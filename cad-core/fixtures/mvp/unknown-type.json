@@ -1,0 +1,15 @@
+{
+  "Objects": [
+    {
+      "Name": "Mystery",
+      "ID": 1,
+      "TypeId": "Part::Unknown",
+      "Properties": {}
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Mystery"
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "Circle",
+            "center": [
+              0,
+              0
+            ],
+            "radius": 5
+          }
+        ],
+        "Constraints": []
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Sketch"
+    ]
+  }
+}

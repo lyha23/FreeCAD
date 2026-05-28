@@ -1,0 +1,19 @@
+{
+  "Objects": [
+    {
+      "Name": "Pad",
+      "ID": 1,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Length": 10,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Pad"
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchA",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "SketchB",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [],
+        "Constraints": []
+      }
+    }
+  ],
+  "recompute": {
+    "objs": []
+  }
+}

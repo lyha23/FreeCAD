@@ -1,0 +1,22 @@
+#pragma once
+
+#include "cad_core/document/model.h"
+#include "cad_core/runtime/diagnostics.h"
+
+#include <map>
+#include <set>
+#include <string>
+#include <vector>
+
+namespace cad_core::graph {
+
+struct RecomputePlan {
+    std::vector<std::string> order;
+    std::map<std::string, std::vector<std::string>> dependencies;
+    std::set<std::string> blockedObjects;
+};
+
+RecomputePlan buildPlan(const document::Document& document, std::vector<runtime::Diagnostic>& diagnostics);
+
+}  // namespace cad_core::graph
+

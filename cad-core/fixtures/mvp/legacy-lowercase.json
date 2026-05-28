@@ -1,0 +1,17 @@
+{
+  "objects": [
+    {
+      "name": "Sketch",
+      "type_id": "Sketcher::SketchObject",
+      "properties": {
+        "Geometry": [],
+        "Constraints": []
+      }
+    }
+  ],
+  "recompute": {
+    "targets": [
+      "Sketch"
+    ]
+  }
+}

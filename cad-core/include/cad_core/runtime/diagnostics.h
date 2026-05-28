@@ -1,0 +1,28 @@
+#pragma once
+
+#include <nlohmann/json.hpp>
+
+#include <string>
+#include <vector>
+
+namespace cad_core::runtime {
+
+struct Diagnostic {
+    std::string severity;
+    std::string code;
+    std::string message;
+    std::string object;
+    std::string property;
+};
+
+void addDiagnostic(std::vector<Diagnostic>& diagnostics,
+                   std::string severity,
+                   std::string code,
+                   std::string message,
+                   std::string object = {},
+                   std::string property = {});
+
+nlohmann::json diagnosticsToJson(const std::vector<Diagnostic>& diagnostics);
+
+}  // namespace cad_core::runtime
+

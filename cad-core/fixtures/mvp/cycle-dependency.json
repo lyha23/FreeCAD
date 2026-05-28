@@ -1,0 +1,43 @@
+{
+  "Objects": [
+    {
+      "Name": "Body",
+      "ID": 1,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": [
+          {
+            "PropertyType": "App::PropertyLinkSub",
+            "value": "Pad",
+            "SubList": []
+          }
+        ],
+        "Tip": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Pad",
+          "SubList": []
+        }
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Body",
+          "SubList": []
+        },
+        "Length": 10,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Body"
+    ]
+  }
+}
