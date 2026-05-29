@@ -9,7 +9,9 @@
 #include "cad_core/features/feature_base.h"
 #include "cad_core/features/fillet.h"
 #include "cad_core/features/hole.h"
+#include "cad_core/features/link.h"
 #include "cad_core/features/linear_pattern.h"
+#include "cad_core/features/mesh.h"
 #include "cad_core/features/mirrored.h"
 #include "cad_core/features/multi_transform.h"
 #include "cad_core/features/part.h"
@@ -40,7 +42,13 @@ FeatureRegistry buildDefaultRegistry()
 {
     FeatureRegistry registry;
     registry.registerExecutor("Sketcher::SketchObject", features::executeSketchObject);
+    registry.registerExecutor("Mesh::Import", features::executeMeshImport);
     registry.registerExecutor("App::Part", features::executePart);
+    registry.registerExecutor("App::Link", features::executeAppLink);
+    registry.registerExecutor("App::LinkElement", features::executeAppLinkElement);
+    registry.registerExecutor("App::LinkGroup", features::executeAppLinkGroup);
+    registry.registerExecutor("Assembly::AssemblyObject", features::executeAssemblyObject);
+    registry.registerExecutor("Assembly::AssemblyLink", features::executeAssemblyLink);
     registry.registerExecutor("Part::Vertex", features::executePartVertex);
     registry.registerExecutor("Part::Line", features::executePartLine);
     registry.registerExecutor("Part::Plane", features::executePartPlane);
@@ -56,6 +64,9 @@ FeatureRegistry buildDefaultRegistry()
     registry.registerExecutor("Part::Ellipse", features::executePartEllipse);
     registry.registerExecutor("Part::Helix", features::executePartHelix);
     registry.registerExecutor("Part::Spiral", features::executePartSpiral);
+    registry.registerExecutor("Part::ImportBrep", features::executePartImportBrep);
+    registry.registerExecutor("Part::ImportStep", features::executePartImportStep);
+    registry.registerExecutor("Part::ImportIges", features::executePartImportIges);
     registry.registerExecutor("Part::Fuse", features::executePartFuse);
     registry.registerExecutor("Part::Cut", features::executePartCut);
     registry.registerExecutor("Part::Common", features::executePartCommon);

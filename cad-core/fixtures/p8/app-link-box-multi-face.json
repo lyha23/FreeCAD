@@ -1,0 +1,35 @@
+{
+  "Objects": [
+    {
+      "Name": "Box",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 3,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "FaceLink",
+      "ID": 2,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "value": "Box",
+          "SubList": ["Face1", "Face2"]
+        },
+        "LinkTransform": false,
+        "LinkPlacement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 10, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["FaceLink"]
+  }
+}

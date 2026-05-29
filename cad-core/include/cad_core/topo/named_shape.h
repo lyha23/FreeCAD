@@ -8,6 +8,7 @@
 
 #include <map>
 #include <optional>
+#include <utility>
 #include <string>
 #include <vector>
 
@@ -117,6 +118,28 @@ NamedShape namedShapeForPreservedSources(
     const std::string& owner,
     const TopoDS_Shape& resultShape,
     const std::vector<NamedShapeSource>& sources
+);
+// FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+// ::LinkBaseExtension::checkGeoElementMap(), calls "geoData->reTagElementMap(obj->getID(), ...)"
+// after resolving the linked object. cad-core exposes the same source-alias retag as ElementMap.
+NamedShape namedShapeForLinkedShape(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const NamedShapeSource& source
+);
+NamedShape namedShapeForLinkedSubshape(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const NamedShapeSource& source,
+    const std::string& sourceElementName,
+    const std::string& targetElementName
+);
+NamedShape namedShapeForLinkedSubshapes(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const NamedShapeSource& source,
+    const std::vector<std::pair<std::string, std::string>>& sourceToTargetElements
 );
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementBoolean(),

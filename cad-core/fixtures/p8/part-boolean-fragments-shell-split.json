@@ -1,0 +1,39 @@
+{
+  "Objects": [
+    {
+      "Name": "ShellBase",
+      "ID": 1,
+      "TypeId": "Part::ImportBrep",
+      "Properties": {
+        "FileName": "fixtures/p8/assets/shell-split-base.brep"
+      }
+    },
+    {
+      "Name": "SplitterFace",
+      "ID": 2,
+      "TypeId": "Part::ImportBrep",
+      "Properties": {
+        "FileName": "fixtures/p8/assets/shell-split-tool.brep"
+      }
+    },
+    {
+      "Name": "BooleanFragments",
+      "ID": 3,
+      "TypeId": "Part::BooleanFragments",
+      "Properties": {
+        "Objects": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["ShellBase", "SplitterFace"]
+        },
+        "Mode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Split"
+        },
+        "Tolerance": 0
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["BooleanFragments"]
+  }
+}

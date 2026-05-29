@@ -11,6 +11,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <optional>
 #include <stdexcept>
 #include <string>
 
@@ -18,13 +19,109 @@ namespace cad_core::adapters {
 
 namespace {
 
-int runRecompute(const std::filesystem::path& inputPath, const std::filesystem::path& outputPath)
+struct ExportRequest {
+    std::string object;
+    geometry::ShapeFileFormat format;
+    std::filesystem::path path;
+    double stlDeflection = 0.01;
+};
+
+struct RecomputeOptions {
+    std::filesystem::path inputPath;
+    std::filesystem::path outputPath;
+    std::optional<ExportRequest> exportRequest;
+};
+
+bool readValueArg(int argc, char** argv, int& index, std::string& value)
+{
+    if (index + 1 >= argc) {
+        return false;
+    }
+    value = argv[index + 1];
+    index += 2;
+    return true;
+}
+
+bool parseRecomputeOptions(int argc, char** argv, RecomputeOptions& options, std::string& error)
+{
+    if (argc < 5 || std::string(argv[1]) != "recompute") {
+        error = "expected recompute <input.json> --output <output.json>";
+        return false;
+    }
+
+    options.inputPath = argv[2];
+    std::optional<std::string> exportObject;
+    std::optional<geometry::ShapeFileFormat> exportFormat;
+    std::optional<std::filesystem::path> exportFile;
+    double stlDeflection = 0.01;
+
+    int index = 3;
+    while (index < argc) {
+        const std::string option = argv[index];
+        std::string value;
+        if (!readValueArg(argc, argv, index, value)) {
+            error = "missing value for " + option;
+            return false;
+        }
+
+        if (option == "--output") {
+            options.outputPath = value;
+        }
+        else if (option == "--export-object") {
+            exportObject = value;
+        }
+        else if (option == "--export-format") {
+            try {
+                exportFormat = geometry::shapeFileFormatFromString(value);
+            }
+            catch (const std::exception& parseError) {
+                error = parseError.what();
+                return false;
+            }
+        }
+        else if (option == "--export-file") {
+            exportFile = value;
+        }
+        else if (option == "--stl-deflection") {
+            try {
+                stlDeflection = std::stod(value);
+            }
+            catch (const std::exception&) {
+                error = "--stl-deflection must be a number";
+                return false;
+            }
+        }
+        else {
+            error = "unknown option " + option;
+            return false;
+        }
+    }
+
+    if (options.outputPath.empty()) {
+        error = "--output is required";
+        return false;
+    }
+
+    const int exportFields = (exportObject.has_value() ? 1 : 0)
+                           + (exportFormat.has_value() ? 1 : 0)
+                           + (exportFile.has_value() ? 1 : 0);
+    if (exportFields != 0 && exportFields != 3) {
+        error = "--export-object, --export-format and --export-file must be provided together";
+        return false;
+    }
+    if (exportFields == 3) {
+        options.exportRequest = ExportRequest{*exportObject, *exportFormat, *exportFile, stlDeflection};
+    }
+    return true;
+}
+
+int runRecompute(const RecomputeOptions& options)
 {
     nlohmann::json raw;
     try {
-        std::ifstream input(inputPath);
+        std::ifstream input(options.inputPath);
         if (!input) {
-            throw std::runtime_error("Unable to read input file " + inputPath.string());
+            throw std::runtime_error("Unable to read input file " + options.inputPath.string());
         }
         input >> raw;
     }
@@ -35,19 +132,39 @@ int runRecompute(const std::filesystem::path& inputPath, const std::filesystem::
             {"subshapes", nlohmann::json::object()},
             {"diagnostics", runtime::diagnosticsToJson({{"error", "parse_error", error.what(), {}, {}}})},
         };
-        runtime::writeJsonFile(outputPath, payload);
+        runtime::writeJsonFile(options.outputPath, payload);
         return 0;
     }
 
     auto [document, diagnostics] = document::parseDocument(raw);
-    const nlohmann::json result = runtime::recompute(document, std::move(diagnostics));
-    runtime::writeJsonFile(outputPath, result);
+    const runtime::ComputeContext context = runtime::recomputeContext(document, std::move(diagnostics));
+    nlohmann::json result = runtime::recomputeResultJson(document, context);
+
+    if (options.exportRequest.has_value()) {
+        const auto& request = *options.exportRequest;
+        const auto shapeIt = context.shapes.find(request.object);
+        if (shapeIt == context.shapes.end()) {
+            throw std::runtime_error("Export object has no computed shape: " + request.object);
+        }
+        geometry::exportShapeFile(shapeIt->second.shape, request.path, request.format, request.stlDeflection);
+        result["exports"] = nlohmann::json::array({
+            {
+                {"object", request.object},
+                {"format", geometry::shapeFileFormatName(request.format)},
+                {"file", request.path.string()},
+            },
+        });
+    }
+
+    runtime::writeJsonFile(options.outputPath, result);
     return 0;
 }
 
 void printHelp()
 {
-    std::cout << "usage: cad-core [--version] recompute <input.json> --output <output.json>\n";
+    std::cout << "usage: cad-core [--version] recompute <input.json> --output <output.json>"
+                 " [--export-object <name> --export-format <brep|step|stl> --export-file <path>]"
+                 " [--stl-deflection <value>]\n";
 }
 
 }  // namespace
@@ -63,11 +180,18 @@ int cliMain(int argc, char** argv)
             printHelp();
             return 0;
         }
-        if (argc != 5 || std::string(argv[1]) != "recompute" || std::string(argv[3]) != "--output") {
+        if (argc < 2 || std::string(argv[1]) != "recompute") {
             printHelp();
             return 2;
         }
-        return runRecompute(argv[2], argv[4]);
+        RecomputeOptions options;
+        std::string error;
+        if (!parseRecomputeOptions(argc, argv, options, error)) {
+            printHelp();
+            std::cerr << "cad-core: " << error << '\n';
+            return 2;
+        }
+        return runRecompute(options);
     }
     catch (const std::exception& error) {
         std::cerr << "cad-core: " << error.what() << '\n';

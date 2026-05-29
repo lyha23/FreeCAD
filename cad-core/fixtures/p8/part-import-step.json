@@ -1,0 +1,15 @@
+{
+  "Objects": [
+    {
+      "Name": "ImportedStep",
+      "ID": 1,
+      "TypeId": "Part::ImportStep",
+      "Properties": {
+        "FileName": "fixtures/p8/assets/as1-ac-214_small.stp"
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["ImportedStep"]
+  }
+}

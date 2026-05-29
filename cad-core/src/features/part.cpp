@@ -8,6 +8,8 @@
 
 #include <BRepGProp.hxx>
 #include <BRepLib.hxx>
+#include <BRepTools.hxx>
+#include <BRep_Builder.hxx>
 #include <BRepBuilderAPI_GTransform.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
@@ -30,9 +32,15 @@
 #include <Geom_SurfaceOfRevolution.hxx>
 #include <Geom2d_TrimmedCurve.hxx>
 #include <GProp_GProps.hxx>
+#include <IGESControl_Controller.hxx>
+#include <IGESControl_Reader.hxx>
+#include <IFSelect_ReturnStatus.hxx>
 #include <Precision.hxx>
+#include <STEPControl_Reader.hxx>
 #include <Standard_Failure.hxx>
 #include <TColgp_Array1OfPnt.hxx>
+#include <TopAbs_ShapeEnum.hxx>
+#include <TopExp_Explorer.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Wire.hxx>
 #include <gp_Ax1.hxx>
@@ -46,6 +54,7 @@
 #include <gp_Vec2d.hxx>
 
 #include <cmath>
+#include <filesystem>
 #include <string>
 
 namespace cad_core::features
@@ -53,6 +62,12 @@ namespace cad_core::features
 
 namespace
 {
+
+struct ImportFile
+{
+    std::string name;
+    std::filesystem::path path;
+};
 
 double readNumberProperty(
     const document::DocumentObject& object,
@@ -331,13 +346,44 @@ TopoDS_Shape applyGlobalPlacement(
     return geometry::transformShape(shape, placementIt->second);
 }
 
+std::string shapeLabelForPartShape(const TopoDS_Shape& shape)
+{
+    switch (shape.ShapeType()) {
+        case TopAbs_SOLID:
+            return "occt_solid";
+        case TopAbs_COMPOUND:
+            return "occt_compound";
+        case TopAbs_COMPSOLID:
+            return "occt_compsolid";
+        case TopAbs_SHELL:
+            return "occt_shell";
+        case TopAbs_FACE:
+            return "occt_face";
+        case TopAbs_WIRE:
+            return "occt_wire";
+        case TopAbs_EDGE:
+            return "occt_edge";
+        case TopAbs_VERTEX:
+            return "occt_vertex";
+        default:
+            return "occt_shape";
+    }
+}
+
+runtime::ShapeValue::Kind shapeKindForPartShape(const TopoDS_Shape& shape)
+{
+    TopExp_Explorer solidExplorer(shape, TopAbs_SOLID);
+    return solidExplorer.More() ? runtime::ShapeValue::Kind::Solid
+                                : runtime::ShapeValue::Kind::PartPrimitive;
+}
+
 void publishPrimitive(
     const document::DocumentObject& object,
     runtime::ComputeContext& context,
     const TopoDS_Shape& localShape,
     const nlohmann::json& metadata,
     runtime::ShapeValue::Kind kind = runtime::ShapeValue::Kind::Solid,
-    const std::string& shapeLabel = "occt_solid"
+    const std::string& label = "occt_solid"
 )
 {
     // FreeCAD:
@@ -352,11 +398,74 @@ void publishPrimitive(
 
     nlohmann::json result = metadata;
     result["status"] = "ok";
-    result["shape"] = shapeLabel;
+    result["shape"] = label;
     result["bbox"] = geometry::bboxForShape(shape);
     result["volume"] = geometry::volumeForShape(shape);
     result["kernel"] = geometry::kernelVersion();
     context.objects[object.name] = result;
+}
+
+void publishPartShape(
+    const document::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const TopoDS_Shape& localShape,
+    const nlohmann::json& metadata
+)
+{
+    const TopoDS_Shape shape = applyGlobalPlacement(object, context, localShape);
+    context.shapes[object.name] = runtime::ShapeValue {shapeKindForPartShape(shape), shape};
+    context.mesh[object.name] = geometry::meshForShape(shape);
+    context.subshapes[object.name] = topo::subshapeMapForShape(shape);
+    context.namedShapes[object.name] = topo::indexedNamedShapeForObject(object.name, shape);
+
+    nlohmann::json result = metadata;
+    result["status"] = "ok";
+    result["shape"] = shapeLabelForPartShape(shape);
+    result["bbox"] = geometry::bboxForShape(shape);
+    result["volume"] = geometry::volumeForShape(shape);
+    result["kernel"] = geometry::kernelVersion();
+    context.objects[object.name] = result;
+}
+
+std::optional<ImportFile> readImportFile(
+    const document::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const std::string& featureName
+)
+{
+    const auto fileName = document::readString(object, "FileName");
+    if (!fileName || fileName->empty()) {
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "missing_property",
+            featureName + " FileName is not set",
+            object.name,
+            "FileName",
+            "runtime"
+        );
+        context.objects[object.name] = {{"status", "error"}};
+        return std::nullopt;
+    }
+
+    std::error_code existsError;
+    const std::filesystem::path filePath(*fileName);
+    if (!std::filesystem::exists(filePath, existsError)
+        || !std::filesystem::is_regular_file(filePath, existsError)) {
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "execution_failed",
+            "Cannot open file " + *fileName,
+            object.name,
+            "FileName",
+            "runtime"
+        );
+        context.objects[object.name] = {{"status", "error"}};
+        return std::nullopt;
+    }
+
+    return ImportFile {*fileName, filePath};
 }
 
 }  // namespace
@@ -1466,6 +1575,210 @@ void executePartSpiral(const document::DocumentObject& object, runtime::ComputeC
             failure.GetMessageString(),
             object.name,
             {},
+            "runtime"
+        );
+        context.objects[object.name] = {{"status", "error"}};
+    }
+}
+
+void executePartImportBrep(const document::DocumentObject& object, runtime::ComputeContext& context)
+{
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FeaturePartImportBrep.cpp
+    // ::ImportBrep::execute(), reads PropertyString "FileName", checks "fi.isReadable()",
+    // then calls "TopoShape aShape; aShape.importBrep(FileName.getValue())" before writing Shape.
+    // cad-core keeps the file path as request input and only returns derived mesh/subshape data.
+    if (!rejectUnsupportedProperties(object, context, {"FileName"})) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+
+    const auto importFile = readImportFile(object, context, "ImportBrep");
+    if (!importFile) {
+        return;
+    }
+
+    try {
+        TopoDS_Shape shape;
+        BRep_Builder builder;
+        if (!BRepTools::Read(shape, importFile->path.string().c_str(), builder) || shape.IsNull()) {
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "execution_failed",
+                "Failed to import BREP file " + importFile->name,
+                object.name,
+                "FileName",
+                "runtime"
+            );
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
+
+        publishPartShape(
+            object,
+            context,
+            shape,
+            {{"primitive", "import_brep"}, {"file_name", importFile->name}}
+        );
+    }
+    catch (const Standard_Failure& failure) {
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "execution_failed",
+            failure.GetMessageString() != nullptr ? failure.GetMessageString()
+                                                  : "Failed to import BREP file",
+            object.name,
+            "FileName",
+            "runtime"
+        );
+        context.objects[object.name] = {{"status", "error"}};
+    }
+}
+
+void executePartImportStep(const document::DocumentObject& object, runtime::ComputeContext& context)
+{
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FeaturePartImportStep.cpp
+    // ::ImportStep::execute(), reads PropertyString "FileName" and calls
+    // "TopoShape aShape; aShape.importStep(FileName.getValue())". TopoShape::importStep()
+    // in /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.cpp
+    // uses "STEPControl_Reader", "ReadFile(...)", "TransferRoots()" and "OneShape()".
+    if (!rejectUnsupportedProperties(object, context, {"FileName"})) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+
+    const auto importFile = readImportFile(object, context, "ImportStep");
+    if (!importFile) {
+        return;
+    }
+
+    try {
+        STEPControl_Reader reader;
+        if (reader.ReadFile(importFile->path.string().c_str()) != IFSelect_RetDone) {
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "execution_failed",
+                "Error in reading STEP file " + importFile->name,
+                object.name,
+                "FileName",
+                "runtime"
+            );
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
+
+        reader.TransferRoots();
+        const TopoDS_Shape shape = reader.OneShape();
+        if (shape.IsNull()) {
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "execution_failed",
+                "Imported STEP shape is null",
+                object.name,
+                "FileName",
+                "runtime"
+            );
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
+
+        publishPartShape(
+            object,
+            context,
+            shape,
+            {{"primitive", "import_step"}, {"file_name", importFile->name}}
+        );
+    }
+    catch (const Standard_Failure& failure) {
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "execution_failed",
+            failure.GetMessageString() != nullptr ? failure.GetMessageString()
+                                                  : "Failed to import STEP file",
+            object.name,
+            "FileName",
+            "runtime"
+        );
+        context.objects[object.name] = {{"status", "error"}};
+    }
+}
+
+void executePartImportIges(const document::DocumentObject& object, runtime::ComputeContext& context)
+{
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FeaturePartImportIges.cpp
+    // ::ImportIges::execute(), reads PropertyString "FileName" and calls
+    // "TopoShape aShape; aShape.importIges(FileName.getValue())". TopoShape::importIges()
+    // in /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.cpp
+    // calls "IGESControl_Controller::Init()", sets "SetReadVisible(Standard_True)",
+    // then uses "ReadFile(...)", "TransferRoots()" and "OneShape()".
+    if (!rejectUnsupportedProperties(object, context, {"FileName"})) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+
+    const auto importFile = readImportFile(object, context, "ImportIges");
+    if (!importFile) {
+        return;
+    }
+
+    try {
+        IGESControl_Controller::Init();
+        IGESControl_Reader reader;
+        reader.SetReadVisible(Standard_True);
+        if (reader.ReadFile(importFile->path.string().c_str()) != IFSelect_RetDone) {
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "execution_failed",
+                "Error in reading IGES file " + importFile->name,
+                object.name,
+                "FileName",
+                "runtime"
+            );
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
+
+        reader.ClearShapes();
+        reader.TransferRoots();
+        const TopoDS_Shape shape = reader.OneShape();
+        if (shape.IsNull()) {
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "execution_failed",
+                "Imported IGES shape is null",
+                object.name,
+                "FileName",
+                "runtime"
+            );
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
+
+        publishPartShape(
+            object,
+            context,
+            shape,
+            {{"primitive", "import_iges"}, {"file_name", importFile->name}}
+        );
+    }
+    catch (const Standard_Failure& failure) {
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "execution_failed",
+            failure.GetMessageString() != nullptr ? failure.GetMessageString()
+                                                  : "Failed to import IGES file",
+            object.name,
+            "FileName",
             "runtime"
         );
         context.objects[object.name] = {{"status", "error"}};

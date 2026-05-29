@@ -1,0 +1,15 @@
+{
+  "Objects": [
+    {
+      "Name": "ImportedMissingStl",
+      "ID": 1,
+      "TypeId": "Mesh::Import",
+      "Properties": {
+        "FileName": "fixtures/p8/assets/missing.stl"
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["ImportedMissingStl"]
+  }
+}

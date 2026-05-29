@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cad_core/document/model.h"
+#include "cad_core/runtime/compute_context.h"
 #include "cad_core/runtime/diagnostics.h"
 
 #include <nlohmann/json.hpp>
@@ -9,6 +10,10 @@
 
 namespace cad_core::runtime {
 
+ComputeContext recomputeContext(const document::Document& document,
+                                std::vector<Diagnostic> diagnostics);
+nlohmann::json recomputeResultJson(const document::Document& document,
+                                   const ComputeContext& context);
 nlohmann::json recompute(const document::Document& document,
                          std::vector<Diagnostic> diagnostics);
 

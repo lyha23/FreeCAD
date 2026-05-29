@@ -27,6 +27,10 @@ struct ShapeValue
         // ::Vertex::execute(), ::Line::execute() and ::Plane::execute() write non-solid
         // PropertyPartShape values that can still be exported and picked as Part features.
         PartPrimitive,
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Mesh/App/MeshFeature.cpp
+        // ::Feature derives from App::GeoFeature and carries PropertyMeshKernel "Mesh"; cad-core
+        // keeps imported mesh files as request-local display/pick results, not PartDesign solids.
+        Mesh,
         DatumPlane,
         DatumLine,
         DatumPoint,

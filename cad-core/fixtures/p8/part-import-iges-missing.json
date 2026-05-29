@@ -1,0 +1,15 @@
+{
+  "Objects": [
+    {
+      "Name": "ImportedMissingIges",
+      "ID": 1,
+      "TypeId": "Part::ImportIges",
+      "Properties": {
+        "FileName": "fixtures/p8/assets/missing.igs"
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["ImportedMissingIges"]
+  }
+}

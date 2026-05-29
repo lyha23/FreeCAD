@@ -291,6 +291,46 @@ void addMergeHistory(NamedShape& namedShape)
     }
 }
 
+void addRetagAlias(NamedShape& namedShape, const std::string& stableName, const std::string& targetName)
+{
+    if (stableName.empty() || targetName.empty() || stableName == targetName
+        || namedShape.elements.count(targetName) == 0U) {
+        return;
+    }
+    namedShape.elementMap[stableName] = targetName;
+    auto& element = namedShape.elements[targetName];
+    if (element.status == ElementHistoryKind::Indexed) {
+        element.status = ElementHistoryKind::Modified;
+    }
+    if (std::find(element.sources.begin(), element.sources.end(), stableName)
+        == element.sources.end()) {
+        element.sources.push_back(stableName);
+    }
+    const auto duplicate = std::find_if(
+        namedShape.history.begin(),
+        namedShape.history.end(),
+        [&](const ElementHistory& entry) {
+            return entry.kind == ElementHistoryKind::Modified && entry.element == targetName
+                && entry.sources == std::vector<std::string>{stableName};
+        }
+    );
+    if (duplicate == namedShape.history.end()) {
+        namedShape.history.push_back(ElementHistory {ElementHistoryKind::Modified, targetName, {stableName}});
+    }
+}
+
+void addLinkRetagAlias(NamedShape& namedShape, const NamedShapeSource& source, const std::string& stableName, const std::string& targetName)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+    // ::LinkBaseExtension::checkGeoElementMap(), "reTagElementMap(obj->getID(), ...)" retags
+    // linked topology under the Link object. cad-core keeps source-prefixed aliases so later
+    // LinkSub references can resolve without guessing topology order.
+    addRetagAlias(namedShape, source.owner + "." + stableName, targetName);
+    if (stableName.find('.') != std::string::npos) {
+        addRetagAlias(namedShape, stableName, targetName);
+    }
+}
+
 void addNestedHistory(
     NamedShape& namedShape,
     ElementHistoryKind kind,
@@ -537,6 +577,74 @@ NamedShape namedShapeForPreservedSources(
     propagateNestedSourceHistory(namedShape, sources);
     addMergeHistory(namedShape);
 
+    return namedShape;
+}
+
+NamedShape namedShapeForLinkedShape(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const NamedShapeSource& source
+)
+{
+    NamedShape namedShape = indexedNamedShapeForObject(owner, resultShape);
+
+    if (source.namedShape == nullptr) {
+        for (const auto& [localName, element] : namedShape.elements) {
+            (void)element;
+            addLinkRetagAlias(namedShape, source, localName, localName);
+        }
+        return namedShape;
+    }
+
+    for (const auto& [stableName, currentName] : source.namedShape->elementMap) {
+        if (namedShape.elements.count(currentName) == 0U) {
+            continue;
+        }
+        addLinkRetagAlias(namedShape, source, stableName, currentName);
+    }
+    return namedShape;
+}
+
+NamedShape namedShapeForLinkedSubshape(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const NamedShapeSource& source,
+    const std::string& sourceElementName,
+    const std::string& targetElementName
+)
+{
+    return namedShapeForLinkedSubshapes(owner, resultShape, source, {{sourceElementName, targetElementName}});
+}
+
+NamedShape namedShapeForLinkedSubshapes(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const NamedShapeSource& source,
+    const std::vector<std::pair<std::string, std::string>>& sourceToTargetElements
+)
+{
+    NamedShape namedShape = indexedNamedShapeForObject(owner, resultShape);
+
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+    // ::LinkBaseExtension::parseSubName() can keep multiple PropertyXLink sub-elements with
+    // the same linked-object prefix, and checkGeoElementMap() retags resolved linked topology.
+    // cad-core preserves that retag per selected source element when a LinkSub returns a compound.
+    for (const auto& [sourceElementName, targetElementName] : sourceToTargetElements) {
+        if (targetElementName.empty() || namedShape.elements.count(targetElementName) == 0U) {
+            continue;
+        }
+
+        addLinkRetagAlias(namedShape, source, sourceElementName, targetElementName);
+        if (source.namedShape == nullptr) {
+            continue;
+        }
+
+        for (const auto& [stableName, currentName] : source.namedShape->elementMap) {
+            if (currentName == sourceElementName) {
+                addLinkRetagAlias(namedShape, source, stableName, targetElementName);
+            }
+        }
+    }
     return namedShape;
 }
 

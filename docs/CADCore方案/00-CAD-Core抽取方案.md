@@ -35,14 +35,20 @@ CAD Core 不依赖 Qt、`src/Gui`、Workbench、ViewProvider、TaskPanel、Web r
 - `graph/`：从 document 层 dependency links 生成 recompute plan，提供缺失链接和循环依赖 diagnostics。
 - `runtime/`：提供 `ComputeContext`、diagnostics、feature registry、recompute loop 和单次请求内 shape / named shape 账本。
 - `features/`：承接 Sketcher、PartDesign、Datum、DressUp、Transformed family 的 executor。
-- `geometry/`：封装 OCCT 构造、placement、mesh、bbox、volume。
+- `geometry/`：封装 OCCT 构造、placement、mesh、bbox、volume 和请求内 shape 的文件导出。
 - `topo/`：承接 subshape map、`ElementMap`、`NamedShape` 和当前 maker history 子集。
 
 当前 registry 覆盖：
 
 ```text
 App::Part
+App::Link
+App::LinkElement
+App::LinkGroup
 App::Origin
+Assembly::AssemblyLink
+Assembly::AssemblyObject
+Mesh::Import
 Part::BooleanFragments
 Part::Box
 Part::Common
@@ -55,6 +61,9 @@ Part::FeatureBooleanFragments
 Part::FeatureXOR
 Part::Fuse
 Part::Helix
+Part::ImportBrep
+Part::ImportIges
+Part::ImportStep
 Part::Line
 Part::MultiCommon
 Part::MultiFuse
@@ -95,7 +104,7 @@ PartDesign::MultiTransform
 | `graph/` | dependency edge、拓扑排序、循环诊断、目标选择 | `DocumentObject::getOutList()` / `getInList()` |
 | `runtime/` | feature registry、compute context、diagnostics、recompute 调度 | `Document::recompute()`、`DocumentObject::execute()` |
 | `features/` | FreeCAD App / Mod 业务语义 executor | `src/Mod/Sketcher/App`、`src/Mod/PartDesign/App` |
-| `geometry/` | OCCT 构造、FaceMaker / WireJoiner / ShapeFix 落点、mesh、bbox、volume | `src/Mod/Part/App` |
+| `geometry/` | OCCT 构造、FaceMaker / WireJoiner / ShapeFix 落点、mesh、bbox、volume、BREP / STEP / STL 文件写出 | `src/Mod/Part/App` |
 | `topo/` | `NamedShape`、`ElementMap`、stable subname、MapperHistory、引用恢复 | `PropertyTopoShape*`、`TopoShape*`、`TopoShapeMapper*` |
 | `adapters/` | CLI、C ABI、后续 Web / Worker / WASM 协议桥接 | 不承载建模语义 |
 
@@ -164,21 +173,24 @@ diagnostics[]
 
 前端拾取应通过返回的 subshape / stable subname 回写 `PropertyLinkSub` 或 `PropertyLinkSubList`，不得自己按几何顺序猜测拓扑命名。
 
-## 已落地能力
+## 阶段状态
 
-P0-P2 已形成可运行底座：文档解析、diagnostics、registry、Sketch + Body + Pad、FeatureBase / FeatureAddSub / Pocket、Body fuse / cut 主链。
+| 阶段 | 当前实现 | 仍需补强 |
+| --- | --- | --- |
+| P0-P2 | 文档解析、diagnostics、registry、Sketch / Body / Pad、FeatureBase / FeatureAddSub / Pocket、Body fuse / cut 主链可运行 | 保持底座稳定，不把后续语义塞回 adapter 或 graph |
+| P3a/P3b | shared `FeatureExtrude` 支持常用长度、UpTo、双侧、方向、placement、Pad / Pocket taper 几何子集 | 多 face / shell UpTo、非平面终止、完整 attachment / support / subname 恢复 |
+| P4 | typed property、`PropertyLink*`、placement、Datum support、graph edge 和结构化 diagnostics 已进入 document / runtime 主路径 | Sketch 专有属性、复杂 GeoFeatureGroup、Origin / AttachEngine 完整坐标传递 |
+| P5 | Sketcher solver-facing 子集、open/raw shape 与 profile face 分离、基础 `InternalShape` / internal element、ExternalGeometry 子集 | 完整 constraint solver、FaceMakerBuildFace / WireJoiner 账本、复杂 `getInternalElementMap()` |
+| P6 | `NamedShape`、`ElementMap`、prism / Body boolean maker history、merge history、stable subname 引用更新、split / deleted diagnostics 已成主路径骨架 | 完整 MapperHistory 生命周期、split 旧引用恢复、ShapeFix / Refine / transformed / DressUp history 收敛 |
+| P7 | Datum / Origin、RefineModel 子集、Hole 常用孔、Fillet / Chamfer、DressUp cache、Mirrored / LinearPattern / PolarPattern / Scaled / MultiTransform 基础路径 | Hole ModelThread、标准件表驱动头部尺寸、链式 SupportTransform ownership、复杂 transformed / pattern ownership |
+| P8 | Part primitives、BREP / STEP / IGES / STL 导入、BREP / STEP / STL CLI 导出、常用 Part Boolean、基础 Link / LinkSub 单/多 SubList compound / LinkGroup source-alias subshape / LinkElement / LinkGroup / ElementCount collapsed / materialized ShowElement child claim / Assembly display | Assembly Joint / solver、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、完整 FreeCAD Link 账本 |
 
-P3a/P3b 已把 shared `FeatureExtrude` 扩到常用终止和方向语义：`Length`、`ThroughAll`、`UpToFace`、单目标 `UpToShape`、`Two sides`、`Symmetric`、`Length2`、第一侧 / 第二侧 UpTo、`UpToFirst`、`UpToLast`、Pad / Pocket taper 几何、custom direction、ReferenceAxis sketch / edge / DatumLine 子集和 Placement。
+P8 当前实现边界：
 
-P4 已把 property / link / placement 收敛到 document 层：常用 typed scalar、Link / LinkList / LinkSub / LinkSubList、Part / Body / Sketch placement、Datum support、graph edge 和结构化 diagnostics。
-
-P5 已接入 Sketcher solver-facing 子集：line / arc / circle / ellipse / 基础 BSpline profile、Sketch point raw vertex、construction geometry 忽略、Coincident 端点合并、多闭合 wire 基础 face-with-holes / island、open wire raw shape 与 profile face 分离、`InternalShape` 的基础导出、`InternalEdgeN` / `InternalVertexN` 外部引用、Datum / Edge / Vertex external geometry 投影，以及 unsupported geometry / constraint diagnostics。
-
-P6 已建立 topo 主路径骨架：`topo/named_shape`、`topo/element_map`、indexed `NamedShape`、identity / source-preserved / history-derived `ElementMap`、merge history 账本、prism maker history 子集、taper `BRepOffsetAPI_ThruSections` generated history 与多侧 / 内环组合透传、`makeElementXorFromSources`、`BRepBuilderAPI_RefineModel` partial history、Body boolean maker history、stable subname 引用更新，以及 split / deleted / unsupported stable subname diagnostics；deleted / split terminal history 已能跨后续 maker 保持诊断语义。
-
-P7 已覆盖常用 PartDesign 生态子集：CoordinateSystem、Origin、Pad standalone refine、Body AddSub final-result refine（Pad / Pocket / Hole）、Fillet / Chamfer / Transformed family replacement refine 的 FreeCAD RefineModel maker 子集、Hole 平底圆柱盲孔 / 通孔 / 点驱动孔 / Tapered / Counterbore / Countersink / Counterdrill / Angled drill point、非建模 Threaded ISO metric / ISO metric fine / UNC / UNF / UNEF / NPT / BSP / BSW / BSF / ISOTyre（TapDrill 表和 FreeCAD fallback 公式）、thread clearance 的 ISO metric 表 / UTS 表 / 非 ISO fallback、Fillet / Chamfer 基础 DressUp 与基础 `SupportTransform` AddSubShape cache、Mirrored、LinearPattern、PolarPattern、Scaled、MultiTransform Features 模式；transformed family 已支持 `Whole shape` 基础路径，LinearPattern / PolarPattern 已支持 Sketch `H_Axis` / `V_Axis` / `N_Axis` 和 construction `AxisN` 基础引用。
-
-P8 已覆盖 FreeCAD `Part::Primitive` 与基础 Box primitive 集合：`Part::Box`、`Part::Cylinder`、`Part::Prism`、`Part::Sphere`、`Part::Ellipsoid`、`Part::Cone`、`Part::Torus`、`Part::Wedge`、`Part::Helix`、`Part::Spiral`、`Part::Vertex`、`Part::Line`、`Part::Ellipse`、`Part::Plane` 和 `Part::RegularPolygon` 走 `features/part.cpp` executor，按 FreeCAD primitive 属性构造 OCCT solid / vertex / edge / face / wire，套用全局 Placement，导出 mesh、subshape map 和 indexed `NamedShape`；Cylinder / Prism 已覆盖 `PrismExtension` 的 `FirstAngle` / `SecondAngle` 基础斜拉方向，Ellipsoid 按 FreeCAD sphere + `BRepBuilderAPI_GTransform` 路径缩放，Torus 按 FreeCAD `TopoShape::makeTorus()` 的圆面旋转路径构造，Helix / Spiral 按 FreeCAD `TopoShape::makeSpiralHelix()` 的 surface-of-revolution + 2D segment 路径构造 wire。P8 也已接入常用 Part Boolean：`Part::Fuse`、`Part::Cut`、`Part::Common`、`Part::Section`、`Part::MultiFuse`、`Part::MultiCommon`、`Part::XOR` / `Part::FeatureXOR`、`Part::BooleanFragments` / `Part::FeatureBooleanFragments` 走 `features/part_boolean.cpp`；Section 读取 `Base` / `Tool` 和 `Approximation`，走 `topo::makeElementSectionFromSources()` 的 maker-history 主路径；XOR 对齐 BOPTools `FeatureXOR`，当前以 typed alias 方式读取 `Objects`，走 `topo::makeElementXorFromSources()` 的 Fuse / Common / Cut 主路径；BooleanFragments 对齐 BOPTools `FeatureBooleanFragments`，当前以 typed alias 方式读取 `Objects`、`Mode=Standard`、`Mode=Split` 的 solid-safe / wire aggregate / CompSolid aggregate 子集、`Mode=CompSolid` 和非负 `Tolerance`，走 `topo::makeElementGeneralFuseFromSources()` 的 generalFuse maker-history 主路径；Split 已迁移 FreeCAD `GeneralFuseResult.makeSplitPieces()` 的 Wire / CompSolid 分支，CompSolid 按 FreeCAD `ShapeMerge.mergeSolids(..., bool_compsolid=True)` 将 solid pieces 按共享面分组为 compound of compsolids。
+- Part primitive：Box、Cylinder、Prism、Sphere、Ellipsoid、Cone、Torus、Wedge、Helix、Spiral、Vertex、Line、Ellipse、Plane、RegularPolygon 落在 `features/part.cpp`，输出请求内 OCCT shape、mesh、subshape map 和 indexed `NamedShape`。
+- Import / Export：`Part::ImportBrep`、`Part::ImportStep`、`Part::ImportIges`、`Mesh::Import` STL 子集可读入请求内 shape；CLI 可把已计算对象写出为 BREP / STEP / STL，导出是 adapter 文件副作用，不进入 graph 或默认 JSON 状态。
+- Part Boolean：Fuse、Cut、Common、Section、MultiFuse、MultiCommon、XOR、BooleanFragments 落在 `features/part_boolean.cpp`，消费 `topo` maker-history 子集；BooleanFragments 覆盖 Standard、solid-safe Split、wire / shell / CompSolid aggregate Split 和 CompSolid mode。
+- Link / Assembly display：`features/link.cpp` 支持 `App::Link`、`App::LinkElement`、`App::LinkGroup`、`Assembly::AssemblyLink` 和 `Assembly::AssemblyObject` 的基础 display。已支持 `LinkedObject`、`LinkTransform`、`LinkPlacement` / `Placement`、基础 `Scale` / `ScaleVector`、`LinkedObject.SubList` 单 subshape 与多 subshape compound、LinkGroup source alias subshape（如 `LinkB.Face1`）、显式 `ElementList` group、`ElementCount` 折叠数组、同文档已物化 `ShowElement=true` 子 `LinkElement` 认领、`PlacementList` / `ScaleList` / `VisibilityList` 和源对象 alias retag；未覆盖 `ShowElement=true` 自动创建 / 删除 `LinkElement` 的完整生命周期、cross-document postfix、多层复杂 LinkSub 链和 Assembly solver。
 
 ## 未完成边界
 
@@ -188,7 +200,7 @@ P8 已覆盖 FreeCAD `Part::Primitive` 与基础 Box primitive 集合：`Part::B
 - Sketcher：完整约束求解、BSpline solver/control-point 语义、ExternalGeometry face / arc edge / defining profile、完整 FaceMakerBuildFace / WireJoiner 账本和复杂 `getInternalElementMap()`。
 - Topo Naming：完整 MapperHistory 消费、split 旧引用恢复、merge history 到完整 MapperHistory 的收敛、ShapeFix / transformed / DressUp 的完整命名传播，以及 RefineModel partial history 向完整 MapperHistory 生命周期收敛。
 - PartDesign：Hole ModelThread、标准件表驱动头部尺寸迁移、复杂 Fillet / Chamfer 参数、链式 DressUp `SupportTransform` ownership、复杂 transformed ownership。
-- P8：BooleanFragments Shell aggregate Split、文件导入导出、Assembly Link / Joint、Worker / WASM / Web adapter 产品化。
+- P8：Assembly Joint / solver、Worker / WASM / Web adapter 产品化、导入 shape 完整 ElementMap、`ShowElement=true` LinkElement / LinkGroup 自动创建 / 删除生命周期、cross-document postfix retag 和多层复杂 LinkSub 链。
 
 这些缺口必须保持显式 diagnostics 或 `known_gap`，不能用 fixture 特判、输出端修剪、几何类型排序或 source edge 猜测伪装完成。
 
@@ -199,7 +211,7 @@ P8 已覆盖 FreeCAD `Part::Primitive` 与基础 Box primitive 集合：`Part::B
 1. P6 topo 主路径补强：完整 MapperHistory 生命周期、split / merge 旧引用恢复、ShapeFix history，以及 RefineModel / taper partial history 到正式 MapperHistory 的收敛。
 2. P5 Sketcher 补强：FaceMaker / WireJoiner 账本、复杂 internal element map、更多 external geometry 和约束。
 3. P7 PartDesign 补强：Hole ModelThread、标准件表驱动头部尺寸迁移、链式 DressUp SupportTransform ownership、复杂 transformed / pattern ownership。
-4. P8 后置能力：继续补 BooleanFragments Shell aggregate Split、导入导出、Assembly、Worker / WASM / Web adapter。
+4. P8 后置能力：继续补 Assembly Joint / solver、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、`ShowElement=true` LinkElement / LinkGroup 自动创建 / 删除生命周期、cross-document postfix retag 和多层复杂 LinkSub 链。
 
 除非前置 topo naming 和 property/link 边界已经覆盖对应引用场景，不应继续扩大高层 executor 的 fixture 特判。
 

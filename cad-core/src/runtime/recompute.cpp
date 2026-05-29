@@ -112,8 +112,8 @@ void registerIndexedNamedShape(const std::string& name, ComputeContext& context)
 
 }  // namespace
 
-nlohmann::json recompute(const document::Document& document,
-                         std::vector<Diagnostic> diagnostics)
+ComputeContext recomputeContext(const document::Document& document,
+                                std::vector<Diagnostic> diagnostics)
 {
     graph::RecomputePlan plan = graph::buildPlan(document, diagnostics);
     FeatureRegistry registry = buildDefaultRegistry();
@@ -161,6 +161,12 @@ nlohmann::json recompute(const document::Document& document,
         context.executionOrder.push_back(name);
     }
 
+    return context;
+}
+
+nlohmann::json recomputeResultJson(const document::Document& document,
+                                   const ComputeContext& context)
+{
     nlohmann::json objects = nlohmann::json::object();
     for (const auto& object : document.objects) {
         auto it = context.objects.find(object.name);
@@ -174,6 +180,13 @@ nlohmann::json recompute(const document::Document& document,
         {"named_shapes", topo::namedShapesToJson(context.namedShapes)},
         {"diagnostics", diagnosticsToJson(context.diagnostics)},
     };
+}
+
+nlohmann::json recompute(const document::Document& document,
+                         std::vector<Diagnostic> diagnostics)
+{
+    const ComputeContext context = recomputeContext(document, std::move(diagnostics));
+    return recomputeResultJson(document, context);
 }
 
 }  // namespace cad_core::runtime

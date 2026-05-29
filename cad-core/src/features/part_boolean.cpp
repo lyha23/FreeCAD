@@ -16,6 +16,7 @@
 #include <TopoDS_Compound.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Iterator.hxx>
+#include <TopoDS_Shell.hxx>
 #include <TopoDS_Vertex.hxx>
 #include <TopoDS_Wire.hxx>
 #include <TopoDS.hxx>
@@ -640,6 +641,18 @@ bool solidTouchesFace(const TopoDS_Shape& solid, const TopoDS_Shape& face)
     return false;
 }
 
+bool faceTouchesEdge(const TopoDS_Shape& face, const TopoDS_Shape& edge)
+{
+    TopTools_IndexedMapOfShape edges;
+    TopExp::MapShapes(face, TopAbs_EDGE, edges);
+    for (int index = 1; index <= edges.Extent(); ++index) {
+        if (edges(index).IsSame(edge)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 std::vector<TopoDS_Shape> edgeChildren(const TopoDS_Shape& shape)
 {
     std::vector<TopoDS_Shape> edges;
@@ -726,6 +739,33 @@ bool isSplitFace(
     return false;
 }
 
+bool isSplitEdge(
+    const topo::NamedShape& generalFuseNamedShape,
+    const TopoDS_Shape& edge,
+    const std::vector<TopoDS_Shape>& allFaces
+)
+{
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/BOPTools/GeneralFuseResult.py
+    // ::makeSplitPieces(), for "Shell" uses bit_extractor=lambda sh: sh.Faces and
+    // joint_extractor=lambda sh: sh.Edges. An edge becomes split_connections when its
+    // source overlap count is higher than at least one connected face's overlap count.
+    const std::size_t jointOverlapCount = sourceRootCount(generalFuseNamedShape, edge, TopAbs_EDGE);
+    if (jointOverlapCount <= 1U) {
+        return false;
+    }
+    for (const auto& face : allFaces) {
+        if (!faceTouchesEdge(face, edge)) {
+            continue;
+        }
+        const std::size_t faceOverlapCount = sourceRootCount(generalFuseNamedShape, face, TopAbs_FACE);
+        if (faceOverlapCount < jointOverlapCount) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool edgeTouchesAnyVertex(const TopoDS_Shape& edge, const std::vector<TopoDS_Shape>& vertices)
 {
     for (const auto& vertex : vertices) {
@@ -736,10 +776,37 @@ bool edgeTouchesAnyVertex(const TopoDS_Shape& edge, const std::vector<TopoDS_Sha
     return false;
 }
 
+bool edgeIsIn(const TopoDS_Shape& edge, const std::vector<TopoDS_Shape>& edges)
+{
+    for (const auto& item : edges) {
+        if (item.IsSame(edge)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool faceIsIn(const TopoDS_Shape& face, const std::vector<TopoDS_Shape>& faces)
 {
     for (const auto& item : faces) {
         if (item.IsSame(face)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool facesConnectedWithoutSplitEdge(
+    const TopoDS_Shape& left,
+    const TopoDS_Shape& right,
+    const std::vector<TopoDS_Shape>& splitEdges
+)
+{
+    for (const auto& edge : edgeChildren(left)) {
+        if (edgeIsIn(edge, splitEdges)) {
+            continue;
+        }
+        if (faceTouchesEdge(right, edge)) {
             return true;
         }
     }
@@ -805,6 +872,38 @@ std::vector<std::vector<std::size_t>> edgeGroupsBySharedVertices(
                     visited[candidate]
                     || !edgesConnectedWithoutSplitVertex(edges[current], edges[candidate], splitVertices)
                 ) {
+                    continue;
+                }
+                visited[candidate] = true;
+                stack.push_back(candidate);
+            }
+        }
+        groups.push_back(std::move(group));
+    }
+    return groups;
+}
+
+std::vector<std::vector<std::size_t>> faceGroupsBySharedEdges(
+    const std::vector<TopoDS_Shape>& faces,
+    const std::vector<TopoDS_Shape>& splitEdges
+)
+{
+    std::vector<std::vector<std::size_t>> groups;
+    std::vector<bool> visited(faces.size(), false);
+    for (std::size_t start = 0; start < faces.size(); ++start) {
+        if (visited[start]) {
+            continue;
+        }
+        std::vector<std::size_t> group;
+        std::vector<std::size_t> stack {start};
+        visited[start] = true;
+        while (!stack.empty()) {
+            const std::size_t current = stack.back();
+            stack.pop_back();
+            group.push_back(current);
+            for (std::size_t candidate = 0; candidate < faces.size(); ++candidate) {
+                if (visited[candidate]
+                    || !facesConnectedWithoutSplitEdge(faces[current], faces[candidate], splitEdges)) {
                     continue;
                 }
                 visited[candidate] = true;
@@ -887,6 +986,20 @@ TopoDS_CompSolid makeCompSolidFromSolids(
     return compSolid;
 }
 
+TopoDS_Shell makeShellFromFaces(
+    const std::vector<TopoDS_Shape>& faces,
+    const std::vector<std::size_t>& group
+)
+{
+    BRep_Builder builder;
+    TopoDS_Shell shell;
+    builder.MakeShell(shell);
+    for (const std::size_t faceIndex : group) {
+        builder.Add(shell, faces.at(faceIndex));
+    }
+    return shell;
+}
+
 std::vector<TopoDS_Shape> splitWirePiece(
     const topo::NamedShape& generalFuseNamedShape,
     const TopoDS_Shape& wire,
@@ -924,6 +1037,41 @@ std::vector<TopoDS_Shape> splitWirePiece(
             return {wire};
         }
         pieces.push_back(*rebuilt);
+    }
+    return pieces;
+}
+
+std::vector<TopoDS_Shape> splitShellPiece(
+    const topo::NamedShape& generalFuseNamedShape,
+    const TopoDS_Shape& shell,
+    const std::vector<TopoDS_Shape>& allFaces
+)
+{
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/BOPTools/GeneralFuseResult.py
+    // ::makeSplitPieces(), for "Shell" uses bit_extractor=lambda sh: sh.Faces and
+    // joint_extractor=lambda sh: sh.Edges; ShapeMerge.mergeShapes() dispatches to
+    // ShapeMerge.mergeShells(), grouping faces by shared edges while excluding split_edges.
+    std::vector<TopoDS_Shape> splitEdges;
+    for (const auto& edge : edgeChildren(shell)) {
+        if (isSplitEdge(generalFuseNamedShape, edge, allFaces)) {
+            splitEdges.push_back(edge);
+        }
+    }
+    if (splitEdges.empty()) {
+        return {shell};
+    }
+
+    const std::vector<TopoDS_Shape> faces = faceChildren(shell);
+    const std::vector<std::vector<std::size_t>> groups = faceGroupsBySharedEdges(faces, splitEdges);
+    if (groups.size() <= 1U) {
+        return {shell};
+    }
+
+    std::vector<TopoDS_Shape> pieces;
+    pieces.reserve(groups.size());
+    for (const auto& group : groups) {
+        pieces.push_back(makeShellFromFaces(faces, group));
     }
     return pieces;
 }
@@ -973,11 +1121,25 @@ struct SplitFragmentsResult
 SplitFragmentsResult splitAggregatePieces(
     const topo::NamedShape& generalFuseNamedShape,
     const TopoDS_Shape& shape,
-    const std::vector<TopoDS_Shape>& allEdges
+    const std::vector<TopoDS_Shape>& allEdges,
+    const std::vector<TopoDS_Shape>& allFaces
 )
 {
     if (shape.ShapeType() == TopAbs_WIRE) {
         const auto pieces = splitWirePiece(generalFuseNamedShape, shape, allEdges);
+        if (pieces.size() == 1U && pieces.front().IsSame(shape)) {
+            return SplitFragmentsResult {shape, false, {}};
+        }
+        BRep_Builder builder;
+        TopoDS_Compound compound;
+        builder.MakeCompound(compound);
+        for (const auto& piece : pieces) {
+            builder.Add(compound, piece);
+        }
+        return SplitFragmentsResult {compound, true, {}};
+    }
+    if (shape.ShapeType() == TopAbs_SHELL) {
+        const auto pieces = splitShellPiece(generalFuseNamedShape, shape, allFaces);
         if (pieces.size() == 1U && pieces.front().IsSame(shape)) {
             return SplitFragmentsResult {shape, false, {}};
         }
@@ -1012,7 +1174,8 @@ SplitFragmentsResult splitAggregatePieces(
         builder.MakeCompound(compound);
         bool changed = false;
         for (TopoDS_Iterator it(shape); it.More(); it.Next()) {
-            const auto child = splitAggregatePieces(generalFuseNamedShape, it.Value(), allEdges);
+            const auto child
+                = splitAggregatePieces(generalFuseNamedShape, it.Value(), allEdges, allFaces);
             if (!child.error.empty()) {
                 return child;
             }
@@ -1020,13 +1183,6 @@ SplitFragmentsResult splitAggregatePieces(
             builder.Add(compound, child.shape);
         }
         return SplitFragmentsResult {changed ? TopoDS_Shape(compound) : shape, changed, {}};
-    }
-    if (shape.ShapeType() == TopAbs_SHELL) {
-        return SplitFragmentsResult {
-            TopoDS_Shape {},
-            false,
-            "BooleanFragments Split mode for Shell aggregate pieces is not supported yet"
-        };
     }
     return SplitFragmentsResult {shape, false, {}};
 }
@@ -1042,7 +1198,8 @@ topo::NamedShapeBuild makeSplitFragmentsBuild(
     const auto split = splitAggregatePieces(
         *generalFuseBuild.namedShape,
         generalFuseBuild.shape,
-        edgeChildren(generalFuseBuild.shape)
+        edgeChildren(generalFuseBuild.shape),
+        faceChildren(generalFuseBuild.shape)
     );
     if (!split.error.empty()) {
         return topo::NamedShapeBuild {TopoDS_Shape {}, std::nullopt, split.error};

@@ -1,0 +1,15 @@
+{
+  "Objects": [
+    {
+      "Name": "ImportedIges",
+      "ID": 1,
+      "TypeId": "Part::ImportIges",
+      "Properties": {
+        "FileName": "fixtures/p8/assets/rlf_12545.igs"
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["ImportedIges"]
+  }
+}

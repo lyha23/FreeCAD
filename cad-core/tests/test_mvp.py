@@ -26,21 +26,23 @@ class CadCoreResult(ctypes.Structure):
 
 
 class CadCoreOcctMvpTest(unittest.TestCase):
-    def run_recompute(self, fixture: str, group: str = "mvp") -> dict:
+    def run_recompute_file(self, input_path: Path, extra_args: list[str] | None = None) -> dict:
         with tempfile.TemporaryDirectory() as tmp:
-            output = Path(tmp) / f"{fixture}.result.json"
-            subprocess.run(
-                [
-                    str(BIN),
-                    "recompute",
-                    str(ROOT / "fixtures" / group / f"{fixture}.json"),
-                    "--output",
-                    str(output),
-                ],
-                cwd=ROOT,
-                check=True,
-            )
+            output = Path(tmp) / f"{input_path.stem}.result.json"
+            command = [
+                str(BIN),
+                "recompute",
+                str(input_path),
+                "--output",
+                str(output),
+            ]
+            if extra_args:
+                command.extend(extra_args)
+            subprocess.run(command, cwd=ROOT, check=True)
             return json.loads(output.read_text(encoding="utf-8"))
+
+    def run_recompute(self, fixture: str, group: str = "mvp") -> dict:
+        return self.run_recompute_file(ROOT / "fixtures" / group / f"{fixture}.json")
 
     def ffi_library_path(self) -> Path:
         for path in FFI_LIB_CANDIDATES:
@@ -343,11 +345,28 @@ class CadCoreOcctMvpTest(unittest.TestCase):
 
     def test_p8_fixture_diagnostics(self) -> None:
         expected = {
+            "app-link-box": [],
+            "app-link-box-face": [],
+            "app-link-box-multi-face": [],
+            "app-link-box-missing-subshape": ["invalid_subshape"],
+            "app-link-box-scale": [],
+            "app-link-box-transform": [],
+            "app-link-element-box": [],
+            "app-link-element-count-collapsed": [],
+            "app-link-group-elements": [],
+            "app-link-group-subshape-alias": [],
+            "app-link-group-visibility": [],
+            "app-link-missing": ["missing_link_target"],
+            "app-link-show-element-materialized": [],
+            "assembly-link-basic": [],
             "part-boolean-fragments": [],
             "part-boolean-fragments-compsolid": [],
             "part-boolean-fragments-compsolid-split": [],
+            "part-boolean-fragments-shell-split": [],
             "part-boolean-fragments-split": [],
             "part-boolean-fragments-wire-split": [],
+            "mesh-import-stl": [],
+            "mesh-import-stl-missing": ["execution_failed"],
             "part-box": [],
             "part-common": [],
             "part-cone": [],
@@ -358,6 +377,12 @@ class CadCoreOcctMvpTest(unittest.TestCase):
             "part-ellipsoid": [],
             "part-fuse": [],
             "part-helix": [],
+            "part-import-brep": [],
+            "part-import-brep-missing": ["execution_failed"],
+            "part-import-iges": [],
+            "part-import-iges-missing": ["execution_failed"],
+            "part-import-step": [],
+            "part-import-step-missing": ["execution_failed"],
             "part-line": [],
             "part-multi-common": [],
             "part-multi-common-first-rest": [],
@@ -2103,6 +2128,199 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assertEqual(named_shape["owner"], "Box")
         self.assertIn("Face1", named_shape["elements"])
 
+    def test_p8_app_link_proxies_linked_shape_with_link_placement(self) -> None:
+        result = self.run_recompute("app-link-box", "p8")
+        link = result["objects"]["BoxLink"]
+        named_shape = result["named_shapes"]["BoxLink"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(link["status"], "ok")
+        self.assertEqual(link["link"], "app_link")
+        self.assertEqual(link["linked_object"], "Box")
+        self.assertEqual(link["link_transform"], False)
+        self.assert_bbox_close(link["bbox"], [5.0, 0.0, 0.0], [7.0, 3.0, 4.0])
+        self.assertAlmostEqual(link["volume"], 24.0, delta=1e-6)
+        self.assert_topology_counts(result["subshapes"]["BoxLink"], {"topology_counts": {"faces": 6, "edges": 12, "vertices": 8}})
+        self.assertEqual(named_shape["owner"], "BoxLink")
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertEqual(named_shape["element_map"]["Box.Face1"], "Face1")
+        self.assertEqual(named_shape["element_map"]["Box.Edge1"], "Edge1")
+        self.assertEqual(named_shape["element_map"]["Box.Vertex1"], "Vertex1")
+
+        transformed = self.run_recompute("app-link-box-transform", "p8")["objects"]["BoxLink"]
+        self.assertEqual(transformed["link_transform"], True)
+        self.assert_bbox_close(transformed["bbox"], [15.0, 0.0, 0.0], [17.0, 3.0, 4.0])
+
+        scaled = self.run_recompute("app-link-box-scale", "p8")["objects"]["BoxLink"]
+        self.assert_bbox_close(scaled["bbox"], [5.0, 0.0, 0.0], [9.0, 6.0, 8.0])
+        self.assertAlmostEqual(scaled["volume"], 192.0, delta=1e-6)
+
+    def test_p8_app_link_subshape_uses_linked_object_sublist(self) -> None:
+        result = self.run_recompute("app-link-box-face", "p8")
+        link = result["objects"]["BoxLink"]
+        named_shape = result["named_shapes"]["BoxLink"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(link["status"], "ok")
+        self.assertEqual(link["link"], "app_link")
+        self.assertEqual(link["linked_object"], "Box")
+        self.assertEqual(link["link_transform"], False)
+        self.assertEqual(link["shape"], "occt_face")
+        self.assertAlmostEqual(link["volume"], 0.0, delta=1e-9)
+        self.assert_topology_counts(result["subshapes"]["BoxLink"], {"topology_counts": {"faces": 1, "edges": 4, "vertices": 4}})
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertEqual(named_shape["element_map"]["Box.Face1"], "Face1")
+
+    def test_p8_app_link_subshape_compounds_multiple_sublist_items(self) -> None:
+        result = self.run_recompute("app-link-box-multi-face", "p8")
+        link = result["objects"]["FaceLink"]
+        named_shape = result["named_shapes"]["FaceLink"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(link["status"], "ok")
+        self.assertEqual(link["link"], "app_link")
+        self.assertEqual(link["linked_object"], "Box")
+        self.assertEqual(link["shape"], "occt_compound")
+        self.assert_bbox_close(link["bbox"], [0.0, 10.0, 0.0], [2.0, 13.0, 4.0])
+        self.assert_topology_counts(result["subshapes"]["FaceLink"], {"topology_counts": {"faces": 2, "edges": 8, "vertices": 8}})
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertEqual(named_shape["element_map"]["Box.Face1"], "Face1")
+        self.assertEqual(named_shape["element_map"]["Box.Face2"], "Face2")
+
+    def test_p8_app_link_element_proxies_linked_shape(self) -> None:
+        result = self.run_recompute("app-link-element-box", "p8")
+        element = result["objects"]["BoxElement"]
+        named_shape = result["named_shapes"]["BoxElement"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(element["status"], "ok")
+        self.assertEqual(element["link"], "app_link_element")
+        self.assertEqual(element["linked_object"], "Box")
+        self.assertEqual(element["link_transform"], False)
+        self.assert_bbox_close(element["bbox"], [2.0, 0.0, 0.0], [4.0, 3.0, 4.0])
+        self.assertAlmostEqual(element["volume"], 24.0, delta=1e-6)
+        self.assert_topology_counts(result["subshapes"]["BoxElement"], {"topology_counts": {"faces": 6, "edges": 12, "vertices": 8}})
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertEqual(named_shape["element_map"]["Box.Face1"], "Face1")
+
+    def test_p8_app_link_group_compounds_element_shapes(self) -> None:
+        result = self.run_recompute("app-link-group-elements", "p8")
+        group = result["objects"]["LinkGroup"]
+        named_shape = result["named_shapes"]["LinkGroup"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(group["status"], "ok")
+        self.assertEqual(group["link"], "app_link_group")
+        self.assertEqual(group["elements"], ["LinkA", "LinkB"])
+        self.assertEqual(group["visible_elements"], ["LinkA", "LinkB"])
+        self.assertEqual(group["shape"], "occt_compound")
+        self.assert_bbox_close(group["bbox"], [0.0, 10.0, 0.0], [7.0, 13.0, 4.0])
+        self.assertAlmostEqual(group["volume"], 48.0, delta=1e-6)
+        self.assert_topology_counts(result["subshapes"]["LinkGroup"], {"topology_counts": {"faces": 12, "edges": 24, "vertices": 16}})
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertEqual(named_shape["element_map"]["LinkA.Face1"], "Face1")
+        self.assertEqual(named_shape["element_map"]["LinkB.Face1"], "Face7")
+
+    def test_p8_app_link_resolves_group_subshape_alias(self) -> None:
+        result = self.run_recompute("app-link-group-subshape-alias", "p8")
+        link = result["objects"]["FaceLink"]
+        named_shape = result["named_shapes"]["FaceLink"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(link["status"], "ok")
+        self.assertEqual(link["link"], "app_link")
+        self.assertEqual(link["linked_object"], "LinkGroup")
+        self.assertEqual(link["shape"], "occt_face")
+        self.assertAlmostEqual(link["volume"], 0.0, delta=1e-9)
+        self.assert_topology_counts(result["subshapes"]["FaceLink"], {"topology_counts": {"faces": 1, "edges": 4, "vertices": 4}})
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertEqual(named_shape["element_map"]["LinkGroup.LinkB.Face1"], "Face1")
+
+    def test_p8_app_link_group_respects_visibility_list(self) -> None:
+        result = self.run_recompute("app-link-group-visibility", "p8")
+        group = result["objects"]["LinkGroup"]
+        named_shape = result["named_shapes"]["LinkGroup"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(group["status"], "ok")
+        self.assertEqual(group["link"], "app_link_group")
+        self.assertEqual(group["elements"], ["LinkA", "LinkB"])
+        self.assertEqual(group["visible_elements"], ["LinkA"])
+        self.assertEqual(group["shape"], "occt_solid")
+        self.assert_bbox_close(group["bbox"], [0.0, 10.0, 0.0], [2.0, 13.0, 4.0])
+        self.assertAlmostEqual(group["volume"], 24.0, delta=1e-6)
+        self.assert_topology_counts(result["subshapes"]["LinkGroup"], {"topology_counts": {"faces": 6, "edges": 12, "vertices": 8}})
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertEqual(named_shape["element_map"]["LinkA.Face1"], "Face1")
+        self.assertNotIn("LinkB.Face1", named_shape["element_map"])
+
+    def test_p8_app_link_element_count_compounds_collapsed_elements(self) -> None:
+        result = self.run_recompute("app-link-element-count-collapsed", "p8")
+        group = result["objects"]["ArrayLink"]
+        named_shape = result["named_shapes"]["ArrayLink"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(group["status"], "ok")
+        self.assertEqual(group["link"], "app_link_group")
+        self.assertEqual(group["linked_object"], "Box")
+        self.assertEqual(group["element_count"], 3)
+        self.assertEqual(group["collapsed_elements"], True)
+        self.assertEqual(group["visible_indices"], [0, 1])
+        self.assertEqual(group["shape"], "occt_compound")
+        self.assert_bbox_close(group["bbox"], [0.0, 10.0, 0.0], [9.0, 13.0, 4.0])
+        self.assertAlmostEqual(group["volume"], 72.0, delta=1e-6)
+        self.assert_topology_counts(result["subshapes"]["ArrayLink"], {"topology_counts": {"faces": 12, "edges": 24, "vertices": 16}})
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertEqual(named_shape["element_map"]["ArrayLink_i0.Face1"], "Face1")
+        self.assertEqual(named_shape["element_map"]["ArrayLink_i1.Face1"], "Face7")
+        self.assertNotIn("ArrayLink_i2.Face1", named_shape["element_map"])
+
+    def test_p8_app_link_show_element_groups_materialized_children(self) -> None:
+        result = self.run_recompute("app-link-show-element-materialized", "p8")
+        group = result["objects"]["ArrayLink"]
+        named_shape = result["named_shapes"]["ArrayLink"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(result["objects"]["ArrayLink_i0"]["status"], "ok")
+        self.assertEqual(result["objects"]["ArrayLink_i1"]["status"], "ok")
+        self.assertEqual(group["status"], "ok")
+        self.assertEqual(group["link"], "app_link_group")
+        self.assertEqual(group["element_count"], 2)
+        self.assertEqual(group["materialized_elements"], True)
+        self.assertEqual(group["elements"], ["ArrayLink_i0", "ArrayLink_i1"])
+        self.assertEqual(group["visible_elements"], ["ArrayLink_i0", "ArrayLink_i1"])
+        self.assertEqual(group["shape"], "occt_compound")
+        self.assert_bbox_close(group["bbox"], [0.0, 10.0, 0.0], [7.0, 13.0, 4.0])
+        self.assertAlmostEqual(group["volume"], 48.0, delta=1e-6)
+        self.assert_topology_counts(result["subshapes"]["ArrayLink"], {"topology_counts": {"faces": 12, "edges": 24, "vertices": 16}})
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertEqual(named_shape["element_map"]["ArrayLink_i0.Face1"], "Face1")
+        self.assertEqual(named_shape["element_map"]["ArrayLink_i1.Face1"], "Face7")
+
+    def test_p8_assembly_object_groups_basic_component_link(self) -> None:
+        result = self.run_recompute("assembly-link-basic", "p8")
+        component = result["objects"]["ComponentLink"]
+        assembly = result["objects"]["Assembly"]
+        assembly_named_shape = result["named_shapes"]["Assembly"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(component["status"], "ok")
+        self.assertEqual(component["link"], "assembly_link")
+        self.assertEqual(component["linked_object"], "Box")
+        self.assertEqual(component["rigid"], True)
+        self.assert_bbox_close(component["bbox"], [0.0, 5.0, 0.0], [2.0, 8.0, 4.0])
+
+        self.assertEqual(assembly["status"], "ok")
+        self.assertEqual(assembly["assembly"], "object")
+        self.assertEqual(assembly["group"], ["ComponentLink"])
+        self.assertEqual(assembly["solve"], "not_migrated")
+        self.assert_bbox_close(assembly["bbox"], [0.0, 5.0, 0.0], [2.0, 8.0, 4.0])
+        self.assertAlmostEqual(assembly["volume"], 24.0, delta=1e-6)
+        self.assert_topology_counts(result["subshapes"]["Assembly"], {"topology_counts": {"faces": 6, "edges": 12, "vertices": 8}})
+        self.assertEqual(assembly_named_shape["element_map_status"], "history_partial")
+        self.assertEqual(assembly_named_shape["element_map"]["ComponentLink.Face1"], "Face1")
+        self.assertEqual(assembly_named_shape["element_map"]["Box.Face1"], "Face1")
+
     def test_p8_part_cylinder_builds_prism_extension_solid(self) -> None:
         result = self.run_recompute("part-cylinder", "p8")
         cylinder = result["objects"]["Cylinder"]
@@ -2198,6 +2416,157 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assert_bbox_close(plane["bbox"], [0.0, 0.0, 0.0], [4.0, 3.0, 0.0])
         self.assertEqual(plane["volume"], 0.0)
         self.assert_topology_counts(result["subshapes"]["Plane"], {"topology_counts": {"faces": 1, "edges": 4, "vertices": 4}})
+
+    def test_p8_part_import_brep_reads_file_shape(self) -> None:
+        result = self.run_recompute("part-import-brep", "p8")
+        imported = result["objects"]["ImportedCylinder"]
+        named_shape = result["named_shapes"]["ImportedCylinder"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(imported["status"], "ok")
+        self.assertEqual(imported["primitive"], "import_brep")
+        self.assertEqual(imported["shape"], "occt_compound")
+        self.assertEqual(imported["file_name"], "fixtures/p8/assets/cylinder1.brep")
+        self.assert_bbox_close_delta(
+            imported["bbox"],
+            [-2.014582351803892, -2.0, -0.014582351803892262],
+            [2.014582351803892, 2.0, 10.014582351803892],
+            1e-6,
+        )
+        self.assertAlmostEqual(imported["volume"], 125.66370614359178, delta=1e-6)
+        self.assert_topology_counts(
+            result["subshapes"]["ImportedCylinder"],
+            {"topology_counts": {"faces": 3, "edges": 3, "vertices": 2}},
+        )
+        self.assertEqual(named_shape["owner"], "ImportedCylinder")
+        self.assertEqual(named_shape["element_map_status"], "indexed_only")
+
+    def test_p8_part_import_step_reads_file_shape(self) -> None:
+        result = self.run_recompute("part-import-step", "p8")
+        imported = result["objects"]["ImportedStep"]
+        named_shape = result["named_shapes"]["ImportedStep"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(imported["status"], "ok")
+        self.assertEqual(imported["primitive"], "import_step")
+        self.assertEqual(imported["shape"], "occt_compound")
+        self.assertEqual(imported["file_name"], "fixtures/p8/assets/as1-ac-214_small.stp")
+        self.assert_bbox_close_delta(
+            imported["bbox"],
+            [122.48640506238414, 25.0, -7.036455729509775],
+            [175.02511031877214, 125.0, 80.0],
+            1e-6,
+        )
+        self.assertAlmostEqual(imported["volume"], 104939.95611579117, delta=1e-6)
+        self.assert_topology_counts(
+            result["subshapes"]["ImportedStep"],
+            {"topology_counts": {"faces": 62, "edges": 134, "vertices": 84}},
+        )
+        self.assertEqual(named_shape["owner"], "ImportedStep")
+        self.assertEqual(named_shape["element_map_status"], "indexed_only")
+
+    def test_p8_part_import_iges_reads_file_shape(self) -> None:
+        result = self.run_recompute("part-import-iges", "p8")
+        imported = result["objects"]["ImportedIges"]
+        named_shape = result["named_shapes"]["ImportedIges"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(imported["status"], "ok")
+        self.assertEqual(imported["primitive"], "import_iges")
+        self.assertEqual(imported["shape"], "occt_compound")
+        self.assertEqual(imported["file_name"], "fixtures/p8/assets/rlf_12545.igs")
+        self.assert_bbox_close_delta(
+            imported["bbox"],
+            [-6.238209180579999, -6.25164176738, 0.009999888938014427],
+            [6.2617910739800005, 6.24835848718, 4.71000012118],
+            1e-6,
+        )
+        self.assertAlmostEqual(imported["volume"], 768.697234526593, delta=1e-6)
+        self.assert_topology_counts(
+            result["subshapes"]["ImportedIges"],
+            {"topology_counts": {"faces": 47, "edges": 240, "vertices": 240}},
+        )
+        self.assertEqual(named_shape["owner"], "ImportedIges")
+        self.assertEqual(named_shape["element_map_status"], "indexed_only")
+
+    def test_p8_mesh_import_stl_reads_mesh_file_shape(self) -> None:
+        result = self.run_recompute("mesh-import-stl", "p8")
+        imported = result["objects"]["ImportedStl"]
+        mesh = result["mesh"]["ImportedStl"]
+        named_shape = result["named_shapes"]["ImportedStl"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(imported["status"], "ok")
+        self.assertEqual(imported["primitive"], "import_stl")
+        self.assertEqual(imported["shape"], "occt_compound")
+        self.assertEqual(imported["file_name"], "fixtures/p8/assets/unit-square.stl")
+        self.assert_bbox_close(imported["bbox"], [0.0, 0.0, 0.0], [1.0, 1.0, 0.0])
+        self.assertEqual(imported["volume"], 0.0)
+        self.assertEqual(mesh["summary"]["vertex_count"], 4)
+        self.assertEqual(mesh["summary"]["triangle_count"], 2)
+        self.assert_topology_counts(
+            result["subshapes"]["ImportedStl"],
+            {"topology_counts": {"faces": 2, "edges": 5, "vertices": 4}},
+        )
+        self.assertEqual(named_shape["owner"], "ImportedStl")
+        self.assertEqual(named_shape["element_map_status"], "indexed_only")
+
+    def test_p8_cli_exports_recomputed_shape_files(self) -> None:
+        cases = {
+            "brep": ("Part::ImportBrep", "ExportedBrep", "box.brep"),
+            "step": ("Part::ImportStep", "ExportedStep", "box.step"),
+            "stl": ("Mesh::Import", "ExportedStl", "box.stl"),
+        }
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            for export_format, (type_id, object_name, file_name) in cases.items():
+                with self.subTest(export_format=export_format):
+                    export_path = tmp_path / file_name
+                    result = self.run_recompute_file(
+                        ROOT / "fixtures" / "p8" / "part-box.json",
+                        [
+                            "--export-object",
+                            "Box",
+                            "--export-format",
+                            export_format,
+                            "--export-file",
+                            str(export_path),
+                        ],
+                    )
+
+                    self.assertEqual(result["diagnostics"], [])
+                    self.assertEqual(
+                        result["exports"],
+                        [{"object": "Box", "format": export_format, "file": str(export_path)}],
+                    )
+                    self.assertTrue(export_path.exists())
+                    self.assertGreater(export_path.stat().st_size, 0)
+
+                    import_request = {
+                        "Objects": [
+                            {
+                                "Name": object_name,
+                                "ID": 1,
+                                "TypeId": type_id,
+                                "Properties": {"FileName": str(export_path)},
+                            }
+                        ],
+                        "recompute": {"objs": [object_name]},
+                    }
+                    import_path = tmp_path / f"import-{export_format}.json"
+                    import_path.write_text(json.dumps(import_request), encoding="utf-8")
+                    imported_result = self.run_recompute_file(import_path)
+                    imported = imported_result["objects"][object_name]
+
+                    self.assertEqual(imported_result["diagnostics"], [])
+                    self.assertEqual(imported["status"], "ok")
+                    self.assert_bbox_close_delta(imported["bbox"], [0.0, 0.0, 0.0], [2.0, 3.0, 4.0], 1e-6)
+                    if export_format == "stl":
+                        self.assertEqual(imported["primitive"], "import_stl")
+                        self.assertGreater(imported_result["mesh"][object_name]["summary"]["triangle_count"], 0)
+                    else:
+                        self.assertAlmostEqual(imported["volume"], 24.0, delta=1e-6)
 
     def test_p8_part_prism_builds_regular_polygon_solid(self) -> None:
         result = self.run_recompute("part-prism", "p8")
@@ -2420,6 +2789,37 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         )
         self.assertEqual(named_shape["element_map_status"], "history_partial")
         self.assertTrue(any(item["kind"] == "split" for item in named_shape["history"]))
+
+    def test_p8_part_boolean_fragments_split_rebuilds_shell_aggregate_pieces(self) -> None:
+        result = self.run_recompute("part-boolean-fragments-shell-split", "p8")
+        fragments = result["objects"]["BooleanFragments"]
+        named_shape = result["named_shapes"]["BooleanFragments"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(fragments["status"], "ok")
+        self.assertEqual(fragments["boolean"], "fragments")
+        self.assertEqual(fragments["mode"], "Split")
+        self.assertEqual(fragments["shape"], "occt_compound")
+        self.assertEqual(fragments["objects"], ["ShellBase", "SplitterFace"])
+        self.assert_bbox_close_delta(
+            fragments["bbox"],
+            [0.0, 0.0, -0.5000001],
+            [2.0, 1.0, 0.5000001],
+            1e-6,
+        )
+        self.assertEqual(fragments["volume"], 0.0)
+        self.assert_topology_counts(
+            result["subshapes"]["BooleanFragments"],
+            {"topology_counts": {"faces": 4, "edges": 13, "vertices": 10}},
+        )
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertTrue(any(item["kind"] == "split" for item in named_shape["history"]))
+        self.assertTrue(
+            any(
+                item["kind"] == "split" and "ShellBase.Face1" in item["sources"]
+                for item in named_shape["history"]
+            )
+        )
 
     def test_p8_part_section_builds_intersection_edges(self) -> None:
         result = self.run_recompute("part-section", "p8")

@@ -1,0 +1,15 @@
+{
+  "Objects": [
+    {
+      "Name": "ImportedMissingStep",
+      "ID": 1,
+      "TypeId": "Part::ImportStep",
+      "Properties": {
+        "FileName": "fixtures/p8/assets/missing.stp"
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["ImportedMissingStep"]
+  }
+}

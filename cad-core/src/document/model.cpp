@@ -14,8 +14,13 @@ namespace {
 
 bool isLinkPropertyType(const std::string& propertyType)
 {
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/PropertyLinks.h
+    // ::PropertyXLink derives from PropertyLinkGlobal and is used by App::Link::LinkedObject
+    // and Assembly::AssemblyLink::LinkedObject; XLink still contributes dependency edges.
     return propertyType == "App::PropertyLink" || propertyType == "App::PropertyLinkList"
-        || propertyType == "App::PropertyLinkSub" || propertyType == "App::PropertyLinkSubList";
+        || propertyType == "App::PropertyLinkSub" || propertyType == "App::PropertyLinkSubList"
+        || propertyType == "App::PropertyXLink" || propertyType == "App::PropertyXLinkList"
+        || propertyType == "App::PropertyXLinkSub" || propertyType == "App::PropertyXLinkSubList";
 }
 
 PropertyKind kindFromPropertyType(const std::string& propertyType)
@@ -42,16 +47,16 @@ PropertyKind kindFromPropertyType(const std::string& propertyType)
     if (propertyType == "App::PropertyPlacement") {
         return PropertyKind::Placement;
     }
-    if (propertyType == "App::PropertyLink") {
+    if (propertyType == "App::PropertyLink" || propertyType == "App::PropertyXLink") {
         return PropertyKind::Link;
     }
-    if (propertyType == "App::PropertyLinkList") {
+    if (propertyType == "App::PropertyLinkList" || propertyType == "App::PropertyXLinkList") {
         return PropertyKind::LinkList;
     }
-    if (propertyType == "App::PropertyLinkSub") {
+    if (propertyType == "App::PropertyLinkSub" || propertyType == "App::PropertyXLinkSub") {
         return PropertyKind::LinkSub;
     }
-    if (propertyType == "App::PropertyLinkSubList") {
+    if (propertyType == "App::PropertyLinkSubList" || propertyType == "App::PropertyXLinkSubList") {
         return PropertyKind::LinkSubList;
     }
     return PropertyKind::Unknown;
@@ -123,7 +128,8 @@ std::optional<Link> readLinkObject(const nlohmann::json& value, const std::strin
         return std::nullopt;
     }
 
-    if (*propertyType != "App::PropertyLink" && *propertyType != "App::PropertyLinkSub") {
+    if (*propertyType != "App::PropertyLink" && *propertyType != "App::PropertyLinkSub"
+        && *propertyType != "App::PropertyXLink" && *propertyType != "App::PropertyXLinkSub") {
         return std::nullopt;
     }
     if (!value.contains("value") || !value.at("value").is_string() || value.at("value").get<std::string>().empty()) {
@@ -219,7 +225,52 @@ bool isGeoFeatureGroupType(const std::string& typeId)
     // calls GroupExtension::initExtension(this), and
     // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/BodyBase.cpp::BodyBase::BodyBase()
     // calls App::OriginGroupExtension::initExtension(this).
-    return typeId == "App::Part" || typeId == "PartDesign::Body";
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/AssemblyObject.h
+    // ::AssemblyObject derives from App::Part, and
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/AssemblyLink.h
+    // ::AssemblyLink derives from App::Part.
+    return typeId == "App::Part" || typeId == "PartDesign::Body"
+        || typeId == "Assembly::AssemblyObject" || typeId == "Assembly::AssemblyLink";
+}
+
+bool isOwnedLinkElement(const DocumentObject& element, const DocumentObject& owner)
+{
+    if (element.typeId != "App::LinkElement") {
+        return false;
+    }
+    const auto ownerValue = readNumber(element, "_LinkOwner");
+    return !ownerValue || static_cast<long long>(*ownerValue) == owner.id;
+}
+
+void addMaterializedLinkElementDependencies(Document& document)
+{
+    for (auto& object : document.objects) {
+        if (object.typeId != "App::Link" || !readLinks(object, "ElementList").empty()) {
+            continue;
+        }
+        const std::size_t elementCount = static_cast<std::size_t>(std::max(0.0, readNumber(object, "ElementCount").value_or(0.0)));
+        if (elementCount == 0U || !readBool(object, "ShowElement").value_or(true)) {
+            continue;
+        }
+
+        for (std::size_t index = 0; index < elementCount; ++index) {
+            const std::string elementName = object.name + "_i" + std::to_string(index);
+            const auto elementIt = document.indexByName.find(elementName);
+            if (elementIt == document.indexByName.end()) {
+                continue;
+            }
+            const auto& element = document.objects.at(elementIt->second);
+            if (!isOwnedLinkElement(element, object)) {
+                continue;
+            }
+
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+            // ::LinkBaseExtension::update(), when ShowElement is true, creates or re-claims
+            // child LinkElement objects named owner "_i" index; cad-core keeps the graph
+            // immutable, but still makes those materialized elements dependency-bearing.
+            object.dependencyLinks.push_back(Link{elementName, {}, {}, {}, "ElementList"});
+        }
+    }
 }
 
 bool hasInvalidTypedPayload(const nlohmann::json& raw, PropertyKind kind)
@@ -249,7 +300,8 @@ bool hasInvalidTypedPayload(const nlohmann::json& raw, PropertyKind kind)
 
 bool isMalformedLinkValue(const nlohmann::json& value, const std::string& propertyType)
 {
-    if (propertyType == "App::PropertyLink" || propertyType == "App::PropertyLinkSub") {
+    if (propertyType == "App::PropertyLink" || propertyType == "App::PropertyLinkSub"
+        || propertyType == "App::PropertyXLink" || propertyType == "App::PropertyXLinkSub") {
         if (value.contains("value") && !value.at("value").is_string()) {
             return true;
         }
@@ -260,7 +312,8 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
         return false;
     }
 
-    if (propertyType == "App::PropertyLinkList" || propertyType == "App::PropertyLinkSubList") {
+    if (propertyType == "App::PropertyLinkList" || propertyType == "App::PropertyLinkSubList"
+        || propertyType == "App::PropertyXLinkList" || propertyType == "App::PropertyXLinkSubList") {
         const auto rawLinksIt = value.find("value");
         if (rawLinksIt == value.end()) {
             return false;
@@ -274,7 +327,8 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
             }
             const auto itemType = propertyTypeOf(item);
             if (item.is_object() && itemType
-                && (*itemType == "App::PropertyLink" || *itemType == "App::PropertyLinkSub")
+                && (*itemType == "App::PropertyLink" || *itemType == "App::PropertyLinkSub"
+                    || *itemType == "App::PropertyXLink" || *itemType == "App::PropertyXLinkSub")
                 && !isMalformedLinkValue(item, *itemType)) {
                 continue;
             }
@@ -367,7 +421,8 @@ std::vector<Link> readLinks(const nlohmann::json& value)
         return links;
     }
 
-    if (*propertyType == "App::PropertyLink" || *propertyType == "App::PropertyLinkSub") {
+    if (*propertyType == "App::PropertyLink" || *propertyType == "App::PropertyLinkSub"
+        || *propertyType == "App::PropertyXLink" || *propertyType == "App::PropertyXLinkSub") {
         auto link = readLinkObject(value);
         if (link) {
             links.push_back(std::move(*link));
@@ -375,7 +430,8 @@ std::vector<Link> readLinks(const nlohmann::json& value)
         return links;
     }
 
-    if (*propertyType == "App::PropertyLinkList" || *propertyType == "App::PropertyLinkSubList") {
+    if (*propertyType == "App::PropertyLinkList" || *propertyType == "App::PropertyLinkSubList"
+        || *propertyType == "App::PropertyXLinkList" || *propertyType == "App::PropertyXLinkSubList") {
         const auto rawLinksIt = value.find("value");
         if (rawLinksIt == value.end() || !rawLinksIt->is_array()) {
             return links;
@@ -639,6 +695,7 @@ std::pair<Document, std::vector<runtime::Diagnostic>> parseDocument(const nlohma
             document.parentGroupByObject.emplace(link.object, object.name);
         }
     }
+    addMaterializedLinkElementDependencies(document);
 
     if (raw.contains("recompute") && raw.at("recompute").is_object() && raw.at("recompute").contains("objs")) {
         const auto& rawTargets = raw.at("recompute").at("objs");

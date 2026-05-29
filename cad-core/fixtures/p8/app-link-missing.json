@@ -1,0 +1,18 @@
+{
+  "Objects": [
+    {
+      "Name": "BoxLink",
+      "ID": 1,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "MissingBox"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["BoxLink"]
+  }
+}

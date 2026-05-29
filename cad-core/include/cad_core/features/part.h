@@ -22,5 +22,8 @@ void executePartWedge(const document::DocumentObject& object, runtime::ComputeCo
 void executePartEllipse(const document::DocumentObject& object, runtime::ComputeContext& context);
 void executePartHelix(const document::DocumentObject& object, runtime::ComputeContext& context);
 void executePartSpiral(const document::DocumentObject& object, runtime::ComputeContext& context);
+void executePartImportBrep(const document::DocumentObject& object, runtime::ComputeContext& context);
+void executePartImportStep(const document::DocumentObject& object, runtime::ComputeContext& context);
+void executePartImportIges(const document::DocumentObject& object, runtime::ComputeContext& context);
 
 }  // namespace cad_core::features

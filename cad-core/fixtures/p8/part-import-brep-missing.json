@@ -1,0 +1,15 @@
+{
+  "Objects": [
+    {
+      "Name": "ImportedMissing",
+      "ID": 1,
+      "TypeId": "Part::ImportBrep",
+      "Properties": {
+        "FileName": "fixtures/p8/assets/missing.brep"
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["ImportedMissing"]
+  }
+}

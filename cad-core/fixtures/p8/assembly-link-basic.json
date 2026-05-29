@@ -1,0 +1,45 @@
+{
+  "Objects": [
+    {
+      "Name": "Box",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 3,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "ComponentLink",
+      "ID": 2,
+      "TypeId": "Assembly::AssemblyLink",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Box"
+        },
+        "Rigid": true,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 5, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "Assembly",
+      "ID": 3,
+      "TypeId": "Assembly::AssemblyObject",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["ComponentLink"]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Assembly"]
+  }
+}

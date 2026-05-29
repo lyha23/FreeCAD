@@ -29,6 +29,8 @@ add_library(cad-core-lib STATIC
   src/features/feature_extrude.cpp
   src/features/feature_executor.cpp
   src/features/hole.cpp
+  src/features/link.cpp
+  src/features/mesh.cpp
   src/features/part.cpp
   src/features/part_boolean.cpp
   src/features/pad.cpp
@@ -77,6 +79,11 @@ target_link_libraries(cad-core-lib PUBLIC
   TKShHealing
   TKMesh
   TKBO
+  TKDE
+  TKDESTL
+  TKDEIGES
+  TKDESTEP
+  TKXSBase
 )
 
 add_library(cad_core_ffi SHARED

@@ -1,0 +1,80 @@
+{
+  "Objects": [
+    {
+      "Name": "Box",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 3,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "LinkA",
+      "ID": 2,
+      "TypeId": "App::LinkElement",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Box"
+        },
+        "LinkTransform": false,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "LinkB",
+      "ID": 3,
+      "TypeId": "App::LinkElement",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Box"
+        },
+        "LinkTransform": false,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [5, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "LinkGroup",
+      "ID": 4,
+      "TypeId": "App::LinkGroup",
+      "Properties": {
+        "ElementList": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["LinkA", "LinkB"]
+        }
+      }
+    },
+    {
+      "Name": "FaceLink",
+      "ID": 5,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "value": "LinkGroup",
+          "SubList": ["LinkB.Face1"]
+        },
+        "LinkTransform": false,
+        "LinkPlacement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 10, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["FaceLink"]
+  }
+}

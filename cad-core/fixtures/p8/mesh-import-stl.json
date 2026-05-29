@@ -1,0 +1,15 @@
+{
+  "Objects": [
+    {
+      "Name": "ImportedStl",
+      "ID": 1,
+      "TypeId": "Mesh::Import",
+      "Properties": {
+        "FileName": "fixtures/p8/assets/unit-square.stl"
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["ImportedStl"]
+  }
+}

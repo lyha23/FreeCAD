@@ -1,25 +1,113 @@
 #include "cad_core/geometry/shape_exporter.h"
 
+#include <APIHeaderSection_MakeHeader.hxx>
 #include <BRepBndLib.hxx>
 #include <BRepGProp.hxx>
 #include <BRepMesh_IncrementalMesh.hxx>
+#include <BRepTools.hxx>
 #include <BRep_Tool.hxx>
 #include <Bnd_Box.hxx>
 #include <GProp_GProps.hxx>
+#include <IFSelect_ReturnStatus.hxx>
+#include <Interface_Static.hxx>
 #include <Poly_Triangle.hxx>
 #include <Poly_Triangulation.hxx>
+#include <STEPControl_Writer.hxx>
 #include <Standard_Version.hxx>
+#include <StlAPI_Writer.hxx>
+#include <TCollection_HAsciiString.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopLoc_Location.hxx>
+#include <TopTools_FormatVersion.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Face.hxx>
 #include <gp_Pnt.hxx>
 
+#include <algorithm>
 #include <cmath>
 #include <map>
 #include <sstream>
+#include <stdexcept>
 
 namespace cad_core::geometry {
+
+namespace {
+
+double defaultAngularDeflection(double linearTolerance)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.cpp
+    // ::defaultAngularDeflection(), "default to at most 0.1 radians" and
+    // "linearTolerance * 5 + 0.005".
+    return std::min(0.1, linearTolerance * 5 + 0.005);
+}
+
+void assertWritableShape(const TopoDS_Shape& shape)
+{
+    if (shape.IsNull()) {
+        throw std::runtime_error("Cannot export a null shape");
+    }
+}
+
+void exportBrepFile(const TopoDS_Shape& shape, const std::filesystem::path& path)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.cpp
+    // ::TopoShape::exportBrep(), writes with BRepTools::Write(...,
+    // TopTools_FormatVersion_VERSION_1).
+    if (!BRepTools::Write(shape,
+                          path.string().c_str(),
+                          Standard_False,
+                          Standard_False,
+                          TopTools_FormatVersion_VERSION_1)) {
+        throw std::runtime_error("Writing of BREP failed: " + path.string());
+    }
+}
+
+void exportStepFile(const TopoDS_Shape& shape, const std::filesystem::path& path)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.cpp
+    // ::TopoShape::exportStep(), "Do not write out any assembly information" and
+    // transfers with STEPControl_AsIs.
+    Interface_Static::SetIVal("write.step.assembly", 0);
+
+    STEPControl_Writer writer;
+    if (writer.Transfer(shape, STEPControl_AsIs) != IFSelect_RetDone) {
+        throw std::runtime_error("Error in transferring STEP");
+    }
+
+    APIHeaderSection_MakeHeader makeHeader(writer.Model());
+    makeHeader.SetAuthorValue(1, new TCollection_HAsciiString("FreeCAD"));
+    makeHeader.SetOrganizationValue(1, new TCollection_HAsciiString("FreeCAD"));
+    makeHeader.SetOriginatingSystem(new TCollection_HAsciiString("FreeCAD"));
+    makeHeader.SetDescriptionValue(1, new TCollection_HAsciiString("FreeCAD Model"));
+
+    if (writer.Write(path.string().c_str()) != IFSelect_RetDone) {
+        throw std::runtime_error("Writing of STEP failed: " + path.string());
+    }
+}
+
+void exportStlFile(const TopoDS_Shape& shape, const std::filesystem::path& path, double deflection)
+{
+    if (deflection <= 0.0) {
+        throw std::runtime_error("STL deflection must be positive");
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.cpp
+    // ::TopoShape::exportStl(), meshes with deflection and defaultAngularDeflection(deflection)
+    // before StlAPI_Writer::Write().
+    BRepMesh_IncrementalMesh mesh(shape,
+                                  deflection,
+                                  Standard_False,
+                                  defaultAngularDeflection(deflection),
+                                  true);
+    mesh.Perform();
+
+    StlAPI_Writer writer;
+    if (!writer.Write(shape, path.string().c_str())) {
+        throw std::runtime_error("Writing of STL failed: " + path.string());
+    }
+}
+
+}  // namespace
 
 nlohmann::json bboxForShape(const TopoDS_Shape& shape)
 {
@@ -122,10 +210,65 @@ nlohmann::json meshForShape(const TopoDS_Shape& shape)
     };
 }
 
+ShapeFileFormat shapeFileFormatFromString(const std::string& format)
+{
+    if (format == "brep" || format == "brp") {
+        return ShapeFileFormat::Brep;
+    }
+    if (format == "step" || format == "stp") {
+        return ShapeFileFormat::Step;
+    }
+    if (format == "stl") {
+        return ShapeFileFormat::Stl;
+    }
+    throw std::runtime_error("Unsupported export format " + format);
+}
+
+std::string shapeFileFormatName(ShapeFileFormat format)
+{
+    switch (format) {
+        case ShapeFileFormat::Brep:
+            return "brep";
+        case ShapeFileFormat::Step:
+            return "step";
+        case ShapeFileFormat::Stl:
+            return "stl";
+    }
+    throw std::runtime_error("Unsupported export format");
+}
+
+void exportShapeFile(const TopoDS_Shape& shape,
+                     const std::filesystem::path& path,
+                     ShapeFileFormat format,
+                     double stlDeflection)
+{
+    assertWritableShape(shape);
+    if (path.empty()) {
+        throw std::runtime_error("Export path must not be empty");
+    }
+
+    const auto parent = path.parent_path();
+    if (!parent.empty()) {
+        std::filesystem::create_directories(parent);
+    }
+
+    switch (format) {
+        case ShapeFileFormat::Brep:
+            exportBrepFile(shape, path);
+            return;
+        case ShapeFileFormat::Step:
+            exportStepFile(shape, path);
+            return;
+        case ShapeFileFormat::Stl:
+            exportStlFile(shape, path, stlDeflection);
+            return;
+    }
+    throw std::runtime_error("Unsupported export format");
+}
+
 std::string kernelVersion()
 {
     return std::string("OCCT ") + OCC_VERSION_COMPLETE;
 }
 
 }  // namespace cad_core::geometry
-
