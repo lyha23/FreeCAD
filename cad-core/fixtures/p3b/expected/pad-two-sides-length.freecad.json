@@ -19,5 +19,15 @@
     "faces": 6,
     "vertices": 8
   },
-  "volume": 499.9999999999999
+  "volume": 499.9999999999999,
+  "named_shapes": {
+    "Pad": {
+      "element_map_status": "history_partial",
+      "element_kind_by_source": {
+        "Sketch.Edge1": "edge",
+        "Sketch.Vertex1": "vertex",
+        "Sketch.Face1": "face"
+      }
+    }
+  }
 }

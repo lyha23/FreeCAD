@@ -2,11 +2,29 @@
   "object": "ImportedIges",
   "reference": "FreeCADCmd geometry-equivalent import of fixtures/p8/assets/rlf_12545.igs",
   "freecad_version": "1.2.0 revision 20260519",
-  "bbox_delta": 0.000001,
+  "bbox_delta": 1e-06,
   "bbox": {
-    "min": [-6.238209180579999, -6.25164176738, 0.009999888938014427],
-    "max": [6.2617910739800005, 6.24835848718, 4.71000012118]
+    "min": [
+      -6.238209180579999,
+      -6.25164176738,
+      0.009999888938014427
+    ],
+    "max": [
+      6.2617910739800005,
+      6.24835848718,
+      4.71000012118
+    ]
   },
   "volume": 768.697234526593,
-  "topology_counts": {"faces": 47, "edges": 240, "vertices": 240}
+  "topology_counts": {
+    "faces": 47,
+    "edges": 240,
+    "vertices": 240
+  },
+  "named_shapes": {
+    "ImportedIges": {
+      "owner": "ImportedIges",
+      "element_map_status": "indexed_only"
+    }
+  }
 }

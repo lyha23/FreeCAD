@@ -3,12 +3,42 @@
   "freecad_version": "1.2.0 revision 20260519",
   "objects": {
     "Scaled": {
-      "bbox": {"min": [-1.0, -1.0, -1.0], "max": [3.0, 3.0, 3.0]},
+      "bbox": {
+        "min": [
+          -1.0,
+          -1.0,
+          -1.0
+        ],
+        "max": [
+          3.0,
+          3.0,
+          3.0
+        ]
+      },
       "volume": 64.0
     },
     "Body": {
-      "bbox": {"min": [-1.0, -1.0, -1.0], "max": [3.0, 3.0, 3.0]},
+      "bbox": {
+        "min": [
+          -1.0,
+          -1.0,
+          -1.0
+        ],
+        "max": [
+          3.0,
+          3.0,
+          3.0
+        ]
+      },
       "volume": 64.0
+    }
+  },
+  "named_shapes": {
+    "Body": {
+      "element_map_status": "history_partial",
+      "element_map_prefixes": [
+        "Scaled.Transform"
+      ]
     }
   }
 }

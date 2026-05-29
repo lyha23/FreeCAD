@@ -19,5 +19,15 @@
     "faces": 11,
     "vertices": 16
   },
-  "volume": 355.99999999999994
+  "volume": 355.99999999999994,
+  "named_shapes": {
+    "Pocket": {
+      "element_map_status": "history_partial",
+      "element_kind_by_source": {
+        "SketchPocket.Edge1": "edge",
+        "SketchPocket.Vertex1": "vertex",
+        "SketchPocket.Face1": "face"
+      }
+    }
+  }
 }

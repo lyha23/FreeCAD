@@ -2,7 +2,32 @@
   "object": "BooleanFragments",
   "reference": "FreeCADCmd geometry-equivalent Part::BooleanFragments Split mode for two overlapping boxes",
   "freecad_version": "1.2.0 revision 20260519",
-  "bbox": {"min": [0.0, 0.0, 0.0], "max": [3.0, 2.0, 2.0]},
+  "bbox": {
+    "min": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "max": [
+      3.0,
+      2.0,
+      2.0
+    ]
+  },
   "volume": 12.0,
-  "topology_counts": {"faces": 16, "edges": 28, "vertices": 16}
+  "topology_counts": {
+    "faces": 16,
+    "edges": 28,
+    "vertices": 16
+  },
+  "named_shapes": {
+    "BooleanFragments": {
+      "owner": "BooleanFragments",
+      "element_map_status": "history_partial",
+      "history_kinds_include": [
+        "split",
+        "modified"
+      ]
+    }
+  }
 }

@@ -19,5 +19,17 @@
     "faces": 10,
     "edges": 20,
     "vertices": 12
+  },
+  "named_shapes": {
+    "Pad": {
+      "element_map_status": "history_partial",
+      "element_map_prefixes": [
+        "Pad.XorUnion1."
+      ],
+      "element_kind_by_source": {
+        "Sketch.Edge1": "edge",
+        "Sketch.Vertex1": "vertex"
+      }
+    }
   }
 }

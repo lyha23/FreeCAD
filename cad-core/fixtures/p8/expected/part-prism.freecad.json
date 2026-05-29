@@ -2,8 +2,28 @@
   "object": "Prism",
   "reference": "FreeCADCmd geometry-equivalent Part::Prism 6-sided, circumradius 2, height 5",
   "freecad_version": "1.2.0 revision 20260519",
-  "bbox_delta": 0.000001,
-  "bbox": {"min": [-2.0, -1.7320508075688772, 0.0], "max": [2.0, 1.7320508075688772, 5.0]},
+  "bbox_delta": 1e-06,
+  "bbox": {
+    "min": [
+      -2.0,
+      -1.7320508075688772,
+      0.0
+    ],
+    "max": [
+      2.0,
+      1.7320508075688772,
+      5.0
+    ]
+  },
   "volume": 51.96152422706632,
-  "topology_counts": {"faces": 8, "edges": 18, "vertices": 12}
+  "topology_counts": {
+    "faces": 8,
+    "edges": 18,
+    "vertices": 12
+  },
+  "named_shapes": {
+    "Prism": {
+      "owner": "Prism"
+    }
+  }
 }

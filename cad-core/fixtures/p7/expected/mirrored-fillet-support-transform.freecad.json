@@ -4,16 +4,57 @@
   "bbox_delta": 0.02,
   "objects": {
     "Fillet": {
-      "bbox": {"min": [0.0, 0.0, 0.0], "max": [2.0, 2.0, 2.0]},
+      "bbox": {
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max": [
+          2.0,
+          2.0,
+          2.0
+        ]
+      },
       "volume": 7.9828318530717945
     },
     "Mirrored": {
-      "bbox": {"min": [0.0, 0.0, 0.0], "max": [4.0, 2.0, 2.0]},
+      "bbox": {
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max": [
+          4.0,
+          2.0,
+          2.0
+        ]
+      },
       "volume": 15.965663706143589
     },
     "Body": {
-      "bbox": {"min": [0.0, 0.0, 0.0], "max": [4.0, 2.0, 2.0]},
+      "bbox": {
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max": [
+          4.0,
+          2.0,
+          2.0
+        ]
+      },
       "volume": 15.965663706143589
+    }
+  },
+  "named_shapes": {
+    "Body": {
+      "element_map_status": "history_partial",
+      "element_map_prefixes": [
+        "Fillet."
+      ]
     }
   }
 }

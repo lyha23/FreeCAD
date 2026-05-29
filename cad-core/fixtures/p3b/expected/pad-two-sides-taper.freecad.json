@@ -19,5 +19,21 @@
     "faces": 10,
     "vertices": 12
   },
-  "volume": 572.5629232343476
+  "volume": 572.5629232343476,
+  "named_shapes": {
+    "Pad": {
+      "element_map_status": "history_partial",
+      "element_kind_by_source": {
+        "Sketch.Edge1": "edge",
+        "Sketch.Vertex1": "vertex"
+      },
+      "history_sources": {
+        "generated": [
+          "Sketch.Edge1",
+          "Pad.Prism1.TaperSection2.Edge1",
+          "Pad.Prism2.TaperSection2.Edge1"
+        ]
+      }
+    }
+  }
 }

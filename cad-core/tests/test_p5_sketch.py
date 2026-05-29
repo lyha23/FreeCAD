@@ -33,11 +33,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assertTrue(sketch["profile_ready"])
         self.assertEqual(sketch["edge_count"], 5)
-        self.assertEqual(sketch["raw_edge_count"], 5)
-        self.assertEqual(sketch["internal_face_count"], 1)
-        self.assertEqual(sketch["internal_edge_count"], 5)
         self.assert_object_matches_expected(result, "p5", "sketch-rect-circle-hole")
 
     def test_p5_nested_closed_wires_keep_island_face(self) -> None:
@@ -47,12 +43,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assertTrue(sketch["profile_ready"])
-        self.assertEqual(sketch["profile"], "occt_compound")
         self.assertEqual(sketch["edge_count"], 6)
-        self.assertEqual(sketch["raw_edge_count"], 6)
-        self.assertEqual(sketch["internal_face_count"], 2)
-        self.assertEqual(sketch["internal_edge_count"], 6)
         self.assert_object_matches_expected(result, "p5", "sketch-rect-circle-island")
 
     def test_p5_arc_profile_outputs_pad(self) -> None:
@@ -95,8 +86,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertTrue(sketch["profile_ready"])
         self.assertEqual(sketch["raw_edge_count"], 2)
         self.assertEqual(sketch["internal_shape"], "occt_internal_shape")
-        self.assertEqual(sketch["internal_face_count"], 1)
-        self.assertGreaterEqual(sketch["internal_edge_count"], 2)
 
     def test_p5_construction_geometry_is_ignored_for_profile(self) -> None:
         result = self.run_recompute("sketch-construction-ignored", "p5")
@@ -168,22 +157,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p5_closed_sketch_exports_internal_subshapes(self) -> None:
         result = self.run_recompute("sketch-internal-face", "p5")
         sketch = result["objects"]["Sketch"]
-        subshape_map = result["subshapes"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assertTrue(sketch["profile_ready"])
-        self.assertEqual(sketch["internal_shape"], "occt_internal_shape")
-        self.assertEqual(sketch["internal_face_count"], 1)
-        self.assertEqual(sketch["internal_edge_count"], 4)
-        self.assertEqual(sketch["internal_vertex_count"], 4)
-        self.assertIn("InternalFace1", subshape_map)
-        self.assertIn("InternalEdge1", subshape_map)
-        self.assertIn("InternalVertex1", subshape_map)
-        self.assertEqual(sketch["internal_element_map"]["InternalEdge1"], "Edge1")
-        self.assertEqual(sketch["internal_element_map"]["Edge1"], "InternalEdge1")
-        self.assertEqual(sketch["internal_element_map"]["InternalVertex1"], "Vertex1")
-        self.assertEqual(sketch["internal_element_map"]["Vertex1"], "InternalVertex1")
+        self.assert_object_matches_expected(result, "p5", "sketch-internal-face")
 
     def test_p5_external_geometry_resolves_internal_edge(self) -> None:
         result = self.run_recompute("sketch-external-internal-edge", "p5")
@@ -192,7 +169,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         pad = result["objects"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(base_sketch["internal_edge_count"], 4)
         self.assertEqual(sketch["external_geometry_count"], 1)
         self.assertEqual(sketch["external_curve_count"], 0)
         self.assertEqual(sketch["external_point_count"], 0)
@@ -204,7 +180,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         pad = result["objects"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(base_sketch["internal_vertex_count"], 4)
         self.assertEqual(sketch["external_geometry_count"], 1)
         self.assertEqual(sketch["external_curve_count"], 0)
         self.assertEqual(sketch["external_point_count"], 1)
@@ -213,14 +188,8 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p5_open_sketch_keeps_raw_shape_without_profile_face(self) -> None:
         result = self.run_recompute("sketch-open-wire-internal-empty", "p5")
         sketch = result["objects"]["Sketch"]
-        subshape_map = result["subshapes"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
         self.assertEqual(sketch["shape"], "occt_sketch_shape")
-        self.assertEqual(sketch["profile"], "none")
-        self.assertFalse(sketch["profile_ready"])
-        self.assertEqual(sketch["raw_edge_count"], 3)
-        self.assertEqual(sketch["internal_shape"], "none")
-        self.assertEqual(sketch["internal_element_map"], {})
-        self.assertEqual(sum(key.startswith("Edge") for key in subshape_map), 3)
+        self.assert_object_matches_expected(result, "p5", "sketch-open-wire-internal-empty")

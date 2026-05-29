@@ -3,13 +3,48 @@
   "freecad_version": "1.2.0 revision 20260519",
   "objects": {
     "ComponentLink": {
-      "bbox": {"min": [0.0, 5.0, 0.0], "max": [2.0, 8.0, 4.0]},
+      "bbox": {
+        "min": [
+          0.0,
+          5.0,
+          0.0
+        ],
+        "max": [
+          2.0,
+          8.0,
+          4.0
+        ]
+      },
       "volume": 24.0
     },
     "Assembly": {
-      "bbox": {"min": [0.0, 5.0, 0.0], "max": [2.0, 8.0, 4.0]},
+      "bbox": {
+        "min": [
+          0.0,
+          5.0,
+          0.0
+        ],
+        "max": [
+          2.0,
+          8.0,
+          4.0
+        ]
+      },
       "volume": 24.0,
-      "topology_counts": {"faces": 6, "edges": 12, "vertices": 8}
+      "topology_counts": {
+        "faces": 6,
+        "edges": 12,
+        "vertices": 8
+      }
+    }
+  },
+  "named_shapes": {
+    "Assembly": {
+      "element_map_status": "history_partial",
+      "element_map": {
+        "ComponentLink.Face1": "Face1",
+        "Box.Face1": "Face1"
+      }
     }
   }
 }

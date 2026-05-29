@@ -4,12 +4,42 @@
   "bbox_delta": 0.01,
   "objects": {
     "Fillet": {
-      "bbox": {"min": [0.0, 0.0, 0.0], "max": [10.0, 5.0, 10.0]},
+      "bbox": {
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max": [
+          10.0,
+          5.0,
+          10.0
+        ]
+      },
       "volume": 499.4634954084936
     },
     "Body": {
-      "bbox": {"min": [0.0, 0.0, 0.0], "max": [10.0, 5.0, 10.0]},
+      "bbox": {
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max": [
+          10.0,
+          5.0,
+          10.0
+        ]
+      },
       "volume": 499.4634954084936
+    }
+  },
+  "named_shapes": {
+    "Body": {
+      "element_map_status": "history_partial",
+      "element_map_prefixes": [
+        "Pad."
+      ]
     }
   }
 }

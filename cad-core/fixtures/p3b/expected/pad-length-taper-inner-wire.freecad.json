@@ -1,15 +1,54 @@
 {
-  "object": "Pad",
   "reference": "FreeCADCmd native document oracle: Sketcher::SketchObject with outer 12x8 rectangle and inner 4x2 rectangle, PartDesign::Pad Length=8 TaperAngle=2",
   "freecad_version": "1.2.0 revision 20260519",
-  "bbox": {
-    "min": [-0.27936615593398173, -0.27936615593398173, 0.0],
-    "max": [12.279366155933982, 8.279366155933982, 8.0]
+  "objects": {
+    "Sketch": {
+      "sketch_internal": {
+        "profile_ready": true,
+        "internal_counts": {
+          "faces": 1
+        }
+      }
+    },
+    "Pad": {
+      "bbox": {
+        "min": [
+          -0.27936615593398173,
+          -0.27936615593398173,
+          0.0
+        ],
+        "max": [
+          12.279366155933982,
+          8.279366155933982,
+          8.0
+        ]
+      },
+      "volume": 735.2890094646057,
+      "topology_counts": {
+        "faces": 10,
+        "edges": 24,
+        "vertices": 16
+      }
+    }
   },
-  "volume": 735.2890094646057,
-  "topology_counts": {
-    "faces": 10,
-    "edges": 24,
-    "vertices": 16
+  "named_shapes": {
+    "Pad": {
+      "element_map_status": "history_partial",
+      "element_kind_by_source": {
+        "Sketch.Face1": "face",
+        "Sketch.Edge1": "edge",
+        "Sketch.Edge5": "edge",
+        "Sketch.Vertex1": "vertex"
+      },
+      "history_sources": {
+        "generated": [
+          "Sketch.Face1",
+          "Sketch.Edge1",
+          "Sketch.Edge5",
+          "Pad.Outer.TaperSection2.Edge1",
+          "Pad.Inner1.TaperSection2.Edge1"
+        ]
+      }
+    }
   }
 }

@@ -2,8 +2,31 @@
   "object": "Split",
   "reference": "FreeCADCmd geometry-equivalent Part::BooleanFragments Split mode for compsolid aggregate",
   "freecad_version": "1.2.0 revision 20260519",
-  "bbox_delta": 0.000001,
-  "bbox": {"min": [0.0, 0.0, 0.0], "max": [3.0, 2.5000001000000007, 2.0]},
+  "bbox_delta": 1e-06,
+  "bbox": {
+    "min": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "max": [
+      3.0,
+      2.5000001000000007,
+      2.0
+    ]
+  },
   "volume": 20.0,
-  "topology_counts": {"faces": 36, "edges": 60, "vertices": 32}
+  "topology_counts": {
+    "faces": 36,
+    "edges": 60,
+    "vertices": 32
+  },
+  "named_shapes": {
+    "Split": {
+      "element_map_status": "history_partial",
+      "history_kinds_include": [
+        "split"
+      ]
+    }
+  }
 }

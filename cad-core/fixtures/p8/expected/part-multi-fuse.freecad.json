@@ -2,7 +2,31 @@
   "object": "MultiFuse",
   "reference": "FreeCADCmd geometry-equivalent Part::MultiFuse of BoxA, BoxB, and BoxC",
   "freecad_version": "1.2.0 revision 20260519",
-  "bbox": {"min": [0.0, 0.0, 0.0], "max": [4.0, 2.0, 2.0]},
+  "bbox": {
+    "min": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "max": [
+      4.0,
+      2.0,
+      2.0
+    ]
+  },
   "volume": 16.0,
-  "topology_counts": {"faces": 18, "edges": 36, "vertices": 20}
+  "topology_counts": {
+    "faces": 18,
+    "edges": 36,
+    "vertices": 20
+  },
+  "named_shapes": {
+    "MultiFuse": {
+      "owner": "MultiFuse",
+      "element_map_status": "history_partial",
+      "elements_include": [
+        "Face1"
+      ]
+    }
+  }
 }

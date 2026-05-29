@@ -1,0 +1,31 @@
+{
+  "reference": "FreeCAD topo naming oracle: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.h::TopoShape::makeShapeWithElementMap(), \"Core function to generate mapped element names from shape history\".",
+  "freecad_version": "1.2.0 revision 20260519",
+  "named_shapes": {
+    "Body": {
+      "owner": "Body",
+      "element_map_status": "history_partial",
+      "element_map": {
+        "Face1": "Face1"
+      },
+      "element_map_prefixes": [
+        "Pad.",
+        "Pocket."
+      ],
+      "history_non_indexed_source_prefixes": [
+        "Pad.",
+        "Pocket."
+      ],
+      "history_entries": [
+        {
+          "kind": "merge",
+          "element_for_source": "SketchPocket.Edge1",
+          "sources_include": [
+            "Pocket.Edge3",
+            "SketchPocket.Edge1"
+          ]
+        }
+      ]
+    }
+  }
+}

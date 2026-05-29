@@ -238,19 +238,28 @@ P2 迁移完成后的测试形态：
 - 四个错误 fixture 继续只在 diagnostics 矩阵中验收。
 - P3B 已补齐 24 个成功几何 fixture 的 expected；6 个错误 fixture 继续只验 diagnostics。
 - P4 已补齐 7 个 shape 成功 fixture 的 expected；`datum-point-part-placement` 只验点对象字段，暂不套 shape expected。
-- P5 已补齐 17 个 Pad 输出成功 fixture 的 expected；`sketch-bspline-profile`、`sketch-internal-face`、`sketch-open-wire-internal-empty` 暂属 sketch/internal-shape 语义断言，后续需要单独设计 `InternalShape` / stable subname expected 字段。
+- P5 已补齐 19 个可直接固定 oracle 的 expected，并新增 `sketch_internal` expected schema；`sketch-internal-face`、`sketch-open-wire-internal-empty`、既有 hole/island/external-internal fixtures，以及 P3B `pad-length-taper-inner-wire` 的 InternalShape count / element-map golden 已从测试内联断言迁入 expected。`sketch-bspline-profile` 已登记为 `known_gap: internal_shape_oracle_pending`，等待 dedicated BSpline InternalShape oracle 后再冻结内部 edge 命名/count。
+- `named_shapes` expected schema 已扩展到 owner、`element_map_status`、element map 精确/缺失/前缀、元素种类、元素状态、history kind/source/prefix/entry 等通用断言；P6 `named-shape-indexed-pad`、P6 body maker/split/merge history、P3B profile/taper history、P7 refine/dress-up/transform history，以及 P8 App::Link、primitive、import、boolean/fragments/section 等 named-shape golden 已从测试内联断言迁入 expected。
 - P7 expected 已扩展到 Hole、DressUp、Pattern、Transform 等成功几何 fixture；当前工作树中 `cad-core/fixtures/p7/expected` 已有 50 个 expected 文件，P7 focused unittest 曾通过。
 - P8 expected 已补齐 App::Link、Assembly、Part primitive、import、Boolean、Fragments、Section 等成功几何 fixture；当前工作树中 `cad-core/fixtures/p8/expected` 已有 46 个 expected 文件，P8 feature flow 已拆到 `cad-core/tests/test_p8_features.py`，固定 bbox / volume / topology 改为读取 expected。
 - 已新增 `cad-core/tests/fixture_runner.py`、`cad-core/tests/fixture_expected.py` 和 `cad-core/tests/test_expected_fixtures.py`；`test_expected_fixtures.py` 会自动遍历 expected 文件并运行同名 fixture。
-- diagnostics 矩阵已拆到 `cad-core/tests/test_diagnostics.py`；C ABI / CLI export / capabilities 已拆到 `cad-core/tests/test_adapters.py`；P5、P6、P7、P8 feature flow 分别拆到 `test_p5_sketch.py`、`test_p6_topology.py`、`test_p7_features.py`、`test_p8_features.py`；`test_mvp.py` 已从约 2934 行降到 345 行。
-- 当前宽泛 `rg -n "bbox|volume|topology_counts|assert_topology_counts|mesh_summary|named_shapes" cad-core/tests` 仍会命中 expected helper 本身、mesh smoke、adapter roundtrip 使用 expected 字段、对象间体积相等关系，以及 P6 named-shape/history 断言；这些不再是 P8 内联几何 golden。P6 named-shape/history 等 schema 明确后再迁移。
+- diagnostics 矩阵已拆到 `cad-core/tests/test_diagnostics.py`；C ABI / CLI export / capabilities 已拆到 `cad-core/tests/test_adapters.py`；P2-P4 flow 已拆到 `cad-core/tests/test_feature_flows.py`；P5、P6、P7、P8 feature flow 分别拆到 `test_p5_sketch.py`、`test_p6_topology.py`、`test_p7_features.py`、`test_p8_features.py`；`test_mvp.py` 已收缩为单个 MVP smoke。
+- 已新增 `cad-core/tools/collect_freecad_expected.py`，采用本机 `FreeCADCmd` 作为 oracle 入口；当前支持单 fixture 生成、phase 批量、`--check`、`--skip-unsupported`，并已覆盖 P8 中 26 个可直接对齐原生 FreeCAD 的 fixture：Part primitive、App::Link、Part boolean / multi-boolean 与 IGES import。BREP/STEP import、Section、Torus、Ellipsoid 等仍保留为既有 geometry-equivalent expected，等 CAD Core 与原生 FreeCAD bbox 口径对齐后再纳入 collector。
+- 当前宽泛 `rg -n "bbox|volume|topology_counts|assert_topology_counts|mesh_summary|named_shapes|element_map_status|[\"element_map\"]|[\"history\"]" cad-core/tests` 只剩 expected helper 本身、adapter roundtrip 使用 expected 字段、对象/mesh 之间的一致性关系，以及 FFI/CLI 输出一致性；P6/P7/P8 直接 named-shape golden 已迁出测试代码。
 - 已验证：
   - `python3 -m unittest tests.test_expected_fixtures`
   - `python3 -m unittest tests.test_diagnostics`
   - `python3 -m unittest tests.test_adapters`
-  - `python3 -m unittest tests.test_p5_sketch tests.test_p6_topology tests.test_p7_features`
+  - `python3 -m unittest tests.test_feature_flows`
+  - `python3 -m unittest tests.test_p5_sketch tests.test_expected_fixtures`（P5 BSpline InternalShape 当前按 known gap 跳过）
+  - `python3 -m unittest tests.test_p6_topology tests.test_p7_features`
   - `python3 -m unittest tests.test_p8_features`
+  - `python3 -m unittest tests.test_expected_fixtures tests.test_diagnostics tests.test_adapters tests.test_feature_flows tests.test_p5_sketch tests.test_p6_topology tests.test_p7_features tests.test_p8_features tests.test_mvp`（当前 `Ran 156 tests`, `OK (skipped=1)`）
   - `python3 -m unittest tests.test_mvp`
+  - `python3 cad-core/tools/collect_freecad_expected.py cad-core/fixtures/p8/part-box.json --check`
+  - `python3 cad-core/tools/collect_freecad_expected.py --phase p8 --check --skip-unsupported`（当前 `processed=26 skipped=26 failed=0`）
+  - `python3 -m py_compile cad-core/tools/collect_freecad_expected.py cad-core/tests/fixture_expected.py cad-core/tests/test_expected_fixtures.py cad-core/tests/test_feature_flows.py cad-core/tests/test_p5_sketch.py cad-core/tests/test_p6_topology.py cad-core/tests/test_p7_features.py cad-core/tests/test_p8_features.py cad-core/tests/test_mvp`
+  - `git diff --check -- cad-core/tests cad-core/tools cad-core/fixtures/p3b/expected cad-core/fixtures/p5/expected cad-core/fixtures/p6/expected cad-core/fixtures/p7/expected cad-core/fixtures/p8/expected docs/5-30-04-33-CADCore-fixture-expected迁移方案.md`
 
 ## 验收标准
 

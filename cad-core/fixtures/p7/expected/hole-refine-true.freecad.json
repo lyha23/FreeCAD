@@ -4,8 +4,24 @@
   "bbox_delta": 0.02,
   "objects": {
     "Body": {
-      "bbox": {"min": [0.0, 0.0, 0.0], "max": [10.0, 5.0, 10.0]},
+      "bbox": {
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max": [
+          10.0,
+          5.0,
+          10.0
+        ]
+      },
       "volume": 487.4336293856408
+    }
+  },
+  "named_shapes": {
+    "Body": {
+      "element_map_status": "history_partial"
     }
   }
 }

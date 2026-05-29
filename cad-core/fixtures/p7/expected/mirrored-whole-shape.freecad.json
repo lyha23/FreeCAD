@@ -3,8 +3,33 @@
   "freecad_version": "1.2.0 revision 20260519",
   "objects": {
     "Mirrored": {
-      "bbox": {"min": [0.0, 0.0, 0.0], "max": [4.0, 2.0, 2.0]},
+      "bbox": {
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max": [
+          4.0,
+          2.0,
+          2.0
+        ]
+      },
       "volume": 16.0
+    }
+  },
+  "named_shapes": {
+    "Mirrored": {
+      "element_map_status": "history_partial",
+      "element_map_prefixes": [
+        "Pad."
+      ],
+      "history_source_prefixes": [
+        "Mirrored.Transform1."
+      ],
+      "history_sources_any": [
+        "Pad.Edge1"
+      ]
     }
   }
 }

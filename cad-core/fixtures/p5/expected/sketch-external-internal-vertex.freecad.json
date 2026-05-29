@@ -1,8 +1,18 @@
 {
-  "object": "Pad",
   "reference": "FreeCADCmd Part.makeBox(6, 3, 2), geometry-equivalent to rectangle Pad whose external geometry resolves to BaseSketch InternalVertex",
   "freecad_version": "1.2.0 revision 20260519",
-  "bbox": {"min": [0.0, 0.0, 0.0], "max": [6.0, 3.0, 2.0]},
-  "volume": 36.0,
-  "topology_counts": {"faces": 6, "edges": 12, "vertices": 8}
+  "objects": {
+    "BaseSketch": {
+      "sketch_internal": {
+        "internal_counts": {
+          "vertices": 4
+        }
+      }
+    },
+    "Pad": {
+      "bbox": {"min": [0.0, 0.0, 0.0], "max": [6.0, 3.0, 2.0]},
+      "volume": 36.0,
+      "topology_counts": {"faces": 6, "edges": 12, "vertices": 8}
+    }
+  }
 }

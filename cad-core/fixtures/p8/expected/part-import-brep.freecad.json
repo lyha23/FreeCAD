@@ -2,11 +2,29 @@
   "object": "ImportedCylinder",
   "reference": "FreeCADCmd geometry-equivalent import of fixtures/p8/assets/cylinder1.brep",
   "freecad_version": "1.2.0 revision 20260519",
-  "bbox_delta": 0.000001,
+  "bbox_delta": 1e-06,
   "bbox": {
-    "min": [-2.014582351803892, -2.0, -0.014582351803892262],
-    "max": [2.014582351803892, 2.0, 10.014582351803892]
+    "min": [
+      -2.014582351803892,
+      -2.0,
+      -0.014582351803892262
+    ],
+    "max": [
+      2.014582351803892,
+      2.0,
+      10.014582351803892
+    ]
   },
   "volume": 125.66370614359178,
-  "topology_counts": {"faces": 3, "edges": 3, "vertices": 2}
+  "topology_counts": {
+    "faces": 3,
+    "edges": 3,
+    "vertices": 2
+  },
+  "named_shapes": {
+    "ImportedCylinder": {
+      "owner": "ImportedCylinder",
+      "element_map_status": "indexed_only"
+    }
+  }
 }

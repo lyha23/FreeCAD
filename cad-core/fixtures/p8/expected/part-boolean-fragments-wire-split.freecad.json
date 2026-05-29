@@ -2,8 +2,31 @@
   "object": "BooleanFragments",
   "reference": "FreeCADCmd geometry-equivalent Part::BooleanFragments Split mode for two wire aggregates",
   "freecad_version": "1.2.0 revision 20260519",
-  "bbox_delta": 0.000001,
-  "bbox": {"min": [-2.1, -2.1, -0.1], "max": [3.1, 2.1, 0.1]},
+  "bbox_delta": 1e-06,
+  "bbox": {
+    "min": [
+      -2.1,
+      -2.1,
+      -0.1
+    ],
+    "max": [
+      3.1,
+      2.1,
+      0.1
+    ]
+  },
   "volume": 0.0,
-  "topology_counts": {"faces": 0, "edges": 12, "vertices": 10}
+  "topology_counts": {
+    "faces": 0,
+    "edges": 12,
+    "vertices": 10
+  },
+  "named_shapes": {
+    "BooleanFragments": {
+      "element_map_status": "history_partial",
+      "history_kinds_include": [
+        "split"
+      ]
+    }
+  }
 }

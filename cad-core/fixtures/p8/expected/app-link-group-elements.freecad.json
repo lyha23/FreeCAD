@@ -2,7 +2,31 @@
   "object": "LinkGroup",
   "reference": "FreeCADCmd geometry-equivalent App::LinkGroup compound of two visible element links",
   "freecad_version": "1.2.0 revision 20260519",
-  "bbox": {"min": [0.0, 10.0, 0.0], "max": [7.0, 13.0, 4.0]},
+  "bbox": {
+    "min": [
+      0.0,
+      10.0,
+      0.0
+    ],
+    "max": [
+      7.0,
+      13.0,
+      4.0
+    ]
+  },
   "volume": 48.0,
-  "topology_counts": {"faces": 12, "edges": 24, "vertices": 16}
+  "topology_counts": {
+    "faces": 12,
+    "edges": 24,
+    "vertices": 16
+  },
+  "named_shapes": {
+    "LinkGroup": {
+      "element_map_status": "history_partial",
+      "element_map": {
+        "LinkA.Face1": "Face1",
+        "LinkB.Face1": "Face7"
+      }
+    }
+  }
 }

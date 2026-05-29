@@ -2,8 +2,32 @@
   "object": "Section",
   "reference": "FreeCADCmd geometry-equivalent Part::Section between Box and Plane",
   "freecad_version": "1.2.0 revision 20260519",
-  "bbox_delta": 0.000001,
-  "bbox": {"min": [-0.1, -0.1, 0.9], "max": [2.1, 2.1, 1.1]},
+  "bbox_delta": 1e-06,
+  "bbox": {
+    "min": [
+      -0.1,
+      -0.1,
+      0.9
+    ],
+    "max": [
+      2.1,
+      2.1,
+      1.1
+    ]
+  },
   "volume": 0.0,
-  "topology_counts": {"faces": 0, "edges": 4, "vertices": 4}
+  "topology_counts": {
+    "faces": 0,
+    "edges": 4,
+    "vertices": 4
+  },
+  "named_shapes": {
+    "Section": {
+      "owner": "Section",
+      "element_map_status": "history_partial",
+      "elements_include": [
+        "Edge1"
+      ]
+    }
+  }
 }

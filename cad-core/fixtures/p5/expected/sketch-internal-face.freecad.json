@@ -1,0 +1,37 @@
+{
+  "object": "Sketch",
+  "reference": "FreeCAD oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildInternals() builds InternalShape; getInternalElementMap() maps internalPrefix() elements back to Shape elements.",
+  "freecad_version": "1.2.0 revision 20260519",
+  "sketch_internal": {
+    "profile_ready": true,
+    "shape": "occt_internal_shape",
+    "internal_counts": {
+      "faces": 1,
+      "edges": 4,
+      "vertices": 4
+    },
+    "contains": [
+      "InternalFace1",
+      "InternalEdge1",
+      "InternalVertex1"
+    ],
+    "element_map": {
+      "Edge1": "InternalEdge1",
+      "Edge2": "InternalEdge2",
+      "Edge3": "InternalEdge3",
+      "Edge4": "InternalEdge4",
+      "InternalEdge1": "Edge1",
+      "InternalEdge2": "Edge2",
+      "InternalEdge3": "Edge3",
+      "InternalEdge4": "Edge4",
+      "InternalVertex1": "Vertex1",
+      "InternalVertex2": "Vertex2",
+      "InternalVertex3": "Vertex3",
+      "InternalVertex4": "Vertex4",
+      "Vertex1": "InternalVertex1",
+      "Vertex2": "InternalVertex2",
+      "Vertex3": "InternalVertex3",
+      "Vertex4": "InternalVertex4"
+    }
+  }
+}
