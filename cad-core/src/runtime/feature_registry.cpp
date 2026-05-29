@@ -38,6 +38,17 @@ features::ExecuteFn FeatureRegistry::executorFor(const std::string& typeId) cons
     return it == executors_.end() ? nullptr : it->second;
 }
 
+std::vector<std::string> FeatureRegistry::typeIds() const
+{
+    std::vector<std::string> ids;
+    ids.reserve(executors_.size());
+    for (const auto& [typeId, executor] : executors_) {
+        (void)executor;
+        ids.push_back(typeId);
+    }
+    return ids;
+}
+
 FeatureRegistry buildDefaultRegistry()
 {
     FeatureRegistry registry;

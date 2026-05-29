@@ -25,6 +25,15 @@ class CadCoreResult(ctypes.Structure):
     _fields_ = [("status", ctypes.c_int32), ("json", CadCoreBuffer), ("error", CadCoreBuffer)]
 
 
+class CadCoreExportResult(ctypes.Structure):
+    _fields_ = [
+        ("status", ctypes.c_int32),
+        ("data", CadCoreBuffer),
+        ("json", CadCoreBuffer),
+        ("error", CadCoreBuffer),
+    ]
+
+
 class CadCoreOcctMvpTest(unittest.TestCase):
     def run_recompute_file(self, input_path: Path, extra_args: list[str] | None = None) -> dict:
         with tempfile.TemporaryDirectory() as tmp:
@@ -50,12 +59,22 @@ class CadCoreOcctMvpTest(unittest.TestCase):
                 return path
         self.fail("cad_core_ffi library is missing; run cmake --build build first")
 
-    def run_recompute_ffi(self, fixture: str, group: str = "mvp") -> dict:
+    def ffi_library(self) -> ctypes.CDLL:
         library = ctypes.CDLL(str(self.ffi_library_path()))
         library.cad_core_recompute_json.argtypes = [ctypes.c_char_p, ctypes.c_size_t]
         library.cad_core_recompute_json.restype = CadCoreResult
+        library.cad_core_capabilities_json.argtypes = []
+        library.cad_core_capabilities_json.restype = CadCoreResult
+        library.cad_core_export_json.argtypes = [ctypes.c_char_p, ctypes.c_size_t]
+        library.cad_core_export_json.restype = CadCoreExportResult
         library.cad_core_free_result.argtypes = [ctypes.POINTER(CadCoreResult)]
         library.cad_core_free_result.restype = None
+        library.cad_core_free_export_result.argtypes = [ctypes.POINTER(CadCoreExportResult)]
+        library.cad_core_free_export_result.restype = None
+        return library
+
+    def run_recompute_ffi(self, fixture: str, group: str = "mvp") -> dict:
+        library = self.ffi_library()
 
         payload = (ROOT / "fixtures" / group / f"{fixture}.json").read_bytes()
         result = library.cad_core_recompute_json(payload, len(payload))
@@ -67,6 +86,33 @@ class CadCoreOcctMvpTest(unittest.TestCase):
             return json.loads(raw)
         finally:
             library.cad_core_free_result(ctypes.byref(result))
+
+    def run_capabilities_ffi(self) -> dict:
+        library = self.ffi_library()
+        result = library.cad_core_capabilities_json()
+        try:
+            if result.status != 0:
+                error = ctypes.string_at(result.error.ptr, result.error.len).decode("utf-8") if result.error.ptr else ""
+                self.fail(f"cad_core_capabilities_json failed with status {result.status}: {error}")
+            raw = ctypes.string_at(result.json.ptr, result.json.len).decode("utf-8")
+            return json.loads(raw)
+        finally:
+            library.cad_core_free_result(ctypes.byref(result))
+
+    def call_export_ffi(self, request: dict) -> tuple[int, dict | None, bytes, str]:
+        library = self.ffi_library()
+        payload = json.dumps(request).encode("utf-8")
+        result = library.cad_core_export_json(payload, len(payload))
+        try:
+            metadata = None
+            if result.json.ptr:
+                raw = ctypes.string_at(result.json.ptr, result.json.len).decode("utf-8")
+                metadata = json.loads(raw)
+            data = ctypes.string_at(result.data.ptr, result.data.len) if result.data.ptr else b""
+            error = ctypes.string_at(result.error.ptr, result.error.len).decode("utf-8") if result.error.ptr else ""
+            return result.status, metadata, data, error
+        finally:
+            library.cad_core_free_export_result(ctypes.byref(result))
 
     def diagnostic_codes(self, fixture: str, group: str = "mvp") -> list[str]:
         return [item["code"] for item in self.run_recompute(fixture, group)["diagnostics"]]
@@ -620,6 +666,122 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assertEqual(ffi_result["mesh"], cli_result["mesh"])
         self.assertEqual(ffi_result["subshapes"], cli_result["subshapes"])
         self.assertEqual(ffi_result["named_shapes"], cli_result["named_shapes"])
+
+    def test_c_api_capabilities_exposes_web_contract_facts(self) -> None:
+        capabilities = self.run_capabilities_ffi()
+
+        self.assertEqual(capabilities["status"], "ok")
+        self.assertEqual(capabilities["schema_version"], "cad-web-v1")
+        self.assertEqual(capabilities["cad_core"]["api"], "cad_core_ffi")
+        self.assertIn("OCCT", capabilities["cad_core"]["kernel"])
+        self.assertEqual(capabilities["document"]["source"], "DocumentObject graph")
+        self.assertEqual(capabilities["export_formats"], ["brep", "step", "stl"])
+        self.assertIn("value", capabilities["document"]["link_property_fields"])
+        self.assertIn("StableSubList", capabilities["document"]["link_property_fields"])
+        self.assertNotIn("values", capabilities["document"]["link_property_fields"])
+
+        for type_id in [
+            "Sketcher::SketchObject",
+            "PartDesign::Hole",
+            "Part::Box",
+            "Part::BooleanFragments",
+            "App::Link",
+            "Assembly::AssemblyObject",
+        ]:
+            self.assertIn(type_id, capabilities["supported_type_ids"])
+
+        for code in [
+            "parse_error",
+            "missing_target",
+            "missing_link_target",
+            "cycle_dependency",
+            "unsupported_type",
+            "invalid_subshape",
+            "unsupported_stable_subname",
+            "split_stable_subname",
+            "deleted_stable_subname",
+        ]:
+            self.assertIn(code, capabilities["diagnostic_codes"])
+
+        self.assertIn("complete_mapper_history", capabilities["known_gaps"])
+
+    def test_c_api_exports_recomputed_shape_buffers(self) -> None:
+        document = json.loads((ROOT / "fixtures" / "p8" / "part-box.json").read_text(encoding="utf-8"))
+        cases = {
+            "brep": ("Part::ImportBrep", "ExportedBrep", "box.brep"),
+            "step": ("Part::ImportStep", "ExportedStep", "box.step"),
+            "stl": ("Mesh::Import", "ExportedStl", "box.stl"),
+        }
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            for export_format, (type_id, object_name, file_name) in cases.items():
+                with self.subTest(export_format=export_format):
+                    status, metadata, data, error = self.call_export_ffi(
+                        {"document": document, "object": "Box", "format": export_format}
+                    )
+                    self.assertEqual(status, 0, error)
+                    self.assertIsNotNone(metadata)
+                    assert metadata is not None
+                    self.assertEqual(metadata["object"], "Box")
+                    self.assertEqual(metadata["format"], export_format)
+                    self.assertEqual(metadata["filename"], f"Box.{export_format}")
+                    self.assertEqual(metadata["diagnostics"], [])
+                    self.assertEqual(metadata["bytes"], len(data))
+                    self.assertGreater(len(data), 0)
+
+                    export_path = tmp_path / file_name
+                    export_path.write_bytes(data)
+                    import_request = {
+                        "Objects": [
+                            {
+                                "Name": object_name,
+                                "ID": 1,
+                                "TypeId": type_id,
+                                "Properties": {"FileName": str(export_path)},
+                            }
+                        ],
+                        "recompute": {"objs": [object_name]},
+                    }
+                    import_path = tmp_path / f"import-{export_format}.json"
+                    import_path.write_text(json.dumps(import_request), encoding="utf-8")
+                    imported_result = self.run_recompute_file(import_path)
+                    imported = imported_result["objects"][object_name]
+
+                    self.assertEqual(imported_result["diagnostics"], [])
+                    self.assertEqual(imported["status"], "ok")
+                    self.assert_bbox_close_delta(imported["bbox"], [0.0, 0.0, 0.0], [2.0, 3.0, 4.0], 1e-6)
+                    if export_format == "stl":
+                        self.assertEqual(imported["primitive"], "import_stl")
+                        self.assertGreater(imported_result["mesh"][object_name]["summary"]["triangle_count"], 0)
+                    else:
+                        self.assertAlmostEqual(imported["volume"], 24.0, delta=1e-6)
+
+    def test_c_api_export_reports_business_diagnostics_without_server_paths(self) -> None:
+        document = json.loads((ROOT / "fixtures" / "p8" / "part-box.json").read_text(encoding="utf-8"))
+
+        status, metadata, data, error = self.call_export_ffi(
+            {"document": document, "object": "Missing", "format": "step"}
+        )
+        self.assertEqual(status, 0, error)
+        self.assertEqual(data, b"")
+        self.assertIsNotNone(metadata)
+        assert metadata is not None
+        self.assertEqual(metadata["bytes"], 0)
+        self.assertEqual([item["code"] for item in metadata["diagnostics"]], ["missing_object"])
+
+        status, metadata, data, error = self.call_export_ffi(
+            {
+                "document": document,
+                "object": "Box",
+                "format": "step",
+                "export_file": "/tmp/box.step",
+            }
+        )
+        self.assertEqual(status, 1)
+        self.assertIsNone(metadata)
+        self.assertEqual(data, b"")
+        self.assertIn("server file path", error)
 
     def test_p3b_reference_axis_uses_sketch_normal_axis(self) -> None:
         for fixture in ["pad-reference-axis", "pad-reference-axis-edge"]:

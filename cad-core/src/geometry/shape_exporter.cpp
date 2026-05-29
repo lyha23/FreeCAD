@@ -25,9 +25,14 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdint>
+#include <fstream>
 #include <map>
+#include <random>
 #include <sstream>
 #include <stdexcept>
+#include <system_error>
+#include <utility>
 
 namespace cad_core::geometry {
 
@@ -106,6 +111,21 @@ void exportStlFile(const TopoDS_Shape& shape, const std::filesystem::path& path,
         throw std::runtime_error("Writing of STL failed: " + path.string());
     }
 }
+
+struct ScopedTempPath {
+    explicit ScopedTempPath(std::filesystem::path value)
+        : path(std::move(value))
+    {
+    }
+
+    ~ScopedTempPath()
+    {
+        std::error_code error;
+        std::filesystem::remove(path, error);
+    }
+
+    std::filesystem::path path;
+};
 
 }  // namespace
 
@@ -237,6 +257,41 @@ std::string shapeFileFormatName(ShapeFileFormat format)
     throw std::runtime_error("Unsupported export format");
 }
 
+std::string shapeFileFormatExtension(ShapeFileFormat format)
+{
+    switch (format) {
+        case ShapeFileFormat::Brep:
+            return "brep";
+        case ShapeFileFormat::Step:
+            return "step";
+        case ShapeFileFormat::Stl:
+            return "stl";
+    }
+    throw std::runtime_error("Unsupported export format");
+}
+
+std::string shapeFileFormatContentType(ShapeFileFormat format)
+{
+    switch (format) {
+        case ShapeFileFormat::Brep:
+            return "application/vnd.opencascade.brep";
+        case ShapeFileFormat::Step:
+            return "application/step";
+        case ShapeFileFormat::Stl:
+            return "model/stl";
+    }
+    throw std::runtime_error("Unsupported export format");
+}
+
+std::vector<std::string> supportedShapeFileFormats()
+{
+    return {
+        shapeFileFormatName(ShapeFileFormat::Brep),
+        shapeFileFormatName(ShapeFileFormat::Step),
+        shapeFileFormatName(ShapeFileFormat::Stl),
+    };
+}
+
 void exportShapeFile(const TopoDS_Shape& shape,
                      const std::filesystem::path& path,
                      ShapeFileFormat format,
@@ -264,6 +319,37 @@ void exportShapeFile(const TopoDS_Shape& shape,
             return;
     }
     throw std::runtime_error("Unsupported export format");
+}
+
+std::string exportShapeBuffer(const TopoDS_Shape& shape,
+                              ShapeFileFormat format,
+                              double stlDeflection)
+{
+    const auto tempDir = std::filesystem::temp_directory_path();
+    std::random_device device;
+    std::mt19937_64 generator(device());
+    std::uniform_int_distribution<std::uint64_t> distribution;
+
+    for (int attempt = 0; attempt < 32; ++attempt) {
+        const auto path = tempDir / ("cad-core-export-" + std::to_string(distribution(generator)) + "."
+                                    + shapeFileFormatExtension(format));
+        if (std::filesystem::exists(path)) {
+            continue;
+        }
+
+        ScopedTempPath scoped(path);
+        exportShapeFile(shape, scoped.path, format, stlDeflection);
+
+        std::ifstream input(scoped.path, std::ios::binary);
+        if (!input) {
+            throw std::runtime_error("Unable to read exported file " + scoped.path.string());
+        }
+        std::ostringstream buffer;
+        buffer << input.rdbuf();
+        return buffer.str();
+    }
+
+    throw std::runtime_error("Unable to allocate a temporary export file");
 }
 
 std::string kernelVersion()
