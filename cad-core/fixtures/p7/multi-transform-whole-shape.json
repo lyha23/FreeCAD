@@ -31,13 +31,45 @@
       }
     },
     {
-      "Name": "MultiTransform",
+      "Name": "DatumLine",
       "ID": 3,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 0],
+          "Rotation": [0, 0.7071067811865475, 0, 0.7071067811865476]
+        }
+      }
+    },
+    {
+      "Name": "LinearPattern",
+      "ID": 4,
+      "TypeId": "PartDesign::LinearPattern",
+      "Properties": {
+        "Direction": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "DatumLine",
+          "SubList": []
+        },
+        "TransformMode": "Features",
+        "Mode": "Extent",
+        "Length": 2,
+        "Occurrences": 3
+      }
+    },
+    {
+      "Name": "MultiTransform",
+      "ID": 5,
       "TypeId": "PartDesign::MultiTransform",
       "Properties": {
         "Originals": {
           "PropertyType": "App::PropertyLinkList",
           "value": ["Pad"]
+        },
+        "Transformations": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["LinearPattern"]
         },
         "TransformMode": "Whole shape"
       }

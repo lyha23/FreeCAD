@@ -1,0 +1,19 @@
+{
+  "Objects": [
+    {
+      "Name": "Cylinder",
+      "ID": 1,
+      "TypeId": "Part::Cylinder",
+      "Properties": {
+        "Radius": 1,
+        "Height": 5,
+        "Angle": 360,
+        "FirstAngle": 10,
+        "SecondAngle": 0
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Cylinder"]
+  }
+}

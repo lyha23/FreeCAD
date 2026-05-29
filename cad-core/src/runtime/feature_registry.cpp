@@ -39,6 +39,8 @@ FeatureRegistry buildDefaultRegistry()
     FeatureRegistry registry;
     registry.registerExecutor("Sketcher::SketchObject", features::executeSketchObject);
     registry.registerExecutor("App::Part", features::executePart);
+    registry.registerExecutor("Part::Box", features::executePartBox);
+    registry.registerExecutor("Part::Cylinder", features::executePartCylinder);
     registry.registerExecutor("App::Origin", features::executeDatumCoordinateSystem);
     registry.registerExecutor("PartDesign::Body", features::executeBody);
     registry.registerExecutor("PartDesign::CoordinateSystem", features::executeDatumCoordinateSystem);

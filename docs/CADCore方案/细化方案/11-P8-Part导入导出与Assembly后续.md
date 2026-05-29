@@ -1,98 +1,57 @@
 # P8：Part、导入导出与 Assembly 后续
 
-P8 的目标是在 PartDesign 主体稳定后，扩展更宽的 CAD Core 能力：Part primitives、Boolean、文件导入导出、Assembly Link / Joint，以及 Worker / WASM / Web adapter 产品化。
+P8 已启动 Part primitive 基础子集。当前先把 FreeCAD `Part::Primitive` 中最基础、对前端展示和后续 Boolean 有价值的 shape 接入 `cad-core`，导入导出、Assembly 和产品化 adapter 仍保持后置。
+
+## 当前基线
+
+- `Part::Box` 已注册 executor，按 `Length` / `Width` / `Height` 构造 OCCT solid，默认值和过小尺寸校验对齐 FreeCAD `Box::execute()`。
+- `Part::Cylinder` 已注册 executor，按 `Radius` / `Height` / `Angle` 构造圆柱底面，再按 `PrismExtension` 的 `FirstAngle` / `SecondAngle` 拉伸成 solid。
+- Part primitive 输出 mesh、subshape map、bbox、volume、kernel metadata 和 indexed `NamedShape`。
+- `fixtures/p8` 已覆盖 `part-box`、`part-cylinder` 和 `part-cylinder-angled-prism`。
+
+## 目标范围
+
+- Part primitives：Box、Cylinder 已接入；Sphere、Cone、Torus 等仍待补。
+- Part Boolean：Fuse、Cut、Common、Section、Fragments 等独立 Part 操作。
+- 文件导入导出：STEP / BREP / STL 等 adapter 能力。
+- Assembly：Link、Joint、约束求解和装配 recompute。
+- 产品化 adapter：Worker、WASM、Web service bridge。
+
+## 边界
+
+- 文件导入导出可以处理 BREP，但 BREP 不进入持久 `DocumentObject graph` 的默认状态模型。
+- Web / Worker / WASM 只做 adapter，不改变 CAD Core 无状态边界。
+- Assembly 不应绕过 topo naming；Link / Joint 的 subname 和 placement 仍需要稳定引用模型。
+- 当前 Part primitive 只使用 indexed `NamedShape`；完整 primitive maker history、Boolean history 和导入 shape 的 ElementMap 仍属于 P6/P8 后续工作。
 
 ## 前置条件
 
-- Document / Property / Link / Placement 稳定。
-- Topo Naming 主路径稳定。
-- PartDesign 常用生态已有 fixture 和 oracle。
-- adapter 边界仍保持薄转换，不承载业务语义。
+- P6 MapperHistory、split / merge 旧引用恢复和 ShapeFix / Refine history 足够稳定。
+- P5 Sketcher external geometry 和 internal element map 能支撑常用引用。
+- P7 Body 生态不再依赖高层 fixture 特判。
+- CLI / C ABI 对同一 fixture 的核心结果一致。
 
-## Part 能力
+## 规划落点
 
-FreeCAD 参考：
+| 能力 | cad-core 落点 |
+| --- | --- |
+| Part primitives | 当前落在 `features/part.cpp`，后续复杂 primitive 可拆到 `geometry/primitives.*` |
+| Part Boolean | `features/part_boolean.*` + `topo/named_shape.*` |
+| Import / Export | `adapters/` 和可选 `geometry/io.*` |
+| Assembly Link / Joint | `features/assembly_*`、`document/` link 扩展、`graph/` |
+| Worker / WASM / Web | adapter 层 |
 
-- `src/Mod/Part/App/PartFeature.cpp`
-- `src/Mod/Part/App/BodyBase.cpp`
-- `src/Mod/Part/App/TopoShape*.cpp`
-- `src/Mod/Part/App/FaceMaker*.cpp`
-- `src/Mod/Part/App/WireJoiner.cpp`
+## 剩余缺口
 
-目标：
+- Sphere、Cone、Torus、Plane、Line、Vertex 等 Part primitive 尚未迁移。
+- Part Boolean 尚未注册 executor，不能替代 Body fuse/cut 主链。
+- STEP / BREP / STL 导入导出还没有 adapter 能力。
+- Assembly Link / Joint、placement chain 和装配求解未迁移。
+- Worker / WASM / Web service bridge 未产品化。
 
-- 支持常用 Part primitives。
-- 支持 Part Boolean。
-- 支持 Shape import/export adapter。
-- 支持 Part::Feature 作为 DocumentObject graph 节点。
+## 验收
 
-fixtures：
-
-```text
-fixtures/p8/
-  part-box.json
-  part-cylinder.json
-  part-boolean-cut.json
-  part-import-shape.json
-```
-
-## 文件导入导出
-
-规则：
-
-- 文件导入导出是 adapter / geometry service 能力，不改变持久源数据是 `DocumentObject graph` 的边界。
-- STEP / IGES / BREP / STL 可作为输入输出 artifact，但不能变成跨请求隐藏状态。
-- import 后若要参与参数化 recompute，必须落成明确 `DocumentObject` 和属性。
-
-候选命令：
-
-```bash
-cad-core import-step model.step --output document.json
-cad-core export-step document.json --object Body --output Body.step
-cad-core export-stl document.json --object Body --output Body.stl
-```
-
-## Assembly 后续
-
-FreeCAD 参考：
-
-- `src/Mod/Assembly/App`
-- `src/App/PropertyLinks.cpp`
-- `src/App/Link*.cpp`
-
-目标：
-
-- 支持 Assembly object graph。
-- 支持 Link / Joint 的基础数据模型。
-- 支持装配依赖和 recompute 顺序。
-- 支持装配约束求解输出到 placement。
-
-暂缓边界：
-
-- Assembly 不应早于 Document / Link / Placement / Topo Naming 稳定。
-- 不把 Assembly solver 状态塞进 PartDesign executor。
-
-## Worker / WASM / Web adapter
-
-目标：
-
-- CLI 继续作为 fixture / CI 主入口。
-- C ABI 继续作为多语言桥接。
-- Worker 用于隔离耗时 recompute。
-- WASM / Web adapter 只做协议和运行环境适配。
-
-规则：
-
-- adapter 不解析 FreeCAD feature 语义。
-- adapter 不修补 topo naming。
-- adapter 不保存跨请求裸 shape。
-- 同一 input document 在 CLI / C ABI / Worker / Web 下核心输出一致。
-
-## 完成定义
-
-P8 完成需要同时满足：
-
-- Part / import-export / Assembly 能力都不破坏 CAD Core 无状态边界。
-- 文件 artifact 不进入持久 DocumentObject graph，除非显式建成导入对象。
-- Assembly 的 Link / Joint / placement 语义和 Document graph 对齐。
-- Worker / WASM / Web adapter 通过一致性 fixture，而不是自带业务分支。
+- 每个 Part / Assembly `TypeId` 有明确 executor 或 diagnostics。
+- 文件导入导出不污染无状态核心边界。
+- Link / Joint placement 和 stable subname 不靠前端猜测。
+- Worker / WASM / Web adapter 与 CLI / C ABI 复用同一 core recompute。

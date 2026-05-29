@@ -199,9 +199,26 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
     }
 
     for (const auto& feature : groupNames) {
+        const auto shapeIt = context.shapes.find(feature);
+        const auto objectIt = context.objects.find(feature);
+        const bool replacesBodyShape = shapeIt != context.shapes.end()
+            && shapeIt->second.kind == runtime::ShapeValue::Kind::Solid
+            && objectIt != context.objects.end() && objectIt->second.value("body_mode", "") == "replace";
+        if (replacesBodyShape) {
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+            // ::Body::execute(), reads only the Tip feature's "Shape". DressUp and Transformed
+            // features publish full replacement solids even when they also expose AddSubShape
+            // caches for later pattern features.
+            bodyShape = shapeIt->second.shape;
+            bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
+            if (feature == tip->object) {
+                break;
+            }
+            continue;
+        }
+
         const auto addSubIt = context.addSubShapes.find(feature);
         if (addSubIt == context.addSubShapes.end()) {
-            const auto shapeIt = context.shapes.find(feature);
             if (shapeIt != context.shapes.end() && shapeIt->second.kind == runtime::ShapeValue::Kind::Solid) {
                 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureDressUp.cpp::DressUp,
                 // derives from FeatureAddSub but execute() writes a full dressed "Shape"; Body Tip

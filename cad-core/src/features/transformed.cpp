@@ -37,6 +37,7 @@
 #include <optional>
 #include <set>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace cad_core::features {
@@ -55,6 +56,11 @@ struct MirrorPlane {
 };
 
 struct RotationAxis {
+    gp_Pnt point;
+    gp_Dir direction;
+};
+
+struct SketchAxis {
     gp_Pnt point;
     gp_Dir direction;
 };
@@ -535,7 +541,7 @@ std::optional<TransformSource> resolveSupportSource(const document::DocumentObje
             runtime::addDiagnostic(context.diagnostics,
                                    "error",
                                    "missing_property",
-                                   "Mirrored BaseFeature must link to a solid",
+                                   "Transformed BaseFeature must link to a solid",
                                    object.name,
                                    "BaseFeature");
             return std::nullopt;
@@ -559,7 +565,7 @@ std::optional<TransformSource> resolveSupportSource(const document::DocumentObje
         runtime::addDiagnostic(context.diagnostics,
                                "error",
                                "missing_property",
-                               "Mirrored Originals must contain at least one feature",
+                               "Transformed Originals must contain at least one feature or BaseFeature must link to a support solid",
                                object.name,
                                "Originals");
         return std::nullopt;
@@ -649,7 +655,8 @@ std::optional<TransformSource> fuseOrCutTransformedSource(const document::Docume
                                                           runtime::ComputeContext& context,
                                                           const TransformSource& support,
                                                           const TransformSource& tool,
-                                                          topo::BooleanOperation operation)
+                                                          topo::BooleanOperation operation,
+                                                          const std::string& property)
 {
     const auto build = topo::makeElementBooleanFromSources(object.name,
                                                            {namedShapeSource(support), namedShapeSource(tool)},
@@ -660,7 +667,7 @@ std::optional<TransformSource> fuseOrCutTransformedSource(const document::Docume
                                "execution_failed",
                                "Transformed boolean operation failed: " + build.error,
                                object.name,
-                               "Originals");
+                               property);
         return std::nullopt;
     }
     return TransformSource{object.name,
@@ -712,7 +719,8 @@ std::optional<TransformApplication> applyFeatureTransforms(const document::Docum
                 if (!transformedTool) {
                     return std::nullopt;
                 }
-                auto fused = fuseOrCutTransformedSource(object, context, current, *transformedTool, topo::BooleanOperation::Fuse);
+                auto fused =
+                    fuseOrCutTransformedSource(object, context, current, *transformedTool, topo::BooleanOperation::Fuse, "Originals");
                 if (!fused) {
                     return std::nullopt;
                 }
@@ -734,7 +742,8 @@ std::optional<TransformApplication> applyFeatureTransforms(const document::Docum
                 if (!transformedTool) {
                     return std::nullopt;
                 }
-                auto cut = fuseOrCutTransformedSource(object, context, current, *transformedTool, topo::BooleanOperation::Cut);
+                auto cut =
+                    fuseOrCutTransformedSource(object, context, current, *transformedTool, topo::BooleanOperation::Cut, "Originals");
                 if (!cut) {
                     return std::nullopt;
                 }
@@ -751,23 +760,77 @@ std::optional<TransformApplication> applyFeatureTransforms(const document::Docum
     return TransformApplication{current.shape, resultNamedShape, originalNames};
 }
 
+std::optional<TransformApplication> applyWholeShapeTransforms(const document::DocumentObject& object,
+                                                              runtime::ComputeContext& context,
+                                                              const std::vector<document::Link>& supportLinks,
+                                                              const std::vector<gp_Trsf>& copyTransforms)
+{
+    auto support = resolveSupportSource(object, context, supportLinks);
+    if (!support) {
+        return std::nullopt;
+    }
+
+    TransformSource current = *support;
+    int transformedIndex = 1;
+    for (const gp_Trsf& transform : copyTransforms) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureTransformed.cpp
+        // ::Transformed::execute(), Mode::WholeShape calls getTransformedCompShape(supportShape,
+        // supportShape) and then makeElementFuse(shapes), keeping the untransformed support plus
+        // transformed support copies.
+        auto transformedTool = transformedCopy(object.name + ".Transform" + std::to_string(transformedIndex++),
+                                               *support,
+                                               transform,
+                                               object,
+                                               context,
+                                               "TransformMode");
+        if (!transformedTool) {
+            return std::nullopt;
+        }
+        auto fused =
+            fuseOrCutTransformedSource(object, context, current, *transformedTool, topo::BooleanOperation::Fuse, "TransformMode");
+        if (!fused) {
+            return std::nullopt;
+        }
+        current = *fused;
+    }
+
+    topo::NamedShape resultNamedShape =
+        current.namedShape ? *current.namedShape : topo::indexedNamedShapeForObject(current.owner, current.shape);
+    if (resultNamedShape.owner != object.name) {
+        resultNamedShape = topo::namedShapeForPreservedSources(object.name, current.shape, {namedShapeSource(current)});
+    }
+
+    std::vector<std::string> supportNames;
+    for (const document::Link& link : supportLinks) {
+        supportNames.push_back(link.object);
+    }
+    return TransformApplication{current.shape, resultNamedShape, supportNames};
+}
+
 std::optional<TransformedBuild> buildMirroredFeatures(const document::DocumentObject& object,
                                                       runtime::ComputeContext& context)
 {
     const std::string mode = readEnumProperty(object, "TransformMode", {"Features", "Whole shape"}, "Features");
-    if (mode != "Features") {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "unsupported_property",
-                               "Only TransformMode=Features is supported for Mirrored before WholeShape migration",
-                               object.name,
-                               "TransformMode");
+    const auto transforms = mirroredTransforms(object, context);
+    if (!transforms) {
         return std::nullopt;
     }
 
     const std::vector<document::Link> originals = document::readLinks(object, "Originals");
-    const auto transforms = mirroredTransforms(object, context);
-    if (!transforms) {
+    if (mode == "Whole shape") {
+        const auto application = applyWholeShapeTransforms(object, context, originals, *transforms);
+        if (!application) {
+            return std::nullopt;
+        }
+        return TransformedBuild{application->shape, application->namedShape, mode, application->originals};
+    }
+    if (mode != "Features") {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "unsupported_property",
+                               "Unsupported Mirrored TransformMode " + mode,
+                               object.name,
+                               "TransformMode");
         return std::nullopt;
     }
 
@@ -856,6 +919,149 @@ std::optional<RotationAxis> axisFromShape(const TopoDS_Shape& shape,
     return std::nullopt;
 }
 
+std::optional<gp_Pnt> readSketchPoint2d(const nlohmann::json& value)
+{
+    if (!value.is_array() || value.size() < 2U || !value[0].is_number() || !value[1].is_number()) {
+        return std::nullopt;
+    }
+    return gp_Pnt(value[0].get<double>(), value[1].get<double>(), 0.0);
+}
+
+std::optional<int> parseSketchConstructionAxisIndex(const std::string& subname)
+{
+    constexpr std::string_view prefix = "Axis";
+    if (subname.rfind(prefix, 0) != 0 || subname.size() == prefix.size()) {
+        return std::nullopt;
+    }
+    int index = 0;
+    for (std::size_t position = prefix.size(); position < subname.size(); ++position) {
+        const char ch = subname[position];
+        if (ch < '0' || ch > '9') {
+            return std::nullopt;
+        }
+        index = index * 10 + (ch - '0');
+    }
+    return index;
+}
+
+bool isSketchAxisSubname(const std::string& subname)
+{
+    return subname == "H_Axis" || subname == "V_Axis" || subname == "N_Axis"
+        || parseSketchConstructionAxisIndex(subname).has_value();
+}
+
+std::optional<SketchAxis> sketchAxisFromObject(const document::DocumentObject& sketch,
+                                               const std::string& subname,
+                                               const document::DocumentObject& object,
+                                               runtime::ComputeContext& context,
+                                               const std::string& property)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/Part2DObject.cpp
+    // ::Part2DObject::getAxis(), returns "H_Axis"=(1,0,0), "V_Axis"=(0,1,0),
+    // and "N_Axis"=(0,0,1).
+    SketchAxis axis{gp_Pnt(0.0, 0.0, 0.0), gp_Dir(1.0, 0.0, 0.0)};
+    bool resolved = true;
+    if (subname == "H_Axis") {
+        axis.direction = gp_Dir(1.0, 0.0, 0.0);
+    }
+    else if (subname == "V_Axis") {
+        axis.direction = gp_Dir(0.0, 1.0, 0.0);
+    }
+    else if (subname == "N_Axis") {
+        axis.direction = gp_Dir(0.0, 0.0, 1.0);
+    }
+    else if (const auto axisIndex = parseSketchConstructionAxisIndex(subname)) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectGeometry.cpp
+        // ::SketchObject::getAxis(), iterates construction "Part::GeomLineSegment" items and
+        // returns Base::Axis(start, end - start) for AxisN indices starting at 0.
+        const nlohmann::json* geometry = propertyPayload(sketch, "Geometry");
+        if (geometry == nullptr || !geometry->is_array()) {
+            resolved = false;
+        }
+        else {
+            int constructionLineIndex = 0;
+            resolved = false;
+            for (const auto& item : *geometry) {
+                if (!item.is_object() || item.value("kind", "") != "LineSegment" || !item.value("construction", false)) {
+                    continue;
+                }
+                if (constructionLineIndex++ != *axisIndex) {
+                    continue;
+                }
+                const auto startIt = item.find("start");
+                const auto endIt = item.find("end");
+                const auto start = startIt != item.end() ? readSketchPoint2d(*startIt) : std::nullopt;
+                const auto end = endIt != item.end() ? readSketchPoint2d(*endIt) : std::nullopt;
+                if (!start || !end || start->Distance(*end) < Precision::Confusion()) {
+                    break;
+                }
+                axis.point = *start;
+                axis.direction = gp_Dir(gp_Vec(*start, *end));
+                resolved = true;
+                break;
+            }
+        }
+    }
+    else {
+        return std::nullopt;
+    }
+
+    if (!resolved) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_subshape",
+                               property + " target " + sketch.name + " has no sketch axis " + subname,
+                               object.name,
+                               property,
+                               "runtime",
+                               sketch.name,
+                               subname);
+        return std::nullopt;
+    }
+
+    const auto placementIt = context.globalPlacements.find(sketch.name);
+    if (placementIt != context.globalPlacements.end()) {
+        axis.point.Transform(placementIt->second);
+        axis.direction.Transform(placementIt->second);
+    }
+    return axis;
+}
+
+std::optional<SketchAxis> resolveSketchAxis(const document::Link& link,
+                                            const document::DocumentObject& object,
+                                            runtime::ComputeContext& context,
+                                            const std::string& property)
+{
+    const auto shapeIt = context.shapes.find(link.object);
+    if (shapeIt == context.shapes.end() || shapeIt->second.kind != runtime::ShapeValue::Kind::Sketch) {
+        return std::nullopt;
+    }
+    if (link.subnames.size() != 1U || link.subnames.front().empty()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_subshape",
+                               property + " must reference one Sketch axis subname",
+                               object.name,
+                               property,
+                               "runtime",
+                               link.object);
+        return std::nullopt;
+    }
+    const auto documentIt = context.documentObjects.find(link.object);
+    if (documentIt == context.documentObjects.end()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "missing_link_target",
+                               property + " target " + link.object + " is missing from the document graph",
+                               object.name,
+                               property,
+                               "runtime",
+                               link.object);
+        return std::nullopt;
+    }
+    return sketchAxisFromObject(*documentIt->second, link.subnames.front(), object, context, property);
+}
+
 std::optional<gp_Dir> resolveLinearPatternDirection(const document::DocumentObject& object,
                                                     runtime::ComputeContext& context,
                                                     const std::string& property)
@@ -887,6 +1093,15 @@ std::optional<gp_Dir> resolveLinearPatternDirection(const document::DocumentObje
         return std::nullopt;
     }
 
+    if (shapeIt->second.kind == runtime::ShapeValue::Kind::Sketch && link->subnames.size() == 1U
+        && isSketchAxisSubname(link->subnames.front())) {
+        const auto sketchAxis = resolveSketchAxis(*link, object, context, property);
+        if (!sketchAxis) {
+            return std::nullopt;
+        }
+        return sketchAxis->direction;
+    }
+
     if (shapeIt->second.kind == runtime::ShapeValue::Kind::DatumLine && link->subnames.empty()) {
         for (TopExp_Explorer explorer(shapeIt->second.shape, TopAbs_EDGE); explorer.More(); explorer.Next()) {
             return directionFromShape(explorer.Current(), object, context, property);
@@ -909,8 +1124,8 @@ std::optional<RotationAxis> resolvePolarPatternAxis(const document::DocumentObje
                                                     runtime::ComputeContext& context)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeaturePolarPattern.cpp
-    // ::PolarPattern::getRotation(), accepts a datum line or a Part feature edge; the edge may be
-    // a straight line, circle, or arc of circle.
+    // ::PolarPattern::getRotation(), accepts a Sketch Part2DObject axis, datum line, or a Part
+    // feature edge; the edge may be a straight line, circle, or arc of circle.
     const auto link = document::readLink(object, "Axis");
     if (!link) {
         runtime::addDiagnostic(context.diagnostics,
@@ -936,7 +1151,15 @@ std::optional<RotationAxis> resolvePolarPatternAxis(const document::DocumentObje
     }
 
     std::optional<RotationAxis> axis;
-    if (shapeIt->second.kind == runtime::ShapeValue::Kind::DatumLine && link->subnames.empty()) {
+    if (shapeIt->second.kind == runtime::ShapeValue::Kind::Sketch && link->subnames.size() == 1U
+        && isSketchAxisSubname(link->subnames.front())) {
+        const auto sketchAxis = resolveSketchAxis(*link, object, context, "Axis");
+        if (!sketchAxis) {
+            return std::nullopt;
+        }
+        axis = RotationAxis{sketchAxis->point, sketchAxis->direction};
+    }
+    else if (shapeIt->second.kind == runtime::ShapeValue::Kind::DatumLine && link->subnames.empty()) {
         for (TopExp_Explorer explorer(shapeIt->second.shape, TopAbs_EDGE); explorer.More(); explorer.Next()) {
             axis = axisFromShape(explorer.Current(), object, context, "Axis");
             break;
@@ -1160,38 +1383,32 @@ std::optional<std::vector<gp_Trsf>> scaledTransforms(const document::DocumentObj
                                "Occurrences");
         return std::nullopt;
     }
-    if (originals.empty()) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "missing_property",
-                               "Scaled Originals must contain at least one feature",
-                               object.name,
-                               "Originals");
-        return std::nullopt;
-    }
+    gp_Pnt centerOfMass;
+    if (!originals.empty()) {
+        const auto addSubIt = context.addSubShapes.find(originals.front().object);
+        if (addSubIt == context.addSubShapes.end() || (!addSubIt->second.addShape && !addSubIt->second.subShape)) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "unsupported_type",
+                                   "Scaled centre of mass requires an additive or subtractive first Original",
+                                   object.name,
+                                   "Originals",
+                                   "runtime",
+                                   originals.front().object);
+            return std::nullopt;
+        }
 
-    const auto addSubIt = context.addSubShapes.find(originals.front().object);
-    if (addSubIt == context.addSubShapes.end() || (!addSubIt->second.addShape && !addSubIt->second.subShape)) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "unsupported_type",
-                               "Scaled centre of mass requires an additive or subtractive first Original",
-                               object.name,
-                               "Originals",
-                               "runtime",
-                               originals.front().object);
-        return std::nullopt;
+        const TopoDS_Shape& originalShape =
+            addSubIt->second.addShape ? *addSubIt->second.addShape : *addSubIt->second.subShape;
+        GProp_GProps props;
+        BRepGProp::VolumeProperties(originalShape, props);
+        centerOfMass = props.CentreOfMass();
     }
-
-    const TopoDS_Shape& originalShape =
-        addSubIt->second.addShape ? *addSubIt->second.addShape : *addSubIt->second.subShape;
-    GProp_GProps props;
-    BRepGProp::VolumeProperties(originalShape, props);
-    const gp_Pnt centerOfMass = props.CentreOfMass();
 
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureScaled.cpp
     // ::Scaled::getTransformations(), computes "f = (factor - 1.0) / (occurrences - 1)"
-    // and scales each copied occurrence around the first original AddSubShape centre of mass.
+    // and scales around the first original AddSubShape centre of mass; WholeShape passes empty
+    // originals through Transformed::getOriginals(), leaving gp_Pnt() as the scale centre.
     const double step = (factor - 1.0) / static_cast<double>(occurrences - 1);
     std::vector<gp_Trsf> transforms;
     for (int index = 1; index < occurrences; ++index) {
@@ -1252,7 +1469,7 @@ std::optional<TemplateTransforms> childTemplateTransforms(const document::Docume
         runtime::addDiagnostic(context.diagnostics,
                                "error",
                                "unsupported_property",
-                               "Only TransformMode=Features is supported for MultiTransform children before WholeShape migration",
+                               "MultiTransform child transformations must use TransformMode=Features",
                                object.name,
                                "Transformations",
                                "runtime",
@@ -1349,9 +1566,17 @@ std::optional<std::vector<gp_Trsf>> multiTransformTransforms(const document::Doc
         return std::nullopt;
     }
 
-    const auto baseCog = firstOriginalCenterOfMass(object, context, originals);
-    if (!baseCog) {
-        return std::nullopt;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureTransformed.cpp
+    // ::Transformed::getOriginals(), returns an empty vector for Mode::WholeShape. MultiTransform
+    // still runs getTransformations(originals), so FeatureMultiTransform.cpp leaves "gp_Pnt cog"
+    // at its default origin when originals is empty.
+    gp_Pnt baseCog;
+    if (!originals.empty()) {
+        const auto originalCog = firstOriginalCenterOfMass(object, context, originals);
+        if (!originalCog) {
+            return std::nullopt;
+        }
+        baseCog = *originalCog;
     }
 
     std::vector<gp_Trsf> result;
@@ -1378,7 +1603,7 @@ std::optional<std::vector<gp_Trsf>> multiTransformTransforms(const document::Doc
             result = childTransforms->transforms;
             cogs.clear();
             for (const gp_Trsf& transform : result) {
-                cogs.push_back(baseCog->Transformed(transform));
+                cogs.push_back(baseCog.Transformed(transform));
             }
             continue;
         }
@@ -1444,16 +1669,6 @@ std::optional<TransformedBuild> buildLinearPatternFeatures(const document::Docum
                                                            runtime::ComputeContext& context)
 {
     const std::string transformMode = readEnumProperty(object, "TransformMode", {"Features", "Whole shape"}, "Features");
-    if (transformMode != "Features") {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "unsupported_property",
-                               "Only TransformMode=Features is supported for LinearPattern before WholeShape migration",
-                               object.name,
-                               "TransformMode");
-        return std::nullopt;
-    }
-
     const int occurrences = readIntegerProperty(object, "Occurrences").value_or(2);
     const int occurrences2 = readIntegerProperty(object, "Occurrences2").value_or(1);
     if (occurrences < 1 || occurrences2 < 1) {
@@ -1475,6 +1690,25 @@ std::optional<TransformedBuild> buildLinearPatternFeatures(const document::Docum
         return std::nullopt;
     }
 
+    if (transformMode == "Whole shape") {
+        const std::vector<document::Link> supportLinks = document::readLinks(object, "Originals");
+        const auto application =
+            applyWholeShapeTransforms(object, context, supportLinks, combinedLinearPatternTransforms(*firstSteps, *secondSteps));
+        if (!application) {
+            return std::nullopt;
+        }
+        return TransformedBuild{application->shape, application->namedShape, transformMode, application->originals};
+    }
+    if (transformMode != "Features") {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "unsupported_property",
+                               "Unsupported LinearPattern TransformMode " + transformMode,
+                               object.name,
+                               "TransformMode");
+        return std::nullopt;
+    }
+
     const std::vector<document::Link> originals = document::readLinks(object, "Originals");
     const auto application = applyFeatureTransforms(object,
                                                     context,
@@ -1490,17 +1724,28 @@ std::optional<TransformedBuild> buildMultiTransformFeatures(const document::Docu
                                                             runtime::ComputeContext& context)
 {
     const std::string transformMode = readEnumProperty(object, "TransformMode", {"Features", "Whole shape"}, "Features");
+    const std::vector<document::Link> originals = document::readLinks(object, "Originals");
+    if (transformMode == "Whole shape") {
+        const auto transforms = multiTransformTransforms(object, context, {});
+        if (!transforms) {
+            return std::nullopt;
+        }
+        const auto application = applyWholeShapeTransforms(object, context, originals, *transforms);
+        if (!application) {
+            return std::nullopt;
+        }
+        return TransformedBuild{application->shape, application->namedShape, transformMode, application->originals};
+    }
     if (transformMode != "Features") {
         runtime::addDiagnostic(context.diagnostics,
                                "error",
                                "unsupported_property",
-                               "Only TransformMode=Features is supported for MultiTransform before WholeShape migration",
+                               "Unsupported MultiTransform TransformMode " + transformMode,
                                object.name,
                                "TransformMode");
         return std::nullopt;
     }
 
-    const std::vector<document::Link> originals = document::readLinks(object, "Originals");
     const auto transforms = multiTransformTransforms(object, context, originals);
     if (!transforms) {
         return std::nullopt;
@@ -1516,16 +1761,6 @@ std::optional<TransformedBuild> buildPolarPatternFeatures(const document::Docume
                                                           runtime::ComputeContext& context)
 {
     const std::string transformMode = readEnumProperty(object, "TransformMode", {"Features", "Whole shape"}, "Features");
-    if (transformMode != "Features") {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "unsupported_property",
-                               "Only TransformMode=Features is supported for PolarPattern before WholeShape migration",
-                               object.name,
-                               "TransformMode");
-        return std::nullopt;
-    }
-
     const int occurrences = readIntegerProperty(object, "Occurrences").value_or(3);
     if (occurrences < 1) {
         runtime::addDiagnostic(context.diagnostics,
@@ -1541,6 +1776,23 @@ std::optional<TransformedBuild> buildPolarPatternFeatures(const document::Docume
     if (!transforms) {
         return std::nullopt;
     }
+    if (transformMode == "Whole shape") {
+        const std::vector<document::Link> supportLinks = document::readLinks(object, "Originals");
+        const auto application = applyWholeShapeTransforms(object, context, supportLinks, *transforms);
+        if (!application) {
+            return std::nullopt;
+        }
+        return TransformedBuild{application->shape, application->namedShape, transformMode, application->originals};
+    }
+    if (transformMode != "Features") {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "unsupported_property",
+                               "Unsupported PolarPattern TransformMode " + transformMode,
+                               object.name,
+                               "TransformMode");
+        return std::nullopt;
+    }
     const std::vector<document::Link> originals = document::readLinks(object, "Originals");
     const auto application = applyFeatureTransforms(object, context, originals, *transforms);
     if (!application) {
@@ -1553,19 +1805,26 @@ std::optional<TransformedBuild> buildScaledFeatures(const document::DocumentObje
                                                     runtime::ComputeContext& context)
 {
     const std::string transformMode = readEnumProperty(object, "TransformMode", {"Features", "Whole shape"}, "Features");
+    const std::vector<document::Link> originals = document::readLinks(object, "Originals");
+    const auto transforms =
+        scaledTransforms(object, context, transformMode == "Whole shape" ? std::vector<document::Link>{} : originals);
+    if (!transforms) {
+        return std::nullopt;
+    }
+    if (transformMode == "Whole shape") {
+        const auto application = applyWholeShapeTransforms(object, context, originals, *transforms);
+        if (!application) {
+            return std::nullopt;
+        }
+        return TransformedBuild{application->shape, application->namedShape, transformMode, application->originals};
+    }
     if (transformMode != "Features") {
         runtime::addDiagnostic(context.diagnostics,
                                "error",
                                "unsupported_property",
-                               "Only TransformMode=Features is supported for Scaled before WholeShape migration",
+                               "Unsupported Scaled TransformMode " + transformMode,
                                object.name,
                                "TransformMode");
-        return std::nullopt;
-    }
-
-    const std::vector<document::Link> originals = document::readLinks(object, "Originals");
-    const auto transforms = scaledTransforms(object, context, originals);
-    if (!transforms) {
         return std::nullopt;
     }
     const auto application = applyFeatureTransforms(object, context, originals, *transforms);

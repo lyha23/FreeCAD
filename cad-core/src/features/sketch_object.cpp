@@ -10,6 +10,7 @@
 #include <BRep_Builder.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
+#include <BRepBuilderAPI_MakeVertex.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRep_Tool.hxx>
 #include <GeomAbs_CurveType.hxx>
@@ -43,6 +44,12 @@ struct SketchSegment {
     std::size_t geometryIndex = 0;
     gp_Pnt start;
     gp_Pnt end;
+    bool construction = false;
+};
+
+struct SketchPoint {
+    std::size_t geometryIndex = 0;
+    gp_Pnt point;
     bool construction = false;
 };
 
@@ -114,6 +121,7 @@ struct SketchEllipseArc {
 
 struct SketchGeometrySet {
     std::vector<SketchSegment> segments;
+    std::vector<SketchPoint> points;
     std::vector<SketchCircle> circles;
     std::vector<SketchEllipse> ellipses;
     std::vector<SketchArc> arcs;
@@ -439,6 +447,29 @@ bool parseSketchGeometry(const nlohmann::json& geometry,
         }
 
         const std::string kind = item.at("kind").get<std::string>();
+        if (kind == "Point" || kind == "GeomPoint") {
+            bool ok = true;
+            const double px = readNumber2(item.at("point"), 0, ok);
+            const double py = readNumber2(item.at("point"), 1, ok);
+            if (!ok) {
+                runtime::addDiagnostic(context.diagnostics,
+                                       "error",
+                                       "unsupported_geometry",
+                                       "Point must provide a two-number point",
+                                       object.name,
+                                       "Geometry");
+                return false;
+            }
+
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+            // ::SketchObject::buildShape(), for "Part::GeomPoint" calls geo->toShape()
+            // and exposes it as a Vertex in the Sketch Shape compound.
+            parsed.points.push_back(SketchPoint{index,
+                                                gp_Pnt(px, py, 0.0),
+                                                readBoolField(item, "construction", false)});
+            continue;
+        }
+
         if (kind == "LineSegment") {
             bool ok = true;
             const double sx = readNumber2(item.at("start"), 0, ok);
@@ -797,6 +828,17 @@ std::vector<SketchSegment> profileSegments(const std::vector<SketchSegment>& seg
     return profile;
 }
 
+std::vector<SketchPoint> profilePoints(const std::vector<SketchPoint>& points)
+{
+    std::vector<SketchPoint> profile;
+    for (const auto& point : points) {
+        if (!point.construction) {
+            profile.push_back(point);
+        }
+    }
+    return profile;
+}
+
 std::vector<SketchArc> profileArcs(const std::vector<SketchArc>& arcs)
 {
     std::vector<SketchArc> profile;
@@ -995,6 +1037,7 @@ std::optional<TopoDS_Wire> makeWireFromEllipse(const SketchEllipse& ellipse)
 std::optional<TopoDS_Shape> buildRawSketchShape(const document::DocumentObject& object,
                                                 runtime::ComputeContext& context,
                                                 const std::vector<SketchProfileEdge>& edges,
+                                                const std::vector<SketchPoint>& points,
                                                 const std::vector<SketchCircle>& circles,
                                                 const std::vector<SketchEllipse>& ellipses)
 {
@@ -1016,6 +1059,21 @@ std::optional<TopoDS_Shape> buildRawSketchShape(const document::DocumentObject& 
             return std::nullopt;
         }
         shapes.push_back(wireBuilder.Wire());
+    }
+    for (const auto& point : points) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/Geometry.cpp
+        // ::GeomPoint::toShape(), returns "BRepBuilderAPI_MakeVertex(myPoint->Pnt())".
+        BRepBuilderAPI_MakeVertex vertexBuilder(point.point);
+        if (!vertexBuilder.IsDone()) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "execution_failed",
+                                   "OCCT could not build raw Sketch Shape point vertex",
+                                   object.name,
+                                   "Geometry");
+            return std::nullopt;
+        }
+        shapes.push_back(vertexBuilder.Vertex());
     }
     for (const auto& circle : circles) {
         const auto wire = makeWireFromCircle(circle);
@@ -1582,12 +1640,13 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
     }
 
     const std::vector<SketchSegment> profile = profileSegments(parsed.segments);
+    const std::vector<SketchPoint> points = profilePoints(parsed.points);
     const std::vector<SketchArc> arcs = profileArcs(parsed.arcs);
     const std::vector<SketchEllipseArc> ellipseArcs = profileEllipseArcs(parsed.ellipseArcs);
     const std::vector<SketchProfileEdge> edges = profileEdges(profile, arcs, ellipseArcs);
     const std::vector<SketchCircle> circles = profileCircles(parsed.circles);
     const std::vector<SketchEllipse> ellipses = profileEllipses(parsed.ellipses);
-    auto rawShape = buildRawSketchShape(object, context, edges, circles, ellipses);
+    auto rawShape = buildRawSketchShape(object, context, edges, points, circles, ellipses);
     if (!rawShape) {
         context.objects[object.name] = {{"status", "error"}};
         return;
@@ -1632,6 +1691,7 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
 
     const std::size_t rawEdgeCount = edges.size() + circles.size() + ellipses.size();
     const std::size_t profileEdgeCount = profileShape ? (circles.empty() && ellipses.empty() ? edges.size() : 1U) : rawEdgeCount;
+    const std::size_t rawPointCount = points.size();
     const nlohmann::json internalSubshapes = internalShape ? topo::subshapeMapForShape(*internalShape, "Internal") : nlohmann::json::object();
     const std::size_t internalFaceCount = countSubshapesOfKind(internalSubshapes, "face");
     const std::size_t internalEdgeCount = countSubshapesOfKind(internalSubshapes, "edge");
@@ -1645,6 +1705,7 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
         {"profile_ready", profileShape.has_value()},
         {"edge_count", profileEdgeCount},
         {"raw_edge_count", rawEdgeCount},
+        {"raw_point_count", rawPointCount},
         {"internal_shape", internalShape ? "occt_internal_shape" : "none"},
         {"internal_face_count", internalFaceCount},
         {"internal_edge_count", internalEdgeCount},

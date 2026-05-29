@@ -46,8 +46,21 @@ struct EdgeSelection {
 struct DressUpResult {
     std::string mode;
     std::string sourceBase;
+    DressUpBase base;
     TopoDS_Shape shape;
     topo::NamedShape namedShape;
+    bool supportTransform = false;
+};
+
+struct ShapeSlotBuild {
+    bool ok = true;
+    std::optional<TopoDS_Shape> shape;
+};
+
+enum class AddSubKind {
+    Additive,
+    Subtractive,
+    Unknown,
 };
 
 const nlohmann::json* propertyPayload(const document::DocumentObject& object, const std::string& property)
@@ -93,6 +106,195 @@ double readNumberProperty(const document::DocumentObject& object,
                           double fallback)
 {
     return document::readNumber(object, property).value_or(fallback);
+}
+
+bool isDressUpType(const std::string& typeId)
+{
+    return typeId == "PartDesign::Fillet" || typeId == "PartDesign::Chamfer";
+}
+
+bool hasSolid(const TopoDS_Shape& shape)
+{
+    if (shape.IsNull()) {
+        return false;
+    }
+    TopExp_Explorer explorer(shape, TopAbs_SOLID);
+    return explorer.More();
+}
+
+std::optional<topo::NamedShape> namedShapeForObject(const std::string& objectName,
+                                                    const TopoDS_Shape& shape,
+                                                    const runtime::ComputeContext& context)
+{
+    const auto namedShapeIt = context.namedShapes.find(objectName);
+    if (namedShapeIt != context.namedShapes.end()) {
+        return namedShapeIt->second;
+    }
+    if (!shape.IsNull()) {
+        return topo::indexedNamedShapeForObject(objectName, shape);
+    }
+    return std::nullopt;
+}
+
+topo::NamedShapeSource namedShapeSource(const std::string& owner,
+                                        const TopoDS_Shape& shape,
+                                        const std::optional<topo::NamedShape>& namedShape)
+{
+    return topo::NamedShapeSource{namedShape ? namedShape->owner : owner, shape, namedShape ? &*namedShape : nullptr};
+}
+
+std::optional<std::string> linkedObjectName(const document::DocumentObject& object, const std::string& property)
+{
+    if (document::propertyValue(object, property) == nullptr) {
+        return std::nullopt;
+    }
+    const auto link = document::readLink(object, property);
+    if (!link) {
+        return std::nullopt;
+    }
+    return link->object;
+}
+
+std::optional<TopoDS_Shape> solidShapeForObject(const std::string& objectName,
+                                                runtime::ComputeContext& context,
+                                                const document::DocumentObject& object,
+                                                const std::string& property)
+{
+    const auto shapeIt = context.shapes.find(objectName);
+    if (shapeIt == context.shapes.end() || shapeIt->second.kind != runtime::ShapeValue::Kind::Solid) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "missing_link_target",
+                               property + " target " + objectName + " did not produce a solid",
+                               object.name,
+                               property,
+                               "runtime",
+                               objectName);
+        return std::nullopt;
+    }
+    return shapeIt->second.shape;
+}
+
+std::optional<TopoDS_Shape> baseTopoShapeForFeature(const std::string& featureName,
+                                                    runtime::ComputeContext& context,
+                                                    const document::DocumentObject& object,
+                                                    bool diagnoseMissingTarget)
+{
+    const auto documentIt = context.documentObjects.find(featureName);
+    if (documentIt == context.documentObjects.end()) {
+        return std::nullopt;
+    }
+
+    const auto baseFeatureName = linkedObjectName(*documentIt->second, "BaseFeature");
+    if (!baseFeatureName) {
+        return std::nullopt;
+    }
+
+    if (!diagnoseMissingTarget) {
+        const auto shapeIt = context.shapes.find(*baseFeatureName);
+        if (shapeIt == context.shapes.end() || shapeIt->second.kind != runtime::ShapeValue::Kind::Solid) {
+            return std::nullopt;
+        }
+        return shapeIt->second.shape;
+    }
+    return solidShapeForObject(*baseFeatureName, context, object, "BaseFeature");
+}
+
+std::optional<std::string> baseLinkObjectName(const document::DocumentObject& object)
+{
+    const auto link = document::readLink(object, "Base");
+    if (!link) {
+        return std::nullopt;
+    }
+    return link->object;
+}
+
+std::optional<std::string> resolveSupportTransformFeature(const DressUpBase& base,
+                                                          runtime::ComputeContext& context)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureDressUp.cpp
+    // ::DressUp::getAddSubShape(), SupportTransform finds "the previous support feature
+    // (which must be of type FeatureAddSub), and skipping any consecutive DressUp in-between".
+    std::string currentName = base.link.object;
+    std::set<std::string> visited;
+    while (visited.insert(currentName).second) {
+        const auto documentIt = context.documentObjects.find(currentName);
+        if (documentIt == context.documentObjects.end() || !isDressUpType(documentIt->second->typeId)) {
+            return currentName;
+        }
+
+        if (const auto baseFeatureName = linkedObjectName(*documentIt->second, "BaseFeature")) {
+            currentName = *baseFeatureName;
+            continue;
+        }
+        if (const auto sourceBaseIt = context.objects.find(currentName);
+            sourceBaseIt != context.objects.end() && sourceBaseIt->second.contains("source_base")
+            && sourceBaseIt->second.at("source_base").is_string()) {
+            currentName = sourceBaseIt->second.at("source_base").get<std::string>();
+            continue;
+        }
+        if (const auto linkedBase = baseLinkObjectName(*documentIt->second)) {
+            currentName = *linkedBase;
+            continue;
+        }
+        break;
+    }
+    return std::nullopt;
+}
+
+AddSubKind addSubKindForFeature(const std::string& featureName, runtime::ComputeContext& context)
+{
+    const auto addSubIt = context.addSubShapes.find(featureName);
+    if (addSubIt != context.addSubShapes.end()) {
+        if (addSubIt->second.addShape) {
+            return AddSubKind::Additive;
+        }
+        if (addSubIt->second.subShape) {
+            return AddSubKind::Subtractive;
+        }
+    }
+
+    const auto documentIt = context.documentObjects.find(featureName);
+    if (documentIt == context.documentObjects.end()) {
+        return AddSubKind::Unknown;
+    }
+    if (documentIt->second->typeId == "PartDesign::Pad" || documentIt->second->typeId == "PartDesign::FeatureBase") {
+        return AddSubKind::Additive;
+    }
+    if (documentIt->second->typeId == "PartDesign::Pocket" || documentIt->second->typeId == "PartDesign::Hole") {
+        return AddSubKind::Subtractive;
+    }
+    return AddSubKind::Unknown;
+}
+
+ShapeSlotBuild cutSlot(const document::DocumentObject& object,
+                       runtime::ComputeContext& context,
+                       const std::string& owner,
+                       const std::string& leftOwner,
+                       const TopoDS_Shape& left,
+                       const std::optional<topo::NamedShape>& leftNamedShape,
+                       const std::string& rightOwner,
+                       const TopoDS_Shape& right,
+                       const std::optional<topo::NamedShape>& rightNamedShape,
+                       const std::string& property)
+{
+    const auto build = topo::makeElementBooleanFromSources(owner,
+                                                           {namedShapeSource(leftOwner, left, leftNamedShape),
+                                                            namedShapeSource(rightOwner, right, rightNamedShape)},
+                                                           topo::BooleanOperation::Cut);
+    if (!build.error.empty()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               "Dress-up AddSubShape cache could not cut boolean sources: " + build.error,
+                               object.name,
+                               property);
+        return ShapeSlotBuild{false, std::nullopt};
+    }
+    if (!hasSolid(build.shape)) {
+        return ShapeSlotBuild{true, std::nullopt};
+    }
+    return ShapeSlotBuild{true, build.shape};
 }
 
 std::string stableSubnameDiagnosticCode(topo::ElementResolveStatus status)
@@ -429,9 +631,16 @@ std::optional<DressUpResult> buildFillet(const document::DocumentObject& object,
                                                                       result,
                                                                       {topo::NamedShapeSource{base->link.object,
                                                                                               base->shape,
-                                                                                              base->namedShape ? &*base->namedShape : nullptr}},
+                                                                                              base->namedShape
+                                                                                                  ? &*base->namedShape
+                                                                                                  : nullptr}},
                                                                       maker);
-        return DressUpResult{"fillet", base->link.object, result, namedShape};
+        return DressUpResult{"fillet",
+                             base->link.object,
+                             *base,
+                             result,
+                             namedShape,
+                             readBoolProperty(object, "SupportTransform")};
     }
     catch (Standard_Failure& failure) {
         runtime::addDiagnostic(context.diagnostics,
@@ -546,9 +755,16 @@ std::optional<DressUpResult> buildChamfer(const document::DocumentObject& object
                                                                       result,
                                                                       {topo::NamedShapeSource{base->link.object,
                                                                                               base->shape,
-                                                                                              base->namedShape ? &*base->namedShape : nullptr}},
+                                                                                              base->namedShape
+                                                                                                  ? &*base->namedShape
+                                                                                                  : nullptr}},
                                                                       maker);
-        return DressUpResult{"chamfer", base->link.object, result, namedShape};
+        return DressUpResult{"chamfer",
+                             base->link.object,
+                             *base,
+                             result,
+                             namedShape,
+                             readBoolProperty(object, "SupportTransform")};
     }
     catch (Standard_Failure& failure) {
         runtime::addDiagnostic(context.diagnostics,
@@ -561,22 +777,133 @@ std::optional<DressUpResult> buildChamfer(const document::DocumentObject& object
     }
 }
 
-bool rejectActiveSupportTransform(const document::DocumentObject& object, runtime::ComputeContext& context)
+bool cacheDressUpAddSubShape(const document::DocumentObject& object,
+                             runtime::ComputeContext& context,
+                             const DressUpResult& result)
 {
-    if (!readBoolProperty(object, "SupportTransform")) {
+    runtime::AddSubShape cache;
+    const auto resultNamedShape = std::optional<topo::NamedShape>{result.namedShape};
+
+    if (result.supportTransform) {
+        const auto supportFeature = resolveSupportTransformFeature(result.base, context);
+        if (!supportFeature) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "missing_link_target",
+                                   "Cannot find additive or subtractive support for " + object.name,
+                                   object.name,
+                                   "SupportTransform");
+            return false;
+        }
+
+        const auto supportKind = addSubKindForFeature(*supportFeature, context);
+        const auto priorBaseShape = baseTopoShapeForFeature(*supportFeature, context, object, true);
+        if (supportKind == AddSubKind::Additive) {
+            if (priorBaseShape && hasSolid(*priorBaseShape)) {
+                const auto priorBaseNamedShape =
+                    namedShapeForObject(*supportFeature + ".Base", *priorBaseShape, context);
+                const auto add = cutSlot(object,
+                                         context,
+                                         object.name,
+                                         object.name,
+                                         result.shape,
+                                         resultNamedShape,
+                                         *supportFeature + ".Base",
+                                         *priorBaseShape,
+                                         priorBaseNamedShape,
+                                         "SupportTransform");
+                if (!add.ok) {
+                    return false;
+                }
+                cache.addShape = add.shape;
+            }
+            else {
+                cache.addShape = result.shape;
+            }
+        }
+        else if (supportKind == AddSubKind::Subtractive) {
+            if (priorBaseShape && hasSolid(*priorBaseShape)) {
+                const auto priorBaseNamedShape =
+                    namedShapeForObject(*supportFeature + ".Base", *priorBaseShape, context);
+                const auto sub = cutSlot(object,
+                                         context,
+                                         object.name,
+                                         *supportFeature + ".Base",
+                                         *priorBaseShape,
+                                         priorBaseNamedShape,
+                                         object.name,
+                                         result.shape,
+                                         resultNamedShape,
+                                         "SupportTransform");
+                if (!sub.ok) {
+                    return false;
+                }
+                cache.subShape = sub.shape;
+            }
+            else {
+                cache.subShape = result.shape;
+            }
+        }
+        else {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "unsupported_type",
+                                   "SupportTransform support " + *supportFeature
+                                       + " is not an additive or subtractive FeatureAddSub",
+                                   object.name,
+                                   "SupportTransform",
+                                   "runtime",
+                                   *supportFeature);
+            return false;
+        }
+
+        if (cache.addShape || cache.subShape) {
+            context.addSubShapes[object.name] = cache;
+        }
         return true;
     }
 
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureDressUp.cpp
-    // ::DressUp::getAddSubShape(), SupportTransform is only meaningful when pattern features
-    // rebuild the dress-up AddSubShape cache. That transformed-family path is not migrated yet.
-    runtime::addDiagnostic(context.diagnostics,
-                           "error",
-                           "unsupported_property",
-                           "SupportTransform requires the transformed-family DressUp AddSubShape path",
-                           object.name,
-                           "SupportTransform");
-    return false;
+    // ::DressUp::getAddSubShape(), without SupportTransform builds two slots:
+    // "shape.makeElementCut(baseShape)" and "baseShape.makeElementCut(shape)" so transformed
+    // features can fuse added dressing material and cut removed dressing material independently.
+    const auto baseFeatureShape = baseTopoShapeForFeature(object.name, context, object, false);
+    const TopoDS_Shape baseShape =
+        baseFeatureShape && hasSolid(*baseFeatureShape) ? *baseFeatureShape : result.base.shape;
+    const auto baseNamedShape = namedShapeForObject(result.base.link.object, baseShape, context);
+
+    const auto add = cutSlot(object,
+                             context,
+                             object.name,
+                             object.name,
+                             result.shape,
+                             resultNamedShape,
+                             result.base.link.object,
+                             baseShape,
+                             baseNamedShape,
+                             "Base");
+    if (!add.ok) {
+        return false;
+    }
+    const auto sub = cutSlot(object,
+                             context,
+                             object.name,
+                             result.base.link.object,
+                             baseShape,
+                             baseNamedShape,
+                             object.name,
+                             result.shape,
+                             resultNamedShape,
+                             "Base");
+    if (!sub.ok) {
+        return false;
+    }
+    cache.addShape = add.shape;
+    cache.subShape = sub.shape;
+    if (cache.addShape || cache.subShape) {
+        context.addSubShapes[object.name] = cache;
+    }
+    return true;
 }
 
 void publishDressUpResult(const document::DocumentObject& object,
@@ -592,6 +919,10 @@ void publishDressUpResult(const document::DocumentObject& object,
         {"shape", "occt_solid"},
         {"body_mode", "replace"},
         {"dress_up", result.mode},
+        {"support_transform", result.supportTransform},
+        {"add_sub_cache",
+         result.supportTransform ? "support_transform"
+                                 : (context.addSubShapes.count(object.name) != 0U ? "delta" : "empty")},
         {"source_base", result.sourceBase},
         {"bbox", geometry::bboxForShape(result.shape)},
         {"volume", geometry::volumeForShape(result.shape)},
@@ -618,13 +949,17 @@ void executeFillet(const document::DocumentObject& object, runtime::ComputeConte
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    if (!rejectActiveRefineProperty(object, context) || !rejectActiveSupportTransform(object, context)) {
+    if (!rejectActiveRefineProperty(object, context)) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
 
     const auto result = buildFillet(object, context);
     if (!result) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+    if (!cacheDressUpAddSubShape(object, context, *result)) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -652,13 +987,17 @@ void executeChamfer(const document::DocumentObject& object, runtime::ComputeCont
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    if (!rejectActiveRefineProperty(object, context) || !rejectActiveSupportTransform(object, context)) {
+    if (!rejectActiveRefineProperty(object, context)) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
 
     const auto result = buildChamfer(object, context);
     if (!result) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+    if (!cacheDressUpAddSubShape(object, context, *result)) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }

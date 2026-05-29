@@ -1,0 +1,17 @@
+{
+  "Objects": [
+    {
+      "Name": "Box",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 3,
+        "Height": 4
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Box"]
+  }
+}

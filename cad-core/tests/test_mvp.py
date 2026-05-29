@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import ctypes
 import json
+import math
 import subprocess
 import tempfile
 import unittest
@@ -278,33 +279,55 @@ class CadCoreOcctMvpTest(unittest.TestCase):
             "chamfer-pad-edge": [],
             "fillet-missing-edge": ["invalid_subshape"],
             "fillet-pad-edge": [],
+            "hole-angled-drill-point": [],
             "hole-blind-depth": [],
+            "hole-counterbore": [],
+            "hole-counterdrill": [],
+            "hole-countersink": [],
+            "hole-point-profile": [],
+            "hole-tapered": [],
+            "hole-thread-clearance": [],
+            "hole-threaded-cosmetic": [],
             "hole-threaded-known-gap": ["unsupported_property"],
             "hole-through-all": [],
             "hole-without-base": ["execution_failed"],
             "linear-pattern-custom-spacings": [],
             "linear-pattern-pad-datum-line": [],
+            "linear-pattern-pad-sketch-axis": [],
             "linear-pattern-pad-two-directions": [],
             "linear-pattern-spacing-pattern": [],
+            "linear-pattern-whole-shape": [],
             "mirrored-pad-datum-plane": [],
-            "mirrored-whole-shape-known-gap": ["unsupported_property"],
+            "mirrored-fillet-support-transform": [],
+            "mirrored-whole-shape": [],
             "multi-transform-linear-mirror": [],
             "multi-transform-scaled-diagonal": [],
             "multi-transform-scaled-divisor-known-gap": ["invalid_length"],
-            "multi-transform-whole-shape-known-gap": ["unsupported_property"],
+            "multi-transform-whole-shape": [],
             "origin-identity-placement": [],
             "pad-refine-false": [],
             "pad-refine-true-known-gap": ["unsupported_property"],
             "polar-pattern-pad-datum-line": [],
+            "polar-pattern-pad-sketch-axis": [],
             "polar-pattern-spacing-pattern": [],
-            "polar-pattern-whole-shape-known-gap": ["unsupported_property"],
+            "polar-pattern-whole-shape": [],
             "scaled-invalid-factor": ["invalid_length"],
             "scaled-pad-factor-two": [],
-            "scaled-whole-shape-known-gap": ["unsupported_property"],
+            "scaled-whole-shape": [],
         }
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):
                 self.assertEqual(self.diagnostic_codes(fixture, "p7"), codes)
+
+    def test_p8_fixture_diagnostics(self) -> None:
+        expected = {
+            "part-box": [],
+            "part-cylinder": [],
+            "part-cylinder-angled-prism": [],
+        }
+        for fixture, codes in expected.items():
+            with self.subTest(fixture=fixture):
+                self.assertEqual(self.diagnostic_codes(fixture, "p8"), codes)
 
     def test_diagnostics_include_stage_target_and_subname_metadata(self) -> None:
         missing_target = self.run_recompute("missing-link-target", "p4")["diagnostics"][0]
@@ -1155,6 +1178,136 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assert_bbox_close_delta(body["bbox"], [0.0, 0.0, 0.0], [10.0, 5.0, 10.0], 1e-2)
         self.assertAlmostEqual(body["volume"], 468.58407346410206, delta=1e-6)
 
+    def test_p7_hole_counterbore_cuts_head_cylinder_and_shaft(self) -> None:
+        result = self.run_recompute("hole-counterbore", "p7")
+        hole = result["objects"]["Hole"]
+        body = result["objects"]["Body"]
+        expected_cut_volume = math.pi * ((2.0 * 2.0 * 2.0) + (1.0 * 1.0 * 2.0))
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(hole["hole_cut_type"], "Counterbore")
+        self.assertEqual(hole["hole_cut_diameter"], 4.0)
+        self.assertEqual(hole["hole_cut_depth"], 2.0)
+        self.assertAlmostEqual(hole["volume"], expected_cut_volume, delta=1e-6)
+        self.assert_bbox_close_delta(body["bbox"], [0.0, 0.0, 0.0], [10.0, 5.0, 10.0], 5e-2)
+        self.assertAlmostEqual(body["volume"], 500.0 - expected_cut_volume, delta=1e-6)
+
+    def test_p7_hole_countersink_cuts_conical_head_and_shaft(self) -> None:
+        result = self.run_recompute("hole-countersink", "p7")
+        hole = result["objects"]["Hole"]
+        body = result["objects"]["Body"]
+        countersink_volume = math.pi * (2.0 * 2.0 + 2.0 * 1.0 + 1.0 * 1.0) / 3.0
+        expected_cut_volume = countersink_volume + math.pi * 3.0
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(hole["hole_cut_type"], "Countersink")
+        self.assertEqual(hole["hole_cut_countersink_angle"], 90.0)
+        self.assertAlmostEqual(hole["volume"], expected_cut_volume, delta=1e-6)
+        self.assert_bbox_close_delta(body["bbox"], [0.0, 0.0, 0.0], [10.0, 5.0, 10.0], 5e-2)
+        self.assertAlmostEqual(body["volume"], 500.0 - expected_cut_volume, delta=1e-6)
+
+    def test_p7_hole_counterdrill_cuts_head_cone_between_two_cylinders(self) -> None:
+        result = self.run_recompute("hole-counterdrill", "p7")
+        hole = result["objects"]["Hole"]
+        body = result["objects"]["Body"]
+        head_cylinder = math.pi * 2.0 * 2.0 * 1.0
+        transition = math.pi * (2.0 * 2.0 + 2.0 * 1.0 + 1.0 * 1.0) / 3.0
+        shaft = math.pi * 2.0
+        expected_cut_volume = head_cylinder + transition + shaft
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(hole["hole_cut_type"], "Counterdrill")
+        self.assertEqual(hole["hole_cut_depth"], 1.0)
+        self.assertAlmostEqual(hole["volume"], expected_cut_volume, delta=1e-6)
+        self.assert_bbox_close_delta(body["bbox"], [0.0, 0.0, 0.0], [10.0, 5.0, 10.0], 5e-2)
+        self.assertAlmostEqual(body["volume"], 500.0 - expected_cut_volume, delta=1e-6)
+
+    def test_p7_hole_angled_drill_point_extends_blind_hole_tip(self) -> None:
+        result = self.run_recompute("hole-angled-drill-point", "p7")
+        hole = result["objects"]["Hole"]
+        body = result["objects"]["Body"]
+        tip_depth = math.tan(math.radians((180.0 - 118.0) / 2.0))
+        expected_cut_volume = (math.pi * 4.0) + (math.pi * tip_depth / 3.0)
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(hole["hole_cut_type"], "None")
+        self.assertEqual(hole["drill_point"], "Angled")
+        self.assertEqual(hole["drill_for_depth"], False)
+        self.assertAlmostEqual(hole["volume"], expected_cut_volume, delta=1e-6)
+        self.assert_bbox_close_delta(body["bbox"], [0.0, 0.0, 0.0], [10.0, 5.0, 10.0], 5e-2)
+        self.assertAlmostEqual(body["volume"], 500.0 - expected_cut_volume, delta=1e-6)
+
+    def test_p7_hole_uses_sketch_points_as_hole_centers(self) -> None:
+        result = self.run_recompute("hole-point-profile", "p7")
+        sketch = result["objects"]["SketchHole"]
+        hole = result["objects"]["Hole"]
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["raw_point_count"], 1)
+        self.assertEqual(sketch["profile_ready"], False)
+        self.assertEqual(hole["method"], "Dimension")
+        self.assertEqual(hole["source_profile"], "SketchHole")
+        self.assert_bbox_close_delta(hole["bbox"], [4.0, 1.5, 6.0], [6.0, 3.5, 10.0], 1e-2)
+        self.assertAlmostEqual(hole["volume"], 4.0 * math.pi, delta=1e-6)
+        self.assert_bbox_close_delta(body["bbox"], [0.0, 0.0, 0.0], [10.0, 5.0, 10.0], 1e-2)
+        self.assertAlmostEqual(body["volume"], 500.0 - (4.0 * math.pi), delta=1e-6)
+
+    def test_p7_hole_tapered_profile_uses_tapered_angle_bottom_radius(self) -> None:
+        result = self.run_recompute("hole-tapered", "p7")
+        hole = result["objects"]["Hole"]
+        body = result["objects"]["Body"]
+        top_radius = 1.0
+        depth = 4.0
+        bottom_radius = top_radius - depth / math.tan(math.radians(80.0))
+        expected_cut_volume = math.pi * depth * (
+            top_radius * top_radius + top_radius * bottom_radius + bottom_radius * bottom_radius
+        ) / 3.0
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(hole["tapered"], True)
+        self.assertEqual(hole["tapered_angle"], 80.0)
+        self.assertAlmostEqual(hole["volume"], expected_cut_volume, delta=1e-6)
+        self.assert_bbox_close_delta(hole["bbox"], [4.0, 1.5, 6.0], [6.0, 3.5, 10.0], 5e-2)
+        self.assertAlmostEqual(body["volume"], 500.0 - expected_cut_volume, delta=1e-6)
+
+    def test_p7_hole_threaded_without_model_thread_uses_tap_drill_plain_tool(self) -> None:
+        result = self.run_recompute("hole-threaded-cosmetic", "p7")
+        hole = result["objects"]["Hole"]
+        body = result["objects"]["Body"]
+        expected_cut_volume = math.pi * 0.375 * 0.375 * 4.0
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(hole["threaded"], True)
+        self.assertEqual(hole["model_thread"], False)
+        self.assertEqual(hole["thread_type"], "ISOMetricProfile")
+        self.assertEqual(hole["thread_size"], "M1x0.25")
+        self.assertEqual(hole["diameter_source"], "thread_tap_drill")
+        self.assertEqual(hole["thread_diameter"], 1.0)
+        self.assertEqual(hole["thread_pitch"], 0.25)
+        self.assertEqual(hole["diameter"], 0.75)
+        self.assertEqual(hole["drill_point"], "Flat")
+        self.assertAlmostEqual(hole["volume"], expected_cut_volume, delta=1e-6)
+        self.assertAlmostEqual(body["volume"], 500.0 - expected_cut_volume, delta=1e-6)
+
+    def test_p7_hole_thread_clearance_uses_iso_metric_fit_table(self) -> None:
+        result = self.run_recompute("hole-thread-clearance", "p7")
+        hole = result["objects"]["Hole"]
+        body = result["objects"]["Body"]
+        expected_cut_volume = math.pi * 2.4 * 2.4 * 4.0
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(hole["threaded"], False)
+        self.assertEqual(hole["thread_type"], "ISOMetricProfile")
+        self.assertEqual(hole["thread_size"], "M4x0.7")
+        self.assertEqual(hole["thread_fit"], "Coarse")
+        self.assertEqual(hole["diameter_source"], "thread_clearance")
+        self.assertEqual(hole["thread_diameter"], 4.0)
+        self.assertEqual(hole["thread_pitch"], 0.7)
+        self.assertEqual(hole["diameter"], 4.8)
+        self.assertAlmostEqual(hole["volume"], expected_cut_volume, delta=1e-6)
+        self.assertAlmostEqual(body["volume"], 500.0 - expected_cut_volume, delta=1e-6)
+
     def test_p7_hole_without_base_and_threaded_gaps_are_explicit(self) -> None:
         result = self.run_recompute("hole-without-base", "p7")
         diagnostic = result["diagnostics"][0]
@@ -1168,7 +1321,7 @@ class CadCoreOcctMvpTest(unittest.TestCase):
 
         self.assertEqual(diagnostic["code"], "unsupported_property")
         self.assertEqual(diagnostic["object"], "Hole")
-        self.assertEqual(diagnostic["property"], "Threaded")
+        self.assertEqual(diagnostic["property"], "ModelThread")
         self.assertIn("Hole::makeThread", diagnostic["message"])
 
     def test_p7_fillet_replaces_body_tip_shape(self) -> None:
@@ -1244,14 +1397,42 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assertTrue(any(key.startswith("Pad.") for key in named_shape["element_map"]))
         self.assertTrue(any(key.startswith("SketchPad.") for key in named_shape["element_map"]))
 
-    def test_p7_mirrored_whole_shape_gap_is_explicit(self) -> None:
-        result = self.run_recompute("mirrored-whole-shape-known-gap", "p7")
-        diagnostic = result["diagnostics"][0]
+    def test_p7_mirrored_features_mode_consumes_dressup_support_transform_cache(self) -> None:
+        result = self.run_recompute("mirrored-fillet-support-transform", "p7")
+        fillet = result["objects"]["Fillet"]
+        mirrored = result["objects"]["Mirrored"]
+        body = result["objects"]["Body"]
+        named_shape = result["named_shapes"]["Body"]
 
-        self.assertEqual(diagnostic["code"], "unsupported_property")
-        self.assertEqual(diagnostic["object"], "Mirrored")
-        self.assertEqual(diagnostic["property"], "TransformMode")
-        self.assertIn("WholeShape", diagnostic["message"])
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(fillet["status"], "ok")
+        self.assertEqual(fillet["support_transform"], True)
+        self.assertEqual(fillet["add_sub_cache"], "support_transform")
+        self.assertEqual(mirrored["status"], "ok")
+        self.assertEqual(mirrored["transformed"], "mirrored")
+        self.assertEqual(mirrored["transform_mode"], "Features")
+        self.assertEqual(mirrored["originals"], ["Fillet"])
+        self.assertEqual(body["tip"], "Mirrored")
+        self.assert_bbox_close_delta(body["bbox"], [0.0, 0.0, 0.0], [4.0, 2.0, 2.0], 2e-2)
+        self.assertAlmostEqual(body["volume"], fillet["volume"] * 2.0, delta=1e-6)
+        self.assertAlmostEqual(mirrored["volume"], body["volume"], delta=1e-6)
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertTrue(any(key.startswith("Fillet.") for key in named_shape["element_map"]))
+
+    def test_p7_mirrored_whole_shape_fuses_transformed_support(self) -> None:
+        result = self.run_recompute("mirrored-whole-shape", "p7")
+        mirrored = result["objects"]["Mirrored"]
+        named_shape = result["named_shapes"]["Mirrored"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(mirrored["status"], "ok")
+        self.assertEqual(mirrored["transformed"], "mirrored")
+        self.assertEqual(mirrored["transform_mode"], "Whole shape")
+        self.assertEqual(mirrored["originals"], ["Pad"])
+        self.assert_bbox_close(mirrored["bbox"], [0.0, 0.0, 0.0], [4.0, 2.0, 2.0])
+        self.assertAlmostEqual(mirrored["volume"], 16.0, delta=1e-6)
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertTrue(any(key.startswith("Pad.") for key in named_shape["element_map"]))
 
     def test_p7_linear_pattern_features_mode_fuses_additive_originals_by_extent(self) -> None:
         result = self.run_recompute("linear-pattern-pad-datum-line", "p7")
@@ -1271,6 +1452,20 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assertAlmostEqual(pattern["volume"], body["volume"], delta=1e-6)
         self.assertEqual(named_shape["element_map_status"], "history_partial")
         self.assertTrue(any(key.startswith("Pad.") for key in named_shape["element_map"]))
+
+    def test_p7_linear_pattern_uses_sketch_construction_axis(self) -> None:
+        result = self.run_recompute("linear-pattern-pad-sketch-axis", "p7")
+        pattern = result["objects"]["LinearPattern"]
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pattern["status"], "ok")
+        self.assertEqual(pattern["transformed"], "linear_pattern")
+        self.assertEqual(pattern["transform_mode"], "Features")
+        self.assertEqual(body["tip"], "LinearPattern")
+        self.assert_bbox_close(body["bbox"], [0.0, 0.0, 0.0], [2.0, 6.0, 2.0])
+        self.assertAlmostEqual(body["volume"], 24.0, delta=1e-6)
+        self.assertAlmostEqual(pattern["volume"], body["volume"], delta=1e-6)
 
     def test_p7_linear_pattern_combines_two_directions(self) -> None:
         result = self.run_recompute("linear-pattern-pad-two-directions", "p7")
@@ -1308,6 +1503,18 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assert_bbox_close(body["bbox"], [0.0, 0.0, 0.0], [12.0, 2.0, 2.0])
         self.assertAlmostEqual(body["volume"], 32.0, delta=1e-6)
 
+    def test_p7_linear_pattern_whole_shape_fuses_transformed_support(self) -> None:
+        result = self.run_recompute("linear-pattern-whole-shape", "p7")
+        pattern = result["objects"]["LinearPattern"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pattern["status"], "ok")
+        self.assertEqual(pattern["transformed"], "linear_pattern")
+        self.assertEqual(pattern["transform_mode"], "Whole shape")
+        self.assertEqual(pattern["originals"], ["Pad"])
+        self.assert_bbox_close(pattern["bbox"], [0.0, 0.0, 0.0], [6.0, 2.0, 2.0])
+        self.assertAlmostEqual(pattern["volume"], 24.0, delta=1e-6)
+
     def test_p7_polar_pattern_features_mode_rotates_additive_originals_by_extent(self) -> None:
         result = self.run_recompute("polar-pattern-pad-datum-line", "p7")
         pattern = result["objects"]["PolarPattern"]
@@ -1327,6 +1534,20 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assertEqual(named_shape["element_map_status"], "history_partial")
         self.assertTrue(any(key.startswith("PolarPattern.Transform") for key in named_shape["element_map"]))
 
+    def test_p7_polar_pattern_uses_sketch_normal_axis(self) -> None:
+        result = self.run_recompute("polar-pattern-pad-sketch-axis", "p7")
+        pattern = result["objects"]["PolarPattern"]
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pattern["status"], "ok")
+        self.assertEqual(pattern["transformed"], "polar_pattern")
+        self.assertEqual(pattern["transform_mode"], "Features")
+        self.assertEqual(body["tip"], "PolarPattern")
+        self.assert_bbox_close(body["bbox"], [-3.0, -3.0, 0.0], [3.0, 3.0, 2.0])
+        self.assertAlmostEqual(body["volume"], 8.0, delta=1e-6)
+        self.assertAlmostEqual(pattern["volume"], body["volume"], delta=1e-6)
+
     def test_p7_polar_pattern_spacing_pattern_controls_angles(self) -> None:
         result = self.run_recompute("polar-pattern-spacing-pattern", "p7")
         pattern = result["objects"]["PolarPattern"]
@@ -1339,14 +1560,17 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assert_bbox_close(body["bbox"], [-1.0, -3.0, 0.0], [3.0, 3.0, 2.0])
         self.assertAlmostEqual(body["volume"], 6.0, delta=1e-6)
 
-    def test_p7_polar_pattern_whole_shape_gap_is_explicit(self) -> None:
-        result = self.run_recompute("polar-pattern-whole-shape-known-gap", "p7")
-        diagnostic = result["diagnostics"][0]
+    def test_p7_polar_pattern_whole_shape_fuses_transformed_support(self) -> None:
+        result = self.run_recompute("polar-pattern-whole-shape", "p7")
+        pattern = result["objects"]["PolarPattern"]
 
-        self.assertEqual(diagnostic["code"], "unsupported_property")
-        self.assertEqual(diagnostic["object"], "PolarPattern")
-        self.assertEqual(diagnostic["property"], "TransformMode")
-        self.assertIn("WholeShape", diagnostic["message"])
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pattern["status"], "ok")
+        self.assertEqual(pattern["transformed"], "polar_pattern")
+        self.assertEqual(pattern["transform_mode"], "Whole shape")
+        self.assertEqual(pattern["originals"], ["Pad"])
+        self.assert_bbox_close(pattern["bbox"], [-3.0, -3.0, 0.0], [3.0, 3.0, 2.0])
+        self.assertAlmostEqual(pattern["volume"], 8.0, delta=1e-6)
 
     def test_p7_scaled_features_mode_scales_around_first_original_center_of_mass(self) -> None:
         result = self.run_recompute("scaled-pad-factor-two", "p7")
@@ -1375,14 +1599,17 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assertEqual(diagnostic["object"], "Scaled")
         self.assertEqual(diagnostic["property"], "Factor")
 
-    def test_p7_scaled_whole_shape_gap_is_explicit(self) -> None:
-        result = self.run_recompute("scaled-whole-shape-known-gap", "p7")
-        diagnostic = result["diagnostics"][0]
+    def test_p7_scaled_whole_shape_scales_support_around_origin(self) -> None:
+        result = self.run_recompute("scaled-whole-shape", "p7")
+        scaled = result["objects"]["Scaled"]
 
-        self.assertEqual(diagnostic["code"], "unsupported_property")
-        self.assertEqual(diagnostic["object"], "Scaled")
-        self.assertEqual(diagnostic["property"], "TransformMode")
-        self.assertIn("WholeShape", diagnostic["message"])
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(scaled["status"], "ok")
+        self.assertEqual(scaled["transformed"], "scaled")
+        self.assertEqual(scaled["transform_mode"], "Whole shape")
+        self.assertEqual(scaled["originals"], ["Pad"])
+        self.assert_bbox_close(scaled["bbox"], [0.0, 0.0, 0.0], [4.0, 4.0, 4.0])
+        self.assertAlmostEqual(scaled["volume"], 64.0, delta=1e-6)
 
     def test_p7_multi_transform_combines_linear_pattern_and_mirror(self) -> None:
         result = self.run_recompute("multi-transform-linear-mirror", "p7")
@@ -1428,14 +1655,53 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assertEqual(diagnostic["property"], "Transformations")
         self.assertIn("divisor", diagnostic["message"])
 
-    def test_p7_multi_transform_whole_shape_gap_is_explicit(self) -> None:
-        result = self.run_recompute("multi-transform-whole-shape-known-gap", "p7")
-        diagnostic = result["diagnostics"][0]
+    def test_p7_multi_transform_whole_shape_uses_support_and_child_transforms(self) -> None:
+        result = self.run_recompute("multi-transform-whole-shape", "p7")
+        multi = result["objects"]["MultiTransform"]
+        child = result["objects"]["LinearPattern"]
 
-        self.assertEqual(diagnostic["code"], "unsupported_property")
-        self.assertEqual(diagnostic["object"], "MultiTransform")
-        self.assertEqual(diagnostic["property"], "TransformMode")
-        self.assertIn("WholeShape", diagnostic["message"])
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(child["transformation_template"], True)
+        self.assertEqual(multi["status"], "ok")
+        self.assertEqual(multi["transformed"], "multi_transform")
+        self.assertEqual(multi["transform_mode"], "Whole shape")
+        self.assertEqual(multi["originals"], ["Pad"])
+        self.assert_bbox_close(multi["bbox"], [0.0, 0.0, 0.0], [3.0, 1.0, 1.0])
+        self.assertAlmostEqual(multi["volume"], 3.0, delta=1e-6)
+
+    def test_p8_part_box_builds_occt_solid(self) -> None:
+        result = self.run_recompute("part-box", "p8")
+        box = result["objects"]["Box"]
+        named_shape = result["named_shapes"]["Box"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(box["status"], "ok")
+        self.assertEqual(box["primitive"], "box")
+        self.assert_bbox_close(box["bbox"], [0.0, 0.0, 0.0], [2.0, 3.0, 4.0])
+        self.assertAlmostEqual(box["volume"], 24.0, delta=1e-6)
+        self.assert_topology_counts(result["subshapes"]["Box"], {"topology_counts": {"faces": 6, "edges": 12, "vertices": 8}})
+        self.assertEqual(named_shape["owner"], "Box")
+        self.assertIn("Face1", named_shape["elements"])
+
+    def test_p8_part_cylinder_builds_prism_extension_solid(self) -> None:
+        result = self.run_recompute("part-cylinder", "p8")
+        cylinder = result["objects"]["Cylinder"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(cylinder["status"], "ok")
+        self.assertEqual(cylinder["primitive"], "cylinder")
+        self.assert_bbox_close_delta(cylinder["bbox"], [-2.0, -2.0, 0.0], [2.0, 2.0, 5.0], 2e-2)
+        self.assertAlmostEqual(cylinder["volume"], math.pi * 2.0 * 2.0 * 5.0, delta=1e-6)
+        self.assertIn("Cylinder", result["named_shapes"])
+
+    def test_p8_part_cylinder_uses_prism_first_angle(self) -> None:
+        result = self.run_recompute("part-cylinder-angled-prism", "p8")
+        cylinder = result["objects"]["Cylinder"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(cylinder["first_angle"], 10.0)
+        self.assertAlmostEqual(cylinder["volume"], math.pi * 5.0, delta=1e-6)
+        self.assert_bbox_close_delta(cylinder["bbox"], [-1.0, -1.0, 0.0], [1.0 + 5.0 * math.tan(math.radians(10.0)), 1.0, 5.0], 1e-2)
 
 
 if __name__ == "__main__":
