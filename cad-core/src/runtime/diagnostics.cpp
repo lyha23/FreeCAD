@@ -9,13 +9,19 @@ void addDiagnostic(std::vector<Diagnostic>& diagnostics,
                    std::string code,
                    std::string message,
                    std::string object,
-                   std::string property)
+                   std::string property,
+                   std::string stage,
+                   std::string target,
+                   std::string subname)
 {
     diagnostics.push_back({std::move(severity),
                            std::move(code),
                            std::move(message),
                            std::move(object),
-                           std::move(property)});
+                           std::move(property),
+                           std::move(stage),
+                           std::move(target),
+                           std::move(subname)});
 }
 
 nlohmann::json diagnosticsToJson(const std::vector<Diagnostic>& diagnostics)
@@ -33,10 +39,18 @@ nlohmann::json diagnosticsToJson(const std::vector<Diagnostic>& diagnostics)
         if (!diagnostic.property.empty()) {
             item["property"] = diagnostic.property;
         }
+        if (!diagnostic.stage.empty()) {
+            item["stage"] = diagnostic.stage;
+        }
+        if (!diagnostic.target.empty()) {
+            item["target"] = diagnostic.target;
+        }
+        if (!diagnostic.subname.empty()) {
+            item["subname"] = diagnostic.subname;
+        }
         result.push_back(item);
     }
     return result;
 }
 
 }  // namespace cad_core::runtime
-

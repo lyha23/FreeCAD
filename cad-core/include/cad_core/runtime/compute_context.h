@@ -3,6 +3,7 @@
 #include "cad_core/runtime/diagnostics.h"
 
 #include <TopoDS_Shape.hxx>
+#include <gp_Trsf.hxx>
 #include <nlohmann/json.hpp>
 
 #include <map>
@@ -16,6 +17,9 @@ struct ShapeValue {
     enum class Kind {
         Profile,
         Solid,
+        DatumPlane,
+        DatumLine,
+        DatumPoint,
     };
 
     Kind kind;
@@ -35,6 +39,9 @@ struct ComputeContext {
     std::map<std::string, nlohmann::json> mesh;
     std::map<std::string, nlohmann::json> subshapes;
     std::map<std::string, std::vector<std::string>> dependencies;
+    std::map<std::string, std::string> parentGroupByObject;
+    std::map<std::string, gp_Trsf> globalPlacements;
+    std::vector<std::string> executionOrder;
 };
 
 bool hasFailed(const ComputeContext& context, const std::string& object);

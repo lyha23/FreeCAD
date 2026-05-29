@@ -1,0 +1,23 @@
+{
+  "object": "Pad",
+  "reference": "FreeCAD Part face rotated by Sketch Placement 90 degrees about X, then extruded with Direction=(0,-1,1) and AlongSketchNormal length correction",
+  "freecad_version": "1.2.0 revision 20260519",
+  "bbox": {
+    "min": [
+      0.0,
+      -4.0,
+      0.0
+    ],
+    "max": [
+      10.0,
+      0.0,
+      9.0
+    ]
+  },
+  "volume": 200.00000000000006,
+  "topology_counts": {
+    "faces": 6,
+    "edges": 12,
+    "vertices": 8
+  }
+}

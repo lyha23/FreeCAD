@@ -65,29 +65,29 @@ python3 -m unittest discover -s cad-core/tests
 | 共享拉伸 | `src/Mod/PartDesign/App/FeatureExtrude.cpp`、`src/Mod/PartDesign/App/FeatureExtrude.h` |
 | Pad / Pocket 入口 | `src/Mod/PartDesign/App/FeaturePad.cpp`、`src/Mod/PartDesign/App/FeaturePocket.cpp` |
 
-## 未完成边界
+## P2 冻结边界
 
-P2 仍然只是 FreeCAD PartDesign 的最小主链，不等于完整 Body 生态：
+P2 仍然只是 FreeCAD PartDesign 的最小主链，不等于完整 Body 生态。下面这些不属于 P2 本身，而由 P3a 之后的阶段继续承接：
 
-- `FeatureExtrude` 只支持 `Type=Length` + `SideType=One side`。
-- `Pocket::TypeEnums` 中的 `ThroughAll`、`UpToFirst`、`UpToFace`、`UpToShape` 仍未支持。
-- `Pad::TypeEnums` 中的 `UpToLast`、`UpToFirst`、`UpToFace`、`UpToShape` 仍未支持。
-- `Two sides`、`Symmetric`、taper、custom direction、ReferenceAxis、object-local placement 仍未完整对齐。
-- `UpToFace` / `UpToShape` 需要真实 subshape 解析，不能只读对象名。
+- `FeatureExtrude` 的 P3a 路径已经继续扩出 `ThroughAll`、`UpToFace`、单目标 `UpToShape`，但 P2 只冻结 `Type=Length` + `SideType=One side` 的主链。
+- `UpToFirst`、`UpToLast`、多 face / shell `UpToShape` 仍未完整对齐。
+- `Two sides`、`Symmetric`、taper、custom direction、ReferenceAxis、object-local placement 由 P3b 处理。
 - Body 还没有完整 placement、suppressed、refine、历史 topo naming 更新。
 
 ## 下一阶段入口
 
-下一阶段先做 `FeatureExtrude` 终止语义，不先做 Hole、Fillet、Chamfer、Pattern、Mirror。
+P2 之后先做 `FeatureExtrude` 终止语义，不先做 Hole、Fillet、Chamfer、Pattern、Mirror。
 
 ```text
 P2 frozen baseline
   -> P3a FeatureExtrude ThroughAll
   -> P3a UpToFace / UpToShape subshape resolution
   -> P3a Pad/Pocket UpTo fixtures
-  -> P3b Two sides / Symmetric / taper / custom direction
-  -> P4 FeatureTransformed / Mirror / Pattern
-  -> P5 Hole / Fillet / Chamfer / Refine
+  -> 06-P3b FeatureExtrude 双侧 / taper / custom direction / placement
+  -> 07-P4 Document / Property / Placement 完整化
+  -> 08-P5 Sketcher 核心与内部元素
+  -> 09-P6 Topo Naming 主路径
+  -> 10-P7 PartDesign 常用生态
 ```
 
 原因：

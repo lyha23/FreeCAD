@@ -1,0 +1,23 @@
+{
+  "bbox": {
+    "max": [
+      10.0,
+      5.0,
+      7.0
+    ],
+    "min": [
+      0.0,
+      0.0,
+      -3.0
+    ]
+  },
+  "freecad_version": "1.2.0 revision 20260519",
+  "object": "Pad",
+  "reference": "FreeCAD Part geometry equivalent to FeatureExtrude SideType=Two sides, Length=7, Length2=3",
+  "topology_counts": {
+    "edges": 12,
+    "faces": 6,
+    "vertices": 8
+  },
+  "volume": 499.9999999999999
+}

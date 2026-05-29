@@ -1,0 +1,40 @@
+{
+  "Objects": [
+    {
+      "Name": "DatumLine",
+      "ID": 1,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "ResizeMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Automatic"
+        }
+      }
+    },
+    {
+      "Name": "Sketch",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
+          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
+          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
+          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]}
+        ],
+        "ExternalGeometry": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "value": [
+            {
+              "PropertyType": "App::PropertyLinkSub",
+              "value": "DatumLine",
+              "SubList": ["Face1"]
+            }
+          ]
+        },
+        "Constraints": []
+      }
+    }
+  ],
+  "recompute": {"objs": ["Sketch"]}
+}

@@ -9,9 +9,9 @@ P0 的目标是先得到一个可运行的无 Qt 程序。它不需要生成真�
 - 有独立 C++/CMake `cad-core-lib` 和 `cad-core` CLI。
 - parser 已固定 `Objects[]` / `Name` / `ID` / `TypeId` / `Properties`，并拒绝旧 lowercase schema。
 - diagnostics、registry、依赖图、一次性 `ComputeContext` 和 recompute 输出已存在。
-- 当前链接发现只识别 `App::PropertyLinkSub` 以及它组成的数组。
+- P0 初始链接发现只识别 `App::PropertyLinkSub` 以及它组成的数组；当前 P2/P3a 基线已经把 `PropertyLink`、`PropertyLinkList`、`PropertyLinkSub`、`PropertyLinkSubList` 归一成 recompute dependency edge。
 
-进入 P2 前需要补一层属性归一化：把 FreeCAD 的 `PropertyLink`、`PropertyLinkList`、`PropertyLinkSub`、`PropertyLinkSubList` 都归一成统一 graph edge 和 subname 数据，executor 不应该直接依赖 JSON 包装形态。
+P0 文档保留的是 Core 壳阶段的冻结边界；完整属性模型继续在 `07-P4-Document-Property-Placement完整化.md` 中收敛。
 
 ## Step 1：固定 DocumentObject Graph 输入模型
 

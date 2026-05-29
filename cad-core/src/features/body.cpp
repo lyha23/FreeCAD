@@ -1,6 +1,7 @@
 #include "cad_core/features/body.h"
 
 #include "cad_core/features/feature_executor.h"
+#include "cad_core/geometry/placement.h"
 #include "cad_core/geometry/shape_exporter.h"
 #include "cad_core/topo/subshape_map.h"
 
@@ -15,19 +16,9 @@ namespace cad_core::features {
 
 namespace {
 
-std::optional<std::vector<std::string>> readGroupNames(const nlohmann::json& value)
+std::optional<std::vector<std::string>> readGroupNames(const document::DocumentObject& object)
 {
-    std::vector<document::Link> links;
-    if (value.is_array()) {
-        for (const auto& item : value) {
-            auto itemLinks = document::readLinks(item);
-            links.insert(links.end(), itemLinks.begin(), itemLinks.end());
-        }
-    }
-    else {
-        links = document::readLinks(value);
-    }
-
+    const std::vector<document::Link> links = document::readLinks(object, "Group");
     if (links.empty()) {
         return std::nullopt;
     }
@@ -93,14 +84,14 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
         return;
     }
 
-    const auto tip = document::readLink(object.properties.at("Tip"));
+    const auto tip = document::readLink(object, "Tip");
     if (!tip) {
         runtime::addDiagnostic(context.diagnostics, "error", "missing_property", "Body Tip must link to the final feature", object.name, "Tip");
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
 
-    auto group = readGroupNames(object.properties.at("Group"));
+    auto group = readGroupNames(object);
     if (!group) {
         runtime::addDiagnostic(context.diagnostics, "error", "missing_link_target", "Body Group item must be an object link", object.name, "Group");
         context.objects[object.name] = {{"status", "error"}};
@@ -109,14 +100,21 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
     const std::vector<std::string>& groupNames = *group;
 
     if (std::find(groupNames.begin(), groupNames.end(), tip->object) == groupNames.end()) {
-        runtime::addDiagnostic(context.diagnostics, "error", "missing_link_target", "Body Tip is not present in Group", object.name, "Tip");
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "missing_link_target",
+                               "Body Tip is not present in Group",
+                               object.name,
+                               "Tip",
+                               "runtime",
+                               tip->object);
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
 
     std::optional<TopoDS_Shape> bodyShape;
     if (object.properties.contains("BaseFeature")) {
-        const auto baseLink = document::readLink(object.properties.at("BaseFeature"));
+        const auto baseLink = document::readLink(object, "BaseFeature");
         if (!baseLink) {
             runtime::addDiagnostic(context.diagnostics, "error", "missing_property", "Body BaseFeature must link to a solid feature", object.name, "BaseFeature");
             context.objects[object.name] = {{"status", "error"}};
@@ -129,7 +127,9 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
                                    "missing_link_target",
                                    "Body BaseFeature target " + baseLink->object + " did not produce a solid",
                                    object.name,
-                                   "BaseFeature");
+                                   "BaseFeature",
+                                   "runtime",
+                                   baseLink->object);
             context.objects[object.name] = {{"status", "error"}};
             return;
         }
@@ -184,16 +184,24 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
         return;
     }
 
-    context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, *bodyShape};
-    context.mesh[object.name] = geometry::meshForShape(*bodyShape);
-    context.subshapes[object.name] = topo::subshapeMapForShape(*bodyShape);
+    TopoDS_Shape resultShape = *bodyShape;
+    const auto placementIt = context.globalPlacements.find(object.name);
+    if (placementIt != context.globalPlacements.end()) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/GeoFeature.cpp
+        // ::GeoFeature::getGlobalPlacement(), "return ext->globalGroupPlacement() * placementProperty->getValue()".
+        resultShape = geometry::transformShape(resultShape, placementIt->second);
+    }
+
+    context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, resultShape};
+    context.mesh[object.name] = geometry::meshForShape(resultShape);
+    context.subshapes[object.name] = topo::subshapeMapForShape(resultShape);
     context.objects[object.name] = {
         {"status", "ok"},
         {"tip", tip->object},
         {"group", groupNames},
         {"shape", "occt_solid"},
-        {"bbox", geometry::bboxForShape(*bodyShape)},
-        {"volume", geometry::volumeForShape(*bodyShape)},
+        {"bbox", geometry::bboxForShape(resultShape)},
+        {"volume", geometry::volumeForShape(resultShape)},
         {"kernel", geometry::kernelVersion()},
     };
 }

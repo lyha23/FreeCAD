@@ -20,12 +20,18 @@ endif()
 add_library(cad-core-lib STATIC
   src/document/model.cpp
   src/features/body.cpp
+  src/features/datum_line.cpp
+  src/features/datum_plane.cpp
+  src/features/datum_point.cpp
   src/features/feature_base.cpp
   src/features/feature_extrude.cpp
   src/features/feature_executor.cpp
+  src/features/part.cpp
   src/features/pad.cpp
   src/features/pocket.cpp
   src/features/sketch_object.cpp
+  src/geometry/extrusion_helper.cpp
+  src/geometry/placement.cpp
   src/geometry/shape_exporter.cpp
   src/graph/recompute_plan.cpp
   src/runtime/compute_context.cpp
@@ -58,6 +64,8 @@ target_link_libraries(cad-core-lib PUBLIC
   TKGeomAlgo
   TKTopAlgo
   TKPrim
+  TKOffset
+  TKShHealing
   TKMesh
   TKBO
 )

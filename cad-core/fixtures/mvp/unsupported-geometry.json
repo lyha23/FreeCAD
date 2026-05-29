@@ -7,12 +7,13 @@
       "Properties": {
         "Geometry": [
           {
-            "kind": "Circle",
-            "center": [
-              0,
-              0
-            ],
-            "radius": 5
+            "kind": "BSpline",
+            "degree": 2,
+            "poles": [
+              [0, 0],
+              [2, 3],
+              [4, 0]
+            ]
           }
         ],
         "Constraints": []

@@ -1,0 +1,23 @@
+{
+  "object": "Body",
+  "reference": "FreeCAD Part base box cut by Pocket custom Direction=(0,1,1), AlongSketchNormal length correction from sketch Placement Base=(0,0,2)",
+  "freecad_version": "1.2.0 revision 20260519",
+  "bbox": {
+    "min": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "max": [
+      10.0,
+      5.0,
+      10.0
+    ]
+  },
+  "volume": 454.99999999999994,
+  "topology_counts": {
+    "faces": 11,
+    "edges": 24,
+    "vertices": 16
+  }
+}

@@ -1,5 +1,7 @@
 #include "cad_core/document/model.h"
 
+#include <algorithm>
+#include <cmath>
 #include <iterator>
 #include <set>
 #include <utility>
@@ -10,14 +12,118 @@ using runtime::addDiagnostic;
 
 namespace {
 
-std::optional<Link> readLinkObject(const nlohmann::json& value)
+bool isLinkPropertyType(const std::string& propertyType)
+{
+    return propertyType == "App::PropertyLink" || propertyType == "App::PropertyLinkList"
+        || propertyType == "App::PropertyLinkSub" || propertyType == "App::PropertyLinkSubList";
+}
+
+PropertyKind kindFromPropertyType(const std::string& propertyType)
+{
+    if (propertyType == "App::PropertyBool") {
+        return PropertyKind::Bool;
+    }
+    if (propertyType == "App::PropertyInteger") {
+        return PropertyKind::Integer;
+    }
+    if (propertyType == "App::PropertyFloat" || propertyType == "App::PropertyLength" || propertyType == "App::PropertyAngle"
+        || propertyType == "App::PropertyDistance") {
+        return PropertyKind::Float;
+    }
+    if (propertyType == "App::PropertyString") {
+        return PropertyKind::String;
+    }
+    if (propertyType == "App::PropertyEnumeration") {
+        return PropertyKind::Enumeration;
+    }
+    if (propertyType == "App::PropertyVector" || propertyType == "App::PropertyVectorDistance") {
+        return PropertyKind::Vector;
+    }
+    if (propertyType == "App::PropertyPlacement") {
+        return PropertyKind::Placement;
+    }
+    if (propertyType == "App::PropertyLink") {
+        return PropertyKind::Link;
+    }
+    if (propertyType == "App::PropertyLinkList") {
+        return PropertyKind::LinkList;
+    }
+    if (propertyType == "App::PropertyLinkSub") {
+        return PropertyKind::LinkSub;
+    }
+    if (propertyType == "App::PropertyLinkSubList") {
+        return PropertyKind::LinkSubList;
+    }
+    return PropertyKind::Unknown;
+}
+
+PropertyKind inferUntypedKind(const nlohmann::json& value)
+{
+    if (value.is_boolean()) {
+        return PropertyKind::Bool;
+    }
+    if (value.is_number_integer()) {
+        return PropertyKind::Integer;
+    }
+    if (value.is_number()) {
+        return PropertyKind::Float;
+    }
+    if (value.is_string()) {
+        return PropertyKind::String;
+    }
+    if (value.is_array() && value.size() == 3U) {
+        const bool vectorLike = std::all_of(value.begin(), value.end(), [](const nlohmann::json& item) {
+            return item.is_number();
+        });
+        if (vectorLike) {
+            return PropertyKind::Vector;
+        }
+    }
+    return PropertyKind::Unknown;
+}
+
+std::optional<std::string> propertyTypeOf(const nlohmann::json& value)
 {
     if (!value.is_object() || !value.contains("PropertyType") || !value.at("PropertyType").is_string()) {
         return std::nullopt;
     }
+    return value.at("PropertyType").get<std::string>();
+}
 
-    const std::string propertyType = value.at("PropertyType").get<std::string>();
-    if (propertyType != "App::PropertyLink" && propertyType != "App::PropertyLinkSub") {
+std::optional<std::vector<std::string>> readStringList(const nlohmann::json& value)
+{
+    if (!value.is_array()) {
+        return std::nullopt;
+    }
+
+    std::vector<std::string> items;
+    for (const auto& item : value) {
+        if (!item.is_string()) {
+            return std::nullopt;
+        }
+        items.push_back(item.get<std::string>());
+    }
+    return items;
+}
+
+std::vector<std::string> readOptionalStringList(const nlohmann::json& value, const std::string& field)
+{
+    const auto it = value.find(field);
+    if (it == value.end()) {
+        return {};
+    }
+    auto items = readStringList(*it);
+    return items.value_or(std::vector<std::string>{});
+}
+
+std::optional<Link> readLinkObject(const nlohmann::json& value, const std::string& property = {})
+{
+    const auto propertyType = propertyTypeOf(value);
+    if (!propertyType) {
+        return std::nullopt;
+    }
+
+    if (*propertyType != "App::PropertyLink" && *propertyType != "App::PropertyLinkSub") {
         return std::nullopt;
     }
     if (!value.contains("value") || !value.at("value").is_string() || value.at("value").get<std::string>().empty()) {
@@ -27,18 +133,223 @@ std::optional<Link> readLinkObject(const nlohmann::json& value)
     std::vector<std::string> subnames;
     const auto subListIt = value.find("SubList");
     if (subListIt != value.end()) {
-        if (!subListIt->is_array()) {
+        auto parsed = readStringList(*subListIt);
+        if (!parsed) {
             return std::nullopt;
         }
-        for (const auto& subname : *subListIt) {
-            if (!subname.is_string()) {
-                return std::nullopt;
+        subnames = std::move(*parsed);
+    }
+
+    std::vector<std::string> stableSubnames = readOptionalStringList(value, "StableSubList");
+    if (stableSubnames.empty()) {
+        stableSubnames = readOptionalStringList(value, "StableSubnames");
+    }
+    std::vector<std::string> fullSubnames = readOptionalStringList(value, "FullSubList");
+    if (fullSubnames.empty()) {
+        fullSubnames = readOptionalStringList(value, "FullSubnames");
+    }
+    if (stableSubnames.empty()) {
+        stableSubnames = subnames;
+    }
+    if (fullSubnames.empty()) {
+        fullSubnames = subnames;
+    }
+
+    return Link{value.at("value").get<std::string>(),
+                std::move(subnames),
+                std::move(stableSubnames),
+                std::move(fullSubnames),
+                property};
+}
+
+const nlohmann::json& propertyPayload(const nlohmann::json& value)
+{
+    if (value.is_object() && value.contains("PropertyType") && value.contains("value")) {
+        return value.at("value");
+    }
+    return value;
+}
+
+bool isFiniteNumber(double value)
+{
+    return std::isfinite(value);
+}
+
+bool isNumberValue(const nlohmann::json& value)
+{
+    return value.is_number() && isFiniteNumber(value.get<double>());
+}
+
+bool isValidVector3Value(const nlohmann::json& value)
+{
+    if (!value.is_array() || value.size() != 3U) {
+        return false;
+    }
+    return std::all_of(value.begin(), value.end(), [](const nlohmann::json& item) {
+        return isNumberValue(item);
+    });
+}
+
+bool isValidPlacementValue(const nlohmann::json& value)
+{
+    if (!value.is_object()) {
+        return false;
+    }
+    const auto baseIt = value.find("Base");
+    const auto rotationIt = value.find("Rotation");
+    if (baseIt == value.end() || rotationIt == value.end() || !isValidVector3Value(*baseIt)
+        || !rotationIt->is_array() || rotationIt->size() != 4U) {
+        return false;
+    }
+
+    double normSquared = 0.0;
+    for (const auto& item : *rotationIt) {
+        if (!isNumberValue(item)) {
+            return false;
+        }
+        const double component = item.get<double>();
+        normSquared += component * component;
+    }
+    return normSquared > 0.0;
+}
+
+bool isGeoFeatureGroupType(const std::string& typeId)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Part.cpp::Part::Part()
+    // calls GroupExtension::initExtension(this), and
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/BodyBase.cpp::BodyBase::BodyBase()
+    // calls App::OriginGroupExtension::initExtension(this).
+    return typeId == "App::Part" || typeId == "PartDesign::Body";
+}
+
+bool hasInvalidTypedPayload(const nlohmann::json& raw, PropertyKind kind)
+{
+    if (!raw.is_object() || !raw.contains("value")) {
+        return false;
+    }
+
+    const nlohmann::json& payload = propertyPayload(raw);
+    switch (kind) {
+        case PropertyKind::Bool:
+            return !payload.is_boolean();
+        case PropertyKind::Integer:
+            return !payload.is_number_integer();
+        case PropertyKind::Float:
+            return !isNumberValue(payload);
+        case PropertyKind::String:
+            return !payload.is_string();
+        case PropertyKind::Enumeration:
+            return !payload.is_string() && !payload.is_number_integer();
+        case PropertyKind::Vector:
+            return !isValidVector3Value(payload);
+        default:
+            return false;
+    }
+}
+
+bool isMalformedLinkValue(const nlohmann::json& value, const std::string& propertyType)
+{
+    if (propertyType == "App::PropertyLink" || propertyType == "App::PropertyLinkSub") {
+        if (value.contains("value") && !value.at("value").is_string()) {
+            return true;
+        }
+        const auto subListIt = value.find("SubList");
+        if (subListIt != value.end() && !readStringList(*subListIt)) {
+            return true;
+        }
+        return false;
+    }
+
+    if (propertyType == "App::PropertyLinkList" || propertyType == "App::PropertyLinkSubList") {
+        const auto rawLinksIt = value.find("value");
+        if (rawLinksIt == value.end()) {
+            return false;
+        }
+        if (!rawLinksIt->is_array()) {
+            return true;
+        }
+        for (const auto& item : *rawLinksIt) {
+            if (item.is_string()) {
+                continue;
             }
-            subnames.push_back(subname.get<std::string>());
+            const auto itemType = propertyTypeOf(item);
+            if (item.is_object() && itemType
+                && (*itemType == "App::PropertyLink" || *itemType == "App::PropertyLinkSub")
+                && !isMalformedLinkValue(item, *itemType)) {
+                continue;
+            }
+            return true;
         }
     }
 
-    return Link{value.at("value").get<std::string>(), std::move(subnames)};
+    return false;
+}
+
+PropertyValue parsePropertyValue(const std::string& objectName,
+                                 const std::string& propertyName,
+                                 const nlohmann::json& raw,
+                                 std::vector<runtime::Diagnostic>& diagnostics)
+{
+    PropertyValue property;
+    property.name = propertyName;
+    property.raw = raw;
+
+    const auto propertyType = propertyTypeOf(raw);
+    if (!propertyType) {
+        property.kind = inferUntypedKind(raw);
+        collectLinks(raw, property.links);
+        for (auto& link : property.links) {
+            if (link.property.empty()) {
+                link.property = propertyName;
+            }
+        }
+        return property;
+    }
+
+    property.propertyType = *propertyType;
+    property.kind = kindFromPropertyType(*propertyType);
+
+    if (property.kind == PropertyKind::Placement && !isValidPlacementValue(raw)) {
+        property.valid = false;
+        addDiagnostic(diagnostics,
+                      "error",
+                      "invalid_placement",
+                      "Property " + propertyName + " has an invalid App::PropertyPlacement value",
+                      objectName,
+                      propertyName,
+                      "parse");
+    }
+    else if (hasInvalidTypedPayload(raw, property.kind)) {
+        property.valid = false;
+        addDiagnostic(diagnostics,
+                      "error",
+                      "invalid_property_type",
+                      "Property " + propertyName + " has an invalid " + *propertyType + " value",
+                      objectName,
+                      propertyName,
+                      "parse");
+    }
+
+    if (isLinkPropertyType(*propertyType)) {
+        property.links = readLinks(raw);
+        for (auto& link : property.links) {
+            if (link.property.empty()) {
+                link.property = propertyName;
+            }
+        }
+        if (isMalformedLinkValue(raw, *propertyType)) {
+            property.valid = false;
+            addDiagnostic(diagnostics,
+                          "error",
+                          "invalid_link_value",
+                          "Property " + propertyName + " has an invalid " + *propertyType + " value",
+                          objectName,
+                          propertyName,
+                          "parse");
+        }
+    }
+
+    return property;
 }
 
 }  // namespace
@@ -51,12 +362,12 @@ bool isLink(const nlohmann::json& value)
 std::vector<Link> readLinks(const nlohmann::json& value)
 {
     std::vector<Link> links;
-    if (!value.is_object() || !value.contains("PropertyType") || !value.at("PropertyType").is_string()) {
+    const auto propertyType = propertyTypeOf(value);
+    if (!propertyType) {
         return links;
     }
 
-    const std::string propertyType = value.at("PropertyType").get<std::string>();
-    if (propertyType == "App::PropertyLink" || propertyType == "App::PropertyLinkSub") {
+    if (*propertyType == "App::PropertyLink" || *propertyType == "App::PropertyLinkSub") {
         auto link = readLinkObject(value);
         if (link) {
             links.push_back(std::move(*link));
@@ -64,7 +375,7 @@ std::vector<Link> readLinks(const nlohmann::json& value)
         return links;
     }
 
-    if (propertyType == "App::PropertyLinkList" || propertyType == "App::PropertyLinkSubList") {
+    if (*propertyType == "App::PropertyLinkList" || *propertyType == "App::PropertyLinkSubList") {
         const auto rawLinksIt = value.find("value");
         if (rawLinksIt == value.end() || !rawLinksIt->is_array()) {
             return links;
@@ -110,19 +421,125 @@ std::optional<Link> readLink(const nlohmann::json& value)
     return readLinkObject(value);
 }
 
+const PropertyValue* propertyValue(const DocumentObject& object, const std::string& property)
+{
+    const auto it = object.propertyValues.find(property);
+    if (it == object.propertyValues.end()) {
+        return nullptr;
+    }
+    return &it->second;
+}
+
+bool hasPropertyType(const DocumentObject& object, const std::string& property, const std::string& propertyType)
+{
+    const auto* value = propertyValue(object, property);
+    return value != nullptr && value->propertyType == propertyType;
+}
+
+std::vector<Link> readLinks(const DocumentObject& object, const std::string& property)
+{
+    const auto* value = propertyValue(object, property);
+    if (value == nullptr) {
+        return {};
+    }
+    return value->links;
+}
+
+std::optional<Link> readLink(const DocumentObject& object, const std::string& property)
+{
+    const auto links = readLinks(object, property);
+    if (links.size() != 1U) {
+        return std::nullopt;
+    }
+    return links.front();
+}
+
+std::optional<bool> readBool(const DocumentObject& object, const std::string& property)
+{
+    const auto* value = propertyValue(object, property);
+    if (value == nullptr) {
+        return std::nullopt;
+    }
+    const nlohmann::json& payload = propertyPayload(value->raw);
+    if (!payload.is_boolean()) {
+        return std::nullopt;
+    }
+    return payload.get<bool>();
+}
+
+std::optional<double> readNumber(const DocumentObject& object, const std::string& property)
+{
+    const auto* value = propertyValue(object, property);
+    if (value == nullptr) {
+        return std::nullopt;
+    }
+    const nlohmann::json& payload = propertyPayload(value->raw);
+    if (!isNumberValue(payload)) {
+        return std::nullopt;
+    }
+    return payload.get<double>();
+}
+
+std::optional<std::string> readString(const DocumentObject& object, const std::string& property)
+{
+    const auto* value = propertyValue(object, property);
+    if (value == nullptr) {
+        return std::nullopt;
+    }
+    const nlohmann::json& payload = propertyPayload(value->raw);
+    if (!payload.is_string()) {
+        return std::nullopt;
+    }
+    return payload.get<std::string>();
+}
+
+std::optional<std::array<double, 3>> readVector3(const DocumentObject& object, const std::string& property)
+{
+    const auto* value = propertyValue(object, property);
+    if (value == nullptr) {
+        return std::nullopt;
+    }
+    const nlohmann::json& payload = propertyPayload(value->raw);
+    if (!isValidVector3Value(payload)) {
+        return std::nullopt;
+    }
+    return std::array<double, 3>{payload.at(0).get<double>(), payload.at(1).get<double>(), payload.at(2).get<double>()};
+}
+
+std::optional<Placement> readPlacement(const DocumentObject& object, const std::string& property)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/GeoFeature.cpp::GeoFeature::GeoFeature(),
+    // declares "ADD_PROPERTY_TYPE(Placement, (Base::Placement()), ... App::Prop_None, \"\")";
+    // cad-core keeps Placement normalized in document and lets geometry convert it to gp_Trsf.
+    const auto* value = propertyValue(object, property);
+    if (value == nullptr || value->kind != PropertyKind::Placement || !isValidPlacementValue(value->raw)) {
+        return std::nullopt;
+    }
+
+    const auto& base = value->raw.at("Base");
+    const auto& rotation = value->raw.at("Rotation");
+    return Placement{
+        std::array<double, 3>{base.at(0).get<double>(), base.at(1).get<double>(), base.at(2).get<double>()},
+        std::array<double, 4>{rotation.at(0).get<double>(),
+                              rotation.at(1).get<double>(),
+                              rotation.at(2).get<double>(),
+                              rotation.at(3).get<double>()},
+    };
+}
+
 std::pair<Document, std::vector<runtime::Diagnostic>> parseDocument(const nlohmann::json& raw)
 {
     Document document;
     std::vector<runtime::Diagnostic> diagnostics;
 
     if (!raw.is_object()) {
-        addDiagnostic(diagnostics, "error", "parse_error", "Document root must be a JSON object");
+        addDiagnostic(diagnostics, "error", "parse_error", "Document root must be a JSON object", {}, {}, "parse");
         return {document, diagnostics};
     }
 
     const auto objectsIt = raw.find("Objects");
     if (objectsIt == raw.end() || !objectsIt->is_array()) {
-        addDiagnostic(diagnostics, "error", "parse_error", "Document field 'Objects' must be a list");
+        addDiagnostic(diagnostics, "error", "parse_error", "Document field 'Objects' must be a list", {}, {}, "parse");
         return {document, diagnostics};
     }
 
@@ -131,57 +548,107 @@ std::pair<Document, std::vector<runtime::Diagnostic>> parseDocument(const nlohma
     for (std::size_t index = 0; index < objectsIt->size(); ++index) {
         const auto& item = objectsIt->at(index);
         if (!item.is_object()) {
-            addDiagnostic(diagnostics, "error", "parse_error", "Objects[" + std::to_string(index) + "] must be an object");
+            addDiagnostic(diagnostics, "error", "parse_error", "Objects[" + std::to_string(index) + "] must be an object", {}, {}, "parse");
             continue;
         }
         if (!item.contains("Name") || !item.at("Name").is_string() || item.at("Name").get<std::string>().empty()) {
-            addDiagnostic(diagnostics, "error", "missing_property", "Objects[" + std::to_string(index) + "] is missing required field Name");
+            addDiagnostic(diagnostics,
+                          "error",
+                          "missing_property",
+                          "Objects[" + std::to_string(index) + "] is missing required field Name",
+                          {},
+                          {},
+                          "parse");
             continue;
         }
 
         std::string name = item.at("Name").get<std::string>();
         if (seenNames.count(name) != 0U) {
-            addDiagnostic(diagnostics, "error", "duplicate_object_name", "Duplicate object name " + name, name);
+            addDiagnostic(diagnostics, "error", "duplicate_object_name", "Duplicate object name " + name, name, {}, "parse");
             continue;
         }
         seenNames.insert(name);
 
         if (!item.contains("ID") || !item.at("ID").is_number_integer()) {
-            addDiagnostic(diagnostics, "error", "missing_property", "Object " + name + " is missing required field ID", name, "ID");
+            addDiagnostic(diagnostics,
+                          "error",
+                          "missing_property",
+                          "Object " + name + " is missing required field ID",
+                          name,
+                          "ID",
+                          "parse");
             continue;
         }
         const long long id = item.at("ID").get<long long>();
         if (seenIds.count(id) != 0U) {
-            addDiagnostic(diagnostics, "error", "duplicate_object_id", "Duplicate object ID " + std::to_string(id), name, "ID");
+            addDiagnostic(diagnostics, "error", "duplicate_object_id", "Duplicate object ID " + std::to_string(id), name, "ID", "parse");
             continue;
         }
         seenIds.insert(id);
 
         if (!item.contains("TypeId") || !item.at("TypeId").is_string() || item.at("TypeId").get<std::string>().empty()) {
-            addDiagnostic(diagnostics, "error", "missing_property", "Object " + name + " is missing required field TypeId", name);
+            addDiagnostic(diagnostics, "error", "missing_property", "Object " + name + " is missing required field TypeId", name, {}, "parse");
             continue;
         }
 
         nlohmann::json properties = nlohmann::json::object();
         if (!item.contains("Properties") || !item.at("Properties").is_object()) {
-            addDiagnostic(diagnostics, "error", "missing_property", "Object " + name + " is missing required field Properties", name, "Properties");
+            addDiagnostic(diagnostics,
+                          "error",
+                          "missing_property",
+                          "Object " + name + " is missing required field Properties",
+                          name,
+                          "Properties",
+                          "parse");
             continue;
         }
         properties = item.at("Properties");
 
+        DocumentObject object;
+        object.name = name;
+        object.id = id;
+        object.typeId = item.at("TypeId").get<std::string>();
+        object.properties = std::move(properties);
+
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/PropertyLinks.h::PropertyLinkSub::getSubValues()
+        // and PropertyLinkSubList::getSubListValues() expose linked object plus sub-element lists.
+        // cad-core keeps the raw JSON for compatibility, but graph/runtime consume this normalized property map.
+        for (const auto& property : object.properties.items()) {
+            auto parsed = parsePropertyValue(object.name, property.key(), property.value(), diagnostics);
+            object.dependencyLinks.insert(object.dependencyLinks.end(), parsed.links.begin(), parsed.links.end());
+            if (!parsed.valid) {
+                object.invalidProperties.insert(property.key());
+            }
+            object.propertyValues.emplace(property.key(), std::move(parsed));
+        }
+
         document.indexByName[name] = document.objects.size();
-        document.objects.push_back({name, id, item.at("TypeId").get<std::string>(), std::move(properties)});
+        document.objects.push_back(std::move(object));
+    }
+
+    for (const auto& object : document.objects) {
+        if (!isGeoFeatureGroupType(object.typeId)) {
+            continue;
+        }
+
+        const auto groupLinks = readLinks(object, "Group");
+        for (const auto& link : groupLinks) {
+            if (link.object.empty() || document.indexByName.count(link.object) == 0U) {
+                continue;
+            }
+            document.parentGroupByObject.emplace(link.object, object.name);
+        }
     }
 
     if (raw.contains("recompute") && raw.at("recompute").is_object() && raw.at("recompute").contains("objs")) {
         const auto& rawTargets = raw.at("recompute").at("objs");
         if (!rawTargets.is_array()) {
-            addDiagnostic(diagnostics, "error", "parse_error", "recompute.objs must be a list of object names");
+            addDiagnostic(diagnostics, "error", "parse_error", "recompute.objs must be a list of object names", {}, {}, "parse");
         }
         else {
             for (const auto& target : rawTargets) {
                 if (!target.is_string()) {
-                    addDiagnostic(diagnostics, "error", "parse_error", "recompute.objs must contain object names");
+                    addDiagnostic(diagnostics, "error", "parse_error", "recompute.objs must contain object names", {}, {}, "parse");
                     continue;
                 }
                 document.targets.push_back(target.get<std::string>());

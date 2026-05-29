@@ -54,7 +54,7 @@
           "value": "SketchPocket",
           "SubList": []
         },
-        "Type": "ThroughAll",
+        "Type": "UpToFirst",
         "Length": 10,
         "Reversed": true,
         "SideType": "One side"

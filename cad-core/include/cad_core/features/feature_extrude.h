@@ -17,16 +17,18 @@ enum class AddSubMode {
 
 struct ExtrudeResult {
     document::Link profile;
+    std::string method;
     double length = 0.0;
     bool reversed = false;
     TopoDS_Shape toolShape;
     nlohmann::json bbox;
     double volume = 0.0;
+    bool topoNamingKnownGap = false;
 };
 
-std::optional<ExtrudeResult> buildLengthExtrusion(const document::DocumentObject& object,
-                                                  runtime::ComputeContext& context,
-                                                  AddSubMode mode,
-                                                  const std::string& featureName);
+std::optional<ExtrudeResult> buildFeatureExtrusion(const document::DocumentObject& object,
+                                                   runtime::ComputeContext& context,
+                                                   AddSubMode mode,
+                                                   const std::string& featureName);
 
 }  // namespace cad_core::features

@@ -30,23 +30,42 @@ void visitObject(const std::string& name,
             message << ' ' << item;
             plan.blockedObjects.insert(item);
         }
-        addDiagnostic(diagnostics, "error", "cycle_dependency", message.str(), name);
+        addDiagnostic(diagnostics, "error", "cycle_dependency", message.str(), name, {}, "graph", name);
         return;
     }
 
     visiting.push_back(name);
     const auto& object = document.objects.at(document.indexByName.at(name));
-    std::vector<document::Link> links;
-    document::collectLinks(object.properties, links);
+    if (!object.invalidProperties.empty()) {
+        plan.blockedObjects.insert(name);
+        visiting.pop_back();
+        visited.insert(name);
+        if (std::find(plan.order.begin(), plan.order.end(), name) == plan.order.end()) {
+            plan.order.push_back(name);
+        }
+        return;
+    }
 
     std::set<std::string> seenDependencies;
-    for (const auto& link : links) {
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/PropertyLinks.h::PropertyLinkBase
+    // is the dependency-bearing property base for PropertyLink, PropertyLinkList, PropertyLinkSub
+    // and PropertyLinkSubList. cad-core graph consumes document-normalized links only.
+    for (const auto& link : object.dependencyLinks) {
         if (seenDependencies.count(link.object) != 0U) {
             continue;
         }
         seenDependencies.insert(link.object);
         if (document.indexByName.count(link.object) == 0U) {
-            addDiagnostic(diagnostics, "error", "missing_link_target", "Object links to missing object " + link.object, name);
+            const std::string subname = link.subnames.empty() ? std::string{} : link.subnames.front();
+            addDiagnostic(diagnostics,
+                          "error",
+                          "missing_link_target",
+                          "Object links to missing object " + link.object,
+                          name,
+                          link.property,
+                          "graph",
+                          link.object,
+                          subname);
             plan.blockedObjects.insert(name);
             continue;
         }
@@ -71,7 +90,14 @@ RecomputePlan buildPlan(const document::Document& document, std::vector<runtime:
 
     for (const auto& target : document.targets) {
         if (document.indexByName.count(target) == 0U) {
-            addDiagnostic(diagnostics, "error", "missing_object", "Recompute target " + target + " does not exist", target);
+            addDiagnostic(diagnostics,
+                          "error",
+                          "missing_object",
+                          "Recompute target " + target + " does not exist",
+                          target,
+                          {},
+                          "graph",
+                          target);
             continue;
         }
         visitObject(target, document, plan, diagnostics, visiting, visited);
@@ -81,4 +107,3 @@ RecomputePlan buildPlan(const document::Document& document, std::vector<runtime:
 }
 
 }  // namespace cad_core::graph
-

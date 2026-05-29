@@ -67,7 +67,7 @@
         "Length": 10,
         "Reversed": false,
         "SideType": "One side",
-        "TaperAngle": 5
+        "UnsupportedMvpProperty": true
       }
     }
   ],
