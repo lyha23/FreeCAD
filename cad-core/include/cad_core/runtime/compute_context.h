@@ -6,6 +6,7 @@
 #include <nlohmann/json.hpp>
 
 #include <map>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -21,9 +22,15 @@ struct ShapeValue {
     TopoDS_Shape shape;
 };
 
+struct AddSubShape {
+    std::optional<TopoDS_Shape> addShape;
+    std::optional<TopoDS_Shape> subShape;
+};
+
 struct ComputeContext {
     std::vector<Diagnostic> diagnostics;
     std::map<std::string, ShapeValue> shapes;
+    std::map<std::string, AddSubShape> addSubShapes;
     std::map<std::string, nlohmann::json> objects;
     std::map<std::string, nlohmann::json> mesh;
     std::map<std::string, nlohmann::json> subshapes;

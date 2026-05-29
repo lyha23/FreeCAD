@@ -1,0 +1,109 @@
+{
+  "Objects": [
+    {
+      "Name": "BaseSketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [10, 0] },
+          { "kind": "LineSegment", "start": [10, 0], "end": [10, 5] },
+          { "kind": "LineSegment", "start": [10, 5], "end": [0, 5] },
+          { "kind": "LineSegment", "start": [0, 5], "end": [0, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "BasePad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "BaseSketch",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 5,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "BaseFeature",
+      "ID": 3,
+      "TypeId": "PartDesign::FeatureBase",
+      "Properties": {
+        "BaseFeature": {
+          "PropertyType": "App::PropertyLink",
+          "value": "BasePad"
+        }
+      }
+    },
+    {
+      "Name": "TopSketch",
+      "ID": 4,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [10, 0] },
+          { "kind": "LineSegment", "start": [10, 0], "end": [10, 5] },
+          { "kind": "LineSegment", "start": [10, 5], "end": [0, 5] },
+          { "kind": "LineSegment", "start": [0, 5], "end": [0, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 5,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "TopSketch",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 5,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 6,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "BaseFeature": {
+          "PropertyType": "App::PropertyLink",
+          "value": "BaseFeature"
+        },
+        "Group": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "value": [
+            {
+              "PropertyType": "App::PropertyLinkSub",
+              "value": "TopSketch",
+              "SubList": []
+            },
+            {
+              "PropertyType": "App::PropertyLinkSub",
+              "value": "Pad",
+              "SubList": []
+            }
+          ]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Pad",
+          "SubList": []
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}

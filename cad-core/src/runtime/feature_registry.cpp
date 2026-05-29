@@ -1,7 +1,9 @@
 #include "cad_core/runtime/feature_registry.h"
 
 #include "cad_core/features/body.h"
+#include "cad_core/features/feature_base.h"
 #include "cad_core/features/pad.h"
+#include "cad_core/features/pocket.h"
 #include "cad_core/features/sketch_object.h"
 
 #include <utility>
@@ -24,9 +26,10 @@ FeatureRegistry buildDefaultRegistry()
     FeatureRegistry registry;
     registry.registerExecutor("Sketcher::SketchObject", features::executeSketchObject);
     registry.registerExecutor("PartDesign::Body", features::executeBody);
+    registry.registerExecutor("PartDesign::FeatureBase", features::executeFeatureBase);
     registry.registerExecutor("PartDesign::Pad", features::executePad);
+    registry.registerExecutor("PartDesign::Pocket", features::executePocket);
     return registry;
 }
 
 }  // namespace cad_core::runtime
-

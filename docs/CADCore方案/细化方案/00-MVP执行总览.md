@@ -9,15 +9,17 @@
 已验证的边界：
 
 - 输入采用 `Objects[]` / `Name` / `ID` / `TypeId` / `Properties`。
-- registry 只注册 `Sketcher::SketchObject`、`PartDesign::Body`、`PartDesign::Pad`。
+- registry 注册 `Sketcher::SketchObject`、`PartDesign::Body`、`PartDesign::FeatureBase`、`PartDesign::Pad`、`PartDesign::Pocket`。
 - `rect-pad.json` 能生成 OCCT mesh、bbox、volume、subshape map。
 - diagnostics fixtures 覆盖未知类型、重复对象、缺失链接、开口草图、不支持参数和非法长度。
+- `PropertyLink` / `PropertyLinkList` / `PropertyLinkSub` / `PropertyLinkSubList` 已经归一成 recompute dependency edge。
+- P2 已有 `FeatureBase` / `FeatureAddSub` / `FeatureExtrude` 最小主链：Pad 写 `add_shape`，Pocket 写 `sub_shape`，Body 按顺序 Fuse / Cut。
+- `rect-pad-pocket.json` 能生成 Pocket 后的 Body mesh、bbox、volume、subshape map。
 
 未实现的边界：
 
-- `FeatureBase` / `FeatureAddSub` / `FeatureExtrude` 模块化主链。
-- `PartDesign::Pocket` 和后续 subtractive feature。
-- `PropertyLink` / `PropertyLinkList` / `PropertyLinkSubList` 的完整 FreeCAD 属性归一化。
+- 完整 FreeCAD `FeatureExtrude`：`ThroughAll`、`UpToFace`、`UpToShape`、`TwoLengths`、taper、custom direction、attachment/support/subname 恢复。
+- 完整 Body 历史/placement/refine/suppressed 语义。
 - Pattern / Mirror / MultiTransform、Hole、Fillet、Chamfer、完整 topo naming 更新。
 
 ## MVP 目标
@@ -49,10 +51,10 @@ FreeCAD 风格 `DocumentObject graph`
 - Pad subshape map 导出。
 - 最小 fixtures 和 FreeCAD 对照结果。
 
-暂不做：
+MVP 暂不做：
 
 - Web / WASM / Worker adapter 的产品化接入。C ABI 可以保留为薄 adapter，但不能反向影响 Core 边界。
-- Pocket、Hole、Fillet、Chamfer、Pattern、Mirror、Scaled。
+- Hole、Fillet、Chamfer、Pattern、Mirror、Scaled。
 - 完整 topo naming 稳定更新。
 - 完整 Sketcher 约束求解器。
 - 长生命周期 shape cache。
@@ -74,7 +76,19 @@ FreeCAD 风格 `DocumentObject graph`
 | 8 | `02-P1-Sketch-Body-Pad闭环.md` | 导出 mesh 和 subshape map。 |
 | 9 | `03-接口与验收样例.md` | 用 fixtures 固化验收。 |
 
-P0 + P1 已落地后，下一阶段执行 `04-P2-FeatureBase-FeatureAddSub-Pocket.md`。不要绕过 `FeatureBase` / `FeatureAddSub` 直接在 `Pocket` 里做减料，否则后续 Pattern、Mirror、Fillet、Chamfer 还会再拆一次。
+P0 + P1 已落地，P2 的 `FeatureBase` / `FeatureAddSub` / `FeatureExtrude` / Pocket Length 最小链也已落地。后续继续扩 `FeatureExtrude` 和 Body 语义时，仍不要绕过 `FeatureBase` / `FeatureAddSub` 直接在单个 feature 里做最终实体修补。
+
+下一阶段执行 `05-P3a-FeatureExtrude-UpTo终止语义.md`：
+
+```text
+ThroughAll
+  -> FaceN subshape 解析
+  -> UpToFace
+  -> UpToShape
+  -> Pad / Pocket UpTo fixtures
+```
+
+Hole、Fillet、Chamfer、Pattern、Mirror 继续后置，等 `FeatureExtrude` 的终止语义和 subshape 引用稳定后再进入。
 
 ## 完成定义
 
@@ -88,6 +102,8 @@ MVP 完成需要同时满足：
 - 缺失 `Profile` 链接返回 diagnostics，不崩溃。
 - 开口草图返回 diagnostics，不生成 Pad。
 - 同一个 fixture 的关键结果能和 FreeCAD 对照文件比较。
+- P2 的 `rect-pad-pocket.json` 能返回 Body 的 cut 后 bbox、volume、mesh 和 subshape map，且 diagnostics 为空。
+- P2 错误 fixture 的 diagnostics code 稳定。
 
 ## 推进原则
 

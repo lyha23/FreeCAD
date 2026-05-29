@@ -1,0 +1,18 @@
+{
+  "Objects": [
+    {
+      "Name": "BaseFeature",
+      "ID": 1,
+      "TypeId": "PartDesign::FeatureBase",
+      "Properties": {
+        "BaseFeature": {
+          "PropertyType": "App::PropertyLink",
+          "value": "MissingSolid"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["BaseFeature"]
+  }
+}

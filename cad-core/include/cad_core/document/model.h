@@ -32,6 +32,7 @@ struct Link {
 
 bool isLink(const nlohmann::json& value);
 void collectLinks(const nlohmann::json& value, std::vector<Link>& links);
+std::vector<Link> readLinks(const nlohmann::json& value);
 std::optional<Link> readLink(const nlohmann::json& value);
 
 std::pair<Document, std::vector<runtime::Diagnostic>> parseDocument(const nlohmann::json& raw);

@@ -1,0 +1,61 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPocket",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [2, 1], "end": [8, 1] },
+          { "kind": "LineSegment", "start": [8, 1], "end": [8, 4] },
+          { "kind": "LineSegment", "start": [8, 4], "end": [2, 4] },
+          { "kind": "LineSegment", "start": [2, 4], "end": [2, 1] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pocket",
+      "ID": 2,
+      "TypeId": "PartDesign::Pocket",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPocket",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 10,
+        "Reversed": true,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 3,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": [
+          {
+            "PropertyType": "App::PropertyLinkSub",
+            "value": "SketchPocket",
+            "SubList": []
+          },
+          {
+            "PropertyType": "App::PropertyLinkSub",
+            "value": "Pocket",
+            "SubList": []
+          }
+        ],
+        "Tip": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Pocket",
+          "SubList": []
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}

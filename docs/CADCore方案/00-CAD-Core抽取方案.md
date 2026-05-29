@@ -21,31 +21,35 @@ CAD Core 不依赖 Qt，不知道 Web 路由，不知道用户系统，不保存
 
 当前 `/cad-core` 已经不是 Python 原型，而是一个独立 C++/CMake Core：`cad-core-lib` 承载建模逻辑，`cad-core` 是 CLI adapter，`cad_core_ffi` 是 C ABI adapter。几何侧已经真实调用 OCCT，覆盖 wire / face / prism、mesh、bbox、volume、subshape 遍历。
 
-已跑通的 MVP 边界很小，但是真 CAD 链路：
+已跑通的 MVP / P2 边界仍然克制，但已经是真 CAD 链路：
 
 ```text
 Objects[]
   -> Sketcher::SketchObject
   -> PartDesign::Pad
+  -> PartDesign::FeatureBase
+  -> PartDesign::Pocket
   -> PartDesign::Body
   -> OCCT mesh / bbox / volume / subshape map / diagnostics
 ```
 
-还没有实现完整 PartDesign Body 生态。当前 registry 只注册：
+还没有实现完整 PartDesign Body 生态。当前 registry 注册：
 
 ```text
 Sketcher::SketchObject
 PartDesign::Body
+PartDesign::FeatureBase
 PartDesign::Pad
+PartDesign::Pocket
 ```
 
-下一步不应该先扩 Web / WASM / Worker，也不应该在 `Pad` executor 里继续堆 Body 逻辑。应该先把 PartDesign 主链拆出来：
+P2 已经把 PartDesign 主链拆出来。下一步不应该先扩 Web / WASM / Worker，也不应该先做 Pattern / Mirror。应该先补 shared `FeatureExtrude` 的 FreeCAD 终止语义：
 
 ```text
-FeatureBase / BaseFeature
-  -> FeatureAddSub 的 add_shape / sub_shape 双通道
-  -> Pad 和 Pocket 共用 FeatureExtrude
-  -> Pocket Length subtractive
+ThroughAll
+  -> UpToFace
+  -> UpToShape
+  -> Pad/Pocket UpTo fixtures
   -> Pattern / Mirror / MultiTransform
 ```
 
@@ -534,13 +538,16 @@ CAD Core MVP 完成标准：
 | --- | --- | --- |
 | P0 Core 壳 | `DocumentObject graph` 输入、recompute 空链路、CLI、diagnostics | 1 到 2 周 |
 | P1 第一条建模链 | Sketch + Body + Pad、mesh、subshape map | 3 到 6 周 |
-| P2 PartDesign 主链 | FeatureBase、FeatureAddSub、FeatureExtrude、Pocket Length | 3 到 6 周 |
-| P3 Body 生态和稳定引用 | Hole、Fillet、Chamfer、Datum、Refine、topo naming、Pattern/Mirror/MultiTransform | 2 到 4 个月 |
+| P2 PartDesign 主链 | FeatureBase、FeatureAddSub、FeatureExtrude、Pocket Length | 已有最小基线 |
+| P3a FeatureExtrude 终止语义 | ThroughAll、UpToFace、UpToShape、FaceN subshape 解析 | 3 到 6 周 |
+| P3b Body 生态和稳定引用 | Two sides、Symmetric、taper、custom direction、placement、topo naming | 1 到 2 个月 |
+| P4 常用特征扩展 | Pattern/Mirror/MultiTransform、Hole、Fillet、Chamfer、Refine | 2 到 4 个月 |
 
-P0 / P1 是当前已有基线；上表保留原始阶段量级，后续剩余工作从 P2 开始计算。  
-如果只要求“先有一个可调用的无 Qt CAD Core MVP”，当前 P0 + P1 已经有 C++/OCCT 基线。  
-如果要求 Body 的加料/减料链能继续承载常用 PartDesign feature，下一步必须做到 P2。  
-如果还要求引用稳定、编辑后不丢边面，必须继续做 P3。
+P0 / P1 / P2 是当前已有基线；后续剩余工作从 P3a 开始计算。
+如果只要求“先有一个可调用的无 Qt CAD Core MVP”，当前 P0 + P1 已经有 C++/OCCT 基线。
+如果要求 Body 的加料/减料链能继续承载常用 PartDesign feature，当前 P2 已经跑通最小链。
+如果还要求 Pocket / Pad 的 FreeCAD 终止语义，下一步必须做到 P3a。
+如果还要求引用稳定、编辑后不丢边面，必须继续做 P3b / P4。
 
 ## 结论
 
@@ -565,7 +572,7 @@ JSON input
   -> mesh/subshape/diagnostics output
 ```
 
-下一条路线应先补 PartDesign Core 主链：
+当前已落地的第二条路线是：
 
 ```text
 FeatureBase
@@ -574,4 +581,13 @@ FeatureBase
   -> Pocket subtractive
 ```
 
-等这条链稳定后，再扩 Web、WASM、桌面进程或 Worker。外壳可以换，CAD Core 不能被外壳绑死。
+下一条路线应先补 `FeatureExtrude` 终止语义：
+
+```text
+ThroughAll
+  -> UpToFace
+  -> UpToShape
+  -> Pad/Pocket UpTo fixtures
+```
+
+等这条链稳定后，再扩 Pattern、Mirror、Hole、Fillet、Chamfer，最后再扩 Web、WASM、桌面进程或 Worker。外壳可以换，CAD Core 不能被外壳绑死。

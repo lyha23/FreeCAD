@@ -1,30 +1,95 @@
 #include "cad_core/document/model.h"
 
+#include <iterator>
 #include <set>
+#include <utility>
 
 namespace cad_core::document {
 
 using runtime::addDiagnostic;
 
+namespace {
+
+std::optional<Link> readLinkObject(const nlohmann::json& value)
+{
+    if (!value.is_object() || !value.contains("PropertyType") || !value.at("PropertyType").is_string()) {
+        return std::nullopt;
+    }
+
+    const std::string propertyType = value.at("PropertyType").get<std::string>();
+    if (propertyType != "App::PropertyLink" && propertyType != "App::PropertyLinkSub") {
+        return std::nullopt;
+    }
+    if (!value.contains("value") || !value.at("value").is_string() || value.at("value").get<std::string>().empty()) {
+        return std::nullopt;
+    }
+
+    std::vector<std::string> subnames;
+    const auto subListIt = value.find("SubList");
+    if (subListIt != value.end()) {
+        if (!subListIt->is_array()) {
+            return std::nullopt;
+        }
+        for (const auto& subname : *subListIt) {
+            if (!subname.is_string()) {
+                return std::nullopt;
+            }
+            subnames.push_back(subname.get<std::string>());
+        }
+    }
+
+    return Link{value.at("value").get<std::string>(), std::move(subnames)};
+}
+
+}  // namespace
+
 bool isLink(const nlohmann::json& value)
 {
-    return value.is_object() && value.contains("PropertyType") && value.at("PropertyType") == "App::PropertyLinkSub" &&
-           value.contains("value") && value.at("value").is_string() && !value.at("value").get<std::string>().empty();
+    return readLinkObject(value).has_value();
+}
+
+std::vector<Link> readLinks(const nlohmann::json& value)
+{
+    std::vector<Link> links;
+    if (!value.is_object() || !value.contains("PropertyType") || !value.at("PropertyType").is_string()) {
+        return links;
+    }
+
+    const std::string propertyType = value.at("PropertyType").get<std::string>();
+    if (propertyType == "App::PropertyLink" || propertyType == "App::PropertyLinkSub") {
+        auto link = readLinkObject(value);
+        if (link) {
+            links.push_back(std::move(*link));
+        }
+        return links;
+    }
+
+    if (propertyType == "App::PropertyLinkList" || propertyType == "App::PropertyLinkSubList") {
+        const auto rawLinksIt = value.find("value");
+        if (rawLinksIt == value.end() || !rawLinksIt->is_array()) {
+            return links;
+        }
+        for (const auto& item : *rawLinksIt) {
+            if (item.is_string() && !item.get<std::string>().empty()) {
+                links.push_back({item.get<std::string>(), {}});
+                continue;
+            }
+
+            auto link = readLinkObject(item);
+            if (link) {
+                links.push_back(std::move(*link));
+            }
+        }
+    }
+
+    return links;
 }
 
 void collectLinks(const nlohmann::json& value, std::vector<Link>& links)
 {
-    if (isLink(value)) {
-        std::vector<std::string> subnames;
-        const auto subListIt = value.find("SubList");
-        if (subListIt != value.end() && subListIt->is_array()) {
-            for (const auto& subname : *subListIt) {
-                if (subname.is_string()) {
-                    subnames.push_back(subname.get<std::string>());
-                }
-            }
-        }
-        links.push_back({value.at("value").get<std::string>(), std::move(subnames)});
+    auto normalized = readLinks(value);
+    if (!normalized.empty()) {
+        links.insert(links.end(), std::make_move_iterator(normalized.begin()), std::make_move_iterator(normalized.end()));
         return;
     }
     if (value.is_array()) {
@@ -42,23 +107,7 @@ void collectLinks(const nlohmann::json& value, std::vector<Link>& links)
 
 std::optional<Link> readLink(const nlohmann::json& value)
 {
-    if (!isLink(value)) {
-        return std::nullopt;
-    }
-    std::vector<std::string> subnames;
-    const auto subListIt = value.find("SubList");
-    if (subListIt != value.end()) {
-        if (!subListIt->is_array()) {
-            return std::nullopt;
-        }
-        for (const auto& subname : *subListIt) {
-            if (!subname.is_string()) {
-                return std::nullopt;
-            }
-            subnames.push_back(subname.get<std::string>());
-        }
-    }
-    return Link{value.at("value").get<std::string>(), std::move(subnames)};
+    return readLinkObject(value);
 }
 
 std::pair<Document, std::vector<runtime::Diagnostic>> parseDocument(const nlohmann::json& raw)

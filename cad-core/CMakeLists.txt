@@ -20,8 +20,11 @@ endif()
 add_library(cad-core-lib STATIC
   src/document/model.cpp
   src/features/body.cpp
+  src/features/feature_base.cpp
+  src/features/feature_extrude.cpp
   src/features/feature_executor.cpp
   src/features/pad.cpp
+  src/features/pocket.cpp
   src/features/sketch_object.cpp
   src/geometry/shape_exporter.cpp
   src/graph/recompute_plan.cpp
@@ -56,6 +59,7 @@ target_link_libraries(cad-core-lib PUBLIC
   TKTopAlgo
   TKPrim
   TKMesh
+  TKBO
 )
 
 add_library(cad_core_ffi SHARED

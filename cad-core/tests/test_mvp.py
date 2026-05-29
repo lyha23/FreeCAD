@@ -12,14 +12,14 @@ BIN = ROOT / "cad-core"
 
 
 class CadCoreOcctMvpTest(unittest.TestCase):
-    def run_recompute(self, fixture: str) -> dict:
+    def run_recompute(self, fixture: str, group: str = "mvp") -> dict:
         with tempfile.TemporaryDirectory() as tmp:
             output = Path(tmp) / f"{fixture}.result.json"
             subprocess.run(
                 [
                     str(BIN),
                     "recompute",
-                    str(ROOT / "fixtures" / "mvp" / f"{fixture}.json"),
+                    str(ROOT / "fixtures" / group / f"{fixture}.json"),
                     "--output",
                     str(output),
                 ],
@@ -28,8 +28,8 @@ class CadCoreOcctMvpTest(unittest.TestCase):
             )
             return json.loads(output.read_text(encoding="utf-8"))
 
-    def diagnostic_codes(self, fixture: str) -> list[str]:
-        return [item["code"] for item in self.run_recompute(fixture)["diagnostics"]]
+    def diagnostic_codes(self, fixture: str, group: str = "mvp") -> list[str]:
+        return [item["code"] for item in self.run_recompute(fixture, group)["diagnostics"]]
 
     def test_fixture_diagnostics(self) -> None:
         expected = {
@@ -51,6 +51,19 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):
                 self.assertEqual(self.diagnostic_codes(fixture), codes)
+
+    def test_p2_fixture_diagnostics(self) -> None:
+        expected = {
+            "body-basefeature-pad": [],
+            "rect-pad-pocket": [],
+            "missing-basefeature": ["missing_link_target"],
+            "pocket-without-base": ["execution_failed"],
+            "pocket-open-sketch": ["open_profile"],
+            "unsupported-pocket-type": ["unsupported_property"],
+        }
+        for fixture, codes in expected.items():
+            with self.subTest(fixture=fixture):
+                self.assertEqual(self.diagnostic_codes(fixture, "p2"), codes)
 
     def test_rect_pad_outputs_occt_mesh_and_subshape_map(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -94,6 +107,44 @@ class CadCoreOcctMvpTest(unittest.TestCase):
                 sum(key.startswith("Vertex") for key in subshape_map),
                 expected["topology_counts"]["vertices"],
             )
+
+    def test_rect_pad_pocket_outputs_cut_body(self) -> None:
+        result = self.run_recompute("rect-pad-pocket", "p2")
+        body = result["objects"]["Body"]
+        mesh = result["mesh"]["Body"]
+        subshape_map = result["subshapes"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(body["bbox"]["min"], [0.0, 0.0, 0.0])
+        self.assertEqual(body["bbox"]["max"], [10.0, 5.0, 10.0])
+        self.assertAlmostEqual(body["volume"], 320.0)
+        self.assertGreater(mesh["summary"]["triangle_count"], 0)
+        self.assertNotIn("shapes", result)
+
+        expected = json.loads((ROOT / "fixtures" / "p2" / "expected" / "rect-pad-pocket.freecad.json").read_text())
+        self.assertEqual(mesh["summary"]["bbox"], expected["bbox"])
+        self.assertAlmostEqual(mesh["summary"]["volume"], expected["volume"])
+        self.assertEqual(
+            sum(key.startswith("Face") for key in subshape_map),
+            expected["topology_counts"]["faces"],
+        )
+        self.assertEqual(
+            sum(key.startswith("Edge") for key in subshape_map),
+            expected["topology_counts"]["edges"],
+        )
+        self.assertEqual(
+            sum(key.startswith("Vertex") for key in subshape_map),
+            expected["topology_counts"]["vertices"],
+        )
+
+    def test_body_basefeature_pad_uses_base_solid(self) -> None:
+        result = self.run_recompute("body-basefeature-pad", "p2")
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(body["bbox"]["min"], [0.0, 0.0, 0.0])
+        self.assertEqual(body["bbox"]["max"], [10.0, 5.0, 5.0])
+        self.assertAlmostEqual(body["volume"], 250.0)
 
 
 if __name__ == "__main__":
