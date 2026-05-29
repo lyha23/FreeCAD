@@ -64,6 +64,8 @@ FeatureRegistry buildDefaultRegistry()
     registry.registerExecutor("Part::MultiCommon", features::executePartMultiCommon);
     registry.registerExecutor("Part::XOR", features::executePartXor);
     registry.registerExecutor("Part::FeatureXOR", features::executePartXor);
+    registry.registerExecutor("Part::BooleanFragments", features::executePartBooleanFragments);
+    registry.registerExecutor("Part::FeatureBooleanFragments", features::executePartBooleanFragments);
     registry.registerExecutor("App::Origin", features::executeDatumCoordinateSystem);
     registry.registerExecutor("PartDesign::Body", features::executeBody);
     registry.registerExecutor("PartDesign::CoordinateSystem", features::executeDatumCoordinateSystem);

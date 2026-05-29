@@ -145,6 +145,15 @@ NamedShapeBuild makeElementSectionFromSources(
     const std::vector<NamedShapeSource>& sources,
     bool approximate
 );
+// FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+// ::TopoShape::makeElementGeneralFuse(), builds "BRepAlgoAPI_BuilderAlgo mkGFA",
+// calls SetArguments(...), then makeElementShape(mkGFA, shapes, OpCodes::GeneralFuse).
+NamedShapeBuild makeElementGeneralFuseFromSources(
+    const std::string& owner,
+    const std::vector<NamedShapeSource>& sources,
+    double tolerance
+);
 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.cpp
 // ::TopoShape::makeElementRefine(), "BRepBuilderAPI_RefineModel mkRefine(getShape())"
 // then makeShapeWithElementMap(..., MapperMaker(mkRefine), {*this}).

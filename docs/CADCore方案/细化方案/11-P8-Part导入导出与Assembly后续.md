@@ -23,13 +23,14 @@ P8 已覆盖 FreeCAD `Part::Primitive` 与常用 Part Boolean 子集。导入导
 - `Part::Section` 已注册 executor，按 `Base` / `Tool` 链接和 `Approximation` 构造 section edges compound，走 `topo::makeElementSectionFromSources()` 的 maker history 主路径。
 - `Part::MultiFuse` / `Part::MultiCommon` 已注册 executor，按 `Shapes` 链接列表读取请求内 shape；`MultiFuse` 支持单 compound 输入展开到子 shape，`MultiCommon` 默认按 `CommonOfAllShapes` 逐步求交，并保留 `CommonOfFirstAndRest` 兼容行为。
 - `Part::XOR` / `Part::FeatureXOR` 已作为 BOPTools `FeatureXOR` typed alias 注册 executor，按 `Objects` 链接列表读取请求内 shape，走 `topo::makeElementXorFromSources()` 的 Fuse / Common / Cut 主路径；当前支持 `Tolerance=0`。
+- `Part::BooleanFragments` / `Part::FeatureBooleanFragments` 已作为 BOPTools `FeatureBooleanFragments` typed alias 注册 executor，按 `Objects` 链接列表读取请求内 shape，支持 `Mode=Standard`、`Mode=Split` 的 solid-safe / wire aggregate / CompSolid aggregate 子集、`Mode=CompSolid` 和非负 `Tolerance`，走 `topo::makeElementGeneralFuseFromSources()` 的 generalFuse maker history 主路径；wire aggregate Split 对齐 FreeCAD `GeneralFuseResult.makeSplitPieces()` 的 Wire 分支，按 split vertices 重建 wire pieces；CompSolid aggregate Split 对齐同一入口的 CompSolid 分支，按 split faces 将 solid children 重新组合为 compsolid pieces；Shell aggregate pieces 仍保持显式 unsupported diagnostics；`Mode=CompSolid` 按 FreeCAD `ShapeMerge.mergeSolids(..., bool_compsolid=True)` 将 solid pieces 按共享面分组为 compound of compsolids。
 - Part primitive 输出 mesh、subshape map、bbox、volume、kernel metadata 和 indexed `NamedShape`；Part Boolean 输出 maker-history derived `NamedShape`。
-- `fixtures/p8` 已覆盖 `part-box`、`part-cylinder`、`part-cylinder-angled-prism`、`part-prism`、`part-regular-polygon`、`part-sphere`、`part-ellipsoid`、`part-cone`、`part-torus`、`part-wedge`、`part-vertex`、`part-line`、`part-ellipse`、`part-plane`、`part-helix`、`part-spiral`、`part-fuse`、`part-cut`、`part-common`、`part-section`、`part-multi-fuse`、`part-multi-common`、`part-multi-common-first-rest` 和 `part-xor`。
+- `fixtures/p8` 已覆盖 `part-box`、`part-cylinder`、`part-cylinder-angled-prism`、`part-prism`、`part-regular-polygon`、`part-sphere`、`part-ellipsoid`、`part-cone`、`part-torus`、`part-wedge`、`part-vertex`、`part-line`、`part-ellipse`、`part-plane`、`part-helix`、`part-spiral`、`part-fuse`、`part-cut`、`part-common`、`part-section`、`part-multi-fuse`、`part-multi-common`、`part-multi-common-first-rest`、`part-xor`、`part-boolean-fragments`、`part-boolean-fragments-split`、`part-boolean-fragments-wire-split`、`part-boolean-fragments-compsolid` 和 `part-boolean-fragments-compsolid-split`。
 
 ## 目标范围
 
 - Part primitives：Box、Cylinder、Prism、RegularPolygon、Sphere、Ellipsoid、Cone、Torus、Wedge、Vertex、Line、Ellipse、Plane、Helix、Spiral 已接入。
-- Part Boolean：Fuse、Cut、Common、Section、MultiFuse、MultiCommon、BOPTools FeatureXOR 已接入；Fragments 等独立 Part 操作仍待迁移。
+- Part Boolean：Fuse、Cut、Common、Section、MultiFuse、MultiCommon、BOPTools FeatureXOR、BOPTools BooleanFragments Standard / solid-safe Split / wire aggregate Split / CompSolid aggregate Split / CompSolid mode 已接入；BooleanFragments Shell aggregate Split 后处理仍待迁移。
 - 文件导入导出：STEP / BREP / STL 等 adapter 能力。
 - Assembly：Link、Joint、约束求解和装配 recompute。
 - 产品化 adapter：Worker、WASM、Web service bridge。
@@ -39,7 +40,7 @@ P8 已覆盖 FreeCAD `Part::Primitive` 与常用 Part Boolean 子集。导入导
 - 文件导入导出可以处理 BREP，但 BREP 不进入持久 `DocumentObject graph` 的默认状态模型。
 - Web / Worker / WASM 只做 adapter，不改变 CAD Core 无状态边界。
 - Assembly 不应绕过 topo naming；Link / Joint 的 subname 和 placement 仍需要稳定引用模型。
-- 当前 Part primitive 仍使用 indexed `NamedShape`；Part Boolean 已消费 boolean / section maker history，完整 primitive maker history、Fragments history 和导入 shape 的 ElementMap 仍属于 P6/P8 后续工作。
+- 当前 Part primitive 仍使用 indexed `NamedShape`；Part Boolean 已消费 boolean / section / generalFuse maker history，完整 primitive maker history、BooleanFragments Shell aggregate Split history、当前 aggregate Split partial history 向完整 MapperHistory 收敛，以及导入 shape 的 ElementMap 仍属于 P6/P8 后续工作。
 
 ## 前置条件
 
@@ -60,7 +61,7 @@ P8 已覆盖 FreeCAD `Part::Primitive` 与常用 Part Boolean 子集。导入导
 
 ## 剩余缺口
 
-- Fragments 等更完整 Part Boolean 尚未注册 executor。
+- BooleanFragments Shell aggregate Split 尚未完整迁移 `GeneralFuseResult.splitAggregates()` 对 Shell pieces 的后处理；嵌套 compound 中若出现 shell aggregate，仍保持显式 unsupported diagnostics。
 - STEP / BREP / STL 导入导出还没有 adapter 能力。
 - Assembly Link / Joint、placement chain 和装配求解未迁移。
 - Worker / WASM / Web service bridge 未产品化。

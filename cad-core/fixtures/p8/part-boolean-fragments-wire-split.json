@@ -1,0 +1,46 @@
+{
+  "Objects": [
+    {
+      "Name": "PolyA",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 2
+      }
+    },
+    {
+      "Name": "PolyB",
+      "ID": 2,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 2,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [1, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "BooleanFragments",
+      "ID": 3,
+      "TypeId": "Part::BooleanFragments",
+      "Properties": {
+        "Objects": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["PolyA", "PolyB"]
+        },
+        "Mode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Split"
+        },
+        "Tolerance": 0
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["BooleanFragments"]
+  }
+}

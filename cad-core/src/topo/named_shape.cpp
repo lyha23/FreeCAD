@@ -3,6 +3,7 @@
 #include "cad_core/geometry/refine_model.h"
 
 #include <BRepAlgoAPI_BooleanOperation.hxx>
+#include <BRepAlgoAPI_BuilderAlgo.hxx>
 #include <BRepAlgoAPI_Common.hxx>
 #include <BRepAlgoAPI_Cut.hxx>
 #include <BRepAlgoAPI_Fuse.hxx>
@@ -733,6 +734,68 @@ NamedShapeBuild makeElementSectionFromSources(
             TopoDS_Shape {},
             std::nullopt,
             failure.GetMessageString() != nullptr ? failure.GetMessageString() : "Section failed"
+        };
+    }
+}
+
+NamedShapeBuild makeElementGeneralFuseFromSources(
+    const std::string& owner,
+    const std::vector<NamedShapeSource>& sources,
+    double tolerance
+)
+{
+    if (sources.empty()) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Null shape"};
+    }
+    for (const auto& source : sources) {
+        if (source.shape.IsNull()) {
+            return NamedShapeBuild {
+                TopoDS_Shape {},
+                std::nullopt,
+                "Null input shape for general fuse operation"
+            };
+        }
+    }
+    if (sources.size() == 1U) {
+        NamedShape namedShape = sources.front().namedShape != nullptr
+            ? *sources.front().namedShape
+            : indexedNamedShapeForObject(owner, sources.front().shape);
+        namedShape.owner = owner;
+        namedShape.shape = sources.front().shape;
+        return NamedShapeBuild {sources.front().shape, std::move(namedShape), {}};
+    }
+
+    try {
+        BRepAlgoAPI_BuilderAlgo maker;
+        maker.SetRunParallel(true);
+        TopTools_ListOfShape arguments;
+        for (const auto& source : sources) {
+            arguments.Append(source.shape);
+        }
+        maker.SetArguments(arguments);
+        if (tolerance > 0.0) {
+            maker.SetFuzzyValue(tolerance);
+        }
+        maker.SetNonDestructive(Standard_True);
+        maker.Build();
+        if (!maker.IsDone()) {
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "GeneralFuse failed"};
+        }
+        const TopoDS_Shape resultShape = maker.Shape();
+        if (resultShape.IsNull()) {
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Resulting shape is null"};
+        }
+        return NamedShapeBuild {
+            resultShape,
+            namedShapeForMakerHistory(owner, resultShape, sources, maker),
+            {},
+        };
+    }
+    catch (const Standard_Failure& failure) {
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            failure.GetMessageString() != nullptr ? failure.GetMessageString() : "GeneralFuse failed"
         };
     }
 }

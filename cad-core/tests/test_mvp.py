@@ -343,6 +343,11 @@ class CadCoreOcctMvpTest(unittest.TestCase):
 
     def test_p8_fixture_diagnostics(self) -> None:
         expected = {
+            "part-boolean-fragments": [],
+            "part-boolean-fragments-compsolid": [],
+            "part-boolean-fragments-compsolid-split": [],
+            "part-boolean-fragments-split": [],
+            "part-boolean-fragments-wire-split": [],
             "part-box": [],
             "part-common": [],
             "part-cone": [],
@@ -2342,6 +2347,79 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assertEqual(named_shape["owner"], "XOR")
         self.assertEqual(named_shape["element_map_status"], "history_partial")
         self.assertIn("Face1", named_shape["elements"])
+
+    def test_p8_part_boolean_fragments_builds_general_fuse_pieces(self) -> None:
+        for fixture, mode in [
+            ("part-boolean-fragments", "Standard"),
+            ("part-boolean-fragments-split", "Split"),
+            ("part-boolean-fragments-compsolid", "CompSolid"),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p8")
+                fragments = result["objects"]["BooleanFragments"]
+                named_shape = result["named_shapes"]["BooleanFragments"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(fragments["status"], "ok")
+                self.assertEqual(fragments["boolean"], "fragments")
+                self.assertEqual(fragments["shape"], "occt_compound")
+                self.assertEqual(fragments["mode"], mode)
+                self.assertEqual(fragments["objects"], ["BoxA", "BoxB"])
+                self.assert_bbox_close(fragments["bbox"], [0.0, 0.0, 0.0], [3.0, 2.0, 2.0])
+                self.assertAlmostEqual(fragments["volume"], 12.0, delta=1e-6)
+                self.assert_topology_counts(
+                    result["subshapes"]["BooleanFragments"],
+                    {"topology_counts": {"faces": 16, "edges": 28, "vertices": 16}},
+                )
+                self.assertEqual(named_shape["owner"], "BooleanFragments")
+                self.assertEqual(named_shape["element_map_status"], "history_partial")
+                self.assertTrue(any(item["kind"] == "split" for item in named_shape["history"]))
+                self.assertTrue(any(item["kind"] == "modified" for item in named_shape["history"]))
+
+    def test_p8_part_boolean_fragments_split_rebuilds_wire_aggregate_pieces(self) -> None:
+        result = self.run_recompute("part-boolean-fragments-wire-split", "p8")
+        fragments = result["objects"]["BooleanFragments"]
+        named_shape = result["named_shapes"]["BooleanFragments"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(fragments["status"], "ok")
+        self.assertEqual(fragments["boolean"], "fragments")
+        self.assertEqual(fragments["mode"], "Split")
+        self.assertEqual(fragments["shape"], "occt_compound")
+        self.assertEqual(fragments["objects"], ["PolyA", "PolyB"])
+        self.assert_bbox_close_delta(fragments["bbox"], [-2.1, -2.1, -0.1], [3.1, 2.1, 0.1], 1e-6)
+        self.assertEqual(fragments["volume"], 0.0)
+        self.assert_topology_counts(
+            result["subshapes"]["BooleanFragments"],
+            {"topology_counts": {"faces": 0, "edges": 12, "vertices": 10}},
+        )
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertTrue(any(item["kind"] == "split" for item in named_shape["history"]))
+
+    def test_p8_part_boolean_fragments_split_rebuilds_compsolid_aggregate_pieces(self) -> None:
+        result = self.run_recompute("part-boolean-fragments-compsolid-split", "p8")
+        fragments = result["objects"]["Split"]
+        named_shape = result["named_shapes"]["Split"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(fragments["status"], "ok")
+        self.assertEqual(fragments["boolean"], "fragments")
+        self.assertEqual(fragments["mode"], "Split")
+        self.assertEqual(fragments["shape"], "occt_compound")
+        self.assertEqual(fragments["objects"], ["Comp", "BoxC"])
+        self.assert_bbox_close_delta(
+            fragments["bbox"],
+            [0.0, 0.0, 0.0],
+            [3.0, 2.5000001000000007, 2.0],
+            1e-6,
+        )
+        self.assertAlmostEqual(fragments["volume"], 20.0, delta=1e-6)
+        self.assert_topology_counts(
+            result["subshapes"]["Split"],
+            {"topology_counts": {"faces": 36, "edges": 60, "vertices": 32}},
+        )
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertTrue(any(item["kind"] == "split" for item in named_shape["history"]))
 
     def test_p8_part_section_builds_intersection_edges(self) -> None:
         result = self.run_recompute("part-section", "p8")

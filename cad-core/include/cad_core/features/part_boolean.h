@@ -13,5 +13,9 @@ void executePartSection(const document::DocumentObject& object, runtime::Compute
 void executePartMultiFuse(const document::DocumentObject& object, runtime::ComputeContext& context);
 void executePartMultiCommon(const document::DocumentObject& object, runtime::ComputeContext& context);
 void executePartXor(const document::DocumentObject& object, runtime::ComputeContext& context);
+void executePartBooleanFragments(
+    const document::DocumentObject& object,
+    runtime::ComputeContext& context
+);
 
 }  // namespace cad_core::features

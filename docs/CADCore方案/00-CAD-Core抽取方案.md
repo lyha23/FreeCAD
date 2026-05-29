@@ -43,6 +43,7 @@ CAD Core 不依赖 Qt、`src/Gui`、Workbench、ViewProvider、TaskPanel、Web r
 ```text
 App::Part
 App::Origin
+Part::BooleanFragments
 Part::Box
 Part::Common
 Part::Cone
@@ -50,6 +51,7 @@ Part::Cut
 Part::Cylinder
 Part::Ellipse
 Part::Ellipsoid
+Part::FeatureBooleanFragments
 Part::FeatureXOR
 Part::Fuse
 Part::Helix
@@ -176,7 +178,7 @@ P6 已建立 topo 主路径骨架：`topo/named_shape`、`topo/element_map`、in
 
 P7 已覆盖常用 PartDesign 生态子集：CoordinateSystem、Origin、Pad standalone refine、Body AddSub final-result refine（Pad / Pocket / Hole）、Fillet / Chamfer / Transformed family replacement refine 的 FreeCAD RefineModel maker 子集、Hole 平底圆柱盲孔 / 通孔 / 点驱动孔 / Tapered / Counterbore / Countersink / Counterdrill / Angled drill point、非建模 Threaded ISO metric / ISO metric fine / UNC / UNF / UNEF / NPT / BSP / BSW / BSF / ISOTyre（TapDrill 表和 FreeCAD fallback 公式）、thread clearance 的 ISO metric 表 / UTS 表 / 非 ISO fallback、Fillet / Chamfer 基础 DressUp 与基础 `SupportTransform` AddSubShape cache、Mirrored、LinearPattern、PolarPattern、Scaled、MultiTransform Features 模式；transformed family 已支持 `Whole shape` 基础路径，LinearPattern / PolarPattern 已支持 Sketch `H_Axis` / `V_Axis` / `N_Axis` 和 construction `AxisN` 基础引用。
 
-P8 已覆盖 FreeCAD `Part::Primitive` 与基础 Box primitive 集合：`Part::Box`、`Part::Cylinder`、`Part::Prism`、`Part::Sphere`、`Part::Ellipsoid`、`Part::Cone`、`Part::Torus`、`Part::Wedge`、`Part::Helix`、`Part::Spiral`、`Part::Vertex`、`Part::Line`、`Part::Ellipse`、`Part::Plane` 和 `Part::RegularPolygon` 走 `features/part.cpp` executor，按 FreeCAD primitive 属性构造 OCCT solid / vertex / edge / face / wire，套用全局 Placement，导出 mesh、subshape map 和 indexed `NamedShape`；Cylinder / Prism 已覆盖 `PrismExtension` 的 `FirstAngle` / `SecondAngle` 基础斜拉方向，Ellipsoid 按 FreeCAD sphere + `BRepBuilderAPI_GTransform` 路径缩放，Torus 按 FreeCAD `TopoShape::makeTorus()` 的圆面旋转路径构造，Helix / Spiral 按 FreeCAD `TopoShape::makeSpiralHelix()` 的 surface-of-revolution + 2D segment 路径构造 wire。P8 也已接入常用 Part Boolean：`Part::Fuse`、`Part::Cut`、`Part::Common`、`Part::Section`、`Part::MultiFuse`、`Part::MultiCommon`、`Part::XOR` / `Part::FeatureXOR` 走 `features/part_boolean.cpp`；Section 读取 `Base` / `Tool` 和 `Approximation`，走 `topo::makeElementSectionFromSources()` 的 maker-history 主路径；XOR 对齐 BOPTools `FeatureXOR`，当前以 typed alias 方式读取 `Objects`，走 `topo::makeElementXorFromSources()` 的 Fuse / Common / Cut 主路径。
+P8 已覆盖 FreeCAD `Part::Primitive` 与基础 Box primitive 集合：`Part::Box`、`Part::Cylinder`、`Part::Prism`、`Part::Sphere`、`Part::Ellipsoid`、`Part::Cone`、`Part::Torus`、`Part::Wedge`、`Part::Helix`、`Part::Spiral`、`Part::Vertex`、`Part::Line`、`Part::Ellipse`、`Part::Plane` 和 `Part::RegularPolygon` 走 `features/part.cpp` executor，按 FreeCAD primitive 属性构造 OCCT solid / vertex / edge / face / wire，套用全局 Placement，导出 mesh、subshape map 和 indexed `NamedShape`；Cylinder / Prism 已覆盖 `PrismExtension` 的 `FirstAngle` / `SecondAngle` 基础斜拉方向，Ellipsoid 按 FreeCAD sphere + `BRepBuilderAPI_GTransform` 路径缩放，Torus 按 FreeCAD `TopoShape::makeTorus()` 的圆面旋转路径构造，Helix / Spiral 按 FreeCAD `TopoShape::makeSpiralHelix()` 的 surface-of-revolution + 2D segment 路径构造 wire。P8 也已接入常用 Part Boolean：`Part::Fuse`、`Part::Cut`、`Part::Common`、`Part::Section`、`Part::MultiFuse`、`Part::MultiCommon`、`Part::XOR` / `Part::FeatureXOR`、`Part::BooleanFragments` / `Part::FeatureBooleanFragments` 走 `features/part_boolean.cpp`；Section 读取 `Base` / `Tool` 和 `Approximation`，走 `topo::makeElementSectionFromSources()` 的 maker-history 主路径；XOR 对齐 BOPTools `FeatureXOR`，当前以 typed alias 方式读取 `Objects`，走 `topo::makeElementXorFromSources()` 的 Fuse / Common / Cut 主路径；BooleanFragments 对齐 BOPTools `FeatureBooleanFragments`，当前以 typed alias 方式读取 `Objects`、`Mode=Standard`、`Mode=Split` 的 solid-safe / wire aggregate / CompSolid aggregate 子集、`Mode=CompSolid` 和非负 `Tolerance`，走 `topo::makeElementGeneralFuseFromSources()` 的 generalFuse maker-history 主路径；Split 已迁移 FreeCAD `GeneralFuseResult.makeSplitPieces()` 的 Wire / CompSolid 分支，CompSolid 按 FreeCAD `ShapeMerge.mergeSolids(..., bool_compsolid=True)` 将 solid pieces 按共享面分组为 compound of compsolids。
 
 ## 未完成边界
 
@@ -186,7 +188,7 @@ P8 已覆盖 FreeCAD `Part::Primitive` 与基础 Box primitive 集合：`Part::B
 - Sketcher：完整约束求解、BSpline solver/control-point 语义、ExternalGeometry face / arc edge / defining profile、完整 FaceMakerBuildFace / WireJoiner 账本和复杂 `getInternalElementMap()`。
 - Topo Naming：完整 MapperHistory 消费、split 旧引用恢复、merge history 到完整 MapperHistory 的收敛、ShapeFix / transformed / DressUp 的完整命名传播，以及 RefineModel partial history 向完整 MapperHistory 生命周期收敛。
 - PartDesign：Hole ModelThread、标准件表驱动头部尺寸迁移、复杂 Fillet / Chamfer 参数、链式 DressUp `SupportTransform` ownership、复杂 transformed ownership。
-- P8：Fragments 等更完整 Part Boolean，文件导入导出、Assembly Link / Joint、Worker / WASM / Web adapter 产品化。
+- P8：BooleanFragments Shell aggregate Split、文件导入导出、Assembly Link / Joint、Worker / WASM / Web adapter 产品化。
 
 这些缺口必须保持显式 diagnostics 或 `known_gap`，不能用 fixture 特判、输出端修剪、几何类型排序或 source edge 猜测伪装完成。
 
@@ -197,7 +199,7 @@ P8 已覆盖 FreeCAD `Part::Primitive` 与基础 Box primitive 集合：`Part::B
 1. P6 topo 主路径补强：完整 MapperHistory 生命周期、split / merge 旧引用恢复、ShapeFix history，以及 RefineModel / taper partial history 到正式 MapperHistory 的收敛。
 2. P5 Sketcher 补强：FaceMaker / WireJoiner 账本、复杂 internal element map、更多 external geometry 和约束。
 3. P7 PartDesign 补强：Hole ModelThread、标准件表驱动头部尺寸迁移、链式 DressUp SupportTransform ownership、复杂 transformed / pattern ownership。
-4. P8 后置能力：继续补 Fragments、导入导出、Assembly、Worker / WASM / Web adapter。
+4. P8 后置能力：继续补 BooleanFragments Shell aggregate Split、导入导出、Assembly、Worker / WASM / Web adapter。
 
 除非前置 topo naming 和 property/link 边界已经覆盖对应引用场景，不应继续扩大高层 executor 的 fixture 特判。
 

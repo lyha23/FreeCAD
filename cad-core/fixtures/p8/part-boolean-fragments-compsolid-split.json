@@ -1,0 +1,79 @@
+{
+  "Objects": [
+    {
+      "Name": "BoxA",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 2,
+        "Height": 2
+      }
+    },
+    {
+      "Name": "BoxB",
+      "ID": 2,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 2,
+        "Height": 2,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [1, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "Comp",
+      "ID": 3,
+      "TypeId": "Part::BooleanFragments",
+      "Properties": {
+        "Objects": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["BoxA", "BoxB"]
+        },
+        "Mode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "CompSolid"
+        },
+        "Tolerance": 0
+      }
+    },
+    {
+      "Name": "BoxC",
+      "ID": 4,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 2,
+        "Height": 2,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0.5, 0.5, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "Split",
+      "ID": 5,
+      "TypeId": "Part::BooleanFragments",
+      "Properties": {
+        "Objects": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["Comp", "BoxC"]
+        },
+        "Mode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Split"
+        },
+        "Tolerance": 0
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Split"]
+  }
+}
