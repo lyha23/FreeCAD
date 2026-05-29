@@ -13,6 +13,7 @@
 #include <BRepGProp.hxx>
 #include <BRepIntCurveSurface_Inter.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
+#include <BRepOffsetAPI_ThruSections.hxx>
 #include <BRepPrimAPI_MakePrism.hxx>
 #include <Bnd_Box.hxx>
 #include <GeomAbs_CurveType.hxx>
@@ -989,6 +990,17 @@ topo::NamedShape namedShapeForTaperComponent(const std::string& componentOwner,
         for (std::size_t index = 1; index < component.historySources.size(); ++index) {
             sources.push_back(topo::NamedShapeSource{componentOwner + ".TaperSection" + std::to_string(index + 1),
                                                      component.historySources.at(index)});
+        }
+        if (auto* thruSections = dynamic_cast<BRepOffsetAPI_ThruSections*>(component.historyMaker.get())) {
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+            // ::MapperThruSections::generated(), adds GeneratedFace(), FirstShape() and LastShape()
+            // to the generic BRepBuilderAPI_MakeShape mapper used by makeElementShape().
+            return topo::namedShapeForThruSectionsHistory(componentOwner,
+                                                          component.shape,
+                                                          sources,
+                                                          *thruSections,
+                                                          component.historySources.front(),
+                                                          component.historySources.back());
         }
         return topo::namedShapeForMakerHistory(componentOwner, component.shape, sources, *component.historyMaker);
     }

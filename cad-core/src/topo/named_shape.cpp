@@ -8,6 +8,7 @@
 #include <BRepAlgoAPI_Cut.hxx>
 #include <BRepAlgoAPI_Fuse.hxx>
 #include <BRepAlgoAPI_Section.hxx>
+#include <BRepOffsetAPI_ThruSections.hxx>
 #include <Standard_Failure.hxx>
 #include <TopAbs_ShapeEnum.hxx>
 #include <TopExp.hxx>
@@ -109,7 +110,44 @@ std::optional<std::string> findElementName(
     return std::nullopt;
 }
 
-void applyHistoryList(
+bool applyHistoryShape(
+    NamedShape& namedShape,
+    const std::string& sourceName,
+    const TopoDS_Shape& historyShape,
+    ElementHistoryKind historyKind,
+    std::map<std::string, SourceTargets>& sourceTargets
+)
+{
+    bool applied = false;
+    for (const TopAbs_ShapeEnum kind : mappableKinds()) {
+        const auto elementName = findElementName(namedShape, historyShape, kind);
+        if (!elementName) {
+            continue;
+        }
+        auto& element = namedShape.elements[*elementName];
+        element.status = historyKind;
+        if (std::find(element.sources.begin(), element.sources.end(), sourceName)
+            == element.sources.end()) {
+            element.sources.push_back(sourceName);
+        }
+        const auto duplicate = std::find_if(
+            namedShape.history.begin(),
+            namedShape.history.end(),
+            [&](const ElementHistory& entry) {
+                return entry.kind == historyKind && entry.element == *elementName
+                    && entry.sources == std::vector<std::string>{sourceName};
+            }
+        );
+        if (duplicate == namedShape.history.end()) {
+            namedShape.history.push_back(ElementHistory {historyKind, *elementName, {sourceName}});
+        }
+        sourceTargets[sourceName].history.insert(*elementName);
+        applied = true;
+    }
+    return applied;
+}
+
+bool applyHistoryList(
     NamedShape& namedShape,
     const std::string& sourceName,
     const TopTools_ListOfShape& historyShapes,
@@ -117,20 +155,90 @@ void applyHistoryList(
     std::map<std::string, SourceTargets>& sourceTargets
 )
 {
+    bool applied = false;
     for (TopTools_ListIteratorOfListOfShape it(historyShapes); it.More(); it.Next()) {
-        const TopoDS_Shape& historyShape = it.Value();
-        for (const TopAbs_ShapeEnum kind : mappableKinds()) {
-            const auto elementName = findElementName(namedShape, historyShape, kind);
-            if (!elementName) {
-                continue;
-            }
-            auto& element = namedShape.elements[*elementName];
-            element.status = historyKind;
-            element.sources.push_back(sourceName);
-            namedShape.history.push_back(ElementHistory {historyKind, *elementName, {sourceName}});
-            sourceTargets[sourceName].history.insert(*elementName);
+        applied = applyHistoryShape(namedShape, sourceName, it.Value(), historyKind, sourceTargets)
+            || applied;
+    }
+    return applied;
+}
+
+bool shapeContains(const TopoDS_Shape& container, const TopoDS_Shape& shape)
+{
+    if (container.IsNull() || shape.IsNull()) {
+        return false;
+    }
+    if (container.IsSame(shape)) {
+        return true;
+    }
+
+    TopTools_IndexedMapOfShape subshapes;
+    TopExp::MapShapes(container, shape.ShapeType(), subshapes);
+    for (int index = 1; index <= subshapes.Extent(); ++index) {
+        if (subshapes(index).IsSame(shape)) {
+            return true;
         }
     }
+    return false;
+}
+
+bool applyThruSectionsGeneratedHistory(
+    NamedShape& namedShape,
+    const std::string& sourceName,
+    const TopoDS_Shape& sourceShape,
+    const TopoDS_Shape& sourceElement,
+    BRepOffsetAPI_ThruSections& maker,
+    const TopoDS_Shape& firstProfile,
+    const TopoDS_Shape& lastProfile,
+    std::map<std::string, SourceTargets>& sourceTargets
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::MapperThruSections::generated(), after MapperMaker::generated(s) is empty, tries
+    // "tmaker.GeneratedFace(s)" and maps source shapes found in the first or last profile to
+    // "tmaker.FirstShape()" / "tmaker.LastShape()".
+    bool applied = false;
+    try {
+        const TopoDS_Shape generatedFace = maker.GeneratedFace(sourceElement);
+        if (!generatedFace.IsNull()) {
+            applied = applyHistoryShape(namedShape,
+                                        sourceName,
+                                        generatedFace,
+                                        ElementHistoryKind::Generated,
+                                        sourceTargets)
+                || applied;
+        }
+        if (applied) {
+            return true;
+        }
+
+        if (sourceElement.ShapeType() == TopAbs_FACE && sourceShape.IsSame(sourceElement)
+            && !maker.FirstShape().IsNull()) {
+            return applyHistoryShape(namedShape,
+                                     sourceName,
+                                     maker.FirstShape(),
+                                     ElementHistoryKind::Generated,
+                                     sourceTargets);
+        }
+        if (shapeContains(firstProfile, sourceElement) && !maker.FirstShape().IsNull()) {
+            return applyHistoryShape(namedShape,
+                                     sourceName,
+                                     maker.FirstShape(),
+                                     ElementHistoryKind::Generated,
+                                     sourceTargets);
+        }
+        if (shapeContains(lastProfile, sourceElement) && !maker.LastShape().IsNull()) {
+            return applyHistoryShape(namedShape,
+                                     sourceName,
+                                     maker.LastShape(),
+                                     ElementHistoryKind::Generated,
+                                     sourceTargets);
+        }
+    }
+    catch (const Standard_Failure&) {
+        return applied;
+    }
+    return applied;
 }
 
 std::vector<std::string> sourceElementNames(
@@ -546,6 +654,75 @@ NamedShape namedShapeForMakerHistory(
     return namedShape;
 }
 
+NamedShape namedShapeForThruSectionsHistory(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const std::vector<NamedShapeSource>& sources,
+    BRepOffsetAPI_ThruSections& maker,
+    const TopoDS_Shape& firstProfile,
+    const TopoDS_Shape& lastProfile
+)
+{
+    NamedShape namedShape = indexedNamedShapeForObject(owner, resultShape);
+    std::map<std::string, SourceTargets> sourceTargets;
+
+    for (const auto& source : sources) {
+        for (const TopAbs_ShapeEnum kind : mappableKinds()) {
+            const std::string prefix = prefixForKind(kind);
+            if (prefix.empty()) {
+                continue;
+            }
+            TopTools_IndexedMapOfShape sourceElements;
+            TopExp::MapShapes(source.shape, kind, sourceElements);
+            for (int index = 1; index <= sourceElements.Extent(); ++index) {
+                const TopoDS_Shape& sourceElement = sourceElements(index);
+                const std::string localElementName = prefix + std::to_string(index);
+                for (const std::string& sourceName : sourceElementNames(source, localElementName)) {
+                    sourceTargets[sourceName];
+                    collectSourceElementMap(namedShape, sourceName, sourceElement, kind, sourceTargets);
+
+                    bool generated = false;
+                    try {
+                        generated = applyHistoryList(namedShape,
+                                                     sourceName,
+                                                     maker.Generated(sourceElement),
+                                                     ElementHistoryKind::Generated,
+                                                     sourceTargets);
+                    }
+                    catch (const Standard_Failure&) {
+                        generated = false;
+                    }
+                    if (!generated) {
+                        applyThruSectionsGeneratedHistory(namedShape,
+                                                          sourceName,
+                                                          source.shape,
+                                                          sourceElement,
+                                                          maker,
+                                                          firstProfile,
+                                                          lastProfile,
+                                                          sourceTargets);
+                    }
+                    try {
+                        applyHistoryList(namedShape,
+                                         sourceName,
+                                         maker.Modified(sourceElement),
+                                         ElementHistoryKind::Modified,
+                                         sourceTargets);
+                    }
+                    catch (const Standard_Failure&) {
+                        continue;
+                    }
+                }
+            }
+        }
+    }
+    applyHistoryElementMap(namedShape, sourceTargets);
+    propagateNestedSourceHistory(namedShape, sources);
+    addMergeHistory(namedShape);
+
+    return namedShape;
+}
+
 NamedShape namedShapeForPreservedSources(
     const std::string& owner,
     const TopoDS_Shape& resultShape,
@@ -645,6 +822,32 @@ NamedShape namedShapeForLinkedSubshapes(
             }
         }
     }
+    return namedShape;
+}
+
+NamedShape namedShapeForTransformedCopy(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const NamedShapeSource& source
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementTransform(), after transforming/copying the shape, calls
+    // "copyElementMap(tmp, op)" instead of deriving ownership from result geometry.
+    NamedShape namedShape = indexedNamedShapeForObject(owner, resultShape);
+
+    for (const auto& [elementName, element] : namedShape.elements) {
+        (void)element;
+        addRetagAlias(namedShape, source.owner + "." + elementName, elementName);
+    }
+
+    if (source.namedShape != nullptr) {
+        for (const auto& [stableName, currentName] : source.namedShape->elementMap) {
+            addRetagAlias(namedShape, stableName, currentName);
+        }
+    }
+    addMergeHistory(namedShape);
+
     return namedShape;
 }
 

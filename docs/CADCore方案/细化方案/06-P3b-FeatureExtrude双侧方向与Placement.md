@@ -6,7 +6,7 @@ P3b 固定 Pad / Pocket shared `FeatureExtrude` 的常用方向矩阵和坐标�
 
 - `SideType=Two sides`、`Symmetric`、`Length2`、第一侧 / 第二侧 `UpToFace` / `UpToShape` 已有基础路径。
 - `UpToFirst` / `UpToLast` 可基于 previous-body 候选面选择终止面。
-- Pad / Pocket taper 可生成几何结果；一侧、多侧和内环 taper 已记录 `BRepOffsetAPI_ThruSections` 的 generated history 子集，但对象结果仍显式标记 `known_gap:taper_history`，等待 P6 完整 MapperHistory。
+- Pad / Pocket taper 可生成几何结果；一侧 / 内环 taper 已记录 `BRepOffsetAPI_ThruSections` 的 source face first-section history，一侧、多侧和内环 taper 已记录 source edge / generated section history 子集，但对象结果仍显式标记 `known_gap:taper_history`，等待 P6 完整 MapperHistory。
 - custom direction 支持 sketch axis / EdgeN / DatumLine 子集。
 - Sketch、Body、FeatureBase placement 已进入运行态变换。
 
@@ -37,4 +37,4 @@ P3b 固定 Pad / Pocket shared `FeatureExtrude` 的常用方向矩阵和坐标�
 
 - `fixtures/p3b` 覆盖双侧、对称、UpTo、UpToFirst/Last、taper、inner-wire taper、custom direction 和 placement。
 - 未支持组合必须 diagnostics，不回退成 One side。
-- taper partial history 可验证 source edge / generated section key，但完整 MapperHistory 缺口必须保留显式标记。
+- taper partial history 可验证一侧 / 内环 source face、source edge 和 generated section key，但完整 MapperHistory 缺口必须保留显式标记。

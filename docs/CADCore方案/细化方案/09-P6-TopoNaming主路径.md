@@ -7,10 +7,11 @@ P6 把稳定引用从导出层补丁升级为 CAD Core 的正式账本。目标�
 - `topo/named_shape` 建立 object-local indexed `FaceN` / `EdgeN` / `VertexN` 账本。
 - 支持 identity、source-preserved、一对一 history-derived `ElementMap` 和多个旧 stable key 指向同一当前元素的 merge history。
 - 普通 prism、非 taper Two sides / Symmetric 单-prism、Two sides UpTo 多 prism XOR 子流程已消费 maker history 子集。
-- taper 已暴露 `BRepOffsetAPI_ThruSections` maker 与 loft section，记录 source edge / offset section 的 generated history，并通过 XOR / boolean 组合透传到一侧、多侧和内环 taper 结果；仍保留 `known_gap:taper_history`，因为完整 MapperHistory 生命周期尚未迁移。
+- taper 已暴露 `BRepOffsetAPI_ThruSections` maker 与 loft section，并按 FreeCAD `MapperThruSections` 补 `GeneratedFace()` / first-section 映射，记录一侧 / 内环 taper 的 source face first-section history，以及各 taper source edge 和 offset section 的 generated history；source edge / offset section history 可通过 XOR / boolean 组合透传到一侧、多侧和内环 taper 结果，但仍保留 `known_gap:taper_history`，因为完整 MapperHistory 生命周期尚未迁移。
 - `BRepBuilderAPI_RefineModel` 已按 FreeCAD `modelRefine` / `FaceUniter` 路径迁入 `geometry/refine_model.*`，Pad standalone、Body AddSub final-result（Pad / Pocket / Hole）和 Fillet / Chamfer / Transformed family replacement refine 可消费 `Modified()` / `IsDeleted()` partial history。
 - `makeElementXorFromSources` 和 `makeElementBooleanFromSources` 已下沉到 topo。
 - Body additive / subtractive 组合通过 `BRepAlgoAPI_Fuse/Cut` 的多源 maker history 传播 source alias。
+- transformed copy 已下沉到 `topo::namedShapeForTransformedCopy()`，按 FreeCAD `makeElementTransform()` / `copyElementMap(tmp, op)` 保留 source-prefixed alias、旧 stable key 和 merge history。
 - UpToFace 和 Sketch ExternalGeometry 可通过 `StableSubList -> ElementMap -> current subname` 更新引用。
 - split / deleted / unsupported stable subname 有结构化 diagnostics；deleted / split terminal history 已能跨后续 Body boolean / maker 继续保留诊断语义。
 
@@ -47,7 +48,7 @@ P6 把稳定引用从导出层补丁升级为 CAD Core 的正式账本。目标�
 
 - `fixtures/p6` 覆盖 indexed named shape、source-preserved key、Body boolean history、stable subname 恢复、split / deleted diagnostics，以及 deleted / split terminal history 跨后续 Body boolean 的传播。
 - Body boolean fixture 约束多个旧 stable key 指向同一当前元素时记录 `merge` history。
-- P3b taper fixture 约束一侧、多侧和内环 taper 的 ThruSections generated history；taper 仍按 partial history 和 known gap 验收。
+- P3b taper fixture 约束一侧 / 内环 taper 的 ThruSections source face first-section history，以及一侧、多侧和内环 taper 的 source edge / offset section generated history；taper 仍按 partial history 和 known gap 验收。
 - P7 Refine fixture 约束 Pad standalone、Body AddSub final-result（Pad / Pocket / Hole）和 Fillet / Chamfer / Transformed family replacement refine 走 RefineModel maker，并导出 history_partial `NamedShape`。
 - 一对多 fragment 只能记录 split history，不写入可解析 `ElementMap`。
 - 无目标 source 只能记录 deleted history，不写入可解析 `ElementMap`。

@@ -12,6 +12,8 @@
 #include <string>
 #include <vector>
 
+class BRepOffsetAPI_ThruSections;
+
 namespace cad_core::topo
 {
 
@@ -111,6 +113,18 @@ NamedShape namedShapeForMakerHistory(
     BRepBuilderAPI_MakeShape& maker
 );
 // FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::MapperThruSections,
+// extends MapperMaker::generated() with "GeneratedFace(s)", "FirstShape()" and "LastShape()"
+// for BRepOffsetAPI_ThruSections loft history.
+NamedShape namedShapeForThruSectionsHistory(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const std::vector<NamedShapeSource>& sources,
+    BRepOffsetAPI_ThruSections& maker,
+    const TopoDS_Shape& firstProfile,
+    const TopoDS_Shape& lastProfile
+);
+// FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::makeShapeWithElementMap(),
 // calls "mapSubElement(shapes)" before mapper history. This helper exposes only that
 // source-preserved subset for makers whose full Generated/Modified ledger is not migrated yet.
@@ -140,6 +154,15 @@ NamedShape namedShapeForLinkedSubshapes(
     const TopoDS_Shape& resultShape,
     const NamedShapeSource& source,
     const std::vector<std::pair<std::string, std::string>>& sourceToTargetElements
+);
+// FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+// ::TopoShape::makeElementTransform(), after BRepBuilderAPI_Transform, calls
+// "copyElementMap(tmp, op)" so transformed copies keep source stable aliases.
+NamedShape namedShapeForTransformedCopy(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const NamedShapeSource& source
 );
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementBoolean(),

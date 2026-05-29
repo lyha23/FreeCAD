@@ -594,21 +594,10 @@ topo::NamedShape transformedCopyNamedShape(const std::string& owner,
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
     // ::TopoShape::makeElementTransform(), applies BRepBuilderAPI_Transform then calls
     // "copyElementMap(tmp, op)" instead of guessing geometry ownership from the output.
-    topo::NamedShape namedShape = topo::indexedNamedShapeForObject(owner, resultShape);
-    for (const auto& [elementName, element] : namedShape.elements) {
-        namedShape.elementMap[source.owner + "." + elementName] = elementName;
-        namedShape.history.push_back(topo::ElementHistory{topo::ElementHistoryKind::Modified,
-                                                          elementName,
-                                                          {source.owner + "." + elementName}});
-    }
-    if (source.namedShape) {
-        for (const auto& [stableName, currentName] : source.namedShape->elementMap) {
-            if (namedShape.elements.count(currentName) != 0U) {
-                namedShape.elementMap[stableName] = currentName;
-            }
-        }
-    }
-    return namedShape;
+    return topo::namedShapeForTransformedCopy(
+        owner,
+        resultShape,
+        topo::NamedShapeSource{source.owner, source.shape, source.namedShape ? &*source.namedShape : nullptr});
 }
 
 std::optional<TransformSource> transformedCopy(const std::string& owner,

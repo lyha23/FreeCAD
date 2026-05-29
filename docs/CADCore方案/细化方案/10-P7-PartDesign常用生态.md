@@ -12,7 +12,7 @@ P7 在 P3-P6 底座上扩展常用 Body feature。原则是所有 feature 都继
 - LinearPattern：支持 `TransformMode=Features` 和 `Whole shape`，DatumLine / DatumPlane / solid Edge / Face / Sketch axis 方向，Extent、Spacing、Spacings、SpacingPattern 和双方向；Sketch axis 覆盖 `H_Axis` / `V_Axis` / `N_Axis` 和 construction `AxisN`。
 - PolarPattern：支持 `TransformMode=Features` 和 `Whole shape`，DatumLine / shape Edge / Sketch axis 轴，Extent、Spacing、SpacingPattern；Sketch axis 覆盖 `H_Axis` / `V_Axis` / `N_Axis` 和 construction `AxisN`。
 - Scaled：支持 `TransformMode=Features` 和 `Whole shape`；Features 模式以第一个 original AddSubShape 体积质心为缩放中心，Whole shape 按 FreeCAD 空 originals 行为使用原点作为缩放中心。
-- MultiTransform：支持 Features 和 Whole shape 模式下 Mirrored / LinearPattern / PolarPattern / Scaled 子特征模板，非 Scaled 乘法组合，Scaled diagonal 组合。
+- MultiTransform：支持 Features 和 Whole shape 模式下 Mirrored / LinearPattern / PolarPattern / Scaled 子特征模板，非 Scaled 乘法组合，Scaled diagonal 组合；transformed copy source alias 已由 `topo::namedShapeForTransformedCopy()` 承接。
 
 ## 已知缺口
 
@@ -51,4 +51,4 @@ P7 在 P3-P6 底座上扩展常用 Body feature。原则是所有 feature 都继
 
 - `fixtures/p7` 覆盖 Datum / Origin、Refine、Hole final-result refine、Hole 基础孔、Hole point profile、Hole tapered、Hole head-cut / drill-point、Hole cosmetic threaded、Hole fine threaded、Hole UNC / UNF / UNEF / NPT / BSP / BSW / BSF / ISOTyre threaded、Hole ISO metric / UTS / generic fallback thread clearance、Fillet、Chamfer、DressUp SupportTransform、Mirrored、LinearPattern、PolarPattern、Scaled、MultiTransform。
 - Hole ModelThread 等缺口必须明确 diagnostics；未接入 RefineModel 语义的特征族仍不能静默执行。
-- transformed copy 继续传播 original stable key，再进入 Body boolean history。
+- transformed copy 通过 topo helper 继续传播 original stable key，再进入 Body boolean history。

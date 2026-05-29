@@ -1121,33 +1121,49 @@ class CadCoreOcctMvpTest(unittest.TestCase):
                     self.assertEqual(elements[named_shape["element_map"][f"{source}.{edge}"]]["kind"], "edge")
 
     def test_p6_taper_records_thru_sections_generated_history(self) -> None:
-        for fixture, owner, source_edges, section_sources in [
-            ("pad-length-taper", "Pad", ["Sketch.Edge1"], ["Pad.TaperSection2.Edge1"]),
-            ("pocket-length-taper", "Pocket", ["SketchPocket.Edge1"], ["Pocket.TaperSection2.Edge1"]),
+        for fixture, owner, source_faces, source_edges, section_sources in [
+            ("pad-length-taper", "Pad", ["Sketch.Face1"], ["Sketch.Edge1"], ["Pad.TaperSection2.Edge1"]),
+            (
+                "pocket-length-taper",
+                "Pocket",
+                ["SketchPocket.Face1"],
+                ["SketchPocket.Edge1"],
+                ["Pocket.TaperSection2.Edge1"],
+            ),
             (
                 "pad-two-sides-taper",
                 "Pad",
+                [],
                 ["Sketch.Edge1"],
                 ["Pad.Prism1.TaperSection2.Edge1", "Pad.Prism2.TaperSection2.Edge1"],
             ),
             (
                 "pad-symmetric-taper",
                 "Pad",
+                [],
                 ["Sketch.Edge1"],
                 ["Pad.Prism1.TaperSection2.Edge1", "Pad.Prism2.TaperSection2.Edge1"],
             ),
             (
                 "pad-length-taper-inner-wire",
                 "Pad",
+                ["Sketch.Face1"],
                 ["Sketch.Edge1", "Sketch.Edge5"],
                 ["Pad.Outer.TaperSection2.Edge1", "Pad.Inner1.TaperSection2.Edge1"],
             ),
         ]:
             with self.subTest(fixture=fixture):
                 result = self.run_recompute(fixture, "p3b")
-                history = result["named_shapes"][owner]["history"]
+                named_shape = result["named_shapes"][owner]
+                history = named_shape["history"]
 
                 self.assertEqual(result["diagnostics"], [])
+                for source_face in source_faces:
+                    self.assertIn(source_face, named_shape["element_map"])
+                    self.assertEqual(named_shape["elements"][named_shape["element_map"][source_face]]["kind"], "face")
+                    self.assertTrue(
+                        any(item["kind"] == "generated" and item["sources"] == [source_face] for item in history)
+                    )
                 for source_edge in source_edges:
                     self.assertTrue(
                         any(item["kind"] == "generated" and item["sources"] == [source_edge] for item in history)
@@ -1878,6 +1894,10 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assertAlmostEqual(mirrored["volume"], 16.0, delta=1e-6)
         self.assertEqual(named_shape["element_map_status"], "history_partial")
         self.assertTrue(any(key.startswith("Pad.") for key in named_shape["element_map"]))
+        self.assertTrue(
+            any(any(source.startswith("Mirrored.Transform1.") for source in item["sources"]) for item in named_shape["history"])
+        )
+        self.assertTrue(any("Pad.Edge1" in item["sources"] for item in named_shape["history"]))
 
     def test_p7_linear_pattern_features_mode_fuses_additive_originals_by_extent(self) -> None:
         result = self.run_recompute("linear-pattern-pad-datum-line", "p7")
@@ -1897,6 +1917,10 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assertAlmostEqual(pattern["volume"], body["volume"], delta=1e-6)
         self.assertEqual(named_shape["element_map_status"], "history_partial")
         self.assertTrue(any(key.startswith("Pad.") for key in named_shape["element_map"]))
+        self.assertTrue(
+            any("LinearPattern.Transform1.Edge1" in item["sources"] for item in named_shape["history"])
+        )
+        self.assertTrue(any("Pad.Edge1" in item["sources"] for item in named_shape["history"]))
 
     def test_p7_linear_pattern_uses_sketch_construction_axis(self) -> None:
         result = self.run_recompute("linear-pattern-pad-sketch-axis", "p7")
