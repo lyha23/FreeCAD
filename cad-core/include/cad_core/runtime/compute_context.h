@@ -1,6 +1,8 @@
 #pragma once
 
+#include "cad_core/document/model.h"
 #include "cad_core/runtime/diagnostics.h"
+#include "cad_core/topo/named_shape.h"
 
 #include <TopoDS_Shape.hxx>
 #include <gp_Trsf.hxx>
@@ -15,15 +17,24 @@ namespace cad_core::runtime {
 
 struct ShapeValue {
     enum class Kind {
+        Sketch,
         Profile,
         Solid,
         DatumPlane,
         DatumLine,
         DatumPoint,
+        DatumCoordinateSystem,
     };
 
     Kind kind;
     TopoDS_Shape shape;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::buildShape(),
+    // sets the raw sketch "Shape" separately from PartDesign's later profile face construction.
+    // cad-core keeps the raw sketch shape in shape and the PartDesign-ready closed face here.
+    std::optional<TopoDS_Shape> profileShape;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::buildInternals(),
+    // writes "InternalShape" from FaceMakerBuildFace and WireJoiner open-wire results.
+    std::optional<TopoDS_Shape> internalShape;
 };
 
 struct AddSubShape {
@@ -38,8 +49,11 @@ struct ComputeContext {
     std::map<std::string, nlohmann::json> objects;
     std::map<std::string, nlohmann::json> mesh;
     std::map<std::string, nlohmann::json> subshapes;
+    std::map<std::string, topo::NamedShape> namedShapes;
     std::map<std::string, std::vector<std::string>> dependencies;
+    std::map<std::string, const document::DocumentObject*> documentObjects;
     std::map<std::string, std::string> parentGroupByObject;
+    std::set<std::string> transformationTemplateObjects;
     std::map<std::string, gp_Trsf> globalPlacements;
     std::vector<std::string> executionOrder;
 };

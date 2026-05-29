@@ -1,0 +1,68 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPad",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [10, 0] },
+          { "kind": "LineSegment", "start": [10, 0], "end": [10, 5] },
+          { "kind": "LineSegment", "start": [10, 5], "end": [0, 5] },
+          { "kind": "LineSegment", "start": [0, 5], "end": [0, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPad",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 10,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Chamfer",
+      "ID": 3,
+      "TypeId": "PartDesign::Chamfer",
+      "Properties": {
+        "Base": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Pad",
+          "SubList": ["Edge1"]
+        },
+        "ChamferType": "Equal distance",
+        "Size": 0.5,
+        "UseAllEdges": false,
+        "FlipDirection": false
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 4,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["SketchPad", "Pad", "Chamfer"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Chamfer"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}

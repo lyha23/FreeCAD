@@ -1,0 +1,95 @@
+{
+  "Objects": [
+    {
+      "Name": "BaseSketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [10, 0] },
+          { "kind": "LineSegment", "start": [10, 0], "end": [10, 5] },
+          { "kind": "LineSegment", "start": [10, 5], "end": [0, 5] },
+          { "kind": "LineSegment", "start": [0, 5], "end": [0, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "BasePad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "BaseSketch",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 5,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Sketch",
+      "ID": 3,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [10, 0] },
+          { "kind": "LineSegment", "start": [10, 0], "end": [10, 5] },
+          { "kind": "LineSegment", "start": [10, 5], "end": [0, 5] },
+          { "kind": "LineSegment", "start": [0, 5], "end": [0, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 4,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Sketch",
+          "SubList": []
+        },
+        "Type": "UpToFace",
+        "UpToFace": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "BasePad",
+          "SubList": ["Face6"]
+        },
+        "Type2": "Length",
+        "Length2": 2,
+        "Reversed": false,
+        "SideType": "Two sides"
+      }
+    },
+    {
+      "Name": "ProbeSketch",
+      "ID": 5,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [1, 0] }
+        ],
+        "ExternalGeometry": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "value": [
+            {
+              "PropertyType": "App::PropertyLinkSub",
+              "value": "Pad",
+              "SubList": ["OldMultiPrismEdge"],
+              "StableSubList": ["Sketch.Edge1"]
+            }
+          ]
+        },
+        "Constraints": []
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["ProbeSketch"]
+  }
+}

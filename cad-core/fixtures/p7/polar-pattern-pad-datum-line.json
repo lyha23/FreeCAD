@@ -1,0 +1,78 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPad",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [2, 0], "end": [3, 0] },
+          { "kind": "LineSegment", "start": [3, 0], "end": [3, 1] },
+          { "kind": "LineSegment", "start": [3, 1], "end": [2, 1] },
+          { "kind": "LineSegment", "start": [2, 1], "end": [2, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPad",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 2,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "DatumLine",
+      "ID": 3,
+      "TypeId": "PartDesign::Line",
+      "Properties": {}
+    },
+    {
+      "Name": "PolarPattern",
+      "ID": 4,
+      "TypeId": "PartDesign::PolarPattern",
+      "Properties": {
+        "Originals": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["Pad"]
+        },
+        "Axis": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "DatumLine",
+          "SubList": []
+        },
+        "TransformMode": "Features",
+        "Mode": "Extent",
+        "Angle": 360,
+        "Occurrences": 4
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 5,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["SketchPad", "Pad", "DatumLine", "PolarPattern"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "PolarPattern"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}

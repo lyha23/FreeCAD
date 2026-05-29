@@ -17,7 +17,7 @@ P5 的目标是让 `Sketcher::SketchObject` 不再只是简单闭合 profile 生
 ## 当前问题
 
 - 当前 Sketch 已能服务 MVP/P2/P3a/P3b 的可成形 profile，并开始消费 FreeCAD 风格 `Coincident(Type=1)` 端点约束；`LineSegment`、`ArcOfCircle`、`ArcOfEllipse`、单个非 construction `Circle` 和单个非 construction `Ellipse` 已可参与 profile，完整几何矩阵和 solver 仍未迁移。
-- `ExternalGeometry` 已开始按 FreeCAD 的持久 LinkSubList / transient ExternalGeo 边界迁移；内部面、open wire 和 `InternalShape` 还没有完整迁移。
+- `ExternalGeometry` 已开始按 FreeCAD 的持久 LinkSubList / transient ExternalGeo 边界迁移；Sketch 原始 `Shape` 与 PartDesign 闭合 profile face 已拆开，open wire sketch 不再被直接当成 sketch 执行失败。闭合 sketch 已导出运行态 `InternalFaceN` / `InternalEdgeN` / `InternalVertexN`；最小双向 `internal_element_map` 已收敛到 `topo/element_map`，并允许其它 sketch 的 `ExternalGeometry` 引用 `InternalEdgeN` / `InternalVertexN`。FaceMakerBuildFace / WireJoiner 完整账本、复杂 `getInternalElementMap()` 和旧引用恢复还没有完整迁移。
 - FaceMaker / WireJoiner 的几何账本不能继续由 sketch executor 猜测。
 - 约束求解不应在这一阶段无边界扩成完整 GUI Sketcher；先保证 CAD Core recompute 需要的 solver-facing 状态。
 
@@ -25,10 +25,12 @@ P5 的目标是让 `Sketcher::SketchObject` 不再只是简单闭合 profile 生
 
 - `Sketcher::SketchObject` 已支持 `LineSegment`、`ArcOfCircle`、`ArcOfEllipse` 组成的闭合 profile，以及单个非 construction `Circle` / `Ellipse` profile；bspline 等未迁移几何仍返回 `unsupported_geometry`。
 - `construction=true` 的 line / arc / circle / ellipse 不参与 profile 构面；当前只作为输入表达保留，未进入内部元素账本。
+- Sketch executor 已对齐 FreeCAD `SketchObject::buildShape()` 的关键边界：非 construction 几何先形成 raw sketch `Shape`，闭合 profile face 作为 PartDesign `ProfileBased` 的可选运行态结果单独保存。open wire sketch 当前 `status=ok`、`profile_ready=false`、保留 raw `EdgeN` subshape，依赖它的 Pad / Pocket 通过 `open_profile` diagnostics 失败，不把原始边丢掉也不伪造闭合 face。
+- closed profile 的 `InternalShape` 当前作为运行态辅助结果导出 `InternalFaceN` / `InternalEdgeN` / `InternalVertexN`，并通过 `topo/element_map` 输出 `InternalEdgeN <-> EdgeN`、`InternalVertexN <-> VertexN` 形式的最小 `internal_element_map`。解析时只在目标是 Sketch 且 subname 带 `Internal` 前缀时转到 `internalShape`，避免把普通 solid 的 `InternalFace1` 错当成 `Face1`。
 - `ExternalGeometry` 已允许 `App::PropertyLinkSubList` 输入，当前 runtime 支持 DatumLine 或 `EdgeN` straight-line edge 投影成 transient construction line，支持 circle `EdgeN` 按 FreeCAD 平行 / 垂直 / 一般倾斜语义投影成 transient construction circle / line / ellipse，支持完整 ellipse `EdgeN` 按平行 / 倾斜语义投影成 transient construction ellipse 或退化 construction line，也支持 DatumPoint 或 `VertexN` 投影成 transient construction point，并记录 `external_geometry_count` / `external_point_count` / `external_curve_count`；face / 非平行 circle 或 ellipse arc edge / defining external profile 仍返回 diagnostics 或保留为后续任务。
 - `Constraints` 已允许保存 FreeCAD 风格字段 `Type` / `First` / `FirstPos` / `Second` / `SecondPos`，当前 runtime 只消费 `Coincident` / `Type=1`，并只合并 line endpoint。其它 constraint 返回 `unsupported_property`，避免悄悄做不完整求解。
 - line/arc profile 构造已从“输入顺序必须天然首尾相接”推进到“先合并 Coincident 端点，再按端点连通性寻找闭合 wire”；circle / ellipse profile 走 OCCT 单闭合 wire。这仍不是完整 planegcs，只是 CAD Core 当前需要的 solver-facing 子集。
-- `fixtures/p5` 已覆盖 Coincident 端点合并生成 Pad profile、ArcOfCircle profile、ArcOfEllipse profile、Circle profile、Ellipse profile、construction geometry ignored、external DatumLine edge projection、external DatumPoint vertex projection、external circle edge 的平行 / 垂直 / 倾斜投影、external ellipse edge 的平行 / 倾斜投影、missing external target、unsupported external face subshape、unsupported BSpline geometry、unsupported constraint diagnostics；当前 `python3 -m unittest tests/test_mvp.py` 为 45 tests OK。
+- `fixtures/p5` 已覆盖 Coincident 端点合并生成 Pad profile、ArcOfCircle profile、ArcOfEllipse profile、Circle profile、Ellipse profile、construction geometry ignored、open wire raw shape / no profile face、closed sketch internal subshape export、closed sketch `internal_element_map`、external sketch `InternalEdgeN` / `InternalVertexN` projection、external DatumLine edge projection、external DatumPoint vertex projection、external circle edge 的平行 / 垂直 / 倾斜投影、external ellipse edge 的平行 / 倾斜投影、missing external target、unsupported external face subshape、unsupported BSpline geometry、unsupported constraint diagnostics；当前 `python3 -m unittest tests/test_mvp.py` 为 53 tests OK。
 
 ## Step 36：草图几何矩阵
 
@@ -126,6 +128,12 @@ fixtures/p5/
   sketch-open-wire-internal-empty.json
   sketch-external-internal-edge.json
 ```
+
+当前已新增 `sketch-open-wire-internal-empty.json` 约束 raw sketch shape / closed profile face 分离：open wire sketch 自身成功、raw `EdgeN` 保留、`profile_ready=false`，但完整 `InternalFaceN` / `InternalEdgeN` / `InternalVertexN` 和 WireJoiner open-wire history 仍需继续迁移。
+
+当前已新增 `sketch-internal-face.json` 和 `sketch-external-internal-edge.json` 约束 closed sketch 的运行态内部元素导出与 `ExternalGeometry` 对 `InternalEdgeN` 的解析；这还不是完整 `getInternalElementMap()`，旧引用恢复和 history 传播仍归 P6。
+
+当前已在 `sketch-internal-face.json` 中约束最小 `internal_element_map`，并新增 `sketch-external-internal-vertex.json` 约束 `ExternalGeometry` 对 `InternalVertexN` 的解析；映射生成逻辑已从 `sketch_object.cpp` 下沉到 `topo/element_map`。复杂 split / open-wire / history 场景仍等待 FaceMaker / WireJoiner / P6 topo naming 主路径。
 
 ## 完成定义
 

@@ -1,0 +1,35 @@
+{
+  "Objects": [
+    {
+      "Name": "Part",
+      "ID": 1,
+      "TypeId": "App::Part",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [10, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        },
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["Origin"]
+        }
+      }
+    },
+    {
+      "Name": "Origin",
+      "ID": 2,
+      "TypeId": "App::Origin",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [99, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Origin"]
+  }
+}

@@ -88,6 +88,12 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         for actual_value, expected_value in zip(actual["max"], expected_max):
             self.assertAlmostEqual(actual_value, expected_value, delta=1e-6)
 
+    def assert_bbox_close_delta(self, actual: dict, expected_min: list[float], expected_max: list[float], delta: float) -> None:
+        for actual_value, expected_value in zip(actual["min"], expected_min):
+            self.assertAlmostEqual(actual_value, expected_value, delta=delta)
+        for actual_value, expected_value in zip(actual["max"], expected_max):
+            self.assertAlmostEqual(actual_value, expected_value, delta=delta)
+
     def expected_freecad(self, group: str, fixture: str) -> dict:
         return json.loads((ROOT / "fixtures" / group / "expected" / f"{fixture}.freecad.json").read_text())
 
@@ -161,6 +167,8 @@ class CadCoreOcctMvpTest(unittest.TestCase):
             "pad-two-sides-up-to-face2": [],
             "pad-two-sides-up-to-shape1": [],
             "pad-two-sides-up-to-shape2": [],
+            "pad-up-to-first": [],
+            "pad-up-to-last": [],
             "pocket-two-sides-length": [],
             "pad-symmetric-length": [],
             "pad-symmetric-taper": [],
@@ -221,16 +229,82 @@ class CadCoreOcctMvpTest(unittest.TestCase):
             "sketch-external-edge": [],
             "sketch-external-ellipse-edge": [],
             "sketch-external-face-unsupported": ["unsupported_subshape_kind"],
+            "sketch-external-internal-edge": [],
+            "sketch-external-internal-vertex": [],
             "sketch-external-tilted-ellipse-edge": [],
             "sketch-external-tilted-circle-edge": [],
             "sketch-external-vertex": [],
+            "sketch-internal-face": [],
             "sketch-missing-external": ["missing_link_target"],
+            "sketch-open-wire-internal-empty": [],
             "sketch-unsupported-bspline": ["unsupported_geometry"],
             "sketch-unsupported-constraint": ["unsupported_property"],
         }
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):
                 self.assertEqual(self.diagnostic_codes(fixture, "p5"), codes)
+
+    def test_p6_fixture_diagnostics(self) -> None:
+        expected = {
+            "body-additive-fuse-history": [],
+            "body-boolean-history": [],
+            "body-split-history": [],
+            "named-shape-indexed-pad": [],
+            "sketch-external-edge-stable-body-deleted": ["deleted_stable_subname"],
+            "sketch-external-edge-stable-body-preserved": [],
+            "sketch-external-edge-stable-body-profile-source": [],
+            "sketch-external-edge-stable-body-split": ["split_stable_subname"],
+            "sketch-external-edge-stable-indexed-opaque-sublist": [],
+            "sketch-external-edge-stable-multi-prism": [],
+            "sketch-external-edge-stable-taper-preserved": [],
+            "up-to-face-stable-body-deleted": ["deleted_stable_subname"],
+            "up-to-face-stable-body-history": [],
+            "up-to-face-stable-body-preserved": [],
+            "up-to-face-stable-body-split": ["split_stable_subname"],
+            "up-to-face-stable-indexed-opaque-sublist": [],
+            "up-to-face-stable-indexed-reference": [],
+            "up-to-face-stable-subname-known-gap": ["unsupported_stable_subname"],
+        }
+        for fixture, codes in expected.items():
+            with self.subTest(fixture=fixture):
+                self.assertEqual(self.diagnostic_codes(fixture, "p6"), codes)
+
+    def test_p7_fixture_diagnostics(self) -> None:
+        expected = {
+            "datum-coordinate-system-invalid-axis": ["unsupported_subshape_kind"],
+            "datum-coordinate-system-reference-axis": [],
+            "datum-coordinate-system-sketch-support": [],
+            "chamfer-invalid-size": ["invalid_length"],
+            "chamfer-pad-edge": [],
+            "fillet-missing-edge": ["invalid_subshape"],
+            "fillet-pad-edge": [],
+            "hole-blind-depth": [],
+            "hole-threaded-known-gap": ["unsupported_property"],
+            "hole-through-all": [],
+            "hole-without-base": ["execution_failed"],
+            "linear-pattern-custom-spacings": [],
+            "linear-pattern-pad-datum-line": [],
+            "linear-pattern-pad-two-directions": [],
+            "linear-pattern-spacing-pattern": [],
+            "mirrored-pad-datum-plane": [],
+            "mirrored-whole-shape-known-gap": ["unsupported_property"],
+            "multi-transform-linear-mirror": [],
+            "multi-transform-scaled-diagonal": [],
+            "multi-transform-scaled-divisor-known-gap": ["invalid_length"],
+            "multi-transform-whole-shape-known-gap": ["unsupported_property"],
+            "origin-identity-placement": [],
+            "pad-refine-false": [],
+            "pad-refine-true-known-gap": ["unsupported_property"],
+            "polar-pattern-pad-datum-line": [],
+            "polar-pattern-spacing-pattern": [],
+            "polar-pattern-whole-shape-known-gap": ["unsupported_property"],
+            "scaled-invalid-factor": ["invalid_length"],
+            "scaled-pad-factor-two": [],
+            "scaled-whole-shape-known-gap": ["unsupported_property"],
+        }
+        for fixture, codes in expected.items():
+            with self.subTest(fixture=fixture):
+                self.assertEqual(self.diagnostic_codes(fixture, "p7"), codes)
 
     def test_diagnostics_include_stage_target_and_subname_metadata(self) -> None:
         missing_target = self.run_recompute("missing-link-target", "p4")["diagnostics"][0]
@@ -398,6 +472,19 @@ class CadCoreOcctMvpTest(unittest.TestCase):
                 self.assertEqual(pad["method"], "Two sides")
                 self.assert_object_matches_expected(result, "p3b", fixture)
 
+    def test_p3b_up_to_first_last_selects_nearest_or_furthest_body_face(self) -> None:
+        first = self.run_recompute("pad-up-to-first", "p3b")
+        last = self.run_recompute("pad-up-to-last", "p3b")
+
+        self.assertEqual(first["diagnostics"], [])
+        self.assertEqual(last["diagnostics"], [])
+        self.assertEqual(first["objects"]["Pad"]["method"], "UpToFirst")
+        self.assertEqual(last["objects"]["Pad"]["method"], "UpToLast")
+        self.assert_bbox_close(first["objects"]["Pad"]["bbox"], [0.0, 0.0, -2.0], [10.0, 5.0, 0.0])
+        self.assert_bbox_close(last["objects"]["Pad"]["bbox"], [0.0, 0.0, -2.0], [10.0, 5.0, 10.0])
+        self.assertAlmostEqual(first["objects"]["Pad"]["volume"], 100.0, delta=1e-6)
+        self.assertAlmostEqual(last["objects"]["Pad"]["volume"], 600.0, delta=1e-6)
+
     def test_p3b_pocket_two_sides_length_cuts_body(self) -> None:
         result = self.run_recompute("pocket-two-sides-length", "p3b")
         pocket = result["objects"]["Pocket"]
@@ -436,6 +523,7 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assertEqual(ffi_result["objects"], cli_result["objects"])
         self.assertEqual(ffi_result["mesh"], cli_result["mesh"])
         self.assertEqual(ffi_result["subshapes"], cli_result["subshapes"])
+        self.assertEqual(ffi_result["named_shapes"], cli_result["named_shapes"])
 
     def test_p3b_reference_axis_uses_sketch_normal_axis(self) -> None:
         for fixture in ["pad-reference-axis", "pad-reference-axis-edge"]:
@@ -733,6 +821,621 @@ class CadCoreOcctMvpTest(unittest.TestCase):
                 self.assertEqual(sketch["external_point_count"], 0)
                 self.assert_bbox_close(pad["bbox"], [0.0, 0.0, 0.0], [10.0, 5.0, 4.0])
                 self.assertAlmostEqual(pad["volume"], 200.0)
+
+    def test_p5_closed_sketch_exports_internal_subshapes(self) -> None:
+        result = self.run_recompute("sketch-internal-face", "p5")
+        sketch = result["objects"]["Sketch"]
+        subshape_map = result["subshapes"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertTrue(sketch["profile_ready"])
+        self.assertEqual(sketch["internal_shape"], "occt_internal_shape")
+        self.assertEqual(sketch["internal_face_count"], 1)
+        self.assertEqual(sketch["internal_edge_count"], 4)
+        self.assertEqual(sketch["internal_vertex_count"], 4)
+        self.assertIn("InternalFace1", subshape_map)
+        self.assertIn("InternalEdge1", subshape_map)
+        self.assertIn("InternalVertex1", subshape_map)
+        self.assertEqual(sketch["internal_element_map"]["InternalEdge1"], "Edge1")
+        self.assertEqual(sketch["internal_element_map"]["Edge1"], "InternalEdge1")
+        self.assertEqual(sketch["internal_element_map"]["InternalVertex1"], "Vertex1")
+        self.assertEqual(sketch["internal_element_map"]["Vertex1"], "InternalVertex1")
+
+    def test_p5_external_geometry_resolves_internal_edge(self) -> None:
+        result = self.run_recompute("sketch-external-internal-edge", "p5")
+        sketch = result["objects"]["Sketch"]
+        base_sketch = result["objects"]["BaseSketch"]
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(base_sketch["internal_edge_count"], 4)
+        self.assertEqual(sketch["external_geometry_count"], 1)
+        self.assertEqual(sketch["external_curve_count"], 0)
+        self.assertEqual(sketch["external_point_count"], 0)
+        self.assert_bbox_close(pad["bbox"], [0.0, 0.0, 0.0], [6.0, 3.0, 2.0])
+        self.assertAlmostEqual(pad["volume"], 36.0)
+
+        result = self.run_recompute("sketch-external-internal-vertex", "p5")
+        sketch = result["objects"]["Sketch"]
+        base_sketch = result["objects"]["BaseSketch"]
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(base_sketch["internal_vertex_count"], 4)
+        self.assertEqual(sketch["external_geometry_count"], 1)
+        self.assertEqual(sketch["external_curve_count"], 0)
+        self.assertEqual(sketch["external_point_count"], 1)
+        self.assert_bbox_close(pad["bbox"], [0.0, 0.0, 0.0], [6.0, 3.0, 2.0])
+        self.assertAlmostEqual(pad["volume"], 36.0)
+
+    def test_p5_open_sketch_keeps_raw_shape_without_profile_face(self) -> None:
+        result = self.run_recompute("sketch-open-wire-internal-empty", "p5")
+        sketch = result["objects"]["Sketch"]
+        subshape_map = result["subshapes"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["shape"], "occt_sketch_shape")
+        self.assertEqual(sketch["profile"], "none")
+        self.assertFalse(sketch["profile_ready"])
+        self.assertEqual(sketch["raw_edge_count"], 3)
+        self.assertEqual(sketch["internal_shape"], "none")
+        self.assertEqual(sketch["internal_element_map"], {})
+        self.assertEqual(sum(key.startswith("Edge") for key in subshape_map), 3)
+
+    def test_p6_named_shape_exports_indexed_element_ledger(self) -> None:
+        result = self.run_recompute("named-shape-indexed-pad", "p6")
+        named_shape = result["named_shapes"]["Pad"]
+        elements = named_shape["elements"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(named_shape["owner"], "Pad")
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertEqual(named_shape["element_map"]["Face1"], "Face1")
+        self.assertEqual(elements[named_shape["element_map"]["Sketch.Edge1"]]["kind"], "edge")
+        self.assertEqual(elements[named_shape["element_map"]["Sketch.Vertex1"]]["kind"], "vertex")
+        self.assertIn("Face1", elements)
+        self.assertIn("Edge1", elements)
+        self.assertIn("Vertex1", elements)
+        self.assertEqual(elements["Face1"]["kind"], "face")
+        self.assertEqual(elements["Face1"]["status"], "generated")
+        self.assertEqual(set(elements), set(result["subshapes"]["Pad"]))
+        generated_sources = {
+            source
+            for item in named_shape["history"]
+            if item["kind"] == "generated"
+            for source in item["sources"]
+        }
+        self.assertIn("Sketch.Edge1", generated_sources)
+        self.assertIn("Sketch.Vertex1", generated_sources)
+
+    def test_p6_two_side_and_symmetric_fast_prisms_keep_profile_history(self) -> None:
+        for fixture, owner, source in [
+            ("pad-two-sides-length", "Pad", "Sketch"),
+            ("pad-symmetric-length", "Pad", "Sketch"),
+            ("pocket-two-sides-length", "Pocket", "SketchPocket"),
+            ("pocket-symmetric-length", "Pocket", "SketchPocket"),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p3b")
+                named_shape = result["named_shapes"][owner]
+                elements = named_shape["elements"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(named_shape["element_map_status"], "history_partial")
+                self.assertEqual(elements[named_shape["element_map"][f"{source}.Edge1"]]["kind"], "edge")
+                self.assertEqual(elements[named_shape["element_map"][f"{source}.Vertex1"]]["kind"], "vertex")
+                self.assertEqual(elements[named_shape["element_map"][f"{source}.Face1"]]["kind"], "face")
+
+    def test_p6_multi_prism_xor_propagates_profile_history(self) -> None:
+        for fixture in [
+            "pad-two-sides-up-to-face1",
+            "pad-two-sides-up-to-shape1",
+            "pad-two-sides-up-to-face2",
+            "pad-two-sides-up-to-shape2",
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p3b")
+                named_shape = result["named_shapes"]["Pad"]
+                elements = named_shape["elements"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(named_shape["element_map_status"], "history_partial")
+                self.assertTrue(any(key.startswith("Pad.XorUnion1.") for key in named_shape["element_map"]))
+                self.assertEqual(elements[named_shape["element_map"]["Sketch.Edge1"]]["kind"], "edge")
+                self.assertEqual(elements[named_shape["element_map"]["Sketch.Vertex1"]]["kind"], "vertex")
+
+    def test_p6_taper_preserved_sources_are_partial_history(self) -> None:
+        for fixture, owner, source in [
+            ("pad-length-taper", "Pad", "Sketch"),
+            ("pad-two-sides-taper", "Pad", "Sketch"),
+            ("pad-symmetric-taper", "Pad", "Sketch"),
+            ("pocket-length-taper", "Pocket", "SketchPocket"),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p3b")
+                named_shape = result["named_shapes"][owner]
+                elements = named_shape["elements"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(result["objects"][owner]["topo_naming"], "known_gap:taper_history")
+                self.assertEqual(named_shape["element_map_status"], "history_partial")
+                self.assertEqual(elements[named_shape["element_map"][f"{source}.Edge1"]]["kind"], "edge")
+                self.assertEqual(elements[named_shape["element_map"][f"{source}.Vertex1"]]["kind"], "vertex")
+
+    def test_p6_body_boolean_named_shape_records_maker_history(self) -> None:
+        for fixture, required_sources in {
+            "body-additive-fuse-history": ("BaseFeature.", "Pad."),
+            "body-boolean-history": ("Pad.", "Pocket."),
+        }.items():
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p6")
+                named_shape = result["named_shapes"]["Body"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(named_shape["owner"], "Body")
+                self.assertEqual(named_shape["element_map_status"], "history_partial")
+                self.assertEqual(named_shape["element_map"]["Face1"], "Face1")
+                non_indexed_sources = {
+                    source
+                    for item in named_shape["history"]
+                    if item["kind"] != "indexed"
+                    for source in item["sources"]
+                }
+                for required_source in required_sources:
+                    self.assertTrue(any(source.startswith(required_source) for source in non_indexed_sources))
+                self.assertTrue(any(key.startswith(required_sources[0]) for key in named_shape["element_map"]))
+                self.assertTrue(any(key.startswith(required_sources[1]) for key in named_shape["element_map"]))
+
+    def test_p6_body_boolean_propagates_nested_element_map_aliases(self) -> None:
+        result = self.run_recompute("sketch-external-edge-stable-body-profile-source", "p6")
+        named_shape = result["named_shapes"]["Body"]
+        sketch = result["objects"]["ProbeSketch"]
+        elements = named_shape["elements"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertEqual(elements[named_shape["element_map"]["SketchPad.Edge1"]]["kind"], "edge")
+        self.assertEqual(sketch["external_geometry_count"], 1)
+        self.assertEqual(sketch["external_curve_count"], 0)
+        self.assertEqual(sketch["external_point_count"], 0)
+
+    def test_p6_body_split_history_does_not_guess_element_map(self) -> None:
+        result = self.run_recompute("body-split-history", "p6")
+        named_shape = result["named_shapes"]["Body"]
+        split_entries = [item for item in named_shape["history"] if item["kind"] == "split"]
+        split_sources = {source for item in split_entries for source in item["sources"]}
+        deleted_elements = {item["element"] for item in named_shape["history"] if item["kind"] == "deleted"}
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertEqual(named_shape["element_map"]["Pad.Face1"], "Face1")
+        self.assertEqual(named_shape["element_map"]["Pad.Edge1"], "Edge1")
+        self.assertEqual(named_shape["element_map"]["Pad.Vertex1"], "Vertex1")
+        self.assertIn("Pad.Face5", split_sources)
+        self.assertNotIn("Pad.Face5", named_shape["element_map"])
+        self.assertTrue(any(element["status"] == "split" for element in named_shape["elements"].values()))
+        self.assertIn("Pocket.Face5", deleted_elements)
+        self.assertNotIn("Pocket.Face5", named_shape["element_map"])
+
+    def test_p6_stable_subname_history_diagnostics(self) -> None:
+        for fixture, code, object_name, property_name, stable_subname in [
+            ("up-to-face-stable-body-split", "split_stable_subname", "ProbePad", "UpToFace", "Pad.Face5"),
+            ("up-to-face-stable-body-deleted", "deleted_stable_subname", "ProbePad", "UpToFace", "Pocket.Face5"),
+            ("sketch-external-edge-stable-body-split", "split_stable_subname", "ProbeSketch", "ExternalGeometry", "Pocket.Edge1"),
+            ("sketch-external-edge-stable-body-deleted", "deleted_stable_subname", "ProbeSketch", "ExternalGeometry", "Pocket.Edge11"),
+        ]:
+            with self.subTest(fixture=fixture):
+                diagnostic = self.run_recompute(fixture, "p6")["diagnostics"][0]
+
+                self.assertEqual(diagnostic["code"], code)
+                self.assertEqual(diagnostic["object"], object_name)
+                self.assertEqual(diagnostic["property"], property_name)
+                self.assertEqual(diagnostic["target"], "Body")
+                self.assertEqual(diagnostic["subname"], stable_subname)
+
+    def test_p6_up_to_face_uses_element_map_before_stale_sublist(self) -> None:
+        for fixture in [
+            "up-to-face-stable-indexed-reference",
+            "up-to-face-stable-indexed-opaque-sublist",
+            "up-to-face-stable-body-history",
+            "up-to-face-stable-body-preserved",
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p6")
+                feature = result["objects"].get("ProbePad", result["objects"].get("Pocket"))
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(feature["status"], "ok")
+                self.assertEqual(feature["method"], "UpToFace")
+
+    def test_p6_external_geometry_link_sub_list_uses_element_map(self) -> None:
+        result = self.run_recompute("sketch-external-edge-stable-indexed-opaque-sublist", "p6")
+        sketch = result["objects"]["Sketch"]
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["external_geometry_count"], 1)
+        self.assertEqual(sketch["external_curve_count"], 0)
+        self.assertEqual(sketch["external_point_count"], 0)
+        self.assertEqual(pad["status"], "ok")
+
+        for fixture in [
+            "sketch-external-edge-stable-body-preserved",
+            "sketch-external-edge-stable-body-profile-source",
+            "sketch-external-edge-stable-multi-prism",
+            "sketch-external-edge-stable-taper-preserved",
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p6")
+                sketch = result["objects"]["ProbeSketch"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(sketch["external_geometry_count"], 1)
+                self.assertEqual(sketch["external_curve_count"], 0)
+                self.assertEqual(sketch["external_point_count"], 0)
+
+    def test_p7_refine_false_is_feature_refine_noop(self) -> None:
+        result = self.run_recompute("pad-refine-false", "p7")
+        pad = result["objects"]["Pad"]
+        expected = self.expected_freecad("mvp", "rect-pad")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pad["status"], "ok")
+        self.assertNotIn("topo_naming", pad)
+        self.assert_bbox_close(pad["bbox"], expected["bbox"]["min"], expected["bbox"]["max"])
+        self.assertAlmostEqual(pad["volume"], expected["volume"])
+        self.assert_topology_counts(result["subshapes"]["Pad"], expected)
+
+    def test_p7_refine_true_reports_refinemodel_gap(self) -> None:
+        result = self.run_recompute("pad-refine-true-known-gap", "p7")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual(diagnostic["code"], "unsupported_property")
+        self.assertEqual(diagnostic["object"], "Pad")
+        self.assertEqual(diagnostic["property"], "Refine")
+        self.assertIn("BRepBuilderAPI_RefineModel", diagnostic["message"])
+
+    def test_p7_coordinate_system_exposes_axes_for_reference_axis(self) -> None:
+        result = self.run_recompute("datum-coordinate-system-reference-axis", "p7")
+        coordinate_system = result["objects"]["CoordinateSystem"]
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(coordinate_system["datum"], "coordinate_system")
+        self.assertAlmostEqual(coordinate_system["z_axis"][0], 0.7071067811865476)
+        self.assertAlmostEqual(coordinate_system["z_axis"][2], 0.7071067811865475)
+        self.assertEqual(pad["method"], "Length")
+        self.assert_bbox_close(pad["bbox"], [0.0, 0.0, 0.0], [16.0, 5.0, 6.0])
+        self.assertAlmostEqual(pad["volume"], 300.0, delta=1e-6)
+
+    def test_p7_coordinate_system_can_place_sketch_support(self) -> None:
+        result = self.run_recompute("datum-coordinate-system-sketch-support", "p7")
+        coordinate_system = result["objects"]["CoordinateSystem"]
+        body = result["objects"]["Body"]
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(coordinate_system["origin"], [0.0, 0.0, 2.0])
+        self.assertEqual(pad["bbox"], body["bbox"])
+        self.assert_bbox_close(body["bbox"], [0.0, 0.0, 2.0], [10.0, 5.0, 7.0])
+        self.assertAlmostEqual(body["volume"], 250.0, delta=1e-6)
+
+    def test_p7_origin_ignores_local_placement_but_keeps_parent_group_placement(self) -> None:
+        result = self.run_recompute("origin-identity-placement", "p7")
+        origin = result["objects"]["Origin"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(origin["datum"], "origin")
+        self.assertEqual(origin["origin"], [10.0, 0.0, 0.0])
+        self.assertEqual(origin["x_axis"], [1.0, 0.0, 0.0])
+
+    def test_p7_hole_blind_depth_cuts_body(self) -> None:
+        result = self.run_recompute("hole-blind-depth", "p7")
+        hole = result["objects"]["Hole"]
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(hole["status"], "ok")
+        self.assertEqual(hole["method"], "Dimension")
+        self.assertEqual(hole["add_sub"], "sub")
+        self.assert_bbox_close_delta(hole["bbox"], [4.0, 1.5, 6.0], [6.0, 3.5, 10.0], 1e-2)
+        self.assert_bbox_close_delta(body["bbox"], [0.0, 0.0, 0.0], [10.0, 5.0, 10.0], 1e-2)
+        self.assertAlmostEqual(body["volume"], 487.4336293856408, delta=1e-6)
+
+    def test_p7_hole_through_all_cuts_body(self) -> None:
+        result = self.run_recompute("hole-through-all", "p7")
+        hole = result["objects"]["Hole"]
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(hole["method"], "ThroughAll")
+        self.assertGreater(hole["depth"], 10.0)
+        self.assert_bbox_close_delta(body["bbox"], [0.0, 0.0, 0.0], [10.0, 5.0, 10.0], 1e-2)
+        self.assertAlmostEqual(body["volume"], 468.58407346410206, delta=1e-6)
+
+    def test_p7_hole_without_base_and_threaded_gaps_are_explicit(self) -> None:
+        result = self.run_recompute("hole-without-base", "p7")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual(diagnostic["code"], "execution_failed")
+        self.assertEqual(diagnostic["object"], "Hole")
+        self.assertEqual(diagnostic["property"], "Profile")
+
+        result = self.run_recompute("hole-threaded-known-gap", "p7")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual(diagnostic["code"], "unsupported_property")
+        self.assertEqual(diagnostic["object"], "Hole")
+        self.assertEqual(diagnostic["property"], "Threaded")
+        self.assertIn("Hole::makeThread", diagnostic["message"])
+
+    def test_p7_fillet_replaces_body_tip_shape(self) -> None:
+        result = self.run_recompute("fillet-pad-edge", "p7")
+        fillet = result["objects"]["Fillet"]
+        body = result["objects"]["Body"]
+        named_shape = result["named_shapes"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(fillet["status"], "ok")
+        self.assertEqual(fillet["dress_up"], "fillet")
+        self.assertEqual(fillet["body_mode"], "replace")
+        self.assertEqual(body["tip"], "Fillet")
+        self.assertEqual(body["bbox"], fillet["bbox"])
+        self.assertAlmostEqual(body["volume"], 499.4634954084936, delta=1e-6)
+        self.assertAlmostEqual(fillet["volume"], body["volume"], delta=1e-6)
+        self.assertLess(body["volume"], 500.0)
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertTrue(any(key.startswith("Pad.") for key in named_shape["element_map"]))
+
+    def test_p7_chamfer_replaces_body_tip_shape(self) -> None:
+        result = self.run_recompute("chamfer-pad-edge", "p7")
+        chamfer = result["objects"]["Chamfer"]
+        body = result["objects"]["Body"]
+        named_shape = result["named_shapes"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(chamfer["status"], "ok")
+        self.assertEqual(chamfer["dress_up"], "chamfer")
+        self.assertEqual(chamfer["body_mode"], "replace")
+        self.assertEqual(body["tip"], "Chamfer")
+        self.assert_bbox_close(body["bbox"], [0.0, 0.0, 0.0], [10.0, 5.0, 10.0])
+        self.assertAlmostEqual(body["volume"], 498.75, delta=1e-6)
+        self.assertAlmostEqual(chamfer["volume"], body["volume"], delta=1e-6)
+        self.assertLess(body["volume"], 500.0)
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertTrue(any(key.startswith("Pad.") for key in named_shape["element_map"]))
+
+    def test_p7_dressup_base_diagnostics_are_structured(self) -> None:
+        result = self.run_recompute("fillet-missing-edge", "p7")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual(diagnostic["code"], "invalid_subshape")
+        self.assertEqual(diagnostic["object"], "Fillet")
+        self.assertEqual(diagnostic["property"], "Base")
+        self.assertEqual(diagnostic["target"], "Pad")
+        self.assertEqual(diagnostic["subname"], "Edge99")
+
+        result = self.run_recompute("chamfer-invalid-size", "p7")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual(diagnostic["code"], "invalid_length")
+        self.assertEqual(diagnostic["object"], "Chamfer")
+        self.assertEqual(diagnostic["property"], "Size")
+
+    def test_p7_mirrored_features_mode_fuses_transformed_additive_original(self) -> None:
+        result = self.run_recompute("mirrored-pad-datum-plane", "p7")
+        mirrored = result["objects"]["Mirrored"]
+        body = result["objects"]["Body"]
+        named_shape = result["named_shapes"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(mirrored["status"], "ok")
+        self.assertEqual(mirrored["transformed"], "mirrored")
+        self.assertEqual(mirrored["transform_mode"], "Features")
+        self.assertEqual(mirrored["originals"], ["Pad"])
+        self.assertEqual(mirrored["body_mode"], "replace")
+        self.assertEqual(body["tip"], "Mirrored")
+        self.assert_bbox_close(body["bbox"], [0.0, 0.0, 0.0], [4.0, 2.0, 2.0])
+        self.assertAlmostEqual(body["volume"], 16.0, delta=1e-6)
+        self.assertAlmostEqual(mirrored["volume"], body["volume"], delta=1e-6)
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertTrue(any(key.startswith("Pad.") for key in named_shape["element_map"]))
+        self.assertTrue(any(key.startswith("SketchPad.") for key in named_shape["element_map"]))
+
+    def test_p7_mirrored_whole_shape_gap_is_explicit(self) -> None:
+        result = self.run_recompute("mirrored-whole-shape-known-gap", "p7")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual(diagnostic["code"], "unsupported_property")
+        self.assertEqual(diagnostic["object"], "Mirrored")
+        self.assertEqual(diagnostic["property"], "TransformMode")
+        self.assertIn("WholeShape", diagnostic["message"])
+
+    def test_p7_linear_pattern_features_mode_fuses_additive_originals_by_extent(self) -> None:
+        result = self.run_recompute("linear-pattern-pad-datum-line", "p7")
+        pattern = result["objects"]["LinearPattern"]
+        body = result["objects"]["Body"]
+        named_shape = result["named_shapes"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pattern["status"], "ok")
+        self.assertEqual(pattern["transformed"], "linear_pattern")
+        self.assertEqual(pattern["transform_mode"], "Features")
+        self.assertEqual(pattern["originals"], ["Pad"])
+        self.assertEqual(pattern["body_mode"], "replace")
+        self.assertEqual(body["tip"], "LinearPattern")
+        self.assert_bbox_close(body["bbox"], [0.0, 0.0, 0.0], [6.0, 2.0, 2.0])
+        self.assertAlmostEqual(body["volume"], 24.0, delta=1e-6)
+        self.assertAlmostEqual(pattern["volume"], body["volume"], delta=1e-6)
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertTrue(any(key.startswith("Pad.") for key in named_shape["element_map"]))
+
+    def test_p7_linear_pattern_combines_two_directions(self) -> None:
+        result = self.run_recompute("linear-pattern-pad-two-directions", "p7")
+        pattern = result["objects"]["LinearPattern"]
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pattern["status"], "ok")
+        self.assertEqual(pattern["transformed"], "linear_pattern")
+        self.assertEqual(pattern["transform_mode"], "Features")
+        self.assertEqual(body["tip"], "LinearPattern")
+        self.assert_bbox_close(body["bbox"], [0.0, 0.0, 0.0], [6.0, 5.0, 2.0])
+        self.assertAlmostEqual(body["volume"], 48.0, delta=1e-6)
+        self.assertAlmostEqual(pattern["volume"], body["volume"], delta=1e-6)
+
+    def test_p7_linear_pattern_custom_spacing_list_controls_steps(self) -> None:
+        result = self.run_recompute("linear-pattern-custom-spacings", "p7")
+        pattern = result["objects"]["LinearPattern"]
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pattern["status"], "ok")
+        self.assertEqual(body["tip"], "LinearPattern")
+        self.assert_bbox_close(body["bbox"], [0.0, 0.0, 0.0], [9.0, 2.0, 2.0])
+        self.assertAlmostEqual(body["volume"], 24.0, delta=1e-6)
+
+    def test_p7_linear_pattern_spacing_pattern_controls_steps(self) -> None:
+        result = self.run_recompute("linear-pattern-spacing-pattern", "p7")
+        pattern = result["objects"]["LinearPattern"]
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pattern["status"], "ok")
+        self.assertEqual(body["tip"], "LinearPattern")
+        self.assert_bbox_close(body["bbox"], [0.0, 0.0, 0.0], [12.0, 2.0, 2.0])
+        self.assertAlmostEqual(body["volume"], 32.0, delta=1e-6)
+
+    def test_p7_polar_pattern_features_mode_rotates_additive_originals_by_extent(self) -> None:
+        result = self.run_recompute("polar-pattern-pad-datum-line", "p7")
+        pattern = result["objects"]["PolarPattern"]
+        body = result["objects"]["Body"]
+        named_shape = result["named_shapes"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pattern["status"], "ok")
+        self.assertEqual(pattern["transformed"], "polar_pattern")
+        self.assertEqual(pattern["transform_mode"], "Features")
+        self.assertEqual(pattern["originals"], ["Pad"])
+        self.assertEqual(pattern["body_mode"], "replace")
+        self.assertEqual(body["tip"], "PolarPattern")
+        self.assert_bbox_close(body["bbox"], [-3.0, -3.0, 0.0], [3.0, 3.0, 2.0])
+        self.assertAlmostEqual(body["volume"], 8.0, delta=1e-6)
+        self.assertAlmostEqual(pattern["volume"], body["volume"], delta=1e-6)
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertTrue(any(key.startswith("PolarPattern.Transform") for key in named_shape["element_map"]))
+
+    def test_p7_polar_pattern_spacing_pattern_controls_angles(self) -> None:
+        result = self.run_recompute("polar-pattern-spacing-pattern", "p7")
+        pattern = result["objects"]["PolarPattern"]
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pattern["status"], "ok")
+        self.assertEqual(pattern["transformed"], "polar_pattern")
+        self.assertEqual(body["tip"], "PolarPattern")
+        self.assert_bbox_close(body["bbox"], [-1.0, -3.0, 0.0], [3.0, 3.0, 2.0])
+        self.assertAlmostEqual(body["volume"], 6.0, delta=1e-6)
+
+    def test_p7_polar_pattern_whole_shape_gap_is_explicit(self) -> None:
+        result = self.run_recompute("polar-pattern-whole-shape-known-gap", "p7")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual(diagnostic["code"], "unsupported_property")
+        self.assertEqual(diagnostic["object"], "PolarPattern")
+        self.assertEqual(diagnostic["property"], "TransformMode")
+        self.assertIn("WholeShape", diagnostic["message"])
+
+    def test_p7_scaled_features_mode_scales_around_first_original_center_of_mass(self) -> None:
+        result = self.run_recompute("scaled-pad-factor-two", "p7")
+        scaled = result["objects"]["Scaled"]
+        body = result["objects"]["Body"]
+        named_shape = result["named_shapes"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(scaled["status"], "ok")
+        self.assertEqual(scaled["transformed"], "scaled")
+        self.assertEqual(scaled["transform_mode"], "Features")
+        self.assertEqual(scaled["originals"], ["Pad"])
+        self.assertEqual(scaled["body_mode"], "replace")
+        self.assertEqual(body["tip"], "Scaled")
+        self.assert_bbox_close(body["bbox"], [-1.0, -1.0, -1.0], [3.0, 3.0, 3.0])
+        self.assertAlmostEqual(body["volume"], 64.0, delta=1e-6)
+        self.assertAlmostEqual(scaled["volume"], body["volume"], delta=1e-6)
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertTrue(any(key.startswith("Scaled.Transform") for key in named_shape["element_map"]))
+
+    def test_p7_scaled_diagnostics_are_structured(self) -> None:
+        result = self.run_recompute("scaled-invalid-factor", "p7")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual(diagnostic["code"], "invalid_length")
+        self.assertEqual(diagnostic["object"], "Scaled")
+        self.assertEqual(diagnostic["property"], "Factor")
+
+    def test_p7_scaled_whole_shape_gap_is_explicit(self) -> None:
+        result = self.run_recompute("scaled-whole-shape-known-gap", "p7")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual(diagnostic["code"], "unsupported_property")
+        self.assertEqual(diagnostic["object"], "Scaled")
+        self.assertEqual(diagnostic["property"], "TransformMode")
+        self.assertIn("WholeShape", diagnostic["message"])
+
+    def test_p7_multi_transform_combines_linear_pattern_and_mirror(self) -> None:
+        result = self.run_recompute("multi-transform-linear-mirror", "p7")
+        multi = result["objects"]["MultiTransform"]
+        body = result["objects"]["Body"]
+        named_shape = result["named_shapes"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(result["objects"]["LinearPattern"]["transformation_template"], True)
+        self.assertEqual(result["objects"]["Mirrored"]["transformation_template"], True)
+        self.assertEqual(multi["status"], "ok")
+        self.assertEqual(multi["transformed"], "multi_transform")
+        self.assertEqual(multi["transform_mode"], "Features")
+        self.assertEqual(multi["originals"], ["Pad"])
+        self.assertEqual(multi["body_mode"], "replace")
+        self.assertEqual(body["tip"], "MultiTransform")
+        self.assert_bbox_close(body["bbox"], [0.0, 0.0, 0.0], [6.0, 6.0, 2.0])
+        self.assertAlmostEqual(body["volume"], 48.0, delta=1e-6)
+        self.assertAlmostEqual(multi["volume"], body["volume"], delta=1e-6)
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertTrue(any(key.startswith("MultiTransform.Transform") for key in named_shape["element_map"]))
+
+    def test_p7_multi_transform_scaled_child_uses_diagonal_composition(self) -> None:
+        result = self.run_recompute("multi-transform-scaled-diagonal", "p7")
+        multi = result["objects"]["MultiTransform"]
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(result["objects"]["LinearPattern"]["transformation_template"], True)
+        self.assertEqual(result["objects"]["Scaled"]["transformation_template"], True)
+        self.assertEqual(multi["status"], "ok")
+        self.assertEqual(multi["transformed"], "multi_transform")
+        self.assertEqual(body["tip"], "MultiTransform")
+        self.assert_bbox_close_delta(body["bbox"], [0.0, -0.5, -0.5], [7.5, 1.5, 1.5], 1e-5)
+        self.assertAlmostEqual(body["volume"], 12.375, delta=1e-6)
+
+    def test_p7_multi_transform_scaled_divisor_gap_is_explicit(self) -> None:
+        result = self.run_recompute("multi-transform-scaled-divisor-known-gap", "p7")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual(diagnostic["code"], "invalid_length")
+        self.assertEqual(diagnostic["object"], "MultiTransform")
+        self.assertEqual(diagnostic["property"], "Transformations")
+        self.assertIn("divisor", diagnostic["message"])
+
+    def test_p7_multi_transform_whole_shape_gap_is_explicit(self) -> None:
+        result = self.run_recompute("multi-transform-whole-shape-known-gap", "p7")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual(diagnostic["code"], "unsupported_property")
+        self.assertEqual(diagnostic["object"], "MultiTransform")
+        self.assertEqual(diagnostic["property"], "TransformMode")
+        self.assertIn("WholeShape", diagnostic["message"])
 
 
 if __name__ == "__main__":

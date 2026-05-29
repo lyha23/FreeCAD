@@ -2,9 +2,12 @@
 
 #include "cad_core/features/feature_executor.h"
 #include "cad_core/geometry/placement.h"
+#include "cad_core/topo/element_map.h"
+#include "cad_core/topo/named_shape.h"
 #include "cad_core/topo/subshape_map.h"
 
 #include <BRepAdaptor_Curve.hxx>
+#include <BRep_Builder.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
@@ -13,9 +16,11 @@
 #include <Precision.hxx>
 #include <TopAbs_ShapeEnum.hxx>
 #include <TopoDS.hxx>
+#include <TopoDS_Compound.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Vertex.hxx>
+#include <TopoDS_Wire.hxx>
 #include <gp_Ax1.hxx>
 #include <gp_Ax2.hxx>
 #include <gp_Circ.hxx>
@@ -65,6 +70,36 @@ struct SketchArc {
     double endAngle = 0.0;
     bool construction = false;
 };
+
+std::string stableSubnameDiagnosticCode(topo::ElementResolveStatus status)
+{
+    switch (status) {
+        case topo::ElementResolveStatus::Deleted:
+            return "deleted_stable_subname";
+        case topo::ElementResolveStatus::Split:
+            return "split_stable_subname";
+        case topo::ElementResolveStatus::Resolved:
+        case topo::ElementResolveStatus::Unresolved:
+            return "unsupported_stable_subname";
+    }
+    return "unsupported_stable_subname";
+}
+
+std::string stableSubnameDiagnosticMessage(const std::string& target,
+                                           const std::string& stableSubname,
+                                           topo::ElementResolveStatus status)
+{
+    if (status == topo::ElementResolveStatus::Deleted) {
+        return "ExternalGeometry target " + target + " has stable subname " + stableSubname
+            + ", but current ElementMap history marks it as deleted";
+    }
+    if (status == topo::ElementResolveStatus::Split) {
+        return "ExternalGeometry target " + target + " has stable subname " + stableSubname
+            + ", but current ElementMap history marks it as split";
+    }
+    return "ExternalGeometry target " + target + " has stable subname " + stableSubname
+        + ", but it is not in the current ElementMap";
+}
 
 struct SketchEllipseArc {
     std::size_t geometryIndex = 0;
@@ -853,10 +888,11 @@ std::optional<TopoDS_Edge> makeProfileEdge(const SketchProfileEdge& edge, bool r
     return reversed ? TopoDS::Edge(built.Reversed()) : built;
 }
 
-bool addClosedWire(const std::vector<SketchProfileEdge>& edges,
-                   BRepBuilderAPI_MakeWire& wireBuilder,
-                   std::optional<gp_Pnt>& firstStart,
-                   std::optional<gp_Pnt>& lastEnd)
+bool addConnectedWire(const std::vector<SketchProfileEdge>& edges,
+                      BRepBuilderAPI_MakeWire& wireBuilder,
+                      std::optional<gp_Pnt>& firstStart,
+                      std::optional<gp_Pnt>& lastEnd,
+                      bool requireClosed)
 {
     if (edges.empty()) {
         return false;
@@ -907,7 +943,157 @@ bool addClosedWire(const std::vector<SketchProfileEdge>& edges,
     }
 
     lastEnd = currentEnd;
-    return wireBuilder.IsDone() && samePoint(*firstStart, *lastEnd);
+    return wireBuilder.IsDone() && (!requireClosed || samePoint(*firstStart, *lastEnd));
+}
+
+bool addClosedWire(const std::vector<SketchProfileEdge>& edges,
+                   BRepBuilderAPI_MakeWire& wireBuilder,
+                   std::optional<gp_Pnt>& firstStart,
+                   std::optional<gp_Pnt>& lastEnd)
+{
+    return addConnectedWire(edges, wireBuilder, firstStart, lastEnd, true);
+}
+
+TopoDS_Shape compoundOrSingleShape(const std::vector<TopoDS_Shape>& shapes)
+{
+    if (shapes.empty()) {
+        return TopoDS_Shape{};
+    }
+    if (shapes.size() == 1U) {
+        return shapes.front();
+    }
+
+    TopoDS_Compound compound;
+    BRep_Builder builder;
+    builder.MakeCompound(compound);
+    for (const auto& shape : shapes) {
+        if (!shape.IsNull()) {
+            builder.Add(compound, shape);
+        }
+    }
+    return compound;
+}
+
+std::optional<TopoDS_Wire> makeWireFromCircle(const SketchCircle& circle)
+{
+    BRepBuilderAPI_MakeWire wireBuilder;
+    if (!addCircleWire(circle, wireBuilder)) {
+        return std::nullopt;
+    }
+    return wireBuilder.Wire();
+}
+
+std::optional<TopoDS_Wire> makeWireFromEllipse(const SketchEllipse& ellipse)
+{
+    BRepBuilderAPI_MakeWire wireBuilder;
+    if (!addEllipseWire(ellipse, wireBuilder)) {
+        return std::nullopt;
+    }
+    return wireBuilder.Wire();
+}
+
+std::optional<TopoDS_Shape> buildRawSketchShape(const document::DocumentObject& object,
+                                                runtime::ComputeContext& context,
+                                                const std::vector<SketchProfileEdge>& edges,
+                                                const std::vector<SketchCircle>& circles,
+                                                const std::vector<SketchEllipse>& ellipses)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::buildShape(),
+    // "GeometryFacade::getConstruction(geo)" is skipped, then raw edges are collected into
+    // makeElementWires() before PartDesign later asks ProfileBased to make a face.
+    std::vector<TopoDS_Shape> shapes;
+    if (!edges.empty()) {
+        BRepBuilderAPI_MakeWire wireBuilder;
+        std::optional<gp_Pnt> firstStart;
+        std::optional<gp_Pnt> lastEnd;
+        if (!addConnectedWire(edges, wireBuilder, firstStart, lastEnd, false)) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "execution_failed",
+                                   "OCCT could not build raw Sketch Shape wire",
+                                   object.name,
+                                   "Geometry");
+            return std::nullopt;
+        }
+        shapes.push_back(wireBuilder.Wire());
+    }
+    for (const auto& circle : circles) {
+        const auto wire = makeWireFromCircle(circle);
+        if (!wire) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "execution_failed",
+                                   "OCCT could not build raw Sketch Shape circle wire",
+                                   object.name,
+                                   "Geometry");
+            return std::nullopt;
+        }
+        shapes.push_back(*wire);
+    }
+    for (const auto& ellipse : ellipses) {
+        const auto wire = makeWireFromEllipse(ellipse);
+        if (!wire) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "execution_failed",
+                                   "OCCT could not build raw Sketch Shape ellipse wire",
+                                   object.name,
+                                   "Geometry");
+            return std::nullopt;
+        }
+        shapes.push_back(*wire);
+    }
+
+    return compoundOrSingleShape(shapes);
+}
+
+std::optional<TopoDS_Face> buildOptionalProfileFace(const std::vector<SketchProfileEdge>& edges,
+                                                    const std::vector<SketchCircle>& circles,
+                                                    const std::vector<SketchEllipse>& ellipses)
+{
+    if (!edges.empty() && (!circles.empty() || !ellipses.empty())) {
+        return std::nullopt;
+    }
+    if (circles.size() + ellipses.size() > 1U) {
+        return std::nullopt;
+    }
+
+    BRepBuilderAPI_MakeWire wireBuilder;
+    if (circles.size() == 1U) {
+        if (!addCircleWire(circles.front(), wireBuilder)) {
+            return std::nullopt;
+        }
+    }
+    else if (ellipses.size() == 1U) {
+        if (!addEllipseWire(ellipses.front(), wireBuilder)) {
+            return std::nullopt;
+        }
+    }
+    else {
+        std::optional<gp_Pnt> firstStart;
+        std::optional<gp_Pnt> lastEnd;
+        if (!addClosedWire(edges, wireBuilder, firstStart, lastEnd)) {
+            return std::nullopt;
+        }
+    }
+
+    BRepBuilderAPI_MakeFace faceBuilder(wireBuilder.Wire());
+    if (!faceBuilder.IsDone()) {
+        return std::nullopt;
+    }
+    return faceBuilder.Face();
+}
+
+std::size_t countSubshapesOfKind(const nlohmann::json& subshapes, const std::string& kind)
+{
+    std::size_t count = 0;
+    for (const auto& item : subshapes.items()) {
+        const nlohmann::json& value = item.value();
+        if (value.is_object() && value.value("kind", std::string{}) == kind) {
+            ++count;
+        }
+    }
+    return count;
 }
 
 std::optional<SketchSegment> projectExternalLineEdge(const TopoDS_Edge& edge,
@@ -1061,11 +1247,65 @@ struct ExternalSubshape {
     TopoDS_Shape shape;
 };
 
+std::optional<ExternalSubshape> resolveSketchInternalSubshape(const document::Link& link,
+                                                              const document::DocumentObject& object,
+                                                              const runtime::ShapeValue& shapeValue,
+                                                              runtime::ComputeContext& context,
+                                                              const std::string& subname)
+{
+    const auto parsed = topo::parseInternalSubshapeName(subname);
+    if (!parsed) {
+        return std::nullopt;
+    }
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::getSubObject(),
+    // convertInternalName("InternalEdge") resolves the subshape from InternalShape, not Shape.
+    if (!shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_subshape",
+                               "ExternalGeometry target " + link.object + " has no InternalShape for " + subname,
+                               object.name,
+                               "ExternalGeometry",
+                               "runtime",
+                               link.object,
+                               subname);
+        return std::nullopt;
+    }
+    if (parsed->kind != TopAbs_EDGE && parsed->kind != TopAbs_VERTEX) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "unsupported_subshape_kind",
+                               "ExternalGeometry projection currently supports InternalEdgeN and InternalVertexN subshapes",
+                               object.name,
+                               "ExternalGeometry",
+                               "runtime",
+                               link.object,
+                               subname);
+        return std::nullopt;
+    }
+
+    const auto subshape = topo::subshapeByName(*shapeValue.internalShape, *parsed);
+    if (!subshape) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_subshape",
+                               "ExternalGeometry target " + link.object + " has no subshape " + subname,
+                               object.name,
+                               "ExternalGeometry",
+                               "runtime",
+                               link.object,
+                               subname);
+        return std::nullopt;
+    }
+    return ExternalSubshape{parsed->kind, *subshape};
+}
+
 std::optional<ExternalSubshape> resolveExternalGeometryLink(const document::Link& link,
                                                             const document::DocumentObject& object,
                                                             runtime::ComputeContext& context)
 {
     const std::string subname = link.subnames.empty() ? std::string{} : link.subnames.front();
+    const std::string stableSubname = link.stableSubnames.size() == 1U ? link.stableSubnames.front() : std::string{};
     const auto shapeIt = context.shapes.find(link.object);
     if (shapeIt == context.shapes.end()) {
         runtime::addDiagnostic(context.diagnostics,
@@ -1078,6 +1318,36 @@ std::optional<ExternalSubshape> resolveExternalGeometryLink(const document::Link
                                link.object,
                                subname);
         return std::nullopt;
+    }
+
+    std::string currentSubname = subname;
+    const auto namedShapeIt = context.namedShapes.find(link.object);
+    if (namedShapeIt != context.namedShapes.end()) {
+        const auto resolved = topo::resolveElementReference(namedShapeIt->second, subname, stableSubname);
+        if (resolved.status == topo::ElementResolveStatus::Resolved && resolved.element) {
+            currentSubname = *resolved.element;
+        }
+        else if (!stableSubname.empty() && stableSubname != subname) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   stableSubnameDiagnosticCode(resolved.status),
+                                   stableSubnameDiagnosticMessage(link.object, stableSubname, resolved.status),
+                                   object.name,
+                                   "ExternalGeometry",
+                                   "runtime",
+                                   link.object,
+                                   stableSubname);
+            return std::nullopt;
+        }
+    }
+
+    if (!subname.empty()) {
+        if (auto internal = resolveSketchInternalSubshape(link, object, shapeIt->second, context, subname)) {
+            return internal;
+        }
+        if (topo::parseInternalSubshapeName(subname)) {
+            return std::nullopt;
+        }
     }
 
     if (shapeIt->second.kind == runtime::ShapeValue::Kind::DatumLine && link.subnames.empty()) {
@@ -1105,17 +1375,17 @@ std::optional<ExternalSubshape> resolveExternalGeometryLink(const document::Link
         return std::nullopt;
     }
 
-    const auto parsed = topo::parseSubshapeName(subname);
+    const auto parsed = topo::parseSubshapeName(currentSubname);
     if (!parsed) {
         runtime::addDiagnostic(context.diagnostics,
                                "error",
                                "invalid_subshape",
-                               "Invalid ExternalGeometry subshape name " + subname,
+                               "Invalid ExternalGeometry subshape name " + currentSubname,
                                object.name,
                                "ExternalGeometry",
                                "runtime",
                                link.object,
-                               subname);
+                               currentSubname);
         return std::nullopt;
     }
     if (parsed->kind != TopAbs_EDGE && parsed->kind != TopAbs_VERTEX) {
@@ -1127,21 +1397,27 @@ std::optional<ExternalSubshape> resolveExternalGeometryLink(const document::Link
                                "ExternalGeometry",
                                "runtime",
                                link.object,
-                               subname);
+                               currentSubname);
         return std::nullopt;
     }
 
-    const auto subshape = topo::subshapeByName(shapeIt->second.shape, subname);
+    std::optional<TopoDS_Shape> subshape;
+    if (namedShapeIt != context.namedShapes.end()) {
+        subshape = topo::subshapeByName(namedShapeIt->second, currentSubname);
+    }
+    else {
+        subshape = topo::subshapeByName(shapeIt->second.shape, currentSubname);
+    }
     if (!subshape) {
         runtime::addDiagnostic(context.diagnostics,
                                "error",
                                "invalid_subshape",
-                               "ExternalGeometry target " + link.object + " has no subshape " + subname,
+                               "ExternalGeometry target " + link.object + " has no subshape " + currentSubname,
                                object.name,
                                "ExternalGeometry",
                                "runtime",
                                link.object,
-                               subname);
+                               currentSubname);
         return std::nullopt;
     }
     return ExternalSubshape{parsed->kind, *subshape};
@@ -1311,29 +1587,69 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
     const std::vector<SketchProfileEdge> edges = profileEdges(profile, arcs, ellipseArcs);
     const std::vector<SketchCircle> circles = profileCircles(parsed.circles);
     const std::vector<SketchEllipse> ellipses = profileEllipses(parsed.ellipses);
-    BRepBuilderAPI_MakeWire wireBuilder;
-    if (!buildProfileWire(object, context, edges, circles, ellipses, wireBuilder)) {
+    auto rawShape = buildRawSketchShape(object, context, edges, circles, ellipses);
+    if (!rawShape) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
 
-    BRepBuilderAPI_MakeFace faceBuilder(wireBuilder.Wire());
-    if (!faceBuilder.IsDone()) {
-        runtime::addDiagnostic(context.diagnostics, "error", "execution_failed", "OCCT could not build a face from Sketch wire", object.name, "Geometry");
-        context.objects[object.name] = {{"status", "error"}};
-        return;
+    std::optional<TopoDS_Shape> profileShape;
+    std::optional<TopoDS_Shape> internalShape;
+    if (auto profileFace = buildOptionalProfileFace(edges, circles, ellipses)) {
+        profileShape = *profileFace;
+        // This is only the first P5 InternalShape baseline. FreeCAD's complete path is
+        // SketchObject::buildInternals() -> FaceMakerBuildFace + WireJoiner::getOpenWires().
+        // Open wires and InternalEdge/InternalVertex mapping stay explicit P5/P6 work.
+        internalShape = *profileFace;
     }
 
-    TopoDS_Face face = faceBuilder.Face();
     if (hasPlacement) {
-        face = TopoDS::Face(geometry::transformShape(face, placement));
+        if (!rawShape->IsNull()) {
+            rawShape = geometry::transformShape(*rawShape, placement);
+        }
+        if (profileShape) {
+            profileShape = geometry::transformShape(*profileShape, placement);
+        }
+        if (internalShape) {
+            internalShape = geometry::transformShape(*internalShape, placement);
+        }
     }
 
-    context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Profile, face};
+    runtime::ShapeValue shapeValue{runtime::ShapeValue::Kind::Sketch, *rawShape};
+    shapeValue.profileShape = profileShape;
+    shapeValue.internalShape = internalShape;
+    context.shapes[object.name] = shapeValue;
+    if (!rawShape->IsNull()) {
+        nlohmann::json subshapes = topo::subshapeMapForShape(*rawShape);
+        if (internalShape && !internalShape->IsNull()) {
+            const nlohmann::json internalSubshapes = topo::subshapeMapForShape(*internalShape, "Internal");
+            for (const auto& item : internalSubshapes.items()) {
+                subshapes[item.key()] = item.value();
+            }
+        }
+        context.subshapes[object.name] = subshapes;
+    }
+
+    const std::size_t rawEdgeCount = edges.size() + circles.size() + ellipses.size();
+    const std::size_t profileEdgeCount = profileShape ? (circles.empty() && ellipses.empty() ? edges.size() : 1U) : rawEdgeCount;
+    const nlohmann::json internalSubshapes = internalShape ? topo::subshapeMapForShape(*internalShape, "Internal") : nlohmann::json::object();
+    const std::size_t internalFaceCount = countSubshapesOfKind(internalSubshapes, "face");
+    const std::size_t internalEdgeCount = countSubshapesOfKind(internalSubshapes, "edge");
+    const std::size_t internalVertexCount = countSubshapesOfKind(internalSubshapes, "vertex");
+    const nlohmann::json internalElementMap =
+        internalShape ? topo::internalElementMapForSketch(*rawShape, *internalShape) : nlohmann::json::object();
     context.objects[object.name] = {
         {"status", "ok"},
-        {"profile", "occt_face"},
-        {"edge_count", circles.empty() && ellipses.empty() ? edges.size() : 1U},
+        {"shape", rawShape->IsNull() ? "empty" : "occt_sketch_shape"},
+        {"profile", profileShape ? "occt_face" : "none"},
+        {"profile_ready", profileShape.has_value()},
+        {"edge_count", profileEdgeCount},
+        {"raw_edge_count", rawEdgeCount},
+        {"internal_shape", internalShape ? "occt_internal_shape" : "none"},
+        {"internal_face_count", internalFaceCount},
+        {"internal_edge_count", internalEdgeCount},
+        {"internal_vertex_count", internalVertexCount},
+        {"internal_element_map", internalElementMap},
         {"coincident_constraints_applied", *appliedConstraints},
         {"external_geometry_count",
          externalGeometry->segments.size() + externalGeometry->points.size() + externalGeometry->circles.size()

@@ -4,6 +4,7 @@
 #include "cad_core/geometry/placement.h"
 #include "cad_core/runtime/compute_context.h"
 #include "cad_core/runtime/feature_registry.h"
+#include "cad_core/topo/named_shape.h"
 
 #include <algorithm>
 #include <set>
@@ -14,6 +15,12 @@ namespace {
 
 gp_Trsf objectPlacement(const document::DocumentObject& object)
 {
+    if (object.typeId == "App::Origin") {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Origin.cpp::Origin::Origin(),
+        // "App::Origin is a LCS for which placement is fixed to identity"; parent group
+        // placement is still applied by resolveGlobalPlacement().
+        return gp_Trsf();
+    }
     if (const auto placement = document::readPlacement(object, "Placement")) {
         return geometry::placementFromComponents(placement->base, placement->rotation);
     }
@@ -58,6 +65,51 @@ std::map<std::string, gp_Trsf> buildGlobalPlacements(const document::Document& d
     return placements;
 }
 
+std::map<std::string, const document::DocumentObject*> buildDocumentObjectMap(const document::Document& document)
+{
+    std::map<std::string, const document::DocumentObject*> objects;
+    for (const auto& object : document.objects) {
+        objects[object.name] = &object;
+    }
+    return objects;
+}
+
+std::set<std::string> findTransformationTemplateObjects(const document::Document& document)
+{
+    std::set<std::string> templates;
+    for (const auto& object : document.objects) {
+        if (object.typeId != "PartDesign::MultiTransform") {
+            continue;
+        }
+        for (const auto& link : document::readLinks(object, "Transformations")) {
+            templates.insert(link.object);
+        }
+    }
+    return templates;
+}
+
+void registerIndexedNamedShape(const std::string& name, ComputeContext& context)
+{
+    if (context.namedShapes.count(name) != 0U) {
+        return;
+    }
+    const auto shapeIt = context.shapes.find(name);
+    if (shapeIt != context.shapes.end()) {
+        context.namedShapes[name] = topo::indexedNamedShapeForObject(name, shapeIt->second.shape);
+        return;
+    }
+    const auto addSubIt = context.addSubShapes.find(name);
+    if (addSubIt == context.addSubShapes.end()) {
+        return;
+    }
+    if (addSubIt->second.addShape) {
+        context.namedShapes[name] = topo::indexedNamedShapeForObject(name, *addSubIt->second.addShape);
+    }
+    else if (addSubIt->second.subShape) {
+        context.namedShapes[name] = topo::indexedNamedShapeForObject(name, *addSubIt->second.subShape);
+    }
+}
+
 }  // namespace
 
 nlohmann::json recompute(const document::Document& document,
@@ -69,7 +121,9 @@ nlohmann::json recompute(const document::Document& document,
     ComputeContext context;
     context.diagnostics = std::move(diagnostics);
     context.dependencies = plan.dependencies;
+    context.documentObjects = buildDocumentObjectMap(document);
     context.parentGroupByObject = document.parentGroupByObject;
+    context.transformationTemplateObjects = findTransformationTemplateObjects(document);
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/GeoFeature.cpp
     // ::GeoFeature::getGlobalPlacement() returns parent GeoFeatureGroup::globalGroupPlacement()
     // multiplied by the object's own Placement.
@@ -103,6 +157,7 @@ nlohmann::json recompute(const document::Document& document,
             continue;
         }
         executor(object, context);
+        registerIndexedNamedShape(name, context);
         context.executionOrder.push_back(name);
     }
 
@@ -116,6 +171,7 @@ nlohmann::json recompute(const document::Document& document,
         {"objects", objects},
         {"mesh", context.mesh},
         {"subshapes", context.subshapes},
+        {"named_shapes", topo::namedShapesToJson(context.namedShapes)},
         {"diagnostics", diagnosticsToJson(context.diagnostics)},
     };
 }

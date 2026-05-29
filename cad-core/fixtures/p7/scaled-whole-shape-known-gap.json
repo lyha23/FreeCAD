@@ -1,0 +1,51 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPad",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [2, 0] },
+          { "kind": "LineSegment", "start": [2, 0], "end": [2, 2] },
+          { "kind": "LineSegment", "start": [2, 2], "end": [0, 2] },
+          { "kind": "LineSegment", "start": [0, 2], "end": [0, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPad",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 2,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Scaled",
+      "ID": 3,
+      "TypeId": "PartDesign::Scaled",
+      "Properties": {
+        "Originals": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["Pad"]
+        },
+        "TransformMode": "Whole shape",
+        "Factor": 2,
+        "Occurrences": 2
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Scaled"]
+  }
+}

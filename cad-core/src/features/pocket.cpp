@@ -32,7 +32,13 @@ void executePocket(const document::DocumentObject& object, runtime::ComputeConte
                                       "UseCustomVector",
                                       "Direction",
                                       "ReferenceAxis",
-                                      "AlongSketchNormal"})) {
+                                      "AlongSketchNormal",
+                                      "Refine",
+                                      "FuzzyTolerance"})) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+    if (!rejectActiveRefineProperty(object, context)) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -45,6 +51,9 @@ void executePocket(const document::DocumentObject& object, runtime::ComputeConte
 
     const TopoDS_Shape tool = extrusion->toolShape;
     context.addSubShapes[object.name] = runtime::AddSubShape{std::nullopt, tool};
+    if (extrusion->namedShape) {
+        context.namedShapes[object.name] = *extrusion->namedShape;
+    }
     context.mesh[object.name] = geometry::meshForShape(tool);
     context.subshapes[object.name] = topo::subshapeMapForShape(tool);
     nlohmann::json result = {

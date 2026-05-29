@@ -13,6 +13,6 @@ using ExecuteFn = void (*)(const document::DocumentObject&, runtime::ComputeCont
 bool rejectUnsupportedProperties(const document::DocumentObject& object,
                                  runtime::ComputeContext& context,
                                  const std::set<std::string>& allowed);
+bool rejectActiveRefineProperty(const document::DocumentObject& object, runtime::ComputeContext& context);
 
 }  // namespace cad_core::features
-

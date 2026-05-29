@@ -1,0 +1,73 @@
+{
+  "Objects": [
+    {
+      "Name": "CoordinateSystem",
+      "ID": 1,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 2],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "Sketch",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "CoordinateSystem",
+          "SubList": []
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "FlatFace"
+        },
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [10, 0] },
+          { "kind": "LineSegment", "start": [10, 0], "end": [10, 5] },
+          { "kind": "LineSegment", "start": [10, 5], "end": [0, 5] },
+          { "kind": "LineSegment", "start": [0, 5], "end": [0, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 3,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Sketch",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 5,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 4,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["CoordinateSystem", "Sketch", "Pad"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Pad"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}

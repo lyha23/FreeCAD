@@ -17,6 +17,7 @@ P3b 在这个基础上补：
 - `SideType=Two sides`。
 - `SideType=Symmetric`。
 - `Type2` / `Length2` / `UpToFace2` / `UpToShape2`。
+- 单侧 `UpToFirst` / `UpToLast` 从 previous body solid 中选择最近 / 最远候选面。
 - taper / taper2。
 - custom direction / ReferenceAxis / AlongSketchNormal。
 - object-local placement 和 sketch normal 的一致性。
@@ -30,6 +31,7 @@ P3b 在这个基础上补：
 | 双侧 / 对称组合 | `FeatureExtrude.cpp` 中 SideType、Type2、Length2、TaperAngle2 相关分支 |
 | 方向计算 | `FeatureExtrude.cpp`：`computeDirection()` |
 | profile / support | `src/Mod/PartDesign/App/FeatureSketchBased.cpp` |
+| UpToFirst / UpToLast face selection | `src/Mod/Part/App/PartFeature.cpp`：`findAllFacesCutBy()`；`src/Mod/PartDesign/App/FeatureSketchBased.cpp`：`ProfileBased::getUpToFace()` |
 | Placement | `src/App/GeoFeature.cpp`、`src/App/GeoFeatureGroupExtension.cpp` |
 
 ## 实现落点
@@ -46,6 +48,7 @@ P3b 在这个基础上补：
 
 - `features/feature_extrude.cpp` 已统一分派 `SideType=One side / Two sides / Symmetric`，Pad / Pocket 仍共用 `buildFeatureExtrusion()`。
 - `Two sides` 已支持 `Type=Length` + `Type2=Length` 的不等长组合；第一侧 `Type=UpToFace` / `Type=UpToShape` 与第二侧 `Type2=UpToFace` / `Type2=UpToShape` 都已接入目标解析，缺失第二侧目标会返回具体 diagnostics。
+- 单侧 `Type=UpToFirst` / `Type=UpToLast` 已按 FreeCAD `findAllFacesCutBy()` 基线接入：从上一 solid 的被切候选面中按 `distsq` 选择最近 / 最远面，再复用当前平面 UpTo 测量路径生成 tool shape。
 - `Symmetric` 已支持 `Type=Length`；非 taper length 路径按 FreeCAD 把 profile 平移到中面一侧再拉伸完整长度，taper 路径按 FreeCAD 把长度减半后沿正反两个方向分别生成 drafted prism 再 fuse。
 - `UseCustomVector + Direction` 已支持显式三维向量；`AlongSketchNormal=true` 时按方向与 sketch normal 的点积校正长度。零向量或正交方向返回 `invalid_direction`。
 - `ReferenceAxis` 已支持 `App::PropertyLinkSub` 到 profile sketch 轴的基础路径：`N_Axis` 可作为拉伸方向，`H_Axis` / `V_Axis` 会按 FreeCAD `NotPerpendicularWithNormal` 规则返回 `invalid_direction`。实现中也接入了已计算 shape 的 `EdgeN` 直线 / 圆弧轴解析，以及 `PartDesign::Line` DatumLine 目标的直接方向解析；坏链接返回 `missing_link_target`。
@@ -54,13 +57,14 @@ P3b 在这个基础上补：
 - `Body` 已在最终 body shape 输出前应用自身 Placement，Pocket cut 后的 bbox / mesh / subshape map 与被放置后的 body 坐标一致。
 - `FeatureBase` 已对导入 base solid 应用自身 Placement，使 Body 采用已经位于目标坐标的 base feature。
 - `geometry/extrusion_helper.*` 已迁入 FreeCAD `Part::ExtrusionHelper::makeElementDraft()` 的主几何流程：端面 wire offset、`BRepOffsetAPI_ThruSections` ruled loft、face 内 wire cut；`FeatureExtrude` 已用它支持 Pad / Pocket 的 `TaperAngle`，`Two sides` 下独立的 `TaperAngle` / `TaperAngle2`，以及 `Symmetric` 下的单侧 taper。
-- P3b/P4 fixture 已覆盖双侧长度、第一侧 `UpToFace` / `UpToShape`、第二侧 `UpToFace2` / `UpToShape2`、Pocket 双侧 cut、对称长度、对称 taper、Pad / Pocket custom vector、ReferenceAxis sketch `N_Axis`、ReferenceAxis EdgeN、ReferenceAxis DatumLine、ReferenceAxis parallel-axis / missing-target error、sketch placement、Body placement、FeatureBase placement、custom direction + sketch translation / rotation placement、Pad taper、Pocket taper、two-sides taper、invalid taper、symmetric UpTo 暂缓和第二侧目标缺失。
+- P3b/P4 fixture 已覆盖双侧长度、第一侧 `UpToFace` / `UpToShape`、第二侧 `UpToFace2` / `UpToShape2`、单侧 `UpToFirst` / `UpToLast` previous-body 最近 / 最远面、Pocket 双侧 cut、对称长度、对称 taper、Pad / Pocket custom vector、ReferenceAxis sketch `N_Axis`、ReferenceAxis EdgeN、ReferenceAxis DatumLine、ReferenceAxis parallel-axis / missing-target error、sketch placement、Body placement、FeatureBase placement、custom direction + sketch translation / rotation placement、Pad taper、Pocket taper、two-sides taper、invalid taper、symmetric UpTo 暂缓和第二侧目标缺失。
 - `fixtures/p3b/expected` 已补 21 个 FreeCAD oracle 快照；`tests/test_mvp.py` 对 P3b 成功 fixture 读取 expected，并校验 bbox、volume 和 topology counts。
 - C ABI harness 已用 P3b `pocket-custom-vector` 和 CLI 输出做同输入一致性校验，覆盖 diagnostics、objects、mesh、subshapes。
 
 仍是明确暂缓边界：
 
 - taper 的几何结果已经生成，但 `TopoShape::makeElementShape(...)` 对应的 Modified / Generated history 还没有进入 `topo` 账本；taper fixture 当前显式标记 `topo_naming=known_gap:taper_history`，归入 P6 继续补。
+- `UpToFirst` / `UpToLast` 当前只覆盖 line-through-profile-center 命中的平面候选面；完整 `makeElementPrismUntil()` 的非平面终止面、多 wire support face 和 offset shell 仍是后续通用化边界。
 - `Symmetric + UpTo*` 的 mirror 路径还未迁移，现在返回 `unsupported_property`，避免生成假成功。
 - `ReferenceAxis` 的 P3b 子集已落地并开始消费 P4 LinkSub 结构；DatumLine 目标已可直接取方向，外部 Part feature edge ownership 与旧引用恢复仍未完成。
 - 完整 object-local inverse placement、GeoFeatureGroup 层级 placement、旧 LinkSub 恢复和 placement 变更后的拓扑命名恢复仍归入 P4 / P6；当前 P3b 只保证显式 Sketch / Body / FeatureBase Placement 不靠输出端修正。
@@ -73,7 +77,7 @@ cmake --build build
 python3 -m unittest tests/test_mvp.py
 ```
 
-当前验证结果：`34 tests OK`，P0/P1/P2/P3a fixture 未回退。
+当前验证结果：`63 tests OK`，P0/P1/P2/P3a fixture 未回退。
 
 ## Step 26：SideType dispatcher
 
@@ -114,6 +118,28 @@ fixtures/p3b/
 - 两侧长度不等时 bbox / volume 与 FreeCAD oracle 一致。
 - 第二侧缺失目标返回具体 diagnostics。
 - Body 仍负责最终 add / subtract。
+
+## Step 27a：UpToFirst / UpToLast
+
+目标：
+
+- 对齐 FreeCAD `ProfileBased::getUpToFace()` 中 `UpToFirst` / `UpToLast` 的候选面选择：从 previous body solid 中用 `findAllFacesCutBy()` 取沿拉伸方向被草图重心线切到的 face。
+- `UpToFirst` 选择最近候选面，`UpToLast` 选择最远候选面。
+- 第一版限定当前已支持的平面终止面；非平面 `makeElementPrismUntil()`、offset 和多 face shell 归入后续边界。
+
+fixtures：
+
+```text
+fixtures/p3b/
+  pad-up-to-first.json
+  pad-up-to-last.json
+```
+
+验收：
+
+- 同一 previous body solid 下，`UpToFirst` / `UpToLast` 生成不同长度的 Pad tool shape。
+- diagnostics 为空；bbox / volume 稳定约束最近 / 最远面选择。
+- 不通过 fixture 名称或输出端修剪决定长度。
 
 ## Step 28：Symmetric
 

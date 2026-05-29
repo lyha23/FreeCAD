@@ -32,7 +32,13 @@ void executePad(const document::DocumentObject& object, runtime::ComputeContext&
                                       "UseCustomVector",
                                       "Direction",
                                       "ReferenceAxis",
-                                      "AlongSketchNormal"})) {
+                                      "AlongSketchNormal",
+                                      "Refine",
+                                      "FuzzyTolerance"})) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+    if (!rejectActiveRefineProperty(object, context)) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -49,6 +55,9 @@ void executePad(const document::DocumentObject& object, runtime::ComputeContext&
 
     context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, solid};
     context.addSubShapes[object.name] = runtime::AddSubShape{solid, std::nullopt};
+    if (extrusion->namedShape) {
+        context.namedShapes[object.name] = *extrusion->namedShape;
+    }
     context.mesh[object.name] = mesh;
     context.subshapes[object.name] = subshapeMap;
     nlohmann::json result = {

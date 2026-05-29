@@ -3,11 +3,11 @@
 #include "cad_core/features/feature_executor.h"
 #include "cad_core/geometry/placement.h"
 #include "cad_core/geometry/shape_exporter.h"
+#include "cad_core/topo/named_shape.h"
 #include "cad_core/topo/subshape_map.h"
 
-#include <BRepAlgoAPI_Cut.hxx>
-#include <BRepAlgoAPI_Fuse.hxx>
 #include <TopoDS_Shape.hxx>
+#include <gp_TrsfForm.hxx>
 
 #include <algorithm>
 #include <optional>
@@ -30,34 +30,94 @@ std::optional<std::vector<std::string>> readGroupNames(const document::DocumentO
     return names;
 }
 
-std::optional<TopoDS_Shape> fuseShapes(const TopoDS_Shape& base,
+struct BooleanBuild {
+    TopoDS_Shape shape;
+    topo::NamedShape namedShape;
+};
+
+topo::NamedShape namedShapeForFeatureOrIndexed(const std::string& feature,
+                                               const TopoDS_Shape& shape,
+                                               const runtime::ComputeContext& context)
+{
+    const auto namedShapeIt = context.namedShapes.find(feature);
+    if (namedShapeIt != context.namedShapes.end()) {
+        return namedShapeIt->second;
+    }
+    return topo::indexedNamedShapeForObject(feature, shape);
+}
+
+topo::NamedShapeSource sourceForCurrentBody(const std::string& bodyName,
+                                            const TopoDS_Shape& shape,
+                                            const std::optional<topo::NamedShape>& namedShape)
+{
+    return topo::NamedShapeSource{namedShape ? namedShape->owner : bodyName, shape, namedShape ? &*namedShape : nullptr};
+}
+
+topo::NamedShapeSource sourceForFeature(const std::string& feature,
+                                        const TopoDS_Shape& shape,
+                                        const runtime::ComputeContext& context)
+{
+    const auto namedShapeIt = context.namedShapes.find(feature);
+    return topo::NamedShapeSource{namedShapeIt != context.namedShapes.end() ? namedShapeIt->second.owner : feature,
+                                  shape,
+                                  namedShapeIt != context.namedShapes.end() ? &namedShapeIt->second : nullptr};
+}
+
+std::optional<BooleanBuild> fuseShapes(const TopoDS_Shape& base,
                                        const TopoDS_Shape& tool,
                                        const document::DocumentObject& object,
                                        runtime::ComputeContext& context,
-                                       const std::string& feature)
+                                       const std::string& feature,
+                                       const std::optional<topo::NamedShape>& baseNamedShape)
 {
-    BRepAlgoAPI_Fuse fuse(base, tool);
-    fuse.Build();
-    if (!fuse.IsDone()) {
-        runtime::addDiagnostic(context.diagnostics, "error", "execution_failed", "Body could not fuse additive feature " + feature, object.name);
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::makeElementBoolean(),
+    // selects BRepAlgoAPI_Fuse and calls makeElementShape(*mk, inputs, ...), where MapperMaker
+    // consumes "BRepBuilderAPI_MakeShape::Modified/Generated()" for every boolean input.
+    const auto build = topo::makeElementBooleanFromSources(object.name,
+                                                           {sourceForCurrentBody(object.name, base, baseNamedShape),
+                                                            sourceForFeature(feature, tool, context)},
+                                                           topo::BooleanOperation::Fuse);
+    if (!build.error.empty()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               "Body could not fuse additive feature " + feature + ": " + build.error,
+                               object.name);
         return std::nullopt;
     }
-    return fuse.Shape();
+    return BooleanBuild{build.shape,
+                        build.namedShape ? *build.namedShape : topo::indexedNamedShapeForObject(object.name, build.shape)};
 }
 
-std::optional<TopoDS_Shape> cutShapes(const TopoDS_Shape& base,
+std::optional<BooleanBuild> cutShapes(const TopoDS_Shape& base,
                                       const TopoDS_Shape& tool,
                                       const document::DocumentObject& object,
                                       runtime::ComputeContext& context,
-                                      const std::string& feature)
+                                      const std::string& feature,
+                                      const std::optional<topo::NamedShape>& baseNamedShape)
 {
-    BRepAlgoAPI_Cut cut(base, tool);
-    cut.Build();
-    if (!cut.IsDone()) {
-        runtime::addDiagnostic(context.diagnostics, "error", "execution_failed", "Body could not cut subtractive feature " + feature, object.name);
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::makeElementBoolean(),
+    // selects BRepAlgoAPI_Cut and calls makeElementShape(*mk, inputs, ...), where MapperMaker
+    // consumes "BRepBuilderAPI_MakeShape::Modified/Generated()" for every boolean input.
+    const auto build = topo::makeElementBooleanFromSources(object.name,
+                                                           {sourceForCurrentBody(object.name, base, baseNamedShape),
+                                                            sourceForFeature(feature, tool, context)},
+                                                           topo::BooleanOperation::Cut);
+    if (!build.error.empty()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               "Body could not cut subtractive feature " + feature + ": " + build.error,
+                               object.name);
         return std::nullopt;
     }
-    return cut.Shape();
+    return BooleanBuild{build.shape,
+                        build.namedShape ? *build.namedShape : topo::indexedNamedShapeForObject(object.name, build.shape)};
+}
+
+bool isIdentityPlacement(const gp_Trsf& placement)
+{
+    return placement.Form() == gp_Identity;
 }
 
 }  // namespace
@@ -113,6 +173,7 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
     }
 
     std::optional<TopoDS_Shape> bodyShape;
+    std::optional<topo::NamedShape> bodyNamedShape;
     if (object.properties.contains("BaseFeature")) {
         const auto baseLink = document::readLink(object, "BaseFeature");
         if (!baseLink) {
@@ -134,14 +195,22 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
             return;
         }
         bodyShape = baseIt->second.shape;
+        bodyNamedShape = namedShapeForFeatureOrIndexed(baseLink->object, *bodyShape, context);
     }
 
     for (const auto& feature : groupNames) {
         const auto addSubIt = context.addSubShapes.find(feature);
         if (addSubIt == context.addSubShapes.end()) {
             const auto shapeIt = context.shapes.find(feature);
-            if (shapeIt != context.shapes.end() && shapeIt->second.kind == runtime::ShapeValue::Kind::Solid && !bodyShape) {
+            if (shapeIt != context.shapes.end() && shapeIt->second.kind == runtime::ShapeValue::Kind::Solid) {
+                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureDressUp.cpp::DressUp,
+                // derives from FeatureAddSub but execute() writes a full dressed "Shape"; Body Tip
+                // must be able to become that replacement solid instead of reusing the previous Pad/Pocket.
                 bodyShape = shapeIt->second.shape;
+                bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
+                if (feature == tip->object) {
+                    break;
+                }
             }
             continue;
         }
@@ -150,9 +219,17 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
         if (addSubShape.addShape) {
             if (!bodyShape) {
                 bodyShape = *addSubShape.addShape;
+                bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
             }
             else {
-                bodyShape = fuseShapes(*bodyShape, *addSubShape.addShape, object, context, feature);
+                const auto build = fuseShapes(*bodyShape, *addSubShape.addShape, object, context, feature, bodyNamedShape);
+                if (build) {
+                    bodyShape = build->shape;
+                    bodyNamedShape = build->namedShape;
+                }
+                else {
+                    bodyShape = std::nullopt;
+                }
             }
         }
         else if (addSubShape.subShape) {
@@ -166,7 +243,14 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
                 context.objects[object.name] = {{"status", "error"}};
                 return;
             }
-            bodyShape = cutShapes(*bodyShape, *addSubShape.subShape, object, context, feature);
+            const auto build = cutShapes(*bodyShape, *addSubShape.subShape, object, context, feature, bodyNamedShape);
+            if (build) {
+                bodyShape = build->shape;
+                bodyNamedShape = build->namedShape;
+            }
+            else {
+                bodyShape = std::nullopt;
+            }
         }
 
         if (!bodyShape) {
@@ -186,12 +270,21 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
 
     TopoDS_Shape resultShape = *bodyShape;
     const auto placementIt = context.globalPlacements.find(object.name);
-    if (placementIt != context.globalPlacements.end()) {
+    const bool hasNonIdentityPlacement = placementIt != context.globalPlacements.end() && !isIdentityPlacement(placementIt->second);
+    if (hasNonIdentityPlacement) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/GeoFeature.cpp
         // ::GeoFeature::getGlobalPlacement(), "return ext->globalGroupPlacement() * placementProperty->getValue()".
         resultShape = geometry::transformShape(resultShape, placementIt->second);
     }
 
+    if (bodyNamedShape && !hasNonIdentityPlacement) {
+        bodyNamedShape->owner = object.name;
+        bodyNamedShape->shape = resultShape;
+        context.namedShapes[object.name] = *bodyNamedShape;
+    }
+    else {
+        context.namedShapes[object.name] = topo::indexedNamedShapeForObject(object.name, resultShape);
+    }
     context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, resultShape};
     context.mesh[object.name] = geometry::meshForShape(resultShape);
     context.subshapes[object.name] = topo::subshapeMapForShape(resultShape);

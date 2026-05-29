@@ -44,7 +44,7 @@ void addEntries(nlohmann::json& result,
 
 }  // namespace
 
-nlohmann::json subshapeMapForShape(const TopoDS_Shape& shape)
+nlohmann::json subshapeMapForShape(const TopoDS_Shape& shape, const std::string& prefix)
 {
     nlohmann::json result = nlohmann::json::object();
 
@@ -55,11 +55,16 @@ nlohmann::json subshapeMapForShape(const TopoDS_Shape& shape)
     TopExp::MapShapes(shape, TopAbs_EDGE, edges);
     TopExp::MapShapes(shape, TopAbs_VERTEX, vertices);
 
-    addEntries(result, faces, "Face", "face");
-    addEntries(result, edges, "Edge", "edge");
-    addEntries(result, vertices, "Vertex", "vertex");
+    addEntries(result, faces, prefix + "Face", "face");
+    addEntries(result, edges, prefix + "Edge", "edge");
+    addEntries(result, vertices, prefix + "Vertex", "vertex");
 
     return result;
+}
+
+nlohmann::json subshapeMapForShape(const TopoDS_Shape& shape)
+{
+    return subshapeMapForShape(shape, "");
 }
 
 std::optional<SubshapeName> parseSubshapeName(const std::string& name)
@@ -90,19 +95,32 @@ std::optional<SubshapeName> parseSubshapeName(const std::string& name)
     return std::nullopt;
 }
 
+std::optional<SubshapeName> parseInternalSubshapeName(const std::string& name)
+{
+    constexpr const char* internalPrefix = "Internal";
+    if (name.rfind(internalPrefix, 0) != 0U) {
+        return std::nullopt;
+    }
+    return parseSubshapeName(name.substr(std::string(internalPrefix).size()));
+}
+
+std::optional<TopoDS_Shape> subshapeByName(const TopoDS_Shape& shape, const SubshapeName& name)
+{
+    TopTools_IndexedMapOfShape shapes;
+    TopExp::MapShapes(shape, name.kind, shapes);
+    if (name.index > shapes.Extent()) {
+        return std::nullopt;
+    }
+    return shapes(name.index);
+}
+
 std::optional<TopoDS_Shape> subshapeByName(const TopoDS_Shape& shape, const std::string& name)
 {
     const auto parsed = parseSubshapeName(name);
     if (!parsed) {
         return std::nullopt;
     }
-
-    TopTools_IndexedMapOfShape shapes;
-    TopExp::MapShapes(shape, parsed->kind, shapes);
-    if (parsed->index > shapes.Extent()) {
-        return std::nullopt;
-    }
-    return shapes(parsed->index);
+    return subshapeByName(shape, *parsed);
 }
 
 std::string subshapeKindName(TopAbs_ShapeEnum kind)

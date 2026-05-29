@@ -20,16 +20,20 @@ endif()
 add_library(cad-core-lib STATIC
   src/document/model.cpp
   src/features/body.cpp
+  src/features/datum_coordinate_system.cpp
   src/features/datum_line.cpp
   src/features/datum_plane.cpp
   src/features/datum_point.cpp
+  src/features/dress_up.cpp
   src/features/feature_base.cpp
   src/features/feature_extrude.cpp
   src/features/feature_executor.cpp
+  src/features/hole.cpp
   src/features/part.cpp
   src/features/pad.cpp
   src/features/pocket.cpp
   src/features/sketch_object.cpp
+  src/features/transformed.cpp
   src/geometry/extrusion_helper.cpp
   src/geometry/placement.cpp
   src/geometry/shape_exporter.cpp
@@ -39,6 +43,8 @@ add_library(cad-core-lib STATIC
   src/runtime/feature_registry.cpp
   src/runtime/io.cpp
   src/runtime/recompute.cpp
+  src/topo/element_map.cpp
+  src/topo/named_shape.cpp
   src/topo/subshape_map.cpp
 )
 

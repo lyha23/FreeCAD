@@ -2,6 +2,7 @@
 
 #include "cad_core/document/model.h"
 #include "cad_core/runtime/compute_context.h"
+#include "cad_core/topo/named_shape.h"
 
 #include <TopoDS_Shape.hxx>
 
@@ -24,6 +25,7 @@ struct ExtrudeResult {
     nlohmann::json bbox;
     double volume = 0.0;
     bool topoNamingKnownGap = false;
+    std::optional<topo::NamedShape> namedShape;
 };
 
 std::optional<ExtrudeResult> buildFeatureExtrusion(const document::DocumentObject& object,

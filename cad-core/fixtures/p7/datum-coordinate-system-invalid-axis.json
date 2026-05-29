@@ -1,0 +1,48 @@
+{
+  "Objects": [
+    {
+      "Name": "CoordinateSystem",
+      "ID": 1,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {}
+    },
+    {
+      "Name": "Sketch",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [10, 0] },
+          { "kind": "LineSegment", "start": [10, 0], "end": [10, 5] },
+          { "kind": "LineSegment", "start": [10, 5], "end": [0, 5] },
+          { "kind": "LineSegment", "start": [0, 5], "end": [0, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 3,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Sketch",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 6,
+        "Reversed": false,
+        "SideType": "One side",
+        "ReferenceAxis": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "CoordinateSystem",
+          "SubList": ["Bad_Axis"]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Pad"]
+  }
+}

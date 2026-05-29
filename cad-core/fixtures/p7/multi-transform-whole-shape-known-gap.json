@@ -1,0 +1,49 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPad",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [1, 0] },
+          { "kind": "LineSegment", "start": [1, 0], "end": [1, 1] },
+          { "kind": "LineSegment", "start": [1, 1], "end": [0, 1] },
+          { "kind": "LineSegment", "start": [0, 1], "end": [0, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPad",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 1,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "MultiTransform",
+      "ID": 3,
+      "TypeId": "PartDesign::MultiTransform",
+      "Properties": {
+        "Originals": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["Pad"]
+        },
+        "TransformMode": "Whole shape"
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["MultiTransform"]
+  }
+}

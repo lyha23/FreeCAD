@@ -1,0 +1,86 @@
+{
+  "Objects": [
+    {
+      "Name": "BaseSketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [10, 0] },
+          { "kind": "LineSegment", "start": [10, 0], "end": [10, 5] },
+          { "kind": "LineSegment", "start": [10, 5], "end": [0, 5] },
+          { "kind": "LineSegment", "start": [0, 5], "end": [0, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "BasePad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "BaseSketch",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 10,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Sketch",
+      "ID": 3,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [10, 0] },
+          { "kind": "LineSegment", "start": [10, 0], "end": [10, 5] },
+          { "kind": "LineSegment", "start": [10, 5], "end": [0, 5] },
+          { "kind": "LineSegment", "start": [0, 5], "end": [0, 0] }
+        ],
+        "Constraints": [],
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, -2],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 4,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Sketch",
+          "SubList": []
+        },
+        "Type": "UpToFirst",
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 5,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["BaseSketch", "BasePad", "Sketch", "Pad"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Pad"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}
