@@ -1,0 +1,321 @@
+from __future__ import annotations
+
+from .fixture_runner import CadCoreFixtureTestCase
+
+
+class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
+    def test_fixture_diagnostics(self) -> None:
+        expected = {
+            "empty": [],
+            "unknown-type": ["unsupported_type"],
+            "duplicate-name": ["duplicate_object_name"],
+            "duplicate-id": ["duplicate_object_id"],
+            "legacy-lowercase": ["parse_error"],
+            "missing-profile": ["missing_property"],
+            "missing-link": ["missing_link_target"],
+            "missing-target": ["missing_object"],
+            "cycle-dependency": ["cycle_dependency"],
+            "unsupported-geometry": ["unsupported_geometry"],
+            "invalid-length": ["invalid_length"],
+            "unsupported-property": ["unsupported_property"],
+            "open-sketch": ["open_profile"],
+            "rect-pad": [],
+        }
+        for fixture, codes in expected.items():
+            with self.subTest(fixture=fixture):
+                self.assertEqual(self.diagnostic_codes(fixture), codes)
+
+    def test_p2_fixture_diagnostics(self) -> None:
+        expected = {
+            "body-basefeature-pad": [],
+            "rect-pad-pocket": [],
+            "missing-basefeature": ["missing_link_target"],
+            "pocket-without-base": ["execution_failed"],
+            "pocket-open-sketch": ["open_profile"],
+            "unsupported-pocket-type": ["unsupported_property"],
+        }
+        for fixture, codes in expected.items():
+            with self.subTest(fixture=fixture):
+                self.assertEqual(self.diagnostic_codes(fixture, "p2"), codes)
+
+    def test_p3a_fixture_diagnostics(self) -> None:
+        expected = {
+            "pocket-through-all": [],
+            "pocket-through-all-without-base": ["execution_failed"],
+            "pocket-up-to-face": [],
+            "pocket-up-to-face-parallel": ["execution_failed"],
+            "pocket-up-to-face-intersects-sketch": ["execution_failed"],
+            "up-to-face-missing-target": ["missing_link_target"],
+            "up-to-face-missing-subshape": ["invalid_subshape"],
+            "up-to-face-edge-subshape": ["unsupported_subshape_kind"],
+            "pocket-up-to-shape-solid": [],
+            "pocket-up-to-shape-face": [],
+            "pocket-up-to-shape-multi-face-unsupported": ["unsupported_subshape_kind"],
+            "pocket-up-to-shape-empty": ["invalid_subshape"],
+            "pad-up-to-face": [],
+            "pad-through-all-unsupported": ["unsupported_property"],
+        }
+        for fixture, codes in expected.items():
+            with self.subTest(fixture=fixture):
+                self.assertEqual(self.diagnostic_codes(fixture, "p3a"), codes)
+
+    def test_p3b_fixture_diagnostics(self) -> None:
+        expected = {
+            "pad-two-sides-length": [],
+            "pad-two-sides-up-to-face1": [],
+            "pad-two-sides-up-to-face2": [],
+            "pad-two-sides-up-to-shape1": [],
+            "pad-two-sides-up-to-shape2": [],
+            "pad-up-to-first": [],
+            "pad-up-to-last": [],
+            "pocket-two-sides-length": [],
+            "pad-symmetric-length": [],
+            "pad-symmetric-taper": [],
+            "pocket-symmetric-length": [],
+            "pad-custom-vector": [],
+            "pocket-custom-vector": [],
+            "pad-reference-axis": [],
+            "pad-reference-axis-edge": [],
+            "pad-sketch-placement": [],
+            "pad-custom-direction-placement": [],
+            "pad-custom-direction-sketch-rotation": [],
+            "pocket-body-placement": [],
+            "body-basefeature-placement": [],
+            "pad-invalid-direction": ["invalid_direction"],
+            "pad-reference-axis-parallel": ["invalid_direction"],
+            "pad-reference-axis-missing-target": ["missing_link_target"],
+            "pad-symmetric-up-to-unsupported": ["unsupported_property"],
+            "pad-length-taper": [],
+            "pad-length-taper-inner-wire": [],
+            "pocket-length-taper": [],
+            "pad-two-sides-taper": [],
+            "pocket-invalid-taper": ["invalid_taper"],
+            "pad-two-sides-up-to-face2-missing-target": ["missing_property"],
+        }
+        for fixture, codes in expected.items():
+            with self.subTest(fixture=fixture):
+                self.assertEqual(self.diagnostic_codes(fixture, "p3b"), codes)
+
+    def test_p4_fixture_diagnostics(self) -> None:
+        expected = {
+            "body-link-list": [],
+            "feature-link-sub-list": [],
+            "missing-link-target": ["missing_link_target"],
+            "cycle-link-sub": ["cycle_dependency"],
+            "invalid-link-value": ["invalid_link_value"],
+            "part-placement-body": [],
+            "sketch-placement-pocket": [],
+            "typed-property-pad": [],
+            "invalid-placement": ["invalid_placement"],
+            "invalid-typed-property": ["invalid_property_type"],
+            "datum-plane-support": [],
+            "datum-line-reference-axis": [],
+            "datum-point-part-placement": [],
+        }
+        for fixture, codes in expected.items():
+            with self.subTest(fixture=fixture):
+                self.assertEqual(self.diagnostic_codes(fixture, "p4"), codes)
+
+    def test_p5_fixture_diagnostics(self) -> None:
+        expected = {
+            "sketch-arc-ellipse-profile": [],
+            "sketch-arc-profile": [],
+            "sketch-bspline-profile": [],
+            "sketch-circle-profile": [],
+            "sketch-coincident-profile": [],
+            "sketch-construction-ignored": [],
+            "sketch-ellipse-profile": [],
+            "sketch-external-circle-edge": [],
+            "sketch-external-circle-edge-as-line": [],
+            "sketch-external-edge": [],
+            "sketch-external-ellipse-edge": [],
+            "sketch-external-face-unsupported": ["unsupported_subshape_kind"],
+            "sketch-external-internal-edge": [],
+            "sketch-external-internal-vertex": [],
+            "sketch-external-tilted-ellipse-edge": [],
+            "sketch-external-tilted-circle-edge": [],
+            "sketch-external-vertex": [],
+            "sketch-internal-face": [],
+            "sketch-missing-external": ["missing_link_target"],
+            "sketch-open-wire-internal-empty": [],
+            "sketch-rect-circle-island": [],
+            "sketch-rect-circle-hole": [],
+            "sketch-unsupported-constraint": ["unsupported_property"],
+            "sketch-unsupported-hyperbola": ["unsupported_geometry"],
+        }
+        for fixture, codes in expected.items():
+            with self.subTest(fixture=fixture):
+                self.assertEqual(self.diagnostic_codes(fixture, "p5"), codes)
+
+    def test_p6_fixture_diagnostics(self) -> None:
+        expected = {
+            "body-additive-fuse-history": [],
+            "body-boolean-history": [],
+            "body-split-history": [],
+            "named-shape-indexed-pad": [],
+            "sketch-external-edge-stable-body-deleted": ["deleted_stable_subname"],
+            "sketch-external-edge-stable-body-deleted-after-add": ["deleted_stable_subname"],
+            "sketch-external-edge-stable-body-preserved": [],
+            "sketch-external-edge-stable-body-profile-source": [],
+            "sketch-external-edge-stable-body-split": ["split_stable_subname"],
+            "sketch-external-edge-stable-body-split-after-add": ["split_stable_subname"],
+            "sketch-external-edge-stable-indexed-opaque-sublist": [],
+            "sketch-external-edge-stable-multi-prism": [],
+            "sketch-external-edge-stable-taper-preserved": [],
+            "up-to-face-stable-body-deleted": ["deleted_stable_subname"],
+            "up-to-face-stable-body-history": [],
+            "up-to-face-stable-body-preserved": [],
+            "up-to-face-stable-body-split": ["split_stable_subname"],
+            "up-to-face-stable-indexed-opaque-sublist": [],
+            "up-to-face-stable-indexed-reference": [],
+            "up-to-face-stable-subname-known-gap": ["unsupported_stable_subname"],
+        }
+        for fixture, codes in expected.items():
+            with self.subTest(fixture=fixture):
+                self.assertEqual(self.diagnostic_codes(fixture, "p6"), codes)
+
+    def test_p7_fixture_diagnostics(self) -> None:
+        expected = {
+            "datum-coordinate-system-invalid-axis": ["unsupported_subshape_kind"],
+            "datum-coordinate-system-reference-axis": [],
+            "datum-coordinate-system-sketch-support": [],
+            "chamfer-invalid-size": ["invalid_length"],
+            "chamfer-pad-edge": [],
+            "chamfer-refine-true": [],
+            "fillet-missing-edge": ["invalid_subshape"],
+            "fillet-pad-edge": [],
+            "fillet-refine-true": [],
+            "hole-angled-drill-point": [],
+            "hole-blind-depth": [],
+            "hole-counterbore": [],
+            "hole-counterdrill": [],
+            "hole-countersink": [],
+            "hole-isotyre-clearance-fallback": [],
+            "hole-point-profile": [],
+            "hole-refine-true": [],
+            "hole-tapered": [],
+            "hole-thread-clearance": [],
+            "hole-threaded-cosmetic": [],
+            "hole-threaded-bsf-cosmetic": [],
+            "hole-threaded-bsp-fallback-cosmetic": [],
+            "hole-threaded-bsw-cosmetic": [],
+            "hole-threaded-fine-cosmetic": [],
+            "hole-threaded-isotyre-cosmetic": [],
+            "hole-threaded-known-gap": ["unsupported_property"],
+            "hole-threaded-npt-cosmetic": [],
+            "hole-threaded-unef-cosmetic": [],
+            "hole-threaded-unf-cosmetic": [],
+            "hole-threaded-unc-cosmetic": [],
+            "hole-through-all": [],
+            "hole-unc-clearance": [],
+            "hole-without-base": ["execution_failed"],
+            "linear-pattern-custom-spacings": [],
+            "linear-pattern-pad-datum-line": [],
+            "linear-pattern-pad-sketch-axis": [],
+            "linear-pattern-pad-two-directions": [],
+            "linear-pattern-spacing-pattern": [],
+            "linear-pattern-whole-shape": [],
+            "mirrored-pad-datum-plane": [],
+            "mirrored-fillet-support-transform": [],
+            "mirrored-refine-true": [],
+            "mirrored-whole-shape": [],
+            "multi-transform-linear-mirror": [],
+            "multi-transform-scaled-diagonal": [],
+            "multi-transform-scaled-divisor-known-gap": ["invalid_length"],
+            "multi-transform-whole-shape": [],
+            "origin-identity-placement": [],
+            "pad-refine-false": [],
+            "pad-refine-true": [],
+            "pocket-refine-true": [],
+            "polar-pattern-pad-datum-line": [],
+            "polar-pattern-pad-sketch-axis": [],
+            "polar-pattern-spacing-pattern": [],
+            "polar-pattern-whole-shape": [],
+            "scaled-invalid-factor": ["invalid_length"],
+            "scaled-pad-factor-two": [],
+            "scaled-whole-shape": [],
+        }
+        for fixture, codes in expected.items():
+            with self.subTest(fixture=fixture):
+                self.assertEqual(self.diagnostic_codes(fixture, "p7"), codes)
+
+    def test_p8_fixture_diagnostics(self) -> None:
+        expected = {
+            "app-link-box": [],
+            "app-link-box-face": [],
+            "app-link-box-multi-face": [],
+            "app-link-box-missing-subshape": ["invalid_subshape"],
+            "app-link-box-scale": [],
+            "app-link-box-transform": [],
+            "app-link-element-box": [],
+            "app-link-element-count-collapsed": [],
+            "app-link-group-elements": [],
+            "app-link-group-subshape-alias": [],
+            "app-link-group-visibility": [],
+            "app-link-missing": ["missing_link_target"],
+            "app-link-show-element-materialized": [],
+            "assembly-link-basic": [],
+            "part-boolean-fragments": [],
+            "part-boolean-fragments-compsolid": [],
+            "part-boolean-fragments-compsolid-split": [],
+            "part-boolean-fragments-shell-split": [],
+            "part-boolean-fragments-split": [],
+            "part-boolean-fragments-wire-split": [],
+            "mesh-import-stl": [],
+            "mesh-import-stl-missing": ["execution_failed"],
+            "part-box": [],
+            "part-common": [],
+            "part-cone": [],
+            "part-cut": [],
+            "part-cylinder": [],
+            "part-cylinder-angled-prism": [],
+            "part-ellipse": [],
+            "part-ellipsoid": [],
+            "part-fuse": [],
+            "part-helix": [],
+            "part-import-brep": [],
+            "part-import-brep-missing": ["execution_failed"],
+            "part-import-iges": [],
+            "part-import-iges-missing": ["execution_failed"],
+            "part-import-step": [],
+            "part-import-step-missing": ["execution_failed"],
+            "part-line": [],
+            "part-multi-common": [],
+            "part-multi-common-first-rest": [],
+            "part-multi-fuse": [],
+            "part-plane": [],
+            "part-prism": [],
+            "part-regular-polygon": [],
+            "part-section": [],
+            "part-sphere": [],
+            "part-torus": [],
+            "part-vertex": [],
+            "part-wedge": [],
+            "part-xor": [],
+            "part-spiral": [],
+        }
+        for fixture, codes in expected.items():
+            with self.subTest(fixture=fixture):
+                self.assertEqual(self.diagnostic_codes(fixture, "p8"), codes)
+
+    def test_diagnostics_include_stage_target_and_subname_metadata(self) -> None:
+        missing_target = self.run_recompute("missing-link-target", "p4")["diagnostics"][0]
+        self.assertEqual(missing_target["code"], "missing_link_target")
+        self.assertEqual(missing_target["object"], "Pad")
+        self.assertEqual(missing_target["property"], "Profile")
+        self.assertEqual(missing_target["stage"], "graph")
+        self.assertEqual(missing_target["target"], "MissingSketch")
+
+        invalid_placement = self.run_recompute("invalid-placement", "p4")["diagnostics"][0]
+        self.assertEqual(invalid_placement["code"], "invalid_placement")
+        self.assertEqual(invalid_placement["object"], "Sketch")
+        self.assertEqual(invalid_placement["property"], "Placement")
+        self.assertEqual(invalid_placement["stage"], "parse")
+
+        missing_subshape = self.run_recompute("up-to-face-missing-subshape", "p3a")["diagnostics"][0]
+        self.assertEqual(missing_subshape["code"], "invalid_subshape")
+        self.assertEqual(missing_subshape["object"], "Pocket")
+        self.assertEqual(missing_subshape["property"], "UpToFace")
+        self.assertEqual(missing_subshape["stage"], "runtime")
+        self.assertEqual(missing_subshape["target"], "Pad")
+        self.assertEqual(missing_subshape["subname"], "Face99")

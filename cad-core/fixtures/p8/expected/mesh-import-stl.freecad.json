@@ -1,0 +1,9 @@
+{
+  "object": "ImportedStl",
+  "reference": "FreeCADCmd geometry-equivalent mesh import of fixtures/p8/assets/unit-square.stl",
+  "freecad_version": "1.2.0 revision 20260519",
+  "bbox": {"min": [0.0, 0.0, 0.0], "max": [1.0, 1.0, 0.0]},
+  "volume": 0.0,
+  "topology_counts": {"faces": 2, "edges": 5, "vertices": 4},
+  "mesh_summary": {"vertex_count": 4, "triangle_count": 2}
+}

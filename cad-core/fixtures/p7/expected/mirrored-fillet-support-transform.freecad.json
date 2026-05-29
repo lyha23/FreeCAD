@@ -1,0 +1,19 @@
+{
+  "reference": "FreeCADCmd geometry-equivalent 2x2x2 Pad filleted with radius 0.2 and mirrored across datum plane at X=2",
+  "freecad_version": "1.2.0 revision 20260519",
+  "bbox_delta": 0.02,
+  "objects": {
+    "Fillet": {
+      "bbox": {"min": [0.0, 0.0, 0.0], "max": [2.0, 2.0, 2.0]},
+      "volume": 7.9828318530717945
+    },
+    "Mirrored": {
+      "bbox": {"min": [0.0, 0.0, 0.0], "max": [4.0, 2.0, 2.0]},
+      "volume": 15.965663706143589
+    },
+    "Body": {
+      "bbox": {"min": [0.0, 0.0, 0.0], "max": [4.0, 2.0, 2.0]},
+      "volume": 15.965663706143589
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "reference": "FreeCADCmd geometry-equivalent Pad box 10x5x10 with PartDesign Fillet radius 0.5 on Edge1",
+  "freecad_version": "1.2.0 revision 20260519",
+  "bbox_delta": 0.01,
+  "objects": {
+    "Fillet": {
+      "bbox": {"min": [0.0, 0.0, 0.0], "max": [10.0, 5.0, 10.0]},
+      "volume": 499.4634954084936
+    },
+    "Body": {
+      "bbox": {"min": [0.0, 0.0, 0.0], "max": [10.0, 5.0, 10.0]},
+      "volume": 499.4634954084936
+    }
+  }
+}

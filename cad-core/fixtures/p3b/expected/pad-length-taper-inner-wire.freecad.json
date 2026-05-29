@@ -1,0 +1,15 @@
+{
+  "object": "Pad",
+  "reference": "FreeCADCmd native document oracle: Sketcher::SketchObject with outer 12x8 rectangle and inner 4x2 rectangle, PartDesign::Pad Length=8 TaperAngle=2",
+  "freecad_version": "1.2.0 revision 20260519",
+  "bbox": {
+    "min": [-0.27936615593398173, -0.27936615593398173, 0.0],
+    "max": [12.279366155933982, 8.279366155933982, 8.0]
+  },
+  "volume": 735.2890094646057,
+  "topology_counts": {
+    "faces": 10,
+    "edges": 24,
+    "vertices": 16
+  }
+}

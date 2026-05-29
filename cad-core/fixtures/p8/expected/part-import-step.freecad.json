@@ -1,0 +1,12 @@
+{
+  "object": "ImportedStep",
+  "reference": "FreeCADCmd geometry-equivalent import of fixtures/p8/assets/as1-ac-214_small.stp",
+  "freecad_version": "1.2.0 revision 20260519",
+  "bbox_delta": 0.000001,
+  "bbox": {
+    "min": [122.48640506238414, 25.0, -7.036455729509775],
+    "max": [175.02511031877214, 125.0, 80.0]
+  },
+  "volume": 104939.95611579117,
+  "topology_counts": {"faces": 62, "edges": 134, "vertices": 84}
+}

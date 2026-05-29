@@ -1,0 +1,8 @@
+{
+  "object": "ArrayLink",
+  "reference": "FreeCADCmd geometry-equivalent collapsed App::Link element count array",
+  "freecad_version": "1.2.0 revision 20260519",
+  "bbox": {"min": [0.0, 10.0, 0.0], "max": [9.0, 13.0, 4.0]},
+  "volume": 72.0,
+  "topology_counts": {"faces": 12, "edges": 24, "vertices": 16}
+}

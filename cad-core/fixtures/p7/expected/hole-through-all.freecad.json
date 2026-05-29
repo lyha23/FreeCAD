@@ -1,0 +1,11 @@
+{
+  "reference": "FreeCADCmd geometry-equivalent base Part.makeBox(10, 5, 10) cut by through-all cylinder radius=1 crossing the full solid",
+  "freecad_version": "1.2.0 revision 20260519",
+  "bbox_delta": 0.02,
+  "objects": {
+    "Body": {
+      "bbox": {"min": [0.0, 0.0, 0.0], "max": [10.0, 5.0, 10.0]},
+      "volume": 468.58407346410206
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "object": "Spiral",
+  "reference": "FreeCADCmd geometry-equivalent Part::Spiral growth 1, radius 1 to 3, 2 rotations",
+  "freecad_version": "1.2.0 revision 20260519",
+  "bbox_delta": 0.2,
+  "bbox": {"min": [-2.6, -2.84, 0.0], "max": [3.0, 2.35, 0.0]},
+  "volume": 0.0,
+  "topology_counts": {"faces": 0, "edges": 2, "vertices": 3}
+}

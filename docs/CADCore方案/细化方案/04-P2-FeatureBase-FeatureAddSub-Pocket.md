@@ -36,7 +36,25 @@ P2 固定 PartDesign Body 的加料 / 减料主链，避免 Pad、Pocket 和后�
 - 缺失 base、无 profile、unsupported type 必须 diagnostics。
 - Body boolean source 应继续进入 `NamedShape` / `ElementMap` 传播。
 
+## Fixture / expected 现状
+
+当前 `fixtures/p2` 同时包含成功几何 fixture 和错误诊断 fixture。`expected/` 目录只承载成功几何 fixture 的 FreeCAD / oracle golden；错误 fixture 只在 diagnostics 矩阵中固定 code，不新增空 expected 文件。统一迁移规则见 `docs/5-30-04-33-CADCore-fixture-expected迁移方案.md`。
+
+2026-05-30 迁移后的 P2 fixture 清单：
+
+| fixture | 类型 | 当前验收方式 | expected 依据 |
+| --- | --- | --- | --- |
+| `rect-pad-pocket` | 成功几何，Pad 后 Pocket cut | diagnostics 为空；读取 `expected/rect-pad-pocket.freecad.json` 校验 object、bbox、volume、topology count | `FreeCADCmd` geometry-equivalent `Part.makeBox(10, 5, 10).cut(Part.makeBox(6, 3, 10, FreeCAD.Vector(2, 1, 0)))` |
+| `body-basefeature-pad` | 成功几何，Body 从 `BaseFeature` 起步再执行 Pad | diagnostics 为空；读取 `expected/body-basefeature-pad.freecad.json` 校验 object、bbox、volume、topology count | `FreeCADCmd Part.makeBox(10, 5, 5)`，与 `fixtures/p3a/expected/pad-up-to-face.freecad.json` 使用同源 geometry-equivalent oracle |
+| `missing-basefeature` | 错误诊断 | `missing_link_target` | 不进入 expected |
+| `pocket-without-base` | 错误诊断 | `execution_failed` | 不进入 expected |
+| `pocket-open-sketch` | 错误诊断 | `open_profile` | 不进入 expected |
+| `unsupported-pocket-type` | 错误诊断 | `unsupported_property` | 不进入 expected |
+
+迁移后 `test_p2_fixture_diagnostics` 继续作为 P2 全量错误码矩阵；两个成功几何 fixture 的几何 golden 不再写在测试代码里。
+
 ## 验收
 
 - `fixtures/p2` 覆盖 FeatureBase、Pocket subtractive、Body BaseFeature 和错误 diagnostics。
+- 成功几何 fixture 使用 expected 文件承载 FreeCAD / oracle golden；错误 fixture 只固定 diagnostics code。
 - P1 Pad fixture 不回退。

@@ -1,0 +1,7 @@
+{
+  "object": "BoxLink",
+  "reference": "FreeCADCmd geometry-equivalent App::Link to Box.Face1 subshape",
+  "freecad_version": "1.2.0 revision 20260519",
+  "volume": 0.0,
+  "topology_counts": {"faces": 1, "edges": 4, "vertices": 4}
+}

@@ -1,0 +1,8 @@
+{
+  "object": "Cone",
+  "reference": "FreeCADCmd geometry-equivalent Part::Cone radius1 2, radius2 4, height 6",
+  "freecad_version": "1.2.0 revision 20260519",
+  "bbox_delta": 0.2,
+  "bbox": {"min": [-4.0, -4.0, 0.0], "max": [4.0, 4.0, 6.0]},
+  "volume": 175.92918860102841
+}

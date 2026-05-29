@@ -1,0 +1,14 @@
+{
+  "reference": "FreeCADCmd geometry-equivalent countersink cut: 90 degree conical head r=2 to r=1 plus shaft cylinder",
+  "freecad_version": "1.2.0 revision 20260519",
+  "bbox_delta": 0.05,
+  "objects": {
+    "Hole": {
+      "volume": 16.755160819145566
+    },
+    "Body": {
+      "bbox": {"min": [0.0, 0.0, 0.0], "max": [10.0, 5.0, 10.0]},
+      "volume": 483.24483918085444
+    }
+  }
+}

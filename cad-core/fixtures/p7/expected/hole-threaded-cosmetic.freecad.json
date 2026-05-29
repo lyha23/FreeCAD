@@ -1,0 +1,8 @@
+{
+  "reference": "FreeCADCmd geometry-equivalent cosmetic threaded blind hole: cylinder radius=0.375 depth=4 cut from 10x5x10 base",
+  "freecad_version": "1.2.0 revision 20260519",
+  "objects": {
+    "Hole": {"volume": 1.7671458676442586},
+    "Body": {"volume": 498.23285413235574}
+  }
+}

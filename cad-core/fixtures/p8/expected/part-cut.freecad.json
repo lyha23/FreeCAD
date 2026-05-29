@@ -1,0 +1,8 @@
+{
+  "object": "Cut",
+  "reference": "FreeCADCmd geometry-equivalent Part::Cut of BaseBox by ToolBox",
+  "freecad_version": "1.2.0 revision 20260519",
+  "bbox": {"min": [0.0, 0.0, 0.0], "max": [1.0, 2.0, 2.0]},
+  "volume": 4.0,
+  "topology_counts": {"faces": 6, "edges": 12, "vertices": 8}
+}

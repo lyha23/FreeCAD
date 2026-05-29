@@ -1,0 +1,9 @@
+{
+  "object": "BooleanFragments",
+  "reference": "FreeCADCmd geometry-equivalent Part::BooleanFragments Split mode for shell and splitter face",
+  "freecad_version": "1.2.0 revision 20260519",
+  "bbox_delta": 0.000001,
+  "bbox": {"min": [0.0, 0.0, -0.5000001], "max": [2.0, 1.0, 0.5000001]},
+  "volume": 0.0,
+  "topology_counts": {"faces": 4, "edges": 13, "vertices": 10}
+}
