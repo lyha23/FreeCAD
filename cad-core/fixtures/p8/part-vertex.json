@@ -1,0 +1,17 @@
+{
+  "Objects": [
+    {
+      "Name": "Vertex",
+      "ID": 1,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 1,
+        "Y": 2,
+        "Z": 3
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Vertex"]
+  }
+}

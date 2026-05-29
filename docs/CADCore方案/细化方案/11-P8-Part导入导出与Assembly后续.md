@@ -1,18 +1,35 @@
 # P8：Part、导入导出与 Assembly 后续
 
-P8 已启动 Part primitive 基础子集。当前先把 FreeCAD `Part::Primitive` 中最基础、对前端展示和后续 Boolean 有价值的 shape 接入 `cad-core`，导入导出、Assembly 和产品化 adapter 仍保持后置。
+P8 已覆盖 FreeCAD `Part::Primitive` 与常用 Part Boolean 子集。导入导出、Assembly 和产品化 adapter 仍保持后置。
 
 ## 当前基线
 
 - `Part::Box` 已注册 executor，按 `Length` / `Width` / `Height` 构造 OCCT solid，默认值和过小尺寸校验对齐 FreeCAD `Box::execute()`。
 - `Part::Cylinder` 已注册 executor，按 `Radius` / `Height` / `Angle` 构造圆柱底面，再按 `PrismExtension` 的 `FirstAngle` / `SecondAngle` 拉伸成 solid。
-- Part primitive 输出 mesh、subshape map、bbox、volume、kernel metadata 和 indexed `NamedShape`。
-- `fixtures/p8` 已覆盖 `part-box`、`part-cylinder` 和 `part-cylinder-angled-prism`。
+- `Part::Prism` 已注册 executor，按 `Polygon` / `Circumradius` 构造正多边形底面，再按 `Height` 和 `PrismExtension` 的 `FirstAngle` / `SecondAngle` 拉伸成 solid。
+- `Part::RegularPolygon` 已注册 executor，按 `Polygon` / `Circumradius` 构造正多边形 wire。
+- `Part::Sphere` 已注册 executor，按 `Radius` / `Angle1` / `Angle2` / `Angle3` 调用 FreeCAD 同款 `BRepPrimAPI_MakeSphere` 参数。
+- `Part::Ellipsoid` 已注册 executor，按 `Radius1` / `Radius2` / `Radius3` 和角度参数构造 sphere 后用 `BRepBuilderAPI_GTransform` 缩放。
+- `Part::Cone` 已注册 executor，按 `Radius1` / `Radius2` / `Height` / `Angle` 调用 `BRepPrimAPI_MakeCone`，两端半径相等时退化为 cylinder 路径。
+- `Part::Torus` 已注册 executor，按 `Radius1` / `Radius2` / `Angle1` / `Angle2` / `Angle3` 走 FreeCAD `TopoShape::makeTorus()` 的圆面旋转路径。
+- `Part::Wedge` 已注册 executor，按 `Xmin` / `Ymin` / `Zmin` / `X2min` / `Z2min` / `Xmax` / `Ymax` / `Zmax` / `X2max` / `Z2max` 构造 `BRepPrim_Wedge` solid。
+- `Part::Vertex` 已注册 executor，按 `X` / `Y` / `Z` 构造 OCCT vertex。
+- `Part::Line` 已注册 executor，按 `X1` / `Y1` / `Z1` 和 `X2` / `Y2` / `Z2` 构造 OCCT edge。
+- `Part::Ellipse` 已注册 executor，按 `MajorRadius` / `MinorRadius` / `Angle1` / `Angle2` 构造 OCCT edge。
+- `Part::Plane` 已注册 executor，按 `Length` / `Width` 构造位于 XY 平面的 OCCT face。
+- `Part::Helix` 已注册 executor，按 `Pitch` / `Height` / `Radius` / `Angle` / `SegmentLength` / `LocalCoord` 走 FreeCAD `TopoShape::makeSpiralHelix()` 路径构造 wire。
+- `Part::Spiral` 已注册 executor，按 `Growth` / `Radius` / `Rotations` / `SegmentLength` 走 FreeCAD `TopoShape::makeSpiralHelix()` 路径构造 wire。
+- `Part::Fuse` / `Part::Cut` / `Part::Common` 已注册 executor，按 `Base` / `Tool` 链接读取请求内 shape，走 `topo::makeElementBooleanFromSources()` 的 OCCT maker history 主路径，输出 mesh / subshape / `NamedShape`，并在 `Refine=true` 时使用当前 RefineModel 子集。
+- `Part::Section` 已注册 executor，按 `Base` / `Tool` 链接和 `Approximation` 构造 section edges compound，走 `topo::makeElementSectionFromSources()` 的 maker history 主路径。
+- `Part::MultiFuse` / `Part::MultiCommon` 已注册 executor，按 `Shapes` 链接列表读取请求内 shape；`MultiFuse` 支持单 compound 输入展开到子 shape，`MultiCommon` 默认按 `CommonOfAllShapes` 逐步求交，并保留 `CommonOfFirstAndRest` 兼容行为。
+- `Part::XOR` / `Part::FeatureXOR` 已作为 BOPTools `FeatureXOR` typed alias 注册 executor，按 `Objects` 链接列表读取请求内 shape，走 `topo::makeElementXorFromSources()` 的 Fuse / Common / Cut 主路径；当前支持 `Tolerance=0`。
+- Part primitive 输出 mesh、subshape map、bbox、volume、kernel metadata 和 indexed `NamedShape`；Part Boolean 输出 maker-history derived `NamedShape`。
+- `fixtures/p8` 已覆盖 `part-box`、`part-cylinder`、`part-cylinder-angled-prism`、`part-prism`、`part-regular-polygon`、`part-sphere`、`part-ellipsoid`、`part-cone`、`part-torus`、`part-wedge`、`part-vertex`、`part-line`、`part-ellipse`、`part-plane`、`part-helix`、`part-spiral`、`part-fuse`、`part-cut`、`part-common`、`part-section`、`part-multi-fuse`、`part-multi-common`、`part-multi-common-first-rest` 和 `part-xor`。
 
 ## 目标范围
 
-- Part primitives：Box、Cylinder 已接入；Sphere、Cone、Torus 等仍待补。
-- Part Boolean：Fuse、Cut、Common、Section、Fragments 等独立 Part 操作。
+- Part primitives：Box、Cylinder、Prism、RegularPolygon、Sphere、Ellipsoid、Cone、Torus、Wedge、Vertex、Line、Ellipse、Plane、Helix、Spiral 已接入。
+- Part Boolean：Fuse、Cut、Common、Section、MultiFuse、MultiCommon、BOPTools FeatureXOR 已接入；Fragments 等独立 Part 操作仍待迁移。
 - 文件导入导出：STEP / BREP / STL 等 adapter 能力。
 - Assembly：Link、Joint、约束求解和装配 recompute。
 - 产品化 adapter：Worker、WASM、Web service bridge。
@@ -22,7 +39,7 @@ P8 已启动 Part primitive 基础子集。当前先把 FreeCAD `Part::Primitive
 - 文件导入导出可以处理 BREP，但 BREP 不进入持久 `DocumentObject graph` 的默认状态模型。
 - Web / Worker / WASM 只做 adapter，不改变 CAD Core 无状态边界。
 - Assembly 不应绕过 topo naming；Link / Joint 的 subname 和 placement 仍需要稳定引用模型。
-- 当前 Part primitive 只使用 indexed `NamedShape`；完整 primitive maker history、Boolean history 和导入 shape 的 ElementMap 仍属于 P6/P8 后续工作。
+- 当前 Part primitive 仍使用 indexed `NamedShape`；Part Boolean 已消费 boolean / section maker history，完整 primitive maker history、Fragments history 和导入 shape 的 ElementMap 仍属于 P6/P8 后续工作。
 
 ## 前置条件
 
@@ -43,8 +60,7 @@ P8 已启动 Part primitive 基础子集。当前先把 FreeCAD `Part::Primitive
 
 ## 剩余缺口
 
-- Sphere、Cone、Torus、Plane、Line、Vertex 等 Part primitive 尚未迁移。
-- Part Boolean 尚未注册 executor，不能替代 Body fuse/cut 主链。
+- Fragments 等更完整 Part Boolean 尚未注册 executor。
 - STEP / BREP / STL 导入导出还没有 adapter 能力。
 - Assembly Link / Joint、placement chain 和装配求解未迁移。
 - Worker / WASM / Web service bridge 未产品化。

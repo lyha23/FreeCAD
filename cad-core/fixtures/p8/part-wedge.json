@@ -1,0 +1,24 @@
+{
+  "Objects": [
+    {
+      "Name": "Wedge",
+      "ID": 1,
+      "TypeId": "Part::Wedge",
+      "Properties": {
+        "Xmin": 0,
+        "Ymin": 0,
+        "Zmin": 0,
+        "X2min": 2,
+        "Z2min": 2,
+        "Xmax": 10,
+        "Ymax": 10,
+        "Zmax": 10,
+        "X2max": 8,
+        "Z2max": 8
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Wedge"]
+  }
+}

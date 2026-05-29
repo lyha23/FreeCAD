@@ -1,9 +1,12 @@
 #include "cad_core/topo/named_shape.h"
 
+#include "cad_core/geometry/refine_model.h"
+
 #include <BRepAlgoAPI_BooleanOperation.hxx>
 #include <BRepAlgoAPI_Common.hxx>
 #include <BRepAlgoAPI_Cut.hxx>
 #include <BRepAlgoAPI_Fuse.hxx>
+#include <BRepAlgoAPI_Section.hxx>
 #include <Standard_Failure.hxx>
 #include <TopAbs_ShapeEnum.hxx>
 #include <TopExp.hxx>
@@ -19,9 +22,11 @@
 #include <utility>
 #include <vector>
 
-namespace cad_core::topo {
+namespace cad_core::topo
+{
 
-namespace {
+namespace
+{
 
 std::string historyKindName(ElementHistoryKind kind)
 {
@@ -42,16 +47,19 @@ std::string historyKindName(ElementHistoryKind kind)
     return "unknown";
 }
 
-void addIndexedElements(NamedShape& namedShape,
-                        const TopTools_IndexedMapOfShape& shapes,
-                        TopAbs_ShapeEnum kind,
-                        const std::string& prefix)
+void addIndexedElements(
+    NamedShape& namedShape,
+    const TopTools_IndexedMapOfShape& shapes,
+    TopAbs_ShapeEnum kind,
+    const std::string& prefix
+)
 {
     for (int index = 1; index <= shapes.Extent(); ++index) {
         const std::string name = prefix + std::to_string(index);
-        namedShape.elements[name] = NamedElement{name, SubshapeName{kind, index}, ElementHistoryKind::Indexed, {}};
+        namedShape.elements[name]
+            = NamedElement {name, SubshapeName {kind, index}, ElementHistoryKind::Indexed, {}};
         namedShape.elementMap[name] = name;
-        namedShape.history.push_back(ElementHistory{ElementHistoryKind::Indexed, name, {}});
+        namedShape.history.push_back(ElementHistory {ElementHistoryKind::Indexed, name, {}});
     }
 }
 
@@ -74,14 +82,17 @@ std::vector<TopAbs_ShapeEnum> mappableKinds()
     return {TopAbs_FACE, TopAbs_EDGE, TopAbs_VERTEX};
 }
 
-struct SourceTargets {
+struct SourceTargets
+{
     std::set<std::string> preserved;
     std::set<std::string> history;
 };
 
-std::optional<std::string> findElementName(const NamedShape& namedShape,
-                                           const TopoDS_Shape& shape,
-                                           TopAbs_ShapeEnum kind)
+std::optional<std::string> findElementName(
+    const NamedShape& namedShape,
+    const TopoDS_Shape& shape,
+    TopAbs_ShapeEnum kind
+)
 {
     const std::string prefix = prefixForKind(kind);
     if (prefix.empty()) {
@@ -97,11 +108,13 @@ std::optional<std::string> findElementName(const NamedShape& namedShape,
     return std::nullopt;
 }
 
-void applyHistoryList(NamedShape& namedShape,
-                      const std::string& sourceName,
-                      const TopTools_ListOfShape& historyShapes,
-                      ElementHistoryKind historyKind,
-                      std::map<std::string, SourceTargets>& sourceTargets)
+void applyHistoryList(
+    NamedShape& namedShape,
+    const std::string& sourceName,
+    const TopTools_ListOfShape& historyShapes,
+    ElementHistoryKind historyKind,
+    std::map<std::string, SourceTargets>& sourceTargets
+)
 {
     for (TopTools_ListIteratorOfListOfShape it(historyShapes); it.More(); it.Next()) {
         const TopoDS_Shape& historyShape = it.Value();
@@ -113,19 +126,22 @@ void applyHistoryList(NamedShape& namedShape,
             auto& element = namedShape.elements[*elementName];
             element.status = historyKind;
             element.sources.push_back(sourceName);
-            namedShape.history.push_back(ElementHistory{historyKind, *elementName, {sourceName}});
+            namedShape.history.push_back(ElementHistory {historyKind, *elementName, {sourceName}});
             sourceTargets[sourceName].history.insert(*elementName);
         }
     }
 }
 
-std::vector<std::string> sourceElementNames(const NamedShapeSource& source, const std::string& localElementName)
+std::vector<std::string> sourceElementNames(
+    const NamedShapeSource& source,
+    const std::string& localElementName
+)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
     // ::TopoShape::makeElementShape() and mapSubElement(shapes) carry existing element names
     // through chained makers. When a source already has an ElementMap, cad-core treats those
     // stable keys as aliases of the source-local FaceN/EdgeN/VertexN during the next maker pass.
-    std::vector<std::string> names{source.owner + "." + localElementName};
+    std::vector<std::string> names {source.owner + "." + localElementName};
     if (source.namedShape == nullptr) {
         return names;
     }
@@ -141,11 +157,13 @@ std::vector<std::string> sourceElementNames(const NamedShapeSource& source, cons
     return names;
 }
 
-void collectSourceElementMap(NamedShape& namedShape,
-                             const std::string& sourceName,
-                             const TopoDS_Shape& sourceElement,
-                             TopAbs_ShapeEnum kind,
-                             std::map<std::string, SourceTargets>& sourceTargets)
+void collectSourceElementMap(
+    NamedShape& namedShape,
+    const std::string& sourceName,
+    const TopoDS_Shape& sourceElement,
+    TopAbs_ShapeEnum kind,
+    std::map<std::string, SourceTargets>& sourceTargets
+)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
     // ::makeShapeWithElementMap() calls "mapSubElement(shapes)" before consuming mapper history,
@@ -157,8 +175,10 @@ void collectSourceElementMap(NamedShape& namedShape,
     sourceTargets[sourceName].preserved.insert(*elementName);
 }
 
-void applyHistoryElementMap(NamedShape& namedShape,
-                            const std::map<std::string, SourceTargets>& sourceTargets)
+void applyHistoryElementMap(
+    NamedShape& namedShape,
+    const std::map<std::string, SourceTargets>& sourceTargets
+)
 {
     const auto applySplit = [&](const std::string& sourceName, const std::set<std::string>& targets) {
         for (const std::string& target : targets) {
@@ -167,7 +187,9 @@ void applyHistoryElementMap(NamedShape& namedShape,
                 continue;
             }
             elementIt->second.status = ElementHistoryKind::Split;
-            namedShape.history.push_back(ElementHistory{ElementHistoryKind::Split, target, {sourceName}});
+            namedShape.history.push_back(
+                ElementHistory {ElementHistoryKind::Split, target, {sourceName}}
+            );
         }
     };
 
@@ -194,12 +216,16 @@ void applyHistoryElementMap(NamedShape& namedShape,
             applySplit(sourceName, targets.history);
             continue;
         }
-        namedShape.history.push_back(ElementHistory{ElementHistoryKind::Deleted, sourceName, {sourceName}});
+        namedShape.history.push_back(
+            ElementHistory {ElementHistoryKind::Deleted, sourceName, {sourceName}}
+        );
     }
 }
 
-void applyPreservedElementMap(NamedShape& namedShape,
-                              const std::map<std::string, SourceTargets>& sourceTargets)
+void applyPreservedElementMap(
+    NamedShape& namedShape,
+    const std::map<std::string, SourceTargets>& sourceTargets
+)
 {
     for (const auto& [sourceName, targets] : sourceTargets) {
         if (targets.preserved.size() == 1U) {
@@ -215,7 +241,142 @@ void applyPreservedElementMap(NamedShape& namedShape,
                 continue;
             }
             elementIt->second.status = ElementHistoryKind::Split;
-            namedShape.history.push_back(ElementHistory{ElementHistoryKind::Split, target, {sourceName}});
+            namedShape.history.push_back(
+                ElementHistory {ElementHistoryKind::Split, target, {sourceName}}
+            );
+        }
+    }
+}
+
+void addMergeHistory(NamedShape& namedShape)
+{
+    std::map<std::string, std::set<std::string>> aliasesByTarget;
+    for (const auto& [stableName, currentName] : namedShape.elementMap) {
+        if (stableName == currentName || namedShape.elements.count(currentName) == 0U) {
+            continue;
+        }
+        aliasesByTarget[currentName].insert(stableName);
+    }
+
+    for (const auto& item : aliasesByTarget) {
+        const std::string& target = item.first;
+        const std::set<std::string>& aliases = item.second;
+        if (aliases.size() <= 1U) {
+            continue;
+        }
+        std::vector<std::string> sources(aliases.begin(), aliases.end());
+        auto elementIt = namedShape.elements.find(target);
+        if (elementIt != namedShape.elements.end()
+            && elementIt->second.status != ElementHistoryKind::Split) {
+            elementIt->second.status = ElementHistoryKind::Merge;
+            for (const std::string& source : sources) {
+                if (std::find(elementIt->second.sources.begin(), elementIt->second.sources.end(), source)
+                    == elementIt->second.sources.end()) {
+                    elementIt->second.sources.push_back(source);
+                }
+            }
+        }
+        const auto duplicate = std::find_if(
+            namedShape.history.begin(),
+            namedShape.history.end(),
+            [&](const ElementHistory& entry) {
+                return entry.kind == ElementHistoryKind::Merge && entry.element == target
+                    && entry.sources == sources;
+            }
+        );
+        if (duplicate == namedShape.history.end()) {
+            namedShape.history.push_back(ElementHistory {ElementHistoryKind::Merge, target, sources});
+        }
+    }
+}
+
+void addNestedHistory(
+    NamedShape& namedShape,
+    ElementHistoryKind kind,
+    const std::string& targetElement,
+    const std::vector<std::string>& sources
+)
+{
+    if (targetElement.empty() || sources.empty()) {
+        return;
+    }
+    auto elementIt = namedShape.elements.find(targetElement);
+    if (elementIt == namedShape.elements.end()) {
+        return;
+    }
+    const auto duplicate = std::find_if(
+        namedShape.history.begin(),
+        namedShape.history.end(),
+        [&](const ElementHistory& entry) {
+            return entry.kind == kind && entry.element == targetElement && entry.sources == sources;
+        }
+    );
+    if (duplicate != namedShape.history.end()) {
+        return;
+    }
+    if (elementIt->second.status == ElementHistoryKind::Indexed
+        && (kind == ElementHistoryKind::Generated || kind == ElementHistoryKind::Modified)) {
+        elementIt->second.status = kind;
+    }
+    for (const std::string& source : sources) {
+        if (std::find(elementIt->second.sources.begin(), elementIt->second.sources.end(), source)
+            == elementIt->second.sources.end()) {
+            elementIt->second.sources.push_back(source);
+        }
+    }
+    namedShape.history.push_back(ElementHistory {kind, targetElement, sources});
+}
+
+void addTerminalHistory(NamedShape& namedShape, const ElementHistory& entry)
+{
+    if (entry.kind != ElementHistoryKind::Deleted && entry.kind != ElementHistoryKind::Split) {
+        return;
+    }
+    const auto duplicate = std::find_if(
+        namedShape.history.begin(),
+        namedShape.history.end(),
+        [&](const ElementHistory& current) {
+            return current.kind == entry.kind && current.element == entry.element
+                && current.sources == entry.sources;
+        }
+    );
+    if (duplicate == namedShape.history.end()) {
+        namedShape.history.push_back(entry);
+    }
+}
+
+void propagateNestedSourceHistory(NamedShape& namedShape, const std::vector<NamedShapeSource>& sources)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementShape() first calls "mapSubElement(shapes)" and then MapperMaker
+    // history, so chained makers keep source-local aliases and previously generated sources.
+    // cad-core only forwards nested history when an existing ElementMap entry resolves to one
+    // current result element; unresolved split/deleted cases remain represented by diagnostics.
+    for (const auto& source : sources) {
+        if (source.namedShape == nullptr) {
+            continue;
+        }
+        for (const ElementHistory& entry : source.namedShape->history) {
+            if (entry.kind == ElementHistoryKind::Deleted || entry.kind == ElementHistoryKind::Split) {
+                // FreeCAD:
+                // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeMapper.cpp,
+                // MapperHistory keeps terminal "deleted" and "split" outcomes in the element
+                // history so later updateElementReference() can still report the old reference
+                // state instead of degrading it to an opaque unresolved subname.
+                addTerminalHistory(namedShape, entry);
+                continue;
+            }
+            if (entry.kind != ElementHistoryKind::Generated
+                && entry.kind != ElementHistoryKind::Modified) {
+                continue;
+            }
+            for (const std::string& sourceName : sourceElementNames(source, entry.element)) {
+                const auto mapped = namedShape.elementMap.find(sourceName);
+                if (mapped == namedShape.elementMap.end()) {
+                    continue;
+                }
+                addNestedHistory(namedShape, entry.kind, mapped->second, entry.sources);
+            }
         }
     }
 }
@@ -274,19 +435,28 @@ NamedShape indexedNamedShapeForObject(const std::string& owner, const TopoDS_Sha
     return namedShape;
 }
 
-NamedShape namedShapeForMakerHistory(const std::string& owner,
-                                     const TopoDS_Shape& resultShape,
-                                     const std::string& sourceOwner,
-                                     const TopoDS_Shape& sourceShape,
-                                     BRepBuilderAPI_MakeShape& maker)
+NamedShape namedShapeForMakerHistory(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const std::string& sourceOwner,
+    const TopoDS_Shape& sourceShape,
+    BRepBuilderAPI_MakeShape& maker
+)
 {
-    return namedShapeForMakerHistory(owner, resultShape, std::vector<NamedShapeSource>{{sourceOwner, sourceShape}}, maker);
+    return namedShapeForMakerHistory(
+        owner,
+        resultShape,
+        std::vector<NamedShapeSource> {{sourceOwner, sourceShape}},
+        maker
+    );
 }
 
-NamedShape namedShapeForMakerHistory(const std::string& owner,
-                                     const TopoDS_Shape& resultShape,
-                                     const std::vector<NamedShapeSource>& sources,
-                                     BRepBuilderAPI_MakeShape& maker)
+NamedShape namedShapeForMakerHistory(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const std::vector<NamedShapeSource>& sources,
+    BRepBuilderAPI_MakeShape& maker
+)
 {
     NamedShape namedShape = indexedNamedShapeForObject(owner, resultShape);
     std::map<std::string, SourceTargets> sourceTargets;
@@ -306,16 +476,20 @@ NamedShape namedShapeForMakerHistory(const std::string& owner,
                     sourceTargets[sourceName];
                     collectSourceElementMap(namedShape, sourceName, sourceElement, kind, sourceTargets);
                     try {
-                        applyHistoryList(namedShape,
-                                         sourceName,
-                                         maker.Generated(sourceElement),
-                                         ElementHistoryKind::Generated,
-                                         sourceTargets);
-                        applyHistoryList(namedShape,
-                                         sourceName,
-                                         maker.Modified(sourceElement),
-                                         ElementHistoryKind::Modified,
-                                         sourceTargets);
+                        applyHistoryList(
+                            namedShape,
+                            sourceName,
+                            maker.Generated(sourceElement),
+                            ElementHistoryKind::Generated,
+                            sourceTargets
+                        );
+                        applyHistoryList(
+                            namedShape,
+                            sourceName,
+                            maker.Modified(sourceElement),
+                            ElementHistoryKind::Modified,
+                            sourceTargets
+                        );
                     }
                     catch (const Standard_Failure&) {
                         continue;
@@ -325,13 +499,17 @@ NamedShape namedShapeForMakerHistory(const std::string& owner,
         }
     }
     applyHistoryElementMap(namedShape, sourceTargets);
+    propagateNestedSourceHistory(namedShape, sources);
+    addMergeHistory(namedShape);
 
     return namedShape;
 }
 
-NamedShape namedShapeForPreservedSources(const std::string& owner,
-                                         const TopoDS_Shape& resultShape,
-                                         const std::vector<NamedShapeSource>& sources)
+NamedShape namedShapeForPreservedSources(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const std::vector<NamedShapeSource>& sources
+)
 {
     NamedShape namedShape = indexedNamedShapeForObject(owner, resultShape);
     std::map<std::string, SourceTargets> sourceTargets;
@@ -355,28 +533,37 @@ NamedShape namedShapeForPreservedSources(const std::string& owner,
         }
     }
     applyPreservedElementMap(namedShape, sourceTargets);
+    propagateNestedSourceHistory(namedShape, sources);
+    addMergeHistory(namedShape);
 
     return namedShape;
 }
 
-NamedShapeBuild makeElementBooleanFromSources(const std::string& owner,
-                                              const std::vector<NamedShapeSource>& sources,
-                                              BooleanOperation operation)
+NamedShapeBuild makeElementBooleanFromSources(
+    const std::string& owner,
+    const std::vector<NamedShapeSource>& sources,
+    BooleanOperation operation
+)
 {
     if (sources.empty()) {
-        return NamedShapeBuild{TopoDS_Shape{}, std::nullopt, "Null shape"};
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Null shape"};
     }
     for (const auto& source : sources) {
         if (source.shape.IsNull()) {
-            return NamedShapeBuild{TopoDS_Shape{}, std::nullopt, "Null input shape for boolean operation"};
+            return NamedShapeBuild {
+                TopoDS_Shape {},
+                std::nullopt,
+                "Null input shape for boolean operation"
+            };
         }
     }
     if (sources.size() == 1U) {
-        NamedShape namedShape = sources.front().namedShape != nullptr ? *sources.front().namedShape
-                                                                      : indexedNamedShapeForObject(owner, sources.front().shape);
+        NamedShape namedShape = sources.front().namedShape != nullptr
+            ? *sources.front().namedShape
+            : indexedNamedShapeForObject(owner, sources.front().shape);
         namedShape.owner = owner;
         namedShape.shape = sources.front().shape;
-        return NamedShapeBuild{sources.front().shape, std::move(namedShape), {}};
+        return NamedShapeBuild {sources.front().shape, std::move(namedShape), {}};
     }
 
     std::unique_ptr<BRepAlgoAPI_BooleanOperation> maker;
@@ -403,22 +590,33 @@ NamedShapeBuild makeElementBooleanFromSources(const std::string& owner,
     maker->SetTools(tools);
     maker->Build();
     if (!maker->IsDone()) {
-        return NamedShapeBuild{TopoDS_Shape{}, std::nullopt, "OCCT could not " + booleanOperationName(operation) + " boolean sources"};
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            "OCCT could not " + booleanOperationName(operation) + " boolean sources"
+        };
     }
 
     const TopoDS_Shape resultShape = maker->Shape();
-    return NamedShapeBuild{resultShape, namedShapeForMakerHistory(owner, resultShape, sources, *maker), {}};
+    return NamedShapeBuild {
+        resultShape,
+        namedShapeForMakerHistory(owner, resultShape, sources, *maker),
+        {}
+    };
 }
 
-NamedShapeBuild makeElementXorFromSources(const std::string& owner, const std::vector<NamedShapeSource>& sources)
+NamedShapeBuild makeElementXorFromSources(
+    const std::string& owner,
+    const std::vector<NamedShapeSource>& sources
+)
 {
     if (sources.empty()) {
-        return NamedShapeBuild{TopoDS_Shape{}, std::nullopt, "Null shape"};
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Null shape"};
     }
 
     for (const auto& source : sources) {
         if (source.shape.IsNull()) {
-            return NamedShapeBuild{TopoDS_Shape{}, std::nullopt, "Null input shape for XOR operation"};
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Null input shape for XOR operation"};
         }
     }
     if (sources.size() == 1U) {
@@ -426,7 +624,7 @@ NamedShapeBuild makeElementXorFromSources(const std::string& owner, const std::v
         if (sources.front().namedShape != nullptr) {
             namedShape = *sources.front().namedShape;
         }
-        return NamedShapeBuild{sources.front().shape, std::move(namedShape), {}};
+        return NamedShapeBuild {sources.front().shape, std::move(namedShape), {}};
     }
 
     TopoDS_Shape currentShape = sources.front().shape;
@@ -437,7 +635,7 @@ NamedShapeBuild makeElementXorFromSources(const std::string& owner, const std::v
     std::string currentOwner = sources.front().owner;
 
     for (std::size_t index = 1; index < sources.size(); ++index) {
-        const std::vector<NamedShapeSource> stepSources{
+        const std::vector<NamedShapeSource> stepSources {
             {currentOwner, currentShape, currentNamedShape ? &*currentNamedShape : nullptr},
             sources.at(index),
         };
@@ -445,15 +643,17 @@ NamedShapeBuild makeElementXorFromSources(const std::string& owner, const std::v
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
         // ::TopoShape::makeElementXor(), "Step 1: Union(A, B)" then "Step 2: Common(A, B)"
         // and finally "Cut(Union, Common)" when an intersection exists.
-        const auto unionBuild = makeElementBooleanFromSources(owner, stepSources, BooleanOperation::Fuse);
+        const auto unionBuild
+            = makeElementBooleanFromSources(owner, stepSources, BooleanOperation::Fuse);
         if (!unionBuild.error.empty()) {
-            return NamedShapeBuild{TopoDS_Shape{}, std::nullopt, unionBuild.error};
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, unionBuild.error};
         }
         const TopoDS_Shape unionShape = unionBuild.shape;
 
-        const auto commonBuild = makeElementBooleanFromSources(owner, stepSources, BooleanOperation::Common);
+        const auto commonBuild
+            = makeElementBooleanFromSources(owner, stepSources, BooleanOperation::Common);
         if (!commonBuild.error.empty()) {
-            return NamedShapeBuild{TopoDS_Shape{}, std::nullopt, commonBuild.error};
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, commonBuild.error};
         }
         const TopoDS_Shape commonShape = commonBuild.shape;
         if (commonShape.IsNull()) {
@@ -463,30 +663,113 @@ NamedShapeBuild makeElementXorFromSources(const std::string& owner, const std::v
             continue;
         }
 
-        const auto cutBuild = makeElementBooleanFromSources(owner,
-                                                            std::vector<NamedShapeSource>{
-                                                                {owner + ".XorUnion" + std::to_string(index),
-                                                                 unionShape,
-                                                                 unionBuild.namedShape ? &*unionBuild.namedShape : nullptr},
-                                                                {owner + ".XorCommon" + std::to_string(index),
-                                                                 commonShape,
-                                                                 commonBuild.namedShape ? &*commonBuild.namedShape : nullptr},
-                                                            },
-                                                            BooleanOperation::Cut);
+        const auto cutBuild = makeElementBooleanFromSources(
+            owner,
+            std::vector<NamedShapeSource> {
+                {owner + ".XorUnion" + std::to_string(index),
+                 unionShape,
+                 unionBuild.namedShape ? &*unionBuild.namedShape : nullptr},
+                {owner + ".XorCommon" + std::to_string(index),
+                 commonShape,
+                 commonBuild.namedShape ? &*commonBuild.namedShape : nullptr},
+            },
+            BooleanOperation::Cut
+        );
         if (!cutBuild.error.empty()) {
-            return NamedShapeBuild{TopoDS_Shape{}, std::nullopt, cutBuild.error};
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, cutBuild.error};
         }
         currentNamedShape = cutBuild.namedShape;
         currentShape = cutBuild.shape;
         currentOwner = owner + ".XorResult" + std::to_string(index);
     }
 
-    return NamedShapeBuild{currentShape, std::move(currentNamedShape), {}};
+    return NamedShapeBuild {currentShape, std::move(currentNamedShape), {}};
 }
 
-std::optional<std::string> resolveElementName(const NamedShape& namedShape,
-                                              const std::string& subname,
-                                              const std::string& stableSubname)
+NamedShapeBuild makeElementSectionFromSources(
+    const std::string& owner,
+    const std::vector<NamedShapeSource>& sources,
+    bool approximate
+)
+{
+    if (sources.size() != 2U) {
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            "Section requires exactly two input shapes"
+        };
+    }
+    for (const auto& source : sources) {
+        if (source.shape.IsNull()) {
+            return NamedShapeBuild {
+                TopoDS_Shape {},
+                std::nullopt,
+                "Null input shape for section operation"
+            };
+        }
+    }
+
+    try {
+        BRepAlgoAPI_Section maker;
+        maker.Init1(sources.front().shape);
+        maker.Init2(sources.back().shape);
+        maker.Approximation(approximate);
+        maker.Build();
+        if (!maker.IsDone()) {
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Section failed"};
+        }
+        const TopoDS_Shape resultShape = maker.Shape();
+        if (resultShape.IsNull()) {
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Resulting shape is null"};
+        }
+        return NamedShapeBuild {
+            resultShape,
+            namedShapeForMakerHistory(owner, resultShape, sources, maker),
+            {},
+        };
+    }
+    catch (const Standard_Failure& failure) {
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            failure.GetMessageString() != nullptr ? failure.GetMessageString() : "Section failed"
+        };
+    }
+}
+
+NamedShapeBuild makeElementRefineFromSource(const std::string& owner, const NamedShapeSource& source)
+{
+    if (source.shape.IsNull()) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Null input shape for refine operation"};
+    }
+
+    try {
+        geometry::BRepBuilderAPI_RefineModel maker(source.shape);
+        const TopoDS_Shape resultShape = maker.Shape();
+        if (resultShape.IsNull()) {
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Refine produced a null shape"};
+        }
+        return NamedShapeBuild {
+            resultShape,
+            namedShapeForMakerHistory(owner, resultShape, std::vector<NamedShapeSource> {source}, maker),
+            {},
+        };
+    }
+    catch (const Standard_Failure& failure) {
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            failure.GetMessageString() != nullptr ? failure.GetMessageString()
+                                                  : "Refine operation failed"
+        };
+    }
+}
+
+std::optional<std::string> resolveElementName(
+    const NamedShape& namedShape,
+    const std::string& subname,
+    const std::string& stableSubname
+)
 {
     auto resolved = resolveElementReference(namedShape, subname, stableSubname);
     if (resolved.status == ElementResolveStatus::Resolved) {
@@ -495,35 +778,39 @@ std::optional<std::string> resolveElementName(const NamedShape& namedShape,
     return std::nullopt;
 }
 
-ElementResolveResult resolveElementReference(const NamedShape& namedShape,
-                                             const std::string& subname,
-                                             const std::string& stableSubname)
+ElementResolveResult resolveElementReference(
+    const NamedShape& namedShape,
+    const std::string& subname,
+    const std::string& stableSubname
+)
 {
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/GeoFeature.cpp::updateElementReference()
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/GeoFeature.cpp::updateElementReference()
     // drives PropertyLinkBase::updateElementReferences() after ElementMap version changes. This
     // is the P6 identity-map baseline: stable indexed names resolve through the object-local map,
     // while opaque mapped names wait for MapperHistory-backed ElementMap entries.
     if (!stableSubname.empty()) {
         const auto mapped = namedShape.elementMap.find(stableSubname);
         if (mapped != namedShape.elementMap.end()) {
-            return ElementResolveResult{ElementResolveStatus::Resolved, mapped->second};
+            return ElementResolveResult {ElementResolveStatus::Resolved, mapped->second};
         }
         for (const ElementHistory& entry : namedShape.history) {
             if (entry.kind == ElementHistoryKind::Deleted && entry.element == stableSubname) {
-                return ElementResolveResult{ElementResolveStatus::Deleted, std::nullopt};
+                return ElementResolveResult {ElementResolveStatus::Deleted, std::nullopt};
             }
             if (entry.kind == ElementHistoryKind::Split
-                && std::find(entry.sources.begin(), entry.sources.end(), stableSubname) != entry.sources.end()) {
-                return ElementResolveResult{ElementResolveStatus::Split, std::nullopt};
+                && std::find(entry.sources.begin(), entry.sources.end(), stableSubname)
+                    != entry.sources.end()) {
+                return ElementResolveResult {ElementResolveStatus::Split, std::nullopt};
             }
         }
-        return ElementResolveResult{ElementResolveStatus::Unresolved, std::nullopt};
+        return ElementResolveResult {ElementResolveStatus::Unresolved, std::nullopt};
     }
 
     if (namedShape.elements.count(subname) != 0U) {
-        return ElementResolveResult{ElementResolveStatus::Resolved, subname};
+        return ElementResolveResult {ElementResolveStatus::Resolved, subname};
     }
-    return ElementResolveResult{ElementResolveStatus::Unresolved, std::nullopt};
+    return ElementResolveResult {ElementResolveStatus::Unresolved, std::nullopt};
 }
 
 std::optional<TopoDS_Shape> subshapeByName(const NamedShape& namedShape, const std::string& name)
@@ -535,9 +822,11 @@ std::optional<TopoDS_Shape> subshapeByName(const NamedShape& namedShape, const s
     return subshapeByName(namedShape.shape, it->second.subshape);
 }
 
-std::optional<TopoDS_Shape> subshapeByName(const NamedShape& namedShape,
-                                           const std::string& subname,
-                                           const std::string& stableSubname)
+std::optional<TopoDS_Shape> subshapeByName(
+    const NamedShape& namedShape,
+    const std::string& subname,
+    const std::string& stableSubname
+)
 {
     const auto resolved = resolveElementName(namedShape, subname, stableSubname);
     if (!resolved) {
@@ -558,11 +847,16 @@ nlohmann::json namedShapeToJson(const NamedShape& namedShape)
         history.push_back(historyToJson(entry));
     }
 
-    const bool hasMappedHistory = std::any_of(namedShape.history.begin(), namedShape.history.end(), [](const ElementHistory& item) {
-        return item.kind != ElementHistoryKind::Indexed;
-    }) || std::any_of(namedShape.elementMap.begin(), namedShape.elementMap.end(), [](const auto& item) {
-        return item.first != item.second;
-    });
+    const bool hasMappedHistory = std::any_of(
+                                      namedShape.history.begin(),
+                                      namedShape.history.end(),
+                                      [](const ElementHistory& item) {
+                                          return item.kind != ElementHistoryKind::Indexed;
+                                      }
+                                  )
+        || std::any_of(namedShape.elementMap.begin(),
+                       namedShape.elementMap.end(),
+                       [](const auto& item) { return item.first != item.second; });
 
     return {
         {"owner", namedShape.owner},

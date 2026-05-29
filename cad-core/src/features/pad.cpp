@@ -38,25 +38,32 @@ void executePad(const document::DocumentObject& object, runtime::ComputeContext&
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    if (!rejectActiveRefineProperty(object, context)) {
-        context.objects[object.name] = {{"status", "error"}};
-        return;
-    }
-
     auto extrusion = buildFeatureExtrusion(object, context, AddSubMode::Additive, "Pad");
     if (!extrusion) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
 
-    const TopoDS_Shape solid = extrusion->toolShape;
+    std::optional<topo::NamedShape> namedShape = extrusion->namedShape;
+    RefineShapeResult shapeResult{extrusion->toolShape, namedShape, false};
+    if (!isFeatureGroupedByBody(object, context)) {
+        const auto refined = applyRefineProperty(object, context, extrusion->toolShape, namedShape);
+        if (!refined) {
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
+        shapeResult = *refined;
+    }
+
+    const TopoDS_Shape solid = shapeResult.shape;
+    namedShape = shapeResult.namedShape;
     const nlohmann::json mesh = geometry::meshForShape(solid);
     const nlohmann::json subshapeMap = topo::subshapeMapForShape(solid);
 
     context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, solid};
     context.addSubShapes[object.name] = runtime::AddSubShape{solid, std::nullopt};
-    if (extrusion->namedShape) {
-        context.namedShapes[object.name] = *extrusion->namedShape;
+    if (namedShape) {
+        context.namedShapes[object.name] = *namedShape;
     }
     context.mesh[object.name] = mesh;
     context.subshapes[object.name] = subshapeMap;
@@ -72,6 +79,9 @@ void executePad(const document::DocumentObject& object, runtime::ComputeContext&
     };
     if (extrusion->topoNamingKnownGap) {
         result["topo_naming"] = "known_gap:taper_history";
+    }
+    if (shapeResult.applied) {
+        result["refine"] = "applied";
     }
     context.objects[object.name] = result;
 }

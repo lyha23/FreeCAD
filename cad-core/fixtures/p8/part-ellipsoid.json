@@ -1,0 +1,17 @@
+{
+  "Objects": [
+    {
+      "Name": "Ellipsoid",
+      "ID": 1,
+      "TypeId": "Part::Ellipsoid",
+      "Properties": {
+        "Radius1": 2,
+        "Radius2": 4,
+        "Radius3": 3
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Ellipsoid"]
+  }
+}

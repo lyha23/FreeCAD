@@ -120,6 +120,36 @@ bool isIdentityPlacement(const gp_Trsf& placement)
     return placement.Form() == gp_Identity;
 }
 
+bool applyFinalResultRefineForFeature(const document::DocumentObject& bodyObject,
+                                      const std::string& feature,
+                                      runtime::ComputeContext& context,
+                                      std::optional<TopoDS_Shape>& bodyShape,
+                                      std::optional<topo::NamedShape>& bodyNamedShape,
+                                      std::vector<std::string>& refinedFeatures)
+{
+    if (!bodyShape) {
+        return true;
+    }
+    const auto documentIt = context.documentObjects.find(feature);
+    if (documentIt == context.documentObjects.end() || documentIt->second == nullptr) {
+        return true;
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureAddSub.cpp
+    // ::FeatureAddSub::execute(), "result = refineShapeIfActive(result)" after the feature's
+    // add/sub boolean has produced the final body result.
+    const auto refined = applyRefinePropertyForOwner(*documentIt->second, bodyObject.name, context, *bodyShape, bodyNamedShape);
+    if (!refined) {
+        return false;
+    }
+    bodyShape = refined->shape;
+    bodyNamedShape = refined->namedShape;
+    if (refined->applied) {
+        refinedFeatures.push_back(feature);
+    }
+    return true;
+}
+
 }  // namespace
 
 void executeBody(const document::DocumentObject& object, runtime::ComputeContext& context)
@@ -174,6 +204,7 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
 
     std::optional<TopoDS_Shape> bodyShape;
     std::optional<topo::NamedShape> bodyNamedShape;
+    std::vector<std::string> refinedFeatures;
     if (object.properties.contains("BaseFeature")) {
         const auto baseLink = document::readLink(object, "BaseFeature");
         if (!baseLink) {
@@ -274,6 +305,10 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
             context.objects[object.name] = {{"status", "error"}};
             return;
         }
+        if (!applyFinalResultRefineForFeature(object, feature, context, bodyShape, bodyNamedShape, refinedFeatures)) {
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
         if (feature == tip->object) {
             break;
         }
@@ -305,7 +340,7 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
     context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, resultShape};
     context.mesh[object.name] = geometry::meshForShape(resultShape);
     context.subshapes[object.name] = topo::subshapeMapForShape(resultShape);
-    context.objects[object.name] = {
+    nlohmann::json result = {
         {"status", "ok"},
         {"tip", tip->object},
         {"group", groupNames},
@@ -314,6 +349,10 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
         {"volume", geometry::volumeForShape(resultShape)},
         {"kernel", geometry::kernelVersion()},
     };
+    if (!refinedFeatures.empty()) {
+        result["refined_features"] = refinedFeatures;
+    }
+    context.objects[object.name] = result;
 }
 
 }  // namespace cad_core::features

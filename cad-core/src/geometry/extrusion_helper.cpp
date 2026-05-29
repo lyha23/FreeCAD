@@ -18,11 +18,18 @@
 #include <gp_Vec.hxx>
 
 #include <cmath>
+#include <memory>
 #include <vector>
 
 namespace cad_core::geometry {
 
 namespace {
+
+struct TaperedWireBuild {
+    TopoDS_Shape shape;
+    std::shared_ptr<BRepBuilderAPI_MakeShape> historyMaker;
+    std::vector<TopoDS_Shape> historySources;
+};
 
 TopoDS_Wire fixedWire(const TopoDS_Wire& wire)
 {
@@ -104,9 +111,9 @@ std::optional<TopoDS_Wire> createTaperedPrismOffset(const TopoDS_Wire& sourceWir
     return wireFromOffsetShape(offsetMaker.Shape(), error);
 }
 
-std::optional<TopoDS_Shape> makeTaperedWireExtrusion(const TopoDS_Wire& sourceWire,
-                                                     const TaperedExtrusionOptions& options,
-                                                     std::string& error)
+std::optional<TaperedWireBuild> makeTaperedWireExtrusion(const TopoDS_Wire& sourceWire,
+                                                        const TaperedExtrusionOptions& options,
+                                                        std::string& error)
 {
     const double offset = std::tan(options.taperAngleRadians) * options.length;
     const gp_Vec translation = gp_Vec(options.direction) * options.length;
@@ -123,18 +130,20 @@ std::optional<TopoDS_Shape> makeTaperedWireExtrusion(const TopoDS_Wire& sourceWi
     try {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/ExtrusionHelper.cpp
         // ::ExtrusionHelper::makeElementDraft(), uses BRepOffsetAPI_ThruSections with ruled=true.
-        BRepOffsetAPI_ThruSections loft(options.solid ? Standard_True : Standard_False,
-                                        Standard_True,
-                                        Precision::Confusion());
+        auto loft = std::make_shared<BRepOffsetAPI_ThruSections>(options.solid ? Standard_True : Standard_False,
+                                                                 Standard_True,
+                                                                 Precision::Confusion());
         for (const auto& section : sections) {
-            loft.AddWire(section);
+            loft->AddWire(section);
         }
-        loft.Build();
-        if (!loft.IsDone()) {
+        loft->Build();
+        if (!loft->IsDone()) {
             error = "Extrusion: Loft could not be built";
             return std::nullopt;
         }
-        return loft.Shape();
+        return TaperedWireBuild{loft->Shape(),
+                                loft,
+                                {TopoDS_Shape(sections.front()), TopoDS_Shape(sections.back())}};
     }
     catch (const Standard_Failure& failure) {
         error = std::string("Extrusion: Loft could not be built: ") + failure.GetMessageString();
@@ -142,9 +151,9 @@ std::optional<TopoDS_Shape> makeTaperedWireExtrusion(const TopoDS_Wire& sourceWi
     }
 }
 
-std::optional<TopoDS_Shape> makeTaperedFaceExtrusion(const TopoDS_Face& face,
-                                                     const TaperedExtrusionOptions& options,
-                                                     std::string& error)
+std::optional<TaperedExtrusionResult> makeTaperedFaceExtrusion(const TopoDS_Face& face,
+                                                               const TaperedExtrusionOptions& options,
+                                                               std::string& error)
 {
     const TopoDS_Wire outerWire = BRepTools::OuterWire(face);
     if (outerWire.IsNull()) {
@@ -157,18 +166,24 @@ std::optional<TopoDS_Shape> makeTaperedFaceExtrusion(const TopoDS_Face& face,
         return std::nullopt;
     }
 
-    TopoDS_Shape result = *outer;
+    TopoDS_Shape result = outer->shape;
+    std::vector<TaperedExtrusionHistoryComponent> components{
+        TaperedExtrusionHistoryComponent{outer->shape, outer->historyMaker, outer->historySources},
+    };
+    bool hasInnerWire = false;
     for (TopExp_Explorer explorer(face, TopAbs_WIRE); explorer.More(); explorer.Next()) {
         const TopoDS_Wire wire = TopoDS::Wire(explorer.Current());
         if (wire.IsSame(outerWire)) {
             continue;
         }
+        hasInnerWire = true;
 
         auto inner = makeTaperedWireExtrusion(wire, options, error);
         if (!inner) {
             return std::nullopt;
         }
-        BRepAlgoAPI_Cut cut(result, *inner);
+        components.push_back(TaperedExtrusionHistoryComponent{inner->shape, inner->historyMaker, inner->historySources});
+        BRepAlgoAPI_Cut cut(result, inner->shape);
         cut.Build();
         if (!cut.IsDone()) {
             error = "Extrusion: Final cut out failed";
@@ -177,7 +192,11 @@ std::optional<TopoDS_Shape> makeTaperedFaceExtrusion(const TopoDS_Face& face,
         result = cut.Shape();
     }
 
-    return result;
+    if (!hasInnerWire) {
+        return TaperedExtrusionResult{result, true, outer->historyMaker, outer->historySources, components};
+    }
+
+    return TaperedExtrusionResult{result, true, nullptr, {}, components};
 }
 
 }  // namespace
@@ -204,18 +223,24 @@ std::optional<TaperedExtrusionResult> makeTaperedExtrusion(const TopoDS_Shape& p
     }
 
     if (profile.ShapeType() == TopAbs_FACE) {
-        auto shape = makeTaperedFaceExtrusion(TopoDS::Face(profile), options, error);
-        if (!shape) {
+        auto result = makeTaperedFaceExtrusion(TopoDS::Face(profile), options, error);
+        if (!result) {
             return std::nullopt;
         }
-        return TaperedExtrusionResult{*shape, true};
+        return result;
     }
     if (profile.ShapeType() == TopAbs_WIRE) {
-        auto shape = makeTaperedWireExtrusion(TopoDS::Wire(profile), options, error);
-        if (!shape) {
+        auto result = makeTaperedWireExtrusion(TopoDS::Wire(profile), options, error);
+        if (!result) {
             return std::nullopt;
         }
-        return TaperedExtrusionResult{*shape, true};
+        return TaperedExtrusionResult{
+            result->shape,
+            true,
+            result->historyMaker,
+            result->historySources,
+            {TaperedExtrusionHistoryComponent{result->shape, result->historyMaker, result->historySources}},
+        };
     }
 
     error = "Only a wire or a face is supported";

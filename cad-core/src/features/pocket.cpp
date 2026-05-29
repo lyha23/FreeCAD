@@ -38,21 +38,28 @@ void executePocket(const document::DocumentObject& object, runtime::ComputeConte
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    if (!rejectActiveRefineProperty(object, context)) {
-        context.objects[object.name] = {{"status", "error"}};
-        return;
-    }
-
     auto extrusion = buildFeatureExtrusion(object, context, AddSubMode::Subtractive, "Pocket");
     if (!extrusion) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
 
-    const TopoDS_Shape tool = extrusion->toolShape;
+    std::optional<topo::NamedShape> namedShape = extrusion->namedShape;
+    RefineShapeResult shapeResult{extrusion->toolShape, namedShape, false};
+    if (!isFeatureGroupedByBody(object, context)) {
+        const auto refined = applyRefineProperty(object, context, extrusion->toolShape, namedShape);
+        if (!refined) {
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
+        shapeResult = *refined;
+    }
+
+    const TopoDS_Shape tool = shapeResult.shape;
+    namedShape = shapeResult.namedShape;
     context.addSubShapes[object.name] = runtime::AddSubShape{std::nullopt, tool};
-    if (extrusion->namedShape) {
-        context.namedShapes[object.name] = *extrusion->namedShape;
+    if (namedShape) {
+        context.namedShapes[object.name] = *namedShape;
     }
     context.mesh[object.name] = geometry::meshForShape(tool);
     context.subshapes[object.name] = topo::subshapeMapForShape(tool);
@@ -68,6 +75,9 @@ void executePocket(const document::DocumentObject& object, runtime::ComputeConte
     };
     if (extrusion->topoNamingKnownGap) {
         result["topo_naming"] = "known_gap:taper_history";
+    }
+    if (shapeResult.applied) {
+        result["refine"] = "applied";
     }
     context.objects[object.name] = result;
 }

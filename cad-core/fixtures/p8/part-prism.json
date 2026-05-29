@@ -1,0 +1,17 @@
+{
+  "Objects": [
+    {
+      "Name": "Prism",
+      "ID": 1,
+      "TypeId": "Part::Prism",
+      "Properties": {
+        "Polygon": 6,
+        "Circumradius": 2,
+        "Height": 5
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Prism"]
+  }
+}

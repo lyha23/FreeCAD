@@ -1,0 +1,16 @@
+{
+  "Objects": [
+    {
+      "Name": "RegularPolygon",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 6,
+        "Circumradius": 2
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["RegularPolygon"]
+  }
+}

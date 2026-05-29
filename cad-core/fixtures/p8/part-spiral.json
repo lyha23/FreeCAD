@@ -1,0 +1,18 @@
+{
+  "Objects": [
+    {
+      "Name": "Spiral",
+      "ID": 1,
+      "TypeId": "Part::Spiral",
+      "Properties": {
+        "Growth": 1,
+        "Radius": 1,
+        "Rotations": 2,
+        "SegmentLength": 1
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Spiral"]
+  }
+}

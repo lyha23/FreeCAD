@@ -945,7 +945,8 @@ std::optional<SideBuild> makePrismSide(const TopoDS_Shape& profile,
                                        runtime::ComputeContext& context,
                                        const document::Link& profileLink,
                                        const std::string& method,
-                                       const std::string& featureName)
+                                       const std::string& featureName,
+                                       const std::string& historyOwner)
 {
     BRepPrimAPI_MakePrism prism(profile, length * gp_Vec(direction));
     prism.Build();
@@ -957,12 +958,83 @@ std::optional<SideBuild> makePrismSide(const TopoDS_Shape& profile,
                                object.name);
         return std::nullopt;
     }
-    auto namedShape = topo::namedShapeForMakerHistory(object.name,
+    auto namedShape = topo::namedShapeForMakerHistory(historyOwner,
                                                       prism.Shape(),
                                                       profileLink.object,
                                                       profile,
                                                       prism);
     return SideBuild{method, length, prism.Shape(), false, std::move(namedShape)};
+}
+
+std::string taperComponentOwner(const std::string& historyOwner, std::size_t index, std::size_t count)
+{
+    if (count <= 1U) {
+        return historyOwner;
+    }
+    if (index == 0U) {
+        return historyOwner + ".Outer";
+    }
+    return historyOwner + ".Inner" + std::to_string(index);
+}
+
+topo::NamedShape namedShapeForTaperComponent(const std::string& componentOwner,
+                                             const geometry::TaperedExtrusionHistoryComponent& component,
+                                             const TopoDS_Shape& profile,
+                                             const topo::NamedShapeSource& profileSource)
+{
+    if (component.historyMaker && !component.historySources.empty()) {
+        std::vector<topo::NamedShapeSource> sources;
+        sources.reserve(component.historySources.size());
+        sources.push_back(topo::NamedShapeSource{profileSource.owner, profile, profileSource.namedShape});
+        for (std::size_t index = 1; index < component.historySources.size(); ++index) {
+            sources.push_back(topo::NamedShapeSource{componentOwner + ".TaperSection" + std::to_string(index + 1),
+                                                     component.historySources.at(index)});
+        }
+        return topo::namedShapeForMakerHistory(componentOwner, component.shape, sources, *component.historyMaker);
+    }
+    return topo::namedShapeForPreservedSources(componentOwner, component.shape, {profileSource});
+}
+
+std::optional<topo::NamedShape> namedShapeForTaperedExtrusion(const std::string& historyOwner,
+                                                             const geometry::TaperedExtrusionResult& tapered,
+                                                             const TopoDS_Shape& profile,
+                                                             const topo::NamedShapeSource& profileSource)
+{
+    if (tapered.historyComponents.empty()) {
+        return std::nullopt;
+    }
+
+    const std::size_t count = tapered.historyComponents.size();
+    std::string currentOwner = taperComponentOwner(historyOwner, 0, count);
+    TopoDS_Shape currentShape = tapered.historyComponents.front().shape;
+    topo::NamedShape currentNamedShape =
+        namedShapeForTaperComponent(currentOwner, tapered.historyComponents.front(), profile, profileSource);
+
+    for (std::size_t index = 1; index < count; ++index) {
+        const std::string innerOwner = taperComponentOwner(historyOwner, index, count);
+        topo::NamedShape innerNamedShape =
+            namedShapeForTaperComponent(innerOwner, tapered.historyComponents.at(index), profile, profileSource);
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/ExtrusionHelper.cpp
+        // ::ExtrusionHelper::makeElementDraft(), "Inner wires are lofted into separate solids and
+        // then cut from the outer solid"; cad-core routes the same owner chain through topo boolean
+        // history so inner-wire generated sources survive the final taper result.
+        const auto cut = topo::makeElementBooleanFromSources(
+            historyOwner,
+            {
+                topo::NamedShapeSource{currentOwner, currentShape, &currentNamedShape},
+                topo::NamedShapeSource{innerOwner, tapered.historyComponents.at(index).shape, &innerNamedShape},
+            },
+            topo::BooleanOperation::Cut);
+        if (cut.error.empty() && cut.namedShape) {
+            currentOwner = historyOwner + ".InnerCut" + std::to_string(index);
+            currentShape = cut.shape;
+            currentNamedShape = *cut.namedShape;
+        }
+    }
+
+    currentNamedShape.owner = historyOwner;
+    currentNamedShape.shape = tapered.shape;
+    return currentNamedShape;
 }
 
 std::optional<SideBuild> makeExtrusionShape(const document::DocumentObject& object,
@@ -974,10 +1046,11 @@ std::optional<SideBuild> makeExtrusionShape(const document::DocumentObject& obje
                                             const std::string& method,
                                             const std::string& taperProperty,
                                             const std::string& featureName,
-                                            const document::Link& profileLink)
+                                            const document::Link& profileLink,
+                                            const std::string& historyOwner)
 {
     if (std::abs(taperAngleDegrees) <= Precision::Angular()) {
-        return makePrismSide(profile, direction, length, object, context, profileLink, method, featureName);
+        return makePrismSide(profile, direction, length, object, context, profileLink, method, featureName, historyOwner);
     }
 
     std::string error;
@@ -1003,7 +1076,8 @@ std::optional<SideBuild> makeExtrusionShape(const document::DocumentObject& obje
     if (profileNamedShapeIt != context.namedShapes.end()) {
         profileSource.namedShape = &profileNamedShapeIt->second;
     }
-    auto namedShape = topo::namedShapeForPreservedSources(object.name, tapered->shape, {profileSource});
+    auto namedShape = namedShapeForTaperedExtrusion(historyOwner, *tapered, profile, profileSource)
+        .value_or(topo::namedShapeForPreservedSources(historyOwner, tapered->shape, {profileSource}));
     return SideBuild{method, length, tapered->shape, tapered->topoNamingKnownGap, std::move(namedShape)};
 }
 
@@ -1047,7 +1121,8 @@ std::optional<SideBuild> buildSingleSide(const document::DocumentObject& object,
                                          const SideSpec& side,
                                          AddSubMode mode,
                                          const std::string& featureName,
-                                         double lengthScale)
+                                         double lengthScale,
+                                         const std::string& historyOwner)
 {
     const std::string method = readStringProperty(object, side.typeProperty, "Length");
     const double taper = readOptionalNumberProperty(object, side.taperProperty);
@@ -1131,7 +1206,8 @@ std::optional<SideBuild> buildSingleSide(const document::DocumentObject& object,
         return SideBuild{method, length, TopoDS_Shape{}, false};
     }
 
-    return makeExtrusionShape(object, context, profile, direction, length, taper, method, side.taperProperty, featureName, profileLink);
+    return makeExtrusionShape(
+        object, context, profile, direction, length, taper, method, side.taperProperty, featureName, profileLink, historyOwner);
 }
 
 }  // namespace
@@ -1237,7 +1313,8 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const document::DocumentObjec
     std::optional<topo::NamedShape> resultNamedShape;
 
     if (sideType == "One side") {
-        auto side = buildSingleSide(object, context, *profileShape, *profileLink, side1, mode, featureName, direction->lengthScale);
+        auto side = buildSingleSide(
+            object, context, *profileShape, *profileLink, side1, mode, featureName, direction->lengthScale, object.name);
         if (!side) {
             return std::nullopt;
         }
@@ -1293,7 +1370,8 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const document::DocumentObjec
                                              context,
                                              *profileLink,
                                              "Two sides",
-                                             featureName);
+                                             featureName,
+                                             object.name);
             if (!prism) {
                 return std::nullopt;
             }
@@ -1302,11 +1380,27 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const document::DocumentObjec
             resultNamedShape = prism->namedShape;
         }
         else {
-            auto first = buildSingleSide(object, context, *profileShape, *profileLink, side1, mode, featureName, direction->lengthScale);
+            auto first = buildSingleSide(object,
+                                         context,
+                                         *profileShape,
+                                         *profileLink,
+                                         side1,
+                                         mode,
+                                         featureName,
+                                         direction->lengthScale,
+                                         object.name + ".Prism1");
             if (!first) {
                 return std::nullopt;
             }
-            auto second = buildSingleSide(object, context, *profileShape, *profileLink, side2, mode, featureName, direction->lengthScale);
+            auto second = buildSingleSide(object,
+                                          context,
+                                          *profileShape,
+                                          *profileLink,
+                                          side2,
+                                          mode,
+                                          featureName,
+                                          direction->lengthScale,
+                                          object.name + ".Prism2");
             if (!second) {
                 return std::nullopt;
             }
@@ -1361,7 +1455,8 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const document::DocumentObjec
                                             "Symmetric",
                                             "TaperAngle",
                                             featureName,
-                                            *profileLink);
+                                            *profileLink,
+                                            object.name + ".Prism1");
             if (!first) {
                 return std::nullopt;
             }
@@ -1374,7 +1469,8 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const document::DocumentObjec
                                              "Symmetric",
                                              "TaperAngle",
                                              featureName,
-                                             *profileLink);
+                                             *profileLink,
+                                             object.name + ".Prism2");
             if (!second) {
                 return std::nullopt;
             }
@@ -1395,7 +1491,8 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const document::DocumentObjec
                                              context,
                                              *profileLink,
                                              "Symmetric",
-                                             featureName);
+                                             featureName,
+                                             object.name);
             if (!prism) {
                 return std::nullopt;
             }

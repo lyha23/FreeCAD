@@ -7,7 +7,7 @@
       "Properties": {
         "Geometry": [
           {
-            "kind": "BSpline",
+            "kind": "ArcOfHyperbola",
             "degree": 2,
             "poles": [
               [0, 0],

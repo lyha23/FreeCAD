@@ -1,6 +1,7 @@
 #include "cad_core/features/sketch_object.h"
 
 #include "cad_core/features/feature_executor.h"
+#include "cad_core/geometry/face_maker.h"
 #include "cad_core/geometry/placement.h"
 #include "cad_core/topo/element_map.h"
 #include "cad_core/topo/named_shape.h"
@@ -9,12 +10,16 @@
 #include <BRepAdaptor_Curve.hxx>
 #include <BRep_Builder.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
-#include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepBuilderAPI_MakeVertex.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRep_Tool.hxx>
 #include <GeomAbs_CurveType.hxx>
+#include <Geom_BSplineCurve.hxx>
 #include <Precision.hxx>
+#include <Standard_Failure.hxx>
+#include <TColStd_Array1OfInteger.hxx>
+#include <TColStd_Array1OfReal.hxx>
+#include <TColgp_Array1OfPnt.hxx>
 #include <TopAbs_ShapeEnum.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Compound.hxx>
@@ -31,6 +36,7 @@
 #include <gp_Trsf.hxx>
 #include <gp_Vec.hxx>
 
+#include <algorithm>
 #include <cmath>
 #include <optional>
 #include <string>
@@ -75,6 +81,13 @@ struct SketchArc {
     double radius = 0.0;
     double startAngle = 0.0;
     double endAngle = 0.0;
+    bool construction = false;
+};
+
+struct SketchBSpline {
+    std::size_t geometryIndex = 0;
+    int degree = 0;
+    std::vector<gp_Pnt> poles;
     bool construction = false;
 };
 
@@ -126,6 +139,7 @@ struct SketchGeometrySet {
     std::vector<SketchEllipse> ellipses;
     std::vector<SketchArc> arcs;
     std::vector<SketchEllipseArc> ellipseArcs;
+    std::vector<SketchBSpline> bsplines;
 };
 
 struct ExternalGeometryResult {
@@ -142,7 +156,7 @@ struct EndpointRef {
     bool start = true;
 };
 
-enum class SketchProfileEdgeKind { Line, ArcOfCircle, ArcOfEllipse };
+enum class SketchProfileEdgeKind { Line, ArcOfCircle, ArcOfEllipse, BSpline };
 
 struct SketchProfileEdge {
     SketchProfileEdgeKind kind = SketchProfileEdgeKind::Line;
@@ -155,6 +169,8 @@ struct SketchProfileEdge {
     double angle = 0.0;
     double startAngle = 0.0;
     double endAngle = 0.0;
+    int degree = 0;
+    std::vector<gp_Pnt> poles;
 };
 
 struct UnionFind {
@@ -332,6 +348,17 @@ bool readBoolField(const nlohmann::json& value, const std::string& field, bool f
         return it->at("value").get<bool>();
     }
     return fallback;
+}
+
+std::optional<gp_Pnt> readPoint2Field(const nlohmann::json& value)
+{
+    bool ok = true;
+    const double x = readNumber2(value, 0, ok);
+    const double y = readNumber2(value, 1, ok);
+    if (!ok) {
+        return std::nullopt;
+    }
+    return gp_Pnt(x, y, 0.0);
 }
 
 std::optional<double> readNumberField(const nlohmann::json& value, const std::string& field)
@@ -600,6 +627,40 @@ bool parseSketchGeometry(const nlohmann::json& geometry,
             continue;
         }
 
+        if (kind == "BSpline" || kind == "BSplineCurve" || kind == "GeomBSplineCurve") {
+            const auto degree = readIntField(item, "degree");
+            const auto polesIt = item.find("poles");
+            std::vector<gp_Pnt> poles;
+            if (polesIt != item.end() && polesIt->is_array()) {
+                poles.reserve(polesIt->size());
+                for (const auto& pole : *polesIt) {
+                    const auto point = readPoint2Field(pole);
+                    if (!point) {
+                        break;
+                    }
+                    poles.push_back(*point);
+                }
+            }
+            const std::size_t rawPoleCount = polesIt != item.end() && polesIt->is_array() ? polesIt->size() : 0U;
+            if (!degree || *degree < 1 || poles.size() != rawPoleCount
+                || poles.size() < static_cast<std::size_t>(*degree + 1)) {
+                runtime::addDiagnostic(context.diagnostics,
+                                       "error",
+                                       "unsupported_geometry",
+                                       "BSpline requires a positive degree and at least degree + 1 two-number poles",
+                                       object.name,
+                                       "Geometry");
+                return false;
+            }
+
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchGeometry.cpp
+            // ::SketchBSplineCurve::getPoint(), returns "bsp->getStartPoint()" and
+            // "bsp->getEndPoint()" for profile connectivity.
+            parsed.bsplines.push_back(
+                SketchBSpline{index, *degree, std::move(poles), readBoolField(item, "construction", false)});
+            continue;
+        }
+
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchGeometry.cpp
         // registers geometry families independently. cad-core keeps unsupported families explicit
         // until their profile and internal-shape paths are migrated.
@@ -662,89 +723,6 @@ bool addEllipseWire(const SketchEllipse& ellipse,
     }
     wireBuilder.Add(edgeBuilder.Edge());
     return wireBuilder.IsDone();
-}
-
-bool addClosedWire(const std::vector<SketchProfileEdge>& edges,
-                   BRepBuilderAPI_MakeWire& wireBuilder,
-                   std::optional<gp_Pnt>& firstStart,
-                   std::optional<gp_Pnt>& lastEnd);
-
-bool rejectMixedProfileGeometry(const document::DocumentObject& object,
-                                runtime::ComputeContext& context,
-                                const std::vector<SketchProfileEdge>& edges,
-                                const std::vector<SketchCircle>& circles,
-                                const std::vector<SketchEllipse>& ellipses)
-{
-    if (!edges.empty() && (!circles.empty() || !ellipses.empty())) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "unsupported_geometry",
-                               "Mixed sketch profile geometry requires FaceMaker/WireJoiner migration",
-                               object.name,
-                               "Geometry");
-        return false;
-    }
-    if (circles.size() + ellipses.size() > 1U) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "unsupported_geometry",
-                               "Multiple closed sketch profiles require FaceMaker/WireJoiner migration",
-                               object.name,
-                               "Geometry");
-        return false;
-    }
-    return true;
-}
-
-bool buildProfileWire(const document::DocumentObject& object,
-                      runtime::ComputeContext& context,
-                      const std::vector<SketchProfileEdge>& edges,
-                      const std::vector<SketchCircle>& circles,
-                      const std::vector<SketchEllipse>& ellipses,
-                      BRepBuilderAPI_MakeWire& wireBuilder)
-{
-    if (!rejectMixedProfileGeometry(object, context, edges, circles, ellipses)) {
-        return false;
-    }
-
-    if (circles.size() == 1U) {
-        if (!addCircleWire(circles.front(), wireBuilder)) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "execution_failed",
-                                   "OCCT could not build a circle wire from Sketch geometry",
-                                   object.name,
-                                   "Geometry");
-            return false;
-        }
-        return true;
-    }
-
-    if (ellipses.size() == 1U) {
-        if (!addEllipseWire(ellipses.front(), wireBuilder)) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "execution_failed",
-                                   "OCCT could not build an ellipse wire from Sketch geometry",
-                                   object.name,
-                                   "Geometry");
-            return false;
-        }
-        return true;
-    }
-
-    if (edges.empty()) {
-        runtime::addDiagnostic(context.diagnostics, "error", "open_profile", "Sketch Geometry must be a closed profile", object.name, "Geometry");
-        return false;
-    }
-
-    std::optional<gp_Pnt> firstStart;
-    std::optional<gp_Pnt> lastEnd;
-    if (!addClosedWire(edges, wireBuilder, firstStart, lastEnd)) {
-        runtime::addDiagnostic(context.diagnostics, "error", "open_profile", "Sketch Geometry must be closed", object.name, "Geometry");
-        return false;
-    }
-    return true;
 }
 
 std::optional<std::size_t> applyCoincidentConstraints(const nlohmann::json& constraints,
@@ -861,9 +839,21 @@ std::vector<SketchEllipseArc> profileEllipseArcs(const std::vector<SketchEllipse
     return profile;
 }
 
+std::vector<SketchBSpline> profileBSplines(const std::vector<SketchBSpline>& bsplines)
+{
+    std::vector<SketchBSpline> profile;
+    for (const auto& bspline : bsplines) {
+        if (!bspline.construction) {
+            profile.push_back(bspline);
+        }
+    }
+    return profile;
+}
+
 std::vector<SketchProfileEdge> profileEdges(const std::vector<SketchSegment>& segments,
                                             const std::vector<SketchArc>& arcs,
-                                            const std::vector<SketchEllipseArc>& ellipseArcs)
+                                            const std::vector<SketchEllipseArc>& ellipseArcs,
+                                            const std::vector<SketchBSpline>& bsplines)
 {
     std::vector<SketchProfileEdge> edges;
     for (const auto& segment : segments) {
@@ -899,7 +889,67 @@ std::vector<SketchProfileEdge> profileEdges(const std::vector<SketchSegment>& se
                                           arc.startAngle,
                                           arc.endAngle});
     }
+    for (const auto& bspline : bsplines) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchGeometry.cpp
+        // ::SketchBSplineCurve::getPoint() exposes start/end for the same wire connectivity
+        // role as line and arc profile geometry.
+        if (bspline.poles.size() < 2U) {
+            continue;
+        }
+        edges.push_back(SketchProfileEdge{SketchProfileEdgeKind::BSpline,
+                                          bspline.poles.front(),
+                                          bspline.poles.back(),
+                                          gp_Pnt{},
+                                          0.0,
+                                          0.0,
+                                          0.0,
+                                          0.0,
+                                          0.0,
+                                          0.0,
+                                          bspline.degree,
+                                          bspline.poles});
+    }
     return edges;
+}
+
+std::optional<Handle(Geom_BSplineCurve)> makeBSplineCurve(int degree, const std::vector<gp_Pnt>& poles)
+{
+    if (degree < 1 || poles.size() < static_cast<std::size_t>(degree + 1)) {
+        return std::nullopt;
+    }
+
+    const int poleCount = static_cast<int>(poles.size());
+    const int knotCount = poleCount - degree + 1;
+    if (knotCount < 2) {
+        return std::nullopt;
+    }
+
+    TColgp_Array1OfPnt poleArray(1, poleCount);
+    for (int index = 1; index <= poleCount; ++index) {
+        poleArray.SetValue(index, poles[static_cast<std::size_t>(index - 1)]);
+    }
+
+    TColStd_Array1OfReal knotArray(1, knotCount);
+    TColStd_Array1OfInteger multiplicities(1, knotCount);
+    for (int index = 1; index <= knotCount; ++index) {
+        const double parameter = knotCount == 1 ? 0.0
+                                                : static_cast<double>(index - 1) / static_cast<double>(knotCount - 1);
+        knotArray.SetValue(index, parameter);
+        multiplicities.SetValue(index, 1);
+    }
+    multiplicities.SetValue(1, degree + 1);
+    multiplicities.SetValue(knotCount, degree + 1);
+
+    try {
+        return Handle(Geom_BSplineCurve)(new Geom_BSplineCurve(poleArray,
+                                                               knotArray,
+                                                               multiplicities,
+                                                               degree,
+                                                               Standard_False));
+    }
+    catch (const Standard_Failure&) {
+        return std::nullopt;
+    }
 }
 
 std::optional<TopoDS_Edge> makeProfileEdge(const SketchProfileEdge& edge, bool reversed)
@@ -915,13 +965,23 @@ std::optional<TopoDS_Edge> makeProfileEdge(const SketchProfileEdge& edge, bool r
                                               edge.startAngle,
                                               edge.endAngle);
     }
-    else {
+    else if (edge.kind == SketchProfileEdgeKind::ArcOfEllipse) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/Geometry.cpp
         // GeomArcOfEllipse::Restore() rebuilds from "MajorRadius", "MinorRadius",
         // "AngleXU", "StartAngle" and "EndAngle".
         edgeBuilder = BRepBuilderAPI_MakeEdge(gp_Elips(ellipseAxis(edge.center, edge.angle), edge.majorRadius, edge.minorRadius),
                                               edge.startAngle,
                                               edge.endAngle);
+    }
+    else {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/Geometry.cpp
+        // GeomBSplineCurve stores "Poles", "Knots", "Multiplicity" and "Degree"; this P5
+        // subset rebuilds a non-periodic clamped curve from fixture poles and degree.
+        const auto curve = makeBSplineCurve(edge.degree, edge.poles);
+        if (!curve) {
+            return std::nullopt;
+        }
+        edgeBuilder = BRepBuilderAPI_MakeEdge(*curve);
     }
     if (!edgeBuilder.IsDone()) {
         return std::nullopt;
@@ -988,12 +1048,67 @@ bool addConnectedWire(const std::vector<SketchProfileEdge>& edges,
     return wireBuilder.IsDone() && (!requireClosed || samePoint(*firstStart, *lastEnd));
 }
 
-bool addClosedWire(const std::vector<SketchProfileEdge>& edges,
-                   BRepBuilderAPI_MakeWire& wireBuilder,
-                   std::optional<gp_Pnt>& firstStart,
-                   std::optional<gp_Pnt>& lastEnd)
+std::optional<std::vector<TopoDS_Wire>> makeClosedWiresFromEdges(const std::vector<SketchProfileEdge>& edges)
 {
-    return addConnectedWire(edges, wireBuilder, firstStart, lastEnd, true);
+    std::vector<TopoDS_Wire> wires;
+    std::vector<bool> used(edges.size(), false);
+
+    for (std::size_t startIndex = 0; startIndex < edges.size(); ++startIndex) {
+        if (used[startIndex]) {
+            continue;
+        }
+
+        BRepBuilderAPI_MakeWire wireBuilder;
+        const gp_Pnt firstStart = edges[startIndex].start;
+        gp_Pnt currentEnd = edges[startIndex].end;
+        const auto firstEdge = makeProfileEdge(edges[startIndex], false);
+        if (!firstEdge) {
+            return std::nullopt;
+        }
+        wireBuilder.Add(*firstEdge);
+        used[startIndex] = true;
+
+        while (!samePoint(firstStart, currentEnd)) {
+            bool found = false;
+            for (std::size_t index = 0; index < edges.size(); ++index) {
+                if (used[index]) {
+                    continue;
+                }
+                if (samePoint(edges[index].start, currentEnd)) {
+                    const auto nextEdge = makeProfileEdge(edges[index], false);
+                    if (!nextEdge) {
+                        return std::nullopt;
+                    }
+                    wireBuilder.Add(*nextEdge);
+                    currentEnd = edges[index].end;
+                    used[index] = true;
+                    found = true;
+                    break;
+                }
+                if (samePoint(edges[index].end, currentEnd)) {
+                    const auto nextEdge = makeProfileEdge(edges[index], true);
+                    if (!nextEdge) {
+                        return std::nullopt;
+                    }
+                    wireBuilder.Add(*nextEdge);
+                    currentEnd = edges[index].start;
+                    used[index] = true;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                return std::nullopt;
+            }
+        }
+
+        if (!wireBuilder.IsDone()) {
+            return std::nullopt;
+        }
+        wires.push_back(wireBuilder.Wire());
+    }
+
+    return wires;
 }
 
 TopoDS_Shape compoundOrSingleShape(const std::vector<TopoDS_Shape>& shapes)
@@ -1046,19 +1161,24 @@ std::optional<TopoDS_Shape> buildRawSketchShape(const document::DocumentObject& 
     // makeElementWires() before PartDesign later asks ProfileBased to make a face.
     std::vector<TopoDS_Shape> shapes;
     if (!edges.empty()) {
-        BRepBuilderAPI_MakeWire wireBuilder;
-        std::optional<gp_Pnt> firstStart;
-        std::optional<gp_Pnt> lastEnd;
-        if (!addConnectedWire(edges, wireBuilder, firstStart, lastEnd, false)) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "execution_failed",
-                                   "OCCT could not build raw Sketch Shape wire",
-                                   object.name,
-                                   "Geometry");
-            return std::nullopt;
+        if (const auto closedWires = makeClosedWiresFromEdges(edges)) {
+            shapes.insert(shapes.end(), closedWires->begin(), closedWires->end());
         }
-        shapes.push_back(wireBuilder.Wire());
+        else {
+            BRepBuilderAPI_MakeWire wireBuilder;
+            std::optional<gp_Pnt> firstStart;
+            std::optional<gp_Pnt> lastEnd;
+            if (!addConnectedWire(edges, wireBuilder, firstStart, lastEnd, false)) {
+                runtime::addDiagnostic(context.diagnostics,
+                                       "error",
+                                       "execution_failed",
+                                       "OCCT could not build raw Sketch Shape wire",
+                                       object.name,
+                                       "Geometry");
+                return std::nullopt;
+            }
+            shapes.push_back(wireBuilder.Wire());
+        }
     }
     for (const auto& point : points) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/Geometry.cpp
@@ -1105,41 +1225,34 @@ std::optional<TopoDS_Shape> buildRawSketchShape(const document::DocumentObject& 
     return compoundOrSingleShape(shapes);
 }
 
-std::optional<TopoDS_Face> buildOptionalProfileFace(const std::vector<SketchProfileEdge>& edges,
-                                                    const std::vector<SketchCircle>& circles,
-                                                    const std::vector<SketchEllipse>& ellipses)
+std::optional<TopoDS_Shape> buildOptionalProfileFace(const std::vector<SketchProfileEdge>& edges,
+                                                     const std::vector<SketchCircle>& circles,
+                                                     const std::vector<SketchEllipse>& ellipses)
 {
-    if (!edges.empty() && (!circles.empty() || !ellipses.empty())) {
-        return std::nullopt;
+    std::vector<TopoDS_Wire> wires;
+    if (!edges.empty()) {
+        auto edgeWires = makeClosedWiresFromEdges(edges);
+        if (!edgeWires) {
+            return std::nullopt;
+        }
+        wires.insert(wires.end(), edgeWires->begin(), edgeWires->end());
     }
-    if (circles.size() + ellipses.size() > 1U) {
-        return std::nullopt;
+    for (const auto& circle : circles) {
+        const auto wire = makeWireFromCircle(circle);
+        if (!wire) {
+            return std::nullopt;
+        }
+        wires.push_back(*wire);
+    }
+    for (const auto& ellipse : ellipses) {
+        const auto wire = makeWireFromEllipse(ellipse);
+        if (!wire) {
+            return std::nullopt;
+        }
+        wires.push_back(*wire);
     }
 
-    BRepBuilderAPI_MakeWire wireBuilder;
-    if (circles.size() == 1U) {
-        if (!addCircleWire(circles.front(), wireBuilder)) {
-            return std::nullopt;
-        }
-    }
-    else if (ellipses.size() == 1U) {
-        if (!addEllipseWire(ellipses.front(), wireBuilder)) {
-            return std::nullopt;
-        }
-    }
-    else {
-        std::optional<gp_Pnt> firstStart;
-        std::optional<gp_Pnt> lastEnd;
-        if (!addClosedWire(edges, wireBuilder, firstStart, lastEnd)) {
-            return std::nullopt;
-        }
-    }
-
-    BRepBuilderAPI_MakeFace faceBuilder(wireBuilder.Wire());
-    if (!faceBuilder.IsDone()) {
-        return std::nullopt;
-    }
-    return faceBuilder.Face();
+    return geometry::makeFaceWithHolesFromClosedWires(wires);
 }
 
 std::size_t countSubshapesOfKind(const nlohmann::json& subshapes, const std::string& kind)
@@ -1152,6 +1265,20 @@ std::size_t countSubshapesOfKind(const nlohmann::json& subshapes, const std::str
         }
     }
     return count;
+}
+
+std::string profileShapeLabel(const std::optional<TopoDS_Shape>& profileShape)
+{
+    if (!profileShape) {
+        return "none";
+    }
+    if (profileShape->ShapeType() == TopAbs_FACE) {
+        return "occt_face";
+    }
+    if (profileShape->ShapeType() == TopAbs_COMPOUND) {
+        return "occt_compound";
+    }
+    return "occt_profile_shape";
 }
 
 std::optional<SketchSegment> projectExternalLineEdge(const TopoDS_Edge& edge,
@@ -1643,7 +1770,8 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
     const std::vector<SketchPoint> points = profilePoints(parsed.points);
     const std::vector<SketchArc> arcs = profileArcs(parsed.arcs);
     const std::vector<SketchEllipseArc> ellipseArcs = profileEllipseArcs(parsed.ellipseArcs);
-    const std::vector<SketchProfileEdge> edges = profileEdges(profile, arcs, ellipseArcs);
+    const std::vector<SketchBSpline> bsplines = profileBSplines(parsed.bsplines);
+    const std::vector<SketchProfileEdge> edges = profileEdges(profile, arcs, ellipseArcs, bsplines);
     const std::vector<SketchCircle> circles = profileCircles(parsed.circles);
     const std::vector<SketchEllipse> ellipses = profileEllipses(parsed.ellipses);
     auto rawShape = buildRawSketchShape(object, context, edges, points, circles, ellipses);
@@ -1690,7 +1818,7 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
     }
 
     const std::size_t rawEdgeCount = edges.size() + circles.size() + ellipses.size();
-    const std::size_t profileEdgeCount = profileShape ? (circles.empty() && ellipses.empty() ? edges.size() : 1U) : rawEdgeCount;
+    const std::size_t profileEdgeCount = rawEdgeCount;
     const std::size_t rawPointCount = points.size();
     const nlohmann::json internalSubshapes = internalShape ? topo::subshapeMapForShape(*internalShape, "Internal") : nlohmann::json::object();
     const std::size_t internalFaceCount = countSubshapesOfKind(internalSubshapes, "face");
@@ -1701,7 +1829,7 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
     context.objects[object.name] = {
         {"status", "ok"},
         {"shape", rawShape->IsNull() ? "empty" : "occt_sketch_shape"},
-        {"profile", profileShape ? "occt_face" : "none"},
+        {"profile", profileShapeLabel(profileShape)},
         {"profile_ready", profileShape.has_value()},
         {"edge_count", profileEdgeCount},
         {"raw_edge_count", rawEdgeCount},

@@ -1,0 +1,18 @@
+{
+  "Objects": [
+    {
+      "Name": "Ellipse",
+      "ID": 1,
+      "TypeId": "Part::Ellipse",
+      "Properties": {
+        "MajorRadius": 4,
+        "MinorRadius": 2,
+        "Angle1": 0,
+        "Angle2": 360
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Ellipse"]
+  }
+}

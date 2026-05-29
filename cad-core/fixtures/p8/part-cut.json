@@ -1,0 +1,48 @@
+{
+  "Objects": [
+    {
+      "Name": "BaseBox",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 3,
+        "Width": 2,
+        "Height": 2
+      }
+    },
+    {
+      "Name": "ToolBox",
+      "ID": 2,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 2,
+        "Height": 2,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [1, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "Cut",
+      "ID": 3,
+      "TypeId": "Part::Cut",
+      "Properties": {
+        "Base": {
+          "PropertyType": "App::PropertyLink",
+          "value": "BaseBox"
+        },
+        "Tool": {
+          "PropertyType": "App::PropertyLink",
+          "value": "ToolBox"
+        },
+        "Refine": false
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Cut"]
+  }
+}

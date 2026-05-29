@@ -50,6 +50,7 @@ struct DressUpResult {
     TopoDS_Shape shape;
     topo::NamedShape namedShape;
     bool supportTransform = false;
+    bool refineApplied = false;
 };
 
 struct ShapeSlotBuild {
@@ -906,6 +907,25 @@ bool cacheDressUpAddSubShape(const document::DocumentObject& object,
     return true;
 }
 
+bool applyDressUpRefine(const document::DocumentObject& object,
+                        runtime::ComputeContext& context,
+                        DressUpResult& result)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureFillet.cpp
+    // ::Fillet::execute() and FeatureChamfer.cpp::Chamfer::execute(), both store rawShape and
+    // then call "shape = refineShapeIfActive(shape)" before publishing Shape.
+    const auto refined = applyRefineProperty(object, context, result.shape, result.namedShape);
+    if (!refined) {
+        return false;
+    }
+    result.shape = refined->shape;
+    if (refined->namedShape) {
+        result.namedShape = *refined->namedShape;
+    }
+    result.refineApplied = refined->applied;
+    return true;
+}
+
 void publishDressUpResult(const document::DocumentObject& object,
                           runtime::ComputeContext& context,
                           const DressUpResult& result)
@@ -928,6 +948,9 @@ void publishDressUpResult(const document::DocumentObject& object,
         {"volume", geometry::volumeForShape(result.shape)},
         {"kernel", geometry::kernelVersion()},
     };
+    if (result.refineApplied) {
+        context.objects[object.name]["refine"] = "applied";
+    }
 }
 
 }  // namespace
@@ -949,13 +972,12 @@ void executeFillet(const document::DocumentObject& object, runtime::ComputeConte
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    if (!rejectActiveRefineProperty(object, context)) {
+    auto result = buildFillet(object, context);
+    if (!result) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-
-    const auto result = buildFillet(object, context);
-    if (!result) {
+    if (!applyDressUpRefine(object, context, *result)) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -987,13 +1009,12 @@ void executeChamfer(const document::DocumentObject& object, runtime::ComputeCont
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    if (!rejectActiveRefineProperty(object, context)) {
+    auto result = buildChamfer(object, context);
+    if (!result) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-
-    const auto result = buildChamfer(object, context);
-    if (!result) {
+    if (!applyDressUpRefine(object, context, *result)) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }

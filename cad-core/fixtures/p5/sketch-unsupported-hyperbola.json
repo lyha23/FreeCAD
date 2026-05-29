@@ -1,0 +1,23 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "ArcOfHyperbola",
+            "center": [0, 0],
+            "majorRadius": 4,
+            "minorRadius": 2,
+            "startAngle": 0,
+            "endAngle": 1
+          }
+        ],
+        "Constraints": []
+      }
+    }
+  ],
+  "recompute": {"objs": ["Sketch"]}
+}

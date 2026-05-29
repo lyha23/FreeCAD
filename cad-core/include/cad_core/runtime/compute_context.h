@@ -13,13 +13,20 @@
 #include <string>
 #include <vector>
 
-namespace cad_core::runtime {
+namespace cad_core::runtime
+{
 
-struct ShapeValue {
-    enum class Kind {
+struct ShapeValue
+{
+    enum class Kind
+    {
         Sketch,
         Profile,
         Solid,
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/PrimitiveFeature.cpp
+        // ::Vertex::execute(), ::Line::execute() and ::Plane::execute() write non-solid
+        // PropertyPartShape values that can still be exported and picked as Part features.
+        PartPrimitive,
         DatumPlane,
         DatumLine,
         DatumPoint,
@@ -28,21 +35,25 @@ struct ShapeValue {
 
     Kind kind;
     TopoDS_Shape shape;
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::buildShape(),
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::buildShape(),
     // sets the raw sketch "Shape" separately from PartDesign's later profile face construction.
     // cad-core keeps the raw sketch shape in shape and the PartDesign-ready closed face here.
     std::optional<TopoDS_Shape> profileShape;
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::buildInternals(),
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::buildInternals(),
     // writes "InternalShape" from FaceMakerBuildFace and WireJoiner open-wire results.
     std::optional<TopoDS_Shape> internalShape;
 };
 
-struct AddSubShape {
+struct AddSubShape
+{
     std::optional<TopoDS_Shape> addShape;
     std::optional<TopoDS_Shape> subShape;
 };
 
-struct ComputeContext {
+struct ComputeContext
+{
     std::vector<Diagnostic> diagnostics;
     std::map<std::string, ShapeValue> shapes;
     std::map<std::string, AddSubShape> addSubShapes;

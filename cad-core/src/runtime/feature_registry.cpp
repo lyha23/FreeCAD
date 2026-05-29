@@ -13,6 +13,7 @@
 #include "cad_core/features/mirrored.h"
 #include "cad_core/features/multi_transform.h"
 #include "cad_core/features/part.h"
+#include "cad_core/features/part_boolean.h"
 #include "cad_core/features/pad.h"
 #include "cad_core/features/pocket.h"
 #include "cad_core/features/polar_pattern.h"
@@ -21,7 +22,8 @@
 
 #include <utility>
 
-namespace cad_core::runtime {
+namespace cad_core::runtime
+{
 
 void FeatureRegistry::registerExecutor(std::string typeId, features::ExecuteFn executor)
 {
@@ -39,8 +41,29 @@ FeatureRegistry buildDefaultRegistry()
     FeatureRegistry registry;
     registry.registerExecutor("Sketcher::SketchObject", features::executeSketchObject);
     registry.registerExecutor("App::Part", features::executePart);
+    registry.registerExecutor("Part::Vertex", features::executePartVertex);
+    registry.registerExecutor("Part::Line", features::executePartLine);
+    registry.registerExecutor("Part::Plane", features::executePartPlane);
     registry.registerExecutor("Part::Box", features::executePartBox);
     registry.registerExecutor("Part::Cylinder", features::executePartCylinder);
+    registry.registerExecutor("Part::Prism", features::executePartPrism);
+    registry.registerExecutor("Part::RegularPolygon", features::executePartRegularPolygon);
+    registry.registerExecutor("Part::Sphere", features::executePartSphere);
+    registry.registerExecutor("Part::Ellipsoid", features::executePartEllipsoid);
+    registry.registerExecutor("Part::Cone", features::executePartCone);
+    registry.registerExecutor("Part::Torus", features::executePartTorus);
+    registry.registerExecutor("Part::Wedge", features::executePartWedge);
+    registry.registerExecutor("Part::Ellipse", features::executePartEllipse);
+    registry.registerExecutor("Part::Helix", features::executePartHelix);
+    registry.registerExecutor("Part::Spiral", features::executePartSpiral);
+    registry.registerExecutor("Part::Fuse", features::executePartFuse);
+    registry.registerExecutor("Part::Cut", features::executePartCut);
+    registry.registerExecutor("Part::Common", features::executePartCommon);
+    registry.registerExecutor("Part::Section", features::executePartSection);
+    registry.registerExecutor("Part::MultiFuse", features::executePartMultiFuse);
+    registry.registerExecutor("Part::MultiCommon", features::executePartMultiCommon);
+    registry.registerExecutor("Part::XOR", features::executePartXor);
+    registry.registerExecutor("Part::FeatureXOR", features::executePartXor);
     registry.registerExecutor("App::Origin", features::executeDatumCoordinateSystem);
     registry.registerExecutor("PartDesign::Body", features::executeBody);
     registry.registerExecutor("PartDesign::CoordinateSystem", features::executeDatumCoordinateSystem);

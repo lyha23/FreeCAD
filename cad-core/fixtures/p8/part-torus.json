@@ -1,0 +1,19 @@
+{
+  "Objects": [
+    {
+      "Name": "Torus",
+      "ID": 1,
+      "TypeId": "Part::Torus",
+      "Properties": {
+        "Radius1": 5,
+        "Radius2": 1,
+        "Angle1": -180,
+        "Angle2": 180,
+        "Angle3": 360
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Torus"]
+  }
+}

@@ -11,9 +11,11 @@
 #include <string>
 #include <vector>
 
-namespace cad_core::topo {
+namespace cad_core::topo
+{
 
-enum class ElementHistoryKind {
+enum class ElementHistoryKind
+{
     Indexed,
     Generated,
     Modified,
@@ -22,20 +24,23 @@ enum class ElementHistoryKind {
     Merge,
 };
 
-struct ElementHistory {
+struct ElementHistory
+{
     ElementHistoryKind kind = ElementHistoryKind::Indexed;
     std::string element;
     std::vector<std::string> sources;
 };
 
-struct NamedElement {
+struct NamedElement
+{
     std::string name;
     SubshapeName subshape;
     ElementHistoryKind status = ElementHistoryKind::Indexed;
     std::vector<std::string> sources;
 };
 
-struct NamedShape {
+struct NamedShape
+{
     std::string owner;
     TopoDS_Shape shape;
     std::map<std::string, NamedElement> elements;
@@ -43,82 +48,123 @@ struct NamedShape {
     std::vector<ElementHistory> history;
 };
 
-struct NamedShapeSource {
+struct NamedShapeSource
+{
     std::string owner;
     TopoDS_Shape shape;
     const NamedShape* namedShape = nullptr;
 };
 
-struct NamedShapeBuild {
+struct NamedShapeBuild
+{
     TopoDS_Shape shape;
     std::optional<NamedShape> namedShape;
     std::string error;
 };
 
-enum class BooleanOperation {
+enum class BooleanOperation
+{
     Fuse,
     Cut,
     Common,
 };
 
-enum class ElementResolveStatus {
+enum class ElementResolveStatus
+{
     Resolved,
     Unresolved,
     Deleted,
     Split,
 };
 
-struct ElementResolveResult {
+struct ElementResolveResult
+{
     ElementResolveStatus status = ElementResolveStatus::Unresolved;
     std::optional<std::string> element;
 };
 
-// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.cpp::getElementTypes(),
-// returns "Face", "Edge", "Vertex", while PropertyPartShape stores TopoShape as the shape
-// property and tracks ElementMap versioning for later GeoFeature link updates.
+// FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.cpp::getElementTypes(),
+// returns "Face", "Edge", "Vertex", while PropertyPartShape stores TopoShape as the shape property
+// and tracks ElementMap versioning for later GeoFeature link updates.
 NamedShape indexedNamedShapeForObject(const std::string& owner, const TopoDS_Shape& shape);
-// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::makeElementPrism(),
+// FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::makeElementPrism(),
 // creates BRepPrimAPI_MakePrism and then calls makeElementShape(...), which consumes
 // MapperMaker::Generated/Modified history from the BRepBuilderAPI_MakeShape maker.
-NamedShape namedShapeForMakerHistory(const std::string& owner,
-                                     const TopoDS_Shape& resultShape,
-                                     const std::string& sourceOwner,
-                                     const TopoDS_Shape& sourceShape,
-                                     BRepBuilderAPI_MakeShape& maker);
-// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::makeElementBoolean(),
+NamedShape namedShapeForMakerHistory(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const std::string& sourceOwner,
+    const TopoDS_Shape& sourceShape,
+    BRepBuilderAPI_MakeShape& maker
+);
+// FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::makeElementBoolean(),
 // calls makeElementShape(*mk, inputs, ...); MapperMaker then consumes the BRepAlgoAPI
 // BooleanOperation Generated/Modified history for every input source.
-NamedShape namedShapeForMakerHistory(const std::string& owner,
-                                     const TopoDS_Shape& resultShape,
-                                     const std::vector<NamedShapeSource>& sources,
-                                     BRepBuilderAPI_MakeShape& maker);
-// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::makeShapeWithElementMap(),
+NamedShape namedShapeForMakerHistory(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const std::vector<NamedShapeSource>& sources,
+    BRepBuilderAPI_MakeShape& maker
+);
+// FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::makeShapeWithElementMap(),
 // calls "mapSubElement(shapes)" before mapper history. This helper exposes only that
 // source-preserved subset for makers whose full Generated/Modified ledger is not migrated yet.
-NamedShape namedShapeForPreservedSources(const std::string& owner,
-                                         const TopoDS_Shape& resultShape,
-                                         const std::vector<NamedShapeSource>& sources);
-// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementBoolean(),
+NamedShape namedShapeForPreservedSources(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const std::vector<NamedShapeSource>& sources
+);
+// FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementBoolean(),
 // selects BRepAlgoAPI_Fuse/Cut/Common, puts the first input into Arguments and
 // the rest into Tools, then calls makeElementShape(*mk, inputs, ...).
-NamedShapeBuild makeElementBooleanFromSources(const std::string& owner,
-                                              const std::vector<NamedShapeSource>& sources,
-                                              BooleanOperation operation);
-// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementXor(),
+NamedShapeBuild makeElementBooleanFromSources(
+    const std::string& owner,
+    const std::vector<NamedShapeSource>& sources,
+    BooleanOperation operation
+);
+// FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementXor(),
 // executes "Step 1: Union(A, B)", "Step 2: Common(A, B)", then "Cut(Union,
 // Common)" when the intersection exists, and routes every maker through
 // makeElementBoolean(...)/makeElementShape(...).
-NamedShapeBuild makeElementXorFromSources(const std::string& owner, const std::vector<NamedShapeSource>& sources);
-std::optional<std::string> resolveElementName(const NamedShape& namedShape,
-                                              const std::string& subname,
-                                              const std::string& stableSubname);
-ElementResolveResult resolveElementReference(const NamedShape& namedShape,
-                                             const std::string& subname,
-                                             const std::string& stableSubname);
+NamedShapeBuild makeElementXorFromSources(
+    const std::string& owner,
+    const std::vector<NamedShapeSource>& sources
+);
+// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FeaturePartSection.cpp
+// ::Section::makeOperation(), configures FCBRepAlgoAPI_Section with Base, Tool and
+// Approximation, then Part::Boolean::execute() routes it through makeElementShape(*mkBool,
+// shapes, opCode()).
+NamedShapeBuild makeElementSectionFromSources(
+    const std::string& owner,
+    const std::vector<NamedShapeSource>& sources,
+    bool approximate
+);
+// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.cpp
+// ::TopoShape::makeElementRefine(), "BRepBuilderAPI_RefineModel mkRefine(getShape())"
+// then makeShapeWithElementMap(..., MapperMaker(mkRefine), {*this}).
+NamedShapeBuild makeElementRefineFromSource(const std::string& owner, const NamedShapeSource& source);
+std::optional<std::string> resolveElementName(
+    const NamedShape& namedShape,
+    const std::string& subname,
+    const std::string& stableSubname
+);
+ElementResolveResult resolveElementReference(
+    const NamedShape& namedShape,
+    const std::string& subname,
+    const std::string& stableSubname
+);
 std::optional<TopoDS_Shape> subshapeByName(const NamedShape& namedShape, const std::string& name);
-std::optional<TopoDS_Shape> subshapeByName(const NamedShape& namedShape,
-                                           const std::string& subname,
-                                           const std::string& stableSubname);
+std::optional<TopoDS_Shape> subshapeByName(
+    const NamedShape& namedShape,
+    const std::string& subname,
+    const std::string& stableSubname
+);
 nlohmann::json namedShapeToJson(const NamedShape& namedShape);
 nlohmann::json namedShapesToJson(const std::map<std::string, NamedShape>& namedShapes);
 

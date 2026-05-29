@@ -1,0 +1,83 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPad",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [2, 0] },
+          { "kind": "LineSegment", "start": [2, 0], "end": [2, 2] },
+          { "kind": "LineSegment", "start": [2, 2], "end": [0, 2] },
+          { "kind": "LineSegment", "start": [0, 2], "end": [0, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPad",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 2,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "MirrorPlane",
+      "ID": 3,
+      "TypeId": "PartDesign::Plane",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [2, 0, 0],
+          "Rotation": [0, 0.7071067811865475, 0, 0.7071067811865476]
+        }
+      }
+    },
+    {
+      "Name": "Mirrored",
+      "ID": 4,
+      "TypeId": "PartDesign::Mirrored",
+      "Properties": {
+        "Originals": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["Pad"]
+        },
+        "MirrorPlane": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "MirrorPlane",
+          "SubList": []
+        },
+        "TransformMode": "Features",
+        "Refine": true,
+        "FuzzyTolerance": 0.0
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 5,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["SketchPad", "Pad", "MirrorPlane", "Mirrored"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Mirrored"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}

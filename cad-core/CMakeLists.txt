@@ -30,12 +30,15 @@ add_library(cad-core-lib STATIC
   src/features/feature_executor.cpp
   src/features/hole.cpp
   src/features/part.cpp
+  src/features/part_boolean.cpp
   src/features/pad.cpp
   src/features/pocket.cpp
   src/features/sketch_object.cpp
   src/features/transformed.cpp
   src/geometry/extrusion_helper.cpp
+  src/geometry/face_maker.cpp
   src/geometry/placement.cpp
+  src/geometry/refine_model.cpp
   src/geometry/shape_exporter.cpp
   src/graph/recompute_plan.cpp
   src/runtime/compute_context.cpp

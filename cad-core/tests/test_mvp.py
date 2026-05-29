@@ -188,6 +188,7 @@ class CadCoreOcctMvpTest(unittest.TestCase):
             "pad-reference-axis-missing-target": ["missing_link_target"],
             "pad-symmetric-up-to-unsupported": ["unsupported_property"],
             "pad-length-taper": [],
+            "pad-length-taper-inner-wire": [],
             "pocket-length-taper": [],
             "pad-two-sides-taper": [],
             "pocket-invalid-taper": ["invalid_taper"],
@@ -221,6 +222,7 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         expected = {
             "sketch-arc-ellipse-profile": [],
             "sketch-arc-profile": [],
+            "sketch-bspline-profile": [],
             "sketch-circle-profile": [],
             "sketch-coincident-profile": [],
             "sketch-construction-ignored": [],
@@ -238,8 +240,10 @@ class CadCoreOcctMvpTest(unittest.TestCase):
             "sketch-internal-face": [],
             "sketch-missing-external": ["missing_link_target"],
             "sketch-open-wire-internal-empty": [],
-            "sketch-unsupported-bspline": ["unsupported_geometry"],
+            "sketch-rect-circle-island": [],
+            "sketch-rect-circle-hole": [],
             "sketch-unsupported-constraint": ["unsupported_property"],
+            "sketch-unsupported-hyperbola": ["unsupported_geometry"],
         }
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):
@@ -252,9 +256,11 @@ class CadCoreOcctMvpTest(unittest.TestCase):
             "body-split-history": [],
             "named-shape-indexed-pad": [],
             "sketch-external-edge-stable-body-deleted": ["deleted_stable_subname"],
+            "sketch-external-edge-stable-body-deleted-after-add": ["deleted_stable_subname"],
             "sketch-external-edge-stable-body-preserved": [],
             "sketch-external-edge-stable-body-profile-source": [],
             "sketch-external-edge-stable-body-split": ["split_stable_subname"],
+            "sketch-external-edge-stable-body-split-after-add": ["split_stable_subname"],
             "sketch-external-edge-stable-indexed-opaque-sublist": [],
             "sketch-external-edge-stable-multi-prism": [],
             "sketch-external-edge-stable-taper-preserved": [],
@@ -277,19 +283,33 @@ class CadCoreOcctMvpTest(unittest.TestCase):
             "datum-coordinate-system-sketch-support": [],
             "chamfer-invalid-size": ["invalid_length"],
             "chamfer-pad-edge": [],
+            "chamfer-refine-true": [],
             "fillet-missing-edge": ["invalid_subshape"],
             "fillet-pad-edge": [],
+            "fillet-refine-true": [],
             "hole-angled-drill-point": [],
             "hole-blind-depth": [],
             "hole-counterbore": [],
             "hole-counterdrill": [],
             "hole-countersink": [],
+            "hole-isotyre-clearance-fallback": [],
             "hole-point-profile": [],
+            "hole-refine-true": [],
             "hole-tapered": [],
             "hole-thread-clearance": [],
             "hole-threaded-cosmetic": [],
+            "hole-threaded-bsf-cosmetic": [],
+            "hole-threaded-bsp-fallback-cosmetic": [],
+            "hole-threaded-bsw-cosmetic": [],
+            "hole-threaded-fine-cosmetic": [],
+            "hole-threaded-isotyre-cosmetic": [],
             "hole-threaded-known-gap": ["unsupported_property"],
+            "hole-threaded-npt-cosmetic": [],
+            "hole-threaded-unef-cosmetic": [],
+            "hole-threaded-unf-cosmetic": [],
+            "hole-threaded-unc-cosmetic": [],
             "hole-through-all": [],
+            "hole-unc-clearance": [],
             "hole-without-base": ["execution_failed"],
             "linear-pattern-custom-spacings": [],
             "linear-pattern-pad-datum-line": [],
@@ -299,6 +319,7 @@ class CadCoreOcctMvpTest(unittest.TestCase):
             "linear-pattern-whole-shape": [],
             "mirrored-pad-datum-plane": [],
             "mirrored-fillet-support-transform": [],
+            "mirrored-refine-true": [],
             "mirrored-whole-shape": [],
             "multi-transform-linear-mirror": [],
             "multi-transform-scaled-diagonal": [],
@@ -306,7 +327,8 @@ class CadCoreOcctMvpTest(unittest.TestCase):
             "multi-transform-whole-shape": [],
             "origin-identity-placement": [],
             "pad-refine-false": [],
-            "pad-refine-true-known-gap": ["unsupported_property"],
+            "pad-refine-true": [],
+            "pocket-refine-true": [],
             "polar-pattern-pad-datum-line": [],
             "polar-pattern-pad-sketch-axis": [],
             "polar-pattern-spacing-pattern": [],
@@ -322,8 +344,29 @@ class CadCoreOcctMvpTest(unittest.TestCase):
     def test_p8_fixture_diagnostics(self) -> None:
         expected = {
             "part-box": [],
+            "part-common": [],
+            "part-cone": [],
+            "part-cut": [],
             "part-cylinder": [],
             "part-cylinder-angled-prism": [],
+            "part-ellipse": [],
+            "part-ellipsoid": [],
+            "part-fuse": [],
+            "part-helix": [],
+            "part-line": [],
+            "part-multi-common": [],
+            "part-multi-common-first-rest": [],
+            "part-multi-fuse": [],
+            "part-plane": [],
+            "part-prism": [],
+            "part-regular-polygon": [],
+            "part-section": [],
+            "part-sphere": [],
+            "part-torus": [],
+            "part-vertex": [],
+            "part-wedge": [],
+            "part-xor": [],
+            "part-spiral": [],
         }
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):
@@ -609,6 +652,19 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assertEqual(pad["method"], "Symmetric")
         self.assert_object_matches_expected(result, "p3b", "pad-symmetric-taper")
 
+    def test_p3b_taper_supports_inner_wire_profile(self) -> None:
+        result = self.run_recompute("pad-length-taper-inner-wire", "p3b")
+        sketch = result["objects"]["Sketch"]
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["profile_ready"], True)
+        self.assertEqual(sketch["edge_count"], 8)
+        self.assertEqual(sketch["internal_face_count"], 1)
+        self.assertEqual(pad["topo_naming"], "known_gap:taper_history")
+        self.assert_bbox_close_delta(pad["bbox"], [-0.2793662559, -0.2793662559, 0.0], [12.2793662559, 8.2793662559, 8.0], 1e-6)
+        self.assertAlmostEqual(pad["volume"], 735.2890094646057, delta=1e-6)
+
     def test_p3b_pocket_taper_cuts_body(self) -> None:
         result = self.run_recompute("pocket-length-taper", "p3b")
         pocket = result["objects"]["Pocket"]
@@ -740,6 +796,37 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assert_bbox_close(pad["bbox"], [-2.0, -2.0, 0.0], [2.0, 2.0, 3.0])
         self.assertAlmostEqual(pad["volume"], 37.69911184307752)
 
+    def test_p5_mixed_closed_wires_make_profile_with_hole(self) -> None:
+        result = self.run_recompute("sketch-rect-circle-hole", "p5")
+        sketch = result["objects"]["Sketch"]
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertTrue(sketch["profile_ready"])
+        self.assertEqual(sketch["edge_count"], 5)
+        self.assertEqual(sketch["raw_edge_count"], 5)
+        self.assertEqual(sketch["internal_face_count"], 1)
+        self.assertEqual(sketch["internal_edge_count"], 5)
+        self.assert_bbox_close(pad["bbox"], [0.0, 0.0, 0.0], [10.0, 5.0, 3.0])
+        self.assertAlmostEqual(pad["volume"], (50.0 - math.pi) * 3.0, delta=1e-6)
+
+    def test_p5_nested_closed_wires_keep_island_face(self) -> None:
+        result = self.run_recompute("sketch-rect-circle-island", "p5")
+        sketch = result["objects"]["Sketch"]
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertTrue(sketch["profile_ready"])
+        self.assertEqual(sketch["profile"], "occt_compound")
+        self.assertEqual(sketch["edge_count"], 6)
+        self.assertEqual(sketch["raw_edge_count"], 6)
+        self.assertEqual(sketch["internal_face_count"], 2)
+        self.assertEqual(sketch["internal_edge_count"], 6)
+        self.assert_bbox_close(pad["bbox"], [0.0, 0.0, 0.0], [10.0, 5.0, 3.0])
+        self.assertAlmostEqual(pad["volume"], (50.0 - 2.0 * math.pi) * 3.0, delta=1e-6)
+
     def test_p5_arc_profile_outputs_pad(self) -> None:
         result = self.run_recompute("sketch-arc-profile", "p5")
         sketch = result["objects"]["Sketch"]
@@ -772,6 +859,19 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assertEqual(sketch["edge_count"], 1)
         self.assert_bbox_close(pad["bbox"], [-3.0, -1.0, 0.0], [3.0, 1.0, 2.0])
         self.assertAlmostEqual(pad["volume"], 18.84955592153876)
+
+    def test_p5_bspline_profile_builds_internal_shape(self) -> None:
+        result = self.run_recompute("sketch-bspline-profile", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["profile"], "occt_face")
+        self.assertTrue(sketch["profile_ready"])
+        self.assertEqual(sketch["raw_edge_count"], 2)
+        self.assertEqual(sketch["internal_shape"], "occt_internal_shape")
+        self.assertEqual(sketch["internal_face_count"], 1)
+        self.assertGreaterEqual(sketch["internal_edge_count"], 2)
 
     def test_p5_construction_geometry_is_ignored_for_profile(self) -> None:
         result = self.run_recompute("sketch-construction-ignored", "p5")
@@ -970,11 +1070,12 @@ class CadCoreOcctMvpTest(unittest.TestCase):
                 self.assertEqual(elements[named_shape["element_map"]["Sketch.Vertex1"]]["kind"], "vertex")
 
     def test_p6_taper_preserved_sources_are_partial_history(self) -> None:
-        for fixture, owner, source in [
-            ("pad-length-taper", "Pad", "Sketch"),
-            ("pad-two-sides-taper", "Pad", "Sketch"),
-            ("pad-symmetric-taper", "Pad", "Sketch"),
-            ("pocket-length-taper", "Pocket", "SketchPocket"),
+        for fixture, owner, source, extra_edges in [
+            ("pad-length-taper", "Pad", "Sketch", []),
+            ("pad-two-sides-taper", "Pad", "Sketch", []),
+            ("pad-symmetric-taper", "Pad", "Sketch", []),
+            ("pad-length-taper-inner-wire", "Pad", "Sketch", ["Edge5"]),
+            ("pocket-length-taper", "Pocket", "SketchPocket", []),
         ]:
             with self.subTest(fixture=fixture):
                 result = self.run_recompute(fixture, "p3b")
@@ -986,6 +1087,49 @@ class CadCoreOcctMvpTest(unittest.TestCase):
                 self.assertEqual(named_shape["element_map_status"], "history_partial")
                 self.assertEqual(elements[named_shape["element_map"][f"{source}.Edge1"]]["kind"], "edge")
                 self.assertEqual(elements[named_shape["element_map"][f"{source}.Vertex1"]]["kind"], "vertex")
+                for edge in extra_edges:
+                    self.assertEqual(elements[named_shape["element_map"][f"{source}.{edge}"]]["kind"], "edge")
+
+    def test_p6_taper_records_thru_sections_generated_history(self) -> None:
+        for fixture, owner, source_edges, section_sources in [
+            ("pad-length-taper", "Pad", ["Sketch.Edge1"], ["Pad.TaperSection2.Edge1"]),
+            ("pocket-length-taper", "Pocket", ["SketchPocket.Edge1"], ["Pocket.TaperSection2.Edge1"]),
+            (
+                "pad-two-sides-taper",
+                "Pad",
+                ["Sketch.Edge1"],
+                ["Pad.Prism1.TaperSection2.Edge1", "Pad.Prism2.TaperSection2.Edge1"],
+            ),
+            (
+                "pad-symmetric-taper",
+                "Pad",
+                ["Sketch.Edge1"],
+                ["Pad.Prism1.TaperSection2.Edge1", "Pad.Prism2.TaperSection2.Edge1"],
+            ),
+            (
+                "pad-length-taper-inner-wire",
+                "Pad",
+                ["Sketch.Edge1", "Sketch.Edge5"],
+                ["Pad.Outer.TaperSection2.Edge1", "Pad.Inner1.TaperSection2.Edge1"],
+            ),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p3b")
+                history = result["named_shapes"][owner]["history"]
+
+                self.assertEqual(result["diagnostics"], [])
+                for source_edge in source_edges:
+                    self.assertTrue(
+                        any(item["kind"] == "generated" and item["sources"] == [source_edge] for item in history)
+                    )
+                for section_source in section_sources:
+                    self.assertTrue(
+                        any(
+                            item["kind"] == "generated"
+                            and item["sources"] == [section_source]
+                            for item in history
+                        )
+                    )
 
     def test_p6_body_boolean_named_shape_records_maker_history(self) -> None:
         for fixture, required_sources in {
@@ -1024,6 +1168,26 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assertEqual(sketch["external_curve_count"], 0)
         self.assertEqual(sketch["external_point_count"], 0)
 
+    def test_p6_body_boolean_records_merge_history_for_shared_current_elements(self) -> None:
+        for fixture, stable_sources in [
+            ("body-additive-fuse-history", ("Pad.Edge3", "TopSketch.Edge1")),
+            ("body-boolean-history", ("Pocket.Edge3", "SketchPocket.Edge1")),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p6")
+                named_shape = result["named_shapes"]["Body"]
+                target = named_shape["element_map"][stable_sources[1]]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertTrue(
+                    any(
+                        item["kind"] == "merge"
+                        and item["element"] == target
+                        and all(source in item["sources"] for source in stable_sources)
+                        for item in named_shape["history"]
+                    )
+                )
+
     def test_p6_body_split_history_does_not_guess_element_map(self) -> None:
         result = self.run_recompute("body-split-history", "p6")
         named_shape = result["named_shapes"]["Body"]
@@ -1048,6 +1212,20 @@ class CadCoreOcctMvpTest(unittest.TestCase):
             ("up-to-face-stable-body-deleted", "deleted_stable_subname", "ProbePad", "UpToFace", "Pocket.Face5"),
             ("sketch-external-edge-stable-body-split", "split_stable_subname", "ProbeSketch", "ExternalGeometry", "Pocket.Edge1"),
             ("sketch-external-edge-stable-body-deleted", "deleted_stable_subname", "ProbeSketch", "ExternalGeometry", "Pocket.Edge11"),
+            (
+                "sketch-external-edge-stable-body-split-after-add",
+                "split_stable_subname",
+                "ProbeSketch",
+                "ExternalGeometry",
+                "Pocket.Edge1",
+            ),
+            (
+                "sketch-external-edge-stable-body-deleted-after-add",
+                "deleted_stable_subname",
+                "ProbeSketch",
+                "ExternalGeometry",
+                "Pocket.Edge11",
+            ),
         ]:
             with self.subTest(fixture=fixture):
                 diagnostic = self.run_recompute(fixture, "p6")["diagnostics"][0]
@@ -1111,14 +1289,33 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assertAlmostEqual(pad["volume"], expected["volume"])
         self.assert_topology_counts(result["subshapes"]["Pad"], expected)
 
-    def test_p7_refine_true_reports_refinemodel_gap(self) -> None:
-        result = self.run_recompute("pad-refine-true-known-gap", "p7")
-        diagnostic = result["diagnostics"][0]
+    def test_p7_refine_true_uses_refinemodel_path(self) -> None:
+        result = self.run_recompute("pad-refine-true", "p7")
+        pad = result["objects"]["Pad"]
+        named_shape = result["named_shapes"]["Pad"]
+        expected = self.expected_freecad("mvp", "rect-pad")
 
-        self.assertEqual(diagnostic["code"], "unsupported_property")
-        self.assertEqual(diagnostic["object"], "Pad")
-        self.assertEqual(diagnostic["property"], "Refine")
-        self.assertIn("BRepBuilderAPI_RefineModel", diagnostic["message"])
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pad["status"], "ok")
+        self.assertEqual(pad["refine"], "applied")
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assert_bbox_close(pad["bbox"], expected["bbox"]["min"], expected["bbox"]["max"])
+        self.assertAlmostEqual(pad["volume"], expected["volume"])
+        self.assert_topology_counts(result["subshapes"]["Pad"], expected)
+
+    def test_p7_pocket_refine_true_uses_refinemodel_path(self) -> None:
+        result = self.run_recompute("pocket-refine-true", "p7")
+        pocket = result["objects"]["Pocket"]
+        body = result["objects"]["Body"]
+        named_shape = result["named_shapes"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pocket["status"], "ok")
+        self.assertNotIn("refine", pocket)
+        self.assertEqual(body["refined_features"], ["Pocket"])
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assert_bbox_close(body["bbox"], [0.0, 0.0, 0.0], [10.0, 5.0, 10.0])
+        self.assertAlmostEqual(body["volume"], 320.0)
 
     def test_p7_coordinate_system_exposes_axes_for_reference_axis(self) -> None:
         result = self.run_recompute("datum-coordinate-system-reference-axis", "p7")
@@ -1166,6 +1363,21 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assert_bbox_close_delta(hole["bbox"], [4.0, 1.5, 6.0], [6.0, 3.5, 10.0], 1e-2)
         self.assert_bbox_close_delta(body["bbox"], [0.0, 0.0, 0.0], [10.0, 5.0, 10.0], 1e-2)
         self.assertAlmostEqual(body["volume"], 487.4336293856408, delta=1e-6)
+
+    def test_p7_hole_refine_true_uses_body_final_result_refine(self) -> None:
+        result = self.run_recompute("hole-refine-true", "p7")
+        hole = result["objects"]["Hole"]
+        body = result["objects"]["Body"]
+        named_shape = result["named_shapes"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(hole["status"], "ok")
+        self.assertEqual(hole["method"], "Dimension")
+        self.assertEqual(body["tip"], "Hole")
+        self.assertEqual(body["refined_features"], ["Hole"])
+        self.assert_bbox_close_delta(body["bbox"], [0.0, 0.0, 0.0], [10.0, 5.0, 10.0], 1e-2)
+        self.assertAlmostEqual(body["volume"], 487.4336293856408, delta=1e-6)
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
 
     def test_p7_hole_through_all_cuts_body(self) -> None:
         result = self.run_recompute("hole-through-all", "p7")
@@ -1290,6 +1502,147 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assertAlmostEqual(hole["volume"], expected_cut_volume, delta=1e-6)
         self.assertAlmostEqual(body["volume"], 500.0 - expected_cut_volume, delta=1e-6)
 
+    def test_p7_hole_threaded_fine_profile_uses_fine_tap_drill_table(self) -> None:
+        result = self.run_recompute("hole-threaded-fine-cosmetic", "p7")
+        hole = result["objects"]["Hole"]
+        body = result["objects"]["Body"]
+        expected_cut_volume = math.pi * 1.75 * 1.75 * 4.0
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(hole["threaded"], True)
+        self.assertEqual(hole["model_thread"], False)
+        self.assertEqual(hole["thread_type"], "ISOMetricFineProfile")
+        self.assertEqual(hole["thread_size"], "M4x0.5")
+        self.assertEqual(hole["diameter_source"], "thread_tap_drill")
+        self.assertEqual(hole["thread_diameter"], 4.0)
+        self.assertEqual(hole["thread_pitch"], 0.5)
+        self.assertEqual(hole["diameter"], 3.5)
+        self.assertAlmostEqual(hole["volume"], expected_cut_volume, delta=1e-6)
+        self.assertAlmostEqual(body["volume"], 500.0 - expected_cut_volume, delta=1e-6)
+
+    def test_p7_hole_threaded_unc_profile_uses_unc_tap_drill_table(self) -> None:
+        result = self.run_recompute("hole-threaded-unc-cosmetic", "p7")
+        hole = result["objects"]["Hole"]
+        body = result["objects"]["Body"]
+        expected_cut_volume = math.pi * 1.175 * 1.175 * 4.0
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(hole["threaded"], True)
+        self.assertEqual(hole["model_thread"], False)
+        self.assertEqual(hole["thread_type"], "UNC")
+        self.assertEqual(hole["thread_size"], "#4")
+        self.assertEqual(hole["diameter_source"], "thread_tap_drill")
+        self.assertEqual(hole["thread_diameter"], 2.845)
+        self.assertEqual(hole["thread_pitch"], 0.635)
+        self.assertEqual(hole["diameter"], 2.35)
+        self.assertAlmostEqual(hole["volume"], expected_cut_volume, delta=1e-6)
+        self.assertAlmostEqual(body["volume"], 500.0 - expected_cut_volume, delta=1e-6)
+
+    def test_p7_hole_threaded_unf_and_unef_profiles_use_tap_drill_tables(self) -> None:
+        for fixture, thread_type, thread_size, thread_diameter, thread_pitch, diameter in [
+            ("hole-threaded-unf-cosmetic", "UNF", "#4", 2.845, 0.529, 2.40),
+            ("hole-threaded-unef-cosmetic", "UNEF", "#12", 5.486, 0.794, 4.80),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p7")
+                hole = result["objects"]["Hole"]
+                body = result["objects"]["Body"]
+                radius = diameter / 2.0
+                expected_cut_volume = math.pi * radius * radius * 4.0
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(hole["threaded"], True)
+                self.assertEqual(hole["model_thread"], False)
+                self.assertEqual(hole["thread_type"], thread_type)
+                self.assertEqual(hole["thread_size"], thread_size)
+                self.assertEqual(hole["diameter_source"], "thread_tap_drill")
+                self.assertEqual(hole["thread_diameter"], thread_diameter)
+                self.assertEqual(hole["thread_pitch"], thread_pitch)
+                self.assertEqual(hole["diameter"], diameter)
+                self.assertAlmostEqual(hole["volume"], expected_cut_volume, delta=1e-6)
+                self.assertAlmostEqual(body["volume"], 500.0 - expected_cut_volume, delta=1e-6)
+
+    def test_p7_hole_threaded_pipe_and_british_profiles_use_freecad_tables(self) -> None:
+        for fixture, thread_type, thread_size, thread_diameter, thread_pitch, diameter, source, base_volume in [
+            (
+                "hole-threaded-npt-cosmetic",
+                "NPT",
+                "1/16",
+                7.938,
+                0.941,
+                7.938 - (2.0 * (0.8 * 0.941)) * 0.75,
+                "thread_npt_fallback",
+                20.0 * 20.0 * 10.0,
+            ),
+            (
+                "hole-threaded-bsp-fallback-cosmetic",
+                "BSP",
+                "1 1/8",
+                37.897,
+                2.309,
+                37.897 - (2.0 * (0.640327 * 2.309)) * 0.75,
+                "thread_whitworth_fallback",
+                50.0 * 50.0 * 10.0,
+            ),
+            (
+                "hole-threaded-bsw-cosmetic",
+                "BSW",
+                "1/8",
+                3.175,
+                0.635,
+                2.55,
+                "thread_tap_drill",
+                20.0 * 20.0 * 10.0,
+            ),
+            (
+                "hole-threaded-bsf-cosmetic",
+                "BSF",
+                "3/16",
+                4.763,
+                0.794,
+                4.00,
+                "thread_tap_drill",
+                20.0 * 20.0 * 10.0,
+            ),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p7")
+                hole = result["objects"]["Hole"]
+                body = result["objects"]["Body"]
+                radius = diameter / 2.0
+                expected_cut_volume = math.pi * radius * radius * 4.0
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(hole["threaded"], True)
+                self.assertEqual(hole["model_thread"], False)
+                self.assertEqual(hole["thread_type"], thread_type)
+                self.assertEqual(hole["thread_size"], thread_size)
+                self.assertEqual(hole["diameter_source"], source)
+                self.assertEqual(hole["thread_diameter"], thread_diameter)
+                self.assertEqual(hole["thread_pitch"], thread_pitch)
+                self.assertAlmostEqual(hole["diameter"], diameter, delta=1e-9)
+                self.assertAlmostEqual(hole["volume"], expected_cut_volume, delta=1e-6)
+                self.assertAlmostEqual(body["volume"], base_volume - expected_cut_volume, delta=1e-6)
+
+    def test_p7_hole_threaded_isotyre_profile_uses_pitch_fallback(self) -> None:
+        result = self.run_recompute("hole-threaded-isotyre-cosmetic", "p7")
+        hole = result["objects"]["Hole"]
+        body = result["objects"]["Body"]
+        diameter = 5.334 - 0.705
+        expected_cut_volume = math.pi * (diameter / 2.0) * (diameter / 2.0) * 4.0
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(hole["threaded"], True)
+        self.assertEqual(hole["model_thread"], False)
+        self.assertEqual(hole["thread_type"], "ISOTyre")
+        self.assertEqual(hole["thread_size"], "5v1")
+        self.assertEqual(hole["diameter_source"], "thread_pitch_fallback")
+        self.assertEqual(hole["thread_diameter"], 5.334)
+        self.assertEqual(hole["thread_pitch"], 0.705)
+        self.assertAlmostEqual(hole["diameter"], diameter, delta=1e-9)
+        self.assertAlmostEqual(hole["volume"], expected_cut_volume, delta=1e-6)
+        self.assertAlmostEqual(body["volume"], 20.0 * 20.0 * 10.0 - expected_cut_volume, delta=1e-6)
+
     def test_p7_hole_thread_clearance_uses_iso_metric_fit_table(self) -> None:
         result = self.run_recompute("hole-thread-clearance", "p7")
         hole = result["objects"]["Hole"]
@@ -1307,6 +1660,34 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assertEqual(hole["diameter"], 4.8)
         self.assertAlmostEqual(hole["volume"], expected_cut_volume, delta=1e-6)
         self.assertAlmostEqual(body["volume"], 500.0 - expected_cut_volume, delta=1e-6)
+
+    def test_p7_hole_thread_clearance_uses_uts_table_and_generic_fallback(self) -> None:
+        for fixture, thread_type, thread_size, diameter, source, base_volume in [
+            ("hole-unc-clearance", "UNC", "#4", 3.3, "thread_uts_clearance", 10.0 * 5.0 * 10.0),
+            (
+                "hole-isotyre-clearance-fallback",
+                "ISOTyre",
+                "5v1",
+                5.334 * 1.10,
+                "thread_clearance_fallback",
+                20.0 * 20.0 * 10.0,
+            ),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p7")
+                hole = result["objects"]["Hole"]
+                body = result["objects"]["Body"]
+                expected_cut_volume = math.pi * (diameter / 2.0) * (diameter / 2.0) * 4.0
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(hole["threaded"], False)
+                self.assertEqual(hole["thread_type"], thread_type)
+                self.assertEqual(hole["thread_size"], thread_size)
+                self.assertEqual(hole["thread_fit"], "Normal")
+                self.assertEqual(hole["diameter_source"], source)
+                self.assertAlmostEqual(hole["diameter"], diameter, delta=1e-9)
+                self.assertAlmostEqual(hole["volume"], expected_cut_volume, delta=1e-6)
+                self.assertAlmostEqual(body["volume"], base_volume - expected_cut_volume, delta=1e-6)
 
     def test_p7_hole_without_base_and_threaded_gaps_are_explicit(self) -> None:
         result = self.run_recompute("hole-without-base", "p7")
@@ -1360,6 +1741,25 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assertEqual(named_shape["element_map_status"], "history_partial")
         self.assertTrue(any(key.startswith("Pad.") for key in named_shape["element_map"]))
 
+    def test_p7_dressup_refine_true_uses_refinemodel_path(self) -> None:
+        for fixture, object_name, expected_volume in [
+            ("fillet-refine-true", "Fillet", 499.4634954084936),
+            ("chamfer-refine-true", "Chamfer", 498.75),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p7")
+                dress_up = result["objects"][object_name]
+                body = result["objects"]["Body"]
+                named_shape = result["named_shapes"][object_name]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(dress_up["status"], "ok")
+                self.assertEqual(dress_up["refine"], "applied")
+                self.assertEqual(body["tip"], object_name)
+                self.assertAlmostEqual(dress_up["volume"], expected_volume, delta=1e-6)
+                self.assertAlmostEqual(body["volume"], expected_volume, delta=1e-6)
+                self.assertEqual(named_shape["element_map_status"], "history_partial")
+
     def test_p7_dressup_base_diagnostics_are_structured(self) -> None:
         result = self.run_recompute("fillet-missing-edge", "p7")
         diagnostic = result["diagnostics"][0]
@@ -1396,6 +1796,21 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assertEqual(named_shape["element_map_status"], "history_partial")
         self.assertTrue(any(key.startswith("Pad.") for key in named_shape["element_map"]))
         self.assertTrue(any(key.startswith("SketchPad.") for key in named_shape["element_map"]))
+
+    def test_p7_transformed_refine_true_uses_refinemodel_path(self) -> None:
+        result = self.run_recompute("mirrored-refine-true", "p7")
+        mirrored = result["objects"]["Mirrored"]
+        body = result["objects"]["Body"]
+        named_shape = result["named_shapes"]["Mirrored"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(mirrored["status"], "ok")
+        self.assertEqual(mirrored["transformed"], "mirrored")
+        self.assertEqual(mirrored["refine"], "applied")
+        self.assertEqual(body["tip"], "Mirrored")
+        self.assert_bbox_close(body["bbox"], [0.0, 0.0, 0.0], [4.0, 2.0, 2.0])
+        self.assertAlmostEqual(body["volume"], 16.0, delta=1e-6)
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
 
     def test_p7_mirrored_features_mode_consumes_dressup_support_transform_cache(self) -> None:
         result = self.run_recompute("mirrored-fillet-support-transform", "p7")
@@ -1702,6 +2117,301 @@ class CadCoreOcctMvpTest(unittest.TestCase):
         self.assertEqual(cylinder["first_angle"], 10.0)
         self.assertAlmostEqual(cylinder["volume"], math.pi * 5.0, delta=1e-6)
         self.assert_bbox_close_delta(cylinder["bbox"], [-1.0, -1.0, 0.0], [1.0 + 5.0 * math.tan(math.radians(10.0)), 1.0, 5.0], 1e-2)
+
+    def test_p8_part_sphere_builds_occt_solid(self) -> None:
+        result = self.run_recompute("part-sphere", "p8")
+        sphere = result["objects"]["Sphere"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sphere["status"], "ok")
+        self.assertEqual(sphere["primitive"], "sphere")
+        self.assertEqual(sphere["radius"], 3.0)
+        self.assert_bbox_close_delta(sphere["bbox"], [-3.0, -3.0, -3.0], [3.0, 3.0, 3.0], 2e-1)
+        self.assertAlmostEqual(sphere["volume"], 4.0 * math.pi * 3.0 * 3.0 * 3.0 / 3.0, delta=1e-6)
+        self.assertIn("Sphere", result["named_shapes"])
+
+    def test_p8_part_cone_builds_occt_solid(self) -> None:
+        result = self.run_recompute("part-cone", "p8")
+        cone = result["objects"]["Cone"]
+        expected_volume = math.pi * 6.0 * (2.0 * 2.0 + 2.0 * 4.0 + 4.0 * 4.0) / 3.0
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(cone["status"], "ok")
+        self.assertEqual(cone["primitive"], "cone")
+        self.assertEqual(cone["radius1"], 2.0)
+        self.assertEqual(cone["radius2"], 4.0)
+        self.assertEqual(cone["height"], 6.0)
+        self.assert_bbox_close_delta(cone["bbox"], [-4.0, -4.0, 0.0], [4.0, 4.0, 6.0], 2e-1)
+        self.assertAlmostEqual(cone["volume"], expected_volume, delta=1e-6)
+        self.assertIn("Cone", result["named_shapes"])
+
+    def test_p8_part_torus_builds_freecad_revolved_solid(self) -> None:
+        result = self.run_recompute("part-torus", "p8")
+        torus = result["objects"]["Torus"]
+        expected_volume = 2.0 * math.pi * math.pi * 5.0 * 1.0 * 1.0
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(torus["status"], "ok")
+        self.assertEqual(torus["primitive"], "torus")
+        self.assertEqual(torus["radius1"], 5.0)
+        self.assertEqual(torus["radius2"], 1.0)
+        self.assert_bbox_close_delta(torus["bbox"], [-6.0, -6.0, -1.0], [6.0, 6.0, 1.0], 2e-1)
+        self.assertAlmostEqual(torus["volume"], expected_volume, delta=1e-6)
+        self.assertIn("Torus", result["named_shapes"])
+
+    def test_p8_part_vertex_line_and_plane_build_topological_shapes(self) -> None:
+        result = self.run_recompute("part-vertex", "p8")
+        vertex = result["objects"]["Vertex"]
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(vertex["status"], "ok")
+        self.assertEqual(vertex["primitive"], "vertex")
+        self.assertEqual(vertex["shape"], "occt_vertex")
+        self.assert_bbox_close(vertex["bbox"], [1.0, 2.0, 3.0], [1.0, 2.0, 3.0])
+        self.assertEqual(vertex["volume"], 0.0)
+        self.assert_topology_counts(result["subshapes"]["Vertex"], {"topology_counts": {"faces": 0, "edges": 0, "vertices": 1}})
+
+        result = self.run_recompute("part-line", "p8")
+        line = result["objects"]["Line"]
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(line["status"], "ok")
+        self.assertEqual(line["primitive"], "line")
+        self.assertEqual(line["shape"], "occt_edge")
+        self.assertEqual(line["start"], [0.0, 0.0, 0.0])
+        self.assertEqual(line["end"], [1.0, 2.0, 3.0])
+        self.assert_bbox_close_delta(line["bbox"], [0.0, 0.0, 0.0], [1.0, 2.0, 3.0], 2e-1)
+        self.assertEqual(line["volume"], 0.0)
+        self.assert_topology_counts(result["subshapes"]["Line"], {"topology_counts": {"faces": 0, "edges": 1, "vertices": 2}})
+
+        result = self.run_recompute("part-plane", "p8")
+        plane = result["objects"]["Plane"]
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(plane["status"], "ok")
+        self.assertEqual(plane["primitive"], "plane")
+        self.assertEqual(plane["shape"], "occt_face")
+        self.assertEqual(plane["length"], 4.0)
+        self.assertEqual(plane["width"], 3.0)
+        self.assert_bbox_close(plane["bbox"], [0.0, 0.0, 0.0], [4.0, 3.0, 0.0])
+        self.assertEqual(plane["volume"], 0.0)
+        self.assert_topology_counts(result["subshapes"]["Plane"], {"topology_counts": {"faces": 1, "edges": 4, "vertices": 4}})
+
+    def test_p8_part_prism_builds_regular_polygon_solid(self) -> None:
+        result = self.run_recompute("part-prism", "p8")
+        prism = result["objects"]["Prism"]
+        expected_area = 6.0 * 2.0 * 2.0 * math.sin(2.0 * math.pi / 6.0) / 2.0
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(prism["status"], "ok")
+        self.assertEqual(prism["primitive"], "prism")
+        self.assertEqual(prism["polygon"], 6)
+        self.assertEqual(prism["circumradius"], 2.0)
+        self.assertEqual(prism["height"], 5.0)
+        self.assert_bbox_close_delta(prism["bbox"], [-2.0, -math.sqrt(3.0), 0.0], [2.0, math.sqrt(3.0), 5.0], 1e-6)
+        self.assertAlmostEqual(prism["volume"], expected_area * 5.0, delta=1e-6)
+        self.assert_topology_counts(result["subshapes"]["Prism"], {"topology_counts": {"faces": 8, "edges": 18, "vertices": 12}})
+        self.assertIn("Prism", result["named_shapes"])
+
+    def test_p8_part_regular_polygon_builds_wire(self) -> None:
+        result = self.run_recompute("part-regular-polygon", "p8")
+        polygon = result["objects"]["RegularPolygon"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(polygon["status"], "ok")
+        self.assertEqual(polygon["primitive"], "regular_polygon")
+        self.assertEqual(polygon["shape"], "occt_wire")
+        self.assertEqual(polygon["polygon"], 6)
+        self.assertEqual(polygon["circumradius"], 2.0)
+        self.assert_bbox_close_delta(polygon["bbox"], [-2.0, -math.sqrt(3.0), 0.0], [2.0, math.sqrt(3.0), 0.0], 2e-1)
+        self.assertEqual(polygon["volume"], 0.0)
+        self.assert_topology_counts(result["subshapes"]["RegularPolygon"], {"topology_counts": {"faces": 0, "edges": 6, "vertices": 6}})
+        self.assertIn("RegularPolygon", result["named_shapes"])
+
+    def test_p8_part_ellipsoid_builds_scaled_sphere_solid(self) -> None:
+        result = self.run_recompute("part-ellipsoid", "p8")
+        ellipsoid = result["objects"]["Ellipsoid"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(ellipsoid["status"], "ok")
+        self.assertEqual(ellipsoid["primitive"], "ellipsoid")
+        self.assertEqual(ellipsoid["radius1"], 2.0)
+        self.assertEqual(ellipsoid["radius2"], 4.0)
+        self.assertEqual(ellipsoid["radius3"], 3.0)
+        self.assert_bbox_close_delta(ellipsoid["bbox"], [-4.0, -3.0, -2.0], [4.0, 3.0, 2.0], 2.5e-1)
+        self.assertAlmostEqual(ellipsoid["volume"], 32.0 * math.pi, delta=1e-1)
+        self.assert_topology_counts(result["subshapes"]["Ellipsoid"], {"topology_counts": {"faces": 1, "edges": 3, "vertices": 2}})
+        self.assertIn("Ellipsoid", result["named_shapes"])
+
+    def test_p8_part_wedge_builds_occt_solid(self) -> None:
+        result = self.run_recompute("part-wedge", "p8")
+        wedge = result["objects"]["Wedge"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(wedge["status"], "ok")
+        self.assertEqual(wedge["primitive"], "wedge")
+        self.assert_bbox_close(wedge["bbox"], [0.0, 0.0, 0.0], [10.0, 10.0, 10.0])
+        self.assertAlmostEqual(wedge["volume"], 653.3333333333333, delta=1e-6)
+        self.assert_topology_counts(result["subshapes"]["Wedge"], {"topology_counts": {"faces": 6, "edges": 12, "vertices": 8}})
+        self.assertIn("Wedge", result["named_shapes"])
+
+    def test_p8_part_binary_booleans_build_occt_solids(self) -> None:
+        cases = {
+            "part-fuse": ("Fuse", "fuse", [0.0, 0.0, 0.0], [3.0, 2.0, 2.0], 12.0, {"faces": 14, "edges": 28, "vertices": 16}),
+            "part-cut": ("Cut", "cut", [0.0, 0.0, 0.0], [1.0, 2.0, 2.0], 4.0, {"faces": 6, "edges": 12, "vertices": 8}),
+            "part-common": ("Common", "common", [1.0, 0.0, 0.0], [2.0, 2.0, 2.0], 4.0, {"faces": 6, "edges": 12, "vertices": 8}),
+        }
+
+        for fixture, (object_name, operation, bbox_min, bbox_max, volume, counts) in cases.items():
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p8")
+                obj = result["objects"][object_name]
+                named_shape = result["named_shapes"][object_name]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(obj["status"], "ok")
+                self.assertEqual(obj["boolean"], operation)
+                self.assertEqual(obj["base"], "BaseBox")
+                self.assertEqual(obj["tool"], "ToolBox")
+                self.assert_bbox_close(obj["bbox"], bbox_min, bbox_max)
+                self.assertAlmostEqual(obj["volume"], volume, delta=1e-6)
+                self.assert_topology_counts(result["subshapes"][object_name], {"topology_counts": counts})
+                self.assertEqual(named_shape["owner"], object_name)
+                self.assertIn("Face1", named_shape["elements"])
+
+    def test_p8_part_multi_booleans_build_occt_solids(self) -> None:
+        cases = {
+            "part-multi-fuse": (
+                "MultiFuse",
+                "multi_fuse",
+                None,
+                [0.0, 0.0, 0.0],
+                [4.0, 2.0, 2.0],
+                16.0,
+                {"faces": 18, "edges": 36, "vertices": 20},
+            ),
+            "part-multi-common": (
+                "MultiCommon",
+                "multi_common",
+                "CommonOfAllShapes",
+                [2.0, 0.0, 0.0],
+                [3.0, 2.0, 2.0],
+                4.0,
+                {"faces": 6, "edges": 12, "vertices": 8},
+            ),
+            "part-multi-common-first-rest": (
+                "MultiCommon",
+                "multi_common",
+                "CommonOfFirstAndRest",
+                [1.0, 0.0, 0.0],
+                [4.0, 2.0, 2.0],
+                12.0,
+                {"faces": 16, "edges": 28, "vertices": 16},
+            ),
+        }
+
+        for fixture, (object_name, operation, behavior, bbox_min, bbox_max, volume, counts) in cases.items():
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p8")
+                obj = result["objects"][object_name]
+                named_shape = result["named_shapes"][object_name]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(obj["status"], "ok")
+                self.assertEqual(obj["boolean"], operation)
+                self.assertEqual(obj["shapes"], ["BoxA", "BoxB", "BoxC"])
+                if behavior is not None:
+                    self.assertEqual(obj["behavior"], behavior)
+                self.assert_bbox_close(obj["bbox"], bbox_min, bbox_max)
+                self.assertAlmostEqual(obj["volume"], volume, delta=1e-6)
+                self.assert_topology_counts(result["subshapes"][object_name], {"topology_counts": counts})
+                self.assertEqual(named_shape["owner"], object_name)
+                self.assertEqual(named_shape["element_map_status"], "history_partial")
+                self.assertIn("Face1", named_shape["elements"])
+
+    def test_p8_part_xor_builds_compound_from_odd_coverage_pieces(self) -> None:
+        result = self.run_recompute("part-xor", "p8")
+        xor = result["objects"]["XOR"]
+        named_shape = result["named_shapes"]["XOR"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(xor["status"], "ok")
+        self.assertEqual(xor["boolean"], "xor")
+        self.assertEqual(xor["shape"], "occt_compound")
+        self.assertEqual(xor["objects"], ["BoxA", "BoxB"])
+        self.assert_bbox_close(xor["bbox"], [0.0, 0.0, 0.0], [3.0, 2.0, 2.0])
+        self.assertAlmostEqual(xor["volume"], 8.0, delta=1e-6)
+        self.assert_topology_counts(result["subshapes"]["XOR"], {"topology_counts": {"faces": 12, "edges": 24, "vertices": 16}})
+        self.assertEqual(named_shape["owner"], "XOR")
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertIn("Face1", named_shape["elements"])
+
+    def test_p8_part_section_builds_intersection_edges(self) -> None:
+        result = self.run_recompute("part-section", "p8")
+        section = result["objects"]["Section"]
+        named_shape = result["named_shapes"]["Section"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(section["status"], "ok")
+        self.assertEqual(section["boolean"], "section")
+        self.assertEqual(section["shape"], "occt_compound")
+        self.assertEqual(section["base"], "Box")
+        self.assertEqual(section["tool"], "Plane")
+        self.assertEqual(section["approximation"], False)
+        self.assert_bbox_close_delta(section["bbox"], [-0.1, -0.1, 0.9], [2.1, 2.1, 1.1], 1e-6)
+        self.assertEqual(section["volume"], 0.0)
+        self.assert_topology_counts(result["subshapes"]["Section"], {"topology_counts": {"faces": 0, "edges": 4, "vertices": 4}})
+        self.assertEqual(named_shape["owner"], "Section")
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertIn("Edge1", named_shape["elements"])
+
+    def test_p8_part_ellipse_builds_edge(self) -> None:
+        result = self.run_recompute("part-ellipse", "p8")
+        ellipse = result["objects"]["Ellipse"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(ellipse["status"], "ok")
+        self.assertEqual(ellipse["primitive"], "ellipse")
+        self.assertEqual(ellipse["shape"], "occt_edge")
+        self.assertEqual(ellipse["major_radius"], 4.0)
+        self.assertEqual(ellipse["minor_radius"], 2.0)
+        self.assert_bbox_close_delta(ellipse["bbox"], [-4.0, -2.0, 0.0], [4.0, 2.0, 0.0], 2e-1)
+        self.assertEqual(ellipse["volume"], 0.0)
+        self.assert_topology_counts(result["subshapes"]["Ellipse"], {"topology_counts": {"faces": 0, "edges": 1, "vertices": 1}})
+        self.assertIn("Ellipse", result["named_shapes"])
+
+    def test_p8_part_helix_builds_spiral_helix_wire(self) -> None:
+        result = self.run_recompute("part-helix", "p8")
+        helix = result["objects"]["Helix"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(helix["status"], "ok")
+        self.assertEqual(helix["primitive"], "helix")
+        self.assertEqual(helix["shape"], "occt_wire")
+        self.assertEqual(helix["pitch"], 1.0)
+        self.assertEqual(helix["height"], 2.0)
+        self.assertEqual(helix["radius"], 1.0)
+        self.assertEqual(helix["turns"], 2.0)
+        self.assert_bbox_close_delta(helix["bbox"], [-1.0, -1.0, 0.0], [1.0, 1.0, 2.0], 2e-1)
+        self.assertGreater(helix["length"], 12.0)
+        self.assertEqual(helix["volume"], 0.0)
+        self.assert_topology_counts(result["subshapes"]["Helix"], {"topology_counts": {"faces": 0, "edges": 1, "vertices": 2}})
+        self.assertIn("Helix", result["named_shapes"])
+
+    def test_p8_part_spiral_builds_spiral_helix_wire(self) -> None:
+        result = self.run_recompute("part-spiral", "p8")
+        spiral = result["objects"]["Spiral"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(spiral["status"], "ok")
+        self.assertEqual(spiral["primitive"], "spiral")
+        self.assertEqual(spiral["shape"], "occt_wire")
+        self.assertEqual(spiral["growth"], 1.0)
+        self.assertEqual(spiral["radius"], 1.0)
+        self.assertEqual(spiral["radius_top"], 3.0)
+        self.assertEqual(spiral["rotations"], 2.0)
+        self.assert_bbox_close_delta(spiral["bbox"], [-2.6, -2.84, 0.0], [3.0, 2.35, 0.0], 2e-1)
+        self.assertGreater(spiral["length"], 24.0)
+        self.assertEqual(spiral["volume"], 0.0)
+        self.assert_topology_counts(result["subshapes"]["Spiral"], {"topology_counts": {"faces": 0, "edges": 2, "vertices": 3}})
+        self.assertIn("Spiral", result["named_shapes"])
 
 
 if __name__ == "__main__":

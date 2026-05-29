@@ -1,0 +1,18 @@
+{
+  "Objects": [
+    {
+      "Name": "Sphere",
+      "ID": 1,
+      "TypeId": "Part::Sphere",
+      "Properties": {
+        "Radius": 3,
+        "Angle1": -90,
+        "Angle2": 90,
+        "Angle3": 360
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Sphere"]
+  }
+}

@@ -76,6 +76,7 @@ struct TransformedBuild {
     topo::NamedShape namedShape;
     std::string mode;
     std::vector<std::string> originals;
+    bool refineApplied = false;
 };
 
 struct TemplateTransforms {
@@ -1854,6 +1855,28 @@ void publishTransformedResult(const document::DocumentObject& object,
         {"volume", geometry::volumeForShape(result.shape)},
         {"kernel", geometry::kernelVersion()},
     };
+    if (result.refineApplied) {
+        context.objects[object.name]["refine"] = "applied";
+    }
+}
+
+bool applyTransformedRefine(const document::DocumentObject& object,
+                            runtime::ComputeContext& context,
+                            TransformedBuild& result)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureTransformed.cpp
+    // ::Transformed::execute(), after Features / WholeShape fuse-cut composition calls
+    // "supportShape = refineShapeIfActive((supportShape))" before setting Shape.
+    const auto refined = applyRefineProperty(object, context, result.shape, result.namedShape);
+    if (!refined) {
+        return false;
+    }
+    result.shape = refined->shape;
+    if (refined->namedShape) {
+        result.namedShape = *refined->namedShape;
+    }
+    result.refineApplied = refined->applied;
+    return true;
 }
 
 }  // namespace
@@ -1874,17 +1897,17 @@ void executeMirrored(const document::DocumentObject& object, runtime::ComputeCon
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    if (!rejectActiveRefineProperty(object, context)) {
-        context.objects[object.name] = {{"status", "error"}};
-        return;
-    }
     if (isTransformationTemplate(object, context)) {
         publishTransformationTemplate(object, context);
         return;
     }
 
-    const auto result = buildMirroredFeatures(object, context);
+    auto result = buildMirroredFeatures(object, context);
     if (!result) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+    if (!applyTransformedRefine(object, context, *result)) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -1907,13 +1930,12 @@ void executeMultiTransform(const document::DocumentObject& object, runtime::Comp
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    if (!rejectActiveRefineProperty(object, context)) {
+    auto result = buildMultiTransformFeatures(object, context);
+    if (!result) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-
-    const auto result = buildMultiTransformFeatures(object, context);
-    if (!result) {
+    if (!applyTransformedRefine(object, context, *result)) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -1951,17 +1973,17 @@ void executeLinearPattern(const document::DocumentObject& object, runtime::Compu
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    if (!rejectActiveRefineProperty(object, context)) {
-        context.objects[object.name] = {{"status", "error"}};
-        return;
-    }
     if (isTransformationTemplate(object, context)) {
         publishTransformationTemplate(object, context);
         return;
     }
 
-    const auto result = buildLinearPatternFeatures(object, context);
+    auto result = buildLinearPatternFeatures(object, context);
     if (!result) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+    if (!applyTransformedRefine(object, context, *result)) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -1991,17 +2013,17 @@ void executePolarPattern(const document::DocumentObject& object, runtime::Comput
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    if (!rejectActiveRefineProperty(object, context)) {
-        context.objects[object.name] = {{"status", "error"}};
-        return;
-    }
     if (isTransformationTemplate(object, context)) {
         publishTransformationTemplate(object, context);
         return;
     }
 
-    const auto result = buildPolarPatternFeatures(object, context);
+    auto result = buildPolarPatternFeatures(object, context);
     if (!result) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+    if (!applyTransformedRefine(object, context, *result)) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -2025,17 +2047,17 @@ void executeScaled(const document::DocumentObject& object, runtime::ComputeConte
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    if (!rejectActiveRefineProperty(object, context)) {
-        context.objects[object.name] = {{"status", "error"}};
-        return;
-    }
     if (isTransformationTemplate(object, context)) {
         publishTransformationTemplate(object, context);
         return;
     }
 
-    const auto result = buildScaledFeatures(object, context);
+    auto result = buildScaledFeatures(object, context);
     if (!result) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+    if (!applyTransformedRefine(object, context, *result)) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }

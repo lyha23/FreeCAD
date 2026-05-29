@@ -1,0 +1,90 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPad",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [20, 0] },
+          { "kind": "LineSegment", "start": [20, 0], "end": [20, 20] },
+          { "kind": "LineSegment", "start": [20, 20], "end": [0, 20] },
+          { "kind": "LineSegment", "start": [0, 20], "end": [0, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPad",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 10,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "SketchHole",
+      "ID": 3,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 10],
+          "Rotation": [0, 0, 0, 1]
+        },
+        "Geometry": [
+          { "kind": "Circle", "center": [10, 10], "radius": 1 }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Hole",
+      "ID": 4,
+      "TypeId": "PartDesign::Hole",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchHole",
+          "SubList": []
+        },
+        "Diameter": 2,
+        "DepthType": "Dimension",
+        "Depth": 4,
+        "DrillPoint": "Flat",
+        "Threaded": true,
+        "ModelThread": false,
+        "ThreadType": "NPT",
+        "ThreadSize": "1/16",
+        "BaseProfileType": 6,
+        "Reversed": true
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 5,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["SketchPad", "Pad", "SketchHole", "Hole"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Hole"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}

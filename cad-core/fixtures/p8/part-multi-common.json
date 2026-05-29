@@ -1,0 +1,60 @@
+{
+  "Objects": [
+    {
+      "Name": "BoxA",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 4,
+        "Width": 2,
+        "Height": 2
+      }
+    },
+    {
+      "Name": "BoxB",
+      "ID": 2,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 3,
+        "Width": 2,
+        "Height": 2,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [1, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "BoxC",
+      "ID": 3,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 1,
+        "Width": 2,
+        "Height": 2,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [2, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "MultiCommon",
+      "ID": 4,
+      "TypeId": "Part::MultiCommon",
+      "Properties": {
+        "Shapes": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["BoxA", "BoxB", "BoxC"]
+        },
+        "Behavior": "CommonOfAllShapes",
+        "Refine": false
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["MultiCommon"]
+  }
+}

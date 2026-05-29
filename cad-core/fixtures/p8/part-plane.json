@@ -1,0 +1,16 @@
+{
+  "Objects": [
+    {
+      "Name": "Plane",
+      "ID": 1,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 4,
+        "Width": 3
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Plane"]
+  }
+}

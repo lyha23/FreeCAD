@@ -1,0 +1,19 @@
+{
+  "Objects": [
+    {
+      "Name": "Helix",
+      "ID": 1,
+      "TypeId": "Part::Helix",
+      "Properties": {
+        "Pitch": 1,
+        "Height": 2,
+        "Radius": 1,
+        "Angle": 0,
+        "SegmentLength": 0
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Helix"]
+  }
+}

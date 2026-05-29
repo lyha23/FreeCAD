@@ -1,0 +1,59 @@
+{
+  "Objects": [
+    {
+      "Name": "BoxA",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 2,
+        "Height": 2
+      }
+    },
+    {
+      "Name": "BoxB",
+      "ID": 2,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 2,
+        "Height": 2,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [1, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "BoxC",
+      "ID": 3,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 2,
+        "Height": 2,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [2, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "MultiFuse",
+      "ID": 4,
+      "TypeId": "Part::MultiFuse",
+      "Properties": {
+        "Shapes": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["BoxA", "BoxB", "BoxC"]
+        },
+        "Refine": false
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["MultiFuse"]
+  }
+}
