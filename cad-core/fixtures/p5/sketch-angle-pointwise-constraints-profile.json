@@ -1,0 +1,45 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
+          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
+          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
+          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]},
+          {"kind": "LineSegment", "start": [0, 8], "end": [10, 8], "construction": true},
+          {"kind": "Circle", "center": [5, 6], "radius": 2, "construction": true},
+          {"kind": "LineSegment", "start": [5, 8], "end": [5, 10], "construction": true},
+          {"kind": "LineSegment", "start": [7, 8], "end": [7, 10], "construction": true},
+          {"kind": "LineSegment", "start": [7, 8], "end": [9, 8], "construction": true},
+          {"kind": "Point", "point": [5, 8], "construction": true}
+        ],
+        "Constraints": [
+          {"Type": "Angle", "First": 6, "FirstPos": "start", "Second": 5, "Value": 1.5707963267948966},
+          {"Type": 9, "First": 7, "FirstPos": "start", "Second": 8, "SecondPos": "start", "Datum": 1.5707963267948966},
+          {"Type": "Angle", "First": 4, "Second": 6, "Third": 9, "ThirdPos": "start", "Value": 1.5707963267948966}
+        ]
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Sketch",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 4,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    }
+  ],
+  "recompute": {"objs": ["Pad"]}
+}

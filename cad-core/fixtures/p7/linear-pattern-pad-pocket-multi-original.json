@@ -1,0 +1,114 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPad",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [10, 0] },
+          { "kind": "LineSegment", "start": [10, 0], "end": [10, 5] },
+          { "kind": "LineSegment", "start": [10, 5], "end": [0, 5] },
+          { "kind": "LineSegment", "start": [0, 5], "end": [0, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "SketchPocket",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [2, 1], "end": [8, 1] },
+          { "kind": "LineSegment", "start": [8, 1], "end": [8, 4] },
+          { "kind": "LineSegment", "start": [8, 4], "end": [2, 4] },
+          { "kind": "LineSegment", "start": [2, 4], "end": [2, 1] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 3,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPad",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 10,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Pocket",
+      "ID": 4,
+      "TypeId": "PartDesign::Pocket",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPocket",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 10,
+        "Reversed": true,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "DatumLine",
+      "ID": 5,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 0],
+          "Rotation": [0, 0.7071067811865475, 0, 0.7071067811865476]
+        }
+      }
+    },
+    {
+      "Name": "LinearPattern",
+      "ID": 6,
+      "TypeId": "PartDesign::LinearPattern",
+      "Properties": {
+        "Originals": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["Pad", "Pocket"]
+        },
+        "Direction": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "DatumLine",
+          "SubList": []
+        },
+        "TransformMode": "Features",
+        "Mode": "Extent",
+        "Length": 12,
+        "Occurrences": 2
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 7,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "value": ["SketchPad", "Pad", "SketchPocket", "Pocket", "DatumLine", "LinearPattern"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "LinearPattern"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}

@@ -58,6 +58,13 @@ struct NamedShapeSource
     const NamedShape* namedShape = nullptr;
 };
 
+struct LinkedSubshapeRetag
+{
+    std::string sourceElementName;
+    std::string targetElementName;
+    std::vector<std::string> exactAliases;
+};
+
 struct NamedShapeBuild
 {
     TopoDS_Shape shape;
@@ -155,6 +162,12 @@ NamedShape namedShapeForLinkedSubshapes(
     const NamedShapeSource& source,
     const std::vector<std::pair<std::string, std::string>>& sourceToTargetElements
 );
+NamedShape namedShapeForLinkedSubshapes(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const NamedShapeSource& source,
+    const std::vector<LinkedSubshapeRetag>& sourceToTargetElements
+);
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
 // ::TopoShape::makeElementTransform(), after BRepBuilderAPI_Transform, calls
@@ -202,7 +215,8 @@ NamedShapeBuild makeElementGeneralFuseFromSources(
 );
 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.cpp
 // ::TopoShape::makeElementRefine(), "BRepBuilderAPI_RefineModel mkRefine(getShape())"
-// then makeShapeWithElementMap(..., MapperMaker(mkRefine), {*this}).
+// then "GenericShapeMapper mapper; mkRefine.populate(mapper); mapper.init(shape,
+// mkRefine.Shape())" before makeShapeWithElementMap(...).
 NamedShapeBuild makeElementRefineFromSource(const std::string& owner, const NamedShapeSource& source);
 std::optional<std::string> resolveElementName(
     const NamedShape& namedShape,

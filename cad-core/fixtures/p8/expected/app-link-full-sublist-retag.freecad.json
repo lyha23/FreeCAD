@@ -1,0 +1,21 @@
+{
+  "object": "BoxLink",
+  "reference": "FreeCAD LinkSub FullSubList exact alias retag for request-local external subname",
+  "freecad_version": "1.2.0 revision 20260519",
+  "volume": 0.0,
+  "topology_counts": {
+    "faces": 1,
+    "edges": 4,
+    "vertices": 4
+  },
+  "named_shapes": {
+    "BoxLink": {
+      "element_map_status": "history_partial",
+      "element_map": {
+        "Box.Face1": "Face1",
+        "ExternalDoc.Box.Face1": "Face1",
+        "Face1;:X;ExternalDoc.Box.Face1": "Face1"
+      }
+    }
+  }
+}

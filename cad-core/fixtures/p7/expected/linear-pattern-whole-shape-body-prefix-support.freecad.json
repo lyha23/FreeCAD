@@ -1,0 +1,48 @@
+{
+  "reference": "FreeCAD semantics: Whole shape mode ignores hidden Originals for transformed support; Body::setBaseProperty() provides the previous Body solid",
+  "freecad_version": "1.2.0 revision 20260519",
+  "objects": {
+    "LinearPattern": {
+      "bbox": {
+        "min": [0.0, 0.0, 0.0],
+        "max": [6.0, 2.0, 2.0]
+      },
+      "volume": 24.0,
+      "topology_counts": {
+        "faces": 14,
+        "edges": 28,
+        "vertices": 16
+      }
+    },
+    "Body": {
+      "bbox": {
+        "min": [0.0, 0.0, 0.0],
+        "max": [6.0, 2.0, 2.0]
+      },
+      "volume": 24.0,
+      "topology_counts": {
+        "faces": 14,
+        "edges": 28,
+        "vertices": 16
+      }
+    }
+  },
+  "named_shapes": {
+    "LinearPattern": {
+      "element_map_status": "history_partial",
+      "history_non_indexed_source_prefixes": [
+        "Pad.",
+        "SketchPad.",
+        "LinearPattern.Transform1."
+      ]
+    },
+    "Body": {
+      "element_map_status": "history_partial",
+      "history_non_indexed_source_prefixes": [
+        "Pad.",
+        "SketchPad.",
+        "LinearPattern.Transform1."
+      ]
+    }
+  }
+}

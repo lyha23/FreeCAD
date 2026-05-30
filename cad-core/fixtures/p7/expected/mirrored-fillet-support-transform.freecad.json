@@ -50,10 +50,20 @@
     }
   },
   "named_shapes": {
+    "Mirrored": {
+      "element_map_status": "history_partial",
+      "history_source_prefixes": [
+        "Fillet.",
+        "Mirrored.Transform1.",
+        "Pad."
+      ]
+    },
     "Body": {
       "element_map_status": "history_partial",
-      "element_map_prefixes": [
-        "Fillet."
+      "history_source_prefixes": [
+        "Fillet.",
+        "Mirrored.Transform1.",
+        "Pad."
       ]
     }
   }

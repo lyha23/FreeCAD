@@ -16,6 +16,200 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["coincident_constraints_applied"], 2)
         self.assert_object_matches_expected(result, "p5", "sketch-coincident-profile")
 
+    def test_p5_horizontal_vertical_constraints_accept_satisfied_lines(self) -> None:
+        result = self.run_recompute("sketch-horizontal-vertical-profile", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["edge_count"], 4)
+        self.assertEqual(sketch["coincident_constraints_applied"], 0)
+        self.assertEqual(sketch["orientation_constraints_applied"], 4)
+        self.assert_object_matches_expected(result, "p5", "sketch-horizontal-vertical-profile")
+
+    def test_p5_dimension_constraints_accept_satisfied_datums(self) -> None:
+        result = self.run_recompute("sketch-dimensional-constraints-profile", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["edge_count"], 4)
+        self.assertEqual(sketch["coincident_constraints_applied"], 0)
+        self.assertEqual(sketch["orientation_constraints_applied"], 0)
+        self.assertEqual(sketch["dimension_constraints_applied"], 4)
+        self.assert_object_matches_expected(result, "p5", "sketch-dimensional-constraints-profile")
+
+    def test_p5_diameter_constraints_accept_satisfied_datums(self) -> None:
+        result = self.run_recompute("sketch-diameter-constraints-profile", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["edge_count"], 4)
+        self.assertEqual(sketch["coincident_constraints_applied"], 0)
+        self.assertEqual(sketch["orientation_constraints_applied"], 0)
+        self.assertEqual(sketch["dimension_constraints_applied"], 2)
+        self.assert_object_matches_expected(result, "p5", "sketch-diameter-constraints-profile")
+
+    def test_p5_point_pair_constraints_accept_satisfied_datums(self) -> None:
+        result = self.run_recompute("sketch-point-pair-constraints-profile", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["edge_count"], 4)
+        self.assertEqual(sketch["coincident_constraints_applied"], 0)
+        self.assertEqual(sketch["orientation_constraints_applied"], 2)
+        self.assertEqual(sketch["dimension_constraints_applied"], 2)
+        self.assert_object_matches_expected(result, "p5", "sketch-point-pair-constraints-profile")
+
+    def test_p5_coordinate_constraints_accept_satisfied_line_end_datums(self) -> None:
+        result = self.run_recompute("sketch-coordinate-constraints-profile", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["edge_count"], 4)
+        self.assertEqual(sketch["coincident_constraints_applied"], 0)
+        self.assertEqual(sketch["orientation_constraints_applied"], 0)
+        self.assertEqual(sketch["dimension_constraints_applied"], 4)
+        self.assert_object_matches_expected(result, "p5", "sketch-coordinate-constraints-profile")
+
+    def test_p5_line_relation_constraints_accept_satisfied_lines(self) -> None:
+        result = self.run_recompute("sketch-line-relation-constraints-profile", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["edge_count"], 4)
+        self.assertEqual(sketch["coincident_constraints_applied"], 0)
+        self.assertEqual(sketch["orientation_constraints_applied"], 0)
+        self.assertEqual(sketch["dimension_constraints_applied"], 0)
+        self.assertEqual(sketch["relation_constraints_applied"], 2)
+        self.assert_object_matches_expected(result, "p5", "sketch-line-relation-constraints-profile")
+
+    def test_p5_tangent_constraints_accept_satisfied_direct_and_pointwise_tangency(self) -> None:
+        result = self.run_recompute("sketch-tangent-constraints-profile", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["edge_count"], 4)
+        self.assertEqual(sketch["coincident_constraints_applied"], 0)
+        self.assertEqual(sketch["orientation_constraints_applied"], 0)
+        self.assertEqual(sketch["dimension_constraints_applied"], 0)
+        self.assertEqual(sketch["relation_constraints_applied"], 6)
+        self.assertEqual(sketch["block_constraints_applied"], 0)
+        self.assert_object_matches_expected(result, "p5", "sketch-tangent-constraints-profile")
+
+    def test_p5_perpendicular_constraints_accept_satisfied_pointwise_relations(self) -> None:
+        result = self.run_recompute("sketch-perpendicular-pointwise-constraints-profile", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["edge_count"], 4)
+        self.assertEqual(sketch["coincident_constraints_applied"], 0)
+        self.assertEqual(sketch["orientation_constraints_applied"], 0)
+        self.assertEqual(sketch["dimension_constraints_applied"], 0)
+        self.assertEqual(sketch["relation_constraints_applied"], 4)
+        self.assertEqual(sketch["block_constraints_applied"], 0)
+        self.assert_object_matches_expected(result, "p5", "sketch-perpendicular-pointwise-constraints-profile")
+
+    def test_p5_perpendicular_constraints_accept_satisfied_curve_midpoints(self) -> None:
+        result = self.run_recompute("sketch-perpendicular-curve-constraints-profile", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["edge_count"], 4)
+        self.assertEqual(sketch["coincident_constraints_applied"], 0)
+        self.assertEqual(sketch["orientation_constraints_applied"], 0)
+        self.assertEqual(sketch["dimension_constraints_applied"], 0)
+        self.assertEqual(sketch["relation_constraints_applied"], 2)
+        self.assertEqual(sketch["block_constraints_applied"], 0)
+        self.assert_object_matches_expected(result, "p5", "sketch-perpendicular-curve-constraints-profile")
+
+    def test_p5_point_on_object_constraints_accept_satisfied_points(self) -> None:
+        result = self.run_recompute("sketch-point-on-object-constraints-profile", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["edge_count"], 4)
+        self.assertEqual(sketch["coincident_constraints_applied"], 0)
+        self.assertEqual(sketch["orientation_constraints_applied"], 0)
+        self.assertEqual(sketch["dimension_constraints_applied"], 0)
+        self.assertEqual(sketch["relation_constraints_applied"], 3)
+        self.assert_object_matches_expected(result, "p5", "sketch-point-on-object-constraints-profile")
+
+    def test_p5_symmetric_constraints_accept_satisfied_points(self) -> None:
+        result = self.run_recompute("sketch-symmetric-constraints-profile", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["edge_count"], 4)
+        self.assertEqual(sketch["coincident_constraints_applied"], 0)
+        self.assertEqual(sketch["orientation_constraints_applied"], 0)
+        self.assertEqual(sketch["dimension_constraints_applied"], 0)
+        self.assertEqual(sketch["relation_constraints_applied"], 2)
+        self.assert_object_matches_expected(result, "p5", "sketch-symmetric-constraints-profile")
+
+    def test_p5_block_constraints_accept_supported_geometry(self) -> None:
+        result = self.run_recompute("sketch-block-constraints-profile", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["edge_count"], 4)
+        self.assertEqual(sketch["coincident_constraints_applied"], 0)
+        self.assertEqual(sketch["orientation_constraints_applied"], 0)
+        self.assertEqual(sketch["dimension_constraints_applied"], 0)
+        self.assertEqual(sketch["relation_constraints_applied"], 0)
+        self.assertEqual(sketch["block_constraints_applied"], 3)
+        self.assert_object_matches_expected(result, "p5", "sketch-block-constraints-profile")
+
+    def test_p5_equal_constraints_accept_satisfied_geometries(self) -> None:
+        result = self.run_recompute("sketch-equal-constraints-profile", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["edge_count"], 4)
+        self.assertEqual(sketch["coincident_constraints_applied"], 0)
+        self.assertEqual(sketch["orientation_constraints_applied"], 0)
+        self.assertEqual(sketch["dimension_constraints_applied"], 0)
+        self.assertEqual(sketch["relation_constraints_applied"], 2)
+        self.assert_object_matches_expected(result, "p5", "sketch-equal-constraints-profile")
+
+    def test_p5_angle_constraints_accept_satisfied_line_pair_datums(self) -> None:
+        result = self.run_recompute("sketch-angle-constraints-profile", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["edge_count"], 4)
+        self.assertEqual(sketch["coincident_constraints_applied"], 0)
+        self.assertEqual(sketch["orientation_constraints_applied"], 0)
+        self.assertEqual(sketch["dimension_constraints_applied"], 0)
+        self.assertEqual(sketch["relation_constraints_applied"], 2)
+        self.assert_object_matches_expected(result, "p5", "sketch-angle-constraints-profile")
+
+    def test_p5_angle_constraints_accept_satisfied_pointwise_datums(self) -> None:
+        result = self.run_recompute("sketch-angle-pointwise-constraints-profile", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["edge_count"], 4)
+        self.assertEqual(sketch["coincident_constraints_applied"], 0)
+        self.assertEqual(sketch["orientation_constraints_applied"], 0)
+        self.assertEqual(sketch["dimension_constraints_applied"], 0)
+        self.assertEqual(sketch["relation_constraints_applied"], 3)
+        self.assertEqual(sketch["block_constraints_applied"], 0)
+        self.assert_object_matches_expected(result, "p5", "sketch-angle-pointwise-constraints-profile")
+
     def test_p5_circle_profile_outputs_pad(self) -> None:
         result = self.run_recompute("sketch-circle-profile", "p5")
         sketch = result["objects"]["Sketch"]
@@ -133,6 +327,26 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(sketch["edge_count"], 4)
                 self.assertEqual(sketch["external_geometry_count"], 1)
                 self.assertEqual(sketch["external_curve_count"], 1)
+                self.assert_object_matches_expected(result, "p5", fixture)
+
+    def test_p5_external_face_projects_boundary_as_construction_geometry(self) -> None:
+        for fixture, expected_count in [
+            ("sketch-external-face", 4),
+            ("sketch-external-face-normal", 1),
+            ("sketch-external-face-intersection", 1),
+            ("sketch-external-face-both", 2),
+            ("sketch-external-whole-box", 12),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p5")
+                sketch = result["objects"]["Sketch"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(sketch["status"], "ok")
+                self.assertEqual(sketch["edge_count"], 4)
+                self.assertEqual(sketch["external_geometry_count"], expected_count)
+                self.assertEqual(sketch["external_curve_count"], 0)
+                self.assertEqual(sketch["external_point_count"], 0)
                 self.assert_object_matches_expected(result, "p5", fixture)
 
     def test_p5_non_parallel_external_circle_edge_projection_variants(self) -> None:

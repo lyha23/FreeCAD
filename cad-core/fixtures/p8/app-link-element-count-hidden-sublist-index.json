@@ -1,0 +1,79 @@
+{
+  "Objects": [
+    {
+      "Name": "Box",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 3,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "ArrayLink",
+      "ID": 2,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Box"
+        },
+        "LinkTransform": false,
+        "ShowElement": {
+          "PropertyType": "App::PropertyBool",
+          "value": false
+        },
+        "ElementCount": {
+          "PropertyType": "App::PropertyInteger",
+          "value": 2
+        },
+        "PlacementList": {
+          "PropertyType": "App::PropertyPlacementList",
+          "value": [
+            {
+              "Base": [0, 0, 0],
+              "Rotation": [0, 0, 0, 1]
+            },
+            {
+              "Base": [5, 0, 0],
+              "Rotation": [0, 0, 0, 1]
+            }
+          ]
+        },
+        "ScaleList": {
+          "PropertyType": "App::PropertyVectorList",
+          "value": [
+            [1, 1, 1],
+            [1, 1, 1]
+          ]
+        },
+        "VisibilityList": {
+          "PropertyType": "App::PropertyBoolList",
+          "value": [true, false]
+        }
+      }
+    },
+    {
+      "Name": "FaceLink",
+      "ID": 3,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "value": "ArrayLink",
+          "SubList": ["1.Face1"]
+        },
+        "LinkTransform": false,
+        "LinkPlacement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 10, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["FaceLink"]
+  }
+}

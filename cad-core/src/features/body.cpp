@@ -55,8 +55,12 @@ topo::NamedShapeSource sourceForCurrentBody(const std::string& bodyName,
 
 topo::NamedShapeSource sourceForFeature(const std::string& feature,
                                         const TopoDS_Shape& shape,
-                                        const runtime::ComputeContext& context)
+                                        const runtime::ComputeContext& context,
+                                        const std::optional<topo::NamedShape>* slotNamedShape = nullptr)
 {
+    if (slotNamedShape != nullptr && *slotNamedShape) {
+        return topo::NamedShapeSource{(*slotNamedShape)->owner, shape, &**slotNamedShape};
+    }
     const auto namedShapeIt = context.namedShapes.find(feature);
     return topo::NamedShapeSource{namedShapeIt != context.namedShapes.end() ? namedShapeIt->second.owner : feature,
                                   shape,
@@ -68,6 +72,7 @@ std::optional<BooleanBuild> fuseShapes(const TopoDS_Shape& base,
                                        const document::DocumentObject& object,
                                        runtime::ComputeContext& context,
                                        const std::string& feature,
+                                       const std::optional<topo::NamedShape>* toolNamedShape,
                                        const std::optional<topo::NamedShape>& baseNamedShape)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::makeElementBoolean(),
@@ -75,7 +80,7 @@ std::optional<BooleanBuild> fuseShapes(const TopoDS_Shape& base,
     // consumes "BRepBuilderAPI_MakeShape::Modified/Generated()" for every boolean input.
     const auto build = topo::makeElementBooleanFromSources(object.name,
                                                            {sourceForCurrentBody(object.name, base, baseNamedShape),
-                                                            sourceForFeature(feature, tool, context)},
+                                                            sourceForFeature(feature, tool, context, toolNamedShape)},
                                                            topo::BooleanOperation::Fuse);
     if (!build.error.empty()) {
         runtime::addDiagnostic(context.diagnostics,
@@ -94,6 +99,7 @@ std::optional<BooleanBuild> cutShapes(const TopoDS_Shape& base,
                                       const document::DocumentObject& object,
                                       runtime::ComputeContext& context,
                                       const std::string& feature,
+                                      const std::optional<topo::NamedShape>* toolNamedShape,
                                       const std::optional<topo::NamedShape>& baseNamedShape)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::makeElementBoolean(),
@@ -101,7 +107,7 @@ std::optional<BooleanBuild> cutShapes(const TopoDS_Shape& base,
     // consumes "BRepBuilderAPI_MakeShape::Modified/Generated()" for every boolean input.
     const auto build = topo::makeElementBooleanFromSources(object.name,
                                                            {sourceForCurrentBody(object.name, base, baseNamedShape),
-                                                            sourceForFeature(feature, tool, context)},
+                                                            sourceForFeature(feature, tool, context, toolNamedShape)},
                                                            topo::BooleanOperation::Cut);
     if (!build.error.empty()) {
         runtime::addDiagnostic(context.diagnostics,
@@ -270,7 +276,13 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
                 bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
             }
             else {
-                const auto build = fuseShapes(*bodyShape, *addSubShape.addShape, object, context, feature, bodyNamedShape);
+                const auto build = fuseShapes(*bodyShape,
+                                              *addSubShape.addShape,
+                                              object,
+                                              context,
+                                              feature,
+                                              &addSubShape.addNamedShape,
+                                              bodyNamedShape);
                 if (build) {
                     bodyShape = build->shape;
                     bodyNamedShape = build->namedShape;
@@ -291,7 +303,13 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
                 context.objects[object.name] = {{"status", "error"}};
                 return;
             }
-            const auto build = cutShapes(*bodyShape, *addSubShape.subShape, object, context, feature, bodyNamedShape);
+            const auto build = cutShapes(*bodyShape,
+                                         *addSubShape.subShape,
+                                         object,
+                                         context,
+                                         feature,
+                                         &addSubShape.subNamedShape,
+                                         bodyNamedShape);
             if (build) {
                 bodyShape = build->shape;
                 bodyNamedShape = build->namedShape;

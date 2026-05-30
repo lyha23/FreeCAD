@@ -1,7 +1,13 @@
 from __future__ import annotations
 
+import json
+import os
+import subprocess
+import tempfile
+from pathlib import Path
+
 from .fixture_expected import ExpectedFixtureAssertions
-from .fixture_runner import CadCoreFixtureTestCase
+from .fixture_runner import BIN, ROOT, CadCoreFixtureTestCase
 
 
 class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
@@ -126,6 +132,137 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(hole["hole_cut_type"], "Counterdrill")
         self.assertEqual(hole["hole_cut_depth"], 1.0)
         self.assert_object_matches_expected(result, "p7", "hole-counterdrill")
+
+    def test_p7_hole_threaded_metric_head_cut_uses_freecad_standard_tables(self) -> None:
+        for fixture, cut_type, standard, source, cut_diameter, cut_depth, angle in [
+            ("hole-threaded-standard-counterbore", "Counterbore", "", "iso4762.json", 8.0, 4.4, 90.0),
+            ("hole-threaded-standard-countersink", "Countersink", "", "iso10642.json", 9.0, 0.0, 90.0),
+            ("hole-threaded-dynamic-din7984", "Counterbore", "DIN 7984", "din7984.json", 8.0, 3.2, 90.0),
+            ("hole-threaded-dynamic-iso2009", "Countersink", "ISO 2009", "iso2009.json", 9.5, 0.0, 90.0),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p7")
+                hole = result["objects"]["Hole"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(hole["threaded"], True)
+                self.assertEqual(hole["model_thread"], False)
+                self.assertEqual(hole["thread_type"], "ISOMetricProfile")
+                self.assertEqual(hole["thread_size"], "M4x0.7")
+                self.assertEqual(hole["diameter_source"], "thread_tap_drill")
+                self.assertAlmostEqual(hole["diameter"], 3.3, delta=1e-9)
+                self.assertEqual(hole["hole_cut_type"], cut_type)
+                self.assertEqual(hole["hole_cut_standard"], standard)
+                self.assertEqual(hole["hole_cut_definition_source"], source)
+                self.assertAlmostEqual(hole["hole_cut_diameter"], cut_diameter, delta=1e-9)
+                self.assertAlmostEqual(hole["hole_cut_depth"], cut_depth, delta=1e-9)
+                self.assertAlmostEqual(hole["hole_cut_countersink_angle"], angle, delta=1e-9)
+
+    def test_p7_hole_cut_type_loads_external_resource_dir(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            resource_dir = Path(tmpdir)
+            (resource_dir / "cad-core-custom-head.json").write_text(
+                json.dumps(
+                    {
+                        "name": "CAD Core Custom Head",
+                        "cut_type": "counterbore",
+                        "thread_type": "metric",
+                        "data": [
+                            {
+                                "thread": "M4x0.7",
+                                "diameter": 12.3,
+                                "depth": 4.5,
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            fixture = json.loads((ROOT / "fixtures" / "p7" / "hole-threaded-dynamic-din7984.json").read_text())
+            for obj in fixture["Objects"]:
+                if obj["Name"] == "Hole":
+                    obj["Properties"]["HoleCutType"] = "CAD Core Custom Head"
+                    obj["Properties"]["HoleCutDiameter"] = 0
+                    obj["Properties"]["HoleCutDepth"] = 0
+                    break
+
+            input_path = resource_dir / "hole-custom-resource.json"
+            output_path = resource_dir / "hole-custom-resource.result.json"
+            input_path.write_text(json.dumps(fixture), encoding="utf-8")
+
+            env = os.environ.copy()
+            env["CAD_CORE_HOLE_RESOURCE_DIR"] = str(resource_dir)
+            subprocess.run(
+                [str(BIN), "recompute", str(input_path), "--output", str(output_path)],
+                cwd=ROOT,
+                env=env,
+                check=True,
+            )
+
+            result = json.loads(output_path.read_text(encoding="utf-8"))
+            hole = result["objects"]["Hole"]
+            self.assertEqual(result["diagnostics"], [])
+            self.assertEqual(hole["hole_cut_type"], "Counterbore")
+            self.assertEqual(hole["hole_cut_standard"], "CAD Core Custom Head")
+            self.assertEqual(hole["hole_cut_definition_source"], "cad-core-custom-head.json")
+            self.assertAlmostEqual(hole["hole_cut_diameter"], 12.3, delta=1e-9)
+            self.assertAlmostEqual(hole["hole_cut_depth"], 4.5, delta=1e-9)
+
+    def test_p7_hole_thread_depth_follows_freecad_thread_depth_param(self) -> None:
+        for fixture, depth_type, thread_depth, runout in [
+            ("hole-thread-depth-din76", "Tapped (DIN76)", 6.2, 3.8),
+            ("hole-thread-depth-dimension-clamped", "Dimension", 6.0, 3.8),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p7")
+                hole = result["objects"]["Hole"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(hole["threaded"], True)
+                self.assertEqual(hole["model_thread"], False)
+                self.assertEqual(hole["thread_depth_type"], depth_type)
+                self.assertAlmostEqual(hole["thread_depth"], thread_depth, delta=1e-9)
+                self.assertAlmostEqual(hole["thread_runout"], runout, delta=1e-9)
+
+    def test_p7_hole_model_thread_parameter_state_matches_freecad_inputs(self) -> None:
+        for fixture, thread_class, direction, use_custom, custom, clearance, radius in [
+            ("hole-thread-class-clearance", "4G", "Left", False, 0.0, 0.022, 0.011),
+            ("hole-thread-custom-clearance", "6H", "Right", True, 0.08, 0.08, 0.04),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p7")
+                hole = result["objects"]["Hole"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(hole["threaded"], True)
+                self.assertEqual(hole["model_thread"], False)
+                self.assertEqual(hole["thread_type"], "ISOMetricProfile")
+                self.assertEqual(hole["thread_size"], "M4x0.7")
+                self.assertEqual(hole["thread_class"], thread_class)
+                self.assertEqual(hole["thread_direction"], direction)
+                self.assertEqual(hole["use_custom_thread_clearance"], use_custom)
+                self.assertAlmostEqual(hole["custom_thread_clearance"], custom, delta=1e-9)
+                self.assertAlmostEqual(hole["thread_clearance"], clearance, delta=1e-9)
+                self.assertAlmostEqual(hole["thread_radius_clearance"], radius, delta=1e-9)
+
+    def test_p7_hole_model_thread_builds_freecad_pipe_shell_tool(self) -> None:
+        plain = self.run_recompute("hole-thread-class-clearance", "p7")
+        result = self.run_recompute("hole-model-thread-metric", "p7")
+        hole = result["objects"]["Hole"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(hole["threaded"], True)
+        self.assertEqual(hole["model_thread"], True)
+        self.assertEqual(hole["model_thread_geometry"], "pipe_shell")
+        self.assertEqual(hole["thread_type"], "ISOMetricProfile")
+        self.assertEqual(hole["thread_size"], "M4x0.7")
+        self.assertEqual(hole["thread_class"], "4G")
+        self.assertEqual(hole["thread_direction"], "Left")
+        self.assertAlmostEqual(hole["thread_pitch"], 0.7, delta=1e-9)
+        self.assertAlmostEqual(hole["thread_radius_clearance"], 0.011, delta=1e-9)
+        self.assertGreater(hole["volume"], plain["objects"]["Hole"]["volume"])
+        self.assertLess(result["objects"]["Body"]["volume"], plain["objects"]["Body"]["volume"])
 
     def test_p7_hole_angled_drill_point_extends_blind_hole_tip(self) -> None:
         result = self.run_recompute("hole-angled-drill-point", "p7")
@@ -334,21 +471,15 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertAlmostEqual(hole["diameter"], diameter, delta=1e-9)
                 self.assert_object_matches_expected(result, "p7", fixture)
 
-    def test_p7_hole_without_base_and_threaded_gaps_are_explicit(self) -> None:
-        result = self.run_recompute("hole-without-base", "p7")
-        diagnostic = result["diagnostics"][0]
+    def test_p7_hole_without_base_diagnostics_are_explicit(self) -> None:
+        for fixture in ["hole-without-base", "hole-threaded-known-gap"]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p7")
+                diagnostic = result["diagnostics"][0]
 
-        self.assertEqual(diagnostic["code"], "execution_failed")
-        self.assertEqual(diagnostic["object"], "Hole")
-        self.assertEqual(diagnostic["property"], "Profile")
-
-        result = self.run_recompute("hole-threaded-known-gap", "p7")
-        diagnostic = result["diagnostics"][0]
-
-        self.assertEqual(diagnostic["code"], "unsupported_property")
-        self.assertEqual(diagnostic["object"], "Hole")
-        self.assertEqual(diagnostic["property"], "ModelThread")
-        self.assertIn("Hole::makeThread", diagnostic["message"])
+                self.assertEqual(diagnostic["code"], "execution_failed")
+                self.assertEqual(diagnostic["object"], "Hole")
+                self.assertEqual(diagnostic["property"], "Profile")
 
     def test_p7_fillet_replaces_body_tip_shape(self) -> None:
         result = self.run_recompute("fillet-pad-edge", "p7")
@@ -450,6 +581,27 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(body["tip"], "Mirrored")
         self.assert_object_matches_expected(result, "p7", "mirrored-fillet-support-transform")
 
+    def test_p7_mirrored_features_mode_consumes_chained_dressup_support_transform_cache(self) -> None:
+        result = self.run_recompute("mirrored-dressup-chain-support-transform", "p7")
+        fillet = result["objects"]["Fillet"]
+        chamfer = result["objects"]["Chamfer"]
+        mirrored = result["objects"]["Mirrored"]
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(fillet["status"], "ok")
+        self.assertEqual(fillet["support_transform_source"], "Pad")
+        self.assertEqual(chamfer["status"], "ok")
+        self.assertEqual(chamfer["support_transform"], True)
+        self.assertEqual(chamfer["support_transform_source"], "Pad")
+        self.assertEqual(chamfer["source_base"], "Fillet")
+        self.assertEqual(chamfer["add_sub_cache"], "support_transform")
+        self.assertEqual(mirrored["status"], "ok")
+        self.assertEqual(mirrored["transformed"], "mirrored")
+        self.assertEqual(mirrored["transform_mode"], "Features")
+        self.assertEqual(mirrored["originals"], ["Chamfer"])
+        self.assertEqual(body["tip"], "Mirrored")
+
     def test_p7_mirrored_whole_shape_fuses_transformed_support(self) -> None:
         result = self.run_recompute("mirrored-whole-shape", "p7")
         mirrored = result["objects"]["Mirrored"]
@@ -499,6 +651,34 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(body["tip"], "LinearPattern")
         self.assert_object_matches_expected(result, "p7", "linear-pattern-pad-two-directions")
 
+    def test_p7_linear_pattern_replays_multi_original_add_and_sub_slots(self) -> None:
+        result = self.run_recompute("linear-pattern-pad-pocket-multi-original", "p7")
+        pattern = result["objects"]["LinearPattern"]
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pattern["status"], "ok")
+        self.assertEqual(pattern["transformed"], "linear_pattern")
+        self.assertEqual(pattern["transform_mode"], "Features")
+        self.assertEqual(pattern["originals"], ["Pad", "Pocket"])
+        self.assertEqual(pattern["body_mode"], "replace")
+        self.assertEqual(body["tip"], "LinearPattern")
+        self.assert_object_matches_expected(result, "p7", "linear-pattern-pad-pocket-multi-original")
+
+    def test_p7_linear_pattern_can_transform_subtractive_original_only(self) -> None:
+        result = self.run_recompute("linear-pattern-pocket-subtractive-original", "p7")
+        pattern = result["objects"]["LinearPattern"]
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pattern["status"], "ok")
+        self.assertEqual(pattern["transformed"], "linear_pattern")
+        self.assertEqual(pattern["transform_mode"], "Features")
+        self.assertEqual(pattern["originals"], ["Pocket"])
+        self.assertEqual(pattern["body_mode"], "replace")
+        self.assertEqual(body["tip"], "LinearPattern")
+        self.assert_object_matches_expected(result, "p7", "linear-pattern-pocket-subtractive-original")
+
     def test_p7_linear_pattern_custom_spacing_list_controls_steps(self) -> None:
         result = self.run_recompute("linear-pattern-custom-spacings", "p7")
         pattern = result["objects"]["LinearPattern"]
@@ -529,6 +709,35 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pattern["transform_mode"], "Whole shape")
         self.assertEqual(pattern["originals"], ["Pad"])
         self.assert_object_matches_expected(result, "p7", "linear-pattern-whole-shape")
+
+    def test_p7_linear_pattern_whole_shape_uses_body_prefix_support(self) -> None:
+        result = self.run_recompute("linear-pattern-whole-shape-body-prefix-support", "p7")
+        pattern = result["objects"]["LinearPattern"]
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pattern["status"], "ok")
+        self.assertEqual(pattern["transformed"], "linear_pattern")
+        self.assertEqual(pattern["transform_mode"], "Whole shape")
+        self.assertEqual(pattern["originals"], ["Pad"])
+        self.assertEqual(pattern["body_mode"], "replace")
+        self.assertEqual(body["tip"], "LinearPattern")
+        self.assert_object_matches_expected(result, "p7", "linear-pattern-whole-shape-body-prefix-support")
+
+    def test_p7_linear_pattern_whole_shape_consumes_refined_prefix_support(self) -> None:
+        result = self.run_recompute("linear-pattern-whole-shape-refined-prefix-support", "p7")
+        pattern = result["objects"]["LinearPattern"]
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pattern["status"], "ok")
+        self.assertEqual(pattern["transformed"], "linear_pattern")
+        self.assertEqual(pattern["transform_mode"], "Whole shape")
+        self.assertEqual(pattern["originals"], ["Pocket"])
+        self.assertEqual(pattern["support_refined_features"], ["Pocket"])
+        self.assertEqual(pattern["body_mode"], "replace")
+        self.assertEqual(body["tip"], "LinearPattern")
+        self.assert_object_matches_expected(result, "p7", "linear-pattern-whole-shape-refined-prefix-support")
 
     def test_p7_polar_pattern_features_mode_rotates_additive_originals_by_extent(self) -> None:
         result = self.run_recompute("polar-pattern-pad-datum-line", "p7")
@@ -610,6 +819,26 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(scaled["transform_mode"], "Whole shape")
         self.assertEqual(scaled["originals"], ["Pad"])
         self.assert_object_matches_expected(result, "p7", "scaled-whole-shape")
+
+    def test_p7_transformed_copy_preserves_terminal_stable_history(self) -> None:
+        for fixture, code, stable_subname in [
+            ("mirrored-stable-history-split", "split_stable_subname", "Pad.Face5"),
+            ("mirrored-stable-history-deleted", "deleted_stable_subname", "Pocket.Face5"),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p7")
+                diagnostic = result["diagnostics"][0]
+                history_kinds = {
+                    item["kind"]
+                    for item in result["named_shapes"]["Mirrored"]["history"]
+                }
+
+                self.assertEqual(diagnostic["code"], code)
+                self.assertEqual(diagnostic["object"], "ProbePad")
+                self.assertEqual(diagnostic["property"], "UpToFace")
+                self.assertEqual(diagnostic["target"], "Mirrored")
+                self.assertEqual(diagnostic["subname"], stable_subname)
+                self.assertIn(code.removesuffix("_stable_subname"), history_kinds)
 
     def test_p7_multi_transform_combines_linear_pattern_and_mirror(self) -> None:
         result = self.run_recompute("multi-transform-linear-mirror", "p7")

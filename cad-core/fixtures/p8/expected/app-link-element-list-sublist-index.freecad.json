@@ -1,0 +1,25 @@
+{
+  "object": "FaceLink",
+  "reference": "FreeCAD LinkSub ElementList numeric path FaceLink -> LinkGroup.1.Face1",
+  "freecad_version": "1.2.0 revision 20260519",
+  "bbox": {
+    "min": [5, 10, 0],
+    "max": [5, 13, 4]
+  },
+  "volume": 0.0,
+  "topology_counts": {
+    "faces": 1,
+    "edges": 4,
+    "vertices": 4
+  },
+  "named_shapes": {
+    "FaceLink": {
+      "element_map_status": "history_partial",
+      "element_map": {
+        "1.Face1": "Face1",
+        "LinkB.Face1": "Face1",
+        "LinkGroup.1.Face1": "Face1"
+      }
+    }
+  }
+}

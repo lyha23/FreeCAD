@@ -8,14 +8,19 @@
 #include <BRepAlgoAPI_Cut.hxx>
 #include <BRepAlgoAPI_Fuse.hxx>
 #include <BRepAlgoAPI_Section.hxx>
+#include <BRep_Tool.hxx>
 #include <BRepOffsetAPI_ThruSections.hxx>
 #include <Standard_Failure.hxx>
 #include <TopAbs_ShapeEnum.hxx>
 #include <TopExp.hxx>
+#include <TopExp_Explorer.hxx>
+#include <TopTools_IndexedDataMapOfShapeListOfShape.hxx>
 #include <TopTools_ListIteratorOfListOfShape.hxx>
 #include <TopTools_IndexedMapOfShape.hxx>
 #include <TopTools_ListOfShape.hxx>
 #include <TopoDS.hxx>
+#include <TopoDS_Edge.hxx>
+#include <TopoDS_Face.hxx>
 
 #include <algorithm>
 #include <map>
@@ -90,6 +95,28 @@ struct SourceTargets
     std::set<std::string> history;
 };
 
+std::optional<TopAbs_ShapeEnum> elementKindFromName(const std::string& elementName)
+{
+    const std::size_t dot = elementName.rfind('.');
+    const std::string localName = dot == std::string::npos ? elementName : elementName.substr(dot + 1);
+    const auto parsed = parseSubshapeName(localName);
+    if (!parsed) {
+        return std::nullopt;
+    }
+    return parsed->kind;
+}
+
+std::set<std::string> targetsOfKind(const std::set<std::string>& targets, TopAbs_ShapeEnum kind)
+{
+    std::set<std::string> result;
+    for (const std::string& target : targets) {
+        if (elementKindFromName(target) == kind) {
+            result.insert(target);
+        }
+    }
+    return result;
+}
+
 std::optional<std::string> findElementName(
     const NamedShape& namedShape,
     const TopoDS_Shape& shape,
@@ -108,6 +135,16 @@ std::optional<std::string> findElementName(
         }
     }
     return std::nullopt;
+}
+
+int findSameShapeIndex(const TopTools_IndexedMapOfShape& shapes, const TopoDS_Shape& shape)
+{
+    for (int index = 1; index <= shapes.Extent(); ++index) {
+        if (shapes(index).IsSame(shape)) {
+            return index;
+        }
+    }
+    return 0;
 }
 
 bool applyHistoryShape(
@@ -284,6 +321,118 @@ void collectSourceElementMap(
     sourceTargets[sourceName].preserved.insert(*elementName);
 }
 
+bool sameRefineSurface(const TopoDS_Face& sourceFace, const TopoDS_Face& resultFace)
+{
+    const GeomAbs_SurfaceType sourceType = geometry::model_refine::FaceTypedBase::getFaceType(sourceFace);
+    if (sourceType != geometry::model_refine::FaceTypedBase::getFaceType(resultFace)) {
+        return false;
+    }
+
+    switch (sourceType) {
+        case GeomAbs_Plane:
+            return geometry::model_refine::getPlaneObject().isEqual(sourceFace, resultFace);
+        case GeomAbs_Cylinder:
+            return geometry::model_refine::getCylinderObject().isEqual(sourceFace, resultFace);
+        case GeomAbs_BSplineSurface:
+            return geometry::model_refine::getBSplineObject().isEqual(sourceFace, resultFace);
+        default:
+            return false;
+    }
+}
+
+void applyRefineGenericGeneratedHistory(
+    NamedShape& namedShape,
+    const NamedShapeSource& source,
+    const TopoDS_Shape& resultShape,
+    std::map<std::string, SourceTargets>& sourceTargets
+)
+{
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementRefine(), "GenericShapeMapper mapper; mkRefine.populate(mapper);
+    // mapper.init(shape, mkRefine.Shape())". GenericShapeMapper::init() marks result faces
+    // absent from the source as generated from a source face sharing two edges, or from a matching
+    // surface among candidate source faces.
+    if (source.shape.IsNull() || resultShape.IsNull()) {
+        return;
+    }
+
+    TopTools_IndexedMapOfShape sourceFaces;
+    TopTools_IndexedMapOfShape sourceEdges;
+    TopTools_IndexedMapOfShape resultFaces;
+    TopTools_IndexedDataMapOfShapeListOfShape edgeToFaces;
+    TopExp::MapShapes(source.shape, TopAbs_FACE, sourceFaces);
+    TopExp::MapShapes(source.shape, TopAbs_EDGE, sourceEdges);
+    TopExp::MapShapes(resultShape, TopAbs_FACE, resultFaces);
+    TopExp::MapShapesAndAncestors(source.shape, TopAbs_EDGE, TopAbs_FACE, edgeToFaces);
+
+    for (int faceIndex = 1; faceIndex <= resultFaces.Extent(); ++faceIndex) {
+        const TopoDS_Shape& resultFaceShape = resultFaces(faceIndex);
+        if (findSameShapeIndex(sourceFaces, resultFaceShape) != 0) {
+            continue;
+        }
+        const auto resultElementName = findElementName(namedShape, resultFaceShape, TopAbs_FACE);
+        if (!resultElementName) {
+            continue;
+        }
+        const auto resultElement = namedShape.elements.find(*resultElementName);
+        if (resultElement != namedShape.elements.end()
+            && resultElement->second.status == ElementHistoryKind::Modified) {
+            continue;
+        }
+
+        std::map<int, int> sourceFaceEdgeCount;
+        int generatedSourceFace = 0;
+        for (TopExp_Explorer edgeIt(resultFaceShape, TopAbs_EDGE); edgeIt.More(); edgeIt.Next()) {
+            const int sourceEdgeIndex = findSameShapeIndex(sourceEdges, edgeIt.Current());
+            if (sourceEdgeIndex == 0 || !edgeToFaces.Contains(sourceEdges(sourceEdgeIndex))) {
+                continue;
+            }
+
+            const TopoDS_Edge sourceEdge = TopoDS::Edge(sourceEdges(sourceEdgeIndex));
+            const TopTools_ListOfShape& faces = edgeToFaces.FindFromKey(sourceEdges(sourceEdgeIndex));
+            for (TopTools_ListIteratorOfListOfShape faceIt(faces); faceIt.More(); faceIt.Next()) {
+                const int sourceFaceIndex = findSameShapeIndex(sourceFaces, faceIt.Value());
+                if (sourceFaceIndex == 0) {
+                    continue;
+                }
+                if (BRep_Tool::IsClosed(sourceEdge)) {
+                    generatedSourceFace = sourceFaceIndex;
+                    break;
+                }
+                if (++sourceFaceEdgeCount[sourceFaceIndex] == 2) {
+                    generatedSourceFace = sourceFaceIndex;
+                    break;
+                }
+            }
+            if (generatedSourceFace != 0) {
+                break;
+            }
+        }
+
+        if (generatedSourceFace == 0) {
+            const TopoDS_Face resultFace = TopoDS::Face(resultFaceShape);
+            for (const auto& item : sourceFaceEdgeCount) {
+                if (sameRefineSurface(TopoDS::Face(sourceFaces(item.first)), resultFace)) {
+                    generatedSourceFace = item.first;
+                    break;
+                }
+            }
+        }
+        if (generatedSourceFace == 0) {
+            continue;
+        }
+
+        const std::string localSourceName = "Face" + std::to_string(generatedSourceFace);
+        for (const std::string& sourceName : sourceElementNames(source, localSourceName)) {
+            applyHistoryShape(namedShape,
+                              sourceName,
+                              resultFaceShape,
+                              ElementHistoryKind::Generated,
+                              sourceTargets);
+        }
+    }
+}
+
 void applyHistoryElementMap(
     NamedShape& namedShape,
     const std::map<std::string, SourceTargets>& sourceTargets
@@ -306,9 +455,11 @@ void applyHistoryElementMap(
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
         // ::makeShapeWithElementMap() consumes MapperMaker generated/modified history into
         // ElementMap after first calling "mapSubElement(shapes)" for preserved source elements.
-        // cad-core follows that priority: preserved source subelements resolve first; one-to-one
-        // history fills the remaining keys; one-to-many history is recorded as split and left
-        // unresolved instead of being guessed as a single current subshape.
+        // The same function walks Vertex, Edge and Face ShapeInfo separately and skips modified
+        // history when "newInfo.type != newShape.ShapeType()", while generated lower elements
+        // remain available as generated names. cad-core follows that priority: preserved source
+        // subelements resolve first; one-to-one same-kind history fills the remaining keys;
+        // one-to-many same-kind history is recorded as split and left unresolved.
         if (targets.preserved.size() == 1U) {
             namedShape.elementMap[sourceName] = *targets.preserved.begin();
             continue;
@@ -317,6 +468,20 @@ void applyHistoryElementMap(
             applySplit(sourceName, targets.preserved);
             continue;
         }
+
+        const auto sourceKind = elementKindFromName(sourceName);
+        if (sourceKind) {
+            const std::set<std::string> sameKindHistory = targetsOfKind(targets.history, *sourceKind);
+            if (sameKindHistory.size() == 1U) {
+                namedShape.elementMap[sourceName] = *sameKindHistory.begin();
+                continue;
+            }
+            if (sameKindHistory.size() > 1U) {
+                applySplit(sourceName, sameKindHistory);
+                continue;
+            }
+        }
+
         if (targets.history.size() == 1U) {
             namedShape.elementMap[sourceName] = *targets.history.begin();
             continue;
@@ -723,6 +888,55 @@ NamedShape namedShapeForThruSectionsHistory(
     return namedShape;
 }
 
+NamedShape namedShapeForRefineHistory(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const NamedShapeSource& source,
+    geometry::BRepBuilderAPI_RefineModel& maker
+)
+{
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::MyRefineMaker::populate(), "mapper.populate(MappingStatus::Modified, it.Key(),
+    // it.Value())"; ::TopoShape::makeElementRefine() then calls "mapper.init(shape,
+    // mkRefine.Shape())" before makeShapeWithElementMap().
+    NamedShape namedShape = indexedNamedShapeForObject(owner, resultShape);
+    std::map<std::string, SourceTargets> sourceTargets;
+
+    for (const TopAbs_ShapeEnum kind : mappableKinds()) {
+        const std::string prefix = prefixForKind(kind);
+        if (prefix.empty()) {
+            continue;
+        }
+        TopTools_IndexedMapOfShape sourceElements;
+        TopExp::MapShapes(source.shape, kind, sourceElements);
+        for (int index = 1; index <= sourceElements.Extent(); ++index) {
+            const TopoDS_Shape& sourceElement = sourceElements(index);
+            const std::string localElementName = prefix + std::to_string(index);
+            for (const std::string& sourceName : sourceElementNames(source, localElementName)) {
+                sourceTargets[sourceName];
+                collectSourceElementMap(namedShape, sourceName, sourceElement, kind, sourceTargets);
+                try {
+                    applyHistoryList(namedShape,
+                                     sourceName,
+                                     maker.Modified(sourceElement),
+                                     ElementHistoryKind::Modified,
+                                     sourceTargets);
+                }
+                catch (const Standard_Failure&) {
+                    continue;
+                }
+            }
+        }
+    }
+
+    applyRefineGenericGeneratedHistory(namedShape, source, resultShape, sourceTargets);
+    applyHistoryElementMap(namedShape, sourceTargets);
+    propagateNestedSourceHistory(namedShape, std::vector<NamedShapeSource> {source});
+    addMergeHistory(namedShape);
+
+    return namedShape;
+}
+
 NamedShape namedShapeForPreservedSources(
     const std::string& owner,
     const TopoDS_Shape& resultShape,
@@ -779,6 +993,8 @@ NamedShape namedShapeForLinkedShape(
         }
         addLinkRetagAlias(namedShape, source, stableName, currentName);
     }
+    propagateNestedSourceHistory(namedShape, {source});
+    addMergeHistory(namedShape);
     return namedShape;
 }
 
@@ -790,7 +1006,12 @@ NamedShape namedShapeForLinkedSubshape(
     const std::string& targetElementName
 )
 {
-    return namedShapeForLinkedSubshapes(owner, resultShape, source, {{sourceElementName, targetElementName}});
+    return namedShapeForLinkedSubshapes(
+        owner,
+        resultShape,
+        source,
+        std::vector<std::pair<std::string, std::string>>{{sourceElementName, targetElementName}}
+    );
 }
 
 NamedShape namedShapeForLinkedSubshapes(
@@ -800,18 +1021,38 @@ NamedShape namedShapeForLinkedSubshapes(
     const std::vector<std::pair<std::string, std::string>>& sourceToTargetElements
 )
 {
+    std::vector<LinkedSubshapeRetag> retags;
+    retags.reserve(sourceToTargetElements.size());
+    for (const auto& [sourceElementName, targetElementName] : sourceToTargetElements) {
+        retags.push_back(LinkedSubshapeRetag{sourceElementName, targetElementName, {}});
+    }
+    return namedShapeForLinkedSubshapes(owner, resultShape, source, retags);
+}
+
+NamedShape namedShapeForLinkedSubshapes(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const NamedShapeSource& source,
+    const std::vector<LinkedSubshapeRetag>& sourceToTargetElements
+)
+{
     NamedShape namedShape = indexedNamedShapeForObject(owner, resultShape);
 
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
     // ::LinkBaseExtension::parseSubName() can keep multiple PropertyXLink sub-elements with
     // the same linked-object prefix, and checkGeoElementMap() retags resolved linked topology.
     // cad-core preserves that retag per selected source element when a LinkSub returns a compound.
-    for (const auto& [sourceElementName, targetElementName] : sourceToTargetElements) {
+    for (const auto& retag : sourceToTargetElements) {
+        const std::string& sourceElementName = retag.sourceElementName;
+        const std::string& targetElementName = retag.targetElementName;
         if (targetElementName.empty() || namedShape.elements.count(targetElementName) == 0U) {
             continue;
         }
 
         addLinkRetagAlias(namedShape, source, sourceElementName, targetElementName);
+        for (const std::string& alias : retag.exactAliases) {
+            addRetagAlias(namedShape, alias, targetElementName);
+        }
         if (source.namedShape == nullptr) {
             continue;
         }
@@ -821,6 +1062,14 @@ NamedShape namedShapeForLinkedSubshapes(
                 addLinkRetagAlias(namedShape, source, stableName, targetElementName);
             }
         }
+    }
+    if (source.namedShape != nullptr) {
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+        // ::LinkBaseExtension::checkGeoElementMap(), after getSubObject() resolves linked
+        // geometry, calls "geoData->reTagElementMap(...)" so copied ElementMap terminal
+        // outcomes remain visible to later PropertyLinkSub::updateElementReference().
+        propagateNestedSourceHistory(namedShape, {source});
+        addMergeHistory(namedShape);
     }
     return namedShape;
 }
@@ -845,6 +1094,7 @@ NamedShape namedShapeForTransformedCopy(
         for (const auto& [stableName, currentName] : source.namedShape->elementMap) {
             addRetagAlias(namedShape, stableName, currentName);
         }
+        propagateNestedSourceHistory(namedShape, {source});
     }
     addMergeHistory(namedShape);
 
@@ -1125,7 +1375,7 @@ NamedShapeBuild makeElementRefineFromSource(const std::string& owner, const Name
         }
         return NamedShapeBuild {
             resultShape,
-            namedShapeForMakerHistory(owner, resultShape, std::vector<NamedShapeSource> {source}, maker),
+            namedShapeForRefineHistory(owner, resultShape, source, maker),
             {},
         };
     }
@@ -1172,11 +1422,25 @@ ElementResolveResult resolveElementReference(
             if (entry.kind == ElementHistoryKind::Deleted && entry.element == stableSubname) {
                 return ElementResolveResult {ElementResolveStatus::Deleted, std::nullopt};
             }
+        }
+        bool split = false;
+        for (const ElementHistory& entry : namedShape.history) {
             if (entry.kind == ElementHistoryKind::Split
                 && std::find(entry.sources.begin(), entry.sources.end(), stableSubname)
                     != entry.sources.end()) {
-                return ElementResolveResult {ElementResolveStatus::Split, std::nullopt};
+                // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/App/GeoFeature.cpp
+                // ::updateElementReference() preserves the user-visible subname when an old
+                // stable reference cannot be collapsed to one ElementMap target. If SubList
+                // already names one concrete split target, cad-core resolves that explicit choice
+                // instead of reporting the whole stable reference as ambiguous.
+                if (entry.element == subname && namedShape.elements.count(subname) != 0U) {
+                    return ElementResolveResult {ElementResolveStatus::Resolved, subname};
+                }
+                split = true;
             }
+        }
+        if (split) {
+            return ElementResolveResult {ElementResolveStatus::Split, std::nullopt};
         }
         return ElementResolveResult {ElementResolveStatus::Unresolved, std::nullopt};
     }

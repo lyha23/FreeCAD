@@ -4,39 +4,64 @@
 #include "cad_core/geometry/shape_exporter.h"
 #include "cad_core/topo/subshape_map.h"
 
+#include <BRepAlgoAPI_Fuse.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
+#include <BRepBuilderAPI_MakeSolid.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
+#include <BRepBuilderAPI_Sewing.hxx>
 #include <BRepAdaptor_Curve.hxx>
 #include <BRepAdaptor_Surface.hxx>
 #include <BRepBndLib.hxx>
 #include <BRepPrimAPI_MakeCylinder.hxx>
 #include <BRepPrimAPI_MakeRevol.hxx>
 #include <BRep_Builder.hxx>
+#include <BRepClass3d_SolidClassifier.hxx>
+#include <BRepLib.hxx>
+#include <BRepOffsetAPI_MakePipeShell.hxx>
 #include <BRep_Tool.hxx>
 #include <Bnd_Box.hxx>
+#include <GCE2d_MakeSegment.hxx>
+#include <GC_MakeArcOfCircle.hxx>
 #include <GeomAbs_CurveType.hxx>
 #include <GeomAbs_SurfaceType.hxx>
+#include <Geom2d_TrimmedCurve.hxx>
+#include <Geom_BezierCurve.hxx>
+#include <Geom_Surface.hxx>
+#include <Geom_SurfaceOfRevolution.hxx>
+#include <Geom_TrimmedCurve.hxx>
 #include <Precision.hxx>
+#include <TColgp_Array1OfPnt.hxx>
 #include <TopAbs_ShapeEnum.hxx>
 #include <TopExp.hxx>
 #include <TopExp_Explorer.hxx>
+#include <TopLoc_Location.hxx>
+#include <TopTools_ListOfShape.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Compound.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
+#include <TopoDS_Shell.hxx>
 #include <TopoDS_Vertex.hxx>
 #include <TopoDS_Wire.hxx>
 #include <gp_Ax1.hxx>
 #include <gp_Ax2.hxx>
 #include <gp_Dir.hxx>
 #include <gp_Pnt.hxx>
+#include <gp_Pnt2d.hxx>
+#include <gp_Trsf.hxx>
 #include <gp_Vec.hxx>
+#include <gp_Vec2d.hxx>
 
+#include <algorithm>
 #include <cmath>
+#include <cstdlib>
+#include <filesystem>
+#include <fstream>
 #include <optional>
 #include <set>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace cad_core::features {
@@ -59,8 +84,19 @@ struct HoleBuild {
     std::string threadType;
     std::string threadSize;
     std::string threadFit;
+    std::string threadClass;
+    std::string threadDirection;
+    double threadClearance = 0.0;
+    double threadRadiusClearance = 0.0;
+    bool useCustomThreadClearance = false;
+    double customThreadClearance = 0.0;
+    std::string threadDepthType;
+    double threadDepth = 0.0;
+    double threadRunout = 0.0;
     double depth = 0.0;
     std::string holeCutType;
+    std::string holeCutStandard;
+    std::string holeCutDefinitionSource;
     std::string drillPoint;
     double holeCutDiameter = 0.0;
     double holeCutDepth = 0.0;
@@ -77,7 +113,10 @@ struct HoleToolOptions {
     double diameter = 0.0;
     double depth = 0.0;
     std::string threadType;
+    std::string threadSize;
     std::string holeCutType;
+    std::string holeCutStandard;
+    std::string holeCutDefinitionSource;
     double holeCutDiameter = 0.0;
     double holeCutDepth = 0.0;
     double holeCutCountersinkAngle = 0.0;
@@ -102,6 +141,58 @@ struct ThreadDiameterResult {
     std::string source = "Diameter";
     std::string threadSize;
     std::string threadFit;
+};
+
+struct ThreadDepthResult {
+    std::string type = "Hole Depth";
+    double depth = 0.0;
+    double runout = 0.0;
+};
+
+struct ThreadModelParameters {
+    std::string threadClass = "None";
+    std::string direction = "Right";
+    double clearance = 0.0;
+    double radiusClearance = 0.0;
+    bool useCustomClearance = false;
+    double customClearance = 0.0;
+};
+
+struct CounterboreDimension {
+    std::string thread;
+    double diameter = 0.0;
+    double depth = 0.0;
+};
+
+struct CountersinkDimension {
+    std::string thread;
+    double diameter = 0.0;
+};
+
+enum class HoleCutDefinitionKind {
+    Counterbore,
+    Countersink,
+};
+
+struct HoleCutDefinition {
+    std::string name;
+    std::string threadType;
+    HoleCutDefinitionKind kind = HoleCutDefinitionKind::Counterbore;
+    double angle = 0.0;
+    std::vector<CounterboreDimension> boreData;
+    std::vector<CountersinkDimension> sinkData;
+    std::string source;
+};
+
+struct CounterboreLookup {
+    CounterboreDimension dimension;
+    std::string source;
+};
+
+struct CountersinkLookup {
+    CountersinkDimension dimension;
+    double angle = 90.0;
+    std::string source;
 };
 
 const nlohmann::json* propertyPayload(const document::DocumentObject& object, const std::string& property)
@@ -1094,6 +1185,539 @@ double defaultCountersinkAngle(const std::string& threadType)
     return 90.0;
 }
 
+double threadRunoutForPitch(double pitch)
+{
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // ::Hole::getThreadRunout(), uses DIN 76-1 ThreadRunout "{Pitch, e1}" rows and for
+    // non-standard pitch falls back to "4 * pitch".
+    static const std::vector<std::pair<double, double>> runouts = {
+        {0.2, 1.3},  {0.25, 1.5}, {0.3, 1.8},  {0.35, 2.1}, {0.4, 2.3},  {0.45, 2.6},
+        {0.5, 2.8},  {0.6, 3.4},  {0.7, 3.8},  {0.75, 4.0}, {0.8, 4.2},  {1.0, 5.1},
+        {1.25, 6.2}, {1.5, 7.3},  {1.75, 8.3}, {2.0, 9.3},  {2.5, 11.2}, {3.0, 13.1},
+        {3.5, 15.2}, {4.0, 16.8}, {4.5, 18.4}, {5.0, 20.8}, {5.5, 22.4}, {6.0, 24.0},
+    };
+    for (const auto& [limit, runout] : runouts) {
+        if (pitch <= limit) {
+            return runout;
+        }
+    }
+    return 4.0 * pitch;
+}
+
+std::vector<std::string> threadClassValuesFor(const std::string& threadType)
+{
+    if (threadType == "ISOMetricProfile" || threadType == "ISOMetricFineProfile") {
+        return {"4G", "4H", "5G", "5H", "6G", "6H", "7G", "7H", "8G", "8H"};
+    }
+    if (threadType == "UNC" || threadType == "UNF" || threadType == "UNEF") {
+        return {"1B", "2B", "3B"};
+    }
+    if (threadType == "BSW" || threadType == "BSF") {
+        return {"Medium", "Normal"};
+    }
+    return {"None"};
+}
+
+double threadClassClearanceFor(const std::string& threadClass, double pitch)
+{
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // ::Hole::getThreadClassClearance(), only classes whose second character is 'G'
+    // add ISO metric clearance from ThreadClass_ISOmetric_data; other classes return 0.
+    if (threadClass.size() < 2 || threadClass[1] != 'G') {
+        return 0.0;
+    }
+    static const std::vector<std::pair<double, double>> clearances = {
+        {0.2, 0.017},  {0.25, 0.018}, {0.3, 0.018},  {0.35, 0.019}, {0.4, 0.019},
+        {0.45, 0.020}, {0.5, 0.020},  {0.6, 0.021},  {0.7, 0.022},  {0.75, 0.022},
+        {0.8, 0.024},  {1.0, 0.026},  {1.25, 0.028}, {1.5, 0.032},  {1.75, 0.034},
+        {2.0, 0.038},  {2.5, 0.042},  {3.0, 0.048},  {3.5, 0.053},  {4.0, 0.060},
+        {4.5, 0.063},  {5.0, 0.071},  {5.5, 0.075},  {6.0, 0.080},  {8.0, 0.100},
+    };
+    for (const auto& [limit, clearance] : clearances) {
+        if (pitch <= limit) {
+            return clearance;
+        }
+    }
+    return 0.0;
+}
+
+ThreadModelParameters resolveThreadModelParameters(const document::DocumentObject& object,
+                                                   const std::string& threadType,
+                                                   double threadPitch,
+                                                   bool threaded)
+{
+    // FreeCAD:
+    // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // ::Hole::makeThread() reads "bool leftHanded = (bool)ThreadDirection.getValue()";
+    // then applies either "CustomThreadClearance / 2" or "getThreadClassClearance() / 2"
+    // to the thread major radius before Hole::makeThread() builds the modeled thread tool.
+    ThreadModelParameters result;
+    const std::vector<std::string> threadClasses = threadClassValuesFor(threadType);
+    result.threadClass =
+        readEnumProperty(object, "ThreadClass", threadClasses, threadClasses.empty() ? "None" : threadClasses.front());
+    result.direction = readEnumProperty(object, "ThreadDirection", {"Right", "Left"}, "Right");
+    result.useCustomClearance = readBoolProperty(object, "UseCustomThreadClearance");
+    result.customClearance = readNumberProperty(object, "CustomThreadClearance", 0.0);
+    if (!threaded) {
+        return result;
+    }
+    result.clearance = result.useCustomClearance
+        ? result.customClearance
+        : threadClassClearanceFor(result.threadClass, threadPitch);
+    result.radiusClearance = result.clearance / 2.0;
+    return result;
+}
+
+ThreadDepthResult resolveThreadDepth(const document::DocumentObject& object,
+                                     const std::string& holeDepthType,
+                                     double holeDepth,
+                                     bool threaded,
+                                     double threadPitch)
+{
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // ::Hole::updateThreadDepthParam(), "Hole Depth" copies Depth, "Dimension" clamps
+    // ThreadDepth to hole depth, and "Tapped (DIN76)" uses "Depth - getThreadRunout()".
+    ThreadDepthResult result;
+    result.type = readEnumProperty(
+        object,
+        "ThreadDepthType",
+        {"Hole Depth", "Dimension", "Tapped (DIN76)"},
+        "Hole Depth"
+    );
+    result.depth = readNumberProperty(object, "ThreadDepth", holeDepth);
+    result.runout = threadPitch > Precision::Confusion() ? threadRunoutForPitch(threadPitch) : 0.0;
+    if (!threaded) {
+        return result;
+    }
+
+    if (holeDepthType == "ThroughAll") {
+        if (result.type != "Dimension") {
+            result.depth = holeDepth;
+        }
+        else if (result.depth > holeDepth) {
+            result.depth = holeDepth;
+        }
+        return result;
+    }
+
+    if (result.type == "Hole Depth") {
+        result.depth = holeDepth;
+    }
+    else if (result.type == "Dimension") {
+        if (result.depth > holeDepth) {
+            result.depth = holeDepth;
+        }
+    }
+    else if (result.type == "Tapped (DIN76)") {
+        result.depth = holeDepth - result.runout;
+    }
+    return result;
+}
+
+std::optional<std::string> threadTypeFromHoleResource(const std::string& threadType)
+{
+    if (threadType == "metric") {
+        return "ISOMetricProfile";
+    }
+    if (threadType == "metricfine") {
+        return "ISOMetricFineProfile";
+    }
+    return std::nullopt;
+}
+
+std::optional<HoleCutDefinitionKind> cutKindFromHoleResource(const std::string& cutType)
+{
+    if (cutType == "counterbore") {
+        return HoleCutDefinitionKind::Counterbore;
+    }
+    if (cutType == "countersink") {
+        return HoleCutDefinitionKind::Countersink;
+    }
+    return std::nullopt;
+}
+
+std::optional<HoleCutDefinition> readHoleCutDefinitionFile(const std::filesystem::path& path)
+{
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // ::Hole::readCutDefinitions(), reads each Resources/Hole "*.json", converts it through
+    // from_json(CutDimensionSet), then addCutType() registers the JSON "name" for metric or
+    // metricfine HoleCutType enum values. cad-core keeps the same resource schema and exposes
+    // the matched filename in the recompute result.
+    try {
+        std::ifstream input(path);
+        if (!input) {
+            return std::nullopt;
+        }
+        nlohmann::json raw;
+        input >> raw;
+
+        const auto threadType = threadTypeFromHoleResource(raw.at("thread_type").get<std::string>());
+        const auto kind = cutKindFromHoleResource(raw.at("cut_type").get<std::string>());
+        if (!threadType || !kind) {
+            return std::nullopt;
+        }
+
+        HoleCutDefinition definition;
+        definition.name = raw.at("name").get<std::string>();
+        definition.threadType = *threadType;
+        definition.kind = *kind;
+        definition.source = path.filename().string();
+
+        if (*kind == HoleCutDefinitionKind::Counterbore) {
+            for (const nlohmann::json& item : raw.at("data")) {
+                definition.boreData.push_back(CounterboreDimension{
+                    item.at("thread").get<std::string>(),
+                    item.at("diameter").get<double>(),
+                    item.at("depth").get<double>(),
+                });
+            }
+        }
+        else {
+            definition.angle = raw.at("angle").get<double>();
+            for (const nlohmann::json& item : raw.at("data")) {
+                definition.sinkData.push_back(CountersinkDimension{
+                    item.at("thread").get<std::string>(),
+                    item.at("diameter").get<double>(),
+                });
+            }
+        }
+        return definition;
+    }
+    catch (const std::exception&) {
+        return std::nullopt;
+    }
+}
+
+std::vector<std::filesystem::path> holeCutDefinitionSearchDirs()
+{
+    std::vector<std::filesystem::path> dirs;
+#ifdef CAD_CORE_SOURCE_DIR
+    dirs.emplace_back(std::filesystem::path(CAD_CORE_SOURCE_DIR) / "resources" / "hole");
+#endif
+    std::error_code cwdError;
+    const std::filesystem::path cwd = std::filesystem::current_path(cwdError);
+    if (!cwdError) {
+        dirs.emplace_back(cwd / "resources" / "hole");
+        dirs.emplace_back(cwd / "cad-core" / "resources" / "hole");
+    }
+    if (const char* customDir = std::getenv("CAD_CORE_HOLE_RESOURCE_DIR")) {
+        dirs.emplace_back(customDir);
+    }
+    return dirs;
+}
+
+const std::vector<HoleCutDefinition>& resourceHoleCutDefinitions()
+{
+    static const std::vector<HoleCutDefinition> definitions = [] {
+        std::vector<HoleCutDefinition> loaded;
+        std::set<std::pair<std::string, std::string>> seen;
+        for (const std::filesystem::path& dir : holeCutDefinitionSearchDirs()) {
+            std::error_code dirError;
+            if (!std::filesystem::exists(dir, dirError) || !std::filesystem::is_directory(dir, dirError)) {
+                continue;
+            }
+
+            std::vector<std::filesystem::path> files;
+            std::filesystem::directory_iterator it(dir, dirError);
+            if (dirError) {
+                continue;
+            }
+            for (const std::filesystem::directory_entry& entry : it) {
+                std::error_code entryError;
+                if (entry.is_regular_file(entryError) && entry.path().extension() == ".json") {
+                    files.push_back(entry.path());
+                }
+            }
+            std::sort(files.begin(), files.end());
+
+            for (const std::filesystem::path& file : files) {
+                const auto definition = readHoleCutDefinitionFile(file);
+                if (!definition) {
+                    continue;
+                }
+                const auto key = std::make_pair(definition->threadType, definition->name);
+                if (seen.insert(key).second) {
+                    loaded.push_back(*definition);
+                }
+            }
+        }
+        return loaded;
+    }();
+    return definitions;
+}
+
+const HoleCutDefinition* resourceHoleCutDefinitionFor(const std::string& threadType,
+                                                      const std::string& name,
+                                                      HoleCutDefinitionKind kind)
+{
+    for (const HoleCutDefinition& definition : resourceHoleCutDefinitions()) {
+        if (definition.threadType == threadType && definition.name == name && definition.kind == kind) {
+            return &definition;
+        }
+    }
+    return nullptr;
+}
+
+const std::vector<CounterboreDimension>* iso4762CounterboreTable(const std::string& threadType)
+{
+    // FreeCAD:
+    // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // ::Hole::updateHoleCutParams(), for metric "Counterbore" reads "ISO 4762" with
+    // "const CounterBoreDimension& dimen = counter.get_bore(threadSizeStr)".
+    // Data source:
+    // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/Resources/Hole/iso4762.json
+    // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/Resources/Hole/iso4762-fine.json
+    static const std::vector<CounterboreDimension> metric = {
+        {"M1.6x0.35", 3.5, 1.7}, {"M2x0.4", 4.3, 2.1},
+        {"M2.5x0.45", 5.0, 3.0}, {"M3x0.5", 6.0, 3.4},
+        {"M3.5x0.6", 6.5, 3.9}, {"M4x0.7", 8.0, 4.4},
+        {"M5x0.8", 10.0, 5.4}, {"M6x1.0", 11.0, 6.4},
+        {"M8x1.25", 15.0, 8.6}, {"M10x1.5", 18.0, 10.6},
+        {"M12x1.75", 20.0, 12.6}, {"M14x2.0", 24.0, 14.6},
+        {"M16x2.0", 26.0, 16.6}, {"M18x2.5", 30.0, 18.6},
+        {"M20x2.5", 33.0, 20.6}, {"M22x2.5", 36.0, 22.8},
+        {"M24x3.0", 40.0, 24.8}, {"M30x3.5", 50.0, 31.0},
+        {"M33x3.5", 54.0, 34.0}, {"M36x4.0", 58.0, 37.0},
+        {"M42x4.5", 69.0, 43.0}, {"M48x5.0", 78.0, 49.0},
+        {"M56x5.5", 90.0, 57.0}, {"M64x6.0", 103.0, 65.0},
+    };
+    static const std::vector<CounterboreDimension> metricFine = {
+        {"M1.6x0.2", 3.5, 1.7}, {"M2x0.25", 4.3, 2.1},
+        {"M2.5x0.35", 5.0, 3.0}, {"M3x0.35", 6.0, 3.4},
+        {"M3.5x0.35", 6.5, 3.9}, {"M4x0.5", 8.0, 4.4},
+        {"M5x0.5", 10.0, 5.4}, {"M6x0.75", 11.0, 6.4},
+        {"M8x0.75", 15.0, 8.6}, {"M8x1.0", 15.0, 8.6},
+        {"M10x1.0", 18.0, 10.6}, {"M10x1.25", 18.0, 10.6},
+        {"M12x1.25", 20.0, 12.6}, {"M12x1.5", 20.0, 12.6},
+        {"M14x1.5", 24.0, 14.6}, {"M16x1.5", 26.0, 16.6},
+        {"M18x1.5", 30.0, 18.6}, {"M18x2.0", 30.0, 18.6},
+        {"M20x1.5", 33.0, 20.6}, {"M20x2.0", 33.0, 20.6},
+        {"M22x1.5", 36.0, 22.8}, {"M22x2.0", 36.0, 22.8},
+        {"M24x2.0", 40.0, 24.8}, {"M30x2.0", 50.0, 31.0},
+        {"M33x2.0", 54.0, 34.0}, {"M36x3.0", 58.0, 37.0},
+        {"M42x3.0", 69.0, 43.0}, {"M48x3.0", 78.0, 49.0},
+    };
+
+    if (threadType == "ISOMetricProfile") {
+        return &metric;
+    }
+    if (threadType == "ISOMetricFineProfile") {
+        return &metricFine;
+    }
+    return nullptr;
+}
+
+const std::vector<CountersinkDimension>* iso10642CountersinkTable(const std::string& threadType)
+{
+    // FreeCAD:
+    // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // ::Hole::updateHoleCutParams(), for metric "Countersink" and "Counterdrill" reads
+    // "ISO 10642" and applies "HoleCutCountersinkAngle.setValue(counter.angle)".
+    // Data source:
+    // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/Resources/Hole/iso10642.json
+    // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/Resources/Hole/iso10642-fine.json
+    static const std::vector<CountersinkDimension> metric = {
+        {"M2x0.4", 4.7}, {"M2.5x0.45", 5.9}, {"M3x0.5", 6.7},
+        {"M4x0.7", 9.0}, {"M5x0.8", 11.2}, {"M6x1.0", 13.4},
+        {"M8x1.25", 17.9}, {"M10x1.5", 22.4}, {"M12x1.75", 26.9},
+        {"M14x2.0", 30.8}, {"M16x2.0", 33.6}, {"M20x2.5", 40.3},
+    };
+    static const std::vector<CountersinkDimension> metricFine = {
+        {"M1.6x0.2", 3.6}, {"M2x0.25", 4.5}, {"M2.5x0.35", 5.6},
+        {"M3x0.35", 6.7}, {"M4x0.5", 9.0}, {"M5x0.5", 11.2},
+        {"M6x0.75", 13.5}, {"M8x0.75", 18.0}, {"M8x1.0", 18.0},
+        {"M10x1.0", 22.4}, {"M10x1.25", 22.4}, {"M12x1.25", 26.8},
+        {"M12x1.5", 26.8}, {"M14x1.5", 30.9}, {"M16x1.5", 33.6},
+        {"M20x1.5", 40.3}, {"M20x2.0", 40.3},
+    };
+
+    if (threadType == "ISOMetricProfile") {
+        return &metric;
+    }
+    if (threadType == "ISOMetricFineProfile") {
+        return &metricFine;
+    }
+    return nullptr;
+}
+
+const std::vector<CounterboreDimension>* namedCounterboreTable(const std::string& threadType,
+                                                              const std::string& tableName)
+{
+    if (tableName == "ISO 4762") {
+        return iso4762CounterboreTable(threadType);
+    }
+
+    // FreeCAD:
+    // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // ::Hole::readCutDefinitions() loads Resources/Hole/*.json and addCutType() registers
+    // their JSON "name" values as dynamic HoleCutType enums for metric / metricfine threads.
+    static const std::vector<CounterboreDimension> din7984 = {
+        {"M2x0.4", 4.3, 1.6}, {"M2.5x0.45", 5.0, 2.0}, {"M3x0.5", 6.0, 2.4},
+        {"M3.5x0.6", 6.5, 2.9}, {"M4x0.7", 8.0, 3.2}, {"M5x0.8", 10.0, 4.0},
+        {"M6x1.0", 11.0, 4.7}, {"M8x1.25", 15.0, 6.0}, {"M10x1.5", 18.0, 7.0},
+        {"M12x1.75", 20.0, 8.0}, {"M14x2.0", 24.0, 9.0}, {"M16x2.0", 26.0, 10.5},
+        {"M18x2.5", 30.0, 11.5}, {"M20x2.5", 33.0, 12.5}, {"M22x2.5", 36.0, 13.5},
+        {"M24x3.0", 40.0, 14.5},
+    };
+    static const std::vector<CounterboreDimension> iso4762WithWasher = {
+        {"M2x0.4", 6.0, 2.4}, {"M2.5x0.45", 7.0, 3.5}, {"M3x0.5", 9.0, 3.9},
+        {"M3.5x0.6", 9.0, 4.4}, {"M4x0.7", 10.0, 5.2}, {"M5x0.8", 13.0, 6.4},
+        {"M6x1.0", 15.0, 8.0}, {"M8x1.25", 18.0, 10.2}, {"M10x1.5", 24.0, 12.6},
+        {"M12x1.75", 26.0, 15.1}, {"M14x2.0", 30.0, 17.1}, {"M16x2.0", 33.0, 16.6},
+        {"M18x2.5", 36.0, 21.6}, {"M20x2.5", 40.0, 23.6}, {"M22x2.5", 43.0, 25.8},
+        {"M24x3.0", 48.0, 29.8}, {"M27x3.0", 54.0, 35.0}, {"M30x3.5", 61.0, 38.0},
+        {"M33x3.5", 63.0, 41.0}, {"M36x4.0", 69.0, 42.0},
+    };
+    static const std::vector<CounterboreDimension> iso14583 = {
+        {"M2x0.4", 4.4, 2.0}, {"M2.5x0.45", 5.4, 2.5}, {"M3x0.5", 6.0, 2.8},
+        {"M3.5x0.6", 7.6, 3.0}, {"M4x0.7", 8.6, 3.5}, {"M5x0.8", 10.1, 4.1},
+        {"M6x1.0", 12.6, 5.0}, {"M8x1.25", 16.6, 6.6}, {"M10x1.5", 20.8, 8.1},
+    };
+    static const std::vector<CounterboreDimension> iso14583Partial = {
+        {"M2x0.4", 4.4, 1.0}, {"M2.5x0.45", 5.4, 1.4}, {"M3x0.5", 6.0, 1.7},
+        {"M3.5x0.6", 7.6, 1.7}, {"M4x0.7", 8.6, 2.0}, {"M5x0.8", 10.1, 2.5},
+        {"M6x1.0", 12.6, 3.0}, {"M8x1.25", 16.6, 3.9}, {"M10x1.5", 20.8, 4.6},
+    };
+    static const std::vector<CounterboreDimension> iso12474 = {
+        {"M8x1.0", 15.0, 8.6}, {"M10x1.0", 18.0, 10.6}, {"M10x1.25", 18.0, 10.6},
+        {"M12x1.25", 20.0, 12.6}, {"M12x1.5", 20.0, 12.6}, {"M14x1.5", 24.0, 14.6},
+        {"M16x1.5", 26.0, 16.6}, {"M18x1.5", 30.0, 18.6}, {"M20x1.5", 33.0, 20.6},
+        {"M20x2.0", 33.0, 20.6}, {"M22x1.5", 36.0, 22.8}, {"M24x2.0", 40.0, 24.8},
+        {"M30x2.0", 50.0, 31.0}, {"M33x1.5", 54.0, 34.0}, {"M36x3.0", 58.0, 37.0},
+        {"M42x3.0", 69.0, 41.0},
+    };
+
+    if (threadType == "ISOMetricProfile") {
+        if (tableName == "DIN 7984") {
+            return &din7984;
+        }
+        if (tableName == "ISO 4762 + 7089") {
+            return &iso4762WithWasher;
+        }
+        if (tableName == "ISO 14583") {
+            return &iso14583;
+        }
+        if (tableName == "ISO 14583 (partial)") {
+            return &iso14583Partial;
+        }
+    }
+    if (threadType == "ISOMetricFineProfile" && tableName == "ISO 12474") {
+        return &iso12474;
+    }
+    return nullptr;
+}
+
+const std::vector<CountersinkDimension>* namedCountersinkTable(const std::string& threadType,
+                                                              const std::string& tableName)
+{
+    if (tableName == "ISO 10642") {
+        return iso10642CountersinkTable(threadType);
+    }
+
+    // FreeCAD:
+    // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/Resources/Hole/iso2009.json
+    // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/Resources/Hole/iso7046.json
+    // are registered through Hole::readCutDefinitions() as metric countersink HoleCutType values.
+    static const std::vector<CountersinkDimension> iso2009 = {
+        {"M2x0.4", 4.3}, {"M2.5x0.45", 5.3}, {"M3x0.5", 6.3},
+        {"M4x0.7", 9.5}, {"M5x0.8", 10.5}, {"M6x1.0", 12.7},
+        {"M8x1.25", 17.7}, {"M10x1.5", 20.2}, {"M12x1.75", 24.7},
+    };
+    static const std::vector<CountersinkDimension> iso7046 = {
+        {"M1.6x0.35", 3.6}, {"M2x0.4", 4.4}, {"M2.5x0.45", 5.5},
+        {"M3x0.5", 6.3}, {"M3.5x0.6", 8.2}, {"M4x0.7", 9.4},
+        {"M5x0.8", 10.4}, {"M6x1.0", 12.6}, {"M8x1.25", 17.3},
+        {"M10x1.5", 20.0},
+    };
+
+    if (threadType == "ISOMetricProfile") {
+        if (tableName == "ISO 2009") {
+            return &iso2009;
+        }
+        if (tableName == "ISO 7046") {
+            return &iso7046;
+        }
+    }
+    return nullptr;
+}
+
+std::optional<CounterboreLookup> standardCounterboreFor(const HoleToolOptions& options)
+{
+    const std::string tableName =
+        options.holeCutStandard.empty() ? "ISO 4762" : options.holeCutStandard;
+    if (const HoleCutDefinition* definition =
+            resourceHoleCutDefinitionFor(options.threadType, tableName, HoleCutDefinitionKind::Counterbore)) {
+        for (const CounterboreDimension& dimension : definition->boreData) {
+            if (options.threadSize == dimension.thread) {
+                return CounterboreLookup{dimension, definition->source};
+            }
+        }
+        return std::nullopt;
+    }
+
+    const std::vector<CounterboreDimension>* dimensions =
+        namedCounterboreTable(options.threadType, tableName);
+    if (dimensions == nullptr) {
+        return std::nullopt;
+    }
+    for (const CounterboreDimension& dimension : *dimensions) {
+        if (options.threadSize == dimension.thread) {
+            return CounterboreLookup{dimension, ""};
+        }
+    }
+    return std::nullopt;
+}
+
+std::optional<CountersinkLookup> standardCountersinkFor(const HoleToolOptions& options)
+{
+    const std::string tableName =
+        options.holeCutStandard.empty() ? "ISO 10642" : options.holeCutStandard;
+    if (const HoleCutDefinition* definition =
+            resourceHoleCutDefinitionFor(options.threadType, tableName, HoleCutDefinitionKind::Countersink)) {
+        for (const CountersinkDimension& dimension : definition->sinkData) {
+            if (options.threadSize == dimension.thread) {
+                return CountersinkLookup{dimension, definition->angle, definition->source};
+            }
+        }
+        return std::nullopt;
+    }
+
+    const std::vector<CountersinkDimension>* dimensions =
+        namedCountersinkTable(options.threadType, tableName);
+    if (dimensions == nullptr) {
+        return std::nullopt;
+    }
+    for (const CountersinkDimension& dimension : *dimensions) {
+        if (options.threadSize == dimension.thread) {
+            return CountersinkLookup{dimension, 90.0, ""};
+        }
+    }
+    return std::nullopt;
+}
+
+bool usesMetricStandardHoleCut(const HoleToolOptions& options)
+{
+    return options.threadType == "ISOMetricProfile" || options.threadType == "ISOMetricFineProfile";
+}
+
+bool isDynamicCounterboreHoleCut(const HoleToolOptions& options)
+{
+    if (resourceHoleCutDefinitionFor(options.threadType, options.holeCutType, HoleCutDefinitionKind::Counterbore)
+        != nullptr) {
+        return true;
+    }
+    return namedCounterboreTable(options.threadType, options.holeCutType) != nullptr;
+}
+
+bool isDynamicCountersinkHoleCut(const HoleToolOptions& options)
+{
+    if (resourceHoleCutDefinitionFor(options.threadType, options.holeCutType, HoleCutDefinitionKind::Countersink)
+        != nullptr) {
+        return true;
+    }
+    return namedCountersinkTable(options.threadType, options.holeCutType) != nullptr;
+}
+
 gp_Vec computePerpendicular(const gp_Dir& direction)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
@@ -1298,24 +1922,496 @@ std::optional<TopoDS_Shape> buildCylinderTool(const std::vector<gp_Pnt>& centers
     return compound;
 }
 
+TopoDS_Compound compoundShapes(const std::vector<TopoDS_Shape>& shapes)
+{
+    TopoDS_Compound compound;
+    BRep_Builder builder;
+    builder.MakeCompound(compound);
+    for (const TopoDS_Shape& shape : shapes) {
+        builder.Add(compound, shape);
+    }
+    return compound;
+}
+
+double modelThreadHelixLength(const ThreadDepthResult& threadDepth,
+                              const std::string& depthMethod,
+                              double holeDepth,
+                              double pitch)
+{
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // ::Hole::makeThread(), initializes "helixLength = threadDepth + Pitch / 2"; non-Dimension
+    // ThroughAll uses "threadDepth + 2 * Pitch", Hole Depth uses "threadDepth + Pitch / 8",
+    // and Dimension clamps to "holeDepth + Pitch / 8" near the hole bottom.
+    const double depth = threadDepth.depth;
+    double helixLength = depth + pitch / 2.0;
+    if (threadDepth.type != "Dimension") {
+        if (depthMethod == "ThroughAll") {
+            helixLength = holeDepth + 2.0 * pitch;
+        }
+        else if (threadDepth.type == "Tapped (DIN76)") {
+            helixLength = depth + pitch / 2.0;
+        }
+        else {
+            helixLength = depth + pitch / 8.0;
+        }
+    }
+    else if (depthMethod == "Dimension" && depth > holeDepth - pitch / 2.0) {
+        helixLength = holeDepth + pitch / 8.0;
+    }
+    return helixLength;
+}
+
+bool buildThreadWireEdge(BRepBuilderAPI_MakeWire& wireBuilder,
+                         const gp_Pnt& start,
+                         const gp_Pnt& end,
+                         const document::DocumentObject& object,
+                         runtime::ComputeContext& context)
+{
+    if (start.Distance(end) <= Precision::Confusion()) {
+        return true;
+    }
+    BRepBuilderAPI_MakeEdge edgeBuilder(start, end);
+    if (!edgeBuilder.IsDone()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               "OCCT could not build Hole thread profile edge",
+                               object.name,
+                               "ModelThread");
+        return false;
+    }
+    wireBuilder.Add(edgeBuilder.Edge());
+    return true;
+}
+
+bool buildThreadWireArc(BRepBuilderAPI_MakeWire& wireBuilder,
+                        const gp_Pnt& start,
+                        const gp_Pnt& mid,
+                        const gp_Pnt& end,
+                        const document::DocumentObject& object,
+                        runtime::ComputeContext& context)
+{
+    if (start.Distance(end) <= Precision::Confusion()) {
+        return true;
+    }
+    Handle(Geom_TrimmedCurve) arc = GC_MakeArcOfCircle(start, mid, end).Value();
+    BRepBuilderAPI_MakeEdge edgeBuilder(arc);
+    if (!edgeBuilder.IsDone()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               "OCCT could not build Hole thread profile arc",
+                               object.name,
+                               "ModelThread");
+        return false;
+    }
+    wireBuilder.Add(edgeBuilder.Edge());
+    return true;
+}
+
+std::optional<TopoDS_Wire> buildThreadProfileWire(const gp_Pnt& center,
+                                                  const gp_Vec& radialDir,
+                                                  const gp_Vec& axisDir,
+                                                  const std::string& threadType,
+                                                  double majorRadius,
+                                                  double pitch,
+                                                  double radiusClearance,
+                                                  const document::DocumentObject& object,
+                                                  runtime::ComputeContext& context)
+{
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // ::Hole::makeThread(), builds "mkThreadWire" from ISO/UTS sharp-V formulas or
+    // BSP/BSW/BSF Whitworth formulas, with "RmajC = Rmaj + clearance".
+    const double rmajC = majorRadius + radiusClearance;
+    constexpr double marginZ = 0.001;
+
+    BRepBuilderAPI_MakeWire wireBuilder;
+    if (threadType == "BSP" || threadType == "BSW" || threadType == "BSF") {
+        const double h = 0.960491 * pitch;
+        const double crestRadius = 0.137329 * pitch;
+        const double marginX = std::tan(62.5 * pi / 180.0) * marginZ;
+        const double p23x = rmajC - crestRadius * 0.58284013094;
+        const gp_Pnt p1 = offsetPoint(center, radialDir, axisDir, rmajC - 5.0 * h / 6.0 + marginX, marginZ);
+        const gp_Pnt p2 = offsetPoint(center, radialDir, axisDir, p23x, 3.0 * pitch / 8.0);
+        const gp_Pnt crest = offsetPoint(center, radialDir, axisDir, rmajC, pitch / 2.0);
+        const gp_Pnt p3 = offsetPoint(center, radialDir, axisDir, p23x, 5.0 * pitch / 8.0);
+        const gp_Pnt p4 =
+            offsetPoint(center, radialDir, axisDir, rmajC - 5.0 * h / 6.0 + marginX, pitch - marginZ);
+        if (!buildThreadWireEdge(wireBuilder, p1, p2, object, context)
+            || !buildThreadWireArc(wireBuilder, p2, crest, p3, object, context)
+            || !buildThreadWireEdge(wireBuilder, p3, p4, object, context)
+            || !buildThreadWireEdge(wireBuilder, p4, p1, object, context)) {
+            return std::nullopt;
+        }
+    }
+    else {
+        const double h = 7.0 * (std::sqrt(3.0) / 2.0 * pitch) / 8.0;
+        const double marginX = std::tan(pi / 3.0) * marginZ;
+        const gp_Pnt p1 = offsetPoint(center, radialDir, axisDir, rmajC - h + marginX, marginZ);
+        const gp_Pnt p2 = offsetPoint(center, radialDir, axisDir, rmajC, 7.0 * pitch / 16.0);
+        const gp_Pnt p3 = offsetPoint(center, radialDir, axisDir, rmajC, 9.0 * pitch / 16.0);
+        const gp_Pnt p4 = offsetPoint(center, radialDir, axisDir, rmajC - h + marginX, pitch - marginZ);
+        if (!buildThreadWireEdge(wireBuilder, p1, p2, object, context)) {
+            return std::nullopt;
+        }
+        if (threadType == "ISOTyre") {
+            const gp_Pnt crest = offsetPoint(center, radialDir, axisDir, rmajC + pitch / 32.0, pitch / 2.0);
+            if (!buildThreadWireArc(wireBuilder, p2, crest, p3, object, context)) {
+                return std::nullopt;
+            }
+        }
+        else if (!buildThreadWireEdge(wireBuilder, p2, p3, object, context)) {
+            return std::nullopt;
+        }
+        if (!buildThreadWireEdge(wireBuilder, p3, p4, object, context)
+            || !buildThreadWireEdge(wireBuilder, p4, p1, object, context)) {
+            return std::nullopt;
+        }
+    }
+
+    wireBuilder.Build();
+    if (!wireBuilder.IsDone()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               "OCCT could not build Hole thread profile wire",
+                               object.name,
+                               "ModelThread");
+        return std::nullopt;
+    }
+    return wireBuilder.Wire();
+}
+
+std::optional<TopoDS_Wire> buildThreadHelix(const gp_Pnt& center,
+                                            const gp_Dir& direction,
+                                            const gp_Vec& radialDir,
+                                            double pitch,
+                                            double helixLength,
+                                            double majorRadius,
+                                            double taperedAngle,
+                                            bool tapered,
+                                            bool leftHanded,
+                                            const document::DocumentObject& object,
+                                            runtime::ComputeContext& context)
+{
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // ::Hole::makeThread(), calls TopoShape::makeLongHelix(Pitch, helixLength, Rmaj,
+    // "TaperedAngle - 90", leftHanded) before feeding the wire to BRepOffsetAPI_MakePipeShell.
+    if (pitch <= Precision::Confusion() || helixLength <= Precision::Confusion()
+        || majorRadius <= Precision::Confusion()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_length",
+                               "Hole model thread pitch, length, and radius must be positive",
+                               object.name,
+                               "ModelThread");
+        return std::nullopt;
+    }
+
+    const double helixAngle = tapered ? (taperedAngle - 90.0) * pi / 180.0 : 0.0;
+    const double topRadius = majorRadius + helixLength * std::tan(helixAngle);
+    if (topRadius <= Precision::Confusion()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_length",
+                               "Hole model thread taper collapses the helix radius",
+                               object.name,
+                               "TaperedAngle");
+        return std::nullopt;
+    }
+
+    TColgp_Array1OfPnt poles(1, 2);
+    poles(1) = offsetPoint(center, radialDir, gp_Vec(direction), majorRadius, 0.0);
+    poles(2) = offsetPoint(center, radialDir, gp_Vec(direction), topRadius, helixLength);
+    Handle(Geom_BezierCurve) meridian = new Geom_BezierCurve(poles);
+    Handle(Geom_Surface) surface =
+        new Geom_SurfaceOfRevolution(meridian, gp_Ax1(center, direction));
+
+    const double turns = helixLength / pitch;
+    const unsigned long wholeTurns = static_cast<unsigned long>(std::floor(turns));
+    const double partTurn = turns - static_cast<double>(wholeTurns);
+    const double handed = leftHanded ? -1.0 : 1.0;
+    gp_Pnt2d begin(0.0, 0.0);
+    BRepBuilderAPI_MakeWire wireBuilder;
+    for (unsigned long index = 0; index < wholeTurns; ++index) {
+        const double v = static_cast<double>(index + 1) / turns;
+        const gp_Pnt2d end(handed * static_cast<double>(index + 1) * 2.0 * pi, v);
+        Handle(Geom2d_TrimmedCurve) segment = GCE2d_MakeSegment(begin, end);
+        BRepBuilderAPI_MakeEdge edgeBuilder(segment, surface);
+        if (!edgeBuilder.IsDone()) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "execution_failed",
+                                   "OCCT could not build Hole thread helix edge",
+                                   object.name,
+                                   "ModelThread");
+            return std::nullopt;
+        }
+        wireBuilder.Add(edgeBuilder.Edge());
+        begin = end;
+    }
+    if (partTurn > Precision::Confusion()) {
+        const gp_Pnt2d end(handed * turns * 2.0 * pi, 1.0);
+        Handle(Geom2d_TrimmedCurve) segment = GCE2d_MakeSegment(begin, end);
+        BRepBuilderAPI_MakeEdge edgeBuilder(segment, surface);
+        if (!edgeBuilder.IsDone()) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "execution_failed",
+                                   "OCCT could not build Hole thread helix edge",
+                                   object.name,
+                                   "ModelThread");
+            return std::nullopt;
+        }
+        wireBuilder.Add(edgeBuilder.Edge());
+    }
+
+    wireBuilder.Build();
+    if (!wireBuilder.IsDone()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               "OCCT could not build Hole thread helix wire",
+                               object.name,
+                               "ModelThread");
+        return std::nullopt;
+    }
+    TopoDS_Wire wire = wireBuilder.Wire();
+    BRepLib::BuildCurves3d(wire);
+    return wire;
+}
+
+std::optional<TopoDS_Shape> buildModelThreadAtCenter(const gp_Pnt& center,
+                                                     const gp_Dir& direction,
+                                                     const HoleToolOptions& options,
+                                                     const ThreadModelParameters& threadModel,
+                                                     const ThreadDepthResult& threadDepth,
+                                                     const std::string& depthMethod,
+                                                     double threadDiameter,
+                                                     double threadPitch,
+                                                     const document::DocumentObject& object,
+                                                     runtime::ComputeContext& context)
+{
+    const double majorRadius = threadDiameter / 2.0;
+    const double helixLength = modelThreadHelixLength(threadDepth, depthMethod, options.depth, threadPitch);
+    if (threadDepth.depth <= Precision::Confusion() || helixLength <= Precision::Confusion()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_length",
+                               "Hole model thread depth must be positive",
+                               object.name,
+                               "ThreadDepth");
+        return std::nullopt;
+    }
+
+    const gp_Vec axisDir(direction);
+    const gp_Vec radialDir = computePerpendicular(direction);
+    const auto threadWire = buildThreadProfileWire(center,
+                                                   radialDir,
+                                                   axisDir,
+                                                   options.threadType,
+                                                   majorRadius,
+                                                   threadPitch,
+                                                   threadModel.radiusClearance,
+                                                   object,
+                                                   context);
+    if (!threadWire) {
+        return std::nullopt;
+    }
+    const auto helix = buildThreadHelix(center,
+                                        direction,
+                                        radialDir,
+                                        threadPitch,
+                                        helixLength,
+                                        majorRadius,
+                                        options.taperedAngle,
+                                        options.tapered,
+                                        threadModel.direction == "Left",
+                                        object,
+                                        context);
+    if (!helix) {
+        return std::nullopt;
+    }
+
+    BRepOffsetAPI_MakePipeShell pipeBuilder(*helix);
+    pipeBuilder.SetTolerance(Precision::Confusion());
+    pipeBuilder.SetTransitionMode(BRepBuilderAPI_Transformed);
+    pipeBuilder.SetMode(true);
+    pipeBuilder.Add(*threadWire);
+    if (!pipeBuilder.IsReady()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               "OCCT could not prepare Hole model thread pipe shell",
+                               object.name,
+                               "ModelThread");
+        return std::nullopt;
+    }
+    pipeBuilder.Build();
+    if (!pipeBuilder.IsDone()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               "OCCT could not build Hole model thread pipe shell",
+                               object.name,
+                               "ModelThread");
+        return std::nullopt;
+    }
+    const TopoDS_Shape shell = pipeBuilder.Shape();
+    if (shell.IsNull()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               "Hole model thread pipe shell is empty",
+                               object.name,
+                               "ModelThread");
+        return std::nullopt;
+    }
+
+    TopTools_ListOfShape simulated;
+    pipeBuilder.Simulate(2, simulated);
+    if (simulated.Extent() < 2) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               "OCCT could not simulate Hole model thread end sections",
+                               object.name,
+                               "ModelThread");
+        return std::nullopt;
+    }
+
+    BRepBuilderAPI_MakeFace frontFaceBuilder(TopoDS::Wire(simulated.First()));
+    BRepBuilderAPI_MakeFace backFaceBuilder(TopoDS::Wire(simulated.Last()));
+    if (!frontFaceBuilder.IsDone() || !backFaceBuilder.IsDone()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               "OCCT could not cap Hole model thread pipe shell",
+                               object.name,
+                               "ModelThread");
+        return std::nullopt;
+    }
+
+    BRepBuilderAPI_Sewing sewing;
+    sewing.SetTolerance(Precision::Confusion());
+    sewing.Add(frontFaceBuilder.Face());
+    sewing.Add(backFaceBuilder.Face());
+    sewing.Add(shell);
+    sewing.Perform();
+    if (sewing.SewedShape().IsNull()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               "OCCT could not sew Hole model thread shell",
+                               object.name,
+                               "ModelThread");
+        return std::nullopt;
+    }
+
+    BRepBuilderAPI_MakeSolid solidBuilder;
+    solidBuilder.Add(TopoDS::Shell(sewing.SewedShape()));
+    if (!solidBuilder.IsDone() || solidBuilder.Shape().IsNull()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               "OCCT could not solidify Hole model thread shell",
+                               object.name,
+                               "ModelThread");
+        return std::nullopt;
+    }
+    TopoDS_Shape result = solidBuilder.Shape();
+    BRepClass3d_SolidClassifier classifier(result);
+    classifier.PerformInfinitePoint(Precision::Confusion());
+    if (classifier.State() == TopAbs_IN) {
+        result.Reverse();
+    }
+    return result;
+}
+
+std::optional<TopoDS_Shape> buildModelThreadTool(const std::vector<gp_Pnt>& centers,
+                                                 const gp_Dir& direction,
+                                                 const HoleToolOptions& options,
+                                                 const ThreadModelParameters& threadModel,
+                                                 const ThreadDepthResult& threadDepth,
+                                                 const std::string& depthMethod,
+                                                 double threadDiameter,
+                                                 double threadPitch,
+                                                 const document::DocumentObject& object,
+                                                 runtime::ComputeContext& context)
+{
+    if (centers.empty()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               "Hole profile did not provide circle or arc centers",
+                               object.name,
+                               "Profile");
+        return std::nullopt;
+    }
+    if (threadDiameter <= Precision::Confusion() || threadPitch <= Precision::Confusion()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_length",
+                               "Hole model thread requires positive thread diameter and pitch",
+                               object.name,
+                               "ModelThread");
+        return std::nullopt;
+    }
+
+    std::vector<TopoDS_Shape> threads;
+    for (const gp_Pnt& center : centers) {
+        const auto thread = buildModelThreadAtCenter(center,
+                                                     direction,
+                                                     options,
+                                                     threadModel,
+                                                     threadDepth,
+                                                     depthMethod,
+                                                     threadDiameter,
+                                                     threadPitch,
+                                                     object,
+                                                     context);
+        if (!thread) {
+            return std::nullopt;
+        }
+        threads.push_back(*thread);
+    }
+    if (threads.size() == 1U) {
+        return threads.front();
+    }
+    return compoundShapes(threads);
+}
+
+std::optional<TopoDS_Shape> combineHoleAndThreadTools(const TopoDS_Shape& holeTool,
+                                                      const TopoDS_Shape& threadTool,
+                                                      const document::DocumentObject& object,
+                                                      runtime::ComputeContext& context)
+{
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // ::Hole::execute(), when "Threaded && ModelThread", adds "protoHole" and "protoThread"
+    // into one "holeWithThread" compound before the subtractive boolean. cad-core keeps the
+    // same tool domain by fusing the overlapping tool solids before Body consumes one subShape.
+    BRepAlgoAPI_Fuse fuse(holeTool, threadTool);
+    fuse.Build();
+    if (!fuse.IsDone() || fuse.Shape().IsNull()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               "OCCT could not combine Hole tap drill and model thread tools",
+                               object.name,
+                               "ModelThread");
+        return std::nullopt;
+    }
+    return fuse.Shape();
+}
+
 bool normalizeHoleToolOptions(HoleToolOptions& options,
                               const document::DocumentObject& object,
                               runtime::ComputeContext& context)
 {
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
-    // ::Hole::updateHoleCutParams(), for non-threaded holes fills Counterbore with
-    // "diameter * 1.6" / "diameter * 0.9" and Countersink/Counterdrill with
-    // "diameter * 1.7" plus getCountersinkAngle().
-    if (options.holeCutType != "None" && options.holeCutType != "Counterbore"
-        && options.holeCutType != "Countersink" && options.holeCutType != "Counterdrill") {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "unsupported_property",
-                               "Unsupported HoleCutType " + options.holeCutType,
-                               object.name,
-                               "HoleCutType");
-        return false;
-    }
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // ::Hole::updateHoleCutParams(), for metric threaded head cuts first uses ISO 4762 /
+    // ISO 10642 standard dimensions, then falls back to calculateAndSetCounterbore() /
+    // calculateAndSetCountersink(); non-metric head cuts keep the existing rule-of-thumb path.
     if (options.drillPoint != "Flat" && options.drillPoint != "Angled") {
         runtime::addDiagnostic(context.diagnostics,
                                "error",
@@ -1326,22 +2422,79 @@ bool normalizeHoleToolOptions(HoleToolOptions& options,
         return false;
     }
 
+    if (options.holeCutType != "None" && options.holeCutType != "Counterbore"
+        && options.holeCutType != "Countersink" && options.holeCutType != "Counterdrill") {
+        if (isDynamicCounterboreHoleCut(options)) {
+            options.holeCutStandard = options.holeCutType;
+            options.holeCutType = "Counterbore";
+        }
+        else if (isDynamicCountersinkHoleCut(options)) {
+            options.holeCutStandard = options.holeCutType;
+            options.holeCutType = "Countersink";
+        }
+        else {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "unsupported_property",
+                                   "Unsupported HoleCutType " + options.holeCutType,
+                                   object.name,
+                                   "HoleCutType");
+            return false;
+        }
+    }
+
     if (options.holeCutType == "Counterbore") {
         if (options.holeCutDiameter <= options.diameter) {
-            options.holeCutDiameter = options.diameter * 1.6;
-            options.holeCutDepth = options.diameter * 0.9;
+            if (const auto standard = standardCounterboreFor(options)) {
+                options.holeCutDiameter = standard->dimension.diameter;
+                options.holeCutDepth = standard->dimension.depth;
+                options.holeCutDefinitionSource = standard->source;
+            }
+            else if (usesMetricStandardHoleCut(options)) {
+                options.holeCutDiameter = options.diameter * 1.5 + 1.0;
+                options.holeCutDepth = options.diameter;
+            }
+            else {
+                options.holeCutDiameter = options.diameter * 1.6;
+                options.holeCutDepth = options.diameter * 0.9;
+            }
         }
         if (options.holeCutDepth <= Precision::Confusion()) {
-            options.holeCutDepth = options.diameter * 0.9;
+            if (const auto standard = standardCounterboreFor(options)) {
+                options.holeCutDepth = standard->dimension.depth;
+                options.holeCutDefinitionSource = standard->source;
+            }
+            else if (usesMetricStandardHoleCut(options)) {
+                options.holeCutDepth = options.diameter;
+            }
+            else {
+                options.holeCutDepth = options.diameter * 0.9;
+            }
         }
         options.holeCutCountersinkAngle = 90.0;
     }
     else if (options.holeCutType == "Countersink" || options.holeCutType == "Counterdrill") {
+        bool appliedMetricStandard = false;
+        double standardAngle = 90.0;
         if (options.holeCutDiameter <= options.diameter) {
-            options.holeCutDiameter = options.diameter * 1.7;
+            if (const auto standard = standardCountersinkFor(options)) {
+                options.holeCutDiameter = standard->dimension.diameter;
+                options.holeCutDefinitionSource = standard->source;
+                standardAngle = standard->angle;
+                appliedMetricStandard = true;
+            }
+            else if (usesMetricStandardHoleCut(options)) {
+                options.holeCutDiameter = options.diameter * 2.24;
+                appliedMetricStandard = true;
+            }
+            else {
+                options.holeCutDiameter = options.diameter * 1.7;
+            }
         }
-        if (options.holeCutCountersinkAngle <= Precision::Confusion()) {
-            options.holeCutCountersinkAngle = defaultCountersinkAngle(options.threadType);
+        if (appliedMetricStandard || options.holeCutCountersinkAngle <= Precision::Confusion()) {
+            options.holeCutCountersinkAngle = usesMetricStandardHoleCut(options)
+                ? standardAngle
+                : defaultCountersinkAngle(options.threadType);
         }
         if (options.holeCutType == "Countersink") {
             options.holeCutDepth = 0.0;
@@ -1622,31 +2775,6 @@ std::optional<TopoDS_Shape> buildProfiledTool(const std::vector<gp_Pnt>& centers
     return compound;
 }
 
-bool rejectActiveHoleGaps(const document::DocumentObject& object, runtime::ComputeContext& context)
-{
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
-    // ::Hole::execute(), after the revolved/cylindrical tool is built, only calls makeThread()
-    // under "if (Threaded.getValue() && ModelThread.getValue())". Non-modeled Threaded holes
-    // are geometric plain holes whose Diameter was already stored on the document object.
-    struct Gap {
-        std::string property;
-        std::string message;
-    };
-    std::vector<Gap> gaps;
-    if (readBoolProperty(object, "ModelThread")) {
-        gaps.push_back({"ModelThread", "Hole model thread geometry requires FreeCAD Hole::makeThread migration"});
-    }
-    for (const auto& gap : gaps) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "unsupported_property",
-                               gap.message,
-                               object.name,
-                               gap.property);
-    }
-    return gaps.empty();
-}
-
 std::optional<HoleBuild> buildHole(const document::DocumentObject& object, runtime::ComputeContext& context)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
@@ -1734,6 +2862,8 @@ std::optional<HoleBuild> buildHole(const document::DocumentObject& object, runti
     if (!threadDiameter) {
         return std::nullopt;
     }
+    const ThreadModelParameters threadModel =
+        resolveThreadModelParameters(object, threadType, threadDiameter->threadPitch, threaded);
 
     const double diameter = threadDiameter->diameter;
     if (diameter <= 10.0 * Precision::Confusion()) {
@@ -1773,6 +2903,8 @@ std::optional<HoleBuild> buildHole(const document::DocumentObject& object, runti
                                method == "Dimension" ? "Depth" : "DepthType");
         return std::nullopt;
     }
+    const ThreadDepthResult threadDepth =
+        resolveThreadDepth(object, method, depth, threaded, threadDiameter->threadPitch);
 
     auto direction = guessHoleDirection(rawProfile, shapeIt->second.profileShape, profileLink->object, context);
     if (!direction) {
@@ -1795,6 +2927,7 @@ std::optional<HoleBuild> buildHole(const document::DocumentObject& object, runti
     options.diameter = diameter;
     options.depth = depth;
     options.threadType = threadType;
+    options.threadSize = threadDiameter->threadSize;
     options.holeCutType = readEnumProperty(object,
                                            "HoleCutType",
                                            {"None", "Counterbore", "Countersink", "Counterdrill"},
@@ -1823,6 +2956,26 @@ std::optional<HoleBuild> buildHole(const document::DocumentObject& object, runti
         return std::nullopt;
     }
 
+    if (threaded && modelThread) {
+        const auto threadTool = buildModelThreadTool(centers,
+                                                     *direction,
+                                                     options,
+                                                     threadModel,
+                                                     threadDepth,
+                                                     method,
+                                                     threadDiameter->threadDiameter,
+                                                     threadDiameter->threadPitch,
+                                                     object,
+                                                     context);
+        if (!threadTool) {
+            return std::nullopt;
+        }
+        toolShape = combineHoleAndThreadTools(*toolShape, *threadTool, object, context);
+        if (!toolShape) {
+            return std::nullopt;
+        }
+    }
+
     return HoleBuild{*profileLink,
                      method,
                      diameter,
@@ -1832,8 +2985,19 @@ std::optional<HoleBuild> buildHole(const document::DocumentObject& object, runti
                      threadType,
                      threadDiameter->threadSize,
                      threadDiameter->threadFit,
+                     threadModel.threadClass,
+                     threadModel.direction,
+                     threadModel.clearance,
+                     threadModel.radiusClearance,
+                     threadModel.useCustomClearance,
+                     threadModel.customClearance,
+                     threadDepth.type,
+                     threadDepth.depth,
+                     threadDepth.runout,
                      depth,
                      options.holeCutType,
+                     options.holeCutStandard,
+                     options.holeCutDefinitionSource,
                      options.drillPoint,
                      options.holeCutDiameter,
                      options.holeCutDepth,
@@ -1890,10 +3054,6 @@ void executeHole(const document::DocumentObject& object, runtime::ComputeContext
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    if (!rejectActiveHoleGaps(object, context)) {
-        context.objects[object.name] = {{"status", "error"}};
-        return;
-    }
 
     const auto hole = buildHole(object, context);
     if (!hole) {
@@ -1901,7 +3061,9 @@ void executeHole(const document::DocumentObject& object, runtime::ComputeContext
         return;
     }
 
-    context.addSubShapes[object.name] = runtime::AddSubShape{std::nullopt, hole->toolShape};
+    const auto holeNamedShape = topo::indexedNamedShapeForObject(object.name, hole->toolShape);
+    context.namedShapes[object.name] = holeNamedShape;
+    context.addSubShapes[object.name] = runtime::AddSubShape{std::nullopt, hole->toolShape, std::nullopt, holeNamedShape};
     context.mesh[object.name] = geometry::meshForShape(hole->toolShape);
     context.subshapes[object.name] = topo::subshapeMapForShape(hole->toolShape);
     context.objects[object.name] = {
@@ -1915,10 +3077,21 @@ void executeHole(const document::DocumentObject& object, runtime::ComputeContext
         {"thread_type", hole->threadType},
         {"thread_size", hole->threadSize},
         {"thread_fit", hole->threadFit},
+        {"thread_class", hole->threadClass},
+        {"thread_direction", hole->threadDirection},
+        {"thread_clearance", hole->threadClearance},
+        {"thread_radius_clearance", hole->threadRadiusClearance},
+        {"use_custom_thread_clearance", hole->useCustomThreadClearance},
+        {"custom_thread_clearance", hole->customThreadClearance},
         {"thread_diameter", hole->threadDiameter},
         {"thread_pitch", hole->threadPitch},
+        {"thread_depth_type", hole->threadDepthType},
+        {"thread_depth", hole->threadDepth},
+        {"thread_runout", hole->threadRunout},
         {"depth", hole->depth},
         {"hole_cut_type", hole->holeCutType},
+        {"hole_cut_standard", hole->holeCutStandard},
+        {"hole_cut_definition_source", hole->holeCutDefinitionSource},
         {"hole_cut_diameter", hole->holeCutDiameter},
         {"hole_cut_depth", hole->holeCutDepth},
         {"hole_cut_countersink_angle", hole->holeCutCountersinkAngle},
@@ -1928,6 +3101,7 @@ void executeHole(const document::DocumentObject& object, runtime::ComputeContext
         {"tapered_angle", hole->taperedAngle},
         {"threaded", hole->threaded},
         {"model_thread", hole->modelThread},
+        {"model_thread_geometry", hole->threaded && hole->modelThread ? "pipe_shell" : "none"},
         {"bbox", geometry::bboxForShape(hole->toolShape)},
         {"volume", geometry::volumeForShape(hole->toolShape)},
         {"kernel", geometry::kernelVersion()},

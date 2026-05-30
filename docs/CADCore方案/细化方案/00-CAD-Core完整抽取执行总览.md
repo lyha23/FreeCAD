@@ -71,19 +71,19 @@ PartDesign::MultiTransform
 | P0-P2 | document / graph / runtime 底座、Sketch + Body + Pad、FeatureBase / Pocket / Body fuse-cut 主链稳定 |
 | P3a/P3b | shared `FeatureExtrude` 已覆盖主要长度、终止、双侧、方向、placement 和 taper 几何子集 |
 | P4 | typed property、`PropertyLink*`、placement、GeoFeatureGroup 基础、graph edge 和结构化 diagnostics 已接入 |
-| P5 | Sketcher profile、基础 BSpline、point raw vertex、construction、Coincident、多闭合 wire、ExternalGeometry 子集、基础 `InternalShape` 与 internal element map 已接入 |
-| P6 | `NamedShape` / `ElementMap` 主路径、prism / Body boolean maker history、merge history、stable subname 引用更新、split / deleted diagnostics 已接入 |
-| P7 | Datum / Origin、RefineModel 子集、Hole 常用孔、Fillet / Chamfer、DressUp cache、Transformed family 基础路径已接入 |
-| P8 | Part primitive、BREP / STEP / IGES / STL 导入、BREP / STEP / STL CLI 导出、常用 Part Boolean、基础 Link / LinkSub 单/多 SubList compound / LinkGroup source-alias subshape / LinkElement / LinkGroup / ElementCount 折叠数组 / 已物化 ShowElement 子 LinkElement 认领 / Assembly display 已接入 |
+| P5 | Sketcher profile、基础 BSpline、point raw vertex、construction、Coincident、已满足 line / line-end-pair Horizontal / Vertical orientation constraint、Parallel whole-line relation constraint、Perpendicular whole-line / line-circle-arc midpoint / point-wise / point-point-line relation constraint、Tangent whole-geometry direct / point-wise relation constraint、PointOnObject point-on-curve constraint、Symmetric point-point relation constraint、Block fixed-geometry constraint、Angle whole-line / point-wise datum constraint、Equal line-length / circle-radius constraint、Distance / Radius / Diameter datum constraint 和 line endpoint fixed coordinate datum、多闭合 wire、ExternalGeometry edge / vertex / planar face boundary / normal-face 单线投影 / whole-shape Face / Edge 展开 / ExternalTypes section 子集、基础 `InternalShape` 与 internal element map 已接入 |
+| P6 | `NamedShape` / `ElementMap` 主路径、prism / Body boolean maker history、RefineModel + GenericShapeMapper history、AddSubShape slot 级 NamedShape ownership、merge history、stable subname 引用更新、同类唯一 split target 自动恢复、split / deleted diagnostics、Link retag 和 transformed copy terminal history 传播已接入 |
+| P7 | Datum / Origin、RefineModel 主路径子集、Hole 常用孔、HoleCutType `Resources/Hole/*.json` 表加载生命周期、ThreadDepth / DIN76、ModelThread pipe-shell 实体螺纹几何和 thread clearance 入参归一化、Fillet / Chamfer、DressUp cache 与链式 `SupportTransform`、Transformed family 消费 AddSubShape slot ownership、Whole shape / Features 的 BaseFeature / Body 前缀 support、refined prefix support、subtractive-only original 和 multi-original Add/Sub replay 的基础路径与 terminal history diagnostics 已接入 |
+| P8 | Part primitive、BREP / STEP / IGES / STL 导入、BREP / STEP / STL CLI 导出、常用 Part Boolean、基础 Link / LinkSub 单/多 SubList compound / LinkSub 对象名和 Label 前缀嵌套路由 / LinkGroup source-alias subshape / LinkElement / LinkGroup / ElementList 和 ElementCount 可见性独立 LinkSub / 已物化 ShowElement 子 LinkElement 认领与 owner target / transform-list 继承 / 缺失 ShowElement 子元素请求内合成 / `FullSubList` 精确 alias retag / LinkSub mapped postfix alias / Link retag terminal history 传播 / Assembly display 已接入 |
 
-当前 P8 只固定可用于显示、拾取和单次 recompute 的基础能力：导入 shape 仍使用 indexed `NamedShape`；Part Boolean 已消费 boolean / section / generalFuse maker-history 子集；Link display 已保留源对象 alias retag，并支持 `LinkedObject.SubList` 单/多 subshape compound、显式 `ElementList` group、LinkGroup source alias subshape、`ElementCount` 折叠数组和同文档已物化 `ShowElement=true` 子 `LinkElement` 认领。`ShowElement=true` 当前只消费请求中已经存在的 `Owner_iN` / `_LinkOwner` 子对象；缺失子对象时仍返回 `unsupported_link_lifecycle`，不会在 recompute 中创建对象或写回 `DocumentObject graph`。这些能力不等价于完整 FreeCAD Link 账本；Assembly display 不包含 Joint / solver。
+当前 P8 只固定可用于显示、拾取和单次 recompute 的基础能力：导入 shape 仍使用 indexed `NamedShape`；Part Boolean 已消费 boolean / section / generalFuse maker-history 子集；Link display 已保留源对象 alias retag，并支持 `LinkedObject.SubList` 单/多 subshape compound、对象名和 `$Label` 前缀形式的嵌套 LinkSub 路由、显式 `ElementList` group、LinkGroup source alias subshape、ElementList 数字下标 / `$Label` LinkSub、`ElementCount` 折叠数组数字下标 / linked-target alias LinkSub，并保持 LinkSub 可引用隐藏元素、同文档已物化 `ShowElement=true` 子 `LinkElement` 认领、已物化子元素 owner `LinkedObject` / `LinkTransform` / `PlacementList` / `ScaleList` 继承、缺失 `ShowElement=true` 子元素的请求内合成、`FullSubList` 精确 alias retag、`;:I` array index / `;:X` external-tag 的请求内 mapped postfix alias，以及上游 split / deleted terminal history 经 Link retag 后继续用于后续 stable subname diagnostics。请求内合成和继承计算沿用 `Owner_iN` 命名、`_LinkOwner`、`PlacementList` / `ScaleList`、默认 placement 和 `VisibilityList`，但不会创建对象或写回 `DocumentObject graph`。这些能力不等价于完整 FreeCAD Link 账本；Assembly display 不包含 Joint / solver。
 
 ## 未完成边界
 
 - Sketcher 完整 solver、BSpline solver/control-point 语义、FaceMakerBuildFace / WireJoiner 账本、复杂 `InternalShape` / `getInternalElementMap()`。
-- Topo Naming 完整 MapperHistory、split 旧引用恢复、merge history 收敛、RefineModel partial history 收敛、ShapeFix / transformed / DressUp 的完整 history。
-- PartDesign Hole ModelThread、标准件表驱动头部尺寸迁移、链式 DressUp `SupportTransform` ownership、复杂 transformed / pattern ownership。
-- Assembly Joint / solver、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、`ShowElement=true` LinkElement / LinkGroup 自动创建 / 删除生命周期、缺失子元素请求内合成、cross-document postfix retag 和多层复杂 LinkSub 链。
+- Topo Naming 完整 MapperHistory、复杂 split 自动旧引用恢复、merge history 收敛、ShapeFix / transformed / DressUp 的完整 maker history，以及 taper partial history 收敛。
+- PartDesign transformed / pattern 完整 MapperHistory 与更复杂 ownership。
+- Assembly Joint / solver、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、`ShowElement=true` LinkElement / LinkGroup 自动创建 / 删除生命周期、完整 cross-document 文档哈希 / postfix 生命周期和更复杂多层 LinkSub 链。
 
 ## 阶段索引
 
@@ -99,14 +99,14 @@ PartDesign::MultiTransform
 | P5 | `08-P5-Sketcher核心与内部元素.md` | 已接入 solver-facing 子集 |
 | P6 | `09-P6-TopoNaming主路径.md` | 主路径骨架已落地，完整 MapperHistory 待补 |
 | P7 | `10-P7-PartDesign常用生态.md` | 常用生态基础子集已落地 |
-| P8 | `11-P8-Part导入导出与Assembly后续.md` | 已覆盖基础 primitive、BREP / STEP / IGES / STL 导入、BREP / STEP / STL CLI 导出、基础 Link / LinkSub 单/多 SubList compound / LinkGroup source-alias subshape / LinkElement / LinkGroup / ElementCount 折叠数组 / 已物化 ShowElement 子 LinkElement 认领 / Assembly display 与常用 Part Boolean 子集 |
+| P8 | `11-P8-Part导入导出与Assembly后续.md` | 已覆盖基础 primitive、BREP / STEP / IGES / STL 导入、BREP / STEP / STL CLI 导出、基础 Link / LinkSub 单/多 SubList compound / LinkSub 对象名和 Label 前缀嵌套路由 / LinkGroup source-alias subshape / LinkElement / LinkGroup / ElementList 和 ElementCount 可见性独立 LinkSub / 已物化 ShowElement 子 LinkElement 认领与 owner target / transform-list 继承 / 缺失 ShowElement 子元素请求内合成 / `FullSubList` 精确 alias retag / LinkSub mapped postfix alias / Link retag terminal history 传播 / Assembly display 与常用 Part Boolean 子集 |
 
 ## 后续队列
 
-1. 补 P6：完整 MapperHistory 生命周期、ShapeFix history、split / merge 旧引用恢复，并把 RefineModel / taper partial history 收敛到正式 MapperHistory。
+1. 补 P6：完整 MapperHistory 生命周期、ShapeFix history、复杂 split 自动旧引用恢复、merge history 收敛，并把 taper partial history 收敛到正式 MapperHistory。
 2. 补 P5：FaceMaker / WireJoiner 状态机、复杂 internal element map、更多 external geometry 和约束。
-3. 补 P7：Hole ModelThread、标准件表驱动头部尺寸迁移、链式 DressUp SupportTransform ownership、复杂 transformed / pattern ownership。
-4. 扩展 P8：Assembly Joint / solver、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、`ShowElement=true` LinkElement / LinkGroup 自动创建 / 删除生命周期、缺失子元素请求内合成、cross-document postfix retag 和多层复杂 LinkSub 链。
+3. 补 P7：transformed / pattern 完整 MapperHistory 与更复杂 ownership。
+4. 扩展 P8：Assembly Joint / solver、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、`ShowElement=true` LinkElement / LinkGroup 自动创建 / 删除生命周期、完整 cross-document 文档哈希 / postfix 生命周期和更复杂多层 LinkSub 链。
 
 ## 全局规则
 

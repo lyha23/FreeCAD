@@ -50,12 +50,14 @@ struct DressUpResult {
     TopoDS_Shape shape;
     topo::NamedShape namedShape;
     bool supportTransform = false;
+    std::string supportTransformSource;
     bool refineApplied = false;
 };
 
 struct ShapeSlotBuild {
     bool ok = true;
     std::optional<TopoDS_Shape> shape;
+    std::optional<topo::NamedShape> namedShape;
 };
 
 enum class AddSubKind {
@@ -290,12 +292,16 @@ ShapeSlotBuild cutSlot(const document::DocumentObject& object,
                                "Dress-up AddSubShape cache could not cut boolean sources: " + build.error,
                                object.name,
                                property);
-        return ShapeSlotBuild{false, std::nullopt};
+        return ShapeSlotBuild{false, std::nullopt, std::nullopt};
     }
     if (!hasSolid(build.shape)) {
-        return ShapeSlotBuild{true, std::nullopt};
+        return ShapeSlotBuild{true, std::nullopt, std::nullopt};
     }
-    return ShapeSlotBuild{true, build.shape};
+    return ShapeSlotBuild{true,
+                          build.shape,
+                          build.namedShape ? std::optional<topo::NamedShape>{*build.namedShape}
+                                           : std::optional<topo::NamedShape>{
+                                               topo::indexedNamedShapeForObject(owner, build.shape)}};
 }
 
 std::string stableSubnameDiagnosticCode(topo::ElementResolveStatus status)
@@ -780,7 +786,7 @@ std::optional<DressUpResult> buildChamfer(const document::DocumentObject& object
 
 bool cacheDressUpAddSubShape(const document::DocumentObject& object,
                              runtime::ComputeContext& context,
-                             const DressUpResult& result)
+                             DressUpResult& result)
 {
     runtime::AddSubShape cache;
     const auto resultNamedShape = std::optional<topo::NamedShape>{result.namedShape};
@@ -796,6 +802,7 @@ bool cacheDressUpAddSubShape(const document::DocumentObject& object,
                                    "SupportTransform");
             return false;
         }
+        result.supportTransformSource = *supportFeature;
 
         const auto supportKind = addSubKindForFeature(*supportFeature, context);
         const auto priorBaseShape = baseTopoShapeForFeature(*supportFeature, context, object, true);
@@ -817,9 +824,11 @@ bool cacheDressUpAddSubShape(const document::DocumentObject& object,
                     return false;
                 }
                 cache.addShape = add.shape;
+                cache.addNamedShape = add.namedShape;
             }
             else {
                 cache.addShape = result.shape;
+                cache.addNamedShape = result.namedShape;
             }
         }
         else if (supportKind == AddSubKind::Subtractive) {
@@ -840,9 +849,11 @@ bool cacheDressUpAddSubShape(const document::DocumentObject& object,
                     return false;
                 }
                 cache.subShape = sub.shape;
+                cache.subNamedShape = sub.namedShape;
             }
             else {
                 cache.subShape = result.shape;
+                cache.subNamedShape = result.namedShape;
             }
         }
         else {
@@ -900,7 +911,9 @@ bool cacheDressUpAddSubShape(const document::DocumentObject& object,
         return false;
     }
     cache.addShape = add.shape;
+    cache.addNamedShape = add.namedShape;
     cache.subShape = sub.shape;
+    cache.subNamedShape = sub.namedShape;
     if (cache.addShape || cache.subShape) {
         context.addSubShapes[object.name] = cache;
     }
@@ -940,6 +953,7 @@ void publishDressUpResult(const document::DocumentObject& object,
         {"body_mode", "replace"},
         {"dress_up", result.mode},
         {"support_transform", result.supportTransform},
+        {"support_transform_source", result.supportTransformSource},
         {"add_sub_cache",
          result.supportTransform ? "support_transform"
                                  : (context.addSubShapes.count(object.name) != 0U ? "delta" : "empty")},

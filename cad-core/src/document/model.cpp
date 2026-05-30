@@ -252,6 +252,7 @@ void addMaterializedLinkElementDependencies(Document& document)
         if (elementCount == 0U || !readBool(object, "ShowElement").value_or(true)) {
             continue;
         }
+        const auto ownerLinkedObject = readLink(object, "LinkedObject");
 
         for (std::size_t index = 0; index < elementCount; ++index) {
             const std::string elementName = object.name + "_i" + std::to_string(index);
@@ -259,7 +260,7 @@ void addMaterializedLinkElementDependencies(Document& document)
             if (elementIt == document.indexByName.end()) {
                 continue;
             }
-            const auto& element = document.objects.at(elementIt->second);
+            auto& element = document.objects.at(elementIt->second);
             if (!isOwnedLinkElement(element, object)) {
                 continue;
             }
@@ -269,6 +270,14 @@ void addMaterializedLinkElementDependencies(Document& document)
             // child LinkElement objects named owner "_i" index; cad-core keeps the graph
             // immutable, but still makes those materialized elements dependency-bearing.
             object.dependencyLinks.push_back(Link{elementName, {}, {}, {}, "ElementList"});
+            if (!readLink(element, "LinkedObject") && ownerLinkedObject) {
+                // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+                // ::LinkBaseExtension::updateGroup(), for owned LinkElement children, copies
+                // parent LinkedObject subvalues into "element->LinkedObject" and syncs transform.
+                // cad-core keeps the request graph immutable, but the child still depends on the
+                // inherited target so recompute order matches the FreeCAD-synchronized state.
+                element.dependencyLinks.push_back(*ownerLinkedObject);
+            }
         }
     }
 }

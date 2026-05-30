@@ -48,6 +48,7 @@ struct TransformSource {
     std::string owner;
     TopoDS_Shape shape;
     std::optional<topo::NamedShape> namedShape;
+    std::vector<std::string> refinedFeatures;
 };
 
 struct MirrorPlane {
@@ -69,6 +70,7 @@ struct TransformApplication {
     TopoDS_Shape shape;
     topo::NamedShape namedShape;
     std::vector<std::string> originals;
+    std::vector<std::string> supportRefinedFeatures;
 };
 
 struct TransformedBuild {
@@ -76,6 +78,7 @@ struct TransformedBuild {
     topo::NamedShape namedShape;
     std::string mode;
     std::vector<std::string> originals;
+    std::vector<std::string> supportRefinedFeatures;
     bool refineApplied = false;
 };
 
@@ -530,12 +533,215 @@ std::optional<TransformSource> solidSource(const std::string& objectName, runtim
                                                                      : std::nullopt};
 }
 
+topo::NamedShapeSource namedShapeSource(const TransformSource& source)
+{
+    return topo::NamedShapeSource{source.namedShape ? source.namedShape->owner : source.owner,
+                                  source.shape,
+                                  source.namedShape ? &*source.namedShape : nullptr};
+}
+
+std::optional<std::vector<std::string>> bodyGroupNames(const document::DocumentObject& bodyObject)
+{
+    const std::vector<document::Link> links = document::readLinks(bodyObject, "Group");
+    if (links.empty()) {
+        return std::nullopt;
+    }
+
+    std::vector<std::string> names;
+    names.reserve(links.size());
+    for (const auto& link : links) {
+        names.push_back(link.object);
+    }
+    return names;
+}
+
+std::optional<topo::NamedShape> namedShapeForSource(const std::string& owner,
+                                                    const runtime::ComputeContext& context,
+                                                    const std::optional<topo::NamedShape>& slotNamedShape)
+{
+    if (slotNamedShape) {
+        return slotNamedShape;
+    }
+    const auto namedShapeIt = context.namedShapes.find(owner);
+    if (namedShapeIt != context.namedShapes.end()) {
+        return namedShapeIt->second;
+    }
+    return std::nullopt;
+}
+
+std::optional<TransformSource> combineBodyPrefixSource(const document::DocumentObject& transformed,
+                                                       runtime::ComputeContext& context,
+                                                       const TransformSource& support,
+                                                       const TransformSource& tool,
+                                                       topo::BooleanOperation operation,
+                                                       const std::string& owner)
+{
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp::FeatureExtrude::execute(),
+    // calls "result.makeElementBoolean(maker, {base, prism}, ...)" and stores the final result
+    // on the current PartDesign feature Shape before later transformed features use it as BaseFeature.
+    const auto build = topo::makeElementBooleanFromSources(owner, {namedShapeSource(support), namedShapeSource(tool)}, operation);
+    if (!build.error.empty()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               "Transformed support prefix boolean failed for " + owner + ": " + build.error,
+                               transformed.name,
+                               "BaseFeature",
+                               "runtime",
+                               owner);
+        return std::nullopt;
+    }
+    std::vector<std::string> refinedFeatures = support.refinedFeatures;
+    refinedFeatures.insert(refinedFeatures.end(), tool.refinedFeatures.begin(), tool.refinedFeatures.end());
+    return TransformSource{owner,
+                           build.shape,
+                           build.namedShape ? *build.namedShape : topo::indexedNamedShapeForObject(owner, build.shape),
+                           refinedFeatures};
+}
+
+std::optional<TransformSource> refineBodyPrefixSourceIfActive(const std::string& feature,
+                                                              runtime::ComputeContext& context,
+                                                              const TransformSource& source)
+{
+    const auto documentIt = context.documentObjects.find(feature);
+    if (documentIt == context.documentObjects.end() || documentIt->second == nullptr) {
+        return source;
+    }
+
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp::FeatureExtrude::execute(),
+    // calls "solRes = refineShapeIfActive(result)" before assigning the feature Shape. Body
+    // prefix support must consume that feature Shape, not just the unrefined add/sub tool cache.
+    const auto refined =
+        applyRefinePropertyForOwner(*documentIt->second, feature, context, source.shape, source.namedShape);
+    if (!refined) {
+        return std::nullopt;
+    }
+    std::vector<std::string> refinedFeatures = source.refinedFeatures;
+    if (refined->applied) {
+        refinedFeatures.push_back(feature);
+    }
+    return TransformSource{feature, refined->shape, refined->namedShape, refinedFeatures};
+}
+
+std::optional<TransformSource> bodyPrefixSupportSource(const document::DocumentObject& transformed,
+                                                       runtime::ComputeContext& context,
+                                                       const std::string& stopFeature,
+                                                       bool includeStopFeature)
+{
+    const auto parentIt = context.parentGroupByObject.find(transformed.name);
+    if (parentIt == context.parentGroupByObject.end()) {
+        return std::nullopt;
+    }
+    const auto bodyIt = context.documentObjects.find(parentIt->second);
+    if (bodyIt == context.documentObjects.end() || bodyIt->second == nullptr || bodyIt->second->typeId != "PartDesign::Body") {
+        return std::nullopt;
+    }
+    const document::DocumentObject& bodyObject = *bodyIt->second;
+    const auto groupNames = bodyGroupNames(bodyObject);
+    if (!groupNames) {
+        return std::nullopt;
+    }
+
+    std::optional<TransformSource> current;
+    if (document::propertyValue(bodyObject, "BaseFeature") != nullptr) {
+        const auto baseFeature = document::readLink(bodyObject, "BaseFeature");
+        if (baseFeature) {
+            current = solidSource(baseFeature->object, context);
+        }
+    }
+
+    bool reachedStop = false;
+    for (const auto& feature : *groupNames) {
+        if (feature == stopFeature && !includeStopFeature) {
+            reachedStop = true;
+            break;
+        }
+        if (context.transformationTemplateObjects.count(feature) != 0U) {
+            if (feature == stopFeature && includeStopFeature) {
+                reachedStop = true;
+                break;
+            }
+            continue;
+        }
+
+        const auto shapeIt = context.shapes.find(feature);
+        const auto objectResultIt = context.objects.find(feature);
+        const bool replacesBodyShape = shapeIt != context.shapes.end()
+            && shapeIt->second.kind == runtime::ShapeValue::Kind::Solid
+            && objectResultIt != context.objects.end() && objectResultIt->second.value("body_mode", "") == "replace";
+        const auto addSubIt = context.addSubShapes.find(feature);
+
+        if (replacesBodyShape || (shapeIt != context.shapes.end()
+                                  && shapeIt->second.kind == runtime::ShapeValue::Kind::Solid
+                                  && addSubIt == context.addSubShapes.end())) {
+            current = solidSource(feature, context);
+        }
+        else if (addSubIt != context.addSubShapes.end()) {
+            const runtime::AddSubShape& addSubShape = addSubIt->second;
+            if (addSubShape.addShape) {
+                TransformSource tool{feature, *addSubShape.addShape, namedShapeForSource(feature, context, addSubShape.addNamedShape)};
+                if (!current) {
+                    current = refineBodyPrefixSourceIfActive(feature, context, tool);
+                    if (!current) {
+                        return std::nullopt;
+                    }
+                }
+                else {
+                    current = combineBodyPrefixSource(transformed, context, *current, tool, topo::BooleanOperation::Fuse, feature);
+                    if (!current) {
+                        return std::nullopt;
+                    }
+                    current = refineBodyPrefixSourceIfActive(feature, context, *current);
+                    if (!current) {
+                        return std::nullopt;
+                    }
+                }
+            }
+            else if (addSubShape.subShape) {
+                if (!current) {
+                    runtime::addDiagnostic(context.diagnostics,
+                                           "error",
+                                           "execution_failed",
+                                           "Transformed support prefix cannot apply subtractive feature " + feature + " without a base solid",
+                                           transformed.name,
+                                           "BaseFeature",
+                                           "runtime",
+                                           feature);
+                    return std::nullopt;
+                }
+                TransformSource tool{feature, *addSubShape.subShape, namedShapeForSource(feature, context, addSubShape.subNamedShape)};
+                current = combineBodyPrefixSource(transformed, context, *current, tool, topo::BooleanOperation::Cut, feature);
+                if (!current) {
+                    return std::nullopt;
+                }
+                current = refineBodyPrefixSourceIfActive(feature, context, *current);
+                if (!current) {
+                    return std::nullopt;
+                }
+            }
+        }
+
+        if (feature == stopFeature && includeStopFeature) {
+            reachedStop = true;
+            break;
+        }
+    }
+
+    if (!reachedStop) {
+        return std::nullopt;
+    }
+    return current;
+}
+
 std::optional<TransformSource> resolveSupportSource(const document::DocumentObject& object,
                                                     runtime::ComputeContext& context,
                                                     const std::vector<document::Link>& originals)
 {
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureTransformed.cpp
-    // ::Transformed::getBaseObject(), returns BaseFeature if present, otherwise the first Original.
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureTransformed.cpp::Transformed::execute(),
+    // calls Body::setBaseProperty(this) when BaseFeature is unset, then reads getBaseObject().
+    // Body::setBaseProperty() in src/Mod/PartDesign/App/Body.cpp sets BaseFeature to the previous
+    // solid feature in Group, so multi-original patterns start from the body prefix rather than
+    // from Originals.front().
     if (document::propertyValue(object, "BaseFeature") != nullptr) {
         const auto baseFeature = document::readLink(object, "BaseFeature");
         if (!baseFeature) {
@@ -548,7 +754,11 @@ std::optional<TransformSource> resolveSupportSource(const document::DocumentObje
             return std::nullopt;
         }
         const auto support = solidSource(baseFeature->object, context);
-        if (!support) {
+        if (support) {
+            return support;
+        }
+        const auto prefixSupport = bodyPrefixSupportSource(object, context, baseFeature->object, true);
+        if (!prefixSupport) {
             runtime::addDiagnostic(context.diagnostics,
                                    "error",
                                    "missing_link_target",
@@ -559,7 +769,11 @@ std::optional<TransformSource> resolveSupportSource(const document::DocumentObje
                                    baseFeature->object);
             return std::nullopt;
         }
-        return support;
+        return prefixSupport;
+    }
+
+    if (const auto prefixSupport = bodyPrefixSupportSource(object, context, object.name, false)) {
+        return prefixSupport;
     }
 
     if (originals.empty()) {
@@ -634,13 +848,6 @@ std::optional<TransformSource> transformedCopy(const std::string& owner,
     }
 }
 
-topo::NamedShapeSource namedShapeSource(const TransformSource& source)
-{
-    return topo::NamedShapeSource{source.namedShape ? source.namedShape->owner : source.owner,
-                                  source.shape,
-                                  source.namedShape ? &*source.namedShape : nullptr};
-}
-
 std::optional<TransformSource> fuseOrCutTransformedSource(const document::DocumentObject& object,
                                                           runtime::ComputeContext& context,
                                                           const TransformSource& support,
@@ -695,11 +902,14 @@ std::optional<TransformApplication> applyFeatureTransforms(const document::Docum
 
         for (const gp_Trsf& transform : copyTransforms) {
             if (addSubIt->second.addShape) {
-                TransformSource originalAdd{original.object,
-                                            *addSubIt->second.addShape,
-                                            context.namedShapes.count(original.object) != 0U
-                                                ? std::optional<topo::NamedShape>{context.namedShapes.at(original.object)}
-                                                : std::nullopt};
+                TransformSource originalAdd{
+                    original.object,
+                    *addSubIt->second.addShape,
+                    addSubIt->second.addNamedShape
+                        ? addSubIt->second.addNamedShape
+                        : (context.namedShapes.count(original.object) != 0U
+                               ? std::optional<topo::NamedShape>{context.namedShapes.at(original.object)}
+                               : std::nullopt)};
                 auto transformedTool = transformedCopy(object.name + ".Transform" + std::to_string(transformedIndex++),
                                                        originalAdd,
                                                        transform,
@@ -718,11 +928,14 @@ std::optional<TransformApplication> applyFeatureTransforms(const document::Docum
             }
 
             if (addSubIt->second.subShape) {
-                TransformSource originalSub{original.object,
-                                            *addSubIt->second.subShape,
-                                            context.namedShapes.count(original.object) != 0U
-                                                ? std::optional<topo::NamedShape>{context.namedShapes.at(original.object)}
-                                                : std::nullopt};
+                TransformSource originalSub{
+                    original.object,
+                    *addSubIt->second.subShape,
+                    addSubIt->second.subNamedShape
+                        ? addSubIt->second.subNamedShape
+                        : (context.namedShapes.count(original.object) != 0U
+                               ? std::optional<topo::NamedShape>{context.namedShapes.at(original.object)}
+                               : std::nullopt)};
                 auto transformedTool = transformedCopy(object.name + ".Transform" + std::to_string(transformedIndex++),
                                                        originalSub,
                                                        transform,
@@ -747,7 +960,7 @@ std::optional<TransformApplication> applyFeatureTransforms(const document::Docum
     if (resultNamedShape.owner != object.name) {
         resultNamedShape = topo::namedShapeForPreservedSources(object.name, current.shape, {namedShapeSource(current)});
     }
-    return TransformApplication{current.shape, resultNamedShape, originalNames};
+    return TransformApplication{current.shape, resultNamedShape, originalNames, support->refinedFeatures};
 }
 
 std::optional<TransformApplication> applyWholeShapeTransforms(const document::DocumentObject& object,
@@ -790,11 +1003,12 @@ std::optional<TransformApplication> applyWholeShapeTransforms(const document::Do
         resultNamedShape = topo::namedShapeForPreservedSources(object.name, current.shape, {namedShapeSource(current)});
     }
 
-    std::vector<std::string> supportNames;
-    for (const document::Link& link : supportLinks) {
-        supportNames.push_back(link.object);
-    }
-    return TransformApplication{current.shape, resultNamedShape, supportNames};
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureTransformed.cpp::Transformed::getOriginals(),
+    // returns an empty vector in WholeShape mode. The semantic support is BaseFeature / Body
+    // prefix from getBaseObject(), so report the resolved support owner instead of the hidden
+    // Originals property.
+    std::vector<std::string> supportNames{support->owner};
+    return TransformApplication{current.shape, resultNamedShape, supportNames, support->refinedFeatures};
 }
 
 std::optional<TransformedBuild> buildMirroredFeatures(const document::DocumentObject& object,
@@ -812,7 +1026,7 @@ std::optional<TransformedBuild> buildMirroredFeatures(const document::DocumentOb
         if (!application) {
             return std::nullopt;
         }
-        return TransformedBuild{application->shape, application->namedShape, mode, application->originals};
+        return TransformedBuild{application->shape, application->namedShape, mode, application->originals, application->supportRefinedFeatures};
     }
     if (mode != "Features") {
         runtime::addDiagnostic(context.diagnostics,
@@ -828,7 +1042,7 @@ std::optional<TransformedBuild> buildMirroredFeatures(const document::DocumentOb
     if (!application) {
         return std::nullopt;
     }
-    return TransformedBuild{application->shape, application->namedShape, mode, application->originals};
+    return TransformedBuild{application->shape, application->namedShape, mode, application->originals, application->supportRefinedFeatures};
 }
 
 std::optional<gp_Dir> directionFromShape(const TopoDS_Shape& shape,
@@ -1687,7 +1901,7 @@ std::optional<TransformedBuild> buildLinearPatternFeatures(const document::Docum
         if (!application) {
             return std::nullopt;
         }
-        return TransformedBuild{application->shape, application->namedShape, transformMode, application->originals};
+        return TransformedBuild{application->shape, application->namedShape, transformMode, application->originals, application->supportRefinedFeatures};
     }
     if (transformMode != "Features") {
         runtime::addDiagnostic(context.diagnostics,
@@ -1707,7 +1921,7 @@ std::optional<TransformedBuild> buildLinearPatternFeatures(const document::Docum
     if (!application) {
         return std::nullopt;
     }
-    return TransformedBuild{application->shape, application->namedShape, transformMode, application->originals};
+    return TransformedBuild{application->shape, application->namedShape, transformMode, application->originals, application->supportRefinedFeatures};
 }
 
 std::optional<TransformedBuild> buildMultiTransformFeatures(const document::DocumentObject& object,
@@ -1724,7 +1938,7 @@ std::optional<TransformedBuild> buildMultiTransformFeatures(const document::Docu
         if (!application) {
             return std::nullopt;
         }
-        return TransformedBuild{application->shape, application->namedShape, transformMode, application->originals};
+        return TransformedBuild{application->shape, application->namedShape, transformMode, application->originals, application->supportRefinedFeatures};
     }
     if (transformMode != "Features") {
         runtime::addDiagnostic(context.diagnostics,
@@ -1744,7 +1958,7 @@ std::optional<TransformedBuild> buildMultiTransformFeatures(const document::Docu
     if (!application) {
         return std::nullopt;
     }
-    return TransformedBuild{application->shape, application->namedShape, transformMode, application->originals};
+    return TransformedBuild{application->shape, application->namedShape, transformMode, application->originals, application->supportRefinedFeatures};
 }
 
 std::optional<TransformedBuild> buildPolarPatternFeatures(const document::DocumentObject& object,
@@ -1772,7 +1986,7 @@ std::optional<TransformedBuild> buildPolarPatternFeatures(const document::Docume
         if (!application) {
             return std::nullopt;
         }
-        return TransformedBuild{application->shape, application->namedShape, transformMode, application->originals};
+        return TransformedBuild{application->shape, application->namedShape, transformMode, application->originals, application->supportRefinedFeatures};
     }
     if (transformMode != "Features") {
         runtime::addDiagnostic(context.diagnostics,
@@ -1788,7 +2002,7 @@ std::optional<TransformedBuild> buildPolarPatternFeatures(const document::Docume
     if (!application) {
         return std::nullopt;
     }
-    return TransformedBuild{application->shape, application->namedShape, transformMode, application->originals};
+    return TransformedBuild{application->shape, application->namedShape, transformMode, application->originals, application->supportRefinedFeatures};
 }
 
 std::optional<TransformedBuild> buildScaledFeatures(const document::DocumentObject& object,
@@ -1806,7 +2020,7 @@ std::optional<TransformedBuild> buildScaledFeatures(const document::DocumentObje
         if (!application) {
             return std::nullopt;
         }
-        return TransformedBuild{application->shape, application->namedShape, transformMode, application->originals};
+        return TransformedBuild{application->shape, application->namedShape, transformMode, application->originals, application->supportRefinedFeatures};
     }
     if (transformMode != "Features") {
         runtime::addDiagnostic(context.diagnostics,
@@ -1821,7 +2035,7 @@ std::optional<TransformedBuild> buildScaledFeatures(const document::DocumentObje
     if (!application) {
         return std::nullopt;
     }
-    return TransformedBuild{application->shape, application->namedShape, transformMode, application->originals};
+    return TransformedBuild{application->shape, application->namedShape, transformMode, application->originals, application->supportRefinedFeatures};
 }
 
 void publishTransformedResult(const document::DocumentObject& object,
@@ -1846,6 +2060,9 @@ void publishTransformedResult(const document::DocumentObject& object,
     };
     if (result.refineApplied) {
         context.objects[object.name]["refine"] = "applied";
+    }
+    if (!result.supportRefinedFeatures.empty()) {
+        context.objects[object.name]["support_refined_features"] = result.supportRefinedFeatures;
     }
 }
 

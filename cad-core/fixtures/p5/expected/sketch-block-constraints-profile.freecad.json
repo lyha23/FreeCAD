@@ -1,0 +1,8 @@
+{
+  "object": "Pad",
+  "reference": "FreeCAD SketchObject::getBlockedState() / Sketch::addConstraint() Block subset: whole-geometry Block declarations freeze solver parameters but do not change the current sketch shape; Pad geometry remains a 10x5x4 box.",
+  "freecad_version": "1.2.0 revision 20260519",
+  "bbox": {"min": [0.0, 0.0, 0.0], "max": [10.0, 5.0, 4.0]},
+  "volume": 199.99999999999994,
+  "topology_counts": {"faces": 6, "edges": 12, "vertices": 8}
+}

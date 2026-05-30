@@ -60,11 +60,11 @@ void executePad(const document::DocumentObject& object, runtime::ComputeContext&
     const nlohmann::json mesh = geometry::meshForShape(solid);
     const nlohmann::json subshapeMap = topo::subshapeMapForShape(solid);
 
-    context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, solid};
-    context.addSubShapes[object.name] = runtime::AddSubShape{solid, std::nullopt};
     if (namedShape) {
         context.namedShapes[object.name] = *namedShape;
     }
+    context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, solid};
+    context.addSubShapes[object.name] = runtime::AddSubShape{solid, std::nullopt, namedShape, std::nullopt};
     context.mesh[object.name] = mesh;
     context.subshapes[object.name] = subshapeMap;
     nlohmann::json result = {

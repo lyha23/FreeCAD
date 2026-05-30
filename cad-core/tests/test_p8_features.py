@@ -57,6 +57,31 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(link["shape"], "occt_compound")
         self.assert_object_matches_expected(result, "p8", "app-link-box-multi-face")
 
+    def test_p8_app_link_preserves_full_sublist_alias(self) -> None:
+        result = self.run_recompute("app-link-full-sublist-retag", "p8")
+        link = result["objects"]["BoxLink"]
+        element_map = result["named_shapes"]["BoxLink"]["element_map"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(link["status"], "ok")
+        self.assertEqual(link["shape"], "occt_face")
+        self.assertEqual(element_map["ExternalDoc.Box.Face1"], "Face1")
+        self.assertEqual(element_map["Face1;:X;ExternalDoc.Box.Face1"], "Face1")
+        self.assert_object_matches_expected(result, "p8", "app-link-full-sublist-retag")
+
+    def test_p8_app_link_resolves_label_qualified_subshape_alias(self) -> None:
+        result = self.run_recompute("app-link-label-qualified-sublist", "p8")
+        link = result["objects"]["BoxLink"]
+        element_map = result["named_shapes"]["BoxLink"]["element_map"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(link["status"], "ok")
+        self.assertEqual(link["link"], "app_link")
+        self.assertEqual(link["linked_object"], "Box")
+        self.assertEqual(link["shape"], "occt_face")
+        self.assertEqual(element_map["$PrettyBox.Face1"], "Face1")
+        self.assert_object_matches_expected(result, "p8", "app-link-label-qualified-sublist")
+
     def test_p8_app_link_element_proxies_linked_shape(self) -> None:
         result = self.run_recompute("app-link-element-box", "p8")
         element = result["objects"]["BoxElement"]
@@ -91,6 +116,58 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(link["shape"], "occt_face")
         self.assert_object_matches_expected(result, "p8", "app-link-group-subshape-alias")
 
+    def test_p8_app_link_resolves_group_index_subshape_alias(self) -> None:
+        result = self.run_recompute("app-link-element-list-sublist-index", "p8")
+        link = result["objects"]["FaceLink"]
+        element_map = result["named_shapes"]["FaceLink"]["element_map"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(link["status"], "ok")
+        self.assertEqual(link["linked_object"], "LinkGroup")
+        self.assertEqual(link["shape"], "occt_face")
+        self.assertEqual(element_map["1.Face1"], "Face1")
+        self.assert_object_matches_expected(result, "p8", "app-link-element-list-sublist-index")
+
+    def test_p8_app_link_resolves_group_label_subshape_alias(self) -> None:
+        result = self.run_recompute("app-link-element-list-sublist-label", "p8")
+        link = result["objects"]["FaceLink"]
+        element_map = result["named_shapes"]["FaceLink"]["element_map"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(link["status"], "ok")
+        self.assertEqual(link["linked_object"], "LinkGroup")
+        self.assertEqual(link["shape"], "occt_face")
+        self.assertEqual(element_map["$PrettyB.Face1"], "Face1")
+        self.assert_object_matches_expected(result, "p8", "app-link-element-list-sublist-label")
+
+    def test_p8_app_link_resolves_hidden_group_label_subshape_alias(self) -> None:
+        result = self.run_recompute("app-link-element-list-hidden-sublist-label", "p8")
+        group = result["objects"]["LinkGroup"]
+        link = result["objects"]["FaceLink"]
+        element_map = result["named_shapes"]["FaceLink"]["element_map"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(group["visible_elements"], ["LinkA"])
+        self.assertEqual(group["shape"], "occt_solid")
+        self.assertEqual(link["status"], "ok")
+        self.assertEqual(link["linked_object"], "LinkGroup")
+        self.assertEqual(link["shape"], "occt_face")
+        self.assertEqual(element_map["$PrettyB.Face1"], "Face1")
+        self.assert_object_matches_expected(result, "p8", "app-link-element-list-hidden-sublist-label")
+
+    def test_p8_app_link_resolves_object_qualified_nested_subshape_alias(self) -> None:
+        result = self.run_recompute("app-link-nested-object-qualified-sublist", "p8")
+        link = result["objects"]["FaceLink"]
+        element_map = result["named_shapes"]["FaceLink"]["element_map"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(link["status"], "ok")
+        self.assertEqual(link["link"], "app_link")
+        self.assertEqual(link["linked_object"], "BoxLink")
+        self.assertEqual(link["shape"], "occt_face")
+        self.assertEqual(element_map["BoxLink.Box.Face1"], "Face1")
+        self.assert_object_matches_expected(result, "p8", "app-link-nested-object-qualified-sublist")
+
     def test_p8_app_link_group_respects_visibility_list(self) -> None:
         result = self.run_recompute("app-link-group-visibility", "p8")
         group = result["objects"]["LinkGroup"]
@@ -117,6 +194,67 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(group["shape"], "occt_compound")
         self.assert_object_matches_expected(result, "p8", "app-link-element-count-collapsed")
 
+    def test_p8_app_link_element_count_resolves_indexed_subshape_alias(self) -> None:
+        result = self.run_recompute("app-link-element-count-sublist-index", "p8")
+        link = result["objects"]["FaceLink"]
+        element_map = result["named_shapes"]["FaceLink"]["element_map"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(link["status"], "ok")
+        self.assertEqual(link["linked_object"], "ArrayLink")
+        self.assertEqual(link["shape"], "occt_face")
+        self.assertEqual(element_map["1.Face1"], "Face1")
+        self.assertEqual(element_map["Face1;:I1"], "Face1")
+        self.assert_object_matches_expected(result, "p8", "app-link-element-count-sublist-index")
+
+    def test_p8_app_link_element_count_resolves_target_label_subshape_alias(self) -> None:
+        result = self.run_recompute("app-link-element-count-sublist-target-label", "p8")
+        link = result["objects"]["FaceLink"]
+        element_map = result["named_shapes"]["FaceLink"]["element_map"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(link["status"], "ok")
+        self.assertEqual(link["linked_object"], "ArrayLink")
+        self.assertEqual(link["shape"], "occt_face")
+        self.assertEqual(element_map["$PrettyBox.Face1"], "Face1")
+        self.assertEqual(element_map["0.Face1"], "Face1")
+        self.assert_object_matches_expected(result, "p8", "app-link-element-count-sublist-target-label")
+
+    def test_p8_app_link_element_count_resolves_hidden_indexed_subshape_alias(self) -> None:
+        result = self.run_recompute("app-link-element-count-hidden-sublist-index", "p8")
+        group = result["objects"]["ArrayLink"]
+        link = result["objects"]["FaceLink"]
+        element_map = result["named_shapes"]["FaceLink"]["element_map"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(group["visible_indices"], [0])
+        self.assertEqual(group["shape"], "occt_solid")
+        self.assertEqual(link["status"], "ok")
+        self.assertEqual(link["linked_object"], "ArrayLink")
+        self.assertEqual(link["shape"], "occt_face")
+        self.assertEqual(element_map["1.Face1"], "Face1")
+        self.assert_object_matches_expected(result, "p8", "app-link-element-count-hidden-sublist-index")
+
+    def test_p8_app_link_preserves_terminal_stable_history(self) -> None:
+        for fixture, code, stable_subname in [
+            ("app-link-stable-history-split", "split_stable_subname", "Pad.Face5"),
+            ("app-link-stable-history-deleted", "deleted_stable_subname", "Pocket.Face5"),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p8")
+                diagnostic = result["diagnostics"][0]
+                history_kinds = {
+                    item["kind"]
+                    for item in result["named_shapes"]["BodyLink"]["history"]
+                }
+
+                self.assertEqual(diagnostic["code"], code)
+                self.assertEqual(diagnostic["object"], "ProbePad")
+                self.assertEqual(diagnostic["property"], "UpToFace")
+                self.assertEqual(diagnostic["target"], "BodyLink")
+                self.assertEqual(diagnostic["subname"], stable_subname)
+                self.assertIn(code.removesuffix("_stable_subname"), history_kinds)
+
     def test_p8_app_link_show_element_groups_materialized_children(self) -> None:
         result = self.run_recompute("app-link-show-element-materialized", "p8")
         group = result["objects"]["ArrayLink"]
@@ -132,6 +270,52 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(group["visible_elements"], ["ArrayLink_i0", "ArrayLink_i1"])
         self.assertEqual(group["shape"], "occt_compound")
         self.assert_object_matches_expected(result, "p8", "app-link-show-element-materialized")
+
+    def test_p8_app_link_show_element_inherits_child_link_target(self) -> None:
+        result = self.run_recompute("app-link-show-element-inherited-child", "p8")
+        element = result["objects"]["ArrayLink_i0"]
+        group = result["objects"]["ArrayLink"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(element["status"], "ok")
+        self.assertEqual(element["link"], "app_link_element")
+        self.assertEqual(element["linked_object"], "Box")
+        self.assertEqual(element["inherited_linked_object"], True)
+        self.assertEqual(group["status"], "ok")
+        self.assertEqual(group["visible_elements"], ["ArrayLink_i0"])
+        self.assertEqual(group["shape"], "occt_solid")
+        self.assert_object_matches_expected(result, "p8", "app-link-show-element-inherited-child")
+
+    def test_p8_app_link_show_element_inherits_child_transform_lists(self) -> None:
+        result = self.run_recompute("app-link-show-element-inherited-placement-list", "p8")
+        element = result["objects"]["ArrayLink_i1"]
+        group = result["objects"]["ArrayLink"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(element["status"], "ok")
+        self.assertEqual(element["inherited_linked_object"], True)
+        self.assertEqual(group["status"], "ok")
+        self.assertEqual(group["visible_elements"], ["ArrayLink_i1"])
+        self.assertEqual(group["shape"], "occt_solid")
+        self.assert_object_matches_expected(result, "p8", "app-link-show-element-inherited-placement-list")
+
+    def test_p8_app_link_show_element_synthesizes_missing_children(self) -> None:
+        result = self.run_recompute("app-link-show-element-synthetic", "p8")
+        group = result["objects"]["ArrayLink"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertNotIn("ArrayLink_i0", result["objects"])
+        self.assertNotIn("ArrayLink_i1", result["objects"])
+        self.assertEqual(group["status"], "ok")
+        self.assertEqual(group["link"], "app_link_group")
+        self.assertEqual(group["element_count"], 2)
+        self.assertEqual(group["materialized_elements"], False)
+        self.assertEqual(group["synthetic_elements"], True)
+        self.assertEqual(group["request_local_elements"], True)
+        self.assertEqual(group["elements"], ["ArrayLink_i0", "ArrayLink_i1"])
+        self.assertEqual(group["visible_elements"], ["ArrayLink_i0", "ArrayLink_i1"])
+        self.assertEqual(group["shape"], "occt_compound")
+        self.assert_object_matches_expected(result, "p8", "app-link-show-element-synthetic")
 
     def test_p8_assembly_object_groups_basic_component_link(self) -> None:
         result = self.run_recompute("assembly-link-basic", "p8")

@@ -1,0 +1,57 @@
+{
+  "Objects": [
+    {
+      "Name": "Box",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 3,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "ArrayLink_i0",
+      "ID": 3,
+      "TypeId": "App::LinkElement",
+      "Properties": {
+        "_LinkOwner": {
+          "PropertyType": "App::PropertyInteger",
+          "value": 2
+        },
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "ArrayLink",
+      "ID": 2,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Box"
+        },
+        "ShowElement": {
+          "PropertyType": "App::PropertyBool",
+          "value": true
+        },
+        "ElementCount": {
+          "PropertyType": "App::PropertyInteger",
+          "value": 1
+        },
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 10, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["ArrayLink"]
+  }
+}

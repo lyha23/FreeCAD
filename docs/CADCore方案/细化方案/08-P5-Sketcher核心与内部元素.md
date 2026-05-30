@@ -6,17 +6,17 @@ P5 让 Sketch 不只是 Pad 的简单 profile，而能承载 FreeCAD 风格外�
 
 - 支持 line、arc of circle、arc of ellipse、circle、ellipse 和基础非周期 BSpline profile；Sketch `Point` 会按 FreeCAD `GeomPoint::toShape()` 输出 raw vertex。
 - construction geometry 不参与 profile 构面。
-- `Coincident` / `Type=1` 可合并 line endpoint。
+- `Coincident` / `Type=1` 可合并 line endpoint；Horizontal / Vertical line / line-end-pair constraint、Parallel whole-line relation constraint、Perpendicular whole-line / line-circle-arc midpoint / point-wise / point-point-line relation constraint、Tangent whole-geometry direct / point-wise relation constraint、PointOnObject point-on-curve constraint、Symmetric point-point relation constraint、Block fixed-geometry constraint、Angle whole-line / point-wise datum constraint、Equal line-length / circle-radius constraint、Distance / DistanceX / DistanceY / Radius / Diameter datum constraint，以及 line endpoint 的 fixed X/Y coordinate datum 可接受已经满足的 solver-facing 约束或固定声明，但不移动未满足约束的几何。
 - 多闭合 wire 可构成一个基础 face-with-holes；最大面积 wire 作为 outer，奇数层 wire 作为 hole，偶数层嵌套 wire 作为 island face，已覆盖 line outer + circle inner 和 hole-with-island 的混合闭合 profile。该路径只覆盖闭合 wire 分组，不替代完整 FaceMakerBuildFace / WireJoiner 账本。
 - open wire sketch 自身成功输出 raw shape，但 `profile_ready=false`，Pad/Pocket 通过 `open_profile` 失败。
 - closed sketch 可导出基础 `InternalFaceN` / `InternalEdgeN` / `InternalVertexN`。
 - `topo/element_map` 承接最小 `InternalEdgeN/InternalVertexN <-> EdgeN/VertexN` 映射。
-- ExternalGeometry 支持 DatumLine / DatumPoint、straight edge、vertex、circle edge、ellipse edge 和 sketch internal edge / vertex 的基础投影。
+- ExternalGeometry 支持 DatumLine / DatumPoint、straight edge、vertex、circle edge、ellipse edge、planar face boundary edge、whole-shape Face / Edge 展开和 sketch internal edge / vertex 的基础投影；planar face 垂直于 sketch plane 时按 FreeCAD `processFace()` 收敛为一条 construction line；`ExternalTypes=Projection/Intersection/Both` 已接入基础 section intersection 路径。
 
 ## 已知缺口
 
-- 完整 constraint solver、BSpline solver/control-point 语义、defining external profile 尚未迁移。
-- ExternalGeometry face、非平行 circle/ellipse arc edge 等复杂场景仍未完整。
+- 完整 constraint solver、会移动几何的 Horizontal / Vertical / Distance / Radius 等约束、BSpline solver/control-point 语义、defining external profile 尚未迁移。
+- ExternalGeometry 非平行 circle/ellipse arc edge、非平面 face HLR 投影等复杂场景仍未完整。
 - `FaceMakerBuildFace` 的 split/intersection、`WireJoiner::getOpenWires()`、复杂 `getInternalElementMap()` 和旧引用恢复不是完整实现。
 - open wire 的完整 InternalShape / WireJoiner history 仍需 P5/P6 联合补齐。
 
@@ -40,6 +40,6 @@ P5 让 Sketch 不只是 Pad 的简单 profile，而能承载 FreeCAD 风格外�
 
 ## 验收
 
-- `fixtures/p5` 覆盖 profile、BSpline profile、mixed/nested closed-wire face-with-holes、construction、Coincident、ExternalGeometry、InternalShape 和 unsupported Sketcher 能力；点几何当前由 P7 Hole point fixture 约束。
+- `fixtures/p5` 覆盖 profile、BSpline profile、mixed/nested closed-wire face-with-holes、construction、Coincident、已满足的 Horizontal / Vertical orientation constraint、已满足的 Parallel whole-line relation constraint、已满足的 Perpendicular whole-line / line-circle-arc midpoint / endpoint-to-curve / endpoint-to-endpoint / via-point / point-point-line relation constraint、已满足的 Tangent whole-geometry direct / endpoint-to-curve / endpoint-to-endpoint / tangent-via-point relation constraint、已满足的 PointOnObject point-on-curve constraint、已满足的 Symmetric point-point relation constraint、Block fixed-geometry constraint、已满足的 Angle whole-line / endpoint-to-curve / endpoint-to-endpoint / via-point datum constraint、已满足的 Equal line-length / circle-radius constraint、已满足的 line / line-end-pair Distance / DistanceX / DistanceY / Radius / Diameter datum constraint、已满足的 line endpoint fixed coordinate datum、ExternalGeometry edge / vertex / planar face boundary / normal-face single-line projection / whole-shape Face expansion / ExternalTypes Intersection 和 Both、InternalShape 和 unsupported Sketcher 能力；点几何当前由 P7 Hole point fixture 约束。
 - open profile 不得伪造成 closed face。
 - internal name 解析只在 Sketch `InternalShape` 上生效。

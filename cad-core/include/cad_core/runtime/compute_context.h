@@ -54,6 +54,12 @@ struct AddSubShape
 {
     std::optional<TopoDS_Shape> addShape;
     std::optional<TopoDS_Shape> subShape;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureAddSub.cpp
+    // ::FeatureAddSub::getAddSubShape() exposes additive/subtractive tools separately from the
+    // feature's final Shape. DressUp::getAddSubShape() can publish delta slots whose ElementMap
+    // is not the same as the replacement solid, so cad-core keeps slot-level NamedShape history.
+    std::optional<topo::NamedShape> addNamedShape;
+    std::optional<topo::NamedShape> subNamedShape;
 };
 
 struct ComputeContext

@@ -21,7 +21,9 @@
   },
   "named_shapes": {
     "Body": {
-      "element_map_status": "history_partial"
+      "element_map_status": "history_partial",
+      "history_kinds_include": ["modified", "generated", "deleted", "merge"],
+      "history_non_indexed_source_prefixes": ["Body.", "Pad.", "Hole.", "SketchPad."]
     }
   }
 }

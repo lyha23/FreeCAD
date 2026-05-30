@@ -1,0 +1,8 @@
+{
+  "object": "Pad",
+  "reference": "FreeCAD Sketch::addPerpendicularConstraint(int,int) accepts Line + Circle/Arc by adding the circle/arc midPointId to the line; already-satisfied construction constraints do not change the 10x5x4 Pad profile.",
+  "freecad_version": "1.2.0 revision 20260519",
+  "bbox": {"min": [0.0, 0.0, 0.0], "max": [10.0, 5.0, 4.0]},
+  "volume": 199.99999999999994,
+  "topology_counts": {"faces": 6, "edges": 12, "vertices": 8}
+}

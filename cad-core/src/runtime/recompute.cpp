@@ -102,7 +102,13 @@ void registerIndexedNamedShape(const std::string& name, ComputeContext& context)
     if (addSubIt == context.addSubShapes.end()) {
         return;
     }
-    if (addSubIt->second.addShape) {
+    if (addSubIt->second.addNamedShape) {
+        context.namedShapes[name] = *addSubIt->second.addNamedShape;
+    }
+    else if (addSubIt->second.subNamedShape) {
+        context.namedShapes[name] = *addSubIt->second.subNamedShape;
+    }
+    else if (addSubIt->second.addShape) {
         context.namedShapes[name] = topo::indexedNamedShapeForObject(name, *addSubIt->second.addShape);
     }
     else if (addSubIt->second.subShape) {

@@ -1,0 +1,27 @@
+{
+  "object": "FaceLink",
+  "reference": "FreeCAD LinkSub collapsed ElementCount linked target label path FaceLink -> ArrayLink.$PrettyBox.Face1",
+  "freecad_version": "1.2.0 revision 20260519",
+  "bbox": {
+    "min": [0, 10, 0],
+    "max": [0, 13, 4]
+  },
+  "volume": 0.0,
+  "topology_counts": {
+    "faces": 1,
+    "edges": 4,
+    "vertices": 4
+  },
+  "named_shapes": {
+    "FaceLink": {
+      "element_map_status": "history_partial",
+      "element_map": {
+        "$PrettyBox.Face1": "Face1",
+        "0.Face1": "Face1",
+        "ArrayLink.$PrettyBox.Face1": "Face1",
+        "ArrayLink_i0.Face1": "Face1",
+        "Box.Face1": "Face1"
+      }
+    }
+  }
+}

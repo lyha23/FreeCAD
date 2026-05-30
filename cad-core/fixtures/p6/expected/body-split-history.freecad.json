@@ -6,26 +6,26 @@
       "element_map_status": "history_partial",
       "element_map": {
         "Pad.Face1": "Face1",
+        "Pad.Face5": "Face4",
         "Pad.Edge1": "Edge1",
-        "Pad.Vertex1": "Vertex1"
+        "Pad.Vertex1": "Vertex1",
+        "Pocket.Edge1": "Edge22",
+        "Pocket.Face1": "Face10"
       },
       "element_map_absent": [
-        "Pad.Face5",
         "Pocket.Face5"
       ],
       "history_sources": {
-        "split": [
-          "Pad.Face5"
+        "modified": [
+          "Pad.Face5",
+          "Pocket.Edge1"
         ]
       },
       "history_elements": {
         "deleted": [
           "Pocket.Face5"
         ]
-      },
-      "element_statuses_include": [
-        "split"
-      ]
+      }
     }
   }
 }

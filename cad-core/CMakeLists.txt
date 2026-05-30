@@ -61,6 +61,10 @@ target_include_directories(cad-core-lib PUBLIC
   ${NLOHMANN_JSON_INCLUDE_DIR}
 )
 
+target_compile_definitions(cad-core-lib PRIVATE
+  CAD_CORE_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}"
+)
+
 target_link_directories(cad-core-lib PUBLIC
   ${OpenCASCADE_LIBRARY_DIR}
 )

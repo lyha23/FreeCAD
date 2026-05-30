@@ -12,7 +12,7 @@
           {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]}
         ],
         "Constraints": [
-          {"Type": "Horizontal", "First": 0}
+          {"Type": "Tangent", "First": 0, "Second": 2}
         ]
       }
     }

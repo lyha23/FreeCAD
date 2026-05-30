@@ -73,25 +73,21 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["external_curve_count"], 0)
         self.assertEqual(sketch["external_point_count"], 0)
 
-    def test_p6_body_split_history_does_not_guess_element_map(self) -> None:
+    def test_p6_body_split_history_promotes_unique_same_kind_targets(self) -> None:
         result = self.run_recompute("body-split-history", "p6")
+        body_named_shape = result["named_shapes"]["Body"]
+        history_kinds = {item["kind"] for item in body_named_shape["history"]}
 
         self.assertEqual(result["diagnostics"], [])
         self.assert_result_matches_expected(result, "p6", "body-split-history")
+        self.assertEqual(body_named_shape["element_map"]["Pad.Face5"], "Face4")
+        self.assertEqual(body_named_shape["element_map"]["Pocket.Edge1"], "Edge22")
+        self.assertNotIn("split", history_kinds)
 
     def test_p6_stable_subname_history_diagnostics(self) -> None:
         for fixture, code, object_name, property_name, stable_subname in [
-            ("up-to-face-stable-body-split", "split_stable_subname", "ProbePad", "UpToFace", "Pad.Face5"),
             ("up-to-face-stable-body-deleted", "deleted_stable_subname", "ProbePad", "UpToFace", "Pocket.Face5"),
-            ("sketch-external-edge-stable-body-split", "split_stable_subname", "ProbeSketch", "ExternalGeometry", "Pocket.Edge1"),
             ("sketch-external-edge-stable-body-deleted", "deleted_stable_subname", "ProbeSketch", "ExternalGeometry", "Pocket.Edge11"),
-            (
-                "sketch-external-edge-stable-body-split-after-add",
-                "split_stable_subname",
-                "ProbeSketch",
-                "ExternalGeometry",
-                "Pocket.Edge1",
-            ),
             (
                 "sketch-external-edge-stable-body-deleted-after-add",
                 "deleted_stable_subname",
@@ -108,6 +104,19 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(diagnostic["property"], property_name)
                 self.assertEqual(diagnostic["target"], "Body")
                 self.assertEqual(diagnostic["subname"], stable_subname)
+
+    def test_p6_split_stable_subname_reaches_downstream_geometry_after_recovery(self) -> None:
+        for fixture, code in [
+            ("up-to-face-stable-body-split", "execution_failed"),
+            ("sketch-external-edge-stable-body-split", "unsupported_geometry"),
+            ("sketch-external-edge-stable-body-split-after-add", "unsupported_geometry"),
+            ("sketch-external-edge-stable-body-split-current-sublist", "unsupported_geometry"),
+        ]:
+            with self.subTest(fixture=fixture):
+                diagnostic = self.run_recompute(fixture, "p6")["diagnostics"][0]
+
+                self.assertEqual(diagnostic["code"], code)
+                self.assertNotEqual(diagnostic["code"], "split_stable_subname")
 
     def test_p6_up_to_face_uses_element_map_before_stale_sublist(self) -> None:
         for fixture in [

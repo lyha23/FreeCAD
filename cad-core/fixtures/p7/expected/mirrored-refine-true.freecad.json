@@ -35,7 +35,9 @@
   },
   "named_shapes": {
     "Mirrored": {
-      "element_map_status": "history_partial"
+      "element_map_status": "history_partial",
+      "history_kinds_include": ["modified", "generated", "deleted", "split", "merge"],
+      "history_non_indexed_source_prefixes": ["Mirrored.", "Mirrored.Transform1.", "Pad.", "SketchPad."]
     }
   }
 }

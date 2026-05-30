@@ -57,10 +57,10 @@ void executePocket(const document::DocumentObject& object, runtime::ComputeConte
 
     const TopoDS_Shape tool = shapeResult.shape;
     namedShape = shapeResult.namedShape;
-    context.addSubShapes[object.name] = runtime::AddSubShape{std::nullopt, tool};
     if (namedShape) {
         context.namedShapes[object.name] = *namedShape;
     }
+    context.addSubShapes[object.name] = runtime::AddSubShape{std::nullopt, tool, std::nullopt, namedShape};
     context.mesh[object.name] = geometry::meshForShape(tool);
     context.subshapes[object.name] = topo::subshapeMapForShape(tool);
     nlohmann::json result = {
