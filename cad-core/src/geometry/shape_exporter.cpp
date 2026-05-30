@@ -183,6 +183,7 @@ nlohmann::json meshForShape(const TopoDS_Shape& shape)
 
     nlohmann::json vertices = nlohmann::json::array();
     nlohmann::json triangles = nlohmann::json::array();
+    nlohmann::json faceIds = nlohmann::json::array();
     std::map<std::string, int> vertexIndexByPoint;
 
     auto addVertex = [&](const gp_Pnt& point) {
@@ -197,7 +198,9 @@ nlohmann::json meshForShape(const TopoDS_Shape& shape)
         return index;
     };
 
+    int faceIndex = 0;
     for (TopExp_Explorer explorer(shape, TopAbs_FACE); explorer.More(); explorer.Next()) {
+        ++faceIndex;
         const TopoDS_Face face = TopoDS::Face(explorer.Current());
         TopLoc_Location location;
         Handle(Poly_Triangulation) triangulation = BRep_Tool::Triangulation(face, location);
@@ -214,12 +217,14 @@ nlohmann::json meshForShape(const TopoDS_Shape& shape)
             gp_Pnt p2 = triangulation->Node(n2).Transformed(location.Transformation());
             gp_Pnt p3 = triangulation->Node(n3).Transformed(location.Transformation());
             triangles.push_back({addVertex(p1), addVertex(p2), addVertex(p3)});
+            faceIds.push_back("Face" + std::to_string(faceIndex));
         }
     }
 
     return {
         {"vertices", vertices},
         {"triangles", triangles},
+        {"faceIds", faceIds},
         {"summary",
          {
              {"vertex_count", vertices.size()},

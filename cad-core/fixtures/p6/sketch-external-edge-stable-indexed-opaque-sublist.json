@@ -6,7 +6,17 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [1, 1], "end": [4, 1] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              1,
+              1
+            ],
+            "end": [
+              4,
+              1
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -17,19 +27,62 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [0, 0], "end": [10, 0] },
-          { "kind": "LineSegment", "start": [10, 0], "end": [10, 5] },
-          { "kind": "LineSegment", "start": [10, 5], "end": [0, 5] },
-          { "kind": "LineSegment", "start": [0, 5], "end": [0, 0] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "ExternalGeometry": {
           "PropertyType": "App::PropertyLinkSubList",
-          "value": [
+          "SubSet": [
             {
-              "PropertyType": "App::PropertyLinkSub",
               "value": "SourceSketch",
-              "SubList": ["OldEdgeExport"],
-              "StableSubList": ["Edge1"]
+              "SubList": [
+                "OldEdgeExport"
+              ],
+              "StableSubList": [
+                "Edge1"
+              ]
             }
           ]
         },
@@ -54,6 +107,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Pad"]
+    "objs": [
+      "Pad"
+    ]
   }
 }

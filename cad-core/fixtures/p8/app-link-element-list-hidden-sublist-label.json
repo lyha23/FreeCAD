@@ -22,8 +22,17 @@
         "LinkTransform": false,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -43,8 +52,17 @@
         "LinkTransform": false,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [5, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            5,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -55,11 +73,17 @@
       "Properties": {
         "ElementList": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["LinkA", "LinkB"]
+          "values": [
+            "LinkA",
+            "LinkB"
+          ]
         },
         "VisibilityList": {
           "PropertyType": "App::PropertyBoolList",
-          "value": [true, false]
+          "value": [
+            true,
+            false
+          ]
         }
       }
     },
@@ -71,18 +95,31 @@
         "LinkedObject": {
           "PropertyType": "App::PropertyXLinkSub",
           "value": "LinkGroup",
-          "SubList": ["$PrettyB.Face1"]
+          "SubList": [
+            "$PrettyB.Face1"
+          ]
         },
         "LinkTransform": false,
         "LinkPlacement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 10, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            10,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     }
   ],
   "recompute": {
-    "objs": ["FaceLink"]
+    "objs": [
+      "FaceLink"
+    ]
   }
 }

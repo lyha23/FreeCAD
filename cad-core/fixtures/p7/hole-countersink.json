@@ -6,10 +6,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [0, 0], "end": [10, 0] },
-          { "kind": "LineSegment", "start": [10, 0], "end": [10, 5] },
-          { "kind": "LineSegment", "start": [10, 5], "end": [0, 5] },
-          { "kind": "LineSegment", "start": [0, 5], "end": [0, 0] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -37,11 +77,27 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 10],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            0,
+            10
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         },
         "Geometry": [
-          { "kind": "Circle", "center": [5, 2.5], "radius": 1 }
+          {
+            "kind": "Circle",
+            "center": [
+              5,
+              2.5
+            ],
+            "radius": 1
+          }
         ],
         "Constraints": []
       }
@@ -74,7 +130,12 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["SketchPad", "Pad", "SketchHole", "Hole"]
+          "values": [
+            "SketchPad",
+            "Pad",
+            "SketchHole",
+            "Hole"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -84,6 +145,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Body"]
+    "objs": [
+      "Body"
+    ]
   }
 }

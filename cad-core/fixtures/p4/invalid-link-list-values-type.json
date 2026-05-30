@@ -1,0 +1,20 @@
+{
+  "Objects": [
+    {
+      "Name": "Body",
+      "ID": 1,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": "Sketch"
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Pad"
+        }
+      }
+    }
+  ],
+  "recompute": {"objs": ["Body"]}
+}

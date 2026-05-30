@@ -6,10 +6,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [2, 0], "end": [3, 0] },
-          { "kind": "LineSegment", "start": [3, 0], "end": [3, 1] },
-          { "kind": "LineSegment", "start": [3, 1], "end": [2, 1] },
-          { "kind": "LineSegment", "start": [2, 1], "end": [2, 0] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              0
+            ],
+            "end": [
+              3,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              3,
+              0
+            ],
+            "end": [
+              3,
+              1
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              3,
+              1
+            ],
+            "end": [
+              2,
+              1
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              1
+            ],
+            "end": [
+              2,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -37,12 +77,16 @@
       "Properties": {
         "Originals": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["Pad"]
+          "values": [
+            "Pad"
+          ]
         },
         "Axis": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SketchPad",
-          "SubList": ["N_Axis"]
+          "SubList": [
+            "N_Axis"
+          ]
         },
         "TransformMode": "Features",
         "Mode": "Extent",
@@ -57,7 +101,11 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["SketchPad", "Pad", "PolarPattern"]
+          "values": [
+            "SketchPad",
+            "Pad",
+            "PolarPattern"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -67,6 +115,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Body"]
+    "objs": [
+      "Body"
+    ]
   }
 }

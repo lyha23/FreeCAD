@@ -6,10 +6,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [0, 0], "end": [2, 0] },
-          { "kind": "LineSegment", "start": [2, 0], "end": [2, 2] },
-          { "kind": "LineSegment", "start": [2, 2], "end": [0, 2] },
-          { "kind": "LineSegment", "start": [0, 2], "end": [0, 0] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              2,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              0
+            ],
+            "end": [
+              2,
+              2
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              2
+            ],
+            "end": [
+              0,
+              2
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              2
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -38,7 +78,9 @@
         "Base": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Pad",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "Radius": 0.2,
         "UseAllEdges": false,
@@ -53,7 +95,9 @@
         "Base": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Fillet",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "ChamferType": "Equal distance",
         "Size": 0.05,
@@ -68,8 +112,17 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [2, 0, 0],
-          "Rotation": [0, 0.7071067811865475, 0, 0.7071067811865476]
+          "Base": [
+            2,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0.7071067811865475,
+            0,
+            0.7071067811865476
+          ]
         }
       }
     },
@@ -80,7 +133,9 @@
       "Properties": {
         "Originals": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["Chamfer"]
+          "values": [
+            "Chamfer"
+          ]
         },
         "MirrorPlane": {
           "PropertyType": "App::PropertyLinkSub",
@@ -97,7 +152,14 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["SketchPad", "Pad", "Fillet", "Chamfer", "MirrorPlane", "Mirrored"]
+          "values": [
+            "SketchPad",
+            "Pad",
+            "Fillet",
+            "Chamfer",
+            "MirrorPlane",
+            "Mirrored"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -107,6 +169,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Body"]
+    "objs": [
+      "Body"
+    ]
   }
 }

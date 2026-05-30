@@ -6,10 +6,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [0, 0], "end": [1, 0] },
-          { "kind": "LineSegment", "start": [1, 0], "end": [1, 1] },
-          { "kind": "LineSegment", "start": [1, 1], "end": [0, 1] },
-          { "kind": "LineSegment", "start": [0, 1], "end": [0, 0] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              1,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              1,
+              0
+            ],
+            "end": [
+              1,
+              1
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              1,
+              1
+            ],
+            "end": [
+              0,
+              1
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              1
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -37,8 +77,17 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 0],
-          "Rotation": [0, 0.7071067811865475, 0, 0.7071067811865476]
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0.7071067811865475,
+            0,
+            0.7071067811865476
+          ]
         }
       }
     },
@@ -75,11 +124,16 @@
       "Properties": {
         "Originals": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["Pad"]
+          "values": [
+            "Pad"
+          ]
         },
         "Transformations": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["LinearPattern", "Scaled"]
+          "values": [
+            "LinearPattern",
+            "Scaled"
+          ]
         },
         "TransformMode": "Features"
       }
@@ -91,7 +145,14 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["SketchPad", "Pad", "DatumLine", "LinearPattern", "Scaled", "MultiTransform"]
+          "values": [
+            "SketchPad",
+            "Pad",
+            "DatumLine",
+            "LinearPattern",
+            "Scaled",
+            "MultiTransform"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -101,6 +162,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Body"]
+    "objs": [
+      "Body"
+    ]
   }
 }

@@ -6,10 +6,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [0, 0], "end": [1, 0] },
-          { "kind": "LineSegment", "start": [1, 0], "end": [1, 1] },
-          { "kind": "LineSegment", "start": [1, 1], "end": [0, 1] },
-          { "kind": "LineSegment", "start": [0, 1], "end": [0, 0] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              1,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              1,
+              0
+            ],
+            "end": [
+              1,
+              1
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              1,
+              1
+            ],
+            "end": [
+              0,
+              1
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              1
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -37,8 +77,17 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 0],
-          "Rotation": [0, 0.7071067811865475, 0, 0.7071067811865476]
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0.7071067811865475,
+            0,
+            0.7071067811865476
+          ]
         }
       }
     },
@@ -65,17 +114,23 @@
       "Properties": {
         "Originals": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["Pad"]
+          "values": [
+            "Pad"
+          ]
         },
         "Transformations": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["LinearPattern"]
+          "values": [
+            "LinearPattern"
+          ]
         },
         "TransformMode": "Whole shape"
       }
     }
   ],
   "recompute": {
-    "objs": ["MultiTransform"]
+    "objs": [
+      "MultiTransform"
+    ]
   }
 }

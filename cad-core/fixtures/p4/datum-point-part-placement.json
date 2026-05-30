@@ -7,12 +7,23 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [10, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            10,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         },
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["DatumPoint"]
+          "values": [
+            "DatumPoint"
+          ]
         }
       }
     },
@@ -23,11 +34,24 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [3, 4, 5],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            3,
+            4,
+            5
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     }
   ],
-  "recompute": {"objs": ["DatumPoint"]}
+  "recompute": {
+    "objs": [
+      "DatumPoint"
+    ]
+  }
 }

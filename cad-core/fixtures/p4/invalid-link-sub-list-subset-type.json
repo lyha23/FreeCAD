@@ -1,0 +1,17 @@
+{
+  "Objects": [
+    {
+      "Name": "Pad",
+      "ID": 1,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Type": "UpToShape",
+        "UpToShape": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": "BasePad"
+        }
+      }
+    }
+  ],
+  "recompute": {"objs": ["Pad"]}
+}

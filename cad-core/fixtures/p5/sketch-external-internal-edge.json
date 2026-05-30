@@ -6,10 +6,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
-          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
-          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]}
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -20,18 +60,59 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [6, 0]},
-          {"kind": "LineSegment", "start": [6, 0], "end": [6, 3]},
-          {"kind": "LineSegment", "start": [6, 3], "end": [0, 3]},
-          {"kind": "LineSegment", "start": [0, 3], "end": [0, 0]}
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              6,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              6,
+              0
+            ],
+            "end": [
+              6,
+              3
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              6,
+              3
+            ],
+            "end": [
+              0,
+              3
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              3
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "ExternalGeometry": {
           "PropertyType": "App::PropertyLinkSubList",
-          "value": [
+          "SubSet": [
             {
-              "PropertyType": "App::PropertyLinkSub",
               "value": "BaseSketch",
-              "SubList": ["InternalEdge1"]
+              "SubList": [
+                "InternalEdge1"
+              ]
             }
           ]
         },
@@ -55,5 +136,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Pad"]}
+  "recompute": {
+    "objs": [
+      "Pad"
+    ]
+  }
 }

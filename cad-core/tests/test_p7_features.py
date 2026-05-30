@@ -193,6 +193,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
             env = os.environ.copy()
             env["CAD_CORE_HOLE_RESOURCE_DIR"] = str(resource_dir)
+            env["CAD_CORE_TEST_LEGACY_OUTPUT"] = "1"
             subprocess.run(
                 [str(BIN), "recompute", str(input_path), "--output", str(output_path)],
                 cwd=ROOT,

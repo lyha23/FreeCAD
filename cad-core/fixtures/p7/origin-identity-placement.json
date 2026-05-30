@@ -7,12 +7,23 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [10, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            10,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         },
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["Origin"]
+          "values": [
+            "Origin"
+          ]
         }
       }
     },
@@ -23,13 +34,24 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [99, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            99,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     }
   ],
   "recompute": {
-    "objs": ["Origin"]
+    "objs": [
+      "Origin"
+    ]
   }
 }

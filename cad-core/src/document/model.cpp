@@ -20,7 +20,28 @@ bool isLinkPropertyType(const std::string& propertyType)
     return propertyType == "App::PropertyLink" || propertyType == "App::PropertyLinkList"
         || propertyType == "App::PropertyLinkSub" || propertyType == "App::PropertyLinkSubList"
         || propertyType == "App::PropertyXLink" || propertyType == "App::PropertyXLinkList"
-        || propertyType == "App::PropertyXLinkSub" || propertyType == "App::PropertyXLinkSubList";
+	        || propertyType == "App::PropertyXLinkSub" || propertyType == "App::PropertyXLinkSubList";
+}
+
+bool isLinkObjectType(const std::string& propertyType)
+{
+    return propertyType == "App::PropertyLink" || propertyType == "App::PropertyLinkSub"
+        || propertyType == "App::PropertyXLink" || propertyType == "App::PropertyXLinkSub";
+}
+
+bool isLinkSubObjectType(const std::string& propertyType)
+{
+    return propertyType == "App::PropertyLinkSub" || propertyType == "App::PropertyXLinkSub";
+}
+
+bool isLinkListType(const std::string& propertyType)
+{
+    return propertyType == "App::PropertyLinkList" || propertyType == "App::PropertyXLinkList";
+}
+
+bool isLinkSubListType(const std::string& propertyType)
+{
+    return propertyType == "App::PropertyLinkSubList" || propertyType == "App::PropertyXLinkSubList";
 }
 
 PropertyKind kindFromPropertyType(const std::string& propertyType)
@@ -124,15 +145,15 @@ std::vector<std::string> readOptionalStringList(const nlohmann::json& value, con
 std::optional<Link> readLinkObject(const nlohmann::json& value, const std::string& property = {})
 {
     const auto propertyType = propertyTypeOf(value);
-    if (!propertyType) {
+    if (!propertyType || !isLinkObjectType(*propertyType)) {
         return std::nullopt;
     }
 
-    if (*propertyType != "App::PropertyLink" && *propertyType != "App::PropertyLinkSub"
-        && *propertyType != "App::PropertyXLink" && *propertyType != "App::PropertyXLinkSub") {
+    const auto objectIt = value.find("value");
+    if (objectIt == value.end() || objectIt->is_null()) {
         return std::nullopt;
     }
-    if (!value.contains("value") || !value.at("value").is_string() || value.at("value").get<std::string>().empty()) {
+    if (!objectIt->is_string() || objectIt->get<std::string>().empty()) {
         return std::nullopt;
     }
 
@@ -147,13 +168,7 @@ std::optional<Link> readLinkObject(const nlohmann::json& value, const std::strin
     }
 
     std::vector<std::string> stableSubnames = readOptionalStringList(value, "StableSubList");
-    if (stableSubnames.empty()) {
-        stableSubnames = readOptionalStringList(value, "StableSubnames");
-    }
     std::vector<std::string> fullSubnames = readOptionalStringList(value, "FullSubList");
-    if (fullSubnames.empty()) {
-        fullSubnames = readOptionalStringList(value, "FullSubnames");
-    }
     if (stableSubnames.empty()) {
         stableSubnames = subnames;
     }
@@ -161,11 +176,82 @@ std::optional<Link> readLinkObject(const nlohmann::json& value, const std::strin
         fullSubnames = subnames;
     }
 
-    return Link{value.at("value").get<std::string>(),
+    return Link{objectIt->get<std::string>(),
                 std::move(subnames),
                 std::move(stableSubnames),
                 std::move(fullSubnames),
                 property};
+}
+
+std::optional<Link> readLinkSubListItem(const nlohmann::json& value, const std::string& property = {})
+{
+    if (!value.is_object() || value.contains("PropertyType")) {
+        return std::nullopt;
+    }
+
+    const auto objectIt = value.find("value");
+    if (objectIt == value.end() || objectIt->is_null()) {
+        return std::nullopt;
+    }
+    if (!objectIt->is_string() || objectIt->get<std::string>().empty()) {
+        return std::nullopt;
+    }
+
+    std::vector<std::string> subnames;
+    const auto subListIt = value.find("SubList");
+    if (subListIt != value.end()) {
+        auto parsed = readStringList(*subListIt);
+        if (!parsed) {
+            return std::nullopt;
+        }
+        subnames = std::move(*parsed);
+    }
+
+    std::vector<std::string> stableSubnames = readOptionalStringList(value, "StableSubList");
+    std::vector<std::string> fullSubnames = readOptionalStringList(value, "FullSubList");
+    if (stableSubnames.empty()) {
+        stableSubnames = subnames;
+    }
+    if (fullSubnames.empty()) {
+        fullSubnames = subnames;
+    }
+
+    return Link{objectIt->get<std::string>(),
+                std::move(subnames),
+                std::move(stableSubnames),
+                std::move(fullSubnames),
+                property};
+}
+
+std::vector<Link> readLinkList(const nlohmann::json& value)
+{
+    std::vector<Link> links;
+    const auto rawLinksIt = value.find("values");
+    if (rawLinksIt == value.end() || !rawLinksIt->is_array()) {
+        return links;
+    }
+    for (const auto& item : *rawLinksIt) {
+        if (item.is_string() && !item.get<std::string>().empty()) {
+            links.push_back({item.get<std::string>(), {}});
+        }
+    }
+    return links;
+}
+
+std::vector<Link> readLinkSubList(const nlohmann::json& value)
+{
+    std::vector<Link> links;
+    const auto rawLinksIt = value.find("SubSet");
+    if (rawLinksIt == value.end() || !rawLinksIt->is_array()) {
+        return links;
+    }
+    for (const auto& item : *rawLinksIt) {
+        auto link = readLinkSubListItem(item);
+        if (link) {
+            links.push_back(std::move(*link));
+        }
+    }
+    return links;
 }
 
 const nlohmann::json& propertyPayload(const nlohmann::json& value)
@@ -309,40 +395,89 @@ bool hasInvalidTypedPayload(const nlohmann::json& raw, PropertyKind kind)
 
 bool isMalformedLinkValue(const nlohmann::json& value, const std::string& propertyType)
 {
-    if (propertyType == "App::PropertyLink" || propertyType == "App::PropertyLinkSub"
-        || propertyType == "App::PropertyXLink" || propertyType == "App::PropertyXLinkSub") {
-        if (value.contains("value") && !value.at("value").is_string()) {
+    auto hasStringListField = [](const nlohmann::json& item, const std::string& field) {
+        const auto fieldIt = item.find(field);
+        return fieldIt == item.end() || readStringList(*fieldIt).has_value();
+    };
+    auto hasAlignedSubnameFields = [&](const nlohmann::json& item) {
+        if (item.contains("StableSubnames") || item.contains("FullSubnames")) {
+            return false;
+        }
+        const auto subListIt = item.find("SubList");
+        std::size_t subListSize = 0U;
+        if (subListIt != item.end()) {
+            const auto subnames = readStringList(*subListIt);
+            if (!subnames) {
+                return false;
+            }
+            subListSize = subnames->size();
+        }
+        for (const std::string field : {"StableSubList", "FullSubList"}) {
+            const auto fieldIt = item.find(field);
+            if (fieldIt == item.end()) {
+                continue;
+            }
+            const auto subnames = readStringList(*fieldIt);
+            if (!subnames || subnames->size() != subListSize) {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    if (isLinkObjectType(propertyType)) {
+        const auto objectIt = value.find("value");
+        if (objectIt == value.end() || (!objectIt->is_string() && !objectIt->is_null())) {
             return true;
         }
-        const auto subListIt = value.find("SubList");
-        if (subListIt != value.end() && !readStringList(*subListIt)) {
+        if (isLinkSubObjectType(propertyType) && !hasAlignedSubnameFields(value)) {
+            return true;
+        }
+        if (!isLinkSubObjectType(propertyType)
+            && (!hasStringListField(value, "SubList") || !hasStringListField(value, "StableSubList")
+                || !hasStringListField(value, "FullSubList") || value.contains("StableSubnames")
+                || value.contains("FullSubnames"))) {
             return true;
         }
         return false;
     }
 
-    if (propertyType == "App::PropertyLinkList" || propertyType == "App::PropertyLinkSubList"
-        || propertyType == "App::PropertyXLinkList" || propertyType == "App::PropertyXLinkSubList") {
-        const auto rawLinksIt = value.find("value");
-        if (rawLinksIt == value.end()) {
-            return false;
+    if (isLinkListType(propertyType)) {
+        if (value.contains("value") || value.contains("SubList") || value.contains("StableSubList")
+            || value.contains("FullSubList") || value.contains("StableSubnames")
+            || value.contains("FullSubnames") || value.contains("SubSet")) {
+            return true;
         }
-        if (!rawLinksIt->is_array()) {
+        const auto rawLinksIt = value.find("values");
+        if (rawLinksIt == value.end()) {
+            return true;
+        }
+        return !readStringList(*rawLinksIt).has_value();
+    }
+
+    if (isLinkSubListType(propertyType)) {
+        if (value.contains("value") || value.contains("values") || value.contains("SubList")
+            || value.contains("StableSubList") || value.contains("FullSubList")
+            || value.contains("StableSubnames") || value.contains("FullSubnames")) {
+            return true;
+        }
+        const auto rawLinksIt = value.find("SubSet");
+        if (rawLinksIt == value.end() || !rawLinksIt->is_array()) {
             return true;
         }
         for (const auto& item : *rawLinksIt) {
-            if (item.is_string()) {
-                continue;
+            if (!item.is_object() || item.contains("PropertyType")) {
+                return true;
             }
-            const auto itemType = propertyTypeOf(item);
-            if (item.is_object() && itemType
-                && (*itemType == "App::PropertyLink" || *itemType == "App::PropertyLinkSub"
-                    || *itemType == "App::PropertyXLink" || *itemType == "App::PropertyXLinkSub")
-                && !isMalformedLinkValue(item, *itemType)) {
-                continue;
+            const auto objectIt = item.find("value");
+            if (objectIt == item.end() || (!objectIt->is_string() && !objectIt->is_null())) {
+                return true;
             }
-            return true;
+            if (!hasAlignedSubnameFields(item)) {
+                return true;
+            }
         }
+        return false;
     }
 
     return false;
@@ -430,8 +565,7 @@ std::vector<Link> readLinks(const nlohmann::json& value)
         return links;
     }
 
-    if (*propertyType == "App::PropertyLink" || *propertyType == "App::PropertyLinkSub"
-        || *propertyType == "App::PropertyXLink" || *propertyType == "App::PropertyXLinkSub") {
+    if (isLinkObjectType(*propertyType)) {
         auto link = readLinkObject(value);
         if (link) {
             links.push_back(std::move(*link));
@@ -439,23 +573,12 @@ std::vector<Link> readLinks(const nlohmann::json& value)
         return links;
     }
 
-    if (*propertyType == "App::PropertyLinkList" || *propertyType == "App::PropertyLinkSubList"
-        || *propertyType == "App::PropertyXLinkList" || *propertyType == "App::PropertyXLinkSubList") {
-        const auto rawLinksIt = value.find("value");
-        if (rawLinksIt == value.end() || !rawLinksIt->is_array()) {
-            return links;
-        }
-        for (const auto& item : *rawLinksIt) {
-            if (item.is_string() && !item.get<std::string>().empty()) {
-                links.push_back({item.get<std::string>(), {}});
-                continue;
-            }
+    if (isLinkListType(*propertyType)) {
+        return readLinkList(value);
+    }
 
-            auto link = readLinkObject(item);
-            if (link) {
-                links.push_back(std::move(*link));
-            }
-        }
+    if (isLinkSubListType(*propertyType)) {
+        return readLinkSubList(value);
     }
 
     return links;
@@ -721,10 +844,8 @@ std::pair<Document, std::vector<runtime::Diagnostic>> parseDocument(const nlohma
             }
         }
     }
-    else {
-        for (const auto& object : document.objects) {
-            document.targets.push_back(object.name);
-        }
+    if (document.targets.empty() && !document.objects.empty()) {
+        document.targets.push_back(document.objects.back().name);
     }
 
     return {document, diagnostics};

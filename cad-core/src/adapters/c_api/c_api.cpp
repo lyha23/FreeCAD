@@ -130,11 +130,18 @@ nlohmann::json capabilitiesJson()
         {"schema_version", "cad-web-v1"},
         {"cad_core", cadCoreVersionJson()},
         {"document",
-         {
-             {"source", "DocumentObject graph"},
-             {"required_object_fields", {"Name", "ID", "TypeId", "Properties"}},
-             {"link_property_fields", {"value", "SubList", "StableSubList", "FullSubList"}},
-         }},
+	         {
+	             {"source", "DocumentObject graph"},
+	             {"required_object_fields", {"Name", "ID", "TypeId", "Properties"}},
+	             {"link_property_fields", {"value", "values", "SubList", "SubSet", "StableSubList", "FullSubList"}},
+	             {"link_property_shapes",
+	              {
+	                  {"App::PropertyLink", {"value"}},
+	                  {"App::PropertyLinkList", {"values"}},
+	                  {"App::PropertyLinkSub", {"value", "SubList", "StableSubList", "FullSubList"}},
+	                  {"App::PropertyLinkSubList", {"SubSet"}},
+	              }},
+	         }},
         {"supported_type_ids", registry.typeIds()},
         {"export_formats", cad_core::geometry::supportedShapeFileFormats()},
         {"diagnostic_codes", diagnosticCodeList()},

@@ -6,10 +6,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [0, 0], "end": [2, 0] },
-          { "kind": "LineSegment", "start": [2, 0], "end": [2, 2] },
-          { "kind": "LineSegment", "start": [2, 2], "end": [0, 2] },
-          { "kind": "LineSegment", "start": [0, 2], "end": [0, 0] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              2,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              0
+            ],
+            "end": [
+              2,
+              2
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              2
+            ],
+            "end": [
+              0,
+              2
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              2
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -37,8 +77,17 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [2, 0, 0],
-          "Rotation": [0, 0.7071067811865475, 0, 0.7071067811865476]
+          "Base": [
+            2,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0.7071067811865475,
+            0,
+            0.7071067811865476
+          ]
         }
       }
     },
@@ -49,7 +98,9 @@
       "Properties": {
         "Originals": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["Pad"]
+          "values": [
+            "Pad"
+          ]
         },
         "MirrorPlane": {
           "PropertyType": "App::PropertyLinkSub",
@@ -61,6 +112,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Mirrored"]
+    "objs": [
+      "Mirrored"
+    ]
   }
 }

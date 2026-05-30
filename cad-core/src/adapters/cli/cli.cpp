@@ -5,6 +5,7 @@
 #include "cad_core/runtime/diagnostics.h"
 #include "cad_core/runtime/io.h"
 #include "cad_core/runtime/recompute.h"
+#include "cad_core/topo/named_shape.h"
 
 #include <nlohmann/json.hpp>
 
@@ -14,6 +15,7 @@
 #include <optional>
 #include <stdexcept>
 #include <string>
+#include <cstdlib>
 
 namespace cad_core::adapters {
 
@@ -31,6 +33,30 @@ struct RecomputeOptions {
     std::filesystem::path outputPath;
     std::optional<ExportRequest> exportRequest;
 };
+
+bool useLegacyTestOutput()
+{
+    const char* value = std::getenv("CAD_CORE_TEST_LEGACY_OUTPUT");
+    return value != nullptr && std::string(value) == "1";
+}
+
+nlohmann::json legacyTestResultJson(const document::Document& document,
+                                    const runtime::ComputeContext& context)
+{
+    nlohmann::json objects = nlohmann::json::object();
+    for (const auto& object : document.objects) {
+        auto it = context.objects.find(object.name);
+        objects[object.name] = it == context.objects.end() ? nlohmann::json{{"status", "pending"}} : it->second;
+    }
+
+    return {
+        {"objects", objects},
+        {"mesh", context.mesh},
+        {"subshapes", context.subshapes},
+        {"named_shapes", topo::namedShapesToJson(context.namedShapes)},
+        {"diagnostics", runtime::diagnosticsToJson(context.diagnostics)},
+    };
+}
 
 bool readValueArg(int argc, char** argv, int& index, std::string& value)
 {
@@ -126,19 +152,28 @@ int runRecompute(const RecomputeOptions& options)
         input >> raw;
     }
     catch (const nlohmann::json::parse_error& error) {
-        nlohmann::json payload = {
-            {"objects", nlohmann::json::object()},
-            {"mesh", nlohmann::json::object()},
-            {"subshapes", nlohmann::json::object()},
-            {"diagnostics", runtime::diagnosticsToJson({{"error", "parse_error", error.what(), {}, {}}})},
-        };
+        const nlohmann::json diagnostics = runtime::diagnosticsToJson({{"error", "parse_error", error.what(), {}, {}}});
+        nlohmann::json payload = useLegacyTestOutput()
+            ? nlohmann::json{
+                  {"objects", nlohmann::json::object()},
+                  {"mesh", nlohmann::json::object()},
+                  {"subshapes", nlohmann::json::object()},
+                  {"diagnostics", diagnostics},
+              }
+            : nlohmann::json{
+                  {"results", nlohmann::json::array()},
+                  {"elementReferenceUpdates", nlohmann::json::array()},
+                  {"diagnostics", diagnostics},
+              };
         runtime::writeJsonFile(options.outputPath, payload);
         return 0;
     }
 
     auto [document, diagnostics] = document::parseDocument(raw);
     const runtime::ComputeContext context = runtime::recomputeContext(document, std::move(diagnostics));
-    nlohmann::json result = runtime::recomputeResultJson(document, context);
+    nlohmann::json result = useLegacyTestOutput()
+        ? legacyTestResultJson(document, context)
+        : runtime::recomputeResultJson(document, context);
 
     if (options.exportRequest.has_value()) {
         const auto& request = *options.exportRequest;

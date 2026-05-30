@@ -20,8 +20,17 @@
         "Height": 2,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [1, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            1,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -32,7 +41,10 @@
       "Properties": {
         "Objects": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["BoxA", "BoxB"]
+          "values": [
+            "BoxA",
+            "BoxB"
+          ]
         },
         "Mode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -51,8 +63,17 @@
         "Height": 2,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0.5, 0.5, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0.5,
+            0.5,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -63,7 +84,10 @@
       "Properties": {
         "Objects": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["Comp", "BoxC"]
+          "values": [
+            "Comp",
+            "BoxC"
+          ]
         },
         "Mode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -74,6 +98,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Split"]
+    "objs": [
+      "Split"
+    ]
   }
 }

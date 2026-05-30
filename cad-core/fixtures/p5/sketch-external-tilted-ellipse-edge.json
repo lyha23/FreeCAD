@@ -7,13 +7,25 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 0],
-          "Rotation": [0.3826834323650898, 0, 0, 0.9238795325112867]
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0.3826834323650898,
+            0,
+            0,
+            0.9238795325112867
+          ]
         },
         "Geometry": [
           {
             "kind": "Ellipse",
-            "center": [5, 2.5],
+            "center": [
+              5,
+              2.5
+            ],
             "majorRadius": 3,
             "minorRadius": 1
           }
@@ -27,18 +39,59 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
-          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
-          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]}
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "ExternalGeometry": {
           "PropertyType": "App::PropertyLinkSubList",
-          "value": [
+          "SubSet": [
             {
-              "PropertyType": "App::PropertyLinkSub",
               "value": "SourceSketch",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             }
           ]
         },
@@ -62,5 +115,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Pad"]}
+  "recompute": {
+    "objs": [
+      "Pad"
+    ]
+  }
 }

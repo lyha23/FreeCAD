@@ -62,18 +62,13 @@
       "ID": 2,
       "TypeId": "PartDesign::Body",
       "Properties": {
-        "Group": [
-          {
-            "PropertyType": "App::PropertyLinkSub",
-            "value": "Sketch",
-            "SubList": []
-          },
-          {
-            "PropertyType": "App::PropertyLinkSub",
-            "value": "Pad",
-            "SubList": []
-          }
-        ],
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "Sketch",
+            "Pad"
+          ]
+        },
         "Tip": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Pad",

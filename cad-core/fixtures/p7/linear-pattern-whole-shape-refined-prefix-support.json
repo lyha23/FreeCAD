@@ -6,10 +6,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [0, 0], "end": [10, 0] },
-          { "kind": "LineSegment", "start": [10, 0], "end": [10, 5] },
-          { "kind": "LineSegment", "start": [10, 5], "end": [0, 5] },
-          { "kind": "LineSegment", "start": [0, 5], "end": [0, 0] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -20,10 +60,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [2, 1], "end": [8, 1] },
-          { "kind": "LineSegment", "start": [8, 1], "end": [8, 4] },
-          { "kind": "LineSegment", "start": [8, 4], "end": [2, 4] },
-          { "kind": "LineSegment", "start": [2, 4], "end": [2, 1] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              1
+            ],
+            "end": [
+              8,
+              1
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              8,
+              1
+            ],
+            "end": [
+              8,
+              4
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              8,
+              4
+            ],
+            "end": [
+              2,
+              4
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              4
+            ],
+            "end": [
+              2,
+              1
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -59,7 +139,7 @@
         "Reversed": true,
         "SideType": "One side",
         "Refine": true,
-        "FuzzyTolerance": 0.0
+        "FuzzyTolerance": 0
       }
     },
     {
@@ -69,8 +149,17 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 0],
-          "Rotation": [0, 0.7071067811865475, 0, 0.7071067811865476]
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0.7071067811865475,
+            0,
+            0.7071067811865476
+          ]
         }
       }
     },
@@ -81,7 +170,9 @@
       "Properties": {
         "Originals": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["Pad"]
+          "values": [
+            "Pad"
+          ]
         },
         "Direction": {
           "PropertyType": "App::PropertyLinkSub",
@@ -101,7 +192,14 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["SketchPad", "Pad", "SketchPocket", "Pocket", "DatumLine", "LinearPattern"]
+          "values": [
+            "SketchPad",
+            "Pad",
+            "SketchPocket",
+            "Pocket",
+            "DatumLine",
+            "LinearPattern"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -111,6 +209,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Body"]
+    "objs": [
+      "Body"
+    ]
   }
 }

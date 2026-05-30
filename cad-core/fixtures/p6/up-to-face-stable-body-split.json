@@ -6,10 +6,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [0, 0], "end": [10, 0] },
-          { "kind": "LineSegment", "start": [10, 0], "end": [10, 5] },
-          { "kind": "LineSegment", "start": [10, 5], "end": [0, 5] },
-          { "kind": "LineSegment", "start": [0, 5], "end": [0, 0] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -20,10 +60,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [2, 1], "end": [8, 1] },
-          { "kind": "LineSegment", "start": [8, 1], "end": [8, 4] },
-          { "kind": "LineSegment", "start": [8, 4], "end": [2, 4] },
-          { "kind": "LineSegment", "start": [2, 4], "end": [2, 1] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              1
+            ],
+            "end": [
+              8,
+              1
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              8,
+              1
+            ],
+            "end": [
+              8,
+              4
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              8,
+              4
+            ],
+            "end": [
+              2,
+              4
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              4
+            ],
+            "end": [
+              2,
+              1
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -69,7 +149,12 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["SketchPad", "Pad", "SketchPocket", "Pocket"]
+          "values": [
+            "SketchPad",
+            "Pad",
+            "SketchPocket",
+            "Pocket"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -83,10 +168,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [0.5, 0.5], "end": [1.5, 0.5] },
-          { "kind": "LineSegment", "start": [1.5, 0.5], "end": [1.5, 1.5] },
-          { "kind": "LineSegment", "start": [1.5, 1.5], "end": [0.5, 1.5] },
-          { "kind": "LineSegment", "start": [0.5, 1.5], "end": [0.5, 0.5] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              0.5,
+              0.5
+            ],
+            "end": [
+              1.5,
+              0.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              1.5,
+              0.5
+            ],
+            "end": [
+              1.5,
+              1.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              1.5,
+              1.5
+            ],
+            "end": [
+              0.5,
+              1.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0.5,
+              1.5
+            ],
+            "end": [
+              0.5,
+              0.5
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -105,8 +230,12 @@
         "UpToFace": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Body",
-          "SubList": ["OldSplitFace"],
-          "StableSubList": ["Pad.Face5"]
+          "SubList": [
+            "OldSplitFace"
+          ],
+          "StableSubList": [
+            "Pad.Face5"
+          ]
         },
         "Reversed": false,
         "SideType": "One side"
@@ -114,6 +243,8 @@
     }
   ],
   "recompute": {
-    "objs": ["ProbePad"]
+    "objs": [
+      "ProbePad"
+    ]
   }
 }

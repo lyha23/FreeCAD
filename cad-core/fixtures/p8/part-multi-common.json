@@ -20,8 +20,17 @@
         "Height": 2,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [1, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            1,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -35,8 +44,17 @@
         "Height": 2,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [2, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            2,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -47,7 +65,11 @@
       "Properties": {
         "Shapes": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["BoxA", "BoxB", "BoxC"]
+          "values": [
+            "BoxA",
+            "BoxB",
+            "BoxC"
+          ]
         },
         "Behavior": "CommonOfAllShapes",
         "Refine": false
@@ -55,6 +77,8 @@
     }
   ],
   "recompute": {
-    "objs": ["MultiCommon"]
+    "objs": [
+      "MultiCommon"
+    ]
   }
 }

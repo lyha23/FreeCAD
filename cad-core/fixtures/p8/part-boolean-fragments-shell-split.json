@@ -23,7 +23,10 @@
       "Properties": {
         "Objects": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["ShellBase", "SplitterFace"]
+          "values": [
+            "ShellBase",
+            "SplitterFace"
+          ]
         },
         "Mode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -34,6 +37,8 @@
     }
   ],
   "recompute": {
-    "objs": ["BooleanFragments"]
+    "objs": [
+      "BooleanFragments"
+    ]
   }
 }

@@ -5,13 +5,12 @@
       "ID": 1,
       "TypeId": "PartDesign::Body",
       "Properties": {
-        "Group": [
-          {
-            "PropertyType": "App::PropertyLinkSub",
-            "value": "Pad",
-            "SubList": []
-          }
-        ],
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "Pad"
+          ]
+        },
         "Tip": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Pad",

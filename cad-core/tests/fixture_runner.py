@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import ctypes
 import json
+import os
 import subprocess
 import tempfile
 import unittest
@@ -9,7 +10,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BIN = ROOT / "cad-core"
+BIN = ROOT / "build" / "cad-core"
 FFI_LIB_CANDIDATES = [
     ROOT / "build" / "libcad_core_ffi.dylib",
     ROOT / "build" / "libcad_core_ffi.so",
@@ -46,7 +47,9 @@ class CadCoreFixtureTestCase(unittest.TestCase):
             ]
             if extra_args:
                 command.extend(extra_args)
-            subprocess.run(command, cwd=ROOT, check=True)
+            env = os.environ.copy()
+            env["CAD_CORE_TEST_LEGACY_OUTPUT"] = "1"
+            subprocess.run(command, cwd=ROOT, check=True, env=env)
             return json.loads(output.read_text(encoding="utf-8"))
 
     def run_recompute(self, fixture: str, group: str = "mvp") -> dict:

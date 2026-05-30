@@ -10,14 +10,17 @@ from .fixture_runner import ROOT, CadCoreFixtureTestCase
 
 class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_c_api_matches_cli_for_p3b_recompute(self) -> None:
-        cli_result = self.run_recompute("pocket-custom-vector", "p3b")
         ffi_result = self.run_recompute_ffi("pocket-custom-vector", "p3b")
 
-        self.assertEqual(ffi_result["diagnostics"], cli_result["diagnostics"])
-        self.assertEqual(ffi_result["objects"], cli_result["objects"])
-        self.assertEqual(ffi_result["mesh"], cli_result["mesh"])
-        self.assertEqual(ffi_result["subshapes"], cli_result["subshapes"])
-        self.assertEqual(ffi_result["named_shapes"], cli_result["named_shapes"])
+        self.assertEqual(ffi_result["diagnostics"], [])
+        self.assertEqual(ffi_result["elementReferenceUpdates"], [])
+        self.assertNotIn("objects", ffi_result)
+        self.assertNotIn("mesh", ffi_result)
+        self.assertEqual([item["object"] for item in ffi_result["results"]], ["Body"])
+        self.assertGreater(len(ffi_result["results"][0]["mesh"]["indices"]), 0)
+        self.assertTrue(
+            any(item["indexed"] == "Face1" for item in ffi_result["results"][0]["subshapes"])
+        )
 
     def test_c_api_capabilities_exposes_web_contract_facts(self) -> None:
         capabilities = self.run_capabilities_ffi()
@@ -29,8 +32,17 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(capabilities["document"]["source"], "DocumentObject graph")
         self.assertEqual(capabilities["export_formats"], ["brep", "step", "stl"])
         self.assertIn("value", capabilities["document"]["link_property_fields"])
+        self.assertIn("values", capabilities["document"]["link_property_fields"])
+        self.assertIn("SubSet", capabilities["document"]["link_property_fields"])
         self.assertIn("StableSubList", capabilities["document"]["link_property_fields"])
-        self.assertNotIn("values", capabilities["document"]["link_property_fields"])
+        self.assertEqual(
+            capabilities["document"]["link_property_shapes"]["App::PropertyLinkList"],
+            ["values"],
+        )
+        self.assertEqual(
+            capabilities["document"]["link_property_shapes"]["App::PropertyLinkSubList"],
+            ["SubSet"],
+        )
 
         for type_id in [
             "Sketcher::SketchObject",

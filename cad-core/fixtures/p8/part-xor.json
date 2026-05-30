@@ -20,8 +20,17 @@
         "Height": 2,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [1, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            1,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -32,13 +41,18 @@
       "Properties": {
         "Objects": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["BoxA", "BoxB"]
+          "values": [
+            "BoxA",
+            "BoxB"
+          ]
         },
         "Tolerance": 0
       }
     }
   ],
   "recompute": {
-    "objs": ["XOR"]
+    "objs": [
+      "XOR"
+    ]
   }
 }

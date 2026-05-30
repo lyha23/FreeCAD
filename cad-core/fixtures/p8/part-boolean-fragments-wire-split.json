@@ -18,8 +18,17 @@
         "Circumradius": 2,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [1, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            1,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -30,7 +39,10 @@
       "Properties": {
         "Objects": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["PolyA", "PolyB"]
+          "values": [
+            "PolyA",
+            "PolyB"
+          ]
         },
         "Mode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -41,6 +53,8 @@
     }
   ],
   "recompute": {
-    "objs": ["BooleanFragments"]
+    "objs": [
+      "BooleanFragments"
+    ]
   }
 }

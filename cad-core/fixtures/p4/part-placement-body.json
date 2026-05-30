@@ -6,10 +6,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
-          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
-          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]}
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -37,7 +77,10 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["Sketch", "Pad"]
+          "values": [
+            "Sketch",
+            "Pad"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -45,8 +88,17 @@
         },
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 3, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            3,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -57,15 +109,30 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["Body"]
+          "values": [
+            "Body"
+          ]
         },
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [20, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            20,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     }
   ],
-  "recompute": {"objs": ["Part"]}
+  "recompute": {
+    "objs": [
+      "Part"
+    ]
+  }
 }

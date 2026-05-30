@@ -116,6 +116,119 @@ void registerIndexedNamedShape(const std::string& name, ComputeContext& context)
     }
 }
 
+std::string displayKind(const nlohmann::json& subshape)
+{
+    const std::string kind = subshape.value("kind", "");
+    if (kind == "face") {
+        return "Face";
+    }
+    if (kind == "edge") {
+        return "Edge";
+    }
+    if (kind == "vertex") {
+        return "Vertex";
+    }
+    return kind.empty() ? "Unknown" : kind;
+}
+
+std::string stableSubnameFor(const std::string& indexed,
+                             const topo::NamedShape* namedShape)
+{
+    if (namedShape == nullptr) {
+        return indexed;
+    }
+
+    std::string fallback;
+    for (const auto& [stableSubname, currentSubname] : namedShape->elementMap) {
+        if (currentSubname != indexed) {
+            continue;
+        }
+        if (stableSubname != indexed) {
+            return stableSubname;
+        }
+        fallback = stableSubname;
+    }
+    return fallback.empty() ? indexed : fallback;
+}
+
+std::string currentSubnameForStable(const std::string& indexed,
+                                    const std::string& stableSubname)
+{
+    const std::size_t dot = stableSubname.rfind('.');
+    if (dot == std::string::npos) {
+        return indexed;
+    }
+    return stableSubname.substr(0, dot + 1) + indexed;
+}
+
+nlohmann::json responseMesh(const std::string& objectName, const nlohmann::json& mesh)
+{
+    if (!mesh.is_object()) {
+        return nullptr;
+    }
+
+    nlohmann::json indices = nlohmann::json::array();
+    const auto trianglesIt = mesh.find("triangles");
+    if (trianglesIt != mesh.end() && trianglesIt->is_array()) {
+        for (const auto& triangle : *trianglesIt) {
+            if (!triangle.is_array()) {
+                continue;
+            }
+            for (const auto& index : triangle) {
+                if (index.is_number_integer()) {
+                    indices.push_back(index.get<int>());
+                }
+            }
+        }
+    }
+
+    nlohmann::json faceIds = nlohmann::json::array();
+    const auto faceIdsIt = mesh.find("faceIds");
+    if (faceIdsIt != mesh.end() && faceIdsIt->is_array()) {
+        for (const auto& faceId : *faceIdsIt) {
+            if (faceId.is_string()) {
+                faceIds.push_back(objectName + ":" + faceId.get<std::string>());
+            }
+        }
+    }
+
+    return {
+        {"vertices", mesh.value("vertices", nlohmann::json::array())},
+        {"normals", mesh.value("normals", nlohmann::json::array())},
+        {"indices", indices},
+        {"faceIds", faceIds},
+    };
+}
+
+nlohmann::json responseSubshapes(const std::string& objectName,
+                                 const ComputeContext& context)
+{
+    nlohmann::json subshapes = nlohmann::json::array();
+    const auto subshapeIt = context.subshapes.find(objectName);
+    if (subshapeIt == context.subshapes.end() || !subshapeIt->second.is_object()) {
+        return subshapes;
+    }
+
+    const topo::NamedShape* namedShape = nullptr;
+    const auto namedShapeIt = context.namedShapes.find(objectName);
+    if (namedShapeIt != context.namedShapes.end()) {
+        namedShape = &namedShapeIt->second;
+    }
+
+    for (const auto& [indexed, subshape] : subshapeIt->second.items()) {
+        const std::string stableSubname = stableSubnameFor(indexed, namedShape);
+        const std::string subname = currentSubnameForStable(indexed, stableSubname);
+        subshapes.push_back({
+            {"id", objectName + ":" + indexed},
+            {"kind", displayKind(subshape)},
+            {"indexed", indexed},
+            {"subname", subname},
+            {"stableSubname", stableSubname},
+        });
+    }
+    return subshapes;
+}
+
 }  // namespace
 
 ComputeContext recomputeContext(const document::Document& document,
@@ -173,17 +286,22 @@ ComputeContext recomputeContext(const document::Document& document,
 nlohmann::json recomputeResultJson(const document::Document& document,
                                    const ComputeContext& context)
 {
-    nlohmann::json objects = nlohmann::json::object();
-    for (const auto& object : document.objects) {
-        auto it = context.objects.find(object.name);
-        objects[object.name] = it == context.objects.end() ? nlohmann::json{{"status", "pending"}} : it->second;
+    nlohmann::json results = nlohmann::json::array();
+    for (const std::string& target : document.targets) {
+        if (document.indexByName.count(target) == 0U) {
+            continue;
+        }
+        const auto meshIt = context.mesh.find(target);
+        results.push_back({
+            {"object", target},
+            {"mesh", meshIt == context.mesh.end() ? nlohmann::json(nullptr) : responseMesh(target, meshIt->second)},
+            {"subshapes", responseSubshapes(target, context)},
+        });
     }
 
     return {
-        {"objects", objects},
-        {"mesh", context.mesh},
-        {"subshapes", context.subshapes},
-        {"named_shapes", topo::namedShapesToJson(context.namedShapes)},
+        {"results", results},
+        {"elementReferenceUpdates", nlohmann::json::array()},
         {"diagnostics", diagnosticsToJson(context.diagnostics)},
     };
 }
