@@ -125,7 +125,28 @@
   "value": "Pad",
   "SubList": ["Face3"],
   "StableSubList": ["Pad.Face6"],
-  "FullSubList": ["Body.Face3"]
+  "FullSubList": ["Body.Face3"],
+  "ShadowSub": [
+    {
+      "newName": "Pad.Face6",
+      "oldName": "Face3"
+    }
+  ],
+  "ReferenceShadow": [
+    {
+      "target": "Pad",
+      "property": "Shape",
+      "shapeType": "Face",
+      "indexed": "Face3",
+      "subname": "Face3",
+      "stableSubname": "Pad.Face6",
+      "fingerprint": {},
+      "brep": {
+        "format": "brep-bin-zstd-base64",
+        "data": "..."
+      }
+    }
+  ]
 }
 ```
 
@@ -135,7 +156,9 @@
 - `SubList` 是当前 indexed subname，例如 `Face3`、`Edge1`。
 - `StableSubList` 是稳定 subname，用于后续 recompute 恢复当前 indexed subname。
 - `FullSubList` 是带对象上下文的显示/回写路径。
-- `StableSubList`、`FullSubList` 存在时，应和 `SubList` 一一对应；长度不一致时返回 `invalid_link_value`。
+- `ShadowSub` 是 FreeCAD 风格的新旧元素名对，存在时应和 `SubList` 一一对应。
+- `ReferenceShadow` 是引用恢复证据，存在时应和 `SubList` 一一对应；其中 `brep` 只允许保存被引用单个旧 subshape 的 BREP snapshot。
+- `StableSubList`、`FullSubList`、`ShadowSub`、`ReferenceShadow` 存在时，应和 `SubList` 一一对应；长度不一致时返回 `invalid_link_value`。
 
 ### App::PropertyLinkSubList
 
@@ -149,7 +172,9 @@
       "value": "Pad",
       "SubList": ["Face3"],
       "StableSubList": ["Pad.Face6"],
-      "FullSubList": ["Body.Face3"]
+      "FullSubList": ["Body.Face3"],
+      "ShadowSub": [{ "newName": "Pad.Face6", "oldName": "Face3" }],
+      "ReferenceShadow": [{ "...": "..." }]
     },
     {
       "value": "Sketch",
@@ -165,7 +190,7 @@
 - 每个 `SubSet[]` item 表示一组 `(DocumentObject, SubList)`。
 - `SubSet[].value` 是被引用对象名。
 - `SubSet[].SubList` 是该对象内部的 sub element 名列表。
-- `SubSet[].StableSubList` 和 `SubSet[].FullSubList` 只描述同一个 item 下的 sub element，不跨 item。
+- `SubSet[].StableSubList`、`SubSet[].FullSubList`、`SubSet[].ShadowSub` 和 `SubSet[].ReferenceShadow` 只描述同一个 item 下的 sub element，不跨 item。
 - `SubSet[]` item 不需要再写 `PropertyType`，因为外层已经声明这是 `App::PropertyLinkSubList`。
 
 ## 输出格式影响
@@ -227,11 +252,15 @@ struct Link {
     std::vector<std::string> subnames;
     std::vector<std::string> stableSubnames;
     std::vector<std::string> fullSubnames;
+    std::vector<ShadowSub> shadowSubs;
+    std::vector<ReferenceShadow> referenceShadows;
     std::string property;
 };
 ```
 
-迁移时应保持这个内部归一化结构不变，只改 JSON 读取入口。
+`ShadowSub` 和 `ReferenceShadow` 是本次接口扩展后的新增归一化字段。旧的
+`value` / `values` / `SubSet` 字段迁移仍只改 JSON 读取入口；接入引用恢复时，再把
+`ShadowSub` / `ReferenceShadow` 写入同一个 `document::Link`。
 
 建议拆出三个读取函数：
 
@@ -259,6 +288,9 @@ PropertyLink:
 PropertyLinkSub:
   value must be string or null
   SubList / StableSubList / FullSubList must be string arrays
+  ShadowSub must be array when present
+  ReferenceShadow must be array when present
+  StableSubList / FullSubList / ShadowSub / ReferenceShadow length must match SubList when present
 
 PropertyLinkList:
   values must exist and be string array
@@ -268,6 +300,9 @@ PropertyLinkSubList:
   SubSet must exist and be array
   each item.value must be string or null
   each item.SubList / StableSubList / FullSubList must be string arrays
+  each item.ShadowSub must be array when present
+  each item.ReferenceShadow must be array when present
+  each item.StableSubList / FullSubList / ShadowSub / ReferenceShadow length must match item.SubList when present
   value must not exist
 ```
 
@@ -288,7 +323,7 @@ cad-core/src/adapters/c_api/c_api.cpp
 改成：
 
 ```json
-["value", "values", "SubList", "SubSet", "StableSubList", "FullSubList"]
+["value", "values", "SubList", "SubSet", "StableSubList", "FullSubList", "ShadowSub", "ReferenceShadow"]
 ```
 
 更清楚的表达是直接按属性类型返回：
@@ -298,7 +333,7 @@ cad-core/src/adapters/c_api/c_api.cpp
   "link_property_shapes": {
     "App::PropertyLink": ["value"],
     "App::PropertyLinkList": ["values"],
-    "App::PropertyLinkSub": ["value", "SubList", "StableSubList", "FullSubList"],
+    "App::PropertyLinkSub": ["value", "SubList", "StableSubList", "FullSubList", "ShadowSub", "ReferenceShadow"],
     "App::PropertyLinkSubList": ["SubSet"]
   }
 }

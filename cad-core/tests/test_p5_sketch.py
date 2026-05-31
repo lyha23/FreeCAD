@@ -382,12 +382,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assertEqual(sketch["internal_shape"], "occt_internal_shape")
-        self.assertEqual(sketch["internal_face_count"], 2)
-        self.assertIn("InternalFace1", result["subshapes"]["Sketch"])
-        self.assertIn("InternalFace2", result["subshapes"]["Sketch"])
-        self.assertIn("InternalFace1", result["mesh"]["Sketch"]["faceIds"])
-        self.assertIn("InternalFace2", result["mesh"]["Sketch"]["faceIds"])
+        self.assert_object_matches_expected(result, "p5", "sketch-internal-face-split-line")
 
     def test_p5_unsupported_splitter_does_not_fake_internal_region(self) -> None:
         result = self.run_recompute("sketch-internal-face-unsupported-splitter", "p5")
@@ -427,25 +422,13 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def test_p5_external_geometry_resolves_internal_edge(self) -> None:
         result = self.run_recompute("sketch-external-internal-edge", "p5")
-        sketch = result["objects"]["Sketch"]
-        base_sketch = result["objects"]["BaseSketch"]
-        pad = result["objects"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(sketch["external_geometry_count"], 1)
-        self.assertEqual(sketch["external_curve_count"], 0)
-        self.assertEqual(sketch["external_point_count"], 0)
         self.assert_object_matches_expected(result, "p5", "sketch-external-internal-edge")
 
         result = self.run_recompute("sketch-external-internal-vertex", "p5")
-        sketch = result["objects"]["Sketch"]
-        base_sketch = result["objects"]["BaseSketch"]
-        pad = result["objects"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(sketch["external_geometry_count"], 1)
-        self.assertEqual(sketch["external_curve_count"], 0)
-        self.assertEqual(sketch["external_point_count"], 1)
         self.assert_object_matches_expected(result, "p5", "sketch-external-internal-vertex")
 
     def test_p5_open_sketch_keeps_raw_shape_without_profile_face(self) -> None:

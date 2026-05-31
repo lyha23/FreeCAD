@@ -97,6 +97,9 @@ class ExpectedFixtureAssertions:
         obj = result["objects"][object_name]
         bbox_delta = expected.get("bbox_delta", default_bbox_delta)
 
+        for key, value in expected.get("object_fields", {}).items():
+            self.assertIn(key, obj)
+            self.assertEqual(obj[key], value)
         if "bbox" in expected:
             self.assert_bbox_close_delta(obj["bbox"], expected["bbox"]["min"], expected["bbox"]["max"], bbox_delta)
         if "volume" in expected:

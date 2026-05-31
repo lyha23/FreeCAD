@@ -11,9 +11,10 @@
 3. `recompute.objs` 决定本次响应返回哪些对象结果。
 4. 如果前端需要“全量派生输出”，就把所有对象名都放进 `recompute.objs`。
 5. 后端不保存跨请求 session，不持有跨请求 OCCT shape，不依赖上一次 recompute 的输出。
-6. BREP、`TopoDS_Shape`、mesh、subshape map、`NamedShape`、`ElementMap` 都是本次 recompute 的运行态产物，不作为下一次请求的源数据保存。
+6. `TopoDS_Shape`、mesh、subshape map、`NamedShape`、`ElementMap` 都是本次 recompute 的运行态产物，不作为下一次请求的源数据保存。
 7. 响应保持 `results[]` 数组形式。不要再额外包一层 `display` / `selection` / `toponaming`，避免比现有 Graph API 契约复杂。
 8. `elementReferenceUpdates` 只是本次 recompute 给前端的写回建议；只有前端应用到 `Objects[]` 后才成为持久输入。
+9. 已批准的 BREP 例外只有 `ReferenceShadow.brep`：它只能挂在 `PropertyLinkSub` / `PropertyLinkSubList.SubSet[]` 的 `ReferenceShadow[]` 中，保存被引用单个 subshape 的旧几何快照，用于引用恢复；不能传完整对象 BREP，不能用于显示、拾取、布尔、拉伸或任意 shape 构造。
 
 ## 请求
 
@@ -106,8 +107,76 @@ Link 属性字段名遵循 `docs/接口规定/05-30-12-36-Link属性迁移到val
 | --- | --- |
 | `App::PropertyLink` | `value` |
 | `App::PropertyLinkList` | `values` |
-| `App::PropertyLinkSub` | `value` + `SubList`，可选 `StableSubList` |
-| `App::PropertyLinkSubList` | `SubSet`，每项为 `value` + `SubList`，可选 `StableSubList` |
+| `App::PropertyLinkSub` | `value` + `SubList`，可选 `StableSubList`、`ShadowSub`、`ReferenceShadow` |
+| `App::PropertyLinkSubList` | `SubSet`，每项为 `value` + `SubList`，可选 `StableSubList`、`ShadowSub`、`ReferenceShadow` |
+
+### `ReferenceShadow` 与 BREP snapshot
+
+`ReferenceShadow` 是和 `SubList` 对齐的引用恢复证据。它不是 FreeCAD 原生字段，而是把 FreeCAD 的运行期旧 subshape cache 转换成无状态接口可携带的恢复数据。
+
+允许位置：
+
+- `App::PropertyLinkSub.ReferenceShadow[]`
+- `App::PropertyLinkSubList.SubSet[].ReferenceShadow[]`
+- `elementReferenceUpdates[].ReferenceShadow[]`
+
+基本结构：
+
+```json
+{
+  "PropertyType": "App::PropertyLinkSub",
+  "value": "Sketch",
+  "SubList": ["InternalFace2"],
+  "StableSubList": ["g305:split2;..."],
+  "ShadowSub": [
+    {
+      "newName": "g305:split2;...",
+      "oldName": "InternalFace2"
+    }
+  ],
+  "ReferenceShadow": [
+    {
+      "target": "Sketch",
+      "property": "InternalShape",
+      "shapeType": "Face",
+      "indexed": "Face2",
+      "subname": "InternalFace2",
+      "stableSubname": "g305:split2;...",
+      "fingerprint": {
+        "area": 1200.0,
+        "centroid": [30.0, 10.0, 0.0],
+        "normal": [0.0, 0.0, 1.0],
+        "bboxMin": [20.0, 0.0, 0.0],
+        "bboxMax": [40.0, 20.0, 0.0],
+        "edgeCount": 4,
+        "vertexCount": 4,
+        "boundaryStableSubnames": ["g301", "g302", "g305:split2", "g306:split2"],
+        "boundaryVertexPoints": [
+          [20.0, 0.0, 0.0],
+          [40.0, 0.0, 0.0],
+          [40.0, 20.0, 0.0],
+          [20.0, 20.0, 0.0]
+        ]
+      },
+      "brep": {
+        "format": "brep-bin-zstd-base64",
+        "data": "..."
+      }
+    }
+  ]
+}
+```
+
+规则：
+
+1. `ReferenceShadow` 存在时必须是数组，长度应与同级 `SubList` 一致；长度不一致返回 `invalid_link_value`。
+2. `ReferenceShadow[].target` 应与同级 `value` 指向同一对象；不一致返回 `invalid_link_value`。
+3. `ReferenceShadow[].shapeType` 只允许 `Vertex`、`Edge`、`Face`。
+4. `ReferenceShadow[].fingerprint` 是轻量恢复证据；后端可在 stable subname 解析成功后用它检测语义漂移。
+5. `ReferenceShadow[].brep` 是已批准的唯一 BREP 载荷。它只能表示被引用的单个旧 subshape，不能是完整对象 shape，也不能被 feature executor 当作 profile / boolean / display 输入。
+6. `ReferenceShadow[].brep.format` 当前固定为 `brep-bin-zstd-base64`；后续如果支持其它编码，必须在 capabilities 中显式声明。
+7. 后端解码失败、格式不支持、体积超限或 shapeType 不匹配时，应忽略该 BREP 并降级到 fingerprint 或返回引用诊断，不应让整个 recompute 崩溃。
+8. 前端可以把 `ReferenceShadow` 随 Link 属性保存在 `Objects[]` 中；它是引用恢复辅助数据，不改变“当前 shape 必须由 `DocumentObject graph` 重新计算”的原则。
 
 ## 响应
 
@@ -196,6 +265,21 @@ Link 属性字段名遵循 `docs/接口规定/05-30-12-36-Link属性迁移到val
           "newName": ";g101;g102;g103;g104.Face1.Face1",
           "oldName": "InternalFace2"
         }
+      ],
+      "ReferenceShadow": [
+        {
+          "target": "Sketch",
+          "property": "InternalShape",
+          "shapeType": "Face",
+          "indexed": "Face2",
+          "subname": "InternalFace2",
+          "stableSubname": ";g101;g102;g103;g104.Face1.Face1",
+          "fingerprint": {},
+          "brep": {
+            "format": "brep-bin-zstd-base64",
+            "data": "..."
+          }
+        }
       ]
     }
   ]
@@ -206,7 +290,7 @@ Link 属性字段名遵循 `docs/接口规定/05-30-12-36-Link属性迁移到val
 
 1. `elementReferenceUpdates` 不表示后端保存了状态。
 2. 前端可以把建议应用到本地 `Objects[]`，也可以提示用户确认后再应用。
-3. 只有被写回 `Objects[]` 的内容，才会成为下一次 recompute 的持久输入。
+3. 只有被写回 `Objects[]` 的内容，才会成为下一次 recompute 的持久输入；其中 `ReferenceShadow.brep` 也只作为引用恢复证据，而不是建模几何源。
 4. 后端不得在 recompute 中隐式修改并持久化前端 graph。
 
 ## diagnostics 与 HTTP 状态
@@ -260,6 +344,7 @@ CAD 业务问题通过 `diagnostics[]` 表达。只要 FFI 调用成功且返回
 1. `PropertyLinkList.values` / `PropertyLinkSubList.SubSet` 的输入字段规则。
 2. 如果前端需要完整派生输出，应显式把全部对象名放进 `recompute.objs`。
 3. `mesh`、`subshapes`、`stableSubname`、`elementReferenceUpdates` 都不是后端跨请求状态。
+4. `ReferenceShadow.brep` 是已批准的旧 subshape snapshot 例外，但只作为 Link 引用恢复证据，不作为显示、拾取或建模输入。
 
 ### 与 TopoNaming 持久 graph 的关系
 
@@ -274,6 +359,7 @@ TopoNaming 文档定义的是持久输入 graph。本文定义的是 `/cad/recom
 | 本次拾取 | `results[].subshapes` | 否 |
 | 本次稳定引用候选 | `results[].subshapes[].stableSubname` | 否，除非前端写回 `Objects[]` |
 | 写回建议 | `elementReferenceUpdates[]` | 否，除非前端应用到 `Objects[]` |
+| 引用恢复证据 | `PropertyLinkSub.ReferenceShadow[]` / `SubSet[].ReferenceShadow[]` | 是，可随 Link 属性保存；其中 `brep` 只允许保存被引用旧 subshape |
 
 ### 与旧 cad-web envelope 的关系
 
@@ -311,7 +397,7 @@ TopoNaming 文档定义的是持久输入 graph。本文定义的是 `/cad/recom
 7. 拾取消费 `results[].subshapes`。
 8. 保存后续 feature 引用时，优先写入选中项的 `stableSubname`。
 9. 收到 `elementReferenceUpdates` 后，前端决定是否应用到本地 `Objects[]`。
-10. 下一次 recompute 仍只以新的完整 `Objects[]` 为输入，不回传上一次的 `mesh`、`subshapes` 或 `elementReferenceUpdates`。
+10. 下一次 recompute 仍只以新的完整 `Objects[]` 为输入，不回传上一次的 `mesh`、`subshapes` 或 `elementReferenceUpdates`；如果前端应用了 `ReferenceShadow` 写回建议，它作为 Link 属性的一部分随 `Objects[]` 发送。
 
 ## 后端实现边界
 
@@ -333,8 +419,9 @@ CAD Core 职责：
 
 禁止事项：
 
-1. 不在 Web 层保存 BREP、mesh、subshape map、NamedShape 或 ElementMap。
+1. 不在 Web 层保存 mesh、subshape map、NamedShape 或 ElementMap；Web 层只能按接口透传 `ReferenceShadow.brep`，不能生成、缓存或解释 BREP。
 2. 不在 recompute 响应中返回可被前端当作持久模型的 `NamedShape` 对象。
 3. 不通过“根据上一次响应查表”的方式恢复引用。
 4. 不在后端隐式改写 `Objects[]`。
 5. 不把 CAD 业务 diagnostics 映射成 HTTP 500。
+6. 不在 `ReferenceShadow.brep` 之外新增任何 BREP 请求或响应字段。

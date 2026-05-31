@@ -9,8 +9,8 @@
 ## 几何库前后端架构
 - 当前几何库按前后端架构设计：前端负责保存和编辑完整的 FreeCAD 风格 `DocumentObject graph`，并在建模操作、参数修改或重算时把该 graph 作为请求数据发送给后端或 `cad-core` adapter。
 - 后端 / CAD Core 是无状态几何计算服务：每次收到请求后，只根据请求里的 `DocumentObject graph`、`recompute` 目标和运行时参数重新计算目标 shape，不依赖上一次请求留下的文档、会话或几何缓存。
-- `DocumentObject graph` 是唯一真实数据；BREP、shape、`NamedShape`、`ElementMap`、topomap、subshape map 和 mesh 都是单次请求中的计算产物，请求结束后不得作为前端或后端长期状态保存。
-- 后端只返回前端显示和拾取所需的 mesh、subshapes、完整 `subname` 与诊断信息；不要在请求或响应中传递 BREP，也不要把 BREP 作为前端或后端的长期状态保存。
+- `DocumentObject graph` 是唯一真实数据；shape、`NamedShape`、`ElementMap`、topomap、subshape map 和 mesh 都是单次请求中的计算产物，请求结束后不得作为前端或后端长期状态保存。已批准的唯一 BREP 例外是 `ReferenceShadow.brep`：它只能保存被引用单个 subshape 的旧几何快照，用作引用恢复证据，不能作为建模输入或完整对象 BREP。
+- 后端只返回前端显示和拾取所需的 mesh、subshapes、完整 `subname`、引用更新建议与诊断信息；除 `ReferenceShadow.brep` 这个旧 subshape snapshot 例外外，不要在请求或响应中传递 BREP，也不要把 BREP 作为前端或后端长期几何状态保存。
 - 前后端接口、拓扑命名、重算流程和阶段边界以 `docs/CADCore方案/00-CAD-Core抽取方案.md` 及其细化方案为准；实现中不得绕过这些文档定义的无状态 CAD Core 边界。
 
 ## 项目结构与模块组织
@@ -84,6 +84,7 @@
 - 拓扑命名相关改动优先查看 FreeCAD 的 `TopoShape*`、`TopoShapeMapper*`、`PropertyTopoShape*`、FaceMaker、WireJoiner 和 `cad-core/src/topo/`，保持命名、映射与索引语义一致。
 - 修复 FreeCAD parity、拓扑命名、内部面、几何排序或 fixture 偏差时，起初就必须按完整通用语义设计，优先补齐 FreeCAD / OpenCascade 对应的通用流程、历史映射与排序规则；不得用只覆盖单一 fixture 形态的窄路径或特异化处理替代通用实现。若短期不得不落窄路径，必须在相邻代码注释和方案文档中说明临时性、适用边界、FreeCAD 依据与后续通用化路径，并避免继续扩大 fixture 特判。
 - 公开 API、核心语义类型、executor、mapper/history 规则等承载 FreeCAD 几何库抽取语义的新增函数、结构体、枚举或字段，必须在相邻 C++ 注释或实现注释中标注 FreeCAD 依据：写明 FreeCAD 源文件绝对路径、类/函数名，并摘录能支撑当前语义的 FreeCAD 原文短句或字段名；不要只写“参考 FreeCAD”。普通 helper、内部实现细节、测试辅助结构若不承载 FreeCAD 语义，不强制标注。示例：`// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeaturePad.cpp::Pad::execute(), calls "buildExtrusion(ExtrudeOption::MakeFace | ExtrudeOption::MakeFuse)".`
+- 审计 FreeCAD 依据路径时，`/Users/li/...` 与 `/Users/admin/...` 只代表不同机器上的本地用户目录；只要后续仓库相对路径、源码文件、类/函数和关键短句一致，不得仅因 `li` / `admin` 用户目录不同判定依据路径不可追溯。若需要在当前机器复核，可把这两个前缀视为同一 FreeCAD 源码树根的等价用户目录前缀。
 
 ## FreeCAD 迁移实现纪律
 - 涉及 FreeCAD parity、草图内部面、拓扑命名、WireJoiner、FaceMaker、ShapeFix、特征重建或历史映射的实现，必须先给出 FreeCAD 调用链和 `cad-core` 分层映射，再写代码。最少要明确：FreeCAD 源文件绝对路径、类/函数、关键字段/短句、调用顺序、对应的 `document` / `graph` / `runtime` / `features` / `geometry` / `topo` / `adapters` 落点。
