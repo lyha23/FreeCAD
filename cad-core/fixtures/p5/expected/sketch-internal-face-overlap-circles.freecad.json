@@ -1,0 +1,15 @@
+{
+  "object": "Sketch",
+  "reference": "Geometry-equivalent FreeCAD oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildInternals() builds InternalShape with FaceMakerBuildFace and WireJoiner; two overlapping circles produce 3 bounded regions including the lens. Internal edge count is kept as a lower bound until exact split-edge naming oracle is frozen.",
+  "freecad_version": "1.2.0 revision 20260519",
+  "sketch_internal": {
+    "profile_ready": true,
+    "shape": "occt_internal_shape",
+    "internal_counts": {
+      "faces": 3
+    },
+    "min_internal_counts": {
+      "edges": 4
+    }
+  }
+}

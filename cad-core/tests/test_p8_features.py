@@ -60,14 +60,12 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p8_app_link_resolves_label_qualified_subshape_alias(self) -> None:
         result = self.run_recompute("app-link-label-qualified-sublist", "p8")
         link = result["objects"]["BoxLink"]
-        element_map = result["named_shapes"]["BoxLink"]["element_map"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(link["status"], "ok")
         self.assertEqual(link["link"], "app_link")
         self.assertEqual(link["linked_object"], "Box")
         self.assertEqual(link["shape"], "occt_face")
-        self.assertEqual(element_map["$PrettyBox.Face1"], "Face1")
         self.assert_object_matches_expected(result, "p8", "app-link-label-qualified-sublist")
 
     def test_p8_app_link_element_proxies_linked_shape(self) -> None:
@@ -107,32 +105,27 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p8_app_link_resolves_group_index_subshape_alias(self) -> None:
         result = self.run_recompute("app-link-element-list-sublist-index", "p8")
         link = result["objects"]["FaceLink"]
-        element_map = result["named_shapes"]["FaceLink"]["element_map"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(link["status"], "ok")
         self.assertEqual(link["linked_object"], "LinkGroup")
         self.assertEqual(link["shape"], "occt_face")
-        self.assertEqual(element_map["1.Face1"], "Face1")
         self.assert_object_matches_expected(result, "p8", "app-link-element-list-sublist-index")
 
     def test_p8_app_link_resolves_group_label_subshape_alias(self) -> None:
         result = self.run_recompute("app-link-element-list-sublist-label", "p8")
         link = result["objects"]["FaceLink"]
-        element_map = result["named_shapes"]["FaceLink"]["element_map"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(link["status"], "ok")
         self.assertEqual(link["linked_object"], "LinkGroup")
         self.assertEqual(link["shape"], "occt_face")
-        self.assertEqual(element_map["$PrettyB.Face1"], "Face1")
         self.assert_object_matches_expected(result, "p8", "app-link-element-list-sublist-label")
 
     def test_p8_app_link_resolves_hidden_group_label_subshape_alias(self) -> None:
         result = self.run_recompute("app-link-element-list-hidden-sublist-label", "p8")
         group = result["objects"]["LinkGroup"]
         link = result["objects"]["FaceLink"]
-        element_map = result["named_shapes"]["FaceLink"]["element_map"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(group["visible_elements"], ["LinkA"])
@@ -140,20 +133,17 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(link["status"], "ok")
         self.assertEqual(link["linked_object"], "LinkGroup")
         self.assertEqual(link["shape"], "occt_face")
-        self.assertEqual(element_map["$PrettyB.Face1"], "Face1")
         self.assert_object_matches_expected(result, "p8", "app-link-element-list-hidden-sublist-label")
 
     def test_p8_app_link_resolves_object_qualified_nested_subshape_alias(self) -> None:
         result = self.run_recompute("app-link-nested-object-qualified-sublist", "p8")
         link = result["objects"]["FaceLink"]
-        element_map = result["named_shapes"]["FaceLink"]["element_map"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(link["status"], "ok")
         self.assertEqual(link["link"], "app_link")
         self.assertEqual(link["linked_object"], "BoxLink")
         self.assertEqual(link["shape"], "occt_face")
-        self.assertEqual(element_map["BoxLink.Box.Face1"], "Face1")
         self.assert_object_matches_expected(result, "p8", "app-link-nested-object-qualified-sublist")
 
     def test_p8_app_link_group_respects_visibility_list(self) -> None:
@@ -185,34 +175,27 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p8_app_link_element_count_resolves_indexed_subshape_alias(self) -> None:
         result = self.run_recompute("app-link-element-count-sublist-index", "p8")
         link = result["objects"]["FaceLink"]
-        element_map = result["named_shapes"]["FaceLink"]["element_map"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(link["status"], "ok")
         self.assertEqual(link["linked_object"], "ArrayLink")
         self.assertEqual(link["shape"], "occt_face")
-        self.assertEqual(element_map["1.Face1"], "Face1")
-        self.assertEqual(element_map["Face1;:I1"], "Face1")
         self.assert_object_matches_expected(result, "p8", "app-link-element-count-sublist-index")
 
     def test_p8_app_link_element_count_resolves_target_label_subshape_alias(self) -> None:
         result = self.run_recompute("app-link-element-count-sublist-target-label", "p8")
         link = result["objects"]["FaceLink"]
-        element_map = result["named_shapes"]["FaceLink"]["element_map"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(link["status"], "ok")
         self.assertEqual(link["linked_object"], "ArrayLink")
         self.assertEqual(link["shape"], "occt_face")
-        self.assertEqual(element_map["$PrettyBox.Face1"], "Face1")
-        self.assertEqual(element_map["0.Face1"], "Face1")
         self.assert_object_matches_expected(result, "p8", "app-link-element-count-sublist-target-label")
 
     def test_p8_app_link_element_count_resolves_hidden_indexed_subshape_alias(self) -> None:
         result = self.run_recompute("app-link-element-count-hidden-sublist-index", "p8")
         group = result["objects"]["ArrayLink"]
         link = result["objects"]["FaceLink"]
-        element_map = result["named_shapes"]["FaceLink"]["element_map"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(group["visible_indices"], [0])
@@ -220,7 +203,6 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(link["status"], "ok")
         self.assertEqual(link["linked_object"], "ArrayLink")
         self.assertEqual(link["shape"], "occt_face")
-        self.assertEqual(element_map["1.Face1"], "Face1")
         self.assert_object_matches_expected(result, "p8", "app-link-element-count-hidden-sublist-index")
 
     def test_p8_app_link_preserves_terminal_stable_history(self) -> None:

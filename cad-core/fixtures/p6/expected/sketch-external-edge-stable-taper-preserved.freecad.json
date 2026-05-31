@@ -1,0 +1,8 @@
+{
+  "reference": "FreeCAD stable subname oracle pending: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.h::TopoShape::makeShapeWithElementMap() maps element names from shape history, but this taper-preserved case still needs a dedicated native ElementMap oracle before freezing geometry or named-shape golden.",
+  "freecad_version": "1.2.0 revision 20260519",
+  "known_gap": {
+    "kind": "stable_subname_oracle_pending",
+    "reason": "Do not freeze taper-preserved stable subname behavior from current cad-core output."
+  }
+}

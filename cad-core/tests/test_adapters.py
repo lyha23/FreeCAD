@@ -9,6 +9,25 @@ from .fixture_runner import ROOT, CadCoreFixtureTestCase
 
 
 class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
+    def assert_ffi_mesh_matches_expected_summary(self, result: dict, group: str, fixture: str) -> None:
+        expected = self.expected_freecad(group, fixture)
+        summary = expected["mesh_summary"]
+        mesh = result["results"][0]["mesh"]
+        vertices = mesh["vertices"]
+        actual_bbox = {
+            "min": [min(vertex[index] for vertex in vertices) for index in range(3)],
+            "max": [max(vertex[index] for vertex in vertices) for index in range(3)],
+        }
+
+        self.assert_bbox_close_delta(
+            actual_bbox,
+            summary["bbox"]["min"],
+            summary["bbox"]["max"],
+            summary.get("bbox_delta", expected.get("bbox_delta", 1e-6)),
+        )
+        self.assertEqual(len(vertices), summary["vertex_count"])
+        self.assertEqual(len(mesh["indices"]) // 3, summary["triangle_count"])
+
     def test_c_api_returns_sketch_internal_profile_mesh(self) -> None:
         result = self.run_recompute_ffi("sketch-internal-face", "p5")
         sketch = result["results"][0]
@@ -34,29 +53,18 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_c_api_applies_sketch_plane_frame_to_internal_profile_mesh(self) -> None:
         result = self.run_recompute_ffi("sketch-plane-frame-internal-face", "p5")
         sketch = result["results"][0]
-        vertices = sketch["mesh"]["vertices"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertIsNotNone(sketch["mesh"])
-        self.assertAlmostEqual(min(vertex[0] for vertex in vertices), -4.0)
-        self.assertAlmostEqual(max(vertex[0] for vertex in vertices), 1.0)
-        self.assertAlmostEqual(min(vertex[1] for vertex in vertices), 2.0)
-        self.assertAlmostEqual(max(vertex[1] for vertex in vertices), 12.0)
-        self.assertAlmostEqual(min(vertex[2] for vertex in vertices), 3.0)
-        self.assertAlmostEqual(max(vertex[2] for vertex in vertices), 3.0)
+        self.assert_ffi_mesh_matches_expected_summary(result, "p5", "sketch-plane-frame-internal-face")
 
     def test_c_api_composes_sketch_plane_frame_with_local_placement(self) -> None:
         result = self.run_recompute_ffi("sketch-plane-frame-placement", "p5")
         sketch = result["results"][0]
-        vertices = sketch["mesh"]["vertices"]
 
         self.assertEqual(result["diagnostics"], [])
-        self.assertAlmostEqual(min(vertex[0] for vertex in vertices), 2.0)
-        self.assertAlmostEqual(max(vertex[0] for vertex in vertices), 12.0)
-        self.assertAlmostEqual(min(vertex[1] for vertex in vertices), 3.0)
-        self.assertAlmostEqual(max(vertex[1] for vertex in vertices), 8.0)
-        self.assertAlmostEqual(min(vertex[2] for vertex in vertices), 3.0)
-        self.assertAlmostEqual(max(vertex[2] for vertex in vertices), 3.0)
+        self.assertIsNotNone(sketch["mesh"])
+        self.assert_ffi_mesh_matches_expected_summary(result, "p5", "sketch-plane-frame-placement")
 
     def test_c_api_rejects_invalid_sketch_plane_frame(self) -> None:
         result = self.run_recompute_ffi("sketch-plane-frame-invalid", "p5")

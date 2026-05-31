@@ -2,9 +2,15 @@
 
 #include "cad_core/geometry/face_maker.h"
 
+#include <BRepAlgoAPI_Splitter.hxx>
 #include <BRep_Builder.hxx>
+#include <BRepBuilderAPI_MakeWire.hxx>
+#include <BRep_Tool.hxx>
+#include <Precision.hxx>
 #include <TopExp_Explorer.hxx>
+#include <TopExp.hxx>
 #include <TopAbs_ShapeEnum.hxx>
+#include <TopTools_ListOfShape.hxx>
 #include <TopoDS_Compound.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Edge.hxx>
@@ -22,18 +28,135 @@ std::vector<TopoDS_Edge> wireEdges(const TopoDS_Wire& wire)
     return edges;
 }
 
-std::vector<TopoDS_Edge> allOpenEdgesExcept(const std::vector<TopoDS_Wire>& wires,
-                                            std::size_t omittedIndex)
+bool samePoint(const gp_Pnt& lhs, const gp_Pnt& rhs)
+{
+    return lhs.SquareDistance(rhs) <= Precision::SquareConfusion();
+}
+
+std::pair<gp_Pnt, gp_Pnt> edgeEndpoints(const TopoDS_Edge& edge)
+{
+    return {BRep_Tool::Pnt(TopExp::FirstVertex(edge)), BRep_Tool::Pnt(TopExp::LastVertex(edge))};
+}
+
+bool edgeMatchesSourceVertices(const TopoDS_Edge& edge, const TopoDS_Edge& source)
+{
+    const auto [first, last] = edgeEndpoints(edge);
+    const auto [sourceFirst, sourceLast] = edgeEndpoints(source);
+    return (samePoint(first, sourceFirst) && samePoint(last, sourceLast))
+        || (samePoint(first, sourceLast) && samePoint(last, sourceFirst));
+}
+
+std::vector<TopoDS_Edge> allOpenEdgesExcept(const std::vector<std::vector<TopoDS_Edge>>& wires,
+                                            std::size_t omittedWireIndex,
+                                            std::size_t omittedEdgeIndex)
 {
     std::vector<TopoDS_Edge> edges;
-    for (std::size_t index = 0; index < wires.size(); ++index) {
-        if (index == omittedIndex) {
-            continue;
+    for (std::size_t wireIndex = 0; wireIndex < wires.size(); ++wireIndex) {
+        for (std::size_t edgeIndex = 0; edgeIndex < wires[wireIndex].size(); ++edgeIndex) {
+            if (wireIndex == omittedWireIndex && edgeIndex == omittedEdgeIndex) {
+                continue;
+            }
+            edges.push_back(wires[wireIndex][edgeIndex]);
         }
-        const auto currentEdges = wireEdges(wires[index]);
-        edges.insert(edges.end(), currentEdges.begin(), currentEdges.end());
     }
     return edges;
+}
+
+std::vector<TopoDS_Edge> boundaryEdges(const std::vector<TopoDS_Wire>& faceWires)
+{
+    std::vector<TopoDS_Edge> edges;
+    for (const TopoDS_Wire& wire : faceWires) {
+        const auto current = wireEdges(wire);
+        edges.insert(edges.end(), current.begin(), current.end());
+    }
+    return edges;
+}
+
+std::vector<TopoDS_Edge> splitOpenEdgeByFaceBoundaries(const TopoDS_Edge& edge,
+                                                       const std::vector<TopoDS_Edge>& faceEdges)
+{
+    if (faceEdges.empty()) {
+        return {edge};
+    }
+
+    TopTools_ListOfShape arguments;
+    arguments.Append(edge);
+    TopTools_ListOfShape tools;
+    for (const TopoDS_Edge& faceEdge : faceEdges) {
+        if (!faceEdge.IsNull()) {
+            tools.Append(faceEdge);
+        }
+    }
+    if (tools.IsEmpty()) {
+        return {edge};
+    }
+
+    BRepAlgoAPI_Splitter splitter;
+    splitter.SetArguments(arguments);
+    splitter.SetTools(tools);
+    splitter.SetNonDestructive(Standard_True);
+    splitter.Build();
+    if (!splitter.IsDone() || splitter.Shape().IsNull()) {
+        return {edge};
+    }
+
+    std::vector<TopoDS_Edge> fragments;
+    for (TopExp_Explorer explorer(splitter.Shape(), TopAbs_EDGE); explorer.More(); explorer.Next()) {
+        fragments.push_back(TopoDS::Edge(explorer.Current()));
+    }
+    if (fragments.empty()) {
+        return {edge};
+    }
+    return fragments;
+}
+
+std::vector<TopoDS_Wire> wiresFromEdges(const std::vector<TopoDS_Edge>& edges)
+{
+    std::vector<TopoDS_Wire> wires;
+    std::vector<bool> used(edges.size(), false);
+
+    for (std::size_t startIndex = 0; startIndex < edges.size(); ++startIndex) {
+        if (used[startIndex] || edges[startIndex].IsNull()) {
+            continue;
+        }
+
+        BRepBuilderAPI_MakeWire builder;
+        builder.Add(edges[startIndex]);
+        used[startIndex] = true;
+        auto [firstPoint, currentEnd] = edgeEndpoints(edges[startIndex]);
+        (void)firstPoint;
+
+        bool extended = true;
+        while (extended) {
+            extended = false;
+            for (std::size_t index = 0; index < edges.size(); ++index) {
+                if (used[index] || edges[index].IsNull()) {
+                    continue;
+                }
+                const auto [edgeStart, edgeEnd] = edgeEndpoints(edges[index]);
+                if (samePoint(edgeStart, currentEnd)) {
+                    builder.Add(edges[index]);
+                    currentEnd = edgeEnd;
+                    used[index] = true;
+                    extended = true;
+                    break;
+                }
+                if (samePoint(edgeEnd, currentEnd)) {
+                    builder.Add(TopoDS::Edge(edges[index].Reversed()));
+                    currentEnd = edgeStart;
+                    used[index] = true;
+                    extended = true;
+                    break;
+                }
+            }
+        }
+
+        if (builder.IsDone()) {
+            wires.push_back(builder.Wire());
+        }
+    }
+
+    return wires;
 }
 
 }  // namespace
@@ -51,7 +174,14 @@ void WireJoiner::setMergeEdges(bool enabled)
 void WireJoiner::addOpenWire(const TopoDS_Wire& wire)
 {
     if (!wire.IsNull()) {
-        openWires_.push_back(WireInfo{wire, false});
+        openWires_.push_back(WireInfo{wire, wireEdges(wire), {}});
+    }
+}
+
+void WireJoiner::addSourceEdge(const TopoDS_Edge& edge)
+{
+    if (!edge.IsNull()) {
+        sourceEdges_.push_back(edge);
     }
 }
 
@@ -61,21 +191,34 @@ void WireJoiner::classifyBoundedFaceOwnership(const std::vector<TopoDS_Wire>& fa
         return;
     }
 
-    std::vector<TopoDS_Wire> allWires;
-    allWires.reserve(openWires_.size());
-    for (const WireInfo& info : openWires_) {
-        allWires.push_back(info.wire);
+    const std::vector<TopoDS_Edge> faceBoundaryEdges = boundaryEdges(faceWires);
+    for (WireInfo& info : openWires_) {
+        std::vector<TopoDS_Edge> fragments;
+        for (const TopoDS_Edge& edge : info.edges) {
+            const auto split = splitOpenEdgeByFaceBoundaries(edge, faceBoundaryEdges);
+            fragments.insert(fragments.end(), split.begin(), split.end());
+        }
+        info.edges = fragments;
+        info.consumedByBoundedFace.assign(info.edges.size(), false);
     }
 
-    for (std::size_t index = 0; index < openWires_.size(); ++index) {
-        const auto edgesWithoutCurrent = allOpenEdgesExcept(allWires, index);
-        const FaceMakerBuildFaceResult withoutCurrent =
-            makeFacesFromClosedWiresAndSplitEdgesDetailed(faceWires, edgesWithoutCurrent);
-        openWires_[index].consumedByBoundedFace = withoutCurrent.faceCount < fullFaceCount;
+    std::vector<std::vector<TopoDS_Edge>> allWireEdges;
+    allWireEdges.reserve(openWires_.size());
+    for (const WireInfo& info : openWires_) {
+        allWireEdges.push_back(info.edges);
+    }
+
+    for (std::size_t wireIndex = 0; wireIndex < openWires_.size(); ++wireIndex) {
+        for (std::size_t edgeIndex = 0; edgeIndex < openWires_[wireIndex].edges.size(); ++edgeIndex) {
+            const auto edgesWithoutCurrent = allOpenEdgesExcept(allWireEdges, wireIndex, edgeIndex);
+            const FaceMakerBuildFaceResult withoutCurrent =
+                makeFacesFromClosedWiresAndSplitEdgesDetailed(faceWires, edgesWithoutCurrent);
+            openWires_[wireIndex].consumedByBoundedFace[edgeIndex] = withoutCurrent.faceCount < fullFaceCount;
+        }
     }
 }
 
-std::optional<TopoDS_Shape> WireJoiner::getOpenWires(const std::string& historyPrefix) const
+std::optional<TopoDS_Shape> WireJoiner::getOpenWires(const std::string& historyPrefix, bool noOriginal) const
 {
     (void)historyPrefix;
     (void)tightBound_;
@@ -83,9 +226,37 @@ std::optional<TopoDS_Shape> WireJoiner::getOpenWires(const std::string& historyP
 
     std::vector<TopoDS_Wire> liveWires;
     for (const WireInfo& info : openWires_) {
-        if (!info.consumedByBoundedFace) {
-            liveWires.push_back(info.wire);
+        std::vector<TopoDS_Edge> liveEdges;
+        for (std::size_t edgeIndex = 0; edgeIndex < info.edges.size(); ++edgeIndex) {
+            if (edgeIndex < info.consumedByBoundedFace.size() && info.consumedByBoundedFace[edgeIndex]) {
+                continue;
+            }
+            liveEdges.push_back(info.edges[edgeIndex]);
         }
+        if (liveEdges.empty()) {
+            continue;
+        }
+        if (noOriginal && !sourceEdges_.empty()) {
+            bool original = true;
+            for (const TopoDS_Edge& edge : liveEdges) {
+                bool found = false;
+                for (const TopoDS_Edge& source : sourceEdges_) {
+                    if (edgeMatchesSourceVertices(edge, source)) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    original = false;
+                    break;
+                }
+            }
+            if (original) {
+                continue;
+            }
+        }
+        const auto currentWires = wiresFromEdges(liveEdges);
+        liveWires.insert(liveWires.end(), currentWires.begin(), currentWires.end());
     }
     if (liveWires.empty()) {
         return std::nullopt;

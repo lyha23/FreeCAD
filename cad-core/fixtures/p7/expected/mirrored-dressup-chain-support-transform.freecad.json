@@ -1,0 +1,8 @@
+{
+  "reference": "FreeCAD transformed dress-up chain oracle pending: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureTransformed.cpp handles transformed feature chains, but this chained Fillet/Chamfer mirror support-transform case still needs a native FreeCAD oracle before freezing geometry or named-shape golden.",
+  "freecad_version": "1.2.0 revision 20260519",
+  "known_gap": {
+    "kind": "transformed_dressup_oracle_pending",
+    "reason": "Do not freeze chained dress-up transform geometry from current cad-core output; focused flow tests only validate support-transform propagation."
+  }
+}

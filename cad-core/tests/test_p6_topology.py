@@ -75,14 +75,9 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def test_p6_body_split_history_promotes_unique_same_kind_targets(self) -> None:
         result = self.run_recompute("body-split-history", "p6")
-        body_named_shape = result["named_shapes"]["Body"]
-        history_kinds = {item["kind"] for item in body_named_shape["history"]}
 
         self.assertEqual(result["diagnostics"], [])
         self.assert_result_matches_expected(result, "p6", "body-split-history")
-        self.assertEqual(body_named_shape["element_map"]["Pad.Face5"], "Face4")
-        self.assertEqual(body_named_shape["element_map"]["Pocket.Edge1"], "Edge22")
-        self.assertNotIn("split", history_kinds)
 
     def test_p6_stable_subname_history_diagnostics(self) -> None:
         for fixture, code, object_name, property_name, stable_subname in [

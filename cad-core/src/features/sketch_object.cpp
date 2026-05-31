@@ -332,6 +332,7 @@ struct SketchProfileWires {
     std::vector<TopoDS_Wire> closedWires;
     std::vector<TopoDS_Wire> openWires;
     std::vector<TopoDS_Edge> openEdges;
+    std::vector<TopoDS_Edge> sourceEdges;
 };
 
 struct ProfileFaceBuild {
@@ -3312,6 +3313,7 @@ std::optional<SketchProfileWires> makeProfileWiresFromEdges(const std::vector<Sk
         if (!wireBuilder.IsDone()) {
             return std::nullopt;
         }
+        result.sourceEdges.insert(result.sourceEdges.end(), builtEdges.begin(), builtEdges.end());
         if (samePoint(firstStart, currentEnd)) {
             result.closedWires.push_back(wireBuilder.Wire());
         }
@@ -3463,6 +3465,7 @@ ProfileFaceBuild buildOptionalProfileFace(const std::vector<SketchProfileEdge>& 
         input.faceWires.insert(input.faceWires.end(), edgeWires->closedWires.begin(), edgeWires->closedWires.end());
         input.openWires.insert(input.openWires.end(), edgeWires->openWires.begin(), edgeWires->openWires.end());
         input.openEdges.insert(input.openEdges.end(), edgeWires->openEdges.begin(), edgeWires->openEdges.end());
+        input.sourceEdges.insert(input.sourceEdges.end(), edgeWires->sourceEdges.begin(), edgeWires->sourceEdges.end());
     }
     for (const auto& circle : circles) {
         const auto wire = makeWireFromCircle(circle);

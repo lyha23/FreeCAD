@@ -48,13 +48,16 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
         WireJoiner joiner;
         joiner.setTightBound(true);
         joiner.setMergeEdges(true);
+        for (const TopoDS_Edge& edge : input.sourceEdges) {
+            joiner.addSourceEdge(edge);
+        }
         for (const TopoDS_Wire& wire : input.openWires) {
             joiner.addOpenWire(wire);
         }
         if (faceResult.splitProducedBoundedFaces) {
             joiner.classifyBoundedFaceOwnership(input.faceWires, faceResult.faceCount);
         }
-        const auto openShape = joiner.getOpenWires("SKF");
+        const auto openShape = joiner.getOpenWires("SKF", true);
         if (openShape && !openShape->IsNull()) {
             result.internalShape = compoundShape(*faceResult.shape, *openShape);
         }

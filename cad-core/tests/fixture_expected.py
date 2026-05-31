@@ -76,6 +76,15 @@ class ExpectedFixtureAssertions:
             if key in counts:
                 self.assertEqual(obj[actual_key], counts[key])
 
+        min_counts = internal_expected.get("min_internal_counts", {})
+        for key, actual_key in [
+            ("faces", "internal_face_count"),
+            ("edges", "internal_edge_count"),
+            ("vertices", "internal_vertex_count"),
+        ]:
+            if key in min_counts:
+                self.assertGreaterEqual(obj[actual_key], min_counts[key])
+
         public_counts = internal_expected.get("public_counts", {})
         for prefix, key in [("Face", "faces"), ("Edge", "edges"), ("Vertex", "vertices")]:
             if key in public_counts:
@@ -188,6 +197,8 @@ class ExpectedFixtureAssertions:
         history = named_shape.get("history", [])
         for kind in expected.get("history_kinds_include", []):
             self.assertTrue(any(item["kind"] == kind for item in history))
+        for kind in expected.get("history_kinds_absent", []):
+            self.assertFalse(any(item["kind"] == kind for item in history))
 
         all_history_sources = {
             source

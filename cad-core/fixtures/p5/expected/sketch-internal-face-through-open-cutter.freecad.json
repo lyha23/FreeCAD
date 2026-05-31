@@ -1,0 +1,16 @@
+{
+  "object": "Sketch",
+  "reference": "FreeCAD-aligned source-code oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildInternals() calls FaceMakerBuildFace and WireJoiner::getOpenWires(openWires, \"SKF\"); /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp::WireJoinerP::splitEdges() splits source edges before final openWireCompound export. A single open cutter crossing the bounded rectangle should split the profile into two InternalFace regions while keeping the outside split fragments as non-original open-wire evidence.",
+  "freecad_version": "1.2.0 revision 20260519",
+  "sketch_internal": {
+    "profile_ready": true,
+    "shape": "occt_internal_shape",
+    "internal_counts": {
+      "faces": 2
+    },
+    "min_internal_counts": {
+      "edges": 9,
+      "vertices": 8
+    }
+  }
+}

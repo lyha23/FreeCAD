@@ -1,0 +1,23 @@
+{
+  "object": "Sketch",
+  "reference": "Geometry-equivalent oracle for Chili::SketchPlaneFrame composed with App::PropertyPlacement: the 10x5 local sketch is first framed at Origin=[1,2,3] and then offset by Placement.Base=[1,1,0].",
+  "freecad_version": "1.2.0 revision 20260519",
+  "sketch_internal": {
+    "profile_ready": true,
+    "shape": "occt_internal_shape",
+    "internal_counts": {
+      "faces": 1,
+      "edges": 4,
+      "vertices": 4
+    }
+  },
+  "mesh_summary": {
+    "bbox": {
+      "min": [2.0, 3.0, 3.0],
+      "max": [12.0, 8.0, 3.0]
+    },
+    "volume": 0.0,
+    "vertex_count": 4,
+    "triangle_count": 2
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "object": "Sketch",
+  "reference": "FreeCAD oracle pending: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildInternals() uses FaceMakerBuildFace, but this fixture needs a dedicated BSpline self-intersection InternalShape oracle before freezing internal face or edge counts.",
+  "freecad_version": "1.2.0 revision 20260519",
+  "known_gap": {
+    "kind": "internal_shape_oracle_pending",
+    "reason": "Do not freeze BSpline self-intersection InternalShape counts or stable internal subnames from current cad-core output."
+  }
+}

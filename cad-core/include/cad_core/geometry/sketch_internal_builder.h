@@ -13,6 +13,10 @@ struct SketchInternalBuildInput {
     std::vector<TopoDS_Wire> faceWires;
     std::vector<TopoDS_Wire> openWires;
     std::vector<TopoDS_Edge> openEdges;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::getOpenWires(), builds a source compound from sourceEdgeArray before
+    // noOriginal filtering; cad-core keeps the same source-edge set for open-wire filtering.
+    std::vector<TopoDS_Edge> sourceEdges;
 };
 
 struct SketchInternalBuildResult {

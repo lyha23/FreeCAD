@@ -21,6 +21,9 @@
           "Pocket.Edge1"
         ]
       },
+      "history_kinds_absent": [
+        "split"
+      ],
       "history_elements": {
         "deleted": [
           "Pocket.Face5"
