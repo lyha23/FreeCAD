@@ -384,14 +384,89 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["status"], "ok")
         self.assert_object_matches_expected(result, "p5", "sketch-internal-face-split-line")
 
-    def test_p5_unsupported_splitter_does_not_fake_internal_region(self) -> None:
-        result = self.run_recompute("sketch-internal-face-unsupported-splitter", "p5")
+    def test_p5_cross_cutters_build_four_internal_faces(self) -> None:
+        result = self.run_recompute("sketch-internal-face-cross-cutters", "p5")
         sketch = result["objects"]["Sketch"]
 
-        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_profile_region"])
+        self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assertFalse(sketch["profile_ready"])
-        self.assertNotIn("Sketch", result["mesh"])
+        self.assertEqual(sketch["internal_face_count"], 4)
+        self.assertGreaterEqual(sketch["internal_edge_count"], 12)
+
+    def test_p5_overlapping_closed_profiles_split_into_disjoint_internal_faces(self) -> None:
+        result = self.run_recompute("sketch-internal-face-overlap-rectangles", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["internal_face_count"], 3)
+        self.assertGreaterEqual(sketch["internal_edge_count"], 12)
+
+    def test_p5_overlapping_circles_split_into_lens_internal_faces(self) -> None:
+        result = self.run_recompute("sketch-internal-face-overlap-circles", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["internal_face_count"], 3)
+        self.assertGreaterEqual(sketch["internal_edge_count"], 4)
+
+    def test_p5_three_overlapping_circles_split_into_venn_internal_faces(self) -> None:
+        result = self.run_recompute("sketch-internal-face-three-overlap-circles", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["internal_face_count"], 7)
+        self.assertGreaterEqual(sketch["internal_edge_count"], 12)
+
+    def test_p5_self_intersecting_single_wire_splits_into_bounded_regions(self) -> None:
+        result = self.run_recompute("sketch-internal-face-bowtie-lines", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["internal_face_count"], 2)
+        self.assertGreaterEqual(sketch["internal_edge_count"], 6)
+
+    def test_p5_self_intersecting_bspline_splits_into_bounded_regions(self) -> None:
+        result = self.run_recompute("sketch-internal-face-figure8-bspline", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["internal_face_count"], 2)
+        self.assertGreaterEqual(sketch["internal_edge_count"], 2)
+
+    def test_p5_cross_pattern_closed_profiles_split_into_five_internal_faces(self) -> None:
+        result = self.run_recompute("sketch-internal-face-cross-pattern", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["internal_face_count"], 5)
+        self.assertGreaterEqual(sketch["internal_edge_count"], 16)
+
+    def test_p5_dangling_open_line_keeps_bounded_internal_face(self) -> None:
+        result = self.run_recompute("sketch-internal-face-dangling-line", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertTrue(sketch["profile_ready"])
+        self.assertEqual(sketch["internal_face_count"], 1)
+        self.assertGreaterEqual(sketch["internal_edge_count"], 5)
+        self.assertIn("Sketch", result["mesh"])
+
+    def test_p5_split_and_dangling_open_wires_keep_leftover_internal_edge(self) -> None:
+        result = self.run_recompute("sketch-internal-face-split-and-dangling", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["internal_face_count"], 2)
+        self.assertGreaterEqual(sketch["internal_edge_count"], 8)
+        self.assertIn("Sketch", result["mesh"])
 
     def test_p5_pad_uses_selected_internal_face_sublist(self) -> None:
         result = self.run_recompute("pad-internal-face-sublist", "p5")
@@ -402,6 +477,27 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["internal_face_count"], 2)
         self.assertEqual(pad["status"], "ok")
         self.assertAlmostEqual(pad["volume"], 250.0)
+
+    def test_p5_pad_uses_selected_internal_face_from_cross_cutters(self) -> None:
+        result = self.run_recompute("pad-internal-face-cross-cutters-sublist", "p5")
+        sketch = result["objects"]["Sketch"]
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["internal_face_count"], 4)
+        self.assertEqual(pad["status"], "ok")
+        self.assertAlmostEqual(pad["volume"], 250.0)
+
+    def test_p5_pad_uses_bounded_profile_when_sketch_has_dangling_open_line(self) -> None:
+        result = self.run_recompute("pad-dangling-line-profile", "p5")
+        sketch = result["objects"]["Sketch"]
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["internal_face_count"], 1)
+        self.assertGreaterEqual(sketch["internal_edge_count"], 5)
+        self.assertEqual(pad["status"], "ok")
+        self.assertAlmostEqual(pad["volume"], 1000.0)
 
     def test_p5_pad_requires_sublist_for_multi_internal_face_sketch(self) -> None:
         result = self.run_recompute("pad-internal-face-missing-sublist", "p5")

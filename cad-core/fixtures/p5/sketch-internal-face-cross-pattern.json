@@ -1,0 +1,23 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [-5, -15], "end": [5, -15]},
+          {"kind": "LineSegment", "start": [5, -15], "end": [5, 15]},
+          {"kind": "LineSegment", "start": [5, 15], "end": [-5, 15]},
+          {"kind": "LineSegment", "start": [-5, 15], "end": [-5, -15]},
+          {"kind": "LineSegment", "start": [-15, -5], "end": [15, -5]},
+          {"kind": "LineSegment", "start": [15, -5], "end": [15, 5]},
+          {"kind": "LineSegment", "start": [15, 5], "end": [-15, 5]},
+          {"kind": "LineSegment", "start": [-15, 5], "end": [-15, -5]}
+        ],
+        "Constraints": []
+      }
+    }
+  ],
+  "recompute": {"objs": ["Sketch"]}
+}

@@ -42,6 +42,8 @@ add_library(cad-core-lib STATIC
   src/geometry/placement.cpp
   src/geometry/refine_model.cpp
   src/geometry/shape_exporter.cpp
+  src/geometry/sketch_internal_builder.cpp
+  src/geometry/wire_joiner.cpp
   src/graph/recompute_plan.cpp
   src/runtime/compute_context.cpp
   src/runtime/diagnostics.cpp

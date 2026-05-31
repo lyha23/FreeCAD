@@ -1,9 +1,9 @@
 #include "cad_core/features/sketch_object.h"
 
 #include "cad_core/features/feature_executor.h"
-#include "cad_core/geometry/face_maker.h"
 #include "cad_core/geometry/placement.h"
 #include "cad_core/geometry/shape_exporter.h"
+#include "cad_core/geometry/sketch_internal_builder.h"
 #include "cad_core/topo/element_map.h"
 #include "cad_core/topo/named_shape.h"
 #include "cad_core/topo/subshape_map.h"
@@ -335,8 +335,9 @@ struct SketchProfileWires {
 };
 
 struct ProfileFaceBuild {
-    std::optional<TopoDS_Shape> shape;
-    bool splitFailed = false;
+    std::optional<TopoDS_Shape> profileShape;
+    std::optional<TopoDS_Shape> internalShape;
+    bool faceMakerFailed = false;
     bool requiresSubshapeSelection = false;
 };
 
@@ -3453,36 +3454,41 @@ ProfileFaceBuild buildOptionalProfileFace(const std::vector<SketchProfileEdge>& 
                                           const std::vector<SketchCircle>& circles,
                                           const std::vector<SketchEllipse>& ellipses)
 {
-    std::vector<TopoDS_Wire> wires;
-    std::vector<TopoDS_Edge> splitEdges;
+    geometry::SketchInternalBuildInput input;
     if (!edges.empty()) {
         auto edgeWires = makeProfileWiresFromEdges(edges);
         if (!edgeWires) {
             return {};
         }
-        wires.insert(wires.end(), edgeWires->closedWires.begin(), edgeWires->closedWires.end());
-        splitEdges.insert(splitEdges.end(), edgeWires->openEdges.begin(), edgeWires->openEdges.end());
+        input.faceWires.insert(input.faceWires.end(), edgeWires->closedWires.begin(), edgeWires->closedWires.end());
+        input.openWires.insert(input.openWires.end(), edgeWires->openWires.begin(), edgeWires->openWires.end());
+        input.openEdges.insert(input.openEdges.end(), edgeWires->openEdges.begin(), edgeWires->openEdges.end());
     }
     for (const auto& circle : circles) {
         const auto wire = makeWireFromCircle(circle);
         if (!wire) {
             return {};
         }
-        wires.push_back(*wire);
+        input.faceWires.push_back(*wire);
     }
     for (const auto& ellipse : ellipses) {
         const auto wire = makeWireFromEllipse(ellipse);
         if (!wire) {
             return {};
         }
-        wires.push_back(*wire);
+        input.faceWires.push_back(*wire);
     }
 
-    if (wires.empty()) {
+    if (input.faceWires.empty()) {
         return {};
     }
-    auto shape = geometry::makeFacesFromClosedWiresAndSplitEdges(wires, splitEdges);
-    return ProfileFaceBuild{shape, !splitEdges.empty() && !shape, !splitEdges.empty() && shape.has_value()};
+    const auto result = geometry::buildSketchInternals(input);
+    return ProfileFaceBuild{
+        result.profileShape,
+        result.internalShape,
+        result.faceMakerFailed,
+        result.requiresSubshapeSelection,
+    };
 }
 
 std::size_t countSubshapesOfKind(const nlohmann::json& subshapes, const std::string& kind)
@@ -4416,7 +4422,7 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
     std::optional<TopoDS_Shape> profileShape;
     std::optional<TopoDS_Shape> internalShape;
     const ProfileFaceBuild profileFace = buildOptionalProfileFace(edges, circles, ellipses);
-    if (profileFace.splitFailed) {
+    if (profileFace.faceMakerFailed) {
         // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
         // ::SketchObject::buildInternals() delegates split-region construction to
         // "Part::FaceMakerBuildFace"; unsupported open splitters must not silently fall
@@ -4428,11 +4434,13 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
                                object.name,
                                "Geometry");
     }
-    if (profileFace.shape) {
-        profileShape = *profileFace.shape;
-        // This is the bounded-face subset of FreeCAD's buildInternals() path. Full
-        // WireJoiner open-wire ledger/history remains separate topology work.
-        internalShape = *profileFace.shape;
+    if (profileFace.profileShape) {
+        profileShape = *profileFace.profileShape;
+    }
+    if (profileFace.internalShape) {
+        // This is the bounded-face subset of FreeCAD's buildInternals() path plus current
+        // open-wire carry-through. Full WireJoiner ownership/history remains separate topology work.
+        internalShape = *profileFace.internalShape;
     }
 
     if (hasPlacement) {

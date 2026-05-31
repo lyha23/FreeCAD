@@ -9,6 +9,12 @@
 
 namespace cad_core::geometry {
 
+struct FaceMakerBuildFaceResult {
+    std::optional<TopoDS_Shape> shape;
+    std::size_t faceCount = 0;
+    bool splitProducedBoundedFaces = false;
+};
+
 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBullseye.cpp
 // ::FaceDriller::addHole(), adds inner wires to the selected outer face; this is the current
 // closed-wire subset and not the full FaceMakerBuildFace / WireJoiner split ledger.
@@ -17,6 +23,8 @@ std::optional<TopoDS_Shape> makeFaceWithHolesFromClosedWires(const std::vector<T
 // ::SketchObject::buildInternals() calls makeElementFace(..., "Part::FaceMakerBuildFace", ...)
 // before WireJoiner open-wire handling. This helper covers the bounded-face split subset for
 // closed profile wires plus on-face open splitter edges.
+FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(const std::vector<TopoDS_Wire>& wires,
+                                                                       const std::vector<TopoDS_Edge>& splitEdges);
 std::optional<TopoDS_Shape> makeFacesFromClosedWiresAndSplitEdges(const std::vector<TopoDS_Wire>& wires,
                                                                   const std::vector<TopoDS_Edge>& splitEdges);
 
