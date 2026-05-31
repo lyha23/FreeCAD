@@ -3116,6 +3116,37 @@ std::vector<SketchProfileEdge> profileEdges(const std::vector<SketchSegment>& se
     return edges;
 }
 
+std::vector<SketchProfileEdge> faceMakerProfileEdges(const std::vector<SketchProfileEdge>& edges)
+{
+    std::vector<SketchProfileEdge> expanded;
+    expanded.reserve(edges.size());
+
+    for (const auto& edge : edges) {
+        if (edge.kind != SketchProfileEdgeKind::BSpline || edge.degree != 1 || edge.poles.size() < 2U) {
+            expanded.push_back(edge);
+            continue;
+        }
+
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
+        // ::FaceMakerBuildFace::splitSelfIntersecting(), "Split self-intersecting edges (e.g.,
+        // figure-8 BSplines)" before BuilderFace. A degree-1 BSpline is exactly piecewise linear,
+        // so each adjacent pole span can be fed to the same edge-network splitter without changing
+        // the raw Sketch Shape representation.
+        for (std::size_t index = 1; index < edge.poles.size(); ++index) {
+            if (samePoint(edge.poles[index - 1], edge.poles[index])) {
+                continue;
+            }
+            expanded.push_back(SketchProfileEdge{
+                SketchProfileEdgeKind::Line,
+                edge.poles[index - 1],
+                edge.poles[index],
+            });
+        }
+    }
+
+    return expanded;
+}
+
 std::optional<Handle(Geom_BSplineCurve)> makeBSplineCurve(int degree, const std::vector<gp_Pnt>& poles)
 {
     if (degree < 1 || poles.size() < static_cast<std::size_t>(degree + 1)) {
@@ -3458,7 +3489,8 @@ ProfileFaceBuild buildOptionalProfileFace(const std::vector<SketchProfileEdge>& 
 {
     geometry::SketchInternalBuildInput input;
     if (!edges.empty()) {
-        auto edgeWires = makeProfileWiresFromEdges(edges);
+        const auto faceEdges = faceMakerProfileEdges(edges);
+        auto edgeWires = makeProfileWiresFromEdges(faceEdges);
         if (!edgeWires) {
             return {};
         }
@@ -3881,6 +3913,45 @@ std::optional<ExternalSubshape> resolveSketchInternalSubshape(const document::Li
     return ExternalSubshape{parsed->kind, *subshape, subname};
 }
 
+std::string internalSubnameFromStableElementMap(const runtime::ComputeContext& context,
+                                                const std::string& objectName,
+                                                const std::string& stableSubname)
+{
+    if (stableSubname.empty() || stableSubname.rfind("Internal", 0) == 0) {
+        return {};
+    }
+    const auto objectIt = context.objects.find(objectName);
+    if (objectIt == context.objects.end() || !objectIt->second.is_object()) {
+        return {};
+    }
+    const auto mapIt = objectIt->second.find("internal_element_map");
+    if (mapIt == objectIt->second.end() || !mapIt->is_object()) {
+        return {};
+    }
+    const auto mappedIt = mapIt->find(stableSubname);
+    if (mappedIt == mapIt->end() || !mappedIt->is_string()) {
+        return {};
+    }
+    const std::string currentInternal = mappedIt->get<std::string>();
+    if (currentInternal.rfind("InternalEdge", 0) != 0 && currentInternal.rfind("InternalVertex", 0) != 0) {
+        return {};
+    }
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+    // ::getInternalElementMap() keeps InternalEdge/InternalVertex recoverable through their raw
+    // Edge/Vertex names. cad-core consumes that map only for these element kinds; InternalFace
+    // remains history-backed and is not recovered through this shortcut.
+    return currentInternal;
+}
+
+bool hasSketchInternalSubshape(const runtime::ShapeValue& shapeValue, const std::string& subname)
+{
+    const auto parsed = topo::parseInternalSubshapeName(subname);
+    if (!parsed || !shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
+        return false;
+    }
+    return topo::subshapeByName(*shapeValue.internalShape, *parsed).has_value();
+}
+
 std::vector<ExternalSubshape> wholeShapeExternalSubshapes(const runtime::ShapeValue& shapeValue)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
@@ -3958,7 +4029,15 @@ std::optional<std::vector<ExternalSubshape>> resolveExternalGeometryLink(const d
     }
 
     if (!subname.empty()) {
-        if (auto internal = resolveSketchInternalSubshape(link, object, shapeIt->second, context, subname)) {
+        std::string internalSubname = subname;
+        if (topo::parseInternalSubshapeName(subname) && !hasSketchInternalSubshape(shapeIt->second, subname)) {
+            const std::string stableInternal =
+                internalSubnameFromStableElementMap(context, link.object, stableSubname);
+            if (!stableInternal.empty()) {
+                internalSubname = stableInternal;
+            }
+        }
+        if (auto internal = resolveSketchInternalSubshape(link, object, shapeIt->second, context, internalSubname)) {
             return std::vector<ExternalSubshape>{*internal};
         }
         if (topo::parseInternalSubshapeName(subname)) {

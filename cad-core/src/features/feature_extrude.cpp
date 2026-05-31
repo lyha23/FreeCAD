@@ -4,6 +4,7 @@
 #include "cad_core/geometry/extrusion_helper.h"
 #include "cad_core/geometry/shape_exporter.h"
 #include "cad_core/topo/named_shape.h"
+#include "cad_core/topo/reference_matcher.h"
 #include "cad_core/topo/subshape_map.h"
 
 #include <BRepAdaptor_Curve.hxx>
@@ -188,9 +189,66 @@ std::optional<TopoDS_Shape> resolveSketchInternalFaceProfile(const document::Doc
                                subname);
         return std::nullopt;
     }
+    if (profileLink.stableSubnamesExplicit) {
+        const std::string stableSubname =
+            profileLink.stableSubnames.size() == 1U ? profileLink.stableSubnames.front() : std::string{};
+        if (!stableSubname.empty()) {
+            const bool requestLocalStableSubname = topo::parseInternalSubshapeName(stableSubname).has_value();
+            if (!requestLocalStableSubname && !profileLink.referenceShadows.empty()) {
+                // ReferenceShadow is the approved stateless evidence channel while Sketch
+                // InternalShape ElementMap is still incomplete; topo/reference_matcher owns
+                // the actual fingerprint check, not the Pad executor.
+            }
+            else {
+                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+                // ::getInternalElementMap() is what makes Internal* names traceable through ElementMap.
+                // cad-core has not yet migrated that Sketch InternalShape NamedShape/ElementMap, so an
+                // explicit StableSubList for InternalFaceN would persist a request-local selector as stable.
+                runtime::addDiagnostic(context.diagnostics,
+                                       "error",
+                                       "unsupported_stable_subname",
+                                       featureName + " Profile.StableSubList cannot reference request-local " + stableSubname
+                                           + " before Sketch InternalShape ElementMap is available",
+                                       object.name,
+                                       "Profile",
+                                       "runtime",
+                                       profileLink.object,
+                                       stableSubname);
+                return std::nullopt;
+            }
+        }
+    }
 
     const auto subshape = topo::subshapeByName(*shapeValue.internalShape, *parsed);
     if (!subshape || subshape->IsNull()) {
+        for (const auto& shadow : profileLink.referenceShadows) {
+            if (!shadow.target.empty() && shadow.target != profileLink.object) {
+                continue;
+            }
+            const auto targetObjectIt = context.documentObjects.find(profileLink.object);
+            if (targetObjectIt != context.documentObjects.end() && shadow.targetId != targetObjectIt->second->id) {
+                continue;
+            }
+            topo::ReferenceMatchResult match;
+            if (shadow.brep && shadow.brep->format == "brep-text") {
+                std::string brepError;
+                match = topo::findUniqueSubshapeByReferenceBrepText(*shapeValue.internalShape,
+                                                                    "Internal",
+                                                                    shadow.brep->data,
+                                                                    shadow.brep->byteLength,
+                                                                    shadow.shapeType,
+                                                                    brepError);
+            }
+            else {
+                match = topo::findUniqueSubshapeByReferenceFingerprint(*shapeValue.internalShape,
+                                                                       "Internal",
+                                                                       shadow.fingerprint,
+                                                                       shadow.shapeType);
+            }
+            if (match.status == topo::ReferenceMatchStatus::Unique && match.shape && !match.shape->IsNull()) {
+                return *match.shape;
+            }
+        }
         runtime::addDiagnostic(context.diagnostics,
                                "error",
                                "invalid_subshape",
@@ -201,6 +259,33 @@ std::optional<TopoDS_Shape> resolveSketchInternalFaceProfile(const document::Doc
                                profileLink.object,
                                subname);
         return std::nullopt;
+    }
+    for (const auto& shadow : profileLink.referenceShadows) {
+        if (!shadow.brep || shadow.brep->format != "brep-text") {
+            continue;
+        }
+        if (!shadow.target.empty() && shadow.target != profileLink.object) {
+            continue;
+        }
+        const auto targetObjectIt = context.documentObjects.find(profileLink.object);
+        if (targetObjectIt != context.documentObjects.end() && shadow.targetId != targetObjectIt->second->id) {
+            continue;
+        }
+        if (!topo::referenceFingerprintDriftReason(*subshape, shadow.fingerprint, shadow.shapeType)) {
+            continue;
+        }
+
+        std::string brepError;
+        const auto match = topo::findUniqueSubshapeByReferenceBrepText(*shapeValue.internalShape,
+                                                                       "Internal",
+                                                                       shadow.brep->data,
+                                                                       shadow.brep->byteLength,
+                                                                       shadow.shapeType,
+                                                                       brepError);
+        if (match.status == topo::ReferenceMatchStatus::Unique && match.shape && !match.shape->IsNull()
+            && !topo::referenceFingerprintDriftReason(*match.shape, shadow.fingerprint, shadow.shapeType)) {
+            return *match.shape;
+        }
     }
     return *subshape;
 }

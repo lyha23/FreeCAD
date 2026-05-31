@@ -1,0 +1,35 @@
+{
+  "Objects": [
+    {
+      "Name": "Line",
+      "ID": 1,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 10,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "Extrude",
+      "ID": 2,
+      "TypeId": "Part::Extrusion",
+      "Properties": {
+        "Base": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Line"
+        },
+        "Dir": [0, 0, 1],
+        "LengthFwd": 5,
+        "LengthRev": 0,
+        "Solid": false,
+        "Reversed": false,
+        "Symmetric": false
+      }
+    }
+  ],
+  "recompute": {"objs": ["Extrude"]}
+}

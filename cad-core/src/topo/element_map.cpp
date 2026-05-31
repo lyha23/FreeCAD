@@ -1,8 +1,12 @@
 #include "cad_core/topo/element_map.h"
 
 #include <BRepAdaptor_Curve.hxx>
+#include <BRepBuilderAPI_MakeVertex.hxx>
+#include <BRepExtrema_DistShapeShape.hxx>
 #include <BRep_Tool.hxx>
+#include <GeomAbs_CurveType.hxx>
 #include <Precision.hxx>
+#include <Standard_Failure.hxx>
 #include <TopAbs_ShapeEnum.hxx>
 #include <TopExp.hxx>
 #include <TopTools_IndexedMapOfShape.hxx>
@@ -11,6 +15,8 @@
 #include <TopoDS_Vertex.hxx>
 #include <gp_Pnt.hxx>
 
+#include <cmath>
+#include <limits>
 #include <optional>
 #include <string>
 #include <utility>
@@ -57,12 +63,80 @@ bool sameEdgeEndpoints(const std::pair<gp_Pnt, gp_Pnt>& left,
         || (samePoint3d(left.first, right.second) && samePoint3d(left.second, right.first));
 }
 
+double distanceFromPointToEdge(const gp_Pnt& point, const TopoDS_Edge& edge)
+{
+    try {
+        const TopoDS_Vertex vertex = BRepBuilderAPI_MakeVertex(point);
+        BRepExtrema_DistShapeShape distance(vertex, edge);
+        distance.Perform();
+        if (distance.IsDone() && distance.NbSolution() > 0) {
+            return distance.Value();
+        }
+    }
+    catch (const Standard_Failure&) {
+    }
+    return std::numeric_limits<double>::infinity();
+}
+
+bool samplesLieOnEdge(const TopoDS_Edge& source, const TopoDS_Edge& target)
+{
+    try {
+        BRepAdaptor_Curve curve(source);
+        const double first = curve.FirstParameter();
+        const double last = curve.LastParameter();
+        if (!std::isfinite(first) || !std::isfinite(last)) {
+            return false;
+        }
+
+        constexpr int sampleCount = 7;
+        for (int sample = 0; sample < sampleCount; ++sample) {
+            const double ratio = static_cast<double>(sample) / (sampleCount - 1);
+            const gp_Pnt point = curve.Value(first + (last - first) * ratio);
+            if (distanceFromPointToEdge(point, target) > Precision::Confusion()) {
+                return false;
+            }
+        }
+    }
+    catch (const Standard_Failure&) {
+        return false;
+    }
+    return true;
+}
+
+bool sameEdgeGeometry(const TopoDS_Edge& rawEdge, const TopoDS_Edge& internalEdge)
+{
+    try {
+        BRepAdaptor_Curve rawCurve(rawEdge);
+        BRepAdaptor_Curve internalCurve(internalEdge);
+        const GeomAbs_CurveType rawType = rawCurve.GetType();
+        const GeomAbs_CurveType internalType = internalCurve.GetType();
+        if (rawType != internalType) {
+            return false;
+        }
+        if (rawType == GeomAbs_Line) {
+            return true;
+        }
+        return samplesLieOnEdge(rawEdge, internalEdge) && samplesLieOnEdge(internalEdge, rawEdge);
+    }
+    catch (const Standard_Failure&) {
+        return false;
+    }
+}
+
 std::optional<int> matchingEdgeIndex(const TopTools_IndexedMapOfShape& rawEdges,
                                      const TopoDS_Edge& internalEdge)
 {
     const auto internalEndpoints = edgeEndpoints(internalEdge);
     for (int index = 1; index <= rawEdges.Extent(); ++index) {
-        if (sameEdgeEndpoints(edgeEndpoints(TopoDS::Edge(rawEdges(index))), internalEndpoints)) {
+        const TopoDS_Edge rawEdge = TopoDS::Edge(rawEdges(index));
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+        // ::getInternalElementMap() calls Shape.findSubShapesWithSharedVertex(...,
+        // CheckGeometry | SingleResult). Matching only edge endpoints can map a request-local
+        // InternalEdge arc to a raw line sharing the same vertices, so cad-core mirrors the
+        // geometry check here. The loose endpoint-only exception remains line-only, matching
+        // TopoShapeExpansion.cpp::findSubShapesWithSharedVertex().
+        if (sameEdgeEndpoints(edgeEndpoints(rawEdge), internalEndpoints)
+            && sameEdgeGeometry(rawEdge, internalEdge)) {
             return index;
         }
     }

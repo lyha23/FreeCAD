@@ -23,7 +23,25 @@
         "Profile": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Sketch",
-          "SubList": ["InternalFace99"]
+          "SubList": ["InternalFace99"],
+          "StableSubList": ["g305:deleted"],
+          "ReferenceShadow": [
+            {
+              "target": "Sketch",
+              "targetId": 1,
+              "property": "InternalShape",
+              "shapeType": "Face",
+              "indexed": "Face1",
+              "subname": "InternalFace1",
+              "stableSubname": "g305:deleted",
+              "fingerprint": {
+                "area": 12.5,
+                "centroid": [2.5, 2.5, 0.0],
+                "edgeCount": 4,
+                "vertexCount": 4
+              }
+            }
+          ]
         },
         "Length": 10,
         "Reversed": false,

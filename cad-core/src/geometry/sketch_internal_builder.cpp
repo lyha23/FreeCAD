@@ -54,8 +54,8 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
         for (const TopoDS_Wire& wire : input.openWires) {
             joiner.addOpenWire(wire);
         }
-        if (faceResult.splitProducedBoundedFaces) {
-            joiner.classifyBoundedFaceOwnership(input.faceWires, faceResult.faceCount);
+        if (faceResult.splitProducedBoundedFaces && faceResult.shape) {
+            joiner.classifyBoundedFaceOwnership(*faceResult.shape);
         }
         const auto openShape = joiner.getOpenWires("SKF", true);
         if (openShape && !openShape->IsNull()) {

@@ -23,7 +23,29 @@
         "Profile": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Sketch",
-          "SubList": ["InternalFace99"]
+          "SubList": ["InternalFace1"],
+          "ShadowSub": [
+            {"newName": "g305:split1", "oldName": "InternalFace1"}
+          ],
+          "ReferenceShadow": [
+            {
+              "target": "Sketch",
+              "targetId": 1,
+              "property": "InternalShape",
+              "shapeType": "Face",
+              "indexed": "Face1",
+              "subname": "InternalFace1",
+              "stableSubname": "g305:split1",
+              "fingerprint": {
+                "area": 25.0,
+                "centroid": [2.5, 2.5, 0.0],
+                "bboxMin": [0.0, 0.0, 0.0],
+                "bboxMax": [5.0, 5.0, 0.0],
+                "edgeCount": 4,
+                "vertexCount": 4
+              }
+            }
+          ]
         },
         "Length": 10,
         "Reversed": false,

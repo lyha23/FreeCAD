@@ -19,6 +19,14 @@ struct FaceMakerBuildFaceResult {
 // ::FaceDriller::addHole(), adds inner wires to the selected outer face; this is the current
 // closed-wire subset and not the full FaceMakerBuildFace / WireJoiner split ledger.
 std::optional<TopoDS_Shape> makeFaceWithHolesFromClosedWires(const std::vector<TopoDS_Wire>& wires);
+// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMaker.cpp
+// ::FaceMakerSimple::Build_Essence(), "make plane faces from all closed wires" independently,
+// with "No support for holes".
+std::optional<TopoDS_Shape> makeSeparateFacesFromClosedWires(const std::vector<TopoDS_Wire>& wires);
+// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerCheese.cpp
+// ::FaceMakerCheese::makeFace(), supports planar "faces with holes, but no islands inside holes";
+// Part::FaceMakerExtrusion delegates to this Cheese face builder after extracting wires.
+std::optional<TopoDS_Shape> makeCheeseFaceFromClosedWires(const std::vector<TopoDS_Wire>& wires);
 // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
 // ::SketchObject::buildInternals() calls makeElementFace(..., "Part::FaceMakerBuildFace", ...)
 // before WireJoiner open-wire handling. This helper covers the bounded-face split subset for

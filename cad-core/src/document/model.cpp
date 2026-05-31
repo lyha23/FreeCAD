@@ -132,6 +132,127 @@ std::optional<std::vector<std::string>> readStringList(const nlohmann::json& val
     return items;
 }
 
+bool isSupportedReferenceShapeType(const std::string& shapeType)
+{
+    return shapeType == "Vertex" || shapeType == "Edge" || shapeType == "Face";
+}
+
+std::optional<std::vector<ShadowSub>> readShadowSubList(const nlohmann::json& value)
+{
+    if (!value.is_array()) {
+        return std::nullopt;
+    }
+
+    std::vector<ShadowSub> items;
+    for (const auto& item : value) {
+        if (!item.is_object()) {
+            return std::nullopt;
+        }
+        const auto newNameIt = item.find("newName");
+        const auto oldNameIt = item.find("oldName");
+        if (newNameIt == item.end() || oldNameIt == item.end() || !newNameIt->is_string()
+            || !oldNameIt->is_string()) {
+            return std::nullopt;
+        }
+        items.push_back({newNameIt->get<std::string>(), oldNameIt->get<std::string>()});
+    }
+    return items;
+}
+
+std::optional<BrepSnapshot> readBrepSnapshot(const nlohmann::json& value)
+{
+    if (!value.is_object()) {
+        return std::nullopt;
+    }
+    const auto formatIt = value.find("format");
+    const auto byteLengthIt = value.find("byteLength");
+    const auto sha256It = value.find("sha256");
+    const auto dataIt = value.find("data");
+    if (formatIt == value.end() || byteLengthIt == value.end() || sha256It == value.end()
+        || dataIt == value.end() || !formatIt->is_string() || !byteLengthIt->is_number_integer()
+        || !sha256It->is_string() || !dataIt->is_string()) {
+        return std::nullopt;
+    }
+
+    const std::string format = formatIt->get<std::string>();
+    if (format != "brep-text" && format != "brep-bin-zstd-base64") {
+        return std::nullopt;
+    }
+    const long long byteLength = byteLengthIt->get<long long>();
+    if (byteLength < 0) {
+        return std::nullopt;
+    }
+
+    return BrepSnapshot{format, byteLength, sha256It->get<std::string>(), dataIt->get<std::string>()};
+}
+
+std::optional<std::vector<ReferenceShadow>> readReferenceShadowList(const nlohmann::json& value)
+{
+    if (!value.is_array()) {
+        return std::nullopt;
+    }
+
+    std::vector<ReferenceShadow> items;
+    for (const auto& item : value) {
+        if (!item.is_object()) {
+            return std::nullopt;
+        }
+        const auto targetIt = item.find("target");
+        const auto targetIdIt = item.find("targetId");
+        const auto propertyIt = item.find("property");
+        const auto shapeTypeIt = item.find("shapeType");
+        const auto indexedIt = item.find("indexed");
+        const auto subnameIt = item.find("subname");
+        if (targetIt == item.end() || targetIdIt == item.end() || propertyIt == item.end()
+            || shapeTypeIt == item.end() || indexedIt == item.end() || subnameIt == item.end()
+            || !targetIt->is_string() || !targetIdIt->is_number_integer() || !propertyIt->is_string()
+            || !shapeTypeIt->is_string() || !indexedIt->is_string() || !subnameIt->is_string()) {
+            return std::nullopt;
+        }
+
+        const std::string shapeType = shapeTypeIt->get<std::string>();
+        if (!isSupportedReferenceShapeType(shapeType)) {
+            return std::nullopt;
+        }
+
+        ReferenceShadow shadow;
+        shadow.target = targetIt->get<std::string>();
+        shadow.targetId = targetIdIt->get<long long>();
+        shadow.property = propertyIt->get<std::string>();
+        shadow.shapeType = shapeType;
+        shadow.indexed = indexedIt->get<std::string>();
+        shadow.subname = subnameIt->get<std::string>();
+
+        const auto stableSubnameIt = item.find("stableSubname");
+        if (stableSubnameIt != item.end()) {
+            if (!stableSubnameIt->is_string()) {
+                return std::nullopt;
+            }
+            shadow.stableSubname = stableSubnameIt->get<std::string>();
+        }
+
+        const auto fingerprintIt = item.find("fingerprint");
+        if (fingerprintIt != item.end()) {
+            if (!fingerprintIt->is_object()) {
+                return std::nullopt;
+            }
+            shadow.fingerprint = *fingerprintIt;
+        }
+
+        const auto brepIt = item.find("brep");
+        if (brepIt != item.end()) {
+            auto brep = readBrepSnapshot(*brepIt);
+            if (!brep) {
+                return std::nullopt;
+            }
+            shadow.brep = std::move(*brep);
+        }
+
+        items.push_back(std::move(shadow));
+    }
+    return items;
+}
+
 std::vector<std::string> readOptionalStringList(const nlohmann::json& value, const std::string& field)
 {
     const auto it = value.find(field);
@@ -167,16 +288,38 @@ std::optional<Link> readLinkObject(const nlohmann::json& value, const std::strin
         subnames = std::move(*parsed);
     }
 
+    const bool stableSubnamesExplicit = value.contains("StableSubList");
     std::vector<std::string> stableSubnames = readOptionalStringList(value, "StableSubList");
     if (stableSubnames.empty()) {
         stableSubnames = subnames;
+    }
+    std::vector<ShadowSub> shadowSubs;
+    const auto shadowSubIt = value.find("ShadowSub");
+    if (shadowSubIt != value.end()) {
+        auto parsed = readShadowSubList(*shadowSubIt);
+        if (!parsed) {
+            return std::nullopt;
+        }
+        shadowSubs = std::move(*parsed);
+    }
+    std::vector<ReferenceShadow> referenceShadows;
+    const auto referenceShadowIt = value.find("ReferenceShadow");
+    if (referenceShadowIt != value.end()) {
+        auto parsed = readReferenceShadowList(*referenceShadowIt);
+        if (!parsed) {
+            return std::nullopt;
+        }
+        referenceShadows = std::move(*parsed);
     }
     std::vector<std::string> fullSubnames = stableSubnames;
     return Link{objectIt->get<std::string>(),
                 std::move(subnames),
                 std::move(stableSubnames),
                 std::move(fullSubnames),
-                property};
+                property,
+                stableSubnamesExplicit,
+                std::move(shadowSubs),
+                std::move(referenceShadows)};
 }
 
 std::optional<Link> readLinkSubListItem(const nlohmann::json& value, const std::string& property = {})
@@ -203,16 +346,38 @@ std::optional<Link> readLinkSubListItem(const nlohmann::json& value, const std::
         subnames = std::move(*parsed);
     }
 
+    const bool stableSubnamesExplicit = value.contains("StableSubList");
     std::vector<std::string> stableSubnames = readOptionalStringList(value, "StableSubList");
     if (stableSubnames.empty()) {
         stableSubnames = subnames;
+    }
+    std::vector<ShadowSub> shadowSubs;
+    const auto shadowSubIt = value.find("ShadowSub");
+    if (shadowSubIt != value.end()) {
+        auto parsed = readShadowSubList(*shadowSubIt);
+        if (!parsed) {
+            return std::nullopt;
+        }
+        shadowSubs = std::move(*parsed);
+    }
+    std::vector<ReferenceShadow> referenceShadows;
+    const auto referenceShadowIt = value.find("ReferenceShadow");
+    if (referenceShadowIt != value.end()) {
+        auto parsed = readReferenceShadowList(*referenceShadowIt);
+        if (!parsed) {
+            return std::nullopt;
+        }
+        referenceShadows = std::move(*parsed);
     }
     std::vector<std::string> fullSubnames = stableSubnames;
     return Link{objectIt->get<std::string>(),
                 std::move(subnames),
                 std::move(stableSubnames),
                 std::move(fullSubnames),
-                property};
+                property,
+                stableSubnamesExplicit,
+                std::move(shadowSubs),
+                std::move(referenceShadows)};
 }
 
 std::vector<Link> readLinkList(const nlohmann::json& value)
@@ -391,6 +556,9 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
         return item.contains("FullSubList") || item.contains("StableSubnames")
             || item.contains("FullSubnames");
     };
+    auto hasReferenceRecoveryFields = [](const nlohmann::json& item) {
+        return item.contains("ShadowSub") || item.contains("ReferenceShadow");
+    };
     auto hasValidSubListField = [&](const nlohmann::json& item) {
         if (hasUnsupportedSubnameFields(item)) {
             return false;
@@ -410,6 +578,32 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
         const auto stableSubnames = readStringList(*stableSubListIt);
         return subnames && stableSubnames && subnames->size() == stableSubnames->size();
     };
+    auto hasValidShadowSubField = [&](const nlohmann::json& item) {
+        const auto shadowSubIt = item.find("ShadowSub");
+        if (shadowSubIt == item.end()) {
+            return true;
+        }
+        const auto subListIt = item.find("SubList");
+        if (subListIt == item.end()) {
+            return false;
+        }
+        const auto subnames = readStringList(*subListIt);
+        const auto shadowSubs = readShadowSubList(*shadowSubIt);
+        return subnames && shadowSubs && subnames->size() == shadowSubs->size();
+    };
+    auto hasValidReferenceShadowField = [&](const nlohmann::json& item) {
+        const auto referenceShadowIt = item.find("ReferenceShadow");
+        if (referenceShadowIt == item.end()) {
+            return true;
+        }
+        const auto subListIt = item.find("SubList");
+        if (subListIt == item.end()) {
+            return false;
+        }
+        const auto subnames = readStringList(*subListIt);
+        const auto referenceShadows = readReferenceShadowList(*referenceShadowIt);
+        return subnames && referenceShadows && subnames->size() == referenceShadows->size();
+    };
 
     if (isLinkObjectType(propertyType)) {
         const auto objectIt = value.find("value");
@@ -418,13 +612,15 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
         }
         const bool supportsSubList = isLinkSubObjectType(propertyType) || propertyType == "App::PropertyXLink";
         if (supportsSubList) {
-            if (value.contains("values") || value.contains("SubSet") || !hasValidSubListField(value)) {
+            if (value.contains("values") || value.contains("SubSet") || !hasValidSubListField(value)
+                || !hasValidShadowSubField(value) || !hasValidReferenceShadowField(value)) {
                 return true;
             }
         }
         if (!supportsSubList
             && (value.contains("SubList") || value.contains("SubSet") || value.contains("values")
-                || value.contains("StableSubList") || hasUnsupportedSubnameFields(value))) {
+                || value.contains("StableSubList") || hasReferenceRecoveryFields(value)
+                || hasUnsupportedSubnameFields(value))) {
             return true;
         }
         return false;
@@ -432,7 +628,8 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
 
     if (isLinkListType(propertyType)) {
         if (value.contains("value") || value.contains("SubList") || value.contains("SubSet")
-            || value.contains("StableSubList") || hasUnsupportedSubnameFields(value)) {
+            || value.contains("StableSubList") || hasReferenceRecoveryFields(value)
+            || hasUnsupportedSubnameFields(value)) {
             return true;
         }
         const auto rawLinksIt = value.find("values");
@@ -444,7 +641,8 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
 
     if (isLinkSubListType(propertyType)) {
         if (value.contains("value") || value.contains("values") || value.contains("SubList")
-            || value.contains("StableSubList") || hasUnsupportedSubnameFields(value)) {
+            || value.contains("StableSubList") || hasReferenceRecoveryFields(value)
+            || hasUnsupportedSubnameFields(value)) {
             return true;
         }
         const auto rawLinksIt = value.find("SubSet");
@@ -462,7 +660,8 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
             if (item.contains("values") || item.contains("SubSet")) {
                 return true;
             }
-            if (!hasValidSubListField(item)) {
+            if (!hasValidSubListField(item) || !hasValidShadowSubField(item)
+                || !hasValidReferenceShadowField(item)) {
                 return true;
             }
         }

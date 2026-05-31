@@ -23,8 +23,7 @@
         "Profile": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Sketch",
-          "SubList": ["InternalFace1"],
-          "StableSubList": ["InternalFace1"]
+          "SubList": ["InternalFace1"]
         },
         "Length": 10,
         "Reversed": false,

@@ -1,0 +1,32 @@
+{
+  "Objects": [
+    {
+      "Name": "Plane",
+      "ID": 1,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 2,
+        "Width": 3
+      }
+    },
+    {
+      "Name": "Extrude",
+      "ID": 2,
+      "TypeId": "Part::Extrusion",
+      "Properties": {
+        "Base": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Plane"
+        },
+        "DirMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Normal"
+        },
+        "LengthFwd": 5,
+        "LengthRev": 0,
+        "Solid": false
+      }
+    }
+  ],
+  "recompute": {"objs": ["Extrude"]}
+}

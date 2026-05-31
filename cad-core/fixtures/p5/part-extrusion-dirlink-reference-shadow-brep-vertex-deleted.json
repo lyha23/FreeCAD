@@ -1,0 +1,61 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
+          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
+          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
+          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Extrude",
+      "ID": 2,
+      "TypeId": "Part::Extrusion",
+      "Properties": {
+        "Base": {"PropertyType": "App::PropertyLink", "value": "Sketch"},
+        "DirMode": "Edge",
+        "DirLink": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Sketch",
+          "SubList": ["Vertex99"],
+          "StableSubList": ["Vertex1"],
+          "ReferenceShadow": [
+            {
+              "target": "Sketch",
+              "targetId": 1,
+              "property": "Shape",
+              "shapeType": "Vertex",
+              "indexed": "Vertex1",
+              "subname": "Vertex1",
+              "stableSubname": "Vertex1",
+              "fingerprint": {
+                "centroid": [20.0, 20.0, 0.0],
+                "bboxMin": [20.0, 20.0, 0.0],
+                "bboxMax": [20.0, 20.0, 0.0],
+                "edgeCount": 0,
+                "vertexCount": 1
+              },
+              "brep": {
+                "format": "brep-text",
+                "byteLength": 210,
+                "sha256": "not-validated",
+                "data": "DBRep_DrawableShape\n\nCASCADE Topology V1, (c) Matra-Datavision\nLocations 0\nCurve2ds 0\nCurves 0\nPolygon3D 0\nPolygonOnTriangulations 0\nSurfaces 0\nTriangulations 0\n\nTShapes 1\nVe\n1e-07\n20 20 0\n0 0\n\n1101101\n*\n\n+1 0 "
+              }
+            }
+          ]
+        },
+        "LengthFwd": 10,
+        "LengthRev": 0,
+        "Solid": false
+      }
+    }
+  ],
+  "recompute": {"objs": ["Extrude"]}
+}

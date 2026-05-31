@@ -1,0 +1,76 @@
+{
+  "Objects": [
+    {
+      "Name": "BaseSketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
+          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
+          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
+          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Sketch",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [6, 0]},
+          {"kind": "LineSegment", "start": [6, 0], "end": [6, 3]},
+          {"kind": "LineSegment", "start": [6, 3], "end": [0, 3]},
+          {"kind": "LineSegment", "start": [0, 3], "end": [0, 0]}
+        ],
+        "ExternalGeometry": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "BaseSketch",
+              "SubList": ["InternalEdge99"],
+              "StableSubList": ["Edge1"],
+              "ReferenceShadow": [
+                {
+                  "target": "BaseSketch",
+                  "targetId": 1,
+                  "property": "InternalShape",
+                  "shapeType": "Edge",
+                  "indexed": "Edge1",
+                  "subname": "InternalEdge1",
+                  "stableSubname": "Edge1",
+                  "fingerprint": {
+                    "length": 10.0,
+                    "centroid": [5.0, 0.0, 0.0],
+                    "edgeCount": 1,
+                    "vertexCount": 2
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 3,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Sketch",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 2,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    }
+  ],
+  "recompute": {"objs": ["Pad"]}
+}

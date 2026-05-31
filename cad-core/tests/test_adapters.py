@@ -88,7 +88,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         ]
         self.assertGreater(len(internal_subshapes), 0)
         for item in internal_subshapes:
-            self.assertEqual(item["stableSubname"], "")
+            if item["indexed"].startswith("InternalFace"):
+                self.assertEqual(item["stableSubname"], "")
+            elif item["stableSubname"]:
+                self.assertRegex(item["stableSubname"], r"^(Edge|Vertex)\d+$")
         self.assertEqual(
             next(item for item in sketch["subshapes"] if item["indexed"] == "Edge1")["stableSubname"],
             "Edge1",
@@ -107,6 +110,68 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             any(item["indexed"] == "Face1" for item in ffi_result["results"][0]["subshapes"])
         )
 
+    def test_c_api_recompute_returns_reference_shadow_update(self) -> None:
+        ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow", "p5")
+        updates = ffi_result["elementReferenceUpdates"]
+
+        self.assertEqual(ffi_result["diagnostics"], [])
+        self.assertEqual(len(updates), 1)
+        self.assertEqual(updates[0]["object"], "Pad")
+        self.assertEqual(updates[0]["property"], "Profile")
+        self.assertEqual(updates[0]["PropertyType"], "App::PropertyLinkSub")
+        self.assertEqual(updates[0]["value"], "Sketch")
+        self.assertEqual(updates[0]["SubList"], ["InternalFace1"])
+        self.assertEqual(updates[0]["ShadowSub"], [{"newName": "g305:split1", "oldName": "InternalFace1"}])
+
+        shadow = updates[0]["ReferenceShadow"][0]
+        self.assertEqual(shadow["target"], "Sketch")
+        self.assertEqual(shadow["property"], "InternalShape")
+        self.assertEqual(shadow["indexed"], "Face1")
+        self.assertEqual(shadow["subname"], "InternalFace1")
+        self.assertEqual(shadow["fingerprint"]["shapeType"], "Face")
+        self.assertAlmostEqual(shadow["fingerprint"]["area"], 25.0)
+        self.assertEqual(shadow["fingerprint"]["centroid"], [2.5, 2.5, 0.0])
+
+    def test_c_api_recompute_returns_recovered_reference_shadow_update(self) -> None:
+        ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-recover-sublist", "p5")
+        updates = ffi_result["elementReferenceUpdates"]
+
+        self.assertEqual(ffi_result["diagnostics"], [])
+        self.assertEqual(len(updates), 1)
+        self.assertEqual(updates[0]["object"], "Pad")
+        self.assertEqual(updates[0]["property"], "Profile")
+        self.assertEqual(updates[0]["SubList"], ["InternalFace1"])
+        self.assertEqual(updates[0]["StableSubList"], ["g305:split1"])
+
+        shadow = updates[0]["ReferenceShadow"][0]
+        self.assertEqual(shadow["indexed"], "Face1")
+        self.assertEqual(shadow["subname"], "InternalFace1")
+        self.assertEqual(shadow["stableSubname"], "g305:split1")
+        self.assertAlmostEqual(shadow["fingerprint"]["area"], 25.0)
+
+    def test_c_api_recompute_returns_reference_shadow_update_for_link_sub_list(self) -> None:
+        ffi_result = self.run_recompute_ffi("sketch-external-face-reference-shadow", "p5")
+        updates = ffi_result["elementReferenceUpdates"]
+
+        self.assertEqual(ffi_result["diagnostics"], [])
+        self.assertEqual(len(updates), 1)
+        self.assertEqual(updates[0]["object"], "Sketch")
+        self.assertEqual(updates[0]["property"], "ExternalGeometry")
+        self.assertEqual(updates[0]["PropertyType"], "App::PropertyLinkSubList")
+        self.assertEqual(len(updates[0]["SubSet"]), 1)
+
+        item = updates[0]["SubSet"][0]
+        self.assertEqual(item["value"], "Box")
+        self.assertEqual(item["SubList"], ["Face5"])
+        shadow = item["ReferenceShadow"][0]
+        self.assertEqual(shadow["target"], "Box")
+        self.assertEqual(shadow["property"], "Shape")
+        self.assertEqual(shadow["indexed"], "Face5")
+        self.assertEqual(shadow["subname"], "Face5")
+        self.assertEqual(shadow["fingerprint"]["shapeType"], "Face")
+        self.assertEqual(shadow["fingerprint"]["edgeCount"], 4)
+        self.assertEqual(shadow["fingerprint"]["vertexCount"], 4)
+
     def test_c_api_capabilities_exposes_web_contract_facts(self) -> None:
         capabilities = self.run_capabilities_ffi()
 
@@ -120,6 +185,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("values", capabilities["document"]["link_property_fields"])
         self.assertIn("SubList", capabilities["document"]["link_property_fields"])
         self.assertIn("StableSubList", capabilities["document"]["link_property_fields"])
+        self.assertIn("ShadowSub", capabilities["document"]["link_property_fields"])
+        self.assertIn("ReferenceShadow", capabilities["document"]["link_property_fields"])
         self.assertIn("SubSet", capabilities["document"]["link_property_fields"])
         self.assertNotIn("FullSubList", capabilities["document"]["link_property_fields"])
         self.assertEqual(
@@ -128,7 +195,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(
             capabilities["document"]["link_property_shapes"]["App::PropertyLinkSub"],
-            ["value", "SubList", "StableSubList"],
+            ["value", "SubList", "StableSubList", "ShadowSub", "ReferenceShadow"],
         )
         self.assertEqual(
             capabilities["document"]["link_property_shapes"]["App::PropertyLinkSubList"],
@@ -153,6 +220,9 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "unsupported_type",
             "invalid_subshape",
             "unsupported_stable_subname",
+            "subname_resolve_ambiguous",
+            "subname_resolve_failed",
+            "subname_semantic_drift",
             "split_stable_subname",
             "deleted_stable_subname",
         ]:

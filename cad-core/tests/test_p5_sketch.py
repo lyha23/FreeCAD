@@ -376,6 +376,29 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["status"], "ok")
         self.assert_object_matches_expected(result, "p5", "sketch-internal-face")
 
+    def test_p5_sketch_exports_internal_edge_vertex_stable_subnames(self) -> None:
+        result = self.run_recompute_ffi("sketch-internal-face", "p5")
+        subshapes = {
+            item["indexed"]: item
+            for item in result["results"][0]["subshapes"]
+        }
+
+        self.assertEqual(subshapes["InternalEdge1"]["stableSubname"], "Edge1")
+        self.assertEqual(subshapes["InternalVertex1"]["stableSubname"], "Vertex1")
+        self.assertEqual(subshapes["InternalFace1"]["stableSubname"], "")
+
+    def test_p5_sketch_internal_edge_stable_subname_checks_geometry(self) -> None:
+        result = self.run_recompute_ffi("sketch-internal-edge-arc-line-same-endpoints", "p5")
+        subshapes = {
+            item["indexed"]: item
+            for item in result["results"][0]["subshapes"]
+        }
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(subshapes["InternalEdge1"]["stableSubname"], "Edge1")
+        self.assertEqual(subshapes["InternalEdge2"]["stableSubname"], "Edge2")
+        self.assertEqual(subshapes["InternalFace1"]["stableSubname"], "")
+
     def test_p5_split_line_builds_multiple_internal_faces(self) -> None:
         result = self.run_recompute("sketch-internal-face-split-line", "p5")
         sketch = result["objects"]["Sketch"]
@@ -474,6 +497,144 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pad["status"], "ok")
         self.assert_object_matches_expected(result, "p5", "pad-internal-face-sublist")
 
+    def test_p5_pad_rejects_internal_face_stable_sublist_until_element_map_exists(self) -> None:
+        result = self.run_recompute("pad-internal-face-stable-sublist-unsupported", "p5")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_stable_subname"])
+        self.assertEqual(diagnostic["object"], "Pad")
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], "Sketch")
+        self.assertEqual(diagnostic["subname"], "InternalFace1")
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
+
+    def test_p5_pad_accepts_reference_shadow_as_recovery_evidence_only(self) -> None:
+        result = self.run_recompute("pad-internal-face-reference-shadow", "p5")
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pad["status"], "ok")
+        self.assertEqual(pad["shape"], "occt_solid")
+        self.assertAlmostEqual(pad["volume"], 250.0)
+        self.assertEqual(pad["bbox"], {"min": [0.0, 0.0, 0.0], "max": [5.0, 5.0, 10.0]})
+
+    def test_p5_pad_rejects_malformed_reference_shadow(self) -> None:
+        for fixture in [
+            "pad-internal-face-reference-shadow-invalid-length",
+            "pad-internal-face-reference-shadow-invalid-brep",
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p5")
+                diagnostic_codes = [item["code"] for item in result["diagnostics"]]
+
+                self.assertIn("invalid_link_value", diagnostic_codes)
+                self.assertEqual(result["diagnostics"][0]["object"], "Pad")
+                self.assertEqual(result["diagnostics"][0]["property"], "Profile")
+                self.assertEqual(result["diagnostics"][0]["stage"], "parse")
+                self.assertEqual(result["objects"]["Pad"]["status"], "error")
+
+    def test_p5_pad_rejects_reference_shadow_semantic_drift(self) -> None:
+        result = self.run_recompute("pad-internal-face-reference-shadow-drift", "p5")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_semantic_drift"])
+        self.assertEqual(diagnostic["object"], "Pad")
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], "Sketch")
+        self.assertEqual(diagnostic["subname"], "InternalFace1")
+        self.assertIn("centroid changed", diagnostic["message"])
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
+
+    def test_p5_pad_recovers_missing_internal_face_sublist_from_reference_shadow(self) -> None:
+        result = self.run_recompute("pad-internal-face-reference-shadow-recover-sublist", "p5")
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pad["status"], "ok")
+        self.assertEqual(pad["shape"], "occt_solid")
+        self.assertAlmostEqual(pad["volume"], 250.0)
+        self.assertEqual(pad["bbox"], {"min": [0.0, 0.0, 0.0], "max": [5.0, 5.0, 10.0]})
+
+    def test_p5_pad_recovers_ambiguous_fingerprint_with_reference_shadow_brep(self) -> None:
+        result = self.run_recompute("pad-internal-face-reference-shadow-brep-recover-sublist", "p5")
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pad["status"], "ok")
+        self.assertEqual(pad["shape"], "occt_solid")
+        self.assertAlmostEqual(pad["volume"], 250.0)
+        self.assertEqual(pad["bbox"], {"min": [0.0, 0.0, 0.0], "max": [5.0, 5.0, 10.0]})
+        ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-brep-recover-sublist", "p5")
+        update = ffi_result["elementReferenceUpdates"][0]
+        self.assertEqual(update["SubList"], ["InternalFace1"])
+        self.assertEqual(update["ReferenceShadow"][0]["subname"], "InternalFace1")
+        brep = update["ReferenceShadow"][0]["brep"]
+        self.assertEqual(brep["format"], "brep-text")
+        self.assertEqual(brep["byteLength"], len(brep["data"]))
+        self.assertNotEqual(brep["byteLength"], 662)
+
+    def test_p5_pad_recovers_drifted_sublist_with_reference_shadow_brep(self) -> None:
+        result = self.run_recompute("pad-internal-face-reference-shadow-brep-drift-recover", "p5")
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pad["status"], "ok")
+        self.assertEqual(pad["shape"], "occt_solid")
+        self.assertAlmostEqual(pad["volume"], 250.0)
+        self.assertEqual(pad["bbox"], {"min": [0.0, 0.0, 0.0], "max": [5.0, 5.0, 10.0]})
+        ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-brep-drift-recover", "p5")
+        update = ffi_result["elementReferenceUpdates"][0]
+        self.assertEqual(update["SubList"], ["InternalFace1"])
+        self.assertEqual(update["ReferenceShadow"][0]["subname"], "InternalFace1")
+
+    def test_p5_pad_requires_reselect_when_reference_shadow_brep_is_split(self) -> None:
+        result = self.run_recompute("pad-internal-face-reference-shadow-brep-split", "p5")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_split_requires_reselect"])
+        self.assertEqual(diagnostic["object"], "Pad")
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], "Sketch")
+        self.assertEqual(diagnostic["subname"], "InternalFace99")
+        self.assertIn("split", diagnostic["message"])
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
+
+    def test_p5_pad_reports_deleted_reference_shadow_brep(self) -> None:
+        result = self.run_recompute("pad-internal-face-reference-shadow-brep-deleted", "p5")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_deleted"])
+        self.assertEqual(diagnostic["object"], "Pad")
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], "Sketch")
+        self.assertEqual(diagnostic["subname"], "InternalFace99")
+        self.assertIn("deleted", diagnostic["message"])
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
+
+    def test_p5_pad_rejects_ambiguous_reference_shadow_recovery(self) -> None:
+        result = self.run_recompute("pad-internal-face-reference-shadow-ambiguous", "p5")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_resolve_ambiguous"])
+        self.assertEqual(diagnostic["object"], "Pad")
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], "Sketch")
+        self.assertEqual(diagnostic["subname"], "InternalFace99")
+        self.assertIn("multiple", diagnostic["message"])
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
+
+    def test_p5_pad_rejects_missing_reference_shadow_recovery(self) -> None:
+        result = self.run_recompute("pad-internal-face-reference-shadow-missing", "p5")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_resolve_failed"])
+        self.assertEqual(diagnostic["object"], "Pad")
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], "Sketch")
+        self.assertEqual(diagnostic["subname"], "InternalFace99")
+        self.assertIn("does not match", diagnostic["message"])
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
+
     def test_p5_pad_uses_selected_internal_face_from_cross_cutters(self) -> None:
         result = self.run_recompute("pad-internal-face-cross-cutters-sublist", "p5")
         pad = result["objects"]["Pad"]
@@ -507,11 +668,244 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(diagnostic["subname"], "InternalFace99")
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
+    def test_p5_pad_rejects_non_face_internal_profile_subshape(self) -> None:
+        result = self.run_recompute("pad-internal-face-invalid-kind", "p5")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_subshape_kind"])
+        self.assertEqual(diagnostic["object"], "Pad")
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], "Sketch")
+        self.assertEqual(diagnostic["subname"], "InternalEdge1")
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
+
+    def test_p5_part_extrusion_uses_whole_sketch_base_not_internal_face_profile(self) -> None:
+        result = self.run_recompute("part-extrusion-sketch-solid", "p5")
+        extrusion = result["objects"]["Extrude"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(extrusion["status"], "ok")
+        self.assertEqual(extrusion["feature"], "part_extrusion")
+        self.assertEqual(extrusion["source_base"], "Sketch")
+        self.assertEqual(extrusion["solid"], True)
+        self.assertEqual(extrusion["shape"], "occt_solid")
+        self.assertAlmostEqual(extrusion["volume"], 300.0)
+        self.assertEqual(extrusion["bbox"], {"min": [0.0, 0.0, 0.0], "max": [10.0, 5.0, 6.0]})
+        self.assertIn("Extrude", result["mesh"])
+        self.assertNotIn("Profile", extrusion)
+
+    def test_p5_part_extrusion_keeps_edge_base_as_surface_when_solid_false(self) -> None:
+        result = self.run_recompute("part-extrusion-edge-surface", "p5")
+        extrusion = result["objects"]["Extrude"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(extrusion["status"], "ok")
+        self.assertEqual(extrusion["source_base"], "Line")
+        self.assertEqual(extrusion["solid"], False)
+        self.assertEqual(extrusion["shape"], "occt_face")
+        self.assertAlmostEqual(extrusion["volume"], 0.0)
+        self.assertEqual(extrusion["bbox"], {"min": [0.0, 0.0, 0.0], "max": [10.0, 0.0, 5.0]})
+
+    def test_p5_part_extrusion_uses_dirlink_edge_magnitude_when_lengths_are_zero(self) -> None:
+        result = self.run_recompute("part-extrusion-dirlink-edge", "p5")
+        extrusion = result["objects"]["Extrude"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(extrusion["status"], "ok")
+        self.assertEqual(extrusion["source_base"], "BaseLine")
+        self.assertEqual(extrusion["shape"], "occt_face")
+        self.assertAlmostEqual(extrusion["length_fwd"], 4.0)
+        self.assertEqual(extrusion["bbox"], {"min": [0.0, 0.0, 0.0], "max": [10.0, 0.0, 4.0]})
+
+    def test_p5_part_extrusion_dirlink_reports_reference_shadow_edge_split(self) -> None:
+        result = self.run_recompute("part-extrusion-dirlink-reference-shadow-brep-edge-split", "p5")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_split_requires_reselect"])
+        self.assertEqual(diagnostic["object"], "Extrude")
+        self.assertEqual(diagnostic["property"], "DirLink")
+        self.assertEqual(diagnostic["target"], "Sketch")
+        self.assertEqual(diagnostic["subname"], "Edge99")
+        self.assertIn("split", diagnostic["message"])
+        self.assertEqual(result["objects"]["Extrude"]["status"], "error")
+
+    def test_p5_part_extrusion_dirlink_reports_reference_shadow_edge_deleted(self) -> None:
+        result = self.run_recompute("part-extrusion-dirlink-reference-shadow-brep-edge-deleted", "p5")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_deleted"])
+        self.assertEqual(diagnostic["object"], "Extrude")
+        self.assertEqual(diagnostic["property"], "DirLink")
+        self.assertEqual(diagnostic["target"], "Sketch")
+        self.assertEqual(diagnostic["subname"], "Edge99")
+        self.assertIn("deleted", diagnostic["message"])
+        self.assertEqual(result["objects"]["Extrude"]["status"], "error")
+
+    def test_p5_part_extrusion_dirlink_reports_reference_shadow_arc_edge_split(self) -> None:
+        result = self.run_recompute("part-extrusion-dirlink-reference-shadow-brep-arc-edge-split", "p5")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_split_requires_reselect"])
+        self.assertEqual(diagnostic["object"], "Extrude")
+        self.assertEqual(diagnostic["property"], "DirLink")
+        self.assertEqual(diagnostic["target"], "SourceSketch")
+        self.assertEqual(diagnostic["subname"], "Edge99")
+        self.assertIn("split", diagnostic["message"])
+        self.assertEqual(result["objects"]["Extrude"]["status"], "error")
+
+    def test_p5_part_extrusion_dirlink_reports_reference_shadow_arc_edge_deleted(self) -> None:
+        result = self.run_recompute("part-extrusion-dirlink-reference-shadow-brep-arc-edge-deleted", "p5")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_deleted"])
+        self.assertEqual(diagnostic["object"], "Extrude")
+        self.assertEqual(diagnostic["property"], "DirLink")
+        self.assertEqual(diagnostic["target"], "SourceSketch")
+        self.assertEqual(diagnostic["subname"], "Edge99")
+        self.assertIn("deleted", diagnostic["message"])
+        self.assertEqual(result["objects"]["Extrude"]["status"], "error")
+
+    def test_p5_part_extrusion_dirlink_reports_reference_shadow_bspline_edge_split(self) -> None:
+        result = self.run_recompute("part-extrusion-dirlink-reference-shadow-brep-bspline-edge-split", "p5")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_split_requires_reselect"])
+        self.assertEqual(diagnostic["object"], "Extrude")
+        self.assertEqual(diagnostic["property"], "DirLink")
+        self.assertEqual(diagnostic["target"], "SourceSketch")
+        self.assertEqual(diagnostic["subname"], "Edge99")
+        self.assertIn("split", diagnostic["message"])
+        self.assertEqual(result["objects"]["Extrude"]["status"], "error")
+
+    def test_p5_part_extrusion_dirlink_reports_reference_shadow_bspline_edge_deleted(self) -> None:
+        result = self.run_recompute("part-extrusion-dirlink-reference-shadow-brep-bspline-edge-deleted", "p5")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_deleted"])
+        self.assertEqual(diagnostic["object"], "Extrude")
+        self.assertEqual(diagnostic["property"], "DirLink")
+        self.assertEqual(diagnostic["target"], "SourceSketch")
+        self.assertEqual(diagnostic["subname"], "Edge99")
+        self.assertIn("deleted", diagnostic["message"])
+        self.assertEqual(result["objects"]["Extrude"]["status"], "error")
+
+    def test_p5_part_extrusion_dirlink_reports_reference_shadow_vertex_deleted(self) -> None:
+        result = self.run_recompute("part-extrusion-dirlink-reference-shadow-brep-vertex-deleted", "p5")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_deleted"])
+        self.assertEqual(diagnostic["object"], "Extrude")
+        self.assertEqual(diagnostic["property"], "DirLink")
+        self.assertEqual(diagnostic["target"], "Sketch")
+        self.assertEqual(diagnostic["subname"], "Vertex99")
+        self.assertIn("deleted", diagnostic["message"])
+        self.assertEqual(result["objects"]["Extrude"]["status"], "error")
+
+    def test_p5_part_extrusion_uses_planar_base_normal(self) -> None:
+        result = self.run_recompute("part-extrusion-normal-plane", "p5")
+        extrusion = result["objects"]["Extrude"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(extrusion["status"], "ok")
+        self.assertEqual(extrusion["source_base"], "Plane")
+        self.assertEqual(extrusion["shape"], "occt_solid")
+        self.assertAlmostEqual(extrusion["volume"], 30.0)
+        self.assertEqual(extrusion["bbox"], {"min": [0.0, 0.0, 0.0], "max": [2.0, 3.0, 5.0]})
+
+    def test_p5_part_extrusion_supports_forward_taper(self) -> None:
+        result = self.run_recompute("part-extrusion-taper", "p5")
+        extrusion = result["objects"]["Extrude"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(extrusion["status"], "ok")
+        self.assertEqual(extrusion["shape"], "occt_solid")
+        self.assertEqual(extrusion["topo_naming"], "known_gap:taper_history")
+        self.assertGreater(extrusion["volume"], 0.0)
+        self.assertIn("Extrude", result["mesh"])
+
+    def test_p5_part_extrusion_supports_reverse_taper(self) -> None:
+        result = self.run_recompute("part-extrusion-reverse-taper", "p5")
+        extrusion = result["objects"]["Extrude"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(extrusion["status"], "ok")
+        self.assertEqual(extrusion["shape"], "occt_solid")
+        self.assertEqual(extrusion["topo_naming"], "known_gap:taper_history")
+        self.assertGreater(extrusion["volume"], 0.0)
+        self.assertLess(extrusion["bbox"]["min"][2], -5.99)
+        self.assertLess(extrusion["bbox"]["max"][2], 1.0)
+
+    def test_p5_part_extrusion_supports_two_sided_taper(self) -> None:
+        result = self.run_recompute("part-extrusion-two-sided-taper", "p5")
+        extrusion = result["objects"]["Extrude"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(extrusion["status"], "ok")
+        self.assertEqual(extrusion["shape"], "occt_solid")
+        self.assertEqual(extrusion["topo_naming"], "known_gap:taper_history")
+        self.assertGreater(extrusion["volume"], 0.0)
+        self.assertLess(extrusion["bbox"]["min"][2], -2.99)
+        self.assertGreater(extrusion["bbox"]["max"][2], 5.99)
+
+    def test_p5_part_extrusion_supports_facemaker_simple_without_holes(self) -> None:
+        result = self.run_recompute("part-extrusion-facemaker-simple", "p5")
+        extrusion = result["objects"]["Extrude"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(extrusion["status"], "ok")
+        self.assertEqual(extrusion["shape"], "occt_compound")
+        self.assertAlmostEqual(extrusion["volume"], 580.0)
+        self.assertEqual(extrusion["bbox"], {"min": [0.0, 0.0, 0.0], "max": [10.0, 10.0, 5.0]})
+
+    def test_p5_part_extrusion_supports_facemaker_cheese_holes(self) -> None:
+        result = self.run_recompute("part-extrusion-facemaker-cheese", "p5")
+        extrusion = result["objects"]["Extrude"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(extrusion["status"], "ok")
+        self.assertEqual(extrusion["shape"], "occt_solid")
+        self.assertAlmostEqual(extrusion["volume"], 420.0)
+        self.assertEqual(extrusion["bbox"], {"min": [0.0, 0.0, 0.0], "max": [10.0, 10.0, 5.0]})
+
+    def test_p5_part_extrusion_supports_facemaker_mode_extrusion(self) -> None:
+        result = self.run_recompute("part-extrusion-facemaker-mode-extrusion", "p5")
+        extrusion = result["objects"]["Extrude"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(extrusion["status"], "ok")
+        self.assertEqual(extrusion["shape"], "occt_solid")
+        self.assertAlmostEqual(extrusion["volume"], 420.0)
+        self.assertEqual(extrusion["bbox"], {"min": [0.0, 0.0, 0.0], "max": [10.0, 10.0, 5.0]})
+
+    def test_p5_part_extrusion_rejects_unknown_facemaker_class(self) -> None:
+        result = self.run_recompute("part-extrusion-facemaker-unknown", "p5")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_property"])
+        self.assertEqual(diagnostic["object"], "Extrude")
+        self.assertEqual(diagnostic["property"], "FaceMakerClass")
+        self.assertEqual(result["objects"]["Extrude"]["status"], "error")
+
     def test_p5_external_geometry_resolves_internal_edge(self) -> None:
         result = self.run_recompute("sketch-external-internal-edge", "p5")
 
         self.assertEqual(result["diagnostics"], [])
         self.assert_object_matches_expected(result, "p5", "sketch-external-internal-edge")
+
+    def test_p5_external_geometry_recovers_internal_edge_from_stable_sublist(self) -> None:
+        result = self.run_recompute("sketch-external-internal-edge-stable-recover", "p5")
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pad["status"], "ok")
+        self.assertEqual(pad["shape"], "occt_solid")
+        self.assertAlmostEqual(pad["volume"], 36.0)
+        ffi_result = self.run_recompute_ffi("sketch-external-internal-edge-stable-recover", "p5")
+        update = ffi_result["elementReferenceUpdates"][0]
+        sub_set = update["SubSet"][0]
+        self.assertEqual(sub_set["SubList"], ["InternalEdge1"])
+        self.assertEqual(sub_set["StableSubList"], ["Edge1"])
+        self.assertEqual(sub_set["ReferenceShadow"][0]["subname"], "InternalEdge1")
 
         result = self.run_recompute("sketch-external-internal-vertex", "p5")
 

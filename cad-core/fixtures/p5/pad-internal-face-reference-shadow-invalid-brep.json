@@ -23,7 +23,23 @@
         "Profile": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Sketch",
-          "SubList": ["InternalFace99"]
+          "SubList": ["InternalFace1"],
+          "ReferenceShadow": [
+            {
+              "target": "Sketch",
+              "targetId": 1,
+              "property": "InternalShape",
+              "shapeType": "Face",
+              "indexed": "Face1",
+              "subname": "InternalFace1",
+              "brep": {
+                "format": "whole-object-brep",
+                "byteLength": 12,
+                "sha256": "bad",
+                "data": "..."
+              }
+            }
+          ]
         },
         "Length": 10,
         "Reversed": false,

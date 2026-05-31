@@ -209,6 +209,26 @@ std::vector<TopoDS_Face> facesForShape(const TopoDS_Shape& shape)
     return faces;
 }
 
+std::optional<TopoDS_Face> faceFromWire(const TopoDS_Wire& wire)
+{
+    BRepBuilderAPI_MakeFace faceBuilder(wire);
+    if (!faceBuilder.IsDone() || faceBuilder.Face().IsNull()) {
+        return std::nullopt;
+    }
+    return faceBuilder.Face();
+}
+
+double wireSquareExtent(const TopoDS_Wire& wire)
+{
+    Bnd_Box box;
+    BRepBndLib::Add(wire, box);
+    box.SetGap(0.0);
+    if (box.IsVoid()) {
+        return 0.0;
+    }
+    return box.SquareExtent();
+}
+
 TopTools_ListOfShape wireEdges(const TopoDS_Wire& wire)
 {
     TopTools_ListOfShape edges;
@@ -543,6 +563,83 @@ std::optional<TopoDS_Shape> makeFaceWithHolesFromClosedWires(const std::vector<T
     // ::Build_Essence() feeds all profile edges into BOPAlgo_BuilderFace so overlapping closed
     // profiles become disjoint bounded regions instead of overlapping face products.
     return splitOverlappingFaces(faces);
+}
+
+std::optional<TopoDS_Shape> makeSeparateFacesFromClosedWires(const std::vector<TopoDS_Wire>& wires)
+{
+    if (wires.empty()) {
+        return std::nullopt;
+    }
+
+    std::vector<TopoDS_Face> faces;
+    faces.reserve(wires.size());
+    for (const TopoDS_Wire& wire : wires) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMaker.cpp
+        // ::FaceMakerSimple::Build_Essence(), pushes "BRepBuilderAPI_MakeFace(w).Shape()" for
+        // every wire instead of classifying holes or nesting.
+        const auto face = faceFromWire(wire);
+        if (!face) {
+            return std::nullopt;
+        }
+        faces.push_back(*face);
+    }
+    return compoundOrSingleFace(faces);
+}
+
+std::optional<TopoDS_Shape> makeCheeseFaceFromClosedWires(const std::vector<TopoDS_Wire>& wires)
+{
+    if (wires.empty()) {
+        return std::nullopt;
+    }
+
+    std::vector<WireInfo> wireInfos;
+    wireInfos.reserve(wires.size());
+    for (const TopoDS_Wire& wire : wires) {
+        const auto area = faceAreaForWire(wire);
+        if (!area) {
+            return std::nullopt;
+        }
+        wireInfos.push_back(WireInfo{wire, *area, 0U});
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerCheese.cpp
+    // ::makeFace(), sorts wires by bounding-box diagonal and then groups every wire inside the
+    // current outer wire as a hole; it intentionally does not promote nested holes back to islands.
+    std::stable_sort(wireInfos.begin(), wireInfos.end(), [](const WireInfo& lhs, const WireInfo& rhs) {
+        return wireSquareExtent(lhs.wire) > wireSquareExtent(rhs.wire);
+    });
+
+    std::vector<TopoDS_Face> faces;
+    while (!wireInfos.empty()) {
+        WireInfo outer = wireInfos.front();
+        wireInfos.erase(wireInfos.begin());
+        const auto plane = planeForWire(outer.wire);
+        if (!plane) {
+            return std::nullopt;
+        }
+
+        BRepBuilderAPI_MakeFace faceBuilder(*plane, orientedWire(*plane, outer.wire, true));
+        if (!faceBuilder.IsDone() || faceBuilder.Face().IsNull()) {
+            return std::nullopt;
+        }
+
+        for (auto it = wireInfos.begin(); it != wireInfos.end();) {
+            if (wireContainsWire(*plane, outer.wire, it->wire, it->area)) {
+                faceBuilder.Add(orientedWire(*plane, it->wire, false));
+                if (!faceBuilder.IsDone()) {
+                    return std::nullopt;
+                }
+                it = wireInfos.erase(it);
+            }
+            else {
+                ++it;
+            }
+        }
+
+        faces.push_back(faceBuilder.Face());
+    }
+
+    return compoundOrSingleFace(faces);
 }
 
 FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(const std::vector<TopoDS_Wire>& wires,

@@ -1,7 +1,5 @@
 #include "cad_core/geometry/wire_joiner.h"
 
-#include "cad_core/geometry/face_maker.h"
-
 #include <BRepAlgoAPI_Splitter.hxx>
 #include <BRep_Builder.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
@@ -46,28 +44,11 @@ bool edgeMatchesSourceVertices(const TopoDS_Edge& edge, const TopoDS_Edge& sourc
         || (samePoint(first, sourceLast) && samePoint(last, sourceFirst));
 }
 
-std::vector<TopoDS_Edge> allOpenEdgesExcept(const std::vector<std::vector<TopoDS_Edge>>& wires,
-                                            std::size_t omittedWireIndex,
-                                            std::size_t omittedEdgeIndex)
+std::vector<TopoDS_Edge> boundaryEdges(const TopoDS_Shape& shape)
 {
     std::vector<TopoDS_Edge> edges;
-    for (std::size_t wireIndex = 0; wireIndex < wires.size(); ++wireIndex) {
-        for (std::size_t edgeIndex = 0; edgeIndex < wires[wireIndex].size(); ++edgeIndex) {
-            if (wireIndex == omittedWireIndex && edgeIndex == omittedEdgeIndex) {
-                continue;
-            }
-            edges.push_back(wires[wireIndex][edgeIndex]);
-        }
-    }
-    return edges;
-}
-
-std::vector<TopoDS_Edge> boundaryEdges(const std::vector<TopoDS_Wire>& faceWires)
-{
-    std::vector<TopoDS_Edge> edges;
-    for (const TopoDS_Wire& wire : faceWires) {
-        const auto current = wireEdges(wire);
-        edges.insert(edges.end(), current.begin(), current.end());
+    for (TopExp_Explorer explorer(shape, TopAbs_EDGE); explorer.More(); explorer.Next()) {
+        edges.push_back(TopoDS::Edge(explorer.Current()));
     }
     return edges;
 }
@@ -159,6 +140,16 @@ std::vector<TopoDS_Wire> wiresFromEdges(const std::vector<TopoDS_Edge>& edges)
     return wires;
 }
 
+bool edgeMatchesAnyBoundary(const TopoDS_Edge& edge, const std::vector<TopoDS_Edge>& boundaryEdges)
+{
+    for (const TopoDS_Edge& boundary : boundaryEdges) {
+        if (edgeMatchesSourceVertices(edge, boundary)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 }  // namespace
 
 void WireJoiner::setTightBound(bool enabled)
@@ -185,13 +176,17 @@ void WireJoiner::addSourceEdge(const TopoDS_Edge& edge)
     }
 }
 
-void WireJoiner::classifyBoundedFaceOwnership(const std::vector<TopoDS_Wire>& faceWires, std::size_t fullFaceCount)
+void WireJoiner::classifyBoundedFaceOwnership(const TopoDS_Shape& boundedFaceShape)
 {
-    if (faceWires.empty() || fullFaceCount == 0U || openWires_.empty()) {
+    if (boundedFaceShape.IsNull() || openWires_.empty()) {
         return;
     }
 
-    const std::vector<TopoDS_Edge> faceBoundaryEdges = boundaryEdges(faceWires);
+    const std::vector<TopoDS_Edge> faceBoundaryEdges = boundaryEdges(boundedFaceShape);
+    if (faceBoundaryEdges.empty()) {
+        return;
+    }
+
     for (WireInfo& info : openWires_) {
         std::vector<TopoDS_Edge> fragments;
         for (const TopoDS_Edge& edge : info.edges) {
@@ -202,18 +197,9 @@ void WireJoiner::classifyBoundedFaceOwnership(const std::vector<TopoDS_Wire>& fa
         info.consumedByBoundedFace.assign(info.edges.size(), false);
     }
 
-    std::vector<std::vector<TopoDS_Edge>> allWireEdges;
-    allWireEdges.reserve(openWires_.size());
-    for (const WireInfo& info : openWires_) {
-        allWireEdges.push_back(info.edges);
-    }
-
-    for (std::size_t wireIndex = 0; wireIndex < openWires_.size(); ++wireIndex) {
-        for (std::size_t edgeIndex = 0; edgeIndex < openWires_[wireIndex].edges.size(); ++edgeIndex) {
-            const auto edgesWithoutCurrent = allOpenEdgesExcept(allWireEdges, wireIndex, edgeIndex);
-            const FaceMakerBuildFaceResult withoutCurrent =
-                makeFacesFromClosedWiresAndSplitEdgesDetailed(faceWires, edgesWithoutCurrent);
-            openWires_[wireIndex].consumedByBoundedFace[edgeIndex] = withoutCurrent.faceCount < fullFaceCount;
+    for (WireInfo& info : openWires_) {
+        for (std::size_t edgeIndex = 0; edgeIndex < info.edges.size(); ++edgeIndex) {
+            info.consumedByBoundedFace[edgeIndex] = edgeMatchesAnyBoundary(info.edges[edgeIndex], faceBoundaryEdges);
         }
     }
 }

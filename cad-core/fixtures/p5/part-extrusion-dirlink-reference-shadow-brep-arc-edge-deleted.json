@@ -1,0 +1,72 @@
+{
+  "Objects": [
+    {
+      "Name": "BaseLine",
+      "ID": 1,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 10,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "SourceSketch",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "ArcOfCircle", "center": [20, 0], "radius": 5, "startAngle": 0, "endAngle": 1.5707963267948966}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Extrude",
+      "ID": 3,
+      "TypeId": "Part::Extrusion",
+      "Properties": {
+        "Base": {"PropertyType": "App::PropertyLink", "value": "BaseLine"},
+        "DirMode": "Edge",
+        "DirLink": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SourceSketch",
+          "SubList": ["Edge99"],
+          "StableSubList": ["Edge1"],
+          "ReferenceShadow": [
+            {
+              "target": "SourceSketch",
+              "targetId": 2,
+              "property": "Shape",
+              "shapeType": "Edge",
+              "indexed": "Edge1",
+              "subname": "Edge1",
+              "stableSubname": "Edge1",
+              "fingerprint": {
+                "length": 7.853981633974483,
+                "centroid": [3.183098861837907, 3.183098861837907, 0.0],
+                "bboxMin": [0.0, 0.0, 0.0],
+                "bboxMax": [5.0, 5.0, 0.0],
+                "edgeCount": 1,
+                "vertexCount": 2
+              },
+              "brep": {
+                "format": "brep-text",
+                "byteLength": 330,
+                "sha256": "aa3e144c28a9a429185a1bc6fff8edfef87616736a3df433a5c64e36d14e373c",
+                "data": "CASCADE Topology V1, (c) Matra-Datavision\nLocations 0\nCurve2ds 0\nCurves 1\n2 0 0 0 0 0 1 1 0 -0 -0 1 0 5\nPolygon3D 0\nPolygonOnTriangulations 0\nSurfaces 0\nTriangulations 0\n\nTShapes 3\nVe\n1e-07\n5 0 0\n0 0\n\n0101101\n*\nVe\n1e-07\n3.06161699786838e-16 5 0\n0 0\n\n0101101\n*\nEd\n 1e-07 1 1 0\n1  1 0 0 1.5707963267949\n0\n\n1101000\n+3 0 -2 0 *\n\n+1 0 "
+              }
+            }
+          ]
+        },
+        "LengthFwd": 10,
+        "LengthRev": 0,
+        "Solid": false
+      }
+    }
+  ],
+  "recompute": {"objs": ["Extrude"]}
+}

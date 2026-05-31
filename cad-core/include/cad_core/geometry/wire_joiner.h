@@ -23,12 +23,10 @@ public:
     void setMergeEdges(bool enabled);
     void addOpenWire(const TopoDS_Wire& wire);
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-    // ::WireJoinerP::findClosedWires() and getOpenWires() use final EdgeInfo/WireInfo ownership
-    // to omit edges consumed by bounded faces and keep leftover open fragments.
-    // Temporary subset: until EdgeInfo/WireInfo is migrated, a wire is treated as consumed when
-    // removing it lowers the bounded-face count. Delete this classifier when final ownership
-    // directly drives getOpenWires().
-    void classifyBoundedFaceOwnership(const std::vector<TopoDS_Wire>& faceWires, std::size_t fullFaceCount);
+    // ::WireJoinerP::build() exports openWireCompound only from edges with no final WireInfo
+    // ownership. This subset uses the already-built bounded face boundary as the ownership
+    // evidence: fragments matching bounded-face edges are consumed; leftover fragments stay open.
+    void classifyBoundedFaceOwnership(const TopoDS_Shape& boundedFaceShape);
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::getOpenWires(), when noOriginal=true, builds a source compound from
     // sourceEdgeArray and removes open-wire edges that still match original source edges.

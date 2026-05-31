@@ -1,0 +1,23 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [-2, 0], "end": [2, 0]},
+          {
+            "kind": "ArcOfCircle",
+            "center": [0, 0],
+            "radius": 2,
+            "startAngle": 0,
+            "endAngle": 3.141592653589793
+          }
+        ],
+        "Constraints": []
+      }
+    }
+  ],
+  "recompute": {"objs": ["Sketch"]}
+}

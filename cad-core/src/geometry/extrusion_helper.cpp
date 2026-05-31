@@ -115,21 +115,45 @@ std::optional<TaperedWireBuild> makeTaperedWireExtrusion(const TopoDS_Wire& sour
                                                         const TaperedExtrusionOptions& options,
                                                         std::string& error)
 {
-    const double offset = std::tan(options.taperAngleRadians) * options.length;
-    const gp_Vec translation = gp_Vec(options.direction) * options.length;
-
     std::vector<TopoDS_Wire> sections;
-    sections.push_back(fixedWire(sourceWire));
+    const TopoDS_Wire source = fixedWire(sourceWire);
+    const bool hasForward = std::abs(options.length) > Precision::Confusion();
+    const bool hasReverse = std::abs(options.reverseLength) > Precision::Confusion();
+    const bool includeSource = !hasForward || !hasReverse || options.length * options.reverseLength > 0.0;
 
-    auto endWire = createTaperedPrismOffset(sections.front(), translation, offset, error);
-    if (!endWire) {
+    if (hasReverse) {
+        const double offset = std::tan(options.reverseTaperAngleRadians) * options.reverseLength;
+        const gp_Vec translation = gp_Vec(options.direction.Reversed()) * options.reverseLength;
+        auto reverseWire = createTaperedPrismOffset(source, translation, offset, error);
+        if (!reverseWire) {
+            return std::nullopt;
+        }
+        sections.push_back(fixedWire(*reverseWire));
+    }
+
+    if (includeSource) {
+        sections.push_back(source);
+    }
+
+    if (hasForward) {
+        const double offset = std::tan(options.taperAngleRadians) * options.length;
+        const gp_Vec translation = gp_Vec(options.direction) * options.length;
+        auto forwardWire = createTaperedPrismOffset(source, translation, offset, error);
+        if (!forwardWire) {
+            return std::nullopt;
+        }
+        sections.push_back(fixedWire(*forwardWire));
+    }
+
+    if (sections.size() < 2U) {
+        error = "Extrusion: drafted length must not be zero";
         return std::nullopt;
     }
-    sections.push_back(fixedWire(*endWire));
 
     try {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/ExtrusionHelper.cpp
-        // ::ExtrusionHelper::makeElementDraft(), uses BRepOffsetAPI_ThruSections with ruled=true.
+        // ::ExtrusionHelper::makeElementDraft(), assembles reverse/source/forward wire sections
+        // and uses BRepOffsetAPI_ThruSections with ruled=true.
         auto loft = std::make_shared<BRepOffsetAPI_ThruSections>(options.solid ? Standard_True : Standard_False,
                                                                  Standard_True,
                                                                  Precision::Confusion());
@@ -141,9 +165,12 @@ std::optional<TaperedWireBuild> makeTaperedWireExtrusion(const TopoDS_Wire& sour
             error = "Extrusion: Loft could not be built";
             return std::nullopt;
         }
-        return TaperedWireBuild{loft->Shape(),
-                                loft,
-                                {TopoDS_Shape(sections.front()), TopoDS_Shape(sections.back())}};
+        std::vector<TopoDS_Shape> historySources;
+        historySources.reserve(sections.size());
+        for (const TopoDS_Wire& section : sections) {
+            historySources.push_back(TopoDS_Shape(section));
+        }
+        return TaperedWireBuild{loft->Shape(), loft, historySources};
     }
     catch (const Standard_Failure& failure) {
         error = std::string("Extrusion: Loft could not be built: ") + failure.GetMessageString();
@@ -213,11 +240,13 @@ std::optional<TaperedExtrusionResult> makeTaperedExtrusion(const TopoDS_Shape& p
         error = "Not a valid shape";
         return std::nullopt;
     }
-    if (std::abs(options.length) <= Precision::Confusion()) {
+    if (std::abs(options.length) <= Precision::Confusion()
+        && std::abs(options.reverseLength) <= Precision::Confusion()) {
         error = "Extrusion: drafted length must not be zero";
         return std::nullopt;
     }
-    if (std::abs(options.taperAngleRadians) >= halfPi - Precision::Angular()) {
+    if (std::abs(options.taperAngleRadians) >= halfPi - Precision::Angular()
+        || std::abs(options.reverseTaperAngleRadians) >= halfPi - Precision::Angular()) {
         error = "Extrusion: taper angle must be smaller than 90 degrees";
         return std::nullopt;
     }

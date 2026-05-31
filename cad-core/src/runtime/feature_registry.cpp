@@ -75,6 +75,7 @@ FeatureRegistry buildDefaultRegistry()
     registry.registerExecutor("Part::Ellipse", features::executePartEllipse);
     registry.registerExecutor("Part::Helix", features::executePartHelix);
     registry.registerExecutor("Part::Spiral", features::executePartSpiral);
+    registry.registerExecutor("Part::Extrusion", features::executePartExtrusion);
     registry.registerExecutor("Part::ImportBrep", features::executePartImportBrep);
     registry.registerExecutor("Part::ImportStep", features::executePartImportStep);
     registry.registerExecutor("Part::ImportIges", features::executePartImportIges);

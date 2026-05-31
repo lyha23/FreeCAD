@@ -23,7 +23,7 @@
         "Profile": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Sketch",
-          "SubList": ["InternalFace99"]
+          "SubList": ["InternalEdge1"]
         },
         "Length": 10,
         "Reversed": false,

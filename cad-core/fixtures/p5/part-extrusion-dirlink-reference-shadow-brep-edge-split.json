@@ -1,0 +1,63 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [5, 0]},
+          {"kind": "LineSegment", "start": [5, 0], "end": [10, 0]},
+          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
+          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
+          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Extrude",
+      "ID": 2,
+      "TypeId": "Part::Extrusion",
+      "Properties": {
+        "Base": {"PropertyType": "App::PropertyLink", "value": "Sketch"},
+        "DirMode": "Edge",
+        "DirLink": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Sketch",
+          "SubList": ["Edge99"],
+          "StableSubList": ["Edge1"],
+          "ReferenceShadow": [
+            {
+              "target": "Sketch",
+              "targetId": 1,
+              "property": "Shape",
+              "shapeType": "Edge",
+              "indexed": "Edge1",
+              "subname": "Edge1",
+              "stableSubname": "Edge1",
+              "fingerprint": {
+                "length": 10.0,
+                "centroid": [5.0, 0.0, 0.0],
+                "bboxMin": [0.0, 0.0, 0.0],
+                "bboxMax": [10.0, 0.0, 0.0],
+                "edgeCount": 1,
+                "vertexCount": 2
+              },
+              "brep": {
+                "format": "brep-text",
+                "byteLength": 305,
+                "sha256": "not-validated",
+                "data": "DBRep_DrawableShape\n\nCASCADE Topology V1, (c) Matra-Datavision\nLocations 0\nCurve2ds 0\nCurves 1\n1 0 0 0 1 0 0 \nPolygon3D 0\nPolygonOnTriangulations 0\nSurfaces 0\nTriangulations 0\n\nTShapes 3\nVe\n1e-07\n0 0 0\n0 0\n\n0101101\n*\nVe\n1e-07\n10 0 0\n0 0\n\n0101101\n*\nEd\n 1e-07 1 1 0\n1  1 0 0 10\n0\n\n1101000\n+3 0 -2 0 *\n\n+1 0 "
+              }
+            }
+          ]
+        },
+        "LengthFwd": 10,
+        "LengthRev": 0,
+        "Solid": false
+      }
+    }
+  ],
+  "recompute": {"objs": ["Extrude"]}
+}

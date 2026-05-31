@@ -29,12 +29,47 @@ enum class PropertyKind {
     LinkSubList,
 };
 
+// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/PropertyLinks.h
+// ::PropertyLinkBase::ShadowSub stores App::ElementNamePair with "newName" and "oldName".
+struct ShadowSub {
+    std::string newName;
+    std::string oldName;
+};
+
+// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/PartFeature.cpp
+// ::Feature::ElementCache keeps old referenced subshape geometry; cad-core carries the
+// approved single-subshape snapshot metadata in request JSON instead of a session cache.
+struct BrepSnapshot {
+    std::string format;
+    long long byteLength = 0;
+    std::string sha256;
+    std::string data;
+};
+
+// FreeCAD basis: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/GeoFeature.h
+// ::searchElementCache() and SketchObject.cpp::SketchObject() "registerElementCache".
+// ReferenceShadow is cad-core's stateless evidence channel for that old-subshape cache.
+struct ReferenceShadow {
+    std::string target;
+    long long targetId = 0;
+    std::string property;
+    std::string shapeType;
+    std::string indexed;
+    std::string subname;
+    std::string stableSubname;
+    nlohmann::json fingerprint = nlohmann::json::object();
+    std::optional<BrepSnapshot> brep;
+};
+
 struct Link {
     std::string object;
     std::vector<std::string> subnames;
     std::vector<std::string> stableSubnames;
     std::vector<std::string> fullSubnames;
     std::string property;
+    bool stableSubnamesExplicit = false;
+    std::vector<ShadowSub> shadowSubs;
+    std::vector<ReferenceShadow> referenceShadows;
 };
 
 struct Placement {

@@ -73,6 +73,7 @@ struct ComputeContext
     std::map<std::string, nlohmann::json> objects;
     std::map<std::string, nlohmann::json> mesh;
     std::map<std::string, nlohmann::json> subshapes;
+    nlohmann::json elementReferenceUpdates = nlohmann::json::array();
     std::map<std::string, topo::NamedShape> namedShapes;
     std::map<std::string, std::vector<std::string>> dependencies;
     std::map<std::string, const document::DocumentObject*> documentObjects;

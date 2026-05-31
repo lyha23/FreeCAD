@@ -16,6 +16,8 @@ struct TaperedExtrusionOptions {
     double length = 0.0;
     double taperAngleRadians = 0.0;
     bool solid = true;
+    double reverseLength = 0.0;
+    double reverseTaperAngleRadians = 0.0;
 };
 
 struct TaperedExtrusionHistoryComponent {
