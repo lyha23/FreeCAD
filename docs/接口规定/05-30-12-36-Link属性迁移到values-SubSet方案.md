@@ -135,6 +135,7 @@
   "ReferenceShadow": [
     {
       "target": "Pad",
+      "targetId": 31,
       "property": "Shape",
       "shapeType": "Face",
       "indexed": "Face3",
@@ -143,6 +144,8 @@
       "fingerprint": {},
       "brep": {
         "format": "brep-bin-zstd-base64",
+        "byteLength": 812,
+        "sha256": "base16-or-base64-digest",
         "data": "..."
       }
     }

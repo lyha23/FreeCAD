@@ -137,6 +137,7 @@ Link 属性字段名遵循 `docs/接口规定/05-30-12-36-Link属性迁移到val
   "ReferenceShadow": [
     {
       "target": "Sketch",
+      "targetId": 30,
       "property": "InternalShape",
       "shapeType": "Face",
       "indexed": "Face2",
@@ -160,6 +161,8 @@ Link 属性字段名遵循 `docs/接口规定/05-30-12-36-Link属性迁移到val
       },
       "brep": {
         "format": "brep-bin-zstd-base64",
+        "byteLength": 812,
+        "sha256": "base16-or-base64-digest",
         "data": "..."
       }
     }
@@ -171,12 +174,15 @@ Link 属性字段名遵循 `docs/接口规定/05-30-12-36-Link属性迁移到val
 
 1. `ReferenceShadow` 存在时必须是数组，长度应与同级 `SubList` 一致；长度不一致返回 `invalid_link_value`。
 2. `ReferenceShadow[].target` 应与同级 `value` 指向同一对象；不一致返回 `invalid_link_value`。
-3. `ReferenceShadow[].shapeType` 只允许 `Vertex`、`Edge`、`Face`。
-4. `ReferenceShadow[].fingerprint` 是轻量恢复证据；后端可在 stable subname 解析成功后用它检测语义漂移。
-5. `ReferenceShadow[].brep` 是已批准的唯一 BREP 载荷。它只能表示被引用的单个旧 subshape，不能是完整对象 shape，也不能被 feature executor 当作 profile / boolean / display 输入。
-6. `ReferenceShadow[].brep.format` 当前固定为 `brep-bin-zstd-base64`；后续如果支持其它编码，必须在 capabilities 中显式声明。
-7. 后端解码失败、格式不支持、体积超限或 shapeType 不匹配时，应忽略该 BREP 并降级到 fingerprint 或返回引用诊断，不应让整个 recompute 崩溃。
-8. 前端可以把 `ReferenceShadow` 随 Link 属性保存在 `Objects[]` 中；它是引用恢复辅助数据，不改变“当前 shape 必须由 `DocumentObject graph` 重新计算”的原则。
+3. `ReferenceShadow[].targetId` 应匹配当前 `Objects[].ID`；不匹配说明 shadow 已过期，应忽略该 shadow 并返回引用诊断，不应拿旧 BREP 去匹配新对象。
+4. `ReferenceShadow[].shapeType` 只允许 `Vertex`、`Edge`、`Face`。
+5. fingerprint 和 BREP 都必须使用被引用属性 shape 的本地坐标，不能混用世界坐标。
+6. `ReferenceShadow[].fingerprint` 是轻量恢复证据；后端可在 stable subname 解析成功后用它检测语义漂移。
+7. `ReferenceShadow[].brep` 是已批准的唯一 BREP 载荷。它只能表示被引用的单个旧 subshape，不能是完整对象 shape，也不能被 feature executor 当作 profile / boolean / display 输入。
+8. `ReferenceShadow[].brep.format` 当前固定为 `brep-bin-zstd-base64`；后续如果支持其它编码，必须在 capabilities 中显式声明。
+9. `ReferenceShadow[].brep.byteLength` 和 `ReferenceShadow[].brep.sha256` 用于体积限制与完整性校验；后端应先做大小检查，再解码 BREP。
+10. 后端解码失败、格式不支持、体积超限、digest 不匹配或 shapeType 不匹配时，应忽略该 BREP 并降级到 fingerprint 或返回引用诊断，不应让整个 recompute 崩溃。
+11. 前端可以把 `ReferenceShadow` 随 Link 属性保存在 `Objects[]` 中；它是引用恢复辅助数据，不改变“当前 shape 必须由 `DocumentObject graph` 重新计算”的原则。
 
 ## 响应
 
@@ -238,11 +244,11 @@ Link 属性字段名遵循 `docs/接口规定/05-30-12-36-Link属性迁移到val
 | `subshapes[].kind` | `Face`、`Edge`、`Vertex`、`Solid`、`Shell`、`Wire` 等。 |
 | `subshapes[].indexed` | 当前 OCC indexed subname，例如 `Face1`、`Edge3`。不要长期保存。 |
 | `subshapes[].subname` | 当前显示 / 拾取名，例如 `InternalFace1`、`Pad.Face3`。 |
-| `subshapes[].stableSubname` | 后续 feature 引用该元素时优先保存的稳定名。前端应当把它当 opaque string。 |
+| `subshapes[].stableSubname` | 后续 feature 引用该元素时优先保存的稳定名。前端应当把它当 opaque string；为空字符串表示当前子元素没有可跨重建使用的稳定名。 |
 
 `mesh` 只服务前端显示，不是持久模型。前端不能把它作为下一次 recompute 的输入。
 
-`subshapes` 只服务本次显示结果上的拾取。前端选择 face / edge / vertex 后，应把当前显示 / 拾取名写入后续 `PropertyLinkSub.SubList` 或 `PropertyLinkSubList.SubSet[].SubList`，并把 `stableSubname` 写入同位置的 `StableSubList`。如果当前名和稳定名暂时相同，两边可以写同一个值；不要自行拼接 `FaceN`、`InternalFaceN`、`;g...` 或 Body 前缀。前端不要传 `FullSubList`。
+`subshapes` 只服务本次显示结果上的拾取。前端选择 face / edge / vertex 后，应把当前显示 / 拾取名写入后续 `PropertyLinkSub.SubList` 或 `PropertyLinkSubList.SubSet[].SubList`；只有 `stableSubname` 非空时，才把它写入同位置的 `StableSubList`。如果当前名和稳定名暂时相同，两边可以写同一个值；如果稳定名为空，例如当前阶段的 Sketch `InternalFaceN` / `InternalEdgeN` / `InternalVertexN`，不得自行把当前名当稳定名写入。不要自行拼接 `FaceN`、`InternalFaceN`、`;g...` 或 Body 前缀。前端不要传 `FullSubList`。
 
 如果 result 对象是 `PartDesign::Body` 且 `Tip` 指向 solid feature，Body 导出的 `subname` / `stableSubname` 可以带 tip feature 段，例如 `Pad.Face1` 或 `Pad.<stableSubname>`，用于对齐 FreeCAD `Body::getSubObject()` 的 child-object 路径。
 
@@ -269,6 +275,7 @@ Link 属性字段名遵循 `docs/接口规定/05-30-12-36-Link属性迁移到val
       "ReferenceShadow": [
         {
           "target": "Sketch",
+          "targetId": 30,
           "property": "InternalShape",
           "shapeType": "Face",
           "indexed": "Face2",
@@ -277,6 +284,8 @@ Link 属性字段名遵循 `docs/接口规定/05-30-12-36-Link属性迁移到val
           "fingerprint": {},
           "brep": {
             "format": "brep-bin-zstd-base64",
+            "byteLength": 812,
+            "sha256": "base16-or-base64-digest",
             "data": "..."
           }
         }

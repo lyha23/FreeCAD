@@ -74,6 +74,17 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("Sketch:InternalFace2", sketch["mesh"]["faceIds"])
         self.assertTrue(any(item["id"] == "Sketch:InternalFace1" for item in sketch["subshapes"]))
         self.assertTrue(any(item["id"] == "Sketch:InternalFace2" for item in sketch["subshapes"]))
+        internal_subshapes = [
+            item for item in sketch["subshapes"]
+            if item["indexed"].startswith("Internal")
+        ]
+        self.assertGreater(len(internal_subshapes), 0)
+        for item in internal_subshapes:
+            self.assertEqual(item["stableSubname"], "")
+        self.assertEqual(
+            next(item for item in sketch["subshapes"] if item["indexed"] == "Edge1")["stableSubname"],
+            "Edge1",
+        )
 
     def test_c_api_matches_cli_for_p3b_recompute(self) -> None:
         ffi_result = self.run_recompute_ffi("pocket-custom-vector", "p3b")

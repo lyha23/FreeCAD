@@ -134,8 +134,11 @@ std::string displayKind(const nlohmann::json& subshape)
 std::string stableSubnameFor(const std::string& indexed,
                              const topo::NamedShape* namedShape)
 {
+    const bool internalIndexed = indexed.rfind("InternalFace", 0) == 0
+        || indexed.rfind("InternalEdge", 0) == 0
+        || indexed.rfind("InternalVertex", 0) == 0;
     if (namedShape == nullptr) {
-        return indexed;
+        return internalIndexed ? std::string{} : indexed;
     }
 
     std::string fallback;
@@ -148,7 +151,12 @@ std::string stableSubnameFor(const std::string& indexed,
         }
         fallback = stableSubname;
     }
-    return fallback.empty() ? indexed : fallback;
+    if (!fallback.empty()) {
+        return fallback;
+    }
+    // Sketch Internal* names are request-local until the sketch InternalShape has a real
+    // NamedShape/ElementMap. Do not synthesize a stable name from the current indexed name.
+    return internalIndexed ? std::string{} : indexed;
 }
 
 std::string currentSubnameForStable(const std::string& indexed,

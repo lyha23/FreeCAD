@@ -92,6 +92,7 @@ g底边:split3 = 右段
   "ReferenceShadow": [
     {
       "target": "Sketch",
+      "targetId": 30,
       "property": "InternalShape",
       "shapeType": "Face",
       "indexed": "Face2",
@@ -115,6 +116,8 @@ g底边:split3 = 右段
       },
       "brep": {
         "format": "brep-bin-zstd-base64",
+        "byteLength": 812,
+        "sha256": "base16-or-base64-digest",
         "data": "..."
       }
     }
@@ -127,6 +130,7 @@ g底边:split3 = 右段
 | 字段 | 语义 |
 | --- | --- |
 | `target` | 被引用对象名，例如 `Sketch`。 |
+| `targetId` | 被引用对象的稳定 `Objects[].ID`，防止同名对象删除重建后误用旧 snapshot。 |
 | `property` | 被引用几何属性；草图内部面使用 `InternalShape`。 |
 | `shapeType` | `Vertex` / `Edge` / `Face`。 |
 | `indexed` | 捕获时的 indexed name，例如 `Face2`。 |
@@ -136,6 +140,16 @@ g底边:split3 = 右段
 | `brep` | 可选旧 subshape 快照，用于贴近 FreeCAD 的旧几何搜索。 |
 
 `brep` 只允许保存被引用子元素，不保存整个对象 BREP。
+
+关键约束：
+
+- `ReferenceShadow` 是可丢弃、可重建的引用恢复证据。字段缺失、`targetId`
+  不匹配、BREP 解码失败或 digest 不匹配时，后端应忽略该 shadow 并返回引用诊断，不应用它强行恢复。
+- 用户主动重新选择 subshape 时，前端必须清掉旧 `ReferenceShadow`，并按新选择重新捕获；
+  不得把旧 face 的 BREP 继续挂在新选择上。
+- `ReferenceShadow` 不能替代 `NamedShape` / `ElementMap`。稳定引用主路径仍然是
+  `StableSubList -> NamedShape / ElementMap`，旧 BREP 只作为 fallback 证据。
+- BREP 和 fingerprint 必须使用同一坐标系：被引用属性 shape 的本地坐标，避免对象 placement 改变后把同一几何误判为漂移。
 
 ## 解析流程
 
@@ -263,7 +277,7 @@ ReferenceShadow.brep
 
 ### runtime
 
-`recompute` 输出通过 `elementReferenceUpdates` 给出引用更新建议，不单独新增 `referenceShadowUpdates` 顶层字段：
+`recompute` 输出通过 `elementReferenceUpdates` 给出引用更新建议，不单独新增 `referenceShadowUpdates` 顶层字段。更新项应尽量保持和正式 `PropertyLinkSub` 输入同形，避免出现另一套 patch DSL：
 
 ```json
 {
@@ -271,11 +285,29 @@ ReferenceShadow.brep
     {
       "object": "Pad",
       "property": "Profile",
-      "index": 0,
-      "oldSubname": "InternalFace2",
-      "newSubname": "InternalFace3",
-      "stableSubname": "g305:split3;...",
-      "ReferenceShadow": [{ "...": "..." }]
+      "PropertyType": "App::PropertyLinkSub",
+      "value": "Sketch",
+      "SubList": ["InternalFace3"],
+      "StableSubList": ["g305:split3;..."],
+      "ShadowSub": [{ "newName": "g305:split3;...", "oldName": "InternalFace2" }],
+      "ReferenceShadow": [
+        {
+          "target": "Sketch",
+          "targetId": 30,
+          "property": "InternalShape",
+          "shapeType": "Face",
+          "indexed": "Face3",
+          "subname": "InternalFace3",
+          "stableSubname": "g305:split3;...",
+          "fingerprint": {},
+          "brep": {
+            "format": "brep-bin-zstd-base64",
+            "byteLength": 812,
+            "sha256": "base16-or-base64-digest",
+            "data": "..."
+          }
+        }
+      ]
     }
   ]
 }
@@ -297,7 +329,7 @@ runtime 只汇总结果；具体解析和匹配逻辑仍归 `topo`。`ReferenceS
 
 - 解析并保存 `ShadowSub newName/oldName`。
 - 在 `NamedShape` / `ElementMap` 支持后，用 `StableSubList` 正常恢复 `InternalFaceN`。
-- 当引用缺失或 element map 需要反向更新时，走旧几何搜索。
+- 当引用缺失或 element map 需要反向更新但还没有 BREP matcher 时，先返回明确诊断，不做几何猜测。
 - 只在唯一候选时更新引用。
 
 验收：
@@ -322,6 +354,7 @@ runtime 只汇总结果；具体解析和匹配逻辑仍归 `topo`。`ReferenceS
 - 只对被引用 subshape 保存可选 BREP。
 - 实现 FreeCAD-like shared-vertex matcher。
 - BREP 读取失败时降级到 fingerprint，不让请求整体崩溃。
+- `targetId`、`byteLength` 和 `sha256` 必须先通过校验，再进入 BREP 解码和匹配。
 
 验收：
 
