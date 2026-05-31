@@ -57,18 +57,6 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(link["shape"], "occt_compound")
         self.assert_object_matches_expected(result, "p8", "app-link-box-multi-face")
 
-    def test_p8_app_link_preserves_full_sublist_alias(self) -> None:
-        result = self.run_recompute("app-link-full-sublist-retag", "p8")
-        link = result["objects"]["BoxLink"]
-        element_map = result["named_shapes"]["BoxLink"]["element_map"]
-
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(link["status"], "ok")
-        self.assertEqual(link["shape"], "occt_face")
-        self.assertEqual(element_map["ExternalDoc.Box.Face1"], "Face1")
-        self.assertEqual(element_map["Face1;:X;ExternalDoc.Box.Face1"], "Face1")
-        self.assert_object_matches_expected(result, "p8", "app-link-full-sublist-retag")
-
     def test_p8_app_link_resolves_label_qualified_subshape_alias(self) -> None:
         result = self.run_recompute("app-link-label-qualified-sublist", "p8")
         link = result["objects"]["BoxLink"]

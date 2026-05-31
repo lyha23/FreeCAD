@@ -3,6 +3,7 @@
 #include "cad_core/features/feature_executor.h"
 #include "cad_core/geometry/face_maker.h"
 #include "cad_core/geometry/placement.h"
+#include "cad_core/geometry/shape_exporter.h"
 #include "cad_core/topo/element_map.h"
 #include "cad_core/topo/named_shape.h"
 #include "cad_core/topo/subshape_map.h"
@@ -327,6 +328,18 @@ struct SketchProfileEdge {
     std::vector<gp_Pnt> poles;
 };
 
+struct SketchProfileWires {
+    std::vector<TopoDS_Wire> closedWires;
+    std::vector<TopoDS_Wire> openWires;
+    std::vector<TopoDS_Edge> openEdges;
+};
+
+struct ProfileFaceBuild {
+    std::optional<TopoDS_Shape> shape;
+    bool splitFailed = false;
+    bool requiresSubshapeSelection = false;
+};
+
 struct UnionFind {
     std::vector<std::size_t> parent;
 
@@ -363,6 +376,20 @@ double readNumber2(const nlohmann::json& value, std::size_t index, bool& ok)
         return 0.0;
     }
     return value.at(index).get<double>();
+}
+
+double readNumber3(const nlohmann::json& value, std::size_t index, bool& ok)
+{
+    if (!value.is_array() || value.size() != 3 || !value.at(index).is_number()) {
+        ok = false;
+        return 0.0;
+    }
+    const double number = value.at(index).get<double>();
+    if (!std::isfinite(number)) {
+        ok = false;
+        return 0.0;
+    }
+    return number;
 }
 
 bool samePoint(const gp_Pnt& left, const gp_Pnt& right)
@@ -522,6 +549,31 @@ std::optional<gp_Pnt> readPoint2Field(const nlohmann::json& value)
         return std::nullopt;
     }
     return gp_Pnt(x, y, 0.0);
+}
+
+std::optional<gp_Pnt> readPoint3Field(const nlohmann::json& value, const std::string& field)
+{
+    const auto it = value.find(field);
+    if (it == value.end()) {
+        return std::nullopt;
+    }
+    bool ok = true;
+    const double x = readNumber3(*it, 0, ok);
+    const double y = readNumber3(*it, 1, ok);
+    const double z = readNumber3(*it, 2, ok);
+    if (!ok) {
+        return std::nullopt;
+    }
+    return gp_Pnt(x, y, z);
+}
+
+std::optional<gp_Vec> readVector3Field(const nlohmann::json& value, const std::string& field)
+{
+    const auto point = readPoint3Field(value, field);
+    if (!point) {
+        return std::nullopt;
+    }
+    return gp_Vec(point->X(), point->Y(), point->Z());
 }
 
 std::optional<double> readNumberField(const nlohmann::json& value, const std::string& field)
@@ -3198,9 +3250,9 @@ bool addConnectedWire(const std::vector<SketchProfileEdge>& edges,
     return wireBuilder.IsDone() && (!requireClosed || samePoint(*firstStart, *lastEnd));
 }
 
-std::optional<std::vector<TopoDS_Wire>> makeClosedWiresFromEdges(const std::vector<SketchProfileEdge>& edges)
+std::optional<SketchProfileWires> makeProfileWiresFromEdges(const std::vector<SketchProfileEdge>& edges)
 {
-    std::vector<TopoDS_Wire> wires;
+    SketchProfileWires result;
     std::vector<bool> used(edges.size(), false);
 
     for (std::size_t startIndex = 0; startIndex < edges.size(); ++startIndex) {
@@ -3209,6 +3261,7 @@ std::optional<std::vector<TopoDS_Wire>> makeClosedWiresFromEdges(const std::vect
         }
 
         BRepBuilderAPI_MakeWire wireBuilder;
+        std::vector<TopoDS_Edge> builtEdges;
         const gp_Pnt firstStart = edges[startIndex].start;
         gp_Pnt currentEnd = edges[startIndex].end;
         const auto firstEdge = makeProfileEdge(edges[startIndex], false);
@@ -3216,6 +3269,7 @@ std::optional<std::vector<TopoDS_Wire>> makeClosedWiresFromEdges(const std::vect
             return std::nullopt;
         }
         wireBuilder.Add(*firstEdge);
+        builtEdges.push_back(*firstEdge);
         used[startIndex] = true;
 
         while (!samePoint(firstStart, currentEnd)) {
@@ -3230,6 +3284,7 @@ std::optional<std::vector<TopoDS_Wire>> makeClosedWiresFromEdges(const std::vect
                         return std::nullopt;
                     }
                     wireBuilder.Add(*nextEdge);
+                    builtEdges.push_back(*nextEdge);
                     currentEnd = edges[index].end;
                     used[index] = true;
                     found = true;
@@ -3241,6 +3296,7 @@ std::optional<std::vector<TopoDS_Wire>> makeClosedWiresFromEdges(const std::vect
                         return std::nullopt;
                     }
                     wireBuilder.Add(*nextEdge);
+                    builtEdges.push_back(*nextEdge);
                     currentEnd = edges[index].start;
                     used[index] = true;
                     found = true;
@@ -3248,17 +3304,32 @@ std::optional<std::vector<TopoDS_Wire>> makeClosedWiresFromEdges(const std::vect
                 }
             }
             if (!found) {
-                return std::nullopt;
+                break;
             }
         }
 
         if (!wireBuilder.IsDone()) {
             return std::nullopt;
         }
-        wires.push_back(wireBuilder.Wire());
+        if (samePoint(firstStart, currentEnd)) {
+            result.closedWires.push_back(wireBuilder.Wire());
+        }
+        else {
+            result.openWires.push_back(wireBuilder.Wire());
+            result.openEdges.insert(result.openEdges.end(), builtEdges.begin(), builtEdges.end());
+        }
     }
 
-    return wires;
+    return result;
+}
+
+std::optional<std::vector<TopoDS_Wire>> makeClosedWiresFromEdges(const std::vector<SketchProfileEdge>& edges)
+{
+    auto wires = makeProfileWiresFromEdges(edges);
+    if (!wires || !wires->openEdges.empty()) {
+        return std::nullopt;
+    }
+    return wires->closedWires;
 }
 
 TopoDS_Shape compoundOrSingleShape(const std::vector<TopoDS_Shape>& shapes)
@@ -3311,23 +3382,26 @@ std::optional<TopoDS_Shape> buildRawSketchShape(const document::DocumentObject& 
     // makeElementWires() before PartDesign later asks ProfileBased to make a face.
     std::vector<TopoDS_Shape> shapes;
     if (!edges.empty()) {
-        if (const auto closedWires = makeClosedWiresFromEdges(edges)) {
-            shapes.insert(shapes.end(), closedWires->begin(), closedWires->end());
+        const auto profileWires = makeProfileWiresFromEdges(edges);
+        if (!profileWires) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "execution_failed",
+                                   "OCCT could not build raw Sketch Shape wire",
+                                   object.name,
+                                   "Geometry");
+            return std::nullopt;
         }
-        else {
-            BRepBuilderAPI_MakeWire wireBuilder;
-            std::optional<gp_Pnt> firstStart;
-            std::optional<gp_Pnt> lastEnd;
-            if (!addConnectedWire(edges, wireBuilder, firstStart, lastEnd, false)) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "execution_failed",
-                                       "OCCT could not build raw Sketch Shape wire",
-                                       object.name,
-                                       "Geometry");
-                return std::nullopt;
-            }
-            shapes.push_back(wireBuilder.Wire());
+        shapes.insert(shapes.end(), profileWires->closedWires.begin(), profileWires->closedWires.end());
+        shapes.insert(shapes.end(), profileWires->openWires.begin(), profileWires->openWires.end());
+        if (shapes.empty()) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "execution_failed",
+                                   "OCCT could not build raw Sketch Shape wire",
+                                   object.name,
+                                   "Geometry");
+            return std::nullopt;
         }
     }
     for (const auto& point : points) {
@@ -3375,34 +3449,40 @@ std::optional<TopoDS_Shape> buildRawSketchShape(const document::DocumentObject& 
     return compoundOrSingleShape(shapes);
 }
 
-std::optional<TopoDS_Shape> buildOptionalProfileFace(const std::vector<SketchProfileEdge>& edges,
-                                                     const std::vector<SketchCircle>& circles,
-                                                     const std::vector<SketchEllipse>& ellipses)
+ProfileFaceBuild buildOptionalProfileFace(const std::vector<SketchProfileEdge>& edges,
+                                          const std::vector<SketchCircle>& circles,
+                                          const std::vector<SketchEllipse>& ellipses)
 {
     std::vector<TopoDS_Wire> wires;
+    std::vector<TopoDS_Edge> splitEdges;
     if (!edges.empty()) {
-        auto edgeWires = makeClosedWiresFromEdges(edges);
+        auto edgeWires = makeProfileWiresFromEdges(edges);
         if (!edgeWires) {
-            return std::nullopt;
+            return {};
         }
-        wires.insert(wires.end(), edgeWires->begin(), edgeWires->end());
+        wires.insert(wires.end(), edgeWires->closedWires.begin(), edgeWires->closedWires.end());
+        splitEdges.insert(splitEdges.end(), edgeWires->openEdges.begin(), edgeWires->openEdges.end());
     }
     for (const auto& circle : circles) {
         const auto wire = makeWireFromCircle(circle);
         if (!wire) {
-            return std::nullopt;
+            return {};
         }
         wires.push_back(*wire);
     }
     for (const auto& ellipse : ellipses) {
         const auto wire = makeWireFromEllipse(ellipse);
         if (!wire) {
-            return std::nullopt;
+            return {};
         }
         wires.push_back(*wire);
     }
 
-    return geometry::makeFaceWithHolesFromClosedWires(wires);
+    if (wires.empty()) {
+        return {};
+    }
+    auto shape = geometry::makeFacesFromClosedWiresAndSplitEdges(wires, splitEdges);
+    return ProfileFaceBuild{shape, !splitEdges.empty() && !shape, !splitEdges.empty() && shape.has_value()};
 }
 
 std::size_t countSubshapesOfKind(const nlohmann::json& subshapes, const std::string& kind)
@@ -4126,13 +4206,104 @@ std::optional<gp_Trsf> supportPlacement(const document::DocumentObject& object,
     return placementIt->second;
 }
 
+std::optional<gp_Trsf> readSketchPlaneFramePlacement(const document::DocumentObject& object,
+                                                     runtime::ComputeContext& context)
+{
+    const auto* value = document::propertyValue(object, "SketchPlaneFrame");
+    if (value == nullptr) {
+        return std::nullopt;
+    }
+    const nlohmann::json& frame = value->raw;
+    if (!frame.is_object() || frame.value("PropertyType", std::string{}) != "Chili::SketchPlaneFrame") {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_property_type",
+                               "SketchPlaneFrame must be a Chili::SketchPlaneFrame property",
+                               object.name,
+                               "SketchPlaneFrame",
+                               "runtime");
+        return std::nullopt;
+    }
+
+    const auto origin = readPoint3Field(frame, "Origin");
+    const auto normalVector = readVector3Field(frame, "Normal");
+    const auto xVector = readVector3Field(frame, "XDirection");
+    if (!origin || !normalVector || !xVector) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_property_type",
+                               "SketchPlaneFrame requires numeric Origin, Normal and XDirection vectors",
+                               object.name,
+                               "SketchPlaneFrame",
+                               "runtime");
+        return std::nullopt;
+    }
+    if (normalVector->SquareMagnitude() <= Precision::SquareConfusion()
+        || xVector->SquareMagnitude() <= Precision::SquareConfusion()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_property_type",
+                               "SketchPlaneFrame Normal and XDirection must be non-zero",
+                               object.name,
+                               "SketchPlaneFrame",
+                               "runtime");
+        return std::nullopt;
+    }
+
+    const gp_Dir normal(*normalVector);
+    const gp_Vec normalUnit(normal.X(), normal.Y(), normal.Z());
+    const double normalProjection = xVector->Dot(normalUnit);
+    const gp_Vec projectedX(xVector->X() - normalProjection * normalUnit.X(),
+                            xVector->Y() - normalProjection * normalUnit.Y(),
+                            xVector->Z() - normalProjection * normalUnit.Z());
+    if (projectedX.SquareMagnitude() <= Precision::SquareConfusion()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_property_type",
+                               "SketchPlaneFrame Normal and XDirection must not be parallel",
+                               object.name,
+                               "SketchPlaneFrame",
+                               "runtime");
+        return std::nullopt;
+    }
+
+    const gp_Dir xDirection(projectedX);
+    const gp_Vec xUnit(xDirection.X(), xDirection.Y(), xDirection.Z());
+    const gp_Vec yVector = normalUnit.Crossed(xUnit);
+    const gp_Dir yDirection(yVector);
+
+    gp_Trsf placement;
+    placement.SetValues(xDirection.X(),
+                        yDirection.X(),
+                        normal.X(),
+                        origin->X(),
+                        xDirection.Y(),
+                        yDirection.Y(),
+                        normal.Y(),
+                        origin->Y(),
+                        xDirection.Z(),
+                        yDirection.Z(),
+                        normal.Z(),
+                        origin->Z());
+    return placement;
+}
+
 }  // namespace
 
 void executeSketchObject(const document::DocumentObject& object, runtime::ComputeContext& context)
 {
     // FreeCAD semantic source: src/Mod/Sketcher/App/SketchObject.cpp
     if (!rejectUnsupportedProperties(
-            object, context, {"Geometry", "Constraints", "Support", "AttachmentSupport", "MapMode", "ExternalGeometry", "ExternalTypes"})) {
+            object,
+            context,
+            {"Geometry",
+             "Constraints",
+             "Support",
+             "AttachmentSupport",
+             "MapMode",
+             "ExternalGeometry",
+             "ExternalTypes",
+             "SketchPlaneFrame"})) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -4171,7 +4342,33 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
 
     gp_Trsf placement;
     bool hasPlacement = false;
-    if (const auto support = supportPlacement(object, context)) {
+    const bool hasSketchPlaneFrame = document::propertyValue(object, "SketchPlaneFrame") != nullptr;
+    const bool hasSupportProperty = document::propertyValue(object, "Support") != nullptr
+        || document::propertyValue(object, "AttachmentSupport") != nullptr;
+    // SketchPlaneFrame is an explicit world-space sketch plane from cad-web. It replaces
+    // Support/AttachmentSupport, while App::PropertyPlacement remains a local transform
+    // composed after that frame, matching the existing support * local placement order.
+    if (hasSketchPlaneFrame && hasSupportProperty) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "conflicting_property",
+                               "SketchPlaneFrame is an explicit sketch plane and cannot be combined with Support or AttachmentSupport",
+                               object.name,
+                               "SketchPlaneFrame",
+                               "runtime");
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+    if (hasSketchPlaneFrame) {
+        const auto framePlacement = readSketchPlaneFramePlacement(object, context);
+        if (!framePlacement) {
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
+        placement = *framePlacement;
+        hasPlacement = true;
+    }
+    else if (const auto support = supportPlacement(object, context)) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.cpp
         // ::ProfileBased::positionByPrevious() falls back to sketch->AttachmentSupport Placement
         // when there is no previous base feature.
@@ -4218,12 +4415,24 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
 
     std::optional<TopoDS_Shape> profileShape;
     std::optional<TopoDS_Shape> internalShape;
-    if (auto profileFace = buildOptionalProfileFace(edges, circles, ellipses)) {
-        profileShape = *profileFace;
-        // This is only the first P5 InternalShape baseline. FreeCAD's complete path is
-        // SketchObject::buildInternals() -> FaceMakerBuildFace + WireJoiner::getOpenWires().
-        // Open wires and InternalEdge/InternalVertex mapping stay explicit P5/P6 work.
-        internalShape = *profileFace;
+    const ProfileFaceBuild profileFace = buildOptionalProfileFace(edges, circles, ellipses);
+    if (profileFace.splitFailed) {
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+        // ::SketchObject::buildInternals() delegates split-region construction to
+        // "Part::FaceMakerBuildFace"; unsupported open splitters must not silently fall
+        // back to a whole-profile face.
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "unsupported_profile_region",
+                               "Sketch open splitter geometry could not produce bounded InternalFace regions",
+                               object.name,
+                               "Geometry");
+    }
+    if (profileFace.shape) {
+        profileShape = *profileFace.shape;
+        // This is the bounded-face subset of FreeCAD's buildInternals() path. Full
+        // WireJoiner open-wire ledger/history remains separate topology work.
+        internalShape = *profileFace.shape;
     }
 
     if (hasPlacement) {
@@ -4241,7 +4450,14 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
     runtime::ShapeValue shapeValue{runtime::ShapeValue::Kind::Sketch, *rawShape};
     shapeValue.profileShape = profileShape;
     shapeValue.internalShape = internalShape;
+    shapeValue.profileRequiresSubshapeSelection = profileFace.requiresSubshapeSelection;
     context.shapes[object.name] = shapeValue;
+    if (internalShape && !internalShape->IsNull()) {
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+        // ::SketchObject::buildInternals(), writes auxiliary "InternalShape"; the web
+        // response renders that request-local shape with InternalFace ids matching subshapes.
+        context.mesh[object.name] = geometry::meshForShape(*internalShape, "InternalFace");
+    }
     if (!rawShape->IsNull()) {
         nlohmann::json subshapes = topo::subshapeMapForShape(*rawShape);
         if (internalShape && !internalShape->IsNull()) {

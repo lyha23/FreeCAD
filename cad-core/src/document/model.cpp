@@ -168,14 +168,10 @@ std::optional<Link> readLinkObject(const nlohmann::json& value, const std::strin
     }
 
     std::vector<std::string> stableSubnames = readOptionalStringList(value, "StableSubList");
-    std::vector<std::string> fullSubnames = readOptionalStringList(value, "FullSubList");
     if (stableSubnames.empty()) {
         stableSubnames = subnames;
     }
-    if (fullSubnames.empty()) {
-        fullSubnames = subnames;
-    }
-
+    std::vector<std::string> fullSubnames = stableSubnames;
     return Link{objectIt->get<std::string>(),
                 std::move(subnames),
                 std::move(stableSubnames),
@@ -208,14 +204,10 @@ std::optional<Link> readLinkSubListItem(const nlohmann::json& value, const std::
     }
 
     std::vector<std::string> stableSubnames = readOptionalStringList(value, "StableSubList");
-    std::vector<std::string> fullSubnames = readOptionalStringList(value, "FullSubList");
     if (stableSubnames.empty()) {
         stableSubnames = subnames;
     }
-    if (fullSubnames.empty()) {
-        fullSubnames = subnames;
-    }
-
+    std::vector<std::string> fullSubnames = stableSubnames;
     return Link{objectIt->get<std::string>(),
                 std::move(subnames),
                 std::move(stableSubnames),
@@ -395,34 +387,28 @@ bool hasInvalidTypedPayload(const nlohmann::json& raw, PropertyKind kind)
 
 bool isMalformedLinkValue(const nlohmann::json& value, const std::string& propertyType)
 {
-    auto hasStringListField = [](const nlohmann::json& item, const std::string& field) {
-        const auto fieldIt = item.find(field);
-        return fieldIt == item.end() || readStringList(*fieldIt).has_value();
+    auto hasUnsupportedSubnameFields = [](const nlohmann::json& item) {
+        return item.contains("FullSubList") || item.contains("StableSubnames")
+            || item.contains("FullSubnames");
     };
-    auto hasAlignedSubnameFields = [&](const nlohmann::json& item) {
-        if (item.contains("StableSubnames") || item.contains("FullSubnames")) {
+    auto hasValidSubListField = [&](const nlohmann::json& item) {
+        if (hasUnsupportedSubnameFields(item)) {
             return false;
         }
         const auto subListIt = item.find("SubList");
-        std::size_t subListSize = 0U;
-        if (subListIt != item.end()) {
-            const auto subnames = readStringList(*subListIt);
-            if (!subnames) {
-                return false;
-            }
-            subListSize = subnames->size();
+        if (subListIt != item.end() && !readStringList(*subListIt)) {
+            return false;
         }
-        for (const std::string field : {"StableSubList", "FullSubList"}) {
-            const auto fieldIt = item.find(field);
-            if (fieldIt == item.end()) {
-                continue;
-            }
-            const auto subnames = readStringList(*fieldIt);
-            if (!subnames || subnames->size() != subListSize) {
-                return false;
-            }
+        const auto stableSubListIt = item.find("StableSubList");
+        if (stableSubListIt == item.end()) {
+            return true;
         }
-        return true;
+        if (subListIt == item.end()) {
+            return false;
+        }
+        const auto subnames = readStringList(*subListIt);
+        const auto stableSubnames = readStringList(*stableSubListIt);
+        return subnames && stableSubnames && subnames->size() == stableSubnames->size();
     };
 
     if (isLinkObjectType(propertyType)) {
@@ -430,22 +416,23 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
         if (objectIt == value.end() || (!objectIt->is_string() && !objectIt->is_null())) {
             return true;
         }
-        if (isLinkSubObjectType(propertyType) && !hasAlignedSubnameFields(value)) {
-            return true;
+        const bool supportsSubList = isLinkSubObjectType(propertyType) || propertyType == "App::PropertyXLink";
+        if (supportsSubList) {
+            if (value.contains("values") || value.contains("SubSet") || !hasValidSubListField(value)) {
+                return true;
+            }
         }
-        if (!isLinkSubObjectType(propertyType)
-            && (!hasStringListField(value, "SubList") || !hasStringListField(value, "StableSubList")
-                || !hasStringListField(value, "FullSubList") || value.contains("StableSubnames")
-                || value.contains("FullSubnames"))) {
+        if (!supportsSubList
+            && (value.contains("SubList") || value.contains("SubSet") || value.contains("values")
+                || value.contains("StableSubList") || hasUnsupportedSubnameFields(value))) {
             return true;
         }
         return false;
     }
 
     if (isLinkListType(propertyType)) {
-        if (value.contains("value") || value.contains("SubList") || value.contains("StableSubList")
-            || value.contains("FullSubList") || value.contains("StableSubnames")
-            || value.contains("FullSubnames") || value.contains("SubSet")) {
+        if (value.contains("value") || value.contains("SubList") || value.contains("SubSet")
+            || value.contains("StableSubList") || hasUnsupportedSubnameFields(value)) {
             return true;
         }
         const auto rawLinksIt = value.find("values");
@@ -457,8 +444,7 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
 
     if (isLinkSubListType(propertyType)) {
         if (value.contains("value") || value.contains("values") || value.contains("SubList")
-            || value.contains("StableSubList") || value.contains("FullSubList")
-            || value.contains("StableSubnames") || value.contains("FullSubnames")) {
+            || value.contains("StableSubList") || hasUnsupportedSubnameFields(value)) {
             return true;
         }
         const auto rawLinksIt = value.find("SubSet");
@@ -473,7 +459,10 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
             if (objectIt == item.end() || (!objectIt->is_string() && !objectIt->is_null())) {
                 return true;
             }
-            if (!hasAlignedSubnameFields(item)) {
+            if (item.contains("values") || item.contains("SubSet")) {
+                return true;
+            }
+            if (!hasValidSubListField(item)) {
                 return true;
             }
         }

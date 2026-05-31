@@ -48,6 +48,9 @@ struct ShapeValue
     // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::buildInternals(),
     // writes "InternalShape" from FaceMakerBuildFace and WireJoiner open-wire results.
     std::optional<TopoDS_Shape> internalShape;
+    // Split-derived InternalFace regions are individually selectable profile domains; closed
+    // wire compounds such as face-with-island can still be consumed as a whole profile.
+    bool profileRequiresSubshapeSelection = false;
 };
 
 struct AddSubShape

@@ -121,6 +121,90 @@ std::optional<TopoDS_Shape> previousSolidShape(const runtime::ComputeContext& co
     return std::nullopt;
 }
 
+// FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+// ::SketchObject::getElementTypes() exposes "InternalFace"; PartDesign Profile is a LinkSub
+// to the sketch, so cad-core resolves Profile.SubList InternalFaceN against InternalShape.
+std::optional<TopoDS_Shape> resolveSketchInternalFaceProfile(const document::DocumentObject& object,
+                                                             runtime::ComputeContext& context,
+                                                             const document::Link& profileLink,
+                                                             const runtime::ShapeValue& shapeValue,
+                                                             const std::string& featureName)
+{
+    if (profileLink.subnames.empty()) {
+        if (shapeValue.profileRequiresSubshapeSelection) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "invalid_subshape",
+                                   featureName + " Profile target " + profileLink.object
+                                       + " has split InternalFace regions; Profile.SubList must select one InternalFaceN",
+                                   object.name,
+                                   "Profile",
+                                   "runtime",
+                                   profileLink.object);
+            return std::nullopt;
+        }
+        if (shapeValue.profileShape && !shapeValue.profileShape->IsNull()) {
+            return *shapeValue.profileShape;
+        }
+        return std::nullopt;
+    }
+
+    if (profileLink.subnames.size() != 1U || profileLink.subnames.front().empty()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_subshape",
+                               featureName + " Profile.SubList must select exactly one InternalFaceN",
+                               object.name,
+                               "Profile",
+                               "runtime",
+                               profileLink.object);
+        return std::nullopt;
+    }
+    if (!shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "missing_link_target",
+                               featureName + " Profile target " + profileLink.object + " has no InternalShape for "
+                                   + profileLink.subnames.front(),
+                               object.name,
+                               "Profile",
+                               "runtime",
+                               profileLink.object,
+                               profileLink.subnames.front());
+        return std::nullopt;
+    }
+
+    const std::string& subname = profileLink.subnames.front();
+    const auto parsed = topo::parseInternalSubshapeName(subname);
+    if (!parsed || parsed->kind != TopAbs_FACE) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "unsupported_subshape_kind",
+                               featureName + " Profile.SubList requires an InternalFaceN subshape",
+                               object.name,
+                               "Profile",
+                               "runtime",
+                               profileLink.object,
+                               subname);
+        return std::nullopt;
+    }
+
+    const auto subshape = topo::subshapeByName(*shapeValue.internalShape, *parsed);
+    if (!subshape || subshape->IsNull()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_subshape",
+                               featureName + " Profile target " + profileLink.object + " has no subshape " + subname,
+                               object.name,
+                               "Profile",
+                               "runtime",
+                               profileLink.object,
+                               subname);
+        return std::nullopt;
+    }
+    return *subshape;
+}
+
 double throughAllLength(const TopoDS_Shape& base, const TopoDS_Shape& profile)
 {
     // FreeCAD semantic source:
@@ -1267,9 +1351,16 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const document::DocumentObjec
                                profileLink->object);
         return std::nullopt;
     }
+    std::optional<TopoDS_Shape> selectedProfileShape;
     const TopoDS_Shape* profileShape = nullptr;
     if (shapeIt->second.kind == runtime::ShapeValue::Kind::Sketch) {
-        profileShape = shapeIt->second.profileShape ? &*shapeIt->second.profileShape : nullptr;
+        selectedProfileShape = resolveSketchInternalFaceProfile(object, context, *profileLink, shapeIt->second, featureName);
+        profileShape = selectedProfileShape ? &*selectedProfileShape : nullptr;
+        const bool explicitSubshape = !profileLink->subnames.empty();
+        const bool ambiguousMultiFace = shapeIt->second.profileRequiresSubshapeSelection;
+        if (profileShape == nullptr && (explicitSubshape || ambiguousMultiFace)) {
+            return std::nullopt;
+        }
     }
     else {
         profileShape = &shapeIt->second.shape;

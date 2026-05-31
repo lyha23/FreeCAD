@@ -376,6 +376,55 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["status"], "ok")
         self.assert_object_matches_expected(result, "p5", "sketch-internal-face")
 
+    def test_p5_split_line_builds_multiple_internal_faces(self) -> None:
+        result = self.run_recompute("sketch-internal-face-split-line", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["internal_shape"], "occt_internal_shape")
+        self.assertEqual(sketch["internal_face_count"], 2)
+        self.assertIn("InternalFace1", result["subshapes"]["Sketch"])
+        self.assertIn("InternalFace2", result["subshapes"]["Sketch"])
+        self.assertIn("InternalFace1", result["mesh"]["Sketch"]["faceIds"])
+        self.assertIn("InternalFace2", result["mesh"]["Sketch"]["faceIds"])
+
+    def test_p5_unsupported_splitter_does_not_fake_internal_region(self) -> None:
+        result = self.run_recompute("sketch-internal-face-unsupported-splitter", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_profile_region"])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertFalse(sketch["profile_ready"])
+        self.assertNotIn("Sketch", result["mesh"])
+
+    def test_p5_pad_uses_selected_internal_face_sublist(self) -> None:
+        result = self.run_recompute("pad-internal-face-sublist", "p5")
+        sketch = result["objects"]["Sketch"]
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["internal_face_count"], 2)
+        self.assertEqual(pad["status"], "ok")
+        self.assertAlmostEqual(pad["volume"], 250.0)
+
+    def test_p5_pad_requires_sublist_for_multi_internal_face_sketch(self) -> None:
+        result = self.run_recompute("pad-internal-face-missing-sublist", "p5")
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["invalid_subshape"])
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
+
+    def test_p5_pad_reports_missing_internal_face_subshape_context(self) -> None:
+        result = self.run_recompute("pad-internal-face-missing-subshape", "p5")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["invalid_subshape"])
+        self.assertEqual(diagnostic["object"], "Pad")
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], "Sketch")
+        self.assertEqual(diagnostic["subname"], "InternalFace99")
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
+
     def test_p5_external_geometry_resolves_internal_edge(self) -> None:
         result = self.run_recompute("sketch-external-internal-edge", "p5")
         sketch = result["objects"]["Sketch"]

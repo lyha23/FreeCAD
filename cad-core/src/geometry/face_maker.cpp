@@ -1,5 +1,6 @@
 #include "cad_core/geometry/face_maker.h"
 
+#include <BRepAlgoAPI_Splitter.hxx>
 #include <BRep_Builder.hxx>
 #include <BRepClass_FaceClassifier.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
@@ -14,8 +15,10 @@
 #include <TopExp_Explorer.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Compound.hxx>
+#include <TopoDS_Edge.hxx>
 #include <TopoDS_Iterator.hxx>
 #include <TopoDS_Vertex.hxx>
+#include <TopTools_ListOfShape.hxx>
 
 #include <algorithm>
 #include <map>
@@ -120,6 +123,15 @@ std::optional<TopoDS_Shape> compoundOrSingleFace(const std::vector<TopoDS_Face>&
     return compound;
 }
 
+std::vector<TopoDS_Face> facesForShape(const TopoDS_Shape& shape)
+{
+    std::vector<TopoDS_Face> faces;
+    for (TopExp_Explorer explorer(shape, TopAbs_FACE); explorer.More(); explorer.Next()) {
+        faces.push_back(TopoDS::Face(explorer.Current()));
+    }
+    return faces;
+}
+
 }  // namespace
 
 std::optional<TopoDS_Shape> makeFaceWithHolesFromClosedWires(const std::vector<TopoDS_Wire>& wires)
@@ -194,6 +206,45 @@ std::optional<TopoDS_Shape> makeFaceWithHolesFromClosedWires(const std::vector<T
     }
 
     return compoundOrSingleFace(faces);
+}
+
+std::optional<TopoDS_Shape> makeFacesFromClosedWiresAndSplitEdges(const std::vector<TopoDS_Wire>& wires,
+                                                                  const std::vector<TopoDS_Edge>& splitEdges)
+{
+    const auto base = makeFaceWithHolesFromClosedWires(wires);
+    if (!base || base->IsNull()) {
+        return std::nullopt;
+    }
+    if (splitEdges.empty()) {
+        return base;
+    }
+
+    TopTools_ListOfShape objects;
+    objects.Append(*base);
+    TopTools_ListOfShape tools;
+    for (const TopoDS_Edge& edge : splitEdges) {
+        if (!edge.IsNull()) {
+            tools.Append(edge);
+        }
+    }
+    if (tools.IsEmpty()) {
+        return base;
+    }
+
+    BRepAlgoAPI_Splitter splitter;
+    splitter.SetArguments(objects);
+    splitter.SetTools(tools);
+    splitter.Build();
+    if (!splitter.IsDone() || splitter.Shape().IsNull()) {
+        return std::nullopt;
+    }
+
+    const std::vector<TopoDS_Face> baseFaces = facesForShape(*base);
+    std::vector<TopoDS_Face> splitFaces = facesForShape(splitter.Shape());
+    if (splitFaces.size() <= baseFaces.size()) {
+        return std::nullopt;
+    }
+    return compoundOrSingleFace(splitFaces);
 }
 
 }  // namespace cad_core::geometry

@@ -17,7 +17,10 @@ enum class ShapeFileFormat {
 
 nlohmann::json bboxForShape(const TopoDS_Shape& shape);
 double volumeForShape(const TopoDS_Shape& shape);
-nlohmann::json meshForShape(const TopoDS_Shape& shape);
+// FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+// ::SketchObject::getElementTypes(), exposes "InternalFace" elements for Sketch
+// InternalShape. cad-core uses the same prefix when exporting display mesh face ids.
+nlohmann::json meshForShape(const TopoDS_Shape& shape, const std::string& faceIdPrefix = "Face");
 ShapeFileFormat shapeFileFormatFromString(const std::string& format);
 std::string shapeFileFormatName(ShapeFileFormat format);
 std::string shapeFileFormatExtension(ShapeFileFormat format);

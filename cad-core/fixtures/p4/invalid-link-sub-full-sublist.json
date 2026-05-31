@@ -1,0 +1,23 @@
+{
+  "Objects": [
+    {
+      "Name": "Pad",
+      "ID": 1,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Sketch",
+          "SubList": ["Face1"],
+          "StableSubList": ["Face1"],
+          "FullSubList": ["Sketch.Face1"]
+        },
+        "Type": "Length",
+        "Length": 10,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    }
+  ],
+  "recompute": {"objs": ["Pad"]}
+}

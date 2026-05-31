@@ -9,6 +9,72 @@ from .fixture_runner import ROOT, CadCoreFixtureTestCase
 
 
 class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
+    def test_c_api_returns_sketch_internal_profile_mesh(self) -> None:
+        result = self.run_recompute_ffi("sketch-internal-face", "p5")
+        sketch = result["results"][0]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["object"], "Sketch")
+        self.assertIsNotNone(sketch["mesh"])
+        self.assertGreater(len(sketch["mesh"]["vertices"]), 0)
+        self.assertGreater(len(sketch["mesh"]["indices"]), 0)
+        self.assertIn("Sketch:InternalFace1", sketch["mesh"]["faceIds"])
+        self.assertTrue(any(item["id"] == "Sketch:InternalFace1" for item in sketch["subshapes"]))
+
+    def test_c_api_keeps_open_sketch_internal_profile_mesh_null(self) -> None:
+        result = self.run_recompute_ffi("sketch-open-wire-internal-empty", "p5")
+        sketch = result["results"][0]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["object"], "Sketch")
+        self.assertIsNone(sketch["mesh"])
+        self.assertFalse(any(item["id"] == "Sketch:InternalFace1" for item in sketch["subshapes"]))
+        self.assertTrue(any(item["id"] == "Sketch:Edge1" for item in sketch["subshapes"]))
+
+    def test_c_api_applies_sketch_plane_frame_to_internal_profile_mesh(self) -> None:
+        result = self.run_recompute_ffi("sketch-plane-frame-internal-face", "p5")
+        sketch = result["results"][0]
+        vertices = sketch["mesh"]["vertices"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertIsNotNone(sketch["mesh"])
+        self.assertAlmostEqual(min(vertex[0] for vertex in vertices), -4.0)
+        self.assertAlmostEqual(max(vertex[0] for vertex in vertices), 1.0)
+        self.assertAlmostEqual(min(vertex[1] for vertex in vertices), 2.0)
+        self.assertAlmostEqual(max(vertex[1] for vertex in vertices), 12.0)
+        self.assertAlmostEqual(min(vertex[2] for vertex in vertices), 3.0)
+        self.assertAlmostEqual(max(vertex[2] for vertex in vertices), 3.0)
+
+    def test_c_api_composes_sketch_plane_frame_with_local_placement(self) -> None:
+        result = self.run_recompute_ffi("sketch-plane-frame-placement", "p5")
+        sketch = result["results"][0]
+        vertices = sketch["mesh"]["vertices"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertAlmostEqual(min(vertex[0] for vertex in vertices), 2.0)
+        self.assertAlmostEqual(max(vertex[0] for vertex in vertices), 12.0)
+        self.assertAlmostEqual(min(vertex[1] for vertex in vertices), 3.0)
+        self.assertAlmostEqual(max(vertex[1] for vertex in vertices), 8.0)
+        self.assertAlmostEqual(min(vertex[2] for vertex in vertices), 3.0)
+        self.assertAlmostEqual(max(vertex[2] for vertex in vertices), 3.0)
+
+    def test_c_api_rejects_invalid_sketch_plane_frame(self) -> None:
+        result = self.run_recompute_ffi("sketch-plane-frame-invalid", "p5")
+        sketch = result["results"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["invalid_property_type"])
+        self.assertIsNone(sketch["mesh"])
+
+    def test_c_api_returns_split_internal_face_mesh_ids(self) -> None:
+        result = self.run_recompute_ffi("sketch-internal-face-split-line", "p5")
+        sketch = result["results"][0]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertIn("Sketch:InternalFace1", sketch["mesh"]["faceIds"])
+        self.assertIn("Sketch:InternalFace2", sketch["mesh"]["faceIds"])
+        self.assertTrue(any(item["id"] == "Sketch:InternalFace1" for item in sketch["subshapes"]))
+        self.assertTrue(any(item["id"] == "Sketch:InternalFace2" for item in sketch["subshapes"]))
+
     def test_c_api_matches_cli_for_p3b_recompute(self) -> None:
         ffi_result = self.run_recompute_ffi("pocket-custom-vector", "p3b")
 
@@ -33,11 +99,17 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(capabilities["export_formats"], ["brep", "step", "stl"])
         self.assertIn("value", capabilities["document"]["link_property_fields"])
         self.assertIn("values", capabilities["document"]["link_property_fields"])
-        self.assertIn("SubSet", capabilities["document"]["link_property_fields"])
+        self.assertIn("SubList", capabilities["document"]["link_property_fields"])
         self.assertIn("StableSubList", capabilities["document"]["link_property_fields"])
+        self.assertIn("SubSet", capabilities["document"]["link_property_fields"])
+        self.assertNotIn("FullSubList", capabilities["document"]["link_property_fields"])
         self.assertEqual(
             capabilities["document"]["link_property_shapes"]["App::PropertyLinkList"],
             ["values"],
+        )
+        self.assertEqual(
+            capabilities["document"]["link_property_shapes"]["App::PropertyLinkSub"],
+            ["value", "SubList", "StableSubList"],
         )
         self.assertEqual(
             capabilities["document"]["link_property_shapes"]["App::PropertyLinkSubList"],

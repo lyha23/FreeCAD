@@ -176,7 +176,7 @@ std::string pointKey(const gp_Pnt& point)
 
 }  // namespace
 
-nlohmann::json meshForShape(const TopoDS_Shape& shape)
+nlohmann::json meshForShape(const TopoDS_Shape& shape, const std::string& faceIdPrefix)
 {
     BRepMesh_IncrementalMesh mesher(shape, 0.1);
     mesher.Perform();
@@ -217,7 +217,7 @@ nlohmann::json meshForShape(const TopoDS_Shape& shape)
             gp_Pnt p2 = triangulation->Node(n2).Transformed(location.Transformation());
             gp_Pnt p3 = triangulation->Node(n3).Transformed(location.Transformation());
             triangles.push_back({addVertex(p1), addVertex(p2), addVertex(p3)});
-            faceIds.push_back("Face" + std::to_string(faceIndex));
+            faceIds.push_back(faceIdPrefix + std::to_string(faceIndex));
         }
     }
 
