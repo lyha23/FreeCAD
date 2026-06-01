@@ -50,10 +50,19 @@ public:
     void setMergeEdges(bool enabled);
     void addOpenWire(const TopoDS_Wire& wire);
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-    // ::WireJoinerP::build() exports openWireCompound only from edges with no final WireInfo
-    // ownership. This subset uses the already-built bounded face boundary as the ownership
-    // evidence: fragments matching bounded-face edges are consumed; leftover fragments stay open.
-    void classifyBoundedFaceOwnership(const TopoDS_Shape& boundedFaceShape);
+    // ::WireJoinerP::findTightBound()/exhaustTightBound() write final EdgeInfo ownership before
+    // getOpenWires(). cad-core records this bounded-face classifier only as a diagnostic probe;
+    // it must not write "wireInfo", "wireInfo2" or "iteration" used by open-wire export.
+    void recordBoundedFaceClassifierProbe(const TopoDS_Shape& boundedFaceShape);
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build(), calls splitEdges(), buildClosedWire(), findTightBound() and
+    // exhaustTightBound() before exporting openWireCompound from final EdgeInfo ownership.
+    // cad-core's current main path builds that final ownership from the split edge graph:
+    // cycle edges receive tight-bound owners, bridge edges remain open-export candidates.
+    void buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape = nullptr,
+                                 const std::vector<TopoDS_Wire>* closedWires = nullptr,
+                                 const std::vector<TopoDS_Edge>* openEdges = nullptr,
+                                 bool splitProducedBoundedFaces = false);
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::getOpenWires(), when noOriginal=true, builds a source compound from
     // sourceEdgeArray and removes open-wire edges whose vertices are still shared with source.
@@ -83,6 +92,7 @@ private:
         int iteration2 = 0;
         std::size_t wireInfo = 0;
         std::size_t wireInfo2 = 0;
+        bool ownerContributesToLedger = true;
         bool splitFromInputEdge = false;
         std::size_t branchCandidateCount = 0;
         std::size_t branchInsideCandidateCount = 0;
@@ -119,20 +129,11 @@ private:
     int nextIteration2_ = 1;
     std::vector<WireInfo> openWires_;
     std::vector<TopoDS_Edge> sourceEdges_;
+    std::optional<TopoDS_Shape> resultWireEvidence_;
     void rebuildOrderedVertices(WireInfo& info);
     void recordBranchSearchCandidates(WireInfo& info, const std::vector<TopoDS_Face>& boundedFaces);
     void recordTightBoundLifecycle(WireInfo& info);
     void recordExhaustTightBoundLifecycle(WireInfo& info);
 };
-
-// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-// ::WireJoinerP::build(), copies result-wire EdgeInfo states into openWireCompound before
-// SketchObject::buildInternals() compounds them with FaceMakerBuildFace output. This is the
-// current result-wire graph subset until the full EdgeInfo/WireInfo history ledger is migrated.
-std::optional<TopoDS_Shape> copiedResultWireGraphForSketchInternals(const TopoDS_Shape& boundedFaceShape,
-                                                                    const std::vector<TopoDS_Edge>& openEdges,
-                                                                    const std::vector<TopoDS_Wire>& closedWires,
-                                                                    bool splitProducedBoundedFaces,
-                                                                    bool hasOpenWireOutput);
 
 }  // namespace cad_core::geometry

@@ -98,6 +98,8 @@ struct ReferenceSubshapeResolution {
     std::string subname;
     TopoDS_Shape shape;
     bool recovered = false;
+    std::string recoveryMethod;
+    std::string recoveryReason;
 };
 
 struct ReferenceSubshapeRecovery {
@@ -106,18 +108,6 @@ struct ReferenceSubshapeRecovery {
     std::string reason;
     std::string diagnosticCode;
 };
-
-std::optional<std::string> unsupportedReferenceShadowBrepReason(const document::ReferenceShadow& shadow)
-{
-    if (!shadow.brep || shadow.brep->format == "brep-text" || shadow.brep->format == "brep-bin-zstd-base64") {
-        return std::nullopt;
-    }
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/PartFeature.cpp
-    // ::Feature::onBeforeChange() keeps old subshape geometry in ElementCache in-process.
-    // cad-core's stateless recovery decoder only accepts approved snapshot transports; unknown
-    // formats must not silently fall back to fingerprint recovery.
-    return "ReferenceShadow.brep format " + shadow.brep->format + " is not supported by runtime recovery";
-}
 
 std::string internalSubnameFromStableElementMap(const ComputeContext& context,
                                                 const std::string& objectName,
@@ -244,58 +234,24 @@ ReferenceSubshapeRecovery recoverSubshapeForReference(const document::Link& link
         searchShape = &shapeIt->second.shape;
     }
 
-    if (const auto unsupportedBrepReason = unsupportedReferenceShadowBrepReason(shadow)) {
+    const auto recovery = topo::recoverReferenceShadowSubshape(*searchShape, prefix, shadow);
+    if (recovery.status != topo::ReferenceMatchStatus::Unique || !recovery.shape) {
         return ReferenceSubshapeRecovery {
-            topo::ReferenceMatchStatus::Missing,
+            recovery.status,
             std::nullopt,
-            *unsupportedBrepReason,
-            "unsupported_reference_shadow_brep",
+            recovery.reason,
+            recovery.diagnosticCode,
         };
-    }
-
-    if (shadow.brep) {
-        std::string brepError;
-        const auto match = topo::findUniqueSubshapeByReferenceBrepSnapshot(*searchShape,
-                                                                           prefix,
-                                                                           shadow.brep->format,
-                                                                           shadow.brep->data,
-                                                                           shadow.brep->byteLength,
-                                                                           shadow.brep->sha256,
-                                                                           shadow.shapeType,
-                                                                           brepError);
-        if (match.status != topo::ReferenceMatchStatus::Unique || !match.shape) {
-            const std::string reason = !brepError.empty()
-                ? "does not decode ReferenceShadow.brep: " + brepError
-                : (match.status == topo::ReferenceMatchStatus::Ambiguous
-                       ? "matches multiple ReferenceShadow.brep candidates"
-                       : (match.status == topo::ReferenceMatchStatus::Split
-                              ? "is split into multiple current ReferenceShadow.brep candidates"
-                              : (match.status == topo::ReferenceMatchStatus::Deleted
-                                     ? "is deleted from current ReferenceShadow.brep candidates"
-                                     : "does not match a current ReferenceShadow.brep candidate")));
-            return ReferenceSubshapeRecovery {match.status, std::nullopt, reason, {}};
-        }
-        return ReferenceSubshapeRecovery {
-            match.status,
-            ReferenceSubshapeResolution {match.subname, *match.shape, true},
-            {},
-            {},
-        };
-    }
-
-    const auto match = topo::findUniqueSubshapeByReferenceFingerprint(*searchShape,
-                                                                      prefix,
-                                                                      shadow.fingerprint,
-                                                                      shadow.shapeType);
-    if (match.status != topo::ReferenceMatchStatus::Unique || !match.shape) {
-        const std::string reason = match.status == topo::ReferenceMatchStatus::Ambiguous
-            ? "matches multiple ReferenceShadow fingerprint candidates"
-            : "does not match a current ReferenceShadow fingerprint candidate";
-        return ReferenceSubshapeRecovery {match.status, std::nullopt, reason, {}};
     }
     return ReferenceSubshapeRecovery {
-        match.status,
-        ReferenceSubshapeResolution {match.subname, *match.shape, true},
+        recovery.status,
+        ReferenceSubshapeResolution {
+            recovery.subname,
+            *recovery.shape,
+            true,
+            "reference_shadow_single_subshape",
+            "element_map_missing_or_split",
+        },
         {},
         {},
     };
@@ -388,24 +344,14 @@ bool internalSubshapeMatchesReferenceShadow(const ShapeValue& shapeValue,
                                             const TopoDS_Shape& subshape,
                                             const document::ReferenceShadow& shadow)
 {
-    if (shadow.fingerprint.is_object() && !shadow.fingerprint.empty()
-        && !topo::referenceFingerprintDriftReason(subshape, shadow.fingerprint, shadow.shapeType)) {
-        return true;
-    }
-    if (!shadow.brep || !shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
+    if (!shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
         return false;
     }
-
-    std::string brepError;
-    const auto match = topo::findUniqueSubshapeByReferenceBrepSnapshot(*shapeValue.internalShape,
-                                                                       "Internal",
-                                                                       shadow.brep->format,
-                                                                       shadow.brep->data,
-                                                                       shadow.brep->byteLength,
-                                                                       shadow.brep->sha256,
-                                                                       shadow.shapeType,
-                                                                       brepError);
-    return match.status == topo::ReferenceMatchStatus::Unique && match.subname == subname;
+    return topo::referenceShadowMatchesCurrentSubshape(*shapeValue.internalShape,
+                                                       "Internal",
+                                                       subname,
+                                                       subshape,
+                                                       shadow);
 }
 
 std::optional<ReferenceSubshapeResolution> internalSubshapeFromShadowSub(const document::Link& link,
@@ -438,6 +384,8 @@ std::optional<ReferenceSubshapeResolution> internalSubshapeFromShadowSub(const d
                                                           recovered->shape,
                                                           shadow)) {
                 recovered->recovered = true;
+                recovered->recoveryMethod = "reference_shadow_single_subshape";
+                recovered->recoveryReason = "shadow_sub_verified_by_reference_shadow";
                 return recovered;
             }
         }
@@ -543,7 +491,9 @@ std::optional<document::BrepSnapshot> brepTextSnapshotForCurrentSubshape(const T
 nlohmann::json referenceShadowUpdateJson(const document::ReferenceShadow& shadow,
                                          const document::Link& link,
                                          const std::string& subname,
-                                         const TopoDS_Shape& currentSubshape)
+                                         const TopoDS_Shape& currentSubshape,
+                                         const std::string& recoveryMethod = {},
+                                         const std::string& recoveryReason = {})
 {
     nlohmann::json update = {
         {"target", link.object},
@@ -562,6 +512,10 @@ nlohmann::json referenceShadowUpdateJson(const document::ReferenceShadow& shadow
         else {
             update["brep"] = brepSnapshotToJson(*shadow.brep);
         }
+    }
+    if (!recoveryMethod.empty()) {
+        update["reference_recovery"] = recoveryMethod;
+        update["reference_recovery_reason"] = recoveryReason;
     }
     return update;
 }
@@ -742,7 +696,12 @@ bool validateReferenceShadows(const document::DocumentObject& object,
                         currentSubshape = shadowSubResolution;
                         setUpdatedSubname(index, currentSubshape->subname);
                         updatedReferenceShadows.push_back(
-                            referenceShadowUpdateJson(shadow, link, currentSubshape->subname, currentSubshape->shape));
+                            referenceShadowUpdateJson(shadow,
+                                                      link,
+                                                      currentSubshape->subname,
+                                                      currentSubshape->shape,
+                                                      currentSubshape->recoveryMethod,
+                                                      currentSubshape->recoveryReason));
                         continue;
                     }
                     if (shadow.brep) {
@@ -757,7 +716,12 @@ bool validateReferenceShadows(const document::DocumentObject& object,
                                                                        shadow.shapeType);
                             if (!recoveredDriftReason) {
                                 updatedReferenceShadows.push_back(
-                                    referenceShadowUpdateJson(shadow, link, currentSubshape->subname, currentSubshape->shape));
+                                    referenceShadowUpdateJson(shadow,
+                                                              link,
+                                                              currentSubshape->subname,
+                                                              currentSubshape->shape,
+                                                              currentSubshape->recoveryMethod,
+                                                              currentSubshape->recoveryReason));
                                 continue;
                             }
                         }
@@ -796,7 +760,12 @@ bool validateReferenceShadows(const document::DocumentObject& object,
                     continue;
                 }
                 updatedReferenceShadows.push_back(
-                    referenceShadowUpdateJson(shadow, link, subname, currentSubshape->shape));
+                    referenceShadowUpdateJson(shadow,
+                                              link,
+                                              subname,
+                                              currentSubshape->shape,
+                                              currentSubshape->recoveryMethod,
+                                              currentSubshape->recoveryReason));
             }
             if (linkValid) {
                 appendElementReferenceUpdate(object,

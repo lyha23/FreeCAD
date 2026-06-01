@@ -1,5 +1,6 @@
 #include "cad_core/topo/reference_matcher.h"
 
+#include "cad_core/document/model.h"
 #include "cad_core/geometry/brep_snapshot.h"
 #include "cad_core/geometry/shape_exporter.h"
 
@@ -890,6 +891,150 @@ ReferenceMatchResult findUniqueSubshapeByReferenceBrepText(const TopoDS_Shape& c
                                                      sha256,
                                                      expectedShapeType,
                                                      error);
+}
+
+namespace {
+
+std::optional<std::string> unsupportedReferenceShadowBrepReason(const document::ReferenceShadow& shadow)
+{
+    if (!shadow.brep || shadow.brep->format == "brep-text" || shadow.brep->format == "brep-bin-zstd-base64") {
+        return std::nullopt;
+    }
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/PartFeature.cpp
+    // ::Feature::onBeforeChange() keeps old subshape geometry in ElementCache in-process.
+    // cad-core's stateless recovery decoder only accepts approved snapshot transports; unknown
+    // formats must not silently fall back to fingerprint recovery.
+    return "ReferenceShadow.brep format " + shadow.brep->format + " is not supported by runtime recovery";
+}
+
+std::string brepRecoveryReason(ReferenceMatchStatus status, const std::string& brepError)
+{
+    if (!brepError.empty()) {
+        return "does not decode ReferenceShadow.brep: " + brepError;
+    }
+    if (status == ReferenceMatchStatus::Ambiguous) {
+        return "matches multiple ReferenceShadow.brep candidates";
+    }
+    if (status == ReferenceMatchStatus::Split) {
+        return "is split into multiple current ReferenceShadow.brep candidates";
+    }
+    if (status == ReferenceMatchStatus::Deleted) {
+        return "is deleted from current ReferenceShadow.brep candidates";
+    }
+    return "does not match a current ReferenceShadow.brep candidate";
+}
+
+std::string fingerprintRecoveryReason(ReferenceMatchStatus status)
+{
+    if (status == ReferenceMatchStatus::Ambiguous) {
+        return "matches multiple ReferenceShadow fingerprint candidates";
+    }
+    if (status == ReferenceMatchStatus::Split) {
+        return "is split into multiple current ReferenceShadow fingerprint candidates";
+    }
+    if (status == ReferenceMatchStatus::Deleted) {
+        return "is deleted from current ReferenceShadow fingerprint candidates";
+    }
+    return "does not match a current ReferenceShadow fingerprint candidate";
+}
+
+}  // namespace
+
+ReferenceShadowRecoveryResult recoverReferenceShadowSubshape(const TopoDS_Shape& currentShape,
+                                                             const std::string& subnamePrefix,
+                                                             const document::ReferenceShadow& shadow)
+{
+    if (currentShape.IsNull()) {
+        return ReferenceShadowRecoveryResult {
+            ReferenceMatchStatus::Missing,
+            {},
+            std::nullopt,
+            "does not have a current shape for ReferenceShadow recovery",
+            {},
+            false,
+        };
+    }
+    if (const auto unsupportedBrepReason = unsupportedReferenceShadowBrepReason(shadow)) {
+        return ReferenceShadowRecoveryResult {
+            ReferenceMatchStatus::Missing,
+            {},
+            std::nullopt,
+            *unsupportedBrepReason,
+            "unsupported_reference_shadow_brep",
+            true,
+        };
+    }
+
+    if (shadow.brep) {
+        std::string brepError;
+        const auto match = findUniqueSubshapeByReferenceBrepSnapshot(currentShape,
+                                                                     subnamePrefix,
+                                                                     shadow.brep->format,
+                                                                     shadow.brep->data,
+                                                                     shadow.brep->byteLength,
+                                                                     shadow.brep->sha256,
+                                                                     shadow.shapeType,
+                                                                     brepError);
+        if (match.status == ReferenceMatchStatus::Unique && match.shape && !match.shape->IsNull()) {
+            return ReferenceShadowRecoveryResult {
+                match.status,
+                match.subname,
+                match.shape,
+                {},
+                {},
+                true,
+            };
+        }
+        return ReferenceShadowRecoveryResult {
+            match.status,
+            {},
+            std::nullopt,
+            brepRecoveryReason(match.status, brepError),
+            {},
+            true,
+        };
+    }
+
+    const auto match = findUniqueSubshapeByReferenceFingerprint(currentShape,
+                                                                subnamePrefix,
+                                                                shadow.fingerprint,
+                                                                shadow.shapeType);
+    if (match.status == ReferenceMatchStatus::Unique && match.shape && !match.shape->IsNull()) {
+        return ReferenceShadowRecoveryResult {
+            match.status,
+            match.subname,
+            match.shape,
+            {},
+            {},
+            false,
+        };
+    }
+    return ReferenceShadowRecoveryResult {
+        match.status,
+        {},
+        std::nullopt,
+        fingerprintRecoveryReason(match.status),
+        {},
+        false,
+    };
+}
+
+bool referenceShadowMatchesCurrentSubshape(const TopoDS_Shape& currentShape,
+                                           const std::string& subnamePrefix,
+                                           const std::string& currentSubname,
+                                           const TopoDS_Shape& currentSubshape,
+                                           const document::ReferenceShadow& shadow)
+{
+    if (shadow.fingerprint.is_object() && !shadow.fingerprint.empty()
+        && !referenceFingerprintDriftReason(currentSubshape, shadow.fingerprint, shadow.shapeType)) {
+        return true;
+    }
+    if (!shadow.brep || currentShape.IsNull()) {
+        return false;
+    }
+
+    const auto recovery = recoverReferenceShadowSubshape(currentShape, subnamePrefix, shadow);
+    return recovery.status == ReferenceMatchStatus::Unique && recovery.subname == currentSubname;
 }
 
 }  // namespace cad_core::topo

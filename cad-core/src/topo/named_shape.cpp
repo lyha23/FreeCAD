@@ -11,6 +11,7 @@
 #include <BRepAlgoAPI_Fuse.hxx>
 #include <BRepAlgoAPI_Section.hxx>
 #include <BRep_Tool.hxx>
+#include <BRepTools.hxx>
 #include <BRepOffsetAPI_ThruSections.hxx>
 #include <Standard_Failure.hxx>
 #include <TopAbs_ShapeEnum.hxx>
@@ -23,6 +24,7 @@
 #include <TopoDS.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
+#include <TopoDS_Wire.hxx>
 
 #include <algorithm>
 #include <map>
@@ -156,6 +158,31 @@ int findSameShapeIndex(const TopTools_IndexedMapOfShape& shapes, const TopoDS_Sh
         }
     }
     return 0;
+}
+
+void addGeneratedHistory(NamedShape& namedShape,
+                         const std::string& targetElement,
+                         const std::vector<std::string>& sources)
+{
+    auto elementIt = namedShape.elements.find(targetElement);
+    if (targetElement.empty() || sources.empty() || elementIt == namedShape.elements.end()) {
+        return;
+    }
+    elementIt->second.status = ElementHistoryKind::Generated;
+    for (const std::string& source : sources) {
+        addDistinctString(elementIt->second.sources, source);
+    }
+    const auto duplicate = std::find_if(
+        namedShape.history.begin(),
+        namedShape.history.end(),
+        [&](const ElementHistory& entry) {
+            return entry.kind == ElementHistoryKind::Generated && entry.element == targetElement
+                && entry.sources == sources;
+        }
+    );
+    if (duplicate == namedShape.history.end()) {
+        namedShape.history.push_back(ElementHistory {ElementHistoryKind::Generated, targetElement, sources});
+    }
 }
 
 bool applyHistoryShape(
@@ -802,6 +829,121 @@ nlohmann::json elementToJson(const NamedElement& element)
     };
 }
 
+void consumeSketchInternalGeneratedFaceHistory(NamedShape& namedShape,
+                                               const TopoDS_Shape& internalShape,
+                                               const nlohmann::json& internalMap,
+                                               const SketchInternalHistoryContext* historyContext)
+{
+    if (!internalMap.is_object()) {
+        return;
+    }
+
+    TopTools_IndexedMapOfShape internalFaces;
+    TopTools_IndexedMapOfShape internalEdges;
+    TopExp::MapShapes(internalShape, TopAbs_FACE, internalFaces);
+    TopExp::MapShapes(internalShape, TopAbs_EDGE, internalEdges);
+    for (int faceIndex = 1; faceIndex <= internalFaces.Extent(); ++faceIndex) {
+        TopTools_IndexedMapOfShape faceEdges;
+        const TopoDS_Face face = TopoDS::Face(internalFaces(faceIndex));
+        const TopoDS_Wire outerWire = BRepTools::OuterWire(face);
+        TopExp::MapShapes(outerWire.IsNull() ? internalFaces(faceIndex) : outerWire, TopAbs_EDGE, faceEdges);
+        std::vector<std::string> sources;
+        for (int edgeIndex = 1; edgeIndex <= faceEdges.Extent(); ++edgeIndex) {
+            const int internalEdgeIndex = findSameShapeIndex(internalEdges, faceEdges(edgeIndex));
+            if (internalEdgeIndex <= 0) {
+                continue;
+            }
+            const std::string internalEdgeName = "InternalEdge" + std::to_string(internalEdgeIndex);
+            const auto mappedIt = internalMap.find(internalEdgeName);
+            if (mappedIt == internalMap.end() || !mappedIt->is_string()) {
+                continue;
+            }
+            const std::string rawName = mappedIt->get<std::string>();
+            if (rawName.rfind("Edge", 0) == 0) {
+                addDistinctString(sources, rawName);
+            }
+        }
+        if (sources.empty() && historyContext != nullptr && historyContext->sourceEdgeCount == 1U
+            && (historyContext->preSplitHistory || historyContext->splitterHistory)) {
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
+            // ::splitSelfIntersecting() records the single original edge in myPreSplitHistory;
+            // all bounded regions returned by BuilderFace are generated from that source even when
+            // no exact InternalEdge alias survives getInternalElementMap().
+            sources.push_back("Edge1");
+        }
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMaker.cpp
+        // ::FaceMaker::postBuild(), consumes FaceMaker history before
+        // SketchObject::getInternalElementMap() publishes InternalEdge aliases. cad-core does not
+        // invent terminal split/deleted history here; it only retags each generated InternalFace
+        // with exact source edges already present in the request-local InternalEdge map.
+        addGeneratedHistory(namedShape, "InternalFace" + std::to_string(faceIndex), sources);
+    }
+}
+
+void consumeSketchInternalTerminalHistory(NamedShape& namedShape,
+                                          const TopoDS_Shape& rawShape,
+                                          const TopoDS_Shape& internalShape,
+                                          const nlohmann::json& internalMap,
+                                          const SketchInternalHistoryContext& history)
+{
+    const bool hasHistoryStage = history.preSplitHistory || history.splitterHistory
+        || history.preSplitEdgeCount > history.sourceEdgeCount
+        || history.splitterEdgeCount > history.sourceEdgeCount;
+    if (!hasHistoryStage) {
+        return;
+    }
+    const bool hasSplitHistoryStage = history.preSplitHistory || history.splitterHistory;
+
+    TopTools_IndexedMapOfShape rawEdges;
+    TopTools_IndexedMapOfShape rawVertices;
+    TopTools_IndexedMapOfShape internalEdges;
+    TopExp::MapShapes(rawShape, TopAbs_EDGE, rawEdges);
+    TopExp::MapShapes(rawShape, TopAbs_VERTEX, rawVertices);
+    TopExp::MapShapes(internalShape, TopAbs_EDGE, internalEdges);
+
+    std::vector<std::string> splitTargets;
+    for (int index = 1; index <= internalEdges.Extent(); ++index) {
+        const std::string internalName = "InternalEdge" + std::to_string(index);
+        const auto mappedIt = internalMap.find(internalName);
+        if (mappedIt != internalMap.end() && mappedIt->is_string()
+            && mappedIt->get<std::string>().rfind("Edge", 0) == 0) {
+            continue;
+        }
+        splitTargets.push_back(internalName);
+    }
+
+    const int sourceEdgeCount = std::min(rawEdges.Extent(), static_cast<int>(history.sourceEdgeCount));
+    for (int index = 1; index <= sourceEdgeCount; ++index) {
+        const std::string sourceName = "Edge" + std::to_string(index);
+        if (internalMap.contains(sourceName)) {
+            continue;
+        }
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMaker.cpp
+        // ::FaceMaker::postBuild(), chains MapperHistory(myPreSplitHistory) and
+        // MapperMaker(mySplitter). When those histories exist and getInternalElementMap() cannot
+        // produce an exact EdgeN alias, the source edge reached terminal split/deleted history.
+        // This consumes the maker-history stage plus exact ElementMap absence; it does not sample
+        // raw/internal geometry to invent ownership.
+        if (!hasSplitHistoryStage || splitTargets.empty()) {
+            addTerminalHistory(namedShape, ElementHistory {ElementHistoryKind::Deleted, sourceName, {sourceName}});
+            continue;
+        }
+        for (const std::string& targetName : splitTargets) {
+            addSplitHistory(namedShape, sourceName, targetName);
+        }
+    }
+
+    if (!hasSplitHistoryStage) {
+        for (int index = 1; index <= rawVertices.Extent(); ++index) {
+            const std::string sourceName = "Vertex" + std::to_string(index);
+            if (!internalMap.contains(sourceName)) {
+                addTerminalHistory(namedShape,
+                                   ElementHistory {ElementHistoryKind::Deleted, sourceName, {sourceName}});
+            }
+        }
+    }
+}
+
 nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& history)
 {
     return {
@@ -904,41 +1046,21 @@ NamedShape namedShapeForSketchInternalShape(
             addRetagAlias(namedShape, target, name);
         }
     }
-
-    for (const InternalGeneratedElementHistory& history :
-         internalGeneratedFaceHistoryForSketch(rawShape, internalShape)) {
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMaker.cpp
-        // ::FaceMaker::postBuild(), "MapperHistory(myPreSplitHistory)" then
-        // "MapperMaker(mySplitter)" before it "name the face using the edges of its outer wire".
-        // Keep InternalFaceN history-backed from the outer wire only while respecting
-        // SketchObject::getInternalElementMap(), which exposes no raw FaceN alias for
-        // InternalShape; the optional SketchInternalHistoryContext records which
-        // FaceMakerBuildFace ledger stages were available for this request.
-        addNestedHistory(namedShape, ElementHistoryKind::Generated, history.target, history.sources);
+    consumeSketchInternalGeneratedFaceHistory(
+        namedShape, internalShape, internalMap, historyContext ? &*historyContext : nullptr);
+    if (historyContext) {
+        consumeSketchInternalTerminalHistory(namedShape, rawShape, internalShape, internalMap, *historyContext);
     }
+
+    // Geometry-only generated/split/deleted history probes used to write NamedShape.history here.
+    // FreeCAD's real path is FaceMaker::postBuild() -> MapperHistory(myPreSplitHistory) /
+    // MapperMaker(mySplitter) -> TopoShape::makeShapeWithElementMap(); until cad-core carries that
+    // history context, topo must not invent terminal history from raw/internal shape sampling.
     if (historyContext && historyContext->preSplitHistory) {
         addDistinctString(namedShape.elementHistoryStatus, "facemaker_history:pre_split");
     }
     if (historyContext && historyContext->splitterHistory) {
         addDistinctString(namedShape.elementHistoryStatus, "facemaker_history:splitter");
-    }
-
-    for (const InternalElementHistory& history : internalSplitElementHistoryForSketch(rawShape, internalShape)) {
-        for (const std::string& target : history.targets) {
-            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-            // ::WireJoinerP::build() keeps split EdgeInfo states, and TopoShape::makeShapeWithElementMap()
-            // leaves one-to-many source edges unresolved. Record terminal split history for
-            // InternalShape without adding a guessed ElementMap alias.
-            addSplitHistory(namedShape, history.source, target);
-        }
-    }
-
-    for (const std::string& source : internalDeletedElementHistoryForSketch(rawShape, internalShape)) {
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-        // ::WireJoinerP::getOpenWires(noOriginal=true), removes original open-wire topology whose
-        // vertices are still shared with sourceEdgeArray. Preserve that one-source-to-zero outcome
-        // as terminal deleted history instead of inventing a current Internal* alias.
-        addTerminalHistory(namedShape, ElementHistory {ElementHistoryKind::Deleted, source, {source}});
     }
 
     return namedShape;

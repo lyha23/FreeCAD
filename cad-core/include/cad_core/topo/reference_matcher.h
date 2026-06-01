@@ -6,6 +6,10 @@
 #include <optional>
 #include <string>
 
+namespace cad_core::document {
+struct ReferenceShadow;
+}
+
 namespace cad_core::topo {
 
 enum class ReferenceMatchStatus {
@@ -20,6 +24,15 @@ struct ReferenceMatchResult {
     ReferenceMatchStatus status = ReferenceMatchStatus::Missing;
     std::string subname;
     std::optional<TopoDS_Shape> shape;
+};
+
+struct ReferenceShadowRecoveryResult {
+    ReferenceMatchStatus status = ReferenceMatchStatus::Missing;
+    std::string subname;
+    std::optional<TopoDS_Shape> shape;
+    std::string reason;
+    std::string diagnosticCode;
+    bool usedBrep = false;
 };
 
 // FreeCAD basis: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
@@ -52,5 +65,19 @@ ReferenceMatchResult findUniqueSubshapeByReferenceBrepSnapshot(const TopoDS_Shap
                                                                const std::string& sha256,
                                                                const std::string& expectedShapeType,
                                                                std::string& error);
+
+// FreeCAD basis: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/PartFeature.cpp
+// ::Feature::onBeforeChange() stores the old referenced subshape in ElementCache; cad-core's
+// ReferenceShadow is the approved stateless single-subshape evidence channel. Keep fingerprint /
+// BREP matching centralized here so feature executors do not grow their own recovery policy.
+ReferenceShadowRecoveryResult recoverReferenceShadowSubshape(const TopoDS_Shape& currentShape,
+                                                             const std::string& subnamePrefix,
+                                                             const document::ReferenceShadow& shadow);
+
+bool referenceShadowMatchesCurrentSubshape(const TopoDS_Shape& currentShape,
+                                           const std::string& subnamePrefix,
+                                           const std::string& currentSubname,
+                                           const TopoDS_Shape& currentSubshape,
+                                           const document::ReferenceShadow& shadow);
 
 }  // namespace cad_core::topo

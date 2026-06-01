@@ -152,24 +152,14 @@ bool internalSubshapeMatchesReferenceShadow(const runtime::ShapeValue& shapeValu
                                             const TopoDS_Shape& subshape,
                                             const document::ReferenceShadow& shadow)
 {
-    if (shadow.fingerprint.is_object() && !shadow.fingerprint.empty()
-        && !topo::referenceFingerprintDriftReason(subshape, shadow.fingerprint, shadow.shapeType)) {
-        return true;
-    }
-    if (!shadow.brep || !shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
+    if (!shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
         return false;
     }
-
-    std::string brepError;
-    const auto match = topo::findUniqueSubshapeByReferenceBrepSnapshot(*shapeValue.internalShape,
-                                                                       "Internal",
-                                                                       shadow.brep->format,
-                                                                       shadow.brep->data,
-                                                                       shadow.brep->byteLength,
-                                                                       shadow.brep->sha256,
-                                                                       shadow.shapeType,
-                                                                       brepError);
-    return match.status == topo::ReferenceMatchStatus::Unique && match.subname == subname;
+    return topo::referenceShadowMatchesCurrentSubshape(*shapeValue.internalShape,
+                                                       "Internal",
+                                                       subname,
+                                                       subshape,
+                                                       shadow);
 }
 
 std::optional<TopoDS_Shape> internalFaceFromShadowSub(const document::Link& profileLink,
@@ -348,26 +338,11 @@ std::optional<TopoDS_Shape> resolveSketchInternalFaceProfile(const document::Doc
             if (const auto shadowSubShape = internalFaceFromShadowSub(profileLink, shadow, shapeValue)) {
                 return *shadowSubShape;
             }
-            topo::ReferenceMatchResult match;
-            if (shadow.brep) {
-                std::string brepError;
-                match = topo::findUniqueSubshapeByReferenceBrepSnapshot(*shapeValue.internalShape,
-                                                                        "Internal",
-                                                                        shadow.brep->format,
-                                                                        shadow.brep->data,
-                                                                        shadow.brep->byteLength,
-                                                                        shadow.brep->sha256,
-                                                                        shadow.shapeType,
-                                                                        brepError);
-            }
-            else {
-                match = topo::findUniqueSubshapeByReferenceFingerprint(*shapeValue.internalShape,
-                                                                       "Internal",
-                                                                       shadow.fingerprint,
-                                                                       shadow.shapeType);
-            }
-            if (match.status == topo::ReferenceMatchStatus::Unique && match.shape && !match.shape->IsNull()) {
-                return *match.shape;
+            const auto recovery = topo::recoverReferenceShadowSubshape(*shapeValue.internalShape, "Internal", shadow);
+            if (recovery.status == topo::ReferenceMatchStatus::Unique
+                && recovery.shape
+                && !recovery.shape->IsNull()) {
+                return *recovery.shape;
             }
         }
         runtime::addDiagnostic(context.diagnostics,
@@ -399,18 +374,12 @@ std::optional<TopoDS_Shape> resolveSketchInternalFaceProfile(const document::Doc
         if (!shadow.brep) {
             continue;
         }
-        std::string brepError;
-        const auto match = topo::findUniqueSubshapeByReferenceBrepSnapshot(*shapeValue.internalShape,
-                                                                           "Internal",
-                                                                           shadow.brep->format,
-                                                                           shadow.brep->data,
-                                                                           shadow.brep->byteLength,
-                                                                           shadow.brep->sha256,
-                                                                           shadow.shapeType,
-                                                                           brepError);
-        if (match.status == topo::ReferenceMatchStatus::Unique && match.shape && !match.shape->IsNull()
-            && !topo::referenceFingerprintDriftReason(*match.shape, shadow.fingerprint, shadow.shapeType)) {
-            return *match.shape;
+        const auto recovery = topo::recoverReferenceShadowSubshape(*shapeValue.internalShape, "Internal", shadow);
+        if (recovery.status == topo::ReferenceMatchStatus::Unique
+            && recovery.shape
+            && !recovery.shape->IsNull()
+            && !topo::referenceFingerprintDriftReason(*recovery.shape, shadow.fingerprint, shadow.shapeType)) {
+            return *recovery.shape;
         }
     }
     return *subshape;

@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <deque>
+#include <limits>
 #include <utility>
 
 namespace cad_core::geometry {
@@ -72,44 +73,6 @@ std::vector<TopoDS_Face> facesForShape(const TopoDS_Shape& shape)
         faces.push_back(TopoDS::Face(explorer.Current()));
     }
     return faces;
-}
-
-std::vector<TopoDS_Edge> splitOpenEdgeByFaceBoundaries(const TopoDS_Edge& edge,
-                                                       const std::vector<TopoDS_Edge>& faceEdges)
-{
-    if (faceEdges.empty()) {
-        return {edge};
-    }
-
-    TopTools_ListOfShape arguments;
-    arguments.Append(edge);
-    TopTools_ListOfShape tools;
-    for (const TopoDS_Edge& faceEdge : faceEdges) {
-        if (!faceEdge.IsNull()) {
-            tools.Append(faceEdge);
-        }
-    }
-    if (tools.IsEmpty()) {
-        return {edge};
-    }
-
-    BRepAlgoAPI_Splitter splitter;
-    splitter.SetArguments(arguments);
-    splitter.SetTools(tools);
-    splitter.SetNonDestructive(Standard_True);
-    splitter.Build();
-    if (!splitter.IsDone() || splitter.Shape().IsNull()) {
-        return {edge};
-    }
-
-    std::vector<TopoDS_Edge> fragments;
-    for (TopExp_Explorer explorer(splitter.Shape(), TopAbs_EDGE); explorer.More(); explorer.Next()) {
-        fragments.push_back(TopoDS::Edge(explorer.Current()));
-    }
-    if (fragments.empty()) {
-        return {edge};
-    }
-    return fragments;
 }
 
 std::vector<TopoDS_Wire> wiresFromEdges(const std::vector<TopoDS_Edge>& edges)
@@ -178,14 +141,36 @@ std::vector<TopoDS_Wire> wiresFromEdges(const std::vector<TopoDS_Edge>& edges)
     return wires;
 }
 
-bool edgeMatchesAnyBoundary(const TopoDS_Edge& edge, const std::vector<TopoDS_Edge>& boundaryEdges)
+std::vector<TopoDS_Edge> splitEdgesAtIntersections(const std::vector<TopoDS_Edge>& edges)
 {
-    for (const TopoDS_Edge& boundary : boundaryEdges) {
-        if (edgeMatchesSourceVertices(edge, boundary)) {
-            return true;
+    if (edges.size() <= 1U) {
+        return edges;
+    }
+
+    TopTools_ListOfShape arguments;
+    for (const TopoDS_Edge& edge : edges) {
+        if (!edge.IsNull()) {
+            arguments.Append(edge);
         }
     }
-    return false;
+    if (arguments.Size() <= 1) {
+        return edges;
+    }
+
+    BRepAlgoAPI_Splitter splitter;
+    splitter.SetArguments(arguments);
+    splitter.SetRunParallel(Standard_True);
+    splitter.SetNonDestructive(Standard_True);
+    splitter.Build();
+    if (!splitter.IsDone() || splitter.Shape().IsNull()) {
+        return edges;
+    }
+
+    std::vector<TopoDS_Edge> result;
+    for (TopExp_Explorer explorer(splitter.Shape(), TopAbs_EDGE); explorer.More(); explorer.Next()) {
+        result.push_back(TopoDS::Edge(explorer.Current()));
+    }
+    return result.empty() ? edges : result;
 }
 
 std::vector<TopoDS_Vertex> edgeVertices(const TopoDS_Edge& edge)
@@ -205,18 +190,6 @@ bool vertexTouchesBoundary(const TopoDS_Vertex& vertex, const TopoDS_Edge& bound
     BRepExtrema_DistShapeShape distance(vertex, boundary);
     distance.Perform();
     return distance.IsDone() && distance.Value() <= Precision::Confusion();
-}
-
-bool edgeTouchesBoundary(const TopoDS_Edge& edge, const std::vector<TopoDS_Edge>& boundaryEdges)
-{
-    for (const TopoDS_Vertex& vertex : edgeVertices(edge)) {
-        for (const TopoDS_Edge& boundary : boundaryEdges) {
-            if (vertexTouchesBoundary(vertex, boundary)) {
-                return true;
-            }
-        }
-    }
-    return false;
 }
 
 gp_Pnt edgeMidpoint(const TopoDS_Edge& edge)
@@ -247,14 +220,15 @@ bool pointInsideOrOnAnyFace(const gp_Pnt& point, const std::vector<TopoDS_Face>&
     return false;
 }
 
-bool wireContainsAnyEdge(const TopoDS_Wire& wire, const std::vector<TopoDS_Edge>& edges)
+bool vertexIsOriginalSourceByIdentity(const TopoDS_Vertex& vertex,
+                                      const std::vector<TopoDS_Edge>& sourceEdges)
 {
-    if (edges.empty()) {
+    if (vertex.IsNull()) {
         return false;
     }
-    for (const TopoDS_Edge& wireEdge : wireEdges(wire)) {
-        for (const TopoDS_Edge& edge : edges) {
-            if (wireEdge.IsSame(edge) || edgeMatchesSourceVertices(wireEdge, edge)) {
+    for (const TopoDS_Edge& sourceEdge : sourceEdges) {
+        for (const TopoDS_Vertex& sourceVertex : edgeVertices(sourceEdge)) {
+            if (vertex.IsSame(sourceVertex)) {
                 return true;
             }
         }
@@ -262,33 +236,114 @@ bool wireContainsAnyEdge(const TopoDS_Wire& wire, const std::vector<TopoDS_Edge>
     return false;
 }
 
-bool edgeSharesSourceVertex(const TopoDS_Edge& edge, const std::vector<TopoDS_Edge>& sourceEdges)
+bool edgeUsesOnlyOriginalSourceVerticesByIdentity(const TopoDS_Edge& edge,
+                                                 const std::vector<TopoDS_Edge>& sourceEdges)
 {
     const std::vector<TopoDS_Vertex> vertices = edgeVertices(edge);
     if (vertices.empty()) {
         return false;
     }
 
+    return std::all_of(vertices.begin(), vertices.end(), [&](const TopoDS_Vertex& vertex) {
+        return vertexIsOriginalSourceByIdentity(vertex, sourceEdges);
+    });
+}
+
+bool edgeMatchesAnySourceByEndpoints(const TopoDS_Edge& edge, const std::vector<TopoDS_Edge>& sourceEdges)
+{
     for (const TopoDS_Edge& sourceEdge : sourceEdges) {
-        for (const TopoDS_Vertex& sourceVertex : edgeVertices(sourceEdge)) {
-            for (const TopoDS_Vertex& vertex : vertices) {
-                if (vertex.IsSame(sourceVertex)
-                    || samePoint(BRep_Tool::Pnt(vertex), BRep_Tool::Pnt(sourceVertex))) {
-                    return true;
-                }
-            }
+        if (edgeMatchesSourceVertices(edge, sourceEdge)) {
+            return true;
         }
     }
     return false;
 }
 
-bool allEdgesShareOriginalSourceVertex(const TopoDS_Wire& wire, const std::vector<TopoDS_Edge>& sourceEdges)
+struct EdgeGraph {
+    struct Edge {
+        std::size_t start = 0;
+        std::size_t end = 0;
+    };
+    std::vector<gp_Pnt> vertices;
+    std::vector<Edge> edges;
+};
+
+std::size_t graphVertexIndex(EdgeGraph& graph, const gp_Pnt& point)
+{
+    for (std::size_t index = 0; index < graph.vertices.size(); ++index) {
+        if (samePoint(graph.vertices[index], point)) {
+            return index;
+        }
+    }
+    graph.vertices.push_back(point);
+    return graph.vertices.size() - 1U;
+}
+
+EdgeGraph edgeGraphForEdges(const std::vector<TopoDS_Edge>& edges)
+{
+    EdgeGraph graph;
+    graph.edges.reserve(edges.size());
+    for (const TopoDS_Edge& edge : edges) {
+        const auto [start, end] = edgeEndpoints(edge);
+        graph.edges.push_back(EdgeGraph::Edge {
+            graphVertexIndex(graph, start),
+            graphVertexIndex(graph, end),
+        });
+    }
+    return graph;
+}
+
+std::vector<bool> graphBridgeFlags(const EdgeGraph& graph)
+{
+    std::vector<bool> bridges(graph.edges.size(), false);
+    std::vector<std::vector<std::pair<std::size_t, std::size_t>>> adjacency(graph.vertices.size());
+    for (std::size_t edgeIndex = 0; edgeIndex < graph.edges.size(); ++edgeIndex) {
+        const auto& edge = graph.edges[edgeIndex];
+        if (edge.start == edge.end || edge.start >= adjacency.size() || edge.end >= adjacency.size()) {
+            continue;
+        }
+        adjacency[edge.start].push_back({edge.end, edgeIndex});
+        adjacency[edge.end].push_back({edge.start, edgeIndex});
+    }
+
+    std::vector<int> discovery(graph.vertices.size(), -1);
+    std::vector<int> low(graph.vertices.size(), -1);
+    int time = 0;
+    const auto dfs = [&](const auto& self, std::size_t vertex, std::size_t parentEdge) -> void {
+        discovery[vertex] = low[vertex] = time++;
+        for (const auto& [next, edgeIndex] : adjacency[vertex]) {
+            if (edgeIndex == parentEdge) {
+                continue;
+            }
+            if (discovery[next] == -1) {
+                self(self, next, edgeIndex);
+                low[vertex] = std::min(low[vertex], low[next]);
+                if (low[next] > discovery[vertex]) {
+                    bridges[edgeIndex] = true;
+                }
+            }
+            else {
+                low[vertex] = std::min(low[vertex], discovery[next]);
+            }
+        }
+    };
+
+    for (std::size_t vertex = 0; vertex < graph.vertices.size(); ++vertex) {
+        if (discovery[vertex] == -1) {
+            dfs(dfs, vertex, std::numeric_limits<std::size_t>::max());
+        }
+    }
+    return bridges;
+}
+
+bool allEdgesShareOriginalSourceVertexByIdentity(const TopoDS_Wire& wire,
+                                                const std::vector<TopoDS_Edge>& sourceEdges)
 {
     if (sourceEdges.empty()) {
         return false;
     }
     for (const TopoDS_Edge& edge : wireEdges(wire)) {
-        if (!edgeSharesSourceVertex(edge, sourceEdges)) {
+        if (!edgeUsesOnlyOriginalSourceVerticesByIdentity(edge, sourceEdges)) {
             return false;
         }
     }
@@ -360,7 +415,8 @@ TopoDS_Edge copyEdgeWithResultWireVertices(const TopoDS_Edge& edge,
     const TopoDS_Vertex start = resultWireVertex(TopExp::FirstVertex(edge), openEdges, copyAllVertices, copiedVertices);
     const TopoDS_Vertex end = resultWireVertex(TopExp::LastVertex(edge), openEdges, copyAllVertices, copiedVertices);
     if (!curve.IsNull()) {
-        BRepBuilderAPI_MakeEdge builder(curve, start, end, first, last);
+        const Handle(Geom_Curve) copiedCurve = Handle(Geom_Curve)::DownCast(curve->Copy());
+        BRepBuilderAPI_MakeEdge builder(copiedCurve.IsNull() ? curve : copiedCurve, start, end, first, last);
         if (builder.IsDone() && !builder.Edge().IsNull()) {
             return builder.Edge();
         }
@@ -674,6 +730,13 @@ std::optional<TopoDS_Shape> copiedPartialJunctionResultWireGraph(const TopoDS_Sh
 
 }  // namespace
 
+std::optional<TopoDS_Shape> copiedResultWireGraphProbeForSketchInternals(
+    const TopoDS_Shape& boundedFaceShape,
+    const std::vector<TopoDS_Edge>& openEdges,
+    const std::vector<TopoDS_Wire>& closedWires,
+    bool splitProducedBoundedFaces,
+    bool hasOpenWireOutput);
+
 void WireJoiner::setTightBound(bool enabled)
 {
     tightBound_ = enabled;
@@ -704,6 +767,94 @@ void WireJoiner::addSourceEdge(const TopoDS_Edge& edge)
     if (!edge.IsNull()) {
         sourceEdges_.push_back(edge);
     }
+}
+
+void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
+                                         const std::vector<TopoDS_Wire>* closedWires,
+                                         const std::vector<TopoDS_Edge>* openEdges,
+                                         bool splitProducedBoundedFaces)
+{
+    resultWireEvidence_.reset();
+    std::vector<TopoDS_Edge> inputEdges;
+    for (const WireInfo& info : openWires_) {
+        for (const EdgeInfo& edgeInfo : info.edges) {
+            if (!edgeInfo.edge.IsNull()) {
+                inputEdges.push_back(edgeInfo.edge);
+            }
+        }
+    }
+    if (inputEdges.empty()) {
+        return;
+    }
+
+    const std::vector<TopoDS_Edge> splitEdges = splitEdgesAtIntersections(inputEdges);
+    const EdgeGraph graph = edgeGraphForEdges(splitEdges);
+    const std::vector<bool> bridges = graphBridgeFlags(graph);
+    const bool hasSplitBoundedRegions = boundedFaceShape && facesForShape(*boundedFaceShape).size() > 1U;
+    const bool assignTightBoundOwners =
+        splitProducedBoundedFaces || !openEdges || openEdges->empty();
+    const bool ownerContributesToLedger = !openEdges || openEdges->empty() || hasSplitBoundedRegions;
+    const std::size_t primaryOwner = nextWireInfoId_++;
+    const std::size_t secondaryOwner = nextWireInfoId_++;
+
+    WireInfo finalInfo;
+    finalInfo.id = nextWireInfoId_++;
+    const std::vector<TopoDS_Wire> finalWires = wiresFromEdges(splitEdges);
+    finalInfo.wire = finalWires.empty() ? TopoDS_Wire() : finalWires.front();
+    finalInfo.edges.reserve(splitEdges.size());
+    for (std::size_t index = 0; index < splitEdges.size(); ++index) {
+        EdgeInfo edgeInfo;
+        edgeInfo.edge = splitEdges[index];
+        edgeInfo.splitFromInputEdge = !edgeMatchesAnySourceByEndpoints(splitEdges[index], inputEdges);
+        const bool bridge = index < bridges.size() && bridges[index];
+        if (assignTightBoundOwners && !bridge) {
+            edgeInfo.wireInfo = primaryOwner;
+            edgeInfo.ownerContributesToLedger = ownerContributesToLedger;
+            const auto& graphEdge = graph.edges[index];
+            std::size_t startDegree = 0;
+            std::size_t endDegree = 0;
+            for (const auto& candidate : graph.edges) {
+                if (candidate.start == graphEdge.start || candidate.end == graphEdge.start) {
+                    ++startDegree;
+                }
+                if (candidate.start == graphEdge.end || candidate.end == graphEdge.end) {
+                    ++endDegree;
+                }
+            }
+            if (startDegree > 2U && endDegree > 2U) {
+                edgeInfo.wireInfo2 = secondaryOwner;
+            }
+        }
+        finalInfo.edges.push_back(edgeInfo);
+    }
+
+    rebuildOrderedVertices(finalInfo);
+    finalInfo.done = std::any_of(finalInfo.edges.begin(), finalInfo.edges.end(), [](const EdgeInfo& edgeInfo) {
+        return edgeInfo.ownerContributesToLedger && edgeInfo.wireInfo != 0U;
+    });
+    if (finalInfo.done) {
+        recordExhaustTightBoundLifecycle(finalInfo);
+    }
+
+    const bool hasOpenWireOutput = std::any_of(finalInfo.edges.begin(), finalInfo.edges.end(), [](const EdgeInfo& edgeInfo) {
+        return edgeInfo.iteration == -3 || (edgeInfo.wireInfo == 0U && edgeInfo.iteration >= 0);
+    });
+    if (boundedFaceShape && closedWires && openEdges) {
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::build(), stores result-wire topology in "openWireCompound" after
+        // splitEdges()/buildClosedWire()/findTightBound()/exhaustTightBound(). Keep this evidence
+        // inside WireJoiner so SketchObject only consumes getOpenWires(); the remaining migration
+        // step is replacing this partial evidence collector with the full EdgeInfo aHistory ledger.
+        resultWireEvidence_ = copiedResultWireGraphProbeForSketchInternals(
+            *boundedFaceShape,
+            *openEdges,
+            *closedWires,
+            splitProducedBoundedFaces,
+            hasOpenWireOutput);
+    }
+
+    openWires_.clear();
+    openWires_.push_back(std::move(finalInfo));
 }
 
 void WireJoiner::rebuildOrderedVertices(WireInfo& info)
@@ -809,9 +960,6 @@ void WireJoiner::recordExhaustTightBoundLifecycle(WireInfo& info)
             edge.exhaustSharedOwner = true;
             edge.exhaustDoneSecondary = true;
         }
-        else {
-            edge.exhaustSearchCandidate = true;
-        }
     }
 }
 
@@ -903,7 +1051,7 @@ void WireJoiner::recordTightBoundLifecycle(WireInfo& info)
     }
 }
 
-void WireJoiner::classifyBoundedFaceOwnership(const TopoDS_Shape& boundedFaceShape)
+void WireJoiner::recordBoundedFaceClassifierProbe(const TopoDS_Shape& boundedFaceShape)
 {
     if (boundedFaceShape.IsNull() || openWires_.empty()) {
         return;
@@ -914,64 +1062,15 @@ void WireJoiner::classifyBoundedFaceOwnership(const TopoDS_Shape& boundedFaceSha
     if (faceBoundaryEdges.empty() || boundedFaces.empty()) {
         return;
     }
-    const std::size_t tightBoundOwner = nextWireInfoId_++;
-    const std::size_t sharedTightBoundOwner = nextWireInfoId_++;
 
     for (WireInfo& info : openWires_) {
-        std::vector<EdgeInfo> splitEdges;
-        for (const EdgeInfo& edgeInfo : info.edges) {
-            const auto split = splitOpenEdgeByFaceBoundaries(edgeInfo.edge, faceBoundaryEdges);
-            const bool splitFromInputEdge = edgeInfo.splitFromInputEdge || split.size() != 1U
-                || (split.size() == 1U && !edgeMatchesSourceVertices(split.front(), edgeInfo.edge));
-            for (const TopoDS_Edge& edge : split) {
-                EdgeInfo splitInfo;
-                splitInfo.edge = edge;
-                splitInfo.superEdge = edgeInfo.superEdge;
-                splitInfo.iteration = edgeInfo.iteration;
-                splitInfo.iteration2 = edgeInfo.iteration2;
-                splitInfo.wireInfo = edgeInfo.wireInfo;
-                splitInfo.wireInfo2 = edgeInfo.wireInfo2;
-                splitInfo.splitFromInputEdge = splitFromInputEdge;
-                splitEdges.push_back(splitInfo);
-            }
-        }
-        info.edges = std::move(splitEdges);
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
         // ::WireJoinerP::findTightBound() iterates ordered "wireInfo->vertices" and marks
-        // "vertex.it->iteration2 = iteration2" before branch search. cad-core now preserves the
-        // request-local ordered EdgeInfo vertex ledger after splitter replacement; the full branch
-        // search still remains a later migration step.
+        // "vertex.it->iteration2 = iteration2" before branch search. This probe records candidate
+        // coverage for diagnostics only; final export state must come from the real EdgeInfo /
+        // WireInfo lifecycle, not from bounded-face boundary or midpoint checks.
         rebuildOrderedVertices(info);
         recordBranchSearchCandidates(info, boundedFaces);
-    }
-
-    for (WireInfo& info : openWires_) {
-        for (EdgeInfo& edgeInfo : info.edges) {
-            if (edgeMatchesAnyBoundary(edgeInfo.edge, faceBoundaryEdges)) {
-                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-                // ::WireJoinerP::findTightBound() assigns the primary tight-bound WireInfo and
-                // ::WireJoinerP::exhaustTightBound() may assign "wireInfo2" when one EdgeInfo is
-                // shared by two tight-bound wires. cad-core does not yet build ordered WireInfo
-                // vertices, but this keeps the same owner slots instead of a separate consumed
-                // flag, so later migration can replace the classifier with the real search.
-                edgeInfo.wireInfo = tightBoundOwner;
-                if (countEquivalentEdges(edgeInfo.edge, faceBoundaryEdges) > 1) {
-                    edgeInfo.wireInfo2 = sharedTightBoundOwner;
-                }
-                continue;
-            }
-            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-            // ::WireJoinerP::splitEdges() and ::WireJoinerP::build() export copied/split open-wire
-            // EdgeInfo states. This bounded-face subset keeps only boundary-touch fragments whose
-            // midpoint is outside the bounded face and that came from a split/copy result edge;
-            // unsplit original dangling edges still go through getOpenWires(noOriginal=true)
-            // purging. Delete this marker when full EdgeInfo/WireInfo identity history is migrated.
-            if (edgeInfo.splitFromInputEdge
-                && edgeTouchesBoundary(edgeInfo.edge, faceBoundaryEdges)
-                && !pointInsideOrOnAnyFace(edgeMidpoint(edgeInfo.edge), boundedFaces)) {
-                edgeInfo.iteration = -3;
-            }
-        }
         recordTightBoundLifecycle(info);
         recordExhaustTightBoundLifecycle(info);
     }
@@ -1006,10 +1105,10 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
             if (edgeInfo.exhaustSearchCandidate) {
                 ++summary.exhaustSearchCandidateEdgeInfoCount;
             }
-            if (edgeInfo.wireInfo != 0U) {
+            if (edgeInfo.ownerContributesToLedger && edgeInfo.wireInfo != 0U) {
                 ++summary.primaryOwnedEdgeInfoCount;
             }
-            if (edgeInfo.wireInfo2 != 0U) {
+            if (edgeInfo.ownerContributesToLedger && edgeInfo.wireInfo2 != 0U) {
                 ++summary.secondaryOwnedEdgeInfoCount;
             }
             if (edgeInfo.iteration == -3 || (edgeInfo.wireInfo == 0U && edgeInfo.iteration >= 0)) {
@@ -1038,7 +1137,8 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
             summary.doneOwnedEdgeInfoCount += std::count_if(info.edges.begin(),
                                                             info.edges.end(),
                                                             [](const EdgeInfo& edgeInfo) {
-                                                                return edgeInfo.wireInfo != 0U;
+                                                                return edgeInfo.ownerContributesToLedger
+                                                                    && edgeInfo.wireInfo != 0U;
                                                             });
         }
         summary.ownerPropagationCandidateCount += info.ownerPropagationCandidateCount;
@@ -1052,7 +1152,6 @@ std::optional<TopoDS_Shape> WireJoiner::getOpenWires(const std::string& historyP
     (void)tightBound_;
 
     std::vector<TopoDS_Edge> allLiveEdges;
-    std::vector<TopoDS_Edge> retainedByBoundaryTouchEdges;
     std::vector<TopoDS_Wire> liveWires;
     for (const WireInfo& info : openWires_) {
         std::vector<TopoDS_Edge> liveEdges;
@@ -1062,10 +1161,24 @@ std::optional<TopoDS_Shape> WireJoiner::getOpenWires(const std::string& historyP
             if (!exportsOpenEdge) {
                 continue;
             }
-            liveEdges.push_back(edgeInfo.edge);
-            if (edgeInfo.iteration == -3) {
-                retainedByBoundaryTouchEdges.push_back(edgeInfo.edge);
+            if (noOriginal && !sourceEdges_.empty() && !edgeInfo.splitFromInputEdge) {
+                const auto edgePoints = edgeEndpoints(edgeInfo.edge);
+                const gp_Pnt edgeStart = edgePoints.first;
+                const gp_Pnt edgeEnd = edgePoints.second;
+                const bool touchesOwnedEdge =
+                    std::any_of(info.edges.begin(), info.edges.end(), [&](const EdgeInfo& candidate) {
+                        if (&candidate == &edgeInfo || (candidate.wireInfo == 0U && candidate.wireInfo2 == 0U)) {
+                            return false;
+                        }
+                        const auto [candidateStart, candidateEnd] = edgeEndpoints(candidate.edge);
+                        return samePoint(edgeStart, candidateStart) || samePoint(edgeStart, candidateEnd)
+                            || samePoint(edgeEnd, candidateStart) || samePoint(edgeEnd, candidateEnd);
+                    });
+                if (touchesOwnedEdge) {
+                    continue;
+                }
             }
+            liveEdges.push_back(edgeInfo.edge);
         }
         if (liveEdges.empty()) {
             continue;
@@ -1091,21 +1204,21 @@ std::optional<TopoDS_Shape> WireJoiner::getOpenWires(const std::string& historyP
                                            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
                                            // ::WireJoinerP::getOpenWires(), calls
                                            // "source.findSubShapesWithSharedVertex(TopoShape(edge, -1))".
-                                           // FreeCAD uses topological shared vertices here. This subset
-                                           // also accepts same-coordinate source endpoints because cad-core
-                                           // does not yet preserve the full EdgeInfo identity ledger; edges
-                                           // marked by bounded-face boundary touch represent the copied/split
-                                           // remnants that must survive this compatibility filter.
-                                           return !wireContainsAnyEdge(wire, retainedByBoundaryTouchEdges)
-                                               && allEdgesShareOriginalSourceVertex(wire, sourceEdges_);
+                                           // Keep the main path topological: same-coordinate source endpoint
+                                           // matching and bounded-face boundary-touch retention are diagnostic
+                                           // compatibility probes, not FreeCAD's open-wire export rule.
+                                           return allEdgesShareOriginalSourceVertexByIdentity(wire, sourceEdges_);
                                        }),
                         liveWires.end());
     }
-    if (liveWires.empty()) {
+    if (liveWires.empty() && (!resultWireEvidence_ || resultWireEvidence_->IsNull())) {
         return std::nullopt;
     }
-    if (liveWires.size() == 1U) {
+    if (liveWires.size() == 1U && (!resultWireEvidence_ || resultWireEvidence_->IsNull())) {
         return liveWires.front();
+    }
+    if (liveWires.empty() && resultWireEvidence_ && !resultWireEvidence_->IsNull()) {
+        return resultWireEvidence_;
     }
 
     TopoDS_Compound compound;
@@ -1114,15 +1227,24 @@ std::optional<TopoDS_Shape> WireJoiner::getOpenWires(const std::string& historyP
     for (const TopoDS_Wire& wire : liveWires) {
         builder.Add(compound, wire);
     }
+    if (resultWireEvidence_ && !resultWireEvidence_->IsNull()) {
+        builder.Add(compound, *resultWireEvidence_);
+    }
     return compound;
 }
 
-std::optional<TopoDS_Shape> copiedResultWireGraphForSketchInternals(const TopoDS_Shape& boundedFaceShape,
-                                                                    const std::vector<TopoDS_Edge>& openEdges,
-                                                                    const std::vector<TopoDS_Wire>& closedWires,
-                                                                    bool splitProducedBoundedFaces,
-                                                                    bool hasOpenWireOutput)
+std::optional<TopoDS_Shape> copiedResultWireGraphProbeForSketchInternals(
+    const TopoDS_Shape& boundedFaceShape,
+    const std::vector<TopoDS_Edge>& openEdges,
+    const std::vector<TopoDS_Wire>& closedWires,
+    bool splitProducedBoundedFaces,
+    bool hasOpenWireOutput)
 {
+    // Diagnostic probe only. FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp::WireJoinerP::build()
+    // exports result-wire topology from final EdgeInfo states. cad-core must not copy bounded-face
+    // result edges into Sketch InternalShape as the main path; this helper is kept only for future
+    // one-off comparisons while the real EdgeInfo/WireInfo final ownership path is migrated.
     if (boundedFaceShape.IsNull()) {
         return std::nullopt;
     }

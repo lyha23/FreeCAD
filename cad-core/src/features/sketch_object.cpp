@@ -345,6 +345,19 @@ struct ProfileFaceBuild {
     std::optional<geometry::WireJoinerLedgerSummary> wireJoinerLedger;
 };
 
+std::string faceMakerRuntimeSourceName(geometry::FaceMakerBuildFaceRuntimeSource source)
+{
+    switch (source) {
+        case geometry::FaceMakerBuildFaceRuntimeSource::BuilderFace:
+            return "builder_face";
+        case geometry::FaceMakerBuildFaceRuntimeSource::FaceWithHolesProfile:
+            return "face_with_holes_profile";
+        case geometry::FaceMakerBuildFaceRuntimeSource::None:
+            break;
+    }
+    return "none";
+}
+
 struct UnionFind {
     std::vector<std::size_t> parent;
 
@@ -3338,6 +3351,13 @@ std::optional<std::vector<TopoDS_Wire>> makeClosedWiresFromEdges(const std::vect
     return wires->closedWires;
 }
 
+void appendSourceEdgesFromWire(std::vector<TopoDS_Edge>& sourceEdges, const TopoDS_Wire& wire)
+{
+    for (TopExp_Explorer explorer(wire, TopAbs_EDGE); explorer.More(); explorer.Next()) {
+        sourceEdges.push_back(TopoDS::Edge(explorer.Current()));
+    }
+}
+
 TopoDS_Shape compoundOrSingleShape(const std::vector<TopoDS_Shape>& shapes)
 {
     if (shapes.empty()) {
@@ -3480,6 +3500,7 @@ ProfileFaceBuild buildOptionalProfileFace(const std::vector<SketchProfileEdge>& 
             return {};
         }
         input.faceWires.push_back(*wire);
+        appendSourceEdgesFromWire(input.sourceEdges, *wire);
     }
     for (const auto& ellipse : ellipses) {
         const auto wire = makeWireFromEllipse(ellipse);
@@ -3487,6 +3508,7 @@ ProfileFaceBuild buildOptionalProfileFace(const std::vector<SketchProfileEdge>& 
             return {};
         }
         input.faceWires.push_back(*wire);
+        appendSourceEdgesFromWire(input.sourceEdges, *wire);
     }
 
     if (input.faceWires.empty() && input.openWires.empty() && input.openEdges.empty()) {
@@ -3960,24 +3982,14 @@ bool internalSubshapeMatchesReferenceShadow(const runtime::ShapeValue& shapeValu
                                             const TopoDS_Shape& subshape,
                                             const document::ReferenceShadow& shadow)
 {
-    if (shadow.fingerprint.is_object() && !shadow.fingerprint.empty()
-        && !topo::referenceFingerprintDriftReason(subshape, shadow.fingerprint, shadow.shapeType)) {
-        return true;
-    }
-    if (!shadow.brep || !shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
+    if (!shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
         return false;
     }
-
-    std::string brepError;
-    const auto match = topo::findUniqueSubshapeByReferenceBrepSnapshot(*shapeValue.internalShape,
-                                                                       "Internal",
-                                                                       shadow.brep->format,
-                                                                       shadow.brep->data,
-                                                                       shadow.brep->byteLength,
-                                                                       shadow.brep->sha256,
-                                                                       shadow.shapeType,
-                                                                       brepError);
-    return match.status == topo::ReferenceMatchStatus::Unique && match.subname == subname;
+    return topo::referenceShadowMatchesCurrentSubshape(*shapeValue.internalShape,
+                                                       "Internal",
+                                                       subname,
+                                                       subshape,
+                                                       shadow);
 }
 
 std::string internalSubnameFromShadowSub(const document::Link& link,
@@ -4700,10 +4712,11 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
         // response renders that request-local shape with InternalFace ids matching subshapes.
         context.mesh[object.name] = geometry::meshForShape(*internalShape, "InternalFace");
     }
+    const nlohmann::json internalSubshapes =
+        hasNonEmptyInternalShape ? topo::subshapeMapForShape(*internalShape, "Internal") : nlohmann::json::object();
     if (!rawShape->IsNull()) {
         nlohmann::json subshapes = topo::subshapeMapForShape(*rawShape);
         if (hasNonEmptyInternalShape) {
-            const nlohmann::json internalSubshapes = topo::subshapeMapForShape(*internalShape, "Internal");
             for (const auto& item : internalSubshapes.items()) {
                 subshapes[item.key()] = item.value();
             }
@@ -4714,8 +4727,6 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
     const std::size_t rawEdgeCount = edges.size() + circles.size() + ellipses.size();
     const std::size_t profileEdgeCount = rawEdgeCount;
     const std::size_t rawPointCount = points.size();
-    const nlohmann::json internalSubshapes =
-        hasNonEmptyInternalShape ? topo::subshapeMapForShape(*internalShape, "Internal") : nlohmann::json::object();
     const std::size_t internalFaceCount = countSubshapesOfKind(internalSubshapes, "face");
     const std::size_t internalEdgeCount = countSubshapesOfKind(internalSubshapes, "edge");
     const std::size_t internalVertexCount = countSubshapesOfKind(internalSubshapes, "vertex");
@@ -4784,6 +4795,9 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
             {"bounded_face_count", faceMakerHistory->boundedFaceCount},
             {"pre_split_history", faceMakerHistory->preSplitHistory},
             {"splitter_history", faceMakerHistory->splitterHistory},
+            {"profile_result_source", faceMakerRuntimeSourceName(faceMakerHistory->profileResultSource)},
+            {"internal_result_source", faceMakerRuntimeSourceName(faceMakerHistory->internalResultSource)},
+            {"topology_switch_used", faceMakerHistory->topologySwitchUsed},
         };
         context.objects[object.name]["facemaker_history_status"] = "history_partial:facemaker_buildface";
     }

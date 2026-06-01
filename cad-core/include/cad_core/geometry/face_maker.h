@@ -4,10 +4,17 @@
 #include <TopoDS_Shape.hxx>
 #include <TopoDS_Wire.hxx>
 
+#include <cstddef>
 #include <optional>
 #include <vector>
 
 namespace cad_core::geometry {
+
+enum class FaceMakerBuildFaceRuntimeSource {
+    None,
+    BuilderFace,
+    FaceWithHolesProfile,
+};
 
 struct FaceMakerHistorySummary {
     std::size_t sourceEdgeCount = 0;
@@ -16,6 +23,9 @@ struct FaceMakerHistorySummary {
     std::size_t boundedFaceCount = 0;
     bool preSplitHistory = false;
     bool splitterHistory = false;
+    FaceMakerBuildFaceRuntimeSource profileResultSource = FaceMakerBuildFaceRuntimeSource::None;
+    FaceMakerBuildFaceRuntimeSource internalResultSource = FaceMakerBuildFaceRuntimeSource::None;
+    bool topologySwitchUsed = false;
 };
 
 struct FaceMakerBuildFaceResult {
