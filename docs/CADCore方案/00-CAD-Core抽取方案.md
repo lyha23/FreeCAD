@@ -45,9 +45,13 @@ App::Part
 App::Link
 App::LinkElement
 App::LinkGroup
+App::DocumentObjectGroup
+App::DocumentObjectGroupPython
+App::FeaturePython
 App::Origin
 Assembly::AssemblyLink
 Assembly::AssemblyObject
+Assembly::JointGroup
 Mesh::Import
 Part::BooleanFragments
 Part::Box
@@ -68,6 +72,7 @@ Part::Line
 Part::MultiCommon
 Part::MultiFuse
 Part::Plane
+Part::Extrusion
 Part::Prism
 Part::RegularPolygon
 Part::Section
@@ -183,15 +188,15 @@ diagnostics[]
 | P5 | Sketcher solver-facing 子集、open/raw shape 与 profile face 分离、基础 `InternalShape` / internal element、ExternalGeometry 子集 | 完整 constraint solver、FaceMakerBuildFace / WireJoiner 账本、复杂 `getInternalElementMap()` |
 | P6 | `NamedShape`、`ElementMap`、prism / Body boolean maker history、merge history、stable subname 引用更新、split / deleted diagnostics 已成主路径骨架 | 完整 MapperHistory 生命周期、split 旧引用恢复、ShapeFix / Refine / transformed / DressUp history 收敛 |
 | P7 | Datum / Origin、RefineModel 子集、Hole 常用孔、Fillet / Chamfer、DressUp cache、Mirrored / LinearPattern / PolarPattern / Scaled / MultiTransform 基础路径 | Hole ModelThread、标准件表驱动头部尺寸、链式 SupportTransform ownership、复杂 transformed / pattern ownership |
-| P8 | Part primitives、BREP / STEP / IGES / STL 导入、BREP / STEP / STL CLI 导出、常用 Part Boolean、基础 Link / LinkSub 单/多 SubList compound / LinkGroup source-alias subshape / LinkElement / LinkGroup / ElementCount 折叠数组 / 已物化 ShowElement 子 LinkElement 认领 / Assembly display | Assembly Joint / solver、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、完整 FreeCAD Link 账本 |
+| P8 | Part primitives、BREP / STEP / IGES / STL 导入、BREP / STEP / STL CLI 导出、常用 Part Boolean、基础 Link / LinkSub / LinkGroup / LinkElement display、ElementCount 折叠数组、ShowElement 请求内子元素合成与 `documentObjectUpdates` 建议、`PropertyXLink*` / `FullSubList` / mapped postfix alias、`App::DocumentObjectGroup` plain group 展开、Assembly display 与 Joint 输入元数据 | Assembly solver、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、完整 FreeCAD Link 账本与持久写回事务、完整 cross-document 文档哈希 / postfix 生命周期 |
 
 P8 当前实现边界：
 
 - Part primitive：Box、Cylinder、Prism、Sphere、Ellipsoid、Cone、Torus、Wedge、Helix、Spiral、Vertex、Line、Ellipse、Plane、RegularPolygon 落在 `features/part.cpp`，输出请求内 OCCT shape、mesh、subshape map 和 indexed `NamedShape`。
 - Import / Export：`Part::ImportBrep`、`Part::ImportStep`、`Part::ImportIges`、`Mesh::Import` STL 子集可读入请求内 shape；CLI 可把已计算对象写出为 BREP / STEP / STL，导出是 adapter 文件副作用，不进入 graph 或默认 JSON 状态。
 - Part Boolean：Fuse、Cut、Common、Section、MultiFuse、MultiCommon、XOR、BooleanFragments 落在 `features/part_boolean.cpp`，消费 `topo` maker-history 子集；BooleanFragments 覆盖 Standard、solid-safe Split、wire / shell / CompSolid aggregate Split 和 CompSolid mode。
-- Link / Assembly display：`features/link.cpp` 支持 `App::Link`、`App::LinkElement`、`App::LinkGroup`、`Assembly::AssemblyLink` 和 `Assembly::AssemblyObject` 的基础 display。已支持 `LinkedObject`、`LinkTransform`、`LinkPlacement` / `Placement`、基础 `Scale` / `ScaleVector`、`LinkedObject.SubList` 单 subshape 与多 subshape compound、LinkGroup source alias subshape（如 `LinkB.Face1`）、显式 `ElementList` group、`ElementCount` 折叠数组、同文档已物化 `ShowElement=true` 子 `LinkElement` 认领、`PlacementList` / `ScaleList` / `VisibilityList` 和源对象 alias retag。当前只认领请求里已经存在的 `Owner_iN` / `_LinkOwner` 子对象；缺失子对象时仍返回 `unsupported_link_lifecycle`，不在 recompute 中创建对象或写回 `DocumentObject graph`。
-- Link / Assembly 未完成：`ShowElement=true` 自动创建 / 删除 `LinkElement` 的完整生命周期、缺失子元素的请求内合成策略、cross-document postfix、多层复杂 LinkSub 链和 Assembly solver 尚未迁移。
+- Link / Assembly display：`features/link.cpp` 支持 `App::Link`、`App::LinkElement`、`App::LinkGroup`、`App::DocumentObjectGroup`、`Assembly::AssemblyLink`、`Assembly::AssemblyObject`、`Assembly::JointGroup` 和 Assembly `App::FeaturePython` Joint / GroundedJoint 输入元数据。已支持 `LinkedObject`、`LinkTransform`、`LinkPlacement` / `Placement`、基础 `Scale` / `ScaleVector`、`LinkedObject.SubList` 单 subshape 与多 subshape compound、LinkSub 对象名 / `$Label` 前缀路由、LinkGroup source alias subshape、显式 `ElementList` group、`ElementCount` 折叠数组、ShowElement 已物化子元素认领、缺失子元素请求内合成、owner / child sync、toggle-off 收回与删除建议、`PlacementList` / `ScaleList` / `VisibilityList`、`PropertyXLink*`、`FullSubList`、mapped postfix alias、源对象 alias retag、Link retag 后 terminal / merge history 传播，以及 plain group children 请求内 display 展开。`documentObjectUpdates` 只作为前端更新 `DocumentObject graph` 的建议返回，CAD Core 不在后端持久化或隐式改写请求 graph。
+- Link / Assembly 未完成：完整 FreeCAD Link 账本、`ShowElement=true` LinkElement / LinkGroup 持久写回事务生命周期、完整 cross-document 文档哈希 / postfix 生命周期、更复杂多层 LinkSub 链、Assembly solver 和完整 Joint placement / constraint 尚未迁移。
 
 ## 未完成边界
 
@@ -201,7 +206,7 @@ P8 当前实现边界：
 - Sketcher：完整约束求解、BSpline solver/control-point 语义、ExternalGeometry face / arc edge / defining profile、完整 FaceMakerBuildFace / WireJoiner 账本和复杂 `getInternalElementMap()`。
 - Topo Naming：完整 MapperHistory 消费、split 旧引用恢复、merge history 到完整 MapperHistory 的收敛、ShapeFix / transformed / DressUp 的完整命名传播，以及 RefineModel partial history 向完整 MapperHistory 生命周期收敛。
 - PartDesign：Hole ModelThread、标准件表驱动头部尺寸迁移、复杂 Fillet / Chamfer 参数、链式 DressUp `SupportTransform` ownership、复杂 transformed ownership。
-- P8：Assembly Joint / solver、Worker / WASM / Web adapter 产品化、导入 shape 完整 ElementMap、`ShowElement=true` LinkElement / LinkGroup 自动创建 / 删除生命周期、缺失子元素请求内合成、cross-document postfix retag 和多层复杂 LinkSub 链。
+- P8：Assembly solver、Worker / WASM / Web adapter 产品化、导入 shape 完整 ElementMap、完整 FreeCAD Link 账本、`ShowElement=true` LinkElement / LinkGroup 持久写回事务生命周期、完整 cross-document 文档哈希 / postfix 生命周期和更复杂多层 LinkSub 链。
 
 这些缺口必须保持显式 diagnostics 或 `known_gap`，不能用 fixture 特判、输出端修剪、几何类型排序或 source edge 猜测伪装完成。
 
@@ -212,7 +217,7 @@ P8 当前实现边界：
 1. P6 topo 主路径补强：完整 MapperHistory 生命周期、split / merge 旧引用恢复、ShapeFix history，以及 RefineModel / taper partial history 到正式 MapperHistory 的收敛。
 2. P5 Sketcher 补强：FaceMaker / WireJoiner 账本、复杂 internal element map、更多 external geometry 和约束。
 3. P7 PartDesign 补强：Hole ModelThread、标准件表驱动头部尺寸迁移、链式 DressUp SupportTransform ownership、复杂 transformed / pattern ownership。
-4. P8 后置能力：继续补 Assembly Joint / solver、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、`ShowElement=true` LinkElement / LinkGroup 自动创建 / 删除生命周期、缺失子元素请求内合成、cross-document postfix retag 和多层复杂 LinkSub 链。
+4. P8 后置能力：继续补 Assembly solver、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、完整 FreeCAD Link 账本、`ShowElement=true` LinkElement / LinkGroup 持久写回事务生命周期、完整 cross-document 文档哈希 / postfix 生命周期和更复杂多层 LinkSub 链。
 
 除非前置 topo naming 和 property/link 边界已经覆盖对应引用场景，不应继续扩大高层 executor 的 fixture 特判。
 
