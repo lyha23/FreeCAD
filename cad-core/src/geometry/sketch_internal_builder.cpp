@@ -6,6 +6,8 @@
 #include <BRep_Builder.hxx>
 #include <TopoDS_Compound.hxx>
 
+#include <utility>
+
 namespace cad_core::geometry {
 
 namespace {
@@ -26,6 +28,12 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
 {
     SketchInternalBuildResult result;
     if (input.faceWires.empty()) {
+        if (!input.openWires.empty() || !input.openEdges.empty()) {
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+            // ::SketchObject::buildInternals(), catches "Part::FaceMaker: result shape is null."
+            // for open-only sketches and returns an empty TopoShape as InternalShape.
+            result.internalShape = TopoDS_Shape();
+        }
         return result;
     }
 
@@ -41,6 +49,7 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
     result.splitProducedBoundedFaces = faceResult.splitProducedBoundedFaces;
     result.requiresSubshapeSelection = faceResult.splitProducedBoundedFaces;
 
+    bool hasOpenWireOutput = false;
     if (!input.openWires.empty()) {
         // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
         // ::SketchObject::buildInternals(), "Append open wires (edges not part of any closed face)"
@@ -54,13 +63,28 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
         for (const TopoDS_Wire& wire : input.openWires) {
             joiner.addOpenWire(wire);
         }
-        if (faceResult.splitProducedBoundedFaces && faceResult.shape) {
+        if (faceResult.shape) {
             joiner.classifyBoundedFaceOwnership(*faceResult.shape);
         }
         const auto openShape = joiner.getOpenWires("SKF", true);
         if (openShape && !openShape->IsNull()) {
             result.internalShape = compoundShape(*faceResult.shape, *openShape);
+            hasOpenWireOutput = true;
         }
+    }
+
+    if (const auto resultEdges = copiedResultWireGraphForSketchInternals(*faceResult.shape,
+                                                                         input.openEdges,
+                                                                         input.faceWires.size(),
+                                                                         faceResult.faceCount,
+                                                                         faceResult.splitProducedBoundedFaces,
+                                                                         hasOpenWireOutput)) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::build() exports copied result-wire EdgeInfo states into openWireCompound;
+        // SketchObject::buildInternals() then compounds them with FaceMakerBuildFace output. This
+        // subset materializes that result-edge graph for fully consumed open cutters and closed-wire
+        // split cycles until the full EdgeInfo/WireInfo history ledger is migrated.
+        result.internalShape = compoundShape(*result.internalShape, *resultEdges);
     }
 
     return result;

@@ -1,0 +1,58 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
+          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
+          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
+          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]},
+          {"kind": "LineSegment", "start": [5, 0], "end": [5, 5]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Sketch",
+          "SubList": ["InternalFace99"],
+          "StableSubList": ["g305:split1"],
+          "ReferenceShadow": [
+            {
+              "target": "Sketch",
+              "targetId": 1,
+              "property": "InternalShape",
+              "shapeType": "Face",
+              "indexed": "Face1",
+              "subname": "InternalFace1",
+              "stableSubname": "g305:split1",
+              "fingerprint": {
+                "area": 25.0,
+                "edgeCount": 4,
+                "vertexCount": 4
+              },
+              "brep": {
+                "format": "brep-bin-zstd-base64",
+                "byteLength": 39,
+                "sha256": "not-validated",
+                "data": "unsupported-binary-snapshot-placeholder"
+              }
+            }
+          ]
+        },
+        "Length": 10,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    }
+  ],
+  "recompute": {"objs": ["Pad"]}
+}

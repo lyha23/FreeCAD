@@ -105,7 +105,20 @@ struct ReferenceSubshapeRecovery {
     topo::ReferenceMatchStatus status = topo::ReferenceMatchStatus::Missing;
     std::optional<ReferenceSubshapeResolution> resolution;
     std::string reason;
+    std::string diagnosticCode;
 };
+
+std::optional<std::string> unsupportedReferenceShadowBrepReason(const document::ReferenceShadow& shadow)
+{
+    if (!shadow.brep || shadow.brep->format == "brep-text") {
+        return std::nullopt;
+    }
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/PartFeature.cpp
+    // ::Feature::onBeforeChange() keeps old subshape geometry in ElementCache in-process.
+    // cad-core's current stateless recovery decoder only accepts the implemented "brep-text"
+    // transport; binary zstd/base64 remains a future transport and must not silently fall back.
+    return "ReferenceShadow.brep format " + shadow.brep->format + " is not supported by runtime recovery";
+}
 
 std::string internalSubnameFromStableElementMap(const ComputeContext& context,
                                                 const std::string& objectName,
@@ -222,6 +235,15 @@ ReferenceSubshapeRecovery recoverSubshapeForReference(const document::Link& link
         searchShape = &shapeIt->second.shape;
     }
 
+    if (const auto unsupportedBrepReason = unsupportedReferenceShadowBrepReason(shadow)) {
+        return ReferenceSubshapeRecovery {
+            topo::ReferenceMatchStatus::Missing,
+            std::nullopt,
+            *unsupportedBrepReason,
+            "unsupported_reference_shadow_brep",
+        };
+    }
+
     if (shadow.brep && shadow.brep->format == "brep-text") {
         std::string brepError;
         const auto match = topo::findUniqueSubshapeByReferenceBrepText(*searchShape,
@@ -240,11 +262,12 @@ ReferenceSubshapeRecovery recoverSubshapeForReference(const document::Link& link
                               : (match.status == topo::ReferenceMatchStatus::Deleted
                                      ? "is deleted from current ReferenceShadow.brep candidates"
                                      : "does not match a current ReferenceShadow.brep candidate")));
-            return ReferenceSubshapeRecovery {match.status, std::nullopt, reason};
+            return ReferenceSubshapeRecovery {match.status, std::nullopt, reason, {}};
         }
         return ReferenceSubshapeRecovery {
             match.status,
             ReferenceSubshapeResolution {match.subname, *match.shape, true},
+            {},
             {},
         };
     }
@@ -257,17 +280,22 @@ ReferenceSubshapeRecovery recoverSubshapeForReference(const document::Link& link
         const std::string reason = match.status == topo::ReferenceMatchStatus::Ambiguous
             ? "matches multiple ReferenceShadow fingerprint candidates"
             : "does not match a current ReferenceShadow fingerprint candidate";
-        return ReferenceSubshapeRecovery {match.status, std::nullopt, reason};
+        return ReferenceSubshapeRecovery {match.status, std::nullopt, reason, {}};
     }
     return ReferenceSubshapeRecovery {
         match.status,
         ReferenceSubshapeResolution {match.subname, *match.shape, true},
         {},
+        {},
     };
 }
 
-std::string referenceRecoveryDiagnosticCode(topo::ReferenceMatchStatus status)
+std::string referenceRecoveryDiagnosticCode(const ReferenceSubshapeRecovery& recovery)
 {
+    if (!recovery.diagnosticCode.empty()) {
+        return recovery.diagnosticCode;
+    }
+    const topo::ReferenceMatchStatus status = recovery.status;
     if (status == topo::ReferenceMatchStatus::Ambiguous) {
         return "subname_resolve_ambiguous";
     }
@@ -500,7 +528,7 @@ bool validateReferenceShadows(const document::DocumentObject& object,
                     }
                     else {
                         const std::string subname = index < link.subnames.size() ? link.subnames.at(index) : shadow.subname;
-                        const std::string code = referenceRecoveryDiagnosticCode(recovery.status);
+                        const std::string code = referenceRecoveryDiagnosticCode(recovery);
                         const std::string reason = referenceRecoveryDiagnosticReason(recovery);
                         addDiagnostic(context.diagnostics,
                                       "error",
@@ -526,7 +554,7 @@ bool validateReferenceShadows(const document::DocumentObject& object,
                 const auto driftReason =
                     topo::referenceFingerprintDriftReason(currentSubshape->shape, shadow.fingerprint, shadow.shapeType);
                 if (driftReason) {
-                    if (shadow.brep && shadow.brep->format == "brep-text") {
+                    if (shadow.brep) {
                         const auto recovery = recoverSubshapeForReference(link, index, shadow, context);
                         if (recovery.status == topo::ReferenceMatchStatus::Unique && recovery.resolution
                             && !recovery.resolution->shape.IsNull()) {
@@ -544,10 +572,11 @@ bool validateReferenceShadows(const document::DocumentObject& object,
                                 continue;
                             }
                         }
-                        else if (recovery.status == topo::ReferenceMatchStatus::Ambiguous
+                        else if (!recovery.diagnosticCode.empty()
+                                 || recovery.status == topo::ReferenceMatchStatus::Ambiguous
                                  || recovery.status == topo::ReferenceMatchStatus::Split
                                  || recovery.status == topo::ReferenceMatchStatus::Deleted) {
-                            const std::string code = referenceRecoveryDiagnosticCode(recovery.status);
+                            const std::string code = referenceRecoveryDiagnosticCode(recovery);
                             const std::string reason = referenceRecoveryDiagnosticReason(recovery);
                             addDiagnostic(context.diagnostics,
                                           "error",
@@ -673,6 +702,9 @@ std::string stableSubnameFor(const std::string& indexed,
         fallback = stableSubname;
     }
     if (!fallback.empty()) {
+        if (internalIndexed && fallback == indexed) {
+            return {};
+        }
         return fallback;
     }
     // Sketch Internal* names are request-local until the sketch InternalShape has a real
@@ -775,9 +807,24 @@ nlohmann::json responseSubshapes(const std::string& objectName,
     if (namedShapeIt != context.namedShapes.end()) {
         namedShape = &namedShapeIt->second;
     }
+    const ShapeValue* shapeValue = nullptr;
+    const auto shapeIt = context.shapes.find(objectName);
+    if (shapeIt != context.shapes.end()) {
+        shapeValue = &shapeIt->second;
+    }
 
     for (const auto& [indexed, subshape] : subshapeIt->second.items()) {
-        std::string stableSubname = stableSubnameFor(indexed, namedShape);
+        const bool internalIndexed = indexed.rfind("InternalFace", 0) == 0
+            || indexed.rfind("InternalEdge", 0) == 0
+            || indexed.rfind("InternalVertex", 0) == 0;
+        const topo::NamedShape* stableSource = namedShape;
+        if (internalIndexed && shapeValue != nullptr && shapeValue->internalNamedShape) {
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+            // ::getInternalElementMap() maps InternalEdge/InternalVertex through InternalShape,
+            // while the public Sketch Shape keeps its own EdgeN/VertexN namespace.
+            stableSource = &*shapeValue->internalNamedShape;
+        }
+        std::string stableSubname = stableSubnameFor(indexed, stableSource);
         if (stableSubname.empty()) {
             stableSubname = internalElementStableSubnameFor(objectName, indexed, context);
         }

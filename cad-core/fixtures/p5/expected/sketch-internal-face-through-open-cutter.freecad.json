@@ -6,11 +6,9 @@
     "profile_ready": true,
     "shape": "occt_internal_shape",
     "internal_counts": {
-      "faces": 2
-    },
-    "min_internal_counts": {
+      "faces": 2,
       "edges": 9,
-      "vertices": 8
+      "vertices": 10
     }
   }
 }

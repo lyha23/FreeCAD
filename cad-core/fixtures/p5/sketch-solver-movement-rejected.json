@@ -1,0 +1,18 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [0, 10]}
+        ],
+        "Constraints": [
+          {"Type": "Horizontal", "First": 0}
+        ]
+      }
+    }
+  ],
+  "recompute": {"objs": ["Sketch"]}
+}

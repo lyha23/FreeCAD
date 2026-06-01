@@ -210,6 +210,16 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["block_constraints_applied"], 0)
         self.assert_object_matches_expected(result, "p5", "sketch-angle-pointwise-constraints-profile")
 
+    def test_p5_sketch_rejects_constraint_that_requires_solver_movement(self) -> None:
+        result = self.run_recompute("sketch-solver-movement-rejected", "p5")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_property"])
+        self.assertEqual(diagnostic["object"], "Sketch")
+        self.assertEqual(diagnostic["property"], "Constraints")
+        self.assertIn("requires solver movement", diagnostic["message"])
+        self.assertEqual(result["objects"]["Sketch"]["status"], "error")
+
     def test_p5_circle_profile_outputs_pad(self) -> None:
         result = self.run_recompute("sketch-circle-profile", "p5")
         sketch = result["objects"]["Sketch"]
@@ -280,6 +290,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertTrue(sketch["profile_ready"])
         self.assertEqual(sketch["raw_edge_count"], 2)
         self.assertEqual(sketch["internal_shape"], "occt_internal_shape")
+        self.assert_object_matches_expected(result, "p5", "sketch-bspline-profile")
 
     def test_p5_construction_geometry_is_ignored_for_profile(self) -> None:
         result = self.run_recompute("sketch-construction-ignored", "p5")
@@ -387,6 +398,17 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(subshapes["InternalVertex1"]["stableSubname"], "Vertex1")
         self.assertEqual(subshapes["InternalFace1"]["stableSubname"], "")
 
+    def test_p5_sketch_internal_shape_named_shape_keeps_face_unstable(self) -> None:
+        result = self.run_recompute("sketch-internal-face", "p5")
+        named_shape = result["named_shapes"]["Sketch.InternalShape"]
+
+        self.assertIn("InternalFace1", named_shape["elements"])
+        self.assertIn("InternalEdge1", named_shape["elements"])
+        self.assertIn("InternalVertex1", named_shape["elements"])
+        self.assertEqual(named_shape["element_map"]["Edge1"], "InternalEdge1")
+        self.assertEqual(named_shape["element_map"]["Vertex1"], "InternalVertex1")
+        self.assertNotIn("Face1", named_shape["element_map"])
+
     def test_p5_sketch_internal_edge_stable_subname_checks_geometry(self) -> None:
         result = self.run_recompute_ffi("sketch-internal-edge-arc-line-same-endpoints", "p5")
         subshapes = {
@@ -414,6 +436,14 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
         self.assert_object_matches_expected(result, "p5", "sketch-internal-face-through-open-cutter")
+
+    def test_p5_branch_open_cutter_keeps_connected_result_wire(self) -> None:
+        result = self.run_recompute("sketch-internal-face-branch-open-cutter", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assert_object_matches_expected(result, "p5", "sketch-internal-face-branch-open-cutter")
 
     def test_p5_cross_cutters_build_four_internal_faces(self) -> None:
         result = self.run_recompute("sketch-internal-face-cross-cutters", "p5")
@@ -462,6 +492,14 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
         self.assert_object_matches_expected(result, "p5", "sketch-internal-face-figure8-bspline")
+
+    def test_p5_self_intersecting_cubic_bspline_splits_into_bounded_regions(self) -> None:
+        result = self.run_recompute("sketch-internal-face-cubic-figure8-bspline", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assert_object_matches_expected(result, "p5", "sketch-internal-face-cubic-figure8-bspline")
 
     def test_p5_cross_pattern_closed_profiles_split_into_five_internal_faces(self) -> None:
         result = self.run_recompute("sketch-internal-face-cross-pattern", "p5")
@@ -573,6 +611,18 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(brep["byteLength"], len(brep["data"]))
         self.assertNotEqual(brep["byteLength"], 662)
 
+    def test_p5_pad_reports_unsupported_reference_shadow_brep_transport(self) -> None:
+        result = self.run_recompute("pad-internal-face-reference-shadow-brep-bin-unsupported", "p5")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_reference_shadow_brep"])
+        self.assertEqual(diagnostic["object"], "Pad")
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], "Sketch")
+        self.assertEqual(diagnostic["subname"], "InternalFace99")
+        self.assertIn("brep-bin-zstd-base64", diagnostic["message"])
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
+
     def test_p5_pad_recovers_drifted_sublist_with_reference_shadow_brep(self) -> None:
         result = self.run_recompute("pad-internal-face-reference-shadow-brep-drift-recover", "p5")
         pad = result["objects"]["Pad"]
@@ -666,6 +716,18 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(diagnostic["property"], "Profile")
         self.assertEqual(diagnostic["target"], "Sketch")
         self.assertEqual(diagnostic["subname"], "InternalFace99")
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
+
+    def test_p5_pad_reports_open_profile_for_explicit_empty_internal_face_selection(self) -> None:
+        result = self.run_recompute("pad-open-wire-profile", "p5")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["open_profile"])
+        self.assertEqual(diagnostic["object"], "Pad")
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], "Sketch")
+        self.assertEqual(diagnostic["subname"], "InternalFace1")
+        self.assertIn("no closed InternalFace profile", diagnostic["message"])
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_rejects_non_face_internal_profile_subshape(self) -> None:
@@ -865,6 +927,36 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(extrusion["status"], "ok")
         self.assertEqual(extrusion["shape"], "occt_solid")
         self.assertAlmostEqual(extrusion["volume"], 420.0)
+        self.assertEqual(extrusion["bbox"], {"min": [0.0, 0.0, 0.0], "max": [10.0, 10.0, 5.0]})
+
+    def test_p5_part_extrusion_default_bullseye_promotes_nested_island(self) -> None:
+        result = self.run_recompute("part-extrusion-facemaker-bullseye-nested-island", "p5")
+        extrusion = result["objects"]["Extrude"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(extrusion["status"], "ok")
+        self.assertEqual(extrusion["shape"], "occt_compound")
+        self.assertAlmostEqual(extrusion["volume"], 340.0)
+        self.assertEqual(extrusion["bbox"], {"min": [0.0, 0.0, 0.0], "max": [10.0, 10.0, 5.0]})
+
+    def test_p5_part_extrusion_default_bullseye_handles_intersected_inner_wires(self) -> None:
+        result = self.run_recompute("part-extrusion-facemaker-bullseye-intersected-holes", "p5")
+        extrusion = result["objects"]["Extrude"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(extrusion["status"], "ok")
+        self.assertEqual(extrusion["shape"], "occt_solid")
+        self.assertAlmostEqual(extrusion["volume"], 340.0)
+        self.assertEqual(extrusion["bbox"], {"min": [0.0, 0.0, 0.0], "max": [10.0, 10.0, 5.0]})
+
+    def test_p5_part_extrusion_cheese_keeps_nested_wire_as_hole(self) -> None:
+        result = self.run_recompute("part-extrusion-facemaker-cheese-nested-holes", "p5")
+        extrusion = result["objects"]["Extrude"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(extrusion["status"], "ok")
+        self.assertEqual(extrusion["shape"], "occt_solid")
+        self.assertAlmostEqual(extrusion["volume"], 300.0)
         self.assertEqual(extrusion["bbox"], {"min": [0.0, 0.0, 0.0], "max": [10.0, 10.0, 5.0]})
 
     def test_p5_part_extrusion_supports_facemaker_mode_extrusion(self) -> None:

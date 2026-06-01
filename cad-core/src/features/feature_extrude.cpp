@@ -162,11 +162,15 @@ std::optional<TopoDS_Shape> resolveSketchInternalFaceProfile(const document::Doc
         return std::nullopt;
     }
     if (!shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.cpp
+        // ::getTopoShapeVerifiedFace(), throws "Cannot make face from profile" when the linked sketch
+        // cannot provide a closed face. An explicit InternalFaceN selection against an empty
+        // Sketch InternalShape is a profile error, not a missing object/link target.
         runtime::addDiagnostic(context.diagnostics,
                                "error",
-                               "missing_link_target",
-                               featureName + " Profile target " + profileLink.object + " has no InternalShape for "
-                                   + profileLink.subnames.front(),
+                               "open_profile",
+                               featureName + " Profile target " + profileLink.object
+                                   + " has no closed InternalFace profile for " + profileLink.subnames.front(),
                                object.name,
                                "Profile",
                                "runtime",

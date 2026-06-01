@@ -1,0 +1,28 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "BSpline",
+            "degree": 3,
+            "poles": [
+              [0, 0],
+              [10, 12],
+              [-10, 12],
+              [10, 0],
+              [-10, 0],
+              [0, 12],
+              [0, 0]
+            ]
+          }
+        ],
+        "Constraints": []
+      }
+    }
+  ],
+  "recompute": {"objs": ["Sketch"]}
+}

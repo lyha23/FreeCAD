@@ -48,6 +48,13 @@ struct ShapeValue
     // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::buildInternals(),
     // writes "InternalShape" from FaceMakerBuildFace and WireJoiner open-wire results.
     std::optional<TopoDS_Shape> internalShape;
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::getInternalElementMap(),
+    // creates bidirectional InternalEdge/InternalVertex aliases only when "Shape.findSubShapesWithSharedVertex"
+    // returns a single CheckGeometry match. cad-core keeps that auxiliary ElementMap separate from
+    // the raw Sketch Shape NamedShape so raw EdgeN links and InternalEdgeN links do not overwrite
+    // each other.
+    std::optional<topo::NamedShape> internalNamedShape;
     // Split-derived InternalFace regions are individually selectable profile domains; closed
     // wire compounds such as face-with-island can still be consumed as a whole profile.
     bool profileRequiresSubshapeSelection = false;

@@ -37,6 +37,7 @@ SUPPORTED_NATIVE_TYPES = {
     "Part::Spiral",
     "Part::Vertex",
     "Part::Wedge",
+    "Sketcher::SketchObject",
 }
 
 
@@ -160,6 +161,116 @@ def placement_value(FreeCAD: Any, value: dict) -> Any:
     )
 
 
+def vector_value(FreeCAD: Any, value: Any, field: str) -> Any:
+    if not isinstance(value, list) or len(value) not in {2, 3}:
+        raise UnsupportedFixture(f"{field} must be a two- or three-number vector")
+    if not all(isinstance(item, (int, float)) for item in value):
+        raise UnsupportedFixture(f"{field} must contain only numbers")
+    z = value[2] if len(value) == 3 else 0.0
+    return FreeCAD.Vector(float(value[0]), float(value[1]), float(z))
+
+
+def number_field(value: dict, name: str) -> float:
+    item = value.get(name)
+    if not isinstance(item, (int, float)):
+        raise UnsupportedFixture(f"Sketch Geometry {name} must be a number")
+    return float(item)
+
+
+def int_field(value: dict, name: str) -> int:
+    item = value.get(name)
+    if not isinstance(item, int):
+        raise UnsupportedFixture(f"Sketch Geometry {name} must be an integer")
+    return item
+
+
+def sketch_geometry_value(FreeCAD: Any, item: dict) -> tuple[Any, bool]:
+    import Part  # type: ignore
+
+    kind = item.get("kind")
+    construction = bool(item.get("construction", False))
+    normal = FreeCAD.Vector(0.0, 0.0, 1.0)
+
+    if kind in {"Point", "GeomPoint"}:
+        return Part.Point(vector_value(FreeCAD, item.get("point"), "Point.point")), construction
+    if kind == "LineSegment":
+        return Part.LineSegment(
+            vector_value(FreeCAD, item.get("start"), "LineSegment.start"),
+            vector_value(FreeCAD, item.get("end"), "LineSegment.end"),
+        ), construction
+    if kind == "Circle":
+        return Part.Circle(
+            vector_value(FreeCAD, item.get("center"), "Circle.center"),
+            normal,
+            number_field(item, "radius"),
+        ), construction
+    if kind == "Ellipse":
+        ellipse = Part.Ellipse(
+            vector_value(FreeCAD, item.get("center"), "Ellipse.center"),
+            number_field(item, "majorRadius"),
+            number_field(item, "minorRadius"),
+        )
+        ellipse.AngleXU = float(item.get("angle", 0.0))
+        return ellipse, construction
+    if kind == "ArcOfCircle":
+        circle = Part.Circle(
+            vector_value(FreeCAD, item.get("center"), "ArcOfCircle.center"),
+            normal,
+            number_field(item, "radius"),
+        )
+        return Part.ArcOfCircle(circle, number_field(item, "startAngle"), number_field(item, "endAngle")), construction
+    if kind == "ArcOfEllipse":
+        ellipse = Part.Ellipse(
+            vector_value(FreeCAD, item.get("center"), "ArcOfEllipse.center"),
+            number_field(item, "majorRadius"),
+            number_field(item, "minorRadius"),
+        )
+        ellipse.AngleXU = float(item.get("angle", 0.0))
+        return Part.ArcOfEllipse(ellipse, number_field(item, "startAngle"), number_field(item, "endAngle")), construction
+    if kind in {"BSpline", "BSplineCurve", "GeomBSplineCurve"}:
+        degree = int_field(item, "degree")
+        raw_poles = item.get("poles")
+        if not isinstance(raw_poles, list):
+            raise UnsupportedFixture("BSpline.poles must be a list")
+        poles = [vector_value(FreeCAD, pole, "BSpline.poles") for pole in raw_poles]
+        knot_count = len(poles) - degree + 1
+        if degree < 1 or knot_count < 2:
+            raise UnsupportedFixture("BSpline requires at least degree + 1 poles")
+        knots = [float(index) / float(knot_count - 1) for index in range(knot_count)]
+        multiplicities = [1] * knot_count
+        multiplicities[0] = degree + 1
+        multiplicities[-1] = degree + 1
+        curve = Part.BSplineCurve()
+        # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/Geometry.cpp
+        # GeomBSplineCurve serializes "Poles", "Knots", "Multiplicity" and "Degree"; cad-core
+        # fixture BSplines use the same non-periodic clamped knot construction.
+        curve.buildFromPolesMultsKnots(poles, multiplicities, knots, False, degree)
+        return curve, construction
+
+    raise UnsupportedFixture(f"unsupported Sketch Geometry kind {kind}")
+
+
+def set_sketch_geometry(FreeCAD: Any, obj: Any, value: Any) -> None:
+    if not isinstance(value, list):
+        raise UnsupportedFixture("Sketch Geometry must be a list")
+    for item in value:
+        if not isinstance(item, dict):
+            raise UnsupportedFixture("Sketch Geometry items must be objects")
+        geometry, construction = sketch_geometry_value(FreeCAD, item)
+        obj.addGeometry(geometry, construction)
+
+
+def set_sketch_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, value: Any) -> None:
+    if name == "Geometry":
+        set_sketch_geometry(FreeCAD, obj, value)
+        return
+    if name == "Constraints":
+        if value:
+            raise UnsupportedFixture("Sketch Constraints are not enabled in this collector yet")
+        return
+    set_property(FreeCAD, created, obj, name, value)
+
+
 def safe_setattr(obj: Any, name: str, value: Any) -> None:
     try:
         setattr(obj, name, value)
@@ -224,7 +335,10 @@ def create_objects(FreeCAD: Any, doc: Any, fixture: dict) -> dict[str, Any]:
         except Exception as exc:
             raise UnsupportedFixture(f"FreeCAD cannot add {type_id}: {exc}") from exc
         for prop_name, prop_value in spec.get("Properties", {}).items():
-            set_property(FreeCAD, created, obj, prop_name, prop_value)
+            if type_id == "Sketcher::SketchObject":
+                set_sketch_property(FreeCAD, created, obj, prop_name, prop_value)
+            else:
+                set_property(FreeCAD, created, obj, prop_name, prop_value)
         created[name] = obj
     return created
 
@@ -244,6 +358,39 @@ def shape_summary(shape: Any) -> dict:
         },
     }
     return summary
+
+
+def sketch_summary(obj: Any) -> dict:
+    shape = getattr(obj, "Shape", None)
+    internal_shape = getattr(obj, "InternalShape", None)
+    if shape is None or shape.isNull():
+        raise UnsupportedFixture(f"target object {obj.Name} has no sketch shape")
+
+    payload: dict[str, Any] = {
+        "object_fields": {
+            "status": "ok",
+            "shape": "occt_sketch_shape",
+            "raw_edge_count": len(getattr(shape, "Edges", [])),
+        }
+    }
+    if internal_shape is not None and not internal_shape.isNull():
+        payload["sketch_internal"] = {
+            "profile_ready": len(getattr(internal_shape, "Faces", [])) > 0,
+            "shape": "occt_internal_shape",
+            "raw_edge_count": len(getattr(shape, "Edges", [])),
+            "internal_counts": {
+                "faces": len(getattr(internal_shape, "Faces", [])),
+                "edges": len(getattr(internal_shape, "Edges", [])),
+                "vertices": len(getattr(internal_shape, "Vertexes", [])),
+            },
+        }
+    else:
+        payload["sketch_internal"] = {
+            "profile_ready": False,
+            "shape": "empty",
+            "raw_edge_count": len(getattr(shape, "Edges", [])),
+        }
+    return payload
 
 
 def target_names(fixture: dict) -> list[str]:
@@ -274,7 +421,10 @@ def collect_one(fixture_path: Path) -> dict:
             shape = getattr(obj, "Shape", None)
             if shape is None or shape.isNull():
                 raise UnsupportedFixture(f"target object {name} has no shape")
-            object_payloads[name] = shape_summary(shape)
+            if getattr(obj, "TypeId", "") == "Sketcher::SketchObject":
+                object_payloads[name] = sketch_summary(obj)
+            else:
+                object_payloads[name] = shape_summary(shape)
 
         reference_types = ", ".join(spec["TypeId"] for spec in fixture.get("Objects", []))
         payload: dict[str, Any] = {
@@ -308,6 +458,22 @@ def compare_bbox(existing: dict, generated: dict, delta: float) -> bool:
 def compare_object_expected(existing: dict, generated: dict) -> list[str]:
     errors: list[str] = []
     bbox_delta = existing.get("bbox_delta", 1e-6)
+    for key, expected_value in existing.get("object_fields", {}).items():
+        if generated.get("object_fields", {}).get(key) != expected_value:
+            errors.append(f"object_fields.{key}")
+    if "sketch_internal" in existing:
+        expected_internal = existing["sketch_internal"]
+        generated_internal = generated.get("sketch_internal", {})
+        for key in ("shape", "profile_ready", "raw_edge_count"):
+            if key in expected_internal and generated_internal.get(key) != expected_internal[key]:
+                errors.append(f"sketch_internal.{key}")
+        for key, expected_value in expected_internal.get("internal_counts", {}).items():
+            if generated_internal.get("internal_counts", {}).get(key) != expected_value:
+                errors.append(f"sketch_internal.internal_counts.{key}")
+        for key, expected_value in expected_internal.get("min_internal_counts", {}).items():
+            generated_value = generated_internal.get("internal_counts", {}).get(key)
+            if generated_value is None or generated_value < expected_value:
+                errors.append(f"sketch_internal.min_internal_counts.{key}")
     if "bbox" in existing and not compare_bbox(existing["bbox"], generated["bbox"], bbox_delta):
         errors.append("bbox")
     if "volume" in existing and not close_enough(existing["volume"], generated["volume"], existing.get("volume_delta", 1e-6)):

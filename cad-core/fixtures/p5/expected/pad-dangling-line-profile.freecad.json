@@ -1,5 +1,5 @@
 {
-  "reference": "FreeCAD-aligned oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildInternals() keeps the bounded outer face, then WireJoiner::getOpenWires(noOriginal=true) purges the dangling source line from InternalShape; /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeaturePad.cpp::Pad::execute() calls buildExtrusion(ExtrudeOption::MakeFace | ExtrudeOption::MakeFuse). The 10x10 bounded profile has area 100, extruded by Length=10, so Pad volume is 1000.",
+  "reference": "FreeCAD-aligned oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildInternals() keeps the bounded outer face, splits the touched boundary edge, and does not retain the touching dangling line as open-wire evidence; /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeaturePad.cpp::Pad::execute() calls buildExtrusion(ExtrudeOption::MakeFace | ExtrudeOption::MakeFuse). The 10x10 bounded profile has area 100, extruded by Length=10, so Pad volume is 1000.",
   "freecad_version": "1.2.0 revision 20260519",
   "objects": {
     "Sketch": {
@@ -7,11 +7,9 @@
         "profile_ready": true,
         "shape": "occt_internal_shape",
         "internal_counts": {
-          "faces": 1
-        },
-        "internal_counts": {
-          "edges": 4,
-          "vertices": 4
+          "faces": 1,
+          "edges": 5,
+          "vertices": 5
         }
       }
     },

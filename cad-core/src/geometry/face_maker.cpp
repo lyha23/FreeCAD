@@ -5,6 +5,7 @@
 #include <BOPAlgo_BuilderFace.hxx>
 #include <BRepBndLib.hxx>
 #include <BRep_Builder.hxx>
+#include <BRepExtrema_DistShapeShape.hxx>
 #include <BRepClass_FaceClassifier.hxx>
 #include <BRepBuilderAPI_Copy.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
@@ -207,6 +208,67 @@ std::vector<TopoDS_Face> facesForShape(const TopoDS_Shape& shape)
         faces.push_back(TopoDS::Face(explorer.Current()));
     }
     return faces;
+}
+
+std::vector<TopoDS_Edge> edgesForShape(const TopoDS_Shape& shape)
+{
+    std::vector<TopoDS_Edge> edges;
+    for (TopExp_Explorer explorer(shape, TopAbs_EDGE); explorer.More(); explorer.Next()) {
+        edges.push_back(TopoDS::Edge(explorer.Current()));
+    }
+    return edges;
+}
+
+std::size_t countSubShapes(const TopoDS_Shape& shape, TopAbs_ShapeEnum shapeType)
+{
+    std::size_t count = 0;
+    for (TopExp_Explorer explorer(shape, shapeType); explorer.More(); explorer.Next()) {
+        ++count;
+    }
+    return count;
+}
+
+bool topologyWasSplit(const TopoDS_Shape& candidate, const TopoDS_Shape& base)
+{
+    return countSubShapes(candidate, TopAbs_EDGE) > countSubShapes(base, TopAbs_EDGE)
+        || countSubShapes(candidate, TopAbs_VERTEX) > countSubShapes(base, TopAbs_VERTEX);
+}
+
+TopTools_ListOfShape edgeNetworkForWiresAndEdges(const std::vector<TopoDS_Wire>& wires,
+                                                 const std::vector<TopoDS_Edge>& extraEdges)
+{
+    TopTools_ListOfShape edges;
+    for (const TopoDS_Wire& wire : wires) {
+        for (TopExp_Explorer explorer(wire, TopAbs_EDGE); explorer.More(); explorer.Next()) {
+            edges.Append(explorer.Current());
+        }
+    }
+    for (const TopoDS_Edge& edge : extraEdges) {
+        if (!edge.IsNull()) {
+            edges.Append(edge);
+        }
+    }
+    return edges;
+}
+
+bool shapesTouch(const TopoDS_Shape& lhs, const TopoDS_Shape& rhs)
+{
+    if (lhs.IsNull() || rhs.IsNull()) {
+        return false;
+    }
+    BRepExtrema_DistShapeShape distance(lhs, rhs);
+    distance.Perform();
+    return distance.IsDone() && distance.Value() <= Precision::Confusion();
+}
+
+bool edgeTouchesAnyBoundary(const TopoDS_Edge& edge, const std::vector<TopoDS_Edge>& boundaryEdges)
+{
+    for (const TopoDS_Edge& boundary : boundaryEdges) {
+        if (shapesTouch(edge, boundary)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 std::optional<TopoDS_Face> faceFromWire(const TopoDS_Wire& wire)
@@ -443,7 +505,7 @@ std::optional<TopoDS_Shape> buildBoundedFacesFromEdgeNetwork(const TopTools_List
 std::optional<FaceMakerBuildFaceResult> makeSelfIntersectingSingleWireFaces(const TopoDS_Wire& wire)
 {
     TopTools_ListOfShape edges = wireEdges(wire);
-    if (edges.Size() <= 1) {
+    if (edges.IsEmpty()) {
         return std::nullopt;
     }
 
@@ -562,7 +624,25 @@ std::optional<TopoDS_Shape> makeFaceWithHolesFromClosedWires(const std::vector<T
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
     // ::Build_Essence() feeds all profile edges into BOPAlgo_BuilderFace so overlapping closed
     // profiles become disjoint bounded regions instead of overlapping face products.
-    return splitOverlappingFaces(faces);
+    const auto result = splitOverlappingFaces(faces);
+    if (!result || result->IsNull()) {
+        return result;
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
+    // ::Build_Essence(), after splitAtIntersections(), BOPAlgo_BuilderFace is the owner of
+    // "myShapesToReturn". When it produces the same bounded region count as the fallback
+    // hole/island path, prefer its face network because it preserves FreeCAD edge ownership.
+    std::size_t rebuiltFaceCount = 0;
+    bool rebuiltProducedSplit = false;
+    const auto rebuilt = buildBoundedFacesFromEdgeNetwork(edgeNetworkForWiresAndEdges(wires, {}),
+                                                          rebuiltFaceCount,
+                                                          rebuiltProducedSplit);
+    if (wires.size() >= 3U && rebuilt && !rebuilt->IsNull() && rebuiltFaceCount == facesForShape(*result).size()
+        && rebuiltFaceCount > wires.size()) {
+        return rebuilt;
+    }
+    return result;
 }
 
 std::optional<TopoDS_Shape> makeSeparateFacesFromClosedWires(const std::vector<TopoDS_Wire>& wires)
@@ -665,9 +745,17 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(const std
     TopTools_ListOfShape objects;
     objects.Append(*base);
     TopTools_ListOfShape tools;
+    std::vector<TopoDS_Edge> selectedSplitEdges;
+    const std::vector<TopoDS_Edge> baseBoundaryEdges = edgesForShape(*base);
     for (const TopoDS_Edge& edge : splitEdges) {
-        if (!edge.IsNull()) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+        // ::SketchObject::buildInternals() lets FaceMakerBuildFace form bounded faces first, then
+        // WireJoiner::getOpenWires() accounts for leftover open wires. In this bounded-face subset,
+        // only open edges that touch the bounded-face boundary can split the face; isolated internal
+        // dangling lines remain WireJoiner open-wire candidates and are later filtered by noOriginal.
+        if (!edge.IsNull() && edgeTouchesAnyBoundary(edge, baseBoundaryEdges)) {
             tools.Append(edge);
+            selectedSplitEdges.push_back(edge);
         }
     }
     if (tools.IsEmpty()) {
@@ -686,10 +774,43 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(const std
     }
 
     std::vector<TopoDS_Face> splitFaces = facesForShape(splitter.Shape());
-    if (splitFaces.size() <= baseFaces.size()) {
+    if (splitFaces.size() < baseFaces.size()) {
         return FaceMakerBuildFaceResult{base, baseFaces.size(), false};
     }
-    return FaceMakerBuildFaceResult{compoundOrSingleFace(splitFaces), splitFaces.size(), true};
+    const auto splitShape = compoundOrSingleFace(splitFaces);
+    if (!splitShape || splitShape->IsNull()) {
+        return FaceMakerBuildFaceResult{base, baseFaces.size(), false};
+    }
+    if (splitFaces.size() == baseFaces.size()) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
+        // ::Build_Essence(), BOPAlgo_BuilderFace uses "SetAvoidInternalShapes" after
+        // splitAtIntersections(). A dangling line touching a face boundary splits the boundary edge
+        // without keeping the dangling line as an internal face edge.
+        const TopTools_ListOfShape faceMakerEdges = edgeNetworkForWiresAndEdges(wires, selectedSplitEdges);
+
+        std::size_t rebuiltFaceCount = 0;
+        bool rebuiltProducedSplit = false;
+        const auto rebuilt = buildBoundedFacesFromEdgeNetwork(faceMakerEdges, rebuiltFaceCount, rebuiltProducedSplit);
+        if (rebuilt && !rebuilt->IsNull() && rebuiltFaceCount == baseFaces.size()
+            && topologyWasSplit(*rebuilt, *base)) {
+            return FaceMakerBuildFaceResult{rebuilt, rebuiltFaceCount, false};
+        }
+        return FaceMakerBuildFaceResult{base, baseFaces.size(), false};
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
+    // ::Build_Essence(), BOPAlgo_BuilderFace owns the split edge network. The splitter result is
+    // only the bounded-region detector here; when BuilderFace reaches the same face count, keep its
+    // topology so shared/result edge ownership matches SketchObject::buildInternals() more closely.
+    std::size_t rebuiltFaceCount = 0;
+    bool rebuiltProducedSplit = false;
+    const auto rebuilt = buildBoundedFacesFromEdgeNetwork(edgeNetworkForWiresAndEdges(wires, selectedSplitEdges),
+                                                          rebuiltFaceCount,
+                                                          rebuiltProducedSplit);
+    if (rebuilt && !rebuilt->IsNull() && rebuiltFaceCount == splitFaces.size()) {
+        return FaceMakerBuildFaceResult{rebuilt, rebuiltFaceCount, true};
+    }
+    return FaceMakerBuildFaceResult{splitShape, splitFaces.size(), true};
 }
 
 std::optional<TopoDS_Shape> makeFacesFromClosedWiresAndSplitEdges(const std::vector<TopoDS_Wire>& wires,

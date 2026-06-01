@@ -3116,37 +3116,6 @@ std::vector<SketchProfileEdge> profileEdges(const std::vector<SketchSegment>& se
     return edges;
 }
 
-std::vector<SketchProfileEdge> faceMakerProfileEdges(const std::vector<SketchProfileEdge>& edges)
-{
-    std::vector<SketchProfileEdge> expanded;
-    expanded.reserve(edges.size());
-
-    for (const auto& edge : edges) {
-        if (edge.kind != SketchProfileEdgeKind::BSpline || edge.degree != 1 || edge.poles.size() < 2U) {
-            expanded.push_back(edge);
-            continue;
-        }
-
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
-        // ::FaceMakerBuildFace::splitSelfIntersecting(), "Split self-intersecting edges (e.g.,
-        // figure-8 BSplines)" before BuilderFace. A degree-1 BSpline is exactly piecewise linear,
-        // so each adjacent pole span can be fed to the same edge-network splitter without changing
-        // the raw Sketch Shape representation.
-        for (std::size_t index = 1; index < edge.poles.size(); ++index) {
-            if (samePoint(edge.poles[index - 1], edge.poles[index])) {
-                continue;
-            }
-            expanded.push_back(SketchProfileEdge{
-                SketchProfileEdgeKind::Line,
-                edge.poles[index - 1],
-                edge.poles[index],
-            });
-        }
-    }
-
-    return expanded;
-}
-
 std::optional<Handle(Geom_BSplineCurve)> makeBSplineCurve(int degree, const std::vector<gp_Pnt>& poles)
 {
     if (degree < 1 || poles.size() < static_cast<std::size_t>(degree + 1)) {
@@ -3489,8 +3458,11 @@ ProfileFaceBuild buildOptionalProfileFace(const std::vector<SketchProfileEdge>& 
 {
     geometry::SketchInternalBuildInput input;
     if (!edges.empty()) {
-        const auto faceEdges = faceMakerProfileEdges(edges);
-        auto edgeWires = makeProfileWiresFromEdges(faceEdges);
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+        // ::SketchObject::buildInternals() passes raw Sketch wires to "Part::FaceMakerBuildFace".
+        // Keep degree-1 BSplines as BSpline edges here; FaceMakerBuildFace::splitSelfIntersecting()
+        // owns the self-intersection split and produces different topology from pre-expanded lines.
+        auto edgeWires = makeProfileWiresFromEdges(edges);
         if (!edgeWires) {
             return {};
         }
@@ -3514,7 +3486,7 @@ ProfileFaceBuild buildOptionalProfileFace(const std::vector<SketchProfileEdge>& 
         input.faceWires.push_back(*wire);
     }
 
-    if (input.faceWires.empty()) {
+    if (input.faceWires.empty() && input.openWires.empty() && input.openEdges.empty()) {
         return {};
     }
     const auto result = geometry::buildSketchInternals(input);
@@ -4532,7 +4504,7 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
         if (profileShape) {
             profileShape = geometry::transformShape(*profileShape, placement);
         }
-        if (internalShape) {
+        if (internalShape && !internalShape->IsNull()) {
             internalShape = geometry::transformShape(*internalShape, placement);
         }
     }
@@ -4541,8 +4513,13 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
     shapeValue.profileShape = profileShape;
     shapeValue.internalShape = internalShape;
     shapeValue.profileRequiresSubshapeSelection = profileFace.requiresSubshapeSelection;
+    const bool hasNonEmptyInternalShape = internalShape && !internalShape->IsNull();
+    if (hasNonEmptyInternalShape) {
+        shapeValue.internalNamedShape = topo::namedShapeForSketchInternalShape(object.name, *rawShape, *internalShape);
+        context.namedShapes[object.name + ".InternalShape"] = *shapeValue.internalNamedShape;
+    }
     context.shapes[object.name] = shapeValue;
-    if (internalShape && !internalShape->IsNull()) {
+    if (hasNonEmptyInternalShape) {
         // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
         // ::SketchObject::buildInternals(), writes auxiliary "InternalShape"; the web
         // response renders that request-local shape with InternalFace ids matching subshapes.
@@ -4550,7 +4527,7 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
     }
     if (!rawShape->IsNull()) {
         nlohmann::json subshapes = topo::subshapeMapForShape(*rawShape);
-        if (internalShape && !internalShape->IsNull()) {
+        if (hasNonEmptyInternalShape) {
             const nlohmann::json internalSubshapes = topo::subshapeMapForShape(*internalShape, "Internal");
             for (const auto& item : internalSubshapes.items()) {
                 subshapes[item.key()] = item.value();
@@ -4562,12 +4539,13 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
     const std::size_t rawEdgeCount = edges.size() + circles.size() + ellipses.size();
     const std::size_t profileEdgeCount = rawEdgeCount;
     const std::size_t rawPointCount = points.size();
-    const nlohmann::json internalSubshapes = internalShape ? topo::subshapeMapForShape(*internalShape, "Internal") : nlohmann::json::object();
+    const nlohmann::json internalSubshapes =
+        hasNonEmptyInternalShape ? topo::subshapeMapForShape(*internalShape, "Internal") : nlohmann::json::object();
     const std::size_t internalFaceCount = countSubshapesOfKind(internalSubshapes, "face");
     const std::size_t internalEdgeCount = countSubshapesOfKind(internalSubshapes, "edge");
     const std::size_t internalVertexCount = countSubshapesOfKind(internalSubshapes, "vertex");
     const nlohmann::json internalElementMap =
-        internalShape ? topo::internalElementMapForSketch(*rawShape, *internalShape) : nlohmann::json::object();
+        hasNonEmptyInternalShape ? topo::internalElementMapForSketch(*rawShape, *internalShape) : nlohmann::json::object();
     context.objects[object.name] = {
         {"status", "ok"},
         {"shape", rawShape->IsNull() ? "empty" : "occt_sketch_shape"},
@@ -4576,7 +4554,7 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
         {"edge_count", profileEdgeCount},
         {"raw_edge_count", rawEdgeCount},
         {"raw_point_count", rawPointCount},
-        {"internal_shape", internalShape ? "occt_internal_shape" : "none"},
+        {"internal_shape", internalShape ? (internalShape->IsNull() ? "empty" : "occt_internal_shape") : "none"},
         {"internal_face_count", internalFaceCount},
         {"internal_edge_count", internalEdgeCount},
         {"internal_vertex_count", internalVertexCount},

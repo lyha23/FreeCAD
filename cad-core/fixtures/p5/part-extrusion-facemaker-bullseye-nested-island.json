@@ -1,0 +1,41 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
+          {"kind": "LineSegment", "start": [10, 0], "end": [10, 10]},
+          {"kind": "LineSegment", "start": [10, 10], "end": [0, 10]},
+          {"kind": "LineSegment", "start": [0, 10], "end": [0, 0]},
+          {"kind": "LineSegment", "start": [2, 2], "end": [8, 2]},
+          {"kind": "LineSegment", "start": [8, 2], "end": [8, 8]},
+          {"kind": "LineSegment", "start": [8, 8], "end": [2, 8]},
+          {"kind": "LineSegment", "start": [2, 8], "end": [2, 2]},
+          {"kind": "LineSegment", "start": [4, 4], "end": [6, 4]},
+          {"kind": "LineSegment", "start": [6, 4], "end": [6, 6]},
+          {"kind": "LineSegment", "start": [6, 6], "end": [4, 6]},
+          {"kind": "LineSegment", "start": [4, 6], "end": [4, 4]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Extrude",
+      "ID": 2,
+      "TypeId": "Part::Extrusion",
+      "Properties": {
+        "Base": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Sketch"
+        },
+        "Dir": [0, 0, 1],
+        "LengthFwd": 5,
+        "Solid": true
+      }
+    }
+  ],
+  "recompute": {"objs": ["Extrude"]}
+}

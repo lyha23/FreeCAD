@@ -1,0 +1,20 @@
+{
+  "object": "Sketch",
+  "reference": "FreeCADCmd Sketcher oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp::FaceMakerBuildFace::splitSelfIntersecting() splits a single self-intersecting non-line/non-conic edge before BuilderFace. This fixture keeps the raw Sketch Shape as one cubic BSpline edge while InternalShape is built from the split bounded regions.",
+  "freecad_version": "1.2.0 revision 20260519",
+  "object_fields": {
+    "status": "ok",
+    "shape": "occt_sketch_shape",
+    "raw_edge_count": 1
+  },
+  "sketch_internal": {
+    "profile_ready": true,
+    "raw_edge_count": 1,
+    "shape": "occt_internal_shape",
+    "internal_counts": {
+      "faces": 4,
+      "edges": 19,
+      "vertices": 16
+    }
+  }
+}

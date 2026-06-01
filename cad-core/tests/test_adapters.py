@@ -225,6 +225,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "subname_semantic_drift",
             "split_stable_subname",
             "deleted_stable_subname",
+            "unsupported_reference_shadow_brep",
         ]:
             self.assertIn(code, capabilities["diagnostic_codes"])
 

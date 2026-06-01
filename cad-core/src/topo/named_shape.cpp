@@ -1,6 +1,7 @@
 #include "cad_core/topo/named_shape.h"
 
 #include "cad_core/geometry/refine_model.h"
+#include "cad_core/topo/element_map.h"
 
 #include <BRepAlgoAPI_BooleanOperation.hxx>
 #include <BRepAlgoAPI_BuilderAlgo.hxx>
@@ -745,6 +746,49 @@ NamedShape indexedNamedShapeForObject(const std::string& owner, const TopoDS_Sha
     addIndexedElements(namedShape, faces, TopAbs_FACE, "Face");
     addIndexedElements(namedShape, edges, TopAbs_EDGE, "Edge");
     addIndexedElements(namedShape, vertices, TopAbs_VERTEX, "Vertex");
+
+    return namedShape;
+}
+
+NamedShape namedShapeForSketchInternalShape(
+    const std::string& owner,
+    const TopoDS_Shape& rawShape,
+    const TopoDS_Shape& internalShape
+)
+{
+    NamedShape namedShape;
+    namedShape.owner = owner + ".InternalShape";
+    namedShape.shape = internalShape;
+
+    TopTools_IndexedMapOfShape faces;
+    TopTools_IndexedMapOfShape edges;
+    TopTools_IndexedMapOfShape vertices;
+    TopExp::MapShapes(internalShape, TopAbs_FACE, faces);
+    TopExp::MapShapes(internalShape, TopAbs_EDGE, edges);
+    TopExp::MapShapes(internalShape, TopAbs_VERTEX, vertices);
+
+    addIndexedElements(namedShape, faces, TopAbs_FACE, "InternalFace");
+    addIndexedElements(namedShape, edges, TopAbs_EDGE, "InternalEdge");
+    addIndexedElements(namedShape, vertices, TopAbs_VERTEX, "InternalVertex");
+
+    const nlohmann::json internalMap = internalElementMapForSketch(rawShape, internalShape);
+    if (!internalMap.is_object()) {
+        return namedShape;
+    }
+
+    for (const auto& [name, mapped] : internalMap.items()) {
+        if (!mapped.is_string()) {
+            continue;
+        }
+        const std::string target = mapped.get<std::string>();
+        if (name.rfind("Internal", 0) == 0) {
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+            // ::getInternalElementMap(), stores both "internalElementMap[prefix] = names.front()"
+            // and "internalElementMap[names.front()] = prefix". Face entries are absent because
+            // the function iterates only TopAbs_VERTEX and TopAbs_EDGE.
+            addRetagAlias(namedShape, target, name);
+        }
+    }
 
     return namedShape;
 }

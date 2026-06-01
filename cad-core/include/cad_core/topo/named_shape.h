@@ -99,6 +99,17 @@ struct ElementResolveResult
 // and tracks ElementMap versioning for later GeoFeature link updates.
 NamedShape indexedNamedShapeForObject(const std::string& owner, const TopoDS_Shape& shape);
 // FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::getInternalElementMap(),
+// iterates InternalShape vertices/edges and records Internal* <-> raw Edge/Vertex aliases after
+// "findSubShapesWithSharedVertex(..., CheckGeometry | SingleResult)". This helper builds the
+// Sketch InternalShape NamedShape baseline and deliberately leaves InternalFaceN without a stable
+// alias until FaceMaker/WireJoiner history is migrated.
+NamedShape namedShapeForSketchInternalShape(
+    const std::string& owner,
+    const TopoDS_Shape& rawShape,
+    const TopoDS_Shape& internalShape
+);
+// FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::makeElementPrism(),
 // creates BRepPrimAPI_MakePrism and then calls makeElementShape(...), which consumes
 // MapperMaker::Generated/Modified history from the BRepBuilderAPI_MakeShape maker.

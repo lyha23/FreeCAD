@@ -1,15 +1,20 @@
 {
   "object": "Sketch",
-  "reference": "FreeCAD-aligned source-code oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp::FaceMakerBuildFace::splitSelfIntersecting() documents figure-8 BSplines as self-intersecting edges that must be split before BuilderFace; a degree-1 BSpline is piecewise linear, so this fixture produces the same two bounded regions as the equivalent bowtie line network. Internal edge count is kept as a lower bound until exact split-edge naming oracle is frozen.",
+  "reference": "FreeCADCmd Sketcher oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp::FaceMakerBuildFace::splitSelfIntersecting() keeps a degree-1 figure-8 BSpline as one raw Sketch edge and splits it inside FaceMakerBuildFace before BuilderFace.",
   "freecad_version": "1.2.0 revision 20260519",
+  "object_fields": {
+    "status": "ok",
+    "shape": "occt_sketch_shape",
+    "raw_edge_count": 1
+  },
   "sketch_internal": {
     "profile_ready": true,
     "shape": "occt_internal_shape",
+    "raw_edge_count": 1,
     "internal_counts": {
-      "faces": 2
-    },
-    "min_internal_counts": {
-      "edges": 6
+      "faces": 2,
+      "edges": 7,
+      "vertices": 6
     }
   }
 }

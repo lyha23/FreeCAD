@@ -123,6 +123,7 @@ nlohmann::json diagnosticCodeList()
         "unsupported_link_lifecycle",
         "unsupported_profile_region",
         "unsupported_property",
+        "unsupported_reference_shadow_brep",
         "unsupported_stable_subname",
         "unsupported_subshape_kind",
         "unsupported_type",

@@ -1,9 +1,20 @@
 {
   "object": "Sketch",
-  "reference": "FreeCAD oracle pending: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildInternals() uses FaceMakerBuildFace, but this fixture needs a dedicated BSpline InternalShape oracle before freezing exact internal edge naming/counts.",
+  "reference": "FreeCADCmd Sketcher oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildInternals() writes InternalShape after rebuilding the raw Sketch Shape; this quadratic BSpline plus closing line produces one bounded internal face.",
   "freecad_version": "1.2.0 revision 20260519",
-  "known_gap": {
-    "kind": "internal_shape_oracle_pending",
-    "reason": "Do not freeze BSpline InternalShape counts or stable internal subnames from current cad-core output."
+  "object_fields": {
+    "status": "ok",
+    "shape": "occt_sketch_shape",
+    "raw_edge_count": 2
+  },
+  "sketch_internal": {
+    "profile_ready": true,
+    "shape": "occt_internal_shape",
+    "raw_edge_count": 2,
+    "internal_counts": {
+      "faces": 1,
+      "edges": 2,
+      "vertices": 2
+    }
   }
 }

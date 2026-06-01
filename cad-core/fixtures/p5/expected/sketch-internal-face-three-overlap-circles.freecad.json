@@ -1,15 +1,15 @@
 {
   "object": "Sketch",
-  "reference": "Geometry-equivalent FreeCAD oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildInternals() builds InternalShape with FaceMakerBuildFace and WireJoiner; three mutually overlapping circles produce 7 bounded regions. Internal edge count is kept as a lower bound until exact split-edge naming oracle is frozen.",
+  "reference": "FreeCADCmd Sketcher oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildInternals() builds InternalShape with FaceMakerBuildFace and WireJoiner; /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp::Build_Essence() and WireJoiner result-wire identity keep copied split-edge ownership for cyclic closed-wire regions. Three mutually overlapping circles produce exact FreeCAD 20260519 counts: 7 faces, 30 edges, 18 vertices.",
   "freecad_version": "1.2.0 revision 20260519",
   "sketch_internal": {
     "profile_ready": true,
     "shape": "occt_internal_shape",
+    "raw_edge_count": 3,
     "internal_counts": {
-      "faces": 7
-    },
-    "min_internal_counts": {
-      "edges": 12
+      "faces": 7,
+      "edges": 30,
+      "vertices": 18
     }
   }
 }

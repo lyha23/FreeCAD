@@ -1,15 +1,15 @@
 {
   "object": "Sketch",
-  "reference": "Geometry-equivalent FreeCAD oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildInternals() builds InternalShape with FaceMakerBuildFace and WireJoiner; a 10x10 frame split by horizontal and vertical cutters has 4 bounded internal faces. Internal edge count is kept as a lower bound until exact split-edge naming oracle is frozen.",
+  "reference": "FreeCADCmd Sketcher oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildInternals() builds InternalShape with FaceMakerBuildFace and WireJoiner; /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp::WireJoinerP::build() keeps copied result-wire EdgeInfo states. A 10x10 frame split by horizontal and vertical cutters has exact FreeCAD 20260519 counts: 4 faces, 24 edges, 14 vertices.",
   "freecad_version": "1.2.0 revision 20260519",
   "sketch_internal": {
     "profile_ready": true,
     "shape": "occt_internal_shape",
+    "raw_edge_count": 6,
     "internal_counts": {
-      "faces": 4
-    },
-    "min_internal_counts": {
-      "edges": 12
+      "faces": 4,
+      "edges": 24,
+      "vertices": 14
     }
   }
 }

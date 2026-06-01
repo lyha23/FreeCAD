@@ -141,6 +141,11 @@ g底边:split3 = 右段
 
 `brep` 只允许保存被引用子元素，不保存整个对象 BREP。
 
+当前实现边界：`brep-text` 是唯一已接入 runtime 恢复解码的 BREP snapshot 格式。
+`brep-bin-zstd-base64` 是后续传输格式占位，模型层可以承载该字段；一旦恢复或漂移纠正需要
+解码它，runtime 必须返回 `unsupported_reference_shadow_brep`，不能静默降级成 fingerprint
+恢复。
+
 关键约束：
 
 - `ReferenceShadow` 是可丢弃、可重建的引用恢复证据。字段缺失、`targetId`
@@ -258,7 +263,7 @@ ReferenceShadow.brep
 职责：
 
 - 只处理单个 subshape 的 BREP 序列化 / 反序列化。
-- 支持 text BREP 作为调试格式，binary BREP + zstd + base64 作为后续传输格式。
+- 当前支持 text BREP 作为 runtime 恢复格式，binary BREP + zstd + base64 仍是后续传输格式。
 - 不暴露给 feature executor 作为建模输入。
 
 ### topo
@@ -361,6 +366,8 @@ runtime 只汇总结果；具体解析和匹配逻辑仍归 `topo`。`ReferenceS
 - 新增 cutter 只改变 split 编号，旧区域几何仍完整存在时，能恢复正确区域。
 - 旧 face 被 split 成多个 face 时，返回 split / ambiguous，不静默选一块。
 - BREP snapshot 不进入 display、pick、boolean、extrude 的建模输入路径。
+- 当前 runtime 只解码 `brep-text`；`brep-bin-zstd-base64` 需要参与恢复时返回
+  `unsupported_reference_shadow_brep`。
 
 ## 风险
 
@@ -377,4 +384,5 @@ runtime 只汇总结果；具体解析和匹配逻辑仍归 `topo`。`ReferenceS
 - `InternalShape` 先要有正式 `NamedShape` / `ElementMap`。
 - FaceMaker / WireJoiner history 先要进入 `ElementMap`。
 - `ReferenceShadow` 是 `StableSubList` 的防漂移和恢复补充，不替代 topo naming 主路径。
-- 第一版可以只实现 fingerprint diagnostic；旧 BREP snapshot 已经进入接口，但仍可按实现成本分阶段落地。
+- 第一版已实现 fingerprint diagnostic 和 `brep-text` 子集恢复；`brep-bin-zstd-base64`
+  解码仍按后续成本分阶段落地。
