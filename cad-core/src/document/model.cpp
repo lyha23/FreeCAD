@@ -17,31 +17,56 @@ bool isLinkPropertyType(const std::string& propertyType)
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/PropertyLinks.h
     // ::PropertyXLink derives from PropertyLinkGlobal and is used by App::Link::LinkedObject
     // and Assembly::AssemblyLink::LinkedObject; XLink still contributes dependency edges.
-    return propertyType == "App::PropertyLink" || propertyType == "App::PropertyLinkList"
-        || propertyType == "App::PropertyLinkSub" || propertyType == "App::PropertyLinkSubList"
-        || propertyType == "App::PropertyXLink" || propertyType == "App::PropertyXLinkList"
-	        || propertyType == "App::PropertyXLinkSub" || propertyType == "App::PropertyXLinkSubList";
+    return propertyType == "App::PropertyLink" || propertyType == "App::PropertyLinkGlobal"
+        || propertyType == "App::PropertyLinkHidden" || propertyType == "App::PropertyLinkList"
+        || propertyType == "App::PropertyLinkListHidden" || propertyType == "App::PropertyLinkSub"
+        || propertyType == "App::PropertyLinkSubHidden" || propertyType == "App::PropertyLinkSubList"
+        || propertyType == "App::PropertyLinkSubListHidden" || propertyType == "App::PropertyXLink"
+        || propertyType == "App::PropertyXLinkList" || propertyType == "App::PropertyXLinkSub"
+        || propertyType == "App::PropertyXLinkSubHidden" || propertyType == "App::PropertyXLinkSubList";
 }
 
 bool isLinkObjectType(const std::string& propertyType)
 {
-    return propertyType == "App::PropertyLink" || propertyType == "App::PropertyLinkSub"
-        || propertyType == "App::PropertyXLink" || propertyType == "App::PropertyXLinkSub";
+    return propertyType == "App::PropertyLink" || propertyType == "App::PropertyLinkGlobal"
+        || propertyType == "App::PropertyLinkHidden" || propertyType == "App::PropertyLinkSub"
+        || propertyType == "App::PropertyLinkSubHidden" || propertyType == "App::PropertyXLink"
+        || propertyType == "App::PropertyXLinkSub" || propertyType == "App::PropertyXLinkSubHidden";
 }
 
 bool isLinkSubObjectType(const std::string& propertyType)
 {
-    return propertyType == "App::PropertyLinkSub" || propertyType == "App::PropertyXLinkSub";
+    return propertyType == "App::PropertyLinkSub" || propertyType == "App::PropertyLinkSubHidden"
+        || propertyType == "App::PropertyXLinkSub" || propertyType == "App::PropertyXLinkSubHidden";
 }
 
 bool isLinkListType(const std::string& propertyType)
 {
-    return propertyType == "App::PropertyLinkList" || propertyType == "App::PropertyXLinkList";
+    return propertyType == "App::PropertyLinkList" || propertyType == "App::PropertyLinkListHidden"
+        || propertyType == "App::PropertyXLinkList";
+}
+
+bool isXLinkListType(const std::string& propertyType)
+{
+    return propertyType == "App::PropertyXLinkList";
 }
 
 bool isLinkSubListType(const std::string& propertyType)
 {
-    return propertyType == "App::PropertyLinkSubList" || propertyType == "App::PropertyXLinkSubList";
+    return propertyType == "App::PropertyLinkSubList" || propertyType == "App::PropertyLinkSubListHidden"
+        || propertyType == "App::PropertyXLinkSubList";
+}
+
+bool isHiddenLinkPropertyType(const std::string& propertyType)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/PropertyLinks.h
+    // ::PropertyLinkHidden, ::PropertyLinkListHidden, ::PropertyLinkSubHidden,
+    // ::PropertyLinkSubListHidden and ::PropertyXLinkSubHidden set "_pcScope = LinkScope::Hidden".
+    // cad-core still parses them for feature executors, but graph dependency planning must not
+    // treat them as dependency-bearing properties.
+    return propertyType == "App::PropertyLinkHidden" || propertyType == "App::PropertyLinkListHidden"
+        || propertyType == "App::PropertyLinkSubHidden" || propertyType == "App::PropertyLinkSubListHidden"
+        || propertyType == "App::PropertyXLinkSubHidden";
 }
 
 PropertyKind kindFromPropertyType(const std::string& propertyType)
@@ -68,16 +93,20 @@ PropertyKind kindFromPropertyType(const std::string& propertyType)
     if (propertyType == "App::PropertyPlacement") {
         return PropertyKind::Placement;
     }
-    if (propertyType == "App::PropertyLink" || propertyType == "App::PropertyXLink") {
+    if (propertyType == "App::PropertyLink" || propertyType == "App::PropertyLinkGlobal"
+        || propertyType == "App::PropertyLinkHidden" || propertyType == "App::PropertyXLink") {
         return PropertyKind::Link;
     }
-    if (propertyType == "App::PropertyLinkList" || propertyType == "App::PropertyXLinkList") {
+    if (propertyType == "App::PropertyLinkList" || propertyType == "App::PropertyLinkListHidden"
+        || propertyType == "App::PropertyXLinkList") {
         return PropertyKind::LinkList;
     }
-    if (propertyType == "App::PropertyLinkSub" || propertyType == "App::PropertyXLinkSub") {
+    if (propertyType == "App::PropertyLinkSub" || propertyType == "App::PropertyLinkSubHidden"
+        || propertyType == "App::PropertyXLinkSub" || propertyType == "App::PropertyXLinkSubHidden") {
         return PropertyKind::LinkSub;
     }
-    if (propertyType == "App::PropertyLinkSubList" || propertyType == "App::PropertyXLinkSubList") {
+    if (propertyType == "App::PropertyLinkSubList" || propertyType == "App::PropertyLinkSubListHidden"
+        || propertyType == "App::PropertyXLinkSubList") {
         return PropertyKind::LinkSubList;
     }
     return PropertyKind::Unknown;
@@ -311,15 +340,25 @@ std::optional<Link> readLinkObject(const nlohmann::json& value, const std::strin
         }
         referenceShadows = std::move(*parsed);
     }
-    std::vector<std::string> fullSubnames = stableSubnames;
-    return Link{objectIt->get<std::string>(),
-                std::move(subnames),
-                std::move(stableSubnames),
-                std::move(fullSubnames),
-                property,
-                stableSubnamesExplicit,
-                std::move(shadowSubs),
-                std::move(referenceShadows)};
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+    // ::LinkBaseExtension::checkGeoElementMap(), for an external linked document, builds
+    // "Data::POSTFIX_EXTERNAL_TAG" before reTagElementMap(). cad-core carries FullSubList as
+    // request-side evidence so link retag can preserve the original full subname alias.
+    const bool fullSubnamesExplicit = value.contains("FullSubList");
+    std::vector<std::string> fullSubnames = readOptionalStringList(value, "FullSubList");
+    if (fullSubnames.empty()) {
+        fullSubnames = stableSubnames;
+    }
+    Link link{objectIt->get<std::string>(),
+              std::move(subnames),
+              std::move(stableSubnames),
+              std::move(fullSubnames),
+              property,
+              stableSubnamesExplicit,
+              std::move(shadowSubs),
+              std::move(referenceShadows)};
+    link.fullSubnamesExplicit = fullSubnamesExplicit;
+    return link;
 }
 
 std::optional<Link> readLinkSubListItem(const nlohmann::json& value, const std::string& property = {})
@@ -369,15 +408,25 @@ std::optional<Link> readLinkSubListItem(const nlohmann::json& value, const std::
         }
         referenceShadows = std::move(*parsed);
     }
-    std::vector<std::string> fullSubnames = stableSubnames;
-    return Link{objectIt->get<std::string>(),
-                std::move(subnames),
-                std::move(stableSubnames),
-                std::move(fullSubnames),
-                property,
-                stableSubnamesExplicit,
-                std::move(shadowSubs),
-                std::move(referenceShadows)};
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+    // ::LinkBaseExtension::checkGeoElementMap() retags external linked topology with
+    // "Data::POSTFIX_EXTERNAL_TAG"; FullSubList keeps that original full subname separate from
+    // the current SubList used for geometry resolution.
+    const bool fullSubnamesExplicit = value.contains("FullSubList");
+    std::vector<std::string> fullSubnames = readOptionalStringList(value, "FullSubList");
+    if (fullSubnames.empty()) {
+        fullSubnames = stableSubnames;
+    }
+    Link link{objectIt->get<std::string>(),
+              std::move(subnames),
+              std::move(stableSubnames),
+              std::move(fullSubnames),
+              property,
+              stableSubnamesExplicit,
+              std::move(shadowSubs),
+              std::move(referenceShadows)};
+    link.fullSubnamesExplicit = fullSubnamesExplicit;
+    return link;
 }
 
 std::vector<Link> readLinkList(const nlohmann::json& value)
@@ -482,7 +531,7 @@ bool isOwnedLinkElement(const DocumentObject& element, const DocumentObject& own
         return false;
     }
     const auto ownerValue = readNumber(element, "_LinkOwner");
-    return !ownerValue || static_cast<long long>(*ownerValue) == owner.id;
+    return !ownerValue || static_cast<long long>(*ownerValue) == 0 || static_cast<long long>(*ownerValue) == owner.id;
 }
 
 void addMaterializedLinkElementDependencies(Document& document)
@@ -553,8 +602,7 @@ bool hasInvalidTypedPayload(const nlohmann::json& raw, PropertyKind kind)
 bool isMalformedLinkValue(const nlohmann::json& value, const std::string& propertyType)
 {
     auto hasUnsupportedSubnameFields = [](const nlohmann::json& item) {
-        return item.contains("FullSubList") || item.contains("StableSubnames")
-            || item.contains("FullSubnames");
+        return item.contains("StableSubnames") || item.contains("FullSubnames");
     };
     auto hasReferenceRecoveryFields = [](const nlohmann::json& item) {
         return item.contains("ShadowSub") || item.contains("ReferenceShadow");
@@ -595,6 +643,13 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
             return false;
         }
         if (hasCurrentSubnames && stableSubListSize && *stableSubListSize != *subListSize) {
+            return false;
+        }
+        std::optional<std::size_t> fullSubListSize;
+        if (!readFieldSize(item, "FullSubList", fullSubListSize)) {
+            return false;
+        }
+        if (fullSubListSize && (!hasCurrentSubnames || *fullSubListSize != *subListSize)) {
             return false;
         }
 
@@ -656,7 +711,8 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
         }
         if (!supportsSubList
             && (value.contains("SubList") || value.contains("SubSet") || value.contains("values")
-                || value.contains("StableSubList") || hasReferenceRecoveryFields(value)
+                || value.contains("StableSubList") || value.contains("FullSubList")
+                || hasReferenceRecoveryFields(value)
                 || hasUnsupportedSubnameFields(value))) {
             return true;
         }
@@ -664,8 +720,48 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
     }
 
     if (isLinkListType(propertyType)) {
+        if (isXLinkListType(propertyType)) {
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/PropertyLinks.cpp
+            // ::PropertyXLinkList::setPyObject() first tries "PropertyLinkList syntax", then
+            // falls back to "PropertyXLinkSubList::setPyObject(value)" for sub-element entries.
+            if (value.contains("value") || value.contains("SubList") || value.contains("StableSubList")
+                || value.contains("FullSubList") || hasReferenceRecoveryFields(value)
+                || hasUnsupportedSubnameFields(value)) {
+                return true;
+            }
+            const bool hasValues = value.contains("values");
+            const bool hasSubSet = value.contains("SubSet");
+            if (hasValues == hasSubSet) {
+                return true;
+            }
+            if (hasValues) {
+                const auto rawLinksIt = value.find("values");
+                return rawLinksIt == value.end() || !readStringList(*rawLinksIt).has_value();
+            }
+            const auto rawLinksIt = value.find("SubSet");
+            if (rawLinksIt == value.end() || !rawLinksIt->is_array()) {
+                return true;
+            }
+            for (const auto& item : *rawLinksIt) {
+                if (!item.is_object() || item.contains("PropertyType")) {
+                    return true;
+                }
+                const auto objectIt = item.find("value");
+                if (objectIt == item.end() || (!objectIt->is_string() && !objectIt->is_null())) {
+                    return true;
+                }
+                if (item.contains("values") || item.contains("SubSet")) {
+                    return true;
+                }
+                if (!hasValidSubnameFields(item)) {
+                    return true;
+                }
+            }
+            return false;
+        }
         if (value.contains("value") || value.contains("SubList") || value.contains("SubSet")
-            || value.contains("StableSubList") || hasReferenceRecoveryFields(value)
+            || value.contains("StableSubList") || value.contains("FullSubList")
+            || hasReferenceRecoveryFields(value)
             || hasUnsupportedSubnameFields(value)) {
             return true;
         }
@@ -678,7 +774,8 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
 
     if (isLinkSubListType(propertyType)) {
         if (value.contains("value") || value.contains("values") || value.contains("SubList")
-            || value.contains("StableSubList") || hasReferenceRecoveryFields(value)
+            || value.contains("StableSubList") || value.contains("FullSubList")
+            || hasReferenceRecoveryFields(value)
             || hasUnsupportedSubnameFields(value)) {
             return true;
         }
@@ -798,6 +895,9 @@ std::vector<Link> readLinks(const nlohmann::json& value)
     }
 
     if (isLinkListType(*propertyType)) {
+        if (isXLinkListType(*propertyType) && value.contains("SubSet")) {
+            return readLinkSubList(value);
+        }
         return readLinkList(value);
     }
 
@@ -1027,7 +1127,9 @@ std::pair<Document, std::vector<runtime::Diagnostic>> parseDocument(const nlohma
         // cad-core keeps the raw JSON for compatibility, but graph/runtime consume this normalized property map.
         for (const auto& property : object.properties.items()) {
             auto parsed = parsePropertyValue(object.name, property.key(), property.value(), diagnostics);
-            object.dependencyLinks.insert(object.dependencyLinks.end(), parsed.links.begin(), parsed.links.end());
+            if (!isHiddenLinkPropertyType(parsed.propertyType)) {
+                object.dependencyLinks.insert(object.dependencyLinks.end(), parsed.links.begin(), parsed.links.end());
+            }
             if (!parsed.valid) {
                 object.invalidProperties.insert(property.key());
             }

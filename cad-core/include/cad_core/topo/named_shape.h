@@ -14,6 +14,11 @@
 
 class BRepOffsetAPI_ThruSections;
 
+namespace cad_core::geometry
+{
+struct TaperedExtrusionResult;
+}
+
 namespace cad_core::topo
 {
 
@@ -56,6 +61,7 @@ struct NamedShapeSource
     std::string owner;
     TopoDS_Shape shape;
     const NamedShape* namedShape = nullptr;
+    std::vector<std::string> ownerAliases;
 };
 
 struct LinkedSubshapeRetag
@@ -141,6 +147,17 @@ NamedShape namedShapeForThruSectionsHistory(
     BRepOffsetAPI_ThruSections& maker,
     const TopoDS_Shape& firstProfile,
     const TopoDS_Shape& lastProfile
+);
+// FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FeatureExtrusion.cpp::Extrusion::extrudeShape(),
+// calls "ExtrusionHelper::makeElementDraft(params, myShape, drafts, result.Hasher)" for taper;
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::MapperThruSections,
+// adds "GeneratedFace(s)", "FirstShape()" and "LastShape()" to the loft maker history.
+std::optional<NamedShape> namedShapeForTaperedExtrusionHistory(
+    const std::string& owner,
+    const geometry::TaperedExtrusionResult& tapered,
+    const TopoDS_Shape& profile,
+    const NamedShapeSource& profileSource
 );
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::makeShapeWithElementMap(),

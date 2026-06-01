@@ -70,6 +70,7 @@ struct Link {
     bool stableSubnamesExplicit = false;
     std::vector<ShadowSub> shadowSubs;
     std::vector<ReferenceShadow> referenceShadows;
+    bool fullSubnamesExplicit = false;
 };
 
 struct Placement {

@@ -54,6 +54,8 @@ nlohmann::json legacyTestResultJson(const document::Document& document,
         {"mesh", context.mesh},
         {"subshapes", context.subshapes},
         {"named_shapes", topo::namedShapesToJson(context.namedShapes)},
+        {"elementReferenceUpdates", context.elementReferenceUpdates},
+        {"documentObjectUpdates", context.documentObjectUpdates},
         {"diagnostics", runtime::diagnosticsToJson(context.diagnostics)},
     };
 }
@@ -158,11 +160,14 @@ int runRecompute(const RecomputeOptions& options)
                   {"objects", nlohmann::json::object()},
                   {"mesh", nlohmann::json::object()},
                   {"subshapes", nlohmann::json::object()},
+                  {"elementReferenceUpdates", nlohmann::json::array()},
+                  {"documentObjectUpdates", nlohmann::json::array()},
                   {"diagnostics", diagnostics},
               }
             : nlohmann::json{
                   {"results", nlohmann::json::array()},
                   {"elementReferenceUpdates", nlohmann::json::array()},
+                  {"documentObjectUpdates", nlohmann::json::array()},
                   {"diagnostics", diagnostics},
               };
         runtime::writeJsonFile(options.outputPath, payload);

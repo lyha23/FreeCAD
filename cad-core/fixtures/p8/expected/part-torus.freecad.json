@@ -1,6 +1,6 @@
 {
   "object": "Torus",
-  "reference": "FreeCADCmd geometry-equivalent Part::Torus major radius 5 minor radius 1",
+  "reference": "FreeCADCmd native Part::Torus major radius 5 minor radius 1 using optimalBoundingBox",
   "freecad_version": "1.2.0 revision 20260519",
   "bbox_delta": 0.2,
   "bbox": {
@@ -15,7 +15,12 @@
       1.0
     ]
   },
-  "volume": 98.69604401089359,
+  "volume": 98.69604401089357,
+  "topology_counts": {
+    "faces": 1,
+    "edges": 2,
+    "vertices": 1
+  },
   "named_shapes": {
     "Torus": {
       "owner": "Torus"

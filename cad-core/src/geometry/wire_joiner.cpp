@@ -537,6 +537,46 @@ std::vector<TopoDS_Edge> openEdgesWithInteriorEndpoint(const std::vector<TopoDS_
     return edges;
 }
 
+bool closedWireCycleNeedsCopiedResultGraph(const TopoDS_Shape& boundedFaceShape,
+                                           const std::vector<TopoDS_Wire>& closedWires)
+{
+    if (closedWires.size() < 3U || boundedFaceShape.IsNull()) {
+        return false;
+    }
+
+    const std::vector<TopoDS_Edge> closedBoundaryEdges = closedWireBoundaryEdges(closedWires);
+    const std::vector<TopoDS_Edge> resultEdges = uniqueEdgesForShape(boundedFaceShape);
+    if (closedBoundaryEdges.empty() || resultEdges.empty()) {
+        return false;
+    }
+
+    std::size_t splitSourceEdges = 0;
+    for (const TopoDS_Edge& source : closedBoundaryEdges) {
+        bool exactResultEdge = false;
+        std::size_t splitFragments = 0;
+        for (const TopoDS_Edge& resultEdge : resultEdges) {
+            if (edgeEquivalentByGeometryAndEndpoints(resultEdge, source)) {
+                exactResultEdge = true;
+                break;
+            }
+            if (edgeSamplesLieOnEdge(resultEdge, source)) {
+                ++splitFragments;
+            }
+        }
+        if (!exactResultEdge && splitFragments >= 2U) {
+            ++splitSourceEdges;
+        }
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build(), seeds EdgeInfo from sourceEdgeArray, calls splitEdges() before
+    // buildClosedWire(), and exports openWireCompound from final EdgeInfo states not owned by a
+    // tight-bound WireInfo. Until the full EdgeInfo/WireInfo ledger is migrated, this predicate
+    // uses result-edge ownership evidence: a closed-source cycle needs copied result wires when
+    // source edges have been replaced by multiple bounded-result fragments instead of one exact edge.
+    return splitSourceEdges >= 3U;
+}
+
 std::optional<TopoDS_Shape> copiedResultWireGraph(const TopoDS_Shape& boundedFaceShape,
                                                   const std::vector<TopoDS_Edge>& openEdges,
                                                   bool copyAllVertices)
@@ -781,8 +821,6 @@ std::optional<TopoDS_Shape> WireJoiner::getOpenWires(const std::string& historyP
 std::optional<TopoDS_Shape> copiedResultWireGraphForSketchInternals(const TopoDS_Shape& boundedFaceShape,
                                                                     const std::vector<TopoDS_Edge>& openEdges,
                                                                     const std::vector<TopoDS_Wire>& closedWires,
-                                                                    std::size_t closedWireCount,
-                                                                    std::size_t boundedFaceCount,
                                                                     bool splitProducedBoundedFaces,
                                                                     bool hasOpenWireOutput)
 {
@@ -790,11 +828,11 @@ std::optional<TopoDS_Shape> copiedResultWireGraphForSketchInternals(const TopoDS
         return std::nullopt;
     }
 
-    const bool consumedOpenCutterGraph = splitProducedBoundedFaces && !hasOpenWireOutput && openEdges.size() >= 2U
-        && allOpenEdgeEndpointsTouchBoundary(openEdges, boundedFaceShape);
+    const bool consumedOpenCutterGraph = splitProducedBoundedFaces && !hasOpenWireOutput
+        && openEdges.size() >= 2U && allOpenEdgeEndpointsTouchBoundary(openEdges, boundedFaceShape);
     const bool closedWireCycleGraph =
-        openEdges.empty() && closedWireCount >= 3U && boundedFaceCount > closedWireCount;
-    if (openEdges.empty() && closedWireCount >= 2U) {
+        openEdges.empty() && closedWireCycleNeedsCopiedResultGraph(boundedFaceShape, closedWires);
+    if (openEdges.empty() && closedWires.size() >= 2U) {
         if (const auto partialSharedEdges = copiedPartialSharedClosedWireEdges(boundedFaceShape, closedWires)) {
             return partialSharedEdges;
         }

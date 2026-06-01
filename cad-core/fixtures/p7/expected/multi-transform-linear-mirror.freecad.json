@@ -1,5 +1,6 @@
 {
-  "reference": "FreeCADCmd geometry-equivalent 2x2x2 Pad MultiTransform with linear pattern then mirror",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "reference": "FreeCADCmd oracle from multi-transform-linear-mirror.json; objects: Sketcher::SketchObject, PartDesign::Pad, PartDesign::Line, PartDesign::Plane, PartDesign::LinearPattern, PartDesign::Mirrored, PartDesign::MultiTransform, PartDesign::Body",
   "freecad_version": "1.2.0 revision 20260519",
   "objects": {
     "MultiTransform": {

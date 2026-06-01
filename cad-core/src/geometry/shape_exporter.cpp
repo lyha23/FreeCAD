@@ -132,7 +132,12 @@ struct ScopedTempPath {
 nlohmann::json bboxForShape(const TopoDS_Shape& shape)
 {
     Bnd_Box box;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App
+    // /TopoShapePyImp.cpp::TopoShapePy::optimalBoundingBox(), calls
+    // "BRepBndLib::AddOptimal(shape, bounds, ...)" and then "bounds.SetGap(0.0)" before
+    // exposing the bounds through Python.
     BRepBndLib::AddOptimal(shape, box, Standard_True, Standard_False);
+    box.SetGap(0.0);
     double xmin = 0.0;
     double ymin = 0.0;
     double zmin = 0.0;

@@ -1,0 +1,81 @@
+{
+  "Objects": [
+    {
+      "Name": "Box",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Label": {
+          "PropertyType": "App::PropertyString",
+          "value": "PrettyBox"
+        },
+        "Length": 2,
+        "Width": 3,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "BoxLink",
+      "ID": 2,
+      "TypeId": "App::Link",
+      "Properties": {
+        "Label": {
+          "PropertyType": "App::PropertyString",
+          "value": "PrettyBoxLink"
+        },
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Box"
+        },
+        "LinkTransform": false,
+        "LinkPlacement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [5, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "ChainLink",
+      "ID": 3,
+      "TypeId": "App::Link",
+      "Properties": {
+        "Label": {
+          "PropertyType": "App::PropertyString",
+          "value": "PrettyChain"
+        },
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "BoxLink"
+        },
+        "LinkTransform": false,
+        "LinkPlacement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 7, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "FaceLink",
+      "ID": 4,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "value": "ChainLink",
+          "SubList": ["$PrettyChain.$PrettyBoxLink.$PrettyBox.Face1"]
+        },
+        "LinkTransform": false,
+        "LinkPlacement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 10, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["FaceLink"]
+  }
+}

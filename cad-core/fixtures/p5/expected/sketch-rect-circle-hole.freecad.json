@@ -1,5 +1,5 @@
 {
-  "reference": "FreeCADCmd Part.makeBox(10, 5, 3).cut(Part.makeCylinder(1, 3, FreeCAD.Vector(5, 2.5, 0)))",
+  "reference": "FreeCADCmd Sketcher oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildInternals() publishes FaceMakerBuildFace bounded regions as InternalShape while Pad extrudes the closed profile face with holes. A rectangle with one circle hole has 2 InternalFace regions and Pad volume matches Part.makeBox(10, 5, 3).cut(Part.makeCylinder(1, 3, FreeCAD.Vector(5, 2.5, 0))).",
   "freecad_version": "1.2.0 revision 20260519",
   "objects": {
     "Sketch": {
@@ -7,8 +7,9 @@
         "profile_ready": true,
         "raw_edge_count": 5,
         "internal_counts": {
-          "faces": 1,
-          "edges": 5
+          "faces": 2,
+          "edges": 5,
+          "vertices": 5
         }
       }
     },

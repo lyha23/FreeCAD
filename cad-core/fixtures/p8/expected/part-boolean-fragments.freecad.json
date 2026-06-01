@@ -1,6 +1,6 @@
 {
   "object": "BooleanFragments",
-  "reference": "FreeCADCmd geometry-equivalent Part::BooleanFragments Standard mode for two overlapping boxes",
+  "reference": "FreeCADCmd native BOPTools FeatureBooleanFragments Standard mode for two overlapping boxes",
   "freecad_version": "1.2.0 revision 20260519",
   "bbox": {
     "min": [

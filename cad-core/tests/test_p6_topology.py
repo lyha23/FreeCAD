@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+import json
+import tempfile
+from pathlib import Path
+
 from .fixture_expected import ExpectedFixtureAssertions
-from .fixture_runner import CadCoreFixtureTestCase
+from .fixture_runner import CadCoreFixtureTestCase, ROOT
 
 
 class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
@@ -50,6 +54,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
                 self.assertEqual(result["diagnostics"], [])
                 self.assertEqual(result["objects"][owner]["topo_naming"], "known_gap:taper_history")
+                self.assertEqual(result["objects"][owner]["topo_naming_history"], "history_partial:taper")
                 self.assert_object_matches_expected(result, "p3b", fixture)
 
     def test_p6_body_boolean_named_shape_records_maker_history(self) -> None:
@@ -71,7 +76,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assert_result_matches_expected(result, "p6", "sketch-external-edge-stable-body-profile-source")
         self.assertEqual(sketch["external_geometry_count"], 1)
         self.assertEqual(sketch["external_curve_count"], 0)
-        self.assertEqual(sketch["external_point_count"], 0)
+        self.assertEqual(sketch["external_point_count"], 1)
 
     def test_p6_body_split_history_promotes_unique_same_kind_targets(self) -> None:
         result = self.run_recompute("body-split-history", "p6")
@@ -101,17 +106,23 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(diagnostic["subname"], stable_subname)
 
     def test_p6_split_stable_subname_reaches_downstream_geometry_after_recovery(self) -> None:
-        for fixture, code in [
-            ("up-to-face-stable-body-split", "execution_failed"),
-            ("sketch-external-edge-stable-body-split", "unsupported_geometry"),
-            ("sketch-external-edge-stable-body-split-after-add", "unsupported_geometry"),
-            ("sketch-external-edge-stable-body-split-current-sublist", "unsupported_geometry"),
+        diagnostic = self.run_recompute("up-to-face-stable-body-split", "p6")["diagnostics"][0]
+
+        self.assertEqual(diagnostic["code"], "execution_failed")
+
+        for fixture in [
+            "sketch-external-edge-stable-body-split",
+            "sketch-external-edge-stable-body-split-after-add",
+            "sketch-external-edge-stable-body-split-current-sublist",
         ]:
             with self.subTest(fixture=fixture):
-                diagnostic = self.run_recompute(fixture, "p6")["diagnostics"][0]
+                result = self.run_recompute(fixture, "p6")
+                sketch = result["objects"]["ProbeSketch"]
 
-                self.assertEqual(diagnostic["code"], code)
-                self.assertNotEqual(diagnostic["code"], "split_stable_subname")
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(sketch["external_geometry_count"], 1)
+                self.assertEqual(sketch["external_point_count"], 1)
+                self.assert_result_matches_expected(result, "p6", fixture)
 
     def test_p6_up_to_face_uses_element_map_before_stale_sublist(self) -> None:
         for fixture in [
@@ -128,6 +139,43 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(feature["status"], "ok")
                 self.assertEqual(feature["method"], "UpToFace")
 
+    def test_p6_reference_shadow_update_uses_stable_element_map_for_up_to_face(self) -> None:
+        fixture_path = ROOT / "fixtures" / "p6" / "up-to-face-stable-body-history.json"
+        payload = json.loads(fixture_path.read_text(encoding="utf-8"))
+        up_to_face = next(item for item in payload["Objects"] if item["Name"] == "ProbePad")["Properties"]["UpToFace"]
+        up_to_face["ReferenceShadow"] = [
+            {
+                "target": "Body",
+                "targetId": 5,
+                "property": "Shape",
+                "shapeType": "Face",
+                "indexed": "OldBodyFace",
+                "subname": "OldBodyFace",
+                "stableSubname": "Pad.Face6",
+                "fingerprint": {},
+            }
+        ]
+
+        temp_path: Path | None = None
+        try:
+            with tempfile.NamedTemporaryFile("w", suffix=".json", encoding="utf-8", delete=False) as temp:
+                json.dump(payload, temp)
+                temp_path = Path(temp.name)
+            result = self.run_recompute_file(temp_path)
+        finally:
+            if temp_path is not None:
+                temp_path.unlink(missing_ok=True)
+
+        update = result["elementReferenceUpdates"][0]
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(result["objects"]["ProbePad"]["status"], "ok")
+        self.assertEqual(update["object"], "ProbePad")
+        self.assertEqual(update["property"], "UpToFace")
+        self.assertEqual(update["SubList"], ["Face5"])
+        self.assertEqual(update["StableSubList"], ["Pad.Face6"])
+        self.assertEqual(update["ShadowSub"], [{"newName": "Pad.Face6", "oldName": "Face5"}])
+        self.assertEqual(update["ReferenceShadow"][0]["subname"], "Face5")
+
     def test_p6_external_geometry_link_sub_list_uses_element_map(self) -> None:
         result = self.run_recompute("sketch-external-edge-stable-indexed-opaque-sublist", "p6")
         sketch = result["objects"]["Sketch"]
@@ -139,11 +187,11 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["external_point_count"], 0)
         self.assertEqual(pad["status"], "ok")
 
-        for fixture in [
-            "sketch-external-edge-stable-body-preserved",
-            "sketch-external-edge-stable-body-profile-source",
-            "sketch-external-edge-stable-multi-prism",
-            "sketch-external-edge-stable-taper-preserved",
+        for fixture, point_count in [
+            ("sketch-external-edge-stable-body-preserved", 0),
+            ("sketch-external-edge-stable-body-profile-source", 1),
+            ("sketch-external-edge-stable-multi-prism", 0),
+            ("sketch-external-edge-stable-taper-preserved", 0),
         ]:
             with self.subTest(fixture=fixture):
                 result = self.run_recompute(fixture, "p6")
@@ -152,4 +200,4 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(result["diagnostics"], [])
                 self.assertEqual(sketch["external_geometry_count"], 1)
                 self.assertEqual(sketch["external_curve_count"], 0)
-                self.assertEqual(sketch["external_point_count"], 0)
+                self.assertEqual(sketch["external_point_count"], point_count)

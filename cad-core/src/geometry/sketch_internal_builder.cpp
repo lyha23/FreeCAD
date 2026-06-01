@@ -49,7 +49,7 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
     }
 
     result.profileShape = faceResult.shape;
-    result.internalShape = faceResult.shape;
+    result.internalShape = faceResult.internalShape ? faceResult.internalShape : faceResult.shape;
     result.splitProducedBoundedFaces = faceResult.splitProducedBoundedFaces;
     result.requiresSubshapeSelection = faceResult.splitProducedBoundedFaces;
 
@@ -72,7 +72,7 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
         }
         const auto openShape = joiner.getOpenWires("SKF", true);
         if (openShape && !openShape->IsNull()) {
-            result.internalShape = compoundShape(*faceResult.shape, *openShape);
+            result.internalShape = compoundShape(*result.internalShape, *openShape);
             hasOpenWireOutput = true;
         }
     }
@@ -80,8 +80,6 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
     if (const auto resultEdges = copiedResultWireGraphForSketchInternals(*faceResult.shape,
                                                                          input.openEdges,
                                                                          input.faceWires,
-                                                                         input.faceWires.size(),
-                                                                         faceResult.faceCount,
                                                                          faceResult.splitProducedBoundedFaces,
                                                                          hasOpenWireOutput)) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp

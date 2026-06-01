@@ -1,5 +1,6 @@
 {
-  "reference": "FreeCADCmd geometry-equivalent 2x2x2 Pad scaled by factor 2 around first original center of mass",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "reference": "FreeCADCmd oracle from scaled-pad-factor-two.json; objects: Sketcher::SketchObject, PartDesign::Pad, PartDesign::Scaled, PartDesign::Body",
   "freecad_version": "1.2.0 revision 20260519",
   "objects": {
     "Scaled": {
@@ -15,7 +16,12 @@
           3.0
         ]
       },
-      "volume": 64.0
+      "volume": 64.0,
+      "topology_counts": {
+        "faces": 6,
+        "edges": 12,
+        "vertices": 8
+      }
     },
     "Body": {
       "bbox": {
@@ -30,7 +36,12 @@
           3.0
         ]
       },
-      "volume": 64.0
+      "volume": 64.0,
+      "topology_counts": {
+        "faces": 6,
+        "edges": 12,
+        "vertices": 8
+      }
     }
   },
   "named_shapes": {

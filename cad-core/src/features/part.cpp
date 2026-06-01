@@ -87,10 +87,17 @@ struct PartExtrusionDirection
     double magnitude = 1.0;
 };
 
+struct PartExtrusionSource
+{
+    TopoDS_Shape shape;
+    std::optional<topo::NamedShape> namedShape;
+};
+
 struct PartExtrusionShapeBuild
 {
     TopoDS_Shape shape;
     bool topoNamingKnownGap = false;
+    std::optional<topo::NamedShape> namedShape;
 };
 
 enum class PartExtrusionFaceMaker
@@ -523,19 +530,25 @@ std::optional<TopoDS_Shape> partExtrusionSolidSourceFromWires(
     return std::nullopt;
 }
 
-std::optional<TopoDS_Shape> partExtrusionSourceShape(
+std::optional<PartExtrusionSource> partExtrusionSourceShape(
     const document::DocumentObject& object,
     runtime::ComputeContext& context,
+    const std::string& baseObjectName,
     const TopoDS_Shape& source,
+    const topo::NamedShape* sourceNamedShape,
     bool solid,
     PartExtrusionFaceMaker faceMaker
 )
 {
+    std::optional<topo::NamedShape> copiedSourceNamedShape;
+    if (sourceNamedShape != nullptr) {
+        copiedSourceNamedShape = *sourceNamedShape;
+    }
     if (!solid) {
-        return source;
+        return PartExtrusionSource{source, copiedSourceNamedShape};
     }
     for (TopExp_Explorer explorer(source, TopAbs_FACE); explorer.More(); explorer.Next()) {
-        return source;
+        return PartExtrusionSource{source, copiedSourceNamedShape};
     }
 
     auto faceShape = partExtrusionSolidSourceFromWires(source, faceMaker);
@@ -549,7 +562,15 @@ std::optional<TopoDS_Shape> partExtrusionSourceShape(
         );
         return std::nullopt;
     }
-    return *faceShape;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FeatureExtrusion.cpp
+    // ::Extrusion::extrudeShape(), for Solid=true wires calls "myShape.makeElementFace(...)"
+    // before "result.makeElementPrism(myShape, vec)". cad-core preserves the source-edge subset
+    // here; full FaceMaker history remains owned by the P5/P6 FaceMaker migration.
+    const topo::NamedShapeSource baseSource{baseObjectName, source, sourceNamedShape};
+    return PartExtrusionSource{
+        *faceShape,
+        topo::namedShapeForPreservedSources(baseObjectName, *faceShape, {baseSource})
+    };
 }
 
 std::optional<PartExtrusionDirection> partExtrusionDirectionFromEdge(
@@ -764,7 +785,9 @@ std::optional<PartExtrusionDirection> partExtrusionDirection(
 std::optional<PartExtrusionShapeBuild> makePartExtrusionShape(
     const document::DocumentObject& object,
     runtime::ComputeContext& context,
+    const std::string& baseObjectName,
     const TopoDS_Shape& baseShape,
+    const topo::NamedShape* baseNamedShape,
     const gp_Dir& direction,
     double lengthFwd,
     double lengthRev,
@@ -774,7 +797,8 @@ std::optional<PartExtrusionShapeBuild> makePartExtrusionShape(
     PartExtrusionFaceMaker faceMaker
 )
 {
-    auto source = partExtrusionSourceShape(object, context, baseShape, solid, faceMaker);
+    auto source =
+        partExtrusionSourceShape(object, context, baseObjectName, baseShape, baseNamedShape, solid, faceMaker);
     if (!source) {
         return std::nullopt;
     }
@@ -792,7 +816,7 @@ std::optional<PartExtrusionShapeBuild> makePartExtrusionShape(
         // and two-sided LengthFwd/LengthRev subsets.
         std::string error;
         const auto tapered = geometry::makeTaperedExtrusion(
-            *source,
+            source->shape,
             geometry::TaperedExtrusionOptions{
                 direction,
                 lengthFwd,
@@ -813,13 +837,22 @@ std::optional<PartExtrusionShapeBuild> makePartExtrusionShape(
             );
             return std::nullopt;
         }
-        return PartExtrusionShapeBuild{tapered->shape, tapered->topoNamingKnownGap};
+        const topo::NamedShapeSource profileSource{baseObjectName,
+                                                   source->shape,
+                                                   source->namedShape ? &*source->namedShape : nullptr};
+        auto namedShape = topo::namedShapeForTaperedExtrusionHistory(object.name,
+                                                                     *tapered,
+                                                                     source->shape,
+                                                                     profileSource);
+        return PartExtrusionShapeBuild{tapered->shape, tapered->topoNamingKnownGap, std::move(namedShape)};
     }
 
     if (std::abs(lengthRev) > Precision::Confusion()) {
         gp_Trsf reverseTransform;
         reverseTransform.SetTranslation(gp_Vec(direction) * (-lengthRev));
-        BRepBuilderAPI_Transform transform(*source, reverseTransform, Standard_True);
+        const TopoDS_Shape previousSourceShape = source->shape;
+        std::optional<topo::NamedShape> previousNamedShape = source->namedShape;
+        BRepBuilderAPI_Transform transform(previousSourceShape, reverseTransform, Standard_True);
         if (!transform.IsDone()) {
             addPartExtrusionDiagnostic(
                 object,
@@ -830,11 +863,18 @@ std::optional<PartExtrusionShapeBuild> makePartExtrusionShape(
             );
             return std::nullopt;
         }
-        source = transform.Shape();
+        source->shape = transform.Shape();
+        if (previousNamedShape) {
+            source->namedShape = topo::namedShapeForTransformedCopy(
+                baseObjectName,
+                source->shape,
+                topo::NamedShapeSource{baseObjectName, previousSourceShape, &*previousNamedShape}
+            );
+        }
     }
 
     try {
-        BRepPrimAPI_MakePrism prism(*source, gp_Vec(direction) * (lengthFwd + lengthRev), Standard_True);
+        BRepPrimAPI_MakePrism prism(source->shape, gp_Vec(direction) * (lengthFwd + lengthRev), Standard_True);
         prism.Build();
         if (!prism.IsDone() || prism.Shape().IsNull()) {
             addPartExtrusionDiagnostic(
@@ -846,7 +886,20 @@ std::optional<PartExtrusionShapeBuild> makePartExtrusionShape(
             );
             return std::nullopt;
         }
-        return PartExtrusionShapeBuild{prism.Shape(), false};
+        const topo::NamedShapeSource profileSource{baseObjectName,
+                                                   source->shape,
+                                                   source->namedShape ? &*source->namedShape : nullptr};
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+        // ::TopoShape::makeElementPrism(), "return makeElementShape(mkPrism, base, op)".
+        // Part::Extrusion publishes the same maker-history subset instead of falling back to
+        // indexed-only names after the prism succeeds.
+        auto namedShape = topo::namedShapeForMakerHistory(
+            object.name,
+            prism.Shape(),
+            std::vector<topo::NamedShapeSource>{profileSource},
+            prism
+        );
+        return PartExtrusionShapeBuild{prism.Shape(), false, std::move(namedShape)};
     }
     catch (const Standard_Failure& failure) {
         addPartExtrusionDiagnostic(object, context, "execution_failed", failure.GetMessageString(), "Base");
@@ -930,14 +983,22 @@ void publishPartShape(
     const document::DocumentObject& object,
     runtime::ComputeContext& context,
     const TopoDS_Shape& localShape,
-    const nlohmann::json& metadata
+    const nlohmann::json& metadata,
+    const std::optional<topo::NamedShape>& namedShape = std::nullopt
 )
 {
     const TopoDS_Shape shape = applyGlobalPlacement(object, context, localShape);
     context.shapes[object.name] = runtime::ShapeValue {shapeKindForPartShape(shape), shape};
     context.mesh[object.name] = geometry::meshForShape(shape);
     context.subshapes[object.name] = topo::subshapeMapForShape(shape);
-    context.namedShapes[object.name] = topo::indexedNamedShapeForObject(object.name, shape);
+    if (namedShape) {
+        context.namedShapes[object.name] = *namedShape;
+        context.namedShapes[object.name].owner = object.name;
+        context.namedShapes[object.name].shape = shape;
+    }
+    else {
+        context.namedShapes[object.name] = topo::indexedNamedShapeForObject(object.name, shape);
+    }
 
     nlohmann::json result = metadata;
     result["status"] = "ok";
@@ -2152,6 +2213,9 @@ void executePartExtrusion(const document::DocumentObject& object, runtime::Compu
         );
         return;
     }
+    const auto baseNamedShapeIt = context.namedShapes.find(baseLink->object);
+    const topo::NamedShape* baseNamedShape =
+        baseNamedShapeIt != context.namedShapes.end() ? &baseNamedShapeIt->second : nullptr;
     const auto faceMaker = partExtrusionFaceMaker(object, context);
     if (!faceMaker) {
         return;
@@ -2199,7 +2263,9 @@ void executePartExtrusion(const document::DocumentObject& object, runtime::Compu
     const bool solid = document::readBool(object, "Solid").value_or(false);
     auto shape = makePartExtrusionShape(object,
                                         context,
+                                        baseLink->object,
                                         baseIt->second.shape,
+                                        baseNamedShape,
                                         direction->direction,
                                         lengthFwd,
                                         lengthRev,
@@ -2220,13 +2286,17 @@ void executePartExtrusion(const document::DocumentObject& object, runtime::Compu
                                {"symmetric", document::readBool(object, "Symmetric").value_or(false)}};
     if (shape->topoNamingKnownGap) {
         metadata["topo_naming"] = "known_gap:taper_history";
+        if (shape->namedShape) {
+            metadata["topo_naming_history"] = "history_partial:taper";
+        }
     }
 
     publishPartShape(
         object,
         context,
         shape->shape,
-        metadata
+        metadata,
+        shape->namedShape
     );
 }
 

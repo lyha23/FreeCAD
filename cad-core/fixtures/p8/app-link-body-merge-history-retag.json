@@ -1,0 +1,126 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPad",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "start": [0, 0],
+            "end": [10, 0]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [10, 0],
+            "end": [10, 5]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [10, 5],
+            "end": [0, 5]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [0, 5],
+            "end": [0, 0]
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "SketchPocket",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "start": [2, 1],
+            "end": [8, 1]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [8, 1],
+            "end": [8, 4]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [8, 4],
+            "end": [2, 4]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [2, 4],
+            "end": [2, 1]
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 3,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPad",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 10,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Pocket",
+      "ID": 4,
+      "TypeId": "PartDesign::Pocket",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPocket",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 10,
+        "Reversed": true,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 5,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["SketchPad", "Pad", "SketchPocket", "Pocket"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Pocket"
+        }
+      }
+    },
+    {
+      "Name": "BodyLink",
+      "ID": 6,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Body"
+        },
+        "LinkTransform": false
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["BodyLink"]
+  }
+}

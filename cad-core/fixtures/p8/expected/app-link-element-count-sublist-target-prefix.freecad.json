@@ -1,0 +1,35 @@
+{
+  "schema_version": "cad-core.freecad-expected.v1",
+  "object": "FaceLink",
+  "reference": "FreeCADCmd native App::Link ElementCount numeric LinkSub with linked-target prefix; ElementMap checks request-local alias retag",
+  "freecad_version": "1.2.0 revision 20260519",
+  "bbox": {
+    "min": [5.0, 10.0, 0.0],
+    "max": [5.0, 13.0, 4.0]
+  },
+  "volume": 0.0,
+  "topology_counts": {
+    "faces": 1,
+    "edges": 4,
+    "vertices": 4
+  },
+  "named_shapes": {
+    "FaceLink": {
+      "element_map_status": "history_partial",
+      "element_map": {
+        "1.Box.Face1": "Face1",
+        "1.Face1": "Face1",
+        "ArrayLink.1.Box.Face1": "Face1",
+        "ArrayLink_i1.Box.Face1": "Face1",
+        "Face1;:I1": "Face1"
+      },
+      "element_map_absent": [
+        "Face1;:X;1.Box.Face1"
+      ],
+      "history_sources_any": [
+        "1.Box.Face1",
+        "ArrayLink.1.Box.Face1"
+      ]
+    }
+  }
+}

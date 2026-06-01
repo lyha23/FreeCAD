@@ -67,8 +67,6 @@ private:
 std::optional<TopoDS_Shape> copiedResultWireGraphForSketchInternals(const TopoDS_Shape& boundedFaceShape,
                                                                     const std::vector<TopoDS_Edge>& openEdges,
                                                                     const std::vector<TopoDS_Wire>& closedWires,
-                                                                    std::size_t closedWireCount,
-                                                                    std::size_t boundedFaceCount,
                                                                     bool splitProducedBoundedFaces,
                                                                     bool hasOpenWireOutput);
 

@@ -1,5 +1,6 @@
 {
-  "reference": "FreeCADCmd geometry-equivalent Pad box 10x5x10 with PartDesign Chamfer size 0.5 and Refine=true",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "reference": "FreeCADCmd oracle from chamfer-refine-true.json; objects: Sketcher::SketchObject, PartDesign::Pad, PartDesign::Chamfer, PartDesign::Body",
   "freecad_version": "1.2.0 revision 20260519",
   "objects": {
     "Chamfer": {
@@ -15,7 +16,12 @@
           10.0
         ]
       },
-      "volume": 498.75
+      "volume": 498.75,
+      "topology_counts": {
+        "faces": 7,
+        "edges": 15,
+        "vertices": 10
+      }
     },
     "Body": {
       "bbox": {
@@ -30,7 +36,12 @@
           10.0
         ]
       },
-      "volume": 498.75
+      "volume": 498.75,
+      "topology_counts": {
+        "faces": 7,
+        "edges": 15,
+        "vertices": 10
+      }
     }
   },
   "named_shapes": {

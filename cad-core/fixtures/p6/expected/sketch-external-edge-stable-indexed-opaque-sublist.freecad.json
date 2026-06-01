@@ -1,8 +1,24 @@
 {
-  "reference": "FreeCAD stable subname oracle pending: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.h::TopoShape::makeShapeWithElementMap() maps element names from shape history, but this indexed opaque sublist case still needs a dedicated native ElementMap oracle before freezing geometry or named-shape golden.",
+  "bbox": {
+    "max": [
+      10.0,
+      5.0,
+      4.0
+    ],
+    "min": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
   "freecad_version": "1.2.0 revision 20260519",
-  "known_gap": {
-    "kind": "stable_subname_oracle_pending",
-    "reason": "Do not freeze indexed opaque stable subname behavior from current cad-core output."
-  }
+  "object": "Pad",
+  "reference": "FreeCADCmd oracle from sketch-external-edge-stable-indexed-opaque-sublist.json; objects: Sketcher::SketchObject, Sketcher::SketchObject, PartDesign::Pad",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "topology_counts": {
+    "edges": 12,
+    "faces": 6,
+    "vertices": 8
+  },
+  "volume": 199.99999999999994
 }

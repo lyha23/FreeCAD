@@ -14,7 +14,6 @@
 #include <BRepGProp.hxx>
 #include <BRepIntCurveSurface_Inter.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
-#include <BRepOffsetAPI_ThruSections.hxx>
 #include <BRepPrimAPI_MakePrism.hxx>
 #include <Bnd_Box.hxx>
 #include <GeomAbs_CurveType.hxx>
@@ -1263,88 +1262,6 @@ std::optional<SideBuild> makePrismSide(const TopoDS_Shape& profile,
     return SideBuild{method, length, prism.Shape(), false, std::move(namedShape)};
 }
 
-std::string taperComponentOwner(const std::string& historyOwner, std::size_t index, std::size_t count)
-{
-    if (count <= 1U) {
-        return historyOwner;
-    }
-    if (index == 0U) {
-        return historyOwner + ".Outer";
-    }
-    return historyOwner + ".Inner" + std::to_string(index);
-}
-
-topo::NamedShape namedShapeForTaperComponent(const std::string& componentOwner,
-                                             const geometry::TaperedExtrusionHistoryComponent& component,
-                                             const TopoDS_Shape& profile,
-                                             const topo::NamedShapeSource& profileSource)
-{
-    if (component.historyMaker && !component.historySources.empty()) {
-        std::vector<topo::NamedShapeSource> sources;
-        sources.reserve(component.historySources.size());
-        sources.push_back(topo::NamedShapeSource{profileSource.owner, profile, profileSource.namedShape});
-        for (std::size_t index = 1; index < component.historySources.size(); ++index) {
-            sources.push_back(topo::NamedShapeSource{componentOwner + ".TaperSection" + std::to_string(index + 1),
-                                                     component.historySources.at(index)});
-        }
-        if (auto* thruSections = dynamic_cast<BRepOffsetAPI_ThruSections*>(component.historyMaker.get())) {
-            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
-            // ::MapperThruSections::generated(), adds GeneratedFace(), FirstShape() and LastShape()
-            // to the generic BRepBuilderAPI_MakeShape mapper used by makeElementShape().
-            return topo::namedShapeForThruSectionsHistory(componentOwner,
-                                                          component.shape,
-                                                          sources,
-                                                          *thruSections,
-                                                          component.historySources.front(),
-                                                          component.historySources.back());
-        }
-        return topo::namedShapeForMakerHistory(componentOwner, component.shape, sources, *component.historyMaker);
-    }
-    return topo::namedShapeForPreservedSources(componentOwner, component.shape, {profileSource});
-}
-
-std::optional<topo::NamedShape> namedShapeForTaperedExtrusion(const std::string& historyOwner,
-                                                             const geometry::TaperedExtrusionResult& tapered,
-                                                             const TopoDS_Shape& profile,
-                                                             const topo::NamedShapeSource& profileSource)
-{
-    if (tapered.historyComponents.empty()) {
-        return std::nullopt;
-    }
-
-    const std::size_t count = tapered.historyComponents.size();
-    std::string currentOwner = taperComponentOwner(historyOwner, 0, count);
-    TopoDS_Shape currentShape = tapered.historyComponents.front().shape;
-    topo::NamedShape currentNamedShape =
-        namedShapeForTaperComponent(currentOwner, tapered.historyComponents.front(), profile, profileSource);
-
-    for (std::size_t index = 1; index < count; ++index) {
-        const std::string innerOwner = taperComponentOwner(historyOwner, index, count);
-        topo::NamedShape innerNamedShape =
-            namedShapeForTaperComponent(innerOwner, tapered.historyComponents.at(index), profile, profileSource);
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/ExtrusionHelper.cpp
-        // ::ExtrusionHelper::makeElementDraft(), "Inner wires are lofted into separate solids and
-        // then cut from the outer solid"; cad-core routes the same owner chain through topo boolean
-        // history so inner-wire generated sources survive the final taper result.
-        const auto cut = topo::makeElementBooleanFromSources(
-            historyOwner,
-            {
-                topo::NamedShapeSource{currentOwner, currentShape, &currentNamedShape},
-                topo::NamedShapeSource{innerOwner, tapered.historyComponents.at(index).shape, &innerNamedShape},
-            },
-            topo::BooleanOperation::Cut);
-        if (cut.error.empty() && cut.namedShape) {
-            currentOwner = historyOwner + ".InnerCut" + std::to_string(index);
-            currentShape = cut.shape;
-            currentNamedShape = *cut.namedShape;
-        }
-    }
-
-    currentNamedShape.owner = historyOwner;
-    currentNamedShape.shape = tapered.shape;
-    return currentNamedShape;
-}
-
 std::optional<SideBuild> makeExtrusionShape(const document::DocumentObject& object,
                                             runtime::ComputeContext& context,
                                             const TopoDS_Shape& profile,
@@ -1384,7 +1301,7 @@ std::optional<SideBuild> makeExtrusionShape(const document::DocumentObject& obje
     if (profileNamedShapeIt != context.namedShapes.end()) {
         profileSource.namedShape = &profileNamedShapeIt->second;
     }
-    auto namedShape = namedShapeForTaperedExtrusion(historyOwner, *tapered, profile, profileSource)
+    auto namedShape = topo::namedShapeForTaperedExtrusionHistory(historyOwner, *tapered, profile, profileSource)
         .value_or(topo::namedShapeForPreservedSources(historyOwner, tapered->shape, {profileSource}));
     return SideBuild{method, length, tapered->shape, tapered->topoNamingKnownGap, std::move(namedShape)};
 }

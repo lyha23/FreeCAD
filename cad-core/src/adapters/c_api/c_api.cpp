@@ -133,6 +133,8 @@ nlohmann::json diagnosticCodeList()
 nlohmann::json capabilitiesJson()
 {
     const cad_core::runtime::FeatureRegistry registry = cad_core::runtime::buildDefaultRegistry();
+    const auto linkSubShapeFields = nlohmann::json::array(
+        {"value", "SubList", "StableSubList", "FullSubList", "ShadowSub", "ReferenceShadow"});
     return {
         {"status", "ok"},
         {"schema_version", "cad-web-v1"},
@@ -142,15 +144,36 @@ nlohmann::json capabilitiesJson()
              {"source", "DocumentObject graph"},
              {"required_object_fields", {"Name", "ID", "TypeId", "Properties"}},
              {"link_property_fields",
-              {"value", "values", "SubList", "StableSubList", "ShadowSub", "ReferenceShadow", "SubSet"}},
+              {"value",
+               "values",
+               "SubList",
+               "StableSubList",
+               "FullSubList",
+               "ShadowSub",
+               "ReferenceShadow",
+               "SubSet"}},
              {"link_property_shapes",
               {
                   {"App::PropertyLink", {"value"}},
+                  {"App::PropertyLinkGlobal", {"value"}},
+                  {"App::PropertyLinkHidden", {"value"}},
+                  // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/PropertyLinks.h
+                  // ::PropertyXLink is a cross-document link with "_SubList";
+                  // ::PropertyXLinkList first accepts object-only PropertyLinkList syntax, then
+                  // falls back to PropertyXLinkSubList for sub-element entries.
+                  {"App::PropertyXLink", linkSubShapeFields},
                   {"App::PropertyLinkList", {"values"}},
-                  {"App::PropertyLinkSub",
-                   {"value", "SubList", "StableSubList", "ShadowSub", "ReferenceShadow"}},
+                  {"App::PropertyLinkListHidden", {"values"}},
+                  {"App::PropertyXLinkList", {"values", "SubSet"}},
+                  {"App::PropertyLinkSub", linkSubShapeFields},
+                  {"App::PropertyLinkSubHidden", linkSubShapeFields},
+                  {"App::PropertyXLinkSub", linkSubShapeFields},
+                  {"App::PropertyXLinkSubHidden", linkSubShapeFields},
                   {"App::PropertyLinkSubList", {"SubSet"}},
+                  {"App::PropertyLinkSubListHidden", {"SubSet"}},
+                  {"App::PropertyXLinkSubList", {"SubSet"}},
               }},
+             {"document_update_channels", {"elementReferenceUpdates", "documentObjectUpdates"}},
          }},
         {"supported_type_ids", registry.typeIds()},
         {"export_formats", cad_core::geometry::supportedShapeFileFormats()},
@@ -159,7 +182,6 @@ nlohmann::json capabilitiesJson()
          {
              "complete_mapper_history",
              "assembly_joint_solver",
-             "show_element_missing_child_lifecycle",
          }},
     };
 }

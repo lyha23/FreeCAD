@@ -1,0 +1,39 @@
+{
+  "schema_version": "cad-core.freecad-expected.v1",
+  "reference": "FreeCADCmd oracle from polar-pattern-whole-shape-body-prefix-support.json; objects: Sketcher::SketchObject, PartDesign::Pad, Part::Box, PartDesign::Line, PartDesign::PolarPattern, PartDesign::Body",
+  "freecad_version": "1.2.0 revision 20260519",
+  "objects": {
+    "PolarPattern": {
+      "bbox": {
+        "min": [0.0, -2.0, -2.0],
+        "max": [2.0, 2.0, 2.0]
+      },
+      "volume": 32.0
+    },
+    "Body": {
+      "bbox": {
+        "min": [0.0, -2.0, -2.0],
+        "max": [2.0, 2.0, 2.0]
+      },
+      "volume": 32.0
+    }
+  },
+  "named_shapes": {
+    "PolarPattern": {
+      "element_map_status": "history_partial",
+      "history_non_indexed_source_prefixes": [
+        "Pad.",
+        "SketchPad.",
+        "PolarPattern.Transform1."
+      ]
+    },
+    "Body": {
+      "element_map_status": "history_partial",
+      "history_non_indexed_source_prefixes": [
+        "Pad.",
+        "SketchPad.",
+        "PolarPattern.Transform1."
+      ]
+    }
+  }
+}

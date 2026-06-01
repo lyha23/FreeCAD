@@ -828,7 +828,7 @@ std::optional<FaceMakerBuildFaceResult> makeSelfIntersectingSingleWireFaces(cons
     if (!shape || shape->IsNull() || faceCount <= 1U) {
         return std::nullopt;
     }
-    return FaceMakerBuildFaceResult{shape, faceCount, producedSplit};
+    return FaceMakerBuildFaceResult{shape, shape, faceCount, producedSplit};
 }
 
 std::optional<TopoDS_Shape> splitOverlappingFaces(const std::vector<TopoDS_Face>& faces)
@@ -1077,8 +1077,28 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(const std
         return {};
     }
     const std::vector<TopoDS_Face> baseFaces = facesForShape(*base);
+    std::optional<TopoDS_Shape> internalBase = base;
+    std::size_t internalBaseFaceCount = baseFaces.size();
+    if (baseFaces.size() == 1U && wires.size() > 1U) {
+        std::size_t boundedFaceCount = 0;
+        bool boundedProducedSplit = false;
+        const auto boundedFaces = buildBoundedFacesFromEdgeNetwork(edgeNetworkForWiresAndEdges(wires, {}),
+                                                                   boundedFaceCount,
+                                                                   boundedProducedSplit);
+        if (boundedFaces && !boundedFaces->IsNull() && boundedFaceCount > baseFaces.size()) {
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App
+            // /FaceMakerBuildFace.cpp::FaceMakerBuildFace::Build_Essence(), stores
+            // "myShapesToReturn" from BOPAlgo_BuilderFace. SketchObject::buildInternals()
+            // publishes that bounded-region result as InternalShape, while PartDesign Pad keeps
+            // using the closed profile face with holes for extrusion. This covers the general
+            // no-island hole case; nested islands stay on the existing face-with-holes profile
+            // until their native InternalShape oracle is frozen.
+            internalBase = boundedFaces;
+            internalBaseFaceCount = boundedFaceCount;
+        }
+    }
     if (splitEdges.empty()) {
-        return FaceMakerBuildFaceResult{base, baseFaces.size(), false};
+        return FaceMakerBuildFaceResult{base, internalBase, internalBaseFaceCount, false};
     }
 
     TopTools_ListOfShape objects;
@@ -1096,7 +1116,7 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(const std
         tools.Append(edge);
     }
     if (tools.IsEmpty()) {
-        return FaceMakerBuildFaceResult{base, baseFaces.size(), false};
+        return FaceMakerBuildFaceResult{base, internalBase, internalBaseFaceCount, false};
     }
 
     BRepAlgoAPI_Splitter splitter;
@@ -1107,16 +1127,16 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(const std
         // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
         // ::Build_Essence(), splitAtIntersections() failure continues with original "edges" instead
         // of dropping already valid bounded faces.
-        return FaceMakerBuildFaceResult{base, baseFaces.size(), false};
+        return FaceMakerBuildFaceResult{base, internalBase, internalBaseFaceCount, false};
     }
 
     std::vector<TopoDS_Face> splitFaces = facesForShape(splitter.Shape());
     if (splitFaces.size() < baseFaces.size()) {
-        return FaceMakerBuildFaceResult{base, baseFaces.size(), false};
+        return FaceMakerBuildFaceResult{base, internalBase, internalBaseFaceCount, false};
     }
     const auto splitShape = compoundOrSingleFace(splitFaces);
     if (!splitShape || splitShape->IsNull()) {
-        return FaceMakerBuildFaceResult{base, baseFaces.size(), false};
+        return FaceMakerBuildFaceResult{base, internalBase, internalBaseFaceCount, false};
     }
     if (splitFaces.size() == baseFaces.size()) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
@@ -1130,9 +1150,9 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(const std
         const auto rebuilt = buildBoundedFacesFromEdgeNetwork(faceMakerEdges, rebuiltFaceCount, rebuiltProducedSplit);
         if (rebuilt && !rebuilt->IsNull() && rebuiltFaceCount == baseFaces.size()
             && topologyWasSplit(*rebuilt, *base)) {
-            return FaceMakerBuildFaceResult{rebuilt, rebuiltFaceCount, false};
+            return FaceMakerBuildFaceResult{rebuilt, rebuilt, rebuiltFaceCount, false};
         }
-        return FaceMakerBuildFaceResult{base, baseFaces.size(), false};
+        return FaceMakerBuildFaceResult{base, internalBase, internalBaseFaceCount, false};
     }
 
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
@@ -1145,9 +1165,9 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(const std
                                                           rebuiltFaceCount,
                                                           rebuiltProducedSplit);
     if (rebuilt && !rebuilt->IsNull() && rebuiltFaceCount == splitFaces.size()) {
-        return FaceMakerBuildFaceResult{rebuilt, rebuiltFaceCount, true};
+        return FaceMakerBuildFaceResult{rebuilt, rebuilt, rebuiltFaceCount, true};
     }
-    return FaceMakerBuildFaceResult{splitShape, splitFaces.size(), true};
+    return FaceMakerBuildFaceResult{splitShape, splitShape, splitFaces.size(), true};
 }
 
 std::optional<TopoDS_Shape> makeFacesFromClosedWiresAndSplitEdges(const std::vector<TopoDS_Wire>& wires,

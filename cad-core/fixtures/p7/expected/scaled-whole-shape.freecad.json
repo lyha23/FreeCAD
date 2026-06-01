@@ -1,10 +1,8 @@
 {
-  "reference": "FreeCADCmd geometry-equivalent 2x2x2 Pad scaled by factor 2 around origin in Whole shape mode",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "reference": "FreeCADCmd oracle from scaled-whole-shape.json; objects: Sketcher::SketchObject, PartDesign::Pad, PartDesign::Scaled",
   "freecad_version": "1.2.0 revision 20260519",
-  "objects": {
-    "Scaled": {
-      "bbox": {"min": [0.0, 0.0, 0.0], "max": [4.0, 4.0, 4.0]},
-      "volume": 64.0
-    }
-  }
+  "object": "Scaled",
+  "bbox": {"min": [0.0, 0.0, 0.0], "max": [4.0, 4.0, 4.0]},
+  "volume": 64.0
 }

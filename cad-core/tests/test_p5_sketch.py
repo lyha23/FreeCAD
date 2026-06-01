@@ -244,6 +244,14 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
         self.assertEqual(sketch["edge_count"], 5)
+        generated_face_sources = [
+            set(item["sources"])
+            for item in result["named_shapes"]["Sketch.InternalShape"]["history"]
+            if item["kind"] == "generated" and item["element"].startswith("InternalFace")
+        ]
+        self.assertIn({"Edge1", "Edge2", "Edge3", "Edge4"}, generated_face_sources)
+        self.assertIn({"Edge5"}, generated_face_sources)
+        self.assertNotIn({"Edge1", "Edge2", "Edge3", "Edge4", "Edge5"}, generated_face_sources)
         self.assert_object_matches_expected(result, "p5", "sketch-rect-circle-hole")
 
     def test_p5_nested_closed_wires_keep_island_face(self) -> None:
@@ -411,9 +419,21 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("InternalFace1", named_shape["elements"])
         self.assertIn("InternalEdge1", named_shape["elements"])
         self.assertIn("InternalVertex1", named_shape["elements"])
+        self.assertEqual(named_shape["elements"]["InternalFace1"]["status"], "generated")
+        self.assertEqual(
+            set(named_shape["elements"]["InternalFace1"]["sources"]),
+            {"Edge1", "Edge2", "Edge3", "Edge4"},
+        )
         self.assertEqual(named_shape["element_map"]["Edge1"], "InternalEdge1")
         self.assertEqual(named_shape["element_map"]["Vertex1"], "InternalVertex1")
         self.assertNotIn("Face1", named_shape["element_map"])
+        generated_face_history = [
+            item
+            for item in named_shape["history"]
+            if item["kind"] == "generated" and item["element"] == "InternalFace1"
+        ]
+        self.assertEqual(len(generated_face_history), 1)
+        self.assertEqual(set(generated_face_history[0]["sources"]), {"Edge1", "Edge2", "Edge3", "Edge4"})
 
     def test_p5_sketch_internal_edge_stable_subname_checks_geometry(self) -> None:
         result = self.run_recompute_ffi("sketch-internal-edge-arc-line-same-endpoints", "p5")
@@ -442,6 +462,21 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
         self.assert_object_matches_expected(result, "p5", "sketch-internal-face-through-open-cutter")
+
+    def test_p5_internal_shape_records_split_history_for_open_cutter_fragments(self) -> None:
+        result = self.run_recompute("sketch-internal-face-through-open-cutter", "p5")
+        named_shape = result["named_shapes"]["Sketch.InternalShape"]
+
+        split_entries = [
+            item
+            for item in named_shape["history"]
+            if item["kind"] == "split" and item["sources"] == ["Edge5"]
+        ]
+        self.assertNotIn("Edge5", named_shape["element_map"])
+        self.assertGreaterEqual(len(split_entries), 2)
+        for entry in split_entries:
+            self.assertTrue(entry["element"].startswith("InternalEdge"))
+            self.assertEqual(named_shape["elements"][entry["element"]]["status"], "split")
 
     def test_p5_branch_open_cutter_keeps_connected_result_wire(self) -> None:
         result = self.run_recompute("sketch-internal-face-branch-open-cutter", "p5")
@@ -563,6 +598,30 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["status"], "ok")
         self.assert_object_matches_expected(result, "p5", "sketch-internal-face-cubic-figure8-bspline")
 
+    def test_p5_self_intersecting_cubic_bspline_records_terminal_split_history(self) -> None:
+        result = self.run_recompute("sketch-internal-face-cubic-figure8-bspline", "p5")
+        named_shape = result["named_shapes"]["Sketch.InternalShape"]
+
+        split_entries = [
+            item
+            for item in named_shape["history"]
+            if item["kind"] == "split" and item["sources"] == ["Edge1"]
+        ]
+
+        self.assertNotIn("Edge1", named_shape["element_map"])
+        self.assertGreaterEqual(len(split_entries), 4)
+        for entry in split_entries:
+            self.assertTrue(entry["element"].startswith("InternalEdge"))
+            self.assertEqual(named_shape["elements"][entry["element"]]["status"], "split")
+        generated_face_sources = [
+            item["sources"]
+            for item in named_shape["history"]
+            if item["kind"] == "generated" and item["element"].startswith("InternalFace")
+        ]
+        self.assertTrue(generated_face_sources)
+        for sources in generated_face_sources:
+            self.assertEqual(sources, ["Edge1"])
+
     def test_p5_cross_pattern_closed_profiles_split_into_five_internal_faces(self) -> None:
         result = self.run_recompute("sketch-internal-face-cross-pattern", "p5")
         sketch = result["objects"]["Sketch"]
@@ -579,6 +638,25 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["status"], "ok")
         self.assert_object_matches_expected(result, "p5", "sketch-internal-face-dangling-line")
         self.assertIn("Sketch", result["mesh"])
+
+    def test_p5_internal_shape_records_deleted_history_for_filtered_dangling_edge(self) -> None:
+        result = self.run_recompute("sketch-internal-face-dangling-line", "p5")
+        named_shape = result["named_shapes"]["Sketch.InternalShape"]
+
+        deleted_edges = [
+            item
+            for item in named_shape["history"]
+            if item["kind"] == "deleted" and item["element"] == "Edge5"
+        ]
+        deleted_vertices = [
+            item
+            for item in named_shape["history"]
+            if item["kind"] == "deleted" and item["element"] == "Vertex6"
+        ]
+        self.assertNotIn("Edge5", named_shape["element_map"])
+        self.assertNotIn("Vertex6", named_shape["element_map"])
+        self.assertEqual(deleted_edges, [{"element": "Edge5", "kind": "deleted", "sources": ["Edge5"]}])
+        self.assertEqual(deleted_vertices, [{"element": "Vertex6", "kind": "deleted", "sources": ["Vertex6"]}])
 
     def test_p5_split_and_dangling_open_wires_keep_leftover_internal_edge(self) -> None:
         result = self.run_recompute("sketch-internal-face-split-and-dangling", "p5")
@@ -1196,8 +1274,22 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(extrusion["status"], "ok")
         self.assertEqual(extrusion["shape"], "occt_solid")
         self.assertEqual(extrusion["topo_naming"], "known_gap:taper_history")
+        self.assertEqual(extrusion["topo_naming_history"], "history_partial:taper")
         self.assertGreater(extrusion["volume"], 0.0)
         self.assertIn("Extrude", result["mesh"])
+
+    def test_p5_part_extrusion_publishes_prism_and_taper_history(self) -> None:
+        for fixture in ["part-extrusion-sketch-solid", "part-extrusion-taper"]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p5")
+                named_shape = result["named_shapes"]["Extrude"]
+                history_kinds = {item["kind"] for item in named_shape["history"]}
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(named_shape["element_map_status"], "history_partial")
+                self.assertIn("generated", history_kinds)
+                self.assertIn("Sketch.Edge1", named_shape["element_map"])
+                self.assertTrue(named_shape["element_map"]["Sketch.Edge1"])
 
     def test_p5_part_extrusion_supports_reverse_taper(self) -> None:
         result = self.run_recompute("part-extrusion-reverse-taper", "p5")
@@ -1207,6 +1299,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(extrusion["status"], "ok")
         self.assertEqual(extrusion["shape"], "occt_solid")
         self.assertEqual(extrusion["topo_naming"], "known_gap:taper_history")
+        self.assertEqual(extrusion["topo_naming_history"], "history_partial:taper")
         self.assertGreater(extrusion["volume"], 0.0)
         self.assertLess(extrusion["bbox"]["min"][2], -5.99)
         self.assertLess(extrusion["bbox"]["max"][2], 1.0)
@@ -1219,6 +1312,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(extrusion["status"], "ok")
         self.assertEqual(extrusion["shape"], "occt_solid")
         self.assertEqual(extrusion["topo_naming"], "known_gap:taper_history")
+        self.assertEqual(extrusion["topo_naming_history"], "history_partial:taper")
         self.assertGreater(extrusion["volume"], 0.0)
         self.assertLess(extrusion["bbox"]["min"][2], -2.99)
         self.assertGreater(extrusion["bbox"]["max"][2], 5.99)

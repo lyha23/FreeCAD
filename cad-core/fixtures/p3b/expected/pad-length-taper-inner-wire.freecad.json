@@ -1,12 +1,12 @@
 {
-  "reference": "FreeCADCmd native document oracle: Sketcher::SketchObject with outer 12x8 rectangle and inner 4x2 rectangle, PartDesign::Pad Length=8 TaperAngle=2",
+  "reference": "FreeCADCmd native document oracle: Sketcher::SketchObject with outer 12x8 rectangle and inner 4x2 rectangle, PartDesign::Pad Length=8 TaperAngle=2. Sketch InternalShape follows FaceMakerBuildFace bounded regions, while Pad extrudes the closed profile face with hole.",
   "freecad_version": "1.2.0 revision 20260519",
   "objects": {
     "Sketch": {
       "sketch_internal": {
         "profile_ready": true,
         "internal_counts": {
-          "faces": 1
+          "faces": 2
         }
       }
     },

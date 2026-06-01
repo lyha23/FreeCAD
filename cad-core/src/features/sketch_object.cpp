@@ -3525,12 +3525,13 @@ std::string profileShapeLabel(const std::optional<TopoDS_Shape>& profileShape)
     return "occt_profile_shape";
 }
 
-std::optional<SketchSegment> projectExternalLineEdge(const TopoDS_Edge& edge,
-                                                     const gp_Trsf& sketchPlacement)
+bool projectExternalLineEdge(const TopoDS_Edge& edge,
+                             const gp_Trsf& sketchPlacement,
+                             ExternalGeometryResult& result)
 {
     BRepAdaptor_Curve curve(edge);
     if (curve.GetType() != GeomAbs_Line) {
-        return std::nullopt;
+        return false;
     }
 
     double first = curve.FirstParameter();
@@ -3545,9 +3546,16 @@ std::optional<SketchSegment> projectExternalLineEdge(const TopoDS_Edge& edge,
     const gp_Pnt start = pointInSketchLocalPlane(curve.Value(first), sketchPlacement);
     const gp_Pnt end = pointInSketchLocalPlane(curve.Value(last), sketchPlacement);
     if (start.SquareDistance(end) < Precision::SquareConfusion()) {
-        return std::nullopt;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App
+        // /SketchObjectExternal.cpp::projectLine(), when "Distance(p1, p2) < Precision::Confusion()",
+        // returns a construction GeomPoint at the midpoint instead of dropping the projection.
+        result.points.push_back(gp_Pnt((start.X() + end.X()) / 2.0,
+                                       (start.Y() + end.Y()) / 2.0,
+                                       (start.Z() + end.Z()) / 2.0));
+        return true;
     }
-    return SketchSegment{0U, start, end, true};
+    result.segments.push_back(SketchSegment{0U, start, end, true});
+    return true;
 }
 
 bool isCollapsedProjectedLineEdge(const TopoDS_Edge& edge, const gp_Trsf& sketchPlacement)
@@ -3696,9 +3704,7 @@ bool projectExternalEdgeIntoResult(const TopoDS_Edge& edge,
                                    const gp_Trsf& sketchPlacement,
                                    ExternalGeometryResult& result)
 {
-    const auto projected = projectExternalLineEdge(edge, sketchPlacement);
-    if (projected) {
-        result.segments.push_back(*projected);
+    if (projectExternalLineEdge(edge, sketchPlacement, result)) {
         return true;
     }
     return projectExternalCurveEdge(edge, sketchPlacement, result);
@@ -3763,10 +3769,10 @@ bool projectExternalFaceBoundary(const TopoDS_Face& face,
     ExternalGeometryResult boundary;
     for (TopExp_Explorer explorer(face, TopAbs_EDGE); explorer.More(); explorer.Next()) {
         const TopoDS_Edge edge = TopoDS::Edge(explorer.Current());
+        if (isCollapsedProjectedLineEdge(edge, sketchPlacement)) {
+            continue;
+        }
         if (!projectExternalEdgeIntoResult(edge, sketchPlacement, boundary)) {
-            if (isCollapsedProjectedLineEdge(edge, sketchPlacement)) {
-                continue;
-            }
             return false;
         }
     }
@@ -4049,6 +4055,20 @@ std::vector<ExternalSubshape> wholeShapeExternalSubshapes(const runtime::ShapeVa
     return result;
 }
 
+std::optional<std::string> sourcePrefixedExternalOldName(const std::string& stableSubname)
+{
+    const std::size_t dot = stableSubname.rfind('.');
+    if (dot == std::string::npos || dot + 1 >= stableSubname.size()) {
+        return std::nullopt;
+    }
+    std::string oldName = stableSubname.substr(dot + 1);
+    const auto parsed = topo::parseSubshapeName(oldName);
+    if (!parsed || (parsed->kind != TopAbs_FACE && parsed->kind != TopAbs_EDGE && parsed->kind != TopAbs_VERTEX)) {
+        return std::nullopt;
+    }
+    return oldName;
+}
+
 std::optional<std::vector<ExternalSubshape>> resolveExternalGeometryLink(const document::Link& link,
                                                                          const document::DocumentObject& object,
                                                                          runtime::ComputeContext& context)
@@ -4071,7 +4091,44 @@ std::optional<std::vector<ExternalSubshape>> resolveExternalGeometryLink(const d
 
     std::string currentSubname = subname;
     const auto namedShapeIt = context.namedShapes.find(link.object);
-    if (namedShapeIt != context.namedShapes.end()) {
+    const auto targetObjectIt = context.documentObjects.find(link.object);
+    const bool targetIsBody = targetObjectIt != context.documentObjects.end()
+        && targetObjectIt->second->typeId == "PartDesign::Body";
+    bool resolvedViaBodyOldName = false;
+    if (targetIsBody) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App
+        // /SketchObjectExternal.cpp::SketchObject::rebuildExternalGeometry(), for Missing
+        // external refs calls GeoFeature::resolveElement(obj, ref-subname, elementName) and
+        // then appends the original object plus "elementName.oldName". Source-prefixed stable
+        // refs such as Body.SketchPad.Edge1 therefore project Body.Edge1, not the current
+        // ElementMap target for SketchPad.Edge1.
+        if (const auto sourceOldName = sourcePrefixedExternalOldName(stableSubname)) {
+            if (namedShapeIt != context.namedShapes.end()) {
+                const auto resolved = topo::resolveElementReference(namedShapeIt->second, subname, stableSubname);
+                if (resolved.status == topo::ElementResolveStatus::Resolved) {
+                    currentSubname = *sourceOldName;
+                    resolvedViaBodyOldName = true;
+                }
+                else if (!stableSubname.empty() && stableSubname != subname) {
+                    runtime::addDiagnostic(context.diagnostics,
+                                           "error",
+                                           stableSubnameDiagnosticCode(resolved.status),
+                                           stableSubnameDiagnosticMessage(link.object, stableSubname, resolved.status),
+                                           object.name,
+                                           "ExternalGeometry",
+                                           "runtime",
+                                           link.object,
+                                           stableSubname);
+                    return std::nullopt;
+                }
+            }
+            else {
+                currentSubname = *sourceOldName;
+                resolvedViaBodyOldName = true;
+            }
+        }
+    }
+    if (!resolvedViaBodyOldName && namedShapeIt != context.namedShapes.end()) {
         const auto resolved = topo::resolveElementReference(namedShapeIt->second, subname, stableSubname);
         if (resolved.status == topo::ElementResolveStatus::Resolved && resolved.element) {
             currentSubname = *resolved.element;

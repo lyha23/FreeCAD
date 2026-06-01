@@ -1,6 +1,6 @@
 {
   "object": "BoxElement",
-  "reference": "FreeCADCmd geometry-equivalent App::LinkElement to Part Box",
+  "reference": "FreeCADCmd native App::LinkElement geometry oracle to Part Box",
   "freecad_version": "1.2.0 revision 20260519",
   "bbox": {
     "min": [

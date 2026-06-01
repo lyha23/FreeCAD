@@ -8,7 +8,7 @@ import subprocess
 import sys
 import traceback
 from pathlib import Path
-from typing import Any
+from typing import Any, Sequence
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -17,29 +17,80 @@ SCHEMA_VERSION = "cad-core.freecad-expected.v1"
 ENV_ARG_MARKER = "__cad_core_expected_args_env__"
 ENV_ARG_NAME = "CAD_CORE_EXPECTED_ARGS_JSON"
 SUPPORTED_NATIVE_TYPES = {
+    "App::FeaturePython",
     "App::Link",
+    "App::LinkElement",
+    "App::LinkGroup",
+    "Assembly::AssemblyLink",
+    "Assembly::AssemblyObject",
+    "Assembly::JointGroup",
+    "Mesh::Import",
+    "PartDesign::Body",
+    "PartDesign::Chamfer",
+    "PartDesign::Fillet",
+    "PartDesign::Hole",
+    "PartDesign::Line",
+    "PartDesign::LinearPattern",
+    "PartDesign::Mirrored",
+    "PartDesign::MultiTransform",
+    "PartDesign::Pad",
+    "PartDesign::Plane",
+    "PartDesign::PolarPattern",
+    "PartDesign::Pocket",
+    "PartDesign::Scaled",
     "Part::Box",
+    "Part::BooleanFragments",
     "Part::Common",
     "Part::Cone",
     "Part::Cut",
     "Part::Cylinder",
     "Part::Ellipse",
+    "Part::Ellipsoid",
     "Part::Fuse",
     "Part::Helix",
     "Part::ImportIges",
+    "Part::ImportBrep",
+    "Part::ImportStep",
     "Part::Line",
     "Part::MultiCommon",
     "Part::MultiFuse",
     "Part::Plane",
     "Part::Prism",
     "Part::RegularPolygon",
+    "Part::Section",
     "Part::Sphere",
     "Part::Spiral",
+    "Part::Torus",
     "Part::Vertex",
     "Part::Wedge",
+    "Part::XOR",
     "Sketcher::SketchObject",
 }
 
+HOLE_PRE_BODY_PROPERTIES = {
+    "Profile",
+}
+
+SKETCH_SHAPE_DEPENDENT_PROPERTIES = {
+    "AttachmentSupport",
+    "Support",
+    "MapMode",
+}
+
+DRESS_UP_TYPES = {
+    "PartDesign::Chamfer",
+    "PartDesign::Fillet",
+}
+
+TRANSFORMED_TYPES = {
+    "PartDesign::LinearPattern",
+    "PartDesign::Mirrored",
+    "PartDesign::MultiTransform",
+    "PartDesign::PolarPattern",
+    "PartDesign::Scaled",
+}
+
+BODY_RESULT_TARGET_TYPES = DRESS_UP_TYPES | TRANSFORMED_TYPES
 
 class UnsupportedFixture(RuntimeError):
     pass
@@ -94,6 +145,9 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 def freecad_version(FreeCAD: Any) -> str:
     version = FreeCAD.Version()
     if isinstance(version, (list, tuple)):
+        if len(version) >= 4:
+            revision = str(version[3]).split()[0]
+            return f"{version[0]}.{version[1]}.{version[2]} revision {revision}"
         return " ".join(str(item) for item in version if item)
     return str(version)
 
@@ -141,15 +195,70 @@ def fixture_file_name(value: str) -> str:
     return str(ROOT / path)
 
 
+def list_field(value: dict, *names: str) -> list:
+    for name in names:
+        item = value.get(name)
+        if item is not None:
+            return list(item)
+    return []
+
+
+def resolve_external_subname(created: dict[str, Any], target_name: str, subname: str) -> tuple[str, str]:
+    if "." in subname:
+        target = created[target_name]
+        try:
+            _, _, old_name = target.resolveSubElement(subname, False, 2)
+        except Exception as exc:
+            raise UnsupportedFixture(
+                f"source-prefixed stable subname {target_name}.{subname} cannot resolve: {exc}"
+            ) from exc
+        if not old_name or str(old_name).startswith(";"):
+            raise UnsupportedFixture(
+                f"source-prefixed stable subname {target_name}.{subname} resolved without current old-style name"
+            )
+        # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App
+        # /SketchObjectExternal.cpp::SketchObject::rebuildExternalGeometry(), when a stored
+        # external reference is missing, calls GeoFeature::resolveElement(obj, ref-subname)
+        # and pushes the original target object plus elementName.oldName into
+        # ExternalGeometry. The collector mirrors that recovery path for CAD Core
+        # StableSubList source-prefixed oracle cases.
+        return target_name, str(old_name)
+    return target_name, subname
+
+
 def link_sub_value(created: dict[str, Any], value: dict) -> Any:
     target_name = value["value"]
     if target_name not in created:
         raise UnsupportedFixture(f"link target {target_name} was not created")
     target = created[target_name]
-    sub_list = value.get("SubList", [])
+    # FreeCAD oracle mode: CAD Core fixtures may keep a stale user-visible SubList and a
+    # StableSubList that represents the stable element to be resolved through ElementMap.
+    # Native FreeCAD has no JSON StableSubList property, so the collector feeds the stable
+    # subname to PropertyLinkSub to collect the expected post-resolution geometry.
+    sub_list = list_field(value, "StableSubList", "SubList")
     if sub_list:
-        return target, list(sub_list)
+        return target, [native_link_subname(target, subname) for subname in sub_list]
     return target
+
+
+def native_link_subname(target: Any, subname: str) -> str:
+    if "." not in subname:
+        return subname
+    if getattr(target, "TypeId", "") == "App::Link":
+        return subname
+
+    token, rest = subname.split(".", 1)
+    label = str(getattr(target, "Label", ""))
+    name = str(getattr(target, "Name", ""))
+    if token == name or (token.startswith("$") and token[1:] == label):
+        # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+        # ::LinkBaseExtension::extensionGetSubObject() accepts linked-object name/label
+        # tokens while resolving a subobject chain, but Python PropertyXLinkSub assignment
+        # may leave the link without Shape when the first token is the current target itself.
+        # Strip that self token for native oracle collection; CAD Core still validates and
+        # retags the original full SubList from the fixture.
+        return rest
+    return subname
 
 
 def placement_value(FreeCAD: Any, value: dict) -> Any:
@@ -268,7 +377,40 @@ def set_sketch_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: s
         if value:
             raise UnsupportedFixture("Sketch Constraints are not enabled in this collector yet")
         return
+    if name == "ExternalGeometry":
+        set_sketch_external_geometry(created, obj, value)
+        return
     set_property(FreeCAD, created, obj, name, value)
+
+
+def set_sketch_external_geometry(created: dict[str, Any], obj: Any, value: Any) -> None:
+    if not isinstance(value, dict) or value.get("PropertyType") != "App::PropertyLinkSubList":
+        raise UnsupportedFixture("Sketch ExternalGeometry must be App::PropertyLinkSubList")
+    sub_set = value.get("SubSet")
+    if not isinstance(sub_set, list):
+        raise UnsupportedFixture("Sketch ExternalGeometry.SubSet must be a list")
+
+    for item in sub_set:
+        if not isinstance(item, dict):
+            raise UnsupportedFixture("Sketch ExternalGeometry.SubSet items must be objects")
+        target_name = item.get("value")
+        if target_name not in created:
+            raise UnsupportedFixture(f"external geometry target {target_name} was not created")
+
+        # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App
+        # /SketchObjectExternal.cpp::SketchObject::addExternal(), the Python wrapper takes
+        # "ObjectName" and "SubName", then stores ExternalGeometry.setValues(Objects,
+        # SubElements). In oracle mode, feed StableSubList first to collect post-resolution
+        # geometry for CAD Core stable-subname fixtures.
+        for subname in list_field(item, "StableSubList", "SubList"):
+            external_target_name, external_subname = resolve_external_subname(created, target_name, subname)
+            try:
+                obj.addExternal(external_target_name, external_subname)
+            except Exception as exc:
+                raise UnsupportedFixture(
+                    f"Sketch ExternalGeometry cannot add {external_target_name}.{external_subname}"
+                    f" from {target_name}.{subname}: {exc}"
+                ) from exc
 
 
 def safe_setattr(obj: Any, name: str, value: Any) -> None:
@@ -286,6 +428,7 @@ def set_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, val
             return
         if property_type in {
             "App::PropertyBool",
+            "App::PropertyEnumeration",
             "App::PropertyInteger",
             "App::PropertyFloat",
             "App::PropertyLength",
@@ -306,14 +449,27 @@ def set_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, val
         if property_type == "App::PropertyBoolList":
             safe_setattr(obj, name, [bool(item) for item in value.get("value", [])])
             return
-        if property_type in {"App::PropertyLink", "App::PropertyXLink"}:
+        if property_type in {
+            "App::PropertyLink",
+            "App::PropertyLinkGlobal",
+            "App::PropertyLinkHidden",
+            "App::PropertyXLink",
+        }:
             safe_setattr(obj, name, link_sub_value(created, value))
             return
-        if property_type in {"App::PropertyLinkSub", "App::PropertyXLinkSub"}:
+        if property_type in {
+            "App::PropertyLinkSub",
+            "App::PropertyLinkSubHidden",
+            "App::PropertyXLinkSub",
+            "App::PropertyXLinkSubHidden",
+        }:
             safe_setattr(obj, name, link_sub_value(created, value))
             return
-        if property_type == "App::PropertyLinkList":
-            safe_setattr(obj, name, [created[target] for target in value.get("value", [])])
+        if property_type in {"App::PropertyLinkList", "App::PropertyLinkListHidden"}:
+            safe_setattr(obj, name, [created[target] for target in list_field(value, "values", "value")])
+            return
+        if property_type == "App::PropertyLinkSubListHidden":
+            safe_setattr(obj, name, [link_sub_value(created, item) for item in value.get("SubSet", [])])
             return
         raise UnsupportedFixture(f"unsupported structured property {name}: {property_type or sorted(value)}")
     if isinstance(value, list) and any(isinstance(item, dict) for item in value):
@@ -323,28 +479,441 @@ def set_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, val
     safe_setattr(obj, name, value)
 
 
-def create_objects(FreeCAD: Any, doc: Any, fixture: dict) -> dict[str, Any]:
+def set_link_visibility_list(obj: Any, value: Any) -> None:
+    if not isinstance(value, dict) or value.get("PropertyType") != "App::PropertyBoolList":
+        raise UnsupportedFixture("App::Link VisibilityList must be an App::PropertyBoolList")
+
+    # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+    # ::LinkBaseExtension::extensionSetElementVisible() writes the immutable
+    # "VisibilityList" through setElementVisible(), using getElementIndex() for ShowElement
+    # links and getArrayIndex() for collapsed ElementCount links.
+    for index, visible in enumerate(value.get("value", [])):
+        try:
+            result = obj.setElementVisible(str(index), bool(visible))
+        except Exception as exc:
+            raise UnsupportedFixture(f"failed to set Link VisibilityList[{index}]: {exc}") from exc
+        if int(result) < 0:
+            raise UnsupportedFixture(f"failed to set Link VisibilityList[{index}]: setElementVisible returned {result}")
+
+
+def link_group_element_names(fixture: dict) -> set[str]:
+    names: set[str] = set()
+    for spec in fixture.get("Objects", []):
+        if not isinstance(spec, dict) or spec.get("TypeId") != "App::LinkGroup":
+            continue
+        element_list = spec.get("Properties", {}).get("ElementList")
+        if isinstance(element_list, dict) and element_list.get("PropertyType") == "App::PropertyLinkList":
+            names.update(str(item) for item in list_field(element_list, "values", "value"))
+    return names
+
+
+def create_native_object_for_fixture(
+    FreeCAD: Any,
+    doc: Any,
+    type_id: str,
+    name: str,
+    link_group_elements: set[str],
+) -> Any:
+    if type_id == "App::LinkElement" and name in link_group_elements:
+        # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+        # ::LinkBaseExtension::setLink() accepts normal App::Link children for LinkGroup
+        # "ElementList". Standalone ownerless LinkElement objects can be created for CAD Core
+        # fixtures, but inserting them into native LinkGroup.ElementList crashes FreeCADCmd;
+        # use App::Link as the native geometry proxy while keeping the fixture schema unchanged.
+        return doc.addObject("App::Link", name)
+    return create_native_object(FreeCAD, doc, type_id, name)
+
+
+def set_link_group_element_list(created: dict[str, Any], obj: Any, value: Any) -> None:
+    if not isinstance(value, dict) or value.get("PropertyType") != "App::PropertyLinkList":
+        raise UnsupportedFixture("App::LinkGroup ElementList must be an App::PropertyLinkList")
+    elements = []
+    for target in list_field(value, "values", "value"):
+        if target not in created:
+            raise UnsupportedFixture(f"LinkGroup element {target} was not created")
+        elements.append(created[target])
+
+    # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+    # ::LinkBaseExtension::setLink(), in the LinkGroup assignment branch, updates
+    # "ElementList" through the extension API instead of writing the property directly.
+    obj.setLink(elements)
+
+
+def link_owner_fixture_id(value: Any) -> int | None:
+    if not isinstance(value, dict) or value.get("PropertyType") != "App::PropertyInteger":
+        return None
+    try:
+        return int(value.get("value", 0))
+    except (TypeError, ValueError):
+        return None
+
+
+def try_set_link_owner(
+    obj: Any,
+    value: Any,
+    fixture_id_to_actual_id: dict[int, int],
+) -> bool:
+    owner_fixture_id = link_owner_fixture_id(value)
+    if owner_fixture_id is None:
+        raise UnsupportedFixture("App::LinkElement _LinkOwner must be an App::PropertyInteger")
+    if owner_fixture_id == 0:
+        safe_setattr(obj, "_LinkOwner", 0)
+        return True
+    actual_owner_id = fixture_id_to_actual_id.get(owner_fixture_id)
+    if actual_owner_id is None:
+        return False
+
+    # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+    # ::LinkElement::canDelete() and ::LinkBaseExtension::update() compare "_LinkOwner"
+    # against DocumentObject::getID() via "getObjectByID(_LinkOwner.getValue())"; fixture
+    # IDs must therefore be mapped onto the native FreeCAD document IDs during collection.
+    safe_setattr(obj, "_LinkOwner", actual_owner_id)
+    return True
+
+
+def flush_deferred_link_owners(
+    deferred_link_owners: list[tuple[Any, Any]],
+    fixture_id_to_actual_id: dict[int, int],
+) -> None:
+    unresolved: list[tuple[Any, Any]] = []
+    for obj, value in deferred_link_owners:
+        if not try_set_link_owner(obj, value, fixture_id_to_actual_id):
+            unresolved.append((obj, value))
+    deferred_link_owners[:] = unresolved
+
+
+def set_body_property(created: dict[str, Any], obj: Any, name: str, value: Any) -> bool:
+    if not isinstance(value, dict):
+        return False
+    property_type = value.get("PropertyType")
+    if name == "Group" and property_type == "App::PropertyLinkList":
+        # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/BodyBase.cpp
+        # ::BodyBase::addObject() is the supported membership path; writing Group directly skips
+        # the same ownership bookkeeping that PartDesign recompute depends on.
+        for target in list_field(value, "values", "value"):
+            if target not in created:
+                raise UnsupportedFixture(f"body member {target} was not created")
+            obj.addObject(created[target])
+        return True
+    return False
+
+
+def link_sub_value_with_empty_datum_subname(
+    created: dict[str, Any],
+    value: dict,
+    empty_subname_type_ids: set[str],
+) -> Any:
+    target_name = value["value"]
+    if target_name not in created:
+        raise UnsupportedFixture(f"link target {target_name} was not created")
+    target = created[target_name]
+    sub_list = list_field(value, "StableSubList", "SubList")
+    if sub_list:
+        return target, sub_list
+    if getattr(target, "TypeId", "") in empty_subname_type_ids:
+        return target, [""]
+    return link_sub_value(created, value)
+
+
+def set_linear_pattern_property(created: dict[str, Any], obj: Any, name: str, value: Any) -> bool:
+    if name in {"Direction", "Direction2"} and isinstance(value, dict):
+        property_type = value.get("PropertyType")
+        if property_type in {"App::PropertyLinkSub", "App::PropertyXLinkSub"}:
+            # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App
+            # /FeatureLinearPattern.cpp::LinearPattern::getDirectionFromProperty() rejects an
+            # empty PropertyLinkSub sub-value list before it checks whether the target is a
+            # DatumLine/DatumPlane. cad-core fixtures model datum directions with an empty SubList,
+            # so the collector feeds a single empty subname to preserve fixture schema while using
+            # FreeCAD's native direction path.
+            safe_setattr(
+                obj,
+                name,
+                link_sub_value_with_empty_datum_subname(
+                    created,
+                    value,
+                    {"PartDesign::Line", "PartDesign::Plane"},
+                ),
+            )
+            return True
+    return False
+
+
+def set_polar_pattern_property(created: dict[str, Any], obj: Any, name: str, value: Any) -> bool:
+    if name == "Axis" and isinstance(value, dict):
+        property_type = value.get("PropertyType")
+        if property_type in {"App::PropertyLinkSub", "App::PropertyXLinkSub"}:
+            # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App
+            # /FeaturePolarPattern.cpp::PolarPattern::getRotation() returns the default axis when
+            # Axis.getSubValues() is empty before it checks whether the target is a DatumLine.
+            # cad-core fixtures model DatumLine axes with an empty SubList, so native collection
+            # supplies one empty subname while keeping the fixture schema unchanged.
+            safe_setattr(
+                obj,
+                name,
+                link_sub_value_with_empty_datum_subname(created, value, {"PartDesign::Line"}),
+            )
+            return True
+    return False
+
+
+def create_native_object(FreeCAD: Any, doc: Any, type_id: str, name: str) -> Any:
+    if type_id == "Part::BooleanFragments":
+        # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/BOPTools
+        # /SplitFeatures.py::makeBooleanFragments(), creates "Part::FeaturePython" and
+        # attaches FeatureBooleanFragments with Objects / Mode / Tolerance properties.
+        FreeCAD.setActiveDocument(doc.Name)
+        from BOPTools import SplitFeatures  # type: ignore
+
+        return SplitFeatures.makeBooleanFragments(name)
+    if type_id == "Part::XOR":
+        # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/BOPTools
+        # /SplitFeatures.py::makeXOR(), creates "Part::FeaturePython" and attaches
+        # FeatureXOR; execute() delegates to SplitAPI.xor(shapes, Tolerance).
+        FreeCAD.setActiveDocument(doc.Name)
+        from BOPTools import SplitFeatures  # type: ignore
+
+        return SplitFeatures.makeXOR(name)
+    return doc.addObject(type_id, name)
+
+
+def scalar_property_value(value: Any) -> Any:
+    if isinstance(value, dict) and "value" in value:
+        return value.get("value")
+    return value
+
+
+def initialize_assembly_feature_python(created: dict[str, Any], obj: Any, properties: dict[str, Any]) -> None:
+    if "ObjectToGround" in properties:
+        target_name = scalar_property_value(properties["ObjectToGround"])
+        if target_name not in created:
+            raise UnsupportedFixture(f"grounded joint target {target_name} was not created")
+        # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/JointObject.py
+        # ::GroundedJoint.__init__() adds "ObjectToGround" to App::FeaturePython joint objects.
+        import JointObject  # type: ignore
+
+        JointObject.GroundedJoint(obj, created[target_name])
+        return
+
+    if "JointType" in properties:
+        joint_type = scalar_property_value(properties["JointType"])
+        # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/JointObject.py
+        # ::Joint.__init__() adds "JointType", "Reference1" and "Reference2"; JointTypes keeps
+        # the user-facing enum names used by Assembly fixtures.
+        import JointObject  # type: ignore
+
+        try:
+            type_index = list(JointObject.JointTypes).index(joint_type)
+        except ValueError as exc:
+            raise UnsupportedFixture(f"unsupported Assembly JointType {joint_type}") from exc
+        JointObject.Joint(obj, type_index)
+        return
+
+    raise UnsupportedFixture("App::FeaturePython is only enabled for Assembly Joint/GroundedJoint fixtures")
+
+
+def has_assembly_objects(fixture: dict) -> bool:
+    assembly_types = {"Assembly::AssemblyObject", "Assembly::AssemblyLink", "Assembly::JointGroup"}
+    return any(spec.get("TypeId") in assembly_types for spec in fixture.get("Objects", []))
+
+
+def fixture_parent_by_child(fixture: dict) -> dict[str, str]:
+    parent_by_child: dict[str, str] = {}
+    for spec in fixture.get("Objects", []):
+        name = spec.get("Name")
+        group = spec.get("Properties", {}).get("Group")
+        if not name or not isinstance(group, dict) or group.get("PropertyType") != "App::PropertyLinkList":
+            continue
+        for child_name in list_field(group, "values", "value"):
+            parent_by_child[str(child_name)] = str(name)
+    return parent_by_child
+
+
+def create_parented_object(doc: Any, parent: Any, type_id: str, name: str) -> Any:
+    # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/CommandCreateAssembly.py
+    # creates JointGroup via "assembly.newObject", and
+    # /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/AssemblyTests/TestCore.py
+    # creates Joint App::FeaturePython objects via "jointgroup.newObject".
+    try:
+        return parent.newObject(type_id, name)
+    except Exception as exc:
+        raise UnsupportedFixture(f"FreeCAD cannot add {type_id} under {parent.Name}: {exc}") from exc
+
+
+def create_assembly_objects(FreeCAD: Any, doc: Any, fixture: dict) -> dict[str, Any]:
     created: dict[str, Any] = {}
+    specs = {spec["Name"]: spec for spec in fixture.get("Objects", [])}
+    parent_by_child = fixture_parent_by_child(fixture)
+    parented_types = {"Assembly::AssemblyLink", "Assembly::JointGroup", "App::FeaturePython"}
+
+    def create_spec(name: str) -> Any:
+        if name in created:
+            return created[name]
+        if name not in specs:
+            raise UnsupportedFixture(f"assembly child {name} has no object spec")
+        spec = specs[name]
+        type_id = spec["TypeId"]
+        if type_id not in SUPPORTED_NATIVE_TYPES:
+            raise UnsupportedFixture(f"{type_id} is not enabled in this collector yet")
+
+        parent_name = parent_by_child.get(name)
+        if parent_name and type_id in parented_types:
+            parent = create_spec(parent_name)
+            obj = create_parented_object(doc, parent, type_id, name)
+        else:
+            try:
+                obj = create_native_object(FreeCAD, doc, type_id, name)
+            except Exception as exc:
+                raise UnsupportedFixture(f"FreeCAD cannot add {type_id}: {exc}") from exc
+        created[name] = obj
+        return obj
+
+    for spec in fixture.get("Objects", []):
+        create_spec(spec["Name"])
+
+    for spec in fixture.get("Objects", []):
+        if spec["TypeId"] == "App::FeaturePython":
+            initialize_assembly_feature_python(created, created[spec["Name"]], spec.get("Properties", {}))
+
+    for spec in fixture.get("Objects", []):
+        obj = created[spec["Name"]]
+        for prop_name, prop_value in spec.get("Properties", {}).items():
+            if spec["TypeId"] == "Sketcher::SketchObject":
+                set_sketch_property(FreeCAD, created, obj, prop_name, prop_value)
+            else:
+                set_property(FreeCAD, created, obj, prop_name, prop_value)
+    return created
+
+
+def create_objects(FreeCAD: Any, doc: Any, fixture: dict) -> dict[str, Any]:
+    if has_assembly_objects(fixture):
+        return create_assembly_objects(FreeCAD, doc, fixture)
+
+    created: dict[str, Any] = {}
+    link_group_elements = link_group_element_names(fixture)
+    fixture_id_to_actual_id: dict[int, int] = {}
+    deferred_link_owners: list[tuple[Any, Any]] = []
+    deferred_after_shape: list[tuple[Any, str, Any]] = []
+    deferred_external_geometry: list[tuple[Any, Any]] = []
+    deferred_after_body: list[tuple[str, Any, str, Any]] = []
     for spec in fixture.get("Objects", []):
         name = spec["Name"]
         type_id = spec["TypeId"]
         if type_id not in SUPPORTED_NATIVE_TYPES:
             raise UnsupportedFixture(f"{type_id} is not enabled in this collector yet")
         try:
-            obj = doc.addObject(type_id, name)
+            obj = create_native_object_for_fixture(FreeCAD, doc, type_id, name, link_group_elements)
         except Exception as exc:
             raise UnsupportedFixture(f"FreeCAD cannot add {type_id}: {exc}") from exc
-        for prop_name, prop_value in spec.get("Properties", {}).items():
+        created[name] = obj
+        if "ID" in spec:
+            fixture_id_to_actual_id[int(spec["ID"])] = int(getattr(obj, "ID"))
+            flush_deferred_link_owners(deferred_link_owners, fixture_id_to_actual_id)
+        properties = spec.get("Properties", {})
+        if type_id == "App::FeaturePython":
+            initialize_assembly_feature_python(created, obj, properties)
+        deferred_link_element_count: tuple[str, Any] | None = None
+        deferred_link_visibility: Any | None = None
+        link_show_element = True
+        if type_id == "App::Link":
+            show_element = properties.get("ShowElement")
+            if isinstance(show_element, dict):
+                link_show_element = bool(show_element.get("value", True))
+            elif show_element is not None:
+                link_show_element = bool(show_element)
+
+        for prop_name, prop_value in properties.items():
+            if type_id == "PartDesign::Body" and set_body_property(created, obj, prop_name, prop_value):
+                continue
+            if type_id == "PartDesign::LinearPattern" and set_linear_pattern_property(created, obj, prop_name, prop_value):
+                continue
+            if type_id == "PartDesign::PolarPattern" and set_polar_pattern_property(created, obj, prop_name, prop_value):
+                continue
+            if type_id == "PartDesign::Hole" and prop_name not in HOLE_PRE_BODY_PROPERTIES:
+                deferred_after_body.append((type_id, obj, prop_name, prop_value))
+                continue
+            if type_id == "Sketcher::SketchObject" and prop_name in SKETCH_SHAPE_DEPENDENT_PROPERTIES:
+                deferred_after_shape.append((obj, prop_name, prop_value))
+                continue
+            if type_id == "Sketcher::SketchObject" and prop_name == "ExternalGeometry":
+                deferred_external_geometry.append((obj, prop_value))
+                continue
+            if type_id == "App::LinkElement" and prop_name == "_LinkOwner":
+                if not try_set_link_owner(obj, prop_value, fixture_id_to_actual_id):
+                    deferred_link_owners.append((obj, prop_value))
+                continue
+            if type_id == "App::LinkGroup" and prop_name == "ElementList":
+                set_link_group_element_list(created, obj, prop_value)
+                continue
+            if type_id == "App::Link" and prop_name == "ElementCount" and link_show_element:
+                # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+                # ::LinkBaseExtension::update(), in the ShowElement ElementCount branch,
+                # creates/re-claims owner "_iN" children and consumes current
+                # "PlacementList" / "ScaleList" values before clearing those lists.
+                # Restore declarative fixtures by setting owner lists first.
+                deferred_link_element_count = (prop_name, prop_value)
+                continue
+            if type_id in {"App::Link", "App::LinkGroup"} and prop_name == "VisibilityList":
+                deferred_link_visibility = prop_value
+                continue
             if type_id == "Sketcher::SketchObject":
                 set_sketch_property(FreeCAD, created, obj, prop_name, prop_value)
             else:
                 set_property(FreeCAD, created, obj, prop_name, prop_value)
-        created[name] = obj
+
+        if deferred_link_element_count is not None:
+            prop_name, prop_value = deferred_link_element_count
+            set_property(FreeCAD, created, obj, prop_name, prop_value)
+        if deferred_link_visibility is not None:
+            set_link_visibility_list(obj, deferred_link_visibility)
+
+    flush_deferred_link_owners(deferred_link_owners, fixture_id_to_actual_id)
+    if deferred_link_owners:
+        unresolved = ", ".join(str(link_owner_fixture_id(value)) for _, value in deferred_link_owners)
+        raise UnsupportedFixture(f"unresolved App::LinkElement _LinkOwner fixture IDs: {unresolved}")
+
+    if deferred_after_shape or deferred_after_body:
+        doc.recompute()
+
+    if deferred_after_shape:
+        # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/AttachExtension.cpp
+        # ::AttachExtension::positionBySupport() resolves AttachmentSupport subshapes during
+        # MapMode updates. Defer support/map restoration until referenced Pad/Body shapes exist.
+        for obj, prop_name, prop_value in deferred_after_shape:
+            set_sketch_property(FreeCAD, created, obj, prop_name, prop_value)
+        doc.recompute()
+
+    if deferred_after_body:
+        # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+        # ::Body::setBaseProperty() wires a PartDesign solid feature's BaseFeature when
+        # Body::addObject() consumes Group. Hole::onChanged(Depth) then calls
+        # getThroughAllLength(), so Hole depth/thread/head-cut properties must be restored
+        # only after Body membership and a recompute have made the base shape available.
+        for type_id, obj, prop_name, prop_value in deferred_after_body:
+            if type_id == "Sketcher::SketchObject":
+                set_sketch_property(FreeCAD, created, obj, prop_name, prop_value)
+            else:
+                set_property(FreeCAD, created, obj, prop_name, prop_value)
+
+    if deferred_external_geometry:
+        # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App
+        # /SketchObjectExternal.cpp::SketchObject::addExternal() resolves the target object's
+        # current TopoShape before storing ExternalGeometry. Recompute the fixture graph once so
+        # sketch/body/pad targets have Shape data before external references are added.
+        doc.recompute()
+        for obj, prop_value in deferred_external_geometry:
+            set_sketch_external_geometry(created, obj, prop_value)
     return created
 
 
 def shape_summary(shape: Any) -> dict:
-    bbox = shape.BoundBox
+    try:
+        # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App
+        # /TopoShapePyImp.cpp::TopoShapePy::optimalBoundingBox(), exposes
+        # "BRepBndLib::AddOptimal" for Python. CAD Core serializes the same tighter bbox
+        # class for object metadata, while FreeCAD's Shape.BoundBox is the looser display box.
+        bbox = shape.optimalBoundingBox()
+    except Exception:
+        bbox = shape.BoundBox
     summary: dict[str, Any] = {
         "bbox": {
             "min": [float(bbox.XMin), float(bbox.YMin), float(bbox.ZMin)],
@@ -360,6 +929,294 @@ def shape_summary(shape: Any) -> dict:
     return summary
 
 
+def shape_with_placement(shape: Any, placement: Any) -> Any:
+    copied = shape.copy()
+    copied.Placement = placement.multiply(copied.Placement)
+    return copied
+
+
+def native_display_shape(obj: Any, seen: set[str] | None = None) -> Any | None:
+    seen = set() if seen is None else seen
+    name = str(getattr(obj, "Name", ""))
+    if name in seen:
+        return None
+    seen.add(name)
+
+    type_id = getattr(obj, "TypeId", "")
+    if type_id == "Assembly::AssemblyLink":
+        return assembly_link_display_shape(obj, seen)
+    if type_id == "Assembly::AssemblyObject":
+        return assembly_object_display_shape(obj, seen)
+
+    shape = getattr(obj, "Shape", None)
+    if shape is None or shape.isNull():
+        return None
+    return shape
+
+
+def assembly_link_display_shape(obj: Any, seen: set[str]) -> Any | None:
+    # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/AssemblyLink.cpp
+    # ::AssemblyLink::execute() calls "updateContents()" then "App::Part::execute()". FreeCAD
+    # CLI does not expose a Part "Shape" for AssemblyLink, so expected collection summarizes
+    # the linked display target with the link Placement while keeping solver migration separate.
+    target = getattr(obj, "LinkedObject", None)
+    if target is None:
+        return None
+    target_shape = native_display_shape(target, set(seen))
+    if target_shape is None:
+        return None
+    return shape_with_placement(target_shape, obj.Placement)
+
+
+def assembly_object_display_shape(obj: Any, seen: set[str]) -> Any | None:
+    # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    # ::AssemblyObject::execute() calls "App::Part::execute()" before "solve(false)"; cad-core
+    # P8 keeps the grouped display shape but marks the solver path as "not_migrated".
+    import Part  # type: ignore
+
+    shapes = []
+    for child in list(getattr(obj, "Group", [])):
+        child_type = getattr(child, "TypeId", "")
+        if child_type in {"Assembly::JointGroup", "App::FeaturePython"}:
+            continue
+        child_shape = native_display_shape(child, set(seen))
+        if child_shape is not None:
+            shapes.append(child_shape)
+    if not shapes:
+        return None
+    if len(shapes) == 1:
+        return shapes[0]
+    return Part.makeCompound(shapes)
+
+
+def link_name(value: Any) -> str:
+    if value is None:
+        return ""
+    return str(getattr(value, "Name", ""))
+
+
+def link_target_name(value: Any) -> str:
+    if isinstance(value, tuple) and value:
+        return link_name(value[0])
+    return link_name(value)
+
+
+def link_names(values: Any) -> list[str]:
+    return [link_name(item) for item in list(values or []) if link_name(item)]
+
+
+def shape_kind(shape: Any) -> str:
+    shape_type = str(getattr(shape, "ShapeType", ""))
+    return {
+        "Compound": "occt_compound",
+        "CompSolid": "occt_compsolid",
+        "Solid": "occt_solid",
+        "Shell": "occt_shell",
+        "Face": "occt_face",
+        "Wire": "occt_wire",
+        "Edge": "occt_edge",
+        "Vertex": "occt_vertex",
+    }.get(shape_type, "occt_shape")
+
+
+def app_link_payload(obj: Any, role: str) -> dict:
+    shape = getattr(obj, "Shape", None)
+    if shape is None or shape.isNull():
+        raise UnsupportedFixture(f"target object {obj.Name} has no shape")
+    payload = shape_summary(shape)
+    payload["object_fields"] = {
+        "link": role,
+        "linked_object": link_target_name(getattr(obj, "LinkedObject", None)),
+        "shape": shape_kind(shape),
+    }
+    return payload
+
+
+def assembly_joint_feature_python_payload(obj: Any) -> dict:
+    if hasattr(obj, "ObjectToGround"):
+        return {
+            "object_fields": {
+                "assembly": "grounded_joint",
+                "object_to_ground": link_name(getattr(obj, "ObjectToGround", None)),
+                "solve": "not_migrated",
+            }
+        }
+
+    if hasattr(obj, "JointType"):
+        reference1 = getattr(obj, "Reference1", None)
+        reference2 = getattr(obj, "Reference2", None)
+        return {
+            "object_fields": {
+                "assembly": "joint",
+                "joint_type": str(getattr(obj, "JointType", "")),
+                "reference1": link_sub_payload(reference1),
+                "reference2": link_sub_payload(reference2),
+                "suppressed": bool(getattr(obj, "Suppressed", False)),
+                "solve": "not_migrated",
+            }
+        }
+
+    raise UnsupportedFixture(f"App::FeaturePython object {obj.Name} is not an Assembly joint")
+
+
+def link_sub_payload(value: Any) -> dict:
+    if isinstance(value, tuple) and value:
+        target = value[0]
+        subnames = list(value[1]) if len(value) > 1 else []
+        return {"object": link_name(target), "subnames": [str(item) for item in subnames]}
+    return {"object": link_name(value), "subnames": []}
+
+
+def assembly_joint_group_payload(obj: Any) -> dict:
+    group = list(getattr(obj, "Group", []))
+    joints = [
+        child
+        for child in group
+        if getattr(child, "TypeId", "") == "App::FeaturePython"
+        and (hasattr(child, "JointType") or hasattr(child, "ObjectToGround"))
+    ]
+    return {
+        "object_fields": {
+            "assembly": "joint_group",
+            "group": link_names(group),
+            "joints": link_names(joints),
+            "solve": "not_migrated",
+        }
+    }
+
+
+def assembly_object_payload(obj: Any) -> dict:
+    group = list(getattr(obj, "Group", []))
+    joint_groups = [child for child in group if getattr(child, "TypeId", "") == "Assembly::JointGroup"]
+    joints = []
+    for joint_group in joint_groups:
+        for child in list(getattr(joint_group, "Group", [])):
+            if getattr(child, "TypeId", "") == "App::FeaturePython":
+                joints.append(child)
+
+    payload = {
+        "object_fields": {
+            "assembly": "object",
+            "group": link_names(group),
+            "joint_groups": link_names(joint_groups),
+            "joints": link_names(joints),
+            "solve": "not_migrated",
+        }
+    }
+    display_shape = assembly_object_display_shape(obj, set())
+    if display_shape is not None:
+        payload.update(shape_summary(display_shape))
+    return payload
+
+
+def assembly_link_payload(obj: Any) -> dict:
+    payload = {
+        "object_fields": {
+            "status": "ok",
+            "link": "assembly_link",
+            "linked_object": link_name(getattr(obj, "LinkedObject", None)),
+            "rigid": bool(getattr(obj, "Rigid", True)),
+        }
+    }
+    display_shape = assembly_link_display_shape(obj, set())
+    if display_shape is not None:
+        payload.update(shape_summary(display_shape))
+    return payload
+
+
+def object_expected_payload(obj: Any) -> dict:
+    type_id = getattr(obj, "TypeId", "")
+    if type_id == "Assembly::AssemblyLink":
+        return assembly_link_payload(obj)
+    if type_id == "Assembly::AssemblyObject":
+        return assembly_object_payload(obj)
+    if type_id == "Assembly::JointGroup":
+        return assembly_joint_group_payload(obj)
+    if type_id == "App::FeaturePython":
+        return assembly_joint_feature_python_payload(obj)
+    if type_id == "App::Link":
+        return app_link_payload(obj, "app_link")
+    if type_id == "App::LinkElement":
+        return app_link_payload(obj, "app_link_element")
+
+    shape = getattr(obj, "Shape", None)
+    if type_id == "Mesh::Import":
+        return mesh_import_summary(obj)
+    if shape is None or shape.isNull():
+        raise UnsupportedFixture(f"target object {obj.Name} has no shape")
+    if type_id == "Sketcher::SketchObject":
+        return sketch_summary(obj)
+    return shape_summary(shape)
+
+
+def mesh_import_summary(obj: Any) -> dict:
+    # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Mesh/App
+    # /FeatureMeshImport.cpp::Mesh::Import::execute(), reads PropertyFile "FileName",
+    # calls "apcKernel->load(...)" and stores the result with "Mesh.setValuePtr(...)".
+    # Mesh objects publish Mesh.CountPoints / CountEdges / CountFacets / Volume and
+    # BoundBox rather than a Part "Shape".
+    mesh = getattr(obj, "Mesh", None)
+    if mesh is None:
+        raise UnsupportedFixture(f"target object {obj.Name} has no Mesh")
+    bbox = mesh.BoundBox
+    vertex_count = int(mesh.CountPoints)
+    triangle_count = int(mesh.CountFacets)
+    return {
+        "bbox": {
+            "min": [float(bbox.XMin), float(bbox.YMin), float(bbox.ZMin)],
+            "max": [float(bbox.XMax), float(bbox.YMax), float(bbox.ZMax)],
+        },
+        "volume": float(mesh.Volume),
+        "topology_counts": {
+            "faces": triangle_count,
+            "edges": int(mesh.CountEdges),
+            "vertices": vertex_count,
+        },
+        "mesh_summary": {
+            "vertex_count": vertex_count,
+            "triangle_count": triangle_count,
+        },
+    }
+
+
+def sketch_external_geometry(obj: Any) -> list[Any]:
+    try:
+        return list(obj.getExternalGeometry())
+    except Exception:
+        pass
+    try:
+        # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App
+        # /SketchObject.cpp::SketchObject::init(), ExternalGeo starts with the H/V axis
+        # construction lines. Python builds without getExternalGeometry() still expose the
+        # transient projected externals through ExternalGeo after those two axis entries.
+        return list(obj.ExternalGeo)[2:]
+    except Exception:
+        return []
+
+
+def sketch_external_geometry_counts(obj: Any) -> dict[str, int]:
+    geometry = sketch_external_geometry(obj)
+    try:
+        external_count = int(obj.getExternalGeometryCount())
+    except Exception:
+        external_count = len(geometry)
+
+    point_count = 0
+    curve_count = 0
+    for item in geometry:
+        type_name = type(item).__name__
+        if "Point" in type_name:
+            point_count += 1
+        elif any(kind in type_name for kind in ("Circle", "Arc", "Ellipse", "BSpline", "Bezier")):
+            curve_count += 1
+
+    return {
+        "external_geometry_count": external_count,
+        "external_point_count": point_count,
+        "external_curve_count": curve_count,
+    }
+
+
 def sketch_summary(obj: Any) -> dict:
     shape = getattr(obj, "Shape", None)
     internal_shape = getattr(obj, "InternalShape", None)
@@ -371,6 +1228,7 @@ def sketch_summary(obj: Any) -> dict:
             "status": "ok",
             "shape": "occt_sketch_shape",
             "raw_edge_count": len(getattr(shape, "Edges", [])),
+            **sketch_external_geometry_counts(obj),
         }
     }
     if internal_shape is not None and not internal_shape.isNull():
@@ -396,35 +1254,161 @@ def sketch_summary(obj: Any) -> dict:
 def target_names(fixture: dict) -> list[str]:
     names = fixture.get("recompute", {}).get("objs")
     if names:
-        return list(names)
+        targets = list(names)
+        specs = {spec.get("Name"): spec for spec in fixture.get("Objects", []) if isinstance(spec, dict)}
+        transformation_templates: set[str] = set()
+        for spec in fixture.get("Objects", []):
+            if not isinstance(spec, dict) or spec.get("TypeId") != "PartDesign::MultiTransform":
+                continue
+            transformations = spec.get("Properties", {}).get("Transformations")
+            if isinstance(transformations, dict):
+                transformation_templates.update(str(item) for item in list_field(transformations, "values", "value"))
+        for name in list(targets):
+            spec = specs.get(name)
+            if not spec or spec.get("TypeId") != "PartDesign::Body":
+                continue
+            group = spec.get("Properties", {}).get("Group")
+            body_members = list_field(group, "values", "value") if isinstance(group, dict) else []
+            insert_at = targets.index(name)
+            for member_name in body_members:
+                member_spec = specs.get(member_name)
+                if (
+                    member_spec
+                    and member_spec.get("TypeId") in BODY_RESULT_TARGET_TYPES
+                    and member_name not in targets
+                    and member_name not in transformation_templates
+                ):
+                    # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App
+                    # /FeatureDressUp.cpp::Fillet::execute() and ::Chamfer::execute() store the
+                    # replacement solid on the DressUp feature, and /FeatureTransformed.cpp
+                    # ::Transformed::execute() stores the transformed replacement solid on the
+                    # transformed feature; Body.Tip exposes the final Body result.
+                    # /FeatureMultiTransform.cpp::MultiTransform::getTransformations() uses
+                    # Transformations links as child templates, so those children are not expected
+                    # to publish Shape during native collection. Collect replacement features as
+                    # well as Body, but skip MultiTransform child templates.
+                    targets.insert(insert_at, str(member_name))
+                    insert_at += 1
+        return targets
     objects = fixture.get("Objects", [])
     if not objects:
         raise UnsupportedFixture("fixture has no Objects")
     return [objects[-1]["Name"]]
 
 
-def collect_one(fixture_path: Path) -> dict:
+def require_native_hole_profile_support(fixture: dict) -> None:
+    specs = {spec.get("Name"): spec for spec in fixture.get("Objects", []) if isinstance(spec, dict)}
+    for spec in fixture.get("Objects", []):
+        if spec.get("TypeId") != "PartDesign::Hole":
+            continue
+        profile = spec.get("Properties", {}).get("Profile")
+        if not isinstance(profile, dict):
+            continue
+        target = specs.get(profile.get("value"))
+        if not target or target.get("TypeId") != "Sketcher::SketchObject":
+            continue
+        target_properties = target.get("Properties", {})
+        if "AttachmentSupport" in target_properties or "Support" in target_properties:
+            continue
+        raise UnsupportedFixture(
+            "PartDesign::Hole native oracle requires the Profile sketch AttachmentSupport/Support; "
+            "detached placement-only Hole fixtures are geometry-equivalent CAD Core cases"
+        )
+
+
+def require_native_dressup_body_membership(fixture: dict) -> None:
+    dressup_names = {
+        spec.get("Name")
+        for spec in fixture.get("Objects", [])
+        if isinstance(spec, dict) and spec.get("TypeId") in DRESS_UP_TYPES
+    }
+    if not dressup_names:
+        return
+
+    body_members: set[str] = set()
+    for spec in fixture.get("Objects", []):
+        if not isinstance(spec, dict) or spec.get("TypeId") != "PartDesign::Body":
+            continue
+        group = spec.get("Properties", {}).get("Group")
+        if isinstance(group, dict) and group.get("PropertyType") == "App::PropertyLinkList":
+            body_members.update(str(item) for item in list_field(group, "values", "value"))
+
+    missing = sorted(name for name in dressup_names if name not in body_members)
+    if missing:
+        # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+        # ::Body::setBaseProperty() sets the previous solid feature as BaseFeature, and
+        # /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureDressUp.cpp
+        # ::DressUp::onChanged() keeps BaseFeature and Base aligned "as long as the feature
+        # is inside a body". Native expected collection only freezes that Body-member path.
+        raise UnsupportedFixture(
+            "PartDesign::Fillet/Chamfer native oracle requires Body Group membership; "
+            f"diagnostic-only or standalone DressUp fixtures are skipped: {', '.join(missing)}"
+        )
+
+
+def require_native_polar_pattern_whole_shape_support(fixture: dict) -> None:
+    body_members: set[str] = set()
+    for spec in fixture.get("Objects", []):
+        if not isinstance(spec, dict) or spec.get("TypeId") != "PartDesign::Body":
+            continue
+        group = spec.get("Properties", {}).get("Group")
+        if isinstance(group, dict) and group.get("PropertyType") == "App::PropertyLinkList":
+            body_members.update(str(item) for item in list_field(group, "values", "value"))
+
+    for spec in fixture.get("Objects", []):
+        if not isinstance(spec, dict) or spec.get("TypeId") != "PartDesign::PolarPattern":
+            continue
+        properties = spec.get("Properties", {})
+        transform_mode = properties.get("TransformMode")
+        if transform_mode != "Whole shape":
+            continue
+        name = str(spec.get("Name"))
+        base_feature = properties.get("BaseFeature")
+        has_base_feature = isinstance(base_feature, dict) and bool(base_feature.get("value"))
+        if name in body_members or has_base_feature:
+            continue
+        # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App
+        # /FeatureTransformed.cpp::Transformed::execute() fills BaseFeature through
+        # Body::setBaseProperty(this) before getBaseObject() in normal Body usage. The existing
+        # standalone cad-core fixture is a geometry-equivalent adapter case, not a native Body
+        # lifecycle oracle for PolarPattern Whole shape.
+        raise UnsupportedFixture(
+            "PartDesign::PolarPattern Whole shape native oracle requires Body Group membership "
+            "or BaseFeature support; standalone Whole shape fixtures remain CAD Core "
+            "geometry-equivalent cases"
+        )
+
+
+def expected_target_names(path: Path) -> list[str] | None:
+    if not path.exists():
+        return None
+    expected = json.loads(path.read_text(encoding="utf-8"))
+    if "objects" in expected:
+        return list(expected["objects"].keys())
+    if "object" in expected:
+        return [str(expected["object"])]
+    return None
+
+
+def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = None) -> dict:
     import FreeCAD  # type: ignore
 
     fixture = load_fixture(fixture_path)
+    require_native_hole_profile_support(fixture)
+    require_native_dressup_body_membership(fixture)
+    require_native_polar_pattern_whole_shape_support(fixture)
     doc = FreeCAD.newDocument("CadCoreExpected")
     try:
         created = create_objects(FreeCAD, doc, fixture)
         doc.recompute()
 
-        targets = target_names(fixture)
+        targets = list(requested_targets) if requested_targets is not None else target_names(fixture)
         object_payloads: dict[str, dict] = {}
         for name in targets:
             obj = created.get(name)
             if obj is None:
                 raise UnsupportedFixture(f"target object {name} was not created")
-            shape = getattr(obj, "Shape", None)
-            if shape is None or shape.isNull():
-                raise UnsupportedFixture(f"target object {name} has no shape")
-            if getattr(obj, "TypeId", "") == "Sketcher::SketchObject":
-                object_payloads[name] = sketch_summary(obj)
-            else:
-                object_payloads[name] = shape_summary(shape)
+            object_payloads[name] = object_expected_payload(obj)
 
         reference_types = ", ".join(spec["TypeId"] for spec in fixture.get("Objects", []))
         payload: dict[str, Any] = {
@@ -507,13 +1491,35 @@ def compare_json(path: Path, payload: dict) -> bool:
     return True
 
 
+def expected_has_native_geometry_payload(path: Path) -> bool:
+    expected = json.loads(path.read_text(encoding="utf-8"))
+    return "object" in expected or "objects" in expected
+
+
 def run_inside_freecad(args: argparse.Namespace) -> int:
     fixtures_root = Path(args.fixtures_root)
     failures = 0
     skipped = 0
     for fixture_path in fixture_paths(args):
+        out_path = Path(args.out) if args.out else expected_path_for_fixture(fixtures_root, fixture_path)
+        target_override: list[str] | None = None
+        if args.check:
+            if args.phase and args.skip_unsupported and not out_path.exists():
+                skipped += 1
+                print(f"skip missing expected {fixture_path}", file=sys.stderr)
+                continue
+            if out_path.exists() and not expected_has_native_geometry_payload(out_path):
+                if args.phase and args.skip_unsupported:
+                    skipped += 1
+                    print(f"skip non-geometry expected {fixture_path}", file=sys.stderr)
+                    continue
+                print(f"unsupported expected for native geometry check: {out_path}", file=sys.stderr)
+                failures += 1
+                continue
+            target_override = expected_target_names(out_path)
+
         try:
-            payload = collect_one(fixture_path)
+            payload = collect_one(fixture_path, target_override)
         except UnsupportedFixture as exc:
             if args.phase and args.skip_unsupported:
                 skipped += 1
@@ -528,12 +1534,7 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
             failures += 1
             continue
 
-        out_path = Path(args.out) if args.out else expected_path_for_fixture(fixtures_root, fixture_path)
         if args.check:
-            if args.phase and args.skip_unsupported and not out_path.exists():
-                skipped += 1
-                print(f"skip missing expected {fixture_path}", file=sys.stderr)
-                continue
             failures += 0 if compare_json(out_path, payload) else 1
         else:
             atomic_write_json(out_path, payload)

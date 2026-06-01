@@ -1,0 +1,27 @@
+{
+  "object": "NestedPlainGroupFaceLink",
+  "reference": "FreeCAD Link.cpp source-equivalent nested plain group LinkSub path: NestedPlainGroupFaceLink -> GroupLink.$PrettySub.$PrettyB.Face1, backed by linkedPlainGroup(), updateGroup() _ChildCache recursion, getElementIndex() and flattenSubname().",
+  "freecad_version": "1.2.0 revision 20260519",
+  "volume": 0.0,
+  "topology_counts": {
+    "faces": 1,
+    "edges": 4,
+    "vertices": 4
+  },
+  "named_shapes": {
+    "GroupLink": {
+      "element_map_status": "history_partial",
+      "element_map": {
+        "$PrettySub.$PrettyB.Face1": "Face7",
+        "SubGroup.$PrettyB.Face1": "Face7"
+      }
+    },
+    "NestedPlainGroupFaceLink": {
+      "element_map_status": "history_partial",
+      "element_map": {
+        "$PrettySub.$PrettyB.Face1": "Face1",
+        "GroupLink.$PrettySub.$PrettyB.Face1": "Face1"
+      }
+    }
+  }
+}

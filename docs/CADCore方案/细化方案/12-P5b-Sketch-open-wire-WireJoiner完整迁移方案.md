@@ -13,22 +13,23 @@ SketchObject::buildInternals()
 ## 当前基线
 
 - `features/sketch_object.cpp` 已通过 `geometry::buildSketchInternals()` 发布 request-local `InternalShape`，并把 `InternalFaceN` / `InternalEdgeN` / `InternalVertexN` 合并进 Sketch 的 `subshapes`。
-- `geometry/face_maker.*` 已覆盖 bounded split 子集：closed profile wires、on-face open splitter edges、重叠闭合 profile、自相交单 wire、inter-edge intersection split 和基础 face-with-holes / island。
-- `geometry/sketch_internal_builder.*` 已把 bounded faces 作为 `profileShape`，并把 WireJoiner open-wire 输出追加到 `internalShape`；Pad / Pocket 只消费 face 子集，不把 open wire 伪造成可拉伸 profile。
-- `geometry/wire_joiner.*` 已接入 `getOpenWires(noOriginal=true)` 子集：按 FreeCAD `sourceEdgeArray` 口径过滤仍匹配原始 source edge 的 open wire；open edge 可先按 face boundary 切成 fragments，再逐 fragment 判断是否被 bounded face 消费，外部非原始 split fragments 可进入 `InternalShape`。
-- `topo/element_map.*` 仍是几何匹配式基础 internal map，只覆盖未发生复杂 split / merge / deleted 的 `InternalEdgeN/InternalVertexN <-> EdgeN/VertexN`。
+- `geometry/face_maker.*` 已覆盖 bounded split 子集：closed profile wires、closed-wire hole 的 profile face-with-holes / `InternalShape` bounded-region 分离、on-face open splitter edges、重叠闭合 profile、自相交单 wire、inter-edge intersection split 和基础 face-with-holes / island。
+- `geometry/sketch_internal_builder.*` 保留 Pad / Pocket 消费的 `profileShape`，并把 `FaceMakerBuildFace` bounded-region 输出与 WireJoiner open-wire 输出组合为 `internalShape`；open wire 不会伪造成可拉伸 profile。
+- `geometry/wire_joiner.*` 已接入 `getOpenWires(noOriginal=true)` 子集：按 FreeCAD `sourceEdgeArray` 口径过滤仍匹配原始 source edge 的 open wire；open edge 可先按 face boundary 切成 fragments，再逐 fragment 判断是否被 bounded face 消费，外部非原始 split fragments 可进入 `InternalShape`；闭合 source wire 循环已从 bounded-face 数量差改为 source edge 被 bounded-result fragments 替换的 ownership 证据触发 copied result-wire graph。
+- `topo/element_map.*` 仍是几何匹配式基础 internal map，只覆盖未发生复杂 split / merge / deleted 的 `InternalEdgeN/InternalVertexN <-> EdgeN/VertexN`；`InternalFaceN` 已按 FaceMaker 外环边命名口径记录 outer-boundary-`EdgeN` generated history，hole / inner wire 不混入同一个 face 来源，但不写 raw `FaceN` alias；raw sketch edge 被拆成多个 `InternalEdgeN` 时已记录 terminal split history，自交单边 pre-split 也记录为 raw `EdgeN` 到多个 `InternalEdgeN` 的 terminal split history；被 `noOriginal` 过滤且没有 Internal* target 的 raw `EdgeN/VertexN` 已记录 terminal deleted history，并明确不写入单一可解析 `ElementMap` target。
 
 ## 已验收能力
 
 - 外矩形 + 中间贯穿线可形成多个 `InternalFaceN`，并要求 `Profile.SubList=InternalFaceN` 才允许 Pad/Pocket 选择局部 profile。
-- 十字切割、重叠矩形、重叠圆、自相交 bowtie、cross pattern、dangling open line、split-and-dangling open wires、through open cutter split fragments 已进入 P5 fixture；dangling source line 当前按 FreeCAD `noOriginal=true` 不进入 `InternalShape`。
+- 外矩形 + 内圆孔、外矩形 + 内矩形 taper profile 已由 native expected 固定：Sketch `InternalShape` 发布 bounded region face count，Pad 仍按 closed profile face-with-hole 得到实体结果。
+- 十字切割、重叠矩形、重叠圆、自相交 bowtie、cubic figure-8 BSpline pre-split、cross pattern、dangling open line、split-and-dangling open wires、through open cutter split fragments 已进入 P5 fixture；dangling source line 当前按 FreeCAD `noOriginal=true` 不进入 `InternalShape`。
 - Pad 可使用 `InternalFaceN` 拉伸局部 bounded region；纯 open profile 仍通过 `open_profile` 失败，不会静默兜底成 face。
 - `fixtures/p5/expected` 已覆盖这些成功几何 fixture 的 internal face count、edge / vertex count 或最低 count、Pad volume 和 SketchPlaneFrame mesh bbox。
 
 ## 剩余缺口
 
-- 当前 `WireJoiner` 仍是临时 ownership 子集：用 bounded-face count 变化判断 open wire 是否被 bounded face 消费；还没有完整迁移 FreeCAD `WireJoinerP::EdgeInfo`、`WireInfo`、`wireInfo/wireInfo2`、`iteration`、`superEdge` 和 `openWireCompound` 生命周期。
-- `FaceMaker::postBuild()`、pre-split history、splitter history、source shape 映射还没有形成完整 MapperHistory；复杂 split / merge / deleted 不能靠当前几何匹配式 `internal_element_map` 证明稳定引用。
+- 当前 `WireJoiner` 仍是临时 ownership 子集：open edge fragment、closed-source split cycle、copied result-wire graph 和 InternalShape terminal split / deleted history 已使用几何 ownership 证据收敛，但还没有完整迁移 FreeCAD `WireJoinerP::EdgeInfo`、`WireInfo`、`wireInfo/wireInfo2`、`iteration`、`superEdge` 和 `openWireCompound` 生命周期。
+- `FaceMaker::postBuild()` 当前只迁入了 face outer-boundary generated history 和 self-intersecting edge pre-split terminal split history 子集；pre-split history、splitter history、source shape 映射还没有形成完整 MapperHistory；复杂 split / merge / deleted 不能靠当前几何匹配式 `internal_element_map` 证明稳定引用。
 - BSpline InternalShape 的 dedicated FreeCAD oracle 尚未冻结，相关 expected 仍以 `known_gap: internal_shape_oracle_pending` 标注。
 - 近切线、重合边、复杂开放线网和非平面/复杂投影场景仍需 FreeCAD oracle 后再进入主路径。
 
@@ -46,18 +47,18 @@ SketchObject::buildInternals()
 | `features/sketch_object.cpp` | Sketch 执行顺序、`InternalShape` 发布、SubList profile 选择 |
 | `geometry/sketch_internal_builder.*` | `FaceMakerBuildFace` bounded result 与 open-wire result 组合 |
 | `geometry/face_maker.*` | bounded split / face-with-holes / overlap / self-intersection 子集 |
-| `geometry/wire_joiner.*` | `noOriginal` 原始 source edge 过滤、open edge split fragment 和 open-wire carry-through 临时子集；后续替换为 WireJoinerP ownership |
-| `topo/element_map.*` | 基础 internal element map；后续消费 FaceMaker / WireJoiner history |
+| `geometry/wire_joiner.*` | `noOriginal` 原始 source edge 过滤、open edge split fragment、closed-source result-fragment ownership 和 open-wire carry-through 子集；后续替换为 WireJoinerP ownership |
+| `topo/element_map.*` | 基础 internal element map、`InternalFaceN` outer-boundary generated history、self-intersecting edge pre-split terminal split history、one-source-to-many `InternalEdgeN` split history、one-source-to-zero `EdgeN/VertexN` deleted history；后续消费完整 FaceMaker / WireJoiner history |
 
 ## 下一步
 
-1. 迁移 `WireJoinerP::EdgeInfo/WireInfo` 状态机，让 open-wire ownership 不再依赖 bounded-face count 差值。
+1. 迁移 `WireJoinerP::EdgeInfo/WireInfo` 状态机，把当前 open-edge fragment 与 closed-source split-cycle ownership predicate 替换为正式 EdgeInfo / WireInfo 生命周期。
 2. 把 `FaceMaker::postBuild()`、pre-split history 和 splitter history 接入 P6 `NamedShape` / `ElementMap`。
 3. 用 FreeCAD oracle 固定 BSpline、近切线、重合边和复杂 open-wire case，再扩大 P5 fixture。
 
 ## 验收
 
 - P5 focused tests 与 expected fixture 自动遍历必须同时覆盖 P5b 成功几何。
-- `InternalFaceN` 可作为正式 sketch profile token；`InternalEdgeN/InternalVertexN` 只能由 `InternalShape` 导出。
+- `InternalFaceN` 可作为正式 sketch profile token，并可记录 outer-boundary generated history；raw `FaceN` 不得映射成稳定 `InternalFaceN`。
 - open wire 不得产生假 `profile_ready=true`。
 - split / merge / deleted 的 internal element map 必须来自 history 或明确 diagnostics，不允许继续叠加 fixture 特判。

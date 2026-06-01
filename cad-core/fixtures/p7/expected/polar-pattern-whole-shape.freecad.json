@@ -1,5 +1,5 @@
 {
-  "reference": "FreeCADCmd geometry-equivalent 2x2x2 Pad polar pattern in Whole shape mode",
+  "reference": "CAD Core geometry-equivalent standalone PolarPattern Whole shape case; native FreeCAD oracle is collected through polar-pattern-whole-shape-body-prefix-support because Body/BaseFeature support is the normal FreeCAD lifecycle",
   "freecad_version": "1.2.0 revision 20260519",
   "objects": {
     "PolarPattern": {

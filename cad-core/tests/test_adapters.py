@@ -149,6 +149,21 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(shadow["stableSubname"], "g305:split1")
         self.assertAlmostEqual(shadow["fingerprint"]["area"], 25.0)
 
+    def test_c_api_recompute_preserves_full_sublist_on_reference_shadow_update(self) -> None:
+        payload = json.loads((ROOT / "fixtures" / "p5" / "pad-internal-face-reference-shadow.json").read_text())
+        profile = payload["Objects"][1]["Properties"]["Profile"]
+        profile["FullSubList"] = ["ExternalDoc#Sketch.InternalFace1"]
+
+        ffi_result = self.run_recompute_ffi_payload(payload)
+        updates = ffi_result["elementReferenceUpdates"]
+
+        self.assertEqual(ffi_result["diagnostics"], [])
+        self.assertEqual(len(updates), 1)
+        self.assertEqual(updates[0]["object"], "Pad")
+        self.assertEqual(updates[0]["property"], "Profile")
+        self.assertEqual(updates[0]["SubList"], ["InternalFace1"])
+        self.assertEqual(updates[0]["FullSubList"], ["ExternalDoc#Sketch.InternalFace1"])
+
     def test_c_api_recompute_returns_reference_shadow_update_for_link_sub_list(self) -> None:
         ffi_result = self.run_recompute_ffi("sketch-external-face-reference-shadow", "p5")
         updates = ffi_result["elementReferenceUpdates"]
@@ -172,6 +187,21 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(shadow["fingerprint"]["edgeCount"], 4)
         self.assertEqual(shadow["fingerprint"]["vertexCount"], 4)
 
+    def test_c_api_recompute_preserves_full_sublist_on_link_sub_list_update(self) -> None:
+        payload = json.loads((ROOT / "fixtures" / "p5" / "sketch-external-face-reference-shadow.json").read_text())
+        external = payload["Objects"][1]["Properties"]["ExternalGeometry"]["SubSet"][0]
+        external["FullSubList"] = ["ExternalDoc#Box.Face5"]
+
+        ffi_result = self.run_recompute_ffi_payload(payload)
+        updates = ffi_result["elementReferenceUpdates"]
+
+        self.assertEqual(ffi_result["diagnostics"], [])
+        self.assertEqual(len(updates), 1)
+        item = updates[0]["SubSet"][0]
+        self.assertEqual(item["value"], "Box")
+        self.assertEqual(item["SubList"], ["Face5"])
+        self.assertEqual(item["FullSubList"], ["ExternalDoc#Box.Face5"])
+
     def test_c_api_capabilities_exposes_web_contract_facts(self) -> None:
         capabilities = self.run_capabilities_ffi()
 
@@ -185,20 +215,69 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("values", capabilities["document"]["link_property_fields"])
         self.assertIn("SubList", capabilities["document"]["link_property_fields"])
         self.assertIn("StableSubList", capabilities["document"]["link_property_fields"])
+        self.assertIn("FullSubList", capabilities["document"]["link_property_fields"])
         self.assertIn("ShadowSub", capabilities["document"]["link_property_fields"])
         self.assertIn("ReferenceShadow", capabilities["document"]["link_property_fields"])
         self.assertIn("SubSet", capabilities["document"]["link_property_fields"])
-        self.assertNotIn("FullSubList", capabilities["document"]["link_property_fields"])
+        self.assertEqual(
+            capabilities["document"]["document_update_channels"],
+            ["elementReferenceUpdates", "documentObjectUpdates"],
+        )
+        link_sub_fields = ["value", "SubList", "StableSubList", "FullSubList", "ShadowSub", "ReferenceShadow"]
+        self.assertEqual(
+            capabilities["document"]["link_property_shapes"]["App::PropertyLink"],
+            ["value"],
+        )
+        self.assertEqual(
+            capabilities["document"]["link_property_shapes"]["App::PropertyLinkGlobal"],
+            ["value"],
+        )
+        self.assertEqual(
+            capabilities["document"]["link_property_shapes"]["App::PropertyLinkHidden"],
+            ["value"],
+        )
+        self.assertEqual(
+            capabilities["document"]["link_property_shapes"]["App::PropertyXLink"],
+            link_sub_fields,
+        )
         self.assertEqual(
             capabilities["document"]["link_property_shapes"]["App::PropertyLinkList"],
             ["values"],
         )
         self.assertEqual(
+            capabilities["document"]["link_property_shapes"]["App::PropertyLinkListHidden"],
+            ["values"],
+        )
+        self.assertEqual(
+            capabilities["document"]["link_property_shapes"]["App::PropertyXLinkList"],
+            ["values", "SubSet"],
+        )
+        self.assertEqual(
             capabilities["document"]["link_property_shapes"]["App::PropertyLinkSub"],
-            ["value", "SubList", "StableSubList", "ShadowSub", "ReferenceShadow"],
+            link_sub_fields,
+        )
+        self.assertEqual(
+            capabilities["document"]["link_property_shapes"]["App::PropertyLinkSubHidden"],
+            link_sub_fields,
+        )
+        self.assertEqual(
+            capabilities["document"]["link_property_shapes"]["App::PropertyXLinkSub"],
+            link_sub_fields,
+        )
+        self.assertEqual(
+            capabilities["document"]["link_property_shapes"]["App::PropertyXLinkSubHidden"],
+            link_sub_fields,
         )
         self.assertEqual(
             capabilities["document"]["link_property_shapes"]["App::PropertyLinkSubList"],
+            ["SubSet"],
+        )
+        self.assertEqual(
+            capabilities["document"]["link_property_shapes"]["App::PropertyLinkSubListHidden"],
+            ["SubSet"],
+        )
+        self.assertEqual(
+            capabilities["document"]["link_property_shapes"]["App::PropertyXLinkSubList"],
             ["SubSet"],
         )
 
@@ -230,6 +309,16 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertIn(code, capabilities["diagnostic_codes"])
 
         self.assertIn("complete_mapper_history", capabilities["known_gaps"])
+        self.assertNotIn("show_element_missing_child_lifecycle", capabilities["known_gaps"])
+
+    def test_c_api_recompute_reports_show_element_lifecycle_updates(self) -> None:
+        ffi_result = self.run_recompute_ffi("app-link-show-element-synthetic", "p8")
+        updates = ffi_result["documentObjectUpdates"]
+
+        self.assertEqual(ffi_result["diagnostics"], [])
+        self.assertEqual([item["action"] for item in updates], ["create", "create"])
+        self.assertEqual(updates[0]["object"], "ArrayLink_i0")
+        self.assertEqual(updates[0]["properties"]["LinkedObject"]["value"], "Box")
 
     def test_c_api_exports_recomputed_shape_buffers(self) -> None:
         document = json.loads((ROOT / "fixtures" / "p8" / "part-box.json").read_text(encoding="utf-8"))

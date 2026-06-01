@@ -58,8 +58,12 @@ FeatureRegistry buildDefaultRegistry()
     registry.registerExecutor("App::Link", features::executeAppLink);
     registry.registerExecutor("App::LinkElement", features::executeAppLinkElement);
     registry.registerExecutor("App::LinkGroup", features::executeAppLinkGroup);
+    registry.registerExecutor("App::DocumentObjectGroup", features::executeDocumentObjectGroup);
+    registry.registerExecutor("App::DocumentObjectGroupPython", features::executeDocumentObjectGroup);
+    registry.registerExecutor("App::FeaturePython", features::executeAssemblyFeaturePython);
     registry.registerExecutor("Assembly::AssemblyObject", features::executeAssemblyObject);
     registry.registerExecutor("Assembly::AssemblyLink", features::executeAssemblyLink);
+    registry.registerExecutor("Assembly::JointGroup", features::executeAssemblyJointGroup);
     registry.registerExecutor("Part::Vertex", features::executePartVertex);
     registry.registerExecutor("Part::Line", features::executePartLine);
     registry.registerExecutor("Part::Plane", features::executePartPlane);

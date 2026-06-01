@@ -1,0 +1,100 @@
+{
+  "Objects": [
+    {
+      "Name": "Box",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 3,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "ArrayLink_i0",
+      "ID": 3,
+      "TypeId": "App::LinkElement",
+      "Properties": {
+        "_LinkOwner": {
+          "PropertyType": "App::PropertyInteger",
+          "value": 2
+        },
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Box"
+        },
+        "LinkTransform": false,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        },
+        "Scale": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 1
+        }
+      }
+    },
+    {
+      "Name": "ArrayLink_i1",
+      "ID": 4,
+      "TypeId": "App::LinkElement",
+      "Properties": {
+        "_LinkOwner": {
+          "PropertyType": "App::PropertyInteger",
+          "value": 2
+        },
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Box"
+        },
+        "LinkTransform": false,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [5, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        },
+        "Scale": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 2
+        }
+      }
+    },
+    {
+      "Name": "ArrayLink",
+      "ID": 2,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Box"
+        },
+        "LinkTransform": false,
+        "ShowElement": {
+          "PropertyType": "App::PropertyBool",
+          "value": false
+        },
+        "ElementCount": {
+          "PropertyType": "App::PropertyInteger",
+          "value": 2
+        },
+        "ElementList": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["ArrayLink_i0", "ArrayLink_i1"]
+        },
+        "VisibilityList": {
+          "PropertyType": "App::PropertyBoolList",
+          "value": [true, true]
+        },
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 10, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["ArrayLink"]
+  }
+}

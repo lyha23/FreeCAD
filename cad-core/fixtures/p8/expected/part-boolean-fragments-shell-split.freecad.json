@@ -1,18 +1,18 @@
 {
   "object": "BooleanFragments",
-  "reference": "FreeCADCmd geometry-equivalent Part::BooleanFragments Split mode for shell and splitter face",
+  "reference": "FreeCADCmd native BOPTools FeatureBooleanFragments Split mode for shell and splitter face",
   "freecad_version": "1.2.0 revision 20260519",
   "bbox_delta": 1e-06,
   "bbox": {
     "min": [
       0.0,
       0.0,
-      -0.5000001
+      -0.5
     ],
     "max": [
       2.0,
       1.0,
-      0.5000001
+      0.5
     ]
   },
   "volume": 0.0,

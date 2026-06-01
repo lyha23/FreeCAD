@@ -73,11 +73,135 @@ struct LinkElementEntry {
     const document::DocumentObject* object = nullptr;
 };
 
+struct PlainGroupChildEntry {
+    std::size_t index = 0U;
+    std::string name;
+    const document::DocumentObject* object = nullptr;
+    std::vector<std::string> ownerAliases;
+    bool isGroup = false;
+};
+
+struct PlainGroupSubpathMatch {
+    const PlainGroupChildEntry* entry = nullptr;
+    std::string ownerAlias;
+    std::string localSubname;
+    std::string localStableSubname;
+};
+
+struct CollapsedElementLists {
+    std::vector<gp_Trsf> placements;
+    std::vector<std::array<double, 3>> scales;
+};
+
 TopoDS_Shape compoundOf(const std::vector<TopoDS_Shape>& shapes);
 std::optional<LinkShapeBuild> baseLinkedShape(const document::DocumentObject& object,
                                               runtime::ComputeContext& context,
                                               const document::Link& link,
                                               bool linkTransform);
+std::optional<std::size_t> materializedLinkElementIndex(const document::DocumentObject& element);
+std::optional<CollapsedElementLists> collapsedElementListsForObject(const document::DocumentObject& object,
+                                                                    runtime::ComputeContext& context,
+                                                                    std::size_t elementCount);
+void addCollapsedElementCountOwnerListSyncUpdate(runtime::ComputeContext& context,
+                                                 const document::DocumentObject& owner,
+                                                 std::size_t elementCount);
+void addShowElementElementListOwnerSyncUpdate(runtime::ComputeContext& context,
+                                              const document::DocumentObject& owner,
+                                              std::size_t elementCount);
+void addShowElementElementListChildSyncUpdates(runtime::ComputeContext& context,
+                                               const document::DocumentObject& owner,
+                                               const std::vector<document::Link>& elements);
+std::optional<document::Link> linkedPlainGroupProperty(const document::DocumentObject& object,
+                                                       const runtime::ComputeContext& context);
+
+bool isAssemblyJointFeaturePython(const document::DocumentObject& object)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/JointObject.py
+    // ::Joint.__init__() adds "JointType", while ::GroundedJoint.__init__() adds
+    // "ObjectToGround"; both are stored as App::FeaturePython objects inside Assembly::JointGroup.
+    return object.typeId == "App::FeaturePython"
+        && (document::propertyValue(object, "JointType") != nullptr
+            || document::propertyValue(object, "ObjectToGround") != nullptr);
+}
+
+bool isPlainDocumentObjectGroup(const document::DocumentObject& object)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/DocumentObjectGroup.cpp
+    // ::DocumentObjectGroup::DocumentObjectGroup(), calls "GroupExtension::initExtension(this)".
+    // This is the plain group subset used by LinkBaseExtension::linkedPlainGroup().
+    return object.typeId == "App::DocumentObjectGroup"
+        || object.typeId == "App::DocumentObjectGroupPython";
+}
+
+const document::DocumentObject* documentObjectByName(const runtime::ComputeContext& context,
+                                                     const std::string& name)
+{
+    const auto objectIt = context.documentObjects.find(name);
+    if (objectIt == context.documentObjects.end()) {
+        return nullptr;
+    }
+    return objectIt->second;
+}
+
+nlohmann::json linkNamesJson(const std::vector<document::Link>& links)
+{
+    nlohmann::json names = nlohmann::json::array();
+    for (const auto& link : links) {
+        names.push_back(link.object);
+    }
+    return names;
+}
+
+nlohmann::json jointReferenceJson(const document::DocumentObject& object, const std::string& property)
+{
+    const auto link = document::readLink(object, property);
+    if (!link) {
+        return nullptr;
+    }
+    return {
+        {"object", link->object},
+        {"subnames", link->subnames},
+    };
+}
+
+std::vector<std::string> assemblyJointNames(const document::DocumentObject& object,
+                                            const runtime::ComputeContext& context)
+{
+    std::vector<std::string> names;
+    for (const auto& link : document::readLinks(object, "Group")) {
+        const document::DocumentObject* child = documentObjectByName(context, link.object);
+        if (child == nullptr) {
+            continue;
+        }
+        if (isAssemblyJointFeaturePython(*child)) {
+            names.push_back(link.object);
+            continue;
+        }
+        if (child->typeId != "Assembly::JointGroup") {
+            continue;
+        }
+        for (const auto& jointLink : document::readLinks(*child, "Group")) {
+            const document::DocumentObject* joint = documentObjectByName(context, jointLink.object);
+            if (joint != nullptr && isAssemblyJointFeaturePython(*joint)) {
+                names.push_back(jointLink.object);
+            }
+        }
+    }
+    return names;
+}
+
+std::vector<std::string> assemblyJointGroupNames(const document::DocumentObject& object,
+                                                 const runtime::ComputeContext& context)
+{
+    std::vector<std::string> names;
+    for (const auto& link : document::readLinks(object, "Group")) {
+        const document::DocumentObject* child = documentObjectByName(context, link.object);
+        if (child != nullptr && child->typeId == "Assembly::JointGroup") {
+            names.push_back(link.object);
+        }
+    }
+    return names;
+}
 
 std::optional<gp_Trsf> placementProperty(const document::DocumentObject& object,
                                          const std::string& property)
@@ -119,16 +243,15 @@ gp_Trsf objectGlobalPlacement(const document::DocumentObject& object, const runt
 
 std::array<double, 3> readScaleVector(const document::DocumentObject& object)
 {
-    const double scale = document::readNumber(object, "Scale").value_or(1.0);
     const auto scaleVector = document::readVector3(object, "ScaleVector");
-    if (!scaleVector) {
-        return {scale, scale, scale};
+    if (scaleVector) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+        // ::LinkBaseExtension::getScaleVector(), returns "getScaleVectorValue()" when the
+        // "ScaleVector" property exists; scalar "Scale" is only the fallback.
+        return *scaleVector;
     }
-    return {
-        scale * scaleVector->at(0),
-        scale * scaleVector->at(1),
-        scale * scaleVector->at(2),
-    };
+    const double scale = document::readNumber(object, "Scale").value_or(1.0);
+    return {scale, scale, scale};
 }
 
 bool parseVector3Value(const nlohmann::json& value, std::array<double, 3>& vector)
@@ -409,6 +532,200 @@ std::string linkedObjectLabel(const document::Link& link, const runtime::Compute
     return objectLabel(link.object, context);
 }
 
+void addPlainGroupOwnerAlias(std::vector<std::string>& aliases,
+                             const std::string& alias,
+                             const std::string& primaryName)
+{
+    if (alias.empty() || alias == primaryName) {
+        return;
+    }
+    if (std::find(aliases.begin(), aliases.end(), alias) == aliases.end()) {
+        aliases.push_back(alias);
+    }
+}
+
+std::vector<std::string> plainGroupOwnerNames(const PlainGroupChildEntry& entry)
+{
+    std::vector<std::string> names {entry.name};
+    for (const std::string& alias : entry.ownerAliases) {
+        if (std::find(names.begin(), names.end(), alias) == names.end()) {
+            names.push_back(alias);
+        }
+    }
+    return names;
+}
+
+void appendPlainGroupChildren(const document::DocumentObject& groupObject,
+                              const runtime::ComputeContext& context,
+                              std::vector<PlainGroupChildEntry>& children,
+                              std::set<std::string>& visited,
+                              const std::vector<std::string>& groupPathAliases)
+{
+    for (const auto& link : document::readLinks(groupObject, "Group")) {
+        const document::DocumentObject* child = documentObjectByName(context, link.object);
+        if (child == nullptr || !visited.insert(link.object).second) {
+            continue;
+        }
+
+        const std::size_t index = children.size();
+        std::vector<std::string> aliases;
+        addPlainGroupOwnerAlias(aliases, std::to_string(index), link.object);
+        const std::string label = objectLabel(link.object, context);
+        if (label != link.object) {
+            addPlainGroupOwnerAlias(aliases, "$" + label, link.object);
+        }
+        for (const std::string& groupAlias : groupPathAliases) {
+            addPlainGroupOwnerAlias(aliases, groupAlias + "." + link.object, link.object);
+            if (label != link.object) {
+                addPlainGroupOwnerAlias(aliases, groupAlias + ".$" + label, link.object);
+            }
+        }
+
+        const bool childIsGroup = isPlainDocumentObjectGroup(*child);
+        children.push_back(PlainGroupChildEntry{index, link.object, child, aliases, childIsGroup});
+        if (!childIsGroup) {
+            continue;
+        }
+
+        std::vector<std::string> childGroupPathAliases;
+        childGroupPathAliases.push_back(link.object);
+        childGroupPathAliases.push_back(std::to_string(index));
+        if (label != link.object) {
+            childGroupPathAliases.push_back("$" + label);
+        }
+        for (const std::string& groupAlias : groupPathAliases) {
+            childGroupPathAliases.push_back(groupAlias + "." + link.object);
+            if (label != link.object) {
+                childGroupPathAliases.push_back(groupAlias + ".$" + label);
+            }
+        }
+        appendPlainGroupChildren(*child, context, children, visited, childGroupPathAliases);
+    }
+}
+
+std::vector<PlainGroupChildEntry> plainGroupChildren(const document::DocumentObject& groupObject,
+                                                    const runtime::ComputeContext& context)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/GroupExtension.cpp
+    // ::GroupExtension::getAllChildren() appends each direct Group child, then recurses into
+    // nested GroupExtension children while guarding duplicates with "rset.insert(obj)".
+    std::vector<PlainGroupChildEntry> children;
+    std::set<std::string> visited;
+    appendPlainGroupChildren(groupObject, context, children, visited, {});
+    return children;
+}
+
+std::vector<PlainGroupChildEntry> elementListWithPlainGroupChildren(const std::vector<document::Link>& links,
+                                                                    const runtime::ComputeContext& context)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+    // ::LinkBaseExtension::updateGroup(), when ElementList contains a GroupExtension object,
+    // starts from "children = getElementListValue()" and appends each group's getAllChildren().
+    // This keeps explicit ElementList semantics distinct from linkedPlainGroup() while exposing
+    // the same request-local _ChildCache-style traversal for grouped children.
+    std::vector<PlainGroupChildEntry> children;
+    std::set<std::string> visited;
+    for (const auto& link : links) {
+        const document::DocumentObject* child = documentObjectByName(context, link.object);
+        if (child == nullptr || !visited.insert(link.object).second) {
+            continue;
+        }
+
+        const std::size_t index = children.size();
+        std::vector<std::string> aliases;
+        addPlainGroupOwnerAlias(aliases, std::to_string(index), link.object);
+        const std::string label = objectLabel(link.object, context);
+        if (label != link.object) {
+            addPlainGroupOwnerAlias(aliases, "$" + label, link.object);
+        }
+        const bool childIsGroup = isPlainDocumentObjectGroup(*child);
+        children.push_back(PlainGroupChildEntry{index, link.object, child, aliases, childIsGroup});
+        if (!childIsGroup) {
+            continue;
+        }
+
+        std::vector<std::string> childGroupPathAliases {link.object, std::to_string(index)};
+        if (label != link.object) {
+            childGroupPathAliases.push_back("$" + label);
+        }
+        appendPlainGroupChildren(*child, context, children, visited, childGroupPathAliases);
+    }
+    return children;
+}
+
+std::optional<PlainGroupSubpathMatch> matchPlainGroupSubpath(const std::vector<PlainGroupChildEntry>& children,
+                                                             const std::string& subname,
+                                                             const std::string& stableSubname)
+{
+    PlainGroupSubpathMatch best;
+    std::size_t bestPrefixSize = 0U;
+    for (const auto& child : children) {
+        if (child.isGroup) {
+            continue;
+        }
+        for (const std::string& ownerName : plainGroupOwnerNames(child)) {
+            const std::string prefix = ownerName + ".";
+            if (subname.rfind(prefix, 0U) != 0U || subname.size() <= prefix.size()) {
+                continue;
+            }
+            if (prefix.size() <= bestPrefixSize) {
+                continue;
+            }
+            best.entry = &child;
+            best.ownerAlias = ownerName;
+            best.localSubname = subname.substr(prefix.size());
+            best.localStableSubname = stableSubname == subname ? best.localSubname : stableSubname;
+            for (const std::string& stableOwnerName : plainGroupOwnerNames(child)) {
+                const std::string stablePrefix = stableOwnerName + ".";
+                if (stableSubname.rfind(stablePrefix, 0U) == 0U
+                    && stableSubname.size() > stablePrefix.size()) {
+                    best.localStableSubname = stableSubname.substr(stablePrefix.size());
+                    break;
+                }
+            }
+            bestPrefixSize = prefix.size();
+        }
+    }
+    if (best.entry == nullptr) {
+        return std::nullopt;
+    }
+    return best;
+}
+
+std::vector<std::string> linkedObjectAliasOwners(const document::Link& link,
+                                                 const runtime::ComputeContext& context)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+    // ::LinkBaseExtension::getElementIndex() accepts "$" + child Label, and
+    // ::extensionGetSubObject() compares subpath tokens with "linked->Label.getValue()".
+    // Keep that label owner in the ElementMap retag so a later LinkSub can walk a Link chain.
+    std::vector<std::string> aliases;
+    const std::string label = linkedObjectLabel(link, context);
+    if (!label.empty() && label != link.object) {
+        aliases.push_back("$" + label);
+    }
+    return aliases;
+}
+
+std::vector<std::string> linkedTargetSubpathAliasOwners(const std::string& owner,
+                                                        const document::Link& link,
+                                                        const runtime::ComputeContext& context)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+    // ::LinkBaseExtension::extensionGetSubObject(), after getElementIndex() consumes an
+    // element token like "1", still accepts a linked-object prefix such as "Box.Face1".
+    std::vector<std::string> aliases;
+    if (owner.empty()) {
+        return aliases;
+    }
+    aliases.push_back(owner + "." + link.object);
+    const std::string label = linkedObjectLabel(link, context);
+    if (!label.empty() && label != link.object) {
+        aliases.push_back(owner + ".$" + label);
+    }
+    return aliases;
+}
+
 bool parseNonNegativeIndex(const std::string& text, std::size_t& index)
 {
     if (text.empty()) {
@@ -541,6 +858,15 @@ bool looksLikeExternalFullSubname(const std::string& fullSubname,
     if (token == link.object || token == "$" + linkedObjectLabel(link, context)) {
         return false;
     }
+    std::size_t index = 0U;
+    if (parseNonNegativeIndex(token, index)) {
+        return false;
+    }
+    const std::string ownerElementPrefix = link.object + "_i";
+    if (token.rfind(ownerElementPrefix, 0U) == 0U
+        && parseNonNegativeIndex(token.substr(ownerElementPrefix.size()), index)) {
+        return false;
+    }
 
     return fullSubname.find('#') != std::string::npos || fullSubname.find('.') != fullSubname.rfind('.');
 }
@@ -609,23 +935,13 @@ std::optional<LinkShapeBuild> linkedElementListSubshape(const document::Document
     if (!subpath) {
         return std::nullopt;
     }
-    std::size_t index = 0U;
-    bool matched = parseNonNegativeIndex(subpath->token, index);
-    if (!matched) {
-        for (std::size_t candidate = 0U; candidate < links.size(); ++candidate) {
-            const std::string& elementName = links.at(candidate).object;
-            if (subpath->token == elementName || subpath->token == "$" + objectLabel(elementName, context)) {
-                index = candidate;
-                matched = true;
-                break;
-            }
-        }
-    }
-    if (!matched || index >= links.size()) {
+    const auto children = elementListWithPlainGroupChildren(links, context);
+    const auto match = matchPlainGroupSubpath(children, subname, stableSubname);
+    if (!match || match->entry == nullptr) {
         return std::nullopt;
     }
 
-    const std::string& elementName = links.at(index).object;
+    const std::string& elementName = match->entry->name;
     const auto shapeIt = context.shapes.find(elementName);
     if (shapeIt == context.shapes.end()) {
         return std::nullopt;
@@ -634,13 +950,11 @@ std::optional<LinkShapeBuild> linkedElementListSubshape(const document::Document
     const topo::NamedShape* elementNamedShape =
         namedShapeIt == context.namedShapes.end() ? nullptr : &namedShapeIt->second;
     std::string resolvedElement;
-    const std::string localStableSubname =
-        splitLinkSubpath(stableSubname).value_or(LinkSubpath{subpath->token, subpath->localSubname}).localSubname;
     auto selected = resolveLocalSubshape(
         shapeIt->second.shape,
         elementNamedShape,
-        subpath->localSubname,
-        localStableSubname,
+        match->localSubname,
+        match->localStableSubname,
         resolvedElement
     );
     if (!selected) {
@@ -652,14 +966,12 @@ std::optional<LinkShapeBuild> linkedElementListSubshape(const document::Document
     const std::string targetElementName = targetElementNameForResolvedSource(resolvedElement);
     std::vector<std::string> exactAliases;
     const std::vector<std::string> existingNames = {subname, stableSubname, resolvedElement};
-    addRetagAliasCandidates(exactAliases,
-                            {rawSubname,
-                             rawStableSubname,
-                             rawFullSubname,
-                             elementName + "." + subpath->localSubname,
-                             std::to_string(index) + "." + subpath->localSubname,
-                             "$" + objectLabel(elementName, context) + "." + subpath->localSubname},
-                            existingNames);
+    std::vector<std::string> aliasCandidates = {rawSubname, rawStableSubname, rawFullSubname};
+    for (const std::string& ownerName : plainGroupOwnerNames(*match->entry)) {
+        aliasCandidates.push_back(ownerName + "." + match->localSubname);
+        aliasCandidates.push_back(linkedObject.name + "." + ownerName + "." + match->localSubname);
+    }
+    addRetagAliasCandidates(exactAliases, aliasCandidates, existingNames);
     addExternalMappedPostfixAlias(exactAliases,
                                   resolvedElement,
                                   rawFullSubname,
@@ -761,28 +1073,37 @@ std::optional<LinkShapeBuild> collapsedElementSubshape(const document::DocumentO
     displayedElement = applyScale(displayedElement, readScaleVector(linkedObject));
     displayedElement = geometry::transformShape(displayedElement, linkPlacement(linkedObject, context));
 
-    std::string resolvedElement = subpath->localSubname;
-    auto selected = topo::subshapeByName(displayedElement, subpath->localSubname);
+    const std::string localSubname = stripLinkedObjectPrefix(subpath->localSubname, *targetLink, context);
+    std::string resolvedElement = localSubname;
+    auto selected = topo::subshapeByName(displayedElement, localSubname);
     if (!selected) {
         return std::nullopt;
     }
 
     const std::string targetElementName = targetElementNameForResolvedSource(resolvedElement);
     std::vector<std::string> exactAliases;
-    const std::string ownerAlias = linkedObject.name + "_i" + std::to_string(index) + "." + subpath->localSubname;
+    const std::string ownerAlias = linkedObject.name + "_i" + std::to_string(index) + "." + localSubname;
     const std::vector<std::string> existingNames = {subname, stableSubname, resolvedElement};
-    addRetagAliasCandidates(exactAliases,
-                            {rawSubname,
-                             rawStableSubname,
-                             rawFullSubname,
-                             ownerAlias,
-                             std::to_string(index) + "." + subpath->localSubname,
-                             targetLink->object + "." + subpath->localSubname,
-                             "$" + linkedObjectLabel(*targetLink, context) + "." + subpath->localSubname},
-                            existingNames);
-    addArrayIndexMappedPostfixAlias(exactAliases, subpath->localSubname, index, existingNames);
+    std::vector<std::string> aliasCandidates = {
+        rawSubname,
+        rawStableSubname,
+        rawFullSubname,
+        ownerAlias,
+        linkedObject.name + "_i" + std::to_string(index) + "."
+            + targetLink->object + "." + localSubname,
+        std::to_string(index) + "." + localSubname,
+        std::to_string(index) + "." + targetLink->object + "." + localSubname,
+        targetLink->object + "." + localSubname,
+    };
+    const std::string targetLabel = linkedObjectLabel(*targetLink, context);
+    if (targetLabel != targetLink->object) {
+        aliasCandidates.push_back("$" + targetLabel + "." + localSubname);
+        aliasCandidates.push_back(std::to_string(index) + ".$" + targetLabel + "." + localSubname);
+    }
+    addRetagAliasCandidates(exactAliases, aliasCandidates, existingNames);
+    addArrayIndexMappedPostfixAlias(exactAliases, localSubname, index, existingNames);
     addExternalMappedPostfixAlias(exactAliases,
-                                  subpath->localSubname,
+                                  localSubname,
                                   rawFullSubname,
                                   link,
                                   context,
@@ -791,6 +1112,79 @@ std::optional<LinkShapeBuild> collapsedElementSubshape(const document::DocumentO
     (void)link;
     return LinkShapeBuild{
         *selected,
+        subname,
+        targetElementName,
+        {topo::LinkedSubshapeRetag{subname, targetElementName, exactAliases}},
+    };
+}
+
+std::optional<LinkShapeBuild> linkedPlainGroupSubshape(const document::DocumentObject& object,
+                                                       runtime::ComputeContext& context,
+                                                       const document::Link& link,
+                                                       const document::DocumentObject& linkedObject,
+                                                       const std::string& subname,
+                                                       const std::string& stableSubname,
+                                                       const std::string& rawSubname,
+                                                       const std::string& rawStableSubname,
+                                                       const std::string& rawFullSubname)
+{
+    const auto groupLink = linkedPlainGroupProperty(linkedObject, context);
+    if (!groupLink) {
+        return std::nullopt;
+    }
+    const document::DocumentObject* groupObject = documentObjectByName(context, groupLink->object);
+    if (groupObject == nullptr) {
+        return std::nullopt;
+    }
+
+    const auto children = plainGroupChildren(*groupObject, context);
+    const auto match = matchPlainGroupSubpath(children, subname, stableSubname);
+    if (!match || match->entry == nullptr) {
+        return std::nullopt;
+    }
+
+    const auto shapeIt = context.shapes.find(match->entry->name);
+    if (shapeIt == context.shapes.end()) {
+        return std::nullopt;
+    }
+    const auto namedShapeIt = context.namedShapes.find(match->entry->name);
+    const topo::NamedShape* elementNamedShape =
+        namedShapeIt == context.namedShapes.end() ? nullptr : &namedShapeIt->second;
+    std::string resolvedElement;
+    auto selected = resolveLocalSubshape(shapeIt->second.shape,
+                                         elementNamedShape,
+                                         match->localSubname,
+                                         match->localStableSubname,
+                                         resolvedElement);
+    if (!selected) {
+        return std::nullopt;
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+    // ::LinkBaseExtension::getElementIndex() recurses through "_ChildCache" group entries,
+    // and ::flattenSubname() keeps the first non-group child token as the effective subpath.
+    // cad-core mirrors that for request-local plain group links without persisting _ChildCache.
+    TopoDS_Shape displayedShape =
+        geometry::transformShape(applyScale(*selected, readScaleVector(linkedObject)),
+                                 linkPlacement(linkedObject, context));
+    const std::string targetElementName = targetElementNameForResolvedSource(resolvedElement);
+    std::vector<std::string> exactAliases;
+    const std::vector<std::string> existingNames = {subname, stableSubname, resolvedElement};
+    std::vector<std::string> aliasCandidates = {rawSubname, rawStableSubname, rawFullSubname};
+    for (const std::string& ownerName : plainGroupOwnerNames(*match->entry)) {
+        aliasCandidates.push_back(ownerName + "." + match->localSubname);
+        aliasCandidates.push_back(linkedObject.name + "." + ownerName + "." + match->localSubname);
+    }
+    addRetagAliasCandidates(exactAliases, aliasCandidates, existingNames);
+    addExternalMappedPostfixAlias(exactAliases,
+                                  resolvedElement,
+                                  rawFullSubname,
+                                  link,
+                                  context,
+                                  existingNames);
+    (void)object;
+    return LinkShapeBuild{
+        displayedShape,
         subname,
         targetElementName,
         {topo::LinkedSubshapeRetag{subname, targetElementName, exactAliases}},
@@ -811,6 +1205,17 @@ std::optional<LinkShapeBuild> linkedGroupElementSubshape(const document::Documen
         return std::nullopt;
     }
     const document::DocumentObject& linkedObject = *objectIt->second;
+    if (const auto selected = linkedPlainGroupSubshape(object,
+                                                      context,
+                                                      link,
+                                                      linkedObject,
+                                                      subname,
+                                                      stableSubname,
+                                                      rawSubname,
+                                                      rawStableSubname,
+                                                      rawFullSubname)) {
+        return selected;
+    }
     if (const auto selected = linkedElementListSubshape(object,
                                                        context,
                                                        link,
@@ -1093,28 +1498,23 @@ std::optional<LinkShapeBuild> inheritedMaterializedLinkElementShape(
         return std::nullopt;
     }
 
-    const bool hasOwnScale = document::propertyValue(object, "Scale") != nullptr
-        || document::propertyValue(object, "ScaleVector") != nullptr;
-    std::array<double, 3> scale = hasOwnScale ? readScaleVector(object) : std::array<double, 3>{1.0, 1.0, 1.0};
-    if (!hasOwnScale) {
-        const auto scales = readScaleList(owner, context);
-        if (!scales) {
-            return std::nullopt;
-        }
-        scale = showElementScaleFromList(*scales, index);
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+    // ::LinkBaseExtension::update(), in the ShowElement ElementCount branch, assigns child
+    // "obj->Placement" and "obj->Scale" from owner "PlacementList" / "ScaleList", or from
+    // default grid placement and scale 1. Existing child placement/scale is not authoritative.
+    const auto scales = readScaleList(owner, context);
+    if (!scales) {
+        return std::nullopt;
     }
+    std::array<double, 3> scale = showElementScaleFromList(*scales, index);
 
-    const bool hasOwnPlacement = document::propertyValue(object, "LinkPlacement") != nullptr
-        || document::propertyValue(object, "Placement") != nullptr;
-    gp_Trsf placement = hasOwnPlacement ? linkPlacement(object, context) : defaultElementPlacement(index);
-    if (!hasOwnPlacement) {
-        const auto placements = readPlacementList(owner, context);
-        if (!placements) {
-            return std::nullopt;
-        }
-        if (index < placements->size()) {
-            placement = placements->at(index);
-        }
+    const auto placements = readPlacementList(owner, context);
+    if (!placements) {
+        return std::nullopt;
+    }
+    gp_Trsf placement = defaultElementPlacement(index);
+    if (index < placements->size()) {
+        placement = placements->at(index);
     }
 
     selected->shape = geometry::transformShape(applyScale(selected->shape, scale), placement);
@@ -1163,6 +1563,7 @@ void executeLinkLike(const document::DocumentObject& object,
             link->object,
             sourceShapeIt->second.shape,
             sourceNamedShapeIt == context.namedShapes.end() ? nullptr : &sourceNamedShapeIt->second,
+            linkedObjectAliasOwners(*link, context),
         };
         if (!shape->sourceToTargetElements.empty()) {
             linkedNamedShape = topo::namedShapeForLinkedSubshapes(
@@ -1192,6 +1593,9 @@ void executeElementGroupLike(const document::DocumentObject& object,
     }
 
     const auto links = document::readLinks(object, "ElementList");
+    addShowElementElementListOwnerSyncUpdate(context, object, links.size());
+    addShowElementElementListChildSyncUpdates(context, object, links);
+    const auto children = elementListWithPlainGroupChildren(links, context);
     nlohmann::json elements = nlohmann::json::array();
     nlohmann::json visibleElements = nlohmann::json::array();
     std::vector<TopoDS_Shape> shapes;
@@ -1199,14 +1603,13 @@ void executeElementGroupLike(const document::DocumentObject& object,
     const auto visibility = readVisibilityList(object);
     const gp_Trsf groupPlacement = objectGlobalPlacement(object, context);
 
-    for (std::size_t index = 0; index < links.size(); ++index) {
-        const auto& link = links.at(index);
-        elements.push_back(link.object);
-        if (!isVisibleElement(index, visibility)) {
+    for (const auto& child : children) {
+        elements.push_back(child.name);
+        if (!isVisibleElement(child.index, visibility)) {
             continue;
         }
 
-        const auto shapeIt = context.shapes.find(link.object);
+        const auto shapeIt = context.shapes.find(child.name);
         if (shapeIt == context.shapes.end()) {
             continue;
         }
@@ -1218,24 +1621,113 @@ void executeElementGroupLike(const document::DocumentObject& object,
         // shape before composing the request-local display compound.
         TopoDS_Shape displayedShape = geometry::transformShape(shapeIt->second.shape, groupPlacement);
         shapes.push_back(displayedShape);
-        visibleElements.push_back(link.object);
+        visibleElements.push_back(child.name);
 
-        const auto namedShapeIt = context.namedShapes.find(link.object);
+        const auto namedShapeIt = context.namedShapes.find(child.name);
         const topo::NamedShape* elementNamedShape =
             namedShapeIt == context.namedShapes.end() ? nullptr : &namedShapeIt->second;
-        sources.push_back(topo::NamedShapeSource{link.object, displayedShape, elementNamedShape});
         // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
-        // ::LinkBaseExtension::getElementIndex(), when ElementList exists, accepts digit
-        // indices and "$" + child Label in addition to the element object's internal name.
-        sources.push_back(topo::NamedShapeSource{std::to_string(index), displayedShape, elementNamedShape});
-        const std::string label = objectLabel(link.object, context);
-        if (label != link.object) {
-            sources.push_back(topo::NamedShapeSource{"$" + label, displayedShape, elementNamedShape});
-        }
+        // ::LinkBaseExtension::getElementIndex(), when ElementList or _ChildCache exists,
+        // accepts digit indices, child names, "$" + child Label, and recurses through group
+        // entries before returning the flattened child index.
+        sources.push_back(
+            topo::NamedShapeSource{child.name, displayedShape, elementNamedShape, child.ownerAliases}
+        );
     }
 
     nlohmann::json metadata = {
         {"link", kind},
+        {"elements", elements},
+        {"visible_elements", visibleElements},
+    };
+    if (shapes.empty()) {
+        publishEmptyLink(object, context, metadata);
+        return;
+    }
+
+    const TopoDS_Shape shape = compoundOf(shapes);
+    publishLinkedShape(
+        object,
+        context,
+        shape,
+        shapeKindForShape(shape),
+        metadata,
+        topo::namedShapeForPreservedSources(object.name, shape, sources)
+    );
+}
+
+std::optional<document::Link> linkedPlainGroupProperty(const document::DocumentObject& object,
+                                                       const runtime::ComputeContext& context)
+{
+    const auto link = document::readLink(object, "LinkedObject");
+    if (!link || !link->subnames.empty()) {
+        return std::nullopt;
+    }
+    const document::DocumentObject* linkedObject = documentObjectByName(context, link->object);
+    if (linkedObject == nullptr || !isPlainDocumentObjectGroup(*linkedObject)) {
+        return std::nullopt;
+    }
+    return link;
+}
+
+void executeLinkedPlainGroupLike(const document::DocumentObject& object,
+                                 runtime::ComputeContext& context,
+                                 const std::set<std::string>& allowedProperties,
+                                 const std::string& kind)
+{
+    if (!rejectUnsupportedProperties(object, context, allowedProperties)) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+
+    const auto link = linkedPlainGroupProperty(object, context);
+    if (!link) {
+        return;
+    }
+    const document::DocumentObject* groupObject = documentObjectByName(context, link->object);
+    if (groupObject == nullptr) {
+        return;
+    }
+
+    nlohmann::json elements = nlohmann::json::array();
+    nlohmann::json visibleElements = nlohmann::json::array();
+    std::vector<TopoDS_Shape> shapes;
+    std::vector<topo::NamedShapeSource> sources;
+    const gp_Trsf placement = linkPlacement(object, context);
+    const auto scale = readScaleVector(object);
+    const auto children = plainGroupChildren(*groupObject, context);
+
+    for (const auto& child : children) {
+        elements.push_back(child.name);
+        const auto shapeIt = context.shapes.find(child.name);
+        if (shapeIt == context.shapes.end()) {
+            continue;
+        }
+
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+        // ::LinkBaseExtension::_getElementListProperty(), when "linkedPlainGroup()" exists,
+        // returns "&group->Group"; updateGroup() then recursively expands GroupExtension
+        // children into "_ChildCache". cad-core keeps the group graph immutable and builds an
+        // equivalent request-local child list for display and LinkSub aliasing.
+        TopoDS_Shape displayedShape = geometry::transformShape(
+            applyScale(shapeIt->second.shape, scale),
+            placement
+        );
+        shapes.push_back(displayedShape);
+        visibleElements.push_back(child.name);
+
+        const auto namedShapeIt = context.namedShapes.find(child.name);
+        const topo::NamedShape* elementNamedShape =
+            namedShapeIt == context.namedShapes.end() ? nullptr : &namedShapeIt->second;
+        sources.push_back(
+            topo::NamedShapeSource{child.name, displayedShape, elementNamedShape, child.ownerAliases}
+        );
+    }
+
+    nlohmann::json metadata = {
+        {"link", kind},
+        {"linked_object", link->object},
+        {"linked_plain_group", true},
         {"elements", elements},
         {"visible_elements", visibleElements},
     };
@@ -1266,12 +1758,8 @@ void executeCollapsedElementCountLink(const document::DocumentObject& object,
     }
 
     const auto elementCount = readElementCount(object);
-    const auto placements = readPlacementList(object, context);
-    if (!placements) {
-        return;
-    }
-    const auto scales = readScaleList(object, context);
-    if (!scales) {
+    const auto elementLists = collapsedElementListsForObject(object, context, elementCount);
+    if (!elementLists) {
         return;
     }
 
@@ -1318,27 +1806,37 @@ void executeCollapsedElementCountLink(const document::DocumentObject& object,
         // names for collapsed elements.
         TopoDS_Shape displayedShape = applyScale(
             baseShape->shape,
-            index < scales->size() ? scales->at(index) : std::array<double, 3> {1.0, 1.0, 1.0}
+            index < elementLists->scales.size() ? elementLists->scales.at(index)
+                                                : std::array<double, 3> {1.0, 1.0, 1.0}
         );
         displayedShape = geometry::transformShape(
             displayedShape,
-            index < placements->size() ? placements->at(index) : defaultElementPlacement(index)
+            index < elementLists->placements.size() ? elementLists->placements.at(index)
+                                                    : defaultElementPlacement(index)
         );
         displayedShape = applyScale(displayedShape, linkScale);
         displayedShape = geometry::transformShape(displayedShape, linkObjectPlacement);
 
         shapes.push_back(displayedShape);
         visibleIndices.push_back(index);
+        const std::string ownerName = object.name + "_i" + std::to_string(index);
         sources.push_back(topo::NamedShapeSource{
-            object.name + "_i" + std::to_string(index),
+            ownerName,
             displayedShape,
             sourceNamedShape,
+            linkedTargetSubpathAliasOwners(ownerName, *link, context),
         });
         // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
         // ::LinkBaseExtension::getElementIndex(), for collapsed ElementCount links, accepts
         // digit-prefixed subpaths like "1.Face1"; when the subpath starts with the linked
         // object's name or "$" + Label, it redirects that reference to the first array element.
-        sources.push_back(topo::NamedShapeSource{std::to_string(index), displayedShape, sourceNamedShape});
+        const std::string indexName = std::to_string(index);
+        sources.push_back(topo::NamedShapeSource{
+            indexName,
+            displayedShape,
+            sourceNamedShape,
+            linkedTargetSubpathAliasOwners(indexName, *link, context),
+        });
         if (index == 0U) {
             sources.push_back(topo::NamedShapeSource{link->object, displayedShape, sourceNamedShape});
             const std::string label = linkedObjectLabel(*link, context);
@@ -1372,7 +1870,661 @@ bool isOwnedMaterializedLinkElement(const document::DocumentObject& element,
         return false;
     }
     const auto ownerValue = document::readNumber(element, "_LinkOwner");
-    return !ownerValue || static_cast<long long>(*ownerValue) == owner.id;
+    return !ownerValue || static_cast<long long>(*ownerValue) == 0 || static_cast<long long>(*ownerValue) == owner.id;
+}
+
+nlohmann::json defaultElementPlacementJson(std::size_t index)
+{
+    return {
+        {"Base",
+         {static_cast<double>(index % 10U),
+          static_cast<double>((index / 10U) % 10U),
+          static_cast<double>(index / 100U)}},
+        {"Rotation", {0.0, 0.0, 0.0, 1.0}},
+    };
+}
+
+nlohmann::json defaultElementScaleJson()
+{
+    return {1.0, 1.0, 1.0};
+}
+
+nlohmann::json placementValueJson(const document::Placement& placement)
+{
+    return {
+        {"Base", {placement.base.at(0), placement.base.at(1), placement.base.at(2)}},
+        {"Rotation",
+         {placement.rotation.at(0),
+          placement.rotation.at(1),
+          placement.rotation.at(2),
+          placement.rotation.at(3)}},
+    };
+}
+
+nlohmann::json scaleValueJson(const std::array<double, 3>& scale)
+{
+    return {scale.at(0), scale.at(1), scale.at(2)};
+}
+
+bool isShowElementToggleOffState(const document::DocumentObject& owner)
+{
+    return !document::readBool(owner, "ShowElement").value_or(true)
+        && !document::readLinks(owner, "ElementList").empty();
+}
+
+nlohmann::json normalizedCollapsedPlacementListJson(const document::DocumentObject& owner,
+                                                    std::size_t elementCount,
+                                                    bool& changed)
+{
+    changed = false;
+    nlohmann::json values = nlohmann::json::array();
+    const auto* property = document::propertyValue(owner, "PlacementList");
+    const nlohmann::json* payload = nullptr;
+    if (property != nullptr) {
+        payload = &rawPropertyPayload(*property);
+    }
+
+    const std::size_t existingSize = payload != nullptr && payload->is_array() ? payload->size() : 0U;
+    changed = property == nullptr || payload == nullptr || !payload->is_array() || existingSize != elementCount;
+    const std::size_t preservedSize = std::min(existingSize, elementCount);
+    for (std::size_t index = 0; index < preservedSize; ++index) {
+        values.push_back(payload->at(index));
+    }
+    for (std::size_t index = preservedSize; index < elementCount; ++index) {
+        values.push_back(defaultElementPlacementJson(index));
+    }
+    return values;
+}
+
+nlohmann::json normalizedCollapsedScaleListJson(const document::DocumentObject& owner,
+                                                std::size_t elementCount,
+                                                bool& changed)
+{
+    changed = false;
+    nlohmann::json values = nlohmann::json::array();
+    const auto* property = document::propertyValue(owner, "ScaleList");
+    const nlohmann::json* payload = nullptr;
+    if (property != nullptr) {
+        payload = &rawPropertyPayload(*property);
+    }
+
+    const std::size_t existingSize = payload != nullptr && payload->is_array() ? payload->size() : 0U;
+    changed = property == nullptr || payload == nullptr || !payload->is_array() || existingSize != elementCount;
+    const std::size_t preservedSize = std::min(existingSize, elementCount);
+    for (std::size_t index = 0; index < preservedSize; ++index) {
+        values.push_back(payload->at(index));
+    }
+    for (std::size_t index = preservedSize; index < elementCount; ++index) {
+        values.push_back(defaultElementScaleJson());
+    }
+    return values;
+}
+
+std::optional<nlohmann::json> collapsedVisibilityListResizeJson(const document::DocumentObject& owner,
+                                                                std::size_t elementCount)
+{
+    const auto* property = document::propertyValue(owner, "VisibilityList");
+    if (property == nullptr) {
+        return std::nullopt;
+    }
+    const auto& payload = rawPropertyPayload(*property);
+    if (!payload.is_array() || payload.size() <= elementCount) {
+        return std::nullopt;
+    }
+
+    nlohmann::json values = nlohmann::json::array();
+    for (std::size_t index = 0; index < elementCount; ++index) {
+        if (!payload.at(index).is_boolean()) {
+            return std::nullopt;
+        }
+        values.push_back(payload.at(index));
+    }
+    return values;
+}
+
+void addCollapsedElementCountOwnerListSyncUpdate(runtime::ComputeContext& context,
+                                                 const document::DocumentObject& owner,
+                                                 std::size_t elementCount)
+{
+    bool placementChanged = false;
+    bool scaleChanged = false;
+    nlohmann::json properties = nlohmann::json::object();
+    const nlohmann::json placements =
+        normalizedCollapsedPlacementListJson(owner, elementCount, placementChanged);
+    const nlohmann::json scales = normalizedCollapsedScaleListJson(owner, elementCount, scaleChanged);
+    if (placementChanged) {
+        properties["PlacementList"] = {
+            {"PropertyType", "App::PropertyPlacementList"},
+            {"value", placements},
+        };
+    }
+    if (scaleChanged) {
+        properties["ScaleList"] = {
+            {"PropertyType", "App::PropertyVectorList"},
+            {"value", scales},
+        };
+    }
+    if (auto visibility = collapsedVisibilityListResizeJson(owner, elementCount)) {
+        properties["VisibilityList"] = {
+            {"PropertyType", "App::PropertyBoolList"},
+            {"value", *visibility},
+        };
+    }
+    if (properties.empty()) {
+        return;
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+    // ::LinkBaseExtension::update(), in the "!_getShowElementValue()" ElementCount branch,
+    // resizes "ScaleList" to ElementCount and grows/crops "PlacementList"; VisibilityList is
+    // cropped when it is longer than ElementCount. cad-core returns that mutation as a stateless
+    // documentObjectUpdates suggestion.
+    context.documentObjectUpdates.push_back({
+        {"action", "update"},
+        {"reason", "element_count_owner_lists_sync"},
+        {"object", owner.name},
+        {"objectId", owner.id},
+        {"typeId", owner.typeId},
+        {"properties", properties},
+    });
+}
+
+std::optional<nlohmann::json> showElementVisibilityListResizeJson(const document::DocumentObject& owner,
+                                                                  std::size_t elementCount)
+{
+    const auto* property = document::propertyValue(owner, "VisibilityList");
+    if (property == nullptr) {
+        return std::nullopt;
+    }
+    const auto& payload = rawPropertyPayload(*property);
+    if (!payload.is_array() || payload.size() == elementCount) {
+        return std::nullopt;
+    }
+
+    nlohmann::json values = nlohmann::json::array();
+    const std::size_t preservedSize = std::min<std::size_t>(payload.size(), elementCount);
+    for (std::size_t index = 0; index < preservedSize; ++index) {
+        if (!payload.at(index).is_boolean()) {
+            return std::nullopt;
+        }
+        values.push_back(payload.at(index));
+    }
+    for (std::size_t index = preservedSize; index < elementCount; ++index) {
+        values.push_back(true);
+    }
+    return values;
+}
+
+void addShowElementElementListOwnerSyncUpdate(runtime::ComputeContext& context,
+                                              const document::DocumentObject& owner,
+                                              std::size_t elementCount)
+{
+    if (owner.typeId != "App::Link" || !document::readBool(owner, "ShowElement").value_or(true)) {
+        return;
+    }
+
+    nlohmann::json properties = nlohmann::json::object();
+    if (document::propertyValue(owner, "ElementCount") != nullptr
+        && readElementCount(owner) != elementCount) {
+        properties["ElementCount"] = {
+            {"PropertyType", "App::PropertyInteger"},
+            {"value", elementCount},
+        };
+    }
+    if (auto visibility = showElementVisibilityListResizeJson(owner, elementCount)) {
+        properties["VisibilityList"] = {
+            {"PropertyType", "App::PropertyBoolList"},
+            {"value", *visibility},
+        };
+    }
+    if (properties.empty()) {
+        return;
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+    // ::LinkBaseExtension::update(), when "prop == getElementListProperty()", rebuilds
+    // "VisibilityList" to the ElementList size and then sets "ElementCount" from
+    // "getElementListProperty()->getSize()". cad-core reports the same owner mutation as a
+    // stateless documentObjectUpdates suggestion.
+    context.documentObjectUpdates.push_back({
+        {"action", "update"},
+        {"reason", "show_element_element_list_owner_sync"},
+        {"object", owner.name},
+        {"objectId", owner.id},
+        {"typeId", owner.typeId},
+        {"properties", properties},
+    });
+}
+
+void addShowElementToggleOffUpdates(runtime::ComputeContext& context,
+                                    const document::DocumentObject& owner,
+                                    const std::vector<document::Link>& elements,
+                                    const nlohmann::json& placements,
+                                    const nlohmann::json& scales)
+{
+    nlohmann::json properties = {
+        {"ElementList", {{"PropertyType", "App::PropertyLinkList"}, {"values", nlohmann::json::array()}}},
+        {"PlacementList", {{"PropertyType", "App::PropertyPlacementList"}, {"value", placements}}},
+        {"ScaleList", {{"PropertyType", "App::PropertyVectorList"}, {"value", scales}}},
+    };
+
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+    // ::LinkBaseExtension::update(), when "_getShowElementValue()" becomes false, preserves
+    // child "element->Placement" and "element->getScaleVector()", clears "ElementList", then
+    // removes the materialized child objects. cad-core returns the equivalent writeback as
+    // documentObjectUpdates and keeps the request graph immutable.
+    context.documentObjectUpdates.push_back({
+        {"action", "update"},
+        {"reason", "show_element_toggle_off_owner_sync"},
+        {"object", owner.name},
+        {"objectId", owner.id},
+        {"typeId", owner.typeId},
+        {"properties", properties},
+    });
+
+    for (const auto& elementLink : elements) {
+        const document::DocumentObject* element = documentObjectByName(context, elementLink.object);
+        if (element == nullptr || !isOwnedMaterializedLinkElement(*element, owner)) {
+            continue;
+        }
+        context.documentObjectUpdates.push_back({
+            {"action", "delete"},
+            {"reason", "show_element_toggle_off_child"},
+            {"object", element->name},
+            {"typeId", element->typeId},
+            {"owner", owner.name},
+            {"ownerId", owner.id},
+        });
+    }
+}
+
+std::optional<CollapsedElementLists> materializedElementListsForToggleOff(
+    const document::DocumentObject& owner,
+    runtime::ComputeContext& context,
+    std::size_t elementCount)
+{
+    CollapsedElementLists lists;
+    nlohmann::json placements = nlohmann::json::array();
+    nlohmann::json scales = nlohmann::json::array();
+    const auto elements = document::readLinks(owner, "ElementList");
+    lists.placements.reserve(std::max(elementCount, elements.size()));
+    lists.scales.reserve(std::max(elementCount, elements.size()));
+
+    for (std::size_t index = 0; index < elements.size(); ++index) {
+        const document::DocumentObject* element = documentObjectByName(context, elements.at(index).object);
+        const auto placement = element == nullptr ? std::nullopt : document::readPlacement(*element, "Placement");
+        if (placement) {
+            placements.push_back(placementValueJson(*placement));
+            lists.placements.push_back(geometry::placementFromComponents(placement->base, placement->rotation));
+        }
+        else {
+            placements.push_back(defaultElementPlacementJson(index));
+            lists.placements.push_back(defaultElementPlacement(index));
+        }
+
+        const std::array<double, 3> scale = element == nullptr ? std::array<double, 3> {1.0, 1.0, 1.0}
+                                                               : readScaleVector(*element);
+        scales.push_back(scaleValueJson(scale));
+        lists.scales.push_back(scale);
+    }
+    addShowElementToggleOffUpdates(context, owner, elements, placements, scales);
+    return lists;
+}
+
+std::optional<CollapsedElementLists> collapsedElementListsForObject(const document::DocumentObject& object,
+                                                                    runtime::ComputeContext& context,
+                                                                    std::size_t elementCount)
+{
+    if (isShowElementToggleOffState(object)) {
+        return materializedElementListsForToggleOff(object, context, elementCount);
+    }
+
+    const auto placements = readPlacementList(object, context);
+    if (!placements) {
+        return std::nullopt;
+    }
+    const auto scales = readScaleList(object, context);
+    if (!scales) {
+        return std::nullopt;
+    }
+    addCollapsedElementCountOwnerListSyncUpdate(context, object, elementCount);
+    return CollapsedElementLists{*placements, *scales};
+}
+
+nlohmann::json showElementPlacementJson(const document::DocumentObject& owner, std::size_t index)
+{
+    const auto* value = document::propertyValue(owner, "PlacementList");
+    if (value != nullptr) {
+        const auto& payload = rawPropertyPayload(*value);
+        if (payload.is_array() && index < payload.size() && payload.at(index).is_object()) {
+            return payload.at(index);
+        }
+    }
+    return defaultElementPlacementJson(index);
+}
+
+double showElementScaleValue(const document::DocumentObject& owner, std::size_t index)
+{
+    const auto* value = document::propertyValue(owner, "ScaleList");
+    if (value != nullptr) {
+        const auto& payload = rawPropertyPayload(*value);
+        if (payload.is_array() && index < payload.size()) {
+            std::array<double, 3> scale {};
+            if (parseVector3Value(payload.at(index), scale)) {
+                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+                // ::LinkBaseExtension::update(), ShowElement branch assigns
+                // "obj->Scale.setValue(scaleProp->getValues()[i].x)".
+                return scale.at(0);
+            }
+        }
+    }
+    return 1.0;
+}
+
+bool nearlyEqual(double lhs, double rhs)
+{
+    return std::abs(lhs - rhs) <= 1e-9;
+}
+
+bool jsonArrayMatches(const nlohmann::json& value, const std::vector<double>& expected)
+{
+    if (!value.is_array() || value.size() != expected.size()) {
+        return false;
+    }
+    for (std::size_t index = 0; index < expected.size(); ++index) {
+        if (!value.at(index).is_number() || !nearlyEqual(value.at(index).get<double>(), expected.at(index))) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool showElementPlacementMatches(const document::DocumentObject& element,
+                                 const document::DocumentObject& owner,
+                                 std::size_t index)
+{
+    const auto placement = document::readPlacement(element, "Placement");
+    if (!placement) {
+        return false;
+    }
+    const nlohmann::json expected = showElementPlacementJson(owner, index);
+    return jsonArrayMatches(expected.at("Base"), {placement->base.at(0), placement->base.at(1), placement->base.at(2)})
+        && jsonArrayMatches(expected.at("Rotation"),
+                            {placement->rotation.at(0),
+                             placement->rotation.at(1),
+                             placement->rotation.at(2),
+                             placement->rotation.at(3)});
+}
+
+bool linkMatches(const document::Link& actual, const document::Link& expected)
+{
+    return actual.object == expected.object && actual.subnames == expected.subnames
+        && actual.stableSubnamesExplicit == expected.stableSubnamesExplicit
+        && actual.stableSubnames == expected.stableSubnames
+        && actual.fullSubnamesExplicit == expected.fullSubnamesExplicit
+        && actual.fullSubnames == expected.fullSubnames;
+}
+
+bool showElementLifecyclePropertiesMatch(const document::DocumentObject& element,
+                                         const document::DocumentObject& owner,
+                                         const document::Link& link,
+                                         bool linkTransform,
+                                         std::size_t index)
+{
+    const auto ownerValue = document::readNumber(element, "_LinkOwner");
+    if (!ownerValue || static_cast<long long>(*ownerValue) != owner.id) {
+        return false;
+    }
+    const auto linkedObject = document::readLink(element, "LinkedObject");
+    if (!linkedObject || !linkMatches(*linkedObject, link)) {
+        return false;
+    }
+    const auto childLinkTransform = document::readBool(element, "LinkTransform");
+    if (!childLinkTransform || *childLinkTransform != linkTransform) {
+        return false;
+    }
+    if (!showElementPlacementMatches(element, owner, index)) {
+        return false;
+    }
+    const auto scale = document::readNumber(element, "Scale");
+    return scale && nearlyEqual(*scale, showElementScaleValue(owner, index));
+}
+
+nlohmann::json linkElementLinkedObjectJson(const document::Link& link)
+{
+    nlohmann::json value = {
+        {"PropertyType", "App::PropertyXLink"},
+        {"value", link.object},
+    };
+    if (!link.subnames.empty()) {
+        value["SubList"] = link.subnames;
+    }
+    if (link.stableSubnamesExplicit) {
+        value["StableSubList"] = link.stableSubnames;
+    }
+    if (link.fullSubnamesExplicit) {
+        value["FullSubList"] = link.fullSubnames;
+    }
+    return value;
+}
+
+nlohmann::json linkElementLifecycleProperties(const document::DocumentObject& owner,
+                                              const document::Link& link,
+                                              bool linkTransform,
+                                              std::size_t index)
+{
+    nlohmann::json placement = showElementPlacementJson(owner, index);
+    placement["PropertyType"] = "App::PropertyPlacement";
+    return {
+        {"_LinkOwner", {{"PropertyType", "App::PropertyInteger"}, {"value", owner.id}}},
+        {"LinkedObject", linkElementLinkedObjectJson(link)},
+        {"LinkTransform", {{"PropertyType", "App::PropertyBool"}, {"value", linkTransform}}},
+        {"Placement", placement},
+        {"Scale", {{"PropertyType", "App::PropertyFloat"}, {"value", showElementScaleValue(owner, index)}}},
+    };
+}
+
+nlohmann::json linkElementListSyncProperties(const document::DocumentObject& owner,
+                                             const document::Link& link,
+                                             bool linkTransform,
+                                             bool syncLinkedObject)
+{
+    nlohmann::json properties = {
+        {"_LinkOwner", {{"PropertyType", "App::PropertyInteger"}, {"value", owner.id}}},
+        {"LinkTransform", {{"PropertyType", "App::PropertyBool"}, {"value", linkTransform}}},
+    };
+    if (syncLinkedObject) {
+        properties["LinkedObject"] = linkElementLinkedObjectJson(link);
+    }
+    return properties;
+}
+
+bool syncableElementListChild(const document::DocumentObject& element,
+                              const document::DocumentObject& owner)
+{
+    if (element.typeId != "App::LinkElement") {
+        return false;
+    }
+    const auto ownerValue = document::readNumber(element, "_LinkOwner");
+    return !ownerValue || static_cast<long long>(*ownerValue) == 0
+        || static_cast<long long>(*ownerValue) == owner.id;
+}
+
+bool elementListChildSyncsLinkedObject(const document::DocumentObject& element)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+    // ::LinkBaseExtension::syncElementList(), after syncing "_LinkOwner" and "LinkTransform",
+    // returns early when "element->LinkCopyOnChange.getValue() == 2"; Link.h names 2 as
+    // "CopyOnChangeOwned", so cad-core must not overwrite that child's LinkedObject.
+    const auto copyOnChange = document::readNumber(element, "LinkCopyOnChange");
+    return !copyOnChange || static_cast<long long>(*copyOnChange) != 2;
+}
+
+bool elementListChildSyncPropertiesMatch(const document::DocumentObject& element,
+                                         const document::DocumentObject& owner,
+                                         const document::Link& link,
+                                         bool linkTransform)
+{
+    const auto ownerValue = document::readNumber(element, "_LinkOwner");
+    if (!ownerValue || static_cast<long long>(*ownerValue) != owner.id) {
+        return false;
+    }
+    if (elementListChildSyncsLinkedObject(element)) {
+        const auto linkedObject = document::readLink(element, "LinkedObject");
+        if (!linkedObject || !linkMatches(*linkedObject, link)) {
+            return false;
+        }
+    }
+    const auto childLinkTransform = document::readBool(element, "LinkTransform");
+    return childLinkTransform && *childLinkTransform == linkTransform;
+}
+
+void addShowElementElementListChildSyncUpdates(runtime::ComputeContext& context,
+                                               const document::DocumentObject& owner,
+                                               const std::vector<document::Link>& elements)
+{
+    if (owner.typeId != "App::Link" || !document::readBool(owner, "ShowElement").value_or(true)) {
+        return;
+    }
+    const auto link = document::readLink(owner, "LinkedObject");
+    if (!link) {
+        return;
+    }
+    const bool linkTransform = document::readBool(owner, "LinkTransform").value_or(false);
+    for (std::size_t index = 0; index < elements.size(); ++index) {
+        const document::DocumentObject* element = documentObjectByName(context, elements.at(index).object);
+        if (element == nullptr || !syncableElementListChild(*element, owner)
+            || elementListChildSyncPropertiesMatch(*element, owner, *link, linkTransform)) {
+            continue;
+        }
+        const auto ownerValue = document::readNumber(*element, "_LinkOwner");
+        const bool orphan = !ownerValue || static_cast<long long>(*ownerValue) == 0;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+        // ::LinkBaseExtension::syncElementList(), for each LinkElement in "ElementList", sets
+        // "_LinkOwner" to the owner ID and synchronizes child "LinkTransform". It synchronizes
+        // "LinkedObject" unless "LinkCopyOnChange == 2" marks the child as an owned copy.
+        // Unlike the ElementCount branch, this does not assign child Placement or Scale.
+        const bool syncLinkedObject = elementListChildSyncsLinkedObject(*element);
+        context.documentObjectUpdates.push_back({
+            {"action", orphan ? "claim" : "update"},
+            {"reason", "show_element_element_list_child_sync"},
+            {"object", element->name},
+            {"typeId", element->typeId},
+            {"owner", owner.name},
+            {"ownerId", owner.id},
+            {"index", index},
+            {"properties", linkElementListSyncProperties(owner, *link, linkTransform, syncLinkedObject)},
+        });
+    }
+}
+
+void addLinkElementCreateUpdate(runtime::ComputeContext& context,
+                                const document::DocumentObject& owner,
+                                const document::Link& link,
+                                bool linkTransform,
+                                const LinkElementEntry& entry)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+    // ::LinkBaseExtension::update(), ShowElement branch creates missing LinkElement children
+    // named owner "_i" index and copies owner LinkedObject / LinkTransform / placement / scale.
+    // cad-core keeps the graph stateless and returns the equivalent mutation as a frontend
+    // documentObjectUpdates suggestion.
+    context.documentObjectUpdates.push_back({
+        {"action", "create"},
+        {"reason", "show_element_missing_child"},
+        {"object", entry.name},
+        {"typeId", "App::LinkElement"},
+        {"owner", owner.name},
+        {"ownerId", owner.id},
+        {"index", entry.index},
+        {"properties", linkElementLifecycleProperties(owner, link, linkTransform, entry.index)},
+    });
+}
+
+void addLinkElementSyncUpdate(runtime::ComputeContext& context,
+                              const document::DocumentObject& owner,
+                              const document::Link& link,
+                              bool linkTransform,
+                              const LinkElementEntry& entry)
+{
+    if (entry.object == nullptr
+        || showElementLifecyclePropertiesMatch(*entry.object, owner, link, linkTransform, entry.index)) {
+        return;
+    }
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+    // ::LinkBaseExtension::update() keeps existing owned ShowElement children in sync by assigning
+    // "obj->Placement", "obj->Scale", and updateGroup() synchronizes LinkedObject/LinkTransform.
+    context.documentObjectUpdates.push_back({
+        {"action", "update"},
+        {"reason", "show_element_child_sync"},
+        {"object", entry.name},
+        {"typeId", "App::LinkElement"},
+        {"owner", owner.name},
+        {"ownerId", owner.id},
+        {"index", entry.index},
+        {"properties", linkElementLifecycleProperties(owner, link, linkTransform, entry.index)},
+    });
+}
+
+void addLinkElementClaimUpdate(runtime::ComputeContext& context,
+                               const document::DocumentObject& owner,
+                               const document::Link& link,
+                               bool linkTransform,
+                               const LinkElementEntry& entry)
+{
+    if (entry.object == nullptr) {
+        return;
+    }
+    const auto ownerValue = document::readNumber(*entry.object, "_LinkOwner");
+    if (ownerValue && static_cast<long long>(*ownerValue) == owner.id) {
+        addLinkElementSyncUpdate(context, owner, link, linkTransform, entry);
+        return;
+    }
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+    // ::LinkBaseExtension::update() re-claims orphan children when "_LinkOwner" is empty/0,
+    // then updateGroup() synchronizes owner id, LinkedObject and LinkTransform.
+    context.documentObjectUpdates.push_back({
+        {"action", "claim"},
+        {"reason", "show_element_orphan_child"},
+        {"object", entry.name},
+        {"typeId", "App::LinkElement"},
+        {"owner", owner.name},
+        {"ownerId", owner.id},
+        {"index", entry.index},
+        {"properties", linkElementLifecycleProperties(owner, link, linkTransform, entry.index)},
+    });
+}
+
+void addStaleLinkElementDeleteUpdates(runtime::ComputeContext& context,
+                                      const document::DocumentObject& owner,
+                                      std::size_t elementCount)
+{
+    const std::string prefix = owner.name + "_i";
+    for (const auto& [name, object] : context.documentObjects) {
+        if (object == nullptr || object->typeId != "App::LinkElement" || name.rfind(prefix, 0U) != 0U) {
+            continue;
+        }
+        const auto index = materializedLinkElementIndex(*object);
+        if (!index || *index < elementCount) {
+            continue;
+        }
+        const auto ownerValue = document::readNumber(*object, "_LinkOwner");
+        if (!ownerValue || static_cast<long long>(*ownerValue) != owner.id) {
+            continue;
+        }
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+        // ::LinkBaseExtension::update(), when ElementCount shrinks, removes trailing owned
+        // LinkElement children after cutting them from ElementList.
+        context.documentObjectUpdates.push_back({
+            {"action", "delete"},
+            {"reason", "show_element_excess_child"},
+            {"object", object->name},
+            {"typeId", "App::LinkElement"},
+            {"owner", owner.name},
+            {"ownerId", owner.id},
+            {"index", *index},
+        });
+    }
 }
 
 std::optional<std::size_t> materializedLinkElementIndex(const document::DocumentObject& element)
@@ -1468,6 +2620,7 @@ void publishLinkShapeBuild(const document::DocumentObject& object,
             link.object,
             sourceShapeIt->second.shape,
             sourceNamedShapeIt == context.namedShapes.end() ? nullptr : &sourceNamedShapeIt->second,
+            linkedObjectAliasOwners(link, context),
         };
         if (!shape->sourceToTargetElements.empty()) {
             linkedNamedShape = topo::namedShapeForLinkedSubshapes(
@@ -1490,10 +2643,6 @@ bool executeInheritedMaterializedLinkElement(
     const std::set<std::string>& allowedProperties,
     const std::string& kind)
 {
-    if (document::propertyValue(object, "LinkedObject") != nullptr) {
-        return false;
-    }
-
     const document::DocumentObject* owner = materializedLinkElementOwner(object, context);
     if (owner == nullptr) {
         return false;
@@ -1501,6 +2650,29 @@ bool executeInheritedMaterializedLinkElement(
 
     if (!rejectUnsupportedProperties(object, context, allowedProperties)) {
         context.objects[object.name] = {{"status", "error"}};
+        return true;
+    }
+
+    const bool linkTransform = document::readBool(*owner, "LinkTransform").value_or(false);
+    if (!elementListChildSyncsLinkedObject(object)) {
+        const auto childLink = document::readLink(object, "LinkedObject");
+        if (!childLink) {
+            return false;
+        }
+
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+        // ::LinkBaseExtension::syncElementList(), "LinkCopyOnChange.getValue() == 2"
+        // returns before replacing child "LinkedObject", but owner "LinkTransform" has already
+        // been synchronized. cad-core computes that mixed state request-locally.
+        const auto shape = linkShape(object, context, *childLink, linkTransform);
+        nlohmann::json metadata = {
+            {"link", kind},
+            {"linked_object", childLink->object},
+            {"link_transform", linkTransform},
+            {"link_owner", owner->name},
+            {"owned_copy_linked_object", true},
+        };
+        publishLinkShapeBuild(object, context, *childLink, shape, metadata);
         return true;
     }
 
@@ -1519,11 +2691,10 @@ bool executeInheritedMaterializedLinkElement(
     }
 
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
-    // ::LinkBaseExtension::updateGroup(), for owned children, copies parent
+    // ::LinkBaseExtension::updateGroup(), for non CopyOnChangeOwned children, copies parent
     // "element->LinkedObject.setValue(xlink->getValue(), xlink->getSubValues())" and syncs
     // "element->LinkTransform" with the owner link. cad-core computes that inherited state
     // request-locally without mutating the DocumentObject graph.
-    const bool linkTransform = document::readBool(*owner, "LinkTransform").value_or(false);
     const auto index = materializedLinkElementIndex(object).value_or(0U);
     const auto shape = inheritedMaterializedLinkElementShape(
         object,
@@ -1550,8 +2721,7 @@ std::optional<LinkShapeBuild> syntheticLinkElementShape(
     const document::Link& link,
     bool linkTransform,
     std::size_t index,
-    const std::vector<gp_Trsf>& placements,
-    const std::vector<std::array<double, 3>>& scales)
+    const std::vector<gp_Trsf>& placements)
 {
     auto selected = baseLinkedShape(object, context, link, linkTransform);
     if (!selected) {
@@ -1559,15 +2729,12 @@ std::optional<LinkShapeBuild> syntheticLinkElementShape(
     }
 
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
-    // ::LinkBaseExtension::update(), when ShowElement is true, creates or re-claims
-    // child LinkElement objects named owner "_iN"; it copies PlacementList[idx] and
-    // ScaleList[idx] into the child, otherwise using default grid placement and scale 1.
-    TopoDS_Shape displayedShape = applyScale(
+    // ::LinkBaseExtension::extensionGetSubObject(), when traversing owner ElementList,
+    // delegates to child getSubObject(); the child "Scale will be included here" branch is
+    // guarded by pyObj, so the owner's Shape collection uses child placement but not child
+    // ScaleList geometry.
+    TopoDS_Shape displayedShape = geometry::transformShape(
         selected->shape,
-        showElementScaleFromList(scales, index)
-    );
-    displayedShape = geometry::transformShape(
-        displayedShape,
         index < placements.size() ? placements.at(index) : defaultElementPlacement(index)
     );
     selected->shape = displayedShape;
@@ -1585,35 +2752,17 @@ void executeMaterializedElementGroupLike(const document::DocumentObject& object,
     }
 
     const auto entries = linkElementEntries(object, context);
-    bool needsSyntheticElements = false;
-    for (const auto& entry : entries) {
-        if (entry.object == nullptr) {
-            needsSyntheticElements = true;
-            break;
-        }
-    }
 
-    std::vector<gp_Trsf> placements;
-    std::vector<std::array<double, 3>> scales;
-    std::optional<document::Link> link;
-    bool linkTransform = false;
-    if (needsSyntheticElements) {
-        const auto parsedPlacements = readPlacementList(object, context);
-        if (!parsedPlacements) {
-            return;
-        }
-        placements = *parsedPlacements;
-        const auto parsedScales = readScaleList(object, context);
-        if (!parsedScales) {
-            return;
-        }
-        scales = *parsedScales;
-        link = linkedObjectProperty(object, context);
-        if (!link) {
-            return;
-        }
-        linkTransform = document::readBool(object, "LinkTransform").value_or(false);
+    const auto parsedPlacements = readPlacementList(object, context);
+    if (!parsedPlacements) {
+        return;
     }
+    const std::vector<gp_Trsf> placements = *parsedPlacements;
+    const auto link = linkedObjectProperty(object, context);
+    if (!link) {
+        return;
+    }
+    const bool linkTransform = document::readBool(object, "LinkTransform").value_or(false);
 
     nlohmann::json elements = nlohmann::json::array();
     nlohmann::json visibleElements = nlohmann::json::array();
@@ -1621,15 +2770,22 @@ void executeMaterializedElementGroupLike(const document::DocumentObject& object,
     std::vector<topo::NamedShapeSource> sources;
     const auto visibility = readVisibilityList(object);
     const gp_Trsf groupPlacement = objectGlobalPlacement(object, context);
-    const auto sourceNamedShapeIt =
-        link ? context.namedShapes.find(link->object) : context.namedShapes.end();
+    const auto ownerLink = document::readLink(object, "LinkedObject");
+    const auto sourceNamedShapeIt = context.namedShapes.find(link->object);
     const topo::NamedShape* sourceNamedShape =
         sourceNamedShapeIt == context.namedShapes.end() ? nullptr : &sourceNamedShapeIt->second;
     bool hasMaterializedElement = false;
     bool hasSyntheticElement = false;
+    addStaleLinkElementDeleteUpdates(context, object, readElementCount(object));
 
     for (const auto& entry : entries) {
         elements.push_back(entry.name);
+        if (entry.object == nullptr) {
+            addLinkElementCreateUpdate(context, object, *link, linkTransform, entry);
+        }
+        else {
+            addLinkElementClaimUpdate(context, object, *link, linkTransform, entry);
+        }
         if (!isVisibleElement(entry.index, visibility)) {
             continue;
         }
@@ -1637,33 +2793,27 @@ void executeMaterializedElementGroupLike(const document::DocumentObject& object,
         TopoDS_Shape displayedShape;
         const topo::NamedShape* elementNamedShape = nullptr;
         if (entry.object != nullptr) {
-            const auto shapeIt = context.shapes.find(entry.name);
-            if (shapeIt == context.shapes.end()) {
-                continue;
-            }
-            displayedShape = shapeIt->second.shape;
             const auto namedShapeIt = context.namedShapes.find(entry.name);
             elementNamedShape =
                 namedShapeIt == context.namedShapes.end() ? nullptr : &namedShapeIt->second;
             hasMaterializedElement = true;
         }
         else {
-            const auto synthetic = syntheticLinkElementShape(
-                object,
-                context,
-                *link,
-                linkTransform,
-                entry.index,
-                placements,
-                scales
-            );
-            if (!synthetic) {
-                continue;
-            }
-            displayedShape = synthetic->shape;
             elementNamedShape = sourceNamedShape;
             hasSyntheticElement = true;
         }
+        const auto synthetic = syntheticLinkElementShape(
+            object,
+            context,
+            *link,
+            linkTransform,
+            entry.index,
+            placements
+        );
+        if (!synthetic) {
+            continue;
+        }
+        displayedShape = synthetic->shape;
 
         // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
         // ::LinkBaseExtension::update() creates or re-claims owner "_iN" LinkElement
@@ -1672,11 +2822,49 @@ void executeMaterializedElementGroupLike(const document::DocumentObject& object,
         displayedShape = geometry::transformShape(displayedShape, groupPlacement);
         shapes.push_back(displayedShape);
         visibleElements.push_back(entry.name);
+        const std::optional<document::Link> elementLink =
+            entry.object == nullptr ? std::nullopt : document::readLink(*entry.object, "LinkedObject");
+        const document::Link* aliasLink = nullptr;
+        if (elementLink) {
+            aliasLink = &*elementLink;
+        }
+        else if (ownerLink) {
+            aliasLink = &*ownerLink;
+        }
+
         sources.push_back(topo::NamedShapeSource{
             entry.name,
             displayedShape,
             elementNamedShape,
+            aliasLink == nullptr
+                ? std::vector<std::string> {}
+                : linkedTargetSubpathAliasOwners(entry.name, *aliasLink, context),
         });
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+        // ::LinkBaseExtension::getElementIndex(), when ShowElement creates child LinkElement
+        // objects, still accepts digit-prefixed subpaths before searching child object names
+        // or "$" + child labels.
+        sources.push_back(topo::NamedShapeSource{
+            std::to_string(entry.index),
+            displayedShape,
+            elementNamedShape,
+            aliasLink == nullptr
+                ? std::vector<std::string> {}
+                : linkedTargetSubpathAliasOwners(std::to_string(entry.index), *aliasLink, context),
+        });
+        if (entry.object != nullptr) {
+            const std::string label = objectLabel(entry.name, context);
+            if (label != entry.name) {
+                sources.push_back(topo::NamedShapeSource{
+                    "$" + label,
+                    displayedShape,
+                    elementNamedShape,
+                    aliasLink == nullptr
+                        ? std::vector<std::string> {}
+                        : linkedTargetSubpathAliasOwners("$" + label, *aliasLink, context),
+                });
+            }
+        }
     }
 
     nlohmann::json metadata = {
@@ -1731,12 +2919,37 @@ void executeAppLink(const document::DocumentObject& object, runtime::ComputeCont
     // adds LINK_PARAMS_LINK including "LinkedObject", "LinkTransform", "LinkPlacement" and
     // "Placement"; Link::isLinkGroup() returns ElementCount > 0, and LinkBaseExtension routes
     // ElementList through child LinkElement objects when the link acts as an element group.
-    if (!document::readLinks(object, "ElementList").empty()) {
+    const auto elementCount = readElementCount(object);
+    const bool showElement = document::readBool(object, "ShowElement").value_or(true);
+    if (linkedPlainGroupProperty(object, context)) {
+        executeLinkedPlainGroupLike(object,
+                                    context,
+                                    {"LinkedObject",
+                                     "LinkTransform",
+                                     "LinkPlacement",
+                                     "Placement",
+                                     "LinkClaimChild",
+                                     "Scale",
+                                     "ScaleVector",
+                                     "ShowElement",
+                                     "ElementCount",
+                                     "ElementList",
+                                     "LinkExecute",
+                                     "LinkCopyOnChange",
+                                     "LinkCopyOnChangeSource",
+                                     "LinkCopyOnChangeGroup",
+                                     "LinkCopyOnChangeTouched"},
+                                    "app_link_group");
+        return;
+    }
+
+    if (!document::readLinks(object, "ElementList").empty() && (showElement || elementCount == 0U)) {
         executeElementGroupLike(object,
                                 context,
                                 {"LinkedObject",
                                  "LinkTransform",
                                  "LinkPlacement",
+                                 "Placement",
                                  "LinkClaimChild",
                                  "Scale",
                                  "ScaleVector",
@@ -1757,12 +2970,13 @@ void executeAppLink(const document::DocumentObject& object, runtime::ComputeCont
         return;
     }
 
-    if (readElementCount(object) > 0U && document::readBool(object, "ShowElement").value_or(true)) {
+    if (elementCount > 0U && showElement) {
         executeMaterializedElementGroupLike(object,
                                             context,
                                             {"LinkedObject",
                                              "LinkTransform",
                                              "LinkPlacement",
+                                             "Placement",
                                              "LinkClaimChild",
                                              "Scale",
                                              "ScaleVector",
@@ -1783,12 +2997,13 @@ void executeAppLink(const document::DocumentObject& object, runtime::ComputeCont
         return;
     }
 
-    if (readElementCount(object) > 0U) {
+    if (elementCount > 0U) {
         executeCollapsedElementCountLink(object,
                                          context,
                                          {"LinkedObject",
                                           "LinkTransform",
                                           "LinkPlacement",
+                                          "Placement",
                                           "LinkClaimChild",
                                           "Scale",
                                           "ScaleVector",
@@ -1813,10 +3028,11 @@ void executeAppLink(const document::DocumentObject& object, runtime::ComputeCont
     // ::LinkBaseExtension::extensionGetLinkedObject() resolves the target shape.
     executeLinkLike(object,
                     context,
-                    {"LinkedObject",
-                     "LinkTransform",
-                     "LinkPlacement",
-                     "LinkClaimChild",
+                     {"LinkedObject",
+                      "LinkTransform",
+                      "LinkPlacement",
+                      "Placement",
+                      "LinkClaimChild",
                      "Scale",
                      "ScaleVector",
                      "ShowElement",
@@ -1838,6 +3054,7 @@ void executeAppLinkElement(const document::DocumentObject& object, runtime::Comp
     const std::set<std::string> allowedProperties = {"LinkedObject",
                                                      "LinkTransform",
                                                      "LinkPlacement",
+                                                     "Placement",
                                                      "_LinkOwner",
                                                      "Scale",
                                                      "ScaleVector",
@@ -1863,8 +3080,26 @@ void executeAppLinkGroup(const document::DocumentObject& object, runtime::Comput
     // placement while keeping each child object's own link semantics.
     executeElementGroupLike(object,
                             context,
-                            {"ElementList", "VisibilityList", "LinkMode", "ColoredElements"},
+                            {"ElementList", "Placement", "VisibilityList", "LinkMode", "ColoredElements"},
                             "app_link_group");
+}
+
+void executeDocumentObjectGroup(const document::DocumentObject& object, runtime::ComputeContext& context)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/DocumentObjectGroup.cpp
+    // ::DocumentObjectGroup::DocumentObjectGroup(), calls "GroupExtension::initExtension(this)".
+    // The plain group has no Shape of its own; App::Link consumes its "Group" children through
+    // LinkBaseExtension::linkedPlainGroup() / updateGroup().
+    if (!rejectUnsupportedProperties(object, context, {"Group", "Label"})) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+
+    context.objects[object.name] = {
+        {"status", "ok"},
+        {"container", "document_object_group"},
+        {"group", linkNamesJson(document::readLinks(object, "Group"))},
+    };
 }
 
 void executeAssemblyObject(const document::DocumentObject& object, runtime::ComputeContext& context)
@@ -1897,6 +3132,8 @@ void executeAssemblyObject(const document::DocumentObject& object, runtime::Comp
     nlohmann::json metadata = {
         {"assembly", "object"},
         {"group", group},
+        {"joint_groups", assemblyJointGroupNames(object, context)},
+        {"joints", assemblyJointNames(object, context)},
         {"solve", "not_migrated"},
     };
     if (shapes.empty()) {
@@ -1912,6 +3149,122 @@ void executeAssemblyObject(const document::DocumentObject& object, runtime::Comp
         shapeKindForShape(shape),
         metadata,
         topo::namedShapeForPreservedSources(object.name, shape, sources)
+    );
+}
+
+void executeAssemblyJointGroup(const document::DocumentObject& object, runtime::ComputeContext& context)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/JointGroup.cpp
+    // PROPERTY_SOURCE(Assembly::JointGroup, App::DocumentObjectGroup); JointGroup::getJoints()
+    // returns its App::FeaturePython joint children and delegates connector updates to their Proxy.
+    if (!rejectUnsupportedProperties(object, context, {"Group"})) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+
+    nlohmann::json joints = nlohmann::json::array();
+    for (const auto& link : document::readLinks(object, "Group")) {
+        const document::DocumentObject* child = documentObjectByName(context, link.object);
+        if (child != nullptr && isAssemblyJointFeaturePython(*child)) {
+            joints.push_back(link.object);
+        }
+    }
+
+    publishEmptyLink(
+        object,
+        context,
+        {
+            {"assembly", "joint_group"},
+            {"group", linkNamesJson(document::readLinks(object, "Group"))},
+            {"joints", joints},
+            {"solve", "not_migrated"},
+        }
+    );
+}
+
+void executeAssemblyFeaturePython(const document::DocumentObject& object, runtime::ComputeContext& context)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/JointObject.py
+    // class Joint "consists of 2 JCS (joint coordinate systems) and a Joint Type";
+    // class GroundedJoint creates "ObjectToGround". cad-core exposes these solver inputs as
+    // request-local metadata while the OndselSolver path remains the Assembly P8 known gap.
+    const bool grounded = document::propertyValue(object, "ObjectToGround") != nullptr;
+    const bool joint = document::propertyValue(object, "JointType") != nullptr;
+    if (!grounded && !joint) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "unsupported_type",
+                               "Unsupported App::FeaturePython role " + object.name,
+                               object.name,
+                               {},
+                               "runtime");
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+
+    const std::set<std::string> allowedProperties = {"JointType",
+                                                     "Reference1",
+                                                     "Placement1",
+                                                     "Detach1",
+                                                     "Offset1",
+                                                     "Reference2",
+                                                     "Placement2",
+                                                     "Detach2",
+                                                     "Offset2",
+                                                     "Angle",
+                                                     "Distance",
+                                                     "Distance2",
+                                                     "EnableLengthMin",
+                                                     "EnableLengthMax",
+                                                     "EnableAngleMin",
+                                                     "EnableAngleMax",
+                                                     "LengthMin",
+                                                     "LengthMax",
+                                                     "AngleMin",
+                                                     "AngleMax",
+                                                     "Suppressed",
+                                                     "ObjectToGround"};
+    if (!rejectUnsupportedProperties(object, context, allowedProperties)) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+
+    if (grounded) {
+        const auto objectToGround = document::readLink(object, "ObjectToGround");
+        if (!objectToGround) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "missing_property",
+                                   "Grounded joint ObjectToGround is not set",
+                                   object.name,
+                                   "ObjectToGround",
+                                   "runtime");
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
+        publishEmptyLink(
+            object,
+            context,
+            {
+                {"assembly", "grounded_joint"},
+                {"object_to_ground", objectToGround->object},
+                {"solve", "not_migrated"},
+            }
+        );
+        return;
+    }
+
+    publishEmptyLink(
+        object,
+        context,
+        {
+            {"assembly", "joint"},
+            {"joint_type", document::readString(object, "JointType").value_or("")},
+            {"reference1", jointReferenceJson(object, "Reference1")},
+            {"reference2", jointReferenceJson(object, "Reference2")},
+            {"suppressed", document::readBool(object, "Suppressed").value_or(false)},
+            {"solve", "not_migrated"},
+        }
     );
 }
 

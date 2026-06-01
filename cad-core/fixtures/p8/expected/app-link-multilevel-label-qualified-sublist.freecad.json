@@ -1,0 +1,39 @@
+{
+  "object": "FaceLink",
+  "reference": "FreeCAD Link.cpp source-equivalent LinkSub label chain: FaceLink -> $PrettyChain.$PrettyBoxLink.$PrettyBox.Face1; LinkBaseExtension::getElementIndex() accepts \"$\" + child Label and extensionGetSubObject() compares tokens with linked->Label",
+  "bbox": {
+    "min": [5, 17, 0],
+    "max": [5, 20, 4]
+  },
+  "volume": 0.0,
+  "topology_counts": {
+    "faces": 1,
+    "edges": 4,
+    "vertices": 4
+  },
+  "object_fields": {
+    "link": "app_link",
+    "linked_object": "ChainLink",
+    "shape": "occt_face"
+  },
+  "named_shapes": {
+    "FaceLink": {
+      "element_map_status": "history_partial",
+      "element_map": {
+        "$PrettyBox.Face1": "Face1",
+        "$PrettyBoxLink.$PrettyBox.Face1": "Face1",
+        "$PrettyChain.$PrettyBoxLink.$PrettyBox.Face1": "Face1",
+        "Box.Face1": "Face1",
+        "BoxLink.$PrettyBox.Face1": "Face1",
+        "ChainLink.$PrettyBoxLink.$PrettyBox.Face1": "Face1"
+      },
+      "history_entries": [
+        {
+          "kind": "modified",
+          "element_for_source": "$PrettyChain.$PrettyBoxLink.$PrettyBox.Face1",
+          "sources_include": ["$PrettyChain.$PrettyBoxLink.$PrettyBox.Face1"]
+        }
+      ]
+    }
+  }
+}

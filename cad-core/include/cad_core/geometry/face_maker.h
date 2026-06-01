@@ -10,7 +10,13 @@
 namespace cad_core::geometry {
 
 struct FaceMakerBuildFaceResult {
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+    // ::SketchObject::buildInternals(), stores the FaceMakerBuildFace result as auxiliary
+    // "InternalShape" while PartDesign Pad still builds its profile face from Sketch.Shape.
+    // Closed-wire holes therefore keep a profile face with holes, but InternalShape can publish
+    // the bounded face network returned by FaceMakerBuildFace.
     std::optional<TopoDS_Shape> shape;
+    std::optional<TopoDS_Shape> internalShape;
     std::size_t faceCount = 0;
     bool splitProducedBoundedFaces = false;
 };

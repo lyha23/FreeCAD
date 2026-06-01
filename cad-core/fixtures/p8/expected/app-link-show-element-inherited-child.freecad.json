@@ -1,6 +1,6 @@
 {
   "object": "ArrayLink",
-  "reference": "FreeCAD LinkBaseExtension updateGroup-equivalent inherited LinkedObject on materialized LinkElement",
+  "reference": "FreeCADCmd native App::Link ShowElement materialized child geometry oracle; inherited LinkElement source alias remains source-equivalent",
   "freecad_version": "1.2.0 revision 20260519",
   "bbox": {
     "min": [

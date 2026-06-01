@@ -192,9 +192,19 @@ std::optional<ReferenceSubshapeResolution> currentSubshapeForReference(const doc
 
     const auto namedShapeIt = context.namedShapes.find(link.object);
     if (namedShapeIt != context.namedShapes.end()) {
-        if (!stableSubname.empty()) {
-            if (const auto subshape = topo::subshapeByName(namedShapeIt->second, stableSubname)) {
-                return ReferenceSubshapeResolution {subname, *subshape, false};
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/PropertyLinks.cpp
+        // ::PropertyLinkBase::_updateElementReference(), calls GeoFeature::resolveElement()
+        // before updating "shadow" and the persisted subname. cad-core mirrors that by
+        // resolving StableSubList through the current NamedShape ElementMap before validating
+        // ReferenceShadow evidence.
+        const auto resolved = topo::resolveElementReference(namedShapeIt->second, subname, stableSubname);
+        if (resolved.status == topo::ElementResolveStatus::Resolved && resolved.element) {
+            if (const auto subshape = topo::subshapeByName(namedShapeIt->second, *resolved.element)) {
+                return ReferenceSubshapeResolution {
+                    *resolved.element,
+                    *subshape,
+                    *resolved.element != subname,
+                };
             }
         }
     }
@@ -463,6 +473,19 @@ std::optional<std::vector<std::string>> stableSubnamesForReferenceUpdate(
     return stableSubnames;
 }
 
+std::optional<std::vector<std::string>> fullSubnamesForReferenceUpdate(const document::Link& link,
+                                                                       std::size_t subnameCount)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+    // ::LinkBaseExtension::checkGeoElementMap() uses the full external subname as the retag
+    // postfix evidence. Preserve explicitly supplied FullSubList when returning stateless
+    // elementReferenceUpdates; generated stable names alone are not enough to reconstruct it.
+    if (!link.fullSubnamesExplicit || link.fullSubnames.size() != subnameCount) {
+        return std::nullopt;
+    }
+    return link.fullSubnames;
+}
+
 nlohmann::json shadowSubsForReferenceUpdate(const document::Link& link,
                                             const std::vector<std::string>& subnames,
                                             const std::optional<std::vector<std::string>>& stableSubnames)
@@ -567,6 +590,9 @@ void appendElementReferenceUpdate(const document::DocumentObject& object,
     if (stableSubnames) {
         update["StableSubList"] = *stableSubnames;
     }
+    if (const auto fullSubnames = fullSubnamesForReferenceUpdate(link, subnames.size())) {
+        update["FullSubList"] = *fullSubnames;
+    }
     nlohmann::json shadowSubs = shadowSubsForReferenceUpdate(link, subnames, stableSubnames);
     if (!shadowSubs.empty()) {
         update["ShadowSub"] = std::move(shadowSubs);
@@ -585,6 +611,9 @@ nlohmann::json linkSubListItemUpdateJson(const document::Link& link,
     const auto stableSubnames = stableSubnamesForReferenceUpdate(link, referenceShadows, subnames.size());
     if (stableSubnames) {
         item["StableSubList"] = *stableSubnames;
+    }
+    if (const auto fullSubnames = fullSubnamesForReferenceUpdate(link, subnames.size())) {
+        item["FullSubList"] = *fullSubnames;
     }
     nlohmann::json shadowSubs = shadowSubsForReferenceUpdate(link, subnames, stableSubnames);
     if (!shadowSubs.empty()) {
@@ -694,6 +723,10 @@ bool validateReferenceShadows(const document::DocumentObject& object,
                 if (!currentSubshape || currentSubshape->shape.IsNull()) {
                     continue;
                 }
+                // Failed ReferenceShadow validation reports the persisted property subname; only
+                // successful updates below replace SubList with the recovered current subshape.
+                const std::string requestedSubname =
+                    index < link.subnames.size() ? link.subnames.at(index) : shadow.subname;
                 if (currentSubshape->recovered) {
                     setUpdatedSubname(index, currentSubshape->subname);
                 }
@@ -737,12 +770,12 @@ bool validateReferenceShadows(const document::DocumentObject& object,
                             addDiagnostic(context.diagnostics,
                                           "error",
                                           code,
-                                          propertyName + " target " + link.object + " subname " + subname + " " + reason,
+                                          propertyName + " target " + link.object + " subname " + requestedSubname + " " + reason,
                                           object.name,
                                           propertyName,
                                           "runtime",
                                           link.object,
-                                          subname);
+                                          requestedSubname);
                             valid = false;
                             linkValid = false;
                             continue;
@@ -751,13 +784,13 @@ bool validateReferenceShadows(const document::DocumentObject& object,
                     addDiagnostic(context.diagnostics,
                                   "error",
                                   "subname_semantic_drift",
-                                  propertyName + " target " + link.object + " subname " + subname
+                                  propertyName + " target " + link.object + " subname " + requestedSubname
                                       + " no longer matches ReferenceShadow fingerprint: " + *driftReason,
                                   object.name,
                                   propertyName,
                                   "runtime",
                                   link.object,
-                                  subname);
+                                  requestedSubname);
                     valid = false;
                     linkValid = false;
                     continue;
@@ -1074,6 +1107,7 @@ nlohmann::json recomputeResultJson(const document::Document& document,
     return {
         {"results", results},
         {"elementReferenceUpdates", context.elementReferenceUpdates},
+        {"documentObjectUpdates", context.documentObjectUpdates},
         {"diagnostics", diagnosticsToJson(context.diagnostics)},
     };
 }

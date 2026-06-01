@@ -8,7 +8,10 @@ namespace cad_core::features {
 void executeAppLink(const document::DocumentObject& object, runtime::ComputeContext& context);
 void executeAppLinkElement(const document::DocumentObject& object, runtime::ComputeContext& context);
 void executeAppLinkGroup(const document::DocumentObject& object, runtime::ComputeContext& context);
+void executeDocumentObjectGroup(const document::DocumentObject& object, runtime::ComputeContext& context);
 void executeAssemblyObject(const document::DocumentObject& object, runtime::ComputeContext& context);
 void executeAssemblyLink(const document::DocumentObject& object, runtime::ComputeContext& context);
+void executeAssemblyJointGroup(const document::DocumentObject& object, runtime::ComputeContext& context);
+void executeAssemblyFeaturePython(const document::DocumentObject& object, runtime::ComputeContext& context);
 
 }  // namespace cad_core::features

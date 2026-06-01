@@ -1,23 +1,21 @@
 {
-  "reference": "FreeCADCmd geometry-equivalent 2x2x2 Pad mirrored as Whole shape across datum plane at X=2",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "reference": "FreeCADCmd oracle from mirrored-whole-shape.json; objects: Sketcher::SketchObject, PartDesign::Pad, PartDesign::Plane, PartDesign::Mirrored",
   "freecad_version": "1.2.0 revision 20260519",
-  "objects": {
-    "Mirrored": {
-      "bbox": {
-        "min": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "max": [
-          4.0,
-          2.0,
-          2.0
-        ]
-      },
-      "volume": 16.0
-    }
+  "object": "Mirrored",
+  "bbox": {
+    "min": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "max": [
+      4.0,
+      2.0,
+      2.0
+    ]
   },
+  "volume": 16.0,
   "named_shapes": {
     "Mirrored": {
       "element_map_status": "history_partial",

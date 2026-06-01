@@ -75,6 +75,9 @@ void executePocket(const document::DocumentObject& object, runtime::ComputeConte
     };
     if (extrusion->topoNamingKnownGap) {
         result["topo_naming"] = "known_gap:taper_history";
+        if (namedShape) {
+            result["topo_naming_history"] = "history_partial:taper";
+        }
     }
     if (shapeResult.applied) {
         result["refine"] = "applied";

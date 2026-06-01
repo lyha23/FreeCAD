@@ -83,6 +83,136 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(hole["add_sub"], "sub")
         self.assert_object_matches_expected(result, "p7", "hole-blind-depth")
 
+    def test_p7_hole_supported_profile_matches_native_oracle(self) -> None:
+        result = self.run_recompute("hole-supported-blind-depth", "p7")
+        hole = result["objects"]["Hole"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(hole["status"], "ok")
+        self.assertEqual(hole["source_profile"], "SketchHole")
+        self.assert_object_matches_expected(result, "p7", "hole-supported-blind-depth")
+
+    def test_p7_hole_supported_common_variants_match_native_oracle(self) -> None:
+        for fixture, expected_fields in [
+            ("hole-supported-through-all", {"method": "ThroughAll"}),
+            ("hole-supported-counterbore", {"hole_cut_type": "Counterbore", "hole_cut_diameter": 4.0}),
+            ("hole-supported-countersink", {"hole_cut_type": "Countersink", "hole_cut_countersink_angle": 90.0}),
+            ("hole-supported-counterdrill", {"hole_cut_type": "Counterdrill", "hole_cut_depth": 1.0}),
+            ("hole-supported-angled-drill-point", {"drill_point": "Angled", "drill_for_depth": False}),
+            ("hole-supported-tapered", {"tapered": True, "tapered_angle": 80.0}),
+            ("hole-supported-point-profile", {"method": "Dimension"}),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p7")
+                hole = result["objects"]["Hole"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(hole["status"], "ok")
+                self.assertEqual(hole["source_profile"], "SketchHole")
+                for field, value in expected_fields.items():
+                    self.assertEqual(hole[field], value)
+                self.assert_object_matches_expected(result, "p7", fixture)
+
+    def test_p7_hole_supported_threaded_heads_match_native_oracle(self) -> None:
+        for fixture, expected_fields in [
+            (
+                "hole-supported-threaded-standard-counterbore",
+                {"hole_cut_definition_source": "iso4762.json", "hole_cut_diameter": 8.0, "hole_cut_depth": 4.4},
+            ),
+            (
+                "hole-supported-threaded-standard-countersink",
+                {"hole_cut_definition_source": "iso10642.json", "hole_cut_diameter": 9.0},
+            ),
+            (
+                "hole-supported-threaded-dynamic-din7984",
+                {
+                    "hole_cut_definition_source": "din7984.json",
+                    "hole_cut_standard": "DIN 7984",
+                    "hole_cut_diameter": 8.0,
+                    "hole_cut_depth": 3.2,
+                },
+            ),
+            (
+                "hole-supported-threaded-dynamic-iso2009",
+                {
+                    "hole_cut_definition_source": "iso2009.json",
+                    "hole_cut_standard": "ISO 2009",
+                    "hole_cut_diameter": 9.5,
+                },
+            ),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p7")
+                hole = result["objects"]["Hole"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(hole["status"], "ok")
+                self.assertEqual(hole["threaded"], True)
+                self.assertEqual(hole["diameter_source"], "thread_tap_drill")
+                self.assertEqual(hole["source_profile"], "SketchHole")
+                for field, value in expected_fields.items():
+                    if isinstance(value, float):
+                        self.assertAlmostEqual(hole[field], value, delta=1e-9)
+                    else:
+                        self.assertEqual(hole[field], value)
+                self.assert_object_matches_expected(result, "p7", fixture)
+
+    def test_p7_hole_supported_thread_options_match_native_oracle(self) -> None:
+        for fixture, expected_fields in [
+            (
+                "hole-supported-thread-depth-din76",
+                {
+                    "thread_depth_type": "Tapped (DIN76)",
+                    "thread_depth": 6.2,
+                    "thread_runout": 3.8,
+                },
+            ),
+            (
+                "hole-supported-thread-depth-dimension-clamped",
+                {
+                    "thread_depth_type": "Dimension",
+                    "thread_depth": 6.0,
+                    "thread_runout": 3.8,
+                },
+            ),
+            (
+                "hole-supported-thread-class-clearance",
+                {
+                    "thread_class": "4G",
+                    "thread_direction": "Left",
+                    "thread_clearance": 0.022,
+                    "thread_radius_clearance": 0.011,
+                },
+            ),
+            (
+                "hole-supported-thread-custom-clearance",
+                {
+                    "thread_class": "6H",
+                    "thread_direction": "Right",
+                    "use_custom_thread_clearance": True,
+                    "custom_thread_clearance": 0.08,
+                    "thread_clearance": 0.08,
+                    "thread_radius_clearance": 0.04,
+                },
+            ),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p7")
+                hole = result["objects"]["Hole"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(hole["status"], "ok")
+                self.assertEqual(hole["source_profile"], "SketchHole")
+                self.assertEqual(hole["threaded"], True)
+                self.assertEqual(hole["model_thread"], False)
+                self.assertEqual(hole["diameter_source"], "thread_tap_drill")
+                for field, value in expected_fields.items():
+                    if isinstance(value, float):
+                        self.assertAlmostEqual(hole[field], value, delta=1e-9)
+                    else:
+                        self.assertEqual(hole[field], value)
+                self.assert_object_matches_expected(result, "p7", fixture)
+
     def test_p7_hole_refine_true_uses_body_final_result_refine(self) -> None:
         result = self.run_recompute("hole-refine-true", "p7")
         hole = result["objects"]["Hole"]
@@ -248,8 +378,8 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertAlmostEqual(hole["thread_radius_clearance"], radius, delta=1e-9)
 
     def test_p7_hole_model_thread_builds_freecad_pipe_shell_tool(self) -> None:
-        plain = self.run_recompute("hole-thread-class-clearance", "p7")
-        result = self.run_recompute("hole-model-thread-metric", "p7")
+        plain = self.run_recompute("hole-supported-thread-class-clearance", "p7")
+        result = self.run_recompute("hole-supported-model-thread-metric", "p7")
         hole = result["objects"]["Hole"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -264,6 +394,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertAlmostEqual(hole["thread_radius_clearance"], 0.011, delta=1e-9)
         self.assertGreater(hole["volume"], plain["objects"]["Hole"]["volume"])
         self.assertLess(result["objects"]["Body"]["volume"], plain["objects"]["Body"]["volume"])
+        self.assert_object_matches_expected(result, "p7", "hole-supported-model-thread-metric")
 
     def test_p7_hole_angled_drill_point_extends_blind_hole_tip(self) -> None:
         result = self.run_recompute("hole-angled-drill-point", "p7")
@@ -602,6 +733,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(mirrored["transform_mode"], "Features")
         self.assertEqual(mirrored["originals"], ["Chamfer"])
         self.assertEqual(body["tip"], "Mirrored")
+        self.assert_object_matches_expected(result, "p7", "mirrored-dressup-chain-support-transform")
 
     def test_p7_mirrored_whole_shape_fuses_transformed_support(self) -> None:
         result = self.run_recompute("mirrored-whole-shape", "p7")
@@ -787,6 +919,20 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pattern["transform_mode"], "Whole shape")
         self.assertEqual(pattern["originals"], ["Pad"])
         self.assert_object_matches_expected(result, "p7", "polar-pattern-whole-shape")
+
+    def test_p7_polar_pattern_whole_shape_uses_body_prefix_support(self) -> None:
+        result = self.run_recompute("polar-pattern-whole-shape-body-prefix-support", "p7")
+        pattern = result["objects"]["PolarPattern"]
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pattern["status"], "ok")
+        self.assertEqual(pattern["transformed"], "polar_pattern")
+        self.assertEqual(pattern["transform_mode"], "Whole shape")
+        self.assertEqual(pattern["originals"], ["Pad"])
+        self.assertEqual(pattern["body_mode"], "replace")
+        self.assertEqual(body["tip"], "PolarPattern")
+        self.assert_object_matches_expected(result, "p7", "polar-pattern-whole-shape-body-prefix-support")
 
     def test_p7_scaled_features_mode_scales_around_first_original_center_of_mass(self) -> None:
         result = self.run_recompute("scaled-pad-factor-two", "p7")

@@ -76,9 +76,13 @@ class CadCoreFixtureTestCase(unittest.TestCase):
         return library
 
     def run_recompute_ffi(self, fixture: str, group: str = "mvp") -> dict:
-        library = self.ffi_library()
-
         payload = (ROOT / "fixtures" / group / f"{fixture}.json").read_bytes()
+        return self.run_recompute_ffi_payload(payload)
+
+    def run_recompute_ffi_payload(self, payload: bytes | dict) -> dict:
+        library = self.ffi_library()
+        if isinstance(payload, dict):
+            payload = json.dumps(payload).encode("utf-8")
         result = library.cad_core_recompute_json(payload, len(payload))
         try:
             if result.status != 0:

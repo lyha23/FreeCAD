@@ -1,0 +1,25 @@
+{
+  "bbox": {
+    "max": [
+      14.0,
+      14.0,
+      10.0
+    ],
+    "min": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "freecad_version": "1.2.0 revision 20260519",
+  "bbox_delta": 0.15,
+  "object": "Body",
+  "reference": "FreeCADCmd oracle from hole-supported-threaded-dynamic-iso2009.json; objects: Sketcher::SketchObject, PartDesign::Pad, Sketcher::SketchObject, PartDesign::Hole, PartDesign::Body",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "topology_counts": {
+    "edges": 17,
+    "faces": 9,
+    "vertices": 11
+  },
+  "volume": 1827.6703578442664
+}

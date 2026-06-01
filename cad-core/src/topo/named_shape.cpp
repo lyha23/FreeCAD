@@ -1,5 +1,6 @@
 #include "cad_core/topo/named_shape.h"
 
+#include "cad_core/geometry/extrusion_helper.h"
 #include "cad_core/geometry/refine_model.h"
 #include "cad_core/topo/element_map.h"
 
@@ -68,6 +69,13 @@ void addIndexedElements(
             = NamedElement {name, SubshapeName {kind, index}, ElementHistoryKind::Indexed, {}};
         namedShape.elementMap[name] = name;
         namedShape.history.push_back(ElementHistory {ElementHistoryKind::Indexed, name, {}});
+    }
+}
+
+void addDistinctString(std::vector<std::string>& values, const std::string& value)
+{
+    if (std::find(values.begin(), values.end(), value) == values.end()) {
+        values.push_back(value);
     }
 }
 
@@ -289,6 +297,11 @@ std::vector<std::string> sourceElementNames(
     // through chained makers. When a source already has an ElementMap, cad-core treats those
     // stable keys as aliases of the source-local FaceN/EdgeN/VertexN during the next maker pass.
     std::vector<std::string> names {source.owner + "." + localElementName};
+    for (const std::string& aliasOwner : source.ownerAliases) {
+        if (!aliasOwner.empty()) {
+            addDistinctString(names, aliasOwner + "." + localElementName);
+        }
+    }
     if (source.namedShape == nullptr) {
         return names;
     }
@@ -302,6 +315,46 @@ std::vector<std::string> sourceElementNames(
         }
     }
     return names;
+}
+
+std::string taperComponentOwner(const std::string& historyOwner, std::size_t index, std::size_t count)
+{
+    if (count <= 1U) {
+        return historyOwner;
+    }
+    if (index == 0U) {
+        return historyOwner + ".Outer";
+    }
+    return historyOwner + ".Inner" + std::to_string(index);
+}
+
+NamedShape namedShapeForTaperComponent(const std::string& componentOwner,
+                                       const geometry::TaperedExtrusionHistoryComponent& component,
+                                       const TopoDS_Shape& profile,
+                                       const NamedShapeSource& profileSource)
+{
+    if (component.historyMaker && !component.historySources.empty()) {
+        std::vector<NamedShapeSource> sources;
+        sources.reserve(component.historySources.size());
+        sources.push_back(NamedShapeSource{profileSource.owner, profile, profileSource.namedShape});
+        for (std::size_t index = 1; index < component.historySources.size(); ++index) {
+            sources.push_back(NamedShapeSource{componentOwner + ".TaperSection" + std::to_string(index + 1),
+                                               component.historySources.at(index)});
+        }
+        if (auto* thruSections = dynamic_cast<BRepOffsetAPI_ThruSections*>(component.historyMaker.get())) {
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+            // ::MapperThruSections::generated(), adds "GeneratedFace(s)", "FirstShape()" and
+            // "LastShape()" to the generic BRepBuilderAPI_MakeShape mapper.
+            return namedShapeForThruSectionsHistory(componentOwner,
+                                                    component.shape,
+                                                    sources,
+                                                    *thruSections,
+                                                    component.historySources.front(),
+                                                    component.historySources.back());
+        }
+        return namedShapeForMakerHistory(componentOwner, component.shape, sources, *component.historyMaker);
+    }
+    return namedShapeForPreservedSources(componentOwner, component.shape, {profileSource});
 }
 
 void collectSourceElementMap(
@@ -600,6 +653,9 @@ void addLinkRetagAlias(NamedShape& namedShape, const NamedShapeSource& source, c
     // linked topology under the Link object. cad-core keeps source-prefixed aliases so later
     // LinkSub references can resolve without guessing topology order.
     addRetagAlias(namedShape, source.owner + "." + stableName, targetName);
+    for (const std::string& aliasOwner : source.ownerAliases) {
+        addRetagAlias(namedShape, aliasOwner + "." + stableName, targetName);
+    }
     if (stableName.find('.') != std::string::npos) {
         addRetagAlias(namedShape, stableName, targetName);
     }
@@ -629,8 +685,12 @@ void addNestedHistory(
     if (duplicate != namedShape.history.end()) {
         return;
     }
-    if (elementIt->second.status == ElementHistoryKind::Indexed
-        && (kind == ElementHistoryKind::Generated || kind == ElementHistoryKind::Modified)) {
+    if (kind == ElementHistoryKind::Merge
+        && elementIt->second.status != ElementHistoryKind::Split) {
+        elementIt->second.status = kind;
+    }
+    else if (elementIt->second.status == ElementHistoryKind::Indexed
+             && (kind == ElementHistoryKind::Generated || kind == ElementHistoryKind::Modified)) {
         elementIt->second.status = kind;
     }
     for (const std::string& source : sources) {
@@ -660,11 +720,24 @@ void addTerminalHistory(NamedShape& namedShape, const ElementHistory& entry)
     }
 }
 
+void addSplitHistory(NamedShape& namedShape, const std::string& sourceName, const std::string& targetName)
+{
+    auto elementIt = namedShape.elements.find(targetName);
+    if (sourceName.empty() || elementIt == namedShape.elements.end()) {
+        return;
+    }
+    elementIt->second.status = ElementHistoryKind::Split;
+    addDistinctString(elementIt->second.sources, sourceName);
+    addTerminalHistory(namedShape, ElementHistory {ElementHistoryKind::Split, targetName, {sourceName}});
+}
+
 void propagateNestedSourceHistory(NamedShape& namedShape, const std::vector<NamedShapeSource>& sources)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
-    // ::TopoShape::makeElementShape() first calls "mapSubElement(shapes)" and then MapperMaker
-    // history, so chained makers keep source-local aliases and previously generated sources.
+    // ::TopoShape::makeShapeWithElementMap(), calls "mapSubElement(shapes)" before MapperMaker;
+    // MapperHistory then queries "Modified(s)" and "Generated(s)". Chained makers keep the
+    // existing ElementMap ledger first, so generated/modified/merge history from the source
+    // remains observable after a later maker or App::Link retag.
     // cad-core only forwards nested history when an existing ElementMap entry resolves to one
     // current result element; unresolved split/deleted cases remain represented by diagnostics.
     for (const auto& source : sources) {
@@ -682,7 +755,8 @@ void propagateNestedSourceHistory(NamedShape& namedShape, const std::vector<Name
                 continue;
             }
             if (entry.kind != ElementHistoryKind::Generated
-                && entry.kind != ElementHistoryKind::Modified) {
+                && entry.kind != ElementHistoryKind::Modified
+                && entry.kind != ElementHistoryKind::Merge) {
                 continue;
             }
             for (const std::string& sourceName : sourceElementNames(source, entry.element)) {
@@ -788,6 +862,34 @@ NamedShape namedShapeForSketchInternalShape(
             // the function iterates only TopAbs_VERTEX and TopAbs_EDGE.
             addRetagAlias(namedShape, target, name);
         }
+    }
+
+    for (const InternalGeneratedElementHistory& history :
+         internalGeneratedFaceHistoryForSketch(rawShape, internalShape)) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMaker.cpp
+        // ::FaceMaker::postBuild(), "name the face using the edges of its outer wire". Keep
+        // InternalFaceN history-backed from the outer wire only while respecting
+        // SketchObject::getInternalElementMap(), which exposes no raw FaceN alias for
+        // InternalShape.
+        addNestedHistory(namedShape, ElementHistoryKind::Generated, history.target, history.sources);
+    }
+
+    for (const InternalElementHistory& history : internalSplitElementHistoryForSketch(rawShape, internalShape)) {
+        for (const std::string& target : history.targets) {
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+            // ::WireJoinerP::build() keeps split EdgeInfo states, and TopoShape::makeShapeWithElementMap()
+            // leaves one-to-many source edges unresolved. Record terminal split history for
+            // InternalShape without adding a guessed ElementMap alias.
+            addSplitHistory(namedShape, history.source, target);
+        }
+    }
+
+    for (const std::string& source : internalDeletedElementHistoryForSketch(rawShape, internalShape)) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::getOpenWires(noOriginal=true), removes original open-wire topology whose
+        // vertices are still shared with sourceEdgeArray. Preserve that one-source-to-zero outcome
+        // as terminal deleted history instead of inventing a current Internal* alias.
+        addTerminalHistory(namedShape, ElementHistory {ElementHistoryKind::Deleted, source, {source}});
     }
 
     return namedShape;
@@ -930,6 +1032,51 @@ NamedShape namedShapeForThruSectionsHistory(
     addMergeHistory(namedShape);
 
     return namedShape;
+}
+
+std::optional<NamedShape> namedShapeForTaperedExtrusionHistory(
+    const std::string& owner,
+    const geometry::TaperedExtrusionResult& tapered,
+    const TopoDS_Shape& profile,
+    const NamedShapeSource& profileSource
+)
+{
+    if (tapered.historyComponents.empty()) {
+        return std::nullopt;
+    }
+
+    const std::size_t count = tapered.historyComponents.size();
+    std::string currentOwner = taperComponentOwner(owner, 0, count);
+    TopoDS_Shape currentShape = tapered.historyComponents.front().shape;
+    NamedShape currentNamedShape =
+        namedShapeForTaperComponent(currentOwner, tapered.historyComponents.front(), profile, profileSource);
+
+    for (std::size_t index = 1; index < count; ++index) {
+        const std::string innerOwner = taperComponentOwner(owner, index, count);
+        NamedShape innerNamedShape =
+            namedShapeForTaperComponent(innerOwner, tapered.historyComponents.at(index), profile, profileSource);
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/ExtrusionHelper.cpp
+        // ::ExtrusionHelper::makeElementDraft(), "Inner wires are lofted into separate solids and
+        // then cut from the outer solid"; cad-core routes the same owner chain through topo boolean
+        // history so inner-wire generated sources survive the final taper result.
+        const auto cut = makeElementBooleanFromSources(
+            owner,
+            {
+                NamedShapeSource{currentOwner, currentShape, &currentNamedShape},
+                NamedShapeSource{innerOwner, tapered.historyComponents.at(index).shape, &innerNamedShape},
+            },
+            BooleanOperation::Cut
+        );
+        if (cut.error.empty() && cut.namedShape) {
+            currentOwner = owner + ".InnerCut" + std::to_string(index);
+            currentShape = cut.shape;
+            currentNamedShape = *cut.namedShape;
+        }
+    }
+
+    currentNamedShape.owner = owner;
+    currentNamedShape.shape = tapered.shape;
+    return currentNamedShape;
 }
 
 NamedShape namedShapeForRefineHistory(

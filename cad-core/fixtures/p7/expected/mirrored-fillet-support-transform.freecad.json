@@ -1,5 +1,6 @@
 {
-  "reference": "FreeCADCmd geometry-equivalent 2x2x2 Pad filleted with radius 0.2 and mirrored across datum plane at X=2",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "reference": "FreeCADCmd oracle from mirrored-fillet-support-transform.json; objects: Sketcher::SketchObject, PartDesign::Pad, PartDesign::Fillet, PartDesign::Plane, PartDesign::Mirrored, PartDesign::Body",
   "freecad_version": "1.2.0 revision 20260519",
   "bbox_delta": 0.02,
   "objects": {

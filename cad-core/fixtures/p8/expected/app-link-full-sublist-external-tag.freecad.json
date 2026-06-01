@@ -1,0 +1,29 @@
+{
+  "schema_version": "cad-core.freecad-expected.v1",
+  "object": "FaceLink",
+  "reference": "FreeCAD Link.cpp source-equivalent PropertyXLinkSub FullSubList external-tag ElementMap retag",
+  "bbox": {
+    "min": [0.0, 0.0, 0.0],
+    "max": [0.0, 3.0, 4.0]
+  },
+  "volume": 0.0,
+  "topology_counts": {
+    "faces": 1,
+    "edges": 4,
+    "vertices": 4
+  },
+  "named_shapes": {
+    "FaceLink": {
+      "element_map_status": "history_partial",
+      "element_map": {
+        "Box.Face1": "Face1",
+        "ExternalDoc#Box.Face1": "Face1",
+        "Face1;:X;ExternalDoc#Box.Face1": "Face1"
+      },
+      "history_sources_any": [
+        "ExternalDoc#Box.Face1",
+        "Face1;:X;ExternalDoc#Box.Face1"
+      ]
+    }
+  }
+}

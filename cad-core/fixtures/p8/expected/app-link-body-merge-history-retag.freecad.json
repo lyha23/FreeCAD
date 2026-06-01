@@ -1,0 +1,26 @@
+{
+  "reference": "FreeCAD topo naming oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeShapeWithElementMap(), calls \"mapSubElement(shapes)\" before MapperHistory; /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp::LinkBaseExtension::checkGeoElementMap(), calls \"reTagElementMap\" for App::Link.",
+  "named_shapes": {
+    "BodyLink": {
+      "owner": "BodyLink",
+      "element_map_status": "history_partial",
+      "element_map": {
+        "Body.SketchPocket.Edge1": "Edge12"
+      },
+      "element_map_prefixes": [
+        "Body.Pad.",
+        "Body.Pocket."
+      ],
+      "history_entries": [
+        {
+          "kind": "merge",
+          "element_for_source": "Body.SketchPocket.Edge1",
+          "sources": [
+            "Pocket.Edge3",
+            "SketchPocket.Edge1"
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,8 +1,96 @@
 {
-  "reference": "FreeCAD transformed dress-up chain oracle pending: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureTransformed.cpp handles transformed feature chains, but this chained Fillet/Chamfer mirror support-transform case still needs a native FreeCAD oracle before freezing geometry or named-shape golden.",
   "freecad_version": "1.2.0 revision 20260519",
-  "known_gap": {
-    "kind": "transformed_dressup_oracle_pending",
-    "reason": "Do not freeze chained dress-up transform geometry from current cad-core output; focused flow tests only validate support-transform propagation."
-  }
+  "bbox_delta": 0.01,
+  "objects": {
+    "Body": {
+      "bbox": {
+        "max": [
+          4.0,
+          2.0,
+          2.000000000000001
+        ],
+        "min": [
+          -5.551115123125783e-17,
+          -5.551115123125783e-17,
+          -9.948097816163189e-18
+        ]
+      },
+      "volume": 15.955943757827143
+    },
+    "Chamfer": {
+      "bbox": {
+        "max": [
+          2.0,
+          2.0,
+          2.0
+        ],
+        "min": [
+          -5.551115123125783e-17,
+          -5.551115123125783e-17,
+          -1.4787126774855188e-17
+        ]
+      },
+      "volume": 7.977971878913572
+    },
+    "Fillet": {
+      "bbox": {
+        "max": [
+          2.0,
+          2.0,
+          2.0
+        ],
+        "min": [
+          -2.7755575615628914e-17,
+          -2.7755575615628914e-17,
+          0.0
+        ]
+      },
+      "volume": 7.9828318530717945
+    },
+    "Mirrored": {
+      "bbox": {
+        "max": [
+          4.0,
+          2.0,
+          2.000000000000001
+        ],
+        "min": [
+          -5.551115123125783e-17,
+          -5.551115123125783e-17,
+          -9.948097816163189e-18
+        ]
+      },
+      "volume": 15.955943757827143
+    }
+  },
+  "named_shapes": {
+    "Chamfer": {
+      "element_map_status": "history_partial",
+      "history_source_prefixes": [
+        "Fillet.",
+        "Pad.",
+        "SketchPad."
+      ]
+    },
+    "Mirrored": {
+      "element_map_status": "history_partial",
+      "history_source_prefixes": [
+        "Chamfer.",
+        "Fillet.",
+        "Mirrored.",
+        "Pad."
+      ]
+    },
+    "Body": {
+      "element_map_status": "history_partial",
+      "history_source_prefixes": [
+        "Chamfer.",
+        "Fillet.",
+        "Mirrored.",
+        "Pad."
+      ]
+    }
+  },
+  "reference": "FreeCADCmd oracle from mirrored-dressup-chain-support-transform.json; objects: Sketcher::SketchObject, PartDesign::Pad, PartDesign::Fillet, PartDesign::Chamfer, PartDesign::Plane, PartDesign::Mirrored, PartDesign::Body",
+  "schema_version": "cad-core.freecad-expected.v1"
 }

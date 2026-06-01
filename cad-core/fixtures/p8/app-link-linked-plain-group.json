@@ -1,0 +1,59 @@
+{
+  "Objects": [
+    {
+      "Name": "BoxA",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 1,
+        "Width": 1,
+        "Height": 1
+      }
+    },
+    {
+      "Name": "BoxB",
+      "ID": 2,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 1,
+        "Height": 1,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [3, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "PlainGroup",
+      "ID": 3,
+      "TypeId": "App::DocumentObjectGroup",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["BoxA", "BoxB"]
+        }
+      }
+    },
+    {
+      "Name": "GroupLink",
+      "ID": 4,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "PlainGroup"
+        },
+        "LinkPlacement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [10, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["GroupLink"]
+  }
+}

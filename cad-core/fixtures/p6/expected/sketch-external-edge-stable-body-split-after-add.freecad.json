@@ -1,0 +1,19 @@
+{
+  "freecad_version": "1.2.0 revision 20260519",
+  "object": "ProbeSketch",
+  "object_fields": {
+    "external_curve_count": 0,
+    "external_geometry_count": 1,
+    "external_point_count": 1,
+    "raw_edge_count": 1,
+    "shape": "occt_sketch_shape",
+    "status": "ok"
+  },
+  "reference": "FreeCADCmd oracle from sketch-external-edge-stable-body-split-after-add.json; objects: Sketcher::SketchObject, Sketcher::SketchObject, Sketcher::SketchObject, PartDesign::Pad, PartDesign::Pocket, PartDesign::Pad, PartDesign::Body, Sketcher::SketchObject",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "sketch_internal": {
+    "profile_ready": false,
+    "raw_edge_count": 1,
+    "shape": "empty"
+  }
+}

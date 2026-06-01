@@ -10,7 +10,7 @@
           "value": "Sketch",
           "SubList": ["Face1"],
           "StableSubList": ["Face1"],
-          "FullSubList": ["Sketch.Face1"]
+          "FullSubList": ["Sketch.Face1", "Sketch.Edge1"]
         },
         "Type": "Length",
         "Length": 10,
