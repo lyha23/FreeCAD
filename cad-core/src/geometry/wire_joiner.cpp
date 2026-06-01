@@ -688,9 +688,12 @@ void WireJoiner::addOpenWire(const TopoDS_Wire& wire)
 {
     if (!wire.IsNull()) {
         WireInfo info;
+        info.id = nextWireInfoId_++;
         info.wire = wire;
         for (const TopoDS_Edge& edge : wireEdges(wire)) {
-            info.fragments.push_back(WireInfo::EdgeFragment{edge});
+            EdgeInfo edgeInfo;
+            edgeInfo.edge = edge;
+            info.edges.push_back(edgeInfo);
         }
         openWires_.push_back(std::move(info));
     }
@@ -716,22 +719,30 @@ void WireJoiner::classifyBoundedFaceOwnership(const TopoDS_Shape& boundedFaceSha
     }
 
     for (WireInfo& info : openWires_) {
-        std::vector<WireInfo::EdgeFragment> fragments;
-        for (const WireInfo::EdgeFragment& fragment : info.fragments) {
-            const auto split = splitOpenEdgeByFaceBoundaries(fragment.edge, faceBoundaryEdges);
-            const bool splitFromInputEdge = fragment.splitFromInputEdge || split.size() != 1U
-                || (split.size() == 1U && !edgeMatchesSourceVertices(split.front(), fragment.edge));
+        std::vector<EdgeInfo> splitEdges;
+        for (const EdgeInfo& edgeInfo : info.edges) {
+            const auto split = splitOpenEdgeByFaceBoundaries(edgeInfo.edge, faceBoundaryEdges);
+            const bool splitFromInputEdge = edgeInfo.splitFromInputEdge || split.size() != 1U
+                || (split.size() == 1U && !edgeMatchesSourceVertices(split.front(), edgeInfo.edge));
             for (const TopoDS_Edge& edge : split) {
-                fragments.push_back(WireInfo::EdgeFragment{edge, splitFromInputEdge});
+                EdgeInfo splitInfo;
+                splitInfo.edge = edge;
+                splitInfo.superEdge = edgeInfo.superEdge;
+                splitInfo.iteration = edgeInfo.iteration;
+                splitInfo.iteration2 = edgeInfo.iteration2;
+                splitInfo.wireInfo = edgeInfo.wireInfo;
+                splitInfo.wireInfo2 = edgeInfo.wireInfo2;
+                splitInfo.splitFromInputEdge = splitFromInputEdge;
+                splitEdges.push_back(splitInfo);
             }
         }
-        info.fragments = std::move(fragments);
+        info.edges = std::move(splitEdges);
     }
 
     for (WireInfo& info : openWires_) {
-        for (WireInfo::EdgeFragment& fragment : info.fragments) {
-            if (edgeMatchesAnyBoundary(fragment.edge, faceBoundaryEdges)) {
-                fragment.ownership = WireInfo::FragmentOwnership::ConsumedByBoundedFace;
+        for (EdgeInfo& edgeInfo : info.edges) {
+            if (edgeMatchesAnyBoundary(edgeInfo.edge, faceBoundaryEdges)) {
+                edgeInfo.wireInfo = info.id;
                 continue;
             }
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
@@ -740,10 +751,10 @@ void WireJoiner::classifyBoundedFaceOwnership(const TopoDS_Shape& boundedFaceSha
             // midpoint is outside the bounded face and that came from a split/copy result edge;
             // unsplit original dangling edges still go through getOpenWires(noOriginal=true)
             // purging. Delete this marker when full EdgeInfo/WireInfo identity history is migrated.
-            if (fragment.splitFromInputEdge
-                && edgeTouchesBoundary(fragment.edge, faceBoundaryEdges)
-                && !pointInsideOrOnAnyFace(edgeMidpoint(fragment.edge), boundedFaces)) {
-                fragment.ownership = WireInfo::FragmentOwnership::RetainedResultFragment;
+            if (edgeInfo.splitFromInputEdge
+                && edgeTouchesBoundary(edgeInfo.edge, faceBoundaryEdges)
+                && !pointInsideOrOnAnyFace(edgeMidpoint(edgeInfo.edge), boundedFaces)) {
+                edgeInfo.iteration = -3;
             }
         }
     }
@@ -759,13 +770,15 @@ std::optional<TopoDS_Shape> WireJoiner::getOpenWires(const std::string& historyP
     std::vector<TopoDS_Wire> liveWires;
     for (const WireInfo& info : openWires_) {
         std::vector<TopoDS_Edge> liveEdges;
-        for (const WireInfo::EdgeFragment& fragment : info.fragments) {
-            if (fragment.ownership == WireInfo::FragmentOwnership::ConsumedByBoundedFace) {
+        for (const EdgeInfo& edgeInfo : info.edges) {
+            const bool exportsOpenEdge = edgeInfo.iteration == -3
+                || (edgeInfo.wireInfo == 0U && edgeInfo.iteration >= 0);
+            if (!exportsOpenEdge) {
                 continue;
             }
-            liveEdges.push_back(fragment.edge);
-            if (fragment.ownership == WireInfo::FragmentOwnership::RetainedResultFragment) {
-                retainedByBoundaryTouchEdges.push_back(fragment.edge);
+            liveEdges.push_back(edgeInfo.edge);
+            if (edgeInfo.iteration == -3) {
+                retainedByBoundaryTouchEdges.push_back(edgeInfo.edge);
             }
         }
         if (liveEdges.empty()) {

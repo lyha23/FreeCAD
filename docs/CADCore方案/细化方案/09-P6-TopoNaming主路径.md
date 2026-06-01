@@ -27,7 +27,7 @@ P6 把稳定引用从导出层补丁升级为 CAD Core 的正式账本。目标�
 - 完整 MapperHistory 生命周期尚未迁移。
 - ShapeFix、DressUp、transformed copy 的完整 maker history 仍未覆盖；taper 当前仍按 partial history 和 `known_gap:taper_history` 验收。
 - split 的完整自动旧引用恢复还不完整；当前只恢复 MapperHistory 能证明同类唯一 target 或 ExternalGeometry collapsed point 的旧 stable 引用；merge 已能记录并跨 Link retag 传播，但 ShapeFix / transformed / DressUp 等完整 MapperHistory 生命周期仍待收敛。
-- FaceMaker / WireJoiner 的完整 history 消费需与 P5 geometry 账本联动；当前只固定了 `InternalFaceN` 的 outer-boundary generated history、self-intersecting edge pre-split terminal split history、raw sketch edge 到多个 `InternalEdgeN` 的 terminal split history，以及 raw sketch `EdgeN/VertexN` 被过滤后的 terminal deleted history 子集。
+- FaceMaker / WireJoiner 的完整 history 消费需与 P5 geometry 账本联动；WireJoiner 侧已具备 EdgeInfo / WireInfo 边级账本落点和 `wireInfo` / `iteration=-3` openWireCompound 判定子集，但 tight-bound ownership 生命周期尚未完整迁入；当前只固定了 `InternalFaceN` 的 outer-boundary generated history、self-intersecting edge pre-split terminal split history、raw sketch edge 到多个 `InternalEdgeN` 的 terminal split history，以及 raw sketch `EdgeN/VertexN` 被过滤后的 terminal deleted history 子集。
 - 更复杂的 source-prefixed stable key 仍要服从完整 MapperHistory；同类一对多 split 和 deleted 只输出结构化诊断，不伪造可解析投影。
 
 ## cad-core 落点

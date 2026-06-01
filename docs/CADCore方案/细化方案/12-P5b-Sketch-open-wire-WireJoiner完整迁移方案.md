@@ -15,7 +15,7 @@ SketchObject::buildInternals()
 - `features/sketch_object.cpp` 已通过 `geometry::buildSketchInternals()` 发布 request-local `InternalShape`，并把 `InternalFaceN` / `InternalEdgeN` / `InternalVertexN` 合并进 Sketch 的 `subshapes`。
 - `geometry/face_maker.*` 已覆盖 bounded split 子集：closed profile wires、closed-wire hole 的 profile face-with-holes / `InternalShape` bounded-region 分离、on-face open splitter edges、重叠闭合 profile、自相交单 wire、inter-edge intersection split 和基础 face-with-holes / island。
 - `geometry/sketch_internal_builder.*` 保留 Pad / Pocket 消费的 `profileShape`，并把 `FaceMakerBuildFace` bounded-region 输出与 WireJoiner open-wire 输出组合为 `internalShape`；open wire 不会伪造成可拉伸 profile。
-- `geometry/wire_joiner.*` 已接入 `getOpenWires(noOriginal=true)` 子集：按 FreeCAD `sourceEdgeArray` 口径过滤仍匹配原始 source edge 的 open wire；open edge 可先按 face boundary 切成 fragments，再逐 fragment 判断是否被 bounded face 消费，外部非原始 split fragments 可进入 `InternalShape`；闭合 source wire 循环已从 bounded-face 数量差改为 source edge 被 bounded-result fragments 替换的 ownership 证据触发 copied result-wire graph。
+- `geometry/wire_joiner.*` 已接入 `getOpenWires(noOriginal=true)` 子集：按 FreeCAD `sourceEdgeArray` 口径过滤仍匹配原始 source edge 的 open wire；open edge 可先按 face boundary 切成 EdgeInfo，再逐 EdgeInfo 判断是否被 bounded face 消费，外部非原始 split EdgeInfo 可进入 `InternalShape`；闭合 source wire 循环已从 bounded-face 数量差改为 source edge 被 bounded-result fragments 替换的 ownership 证据触发 copied result-wire graph；cad-core 账本已用 EdgeInfo / WireInfo 承接当前边级 ownership，并按 `iteration == -3 || (!wireInfo && iteration >= 0)` 子集表达 openWireCompound 输出判定，后续 `findTightBound()` / `exhaustTightBound()` 继续扩展同一状态。
 - `topo/element_map.*` 仍是几何匹配式基础 internal map，只覆盖未发生复杂 split / merge / deleted 的 `InternalEdgeN/InternalVertexN <-> EdgeN/VertexN`；`InternalFaceN` 已按 FaceMaker 外环边命名口径记录 outer-boundary-`EdgeN` generated history，hole / inner wire 不混入同一个 face 来源，但不写 raw `FaceN` alias；raw sketch edge 被拆成多个 `InternalEdgeN` 时已记录 terminal split history，自交单边 pre-split 也记录为 raw `EdgeN` 到多个 `InternalEdgeN` 的 terminal split history；被 `noOriginal` 过滤且没有 Internal* target 的 raw `EdgeN/VertexN` 已记录 terminal deleted history，并明确不写入单一可解析 `ElementMap` target。
 
 ## 已验收能力
@@ -28,7 +28,7 @@ SketchObject::buildInternals()
 
 ## 剩余缺口
 
-- 当前 `WireJoiner` 仍是临时 ownership 子集：open edge fragment、closed-source split cycle、copied result-wire graph 和 InternalShape terminal split / deleted history 已使用几何 ownership 证据收敛，但还没有完整迁移 FreeCAD `WireJoinerP::EdgeInfo`、`WireInfo`、`wireInfo/wireInfo2`、`iteration`、`superEdge` 和 `openWireCompound` 生命周期。
+- 当前 `WireJoiner` 仍是部分 ownership 子集：EdgeInfo / WireInfo 存储已经落到正式账本位置，openWireCompound 输出已用 `wireInfo` / `iteration=-3` 状态表达，open edge split、closed-source split cycle、copied result-wire graph 和 InternalShape terminal split / deleted history 已使用边级 ownership 证据收敛；但还没有完整迁移 FreeCAD `findTightBound()`、`exhaustTightBound()`、`wireInfo2`、`iteration/iteration2`、`superEdge` 和 `openWireCompound` 生命周期。
 - `FaceMaker::postBuild()` 当前只迁入了 face outer-boundary generated history 和 self-intersecting edge pre-split terminal split history 子集；pre-split history、splitter history、source shape 映射还没有形成完整 MapperHistory；复杂 split / merge / deleted 不能靠当前几何匹配式 `internal_element_map` 证明稳定引用。
 - BSpline InternalShape 的 dedicated FreeCAD oracle 尚未冻结，相关 expected 仍以 `known_gap: internal_shape_oracle_pending` 标注。
 - 近切线、重合边、复杂开放线网和非平面/复杂投影场景仍需 FreeCAD oracle 后再进入主路径。
@@ -47,12 +47,12 @@ SketchObject::buildInternals()
 | `features/sketch_object.cpp` | Sketch 执行顺序、`InternalShape` 发布、SubList profile 选择 |
 | `geometry/sketch_internal_builder.*` | `FaceMakerBuildFace` bounded result 与 open-wire result 组合 |
 | `geometry/face_maker.*` | bounded split / face-with-holes / overlap / self-intersection 子集 |
-| `geometry/wire_joiner.*` | `noOriginal` 原始 source edge 过滤、open edge split fragment、closed-source result-fragment ownership 和 open-wire carry-through 子集；后续替换为 WireJoinerP ownership |
+| `geometry/wire_joiner.*` | `noOriginal` 原始 source edge 过滤、EdgeInfo / WireInfo 边级账本、`wireInfo` / `iteration=-3` openWireCompound 判定子集、open edge split fragment、closed-source result-fragment ownership 和 open-wire carry-through 子集；后续补齐 WireJoinerP tight-bound 生命周期 |
 | `topo/element_map.*` | 基础 internal element map、`InternalFaceN` outer-boundary generated history、self-intersecting edge pre-split terminal split history、one-source-to-many `InternalEdgeN` split history、one-source-to-zero `EdgeN/VertexN` deleted history；后续消费完整 FaceMaker / WireJoiner history |
 
 ## 下一步
 
-1. 迁移 `WireJoinerP::EdgeInfo/WireInfo` 状态机，把当前 open-edge fragment 与 closed-source split-cycle ownership predicate 替换为正式 EdgeInfo / WireInfo 生命周期。
+1. 迁移 `WireJoinerP::findTightBound()` / `exhaustTightBound()` / `wireInfo2` 生命周期，把当前 bounded-face ownership predicate 收敛成正式 tight-bound ownership。
 2. 把 `FaceMaker::postBuild()`、pre-split history 和 splitter history 接入 P6 `NamedShape` / `ElementMap`。
 3. 用 FreeCAD oracle 固定 BSpline、近切线、重合边和复杂 open-wire case，再扩大 P5 fixture。
 

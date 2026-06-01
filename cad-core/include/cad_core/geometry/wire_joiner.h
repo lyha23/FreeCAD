@@ -38,24 +38,31 @@ public:
 private:
     bool tightBound_ = false;
     bool mergeEdges_ = false;
-    struct WireInfo {
-        TopoDS_Wire wire;
-        enum class FragmentOwnership {
-            Open,
-            ConsumedByBoundedFace,
-            RetainedResultFragment,
-        };
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-        // ::WireJoinerP::splitEdges() replaces source EdgeInfo entries with split fragments before
-        // build() exports openWireCompound from final EdgeInfo states. cad-core keeps the current
-        // compatibility subset as explicit fragment ownership instead of parallel output flags.
-        struct EdgeFragment {
-            TopoDS_Edge edge;
-            bool splitFromInputEdge = false;
-            FragmentOwnership ownership = FragmentOwnership::Open;
-        };
-        std::vector<EdgeFragment> fragments;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::EdgeInfo stores "iteration", "iteration2", "superEdge",
+    // "wireInfo" and "wireInfo2" while splitEdges()/findTightBound()/exhaustTightBound()
+    // move edges between WireInfo owners. The final openWireCompound uses edges with
+    // "iteration == -3 || (!info.wireInfo && info.iteration >= 0)"; cad-core keeps that state
+    // shape so later tight-bound migration can extend the same ledger.
+    struct EdgeInfo {
+        TopoDS_Edge edge;
+        TopoDS_Wire superEdge;
+        int iteration = 0;
+        int iteration2 = 0;
+        std::size_t wireInfo = 0;
+        std::size_t wireInfo2 = 0;
+        bool splitFromInputEdge = false;
     };
+    struct WireInfo {
+        std::size_t id = 0;
+        TopoDS_Wire wire;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::WireInfo owns ordered EdgeInfo vertices for tight-bound wires.
+        // cad-core still stores edge-level states rather than vertex pairs, but the owner id now
+        // mirrors EdgeInfo::wireInfo / wireInfo2 instead of a separate output-side enum.
+        std::vector<EdgeInfo> edges;
+    };
+    std::size_t nextWireInfoId_ = 1;
     std::vector<WireInfo> openWires_;
     std::vector<TopoDS_Edge> sourceEdges_;
 };
