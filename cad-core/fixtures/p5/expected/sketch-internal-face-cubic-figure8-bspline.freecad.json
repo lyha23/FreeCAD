@@ -16,5 +16,14 @@
       "edges": 19,
       "vertices": 16
     }
+  },
+  "named_shapes": {
+    "Sketch.InternalShape": {
+      "element_history_status_contains": [
+        "facemaker_history:pre_split",
+        "history_consumed:generated_modified",
+        "terminal_history:split_deleted"
+      ]
+    }
   }
 }

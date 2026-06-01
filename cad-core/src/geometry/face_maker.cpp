@@ -718,6 +718,11 @@ TopTools_ListOfShape splitEdgesAtTouchingEndpoints(const TopTools_ListOfShape& e
     return result;
 }
 
+std::size_t shapeListSize(const TopTools_ListOfShape& shapes)
+{
+    return static_cast<std::size_t>(shapes.Size());
+}
+
 TopTools_ListOfShape splitEdgesAtIntersections(const TopTools_ListOfShape& edges, bool& producedSplit)
 {
     if (edges.Size() <= 1) {
@@ -746,17 +751,32 @@ TopTools_ListOfShape splitEdgesAtIntersections(const TopTools_ListOfShape& edges
 
 std::optional<TopoDS_Shape> buildBoundedFacesFromEdgeNetwork(const TopTools_ListOfShape& sourceEdges,
                                                              std::size_t& faceCount,
-                                                             bool& producedSplit)
+                                                             bool& producedSplit,
+                                                             FaceMakerHistorySummary* historySummary = nullptr)
 {
     const auto plane = planeForEdges(sourceEdges);
     if (!plane) {
         return std::nullopt;
     }
+    if (historySummary != nullptr) {
+        historySummary->sourceEdgeCount = shapeListSize(sourceEdges);
+    }
 
+    const std::size_t beforeSelfSplit = shapeListSize(sourceEdges);
     TopTools_ListOfShape edges = splitSelfIntersectingEdges(sourceEdges, *plane, producedSplit);
+    const std::size_t afterSelfSplit = shapeListSize(edges);
+    if (historySummary != nullptr) {
+        historySummary->preSplitEdgeCount = afterSelfSplit;
+        historySummary->preSplitHistory = afterSelfSplit > beforeSelfSplit;
+    }
     edges = splitEdgesAtTouchingEndpoints(edges, producedSplit);
+    const std::size_t beforeIntersections = shapeListSize(edges);
     edges = splitEdgesAtIntersections(edges, producedSplit);
     edges = splitEdgesAtTouchingEndpoints(edges, producedSplit);
+    if (historySummary != nullptr) {
+        historySummary->splitterEdgeCount = shapeListSize(edges);
+        historySummary->splitterHistory = historySummary->splitterEdgeCount > beforeIntersections;
+    }
     if (edges.IsEmpty()) {
         return std::nullopt;
     }
@@ -812,6 +832,9 @@ std::optional<TopoDS_Shape> buildBoundedFacesFromEdgeNetwork(const TopTools_List
     }
 
     faceCount = faces.size();
+    if (historySummary != nullptr) {
+        historySummary->boundedFaceCount = faceCount;
+    }
     return compoundOrSingleFace(faces);
 }
 
@@ -824,11 +847,12 @@ std::optional<FaceMakerBuildFaceResult> makeSelfIntersectingSingleWireFaces(cons
 
     std::size_t faceCount = 0;
     bool producedSplit = false;
-    const auto shape = buildBoundedFacesFromEdgeNetwork(edges, faceCount, producedSplit);
+    FaceMakerHistorySummary historySummary;
+    const auto shape = buildBoundedFacesFromEdgeNetwork(edges, faceCount, producedSplit, &historySummary);
     if (!shape || shape->IsNull() || faceCount <= 1U) {
         return std::nullopt;
     }
-    return FaceMakerBuildFaceResult{shape, shape, faceCount, producedSplit};
+    return FaceMakerBuildFaceResult{shape, shape, faceCount, producedSplit, historySummary};
 }
 
 std::optional<TopoDS_Shape> splitOverlappingFaces(const std::vector<TopoDS_Face>& faces)
@@ -1082,17 +1106,19 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(const std
     if (baseFaces.size() == 1U && wires.size() > 1U) {
         std::size_t boundedFaceCount = 0;
         bool boundedProducedSplit = false;
+        FaceMakerHistorySummary boundedHistory;
         const auto boundedFaces = buildBoundedFacesFromEdgeNetwork(edgeNetworkForWiresAndEdges(wires, {}),
                                                                    boundedFaceCount,
-                                                                   boundedProducedSplit);
+                                                                   boundedProducedSplit,
+                                                                   &boundedHistory);
         if (boundedFaces && !boundedFaces->IsNull() && boundedFaceCount > baseFaces.size()) {
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App
             // /FaceMakerBuildFace.cpp::FaceMakerBuildFace::Build_Essence(), stores
             // "myShapesToReturn" from BOPAlgo_BuilderFace. SketchObject::buildInternals()
             // publishes that bounded-region result as InternalShape, while PartDesign Pad keeps
-            // using the closed profile face with holes for extrusion. This covers the general
-            // no-island hole case; nested islands stay on the existing face-with-holes profile
-            // until their native InternalShape oracle is frozen.
+            // using the closed profile face with holes for extrusion. This single-face branch
+            // covers the no-island hole case; nested-island compounds keep the existing
+            // face-with-holes / island profile and are covered by the P5 native expected.
             internalBase = boundedFaces;
             internalBaseFaceCount = boundedFaceCount;
         }
@@ -1147,10 +1173,12 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(const std
 
         std::size_t rebuiltFaceCount = 0;
         bool rebuiltProducedSplit = false;
-        const auto rebuilt = buildBoundedFacesFromEdgeNetwork(faceMakerEdges, rebuiltFaceCount, rebuiltProducedSplit);
+        FaceMakerHistorySummary rebuiltHistory;
+        const auto rebuilt =
+            buildBoundedFacesFromEdgeNetwork(faceMakerEdges, rebuiltFaceCount, rebuiltProducedSplit, &rebuiltHistory);
         if (rebuilt && !rebuilt->IsNull() && rebuiltFaceCount == baseFaces.size()
             && topologyWasSplit(*rebuilt, *base)) {
-            return FaceMakerBuildFaceResult{rebuilt, rebuilt, rebuiltFaceCount, false};
+            return FaceMakerBuildFaceResult{rebuilt, rebuilt, rebuiltFaceCount, false, rebuiltHistory};
         }
         return FaceMakerBuildFaceResult{base, internalBase, internalBaseFaceCount, false};
     }
@@ -1161,11 +1189,13 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(const std
     // topology so shared/result edge ownership matches SketchObject::buildInternals() more closely.
     std::size_t rebuiltFaceCount = 0;
     bool rebuiltProducedSplit = false;
+    FaceMakerHistorySummary rebuiltHistory;
     const auto rebuilt = buildBoundedFacesFromEdgeNetwork(edgeNetworkForWiresAndEdges(wires, selectedSplitEdges),
                                                           rebuiltFaceCount,
-                                                          rebuiltProducedSplit);
+                                                          rebuiltProducedSplit,
+                                                          &rebuiltHistory);
     if (rebuilt && !rebuilt->IsNull() && rebuiltFaceCount == splitFaces.size()) {
-        return FaceMakerBuildFaceResult{rebuilt, rebuilt, rebuiltFaceCount, true};
+        return FaceMakerBuildFaceResult{rebuilt, rebuilt, rebuiltFaceCount, true, rebuiltHistory};
     }
     return FaceMakerBuildFaceResult{splitShape, splitShape, splitFaces.size(), true};
 }

@@ -104,6 +104,8 @@ struct SourceTargets
     std::set<std::string> history;
 };
 
+void addTerminalHistory(NamedShape& namedShape, const ElementHistory& entry);
+
 std::optional<TopAbs_ShapeEnum> elementKindFromName(const std::string& elementName)
 {
     const std::size_t dot = elementName.rfind('.');
@@ -544,9 +546,7 @@ void applyHistoryElementMap(
             applySplit(sourceName, targets.history);
             continue;
         }
-        namedShape.history.push_back(
-            ElementHistory {ElementHistoryKind::Deleted, sourceName, {sourceName}}
-        );
+        addTerminalHistory(namedShape, ElementHistory {ElementHistoryKind::Deleted, sourceName, {sourceName}});
     }
 }
 
@@ -802,6 +802,45 @@ nlohmann::json elementToJson(const NamedElement& element)
     };
 }
 
+nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& history)
+{
+    return {
+        {"source_edge_count", history.sourceEdgeCount},
+        {"pre_split_edge_count", history.preSplitEdgeCount},
+        {"splitter_edge_count", history.splitterEdgeCount},
+        {"bounded_face_count", history.boundedFaceCount},
+        {"pre_split_history", history.preSplitHistory},
+        {"splitter_history", history.splitterHistory},
+    };
+}
+
+std::vector<std::string> elementHistoryStatusForNamedShape(const NamedShape& namedShape)
+{
+    std::vector<std::string> statuses;
+    bool hasGenerated = false;
+    bool hasModified = false;
+    bool hasDeleted = false;
+    bool hasSplit = false;
+    bool hasMerge = false;
+    for (const ElementHistory& entry : namedShape.history) {
+        hasGenerated = hasGenerated || entry.kind == ElementHistoryKind::Generated;
+        hasModified = hasModified || entry.kind == ElementHistoryKind::Modified;
+        hasDeleted = hasDeleted || entry.kind == ElementHistoryKind::Deleted;
+        hasSplit = hasSplit || entry.kind == ElementHistoryKind::Split;
+        hasMerge = hasMerge || entry.kind == ElementHistoryKind::Merge;
+    }
+    if (hasGenerated || hasModified) {
+        statuses.push_back("history_consumed:generated_modified");
+    }
+    if (hasSplit || hasDeleted) {
+        statuses.push_back("terminal_history:split_deleted");
+    }
+    if (hasMerge) {
+        statuses.push_back("history_consumed:merge");
+    }
+    return statuses;
+}
+
 }  // namespace
 
 NamedShape indexedNamedShapeForObject(const std::string& owner, const TopoDS_Shape& shape)
@@ -827,12 +866,14 @@ NamedShape indexedNamedShapeForObject(const std::string& owner, const TopoDS_Sha
 NamedShape namedShapeForSketchInternalShape(
     const std::string& owner,
     const TopoDS_Shape& rawShape,
-    const TopoDS_Shape& internalShape
+    const TopoDS_Shape& internalShape,
+    std::optional<SketchInternalHistoryContext> historyContext
 )
 {
     NamedShape namedShape;
     namedShape.owner = owner + ".InternalShape";
     namedShape.shape = internalShape;
+    namedShape.sketchInternalHistory = historyContext;
 
     TopTools_IndexedMapOfShape faces;
     TopTools_IndexedMapOfShape edges;
@@ -867,11 +908,19 @@ NamedShape namedShapeForSketchInternalShape(
     for (const InternalGeneratedElementHistory& history :
          internalGeneratedFaceHistoryForSketch(rawShape, internalShape)) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMaker.cpp
-        // ::FaceMaker::postBuild(), "name the face using the edges of its outer wire". Keep
-        // InternalFaceN history-backed from the outer wire only while respecting
+        // ::FaceMaker::postBuild(), "MapperHistory(myPreSplitHistory)" then
+        // "MapperMaker(mySplitter)" before it "name the face using the edges of its outer wire".
+        // Keep InternalFaceN history-backed from the outer wire only while respecting
         // SketchObject::getInternalElementMap(), which exposes no raw FaceN alias for
-        // InternalShape.
+        // InternalShape; the optional SketchInternalHistoryContext records which
+        // FaceMakerBuildFace ledger stages were available for this request.
         addNestedHistory(namedShape, ElementHistoryKind::Generated, history.target, history.sources);
+    }
+    if (historyContext && historyContext->preSplitHistory) {
+        addDistinctString(namedShape.elementHistoryStatus, "facemaker_history:pre_split");
+    }
+    if (historyContext && historyContext->splitterHistory) {
+        addDistinctString(namedShape.elementHistoryStatus, "facemaker_history:splitter");
     }
 
     for (const InternalElementHistory& history : internalSplitElementHistoryForSketch(rawShape, internalShape)) {
@@ -1112,6 +1161,18 @@ NamedShape namedShapeForRefineHistory(
                                      maker.Modified(sourceElement),
                                      ElementHistoryKind::Modified,
                                      sourceTargets);
+                    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/modelRefine.h
+                    // ::BRepBuilderAPI_RefineModel exposes "IsDeleted(const TopoDS_Shape& S)";
+                    // TopoShapeExpansion.cpp::makeElementRefine() routes that mapper into
+                    // makeShapeWithElementMap(), so refined-away source elements remain terminal
+                    // deleted history for later updateElementReference().
+                    if (maker.IsDeleted(sourceElement) && sourceTargets[sourceName].preserved.empty()
+                        && sourceTargets[sourceName].history.empty()) {
+                        addTerminalHistory(
+                            namedShape,
+                            ElementHistory {ElementHistoryKind::Deleted, sourceName, {sourceName}}
+                        );
+                    }
                 }
                 catch (const Standard_Failure&) {
                     continue;
@@ -1686,14 +1747,24 @@ nlohmann::json namedShapeToJson(const NamedShape& namedShape)
         || std::any_of(namedShape.elementMap.begin(),
                        namedShape.elementMap.end(),
                        [](const auto& item) { return item.first != item.second; });
+    std::vector<std::string> elementHistoryStatus = namedShape.elementHistoryStatus;
+    for (const std::string& status : elementHistoryStatusForNamedShape(namedShape)) {
+        addDistinctString(elementHistoryStatus, status);
+    }
 
-    return {
+    nlohmann::json result = {
         {"owner", namedShape.owner},
         {"element_map_status", hasMappedHistory ? "history_partial" : "indexed_only"},
+        {"element_history_status", elementHistoryStatus},
         {"element_map", namedShape.elementMap},
         {"elements", elements},
         {"history", history},
     };
+    if (namedShape.sketchInternalHistory) {
+        result["sketch_internal_history"] = sketchInternalHistoryToJson(*namedShape.sketchInternalHistory);
+        result["sketch_internal_history_status"] = "history_partial:facemaker_buildface";
+    }
+    return result;
 }
 
 nlohmann::json namedShapesToJson(const std::map<std::string, NamedShape>& namedShapes)

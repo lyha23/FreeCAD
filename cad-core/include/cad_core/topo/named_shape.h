@@ -39,6 +39,16 @@ struct ElementHistory
     std::vector<std::string> sources;
 };
 
+struct SketchInternalHistoryContext
+{
+    std::size_t sourceEdgeCount = 0;
+    std::size_t preSplitEdgeCount = 0;
+    std::size_t splitterEdgeCount = 0;
+    std::size_t boundedFaceCount = 0;
+    bool preSplitHistory = false;
+    bool splitterHistory = false;
+};
+
 struct NamedElement
 {
     std::string name;
@@ -54,6 +64,13 @@ struct NamedShape
     std::map<std::string, NamedElement> elements;
     std::map<std::string, std::string> elementMap;
     std::vector<ElementHistory> history;
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeMapper.cpp,
+    // MapperHistory can carry generated/modified/split/merge/deleted outcomes independently
+    // from the currently resolvable ElementMap. cad-core exposes this request-local summary so
+    // diagnostics can distinguish an indexed-only map from a partially consumed history ledger.
+    std::vector<std::string> elementHistoryStatus;
+    std::optional<SketchInternalHistoryContext> sketchInternalHistory;
 };
 
 struct NamedShapeSource
@@ -113,7 +130,8 @@ NamedShape indexedNamedShapeForObject(const std::string& owner, const TopoDS_Sha
 NamedShape namedShapeForSketchInternalShape(
     const std::string& owner,
     const TopoDS_Shape& rawShape,
-    const TopoDS_Shape& internalShape
+    const TopoDS_Shape& internalShape,
+    std::optional<SketchInternalHistoryContext> historyContext = std::nullopt
 );
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::makeElementPrism(),

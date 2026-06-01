@@ -706,6 +706,203 @@ void WireJoiner::addSourceEdge(const TopoDS_Edge& edge)
     }
 }
 
+void WireJoiner::rebuildOrderedVertices(WireInfo& info)
+{
+    info.orderedVertices.clear();
+    info.hasNewWireSeed = false;
+    info.hasSplitWireCandidate = false;
+    info.done = false;
+    info.splitWireCandidateCount = 0;
+    info.ownerPropagationCandidateCount = 0;
+    for (EdgeInfo& edge : info.edges) {
+        edge.branchCandidateCount = 0;
+        edge.branchInsideCandidateCount = 0;
+        edge.branchOutsideCandidateCount = 0;
+        edge.newWireSeedCandidateCount = 0;
+        edge.splitWireCandidateCount = 0;
+        edge.ownerPropagationCandidateCount = 0;
+        edge.exhaustSeed = false;
+        edge.exhaustSharedOwner = false;
+        edge.exhaustDoneSecondary = false;
+        edge.exhaustSearchCandidate = false;
+    }
+    std::vector<bool> used(info.edges.size(), false);
+
+    for (std::size_t startIndex = 0; startIndex < info.edges.size(); ++startIndex) {
+        if (used[startIndex] || info.edges[startIndex].edge.IsNull()) {
+            continue;
+        }
+
+        std::deque<WireVertex> component;
+        component.push_back(WireVertex{startIndex, true});
+        used[startIndex] = true;
+        auto [currentStart, currentEnd] = edgeEndpoints(info.edges[startIndex].edge);
+
+        bool extended = true;
+        while (extended) {
+            extended = false;
+            for (std::size_t index = 0; index < info.edges.size(); ++index) {
+                if (used[index] || info.edges[index].edge.IsNull()) {
+                    continue;
+                }
+                const auto [edgeStart, edgeEnd] = edgeEndpoints(info.edges[index].edge);
+                if (samePoint(edgeStart, currentEnd)) {
+                    component.push_back(WireVertex{index, true});
+                    currentEnd = edgeEnd;
+                    used[index] = true;
+                    extended = true;
+                    break;
+                }
+                if (samePoint(edgeEnd, currentEnd)) {
+                    component.push_back(WireVertex{index, false});
+                    currentEnd = edgeStart;
+                    used[index] = true;
+                    extended = true;
+                    break;
+                }
+                if (samePoint(edgeEnd, currentStart)) {
+                    component.push_front(WireVertex{index, true});
+                    currentStart = edgeStart;
+                    used[index] = true;
+                    extended = true;
+                    break;
+                }
+                if (samePoint(edgeStart, currentStart)) {
+                    component.push_front(WireVertex{index, false});
+                    currentStart = edgeEnd;
+                    used[index] = true;
+                    extended = true;
+                    break;
+                }
+            }
+        }
+
+        info.orderedVertices.insert(info.orderedVertices.end(), component.begin(), component.end());
+    }
+
+    const int iteration2 = nextIteration2_++;
+    for (const WireVertex& vertex : info.orderedVertices) {
+        if (vertex.edgeIndex < info.edges.size()) {
+            info.edges[vertex.edgeIndex].iteration2 = iteration2;
+        }
+    }
+}
+
+void WireJoiner::recordExhaustTightBoundLifecycle(WireInfo& info)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::exhaustTightBound() first visits edges whose "wireInfo->done" is true,
+    // copies a completed primary owner into "wireInfo2" for vertices owned by a different
+    // WireInfo, skips edges where "wireInfo2 && wireInfo2->done", and otherwise calls
+    // exhaustTightBoundUpdateWire() to search for the second tight-bound owner. This keeps
+    // those request-local phases explicit before cad-core replaces the bounded classifier.
+    if (!info.done) {
+        return;
+    }
+
+    for (EdgeInfo& edge : info.edges) {
+        if (edge.wireInfo == 0U) {
+            continue;
+        }
+        edge.exhaustSeed = true;
+        if (edge.wireInfo2 != 0U) {
+            edge.exhaustSharedOwner = true;
+            edge.exhaustDoneSecondary = true;
+        }
+        else {
+            edge.exhaustSearchCandidate = true;
+        }
+    }
+}
+
+void WireJoiner::recordBranchSearchCandidates(WireInfo& info, const std::vector<TopoDS_Face>& boundedFaces)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::findTightBoundByVertices() walks "current->iStart[idx]..iEnd[idx]" and
+    // skips "next == current || next->iteration2 == iteration2 || next->iteration < 0" before
+    // testing "isInside(*wireInfo, next->mid)". This records the same request-local adjacent
+    // EdgeInfo candidates and the inside candidates that would seed the "new WireInfo" branch
+    // without yet replacing the bounded-face ownership classifier with the full branch search.
+    for (WireVertex& vertex : info.orderedVertices) {
+        if (vertex.edgeIndex >= info.edges.size()) {
+            continue;
+        }
+        EdgeInfo& current = info.edges[vertex.edgeIndex];
+        const gp_Pnt point = vertex.start ? edgeEndpoints(current.edge).first : edgeEndpoints(current.edge).second;
+        std::size_t candidates = 0;
+        std::size_t insideCandidates = 0;
+        std::size_t outsideCandidates = 0;
+        std::size_t newWireSeeds = 0;
+        for (std::size_t index = 0; index < info.edges.size(); ++index) {
+            if (index == vertex.edgeIndex || info.edges[index].iteration < 0) {
+                continue;
+            }
+            const auto [edgeStart, edgeEnd] = edgeEndpoints(info.edges[index].edge);
+            if (samePoint(point, edgeStart) || samePoint(point, edgeEnd)) {
+                ++candidates;
+                if (pointInsideOrOnAnyFace(edgeMidpoint(info.edges[index].edge), boundedFaces)) {
+                    ++insideCandidates;
+                    ++newWireSeeds;
+                }
+                else {
+                    ++outsideCandidates;
+                }
+            }
+        }
+        vertex.branchCandidateCount = candidates;
+        current.branchCandidateCount += candidates;
+        current.branchInsideCandidateCount += insideCandidates;
+        current.branchOutsideCandidateCount += outsideCandidates;
+        current.newWireSeedCandidateCount += newWireSeeds;
+        if (newWireSeeds > 0U) {
+            info.hasNewWireSeed = true;
+        }
+    }
+}
+
+void WireJoiner::recordTightBoundLifecycle(WireInfo& info)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::findTightBoundSplitWire() creates "splitWire.reset(new WireInfo())"
+    // when the branch search slices an existing WireInfo, and ::findTightBoundUpdateVertices()
+    // marks "beginInfo.wireInfo->done = true" before propagating that owner to vertices whose
+    // EdgeInfo still points at another unfinished WireInfo. This records the equivalent
+    // request-local lifecycle boundary without using it as an output pruning rule yet.
+    bool hasOwnedEdge = false;
+    bool hasOpenExportEdge = false;
+    std::size_t insideBranchCandidates = 0;
+    std::size_t outsideBranchCandidates = 0;
+    for (const EdgeInfo& edge : info.edges) {
+        hasOwnedEdge = hasOwnedEdge || edge.wireInfo != 0U;
+        hasOpenExportEdge = hasOpenExportEdge || edge.iteration == -3 || (edge.wireInfo == 0U && edge.iteration >= 0);
+        insideBranchCandidates += edge.branchInsideCandidateCount;
+        outsideBranchCandidates += edge.branchOutsideCandidateCount;
+    }
+
+    if (insideBranchCandidates > 0U && (outsideBranchCandidates > 0U || hasOpenExportEdge)) {
+        info.hasSplitWireCandidate = true;
+        info.splitWireCandidateCount = 1;
+        for (EdgeInfo& edge : info.edges) {
+            if (edge.branchInsideCandidateCount > 0U) {
+                edge.splitWireCandidateCount += edge.branchInsideCandidateCount;
+            }
+        }
+    }
+
+    if (!info.orderedVertices.empty() && (hasOwnedEdge || insideBranchCandidates > 0U)) {
+        info.done = true;
+    }
+
+    if (info.done && hasOwnedEdge) {
+        for (EdgeInfo& edge : info.edges) {
+            if (edge.wireInfo == 0U) {
+                ++info.ownerPropagationCandidateCount;
+                ++edge.ownerPropagationCandidateCount;
+            }
+        }
+    }
+}
+
 void WireJoiner::classifyBoundedFaceOwnership(const TopoDS_Shape& boundedFaceShape)
 {
     if (boundedFaceShape.IsNull() || openWires_.empty()) {
@@ -717,6 +914,8 @@ void WireJoiner::classifyBoundedFaceOwnership(const TopoDS_Shape& boundedFaceSha
     if (faceBoundaryEdges.empty() || boundedFaces.empty()) {
         return;
     }
+    const std::size_t tightBoundOwner = nextWireInfoId_++;
+    const std::size_t sharedTightBoundOwner = nextWireInfoId_++;
 
     for (WireInfo& info : openWires_) {
         std::vector<EdgeInfo> splitEdges;
@@ -737,12 +936,28 @@ void WireJoiner::classifyBoundedFaceOwnership(const TopoDS_Shape& boundedFaceSha
             }
         }
         info.edges = std::move(splitEdges);
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::findTightBound() iterates ordered "wireInfo->vertices" and marks
+        // "vertex.it->iteration2 = iteration2" before branch search. cad-core now preserves the
+        // request-local ordered EdgeInfo vertex ledger after splitter replacement; the full branch
+        // search still remains a later migration step.
+        rebuildOrderedVertices(info);
+        recordBranchSearchCandidates(info, boundedFaces);
     }
 
     for (WireInfo& info : openWires_) {
         for (EdgeInfo& edgeInfo : info.edges) {
             if (edgeMatchesAnyBoundary(edgeInfo.edge, faceBoundaryEdges)) {
-                edgeInfo.wireInfo = info.id;
+                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                // ::WireJoinerP::findTightBound() assigns the primary tight-bound WireInfo and
+                // ::WireJoinerP::exhaustTightBound() may assign "wireInfo2" when one EdgeInfo is
+                // shared by two tight-bound wires. cad-core does not yet build ordered WireInfo
+                // vertices, but this keeps the same owner slots instead of a separate consumed
+                // flag, so later migration can replace the classifier with the real search.
+                edgeInfo.wireInfo = tightBoundOwner;
+                if (countEquivalentEdges(edgeInfo.edge, faceBoundaryEdges) > 1) {
+                    edgeInfo.wireInfo2 = sharedTightBoundOwner;
+                }
                 continue;
             }
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
@@ -757,7 +972,78 @@ void WireJoiner::classifyBoundedFaceOwnership(const TopoDS_Shape& boundedFaceSha
                 edgeInfo.iteration = -3;
             }
         }
+        recordTightBoundLifecycle(info);
+        recordExhaustTightBoundLifecycle(info);
     }
+}
+
+WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
+{
+    WireJoinerLedgerSummary summary;
+    for (const WireInfo& info : openWires_) {
+        for (const EdgeInfo& edgeInfo : info.edges) {
+            ++summary.edgeInfoCount;
+            if (edgeInfo.splitFromInputEdge) {
+                ++summary.splitEdgeInfoCount;
+            }
+            if (edgeInfo.iteration2 != 0) {
+                ++summary.iteration2MarkedEdgeInfoCount;
+            }
+            summary.branchSearchCandidateCount += edgeInfo.branchCandidateCount;
+            summary.branchSearchInsideCandidateCount += edgeInfo.branchInsideCandidateCount;
+            summary.branchSearchOutsideCandidateCount += edgeInfo.branchOutsideCandidateCount;
+            summary.newWireSeedCandidateCount += edgeInfo.newWireSeedCandidateCount;
+            summary.splitWireEdgeInfoCount += edgeInfo.splitWireCandidateCount;
+            if (edgeInfo.exhaustSeed) {
+                ++summary.exhaustSeedEdgeInfoCount;
+            }
+            if (edgeInfo.exhaustSharedOwner) {
+                ++summary.exhaustSharedOwnerEdgeInfoCount;
+            }
+            if (edgeInfo.exhaustDoneSecondary) {
+                ++summary.exhaustDoneSecondaryEdgeInfoCount;
+            }
+            if (edgeInfo.exhaustSearchCandidate) {
+                ++summary.exhaustSearchCandidateEdgeInfoCount;
+            }
+            if (edgeInfo.wireInfo != 0U) {
+                ++summary.primaryOwnedEdgeInfoCount;
+            }
+            if (edgeInfo.wireInfo2 != 0U) {
+                ++summary.secondaryOwnedEdgeInfoCount;
+            }
+            if (edgeInfo.iteration == -3 || (edgeInfo.wireInfo == 0U && edgeInfo.iteration >= 0)) {
+                ++summary.openExportEdgeInfoCount;
+            }
+        }
+        if (!info.orderedVertices.empty()) {
+            ++summary.orderedWireInfoCount;
+            summary.orderedVertexCount += info.orderedVertices.size();
+            if (std::any_of(info.orderedVertices.begin(),
+                            info.orderedVertices.end(),
+                            [](const WireVertex& vertex) {
+                                return vertex.branchCandidateCount > 0U;
+                            })) {
+                ++summary.branchSearchSeedWireInfoCount;
+            }
+            if (info.hasNewWireSeed) {
+                ++summary.newWireSeedWireInfoCount;
+            }
+            if (info.hasSplitWireCandidate) {
+                summary.splitWireCandidateCount += info.splitWireCandidateCount;
+            }
+            if (info.done) {
+                ++summary.doneWireInfoCount;
+            }
+            summary.doneOwnedEdgeInfoCount += std::count_if(info.edges.begin(),
+                                                            info.edges.end(),
+                                                            [](const EdgeInfo& edgeInfo) {
+                                                                return edgeInfo.wireInfo != 0U;
+                                                            });
+        }
+        summary.ownerPropagationCandidateCount += info.ownerPropagationCandidateCount;
+    }
+    return summary;
 }
 
 std::optional<TopoDS_Shape> WireJoiner::getOpenWires(const std::string& historyPrefix, bool noOriginal) const

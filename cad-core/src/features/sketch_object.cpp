@@ -341,6 +341,8 @@ struct ProfileFaceBuild {
     std::optional<TopoDS_Shape> internalShape;
     bool faceMakerFailed = false;
     bool requiresSubshapeSelection = false;
+    std::optional<geometry::FaceMakerHistorySummary> faceMakerHistory;
+    std::optional<geometry::WireJoinerLedgerSummary> wireJoinerLedger;
 };
 
 struct UnionFind {
@@ -3496,6 +3498,8 @@ ProfileFaceBuild buildOptionalProfileFace(const std::vector<SketchProfileEdge>& 
         result.internalShape,
         result.faceMakerFailed,
         result.requiresSubshapeSelection,
+        result.faceMakerHistory,
+        result.wireJoinerLedger,
     };
 }
 
@@ -4647,6 +4651,8 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
         // open-wire carry-through. Full WireJoiner ownership/history remains separate topology work.
         internalShape = *profileFace.internalShape;
     }
+    const auto faceMakerHistory = profileFace.faceMakerHistory;
+    const auto wireJoinerLedger = profileFace.wireJoinerLedger;
 
     if (hasPlacement) {
         if (!rawShape->IsNull()) {
@@ -4666,7 +4672,25 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
     shapeValue.profileRequiresSubshapeSelection = profileFace.requiresSubshapeSelection;
     const bool hasNonEmptyInternalShape = internalShape && !internalShape->IsNull();
     if (hasNonEmptyInternalShape) {
-        shapeValue.internalNamedShape = topo::namedShapeForSketchInternalShape(object.name, *rawShape, *internalShape);
+        std::optional<topo::SketchInternalHistoryContext> internalHistoryContext;
+        if (faceMakerHistory) {
+            // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMaker.cpp
+            // ::FaceMaker::postBuild(), consumes "MapperHistory(myPreSplitHistory)" and
+            // "MapperMaker(mySplitter)" before SketchObject::getInternalElementMap() exposes
+            // the request-local InternalShape. Store the FaceMakerBuildFace summary next to the
+            // InternalShape NamedShape so topo consumers can see which maker-history stages
+            // backed the generated/split/deleted element history.
+            internalHistoryContext = topo::SketchInternalHistoryContext {
+                faceMakerHistory->sourceEdgeCount,
+                faceMakerHistory->preSplitEdgeCount,
+                faceMakerHistory->splitterEdgeCount,
+                faceMakerHistory->boundedFaceCount,
+                faceMakerHistory->preSplitHistory,
+                faceMakerHistory->splitterHistory,
+            };
+        }
+        shapeValue.internalNamedShape =
+            topo::namedShapeForSketchInternalShape(object.name, *rawShape, *internalShape, internalHistoryContext);
         context.namedShapes[object.name + ".InternalShape"] = *shapeValue.internalNamedShape;
     }
     context.shapes[object.name] = shapeValue;
@@ -4723,6 +4747,46 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
          externalGeometry->circles.size() + externalGeometry->arcs.size() + externalGeometry->ellipses.size()
              + externalGeometry->ellipseArcs.size()},
     };
+    if (wireJoinerLedger) {
+        context.objects[object.name]["wire_joiner_ledger"] = {
+            {"edge_info_count", wireJoinerLedger->edgeInfoCount},
+            {"split_edge_info_count", wireJoinerLedger->splitEdgeInfoCount},
+            {"primary_owned_edge_info_count", wireJoinerLedger->primaryOwnedEdgeInfoCount},
+            {"secondary_owned_edge_info_count", wireJoinerLedger->secondaryOwnedEdgeInfoCount},
+            {"open_export_edge_info_count", wireJoinerLedger->openExportEdgeInfoCount},
+            {"ordered_wire_info_count", wireJoinerLedger->orderedWireInfoCount},
+            {"ordered_vertex_count", wireJoinerLedger->orderedVertexCount},
+            {"iteration2_marked_edge_info_count", wireJoinerLedger->iteration2MarkedEdgeInfoCount},
+            {"branch_search_candidate_count", wireJoinerLedger->branchSearchCandidateCount},
+            {"branch_search_seed_wire_info_count", wireJoinerLedger->branchSearchSeedWireInfoCount},
+            {"branch_search_inside_candidate_count", wireJoinerLedger->branchSearchInsideCandidateCount},
+            {"branch_search_outside_candidate_count", wireJoinerLedger->branchSearchOutsideCandidateCount},
+            {"new_wire_seed_candidate_count", wireJoinerLedger->newWireSeedCandidateCount},
+            {"new_wire_seed_wire_info_count", wireJoinerLedger->newWireSeedWireInfoCount},
+            {"split_wire_candidate_count", wireJoinerLedger->splitWireCandidateCount},
+            {"split_wire_edge_info_count", wireJoinerLedger->splitWireEdgeInfoCount},
+            {"done_wire_info_count", wireJoinerLedger->doneWireInfoCount},
+            {"done_owned_edge_info_count", wireJoinerLedger->doneOwnedEdgeInfoCount},
+            {"owner_propagation_candidate_count", wireJoinerLedger->ownerPropagationCandidateCount},
+            {"exhaust_seed_edge_info_count", wireJoinerLedger->exhaustSeedEdgeInfoCount},
+            {"exhaust_shared_owner_edge_info_count", wireJoinerLedger->exhaustSharedOwnerEdgeInfoCount},
+            {"exhaust_done_secondary_edge_info_count", wireJoinerLedger->exhaustDoneSecondaryEdgeInfoCount},
+            {"exhaust_search_candidate_edge_info_count", wireJoinerLedger->exhaustSearchCandidateEdgeInfoCount},
+        };
+        context.objects[object.name]["wire_joiner_history"] =
+            "history_partial:edge_info_wire_info_split_done_exhaust";
+    }
+    if (faceMakerHistory) {
+        context.objects[object.name]["facemaker_history"] = {
+            {"source_edge_count", faceMakerHistory->sourceEdgeCount},
+            {"pre_split_edge_count", faceMakerHistory->preSplitEdgeCount},
+            {"splitter_edge_count", faceMakerHistory->splitterEdgeCount},
+            {"bounded_face_count", faceMakerHistory->boundedFaceCount},
+            {"pre_split_history", faceMakerHistory->preSplitHistory},
+            {"splitter_history", faceMakerHistory->splitterHistory},
+        };
+        context.objects[object.name]["facemaker_history_status"] = "history_partial:facemaker_buildface";
+    }
 }
 
 }  // namespace cad_core::features

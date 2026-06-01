@@ -10,5 +10,14 @@
       "edges": 9,
       "vertices": 10
     }
+  },
+  "named_shapes": {
+    "Sketch.InternalShape": {
+      "element_history_status_contains": [
+        "facemaker_history:splitter",
+        "history_consumed:generated_modified",
+        "terminal_history:split_deleted"
+      ]
+    }
   }
 }

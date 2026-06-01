@@ -9,6 +9,15 @@
 
 namespace cad_core::geometry {
 
+struct FaceMakerHistorySummary {
+    std::size_t sourceEdgeCount = 0;
+    std::size_t preSplitEdgeCount = 0;
+    std::size_t splitterEdgeCount = 0;
+    std::size_t boundedFaceCount = 0;
+    bool preSplitHistory = false;
+    bool splitterHistory = false;
+};
+
 struct FaceMakerBuildFaceResult {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
     // ::SketchObject::buildInternals(), stores the FaceMakerBuildFace result as auxiliary
@@ -19,6 +28,7 @@ struct FaceMakerBuildFaceResult {
     std::optional<TopoDS_Shape> internalShape;
     std::size_t faceCount = 0;
     bool splitProducedBoundedFaces = false;
+    std::optional<FaceMakerHistorySummary> historySummary;
 };
 
 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBullseye.cpp

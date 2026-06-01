@@ -150,6 +150,10 @@ class ExpectedFixtureAssertions:
         for key in ("owner", "element_map_status"):
             if key in expected:
                 self.assertEqual(named_shape[key], expected[key])
+        if "element_history_status" in expected:
+            self.assertEqual(named_shape.get("element_history_status", []), expected["element_history_status"])
+        for status in expected.get("element_history_status_contains", []):
+            self.assertIn(status, named_shape.get("element_history_status", []))
 
         for source, element_name in expected.get("element_map", {}).items():
             self.assertIn(source, element_map)

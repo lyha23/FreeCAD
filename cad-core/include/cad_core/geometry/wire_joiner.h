@@ -1,6 +1,7 @@
 #pragma once
 
 #include <TopoDS_Edge.hxx>
+#include <TopoDS_Face.hxx>
 #include <TopoDS_Shape.hxx>
 #include <TopoDS_Wire.hxx>
 
@@ -10,6 +11,32 @@
 #include <vector>
 
 namespace cad_core::geometry {
+
+struct WireJoinerLedgerSummary {
+    std::size_t edgeInfoCount = 0;
+    std::size_t splitEdgeInfoCount = 0;
+    std::size_t primaryOwnedEdgeInfoCount = 0;
+    std::size_t secondaryOwnedEdgeInfoCount = 0;
+    std::size_t openExportEdgeInfoCount = 0;
+    std::size_t orderedWireInfoCount = 0;
+    std::size_t orderedVertexCount = 0;
+    std::size_t iteration2MarkedEdgeInfoCount = 0;
+    std::size_t branchSearchCandidateCount = 0;
+    std::size_t branchSearchSeedWireInfoCount = 0;
+    std::size_t branchSearchInsideCandidateCount = 0;
+    std::size_t branchSearchOutsideCandidateCount = 0;
+    std::size_t newWireSeedCandidateCount = 0;
+    std::size_t newWireSeedWireInfoCount = 0;
+    std::size_t splitWireCandidateCount = 0;
+    std::size_t splitWireEdgeInfoCount = 0;
+    std::size_t doneWireInfoCount = 0;
+    std::size_t doneOwnedEdgeInfoCount = 0;
+    std::size_t ownerPropagationCandidateCount = 0;
+    std::size_t exhaustSeedEdgeInfoCount = 0;
+    std::size_t exhaustSharedOwnerEdgeInfoCount = 0;
+    std::size_t exhaustDoneSecondaryEdgeInfoCount = 0;
+    std::size_t exhaustSearchCandidateEdgeInfoCount = 0;
+};
 
 class WireJoiner {
 public:
@@ -34,6 +61,11 @@ public:
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
     // ::SketchObject::buildInternals(), calls joiner.getOpenWires(openWires, "SKF").
     std::optional<TopoDS_Shape> getOpenWires(const std::string& historyPrefix, bool noOriginal = true) const;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::buildClosedWire() calls findTightBound()/exhaustTightBound(); this summary
+    // exposes only the request-local EdgeInfo/WireInfo slot coverage used by tests and diagnostics,
+    // not a frontend protocol contract or persisted graph state.
+    WireJoinerLedgerSummary ledgerSummary() const;
 
 private:
     bool tightBound_ = false;
@@ -52,19 +84,45 @@ private:
         std::size_t wireInfo = 0;
         std::size_t wireInfo2 = 0;
         bool splitFromInputEdge = false;
+        std::size_t branchCandidateCount = 0;
+        std::size_t branchInsideCandidateCount = 0;
+        std::size_t branchOutsideCandidateCount = 0;
+        std::size_t newWireSeedCandidateCount = 0;
+        std::size_t splitWireCandidateCount = 0;
+        std::size_t ownerPropagationCandidateCount = 0;
+        bool exhaustSeed = false;
+        bool exhaustSharedOwner = false;
+        bool exhaustDoneSecondary = false;
+        bool exhaustSearchCandidate = false;
+    };
+    struct WireVertex {
+        std::size_t edgeIndex = 0;
+        bool start = true;
+        std::size_t branchCandidateCount = 0;
     };
     struct WireInfo {
         std::size_t id = 0;
         TopoDS_Wire wire;
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
         // ::WireJoinerP::WireInfo owns ordered EdgeInfo vertices for tight-bound wires.
-        // cad-core still stores edge-level states rather than vertex pairs, but the owner id now
-        // mirrors EdgeInfo::wireInfo / wireInfo2 instead of a separate output-side enum.
+        // cad-core keeps the ordered request-local vertex ledger alongside edge states so
+        // findTightBound()/exhaustTightBound() can migrate onto the same shape of state.
         std::vector<EdgeInfo> edges;
+        std::vector<WireVertex> orderedVertices;
+        bool hasNewWireSeed = false;
+        bool hasSplitWireCandidate = false;
+        bool done = false;
+        std::size_t splitWireCandidateCount = 0;
+        std::size_t ownerPropagationCandidateCount = 0;
     };
     std::size_t nextWireInfoId_ = 1;
+    int nextIteration2_ = 1;
     std::vector<WireInfo> openWires_;
     std::vector<TopoDS_Edge> sourceEdges_;
+    void rebuildOrderedVertices(WireInfo& info);
+    void recordBranchSearchCandidates(WireInfo& info, const std::vector<TopoDS_Face>& boundedFaces);
+    void recordTightBoundLifecycle(WireInfo& info);
+    void recordExhaustTightBoundLifecycle(WireInfo& info);
 };
 
 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp

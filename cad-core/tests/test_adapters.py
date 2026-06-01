@@ -308,6 +308,30 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         ]:
             self.assertIn(code, capabilities["diagnostic_codes"])
 
+        self.assertEqual(
+            capabilities["topo_history"]["stable_subname_resolution"],
+            [
+                "indexed",
+                "source_preserved",
+                "one_to_one_history",
+                "unique_same_kind_split_recovery",
+                "reference_shadow_recovery",
+            ],
+        )
+        self.assertIn("refine_modified_deleted_generated", capabilities["topo_history"]["maker_history"])
+        self.assertEqual(capabilities["topo_history"]["terminal_history"], ["deleted", "split", "merge"])
+        self.assertEqual(
+            capabilities["topo_history"]["element_history_status"],
+            [
+                "generated_modified",
+                "terminal_split_deleted",
+                "merge",
+                "facemaker_pre_split",
+                "facemaker_splitter",
+            ],
+        )
+        self.assertIn("facemaker_wirejoiner_history", capabilities["topo_history"]["remaining_gaps"])
+        self.assertIn("import_shape_element_map", capabilities["topo_history"]["remaining_gaps"])
         self.assertIn("complete_mapper_history", capabilities["known_gaps"])
         self.assertNotIn("show_element_missing_child_lifecycle", capabilities["known_gaps"])
 

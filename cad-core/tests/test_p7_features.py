@@ -33,11 +33,21 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         result = self.run_recompute("pocket-refine-true", "p7")
         pocket = result["objects"]["Pocket"]
         body = result["objects"]["Body"]
+        body_history = result["named_shapes"]["Body"]["history"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pocket["status"], "ok")
         self.assertNotIn("refine", pocket)
         self.assertEqual(body["refined_features"], ["Pocket"])
+        for source in ["Pocket.Face5", "Pocket.Face6", "SketchPocket.Face1"]:
+            self.assertTrue(
+                any(
+                    item["kind"] == "deleted"
+                    and item["element"] == source
+                    and item["sources"] == [source]
+                    for item in body_history
+                )
+            )
         self.assert_object_matches_expected(result, "p7", "pocket-refine-true")
 
     def test_p7_coordinate_system_exposes_axes_for_reference_axis(self) -> None:
@@ -674,6 +684,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         result = self.run_recompute("mirrored-pad-datum-plane", "p7")
         mirrored = result["objects"]["Mirrored"]
         body = result["objects"]["Body"]
+        mirrored_named_shape = result["named_shapes"]["Mirrored"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(mirrored["status"], "ok")
@@ -682,6 +693,22 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(mirrored["originals"], ["Pad"])
         self.assertEqual(mirrored["body_mode"], "replace")
         self.assertEqual(body["tip"], "Mirrored")
+        self.assertTrue(
+            any(key.startswith("Mirrored.Transform1.") for key in mirrored_named_shape["element_map"]),
+            "transformed copy source aliases should survive into ElementMap",
+        )
+        self.assertTrue(
+            any(key.startswith("Pad.") for key in mirrored_named_shape["element_map"]),
+            "source feature stable aliases should survive transformed copy propagation",
+        )
+        self.assertTrue(
+            any(
+                item["kind"] == "modified"
+                and any(source.startswith("Mirrored.Transform1.") for source in item["sources"])
+                for item in mirrored_named_shape["history"]
+            ),
+            "transformed copy should record non-indexed history for copied source aliases",
+        )
         self.assert_object_matches_expected(result, "p7", "mirrored-pad-datum-plane")
 
     def test_p7_transformed_refine_true_uses_refinemodel_path(self) -> None:
@@ -979,6 +1006,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     item["kind"]
                     for item in result["named_shapes"]["Mirrored"]["history"]
                 }
+                history_status = result["named_shapes"]["Mirrored"]["element_history_status"]
 
                 self.assertEqual(diagnostic["code"], code)
                 self.assertEqual(diagnostic["object"], "ProbePad")
@@ -986,6 +1014,9 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(diagnostic["target"], "Mirrored")
                 self.assertEqual(diagnostic["subname"], stable_subname)
                 self.assertIn(code.removesuffix("_stable_subname"), history_kinds)
+                self.assertIn("history_consumed:generated_modified", history_status)
+                self.assertIn("terminal_history:split_deleted", history_status)
+                self.assertIn("history_consumed:merge", history_status)
 
     def test_p7_multi_transform_combines_linear_pattern_and_mirror(self) -> None:
         result = self.run_recompute("multi-transform-linear-mirror", "p7")

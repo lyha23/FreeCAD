@@ -73,8 +73,8 @@ PartDesign::MultiTransform
 | P0-P2 | document / graph / runtime 底座、Sketch + Body + Pad、FeatureBase / Pocket / Body fuse-cut 主链稳定 |
 | P3a/P3b | shared `FeatureExtrude` 已覆盖主要长度、终止、双侧、方向、placement 和 taper 几何子集；taper 对象级 partial history 状态已暴露 |
 | P4 | typed property、`PropertyLink*`、placement、GeoFeatureGroup 基础、graph edge 和结构化 diagnostics 已接入 |
-| P5 | Sketcher profile、基础约束与 datum constraint 子集、ExternalGeometry 子集、closed / open / split internal geometry、`FaceMakerBuildFace` bounded split 子集、WireJoiner EdgeInfo / WireInfo 边级账本子集、基础 `InternalShape`、internal element map 与 terminal split / deleted history 已接入 |
-| P6 | `NamedShape` / `ElementMap` 主路径、prism / Body boolean / Part::Extrusion maker history 子集、RefineModel + GenericShapeMapper history、AddSubShape slot ownership、stable subname 引用更新、ReferenceShadow 恢复、split / deleted diagnostics、Link retag 和 transformed copy terminal history 传播已接入 |
+| P5 | Sketcher profile、基础约束与 datum constraint 子集、ExternalGeometry 子集、closed / open / split internal geometry、BSpline InternalShape oracle、`FaceMakerBuildFace` bounded split 子集、pre-split / splitter history summary、WireJoiner EdgeInfo / WireInfo 边级账本子集、ordered `WireInfo::vertices` / `iteration2` 标记、branch-search candidate inside/outside、`newWire` seed、splitWire / done lifecycle 与 `exhaustTightBound()` 二次 owner 诊断账本、bounded tight-bound primary / secondary owner slot 汇总、基础 `InternalShape`、internal element map 与 terminal split / deleted history 已接入 |
+| P6 | `NamedShape` / `ElementMap` 主路径、Sketch InternalShape FaceMaker history context 与通用 `element_history_status` expected / C ABI capabilities 验收、prism / Body boolean / Part::Extrusion maker history 子集、RefineModel `Modified()` / `IsDeleted()` + GenericShapeMapper history、AddSubShape slot ownership、stable subname 引用更新、ReferenceShadow 恢复、split / deleted diagnostics、Link retag 和 transformed copy terminal history 传播已接入 |
 | P7 | Datum / Origin、RefineModel 主路径子集、Hole 常用孔与资源表、ModelThread pipe-shell 子集、Fillet / Chamfer、DressUp cache、Mirrored / LinearPattern / PolarPattern / Scaled / MultiTransform 基础路径、Whole shape / Features support、Add/Sub replay 与 terminal history diagnostics 已接入 |
 | P8 | Part primitives、BREP / STEP / IGES / STL 导入、BREP / STEP / STL CLI 导出、常用 Part Boolean、基础 Link / LinkSub / LinkGroup / LinkElement display、ShowElement 请求内子元素合成与 `documentObjectUpdates` 建议、`PropertyXLink*` / `FullSubList` / mapped postfix alias、`App::DocumentObjectGroup` plain group 展开、Assembly display 与 Joint 输入元数据已接入 |
 
@@ -86,7 +86,7 @@ P8 Link display 已新增 `App::DocumentObjectGroup` plain group 请求内 child
 
 ## 未完成边界
 
-- Sketcher 完整 solver、BSpline solver/control-point 语义、WireJoiner EdgeInfo / WireInfo 的 `findTightBound()` / `exhaustTightBound()` / `wireInfo2` 完整生命周期、FaceMaker / WireJoiner history-driven `InternalShape` / `getInternalElementMap()`。
+- Sketcher 完整 solver、BSpline solver/control-point 语义、WireJoiner EdgeInfo / WireInfo 的 `findTightBoundSplitWire()` / `findTightBoundUpdateVertices()` / `exhaustTightBound()` 已有 splitWire / done / secondary-owner lifecycle 诊断账本，但尚未替代 bounded ownership classifier，也尚未执行 `exhaustTightBoundUpdateWire()` 搜索主路径；真实 `openWireCompound` history 过滤、FaceMaker / WireJoiner history summary 到正式 `NamedShape` / `ElementMap` 的完整 MapperHistory 消费仍待迁移；FaceMaker summary 当前进入 `Sketch.InternalShape` 的 `NamedShape` 元数据和通用 `element_history_status`。
 - Topo Naming 完整 MapperHistory、复杂 split 自动旧引用恢复、ShapeFix / transformed / DressUp 的完整 maker history，以及 taper partial history 收敛；merge history 已有 Body boolean 与 Link retag 传播回归，但仍要纳入完整 MapperHistory 生命周期。
 - PartDesign transformed / pattern 完整 MapperHistory 与更复杂 ownership。
 - Assembly 求解器、完整 Joint placement / constraint 求解、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、`ShowElement=true` LinkElement / LinkGroup 持久写回事务生命周期、完整 cross-document 文档哈希 / postfix 生命周期和更复杂多层 LinkSub 链。

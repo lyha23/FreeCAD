@@ -70,6 +70,11 @@
         "Fillet.",
         "Pad.",
         "SketchPad."
+      ],
+      "element_history_status_contains": [
+        "history_consumed:generated_modified",
+        "terminal_history:split_deleted",
+        "history_consumed:merge"
       ]
     },
     "Mirrored": {
@@ -79,6 +84,11 @@
         "Fillet.",
         "Mirrored.",
         "Pad."
+      ],
+      "element_history_status_contains": [
+        "history_consumed:generated_modified",
+        "terminal_history:split_deleted",
+        "history_consumed:merge"
       ]
     },
     "Body": {
@@ -88,6 +98,11 @@
         "Fillet.",
         "Mirrored.",
         "Pad."
+      ],
+      "element_history_status_contains": [
+        "history_consumed:generated_modified",
+        "terminal_history:split_deleted",
+        "history_consumed:merge"
       ]
     }
   },

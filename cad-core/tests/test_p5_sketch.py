@@ -458,20 +458,59 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p5_through_open_cutter_keeps_non_original_split_fragments(self) -> None:
         result = self.run_recompute("sketch-internal-face-through-open-cutter", "p5")
         sketch = result["objects"]["Sketch"]
+        ledger = sketch["wire_joiner_ledger"]
+        face_history = sketch["facemaker_history"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["facemaker_history_status"], "history_partial:facemaker_buildface")
+        self.assertEqual(face_history["source_edge_count"], 5)
+        self.assertEqual(face_history["bounded_face_count"], 2)
+        self.assertFalse(face_history["pre_split_history"])
+        self.assertTrue(face_history["splitter_history"])
+        self.assertEqual(sketch["wire_joiner_history"], "history_partial:edge_info_wire_info_split_done_exhaust")
+        self.assertGreaterEqual(ledger["split_edge_info_count"], 2)
+        self.assertGreaterEqual(ledger["primary_owned_edge_info_count"], 1)
+        self.assertGreaterEqual(ledger["secondary_owned_edge_info_count"], 1)
+        self.assertGreaterEqual(ledger["open_export_edge_info_count"], 1)
+        self.assertGreaterEqual(ledger["ordered_wire_info_count"], 1)
+        self.assertGreaterEqual(ledger["ordered_vertex_count"], ledger["edge_info_count"])
+        self.assertEqual(ledger["iteration2_marked_edge_info_count"], ledger["edge_info_count"])
+        self.assertGreater(ledger["branch_search_candidate_count"], 0)
+        self.assertGreaterEqual(ledger["branch_search_seed_wire_info_count"], 1)
+        self.assertGreater(ledger["branch_search_inside_candidate_count"], 0)
+        self.assertGreater(ledger["branch_search_outside_candidate_count"], 0)
+        self.assertEqual(ledger["new_wire_seed_candidate_count"], ledger["branch_search_inside_candidate_count"])
+        self.assertGreaterEqual(ledger["new_wire_seed_wire_info_count"], 1)
+        self.assertGreaterEqual(ledger["split_wire_candidate_count"], 1)
+        self.assertGreaterEqual(ledger["split_wire_edge_info_count"], 1)
+        self.assertGreaterEqual(ledger["done_wire_info_count"], 1)
+        self.assertGreaterEqual(ledger["done_owned_edge_info_count"], ledger["primary_owned_edge_info_count"])
+        self.assertGreaterEqual(ledger["owner_propagation_candidate_count"], 1)
+        self.assertEqual(ledger["exhaust_seed_edge_info_count"], ledger["primary_owned_edge_info_count"])
+        self.assertEqual(ledger["exhaust_shared_owner_edge_info_count"], ledger["secondary_owned_edge_info_count"])
+        self.assertEqual(ledger["exhaust_done_secondary_edge_info_count"], ledger["secondary_owned_edge_info_count"])
+        self.assertEqual(ledger["exhaust_search_candidate_edge_info_count"], 0)
         self.assert_object_matches_expected(result, "p5", "sketch-internal-face-through-open-cutter")
 
     def test_p5_internal_shape_records_split_history_for_open_cutter_fragments(self) -> None:
         result = self.run_recompute("sketch-internal-face-through-open-cutter", "p5")
         named_shape = result["named_shapes"]["Sketch.InternalShape"]
+        internal_history = named_shape["sketch_internal_history"]
 
         split_entries = [
             item
             for item in named_shape["history"]
             if item["kind"] == "split" and item["sources"] == ["Edge5"]
         ]
+        self.assertEqual(named_shape["sketch_internal_history_status"], "history_partial:facemaker_buildface")
+        self.assertIn("facemaker_history:splitter", named_shape["element_history_status"])
+        self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
+        self.assertIn("terminal_history:split_deleted", named_shape["element_history_status"])
+        self.assertEqual(internal_history["source_edge_count"], 5)
+        self.assertEqual(internal_history["bounded_face_count"], 2)
+        self.assertFalse(internal_history["pre_split_history"])
+        self.assertTrue(internal_history["splitter_history"])
         self.assertNotIn("Edge5", named_shape["element_map"])
         self.assertGreaterEqual(len(split_entries), 2)
         for entry in split_entries:
@@ -497,9 +536,33 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p5_t_junction_cutter_keeps_partial_result_wire_graph(self) -> None:
         result = self.run_recompute("sketch-internal-face-t-cutter", "p5")
         sketch = result["objects"]["Sketch"]
+        ledger = sketch["wire_joiner_ledger"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["wire_joiner_history"], "history_partial:edge_info_wire_info_split_done_exhaust")
+        self.assertGreaterEqual(ledger["split_edge_info_count"], 2)
+        self.assertGreaterEqual(ledger["primary_owned_edge_info_count"], 1)
+        self.assertGreaterEqual(ledger["secondary_owned_edge_info_count"], 1)
+        self.assertEqual(ledger["open_export_edge_info_count"], 0)
+        self.assertGreaterEqual(ledger["ordered_wire_info_count"], 1)
+        self.assertGreaterEqual(ledger["ordered_vertex_count"], ledger["edge_info_count"])
+        self.assertEqual(ledger["iteration2_marked_edge_info_count"], ledger["edge_info_count"])
+        self.assertGreater(ledger["branch_search_candidate_count"], 0)
+        self.assertGreaterEqual(ledger["branch_search_seed_wire_info_count"], 1)
+        self.assertGreater(ledger["branch_search_inside_candidate_count"], 0)
+        self.assertEqual(ledger["branch_search_outside_candidate_count"], 0)
+        self.assertEqual(ledger["new_wire_seed_candidate_count"], ledger["branch_search_inside_candidate_count"])
+        self.assertGreaterEqual(ledger["new_wire_seed_wire_info_count"], 1)
+        self.assertGreaterEqual(ledger["done_wire_info_count"], 1)
+        self.assertGreaterEqual(ledger["done_owned_edge_info_count"], ledger["primary_owned_edge_info_count"])
+        self.assertEqual(ledger["split_wire_candidate_count"], 0)
+        self.assertEqual(ledger["split_wire_edge_info_count"], 0)
+        self.assertEqual(ledger["owner_propagation_candidate_count"], 0)
+        self.assertEqual(ledger["exhaust_seed_edge_info_count"], ledger["primary_owned_edge_info_count"])
+        self.assertEqual(ledger["exhaust_shared_owner_edge_info_count"], ledger["secondary_owned_edge_info_count"])
+        self.assertEqual(ledger["exhaust_done_secondary_edge_info_count"], ledger["secondary_owned_edge_info_count"])
+        self.assertEqual(ledger["exhaust_search_candidate_edge_info_count"], 0)
         self.assert_object_matches_expected(result, "p5", "sketch-internal-face-t-cutter")
 
     def test_p5_internal_branch_cutter_splits_generated_boundary_endpoint(self) -> None:
@@ -593,14 +656,21 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p5_self_intersecting_cubic_bspline_splits_into_bounded_regions(self) -> None:
         result = self.run_recompute("sketch-internal-face-cubic-figure8-bspline", "p5")
         sketch = result["objects"]["Sketch"]
+        face_history = sketch["facemaker_history"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["facemaker_history_status"], "history_partial:facemaker_buildface")
+        self.assertEqual(face_history["source_edge_count"], 1)
+        self.assertTrue(face_history["pre_split_history"])
+        self.assertFalse(face_history["splitter_history"])
+        self.assertEqual(face_history["bounded_face_count"], sketch["internal_face_count"])
         self.assert_object_matches_expected(result, "p5", "sketch-internal-face-cubic-figure8-bspline")
 
     def test_p5_self_intersecting_cubic_bspline_records_terminal_split_history(self) -> None:
         result = self.run_recompute("sketch-internal-face-cubic-figure8-bspline", "p5")
         named_shape = result["named_shapes"]["Sketch.InternalShape"]
+        internal_history = named_shape["sketch_internal_history"]
 
         split_entries = [
             item
@@ -608,6 +678,13 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             if item["kind"] == "split" and item["sources"] == ["Edge1"]
         ]
 
+        self.assertEqual(named_shape["sketch_internal_history_status"], "history_partial:facemaker_buildface")
+        self.assertIn("facemaker_history:pre_split", named_shape["element_history_status"])
+        self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
+        self.assertIn("terminal_history:split_deleted", named_shape["element_history_status"])
+        self.assertEqual(internal_history["source_edge_count"], 1)
+        self.assertTrue(internal_history["pre_split_history"])
+        self.assertFalse(internal_history["splitter_history"])
         self.assertNotIn("Edge1", named_shape["element_map"])
         self.assertGreaterEqual(len(split_entries), 4)
         for entry in split_entries:
@@ -633,9 +710,32 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p5_dangling_open_line_keeps_bounded_internal_face(self) -> None:
         result = self.run_recompute("sketch-internal-face-dangling-line", "p5")
         sketch = result["objects"]["Sketch"]
+        ledger = sketch["wire_joiner_ledger"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["wire_joiner_history"], "history_partial:edge_info_wire_info_split_done_exhaust")
+        self.assertEqual(ledger["primary_owned_edge_info_count"], 0)
+        self.assertEqual(ledger["secondary_owned_edge_info_count"], 0)
+        self.assertEqual(ledger["open_export_edge_info_count"], 1)
+        self.assertEqual(ledger["ordered_wire_info_count"], 1)
+        self.assertEqual(ledger["ordered_vertex_count"], ledger["edge_info_count"])
+        self.assertEqual(ledger["iteration2_marked_edge_info_count"], ledger["edge_info_count"])
+        self.assertEqual(ledger["branch_search_candidate_count"], 0)
+        self.assertEqual(ledger["branch_search_seed_wire_info_count"], 0)
+        self.assertEqual(ledger["branch_search_inside_candidate_count"], 0)
+        self.assertEqual(ledger["branch_search_outside_candidate_count"], 0)
+        self.assertEqual(ledger["new_wire_seed_candidate_count"], 0)
+        self.assertEqual(ledger["new_wire_seed_wire_info_count"], 0)
+        self.assertEqual(ledger["split_wire_candidate_count"], 0)
+        self.assertEqual(ledger["split_wire_edge_info_count"], 0)
+        self.assertEqual(ledger["done_wire_info_count"], 0)
+        self.assertEqual(ledger["done_owned_edge_info_count"], 0)
+        self.assertEqual(ledger["owner_propagation_candidate_count"], 0)
+        self.assertEqual(ledger["exhaust_seed_edge_info_count"], 0)
+        self.assertEqual(ledger["exhaust_shared_owner_edge_info_count"], 0)
+        self.assertEqual(ledger["exhaust_done_secondary_edge_info_count"], 0)
+        self.assertEqual(ledger["exhaust_search_candidate_edge_info_count"], 0)
         self.assert_object_matches_expected(result, "p5", "sketch-internal-face-dangling-line")
         self.assertIn("Sketch", result["mesh"])
 

@@ -4,8 +4,16 @@
   "objects": {
     "LinearPattern": {
       "bbox": {
-        "min": [0.0, 0.0, 0.0],
-        "max": [22.0, 5.0, 10.0]
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max": [
+          22.0,
+          5.0,
+          10.0
+        ]
       },
       "volume": 640.0,
       "topology_counts": {
@@ -16,8 +24,16 @@
     },
     "Body": {
       "bbox": {
-        "min": [0.0, 0.0, 0.0],
-        "max": [22.0, 5.0, 10.0]
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max": [
+          22.0,
+          5.0,
+          10.0
+        ]
       },
       "volume": 640.0,
       "topology_counts": {
@@ -30,22 +46,40 @@
   "named_shapes": {
     "LinearPattern": {
       "element_map_status": "history_partial",
-      "history_kinds_include": ["modified", "generated", "deleted"],
+      "history_kinds_include": [
+        "modified",
+        "generated",
+        "deleted"
+      ],
       "history_non_indexed_source_prefixes": [
         "Pad.",
         "Pocket.",
         "SketchPad.",
         "SketchPocket."
+      ],
+      "element_history_status_contains": [
+        "history_consumed:generated_modified",
+        "terminal_history:split_deleted",
+        "history_consumed:merge"
       ]
     },
     "Body": {
       "element_map_status": "history_partial",
-      "history_kinds_include": ["modified", "generated", "deleted"],
+      "history_kinds_include": [
+        "modified",
+        "generated",
+        "deleted"
+      ],
       "history_non_indexed_source_prefixes": [
         "Pad.",
         "Pocket.",
         "SketchPad.",
         "SketchPocket."
+      ],
+      "element_history_status_contains": [
+        "history_consumed:generated_modified",
+        "terminal_history:split_deleted",
+        "history_consumed:merge"
       ]
     }
   }

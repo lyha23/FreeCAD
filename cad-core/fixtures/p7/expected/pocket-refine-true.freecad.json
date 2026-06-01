@@ -23,8 +23,24 @@
   "named_shapes": {
     "Body": {
       "element_map_status": "history_partial",
-      "history_kinds_include": ["modified", "generated", "deleted", "merge"],
-      "history_non_indexed_source_prefixes": ["Body.", "Pad.", "Pocket.", "SketchPad.", "SketchPocket."]
+      "history_kinds_include": [
+        "modified",
+        "generated",
+        "deleted",
+        "merge"
+      ],
+      "history_non_indexed_source_prefixes": [
+        "Body.",
+        "Pad.",
+        "Pocket.",
+        "SketchPad.",
+        "SketchPocket."
+      ],
+      "element_history_status_contains": [
+        "history_consumed:generated_modified",
+        "terminal_history:split_deleted",
+        "history_consumed:merge"
+      ]
     }
   }
 }

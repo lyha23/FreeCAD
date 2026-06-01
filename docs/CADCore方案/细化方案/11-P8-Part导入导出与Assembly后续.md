@@ -1,6 +1,6 @@
 # P8：Part、导入导出与 Assembly 后续
 
-P8 已覆盖 Part primitives、BREP / STEP / IGES / STL 导入、BREP / STEP / STL CLI 导出、常用 Part Boolean、基础 Link / LinkSub / LinkGroup / LinkElement display、ShowElement 请求内子元素合成与 `documentObjectUpdates` 建议、`PropertyXLink*` / `FullSubList` / mapped postfix alias、`App::DocumentObjectGroup` plain group 展开、Assembly display 与 Joint 输入元数据。Assembly 求解器、完整 FreeCAD Link 账本、持久写回事务和产品化 adapter 仍保持后置。
+P8 已覆盖 Part primitives、BREP / STEP / IGES / STL 导入、BREP / STEP / STL CLI 导出、常用 Part Boolean、基础 Link / LinkSub / LinkGroup / LinkElement display、ShowElement 请求内子元素合成与 `documentObjectUpdates` 建议、`PropertyXLink*` / `FullSubList` / mapped postfix alias、`App::DocumentObjectGroup` plain group 展开、Assembly display 与 Joint 输入元数据。C ABI capabilities 已暴露当前 `topo_history` 子集与 remaining gaps，供前端区分可依赖的 stable subname / maker history 子集和完整 MapperHistory 缺口。Assembly 求解器、完整 FreeCAD Link 账本、持久写回事务和产品化 adapter 仍保持后置。
 
 本轮新增 `App::DocumentObjectGroup` plain group Link 展开：CAD Core 现在能把 `App::Link.LinkedObject` 指向的 plain `DocumentObjectGroup.Group` children，以及显式 `ElementList` 内 plain group 的 children，递归聚合为请求内 display compound，并保留 group 容器 executor 的 children 元数据、flattened index、group path、object-name 和 `$Label` LinkSub alias。该能力对齐 FreeCAD `LinkBaseExtension::linkedPlainGroup()` / `updateGroup()` 的请求内 `_ChildCache` display 与拾取边界，不声明完整 `_ChildCache` 持久生命周期、copy-on-change / linked-owner 矩阵或持久写回生命周期。
 

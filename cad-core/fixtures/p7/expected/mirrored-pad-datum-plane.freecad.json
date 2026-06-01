@@ -40,6 +40,11 @@
       "element_map_prefixes": [
         "Pad.",
         "SketchPad."
+      ],
+      "element_history_status_contains": [
+        "history_consumed:generated_modified",
+        "terminal_history:split_deleted",
+        "history_consumed:merge"
       ]
     }
   }

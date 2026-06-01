@@ -1,8 +1,6 @@
 #include "cad_core/geometry/sketch_internal_builder.h"
 
 #include "cad_core/geometry/face_maker.h"
-#include "cad_core/geometry/wire_joiner.h"
-
 #include <BRep_Builder.hxx>
 #include <TopoDS_Compound.hxx>
 
@@ -52,6 +50,7 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
     result.internalShape = faceResult.internalShape ? faceResult.internalShape : faceResult.shape;
     result.splitProducedBoundedFaces = faceResult.splitProducedBoundedFaces;
     result.requiresSubshapeSelection = faceResult.splitProducedBoundedFaces;
+    result.faceMakerHistory = faceResult.historySummary;
 
     bool hasOpenWireOutput = false;
     if (!input.openWires.empty()) {
@@ -70,6 +69,7 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
         if (faceResult.shape) {
             joiner.classifyBoundedFaceOwnership(*faceResult.shape);
         }
+        result.wireJoinerLedger = joiner.ledgerSummary();
         const auto openShape = joiner.getOpenWires("SKF", true);
         if (openShape && !openShape->IsNull()) {
             result.internalShape = compoundShape(*result.internalShape, *openShape);
