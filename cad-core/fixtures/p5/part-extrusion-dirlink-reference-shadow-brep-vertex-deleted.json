@@ -45,7 +45,7 @@
               "brep": {
                 "format": "brep-text",
                 "byteLength": 210,
-                "sha256": "not-validated",
+                "sha256": "8973c166373decbc4f9feaa82df842e4146c5babc34cdc4bc7ff3912839d7495",
                 "data": "DBRep_DrawableShape\n\nCASCADE Topology V1, (c) Matra-Datavision\nLocations 0\nCurve2ds 0\nCurves 0\nPolygon3D 0\nPolygonOnTriangulations 0\nSurfaces 0\nTriangulations 0\n\nTShapes 1\nVe\n1e-07\n20 20 0\n0 0\n\n1101101\n*\n\n+1 0 "
               }
             }

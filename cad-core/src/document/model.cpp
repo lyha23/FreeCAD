@@ -559,50 +559,88 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
     auto hasReferenceRecoveryFields = [](const nlohmann::json& item) {
         return item.contains("ShadowSub") || item.contains("ReferenceShadow");
     };
-    auto hasValidSubListField = [&](const nlohmann::json& item) {
+    auto readFieldSize = [](const nlohmann::json& item,
+                            const std::string& field,
+                            std::optional<std::size_t>& size) {
+        const auto it = item.find(field);
+        if (it == item.end()) {
+            return true;
+        }
+        const auto values = readStringList(*it);
+        if (!values) {
+            return false;
+        }
+        size = values->size();
+        return true;
+    };
+    auto alignRecoverySize = [](std::optional<std::size_t>& recoverySize, std::size_t count) {
+        if (recoverySize && *recoverySize != count) {
+            return false;
+        }
+        recoverySize = count;
+        return true;
+    };
+    auto hasValidSubnameFields = [&](const nlohmann::json& item) {
         if (hasUnsupportedSubnameFields(item)) {
             return false;
         }
-        const auto subListIt = item.find("SubList");
-        if (subListIt != item.end() && !readStringList(*subListIt)) {
+        std::optional<std::size_t> subListSize;
+        if (!readFieldSize(item, "SubList", subListSize)) {
             return false;
         }
-        const auto stableSubListIt = item.find("StableSubList");
-        if (stableSubListIt == item.end()) {
-            return true;
-        }
-        if (subListIt == item.end()) {
+        const bool hasCurrentSubnames = subListSize && *subListSize > 0U;
+
+        std::optional<std::size_t> stableSubListSize;
+        if (!readFieldSize(item, "StableSubList", stableSubListSize)) {
             return false;
         }
-        const auto subnames = readStringList(*subListIt);
-        const auto stableSubnames = readStringList(*stableSubListIt);
-        return subnames && stableSubnames && subnames->size() == stableSubnames->size();
-    };
-    auto hasValidShadowSubField = [&](const nlohmann::json& item) {
+        if (hasCurrentSubnames && stableSubListSize && *stableSubListSize != *subListSize) {
+            return false;
+        }
+
+        std::optional<std::size_t> recoverySize;
         const auto shadowSubIt = item.find("ShadowSub");
-        if (shadowSubIt == item.end()) {
-            return true;
+        if (shadowSubIt != item.end()) {
+            const auto shadowSubs = readShadowSubList(*shadowSubIt);
+            if (!shadowSubs) {
+                return false;
+            }
+            if (hasCurrentSubnames && shadowSubs->size() != *subListSize) {
+                return false;
+            }
+            if (!hasCurrentSubnames && !alignRecoverySize(recoverySize, shadowSubs->size())) {
+                return false;
+            }
         }
-        const auto subListIt = item.find("SubList");
-        if (subListIt == item.end()) {
-            return false;
-        }
-        const auto subnames = readStringList(*subListIt);
-        const auto shadowSubs = readShadowSubList(*shadowSubIt);
-        return subnames && shadowSubs && subnames->size() == shadowSubs->size();
-    };
-    auto hasValidReferenceShadowField = [&](const nlohmann::json& item) {
+
         const auto referenceShadowIt = item.find("ReferenceShadow");
-        if (referenceShadowIt == item.end()) {
-            return true;
+        if (referenceShadowIt != item.end()) {
+            const auto referenceShadows = readReferenceShadowList(*referenceShadowIt);
+            if (!referenceShadows) {
+                return false;
+            }
+            if (hasCurrentSubnames && referenceShadows->size() != *subListSize) {
+                return false;
+            }
+            if (!hasCurrentSubnames && !alignRecoverySize(recoverySize, referenceShadows->size())) {
+                return false;
+            }
         }
-        const auto subListIt = item.find("SubList");
-        if (subListIt == item.end()) {
+
+        if (!hasCurrentSubnames && recoverySize) {
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/PropertyLinks.cpp
+            // ::PropertyLinkBase::_updateElementReference() can recover a missing current
+            // subname from ShadowSub before consulting the old geometry cache. cad-core accepts
+            // this evidence-only request shape only when the stable name, ShadowSub pair, and
+            // ReferenceShadow entry stay index-aligned.
+            return item.contains("StableSubList") && item.contains("ShadowSub")
+                && item.contains("ReferenceShadow") && stableSubListSize
+                && *stableSubListSize == *recoverySize && *recoverySize > 0U;
+        }
+        if (!hasCurrentSubnames && stableSubListSize) {
             return false;
         }
-        const auto subnames = readStringList(*subListIt);
-        const auto referenceShadows = readReferenceShadowList(*referenceShadowIt);
-        return subnames && referenceShadows && subnames->size() == referenceShadows->size();
+        return true;
     };
 
     if (isLinkObjectType(propertyType)) {
@@ -612,8 +650,7 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
         }
         const bool supportsSubList = isLinkSubObjectType(propertyType) || propertyType == "App::PropertyXLink";
         if (supportsSubList) {
-            if (value.contains("values") || value.contains("SubSet") || !hasValidSubListField(value)
-                || !hasValidShadowSubField(value) || !hasValidReferenceShadowField(value)) {
+            if (value.contains("values") || value.contains("SubSet") || !hasValidSubnameFields(value)) {
                 return true;
             }
         }
@@ -660,8 +697,7 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
             if (item.contains("values") || item.contains("SubSet")) {
                 return true;
             }
-            if (!hasValidSubListField(item) || !hasValidShadowSubField(item)
-                || !hasValidReferenceShadowField(item)) {
+            if (!hasValidSubnameFields(item)) {
                 return true;
             }
         }

@@ -40,7 +40,17 @@ ReferenceMatchResult findUniqueSubshapeByReferenceBrepText(const TopoDS_Shape& c
                                                            const std::string& subnamePrefix,
                                                            const std::string& brepText,
                                                            long long byteLength,
+                                                           const std::string& sha256,
                                                            const std::string& expectedShapeType,
                                                            std::string& error);
+
+ReferenceMatchResult findUniqueSubshapeByReferenceBrepSnapshot(const TopoDS_Shape& currentShape,
+                                                               const std::string& subnamePrefix,
+                                                               const std::string& format,
+                                                               const std::string& data,
+                                                               long long byteLength,
+                                                               const std::string& sha256,
+                                                               const std::string& expectedShapeType,
+                                                               std::string& error);
 
 }  // namespace cad_core::topo

@@ -6,6 +6,7 @@
 #include "cad_core/geometry/sketch_internal_builder.h"
 #include "cad_core/topo/element_map.h"
 #include "cad_core/topo/named_shape.h"
+#include "cad_core/topo/reference_matcher.h"
 #include "cad_core/topo/subshape_map.h"
 
 #include <BRepAlgoAPI_Section.hxx>
@@ -3915,6 +3916,26 @@ std::string internalSubnameFromStableElementMap(const runtime::ComputeContext& c
     return currentInternal;
 }
 
+std::vector<std::string> stableNameCandidatesForExternal(const document::Link& link,
+                                                         const document::ReferenceShadow& shadow)
+{
+    std::vector<std::string> candidates;
+    const auto addCandidate = [&](const std::string& stableSubname) {
+        if (stableSubname.empty() || stableSubname.rfind("Internal", 0) == 0) {
+            return;
+        }
+        if (std::find(candidates.begin(), candidates.end(), stableSubname) == candidates.end()) {
+            candidates.push_back(stableSubname);
+        }
+    };
+
+    addCandidate(shadow.stableSubname);
+    if (!link.stableSubnames.empty()) {
+        addCandidate(link.stableSubnames.front());
+    }
+    return candidates;
+}
+
 bool hasSketchInternalSubshape(const runtime::ShapeValue& shapeValue, const std::string& subname)
 {
     const auto parsed = topo::parseInternalSubshapeName(subname);
@@ -3922,6 +3943,75 @@ bool hasSketchInternalSubshape(const runtime::ShapeValue& shapeValue, const std:
         return false;
     }
     return topo::subshapeByName(*shapeValue.internalShape, *parsed).has_value();
+}
+
+bool internalSubshapeMatchesReferenceShadow(const runtime::ShapeValue& shapeValue,
+                                            const std::string& subname,
+                                            const TopoDS_Shape& subshape,
+                                            const document::ReferenceShadow& shadow)
+{
+    if (shadow.fingerprint.is_object() && !shadow.fingerprint.empty()
+        && !topo::referenceFingerprintDriftReason(subshape, shadow.fingerprint, shadow.shapeType)) {
+        return true;
+    }
+    if (!shadow.brep || !shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
+        return false;
+    }
+
+    std::string brepError;
+    const auto match = topo::findUniqueSubshapeByReferenceBrepSnapshot(*shapeValue.internalShape,
+                                                                       "Internal",
+                                                                       shadow.brep->format,
+                                                                       shadow.brep->data,
+                                                                       shadow.brep->byteLength,
+                                                                       shadow.brep->sha256,
+                                                                       shadow.shapeType,
+                                                                       brepError);
+    return match.status == topo::ReferenceMatchStatus::Unique && match.subname == subname;
+}
+
+std::string internalSubnameFromShadowSub(const document::Link& link,
+                                         const runtime::ShapeValue& shapeValue,
+                                         const runtime::ComputeContext& context)
+{
+    if (link.shadowSubs.empty() || !shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
+        return {};
+    }
+
+    for (const auto& shadow : link.referenceShadows) {
+        if (!shadow.target.empty() && shadow.target != link.object) {
+            continue;
+        }
+        const auto targetObjectIt = context.documentObjects.find(link.object);
+        if (targetObjectIt != context.documentObjects.end() && shadow.targetId != targetObjectIt->second->id) {
+            continue;
+        }
+        for (const std::string& stableName : stableNameCandidatesForExternal(link, shadow)) {
+            for (const auto& shadowSub : link.shadowSubs) {
+                if (shadowSub.newName != stableName) {
+                    continue;
+                }
+                const auto parsed = topo::parseInternalSubshapeName(shadowSub.oldName);
+                if (!parsed || (parsed->kind != TopAbs_EDGE && parsed->kind != TopAbs_VERTEX)) {
+                    continue;
+                }
+                const auto subshape = topo::subshapeByName(*shapeValue.internalShape, *parsed);
+                if (!subshape || subshape->IsNull()) {
+                    continue;
+                }
+                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/PropertyLinks.cpp
+                // ::PropertyLinkBase::_updateElementReference() tries ShadowSub before
+                // GeoFeature::searchElementCache(); SketchObjectExternal then rebuilds the
+                // transient external geometry from the resolved subshape. cad-core accepts the
+                // paired InternalEdge/InternalVertex only after ReferenceShadow proves it still
+                // matches the old referenced geometry.
+                if (internalSubshapeMatchesReferenceShadow(shapeValue, shadowSub.oldName, *subshape, shadow)) {
+                    return shadowSub.oldName;
+                }
+            }
+        }
+    }
+    return {};
 }
 
 std::vector<ExternalSubshape> wholeShapeExternalSubshapes(const runtime::ShapeValue& shapeValue)
@@ -4002,6 +4092,10 @@ std::optional<std::vector<ExternalSubshape>> resolveExternalGeometryLink(const d
 
     if (!subname.empty()) {
         std::string internalSubname = subname;
+        if (const std::string shadowSubInternal = internalSubnameFromShadowSub(link, shapeIt->second, context);
+            !shadowSubInternal.empty()) {
+            internalSubname = shadowSubInternal;
+        }
         if (topo::parseInternalSubshapeName(subname) && !hasSketchInternalSubshape(shapeIt->second, subname)) {
             const std::string stableInternal =
                 internalSubnameFromStableElementMap(context, link.object, stableSubname);

@@ -1,16 +1,17 @@
 #include "cad_core/topo/reference_matcher.h"
 
+#include "cad_core/geometry/brep_snapshot.h"
 #include "cad_core/geometry/shape_exporter.h"
 
 #include <BRepAlgoAPI_Common.hxx>
 #include <BRepAdaptor_Curve.hxx>
+#include <BRepAdaptor_Surface.hxx>
 #include <BRepBuilderAPI_MakeVertex.hxx>
 #include <BRepExtrema_DistShapeShape.hxx>
-#include <BRepTools.hxx>
-#include <BRep_Builder.hxx>
 #include <BRepGProp.hxx>
 #include <BRep_Tool.hxx>
 #include <GeomAbs_CurveType.hxx>
+#include <GeomAbs_SurfaceType.hxx>
 #include <GProp_GProps.hxx>
 #include <Standard_Failure.hxx>
 #include <TopAbs_ShapeEnum.hxx>
@@ -25,10 +26,8 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
-#include <exception>
 #include <limits>
 #include <optional>
-#include <sstream>
 #include <string>
 #include <utility>
 #include <vector>
@@ -154,6 +153,58 @@ double commonFaceArea(const TopoDS_Shape& left, const TopoDS_Shape& right)
     }
 }
 
+std::vector<TopoDS_Shape> subshapesOfKind(const TopoDS_Shape& shape, TopAbs_ShapeEnum kind)
+{
+    TopTools_IndexedMapOfShape map;
+    TopExp::MapShapes(shape, kind, map);
+    std::vector<TopoDS_Shape> result;
+    result.reserve(static_cast<std::size_t>(map.Extent()));
+    for (int index = 1; index <= map.Extent(); ++index) {
+        result.push_back(map(index));
+    }
+    return result;
+}
+
+bool samePoint(const gp_Pnt& lhs, const gp_Pnt& rhs, double tolerance)
+{
+    return lhs.SquareDistance(rhs) <= tolerance * tolerance;
+}
+
+std::vector<gp_Pnt> vertexPointsForShape(const TopoDS_Shape& shape)
+{
+    std::vector<gp_Pnt> points;
+    for (const auto& vertex : subshapesOfKind(shape, TopAbs_VERTEX)) {
+        points.push_back(BRep_Tool::Pnt(TopoDS::Vertex(vertex)));
+    }
+    return points;
+}
+
+bool sameVertexSet(const TopoDS_Shape& oldShape, const TopoDS_Shape& candidate, double tolerance)
+{
+    const std::vector<gp_Pnt> oldVertices = vertexPointsForShape(oldShape);
+    const std::vector<gp_Pnt> candidateVertices = vertexPointsForShape(candidate);
+    if (oldVertices.size() != candidateVertices.size()) {
+        return false;
+    }
+
+    std::vector<bool> used(candidateVertices.size(), false);
+    for (const auto& oldVertex : oldVertices) {
+        bool found = false;
+        for (std::size_t index = 0; index < candidateVertices.size(); ++index) {
+            if (used.at(index) || !samePoint(oldVertex, candidateVertices.at(index), tolerance)) {
+                continue;
+            }
+            used[index] = true;
+            found = true;
+            break;
+        }
+        if (!found) {
+            return false;
+        }
+    }
+    return true;
+}
+
 ReferenceMatchResult classifyFaceSplitOrDeleted(const TopoDS_Shape& currentShape,
                                                 const std::string& subnamePrefix,
                                                 const TopoDS_Shape& oldFace)
@@ -207,6 +258,14 @@ std::optional<std::pair<gp_Pnt, gp_Pnt>> lineEdgeEndpoints(const TopoDS_Edge& ed
         return std::nullopt;
     }
     return std::make_pair(curve.Value(curve.FirstParameter()), curve.Value(curve.LastParameter()));
+}
+
+bool lineEndpointsMatch(const std::pair<gp_Pnt, gp_Pnt>& lhs,
+                        const std::pair<gp_Pnt, gp_Pnt>& rhs,
+                        double tolerance)
+{
+    return (samePoint(lhs.first, rhs.first, tolerance) && samePoint(lhs.second, rhs.second, tolerance))
+        || (samePoint(lhs.first, rhs.second, tolerance) && samePoint(lhs.second, rhs.first, tolerance));
 }
 
 double pointLineDistance(const gp_Pnt& point, const gp_Pnt& lineStart, const gp_Vec& direction)
@@ -323,6 +382,127 @@ bool edgeSamplesLieOnOldEdge(const TopoDS_Edge& oldEdge,
     catch (const Standard_Failure&) {
         return false;
     }
+}
+
+bool edgeGeometryMatches(const TopoDS_Edge& oldEdge, const TopoDS_Edge& candidate, double tolerance)
+{
+    try {
+        const auto oldLine = lineEdgeEndpoints(oldEdge);
+        const auto candidateLine = lineEdgeEndpoints(candidate);
+        if (oldLine || candidateLine) {
+            return oldLine && candidateLine && lineEndpointsMatch(*oldLine, *candidateLine, tolerance);
+        }
+
+        BRepAdaptor_Curve oldCurve(oldEdge);
+        BRepAdaptor_Curve candidateCurve(candidate);
+        if (oldCurve.GetType() != candidateCurve.GetType()) {
+            return false;
+        }
+
+        const double oldLength = measureForShape(oldEdge);
+        const double candidateLength = measureForShape(candidate);
+        const double lengthTolerance = std::max(tolerance, std::max(oldLength, candidateLength) * 1e-6);
+        if (std::abs(oldLength - candidateLength) > lengthTolerance) {
+            return false;
+        }
+
+        return edgeSamplesLieOnOldEdge(oldEdge, candidate, tolerance)
+            && edgeSamplesLieOnOldEdge(candidate, oldEdge, tolerance);
+    }
+    catch (const Standard_Failure&) {
+        return false;
+    }
+}
+
+bool faceSurfaceCompatible(const TopoDS_Shape& oldFace, const TopoDS_Shape& candidate)
+{
+    try {
+        BRepAdaptor_Surface oldSurface(TopoDS::Face(oldFace));
+        BRepAdaptor_Surface candidateSurface(TopoDS::Face(candidate));
+        if (oldSurface.GetType() == GeomAbs_Plane) {
+            return candidateSurface.GetType() == GeomAbs_Plane;
+        }
+        return oldSurface.GetType() == candidateSurface.GetType();
+    }
+    catch (const Standard_Failure&) {
+        return false;
+    }
+}
+
+bool faceEdgesMatch(const TopoDS_Shape& oldFace, const TopoDS_Shape& candidate, double tolerance)
+{
+    const std::vector<TopoDS_Shape> oldEdges = subshapesOfKind(oldFace, TopAbs_EDGE);
+    const std::vector<TopoDS_Shape> candidateEdges = subshapesOfKind(candidate, TopAbs_EDGE);
+    if (oldEdges.size() != candidateEdges.size()) {
+        return false;
+    }
+
+    std::vector<bool> used(candidateEdges.size(), false);
+    for (const auto& oldEdge : oldEdges) {
+        bool found = false;
+        for (std::size_t index = 0; index < candidateEdges.size(); ++index) {
+            if (used.at(index)) {
+                continue;
+            }
+            if (!edgeGeometryMatches(TopoDS::Edge(oldEdge), TopoDS::Edge(candidateEdges.at(index)), tolerance)) {
+                continue;
+            }
+            used[index] = true;
+            found = true;
+            break;
+        }
+        if (!found) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool sharedVertexGeometryMatches(const TopoDS_Shape& oldShape,
+                                 const TopoDS_Shape& candidate,
+                                 TopAbs_ShapeEnum shapeType,
+                                 double tolerance)
+{
+    if (oldShape.IsNull() || candidate.IsNull() || candidate.ShapeType() != shapeType) {
+        return false;
+    }
+    switch (shapeType) {
+        case TopAbs_VERTEX:
+            return samePoint(BRep_Tool::Pnt(TopoDS::Vertex(oldShape)),
+                             BRep_Tool::Pnt(TopoDS::Vertex(candidate)),
+                             tolerance);
+        case TopAbs_EDGE:
+            return sameVertexSet(oldShape, candidate, tolerance)
+                && edgeGeometryMatches(TopoDS::Edge(oldShape), TopoDS::Edge(candidate), tolerance);
+        case TopAbs_FACE:
+            return sameVertexSet(oldShape, candidate, tolerance) && faceSurfaceCompatible(oldShape, candidate)
+                && faceEdgesMatch(oldShape, candidate, tolerance);
+        default:
+            return false;
+    }
+}
+
+ReferenceMatchResult findSubshapeBySharedVertexGeometry(const TopoDS_Shape& currentShape,
+                                                        const std::string& subnamePrefix,
+                                                        const TopoDS_Shape& oldShape,
+                                                        TopAbs_ShapeEnum shapeType)
+{
+    ReferenceMatchResult result;
+    TopTools_IndexedMapOfShape subshapes;
+    TopExp::MapShapes(currentShape, shapeType, subshapes);
+    for (int index = 1; index <= subshapes.Extent(); ++index) {
+        const TopoDS_Shape candidate = subshapes(index);
+        if (!sharedVertexGeometryMatches(oldShape, candidate, shapeType, 1e-7)) {
+            continue;
+        }
+        if (result.status == ReferenceMatchStatus::Unique) {
+            return ReferenceMatchResult {ReferenceMatchStatus::Ambiguous, {}, std::nullopt};
+        }
+        result.status = ReferenceMatchStatus::Unique;
+        result.subname = subnamePrefix + shapeTypeName(shapeType) + std::to_string(index);
+        result.shape = candidate;
+    }
+    return result;
 }
 
 ReferenceMatchResult classifyNonLineEdgeSplitOrDeleted(const TopoDS_Shape& currentShape,
@@ -467,36 +647,6 @@ std::optional<int> fingerprintInteger(const nlohmann::json& fingerprint, const s
         return std::nullopt;
     }
     return it->get<int>();
-}
-
-std::optional<TopoDS_Shape> readBrepTextSnapshot(const std::string& brepText,
-                                                 long long byteLength,
-                                                 std::string& error)
-{
-    if (byteLength >= 0 && static_cast<long long>(brepText.size()) != byteLength) {
-        error = "ReferenceShadow.brep byteLength does not match data length";
-        return std::nullopt;
-    }
-
-    try {
-        TopoDS_Shape shape;
-        BRep_Builder builder;
-        std::istringstream stream(brepText);
-        BRepTools::Read(shape, stream, builder);
-        if (shape.IsNull()) {
-            error = "ReferenceShadow.brep did not decode to a shape";
-            return std::nullopt;
-        }
-        return shape;
-    }
-    catch (const Standard_Failure& failure) {
-        error = failure.GetMessageString() != nullptr ? failure.GetMessageString()
-                                                      : "ReferenceShadow.brep decode failed";
-    }
-    catch (const std::exception& exception) {
-        error = exception.what();
-    }
-    return std::nullopt;
 }
 
 std::optional<std::array<double, 3>> jsonVector(const nlohmann::json& value)
@@ -659,14 +809,16 @@ ReferenceMatchResult findUniqueSubshapeByReferenceFingerprint(const TopoDS_Shape
     return result;
 }
 
-ReferenceMatchResult findUniqueSubshapeByReferenceBrepText(const TopoDS_Shape& currentShape,
-                                                           const std::string& subnamePrefix,
-                                                           const std::string& brepText,
-                                                           long long byteLength,
-                                                           const std::string& expectedShapeType,
-                                                           std::string& error)
+ReferenceMatchResult findUniqueSubshapeByReferenceBrepSnapshot(const TopoDS_Shape& currentShape,
+                                                               const std::string& subnamePrefix,
+                                                               const std::string& format,
+                                                               const std::string& data,
+                                                               long long byteLength,
+                                                               const std::string& sha256,
+                                                               const std::string& expectedShapeType,
+                                                               std::string& error)
 {
-    const auto oldShape = readBrepTextSnapshot(brepText, byteLength, error);
+    const auto oldShape = geometry::readBrepSnapshot(format, data, byteLength, sha256, error);
     if (!oldShape) {
         return {};
     }
@@ -682,16 +834,25 @@ ReferenceMatchResult findUniqueSubshapeByReferenceBrepText(const TopoDS_Shape& c
     }
 
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
-    // ::TopoShape::findSubShapesWithSharedVertex() uses cached old subshape geometry to search
-    // current topology. This stateless slice first tries strict single-candidate geometry
-    // equality, then classifies old face split/deleted states by overlap so Pad/Pocket does not
-    // silently choose one fragment.
-    const ReferenceMatchResult strict = findUniqueSubshapeByReferenceFingerprint(currentShape,
-                                                                                 subnamePrefix,
-                                                                                 referenceFingerprintForShape(*oldShape),
-                                                                                 expectedShapeType);
-    if (strict.status != ReferenceMatchStatus::Missing) {
-        return strict;
+    // ::TopoShape::findSubShapesWithSharedVertex(), "Search the first vertex", "Compare each
+    // vertex of the ancestor shape and the input shape", then "Perform geometry comparison of
+    // the ancestor and input shape." BREP snapshots are old single-subshape evidence, so recovery
+    // must use that shared-vertex + geometry path instead of bbox/centroid fingerprints that can
+    // treat crossing line edges as equivalent.
+    const ReferenceMatchResult sharedVertex =
+        findSubshapeBySharedVertexGeometry(currentShape, subnamePrefix, *oldShape, *shapeType);
+    if (sharedVertex.status != ReferenceMatchStatus::Missing) {
+        return sharedVertex;
+    }
+
+    if (countSubshapes(*oldShape, TopAbs_VERTEX) == 0U) {
+        const ReferenceMatchResult strict = findUniqueSubshapeByReferenceFingerprint(currentShape,
+                                                                                     subnamePrefix,
+                                                                                     referenceFingerprintForShape(*oldShape),
+                                                                                     expectedShapeType);
+        if (strict.status != ReferenceMatchStatus::Missing) {
+            return strict;
+        }
     }
     if (*shapeType == TopAbs_FACE) {
         return classifyFaceSplitOrDeleted(currentShape, subnamePrefix, *oldShape);
@@ -706,11 +867,29 @@ ReferenceMatchResult findUniqueSubshapeByReferenceBrepText(const TopoDS_Shape& c
     if (*shapeType == TopAbs_VERTEX) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
         // ::findSubShapesWithSharedVertex(), Vertex search compares BRep_Tool::Pnt() with
-        // tolerance. If strict point matching found no unique current vertex, the old point is no
+        // tolerance. If shared-vertex matching found no unique current vertex, the old point is no
         // longer represented by current topology.
         return ReferenceMatchResult {ReferenceMatchStatus::Deleted, {}, std::nullopt};
     }
-    return strict;
+    return {};
+}
+
+ReferenceMatchResult findUniqueSubshapeByReferenceBrepText(const TopoDS_Shape& currentShape,
+                                                           const std::string& subnamePrefix,
+                                                           const std::string& brepText,
+                                                           long long byteLength,
+                                                           const std::string& sha256,
+                                                           const std::string& expectedShapeType,
+                                                           std::string& error)
+{
+    return findUniqueSubshapeByReferenceBrepSnapshot(currentShape,
+                                                     subnamePrefix,
+                                                     "brep-text",
+                                                     brepText,
+                                                     byteLength,
+                                                     sha256,
+                                                     expectedShapeType,
+                                                     error);
 }
 
 }  // namespace cad_core::topo

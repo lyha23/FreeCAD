@@ -41,9 +41,9 @@
               },
               "brep": {
                 "format": "brep-bin-zstd-base64",
-                "byteLength": 39,
-                "sha256": "not-validated",
-                "data": "unsupported-binary-snapshot-placeholder"
+                "byteLength": 662,
+                "sha256": "fe4b8e0807582f3a9f75af799630727ad12a88998e5f613c9150536519817ff6",
+                "data": "KLUv/WSWAR0JADLOLCMgbaYDcAyUbwslt7QDpEJdQyANcJK+3I1E3msxsBoghBOnAb5TaZO39/sQmjAEiu8CpaccmjjGKb5wS+PbwKXS/3U27T4aTdJ85vPtu7iDWejo01nUumZgcTadQelFYBtUbZP1KCyyFu5HYcUpUkWG3jXO3lnG2WOBEGxzemdWpLQnxYRakcooyNPe4x6mPQUHSAAWSIcjU6ziFSM3HoYDMZwWXk8CghXEm3jY83DBhoMnMSBwgjFE2gFhBkiIGyZhtFgWN4C4wHBqhGjLOwgrkJy1H+XZZcWSQ8mmpZ1ZM2F4BPWnzVDJ8qa1IG20GAZoiekNg6eZ9V/qnoBAhvvMTLg7WDoU3F37BR1JlhJm7YSVayZrgRJphCA1k6wZM6jNLoo="
               }
             }
           ]

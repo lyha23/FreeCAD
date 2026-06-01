@@ -17,6 +17,20 @@ if(NOT NLOHMANN_JSON_INCLUDE_DIR)
   message(FATAL_ERROR "nlohmann/json.hpp was not found")
 endif()
 
+find_path(ZSTD_INCLUDE_DIR
+  NAMES zstd.h
+  PATHS /opt/homebrew/include /opt/homebrew/opt/zstd/include /usr/local/include
+)
+
+find_library(ZSTD_LIBRARY
+  NAMES zstd
+  PATHS /opt/homebrew/lib /opt/homebrew/opt/zstd/lib /usr/local/lib
+)
+
+if(NOT ZSTD_INCLUDE_DIR OR NOT ZSTD_LIBRARY)
+  message(FATAL_ERROR "libzstd was not found")
+endif()
+
 add_library(cad-core-lib STATIC
   src/document/model.cpp
   src/features/body.cpp
@@ -37,6 +51,7 @@ add_library(cad-core-lib STATIC
   src/features/pocket.cpp
   src/features/sketch_object.cpp
   src/features/transformed.cpp
+  src/geometry/brep_snapshot.cpp
   src/geometry/extrusion_helper.cpp
   src/geometry/face_maker.cpp
   src/geometry/placement.cpp
@@ -64,6 +79,10 @@ target_include_directories(cad-core-lib PUBLIC
   ${NLOHMANN_JSON_INCLUDE_DIR}
 )
 
+target_include_directories(cad-core-lib PRIVATE
+  ${ZSTD_INCLUDE_DIR}
+)
+
 target_compile_definitions(cad-core-lib PRIVATE
   CAD_CORE_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}"
 )
@@ -73,6 +92,7 @@ target_link_directories(cad-core-lib PUBLIC
 )
 
 target_link_libraries(cad-core-lib PUBLIC
+  ${ZSTD_LIBRARY}
   TKernel
   TKMath
   TKG2d

@@ -1,0 +1,21 @@
+{
+  "freecad_version": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+  "object": "Sketch",
+  "object_fields": {
+    "raw_edge_count": 4,
+    "shape": "occt_sketch_shape",
+    "status": "ok"
+  },
+  "reference": "FreeCADCmd Sketcher oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildInternals() builds InternalShape with FaceMakerBuildFace and WireJoiner; /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp::WireJoinerP::buildClosedWire() keeps partial shared closed-wire result-edge evidence for overlapping closed profiles.",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "sketch_internal": {
+    "internal_counts": {
+      "edges": 8,
+      "faces": 3,
+      "vertices": 7
+    },
+    "profile_ready": true,
+    "raw_edge_count": 4,
+    "shape": "occt_internal_shape"
+  }
+}

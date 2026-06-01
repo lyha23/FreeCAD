@@ -117,7 +117,7 @@ g底边:split3 = 右段
       "brep": {
         "format": "brep-bin-zstd-base64",
         "byteLength": 812,
-        "sha256": "base16-or-base64-digest",
+        "sha256": "base16-digest-of-uncompressed-brep",
         "data": "..."
       }
     }
@@ -141,10 +141,13 @@ g底边:split3 = 右段
 
 `brep` 只允许保存被引用子元素，不保存整个对象 BREP。
 
-当前实现边界：`brep-text` 是唯一已接入 runtime 恢复解码的 BREP snapshot 格式。
-`brep-bin-zstd-base64` 是后续传输格式占位，模型层可以承载该字段；一旦恢复或漂移纠正需要
-解码它，runtime 必须返回 `unsupported_reference_shadow_brep`，不能静默降级成 fingerprint
-恢复。
+当前实现边界：`brep-text` 与 `brep-bin-zstd-base64` 已接入 runtime 恢复解码；
+`byteLength` 与 base16 `sha256` 都按未压缩 BREP payload 校验。`brep-bin-zstd-base64`
+只作为压缩传输格式，解码成功后仍按同一份 BREP 几何匹配；响应写回统一刷新为当前子形状的
+`brep-text` snapshot。无效 base64 / zstd / digest 必须返回引用诊断，不能静默降级成
+fingerprint 恢复。BREP 旧几何恢复已对 `ReferenceShadow` 当前支持的 Vertex / Edge / Face
+类型使用 FreeCAD-like shared-vertex + geometry matcher；fingerprint 只作为无 BREP 的轻量
+恢复证据，不再作为 BREP 几何等价判据。
 
 关键约束：
 
@@ -210,12 +213,12 @@ ReferenceShadow.brep
   -> Unique / Missing / Ambiguous
 ```
 
-匹配器应对齐 FreeCAD `TopoShape::findSubShapesWithSharedVertex()`：
+匹配器对齐 FreeCAD `TopoShape::findSubShapesWithSharedVertex()` 的当前支持类型子集：
 
 - Vertex：按 `BRep_Tool::Pnt()` 和 tolerance 匹配。
 - Edge：先用端点找候选 ancestor edge；直线按端点，非直线比较曲线几何等价。
 - Face：先用旧 face 外轮廓顶点找候选 face；候选 face 的顶点数、边数、平面、外轮廓边都要匹配。
-- Composite shape：递归比较子元素结构。
+- Composite shape：`ReferenceShadow` 当前不接收 composite shapeType，后续若开放再递归比较子元素结构。
 
 如果没有 BREP，允许用 fingerprint 做降级恢复，但只能接受唯一高置信候选。
 
@@ -263,7 +266,7 @@ ReferenceShadow.brep
 职责：
 
 - 只处理单个 subshape 的 BREP 序列化 / 反序列化。
-- 当前支持 text BREP 作为 runtime 恢复格式，binary BREP + zstd + base64 仍是后续传输格式。
+- 当前支持 text BREP 与 zstd + base64 压缩传输格式作为 runtime 恢复格式。
 - 不暴露给 feature executor 作为建模输入。
 
 ### topo
@@ -277,7 +280,7 @@ ReferenceShadow.brep
 
 - 从 `NamedShape` / `ElementMap` 解析当前候选。
 - 计算当前 subshape fingerprint。
-- 实现 FreeCAD-like `findSubShapesWithSharedVertex()` 搜索。
+- 实现 FreeCAD-like `findSubShapesWithSharedVertex()` 的 Vertex / Edge / Face 搜索。
 - 返回 `Unique` / `Missing` / `Ambiguous` / `Drift`，不在 matcher 内部改 document graph。
 
 ### runtime
@@ -308,7 +311,7 @@ ReferenceShadow.brep
           "brep": {
             "format": "brep-bin-zstd-base64",
             "byteLength": 812,
-            "sha256": "base16-or-base64-digest",
+            "sha256": "base16-digest-of-uncompressed-brep",
             "data": "..."
           }
         }
@@ -357,17 +360,19 @@ runtime 只汇总结果；具体解析和匹配逻辑仍归 `topo`。`ReferenceS
 ### 阶段三：旧子元素 BREP snapshot
 
 - 只对被引用 subshape 保存可选 BREP。
-- 实现 FreeCAD-like shared-vertex matcher。
-- BREP 读取失败时降级到 fingerprint，不让请求整体崩溃。
-- `targetId`、`byteLength` 和 `sha256` 必须先通过校验，再进入 BREP 解码和匹配。
+- 已实现当前支持类型的 FreeCAD-like shared-vertex matcher；Vertex / Edge / Face 先按共享顶点筛选，再做几何检查。
+- `brep-text` 的 `byteLength` 和 base16 `sha256` 必须先通过校验，再进入 BREP 解码和匹配；
+  digest 不匹配返回引用诊断，不静默改用旧几何。
+- `brep-bin-zstd-base64` 解码后必须校验未压缩 BREP 的 `byteLength` 与 base16 `sha256`，
+  无效 base64 / zstd / digest 不伪装成 fingerprint 恢复。
 
 验收：
 
 - 新增 cutter 只改变 split 编号，旧区域几何仍完整存在时，能恢复正确区域。
 - 旧 face 被 split 成多个 face 时，返回 split / ambiguous，不静默选一块。
 - BREP snapshot 不进入 display、pick、boolean、extrude 的建模输入路径。
-- 当前 runtime 只解码 `brep-text`；`brep-bin-zstd-base64` 需要参与恢复时返回
-  `unsupported_reference_shadow_brep`。
+- 当前 runtime 解码 `brep-text` 与 `brep-bin-zstd-base64`；后者成功恢复后写回当前
+  `brep-text` snapshot，避免前端继续保存旧压缩 payload。
 
 ## 风险
 
@@ -384,5 +389,6 @@ runtime 只汇总结果；具体解析和匹配逻辑仍归 `topo`。`ReferenceS
 - `InternalShape` 先要有正式 `NamedShape` / `ElementMap`。
 - FaceMaker / WireJoiner history 先要进入 `ElementMap`。
 - `ReferenceShadow` 是 `StableSubList` 的防漂移和恢复补充，不替代 topo naming 主路径。
-- 第一版已实现 fingerprint diagnostic 和 `brep-text` 子集恢复；`brep-bin-zstd-base64`
-  解码仍按后续成本分阶段落地。
+- 第一版已实现 fingerprint diagnostic、`brep-text` / `brep-bin-zstd-base64` 解码校验，以及
+  Vertex / Edge / Face 的 shared-vertex BREP matcher；剩余风险集中在正式 InternalFace
+  ElementMap / FaceMaker-WireJoiner history。

@@ -1,0 +1,21 @@
+{
+  "freecad_version": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+  "object": "Sketch",
+  "object_fields": {
+    "raw_edge_count": 7,
+    "shape": "occt_sketch_shape",
+    "status": "ok"
+  },
+  "reference": "FreeCADCmd Sketcher oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildInternals() builds InternalShape with FaceMakerBuildFace and WireJoiner; /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp::WireJoinerP::build() keeps final EdgeInfo ownership. A cross cutter split into two vertical source segments is not topology-equivalent to a single continuous vertical source edge and produces exact FreeCAD counts: 4 faces, 22 edges, 14 vertices.",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "sketch_internal": {
+    "internal_counts": {
+      "edges": 22,
+      "faces": 4,
+      "vertices": 14
+    },
+    "profile_ready": true,
+    "raw_edge_count": 7,
+    "shape": "occt_internal_shape"
+  }
+}

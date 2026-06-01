@@ -1,0 +1,21 @@
+{
+  "freecad_version": "1 2 0 20260519 (Git shallow) Unknown 2026/05/19 20:59:45 (HEAD detached at 5a5d8d042) 5a5d8d0425fdb440fb5dcb47f1c48422d07d3267",
+  "object": "Sketch",
+  "object_fields": {
+    "raw_edge_count": 6,
+    "shape": "occt_sketch_shape",
+    "status": "ok"
+  },
+  "reference": "FreeCADCmd Sketcher oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildInternals() builds InternalShape with FaceMakerBuildFace and WireJoiner; /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp::FaceMakerBuildFace::Build_Essence() lets BOPAlgo_BuilderFace own same-endpoint line/arc split regions instead of treating endpoints alone as a shared edge.",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "sketch_internal": {
+    "internal_counts": {
+      "edges": 10,
+      "faces": 5,
+      "vertices": 6
+    },
+    "profile_ready": true,
+    "raw_edge_count": 6,
+    "shape": "occt_internal_shape"
+  }
+}

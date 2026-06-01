@@ -40,6 +40,10 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
     const FaceMakerBuildFaceResult faceResult =
         makeFacesFromClosedWiresAndSplitEdgesDetailed(input.faceWires, input.openEdges);
     if (!faceResult.shape || faceResult.shape->IsNull()) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+        // ::SketchObject::buildInternals(), catches FaceMakerBuildFace failures and leaves
+        // InternalShape as an empty TopoShape while the raw Sketch Shape remains available.
+        result.internalShape = TopoDS_Shape();
         result.faceMakerFailed = !input.openEdges.empty();
         return result;
     }
@@ -75,6 +79,7 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
 
     if (const auto resultEdges = copiedResultWireGraphForSketchInternals(*faceResult.shape,
                                                                          input.openEdges,
+                                                                         input.faceWires,
                                                                          input.faceWires.size(),
                                                                          faceResult.faceCount,
                                                                          faceResult.splitProducedBoundedFaces,
