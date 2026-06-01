@@ -6,4 +6,4 @@ Chili/FreeCAD/docs/CADCore方案/细化方案', 要把每一个步骤干什么�
  /goal 按照'UsersadminChili3DProject重构ChiliFreeCADdocs5-30-04-33-CADCore-fixture-expected迁移方案.md'为我实现, 完成每个部分的时候, 就更新'/Users/admin/Chili3DProject/重构Chili/FreeCAD/docs/5-30-04-33-CADCore-fixture-expected迁移方案.md', 只写重要的最大的节点, 不要写流水账
 
 
-/goal  按照'/Users/li/Chili3DProject/重构Chili/FreeCAD/docs/草图实现/5-31-09-28-草图到拉伸补齐方案.md' 为我实现, 完成每个部分的时候,就更新 '/Users/li/Chili3DProject/重构Chili/FreeCAD/docs/草图实现/5-31-09-28-草图到拉伸补齐方案.md' 只写重要的最大的节点, 不要写流水账
+/goal  按照'/Users/admin/Chili3DProject/重构Chili/FreeCAD/docs/偏移处理/06-02-02-37-cad-core临时诊断主路径偏移整改方案.md' 为我实现, 完成每个部分的时候,就更新 '/Users/admin/Chili3DProject/重构Chili/FreeCAD/docs/偏移处理/06-02-02-37-cad-core临时诊断主路径偏移整改方案.md' 只写重要的最大的节点, 不要写流水账

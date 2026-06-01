@@ -185,8 +185,8 @@ diagnostics[]
 | P0-P2 | 文档解析、diagnostics、registry、Sketch / Body / Pad、FeatureBase / FeatureAddSub / Pocket、Body fuse / cut 主链可运行 | 保持底座稳定，不把后续语义塞回 adapter 或 graph |
 | P3a/P3b | shared `FeatureExtrude` 支持常用长度、UpTo、双侧、方向、placement、Pad / Pocket taper 几何子集 | 多 face / shell UpTo、非平面终止、完整 attachment / support / subname 恢复 |
 | P4 | typed property、`PropertyLink*`、placement、Datum support、graph edge 和结构化 diagnostics 已进入 document / runtime 主路径 | Sketch 专有属性、复杂 GeoFeatureGroup、Origin / AttachEngine 完整坐标传递 |
-| P5 | Sketcher solver-facing 子集、open/raw shape 与 profile face 分离、基础 `InternalShape` / internal element、ExternalGeometry 子集 | 完整 constraint solver、FaceMakerBuildFace / WireJoiner 账本、复杂 `getInternalElementMap()` |
-| P6 | `NamedShape`、`ElementMap`、prism / Body boolean maker history、merge history、stable subname 引用更新、split / deleted diagnostics 已成主路径骨架 | 完整 MapperHistory 生命周期、split 旧引用恢复、ShapeFix / Refine / transformed / DressUp history 收敛 |
+| P5 | Sketcher solver-facing 子集、open/raw shape 与 profile face 分离、基础 `InternalShape` / internal element、ExternalGeometry 子集 | 完整 `ExternalGeometryExtension` 状态机、FaceMakerBuildFace / WireJoiner 账本、复杂 `getInternalElementMap()` |
+| P6 | `NamedShape`、`ElementMap`、prism / Body boolean maker history、merge history、stable subname 引用更新、split / deleted diagnostics 已成主路径骨架 | 完整 MapperHistory 生命周期、split 旧引用恢复、ExternalGeometry 引用恢复链路、ShapeFix / Refine / transformed / DressUp history 收敛 |
 | P7 | Datum / Origin、RefineModel 子集、Hole 常用孔、Fillet / Chamfer、DressUp cache、Mirrored / LinearPattern / PolarPattern / Scaled / MultiTransform 基础路径 | Hole ModelThread、标准件表驱动头部尺寸、链式 SupportTransform ownership、复杂 transformed / pattern ownership |
 | P8 | Part primitives、BREP / STEP / IGES / STL 导入、BREP / STEP / STL CLI 导出、常用 Part Boolean、基础 Link / LinkSub / LinkGroup / LinkElement display、ElementCount 折叠数组、ShowElement 请求内子元素合成与 `documentObjectUpdates` 建议、`PropertyXLink*` / `FullSubList` / mapped postfix alias、`App::DocumentObjectGroup` plain group 展开、Assembly display 与 Joint 输入元数据 | Assembly solver、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、完整 FreeCAD Link 账本与持久写回事务、完整 cross-document 文档哈希 / postfix 生命周期 |
 
@@ -203,19 +203,25 @@ P8 当前实现边界：
 仍未完成的核心边界：
 
 - `FeatureExtrude`：多 face / shell `UpToShape`、非平面终止面、完整 attachment/support/subname 恢复。
-- Sketcher：完整约束求解、BSpline solver/control-point 语义、ExternalGeometry face / arc edge / defining profile、完整 FaceMakerBuildFace / WireJoiner 账本和复杂 `getInternalElementMap()`。
-- Topo Naming：完整 MapperHistory 消费、split 旧引用恢复、merge history 到完整 MapperHistory 的收敛、ShapeFix / transformed / DressUp 的完整命名传播，以及 RefineModel partial history 向完整 MapperHistory 生命周期收敛。
+- Sketcher：完整约束求解、BSpline solver/control-point 语义、`ExternalGeometryExtension` 的 Defining / Frozen / Detached / Missing / Sync 状态机、ExternalGeometry face / arc edge / defining profile、完整 FaceMakerBuildFace / WireJoiner history 消费和复杂 `getInternalElementMap()`。
+- Topo Naming：完整 MapperHistory 消费、split 旧引用恢复、merge history 到完整 MapperHistory 的收敛、ExternalGeometry 旧引用恢复链路、ShapeFix / transformed / DressUp 的完整命名传播，以及 RefineModel partial history 向完整 MapperHistory 生命周期收敛。
 - PartDesign：Hole ModelThread、标准件表驱动头部尺寸迁移、复杂 Fillet / Chamfer 参数、链式 DressUp `SupportTransform` ownership、复杂 transformed ownership。
 - P8：Assembly solver、Worker / WASM / Web adapter 产品化、导入 shape 完整 ElementMap、完整 FreeCAD Link 账本、`ShowElement=true` LinkElement / LinkGroup 持久写回事务生命周期、完整 cross-document 文档哈希 / postfix 生命周期和更复杂多层 LinkSub 链。
 
 这些缺口必须保持显式 diagnostics 或 `known_gap`，不能用 fixture 特判、输出端修剪、几何类型排序或 source edge 猜测伪装完成。
 
+## 下一阶段重点
+
+下一阶段把 P5 Sketcher 外部几何与 P6 topo naming 合并为一条主线推进：完整 `ExternalGeometryExtension` 状态机、完整 MapperHistory、FaceMaker / WireJoiner history 消费和复杂旧引用恢复。细化方案见 `细化方案/13-ExternalGeometry-TopoNaming下一阶段主线.md`。
+
+这条主线的正确顺序是先补 `topo` 中的 MapperHistory / ElementMap 生命周期，再让 `geometry` 中的 FaceMaker / WireJoiner / ShapeFix 产出可消费 history，然后在 `runtime` / `document` 中统一旧引用解析与 `elementReferenceUpdates`，最后由 `features/sketch_object.*` 表达 FreeCAD `SketchObjectExternal` 的外部几何状态机。不得把 ExternalGeometry 恢复、InternalShape 命名或 split fragment 归属继续放在 sketch executor、adapter 或输出层靠几何猜测完成。
+
 ## 实施顺序
 
 后续推进优先级：
 
-1. P6 topo 主路径补强：完整 MapperHistory 生命周期、split / merge 旧引用恢复、ShapeFix history，以及 RefineModel / taper partial history 到正式 MapperHistory 的收敛。
-2. P5 Sketcher 补强：FaceMaker / WireJoiner 账本、复杂 internal element map、更多 external geometry 和约束。
+1. P5/P6 联合主线：按 `细化方案/13-ExternalGeometry-TopoNaming下一阶段主线.md` 补完整 MapperHistory、FaceMaker / WireJoiner history、ExternalGeometryExtension 状态机和复杂引用恢复。
+2. P6 余量收敛：ShapeFix history、RefineModel / taper partial history 到正式 MapperHistory 的收敛，以及 transformed / DressUp history 的完整传播。
 3. P7 PartDesign 补强：Hole ModelThread、标准件表驱动头部尺寸迁移、链式 DressUp SupportTransform ownership、复杂 transformed / pattern ownership。
 4. P8 后置能力：继续补 Assembly solver、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、完整 FreeCAD Link 账本、`ShowElement=true` LinkElement / LinkGroup 持久写回事务生命周期、完整 cross-document 文档哈希 / postfix 生命周期和更复杂多层 LinkSub 链。
 

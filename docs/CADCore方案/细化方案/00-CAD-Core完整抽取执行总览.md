@@ -86,8 +86,8 @@ P8 Link display 已新增 `App::DocumentObjectGroup` plain group 请求内 child
 
 ## 未完成边界
 
-- Sketcher 完整 solver、BSpline solver/control-point 语义、WireJoiner EdgeInfo / WireInfo 的 `findTightBoundSplitWire()` / `findTightBoundUpdateVertices()` / `exhaustTightBound()` 已有 splitWire / done / secondary-owner lifecycle 诊断账本，但尚未替代 bounded ownership classifier，也尚未执行 `exhaustTightBoundUpdateWire()` 搜索主路径；真实 `openWireCompound` history 过滤、FaceMaker / WireJoiner history summary 到正式 `NamedShape` / `ElementMap` 的完整 MapperHistory 消费仍待迁移；FaceMaker summary 当前进入 `Sketch.InternalShape` 的 `NamedShape` 元数据和通用 `element_history_status`。
-- Topo Naming 完整 MapperHistory、复杂 split 自动旧引用恢复、ShapeFix / transformed / DressUp 的完整 maker history，以及 taper partial history 收敛；merge history 已有 Body boolean 与 Link retag 传播回归，但仍要纳入完整 MapperHistory 生命周期。
+- Sketcher 完整 solver、BSpline solver/control-point 语义、完整 `ExternalGeometryExtension` 状态机、WireJoiner EdgeInfo / WireInfo 的 `findTightBoundSplitWire()` / `findTightBoundUpdateVertices()` / `exhaustTightBound()` 已有 splitWire / done / secondary-owner lifecycle 诊断账本，但尚未替代 bounded ownership classifier，也尚未执行 `exhaustTightBoundUpdateWire()` 搜索主路径；真实 `openWireCompound` history 过滤、FaceMaker / WireJoiner history summary 到正式 `NamedShape` / `ElementMap` 的完整 MapperHistory 消费仍待迁移；FaceMaker summary 当前进入 `Sketch.InternalShape` 的 `NamedShape` 元数据和通用 `element_history_status`。
+- Topo Naming 完整 MapperHistory、复杂 split 自动旧引用恢复、ExternalGeometry 旧引用恢复链路、ShapeFix / transformed / DressUp 的完整 maker history，以及 taper partial history 收敛；merge history 已有 Body boolean 与 Link retag 传播回归，但仍要纳入完整 MapperHistory 生命周期。
 - PartDesign transformed / pattern 完整 MapperHistory 与更复杂 ownership。
 - Assembly 求解器、完整 Joint placement / constraint 求解、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、`ShowElement=true` LinkElement / LinkGroup 持久写回事务生命周期、完整 cross-document 文档哈希 / postfix 生命周期和更复杂多层 LinkSub 链。
 
@@ -106,11 +106,12 @@ P8 Link display 已新增 `App::DocumentObjectGroup` plain group 请求内 child
 | P6 | `09-P6-TopoNaming主路径.md` | 主路径骨架已落地，完整 MapperHistory 待补 |
 | P7 | `10-P7-PartDesign常用生态.md` | 常用生态基础子集已落地 |
 | P8 | `11-P8-Part导入导出与Assembly后续.md` | 已覆盖 Part primitives、导入导出、常用 Part Boolean、基础 Link / LinkSub / LinkGroup / LinkElement display、ShowElement 请求内生命周期建议、XLink / FullSubList / mapped alias、plain group 展开、Assembly display 与 Joint 输入元数据 |
+| 下一阶段主线 | `13-ExternalGeometry-TopoNaming下一阶段主线.md` | 待实施：完整 ExternalGeometryExtension 状态机、完整 MapperHistory、FaceMaker / WireJoiner history 消费和复杂引用恢复 |
 
 ## 后续队列
 
-1. 补 P6：完整 MapperHistory 生命周期、ShapeFix history、复杂 split 自动旧引用恢复，并把已记录 / 已跨 Link retag 传播的 merge history 与 taper partial history 收敛到正式 MapperHistory。
-2. 补 P5：FaceMaker / WireJoiner 状态机、复杂 internal element map、更多 external geometry 和约束。
+1. 按 `13-ExternalGeometry-TopoNaming下一阶段主线.md` 补 P5/P6 联合主线：完整 MapperHistory、FaceMaker / WireJoiner history、ExternalGeometryExtension 状态机和复杂引用恢复。
+2. 补 P6 余量：ShapeFix history、RefineModel / taper partial history 到正式 MapperHistory 的收敛，以及 transformed / DressUp history 的完整传播。
 3. 补 P7：transformed / pattern 完整 MapperHistory 与更复杂 ownership。
 4. 扩展 P8：Assembly 求解器与完整 Joint placement / constraint、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、`ShowElement=true` LinkElement / LinkGroup 持久写回事务生命周期、完整 cross-document 文档哈希 / postfix 生命周期和更复杂多层 LinkSub 链。
 

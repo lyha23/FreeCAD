@@ -2,6 +2,8 @@
 
 P5 让 Sketch 不只是 Pad 的简单 profile，而能承载 FreeCAD 风格外部引用、内部元素和 solver-facing 子集。
 
+下一阶段的 Sketcher 重点不再单独扩大 ExternalGeometry fixture，而是按 `13-ExternalGeometry-TopoNaming下一阶段主线.md` 与 P6 联合推进：ExternalGeometryExtension 状态机、FaceMaker / WireJoiner history 和复杂引用恢复必须落到同一套 MapperHistory / ElementMap 主路径。
+
 ## 当前基线
 
 - 支持 line、arc of circle、arc of ellipse、circle、ellipse 和基础非周期 BSpline profile；Sketch `Point` 会按 FreeCAD `GeomPoint::toShape()` 输出 raw vertex。
@@ -16,7 +18,7 @@ P5 让 Sketch 不只是 Pad 的简单 profile，而能承载 FreeCAD 风格外�
 
 ## 已知缺口
 
-- 完整 constraint solver、会移动几何的 Horizontal / Vertical / Distance / Radius 等约束、BSpline solver/control-point 语义、defining external profile 尚未迁移。
+- 完整 constraint solver、会移动几何的 Horizontal / Vertical / Distance / Radius 等约束、BSpline solver/control-point 语义、`ExternalGeometryExtension` Defining / Frozen / Detached / Missing / Sync 状态机和 defining external profile 尚未迁移。
 - ExternalGeometry 非平行 circle/ellipse arc edge、非平面 face HLR 投影等复杂场景仍未完整。
 - 当前 `FaceMakerBuildFace` 覆盖 bounded split 主几何子集、self-intersecting edge pre-split terminal history、`InternalFaceN` outer-boundary generated history，以及 pre-split / splitter history summary；`WireJoiner` 覆盖 `noOriginal` 原始 source edge 过滤、open edge 按 face boundary split 的 fragment 子集、closed-source result-fragment ownership、bounded primary / secondary owner slot、terminal split / deleted history 和 open-wire carry-through；完整 `FaceMaker::postBuild()` / splitter MapperHistory 进入 `NamedShape` / `ElementMap`、`WireJoinerP::findTightBound()` / `exhaustTightBound()` ownership、open-wire history 和 source/split 账本尚未迁移。
 - 复杂 `getInternalElementMap()`、split/merge/deleted history 到 internal element map 的传播和旧引用恢复仍需 P5/P6 联合补齐。

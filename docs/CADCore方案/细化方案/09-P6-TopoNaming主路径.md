@@ -2,6 +2,8 @@
 
 P6 把稳定引用从导出层补丁升级为 CAD Core 的正式账本。目标是让 Pad / Pocket / Sketch external reference / DressUp / Pattern 都通过 `NamedShape`、`ElementMap` 和 MapperHistory 传播 stable subname。
 
+下一阶段 P6 不再只补零散 maker helper，而要按 `13-ExternalGeometry-TopoNaming下一阶段主线.md` 与 P5 联合推进：完整 MapperHistory、FaceMaker / WireJoiner history、ExternalGeometryExtension 状态机和复杂旧引用恢复必须进入同一条引用更新主路径。
+
 ## 当前基线
 
 - `topo/named_shape` 建立 object-local indexed `FaceN` / `EdgeN` / `VertexN` 账本。
@@ -24,7 +26,7 @@ P6 把稳定引用从导出层补丁升级为 CAD Core 的正式账本。目标�
 
 ## 已知缺口
 
-- 完整 MapperHistory 生命周期尚未迁移。
+- 完整 MapperHistory 生命周期尚未迁移；下一阶段应先补统一 MapperHistory / ElementMap 生命周期，再接 FaceMaker / WireJoiner history 和 ExternalGeometry 引用恢复。
 - ShapeFix、DressUp、transformed copy 的完整 maker history 仍未覆盖；taper 当前仍按 partial history 和 `known_gap:taper_history` 验收。
 - split 的完整自动旧引用恢复还不完整；当前只恢复 MapperHistory 能证明同类唯一 target 或 ExternalGeometry collapsed point 的旧 stable 引用；merge 已能记录并跨 Link retag 传播，但 ShapeFix / transformed / DressUp 等完整 MapperHistory 生命周期仍待收敛。
 - FaceMaker / WireJoiner 的完整 history 消费需与 P5 geometry 账本联动；FaceMakerBuildFace pre-split / splitter summary 已进入 `Sketch.InternalShape` 的 `NamedShape` 元数据和 `element_history_status`，WireJoiner 侧已具备 EdgeInfo / WireInfo 边级账本落点、ordered `WireInfo::vertices` / `iteration2` 标记、branch-search candidate inside/outside、`newWire` seed、splitWire / done lifecycle、`exhaustTightBound()` secondary-owner 诊断账本、bounded primary / secondary owner slot 汇总和 `wireInfo` / `iteration=-3` openWireCompound 判定子集，但这些 summary 尚未替代几何匹配式 internal map，也尚未形成完整 MapperHistory 可解析 `ElementMap`；真实 history 过滤也尚未完整迁入。当前只固定了 `InternalFaceN` 的 outer-boundary generated history、self-intersecting edge pre-split terminal split history、raw sketch edge 到多个 `InternalEdgeN` 的 terminal split history，以及 raw sketch `EdgeN/VertexN` 被过滤后的 terminal deleted history 子集。
