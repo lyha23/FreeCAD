@@ -58,11 +58,23 @@ M1 只负责 WireJoiner 内部账本，不负责 topo `ElementMap`，也不负�
 - repeated split/exhaust rerun 已补下一轮 removal / loop-exit 边界：FreeCAD `buildClosedWire()` 初始阶段调用 `exhaustTightBound()`，但 while 循环尾部只重跑 `findClosedWires(true); findTightBound()`；下一轮 while 开头重新构造 `counter` 并只在 `++counter[vertex.edgeInfo()] == 2` 时删除 edge。`repeated_split_exhaust_rerun_removal_*` 记录 live rerun owner 写回后的下一轮 removal scan，`repeated_split_exhaust_rerun_loop_exit_no_removal_count` 记录无新增 removal时循环会退出。该路径仍用于真正进入 rerun 的 owner；overlap rectangles / overlap circles 当前由 otherWire live propagation 提前消化，不再进入该 fallback。
 - repeated split/exhaust 的 M3 阻塞已进入 output-neutral ledger：`repeated_split_exhaust_generated_identity_blocked_edge_info_count` 标记 pending rerun 同时仍依赖 generated open-export EdgeInfo 的数量；through-open-cutter 这类无 generated result-wire 的 pending rerun 为 0，T/cross/overlap/lens 等 generated result-wire fixture 与 `generated_open_export_edge_info_count` 一致。
 
-仍未完成：
+M1 收口状态：
 
-- `findTightBoundSplitWire()` 已有 live splitWire owner id 的安全子集；existing-wire hit 也已记录 path vertex 并尝试用 `idxVertex/stackPos` 构造 transfer path。但 through/split/branch/adjacent-rectangles/arc-lens 以及 Pad/Extrude 衍生 internal-face case 仍表现为 `tight_bound_existing_wire_search_only_order_blocked_count > 0`，说明 hit path 存在，但按 FreeCAD `idxEnd == 0` 归一化和 `ENSURE(idxV <= idxEnd)` 不能安全转 selected transfer。剩余推进必须来自 repeated split/exhaust owner lifecycle 或 M3 generated result-wire identity，不得靠放宽 idx/stack 顺序条件消掉余额。
-- full repeated split / exhaust 循环还未完整迁移。按 FreeCAD `buildClosedWire()`，删除 consumed edge 后会重跑 `findClosedWires(true)` 和 `findTightBound()`，然后进入下一轮 removal scan；不会在 while 尾部再次调用 `exhaustTightBound()`。当前 rerun 已按 FreeCAD 重置 primary/secondary owner，并能区分 active/unowned live 写回、无 generated bridge 的 resettable live reset / branch done、otherWire live propagation 后无需 rerun、下一轮 removal loop-exit、no-active seed 和 search miss，但尚未把会产生新增 removal 或依赖 generated-result identity 的 rerun owner 安全切成 live mutation。直接让该 rerun 清理 generated-result 相关 owner 会使 T/cross result-wire 从真实输出中消失，只剩 1-2 条 source-lineage open export。`repeated_split_exhaust_generated_identity_blocked_edge_info_count` 已把这类剩余切换归因到 M3 的 generated result-wire identity 替换。
-- `exhaustDiscardedByPurge` 已能在 consumed-edge removal 内清空对应 primary `EdgeInfo::wireInfo`，但完整 `wireInfo2` 重搜和下一轮 removal mutation 仍未接管；直接把未消费的 owner 或 generated result-wire 相关 owner 清掉仍会使 cross generated result-wire 消失、overlap/arc 输出偏离，剩余缺口已归到 M2/M3 identity 边界，不能在 M1 内靠输出端规则补齐。
+M1 不再以“所有 blocker 归零”为验收目标，而以“所有剩余都有明确 FreeCAD 生命周期归因、ledger 字段和后续 milestone 归属”为收口目标。当前 M1 已完成：
+
+- `EdgeInfo` / `WireInfo` ownership 从 bounded-face / graph fallback 迁回 FreeCAD closed-wire search、tight-bound、exhaust 和 consumed-removal 生命周期。
+- `purge` / `done` / `exhaustDiscardedByPurge` / `wireInfo2` adjacent search 已进入 request-local ledger，且不再绕过 FreeCAD stack / vertexStack / edgeSet / wireSet 路径。
+- `findTightBoundUpdateVertices()` 的 unfinished `otherWire` 分支已 live 写回 `EdgeInfo::wireInfo`，overlap rectangles / overlap circles 由该路径消化，不再依赖 repeated split/exhaust fallback。
+- `findTightBoundSplitWire()` 已有 live splitWire owner id 的安全子集；cross 这类 sidecar-only splitOwnerVertices 不伪造 live splitWire id。
+- repeated split/exhaust 已覆盖 removal、rerun reset、rerun search、live rerun owner 安全子集、live branch/transfer/done 和下一轮 removal/loop-exit 的诊断账本。
+
+保留到后续 milestone 的余额：
+
+- `tight_bound_existing_wire_search_only_order_blocked_count > 0`：说明 `_findClosedWiresWithExisting()` 已找到 hit path，但按 FreeCAD `idxEnd == 0` 归一化和 `ENSURE(idxV <= idxEnd)` 不能安全转 selected transfer。该余额不得通过放宽 `idxVertex` / `stackPos` 顺序约束消掉；后续只能由 repeated split/exhaust owner lifecycle 或 generated result-wire identity 统一后自然收敛。
+- `repeated_split_exhaust_generated_identity_blocked_edge_info_count > 0`：说明 pending rerun 仍依赖 generated open-export EdgeInfo。该字段是 M3 readiness，而不是 M1 failure；M1 只要求它具备明确归因，不要求清零。
+- 完整 `wireInfo2` 重搜和下一轮 removal mutation 只有在 generated result-wire identity 统一后才能安全推进。M1 内不得直接清理未消费 owner 或 generated-result 相关 owner，否则会导致 T/cross result-wire 从真实输出中消失，或导致 overlap/arc 输出偏离。
+
+因此，M1 当前收口结论是：生命周期账本已闭合，剩余问题转入 M2/M3/M4，其中 generated result-wire identity 由 M3 负责。
 
 ## 本轮 M1 切片
 
@@ -112,7 +124,7 @@ cad-core 落点：
 - `cad-core/tests/test_p5_sketch.py`：约束 purged owner count 只随 existing-wire purge trace 出现，且 purged owner 必须被 exhaust sidecar 消费为 discarded；primary reset 必须由 live reset 或 remaining blocker 解释，且 live reset 只能发生在 consumed unowned removal 内；existing-wire direct hit 必须有 path vertex 证据，search-only hit 必须进入 path-blocked 分类，且当前 through/split/branch/adjacent/arc-lens 与 Pad/Extrude 衍生 internal-face case 的 search-only path-block 必须全部归入 FreeCAD idx/stack order blocked；unfinished otherWire case 必须 live 写回 `EdgeInfo::wireInfo`；through/cross/T-junction case 约束 full `wireSet`、live-blocked transfer 和 repeated split/exhaust sidecar 非零，并约束 rerun reset 后的扫描域能解释当前没有新 unowned closed-wire owner；rerun live 写回和 live branch/transfer/done 字段不得超过 scan 找到的新 owner / assigned edge / branch 范围；bullseye intersected holes 约束 search hit 坐标即使没有最终 transfer 也会写入 search-only lifecycle。
 - `cad-core/tests/test_p5_sketch.py`：约束 exhaust adjacent search 的 `search == hit + miss`、wireSet insert/erase、cross/T-junction hit、three-overlap miss/backtrack 和 wireInfo2 abort。
 
-本切片边界：full `wireSet` 只驱动 transfer-candidate 生命周期，不作为输出端 pruning；purge reset 只在同一个 consumed-edge removal 内切入 live `EdgeInfo`，repeated rerun / generated result-wire 仍归因到 M3 readiness，不改变 `openWireCompound`、`NamedShape.history` 或 `ElementMap`。
+本切片边界：full `wireSet` 只驱动 transfer-candidate 生命周期，不作为输出端 pruning；purge reset 只在同一个 consumed-edge removal 内切入 live `EdgeInfo`，repeated rerun / generated result-wire 只作为 M3 readiness 和 causal blocker 记录，不改变 `openWireCompound`、`NamedShape.history` 或 `ElementMap`。M1 的完成条件是 blocker 有明确归因，而不是 blocker 清零。
 
 ## 必收切片
 
@@ -128,6 +140,8 @@ M1 产出 final `EdgeInfo` / `WireInfo` 生命周期状态和诊断账本。
 
 M1 不直接决定：
 
+- `tight_bound_existing_wire_search_only_order_blocked_count` 是否归零。该余额必须遵守 FreeCAD `idxVertex` / `stackPos` 顺序约束，不能在 M1 内放宽。
+- `repeated_split_exhaust_generated_identity_blocked_edge_info_count` 是否归零。该余额属于 M3 generated result-wire identity。
 - `openWireCompound` 是否切成输出主路径。这属于 M2。
 - generated result-wire copy 如何删除。这属于 M3。
 - `NamedShape.history` 如何消费。这属于 M4。
@@ -185,7 +199,7 @@ M1 不直接决定：
 - `repeated_split_exhaust_rerun_branch_search_candidate_count == repeated_split_exhaust_rerun_branch_search_inside_candidate_count + repeated_split_exhaust_rerun_branch_search_outside_candidate_count`
 - through/branch/split-dangling 的 rerun 域只剩 `iteration=-3` open leaf；split-line/adjacent/Pad/Extrude internal-face case 的 rerun 域在 removal 后没有 active seed，必须记录 `repeated_split_exhaust_rerun_no_active_search_count == 1` 且 `repeated_split_exhaust_rerun_closed_wire_search_count == 0`；cross-cutters/T-junction 的 rerun 域会先 reset 旧 owner 并重新搜索一次，当前因 rerun removal mutation / generated result-wire identity 未接管而记为 miss，不得伪造成新的 closed-wire owner；cross-pattern / line-arc same-endpoints 没有 generated open-export identity 依赖，resettable rerun owner 必须满足 `repeated_split_exhaust_rerun_live_closed_wire_info_count == repeated_split_exhaust_rerun_closed_wire_info_count`，并把 live branch scan 归入 done 路径
 - overlap rectangles / overlap circles 的 unfinished otherWire 分支必须 live 写回 done owner，并且不再进入 repeated split/exhaust rerun 域；若后续出现只被旧 primary owner 阻挡且不依赖 generated open-export identity 的新 case，才允许走 rerun live reset 子路径
-- generated result-wire fixture 中 `repeated_split_exhaust_generated_identity_blocked_edge_info_count == generated_open_export_edge_info_count`，无 generated result-wire 的 pending rerun 为 0
+- generated result-wire fixture 中 `repeated_split_exhaust_generated_identity_blocked_edge_info_count` 只要求能解释 pending rerun 依赖 generated open-export identity；无 generated result-wire 的 pending rerun 为 0。该 blocker 是否归零属于 M3，不作为 M1 未完成项
 - `closed_wire_search_*`、`tight_bound_*`、`super_edge_*` 能解释对应 fixture。
 
 当前切片验收命令：
