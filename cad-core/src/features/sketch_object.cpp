@@ -343,6 +343,7 @@ struct ProfileFaceBuild {
     bool requiresSubshapeSelection = false;
     std::optional<geometry::FaceMakerHistorySummary> faceMakerHistory;
     std::optional<geometry::WireJoinerLedgerSummary> wireJoinerLedger;
+    std::optional<geometry::WireJoinerHistorySummary> wireJoinerHistory;
 };
 
 std::string faceMakerRuntimeSourceName(geometry::FaceMakerBuildFaceRuntimeSource source)
@@ -3522,6 +3523,7 @@ ProfileFaceBuild buildOptionalProfileFace(const std::vector<SketchProfileEdge>& 
         result.requiresSubshapeSelection,
         result.faceMakerHistory,
         result.wireJoinerLedger,
+        result.wireJoinerHistory,
     };
 }
 
@@ -4665,6 +4667,7 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
     }
     const auto faceMakerHistory = profileFace.faceMakerHistory;
     const auto wireJoinerLedger = profileFace.wireJoinerLedger;
+    const auto wireJoinerHistory = profileFace.wireJoinerHistory;
 
     if (hasPlacement) {
         if (!rawShape->IsNull()) {
@@ -4685,21 +4688,60 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
     const bool hasNonEmptyInternalShape = internalShape && !internalShape->IsNull();
     if (hasNonEmptyInternalShape) {
         std::optional<topo::SketchInternalHistoryContext> internalHistoryContext;
-        if (faceMakerHistory) {
+        if (faceMakerHistory || wireJoinerHistory) {
             // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMaker.cpp
             // ::FaceMaker::postBuild(), consumes "MapperHistory(myPreSplitHistory)" and
             // "MapperMaker(mySplitter)" before SketchObject::getInternalElementMap() exposes
             // the request-local InternalShape. Store the FaceMakerBuildFace summary next to the
             // InternalShape NamedShape so topo consumers can see which maker-history stages
             // backed the generated/split/deleted element history.
-            internalHistoryContext = topo::SketchInternalHistoryContext {
-                faceMakerHistory->sourceEdgeCount,
-                faceMakerHistory->preSplitEdgeCount,
-                faceMakerHistory->splitterEdgeCount,
-                faceMakerHistory->boundedFaceCount,
-                faceMakerHistory->preSplitHistory,
-                faceMakerHistory->splitterHistory,
-            };
+            internalHistoryContext = topo::SketchInternalHistoryContext {};
+            if (faceMakerHistory) {
+                internalHistoryContext->sourceEdgeCount = faceMakerHistory->sourceEdgeCount;
+                internalHistoryContext->preSplitEdgeCount = faceMakerHistory->preSplitEdgeCount;
+                internalHistoryContext->splitterEdgeCount = faceMakerHistory->splitterEdgeCount;
+                internalHistoryContext->boundedFaceCount = faceMakerHistory->boundedFaceCount;
+                internalHistoryContext->preSplitHistory = faceMakerHistory->preSplitHistory;
+                internalHistoryContext->splitterHistory = faceMakerHistory->splitterHistory;
+            }
+            if (wireJoinerHistory) {
+                // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                // ::WireJoinerP::getOpenWires(), calls makeShapeWithElementMap(...,
+                // MapperHistory(aHistory), {sourceEdges.begin(), sourceEdges.end()}, op).
+                // This passes only WireJoiner-produced history summary into topo; topo must not
+                // infer WireJoiner split/generated/deleted history from raw/internal geometry.
+                internalHistoryContext->wireJoinerSourceEdgeCount = wireJoinerHistory->sourceEdgeCount;
+                internalHistoryContext->wireJoinerSplitResultEdgeCount = wireJoinerHistory->splitResultEdgeCount;
+                internalHistoryContext->wireJoinerOpenExportEdgeCount = wireJoinerHistory->openExportEdgeCount;
+                internalHistoryContext->wireJoinerOpenExportSourceLineageEdgeCount =
+                    wireJoinerHistory->openExportSourceLineageEdgeCount;
+                internalHistoryContext->wireJoinerOpenExportMissingSourceLineageEdgeCount =
+                    wireJoinerHistory->openExportMissingSourceLineageEdgeCount;
+                internalHistoryContext->wireJoinerOpenExportGeneratedEdgeCount =
+                    wireJoinerHistory->openExportGeneratedEdgeCount;
+                internalHistoryContext->wireJoinerOpenExportGeneratedMissingSourceLineageEdgeCount =
+                    wireJoinerHistory->openExportGeneratedMissingSourceLineageEdgeCount;
+                internalHistoryContext->wireJoinerOpenExportPurgeBridgeEdgeCount =
+                    wireJoinerHistory->openExportPurgeBridgeEdgeCount;
+                for (const geometry::WireJoinerOpenExportHistoryEntry& entry :
+                     wireJoinerHistory->openExportEntries) {
+                    topo::SketchInternalWireJoinerOpenExportHistoryEntry topoEntry;
+                    topoEntry.openExportIndex = entry.openExportIndex;
+                    topoEntry.edgeInfoIndex = entry.edgeInfoIndex;
+                    topoEntry.sourceEdgeIndices = entry.sourceEdgeIndices;
+                    topoEntry.sourceLineageFromSplitterHistory = entry.sourceLineageFromSplitterHistory;
+                    topoEntry.generatedOpenExport = entry.generatedOpenExport;
+                    topoEntry.purgeBridge = entry.purgeBridge;
+                    internalHistoryContext->wireJoinerOpenExportHistoryEntries.push_back(std::move(topoEntry));
+                }
+                internalHistoryContext->wireJoinerModifiedSourceEdgeCount =
+                    wireJoinerHistory->modifiedSourceEdgeCount;
+                internalHistoryContext->wireJoinerModifiedHistoryCount = wireJoinerHistory->modifiedHistoryCount;
+                internalHistoryContext->wireJoinerGeneratedHistoryCount = wireJoinerHistory->generatedHistoryCount;
+                internalHistoryContext->wireJoinerDeletedHistoryCount = wireJoinerHistory->deletedHistoryCount;
+                internalHistoryContext->wireJoinerSplitterHistory = wireJoinerHistory->splitterHistory;
+                internalHistoryContext->wireJoinerFinalExportHistory = wireJoinerHistory->finalExportHistory;
+            }
         }
         shapeValue.internalNamedShape =
             topo::namedShapeForSketchInternalShape(object.name, *rawShape, *internalShape, internalHistoryContext);
@@ -4764,7 +4806,111 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
             {"split_edge_info_count", wireJoinerLedger->splitEdgeInfoCount},
             {"primary_owned_edge_info_count", wireJoinerLedger->primaryOwnedEdgeInfoCount},
             {"secondary_owned_edge_info_count", wireJoinerLedger->secondaryOwnedEdgeInfoCount},
+            {"closed_wire_assigned_edge_info_count", wireJoinerLedger->closedWireAssignedEdgeInfoCount},
+            {"graph_fallback_assigned_edge_info_count", wireJoinerLedger->graphFallbackAssignedEdgeInfoCount},
+            {"closed_wire_info_count", wireJoinerLedger->closedWireInfoCount},
+            {"closed_wire_vertex_count", wireJoinerLedger->closedWireVertexCount},
+            {"closed_wire_search_stack_frame_count", wireJoinerLedger->closedWireSearchStackFrameCount},
+            {"closed_wire_search_vertex_stack_count", wireJoinerLedger->closedWireSearchVertexStackCount},
+            {"closed_wire_search_edge_set_visit_count", wireJoinerLedger->closedWireSearchEdgeSetVisitCount},
+            {"closed_wire_search_backtrack_count", wireJoinerLedger->closedWireSearchBacktrackCount},
+            {"closed_wire_search_intersect_skip_count", wireJoinerLedger->closedWireSearchIntersectSkipCount},
+            {"tight_bound_done_wire_info_count", wireJoinerLedger->tightBoundDoneWireInfoCount},
+            {"tight_bound_split_wire_info_count", wireJoinerLedger->tightBoundSplitWireInfoCount},
+            {"tight_bound_new_wire_candidate_count", wireJoinerLedger->tightBoundNewWireCandidateCount},
+            {"tight_bound_new_wire_vertex_count", wireJoinerLedger->tightBoundNewWireVertexCount},
+            {"tight_bound_owner_transfer_candidate_edge_info_count",
+             wireJoinerLedger->tightBoundOwnerTransferCandidateEdgeInfoCount},
+            {"tight_bound_transfer_wire_info_count", wireJoinerLedger->tightBoundTransferWireInfoCount},
+            {"tight_bound_transfer_wire_vertex_count", wireJoinerLedger->tightBoundTransferWireVertexCount},
+            {"tight_bound_transferred_owner_edge_info_count",
+             wireJoinerLedger->tightBoundTransferredOwnerEdgeInfoCount},
+            {"tight_bound_split_owner_wire_info_count", wireJoinerLedger->tightBoundSplitOwnerWireInfoCount},
+            {"tight_bound_split_owner_vertex_count", wireJoinerLedger->tightBoundSplitOwnerVertexCount},
+            {"tight_bound_split_owner_built_wire_count", wireJoinerLedger->tightBoundSplitOwnerBuiltWireCount},
+            {"tight_bound_split_wire_vertex_count", wireJoinerLedger->tightBoundSplitWireVertexCount},
+            {"tight_bound_split_wire_built_count", wireJoinerLedger->tightBoundSplitWireBuiltCount},
+            {"tight_bound_existing_wire_search_count", wireJoinerLedger->tightBoundExistingWireSearchCount},
+            {"tight_bound_existing_wire_hit_count", wireJoinerLedger->tightBoundExistingWireHitCount},
+            {"tight_bound_existing_wire_reverse_hit_count",
+             wireJoinerLedger->tightBoundExistingWireReverseHitCount},
+            {"tight_bound_existing_wire_purge_count", wireJoinerLedger->tightBoundExistingWirePurgeCount},
+            {"tight_bound_existing_wire_search_stack_frame_count",
+             wireJoinerLedger->tightBoundExistingWireSearchStackFrameCount},
+            {"tight_bound_existing_wire_search_vertex_stack_count",
+             wireJoinerLedger->tightBoundExistingWireSearchVertexStackCount},
+            {"tight_bound_existing_wire_search_edge_set_visit_count",
+             wireJoinerLedger->tightBoundExistingWireSearchEdgeSetVisitCount},
+            {"tight_bound_existing_wire_search_backtrack_count",
+             wireJoinerLedger->tightBoundExistingWireSearchBacktrackCount},
+            {"tight_bound_existing_wire_search_intersect_skip_count",
+             wireJoinerLedger->tightBoundExistingWireSearchIntersectSkipCount},
+            {"tight_bound_existing_wire_idx_vertex_count",
+             wireJoinerLedger->tightBoundExistingWireIdxVertexCount},
+            {"tight_bound_existing_wire_stack_pos_count",
+             wireJoinerLedger->tightBoundExistingWireStackPosCount},
+            {"temporary_result_wire_edge_info_count", wireJoinerLedger->temporaryResultWireEdgeInfoCount},
+            {"generated_open_export_edge_info_count", wireJoinerLedger->generatedOpenExportEdgeInfoCount},
+            {"source_identity_shared_vertex_edge_info_count",
+             wireJoinerLedger->sourceIdentitySharedVertexEdgeInfoCount},
+            {"source_identity_only_source_vertices_edge_info_count",
+             wireJoinerLedger->sourceIdentityOnlySourceVerticesEdgeInfoCount},
+            {"source_identity_open_export_shared_vertex_edge_info_count",
+             wireJoinerLedger->sourceIdentityOpenExportSharedVertexEdgeInfoCount},
+            {"source_identity_open_export_only_source_vertices_edge_info_count",
+             wireJoinerLedger->sourceIdentityOpenExportOnlySourceVerticesEdgeInfoCount},
+            {"source_identity_purge_bridge_edge_info_count",
+             wireJoinerLedger->sourceIdentityPurgeBridgeEdgeInfoCount},
+            {"source_lineage_edge_info_count", wireJoinerLedger->sourceLineageEdgeInfoCount},
+            {"source_lineage_split_edge_info_count", wireJoinerLedger->sourceLineageSplitEdgeInfoCount},
+            {"source_lineage_open_export_edge_info_count",
+             wireJoinerLedger->sourceLineageOpenExportEdgeInfoCount},
+            {"source_lineage_missing_open_export_edge_info_count",
+             wireJoinerLedger->sourceLineageMissingOpenExportEdgeInfoCount},
+            {"source_lineage_multi_source_edge_info_count",
+             wireJoinerLedger->sourceLineageMultiSourceEdgeInfoCount},
+            {"super_edge_candidate_count", wireJoinerLedger->superEdgeCandidateCount},
+            {"super_edge_candidate_edge_info_count", wireJoinerLedger->superEdgeCandidateEdgeInfoCount},
+            {"super_edge_root_edge_info_count", wireJoinerLedger->superEdgeRootEdgeInfoCount},
+            {"super_edge_closed_candidate_count", wireJoinerLedger->superEdgeClosedCandidateCount},
+            {"super_edge_open_candidate_count", wireJoinerLedger->superEdgeOpenCandidateCount},
+            {"super_edge_materialized_root_edge_info_count",
+             wireJoinerLedger->superEdgeMaterializedRootEdgeInfoCount},
+            {"super_edge_materialized_edge_info_count",
+             wireJoinerLedger->superEdgeMaterializedEdgeInfoCount},
+            {"super_edge_shadowed_member_edge_info_count",
+             wireJoinerLedger->superEdgeShadowedMemberEdgeInfoCount},
+            {"super_edge_lifecycle_member_minus_one_edge_info_count",
+             wireJoinerLedger->superEdgeLifecycleMemberMinusOneEdgeInfoCount},
+            {"super_edge_lifecycle_open_root_edge_info_count",
+             wireJoinerLedger->superEdgeLifecycleOpenRootEdgeInfoCount},
+            {"super_edge_lifecycle_closed_root_edge_info_count",
+             wireJoinerLedger->superEdgeLifecycleClosedRootEdgeInfoCount},
+            {"super_edge_lifecycle_adjacent_range_rewrite_count",
+             wireJoinerLedger->superEdgeLifecycleAdjacentRangeRewriteCount},
+            {"super_edge_lifecycle_endpoint_rewrite_count",
+             wireJoinerLedger->superEdgeLifecycleEndpointRewriteCount},
+            {"super_edge_lifecycle_adjacent_range_source_edge_info_count",
+             wireJoinerLedger->superEdgeLifecycleAdjacentRangeSourceEdgeInfoCount},
+            {"super_edge_lifecycle_adjacent_range_vertex_count",
+             wireJoinerLedger->superEdgeLifecycleAdjacentRangeVertexCount},
             {"open_export_edge_info_count", wireJoinerLedger->openExportEdgeInfoCount},
+            {"open_wire_compound_wire_info_count", wireJoinerLedger->openWireCompoundWireInfoCount},
+            {"open_wire_compound_built_wire_info_count",
+             wireJoinerLedger->openWireCompoundBuiltWireInfoCount},
+            {"open_wire_compound_edge_info_count", wireJoinerLedger->openWireCompoundEdgeInfoCount},
+            {"open_wire_compound_super_edge_wire_info_count",
+             wireJoinerLedger->openWireCompoundSuperEdgeWireInfoCount},
+            {"open_wire_compound_generated_wire_info_count",
+             wireJoinerLedger->openWireCompoundGeneratedWireInfoCount},
+            {"open_wire_compound_purge_bridge_wire_info_count",
+             wireJoinerLedger->openWireCompoundPurgeBridgeWireInfoCount},
+            {"open_wire_compound_source_shared_vertex_wire_info_count",
+             wireJoinerLedger->openWireCompoundSourceSharedVertexWireInfoCount},
+            {"open_wire_compound_purge_bridge_source_shared_vertex_wire_info_count",
+             wireJoinerLedger->openWireCompoundPurgeBridgeSourceSharedVertexWireInfoCount},
+            {"open_wire_compound_purge_bridge_unmatched_wire_info_count",
+             wireJoinerLedger->openWireCompoundPurgeBridgeUnmatchedWireInfoCount},
             {"ordered_wire_info_count", wireJoinerLedger->orderedWireInfoCount},
             {"ordered_vertex_count", wireJoinerLedger->orderedVertexCount},
             {"iteration2_marked_edge_info_count", wireJoinerLedger->iteration2MarkedEdgeInfoCount},
@@ -4783,9 +4929,43 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
             {"exhaust_shared_owner_edge_info_count", wireJoinerLedger->exhaustSharedOwnerEdgeInfoCount},
             {"exhaust_done_secondary_edge_info_count", wireJoinerLedger->exhaustDoneSecondaryEdgeInfoCount},
             {"exhaust_search_candidate_edge_info_count", wireJoinerLedger->exhaustSearchCandidateEdgeInfoCount},
+            {"exhaust_secondary_owner_edge_info_count", wireJoinerLedger->exhaustSecondaryOwnerEdgeInfoCount},
+            {"graph_secondary_owner_edge_info_count", wireJoinerLedger->graphSecondaryOwnerEdgeInfoCount},
         };
         context.objects[object.name]["wire_joiner_history"] =
             "history_partial:edge_info_wire_info_split_done_exhaust";
+    }
+    if (wireJoinerHistory) {
+        nlohmann::json openExportHistoryEntries = nlohmann::json::array();
+        for (const geometry::WireJoinerOpenExportHistoryEntry& entry : wireJoinerHistory->openExportEntries) {
+            openExportHistoryEntries.push_back({
+                {"open_export_index", entry.openExportIndex},
+                {"edge_info_index", entry.edgeInfoIndex},
+                {"source_edge_indices", entry.sourceEdgeIndices},
+                {"source_lineage_from_splitter_history", entry.sourceLineageFromSplitterHistory},
+                {"generated_open_export", entry.generatedOpenExport},
+                {"purge_bridge", entry.purgeBridge},
+            });
+        }
+        context.objects[object.name]["wire_joiner_history_detail"] = {
+            {"source_edge_count", wireJoinerHistory->sourceEdgeCount},
+            {"split_result_edge_count", wireJoinerHistory->splitResultEdgeCount},
+            {"open_export_edge_count", wireJoinerHistory->openExportEdgeCount},
+            {"open_export_source_lineage_edge_count", wireJoinerHistory->openExportSourceLineageEdgeCount},
+            {"open_export_missing_source_lineage_edge_count",
+             wireJoinerHistory->openExportMissingSourceLineageEdgeCount},
+            {"open_export_generated_edge_count", wireJoinerHistory->openExportGeneratedEdgeCount},
+            {"open_export_generated_missing_source_lineage_edge_count",
+             wireJoinerHistory->openExportGeneratedMissingSourceLineageEdgeCount},
+            {"open_export_purge_bridge_edge_count", wireJoinerHistory->openExportPurgeBridgeEdgeCount},
+            {"open_export_history_entries", std::move(openExportHistoryEntries)},
+            {"modified_source_edge_count", wireJoinerHistory->modifiedSourceEdgeCount},
+            {"modified_history_count", wireJoinerHistory->modifiedHistoryCount},
+            {"generated_history_count", wireJoinerHistory->generatedHistoryCount},
+            {"deleted_history_count", wireJoinerHistory->deletedHistoryCount},
+            {"splitter_history", wireJoinerHistory->splitterHistory},
+            {"final_export_history", wireJoinerHistory->finalExportHistory},
+        };
     }
     if (faceMakerHistory) {
         context.objects[object.name]["facemaker_history"] = {

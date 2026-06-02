@@ -39,6 +39,16 @@ struct ElementHistory
     std::vector<std::string> sources;
 };
 
+struct SketchInternalWireJoinerOpenExportHistoryEntry
+{
+    std::size_t openExportIndex = 0;
+    std::size_t edgeInfoIndex = 0;
+    std::vector<std::size_t> sourceEdgeIndices;
+    bool sourceLineageFromSplitterHistory = false;
+    bool generatedOpenExport = false;
+    bool purgeBridge = false;
+};
+
 struct SketchInternalHistoryContext
 {
     std::size_t sourceEdgeCount = 0;
@@ -47,6 +57,21 @@ struct SketchInternalHistoryContext
     std::size_t boundedFaceCount = 0;
     bool preSplitHistory = false;
     bool splitterHistory = false;
+    std::size_t wireJoinerSourceEdgeCount = 0;
+    std::size_t wireJoinerSplitResultEdgeCount = 0;
+    std::size_t wireJoinerOpenExportEdgeCount = 0;
+    std::size_t wireJoinerOpenExportSourceLineageEdgeCount = 0;
+    std::size_t wireJoinerOpenExportMissingSourceLineageEdgeCount = 0;
+    std::size_t wireJoinerOpenExportGeneratedEdgeCount = 0;
+    std::size_t wireJoinerOpenExportGeneratedMissingSourceLineageEdgeCount = 0;
+    std::size_t wireJoinerOpenExportPurgeBridgeEdgeCount = 0;
+    std::vector<SketchInternalWireJoinerOpenExportHistoryEntry> wireJoinerOpenExportHistoryEntries;
+    std::size_t wireJoinerModifiedSourceEdgeCount = 0;
+    std::size_t wireJoinerModifiedHistoryCount = 0;
+    std::size_t wireJoinerGeneratedHistoryCount = 0;
+    std::size_t wireJoinerDeletedHistoryCount = 0;
+    bool wireJoinerSplitterHistory = false;
+    bool wireJoinerFinalExportHistory = false;
 };
 
 struct NamedElement

@@ -30,6 +30,7 @@ struct SketchInternalBuildResult {
     bool requiresSubshapeSelection = false;
     std::optional<FaceMakerHistorySummary> faceMakerHistory;
     std::optional<WireJoinerLedgerSummary> wireJoinerLedger;
+    std::optional<WireJoinerHistorySummary> wireJoinerHistory;
 };
 
 // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp

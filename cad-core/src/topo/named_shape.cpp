@@ -946,6 +946,18 @@ void consumeSketchInternalTerminalHistory(NamedShape& namedShape,
 
 nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& history)
 {
+    nlohmann::json wireJoinerOpenExportEntries = nlohmann::json::array();
+    for (const SketchInternalWireJoinerOpenExportHistoryEntry& entry :
+         history.wireJoinerOpenExportHistoryEntries) {
+        wireJoinerOpenExportEntries.push_back({
+            {"open_export_index", entry.openExportIndex},
+            {"edge_info_index", entry.edgeInfoIndex},
+            {"source_edge_indices", entry.sourceEdgeIndices},
+            {"source_lineage_from_splitter_history", entry.sourceLineageFromSplitterHistory},
+            {"generated_open_export", entry.generatedOpenExport},
+            {"purge_bridge", entry.purgeBridge},
+        });
+    }
     return {
         {"source_edge_count", history.sourceEdgeCount},
         {"pre_split_edge_count", history.preSplitEdgeCount},
@@ -953,6 +965,25 @@ nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& h
         {"bounded_face_count", history.boundedFaceCount},
         {"pre_split_history", history.preSplitHistory},
         {"splitter_history", history.splitterHistory},
+        {"wire_joiner_source_edge_count", history.wireJoinerSourceEdgeCount},
+        {"wire_joiner_split_result_edge_count", history.wireJoinerSplitResultEdgeCount},
+        {"wire_joiner_open_export_edge_count", history.wireJoinerOpenExportEdgeCount},
+        {"wire_joiner_open_export_source_lineage_edge_count",
+         history.wireJoinerOpenExportSourceLineageEdgeCount},
+        {"wire_joiner_open_export_missing_source_lineage_edge_count",
+         history.wireJoinerOpenExportMissingSourceLineageEdgeCount},
+        {"wire_joiner_open_export_generated_edge_count", history.wireJoinerOpenExportGeneratedEdgeCount},
+        {"wire_joiner_open_export_generated_missing_source_lineage_edge_count",
+         history.wireJoinerOpenExportGeneratedMissingSourceLineageEdgeCount},
+        {"wire_joiner_open_export_purge_bridge_edge_count",
+         history.wireJoinerOpenExportPurgeBridgeEdgeCount},
+        {"wire_joiner_open_export_history_entries", std::move(wireJoinerOpenExportEntries)},
+        {"wire_joiner_modified_source_edge_count", history.wireJoinerModifiedSourceEdgeCount},
+        {"wire_joiner_modified_history_count", history.wireJoinerModifiedHistoryCount},
+        {"wire_joiner_generated_history_count", history.wireJoinerGeneratedHistoryCount},
+        {"wire_joiner_deleted_history_count", history.wireJoinerDeletedHistoryCount},
+        {"wire_joiner_splitter_history", history.wireJoinerSplitterHistory},
+        {"wire_joiner_final_export_history", history.wireJoinerFinalExportHistory},
     };
 }
 
@@ -1061,6 +1092,25 @@ NamedShape namedShapeForSketchInternalShape(
     }
     if (historyContext && historyContext->splitterHistory) {
         addDistinctString(namedShape.elementHistoryStatus, "facemaker_history:splitter");
+    }
+    if (historyContext && historyContext->wireJoinerSplitterHistory) {
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::getOpenWires(), passes "MapperHistory(aHistory)" into
+        // makeShapeWithElementMap(). This status marks consumption of WireJoiner-produced
+        // splitter history summary only; it does not infer element history from geometry.
+        addDistinctString(namedShape.elementHistoryStatus, "wire_joiner_history:splitter");
+    }
+    if (historyContext && historyContext->wireJoinerModifiedHistoryCount > 0U) {
+        addDistinctString(namedShape.elementHistoryStatus, "wire_joiner_history:modified");
+    }
+    if (historyContext && historyContext->wireJoinerGeneratedHistoryCount > 0U) {
+        addDistinctString(namedShape.elementHistoryStatus, "wire_joiner_history:generated");
+    }
+    if (historyContext && historyContext->wireJoinerDeletedHistoryCount > 0U) {
+        addDistinctString(namedShape.elementHistoryStatus, "wire_joiner_history:deleted");
+    }
+    if (historyContext && historyContext->wireJoinerFinalExportHistory) {
+        addDistinctString(namedShape.elementHistoryStatus, "wire_joiner_history:open_export");
     }
 
     return namedShape;

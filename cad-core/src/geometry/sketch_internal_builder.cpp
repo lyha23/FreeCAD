@@ -77,10 +77,8 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
                                        &input.faceWires,
                                        &input.openEdges,
                                        result.splitProducedBoundedFaces);
-        if (wireJoinerFaceResult && !input.openEdges.empty() && faceResult.faceCount > 1U) {
-            joiner.recordBoundedFaceClassifierProbe(*wireJoinerFaceResult);
-        }
         result.wireJoinerLedger = joiner.ledgerSummary();
+        result.wireJoinerHistory = joiner.historySummary();
         const auto openShape = joiner.getOpenWires("SKF", true);
         if (openShape && !openShape->IsNull()) {
             result.internalShape = compoundShape(*result.internalShape, *openShape);
