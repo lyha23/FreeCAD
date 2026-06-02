@@ -46,6 +46,10 @@ struct SketchInternalWireJoinerOpenExportHistoryEntry
     std::vector<std::size_t> sourceEdgeIndices;
     bool sourceLineageFromSplitterHistory = false;
     bool generatedOpenExport = false;
+    std::string generatedOpenExportReason;
+    bool generatedOpenExportSourceEdgeInfo = false;
+    std::size_t generatedOpenExportSourceEdgeInfoIndex = 0;
+    bool generatedOpenExportSourceEdgeInfoConsumed = false;
     bool purgeBridge = false;
 };
 
@@ -63,6 +67,8 @@ struct SketchInternalHistoryContext
     std::size_t wireJoinerOpenExportSourceLineageEdgeCount = 0;
     std::size_t wireJoinerOpenExportMissingSourceLineageEdgeCount = 0;
     std::size_t wireJoinerOpenExportGeneratedEdgeCount = 0;
+    std::size_t wireJoinerOpenExportGeneratedSourceEdgeInfoCount = 0;
+    std::size_t wireJoinerOpenExportGeneratedSourceEdgeInfoConsumedCount = 0;
     std::size_t wireJoinerOpenExportGeneratedMissingSourceLineageEdgeCount = 0;
     std::size_t wireJoinerOpenExportPurgeBridgeEdgeCount = 0;
     std::vector<SketchInternalWireJoinerOpenExportHistoryEntry> wireJoinerOpenExportHistoryEntries;

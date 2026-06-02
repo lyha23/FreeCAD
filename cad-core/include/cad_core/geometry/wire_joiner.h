@@ -40,21 +40,103 @@ struct WireJoinerLedgerSummary {
     std::size_t tightBoundSplitOwnerWireInfoCount = 0;
     std::size_t tightBoundSplitOwnerVertexCount = 0;
     std::size_t tightBoundSplitOwnerBuiltWireCount = 0;
+    std::size_t tightBoundLiveSplitWireInfoCount = 0;
+    std::size_t tightBoundLiveSplitWireEdgeInfoCount = 0;
     std::size_t tightBoundSplitWireVertexCount = 0;
     std::size_t tightBoundSplitWireBuiltCount = 0;
     std::size_t tightBoundExistingWireSearchCount = 0;
     std::size_t tightBoundExistingWireHitCount = 0;
     std::size_t tightBoundExistingWireReverseHitCount = 0;
     std::size_t tightBoundExistingWirePurgeCount = 0;
+    std::size_t tightBoundPurgedWireInfoCount = 0;
+    std::size_t tightBoundExhaustVisitedWireInfoCount = 0;
+    std::size_t tightBoundExhaustDoneWireInfoCount = 0;
+    std::size_t tightBoundExhaustDiscardedPurgedWireInfoCount = 0;
+    std::size_t tightBoundExhaustPrimaryResetEdgeInfoCount = 0;
+    std::size_t tightBoundExhaustPrimaryResetBlockedEdgeInfoCount = 0;
+    std::size_t tightBoundFullWireSetInsertCount = 0;
+    std::size_t tightBoundFullWireSetEraseCount = 0;
+    std::size_t tightBoundFullWireSetAbortCount = 0;
+    std::size_t tightBoundFullWireSetPurgeCandidateCount = 0;
+    std::size_t tightBoundFullWireSetBlockedTransferCount = 0;
+    std::size_t tightBoundFullWireSetAbortSearchCount = 0;
+    std::size_t tightBoundFullWireSetAbortResolvedByHitCount = 0;
+    std::size_t tightBoundFullWireSetAbortBlockedSearchCount = 0;
+    std::size_t tightBoundExistingWireMultiRoundWireInfoCount = 0;
+    std::size_t tightBoundExistingWireMultiRoundSearchCount = 0;
+    std::size_t repeatedSplitExhaustCycleCount = 0;
+    std::size_t repeatedSplitExhaustRemovedEdgeInfoCount = 0;
+    std::size_t repeatedSplitExhaustRemovedUnownedEdgeInfoCount = 0;
+    std::size_t repeatedSplitExhaustRemovedSecondaryEdgeInfoCount = 0;
+    std::size_t repeatedSplitExhaustRemovedPrimaryEdgeInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunActiveEdgeInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunOwnedActiveEdgeInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunResetPrimaryEdgeInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunResetSecondaryEdgeInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunSkippedOpenLeafEdgeInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunNoActiveSearchCount = 0;
+    std::size_t repeatedSplitExhaustRerunClosedWireSearchCount = 0;
+    std::size_t repeatedSplitExhaustRerunClosedWireMissCount = 0;
+    std::size_t repeatedSplitExhaustRerunClosedWireInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunClosedWireAssignedEdgeInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunClosedWireVertexCount = 0;
+    std::size_t repeatedSplitExhaustRerunResettableClosedWireInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunResettableAssignedEdgeInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunLiveResetPrimaryEdgeInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunLiveResetSecondaryEdgeInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunLiveClosedWireInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunLiveAssignedEdgeInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunLiveClosedWireVertexCount = 0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::buildClosedWire() reruns "findClosedWires(true); findTightBound()" after
+    // consumed-edge removal. These fields track the live rerun owners that continue into the
+    // repeated findTightBound branch/transfer lifecycle.
+    std::size_t repeatedSplitExhaustRerunLiveBranchSearchCandidateCount = 0;
+    std::size_t repeatedSplitExhaustRerunLiveBranchSearchInsideCandidateCount = 0;
+    std::size_t repeatedSplitExhaustRerunLiveBranchSearchOutsideCandidateCount = 0;
+    std::size_t repeatedSplitExhaustRerunLiveTransferWireInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunLiveTransferredOwnerEdgeInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunLiveDoneWireInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunRemovalScanCount = 0;
+    std::size_t repeatedSplitExhaustRerunRemovalEdgeInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunRemovalUnownedEdgeInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunRemovalSecondaryEdgeInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunRemovalPrimaryEdgeInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunLoopExitNoRemovalCount = 0;
+    std::size_t repeatedSplitExhaustRerunBranchSearchCandidateCount = 0;
+    std::size_t repeatedSplitExhaustRerunBranchSearchInsideCandidateCount = 0;
+    std::size_t repeatedSplitExhaustRerunBranchSearchOutsideCandidateCount = 0;
+    std::size_t repeatedSplitExhaustRerunNewWireSeedCandidateCount = 0;
+    std::size_t repeatedSplitExhaustGeneratedIdentityBlockedEdgeInfoCount = 0;
     std::size_t tightBoundExistingWireSearchStackFrameCount = 0;
     std::size_t tightBoundExistingWireSearchVertexStackCount = 0;
     std::size_t tightBoundExistingWireSearchEdgeSetVisitCount = 0;
     std::size_t tightBoundExistingWireSearchBacktrackCount = 0;
     std::size_t tightBoundExistingWireSearchIntersectSkipCount = 0;
+    std::size_t tightBoundExistingWireSearchIdxVertexCount = 0;
+    std::size_t tightBoundExistingWireSearchStackPosCount = 0;
+    std::size_t tightBoundExistingWireSearchPathVertexCount = 0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::_findClosedWiresWithExisting() writes "idxVertex" / "stackPos" for
+    // existing-wire hits; ::findTightBoundWithSplit() later consumes only the selected transfer path.
+    std::size_t tightBoundExistingWireSelectedHitCount = 0;
+    std::size_t tightBoundExistingWireSearchOnlyHitCount = 0;
+    std::size_t tightBoundExistingWireSearchOnlyIdxVertexCount = 0;
+    std::size_t tightBoundExistingWireSearchOnlyStackPosCount = 0;
+    std::size_t tightBoundExistingWireSearchOnlyPathBlockedCount = 0;
+    std::size_t tightBoundExistingWireSearchOnlyOwnerVertexBlockedCount = 0;
+    std::size_t tightBoundExistingWireSearchOnlyOrderBlockedCount = 0;
+    std::size_t tightBoundExistingWireSearchOnlyWireBuildBlockedCount = 0;
     std::size_t tightBoundExistingWireIdxVertexCount = 0;
     std::size_t tightBoundExistingWireStackPosCount = 0;
     std::size_t temporaryResultWireEdgeInfoCount = 0;
     std::size_t generatedOpenExportEdgeInfoCount = 0;
+    std::size_t generatedOpenExportSourceEdgeInfoCount = 0;
+    std::size_t generatedOpenExportSourceEdgeInfoConsumedCount = 0;
+    std::size_t generatedOpenExportConsumedOpenCutterGraphEdgeInfoCount = 0;
+    std::size_t generatedOpenExportPartialJunctionOpenCutterEdgeInfoCount = 0;
+    std::size_t generatedOpenExportClosedWireCycleEdgeInfoCount = 0;
+    std::size_t generatedOpenExportPartialSharedClosedWireEdgeInfoCount = 0;
     std::size_t sourceIdentitySharedVertexEdgeInfoCount = 0;
     std::size_t sourceIdentityOnlySourceVerticesEdgeInfoCount = 0;
     std::size_t sourceIdentityOpenExportSharedVertexEdgeInfoCount = 0;
@@ -86,6 +168,12 @@ struct WireJoinerLedgerSummary {
     std::size_t openWireCompoundEdgeInfoCount = 0;
     std::size_t openWireCompoundSuperEdgeWireInfoCount = 0;
     std::size_t openWireCompoundGeneratedWireInfoCount = 0;
+    std::size_t openWireCompoundGeneratedSourceEdgeInfoWireInfoCount = 0;
+    std::size_t openWireCompoundGeneratedSourceEdgeInfoConsumedWireInfoCount = 0;
+    std::size_t openWireCompoundGeneratedConsumedOpenCutterGraphWireInfoCount = 0;
+    std::size_t openWireCompoundGeneratedPartialJunctionOpenCutterWireInfoCount = 0;
+    std::size_t openWireCompoundGeneratedClosedWireCycleWireInfoCount = 0;
+    std::size_t openWireCompoundGeneratedPartialSharedClosedWireWireInfoCount = 0;
     std::size_t openWireCompoundPurgeBridgeWireInfoCount = 0;
     std::size_t openWireCompoundSourceSharedVertexWireInfoCount = 0;
     std::size_t openWireCompoundPurgeBridgeSourceSharedVertexWireInfoCount = 0;
@@ -104,11 +192,25 @@ struct WireJoinerLedgerSummary {
     std::size_t doneWireInfoCount = 0;
     std::size_t doneOwnedEdgeInfoCount = 0;
     std::size_t ownerPropagationCandidateCount = 0;
+    std::size_t ownerPropagationUnassignedCandidateCount = 0;
+    std::size_t ownerPropagationOtherWireCandidateCount = 0;
+    std::size_t ownerPropagationOtherWireLiveEdgeInfoCount = 0;
     std::size_t exhaustSeedEdgeInfoCount = 0;
     std::size_t exhaustSharedOwnerEdgeInfoCount = 0;
     std::size_t exhaustDoneSecondaryEdgeInfoCount = 0;
     std::size_t exhaustSearchCandidateEdgeInfoCount = 0;
     std::size_t exhaustSecondaryOwnerEdgeInfoCount = 0;
+    std::size_t exhaustAdjacentSearchCount = 0;
+    std::size_t exhaustAdjacentSearchHitCount = 0;
+    std::size_t exhaustAdjacentSearchMissCount = 0;
+    std::size_t exhaustAdjacentSearchStackFrameCount = 0;
+    std::size_t exhaustAdjacentSearchVertexStackCount = 0;
+    std::size_t exhaustAdjacentSearchEdgeSetVisitCount = 0;
+    std::size_t exhaustAdjacentSearchBacktrackCount = 0;
+    std::size_t exhaustAdjacentWireSetInsertCount = 0;
+    std::size_t exhaustAdjacentWireSetEraseCount = 0;
+    std::size_t exhaustAdjacentWireSetAbortCount = 0;
+    std::size_t exhaustAdjacentWireInfo2AbortCount = 0;
     std::size_t graphSecondaryOwnerEdgeInfoCount = 0;
 };
 
@@ -123,6 +225,10 @@ struct WireJoinerOpenExportHistoryEntry {
     std::vector<std::size_t> sourceEdgeIndices;
     bool sourceLineageFromSplitterHistory = false;
     bool generatedOpenExport = false;
+    std::string generatedOpenExportReason;
+    bool generatedOpenExportSourceEdgeInfo = false;
+    std::size_t generatedOpenExportSourceEdgeInfoIndex = 0;
+    bool generatedOpenExportSourceEdgeInfoConsumed = false;
     bool purgeBridge = false;
 };
 
@@ -133,6 +239,8 @@ struct WireJoinerHistorySummary {
     std::size_t openExportSourceLineageEdgeCount = 0;
     std::size_t openExportMissingSourceLineageEdgeCount = 0;
     std::size_t openExportGeneratedEdgeCount = 0;
+    std::size_t openExportGeneratedSourceEdgeInfoCount = 0;
+    std::size_t openExportGeneratedSourceEdgeInfoConsumedCount = 0;
     std::size_t openExportGeneratedMissingSourceLineageEdgeCount = 0;
     std::size_t openExportPurgeBridgeEdgeCount = 0;
     std::vector<WireJoinerOpenExportHistoryEntry> openExportEntries;
@@ -208,6 +316,10 @@ private:
         // This request-local lineage records which sourceEdgeArray entries produced this EdgeInfo.
         std::vector<std::size_t> sourceEdgeIndices;
         bool sourceLineageFromSplitterHistory = false;
+        std::string generatedOpenExportReason;
+        bool generatedOpenExportSourceEdgeInfo = false;
+        std::size_t generatedOpenExportSourceEdgeInfoIndex = 0;
+        bool generatedOpenExportSourceEdgeInfoConsumed = false;
         // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
         // ::WireJoinerP::findSuperEdges(), "Join edges (let's call it super edge) that are connected
         // to only one other edges". This is currently diagnostic only; getOpenWires() still exports
@@ -300,17 +412,32 @@ private:
         int existingWireIdxVertex = -1;
         int existingWireStackPos = -1;
     };
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::findTightBoundByVertices(), after "_findClosedWires(..., &idxEnd,
+    // ..., &stackPos)", normalizes "idxEnd == 0" and enforces "ENSURE(idxV <= idxEnd)".
+    enum class TightBoundExistingWirePathBlockReason
+    {
+        None,
+        OwnerVertexMissing,
+        OrderBlocked,
+        WireBuildBlocked,
+    };
     struct TightBoundExistingWireSearchTrace {
         bool hit = false;
         bool reverseHit = false;
         bool purge = false;
         int idxVertex = -1;
         int stackPos = -1;
+        std::vector<WireVertex> hitPath;
         std::size_t stackFrameCount = 0;
         std::size_t vertexStackCount = 0;
         std::size_t edgeSetVisitCount = 0;
         std::size_t backtrackCount = 0;
         std::size_t intersectSkipCount = 0;
+        std::size_t fullWireSetInsertCount = 0;
+        std::size_t fullWireSetEraseCount = 0;
+        std::size_t fullWireSetAbortCount = 0;
+        std::size_t fullWireSetPurgeCandidateCount = 0;
     };
     struct OpenWireCompoundWireInfo {
         // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
@@ -321,11 +448,16 @@ private:
         bool wireBuilt = false;
         bool superEdgeWire = false;
         bool generatedOpenExport = false;
+        std::string generatedOpenExportReason;
+        bool generatedOpenExportSourceEdgeInfo = false;
+        std::size_t generatedOpenExportSourceEdgeInfoIndex = 0;
+        bool generatedOpenExportSourceEdgeInfoConsumed = false;
         bool purgeBridge = false;
         bool sourceSharedVertexPurgeMatch = false;
     };
     struct OwnerWireInfo {
         std::size_t id = 0;
+        std::size_t splitWireId = 0;
         TopoDS_Wire wire;
         std::vector<WireVertex> vertices;
         std::vector<WireVertex> splitOwnerVertices;
@@ -334,6 +466,19 @@ private:
         bool hasNewWireSeed = false;
         bool hasSplitWireCandidate = false;
         bool splitOwnerWireBuilt = false;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::_findClosedWiresWithExisting() and ::_findClosedWiresUpdateStack()
+        // mark "wireInfo->purge = true"; ::exhaustTightBoundUpdateEdge() later discards that
+        // WireInfo instead of marking it done. cad-core records the lifecycle bit as diagnostics
+        // only until the full repeated split/exhaust loop is migrated.
+        bool purge = false;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::exhaustTightBoundUpdateEdge(), "if (wireInfo->purge) ... wireInfo.reset();
+        // else wireInfo->done = true". This sidecar records the FreeCAD-equivalent exhaust
+        // transition while the legacy "done" bit still feeds the current output-neutral bridge.
+        bool exhaustVisited = false;
+        bool exhaustDone = false;
+        bool exhaustDiscardedByPurge = false;
         bool done = false;
         std::size_t splitWireCandidateCount = 0;
         std::size_t branchSearchCandidateCount = 0;
@@ -353,6 +498,25 @@ private:
         std::size_t tightBoundExistingWireSearchEdgeSetVisitCount = 0;
         std::size_t tightBoundExistingWireSearchBacktrackCount = 0;
         std::size_t tightBoundExistingWireSearchIntersectSkipCount = 0;
+        std::size_t tightBoundExistingWireSearchIdxVertexCount = 0;
+        std::size_t tightBoundExistingWireSearchStackPosCount = 0;
+        std::size_t tightBoundExistingWireSearchPathVertexCount = 0;
+        std::size_t tightBoundExistingWireSearchOnlyPathBlockedCount = 0;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::_findClosedWiresWithExisting() writes idxVertex/stackPos; a hit is only
+        // selectable by ::findTightBoundWithSplit() if it maps to an ordered owner vertex range
+        // that can build the transfer wire.
+        std::size_t tightBoundExistingWireSearchOnlyOwnerVertexBlockedCount = 0;
+        std::size_t tightBoundExistingWireSearchOnlyOrderBlockedCount = 0;
+        std::size_t tightBoundExistingWireSearchOnlyWireBuildBlockedCount = 0;
+        std::size_t tightBoundFullWireSetInsertCount = 0;
+        std::size_t tightBoundFullWireSetEraseCount = 0;
+        std::size_t tightBoundFullWireSetAbortCount = 0;
+        std::size_t tightBoundFullWireSetPurgeCandidateCount = 0;
+        std::size_t tightBoundFullWireSetBlockedTransferCount = 0;
+        std::size_t tightBoundFullWireSetAbortSearchCount = 0;
+        std::size_t tightBoundFullWireSetAbortResolvedByHitCount = 0;
+        std::size_t tightBoundFullWireSetAbortBlockedSearchCount = 0;
     };
     struct ClosedWireSearchFrame {
         std::size_t start = 0;
@@ -366,6 +530,17 @@ private:
         std::size_t edgeSetVisitCount = 0;
         std::size_t backtrackCount = 0;
         std::size_t intersectSkipCount = 0;
+    };
+    struct ExhaustAdjacentSearchTrace {
+        bool hit = false;
+        std::size_t stackFrameCount = 0;
+        std::size_t vertexStackCount = 0;
+        std::size_t edgeSetVisitCount = 0;
+        std::size_t backtrackCount = 0;
+        std::size_t wireSetInsertCount = 0;
+        std::size_t wireSetEraseCount = 0;
+        std::size_t wireSetAbortCount = 0;
+        std::size_t wireInfo2AbortCount = 0;
     };
     struct WireInfo {
         std::size_t id = 0;
@@ -385,6 +560,95 @@ private:
         bool done = false;
         std::size_t splitWireCandidateCount = 0;
         std::size_t ownerPropagationCandidateCount = 0;
+        std::size_t ownerPropagationUnassignedCandidateCount = 0;
+        std::size_t ownerPropagationOtherWireCandidateCount = 0;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::findTightBoundUpdateVertices(), "info->wireInfo = beginInfo.wireInfo"
+        // when an unfinished "otherWire" is overtaken by the just-completed tight-bound owner.
+        std::size_t ownerPropagationOtherWireLiveEdgeInfoCount = 0;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::exhaustTightBoundWithAdjacent() seeds "wireSet" from the adjacent done
+        // owner and searches through adjacentList before writing "wireInfo2".
+        std::size_t exhaustAdjacentSearchCount = 0;
+        std::size_t exhaustAdjacentSearchHitCount = 0;
+        std::size_t exhaustAdjacentSearchMissCount = 0;
+        std::size_t exhaustAdjacentSearchStackFrameCount = 0;
+        std::size_t exhaustAdjacentSearchVertexStackCount = 0;
+        std::size_t exhaustAdjacentSearchEdgeSetVisitCount = 0;
+        std::size_t exhaustAdjacentSearchBacktrackCount = 0;
+        std::size_t exhaustAdjacentWireSetInsertCount = 0;
+        std::size_t exhaustAdjacentWireSetEraseCount = 0;
+        std::size_t exhaustAdjacentWireSetAbortCount = 0;
+        std::size_t exhaustAdjacentWireInfo2AbortCount = 0;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::buildClosedWire() removes consumed EdgeInfo entries, then loops back
+        // through "findClosedWires(true); findTightBound();" until no more removal happens.
+        // cad-core records the repeat-cycle need without re-entering output mutation yet.
+        std::size_t repeatedSplitExhaustCycleCount = 0;
+        std::size_t repeatedSplitExhaustRemovedEdgeInfoCount = 0;
+        std::size_t repeatedSplitExhaustRemovedUnownedEdgeInfoCount = 0;
+        std::size_t repeatedSplitExhaustRemovedSecondaryEdgeInfoCount = 0;
+        std::size_t repeatedSplitExhaustRemovedPrimaryEdgeInfoCount = 0;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::buildClosedWire() repeats "findClosedWires(true); findTightBound()"
+        // after consumed-edge removal. These fields record the output-neutral rerun search on a
+        // temporary WireInfo copy until M3 result-wire identity lets the live loop take over.
+        std::size_t repeatedSplitExhaustRerunActiveEdgeInfoCount = 0;
+        std::size_t repeatedSplitExhaustRerunOwnedActiveEdgeInfoCount = 0;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::findClosedWires(true), at each buildClosedWire() rerun, first clears
+        // every "info.wireInfo" and "info.wireInfo2" before rebuilding tight-bound closed owners.
+        std::size_t repeatedSplitExhaustRerunResetPrimaryEdgeInfoCount = 0;
+        std::size_t repeatedSplitExhaustRerunResetSecondaryEdgeInfoCount = 0;
+        std::size_t repeatedSplitExhaustRerunSkippedOpenLeafEdgeInfoCount = 0;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::buildClosedWire() reruns "findClosedWires(true)"; after consumed-edge
+        // removal there may be no EdgeInfo with active "iteration >= 0" left to seed that search.
+        std::size_t repeatedSplitExhaustRerunNoActiveSearchCount = 0;
+        std::size_t repeatedSplitExhaustRerunClosedWireSearchCount = 0;
+        std::size_t repeatedSplitExhaustRerunClosedWireMissCount = 0;
+        std::size_t repeatedSplitExhaustRerunClosedWireInfoCount = 0;
+        std::size_t repeatedSplitExhaustRerunClosedWireAssignedEdgeInfoCount = 0;
+        std::size_t repeatedSplitExhaustRerunClosedWireVertexCount = 0;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::findClosedWires(true) clears old "info.wireInfo" before rebuilding.
+        // These fields classify rerun owners whose live writeback is currently blocked only by
+        // primary owners that the rerun reset would remove.
+        std::size_t repeatedSplitExhaustRerunResettableClosedWireInfoCount = 0;
+        std::size_t repeatedSplitExhaustRerunResettableAssignedEdgeInfoCount = 0;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::findClosedWires(true) clears "info.wireInfo" / "info.wireInfo2" before
+        // assigning the rerun closed owner. These fields track the safe live-reset subset.
+        std::size_t repeatedSplitExhaustRerunLiveResetPrimaryEdgeInfoCount = 0;
+        std::size_t repeatedSplitExhaustRerunLiveResetSecondaryEdgeInfoCount = 0;
+        std::size_t repeatedSplitExhaustRerunLiveClosedWireInfoCount = 0;
+        std::size_t repeatedSplitExhaustRerunLiveAssignedEdgeInfoCount = 0;
+        std::size_t repeatedSplitExhaustRerunLiveClosedWireVertexCount = 0;
+        std::size_t repeatedSplitExhaustRerunLiveBranchSearchCandidateCount = 0;
+        std::size_t repeatedSplitExhaustRerunLiveBranchSearchInsideCandidateCount = 0;
+        std::size_t repeatedSplitExhaustRerunLiveBranchSearchOutsideCandidateCount = 0;
+        std::size_t repeatedSplitExhaustRerunLiveTransferWireInfoCount = 0;
+        std::size_t repeatedSplitExhaustRerunLiveTransferredOwnerEdgeInfoCount = 0;
+        std::size_t repeatedSplitExhaustRerunLiveDoneWireInfoCount = 0;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::buildClosedWire(), after rerun "findClosedWires(true); findTightBound()",
+        // starts the next while pass by scanning for consumed EdgeInfo removal. These fields record
+        // that next-pass removal boundary from live rerun owner state.
+        std::size_t repeatedSplitExhaustRerunRemovalScanCount = 0;
+        std::size_t repeatedSplitExhaustRerunRemovalEdgeInfoCount = 0;
+        std::size_t repeatedSplitExhaustRerunRemovalUnownedEdgeInfoCount = 0;
+        std::size_t repeatedSplitExhaustRerunRemovalSecondaryEdgeInfoCount = 0;
+        std::size_t repeatedSplitExhaustRerunRemovalPrimaryEdgeInfoCount = 0;
+        std::size_t repeatedSplitExhaustRerunLoopExitNoRemovalCount = 0;
+        std::size_t repeatedSplitExhaustRerunBranchSearchCandidateCount = 0;
+        std::size_t repeatedSplitExhaustRerunBranchSearchInsideCandidateCount = 0;
+        std::size_t repeatedSplitExhaustRerunBranchSearchOutsideCandidateCount = 0;
+        std::size_t repeatedSplitExhaustRerunNewWireSeedCandidateCount = 0;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::exhaustTightBoundUpdateEdge() resets purged "wireInfo"; ::buildClosedWire()
+        // then removes still-active unowned edges. cad-core clears the live primary owner only when
+        // that same consumed-edge removal is applied, so reset cannot leak an open export.
+        std::size_t tightBoundExhaustPrimaryResetEdgeInfoCount = 0;
     };
     std::size_t nextWireInfoId_ = 1;
     std::size_t nextSuperEdgeId_ = 1;
@@ -427,18 +691,27 @@ private:
         const WireInfo& info,
         const OwnerWireInfo& owner,
         const TightBoundBranchCandidate& candidate) const;
+    std::optional<TightBoundTransferPath> tightBoundTransferPathForExistingWireHit(
+        const WireInfo& info,
+        const OwnerWireInfo& owner,
+        const TightBoundBranchCandidate& candidate,
+        const TightBoundExistingWireSearchTrace& trace,
+        TightBoundExistingWirePathBlockReason* blockReason = nullptr) const;
     std::optional<std::size_t> ownerVertexIndex(const OwnerWireInfo& owner, const WireVertex& vertex) const;
     TightBoundExistingWireSearchTrace traceExistingWireSearchForCandidate(
         const WireInfo& info,
         const OwnerWireInfo& owner,
         const TightBoundBranchCandidate& candidate) const;
     bool isDoneOwner(const WireInfo& info, std::size_t ownerId) const;
-    std::vector<std::size_t> doneAdjacentOwnersAtEndpoint(const WireInfo& info,
-                                                          const EdgeInfo& edge,
-                                                          int endpointIndex) const;
     void recordExhaustOwnerVertex(WireInfo& info, const WireVertex& vertex, std::size_t ownerId);
+    ExhaustAdjacentSearchTrace traceExhaustAdjacentSearch(const WireInfo& info,
+                                                          const WireVertex& beginVertex,
+                                                          const WireVertex& adjacentVertex,
+                                                          std::size_t seedOwnerId) const;
     void recordExhaustAdjacentSecondaryOwners(WireInfo& info);
     void recordBuildClosedWireRemovalLifecycle(WireInfo& info);
+    void recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
+                                                  const std::vector<TopoDS_Face>& boundedFaces);
     void recordBranchSearchCandidatesForOwner(WireInfo& info,
                                               OwnerWireInfo& owner,
                                               const std::vector<TopoDS_Face>& boundedFaces);

@@ -955,6 +955,11 @@ nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& h
             {"source_edge_indices", entry.sourceEdgeIndices},
             {"source_lineage_from_splitter_history", entry.sourceLineageFromSplitterHistory},
             {"generated_open_export", entry.generatedOpenExport},
+            {"generated_open_export_reason", entry.generatedOpenExportReason},
+            {"generated_open_export_source_edge_info", entry.generatedOpenExportSourceEdgeInfo},
+            {"generated_open_export_source_edge_info_index", entry.generatedOpenExportSourceEdgeInfoIndex},
+            {"generated_open_export_source_edge_info_consumed",
+             entry.generatedOpenExportSourceEdgeInfoConsumed},
             {"purge_bridge", entry.purgeBridge},
         });
     }
@@ -973,6 +978,10 @@ nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& h
         {"wire_joiner_open_export_missing_source_lineage_edge_count",
          history.wireJoinerOpenExportMissingSourceLineageEdgeCount},
         {"wire_joiner_open_export_generated_edge_count", history.wireJoinerOpenExportGeneratedEdgeCount},
+        {"wire_joiner_open_export_generated_source_edge_info_count",
+         history.wireJoinerOpenExportGeneratedSourceEdgeInfoCount},
+        {"wire_joiner_open_export_generated_source_edge_info_consumed_count",
+         history.wireJoinerOpenExportGeneratedSourceEdgeInfoConsumedCount},
         {"wire_joiner_open_export_generated_missing_source_lineage_edge_count",
          history.wireJoinerOpenExportGeneratedMissingSourceLineageEdgeCount},
         {"wire_joiner_open_export_purge_bridge_edge_count",

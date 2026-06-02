@@ -154,6 +154,11 @@ struct SplitEdgesResult {
     WireJoinerHistorySummary history;
 };
 
+struct GeneratedOpenExportShapeResult {
+    TopoDS_Shape shape;
+    std::string reason;
+};
+
 void appendUniqueSourceIndex(std::vector<std::size_t>& indices, std::size_t sourceIndex)
 {
     if (std::find(indices.begin(), indices.end(), sourceIndex) == indices.end()) {
@@ -406,13 +411,30 @@ bool edgeMatchesAnySourceByEndpoints(const TopoDS_Edge& edge, const std::vector<
 }
 
 bool allEdgesShareOriginalSourceVertexByIdentity(const TopoDS_Wire& wire,
-                                                const std::vector<TopoDS_Edge>& sourceEdges)
+                                                 const std::vector<TopoDS_Edge>& sourceEdges)
 {
     if (sourceEdges.empty()) {
         return false;
     }
     for (const TopoDS_Edge& edge : wireEdges(wire)) {
         if (!edgeUsesOnlyOriginalSourceVerticesByIdentity(edge, sourceEdges)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool allEdgesHaveSharedOriginalSourceVertexByIdentity(const TopoDS_Wire& wire,
+                                                      const std::vector<TopoDS_Edge>& sourceEdges)
+{
+    if (sourceEdges.empty()) {
+        return false;
+    }
+    for (const TopoDS_Edge& edge : wireEdges(wire)) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::getOpenWires(), purges a child wire only when each edge finds at
+        // least one shared source vertex: "source.findSubShapesWithSharedVertex(...).empty()".
+        if (!edgeSharesOriginalSourceVertexByIdentity(edge, sourceEdges)) {
             return false;
         }
     }
@@ -852,7 +874,7 @@ std::optional<TopoDS_Shape> partialJunctionOpenExportShape(const TopoDS_Shape& b
 
 }  // namespace
 
-std::optional<TopoDS_Shape> generatedOpenExportShapeForSketchInternals(
+std::optional<GeneratedOpenExportShapeResult> generatedOpenExportShapeForSketchInternals(
     const TopoDS_Shape& boundedFaceShape,
     const std::vector<TopoDS_Edge>& openEdges,
     const std::vector<TopoDS_Wire>& closedWires,
@@ -918,7 +940,6 @@ void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
     historySummary_ = splitResult.history;
     const std::vector<TopoDS_Face> boundedFaces = boundedFaceShape ? facesForShape(*boundedFaceShape)
                                                                    : std::vector<TopoDS_Face>{};
-    const bool hasSplitBoundedRegions = boundedFaces.size() > 1U;
     const bool assignTightBoundOwners =
         splitProducedBoundedFaces || !openEdges || openEdges->empty();
     WireInfo finalInfo;
@@ -935,12 +956,11 @@ void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
         edgeInfo.splitFromInputEdge = !edgeMatchesAnySourceByEndpoints(record.edge, inputEdges);
         // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
         // ::WireJoinerP::getOpenWires(noOriginal=true) purges open wires still sharing source
-        // vertices. This temporary identity bridge is limited to unsplit open edges until the full
-        // WireJoinerP VertexInfo/sourceEdgeArray identity ledger is migrated.
-        const bool originalOpenInsideBoundedRegion =
-            !edgeInfo.splitFromInputEdge && pointInsideOrOnAnyFace(edgeInfo.mid, boundedFaces);
+        // vertices. This temporary bridge is now constrained to unsplit EdgeInfo entries that
+        // still share an original source vertex identity; bounded-face midpoint checks are not
+        // part of FreeCAD's noOriginal purge rule.
         edgeInfo.purgeAsOriginalOpenEdge =
-            !edgeInfo.splitFromInputEdge && (!hasSplitBoundedRegions || originalOpenInsideBoundedRegion);
+            !edgeInfo.splitFromInputEdge && (edgeInfo.sourceVertexIdentity[0] || edgeInfo.sourceVertexIdentity[1]);
         finalInfo.edges.push_back(edgeInfo);
     }
 
@@ -966,6 +986,7 @@ void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
     if (finalInfo.done) {
         recordExhaustTightBoundLifecycle(finalInfo);
         recordBuildClosedWireRemovalLifecycle(finalInfo);
+        recordRepeatedSplitExhaustRerunLifecycle(finalInfo, boundedFaces);
     }
 
     const bool hasOpenWireOutput = std::any_of(finalInfo.edges.begin(), finalInfo.edges.end(), [](const EdgeInfo& edgeInfo) {
@@ -977,19 +998,37 @@ void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
         // splitEdges()/buildClosedWire()/findTightBound()/exhaustTightBound(). cad-core records
         // these as generated final EdgeInfo export entries inside WireJoiner so getOpenWires()
         // still consumes the same EdgeInfo lifecycle.
-        const std::optional<TopoDS_Shape> generatedOpenExportShape = generatedOpenExportShapeForSketchInternals(
-            *boundedFaceShape,
-            *openEdges,
-            *closedWires,
-            splitProducedBoundedFaces,
-            hasOpenWireOutput);
-        if (generatedOpenExportShape && !generatedOpenExportShape->IsNull()) {
+        const std::optional<GeneratedOpenExportShapeResult> generatedOpenExportShape =
+            generatedOpenExportShapeForSketchInternals(
+                *boundedFaceShape,
+                *openEdges,
+                *closedWires,
+                splitProducedBoundedFaces,
+                hasOpenWireOutput);
+        if (generatedOpenExportShape && !generatedOpenExportShape->shape.IsNull()) {
+            const std::size_t sourceEdgeInfoCount = finalInfo.edges.size();
             std::size_t generatedEdgeCount = 0;
-            for (const TopoDS_Edge& edge : boundaryEdges(*generatedOpenExportShape)) {
+            for (const TopoDS_Edge& edge : boundaryEdges(generatedOpenExportShape->shape)) {
                 EdgeInfo edgeInfo;
                 initializeEdgeInfo(edgeInfo, edge);
                 edgeInfo.splitFromInputEdge = true;
                 edgeInfo.generatedOpenExportEdge = true;
+                edgeInfo.generatedOpenExportReason = generatedOpenExportShape->reason;
+                for (std::size_t sourceIndex = 0; sourceIndex < sourceEdgeInfoCount; ++sourceIndex) {
+                    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                    // ::WireJoinerP::build(), adds final EdgeInfo::wire() shapes into
+                    // openWireCompound. This records which pre-existing EdgeInfo a transitional
+                    // generated open-export copy mirrors; it is not sourceEdgeArray lineage.
+                    if (edgeEquivalentByGeometryAndEndpoints(edge, finalInfo.edges[sourceIndex].edge)) {
+                        edgeInfo.generatedOpenExportSourceEdgeInfo = true;
+                        edgeInfo.generatedOpenExportSourceEdgeInfoIndex = sourceIndex;
+                        const EdgeInfo& sourceEdgeInfo = finalInfo.edges[sourceIndex];
+                        const bool sourceExportsOpenEdge = sourceEdgeInfo.iteration == -3
+                            || (sourceEdgeInfo.wireInfo == 0U && sourceEdgeInfo.iteration >= 0);
+                        edgeInfo.generatedOpenExportSourceEdgeInfoConsumed = !sourceExportsOpenEdge;
+                        break;
+                    }
+                }
                 finalInfo.edges.push_back(edgeInfo);
                 ++generatedEdgeCount;
             }
@@ -1020,6 +1059,10 @@ void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
         entry.sourceEdgeIndices = edgeInfo.sourceEdgeIndices;
         entry.sourceLineageFromSplitterHistory = edgeInfo.sourceLineageFromSplitterHistory;
         entry.generatedOpenExport = edgeInfo.generatedOpenExportEdge;
+        entry.generatedOpenExportReason = edgeInfo.generatedOpenExportReason;
+        entry.generatedOpenExportSourceEdgeInfo = edgeInfo.generatedOpenExportSourceEdgeInfo;
+        entry.generatedOpenExportSourceEdgeInfoIndex = edgeInfo.generatedOpenExportSourceEdgeInfoIndex;
+        entry.generatedOpenExportSourceEdgeInfoConsumed = edgeInfo.generatedOpenExportSourceEdgeInfoConsumed;
         entry.purgeBridge = edgeInfo.purgeAsOriginalOpenEdge;
         historySummary_.openExportEntries.push_back(std::move(entry));
         if (edgeInfo.sourceEdgeIndices.empty()) {
@@ -1030,6 +1073,12 @@ void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
         }
         if (edgeInfo.generatedOpenExportEdge) {
             ++historySummary_.openExportGeneratedEdgeCount;
+            if (edgeInfo.generatedOpenExportSourceEdgeInfo) {
+                ++historySummary_.openExportGeneratedSourceEdgeInfoCount;
+            }
+            if (edgeInfo.generatedOpenExportSourceEdgeInfoConsumed) {
+                ++historySummary_.openExportGeneratedSourceEdgeInfoConsumedCount;
+            }
             if (edgeInfo.sourceEdgeIndices.empty()) {
                 ++historySummary_.openExportGeneratedMissingSourceLineageEdgeCount;
             }
@@ -1452,14 +1501,82 @@ void WireJoiner::rebuildOrderedVertices(WireInfo& info)
     info.done = false;
     info.splitWireCandidateCount = 0;
     info.ownerPropagationCandidateCount = 0;
+    info.ownerPropagationUnassignedCandidateCount = 0;
+    info.ownerPropagationOtherWireCandidateCount = 0;
+    info.ownerPropagationOtherWireLiveEdgeInfoCount = 0;
+    info.exhaustAdjacentSearchCount = 0;
+    info.exhaustAdjacentSearchHitCount = 0;
+    info.exhaustAdjacentSearchMissCount = 0;
+    info.exhaustAdjacentSearchStackFrameCount = 0;
+    info.exhaustAdjacentSearchVertexStackCount = 0;
+    info.exhaustAdjacentSearchEdgeSetVisitCount = 0;
+    info.exhaustAdjacentSearchBacktrackCount = 0;
+    info.exhaustAdjacentWireSetInsertCount = 0;
+    info.exhaustAdjacentWireSetEraseCount = 0;
+    info.exhaustAdjacentWireSetAbortCount = 0;
+    info.exhaustAdjacentWireInfo2AbortCount = 0;
+    info.repeatedSplitExhaustCycleCount = 0;
+    info.repeatedSplitExhaustRemovedEdgeInfoCount = 0;
+    info.repeatedSplitExhaustRemovedUnownedEdgeInfoCount = 0;
+    info.repeatedSplitExhaustRemovedSecondaryEdgeInfoCount = 0;
+    info.repeatedSplitExhaustRemovedPrimaryEdgeInfoCount = 0;
+    info.repeatedSplitExhaustRerunActiveEdgeInfoCount = 0;
+    info.repeatedSplitExhaustRerunOwnedActiveEdgeInfoCount = 0;
+    info.repeatedSplitExhaustRerunResetPrimaryEdgeInfoCount = 0;
+    info.repeatedSplitExhaustRerunResetSecondaryEdgeInfoCount = 0;
+    info.repeatedSplitExhaustRerunSkippedOpenLeafEdgeInfoCount = 0;
+    info.repeatedSplitExhaustRerunNoActiveSearchCount = 0;
+    info.repeatedSplitExhaustRerunClosedWireSearchCount = 0;
+    info.repeatedSplitExhaustRerunClosedWireMissCount = 0;
+    info.repeatedSplitExhaustRerunClosedWireInfoCount = 0;
+    info.repeatedSplitExhaustRerunClosedWireAssignedEdgeInfoCount = 0;
+    info.repeatedSplitExhaustRerunClosedWireVertexCount = 0;
+    info.repeatedSplitExhaustRerunResettableClosedWireInfoCount = 0;
+    info.repeatedSplitExhaustRerunResettableAssignedEdgeInfoCount = 0;
+    info.repeatedSplitExhaustRerunLiveResetPrimaryEdgeInfoCount = 0;
+    info.repeatedSplitExhaustRerunLiveResetSecondaryEdgeInfoCount = 0;
+    info.repeatedSplitExhaustRerunLiveClosedWireInfoCount = 0;
+    info.repeatedSplitExhaustRerunLiveAssignedEdgeInfoCount = 0;
+    info.repeatedSplitExhaustRerunLiveClosedWireVertexCount = 0;
+    info.repeatedSplitExhaustRerunLiveBranchSearchCandidateCount = 0;
+    info.repeatedSplitExhaustRerunLiveBranchSearchInsideCandidateCount = 0;
+    info.repeatedSplitExhaustRerunLiveBranchSearchOutsideCandidateCount = 0;
+    info.repeatedSplitExhaustRerunLiveTransferWireInfoCount = 0;
+    info.repeatedSplitExhaustRerunLiveTransferredOwnerEdgeInfoCount = 0;
+    info.repeatedSplitExhaustRerunLiveDoneWireInfoCount = 0;
+    info.repeatedSplitExhaustRerunRemovalScanCount = 0;
+    info.repeatedSplitExhaustRerunRemovalEdgeInfoCount = 0;
+    info.repeatedSplitExhaustRerunRemovalUnownedEdgeInfoCount = 0;
+    info.repeatedSplitExhaustRerunRemovalSecondaryEdgeInfoCount = 0;
+    info.repeatedSplitExhaustRerunRemovalPrimaryEdgeInfoCount = 0;
+    info.repeatedSplitExhaustRerunLoopExitNoRemovalCount = 0;
+    info.repeatedSplitExhaustRerunBranchSearchCandidateCount = 0;
+    info.repeatedSplitExhaustRerunBranchSearchInsideCandidateCount = 0;
+    info.repeatedSplitExhaustRerunBranchSearchOutsideCandidateCount = 0;
+    info.repeatedSplitExhaustRerunNewWireSeedCandidateCount = 0;
     for (OwnerWireInfo& owner : info.ownerWires) {
         owner.hasNewWireSeed = false;
         owner.hasSplitWireCandidate = false;
         owner.done = false;
+        owner.splitWireId = 0;
+        owner.purge = false;
+        owner.exhaustVisited = false;
+        owner.exhaustDone = false;
+        owner.exhaustDiscardedByPurge = false;
         owner.splitWireCandidateCount = 0;
         owner.branchSearchCandidateCount = 0;
         owner.branchSearchInsideCandidateCount = 0;
         owner.branchSearchOutsideCandidateCount = 0;
+        owner.tightBoundExistingWireSearchIdxVertexCount = 0;
+        owner.tightBoundExistingWireSearchStackPosCount = 0;
+        owner.tightBoundFullWireSetInsertCount = 0;
+        owner.tightBoundFullWireSetEraseCount = 0;
+        owner.tightBoundFullWireSetAbortCount = 0;
+        owner.tightBoundFullWireSetPurgeCandidateCount = 0;
+        owner.tightBoundFullWireSetBlockedTransferCount = 0;
+        owner.tightBoundFullWireSetAbortSearchCount = 0;
+        owner.tightBoundFullWireSetAbortResolvedByHitCount = 0;
+        owner.tightBoundFullWireSetAbortBlockedSearchCount = 0;
         owner.branchCandidates.clear();
         owner.transferWires.clear();
         for (WireVertex& vertex : owner.vertices) {
@@ -1766,6 +1883,22 @@ WireJoiner::TightBoundExistingWireSearchTrace WireJoiner::traceExistingWireSearc
     edgeSet[candidate.adjacentVertex.edgeIndex] = true;
     ++trace.edgeSetVisitCount;
 
+    std::vector<std::size_t> wireSet;
+    const EdgeInfo& seedEdge = info.edges[candidate.adjacentVertex.edgeIndex];
+    if (seedEdge.wireInfo != 0U) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::exhaustTightBoundWithAdjacent() seeds "wireSet.insert(next->wireInfo.get())"
+        // before calling _findClosedWires(); _findClosedWiresUpdateEdges() then inserts each
+        // current edge owner and erases it during backtracking.
+        wireSet.push_back(seedEdge.wireInfo);
+        ++trace.fullWireSetInsertCount;
+    }
+    const auto wireSetContains = [&](std::size_t ownerId) {
+        return ownerId != 0U && std::find(wireSet.begin(), wireSet.end(), ownerId) != wireSet.end();
+    };
+
+    std::vector<WireVertex> currentPath;
+    currentPath.push_back(candidate.adjacentVertex);
     std::function<bool(const WireVertex&, std::size_t)> visit = [&](const WireVertex& currentVertex,
                                                                     std::size_t depth) -> bool {
         if (currentVertex.edgeIndex >= info.edges.size() || depth > info.edges.size()) {
@@ -1793,11 +1926,24 @@ WireJoiner::TightBoundExistingWireSearchTrace WireJoiner::traceExistingWireSearc
                 continue;
             }
 
+            if (!wireSet.empty() && wireSetContains(next.wireInfo)) {
+                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                // ::WireJoinerP::_findClosedWiresUpdateStack(), "if (!wireSet.empty() &&
+                // wireSet.contains(info.wireInfo.get()))" aborts this branch and, when searching
+                // with an existing wireInfo, marks "wireInfo->purge = true". This remains a trace
+                // sidecar until full repeated split/exhaust is live.
+                ++trace.fullWireSetAbortCount;
+                ++trace.fullWireSetPurgeCandidateCount;
+                continue;
+            }
+
             if (const std::optional<std::size_t> ownerIndex = ownerVertexIndex(owner, adjacent)) {
                 if (*ownerIndex != 0U) {
                     trace.hit = true;
                     trace.idxVertex = static_cast<int>(*ownerIndex) - 1;
                     trace.stackPos = static_cast<int>(trace.stackFrameCount) - 1;
+                    trace.hitPath = currentPath;
+                    trace.hitPath.push_back(adjacent);
                     ++trace.vertexStackCount;
                     return true;
                 }
@@ -1821,9 +1967,21 @@ WireJoiner::TightBoundExistingWireSearchTrace WireJoiner::traceExistingWireSearc
 
             edgeSet[adjacent.edgeIndex] = true;
             ++trace.edgeSetVisitCount;
+            currentPath.push_back(adjacent);
+            bool insertedWireSetOwner = false;
+            if (!wireSet.empty() && next.wireInfo != 0U) {
+                wireSet.push_back(next.wireInfo);
+                insertedWireSetOwner = true;
+                ++trace.fullWireSetInsertCount;
+            }
             ++trace.vertexStackCount;
             if (visit(adjacent, depth + 1U)) {
                 return true;
+            }
+            currentPath.pop_back();
+            if (insertedWireSetOwner) {
+                wireSet.pop_back();
+                ++trace.fullWireSetEraseCount;
             }
             edgeSet[adjacent.edgeIndex] = false;
             ++trace.backtrackCount;
@@ -1960,6 +2118,73 @@ std::optional<WireJoiner::TightBoundTransferPath> WireJoiner::tightBoundTransfer
     return path;
 }
 
+std::optional<WireJoiner::TightBoundTransferPath> WireJoiner::tightBoundTransferPathForExistingWireHit(
+    const WireInfo& info,
+    const OwnerWireInfo& owner,
+    const TightBoundBranchCandidate& candidate,
+    const TightBoundExistingWireSearchTrace& trace,
+    TightBoundExistingWirePathBlockReason* blockReason) const
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::_findClosedWiresWithExisting() writes "idxVertex" and "stackPos" when the
+    // branch search reaches the existing "wireInfo"; ::findTightBoundSplitWire() then moves
+    // owner vertices from the current idxV up to idxEnd into "splitWire".
+    if (blockReason != nullptr) {
+        *blockReason = TightBoundExistingWirePathBlockReason::None;
+    }
+    if (!trace.hit || trace.idxVertex < 0 || trace.stackPos < 0 || trace.hitPath.empty()) {
+        return std::nullopt;
+    }
+    const auto ownerVertexIt = std::find_if(owner.vertices.begin(),
+                                            owner.vertices.end(),
+                                            [&](const WireVertex& vertex) {
+                                                return vertex.edgeIndex == candidate.ownerVertex.edgeIndex
+                                                    && vertex.start == candidate.ownerVertex.start;
+                                            });
+    if (ownerVertexIt == owner.vertices.end()) {
+        if (blockReason != nullptr) {
+            *blockReason = TightBoundExistingWirePathBlockReason::OwnerVertexMissing;
+        }
+        return std::nullopt;
+    }
+    const std::size_t ownerVertexIndex = static_cast<std::size_t>(
+        std::distance(owner.vertices.begin(), ownerVertexIt));
+    const std::size_t hitIndex = static_cast<std::size_t>(trace.idxVertex);
+    if (hitIndex >= owner.vertices.size() || ownerVertexIndex + 1U > hitIndex) {
+        if (blockReason != nullptr) {
+            *blockReason = TightBoundExistingWirePathBlockReason::OrderBlocked;
+        }
+        return std::nullopt;
+    }
+
+    TightBoundTransferPath path;
+    path.transferVertices.push_back(owner.vertices.front());
+    path.transferVertices.insert(path.transferVertices.end(), trace.hitPath.begin(), trace.hitPath.end());
+    for (std::size_t index = hitIndex + 1U; index < owner.vertices.size(); ++index) {
+        path.transferVertices.push_back(owner.vertices[index]);
+    }
+    if (wireFromVertices(info, path.transferVertices).IsNull()) {
+        if (blockReason != nullptr) {
+            *blockReason = TightBoundExistingWirePathBlockReason::WireBuildBlocked;
+        }
+        return std::nullopt;
+    }
+
+    for (std::size_t index = ownerVertexIndex + 1U; index < hitIndex; ++index) {
+        path.splitOwnerVertices.push_back(owner.vertices[index]);
+    }
+    path.splitWireVertices = path.splitOwnerVertices;
+    for (auto it = trace.hitPath.rbegin(); it != trace.hitPath.rend(); ++it) {
+        WireVertex reversed = *it;
+        reversed.start = !reversed.start;
+        path.splitWireVertices.push_back(reversed);
+    }
+    path.existingWireHit = true;
+    path.existingWireIdxVertex = trace.idxVertex;
+    path.existingWireStackPos = trace.stackPos;
+    return path;
+}
+
 bool WireJoiner::isDoneOwner(const WireInfo& info, std::size_t ownerId) const
 {
     if (ownerId == 0U) {
@@ -1967,7 +2192,10 @@ bool WireJoiner::isDoneOwner(const WireInfo& info, std::size_t ownerId) const
     }
     for (const OwnerWireInfo& owner : info.ownerWires) {
         if (owner.id == ownerId) {
-            return owner.done;
+            return owner.done && !owner.exhaustDiscardedByPurge;
+        }
+        if (owner.splitWireId != 0U && owner.splitWireId == ownerId) {
+            return owner.done && !owner.exhaustDiscardedByPurge;
         }
         for (const TightBoundTransferWire& transfer : owner.transferWires) {
             if (transfer.id == ownerId) {
@@ -1976,35 +2204,6 @@ bool WireJoiner::isDoneOwner(const WireInfo& info, std::size_t ownerId) const
         }
     }
     return info.done && ownerId == info.id;
-}
-
-std::vector<std::size_t> WireJoiner::doneAdjacentOwnersAtEndpoint(const WireInfo& info,
-                                                                  const EdgeInfo& edge,
-                                                                  int endpointIndex) const
-{
-    std::vector<std::size_t> owners;
-    if (endpointIndex < 0 || endpointIndex > 1 || edge.iStart[endpointIndex] < 0 || edge.iEnd[endpointIndex] < 0) {
-        return owners;
-    }
-
-    for (int adjacentIndex = edge.iStart[endpointIndex]; adjacentIndex < edge.iEnd[endpointIndex]; ++adjacentIndex) {
-        if (adjacentIndex < 0 || static_cast<std::size_t>(adjacentIndex) >= info.adjacentVertices.size()) {
-            continue;
-        }
-        const WireVertex& adjacent = info.adjacentVertices[static_cast<std::size_t>(adjacentIndex)];
-        if (adjacent.edgeIndex >= info.edges.size()) {
-            continue;
-        }
-        const EdgeInfo& candidate = info.edges[adjacent.edgeIndex];
-        if (&candidate == &edge || candidate.edge.IsNull() || candidate.iteration < 0 || candidate.wireInfo == 0U
-            || candidate.wireInfo == edge.wireInfo || !isDoneOwner(info, candidate.wireInfo)) {
-            continue;
-        }
-        if (std::find(owners.begin(), owners.end(), candidate.wireInfo) == owners.end()) {
-            owners.push_back(candidate.wireInfo);
-        }
-    }
-    return owners;
 }
 
 void WireJoiner::recordExhaustOwnerVertex(WireInfo& info, const WireVertex& vertex, std::size_t ownerId)
@@ -2037,6 +2236,106 @@ void WireJoiner::recordExhaustOwnerVertex(WireInfo& info, const WireVertex& vert
     edge.exhaustDoneSecondary = true;
 }
 
+WireJoiner::ExhaustAdjacentSearchTrace WireJoiner::traceExhaustAdjacentSearch(
+    const WireInfo& info,
+    const WireVertex& beginVertex,
+    const WireVertex& adjacentVertex,
+    std::size_t seedOwnerId) const
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::exhaustTightBoundWithAdjacent(), seeds "edgeSet.insert(next)" and
+    // "wireSet.insert(next->wireInfo.get())", then calls _findClosedWires(beginVertex,
+    // currentVertex). ::_findClosedWiresUpdateStack() aborts branches when "wireSet.contains(...)"
+    // or "currentInfo->wireInfo2" is true.
+    ExhaustAdjacentSearchTrace trace;
+    if (beginVertex.edgeIndex >= info.edges.size() || adjacentVertex.edgeIndex >= info.edges.size()) {
+        return trace;
+    }
+
+    const gp_Pnt target = vertexPoint(info, beginVertex);
+    std::vector<bool> edgeSet(info.edges.size(), false);
+    edgeSet[adjacentVertex.edgeIndex] = true;
+    ++trace.edgeSetVisitCount;
+
+    std::vector<std::size_t> wireSet;
+    if (seedOwnerId != 0U) {
+        wireSet.push_back(seedOwnerId);
+        ++trace.wireSetInsertCount;
+    }
+    const auto wireSetContains = [&](std::size_t ownerId) {
+        return ownerId != 0U && std::find(wireSet.begin(), wireSet.end(), ownerId) != wireSet.end();
+    };
+
+    std::function<bool(const WireVertex&, std::size_t)> visit = [&](const WireVertex& currentVertex,
+                                                                    std::size_t depth) -> bool {
+        if (currentVertex.edgeIndex >= info.edges.size() || depth > info.edges.size()) {
+            return false;
+        }
+        if (samePoint(vertexOtherPoint(info, currentVertex), target)) {
+            trace.hit = true;
+            return true;
+        }
+
+        const EdgeInfo& current = info.edges[currentVertex.edgeIndex];
+        const int endpointIndex = currentVertex.start ? 1 : 0;
+        if (endpointIndex < 0 || endpointIndex > 1 || current.iStart[endpointIndex] < 0
+            || current.iEnd[endpointIndex] < current.iStart[endpointIndex]) {
+            return false;
+        }
+
+        ++trace.stackFrameCount;
+        for (int adjacentIndex = current.iStart[endpointIndex];
+             adjacentIndex < current.iEnd[endpointIndex];
+             ++adjacentIndex) {
+            if (adjacentIndex < 0 || static_cast<std::size_t>(adjacentIndex) >= info.adjacentVertices.size()) {
+                continue;
+            }
+            const WireVertex& nextVertex = info.adjacentVertices[static_cast<std::size_t>(adjacentIndex)];
+            if (nextVertex.edgeIndex >= info.edges.size() || nextVertex.edgeIndex == currentVertex.edgeIndex) {
+                continue;
+            }
+            const EdgeInfo& next = info.edges[nextVertex.edgeIndex];
+            if (next.edge.IsNull() || next.iteration < 0) {
+                continue;
+            }
+            if (edgeSet[nextVertex.edgeIndex]) {
+                continue;
+            }
+            if (!wireSet.empty() && wireSetContains(next.wireInfo)) {
+                ++trace.wireSetAbortCount;
+                continue;
+            }
+            if (current.wireInfo2 != 0U) {
+                ++trace.wireInfo2AbortCount;
+                continue;
+            }
+
+            edgeSet[nextVertex.edgeIndex] = true;
+            ++trace.edgeSetVisitCount;
+            bool insertedWireSetOwner = false;
+            if (!wireSet.empty() && next.wireInfo != 0U) {
+                wireSet.push_back(next.wireInfo);
+                insertedWireSetOwner = true;
+                ++trace.wireSetInsertCount;
+            }
+            ++trace.vertexStackCount;
+            if (visit(nextVertex, depth + 1U)) {
+                return true;
+            }
+            if (insertedWireSetOwner) {
+                wireSet.pop_back();
+                ++trace.wireSetEraseCount;
+            }
+            edgeSet[nextVertex.edgeIndex] = false;
+            ++trace.backtrackCount;
+        }
+        return false;
+    };
+
+    visit(adjacentVertex, 0U);
+    return trace;
+}
+
 void WireJoiner::recordExhaustAdjacentSecondaryOwners(WireInfo& info)
 {
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
@@ -2055,7 +2354,6 @@ void WireJoiner::recordExhaustAdjacentSecondaryOwners(WireInfo& info)
                 continue;
             }
             const WireVertex beginVertex{edgeIndex, endpointIndex == 0, 0U};
-            const gp_Pnt target = vertexPoint(info, beginVertex);
             for (int adjacentIndex = edge.iStart[endpointIndex];
                  adjacentIndex < edge.iEnd[endpointIndex];
                  ++adjacentIndex) {
@@ -2072,15 +2370,22 @@ void WireJoiner::recordExhaustAdjacentSecondaryOwners(WireInfo& info)
                     || !isDoneOwner(info, candidate.wireInfo)) {
                     continue;
                 }
-                std::vector<bool> usedEdges(info.edges.size(), false);
-                usedEdges[edgeIndex] = true;
-                usedEdges[adjacent.edgeIndex] = true;
-                std::vector<WireVertex> branchPath;
-                const gp_Pnt current = vertexOtherPoint(info, adjacent);
-                if (!findBranchPathToPointSkippingOwner(
-                        info, edge.wireInfo, current, target, usedEdges, branchPath)) {
+                const ExhaustAdjacentSearchTrace trace =
+                    traceExhaustAdjacentSearch(info, beginVertex, adjacent, candidate.wireInfo);
+                ++info.exhaustAdjacentSearchCount;
+                info.exhaustAdjacentSearchStackFrameCount += trace.stackFrameCount;
+                info.exhaustAdjacentSearchVertexStackCount += trace.vertexStackCount;
+                info.exhaustAdjacentSearchEdgeSetVisitCount += trace.edgeSetVisitCount;
+                info.exhaustAdjacentSearchBacktrackCount += trace.backtrackCount;
+                info.exhaustAdjacentWireSetInsertCount += trace.wireSetInsertCount;
+                info.exhaustAdjacentWireSetEraseCount += trace.wireSetEraseCount;
+                info.exhaustAdjacentWireSetAbortCount += trace.wireSetAbortCount;
+                info.exhaustAdjacentWireInfo2AbortCount += trace.wireInfo2AbortCount;
+                if (!trace.hit) {
+                    ++info.exhaustAdjacentSearchMissCount;
                     continue;
                 }
+                ++info.exhaustAdjacentSearchHitCount;
                 edge.wireInfo2 = candidate.wireInfo;
                 edge.exhaustSecondaryOwner = true;
                 edge.exhaustSharedOwner = true;
@@ -2088,22 +2393,6 @@ void WireJoiner::recordExhaustAdjacentSecondaryOwners(WireInfo& info)
                 edge.exhaustSearchCandidate = true;
                 break;
             }
-        }
-        if (edge.wireInfo2 != 0U) {
-            continue;
-        }
-        const std::vector<std::size_t> startOwners = doneAdjacentOwnersAtEndpoint(info, edge, 0);
-        const std::vector<std::size_t> endOwners = doneAdjacentOwnersAtEndpoint(info, edge, 1);
-        for (std::size_t ownerId : startOwners) {
-            if (std::find(endOwners.begin(), endOwners.end(), ownerId) == endOwners.end()) {
-                continue;
-            }
-            edge.wireInfo2 = ownerId;
-            edge.exhaustSecondaryOwner = true;
-            edge.exhaustSharedOwner = true;
-            edge.exhaustDoneSecondary = true;
-            edge.exhaustSearchCandidate = true;
-            break;
         }
     }
 }
@@ -2117,12 +2406,28 @@ void WireJoiner::recordExhaustTightBoundLifecycle(WireInfo& info)
     // exhaustTightBoundUpdateWire() to search for the second tight-bound owner. This keeps
     // those request-local phases explicit before cad-core replaces the bounded classifier.
     if (!info.ownerWires.empty()) {
-        for (const OwnerWireInfo& owner : info.ownerWires) {
+        for (OwnerWireInfo& owner : info.ownerWires) {
             if (owner.done) {
+                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                // ::WireJoinerP::exhaustTightBoundUpdateEdge() consumes "wireInfo->purge"
+                // after scanning all vertices: "wireInfo.reset()" for purge, otherwise
+                // "wireInfo->done = true". cad-core now suppresses the discarded owner from
+                // done2 seed/search/removal while leaving the primary EdgeInfo owner intact
+                // until full repeated split/exhaust can replace the generated result-wire bridge.
+                owner.exhaustVisited = true;
                 const std::vector<WireVertex>& ownerVertices =
                     owner.splitOwnerVertices.empty() ? owner.vertices : owner.splitOwnerVertices;
+                const std::size_t exhaustOwnerId = owner.splitWireId == 0U ? owner.id : owner.splitWireId;
+                if (owner.purge) {
+                    owner.exhaustDiscardedByPurge = true;
+                    owner.exhaustDone = false;
+                    continue;
+                }
+                else {
+                    owner.exhaustDone = true;
+                }
                 for (const WireVertex& vertex : ownerVertices) {
-                    recordExhaustOwnerVertex(info, vertex, owner.id);
+                    recordExhaustOwnerVertex(info, vertex, exhaustOwnerId);
                 }
             }
             for (const TightBoundTransferWire& transfer : owner.transferWires) {
@@ -2168,11 +2473,17 @@ void WireJoiner::recordBuildClosedWireRemovalLifecycle(WireInfo& info)
     std::vector<int> counter(info.edges.size(), 0);
     std::vector<std::size_t> countedOwners;
     std::size_t removedCount = 0;
+    std::size_t removedUnownedCount = 0;
+    std::size_t removedSecondaryCount = 0;
+    std::size_t removedPrimaryCount = 0;
 
     const auto ownerVertices = [&](std::size_t ownerId) -> const std::vector<WireVertex>* {
         for (const OwnerWireInfo& owner : info.ownerWires) {
             if (owner.id == ownerId) {
-                return owner.splitOwnerVertices.empty() ? &owner.vertices : &owner.splitOwnerVertices;
+                return owner.splitWireId == 0U ? &owner.vertices : nullptr;
+            }
+            if (owner.splitWireId == ownerId) {
+                return &owner.splitOwnerVertices;
             }
             for (const TightBoundTransferWire& transfer : owner.transferWires) {
                 if (transfer.id == ownerId) {
@@ -2185,7 +2496,19 @@ void WireJoiner::recordBuildClosedWireRemovalLifecycle(WireInfo& info)
     const auto ownerAlreadyCounted = [&](std::size_t ownerId) {
         return std::find(countedOwners.begin(), countedOwners.end(), ownerId) != countedOwners.end();
     };
-    const auto countOwner = [&](std::size_t ownerId) {
+    const auto isDiscardedPrimaryOwner = [&](std::size_t ownerId) {
+        if (ownerId == 0U) {
+            return false;
+        }
+        for (const OwnerWireInfo& owner : info.ownerWires) {
+            if ((owner.id == ownerId || (owner.splitWireId != 0U && owner.splitWireId == ownerId))
+                && owner.exhaustDiscardedByPurge) {
+                return true;
+            }
+        }
+        return false;
+    };
+    const auto countOwner = [&](std::size_t ownerId, bool secondaryOwner) {
         if (ownerId == 0U || ownerAlreadyCounted(ownerId) || !isDoneOwner(info, ownerId)) {
             return;
         }
@@ -2205,6 +2528,12 @@ void WireJoiner::recordBuildClosedWireRemovalLifecycle(WireInfo& info)
             if (++counter[vertex.edgeIndex] == 2 && edge.iteration >= 0) {
                 edge.iteration = -1;
                 ++removedCount;
+                if (secondaryOwner) {
+                    ++removedSecondaryCount;
+                }
+                else {
+                    ++removedPrimaryCount;
+                }
             }
         }
     };
@@ -2218,17 +2547,365 @@ void WireJoiner::recordBuildClosedWireRemovalLifecycle(WireInfo& info)
         }
         if (!isDoneOwner(info, edge.wireInfo)) {
             if (edge.iteration >= 0) {
+                const bool resetDiscardedPrimaryOwner = isDiscardedPrimaryOwner(edge.wireInfo);
                 edge.iteration = -1;
                 ++removedCount;
+                ++removedUnownedCount;
+                if (resetDiscardedPrimaryOwner) {
+                    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                    // ::WireJoinerP::exhaustTightBoundUpdateEdge(), "wireInfo.reset()" for a purged
+                    // owner; ::buildClosedWire() immediately removes still-active unowned edges with
+                    // "info.iteration = -1". Apply both transitions together so the reset does not
+                    // create a transient openWireCompound export.
+                    edge.wireInfo = 0U;
+                    ++info.tightBoundExhaustPrimaryResetEdgeInfoCount;
+                }
             }
             continue;
         }
-        countOwner(edge.wireInfo2);
-        countOwner(edge.wireInfo);
+        countOwner(edge.wireInfo2, true);
+        countOwner(edge.wireInfo, false);
     }
 
     historySummary_.deletedHistoryCount += removedCount;
     historySummary_.splitterHistory = historySummary_.splitterHistory || removedCount > 0U;
+    if (removedCount > 0U) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::buildClosedWire(), after removing consumed edges, sets "done = false"
+        // and immediately repeats "findClosedWires(true); findTightBound();" inside the loop.
+        // This records the pending repeated split/exhaust lifecycle without changing current
+        // openWireCompound/getOpenWires output.
+        ++info.repeatedSplitExhaustCycleCount;
+        info.repeatedSplitExhaustRemovedEdgeInfoCount += removedCount;
+        info.repeatedSplitExhaustRemovedUnownedEdgeInfoCount += removedUnownedCount;
+        info.repeatedSplitExhaustRemovedSecondaryEdgeInfoCount += removedSecondaryCount;
+        info.repeatedSplitExhaustRemovedPrimaryEdgeInfoCount += removedPrimaryCount;
+    }
+}
+
+void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
+                                                          const std::vector<TopoDS_Face>& boundedFaces)
+{
+    if (info.repeatedSplitExhaustCycleCount == 0U) {
+        return;
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::buildClosedWire(), after consumed edges are removed, immediately runs
+    // "findClosedWires(true); findTightBound();" again. ::findClosedWires(true) first clears
+    // "info.wireInfo" and "info.wireInfo2" for every EdgeInfo, then rebuilds owners from the
+    // current "iteration" state. cad-core records that reset/rebuild on a temporary WireInfo copy
+    // so the M1 ledger can prove the next search boundary without changing openWireCompound/getOpenWires
+    // output before generated result-wire identity is migrated.
+    WireInfo rerunInfo = info;
+    const std::size_t existingOwnerCount = rerunInfo.ownerWires.size();
+    const std::size_t savedNextWireInfoId = nextWireInfoId_;
+    const int nextIteration2 = nextIteration2_;
+    const bool hasGeneratedOpenExportEdge =
+        std::any_of(info.edges.begin(), info.edges.end(), [](const EdgeInfo& edge) {
+            return edge.generatedOpenExportEdge;
+        });
+    std::size_t assignedEdges = 0;
+    for (EdgeInfo& edge : rerunInfo.edges) {
+        if (edge.wireInfo != 0U) {
+            ++info.repeatedSplitExhaustRerunResetPrimaryEdgeInfoCount;
+            edge.wireInfo = 0U;
+        }
+        if (edge.wireInfo2 != 0U) {
+            ++info.repeatedSplitExhaustRerunResetSecondaryEdgeInfoCount;
+            edge.wireInfo2 = 0U;
+        }
+    }
+    for (std::size_t edgeIndex = 0; edgeIndex < rerunInfo.edges.size(); ++edgeIndex) {
+        EdgeInfo& beginInfo = rerunInfo.edges[edgeIndex];
+        if (beginInfo.edge.IsNull()) {
+            continue;
+        }
+        if (beginInfo.iteration == -3) {
+            ++info.repeatedSplitExhaustRerunSkippedOpenLeafEdgeInfoCount;
+            continue;
+        }
+        if (beginInfo.iteration < 0) {
+            continue;
+        }
+        ++info.repeatedSplitExhaustRerunActiveEdgeInfoCount;
+        const bool wasOwnedActive =
+            edgeIndex < info.edges.size() && info.edges[edgeIndex].wireInfo != 0U;
+        if (wasOwnedActive) {
+            ++info.repeatedSplitExhaustRerunOwnedActiveEdgeInfoCount;
+        }
+        if (beginInfo.wireInfo != 0U) {
+            continue;
+        }
+        ++info.repeatedSplitExhaustRerunClosedWireSearchCount;
+        const std::optional<ClosedWireSearchResult> search = findClosedWirePath(rerunInfo, edgeIndex);
+        if (!search) {
+            ++info.repeatedSplitExhaustRerunClosedWireMissCount;
+            continue;
+        }
+
+        const std::size_t owner = nextWireInfoId_++;
+        OwnerWireInfo ownerInfo;
+        ownerInfo.id = owner;
+        ownerInfo.vertices = search->vertices;
+        ownerInfo.wire = wireFromVertices(rerunInfo, ownerInfo.vertices);
+        ownerInfo.closedWireSearchStackFrameCount = search->stackFrameCount;
+        ownerInfo.closedWireSearchVertexStackCount = search->vertexStackCount;
+        ownerInfo.closedWireSearchEdgeSetVisitCount = search->edgeSetVisitCount;
+        ownerInfo.closedWireSearchBacktrackCount = search->backtrackCount;
+        ownerInfo.closedWireSearchIntersectSkipCount = search->intersectSkipCount;
+        for (const WireVertex& vertex : search->vertices) {
+            if (vertex.edgeIndex >= rerunInfo.edges.size()) {
+                continue;
+            }
+            EdgeInfo& edgeInfo = rerunInfo.edges[vertex.edgeIndex];
+            if (edgeInfo.iteration < 0 || edgeInfo.wireInfo != 0U) {
+                continue;
+            }
+            edgeInfo.wireInfo = owner;
+            edgeInfo.closedWireOwner = true;
+            ++assignedEdges;
+        }
+        rerunInfo.ownerWires.push_back(std::move(ownerInfo));
+    }
+    if (info.repeatedSplitExhaustRerunActiveEdgeInfoCount == 0U) {
+        ++info.repeatedSplitExhaustRerunNoActiveSearchCount;
+    }
+    nextWireInfoId_ = savedNextWireInfoId;
+    const std::size_t newOwnerCount = rerunInfo.ownerWires.size() - existingOwnerCount;
+    info.repeatedSplitExhaustRerunClosedWireInfoCount += newOwnerCount;
+    info.repeatedSplitExhaustRerunClosedWireAssignedEdgeInfoCount += assignedEdges;
+
+    const auto canApplyLiveRerunOwner = [&](const OwnerWireInfo& owner) {
+        if (owner.vertices.empty() || owner.wire.IsNull()) {
+            return false;
+        }
+        for (const WireVertex& vertex : owner.vertices) {
+            if (vertex.edgeIndex >= info.edges.size()) {
+                return false;
+            }
+            const EdgeInfo& edge = info.edges[vertex.edgeIndex];
+            if (edge.iteration < 0 || edge.wireInfo != 0U) {
+                return false;
+            }
+        }
+        return true;
+    };
+    const auto resettableRerunOwnerAssignedEdgeCount = [&](const OwnerWireInfo& owner) -> std::size_t {
+        if (owner.vertices.empty() || owner.wire.IsNull()) {
+            return 0U;
+        }
+        bool needsPrimaryReset = false;
+        std::vector<std::size_t> assignedEdgeIndices;
+        for (const WireVertex& vertex : owner.vertices) {
+            if (vertex.edgeIndex >= info.edges.size()) {
+                return 0U;
+            }
+            const EdgeInfo& edge = info.edges[vertex.edgeIndex];
+            if (edge.iteration < 0) {
+                return 0U;
+            }
+            needsPrimaryReset = needsPrimaryReset || edge.wireInfo != 0U;
+            if (std::find(assignedEdgeIndices.begin(), assignedEdgeIndices.end(), vertex.edgeIndex)
+                == assignedEdgeIndices.end()) {
+                assignedEdgeIndices.push_back(vertex.edgeIndex);
+            }
+        }
+        return needsPrimaryReset ? assignedEdgeIndices.size() : 0U;
+    };
+
+    for (std::size_t ownerIndex = existingOwnerCount; ownerIndex < rerunInfo.ownerWires.size(); ++ownerIndex) {
+        OwnerWireInfo& owner = rerunInfo.ownerWires[ownerIndex];
+        info.repeatedSplitExhaustRerunClosedWireVertexCount += owner.vertices.size();
+        recordBranchSearchCandidatesForOwner(rerunInfo, owner, boundedFaces);
+        info.repeatedSplitExhaustRerunBranchSearchCandidateCount += owner.branchSearchCandidateCount;
+        info.repeatedSplitExhaustRerunBranchSearchInsideCandidateCount +=
+            owner.branchSearchInsideCandidateCount;
+        info.repeatedSplitExhaustRerunBranchSearchOutsideCandidateCount +=
+            owner.branchSearchOutsideCandidateCount;
+        if (owner.hasNewWireSeed) {
+            info.repeatedSplitExhaustRerunNewWireSeedCandidateCount +=
+                owner.branchSearchInsideCandidateCount;
+        }
+
+        const std::size_t resettableAssignedEdges = resettableRerunOwnerAssignedEdgeCount(owner);
+        if (resettableAssignedEdges > 0U) {
+            ++info.repeatedSplitExhaustRerunResettableClosedWireInfoCount;
+            info.repeatedSplitExhaustRerunResettableAssignedEdgeInfoCount += resettableAssignedEdges;
+        }
+        const bool canApplyWithoutReset = canApplyLiveRerunOwner(owner);
+        const bool canApplyWithLiveReset = !canApplyWithoutReset && resettableAssignedEdges > 0U
+            && (owner.branchSearchCandidateCount == 0U || !hasGeneratedOpenExportEdge);
+        if (!canApplyWithoutReset && !canApplyWithLiveReset) {
+            continue;
+        }
+
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::buildClosedWire(), after marking consumed edges "iteration = -1",
+        // immediately repeats "findClosedWires(true); findTightBound()". If the rerun finds a
+        // closed WireInfo whose EdgeInfo entries are still active and unowned, or can be rebuilt by
+        // the FreeCAD reset-before-rerun path without generated open-export identity, cad-core writes
+        // that owner back to the live EdgeInfo ledger. Generated/open-export identity cases still
+        // remain outside this path.
+        OwnerWireInfo liveOwner;
+        liveOwner.id = nextWireInfoId_++;
+        liveOwner.vertices = owner.vertices;
+        liveOwner.wire = owner.wire;
+        liveOwner.closedWireSearchStackFrameCount = owner.closedWireSearchStackFrameCount;
+        liveOwner.closedWireSearchVertexStackCount = owner.closedWireSearchVertexStackCount;
+        liveOwner.closedWireSearchEdgeSetVisitCount = owner.closedWireSearchEdgeSetVisitCount;
+        liveOwner.closedWireSearchBacktrackCount = owner.closedWireSearchBacktrackCount;
+        liveOwner.closedWireSearchIntersectSkipCount = owner.closedWireSearchIntersectSkipCount;
+
+        std::size_t liveAssignedEdges = 0;
+        std::vector<std::size_t> liveResetPrimaryEdgeIndices;
+        std::vector<std::size_t> liveResetSecondaryEdgeIndices;
+        for (const WireVertex& vertex : liveOwner.vertices) {
+            EdgeInfo& edge = info.edges[vertex.edgeIndex];
+            if (canApplyWithLiveReset && edge.wireInfo != 0U
+                && std::find(liveResetPrimaryEdgeIndices.begin(),
+                             liveResetPrimaryEdgeIndices.end(),
+                             vertex.edgeIndex)
+                    == liveResetPrimaryEdgeIndices.end()) {
+                liveResetPrimaryEdgeIndices.push_back(vertex.edgeIndex);
+                ++info.repeatedSplitExhaustRerunLiveResetPrimaryEdgeInfoCount;
+            }
+            if (canApplyWithLiveReset && edge.wireInfo2 != 0U
+                && std::find(liveResetSecondaryEdgeIndices.begin(),
+                             liveResetSecondaryEdgeIndices.end(),
+                             vertex.edgeIndex)
+                    == liveResetSecondaryEdgeIndices.end()) {
+                liveResetSecondaryEdgeIndices.push_back(vertex.edgeIndex);
+                ++info.repeatedSplitExhaustRerunLiveResetSecondaryEdgeInfoCount;
+                edge.wireInfo2 = 0U;
+            }
+            edge.wireInfo = liveOwner.id;
+            edge.closedWireOwner = true;
+            ++liveAssignedEdges;
+        }
+        info.repeatedSplitExhaustRerunLiveClosedWireVertexCount += liveOwner.vertices.size();
+        info.repeatedSplitExhaustRerunLiveAssignedEdgeInfoCount += liveAssignedEdges;
+        ++info.repeatedSplitExhaustRerunLiveClosedWireInfoCount;
+        info.ownerWires.push_back(std::move(liveOwner));
+        OwnerWireInfo& insertedOwner = info.ownerWires.back();
+        recordBranchSearchCandidatesForOwner(info, insertedOwner, boundedFaces);
+        info.repeatedSplitExhaustRerunLiveBranchSearchCandidateCount +=
+            insertedOwner.branchSearchCandidateCount;
+        info.repeatedSplitExhaustRerunLiveBranchSearchInsideCandidateCount +=
+            insertedOwner.branchSearchInsideCandidateCount;
+        info.repeatedSplitExhaustRerunLiveBranchSearchOutsideCandidateCount +=
+            insertedOwner.branchSearchOutsideCandidateCount;
+
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::findTightBound(), after a rerun-created WireInfo is found, checks adjacent
+        // branch candidates and either creates a new transfer WireInfo or calls
+        // ::findTightBoundUpdateVertices() to mark the current WireInfo done. This is limited to the
+        // live rerun owner; the next buildClosedWire() removal pass is tracked separately below.
+        const bool transferRecorded =
+            insertedOwner.branchSearchInsideCandidateCount > 0U
+            && recordTightBoundTransferWire(info, insertedOwner);
+        if (transferRecorded) {
+            ++info.repeatedSplitExhaustRerunLiveTransferWireInfoCount;
+            const TightBoundTransferWire& transfer = insertedOwner.transferWires.back();
+            info.repeatedSplitExhaustRerunLiveTransferredOwnerEdgeInfoCount +=
+                transfer.transferredOwnerEdgeCount;
+            insertedOwner.hasSplitWireCandidate = true;
+            insertedOwner.splitWireCandidateCount = 1;
+            info.hasSplitWireCandidate = true;
+            ++info.splitWireCandidateCount;
+        }
+        else {
+            insertedOwner.done = true;
+            info.done = true;
+            ++info.repeatedSplitExhaustRerunLiveDoneWireInfoCount;
+        }
+    }
+    nextIteration2_ = nextIteration2;
+
+    if (info.repeatedSplitExhaustRerunLiveClosedWireInfoCount > 0U) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::buildClosedWire(), after the loop-tail
+        // "findClosedWires(true); findTightBound()", the next while pass rebuilds a fresh
+        // "counter" and removes only EdgeInfo entries whose done primary/secondary owner vertices
+        // make "++counter[vertex.edgeInfo()] == 2"; if no edge is removed the loop exits. This
+        // records that next-pass boundary from live rerun owner state without switching M2 output.
+        ++info.repeatedSplitExhaustRerunRemovalScanCount;
+        std::vector<int> counter(info.edges.size(), 0);
+        std::vector<std::size_t> countedOwners;
+        std::size_t removalCount = 0;
+        std::size_t unownedRemovalCount = 0;
+        std::size_t secondaryRemovalCount = 0;
+        std::size_t primaryRemovalCount = 0;
+
+        const auto ownerVertices = [&](std::size_t ownerId) -> const std::vector<WireVertex>* {
+            for (const OwnerWireInfo& owner : info.ownerWires) {
+                if (owner.id == ownerId) {
+                    return owner.splitWireId == 0U ? &owner.vertices : nullptr;
+                }
+                if (owner.splitWireId != 0U && owner.splitWireId == ownerId) {
+                    return &owner.splitOwnerVertices;
+                }
+                for (const TightBoundTransferWire& transfer : owner.transferWires) {
+                    if (transfer.id == ownerId) {
+                        return &transfer.vertices;
+                    }
+                }
+            }
+            return nullptr;
+        };
+        const auto ownerAlreadyCounted = [&](std::size_t ownerId) {
+            return std::find(countedOwners.begin(), countedOwners.end(), ownerId) != countedOwners.end();
+        };
+        const auto countOwner = [&](std::size_t ownerId, bool secondaryOwner) {
+            if (ownerId == 0U || ownerAlreadyCounted(ownerId) || !isDoneOwner(info, ownerId)) {
+                return;
+            }
+            const std::vector<WireVertex>* vertices = ownerVertices(ownerId);
+            if (vertices == nullptr) {
+                return;
+            }
+            countedOwners.push_back(ownerId);
+            for (const WireVertex& vertex : *vertices) {
+                if (vertex.edgeIndex >= info.edges.size()) {
+                    continue;
+                }
+                const EdgeInfo& edge = info.edges[vertex.edgeIndex];
+                if (edge.iteration == -2) {
+                    continue;
+                }
+                if (++counter[vertex.edgeIndex] == 2 && edge.iteration >= 0) {
+                    ++removalCount;
+                    if (secondaryOwner) {
+                        ++secondaryRemovalCount;
+                    }
+                    else {
+                        ++primaryRemovalCount;
+                    }
+                }
+            }
+        };
+
+        for (const EdgeInfo& edge : info.edges) {
+            if (edge.iteration == -2 || edge.iteration < 0) {
+                continue;
+            }
+            if (edge.wireInfo == 0U || !isDoneOwner(info, edge.wireInfo)) {
+                ++removalCount;
+                ++unownedRemovalCount;
+                continue;
+            }
+            countOwner(edge.wireInfo2, true);
+            countOwner(edge.wireInfo, false);
+        }
+
+        info.repeatedSplitExhaustRerunRemovalEdgeInfoCount += removalCount;
+        info.repeatedSplitExhaustRerunRemovalUnownedEdgeInfoCount += unownedRemovalCount;
+        info.repeatedSplitExhaustRerunRemovalSecondaryEdgeInfoCount += secondaryRemovalCount;
+        info.repeatedSplitExhaustRerunRemovalPrimaryEdgeInfoCount += primaryRemovalCount;
+        if (removalCount == 0U) {
+            ++info.repeatedSplitExhaustRerunLoopExitNoRemovalCount;
+        }
+    }
 }
 
 void WireJoiner::recordBranchSearchCandidatesForOwner(WireInfo& info,
@@ -2420,17 +3097,79 @@ bool WireJoiner::recordTightBoundTransferWire(WireInfo& info, OwnerWireInfo& own
             owner.tightBoundExistingWireSearchEdgeSetVisitCount += trace.edgeSetVisitCount;
             owner.tightBoundExistingWireSearchBacktrackCount += trace.backtrackCount;
             owner.tightBoundExistingWireSearchIntersectSkipCount += trace.intersectSkipCount;
+            owner.tightBoundFullWireSetInsertCount += trace.fullWireSetInsertCount;
+            owner.tightBoundFullWireSetEraseCount += trace.fullWireSetEraseCount;
+            owner.tightBoundFullWireSetAbortCount += trace.fullWireSetAbortCount;
+            owner.tightBoundFullWireSetPurgeCandidateCount += trace.fullWireSetPurgeCandidateCount;
+            if (trace.fullWireSetAbortCount > 0U) {
+                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                // ::WireJoinerP::_findClosedWiresUpdateStack(), "if (!wireSet.empty() &&
+                // wireSet.contains(info.wireInfo.get()))" aborts the current branch. A later
+                // existing-wire hit may still resolve the search; otherwise cad-core blocks this
+                // candidate from becoming a transfer wire.
+                ++owner.tightBoundFullWireSetAbortSearchCount;
+                if (trace.hit) {
+                    ++owner.tightBoundFullWireSetAbortResolvedByHitCount;
+                }
+                else {
+                    ++owner.tightBoundFullWireSetAbortBlockedSearchCount;
+                }
+            }
             if (trace.hit) {
                 ++owner.tightBoundExistingWireHitCount;
+                owner.tightBoundExistingWireSearchPathVertexCount += trace.hitPath.size();
+                if (trace.idxVertex >= 0) {
+                    ++owner.tightBoundExistingWireSearchIdxVertexCount;
+                }
+                if (trace.stackPos >= 0) {
+                    ++owner.tightBoundExistingWireSearchStackPosCount;
+                }
             }
             if (trace.reverseHit) {
                 ++owner.tightBoundExistingWireReverseHitCount;
             }
-            if (trace.purge) {
+            const bool fullWireSetPurged = trace.fullWireSetPurgeCandidateCount > 0U;
+            if (trace.purge || fullWireSetPurged) {
                 ++owner.tightBoundExistingWirePurgeCount;
+                owner.purge = true;
+            }
+            if (trace.purge || (trace.fullWireSetAbortCount > 0U && !trace.hit)) {
+                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                // ::WireJoinerP::_findClosedWiresUpdateStack(), "if (!wireSet.empty() &&
+                // wireSet.contains(info.wireInfo.get()))" aborts this branch; with an existing
+                // wireInfo it marks "wireInfo->purge = true" and does not let the same candidate
+                // become a transfer wire.
+                ++owner.tightBoundFullWireSetBlockedTransferCount;
+                continue;
             }
         }
         transferPath = tightBoundTransferPathForCandidate(info, owner, candidate);
+        TightBoundExistingWirePathBlockReason existingWireBlockReason =
+            TightBoundExistingWirePathBlockReason::None;
+        if (!transferPath && candidateTrace && candidateTrace->hit) {
+            transferPath = tightBoundTransferPathForExistingWireHit(
+                info,
+                owner,
+                candidate,
+                *candidateTrace,
+                &existingWireBlockReason);
+        }
+        if (!transferPath && candidateTrace && candidateTrace->hit) {
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+            // ::WireJoinerP::_findClosedWiresWithExisting() can still report idxVertex/stackPos
+            // for a branch that does not become the selected ::findTightBoundByVertices() transfer.
+            // Keep that remaining M1 gap explicit instead of hiding it in hit-minus-selected math.
+            ++owner.tightBoundExistingWireSearchOnlyPathBlockedCount;
+            if (existingWireBlockReason == TightBoundExistingWirePathBlockReason::OwnerVertexMissing) {
+                ++owner.tightBoundExistingWireSearchOnlyOwnerVertexBlockedCount;
+            }
+            else if (existingWireBlockReason == TightBoundExistingWirePathBlockReason::OrderBlocked) {
+                ++owner.tightBoundExistingWireSearchOnlyOrderBlockedCount;
+            }
+            else if (existingWireBlockReason == TightBoundExistingWirePathBlockReason::WireBuildBlocked) {
+                ++owner.tightBoundExistingWireSearchOnlyWireBuildBlockedCount;
+            }
+        }
         if (transferPath) {
             selectedExistingWireTrace = candidateTrace;
             if (selectedExistingWireTrace) {
@@ -2490,6 +3229,48 @@ void WireJoiner::recordTightBoundLifecycle(WireInfo& info)
     for (const EdgeInfo& edge : info.edges) {
         hasOpenExportEdge = hasOpenExportEdge || edge.iteration == -3 || (edge.wireInfo == 0U && edge.iteration >= 0);
     }
+    std::vector<bool> unassignedPropagationRecorded(info.edges.size(), false);
+    std::vector<bool> otherWirePropagationRecorded(info.edges.size(), false);
+    std::vector<bool> otherWireLivePropagationRecorded(info.edges.size(), false);
+    const auto recordDoneOwnerPropagation = [&](std::size_t ownerId, const std::vector<WireVertex>& vertices) {
+        for (const WireVertex& vertex : vertices) {
+            if (vertex.edgeIndex >= info.edges.size()) {
+                continue;
+            }
+            EdgeInfo& edge = info.edges[vertex.edgeIndex];
+            if (edge.iteration < 0) {
+                continue;
+            }
+            if (edge.wireInfo == 0U) {
+                if (!unassignedPropagationRecorded[vertex.edgeIndex]) {
+                    ++info.ownerPropagationCandidateCount;
+                    ++info.ownerPropagationUnassignedCandidateCount;
+                    ++edge.ownerPropagationCandidateCount;
+                    unassignedPropagationRecorded[vertex.edgeIndex] = true;
+                }
+                continue;
+            }
+            if (edge.wireInfo == ownerId || isDoneOwner(info, edge.wireInfo)) {
+                continue;
+            }
+            if (!otherWirePropagationRecorded[vertex.edgeIndex]) {
+                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                // ::WireJoinerP::findTightBoundUpdateVertices(), after "beginInfo.wireInfo->done = true",
+                // keeps done owners stable while edges owned by an unfinished "otherWire" are reassigned
+                // to the just-completed owner. cad-core records this propagation branch without using it
+                // to prune openWireCompound/getOpenWires output.
+                ++info.ownerPropagationCandidateCount;
+                ++info.ownerPropagationOtherWireCandidateCount;
+                ++edge.ownerPropagationCandidateCount;
+                otherWirePropagationRecorded[vertex.edgeIndex] = true;
+            }
+            if (!otherWireLivePropagationRecorded[vertex.edgeIndex]) {
+                edge.wireInfo = ownerId;
+                ++info.ownerPropagationOtherWireLiveEdgeInfoCount;
+                otherWireLivePropagationRecorded[vertex.edgeIndex] = true;
+            }
+        }
+    };
 
     if (!info.ownerWires.empty()) {
         bool anyDone = false;
@@ -2514,19 +3295,41 @@ void WireJoiner::recordTightBoundLifecycle(WireInfo& info)
             const bool hasOwnerVertices =
                 !owner.splitOwnerVertices.empty() || (!owner.vertices.empty() && owner.transferWires.empty());
             if (hasOwnerVertices) {
+                if (!owner.splitOwnerVertices.empty() && owner.splitWireId == 0U) {
+                    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                    // ::WireJoinerP::findTightBoundSplitWire(), "splitWire.reset(new WireInfo())"
+                    // followed by "info->wireInfo = splitWire" for remaining old-owner vertices.
+                    // cad-core keeps that split owner live in EdgeInfo while output export still
+                    // waits for the later openWireCompound / generated-result-wire milestones.
+                    for (const WireVertex& vertex : owner.splitOwnerVertices) {
+                        if (vertex.edgeIndex >= info.edges.size()) {
+                            continue;
+                        }
+                        EdgeInfo& edge = info.edges[vertex.edgeIndex];
+                        if (edge.wireInfo == owner.id) {
+                            if (owner.splitWireId == 0U) {
+                                owner.splitWireId = nextWireInfoId_++;
+                            }
+                            edge.wireInfo = owner.splitWireId;
+                        }
+                    }
+                }
                 owner.done = true;
                 anyDone = true;
             }
-        }
-        info.done = anyDone;
-        if (info.done) {
-            for (EdgeInfo& edge : info.edges) {
-                if (edge.wireInfo == 0U) {
-                    ++info.ownerPropagationCandidateCount;
-                    ++edge.ownerPropagationCandidateCount;
+            if (owner.done) {
+                const std::vector<WireVertex>& ownerVertices =
+                    owner.splitOwnerVertices.empty() ? owner.vertices : owner.splitOwnerVertices;
+                const std::size_t propagationOwnerId = owner.splitWireId == 0U ? owner.id : owner.splitWireId;
+                recordDoneOwnerPropagation(propagationOwnerId, ownerVertices);
+            }
+            for (const TightBoundTransferWire& transfer : owner.transferWires) {
+                if (transfer.done) {
+                    recordDoneOwnerPropagation(transfer.id, transfer.vertices);
                 }
             }
         }
+        info.done = anyDone;
         return;
     }
 
@@ -2554,12 +3357,7 @@ void WireJoiner::recordTightBoundLifecycle(WireInfo& info)
     }
 
     if (info.done && hasOwnedEdge) {
-        for (EdgeInfo& edge : info.edges) {
-            if (edge.wireInfo == 0U) {
-                ++info.ownerPropagationCandidateCount;
-                ++edge.ownerPropagationCandidateCount;
-            }
-        }
+        recordDoneOwnerPropagation(info.id, info.orderedVertices);
     }
 }
 
@@ -2585,9 +3383,14 @@ void WireJoiner::recordOpenWireCompoundLedger(WireInfo& info)
         childWire.wireBuilt = !childWire.wire.IsNull();
         childWire.superEdgeWire = !edgeInfo.superEdge.IsNull();
         childWire.generatedOpenExport = edgeInfo.generatedOpenExportEdge;
+        childWire.generatedOpenExportReason = edgeInfo.generatedOpenExportReason;
+        childWire.generatedOpenExportSourceEdgeInfo = edgeInfo.generatedOpenExportSourceEdgeInfo;
+        childWire.generatedOpenExportSourceEdgeInfoIndex = edgeInfo.generatedOpenExportSourceEdgeInfoIndex;
+        childWire.generatedOpenExportSourceEdgeInfoConsumed =
+            edgeInfo.generatedOpenExportSourceEdgeInfoConsumed;
         childWire.purgeBridge = edgeInfo.purgeAsOriginalOpenEdge;
         childWire.sourceSharedVertexPurgeMatch =
-            !sourceEdges_.empty() && allEdgesShareOriginalSourceVertexByIdentity(childWire.wire, sourceEdges_);
+            !sourceEdges_.empty() && allEdgesHaveSharedOriginalSourceVertexByIdentity(childWire.wire, sourceEdges_);
         info.openWireCompoundWires.push_back(std::move(childWire));
     }
 }
@@ -2617,6 +3420,24 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
             }
             if (childWire.generatedOpenExport) {
                 ++summary.openWireCompoundGeneratedWireInfoCount;
+                if (childWire.generatedOpenExportSourceEdgeInfo) {
+                    ++summary.openWireCompoundGeneratedSourceEdgeInfoWireInfoCount;
+                }
+                if (childWire.generatedOpenExportSourceEdgeInfoConsumed) {
+                    ++summary.openWireCompoundGeneratedSourceEdgeInfoConsumedWireInfoCount;
+                }
+                if (childWire.generatedOpenExportReason == "consumed_open_cutter_graph") {
+                    ++summary.openWireCompoundGeneratedConsumedOpenCutterGraphWireInfoCount;
+                }
+                else if (childWire.generatedOpenExportReason == "partial_junction_open_cutter") {
+                    ++summary.openWireCompoundGeneratedPartialJunctionOpenCutterWireInfoCount;
+                }
+                else if (childWire.generatedOpenExportReason == "closed_wire_cycle") {
+                    ++summary.openWireCompoundGeneratedClosedWireCycleWireInfoCount;
+                }
+                else if (childWire.generatedOpenExportReason == "partial_shared_closed_wire") {
+                    ++summary.openWireCompoundGeneratedPartialSharedClosedWireWireInfoCount;
+                }
             }
             if (childWire.purgeBridge) {
                 ++summary.openWireCompoundPurgeBridgeWireInfoCount;
@@ -2631,6 +3452,7 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
                 ++summary.openWireCompoundPurgeBridgeUnmatchedWireInfoCount;
             }
         }
+        std::size_t generatedOpenExportEdgeInfoCount = 0;
         summary.closedWireInfoCount += info.ownerWires.size();
         for (const OwnerWireInfo& owner : info.ownerWires) {
             summary.closedWireVertexCount += owner.vertices.size();
@@ -2643,11 +3465,56 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
             summary.tightBoundExistingWireHitCount += owner.tightBoundExistingWireHitCount;
             summary.tightBoundExistingWireReverseHitCount += owner.tightBoundExistingWireReverseHitCount;
             summary.tightBoundExistingWirePurgeCount += owner.tightBoundExistingWirePurgeCount;
+            if (owner.purge) {
+                ++summary.tightBoundPurgedWireInfoCount;
+            }
+            if (owner.exhaustVisited) {
+                ++summary.tightBoundExhaustVisitedWireInfoCount;
+            }
+            if (owner.exhaustDone) {
+                ++summary.tightBoundExhaustDoneWireInfoCount;
+            }
+            if (owner.exhaustDiscardedByPurge) {
+                ++summary.tightBoundExhaustDiscardedPurgedWireInfoCount;
+                const std::vector<WireVertex>& ownerVertices =
+                    owner.splitOwnerVertices.empty() ? owner.vertices : owner.splitOwnerVertices;
+                const std::size_t ownerId = owner.splitWireId == 0U ? owner.id : owner.splitWireId;
+                for (const WireVertex& vertex : ownerVertices) {
+	                    if (vertex.edgeIndex < info.edges.size()
+	                        && info.edges[vertex.edgeIndex].wireInfo == ownerId) {
+	                        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+	                        // ::WireJoinerP::exhaustTightBoundUpdateEdge() calls "wireInfo.reset()"
+	                        // for purged wires. cad-core now clears the primary owner when the same
+	                        // edge is consumed by ::buildClosedWire(); any remaining owned edge here is
+	                        // still blocked by the repeated split/exhaust or generated result-wire path.
+	                        ++summary.tightBoundExhaustPrimaryResetBlockedEdgeInfoCount;
+	                    }
+	                }
+            }
+            summary.tightBoundFullWireSetInsertCount += owner.tightBoundFullWireSetInsertCount;
+            summary.tightBoundFullWireSetEraseCount += owner.tightBoundFullWireSetEraseCount;
+            summary.tightBoundFullWireSetAbortCount += owner.tightBoundFullWireSetAbortCount;
+            summary.tightBoundFullWireSetPurgeCandidateCount += owner.tightBoundFullWireSetPurgeCandidateCount;
+            summary.tightBoundFullWireSetBlockedTransferCount += owner.tightBoundFullWireSetBlockedTransferCount;
+            summary.tightBoundFullWireSetAbortSearchCount += owner.tightBoundFullWireSetAbortSearchCount;
+            summary.tightBoundFullWireSetAbortResolvedByHitCount +=
+                owner.tightBoundFullWireSetAbortResolvedByHitCount;
+            summary.tightBoundFullWireSetAbortBlockedSearchCount +=
+                owner.tightBoundFullWireSetAbortBlockedSearchCount;
+            if (owner.tightBoundExistingWireSearchCount > 1U) {
+                ++summary.tightBoundExistingWireMultiRoundWireInfoCount;
+                summary.tightBoundExistingWireMultiRoundSearchCount +=
+                    owner.tightBoundExistingWireSearchCount - 1U;
+            }
             summary.tightBoundExistingWireSearchStackFrameCount += owner.tightBoundExistingWireSearchStackFrameCount;
             summary.tightBoundExistingWireSearchVertexStackCount += owner.tightBoundExistingWireSearchVertexStackCount;
             summary.tightBoundExistingWireSearchEdgeSetVisitCount += owner.tightBoundExistingWireSearchEdgeSetVisitCount;
             summary.tightBoundExistingWireSearchBacktrackCount += owner.tightBoundExistingWireSearchBacktrackCount;
             summary.tightBoundExistingWireSearchIntersectSkipCount += owner.tightBoundExistingWireSearchIntersectSkipCount;
+            summary.tightBoundExistingWireSearchIdxVertexCount += owner.tightBoundExistingWireSearchIdxVertexCount;
+            summary.tightBoundExistingWireSearchStackPosCount += owner.tightBoundExistingWireSearchStackPosCount;
+            summary.tightBoundExistingWireSearchPathVertexCount +=
+                owner.tightBoundExistingWireSearchPathVertexCount;
             for (const TightBoundBranchCandidate& candidate : owner.branchCandidates) {
                 if (!candidate.inside) {
                     continue;
@@ -2662,24 +3529,66 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
                 ++summary.newWireSeedWireInfoCount;
             }
             summary.tightBoundTransferWireInfoCount += owner.transferWires.size();
+            std::size_t selectedExistingWireHitCount = 0;
+            std::size_t selectedExistingWireIdxVertexCount = 0;
+            std::size_t selectedExistingWireStackPosCount = 0;
             for (const TightBoundTransferWire& transfer : owner.transferWires) {
                 summary.tightBoundTransferWireVertexCount += transfer.vertices.size();
                 summary.tightBoundSplitWireVertexCount += transfer.splitWireVertices.size();
+                if (transfer.existingWireHit) {
+                    ++selectedExistingWireHitCount;
+                }
                 if (transfer.existingWireHit && transfer.existingWireIdxVertex >= 0) {
-                    ++summary.tightBoundExistingWireIdxVertexCount;
+                    ++selectedExistingWireIdxVertexCount;
                 }
                 if (transfer.existingWireHit && transfer.existingWireStackPos >= 0) {
-                    ++summary.tightBoundExistingWireStackPosCount;
+                    ++selectedExistingWireStackPosCount;
                 }
                 if (transfer.splitWireBuilt) {
                     ++summary.tightBoundSplitWireBuiltCount;
                 }
             }
+            summary.tightBoundExistingWireSelectedHitCount += selectedExistingWireHitCount;
+            summary.tightBoundExistingWireIdxVertexCount += selectedExistingWireIdxVertexCount;
+            summary.tightBoundExistingWireStackPosCount += selectedExistingWireStackPosCount;
+            if (owner.tightBoundExistingWireHitCount > selectedExistingWireHitCount) {
+                summary.tightBoundExistingWireSearchOnlyHitCount +=
+                    owner.tightBoundExistingWireHitCount - selectedExistingWireHitCount;
+            }
+            if (owner.tightBoundExistingWireSearchIdxVertexCount > selectedExistingWireIdxVertexCount) {
+                summary.tightBoundExistingWireSearchOnlyIdxVertexCount +=
+                    owner.tightBoundExistingWireSearchIdxVertexCount - selectedExistingWireIdxVertexCount;
+            }
+            if (owner.tightBoundExistingWireSearchStackPosCount > selectedExistingWireStackPosCount) {
+                summary.tightBoundExistingWireSearchOnlyStackPosCount +=
+                    owner.tightBoundExistingWireSearchStackPosCount - selectedExistingWireStackPosCount;
+            }
+            summary.tightBoundExistingWireSearchOnlyPathBlockedCount +=
+                owner.tightBoundExistingWireSearchOnlyPathBlockedCount;
+            summary.tightBoundExistingWireSearchOnlyOwnerVertexBlockedCount +=
+                owner.tightBoundExistingWireSearchOnlyOwnerVertexBlockedCount;
+            summary.tightBoundExistingWireSearchOnlyOrderBlockedCount +=
+                owner.tightBoundExistingWireSearchOnlyOrderBlockedCount;
+            summary.tightBoundExistingWireSearchOnlyWireBuildBlockedCount +=
+                owner.tightBoundExistingWireSearchOnlyWireBuildBlockedCount;
             if (!owner.splitOwnerVertices.empty()) {
                 ++summary.tightBoundSplitOwnerWireInfoCount;
                 summary.tightBoundSplitOwnerVertexCount += owner.splitOwnerVertices.size();
                 if (owner.splitOwnerWireBuilt) {
                     ++summary.tightBoundSplitOwnerBuiltWireCount;
+                }
+                if (owner.splitWireId != 0U) {
+                    std::size_t liveSplitWireEdgeCount = 0;
+                    for (const WireVertex& vertex : owner.splitOwnerVertices) {
+                        if (vertex.edgeIndex < info.edges.size()
+                            && info.edges[vertex.edgeIndex].wireInfo == owner.splitWireId) {
+                            ++liveSplitWireEdgeCount;
+                        }
+                    }
+                    if (liveSplitWireEdgeCount > 0U) {
+                        ++summary.tightBoundLiveSplitWireInfoCount;
+                        summary.tightBoundLiveSplitWireEdgeInfoCount += liveSplitWireEdgeCount;
+                    }
                 }
             }
             if (owner.done) {
@@ -2700,7 +3609,26 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
                 ++summary.splitEdgeInfoCount;
             }
             if (edgeInfo.generatedOpenExportEdge) {
+                ++generatedOpenExportEdgeInfoCount;
                 ++summary.generatedOpenExportEdgeInfoCount;
+                if (edgeInfo.generatedOpenExportSourceEdgeInfo) {
+                    ++summary.generatedOpenExportSourceEdgeInfoCount;
+                }
+                if (edgeInfo.generatedOpenExportSourceEdgeInfoConsumed) {
+                    ++summary.generatedOpenExportSourceEdgeInfoConsumedCount;
+                }
+                if (edgeInfo.generatedOpenExportReason == "consumed_open_cutter_graph") {
+                    ++summary.generatedOpenExportConsumedOpenCutterGraphEdgeInfoCount;
+                }
+                else if (edgeInfo.generatedOpenExportReason == "partial_junction_open_cutter") {
+                    ++summary.generatedOpenExportPartialJunctionOpenCutterEdgeInfoCount;
+                }
+                else if (edgeInfo.generatedOpenExportReason == "closed_wire_cycle") {
+                    ++summary.generatedOpenExportClosedWireCycleEdgeInfoCount;
+                }
+                else if (edgeInfo.generatedOpenExportReason == "partial_shared_closed_wire") {
+                    ++summary.generatedOpenExportPartialSharedClosedWireEdgeInfoCount;
+                }
             }
             if (edgeInfo.superEdgeRoot) {
                 ++summary.superEdgeRootEdgeInfoCount;
@@ -2843,6 +3771,108 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
                                                             });
         }
         summary.ownerPropagationCandidateCount += info.ownerPropagationCandidateCount;
+        summary.ownerPropagationUnassignedCandidateCount += info.ownerPropagationUnassignedCandidateCount;
+        summary.ownerPropagationOtherWireCandidateCount += info.ownerPropagationOtherWireCandidateCount;
+        summary.ownerPropagationOtherWireLiveEdgeInfoCount +=
+            info.ownerPropagationOtherWireLiveEdgeInfoCount;
+        summary.exhaustAdjacentSearchCount += info.exhaustAdjacentSearchCount;
+        summary.exhaustAdjacentSearchHitCount += info.exhaustAdjacentSearchHitCount;
+        summary.exhaustAdjacentSearchMissCount += info.exhaustAdjacentSearchMissCount;
+        summary.exhaustAdjacentSearchStackFrameCount += info.exhaustAdjacentSearchStackFrameCount;
+        summary.exhaustAdjacentSearchVertexStackCount += info.exhaustAdjacentSearchVertexStackCount;
+        summary.exhaustAdjacentSearchEdgeSetVisitCount += info.exhaustAdjacentSearchEdgeSetVisitCount;
+        summary.exhaustAdjacentSearchBacktrackCount += info.exhaustAdjacentSearchBacktrackCount;
+        summary.exhaustAdjacentWireSetInsertCount += info.exhaustAdjacentWireSetInsertCount;
+        summary.exhaustAdjacentWireSetEraseCount += info.exhaustAdjacentWireSetEraseCount;
+	        summary.exhaustAdjacentWireSetAbortCount += info.exhaustAdjacentWireSetAbortCount;
+	        summary.exhaustAdjacentWireInfo2AbortCount += info.exhaustAdjacentWireInfo2AbortCount;
+	        summary.tightBoundExhaustPrimaryResetEdgeInfoCount +=
+	            info.tightBoundExhaustPrimaryResetEdgeInfoCount;
+	        summary.repeatedSplitExhaustCycleCount += info.repeatedSplitExhaustCycleCount;
+        summary.repeatedSplitExhaustRemovedEdgeInfoCount += info.repeatedSplitExhaustRemovedEdgeInfoCount;
+        summary.repeatedSplitExhaustRemovedUnownedEdgeInfoCount +=
+            info.repeatedSplitExhaustRemovedUnownedEdgeInfoCount;
+        summary.repeatedSplitExhaustRemovedSecondaryEdgeInfoCount +=
+            info.repeatedSplitExhaustRemovedSecondaryEdgeInfoCount;
+        summary.repeatedSplitExhaustRemovedPrimaryEdgeInfoCount +=
+            info.repeatedSplitExhaustRemovedPrimaryEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunActiveEdgeInfoCount +=
+            info.repeatedSplitExhaustRerunActiveEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunOwnedActiveEdgeInfoCount +=
+            info.repeatedSplitExhaustRerunOwnedActiveEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunResetPrimaryEdgeInfoCount +=
+            info.repeatedSplitExhaustRerunResetPrimaryEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunResetSecondaryEdgeInfoCount +=
+            info.repeatedSplitExhaustRerunResetSecondaryEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunSkippedOpenLeafEdgeInfoCount +=
+            info.repeatedSplitExhaustRerunSkippedOpenLeafEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunNoActiveSearchCount +=
+            info.repeatedSplitExhaustRerunNoActiveSearchCount;
+        summary.repeatedSplitExhaustRerunClosedWireSearchCount +=
+            info.repeatedSplitExhaustRerunClosedWireSearchCount;
+        summary.repeatedSplitExhaustRerunClosedWireMissCount +=
+            info.repeatedSplitExhaustRerunClosedWireMissCount;
+        summary.repeatedSplitExhaustRerunClosedWireInfoCount +=
+            info.repeatedSplitExhaustRerunClosedWireInfoCount;
+        summary.repeatedSplitExhaustRerunClosedWireAssignedEdgeInfoCount +=
+            info.repeatedSplitExhaustRerunClosedWireAssignedEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunClosedWireVertexCount +=
+            info.repeatedSplitExhaustRerunClosedWireVertexCount;
+        summary.repeatedSplitExhaustRerunResettableClosedWireInfoCount +=
+            info.repeatedSplitExhaustRerunResettableClosedWireInfoCount;
+        summary.repeatedSplitExhaustRerunResettableAssignedEdgeInfoCount +=
+            info.repeatedSplitExhaustRerunResettableAssignedEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunLiveResetPrimaryEdgeInfoCount +=
+            info.repeatedSplitExhaustRerunLiveResetPrimaryEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunLiveResetSecondaryEdgeInfoCount +=
+            info.repeatedSplitExhaustRerunLiveResetSecondaryEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunLiveClosedWireInfoCount +=
+            info.repeatedSplitExhaustRerunLiveClosedWireInfoCount;
+        summary.repeatedSplitExhaustRerunLiveAssignedEdgeInfoCount +=
+            info.repeatedSplitExhaustRerunLiveAssignedEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunLiveClosedWireVertexCount +=
+            info.repeatedSplitExhaustRerunLiveClosedWireVertexCount;
+        summary.repeatedSplitExhaustRerunLiveBranchSearchCandidateCount +=
+            info.repeatedSplitExhaustRerunLiveBranchSearchCandidateCount;
+        summary.repeatedSplitExhaustRerunLiveBranchSearchInsideCandidateCount +=
+            info.repeatedSplitExhaustRerunLiveBranchSearchInsideCandidateCount;
+        summary.repeatedSplitExhaustRerunLiveBranchSearchOutsideCandidateCount +=
+            info.repeatedSplitExhaustRerunLiveBranchSearchOutsideCandidateCount;
+        summary.repeatedSplitExhaustRerunLiveTransferWireInfoCount +=
+            info.repeatedSplitExhaustRerunLiveTransferWireInfoCount;
+        summary.repeatedSplitExhaustRerunLiveTransferredOwnerEdgeInfoCount +=
+            info.repeatedSplitExhaustRerunLiveTransferredOwnerEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunLiveDoneWireInfoCount +=
+            info.repeatedSplitExhaustRerunLiveDoneWireInfoCount;
+        summary.repeatedSplitExhaustRerunRemovalScanCount +=
+            info.repeatedSplitExhaustRerunRemovalScanCount;
+        summary.repeatedSplitExhaustRerunRemovalEdgeInfoCount +=
+            info.repeatedSplitExhaustRerunRemovalEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunRemovalUnownedEdgeInfoCount +=
+            info.repeatedSplitExhaustRerunRemovalUnownedEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunRemovalSecondaryEdgeInfoCount +=
+            info.repeatedSplitExhaustRerunRemovalSecondaryEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunRemovalPrimaryEdgeInfoCount +=
+            info.repeatedSplitExhaustRerunRemovalPrimaryEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunLoopExitNoRemovalCount +=
+            info.repeatedSplitExhaustRerunLoopExitNoRemovalCount;
+        summary.repeatedSplitExhaustRerunBranchSearchCandidateCount +=
+            info.repeatedSplitExhaustRerunBranchSearchCandidateCount;
+        summary.repeatedSplitExhaustRerunBranchSearchInsideCandidateCount +=
+            info.repeatedSplitExhaustRerunBranchSearchInsideCandidateCount;
+        summary.repeatedSplitExhaustRerunBranchSearchOutsideCandidateCount +=
+            info.repeatedSplitExhaustRerunBranchSearchOutsideCandidateCount;
+        summary.repeatedSplitExhaustRerunNewWireSeedCandidateCount +=
+            info.repeatedSplitExhaustRerunNewWireSeedCandidateCount;
+        if (info.repeatedSplitExhaustCycleCount > 0U) {
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+            // ::WireJoinerP::buildClosedWire() reruns findClosedWires(true)/findTightBound()
+            // before ::build() exports "openWireCompound". If the current result still needs
+            // generated open-export EdgeInfo entries, that rerun/reset cannot become the output
+            // path until M3 replaces the generated result-wire identity.
+            summary.repeatedSplitExhaustGeneratedIdentityBlockedEdgeInfoCount +=
+                generatedOpenExportEdgeInfoCount;
+        }
     }
     return summary;
 }
@@ -2933,7 +3963,7 @@ std::optional<TopoDS_Shape> WireJoiner::getOpenWires(const std::string& historyP
     return compound;
 }
 
-std::optional<TopoDS_Shape> generatedOpenExportShapeForSketchInternals(
+std::optional<GeneratedOpenExportShapeResult> generatedOpenExportShapeForSketchInternals(
     const TopoDS_Shape& boundedFaceShape,
     const std::vector<TopoDS_Edge>& openEdges,
     const std::vector<TopoDS_Wire>& closedWires,
@@ -2956,7 +3986,7 @@ std::optional<TopoDS_Shape> generatedOpenExportShapeForSketchInternals(
         openEdges.empty() && closedWireCycleNeedsGeneratedOpenExport(boundedFaceShape, closedWires);
     if (openEdges.empty() && closedWires.size() >= 2U) {
         if (const auto partialSharedEdges = partialSharedClosedWireOpenExportShape(boundedFaceShape, closedWires)) {
-            return partialSharedEdges;
+            return GeneratedOpenExportShapeResult{*partialSharedEdges, "partial_shared_closed_wire"};
         }
     }
     if (!consumedOpenCutterGraph && !closedWireCycleExport) {
@@ -2968,15 +3998,26 @@ std::optional<TopoDS_Shape> generatedOpenExportShapeForSketchInternals(
         // ::WireJoinerP::build() exports only final EdgeInfo states with no tight-bound WireInfo.
         // In T-junction cutter networks, through-cutter fragments are owned by tight-bound faces
         // while the branch cutter and original closed boundary remain generated open-export edges.
-        return partialJunctionOpenExportShape(boundedFaceShape, closedWires, openEdges);
+        if (const auto partialJunctionEdges = partialJunctionOpenExportShape(boundedFaceShape, closedWires, openEdges)) {
+            return GeneratedOpenExportShapeResult{*partialJunctionEdges, "partial_junction_open_cutter"};
+        }
+        return std::nullopt;
     }
 
-    return generatedOpenExportShape(boundedFaceShape,
-                                    openEdges,
-                                    openEdges.empty(),
-                                    openEdges.empty() && closedWireEdgesAreLinear(closedWires)
-                                        ? wireVertexPoints(closedWires)
-                                        : std::vector<gp_Pnt>{});
+    const std::optional<TopoDS_Shape> generatedShape =
+        generatedOpenExportShape(boundedFaceShape,
+                                 openEdges,
+                                 openEdges.empty(),
+                                 openEdges.empty() && closedWireEdgesAreLinear(closedWires)
+                                     ? wireVertexPoints(closedWires)
+                                     : std::vector<gp_Pnt>{});
+    if (!generatedShape) {
+        return std::nullopt;
+    }
+    return GeneratedOpenExportShapeResult{
+        *generatedShape,
+        closedWireCycleExport ? "closed_wire_cycle" : "consumed_open_cutter_graph",
+    };
 }
 
 }  // namespace cad_core::geometry
