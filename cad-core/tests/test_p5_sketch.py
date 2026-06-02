@@ -12,22 +12,22 @@ from .fixture_runner import ROOT, CadCoreFixtureTestCase
 
 
 class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
-    GENERATED_REASON_LEDGER_KEYS = {
+    HELPER_OVERRIDE_REASON_LEDGER_KEYS = {
         "consumed_open_cutter_graph": (
-            "generated_open_export_consumed_open_cutter_graph_edge_info_count",
-            "open_wire_compound_generated_consumed_open_cutter_graph_wire_info_count",
+            "helper_open_export_override_consumed_open_cutter_graph_edge_info_count",
+            "open_wire_compound_helper_open_export_override_consumed_open_cutter_graph_wire_info_count",
         ),
         "partial_junction_open_cutter": (
-            "generated_open_export_partial_junction_open_cutter_edge_info_count",
-            "open_wire_compound_generated_partial_junction_open_cutter_wire_info_count",
+            "helper_open_export_override_partial_junction_open_cutter_edge_info_count",
+            "open_wire_compound_helper_open_export_override_partial_junction_open_cutter_wire_info_count",
         ),
         "closed_wire_cycle": (
-            "generated_open_export_closed_wire_cycle_edge_info_count",
-            "open_wire_compound_generated_closed_wire_cycle_wire_info_count",
+            "helper_open_export_override_closed_wire_cycle_edge_info_count",
+            "open_wire_compound_helper_open_export_override_closed_wire_cycle_wire_info_count",
         ),
         "partial_shared_closed_wire": (
-            "generated_open_export_partial_shared_closed_wire_edge_info_count",
-            "open_wire_compound_generated_partial_shared_closed_wire_wire_info_count",
+            "helper_open_export_override_partial_shared_closed_wire_edge_info_count",
+            "open_wire_compound_helper_open_export_override_partial_shared_closed_wire_wire_info_count",
         ),
     }
 
@@ -398,6 +398,61 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertEqual(ledger["open_wire_compound_edge_info_count"], 0)
             self.assertEqual(ledger["open_wire_compound_super_edge_wire_info_count"], 0)
             self.assertEqual(ledger["open_wire_compound_generated_wire_info_count"], 0)
+            self.assertEqual(ledger["open_wire_compound_helper_open_export_override_wire_info_count"], 0)
+            self.assertEqual(
+                ledger[
+                    "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_candidate_wire_info_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                ledger[
+                    "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready_wire_info_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                ledger[
+                    "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_wire_built_wire_info_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                ledger[
+                    "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready_wire_built_wire_info_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                ledger[
+                    "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_output_wire_info_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                ledger[
+                    "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_unowned_removal_child_wire_producer_ready_output_wire_info_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                ledger[
+                    "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_output_blocked_by_multi_member_super_edge_wire_info_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                ledger[
+                    "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_current_member_child_wire_producer_ready_wire_info_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                ledger[
+                    "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_current_member_child_wire_producer_full_ahistory_evidence_wire_info_count"
+                ],
+                0,
+            )
             self.assertEqual(ledger["open_wire_compound_purge_bridge_wire_info_count"], 0)
             self.assertEqual(ledger["open_wire_compound_source_shared_vertex_wire_info_count"], 0)
             self.assertEqual(
@@ -422,6 +477,322 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(
             ledger["open_wire_compound_generated_wire_info_count"],
             ledger["generated_open_export_edge_info_count"],
+        )
+        self.assertEqual(ledger["generated_open_export_edge_info_count"], 0)
+        self.assertEqual(
+            ledger["open_wire_compound_helper_open_export_override_wire_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger["open_wire_compound_helper_open_export_override_source_edge_export_shape_wire_info_count"],
+            ledger["helper_open_export_override_source_edge_export_shape_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_source_edge_producer_output_wire_info_count"
+            ],
+            ledger["open_wire_compound_helper_open_export_override_source_edge_export_shape_wire_info_count"],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_source_edge_producer_output_wire_info_count"
+            ]
+            + ledger["open_wire_compound_helper_open_export_override_helper_shape_wire_info_count"]
+            + ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_output_wire_info_count"
+            ],
+            ledger["open_wire_compound_helper_open_export_override_wire_info_count"],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_candidate_wire_info_count"
+            ],
+            ledger["open_wire_compound_helper_open_export_override_wire_info_count"],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready_wire_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_candidate_wire_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_wire_built_wire_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_candidate_wire_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready_wire_built_wire_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready_wire_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_unowned_removal_child_wire_producer_ready_output_wire_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_output_wire_info_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_wire_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready_wire_built_wire_info_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_edge_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_wire_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_output_wire_info_count"
+            ]
+            + ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_output_blocked_by_multi_member_super_edge_wire_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready_wire_built_wire_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_wire_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_wire_info_count"
+            ]
+            + ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_output_blocked_by_multi_member_super_edge_wire_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_non_current_member_edge_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_output_blocked_non_current_member_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_current_member_wire_info_count"
+            ]
+            + ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_non_current_member_edge_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_covered_member_edge_info_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_unique_covered_member_edge_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_covered_member_edge_info_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_unique_current_member_edge_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_current_member_wire_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_unique_current_member_edge_info_count"
+            ]
+            + ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_suppressed_pending_member_edge_info_count"
+            ]
+            + ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_pending_member_edge_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_unique_covered_member_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_suppressed_pending_member_full_ahistory_producer_evidence_edge_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_suppressed_pending_member_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_suppressed_pending_member_unowned_removal_edge_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_suppressed_pending_member_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_pending_member_full_ahistory_producer_evidence_edge_info_count"
+            ]
+            + ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_pending_member_missing_full_ahistory_producer_evidence_edge_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_pending_member_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_pending_member_unowned_removal_edge_info_count"
+            ]
+            + ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_pending_member_primary_removal_edge_info_count"
+            ]
+            + ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_pending_member_secondary_removal_edge_info_count"
+            ]
+            + ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_pending_member_missing_removal_branch_edge_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_pending_member_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_complete_child_ownership_root_edge_info_count"
+            ]
+            + ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_incomplete_child_ownership_root_edge_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_edge_info_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_wire_built_wire_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_wire_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_candidate_wire_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_wire_built_wire_info_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_current_member_child_wire_producer_ready_wire_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_candidate_wire_info_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_current_member_child_wire_producer_full_ahistory_evidence_wire_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_current_member_child_wire_producer_ready_wire_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_wire_info_count"
+            ]
+            + ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_pending_member_wire_info_count"
+            ]
+            + ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_wire_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_candidate_wire_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_full_ahistory_producer_evidence_wire_info_count"
+            ]
+            + ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_missing_full_ahistory_producer_evidence_wire_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_wire_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_open_wire_compound_eligible_wire_info_count"
+            ]
+            + ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_forced_open_wire_compound_wire_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_wire_info_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_root_producer_ready_wire_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_wire_info_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_current_member_child_wire_producer_ready_wire_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_root_producer_ready_wire_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_current_member_child_wire_producer_full_ahistory_evidence_wire_info_count"
+            ]
+            + ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_current_member_child_wire_producer_missing_full_ahistory_evidence_wire_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_wire_info_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_current_member_child_wire_producer_full_ahistory_evidence_wire_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_current_member_child_wire_producer_ready_wire_info_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_wire_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_current_member_wire_info_count"
+            ],
         )
         self.assertEqual(
             ledger["open_wire_compound_purge_bridge_wire_info_count"],
@@ -457,6 +828,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             sum(1 for entry in entries if entry["generated_open_export"]),
             history["open_export_generated_edge_count"],
         )
+        self.assertEqual(history["open_export_generated_edge_count"], 0)
         self.assertEqual(
             sum(1 for entry in entries if entry["generated_open_export_reason"]),
             history["open_export_generated_edge_count"],
@@ -471,6 +843,28 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 if entry["generated_open_export"] and not entry["source_edge_indices"]
             ),
             history["open_export_generated_missing_source_lineage_edge_count"],
+        )
+        self.assertEqual(
+            sum(1 for entry in entries if entry["helper_open_export_override"]),
+            history["open_export_helper_override_edge_count"],
+        )
+        self.assertEqual(
+            sum(1 for entry in entries if entry["helper_open_export_override_reason"]),
+            history["open_export_helper_override_edge_count"],
+        )
+        self.assertTrue(
+            all(
+                bool(entry["helper_open_export_override_reason"]) == entry["helper_open_export_override"]
+                for entry in entries
+            )
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override"] and not entry["source_edge_indices"]
+            ),
+            history["open_export_helper_override_missing_source_lineage_edge_count"],
         )
         self.assertEqual(
             sum(1 for entry in entries if entry["purge_bridge"]),
@@ -491,6 +885,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "repeated_split_exhaust_rerun_skipped_open_leaf_edge_info_count",
             "repeated_split_exhaust_rerun_closed_wire_search_count",
             "repeated_split_exhaust_rerun_closed_wire_miss_count",
+            "repeated_split_exhaust_rerun_miss_live_reset_edge_info_count",
             "repeated_split_exhaust_rerun_closed_wire_info_count",
             "repeated_split_exhaust_rerun_closed_wire_assigned_edge_info_count",
             "repeated_split_exhaust_rerun_closed_wire_vertex_count",
@@ -536,6 +931,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ledger["repeated_split_exhaust_rerun_closed_wire_search_count"],
             ledger["repeated_split_exhaust_rerun_closed_wire_info_count"]
             + ledger["repeated_split_exhaust_rerun_closed_wire_miss_count"],
+        )
+        self.assertLessEqual(
+            ledger["repeated_split_exhaust_rerun_miss_live_reset_edge_info_count"],
+            ledger["repeated_split_exhaust_rerun_closed_wire_miss_count"],
         )
         self.assertLessEqual(
             ledger["repeated_split_exhaust_rerun_closed_wire_assigned_edge_info_count"],
@@ -663,7 +1062,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ledger["repeated_split_exhaust_removed_edge_info_count"],
         )
 
-    def assert_generated_open_export_reason_ledger(
+    def assert_helper_open_export_override_reason_ledger(
         self,
         sketch: dict[str, object],
         expected_counts: dict[str, int],
@@ -672,14 +1071,30 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         history = sketch["wire_joiner_history_detail"]
         entries = self.assert_open_export_history_entries(history)
         reason_counts = Counter(
-            entry["generated_open_export_reason"]
+            entry["helper_open_export_override_reason"]
             for entry in entries
-            if entry["generated_open_export"]
+            if entry["helper_open_export_override"]
         )
 
         self.assertEqual(reason_counts, Counter(expected_counts))
-        self.assertEqual(sum(expected_counts.values()), ledger["generated_open_export_edge_info_count"])
-        self.assertEqual(sum(expected_counts.values()), history["open_export_generated_edge_count"])
+        self.assertEqual(ledger["generated_open_export_edge_info_count"], 0)
+        self.assertEqual(ledger["generated_open_export_source_edge_info_count"], 0)
+        self.assertEqual(ledger["generated_open_export_source_edge_info_consumed_count"], 0)
+        self.assertEqual(ledger["open_wire_compound_generated_wire_info_count"], 0)
+        self.assertEqual(history["open_export_generated_edge_count"], 0)
+        self.assertEqual(history["open_export_generated_source_edge_info_count"], 0)
+        self.assertEqual(history["open_export_generated_source_edge_info_consumed_count"], 0)
+        self.assertEqual(history["open_export_generated_missing_source_lineage_edge_count"], 0)
+        self.assertEqual(sum(expected_counts.values()), ledger["helper_open_export_override_edge_info_count"])
+        self.assertEqual(sum(expected_counts.values()), history["open_export_helper_override_edge_count"])
+        self.assertEqual(ledger["generated_open_export_unbound_edge_count"], 0)
+        self.assertEqual(ledger["generated_open_export_duplicate_source_edge_info_count"], 0)
+        self.assertEqual(
+            sum(expected_counts.values()),
+            ledger["helper_open_export_override_candidate_edge_count"],
+        )
+        self.assertEqual(ledger["helper_open_export_override_unbound_edge_count"], 0)
+        self.assertEqual(ledger["helper_open_export_override_duplicate_source_edge_info_count"], 0)
         self.assert_exhaust_adjacent_search_ledger(ledger)
         self.assert_repeated_split_exhaust_removal_ledger(ledger)
         self.assertLessEqual(
@@ -709,72 +1124,2283 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ledger["owner_propagation_other_wire_live_edge_info_count"],
             ledger["owner_propagation_other_wire_candidate_count"],
         )
-        if ledger["repeated_split_exhaust_cycle_count"] > 0:
+        self.assertLessEqual(
+            ledger["repeated_split_exhaust_generated_identity_blocked_edge_info_count"],
+            ledger["repeated_split_exhaust_rerun_resettable_assigned_edge_info_count"],
+        )
+        if ledger["repeated_split_exhaust_rerun_resettable_assigned_edge_info_count"] == 0:
+            self.assertEqual(ledger["repeated_split_exhaust_generated_identity_blocked_edge_info_count"], 0)
+        if ledger["repeated_split_exhaust_generated_identity_blocked_edge_info_count"] > 0:
+            self.assertGreater(ledger["helper_open_export_override_edge_info_count"], 0)
+            self.assertGreater(ledger["repeated_split_exhaust_cycle_count"], 0)
+        self.assertGreaterEqual(
+            history["deleted_history_count"],
+            ledger["repeated_split_exhaust_removed_edge_info_count"]
+            + ledger["repeated_split_exhaust_rerun_removal_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_source_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_source_edge_info_consumed_count"],
+            ledger["helper_open_export_override_forced_open_wire_compound_edge_info_count"],
+        )
+        self.assertEqual(
+            history["open_export_helper_override_source_edge_info_count"],
+            history["open_export_helper_override_edge_count"],
+        )
+        self.assertEqual(
+            history["open_export_helper_override_source_edge_info_consumed_count"],
+            history["open_export_helper_override_forced_open_wire_compound_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_open_wire_compound_eligible_edge_info_count"]
+            + ledger["helper_open_export_override_forced_open_wire_compound_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
+        )
+        self.assertEqual(
+            history["open_export_helper_override_open_wire_compound_eligible_edge_info_count"]
+            + history["open_export_helper_override_forced_open_wire_compound_edge_info_count"],
+            history["open_export_helper_override_edge_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_source_edge_export_shape_edge_info_count"],
+            history["open_export_helper_override_source_edge_export_shape_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_open_wire_compound_eligible_without_source_edge_export_shape_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_open_wire_compound_eligible_without_source_edge_export_shape_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_full_ahistory_producer_evidence_edge_info_count"],
+            history["open_export_helper_override_full_ahistory_producer_evidence_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_full_ahistory_producer_evidence_without_source_edge_export_shape_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_full_ahistory_producer_evidence_without_source_edge_export_shape_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_full_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_full_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_safe_ahistory_producer_evidence_without_full_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_safe_ahistory_producer_evidence_without_full_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_super_edge_member_edge_info_count"],
+            history["open_export_helper_override_super_edge_member_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_super_edge_member_with_root_edge_info_count"],
+            history["open_export_helper_override_super_edge_member_with_root_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_open_wire_compound_eligible_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_open_wire_compound_eligible_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_open_lifecycle_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_open_lifecycle_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_closed_lifecycle_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_closed_lifecycle_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_export_blocked_by_iteration_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_export_blocked_by_iteration_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_export_blocked_by_wire_info_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_export_blocked_by_wire_info_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_full_ahistory_producer_evidence_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_full_ahistory_producer_evidence_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_open_wire_compound_eligible_and_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_open_wire_compound_eligible_and_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_open_wire_compound_eligible_missing_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_open_wire_compound_eligible_missing_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_safe_ahistory_producer_evidence_without_open_wire_compound_eligible_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_safe_ahistory_producer_evidence_without_open_wire_compound_eligible_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_full_ahistory_producer_evidence_without_open_wire_compound_eligible_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_full_ahistory_producer_evidence_without_open_wire_compound_eligible_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_safe_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_safe_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_full_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_full_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_missing_safe_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_missing_safe_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_iteration_blocked_unowned_removal_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_iteration_blocked_unowned_removal_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_iteration_blocked_primary_removal_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_iteration_blocked_primary_removal_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_iteration_blocked_secondary_removal_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_iteration_blocked_secondary_removal_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_iteration_blocked_missing_removal_branch_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_iteration_blocked_missing_removal_branch_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_full_ahistory_producer_evidence_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_full_ahistory_producer_evidence_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_candidate_wire_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready_wire_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_wire_built_wire_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready_wire_built_wire_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready_edge_info_count"
+            ],
+        )
+        for ledger_key, history_key in (
+            (
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_unowned_removal_edge_info_count",
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_unowned_removal_edge_info_count",
+            ),
+            (
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready_edge_info_count",
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready_edge_info_count",
+            ),
+            (
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_primary_removal_edge_info_count",
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_primary_removal_edge_info_count",
+            ),
+            (
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_secondary_removal_edge_info_count",
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_secondary_removal_edge_info_count",
+            ),
+            (
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_removal_branch_edge_info_count",
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_missing_removal_branch_edge_info_count",
+            ),
+            (
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_unowned_removal_edge_info_count",
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_unowned_removal_edge_info_count",
+            ),
+            (
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_primary_removal_edge_info_count",
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_primary_removal_edge_info_count",
+            ),
+            (
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_secondary_removal_edge_info_count",
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_secondary_removal_edge_info_count",
+            ),
+            (
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_missing_removal_branch_edge_info_count",
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_missing_removal_branch_edge_info_count",
+            ),
+        ):
+            self.assertEqual(ledger[ledger_key], history[history_key])
+        self.assertEqual(
+            ledger["helper_open_export_override_super_edge_member_forced_open_wire_compound_edge_info_count"],
+            history["open_export_helper_override_super_edge_member_forced_open_wire_compound_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_missing_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_missing_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger["helper_open_export_override_source_edge_export_shape_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_source_edge_export_shape_edge_info_count"],
+            history["open_export_helper_override_source_edge_producer_output_edge_info_count"],
+        )
+        self.assertLessEqual(
+            ledger["helper_open_export_override_full_ahistory_producer_evidence_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
+        )
+        self.assertLessEqual(
+            ledger[
+                "helper_open_export_override_full_ahistory_producer_evidence_without_source_edge_export_shape_edge_info_count"
+            ],
+            ledger["helper_open_export_override_full_ahistory_producer_evidence_edge_info_count"],
+        )
+        self.assertLessEqual(
+            ledger[
+                "helper_open_export_override_full_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+            ledger["helper_open_export_override_full_ahistory_producer_evidence_edge_info_count"],
+        )
+        self.assertLessEqual(
+            ledger["helper_open_export_override_super_edge_member_with_root_edge_info_count"],
+            ledger["helper_open_export_override_super_edge_member_edge_info_count"],
+        )
+        self.assertLessEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_open_wire_compound_eligible_edge_info_count"
+            ],
+            ledger["helper_open_export_override_super_edge_member_with_root_edge_info_count"],
+        )
+        self.assertLessEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_open_lifecycle_edge_info_count"
+            ],
+            ledger["helper_open_export_override_super_edge_member_with_root_edge_info_count"],
+        )
+        self.assertLessEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_closed_lifecycle_edge_info_count"
+            ],
+            ledger["helper_open_export_override_super_edge_member_with_root_edge_info_count"],
+        )
+        self.assertLessEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_open_lifecycle_edge_info_count"
+            ]
+            + ledger[
+                "helper_open_export_override_super_edge_member_root_closed_lifecycle_edge_info_count"
+            ],
+            ledger["helper_open_export_override_super_edge_member_with_root_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_open_wire_compound_eligible_edge_info_count"
+            ]
+            + ledger[
+                "helper_open_export_override_super_edge_member_root_export_blocked_by_iteration_edge_info_count"
+            ]
+            + ledger[
+                "helper_open_export_override_super_edge_member_root_export_blocked_by_wire_info_edge_info_count"
+            ],
+            ledger["helper_open_export_override_super_edge_member_with_root_edge_info_count"],
+        )
+        self.assertLessEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+            ledger["helper_open_export_override_super_edge_member_with_root_edge_info_count"],
+        )
+        self.assertLessEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_full_ahistory_producer_evidence_edge_info_count"
+            ],
+            ledger[
+                "helper_open_export_override_super_edge_member_root_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_open_wire_compound_eligible_and_safe_ahistory_producer_evidence_edge_info_count"
+            ]
+            + ledger[
+                "helper_open_export_override_super_edge_member_root_open_wire_compound_eligible_missing_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+            ledger[
+                "helper_open_export_override_super_edge_member_root_open_wire_compound_eligible_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_open_wire_compound_eligible_and_safe_ahistory_producer_evidence_edge_info_count"
+            ]
+            + ledger[
+                "helper_open_export_override_super_edge_member_root_safe_ahistory_producer_evidence_without_open_wire_compound_eligible_edge_info_count"
+            ],
+            ledger[
+                "helper_open_export_override_super_edge_member_root_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_full_ahistory_producer_evidence_without_open_wire_compound_eligible_edge_info_count"
+            ],
+            ledger[
+                "helper_open_export_override_super_edge_member_root_safe_ahistory_producer_evidence_without_open_wire_compound_eligible_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_safe_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ]
+            + ledger[
+                "helper_open_export_override_super_edge_member_root_missing_safe_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+            ledger[
+                "helper_open_export_override_super_edge_member_root_export_blocked_by_iteration_edge_info_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_full_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+            ledger[
+                "helper_open_export_override_super_edge_member_root_safe_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_iteration_blocked_unowned_removal_edge_info_count"
+            ]
+            + ledger[
+                "helper_open_export_override_super_edge_member_root_iteration_blocked_primary_removal_edge_info_count"
+            ]
+            + ledger[
+                "helper_open_export_override_super_edge_member_root_iteration_blocked_secondary_removal_edge_info_count"
+            ]
+            + ledger[
+                "helper_open_export_override_super_edge_member_root_iteration_blocked_missing_removal_branch_edge_info_count"
+            ],
+            ledger[
+                "helper_open_export_override_super_edge_member_root_export_blocked_by_iteration_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_full_ahistory_producer_evidence_edge_info_count"
+            ]
+            + ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_edge_info_count"
+            ],
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_edge_info_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_edge_info_count"
+            ],
+            ledger[
+                "helper_open_export_override_super_edge_member_root_export_blocked_by_iteration_edge_info_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_full_ahistory_producer_evidence_edge_info_count"
+            ],
+            ledger[
+                "helper_open_export_override_super_edge_member_root_full_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_unowned_removal_edge_info_count"
+            ]
+            + ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_primary_removal_edge_info_count"
+            ]
+            + ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_secondary_removal_edge_info_count"
+            ]
+            + ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_removal_branch_edge_info_count"
+            ],
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_unowned_removal_edge_info_count"
+            ]
+            + ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_primary_removal_edge_info_count"
+            ]
+            + ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_secondary_removal_edge_info_count"
+            ]
+            + ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_missing_removal_branch_edge_info_count"
+            ],
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_edge_info_count"
+            ],
+        )
+        for ledger_key, history_key in (
+            (
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_covered_member_edge_info_count",
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_covered_member_edge_info_count",
+            ),
+            (
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_current_member_edge_info_count",
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_current_member_edge_info_count",
+            ),
+            (
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_non_current_member_edge_info_count",
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_non_current_member_edge_info_count",
+            ),
+        ):
+            self.assertEqual(ledger[ledger_key], history[history_key])
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_current_member_edge_info_count"
+            ]
+            + ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_non_current_member_edge_info_count"
+            ],
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_covered_member_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_current_member_wire_info_count"
+            ]
+            + ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_non_current_member_edge_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_covered_member_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_current_member_wire_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_candidate_wire_info_count"
+            ],
+        )
+        self.assertGreaterEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_output_blocked_non_current_member_edge_info_count"
+            ],
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_output_blocked_by_multi_member_super_edge_wire_info_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger["helper_open_export_override_super_edge_member_forced_open_wire_compound_edge_info_count"],
+            ledger["helper_open_export_override_super_edge_member_edge_info_count"],
+        )
+        self.assertLessEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_missing_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+            ledger["helper_open_export_override_super_edge_member_forced_open_wire_compound_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_export_blocked_by_iteration_edge_info_count"]
+            + ledger["helper_open_export_override_export_blocked_by_wire_info_edge_info_count"],
+            ledger["helper_open_export_override_forced_open_wire_compound_edge_info_count"],
+        )
+        self.assertEqual(
+            history["open_export_helper_override_export_blocked_by_iteration_edge_info_count"]
+            + history["open_export_helper_override_export_blocked_by_wire_info_edge_info_count"],
+            history["open_export_helper_override_forced_open_wire_compound_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_with_open_wire_compound_eligible_candidate_edge_info_count"]
+            + ledger["helper_open_export_override_missing_open_wire_compound_eligible_candidate_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
+        )
+        self.assertEqual(
+            history["open_export_helper_override_with_open_wire_compound_eligible_candidate_edge_info_count"]
+            + history["open_export_helper_override_missing_open_wire_compound_eligible_candidate_edge_info_count"],
+            history["open_export_helper_override_edge_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_removed_source_edge_info_count"]
+            + ledger["helper_open_export_override_missing_removed_source_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
+        )
+        self.assertEqual(
+            history["open_export_helper_override_removed_source_edge_info_count"]
+            + history["open_export_helper_override_missing_removed_source_edge_info_count"],
+            history["open_export_helper_override_edge_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_removed_target_edge_info_count"]
+            + ledger["helper_open_export_override_missing_removed_target_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
+        )
+        self.assertEqual(
+            history["open_export_helper_override_removed_target_edge_info_count"]
+            + history["open_export_helper_override_missing_removed_target_edge_info_count"],
+            history["open_export_helper_override_edge_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_ahistory_remove_source_edge_info_count"]
+            + ledger["helper_open_export_override_missing_ahistory_remove_source_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
+        )
+        self.assertEqual(
+            history["open_export_helper_override_ahistory_remove_source_edge_info_count"]
+            + history["open_export_helper_override_missing_ahistory_remove_source_edge_info_count"],
+            history["open_export_helper_override_edge_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_ahistory_remove_source_lineage_edge_info_count"]
+            + ledger["helper_open_export_override_missing_ahistory_remove_source_lineage_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
+        )
+        self.assertEqual(
+            history["open_export_helper_override_ahistory_remove_source_lineage_edge_info_count"]
+            + history["open_export_helper_override_missing_ahistory_remove_source_lineage_edge_info_count"],
+            history["open_export_helper_override_edge_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_ahistory_remove_same_source_lineage_edge_info_count"]
+            + ledger["helper_open_export_override_ahistory_remove_foreign_source_lineage_edge_info_count"],
+            ledger["helper_open_export_override_ahistory_remove_source_lineage_edge_info_count"],
+        )
+        self.assertEqual(
+            history["open_export_helper_override_ahistory_remove_same_source_lineage_edge_info_count"]
+            + history["open_export_helper_override_ahistory_remove_foreign_source_lineage_edge_info_count"],
+            history["open_export_helper_override_ahistory_remove_source_lineage_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_safe_ahistory_producer_evidence_edge_info_count"]
+            + ledger["helper_open_export_override_missing_safe_ahistory_producer_evidence_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
+        )
+        self.assertEqual(
+            history["open_export_helper_override_safe_ahistory_producer_evidence_edge_info_count"]
+            + history["open_export_helper_override_missing_safe_ahistory_producer_evidence_edge_info_count"],
+            history["open_export_helper_override_edge_count"],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ]
+            + ledger[
+                "helper_open_export_override_missing_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+            ledger["helper_open_export_override_forced_open_wire_compound_edge_info_count"],
+        )
+        self.assertEqual(
+            history[
+                "open_export_helper_override_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ]
+            + history[
+                "open_export_helper_override_missing_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+            history["open_export_helper_override_forced_open_wire_compound_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_full_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ]
+            + ledger[
+                "helper_open_export_override_safe_ahistory_producer_evidence_without_full_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+            ledger[
+                "helper_open_export_override_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            history[
+                "open_export_helper_override_full_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ]
+            + history[
+                "open_export_helper_override_safe_ahistory_producer_evidence_without_full_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_source_lineage_removed_source_edge_info_count"]
+            + ledger["helper_open_export_override_missing_source_lineage_removed_source_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
+        )
+        self.assertEqual(
+            history["open_export_helper_override_source_lineage_removed_source_edge_info_count"]
+            + history["open_export_helper_override_missing_source_lineage_removed_source_edge_info_count"],
+            history["open_export_helper_override_edge_count"],
+        )
+        self.assertEqual(
+            sum(1 for entry in entries if entry["helper_open_export_override_source_edge_info"]),
+            history["open_export_helper_override_source_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(1 for entry in entries if entry["helper_open_export_override_source_edge_info_consumed"]),
+            history["open_export_helper_override_source_edge_info_consumed_count"],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_open_wire_compound_eligible_edge_info"]
+            ),
+            history["open_export_helper_override_open_wire_compound_eligible_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_forced_open_wire_compound_edge_info"]
+            ),
+            history["open_export_helper_override_forced_open_wire_compound_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(1 for entry in entries if entry["helper_open_export_override_source_edge_export_shape"]),
+            history["open_export_helper_override_source_edge_export_shape_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_open_wire_compound_eligible_edge_info"]
+                and not entry["helper_open_export_override_source_edge_export_shape"]
+            ),
+            history[
+                "open_export_helper_override_open_wire_compound_eligible_without_source_edge_export_shape_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(1 for entry in entries if entry["helper_open_export_override_full_ahistory_producer_evidence"]),
+            history["open_export_helper_override_full_ahistory_producer_evidence_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_full_ahistory_producer_evidence"]
+                and not entry["helper_open_export_override_source_edge_export_shape"]
+            ),
+            history[
+                "open_export_helper_override_full_ahistory_producer_evidence_without_source_edge_export_shape_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_full_ahistory_producer_evidence"]
+                and entry["helper_open_export_override_forced_open_wire_compound_edge_info"]
+            ),
+            history[
+                "open_export_helper_override_full_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_safe_ahistory_producer_evidence"]
+                and not entry["helper_open_export_override_full_ahistory_producer_evidence"]
+                and entry["helper_open_export_override_forced_open_wire_compound_edge_info"]
+            ),
+            history[
+                "open_export_helper_override_safe_ahistory_producer_evidence_without_full_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(1 for entry in entries if entry["helper_open_export_override_super_edge_member_edge_info"]),
+            history["open_export_helper_override_super_edge_member_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_edge_info"]
+            ),
+            history["open_export_helper_override_super_edge_member_with_root_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_open_wire_compound_eligible_edge_info"]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_root_open_wire_compound_eligible_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_open_lifecycle_edge_info"]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_root_open_lifecycle_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_closed_lifecycle_edge_info"]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_root_closed_lifecycle_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_export_blocked_by_iteration"]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_root_export_blocked_by_iteration_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_export_blocked_by_wire_info"]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_root_export_blocked_by_wire_info_edge_info_count"
+            ],
+        )
+        self.assertTrue(
+            all(
+                (
+                    entry["helper_open_export_override_super_edge_root_open_wire_compound_eligible_edge_info"]
+                    + entry["helper_open_export_override_super_edge_root_export_blocked_by_iteration"]
+                    + entry["helper_open_export_override_super_edge_root_export_blocked_by_wire_info"]
+                )
+                == 1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_edge_info"]
+            )
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_safe_ahistory_producer_evidence"]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_root_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_full_ahistory_producer_evidence"]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_root_full_ahistory_producer_evidence_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_open_wire_compound_eligible_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_safe_ahistory_producer_evidence"]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_root_open_wire_compound_eligible_and_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_open_wire_compound_eligible_edge_info"]
+                and not entry["helper_open_export_override_super_edge_root_safe_ahistory_producer_evidence"]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_root_open_wire_compound_eligible_missing_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_safe_ahistory_producer_evidence"]
+                and not entry["helper_open_export_override_super_edge_root_open_wire_compound_eligible_edge_info"]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_root_safe_ahistory_producer_evidence_without_open_wire_compound_eligible_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_full_ahistory_producer_evidence"]
+                and not entry["helper_open_export_override_super_edge_root_open_wire_compound_eligible_edge_info"]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_root_full_ahistory_producer_evidence_without_open_wire_compound_eligible_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_safe_ahistory_producer_evidence_iteration_blocked"]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_root_safe_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_full_ahistory_producer_evidence_iteration_blocked"]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_root_full_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_missing_safe_ahistory_producer_evidence_iteration_blocked"]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_root_missing_safe_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+        )
+        self.assertTrue(
+            all(
+                entry["helper_open_export_override_super_edge_root_safe_ahistory_producer_evidence_iteration_blocked"]
+                == (
+                    entry["helper_open_export_override_super_edge_root_export_blocked_by_iteration"]
+                    and entry["helper_open_export_override_super_edge_root_safe_ahistory_producer_evidence"]
+                )
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+            )
+        )
+        self.assertTrue(
+            all(
+                entry["helper_open_export_override_super_edge_root_full_ahistory_producer_evidence_iteration_blocked"]
+                == (
+                    entry["helper_open_export_override_super_edge_root_export_blocked_by_iteration"]
+                    and entry["helper_open_export_override_super_edge_root_full_ahistory_producer_evidence"]
+                )
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+            )
+        )
+        self.assertTrue(
+            all(
+                entry["helper_open_export_override_super_edge_root_missing_safe_ahistory_producer_evidence_iteration_blocked"]
+                == (
+                    entry["helper_open_export_override_super_edge_root_export_blocked_by_iteration"]
+                    and not entry["helper_open_export_override_super_edge_root_safe_ahistory_producer_evidence"]
+                )
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+            )
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_iteration_blocked_unowned_removal"]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_root_iteration_blocked_unowned_removal_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_iteration_blocked_primary_removal"]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_root_iteration_blocked_primary_removal_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_iteration_blocked_secondary_removal"]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_root_iteration_blocked_secondary_removal_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_iteration_blocked_missing_removal_branch"]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_root_iteration_blocked_missing_removal_branch_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_super_edge_root_result_wire_producer_candidate"]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry[
+                    "helper_open_export_override_super_edge_root_result_wire_producer_candidate_full_ahistory_producer_evidence"
+                ]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_full_ahistory_producer_evidence_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry[
+                    "helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence"
+                ]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_edge_info_count"
+            ],
+        )
+        self.assertTrue(
+            all(
+                not entry["helper_open_export_override_super_edge_root_result_wire_producer_candidate"]
+                or (
+                    entry["helper_open_export_override_super_edge_root_export_blocked_by_iteration"]
+                    and entry["helper_open_export_override_super_edge_root_open_lifecycle_edge_info"]
+                )
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+            )
+        )
+        self.assertTrue(
+            all(
+                entry[
+                    "helper_open_export_override_super_edge_root_result_wire_producer_candidate_full_ahistory_producer_evidence"
+                ]
+                == (
+                    entry["helper_open_export_override_super_edge_root_result_wire_producer_candidate"]
+                    and entry["helper_open_export_override_super_edge_root_full_ahistory_producer_evidence"]
+                )
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+            )
+        )
+        self.assertTrue(
+            all(
+                entry[
+                    "helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence"
+                ]
+                == (
+                    entry["helper_open_export_override_super_edge_root_result_wire_producer_candidate"]
+                    and not entry["helper_open_export_override_super_edge_root_full_ahistory_producer_evidence"]
+                )
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+            )
+        )
+        self.assertTrue(
+            all(
+                int(
+                    entry[
+                        "helper_open_export_override_super_edge_root_result_wire_producer_candidate_full_ahistory_producer_evidence"
+                    ]
+                )
+                + int(
+                    entry[
+                        "helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence"
+                    ]
+                )
+                == int(entry["helper_open_export_override_super_edge_root_result_wire_producer_candidate"])
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+            )
+        )
+        for entry_key, history_key in (
+            (
+                "helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal",
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_unowned_removal_edge_info_count",
+            ),
+            (
+                "helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready",
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready_edge_info_count",
+            ),
+            (
+                "helper_open_export_override_super_edge_root_result_wire_producer_candidate_primary_removal",
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_primary_removal_edge_info_count",
+            ),
+            (
+                "helper_open_export_override_super_edge_root_result_wire_producer_candidate_secondary_removal",
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_secondary_removal_edge_info_count",
+            ),
+            (
+                "helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_removal_branch",
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_missing_removal_branch_edge_info_count",
+            ),
+            (
+                "helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_unowned_removal",
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_unowned_removal_edge_info_count",
+            ),
+            (
+                "helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_primary_removal",
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_primary_removal_edge_info_count",
+            ),
+            (
+                "helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_secondary_removal",
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_secondary_removal_edge_info_count",
+            ),
+            (
+                "helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_missing_removal_branch",
+                "open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_missing_removal_branch_edge_info_count",
+            ),
+        ):
             self.assertEqual(
-                ledger["repeated_split_exhaust_generated_identity_blocked_edge_info_count"],
-                ledger["generated_open_export_edge_info_count"],
+                sum(
+                    1
+                    for entry in entries
+                    if entry["helper_open_export_override_super_edge_member_edge_info"] and entry[entry_key]
+                ),
+                history[history_key],
             )
-        self.assertEqual(
-            ledger["generated_open_export_source_edge_info_count"],
-            ledger["generated_open_export_edge_info_count"],
-        )
-        self.assertEqual(
-            ledger["generated_open_export_source_edge_info_consumed_count"],
-            ledger["generated_open_export_edge_info_count"],
-        )
-        self.assertEqual(
-            history["open_export_generated_source_edge_info_count"],
-            history["open_export_generated_edge_count"],
-        )
-        self.assertEqual(
-            history["open_export_generated_source_edge_info_consumed_count"],
-            history["open_export_generated_edge_count"],
-        )
-        self.assertEqual(
-            sum(1 for entry in entries if entry["generated_open_export_source_edge_info"]),
-            history["open_export_generated_source_edge_info_count"],
-        )
-        self.assertEqual(
-            sum(1 for entry in entries if entry["generated_open_export_source_edge_info_consumed"]),
-            history["open_export_generated_source_edge_info_consumed_count"],
+        for candidate_branch_key, removal_branch_key in (
+            (
+                "helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal",
+                "helper_open_export_override_super_edge_root_iteration_blocked_unowned_removal",
+            ),
+            (
+                "helper_open_export_override_super_edge_root_result_wire_producer_candidate_primary_removal",
+                "helper_open_export_override_super_edge_root_iteration_blocked_primary_removal",
+            ),
+            (
+                "helper_open_export_override_super_edge_root_result_wire_producer_candidate_secondary_removal",
+                "helper_open_export_override_super_edge_root_iteration_blocked_secondary_removal",
+            ),
+            (
+                "helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_removal_branch",
+                "helper_open_export_override_super_edge_root_iteration_blocked_missing_removal_branch",
+            ),
+        ):
+            self.assertTrue(
+                all(
+                    entry[candidate_branch_key]
+                    == (
+                        entry["helper_open_export_override_super_edge_root_result_wire_producer_candidate"]
+                        and entry[removal_branch_key]
+                    )
+                    for entry in entries
+                    if entry["helper_open_export_override_super_edge_member_edge_info"]
+                )
+            )
+        self.assertTrue(
+            all(
+                entry[
+                    "helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready"
+                ]
+                == (
+                    entry["helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal"]
+                    and entry[
+                        "helper_open_export_override_super_edge_root_result_wire_producer_candidate_full_ahistory_producer_evidence"
+                    ]
+                )
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+            )
         )
         self.assertTrue(
             all(
-                entry["generated_open_export_source_edge_info"] == entry["generated_open_export"]
+                int(entry["helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal"])
+                + int(entry["helper_open_export_override_super_edge_root_result_wire_producer_candidate_primary_removal"])
+                + int(entry["helper_open_export_override_super_edge_root_result_wire_producer_candidate_secondary_removal"])
+                + int(entry["helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_removal_branch"])
+                == int(entry["helper_open_export_override_super_edge_root_result_wire_producer_candidate"])
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+            )
+        )
+        for missing_full_branch_key, candidate_branch_key in (
+            (
+                "helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_unowned_removal",
+                "helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal",
+            ),
+            (
+                "helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_primary_removal",
+                "helper_open_export_override_super_edge_root_result_wire_producer_candidate_primary_removal",
+            ),
+            (
+                "helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_secondary_removal",
+                "helper_open_export_override_super_edge_root_result_wire_producer_candidate_secondary_removal",
+            ),
+            (
+                "helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_missing_removal_branch",
+                "helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_removal_branch",
+            ),
+        ):
+            self.assertTrue(
+                all(
+                    entry[missing_full_branch_key]
+                    == (
+                        entry[
+                            "helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence"
+                        ]
+                        and entry[candidate_branch_key]
+                    )
+                    for entry in entries
+                    if entry["helper_open_export_override_super_edge_member_edge_info"]
+                )
+            )
+        self.assertTrue(
+            all(
+                int(
+                    entry[
+                        "helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_unowned_removal"
+                    ]
+                )
+                + int(
+                    entry[
+                        "helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_primary_removal"
+                    ]
+                )
+                + int(
+                    entry[
+                        "helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_secondary_removal"
+                    ]
+                )
+                + int(
+                    entry[
+                        "helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_missing_removal_branch"
+                    ]
+                )
+                == int(
+                    entry[
+                        "helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence"
+                    ]
+                )
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+            )
+        )
+        self.assertTrue(
+            all(
+                entry["helper_open_export_override_super_edge_root_iteration_blocked_unowned_removal"]
+                == (
+                    entry["helper_open_export_override_super_edge_root_export_blocked_by_iteration"]
+                    and entry["helper_open_export_override_super_edge_root_removed_by_unowned"]
+                )
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+            )
+        )
+        self.assertTrue(
+            all(
+                entry["helper_open_export_override_super_edge_root_iteration_blocked_primary_removal"]
+                == (
+                    entry["helper_open_export_override_super_edge_root_export_blocked_by_iteration"]
+                    and entry["helper_open_export_override_super_edge_root_removed_by_primary_owner"]
+                )
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+            )
+        )
+        self.assertTrue(
+            all(
+                entry["helper_open_export_override_super_edge_root_iteration_blocked_secondary_removal"]
+                == (
+                    entry["helper_open_export_override_super_edge_root_export_blocked_by_iteration"]
+                    and entry["helper_open_export_override_super_edge_root_removed_by_secondary_owner"]
+                )
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+            )
+        )
+        self.assertTrue(
+            all(
+                entry["helper_open_export_override_super_edge_root_iteration_blocked_missing_removal_branch"]
+                == (
+                    entry["helper_open_export_override_super_edge_root_export_blocked_by_iteration"]
+                    and not entry["helper_open_export_override_super_edge_root_removed_by_unowned"]
+                    and not entry["helper_open_export_override_super_edge_root_removed_by_primary_owner"]
+                    and not entry["helper_open_export_override_super_edge_root_removed_by_secondary_owner"]
+                )
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+            )
+        )
+        self.assertTrue(
+            all(
+                int(entry["helper_open_export_override_super_edge_root_iteration_blocked_unowned_removal"])
+                + int(entry["helper_open_export_override_super_edge_root_iteration_blocked_primary_removal"])
+                + int(entry["helper_open_export_override_super_edge_root_iteration_blocked_secondary_removal"])
+                + int(entry["helper_open_export_override_super_edge_root_iteration_blocked_missing_removal_branch"])
+                == int(entry["helper_open_export_override_super_edge_root_export_blocked_by_iteration"])
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+            )
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and entry["helper_open_export_override_forced_open_wire_compound_edge_info"]
+            ),
+            history["open_export_helper_override_super_edge_member_forced_open_wire_compound_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_super_edge_member_edge_info"]
+                and not entry["helper_open_export_override_safe_ahistory_producer_evidence"]
+                and entry["helper_open_export_override_forced_open_wire_compound_edge_info"]
+            ),
+            history[
+                "open_export_helper_override_super_edge_member_missing_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+        )
+        self.assertTrue(
+            all(
+                entry["helper_open_export_override_open_wire_compound_eligible_edge_info"]
+                != entry["helper_open_export_override_forced_open_wire_compound_edge_info"]
+                for entry in entries
+                if entry["helper_open_export_override"]
+            )
+        )
+        self.assertEqual(
+            sum(1 for entry in entries if entry["helper_open_export_override_export_blocked_by_iteration"]),
+            history["open_export_helper_override_export_blocked_by_iteration_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(1 for entry in entries if entry["helper_open_export_override_export_blocked_by_wire_info"]),
+            history["open_export_helper_override_export_blocked_by_wire_info_edge_info_count"],
+        )
+        self.assertTrue(
+            all(
+                entry["helper_open_export_override_export_blocked_by_iteration"]
+                != entry["helper_open_export_override_export_blocked_by_wire_info"]
+                for entry in entries
+                if entry["helper_open_export_override_forced_open_wire_compound_edge_info"]
+            )
+        )
+        self.assertTrue(
+            all(
+                (entry["helper_open_export_override_selected_iteration"] < 0)
+                == entry["helper_open_export_override_export_blocked_by_iteration"]
+                for entry in entries
+                if entry["helper_open_export_override_forced_open_wire_compound_edge_info"]
+            )
+        )
+        self.assertTrue(
+            all(
+                (
+                    entry["helper_open_export_override_selected_iteration"] >= 0
+                    and entry["helper_open_export_override_selected_wire_info"] != 0
+                )
+                == entry["helper_open_export_override_export_blocked_by_wire_info"]
+                for entry in entries
+                if entry["helper_open_export_override_forced_open_wire_compound_edge_info"]
+            )
+        )
+        self.assertEqual(
+            sum(len(entry["helper_open_export_override_candidate_edge_info_indices"]) for entry in entries),
+            history["open_export_helper_override_binding_candidate_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(
+                len(entry["helper_open_export_override_open_wire_compound_eligible_candidate_edge_info_indices"])
+                for entry in entries
+            ),
+            history["open_export_helper_override_open_wire_compound_eligible_candidate_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_open_wire_compound_eligible_candidate_edge_info_indices"]
+            ),
+            history["open_export_helper_override_with_open_wire_compound_eligible_candidate_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override"]
+                and not entry["helper_open_export_override_open_wire_compound_eligible_candidate_edge_info_indices"]
+            ),
+            history["open_export_helper_override_missing_open_wire_compound_eligible_candidate_edge_info_count"],
+        )
+        self.assertTrue(
+            all(
+                entry["edge_info_index"] in entry["helper_open_export_override_candidate_edge_info_indices"]
+                for entry in entries
+                if entry["helper_open_export_override"]
+            )
+        )
+        self.assertTrue(
+            all(
+                entry["helper_open_export_override_open_wire_compound_eligible_edge_info"]
+                == (
+                    entry["edge_info_index"]
+                    in entry[
+                        "helper_open_export_override_open_wire_compound_eligible_candidate_edge_info_indices"
+                    ]
+                )
+                for entry in entries
+                if entry["helper_open_export_override"]
+            )
+        )
+        self.assertEqual(
+            sum(1 for entry in entries if entry["helper_open_export_override_removed_source_edge_info"]),
+            history["open_export_helper_override_removed_source_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override"]
+                and not entry["helper_open_export_override_removed_source_edge_info"]
+            ),
+            history["open_export_helper_override_missing_removed_source_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(1 for entry in entries if entry["helper_open_export_override_removed_target_edge_info"]),
+            history["open_export_helper_override_removed_target_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override"]
+                and not entry["helper_open_export_override_removed_target_edge_info"]
+            ),
+            history["open_export_helper_override_missing_removed_target_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(1 for entry in entries if entry["helper_open_export_override_ahistory_remove_source_edge_info"]),
+            history["open_export_helper_override_ahistory_remove_source_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override"]
+                and not entry["helper_open_export_override_ahistory_remove_source_edge_info"]
+            ),
+            history["open_export_helper_override_missing_ahistory_remove_source_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(1 for entry in entries if entry["helper_open_export_override_ahistory_remove_source_lineage"]),
+            history["open_export_helper_override_ahistory_remove_source_lineage_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(1 for entry in entries if entry["helper_open_export_override_ahistory_remove_same_source_lineage"]),
+            history["open_export_helper_override_ahistory_remove_same_source_lineage_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(1 for entry in entries if entry["helper_open_export_override_ahistory_remove_foreign_source_lineage"]),
+            history["open_export_helper_override_ahistory_remove_foreign_source_lineage_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(1 for entry in entries if entry["helper_open_export_override_safe_ahistory_producer_evidence"]),
+            history["open_export_helper_override_safe_ahistory_producer_evidence_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_safe_ahistory_producer_evidence"]
+                and entry["helper_open_export_override_forced_open_wire_compound_edge_info"]
+            ),
+            history[
+                "open_export_helper_override_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override"]
+                and not entry["helper_open_export_override_safe_ahistory_producer_evidence"]
+                and entry["helper_open_export_override_forced_open_wire_compound_edge_info"]
+            ),
+            history[
+                "open_export_helper_override_missing_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override"]
+                and not entry["helper_open_export_override_safe_ahistory_producer_evidence"]
+            ),
+            history["open_export_helper_override_missing_safe_ahistory_producer_evidence_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override"]
+                and not entry["helper_open_export_override_ahistory_remove_source_lineage"]
+            ),
+            history["open_export_helper_override_missing_ahistory_remove_source_lineage_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override_source_lineage_removed_source_edge_info"]
+            ),
+            history["open_export_helper_override_source_lineage_removed_source_edge_info_count"],
+        )
+        self.assertEqual(
+            sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override"]
+                and not entry["helper_open_export_override_source_lineage_removed_source_edge_info"]
+            ),
+            history["open_export_helper_override_missing_source_lineage_removed_source_edge_info_count"],
+        )
+        self.assertTrue(
+            all(
+                bool(entry["helper_open_export_override_ahistory_remove_source_edge_info_indices"])
+                == entry["helper_open_export_override_ahistory_remove_source_edge_info"]
                 for entry in entries
             )
         )
         self.assertTrue(
             all(
-                entry["generated_open_export_source_edge_info_consumed"] == entry["generated_open_export"]
+                bool(entry["helper_open_export_override_ahistory_remove_source_edge_indices"])
+                == entry["helper_open_export_override_ahistory_remove_source_lineage"]
+                for entry in entries
+            )
+        )
+        self.assertTrue(
+            all(
+                not entry["helper_open_export_override_ahistory_remove_source_lineage"]
+                or entry["helper_open_export_override_ahistory_remove_source_edge_info"]
+                for entry in entries
+            )
+        )
+        self.assertTrue(
+            all(
+                bool(
+                    set(entry["source_edge_indices"]).intersection(
+                        entry["helper_open_export_override_ahistory_remove_source_edge_indices"]
+                    )
+                )
+                == entry["helper_open_export_override_ahistory_remove_same_source_lineage"]
+                for entry in entries
+            )
+        )
+        self.assertTrue(
+            all(
+                (
+                    entry["helper_open_export_override_ahistory_remove_source_lineage"]
+                    and not entry["helper_open_export_override_ahistory_remove_same_source_lineage"]
+                )
+                == entry["helper_open_export_override_ahistory_remove_foreign_source_lineage"]
+                for entry in entries
+            )
+        )
+        self.assertTrue(
+            all(
+                (
+                    (
+                        entry["helper_open_export_override_removed_source_edge_info"]
+                        and bool(entry["source_edge_indices"])
+                    )
+                    or entry["helper_open_export_override_ahistory_remove_same_source_lineage"]
+                )
+                == entry["helper_open_export_override_safe_ahistory_producer_evidence"]
+                for entry in entries
+            )
+        )
+        self.assertTrue(
+            all(
+                not entry["helper_open_export_override_ahistory_remove_foreign_source_lineage"]
+                or not entry["helper_open_export_override_safe_ahistory_producer_evidence"]
+                for entry in entries
+            )
+        )
+        self.assertTrue(
+            all(
+                bool(entry["helper_open_export_override_source_lineage_removed_source_edge_info_indices"])
+                == entry["helper_open_export_override_source_lineage_removed_source_edge_info"]
+                for entry in entries
+            )
+        )
+        self.assertTrue(
+            all(
+                not entry["helper_open_export_override_source_lineage_removed_source_edge_info"]
+                or bool(entry["source_edge_indices"])
+                for entry in entries
+            )
+        )
+        self.assertTrue(
+            all(
+                entry["helper_open_export_override_source_edge_info"] == entry["helper_open_export_override"]
+                for entry in entries
+            )
+        )
+        self.assertTrue(
+            all(
+                entry["helper_open_export_override_source_edge_info_consumed"]
+                == entry["helper_open_export_override_forced_open_wire_compound_edge_info"]
+                for entry in entries
+            )
+        )
+        self.assertTrue(
+            all(
+                not entry["helper_open_export_override_super_edge_root_edge_info"]
+                or entry["helper_open_export_override_super_edge_member_edge_info"]
+                for entry in entries
+            )
+        )
+        self.assertTrue(
+            all(
+                not entry["helper_open_export_override_super_edge_root_open_wire_compound_eligible_edge_info"]
+                or entry["helper_open_export_override_super_edge_root_edge_info"]
+                for entry in entries
+            )
+        )
+        self.assertTrue(
+            all(
+                not entry["helper_open_export_override_super_edge_root_safe_ahistory_producer_evidence"]
+                or entry["helper_open_export_override_super_edge_root_edge_info"]
+                for entry in entries
+            )
+        )
+        self.assertTrue(
+            all(
+                not entry["helper_open_export_override_super_edge_root_full_ahistory_producer_evidence"]
+                or entry["helper_open_export_override_super_edge_root_safe_ahistory_producer_evidence"]
+                for entry in entries
+            )
+        )
+        self.assertTrue(
+            all(
+                entry["helper_open_export_override_super_edge_root_edge_info"]
+                or entry["helper_open_export_override_super_edge_root_edge_info_index"] == 0
                 for entry in entries
             )
         )
         self.assertEqual(
-            ledger["open_wire_compound_generated_wire_info_count"],
-            ledger["generated_open_export_edge_info_count"],
+            ledger["open_wire_compound_helper_open_export_override_wire_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
         )
         self.assertEqual(
-            ledger["open_wire_compound_generated_source_edge_info_wire_info_count"],
-            ledger["open_wire_compound_generated_wire_info_count"],
+            ledger["open_wire_compound_helper_open_export_override_source_edge_info_wire_info_count"],
+            ledger["open_wire_compound_helper_open_export_override_wire_info_count"],
         )
         self.assertEqual(
-            ledger["open_wire_compound_generated_source_edge_info_consumed_wire_info_count"],
-            ledger["open_wire_compound_generated_wire_info_count"],
+            ledger["open_wire_compound_helper_open_export_override_source_edge_info_consumed_wire_info_count"],
+            ledger["open_wire_compound_helper_open_export_override_forced_open_wire_compound_wire_info_count"],
+        )
+        self.assertEqual(
+            ledger["open_wire_compound_helper_open_export_override_open_wire_compound_eligible_wire_info_count"]
+            + ledger["open_wire_compound_helper_open_export_override_forced_open_wire_compound_wire_info_count"],
+            ledger["open_wire_compound_helper_open_export_override_wire_info_count"],
         )
 
         edge_reason_total = 0
         child_wire_reason_total = 0
-        for reason, (edge_key, child_wire_key) in self.GENERATED_REASON_LEDGER_KEYS.items():
+        for reason, (edge_key, child_wire_key) in self.HELPER_OVERRIDE_REASON_LEDGER_KEYS.items():
             expected = expected_counts.get(reason, 0)
             self.assertEqual(ledger[edge_key], expected)
             self.assertEqual(ledger[child_wire_key], expected)
             edge_reason_total += ledger[edge_key]
             child_wire_reason_total += ledger[child_wire_key]
 
-        self.assertEqual(edge_reason_total, ledger["generated_open_export_edge_info_count"])
-        self.assertEqual(child_wire_reason_total, ledger["open_wire_compound_generated_wire_info_count"])
+        self.assertEqual(edge_reason_total, ledger["helper_open_export_override_edge_info_count"])
+        self.assertEqual(
+            child_wire_reason_total,
+            ledger["open_wire_compound_helper_open_export_override_wire_info_count"],
+        )
         return entries
+
+    def assert_helper_override_has_no_open_wire_compound_eligible_candidate(
+        self,
+        ledger: dict[str, int],
+    ) -> None:
+        self.assert_helper_override_open_wire_compound_eligible_candidate_count(ledger, expected=0)
+
+    def assert_helper_override_open_wire_compound_eligible_candidate_count(
+        self,
+        ledger: dict[str, int],
+        *,
+        expected: int,
+    ) -> None:
+        self.assertEqual(
+            ledger["helper_open_export_override_open_wire_compound_eligible_edge_info_count"],
+            expected,
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_open_wire_compound_eligible_candidate_edge_info_count"],
+            expected,
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_with_open_wire_compound_eligible_candidate_edge_info_count"],
+            expected,
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_missing_open_wire_compound_eligible_candidate_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"] - expected,
+        )
+
+    def assert_helper_override_export_blocked_by_lifecycle(
+        self,
+        ledger: dict[str, int],
+        *,
+        by_iteration: int,
+        by_wire_info: int,
+    ) -> None:
+        self.assertEqual(
+            ledger["helper_open_export_override_export_blocked_by_iteration_edge_info_count"],
+            by_iteration,
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_export_blocked_by_wire_info_edge_info_count"],
+            by_wire_info,
+        )
+        self.assertEqual(
+            by_iteration + by_wire_info,
+            ledger["helper_open_export_override_forced_open_wire_compound_edge_info_count"],
+        )
+
+    def assert_helper_override_has_no_source_edge_export_shape(self, ledger: dict[str, int]) -> None:
+        self.assertEqual(
+            ledger["helper_open_export_override_source_edge_export_shape_edge_info_count"],
+            0,
+        )
+
+    def assert_helper_override_source_edge_export_shape_count(
+        self,
+        ledger: dict[str, int],
+        expected: int,
+    ) -> None:
+        self.assertEqual(
+            ledger["helper_open_export_override_source_edge_export_shape_edge_info_count"],
+            expected,
+        )
+
+    def assert_helper_override_eligible_without_source_edge_export_shape_count(
+        self,
+        ledger: dict[str, int],
+        expected: int,
+    ) -> None:
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_open_wire_compound_eligible_without_source_edge_export_shape_edge_info_count"
+            ],
+            expected,
+        )
+        self.assertLessEqual(
+            expected,
+            ledger["helper_open_export_override_open_wire_compound_eligible_edge_info_count"],
+        )
+
+    def assert_helper_override_all_use_source_edge_export_shape(self, ledger: dict[str, int]) -> None:
+        self.assertEqual(
+            ledger["helper_open_export_override_source_edge_export_shape_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
+        )
+
+    def assert_helper_override_full_ahistory_producer_evidence(
+        self,
+        ledger: dict[str, int],
+        *,
+        full: int,
+        without_source_edge_export_shape: int,
+    ) -> None:
+        self.assertEqual(
+            ledger["helper_open_export_override_full_ahistory_producer_evidence_edge_info_count"],
+            full,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_full_ahistory_producer_evidence_without_source_edge_export_shape_edge_info_count"
+            ],
+            without_source_edge_export_shape,
+        )
+
+    def assert_helper_override_ahistory_remove_lineage_split(
+        self,
+        ledger: dict[str, int],
+        *,
+        same: int,
+        foreign: int,
+    ) -> None:
+        self.assertEqual(
+            ledger["helper_open_export_override_ahistory_remove_same_source_lineage_edge_info_count"],
+            same,
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_ahistory_remove_foreign_source_lineage_edge_info_count"],
+            foreign,
+        )
+        self.assertEqual(
+            same + foreign,
+            ledger["helper_open_export_override_ahistory_remove_source_lineage_edge_info_count"],
+        )
+
+    def assert_helper_override_safe_ahistory_producer_evidence(
+        self,
+        ledger: dict[str, int],
+        *,
+        safe: int,
+    ) -> None:
+        self.assertEqual(
+            ledger["helper_open_export_override_safe_ahistory_producer_evidence_edge_info_count"],
+            safe,
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_missing_safe_ahistory_producer_evidence_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"] - safe,
+        )
+
+    def assert_helper_override_safe_ahistory_forced_split(
+        self,
+        ledger: dict[str, int],
+        *,
+        safe_forced: int,
+        missing_safe_forced: int,
+        full_forced: int,
+        safe_without_full_forced: int,
+    ) -> None:
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+            safe_forced,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_missing_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+            missing_safe_forced,
+        )
+        self.assertEqual(
+            safe_forced + missing_safe_forced,
+            ledger["helper_open_export_override_forced_open_wire_compound_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_full_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+            full_forced,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_safe_ahistory_producer_evidence_without_full_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+            safe_without_full_forced,
+        )
+        self.assertEqual(full_forced + safe_without_full_forced, safe_forced)
+
+    def assert_helper_override_super_edge_member_split(
+        self,
+        ledger: dict[str, int],
+        *,
+        member: int,
+        with_root: int,
+        root_eligible: int,
+        root_open: int,
+        root_closed: int,
+        root_blocked_by_iteration: int,
+        root_unowned_iteration_blocked: int,
+        root_primary_iteration_blocked: int,
+        root_secondary_iteration_blocked: int,
+        root_missing_branch_iteration_blocked: int,
+        root_result_wire_candidate: int,
+        root_result_wire_candidate_full: int,
+        root_result_wire_candidate_missing_full: int,
+        root_result_wire_candidate_unowned: int,
+        root_result_wire_candidate_unowned_ready: int,
+        root_result_wire_candidate_primary: int,
+        root_result_wire_candidate_secondary: int,
+        root_result_wire_candidate_missing_branch: int,
+        root_result_wire_candidate_missing_full_unowned: int,
+        root_result_wire_candidate_missing_full_primary: int,
+        root_result_wire_candidate_missing_full_secondary: int,
+        root_result_wire_candidate_missing_full_missing_branch: int,
+        current_member_child_wire_ready: int,
+        current_member_child_wire_full_ahistory: int,
+        root_blocked_by_wire_info: int,
+        root_safe: int,
+        root_full: int,
+        root_eligible_safe: int,
+        root_eligible_missing_safe: int,
+        root_safe_without_eligible: int,
+        root_full_without_eligible: int,
+        root_safe_iteration_blocked: int,
+        root_full_iteration_blocked: int,
+        root_missing_safe_iteration_blocked: int,
+        forced: int,
+        missing_safe_forced: int,
+    ) -> None:
+        self.assertEqual(ledger["helper_open_export_override_super_edge_member_edge_info_count"], member)
+        self.assertEqual(
+            ledger["helper_open_export_override_super_edge_member_with_root_edge_info_count"],
+            with_root,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_open_wire_compound_eligible_edge_info_count"
+            ],
+            root_eligible,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_open_lifecycle_edge_info_count"
+            ],
+            root_open,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_closed_lifecycle_edge_info_count"
+            ],
+            root_closed,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_export_blocked_by_iteration_edge_info_count"
+            ],
+            root_blocked_by_iteration,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_iteration_blocked_unowned_removal_edge_info_count"
+            ],
+            root_unowned_iteration_blocked,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_iteration_blocked_primary_removal_edge_info_count"
+            ],
+            root_primary_iteration_blocked,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_iteration_blocked_secondary_removal_edge_info_count"
+            ],
+            root_secondary_iteration_blocked,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_iteration_blocked_missing_removal_branch_edge_info_count"
+            ],
+            root_missing_branch_iteration_blocked,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_edge_info_count"
+            ],
+            root_result_wire_candidate,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_full_ahistory_producer_evidence_edge_info_count"
+            ],
+            root_result_wire_candidate_full,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_edge_info_count"
+            ],
+            root_result_wire_candidate_missing_full,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_unowned_removal_edge_info_count"
+            ],
+            root_result_wire_candidate_unowned,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready_edge_info_count"
+            ],
+            root_result_wire_candidate_unowned_ready,
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_candidate_wire_info_count"
+            ],
+            root_result_wire_candidate,
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready_wire_info_count"
+            ],
+            root_result_wire_candidate_unowned_ready,
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_wire_built_wire_info_count"
+            ],
+            root_result_wire_candidate,
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready_wire_built_wire_info_count"
+            ],
+            root_result_wire_candidate_unowned_ready,
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_current_member_child_wire_producer_ready_wire_info_count"
+            ],
+            current_member_child_wire_ready,
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_current_member_child_wire_producer_full_ahistory_evidence_wire_info_count"
+            ],
+            current_member_child_wire_full_ahistory,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_primary_removal_edge_info_count"
+            ],
+            root_result_wire_candidate_primary,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_secondary_removal_edge_info_count"
+            ],
+            root_result_wire_candidate_secondary,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_removal_branch_edge_info_count"
+            ],
+            root_result_wire_candidate_missing_branch,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_unowned_removal_edge_info_count"
+            ],
+            root_result_wire_candidate_missing_full_unowned,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_primary_removal_edge_info_count"
+            ],
+            root_result_wire_candidate_missing_full_primary,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_secondary_removal_edge_info_count"
+            ],
+            root_result_wire_candidate_missing_full_secondary,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_missing_removal_branch_edge_info_count"
+            ],
+            root_result_wire_candidate_missing_full_missing_branch,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_export_blocked_by_wire_info_edge_info_count"
+            ],
+            root_blocked_by_wire_info,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+            root_safe,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_full_ahistory_producer_evidence_edge_info_count"
+            ],
+            root_full,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_open_wire_compound_eligible_and_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+            root_eligible_safe,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_open_wire_compound_eligible_missing_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+            root_eligible_missing_safe,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_safe_ahistory_producer_evidence_without_open_wire_compound_eligible_edge_info_count"
+            ],
+            root_safe_without_eligible,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_full_ahistory_producer_evidence_without_open_wire_compound_eligible_edge_info_count"
+            ],
+            root_full_without_eligible,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_safe_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+            root_safe_iteration_blocked,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_full_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+            root_full_iteration_blocked,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_root_missing_safe_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+            root_missing_safe_iteration_blocked,
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_super_edge_member_forced_open_wire_compound_edge_info_count"],
+            forced,
+        )
+        self.assertEqual(
+            ledger[
+                "helper_open_export_override_super_edge_member_missing_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+            missing_safe_forced,
+        )
+        self.assertLessEqual(root_eligible, with_root)
+        self.assertLessEqual(root_open, with_root)
+        self.assertLessEqual(root_closed, with_root)
+        self.assertLessEqual(root_open + root_closed, with_root)
+        self.assertEqual(root_eligible + root_blocked_by_iteration + root_blocked_by_wire_info, with_root)
+        self.assertLessEqual(root_safe, with_root)
+        self.assertLessEqual(root_full, root_safe)
+        self.assertEqual(root_eligible_safe + root_eligible_missing_safe, root_eligible)
+        self.assertEqual(root_eligible_safe + root_safe_without_eligible, root_safe)
+        self.assertLessEqual(root_full_without_eligible, root_safe_without_eligible)
+        self.assertEqual(
+            root_safe_iteration_blocked + root_missing_safe_iteration_blocked,
+            root_blocked_by_iteration,
+        )
+        self.assertEqual(
+            root_unowned_iteration_blocked
+            + root_primary_iteration_blocked
+            + root_secondary_iteration_blocked
+            + root_missing_branch_iteration_blocked,
+            root_blocked_by_iteration,
+        )
+        self.assertEqual(
+            root_result_wire_candidate_full + root_result_wire_candidate_missing_full,
+            root_result_wire_candidate,
+        )
+        self.assertEqual(
+            root_result_wire_candidate_unowned
+            + root_result_wire_candidate_primary
+            + root_result_wire_candidate_secondary
+            + root_result_wire_candidate_missing_branch,
+            root_result_wire_candidate,
+        )
+        self.assertEqual(
+            root_result_wire_candidate_missing_full_unowned
+            + root_result_wire_candidate_missing_full_primary
+            + root_result_wire_candidate_missing_full_secondary
+            + root_result_wire_candidate_missing_full_missing_branch,
+            root_result_wire_candidate_missing_full,
+        )
+        self.assertEqual(
+            root_result_wire_candidate_unowned_ready + root_result_wire_candidate_missing_full_unowned,
+            root_result_wire_candidate_unowned,
+        )
+        self.assertLessEqual(root_result_wire_candidate, root_blocked_by_iteration)
+        self.assertLessEqual(root_result_wire_candidate_unowned_ready, root_result_wire_candidate_full)
+        self.assertLessEqual(current_member_child_wire_ready, root_result_wire_candidate_unowned_ready)
+        self.assertLessEqual(current_member_child_wire_full_ahistory, current_member_child_wire_ready)
+        self.assertLessEqual(root_result_wire_candidate_full, root_full_iteration_blocked)
+        self.assertLessEqual(root_full_iteration_blocked, root_safe_iteration_blocked)
+        self.assertLessEqual(root_safe_iteration_blocked, root_safe)
+        self.assertLessEqual(root_full_iteration_blocked, root_full)
+        self.assertLessEqual(with_root, member)
+        self.assertLessEqual(forced, member)
+        self.assertLessEqual(missing_safe_forced, forced)
 
     def test_p5_coincident_constraints_merge_profile_endpoints(self) -> None:
         result = self.run_recompute("sketch-coincident-profile", "p5")
@@ -1350,7 +3976,11 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(ledger["tight_bound_exhaust_primary_reset_blocked_edge_info_count"], 0)
         self.assertEqual(ledger["exhaust_seed_edge_info_count"], 0)
-        self.assertEqual(ledger["secondary_owned_edge_info_count"], ledger["exhaust_secondary_owner_edge_info_count"])
+        self.assertEqual(
+            ledger["secondary_owned_edge_info_count"]
+            + ledger["repeated_split_exhaust_rerun_miss_live_reset_edge_info_count"],
+            ledger["exhaust_secondary_owner_edge_info_count"],
+        )
         self.assertEqual(ledger["exhaust_shared_owner_edge_info_count"], ledger["exhaust_secondary_owner_edge_info_count"])
         self.assertEqual(ledger["exhaust_done_secondary_edge_info_count"], ledger["exhaust_secondary_owner_edge_info_count"])
         self.assertEqual(ledger["exhaust_secondary_owner_edge_info_count"], 0)
@@ -1422,18 +4052,27 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
         self.assertEqual(ledger["temporary_result_wire_edge_info_count"], 0)
-        self.assertGreater(ledger["generated_open_export_edge_info_count"], 0)
-        self.assertEqual(ledger["generated_open_export_edge_info_count"], ledger["open_export_edge_info_count"])
-        self.assert_open_wire_compound_ledger(ledger)
+        self.assertEqual(ledger["generated_open_export_edge_info_count"], 0)
+        self.assertGreater(ledger["helper_open_export_override_edge_info_count"], 0)
         self.assertEqual(
-            ledger["source_lineage_missing_open_export_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
             ledger["open_export_edge_info_count"],
         )
-        self.assertEqual(ledger["source_lineage_open_export_edge_info_count"], 0)
+        self.assert_open_wire_compound_ledger(ledger)
+        self.assertGreater(ledger["source_lineage_open_export_edge_info_count"], 0)
+        self.assertEqual(ledger["source_lineage_missing_open_export_edge_info_count"], 0)
+        self.assertEqual(
+            ledger["source_lineage_open_export_edge_info_count"],
+            ledger["open_export_edge_info_count"],
+        )
         self.assert_super_edge_lifecycle_ledger(ledger)
         self.assert_closed_wire_stack_ledger(ledger)
         self.assertEqual(ledger["graph_secondary_owner_edge_info_count"], 0)
-        self.assertEqual(ledger["secondary_owned_edge_info_count"], ledger["exhaust_secondary_owner_edge_info_count"])
+        self.assertEqual(
+            ledger["secondary_owned_edge_info_count"]
+            + ledger["repeated_split_exhaust_rerun_miss_live_reset_edge_info_count"],
+            ledger["exhaust_secondary_owner_edge_info_count"],
+        )
         self.assertGreater(ledger["tight_bound_split_wire_vertex_count"], 0)
         self.assertGreaterEqual(
             ledger["tight_bound_split_wire_vertex_count"],
@@ -1464,13 +4103,96 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(ledger["exhaust_adjacent_search_hit_count"], 0)
         self.assertGreater(ledger["exhaust_adjacent_wire_set_abort_count"], 0)
         self.assertGreater(ledger["exhaust_adjacent_wire_info2_abort_count"], 0)
-        entries = self.assert_generated_open_export_reason_ledger(
+        entries = self.assert_helper_open_export_override_reason_ledger(
             sketch,
             {"consumed_open_cutter_graph": 12},
         )
         self.assertTrue(
-            all(entry["generated_open_export_reason"] == "consumed_open_cutter_graph" for entry in entries)
+            all(entry["helper_open_export_override_reason"] == "consumed_open_cutter_graph" for entry in entries)
         )
+        self.assertTrue(all(entry["source_edge_indices"] for entry in entries))
+        self.assertEqual(
+            ledger["helper_open_export_override_ahistory_remove_source_lineage_edge_info_count"],
+            ledger["helper_open_export_override_ahistory_remove_source_edge_info_count"],
+        )
+        self.assertGreater(
+            ledger["helper_open_export_override_ahistory_remove_source_lineage_edge_info_count"],
+            ledger["helper_open_export_override_removed_source_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_source_lineage_removed_source_edge_info_count"],
+            10,
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_missing_source_lineage_removed_source_edge_info_count"],
+            2,
+        )
+        self.assertGreater(
+            ledger["helper_open_export_override_source_lineage_removed_source_edge_info_count"],
+            ledger["helper_open_export_override_ahistory_remove_source_lineage_edge_info_count"],
+        )
+        self.assertEqual(ledger["repeated_split_exhaust_rerun_miss_live_reset_edge_info_count"], 1)
+        self.assert_helper_override_open_wire_compound_eligible_candidate_count(ledger, expected=1)
+        self.assert_helper_override_export_blocked_by_lifecycle(
+            ledger,
+            by_iteration=11,
+            by_wire_info=0,
+        )
+        self.assert_helper_override_full_ahistory_producer_evidence(
+            ledger,
+            full=6,
+            without_source_edge_export_shape=6,
+        )
+        self.assert_helper_override_ahistory_remove_lineage_split(ledger, same=6, foreign=1)
+        self.assert_helper_override_safe_ahistory_producer_evidence(ledger, safe=6)
+        self.assert_helper_override_safe_ahistory_forced_split(
+            ledger,
+            safe_forced=6,
+            missing_safe_forced=5,
+            full_forced=6,
+            safe_without_full_forced=0,
+        )
+        self.assert_helper_override_super_edge_member_split(
+            ledger,
+            member=4,
+            with_root=4,
+            root_eligible=0,
+            root_open=4,
+            root_closed=0,
+            root_blocked_by_iteration=4,
+            root_unowned_iteration_blocked=4,
+            root_primary_iteration_blocked=0,
+            root_secondary_iteration_blocked=0,
+            root_missing_branch_iteration_blocked=0,
+            root_result_wire_candidate=4,
+            root_result_wire_candidate_full=4,
+            root_result_wire_candidate_missing_full=0,
+            root_result_wire_candidate_unowned=4,
+            root_result_wire_candidate_unowned_ready=4,
+            root_result_wire_candidate_primary=0,
+            root_result_wire_candidate_secondary=0,
+            root_result_wire_candidate_missing_branch=0,
+            root_result_wire_candidate_missing_full_unowned=0,
+            root_result_wire_candidate_missing_full_primary=0,
+            root_result_wire_candidate_missing_full_secondary=0,
+            root_result_wire_candidate_missing_full_missing_branch=0,
+            current_member_child_wire_ready=4,
+            current_member_child_wire_full_ahistory=4,
+            root_blocked_by_wire_info=0,
+            root_safe=4,
+            root_full=4,
+            root_eligible_safe=0,
+            root_eligible_missing_safe=0,
+            root_safe_without_eligible=4,
+            root_full_without_eligible=4,
+            root_safe_iteration_blocked=4,
+            root_full_iteration_blocked=4,
+            root_missing_safe_iteration_blocked=0,
+            forced=4,
+            missing_safe_forced=4,
+        )
+        self.assert_helper_override_has_no_source_edge_export_shape(ledger)
+        self.assert_helper_override_eligible_without_source_edge_export_shape_count(ledger, 1)
         self.assert_object_matches_expected(result, "p5", "sketch-internal-face-cross-cutters")
 
     def test_p5_t_junction_cutter_records_result_wire_open_export(self) -> None:
@@ -1488,7 +4210,8 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(
             ledger["closed_wire_assigned_edge_info_count"],
             ledger["primary_owned_edge_info_count"]
-            + ledger["tight_bound_exhaust_primary_reset_edge_info_count"],
+            + ledger["tight_bound_exhaust_primary_reset_edge_info_count"]
+            + ledger["repeated_split_exhaust_rerun_miss_live_reset_edge_info_count"],
         )
         self.assertEqual(ledger["graph_fallback_assigned_edge_info_count"], 0)
         self.assertGreaterEqual(ledger["closed_wire_info_count"], 1)
@@ -1541,51 +4264,488 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(ledger["open_export_edge_info_count"], 0)
         self.assert_open_wire_compound_ledger(ledger)
         self.assertEqual(history["open_export_edge_count"], ledger["open_export_edge_info_count"])
+        self.assertEqual(history["open_export_generated_edge_count"], 0)
+        self.assertEqual(ledger["generated_open_export_edge_info_count"], 0)
         self.assertEqual(
-            history["open_export_generated_edge_count"],
-            ledger["generated_open_export_edge_info_count"],
+            history["open_export_helper_override_edge_count"],
+            ledger["helper_open_export_override_edge_info_count"],
         )
         self.assertEqual(
-            history["open_export_generated_missing_source_lineage_edge_count"],
+            history["open_export_helper_override_missing_source_lineage_edge_count"],
             ledger["source_lineage_missing_open_export_edge_info_count"],
         )
-        self.assertEqual(history["open_export_source_lineage_edge_count"], 0)
-        entries = self.assert_generated_open_export_reason_ledger(
+        self.assertGreater(history["open_export_source_lineage_edge_count"], 0)
+        self.assertEqual(history["open_export_missing_source_lineage_edge_count"], 0)
+        self.assertEqual(
+            history["open_export_source_lineage_edge_count"],
+            history["open_export_edge_count"],
+        )
+        entries = self.assert_helper_open_export_override_reason_ledger(
             sketch,
             {"partial_junction_open_cutter": 8},
         )
-        self.assertTrue(all(not entry["source_edge_indices"] for entry in entries))
-        self.assertTrue(all(entry["generated_open_export"] for entry in entries))
+        self.assertTrue(all(entry["source_edge_indices"] for entry in entries))
+        self.assertTrue(all(entry["helper_open_export_override"] for entry in entries))
+        self.assertTrue(all(not entry["generated_open_export"] for entry in entries))
         self.assertTrue(
-            all(entry["generated_open_export_reason"] == "partial_junction_open_cutter" for entry in entries)
+            all(entry["helper_open_export_override_reason"] == "partial_junction_open_cutter" for entry in entries)
         )
         self.assertTrue(all(not entry["purge_bridge"] for entry in entries))
-        internal_entries = result["named_shapes"]["Sketch.InternalShape"]["sketch_internal_history"][
-            "wire_joiner_open_export_history_entries"
-        ]
+        internal_history = result["named_shapes"]["Sketch.InternalShape"]["sketch_internal_history"]
+        internal_entries = internal_history["wire_joiner_open_export_history_entries"]
         self.assertEqual(
-            [entry["generated_open_export_reason"] for entry in internal_entries],
-            [entry["generated_open_export_reason"] for entry in entries],
+            internal_history[
+                "wire_joiner_open_export_helper_override_full_ahistory_producer_evidence_edge_info_count"
+            ],
+            history["open_export_helper_override_full_ahistory_producer_evidence_edge_info_count"],
         )
         self.assertEqual(
-            [entry["generated_open_export_source_edge_info"] for entry in internal_entries],
-            [entry["generated_open_export_source_edge_info"] for entry in entries],
+            internal_history[
+                "wire_joiner_open_export_helper_override_full_ahistory_producer_evidence_without_source_edge_export_shape_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_full_ahistory_producer_evidence_without_source_edge_export_shape_edge_info_count"
+            ],
         )
         self.assertEqual(
-            [entry["generated_open_export_source_edge_info_index"] for entry in internal_entries],
-            [entry["generated_open_export_source_edge_info_index"] for entry in entries],
+            internal_history[
+                "wire_joiner_open_export_helper_override_full_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_full_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
         )
         self.assertEqual(
-            [entry["generated_open_export_source_edge_info_consumed"] for entry in internal_entries],
-            [entry["generated_open_export_source_edge_info_consumed"] for entry in entries],
+            internal_history[
+                "wire_joiner_open_export_helper_override_safe_ahistory_producer_evidence_without_full_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_safe_ahistory_producer_evidence_without_full_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            internal_history["wire_joiner_open_export_helper_override_super_edge_member_edge_info_count"],
+            history["open_export_helper_override_super_edge_member_edge_info_count"],
+        )
+        self.assertEqual(
+            internal_history[
+                "wire_joiner_open_export_helper_override_super_edge_member_with_root_edge_info_count"
+            ],
+            history["open_export_helper_override_super_edge_member_with_root_edge_info_count"],
+        )
+        self.assertEqual(
+            internal_history[
+                "wire_joiner_open_export_helper_override_super_edge_member_root_open_wire_compound_eligible_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_open_wire_compound_eligible_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            internal_history[
+                "wire_joiner_open_export_helper_override_super_edge_member_root_open_lifecycle_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_open_lifecycle_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            internal_history[
+                "wire_joiner_open_export_helper_override_super_edge_member_root_closed_lifecycle_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_closed_lifecycle_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            internal_history[
+                "wire_joiner_open_export_helper_override_super_edge_member_root_export_blocked_by_iteration_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_export_blocked_by_iteration_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            internal_history[
+                "wire_joiner_open_export_helper_override_super_edge_member_root_export_blocked_by_wire_info_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_export_blocked_by_wire_info_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            internal_history[
+                "wire_joiner_open_export_helper_override_super_edge_member_root_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            internal_history[
+                "wire_joiner_open_export_helper_override_super_edge_member_root_full_ahistory_producer_evidence_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_full_ahistory_producer_evidence_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            internal_history[
+                "wire_joiner_open_export_helper_override_super_edge_member_root_open_wire_compound_eligible_and_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_open_wire_compound_eligible_and_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            internal_history[
+                "wire_joiner_open_export_helper_override_super_edge_member_root_open_wire_compound_eligible_missing_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_open_wire_compound_eligible_missing_safe_ahistory_producer_evidence_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            internal_history[
+                "wire_joiner_open_export_helper_override_super_edge_member_root_safe_ahistory_producer_evidence_without_open_wire_compound_eligible_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_safe_ahistory_producer_evidence_without_open_wire_compound_eligible_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            internal_history[
+                "wire_joiner_open_export_helper_override_super_edge_member_root_full_ahistory_producer_evidence_without_open_wire_compound_eligible_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_full_ahistory_producer_evidence_without_open_wire_compound_eligible_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            internal_history[
+                "wire_joiner_open_export_helper_override_super_edge_member_root_safe_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_safe_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            internal_history[
+                "wire_joiner_open_export_helper_override_super_edge_member_root_full_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_full_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            internal_history[
+                "wire_joiner_open_export_helper_override_super_edge_member_root_missing_safe_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_root_missing_safe_ahistory_producer_evidence_iteration_blocked_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            internal_history[
+                "wire_joiner_open_export_helper_override_super_edge_member_forced_open_wire_compound_edge_info_count"
+            ],
+            history["open_export_helper_override_super_edge_member_forced_open_wire_compound_edge_info_count"],
+        )
+        self.assertEqual(
+            internal_history[
+                "wire_joiner_open_export_helper_override_super_edge_member_missing_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+            history[
+                "open_export_helper_override_super_edge_member_missing_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count"
+            ],
+        )
+        self.assertEqual(
+            [entry["helper_open_export_override_reason"] for entry in internal_entries],
+            [entry["helper_open_export_override_reason"] for entry in entries],
+        )
+        self.assertEqual(
+            [entry["helper_open_export_override_source_edge_info"] for entry in internal_entries],
+            [entry["helper_open_export_override_source_edge_info"] for entry in entries],
+        )
+        self.assertEqual(
+            [entry["helper_open_export_override_source_edge_info_index"] for entry in internal_entries],
+            [entry["helper_open_export_override_source_edge_info_index"] for entry in entries],
+        )
+        self.assertEqual(
+            [entry["helper_open_export_override_source_edge_info_consumed"] for entry in internal_entries],
+            [entry["helper_open_export_override_source_edge_info_consumed"] for entry in entries],
+        )
+        self.assertEqual(
+            [
+                entry["helper_open_export_override_open_wire_compound_eligible_edge_info"]
+                for entry in internal_entries
+            ],
+            [
+                entry["helper_open_export_override_open_wire_compound_eligible_edge_info"]
+                for entry in entries
+            ],
+        )
+        self.assertEqual(
+            [entry["helper_open_export_override_forced_open_wire_compound_edge_info"] for entry in internal_entries],
+            [entry["helper_open_export_override_forced_open_wire_compound_edge_info"] for entry in entries],
+        )
+        self.assertEqual(
+            [entry["helper_open_export_override_source_edge_export_shape"] for entry in internal_entries],
+            [entry["helper_open_export_override_source_edge_export_shape"] for entry in entries],
+        )
+        self.assertEqual(
+            [
+                entry["helper_open_export_override_full_ahistory_producer_evidence"]
+                for entry in internal_entries
+            ],
+            [
+                entry["helper_open_export_override_full_ahistory_producer_evidence"]
+                for entry in entries
+            ],
+        )
+        self.assertEqual(
+            [
+                entry["helper_open_export_override_super_edge_member_edge_info"]
+                for entry in internal_entries
+            ],
+            [
+                entry["helper_open_export_override_super_edge_member_edge_info"]
+                for entry in entries
+            ],
+        )
+        self.assertEqual(
+            [
+                entry["helper_open_export_override_super_edge_root_edge_info"]
+                for entry in internal_entries
+            ],
+            [
+                entry["helper_open_export_override_super_edge_root_edge_info"]
+                for entry in entries
+            ],
+        )
+        self.assertEqual(
+            [
+                entry["helper_open_export_override_super_edge_root_edge_info_index"]
+                for entry in internal_entries
+            ],
+            [
+                entry["helper_open_export_override_super_edge_root_edge_info_index"]
+                for entry in entries
+            ],
+        )
+        self.assertEqual(
+            [
+                entry["helper_open_export_override_super_edge_root_open_wire_compound_eligible_edge_info"]
+                for entry in internal_entries
+            ],
+            [
+                entry["helper_open_export_override_super_edge_root_open_wire_compound_eligible_edge_info"]
+                for entry in entries
+            ],
+        )
+        self.assertEqual(
+            [
+                entry["helper_open_export_override_super_edge_root_open_lifecycle_edge_info"]
+                for entry in internal_entries
+            ],
+            [
+                entry["helper_open_export_override_super_edge_root_open_lifecycle_edge_info"]
+                for entry in entries
+            ],
+        )
+        self.assertEqual(
+            [
+                entry["helper_open_export_override_super_edge_root_closed_lifecycle_edge_info"]
+                for entry in internal_entries
+            ],
+            [
+                entry["helper_open_export_override_super_edge_root_closed_lifecycle_edge_info"]
+                for entry in entries
+            ],
+        )
+        self.assertEqual(
+            [
+                entry["helper_open_export_override_super_edge_root_selected_iteration"]
+                for entry in internal_entries
+            ],
+            [
+                entry["helper_open_export_override_super_edge_root_selected_iteration"]
+                for entry in entries
+            ],
+        )
+        self.assertEqual(
+            [
+                entry["helper_open_export_override_super_edge_root_selected_wire_info"]
+                for entry in internal_entries
+            ],
+            [
+                entry["helper_open_export_override_super_edge_root_selected_wire_info"]
+                for entry in entries
+            ],
+        )
+        self.assertEqual(
+            [
+                entry["helper_open_export_override_super_edge_root_selected_wire_info2"]
+                for entry in internal_entries
+            ],
+            [
+                entry["helper_open_export_override_super_edge_root_selected_wire_info2"]
+                for entry in entries
+            ],
+        )
+        self.assertEqual(
+            [
+                entry["helper_open_export_override_super_edge_root_export_blocked_by_iteration"]
+                for entry in internal_entries
+            ],
+            [
+                entry["helper_open_export_override_super_edge_root_export_blocked_by_iteration"]
+                for entry in entries
+            ],
+        )
+        self.assertEqual(
+            [
+                entry["helper_open_export_override_super_edge_root_export_blocked_by_wire_info"]
+                for entry in internal_entries
+            ],
+            [
+                entry["helper_open_export_override_super_edge_root_export_blocked_by_wire_info"]
+                for entry in entries
+            ],
+        )
+        self.assertEqual(
+            [
+                entry["helper_open_export_override_super_edge_root_safe_ahistory_producer_evidence"]
+                for entry in internal_entries
+            ],
+            [
+                entry["helper_open_export_override_super_edge_root_safe_ahistory_producer_evidence"]
+                for entry in entries
+            ],
+        )
+        self.assertEqual(
+            [
+                entry["helper_open_export_override_super_edge_root_full_ahistory_producer_evidence"]
+                for entry in internal_entries
+            ],
+            [
+                entry["helper_open_export_override_super_edge_root_full_ahistory_producer_evidence"]
+                for entry in entries
+            ],
+        )
+        self.assertEqual(
+            [
+                entry[
+                    "helper_open_export_override_super_edge_root_safe_ahistory_producer_evidence_iteration_blocked"
+                ]
+                for entry in internal_entries
+            ],
+            [
+                entry[
+                    "helper_open_export_override_super_edge_root_safe_ahistory_producer_evidence_iteration_blocked"
+                ]
+                for entry in entries
+            ],
+        )
+        self.assertEqual(
+            [
+                entry[
+                    "helper_open_export_override_super_edge_root_full_ahistory_producer_evidence_iteration_blocked"
+                ]
+                for entry in internal_entries
+            ],
+            [
+                entry[
+                    "helper_open_export_override_super_edge_root_full_ahistory_producer_evidence_iteration_blocked"
+                ]
+                for entry in entries
+            ],
+        )
+        self.assertEqual(
+            [
+                entry[
+                    "helper_open_export_override_super_edge_root_missing_safe_ahistory_producer_evidence_iteration_blocked"
+                ]
+                for entry in internal_entries
+            ],
+            [
+                entry[
+                    "helper_open_export_override_super_edge_root_missing_safe_ahistory_producer_evidence_iteration_blocked"
+                ]
+                for entry in entries
+            ],
+        )
+        self.assertEqual(
+            [entry["helper_open_export_override_selected_iteration"] for entry in internal_entries],
+            [entry["helper_open_export_override_selected_iteration"] for entry in entries],
+        )
+        self.assertEqual(
+            [entry["helper_open_export_override_selected_wire_info"] for entry in internal_entries],
+            [entry["helper_open_export_override_selected_wire_info"] for entry in entries],
+        )
+        self.assertEqual(
+            [entry["helper_open_export_override_selected_wire_info2"] for entry in internal_entries],
+            [entry["helper_open_export_override_selected_wire_info2"] for entry in entries],
+        )
+        self.assertEqual(
+            [entry["helper_open_export_override_export_blocked_by_iteration"] for entry in internal_entries],
+            [entry["helper_open_export_override_export_blocked_by_iteration"] for entry in entries],
+        )
+        self.assertEqual(
+            [entry["helper_open_export_override_export_blocked_by_wire_info"] for entry in internal_entries],
+            [entry["helper_open_export_override_export_blocked_by_wire_info"] for entry in entries],
+        )
+        self.assertEqual(
+            [entry["helper_open_export_override_candidate_edge_info_indices"] for entry in internal_entries],
+            [entry["helper_open_export_override_candidate_edge_info_indices"] for entry in entries],
+        )
+        self.assertEqual(
+            [
+                entry["helper_open_export_override_open_wire_compound_eligible_candidate_edge_info_indices"]
+                for entry in internal_entries
+            ],
+            [
+                entry["helper_open_export_override_open_wire_compound_eligible_candidate_edge_info_indices"]
+                for entry in entries
+            ],
+        )
+        self.assertEqual(
+            [entry["helper_open_export_override_source_lineage_removed_source_edge_info"] for entry in internal_entries],
+            [entry["helper_open_export_override_source_lineage_removed_source_edge_info"] for entry in entries],
+        )
+        self.assertEqual(
+            [entry["helper_open_export_override_ahistory_remove_same_source_lineage"] for entry in internal_entries],
+            [entry["helper_open_export_override_ahistory_remove_same_source_lineage"] for entry in entries],
+        )
+        self.assertEqual(
+            [entry["helper_open_export_override_ahistory_remove_foreign_source_lineage"] for entry in internal_entries],
+            [entry["helper_open_export_override_ahistory_remove_foreign_source_lineage"] for entry in entries],
+        )
+        self.assertEqual(
+            [entry["helper_open_export_override_safe_ahistory_producer_evidence"] for entry in internal_entries],
+            [entry["helper_open_export_override_safe_ahistory_producer_evidence"] for entry in entries],
+        )
+        self.assertEqual(
+            [
+                entry["helper_open_export_override_source_lineage_removed_source_edge_info_indices"]
+                for entry in internal_entries
+            ],
+            [
+                entry["helper_open_export_override_source_lineage_removed_source_edge_info_indices"]
+                for entry in entries
+            ],
         )
         self.assertGreater(history["modified_history_count"], 0)
         self.assertGreater(history["deleted_history_count"], 0)
         self.assertTrue(history["splitter_history"])
         self.assertTrue(history["final_export_history"])
         self.assertEqual(ledger["temporary_result_wire_edge_info_count"], 0)
-        self.assertGreater(ledger["generated_open_export_edge_info_count"], 0)
-        self.assertEqual(ledger["generated_open_export_edge_info_count"], ledger["open_export_edge_info_count"])
+        self.assertEqual(ledger["generated_open_export_edge_info_count"], 0)
+        self.assertGreater(ledger["helper_open_export_override_edge_info_count"], 0)
+        self.assertEqual(
+            ledger["helper_open_export_override_edge_info_count"],
+            ledger["open_export_edge_info_count"],
+        )
         self.assertGreater(ledger["source_identity_open_export_shared_vertex_edge_info_count"], 0)
         self.assertGreater(
             ledger["source_identity_open_export_shared_vertex_edge_info_count"],
@@ -1597,21 +4757,91 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ledger["open_export_edge_info_count"],
         )
         self.assertGreater(ledger["source_lineage_split_edge_info_count"], 0)
+        self.assertGreater(ledger["source_lineage_open_export_edge_info_count"], 0)
+        self.assertEqual(ledger["source_lineage_missing_open_export_edge_info_count"], 0)
         self.assertEqual(
-            ledger["source_lineage_missing_open_export_edge_info_count"],
-            ledger["generated_open_export_edge_info_count"],
+            ledger["source_lineage_open_export_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
         )
-        self.assertEqual(ledger["source_lineage_open_export_edge_info_count"], 0)
+        self.assertEqual(
+            ledger["helper_open_export_override_ahistory_remove_source_lineage_edge_info_count"],
+            ledger["helper_open_export_override_ahistory_remove_source_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_source_lineage_removed_source_edge_info_count"],
+            3,
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_missing_source_lineage_removed_source_edge_info_count"],
+            5,
+        )
+        self.assertEqual(ledger["repeated_split_exhaust_rerun_miss_live_reset_edge_info_count"], 2)
+        self.assert_helper_override_open_wire_compound_eligible_candidate_count(ledger, expected=2)
+        self.assert_helper_override_export_blocked_by_lifecycle(
+            ledger,
+            by_iteration=6,
+            by_wire_info=0,
+        )
+        self.assert_helper_override_full_ahistory_producer_evidence(
+            ledger,
+            full=2,
+            without_source_edge_export_shape=2,
+        )
+        self.assert_helper_override_ahistory_remove_lineage_split(ledger, same=2, foreign=0)
+        self.assert_helper_override_safe_ahistory_producer_evidence(ledger, safe=2)
+        self.assert_helper_override_safe_ahistory_forced_split(
+            ledger,
+            safe_forced=2,
+            missing_safe_forced=4,
+            full_forced=2,
+            safe_without_full_forced=0,
+        )
+        self.assert_helper_override_super_edge_member_split(
+            ledger,
+            member=4,
+            with_root=4,
+            root_eligible=2,
+            root_open=4,
+            root_closed=0,
+            root_blocked_by_iteration=2,
+            root_unowned_iteration_blocked=2,
+            root_primary_iteration_blocked=0,
+            root_secondary_iteration_blocked=0,
+            root_missing_branch_iteration_blocked=0,
+            root_result_wire_candidate=2,
+            root_result_wire_candidate_full=2,
+            root_result_wire_candidate_missing_full=0,
+            root_result_wire_candidate_unowned=2,
+            root_result_wire_candidate_unowned_ready=2,
+            root_result_wire_candidate_primary=0,
+            root_result_wire_candidate_secondary=0,
+            root_result_wire_candidate_missing_branch=0,
+            root_result_wire_candidate_missing_full_unowned=0,
+            root_result_wire_candidate_missing_full_primary=0,
+            root_result_wire_candidate_missing_full_secondary=0,
+            root_result_wire_candidate_missing_full_missing_branch=0,
+            current_member_child_wire_ready=2,
+            current_member_child_wire_full_ahistory=2,
+            root_blocked_by_wire_info=0,
+            root_safe=2,
+            root_full=2,
+            root_eligible_safe=0,
+            root_eligible_missing_safe=2,
+            root_safe_without_eligible=2,
+            root_full_without_eligible=2,
+            root_safe_iteration_blocked=2,
+            root_full_iteration_blocked=2,
+            root_missing_safe_iteration_blocked=0,
+            forced=4,
+            missing_safe_forced=4,
+        )
+        self.assert_helper_override_has_no_source_edge_export_shape(ledger)
+        self.assert_helper_override_eligible_without_source_edge_export_shape_count(ledger, 2)
         self.assert_super_edge_lifecycle_ledger(ledger)
         self.assertGreaterEqual(ledger["ordered_wire_info_count"], 1)
-        self.assertEqual(
-            ledger["ordered_vertex_count"] + ledger["generated_open_export_edge_info_count"],
-            ledger["edge_info_count"],
-        )
-        self.assertEqual(
-            ledger["iteration2_marked_edge_info_count"] + ledger["generated_open_export_edge_info_count"],
-            ledger["edge_info_count"],
-        )
+        self.assertLessEqual(ledger["ordered_vertex_count"], ledger["edge_info_count"])
+        self.assertLessEqual(ledger["iteration2_marked_edge_info_count"], ledger["edge_info_count"])
+        self.assertLessEqual(ledger["helper_open_export_override_edge_info_count"], ledger["edge_info_count"])
         self.assertGreater(ledger["branch_search_candidate_count"], 0)
         self.assertGreaterEqual(ledger["branch_search_seed_wire_info_count"], 1)
         self.assertGreater(ledger["branch_search_inside_candidate_count"], 0)
@@ -1664,10 +4894,87 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assert_generated_open_export_reason_ledger(
+        entries = self.assert_helper_open_export_override_reason_ledger(
             sketch,
             {"partial_junction_open_cutter": 10},
         )
+        ledger = sketch["wire_joiner_ledger"]
+        self.assertTrue(all(entry["source_edge_indices"] for entry in entries))
+        self.assertEqual(ledger["source_lineage_missing_open_export_edge_info_count"], 0)
+        self.assertEqual(
+            ledger["helper_open_export_override_ahistory_remove_source_lineage_edge_info_count"],
+            ledger["helper_open_export_override_ahistory_remove_source_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_source_lineage_removed_source_edge_info_count"],
+            8,
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_missing_source_lineage_removed_source_edge_info_count"],
+            2,
+        )
+        self.assertEqual(ledger["repeated_split_exhaust_rerun_miss_live_reset_edge_info_count"], 1)
+        self.assert_helper_override_open_wire_compound_eligible_candidate_count(ledger, expected=1)
+        self.assert_helper_override_export_blocked_by_lifecycle(
+            ledger,
+            by_iteration=9,
+            by_wire_info=0,
+        )
+        self.assert_helper_override_full_ahistory_producer_evidence(
+            ledger,
+            full=4,
+            without_source_edge_export_shape=4,
+        )
+        self.assert_helper_override_ahistory_remove_lineage_split(ledger, same=4, foreign=1)
+        self.assert_helper_override_safe_ahistory_producer_evidence(ledger, safe=4)
+        self.assert_helper_override_safe_ahistory_forced_split(
+            ledger,
+            safe_forced=4,
+            missing_safe_forced=5,
+            full_forced=4,
+            safe_without_full_forced=0,
+        )
+        self.assert_helper_override_super_edge_member_split(
+            ledger,
+            member=4,
+            with_root=4,
+            root_eligible=0,
+            root_open=4,
+            root_closed=0,
+            root_blocked_by_iteration=4,
+            root_unowned_iteration_blocked=4,
+            root_primary_iteration_blocked=0,
+            root_secondary_iteration_blocked=0,
+            root_missing_branch_iteration_blocked=0,
+            root_result_wire_candidate=4,
+            root_result_wire_candidate_full=4,
+            root_result_wire_candidate_missing_full=0,
+            root_result_wire_candidate_unowned=4,
+            root_result_wire_candidate_unowned_ready=4,
+            root_result_wire_candidate_primary=0,
+            root_result_wire_candidate_secondary=0,
+            root_result_wire_candidate_missing_branch=0,
+            root_result_wire_candidate_missing_full_unowned=0,
+            root_result_wire_candidate_missing_full_primary=0,
+            root_result_wire_candidate_missing_full_secondary=0,
+            root_result_wire_candidate_missing_full_missing_branch=0,
+            current_member_child_wire_ready=4,
+            current_member_child_wire_full_ahistory=4,
+            root_blocked_by_wire_info=0,
+            root_safe=4,
+            root_full=4,
+            root_eligible_safe=0,
+            root_eligible_missing_safe=0,
+            root_safe_without_eligible=4,
+            root_full_without_eligible=4,
+            root_safe_iteration_blocked=4,
+            root_full_iteration_blocked=4,
+            root_missing_safe_iteration_blocked=0,
+            forced=4,
+            missing_safe_forced=4,
+        )
+        self.assert_helper_override_has_no_source_edge_export_shape(ledger)
+        self.assert_helper_override_eligible_without_source_edge_export_shape_count(ledger, 1)
         self.assert_object_matches_expected(result, "p5", "sketch-internal-face-segmented-cross-cutter")
 
     def test_p5_overlapping_closed_profiles_split_into_disjoint_internal_faces(self) -> None:
@@ -1724,10 +5031,88 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assert_generated_open_export_reason_ledger(
+        self.assert_helper_open_export_override_reason_ledger(
             sketch,
             {"closed_wire_cycle": 15},
         )
+        self.assertGreater(
+            ledger["helper_open_export_override_ahistory_remove_source_lineage_edge_info_count"],
+            ledger["helper_open_export_override_removed_source_edge_info_count"],
+        )
+        self.assertGreater(
+            ledger["helper_open_export_override_ahistory_remove_source_edge_info_count"],
+            ledger["helper_open_export_override_removed_source_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_source_lineage_removed_source_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_missing_source_lineage_removed_source_edge_info_count"],
+            0,
+        )
+        self.assertEqual(ledger["repeated_split_exhaust_rerun_miss_live_reset_edge_info_count"], 3)
+        self.assert_helper_override_open_wire_compound_eligible_candidate_count(ledger, expected=3)
+        self.assert_helper_override_export_blocked_by_lifecycle(
+            ledger,
+            by_iteration=12,
+            by_wire_info=0,
+        )
+        self.assert_helper_override_full_ahistory_producer_evidence(
+            ledger,
+            full=5,
+            without_source_edge_export_shape=5,
+        )
+        self.assert_helper_override_ahistory_remove_lineage_split(ledger, same=7, foreign=2)
+        self.assert_helper_override_safe_ahistory_producer_evidence(ledger, safe=7)
+        self.assert_helper_override_safe_ahistory_forced_split(
+            ledger,
+            safe_forced=7,
+            missing_safe_forced=5,
+            full_forced=5,
+            safe_without_full_forced=2,
+        )
+        self.assert_helper_override_super_edge_member_split(
+            ledger,
+            member=3,
+            with_root=3,
+            root_eligible=1,
+            root_open=3,
+            root_closed=0,
+            root_blocked_by_iteration=2,
+            root_unowned_iteration_blocked=1,
+            root_primary_iteration_blocked=1,
+            root_secondary_iteration_blocked=0,
+            root_missing_branch_iteration_blocked=0,
+            root_result_wire_candidate=2,
+            root_result_wire_candidate_full=2,
+            root_result_wire_candidate_missing_full=0,
+            root_result_wire_candidate_unowned=1,
+            root_result_wire_candidate_unowned_ready=1,
+            root_result_wire_candidate_primary=1,
+            root_result_wire_candidate_secondary=0,
+            root_result_wire_candidate_missing_branch=0,
+            root_result_wire_candidate_missing_full_unowned=0,
+            root_result_wire_candidate_missing_full_primary=0,
+            root_result_wire_candidate_missing_full_secondary=0,
+            root_result_wire_candidate_missing_full_missing_branch=0,
+            current_member_child_wire_ready=1,
+            current_member_child_wire_full_ahistory=1,
+            root_blocked_by_wire_info=0,
+            root_safe=2,
+            root_full=2,
+            root_eligible_safe=0,
+            root_eligible_missing_safe=1,
+            root_safe_without_eligible=2,
+            root_full_without_eligible=2,
+            root_safe_iteration_blocked=2,
+            root_full_iteration_blocked=2,
+            root_missing_safe_iteration_blocked=0,
+            forced=3,
+            missing_safe_forced=3,
+        )
+        self.assert_helper_override_has_no_source_edge_export_shape(ledger)
+        self.assert_helper_override_eligible_without_source_edge_export_shape_count(ledger, 3)
         self.assertGreater(ledger["exhaust_adjacent_search_miss_count"], 0)
         self.assertGreater(ledger["exhaust_adjacent_search_hit_count"], 0)
         self.assertGreater(ledger["exhaust_adjacent_search_backtrack_count"], 0)
@@ -1738,12 +5123,123 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         result = self.run_recompute("sketch-internal-face-arc-lens", "p5")
         sketch = result["objects"]["Sketch"]
         ledger = sketch["wire_joiner_ledger"]
+        history = sketch["wire_joiner_history_detail"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assert_generated_open_export_reason_ledger(
+        entries = self.assert_helper_open_export_override_reason_ledger(
             sketch,
             {"partial_shared_closed_wire": 1},
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_removed_source_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
+        )
+        self.assertEqual(ledger["helper_open_export_override_missing_removed_source_edge_info_count"], 0)
+        self.assertEqual(
+            ledger["helper_open_export_override_removed_target_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_ahistory_remove_source_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_ahistory_remove_source_lineage_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_source_lineage_removed_source_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
+        )
+        self.assertEqual(
+            ledger["helper_open_export_override_missing_source_lineage_removed_source_edge_info_count"],
+            0,
+        )
+        self.assertEqual(ledger["helper_open_export_override_open_wire_compound_eligible_edge_info_count"], 0)
+        self.assertEqual(
+            ledger["helper_open_export_override_forced_open_wire_compound_edge_info_count"],
+            ledger["helper_open_export_override_edge_info_count"],
+        )
+        self.assert_helper_override_has_no_open_wire_compound_eligible_candidate(ledger)
+        self.assert_helper_override_export_blocked_by_lifecycle(
+            ledger,
+            by_iteration=1,
+            by_wire_info=0,
+        )
+        self.assert_helper_override_full_ahistory_producer_evidence(
+            ledger,
+            full=1,
+            without_source_edge_export_shape=0,
+        )
+        self.assert_helper_override_ahistory_remove_lineage_split(ledger, same=1, foreign=0)
+        self.assert_helper_override_safe_ahistory_producer_evidence(ledger, safe=1)
+        self.assert_helper_override_safe_ahistory_forced_split(
+            ledger,
+            safe_forced=1,
+            missing_safe_forced=0,
+            full_forced=1,
+            safe_without_full_forced=0,
+        )
+        self.assert_helper_override_super_edge_member_split(
+            ledger,
+            member=0,
+            with_root=0,
+            root_eligible=0,
+            root_open=0,
+            root_closed=0,
+            root_blocked_by_iteration=0,
+            root_unowned_iteration_blocked=0,
+            root_primary_iteration_blocked=0,
+            root_secondary_iteration_blocked=0,
+            root_missing_branch_iteration_blocked=0,
+            root_result_wire_candidate=0,
+            root_result_wire_candidate_full=0,
+            root_result_wire_candidate_missing_full=0,
+            root_result_wire_candidate_unowned=0,
+            root_result_wire_candidate_unowned_ready=0,
+            root_result_wire_candidate_primary=0,
+            root_result_wire_candidate_secondary=0,
+            root_result_wire_candidate_missing_branch=0,
+            root_result_wire_candidate_missing_full_unowned=0,
+            root_result_wire_candidate_missing_full_primary=0,
+            root_result_wire_candidate_missing_full_secondary=0,
+            root_result_wire_candidate_missing_full_missing_branch=0,
+            current_member_child_wire_ready=0,
+            current_member_child_wire_full_ahistory=0,
+            root_blocked_by_wire_info=0,
+            root_safe=0,
+            root_full=0,
+            root_eligible_safe=0,
+            root_eligible_missing_safe=0,
+            root_safe_without_eligible=0,
+            root_full_without_eligible=0,
+            root_safe_iteration_blocked=0,
+            root_full_iteration_blocked=0,
+            root_missing_safe_iteration_blocked=0,
+            forced=0,
+            missing_safe_forced=0,
+        )
+        self.assert_helper_override_all_use_source_edge_export_shape(ledger)
+        self.assert_helper_override_eligible_without_source_edge_export_shape_count(ledger, 0)
+        self.assertEqual(ledger["source_lineage_missing_open_export_edge_info_count"], 0)
+        self.assertEqual(history["open_export_helper_override_missing_source_lineage_edge_count"], 0)
+        self.assertTrue(
+            all(
+                entry["helper_open_export_override_removed_source_edge_info"]
+                and bool(entry["source_edge_indices"])
+                and entry["helper_open_export_override_removed_target_edge_info"]
+                and entry["helper_open_export_override_ahistory_remove_source_edge_info"]
+                and bool(entry["helper_open_export_override_ahistory_remove_source_edge_info_indices"])
+                and entry["helper_open_export_override_ahistory_remove_source_lineage"]
+                and bool(entry["helper_open_export_override_ahistory_remove_source_edge_indices"])
+                and entry["helper_open_export_override_ahistory_remove_same_source_lineage"]
+                and not entry["helper_open_export_override_ahistory_remove_foreign_source_lineage"]
+                and entry["helper_open_export_override_source_lineage_removed_source_edge_info"]
+                and bool(entry["helper_open_export_override_source_lineage_removed_source_edge_info_indices"])
+                for entry in entries
+                if entry["helper_open_export_override"]
+            )
         )
         self.assert_existing_wire_search_ledger(ledger)
         self.assert_existing_wire_search_only_order_blocked_ledger(ledger)

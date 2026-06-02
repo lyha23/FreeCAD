@@ -4725,6 +4725,239 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
                     wireJoinerHistory->openExportGeneratedSourceEdgeInfoConsumedCount;
                 internalHistoryContext->wireJoinerOpenExportGeneratedMissingSourceLineageEdgeCount =
                     wireJoinerHistory->openExportGeneratedMissingSourceLineageEdgeCount;
+                internalHistoryContext->wireJoinerOpenExportHelperOverrideEdgeCount =
+                    wireJoinerHistory->openExportHelperOverrideEdgeCount;
+                internalHistoryContext->wireJoinerOpenExportHelperOverrideSourceEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideSourceEdgeInfoCount;
+                internalHistoryContext->wireJoinerOpenExportHelperOverrideSourceEdgeInfoConsumedCount =
+                    wireJoinerHistory->openExportHelperOverrideSourceEdgeInfoConsumedCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideOpenWireCompoundEligibleEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideOpenWireCompoundEligibleEdgeInfoCount;
+                internalHistoryContext->wireJoinerOpenExportHelperOverrideForcedOpenWireCompoundEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideForcedOpenWireCompoundEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSourceEdgeExportShapeEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideSourceEdgeExportShapeEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSourceEdgeProducerOutputEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideSourceEdgeProducerOutputEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideOpenWireCompoundEligibleWithoutSourceEdgeExportShapeEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideOpenWireCompoundEligibleWithoutSourceEdgeExportShapeEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideExportBlockedByIterationEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideExportBlockedByIterationEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideExportBlockedByWireInfoEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideExportBlockedByWireInfoEdgeInfoCount;
+                internalHistoryContext->wireJoinerOpenExportHelperOverrideBindingCandidateEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideBindingCandidateEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideOpenWireCompoundEligibleCandidateEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideOpenWireCompoundEligibleCandidateEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideWithOpenWireCompoundEligibleCandidateEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideWithOpenWireCompoundEligibleCandidateEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideMissingOpenWireCompoundEligibleCandidateEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideMissingOpenWireCompoundEligibleCandidateEdgeInfoCount;
+                internalHistoryContext->wireJoinerOpenExportHelperOverrideRemovedSourceEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideRemovedSourceEdgeInfoCount;
+                internalHistoryContext->wireJoinerOpenExportHelperOverrideMissingRemovedSourceEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideMissingRemovedSourceEdgeInfoCount;
+                internalHistoryContext->wireJoinerOpenExportHelperOverrideRemovedTargetEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideRemovedTargetEdgeInfoCount;
+                internalHistoryContext->wireJoinerOpenExportHelperOverrideMissingRemovedTargetEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideMissingRemovedTargetEdgeInfoCount;
+                internalHistoryContext->wireJoinerOpenExportHelperOverrideAHistoryRemoveSourceEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideAHistoryRemoveSourceEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideMissingAHistoryRemoveSourceEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideMissingAHistoryRemoveSourceEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideAHistoryRemoveSourceLineageEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideAHistoryRemoveSourceLineageEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideMissingAHistoryRemoveSourceLineageEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideMissingAHistoryRemoveSourceLineageEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideAHistoryRemoveSameSourceLineageEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideAHistoryRemoveSameSourceLineageEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideAHistoryRemoveForeignSourceLineageEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideAHistoryRemoveForeignSourceLineageEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSafeAHistoryProducerEvidenceEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideSafeAHistoryProducerEvidenceEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideMissingSafeAHistoryProducerEvidenceEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideMissingSafeAHistoryProducerEvidenceEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideMissingSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideMissingSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSourceLineageRemovedSourceEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideSourceLineageRemovedSourceEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideFullAHistoryProducerEvidenceEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideFullAHistoryProducerEvidenceEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideFullAHistoryProducerEvidenceWithoutSourceEdgeExportShapeEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideFullAHistoryProducerEvidenceWithoutSourceEdgeExportShapeEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideFullAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideFullAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSafeAHistoryProducerEvidenceWithoutFullAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSafeAHistoryProducerEvidenceWithoutFullAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideSuperEdgeMemberEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberWithRootEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideSuperEdgeMemberWithRootEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootOpenWireCompoundEligibleEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootOpenWireCompoundEligibleEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootOpenLifecycleEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootOpenLifecycleEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootClosedLifecycleEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootClosedLifecycleEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootExportBlockedByIterationEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootExportBlockedByIterationEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootExportBlockedByWireInfoEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootExportBlockedByWireInfoEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootOpenWireCompoundEligibleAndSafeAHistoryProducerEvidenceEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootOpenWireCompoundEligibleAndSafeAHistoryProducerEvidenceEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootOpenWireCompoundEligibleMissingSafeAHistoryProducerEvidenceEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootOpenWireCompoundEligibleMissingSafeAHistoryProducerEvidenceEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceWithoutOpenWireCompoundEligibleEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceWithoutOpenWireCompoundEligibleEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceWithoutOpenWireCompoundEligibleEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceWithoutOpenWireCompoundEligibleEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceIterationBlockedEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceIterationBlockedEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceIterationBlockedEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceIterationBlockedEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootMissingSafeAHistoryProducerEvidenceIterationBlockedEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootMissingSafeAHistoryProducerEvidenceIterationBlockedEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootIterationBlockedUnownedRemovalEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootIterationBlockedUnownedRemovalEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootIterationBlockedPrimaryRemovalEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootIterationBlockedPrimaryRemovalEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootIterationBlockedSecondaryRemovalEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootIterationBlockedSecondaryRemovalEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootIterationBlockedMissingRemovalBranchEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootIterationBlockedMissingRemovalBranchEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateFullAHistoryProducerEvidenceEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateFullAHistoryProducerEvidenceEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateUnownedRemovalEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateUnownedRemovalEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateUnownedRemovalChildWireProducerReadyEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateUnownedRemovalChildWireProducerReadyEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidatePrimaryRemovalEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidatePrimaryRemovalEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateSecondaryRemovalEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateSecondaryRemovalEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingRemovalBranchEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingRemovalBranchEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceUnownedRemovalEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceUnownedRemovalEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidencePrimaryRemovalEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidencePrimaryRemovalEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceSecondaryRemovalEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceSecondaryRemovalEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceMissingRemovalBranchEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceMissingRemovalBranchEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberForcedOpenWireCompoundEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideSuperEdgeMemberForcedOpenWireCompoundEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideSuperEdgeMemberMissingSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount =
+                    wireJoinerHistory
+                        ->openExportHelperOverrideSuperEdgeMemberMissingSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount;
+                internalHistoryContext
+                    ->wireJoinerOpenExportHelperOverrideMissingSourceLineageRemovedSourceEdgeInfoCount =
+                    wireJoinerHistory->openExportHelperOverrideMissingSourceLineageRemovedSourceEdgeInfoCount;
+                internalHistoryContext->wireJoinerOpenExportHelperOverrideMissingSourceLineageEdgeCount =
+                    wireJoinerHistory->openExportHelperOverrideMissingSourceLineageEdgeCount;
                 internalHistoryContext->wireJoinerOpenExportPurgeBridgeEdgeCount =
                     wireJoinerHistory->openExportPurgeBridgeEdgeCount;
                 for (const geometry::WireJoinerOpenExportHistoryEntry& entry :
@@ -4741,6 +4974,144 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
                         entry.generatedOpenExportSourceEdgeInfoIndex;
                     topoEntry.generatedOpenExportSourceEdgeInfoConsumed =
                         entry.generatedOpenExportSourceEdgeInfoConsumed;
+                    topoEntry.helperOpenExportOverride = entry.helperOpenExportOverride;
+                    topoEntry.helperOpenExportOverrideReason = entry.helperOpenExportOverrideReason;
+                    topoEntry.helperOpenExportOverrideSourceEdgeInfo =
+                        entry.helperOpenExportOverrideSourceEdgeInfo;
+                    topoEntry.helperOpenExportOverrideSourceEdgeInfoIndex =
+                        entry.helperOpenExportOverrideSourceEdgeInfoIndex;
+                    topoEntry.helperOpenExportOverrideSourceEdgeInfoConsumed =
+                        entry.helperOpenExportOverrideSourceEdgeInfoConsumed;
+                    topoEntry.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo =
+                        entry.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo;
+                    topoEntry.helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo =
+                        entry.helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo;
+                    topoEntry.helperOpenExportOverrideSourceEdgeExportShape =
+                        entry.helperOpenExportOverrideSourceEdgeExportShape;
+                    topoEntry.helperOpenExportOverrideSourceEdgeProducerOutput =
+                        entry.helperOpenExportOverrideSourceEdgeProducerOutput;
+                    topoEntry.helperOpenExportOverrideFullAHistoryProducerEvidence =
+                        entry.helperOpenExportOverrideFullAHistoryProducerEvidence;
+                    topoEntry.helperOpenExportOverrideSuperEdgeMemberEdgeInfo =
+                        entry.helperOpenExportOverrideSuperEdgeMemberEdgeInfo;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootEdgeInfo =
+                        entry.helperOpenExportOverrideSuperEdgeRootEdgeInfo;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex =
+                        entry.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo =
+                        entry.helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootOpenLifecycleEdgeInfo =
+                        entry.helperOpenExportOverrideSuperEdgeRootOpenLifecycleEdgeInfo;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootClosedLifecycleEdgeInfo =
+                        entry.helperOpenExportOverrideSuperEdgeRootClosedLifecycleEdgeInfo;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootRemovedByUnowned =
+                        entry.helperOpenExportOverrideSuperEdgeRootRemovedByUnowned;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootRemovedByPrimaryOwner =
+                        entry.helperOpenExportOverrideSuperEdgeRootRemovedByPrimaryOwner;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootRemovedBySecondaryOwner =
+                        entry.helperOpenExportOverrideSuperEdgeRootRemovedBySecondaryOwner;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidence =
+                        entry.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidence;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidence =
+                        entry.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidence;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootSelectedIteration =
+                        entry.helperOpenExportOverrideSuperEdgeRootSelectedIteration;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootSelectedWireInfo =
+                        entry.helperOpenExportOverrideSuperEdgeRootSelectedWireInfo;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootSelectedWireInfo2 =
+                        entry.helperOpenExportOverrideSuperEdgeRootSelectedWireInfo2;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration =
+                        entry.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootExportBlockedByWireInfo =
+                        entry.helperOpenExportOverrideSuperEdgeRootExportBlockedByWireInfo;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidenceIterationBlocked =
+                        entry.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidenceIterationBlocked;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidenceIterationBlocked =
+                        entry.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidenceIterationBlocked;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootMissingSafeAHistoryProducerEvidenceIterationBlocked =
+                        entry.helperOpenExportOverrideSuperEdgeRootMissingSafeAHistoryProducerEvidenceIterationBlocked;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval =
+                        entry.helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootIterationBlockedPrimaryRemoval =
+                        entry.helperOpenExportOverrideSuperEdgeRootIterationBlockedPrimaryRemoval;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootIterationBlockedSecondaryRemoval =
+                        entry.helperOpenExportOverrideSuperEdgeRootIterationBlockedSecondaryRemoval;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootIterationBlockedMissingRemovalBranch =
+                        entry.helperOpenExportOverrideSuperEdgeRootIterationBlockedMissingRemovalBranch;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate =
+                        entry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate;
+                    topoEntry
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence =
+                        entry
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence;
+                    topoEntry
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidence =
+                        entry
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidence;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemoval =
+                        entry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemoval;
+                    topoEntry
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady =
+                        entry
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidatePrimaryRemoval =
+                        entry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidatePrimaryRemoval;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateSecondaryRemoval =
+                        entry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateSecondaryRemoval;
+                    topoEntry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingRemovalBranch =
+                        entry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingRemovalBranch;
+                    topoEntry
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceUnownedRemoval =
+                        entry
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceUnownedRemoval;
+                    topoEntry
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidencePrimaryRemoval =
+                        entry
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidencePrimaryRemoval;
+                    topoEntry
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceSecondaryRemoval =
+                        entry
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceSecondaryRemoval;
+                    topoEntry
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceMissingRemovalBranch =
+                        entry
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceMissingRemovalBranch;
+                    topoEntry.helperOpenExportOverrideSelectedIteration =
+                        entry.helperOpenExportOverrideSelectedIteration;
+                    topoEntry.helperOpenExportOverrideSelectedWireInfo =
+                        entry.helperOpenExportOverrideSelectedWireInfo;
+                    topoEntry.helperOpenExportOverrideSelectedWireInfo2 =
+                        entry.helperOpenExportOverrideSelectedWireInfo2;
+                    topoEntry.helperOpenExportOverrideExportBlockedByIteration =
+                        entry.helperOpenExportOverrideExportBlockedByIteration;
+                    topoEntry.helperOpenExportOverrideExportBlockedByWireInfo =
+                        entry.helperOpenExportOverrideExportBlockedByWireInfo;
+                    topoEntry.helperOpenExportOverrideCandidateEdgeInfoIndices =
+                        entry.helperOpenExportOverrideCandidateEdgeInfoIndices;
+                    topoEntry.helperOpenExportOverrideOpenWireCompoundEligibleCandidateEdgeInfoIndices =
+                        entry.helperOpenExportOverrideOpenWireCompoundEligibleCandidateEdgeInfoIndices;
+                    topoEntry.helperOpenExportOverrideRemovedSourceEdgeInfo =
+                        entry.helperOpenExportOverrideRemovedSourceEdgeInfo;
+                    topoEntry.helperOpenExportOverrideRemovedTargetEdgeInfo =
+                        entry.helperOpenExportOverrideRemovedTargetEdgeInfo;
+                    topoEntry.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo =
+                        entry.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo;
+                    topoEntry.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices =
+                        entry.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices;
+                    topoEntry.helperOpenExportOverrideAHistoryRemoveSourceEdgeIndices =
+                        entry.helperOpenExportOverrideAHistoryRemoveSourceEdgeIndices;
+                    topoEntry.helperOpenExportOverrideAHistoryRemoveSourceLineage =
+                        entry.helperOpenExportOverrideAHistoryRemoveSourceLineage;
+                    topoEntry.helperOpenExportOverrideAHistoryRemoveSameSourceLineage =
+                        entry.helperOpenExportOverrideAHistoryRemoveSameSourceLineage;
+                    topoEntry.helperOpenExportOverrideAHistoryRemoveForeignSourceLineage =
+                        entry.helperOpenExportOverrideAHistoryRemoveForeignSourceLineage;
+                    topoEntry.helperOpenExportOverrideSafeAHistoryProducerEvidence =
+                        entry.helperOpenExportOverrideSafeAHistoryProducerEvidence;
+                    topoEntry.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo =
+                        entry.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo;
+                    topoEntry.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices =
+                        entry.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices;
                     topoEntry.purgeBridge = entry.purgeBridge;
                     internalHistoryContext->wireJoinerOpenExportHistoryEntries.push_back(std::move(topoEntry));
                 }
@@ -4925,6 +5296,8 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
              wireJoinerLedger->repeatedSplitExhaustRerunClosedWireSearchCount},
             {"repeated_split_exhaust_rerun_closed_wire_miss_count",
              wireJoinerLedger->repeatedSplitExhaustRerunClosedWireMissCount},
+            {"repeated_split_exhaust_rerun_miss_live_reset_edge_info_count",
+             wireJoinerLedger->repeatedSplitExhaustRerunMissLiveResetEdgeInfoCount},
             {"repeated_split_exhaust_rerun_closed_wire_info_count",
              wireJoinerLedger->repeatedSplitExhaustRerunClosedWireInfoCount},
             {"repeated_split_exhaust_rerun_closed_wire_assigned_edge_info_count",
@@ -5029,6 +5402,204 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
              wireJoinerLedger->generatedOpenExportClosedWireCycleEdgeInfoCount},
             {"generated_open_export_partial_shared_closed_wire_edge_info_count",
              wireJoinerLedger->generatedOpenExportPartialSharedClosedWireEdgeInfoCount},
+            {"generated_open_export_unbound_edge_count",
+             wireJoinerLedger->generatedOpenExportUnboundEdgeCount},
+            {"generated_open_export_duplicate_source_edge_info_count",
+             wireJoinerLedger->generatedOpenExportDuplicateSourceEdgeInfoCount},
+            {"helper_open_export_override_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideEdgeInfoCount},
+            {"helper_open_export_override_source_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideSourceEdgeInfoCount},
+            {"helper_open_export_override_source_edge_info_consumed_count",
+             wireJoinerLedger->helperOpenExportOverrideSourceEdgeInfoConsumedCount},
+            {"helper_open_export_override_open_wire_compound_eligible_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfoCount},
+            {"helper_open_export_override_forced_open_wire_compound_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideForcedOpenWireCompoundEdgeInfoCount},
+            {"helper_open_export_override_source_edge_export_shape_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideSourceEdgeExportShapeEdgeInfoCount},
+            {"helper_open_export_override_open_wire_compound_eligible_without_source_edge_export_shape_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideOpenWireCompoundEligibleWithoutSourceEdgeExportShapeEdgeInfoCount},
+            {"helper_open_export_override_full_ahistory_producer_evidence_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideFullAHistoryProducerEvidenceEdgeInfoCount},
+            {"helper_open_export_override_full_ahistory_producer_evidence_without_source_edge_export_shape_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideFullAHistoryProducerEvidenceWithoutSourceEdgeExportShapeEdgeInfoCount},
+            {"helper_open_export_override_full_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideFullAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount},
+            {"helper_open_export_override_safe_ahistory_producer_evidence_without_full_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSafeAHistoryProducerEvidenceWithoutFullAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideSuperEdgeMemberEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_with_root_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideSuperEdgeMemberWithRootEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_open_wire_compound_eligible_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootOpenWireCompoundEligibleEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_open_lifecycle_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootOpenLifecycleEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_closed_lifecycle_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootClosedLifecycleEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_export_blocked_by_iteration_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootExportBlockedByIterationEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_export_blocked_by_wire_info_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootExportBlockedByWireInfoEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_safe_ahistory_producer_evidence_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_full_ahistory_producer_evidence_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_open_wire_compound_eligible_and_safe_ahistory_producer_evidence_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootOpenWireCompoundEligibleAndSafeAHistoryProducerEvidenceEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_open_wire_compound_eligible_missing_safe_ahistory_producer_evidence_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootOpenWireCompoundEligibleMissingSafeAHistoryProducerEvidenceEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_safe_ahistory_producer_evidence_without_open_wire_compound_eligible_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceWithoutOpenWireCompoundEligibleEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_full_ahistory_producer_evidence_without_open_wire_compound_eligible_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceWithoutOpenWireCompoundEligibleEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_safe_ahistory_producer_evidence_iteration_blocked_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceIterationBlockedEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_full_ahistory_producer_evidence_iteration_blocked_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceIterationBlockedEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_missing_safe_ahistory_producer_evidence_iteration_blocked_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootMissingSafeAHistoryProducerEvidenceIterationBlockedEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_iteration_blocked_unowned_removal_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootIterationBlockedUnownedRemovalEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_iteration_blocked_primary_removal_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootIterationBlockedPrimaryRemovalEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_iteration_blocked_secondary_removal_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootIterationBlockedSecondaryRemovalEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_iteration_blocked_missing_removal_branch_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootIterationBlockedMissingRemovalBranchEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_full_ahistory_producer_evidence_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateFullAHistoryProducerEvidenceEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_unowned_removal_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateUnownedRemovalEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateUnownedRemovalChildWireProducerReadyEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_primary_removal_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidatePrimaryRemovalEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_secondary_removal_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateSecondaryRemovalEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_removal_branch_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingRemovalBranchEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_unowned_removal_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceUnownedRemovalEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_primary_removal_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidencePrimaryRemovalEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_secondary_removal_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceSecondaryRemovalEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_missing_removal_branch_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceMissingRemovalBranchEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_result_wire_producer_covered_member_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCoveredMemberEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_result_wire_producer_current_member_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCurrentMemberEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_root_result_wire_producer_non_current_member_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerNonCurrentMemberEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_forced_open_wire_compound_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideSuperEdgeMemberForcedOpenWireCompoundEdgeInfoCount},
+            {"helper_open_export_override_super_edge_member_missing_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSuperEdgeMemberMissingSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount},
+            {"helper_open_export_override_export_blocked_by_iteration_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideExportBlockedByIterationEdgeInfoCount},
+            {"helper_open_export_override_export_blocked_by_wire_info_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideExportBlockedByWireInfoEdgeInfoCount},
+            {"helper_open_export_override_binding_candidate_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideBindingCandidateEdgeInfoCount},
+            {"helper_open_export_override_open_wire_compound_eligible_candidate_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideOpenWireCompoundEligibleCandidateEdgeInfoCount},
+            {"helper_open_export_override_with_open_wire_compound_eligible_candidate_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideWithOpenWireCompoundEligibleCandidateEdgeInfoCount},
+            {"helper_open_export_override_missing_open_wire_compound_eligible_candidate_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideMissingOpenWireCompoundEligibleCandidateEdgeInfoCount},
+            {"helper_open_export_override_removed_source_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideRemovedSourceEdgeInfoCount},
+            {"helper_open_export_override_missing_removed_source_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideMissingRemovedSourceEdgeInfoCount},
+            {"helper_open_export_override_removed_target_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideRemovedTargetEdgeInfoCount},
+            {"helper_open_export_override_missing_removed_target_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideMissingRemovedTargetEdgeInfoCount},
+            {"helper_open_export_override_ahistory_remove_source_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoCount},
+            {"helper_open_export_override_missing_ahistory_remove_source_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideMissingAHistoryRemoveSourceEdgeInfoCount},
+            {"helper_open_export_override_ahistory_remove_source_lineage_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideAHistoryRemoveSourceLineageEdgeInfoCount},
+            {"helper_open_export_override_missing_ahistory_remove_source_lineage_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideMissingAHistoryRemoveSourceLineageEdgeInfoCount},
+            {"helper_open_export_override_ahistory_remove_same_source_lineage_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideAHistoryRemoveSameSourceLineageEdgeInfoCount},
+            {"helper_open_export_override_ahistory_remove_foreign_source_lineage_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideAHistoryRemoveForeignSourceLineageEdgeInfoCount},
+            {"helper_open_export_override_safe_ahistory_producer_evidence_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideSafeAHistoryProducerEvidenceEdgeInfoCount},
+            {"helper_open_export_override_missing_safe_ahistory_producer_evidence_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideMissingSafeAHistoryProducerEvidenceEdgeInfoCount},
+            {"helper_open_export_override_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount},
+            {"helper_open_export_override_missing_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count",
+             wireJoinerLedger
+                 ->helperOpenExportOverrideMissingSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount},
+            {"helper_open_export_override_source_lineage_removed_source_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoCount},
+            {"helper_open_export_override_missing_source_lineage_removed_source_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideMissingSourceLineageRemovedSourceEdgeInfoCount},
+            {"helper_open_export_override_consumed_open_cutter_graph_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideConsumedOpenCutterGraphEdgeInfoCount},
+            {"helper_open_export_override_partial_junction_open_cutter_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverridePartialJunctionOpenCutterEdgeInfoCount},
+            {"helper_open_export_override_closed_wire_cycle_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideClosedWireCycleEdgeInfoCount},
+            {"helper_open_export_override_partial_shared_closed_wire_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverridePartialSharedClosedWireEdgeInfoCount},
+            {"helper_open_export_override_candidate_edge_count",
+             wireJoinerLedger->helperOpenExportOverrideCandidateEdgeCount},
+            {"helper_open_export_override_unbound_edge_count",
+             wireJoinerLedger->helperOpenExportOverrideUnboundEdgeCount},
+            {"helper_open_export_override_duplicate_source_edge_info_count",
+             wireJoinerLedger->helperOpenExportOverrideDuplicateSourceEdgeInfoCount},
             {"source_identity_shared_vertex_edge_info_count",
              wireJoinerLedger->sourceIdentitySharedVertexEdgeInfoCount},
             {"source_identity_only_source_vertices_edge_info_count",
@@ -5093,6 +5664,166 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
              wireJoinerLedger->openWireCompoundGeneratedClosedWireCycleWireInfoCount},
             {"open_wire_compound_generated_partial_shared_closed_wire_wire_info_count",
              wireJoinerLedger->openWireCompoundGeneratedPartialSharedClosedWireWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_wire_info_count",
+             wireJoinerLedger->openWireCompoundHelperOpenExportOverrideWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_source_edge_info_wire_info_count",
+             wireJoinerLedger->openWireCompoundHelperOpenExportOverrideSourceEdgeInfoWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_source_edge_info_consumed_wire_info_count",
+             wireJoinerLedger->openWireCompoundHelperOpenExportOverrideSourceEdgeInfoConsumedWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_source_edge_export_shape_wire_info_count",
+             wireJoinerLedger->openWireCompoundHelperOpenExportOverrideSourceEdgeExportShapeWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_source_edge_producer_output_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSourceEdgeProducerOutputWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_helper_shape_wire_info_count",
+             wireJoinerLedger->openWireCompoundHelperOpenExportOverrideHelperShapeWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_open_wire_compound_eligible_wire_info_count",
+             wireJoinerLedger->openWireCompoundHelperOpenExportOverrideOpenWireCompoundEligibleWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_forced_open_wire_compound_wire_info_count",
+             wireJoinerLedger->openWireCompoundHelperOpenExportOverrideForcedOpenWireCompoundWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_consumed_open_cutter_graph_wire_info_count",
+             wireJoinerLedger->openWireCompoundHelperOpenExportOverrideConsumedOpenCutterGraphWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_partial_junction_open_cutter_wire_info_count",
+             wireJoinerLedger->openWireCompoundHelperOpenExportOverridePartialJunctionOpenCutterWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_closed_wire_cycle_wire_info_count",
+             wireJoinerLedger->openWireCompoundHelperOpenExportOverrideClosedWireCycleWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_partial_shared_closed_wire_wire_info_count",
+             wireJoinerLedger->openWireCompoundHelperOpenExportOverridePartialSharedClosedWireWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_candidate_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReadyWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_wire_built_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerWireBuiltWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready_wire_built_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReadyWireBuiltWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_output_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerOutputWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_edge_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootEdgeInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_covered_member_edge_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionCoveredMemberEdgeInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_current_member_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionCurrentMemberWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_unique_covered_member_edge_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootUniqueCoveredMemberEdgeInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_unique_current_member_edge_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootUniqueCurrentMemberEdgeInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_pending_member_edge_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootPendingMemberEdgeInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_suppressed_pending_member_edge_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootSuppressedPendingMemberEdgeInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_suppressed_pending_member_full_ahistory_producer_evidence_edge_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootSuppressedPendingMemberFullAHistoryProducerEvidenceEdgeInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_suppressed_pending_member_unowned_removal_edge_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootSuppressedPendingMemberUnownedRemovalEdgeInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_pending_member_full_ahistory_producer_evidence_edge_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootPendingMemberFullAHistoryProducerEvidenceEdgeInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_pending_member_missing_full_ahistory_producer_evidence_edge_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootPendingMemberMissingFullAHistoryProducerEvidenceEdgeInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_pending_member_unowned_removal_edge_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootPendingMemberUnownedRemovalEdgeInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_pending_member_primary_removal_edge_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootPendingMemberPrimaryRemovalEdgeInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_pending_member_secondary_removal_edge_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootPendingMemberSecondaryRemovalEdgeInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_pending_member_missing_removal_branch_edge_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootPendingMemberMissingRemovalBranchEdgeInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_complete_child_ownership_root_edge_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootCompleteChildOwnershipRootEdgeInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_root_incomplete_child_ownership_root_edge_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootIncompleteChildOwnershipRootEdgeInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_wire_built_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWireBuiltWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_candidate_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputCandidateWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_current_member_child_wire_producer_ready_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerReadyWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_current_member_child_wire_producer_full_ahistory_evidence_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerFullAHistoryEvidenceWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_pending_member_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedByPendingMemberWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_full_ahistory_producer_evidence_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeFullAHistoryProducerEvidenceWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_missing_full_ahistory_producer_evidence_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeMissingFullAHistoryProducerEvidenceWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_open_wire_compound_eligible_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeOpenWireCompoundEligibleWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_forced_open_wire_compound_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeForcedOpenWireCompoundWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_root_producer_ready_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeRootProducerReadyWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_current_member_child_wire_producer_ready_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeCurrentMemberChildWireProducerReadyWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_current_member_child_wire_producer_full_ahistory_evidence_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeCurrentMemberChildWireProducerFullAHistoryEvidenceWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_blocked_by_source_shape_current_member_child_wire_producer_missing_full_ahistory_evidence_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeCurrentMemberChildWireProducerMissingFullAHistoryEvidenceWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_member_suppressed_output_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_unowned_removal_child_wire_producer_ready_output_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerUnownedRemovalChildWireProducerReadyOutputWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_requires_member_suppression_non_current_member_edge_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionNonCurrentMemberEdgeInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_output_blocked_by_multi_member_super_edge_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerOutputBlockedByMultiMemberSuperEdgeWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_covered_member_edge_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_current_member_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberWireInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_non_current_member_edge_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoCount},
+            {"open_wire_compound_helper_open_export_override_super_edge_root_result_wire_producer_output_blocked_non_current_member_edge_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerOutputBlockedNonCurrentMemberEdgeInfoCount},
             {"open_wire_compound_purge_bridge_wire_info_count",
              wireJoinerLedger->openWireCompoundPurgeBridgeWireInfoCount},
             {"open_wire_compound_source_shared_vertex_wire_info_count",
@@ -5145,6 +5876,145 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
                 {"generated_open_export_source_edge_info_index", entry.generatedOpenExportSourceEdgeInfoIndex},
                 {"generated_open_export_source_edge_info_consumed",
                  entry.generatedOpenExportSourceEdgeInfoConsumed},
+                {"helper_open_export_override", entry.helperOpenExportOverride},
+                {"helper_open_export_override_reason", entry.helperOpenExportOverrideReason},
+                {"helper_open_export_override_source_edge_info",
+                 entry.helperOpenExportOverrideSourceEdgeInfo},
+                {"helper_open_export_override_source_edge_info_index",
+                 entry.helperOpenExportOverrideSourceEdgeInfoIndex},
+                {"helper_open_export_override_source_edge_info_consumed",
+                 entry.helperOpenExportOverrideSourceEdgeInfoConsumed},
+                {"helper_open_export_override_open_wire_compound_eligible_edge_info",
+                 entry.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo},
+                {"helper_open_export_override_forced_open_wire_compound_edge_info",
+                 entry.helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo},
+                {"helper_open_export_override_source_edge_export_shape",
+                 entry.helperOpenExportOverrideSourceEdgeExportShape},
+                {"helper_open_export_override_source_edge_producer_output",
+                 entry.helperOpenExportOverrideSourceEdgeProducerOutput},
+                {"helper_open_export_override_full_ahistory_producer_evidence",
+                 entry.helperOpenExportOverrideFullAHistoryProducerEvidence},
+                {"helper_open_export_override_super_edge_member_edge_info",
+                 entry.helperOpenExportOverrideSuperEdgeMemberEdgeInfo},
+                {"helper_open_export_override_super_edge_root_edge_info",
+                 entry.helperOpenExportOverrideSuperEdgeRootEdgeInfo},
+                {"helper_open_export_override_super_edge_root_edge_info_index",
+                 entry.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex},
+                {"helper_open_export_override_super_edge_root_open_wire_compound_eligible_edge_info",
+                 entry.helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo},
+                {"helper_open_export_override_super_edge_root_open_lifecycle_edge_info",
+                 entry.helperOpenExportOverrideSuperEdgeRootOpenLifecycleEdgeInfo},
+                {"helper_open_export_override_super_edge_root_closed_lifecycle_edge_info",
+                 entry.helperOpenExportOverrideSuperEdgeRootClosedLifecycleEdgeInfo},
+                {"helper_open_export_override_super_edge_root_removed_by_unowned",
+                 entry.helperOpenExportOverrideSuperEdgeRootRemovedByUnowned},
+                {"helper_open_export_override_super_edge_root_removed_by_primary_owner",
+                 entry.helperOpenExportOverrideSuperEdgeRootRemovedByPrimaryOwner},
+                {"helper_open_export_override_super_edge_root_removed_by_secondary_owner",
+                 entry.helperOpenExportOverrideSuperEdgeRootRemovedBySecondaryOwner},
+                {"helper_open_export_override_super_edge_root_safe_ahistory_producer_evidence",
+                 entry.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidence},
+                {"helper_open_export_override_super_edge_root_full_ahistory_producer_evidence",
+                 entry.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidence},
+                {"helper_open_export_override_super_edge_root_selected_iteration",
+                 entry.helperOpenExportOverrideSuperEdgeRootSelectedIteration},
+                {"helper_open_export_override_super_edge_root_selected_wire_info",
+                 entry.helperOpenExportOverrideSuperEdgeRootSelectedWireInfo},
+                {"helper_open_export_override_super_edge_root_selected_wire_info2",
+                 entry.helperOpenExportOverrideSuperEdgeRootSelectedWireInfo2},
+                {"helper_open_export_override_super_edge_root_export_blocked_by_iteration",
+                 entry.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration},
+                {"helper_open_export_override_super_edge_root_export_blocked_by_wire_info",
+                 entry.helperOpenExportOverrideSuperEdgeRootExportBlockedByWireInfo},
+                {"helper_open_export_override_super_edge_root_safe_ahistory_producer_evidence_iteration_blocked",
+                 entry.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidenceIterationBlocked},
+                {"helper_open_export_override_super_edge_root_full_ahistory_producer_evidence_iteration_blocked",
+                 entry.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidenceIterationBlocked},
+                {"helper_open_export_override_super_edge_root_missing_safe_ahistory_producer_evidence_iteration_blocked",
+                 entry.helperOpenExportOverrideSuperEdgeRootMissingSafeAHistoryProducerEvidenceIterationBlocked},
+                {"helper_open_export_override_super_edge_root_iteration_blocked_unowned_removal",
+                 entry.helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval},
+                {"helper_open_export_override_super_edge_root_iteration_blocked_primary_removal",
+                 entry.helperOpenExportOverrideSuperEdgeRootIterationBlockedPrimaryRemoval},
+                {"helper_open_export_override_super_edge_root_iteration_blocked_secondary_removal",
+                 entry.helperOpenExportOverrideSuperEdgeRootIterationBlockedSecondaryRemoval},
+                {"helper_open_export_override_super_edge_root_iteration_blocked_missing_removal_branch",
+                 entry.helperOpenExportOverrideSuperEdgeRootIterationBlockedMissingRemovalBranch},
+                {"helper_open_export_override_super_edge_root_result_wire_producer_candidate",
+                 entry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate},
+                {"helper_open_export_override_super_edge_root_result_wire_producer_candidate_full_ahistory_producer_evidence",
+                 entry
+                     .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence},
+                {"helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence",
+                 entry
+                     .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidence},
+                {"helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal",
+                 entry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemoval},
+                {"helper_open_export_override_super_edge_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready",
+                 entry
+                     .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady},
+                {"helper_open_export_override_super_edge_root_result_wire_producer_candidate_primary_removal",
+                 entry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidatePrimaryRemoval},
+                {"helper_open_export_override_super_edge_root_result_wire_producer_candidate_secondary_removal",
+                 entry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateSecondaryRemoval},
+                {"helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_removal_branch",
+                 entry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingRemovalBranch},
+                {"helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_unowned_removal",
+                 entry
+                     .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceUnownedRemoval},
+                {"helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_primary_removal",
+                 entry
+                     .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidencePrimaryRemoval},
+                {"helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_secondary_removal",
+                 entry
+                     .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceSecondaryRemoval},
+                {"helper_open_export_override_super_edge_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_missing_removal_branch",
+                 entry
+                     .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceMissingRemovalBranch},
+                {"helper_open_export_override_super_edge_root_result_wire_producer_current_member_edge_info",
+                 entry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo},
+                {"helper_open_export_override_super_edge_root_result_wire_producer_covered_member_edge_info_indices",
+                 entry
+                     .helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices},
+                {"helper_open_export_override_super_edge_root_result_wire_producer_non_current_member_edge_info_indices",
+                 entry
+                     .helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices},
+                {"helper_open_export_override_selected_iteration",
+                 entry.helperOpenExportOverrideSelectedIteration},
+                {"helper_open_export_override_selected_wire_info",
+                 entry.helperOpenExportOverrideSelectedWireInfo},
+                {"helper_open_export_override_selected_wire_info2",
+                 entry.helperOpenExportOverrideSelectedWireInfo2},
+                {"helper_open_export_override_export_blocked_by_iteration",
+                 entry.helperOpenExportOverrideExportBlockedByIteration},
+                {"helper_open_export_override_export_blocked_by_wire_info",
+                 entry.helperOpenExportOverrideExportBlockedByWireInfo},
+                {"helper_open_export_override_candidate_edge_info_indices",
+                 entry.helperOpenExportOverrideCandidateEdgeInfoIndices},
+                {"helper_open_export_override_open_wire_compound_eligible_candidate_edge_info_indices",
+                 entry.helperOpenExportOverrideOpenWireCompoundEligibleCandidateEdgeInfoIndices},
+                {"helper_open_export_override_removed_source_edge_info",
+                 entry.helperOpenExportOverrideRemovedSourceEdgeInfo},
+                {"helper_open_export_override_removed_target_edge_info",
+                 entry.helperOpenExportOverrideRemovedTargetEdgeInfo},
+                {"helper_open_export_override_ahistory_remove_source_edge_info",
+                 entry.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo},
+                {"helper_open_export_override_ahistory_remove_source_edge_info_indices",
+                 entry.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices},
+                {"helper_open_export_override_ahistory_remove_source_edge_indices",
+                 entry.helperOpenExportOverrideAHistoryRemoveSourceEdgeIndices},
+                {"helper_open_export_override_ahistory_remove_source_lineage",
+                 entry.helperOpenExportOverrideAHistoryRemoveSourceLineage},
+                {"helper_open_export_override_ahistory_remove_same_source_lineage",
+                 entry.helperOpenExportOverrideAHistoryRemoveSameSourceLineage},
+                {"helper_open_export_override_ahistory_remove_foreign_source_lineage",
+                 entry.helperOpenExportOverrideAHistoryRemoveForeignSourceLineage},
+                {"helper_open_export_override_safe_ahistory_producer_evidence",
+                 entry.helperOpenExportOverrideSafeAHistoryProducerEvidence},
+                {"helper_open_export_override_source_lineage_removed_source_edge_info",
+                 entry.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo},
+                {"helper_open_export_override_source_lineage_removed_source_edge_info_indices",
+                 entry.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices},
                 {"purge_bridge", entry.purgeBridge},
             });
         }
@@ -5162,6 +6032,189 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
              wireJoinerHistory->openExportGeneratedSourceEdgeInfoConsumedCount},
             {"open_export_generated_missing_source_lineage_edge_count",
              wireJoinerHistory->openExportGeneratedMissingSourceLineageEdgeCount},
+            {"open_export_helper_override_edge_count", wireJoinerHistory->openExportHelperOverrideEdgeCount},
+            {"open_export_helper_override_source_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideSourceEdgeInfoCount},
+            {"open_export_helper_override_source_edge_info_consumed_count",
+             wireJoinerHistory->openExportHelperOverrideSourceEdgeInfoConsumedCount},
+            {"open_export_helper_override_open_wire_compound_eligible_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideOpenWireCompoundEligibleEdgeInfoCount},
+            {"open_export_helper_override_forced_open_wire_compound_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideForcedOpenWireCompoundEdgeInfoCount},
+            {"open_export_helper_override_source_edge_export_shape_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideSourceEdgeExportShapeEdgeInfoCount},
+            {"open_export_helper_override_source_edge_producer_output_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideSourceEdgeProducerOutputEdgeInfoCount},
+            {"open_export_helper_override_open_wire_compound_eligible_without_source_edge_export_shape_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideOpenWireCompoundEligibleWithoutSourceEdgeExportShapeEdgeInfoCount},
+            {"open_export_helper_override_full_ahistory_producer_evidence_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideFullAHistoryProducerEvidenceEdgeInfoCount},
+            {"open_export_helper_override_full_ahistory_producer_evidence_without_source_edge_export_shape_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideFullAHistoryProducerEvidenceWithoutSourceEdgeExportShapeEdgeInfoCount},
+            {"open_export_helper_override_full_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideFullAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount},
+            {"open_export_helper_override_safe_ahistory_producer_evidence_without_full_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSafeAHistoryProducerEvidenceWithoutFullAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideSuperEdgeMemberEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_with_root_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideSuperEdgeMemberWithRootEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_open_wire_compound_eligible_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootOpenWireCompoundEligibleEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_open_lifecycle_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootOpenLifecycleEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_closed_lifecycle_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootClosedLifecycleEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_export_blocked_by_iteration_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootExportBlockedByIterationEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_export_blocked_by_wire_info_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootExportBlockedByWireInfoEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_safe_ahistory_producer_evidence_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_full_ahistory_producer_evidence_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_open_wire_compound_eligible_and_safe_ahistory_producer_evidence_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootOpenWireCompoundEligibleAndSafeAHistoryProducerEvidenceEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_open_wire_compound_eligible_missing_safe_ahistory_producer_evidence_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootOpenWireCompoundEligibleMissingSafeAHistoryProducerEvidenceEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_safe_ahistory_producer_evidence_without_open_wire_compound_eligible_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceWithoutOpenWireCompoundEligibleEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_full_ahistory_producer_evidence_without_open_wire_compound_eligible_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceWithoutOpenWireCompoundEligibleEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_safe_ahistory_producer_evidence_iteration_blocked_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceIterationBlockedEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_full_ahistory_producer_evidence_iteration_blocked_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceIterationBlockedEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_missing_safe_ahistory_producer_evidence_iteration_blocked_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootMissingSafeAHistoryProducerEvidenceIterationBlockedEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_iteration_blocked_unowned_removal_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootIterationBlockedUnownedRemovalEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_iteration_blocked_primary_removal_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootIterationBlockedPrimaryRemovalEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_iteration_blocked_secondary_removal_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootIterationBlockedSecondaryRemovalEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_iteration_blocked_missing_removal_branch_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootIterationBlockedMissingRemovalBranchEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_full_ahistory_producer_evidence_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateFullAHistoryProducerEvidenceEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_unowned_removal_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateUnownedRemovalEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_unowned_removal_child_wire_producer_ready_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateUnownedRemovalChildWireProducerReadyEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_primary_removal_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidatePrimaryRemovalEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_secondary_removal_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateSecondaryRemovalEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_missing_removal_branch_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingRemovalBranchEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_unowned_removal_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceUnownedRemovalEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_primary_removal_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidencePrimaryRemovalEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_secondary_removal_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceSecondaryRemovalEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_result_wire_producer_candidate_missing_full_ahistory_producer_evidence_missing_removal_branch_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceMissingRemovalBranchEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_result_wire_producer_covered_member_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCoveredMemberEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_result_wire_producer_current_member_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCurrentMemberEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_root_result_wire_producer_non_current_member_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberRootResultWireProducerNonCurrentMemberEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_forced_open_wire_compound_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideSuperEdgeMemberForcedOpenWireCompoundEdgeInfoCount},
+            {"open_export_helper_override_super_edge_member_missing_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSuperEdgeMemberMissingSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount},
+            {"open_export_helper_override_export_blocked_by_iteration_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideExportBlockedByIterationEdgeInfoCount},
+            {"open_export_helper_override_export_blocked_by_wire_info_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideExportBlockedByWireInfoEdgeInfoCount},
+            {"open_export_helper_override_binding_candidate_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideBindingCandidateEdgeInfoCount},
+            {"open_export_helper_override_open_wire_compound_eligible_candidate_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideOpenWireCompoundEligibleCandidateEdgeInfoCount},
+            {"open_export_helper_override_with_open_wire_compound_eligible_candidate_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideWithOpenWireCompoundEligibleCandidateEdgeInfoCount},
+            {"open_export_helper_override_missing_open_wire_compound_eligible_candidate_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideMissingOpenWireCompoundEligibleCandidateEdgeInfoCount},
+            {"open_export_helper_override_removed_source_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideRemovedSourceEdgeInfoCount},
+            {"open_export_helper_override_missing_removed_source_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideMissingRemovedSourceEdgeInfoCount},
+            {"open_export_helper_override_removed_target_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideRemovedTargetEdgeInfoCount},
+            {"open_export_helper_override_missing_removed_target_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideMissingRemovedTargetEdgeInfoCount},
+            {"open_export_helper_override_ahistory_remove_source_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideAHistoryRemoveSourceEdgeInfoCount},
+            {"open_export_helper_override_missing_ahistory_remove_source_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideMissingAHistoryRemoveSourceEdgeInfoCount},
+            {"open_export_helper_override_ahistory_remove_source_lineage_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideAHistoryRemoveSourceLineageEdgeInfoCount},
+            {"open_export_helper_override_missing_ahistory_remove_source_lineage_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideMissingAHistoryRemoveSourceLineageEdgeInfoCount},
+            {"open_export_helper_override_ahistory_remove_same_source_lineage_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideAHistoryRemoveSameSourceLineageEdgeInfoCount},
+            {"open_export_helper_override_ahistory_remove_foreign_source_lineage_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideAHistoryRemoveForeignSourceLineageEdgeInfoCount},
+            {"open_export_helper_override_safe_ahistory_producer_evidence_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideSafeAHistoryProducerEvidenceEdgeInfoCount},
+            {"open_export_helper_override_missing_safe_ahistory_producer_evidence_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideMissingSafeAHistoryProducerEvidenceEdgeInfoCount},
+            {"open_export_helper_override_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount},
+            {"open_export_helper_override_missing_safe_ahistory_producer_evidence_forced_open_wire_compound_edge_info_count",
+             wireJoinerHistory
+                 ->openExportHelperOverrideMissingSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount},
+            {"open_export_helper_override_source_lineage_removed_source_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideSourceLineageRemovedSourceEdgeInfoCount},
+            {"open_export_helper_override_missing_source_lineage_removed_source_edge_info_count",
+             wireJoinerHistory->openExportHelperOverrideMissingSourceLineageRemovedSourceEdgeInfoCount},
+            {"open_export_helper_override_missing_source_lineage_edge_count",
+             wireJoinerHistory->openExportHelperOverrideMissingSourceLineageEdgeCount},
             {"open_export_purge_bridge_edge_count", wireJoinerHistory->openExportPurgeBridgeEdgeCount},
             {"open_export_history_entries", std::move(openExportHistoryEntries)},
             {"modified_source_edge_count", wireJoinerHistory->modifiedSourceEdgeCount},

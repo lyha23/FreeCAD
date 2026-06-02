@@ -77,6 +77,7 @@ struct WireJoinerLedgerSummary {
     std::size_t repeatedSplitExhaustRerunNoActiveSearchCount = 0;
     std::size_t repeatedSplitExhaustRerunClosedWireSearchCount = 0;
     std::size_t repeatedSplitExhaustRerunClosedWireMissCount = 0;
+    std::size_t repeatedSplitExhaustRerunMissLiveResetEdgeInfoCount = 0;
     std::size_t repeatedSplitExhaustRerunClosedWireInfoCount = 0;
     std::size_t repeatedSplitExhaustRerunClosedWireAssignedEdgeInfoCount = 0;
     std::size_t repeatedSplitExhaustRerunClosedWireVertexCount = 0;
@@ -137,6 +138,165 @@ struct WireJoinerLedgerSummary {
     std::size_t generatedOpenExportPartialJunctionOpenCutterEdgeInfoCount = 0;
     std::size_t generatedOpenExportClosedWireCycleEdgeInfoCount = 0;
     std::size_t generatedOpenExportPartialSharedClosedWireEdgeInfoCount = 0;
+    std::size_t generatedOpenExportUnboundEdgeCount = 0;
+    std::size_t generatedOpenExportDuplicateSourceEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideSourceEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideSourceEdgeInfoConsumedCount = 0;
+    std::size_t helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideForcedOpenWireCompoundEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideSourceEdgeExportShapeEdgeInfoCount = 0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build() exports final-gate EdgeInfo wires with
+    // "builder.Add(openWireCompound, info.wire())". This counter records helper-selected EdgeInfo
+    // that already satisfy that gate, but still cannot safely export EdgeInfo::edge because M2
+    // child-wire/source-vertex identity is incomplete.
+    std::size_t helperOpenExportOverrideOpenWireCompoundEligibleWithoutSourceEdgeExportShapeEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideFullAHistoryProducerEvidenceEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideFullAHistoryProducerEvidenceWithoutSourceEdgeExportShapeEdgeInfoCount = 0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::buildClosedWire() calls "aHistory->Remove(info.edge)", while ::build()
+    // exports only "info.iteration == -3 || (!info.wireInfo && info.iteration >= 0)".
+    // Split complete producer evidence that is still forced from same-source safe evidence that
+    // does not yet have the full Remove-source/removed-target/source-lineage trio.
+    std::size_t helperOpenExportOverrideFullAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount = 0;
+    std::size_t
+        helperOpenExportOverrideSafeAHistoryProducerEvidenceWithoutFullAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount =
+            0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::findSuperEdgesUpdateFirst() sets member edges with "current->iteration = -1",
+    // stores the root "first->superEdge = makeCleanWire(false)", then assigns closed roots
+    // "first->iteration = -2" or open roots "first->iteration = iteration". These counters keep
+    // helper-forced exports split by that producer lifecycle without promoting helper geometry.
+    std::size_t helperOpenExportOverrideSuperEdgeMemberEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideSuperEdgeMemberWithRootEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideSuperEdgeMemberRootOpenWireCompoundEligibleEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideSuperEdgeMemberRootOpenLifecycleEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideSuperEdgeMemberRootClosedLifecycleEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideSuperEdgeMemberRootExportBlockedByIterationEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideSuperEdgeMemberRootExportBlockedByWireInfoEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceEdgeInfoCount = 0;
+    std::size_t
+        helperOpenExportOverrideSuperEdgeMemberRootOpenWireCompoundEligibleAndSafeAHistoryProducerEvidenceEdgeInfoCount =
+            0;
+    std::size_t
+        helperOpenExportOverrideSuperEdgeMemberRootOpenWireCompoundEligibleMissingSafeAHistoryProducerEvidenceEdgeInfoCount =
+            0;
+    std::size_t
+        helperOpenExportOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceWithoutOpenWireCompoundEligibleEdgeInfoCount =
+            0;
+    std::size_t
+        helperOpenExportOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceWithoutOpenWireCompoundEligibleEdgeInfoCount =
+            0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::buildClosedWire() removes consumed result-wire members with
+    // "info.iteration = -1" and records "aHistory->Remove(info.edge)" before the next
+    // findClosedWires()/findTightBound() pass. These counters isolate open super-edge roots that
+    // are blocked specifically by that iteration lifecycle while already carrying producer evidence.
+    std::size_t
+        helperOpenExportOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceIterationBlockedEdgeInfoCount =
+            0;
+    std::size_t
+        helperOpenExportOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceIterationBlockedEdgeInfoCount =
+            0;
+    std::size_t
+        helperOpenExportOverrideSuperEdgeMemberRootMissingSafeAHistoryProducerEvidenceIterationBlockedEdgeInfoCount =
+            0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::buildClosedWire() has three removal paths before final openWireCompound:
+    // direct unowned/unfinished removal, secondary owner vertex counting, and primary owner
+    // vertex counting. Split blocked roots by that producer branch before changing output.
+    std::size_t helperOpenExportOverrideSuperEdgeMemberRootIterationBlockedUnownedRemovalEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideSuperEdgeMemberRootIterationBlockedPrimaryRemovalEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideSuperEdgeMemberRootIterationBlockedSecondaryRemovalEdgeInfoCount = 0;
+    std::size_t
+        helperOpenExportOverrideSuperEdgeMemberRootIterationBlockedMissingRemovalBranchEdgeInfoCount =
+            0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::findSuperEdgesUpdateFirst() stores the open root "first->superEdge =
+    // makeCleanWire(false)", then ::buildClosedWire() may remove that root before final
+    // openWireCompound export. These counters mark roots that already have a materialized result-wire
+    // producer candidate, without exporting it yet.
+    std::size_t helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateEdgeInfoCount = 0;
+    std::size_t
+        helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateFullAHistoryProducerEvidenceEdgeInfoCount =
+            0;
+    std::size_t
+        helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceEdgeInfoCount =
+            0;
+    std::size_t helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateUnownedRemovalEdgeInfoCount = 0;
+    std::size_t
+        helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateUnownedRemovalChildWireProducerReadyEdgeInfoCount =
+            0;
+    std::size_t helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidatePrimaryRemovalEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateSecondaryRemovalEdgeInfoCount = 0;
+    std::size_t
+        helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingRemovalBranchEdgeInfoCount =
+            0;
+    std::size_t
+        helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceUnownedRemovalEdgeInfoCount =
+            0;
+    std::size_t
+        helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidencePrimaryRemovalEdgeInfoCount =
+            0;
+    std::size_t
+        helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceSecondaryRemovalEdgeInfoCount =
+            0;
+    std::size_t
+        helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceMissingRemovalBranchEdgeInfoCount =
+            0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::findSuperEdgesUpdateFirst() materializes one root "superEdge" from the
+    // complete member chain. Keep member coverage visible here so M3 can avoid output-count
+    // inference while migrating the final child-wire producer.
+    std::size_t
+        helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCoveredMemberEdgeInfoCount =
+            0;
+    std::size_t
+        helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCurrentMemberEdgeInfoCount =
+            0;
+    std::size_t
+        helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerNonCurrentMemberEdgeInfoCount =
+            0;
+    std::size_t helperOpenExportOverrideSuperEdgeMemberForcedOpenWireCompoundEdgeInfoCount = 0;
+    std::size_t
+        helperOpenExportOverrideSuperEdgeMemberMissingSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount =
+            0;
+    std::size_t helperOpenExportOverrideExportBlockedByIterationEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideExportBlockedByWireInfoEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideBindingCandidateEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideOpenWireCompoundEligibleCandidateEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideWithOpenWireCompoundEligibleCandidateEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideMissingOpenWireCompoundEligibleCandidateEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideRemovedSourceEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideMissingRemovedSourceEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideRemovedTargetEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideMissingRemovedTargetEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideMissingAHistoryRemoveSourceEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideAHistoryRemoveSourceLineageEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideMissingAHistoryRemoveSourceLineageEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideAHistoryRemoveSameSourceLineageEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideAHistoryRemoveForeignSourceLineageEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideSafeAHistoryProducerEvidenceEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideMissingSafeAHistoryProducerEvidenceEdgeInfoCount = 0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::buildClosedWire() calls "aHistory->Remove(info.edge)", while
+    // ::build() exports only "iteration == -3 || (!info.wireInfo && info.iteration >= 0)".
+    // These counters split remaining helper-forced exports by whether they already have safe
+    // same-source aHistory producer evidence.
+    std::size_t helperOpenExportOverrideSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideMissingSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideMissingSourceLineageRemovedSourceEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideConsumedOpenCutterGraphEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverridePartialJunctionOpenCutterEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideClosedWireCycleEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverridePartialSharedClosedWireEdgeInfoCount = 0;
+    std::size_t helperOpenExportOverrideCandidateEdgeCount = 0;
+    std::size_t helperOpenExportOverrideUnboundEdgeCount = 0;
+    std::size_t helperOpenExportOverrideDuplicateSourceEdgeInfoCount = 0;
     std::size_t sourceIdentitySharedVertexEdgeInfoCount = 0;
     std::size_t sourceIdentityOnlySourceVerticesEdgeInfoCount = 0;
     std::size_t sourceIdentityOpenExportSharedVertexEdgeInfoCount = 0;
@@ -174,6 +334,174 @@ struct WireJoinerLedgerSummary {
     std::size_t openWireCompoundGeneratedPartialJunctionOpenCutterWireInfoCount = 0;
     std::size_t openWireCompoundGeneratedClosedWireCycleWireInfoCount = 0;
     std::size_t openWireCompoundGeneratedPartialSharedClosedWireWireInfoCount = 0;
+    std::size_t openWireCompoundHelperOpenExportOverrideWireInfoCount = 0;
+    std::size_t openWireCompoundHelperOpenExportOverrideSourceEdgeInfoWireInfoCount = 0;
+    std::size_t openWireCompoundHelperOpenExportOverrideSourceEdgeInfoConsumedWireInfoCount = 0;
+    std::size_t openWireCompoundHelperOpenExportOverrideSourceEdgeExportShapeWireInfoCount = 0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSourceEdgeProducerOutputWireInfoCount =
+            0;
+    std::size_t openWireCompoundHelperOpenExportOverrideHelperShapeWireInfoCount = 0;
+    std::size_t openWireCompoundHelperOpenExportOverrideOpenWireCompoundEligibleWireInfoCount = 0;
+    std::size_t openWireCompoundHelperOpenExportOverrideForcedOpenWireCompoundWireInfoCount = 0;
+    std::size_t openWireCompoundHelperOpenExportOverrideConsumedOpenCutterGraphWireInfoCount = 0;
+    std::size_t openWireCompoundHelperOpenExportOverridePartialJunctionOpenCutterWireInfoCount = 0;
+    std::size_t openWireCompoundHelperOpenExportOverrideClosedWireCycleWireInfoCount = 0;
+    std::size_t openWireCompoundHelperOpenExportOverridePartialSharedClosedWireWireInfoCount = 0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReadyWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerWireBuiltWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReadyWireBuiltWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerOutputWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootEdgeInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionCoveredMemberEdgeInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionCurrentMemberWireInfoCount =
+            0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::findSuperEdgesUpdateFirst(), "current->iteration = -1" for every member and
+    // "first->superEdge = makeCleanWire(false)" for the root. These root-group counters keep the
+    // child ownership/suppression gap explicit before the root superEdge can replace helper output.
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootUniqueCoveredMemberEdgeInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootUniqueCurrentMemberEdgeInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootPendingMemberEdgeInfoCount =
+            0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::findSuperEdgesUpdateFirst() suppresses super-edge members with
+    // "current->iteration = -1"; ::WireJoinerP::buildClosedWire() can then prove the remaining
+    // non-current member is already consumed by unowned removal and full "aHistory->Remove(info.edge)"
+    // producer evidence. These counters separate formally suppressed non-current members from still
+    // pending child ownership.
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootSuppressedPendingMemberEdgeInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootSuppressedPendingMemberFullAHistoryProducerEvidenceEdgeInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootSuppressedPendingMemberUnownedRemovalEdgeInfoCount =
+            0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::buildClosedWire(), "vertex.edgeInfo()->iteration = -1" on the removed
+    // member and "aHistory->Remove(info.edge)" on the source EdgeInfo. These counters classify
+    // the pending members that still block child-ownership-complete result-wire output.
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootPendingMemberFullAHistoryProducerEvidenceEdgeInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootPendingMemberMissingFullAHistoryProducerEvidenceEdgeInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootPendingMemberUnownedRemovalEdgeInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootPendingMemberPrimaryRemovalEdgeInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootPendingMemberSecondaryRemovalEdgeInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootPendingMemberMissingRemovalBranchEdgeInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootCompleteChildOwnershipRootEdgeInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootIncompleteChildOwnershipRootEdgeInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWireBuiltWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputCandidateWireInfoCount =
+            0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::findSuperEdgesUpdateFirst() stores the full result producer on the root
+    // "superEdge", while ::build() exports child wires through final EdgeInfo slots. This counter
+    // records the output-neutral point where root producer evidence is attached to the current
+    // member child-wire identity before the source-shape gate is allowed to switch output.
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerReadyWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerFullAHistoryEvidenceWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedByPendingMemberWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeFullAHistoryProducerEvidenceWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeMissingFullAHistoryProducerEvidenceWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeOpenWireCompoundEligibleWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeForcedOpenWireCompoundWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeRootProducerReadyWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeCurrentMemberChildWireProducerReadyWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeCurrentMemberChildWireProducerFullAHistoryEvidenceWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeCurrentMemberChildWireProducerMissingFullAHistoryEvidenceWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerUnownedRemovalChildWireProducerReadyOutputWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionNonCurrentMemberEdgeInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerOutputBlockedByMultiMemberSuperEdgeWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberWireInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoCount =
+            0;
+    std::size_t
+        openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerOutputBlockedNonCurrentMemberEdgeInfoCount =
+            0;
     std::size_t openWireCompoundPurgeBridgeWireInfoCount = 0;
     std::size_t openWireCompoundSourceSharedVertexWireInfoCount = 0;
     std::size_t openWireCompoundPurgeBridgeSourceSharedVertexWireInfoCount = 0;
@@ -229,6 +557,74 @@ struct WireJoinerOpenExportHistoryEntry {
     bool generatedOpenExportSourceEdgeInfo = false;
     std::size_t generatedOpenExportSourceEdgeInfoIndex = 0;
     bool generatedOpenExportSourceEdgeInfoConsumed = false;
+    bool helperOpenExportOverride = false;
+    std::string helperOpenExportOverrideReason;
+    bool helperOpenExportOverrideSourceEdgeInfo = false;
+    std::size_t helperOpenExportOverrideSourceEdgeInfoIndex = 0;
+    bool helperOpenExportOverrideSourceEdgeInfoConsumed = false;
+    bool helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo = false;
+    bool helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo = false;
+    bool helperOpenExportOverrideSourceEdgeExportShape = false;
+    bool helperOpenExportOverrideSourceEdgeProducerOutput = false;
+    bool helperOpenExportOverrideFullAHistoryProducerEvidence = false;
+    bool helperOpenExportOverrideSuperEdgeMemberEdgeInfo = false;
+    bool helperOpenExportOverrideSuperEdgeRootEdgeInfo = false;
+    std::size_t helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex = 0;
+    bool helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo = false;
+    bool helperOpenExportOverrideSuperEdgeRootOpenLifecycleEdgeInfo = false;
+    bool helperOpenExportOverrideSuperEdgeRootClosedLifecycleEdgeInfo = false;
+    bool helperOpenExportOverrideSuperEdgeRootRemovedByUnowned = false;
+    bool helperOpenExportOverrideSuperEdgeRootRemovedByPrimaryOwner = false;
+    bool helperOpenExportOverrideSuperEdgeRootRemovedBySecondaryOwner = false;
+    bool helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidence = false;
+    bool helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidence = false;
+    int helperOpenExportOverrideSuperEdgeRootSelectedIteration = 0;
+    std::size_t helperOpenExportOverrideSuperEdgeRootSelectedWireInfo = 0;
+    std::size_t helperOpenExportOverrideSuperEdgeRootSelectedWireInfo2 = 0;
+    bool helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration = false;
+    bool helperOpenExportOverrideSuperEdgeRootExportBlockedByWireInfo = false;
+    bool helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidenceIterationBlocked = false;
+    bool helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidenceIterationBlocked = false;
+    bool helperOpenExportOverrideSuperEdgeRootMissingSafeAHistoryProducerEvidenceIterationBlocked = false;
+    bool helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval = false;
+    bool helperOpenExportOverrideSuperEdgeRootIterationBlockedPrimaryRemoval = false;
+    bool helperOpenExportOverrideSuperEdgeRootIterationBlockedSecondaryRemoval = false;
+    bool helperOpenExportOverrideSuperEdgeRootIterationBlockedMissingRemovalBranch = false;
+    bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate = false;
+    bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence = false;
+    bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidence = false;
+    bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemoval = false;
+    bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady = false;
+    bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidatePrimaryRemoval = false;
+    bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateSecondaryRemoval = false;
+    bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingRemovalBranch = false;
+    bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceUnownedRemoval = false;
+    bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidencePrimaryRemoval = false;
+    bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceSecondaryRemoval = false;
+    bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceMissingRemovalBranch = false;
+    bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo = false;
+    std::vector<std::size_t>
+        helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices;
+    std::vector<std::size_t>
+        helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices;
+    int helperOpenExportOverrideSelectedIteration = 0;
+    std::size_t helperOpenExportOverrideSelectedWireInfo = 0;
+    std::size_t helperOpenExportOverrideSelectedWireInfo2 = 0;
+    bool helperOpenExportOverrideExportBlockedByIteration = false;
+    bool helperOpenExportOverrideExportBlockedByWireInfo = false;
+    std::vector<std::size_t> helperOpenExportOverrideCandidateEdgeInfoIndices;
+    std::vector<std::size_t> helperOpenExportOverrideOpenWireCompoundEligibleCandidateEdgeInfoIndices;
+    bool helperOpenExportOverrideRemovedSourceEdgeInfo = false;
+    bool helperOpenExportOverrideRemovedTargetEdgeInfo = false;
+    bool helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo = false;
+    std::vector<std::size_t> helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices;
+    std::vector<std::size_t> helperOpenExportOverrideAHistoryRemoveSourceEdgeIndices;
+    bool helperOpenExportOverrideAHistoryRemoveSourceLineage = false;
+    bool helperOpenExportOverrideAHistoryRemoveSameSourceLineage = false;
+    bool helperOpenExportOverrideAHistoryRemoveForeignSourceLineage = false;
+    bool helperOpenExportOverrideSafeAHistoryProducerEvidence = false;
+    bool helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo = false;
+    std::vector<std::size_t> helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices;
     bool purgeBridge = false;
 };
 
@@ -242,6 +638,151 @@ struct WireJoinerHistorySummary {
     std::size_t openExportGeneratedSourceEdgeInfoCount = 0;
     std::size_t openExportGeneratedSourceEdgeInfoConsumedCount = 0;
     std::size_t openExportGeneratedMissingSourceLineageEdgeCount = 0;
+    std::size_t openExportHelperOverrideEdgeCount = 0;
+    std::size_t openExportHelperOverrideSourceEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideSourceEdgeInfoConsumedCount = 0;
+    std::size_t openExportHelperOverrideOpenWireCompoundEligibleEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideForcedOpenWireCompoundEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideSourceEdgeExportShapeEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideSourceEdgeProducerOutputEdgeInfoCount = 0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build() can export natural final-gate EdgeInfo wires before
+    // ::getOpenWires() consumes "MapperHistory(aHistory)"; keep the still-helper-shaped subset
+    // visible to topo consumers as an M2/M3 identity boundary.
+    std::size_t openExportHelperOverrideOpenWireCompoundEligibleWithoutSourceEdgeExportShapeEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideFullAHistoryProducerEvidenceEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideFullAHistoryProducerEvidenceWithoutSourceEdgeExportShapeEdgeInfoCount = 0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::buildClosedWire() calls "aHistory->Remove(info.edge)", while ::build()
+    // exports only "info.iteration == -3 || (!info.wireInfo && info.iteration >= 0)".
+    // Preserve the producer/final-gate split for open-export history consumers.
+    std::size_t openExportHelperOverrideFullAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount = 0;
+    std::size_t
+        openExportHelperOverrideSafeAHistoryProducerEvidenceWithoutFullAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount =
+            0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::findSuperEdgesUpdateFirst() records super-edge members with
+    // "current->iteration = -1" and one root with "first->superEdge = makeCleanWire(false)".
+    // Preserve that member/root/export-gate split for open-export history consumers.
+    std::size_t openExportHelperOverrideSuperEdgeMemberEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideSuperEdgeMemberWithRootEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideSuperEdgeMemberRootOpenWireCompoundEligibleEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideSuperEdgeMemberRootOpenLifecycleEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideSuperEdgeMemberRootClosedLifecycleEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideSuperEdgeMemberRootExportBlockedByIterationEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideSuperEdgeMemberRootExportBlockedByWireInfoEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceEdgeInfoCount = 0;
+    std::size_t
+        openExportHelperOverrideSuperEdgeMemberRootOpenWireCompoundEligibleAndSafeAHistoryProducerEvidenceEdgeInfoCount =
+            0;
+    std::size_t
+        openExportHelperOverrideSuperEdgeMemberRootOpenWireCompoundEligibleMissingSafeAHistoryProducerEvidenceEdgeInfoCount =
+            0;
+    std::size_t
+        openExportHelperOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceWithoutOpenWireCompoundEligibleEdgeInfoCount =
+            0;
+    std::size_t
+        openExportHelperOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceWithoutOpenWireCompoundEligibleEdgeInfoCount =
+            0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::buildClosedWire() removes a consumed edge via the "iteration < 0"
+    // lifecycle and preserves the Remove producer in MapperHistory(aHistory). Keep that
+    // intersection in history summary so topo does not infer it from output geometry.
+    std::size_t
+        openExportHelperOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceIterationBlockedEdgeInfoCount =
+            0;
+    std::size_t
+        openExportHelperOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceIterationBlockedEdgeInfoCount =
+            0;
+    std::size_t
+        openExportHelperOverrideSuperEdgeMemberRootMissingSafeAHistoryProducerEvidenceIterationBlockedEdgeInfoCount =
+            0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::buildClosedWire() removes consumed roots through unowned, primary-owner or
+    // secondary-owner branches. Expose that branch split to history consumers as producer evidence.
+    std::size_t openExportHelperOverrideSuperEdgeMemberRootIterationBlockedUnownedRemovalEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideSuperEdgeMemberRootIterationBlockedPrimaryRemovalEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideSuperEdgeMemberRootIterationBlockedSecondaryRemovalEdgeInfoCount = 0;
+    std::size_t
+        openExportHelperOverrideSuperEdgeMemberRootIterationBlockedMissingRemovalBranchEdgeInfoCount =
+            0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build() can only export final EdgeInfo wires, while open super-edge roots are
+    // materialized by "makeCleanWire(false)" before later removal. Preserve this candidate split for
+    // M3 producer migration without changing getOpenWires().
+    std::size_t openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateEdgeInfoCount = 0;
+    std::size_t
+        openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateFullAHistoryProducerEvidenceEdgeInfoCount =
+            0;
+    std::size_t
+        openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceEdgeInfoCount =
+            0;
+    std::size_t openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateUnownedRemovalEdgeInfoCount = 0;
+    std::size_t
+        openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateUnownedRemovalChildWireProducerReadyEdgeInfoCount =
+            0;
+    std::size_t openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidatePrimaryRemovalEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateSecondaryRemovalEdgeInfoCount = 0;
+    std::size_t
+        openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingRemovalBranchEdgeInfoCount =
+            0;
+    std::size_t
+        openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceUnownedRemovalEdgeInfoCount =
+            0;
+    std::size_t
+        openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidencePrimaryRemovalEdgeInfoCount =
+            0;
+    std::size_t
+        openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceSecondaryRemovalEdgeInfoCount =
+            0;
+    std::size_t
+        openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceMissingRemovalBranchEdgeInfoCount =
+            0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::findSuperEdgesUpdateFirst() suppresses super-edge members by lifecycle and
+    // stores the materialized result on the root. History keeps that member coverage explicit so
+    // M4/topo consumers do not infer it from exported geometry.
+    std::size_t
+        openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCoveredMemberEdgeInfoCount =
+            0;
+    std::size_t
+        openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCurrentMemberEdgeInfoCount =
+            0;
+    std::size_t
+        openExportHelperOverrideSuperEdgeMemberRootResultWireProducerNonCurrentMemberEdgeInfoCount =
+            0;
+    std::size_t openExportHelperOverrideSuperEdgeMemberForcedOpenWireCompoundEdgeInfoCount = 0;
+    std::size_t
+        openExportHelperOverrideSuperEdgeMemberMissingSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount =
+            0;
+    std::size_t openExportHelperOverrideExportBlockedByIterationEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideExportBlockedByWireInfoEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideBindingCandidateEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideOpenWireCompoundEligibleCandidateEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideWithOpenWireCompoundEligibleCandidateEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideMissingOpenWireCompoundEligibleCandidateEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideRemovedSourceEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideMissingRemovedSourceEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideRemovedTargetEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideMissingRemovedTargetEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideAHistoryRemoveSourceEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideMissingAHistoryRemoveSourceEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideAHistoryRemoveSourceLineageEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideMissingAHistoryRemoveSourceLineageEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideAHistoryRemoveSameSourceLineageEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideAHistoryRemoveForeignSourceLineageEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideSafeAHistoryProducerEvidenceEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideMissingSafeAHistoryProducerEvidenceEdgeInfoCount = 0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::buildClosedWire() records removal through "aHistory->Remove(info.edge)";
+    // ::build() later adds only final-gate EdgeInfo wires to "openWireCompound". Preserve that
+    // producer/export split for topo consumers of open-export history.
+    std::size_t openExportHelperOverrideSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideMissingSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideSourceLineageRemovedSourceEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideMissingSourceLineageRemovedSourceEdgeInfoCount = 0;
+    std::size_t openExportHelperOverrideMissingSourceLineageEdgeCount = 0;
     std::size_t openExportPurgeBridgeEdgeCount = 0;
     std::vector<WireJoinerOpenExportHistoryEntry> openExportEntries;
     std::size_t modifiedSourceEdgeCount = 0;
@@ -320,10 +861,94 @@ private:
         bool generatedOpenExportSourceEdgeInfo = false;
         std::size_t generatedOpenExportSourceEdgeInfoIndex = 0;
         bool generatedOpenExportSourceEdgeInfoConsumed = false;
+        bool helperOpenExportOverride = false;
+        std::string helperOpenExportOverrideReason;
+        bool helperOpenExportOverrideSourceEdgeInfo = false;
+        std::size_t helperOpenExportOverrideSourceEdgeInfoIndex = 0;
+        bool helperOpenExportOverrideSourceEdgeInfoConsumed = false;
+        bool helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo = false;
+        bool helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo = false;
+        bool helperOpenExportOverrideSourceEdgeExportShape = false;
+        bool helperOpenExportOverrideSourceEdgeProducerOutput = false;
+        bool helperOpenExportOverrideFullAHistoryProducerEvidence = false;
+        bool helperOpenExportOverrideSuperEdgeMemberEdgeInfo = false;
+        bool helperOpenExportOverrideSuperEdgeRootEdgeInfo = false;
+        std::size_t helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex = 0;
+        bool helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo = false;
+        bool helperOpenExportOverrideSuperEdgeRootOpenLifecycleEdgeInfo = false;
+        bool helperOpenExportOverrideSuperEdgeRootClosedLifecycleEdgeInfo = false;
+        bool helperOpenExportOverrideSuperEdgeRootRemovedByUnowned = false;
+        bool helperOpenExportOverrideSuperEdgeRootRemovedByPrimaryOwner = false;
+        bool helperOpenExportOverrideSuperEdgeRootRemovedBySecondaryOwner = false;
+        bool helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidence = false;
+        bool helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidence = false;
+        int helperOpenExportOverrideSuperEdgeRootSelectedIteration = 0;
+        std::size_t helperOpenExportOverrideSuperEdgeRootSelectedWireInfo = 0;
+        std::size_t helperOpenExportOverrideSuperEdgeRootSelectedWireInfo2 = 0;
+        bool helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration = false;
+        bool helperOpenExportOverrideSuperEdgeRootExportBlockedByWireInfo = false;
+        bool helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidenceIterationBlocked = false;
+        bool helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidenceIterationBlocked = false;
+        bool helperOpenExportOverrideSuperEdgeRootMissingSafeAHistoryProducerEvidenceIterationBlocked = false;
+        bool helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval = false;
+        bool helperOpenExportOverrideSuperEdgeRootIterationBlockedPrimaryRemoval = false;
+        bool helperOpenExportOverrideSuperEdgeRootIterationBlockedSecondaryRemoval = false;
+        bool helperOpenExportOverrideSuperEdgeRootIterationBlockedMissingRemovalBranch = false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate = false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence = false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidence = false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemoval = false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady = false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidatePrimaryRemoval = false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateSecondaryRemoval = false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingRemovalBranch = false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceUnownedRemoval = false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidencePrimaryRemoval = false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceSecondaryRemoval = false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceMissingRemovalBranch = false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo = false;
+        std::vector<std::size_t>
+            helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices;
+        std::vector<std::size_t>
+            helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices;
+        int helperOpenExportOverrideSelectedIteration = 0;
+        std::size_t helperOpenExportOverrideSelectedWireInfo = 0;
+        std::size_t helperOpenExportOverrideSelectedWireInfo2 = 0;
+        bool helperOpenExportOverrideExportBlockedByIteration = false;
+        bool helperOpenExportOverrideExportBlockedByWireInfo = false;
+        std::vector<std::size_t> helperOpenExportOverrideCandidateEdgeInfoIndices;
+        std::vector<std::size_t> helperOpenExportOverrideOpenWireCompoundEligibleCandidateEdgeInfoIndices;
+        bool helperOpenExportOverrideRemovedSourceEdgeInfo = false;
+        bool helperOpenExportOverrideRemovedTargetEdgeInfo = false;
+        bool helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo = false;
+        std::vector<std::size_t> helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices;
+        std::vector<std::size_t> helperOpenExportOverrideAHistoryRemoveSourceEdgeIndices;
+        bool helperOpenExportOverrideAHistoryRemoveSourceLineage = false;
+        bool helperOpenExportOverrideAHistoryRemoveSameSourceLineage = false;
+        bool helperOpenExportOverrideAHistoryRemoveForeignSourceLineage = false;
+        bool helperOpenExportOverrideSafeAHistoryProducerEvidence = false;
+        bool helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo = false;
+        std::vector<std::size_t> helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices;
+        bool buildClosedWireRemoved = false;
+        bool buildClosedWireRemovedByUnowned = false;
+        bool buildClosedWireRemovedByPrimaryOwner = false;
+        bool buildClosedWireRemovedBySecondaryOwner = false;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::buildClosedWire(), counter removal sets "vertex.edgeInfo()->iteration = -1"
+        // but calls "aHistory->Remove(info.edge)" with the outer EdgeInfo source.
+        bool buildClosedWireAHistoryRemoved = false;
+        std::vector<std::size_t> buildClosedWireAHistoryRemoveSourceEdgeInfoIndices;
+        std::vector<std::size_t> buildClosedWireAHistoryRemoveSourceEdgeIndices;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::build() exports final EdgeInfo identity into "openWireCompound" by calling
+        // "builder.Add(openWireCompound, info.wire())". While M3 is replacing the helper-generated
+        // result edge source, keep the owner lifecycle on "edge" and override only the export shape
+        // recorded in OpenWireCompoundWireInfo.
+        std::optional<TopoDS_Edge> openExportOverride;
         // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
         // ::WireJoinerP::findSuperEdges(), "Join edges (let's call it super edge) that are connected
-        // to only one other edges". This is currently diagnostic only; getOpenWires() still exports
-        // original EdgeInfo edges until real superEdge/openWireCompound child-wire semantics migrate.
+        // to only one other edges". The regular child-wire ledger can consume final superEdge wires;
+        // helper root producer wires remain evidence until their M3 output boundary is switched.
         std::size_t superEdgeInfo = 0;
         std::size_t superEdgeMemberCount = 0;
         bool superEdgeRoot = false;
@@ -349,6 +974,9 @@ private:
         int superEdgeAdjacentRangeEnd = -1;
         const TopoDS_Shape& shape(bool forward = true) const;
         TopoDS_Wire wire(bool forward = true) const;
+        TopoDS_Wire openExportWire() const;
+        const TopoDS_Edge& openExportEdge() const;
+        bool hasOpenExportOverride() const;
         int iteration = 0;
         int iteration2 = 0;
         std::size_t wireInfo = 0;
@@ -452,8 +1080,87 @@ private:
         bool generatedOpenExportSourceEdgeInfo = false;
         std::size_t generatedOpenExportSourceEdgeInfoIndex = 0;
         bool generatedOpenExportSourceEdgeInfoConsumed = false;
+        bool helperOpenExportOverride = false;
+        std::string helperOpenExportOverrideReason;
+        bool helperOpenExportOverrideSourceEdgeInfo = false;
+        std::size_t helperOpenExportOverrideSourceEdgeInfoIndex = 0;
+        bool helperOpenExportOverrideSourceEdgeInfoConsumed = false;
+        bool helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo = false;
+        bool helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo = false;
+        bool helperOpenExportOverrideSourceEdgeExportShape = false;
+        bool helperOpenExportOverrideSourceEdgeProducerOutput = false;
+        bool helperOpenExportOverrideFullAHistoryProducerEvidence = false;
+        bool helperOpenExportOverrideSuperEdgeMemberEdgeInfo = false;
+        bool helperOpenExportOverrideSuperEdgeRootEdgeInfo = false;
+        std::size_t helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex = 0;
+        bool helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo = false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate = false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady = false;
+        TopoDS_Wire helperOpenExportOverrideSuperEdgeRootResultWireProducerWire;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerWireBuilt = false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerOutput = false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerUnownedRemovalChildWireProducerReadyOutput = false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppression = false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerOutputBlockedByMultiMemberSuperEdge = false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo = false;
+        std::vector<std::size_t>
+            helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices;
+        std::vector<std::size_t>
+            helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::findSuperEdgesUpdateFirst() stores one root "superEdge" after setting
+        // each member "current->iteration = -1". This candidate keeps only the current child
+        // member wire so M3 can suppress sibling members without exporting the full root superEdge.
+        TopoDS_Wire helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWire;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWireBuilt = false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputCandidate = false;
+        bool
+            helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedByPendingMember =
+                false;
+        bool
+            helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShape =
+                false;
+        bool
+            helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerReady =
+                false;
+        bool
+            helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerFullAHistoryEvidence =
+                false;
+        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutput = false;
+        bool helperOpenExportOverrideRemovedSourceEdgeInfo = false;
+        bool helperOpenExportOverrideRemovedTargetEdgeInfo = false;
+        bool helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo = false;
+        std::vector<std::size_t> helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices;
+        std::vector<std::size_t> helperOpenExportOverrideAHistoryRemoveSourceEdgeIndices;
+        bool helperOpenExportOverrideAHistoryRemoveSourceLineage = false;
+        bool helperOpenExportOverrideAHistoryRemoveSameSourceLineage = false;
+        bool helperOpenExportOverrideAHistoryRemoveForeignSourceLineage = false;
+        bool helperOpenExportOverrideSafeAHistoryProducerEvidence = false;
+        bool helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo = false;
+        std::vector<std::size_t> helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices;
         bool purgeBridge = false;
         bool sourceSharedVertexPurgeMatch = false;
+    };
+    struct HelperOpenExportOverrideBinding {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::build() exports result-wire identity from final EdgeInfo states before
+        // ::getOpenWires() consumes "MapperHistory(aHistory)". This binding records the transitional
+        // helper export edge and the pre-existing EdgeInfo it mirrors before true aHistory producer
+        // identity is available.
+        TopoDS_Edge helperEdge;
+        std::string reason;
+        std::vector<std::size_t> sourceEdgeInfoCandidateIndices;
+        std::vector<std::size_t> openWireCompoundEligibleCandidateIndices;
+    };
+    struct HelperOpenExportOverridePlan {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::buildClosedWire() reruns findClosedWires(true)/findTightBound() before final
+        // openWireCompound export. The rerun gate must know whether result-wire identity is still a
+        // transitional helper override before it mutates live EdgeInfo owners.
+        bool needed = false;
+        std::size_t candidateEdgeCount = 0;
+        std::size_t unboundEdgeCount = 0;
+        std::vector<HelperOpenExportOverrideBinding> bindings;
     };
     struct OwnerWireInfo {
         std::size_t id = 0;
@@ -605,9 +1312,10 @@ private:
         // ::WireJoinerP::buildClosedWire() reruns "findClosedWires(true)"; after consumed-edge
         // removal there may be no EdgeInfo with active "iteration >= 0" left to seed that search.
         std::size_t repeatedSplitExhaustRerunNoActiveSearchCount = 0;
-        std::size_t repeatedSplitExhaustRerunClosedWireSearchCount = 0;
-        std::size_t repeatedSplitExhaustRerunClosedWireMissCount = 0;
-        std::size_t repeatedSplitExhaustRerunClosedWireInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunClosedWireSearchCount = 0;
+    std::size_t repeatedSplitExhaustRerunClosedWireMissCount = 0;
+    std::size_t repeatedSplitExhaustRerunMissLiveResetEdgeInfoCount = 0;
+    std::size_t repeatedSplitExhaustRerunClosedWireInfoCount = 0;
         std::size_t repeatedSplitExhaustRerunClosedWireAssignedEdgeInfoCount = 0;
         std::size_t repeatedSplitExhaustRerunClosedWireVertexCount = 0;
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
@@ -644,6 +1352,20 @@ private:
         std::size_t repeatedSplitExhaustRerunBranchSearchInsideCandidateCount = 0;
         std::size_t repeatedSplitExhaustRerunBranchSearchOutsideCandidateCount = 0;
         std::size_t repeatedSplitExhaustRerunNewWireSeedCandidateCount = 0;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::buildClosedWire() reruns owner search before ::build() adds openWireCompound.
+        // This field records live rerun owners rejected because their result-wire identity still comes
+        // from the generated open-export transition instead of real EdgeInfo/WireInfo/aHistory state.
+        std::size_t repeatedSplitExhaustGeneratedIdentityBlockedEdgeInfoCount = 0;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::build() only exports existing final EdgeInfo states into openWireCompound.
+        // These M3 risk counters record helper-produced export candidates that cannot bind to one
+        // final EdgeInfo and therefore must not be appended as detached EdgeInfo output.
+        std::size_t generatedOpenExportUnboundEdgeCount = 0;
+        std::size_t generatedOpenExportDuplicateSourceEdgeInfoCount = 0;
+        std::size_t helperOpenExportOverrideCandidateEdgeCount = 0;
+        std::size_t helperOpenExportOverrideUnboundEdgeCount = 0;
+        std::size_t helperOpenExportOverrideDuplicateSourceEdgeInfoCount = 0;
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
         // ::WireJoinerP::exhaustTightBoundUpdateEdge() resets purged "wireInfo"; ::buildClosedWire()
         // then removes still-active unowned edges. cad-core clears the live primary owner only when
@@ -711,7 +1433,31 @@ private:
     void recordExhaustAdjacentSecondaryOwners(WireInfo& info);
     void recordBuildClosedWireRemovalLifecycle(WireInfo& info);
     void recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
-                                                  const std::vector<TopoDS_Face>& boundedFaces);
+                                                  const std::vector<TopoDS_Face>& boundedFaces,
+                                                  const HelperOpenExportOverridePlan& helperPlan);
+    HelperOpenExportOverridePlan computeHelperOpenExportOverridePlan(
+        const WireInfo& info,
+        const TopoDS_Shape& boundedFaceShape,
+        const std::vector<TopoDS_Wire>& closedWires,
+        const std::vector<TopoDS_Edge>& openEdges,
+        bool splitProducedBoundedFaces,
+        bool hasOpenWireOutput) const;
+    bool helperOpenExportOverridePlanHasUnsafeProducer(const WireInfo& info,
+                                                       const HelperOpenExportOverridePlan& helperPlan) const;
+    bool edgeInfoExportsOpenWireCompound(const EdgeInfo& edgeInfo) const;
+    bool helperOpenExportOverrideCandidateHasFullAHistoryProducerEvidence(const EdgeInfo& edgeInfo) const;
+    bool helperOpenExportOverrideRootResultWireProducerHasFullAHistoryProducerEvidence(
+        const EdgeInfo& edgeInfo) const;
+    bool helperOpenExportOverrideRootResultWireProducerCanSuppressPendingMember(
+        const EdgeInfo& edgeInfo) const;
+    bool helperOpenExportOverrideCandidateHasSafeAHistoryProducerEvidence(const EdgeInfo& edgeInfo) const;
+    std::optional<std::size_t> superEdgeRootIndexForMember(const WireInfo& info,
+                                                           const EdgeInfo& edgeInfo) const;
+    std::vector<std::size_t> strictRemovedSourceEdgeInfoIndicesForSourceLineage(
+        const WireInfo& info,
+        const EdgeInfo& edgeInfo) const;
+    void applyHelperOpenExportOverridePlan(WireInfo& info,
+                                           const HelperOpenExportOverridePlan& helperPlan);
     void recordBranchSearchCandidatesForOwner(WireInfo& info,
                                               OwnerWireInfo& owner,
                                               const std::vector<TopoDS_Face>& boundedFaces);

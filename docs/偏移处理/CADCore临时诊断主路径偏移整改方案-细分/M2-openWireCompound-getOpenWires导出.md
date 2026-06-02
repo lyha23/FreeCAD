@@ -33,14 +33,17 @@ source.findSubShapesWithSharedVertex(TopoShape(edge, -1))
 
 - `recordOpenWireCompoundLedger()` 已为 final open-export `EdgeInfo` 保存 request-local child wire。
 - `open_wire_compound_*` 计数已进入 `wire_joiner_ledger`。
+- `getOpenWires()` 已优先消费 `recordOpenWireCompoundLedger()` 生成的 `OpenWireCompoundWireInfo` child-wire 账本；只有没有 ledger 的旧调用才回退到 `EdgeInfo` 扫描。
 - child-wire shared-vertex predicate 已能解释 dangling open line、internal-branch cutter、pad-dangling 的 `purgeAsOriginalOpenEdge` bridge。
 - `open_wire_compound_purge_bridge_unmatched_wire_info_count == 0` 已成为重要回归信号。
 
 仍未完成：
 
-- 直接让 `getOpenWires()` 读取 child-wire ledger 会让 original open edge 泄漏。
+- `getOpenWires()` 虽然已读取 child-wire ledger，但 ledger 中仍有 helper override child wire；这不是最终真实 result-wire identity。
+- M3 已把 unowned-removal ready root producer wire 放进 child-wire ledger，但多成员 `superEdge` 目前不能直接接替 helper child-wire 输出，否则会把 sibling member 一起带入 InternalEdge；这部分现在由 multi-member output guard 记录，仍需 M2/M3 后续补 child-wire member 抑制或真实 final child ownership。
 - 直接应用 shared-vertex purge 会误删 cross / branch result-wire edge。
 - 原因是当前 generated copy edge 的 vertex identity 还不是 FreeCAD `openWireCompound` / `aHistory` 产物。
+- `purgeAsOriginalOpenEdge` 仍是 original open edge 与 split/result edge 的临时 bridge，尚未删除。
 
 ## 必收切片
 

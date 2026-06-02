@@ -159,6 +159,8 @@ struct GeneratedOpenExportShapeResult {
     std::string reason;
 };
 
+bool edgeEquivalentByGeometryAndEndpoints(const TopoDS_Edge& left, const TopoDS_Edge& right);
+
 void appendUniqueSourceIndex(std::vector<std::size_t>& indices, std::size_t sourceIndex)
 {
     if (std::find(indices.begin(), indices.end(), sourceIndex) == indices.end()) {
@@ -173,12 +175,35 @@ void appendUniqueSourceIndices(std::vector<std::size_t>& target, const std::vect
     }
 }
 
+bool sourceEdgeIndicesIntersect(const std::vector<std::size_t>& left,
+                                const std::vector<std::size_t>& right)
+{
+    return std::any_of(left.begin(), left.end(), [&](std::size_t leftIndex) {
+        return std::find(right.begin(), right.end(), leftIndex) != right.end();
+    });
+}
+
 std::vector<std::size_t> sourceEdgeIndicesByIdentity(const TopoDS_Edge& edge,
                                                      const std::vector<TopoDS_Edge>& sourceEdges)
 {
     std::vector<std::size_t> indices;
     for (std::size_t index = 0; index < sourceEdges.size(); ++index) {
         if (!edge.IsNull() && !sourceEdges[index].IsNull() && edge.IsSame(sourceEdges[index])) {
+            indices.push_back(index);
+        }
+    }
+    if (!indices.empty()) {
+        return indices;
+    }
+    for (std::size_t index = 0; index < sourceEdges.size(); ++index) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::build(), "sourceEdges.insert(sourceEdgeArray.begin(), sourceEdgeArray.end())",
+        // then splitEdges() records "aHistory->AddModified(split.intersectShape, newInfo.edge)".
+        // cad-core can receive copied face/open-wire edges before split; when exact sourceEdgeArray
+        // identity is already lost, recover only the request-local source index for the copied
+        // EdgeInfo, not helper output geometry or result-wire ownership.
+        if (!edge.IsNull() && !sourceEdges[index].IsNull()
+            && edgeEquivalentByGeometryAndEndpoints(edge, sourceEdges[index])) {
             indices.push_back(index);
         }
     }
@@ -206,8 +231,24 @@ void appendLineageForHistoryShape(std::vector<SplitEdgeRecord>& records,
         return;
     }
     for (const TopoDS_Edge& historyEdge : shapeEdgesForLineage(historyShape)) {
+        bool matchedByIdentity = false;
         for (SplitEdgeRecord& record : records) {
             if (!record.edge.IsNull() && record.edge.IsSame(historyEdge)) {
+                appendUniqueSourceIndices(record.sourceEdgeIndices, sourceIndices);
+                record.fromSplitterHistory = true;
+                matchedByIdentity = true;
+            }
+        }
+        if (matchedByIdentity) {
+            continue;
+        }
+        for (SplitEdgeRecord& record : records) {
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+            // ::WireJoinerP::splitEdges(), after add(split.edge, ...), records
+            // "aHistory->AddModified(split.intersectShape, newInfo.edge)". When OCCT gives the
+            // history edge as a copied shape rather than the same TShape held in splitter.Shape(),
+            // bind lineage to the existing result record instead of creating a helper output edge.
+            if (!record.edge.IsNull() && edgeEquivalentByGeometryAndEndpoints(record.edge, historyEdge)) {
                 appendUniqueSourceIndices(record.sourceEdgeIndices, sourceIndices);
                 record.fromSplitterHistory = true;
             }
@@ -913,6 +954,544 @@ void WireJoiner::addSourceEdge(const TopoDS_Edge& edge)
     }
 }
 
+WireJoiner::HelperOpenExportOverridePlan WireJoiner::computeHelperOpenExportOverridePlan(
+    const WireInfo& info,
+    const TopoDS_Shape& boundedFaceShape,
+    const std::vector<TopoDS_Wire>& closedWires,
+    const std::vector<TopoDS_Edge>& openEdges,
+    bool splitProducedBoundedFaces,
+    bool hasOpenWireOutput) const
+{
+    HelperOpenExportOverridePlan plan;
+    const std::optional<GeneratedOpenExportShapeResult> generatedOpenExportShape =
+        generatedOpenExportShapeForSketchInternals(
+            boundedFaceShape,
+            openEdges,
+            closedWires,
+            splitProducedBoundedFaces,
+            hasOpenWireOutput);
+    if (!generatedOpenExportShape || generatedOpenExportShape->shape.IsNull()) {
+        return plan;
+    }
+
+    for (const TopoDS_Edge& edge : boundaryEdges(generatedOpenExportShape->shape)) {
+        if (edge.IsNull()) {
+            continue;
+        }
+        ++plan.candidateEdgeCount;
+        HelperOpenExportOverrideBinding binding;
+        binding.helperEdge = edge;
+        binding.reason = generatedOpenExportShape->reason;
+        for (std::size_t sourceIndex = 0; sourceIndex < info.edges.size(); ++sourceIndex) {
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+            // ::WireJoinerP::build() adds final "info.wire()" into openWireCompound from existing
+            // EdgeInfo states. Keep every equivalent EdgeInfo candidate here; applyHelperOpenExportOverridePlan()
+            // runs after buildClosedWire() removal lifecycle and can therefore prefer the candidate that was
+            // actually removed by that FreeCAD producer path.
+            if (edgeEquivalentByGeometryAndEndpoints(edge, info.edges[sourceIndex].edge)) {
+                binding.sourceEdgeInfoCandidateIndices.push_back(sourceIndex);
+                if (edgeInfoExportsOpenWireCompound(info.edges[sourceIndex])) {
+                    binding.openWireCompoundEligibleCandidateIndices.push_back(sourceIndex);
+                }
+            }
+        }
+        if (binding.sourceEdgeInfoCandidateIndices.empty()) {
+            ++plan.unboundEdgeCount;
+            continue;
+        }
+        plan.bindings.push_back(std::move(binding));
+    }
+
+    plan.needed = plan.candidateEdgeCount > 0U;
+    return plan;
+}
+
+bool WireJoiner::helperOpenExportOverridePlanHasUnsafeProducer(
+    const WireInfo& info,
+    const HelperOpenExportOverridePlan& helperPlan) const
+{
+    if (!helperPlan.needed) {
+        return false;
+    }
+    if (helperPlan.unboundEdgeCount > 0U) {
+        return true;
+    }
+
+    for (const HelperOpenExportOverrideBinding& binding : helperPlan.bindings) {
+        bool hasAHistoryProducerCandidate = false;
+        for (const std::size_t candidateIndex : binding.sourceEdgeInfoCandidateIndices) {
+            if (candidateIndex >= info.edges.size()) {
+                continue;
+            }
+            const EdgeInfo& candidate = info.edges[candidateIndex];
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+            // ::WireJoinerP::splitEdges() records "aHistory->AddModified(..., newInfo.edge)" and
+            // ::buildClosedWire() later calls "aHistory->Remove(info.edge)". Only candidates with both
+            // request-local source lineage and Remove-source evidence are safe enough for the rerun gate
+            // to avoid treating this helper-produced identity as a live-owner blocker. A removed target
+            // can also be safe when it records the actual outer EdgeInfo passed to Remove() and that
+            // source carries splitter/source lineage. The rerun removal scan records the same
+            // target/source evidence output-neutrally, so those candidates are safe for M3
+            // helper binding even before the live openWireCompound path is switched.
+            if (helperOpenExportOverrideCandidateHasSafeAHistoryProducerEvidence(candidate)) {
+                hasAHistoryProducerCandidate = true;
+                break;
+            }
+        }
+        if (!hasAHistoryProducerCandidate) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool WireJoiner::edgeInfoExportsOpenWireCompound(const EdgeInfo& edgeInfo) const
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build(), exports an EdgeInfo into "openWireCompound" only when
+    // "info.iteration == -3 || (!info.wireInfo && info.iteration >= 0)".
+    return edgeInfo.iteration == -3 || (edgeInfo.wireInfo == 0U && edgeInfo.iteration >= 0);
+}
+
+bool WireJoiner::helperOpenExportOverrideCandidateHasFullAHistoryProducerEvidence(
+    const EdgeInfo& edgeInfo) const
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::buildClosedWire() marks the removed target and separately records
+    // "aHistory->Remove(info.edge)" on the outer EdgeInfo source. Full M3 producer evidence
+    // requires both sides plus request-local sourceEdgeArray lineage.
+    return edgeInfo.buildClosedWireAHistoryRemoved && edgeInfo.buildClosedWireRemoved
+        && !edgeInfo.sourceEdgeIndices.empty()
+        && !edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeIndices.empty();
+}
+
+bool WireJoiner::helperOpenExportOverrideRootResultWireProducerHasFullAHistoryProducerEvidence(
+    const EdgeInfo& edgeInfo) const
+{
+    if (helperOpenExportOverrideCandidateHasFullAHistoryProducerEvidence(edgeInfo)) {
+        return true;
+    }
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::buildClosedWire() primary/secondary removal sets
+    // "vertex.edgeInfo()->iteration = -1" on the removed target but records
+    // "aHistory->Remove(info.edge)" on the outer EdgeInfo source. A superEdge root result-wire
+    // producer is complete when it has the removed target, the actual Remove source, and same-source
+    // request-local lineage; foreign Remove lineage remains risk evidence for another producer.
+    return edgeInfo.buildClosedWireRemoved
+        && !edgeInfo.sourceEdgeIndices.empty()
+        && !edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices.empty()
+        && sourceEdgeIndicesIntersect(edgeInfo.sourceEdgeIndices,
+                                      edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeIndices);
+}
+
+bool WireJoiner::helperOpenExportOverrideRootResultWireProducerCanSuppressPendingMember(
+    const EdgeInfo& edgeInfo) const
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::findSuperEdgesUpdateFirst() sets each member "current->iteration = -1",
+    // while ::WireJoinerP::buildClosedWire() later records consumed unowned members with
+    // "aHistory->Remove(info.edge)". M3 can suppress a non-current member only when that member is
+    // already proven to be a full aHistory producer in the unowned removal branch.
+    return edgeInfo.buildClosedWireRemovedByUnowned
+        && helperOpenExportOverrideRootResultWireProducerHasFullAHistoryProducerEvidence(edgeInfo);
+}
+
+bool WireJoiner::helperOpenExportOverrideCandidateHasSafeAHistoryProducerEvidence(
+    const EdgeInfo& edgeInfo) const
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::buildClosedWire() separates the removed target
+    // "vertex.edgeInfo()->iteration = -1" from the aHistory producer
+    // "aHistory->Remove(info.edge)". A helper binding is safe for M3's rerun gate only when the
+    // selected EdgeInfo is itself that Remove source with request-local source lineage, or the
+    // recorded Remove source belongs to the same sourceEdgeArray lineage. Foreign Remove lineage is
+    // producer evidence for another source, not a safe producer for this helper-selected EdgeInfo.
+    if (edgeInfo.buildClosedWireAHistoryRemoved && !edgeInfo.sourceEdgeIndices.empty()) {
+        return true;
+    }
+    return !edgeInfo.sourceEdgeIndices.empty()
+        && sourceEdgeIndicesIntersect(edgeInfo.sourceEdgeIndices,
+                                      edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeIndices);
+}
+
+std::optional<std::size_t> WireJoiner::superEdgeRootIndexForMember(const WireInfo& info,
+                                                                   const EdgeInfo& edgeInfo) const
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::findSuperEdgesUpdateFirst() sets each non-root member to
+    // "current->iteration = -1" and materializes the root with
+    // "first->superEdge = makeCleanWire(false)". This maps a helper-selected member back to its
+    // same superEdgeInfo root without changing the live openWireCompound export path.
+    if (edgeInfo.superEdgeInfo == 0U || !edgeInfo.superEdgeLifecycleMemberMinusOne) {
+        return std::nullopt;
+    }
+    for (std::size_t edgeIndex = 0; edgeIndex < info.edges.size(); ++edgeIndex) {
+        const EdgeInfo& candidate = info.edges[edgeIndex];
+        if (candidate.superEdgeInfo == edgeInfo.superEdgeInfo && candidate.superEdgeRoot) {
+            return edgeIndex;
+        }
+    }
+    return std::nullopt;
+}
+
+std::vector<std::size_t> WireJoiner::strictRemovedSourceEdgeInfoIndicesForSourceLineage(
+    const WireInfo& info,
+    const EdgeInfo& edgeInfo) const
+{
+    std::vector<std::size_t> indices;
+    if (edgeInfo.sourceEdgeIndices.empty()) {
+        return indices;
+    }
+
+    for (std::size_t candidateIndex = 0; candidateIndex < info.edges.size(); ++candidateIndex) {
+        const EdgeInfo& candidate = info.edges[candidateIndex];
+        if (!candidate.buildClosedWireAHistoryRemoved || candidate.sourceEdgeIndices.empty()) {
+            continue;
+        }
+        if (sourceEdgeIndicesIntersect(edgeInfo.sourceEdgeIndices, candidate.sourceEdgeIndices)) {
+            appendUniqueSourceIndex(indices, candidateIndex);
+        }
+    }
+    return indices;
+}
+
+void WireJoiner::applyHelperOpenExportOverridePlan(WireInfo& info,
+                                                   const HelperOpenExportOverridePlan& helperPlan)
+{
+    if (!helperPlan.needed) {
+        return;
+    }
+
+    info.helperOpenExportOverrideCandidateEdgeCount += helperPlan.candidateEdgeCount;
+    info.helperOpenExportOverrideUnboundEdgeCount += helperPlan.unboundEdgeCount;
+    for (const HelperOpenExportOverrideBinding& binding : helperPlan.bindings) {
+        if (binding.helperEdge.IsNull()) {
+            continue;
+        }
+        std::optional<std::size_t> selectedSourceEdgeInfoIndex;
+        const auto selectCandidate = [&](const auto& acceptCandidate) {
+            for (const std::size_t candidateIndex : binding.sourceEdgeInfoCandidateIndices) {
+                if (candidateIndex >= info.edges.size()
+                    || info.edges[candidateIndex].hasOpenExportOverride()) {
+                    continue;
+                }
+                const EdgeInfo& candidate = info.edges[candidateIndex];
+                if (!acceptCandidate(candidate)) {
+                    continue;
+                }
+                return std::optional<std::size_t>{candidateIndex};
+            }
+            return std::optional<std::size_t>{};
+        };
+        selectedSourceEdgeInfoIndex = selectCandidate([&](const EdgeInfo& candidate) {
+            return edgeInfoExportsOpenWireCompound(candidate) && candidate.buildClosedWireAHistoryRemoved
+                && !candidate.sourceEdgeIndices.empty();
+        });
+        if (!selectedSourceEdgeInfoIndex) {
+            selectedSourceEdgeInfoIndex = selectCandidate([&](const EdgeInfo& candidate) {
+                return edgeInfoExportsOpenWireCompound(candidate)
+                    && helperOpenExportOverrideCandidateHasSafeAHistoryProducerEvidence(candidate);
+            });
+        }
+        if (!selectedSourceEdgeInfoIndex) {
+            selectedSourceEdgeInfoIndex = selectCandidate([&](const EdgeInfo& candidate) {
+                return edgeInfoExportsOpenWireCompound(candidate)
+                    && !candidate.buildClosedWireAHistoryRemoveSourceEdgeIndices.empty();
+            });
+        }
+        if (!selectedSourceEdgeInfoIndex) {
+            selectedSourceEdgeInfoIndex = selectCandidate([&](const EdgeInfo& candidate) {
+                return edgeInfoExportsOpenWireCompound(candidate) && !candidate.sourceEdgeIndices.empty();
+            });
+        }
+        if (!selectedSourceEdgeInfoIndex) {
+            selectedSourceEdgeInfoIndex = selectCandidate([](const EdgeInfo& candidate) {
+                return candidate.buildClosedWireAHistoryRemoved && !candidate.sourceEdgeIndices.empty();
+            });
+        }
+        if (!selectedSourceEdgeInfoIndex) {
+            selectedSourceEdgeInfoIndex = selectCandidate([&](const EdgeInfo& candidate) {
+                return helperOpenExportOverrideCandidateHasSafeAHistoryProducerEvidence(candidate);
+            });
+        }
+        if (!selectedSourceEdgeInfoIndex) {
+            selectedSourceEdgeInfoIndex = selectCandidate([](const EdgeInfo& candidate) {
+                return !candidate.buildClosedWireAHistoryRemoveSourceEdgeIndices.empty();
+            });
+        }
+        if (!selectedSourceEdgeInfoIndex) {
+            selectedSourceEdgeInfoIndex = selectCandidate([](const EdgeInfo& candidate) {
+                return candidate.buildClosedWireAHistoryRemoved;
+            });
+        }
+        if (!selectedSourceEdgeInfoIndex) {
+            selectedSourceEdgeInfoIndex = selectCandidate([](const EdgeInfo& candidate) {
+                return !candidate.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices.empty();
+            });
+        }
+        if (!selectedSourceEdgeInfoIndex) {
+            selectedSourceEdgeInfoIndex = selectCandidate([](const EdgeInfo& candidate) {
+                return !candidate.sourceEdgeIndices.empty();
+            });
+        }
+        if (!selectedSourceEdgeInfoIndex) {
+            selectedSourceEdgeInfoIndex = selectCandidate([](const EdgeInfo&) {
+                return true;
+            });
+        }
+
+        if (selectedSourceEdgeInfoIndex) {
+            std::vector<std::size_t> openWireCompoundEligibleCandidateIndices =
+                binding.openWireCompoundEligibleCandidateIndices;
+            for (const std::size_t candidateIndex : binding.sourceEdgeInfoCandidateIndices) {
+                if (candidateIndex >= info.edges.size()) {
+                    continue;
+                }
+                if (edgeInfoExportsOpenWireCompound(info.edges[candidateIndex])) {
+                    appendUniqueSourceIndex(openWireCompoundEligibleCandidateIndices, candidateIndex);
+                }
+            }
+            EdgeInfo& edgeInfo = info.edges[*selectedSourceEdgeInfoIndex];
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+            // ::WireJoinerP::build() exports "info.wire()" from final EdgeInfo states. M3 keeps
+            // ownership/search state on an existing EdgeInfo and only substitutes the open-export
+            // shape until generatedOpenExportShapeForSketchInternals() is replaced by true producer
+            // EdgeInfo/WireInfo/aHistory identity. Prefer candidates already marked by
+            // aHistory->Remove() source and splitter/source lineage so helper evidence follows the
+            // real aHistory producer ledger instead of whichever equivalent edge happened to appear first.
+            const bool sourceExportsOpenEdge = edgeInfoExportsOpenWireCompound(edgeInfo);
+            const bool sourceConsumedByBuildClosedWire =
+                edgeInfo.buildClosedWireRemoved || edgeInfo.buildClosedWireAHistoryRemoved;
+            const bool exportBlockedByIteration =
+                !sourceExportsOpenEdge && edgeInfo.iteration < 0 && edgeInfo.iteration != -3;
+            const bool exportBlockedByWireInfo =
+                !sourceExportsOpenEdge && edgeInfo.iteration >= 0 && edgeInfo.wireInfo != 0U;
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+            // ::WireJoinerP::build() calls "builder.Add(openWireCompound, info.wire())" from the
+            // final EdgeInfo, not from a generated helper copy. The helper binding still identifies
+            // which equivalent edge should export, but the export shape is now the selected
+            // EdgeInfo::edge; remaining M3 debt is the forced export gate, not the shape source.
+            const bool hasFullAHistoryProducerEvidence =
+                helperOpenExportOverrideCandidateHasFullAHistoryProducerEvidence(edgeInfo);
+            const bool useSourceEdgeExportShape = edgeInfo.edge.IsSame(binding.helperEdge)
+                || (binding.reason == "partial_shared_closed_wire" && hasFullAHistoryProducerEvidence);
+            const std::optional<std::size_t> superEdgeRootIndex =
+                superEdgeRootIndexForMember(info, edgeInfo);
+            edgeInfo.openExportOverride = useSourceEdgeExportShape ? edgeInfo.edge : binding.helperEdge;
+            edgeInfo.helperOpenExportOverride = true;
+            edgeInfo.helperOpenExportOverrideReason = binding.reason;
+            edgeInfo.helperOpenExportOverrideSourceEdgeInfo = true;
+            edgeInfo.helperOpenExportOverrideSourceEdgeInfoIndex = *selectedSourceEdgeInfoIndex;
+            edgeInfo.helperOpenExportOverrideSourceEdgeInfoConsumed =
+                !sourceExportsOpenEdge || sourceConsumedByBuildClosedWire;
+            edgeInfo.helperOpenExportOverrideCandidateEdgeInfoIndices =
+                binding.sourceEdgeInfoCandidateIndices;
+            edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleCandidateEdgeInfoIndices =
+                openWireCompoundEligibleCandidateIndices;
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+            // ::WireJoinerP::build() adds to "openWireCompound" only when
+            // "info.iteration == -3 || (!info.wireInfo && info.iteration >= 0)". Track whether
+            // this helper-selected EdgeInfo would satisfy that exact export gate without
+            // "openExportOverride"; a forced export is the remaining M3 lifecycle gap.
+            edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo = sourceExportsOpenEdge;
+            edgeInfo.helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo = !sourceExportsOpenEdge;
+            edgeInfo.helperOpenExportOverrideSourceEdgeExportShape = useSourceEdgeExportShape;
+            edgeInfo.helperOpenExportOverrideFullAHistoryProducerEvidence =
+                hasFullAHistoryProducerEvidence;
+            edgeInfo.helperOpenExportOverrideSuperEdgeMemberEdgeInfo =
+                edgeInfo.superEdgeLifecycleMemberMinusOne;
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootEdgeInfo = superEdgeRootIndex.has_value();
+            if (superEdgeRootIndex) {
+                const EdgeInfo& rootEdgeInfo = info.edges[*superEdgeRootIndex];
+                const bool rootExportsOpenEdge = edgeInfoExportsOpenWireCompound(rootEdgeInfo);
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex = *superEdgeRootIndex;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo =
+                    rootExportsOpenEdge;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootOpenLifecycleEdgeInfo =
+                    rootEdgeInfo.superEdgeLifecycleOpenRoot;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootClosedLifecycleEdgeInfo =
+                    rootEdgeInfo.superEdgeLifecycleClosedRoot;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootRemovedByUnowned =
+                    rootEdgeInfo.buildClosedWireRemovedByUnowned;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootRemovedByPrimaryOwner =
+                    rootEdgeInfo.buildClosedWireRemovedByPrimaryOwner;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootRemovedBySecondaryOwner =
+                    rootEdgeInfo.buildClosedWireRemovedBySecondaryOwner;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidence =
+                    helperOpenExportOverrideCandidateHasSafeAHistoryProducerEvidence(rootEdgeInfo);
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidence =
+                    helperOpenExportOverrideRootResultWireProducerHasFullAHistoryProducerEvidence(rootEdgeInfo);
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootSelectedIteration = rootEdgeInfo.iteration;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootSelectedWireInfo = rootEdgeInfo.wireInfo;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootSelectedWireInfo2 = rootEdgeInfo.wireInfo2;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration =
+                    !rootExportsOpenEdge && rootEdgeInfo.iteration < 0 && rootEdgeInfo.iteration != -3;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByWireInfo =
+                    !rootExportsOpenEdge && rootEdgeInfo.iteration >= 0 && rootEdgeInfo.wireInfo != 0U;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidenceIterationBlocked =
+                    edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
+                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidence;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidenceIterationBlocked =
+                    edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
+                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidence;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootMissingSafeAHistoryProducerEvidenceIterationBlocked =
+                    edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
+                    && !edgeInfo.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidence;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval =
+                    edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
+                    && rootEdgeInfo.buildClosedWireRemovedByUnowned;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedPrimaryRemoval =
+                    edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
+                    && rootEdgeInfo.buildClosedWireRemovedByPrimaryOwner;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedSecondaryRemoval =
+                    edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
+                    && rootEdgeInfo.buildClosedWireRemovedBySecondaryOwner;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedMissingRemovalBranch =
+                    edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
+                    && !rootEdgeInfo.buildClosedWireRemovedByUnowned
+                    && !rootEdgeInfo.buildClosedWireRemovedByPrimaryOwner
+                    && !rootEdgeInfo.buildClosedWireRemovedBySecondaryOwner;
+                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                // ::WireJoinerP::findSuperEdgesUpdateFirst() stores an open root wire in
+                // "first->superEdge = makeCleanWire(false)"; ::buildClosedWire() can later remove
+                // that root before ::build() exports openWireCompound. Track this as the next M3
+                // producer candidate, but do not export root.superEdge from the helper path yet.
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate =
+                    edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
+                    && rootEdgeInfo.superEdgeLifecycleOpenRoot
+                    && rootEdgeInfo.superEdgeMaterialized
+                    && !rootEdgeInfo.superEdge.IsNull();
+                edgeInfo
+                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence =
+                    edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
+                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidence;
+                edgeInfo
+                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidence =
+                    edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
+                    && !edgeInfo.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidence;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemoval =
+                    edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
+                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval;
+                edgeInfo
+                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady =
+                    edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemoval
+                    && edgeInfo
+                           .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidatePrimaryRemoval =
+                    edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
+                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedPrimaryRemoval;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateSecondaryRemoval =
+                    edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
+                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedSecondaryRemoval;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingRemovalBranch =
+                    edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
+                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedMissingRemovalBranch;
+                edgeInfo
+                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceUnownedRemoval =
+                    edgeInfo
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidence
+                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval;
+                edgeInfo
+                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidencePrimaryRemoval =
+                    edgeInfo
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidence
+                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedPrimaryRemoval;
+                edgeInfo
+                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceSecondaryRemoval =
+                    edgeInfo
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidence
+                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedSecondaryRemoval;
+                edgeInfo
+                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceMissingRemovalBranch =
+                    edgeInfo
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidence
+                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedMissingRemovalBranch;
+                if (edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
+                    && rootEdgeInfo.superEdgeInfo != 0U) {
+                    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                    // ::WireJoinerP::findSuperEdgesUpdateFirst() walks every "current" member,
+                    // sets members to "current->iteration = -1", and stores the materialized
+                    // result on the root "first->superEdge". Track the whole member set here so
+                    // the child-wire producer guard can explain exactly which non-current members
+                    // a root export would still carry.
+                    for (std::size_t memberIndex = 0; memberIndex < info.edges.size(); ++memberIndex) {
+                        const EdgeInfo& member = info.edges[memberIndex];
+                        if (member.superEdgeInfo != rootEdgeInfo.superEdgeInfo) {
+                            continue;
+                        }
+                        appendUniqueSourceIndex(
+                            edgeInfo
+                                .helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices,
+                            memberIndex);
+                        if (memberIndex == *selectedSourceEdgeInfoIndex) {
+                            edgeInfo
+                                .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo =
+                                true;
+                        }
+                        else {
+                            appendUniqueSourceIndex(
+                                edgeInfo
+                                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices,
+                                memberIndex);
+                        }
+                    }
+                }
+            }
+            edgeInfo.helperOpenExportOverrideSelectedIteration = edgeInfo.iteration;
+            edgeInfo.helperOpenExportOverrideSelectedWireInfo = edgeInfo.wireInfo;
+            edgeInfo.helperOpenExportOverrideSelectedWireInfo2 = edgeInfo.wireInfo2;
+            edgeInfo.helperOpenExportOverrideExportBlockedByIteration = exportBlockedByIteration;
+            edgeInfo.helperOpenExportOverrideExportBlockedByWireInfo = exportBlockedByWireInfo;
+            edgeInfo.helperOpenExportOverrideRemovedSourceEdgeInfo = edgeInfo.buildClosedWireAHistoryRemoved;
+            edgeInfo.helperOpenExportOverrideRemovedTargetEdgeInfo = edgeInfo.buildClosedWireRemoved;
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo =
+                !edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices.empty();
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices =
+                edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices;
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeIndices =
+                edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeIndices;
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceLineage =
+                !edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeIndices.empty();
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+            // ::WireJoinerP::buildClosedWire() calls "aHistory->Remove(info.edge)" from the
+            // outer EdgeInfo that caused removal. Record whether that Remove source is in the
+            // selected helper EdgeInfo's request-local sourceEdgeArray lineage; foreign lineage is
+            // still a producer gap, not a reason to force removed targets into openWireCompound.
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveSameSourceLineage =
+                sourceEdgeIndicesIntersect(edgeInfo.sourceEdgeIndices,
+                                           edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeIndices);
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveForeignSourceLineage =
+                edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceLineage
+                && !edgeInfo.helperOpenExportOverrideAHistoryRemoveSameSourceLineage;
+            edgeInfo.helperOpenExportOverrideSafeAHistoryProducerEvidence =
+                helperOpenExportOverrideCandidateHasSafeAHistoryProducerEvidence(edgeInfo);
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+            // ::WireJoinerP::build() keeps the original "sourceEdges" set, while ::getOpenWires()
+            // consumes "MapperHistory(aHistory)". This records whether the selected helper export's
+            // request-local sourceEdgeArray lineage group already contains an EdgeInfo that was
+            // strictly passed to "aHistory->Remove(info.edge)"; it does not promote this EdgeInfo to
+            // that Remove source.
+            edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices =
+                strictRemovedSourceEdgeInfoIndicesForSourceLineage(info, edgeInfo);
+            edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo =
+                !edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices.empty();
+            edgeInfo.purgeAsOriginalOpenEdge = false;
+            continue;
+        }
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::build() never appends a detached EdgeInfo for result-wire export; it only
+        // emits existing final EdgeInfo states through "openWireCompound". If the transitional helper
+        // cannot bind one generated export edge to one final EdgeInfo, keep it as M3 risk evidence
+        // instead of turning it into output geometry.
+        if (!binding.sourceEdgeInfoCandidateIndices.empty()) {
+            ++info.helperOpenExportOverrideDuplicateSourceEdgeInfoCount;
+        }
+        else {
+            ++info.helperOpenExportOverrideUnboundEdgeCount;
+        }
+    }
+}
+
 void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
                                          const std::vector<TopoDS_Wire>* closedWires,
                                          const std::vector<TopoDS_Edge>* openEdges,
@@ -983,72 +1562,39 @@ void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
             return edgeInfo.wireInfo != 0U;
         });
     }
+    const bool hasOpenWireOutput = std::any_of(finalInfo.edges.begin(),
+                                               finalInfo.edges.end(),
+                                               [this](const EdgeInfo& edgeInfo) {
+                                                   return edgeInfoExportsOpenWireCompound(edgeInfo);
+                                               });
+    HelperOpenExportOverridePlan helperOpenExportOverridePlan;
+    if (boundedFaceShape && closedWires && openEdges) {
+        helperOpenExportOverridePlan = computeHelperOpenExportOverridePlan(finalInfo,
+                                                                           *boundedFaceShape,
+                                                                           *closedWires,
+                                                                           *openEdges,
+                                                                           splitProducedBoundedFaces,
+                                                                           hasOpenWireOutput);
+    }
     if (finalInfo.done) {
         recordExhaustTightBoundLifecycle(finalInfo);
         recordBuildClosedWireRemovalLifecycle(finalInfo);
-        recordRepeatedSplitExhaustRerunLifecycle(finalInfo, boundedFaces);
+        recordRepeatedSplitExhaustRerunLifecycle(finalInfo, boundedFaces, helperOpenExportOverridePlan);
     }
-
-    const bool hasOpenWireOutput = std::any_of(finalInfo.edges.begin(), finalInfo.edges.end(), [](const EdgeInfo& edgeInfo) {
-        return edgeInfo.iteration == -3 || (edgeInfo.wireInfo == 0U && edgeInfo.iteration >= 0);
-    });
-    if (boundedFaceShape && closedWires && openEdges) {
-        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-        // ::WireJoinerP::build(), stores result-wire topology in "openWireCompound" after
-        // splitEdges()/buildClosedWire()/findTightBound()/exhaustTightBound(). cad-core records
-        // these as generated final EdgeInfo export entries inside WireJoiner so getOpenWires()
-        // still consumes the same EdgeInfo lifecycle.
-        const std::optional<GeneratedOpenExportShapeResult> generatedOpenExportShape =
-            generatedOpenExportShapeForSketchInternals(
-                *boundedFaceShape,
-                *openEdges,
-                *closedWires,
-                splitProducedBoundedFaces,
-                hasOpenWireOutput);
-        if (generatedOpenExportShape && !generatedOpenExportShape->shape.IsNull()) {
-            const std::size_t sourceEdgeInfoCount = finalInfo.edges.size();
-            std::size_t generatedEdgeCount = 0;
-            for (const TopoDS_Edge& edge : boundaryEdges(generatedOpenExportShape->shape)) {
-                EdgeInfo edgeInfo;
-                initializeEdgeInfo(edgeInfo, edge);
-                edgeInfo.splitFromInputEdge = true;
-                edgeInfo.generatedOpenExportEdge = true;
-                edgeInfo.generatedOpenExportReason = generatedOpenExportShape->reason;
-                for (std::size_t sourceIndex = 0; sourceIndex < sourceEdgeInfoCount; ++sourceIndex) {
-                    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-                    // ::WireJoinerP::build(), adds final EdgeInfo::wire() shapes into
-                    // openWireCompound. This records which pre-existing EdgeInfo a transitional
-                    // generated open-export copy mirrors; it is not sourceEdgeArray lineage.
-                    if (edgeEquivalentByGeometryAndEndpoints(edge, finalInfo.edges[sourceIndex].edge)) {
-                        edgeInfo.generatedOpenExportSourceEdgeInfo = true;
-                        edgeInfo.generatedOpenExportSourceEdgeInfoIndex = sourceIndex;
-                        const EdgeInfo& sourceEdgeInfo = finalInfo.edges[sourceIndex];
-                        const bool sourceExportsOpenEdge = sourceEdgeInfo.iteration == -3
-                            || (sourceEdgeInfo.wireInfo == 0U && sourceEdgeInfo.iteration >= 0);
-                        edgeInfo.generatedOpenExportSourceEdgeInfoConsumed = !sourceExportsOpenEdge;
-                        break;
-                    }
-                }
-                finalInfo.edges.push_back(edgeInfo);
-                ++generatedEdgeCount;
-            }
-            historySummary_.generatedHistoryCount += generatedEdgeCount;
-        }
-    }
+    applyHelperOpenExportOverridePlan(finalInfo, helperOpenExportOverridePlan);
 
     rebuildAdjacentList(finalInfo);
     recordOpenWireCompoundLedger(finalInfo);
     historySummary_.openExportEdgeCount = std::count_if(
         finalInfo.edges.begin(),
         finalInfo.edges.end(),
-        [](const EdgeInfo& edgeInfo) {
-            return edgeInfo.iteration == -3 || (edgeInfo.wireInfo == 0U && edgeInfo.iteration >= 0);
+        [this](const EdgeInfo& edgeInfo) {
+            return edgeInfo.hasOpenExportOverride() || edgeInfoExportsOpenWireCompound(edgeInfo);
         });
     std::size_t openExportIndex = 0;
     for (std::size_t edgeInfoIndex = 0; edgeInfoIndex < finalInfo.edges.size(); ++edgeInfoIndex) {
         const EdgeInfo& edgeInfo = finalInfo.edges[edgeInfoIndex];
-        const bool exportsOpenEdge = edgeInfo.iteration == -3
-            || (edgeInfo.wireInfo == 0U && edgeInfo.iteration >= 0);
+        const bool exportsOpenEdge = edgeInfo.hasOpenExportOverride() || edgeInfoExportsOpenWireCompound(edgeInfo);
         if (!exportsOpenEdge) {
             continue;
         }
@@ -1063,7 +1609,151 @@ void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
         entry.generatedOpenExportSourceEdgeInfo = edgeInfo.generatedOpenExportSourceEdgeInfo;
         entry.generatedOpenExportSourceEdgeInfoIndex = edgeInfo.generatedOpenExportSourceEdgeInfoIndex;
         entry.generatedOpenExportSourceEdgeInfoConsumed = edgeInfo.generatedOpenExportSourceEdgeInfoConsumed;
-        entry.purgeBridge = edgeInfo.purgeAsOriginalOpenEdge;
+        entry.helperOpenExportOverride = edgeInfo.helperOpenExportOverride;
+        entry.helperOpenExportOverrideReason = edgeInfo.helperOpenExportOverrideReason;
+        entry.helperOpenExportOverrideSourceEdgeInfo = edgeInfo.helperOpenExportOverrideSourceEdgeInfo;
+        entry.helperOpenExportOverrideSourceEdgeInfoIndex =
+            edgeInfo.helperOpenExportOverrideSourceEdgeInfoIndex;
+        entry.helperOpenExportOverrideSourceEdgeInfoConsumed =
+            edgeInfo.helperOpenExportOverrideSourceEdgeInfoConsumed;
+        entry.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo =
+            edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo;
+        entry.helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo =
+            edgeInfo.helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo;
+        entry.helperOpenExportOverrideSourceEdgeExportShape =
+            edgeInfo.helperOpenExportOverrideSourceEdgeExportShape;
+        entry.helperOpenExportOverrideSourceEdgeProducerOutput =
+            edgeInfo.helperOpenExportOverrideSourceEdgeExportShape;
+        entry.helperOpenExportOverrideFullAHistoryProducerEvidence =
+            edgeInfo.helperOpenExportOverrideFullAHistoryProducerEvidence;
+        entry.helperOpenExportOverrideSuperEdgeMemberEdgeInfo =
+            edgeInfo.helperOpenExportOverrideSuperEdgeMemberEdgeInfo;
+        entry.helperOpenExportOverrideSuperEdgeRootEdgeInfo =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootEdgeInfo;
+        entry.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex;
+        entry.helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo;
+        entry.helperOpenExportOverrideSuperEdgeRootOpenLifecycleEdgeInfo =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootOpenLifecycleEdgeInfo;
+        entry.helperOpenExportOverrideSuperEdgeRootClosedLifecycleEdgeInfo =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootClosedLifecycleEdgeInfo;
+        entry.helperOpenExportOverrideSuperEdgeRootRemovedByUnowned =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootRemovedByUnowned;
+        entry.helperOpenExportOverrideSuperEdgeRootRemovedByPrimaryOwner =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootRemovedByPrimaryOwner;
+        entry.helperOpenExportOverrideSuperEdgeRootRemovedBySecondaryOwner =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootRemovedBySecondaryOwner;
+        entry.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidence =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidence;
+        entry.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidence =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidence;
+        entry.helperOpenExportOverrideSuperEdgeRootSelectedIteration =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootSelectedIteration;
+        entry.helperOpenExportOverrideSuperEdgeRootSelectedWireInfo =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootSelectedWireInfo;
+        entry.helperOpenExportOverrideSuperEdgeRootSelectedWireInfo2 =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootSelectedWireInfo2;
+        entry.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration;
+        entry.helperOpenExportOverrideSuperEdgeRootExportBlockedByWireInfo =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByWireInfo;
+        entry.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidenceIterationBlocked =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidenceIterationBlocked;
+        entry.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidenceIterationBlocked =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidenceIterationBlocked;
+        entry.helperOpenExportOverrideSuperEdgeRootMissingSafeAHistoryProducerEvidenceIterationBlocked =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootMissingSafeAHistoryProducerEvidenceIterationBlocked;
+        entry.helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval;
+        entry.helperOpenExportOverrideSuperEdgeRootIterationBlockedPrimaryRemoval =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedPrimaryRemoval;
+        entry.helperOpenExportOverrideSuperEdgeRootIterationBlockedSecondaryRemoval =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedSecondaryRemoval;
+        entry.helperOpenExportOverrideSuperEdgeRootIterationBlockedMissingRemovalBranch =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedMissingRemovalBranch;
+        entry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate;
+        entry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence =
+            edgeInfo
+                .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence;
+        entry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidence =
+            edgeInfo
+                .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidence;
+        entry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemoval =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemoval;
+        entry
+            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady =
+            edgeInfo
+                .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady;
+        entry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidatePrimaryRemoval =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidatePrimaryRemoval;
+        entry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateSecondaryRemoval =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateSecondaryRemoval;
+        entry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingRemovalBranch =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingRemovalBranch;
+        entry
+            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceUnownedRemoval =
+            edgeInfo
+                .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceUnownedRemoval;
+        entry
+            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidencePrimaryRemoval =
+            edgeInfo
+                .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidencePrimaryRemoval;
+        entry
+            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceSecondaryRemoval =
+            edgeInfo
+                .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceSecondaryRemoval;
+        entry
+            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceMissingRemovalBranch =
+            edgeInfo
+                .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceMissingRemovalBranch;
+        entry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo;
+        entry.helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices;
+        entry.helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices =
+            edgeInfo
+                .helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices;
+        entry.helperOpenExportOverrideSelectedIteration =
+            edgeInfo.helperOpenExportOverrideSelectedIteration;
+        entry.helperOpenExportOverrideSelectedWireInfo =
+            edgeInfo.helperOpenExportOverrideSelectedWireInfo;
+        entry.helperOpenExportOverrideSelectedWireInfo2 =
+            edgeInfo.helperOpenExportOverrideSelectedWireInfo2;
+        entry.helperOpenExportOverrideExportBlockedByIteration =
+            edgeInfo.helperOpenExportOverrideExportBlockedByIteration;
+        entry.helperOpenExportOverrideExportBlockedByWireInfo =
+            edgeInfo.helperOpenExportOverrideExportBlockedByWireInfo;
+        entry.helperOpenExportOverrideCandidateEdgeInfoIndices =
+            edgeInfo.helperOpenExportOverrideCandidateEdgeInfoIndices;
+        entry.helperOpenExportOverrideOpenWireCompoundEligibleCandidateEdgeInfoIndices =
+            edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleCandidateEdgeInfoIndices;
+        entry.helperOpenExportOverrideRemovedSourceEdgeInfo =
+            edgeInfo.helperOpenExportOverrideRemovedSourceEdgeInfo;
+        entry.helperOpenExportOverrideRemovedTargetEdgeInfo =
+            edgeInfo.helperOpenExportOverrideRemovedTargetEdgeInfo;
+        entry.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo =
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo;
+        entry.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices =
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices;
+        entry.helperOpenExportOverrideAHistoryRemoveSourceEdgeIndices =
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeIndices;
+        entry.helperOpenExportOverrideAHistoryRemoveSourceLineage =
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceLineage;
+        entry.helperOpenExportOverrideAHistoryRemoveSameSourceLineage =
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveSameSourceLineage;
+        entry.helperOpenExportOverrideAHistoryRemoveForeignSourceLineage =
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveForeignSourceLineage;
+        entry.helperOpenExportOverrideSafeAHistoryProducerEvidence =
+            edgeInfo.helperOpenExportOverrideSafeAHistoryProducerEvidence;
+        entry.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo =
+            edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo;
+        entry.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices =
+            edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices;
+        entry.purgeBridge = edgeInfo.generatedOpenExportEdge || edgeInfo.helperOpenExportOverride
+            ? false
+            : edgeInfo.purgeAsOriginalOpenEdge;
         historySummary_.openExportEntries.push_back(std::move(entry));
         if (edgeInfo.sourceEdgeIndices.empty()) {
             ++historySummary_.openExportMissingSourceLineageEdgeCount;
@@ -1081,6 +1771,284 @@ void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
             }
             if (edgeInfo.sourceEdgeIndices.empty()) {
                 ++historySummary_.openExportGeneratedMissingSourceLineageEdgeCount;
+            }
+        }
+        if (edgeInfo.helperOpenExportOverride) {
+            ++historySummary_.openExportHelperOverrideEdgeCount;
+            if (edgeInfo.helperOpenExportOverrideSourceEdgeInfo) {
+                ++historySummary_.openExportHelperOverrideSourceEdgeInfoCount;
+            }
+            if (edgeInfo.helperOpenExportOverrideSourceEdgeInfoConsumed) {
+                ++historySummary_.openExportHelperOverrideSourceEdgeInfoConsumedCount;
+            }
+            if (edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo) {
+                ++historySummary_.openExportHelperOverrideOpenWireCompoundEligibleEdgeInfoCount;
+            }
+            if (edgeInfo.helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo) {
+                ++historySummary_.openExportHelperOverrideForcedOpenWireCompoundEdgeInfoCount;
+            }
+            if (edgeInfo.helperOpenExportOverrideSourceEdgeExportShape) {
+                ++historySummary_.openExportHelperOverrideSourceEdgeExportShapeEdgeInfoCount;
+                ++historySummary_.openExportHelperOverrideSourceEdgeProducerOutputEdgeInfoCount;
+            }
+            if (edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo
+                && !edgeInfo.helperOpenExportOverrideSourceEdgeExportShape) {
+                ++historySummary_
+                      .openExportHelperOverrideOpenWireCompoundEligibleWithoutSourceEdgeExportShapeEdgeInfoCount;
+            }
+            if (edgeInfo.helperOpenExportOverrideFullAHistoryProducerEvidence) {
+                ++historySummary_.openExportHelperOverrideFullAHistoryProducerEvidenceEdgeInfoCount;
+                if (!edgeInfo.helperOpenExportOverrideSourceEdgeExportShape) {
+                    auto& fullAHistoryWithoutSourceShapeCount =
+                        historySummary_
+                            .openExportHelperOverrideFullAHistoryProducerEvidenceWithoutSourceEdgeExportShapeEdgeInfoCount;
+                    ++fullAHistoryWithoutSourceShapeCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo) {
+                    auto& fullAHistoryForcedCount =
+                        historySummary_
+                            .openExportHelperOverrideFullAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount;
+                    ++fullAHistoryForcedCount;
+                }
+            }
+            if (edgeInfo.helperOpenExportOverrideSuperEdgeMemberEdgeInfo) {
+                const bool rootOpenWireCompoundEligible =
+                    edgeInfo.helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo;
+                const bool rootSafeAHistoryProducerEvidence =
+                    edgeInfo.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidence;
+                const bool rootFullAHistoryProducerEvidence =
+                    edgeInfo.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidence;
+                ++historySummary_.openExportHelperOverrideSuperEdgeMemberEdgeInfoCount;
+                if (edgeInfo.helperOpenExportOverrideSuperEdgeRootEdgeInfo) {
+                    ++historySummary_.openExportHelperOverrideSuperEdgeMemberWithRootEdgeInfoCount;
+                }
+                if (rootOpenWireCompoundEligible) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootOpenWireCompoundEligibleEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideSuperEdgeRootOpenLifecycleEdgeInfo) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootOpenLifecycleEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideSuperEdgeRootClosedLifecycleEdgeInfo) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootClosedLifecycleEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootExportBlockedByIterationEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByWireInfo) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootExportBlockedByWireInfoEdgeInfoCount;
+                }
+                if (rootSafeAHistoryProducerEvidence) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceEdgeInfoCount;
+                }
+                if (rootFullAHistoryProducerEvidence) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceEdgeInfoCount;
+                }
+                if (rootOpenWireCompoundEligible && rootSafeAHistoryProducerEvidence) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootOpenWireCompoundEligibleAndSafeAHistoryProducerEvidenceEdgeInfoCount;
+                }
+                if (rootOpenWireCompoundEligible && !rootSafeAHistoryProducerEvidence) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootOpenWireCompoundEligibleMissingSafeAHistoryProducerEvidenceEdgeInfoCount;
+                }
+                if (rootSafeAHistoryProducerEvidence && !rootOpenWireCompoundEligible) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceWithoutOpenWireCompoundEligibleEdgeInfoCount;
+                }
+                if (rootFullAHistoryProducerEvidence && !rootOpenWireCompoundEligible) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceWithoutOpenWireCompoundEligibleEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidenceIterationBlocked) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceIterationBlockedEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidenceIterationBlocked) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceIterationBlockedEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideSuperEdgeRootMissingSafeAHistoryProducerEvidenceIterationBlocked) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootMissingSafeAHistoryProducerEvidenceIterationBlockedEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootIterationBlockedUnownedRemovalEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedPrimaryRemoval) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootIterationBlockedPrimaryRemovalEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedSecondaryRemoval) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootIterationBlockedSecondaryRemovalEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedMissingRemovalBranch) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootIterationBlockedMissingRemovalBranchEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateEdgeInfoCount;
+                }
+                if (edgeInfo
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateFullAHistoryProducerEvidenceEdgeInfoCount;
+                }
+                if (edgeInfo
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidence) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemoval) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateUnownedRemovalEdgeInfoCount;
+                }
+                if (edgeInfo
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateUnownedRemovalChildWireProducerReadyEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidatePrimaryRemoval) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidatePrimaryRemovalEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateSecondaryRemoval) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateSecondaryRemovalEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingRemovalBranch) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingRemovalBranchEdgeInfoCount;
+                }
+                if (edgeInfo
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceUnownedRemoval) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceUnownedRemovalEdgeInfoCount;
+                }
+                if (edgeInfo
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidencePrimaryRemoval) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidencePrimaryRemovalEdgeInfoCount;
+                }
+                if (edgeInfo
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceSecondaryRemoval) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceSecondaryRemovalEdgeInfoCount;
+                }
+                if (edgeInfo
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceMissingRemovalBranch) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceMissingRemovalBranchEdgeInfoCount;
+                }
+                historySummary_
+                    .openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCoveredMemberEdgeInfoCount +=
+                    edgeInfo
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices
+                        .size();
+                if (edgeInfo
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberRootResultWireProducerCurrentMemberEdgeInfoCount;
+                }
+                historySummary_
+                    .openExportHelperOverrideSuperEdgeMemberRootResultWireProducerNonCurrentMemberEdgeInfoCount +=
+                    edgeInfo
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices
+                        .size();
+                if (edgeInfo.helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo) {
+                    ++historySummary_
+                          .openExportHelperOverrideSuperEdgeMemberForcedOpenWireCompoundEdgeInfoCount;
+                    if (!edgeInfo.helperOpenExportOverrideSafeAHistoryProducerEvidence) {
+                        ++historySummary_
+                              .openExportHelperOverrideSuperEdgeMemberMissingSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount;
+                    }
+                }
+            }
+            if (edgeInfo.helperOpenExportOverrideExportBlockedByIteration) {
+                ++historySummary_.openExportHelperOverrideExportBlockedByIterationEdgeInfoCount;
+            }
+            if (edgeInfo.helperOpenExportOverrideExportBlockedByWireInfo) {
+                ++historySummary_.openExportHelperOverrideExportBlockedByWireInfoEdgeInfoCount;
+            }
+            historySummary_.openExportHelperOverrideBindingCandidateEdgeInfoCount +=
+                edgeInfo.helperOpenExportOverrideCandidateEdgeInfoIndices.size();
+            historySummary_.openExportHelperOverrideOpenWireCompoundEligibleCandidateEdgeInfoCount +=
+                edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleCandidateEdgeInfoIndices.size();
+            if (edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleCandidateEdgeInfoIndices.empty()) {
+                ++historySummary_.openExportHelperOverrideMissingOpenWireCompoundEligibleCandidateEdgeInfoCount;
+            }
+            else {
+                ++historySummary_.openExportHelperOverrideWithOpenWireCompoundEligibleCandidateEdgeInfoCount;
+            }
+            if (edgeInfo.helperOpenExportOverrideRemovedSourceEdgeInfo) {
+                ++historySummary_.openExportHelperOverrideRemovedSourceEdgeInfoCount;
+            }
+            else {
+                ++historySummary_.openExportHelperOverrideMissingRemovedSourceEdgeInfoCount;
+            }
+            if (edgeInfo.helperOpenExportOverrideRemovedTargetEdgeInfo) {
+                ++historySummary_.openExportHelperOverrideRemovedTargetEdgeInfoCount;
+            }
+            else {
+                ++historySummary_.openExportHelperOverrideMissingRemovedTargetEdgeInfoCount;
+            }
+            if (edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo) {
+                ++historySummary_.openExportHelperOverrideAHistoryRemoveSourceEdgeInfoCount;
+            }
+            else {
+                ++historySummary_.openExportHelperOverrideMissingAHistoryRemoveSourceEdgeInfoCount;
+            }
+            if (edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceLineage) {
+                ++historySummary_.openExportHelperOverrideAHistoryRemoveSourceLineageEdgeInfoCount;
+            }
+            else {
+                ++historySummary_.openExportHelperOverrideMissingAHistoryRemoveSourceLineageEdgeInfoCount;
+            }
+            if (edgeInfo.helperOpenExportOverrideAHistoryRemoveSameSourceLineage) {
+                ++historySummary_.openExportHelperOverrideAHistoryRemoveSameSourceLineageEdgeInfoCount;
+            }
+            if (edgeInfo.helperOpenExportOverrideAHistoryRemoveForeignSourceLineage) {
+                ++historySummary_.openExportHelperOverrideAHistoryRemoveForeignSourceLineageEdgeInfoCount;
+            }
+            if (edgeInfo.helperOpenExportOverrideSafeAHistoryProducerEvidence) {
+                ++historySummary_.openExportHelperOverrideSafeAHistoryProducerEvidenceEdgeInfoCount;
+            }
+            else {
+                ++historySummary_.openExportHelperOverrideMissingSafeAHistoryProducerEvidenceEdgeInfoCount;
+            }
+            if (edgeInfo.helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo) {
+                if (edgeInfo.helperOpenExportOverrideSafeAHistoryProducerEvidence) {
+                    ++historySummary_
+                          .openExportHelperOverrideSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount;
+                    if (!edgeInfo.helperOpenExportOverrideFullAHistoryProducerEvidence) {
+                        auto& safeWithoutFullForcedCount =
+                            historySummary_
+                                .openExportHelperOverrideSafeAHistoryProducerEvidenceWithoutFullAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount;
+                        ++safeWithoutFullForcedCount;
+                    }
+                }
+                else {
+                    ++historySummary_
+                          .openExportHelperOverrideMissingSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount;
+                }
+            }
+            if (edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo) {
+                ++historySummary_.openExportHelperOverrideSourceLineageRemovedSourceEdgeInfoCount;
+            }
+            else {
+                ++historySummary_.openExportHelperOverrideMissingSourceLineageRemovedSourceEdgeInfoCount;
+            }
+            if (edgeInfo.sourceEdgeIndices.empty()) {
+                ++historySummary_.openExportHelperOverrideMissingSourceLineageEdgeCount;
             }
         }
         if (edgeInfo.purgeAsOriginalOpenEdge) {
@@ -1153,6 +2121,24 @@ TopoDS_Wire WireJoiner::EdgeInfo::wire(bool forward) const
         return BRepBuilderAPI_MakeWire(TopoDS::Edge(shapeForWire)).Wire();
     }
     return TopoDS_Wire();
+}
+
+bool WireJoiner::EdgeInfo::hasOpenExportOverride() const
+{
+    return openExportOverride && !openExportOverride->IsNull();
+}
+
+const TopoDS_Edge& WireJoiner::EdgeInfo::openExportEdge() const
+{
+    return hasOpenExportOverride() ? *openExportOverride : edge;
+}
+
+TopoDS_Wire WireJoiner::EdgeInfo::openExportWire() const
+{
+    if (hasOpenExportOverride()) {
+        return BRepBuilderAPI_MakeWire(*openExportOverride).Wire();
+    }
+    return wire();
 }
 
 TopoDS_Wire WireJoiner::wireFromVertices(const WireInfo& info, const std::vector<WireVertex>& vertices) const
@@ -1528,6 +2514,7 @@ void WireJoiner::rebuildOrderedVertices(WireInfo& info)
     info.repeatedSplitExhaustRerunNoActiveSearchCount = 0;
     info.repeatedSplitExhaustRerunClosedWireSearchCount = 0;
     info.repeatedSplitExhaustRerunClosedWireMissCount = 0;
+    info.repeatedSplitExhaustRerunMissLiveResetEdgeInfoCount = 0;
     info.repeatedSplitExhaustRerunClosedWireInfoCount = 0;
     info.repeatedSplitExhaustRerunClosedWireAssignedEdgeInfoCount = 0;
     info.repeatedSplitExhaustRerunClosedWireVertexCount = 0;
@@ -2508,7 +3495,9 @@ void WireJoiner::recordBuildClosedWireRemovalLifecycle(WireInfo& info)
         }
         return false;
     };
-    const auto countOwner = [&](std::size_t ownerId, bool secondaryOwner) {
+    const auto countOwner = [&](std::size_t ownerId,
+                                bool secondaryOwner,
+                                std::size_t aHistoryRemoveSourceEdgeIndex) {
         if (ownerId == 0U || ownerAlreadyCounted(ownerId) || !isDoneOwner(info, ownerId)) {
             return;
         }
@@ -2527,6 +3516,24 @@ void WireJoiner::recordBuildClosedWireRemovalLifecycle(WireInfo& info)
             }
             if (++counter[vertex.edgeIndex] == 2 && edge.iteration >= 0) {
                 edge.iteration = -1;
+                edge.buildClosedWireRemoved = true;
+                if (secondaryOwner) {
+                    edge.buildClosedWireRemovedBySecondaryOwner = true;
+                }
+                else {
+                    edge.buildClosedWireRemovedByPrimaryOwner = true;
+                }
+                if (aHistoryRemoveSourceEdgeIndex < info.edges.size()) {
+                    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                    // ::WireJoinerP::buildClosedWire(), after "vertex.edgeInfo()->iteration = -1",
+                    // calls "aHistory->Remove(info.edge)" using the outer loop EdgeInfo. Keep the
+                    // iteration-removal target and the aHistory Remove source as separate evidence.
+                    info.edges[aHistoryRemoveSourceEdgeIndex].buildClosedWireAHistoryRemoved = true;
+                    appendUniqueSourceIndex(edge.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices,
+                                            aHistoryRemoveSourceEdgeIndex);
+                    appendUniqueSourceIndices(edge.buildClosedWireAHistoryRemoveSourceEdgeIndices,
+                                              info.edges[aHistoryRemoveSourceEdgeIndex].sourceEdgeIndices);
+                }
                 ++removedCount;
                 if (secondaryOwner) {
                     ++removedSecondaryCount;
@@ -2538,7 +3545,8 @@ void WireJoiner::recordBuildClosedWireRemovalLifecycle(WireInfo& info)
         }
     };
 
-    for (EdgeInfo& edge : info.edges) {
+    for (std::size_t edgeIndex = 0; edgeIndex < info.edges.size(); ++edgeIndex) {
+        EdgeInfo& edge = info.edges[edgeIndex];
         if (edge.iteration == -2) {
             continue;
         }
@@ -2549,6 +3557,12 @@ void WireJoiner::recordBuildClosedWireRemovalLifecycle(WireInfo& info)
             if (edge.iteration >= 0) {
                 const bool resetDiscardedPrimaryOwner = isDiscardedPrimaryOwner(edge.wireInfo);
                 edge.iteration = -1;
+                edge.buildClosedWireRemoved = true;
+                edge.buildClosedWireRemovedByUnowned = true;
+                edge.buildClosedWireAHistoryRemoved = true;
+                appendUniqueSourceIndex(edge.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices, edgeIndex);
+                appendUniqueSourceIndices(edge.buildClosedWireAHistoryRemoveSourceEdgeIndices,
+                                          edge.sourceEdgeIndices);
                 ++removedCount;
                 ++removedUnownedCount;
                 if (resetDiscardedPrimaryOwner) {
@@ -2563,8 +3577,8 @@ void WireJoiner::recordBuildClosedWireRemovalLifecycle(WireInfo& info)
             }
             continue;
         }
-        countOwner(edge.wireInfo2, true);
-        countOwner(edge.wireInfo, false);
+        countOwner(edge.wireInfo2, true, edgeIndex);
+        countOwner(edge.wireInfo, false, edgeIndex);
     }
 
     historySummary_.deletedHistoryCount += removedCount;
@@ -2584,7 +3598,8 @@ void WireJoiner::recordBuildClosedWireRemovalLifecycle(WireInfo& info)
 }
 
 void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
-                                                          const std::vector<TopoDS_Face>& boundedFaces)
+                                                          const std::vector<TopoDS_Face>& boundedFaces,
+                                                          const HelperOpenExportOverridePlan& helperPlan)
 {
     if (info.repeatedSplitExhaustCycleCount == 0U) {
         return;
@@ -2601,10 +3616,19 @@ void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
     const std::size_t existingOwnerCount = rerunInfo.ownerWires.size();
     const std::size_t savedNextWireInfoId = nextWireInfoId_;
     const int nextIteration2 = nextIteration2_;
-    const bool hasGeneratedOpenExportEdge =
-        std::any_of(info.edges.begin(), info.edges.end(), [](const EdgeInfo& edge) {
-            return edge.generatedOpenExportEdge;
-        });
+    const bool helperIdentityUnsafe =
+        helperOpenExportOverridePlanHasUnsafeProducer(info, helperPlan);
+    const auto helperPlanHasCandidateEdgeInfo = [&](std::size_t edgeIndex) {
+        for (const HelperOpenExportOverrideBinding& binding : helperPlan.bindings) {
+            if (std::find(binding.sourceEdgeInfoCandidateIndices.begin(),
+                          binding.sourceEdgeInfoCandidateIndices.end(),
+                          edgeIndex)
+                != binding.sourceEdgeInfoCandidateIndices.end()) {
+                return true;
+            }
+        }
+        return false;
+    };
     std::size_t assignedEdges = 0;
     for (EdgeInfo& edge : rerunInfo.edges) {
         if (edge.wireInfo != 0U) {
@@ -2641,6 +3665,21 @@ void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
         const std::optional<ClosedWireSearchResult> search = findClosedWirePath(rerunInfo, edgeIndex);
         if (!search) {
             ++info.repeatedSplitExhaustRerunClosedWireMissCount;
+            if (wasOwnedActive && helperPlanHasCandidateEdgeInfo(edgeIndex) && edgeIndex < info.edges.size()) {
+                EdgeInfo& liveEdge = info.edges[edgeIndex];
+                if (liveEdge.iteration >= 0 && liveEdge.wireInfo != 0U) {
+                    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                    // ::WireJoinerP::findClosedWires(true), called from ::buildClosedWire() after
+                    // consumed-edge removal, first clears "info.wireInfo" and "info.wireInfo2".
+                    // If the rerun closed-wire search misses, the active EdgeInfo remains unowned
+                    // and later satisfies ::build()'s openWireCompound gate without a helper-forced
+                    // export. Apply only the helper-binding candidate subset here so M3 advances the
+                    // FreeCAD lifecycle without broadening getOpenWires() or adding output geometry.
+                    liveEdge.wireInfo = 0U;
+                    liveEdge.wireInfo2 = 0U;
+                    ++info.repeatedSplitExhaustRerunMissLiveResetEdgeInfoCount;
+                }
+            }
             continue;
         }
 
@@ -2735,8 +3774,16 @@ void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
         }
         const bool canApplyWithoutReset = canApplyLiveRerunOwner(owner);
         const bool canApplyWithLiveReset = !canApplyWithoutReset && resettableAssignedEdges > 0U
-            && (owner.branchSearchCandidateCount == 0U || !hasGeneratedOpenExportEdge);
+            && (owner.branchSearchCandidateCount == 0U || !helperIdentityUnsafe);
         if (!canApplyWithoutReset && !canApplyWithLiveReset) {
+            if (helperIdentityUnsafe && resettableAssignedEdges > 0U) {
+                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                // ::WireJoinerP::buildClosedWire() reruns findClosedWires(true)/findTightBound()
+                // before ::build() emits openWireCompound. If the only live-reset path would mutate
+                // owners while generated result-wire identity is still helper-produced, record the
+                // actual rejected owner edges here instead of deriving it later from generated output count.
+                info.repeatedSplitExhaustGeneratedIdentityBlockedEdgeInfoCount += resettableAssignedEdges;
+            }
             continue;
         }
 
@@ -2827,8 +3874,10 @@ void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
         // ::WireJoinerP::buildClosedWire(), after the loop-tail
         // "findClosedWires(true); findTightBound()", the next while pass rebuilds a fresh
         // "counter" and removes only EdgeInfo entries whose done primary/secondary owner vertices
-        // make "++counter[vertex.edgeInfo()] == 2"; if no edge is removed the loop exits. This
-        // records that next-pass boundary from live rerun owner state without switching M2 output.
+        // make "++counter[vertex.edgeInfo()] == 2"; the removal target receives
+        // "iteration = -1" while "aHistory->Remove(info.edge)" uses the outer EdgeInfo source.
+        // Keep this next-pass producer evidence on EdgeInfo, but leave iteration/wireInfo unchanged
+        // until the generated open-export bridge is removed from the live output path.
         ++info.repeatedSplitExhaustRerunRemovalScanCount;
         std::vector<int> counter(info.edges.size(), 0);
         std::vector<std::size_t> countedOwners;
@@ -2856,7 +3905,9 @@ void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
         const auto ownerAlreadyCounted = [&](std::size_t ownerId) {
             return std::find(countedOwners.begin(), countedOwners.end(), ownerId) != countedOwners.end();
         };
-        const auto countOwner = [&](std::size_t ownerId, bool secondaryOwner) {
+        const auto countOwner = [&](std::size_t ownerId,
+                                    bool secondaryOwner,
+                                    std::size_t aHistoryRemoveSourceEdgeIndex) {
             if (ownerId == 0U || ownerAlreadyCounted(ownerId) || !isDoneOwner(info, ownerId)) {
                 return;
             }
@@ -2869,11 +3920,25 @@ void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
                 if (vertex.edgeIndex >= info.edges.size()) {
                     continue;
                 }
-                const EdgeInfo& edge = info.edges[vertex.edgeIndex];
+                EdgeInfo& edge = info.edges[vertex.edgeIndex];
                 if (edge.iteration == -2) {
                     continue;
                 }
                 if (++counter[vertex.edgeIndex] == 2 && edge.iteration >= 0) {
+                    edge.buildClosedWireRemoved = true;
+                    if (secondaryOwner) {
+                        edge.buildClosedWireRemovedBySecondaryOwner = true;
+                    }
+                    else {
+                        edge.buildClosedWireRemovedByPrimaryOwner = true;
+                    }
+                    if (aHistoryRemoveSourceEdgeIndex < info.edges.size()) {
+                        info.edges[aHistoryRemoveSourceEdgeIndex].buildClosedWireAHistoryRemoved = true;
+                        appendUniqueSourceIndex(edge.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices,
+                                                aHistoryRemoveSourceEdgeIndex);
+                        appendUniqueSourceIndices(edge.buildClosedWireAHistoryRemoveSourceEdgeIndices,
+                                                  info.edges[aHistoryRemoveSourceEdgeIndex].sourceEdgeIndices);
+                    }
                     ++removalCount;
                     if (secondaryOwner) {
                         ++secondaryRemovalCount;
@@ -2885,17 +3950,24 @@ void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
             }
         };
 
-        for (const EdgeInfo& edge : info.edges) {
+        for (std::size_t edgeIndex = 0; edgeIndex < info.edges.size(); ++edgeIndex) {
+            EdgeInfo& edge = info.edges[edgeIndex];
             if (edge.iteration == -2 || edge.iteration < 0) {
                 continue;
             }
             if (edge.wireInfo == 0U || !isDoneOwner(info, edge.wireInfo)) {
+                edge.buildClosedWireRemoved = true;
+                edge.buildClosedWireRemovedByUnowned = true;
+                edge.buildClosedWireAHistoryRemoved = true;
+                appendUniqueSourceIndex(edge.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices, edgeIndex);
+                appendUniqueSourceIndices(edge.buildClosedWireAHistoryRemoveSourceEdgeIndices,
+                                          edge.sourceEdgeIndices);
                 ++removalCount;
                 ++unownedRemovalCount;
                 continue;
             }
-            countOwner(edge.wireInfo2, true);
-            countOwner(edge.wireInfo, false);
+            countOwner(edge.wireInfo2, true, edgeIndex);
+            countOwner(edge.wireInfo, false, edgeIndex);
         }
 
         info.repeatedSplitExhaustRerunRemovalEdgeInfoCount += removalCount;
@@ -2905,6 +3977,8 @@ void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
         if (removalCount == 0U) {
             ++info.repeatedSplitExhaustRerunLoopExitNoRemovalCount;
         }
+        historySummary_.deletedHistoryCount += removalCount;
+        historySummary_.splitterHistory = historySummary_.splitterHistory || removalCount > 0U;
     }
 }
 
@@ -3227,7 +4301,7 @@ void WireJoiner::recordTightBoundLifecycle(WireInfo& info)
     // request-local lifecycle boundary without using it as an output pruning rule yet.
     bool hasOpenExportEdge = false;
     for (const EdgeInfo& edge : info.edges) {
-        hasOpenExportEdge = hasOpenExportEdge || edge.iteration == -3 || (edge.wireInfo == 0U && edge.iteration >= 0);
+        hasOpenExportEdge = hasOpenExportEdge || edgeInfoExportsOpenWireCompound(edge);
     }
     std::vector<bool> unassignedPropagationRecorded(info.edges.size(), false);
     std::vector<bool> otherWirePropagationRecorded(info.edges.size(), false);
@@ -3366,38 +4440,288 @@ void WireJoiner::recordOpenWireCompoundLedger(WireInfo& info)
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::build(), after buildClosedWire(), loops final EdgeInfo states and adds
     // "info.wire()" to openWireCompound when "iteration == -3 || (!info.wireInfo && info.iteration >= 0)".
-    // This is a request-local mirror of that child-wire boundary; getOpenWires() still keeps the
-    // transitional merge/purge bridge until generated open-export and source identity are complete.
+    // This is a request-local mirror of that child-wire boundary. getOpenWires() consumes this
+    // child-wire ledger first, while the ledger still carries helper override shape debt until M3
+    // can replace each transitional child wire with a true producer.
     info.openWireCompoundWires.clear();
     for (std::size_t edgeIndex = 0; edgeIndex < info.edges.size(); ++edgeIndex) {
         const EdgeInfo& edgeInfo = info.edges[edgeIndex];
-        const bool exportsOpenEdge = edgeInfo.iteration == -3
-            || (edgeInfo.wireInfo == 0U && edgeInfo.iteration >= 0);
+        const bool exportsOpenEdge = edgeInfo.hasOpenExportOverride() || edgeInfoExportsOpenWireCompound(edgeInfo);
         if (!exportsOpenEdge) {
             continue;
         }
 
         OpenWireCompoundWireInfo childWire;
         childWire.edgeIndex = edgeIndex;
-        childWire.wire = edgeInfo.wire();
+        childWire.wire = edgeInfo.openExportWire();
         childWire.wireBuilt = !childWire.wire.IsNull();
-        childWire.superEdgeWire = !edgeInfo.superEdge.IsNull();
+        childWire.superEdgeWire = !edgeInfo.superEdge.IsNull() && !edgeInfo.hasOpenExportOverride();
         childWire.generatedOpenExport = edgeInfo.generatedOpenExportEdge;
         childWire.generatedOpenExportReason = edgeInfo.generatedOpenExportReason;
         childWire.generatedOpenExportSourceEdgeInfo = edgeInfo.generatedOpenExportSourceEdgeInfo;
         childWire.generatedOpenExportSourceEdgeInfoIndex = edgeInfo.generatedOpenExportSourceEdgeInfoIndex;
         childWire.generatedOpenExportSourceEdgeInfoConsumed =
             edgeInfo.generatedOpenExportSourceEdgeInfoConsumed;
-        childWire.purgeBridge = edgeInfo.purgeAsOriginalOpenEdge;
+        childWire.helperOpenExportOverride = edgeInfo.helperOpenExportOverride;
+        childWire.helperOpenExportOverrideReason = edgeInfo.helperOpenExportOverrideReason;
+        childWire.helperOpenExportOverrideSourceEdgeInfo = edgeInfo.helperOpenExportOverrideSourceEdgeInfo;
+        childWire.helperOpenExportOverrideSourceEdgeInfoIndex =
+            edgeInfo.helperOpenExportOverrideSourceEdgeInfoIndex;
+        childWire.helperOpenExportOverrideSourceEdgeInfoConsumed =
+            edgeInfo.helperOpenExportOverrideSourceEdgeInfoConsumed;
+        childWire.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo =
+            edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo;
+        childWire.helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo =
+            edgeInfo.helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo;
+        childWire.helperOpenExportOverrideSourceEdgeExportShape =
+            edgeInfo.helperOpenExportOverrideSourceEdgeExportShape;
+        childWire.helperOpenExportOverrideSourceEdgeProducerOutput =
+            edgeInfo.helperOpenExportOverrideSourceEdgeExportShape;
+        childWire.helperOpenExportOverrideFullAHistoryProducerEvidence =
+            edgeInfo.helperOpenExportOverrideFullAHistoryProducerEvidence;
+        childWire.helperOpenExportOverrideSuperEdgeMemberEdgeInfo =
+            edgeInfo.helperOpenExportOverrideSuperEdgeMemberEdgeInfo;
+        childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfo =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootEdgeInfo;
+        childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex;
+        childWire.helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo;
+        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate;
+        childWire
+            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady =
+            edgeInfo
+                .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady;
+        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo;
+        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices =
+            edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices;
+        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices =
+            edgeInfo
+                .helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices;
+        if (childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
+            && childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex < info.edges.size()) {
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+            // ::WireJoinerP::findSuperEdgesUpdateFirst() materializes the open root with
+            // "first->superEdge = makeCleanWire(false)"; ::build() later emits child wires with
+            // "builder.Add(openWireCompound, info.wire())". Once the root is from the unowned
+            // removal branch and carries full aHistory producer evidence, the child-wire ledger can
+            // export that root producer wire directly instead of the transitional helper override.
+            const EdgeInfo& rootEdgeInfo =
+                info.edges[childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex];
+            childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerWire =
+                rootEdgeInfo.superEdge;
+            childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerWireBuilt =
+                !childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerWire.IsNull();
+            const bool useRootResultWireProducer =
+                childWire
+                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady
+                && childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerWireBuilt;
+            const bool rootProducerIsSingleMember = rootEdgeInfo.superEdgeMemberCount <= 1U;
+            if (useRootResultWireProducer && rootProducerIsSingleMember) {
+                childWire.wire = childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerWire;
+                childWire.wireBuilt = true;
+                childWire.superEdgeWire = true;
+                childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerOutput = true;
+                childWire
+                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerUnownedRemovalChildWireProducerReadyOutput =
+                    true;
+            }
+            else if (useRootResultWireProducer) {
+                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                // ::WireJoinerP::findSuperEdgesUpdateFirst() stores a multi-member "superEdge" on
+                // the root. Exporting that whole root from a member helper child-wire carries
+                // sibling members; this needs a formal child-wire member suppression step before it
+                // can replace the helper shape.
+                childWire
+                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppression =
+                    true;
+                childWire
+                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerOutputBlockedByMultiMemberSuperEdge =
+                    true;
+            }
+        }
+        childWire.helperOpenExportOverrideRemovedSourceEdgeInfo =
+            edgeInfo.helperOpenExportOverrideRemovedSourceEdgeInfo;
+        childWire.helperOpenExportOverrideRemovedTargetEdgeInfo =
+            edgeInfo.helperOpenExportOverrideRemovedTargetEdgeInfo;
+        childWire.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo =
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo;
+        childWire.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices =
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices;
+        childWire.helperOpenExportOverrideAHistoryRemoveSourceEdgeIndices =
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeIndices;
+        childWire.helperOpenExportOverrideAHistoryRemoveSourceLineage =
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceLineage;
+        childWire.helperOpenExportOverrideAHistoryRemoveSameSourceLineage =
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveSameSourceLineage;
+        childWire.helperOpenExportOverrideAHistoryRemoveForeignSourceLineage =
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveForeignSourceLineage;
+        childWire.helperOpenExportOverrideSafeAHistoryProducerEvidence =
+            edgeInfo.helperOpenExportOverrideSafeAHistoryProducerEvidence;
+        childWire.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo =
+            edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo;
+        childWire.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices =
+            edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices;
+        childWire.purgeBridge = edgeInfo.generatedOpenExportEdge || edgeInfo.helperOpenExportOverride
+            ? false
+            : edgeInfo.purgeAsOriginalOpenEdge;
         childWire.sourceSharedVertexPurgeMatch =
             !sourceEdges_.empty() && allEdgesHaveSharedOriginalSourceVertexByIdentity(childWire.wire, sourceEdges_);
         info.openWireCompoundWires.push_back(std::move(childWire));
+    }
+
+    struct MemberSuppressionOutputGroup {
+        std::size_t rootEdgeInfoIndex = 0;
+        std::vector<std::size_t> childWireIndices;
+        std::vector<std::size_t> coveredMemberEdgeInfoIndices;
+        std::vector<std::size_t> currentMemberEdgeInfoIndices;
+        std::vector<std::size_t> suppressedPendingMemberEdgeInfoIndices;
+    };
+    auto outputGroupFor =
+        [](std::vector<MemberSuppressionOutputGroup>& groups,
+           std::size_t rootEdgeInfoIndex) -> MemberSuppressionOutputGroup& {
+        const auto groupIt = std::find_if(
+            groups.begin(), groups.end(), [&](const MemberSuppressionOutputGroup& group) {
+                return group.rootEdgeInfoIndex == rootEdgeInfoIndex;
+            });
+        if (groupIt != groups.end()) {
+            return *groupIt;
+        }
+        groups.push_back(MemberSuppressionOutputGroup{rootEdgeInfoIndex, {}, {}, {}, {}});
+        return groups.back();
+    };
+
+    std::vector<MemberSuppressionOutputGroup> memberSuppressionOutputGroups;
+    for (std::size_t childWireIndex = 0; childWireIndex < info.openWireCompoundWires.size();
+         ++childWireIndex) {
+        OpenWireCompoundWireInfo& childWire = info.openWireCompoundWires[childWireIndex];
+        if (!childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppression) {
+            continue;
+        }
+        if (childWire.edgeIndex >= info.edges.size()) {
+            continue;
+        }
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::findSuperEdgesUpdateFirst() suppresses member edges with
+        // "current->iteration = -1" and stores the full root "superEdge". Build a request-local
+        // current-member producer candidate here, but keep it out of output until every member in
+        // the same root group has an explicit child owner.
+        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWire =
+            info.edges[childWire.edgeIndex].wire();
+        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWireBuilt =
+            !childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWire.IsNull();
+        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputCandidate =
+            childWire
+                .helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWireBuilt;
+
+        MemberSuppressionOutputGroup& group = outputGroupFor(
+            memberSuppressionOutputGroups,
+            childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex);
+        appendUniqueSourceIndex(group.childWireIndices, childWireIndex);
+        appendUniqueSourceIndices(
+            group.coveredMemberEdgeInfoIndices,
+            childWire
+                .helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices);
+        if (childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo) {
+            appendUniqueSourceIndex(group.currentMemberEdgeInfoIndices, childWire.edgeIndex);
+        }
+    }
+
+    for (const MemberSuppressionOutputGroup& group : memberSuppressionOutputGroups) {
+        std::vector<std::size_t> pendingMemberEdgeInfoIndices;
+        for (const std::size_t memberIndex : group.coveredMemberEdgeInfoIndices) {
+            if (std::find(group.currentMemberEdgeInfoIndices.begin(),
+                          group.currentMemberEdgeInfoIndices.end(),
+                          memberIndex)
+                == group.currentMemberEdgeInfoIndices.end()) {
+                if (memberIndex < info.edges.size()
+                    && helperOpenExportOverrideRootResultWireProducerCanSuppressPendingMember(
+                        info.edges[memberIndex])) {
+                    continue;
+                }
+                appendUniqueSourceIndex(pendingMemberEdgeInfoIndices, memberIndex);
+            }
+        }
+        const bool groupChildOwnershipComplete = pendingMemberEdgeInfoIndices.empty();
+        for (const std::size_t childWireIndex : group.childWireIndices) {
+            if (childWireIndex >= info.openWireCompoundWires.size()) {
+                continue;
+            }
+            OpenWireCompoundWireInfo& childWire = info.openWireCompoundWires[childWireIndex];
+            if (!childWire
+                     .helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputCandidate) {
+                continue;
+            }
+            if (!groupChildOwnershipComplete) {
+                childWire
+                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedByPendingMember =
+                    true;
+                continue;
+            }
+            childWire
+                .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerReady =
+                childWire
+                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady
+                && childWire
+                       .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo;
+            childWire
+                .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerFullAHistoryEvidence =
+                childWire
+                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerReady;
+            if (!childWire.helperOpenExportOverrideSourceEdgeExportShape) {
+                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                // ::WireJoinerP::build() exports the exact final child wire identity. Even after
+                // every non-current member is formally suppressible, cad-core cannot replace the
+                // helper child shape with EdgeInfo::wire() until M2/source-edge child-wire identity
+                // is ready for this child.
+                childWire
+                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShape =
+                    true;
+                continue;
+            }
+            childWire.wire =
+                childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWire;
+            childWire.wireBuilt = true;
+            childWire.superEdgeWire = false;
+            childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutput = true;
+            childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerOutput = true;
+            childWire
+                .helperOpenExportOverrideSuperEdgeRootResultWireProducerOutputBlockedByMultiMemberSuperEdge =
+                false;
+            childWire
+                .helperOpenExportOverrideSuperEdgeRootResultWireProducerUnownedRemovalChildWireProducerReadyOutput =
+                true;
+            childWire.sourceSharedVertexPurgeMatch =
+                !sourceEdges_.empty()
+                && allEdgesHaveSharedOriginalSourceVertexByIdentity(childWire.wire, sourceEdges_);
+        }
     }
 }
 
 WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
 {
     WireJoinerLedgerSummary summary;
+    struct MemberSuppressionRootGroup {
+        std::size_t rootEdgeInfoIndex = 0;
+        std::vector<std::size_t> coveredMemberEdgeInfoIndices;
+        std::vector<std::size_t> currentMemberEdgeInfoIndices;
+    };
+    auto memberSuppressionRootGroupFor =
+        [](std::vector<MemberSuppressionRootGroup>& groups,
+           std::size_t rootEdgeInfoIndex) -> MemberSuppressionRootGroup& {
+        const auto groupIt = std::find_if(
+            groups.begin(), groups.end(), [&](const MemberSuppressionRootGroup& group) {
+                return group.rootEdgeInfoIndex == rootEdgeInfoIndex;
+            });
+        if (groupIt != groups.end()) {
+            return *groupIt;
+        }
+        groups.push_back(MemberSuppressionRootGroup{rootEdgeInfoIndex, {}, {}});
+        return groups.back();
+    };
+
     for (const WireInfo& info : openWires_) {
         summary.superEdgeCandidateCount += info.superEdges.size();
         for (const SuperEdgeInfo& superEdge : info.superEdges) {
@@ -3410,6 +4734,8 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
             }
         }
         summary.openWireCompoundWireInfoCount += info.openWireCompoundWires.size();
+        std::vector<std::size_t> memberSuppressionRootEdgeInfoIndices;
+        std::vector<MemberSuppressionRootGroup> memberSuppressionRootGroups;
         for (const OpenWireCompoundWireInfo& childWire : info.openWireCompoundWires) {
             ++summary.openWireCompoundEdgeInfoCount;
             if (childWire.wireBuilt) {
@@ -3439,6 +4765,199 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
                     ++summary.openWireCompoundGeneratedPartialSharedClosedWireWireInfoCount;
                 }
             }
+            if (childWire.helperOpenExportOverride) {
+                ++summary.openWireCompoundHelperOpenExportOverrideWireInfoCount;
+                if (childWire.helperOpenExportOverrideSourceEdgeInfo) {
+                    ++summary.openWireCompoundHelperOpenExportOverrideSourceEdgeInfoWireInfoCount;
+                }
+                if (childWire.helperOpenExportOverrideSourceEdgeInfoConsumed) {
+                    ++summary.openWireCompoundHelperOpenExportOverrideSourceEdgeInfoConsumedWireInfoCount;
+                }
+                if (childWire.helperOpenExportOverrideSourceEdgeExportShape) {
+                    ++summary.openWireCompoundHelperOpenExportOverrideSourceEdgeExportShapeWireInfoCount;
+                }
+                if (childWire.helperOpenExportOverrideSourceEdgeProducerOutput) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSourceEdgeProducerOutputWireInfoCount;
+                }
+                if (!childWire.helperOpenExportOverrideSourceEdgeExportShape
+                    && !childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerOutput) {
+                    ++summary.openWireCompoundHelperOpenExportOverrideHelperShapeWireInfoCount;
+                }
+                if (childWire.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo) {
+                    ++summary.openWireCompoundHelperOpenExportOverrideOpenWireCompoundEligibleWireInfoCount;
+                }
+                if (childWire.helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo) {
+                    ++summary.openWireCompoundHelperOpenExportOverrideForcedOpenWireCompoundWireInfoCount;
+                }
+                if (childWire.helperOpenExportOverrideReason == "consumed_open_cutter_graph") {
+                    ++summary.openWireCompoundHelperOpenExportOverrideConsumedOpenCutterGraphWireInfoCount;
+                }
+                else if (childWire.helperOpenExportOverrideReason == "partial_junction_open_cutter") {
+                    ++summary.openWireCompoundHelperOpenExportOverridePartialJunctionOpenCutterWireInfoCount;
+                }
+                else if (childWire.helperOpenExportOverrideReason == "closed_wire_cycle") {
+                    ++summary.openWireCompoundHelperOpenExportOverrideClosedWireCycleWireInfoCount;
+                }
+                else if (childWire.helperOpenExportOverrideReason == "partial_shared_closed_wire") {
+                    ++summary.openWireCompoundHelperOpenExportOverridePartialSharedClosedWireWireInfoCount;
+                }
+                if (childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateWireInfoCount;
+                }
+                if (childWire
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReadyWireInfoCount;
+                }
+                if (childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerWireBuilt) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerWireBuiltWireInfoCount;
+                }
+                if (childWire
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady
+                    && childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerWireBuilt) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReadyWireBuiltWireInfoCount;
+                }
+                if (childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerOutput) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerOutputWireInfoCount;
+                }
+                if (childWire
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWireBuilt) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWireBuiltWireInfoCount;
+                }
+                if (childWire
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputCandidate) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputCandidateWireInfoCount;
+                }
+                if (childWire
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerReady) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerReadyWireInfoCount;
+                }
+                if (childWire
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerFullAHistoryEvidence) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerFullAHistoryEvidenceWireInfoCount;
+                }
+                if (childWire
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedByPendingMember) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedByPendingMemberWireInfoCount;
+                }
+                if (childWire
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShape) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeWireInfoCount;
+                    if (childWire.helperOpenExportOverrideFullAHistoryProducerEvidence) {
+                        ++summary
+                              .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeFullAHistoryProducerEvidenceWireInfoCount;
+                    }
+                    else {
+                        ++summary
+                              .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeMissingFullAHistoryProducerEvidenceWireInfoCount;
+                    }
+                    if (childWire.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo) {
+                        ++summary
+                              .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeOpenWireCompoundEligibleWireInfoCount;
+                    }
+                    if (childWire.helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo) {
+                        ++summary
+                              .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeForcedOpenWireCompoundWireInfoCount;
+                    }
+                    if (childWire
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady) {
+                        ++summary
+                              .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeRootProducerReadyWireInfoCount;
+                    }
+                    if (childWire
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerReady) {
+                        ++summary
+                              .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeCurrentMemberChildWireProducerReadyWireInfoCount;
+                    }
+                    if (childWire
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerFullAHistoryEvidence) {
+                        ++summary
+                              .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeCurrentMemberChildWireProducerFullAHistoryEvidenceWireInfoCount;
+                    }
+                    else {
+                        ++summary
+                              .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShapeCurrentMemberChildWireProducerMissingFullAHistoryEvidenceWireInfoCount;
+                    }
+                }
+                if (childWire
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutput) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputWireInfoCount;
+                }
+                if (childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppression) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionWireInfoCount;
+                    appendUniqueSourceIndex(
+                        memberSuppressionRootEdgeInfoIndices,
+                        childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex);
+                    MemberSuppressionRootGroup& rootGroup = memberSuppressionRootGroupFor(
+                        memberSuppressionRootGroups,
+                        childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex);
+                    appendUniqueSourceIndices(
+                        rootGroup.coveredMemberEdgeInfoIndices,
+                        childWire
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices);
+                    if (childWire
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo) {
+                        appendUniqueSourceIndex(rootGroup.currentMemberEdgeInfoIndices, childWire.edgeIndex);
+                    }
+                    summary
+                        .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionCoveredMemberEdgeInfoCount +=
+                        childWire
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices
+                            .size();
+                    if (childWire
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo) {
+                        ++summary
+                              .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionCurrentMemberWireInfoCount;
+                    }
+                    summary
+                        .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionNonCurrentMemberEdgeInfoCount +=
+                        childWire
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices
+                            .size();
+                }
+                if (childWire
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerUnownedRemovalChildWireProducerReadyOutput) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerUnownedRemovalChildWireProducerReadyOutputWireInfoCount;
+                }
+                if (childWire
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerOutputBlockedByMultiMemberSuperEdge) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerOutputBlockedByMultiMemberSuperEdgeWireInfoCount;
+                    summary
+                        .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerOutputBlockedNonCurrentMemberEdgeInfoCount +=
+                        childWire
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices
+                            .size();
+                }
+                summary
+                    .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoCount +=
+                    childWire
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices
+                        .size();
+                if (childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberWireInfoCount;
+                }
+                summary
+                    .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoCount +=
+                    childWire
+                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices
+                        .size();
+            }
             if (childWire.purgeBridge) {
                 ++summary.openWireCompoundPurgeBridgeWireInfoCount;
             }
@@ -3452,7 +4971,93 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
                 ++summary.openWireCompoundPurgeBridgeUnmatchedWireInfoCount;
             }
         }
-        std::size_t generatedOpenExportEdgeInfoCount = 0;
+        summary
+            .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootEdgeInfoCount +=
+            memberSuppressionRootEdgeInfoIndices.size();
+        for (const MemberSuppressionRootGroup& rootGroup : memberSuppressionRootGroups) {
+            std::vector<std::size_t> pendingMemberEdgeInfoIndices;
+            std::vector<std::size_t> suppressedPendingMemberEdgeInfoIndices;
+            for (const std::size_t memberIndex : rootGroup.coveredMemberEdgeInfoIndices) {
+                if (std::find(rootGroup.currentMemberEdgeInfoIndices.begin(),
+                              rootGroup.currentMemberEdgeInfoIndices.end(),
+                              memberIndex)
+                    == rootGroup.currentMemberEdgeInfoIndices.end()) {
+                    if (memberIndex < info.edges.size()
+                        && helperOpenExportOverrideRootResultWireProducerCanSuppressPendingMember(
+                            info.edges[memberIndex])) {
+                        appendUniqueSourceIndex(suppressedPendingMemberEdgeInfoIndices, memberIndex);
+                        continue;
+                    }
+                    appendUniqueSourceIndex(pendingMemberEdgeInfoIndices, memberIndex);
+                }
+            }
+            summary
+                .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootUniqueCoveredMemberEdgeInfoCount +=
+                rootGroup.coveredMemberEdgeInfoIndices.size();
+            summary
+                .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootUniqueCurrentMemberEdgeInfoCount +=
+                rootGroup.currentMemberEdgeInfoIndices.size();
+            summary
+                .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootPendingMemberEdgeInfoCount +=
+                pendingMemberEdgeInfoIndices.size();
+            summary
+                .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootSuppressedPendingMemberEdgeInfoCount +=
+                suppressedPendingMemberEdgeInfoIndices.size();
+            for (const std::size_t suppressedMemberIndex : suppressedPendingMemberEdgeInfoIndices) {
+                if (suppressedMemberIndex >= info.edges.size()) {
+                    continue;
+                }
+                const EdgeInfo& suppressedMember = info.edges[suppressedMemberIndex];
+                if (helperOpenExportOverrideRootResultWireProducerHasFullAHistoryProducerEvidence(
+                        suppressedMember)) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootSuppressedPendingMemberFullAHistoryProducerEvidenceEdgeInfoCount;
+                }
+                if (suppressedMember.buildClosedWireRemovedByUnowned) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootSuppressedPendingMemberUnownedRemovalEdgeInfoCount;
+                }
+            }
+            for (const std::size_t pendingMemberIndex : pendingMemberEdgeInfoIndices) {
+                if (pendingMemberIndex >= info.edges.size()) {
+                    continue;
+                }
+                const EdgeInfo& pendingMember = info.edges[pendingMemberIndex];
+                if (helperOpenExportOverrideRootResultWireProducerHasFullAHistoryProducerEvidence(
+                        pendingMember)) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootPendingMemberFullAHistoryProducerEvidenceEdgeInfoCount;
+                }
+                else {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootPendingMemberMissingFullAHistoryProducerEvidenceEdgeInfoCount;
+                }
+                if (pendingMember.buildClosedWireRemovedByUnowned) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootPendingMemberUnownedRemovalEdgeInfoCount;
+                }
+                else if (pendingMember.buildClosedWireRemovedByPrimaryOwner) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootPendingMemberPrimaryRemovalEdgeInfoCount;
+                }
+                else if (pendingMember.buildClosedWireRemovedBySecondaryOwner) {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootPendingMemberSecondaryRemovalEdgeInfoCount;
+                }
+                else {
+                    ++summary
+                          .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootPendingMemberMissingRemovalBranchEdgeInfoCount;
+                }
+            }
+            if (pendingMemberEdgeInfoIndices.empty()) {
+                ++summary
+                      .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootCompleteChildOwnershipRootEdgeInfoCount;
+            }
+            else {
+                ++summary
+                      .openWireCompoundHelperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppressionRootIncompleteChildOwnershipRootEdgeInfoCount;
+            }
+        }
         summary.closedWireInfoCount += info.ownerWires.size();
         for (const OwnerWireInfo& owner : info.ownerWires) {
             summary.closedWireVertexCount += owner.vertices.size();
@@ -3609,7 +5214,6 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
                 ++summary.splitEdgeInfoCount;
             }
             if (edgeInfo.generatedOpenExportEdge) {
-                ++generatedOpenExportEdgeInfoCount;
                 ++summary.generatedOpenExportEdgeInfoCount;
                 if (edgeInfo.generatedOpenExportSourceEdgeInfo) {
                     ++summary.generatedOpenExportSourceEdgeInfoCount;
@@ -3628,6 +5232,291 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
                 }
                 else if (edgeInfo.generatedOpenExportReason == "partial_shared_closed_wire") {
                     ++summary.generatedOpenExportPartialSharedClosedWireEdgeInfoCount;
+                }
+            }
+            if (edgeInfo.helperOpenExportOverride) {
+                ++summary.helperOpenExportOverrideEdgeInfoCount;
+                if (edgeInfo.helperOpenExportOverrideSourceEdgeInfo) {
+                    ++summary.helperOpenExportOverrideSourceEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideSourceEdgeInfoConsumed) {
+                    ++summary.helperOpenExportOverrideSourceEdgeInfoConsumedCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo) {
+                    ++summary.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo) {
+                    ++summary.helperOpenExportOverrideForcedOpenWireCompoundEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideSourceEdgeExportShape) {
+                    ++summary.helperOpenExportOverrideSourceEdgeExportShapeEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo
+                    && !edgeInfo.helperOpenExportOverrideSourceEdgeExportShape) {
+                    ++summary
+                          .helperOpenExportOverrideOpenWireCompoundEligibleWithoutSourceEdgeExportShapeEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideFullAHistoryProducerEvidence) {
+                    ++summary.helperOpenExportOverrideFullAHistoryProducerEvidenceEdgeInfoCount;
+                    if (!edgeInfo.helperOpenExportOverrideSourceEdgeExportShape) {
+                        auto& fullAHistoryWithoutSourceShapeCount =
+                            summary
+                                .helperOpenExportOverrideFullAHistoryProducerEvidenceWithoutSourceEdgeExportShapeEdgeInfoCount;
+                        ++fullAHistoryWithoutSourceShapeCount;
+                    }
+                    if (edgeInfo.helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo) {
+                        auto& fullAHistoryForcedCount =
+                            summary
+                                .helperOpenExportOverrideFullAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount;
+                        ++fullAHistoryForcedCount;
+                    }
+                }
+                if (edgeInfo.helperOpenExportOverrideSuperEdgeMemberEdgeInfo) {
+                    const bool rootOpenWireCompoundEligible =
+                        edgeInfo.helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo;
+                    const bool rootSafeAHistoryProducerEvidence =
+                        edgeInfo.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidence;
+                    const bool rootFullAHistoryProducerEvidence =
+                        edgeInfo.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidence;
+                    ++summary.helperOpenExportOverrideSuperEdgeMemberEdgeInfoCount;
+                    if (edgeInfo.helperOpenExportOverrideSuperEdgeRootEdgeInfo) {
+                        ++summary.helperOpenExportOverrideSuperEdgeMemberWithRootEdgeInfoCount;
+                    }
+                    if (rootOpenWireCompoundEligible) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootOpenWireCompoundEligibleEdgeInfoCount;
+                    }
+                    if (edgeInfo.helperOpenExportOverrideSuperEdgeRootOpenLifecycleEdgeInfo) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootOpenLifecycleEdgeInfoCount;
+                    }
+                    if (edgeInfo.helperOpenExportOverrideSuperEdgeRootClosedLifecycleEdgeInfo) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootClosedLifecycleEdgeInfoCount;
+                    }
+                    if (edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootExportBlockedByIterationEdgeInfoCount;
+                    }
+                    if (edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByWireInfo) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootExportBlockedByWireInfoEdgeInfoCount;
+                    }
+                    if (rootSafeAHistoryProducerEvidence) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceEdgeInfoCount;
+                    }
+                    if (rootFullAHistoryProducerEvidence) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceEdgeInfoCount;
+                    }
+                    if (rootOpenWireCompoundEligible && rootSafeAHistoryProducerEvidence) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootOpenWireCompoundEligibleAndSafeAHistoryProducerEvidenceEdgeInfoCount;
+                    }
+                    if (rootOpenWireCompoundEligible && !rootSafeAHistoryProducerEvidence) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootOpenWireCompoundEligibleMissingSafeAHistoryProducerEvidenceEdgeInfoCount;
+                    }
+                    if (rootSafeAHistoryProducerEvidence && !rootOpenWireCompoundEligible) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceWithoutOpenWireCompoundEligibleEdgeInfoCount;
+                    }
+                    if (rootFullAHistoryProducerEvidence && !rootOpenWireCompoundEligible) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceWithoutOpenWireCompoundEligibleEdgeInfoCount;
+                    }
+                    if (edgeInfo.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidenceIterationBlocked) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootSafeAHistoryProducerEvidenceIterationBlockedEdgeInfoCount;
+                    }
+                    if (edgeInfo.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidenceIterationBlocked) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootFullAHistoryProducerEvidenceIterationBlockedEdgeInfoCount;
+                    }
+                    if (edgeInfo.helperOpenExportOverrideSuperEdgeRootMissingSafeAHistoryProducerEvidenceIterationBlocked) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootMissingSafeAHistoryProducerEvidenceIterationBlockedEdgeInfoCount;
+                    }
+                    if (edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootIterationBlockedUnownedRemovalEdgeInfoCount;
+                    }
+                    if (edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedPrimaryRemoval) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootIterationBlockedPrimaryRemovalEdgeInfoCount;
+                    }
+                    if (edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedSecondaryRemoval) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootIterationBlockedSecondaryRemovalEdgeInfoCount;
+                    }
+                    if (edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedMissingRemovalBranch) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootIterationBlockedMissingRemovalBranchEdgeInfoCount;
+                    }
+                    if (edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateEdgeInfoCount;
+                    }
+                    if (edgeInfo
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateFullAHistoryProducerEvidenceEdgeInfoCount;
+                    }
+                    if (edgeInfo
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidence) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceEdgeInfoCount;
+                    }
+                    if (edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemoval) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateUnownedRemovalEdgeInfoCount;
+                    }
+                    if (edgeInfo
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateUnownedRemovalChildWireProducerReadyEdgeInfoCount;
+                    }
+                    if (edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidatePrimaryRemoval) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidatePrimaryRemovalEdgeInfoCount;
+                    }
+                    if (edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateSecondaryRemoval) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateSecondaryRemovalEdgeInfoCount;
+                    }
+                    if (edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingRemovalBranch) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingRemovalBranchEdgeInfoCount;
+                    }
+                    if (edgeInfo
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceUnownedRemoval) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceUnownedRemovalEdgeInfoCount;
+                    }
+                    if (edgeInfo
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidencePrimaryRemoval) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidencePrimaryRemovalEdgeInfoCount;
+                    }
+                    if (edgeInfo
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceSecondaryRemoval) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceSecondaryRemovalEdgeInfoCount;
+                    }
+                    if (edgeInfo
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceMissingRemovalBranch) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceMissingRemovalBranchEdgeInfoCount;
+                    }
+                    summary
+                        .helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCoveredMemberEdgeInfoCount +=
+                        edgeInfo
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices
+                            .size();
+                    if (edgeInfo
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo) {
+                        ++summary
+                              .helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerCurrentMemberEdgeInfoCount;
+                    }
+                    summary
+                        .helperOpenExportOverrideSuperEdgeMemberRootResultWireProducerNonCurrentMemberEdgeInfoCount +=
+                        edgeInfo
+                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices
+                            .size();
+                    if (edgeInfo.helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo) {
+                        ++summary.helperOpenExportOverrideSuperEdgeMemberForcedOpenWireCompoundEdgeInfoCount;
+                        if (!edgeInfo.helperOpenExportOverrideSafeAHistoryProducerEvidence) {
+                            ++summary
+                                  .helperOpenExportOverrideSuperEdgeMemberMissingSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount;
+                        }
+                    }
+                }
+                if (edgeInfo.helperOpenExportOverrideExportBlockedByIteration) {
+                    ++summary.helperOpenExportOverrideExportBlockedByIterationEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideExportBlockedByWireInfo) {
+                    ++summary.helperOpenExportOverrideExportBlockedByWireInfoEdgeInfoCount;
+                }
+                summary.helperOpenExportOverrideBindingCandidateEdgeInfoCount +=
+                    edgeInfo.helperOpenExportOverrideCandidateEdgeInfoIndices.size();
+                summary.helperOpenExportOverrideOpenWireCompoundEligibleCandidateEdgeInfoCount +=
+                    edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleCandidateEdgeInfoIndices.size();
+                if (edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleCandidateEdgeInfoIndices.empty()) {
+                    ++summary.helperOpenExportOverrideMissingOpenWireCompoundEligibleCandidateEdgeInfoCount;
+                }
+                else {
+                    ++summary.helperOpenExportOverrideWithOpenWireCompoundEligibleCandidateEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideRemovedSourceEdgeInfo) {
+                    ++summary.helperOpenExportOverrideRemovedSourceEdgeInfoCount;
+                }
+                else {
+                    ++summary.helperOpenExportOverrideMissingRemovedSourceEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideRemovedTargetEdgeInfo) {
+                    ++summary.helperOpenExportOverrideRemovedTargetEdgeInfoCount;
+                }
+                else {
+                    ++summary.helperOpenExportOverrideMissingRemovedTargetEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo) {
+                    ++summary.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoCount;
+                }
+                else {
+                    ++summary.helperOpenExportOverrideMissingAHistoryRemoveSourceEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceLineage) {
+                    ++summary.helperOpenExportOverrideAHistoryRemoveSourceLineageEdgeInfoCount;
+                }
+                else {
+                    ++summary.helperOpenExportOverrideMissingAHistoryRemoveSourceLineageEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideAHistoryRemoveSameSourceLineage) {
+                    ++summary.helperOpenExportOverrideAHistoryRemoveSameSourceLineageEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideAHistoryRemoveForeignSourceLineage) {
+                    ++summary.helperOpenExportOverrideAHistoryRemoveForeignSourceLineageEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideSafeAHistoryProducerEvidence) {
+                    ++summary.helperOpenExportOverrideSafeAHistoryProducerEvidenceEdgeInfoCount;
+                }
+                else {
+                    ++summary.helperOpenExportOverrideMissingSafeAHistoryProducerEvidenceEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo) {
+                    if (edgeInfo.helperOpenExportOverrideSafeAHistoryProducerEvidence) {
+                        ++summary
+                              .helperOpenExportOverrideSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount;
+                        if (!edgeInfo.helperOpenExportOverrideFullAHistoryProducerEvidence) {
+                            auto& safeWithoutFullForcedCount =
+                                summary
+                                    .helperOpenExportOverrideSafeAHistoryProducerEvidenceWithoutFullAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount;
+                            ++safeWithoutFullForcedCount;
+                        }
+                    }
+                    else {
+                        ++summary
+                              .helperOpenExportOverrideMissingSafeAHistoryProducerEvidenceForcedOpenWireCompoundEdgeInfoCount;
+                    }
+                }
+                if (edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo) {
+                    ++summary.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoCount;
+                }
+                else {
+                    ++summary.helperOpenExportOverrideMissingSourceLineageRemovedSourceEdgeInfoCount;
+                }
+                if (edgeInfo.helperOpenExportOverrideReason == "consumed_open_cutter_graph") {
+                    ++summary.helperOpenExportOverrideConsumedOpenCutterGraphEdgeInfoCount;
+                }
+                else if (edgeInfo.helperOpenExportOverrideReason == "partial_junction_open_cutter") {
+                    ++summary.helperOpenExportOverridePartialJunctionOpenCutterEdgeInfoCount;
+                }
+                else if (edgeInfo.helperOpenExportOverrideReason == "closed_wire_cycle") {
+                    ++summary.helperOpenExportOverrideClosedWireCycleEdgeInfoCount;
+                }
+                else if (edgeInfo.helperOpenExportOverrideReason == "partial_shared_closed_wire") {
+                    ++summary.helperOpenExportOverridePartialSharedClosedWireEdgeInfoCount;
                 }
             }
             if (edgeInfo.superEdgeRoot) {
@@ -3724,8 +5613,8 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
             if (edgeInfo.closedWireOwner) {
                 ++summary.closedWireAssignedEdgeInfoCount;
             }
-            const bool exportsOpenEdge = edgeInfo.iteration == -3
-                || (edgeInfo.wireInfo == 0U && edgeInfo.iteration >= 0);
+            const bool exportsOpenEdge = edgeInfo.hasOpenExportOverride()
+                || edgeInfoExportsOpenWireCompound(edgeInfo);
             if (exportsOpenEdge) {
                 ++summary.openExportEdgeInfoCount;
                 if (hasSourceIdentityVertex) {
@@ -3734,7 +5623,8 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
                 if (hasOnlySourceIdentityVertices) {
                     ++summary.sourceIdentityOpenExportOnlySourceVerticesEdgeInfoCount;
                 }
-                if (edgeInfo.purgeAsOriginalOpenEdge && hasSourceIdentityVertex) {
+                if (!edgeInfo.generatedOpenExportEdge && !edgeInfo.helperOpenExportOverride
+                    && edgeInfo.purgeAsOriginalOpenEdge && hasSourceIdentityVertex) {
                     ++summary.sourceIdentityPurgeBridgeEdgeInfoCount;
                 }
                 if (hasSourceLineage) {
@@ -3784,11 +5674,11 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
         summary.exhaustAdjacentSearchBacktrackCount += info.exhaustAdjacentSearchBacktrackCount;
         summary.exhaustAdjacentWireSetInsertCount += info.exhaustAdjacentWireSetInsertCount;
         summary.exhaustAdjacentWireSetEraseCount += info.exhaustAdjacentWireSetEraseCount;
-	        summary.exhaustAdjacentWireSetAbortCount += info.exhaustAdjacentWireSetAbortCount;
-	        summary.exhaustAdjacentWireInfo2AbortCount += info.exhaustAdjacentWireInfo2AbortCount;
-	        summary.tightBoundExhaustPrimaryResetEdgeInfoCount +=
-	            info.tightBoundExhaustPrimaryResetEdgeInfoCount;
-	        summary.repeatedSplitExhaustCycleCount += info.repeatedSplitExhaustCycleCount;
+        summary.exhaustAdjacentWireSetAbortCount += info.exhaustAdjacentWireSetAbortCount;
+        summary.exhaustAdjacentWireInfo2AbortCount += info.exhaustAdjacentWireInfo2AbortCount;
+        summary.tightBoundExhaustPrimaryResetEdgeInfoCount +=
+            info.tightBoundExhaustPrimaryResetEdgeInfoCount;
+        summary.repeatedSplitExhaustCycleCount += info.repeatedSplitExhaustCycleCount;
         summary.repeatedSplitExhaustRemovedEdgeInfoCount += info.repeatedSplitExhaustRemovedEdgeInfoCount;
         summary.repeatedSplitExhaustRemovedUnownedEdgeInfoCount +=
             info.repeatedSplitExhaustRemovedUnownedEdgeInfoCount;
@@ -3812,6 +5702,8 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
             info.repeatedSplitExhaustRerunClosedWireSearchCount;
         summary.repeatedSplitExhaustRerunClosedWireMissCount +=
             info.repeatedSplitExhaustRerunClosedWireMissCount;
+        summary.repeatedSplitExhaustRerunMissLiveResetEdgeInfoCount +=
+            info.repeatedSplitExhaustRerunMissLiveResetEdgeInfoCount;
         summary.repeatedSplitExhaustRerunClosedWireInfoCount +=
             info.repeatedSplitExhaustRerunClosedWireInfoCount;
         summary.repeatedSplitExhaustRerunClosedWireAssignedEdgeInfoCount +=
@@ -3864,15 +5756,17 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
             info.repeatedSplitExhaustRerunBranchSearchOutsideCandidateCount;
         summary.repeatedSplitExhaustRerunNewWireSeedCandidateCount +=
             info.repeatedSplitExhaustRerunNewWireSeedCandidateCount;
-        if (info.repeatedSplitExhaustCycleCount > 0U) {
-            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-            // ::WireJoinerP::buildClosedWire() reruns findClosedWires(true)/findTightBound()
-            // before ::build() exports "openWireCompound". If the current result still needs
-            // generated open-export EdgeInfo entries, that rerun/reset cannot become the output
-            // path until M3 replaces the generated result-wire identity.
-            summary.repeatedSplitExhaustGeneratedIdentityBlockedEdgeInfoCount +=
-                generatedOpenExportEdgeInfoCount;
-        }
+        summary.repeatedSplitExhaustGeneratedIdentityBlockedEdgeInfoCount +=
+            info.repeatedSplitExhaustGeneratedIdentityBlockedEdgeInfoCount;
+        summary.generatedOpenExportUnboundEdgeCount += info.generatedOpenExportUnboundEdgeCount;
+        summary.generatedOpenExportDuplicateSourceEdgeInfoCount +=
+            info.generatedOpenExportDuplicateSourceEdgeInfoCount;
+        summary.helperOpenExportOverrideCandidateEdgeCount +=
+            info.helperOpenExportOverrideCandidateEdgeCount;
+        summary.helperOpenExportOverrideUnboundEdgeCount +=
+            info.helperOpenExportOverrideUnboundEdgeCount;
+        summary.helperOpenExportOverrideDuplicateSourceEdgeInfoCount +=
+            info.helperOpenExportOverrideDuplicateSourceEdgeInfoCount;
     }
     return summary;
 }
@@ -3890,30 +5784,71 @@ std::optional<TopoDS_Shape> WireJoiner::getOpenWires(const std::string& historyP
     std::vector<TopoDS_Edge> allLiveEdges;
     std::vector<TopoDS_Wire> liveWires;
     for (const WireInfo& info : openWires_) {
+        if (!info.openWireCompoundWires.empty()) {
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+            // ::WireJoinerP::build() first materializes "openWireCompound" with
+            // "builder.Add(openWireCompound, info.wire())"; ::getOpenWires() then consumes that
+            // child-wire compound. Read the request-local OpenWireCompoundWireInfo ledger here
+            // instead of re-deriving the export boundary from EdgeInfo/openExportOverride.
+            std::vector<TopoDS_Edge> liveEdges;
+            for (const OpenWireCompoundWireInfo& childWire : info.openWireCompoundWires) {
+                if (childWire.wire.IsNull()) {
+                    continue;
+                }
+                if (noOriginal && !sourceEdges_.empty() && childWire.purgeBridge
+                    && childWire.sourceSharedVertexPurgeMatch) {
+                    continue;
+                }
+                if (childWire.superEdgeWire) {
+                    liveWires.push_back(childWire.wire);
+                    continue;
+                }
+                const std::vector<TopoDS_Edge> childWireEdges = wireEdges(childWire.wire);
+                liveEdges.insert(liveEdges.end(), childWireEdges.begin(), childWireEdges.end());
+            }
+            if (liveEdges.empty()) {
+                continue;
+            }
+            if (mergeEdges_) {
+                allLiveEdges.insert(allLiveEdges.end(), liveEdges.begin(), liveEdges.end());
+                continue;
+            }
+            const auto currentWires = wiresFromEdges(liveEdges);
+            liveWires.insert(liveWires.end(), currentWires.begin(), currentWires.end());
+            continue;
+        }
+
         std::vector<TopoDS_Edge> liveEdges;
         for (const EdgeInfo& edgeInfo : info.edges) {
-            const bool exportsOpenEdge = edgeInfo.iteration == -3
-                || (edgeInfo.wireInfo == 0U && edgeInfo.iteration >= 0);
+            const bool exportsOpenEdge = edgeInfo.hasOpenExportOverride()
+                || edgeInfoExportsOpenWireCompound(edgeInfo);
             if (!exportsOpenEdge) {
                 continue;
             }
-            if (!edgeInfo.superEdge.IsNull()) {
-                const TopoDS_Wire wire = edgeInfo.wire();
+            const bool purgeBridge = edgeInfo.generatedOpenExportEdge || edgeInfo.helperOpenExportOverride
+                ? false
+                : edgeInfo.purgeAsOriginalOpenEdge;
+            if (!edgeInfo.superEdge.IsNull() && !edgeInfo.hasOpenExportOverride()) {
+                const TopoDS_Wire wire = edgeInfo.openExportWire();
                 if (wire.IsNull()) {
                     continue;
                 }
-                if (noOriginal && !sourceEdges_.empty() && edgeInfo.purgeAsOriginalOpenEdge
+                if (noOriginal && !sourceEdges_.empty() && purgeBridge
                     && allEdgesShareOriginalSourceVertexByIdentity(wire, sourceEdges_)) {
                     continue;
                 }
                 liveWires.push_back(wire);
                 continue;
             }
-            if (noOriginal && !sourceEdges_.empty() && edgeInfo.purgeAsOriginalOpenEdge
-                && edgeSharesOriginalSourceVertexByIdentity(edgeInfo.edge, sourceEdges_)) {
+            const TopoDS_Edge& exportEdge = edgeInfo.openExportEdge();
+            if (exportEdge.IsNull()) {
                 continue;
             }
-            liveEdges.push_back(edgeInfo.edge);
+            if (noOriginal && !sourceEdges_.empty() && purgeBridge
+                && edgeSharesOriginalSourceVertexByIdentity(exportEdge, sourceEdges_)) {
+                continue;
+            }
+            liveEdges.push_back(exportEdge);
         }
         if (liveEdges.empty()) {
             continue;
