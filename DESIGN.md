@@ -7,11 +7,7 @@ Chili/FreeCAD/docs/CADCore方案/细化方案', 要把每一个步骤干什么�
 
 /goal  按照'/Users/admin/Chili3DProject/重构Chili/FreeCAD/docs/偏移处理/06-02-02-37-cad-core临时诊断主路径偏移整改方案.md' 为我实现, 完成每个部分的时候,就更新 '/Users/admin/Chili3DProject/重构Chili/FreeCAD/docs/偏移处理/06-02-02-37-cad-core临时诊断主路径偏移整改方案.md' 只写重要的最大的节点, 不要写流水账
 
-
-
 ---
-
-
 
   目标：在 /Users/li/Chili3DProject/重构Chili/FreeCAD 仓库中，完成 CAD Core 临时诊断主路径偏移整改的第一轮 goal：先完成 M0 fallback 闸门审计，再推进 M1
   WireJoiner EdgeInfo/WireInfo 生命周期中的下一个最小可验收切片。
@@ -59,3 +55,5 @@ Chili/FreeCAD/docs/CADCore方案/细化方案', 要把每一个步骤干什么�
   这个 prompt 的关键是把 goal 的范围锁死在 M0 + M1 一个切片，不要让它一口气跳到 M2/M3/M4。
 
 ---
+
+我的FreeCAD 仓库中docs/偏移处理/CADCore临时诊断主路径偏移整改方案-细分/M3-generated-result-wire-identity.md' 这个里程碑执行过程始终无法收敛，无法结束。 我希望你给我出一个 用于修改  CADCore临时诊断主路径偏移整改方案-细分 中内容 的 独立的 .patch 文件，不要尝试修改github中的内容，你没有权限
