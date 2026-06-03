@@ -400,6 +400,17 @@ nlohmann::json shadowSubsToJson(const std::vector<document::ShadowSub>& shadowSu
     return items;
 }
 
+nlohmann::json externalGeometryFlagsToJson(const std::set<std::string>& flags)
+{
+    nlohmann::json items = nlohmann::json::array();
+    for (const char* flag : {"Defining", "Frozen", "Detached", "Missing", "Sync"}) {
+        if (flags.count(flag) != 0U) {
+            items.push_back(flag);
+        }
+    }
+    return items;
+}
+
 bool requestLocalInternalSubname(const std::string& subname)
 {
     return topo::parseInternalSubshapeName(subname).has_value();
@@ -634,6 +645,9 @@ void appendElementReferenceUpdate(const document::DocumentObject& object,
     if (const auto fullSubnames = fullSubnamesForReferenceUpdate(link, subnames.size())) {
         update["FullSubList"] = *fullSubnames;
     }
+    if (!link.externalGeometryFlags.empty()) {
+        update["ExternalFlags"] = externalGeometryFlagsToJson(link.externalGeometryFlags);
+    }
     nlohmann::json shadowSubs = shadowSubsForReferenceUpdate(link, subnames, stableSubnames);
     if (!shadowSubs.empty()) {
         update["ShadowSub"] = std::move(shadowSubs);
@@ -655,6 +669,9 @@ nlohmann::json linkSubListItemUpdateJson(const document::Link& link,
     }
     if (const auto fullSubnames = fullSubnamesForReferenceUpdate(link, subnames.size())) {
         item["FullSubList"] = *fullSubnames;
+    }
+    if (!link.externalGeometryFlags.empty()) {
+        item["ExternalFlags"] = externalGeometryFlagsToJson(link.externalGeometryFlags);
     }
     nlohmann::json shadowSubs = shadowSubsForReferenceUpdate(link, subnames, stableSubnames);
     if (!shadowSubs.empty()) {

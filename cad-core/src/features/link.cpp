@@ -203,6 +203,90 @@ std::vector<std::string> assemblyJointGroupNames(const document::DocumentObject&
     return names;
 }
 
+struct AssemblySolverSummary {
+    std::string solve;
+    nlohmann::json adapter;
+};
+
+AssemblySolverSummary assemblySolverSummary(const document::DocumentObject& object,
+                                            runtime::ComputeContext& context)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    // ::AssemblyObject::solve(), calls "syncGroundedJoints()", then "fixGroundedParts()";
+    // if no part is fixed it returns -6, and full solving proceeds through
+    // "mbdAssembly->runPreDrag()". cad-core keeps this as a stateless adapter boundary.
+    nlohmann::json groundedJoints = nlohmann::json::array();
+    nlohmann::json supportedJoints = nlohmann::json::array();
+    nlohmann::json unsupportedJoints = nlohmann::json::array();
+
+    for (const auto& jointName : assemblyJointNames(object, context)) {
+        const document::DocumentObject* joint = documentObjectByName(context, jointName);
+        if (joint == nullptr) {
+            continue;
+        }
+        if (document::propertyValue(*joint, "ObjectToGround") != nullptr) {
+            groundedJoints.push_back(jointName);
+            continue;
+        }
+        if (document::propertyValue(*joint, "JointType") != nullptr) {
+            supportedJoints.push_back(jointName);
+            unsupportedJoints.push_back({
+                {"object", jointName},
+                {"joint_type", document::readString(*joint, "JointType").value_or("")},
+            });
+        }
+    }
+
+    if (groundedJoints.empty() && supportedJoints.empty()) {
+        return {
+            "skipped_no_joints",
+            {
+                {"status", "skipped"},
+                {"reason", "no_joints"},
+                {"grounded_joints", groundedJoints},
+                {"joints", supportedJoints},
+                {"unsupported_joints", unsupportedJoints},
+            },
+        };
+    }
+
+    if (supportedJoints.empty()) {
+        return {
+            "solved_noop",
+            {
+                {"status", "solved"},
+                {"mode", "grounded_only_noop"},
+                {"grounded_joints", groundedJoints},
+                {"joints", supportedJoints},
+                {"unsupported_joints", unsupportedJoints},
+            },
+        };
+    }
+
+    for (const auto& unsupported : unsupportedJoints) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "warning",
+                               "unsupported_assembly_solver",
+                               "Assembly solver adapter does not yet solve JointType "
+                                   + unsupported["joint_type"].get<std::string>(),
+                               object.name,
+                               "Group",
+                               "runtime",
+                               unsupported["object"].get<std::string>());
+    }
+
+    return {
+        "unsupported",
+        {
+            {"status", "unsupported"},
+            {"reason", "joint_type_not_migrated"},
+            {"grounded_joints", groundedJoints},
+            {"joints", supportedJoints},
+            {"unsupported_joints", unsupportedJoints},
+        },
+    };
+}
+
 std::optional<gp_Trsf> placementProperty(const document::DocumentObject& object,
                                          const std::string& property)
 {
@@ -3129,12 +3213,14 @@ void executeAssemblyObject(const document::DocumentObject& object, runtime::Comp
         }
     }
 
+    const auto solver = assemblySolverSummary(object, context);
     nlohmann::json metadata = {
         {"assembly", "object"},
         {"group", group},
         {"joint_groups", assemblyJointGroupNames(object, context)},
         {"joints", assemblyJointNames(object, context)},
-        {"solve", "not_migrated"},
+        {"solve", solver.solve},
+        {"solver_adapter", solver.adapter},
     };
     if (shapes.empty()) {
         publishEmptyLink(object, context, metadata);
@@ -3177,7 +3263,7 @@ void executeAssemblyJointGroup(const document::DocumentObject& object, runtime::
             {"assembly", "joint_group"},
             {"group", linkNamesJson(document::readLinks(object, "Group"))},
             {"joints", joints},
-            {"solve", "not_migrated"},
+            {"solve", "solver_inputs"},
         }
     );
 }
@@ -3248,7 +3334,7 @@ void executeAssemblyFeaturePython(const document::DocumentObject& object, runtim
             {
                 {"assembly", "grounded_joint"},
                 {"object_to_ground", objectToGround->object},
-                {"solve", "not_migrated"},
+                {"solve", "grounded_input"},
             }
         );
         return;
@@ -3263,7 +3349,7 @@ void executeAssemblyFeaturePython(const document::DocumentObject& object, runtim
             {"reference1", jointReferenceJson(object, "Reference1")},
             {"reference2", jointReferenceJson(object, "Reference2")},
             {"suppressed", document::readBool(object, "Suppressed").value_or(false)},
-            {"solve", "not_migrated"},
+            {"solve", "joint_input"},
         }
     );
 }

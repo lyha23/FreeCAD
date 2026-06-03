@@ -1,12 +1,15 @@
 {
-  "reference": "FreeCAD Assembly stores JointObject.Joint and GroundedJoint as App::FeaturePython children of Assembly::JointGroup; cad-core keeps solver inputs explicit while the Assembly solver is not migrated.",
+  "reference": "FreeCAD Assembly stores JointObject.Joint and GroundedJoint as App::FeaturePython children of Assembly::JointGroup; cad-core keeps solver inputs explicit and reports unsupported JointType solving through the stateless solver adapter.",
   "freecad_version": "1.2.0 revision 20260519",
+  "diagnostic_codes": [
+    "unsupported_assembly_solver"
+  ],
   "objects": {
     "GroundedJoint": {
       "object_fields": {
         "assembly": "grounded_joint",
         "object_to_ground": "ComponentA",
-        "solve": "not_migrated"
+        "solve": "grounded_input"
       }
     },
     "FixedJoint": {
@@ -22,7 +25,7 @@
           "subnames": []
         },
         "suppressed": false,
-        "solve": "not_migrated"
+        "solve": "joint_input"
       }
     },
     "Joints": {
@@ -36,7 +39,7 @@
           "GroundedJoint",
           "FixedJoint"
         ],
-        "solve": "not_migrated"
+        "solve": "solver_inputs"
       }
     },
     "Assembly": {
@@ -54,7 +57,7 @@
           "GroundedJoint",
           "FixedJoint"
         ],
-        "solve": "not_migrated"
+        "solve": "unsupported"
       },
       "bbox": {
         "min": [

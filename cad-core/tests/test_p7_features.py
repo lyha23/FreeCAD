@@ -11,6 +11,130 @@ from .fixture_runner import BIN, ROOT, CadCoreFixtureTestCase
 
 
 class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
+    def assert_dressup_slot_history(
+        self,
+        named_shape: dict,
+        source_objects: set[str],
+        transformed_source: str,
+    ) -> None:
+        maker_events = [
+            event
+            for event in named_shape["mapper_history"]
+            if event["maker_stage"] == "maker_history"
+        ]
+
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
+        self.assertIn("terminal_history:split_deleted", named_shape["element_history_status"])
+        self.assertIn("history_consumed:merge", named_shape["element_history_status"])
+        for source_object in source_objects:
+            self.assertTrue(
+                any(key.startswith(f"{source_object}.") for key in named_shape["element_map"]),
+                f"{source_object} aliases should survive DressUp AddSubShape slot propagation",
+            )
+            self.assertTrue(
+                any(event["source"]["object"] == source_object for event in maker_events),
+                f"{source_object} should remain a maker-history source",
+            )
+        self.assertTrue(
+            any(key.startswith(f"{transformed_source}.") for key in named_shape["element_map"]),
+            "transformed DressUp slot aliases should survive into ElementMap",
+        )
+        self.assertTrue(
+            any(
+                event["relation"] == "modified"
+                and event["source"]["object"] == transformed_source
+                for event in maker_events
+            ),
+            "transformed DressUp slot should record modified maker history",
+        )
+
+    def assert_refine_model_history(
+        self,
+        named_shape: dict,
+        generated_sources: set[str],
+        modified_sources: set[str],
+        deleted_sources: set[tuple[str, str]],
+    ) -> None:
+        maker_events = [
+            event
+            for event in named_shape["mapper_history"]
+            if event["maker_stage"] == "maker_history"
+        ]
+        terminal_events = [
+            event
+            for event in named_shape["mapper_history"]
+            if event["maker_stage"] == "terminal_history"
+        ]
+
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
+        for source_object in generated_sources:
+            self.assertTrue(
+                any(
+                    event["relation"] == "generated"
+                    and event["source"]["object"] == source_object
+                    for event in maker_events
+                ),
+                f"{source_object} should contribute generated RefineModel history",
+            )
+        for source_object in modified_sources:
+            self.assertTrue(
+                any(
+                    event["relation"] == "modified"
+                    and event["source"]["object"] == source_object
+                    for event in maker_events
+                ),
+                f"{source_object} should contribute modified RefineModel history",
+            )
+        if deleted_sources:
+            self.assertIn("terminal_history:split_deleted", named_shape["element_history_status"])
+        for source_object, source_subname in deleted_sources:
+            self.assertTrue(
+                any(
+                    event["relation"] == "deleted"
+                    and event["source"] == {"object": source_object, "subname": source_subname}
+                    and event["recoverability"] == "deleted"
+                    and event["diagnostic_status"] == "deleted_stable_subname"
+                    for event in terminal_events
+                ),
+                f"{source_object}.{source_subname} should remain terminal deleted RefineModel history",
+            )
+
+    def assert_transformed_pattern_ownership(
+        self,
+        named_shape: dict,
+        transformed_sources: set[str],
+        source_objects: set[str],
+        *,
+        terminal: bool,
+    ) -> None:
+        events = named_shape["mapper_history"]
+
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
+        self.assertIn("history_consumed:merge", named_shape["element_history_status"])
+        if terminal:
+            self.assertIn("terminal_history:split_deleted", named_shape["element_history_status"])
+            self.assertTrue(
+                any(event["maker_stage"] == "terminal_history" for event in events),
+                "transformed/pattern ownership should keep terminal split/deleted history",
+            )
+        for transformed_source in transformed_sources:
+            self.assertTrue(
+                any(key.startswith(f"{transformed_source}.") for key in named_shape["element_map"]),
+                f"{transformed_source} aliases should survive transformed/pattern ownership propagation",
+            )
+            self.assertTrue(
+                any(event["source"]["object"] == transformed_source for event in events),
+                f"{transformed_source} should remain visible in mapper history",
+            )
+        for source_object in source_objects:
+            self.assertTrue(
+                any(event["source"]["object"] == source_object for event in events),
+                f"{source_object} should remain visible in transformed/pattern mapper history",
+            )
+
     def test_p7_refine_false_is_feature_refine_noop(self) -> None:
         result = self.run_recompute("pad-refine-false", "p7")
         pad = result["objects"]["Pad"]
@@ -23,16 +147,19 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p7_refine_true_uses_refinemodel_path(self) -> None:
         result = self.run_recompute("pad-refine-true", "p7")
         pad = result["objects"]["Pad"]
+        pad_named_shape = result["named_shapes"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pad["status"], "ok")
         self.assertEqual(pad["refine"], "applied")
+        self.assert_refine_model_history(pad_named_shape, {"Sketch"}, set(), set())
         self.assert_object_matches_expected(result, "p7", "pad-refine-true")
 
     def test_p7_pocket_refine_true_uses_refinemodel_path(self) -> None:
         result = self.run_recompute("pocket-refine-true", "p7")
         pocket = result["objects"]["Pocket"]
         body = result["objects"]["Body"]
+        body_named_shape = result["named_shapes"]["Body"]
         body_history = result["named_shapes"]["Body"]["history"]
 
         self.assertEqual(result["diagnostics"], [])
@@ -48,6 +175,12 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     for item in body_history
                 )
             )
+        self.assert_refine_model_history(
+            body_named_shape,
+            {"SketchPad", "SketchPocket"},
+            {"Pad", "Pocket", "SketchPad", "SketchPocket"},
+            {("Pocket", "Face5"), ("Pocket", "Face6"), ("SketchPocket", "Face1")},
+        )
         self.assert_object_matches_expected(result, "p7", "pocket-refine-true")
 
     def test_p7_coordinate_system_exposes_axes_for_reference_axis(self) -> None:
@@ -227,12 +360,19 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         result = self.run_recompute("hole-refine-true", "p7")
         hole = result["objects"]["Hole"]
         body = result["objects"]["Body"]
+        body_named_shape = result["named_shapes"]["Body"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(hole["status"], "ok")
         self.assertEqual(hole["method"], "Dimension")
         self.assertEqual(body["tip"], "Hole")
         self.assertEqual(body["refined_features"], ["Hole"])
+        self.assert_refine_model_history(
+            body_named_shape,
+            {"SketchPad"},
+            {"Pad", "Hole"},
+            {("Hole", "Face3")},
+        )
         self.assert_object_matches_expected(result, "p7", "hole-refine-true")
 
     def test_p7_hole_through_all_cuts_body(self) -> None:
@@ -656,11 +796,18 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 result = self.run_recompute(fixture, "p7")
                 dress_up = result["objects"][object_name]
                 body = result["objects"]["Body"]
+                dress_up_named_shape = result["named_shapes"][object_name]
 
                 self.assertEqual(result["diagnostics"], [])
                 self.assertEqual(dress_up["status"], "ok")
                 self.assertEqual(dress_up["refine"], "applied")
                 self.assertEqual(body["tip"], object_name)
+                self.assert_refine_model_history(
+                    dress_up_named_shape,
+                    {"Pad", "SketchPad"},
+                    {"Pad", "SketchPad"},
+                    {("Pad", "Vertex1"), ("Pad", "Vertex2"), ("SketchPad", "Vertex1")},
+                )
                 self.assert_object_matches_expected(result, "p7", fixture)
 
     def test_p7_dressup_base_diagnostics_are_structured(self) -> None:
@@ -715,12 +862,23 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         result = self.run_recompute("mirrored-refine-true", "p7")
         mirrored = result["objects"]["Mirrored"]
         body = result["objects"]["Body"]
+        mirrored_named_shape = result["named_shapes"]["Mirrored"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(mirrored["status"], "ok")
         self.assertEqual(mirrored["transformed"], "mirrored")
         self.assertEqual(mirrored["refine"], "applied")
         self.assertEqual(body["tip"], "Mirrored")
+        self.assert_refine_model_history(
+            mirrored_named_shape,
+            {"SketchPad"},
+            {"Mirrored", "Mirrored.Transform1", "Pad", "SketchPad"},
+            {
+                ("Mirrored.Transform1", "Face2"),
+                ("Pad", "Face2"),
+                ("SketchPad", "Edge2"),
+            },
+        )
         self.assert_object_matches_expected(result, "p7", "mirrored-refine-true")
 
     def test_p7_mirrored_features_mode_consumes_dressup_support_transform_cache(self) -> None:
@@ -728,6 +886,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         fillet = result["objects"]["Fillet"]
         mirrored = result["objects"]["Mirrored"]
         body = result["objects"]["Body"]
+        mirrored_named_shape = result["named_shapes"]["Mirrored"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(fillet["status"], "ok")
@@ -738,6 +897,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(mirrored["transform_mode"], "Features")
         self.assertEqual(mirrored["originals"], ["Fillet"])
         self.assertEqual(body["tip"], "Mirrored")
+        self.assert_dressup_slot_history(mirrored_named_shape, {"Fillet", "Pad"}, "Mirrored.Transform1")
         self.assert_object_matches_expected(result, "p7", "mirrored-fillet-support-transform")
 
     def test_p7_mirrored_features_mode_consumes_chained_dressup_support_transform_cache(self) -> None:
@@ -746,6 +906,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         chamfer = result["objects"]["Chamfer"]
         mirrored = result["objects"]["Mirrored"]
         body = result["objects"]["Body"]
+        mirrored_named_shape = result["named_shapes"]["Mirrored"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(fillet["status"], "ok")
@@ -760,6 +921,11 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(mirrored["transform_mode"], "Features")
         self.assertEqual(mirrored["originals"], ["Chamfer"])
         self.assertEqual(body["tip"], "Mirrored")
+        self.assert_dressup_slot_history(
+            mirrored_named_shape,
+            {"Chamfer", "Fillet", "Pad"},
+            "Mirrored.Transform1",
+        )
         self.assert_object_matches_expected(result, "p7", "mirrored-dressup-chain-support-transform")
 
     def test_p7_mirrored_whole_shape_fuses_transformed_support(self) -> None:
@@ -777,6 +943,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         result = self.run_recompute("linear-pattern-pad-datum-line", "p7")
         pattern = result["objects"]["LinearPattern"]
         body = result["objects"]["Body"]
+        pattern_named_shape = result["named_shapes"]["LinearPattern"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pattern["status"], "ok")
@@ -785,6 +952,12 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pattern["originals"], ["Pad"])
         self.assertEqual(pattern["body_mode"], "replace")
         self.assertEqual(body["tip"], "LinearPattern")
+        self.assert_transformed_pattern_ownership(
+            pattern_named_shape,
+            {"LinearPattern.Transform1", "LinearPattern.Transform2"},
+            {"Pad", "SketchPad"},
+            terminal=True,
+        )
         self.assert_object_matches_expected(result, "p7", "linear-pattern-pad-datum-line")
 
     def test_p7_linear_pattern_uses_sketch_construction_axis(self) -> None:
@@ -815,6 +988,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         result = self.run_recompute("linear-pattern-pad-pocket-multi-original", "p7")
         pattern = result["objects"]["LinearPattern"]
         body = result["objects"]["Body"]
+        pattern_named_shape = result["named_shapes"]["LinearPattern"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pattern["status"], "ok")
@@ -823,12 +997,19 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pattern["originals"], ["Pad", "Pocket"])
         self.assertEqual(pattern["body_mode"], "replace")
         self.assertEqual(body["tip"], "LinearPattern")
+        self.assert_transformed_pattern_ownership(
+            pattern_named_shape,
+            {"LinearPattern.Transform1", "LinearPattern.Transform2"},
+            {"Pad", "Pocket", "SketchPad", "SketchPocket"},
+            terminal=True,
+        )
         self.assert_object_matches_expected(result, "p7", "linear-pattern-pad-pocket-multi-original")
 
     def test_p7_linear_pattern_can_transform_subtractive_original_only(self) -> None:
         result = self.run_recompute("linear-pattern-pocket-subtractive-original", "p7")
         pattern = result["objects"]["LinearPattern"]
         body = result["objects"]["Body"]
+        pattern_named_shape = result["named_shapes"]["LinearPattern"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pattern["status"], "ok")
@@ -837,6 +1018,12 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pattern["originals"], ["Pocket"])
         self.assertEqual(pattern["body_mode"], "replace")
         self.assertEqual(body["tip"], "LinearPattern")
+        self.assert_transformed_pattern_ownership(
+            pattern_named_shape,
+            {"LinearPattern.Transform1"},
+            {"Pad", "Pocket", "SketchPad", "SketchPocket"},
+            terminal=True,
+        )
         self.assert_object_matches_expected(result, "p7", "linear-pattern-pocket-subtractive-original")
 
     def test_p7_linear_pattern_custom_spacing_list_controls_steps(self) -> None:
@@ -888,6 +1075,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         result = self.run_recompute("linear-pattern-whole-shape-refined-prefix-support", "p7")
         pattern = result["objects"]["LinearPattern"]
         body = result["objects"]["Body"]
+        pattern_named_shape = result["named_shapes"]["LinearPattern"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pattern["status"], "ok")
@@ -897,12 +1085,19 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pattern["support_refined_features"], ["Pocket"])
         self.assertEqual(pattern["body_mode"], "replace")
         self.assertEqual(body["tip"], "LinearPattern")
+        self.assert_transformed_pattern_ownership(
+            pattern_named_shape,
+            {"LinearPattern.Transform1"},
+            {"Pad", "Pocket", "SketchPad", "SketchPocket"},
+            terminal=True,
+        )
         self.assert_object_matches_expected(result, "p7", "linear-pattern-whole-shape-refined-prefix-support")
 
     def test_p7_polar_pattern_features_mode_rotates_additive_originals_by_extent(self) -> None:
         result = self.run_recompute("polar-pattern-pad-datum-line", "p7")
         pattern = result["objects"]["PolarPattern"]
         body = result["objects"]["Body"]
+        pattern_named_shape = result["named_shapes"]["PolarPattern"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pattern["status"], "ok")
@@ -911,6 +1106,12 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pattern["originals"], ["Pad"])
         self.assertEqual(pattern["body_mode"], "replace")
         self.assertEqual(body["tip"], "PolarPattern")
+        self.assert_transformed_pattern_ownership(
+            pattern_named_shape,
+            {"PolarPattern.Transform1", "PolarPattern.Transform2", "PolarPattern.Transform3"},
+            {"Pad", "SketchPad"},
+            terminal=True,
+        )
         self.assert_object_matches_expected(result, "p7", "polar-pattern-pad-datum-line")
 
     def test_p7_polar_pattern_uses_sketch_normal_axis(self) -> None:
@@ -965,6 +1166,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         result = self.run_recompute("scaled-pad-factor-two", "p7")
         scaled = result["objects"]["Scaled"]
         body = result["objects"]["Body"]
+        scaled_named_shape = result["named_shapes"]["Scaled"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(scaled["status"], "ok")
@@ -973,6 +1175,12 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(scaled["originals"], ["Pad"])
         self.assertEqual(scaled["body_mode"], "replace")
         self.assertEqual(body["tip"], "Scaled")
+        self.assert_transformed_pattern_ownership(
+            scaled_named_shape,
+            {"Scaled.Transform1"},
+            {"Pad", "SketchPad"},
+            terminal=False,
+        )
         self.assert_object_matches_expected(result, "p7", "scaled-pad-factor-two")
 
     def test_p7_scaled_diagnostics_are_structured(self) -> None:
@@ -1039,6 +1247,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         result = self.run_recompute("multi-transform-linear-mirror", "p7")
         multi = result["objects"]["MultiTransform"]
         body = result["objects"]["Body"]
+        multi_named_shape = result["named_shapes"]["MultiTransform"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(result["objects"]["LinearPattern"]["transformation_template"], True)
@@ -1049,6 +1258,18 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(multi["originals"], ["Pad"])
         self.assertEqual(multi["body_mode"], "replace")
         self.assertEqual(body["tip"], "MultiTransform")
+        self.assert_transformed_pattern_ownership(
+            multi_named_shape,
+            {
+                "MultiTransform.Transform1",
+                "MultiTransform.Transform2",
+                "MultiTransform.Transform3",
+                "MultiTransform.Transform4",
+                "MultiTransform.Transform5",
+            },
+            {"Pad", "SketchPad"},
+            terminal=True,
+        )
         self.assert_object_matches_expected(result, "p7", "multi-transform-linear-mirror")
 
     def test_p7_multi_transform_scaled_child_uses_diagonal_composition(self) -> None:
@@ -1077,6 +1298,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         result = self.run_recompute("multi-transform-whole-shape", "p7")
         multi = result["objects"]["MultiTransform"]
         child = result["objects"]["LinearPattern"]
+        multi_named_shape = result["named_shapes"]["MultiTransform"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(child["transformation_template"], True)
@@ -1084,4 +1306,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(multi["transformed"], "multi_transform")
         self.assertEqual(multi["transform_mode"], "Whole shape")
         self.assertEqual(multi["originals"], ["Pad"])
+        self.assert_transformed_pattern_ownership(
+            multi_named_shape,
+            {"MultiTransform.Transform1", "MultiTransform.Transform2"},
+            {"Pad", "SketchPad"},
+            terminal=True,
+        )
         self.assert_object_matches_expected(result, "p7", "multi-transform-whole-shape")

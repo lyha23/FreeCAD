@@ -292,6 +292,62 @@ std::vector<std::string> readOptionalStringList(const nlohmann::json& value, con
     return items.value_or(std::vector<std::string>{});
 }
 
+std::set<std::string> readExternalGeometryFlags(const nlohmann::json& value)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/ExternalGeometryExtension.cpp
+    // ::ExternalGeometryExtension::saveAttributes() writes "Flags" as a bitset, while
+    // ::flag2str exposes the stable names "Defining", "Frozen", "Detached", "Missing", "Sync".
+    // cad-core accepts either the bitset-style integer or a fixture-facing string list.
+    constexpr std::array<const char*, 5> knownFlags = {
+        "Defining",
+        "Frozen",
+        "Detached",
+        "Missing",
+        "Sync",
+    };
+    std::set<std::string> flags;
+    const auto addFlag = [&](const std::string& flag) {
+        if (std::find(knownFlags.begin(), knownFlags.end(), flag) != knownFlags.end()) {
+            flags.insert(flag);
+        }
+    };
+    const auto readFlagList = [&](const nlohmann::json& raw) {
+        if (!raw.is_array()) {
+            return;
+        }
+        for (const auto& item : raw) {
+            if (item.is_string()) {
+                addFlag(item.get<std::string>());
+            }
+        }
+    };
+
+    if (const auto it = value.find("ExternalFlags"); it != value.end()) {
+        readFlagList(*it);
+    }
+    if (const auto it = value.find("Flags"); it != value.end()) {
+        if (it->is_number_unsigned() || it->is_number_integer()) {
+            const long long bits = it->get<long long>();
+            if (bits >= 0) {
+                for (std::size_t index = 0; index < knownFlags.size(); ++index) {
+                    if ((bits & (1LL << index)) != 0) {
+                        flags.insert(knownFlags.at(index));
+                    }
+                }
+            }
+        }
+        else {
+            readFlagList(*it);
+        }
+    }
+    for (const char* flag : knownFlags) {
+        if (const auto it = value.find(flag); it != value.end() && it->is_boolean() && it->get<bool>()) {
+            flags.insert(flag);
+        }
+    }
+    return flags;
+}
+
 std::optional<Link> readLinkObject(const nlohmann::json& value, const std::string& property = {})
 {
     const auto propertyType = propertyTypeOf(value);
@@ -358,6 +414,7 @@ std::optional<Link> readLinkObject(const nlohmann::json& value, const std::strin
               std::move(shadowSubs),
               std::move(referenceShadows)};
     link.fullSubnamesExplicit = fullSubnamesExplicit;
+    link.externalGeometryFlags = readExternalGeometryFlags(value);
     return link;
 }
 
@@ -426,6 +483,7 @@ std::optional<Link> readLinkSubListItem(const nlohmann::json& value, const std::
               std::move(shadowSubs),
               std::move(referenceShadows)};
     link.fullSubnamesExplicit = fullSubnamesExplicit;
+    link.externalGeometryFlags = readExternalGeometryFlags(value);
     return link;
 }
 

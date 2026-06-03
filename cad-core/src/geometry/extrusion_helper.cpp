@@ -31,6 +31,24 @@ struct TaperedWireBuild {
     std::vector<TopoDS_Shape> historySources;
 };
 
+bool hasTaperHistory(const TaperedWireBuild& build)
+{
+    return build.historyMaker != nullptr && !build.historySources.empty();
+}
+
+bool hasTaperHistory(const std::vector<TaperedExtrusionHistoryComponent>& components)
+{
+    if (components.empty()) {
+        return false;
+    }
+    for (const auto& component : components) {
+        if (component.historyMaker == nullptr || component.historySources.empty()) {
+            return false;
+        }
+    }
+    return true;
+}
+
 TopoDS_Wire fixedWire(const TopoDS_Wire& wire)
 {
     ShapeFix_Wire fixer;
@@ -220,10 +238,16 @@ std::optional<TaperedExtrusionResult> makeTaperedFaceExtrusion(const TopoDS_Face
     }
 
     if (!hasInnerWire) {
-        return TaperedExtrusionResult{result, true, outer->historyMaker, outer->historySources, components};
+        return TaperedExtrusionResult{
+            result,
+            !hasTaperHistory(*outer),
+            outer->historyMaker,
+            outer->historySources,
+            components,
+        };
     }
 
-    return TaperedExtrusionResult{result, true, nullptr, {}, components};
+    return TaperedExtrusionResult{result, !hasTaperHistory(components), nullptr, {}, components};
 }
 
 }  // namespace
@@ -234,7 +258,8 @@ std::optional<TaperedExtrusionResult> makeTaperedExtrusion(const TopoDS_Shape& p
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/ExtrusionHelper.cpp
     // ::ExtrusionHelper::makeElementDraft(), supports face and wire profile drafting and leaves
-    // topo history to TopoShape::makeElementShape(...). cad-core returns a known topo gap marker.
+    // topo history to TopoShape::makeElementShape(...); cad-core reports a topo gap only when
+    // the ThruSections maker/source history is unavailable.
     constexpr double halfPi = 1.57079632679489661923;
     if (profile.IsNull()) {
         error = "Not a valid shape";
@@ -265,7 +290,7 @@ std::optional<TaperedExtrusionResult> makeTaperedExtrusion(const TopoDS_Shape& p
         }
         return TaperedExtrusionResult{
             result->shape,
-            true,
+            !hasTaperHistory(*result),
             result->historyMaker,
             result->historySources,
             {TaperedExtrusionHistoryComponent{result->shape, result->historyMaker, result->historySources}},

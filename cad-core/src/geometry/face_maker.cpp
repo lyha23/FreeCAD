@@ -13,6 +13,7 @@
 #include <BRepLib_FindSurface.hxx>
 #include <BRepGProp.hxx>
 #include <BRep_Tool.hxx>
+#include <BRepTools.hxx>
 #include <Bnd_Box.hxx>
 #include <Geom2d_Curve.hxx>
 #include <Geom2dAPI_InterCurveCurve.hxx>
@@ -47,11 +48,14 @@
 #include <map>
 #include <utility>
 
-namespace cad_core::geometry {
+namespace cad_core::geometry
+{
 
-namespace {
+namespace
+{
 
-struct WireInfo {
+struct WireInfo
+{
     TopoDS_Wire wire;
     double area = 0.0;
     std::size_t depth = 0;
@@ -146,10 +150,7 @@ bool wireContainsPoint(const gp_Pln& plane, const TopoDS_Wire& wire, const gp_Pn
     return classifier.State() == TopAbs_IN || classifier.State() == TopAbs_ON;
 }
 
-bool wireContainsWire(const gp_Pln& plane,
-                      const TopoDS_Wire& outer,
-                      const TopoDS_Wire& inner,
-                      double innerArea)
+bool wireContainsWire(const gp_Pln& plane, const TopoDS_Wire& outer, const TopoDS_Wire& inner, double innerArea)
 {
     BRepBuilderAPI_MakeFace outerFaceBuilder(plane, outer);
     BRepBuilderAPI_MakeFace innerFaceBuilder(plane, inner);
@@ -270,8 +271,10 @@ std::vector<TopoDS_Face> facesForShape(const TopoDS_Shape& shape)
     return faces;
 }
 
-TopTools_ListOfShape edgeNetworkForWiresAndEdges(const std::vector<TopoDS_Wire>& wires,
-                                                 const std::vector<TopoDS_Edge>& extraEdges)
+TopTools_ListOfShape edgeNetworkForWiresAndEdges(
+    const std::vector<TopoDS_Wire>& wires,
+    const std::vector<TopoDS_Edge>& extraEdges
+)
 {
     TopTools_ListOfShape edges;
     for (const TopoDS_Wire& wire : wires) {
@@ -316,9 +319,11 @@ TopTools_ListOfShape wireEdges(const TopoDS_Wire& wire)
     return edges;
 }
 
-TopTools_ListOfShape splitSelfIntersectingEdges(const TopTools_ListOfShape& edges,
-                                                const gp_Pln& plane,
-                                                bool& producedSplit)
+TopTools_ListOfShape splitSelfIntersectingEdges(
+    const TopTools_ListOfShape& edges,
+    const gp_Pln& plane,
+    bool& producedSplit
+)
 {
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
     // ::FaceMakerBuildFace::splitSelfIntersecting(), "Split self-intersecting edges" before
@@ -352,17 +357,19 @@ TopTools_ListOfShape splitSelfIntersectingEdges(const TopTools_ListOfShape& edge
 
             std::vector<Standard_Real> parameters;
             for (int index = 1; index <= selfIntersection.NbPoints(); ++index) {
-                const IntRes2d_IntersectionPoint& intersectionPoint =
-                    selfIntersection.Intersector().Point(index);
-                for (const Standard_Real parameter :
-                     std::array<Standard_Real, 2>{intersectionPoint.ParamOnFirst(),
-                                                  intersectionPoint.ParamOnSecond()}) {
+                const IntRes2d_IntersectionPoint& intersectionPoint
+                    = selfIntersection.Intersector().Point(index);
+                for (const Standard_Real parameter : std::array<Standard_Real, 2> {
+                         intersectionPoint.ParamOnFirst(),
+                         intersectionPoint.ParamOnSecond()
+                     }) {
                     if (parameter - first > tolerance && last - parameter > tolerance) {
                         parameters.push_back(parameter);
                     }
                 }
 
-                Geom2dAPI_ProjectPointOnCurve projection(selfIntersection.Point(index), curve2d, first, last);
+                Geom2dAPI_ProjectPointOnCurve
+                    projection(selfIntersection.Point(index), curve2d, first, last);
                 for (int pointIndex = 1; pointIndex <= projection.NbPoints(); ++pointIndex) {
                     const Standard_Real parameter = projection.Parameter(pointIndex);
                     if (parameter - first > tolerance && last - parameter > tolerance) {
@@ -377,12 +384,14 @@ TopTools_ListOfShape splitSelfIntersectingEdges(const TopTools_ListOfShape& edge
             }
 
             std::sort(parameters.begin(), parameters.end());
-            parameters.erase(std::unique(parameters.begin(),
-                                         parameters.end(),
-                                         [tolerance](double lhs, double rhs) {
-                                             return rhs - lhs < tolerance;
-                                         }),
-                             parameters.end());
+            parameters.erase(
+                std::unique(
+                    parameters.begin(),
+                    parameters.end(),
+                    [tolerance](double lhs, double rhs) { return rhs - lhs < tolerance; }
+                ),
+                parameters.end()
+            );
 
             TopTools_ListOfShape fragments;
             Standard_Real previous = first;
@@ -408,7 +417,8 @@ TopTools_ListOfShape splitSelfIntersectingEdges(const TopTools_ListOfShape& edge
             }
 
             producedSplit = true;
-            for (TopTools_ListIteratorOfListOfShape fragmentIt(fragments); fragmentIt.More(); fragmentIt.Next()) {
+            for (TopTools_ListIteratorOfListOfShape fragmentIt(fragments); fragmentIt.More();
+                 fragmentIt.Next()) {
                 result.Append(fragmentIt.Value());
             }
         }
@@ -423,7 +433,8 @@ TopTools_ListOfShape splitSelfIntersectingEdges(const TopTools_ListOfShape& edge
     return result;
 }
 
-struct EdgeSplitPoint {
+struct EdgeSplitPoint
+{
     Standard_Real parameter = 0.0;
     TopoDS_Vertex vertex;
 };
@@ -486,14 +497,15 @@ TopTools_ListOfShape splitEdgesAtTouchingEndpoints(const TopTools_ListOfShape& e
             if (!parameter) {
                 continue;
             }
-            auto duplicate = std::find_if(splitPoints.begin(),
-                                          splitPoints.end(),
-                                          [&](const EdgeSplitPoint& existing) {
-                                              return std::abs(existing.parameter - *parameter)
-                                                  <= Precision::Confusion();
-                                          });
+            auto duplicate = std::find_if(
+                splitPoints.begin(),
+                splitPoints.end(),
+                [&](const EdgeSplitPoint& existing) {
+                    return std::abs(existing.parameter - *parameter) <= Precision::Confusion();
+                }
+            );
             if (duplicate == splitPoints.end()) {
-                splitPoints.push_back(EdgeSplitPoint{*parameter, vertex});
+                splitPoints.push_back(EdgeSplitPoint {*parameter, vertex});
             }
         }
         if (splitPoints.empty()) {
@@ -501,11 +513,13 @@ TopTools_ListOfShape splitEdgesAtTouchingEndpoints(const TopTools_ListOfShape& e
             continue;
         }
 
-        std::sort(splitPoints.begin(),
-                  splitPoints.end(),
-                  [](const EdgeSplitPoint& lhs, const EdgeSplitPoint& rhs) {
-                      return lhs.parameter < rhs.parameter;
-                  });
+        std::sort(
+            splitPoints.begin(),
+            splitPoints.end(),
+            [](const EdgeSplitPoint& lhs, const EdgeSplitPoint& rhs) {
+                return lhs.parameter < rhs.parameter;
+            }
+        );
 
         bool failed = false;
         Standard_Real previous = first;
@@ -513,11 +527,13 @@ TopTools_ListOfShape splitEdgesAtTouchingEndpoints(const TopTools_ListOfShape& e
         TopTools_ListOfShape fragments;
         for (const EdgeSplitPoint& splitPoint : splitPoints) {
             if (splitPoint.parameter - previous > Precision::Confusion()) {
-                BRepBuilderAPI_MakeEdge edgeBuilder(curve,
-                                                    previousVertex,
-                                                    splitPoint.vertex,
-                                                    previous,
-                                                    splitPoint.parameter);
+                BRepBuilderAPI_MakeEdge edgeBuilder(
+                    curve,
+                    previousVertex,
+                    splitPoint.vertex,
+                    previous,
+                    splitPoint.parameter
+                );
                 if (!edgeBuilder.IsDone() || edgeBuilder.Edge().IsNull()) {
                     failed = true;
                     break;
@@ -528,11 +544,8 @@ TopTools_ListOfShape splitEdgesAtTouchingEndpoints(const TopTools_ListOfShape& e
             previousVertex = splitPoint.vertex;
         }
         if (!failed && last - previous > Precision::Confusion()) {
-            BRepBuilderAPI_MakeEdge edgeBuilder(curve,
-                                                previousVertex,
-                                                TopExp::LastVertex(edge),
-                                                previous,
-                                                last);
+            BRepBuilderAPI_MakeEdge
+                edgeBuilder(curve, previousVertex, TopExp::LastVertex(edge), previous, last);
             if (!edgeBuilder.IsDone() || edgeBuilder.Edge().IsNull()) {
                 failed = true;
             }
@@ -545,12 +558,14 @@ TopTools_ListOfShape splitEdgesAtTouchingEndpoints(const TopTools_ListOfShape& e
             continue;
         }
 
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
+        // FreeCAD:
+        // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
         // ::Build_Essence(), "splitAtIntersections()" runs before BOPAlgo_BuilderFace. FreeCAD's
-        // edge graph also carries T-junction endpoint vertices into BuilderFace; cad-core must split
-        // a touched edge at an open-edge endpoint and reuse that endpoint vertex.
+        // edge graph also carries T-junction endpoint vertices into BuilderFace; cad-core must
+        // split a touched edge at an open-edge endpoint and reuse that endpoint vertex.
         touched = true;
-        for (TopTools_ListIteratorOfListOfShape fragmentIt(fragments); fragmentIt.More(); fragmentIt.Next()) {
+        for (TopTools_ListIteratorOfListOfShape fragmentIt(fragments); fragmentIt.More();
+             fragmentIt.Next()) {
             result.Append(fragmentIt.Value());
         }
     }
@@ -562,6 +577,499 @@ TopTools_ListOfShape splitEdgesAtTouchingEndpoints(const TopTools_ListOfShape& e
 std::size_t shapeListSize(const TopTools_ListOfShape& shapes)
 {
     return static_cast<std::size_t>(shapes.Size());
+}
+
+struct FaceMakerEdgeLineageRecord
+{
+    TopoDS_Edge edge;
+    std::vector<std::size_t> sourceEdgeIndices;
+    bool preSplitHistory = false;
+    bool splitterHistory = false;
+    std::size_t targetEdgeIndex = 0;
+};
+
+void appendUniqueIndex(std::vector<std::size_t>& indices, std::size_t value)
+{
+    if (value == 0U) {
+        return;
+    }
+    if (std::find(indices.begin(), indices.end(), value) == indices.end()) {
+        indices.push_back(value);
+    }
+}
+
+void appendUniqueIndices(std::vector<std::size_t>& target, const std::vector<std::size_t>& source)
+{
+    for (const std::size_t index : source) {
+        appendUniqueIndex(target, index);
+    }
+}
+
+std::vector<FaceMakerEdgeLineageRecord> lineageRecordsFromSourceEdges(const TopTools_ListOfShape& edges)
+{
+    std::vector<FaceMakerEdgeLineageRecord> records;
+    std::size_t index = 0;
+    for (TopTools_ListIteratorOfListOfShape it(edges); it.More(); it.Next()) {
+        ++index;
+        FaceMakerEdgeLineageRecord record;
+        record.edge = TopoDS::Edge(it.Value());
+        record.sourceEdgeIndices.push_back(index);
+        records.push_back(std::move(record));
+    }
+    return records;
+}
+
+TopTools_ListOfShape shapeListFromLineageRecords(const std::vector<FaceMakerEdgeLineageRecord>& records)
+{
+    TopTools_ListOfShape shapes;
+    for (const FaceMakerEdgeLineageRecord& record : records) {
+        if (!record.edge.IsNull()) {
+            shapes.Append(record.edge);
+        }
+    }
+    return shapes;
+}
+
+std::vector<FaceMakerEdgeLineageRecord> splitSelfIntersectingLineageRecords(
+    const std::vector<FaceMakerEdgeLineageRecord>& records,
+    const gp_Pln& plane,
+    bool& producedSplit
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
+    // ::FaceMakerBuildFace::splitSelfIntersecting(), records "myPreSplitHistory->AddModified"
+    // from the original edge to every fragment so FaceMaker::postBuild() can chain the history.
+    const Standard_Real tolerance = Precision::Confusion();
+    std::vector<FaceMakerEdgeLineageRecord> result;
+
+    for (const FaceMakerEdgeLineageRecord& record : records) {
+        const TopoDS_Edge& edge = record.edge;
+        try {
+            Standard_Real first = 0.0;
+            Standard_Real last = 0.0;
+            Handle(Geom_Curve) curve = BRep_Tool::Curve(edge, first, last);
+            if (curve.IsNull() || curve->IsKind(STANDARD_TYPE(Geom_Line))
+                || curve->IsKind(STANDARD_TYPE(Geom_Conic))) {
+                result.push_back(record);
+                continue;
+            }
+
+            Handle(Geom2d_Curve) curve2d = GeomAPI::To2d(curve, plane);
+            if (curve2d.IsNull()) {
+                result.push_back(record);
+                continue;
+            }
+
+            Geom2dAPI_InterCurveCurve selfIntersection(curve2d, tolerance);
+            if (selfIntersection.NbPoints() == 0) {
+                result.push_back(record);
+                continue;
+            }
+
+            std::vector<Standard_Real> parameters;
+            for (int index = 1; index <= selfIntersection.NbPoints(); ++index) {
+                const IntRes2d_IntersectionPoint& intersectionPoint
+                    = selfIntersection.Intersector().Point(index);
+                for (const Standard_Real parameter : std::array<Standard_Real, 2> {
+                         intersectionPoint.ParamOnFirst(),
+                         intersectionPoint.ParamOnSecond()
+                     }) {
+                    if (parameter - first > tolerance && last - parameter > tolerance) {
+                        parameters.push_back(parameter);
+                    }
+                }
+
+                Geom2dAPI_ProjectPointOnCurve
+                    projection(selfIntersection.Point(index), curve2d, first, last);
+                for (int pointIndex = 1; pointIndex <= projection.NbPoints(); ++pointIndex) {
+                    const Standard_Real parameter = projection.Parameter(pointIndex);
+                    if (parameter - first > tolerance && last - parameter > tolerance) {
+                        parameters.push_back(parameter);
+                    }
+                }
+            }
+
+            if (parameters.empty()) {
+                result.push_back(record);
+                continue;
+            }
+
+            std::sort(parameters.begin(), parameters.end());
+            parameters.erase(
+                std::unique(
+                    parameters.begin(),
+                    parameters.end(),
+                    [tolerance](double lhs, double rhs) { return rhs - lhs < tolerance; }
+                ),
+                parameters.end()
+            );
+
+            std::vector<TopoDS_Edge> fragments;
+            Standard_Real previous = first;
+            for (const Standard_Real parameter : parameters) {
+                if (parameter - previous > tolerance) {
+                    BRepBuilderAPI_MakeEdge edgeBuilder(curve, previous, parameter);
+                    if (edgeBuilder.IsDone()) {
+                        fragments.push_back(edgeBuilder.Edge());
+                    }
+                    previous = parameter;
+                }
+            }
+            if (last - previous > tolerance) {
+                BRepBuilderAPI_MakeEdge edgeBuilder(curve, previous, last);
+                if (edgeBuilder.IsDone()) {
+                    fragments.push_back(edgeBuilder.Edge());
+                }
+            }
+
+            if (fragments.empty()) {
+                result.push_back(record);
+                continue;
+            }
+
+            producedSplit = true;
+            for (const TopoDS_Edge& fragment : fragments) {
+                FaceMakerEdgeLineageRecord fragmentRecord = record;
+                fragmentRecord.edge = fragment;
+                fragmentRecord.preSplitHistory = true;
+                result.push_back(std::move(fragmentRecord));
+            }
+        }
+        catch (const Standard_Failure&) {
+            result.push_back(record);
+        }
+        catch (...) {
+            result.push_back(record);
+        }
+    }
+
+    return result;
+}
+
+std::vector<FaceMakerEdgeLineageRecord> splitLineageRecordsAtTouchingEndpoints(
+    const std::vector<FaceMakerEdgeLineageRecord>& records,
+    bool& producedSplit
+)
+{
+    std::vector<TopoDS_Vertex> endpointVertices;
+    for (const FaceMakerEdgeLineageRecord& record : records) {
+        if (record.edge.IsNull()) {
+            continue;
+        }
+        endpointVertices.push_back(TopExp::FirstVertex(record.edge));
+        endpointVertices.push_back(TopExp::LastVertex(record.edge));
+    }
+    if (records.size() <= 1U) {
+        return records;
+    }
+
+    std::vector<FaceMakerEdgeLineageRecord> result;
+    bool touched = false;
+    for (const FaceMakerEdgeLineageRecord& record : records) {
+        const TopoDS_Edge& edge = record.edge;
+        Standard_Real first = 0.0;
+        Standard_Real last = 0.0;
+        const Handle(Geom_Curve) curve = BRep_Tool::Curve(edge, first, last);
+        if (curve.IsNull()) {
+            result.push_back(record);
+            continue;
+        }
+
+        std::vector<EdgeSplitPoint> splitPoints;
+        for (const TopoDS_Vertex& vertex : endpointVertices) {
+            if (vertex.IsNull()) {
+                continue;
+            }
+            if (vertex.IsSame(TopExp::FirstVertex(edge)) || vertex.IsSame(TopExp::LastVertex(edge))) {
+                continue;
+            }
+            const auto parameter = parameterForPointOnEdge(edge, BRep_Tool::Pnt(vertex));
+            if (!parameter) {
+                continue;
+            }
+            auto duplicate = std::find_if(
+                splitPoints.begin(),
+                splitPoints.end(),
+                [&](const EdgeSplitPoint& existing) {
+                    return std::abs(existing.parameter - *parameter) <= Precision::Confusion();
+                }
+            );
+            if (duplicate == splitPoints.end()) {
+                splitPoints.push_back(EdgeSplitPoint {*parameter, vertex});
+            }
+        }
+        if (splitPoints.empty()) {
+            result.push_back(record);
+            continue;
+        }
+
+        std::sort(
+            splitPoints.begin(),
+            splitPoints.end(),
+            [](const EdgeSplitPoint& lhs, const EdgeSplitPoint& rhs) {
+                return lhs.parameter < rhs.parameter;
+            }
+        );
+
+        bool failed = false;
+        Standard_Real previous = first;
+        TopoDS_Vertex previousVertex = TopExp::FirstVertex(edge);
+        std::vector<TopoDS_Edge> fragments;
+        for (const EdgeSplitPoint& splitPoint : splitPoints) {
+            if (splitPoint.parameter - previous > Precision::Confusion()) {
+                BRepBuilderAPI_MakeEdge edgeBuilder(
+                    curve,
+                    previousVertex,
+                    splitPoint.vertex,
+                    previous,
+                    splitPoint.parameter
+                );
+                if (!edgeBuilder.IsDone() || edgeBuilder.Edge().IsNull()) {
+                    failed = true;
+                    break;
+                }
+                fragments.push_back(edgeBuilder.Edge());
+            }
+            previous = splitPoint.parameter;
+            previousVertex = splitPoint.vertex;
+        }
+        if (!failed && last - previous > Precision::Confusion()) {
+            BRepBuilderAPI_MakeEdge
+                edgeBuilder(curve, previousVertex, TopExp::LastVertex(edge), previous, last);
+            if (!edgeBuilder.IsDone() || edgeBuilder.Edge().IsNull()) {
+                failed = true;
+            }
+            else {
+                fragments.push_back(edgeBuilder.Edge());
+            }
+        }
+        if (failed || fragments.empty()) {
+            result.push_back(record);
+            continue;
+        }
+
+        touched = true;
+        for (const TopoDS_Edge& fragment : fragments) {
+            FaceMakerEdgeLineageRecord fragmentRecord = record;
+            fragmentRecord.edge = fragment;
+            fragmentRecord.splitterHistory = true;
+            result.push_back(std::move(fragmentRecord));
+        }
+    }
+
+    producedSplit = producedSplit || touched;
+    return result;
+}
+
+void appendLineageForFaceMakerHistoryShape(
+    std::vector<FaceMakerEdgeLineageRecord>& records,
+    const TopoDS_Shape& historyShape,
+    const FaceMakerEdgeLineageRecord& sourceRecord,
+    bool markSplitterHistory
+)
+{
+    for (TopExp_Explorer explorer(historyShape, TopAbs_EDGE); explorer.More(); explorer.Next()) {
+        const TopoDS_Edge historyEdge = TopoDS::Edge(explorer.Current());
+        for (FaceMakerEdgeLineageRecord& record : records) {
+            if (!record.edge.IsNull() && record.edge.IsSame(historyEdge)) {
+                appendUniqueIndices(record.sourceEdgeIndices, sourceRecord.sourceEdgeIndices);
+                record.preSplitHistory = record.preSplitHistory || sourceRecord.preSplitHistory;
+                record.splitterHistory = record.splitterHistory || markSplitterHistory;
+            }
+        }
+    }
+}
+
+std::vector<FaceMakerEdgeLineageRecord> splitLineageRecordsAtIntersections(
+    const std::vector<FaceMakerEdgeLineageRecord>& records,
+    bool& producedSplit
+)
+{
+    if (records.size() <= 1U) {
+        return records;
+    }
+
+    TopTools_ListOfShape arguments;
+    for (const FaceMakerEdgeLineageRecord& record : records) {
+        if (!record.edge.IsNull()) {
+            arguments.Append(record.edge);
+        }
+    }
+    if (arguments.Size() <= 1) {
+        return records;
+    }
+
+    BRepAlgoAPI_Splitter splitter;
+    splitter.SetArguments(arguments);
+    splitter.SetToFillHistory(Standard_True);
+    splitter.SetRunParallel(Standard_True);
+    splitter.SetNonDestructive(Standard_True);
+    splitter.Build();
+    if (!splitter.IsDone() || splitter.Shape().IsNull()) {
+        return records;
+    }
+
+    std::vector<FaceMakerEdgeLineageRecord> result;
+    for (TopExp_Explorer explorer(splitter.Shape(), TopAbs_EDGE); explorer.More(); explorer.Next()) {
+        FaceMakerEdgeLineageRecord record;
+        record.edge = TopoDS::Edge(explorer.Current());
+        result.push_back(std::move(record));
+    }
+    if (result.empty()) {
+        return records;
+    }
+    const bool splitterProducedNewTargets = result.size() > records.size();
+
+    for (const FaceMakerEdgeLineageRecord& inputRecord : records) {
+        bool consumedByHistory = false;
+        const TopTools_ListOfShape& modified = splitter.Modified(inputRecord.edge);
+        if (!modified.IsEmpty()) {
+            consumedByHistory = true;
+            for (TopTools_ListIteratorOfListOfShape it(modified); it.More(); it.Next()) {
+                appendLineageForFaceMakerHistoryShape(
+                    result,
+                    it.Value(),
+                    inputRecord,
+                    splitterProducedNewTargets
+                );
+            }
+        }
+        const TopTools_ListOfShape& generated = splitter.Generated(inputRecord.edge);
+        if (!generated.IsEmpty()) {
+            consumedByHistory = true;
+            for (TopTools_ListIteratorOfListOfShape it(generated); it.More(); it.Next()) {
+                appendLineageForFaceMakerHistoryShape(
+                    result,
+                    it.Value(),
+                    inputRecord,
+                    splitterProducedNewTargets
+                );
+            }
+        }
+        if (consumedByHistory || splitter.IsDeleted(inputRecord.edge)) {
+            continue;
+        }
+        for (FaceMakerEdgeLineageRecord& outputRecord : result) {
+            if (!outputRecord.edge.IsNull() && outputRecord.edge.IsSame(inputRecord.edge)) {
+                appendUniqueIndices(outputRecord.sourceEdgeIndices, inputRecord.sourceEdgeIndices);
+                outputRecord.preSplitHistory = outputRecord.preSplitHistory
+                    || inputRecord.preSplitHistory;
+                outputRecord.splitterHistory = outputRecord.splitterHistory
+                    || inputRecord.splitterHistory;
+            }
+        }
+    }
+
+    producedSplit = producedSplit || result.size() > records.size();
+    return result;
+}
+
+std::string faceMakerStageForRecord(const FaceMakerEdgeLineageRecord& record)
+{
+    if (record.splitterHistory) {
+        return "facemaker:splitter";
+    }
+    if (record.preSplitHistory) {
+        return "facemaker:pre_split";
+    }
+    return "facemaker:source";
+}
+
+void populateFaceMakerEdgeEvidence(
+    FaceMakerHistorySummary& summary,
+    const std::vector<FaceMakerEdgeLineageRecord>& records
+)
+{
+    std::map<std::size_t, std::size_t> targetCountBySource;
+    for (const FaceMakerEdgeLineageRecord& record : records) {
+        if (record.targetEdgeIndex == 0U) {
+            continue;
+        }
+        for (const std::size_t sourceIndex : record.sourceEdgeIndices) {
+            ++targetCountBySource[sourceIndex];
+        }
+    }
+
+    for (const FaceMakerEdgeLineageRecord& record : records) {
+        for (const std::size_t sourceIndex : record.sourceEdgeIndices) {
+            FaceMakerEdgeHistoryEvidence evidence;
+            evidence.makerStage = faceMakerStageForRecord(record);
+            evidence.relation = targetCountBySource[sourceIndex] > 1U ? "split" : "preserved";
+            evidence.sourceEdgeIndex = sourceIndex;
+            evidence.targetEdgeIndex = record.targetEdgeIndex;
+            evidence.targetEdge = record.edge;
+            evidence.preSplitHistory = record.preSplitHistory;
+            evidence.splitterHistory = record.splitterHistory;
+            summary.edgeEvidence.push_back(std::move(evidence));
+        }
+    }
+
+    for (std::size_t sourceIndex = 1; sourceIndex <= summary.sourceEdgeCount; ++sourceIndex) {
+        if (targetCountBySource[sourceIndex] != 0U) {
+            continue;
+        }
+        FaceMakerEdgeHistoryEvidence evidence;
+        evidence.makerStage = summary.splitterHistory ? "facemaker:splitter" : "facemaker:pre_split";
+        evidence.relation = "deleted";
+        evidence.sourceEdgeIndex = sourceIndex;
+        evidence.preSplitHistory = summary.preSplitHistory;
+        evidence.splitterHistory = summary.splitterHistory;
+        summary.edgeEvidence.push_back(std::move(evidence));
+    }
+}
+
+const FaceMakerEdgeLineageRecord* findLineageRecordForEdge(
+    const std::vector<FaceMakerEdgeLineageRecord>& records,
+    const TopoDS_Edge& edge
+)
+{
+    for (const FaceMakerEdgeLineageRecord& record : records) {
+        if (!record.edge.IsNull() && record.edge.IsSame(edge)) {
+            return &record;
+        }
+    }
+    return nullptr;
+}
+
+void populateFaceMakerBoundedFaceEvidence(
+    FaceMakerHistorySummary& summary,
+    const std::vector<TopoDS_Face>& faces,
+    const std::vector<FaceMakerEdgeLineageRecord>& records
+)
+{
+    std::size_t faceIndex = 0;
+    for (const TopoDS_Face& face : faces) {
+        ++faceIndex;
+        FaceMakerBoundedFaceHistoryEvidence faceEvidence;
+        faceEvidence.boundedFaceIndex = faceIndex;
+        faceEvidence.face = face;
+        const TopoDS_Wire outerWire = BRepTools::OuterWire(face);
+        TopTools_IndexedMapOfShape faceEdges;
+        const TopoDS_Shape outerBoundaryShape = outerWire.IsNull() ? TopoDS_Shape(face)
+                                                                   : TopoDS_Shape(outerWire);
+        TopExp::MapShapes(outerBoundaryShape, TopAbs_EDGE, faceEdges);
+        for (int edgeIndex = 1; edgeIndex <= faceEdges.Extent(); ++edgeIndex) {
+            const FaceMakerEdgeLineageRecord* record
+                = findLineageRecordForEdge(records, TopoDS::Edge(faceEdges(edgeIndex)));
+            if (record == nullptr) {
+                continue;
+            }
+            appendUniqueIndex(faceEvidence.outerBoundaryTargetEdgeIndices, record->targetEdgeIndex);
+            for (const std::size_t sourceIndex : record->sourceEdgeIndices) {
+                appendUniqueIndex(faceEvidence.sourceEdgeIndices, sourceIndex);
+                FaceMakerBoundedFaceBoundaryEvidence boundary;
+                boundary.sourceEdgeIndex = sourceIndex;
+                boundary.targetEdgeIndex = record->targetEdgeIndex;
+                boundary.makerStage = faceMakerStageForRecord(*record);
+                boundary.relation = record->splitterHistory || record->preSplitHistory
+                    ? "split"
+                    : "preserved";
+                boundary.targetEdge = record->edge;
+                faceEvidence.outerBoundary.push_back(std::move(boundary));
+            }
+        }
+        summary.boundedFaceEvidence.push_back(std::move(faceEvidence));
+    }
 }
 
 TopTools_ListOfShape splitEdgesAtIntersections(const TopTools_ListOfShape& edges, bool& producedSplit)
@@ -590,10 +1098,12 @@ TopTools_ListOfShape splitEdgesAtIntersections(const TopTools_ListOfShape& edges
     return result;
 }
 
-std::optional<TopoDS_Shape> buildBoundedFacesFromEdgeNetwork(const TopTools_ListOfShape& sourceEdges,
-                                                             std::size_t& faceCount,
-                                                             bool& producedSplit,
-                                                             FaceMakerHistorySummary* historySummary = nullptr)
+std::optional<TopoDS_Shape> buildBoundedFacesFromEdgeNetwork(
+    const TopTools_ListOfShape& sourceEdges,
+    std::size_t& faceCount,
+    bool& producedSplit,
+    FaceMakerHistorySummary* historySummary = nullptr
+)
 {
     const auto plane = planeForEdges(sourceEdges);
     if (!plane) {
@@ -604,19 +1114,30 @@ std::optional<TopoDS_Shape> buildBoundedFacesFromEdgeNetwork(const TopTools_List
     }
 
     const std::size_t beforeSelfSplit = shapeListSize(sourceEdges);
-    TopTools_ListOfShape edges = splitSelfIntersectingEdges(sourceEdges, *plane, producedSplit);
-    const std::size_t afterSelfSplit = shapeListSize(edges);
+    std::vector<FaceMakerEdgeLineageRecord> edgeRecords = lineageRecordsFromSourceEdges(sourceEdges);
+    edgeRecords = splitSelfIntersectingLineageRecords(edgeRecords, *plane, producedSplit);
+    const std::size_t afterSelfSplit = edgeRecords.size();
     if (historySummary != nullptr) {
         historySummary->preSplitEdgeCount = afterSelfSplit;
         historySummary->preSplitHistory = afterSelfSplit > beforeSelfSplit;
     }
-    edges = splitEdgesAtTouchingEndpoints(edges, producedSplit);
-    const std::size_t beforeIntersections = shapeListSize(edges);
-    edges = splitEdgesAtIntersections(edges, producedSplit);
-    edges = splitEdgesAtTouchingEndpoints(edges, producedSplit);
+    edgeRecords = splitLineageRecordsAtTouchingEndpoints(edgeRecords, producedSplit);
+    const std::size_t beforeIntersections = edgeRecords.size();
+    edgeRecords = splitLineageRecordsAtIntersections(edgeRecords, producedSplit);
+    edgeRecords = splitLineageRecordsAtTouchingEndpoints(edgeRecords, producedSplit);
+    for (std::size_t index = 0; index < edgeRecords.size(); ++index) {
+        edgeRecords[index].targetEdgeIndex = index + 1U;
+    }
+    TopTools_ListOfShape edges = shapeListFromLineageRecords(edgeRecords);
     if (historySummary != nullptr) {
-        historySummary->splitterEdgeCount = shapeListSize(edges);
-        historySummary->splitterHistory = historySummary->splitterEdgeCount > beforeIntersections;
+        historySummary->splitterEdgeCount = edgeRecords.size();
+        historySummary->splitterHistory = historySummary->splitterEdgeCount > beforeIntersections
+            || std::any_of(edgeRecords.begin(),
+                           edgeRecords.end(),
+                           [](const FaceMakerEdgeLineageRecord& record) {
+                               return record.splitterHistory;
+                           });
+        populateFaceMakerEdgeEvidence(*historySummary, edgeRecords);
     }
     if (edges.IsEmpty()) {
         return std::nullopt;
@@ -675,6 +1196,7 @@ std::optional<TopoDS_Shape> buildBoundedFacesFromEdgeNetwork(const TopTools_List
     faceCount = faces.size();
     if (historySummary != nullptr) {
         historySummary->boundedFaceCount = faceCount;
+        populateFaceMakerBoundedFaceEvidence(*historySummary, faces, edgeRecords);
     }
     return compoundOrSingleFace(faces);
 }
@@ -722,7 +1244,7 @@ std::optional<TopoDS_Shape> makeFaceWithHolesFromClosedWiresImpl(const std::vect
         if (!area) {
             return std::nullopt;
         }
-        wireInfos.push_back(WireInfo{wire, *area, 0U, wireHasBSplineEdge(wire)});
+        wireInfos.push_back(WireInfo {wire, *area, 0U, wireHasBSplineEdge(wire)});
     }
     std::stable_sort(wireInfos.begin(), wireInfos.end(), [](const WireInfo& lhs, const WireInfo& rhs) {
         return lhs.area > rhs.area;
@@ -742,7 +1264,12 @@ std::optional<TopoDS_Shape> makeFaceWithHolesFromClosedWiresImpl(const std::vect
             if (parent == index || wireInfos[parent].area <= wireInfos[index].area) {
                 continue;
             }
-            if (wireContainsWire(*plane, wireInfos[parent].wire, wireInfos[index].wire, wireInfos[index].area)) {
+            if (wireContainsWire(
+                    *plane,
+                    wireInfos[parent].wire,
+                    wireInfos[index].wire,
+                    wireInfos[index].area
+                )) {
                 ++wireInfos[index].depth;
             }
         }
@@ -766,7 +1293,10 @@ std::optional<TopoDS_Shape> makeFaceWithHolesFromClosedWiresImpl(const std::vect
         // ::Build_Essence(), "Shape in outer wire but not on face, which means it is within a
         // hole. So it's a hit and we shall make a new face with the wire." This keeps islands
         // as separate faces while odd-depth wires are added as holes to their containing face.
-        BRepBuilderAPI_MakeFace faceBuilder(*plane, orientedWire(*plane, wireInfos[outerIndex].wire, true));
+        BRepBuilderAPI_MakeFace faceBuilder(
+            *plane,
+            orientedWire(*plane, wireInfos[outerIndex].wire, true)
+        );
         if (!faceBuilder.IsDone()) {
             return std::nullopt;
         }
@@ -804,7 +1334,7 @@ bool hasNestedHoleIslandWires(const std::vector<TopoDS_Wire>& wires)
         if (!area) {
             return false;
         }
-        wireInfos.push_back(WireInfo{wire, *area, 0U, wireHasBSplineEdge(wire)});
+        wireInfos.push_back(WireInfo {wire, *area, 0U, wireHasBSplineEdge(wire)});
     }
     std::stable_sort(wireInfos.begin(), wireInfos.end(), [](const WireInfo& lhs, const WireInfo& rhs) {
         return lhs.area > rhs.area;
@@ -819,7 +1349,12 @@ bool hasNestedHoleIslandWires(const std::vector<TopoDS_Wire>& wires)
             if (parent == index || wireInfos[parent].area <= wireInfos[index].area) {
                 continue;
             }
-            if (wireContainsWire(*plane, wireInfos[parent].wire, wireInfos[index].wire, wireInfos[index].area)) {
+            if (wireContainsWire(
+                    *plane,
+                    wireInfos[parent].wire,
+                    wireInfos[index].wire,
+                    wireInfos[index].area
+                )) {
                 ++wireInfos[index].depth;
             }
         }
@@ -871,7 +1406,7 @@ std::optional<TopoDS_Shape> makeCheeseFaceFromClosedWires(const std::vector<Topo
         if (!area) {
             return std::nullopt;
         }
-        wireInfos.push_back(WireInfo{wire, *area, 0U});
+        wireInfos.push_back(WireInfo {wire, *area, 0U});
     }
 
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerCheese.cpp
@@ -914,8 +1449,10 @@ std::optional<TopoDS_Shape> makeCheeseFaceFromClosedWires(const std::vector<Topo
     return compoundOrSingleFace(faces);
 }
 
-FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(const std::vector<TopoDS_Wire>& wires,
-                                                                       const std::vector<TopoDS_Edge>& splitEdges)
+FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(
+    const std::vector<TopoDS_Wire>& wires,
+    const std::vector<TopoDS_Edge>& splitEdges
+)
 {
     if (wires.empty()) {
         return {};
@@ -923,7 +1460,8 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(const std
 
     const auto profileFace = makeFaceWithHolesFromClosedWiresImpl(wires);
     if (!profileFace && splitEdges.empty() && wires.size() > 1U) {
-        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
+        // FreeCAD:
+        // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
         // ::Build_Essence(), intersecting BSpline closed profiles can fail before publishing a
         // usable InternalShape; SketchObject::buildInternals() then returns an empty TopoShape.
         return {};
@@ -933,8 +1471,12 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(const std
     bool producedSplit = false;
     FaceMakerHistorySummary historySummary;
     const TopTools_ListOfShape faceMakerEdges = edgeNetworkForWiresAndEdges(wires, splitEdges);
-    const auto boundedFaces =
-        buildBoundedFacesFromEdgeNetwork(faceMakerEdges, boundedFaceCount, producedSplit, &historySummary);
+    const auto boundedFaces = buildBoundedFacesFromEdgeNetwork(
+        faceMakerEdges,
+        boundedFaceCount,
+        producedSplit,
+        &historySummary
+    );
     if (!boundedFaces || boundedFaces->IsNull() || boundedFaceCount == 0U) {
         return {};
     }
@@ -953,8 +1495,9 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(const std
     historySummary.topologySwitchUsed = false;
 
     const bool splitProducedBoundedFaces = producedSplit || boundedFaceCount > profileFaceCount;
-    const bool preserveSingleWireSourceOrder = !producedSplit && splitEdges.empty() && wires.size() == 1U
-        && profileFace && !profileFace->IsNull() && profileFaceCount == boundedFaceCount;
+    const bool preserveSingleWireSourceOrder = !producedSplit && splitEdges.empty()
+        && wires.size() == 1U && profileFace && !profileFace->IsNull()
+        && profileFaceCount == boundedFaceCount;
     const bool normalizeNestedHoleIsland = !producedSplit && splitEdges.empty() && profileFace
         && !profileFace->IsNull() && hasNestedHoleIslandWires(wires);
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
@@ -962,9 +1505,11 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(const std
     // for an unsplit single closed sketch. OCCT BuilderFace can enumerate the equivalent face in
     // reverse edge order, so cad-core keeps the source-wire face only for this one-to-one no-split
     // case; split or multi-wire InternalShape topology remains BuilderFace-owned.
-    const std::optional<TopoDS_Shape> internalShape =
-        preserveSingleWireSourceOrder || normalizeNestedHoleIsland ? profileFace : boundedFaces;
-    return FaceMakerBuildFaceResult{
+    const std::optional<TopoDS_Shape> internalShape = preserveSingleWireSourceOrder
+            || normalizeNestedHoleIsland
+        ? profileFace
+        : boundedFaces;
+    return FaceMakerBuildFaceResult {
         profileFace && !profileFace->IsNull() ? profileFace : boundedFaces,
         internalShape,
         boundedFaceCount,
@@ -973,8 +1518,10 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(const std
     };
 }
 
-std::optional<TopoDS_Shape> makeFacesFromClosedWiresAndSplitEdges(const std::vector<TopoDS_Wire>& wires,
-                                                                  const std::vector<TopoDS_Edge>& splitEdges)
+std::optional<TopoDS_Shape> makeFacesFromClosedWiresAndSplitEdges(
+    const std::vector<TopoDS_Wire>& wires,
+    const std::vector<TopoDS_Edge>& splitEdges
+)
 {
     return makeFacesFromClosedWiresAndSplitEdgesDetailed(wires, splitEdges).shape;
 }

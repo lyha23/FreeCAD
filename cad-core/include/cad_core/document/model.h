@@ -71,6 +71,11 @@ struct Link {
     std::vector<ShadowSub> shadowSubs;
     std::vector<ReferenceShadow> referenceShadows;
     bool fullSubnamesExplicit = false;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/ExternalGeometryExtension.h
+    // ::ExternalGeometryExtension::Flag stores "Defining", "Frozen", "Detached", "Missing", "Sync"
+    // on external geometry entries. cad-core carries the request-side flag names on normalized
+    // LinkSub entries so SketchObject can rebuild ExternalGeometry without mutating the graph.
+    std::set<std::string> externalGeometryFlags;
 };
 
 struct Placement {

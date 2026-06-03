@@ -218,12 +218,115 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("FullSubList", capabilities["document"]["link_property_fields"])
         self.assertIn("ShadowSub", capabilities["document"]["link_property_fields"])
         self.assertIn("ReferenceShadow", capabilities["document"]["link_property_fields"])
+        self.assertIn("ExternalFlags", capabilities["document"]["link_property_fields"])
         self.assertIn("SubSet", capabilities["document"]["link_property_fields"])
+        self.assertEqual(
+            capabilities["document"]["external_geometry_flags"],
+            ["Defining", "Frozen", "Detached", "Missing", "Sync"],
+        )
         self.assertEqual(
             capabilities["document"]["document_update_channels"],
             ["elementReferenceUpdates", "documentObjectUpdates"],
         )
-        link_sub_fields = ["value", "SubList", "StableSubList", "FullSubList", "ShadowSub", "ReferenceShadow"]
+        self.assertEqual(
+            capabilities["link_transaction"]["document_object_updates"],
+            [
+                "show_element_create",
+                "show_element_claim",
+                "show_element_sync",
+                "show_element_delete",
+                "show_element_toggle_off",
+                "element_count_owner_lists_sync",
+                "element_list_owner_sync",
+                "element_list_child_sync",
+                "copy_on_change_owned_child_sync",
+            ],
+        )
+        self.assertEqual(
+            capabilities["link_transaction"]["writeback_properties"],
+            [
+                "ElementList",
+                "ElementCount",
+                "PlacementList",
+                "ScaleList",
+                "VisibilityList",
+                "LinkedObject",
+                "_LinkOwner",
+                "LinkTransform",
+            ],
+        )
+        self.assertIn(
+            "plain_group_child_expansion_without_persistent_child_cache",
+            capabilities["link_transaction"]["request_local_boundaries"],
+        )
+        self.assertIn(
+            "full_child_cache_lifecycle",
+            capabilities["link_transaction"]["remaining_gaps"],
+        )
+        self.assertIn(
+            "copy_on_change_deep_copy_lifecycle",
+            capabilities["link_transaction"]["remaining_gaps"],
+        )
+        self.assertEqual(
+            capabilities["link_reference_lifecycle"]["retag_aliases"],
+            [
+                "full_sublist_external_tag",
+                "mapped_postfix_alias",
+                "source_prefixed_stable_key",
+                "label_qualified_subname",
+                "multi_level_link_subname",
+                "property_xlink_list_subset_compound",
+            ],
+        )
+        self.assertEqual(
+            capabilities["link_reference_lifecycle"]["reference_update_fields"],
+            ["FullSubList", "StableSubList", "ShadowSub", "ReferenceShadow", "ExternalFlags"],
+        )
+        self.assertIn(
+            "document_hash_lifecycle",
+            capabilities["link_reference_lifecycle"]["remaining_gaps"],
+        )
+        self.assertIn(
+            "source_object_rename_recovery",
+            capabilities["link_reference_lifecycle"]["remaining_gaps"],
+        )
+        self.assertIn(
+            "label_rename_recovery",
+            capabilities["link_reference_lifecycle"]["remaining_gaps"],
+        )
+        self.assertEqual(
+            capabilities["adapters"]["core_entrypoints"],
+            [
+                "cad_core_recompute_json",
+                "cad_core_export_json",
+                "cad_core_capabilities_json",
+                "cli_recompute",
+            ],
+        )
+        self.assertEqual(
+            capabilities["adapters"]["stateless_result_channels"],
+            ["results", "elementReferenceUpdates", "documentObjectUpdates", "diagnostics"],
+        )
+        self.assertEqual(
+            capabilities["adapters"]["c_api_export"],
+            ["buffer_only", "rejects_server_file_paths", "metadata_diagnostics", "stl_deflection"],
+        )
+        self.assertEqual(
+            capabilities["adapters"]["cli_export"],
+            ["file_protocol", "requires_object_format_file", "stl_deflection"],
+        )
+        self.assertIn("worker_adapter", capabilities["adapters"]["remaining_gaps"])
+        self.assertIn("wasm_adapter", capabilities["adapters"]["remaining_gaps"])
+        self.assertIn("streaming_mesh_limits", capabilities["adapters"]["remaining_gaps"])
+        link_sub_fields = [
+            "value",
+            "SubList",
+            "StableSubList",
+            "FullSubList",
+            "ShadowSub",
+            "ReferenceShadow",
+            "ExternalFlags",
+        ]
         self.assertEqual(
             capabilities["document"]["link_property_shapes"]["App::PropertyLink"],
             ["value"],
@@ -304,9 +407,17 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "subname_semantic_drift",
             "split_stable_subname",
             "deleted_stable_subname",
+            "unsupported_assembly_solver",
             "unsupported_reference_shadow_brep",
         ]:
             self.assertIn(code, capabilities["diagnostic_codes"])
+
+        self.assertEqual(
+            capabilities["assembly"]["solver_adapter"],
+            ["skipped_no_joints", "grounded_only_noop", "unsupported_joint_diagnostics"],
+        )
+        self.assertIn("full_ondsel_solver", capabilities["assembly"]["remaining_gaps"])
+        self.assertIn("solver_placement_updates", capabilities["assembly"]["remaining_gaps"])
 
         self.assertEqual(
             capabilities["topo_history"]["stable_subname_resolution"],
@@ -329,11 +440,16 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "evidence",
                 "recoverability",
                 "diagnostic_status",
+                "summary_only_diagnostics",
                 "legacy_history_conversion",
                 "element_map_preserved_aliases",
             ],
         )
         self.assertIn("refine_modified_deleted_generated", capabilities["topo_history"]["maker_history"])
+        self.assertIn("sketch_internalshape_producer_evidence", capabilities["topo_history"]["maker_history"])
+        self.assertIn("taper_thru_sections", capabilities["topo_history"]["maker_history"])
+        self.assertIn("dressup_addsubshape_slot", capabilities["topo_history"]["maker_history"])
+        self.assertIn("transformed_pattern_addsub_ownership", capabilities["topo_history"]["maker_history"])
         self.assertEqual(capabilities["topo_history"]["terminal_history"], ["deleted", "split", "merge"])
         self.assertEqual(
             capabilities["topo_history"]["element_history_status"],
@@ -343,9 +459,13 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "merge",
                 "facemaker_pre_split",
                 "facemaker_splitter",
+                "facemaker_summary_only",
             ],
         )
-        self.assertIn("facemaker_wirejoiner_history", capabilities["topo_history"]["remaining_gaps"])
+        self.assertNotIn("sketch_internalshape_main_path", capabilities["topo_history"]["remaining_gaps"])
+        self.assertNotIn("taper_full_history", capabilities["topo_history"]["remaining_gaps"])
+        self.assertIn("shapefix_history", capabilities["topo_history"]["remaining_gaps"])
+        self.assertIn("transformed_pattern_full_history", capabilities["topo_history"]["remaining_gaps"])
         self.assertIn("import_shape_element_map", capabilities["topo_history"]["remaining_gaps"])
         self.assertIn("complete_mapper_history", capabilities["known_gaps"])
         self.assertNotIn("show_element_missing_child_lifecycle", capabilities["known_gaps"])

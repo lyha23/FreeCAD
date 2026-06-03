@@ -4,7 +4,10 @@
 #include "cad_core/topo/subshape_map.h"
 
 #include <BRepBuilderAPI_MakeShape.hxx>
+#include <TopoDS_Edge.hxx>
+#include <TopoDS_Face.hxx>
 #include <TopoDS_Shape.hxx>
+#include <TopoDS_Wire.hxx>
 #include <nlohmann/json.hpp>
 
 #include <map>
@@ -44,6 +47,8 @@ struct SketchInternalWireJoinerOpenExportHistoryEntry
 {
     std::size_t openExportIndex = 0;
     std::size_t edgeInfoIndex = 0;
+    TopoDS_Wire openExportWire;
+    TopoDS_Edge openExportEdge;
     std::string resultWireProducerKind;
     std::string resultWireProducerState;
     std::string resultWireProducerBlocker;
@@ -58,6 +63,35 @@ struct SketchInternalWireJoinerOpenExportHistoryEntry
     bool purgeBridge = false;
 };
 
+struct SketchInternalFaceMakerEdgeEvidence
+{
+    std::string makerStage;
+    std::string relation;
+    std::size_t sourceEdgeIndex = 0;
+    std::size_t targetEdgeIndex = 0;
+    TopoDS_Edge targetEdge;
+    bool preSplitHistory = false;
+    bool splitterHistory = false;
+};
+
+struct SketchInternalFaceMakerBoundedFaceBoundaryEvidence
+{
+    std::size_t sourceEdgeIndex = 0;
+    std::size_t targetEdgeIndex = 0;
+    std::string makerStage;
+    std::string relation;
+    TopoDS_Edge targetEdge;
+};
+
+struct SketchInternalFaceMakerBoundedFaceEvidence
+{
+    std::size_t boundedFaceIndex = 0;
+    TopoDS_Face face;
+    std::vector<std::size_t> sourceEdgeIndices;
+    std::vector<std::size_t> outerBoundaryTargetEdgeIndices;
+    std::vector<SketchInternalFaceMakerBoundedFaceBoundaryEvidence> outerBoundary;
+};
+
 struct SketchInternalHistoryContext
 {
     std::size_t sourceEdgeCount = 0;
@@ -66,6 +100,12 @@ struct SketchInternalHistoryContext
     std::size_t boundedFaceCount = 0;
     bool preSplitHistory = false;
     bool splitterHistory = false;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMaker.cpp
+    // ::FaceMaker::postBuild(), maps pre-split and splitter history before generated face naming.
+    // These entries are producer evidence; InternalShape topo consumers must not rebuild them from
+    // bbox, area, geometry type, or output order.
+    std::vector<SketchInternalFaceMakerEdgeEvidence> faceMakerEdgeEvidence;
+    std::vector<SketchInternalFaceMakerBoundedFaceEvidence> faceMakerBoundedFaceEvidence;
     std::size_t wireJoinerSourceEdgeCount = 0;
     std::size_t wireJoinerSplitResultEdgeCount = 0;
     std::vector<SketchInternalWireJoinerOpenExportHistoryEntry> wireJoinerOpenExportHistoryEntries;

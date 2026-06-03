@@ -57,9 +57,8 @@
 
 剩余缺口：
 
-- FaceMaker / WireJoiner 的完整 producer evidence 仍属于 C2-M2，本阶段只消费现有 summary / ledger。
-- ExternalGeometry Defining / Frozen / Detached / Missing / Sync 完整状态机仍属于 C2-M3。
-- taper、transformed / pattern、DressUp 等完整 PartDesign history 收敛仍属于 C2-M5+。
+- ExternalGeometry Defining / Frozen / Detached / Missing / Sync 基础状态机已在 C2-M3 落地；旧 `ExternalGeo` 几何持久复用和复杂 UI 修复流仍是后续 native 生命周期缺口。
+- taper ThruSections、RefineModel 当前 P7 覆盖子路径与 DressUp SupportTransform AddSubShape slot 已在 C2-M5 接入统一 MapperHistory；transformed / pattern Add/Sub ownership 子路径已在 C2-M6 由 `transformed_pattern_addsub_ownership` 暴露，完整 pattern history 与 DressUp 复杂余量仍属于 C2-M5+。
 
 ## C2-M2：FaceMaker / WireJoiner history producer
 
@@ -76,6 +75,26 @@
 - `InternalEdgeN / InternalVertexN` 的 split / deleted 由 WireJoiner / FaceMaker history 解释。
 - 当前几何匹配式 `internal_element_map` 不再承担复杂 split 判断。
 
+当前状态：
+
+- FaceMaker producer 已从 summary 升级为结构化 evidence：`edge_evidence` 表达 pre-split / splitter / deleted source edge，`bounded_face_evidence` 表达 bounded `InternalFaceN` 的 outer-boundary source。
+- WireJoiner open export 已携带 producer identity、source edge lineage、target wire / edge 和 `noOriginal` purge 诊断；`topo/named_shape` 消费这些 evidence 写入 `mapper_history`、terminal split / deleted 和 diagnostics。
+- `features/sketch_object.*` 只把 FaceMaker / WireJoiner evidence 传给 topo 并序列化 JSON，不再合成 split ownership。
+- `internal_element_map` 保持唯一 alias 职责；source edge 一对多 fragment、source edge deleted、bounded owner slot 不写入唯一 target。
+
+剩余缺口：
+
+- C2-M3 已补 ExternalGeometry flags / resolver / 写回建议基础；完整 native `ExternalGeo` 持久复用仍未冻结。
+- taper ThruSections、RefineModel 当前 P7 覆盖子路径与 DressUp SupportTransform AddSubShape slot 已在 C2-M5 接入统一 MapperHistory；transformed / pattern Add/Sub ownership 子路径已在 C2-M6 暴露；ShapeFix 主路径 / RefineModel 复杂 identity-change / transformed full history / DressUp 复杂余量的跨 feature history 收敛仍属于 C2-M5+。
+
+验收命令：
+
+```bash
+cd /Users/li/Chili3DProject/重构Chili/FreeCAD/cad-core
+cmake --build build
+python3 -m unittest tests.test_p5_sketch tests.test_p6_topology tests.test_adapters
+```
+
 ## C2-M3：Reference resolver + ExternalGeometry 状态机
 
 交付内容：
@@ -91,6 +110,25 @@
 - Missing / Frozen / Detached / Sync 都有成功路径和失败 diagnostics。
 - 一对多 split 不自动猜唯一目标。
 
+当前状态：
+
+- `document/model.*` 支持 ExternalGeometry `ExternalFlags` 字符串数组、FreeCAD `Flags` bitset 和单 flag bool 输入，解析为 Defining / Frozen / Detached / Missing / Sync。
+- `features/sketch_object.cpp` 消费状态机：Defining 投影几何进入 profile；Frozen 在没有 Sync 时不刷新；Detached 不追随源对象；Missing / Sync 成功后返回 `documentObjectUpdates` 清理一次性 flag。
+- `runtime/recompute.cpp` 保留 ExternalFlags，并继续通过集中 ReferenceShadow resolver 产出 `elementReferenceUpdates`；split / deleted / ambiguous 只给 diagnostics 或 mapper diagnostic，不猜唯一 target。
+
+剩余缺口：
+
+- FreeCAD 旧 `ExternalGeo` 几何在 Frozen / Detached 下可持久复用；cad-core 当前无状态请求没有等价持久几何槽，只能跳过刷新并显式暴露状态。
+- Missing 的复杂 UI 修复、跨文档 postfix 与 Link retag 后的完整生命周期仍依赖 C2-M7 的 Link / XLink 产品化。
+
+验收命令：
+
+```bash
+cd /Users/li/Chili3DProject/重构Chili/FreeCAD/cad-core
+cmake --build build
+python3 -m unittest tests.test_diagnostics tests.test_feature_flows tests.test_p6_topology tests.test_p5_sketch
+```
+
 ## C2-M4：Sketch InternalShape 主路径切换
 
 交付内容：
@@ -104,3 +142,23 @@
 - P5 fixture 覆盖 self-intersection、inter-edge intersection、open wire、bounded faces、source edge one-to-many、source edge deleted。
 - `Face1` 不被伪装成稳定 `InternalFace1`。
 - open wire 不产生假 `profile_ready=true`。
+
+当前状态：
+
+- `Sketch.InternalShape` 的复杂 InternalFace / InternalEdge / InternalVertex history 已切到 producer evidence 主路径：FaceMaker edge / bounded-face evidence 和 WireJoiner open-export identity 负责 generated / split / deleted / purge 解释。
+- `consumeSketchInternalTerminalHistory()` 不再在缺少 edge evidence 时用 history stage、`internal_element_map` 缺口或 raw/internal 几何采样合成 split / deleted terminal history。
+- `mapper_history` 中旧 FaceMaker / WireJoiner stage/count 汇总只作为 `summary_only:*` diagnostic event 保留，source / target 为空，recoverability 为 diagnostic，不参与引用恢复。
+- `internal_element_map` 只保留 FreeCAD `SketchObject::getInternalElementMap()` 等价的 InternalEdge / InternalVertex 简单唯一 alias；source edge 一对多、deleted、bounded face ownership 均由 MapperHistory 或 diagnostics 解释。
+
+剩余缺口：
+
+- 旧 `ExternalGeo` 几何持久复用和跨文档 ExternalGeometry 生命周期仍属于 C2-M7 native 产品化边界。
+- taper ThruSections、RefineModel 当前 P7 覆盖子路径与 DressUp SupportTransform AddSubShape slot 已在 C2-M5 接入统一 MapperHistory；transformed / pattern Add/Sub ownership 子路径已在 C2-M6 暴露；ShapeFix 主路径 / RefineModel 复杂 identity-change / transformed full history / DressUp 复杂余量 / PartDesign pattern 的完整 history 收敛进入 C2-M5 / C2-M6。
+
+验收命令：
+
+```bash
+cd /Users/li/Chili3DProject/重构Chili/FreeCAD/cad-core
+cmake --build build
+python3 -m unittest tests.test_p5_sketch tests.test_p6_topology
+```

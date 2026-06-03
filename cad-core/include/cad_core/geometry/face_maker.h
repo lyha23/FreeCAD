@@ -1,22 +1,56 @@
 #pragma once
 
 #include <TopoDS_Edge.hxx>
+#include <TopoDS_Face.hxx>
 #include <TopoDS_Shape.hxx>
 #include <TopoDS_Wire.hxx>
 
 #include <cstddef>
 #include <optional>
+#include <string>
 #include <vector>
 
-namespace cad_core::geometry {
+namespace cad_core::geometry
+{
 
-enum class FaceMakerBuildFaceRuntimeSource {
+enum class FaceMakerBuildFaceRuntimeSource
+{
     None,
     BuilderFace,
     FaceWithHolesProfile,
 };
 
-struct FaceMakerHistorySummary {
+struct FaceMakerEdgeHistoryEvidence
+{
+    std::string makerStage;
+    std::string relation;
+    std::size_t sourceEdgeIndex = 0;
+    std::size_t targetEdgeIndex = 0;
+    TopoDS_Edge targetEdge;
+    bool preSplitHistory = false;
+    bool splitterHistory = false;
+};
+
+struct FaceMakerBoundedFaceBoundaryEvidence
+{
+    std::size_t sourceEdgeIndex = 0;
+    std::size_t targetEdgeIndex = 0;
+    std::string makerStage;
+    std::string relation;
+    TopoDS_Edge targetEdge;
+};
+
+struct FaceMakerBoundedFaceHistoryEvidence
+{
+    std::size_t boundedFaceIndex = 0;
+    TopoDS_Face face;
+    std::vector<std::size_t> sourceEdgeIndices;
+    std::vector<std::size_t> outerBoundaryTargetEdgeIndices;
+    std::vector<FaceMakerBoundedFaceBoundaryEvidence> outerBoundary;
+};
+
+struct FaceMakerHistorySummary
+{
     std::size_t sourceEdgeCount = 0;
     std::size_t preSplitEdgeCount = 0;
     std::size_t splitterEdgeCount = 0;
@@ -26,9 +60,15 @@ struct FaceMakerHistorySummary {
     FaceMakerBuildFaceRuntimeSource profileResultSource = FaceMakerBuildFaceRuntimeSource::None;
     FaceMakerBuildFaceRuntimeSource internalResultSource = FaceMakerBuildFaceRuntimeSource::None;
     bool topologySwitchUsed = false;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMaker.cpp
+    // ::FaceMaker::postBuild(), chains "MapperHistory(myPreSplitHistory)" and
+    // "MapperMaker(mySplitter)" before naming the generated face from its outer wire edges.
+    std::vector<FaceMakerEdgeHistoryEvidence> edgeEvidence;
+    std::vector<FaceMakerBoundedFaceHistoryEvidence> boundedFaceEvidence;
 };
 
-struct FaceMakerBuildFaceResult {
+struct FaceMakerBuildFaceResult
+{
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
     // ::SketchObject::buildInternals(), stores the FaceMakerBuildFace result as auxiliary
     // "InternalShape" while PartDesign Pad still builds its profile face from Sketch.Shape.
@@ -57,9 +97,13 @@ std::optional<TopoDS_Shape> makeCheeseFaceFromClosedWires(const std::vector<Topo
 // ::SketchObject::buildInternals() calls makeElementFace(..., "Part::FaceMakerBuildFace", ...)
 // before WireJoiner open-wire handling. This helper covers the bounded-face split subset for
 // closed profile wires plus on-face open splitter edges.
-FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(const std::vector<TopoDS_Wire>& wires,
-                                                                       const std::vector<TopoDS_Edge>& splitEdges);
-std::optional<TopoDS_Shape> makeFacesFromClosedWiresAndSplitEdges(const std::vector<TopoDS_Wire>& wires,
-                                                                  const std::vector<TopoDS_Edge>& splitEdges);
+FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(
+    const std::vector<TopoDS_Wire>& wires,
+    const std::vector<TopoDS_Edge>& splitEdges
+);
+std::optional<TopoDS_Shape> makeFacesFromClosedWiresAndSplitEdges(
+    const std::vector<TopoDS_Wire>& wires,
+    const std::vector<TopoDS_Edge>& splitEdges
+);
 
 }  // namespace cad_core::geometry

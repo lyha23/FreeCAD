@@ -14,5 +14,8 @@ class CadCoreExpectedFixtureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCa
                 if "known_gap" in expected:
                     self.skipTest(f"{group}/{fixture}: {expected['known_gap']}")
                 result = self.run_recompute(fixture, group)
-                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(
+                    [diagnostic["code"] for diagnostic in result["diagnostics"]],
+                    expected.get("diagnostic_codes", []),
+                )
                 self.assert_result_matches_expected(result, group, fixture)

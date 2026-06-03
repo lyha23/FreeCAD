@@ -47,36 +47,44 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <map>
 #include <optional>
+#include <set>
 #include <string>
 #include <utility>
 #include <vector>
 
-namespace cad_core::features {
+namespace cad_core::features
+{
 
-namespace {
+namespace
+{
 
-struct SketchSegment {
+struct SketchSegment
+{
     std::size_t geometryIndex = 0;
     gp_Pnt start;
     gp_Pnt end;
     bool construction = false;
 };
 
-struct SketchPoint {
+struct SketchPoint
+{
     std::size_t geometryIndex = 0;
     gp_Pnt point;
     bool construction = false;
 };
 
-struct SketchCircle {
+struct SketchCircle
+{
     std::size_t geometryIndex = 0;
     gp_Pnt center;
     double radius = 0.0;
     bool construction = false;
 };
 
-struct SketchEllipse {
+struct SketchEllipse
+{
     std::size_t geometryIndex = 0;
     gp_Pnt center;
     double majorRadius = 0.0;
@@ -85,7 +93,8 @@ struct SketchEllipse {
     bool construction = false;
 };
 
-struct SketchArc {
+struct SketchArc
+{
     std::size_t geometryIndex = 0;
     gp_Pnt center;
     double radius = 0.0;
@@ -94,7 +103,8 @@ struct SketchArc {
     bool construction = false;
 };
 
-struct SketchBSpline {
+struct SketchBSpline
+{
     std::size_t geometryIndex = 0;
     int degree = 0;
     std::vector<gp_Pnt> poles;
@@ -115,9 +125,11 @@ std::string stableSubnameDiagnosticCode(topo::ElementResolveStatus status)
     return "unsupported_stable_subname";
 }
 
-std::string stableSubnameDiagnosticMessage(const std::string& target,
-                                           const std::string& stableSubname,
-                                           topo::ElementResolveStatus status)
+std::string stableSubnameDiagnosticMessage(
+    const std::string& target,
+    const std::string& stableSubname,
+    topo::ElementResolveStatus status
+)
 {
     if (status == topo::ElementResolveStatus::Deleted) {
         return "ExternalGeometry target " + target + " has stable subname " + stableSubname
@@ -131,7 +143,8 @@ std::string stableSubnameDiagnosticMessage(const std::string& target,
         + ", but it is not in the current ElementMap";
 }
 
-struct SketchEllipseArc {
+struct SketchEllipseArc
+{
     std::size_t geometryIndex = 0;
     gp_Pnt center;
     double majorRadius = 0.0;
@@ -142,7 +155,8 @@ struct SketchEllipseArc {
     bool construction = false;
 };
 
-struct SketchGeometrySet {
+struct SketchGeometrySet
+{
     std::vector<SketchSegment> segments;
     std::vector<SketchPoint> points;
     std::vector<SketchCircle> circles;
@@ -152,22 +166,41 @@ struct SketchGeometrySet {
     std::vector<SketchBSpline> bsplines;
 };
 
-struct ExternalGeometryResult {
+struct ExternalGeometryResult
+{
     std::vector<SketchSegment> segments;
     std::vector<gp_Pnt> points;
+    std::vector<SketchPoint> definingPoints;
     std::vector<SketchCircle> circles;
     std::vector<SketchArc> arcs;
     std::vector<SketchEllipse> ellipses;
     std::vector<SketchEllipseArc> ellipseArcs;
+    std::size_t definingLinkCount = 0;
+    std::size_t frozenLinkCount = 0;
+    std::size_t detachedLinkCount = 0;
+    std::size_t missingLinkCount = 0;
+    std::size_t syncLinkCount = 0;
+    std::size_t recoveredMissingLinkCount = 0;
 };
 
-enum class ExternalGeometryType {
+enum class ExternalGeometryType
+{
     Projection = 0,
     Intersection = 1,
     Both = 2,
 };
 
-enum class SketchConstraintKind {
+struct ExternalGeometryFlags
+{
+    bool defining = false;
+    bool frozen = false;
+    bool detached = false;
+    bool missing = false;
+    bool sync = false;
+};
+
+enum class SketchConstraintKind
+{
     Coincident,
     Horizontal,
     Vertical,
@@ -187,19 +220,22 @@ enum class SketchConstraintKind {
     Unsupported,
 };
 
-struct EndpointRef {
+struct EndpointRef
+{
     std::size_t segmentIndex = 0;
     bool start = true;
 };
 
-struct OrientationConstraintRef {
+struct OrientationConstraintRef
+{
     SketchConstraintKind kind = SketchConstraintKind::Unsupported;
     std::optional<std::size_t> segmentIndex;
     std::optional<EndpointRef> firstEndpoint;
     std::optional<EndpointRef> secondEndpoint;
 };
 
-struct DimensionConstraintRef {
+struct DimensionConstraintRef
+{
     SketchConstraintKind kind = SketchConstraintKind::Unsupported;
     int geometryIndex = -1;
     double value = 0.0;
@@ -208,13 +244,15 @@ struct DimensionConstraintRef {
     std::optional<EndpointRef> coordinateEndpoint;
 };
 
-struct LinePairConstraintRef {
+struct LinePairConstraintRef
+{
     SketchConstraintKind kind = SketchConstraintKind::Unsupported;
     std::size_t firstSegmentIndex = 0;
     std::size_t secondSegmentIndex = 0;
 };
 
-enum class TangentGeometryKind {
+enum class TangentGeometryKind
+{
     Line,
     Circle,
     Arc,
@@ -222,28 +260,33 @@ enum class TangentGeometryKind {
     EllipseArc,
 };
 
-struct TangentGeometryRef {
+struct TangentGeometryRef
+{
     TangentGeometryKind kind = TangentGeometryKind::Line;
     std::size_t index = 0;
 };
 
-struct EqualConstraintRef {
+struct EqualConstraintRef
+{
     int firstGeometryIndex = -1;
     int secondGeometryIndex = -1;
 };
 
-struct AngleConstraintRef {
+struct AngleConstraintRef
+{
     LinePairConstraintRef linePair;
     double value = 0.0;
 };
 
-enum class ConstraintPointPosition {
+enum class ConstraintPointPosition
+{
     Start,
     End,
     Mid,
 };
 
-enum class ConstraintPointKind {
+enum class ConstraintPointKind
+{
     SegmentEndpoint,
     PointGeometry,
     CircleCenter,
@@ -252,13 +295,15 @@ enum class ConstraintPointKind {
     EllipseArcEndpoint,
 };
 
-struct ConstraintPointRef {
+struct ConstraintPointRef
+{
     ConstraintPointKind kind = ConstraintPointKind::SegmentEndpoint;
     std::size_t index = 0;
     bool start = true;
 };
 
-struct TangentConstraintRef {
+struct TangentConstraintRef
+{
     TangentGeometryRef first;
     TangentGeometryRef second;
     std::optional<ConstraintPointRef> firstPoint;
@@ -266,45 +311,53 @@ struct TangentConstraintRef {
     std::optional<ConstraintPointRef> viaPoint;
 };
 
-struct PointwiseAngleConstraintRef {
+struct PointwiseAngleConstraintRef
+{
     TangentConstraintRef geometry;
     double value = 0.0;
 };
 
-struct PerpendicularPointLineConstraintRef {
+struct PerpendicularPointLineConstraintRef
+{
     ConstraintPointRef first;
     ConstraintPointRef second;
     std::size_t axisSegmentIndex = 0;
 };
 
-enum class PerpendicularMidpointTargetKind {
+enum class PerpendicularMidpointTargetKind
+{
     Circle,
     Arc,
 };
 
-struct PerpendicularMidpointLineConstraintRef {
+struct PerpendicularMidpointLineConstraintRef
+{
     std::size_t lineSegmentIndex = 0;
     PerpendicularMidpointTargetKind targetKind = PerpendicularMidpointTargetKind::Circle;
     std::size_t targetIndex = 0;
 };
 
-struct PointOnObjectConstraintRef {
+struct PointOnObjectConstraintRef
+{
     ConstraintPointRef point;
     int objectGeometryIndex = -1;
 };
 
-struct SymmetricConstraintRef {
+struct SymmetricConstraintRef
+{
     ConstraintPointRef first;
     ConstraintPointRef second;
     std::optional<std::size_t> axisSegmentIndex;
     std::optional<ConstraintPointRef> centerPoint;
 };
 
-struct BlockConstraintRef {
+struct BlockConstraintRef
+{
     int geometryIndex = -1;
 };
 
-struct AppliedSketchConstraints {
+struct AppliedSketchConstraints
+{
     std::size_t coincident = 0;
     std::size_t orientation = 0;
     std::size_t dimension = 0;
@@ -312,9 +365,16 @@ struct AppliedSketchConstraints {
     std::size_t block = 0;
 };
 
-enum class SketchProfileEdgeKind { Line, ArcOfCircle, ArcOfEllipse, BSpline };
+enum class SketchProfileEdgeKind
+{
+    Line,
+    ArcOfCircle,
+    ArcOfEllipse,
+    BSpline
+};
 
-struct SketchProfileEdge {
+struct SketchProfileEdge
+{
     SketchProfileEdgeKind kind = SketchProfileEdgeKind::Line;
     gp_Pnt start;
     gp_Pnt end;
@@ -329,14 +389,16 @@ struct SketchProfileEdge {
     std::vector<gp_Pnt> poles;
 };
 
-struct SketchProfileWires {
+struct SketchProfileWires
+{
     std::vector<TopoDS_Wire> closedWires;
     std::vector<TopoDS_Wire> openWires;
     std::vector<TopoDS_Edge> openEdges;
     std::vector<TopoDS_Edge> sourceEdges;
 };
 
-struct ProfileFaceBuild {
+struct ProfileFaceBuild
+{
     std::optional<TopoDS_Shape> profileShape;
     std::optional<TopoDS_Shape> internalShape;
     bool faceMakerFailed = false;
@@ -359,7 +421,8 @@ std::string faceMakerRuntimeSourceName(geometry::FaceMakerBuildFaceRuntimeSource
     return "none";
 }
 
-struct UnionFind {
+struct UnionFind
+{
     std::vector<std::size_t> parent;
 
     explicit UnionFind(std::size_t size)
@@ -419,7 +482,11 @@ bool samePoint(const gp_Pnt& left, const gp_Pnt& right)
 
 gp_Pnt pointAtAngle(const gp_Pnt& center, double radius, double angle)
 {
-    return gp_Pnt(center.X() + radius * std::cos(angle), center.Y() + radius * std::sin(angle), center.Z());
+    return gp_Pnt(
+        center.X() + radius * std::cos(angle),
+        center.Y() + radius * std::sin(angle),
+        center.Z()
+    );
 }
 
 gp_Ax2 ellipseAxis(const gp_Pnt& center, double angle)
@@ -429,15 +496,23 @@ gp_Ax2 ellipseAxis(const gp_Pnt& center, double angle)
     return axis;
 }
 
-gp_Pnt pointAtEllipseAngle(const gp_Pnt& center, double majorRadius, double minorRadius, double angleXU, double parameter)
+gp_Pnt pointAtEllipseAngle(
+    const gp_Pnt& center,
+    double majorRadius,
+    double minorRadius,
+    double angleXU,
+    double parameter
+)
 {
     const double cosAxis = std::cos(angleXU);
     const double sinAxis = std::sin(angleXU);
     const double localX = majorRadius * std::cos(parameter);
     const double localY = minorRadius * std::sin(parameter);
-    return gp_Pnt(center.X() + localX * cosAxis - localY * sinAxis,
-                  center.Y() + localX * sinAxis + localY * cosAxis,
-                  center.Z());
+    return gp_Pnt(
+        center.X() + localX * cosAxis - localY * sinAxis,
+        center.Y() + localX * sinAxis + localY * cosAxis,
+        center.Z()
+    );
 }
 
 gp_Pnt pointInSketchLocalPlane(const gp_Pnt& worldPoint, const gp_Trsf& sketchPlacement)
@@ -465,12 +540,14 @@ gp_Pln sketchPlaneFromPlacement(const gp_Trsf& sketchPlacement)
     return gp_Pln(origin, normal);
 }
 
-std::optional<SketchEllipse> projectedEllipseFromAxes(const gp_Pnt& center,
-                                                      const gp_Dir& majorDirection,
-                                                      double majorRadius,
-                                                      const gp_Dir& minorDirection,
-                                                      double minorRadius,
-                                                      const gp_Trsf& sketchPlacement)
+std::optional<SketchEllipse> projectedEllipseFromAxes(
+    const gp_Pnt& center,
+    const gp_Dir& majorDirection,
+    double majorRadius,
+    const gp_Dir& minorDirection,
+    double minorRadius,
+    const gp_Trsf& sketchPlacement
+)
 {
     const gp_Dir localMajor = directionInSketchLocalPlane(majorDirection, sketchPlacement);
     const gp_Dir localMinor = directionInSketchLocalPlane(minorDirection, sketchPlacement);
@@ -499,12 +576,14 @@ std::optional<SketchEllipse> projectedEllipseFromAxes(const gp_Pnt& center,
         angle = 0.5 * 3.14159265358979323846;
     }
 
-    return SketchEllipse{0U,
-                         center,
-                         std::sqrt(lambdaMajor),
-                         lambdaMinor > Precision::SquareConfusion() ? std::sqrt(lambdaMinor) : 0.0,
-                         angle,
-                         true};
+    return SketchEllipse {
+        0U,
+        center,
+        std::sqrt(lambdaMajor),
+        lambdaMinor > Precision::SquareConfusion() ? std::sqrt(lambdaMinor) : 0.0,
+        angle,
+        true
+    };
 }
 
 double angleXUInSketchPlane(gp_Dir worldXDirection, gp_Dir worldNormal, const gp_Trsf& sketchPlacement)
@@ -603,11 +682,11 @@ std::optional<double> readNumberField(const nlohmann::json& value, const std::st
     }
     if (it->is_number()) {
         const double number = it->get<double>();
-        return std::isfinite(number) ? std::optional<double>{number} : std::nullopt;
+        return std::isfinite(number) ? std::optional<double> {number} : std::nullopt;
     }
     if (it->is_object() && it->contains("value") && it->at("value").is_number()) {
         const double number = it->at("value").get<double>();
-        return std::isfinite(number) ? std::optional<double>{number} : std::nullopt;
+        return std::isfinite(number) ? std::optional<double> {number} : std::nullopt;
     }
     return std::nullopt;
 }
@@ -746,7 +825,10 @@ std::optional<bool> readEndpointPosition(const nlohmann::json& constraint, const
     return std::nullopt;
 }
 
-std::optional<ConstraintPointPosition> readPointPosition(const nlohmann::json& constraint, const std::string& field)
+std::optional<ConstraintPointPosition> readPointPosition(
+    const nlohmann::json& constraint,
+    const std::string& field
+)
 {
     if (const auto position = readStringField(constraint, field)) {
         if (*position == "start" || *position == "Start") {
@@ -788,7 +870,10 @@ bool readPointPositionIsNone(const nlohmann::json& constraint, const std::string
     return false;
 }
 
-std::optional<std::size_t> segmentIndexForGeometry(const std::vector<SketchSegment>& segments, int geometryIndex)
+std::optional<std::size_t> segmentIndexForGeometry(
+    const std::vector<SketchSegment>& segments,
+    int geometryIndex
+)
 {
     if (geometryIndex < 0) {
         return std::nullopt;
@@ -814,7 +899,10 @@ std::optional<std::size_t> pointIndexForGeometry(const std::vector<SketchPoint>&
     return std::nullopt;
 }
 
-std::optional<std::size_t> circleIndexForGeometry(const std::vector<SketchCircle>& circles, int geometryIndex)
+std::optional<std::size_t> circleIndexForGeometry(
+    const std::vector<SketchCircle>& circles,
+    int geometryIndex
+)
 {
     if (geometryIndex < 0) {
         return std::nullopt;
@@ -827,7 +915,10 @@ std::optional<std::size_t> circleIndexForGeometry(const std::vector<SketchCircle
     return std::nullopt;
 }
 
-std::optional<std::size_t> ellipseIndexForGeometry(const std::vector<SketchEllipse>& ellipses, int geometryIndex)
+std::optional<std::size_t> ellipseIndexForGeometry(
+    const std::vector<SketchEllipse>& ellipses,
+    int geometryIndex
+)
 {
     if (geometryIndex < 0) {
         return std::nullopt;
@@ -853,7 +944,10 @@ std::optional<std::size_t> arcIndexForGeometry(const std::vector<SketchArc>& arc
     return std::nullopt;
 }
 
-std::optional<std::size_t> ellipseArcIndexForGeometry(const std::vector<SketchEllipseArc>& arcs, int geometryIndex)
+std::optional<std::size_t> ellipseArcIndexForGeometry(
+    const std::vector<SketchEllipseArc>& arcs,
+    int geometryIndex
+)
 {
     if (geometryIndex < 0) {
         return std::nullopt;
@@ -866,7 +960,10 @@ std::optional<std::size_t> ellipseArcIndexForGeometry(const std::vector<SketchEl
     return std::nullopt;
 }
 
-std::optional<std::size_t> bsplineIndexForGeometry(const std::vector<SketchBSpline>& bsplines, int geometryIndex)
+std::optional<std::size_t> bsplineIndexForGeometry(
+    const std::vector<SketchBSpline>& bsplines,
+    int geometryIndex
+)
 {
     if (geometryIndex < 0) {
         return std::nullopt;
@@ -879,10 +976,12 @@ std::optional<std::size_t> bsplineIndexForGeometry(const std::vector<SketchBSpli
     return std::nullopt;
 }
 
-std::optional<EndpointRef> readEndpointRef(const nlohmann::json& constraint,
-                                           const std::string& indexField,
-                                           const std::string& positionField,
-                                           const std::vector<SketchSegment>& segments)
+std::optional<EndpointRef> readEndpointRef(
+    const nlohmann::json& constraint,
+    const std::string& indexField,
+    const std::string& positionField,
+    const std::vector<SketchSegment>& segments
+)
 {
     const auto geometryIndex = readIntField(constraint, indexField);
     const auto start = readEndpointPosition(constraint, positionField);
@@ -893,20 +992,23 @@ std::optional<EndpointRef> readEndpointRef(const nlohmann::json& constraint,
     if (!segmentIndex) {
         return std::nullopt;
     }
-    return EndpointRef{*segmentIndex, *start};
+    return EndpointRef {*segmentIndex, *start};
 }
 
-std::optional<OrientationConstraintRef> readOrientationConstraintRef(const nlohmann::json& constraint,
-                                                                     SketchConstraintKind kind,
-                                                                     const std::vector<SketchSegment>& segments)
+std::optional<OrientationConstraintRef> readOrientationConstraintRef(
+    const nlohmann::json& constraint,
+    SketchConstraintKind kind,
+    const std::vector<SketchSegment>& segments
+)
 {
-    if (constraint.contains("FirstPos") || constraint.contains("Second") || constraint.contains("SecondPos")) {
+    if (constraint.contains("FirstPos") || constraint.contains("Second")
+        || constraint.contains("SecondPos")) {
         const auto first = readEndpointRef(constraint, "First", "FirstPos", segments);
         const auto second = readEndpointRef(constraint, "Second", "SecondPos", segments);
         if (!first || !second) {
             return std::nullopt;
         }
-        return OrientationConstraintRef{kind, std::nullopt, first, second};
+        return OrientationConstraintRef {kind, std::nullopt, first, second};
     }
 
     const auto geometryIndex = readIntField(constraint, "First");
@@ -917,7 +1019,7 @@ std::optional<OrientationConstraintRef> readOrientationConstraintRef(const nlohm
     if (!segmentIndex) {
         return std::nullopt;
     }
-    return OrientationConstraintRef{kind, segmentIndex, std::nullopt, std::nullopt};
+    return OrientationConstraintRef {kind, segmentIndex, std::nullopt, std::nullopt};
 }
 
 std::optional<double> readConstraintValue(const nlohmann::json& constraint)
@@ -930,9 +1032,11 @@ std::optional<double> readConstraintValue(const nlohmann::json& constraint)
     return std::nullopt;
 }
 
-std::optional<DimensionConstraintRef> readDimensionConstraintRef(const nlohmann::json& constraint,
-                                                                 SketchConstraintKind kind,
-                                                                 const std::vector<SketchSegment>& segments)
+std::optional<DimensionConstraintRef> readDimensionConstraintRef(
+    const nlohmann::json& constraint,
+    SketchConstraintKind kind,
+    const std::vector<SketchSegment>& segments
+)
 {
     const auto value = readConstraintValue(constraint);
     if (!value || !std::isfinite(*value)) {
@@ -946,7 +1050,7 @@ std::optional<DimensionConstraintRef> readDimensionConstraintRef(const nlohmann:
         if (!endpoint) {
             return std::nullopt;
         }
-        return DimensionConstraintRef{kind, -1, *value, std::nullopt, std::nullopt, endpoint};
+        return DimensionConstraintRef {kind, -1, *value, std::nullopt, std::nullopt, endpoint};
     }
 
     if (*value <= 0.0) {
@@ -960,19 +1064,21 @@ std::optional<DimensionConstraintRef> readDimensionConstraintRef(const nlohmann:
         if (!first || !second) {
             return std::nullopt;
         }
-        return DimensionConstraintRef{kind, -1, *value, first, second};
+        return DimensionConstraintRef {kind, -1, *value, first, second};
     }
 
     const auto geometryIndex = readIntField(constraint, "First");
     if (!geometryIndex) {
         return std::nullopt;
     }
-    return DimensionConstraintRef{kind, *geometryIndex, *value, std::nullopt, std::nullopt};
+    return DimensionConstraintRef {kind, *geometryIndex, *value, std::nullopt, std::nullopt};
 }
 
-std::optional<LinePairConstraintRef> readLinePairConstraintRef(const nlohmann::json& constraint,
-                                                               SketchConstraintKind kind,
-                                                               const std::vector<SketchSegment>& segments)
+std::optional<LinePairConstraintRef> readLinePairConstraintRef(
+    const nlohmann::json& constraint,
+    SketchConstraintKind kind,
+    const std::vector<SketchSegment>& segments
+)
 {
     if (constraint.contains("FirstPos") || constraint.contains("SecondPos")) {
         return std::nullopt;
@@ -988,30 +1094,32 @@ std::optional<LinePairConstraintRef> readLinePairConstraintRef(const nlohmann::j
     if (!firstSegment || !secondSegment) {
         return std::nullopt;
     }
-    return LinePairConstraintRef{kind, *firstSegment, *secondSegment};
+    return LinePairConstraintRef {kind, *firstSegment, *secondSegment};
 }
 
-std::optional<TangentGeometryRef> tangentGeometryRefForIndex(int geometryIndex,
-                                                            const std::vector<SketchSegment>& segments,
-                                                            const std::vector<SketchCircle>& circles,
-                                                            const std::vector<SketchEllipse>& ellipses,
-                                                            const std::vector<SketchArc>& arcs,
-                                                            const std::vector<SketchEllipseArc>& ellipseArcs)
+std::optional<TangentGeometryRef> tangentGeometryRefForIndex(
+    int geometryIndex,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
     if (const auto segment = segmentIndexForGeometry(segments, geometryIndex)) {
-        return TangentGeometryRef{TangentGeometryKind::Line, *segment};
+        return TangentGeometryRef {TangentGeometryKind::Line, *segment};
     }
     if (const auto circle = circleIndexForGeometry(circles, geometryIndex)) {
-        return TangentGeometryRef{TangentGeometryKind::Circle, *circle};
+        return TangentGeometryRef {TangentGeometryKind::Circle, *circle};
     }
     if (const auto arc = arcIndexForGeometry(arcs, geometryIndex)) {
-        return TangentGeometryRef{TangentGeometryKind::Arc, *arc};
+        return TangentGeometryRef {TangentGeometryKind::Arc, *arc};
     }
     if (const auto ellipse = ellipseIndexForGeometry(ellipses, geometryIndex)) {
-        return TangentGeometryRef{TangentGeometryKind::Ellipse, *ellipse};
+        return TangentGeometryRef {TangentGeometryKind::Ellipse, *ellipse};
     }
     if (const auto ellipseArc = ellipseArcIndexForGeometry(ellipseArcs, geometryIndex)) {
-        return TangentGeometryRef{TangentGeometryKind::EllipseArc, *ellipseArc};
+        return TangentGeometryRef {TangentGeometryKind::EllipseArc, *ellipseArc};
     }
     return std::nullopt;
 }
@@ -1025,17 +1133,21 @@ bool directTangentPairSupported(const TangentGeometryRef& first, const TangentGe
         return true;
     }
 
-    const bool firstRound = first.kind == TangentGeometryKind::Circle || first.kind == TangentGeometryKind::Arc;
-    const bool secondRound = second.kind == TangentGeometryKind::Circle || second.kind == TangentGeometryKind::Arc;
+    const bool firstRound = first.kind == TangentGeometryKind::Circle
+        || first.kind == TangentGeometryKind::Arc;
+    const bool secondRound = second.kind == TangentGeometryKind::Circle
+        || second.kind == TangentGeometryKind::Arc;
     return firstRound && secondRound;
 }
 
-std::optional<ConstraintPointRef> readTangentCurvePointRef(const nlohmann::json& constraint,
-                                                           const std::string& geometryField,
-                                                           const std::string& positionField,
-                                                           const std::vector<SketchSegment>& segments,
-                                                           const std::vector<SketchArc>& arcs,
-                                                           const std::vector<SketchEllipseArc>& ellipseArcs)
+std::optional<ConstraintPointRef> readTangentCurvePointRef(
+    const nlohmann::json& constraint,
+    const std::string& geometryField,
+    const std::string& positionField,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
     const auto geometryIndex = readIntField(constraint, geometryField);
     const auto position = readPointPosition(constraint, positionField);
@@ -1045,31 +1157,45 @@ std::optional<ConstraintPointRef> readTangentCurvePointRef(const nlohmann::json&
 
     if (*position == ConstraintPointPosition::Start || *position == ConstraintPointPosition::End) {
         if (const auto segmentIndex = segmentIndexForGeometry(segments, *geometryIndex)) {
-            return ConstraintPointRef{
-                ConstraintPointKind::SegmentEndpoint, *segmentIndex, *position == ConstraintPointPosition::Start};
+            return ConstraintPointRef {
+                ConstraintPointKind::SegmentEndpoint,
+                *segmentIndex,
+                *position == ConstraintPointPosition::Start
+            };
         }
         if (const auto arcIndex = arcIndexForGeometry(arcs, *geometryIndex)) {
-            return ConstraintPointRef{
-                ConstraintPointKind::ArcEndpoint, *arcIndex, *position == ConstraintPointPosition::Start};
+            return ConstraintPointRef {
+                ConstraintPointKind::ArcEndpoint,
+                *arcIndex,
+                *position == ConstraintPointPosition::Start
+            };
         }
         if (const auto ellipseArcIndex = ellipseArcIndexForGeometry(ellipseArcs, *geometryIndex)) {
-            return ConstraintPointRef{
-                ConstraintPointKind::EllipseArcEndpoint, *ellipseArcIndex, *position == ConstraintPointPosition::Start};
+            return ConstraintPointRef {
+                ConstraintPointKind::EllipseArcEndpoint,
+                *ellipseArcIndex,
+                *position == ConstraintPointPosition::Start
+            };
         }
     }
 
     return std::nullopt;
 }
 
-std::optional<ConstraintPointRef> readTangentPointRef(const nlohmann::json& constraint,
-                                                      const std::string& geometryField,
-                                                      const std::string& positionField,
-                                                      const std::vector<SketchSegment>& segments,
-                                                      const std::vector<SketchPoint>& points,
-                                                      const std::vector<SketchArc>& arcs,
-                                                      const std::vector<SketchEllipseArc>& ellipseArcs)
+std::optional<ConstraintPointRef> readTangentPointRef(
+    const nlohmann::json& constraint,
+    const std::string& geometryField,
+    const std::string& positionField,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
-    if (const auto curvePoint = readTangentCurvePointRef(constraint, geometryField, positionField, segments, arcs, ellipseArcs)) {
+    if (
+        const auto curvePoint
+        = readTangentCurvePointRef(constraint, geometryField, positionField, segments, arcs, ellipseArcs)
+    ) {
         return curvePoint;
     }
 
@@ -1079,7 +1205,7 @@ std::optional<ConstraintPointRef> readTangentPointRef(const nlohmann::json& cons
         return std::nullopt;
     }
     if (const auto pointIndex = pointIndexForGeometry(points, *geometryIndex)) {
-        return ConstraintPointRef{ConstraintPointKind::PointGeometry, *pointIndex, true};
+        return ConstraintPointRef {ConstraintPointKind::PointGeometry, *pointIndex, true};
     }
     return std::nullopt;
 }
@@ -1091,7 +1217,8 @@ std::optional<TangentConstraintRef> readTangentConstraintRef(
     const std::vector<SketchCircle>& circles,
     const std::vector<SketchEllipse>& ellipses,
     const std::vector<SketchArc>& arcs,
-    const std::vector<SketchEllipseArc>& ellipseArcs)
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
     const auto firstGeometry = readIntField(constraint, "First");
     const auto secondGeometry = readIntField(constraint, "Second");
@@ -1099,8 +1226,10 @@ std::optional<TangentConstraintRef> readTangentConstraintRef(
         return std::nullopt;
     }
 
-    const auto first = tangentGeometryRefForIndex(*firstGeometry, segments, circles, ellipses, arcs, ellipseArcs);
-    const auto second = tangentGeometryRefForIndex(*secondGeometry, segments, circles, ellipses, arcs, ellipseArcs);
+    const auto first
+        = tangentGeometryRefForIndex(*firstGeometry, segments, circles, ellipses, arcs, ellipseArcs);
+    const auto second
+        = tangentGeometryRefForIndex(*secondGeometry, segments, circles, ellipses, arcs, ellipseArcs);
     if (!first || !second) {
         return std::nullopt;
     }
@@ -1112,36 +1241,36 @@ std::optional<TangentConstraintRef> readTangentConstraintRef(
         if (!directTangentPairSupported(*first, *second)) {
             return std::nullopt;
         }
-        return TangentConstraintRef{*first, *second};
+        return TangentConstraintRef {*first, *second};
     }
 
     if (hasThird) {
         if (!firstNone || !secondNone) {
             return std::nullopt;
         }
-        const auto viaPoint =
-            readTangentPointRef(constraint, "Third", "ThirdPos", segments, points, arcs, ellipseArcs);
+        const auto viaPoint
+            = readTangentPointRef(constraint, "Third", "ThirdPos", segments, points, arcs, ellipseArcs);
         if (!viaPoint) {
             return std::nullopt;
         }
-        return TangentConstraintRef{*first, *second, std::nullopt, std::nullopt, viaPoint};
+        return TangentConstraintRef {*first, *second, std::nullopt, std::nullopt, viaPoint};
     }
 
-    const auto firstPoint =
-        readTangentCurvePointRef(constraint, "First", "FirstPos", segments, arcs, ellipseArcs);
+    const auto firstPoint
+        = readTangentCurvePointRef(constraint, "First", "FirstPos", segments, arcs, ellipseArcs);
     if (!firstPoint) {
         return std::nullopt;
     }
     if (secondNone) {
-        return TangentConstraintRef{*first, *second, firstPoint};
+        return TangentConstraintRef {*first, *second, firstPoint};
     }
 
-    const auto secondPoint =
-        readTangentCurvePointRef(constraint, "Second", "SecondPos", segments, arcs, ellipseArcs);
+    const auto secondPoint
+        = readTangentCurvePointRef(constraint, "Second", "SecondPos", segments, arcs, ellipseArcs);
     if (!secondPoint) {
         return std::nullopt;
     }
-    return TangentConstraintRef{*first, *second, firstPoint, secondPoint};
+    return TangentConstraintRef {*first, *second, firstPoint, secondPoint};
 }
 
 std::optional<PointwiseAngleConstraintRef> readPointwiseAngleConstraintRef(
@@ -1151,29 +1280,33 @@ std::optional<PointwiseAngleConstraintRef> readPointwiseAngleConstraintRef(
     const std::vector<SketchCircle>& circles,
     const std::vector<SketchEllipse>& ellipses,
     const std::vector<SketchArc>& arcs,
-    const std::vector<SketchEllipseArc>& ellipseArcs)
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
     const auto value = readConstraintValue(constraint);
     if (!value || !std::isfinite(*value) || *value < 0.0 || *value > 3.14159265358979323846) {
         return std::nullopt;
     }
 
-    const auto geometry = readTangentConstraintRef(constraint, segments, points, circles, ellipses, arcs, ellipseArcs);
+    const auto geometry
+        = readTangentConstraintRef(constraint, segments, points, circles, ellipses, arcs, ellipseArcs);
     if (!geometry || (!geometry->firstPoint && !geometry->viaPoint)) {
         return std::nullopt;
     }
-    return PointwiseAngleConstraintRef{*geometry, *value};
+    return PointwiseAngleConstraintRef {*geometry, *value};
 }
 
-std::optional<ConstraintPointRef> readConstraintPointRef(const nlohmann::json& constraint,
-                                                         const std::string& geometryField,
-                                                         const std::string& positionField,
-                                                         const std::vector<SketchSegment>& segments,
-                                                         const std::vector<SketchPoint>& points,
-                                                         const std::vector<SketchCircle>& circles,
-                                                         const std::vector<SketchEllipse>& ellipses,
-                                                         const std::vector<SketchArc>& arcs,
-                                                         const std::vector<SketchEllipseArc>& ellipseArcs);
+std::optional<ConstraintPointRef> readConstraintPointRef(
+    const nlohmann::json& constraint,
+    const std::string& geometryField,
+    const std::string& positionField,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+);
 
 std::optional<PerpendicularPointLineConstraintRef> readPerpendicularPointLineConstraintRef(
     const nlohmann::json& constraint,
@@ -1182,16 +1315,35 @@ std::optional<PerpendicularPointLineConstraintRef> readPerpendicularPointLineCon
     const std::vector<SketchCircle>& circles,
     const std::vector<SketchEllipse>& ellipses,
     const std::vector<SketchArc>& arcs,
-    const std::vector<SketchEllipseArc>& ellipseArcs)
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
     if (!readPointPositionIsNone(constraint, "ThirdPos", true)) {
         return std::nullopt;
     }
 
     const auto first = readConstraintPointRef(
-        constraint, "First", "FirstPos", segments, points, circles, ellipses, arcs, ellipseArcs);
+        constraint,
+        "First",
+        "FirstPos",
+        segments,
+        points,
+        circles,
+        ellipses,
+        arcs,
+        ellipseArcs
+    );
     const auto second = readConstraintPointRef(
-        constraint, "Second", "SecondPos", segments, points, circles, ellipses, arcs, ellipseArcs);
+        constraint,
+        "Second",
+        "SecondPos",
+        segments,
+        points,
+        circles,
+        ellipses,
+        arcs,
+        ellipseArcs
+    );
     const auto thirdGeometry = readIntField(constraint, "Third");
     if (!first || !second || !thirdGeometry) {
         return std::nullopt;
@@ -1201,17 +1353,18 @@ std::optional<PerpendicularPointLineConstraintRef> readPerpendicularPointLineCon
     if (!axisSegment) {
         return std::nullopt;
     }
-    return PerpendicularPointLineConstraintRef{*first, *second, *axisSegment};
+    return PerpendicularPointLineConstraintRef {*first, *second, *axisSegment};
 }
 
 std::optional<PerpendicularMidpointLineConstraintRef> readPerpendicularMidpointLineConstraintRef(
     const nlohmann::json& constraint,
     const std::vector<SketchSegment>& segments,
     const std::vector<SketchCircle>& circles,
-    const std::vector<SketchArc>& arcs)
+    const std::vector<SketchArc>& arcs
+)
 {
-    if (constraint.contains("FirstPos") || constraint.contains("SecondPos") || constraint.contains("Third")
-        || constraint.contains("ThirdPos")) {
+    if (constraint.contains("FirstPos") || constraint.contains("SecondPos")
+        || constraint.contains("Third") || constraint.contains("ThirdPos")) {
         return std::nullopt;
     }
 
@@ -1223,12 +1376,21 @@ std::optional<PerpendicularMidpointLineConstraintRef> readPerpendicularMidpointL
 
     const auto firstSegment = segmentIndexForGeometry(segments, *firstGeometry);
     const auto secondSegment = segmentIndexForGeometry(segments, *secondGeometry);
-    const auto readTarget = [&](int geometryIndex) -> std::optional<PerpendicularMidpointLineConstraintRef> {
+    const auto readTarget =
+        [&](int geometryIndex) -> std::optional<PerpendicularMidpointLineConstraintRef> {
         if (const auto circleIndex = circleIndexForGeometry(circles, geometryIndex)) {
-            return PerpendicularMidpointLineConstraintRef{0, PerpendicularMidpointTargetKind::Circle, *circleIndex};
+            return PerpendicularMidpointLineConstraintRef {
+                0,
+                PerpendicularMidpointTargetKind::Circle,
+                *circleIndex
+            };
         }
         if (const auto arcIndex = arcIndexForGeometry(arcs, geometryIndex)) {
-            return PerpendicularMidpointLineConstraintRef{0, PerpendicularMidpointTargetKind::Arc, *arcIndex};
+            return PerpendicularMidpointLineConstraintRef {
+                0,
+                PerpendicularMidpointTargetKind::Arc,
+                *arcIndex
+            };
         }
         return std::nullopt;
     };
@@ -1258,14 +1420,16 @@ std::optional<EqualConstraintRef> readEqualConstraintRef(const nlohmann::json& c
     if (!firstGeometry || !secondGeometry) {
         return std::nullopt;
     }
-    return EqualConstraintRef{*firstGeometry, *secondGeometry};
+    return EqualConstraintRef {*firstGeometry, *secondGeometry};
 }
 
-std::optional<AngleConstraintRef> readAngleConstraintRef(const nlohmann::json& constraint,
-                                                         const std::vector<SketchSegment>& segments)
+std::optional<AngleConstraintRef> readAngleConstraintRef(
+    const nlohmann::json& constraint,
+    const std::vector<SketchSegment>& segments
+)
 {
-    if (constraint.contains("FirstPos") || constraint.contains("SecondPos") || constraint.contains("Third")
-        || constraint.contains("ThirdPos")) {
+    if (constraint.contains("FirstPos") || constraint.contains("SecondPos")
+        || constraint.contains("Third") || constraint.contains("ThirdPos")) {
         return std::nullopt;
     }
 
@@ -1278,18 +1442,20 @@ std::optional<AngleConstraintRef> readAngleConstraintRef(const nlohmann::json& c
     if (!linePair) {
         return std::nullopt;
     }
-    return AngleConstraintRef{*linePair, *value};
+    return AngleConstraintRef {*linePair, *value};
 }
 
-std::optional<ConstraintPointRef> readConstraintPointRef(const nlohmann::json& constraint,
-                                                         const std::string& geometryField,
-                                                         const std::string& positionField,
-                                                         const std::vector<SketchSegment>& segments,
-                                                         const std::vector<SketchPoint>& points,
-                                                         const std::vector<SketchCircle>& circles,
-                                                         const std::vector<SketchEllipse>& ellipses,
-                                                         const std::vector<SketchArc>& arcs,
-                                                         const std::vector<SketchEllipseArc>& ellipseArcs)
+std::optional<ConstraintPointRef> readConstraintPointRef(
+    const nlohmann::json& constraint,
+    const std::string& geometryField,
+    const std::string& positionField,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
     const auto geometryIndex = readIntField(constraint, geometryField);
     const auto position = readPointPosition(constraint, positionField);
@@ -1299,54 +1465,76 @@ std::optional<ConstraintPointRef> readConstraintPointRef(const nlohmann::json& c
 
     if (*position == ConstraintPointPosition::Start || *position == ConstraintPointPosition::End) {
         if (const auto segmentIndex = segmentIndexForGeometry(segments, *geometryIndex)) {
-            return ConstraintPointRef{
-                ConstraintPointKind::SegmentEndpoint, *segmentIndex, *position == ConstraintPointPosition::Start};
+            return ConstraintPointRef {
+                ConstraintPointKind::SegmentEndpoint,
+                *segmentIndex,
+                *position == ConstraintPointPosition::Start
+            };
         }
         if (*position == ConstraintPointPosition::Start) {
             if (const auto pointIndex = pointIndexForGeometry(points, *geometryIndex)) {
-                return ConstraintPointRef{ConstraintPointKind::PointGeometry, *pointIndex, true};
+                return ConstraintPointRef {ConstraintPointKind::PointGeometry, *pointIndex, true};
             }
         }
         if (const auto arcIndex = arcIndexForGeometry(arcs, *geometryIndex)) {
-            return ConstraintPointRef{
-                ConstraintPointKind::ArcEndpoint, *arcIndex, *position == ConstraintPointPosition::Start};
+            return ConstraintPointRef {
+                ConstraintPointKind::ArcEndpoint,
+                *arcIndex,
+                *position == ConstraintPointPosition::Start
+            };
         }
         if (const auto ellipseArcIndex = ellipseArcIndexForGeometry(ellipseArcs, *geometryIndex)) {
-            return ConstraintPointRef{
-                ConstraintPointKind::EllipseArcEndpoint, *ellipseArcIndex, *position == ConstraintPointPosition::Start};
+            return ConstraintPointRef {
+                ConstraintPointKind::EllipseArcEndpoint,
+                *ellipseArcIndex,
+                *position == ConstraintPointPosition::Start
+            };
         }
     }
 
     if (*position == ConstraintPointPosition::Mid) {
         if (const auto circleIndex = circleIndexForGeometry(circles, *geometryIndex)) {
-            return ConstraintPointRef{ConstraintPointKind::CircleCenter, *circleIndex, true};
+            return ConstraintPointRef {ConstraintPointKind::CircleCenter, *circleIndex, true};
         }
         if (const auto ellipseIndex = ellipseIndexForGeometry(ellipses, *geometryIndex)) {
-            return ConstraintPointRef{ConstraintPointKind::EllipseCenter, *ellipseIndex, true};
+            return ConstraintPointRef {ConstraintPointKind::EllipseCenter, *ellipseIndex, true};
         }
     }
 
     return std::nullopt;
 }
 
-std::optional<ConstraintPointRef> readConstraintPointRef(const nlohmann::json& constraint,
-                                                         const std::vector<SketchSegment>& segments,
-                                                         const std::vector<SketchPoint>& points,
-                                                         const std::vector<SketchCircle>& circles,
-                                                         const std::vector<SketchEllipse>& ellipses,
-                                                         const std::vector<SketchArc>& arcs,
-                                                         const std::vector<SketchEllipseArc>& ellipseArcs)
+std::optional<ConstraintPointRef> readConstraintPointRef(
+    const nlohmann::json& constraint,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
     return readConstraintPointRef(
-        constraint, "First", "FirstPos", segments, points, circles, ellipses, arcs, ellipseArcs);
+        constraint,
+        "First",
+        "FirstPos",
+        segments,
+        points,
+        circles,
+        ellipses,
+        arcs,
+        ellipseArcs
+    );
 }
 
-bool hasPointOnObjectTarget(int geometryIndex,
-                            const std::vector<SketchSegment>& segments,
-                            const std::vector<SketchCircle>& circles,
-                            const std::vector<SketchEllipse>& ellipses,
-                            const std::vector<SketchArc>& arcs,
-                            const std::vector<SketchEllipseArc>& ellipseArcs)
+bool hasPointOnObjectTarget(
+    int geometryIndex,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
     return segmentIndexForGeometry(segments, geometryIndex).has_value()
         || circleIndexForGeometry(circles, geometryIndex).has_value()
@@ -1362,36 +1550,60 @@ std::optional<PointOnObjectConstraintRef> readPointOnObjectConstraintRef(
     const std::vector<SketchCircle>& circles,
     const std::vector<SketchEllipse>& ellipses,
     const std::vector<SketchArc>& arcs,
-    const std::vector<SketchEllipseArc>& ellipseArcs)
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
-    if (constraint.contains("SecondPos") || constraint.contains("Third") || constraint.contains("ThirdPos")) {
+    if (constraint.contains("SecondPos") || constraint.contains("Third")
+        || constraint.contains("ThirdPos")) {
         return std::nullopt;
     }
 
     const auto targetGeometry = readIntField(constraint, "Second");
-    if (!targetGeometry || !hasPointOnObjectTarget(*targetGeometry, segments, circles, ellipses, arcs, ellipseArcs)) {
+    if (!targetGeometry
+        || !hasPointOnObjectTarget(*targetGeometry, segments, circles, ellipses, arcs, ellipseArcs)) {
         return std::nullopt;
     }
 
-    const auto point = readConstraintPointRef(constraint, segments, points, circles, ellipses, arcs, ellipseArcs);
+    const auto point
+        = readConstraintPointRef(constraint, segments, points, circles, ellipses, arcs, ellipseArcs);
     if (!point) {
         return std::nullopt;
     }
-    return PointOnObjectConstraintRef{*point, *targetGeometry};
+    return PointOnObjectConstraintRef {*point, *targetGeometry};
 }
 
-std::optional<SymmetricConstraintRef> readSymmetricConstraintRef(const nlohmann::json& constraint,
-                                                                 const std::vector<SketchSegment>& segments,
-                                                                 const std::vector<SketchPoint>& points,
-                                                                 const std::vector<SketchCircle>& circles,
-                                                                 const std::vector<SketchEllipse>& ellipses,
-                                                                 const std::vector<SketchArc>& arcs,
-                                                                 const std::vector<SketchEllipseArc>& ellipseArcs)
+std::optional<SymmetricConstraintRef> readSymmetricConstraintRef(
+    const nlohmann::json& constraint,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
     const auto first = readConstraintPointRef(
-        constraint, "First", "FirstPos", segments, points, circles, ellipses, arcs, ellipseArcs);
+        constraint,
+        "First",
+        "FirstPos",
+        segments,
+        points,
+        circles,
+        ellipses,
+        arcs,
+        ellipseArcs
+    );
     const auto second = readConstraintPointRef(
-        constraint, "Second", "SecondPos", segments, points, circles, ellipses, arcs, ellipseArcs);
+        constraint,
+        "Second",
+        "SecondPos",
+        segments,
+        points,
+        circles,
+        ellipses,
+        arcs,
+        ellipseArcs
+    );
     const auto thirdGeometry = readIntField(constraint, "Third");
     if (!first || !second || !thirdGeometry) {
         return std::nullopt;
@@ -1402,25 +1614,36 @@ std::optional<SymmetricConstraintRef> readSymmetricConstraintRef(const nlohmann:
         if (!axisSegment) {
             return std::nullopt;
         }
-        return SymmetricConstraintRef{*first, *second, axisSegment, std::nullopt};
+        return SymmetricConstraintRef {*first, *second, axisSegment, std::nullopt};
     }
 
     const auto center = readConstraintPointRef(
-        constraint, "Third", "ThirdPos", segments, points, circles, ellipses, arcs, ellipseArcs);
+        constraint,
+        "Third",
+        "ThirdPos",
+        segments,
+        points,
+        circles,
+        ellipses,
+        arcs,
+        ellipseArcs
+    );
     if (!center) {
         return std::nullopt;
     }
-    return SymmetricConstraintRef{*first, *second, std::nullopt, center};
+    return SymmetricConstraintRef {*first, *second, std::nullopt, center};
 }
 
-bool hasBlockTarget(int geometryIndex,
-                    const std::vector<SketchSegment>& segments,
-                    const std::vector<SketchPoint>& points,
-                    const std::vector<SketchCircle>& circles,
-                    const std::vector<SketchEllipse>& ellipses,
-                    const std::vector<SketchArc>& arcs,
-                    const std::vector<SketchEllipseArc>& ellipseArcs,
-                    const std::vector<SketchBSpline>& bsplines)
+bool hasBlockTarget(
+    int geometryIndex,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs,
+    const std::vector<SketchBSpline>& bsplines
+)
 {
     return segmentIndexForGeometry(segments, geometryIndex).has_value()
         || pointIndexForGeometry(points, geometryIndex).has_value()
@@ -1431,27 +1654,31 @@ bool hasBlockTarget(int geometryIndex,
         || bsplineIndexForGeometry(bsplines, geometryIndex).has_value();
 }
 
-std::optional<BlockConstraintRef> readBlockConstraintRef(const nlohmann::json& constraint,
-                                                         const std::vector<SketchSegment>& segments,
-                                                         const std::vector<SketchPoint>& points,
-                                                         const std::vector<SketchCircle>& circles,
-                                                         const std::vector<SketchEllipse>& ellipses,
-                                                         const std::vector<SketchArc>& arcs,
-                                                         const std::vector<SketchEllipseArc>& ellipseArcs,
-                                                         const std::vector<SketchBSpline>& bsplines)
+std::optional<BlockConstraintRef> readBlockConstraintRef(
+    const nlohmann::json& constraint,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs,
+    const std::vector<SketchBSpline>& bsplines
+)
 {
     if ((constraint.contains("FirstPos") && !readPointPositionIsNone(constraint, "FirstPos", false))
-        || constraint.contains("Second") || constraint.contains("SecondPos") || constraint.contains("Third")
-        || constraint.contains("ThirdPos")) {
+        || constraint.contains("Second") || constraint.contains("SecondPos")
+        || constraint.contains("Third") || constraint.contains("ThirdPos")) {
         return std::nullopt;
     }
 
     const auto geometryIndex = readIntField(constraint, "First");
-    if (!geometryIndex
-        || !hasBlockTarget(*geometryIndex, segments, points, circles, ellipses, arcs, ellipseArcs, bsplines)) {
+    if (
+        !geometryIndex
+        || !hasBlockTarget(*geometryIndex, segments, points, circles, ellipses, arcs, ellipseArcs, bsplines)
+    ) {
         return std::nullopt;
     }
-    return BlockConstraintRef{*geometryIndex};
+    return BlockConstraintRef {*geometryIndex};
 }
 
 std::size_t endpointId(const EndpointRef& endpoint)
@@ -1474,20 +1701,24 @@ gp_Pnt endpointPoint(const std::vector<SketchSegment>& segments, const EndpointR
     return endpointPoint(segments.at(endpoint.segmentIndex), endpoint.start);
 }
 
-bool parseSketchGeometry(const nlohmann::json& geometry,
-                         const document::DocumentObject& object,
-                         runtime::ComputeContext& context,
-                         SketchGeometrySet& parsed)
+bool parseSketchGeometry(
+    const nlohmann::json& geometry,
+    const document::DocumentObject& object,
+    runtime::ComputeContext& context,
+    SketchGeometrySet& parsed
+)
 {
     for (std::size_t index = 0; index < geometry.size(); ++index) {
         const auto& item = geometry.at(index);
         if (!item.is_object() || !item.contains("kind") || !item.at("kind").is_string()) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "unsupported_geometry",
-                                   "Sketch Geometry item must declare a supported kind",
-                                   object.name,
-                                   "Geometry");
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "unsupported_geometry",
+                "Sketch Geometry item must declare a supported kind",
+                object.name,
+                "Geometry"
+            );
             return false;
         }
 
@@ -1497,21 +1728,24 @@ bool parseSketchGeometry(const nlohmann::json& geometry,
             const double px = readNumber2(item.at("point"), 0, ok);
             const double py = readNumber2(item.at("point"), 1, ok);
             if (!ok) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_geometry",
-                                       "Point must provide a two-number point",
-                                       object.name,
-                                       "Geometry");
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_geometry",
+                    "Point must provide a two-number point",
+                    object.name,
+                    "Geometry"
+                );
                 return false;
             }
 
-            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+            // FreeCAD:
+            // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
             // ::SketchObject::buildShape(), for "Part::GeomPoint" calls geo->toShape()
             // and exposes it as a Vertex in the Sketch Shape compound.
-            parsed.points.push_back(SketchPoint{index,
-                                                gp_Pnt(px, py, 0.0),
-                                                readBoolField(item, "construction", false)});
+            parsed.points.push_back(
+                SketchPoint {index, gp_Pnt(px, py, 0.0), readBoolField(item, "construction", false)}
+            );
             continue;
         }
 
@@ -1522,19 +1756,25 @@ bool parseSketchGeometry(const nlohmann::json& geometry,
             const double ex = readNumber2(item.at("end"), 0, ok);
             const double ey = readNumber2(item.at("end"), 1, ok);
             if (!ok) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_geometry",
-                                       "LineSegment start/end must be two numbers",
-                                       object.name,
-                                       "Geometry");
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_geometry",
+                    "LineSegment start/end must be two numbers",
+                    object.name,
+                    "Geometry"
+                );
                 return false;
             }
 
-            parsed.segments.push_back(SketchSegment{index,
-                                                    gp_Pnt(sx, sy, 0.0),
-                                                    gp_Pnt(ex, ey, 0.0),
-                                                    readBoolField(item, "construction", false)});
+            parsed.segments.push_back(
+                SketchSegment {
+                    index,
+                    gp_Pnt(sx, sy, 0.0),
+                    gp_Pnt(ex, ey, 0.0),
+                    readBoolField(item, "construction", false)
+                }
+            );
             continue;
         }
 
@@ -1544,19 +1784,20 @@ bool parseSketchGeometry(const nlohmann::json& geometry,
             const double cy = readNumber2(item.at("center"), 1, ok);
             const auto radius = readNumberField(item, "radius");
             if (!ok || !radius || *radius <= 0.0) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_geometry",
-                                       "Circle center must be two numbers and radius must be positive",
-                                       object.name,
-                                       "Geometry");
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_geometry",
+                    "Circle center must be two numbers and radius must be positive",
+                    object.name,
+                    "Geometry"
+                );
                 return false;
             }
 
-            parsed.circles.push_back(SketchCircle{index,
-                                                  gp_Pnt(cx, cy, 0.0),
-                                                  *radius,
-                                                  readBoolField(item, "construction", false)});
+            parsed.circles.push_back(
+                SketchCircle {index, gp_Pnt(cx, cy, 0.0), *radius, readBoolField(item, "construction", false)}
+            );
             continue;
         }
 
@@ -1569,21 +1810,27 @@ bool parseSketchGeometry(const nlohmann::json& geometry,
             const auto angle = readNumberField(item, "angle").value_or(0.0);
             if (!ok || !majorRadius || !minorRadius || *majorRadius <= 0.0 || *minorRadius <= 0.0
                 || *majorRadius < *minorRadius || !std::isfinite(angle)) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_geometry",
-                                       "Ellipse center, majorRadius and minorRadius are required",
-                                       object.name,
-                                       "Geometry");
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_geometry",
+                    "Ellipse center, majorRadius and minorRadius are required",
+                    object.name,
+                    "Geometry"
+                );
                 return false;
             }
 
-            parsed.ellipses.push_back(SketchEllipse{index,
-                                                    gp_Pnt(cx, cy, 0.0),
-                                                    *majorRadius,
-                                                    *minorRadius,
-                                                    angle,
-                                                    readBoolField(item, "construction", false)});
+            parsed.ellipses.push_back(
+                SketchEllipse {
+                    index,
+                    gp_Pnt(cx, cy, 0.0),
+                    *majorRadius,
+                    *minorRadius,
+                    angle,
+                    readBoolField(item, "construction", false)
+                }
+            );
             continue;
         }
 
@@ -1594,22 +1841,29 @@ bool parseSketchGeometry(const nlohmann::json& geometry,
             const auto radius = readNumberField(item, "radius");
             const auto startAngle = readNumberField(item, "startAngle");
             const auto endAngle = readNumberField(item, "endAngle");
-            if (!ok || !radius || !startAngle || !endAngle || *radius <= 0.0 || *startAngle == *endAngle) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_geometry",
-                                       "ArcOfCircle center, positive radius, startAngle and endAngle are required",
-                                       object.name,
-                                       "Geometry");
+            if (!ok || !radius || !startAngle || !endAngle || *radius <= 0.0
+                || *startAngle == *endAngle) {
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_geometry",
+                    "ArcOfCircle center, positive radius, startAngle and endAngle are required",
+                    object.name,
+                    "Geometry"
+                );
                 return false;
             }
 
-            parsed.arcs.push_back(SketchArc{index,
-                                            gp_Pnt(cx, cy, 0.0),
-                                            *radius,
-                                            *startAngle,
-                                            *endAngle,
-                                            readBoolField(item, "construction", false)});
+            parsed.arcs.push_back(
+                SketchArc {
+                    index,
+                    gp_Pnt(cx, cy, 0.0),
+                    *radius,
+                    *startAngle,
+                    *endAngle,
+                    readBoolField(item, "construction", false)
+                }
+            );
             continue;
         }
 
@@ -1622,26 +1876,32 @@ bool parseSketchGeometry(const nlohmann::json& geometry,
             const auto angle = readNumberField(item, "angle").value_or(0.0);
             const auto startAngle = readNumberField(item, "startAngle");
             const auto endAngle = readNumberField(item, "endAngle");
-            if (!ok || !majorRadius || !minorRadius || !startAngle || !endAngle || *majorRadius <= 0.0
-                || *minorRadius <= 0.0 || *majorRadius < *minorRadius || *startAngle == *endAngle
-                || !std::isfinite(angle)) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_geometry",
-                                       "ArcOfEllipse center, radii, startAngle and endAngle are required",
-                                       object.name,
-                                       "Geometry");
+            if (!ok || !majorRadius || !minorRadius || !startAngle || !endAngle
+                || *majorRadius <= 0.0 || *minorRadius <= 0.0 || *majorRadius < *minorRadius
+                || *startAngle == *endAngle || !std::isfinite(angle)) {
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_geometry",
+                    "ArcOfEllipse center, radii, startAngle and endAngle are required",
+                    object.name,
+                    "Geometry"
+                );
                 return false;
             }
 
-            parsed.ellipseArcs.push_back(SketchEllipseArc{index,
-                                                          gp_Pnt(cx, cy, 0.0),
-                                                          *majorRadius,
-                                                          *minorRadius,
-                                                          angle,
-                                                          *startAngle,
-                                                          *endAngle,
-                                                          readBoolField(item, "construction", false)});
+            parsed.ellipseArcs.push_back(
+                SketchEllipseArc {
+                    index,
+                    gp_Pnt(cx, cy, 0.0),
+                    *majorRadius,
+                    *minorRadius,
+                    angle,
+                    *startAngle,
+                    *endAngle,
+                    readBoolField(item, "construction", false)
+                }
+            );
             continue;
         }
 
@@ -1659,35 +1919,43 @@ bool parseSketchGeometry(const nlohmann::json& geometry,
                     poles.push_back(*point);
                 }
             }
-            const std::size_t rawPoleCount = polesIt != item.end() && polesIt->is_array() ? polesIt->size() : 0U;
+            const std::size_t rawPoleCount = polesIt != item.end() && polesIt->is_array()
+                ? polesIt->size()
+                : 0U;
             if (!degree || *degree < 1 || poles.size() != rawPoleCount
                 || poles.size() < static_cast<std::size_t>(*degree + 1)) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_geometry",
-                                       "BSpline requires a positive degree and at least degree + 1 two-number poles",
-                                       object.name,
-                                       "Geometry");
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_geometry",
+                    "BSpline requires a positive degree and at least degree + 1 two-number poles",
+                    object.name,
+                    "Geometry"
+                );
                 return false;
             }
 
-            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchGeometry.cpp
+            // FreeCAD:
+            // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchGeometry.cpp
             // ::SketchBSplineCurve::getPoint(), returns "bsp->getStartPoint()" and
             // "bsp->getEndPoint()" for profile connectivity.
             parsed.bsplines.push_back(
-                SketchBSpline{index, *degree, std::move(poles), readBoolField(item, "construction", false)});
+                SketchBSpline {index, *degree, std::move(poles), readBoolField(item, "construction", false)}
+            );
             continue;
         }
 
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchGeometry.cpp
         // registers geometry families independently. cad-core keeps unsupported families explicit
         // until their profile and internal-shape paths are migrated.
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "unsupported_geometry",
-                               "Sketch Geometry kind " + kind + " is not supported in the current P5 subset",
-                               object.name,
-                               "Geometry");
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "unsupported_geometry",
+            "Sketch Geometry kind " + kind + " is not supported in the current P5 subset",
+            object.name,
+            "Geometry"
+        );
         return false;
     }
     return true;
@@ -1715,8 +1983,7 @@ std::vector<SketchEllipse> profileEllipses(const std::vector<SketchEllipse>& ell
     return profile;
 }
 
-bool addCircleWire(const SketchCircle& circle,
-                   BRepBuilderAPI_MakeWire& wireBuilder)
+bool addCircleWire(const SketchCircle& circle, BRepBuilderAPI_MakeWire& wireBuilder)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchGeometry.cpp
     // registers Part::GeomCircle as a Sketcher geometry type with a center point but no start/end
@@ -1729,8 +1996,7 @@ bool addCircleWire(const SketchCircle& circle,
     return wireBuilder.IsDone();
 }
 
-bool addEllipseWire(const SketchEllipse& ellipse,
-                    BRepBuilderAPI_MakeWire& wireBuilder)
+bool addEllipseWire(const SketchEllipse& ellipse, BRepBuilderAPI_MakeWire& wireBuilder)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/Geometry.cpp
     // GeomEllipse::Restore() rebuilds from "MajorRadius", "MinorRadius" and "AngleXU".
@@ -1743,8 +2009,10 @@ bool addEllipseWire(const SketchEllipse& ellipse,
     return wireBuilder.IsDone();
 }
 
-bool orientationConstraintSatisfied(const OrientationConstraintRef& constraint,
-                                    const std::vector<SketchSegment>& segments)
+bool orientationConstraintSatisfied(
+    const OrientationConstraintRef& constraint,
+    const std::vector<SketchSegment>& segments
+)
 {
     std::optional<gp_Pnt> first;
     std::optional<gp_Pnt> second;
@@ -1770,10 +2038,12 @@ bool orientationConstraintSatisfied(const OrientationConstraintRef& constraint,
     return false;
 }
 
-std::optional<double> dimensionConstraintValue(const DimensionConstraintRef& constraint,
-                                               const std::vector<SketchSegment>& segments,
-                                               const std::vector<SketchCircle>& circles,
-                                               const std::vector<SketchArc>& arcs)
+std::optional<double> dimensionConstraintValue(
+    const DimensionConstraintRef& constraint,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchArc>& arcs
+)
 {
     if (constraint.kind == SketchConstraintKind::Distance
         || constraint.kind == SketchConstraintKind::DistanceX
@@ -1815,25 +2085,30 @@ std::optional<double> dimensionConstraintValue(const DimensionConstraintRef& con
         return first->Distance(*second);
     }
 
-    if (constraint.kind == SketchConstraintKind::Radius || constraint.kind == SketchConstraintKind::Diameter) {
+    if (constraint.kind == SketchConstraintKind::Radius
+        || constraint.kind == SketchConstraintKind::Diameter) {
         for (const SketchCircle& circle : circles) {
             if (circle.geometryIndex == static_cast<std::size_t>(constraint.geometryIndex)) {
-                return constraint.kind == SketchConstraintKind::Diameter ? 2.0 * circle.radius : circle.radius;
+                return constraint.kind == SketchConstraintKind::Diameter ? 2.0 * circle.radius
+                                                                         : circle.radius;
             }
         }
         for (const SketchArc& arc : arcs) {
             if (arc.geometryIndex == static_cast<std::size_t>(constraint.geometryIndex)) {
-                return constraint.kind == SketchConstraintKind::Diameter ? 2.0 * arc.radius : arc.radius;
+                return constraint.kind == SketchConstraintKind::Diameter ? 2.0 * arc.radius
+                                                                         : arc.radius;
             }
         }
     }
     return std::nullopt;
 }
 
-bool dimensionConstraintSatisfied(const DimensionConstraintRef& constraint,
-                                  const std::vector<SketchSegment>& segments,
-                                  const std::vector<SketchCircle>& circles,
-                                  const std::vector<SketchArc>& arcs)
+bool dimensionConstraintSatisfied(
+    const DimensionConstraintRef& constraint,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchArc>& arcs
+)
 {
     const auto actual = dimensionConstraintValue(constraint, segments, circles, arcs);
     if (!actual) {
@@ -1850,20 +2125,24 @@ std::optional<std::pair<double, double>> segmentDirection2d(const SketchSegment&
     if (length <= Precision::Confusion()) {
         return std::nullopt;
     }
-    return std::pair<double, double>{dx / length, dy / length};
+    return std::pair<double, double> {dx / length, dy / length};
 }
 
 double pointToLineDistance2d(const gp_Pnt& point, const SketchSegment& segment);
-std::optional<gp_Pnt> constraintPointValue(const ConstraintPointRef& point,
-                                           const std::vector<SketchSegment>& segments,
-                                           const std::vector<SketchPoint>& points,
-                                           const std::vector<SketchCircle>& circles,
-                                           const std::vector<SketchEllipse>& ellipses,
-                                           const std::vector<SketchArc>& arcs,
-                                           const std::vector<SketchEllipseArc>& ellipseArcs);
+std::optional<gp_Pnt> constraintPointValue(
+    const ConstraintPointRef& point,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+);
 
-bool linePairConstraintSatisfied(const LinePairConstraintRef& constraint,
-                                 const std::vector<SketchSegment>& segments)
+bool linePairConstraintSatisfied(
+    const LinePairConstraintRef& constraint,
+    const std::vector<SketchSegment>& segments
+)
 {
     const auto first = segmentDirection2d(segments.at(constraint.firstSegmentIndex));
     const auto second = segmentDirection2d(segments.at(constraint.secondSegmentIndex));
@@ -1882,8 +2161,10 @@ bool linePairConstraintSatisfied(const LinePairConstraintRef& constraint,
     return false;
 }
 
-std::optional<double> linePairAngleValue(const LinePairConstraintRef& constraint,
-                                         const std::vector<SketchSegment>& segments)
+std::optional<double> linePairAngleValue(
+    const LinePairConstraintRef& constraint,
+    const std::vector<SketchSegment>& segments
+)
 {
     const auto first = segmentDirection2d(segments.at(constraint.firstSegmentIndex));
     const auto second = segmentDirection2d(segments.at(constraint.secondSegmentIndex));
@@ -1895,44 +2176,55 @@ std::optional<double> linePairAngleValue(const LinePairConstraintRef& constraint
     return std::acos(std::clamp(std::abs(dot), -1.0, 1.0));
 }
 
-struct RoundTangentGeometry {
+struct RoundTangentGeometry
+{
     gp_Pnt center;
     double radius = 0.0;
 };
 
-struct EllipseTangentGeometry {
+struct EllipseTangentGeometry
+{
     gp_Pnt center;
     double majorRadius = 0.0;
     double minorRadius = 0.0;
     double angle = 0.0;
 };
 
-std::optional<RoundTangentGeometry> roundTangentGeometry(const TangentGeometryRef& geometry,
-                                                        const std::vector<SketchCircle>& circles,
-                                                        const std::vector<SketchArc>& arcs)
+std::optional<RoundTangentGeometry> roundTangentGeometry(
+    const TangentGeometryRef& geometry,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchArc>& arcs
+)
 {
     if (geometry.kind == TangentGeometryKind::Circle) {
         const SketchCircle& circle = circles.at(geometry.index);
-        return RoundTangentGeometry{circle.center, circle.radius};
+        return RoundTangentGeometry {circle.center, circle.radius};
     }
     if (geometry.kind == TangentGeometryKind::Arc) {
         const SketchArc& arc = arcs.at(geometry.index);
-        return RoundTangentGeometry{arc.center, arc.radius};
+        return RoundTangentGeometry {arc.center, arc.radius};
     }
     return std::nullopt;
 }
 
-std::optional<EllipseTangentGeometry> ellipseTangentGeometry(const TangentGeometryRef& geometry,
-                                                            const std::vector<SketchEllipse>& ellipses,
-                                                            const std::vector<SketchEllipseArc>& ellipseArcs)
+std::optional<EllipseTangentGeometry> ellipseTangentGeometry(
+    const TangentGeometryRef& geometry,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
     if (geometry.kind == TangentGeometryKind::Ellipse) {
         const SketchEllipse& ellipse = ellipses.at(geometry.index);
-        return EllipseTangentGeometry{ellipse.center, ellipse.majorRadius, ellipse.minorRadius, ellipse.angle};
+        return EllipseTangentGeometry {
+            ellipse.center,
+            ellipse.majorRadius,
+            ellipse.minorRadius,
+            ellipse.angle
+        };
     }
     if (geometry.kind == TangentGeometryKind::EllipseArc) {
         const SketchEllipseArc& arc = ellipseArcs.at(geometry.index);
-        return EllipseTangentGeometry{arc.center, arc.majorRadius, arc.minorRadius, arc.angle};
+        return EllipseTangentGeometry {arc.center, arc.majorRadius, arc.minorRadius, arc.angle};
     }
     return std::nullopt;
 }
@@ -1969,8 +2261,10 @@ bool lineEllipseTangentSatisfied(const SketchSegment& line, const EllipseTangent
     const double sinAxis = std::sin(ellipse.angle);
     const double normalMajor = nx * cosAxis + ny * sinAxis;
     const double normalMinor = -nx * sinAxis + ny * cosAxis;
-    const double support = std::sqrt(ellipse.majorRadius * ellipse.majorRadius * normalMajor * normalMajor
-                                     + ellipse.minorRadius * ellipse.minorRadius * normalMinor * normalMinor);
+    const double support = std::sqrt(
+        ellipse.majorRadius * ellipse.majorRadius * normalMajor * normalMajor
+        + ellipse.minorRadius * ellipse.minorRadius * normalMinor * normalMinor
+    );
     return std::abs(pointToLineDistance2d(ellipse.center, line) - support) <= 1e-7;
 }
 
@@ -1979,7 +2273,8 @@ bool roundRoundTangentSatisfied(const RoundTangentGeometry& first, const RoundTa
     const double distance = first.center.Distance(second.center);
     const double external = first.radius + second.radius;
     const double internal = std::abs(first.radius - second.radius);
-    return std::abs(distance - external) <= 1e-7 || (internal > 1e-7 && std::abs(distance - internal) <= 1e-7);
+    return std::abs(distance - external) <= 1e-7
+        || (internal > 1e-7 && std::abs(distance - internal) <= 1e-7);
 }
 
 std::optional<std::pair<double, double>> normalizeDirection2d(double dx, double dy)
@@ -1988,11 +2283,13 @@ std::optional<std::pair<double, double>> normalizeDirection2d(double dx, double 
     if (length <= Precision::Confusion()) {
         return std::nullopt;
     }
-    return std::pair<double, double>{dx / length, dy / length};
+    return std::pair<double, double> {dx / length, dy / length};
 }
 
-std::optional<std::pair<double, double>> roundTangentDirectionAtPoint(const RoundTangentGeometry& round,
-                                                                      const gp_Pnt& point)
+std::optional<std::pair<double, double>> roundTangentDirectionAtPoint(
+    const RoundTangentGeometry& round,
+    const gp_Pnt& point
+)
 {
     const double rx = point.X() - round.center.X();
     const double ry = point.Y() - round.center.Y();
@@ -2003,8 +2300,10 @@ std::optional<std::pair<double, double>> roundTangentDirectionAtPoint(const Roun
     return normalizeDirection2d(-ry, rx);
 }
 
-std::optional<std::pair<double, double>> ellipseTangentDirectionAtPoint(const EllipseTangentGeometry& ellipse,
-                                                                        const gp_Pnt& point)
+std::optional<std::pair<double, double>> ellipseTangentDirectionAtPoint(
+    const EllipseTangentGeometry& ellipse,
+    const gp_Pnt& point
+)
 {
     const double dx = point.X() - ellipse.center.X();
     const double dy = point.Y() - ellipse.center.Y();
@@ -2020,17 +2319,21 @@ std::optional<std::pair<double, double>> ellipseTangentDirectionAtPoint(const El
 
     const double localTangentX = -ellipse.majorRadius * localY / ellipse.minorRadius;
     const double localTangentY = ellipse.minorRadius * localX / ellipse.majorRadius;
-    return normalizeDirection2d(localTangentX * cosAxis - localTangentY * sinAxis,
-                                localTangentX * sinAxis + localTangentY * cosAxis);
+    return normalizeDirection2d(
+        localTangentX * cosAxis - localTangentY * sinAxis,
+        localTangentX * sinAxis + localTangentY * cosAxis
+    );
 }
 
-std::optional<std::pair<double, double>> tangentDirectionAtPoint(const TangentGeometryRef& geometry,
-                                                                 const gp_Pnt& point,
-                                                                 const std::vector<SketchSegment>& segments,
-                                                                 const std::vector<SketchCircle>& circles,
-                                                                 const std::vector<SketchEllipse>& ellipses,
-                                                                 const std::vector<SketchArc>& arcs,
-                                                                 const std::vector<SketchEllipseArc>& ellipseArcs)
+std::optional<std::pair<double, double>> tangentDirectionAtPoint(
+    const TangentGeometryRef& geometry,
+    const gp_Pnt& point,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
     if (geometry.kind == TangentGeometryKind::Line) {
         const SketchSegment& line = segments.at(geometry.index);
@@ -2048,19 +2351,22 @@ std::optional<std::pair<double, double>> tangentDirectionAtPoint(const TangentGe
     return std::nullopt;
 }
 
-bool tangentDirectionsParallel(const TangentGeometryRef& first,
-                               const gp_Pnt& firstPoint,
-                               const TangentGeometryRef& second,
-                               const gp_Pnt& secondPoint,
-                               const std::vector<SketchSegment>& segments,
-                               const std::vector<SketchCircle>& circles,
-                               const std::vector<SketchEllipse>& ellipses,
-                               const std::vector<SketchArc>& arcs,
-                               const std::vector<SketchEllipseArc>& ellipseArcs)
+bool tangentDirectionsParallel(
+    const TangentGeometryRef& first,
+    const gp_Pnt& firstPoint,
+    const TangentGeometryRef& second,
+    const gp_Pnt& secondPoint,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
-    const auto firstDirection = tangentDirectionAtPoint(first, firstPoint, segments, circles, ellipses, arcs, ellipseArcs);
-    const auto secondDirection =
-        tangentDirectionAtPoint(second, secondPoint, segments, circles, ellipses, arcs, ellipseArcs);
+    const auto firstDirection
+        = tangentDirectionAtPoint(first, firstPoint, segments, circles, ellipses, arcs, ellipseArcs);
+    const auto secondDirection
+        = tangentDirectionAtPoint(second, secondPoint, segments, circles, ellipses, arcs, ellipseArcs);
     if (!firstDirection || !secondDirection) {
         return false;
     }
@@ -2070,19 +2376,22 @@ bool tangentDirectionsParallel(const TangentGeometryRef& first,
     return std::abs(cross) <= 1e-7;
 }
 
-bool tangentDirectionsPerpendicular(const TangentGeometryRef& first,
-                                    const gp_Pnt& firstPoint,
-                                    const TangentGeometryRef& second,
-                                    const gp_Pnt& secondPoint,
-                                    const std::vector<SketchSegment>& segments,
-                                    const std::vector<SketchCircle>& circles,
-                                    const std::vector<SketchEllipse>& ellipses,
-                                    const std::vector<SketchArc>& arcs,
-                                    const std::vector<SketchEllipseArc>& ellipseArcs)
+bool tangentDirectionsPerpendicular(
+    const TangentGeometryRef& first,
+    const gp_Pnt& firstPoint,
+    const TangentGeometryRef& second,
+    const gp_Pnt& secondPoint,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
-    const auto firstDirection = tangentDirectionAtPoint(first, firstPoint, segments, circles, ellipses, arcs, ellipseArcs);
-    const auto secondDirection =
-        tangentDirectionAtPoint(second, secondPoint, segments, circles, ellipses, arcs, ellipseArcs);
+    const auto firstDirection
+        = tangentDirectionAtPoint(first, firstPoint, segments, circles, ellipses, arcs, ellipseArcs);
+    const auto secondDirection
+        = tangentDirectionAtPoint(second, secondPoint, segments, circles, ellipses, arcs, ellipseArcs);
     if (!firstDirection || !secondDirection) {
         return false;
     }
@@ -2092,19 +2401,36 @@ bool tangentDirectionsPerpendicular(const TangentGeometryRef& first,
     return std::abs(dot) <= 1e-7;
 }
 
-std::optional<double> pointwiseCurveAngleValue(const TangentConstraintRef& constraint,
-                                               const std::vector<SketchSegment>& segments,
-                                               const std::vector<SketchPoint>& points,
-                                               const std::vector<SketchCircle>& circles,
-                                               const std::vector<SketchEllipse>& ellipses,
-                                               const std::vector<SketchArc>& arcs,
-                                               const std::vector<SketchEllipseArc>& ellipseArcs)
+std::optional<double> pointwiseCurveAngleValue(
+    const TangentConstraintRef& constraint,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
-    const auto angleAt = [&](const gp_Pnt& firstPoint, const gp_Pnt& secondPoint) -> std::optional<double> {
-        const auto firstDirection =
-            tangentDirectionAtPoint(constraint.first, firstPoint, segments, circles, ellipses, arcs, ellipseArcs);
-        const auto secondDirection =
-            tangentDirectionAtPoint(constraint.second, secondPoint, segments, circles, ellipses, arcs, ellipseArcs);
+    const auto angleAt = [&](const gp_Pnt& firstPoint,
+                             const gp_Pnt& secondPoint) -> std::optional<double> {
+        const auto firstDirection = tangentDirectionAtPoint(
+            constraint.first,
+            firstPoint,
+            segments,
+            circles,
+            ellipses,
+            arcs,
+            ellipseArcs
+        );
+        const auto secondDirection = tangentDirectionAtPoint(
+            constraint.second,
+            secondPoint,
+            segments,
+            circles,
+            ellipses,
+            arcs,
+            ellipseArcs
+        );
         if (!firstDirection || !secondDirection) {
             return std::nullopt;
         }
@@ -2115,8 +2441,15 @@ std::optional<double> pointwiseCurveAngleValue(const TangentConstraintRef& const
     };
 
     if (constraint.viaPoint) {
-        const auto point =
-            constraintPointValue(*constraint.viaPoint, segments, points, circles, ellipses, arcs, ellipseArcs);
+        const auto point = constraintPointValue(
+            *constraint.viaPoint,
+            segments,
+            points,
+            circles,
+            ellipses,
+            arcs,
+            ellipseArcs
+        );
         if (!point) {
             return std::nullopt;
         }
@@ -2127,15 +2460,29 @@ std::optional<double> pointwiseCurveAngleValue(const TangentConstraintRef& const
         return std::nullopt;
     }
 
-    const auto firstPoint =
-        constraintPointValue(*constraint.firstPoint, segments, points, circles, ellipses, arcs, ellipseArcs);
+    const auto firstPoint = constraintPointValue(
+        *constraint.firstPoint,
+        segments,
+        points,
+        circles,
+        ellipses,
+        arcs,
+        ellipseArcs
+    );
     if (!firstPoint) {
         return std::nullopt;
     }
 
     if (constraint.secondPoint) {
-        const auto secondPoint =
-            constraintPointValue(*constraint.secondPoint, segments, points, circles, ellipses, arcs, ellipseArcs);
+        const auto secondPoint = constraintPointValue(
+            *constraint.secondPoint,
+            segments,
+            points,
+            circles,
+            ellipses,
+            arcs,
+            ellipseArcs
+        );
         if (!secondPoint || firstPoint->Distance(*secondPoint) > 1e-7) {
             return std::nullopt;
         }
@@ -2145,16 +2492,19 @@ std::optional<double> pointwiseCurveAngleValue(const TangentConstraintRef& const
     return angleAt(*firstPoint, *firstPoint);
 }
 
-bool pointwiseCurveAngleConstraintSatisfied(const TangentConstraintRef& constraint,
-                                            bool tangent,
-                                            const std::vector<SketchSegment>& segments,
-                                            const std::vector<SketchPoint>& points,
-                                            const std::vector<SketchCircle>& circles,
-                                            const std::vector<SketchEllipse>& ellipses,
-                                            const std::vector<SketchArc>& arcs,
-                                            const std::vector<SketchEllipseArc>& ellipseArcs)
+bool pointwiseCurveAngleConstraintSatisfied(
+    const TangentConstraintRef& constraint,
+    bool tangent,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
-    const auto actual = pointwiseCurveAngleValue(constraint, segments, points, circles, ellipses, arcs, ellipseArcs);
+    const auto actual
+        = pointwiseCurveAngleValue(constraint, segments, points, circles, ellipses, arcs, ellipseArcs);
     if (!actual) {
         return false;
     }
@@ -2163,13 +2513,15 @@ bool pointwiseCurveAngleConstraintSatisfied(const TangentConstraintRef& constrai
     return std::abs(*actual - expected) <= 1e-7;
 }
 
-bool pointwiseAngleConstraintSatisfied(const PointwiseAngleConstraintRef& constraint,
-                                       const std::vector<SketchSegment>& segments,
-                                       const std::vector<SketchPoint>& points,
-                                       const std::vector<SketchCircle>& circles,
-                                       const std::vector<SketchEllipse>& ellipses,
-                                       const std::vector<SketchArc>& arcs,
-                                       const std::vector<SketchEllipseArc>& ellipseArcs)
+bool pointwiseAngleConstraintSatisfied(
+    const PointwiseAngleConstraintRef& constraint,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
     // ::Sketch::addAngleAtPointConstraint() accepts Angle together with Tangent and
@@ -2177,7 +2529,14 @@ bool pointwiseAngleConstraintSatisfied(const PointwiseAngleConstraintRef& constr
     // GCS constraint. cad-core verifies the already-satisfied point-wise datum and does not move
     // geometry.
     const auto actual = pointwiseCurveAngleValue(
-        constraint.geometry, segments, points, circles, ellipses, arcs, ellipseArcs);
+        constraint.geometry,
+        segments,
+        points,
+        circles,
+        ellipses,
+        arcs,
+        ellipseArcs
+    );
     if (!actual) {
         return false;
     }
@@ -2186,13 +2545,15 @@ bool pointwiseAngleConstraintSatisfied(const PointwiseAngleConstraintRef& constr
     return std::abs(*actual - expected) <= 1e-7;
 }
 
-bool tangentConstraintSatisfied(const TangentConstraintRef& constraint,
-                                const std::vector<SketchSegment>& segments,
-                                const std::vector<SketchPoint>& points,
-                                const std::vector<SketchCircle>& circles,
-                                const std::vector<SketchEllipse>& ellipses,
-                                const std::vector<SketchArc>& arcs,
-                                const std::vector<SketchEllipseArc>& ellipseArcs)
+bool tangentConstraintSatisfied(
+    const TangentConstraintRef& constraint,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
     // ::Sketch::addConstraint(), case Tangent routes whole-geometry constraints to
@@ -2201,7 +2562,15 @@ bool tangentConstraintSatisfied(const TangentConstraintRef& constraint,
     // verifies already-satisfied direct and point-wise tangency without invoking the solver.
     if (constraint.viaPoint || constraint.firstPoint) {
         return pointwiseCurveAngleConstraintSatisfied(
-            constraint, true, segments, points, circles, ellipses, arcs, ellipseArcs);
+            constraint,
+            true,
+            segments,
+            points,
+            circles,
+            ellipses,
+            arcs,
+            ellipseArcs
+        );
     }
 
     if (constraint.first.kind == TangentGeometryKind::Line) {
@@ -2219,13 +2588,15 @@ bool tangentConstraintSatisfied(const TangentConstraintRef& constraint,
     }
 
     if (constraint.second.kind == TangentGeometryKind::Line) {
-        return tangentConstraintSatisfied(TangentConstraintRef{constraint.second, constraint.first},
-                                          segments,
-                                          points,
-                                          circles,
-                                          ellipses,
-                                          arcs,
-                                          ellipseArcs);
+        return tangentConstraintSatisfied(
+            TangentConstraintRef {constraint.second, constraint.first},
+            segments,
+            points,
+            circles,
+            ellipses,
+            arcs,
+            ellipseArcs
+        );
     }
 
     const auto firstRound = roundTangentGeometry(constraint.first, circles, arcs);
@@ -2236,10 +2607,12 @@ bool tangentConstraintSatisfied(const TangentConstraintRef& constraint,
     return false;
 }
 
-std::optional<double> equalConstraintMeasure(int geometryIndex,
-                                             const std::vector<SketchSegment>& segments,
-                                             const std::vector<SketchCircle>& circles,
-                                             const std::vector<SketchArc>& arcs)
+std::optional<double> equalConstraintMeasure(
+    int geometryIndex,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchArc>& arcs
+)
 {
     if (const auto segmentIndex = segmentIndexForGeometry(segments, geometryIndex)) {
         const SketchSegment& segment = segments.at(*segmentIndex);
@@ -2258,10 +2631,12 @@ std::optional<double> equalConstraintMeasure(int geometryIndex,
     return std::nullopt;
 }
 
-bool equalConstraintSatisfied(const EqualConstraintRef& constraint,
-                              const std::vector<SketchSegment>& segments,
-                              const std::vector<SketchCircle>& circles,
-                              const std::vector<SketchArc>& arcs)
+bool equalConstraintSatisfied(
+    const EqualConstraintRef& constraint,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchArc>& arcs
+)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
     // ::Sketch::addEqualConstraint(), for two lines calls "addConstraintEqualLength";
@@ -2275,8 +2650,10 @@ bool equalConstraintSatisfied(const EqualConstraintRef& constraint,
     return std::abs(*first - *second) <= 1e-7;
 }
 
-bool angleConstraintSatisfied(const AngleConstraintRef& constraint,
-                              const std::vector<SketchSegment>& segments)
+bool angleConstraintSatisfied(
+    const AngleConstraintRef& constraint,
+    const std::vector<SketchSegment>& segments
+)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
     // ::Sketch::addConstraint(), case Angle routes whole-line pairs to
@@ -2292,13 +2669,15 @@ bool angleConstraintSatisfied(const AngleConstraintRef& constraint,
     return std::abs(*actual - expected) <= 1e-7;
 }
 
-std::optional<gp_Pnt> constraintPointValue(const ConstraintPointRef& point,
-                                           const std::vector<SketchSegment>& segments,
-                                           const std::vector<SketchPoint>& points,
-                                           const std::vector<SketchCircle>& circles,
-                                           const std::vector<SketchEllipse>& ellipses,
-                                           const std::vector<SketchArc>& arcs,
-                                           const std::vector<SketchEllipseArc>& ellipseArcs)
+std::optional<gp_Pnt> constraintPointValue(
+    const ConstraintPointRef& point,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
     switch (point.kind) {
         case ConstraintPointKind::SegmentEndpoint:
@@ -2315,11 +2694,13 @@ std::optional<gp_Pnt> constraintPointValue(const ConstraintPointRef& point,
         }
         case ConstraintPointKind::EllipseArcEndpoint: {
             const SketchEllipseArc& arc = ellipseArcs.at(point.index);
-            return pointAtEllipseAngle(arc.center,
-                                       arc.majorRadius,
-                                       arc.minorRadius,
-                                       arc.angle,
-                                       point.start ? arc.startAngle : arc.endAngle);
+            return pointAtEllipseAngle(
+                arc.center,
+                arc.majorRadius,
+                arc.minorRadius,
+                arc.angle,
+                point.start ? arc.startAngle : arc.endAngle
+            );
         }
     }
     return std::nullopt;
@@ -2338,11 +2719,13 @@ double pointToLineDistance2d(const gp_Pnt& point, const SketchSegment& segment)
     return std::abs(area) / length;
 }
 
-double ellipseEquationError(const gp_Pnt& point,
-                            const gp_Pnt& center,
-                            double majorRadius,
-                            double minorRadius,
-                            double angle)
+double ellipseEquationError(
+    const gp_Pnt& point,
+    const gp_Pnt& center,
+    double majorRadius,
+    double minorRadius,
+    double angle
+)
 {
     const double dx = point.X() - center.X();
     const double dy = point.Y() - center.Y();
@@ -2355,13 +2738,15 @@ double ellipseEquationError(const gp_Pnt& point,
     return std::abs(value - 1.0);
 }
 
-bool pointOnObjectConstraintSatisfied(const PointOnObjectConstraintRef& constraint,
-                                      const std::vector<SketchSegment>& segments,
-                                      const std::vector<SketchPoint>& points,
-                                      const std::vector<SketchCircle>& circles,
-                                      const std::vector<SketchEllipse>& ellipses,
-                                      const std::vector<SketchArc>& arcs,
-                                      const std::vector<SketchEllipseArc>& ellipseArcs)
+bool pointOnObjectConstraintSatisfied(
+    const PointOnObjectConstraintRef& constraint,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
     // ::Sketch::addConstraint(), case PointOnObject routes to
@@ -2369,7 +2754,8 @@ bool pointOnObjectConstraintSatisfied(const PointOnObjectConstraintRef& constrai
     // That overload accepts Line, Arc, Circle, Ellipse and ArcOfEllipse targets. cad-core only
     // verifies already-satisfied point-on-object constraints; it does not run the solver or move
     // the constrained point.
-    const auto point = constraintPointValue(constraint.point, segments, points, circles, ellipses, arcs, ellipseArcs);
+    const auto point
+        = constraintPointValue(constraint.point, segments, points, circles, ellipses, arcs, ellipseArcs);
     if (!point) {
         return false;
     }
@@ -2387,12 +2773,20 @@ bool pointOnObjectConstraintSatisfied(const PointOnObjectConstraintRef& constrai
     }
     if (const auto ellipseIndex = ellipseIndexForGeometry(ellipses, constraint.objectGeometryIndex)) {
         const SketchEllipse& ellipse = ellipses.at(*ellipseIndex);
-        return ellipseEquationError(*point, ellipse.center, ellipse.majorRadius, ellipse.minorRadius, ellipse.angle)
+        return ellipseEquationError(
+                   *point,
+                   ellipse.center,
+                   ellipse.majorRadius,
+                   ellipse.minorRadius,
+                   ellipse.angle
+               )
             <= 1e-7;
     }
-    if (const auto ellipseArcIndex = ellipseArcIndexForGeometry(ellipseArcs, constraint.objectGeometryIndex)) {
+    if (const auto ellipseArcIndex
+        = ellipseArcIndexForGeometry(ellipseArcs, constraint.objectGeometryIndex)) {
         const SketchEllipseArc& arc = ellipseArcs.at(*ellipseArcIndex);
-        return ellipseEquationError(*point, arc.center, arc.majorRadius, arc.minorRadius, arc.angle) <= 1e-7;
+        return ellipseEquationError(*point, arc.center, arc.majorRadius, arc.minorRadius, arc.angle)
+            <= 1e-7;
     }
     return false;
 }
@@ -2409,24 +2803,28 @@ bool symmetricAroundLineSatisfied(const gp_Pnt& first, const gp_Pnt& second, con
     const gp_Pnt midpoint((first.X() + second.X()) * 0.5, (first.Y() + second.Y()) * 0.5, 0.0);
     const double vx = second.X() - first.X();
     const double vy = second.Y() - first.Y();
-    return pointToLineDistance2d(midpoint, axis) <= 1e-7 && std::abs(vx * dx + vy * dy) / length <= 1e-7;
+    return pointToLineDistance2d(midpoint, axis) <= 1e-7
+        && std::abs(vx * dx + vy * dy) / length <= 1e-7;
 }
 
-bool perpendicularPointLineConstraintSatisfied(const PerpendicularPointLineConstraintRef& constraint,
-                                               const std::vector<SketchSegment>& segments,
-                                               const std::vector<SketchPoint>& points,
-                                               const std::vector<SketchCircle>& circles,
-                                               const std::vector<SketchEllipse>& ellipses,
-                                               const std::vector<SketchArc>& arcs,
-                                               const std::vector<SketchEllipseArc>& ellipseArcs)
+bool perpendicularPointLineConstraintSatisfied(
+    const PerpendicularPointLineConstraintRef& constraint,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
     // ::Sketch::addConstraint(), case Perpendicular routes "point point line perpendicularity" to
     // addPerpendicularConstraint(geoId1, pos1, geoId2, pos2, geoId3). That overload calls
     // "GCSsys.addConstraintPerpendicular(p1, p2, l, tag)" and requires geoId3 to be a Line.
-    const auto first = constraintPointValue(constraint.first, segments, points, circles, ellipses, arcs, ellipseArcs);
-    const auto second =
-        constraintPointValue(constraint.second, segments, points, circles, ellipses, arcs, ellipseArcs);
+    const auto first
+        = constraintPointValue(constraint.first, segments, points, circles, ellipses, arcs, ellipseArcs);
+    const auto second
+        = constraintPointValue(constraint.second, segments, points, circles, ellipses, arcs, ellipseArcs);
     if (!first || !second) {
         return false;
     }
@@ -2444,10 +2842,12 @@ bool perpendicularPointLineConstraintSatisfied(const PerpendicularPointLineConst
     return std::abs(axisDx * pointDx + axisDy * pointDy) / (axisLength * pointLength) <= 1e-7;
 }
 
-bool perpendicularMidpointLineConstraintSatisfied(const PerpendicularMidpointLineConstraintRef& constraint,
-                                                  const std::vector<SketchSegment>& segments,
-                                                  const std::vector<SketchCircle>& circles,
-                                                  const std::vector<SketchArc>& arcs)
+bool perpendicularMidpointLineConstraintSatisfied(
+    const PerpendicularMidpointLineConstraintRef& constraint,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchArc>& arcs
+)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
     // ::Sketch::addPerpendicularConstraint(int geoId1, int geoId2), for Line + Circle/Arc,
@@ -2459,13 +2859,15 @@ bool perpendicularMidpointLineConstraintSatisfied(const PerpendicularMidpointLin
     return pointToLineDistance2d(center, line) <= 1e-7;
 }
 
-bool symmetricConstraintSatisfied(const SymmetricConstraintRef& constraint,
-                                  const std::vector<SketchSegment>& segments,
-                                  const std::vector<SketchPoint>& points,
-                                  const std::vector<SketchCircle>& circles,
-                                  const std::vector<SketchEllipse>& ellipses,
-                                  const std::vector<SketchArc>& arcs,
-                                  const std::vector<SketchEllipseArc>& ellipseArcs)
+bool symmetricConstraintSatisfied(
+    const SymmetricConstraintRef& constraint,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
     // ::Sketch::addConstraint(), case Symmetric dispatches either to
@@ -2473,9 +2875,10 @@ bool symmetricConstraintSatisfied(const SymmetricConstraintRef& constraint,
     // "addSymmetricConstraint(..., constraint->Third, constraint->ThirdPos)" for symmetry about a
     // point. cad-core only verifies already-satisfied point symmetry; it does not run the solver
     // or move geometry.
-    const auto first = constraintPointValue(constraint.first, segments, points, circles, ellipses, arcs, ellipseArcs);
-    const auto second =
-        constraintPointValue(constraint.second, segments, points, circles, ellipses, arcs, ellipseArcs);
+    const auto first
+        = constraintPointValue(constraint.first, segments, points, circles, ellipses, arcs, ellipseArcs);
+    const auto second
+        = constraintPointValue(constraint.second, segments, points, circles, ellipses, arcs, ellipseArcs);
     if (!first || !second) {
         return false;
     }
@@ -2484,8 +2887,15 @@ bool symmetricConstraintSatisfied(const SymmetricConstraintRef& constraint,
         return symmetricAroundLineSatisfied(*first, *second, segments.at(*constraint.axisSegmentIndex));
     }
     if (constraint.centerPoint) {
-        const auto center =
-            constraintPointValue(*constraint.centerPoint, segments, points, circles, ellipses, arcs, ellipseArcs);
+        const auto center = constraintPointValue(
+            *constraint.centerPoint,
+            segments,
+            points,
+            circles,
+            ellipses,
+            arcs,
+            ellipseArcs
+        );
         if (!center) {
             return false;
         }
@@ -2495,27 +2905,31 @@ bool symmetricConstraintSatisfied(const SymmetricConstraintRef& constraint,
     return false;
 }
 
-std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::json& constraints,
-                                                              const document::DocumentObject& object,
-                                                              runtime::ComputeContext& context,
-                                                              std::vector<SketchSegment>& segments,
-                                                              const std::vector<SketchPoint>& points,
-                                                              const std::vector<SketchCircle>& circles,
-                                                              const std::vector<SketchEllipse>& ellipses,
-                                                              const std::vector<SketchArc>& arcs,
-                                                              const std::vector<SketchEllipseArc>& ellipseArcs,
-                                                              const std::vector<SketchBSpline>& bsplines)
+std::optional<AppliedSketchConstraints> applySketchConstraints(
+    const nlohmann::json& constraints,
+    const document::DocumentObject& object,
+    runtime::ComputeContext& context,
+    std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs,
+    const std::vector<SketchBSpline>& bsplines
+)
 {
     if (constraints.is_null()) {
-        return AppliedSketchConstraints{};
+        return AppliedSketchConstraints {};
     }
     if (!constraints.is_array()) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "unsupported_property",
-                               "Sketch Constraints must be a list",
-                               object.name,
-                               "Constraints");
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "unsupported_property",
+            "Sketch Constraints must be a list",
+            object.name,
+            "Constraints"
+        );
         return std::nullopt;
     }
 
@@ -2536,12 +2950,14 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
     std::vector<BlockConstraintRef> blockConstraints;
     for (const auto& constraint : constraints) {
         if (!constraint.is_object()) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "unsupported_property",
-                                   "Sketch Constraints must be objects",
-                                   object.name,
-                                   "Constraints");
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "unsupported_property",
+                "Sketch Constraints must be objects",
+                object.name,
+                "Constraints"
+            );
             return std::nullopt;
         }
 
@@ -2550,12 +2966,14 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
             const auto first = readEndpointRef(constraint, "First", "FirstPos", segments);
             const auto second = readEndpointRef(constraint, "Second", "SecondPos", segments);
             if (!first || !second) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_property",
-                                       "Coincident constraint must reference two line endpoints",
-                                       object.name,
-                                       "Constraints");
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_property",
+                    "Coincident constraint must reference two line endpoints",
+                    object.name,
+                    "Constraints"
+                );
                 return std::nullopt;
             }
 
@@ -2571,12 +2989,14 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
             // this solver-facing subset when it is already satisfied; it does not move geometry.
             const auto orientation = readOrientationConstraintRef(constraint, kind, segments);
             if (!orientation) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_property",
-                                       "Horizontal/Vertical constraints currently support whole line references",
-                                       object.name,
-                                       "Constraints");
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_property",
+                    "Horizontal/Vertical constraints currently support whole line references",
+                    object.name,
+                    "Constraints"
+                );
                 return std::nullopt;
             }
             orientationConstraints.push_back(*orientation);
@@ -2590,12 +3010,14 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
             // sketch solver.
             const auto relation = readLinePairConstraintRef(constraint, kind, segments);
             if (!relation) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_property",
-                                       "Parallel constraints currently support whole line pairs only",
-                                       object.name,
-                                       "Constraints");
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_property",
+                    "Parallel constraints currently support whole line pairs only",
+                    object.name,
+                    "Constraints"
+                );
                 return std::nullopt;
             }
             linePairConstraints.push_back(*relation);
@@ -2605,32 +3027,52 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
         if (kind == SketchConstraintKind::Perpendicular) {
             if (constraint.contains("Third") && !readPointPositionIsNone(constraint, "FirstPos", true)
                 && !readPointPositionIsNone(constraint, "SecondPos", true)) {
-                const auto perpendicularPointLine =
-                    readPerpendicularPointLineConstraintRef(constraint, segments, points, circles, ellipses, arcs, ellipseArcs);
+                const auto perpendicularPointLine = readPerpendicularPointLineConstraintRef(
+                    constraint,
+                    segments,
+                    points,
+                    circles,
+                    ellipses,
+                    arcs,
+                    ellipseArcs
+                );
                 if (!perpendicularPointLine) {
-                    runtime::addDiagnostic(context.diagnostics,
-                                           "error",
-                                           "unsupported_property",
-                                           "Perpendicular point-point-line constraints require two point references and a line reference",
-                                           object.name,
-                                           "Constraints");
+                    runtime::addDiagnostic(
+                        context.diagnostics,
+                        "error",
+                        "unsupported_property",
+                        "Perpendicular point-point-line constraints require two point references "
+                        "and a line reference",
+                        object.name,
+                        "Constraints"
+                    );
                     return std::nullopt;
                 }
                 perpendicularPointLineConstraints.push_back(*perpendicularPointLine);
                 continue;
             }
 
-            if (constraint.contains("FirstPos") || constraint.contains("SecondPos") || constraint.contains("Third")
-                || constraint.contains("ThirdPos")) {
-                const auto perpendicular =
-                    readTangentConstraintRef(constraint, segments, points, circles, ellipses, arcs, ellipseArcs);
+            if (constraint.contains("FirstPos") || constraint.contains("SecondPos")
+                || constraint.contains("Third") || constraint.contains("ThirdPos")) {
+                const auto perpendicular = readTangentConstraintRef(
+                    constraint,
+                    segments,
+                    points,
+                    circles,
+                    ellipses,
+                    arcs,
+                    ellipseArcs
+                );
                 if (!perpendicular) {
-                    runtime::addDiagnostic(context.diagnostics,
-                                           "error",
-                                           "unsupported_property",
-                                           "Perpendicular constraints currently support whole line pairs and point-wise curve references only",
-                                           object.name,
-                                           "Constraints");
+                    runtime::addDiagnostic(
+                        context.diagnostics,
+                        "error",
+                        "unsupported_property",
+                        "Perpendicular constraints currently support whole line pairs and "
+                        "point-wise curve references only",
+                        object.name,
+                        "Constraints"
+                    );
                     return std::nullopt;
                 }
                 perpendicularPointConstraints.push_back(*perpendicular);
@@ -2647,14 +3089,18 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
                 continue;
             }
 
-            const auto midpoint = readPerpendicularMidpointLineConstraintRef(constraint, segments, circles, arcs);
+            const auto midpoint
+                = readPerpendicularMidpointLineConstraintRef(constraint, segments, circles, arcs);
             if (!midpoint) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_property",
-                                       "Perpendicular constraints currently support whole line pairs, line-circle/arc midpoint pairs, and point-wise curve references only",
-                                       object.name,
-                                       "Constraints");
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_property",
+                    "Perpendicular constraints currently support whole line pairs, line-circle/arc "
+                    "midpoint pairs, and point-wise curve references only",
+                    object.name,
+                    "Constraints"
+                );
                 return std::nullopt;
             }
             perpendicularMidpointLineConstraints.push_back(*midpoint);
@@ -2662,15 +3108,25 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
         }
 
         if (kind == SketchConstraintKind::Tangent) {
-            const auto tangent =
-                readTangentConstraintRef(constraint, segments, points, circles, ellipses, arcs, ellipseArcs);
+            const auto tangent = readTangentConstraintRef(
+                constraint,
+                segments,
+                points,
+                circles,
+                ellipses,
+                arcs,
+                ellipseArcs
+            );
             if (!tangent) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_property",
-                                       "Tangent constraints currently support direct whole-geometry and point-wise tangency only",
-                                       object.name,
-                                       "Constraints");
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_property",
+                    "Tangent constraints currently support direct whole-geometry and point-wise "
+                    "tangency only",
+                    object.name,
+                    "Constraints"
+                );
                 return std::nullopt;
             }
             tangentConstraints.push_back(*tangent);
@@ -2678,15 +3134,25 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
         }
 
         if (kind == SketchConstraintKind::PointOnObject) {
-            const auto pointOnObject =
-                readPointOnObjectConstraintRef(constraint, segments, points, circles, ellipses, arcs, ellipseArcs);
+            const auto pointOnObject = readPointOnObjectConstraintRef(
+                constraint,
+                segments,
+                points,
+                circles,
+                ellipses,
+                arcs,
+                ellipseArcs
+            );
             if (!pointOnObject) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_property",
-                                       "PointOnObject constraints currently support line/arc/point references on line, circle, arc, ellipse and ellipse-arc targets only",
-                                       object.name,
-                                       "Constraints");
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_property",
+                    "PointOnObject constraints currently support line/arc/point references on "
+                    "line, circle, arc, ellipse and ellipse-arc targets only",
+                    object.name,
+                    "Constraints"
+                );
                 return std::nullopt;
             }
             pointOnObjectConstraints.push_back(*pointOnObject);
@@ -2694,15 +3160,25 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
         }
 
         if (kind == SketchConstraintKind::Symmetric) {
-            const auto symmetric =
-                readSymmetricConstraintRef(constraint, segments, points, circles, ellipses, arcs, ellipseArcs);
+            const auto symmetric = readSymmetricConstraintRef(
+                constraint,
+                segments,
+                points,
+                circles,
+                ellipses,
+                arcs,
+                ellipseArcs
+            );
             if (!symmetric) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_property",
-                                       "Symmetric constraints currently support two point references about a line or point reference only",
-                                       object.name,
-                                       "Constraints");
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_property",
+                    "Symmetric constraints currently support two point references about a line or "
+                    "point reference only",
+                    object.name,
+                    "Constraints"
+                );
                 return std::nullopt;
             }
             symmetricConstraints.push_back(*symmetric);
@@ -2710,21 +3186,33 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
         }
 
         if (kind == SketchConstraintKind::Block) {
-            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectConstraints.cpp
+            // FreeCAD:
+            // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectConstraints.cpp
             // ::SketchObject::getBlockedState(), for "cstr->Type == Block" sets
-            // "blockedstate = true"; /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
+            // "blockedstate = true";
+            // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
             // ::Sketch::addConstraint() handles "Sketcher::Block" separately while adding
             // geometry. cad-core has no solver parameters to freeze, so it accepts valid
             // whole-geometry Block declarations without changing the current shape.
             const auto block = readBlockConstraintRef(
-                constraint, segments, points, circles, ellipses, arcs, ellipseArcs, bsplines);
+                constraint,
+                segments,
+                points,
+                circles,
+                ellipses,
+                arcs,
+                ellipseArcs,
+                bsplines
+            );
             if (!block) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_property",
-                                       "Block constraints currently support whole sketch geometry references only",
-                                       object.name,
-                                       "Constraints");
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_property",
+                    "Block constraints currently support whole sketch geometry references only",
+                    object.name,
+                    "Constraints"
+                );
                 return std::nullopt;
             }
             blockConstraints.push_back(*block);
@@ -2734,12 +3222,15 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
         if (kind == SketchConstraintKind::Equal) {
             const auto equal = readEqualConstraintRef(constraint);
             if (!equal) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_property",
-                                       "Equal constraints currently support whole line, circle and arc geometry pairs only",
-                                       object.name,
-                                       "Constraints");
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_property",
+                    "Equal constraints currently support whole line, circle and arc geometry pairs "
+                    "only",
+                    object.name,
+                    "Constraints"
+                );
                 return std::nullopt;
             }
             equalConstraints.push_back(*equal);
@@ -2747,17 +3238,27 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
         }
 
         if (kind == SketchConstraintKind::Angle) {
-            if (constraint.contains("FirstPos") || constraint.contains("SecondPos") || constraint.contains("Third")
-                || constraint.contains("ThirdPos")) {
-                const auto angle =
-                    readPointwiseAngleConstraintRef(constraint, segments, points, circles, ellipses, arcs, ellipseArcs);
+            if (constraint.contains("FirstPos") || constraint.contains("SecondPos")
+                || constraint.contains("Third") || constraint.contains("ThirdPos")) {
+                const auto angle = readPointwiseAngleConstraintRef(
+                    constraint,
+                    segments,
+                    points,
+                    circles,
+                    ellipses,
+                    arcs,
+                    ellipseArcs
+                );
                 if (!angle) {
-                    runtime::addDiagnostic(context.diagnostics,
-                                           "error",
-                                           "unsupported_property",
-                                           "Angle constraints currently require a Value/Datum and support whole line pairs or point-wise curve references only",
-                                           object.name,
-                                           "Constraints");
+                    runtime::addDiagnostic(
+                        context.diagnostics,
+                        "error",
+                        "unsupported_property",
+                        "Angle constraints currently require a Value/Datum and support whole line "
+                        "pairs or point-wise curve references only",
+                        object.name,
+                        "Constraints"
+                    );
                     return std::nullopt;
                 }
                 pointwiseAngleConstraints.push_back(*angle);
@@ -2766,12 +3267,15 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
 
             const auto angle = readAngleConstraintRef(constraint, segments);
             if (!angle) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_property",
-                                       "Angle constraints currently require a Value/Datum and support whole line pairs or point-wise curve references only",
-                                       object.name,
-                                       "Constraints");
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_property",
+                    "Angle constraints currently require a Value/Datum and support whole line "
+                    "pairs or point-wise curve references only",
+                    object.name,
+                    "Constraints"
+                );
                 return std::nullopt;
             }
             angleConstraints.push_back(*angle);
@@ -2791,24 +3295,31 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
             // geometry to satisfy a datum.
             const auto dimension = readDimensionConstraintRef(constraint, kind, segments);
             if (!dimension) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_property",
-                                       "Distance/Radius/Diameter constraints currently require a Value/Datum and a whole geometry, line-end pair, or fixed line-end coordinate reference",
-                                       object.name,
-                                       "Constraints");
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_property",
+                    "Distance/Radius/Diameter constraints currently require a Value/Datum and a "
+                    "whole geometry, line-end pair, or fixed line-end coordinate reference",
+                    object.name,
+                    "Constraints"
+                );
                 return std::nullopt;
             }
             dimensionConstraints.push_back(*dimension);
             continue;
         }
 
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "unsupported_property",
-                               "Only Sketcher Coincident and already-satisfied Horizontal/Vertical/Parallel/Tangent/Perpendicular/PointOnObject/Symmetric/Block/Angle/Distance/Radius/Diameter/Equal constraints are applied in the current P5 subset",
-                               object.name,
-                               "Constraints");
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "unsupported_property",
+            "Only Sketcher Coincident and already-satisfied "
+            "Horizontal/Vertical/Parallel/Tangent/Perpendicular/PointOnObject/Symmetric/Block/"
+            "Angle/Distance/Radius/Diameter/Equal constraints are applied in the current P5 subset",
+            object.name,
+            "Constraints"
+        );
         return std::nullopt;
     }
 
@@ -2817,12 +3328,15 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
     if (endpoints.parent.empty() && !orientationConstraints.empty()) {
         for (const auto& orientation : orientationConstraints) {
             if (!orientationConstraintSatisfied(orientation, segments)) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_property",
-                                       "Horizontal/Vertical constraint requires solver movement in the current P5 subset",
-                                       object.name,
-                                       "Constraints");
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_property",
+                    "Horizontal/Vertical constraint requires solver movement in the current P5 "
+                    "subset",
+                    object.name,
+                    "Constraints"
+                );
                 return std::nullopt;
             }
             ++applied.orientation;
@@ -2833,7 +3347,7 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
     std::vector<std::optional<gp_Pnt>> mergedPoints(segments.size() * 2U);
     for (std::size_t index = 0; index < segments.size(); ++index) {
         for (bool start : {true, false}) {
-            const EndpointRef endpoint{index, start};
+            const EndpointRef endpoint {index, start};
             const std::size_t root = endpoints.find(endpointId(endpoint));
             if (!mergedPoints[root]) {
                 mergedPoints[root] = endpointPoint(segments[index], start);
@@ -2842,7 +3356,7 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
     }
     for (std::size_t index = 0; index < segments.size(); ++index) {
         for (bool start : {true, false}) {
-            const EndpointRef endpoint{index, start};
+            const EndpointRef endpoint {index, start};
             const std::size_t root = endpoints.find(endpointId(endpoint));
             if (mergedPoints[root]) {
                 endpointPoint(segments[index], start) = *mergedPoints[root];
@@ -2852,12 +3366,14 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
 
     for (const auto& orientation : orientationConstraints) {
         if (!orientationConstraintSatisfied(orientation, segments)) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "unsupported_property",
-                                   "Horizontal/Vertical constraint requires solver movement in the current P5 subset",
-                                   object.name,
-                                   "Constraints");
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "unsupported_property",
+                "Horizontal/Vertical constraint requires solver movement in the current P5 subset",
+                object.name,
+                "Constraints"
+            );
             return std::nullopt;
         }
         ++applied.orientation;
@@ -2865,12 +3381,15 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
 
     for (const auto& dimension : dimensionConstraints) {
         if (!dimensionConstraintSatisfied(dimension, segments, circles, arcs)) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "unsupported_property",
-                                   "Distance/Radius/Diameter constraint requires solver movement in the current P5 subset",
-                                   object.name,
-                                   "Constraints");
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "unsupported_property",
+                "Distance/Radius/Diameter constraint requires solver movement in the current P5 "
+                "subset",
+                object.name,
+                "Constraints"
+            );
             return std::nullopt;
         }
         ++applied.dimension;
@@ -2878,25 +3397,32 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
 
     for (const auto& relation : linePairConstraints) {
         if (!linePairConstraintSatisfied(relation, segments)) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "unsupported_property",
-                                   "Parallel/Perpendicular constraint requires solver movement in the current P5 subset",
-                                   object.name,
-                                   "Constraints");
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "unsupported_property",
+                "Parallel/Perpendicular constraint requires solver movement in the current P5 "
+                "subset",
+                object.name,
+                "Constraints"
+            );
             return std::nullopt;
         }
         ++applied.relation;
     }
 
     for (const auto& tangent : tangentConstraints) {
-        if (!tangentConstraintSatisfied(tangent, segments, points, circles, ellipses, arcs, ellipseArcs)) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "unsupported_property",
-                                   "Tangent constraint requires solver movement in the current P5 subset",
-                                   object.name,
-                                   "Constraints");
+        if (
+            !tangentConstraintSatisfied(tangent, segments, points, circles, ellipses, arcs, ellipseArcs)
+        ) {
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "unsupported_property",
+                "Tangent constraint requires solver movement in the current P5 subset",
+                object.name,
+                "Constraints"
+            );
             return std::nullopt;
         }
         ++applied.relation;
@@ -2909,13 +3435,23 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
         // cad-core verifies the already-satisfied point-wise curve-angle subset without moving
         // geometry or invoking the solver.
         if (!pointwiseCurveAngleConstraintSatisfied(
-                perpendicular, false, segments, points, circles, ellipses, arcs, ellipseArcs)) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "unsupported_property",
-                                   "Perpendicular constraint requires solver movement in the current P5 subset",
-                                   object.name,
-                                   "Constraints");
+                perpendicular,
+                false,
+                segments,
+                points,
+                circles,
+                ellipses,
+                arcs,
+                ellipseArcs
+            )) {
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "unsupported_property",
+                "Perpendicular constraint requires solver movement in the current P5 subset",
+                object.name,
+                "Constraints"
+            );
             return std::nullopt;
         }
         ++applied.relation;
@@ -2923,13 +3459,23 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
 
     for (const auto& perpendicular : perpendicularPointLineConstraints) {
         if (!perpendicularPointLineConstraintSatisfied(
-                perpendicular, segments, points, circles, ellipses, arcs, ellipseArcs)) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "unsupported_property",
-                                   "Perpendicular point-point-line constraint requires solver movement in the current P5 subset",
-                                   object.name,
-                                   "Constraints");
+                perpendicular,
+                segments,
+                points,
+                circles,
+                ellipses,
+                arcs,
+                ellipseArcs
+            )) {
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "unsupported_property",
+                "Perpendicular point-point-line constraint requires solver movement in the current "
+                "P5 subset",
+                object.name,
+                "Constraints"
+            );
             return std::nullopt;
         }
         ++applied.relation;
@@ -2937,38 +3483,49 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
 
     for (const auto& perpendicular : perpendicularMidpointLineConstraints) {
         if (!perpendicularMidpointLineConstraintSatisfied(perpendicular, segments, circles, arcs)) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "unsupported_property",
-                                   "Perpendicular line-circle/arc midpoint constraint requires solver movement in the current P5 subset",
-                                   object.name,
-                                   "Constraints");
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "unsupported_property",
+                "Perpendicular line-circle/arc midpoint constraint requires solver movement in the "
+                "current P5 subset",
+                object.name,
+                "Constraints"
+            );
             return std::nullopt;
         }
         ++applied.relation;
     }
 
     for (const auto& pointOnObject : pointOnObjectConstraints) {
-        if (!pointOnObjectConstraintSatisfied(pointOnObject, segments, points, circles, ellipses, arcs, ellipseArcs)) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "unsupported_property",
-                                   "PointOnObject constraint requires solver movement in the current P5 subset",
-                                   object.name,
-                                   "Constraints");
+        if (
+            !pointOnObjectConstraintSatisfied(pointOnObject, segments, points, circles, ellipses, arcs, ellipseArcs)
+        ) {
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "unsupported_property",
+                "PointOnObject constraint requires solver movement in the current P5 subset",
+                object.name,
+                "Constraints"
+            );
             return std::nullopt;
         }
         ++applied.relation;
     }
 
     for (const auto& symmetric : symmetricConstraints) {
-        if (!symmetricConstraintSatisfied(symmetric, segments, points, circles, ellipses, arcs, ellipseArcs)) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "unsupported_property",
-                                   "Symmetric constraint requires solver movement in the current P5 subset",
-                                   object.name,
-                                   "Constraints");
+        if (
+            !symmetricConstraintSatisfied(symmetric, segments, points, circles, ellipses, arcs, ellipseArcs)
+        ) {
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "unsupported_property",
+                "Symmetric constraint requires solver movement in the current P5 subset",
+                object.name,
+                "Constraints"
+            );
             return std::nullopt;
         }
         ++applied.relation;
@@ -2976,25 +3533,31 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
 
     for (const auto& angle : angleConstraints) {
         if (!angleConstraintSatisfied(angle, segments)) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "unsupported_property",
-                                   "Angle constraint requires solver movement in the current P5 subset",
-                                   object.name,
-                                   "Constraints");
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "unsupported_property",
+                "Angle constraint requires solver movement in the current P5 subset",
+                object.name,
+                "Constraints"
+            );
             return std::nullopt;
         }
         ++applied.relation;
     }
 
     for (const auto& angle : pointwiseAngleConstraints) {
-        if (!pointwiseAngleConstraintSatisfied(angle, segments, points, circles, ellipses, arcs, ellipseArcs)) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "unsupported_property",
-                                   "Angle constraint requires solver movement in the current P5 subset",
-                                   object.name,
-                                   "Constraints");
+        if (
+            !pointwiseAngleConstraintSatisfied(angle, segments, points, circles, ellipses, arcs, ellipseArcs)
+        ) {
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "unsupported_property",
+                "Angle constraint requires solver movement in the current P5 subset",
+                object.name,
+                "Constraints"
+            );
             return std::nullopt;
         }
         ++applied.relation;
@@ -3002,12 +3565,14 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(const nlohmann::j
 
     for (const auto& equal : equalConstraints) {
         if (!equalConstraintSatisfied(equal, segments, circles, arcs)) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "unsupported_property",
-                                   "Equal constraint requires solver movement in the current P5 subset",
-                                   object.name,
-                                   "Constraints");
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "unsupported_property",
+                "Equal constraint requires solver movement in the current P5 subset",
+                object.name,
+                "Constraints"
+            );
             return std::nullopt;
         }
         ++applied.relation;
@@ -3071,44 +3636,54 @@ std::vector<SketchBSpline> profileBSplines(const std::vector<SketchBSpline>& bsp
     return profile;
 }
 
-std::vector<SketchProfileEdge> profileEdges(const std::vector<SketchSegment>& segments,
-                                            const std::vector<SketchArc>& arcs,
-                                            const std::vector<SketchEllipseArc>& ellipseArcs,
-                                            const std::vector<SketchBSpline>& bsplines)
+std::vector<SketchProfileEdge> profileEdges(
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs,
+    const std::vector<SketchBSpline>& bsplines
+)
 {
     std::vector<SketchProfileEdge> edges;
     for (const auto& segment : segments) {
-        edges.push_back(SketchProfileEdge{SketchProfileEdgeKind::Line, segment.start, segment.end});
+        edges.push_back(SketchProfileEdge {SketchProfileEdgeKind::Line, segment.start, segment.end});
     }
     for (const auto& arc : arcs) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchGeometry.cpp
         // SketchArcOfCircle::getPoint() exposes start/end/mid; cad-core keeps the same endpoint
         // semantics for profile connectivity while deferring full solver support.
-        edges.push_back(SketchProfileEdge{SketchProfileEdgeKind::ArcOfCircle,
-                                          pointAtAngle(arc.center, arc.radius, arc.startAngle),
-                                          pointAtAngle(arc.center, arc.radius, arc.endAngle),
-                                          arc.center,
-                                          arc.radius,
-                                          0.0,
-                                          0.0,
-                                          0.0,
-                                          arc.startAngle,
-                                          arc.endAngle});
+        edges.push_back(
+            SketchProfileEdge {
+                SketchProfileEdgeKind::ArcOfCircle,
+                pointAtAngle(arc.center, arc.radius, arc.startAngle),
+                pointAtAngle(arc.center, arc.radius, arc.endAngle),
+                arc.center,
+                arc.radius,
+                0.0,
+                0.0,
+                0.0,
+                arc.startAngle,
+                arc.endAngle
+            }
+        );
     }
     for (const auto& arc : ellipseArcs) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchGeometry.cpp
         // SketchArcOfEllipse::getPoint() exposes start/end/mid with emulateCCW=true.
         // cad-core uses the same start/end parameters for profile connectivity.
-        edges.push_back(SketchProfileEdge{SketchProfileEdgeKind::ArcOfEllipse,
-                                          pointAtEllipseAngle(arc.center, arc.majorRadius, arc.minorRadius, arc.angle, arc.startAngle),
-                                          pointAtEllipseAngle(arc.center, arc.majorRadius, arc.minorRadius, arc.angle, arc.endAngle),
-                                          arc.center,
-                                          0.0,
-                                          arc.majorRadius,
-                                          arc.minorRadius,
-                                          arc.angle,
-                                          arc.startAngle,
-                                          arc.endAngle});
+        edges.push_back(
+            SketchProfileEdge {
+                SketchProfileEdgeKind::ArcOfEllipse,
+                pointAtEllipseAngle(arc.center, arc.majorRadius, arc.minorRadius, arc.angle, arc.startAngle),
+                pointAtEllipseAngle(arc.center, arc.majorRadius, arc.minorRadius, arc.angle, arc.endAngle),
+                arc.center,
+                0.0,
+                arc.majorRadius,
+                arc.minorRadius,
+                arc.angle,
+                arc.startAngle,
+                arc.endAngle
+            }
+        );
     }
     for (const auto& bspline : bsplines) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchGeometry.cpp
@@ -3117,18 +3692,22 @@ std::vector<SketchProfileEdge> profileEdges(const std::vector<SketchSegment>& se
         if (bspline.poles.size() < 2U) {
             continue;
         }
-        edges.push_back(SketchProfileEdge{SketchProfileEdgeKind::BSpline,
-                                          bspline.poles.front(),
-                                          bspline.poles.back(),
-                                          gp_Pnt{},
-                                          0.0,
-                                          0.0,
-                                          0.0,
-                                          0.0,
-                                          0.0,
-                                          0.0,
-                                          bspline.degree,
-                                          bspline.poles});
+        edges.push_back(
+            SketchProfileEdge {
+                SketchProfileEdgeKind::BSpline,
+                bspline.poles.front(),
+                bspline.poles.back(),
+                gp_Pnt {},
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                bspline.degree,
+                bspline.poles
+            }
+        );
     }
     return edges;
 }
@@ -3153,8 +3732,9 @@ std::optional<Handle(Geom_BSplineCurve)> makeBSplineCurve(int degree, const std:
     TColStd_Array1OfReal knotArray(1, knotCount);
     TColStd_Array1OfInteger multiplicities(1, knotCount);
     for (int index = 1; index <= knotCount; ++index) {
-        const double parameter = knotCount == 1 ? 0.0
-                                                : static_cast<double>(index - 1) / static_cast<double>(knotCount - 1);
+        const double parameter = knotCount == 1
+            ? 0.0
+            : static_cast<double>(index - 1) / static_cast<double>(knotCount - 1);
         knotArray.SetValue(index, parameter);
         multiplicities.SetValue(index, 1);
     }
@@ -3162,11 +3742,9 @@ std::optional<Handle(Geom_BSplineCurve)> makeBSplineCurve(int degree, const std:
     multiplicities.SetValue(knotCount, degree + 1);
 
     try {
-        return Handle(Geom_BSplineCurve)(new Geom_BSplineCurve(poleArray,
-                                                               knotArray,
-                                                               multiplicities,
-                                                               degree,
-                                                               Standard_False));
+        return Handle(Geom_BSplineCurve)(
+            new Geom_BSplineCurve(poleArray, knotArray, multiplicities, degree, Standard_False)
+        );
     }
     catch (const Standard_Failure&) {
         return std::nullopt;
@@ -3182,17 +3760,21 @@ std::optional<TopoDS_Edge> makeProfileEdge(const SketchProfileEdge& edge, bool r
     else if (edge.kind == SketchProfileEdgeKind::ArcOfCircle) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/Geometry.cpp
         // GeomArcOfCircle::Restore() rebuilds from "Radius", "StartAngle" and "EndAngle".
-        edgeBuilder = BRepBuilderAPI_MakeEdge(gp_Circ(gp_Ax2(edge.center, gp_Dir(0, 0, 1)), edge.radius),
-                                              edge.startAngle,
-                                              edge.endAngle);
+        edgeBuilder = BRepBuilderAPI_MakeEdge(
+            gp_Circ(gp_Ax2(edge.center, gp_Dir(0, 0, 1)), edge.radius),
+            edge.startAngle,
+            edge.endAngle
+        );
     }
     else if (edge.kind == SketchProfileEdgeKind::ArcOfEllipse) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/Geometry.cpp
         // GeomArcOfEllipse::Restore() rebuilds from "MajorRadius", "MinorRadius",
         // "AngleXU", "StartAngle" and "EndAngle".
-        edgeBuilder = BRepBuilderAPI_MakeEdge(gp_Elips(ellipseAxis(edge.center, edge.angle), edge.majorRadius, edge.minorRadius),
-                                              edge.startAngle,
-                                              edge.endAngle);
+        edgeBuilder = BRepBuilderAPI_MakeEdge(
+            gp_Elips(ellipseAxis(edge.center, edge.angle), edge.majorRadius, edge.minorRadius),
+            edge.startAngle,
+            edge.endAngle
+        );
     }
     else {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/Geometry.cpp
@@ -3211,11 +3793,13 @@ std::optional<TopoDS_Edge> makeProfileEdge(const SketchProfileEdge& edge, bool r
     return reversed ? TopoDS::Edge(built.Reversed()) : built;
 }
 
-bool addConnectedWire(const std::vector<SketchProfileEdge>& edges,
-                      BRepBuilderAPI_MakeWire& wireBuilder,
-                      std::optional<gp_Pnt>& firstStart,
-                      std::optional<gp_Pnt>& lastEnd,
-                      bool requireClosed)
+bool addConnectedWire(
+    const std::vector<SketchProfileEdge>& edges,
+    BRepBuilderAPI_MakeWire& wireBuilder,
+    std::optional<gp_Pnt>& firstStart,
+    std::optional<gp_Pnt>& lastEnd,
+    bool requireClosed
+)
 {
     if (edges.empty()) {
         return false;
@@ -3343,7 +3927,9 @@ std::optional<SketchProfileWires> makeProfileWiresFromEdges(const std::vector<Sk
     return result;
 }
 
-std::optional<std::vector<TopoDS_Wire>> makeClosedWiresFromEdges(const std::vector<SketchProfileEdge>& edges)
+std::optional<std::vector<TopoDS_Wire>> makeClosedWiresFromEdges(
+    const std::vector<SketchProfileEdge>& edges
+)
 {
     auto wires = makeProfileWiresFromEdges(edges);
     if (!wires || !wires->openEdges.empty()) {
@@ -3362,7 +3948,7 @@ void appendSourceEdgesFromWire(std::vector<TopoDS_Edge>& sourceEdges, const Topo
 TopoDS_Shape compoundOrSingleShape(const std::vector<TopoDS_Shape>& shapes)
 {
     if (shapes.empty()) {
-        return TopoDS_Shape{};
+        return TopoDS_Shape {};
     }
     if (shapes.size() == 1U) {
         return shapes.front();
@@ -3397,37 +3983,44 @@ std::optional<TopoDS_Wire> makeWireFromEllipse(const SketchEllipse& ellipse)
     return wireBuilder.Wire();
 }
 
-std::optional<TopoDS_Shape> buildRawSketchShape(const document::DocumentObject& object,
-                                                runtime::ComputeContext& context,
-                                                const std::vector<SketchProfileEdge>& edges,
-                                                const std::vector<SketchPoint>& points,
-                                                const std::vector<SketchCircle>& circles,
-                                                const std::vector<SketchEllipse>& ellipses)
+std::optional<TopoDS_Shape> buildRawSketchShape(
+    const document::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const std::vector<SketchProfileEdge>& edges,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses
+)
 {
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::buildShape(),
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::buildShape(),
     // "GeometryFacade::getConstruction(geo)" is skipped, then raw edges are collected into
     // makeElementWires() before PartDesign later asks ProfileBased to make a face.
     std::vector<TopoDS_Shape> shapes;
     if (!edges.empty()) {
         const auto profileWires = makeProfileWiresFromEdges(edges);
         if (!profileWires) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "execution_failed",
-                                   "OCCT could not build raw Sketch Shape wire",
-                                   object.name,
-                                   "Geometry");
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "execution_failed",
+                "OCCT could not build raw Sketch Shape wire",
+                object.name,
+                "Geometry"
+            );
             return std::nullopt;
         }
         shapes.insert(shapes.end(), profileWires->closedWires.begin(), profileWires->closedWires.end());
         shapes.insert(shapes.end(), profileWires->openWires.begin(), profileWires->openWires.end());
         if (shapes.empty()) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "execution_failed",
-                                   "OCCT could not build raw Sketch Shape wire",
-                                   object.name,
-                                   "Geometry");
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "execution_failed",
+                "OCCT could not build raw Sketch Shape wire",
+                object.name,
+                "Geometry"
+            );
             return std::nullopt;
         }
     }
@@ -3436,12 +4029,14 @@ std::optional<TopoDS_Shape> buildRawSketchShape(const document::DocumentObject& 
         // ::GeomPoint::toShape(), returns "BRepBuilderAPI_MakeVertex(myPoint->Pnt())".
         BRepBuilderAPI_MakeVertex vertexBuilder(point.point);
         if (!vertexBuilder.IsDone()) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "execution_failed",
-                                   "OCCT could not build raw Sketch Shape point vertex",
-                                   object.name,
-                                   "Geometry");
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "execution_failed",
+                "OCCT could not build raw Sketch Shape point vertex",
+                object.name,
+                "Geometry"
+            );
             return std::nullopt;
         }
         shapes.push_back(vertexBuilder.Vertex());
@@ -3449,12 +4044,14 @@ std::optional<TopoDS_Shape> buildRawSketchShape(const document::DocumentObject& 
     for (const auto& circle : circles) {
         const auto wire = makeWireFromCircle(circle);
         if (!wire) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "execution_failed",
-                                   "OCCT could not build raw Sketch Shape circle wire",
-                                   object.name,
-                                   "Geometry");
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "execution_failed",
+                "OCCT could not build raw Sketch Shape circle wire",
+                object.name,
+                "Geometry"
+            );
             return std::nullopt;
         }
         shapes.push_back(*wire);
@@ -3462,12 +4059,14 @@ std::optional<TopoDS_Shape> buildRawSketchShape(const document::DocumentObject& 
     for (const auto& ellipse : ellipses) {
         const auto wire = makeWireFromEllipse(ellipse);
         if (!wire) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "execution_failed",
-                                   "OCCT could not build raw Sketch Shape ellipse wire",
-                                   object.name,
-                                   "Geometry");
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "execution_failed",
+                "OCCT could not build raw Sketch Shape ellipse wire",
+                object.name,
+                "Geometry"
+            );
             return std::nullopt;
         }
         shapes.push_back(*wire);
@@ -3476,9 +4075,11 @@ std::optional<TopoDS_Shape> buildRawSketchShape(const document::DocumentObject& 
     return compoundOrSingleShape(shapes);
 }
 
-ProfileFaceBuild buildOptionalProfileFace(const std::vector<SketchProfileEdge>& edges,
-                                          const std::vector<SketchCircle>& circles,
-                                          const std::vector<SketchEllipse>& ellipses)
+ProfileFaceBuild buildOptionalProfileFace(
+    const std::vector<SketchProfileEdge>& edges,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses
+)
 {
     geometry::SketchInternalBuildInput input;
     if (!edges.empty()) {
@@ -3490,10 +4091,20 @@ ProfileFaceBuild buildOptionalProfileFace(const std::vector<SketchProfileEdge>& 
         if (!edgeWires) {
             return {};
         }
-        input.faceWires.insert(input.faceWires.end(), edgeWires->closedWires.begin(), edgeWires->closedWires.end());
-        input.openWires.insert(input.openWires.end(), edgeWires->openWires.begin(), edgeWires->openWires.end());
-        input.openEdges.insert(input.openEdges.end(), edgeWires->openEdges.begin(), edgeWires->openEdges.end());
-        input.sourceEdges.insert(input.sourceEdges.end(), edgeWires->sourceEdges.begin(), edgeWires->sourceEdges.end());
+        input.faceWires.insert(
+            input.faceWires.end(),
+            edgeWires->closedWires.begin(),
+            edgeWires->closedWires.end()
+        );
+        input.openWires
+            .insert(input.openWires.end(), edgeWires->openWires.begin(), edgeWires->openWires.end());
+        input.openEdges
+            .insert(input.openEdges.end(), edgeWires->openEdges.begin(), edgeWires->openEdges.end());
+        input.sourceEdges.insert(
+            input.sourceEdges.end(),
+            edgeWires->sourceEdges.begin(),
+            edgeWires->sourceEdges.end()
+        );
     }
     for (const auto& circle : circles) {
         const auto wire = makeWireFromCircle(circle);
@@ -3516,7 +4127,7 @@ ProfileFaceBuild buildOptionalProfileFace(const std::vector<SketchProfileEdge>& 
         return {};
     }
     const auto result = geometry::buildSketchInternals(input);
-    return ProfileFaceBuild{
+    return ProfileFaceBuild {
         result.profileShape,
         result.internalShape,
         result.faceMakerFailed,
@@ -3532,7 +4143,7 @@ std::size_t countSubshapesOfKind(const nlohmann::json& subshapes, const std::str
     std::size_t count = 0;
     for (const auto& item : subshapes.items()) {
         const nlohmann::json& value = item.value();
-        if (value.is_object() && value.value("kind", std::string{}) == kind) {
+        if (value.is_object() && value.value("kind", std::string {}) == kind) {
             ++count;
         }
     }
@@ -3553,9 +4164,12 @@ std::string profileShapeLabel(const std::optional<TopoDS_Shape>& profileShape)
     return "occt_profile_shape";
 }
 
-bool projectExternalLineEdge(const TopoDS_Edge& edge,
-                             const gp_Trsf& sketchPlacement,
-                             ExternalGeometryResult& result)
+bool projectExternalLineEdge(
+    const TopoDS_Edge& edge,
+    const gp_Trsf& sketchPlacement,
+    ExternalGeometryResult& result,
+    bool defining
+)
 {
     BRepAdaptor_Curve curve(edge);
     if (curve.GetType() != GeomAbs_Line) {
@@ -3577,12 +4191,15 @@ bool projectExternalLineEdge(const TopoDS_Edge& edge,
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App
         // /SketchObjectExternal.cpp::projectLine(), when "Distance(p1, p2) < Precision::Confusion()",
         // returns a construction GeomPoint at the midpoint instead of dropping the projection.
-        result.points.push_back(gp_Pnt((start.X() + end.X()) / 2.0,
-                                       (start.Y() + end.Y()) / 2.0,
-                                       (start.Z() + end.Z()) / 2.0));
+        result.points.push_back(
+            gp_Pnt((start.X() + end.X()) / 2.0, (start.Y() + end.Y()) / 2.0, (start.Z() + end.Z()) / 2.0)
+        );
+        if (defining) {
+            result.definingPoints.push_back(SketchPoint {0U, result.points.back(), false});
+        }
         return true;
     }
-    result.segments.push_back(SketchSegment{0U, start, end, true});
+    result.segments.push_back(SketchSegment {0U, start, end, !defining});
     return true;
 }
 
@@ -3611,17 +4228,22 @@ bool isFullPeriodicEdge(const BRepAdaptor_Curve& curve)
 {
     constexpr double twoPi = 6.28318530717958647692;
     return std::abs(curve.LastParameter() - curve.FirstParameter() - twoPi) < Precision::PConfusion()
-        || curve.Value(curve.FirstParameter()).SquareDistance(curve.Value(curve.LastParameter())) < Precision::SquareConfusion();
+        || curve.Value(curve.FirstParameter()).SquareDistance(curve.Value(curve.LastParameter()))
+        < Precision::SquareConfusion();
 }
 
-bool projectExternalCurveEdge(const TopoDS_Edge& edge,
-                              const gp_Trsf& sketchPlacement,
-                              ExternalGeometryResult& result)
+bool projectExternalCurveEdge(
+    const TopoDS_Edge& edge,
+    const gp_Trsf& sketchPlacement,
+    ExternalGeometryResult& result,
+    bool defining
+)
 {
     BRepAdaptor_Curve curve(edge);
     if (curve.GetType() == GeomAbs_Circle) {
         const gp_Circ circle = curve.Circle();
-        const gp_Dir localNormal = directionInSketchLocalPlane(circle.Axis().Direction(), sketchPlacement);
+        const gp_Dir localNormal
+            = directionInSketchLocalPlane(circle.Axis().Direction(), sketchPlacement);
         const gp_Pnt center = pointInSketchLocalPlane(circle.Location(), sketchPlacement);
         if (!localNormal.IsParallel(gp_Dir(0, 0, 1), Precision::Angular())) {
             gp_Vec majorVector(gp_Dir(0, 0, 1));
@@ -3630,18 +4252,23 @@ bool projectExternalCurveEdge(const TopoDS_Edge& edge,
                 return false;
             }
             const gp_Dir majorDirection(majorVector);
-            const gp_Pnt start(center.X() - circle.Radius() * majorDirection.X(),
-                               center.Y() - circle.Radius() * majorDirection.Y(),
-                               0.0);
-            const gp_Pnt end(center.X() + circle.Radius() * majorDirection.X(),
-                             center.Y() + circle.Radius() * majorDirection.Y(),
-                             0.0);
+            const gp_Pnt start(
+                center.X() - circle.Radius() * majorDirection.X(),
+                center.Y() - circle.Radius() * majorDirection.Y(),
+                0.0
+            );
+            const gp_Pnt end(
+                center.X() + circle.Radius() * majorDirection.X(),
+                center.Y() + circle.Radius() * majorDirection.Y(),
+                0.0
+            );
 
             if (localNormal.IsNormal(gp_Dir(0, 0, 1), Precision::Angular())) {
-                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+                // FreeCAD:
+                // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
                 // processEdge(), for a circle with normal vector in the sketch plane,
                 // says "projection is a line".
-                result.segments.push_back(SketchSegment{0U, start, end, true});
+                result.segments.push_back(SketchSegment {0U, start, end, !defining});
                 return true;
             }
 
@@ -3650,105 +4277,145 @@ bool projectExternalCurveEdge(const TopoDS_Edge& edge,
             }
             const double angle = std::atan2(majorDirection.Y(), majorDirection.X());
             const double minorRadius = circle.Radius() * std::abs(localNormal.Dot(gp_Dir(0, 0, 1)));
-            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+            // FreeCAD:
+            // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
             // processEdge(), for the general non-parallel circle case, projects a full circle
             // to a construction Part::GeomEllipse.
-            result.ellipses.push_back(SketchEllipse{0U, center, circle.Radius(), minorRadius, angle, true});
+            result.ellipses.push_back(
+                SketchEllipse {0U, center, circle.Radius(), minorRadius, angle, !defining}
+            );
             return true;
         }
 
         if (isFullPeriodicEdge(curve)) {
-            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+            // FreeCAD:
+            // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
             // processEdge() projects a full circle edge parallel to the sketch plane as
             // construction Part::GeomCircle in ExternalGeo.
-            result.circles.push_back(SketchCircle{0U, center, circle.Radius(), true});
+            result.circles.push_back(SketchCircle {0U, center, circle.Radius(), !defining});
             return true;
         }
 
-        result.arcs.push_back(SketchArc{0U, center, circle.Radius(), curve.FirstParameter(), curve.LastParameter(), true});
+        result.arcs.push_back(
+            SketchArc {0U, center, circle.Radius(), curve.FirstParameter(), curve.LastParameter(), !defining}
+        );
         return true;
     }
 
     if (curve.GetType() == GeomAbs_Ellipse) {
         const gp_Elips ellipse = curve.Ellipse();
-        const gp_Dir localNormal = directionInSketchLocalPlane(ellipse.Axis().Direction(), sketchPlacement);
+        const gp_Dir localNormal
+            = directionInSketchLocalPlane(ellipse.Axis().Direction(), sketchPlacement);
         if (!localNormal.IsParallel(gp_Dir(0, 0, 1), Precision::Angular())) {
             if (!isFullPeriodicEdge(curve)) {
                 return false;
             }
 
             const gp_Pnt center = pointInSketchLocalPlane(ellipse.Location(), sketchPlacement);
-            const auto projected = projectedEllipseFromAxes(center,
-                                                            ellipse.XAxis().Direction(),
-                                                            ellipse.MajorRadius(),
-                                                            ellipse.YAxis().Direction(),
-                                                            ellipse.MinorRadius(),
-                                                            sketchPlacement);
+            const auto projected = projectedEllipseFromAxes(
+                center,
+                ellipse.XAxis().Direction(),
+                ellipse.MajorRadius(),
+                ellipse.YAxis().Direction(),
+                ellipse.MinorRadius(),
+                sketchPlacement
+            );
             if (!projected) {
                 return false;
             }
             if (projected->minorRadius <= Precision::Confusion()) {
-                const gp_Pnt start(center.X() - projected->majorRadius * std::cos(projected->angle),
-                                   center.Y() - projected->majorRadius * std::sin(projected->angle),
-                                   0.0);
-                const gp_Pnt end(center.X() + projected->majorRadius * std::cos(projected->angle),
-                                 center.Y() + projected->majorRadius * std::sin(projected->angle),
-                                 0.0);
-                result.segments.push_back(SketchSegment{0U, start, end, true});
+                const gp_Pnt start(
+                    center.X() - projected->majorRadius * std::cos(projected->angle),
+                    center.Y() - projected->majorRadius * std::sin(projected->angle),
+                    0.0
+                );
+                const gp_Pnt end(
+                    center.X() + projected->majorRadius * std::cos(projected->angle),
+                    center.Y() + projected->majorRadius * std::sin(projected->angle),
+                    0.0
+                );
+                result.segments.push_back(SketchSegment {0U, start, end, !defining});
                 return true;
             }
 
-            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+            // FreeCAD:
+            // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
             // processEdge(), GeomAbs_Ellipse uses a general projected-ellipse construction
             // algorithm from the original major/minor axes.
-            result.ellipses.push_back(*projected);
+            SketchEllipse ellipse = *projected;
+            ellipse.construction = !defining;
+            result.ellipses.push_back(ellipse);
             return true;
         }
 
         const gp_Pnt center = pointInSketchLocalPlane(ellipse.Location(), sketchPlacement);
-        const double angle = angleXUInSketchPlane(ellipse.XAxis().Direction(), ellipse.Axis().Direction(), sketchPlacement);
+        const double angle = angleXUInSketchPlane(
+            ellipse.XAxis().Direction(),
+            ellipse.Axis().Direction(),
+            sketchPlacement
+        );
         if (isFullPeriodicEdge(curve)) {
-            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+            // FreeCAD:
+            // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
             // processEdge2() keeps a full ellipse edge as construction Part::GeomEllipse.
-            result.ellipses.push_back(SketchEllipse{0U, center, ellipse.MajorRadius(), ellipse.MinorRadius(), angle, true});
+            result.ellipses.push_back(
+                SketchEllipse {0U, center, ellipse.MajorRadius(), ellipse.MinorRadius(), angle, !defining}
+            );
             return true;
         }
 
-        result.ellipseArcs.push_back(SketchEllipseArc{0U,
-                                                      center,
-                                                      ellipse.MajorRadius(),
-                                                      ellipse.MinorRadius(),
-                                                      angle,
-                                                      curve.FirstParameter(),
-                                                      curve.LastParameter(),
-                                                      true});
+        result.ellipseArcs.push_back(
+            SketchEllipseArc {
+                0U,
+                center,
+                ellipse.MajorRadius(),
+                ellipse.MinorRadius(),
+                angle,
+                curve.FirstParameter(),
+                curve.LastParameter(),
+                !defining
+            }
+        );
         return true;
     }
 
     return false;
 }
 
-bool projectExternalEdgeIntoResult(const TopoDS_Edge& edge,
-                                   const gp_Trsf& sketchPlacement,
-                                   ExternalGeometryResult& result)
+bool projectExternalEdgeIntoResult(
+    const TopoDS_Edge& edge,
+    const gp_Trsf& sketchPlacement,
+    ExternalGeometryResult& result,
+    bool defining
+)
 {
-    if (projectExternalLineEdge(edge, sketchPlacement, result)) {
+    if (projectExternalLineEdge(edge, sketchPlacement, result, defining)) {
         return true;
     }
-    return projectExternalCurveEdge(edge, sketchPlacement, result);
+    return projectExternalCurveEdge(edge, sketchPlacement, result, defining);
 }
 
 void appendExternalGeometry(ExternalGeometryResult& result, const ExternalGeometryResult& source)
 {
     result.segments.insert(result.segments.end(), source.segments.begin(), source.segments.end());
     result.points.insert(result.points.end(), source.points.begin(), source.points.end());
+    result.definingPoints.insert(
+        result.definingPoints.end(),
+        source.definingPoints.begin(),
+        source.definingPoints.end()
+    );
     result.circles.insert(result.circles.end(), source.circles.begin(), source.circles.end());
     result.arcs.insert(result.arcs.end(), source.arcs.begin(), source.arcs.end());
     result.ellipses.insert(result.ellipses.end(), source.ellipses.begin(), source.ellipses.end());
-    result.ellipseArcs.insert(result.ellipseArcs.end(), source.ellipseArcs.begin(), source.ellipseArcs.end());
+    result.ellipseArcs
+        .insert(result.ellipseArcs.end(), source.ellipseArcs.begin(), source.ellipseArcs.end());
 }
 
-bool appendUnifiedNormalFaceLine(const ExternalGeometryResult& boundary, ExternalGeometryResult& result)
+bool appendUnifiedNormalFaceLine(
+    const ExternalGeometryResult& boundary,
+    ExternalGeometryResult& result,
+    bool defining
+)
 {
     if (!boundary.points.empty() || !boundary.circles.empty() || !boundary.arcs.empty()
         || !boundary.ellipses.empty() || !boundary.ellipseArcs.empty() || boundary.segments.empty()) {
@@ -3777,20 +4444,24 @@ bool appendUnifiedNormalFaceLine(const ExternalGeometryResult& boundary, Externa
     if (start.SquareDistance(end) < Precision::SquareConfusion()) {
         return false;
     }
-    result.segments.push_back(SketchSegment{0U, start, end, true});
+    result.segments.push_back(SketchSegment {0U, start, end, !defining});
     return true;
 }
 
-bool projectExternalFaceBoundary(const TopoDS_Face& face,
-                                 const gp_Trsf& sketchPlacement,
-                                 ExternalGeometryResult& result)
+bool projectExternalFaceBoundary(
+    const TopoDS_Face& face,
+    const gp_Trsf& sketchPlacement,
+    ExternalGeometryResult& result,
+    bool defining
+)
 {
     BRepAdaptor_Surface surface(face);
     if (surface.GetType() != GeomAbs_Plane) {
         return false;
     }
 
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
     // ::processFace(), for a planar face, says "Extract all edges from the face" and then
     // "Process each edge" through processEdge(). This is the planar-boundary subset; the HLR
     // projection path for non-planar faces remains a later Face/ExternalGeometry task.
@@ -3800,7 +4471,7 @@ bool projectExternalFaceBoundary(const TopoDS_Face& face,
         if (isCollapsedProjectedLineEdge(edge, sketchPlacement)) {
             continue;
         }
-        if (!projectExternalEdgeIntoResult(edge, sketchPlacement, boundary)) {
+        if (!projectExternalEdgeIntoResult(edge, sketchPlacement, boundary, defining)) {
             return false;
         }
     }
@@ -3809,22 +4480,27 @@ bool projectExternalFaceBoundary(const TopoDS_Face& face,
         return false;
     }
 
-    const gp_Dir localFaceNormal = directionInSketchLocalPlane(surface.Plane().Axis().Direction(), sketchPlacement);
+    const gp_Dir localFaceNormal
+        = directionInSketchLocalPlane(surface.Plane().Axis().Direction(), sketchPlacement);
     if (localFaceNormal.IsNormal(gp_Dir(0, 0, 1), Precision::Angular())) {
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+        // FreeCAD:
+        // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
         // ::processFace(), when "The face is normal to the sketch plane", discards the separate
         // edge projections and keeps "a single line that goes from min to max of all the projections".
-        return appendUnifiedNormalFaceLine(boundary, result);
+        return appendUnifiedNormalFaceLine(boundary, result, defining);
     }
 
     appendExternalGeometry(result, boundary);
     return true;
 }
 
-std::vector<ExternalGeometryType> readExternalGeometryTypes(const document::DocumentObject& object,
-                                                            std::size_t count)
+std::vector<ExternalGeometryType> readExternalGeometryTypes(
+    const document::DocumentObject& object,
+    std::size_t count
+)
 {
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
     // ::SketchObject::rebuildExternalGeometry(), reads "ExternalTypes.getValues()" and then
     // "Types.resize(Objects.size(), static_cast<long>(ExtType::Projection))".
     std::vector<ExternalGeometryType> types(count, ExternalGeometryType::Projection);
@@ -3861,68 +4537,230 @@ std::vector<ExternalGeometryType> readExternalGeometryTypes(const document::Docu
     return types;
 }
 
-struct ExternalSubshape {
+ExternalGeometryFlags externalGeometryFlags(const document::Link& link)
+{
+    ExternalGeometryFlags flags;
+    flags.defining = link.externalGeometryFlags.count("Defining") != 0U;
+    flags.frozen = link.externalGeometryFlags.count("Frozen") != 0U;
+    flags.detached = link.externalGeometryFlags.count("Detached") != 0U;
+    flags.missing = link.externalGeometryFlags.count("Missing") != 0U;
+    flags.sync = link.externalGeometryFlags.count("Sync") != 0U;
+    return flags;
+}
+
+std::set<std::string> normalizedExternalGeometryFlagSet(ExternalGeometryFlags flags)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+    // ::SketchObject::rebuildExternalGeometry() clears "Sync" after a rebuild and clears
+    // "Missing" once "refSet" contains the reference again. cad-core returns the same mutation
+    // as a documentObjectUpdates suggestion and keeps the request graph immutable.
+    std::set<std::string> result;
+    if (flags.defining) {
+        result.insert("Defining");
+    }
+    if (flags.frozen) {
+        result.insert("Frozen");
+    }
+    if (flags.detached) {
+        result.insert("Detached");
+    }
+    if (flags.missing) {
+        result.insert("Missing");
+    }
+    if (flags.sync) {
+        result.insert("Sync");
+    }
+    return result;
+}
+
+nlohmann::json externalGeometryFlagsJson(const std::set<std::string>& flags)
+{
+    nlohmann::json result = nlohmann::json::array();
+    for (const char* name : {"Defining", "Frozen", "Detached", "Missing", "Sync"}) {
+        if (flags.count(name) != 0U) {
+            result.push_back(name);
+        }
+    }
+    return result;
+}
+
+nlohmann::json externalReferenceShadowsJson(const std::vector<document::ReferenceShadow>& shadows)
+{
+    nlohmann::json result = nlohmann::json::array();
+    for (const auto& shadow : shadows) {
+        nlohmann::json item = {
+            {"target", shadow.target},
+            {"targetId", shadow.targetId},
+            {"property", shadow.property},
+            {"shapeType", shadow.shapeType},
+            {"indexed", shadow.indexed},
+            {"subname", shadow.subname},
+            {"fingerprint", shadow.fingerprint},
+        };
+        if (!shadow.stableSubname.empty()) {
+            item["stableSubname"] = shadow.stableSubname;
+        }
+        if (shadow.brep) {
+            item["brep"] = {
+                {"format", shadow.brep->format},
+                {"byteLength", shadow.brep->byteLength},
+                {"sha256", shadow.brep->sha256},
+                {"data", shadow.brep->data},
+            };
+        }
+        result.push_back(std::move(item));
+    }
+    return result;
+}
+
+nlohmann::json externalGeometryLinkItemJson(const document::Link& link,
+                                            const std::set<std::string>& flags)
+{
+    nlohmann::json item = {
+        {"value", link.object},
+        {"SubList", link.subnames},
+    };
+    if (link.stableSubnamesExplicit) {
+        item["StableSubList"] = link.stableSubnames;
+    }
+    if (link.fullSubnamesExplicit) {
+        item["FullSubList"] = link.fullSubnames;
+    }
+    if (!link.shadowSubs.empty()) {
+        nlohmann::json shadowSubs = nlohmann::json::array();
+        for (const auto& shadowSub : link.shadowSubs) {
+            shadowSubs.push_back({
+                {"newName", shadowSub.newName},
+                {"oldName", shadowSub.oldName},
+            });
+        }
+        item["ShadowSub"] = std::move(shadowSubs);
+    }
+    if (!link.referenceShadows.empty()) {
+        item["ReferenceShadow"] = externalReferenceShadowsJson(link.referenceShadows);
+    }
+    if (!flags.empty()) {
+        item["ExternalFlags"] = externalGeometryFlagsJson(flags);
+    }
+    return item;
+}
+
+void appendExternalGeometryFlagsUpdate(runtime::ComputeContext& context,
+                                       const document::DocumentObject& object,
+                                       const std::vector<document::Link>& links,
+                                       const std::map<std::size_t, ExternalGeometryFlags>& replacementFlags,
+                                       const std::string& reason)
+{
+    if (replacementFlags.empty()) {
+        return;
+    }
+
+    nlohmann::json subSet = nlohmann::json::array();
+    for (std::size_t index = 0; index < links.size(); ++index) {
+        const auto replacement = replacementFlags.find(index);
+        std::set<std::string> flags = replacement == replacementFlags.end()
+            ? links.at(index).externalGeometryFlags
+            : normalizedExternalGeometryFlagSet(replacement->second);
+        subSet.push_back(externalGeometryLinkItemJson(links.at(index), flags));
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+    // ::SketchObject::rebuildExternalGeometry(), after successful rebuild, calls
+    // "egf->setFlag(ExternalGeometryExtension::Sync,false)" and toggles "Missing" from
+    // whether "refSet" contains the reference. cad-core reports that mutation as a stateless
+    // documentObjectUpdates suggestion.
+    context.documentObjectUpdates.push_back({
+        {"action", "update"},
+        {"reason", reason},
+        {"object", object.name},
+        {"objectId", object.id},
+        {"typeId", object.typeId},
+        {"properties",
+         {
+             {"ExternalGeometry",
+              {
+                  {"PropertyType", "App::PropertyLinkSubList"},
+                  {"SubSet", std::move(subSet)},
+              }},
+         }},
+    });
+}
+
+struct ExternalSubshape
+{
     TopAbs_ShapeEnum kind = TopAbs_SHAPE;
     TopoDS_Shape shape;
     std::string subname;
 };
 
-std::optional<ExternalSubshape> resolveSketchInternalSubshape(const document::Link& link,
-                                                              const document::DocumentObject& object,
-                                                              const runtime::ShapeValue& shapeValue,
-                                                              runtime::ComputeContext& context,
-                                                              const std::string& subname)
+std::optional<ExternalSubshape> resolveSketchInternalSubshape(
+    const document::Link& link,
+    const document::DocumentObject& object,
+    const runtime::ShapeValue& shapeValue,
+    runtime::ComputeContext& context,
+    const std::string& subname
+)
 {
     const auto parsed = topo::parseInternalSubshapeName(subname);
     if (!parsed) {
         return std::nullopt;
     }
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::getSubObject(),
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::getSubObject(),
     // convertInternalName("InternalEdge") resolves the subshape from InternalShape, not Shape.
     if (!shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "invalid_subshape",
-                               "ExternalGeometry target " + link.object + " has no InternalShape for " + subname,
-                               object.name,
-                               "ExternalGeometry",
-                               "runtime",
-                               link.object,
-                               subname);
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "invalid_subshape",
+            "ExternalGeometry target " + link.object + " has no InternalShape for " + subname,
+            object.name,
+            "ExternalGeometry",
+            "runtime",
+            link.object,
+            subname
+        );
         return std::nullopt;
     }
     if (parsed->kind != TopAbs_EDGE && parsed->kind != TopAbs_VERTEX) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "unsupported_subshape_kind",
-                               "ExternalGeometry projection currently supports InternalEdgeN and InternalVertexN subshapes",
-                               object.name,
-                               "ExternalGeometry",
-                               "runtime",
-                               link.object,
-                               subname);
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "unsupported_subshape_kind",
+            "ExternalGeometry projection currently supports InternalEdgeN and InternalVertexN "
+            "subshapes",
+            object.name,
+            "ExternalGeometry",
+            "runtime",
+            link.object,
+            subname
+        );
         return std::nullopt;
     }
 
     const auto subshape = topo::subshapeByName(*shapeValue.internalShape, *parsed);
     if (!subshape) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "invalid_subshape",
-                               "ExternalGeometry target " + link.object + " has no subshape " + subname,
-                               object.name,
-                               "ExternalGeometry",
-                               "runtime",
-                               link.object,
-                               subname);
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "invalid_subshape",
+            "ExternalGeometry target " + link.object + " has no subshape " + subname,
+            object.name,
+            "ExternalGeometry",
+            "runtime",
+            link.object,
+            subname
+        );
         return std::nullopt;
     }
-    return ExternalSubshape{parsed->kind, *subshape, subname};
+    return ExternalSubshape {parsed->kind, *subshape, subname};
 }
 
-std::string internalSubnameFromStableElementMap(const runtime::ComputeContext& context,
-                                                const std::string& objectName,
-                                                const std::string& stableSubname)
+std::string internalSubnameFromStableElementMap(
+    const runtime::ComputeContext& context,
+    const std::string& objectName,
+    const std::string& stableSubname
+)
 {
     if (stableSubname.empty() || stableSubname.rfind("Internal", 0) == 0) {
         return {};
@@ -3940,7 +4778,8 @@ std::string internalSubnameFromStableElementMap(const runtime::ComputeContext& c
         return {};
     }
     const std::string currentInternal = mappedIt->get<std::string>();
-    if (currentInternal.rfind("InternalEdge", 0) != 0 && currentInternal.rfind("InternalVertex", 0) != 0) {
+    if (currentInternal.rfind("InternalEdge", 0) != 0
+        && currentInternal.rfind("InternalVertex", 0) != 0) {
         return {};
     }
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
@@ -3950,8 +4789,10 @@ std::string internalSubnameFromStableElementMap(const runtime::ComputeContext& c
     return currentInternal;
 }
 
-std::vector<std::string> stableNameCandidatesForExternal(const document::Link& link,
-                                                         const document::ReferenceShadow& shadow)
+std::vector<std::string> stableNameCandidatesForExternal(
+    const document::Link& link,
+    const document::ReferenceShadow& shadow
+)
 {
     std::vector<std::string> candidates;
     const auto addCandidate = [&](const std::string& stableSubname) {
@@ -3979,24 +4820,30 @@ bool hasSketchInternalSubshape(const runtime::ShapeValue& shapeValue, const std:
     return topo::subshapeByName(*shapeValue.internalShape, *parsed).has_value();
 }
 
-bool internalSubshapeMatchesReferenceShadow(const runtime::ShapeValue& shapeValue,
-                                            const std::string& subname,
-                                            const TopoDS_Shape& subshape,
-                                            const document::ReferenceShadow& shadow)
+bool internalSubshapeMatchesReferenceShadow(
+    const runtime::ShapeValue& shapeValue,
+    const std::string& subname,
+    const TopoDS_Shape& subshape,
+    const document::ReferenceShadow& shadow
+)
 {
     if (!shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
         return false;
     }
-    return topo::referenceShadowMatchesCurrentSubshape(*shapeValue.internalShape,
-                                                       "Internal",
-                                                       subname,
-                                                       subshape,
-                                                       shadow);
+    return topo::referenceShadowMatchesCurrentSubshape(
+        *shapeValue.internalShape,
+        "Internal",
+        subname,
+        subshape,
+        shadow
+    );
 }
 
-std::string internalSubnameFromShadowSub(const document::Link& link,
-                                         const runtime::ShapeValue& shapeValue,
-                                         const runtime::ComputeContext& context)
+std::string internalSubnameFromShadowSub(
+    const document::Link& link,
+    const runtime::ShapeValue& shapeValue,
+    const runtime::ComputeContext& context
+)
 {
     if (link.shadowSubs.empty() || !shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
         return {};
@@ -4007,7 +4854,8 @@ std::string internalSubnameFromShadowSub(const document::Link& link,
             continue;
         }
         const auto targetObjectIt = context.documentObjects.find(link.object);
-        if (targetObjectIt != context.documentObjects.end() && shadow.targetId != targetObjectIt->second->id) {
+        if (targetObjectIt != context.documentObjects.end()
+            && shadow.targetId != targetObjectIt->second->id) {
             continue;
         }
         for (const std::string& stableName : stableNameCandidatesForExternal(link, shadow)) {
@@ -4029,7 +4877,9 @@ std::string internalSubnameFromShadowSub(const document::Link& link,
                 // transient external geometry from the resolved subshape. cad-core accepts the
                 // paired InternalEdge/InternalVertex only after ReferenceShadow proves it still
                 // matches the old referenced geometry.
-                if (internalSubshapeMatchesReferenceShadow(shapeValue, shadowSub.oldName, *subshape, shadow)) {
+                if (
+                    internalSubshapeMatchesReferenceShadow(shapeValue, shadowSub.oldName, *subshape, shadow)
+                ) {
                     return shadowSub.oldName;
                 }
             }
@@ -4040,10 +4890,12 @@ std::string internalSubnameFromShadowSub(const document::Link& link,
 
 std::vector<ExternalSubshape> wholeShapeExternalSubshapes(const runtime::ShapeValue& shapeValue)
 {
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
-    // ::SketchObject::addExternal(), when the selected shape is not a face but "hasSubShape(TopAbs_FACE)",
-    // expands the external reference into each FaceN; otherwise it expands into EdgeN when edges
-    // exist. cad-core keeps this as request-local expansion and does not mutate ExternalGeometry.
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+    // ::SketchObject::addExternal(), when the selected shape is not a face but
+    // "hasSubShape(TopAbs_FACE)", expands the external reference into each FaceN; otherwise it
+    // expands into EdgeN when edges exist. cad-core keeps this as request-local expansion and does
+    // not mutate ExternalGeometry.
     std::vector<ExternalSubshape> result;
     if (shapeValue.shape.IsNull()) {
         return result;
@@ -4068,7 +4920,7 @@ std::vector<ExternalSubshape> wholeShapeExternalSubshapes(const runtime::ShapeVa
     const std::string prefix = kind == TopAbs_FACE ? "Face" : "Edge";
     result.reserve(static_cast<std::size_t>(subshapes.Extent()));
     for (int index = 1; index <= subshapes.Extent(); ++index) {
-        result.push_back(ExternalSubshape{kind, subshapes(index), prefix + std::to_string(index)});
+        result.push_back(ExternalSubshape {kind, subshapes(index), prefix + std::to_string(index)});
     }
     return result;
 }
@@ -4081,29 +4933,36 @@ std::optional<std::string> sourcePrefixedExternalOldName(const std::string& stab
     }
     std::string oldName = stableSubname.substr(dot + 1);
     const auto parsed = topo::parseSubshapeName(oldName);
-    if (!parsed || (parsed->kind != TopAbs_FACE && parsed->kind != TopAbs_EDGE && parsed->kind != TopAbs_VERTEX)) {
+    if (!parsed
+        || (parsed->kind != TopAbs_FACE && parsed->kind != TopAbs_EDGE
+            && parsed->kind != TopAbs_VERTEX)) {
         return std::nullopt;
     }
     return oldName;
 }
 
-std::optional<std::vector<ExternalSubshape>> resolveExternalGeometryLink(const document::Link& link,
-                                                                         const document::DocumentObject& object,
-                                                                         runtime::ComputeContext& context)
+std::optional<std::vector<ExternalSubshape>> resolveExternalGeometryLink(
+    const document::Link& link,
+    const document::DocumentObject& object,
+    runtime::ComputeContext& context
+)
 {
-    const std::string subname = link.subnames.empty() ? std::string{} : link.subnames.front();
-    const std::string stableSubname = link.stableSubnames.size() == 1U ? link.stableSubnames.front() : std::string{};
+    const std::string subname = link.subnames.empty() ? std::string {} : link.subnames.front();
+    const std::string stableSubname = link.stableSubnames.size() == 1U ? link.stableSubnames.front()
+                                                                       : std::string {};
     const auto shapeIt = context.shapes.find(link.object);
     if (shapeIt == context.shapes.end()) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "missing_link_target",
-                               "ExternalGeometry target " + link.object + " did not produce a shape",
-                               object.name,
-                               "ExternalGeometry",
-                               "runtime",
-                               link.object,
-                               subname);
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "missing_link_target",
+            "ExternalGeometry target " + link.object + " did not produce a shape",
+            object.name,
+            "ExternalGeometry",
+            "runtime",
+            link.object,
+            subname
+        );
         return std::nullopt;
     }
 
@@ -4122,21 +4981,24 @@ std::optional<std::vector<ExternalSubshape>> resolveExternalGeometryLink(const d
         // ElementMap target for SketchPad.Edge1.
         if (const auto sourceOldName = sourcePrefixedExternalOldName(stableSubname)) {
             if (namedShapeIt != context.namedShapes.end()) {
-                const auto resolved = topo::resolveElementReference(namedShapeIt->second, subname, stableSubname);
+                const auto resolved
+                    = topo::resolveElementReference(namedShapeIt->second, subname, stableSubname);
                 if (resolved.status == topo::ElementResolveStatus::Resolved) {
                     currentSubname = *sourceOldName;
                     resolvedViaBodyOldName = true;
                 }
                 else if (!stableSubname.empty() && stableSubname != subname) {
-                    runtime::addDiagnostic(context.diagnostics,
-                                           "error",
-                                           stableSubnameDiagnosticCode(resolved.status),
-                                           stableSubnameDiagnosticMessage(link.object, stableSubname, resolved.status),
-                                           object.name,
-                                           "ExternalGeometry",
-                                           "runtime",
-                                           link.object,
-                                           stableSubname);
+                    runtime::addDiagnostic(
+                        context.diagnostics,
+                        "error",
+                        stableSubnameDiagnosticCode(resolved.status),
+                        stableSubnameDiagnosticMessage(link.object, stableSubname, resolved.status),
+                        object.name,
+                        "ExternalGeometry",
+                        "runtime",
+                        link.object,
+                        stableSubname
+                    );
                     return std::nullopt;
                 }
             }
@@ -4147,39 +5009,45 @@ std::optional<std::vector<ExternalSubshape>> resolveExternalGeometryLink(const d
         }
     }
     if (!resolvedViaBodyOldName && namedShapeIt != context.namedShapes.end()) {
-        const auto resolved = topo::resolveElementReference(namedShapeIt->second, subname, stableSubname);
+        const auto resolved
+            = topo::resolveElementReference(namedShapeIt->second, subname, stableSubname);
         if (resolved.status == topo::ElementResolveStatus::Resolved && resolved.element) {
             currentSubname = *resolved.element;
         }
         else if (!stableSubname.empty() && stableSubname != subname) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   stableSubnameDiagnosticCode(resolved.status),
-                                   stableSubnameDiagnosticMessage(link.object, stableSubname, resolved.status),
-                                   object.name,
-                                   "ExternalGeometry",
-                                   "runtime",
-                                   link.object,
-                                   stableSubname);
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                stableSubnameDiagnosticCode(resolved.status),
+                stableSubnameDiagnosticMessage(link.object, stableSubname, resolved.status),
+                object.name,
+                "ExternalGeometry",
+                "runtime",
+                link.object,
+                stableSubname
+            );
             return std::nullopt;
         }
     }
 
     if (!subname.empty()) {
         std::string internalSubname = subname;
-        if (const std::string shadowSubInternal = internalSubnameFromShadowSub(link, shapeIt->second, context);
+        if (const std::string shadowSubInternal
+            = internalSubnameFromShadowSub(link, shapeIt->second, context);
             !shadowSubInternal.empty()) {
             internalSubname = shadowSubInternal;
         }
-        if (topo::parseInternalSubshapeName(subname) && !hasSketchInternalSubshape(shapeIt->second, subname)) {
-            const std::string stableInternal =
-                internalSubnameFromStableElementMap(context, link.object, stableSubname);
+        if (topo::parseInternalSubshapeName(subname)
+            && !hasSketchInternalSubshape(shapeIt->second, subname)) {
+            const std::string stableInternal
+                = internalSubnameFromStableElementMap(context, link.object, stableSubname);
             if (!stableInternal.empty()) {
                 internalSubname = stableInternal;
             }
         }
-        if (auto internal = resolveSketchInternalSubshape(link, object, shapeIt->second, context, internalSubname)) {
-            return std::vector<ExternalSubshape>{*internal};
+        if (auto internal
+            = resolveSketchInternalSubshape(link, object, shapeIt->second, context, internalSubname)) {
+            return std::vector<ExternalSubshape> {*internal};
         }
         if (topo::parseInternalSubshapeName(subname)) {
             return std::nullopt;
@@ -4187,15 +5055,21 @@ std::optional<std::vector<ExternalSubshape>> resolveExternalGeometryLink(const d
     }
 
     if (shapeIt->second.kind == runtime::ShapeValue::Kind::DatumLine && link.subnames.empty()) {
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+        // FreeCAD:
+        // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
         // rebuildExternalGeometry() accepts Part::DatumLine and builds an edge from its shape.
-        return std::vector<ExternalSubshape>{ExternalSubshape{TopAbs_EDGE, shapeIt->second.shape, {}}};
+        return std::vector<ExternalSubshape> {
+            ExternalSubshape {TopAbs_EDGE, shapeIt->second.shape, {}}
+        };
     }
 
     if (shapeIt->second.kind == runtime::ShapeValue::Kind::DatumPoint && link.subnames.empty()) {
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+        // FreeCAD:
+        // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
         // rebuildExternalGeometry() accepts Part::DatumPoint and builds a vertex from its shape.
-        return std::vector<ExternalSubshape>{ExternalSubshape{TopAbs_VERTEX, shapeIt->second.shape, {}}};
+        return std::vector<ExternalSubshape> {
+            ExternalSubshape {TopAbs_VERTEX, shapeIt->second.shape, {}}
+        };
     }
 
     if (link.subnames.empty()) {
@@ -4206,41 +5080,48 @@ std::optional<std::vector<ExternalSubshape>> resolveExternalGeometryLink(const d
     }
 
     if (link.subnames.size() != 1U || subname.empty()) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "invalid_subshape",
-                               "ExternalGeometry must reference exactly one FaceN/EdgeN/VertexN subshape or a DatumLine/DatumPoint",
-                               object.name,
-                               "ExternalGeometry",
-                               "runtime",
-                               link.object,
-                               subname);
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "invalid_subshape",
+            "ExternalGeometry must reference exactly one FaceN/EdgeN/VertexN subshape or a "
+            "DatumLine/DatumPoint",
+            object.name,
+            "ExternalGeometry",
+            "runtime",
+            link.object,
+            subname
+        );
         return std::nullopt;
     }
 
     const auto parsed = topo::parseSubshapeName(currentSubname);
     if (!parsed) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "invalid_subshape",
-                               "Invalid ExternalGeometry subshape name " + currentSubname,
-                               object.name,
-                               "ExternalGeometry",
-                               "runtime",
-                               link.object,
-                               currentSubname);
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "invalid_subshape",
+            "Invalid ExternalGeometry subshape name " + currentSubname,
+            object.name,
+            "ExternalGeometry",
+            "runtime",
+            link.object,
+            currentSubname
+        );
         return std::nullopt;
     }
     if (parsed->kind != TopAbs_FACE && parsed->kind != TopAbs_EDGE && parsed->kind != TopAbs_VERTEX) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "unsupported_subshape_kind",
-                               "ExternalGeometry projection currently supports FaceN, EdgeN and VertexN subshapes",
-                               object.name,
-                               "ExternalGeometry",
-                               "runtime",
-                               link.object,
-                               currentSubname);
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "unsupported_subshape_kind",
+            "ExternalGeometry projection currently supports FaceN, EdgeN and VertexN subshapes",
+            object.name,
+            "ExternalGeometry",
+            "runtime",
+            link.object,
+            currentSubname
+        );
         return std::nullopt;
     }
 
@@ -4252,30 +5133,40 @@ std::optional<std::vector<ExternalSubshape>> resolveExternalGeometryLink(const d
         subshape = topo::subshapeByName(shapeIt->second.shape, currentSubname);
     }
     if (!subshape) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "invalid_subshape",
-                               "ExternalGeometry target " + link.object + " has no subshape " + currentSubname,
-                               object.name,
-                               "ExternalGeometry",
-                               "runtime",
-                               link.object,
-                               currentSubname);
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "invalid_subshape",
+            "ExternalGeometry target " + link.object + " has no subshape " + currentSubname,
+            object.name,
+            "ExternalGeometry",
+            "runtime",
+            link.object,
+            currentSubname
+        );
         return std::nullopt;
     }
-    return std::vector<ExternalSubshape>{ExternalSubshape{parsed->kind, *subshape, currentSubname}};
+    return std::vector<ExternalSubshape> {ExternalSubshape {parsed->kind, *subshape, currentSubname}};
 }
 
-bool addExternalGeometryIntersection(const ExternalSubshape& external,
-                                     const gp_Trsf& sketchPlacement,
-                                     ExternalGeometryResult& result)
+bool addExternalGeometryIntersection(
+    const ExternalSubshape& external,
+    const gp_Trsf& sketchPlacement,
+    ExternalGeometryResult& result,
+    bool defining
+)
 {
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
     // ::SketchObject::rebuildExternalGeometry(), for "intersection", runs
     // "FCBRepAlgoAPI_Section maker(refSubShape, sketchPlane)" and then processes section edges
     // through processEdge(); standalone section vertices are imported as points.
     try {
-        BRepAlgoAPI_Section maker(external.shape, sketchPlaneFromPlacement(sketchPlacement), Standard_False);
+        BRepAlgoAPI_Section maker(
+            external.shape,
+            sketchPlaneFromPlacement(sketchPlacement),
+            Standard_False
+        );
         maker.Approximation(Standard_True);
         maker.Build();
         if (!maker.IsDone()) {
@@ -4290,7 +5181,7 @@ bool addExternalGeometryIntersection(const ExternalSubshape& external,
         TopTools_IndexedMapOfShape edgeVertices;
         for (TopExp_Explorer explorer(sectionShape, TopAbs_EDGE); explorer.More(); explorer.Next()) {
             const TopoDS_Edge edge = TopoDS::Edge(explorer.Current());
-            if (!projectExternalEdgeIntoResult(edge, sketchPlacement, result)) {
+            if (!projectExternalEdgeIntoResult(edge, sketchPlacement, result, defining)) {
                 return false;
             }
             TopExp::MapShapes(edge, TopAbs_VERTEX, edgeVertices);
@@ -4303,6 +5194,9 @@ bool addExternalGeometryIntersection(const ExternalSubshape& external,
                 continue;
             }
             result.points.push_back(pointInSketchLocalPlane(BRep_Tool::Pnt(vertex), sketchPlacement));
+            if (defining) {
+                result.definingPoints.push_back(SketchPoint {0U, result.points.back(), false});
+            }
             added = true;
         }
         return added;
@@ -4312,90 +5206,165 @@ bool addExternalGeometryIntersection(const ExternalSubshape& external,
     }
 }
 
-std::optional<ExternalGeometryResult> rebuildExternalGeometry(const document::DocumentObject& object,
-                                                              runtime::ComputeContext& context,
-                                                              const gp_Trsf& sketchPlacement)
+std::optional<ExternalGeometryResult> rebuildExternalGeometry(
+    const document::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const gp_Trsf& sketchPlacement
+)
 {
     const auto* externalProperty = document::propertyValue(object, "ExternalGeometry");
     if (externalProperty == nullptr) {
-        return ExternalGeometryResult{};
+        return ExternalGeometryResult {};
     }
     if (externalProperty->propertyType != "App::PropertyLinkSubList") {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "missing_property",
-                               "ExternalGeometry must be an App::PropertyLinkSubList",
-                               object.name,
-                               "ExternalGeometry",
-                               "runtime");
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "missing_property",
+            "ExternalGeometry must be an App::PropertyLinkSubList",
+            object.name,
+            "ExternalGeometry",
+            "runtime"
+        );
         return std::nullopt;
     }
 
     ExternalGeometryResult result;
     const std::vector<document::Link> links = document::readLinks(object, "ExternalGeometry");
-    const std::vector<ExternalGeometryType> externalTypes = readExternalGeometryTypes(object, links.size());
+    const std::vector<ExternalGeometryType> externalTypes
+        = readExternalGeometryTypes(object, links.size());
+    std::map<std::size_t, ExternalGeometryFlags> stateUpdates;
     for (std::size_t index = 0; index < links.size(); ++index) {
         const auto& link = links.at(index);
+        ExternalGeometryFlags flags = externalGeometryFlags(link);
+        if (flags.defining) {
+            ++result.definingLinkCount;
+        }
+        if (flags.frozen) {
+            ++result.frozenLinkCount;
+        }
+        if (flags.detached) {
+            ++result.detachedLinkCount;
+        }
+        if (flags.missing) {
+            ++result.missingLinkCount;
+        }
+        if (flags.sync) {
+            ++result.syncLinkCount;
+        }
+        if (flags.detached) {
+            continue;
+        }
+        if (flags.frozen && !flags.sync) {
+            continue;
+        }
         const ExternalGeometryType externalType = externalTypes.at(index);
-        const bool projection =
-            externalType == ExternalGeometryType::Projection || externalType == ExternalGeometryType::Both;
-        const bool intersection =
-            externalType == ExternalGeometryType::Intersection || externalType == ExternalGeometryType::Both;
+        const bool projection = externalType == ExternalGeometryType::Projection
+            || externalType == ExternalGeometryType::Both;
+        const bool intersection = externalType == ExternalGeometryType::Intersection
+            || externalType == ExternalGeometryType::Both;
         const auto externals = resolveExternalGeometryLink(link, object, context);
         if (!externals) {
             return std::nullopt;
         }
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+        if (flags.missing || flags.sync) {
+            if (flags.missing) {
+                ++result.recoveredMissingLinkCount;
+            }
+            flags.missing = false;
+            flags.sync = false;
+            stateUpdates[index] = flags;
+        }
+        // FreeCAD:
+        // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
         // rebuildExternalGeometry() reads "ExternalGeometry" links and fills transient
         // "ExternalGeo" with projected construction geometry before Constraints.acceptGeometry().
         for (const ExternalSubshape& external : *externals) {
             if (projection && external.kind == TopAbs_VERTEX) {
-                result.points.push_back(pointInSketchLocalPlane(BRep_Tool::Pnt(TopoDS::Vertex(external.shape)), sketchPlacement));
+                result.points.push_back(pointInSketchLocalPlane(
+                    BRep_Tool::Pnt(TopoDS::Vertex(external.shape)),
+                    sketchPlacement
+                ));
+                if (flags.defining) {
+                    result.definingPoints.push_back(SketchPoint {0U, result.points.back(), false});
+                }
             }
 
             if (projection && external.kind == TopAbs_FACE) {
-                if (!projectExternalFaceBoundary(TopoDS::Face(external.shape), sketchPlacement, result)) {
-                    runtime::addDiagnostic(context.diagnostics,
-                                           "error",
-                                           "unsupported_geometry",
-                                           "ExternalGeometry currently projects planar face boundary edges, line edges, circle edges and ellipse edges",
-                                           object.name,
-                                           "ExternalGeometry",
-                                           "runtime",
-                                           link.object,
-                                           external.subname);
+                if (!projectExternalFaceBoundary(
+                        TopoDS::Face(external.shape),
+                        sketchPlacement,
+                        result,
+                        flags.defining
+                    )) {
+                    runtime::addDiagnostic(
+                        context.diagnostics,
+                        "error",
+                        "unsupported_geometry",
+                        "ExternalGeometry currently projects planar face boundary edges, line "
+                        "edges, circle edges and ellipse edges",
+                        object.name,
+                        "ExternalGeometry",
+                        "runtime",
+                        link.object,
+                        external.subname
+                    );
                     return std::nullopt;
                 }
             }
 
-            if (projection && external.kind == TopAbs_EDGE
-                && !projectExternalEdgeIntoResult(TopoDS::Edge(external.shape), sketchPlacement, result)) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_geometry",
-                                       "ExternalGeometry currently projects planar face boundary edges, line edges, circle edges and ellipse edges",
-                                       object.name,
-                                       "ExternalGeometry",
-                                       "runtime",
-                                       link.object,
-                                       external.subname);
+            if (
+                projection && external.kind == TopAbs_EDGE
+                && !projectExternalEdgeIntoResult(
+                    TopoDS::Edge(external.shape),
+                    sketchPlacement,
+                    result,
+                    flags.defining
+                )
+            ) {
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_geometry",
+                    "ExternalGeometry currently projects planar face boundary edges, line edges, "
+                    "circle edges and ellipse edges",
+                    object.name,
+                    "ExternalGeometry",
+                    "runtime",
+                    link.object,
+                    external.subname
+                );
                 return std::nullopt;
             }
 
-            if (intersection && !addExternalGeometryIntersection(external, sketchPlacement, result)) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_geometry",
-                                       "ExternalGeometry could not intersect target with the sketch plane",
-                                       object.name,
-                                       "ExternalGeometry",
-                                       "runtime",
-                                       link.object,
-                                       external.subname);
+            if (intersection && !addExternalGeometryIntersection(
+                    external,
+                    sketchPlacement,
+                    result,
+                    flags.defining
+                )) {
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_geometry",
+                    "ExternalGeometry could not intersect target with the sketch plane",
+                    object.name,
+                    "ExternalGeometry",
+                    "runtime",
+                    link.object,
+                    external.subname
+                );
                 return std::nullopt;
             }
         }
     }
+    appendExternalGeometryFlagsUpdate(
+        context,
+        object,
+        links,
+        stateUpdates,
+        "external_geometry_flags_sync"
+    );
     return result;
 }
 
@@ -4412,8 +5381,10 @@ std::optional<document::Link> readSupportLink(const document::DocumentObject& ob
     return document::readLink(object, "Support");
 }
 
-std::optional<gp_Trsf> supportPlacement(const document::DocumentObject& object,
-                                        runtime::ComputeContext& context)
+std::optional<gp_Trsf> supportPlacement(
+    const document::DocumentObject& object,
+    runtime::ComputeContext& context
+)
 {
     const auto support = readSupportLink(object);
     if (!support) {
@@ -4422,35 +5393,42 @@ std::optional<gp_Trsf> supportPlacement(const document::DocumentObject& object,
 
     const auto placementIt = context.globalPlacements.find(support->object);
     if (placementIt == context.globalPlacements.end()) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "missing_link_target",
-                               "Sketch support " + support->object + " did not produce a placement",
-                               object.name,
-                               support->property.empty() ? "Support" : support->property,
-                               "runtime",
-                               support->object);
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "missing_link_target",
+            "Sketch support " + support->object + " did not produce a placement",
+            object.name,
+            support->property.empty() ? "Support" : support->property,
+            "runtime",
+            support->object
+        );
         return std::nullopt;
     }
     return placementIt->second;
 }
 
-std::optional<gp_Trsf> readSketchPlaneFramePlacement(const document::DocumentObject& object,
-                                                     runtime::ComputeContext& context)
+std::optional<gp_Trsf> readSketchPlaneFramePlacement(
+    const document::DocumentObject& object,
+    runtime::ComputeContext& context
+)
 {
     const auto* value = document::propertyValue(object, "SketchPlaneFrame");
     if (value == nullptr) {
         return std::nullopt;
     }
     const nlohmann::json& frame = value->raw;
-    if (!frame.is_object() || frame.value("PropertyType", std::string{}) != "Chili::SketchPlaneFrame") {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "invalid_property_type",
-                               "SketchPlaneFrame must be a Chili::SketchPlaneFrame property",
-                               object.name,
-                               "SketchPlaneFrame",
-                               "runtime");
+    if (!frame.is_object()
+        || frame.value("PropertyType", std::string {}) != "Chili::SketchPlaneFrame") {
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "invalid_property_type",
+            "SketchPlaneFrame must be a Chili::SketchPlaneFrame property",
+            object.name,
+            "SketchPlaneFrame",
+            "runtime"
+        );
         return std::nullopt;
     }
 
@@ -4458,41 +5436,49 @@ std::optional<gp_Trsf> readSketchPlaneFramePlacement(const document::DocumentObj
     const auto normalVector = readVector3Field(frame, "Normal");
     const auto xVector = readVector3Field(frame, "XDirection");
     if (!origin || !normalVector || !xVector) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "invalid_property_type",
-                               "SketchPlaneFrame requires numeric Origin, Normal and XDirection vectors",
-                               object.name,
-                               "SketchPlaneFrame",
-                               "runtime");
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "invalid_property_type",
+            "SketchPlaneFrame requires numeric Origin, Normal and XDirection vectors",
+            object.name,
+            "SketchPlaneFrame",
+            "runtime"
+        );
         return std::nullopt;
     }
     if (normalVector->SquareMagnitude() <= Precision::SquareConfusion()
         || xVector->SquareMagnitude() <= Precision::SquareConfusion()) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "invalid_property_type",
-                               "SketchPlaneFrame Normal and XDirection must be non-zero",
-                               object.name,
-                               "SketchPlaneFrame",
-                               "runtime");
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "invalid_property_type",
+            "SketchPlaneFrame Normal and XDirection must be non-zero",
+            object.name,
+            "SketchPlaneFrame",
+            "runtime"
+        );
         return std::nullopt;
     }
 
     const gp_Dir normal(*normalVector);
     const gp_Vec normalUnit(normal.X(), normal.Y(), normal.Z());
     const double normalProjection = xVector->Dot(normalUnit);
-    const gp_Vec projectedX(xVector->X() - normalProjection * normalUnit.X(),
-                            xVector->Y() - normalProjection * normalUnit.Y(),
-                            xVector->Z() - normalProjection * normalUnit.Z());
+    const gp_Vec projectedX(
+        xVector->X() - normalProjection * normalUnit.X(),
+        xVector->Y() - normalProjection * normalUnit.Y(),
+        xVector->Z() - normalProjection * normalUnit.Z()
+    );
     if (projectedX.SquareMagnitude() <= Precision::SquareConfusion()) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "invalid_property_type",
-                               "SketchPlaneFrame Normal and XDirection must not be parallel",
-                               object.name,
-                               "SketchPlaneFrame",
-                               "runtime");
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "invalid_property_type",
+            "SketchPlaneFrame Normal and XDirection must not be parallel",
+            object.name,
+            "SketchPlaneFrame",
+            "runtime"
+        );
         return std::nullopt;
     }
 
@@ -4502,18 +5488,20 @@ std::optional<gp_Trsf> readSketchPlaneFramePlacement(const document::DocumentObj
     const gp_Dir yDirection(yVector);
 
     gp_Trsf placement;
-    placement.SetValues(xDirection.X(),
-                        yDirection.X(),
-                        normal.X(),
-                        origin->X(),
-                        xDirection.Y(),
-                        yDirection.Y(),
-                        normal.Y(),
-                        origin->Y(),
-                        xDirection.Z(),
-                        yDirection.Z(),
-                        normal.Z(),
-                        origin->Z());
+    placement.SetValues(
+        xDirection.X(),
+        yDirection.X(),
+        normal.X(),
+        origin->X(),
+        xDirection.Y(),
+        yDirection.Y(),
+        normal.Y(),
+        origin->Y(),
+        xDirection.Z(),
+        yDirection.Z(),
+        normal.Z(),
+        origin->Z()
+    );
     return placement;
 }
 
@@ -4532,13 +5520,21 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
              "MapMode",
              "ExternalGeometry",
              "ExternalTypes",
-             "SketchPlaneFrame"})) {
+             "SketchPlaneFrame"}
+        )) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
 
     if (!object.properties.contains("Geometry") || !object.properties.at("Geometry").is_array()) {
-        runtime::addDiagnostic(context.diagnostics, "error", "missing_property", "Sketch Geometry must be a list", object.name, "Geometry");
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "missing_property",
+            "Sketch Geometry must be a list",
+            object.name,
+            "Geometry"
+        );
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -4552,18 +5548,21 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
 
     const auto constraintsIt = object.properties.find("Constraints");
     const nlohmann::json emptyConstraints;
-    const nlohmann::json& constraints = constraintsIt == object.properties.end() ? emptyConstraints : constraintsIt.value();
-    const auto appliedConstraints =
-        applySketchConstraints(constraints,
-                               object,
-                               context,
-                               parsed.segments,
-                               parsed.points,
-                               parsed.circles,
-                               parsed.ellipses,
-                               parsed.arcs,
-                               parsed.ellipseArcs,
-                               parsed.bsplines);
+    const nlohmann::json& constraints = constraintsIt == object.properties.end()
+        ? emptyConstraints
+        : constraintsIt.value();
+    const auto appliedConstraints = applySketchConstraints(
+        constraints,
+        object,
+        context,
+        parsed.segments,
+        parsed.points,
+        parsed.circles,
+        parsed.ellipses,
+        parsed.arcs,
+        parsed.ellipseArcs,
+        parsed.bsplines
+    );
     if (!appliedConstraints) {
         context.objects[object.name] = {{"status", "error"}};
         return;
@@ -4578,13 +5577,16 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
     // Support/AttachmentSupport, while App::PropertyPlacement remains a local transform
     // composed after that frame, matching the existing support * local placement order.
     if (hasSketchPlaneFrame && hasSupportProperty) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "conflicting_property",
-                               "SketchPlaneFrame is an explicit sketch plane and cannot be combined with Support or AttachmentSupport",
-                               object.name,
-                               "SketchPlaneFrame",
-                               "runtime");
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "conflicting_property",
+            "SketchPlaneFrame is an explicit sketch plane and cannot be combined with Support or "
+            "AttachmentSupport",
+            object.name,
+            "SketchPlaneFrame",
+            "runtime"
+        );
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -4598,7 +5600,8 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
         hasPlacement = true;
     }
     else if (const auto support = supportPlacement(object, context)) {
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.cpp
+        // FreeCAD:
+        // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.cpp
         // ::ProfileBased::positionByPrevious() falls back to sketch->AttachmentSupport Placement
         // when there is no previous base feature.
         placement = *support;
@@ -4607,35 +5610,72 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
     if (document::propertyValue(object, "Placement") != nullptr) {
         const auto localPlacement = document::readPlacement(object, "Placement");
         if (!localPlacement) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "invalid_placement",
-                                   "Sketch Placement must be an App::PropertyPlacement",
-                                   object.name,
-                                   "Placement",
-                                   "runtime");
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "invalid_placement",
+                "Sketch Placement must be an App::PropertyPlacement",
+                object.name,
+                "Placement",
+                "runtime"
+            );
             context.objects[object.name] = {{"status", "error"}};
             return;
         }
-        const gp_Trsf localTransform = geometry::placementFromComponents(localPlacement->base, localPlacement->rotation);
+        const gp_Trsf localTransform
+            = geometry::placementFromComponents(localPlacement->base, localPlacement->rotation);
         placement = hasPlacement ? placement * localTransform : localTransform;
         hasPlacement = true;
     }
 
-    const auto externalGeometry = rebuildExternalGeometry(object, context, hasPlacement ? placement : gp_Trsf{});
+    const auto externalGeometry
+        = rebuildExternalGeometry(object, context, hasPlacement ? placement : gp_Trsf {});
     if (!externalGeometry) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
 
-    const std::vector<SketchSegment> profile = profileSegments(parsed.segments);
-    const std::vector<SketchPoint> points = profilePoints(parsed.points);
-    const std::vector<SketchArc> arcs = profileArcs(parsed.arcs);
-    const std::vector<SketchEllipseArc> ellipseArcs = profileEllipseArcs(parsed.ellipseArcs);
+    std::vector<SketchSegment> resolvedSegments = parsed.segments;
+    resolvedSegments.insert(
+        resolvedSegments.end(),
+        externalGeometry->segments.begin(),
+        externalGeometry->segments.end()
+    );
+    std::vector<SketchPoint> resolvedPoints = parsed.points;
+    resolvedPoints.insert(
+        resolvedPoints.end(),
+        externalGeometry->definingPoints.begin(),
+        externalGeometry->definingPoints.end()
+    );
+    std::vector<SketchCircle> resolvedCircles = parsed.circles;
+    resolvedCircles.insert(
+        resolvedCircles.end(),
+        externalGeometry->circles.begin(),
+        externalGeometry->circles.end()
+    );
+    std::vector<SketchArc> resolvedArcs = parsed.arcs;
+    resolvedArcs.insert(resolvedArcs.end(), externalGeometry->arcs.begin(), externalGeometry->arcs.end());
+    std::vector<SketchEllipse> resolvedEllipses = parsed.ellipses;
+    resolvedEllipses.insert(
+        resolvedEllipses.end(),
+        externalGeometry->ellipses.begin(),
+        externalGeometry->ellipses.end()
+    );
+    std::vector<SketchEllipseArc> resolvedEllipseArcs = parsed.ellipseArcs;
+    resolvedEllipseArcs.insert(
+        resolvedEllipseArcs.end(),
+        externalGeometry->ellipseArcs.begin(),
+        externalGeometry->ellipseArcs.end()
+    );
+
+    const std::vector<SketchSegment> profile = profileSegments(resolvedSegments);
+    const std::vector<SketchPoint> points = profilePoints(resolvedPoints);
+    const std::vector<SketchArc> arcs = profileArcs(resolvedArcs);
+    const std::vector<SketchEllipseArc> ellipseArcs = profileEllipseArcs(resolvedEllipseArcs);
     const std::vector<SketchBSpline> bsplines = profileBSplines(parsed.bsplines);
     const std::vector<SketchProfileEdge> edges = profileEdges(profile, arcs, ellipseArcs, bsplines);
-    const std::vector<SketchCircle> circles = profileCircles(parsed.circles);
-    const std::vector<SketchEllipse> ellipses = profileEllipses(parsed.ellipses);
+    const std::vector<SketchCircle> circles = profileCircles(resolvedCircles);
+    const std::vector<SketchEllipse> ellipses = profileEllipses(resolvedEllipses);
     auto rawShape = buildRawSketchShape(object, context, edges, points, circles, ellipses);
     if (!rawShape) {
         context.objects[object.name] = {{"status", "error"}};
@@ -4646,16 +5686,19 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
     std::optional<TopoDS_Shape> internalShape;
     const ProfileFaceBuild profileFace = buildOptionalProfileFace(edges, circles, ellipses);
     if (profileFace.faceMakerFailed) {
-        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+        // FreeCAD:
+        // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
         // ::SketchObject::buildInternals() delegates split-region construction to
         // "Part::FaceMakerBuildFace"; unsupported open splitters must not silently fall
         // back to a whole-profile face.
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "unsupported_profile_region",
-                               "Sketch open splitter geometry could not produce bounded InternalFace regions",
-                               object.name,
-                               "Geometry");
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "unsupported_profile_region",
+            "Sketch open splitter geometry could not produce bounded InternalFace regions",
+            object.name,
+            "Geometry"
+        );
     }
     if (profileFace.profileShape) {
         profileShape = *profileFace.profileShape;
@@ -4681,7 +5724,7 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
         }
     }
 
-    runtime::ShapeValue shapeValue{runtime::ShapeValue::Kind::Sketch, *rawShape};
+    runtime::ShapeValue shapeValue {runtime::ShapeValue::Kind::Sketch, *rawShape};
     shapeValue.profileShape = profileShape;
     shapeValue.internalShape = internalShape;
     shapeValue.profileRequiresSubshapeSelection = profileFace.requiresSubshapeSelection;
@@ -4703,62 +5746,113 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
                 internalHistoryContext->boundedFaceCount = faceMakerHistory->boundedFaceCount;
                 internalHistoryContext->preSplitHistory = faceMakerHistory->preSplitHistory;
                 internalHistoryContext->splitterHistory = faceMakerHistory->splitterHistory;
+                for (const geometry::FaceMakerEdgeHistoryEvidence& entry :
+                     faceMakerHistory->edgeEvidence) {
+                    topo::SketchInternalFaceMakerEdgeEvidence topoEntry;
+                    topoEntry.makerStage = entry.makerStage;
+                    topoEntry.relation = entry.relation;
+                    topoEntry.sourceEdgeIndex = entry.sourceEdgeIndex;
+                    topoEntry.targetEdgeIndex = entry.targetEdgeIndex;
+                    topoEntry.targetEdge = entry.targetEdge;
+                    topoEntry.preSplitHistory = entry.preSplitHistory;
+                    topoEntry.splitterHistory = entry.splitterHistory;
+                    internalHistoryContext->faceMakerEdgeEvidence.push_back(std::move(topoEntry));
+                }
+                for (const geometry::FaceMakerBoundedFaceHistoryEvidence& entry :
+                     faceMakerHistory->boundedFaceEvidence) {
+                    topo::SketchInternalFaceMakerBoundedFaceEvidence topoEntry;
+                    topoEntry.boundedFaceIndex = entry.boundedFaceIndex;
+                    topoEntry.face = entry.face;
+                    topoEntry.sourceEdgeIndices = entry.sourceEdgeIndices;
+                    topoEntry.outerBoundaryTargetEdgeIndices = entry.outerBoundaryTargetEdgeIndices;
+                    for (const geometry::FaceMakerBoundedFaceBoundaryEvidence& boundary :
+                         entry.outerBoundary) {
+                        topo::SketchInternalFaceMakerBoundedFaceBoundaryEvidence topoBoundary;
+                        topoBoundary.sourceEdgeIndex = boundary.sourceEdgeIndex;
+                        topoBoundary.targetEdgeIndex = boundary.targetEdgeIndex;
+                        topoBoundary.makerStage = boundary.makerStage;
+                        topoBoundary.relation = boundary.relation;
+                        topoBoundary.targetEdge = boundary.targetEdge;
+                        topoEntry.outerBoundary.push_back(std::move(topoBoundary));
+                    }
+                    internalHistoryContext->faceMakerBoundedFaceEvidence.push_back(
+                        std::move(topoEntry)
+                    );
+                }
             }
             if (wireJoinerHistory) {
-                // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                // FreeCAD:
+                // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
                 // ::WireJoinerP::getOpenWires(), calls makeShapeWithElementMap(...,
                 // MapperHistory(aHistory), {sourceEdges.begin(), sourceEdges.end()}, op).
                 // This passes only WireJoiner-produced history summary into topo; topo must not
                 // infer WireJoiner split/generated/deleted history from raw/internal geometry.
                 internalHistoryContext->wireJoinerSourceEdgeCount = wireJoinerHistory->sourceEdgeCount;
-                internalHistoryContext->wireJoinerSplitResultEdgeCount = wireJoinerHistory->splitResultEdgeCount;
+                internalHistoryContext->wireJoinerSplitResultEdgeCount
+                    = wireJoinerHistory->splitResultEdgeCount;
                 for (const geometry::WireJoinerOpenExportHistoryEntry& entry :
                      wireJoinerHistory->openExportEntries) {
                     topo::SketchInternalWireJoinerOpenExportHistoryEntry topoEntry;
                     topoEntry.openExportIndex = entry.openExportIndex;
                     topoEntry.edgeInfoIndex = entry.edgeInfoIndex;
-                    topoEntry.resultWireProducerKind =
-                        geometry::resultWireProducerKindName(entry.resultWireProducer.kind);
-                    topoEntry.resultWireProducerState =
-                        geometry::resultWireProducerStateName(entry.resultWireProducer.state);
-                    topoEntry.resultWireProducerBlocker =
-                        geometry::resultWireBlockerName(entry.resultWireProducer.blocker);
-                    topoEntry.resultWireProducerSourceEdgeInfoIndex =
-                        entry.resultWireProducer.sourceEdgeInfoIndex;
-                    topoEntry.resultWireProducerRootEdgeInfoIndex =
-                        entry.resultWireProducer.rootEdgeInfoIndex;
-                    topoEntry.resultWireProducerCurrentMemberEdgeInfoIndex =
-                        entry.resultWireProducer.currentMemberEdgeInfoIndex;
-                    topoEntry.resultWireProducerChildWireInfoIndex =
-                        entry.resultWireProducer.childWireInfoIndex;
+                    topoEntry.openExportWire = entry.openExportWire;
+                    topoEntry.openExportEdge = entry.openExportEdge;
+                    topoEntry.resultWireProducerKind = geometry::resultWireProducerKindName(
+                        entry.resultWireProducer.kind
+                    );
+                    topoEntry.resultWireProducerState = geometry::resultWireProducerStateName(
+                        entry.resultWireProducer.state
+                    );
+                    topoEntry.resultWireProducerBlocker = geometry::resultWireBlockerName(
+                        entry.resultWireProducer.blocker
+                    );
+                    topoEntry.resultWireProducerSourceEdgeInfoIndex
+                        = entry.resultWireProducer.sourceEdgeInfoIndex;
+                    topoEntry.resultWireProducerRootEdgeInfoIndex
+                        = entry.resultWireProducer.rootEdgeInfoIndex;
+                    topoEntry.resultWireProducerCurrentMemberEdgeInfoIndex
+                        = entry.resultWireProducer.currentMemberEdgeInfoIndex;
+                    topoEntry.resultWireProducerChildWireInfoIndex
+                        = entry.resultWireProducer.childWireInfoIndex;
                     topoEntry.sourceEdgeIndices = entry.sourceEdgeIndices;
                     topoEntry.sourceLineageFromSplitterHistory = entry.sourceLineageFromSplitterHistory;
                     topoEntry.helperOpenExportOverride = entry.helperOpenExportOverride;
                     topoEntry.helperOpenExportOverrideReason = entry.helperOpenExportOverrideReason;
                     topoEntry.purgeBridge = entry.purgeBridge;
-                    internalHistoryContext->wireJoinerOpenExportHistoryEntries.push_back(std::move(topoEntry));
+                    internalHistoryContext->wireJoinerOpenExportHistoryEntries.push_back(
+                        std::move(topoEntry)
+                    );
                 }
-                internalHistoryContext->wireJoinerModifiedSourceEdgeCount =
-                    wireJoinerHistory->modifiedSourceEdgeCount;
-                internalHistoryContext->wireJoinerModifiedHistoryCount = wireJoinerHistory->modifiedHistoryCount;
-                internalHistoryContext->wireJoinerGeneratedHistoryCount = wireJoinerHistory->generatedHistoryCount;
-                internalHistoryContext->wireJoinerDeletedHistoryCount = wireJoinerHistory->deletedHistoryCount;
+                internalHistoryContext->wireJoinerModifiedSourceEdgeCount
+                    = wireJoinerHistory->modifiedSourceEdgeCount;
+                internalHistoryContext->wireJoinerModifiedHistoryCount
+                    = wireJoinerHistory->modifiedHistoryCount;
+                internalHistoryContext->wireJoinerGeneratedHistoryCount
+                    = wireJoinerHistory->generatedHistoryCount;
+                internalHistoryContext->wireJoinerDeletedHistoryCount
+                    = wireJoinerHistory->deletedHistoryCount;
                 internalHistoryContext->wireJoinerSplitterHistory = wireJoinerHistory->splitterHistory;
             }
         }
-        shapeValue.internalNamedShape =
-            topo::namedShapeForSketchInternalShape(object.name, *rawShape, *internalShape, internalHistoryContext);
+        shapeValue.internalNamedShape = topo::namedShapeForSketchInternalShape(
+            object.name,
+            *rawShape,
+            *internalShape,
+            internalHistoryContext
+        );
         context.namedShapes[object.name + ".InternalShape"] = *shapeValue.internalNamedShape;
     }
     context.shapes[object.name] = shapeValue;
     if (hasNonEmptyInternalShape) {
-        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+        // FreeCAD:
+        // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
         // ::SketchObject::buildInternals(), writes auxiliary "InternalShape"; the web
         // response renders that request-local shape with InternalFace ids matching subshapes.
         context.mesh[object.name] = geometry::meshForShape(*internalShape, "InternalFace");
     }
-    const nlohmann::json internalSubshapes =
-        hasNonEmptyInternalShape ? topo::subshapeMapForShape(*internalShape, "Internal") : nlohmann::json::object();
+    const nlohmann::json internalSubshapes = hasNonEmptyInternalShape
+        ? topo::subshapeMapForShape(*internalShape, "Internal")
+        : nlohmann::json::object();
     if (!rawShape->IsNull()) {
         nlohmann::json subshapes = topo::subshapeMapForShape(*rawShape);
         if (hasNonEmptyInternalShape) {
@@ -4775,8 +5869,9 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
     const std::size_t internalFaceCount = countSubshapesOfKind(internalSubshapes, "face");
     const std::size_t internalEdgeCount = countSubshapesOfKind(internalSubshapes, "edge");
     const std::size_t internalVertexCount = countSubshapesOfKind(internalSubshapes, "vertex");
-    const nlohmann::json internalElementMap =
-        hasNonEmptyInternalShape ? topo::internalElementMapForSketch(*rawShape, *internalShape) : nlohmann::json::object();
+    const nlohmann::json internalElementMap = hasNonEmptyInternalShape
+        ? topo::internalElementMapForSketch(*rawShape, *internalShape)
+        : nlohmann::json::object();
     context.objects[object.name] = {
         {"status", "ok"},
         {"shape", rawShape->IsNull() ? "empty" : "occt_sketch_shape"},
@@ -4785,7 +5880,8 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
         {"edge_count", profileEdgeCount},
         {"raw_edge_count", rawEdgeCount},
         {"raw_point_count", rawPointCount},
-        {"internal_shape", internalShape ? (internalShape->IsNull() ? "empty" : "occt_internal_shape") : "none"},
+        {"internal_shape",
+         internalShape ? (internalShape->IsNull() ? "empty" : "occt_internal_shape") : "none"},
         {"internal_face_count", internalFaceCount},
         {"internal_edge_count", internalEdgeCount},
         {"internal_vertex_count", internalVertexCount},
@@ -4796,12 +5892,22 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
         {"relation_constraints_applied", appliedConstraints->relation},
         {"block_constraints_applied", appliedConstraints->block},
         {"external_geometry_count",
-         externalGeometry->segments.size() + externalGeometry->points.size() + externalGeometry->circles.size()
-             + externalGeometry->arcs.size() + externalGeometry->ellipses.size() + externalGeometry->ellipseArcs.size()},
+         externalGeometry->segments.size() + externalGeometry->points.size()
+             + externalGeometry->circles.size() + externalGeometry->arcs.size()
+             + externalGeometry->ellipses.size() + externalGeometry->ellipseArcs.size()},
         {"external_point_count", externalGeometry->points.size()},
         {"external_curve_count",
-         externalGeometry->circles.size() + externalGeometry->arcs.size() + externalGeometry->ellipses.size()
-             + externalGeometry->ellipseArcs.size()},
+         externalGeometry->circles.size() + externalGeometry->arcs.size()
+             + externalGeometry->ellipses.size() + externalGeometry->ellipseArcs.size()},
+        {"external_geometry_state_counts",
+         {
+             {"defining", externalGeometry->definingLinkCount},
+             {"frozen", externalGeometry->frozenLinkCount},
+             {"detached", externalGeometry->detachedLinkCount},
+             {"missing", externalGeometry->missingLinkCount},
+             {"sync", externalGeometry->syncLinkCount},
+             {"recovered_missing", externalGeometry->recoveredMissingLinkCount},
+         }},
     };
     if (wireJoinerLedger) {
         nlohmann::json resultWireProducerLedgerEntries = nlohmann::json::array();
@@ -4823,34 +5929,47 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
             {"split_edge_info_count", wireJoinerLedger->splitEdgeInfoCount},
             {"primary_owned_edge_info_count", wireJoinerLedger->primaryOwnedEdgeInfoCount},
             {"secondary_owned_edge_info_count", wireJoinerLedger->secondaryOwnedEdgeInfoCount},
-            {"closed_wire_assigned_edge_info_count", wireJoinerLedger->closedWireAssignedEdgeInfoCount},
+            {"closed_wire_assigned_edge_info_count",
+             wireJoinerLedger->closedWireAssignedEdgeInfoCount},
             {"closed_wire_info_count", wireJoinerLedger->closedWireInfoCount},
             {"closed_wire_vertex_count", wireJoinerLedger->closedWireVertexCount},
-            {"closed_wire_search_stack_frame_count", wireJoinerLedger->closedWireSearchStackFrameCount},
-            {"closed_wire_search_vertex_stack_count", wireJoinerLedger->closedWireSearchVertexStackCount},
-            {"closed_wire_search_edge_set_visit_count", wireJoinerLedger->closedWireSearchEdgeSetVisitCount},
+            {"closed_wire_search_stack_frame_count",
+             wireJoinerLedger->closedWireSearchStackFrameCount},
+            {"closed_wire_search_vertex_stack_count",
+             wireJoinerLedger->closedWireSearchVertexStackCount},
+            {"closed_wire_search_edge_set_visit_count",
+             wireJoinerLedger->closedWireSearchEdgeSetVisitCount},
             {"closed_wire_search_backtrack_count", wireJoinerLedger->closedWireSearchBacktrackCount},
-            {"closed_wire_search_intersect_skip_count", wireJoinerLedger->closedWireSearchIntersectSkipCount},
+            {"closed_wire_search_intersect_skip_count",
+             wireJoinerLedger->closedWireSearchIntersectSkipCount},
             {"tight_bound_done_wire_info_count", wireJoinerLedger->tightBoundDoneWireInfoCount},
             {"tight_bound_split_wire_info_count", wireJoinerLedger->tightBoundSplitWireInfoCount},
-            {"tight_bound_new_wire_candidate_count", wireJoinerLedger->tightBoundNewWireCandidateCount},
+            {"tight_bound_new_wire_candidate_count",
+             wireJoinerLedger->tightBoundNewWireCandidateCount},
             {"tight_bound_new_wire_vertex_count", wireJoinerLedger->tightBoundNewWireVertexCount},
             {"tight_bound_owner_transfer_candidate_edge_info_count",
              wireJoinerLedger->tightBoundOwnerTransferCandidateEdgeInfoCount},
-            {"tight_bound_transfer_wire_info_count", wireJoinerLedger->tightBoundTransferWireInfoCount},
-            {"tight_bound_transfer_wire_vertex_count", wireJoinerLedger->tightBoundTransferWireVertexCount},
+            {"tight_bound_transfer_wire_info_count",
+             wireJoinerLedger->tightBoundTransferWireInfoCount},
+            {"tight_bound_transfer_wire_vertex_count",
+             wireJoinerLedger->tightBoundTransferWireVertexCount},
             {"tight_bound_transferred_owner_edge_info_count",
              wireJoinerLedger->tightBoundTransferredOwnerEdgeInfoCount},
-            {"tight_bound_split_owner_wire_info_count", wireJoinerLedger->tightBoundSplitOwnerWireInfoCount},
-            {"tight_bound_split_owner_vertex_count", wireJoinerLedger->tightBoundSplitOwnerVertexCount},
-            {"tight_bound_split_owner_built_wire_count", wireJoinerLedger->tightBoundSplitOwnerBuiltWireCount},
+            {"tight_bound_split_owner_wire_info_count",
+             wireJoinerLedger->tightBoundSplitOwnerWireInfoCount},
+            {"tight_bound_split_owner_vertex_count",
+             wireJoinerLedger->tightBoundSplitOwnerVertexCount},
+            {"tight_bound_split_owner_built_wire_count",
+             wireJoinerLedger->tightBoundSplitOwnerBuiltWireCount},
             {"tight_bound_split_wire_vertex_count", wireJoinerLedger->tightBoundSplitWireVertexCount},
             {"tight_bound_split_wire_built_count", wireJoinerLedger->tightBoundSplitWireBuiltCount},
-            {"tight_bound_existing_wire_search_count", wireJoinerLedger->tightBoundExistingWireSearchCount},
+            {"tight_bound_existing_wire_search_count",
+             wireJoinerLedger->tightBoundExistingWireSearchCount},
             {"tight_bound_existing_wire_hit_count", wireJoinerLedger->tightBoundExistingWireHitCount},
             {"tight_bound_existing_wire_reverse_hit_count",
              wireJoinerLedger->tightBoundExistingWireReverseHitCount},
-            {"tight_bound_existing_wire_purge_count", wireJoinerLedger->tightBoundExistingWirePurgeCount},
+            {"tight_bound_existing_wire_purge_count",
+             wireJoinerLedger->tightBoundExistingWirePurgeCount},
             {"tight_bound_purged_wire_info_count", wireJoinerLedger->tightBoundPurgedWireInfoCount},
             {"tight_bound_exhaust_visited_wire_info_count",
              wireJoinerLedger->tightBoundExhaustVisitedWireInfoCount},
@@ -4899,8 +6018,7 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
              wireJoinerLedger->exhaustAdjacentWireSetAbortCount},
             {"exhaust_adjacent_wire_info2_abort_count",
              wireJoinerLedger->exhaustAdjacentWireInfo2AbortCount},
-            {"repeated_split_exhaust_cycle_count",
-             wireJoinerLedger->repeatedSplitExhaustCycleCount},
+            {"repeated_split_exhaust_cycle_count", wireJoinerLedger->repeatedSplitExhaustCycleCount},
             {"repeated_split_exhaust_removed_edge_info_count",
              wireJoinerLedger->repeatedSplitExhaustRemovedEdgeInfoCount},
             {"repeated_split_exhaust_removed_unowned_edge_info_count",
@@ -5007,7 +6125,8 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
             {"source_identity_purge_bridge_edge_info_count",
              wireJoinerLedger->sourceIdentityPurgeBridgeEdgeInfoCount},
             {"source_lineage_edge_info_count", wireJoinerLedger->sourceLineageEdgeInfoCount},
-            {"source_lineage_split_edge_info_count", wireJoinerLedger->sourceLineageSplitEdgeInfoCount},
+            {"source_lineage_split_edge_info_count",
+             wireJoinerLedger->sourceLineageSplitEdgeInfoCount},
             {"source_lineage_open_export_edge_info_count",
              wireJoinerLedger->sourceLineageOpenExportEdgeInfoCount},
             {"source_lineage_missing_open_export_edge_info_count",
@@ -5015,7 +6134,8 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
             {"source_lineage_multi_source_edge_info_count",
              wireJoinerLedger->sourceLineageMultiSourceEdgeInfoCount},
             {"super_edge_candidate_count", wireJoinerLedger->superEdgeCandidateCount},
-            {"super_edge_candidate_edge_info_count", wireJoinerLedger->superEdgeCandidateEdgeInfoCount},
+            {"super_edge_candidate_edge_info_count",
+             wireJoinerLedger->superEdgeCandidateEdgeInfoCount},
             {"super_edge_root_edge_info_count", wireJoinerLedger->superEdgeRootEdgeInfoCount},
             {"super_edge_closed_candidate_count", wireJoinerLedger->superEdgeClosedCandidateCount},
             {"super_edge_open_candidate_count", wireJoinerLedger->superEdgeOpenCandidateCount},
@@ -5059,7 +6179,8 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
             {"iteration2_marked_edge_info_count", wireJoinerLedger->iteration2MarkedEdgeInfoCount},
             {"branch_search_candidate_count", wireJoinerLedger->branchSearchCandidateCount},
             {"branch_search_seed_wire_info_count", wireJoinerLedger->branchSearchSeedWireInfoCount},
-            {"branch_search_inside_candidate_count", wireJoinerLedger->branchSearchInsideCandidateCount},
+            {"branch_search_inside_candidate_count",
+             wireJoinerLedger->branchSearchInsideCandidateCount},
             {"new_wire_seed_candidate_count", wireJoinerLedger->newWireSeedCandidateCount},
             {"new_wire_seed_wire_info_count", wireJoinerLedger->newWireSeedWireInfoCount},
             {"split_wire_candidate_count", wireJoinerLedger->splitWireCandidateCount},
@@ -5072,17 +6193,22 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
             {"owner_propagation_other_wire_live_edge_info_count",
              wireJoinerLedger->ownerPropagationOtherWireLiveEdgeInfoCount},
             {"exhaust_seed_edge_info_count", wireJoinerLedger->exhaustSeedEdgeInfoCount},
-            {"exhaust_shared_owner_edge_info_count", wireJoinerLedger->exhaustSharedOwnerEdgeInfoCount},
-            {"exhaust_done_secondary_edge_info_count", wireJoinerLedger->exhaustDoneSecondaryEdgeInfoCount},
-            {"exhaust_search_candidate_edge_info_count", wireJoinerLedger->exhaustSearchCandidateEdgeInfoCount},
-            {"exhaust_secondary_owner_edge_info_count", wireJoinerLedger->exhaustSecondaryOwnerEdgeInfoCount},
+            {"exhaust_shared_owner_edge_info_count",
+             wireJoinerLedger->exhaustSharedOwnerEdgeInfoCount},
+            {"exhaust_done_secondary_edge_info_count",
+             wireJoinerLedger->exhaustDoneSecondaryEdgeInfoCount},
+            {"exhaust_search_candidate_edge_info_count",
+             wireJoinerLedger->exhaustSearchCandidateEdgeInfoCount},
+            {"exhaust_secondary_owner_edge_info_count",
+             wireJoinerLedger->exhaustSecondaryOwnerEdgeInfoCount},
         };
-        context.objects[object.name]["wire_joiner_history"] =
-            "history_partial:edge_info_wire_info_split_done_exhaust";
+        context.objects[object.name]["wire_joiner_history"]
+            = "history_partial:edge_info_wire_info_split_done_exhaust";
     }
     if (wireJoinerHistory) {
         nlohmann::json openExportHistoryEntries = nlohmann::json::array();
-        for (const geometry::WireJoinerOpenExportHistoryEntry& entry : wireJoinerHistory->openExportEntries) {
+        for (const geometry::WireJoinerOpenExportHistoryEntry& entry :
+             wireJoinerHistory->openExportEntries) {
             openExportHistoryEntries.push_back({
                 {"open_export_index", entry.openExportIndex},
                 {"edge_info_index", entry.edgeInfoIndex},
@@ -5119,6 +6245,37 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
         };
     }
     if (faceMakerHistory) {
+        nlohmann::json edgeEvidence = nlohmann::json::array();
+        for (const geometry::FaceMakerEdgeHistoryEvidence& entry : faceMakerHistory->edgeEvidence) {
+            edgeEvidence.push_back({
+                {"maker_stage", entry.makerStage},
+                {"relation", entry.relation},
+                {"source_edge_index", entry.sourceEdgeIndex},
+                {"target_edge_index", entry.targetEdgeIndex},
+                {"pre_split_history", entry.preSplitHistory},
+                {"splitter_history", entry.splitterHistory},
+            });
+        }
+        nlohmann::json boundedFaceEvidence = nlohmann::json::array();
+        for (const geometry::FaceMakerBoundedFaceHistoryEvidence& entry :
+             faceMakerHistory->boundedFaceEvidence) {
+            nlohmann::json boundary = nlohmann::json::array();
+            for (const geometry::FaceMakerBoundedFaceBoundaryEvidence& boundaryEntry :
+                 entry.outerBoundary) {
+                boundary.push_back({
+                    {"source_edge_index", boundaryEntry.sourceEdgeIndex},
+                    {"target_edge_index", boundaryEntry.targetEdgeIndex},
+                    {"maker_stage", boundaryEntry.makerStage},
+                    {"relation", boundaryEntry.relation},
+                });
+            }
+            boundedFaceEvidence.push_back({
+                {"bounded_face_index", entry.boundedFaceIndex},
+                {"source_edge_indices", entry.sourceEdgeIndices},
+                {"outer_boundary_target_edge_indices", entry.outerBoundaryTargetEdgeIndices},
+                {"outer_boundary", std::move(boundary)},
+            });
+        }
         context.objects[object.name]["facemaker_history"] = {
             {"source_edge_count", faceMakerHistory->sourceEdgeCount},
             {"pre_split_edge_count", faceMakerHistory->preSplitEdgeCount},
@@ -5126,11 +6283,16 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
             {"bounded_face_count", faceMakerHistory->boundedFaceCount},
             {"pre_split_history", faceMakerHistory->preSplitHistory},
             {"splitter_history", faceMakerHistory->splitterHistory},
-            {"profile_result_source", faceMakerRuntimeSourceName(faceMakerHistory->profileResultSource)},
-            {"internal_result_source", faceMakerRuntimeSourceName(faceMakerHistory->internalResultSource)},
+            {"profile_result_source",
+             faceMakerRuntimeSourceName(faceMakerHistory->profileResultSource)},
+            {"internal_result_source",
+             faceMakerRuntimeSourceName(faceMakerHistory->internalResultSource)},
             {"topology_switch_used", faceMakerHistory->topologySwitchUsed},
+            {"edge_evidence", std::move(edgeEvidence)},
+            {"bounded_face_evidence", std::move(boundedFaceEvidence)},
         };
-        context.objects[object.name]["facemaker_history_status"] = "history_partial:facemaker_buildface";
+        context.objects[object.name]["facemaker_history_status"]
+            = "history_evidence:facemaker_buildface";
     }
 }
 

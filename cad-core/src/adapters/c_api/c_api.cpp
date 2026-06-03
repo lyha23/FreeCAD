@@ -120,6 +120,7 @@ nlohmann::json diagnosticCodeList()
         "subname_semantic_drift",
         "subname_split_requires_reselect",
         "unsupported_geometry",
+        "unsupported_assembly_solver",
         "unsupported_link_lifecycle",
         "unsupported_profile_region",
         "unsupported_property",
@@ -134,7 +135,7 @@ nlohmann::json capabilitiesJson()
 {
     const cad_core::runtime::FeatureRegistry registry = cad_core::runtime::buildDefaultRegistry();
     const auto linkSubShapeFields = nlohmann::json::array(
-        {"value", "SubList", "StableSubList", "FullSubList", "ShadowSub", "ReferenceShadow"});
+        {"value", "SubList", "StableSubList", "FullSubList", "ShadowSub", "ReferenceShadow", "ExternalFlags"});
     return {
         {"status", "ok"},
         {"schema_version", "cad-web-v1"},
@@ -151,7 +152,9 @@ nlohmann::json capabilitiesJson()
                "FullSubList",
                "ShadowSub",
                "ReferenceShadow",
+               "ExternalFlags",
                "SubSet"}},
+             {"external_geometry_flags", {"Defining", "Frozen", "Detached", "Missing", "Sync"}},
              {"link_property_shapes",
               {
                   {"App::PropertyLink", {"value"}},
@@ -175,9 +178,84 @@ nlohmann::json capabilitiesJson()
               }},
              {"document_update_channels", {"elementReferenceUpdates", "documentObjectUpdates"}},
          }},
+        {"link_transaction",
+         {
+             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+             // ::LinkBaseExtension::update(), ShowElement false preserves "PlacementList" /
+             // "ScaleList" before removeObject(); ElementCount true path creates or re-claims
+             // LinkElement children, and ::syncElementList() writes "_LinkOwner",
+             // "LinkTransform" and "LinkedObject" back to owned children.
+             {"document_object_updates",
+              {"show_element_create",
+               "show_element_claim",
+               "show_element_sync",
+               "show_element_delete",
+               "show_element_toggle_off",
+               "element_count_owner_lists_sync",
+               "element_list_owner_sync",
+               "element_list_child_sync",
+               "copy_on_change_owned_child_sync"}},
+             {"writeback_properties",
+              {"ElementList",
+               "ElementCount",
+               "PlacementList",
+               "ScaleList",
+               "VisibilityList",
+               "LinkedObject",
+               "_LinkOwner",
+               "LinkTransform"}},
+             {"request_local_boundaries",
+              {"plain_group_child_expansion_without_persistent_child_cache",
+               "show_element_missing_children_are_create_updates"}},
+             {"remaining_gaps",
+              {"full_child_cache_lifecycle", "copy_on_change_deep_copy_lifecycle"}},
+         }},
+        {"link_reference_lifecycle",
+         {
+             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+             // ::LinkBaseExtension::checkGeoElementMap() builds "Data::POSTFIX_EXTERNAL_TAG"
+             // retag postfix evidence for external links; ::parseSubName() keeps PropertyXLink
+             // subvalues so getTrueLinkedObject() can resolve multi-level link subobjects.
+             {"retag_aliases",
+              {"full_sublist_external_tag",
+               "mapped_postfix_alias",
+               "source_prefixed_stable_key",
+               "label_qualified_subname",
+               "multi_level_link_subname",
+               "property_xlink_list_subset_compound"}},
+             {"reference_update_fields",
+              {"FullSubList", "StableSubList", "ShadowSub", "ReferenceShadow", "ExternalFlags"}},
+             {"remaining_gaps",
+              {"document_hash_lifecycle", "source_object_rename_recovery", "label_rename_recovery"}},
+         }},
         {"supported_type_ids", registry.typeIds()},
         {"export_formats", cad_core::geometry::supportedShapeFileFormats()},
         {"diagnostic_codes", diagnosticCodeList()},
+        {"adapters",
+         {
+             {"core_entrypoints",
+              {"cad_core_recompute_json",
+               "cad_core_export_json",
+               "cad_core_capabilities_json",
+               "cli_recompute"}},
+             {"stateless_result_channels",
+              {"results", "elementReferenceUpdates", "documentObjectUpdates", "diagnostics"}},
+             {"c_api_export",
+              {"buffer_only", "rejects_server_file_paths", "metadata_diagnostics", "stl_deflection"}},
+             {"cli_export",
+              {"file_protocol", "requires_object_format_file", "stl_deflection"}},
+             {"remaining_gaps",
+              {"worker_adapter", "wasm_adapter", "streaming_mesh_limits", "binary_mesh_protocol"}},
+         }},
+        {"assembly",
+         {
+             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+             // ::AssemblyObject::solve(), uses "fixGroundedParts()" before "mbdAssembly->runPreDrag()";
+             // cad-core exposes the stateless adapter states while full Ondsel solving remains a gap.
+             {"solver_adapter",
+              {"skipped_no_joints", "grounded_only_noop", "unsupported_joint_diagnostics"}},
+             {"remaining_gaps", {"full_ondsel_solver", "solver_placement_updates"}},
+         }},
         {"topo_history",
          {
              {"mapper_history_core",
@@ -189,6 +267,7 @@ nlohmann::json capabilitiesJson()
                "evidence",
                "recoverability",
                "diagnostic_status",
+               "summary_only_diagnostics",
                "legacy_history_conversion",
                "element_map_preserved_aliases"}},
              {"stable_subname_resolution",
@@ -204,7 +283,14 @@ nlohmann::json capabilitiesJson()
                "section",
                "general_fuse",
                "link_retag",
+               "sketch_internalshape_producer_evidence",
+               "taper_thru_sections",
+               "dressup_addsubshape_slot",
                "transformed_copy_terminal",
+               // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureTransformed.cpp::Transformed::execute(),
+               // Features mode calls "feature->getAddSubShape(fuseShape, cutShape)" and transforms
+               // each original with "makeElementTransform", while WholeShape transforms the support.
+               "transformed_pattern_addsub_ownership",
                "refine_modified_deleted_generated"}},
              {"terminal_history", {"deleted", "split", "merge"}},
              {"element_history_status",
@@ -212,11 +298,14 @@ nlohmann::json capabilitiesJson()
                "terminal_split_deleted",
                "merge",
                "facemaker_pre_split",
-               "facemaker_splitter"}},
+               "facemaker_splitter",
+               "facemaker_summary_only"}},
              {"remaining_gaps",
               {"complete_mapper_history",
-               "facemaker_wirejoiner_history",
-               "taper_full_history",
+               // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.cpp::TopoShape::fix(),
+               // calls "makeShapeWithElementMap(fixThis.Shape(), MapperHistory(fixThis), {*this})"
+               // because "ShapeFix_Shape may delete ... or modify the input shape".
+               "shapefix_history",
                "transformed_pattern_full_history",
                "import_shape_element_map"}},
          }},

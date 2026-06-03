@@ -1,0 +1,83 @@
+{
+  "Objects": [
+    {
+      "Name": "Box",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 3,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "ComponentLink",
+      "ID": 2,
+      "TypeId": "Assembly::AssemblyLink",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Box"
+        },
+        "Rigid": true,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [
+            0,
+            5,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "Name": "GroundedJoint",
+      "ID": 3,
+      "TypeId": "App::FeaturePython",
+      "Properties": {
+        "ObjectToGround": {
+          "PropertyType": "App::PropertyLinkGlobal",
+          "value": "ComponentLink"
+        }
+      }
+    },
+    {
+      "Name": "Joints",
+      "ID": 4,
+      "TypeId": "Assembly::JointGroup",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "GroundedJoint"
+          ]
+        }
+      }
+    },
+    {
+      "Name": "Assembly",
+      "ID": 5,
+      "TypeId": "Assembly::AssemblyObject",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "ComponentLink",
+            "Joints"
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Assembly"
+    ]
+  }
+}

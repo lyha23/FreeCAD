@@ -5,6 +5,9 @@ from .fixture_runner import CadCoreFixtureTestCase
 
 
 class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
+    def assert_update_property_type(self, update: dict, property_name: str, property_type: str) -> None:
+        self.assertEqual(update["properties"][property_name]["PropertyType"], property_type)
+
     def test_p8_part_box_builds_occt_solid(self) -> None:
         result = self.run_recompute("part-box", "p8")
         box = result["objects"]["Box"]
@@ -94,12 +97,16 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p8_app_link_preserves_full_sublist_external_mapped_alias(self) -> None:
         result = self.run_recompute("app-link-full-sublist-external-tag", "p8")
         link = result["objects"]["FaceLink"]
+        named_shape = result["named_shapes"]["FaceLink"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(link["status"], "ok")
         self.assertEqual(link["link"], "app_link")
         self.assertEqual(link["linked_object"], "Box")
         self.assertEqual(link["shape"], "occt_face")
+        self.assertEqual(named_shape["element_map"]["ExternalDoc#Box.Face1"], "Face1")
+        self.assertEqual(named_shape["element_map"]["Face1;:X;ExternalDoc#Box.Face1"], "Face1")
+        self.assertIn("Face1;:X;ExternalDoc#Box.Face1", named_shape["elements"]["Face1"]["sources"])
         self.assert_object_matches_expected(result, "p8", "app-link-full-sublist-external-tag")
 
     def test_p8_app_link_element_proxies_linked_shape(self) -> None:
@@ -204,6 +211,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p8_app_link_group_accepts_xlink_list_subset_elements(self) -> None:
         result = self.run_recompute("app-link-group-xlink-list-subset-elements", "p8")
         group = result["objects"]["LinkGroup"]
+        named_shape = result["named_shapes"]["LinkGroup"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(group["status"], "ok")
@@ -211,6 +219,8 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(group["elements"], ["LinkA", "LinkB"])
         self.assertEqual(group["visible_elements"], ["LinkA", "LinkB"])
         self.assertEqual(group["shape"], "occt_compound")
+        self.assertEqual(named_shape["element_map"]["0.Face1"], "Face1")
+        self.assertEqual(named_shape["element_map"]["1.Face1"], "Face7")
 
     def test_p8_app_link_resolves_group_subshape_alias(self) -> None:
         result = self.run_recompute("app-link-group-subshape-alias", "p8")
@@ -280,12 +290,16 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p8_app_link_resolves_multilevel_label_qualified_subshape_alias(self) -> None:
         result = self.run_recompute("app-link-multilevel-label-qualified-sublist", "p8")
         link = result["objects"]["FaceLink"]
+        named_shape = result["named_shapes"]["FaceLink"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(link["status"], "ok")
         self.assertEqual(link["link"], "app_link")
         self.assertEqual(link["linked_object"], "ChainLink")
         self.assertEqual(link["shape"], "occt_face")
+        self.assertEqual(named_shape["element_map"]["$PrettyChain.$PrettyBoxLink.$PrettyBox.Face1"], "Face1")
+        self.assertEqual(named_shape["element_map"]["ChainLink.BoxLink.Box.Face1"], "Face1")
+        self.assertIn("$PrettyChain.$PrettyBoxLink.$PrettyBox.Face1", named_shape["elements"]["Face1"]["sources"])
         self.assert_object_matches_expected(result, "p8", "app-link-multilevel-label-qualified-sublist")
 
     def test_p8_app_link_group_respects_visibility_list(self) -> None:
@@ -330,6 +344,8 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(updates[0]["object"], "ArrayLink")
         properties = updates[0]["properties"]
         self.assertEqual(properties["PlacementList"]["PropertyType"], "App::PropertyPlacementList")
+        self.assert_update_property_type(updates[0], "ScaleList", "App::PropertyVectorList")
+        self.assert_update_property_type(updates[0], "VisibilityList", "App::PropertyBoolList")
         self.assertEqual(properties["PlacementList"]["value"][0]["Base"], [0, 0, 0])
         self.assertEqual(properties["PlacementList"]["value"][1]["Base"], [1, 0, 0])
         self.assertEqual(properties["PlacementList"]["value"][2]["Base"], [2, 0, 0])
@@ -351,6 +367,9 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(updates[0]["reason"], "show_element_toggle_off_owner_sync")
         self.assertEqual(updates[0]["object"], "ArrayLink")
         properties = updates[0]["properties"]
+        self.assert_update_property_type(updates[0], "ElementList", "App::PropertyLinkList")
+        self.assert_update_property_type(updates[0], "PlacementList", "App::PropertyPlacementList")
+        self.assert_update_property_type(updates[0], "ScaleList", "App::PropertyVectorList")
         self.assertEqual(properties["ElementList"]["values"], [])
         self.assertEqual(properties["PlacementList"]["value"][0]["Base"], [0, 0, 0])
         self.assertEqual(properties["PlacementList"]["value"][1]["Base"], [5, 0, 0])
@@ -373,6 +392,8 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(updates[0]["reason"], "show_element_element_list_owner_sync")
         self.assertEqual(updates[0]["object"], "ArrayLink")
         properties = updates[0]["properties"]
+        self.assert_update_property_type(updates[0], "ElementCount", "App::PropertyInteger")
+        self.assert_update_property_type(updates[0], "VisibilityList", "App::PropertyBoolList")
         self.assertEqual(properties["ElementCount"]["value"], 2)
         self.assertEqual(properties["VisibilityList"]["value"], [False, True])
 
@@ -393,6 +414,12 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "show_element_element_list_child_sync",
         ])
         self.assertEqual([item["object"] for item in updates], ["ArrayLink_i0", "ArrayLink_i1"])
+        self.assert_update_property_type(updates[0], "_LinkOwner", "App::PropertyInteger")
+        self.assert_update_property_type(updates[0], "LinkedObject", "App::PropertyXLink")
+        self.assert_update_property_type(updates[0], "LinkTransform", "App::PropertyBool")
+        self.assert_update_property_type(updates[1], "_LinkOwner", "App::PropertyInteger")
+        self.assert_update_property_type(updates[1], "LinkedObject", "App::PropertyXLink")
+        self.assert_update_property_type(updates[1], "LinkTransform", "App::PropertyBool")
         self.assertEqual(updates[0]["properties"]["_LinkOwner"]["value"], 2)
         self.assertEqual(updates[1]["properties"]["LinkTransform"]["value"], False)
         self.assertEqual(updates[1]["properties"]["LinkedObject"]["value"], "Box")
@@ -411,6 +438,8 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(updates[0]["reason"], "show_element_element_list_child_sync")
         self.assertEqual(updates[0]["object"], "ArrayLink_i0")
         properties = updates[0]["properties"]
+        self.assert_update_property_type(updates[0], "_LinkOwner", "App::PropertyInteger")
+        self.assert_update_property_type(updates[0], "LinkTransform", "App::PropertyBool")
         self.assertEqual(properties["_LinkOwner"]["value"], 2)
         self.assertEqual(properties["LinkTransform"]["value"], False)
         self.assertNotIn("LinkedObject", properties)
@@ -576,6 +605,11 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual([item["object"] for item in updates], ["ArrayLink_i0", "ArrayLink_i1"])
         self.assertEqual(updates[0]["owner"], "ArrayLink")
         self.assertEqual(updates[0]["ownerId"], 2)
+        self.assert_update_property_type(updates[0], "_LinkOwner", "App::PropertyInteger")
+        self.assert_update_property_type(updates[0], "LinkedObject", "App::PropertyXLink")
+        self.assert_update_property_type(updates[0], "LinkTransform", "App::PropertyBool")
+        self.assert_update_property_type(updates[0], "Placement", "App::PropertyPlacement")
+        self.assert_update_property_type(updates[0], "Scale", "App::PropertyFloat")
         self.assertEqual(updates[0]["properties"]["_LinkOwner"]["value"], 2)
         self.assertEqual(updates[0]["properties"]["LinkedObject"]["value"], "Box")
         self.assertEqual(updates[1]["properties"]["Placement"]["Base"], [5, 0, 0])
@@ -638,47 +672,84 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(assembly["status"], "ok")
         self.assertEqual(assembly["assembly"], "object")
         self.assertEqual(assembly["group"], ["ComponentLink"])
-        self.assertEqual(assembly["solve"], "not_migrated")
+        self.assertEqual(assembly["solve"], "skipped_no_joints")
+        self.assertEqual(assembly["solver_adapter"]["status"], "skipped")
+        self.assertEqual(assembly["solver_adapter"]["reason"], "no_joints")
         self.assert_object_matches_expected(result, "p8", "assembly-link-basic")
 
-    def test_p8_assembly_joint_group_reports_solver_inputs_as_not_migrated(self) -> None:
+    def test_p8_assembly_grounded_only_solver_adapter_succeeds_noop(self) -> None:
+        result = self.run_recompute("assembly-grounded-only-solver-success", "p8")
+        assembly = result["objects"]["Assembly"]
+        joint_group = result["objects"]["Joints"]
+        grounded = result["objects"]["GroundedJoint"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(grounded["status"], "ok")
+        self.assertEqual(grounded["assembly"], "grounded_joint")
+        self.assertEqual(grounded["object_to_ground"], "ComponentLink")
+        self.assertEqual(grounded["solve"], "grounded_input")
+        self.assertEqual(joint_group["status"], "ok")
+        self.assertEqual(joint_group["solve"], "solver_inputs")
+        self.assertEqual(joint_group["joints"], ["GroundedJoint"])
+        self.assertEqual(assembly["status"], "ok")
+        self.assertEqual(assembly["assembly"], "object")
+        self.assertEqual(assembly["joint_groups"], ["Joints"])
+        self.assertEqual(assembly["joints"], ["GroundedJoint"])
+        self.assertEqual(assembly["solve"], "solved_noop")
+        self.assertEqual(assembly["solver_adapter"]["status"], "solved")
+        self.assertEqual(assembly["solver_adapter"]["mode"], "grounded_only_noop")
+        self.assertEqual(assembly["solver_adapter"]["grounded_joints"], ["GroundedJoint"])
+
+    def test_p8_assembly_joint_group_reports_solver_inputs_and_unsupported_solver(self) -> None:
         result = self.run_recompute("assembly-joint-group-diagnostics", "p8")
         assembly = result["objects"]["Assembly"]
         joint_group = result["objects"]["Joints"]
         grounded = result["objects"]["GroundedJoint"]
         fixed = result["objects"]["FixedJoint"]
+        diagnostic = result["diagnostics"][0]
 
-        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(diagnostic["severity"], "warning")
+        self.assertEqual(diagnostic["code"], "unsupported_assembly_solver")
+        self.assertEqual(diagnostic["object"], "Assembly")
+        self.assertEqual(diagnostic["property"], "Group")
+        self.assertEqual(diagnostic["target"], "FixedJoint")
         self.assertEqual(grounded["status"], "ok")
         self.assertEqual(grounded["assembly"], "grounded_joint")
         self.assertEqual(grounded["object_to_ground"], "ComponentA")
-        self.assertEqual(grounded["solve"], "not_migrated")
+        self.assertEqual(grounded["solve"], "grounded_input")
 
         self.assertEqual(fixed["status"], "ok")
         self.assertEqual(fixed["assembly"], "joint")
         self.assertEqual(fixed["joint_type"], "Fixed")
         self.assertEqual(fixed["reference1"]["object"], "ComponentA")
         self.assertEqual(fixed["reference2"]["object"], "ComponentB")
-        self.assertEqual(fixed["solve"], "not_migrated")
+        self.assertEqual(fixed["solve"], "joint_input")
 
         self.assertEqual(joint_group["status"], "ok")
         self.assertEqual(joint_group["assembly"], "joint_group")
         self.assertEqual(joint_group["joints"], ["GroundedJoint", "FixedJoint"])
-        self.assertEqual(joint_group["solve"], "not_migrated")
+        self.assertEqual(joint_group["solve"], "solver_inputs")
 
         self.assertEqual(assembly["status"], "ok")
         self.assertEqual(assembly["assembly"], "object")
         self.assertEqual(assembly["joint_groups"], ["Joints"])
         self.assertEqual(assembly["joints"], ["GroundedJoint", "FixedJoint"])
-        self.assertEqual(assembly["solve"], "not_migrated")
+        self.assertEqual(assembly["solve"], "unsupported")
+        self.assertEqual(assembly["solver_adapter"]["status"], "unsupported")
+        self.assertEqual(assembly["solver_adapter"]["reason"], "joint_type_not_migrated")
+        self.assertEqual(assembly["solver_adapter"]["grounded_joints"], ["GroundedJoint"])
+        self.assertEqual(assembly["solver_adapter"]["joints"], ["FixedJoint"])
         self.assert_object_matches_expected(result, "p8", "assembly-joint-group-diagnostics")
 
     def test_p8_assembly_joint_reads_hidden_xlinksub_solver_references(self) -> None:
         result = self.run_recompute("assembly-joint-hidden-reference-diagnostics", "p8")
         fixed = result["objects"]["FixedJoint"]
         assembly = result["objects"]["Assembly"]
+        diagnostic = result["diagnostics"][0]
 
-        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(diagnostic["severity"], "warning")
+        self.assertEqual(diagnostic["code"], "unsupported_assembly_solver")
+        self.assertEqual(diagnostic["target"], "FixedJoint")
         self.assertEqual(fixed["status"], "ok")
         self.assertEqual(fixed["assembly"], "joint")
         self.assertEqual(fixed["joint_type"], "Fixed")
@@ -686,8 +757,10 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(fixed["reference1"]["subnames"], ["Face1"])
         self.assertEqual(fixed["reference2"]["object"], "ComponentB")
         self.assertEqual(fixed["reference2"]["subnames"], ["Face1"])
-        self.assertEqual(fixed["solve"], "not_migrated")
+        self.assertEqual(fixed["solve"], "joint_input")
         self.assertEqual(assembly["joints"], ["FixedJoint"])
+        self.assertEqual(assembly["solve"], "unsupported")
+        self.assertEqual(assembly["solver_adapter"]["status"], "unsupported")
         self.assert_object_matches_expected(result, "p8", "assembly-joint-hidden-reference-diagnostics")
 
     def test_p8_part_cylinder_builds_prism_extension_solid(self) -> None:

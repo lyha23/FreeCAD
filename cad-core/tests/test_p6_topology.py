@@ -41,21 +41,46 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(result["diagnostics"], [])
                 self.assert_object_matches_expected(result, "p3b", fixture)
 
-    def test_p6_taper_preserved_sources_are_partial_history(self) -> None:
-        for fixture, owner, source, extra_edges in [
-            ("pad-length-taper", "Pad", "Sketch", []),
-            ("pad-two-sides-taper", "Pad", "Sketch", []),
-            ("pad-symmetric-taper", "Pad", "Sketch", []),
-            ("pad-length-taper-inner-wire", "Pad", "Sketch", ["Edge5"]),
-            ("pocket-length-taper", "Pocket", "SketchPocket", []),
+    def test_p6_taper_thru_sections_history_is_mapper_backed(self) -> None:
+        for fixture, owner, source in [
+            ("pad-length-taper", "Pad", "Sketch"),
+            ("pad-two-sides-taper", "Pad", "Sketch"),
+            ("pad-symmetric-taper", "Pad", "Sketch"),
+            ("pad-length-taper-inner-wire", "Pad", "Sketch"),
+            ("pocket-length-taper", "Pocket", "SketchPocket"),
         ]:
             with self.subTest(fixture=fixture):
                 result = self.run_recompute(fixture, "p3b")
+                owner_object = result["objects"][owner]
+                named_shape = result["named_shapes"][owner]
+                history_kinds = {item["kind"] for item in named_shape["history"]}
+                maker_events = [
+                    event
+                    for event in named_shape["mapper_history"]
+                    if event["maker_stage"] == "maker_history"
+                ]
 
                 self.assertEqual(result["diagnostics"], [])
-                self.assertEqual(result["objects"][owner]["topo_naming"], "known_gap:taper_history")
-                self.assertEqual(result["objects"][owner]["topo_naming_history"], "history_partial:taper")
+                self.assertNotIn("topo_naming", owner_object)
+                self.assertNotIn("topo_naming_history", owner_object)
                 self.assert_object_matches_expected(result, "p3b", fixture)
+                self.assertEqual(named_shape["element_map_status"], "history_partial")
+                self.assertIn("generated", history_kinds)
+                self.assertTrue(
+                    any(
+                        event["relation"] == "generated"
+                        and event["source"]["object"] == source
+                        for event in maker_events
+                    )
+                )
+                self.assertTrue(
+                    any(
+                        event["relation"] == "generated"
+                        and event["source"]["object"].startswith(f"{owner}.")
+                        and ".TaperSection" in event["source"]["object"]
+                        for event in maker_events
+                    )
+                )
 
     def test_p6_body_boolean_named_shape_records_maker_history(self) -> None:
         for fixture, required_sources in {

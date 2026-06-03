@@ -21,6 +21,53 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         "part-extrusion-facemaker-bullseye-intersected-holes",
     )
 
+    def run_payload(self, payload: dict) -> dict:
+        temp_path: Path | None = None
+        try:
+            with tempfile.NamedTemporaryFile("w", suffix=".json", encoding="utf-8", delete=False) as temp:
+                json.dump(payload, temp)
+                temp_path = Path(temp.name)
+            return self.run_recompute_file(temp_path)
+        finally:
+            if temp_path is not None:
+                temp_path.unlink(missing_ok=True)
+
+    def external_geometry_state_payload(self, flags: list[str]) -> dict:
+        return {
+            "Objects": [
+                {
+                    "Name": "Box",
+                    "ID": 1,
+                    "TypeId": "Part::Box",
+                    "Properties": {
+                        "Length": 10,
+                        "Width": 5,
+                        "Height": 1,
+                    },
+                },
+                {
+                    "Name": "Sketch",
+                    "ID": 2,
+                    "TypeId": "Sketcher::SketchObject",
+                    "Properties": {
+                        "Geometry": [],
+                        "ExternalGeometry": {
+                            "PropertyType": "App::PropertyLinkSubList",
+                            "SubSet": [
+                                {
+                                    "value": "Box",
+                                    "SubList": ["Face5"],
+                                    "ExternalFlags": flags,
+                                }
+                            ],
+                        },
+                        "Constraints": [],
+                    },
+                },
+            ],
+            "recompute": {"objs": ["Sketch"]},
+        }
+
     def assert_super_edge_lifecycle_ledger(self, ledger: dict[str, int]) -> None:
         self.assertGreater(ledger["super_edge_candidate_count"], 0)
         self.assertEqual(ledger["super_edge_root_edge_info_count"], ledger["super_edge_candidate_count"])
@@ -453,7 +500,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         runtime_entry_counts = self.open_export_entry_counts(runtime_entries)
         internal_entry_counts = self.open_export_entry_counts(internal_entries)
 
-        self.assertEqual(named_shape["sketch_internal_history_status"], "history_partial:facemaker_buildface")
+        self.assertEqual(named_shape["sketch_internal_history_status"], "history_evidence:facemaker_wirejoiner")
         self.assertIn("wire_joiner_history:open_export", named_shape["element_history_status"])
         self.assertEqual(len(internal_entries), len(runtime_entries))
         self.assertEqual(internal_entry_counts, runtime_entry_counts)
@@ -1304,6 +1351,60 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(sketch["external_point_count"], 0)
                 self.assert_object_matches_expected(result, "p5", fixture)
 
+    def test_p5_external_geometry_defining_participates_in_profile(self) -> None:
+        result = self.run_payload(self.external_geometry_state_payload(["Defining"]))
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["profile"], "occt_face")
+        self.assertTrue(sketch["profile_ready"])
+        self.assertEqual(sketch["edge_count"], 4)
+        self.assertEqual(sketch["raw_edge_count"], 4)
+        self.assertEqual(sketch["external_geometry_count"], 4)
+        self.assertEqual(sketch["external_geometry_state_counts"]["defining"], 1)
+
+    def test_p5_external_geometry_frozen_and_detached_do_not_follow_source(self) -> None:
+        for flags, state in [(["Frozen"], "frozen"), (["Detached"], "detached")]:
+            with self.subTest(flags=flags):
+                result = self.run_payload(self.external_geometry_state_payload(flags))
+                sketch = result["objects"]["Sketch"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(sketch["status"], "ok")
+                self.assertFalse(sketch["profile_ready"])
+                self.assertEqual(sketch["edge_count"], 0)
+                self.assertEqual(sketch["external_geometry_count"], 0)
+                self.assertEqual(sketch["external_geometry_state_counts"][state], 1)
+
+    def test_p5_external_geometry_sync_refreshes_and_clears_sync_flag(self) -> None:
+        result = self.run_payload(self.external_geometry_state_payload(["Frozen", "Sync"]))
+        sketch = result["objects"]["Sketch"]
+        updates = result["documentObjectUpdates"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["external_geometry_count"], 4)
+        self.assertEqual(sketch["external_geometry_state_counts"]["frozen"], 1)
+        self.assertEqual(sketch["external_geometry_state_counts"]["sync"], 1)
+        self.assertEqual([item["reason"] for item in updates], ["external_geometry_flags_sync"])
+        sub_set = updates[0]["properties"]["ExternalGeometry"]["SubSet"]
+        self.assertEqual(sub_set[0]["ExternalFlags"], ["Frozen"])
+
+    def test_p5_external_geometry_missing_recovery_clears_missing_flag(self) -> None:
+        result = self.run_payload(self.external_geometry_state_payload(["Missing"]))
+        sketch = result["objects"]["Sketch"]
+        updates = result["documentObjectUpdates"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["external_geometry_count"], 4)
+        self.assertEqual(sketch["external_geometry_state_counts"]["missing"], 1)
+        self.assertEqual(sketch["external_geometry_state_counts"]["recovered_missing"], 1)
+        self.assertEqual([item["reason"] for item in updates], ["external_geometry_flags_sync"])
+        sub_set = updates[0]["properties"]["ExternalGeometry"]["SubSet"]
+        self.assertNotIn("ExternalFlags", sub_set[0])
+
     def test_p5_non_parallel_external_circle_edge_projection_variants(self) -> None:
         for fixture, expected_curve_count in {
             "sketch-external-circle-edge-as-line": 0,
@@ -1396,7 +1497,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assertEqual(sketch["facemaker_history_status"], "history_partial:facemaker_buildface")
+        self.assertEqual(sketch["facemaker_history_status"], "history_evidence:facemaker_buildface")
         self.assertEqual(face_history["source_edge_count"], 5)
         self.assertEqual(face_history["bounded_face_count"], 2)
         self.assertFalse(face_history["pre_split_history"])
@@ -1526,7 +1627,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             for item in named_shape["history"]
             if item["kind"] == "split" and item["sources"] == ["Edge5"]
         ]
-        self.assertEqual(named_shape["sketch_internal_history_status"], "history_partial:facemaker_buildface")
+        self.assertEqual(named_shape["sketch_internal_history_status"], "history_evidence:facemaker_wirejoiner")
         self.assertIn("facemaker_history:splitter", named_shape["element_history_status"])
         self.assertIn("wire_joiner_history:splitter", named_shape["element_history_status"])
         self.assertIn("wire_joiner_history:modified", named_shape["element_history_status"])
@@ -1541,7 +1642,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         }
         self.assertIn("facemaker:splitter", mapper_history_stages)
         self.assertIn("wire_joiner:open_export", mapper_history_stages)
-        self.assertIn("wire_joiner_history:open_export", mapper_history_diagnostics)
+        self.assertIn("summary_only:wire_joiner_history:open_export", mapper_history_diagnostics)
         self.assertEqual(internal_history["source_edge_count"], 5)
         self.assertEqual(internal_history["bounded_face_count"], 2)
         self.assertFalse(internal_history["pre_split_history"])
@@ -1561,6 +1662,150 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         for entry in split_entries:
             self.assertTrue(entry["element"].startswith("InternalEdge"))
             self.assertEqual(named_shape["elements"][entry["element"]]["status"], "split")
+
+    def test_p5_c2_m2_facemaker_bounded_faces_emit_outer_boundary_evidence(self) -> None:
+        result = self.run_recompute("sketch-internal-face-through-open-cutter", "p5")
+        sketch = result["objects"]["Sketch"]
+        named_shape = result["named_shapes"]["Sketch.InternalShape"]
+        internal_history = named_shape["sketch_internal_history"]
+
+        face_evidence = sketch["facemaker_history"]["bounded_face_evidence"]
+        self.assertEqual(sketch["facemaker_history_status"], "history_evidence:facemaker_buildface")
+        self.assertEqual(len(face_evidence), sketch["internal_face_count"])
+        self.assertEqual(face_evidence, internal_history["facemaker_bounded_face_evidence"])
+        self.assertTrue(all(entry["source_edge_indices"] for entry in face_evidence))
+        self.assertTrue(all(entry["outer_boundary"] for entry in face_evidence))
+
+        generated_events = [
+            event
+            for event in named_shape["mapper_history"]
+            if event["maker_stage"] == "facemaker:outer_boundary"
+            and event["relation"] == "generated"
+            and event["shape_kind"] == "face"
+        ]
+        self.assertGreaterEqual(len(generated_events), sketch["internal_face_count"])
+        for event in generated_events:
+            self.assertEqual(event["evidence"]["producer"], "FaceMakerBuildFace")
+            self.assertTrue(event["target"]["subname"].startswith("InternalFace"))
+            self.assertGreater(event["evidence"]["source_edge_index"], 0)
+            self.assertTrue(event["evidence"]["outer_boundary_target_edge_indices"])
+
+    def test_p5_c2_m4_summary_history_is_diagnostic_only(self) -> None:
+        result = self.run_recompute("sketch-internal-face-through-open-cutter", "p5")
+        named_shape = result["named_shapes"]["Sketch.InternalShape"]
+        mapper_history = named_shape["mapper_history"]
+
+        summary_events = [
+            event
+            for event in mapper_history
+            if event["diagnostic_status"].startswith("summary_only:")
+        ]
+        self.assertTrue(summary_events)
+        for event in summary_events:
+            self.assertEqual(event["recoverability"], "diagnostic")
+            self.assertEqual(event["source"], {"object": "Sketch.InternalShape", "subname": ""})
+            self.assertEqual(event["target"], {"object": "Sketch.InternalShape", "subname": ""})
+
+        producer_events = [
+            event
+            for event in mapper_history
+            if event["evidence"].get("producer") in {"FaceMakerBuildFace", "WireJoiner"}
+        ]
+        self.assertTrue(producer_events)
+        self.assertTrue(
+            all(
+                not event["diagnostic_status"].startswith("summary_only:")
+                for event in producer_events
+            )
+        )
+        self.assertTrue(
+            any(
+                event["relation"] == "split"
+                and event["evidence"]["producer"] == "FaceMakerBuildFace"
+                for event in producer_events
+            )
+        )
+        self.assertTrue(
+            any(
+                event["relation"] in {"generated", "split"}
+                and event["evidence"]["producer"] == "WireJoiner"
+                for event in producer_events
+            )
+        )
+
+    def test_p5_c2_m2_source_edge_one_to_many_split_uses_producer_evidence(self) -> None:
+        result = self.run_recompute("sketch-internal-face-through-open-cutter", "p5")
+        sketch = result["objects"]["Sketch"]
+        named_shape = result["named_shapes"]["Sketch.InternalShape"]
+        internal_map = sketch["internal_element_map"]
+
+        edge5_evidence = [
+            entry
+            for entry in sketch["facemaker_history"]["edge_evidence"]
+            if entry["source_edge_index"] == 5 and entry["relation"] == "split"
+        ]
+        self.assertGreaterEqual(len(edge5_evidence), 2)
+        self.assertTrue(all(entry["maker_stage"] == "facemaker:splitter" for entry in edge5_evidence))
+        self.assertNotIn("Edge5", internal_map)
+        self.assertNotIn("Edge5", named_shape["element_map"])
+
+        edge5_events = [
+            event
+            for event in named_shape["mapper_history"]
+            if event["source"] == {"object": "Sketch", "subname": "Edge5"}
+            and event["relation"] == "split"
+            and event["shape_kind"] == "edge"
+        ]
+        self.assertGreaterEqual(len(edge5_events), 2)
+        self.assertTrue(all(event["evidence"]["producer"] in {"FaceMakerBuildFace", "WireJoiner"} for event in edge5_events))
+
+    def test_p5_c2_m2_deleted_no_original_purge_is_diagnostic_not_unique_map(self) -> None:
+        result = self.run_recompute("sketch-internal-face-dangling-line", "p5")
+        named_shape = result["named_shapes"]["Sketch.InternalShape"]
+        internal_map = result["objects"]["Sketch"]["internal_element_map"]
+
+        self.assertNotIn("Edge5", internal_map)
+        self.assertNotIn("Vertex6", internal_map)
+        self.assertNotIn("Edge5", named_shape["element_map"])
+        self.assertNotIn("Vertex6", named_shape["element_map"])
+        purge_events = [
+            event
+            for event in named_shape["mapper_history"]
+            if event["maker_stage"].startswith("wire_joiner")
+            and event["diagnostic_status"] == "no_original_purge"
+        ]
+        self.assertTrue(any(event["source"] == {"object": "Sketch", "subname": "Edge5"} for event in purge_events))
+        self.assertTrue(any(event["source"] == {"object": "Sketch", "subname": "Vertex6"} for event in purge_events))
+
+    def test_p5_c2_m2_wire_joiner_open_export_uses_producer_identity(self) -> None:
+        result = self.run_recompute("sketch-internal-face-t-cutter", "p5")
+        sketch = result["objects"]["Sketch"]
+        named_shape = result["named_shapes"]["Sketch.InternalShape"]
+        entries = sketch["wire_joiner_history_detail"]["open_export_history_entries"]
+        producer_entries = sketch["wire_joiner_ledger"]["result_wire_producer_ledger_entries"]
+
+        self.assertTrue(entries)
+        self.assertEqual(len(entries), len(producer_entries))
+        events = [
+            event
+            for event in named_shape["mapper_history"]
+            if event["maker_stage"] == "wire_joiner:open_export"
+            and event["shape_kind"] == "edge"
+        ]
+        self.assertTrue(events)
+        self.assertTrue(any(event["relation"] == "generated" for event in events))
+        self.assertTrue(any(event["relation"] == "split" for event in events))
+        for event in events:
+            self.assertEqual(event["evidence"]["producer"], "WireJoiner")
+            self.assertIn("result_wire_producer_kind", event["evidence"])
+            self.assertIn(event["evidence"]["result_wire_producer_state"], {
+                "LegacyHelperCandidate",
+                "ProducerLocated",
+                "AHistoryEvidenceReady",
+                "ChildWireReady",
+                "SourceShapeReady",
+                "ExportedWithoutHelper",
+            })
 
     def test_p5_branch_open_cutter_keeps_connected_result_wire(self) -> None:
         result = self.run_recompute("sketch-internal-face-branch-open-cutter", "p5")
@@ -1966,7 +2211,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assertEqual(sketch["facemaker_history_status"], "history_partial:facemaker_buildface")
+        self.assertEqual(sketch["facemaker_history_status"], "history_evidence:facemaker_buildface")
         self.assertEqual(face_history["source_edge_count"], 1)
         self.assertTrue(face_history["pre_split_history"])
         self.assertFalse(face_history["splitter_history"])
@@ -1984,7 +2229,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             if item["kind"] == "split" and item["sources"] == ["Edge1"]
         ]
 
-        self.assertEqual(named_shape["sketch_internal_history_status"], "history_partial:facemaker_buildface")
+        self.assertEqual(named_shape["sketch_internal_history_status"], "history_evidence:facemaker_wirejoiner")
         self.assertIn("facemaker_history:pre_split", named_shape["element_history_status"])
         self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
         self.assertIn("terminal_history:split_deleted", named_shape["element_history_status"])
@@ -2760,8 +3005,8 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(extrusion["status"], "ok")
         self.assertEqual(extrusion["shape"], "occt_solid")
-        self.assertEqual(extrusion["topo_naming"], "known_gap:taper_history")
-        self.assertEqual(extrusion["topo_naming_history"], "history_partial:taper")
+        self.assertNotIn("topo_naming", extrusion)
+        self.assertNotIn("topo_naming_history", extrusion)
         self.assertGreater(extrusion["volume"], 0.0)
         self.assertIn("Extrude", result["mesh"])
 
@@ -2777,6 +3022,26 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertIn("generated", history_kinds)
                 self.assertIn("Sketch.Edge1", named_shape["element_map"])
                 self.assertTrue(named_shape["element_map"]["Sketch.Edge1"])
+                if fixture == "part-extrusion-taper":
+                    maker_events = [
+                        event
+                        for event in named_shape["mapper_history"]
+                        if event["maker_stage"] == "maker_history"
+                    ]
+                    self.assertTrue(
+                        any(
+                            event["relation"] == "generated"
+                            and event["source"]["object"] == "Sketch"
+                            for event in maker_events
+                        )
+                    )
+                    self.assertTrue(
+                        any(
+                            event["relation"] == "generated"
+                            and event["source"]["object"].startswith("Extrude.TaperSection")
+                            for event in maker_events
+                        )
+                    )
 
     def test_p5_part_extrusion_supports_reverse_taper(self) -> None:
         result = self.run_recompute("part-extrusion-reverse-taper", "p5")
@@ -2785,8 +3050,8 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(extrusion["status"], "ok")
         self.assertEqual(extrusion["shape"], "occt_solid")
-        self.assertEqual(extrusion["topo_naming"], "known_gap:taper_history")
-        self.assertEqual(extrusion["topo_naming_history"], "history_partial:taper")
+        self.assertNotIn("topo_naming", extrusion)
+        self.assertNotIn("topo_naming_history", extrusion)
         self.assertGreater(extrusion["volume"], 0.0)
         self.assertLess(extrusion["bbox"]["min"][2], -5.99)
         self.assertLess(extrusion["bbox"]["max"][2], 1.0)
@@ -2798,8 +3063,8 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(extrusion["status"], "ok")
         self.assertEqual(extrusion["shape"], "occt_solid")
-        self.assertEqual(extrusion["topo_naming"], "known_gap:taper_history")
-        self.assertEqual(extrusion["topo_naming_history"], "history_partial:taper")
+        self.assertNotIn("topo_naming", extrusion)
+        self.assertNotIn("topo_naming_history", extrusion)
         self.assertGreater(extrusion["volume"], 0.0)
         self.assertLess(extrusion["bbox"]["min"][2], -2.99)
         self.assertGreater(extrusion["bbox"]["max"][2], 5.99)

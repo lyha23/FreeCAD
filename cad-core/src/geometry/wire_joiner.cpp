@@ -30,23 +30,24 @@
 #include <functional>
 #include <utility>
 
-namespace cad_core::geometry {
+namespace cad_core::geometry
+{
 
 const char* resultWireProducerKindName(ResultWireProducerKind kind)
 {
     switch (kind) {
-    case ResultWireProducerKind::None:
-        return "None";
-    case ResultWireProducerKind::ExistingSourceEdge:
-        return "ExistingSourceEdge";
-    case ResultWireProducerKind::PartialSharedClosedWire:
-        return "PartialSharedClosedWire";
-    case ResultWireProducerKind::LiveResetOpenEdge:
-        return "LiveResetOpenEdge";
-    case ResultWireProducerKind::SuperEdgeRoot:
-        return "SuperEdgeRoot";
-    case ResultWireProducerKind::CurrentMemberChildWire:
-        return "CurrentMemberChildWire";
+        case ResultWireProducerKind::None:
+            return "None";
+        case ResultWireProducerKind::ExistingSourceEdge:
+            return "ExistingSourceEdge";
+        case ResultWireProducerKind::PartialSharedClosedWire:
+            return "PartialSharedClosedWire";
+        case ResultWireProducerKind::LiveResetOpenEdge:
+            return "LiveResetOpenEdge";
+        case ResultWireProducerKind::SuperEdgeRoot:
+            return "SuperEdgeRoot";
+        case ResultWireProducerKind::CurrentMemberChildWire:
+            return "CurrentMemberChildWire";
     }
     return "None";
 }
@@ -54,18 +55,18 @@ const char* resultWireProducerKindName(ResultWireProducerKind kind)
 const char* resultWireProducerStateName(ResultWireProducerState state)
 {
     switch (state) {
-    case ResultWireProducerState::LegacyHelperCandidate:
-        return "LegacyHelperCandidate";
-    case ResultWireProducerState::ProducerLocated:
-        return "ProducerLocated";
-    case ResultWireProducerState::AHistoryEvidenceReady:
-        return "AHistoryEvidenceReady";
-    case ResultWireProducerState::ChildWireReady:
-        return "ChildWireReady";
-    case ResultWireProducerState::SourceShapeReady:
-        return "SourceShapeReady";
-    case ResultWireProducerState::ExportedWithoutHelper:
-        return "ExportedWithoutHelper";
+        case ResultWireProducerState::LegacyHelperCandidate:
+            return "LegacyHelperCandidate";
+        case ResultWireProducerState::ProducerLocated:
+            return "ProducerLocated";
+        case ResultWireProducerState::AHistoryEvidenceReady:
+            return "AHistoryEvidenceReady";
+        case ResultWireProducerState::ChildWireReady:
+            return "ChildWireReady";
+        case ResultWireProducerState::SourceShapeReady:
+            return "SourceShapeReady";
+        case ResultWireProducerState::ExportedWithoutHelper:
+            return "ExportedWithoutHelper";
     }
     return "LegacyHelperCandidate";
 }
@@ -73,83 +74,84 @@ const char* resultWireProducerStateName(ResultWireProducerState state)
 const char* resultWireBlockerName(ResultWireBlocker blocker)
 {
     switch (blocker) {
-    case ResultWireBlocker::None:
-        return "None";
-    case ResultWireBlocker::MissingSourceLineage:
-        return "MissingSourceLineage";
-    case ResultWireBlocker::MissingAHistoryRemoveSource:
-        return "MissingAHistoryRemoveSource";
-    case ResultWireBlocker::ForeignAHistorySourceLineage:
-        return "ForeignAHistorySourceLineage";
-    case ResultWireBlocker::ForeignAHistorySourceShapeReadyLineageMismatch:
-        return "ForeignAHistorySourceShapeReadyLineageMismatch";
-    case ResultWireBlocker::ForeignAHistorySourceShapeIdentityNotReady:
-        return "ForeignAHistorySourceShapeIdentityNotReady";
-    case ResultWireBlocker::ForeignAHistorySourceGeometryMismatch:
-        return "ForeignAHistorySourceGeometryMismatch";
-    case ResultWireBlocker::MissingRemovedTargetEvidence:
-        return "MissingRemovedTargetEvidence";
-    case ResultWireBlocker::MissingFullAHistoryProducerEvidence:
-        return "MissingFullAHistoryProducerEvidence";
-    case ResultWireBlocker::FinalGateBlockedByIteration:
-        return "FinalGateBlockedByIteration";
-    case ResultWireBlocker::FinalGateBlockedByWireInfo:
-        return "FinalGateBlockedByWireInfo";
-    case ResultWireBlocker::RootRemovedByUnownedBranch:
-        return "RootRemovedByUnownedBranch";
-    case ResultWireBlocker::RootRemovedByPrimaryBranch:
-        return "RootRemovedByPrimaryBranch";
-    case ResultWireBlocker::RootRemovedBySecondaryBranch:
-        return "RootRemovedBySecondaryBranch";
-    case ResultWireBlocker::MultiMemberRootPendingSuppression:
-        return "MultiMemberRootPendingSuppression";
-    case ResultWireBlocker::SourceShapeIdentityNotReady:
-        return "SourceShapeIdentityNotReady";
-    case ResultWireBlocker::SourceShapeWouldPurgeOriginal:
-        return "SourceShapeWouldPurgeOriginal";
-    case ResultWireBlocker::LiveResetSourceShapeWouldPurgeOriginal:
-        return "LiveResetSourceShapeWouldPurgeOriginal";
-    case ResultWireBlocker::CurrentMemberSourceShapeWouldPurgeOriginal:
-        return "CurrentMemberSourceShapeWouldPurgeOriginal";
-    case ResultWireBlocker::SameSourceSidecarSourceShapeIdentityNotReady:
-        return "SameSourceSidecarSourceShapeIdentityNotReady";
-    case ResultWireBlocker::SameSourceSidecarGeometryMismatch:
-        return "SameSourceSidecarGeometryMismatch";
-    case ResultWireBlocker::SourceShapeMemberVertexIdentityNotReady:
-        return "SourceShapeMemberVertexIdentityNotReady";
-    case ResultWireBlocker::CurrentMemberChildWireIdentityNotReady:
-        return "CurrentMemberChildWireIdentityNotReady";
-    case ResultWireBlocker::CurrentMemberMissingSidecarEvidence:
-        return "CurrentMemberMissingSidecarEvidence";
-    case ResultWireBlocker::CurrentMemberRootOpenProducerNotReady:
-        return "CurrentMemberRootOpenProducerNotReady";
-    case ResultWireBlocker::CurrentMemberSidecarGeometryMismatch:
-        return "CurrentMemberSidecarGeometryMismatch";
-    case ResultWireBlocker::LegacyHelperShapeStillUsed:
-        return "LegacyHelperShapeStillUsed";
-    case ResultWireBlocker::UnknownInvariant:
-        return "UnknownInvariant";
+        case ResultWireBlocker::None:
+            return "None";
+        case ResultWireBlocker::MissingSourceLineage:
+            return "MissingSourceLineage";
+        case ResultWireBlocker::MissingAHistoryRemoveSource:
+            return "MissingAHistoryRemoveSource";
+        case ResultWireBlocker::ForeignAHistorySourceLineage:
+            return "ForeignAHistorySourceLineage";
+        case ResultWireBlocker::ForeignAHistorySourceShapeReadyLineageMismatch:
+            return "ForeignAHistorySourceShapeReadyLineageMismatch";
+        case ResultWireBlocker::ForeignAHistorySourceShapeIdentityNotReady:
+            return "ForeignAHistorySourceShapeIdentityNotReady";
+        case ResultWireBlocker::ForeignAHistorySourceGeometryMismatch:
+            return "ForeignAHistorySourceGeometryMismatch";
+        case ResultWireBlocker::MissingRemovedTargetEvidence:
+            return "MissingRemovedTargetEvidence";
+        case ResultWireBlocker::MissingFullAHistoryProducerEvidence:
+            return "MissingFullAHistoryProducerEvidence";
+        case ResultWireBlocker::FinalGateBlockedByIteration:
+            return "FinalGateBlockedByIteration";
+        case ResultWireBlocker::FinalGateBlockedByWireInfo:
+            return "FinalGateBlockedByWireInfo";
+        case ResultWireBlocker::RootRemovedByUnownedBranch:
+            return "RootRemovedByUnownedBranch";
+        case ResultWireBlocker::RootRemovedByPrimaryBranch:
+            return "RootRemovedByPrimaryBranch";
+        case ResultWireBlocker::RootRemovedBySecondaryBranch:
+            return "RootRemovedBySecondaryBranch";
+        case ResultWireBlocker::MultiMemberRootPendingSuppression:
+            return "MultiMemberRootPendingSuppression";
+        case ResultWireBlocker::SourceShapeIdentityNotReady:
+            return "SourceShapeIdentityNotReady";
+        case ResultWireBlocker::SourceShapeWouldPurgeOriginal:
+            return "SourceShapeWouldPurgeOriginal";
+        case ResultWireBlocker::LiveResetSourceShapeWouldPurgeOriginal:
+            return "LiveResetSourceShapeWouldPurgeOriginal";
+        case ResultWireBlocker::CurrentMemberSourceShapeWouldPurgeOriginal:
+            return "CurrentMemberSourceShapeWouldPurgeOriginal";
+        case ResultWireBlocker::SameSourceSidecarSourceShapeIdentityNotReady:
+            return "SameSourceSidecarSourceShapeIdentityNotReady";
+        case ResultWireBlocker::SameSourceSidecarGeometryMismatch:
+            return "SameSourceSidecarGeometryMismatch";
+        case ResultWireBlocker::SourceShapeMemberVertexIdentityNotReady:
+            return "SourceShapeMemberVertexIdentityNotReady";
+        case ResultWireBlocker::CurrentMemberChildWireIdentityNotReady:
+            return "CurrentMemberChildWireIdentityNotReady";
+        case ResultWireBlocker::CurrentMemberMissingSidecarEvidence:
+            return "CurrentMemberMissingSidecarEvidence";
+        case ResultWireBlocker::CurrentMemberRootOpenProducerNotReady:
+            return "CurrentMemberRootOpenProducerNotReady";
+        case ResultWireBlocker::CurrentMemberSidecarGeometryMismatch:
+            return "CurrentMemberSidecarGeometryMismatch";
+        case ResultWireBlocker::LegacyHelperShapeStillUsed:
+            return "LegacyHelperShapeStillUsed";
+        case ResultWireBlocker::UnknownInvariant:
+            return "UnknownInvariant";
     }
     return "UnknownInvariant";
 }
 
-namespace {
+namespace
+{
 
 int resultWireProducerStateRank(ResultWireProducerState state)
 {
     switch (state) {
-    case ResultWireProducerState::LegacyHelperCandidate:
-        return 0;
-    case ResultWireProducerState::ProducerLocated:
-        return 1;
-    case ResultWireProducerState::AHistoryEvidenceReady:
-        return 2;
-    case ResultWireProducerState::ChildWireReady:
-        return 3;
-    case ResultWireProducerState::SourceShapeReady:
-        return 4;
-    case ResultWireProducerState::ExportedWithoutHelper:
-        return 5;
+        case ResultWireProducerState::LegacyHelperCandidate:
+            return 0;
+        case ResultWireProducerState::ProducerLocated:
+            return 1;
+        case ResultWireProducerState::AHistoryEvidenceReady:
+            return 2;
+        case ResultWireProducerState::ChildWireReady:
+            return 3;
+        case ResultWireProducerState::SourceShapeReady:
+            return 4;
+        case ResultWireProducerState::ExportedWithoutHelper:
+            return 5;
     }
     return 0;
 }
@@ -279,13 +281,15 @@ std::vector<TopoDS_Wire> wiresFromEdges(const std::vector<TopoDS_Edge>& edges)
     return wires;
 }
 
-struct SplitEdgeRecord {
+struct SplitEdgeRecord
+{
     TopoDS_Edge edge;
     std::vector<std::size_t> sourceEdgeIndices;
     bool fromSplitterHistory = false;
 };
 
-struct SplitEdgesResult {
+struct SplitEdgesResult
+{
     std::vector<SplitEdgeRecord> records;
     WireJoinerHistorySummary history;
 };
@@ -306,16 +310,20 @@ void appendUniqueSourceIndices(std::vector<std::size_t>& target, const std::vect
     }
 }
 
-bool sourceEdgeIndicesIntersect(const std::vector<std::size_t>& left,
-                                const std::vector<std::size_t>& right)
+bool sourceEdgeIndicesIntersect(
+    const std::vector<std::size_t>& left,
+    const std::vector<std::size_t>& right
+)
 {
     return std::any_of(left.begin(), left.end(), [&](std::size_t leftIndex) {
         return std::find(right.begin(), right.end(), leftIndex) != right.end();
     });
 }
 
-std::vector<std::size_t> sourceEdgeIndicesByIdentity(const TopoDS_Edge& edge,
-                                                     const std::vector<TopoDS_Edge>& sourceEdges)
+std::vector<std::size_t> sourceEdgeIndicesByIdentity(
+    const TopoDS_Edge& edge,
+    const std::vector<TopoDS_Edge>& sourceEdges
+)
 {
     std::vector<std::size_t> indices;
     for (std::size_t index = 0; index < sourceEdges.size(); ++index) {
@@ -328,11 +336,12 @@ std::vector<std::size_t> sourceEdgeIndicesByIdentity(const TopoDS_Edge& edge,
     }
     for (std::size_t index = 0; index < sourceEdges.size(); ++index) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-        // ::WireJoinerP::build(), "sourceEdges.insert(sourceEdgeArray.begin(), sourceEdgeArray.end())",
-        // then splitEdges() records "aHistory->AddModified(split.intersectShape, newInfo.edge)".
-        // cad-core can receive copied face/open-wire edges before split; when exact sourceEdgeArray
-        // identity is already lost, recover only the request-local source index for the copied
-        // EdgeInfo, not helper output geometry or result-wire ownership.
+        // ::WireJoinerP::build(), "sourceEdges.insert(sourceEdgeArray.begin(),
+        // sourceEdgeArray.end())", then splitEdges() records
+        // "aHistory->AddModified(split.intersectShape, newInfo.edge)". cad-core can receive copied
+        // face/open-wire edges before split; when exact sourceEdgeArray identity is already lost,
+        // recover only the request-local source index for the copied EdgeInfo, not helper output
+        // geometry or result-wire ownership.
         if (!edge.IsNull() && !sourceEdges[index].IsNull()
             && edgeEquivalentByGeometryAndEndpoints(edge, sourceEdges[index])) {
             indices.push_back(index);
@@ -354,9 +363,11 @@ std::vector<TopoDS_Edge> shapeEdgesForLineage(const TopoDS_Shape& shape)
     return boundaryEdges(shape);
 }
 
-void appendLineageForHistoryShape(std::vector<SplitEdgeRecord>& records,
-                                  const TopoDS_Shape& historyShape,
-                                  const std::vector<std::size_t>& sourceIndices)
+void appendLineageForHistoryShape(
+    std::vector<SplitEdgeRecord>& records,
+    const TopoDS_Shape& historyShape,
+    const std::vector<std::size_t>& sourceIndices
+)
 {
     if (sourceIndices.empty()) {
         return;
@@ -379,7 +390,8 @@ void appendLineageForHistoryShape(std::vector<SplitEdgeRecord>& records,
             // "aHistory->AddModified(split.intersectShape, newInfo.edge)". When OCCT gives the
             // history edge as a copied shape rather than the same TShape held in splitter.Shape(),
             // bind lineage to the existing result record instead of creating a helper output edge.
-            if (!record.edge.IsNull() && edgeEquivalentByGeometryAndEndpoints(record.edge, historyEdge)) {
+            if (!record.edge.IsNull()
+                && edgeEquivalentByGeometryAndEndpoints(record.edge, historyEdge)) {
                 appendUniqueSourceIndices(record.sourceEdgeIndices, sourceIndices);
                 record.fromSplitterHistory = true;
             }
@@ -387,9 +399,11 @@ void appendLineageForHistoryShape(std::vector<SplitEdgeRecord>& records,
     }
 }
 
-void appendInputEdgeRecord(SplitEdgesResult& result,
-                           const TopoDS_Edge& edge,
-                           const std::vector<TopoDS_Edge>& sourceEdges)
+void appendInputEdgeRecord(
+    SplitEdgesResult& result,
+    const TopoDS_Edge& edge,
+    const std::vector<TopoDS_Edge>& sourceEdges
+)
 {
     SplitEdgeRecord record;
     record.edge = edge;
@@ -397,8 +411,10 @@ void appendInputEdgeRecord(SplitEdgesResult& result,
     result.records.push_back(std::move(record));
 }
 
-SplitEdgesResult splitEdgesAtIntersections(const std::vector<TopoDS_Edge>& edges,
-                                           const std::vector<TopoDS_Edge>& sourceEdges)
+SplitEdgesResult splitEdgesAtIntersections(
+    const std::vector<TopoDS_Edge>& edges,
+    const std::vector<TopoDS_Edge>& sourceEdges
+)
 {
     SplitEdgesResult result;
     const std::vector<TopoDS_Edge>& lineageSources = sourceEdges.empty() ? edges : sourceEdges;
@@ -449,14 +465,16 @@ SplitEdgesResult splitEdgesAtIntersections(const std::vector<TopoDS_Edge>& edges
         const TopTools_ListOfShape& modified = splitter.Modified(edge);
         if (!modified.IsEmpty()) {
             ++result.history.modifiedSourceEdgeCount;
-            const std::vector<std::size_t> sourceIndices = sourceEdgeIndicesByIdentity(edge, lineageSources);
+            const std::vector<std::size_t> sourceIndices
+                = sourceEdgeIndicesByIdentity(edge, lineageSources);
             for (TopTools_ListIteratorOfListOfShape it(modified); it.More(); it.Next()) {
                 ++result.history.modifiedHistoryCount;
                 appendLineageForHistoryShape(result.records, it.Value(), sourceIndices);
             }
         }
         const TopTools_ListOfShape& generated = splitter.Generated(edge);
-        const std::vector<std::size_t> sourceIndices = sourceEdgeIndicesByIdentity(edge, lineageSources);
+        const std::vector<std::size_t> sourceIndices
+            = sourceEdgeIndicesByIdentity(edge, lineageSources);
         for (TopTools_ListIteratorOfListOfShape it(generated); it.More(); it.Next()) {
             ++result.history.generatedHistoryCount;
             appendLineageForHistoryShape(result.records, it.Value(), sourceIndices);
@@ -478,8 +496,7 @@ SplitEdgesResult splitEdgesAtIntersections(const std::vector<TopoDS_Edge>& edges
     }
     result.history.splitResultEdgeCount = result.records.size();
     result.history.splitterHistory = result.history.modifiedHistoryCount > 0U
-        || result.history.generatedHistoryCount > 0U
-        || result.history.deletedHistoryCount > 0U;
+        || result.history.generatedHistoryCount > 0U || result.history.deletedHistoryCount > 0U;
     return result;
 }
 
@@ -511,9 +528,7 @@ gp_Pnt edgeMidpoint(const TopoDS_Edge& edge)
         return curve->Value((first + last) * 0.5);
     }
     const auto [start, end] = edgeEndpoints(edge);
-    return gp_Pnt((start.X() + end.X()) * 0.5,
-                  (start.Y() + end.Y()) * 0.5,
-                  (start.Z() + end.Z()) * 0.5);
+    return gp_Pnt((start.X() + end.X()) * 0.5, (start.Y() + end.Y()) * 0.5, (start.Z() + end.Z()) * 0.5);
 }
 
 bool pointInsideOrOnAnyFace(const gp_Pnt& point, const std::vector<TopoDS_Face>& faces)
@@ -530,8 +545,10 @@ bool pointInsideOrOnAnyFace(const gp_Pnt& point, const std::vector<TopoDS_Face>&
     return false;
 }
 
-bool vertexIsOriginalSourceByIdentity(const TopoDS_Vertex& vertex,
-                                      const std::vector<TopoDS_Edge>& sourceEdges)
+bool vertexIsOriginalSourceByIdentity(
+    const TopoDS_Vertex& vertex,
+    const std::vector<TopoDS_Edge>& sourceEdges
+)
 {
     if (vertex.IsNull()) {
         return false;
@@ -546,8 +563,10 @@ bool vertexIsOriginalSourceByIdentity(const TopoDS_Vertex& vertex,
     return false;
 }
 
-bool edgeSharesOriginalSourceVertexByIdentity(const TopoDS_Edge& edge,
-                                              const std::vector<TopoDS_Edge>& sourceEdges)
+bool edgeSharesOriginalSourceVertexByIdentity(
+    const TopoDS_Edge& edge,
+    const std::vector<TopoDS_Edge>& sourceEdges
+)
 {
     const std::vector<TopoDS_Vertex> vertices = edgeVertices(edge);
     if (vertices.empty()) {
@@ -559,8 +578,10 @@ bool edgeSharesOriginalSourceVertexByIdentity(const TopoDS_Edge& edge,
     });
 }
 
-bool edgeUsesOnlyOriginalSourceVerticesByIdentity(const TopoDS_Edge& edge,
-                                                  const std::vector<TopoDS_Edge>& sourceEdges)
+bool edgeUsesOnlyOriginalSourceVerticesByIdentity(
+    const TopoDS_Edge& edge,
+    const std::vector<TopoDS_Edge>& sourceEdges
+)
 {
     const std::vector<TopoDS_Vertex> vertices = edgeVertices(edge);
     if (vertices.empty()) {
@@ -582,8 +603,10 @@ bool edgeMatchesAnySourceByEndpoints(const TopoDS_Edge& edge, const std::vector<
     return false;
 }
 
-bool allEdgesShareOriginalSourceVertexByIdentity(const TopoDS_Wire& wire,
-                                                 const std::vector<TopoDS_Edge>& sourceEdges)
+bool allEdgesShareOriginalSourceVertexByIdentity(
+    const TopoDS_Wire& wire,
+    const std::vector<TopoDS_Edge>& sourceEdges
+)
 {
     if (sourceEdges.empty()) {
         return false;
@@ -596,8 +619,10 @@ bool allEdgesShareOriginalSourceVertexByIdentity(const TopoDS_Wire& wire,
     return true;
 }
 
-bool allEdgesHaveSharedOriginalSourceVertexByIdentity(const TopoDS_Wire& wire,
-                                                      const std::vector<TopoDS_Edge>& sourceEdges)
+bool allEdgesHaveSharedOriginalSourceVertexByIdentity(
+    const TopoDS_Wire& wire,
+    const std::vector<TopoDS_Edge>& sourceEdges
+)
 {
     if (sourceEdges.empty()) {
         return false;
@@ -642,8 +667,10 @@ bool pointOnOpenEdge(const gp_Pnt& point, const std::vector<TopoDS_Edge>& openEd
     return false;
 }
 
-TopoDS_Vertex cachedCopiedVertex(std::vector<std::pair<gp_Pnt, TopoDS_Vertex>>& copiedVertices,
-                                 const gp_Pnt& point)
+TopoDS_Vertex cachedCopiedVertex(
+    std::vector<std::pair<gp_Pnt, TopoDS_Vertex>>& copiedVertices,
+    const gp_Pnt& point
+)
 {
     for (const auto& [existingPoint, vertex] : copiedVertices) {
         if (samePoint(existingPoint, point)) {
@@ -689,11 +716,13 @@ bool closedWireEdgesAreLinear(const std::vector<TopoDS_Wire>& wires)
     return !wires.empty();
 }
 
-TopoDS_Vertex resultWireVertex(const TopoDS_Vertex& sourceVertex,
-                               const std::vector<TopoDS_Edge>& openEdges,
-                               bool copyAllVertices,
-                               const std::vector<gp_Pnt>& reusableVertexPoints,
-                               std::vector<std::pair<gp_Pnt, TopoDS_Vertex>>& copiedVertices)
+TopoDS_Vertex resultWireVertex(
+    const TopoDS_Vertex& sourceVertex,
+    const std::vector<TopoDS_Edge>& openEdges,
+    bool copyAllVertices,
+    const std::vector<gp_Pnt>& reusableVertexPoints,
+    std::vector<std::pair<gp_Pnt, TopoDS_Vertex>>& copiedVertices
+)
 {
     const gp_Pnt point = BRep_Tool::Pnt(sourceVertex);
     if (pointMatchesAny(point, reusableVertexPoints)) {
@@ -705,28 +734,35 @@ TopoDS_Vertex resultWireVertex(const TopoDS_Vertex& sourceVertex,
     return sourceVertex;
 }
 
-TopoDS_Edge copyEdgeWithResultWireVertices(const TopoDS_Edge& edge,
-                                           const std::vector<TopoDS_Edge>& openEdges,
-                                           bool copyAllVertices,
-                                           const std::vector<gp_Pnt>& reusableVertexPoints,
-                                           std::vector<std::pair<gp_Pnt, TopoDS_Vertex>>& copiedVertices)
+TopoDS_Edge copyEdgeWithResultWireVertices(
+    const TopoDS_Edge& edge,
+    const std::vector<TopoDS_Edge>& openEdges,
+    bool copyAllVertices,
+    const std::vector<gp_Pnt>& reusableVertexPoints,
+    std::vector<std::pair<gp_Pnt, TopoDS_Vertex>>& copiedVertices
+)
 {
     Standard_Real first = 0.0;
     Standard_Real last = 0.0;
     const Handle(Geom_Curve) curve = BRep_Tool::Curve(edge, first, last);
-    const TopoDS_Vertex start = resultWireVertex(TopExp::FirstVertex(edge),
-                                                 openEdges,
-                                                 copyAllVertices,
-                                                 reusableVertexPoints,
-                                                 copiedVertices);
-    const TopoDS_Vertex end = resultWireVertex(TopExp::LastVertex(edge),
-                                               openEdges,
-                                               copyAllVertices,
-                                               reusableVertexPoints,
-                                               copiedVertices);
+    const TopoDS_Vertex start = resultWireVertex(
+        TopExp::FirstVertex(edge),
+        openEdges,
+        copyAllVertices,
+        reusableVertexPoints,
+        copiedVertices
+    );
+    const TopoDS_Vertex end = resultWireVertex(
+        TopExp::LastVertex(edge),
+        openEdges,
+        copyAllVertices,
+        reusableVertexPoints,
+        copiedVertices
+    );
     if (!curve.IsNull()) {
         const Handle(Geom_Curve) copiedCurve = Handle(Geom_Curve)::DownCast(curve->Copy());
-        BRepBuilderAPI_MakeEdge builder(copiedCurve.IsNull() ? curve : copiedCurve, start, end, first, last);
+        BRepBuilderAPI_MakeEdge
+            builder(copiedCurve.IsNull() ? curve : copiedCurve, start, end, first, last);
         if (builder.IsDone() && !builder.Edge().IsNull()) {
             return builder.Edge();
         }
@@ -735,7 +771,10 @@ TopoDS_Edge copyEdgeWithResultWireVertices(const TopoDS_Edge& edge,
     return fallback.Edge();
 }
 
-bool allOpenEdgeEndpointsTouchBoundary(const std::vector<TopoDS_Edge>& openEdges, const TopoDS_Shape& faceShape)
+bool allOpenEdgeEndpointsTouchBoundary(
+    const std::vector<TopoDS_Edge>& openEdges,
+    const TopoDS_Shape& faceShape
+)
 {
     if (openEdges.empty() || faceShape.IsNull()) {
         return false;
@@ -765,8 +804,10 @@ bool allOpenEdgeEndpointsTouchBoundary(const std::vector<TopoDS_Edge>& openEdges
     return true;
 }
 
-bool allOpenEdgeEndpointsTouchClosedWireBoundary(const std::vector<TopoDS_Edge>& openEdges,
-                                                 const std::vector<TopoDS_Wire>& closedWires)
+bool allOpenEdgeEndpointsTouchClosedWireBoundary(
+    const std::vector<TopoDS_Edge>& openEdges,
+    const std::vector<TopoDS_Wire>& closedWires
+)
 {
     if (openEdges.empty() || closedWires.empty()) {
         return false;
@@ -840,7 +881,8 @@ bool edgeSamplesLieOnEdge(const TopoDS_Edge& edge, const TopoDS_Edge& source)
         return false;
     }
     const auto [start, end] = edgeEndpoints(edge);
-    return pointOnEdge(start, source) && pointOnEdge(edgeMidpoint(edge), source) && pointOnEdge(end, source);
+    return pointOnEdge(start, source) && pointOnEdge(edgeMidpoint(edge), source)
+        && pointOnEdge(end, source);
 }
 
 bool edgeLiesOnAnyEdge(const TopoDS_Edge& edge, const std::vector<TopoDS_Edge>& sources)
@@ -863,7 +905,10 @@ std::vector<TopoDS_Edge> closedWireBoundaryEdges(const std::vector<TopoDS_Wire>&
     return edges;
 }
 
-std::vector<TopoDS_Edge> edgesContainingEdge(const TopoDS_Edge& edge, const std::vector<TopoDS_Edge>& sources)
+std::vector<TopoDS_Edge> edgesContainingEdge(
+    const TopoDS_Edge& edge,
+    const std::vector<TopoDS_Edge>& sources
+)
 {
     std::vector<TopoDS_Edge> matches;
     for (const TopoDS_Edge& source : sources) {
@@ -880,8 +925,7 @@ bool edgeEquivalentByGeometryAndEndpoints(const TopoDS_Edge& left, const TopoDS_
         && edgeSamplesLieOnEdge(right, left);
 }
 
-std::optional<TopoDS_Vertex> vertexAtPoint(const std::vector<TopoDS_Vertex>& vertices,
-                                           const gp_Pnt& point)
+std::optional<TopoDS_Vertex> vertexAtPoint(const std::vector<TopoDS_Vertex>& vertices, const gp_Pnt& point)
 {
     const auto it = std::find_if(vertices.begin(), vertices.end(), [&](const TopoDS_Vertex& vertex) {
         return !vertex.IsNull() && samePoint(BRep_Tool::Pnt(vertex), point);
@@ -892,9 +936,11 @@ std::optional<TopoDS_Vertex> vertexAtPoint(const std::vector<TopoDS_Vertex>& ver
     return *it;
 }
 
-TopoDS_Edge edgeWithReusedVertices(const TopoDS_Edge& edge,
-                                   const TopoDS_Vertex& firstVertex,
-                                   const TopoDS_Vertex& lastVertex)
+TopoDS_Edge edgeWithReusedVertices(
+    const TopoDS_Edge& edge,
+    const TopoDS_Vertex& firstVertex,
+    const TopoDS_Vertex& lastVertex
+)
 {
     Standard_Real first = 0.0;
     Standard_Real last = 0.0;
@@ -909,8 +955,10 @@ TopoDS_Edge edgeWithReusedVertices(const TopoDS_Edge& edge,
     return fallback.Edge();
 }
 
-std::optional<TopoDS_Edge> edgeWithEquivalentResultVertices(const TopoDS_Edge& producerEdge,
-                                                            const TopoDS_Edge& resultEdge)
+std::optional<TopoDS_Edge> edgeWithEquivalentResultVertices(
+    const TopoDS_Edge& producerEdge,
+    const TopoDS_Edge& resultEdge
+)
 {
     if (producerEdge.IsNull() || resultEdge.IsNull()
         || !edgeEquivalentByGeometryAndEndpoints(producerEdge, resultEdge)) {
@@ -932,9 +980,11 @@ std::optional<TopoDS_Edge> edgeWithEquivalentResultVertices(const TopoDS_Edge& p
     return outputEdge;
 }
 
-std::optional<TopoDS_Edge> edgeSubsegmentWithReusedVertices(const TopoDS_Edge& producerEdge,
-                                                            const TopoDS_Vertex& firstVertex,
-                                                            const TopoDS_Vertex& lastVertex)
+std::optional<TopoDS_Edge> edgeSubsegmentWithReusedVertices(
+    const TopoDS_Edge& producerEdge,
+    const TopoDS_Vertex& firstVertex,
+    const TopoDS_Vertex& lastVertex
+)
 {
     Standard_Real first = 0.0;
     Standard_Real last = 0.0;
@@ -961,14 +1011,17 @@ std::optional<TopoDS_Edge> edgeSubsegmentWithReusedVertices(const TopoDS_Edge& p
     return std::nullopt;
 }
 
-std::optional<TopoDS_Edge> edgeWithProducerCurveAndResultVertices(const TopoDS_Edge& producerEdge,
-                                                                  const TopoDS_Edge& resultEdge)
+std::optional<TopoDS_Edge> edgeWithProducerCurveAndResultVertices(
+    const TopoDS_Edge& producerEdge,
+    const TopoDS_Edge& resultEdge
+)
 {
-    if (const std::optional<TopoDS_Edge> equivalent =
-            edgeWithEquivalentResultVertices(producerEdge, resultEdge)) {
+    if (const std::optional<TopoDS_Edge> equivalent
+        = edgeWithEquivalentResultVertices(producerEdge, resultEdge)) {
         return equivalent;
     }
-    if (producerEdge.IsNull() || resultEdge.IsNull() || !edgeSamplesLieOnEdge(resultEdge, producerEdge)) {
+    if (producerEdge.IsNull() || resultEdge.IsNull()
+        || !edgeSamplesLieOnEdge(resultEdge, producerEdge)) {
         return std::nullopt;
     }
     const std::vector<TopoDS_Vertex> resultVertices = edgeVertices(resultEdge);
@@ -981,10 +1034,12 @@ std::optional<TopoDS_Edge> edgeWithProducerCurveAndResultVertices(const TopoDS_E
     return edgeSubsegmentWithReusedVertices(producerEdge, *firstVertex, *lastVertex);
 }
 
-TopoDS_Wire currentMemberWireFromRootSuperEdge(const TopoDS_Wire& rootWire,
-                                               const TopoDS_Wire& targetWire,
-                                               const TopoDS_Edge& fallbackMemberEdge,
-                                               const std::vector<TopoDS_Vertex>& ledgerVertices)
+TopoDS_Wire currentMemberWireFromRootSuperEdge(
+    const TopoDS_Wire& rootWire,
+    const TopoDS_Wire& targetWire,
+    const TopoDS_Edge& fallbackMemberEdge,
+    const std::vector<TopoDS_Vertex>& ledgerVertices
+)
 {
     if (rootWire.IsNull()) {
         return TopoDS_Wire();
@@ -992,12 +1047,10 @@ TopoDS_Wire currentMemberWireFromRootSuperEdge(const TopoDS_Wire& rootWire,
 
     std::vector<TopoDS_Edge> targetEdges = wireEdges(targetWire);
     if (!fallbackMemberEdge.IsNull()) {
-        const bool fallbackAlreadyCovered = std::any_of(
-            targetEdges.begin(),
-            targetEdges.end(),
-            [&](const TopoDS_Edge& targetEdge) {
-                return edgeEquivalentByGeometryAndEndpoints(targetEdge, fallbackMemberEdge);
-            });
+        const bool fallbackAlreadyCovered
+            = std::any_of(targetEdges.begin(), targetEdges.end(), [&](const TopoDS_Edge& targetEdge) {
+                  return edgeEquivalentByGeometryAndEndpoints(targetEdge, fallbackMemberEdge);
+              });
         if (!fallbackAlreadyCovered) {
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
             // ::WireJoinerP::findSuperEdgesUpdateFirst() stores the real member edge in the root
@@ -1015,15 +1068,15 @@ TopoDS_Wire currentMemberWireFromRootSuperEdge(const TopoDS_Wire& rootWire,
         for (const TopoDS_Edge& targetEdge : targetEdges) {
             if (edgeEquivalentByGeometryAndEndpoints(rootEdge, targetEdge)) {
                 const auto [firstPoint, lastPoint] = edgeEndpoints(rootEdge);
-                const std::optional<TopoDS_Vertex> firstVertex =
-                    vertexAtPoint(ledgerVertices, firstPoint);
-                const std::optional<TopoDS_Vertex> lastVertex =
-                    vertexAtPoint(ledgerVertices, lastPoint);
+                const std::optional<TopoDS_Vertex> firstVertex
+                    = vertexAtPoint(ledgerVertices, firstPoint);
+                const std::optional<TopoDS_Vertex> lastVertex
+                    = vertexAtPoint(ledgerVertices, lastPoint);
                 if (!firstVertex || !lastVertex) {
                     continue;
                 }
-                const TopoDS_Edge outputEdge =
-                    edgeWithReusedVertices(rootEdge, *firstVertex, *lastVertex);
+                const TopoDS_Edge outputEdge
+                    = edgeWithReusedVertices(rootEdge, *firstVertex, *lastVertex);
                 BRepBuilderAPI_MakeWire builder(outputEdge);
                 if (builder.IsDone()) {
                     return builder.Wire();
@@ -1034,15 +1087,13 @@ TopoDS_Wire currentMemberWireFromRootSuperEdge(const TopoDS_Wire& rootWire,
                 continue;
             }
             const auto [firstPoint, lastPoint] = edgeEndpoints(targetEdge);
-            const std::optional<TopoDS_Vertex> firstVertex =
-                vertexAtPoint(ledgerVertices, firstPoint);
-            const std::optional<TopoDS_Vertex> lastVertex =
-                vertexAtPoint(ledgerVertices, lastPoint);
+            const std::optional<TopoDS_Vertex> firstVertex = vertexAtPoint(ledgerVertices, firstPoint);
+            const std::optional<TopoDS_Vertex> lastVertex = vertexAtPoint(ledgerVertices, lastPoint);
             if (!firstVertex || !lastVertex) {
                 continue;
             }
-            const std::optional<TopoDS_Edge> outputEdge =
-                edgeSubsegmentWithReusedVertices(rootEdge, *firstVertex, *lastVertex);
+            const std::optional<TopoDS_Edge> outputEdge
+                = edgeSubsegmentWithReusedVertices(rootEdge, *firstVertex, *lastVertex);
             if (!outputEdge || outputEdge->IsNull()) {
                 continue;
             }
@@ -1059,17 +1110,16 @@ TopoDS_Wire currentMemberWireFromRootSuperEdge(const TopoDS_Wire& rootWire,
                 continue;
             }
             const auto [firstPoint, lastPoint] = edgeEndpoints(targetEdge);
-            const std::optional<TopoDS_Vertex> firstVertex =
-                vertexAtPoint(ledgerVertices, firstPoint);
-            const std::optional<TopoDS_Vertex> lastVertex =
-                vertexAtPoint(ledgerVertices, lastPoint);
+            const std::optional<TopoDS_Vertex> firstVertex = vertexAtPoint(ledgerVertices, firstPoint);
+            const std::optional<TopoDS_Vertex> lastVertex = vertexAtPoint(ledgerVertices, lastPoint);
             if (!firstVertex || !lastVertex) {
                 continue;
             }
-            const std::optional<TopoDS_Edge> outputEdge =
-                edgeEquivalentByGeometryAndEndpoints(fallbackMemberEdge, targetEdge)
+            const std::optional<TopoDS_Edge> outputEdge
+                = edgeEquivalentByGeometryAndEndpoints(fallbackMemberEdge, targetEdge)
                 ? std::optional<TopoDS_Edge>(
-                      edgeWithReusedVertices(fallbackMemberEdge, *firstVertex, *lastVertex))
+                      edgeWithReusedVertices(fallbackMemberEdge, *firstVertex, *lastVertex)
+                  )
                 : edgeSubsegmentWithReusedVertices(fallbackMemberEdge, *firstVertex, *lastVertex);
             if (!outputEdge || outputEdge->IsNull()) {
                 continue;
@@ -1090,8 +1140,10 @@ TopoDS_Wire currentMemberWireFromRootSuperEdge(const TopoDS_Wire& rootWire,
     return TopoDS_Wire();
 }
 
-bool edgeMatchesSourceSharedVertexSearch(const TopoDS_Edge& edge,
-                                         const std::vector<TopoDS_Edge>& sourceEdges)
+bool edgeMatchesSourceSharedVertexSearch(
+    const TopoDS_Edge& edge,
+    const std::vector<TopoDS_Edge>& sourceEdges
+)
 {
     for (const TopoDS_Edge& sourceEdge : sourceEdges) {
         if (edgeEquivalentByGeometryAndEndpoints(edge, sourceEdge)) {
@@ -1101,8 +1153,10 @@ bool edgeMatchesSourceSharedVertexSearch(const TopoDS_Edge& edge,
     return false;
 }
 
-bool allEdgesMatchSourceSharedVertexSearch(const TopoDS_Wire& wire,
-                                           const std::vector<TopoDS_Edge>& sourceEdges)
+bool allEdgesMatchSourceSharedVertexSearch(
+    const TopoDS_Wire& wire,
+    const std::vector<TopoDS_Edge>& sourceEdges
+)
 {
     if (sourceEdges.empty()) {
         return false;
@@ -1116,8 +1170,7 @@ bool allEdgesMatchSourceSharedVertexSearch(const TopoDS_Wire& wire,
     });
 }
 
-bool vertexMatchesAnyByIdentity(const TopoDS_Vertex& vertex,
-                                const std::vector<TopoDS_Vertex>& candidates)
+bool vertexMatchesAnyByIdentity(const TopoDS_Vertex& vertex, const std::vector<TopoDS_Vertex>& candidates)
 {
     return std::any_of(candidates.begin(), candidates.end(), [&](const TopoDS_Vertex& candidate) {
         return vertex.IsSame(candidate);
@@ -1135,8 +1188,10 @@ int countEquivalentEdges(const TopoDS_Edge& edge, const std::vector<TopoDS_Edge>
     return count;
 }
 
-std::vector<TopoDS_Edge> openEdgesWithInteriorEndpoint(const std::vector<TopoDS_Edge>& openEdges,
-                                                       const std::vector<TopoDS_Edge>& closedBoundaryEdges)
+std::vector<TopoDS_Edge> openEdgesWithInteriorEndpoint(
+    const std::vector<TopoDS_Edge>& openEdges,
+    const std::vector<TopoDS_Edge>& closedBoundaryEdges
+)
 {
     std::vector<TopoDS_Edge> edges;
     for (const TopoDS_Edge& edge : openEdges) {
@@ -1147,8 +1202,10 @@ std::vector<TopoDS_Edge> openEdgesWithInteriorEndpoint(const std::vector<TopoDS_
     return edges;
 }
 
-bool closedWireCycleNeedsGeneratedOpenExport(const TopoDS_Shape& boundedFaceShape,
-                                             const std::vector<TopoDS_Wire>& closedWires)
+bool closedWireCycleNeedsGeneratedOpenExport(
+    const TopoDS_Shape& boundedFaceShape,
+    const std::vector<TopoDS_Wire>& closedWires
+)
 {
     if (closedWires.size() < 3U || boundedFaceShape.IsNull()) {
         return false;
@@ -1227,7 +1284,8 @@ WireJoiner::HelperOpenExportOverridePlan WireJoiner::computeHelperOpenExportOver
     const std::vector<TopoDS_Wire>& closedWires,
     const std::vector<TopoDS_Edge>& openEdges,
     bool splitProducedBoundedFaces,
-    bool hasOpenWireOutput) const
+    bool hasOpenWireOutput
+) const
 {
     HelperOpenExportOverridePlan plan;
     if (openEdges.empty() && closedWires.size() >= 2U) {
@@ -1245,17 +1303,18 @@ WireJoiner::HelperOpenExportOverridePlan WireJoiner::computeHelperOpenExportOver
                 if (edgeInfo.edge.IsNull() || edgeInfo.sourceEdgeIndices.size() < 2U) {
                     continue;
                 }
-                const std::vector<TopoDS_Edge> containingSources =
-                    edgesContainingEdge(edgeInfo.edge, closedBoundaryEdges);
+                const std::vector<TopoDS_Edge> containingSources
+                    = edgesContainingEdge(edgeInfo.edge, closedBoundaryEdges);
                 if (containingSources.size() < 2U) {
                     continue;
                 }
-                const bool partialOverlap =
-                    std::any_of(containingSources.begin(),
-                                containingSources.end(),
-                                [&](const TopoDS_Edge& source) {
-                                    return !edgeEquivalentByGeometryAndEndpoints(edgeInfo.edge, source);
-                                });
+                const bool partialOverlap = std::any_of(
+                    containingSources.begin(),
+                    containingSources.end(),
+                    [&](const TopoDS_Edge& source) {
+                        return !edgeEquivalentByGeometryAndEndpoints(edgeInfo.edge, source);
+                    }
+                );
                 if (!partialOverlap || countEquivalentEdges(edgeInfo.edge, finalEdges) > 1) {
                     continue;
                 }
@@ -1286,15 +1345,15 @@ WireJoiner::HelperOpenExportOverridePlan WireJoiner::computeHelperOpenExportOver
     const bool consumedOpenCutterGraph = splitProducedBoundedFaces && !hasOpenWireOutput
         && openEdges.size() >= 2U && allOpenEdgeEndpointsTouchBoundary(openEdges, boundedFaceShape);
     if (consumedOpenCutterGraph) {
-        const bool partialJunctionOpenCutter =
-            !allOpenEdgeEndpointsTouchClosedWireBoundary(openEdges, closedWires);
+        const bool partialJunctionOpenCutter
+            = !allOpenEdgeEndpointsTouchClosedWireBoundary(openEdges, closedWires);
         const std::vector<TopoDS_Edge> boundedEdges = uniqueEdgesForShape(boundedFaceShape);
-        const std::vector<TopoDS_Edge> closedBoundaryEdges =
-            partialJunctionOpenCutter ? closedWireBoundaryEdges(closedWires) : std::vector<TopoDS_Edge>{};
-        const std::vector<TopoDS_Edge> partialOpenEdges =
-            partialJunctionOpenCutter
+        const std::vector<TopoDS_Edge> closedBoundaryEdges = partialJunctionOpenCutter
+            ? closedWireBoundaryEdges(closedWires)
+            : std::vector<TopoDS_Edge> {};
+        const std::vector<TopoDS_Edge> partialOpenEdges = partialJunctionOpenCutter
             ? openEdgesWithInteriorEndpoint(openEdges, closedBoundaryEdges)
-            : std::vector<TopoDS_Edge>{};
+            : std::vector<TopoDS_Edge> {};
         std::vector<TopoDS_Edge> resultSlotSeeds;
         std::vector<std::pair<gp_Pnt, TopoDS_Vertex>> copiedVertices;
         for (std::size_t edgeInfoIndex = 0; edgeInfoIndex < info.edges.size(); ++edgeInfoIndex) {
@@ -1311,11 +1370,8 @@ WireJoiner::HelperOpenExportOverridePlan WireJoiner::computeHelperOpenExportOver
                 continue;
             }
 
-            TopoDS_Edge resultSlotEdge = copyEdgeWithResultWireVertices(edgeInfo.edge,
-                                                                        openEdges,
-                                                                        false,
-                                                                        {},
-                                                                        copiedVertices);
+            TopoDS_Edge resultSlotEdge
+                = copyEdgeWithResultWireVertices(edgeInfo.edge, openEdges, false, {}, copiedVertices);
             if (resultSlotEdge.IsNull()) {
                 continue;
             }
@@ -1332,8 +1388,11 @@ WireJoiner::HelperOpenExportOverridePlan WireJoiner::computeHelperOpenExportOver
             binding.resultSlotEdge = resultSlotEdge;
             binding.reason = partialJunctionOpenCutter ? "partial_junction_open_cutter"
                                                        : "consumed_open_cutter_graph";
-            for (std::size_t candidateIndex = 0; candidateIndex < info.edges.size(); ++candidateIndex) {
-                if (edgeEquivalentByGeometryAndEndpoints(edgeInfo.edge, info.edges[candidateIndex].edge)) {
+            for (std::size_t candidateIndex = 0; candidateIndex < info.edges.size();
+                 ++candidateIndex) {
+                if (
+                    edgeEquivalentByGeometryAndEndpoints(edgeInfo.edge, info.edges[candidateIndex].edge)
+                ) {
                     binding.sourceEdgeInfoCandidateIndices.push_back(candidateIndex);
                     if (edgeInfoExportsOpenWireCompound(info.edges[candidateIndex])) {
                         binding.openWireCompoundEligibleCandidateIndices.push_back(candidateIndex);
@@ -1350,13 +1409,13 @@ WireJoiner::HelperOpenExportOverridePlan WireJoiner::computeHelperOpenExportOver
         return plan;
     }
 
-    const bool closedWireCycleExport =
-        openEdges.empty() && closedWireCycleNeedsGeneratedOpenExport(boundedFaceShape, closedWires);
+    const bool closedWireCycleExport = openEdges.empty()
+        && closedWireCycleNeedsGeneratedOpenExport(boundedFaceShape, closedWires);
     if (closedWireCycleExport) {
         const std::vector<TopoDS_Edge> boundedEdges = uniqueEdgesForShape(boundedFaceShape);
-        const std::vector<gp_Pnt> reusableVertexPoints =
-            closedWireEdgesAreLinear(closedWires) ? wireVertexPoints(closedWires)
-                                                  : std::vector<gp_Pnt>{};
+        const std::vector<gp_Pnt> reusableVertexPoints = closedWireEdgesAreLinear(closedWires)
+            ? wireVertexPoints(closedWires)
+            : std::vector<gp_Pnt> {};
         std::vector<TopoDS_Edge> resultSlotSeeds;
         std::vector<std::pair<gp_Pnt, TopoDS_Vertex>> copiedVertices;
         for (std::size_t edgeInfoIndex = 0; edgeInfoIndex < info.edges.size(); ++edgeInfoIndex) {
@@ -1368,11 +1427,13 @@ WireJoiner::HelperOpenExportOverridePlan WireJoiner::computeHelperOpenExportOver
                 continue;
             }
 
-            TopoDS_Edge resultSlotEdge = copyEdgeWithResultWireVertices(edgeInfo.edge,
-                                                                        openEdges,
-                                                                        true,
-                                                                        reusableVertexPoints,
-                                                                        copiedVertices);
+            TopoDS_Edge resultSlotEdge = copyEdgeWithResultWireVertices(
+                edgeInfo.edge,
+                openEdges,
+                true,
+                reusableVertexPoints,
+                copiedVertices
+            );
             if (resultSlotEdge.IsNull()) {
                 continue;
             }
@@ -1388,8 +1449,11 @@ WireJoiner::HelperOpenExportOverridePlan WireJoiner::computeHelperOpenExportOver
             HelperOpenExportOverrideBinding binding;
             binding.resultSlotEdge = resultSlotEdge;
             binding.reason = "closed_wire_cycle";
-            for (std::size_t candidateIndex = 0; candidateIndex < info.edges.size(); ++candidateIndex) {
-                if (edgeEquivalentByGeometryAndEndpoints(edgeInfo.edge, info.edges[candidateIndex].edge)) {
+            for (std::size_t candidateIndex = 0; candidateIndex < info.edges.size();
+                 ++candidateIndex) {
+                if (
+                    edgeEquivalentByGeometryAndEndpoints(edgeInfo.edge, info.edges[candidateIndex].edge)
+                ) {
                     binding.sourceEdgeInfoCandidateIndices.push_back(candidateIndex);
                     if (edgeInfoExportsOpenWireCompound(info.edges[candidateIndex])) {
                         binding.openWireCompoundEligibleCandidateIndices.push_back(candidateIndex);
@@ -1410,7 +1474,8 @@ WireJoiner::HelperOpenExportOverridePlan WireJoiner::computeHelperOpenExportOver
 
 bool WireJoiner::helperOpenExportOverridePlanHasUnsafeProducer(
     const WireInfo& info,
-    const HelperOpenExportOverridePlan& helperPlan) const
+    const HelperOpenExportOverridePlan& helperPlan
+) const
 {
     if (!helperPlan.needed) {
         return false;
@@ -1428,13 +1493,13 @@ bool WireJoiner::helperOpenExportOverridePlanHasUnsafeProducer(
             const EdgeInfo& candidate = info.edges[candidateIndex];
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
             // ::WireJoinerP::splitEdges() records "aHistory->AddModified(..., newInfo.edge)" and
-            // ::buildClosedWire() later calls "aHistory->Remove(info.edge)". Only candidates with both
-            // request-local source lineage and Remove-source evidence are safe enough for the rerun gate
-            // to avoid treating this helper-produced identity as a live-owner blocker. A removed target
-            // can also be safe when it records the actual outer EdgeInfo passed to Remove() and that
-            // source carries splitter/source lineage. The rerun removal scan records the same
-            // target/source evidence output-neutrally, so those candidates are safe for M3
-            // helper binding even before the live openWireCompound path is switched.
+            // ::buildClosedWire() later calls "aHistory->Remove(info.edge)". Only candidates with
+            // both request-local source lineage and Remove-source evidence are safe enough for the
+            // rerun gate to avoid treating this helper-produced identity as a live-owner blocker. A
+            // removed target can also be safe when it records the actual outer EdgeInfo passed to
+            // Remove() and that source carries splitter/source lineage. The rerun removal scan
+            // records the same target/source evidence output-neutrally, so those candidates are
+            // safe for M3 helper binding even before the live openWireCompound path is switched.
             if (helperOpenExportOverrideCandidateHasSafeAHistoryProducerEvidence(candidate)) {
                 hasAHistoryProducerCandidate = true;
                 break;
@@ -1456,7 +1521,8 @@ bool WireJoiner::edgeInfoExportsOpenWireCompound(const EdgeInfo& edgeInfo) const
 }
 
 bool WireJoiner::helperOpenExportOverrideCandidateHasFullAHistoryProducerEvidence(
-    const EdgeInfo& edgeInfo) const
+    const EdgeInfo& edgeInfo
+) const
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::buildClosedWire() marks the removed target and separately records
@@ -1468,7 +1534,8 @@ bool WireJoiner::helperOpenExportOverrideCandidateHasFullAHistoryProducerEvidenc
 }
 
 bool WireJoiner::helperOpenExportOverrideRootResultWireProducerHasFullAHistoryProducerEvidence(
-    const EdgeInfo& edgeInfo) const
+    const EdgeInfo& edgeInfo
+) const
 {
     if (helperOpenExportOverrideCandidateHasFullAHistoryProducerEvidence(edgeInfo)) {
         return true;
@@ -1479,15 +1546,17 @@ bool WireJoiner::helperOpenExportOverrideRootResultWireProducerHasFullAHistoryPr
     // "aHistory->Remove(info.edge)" on the outer EdgeInfo source. A superEdge root result-wire
     // producer is complete when it has the removed target, the actual Remove source, and same-source
     // request-local lineage; foreign Remove lineage remains risk evidence for another producer.
-    return edgeInfo.buildClosedWireRemoved
-        && !edgeInfo.sourceEdgeIndices.empty()
+    return edgeInfo.buildClosedWireRemoved && !edgeInfo.sourceEdgeIndices.empty()
         && !edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices.empty()
-        && sourceEdgeIndicesIntersect(edgeInfo.sourceEdgeIndices,
-                                      edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeIndices);
+        && sourceEdgeIndicesIntersect(
+               edgeInfo.sourceEdgeIndices,
+               edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeIndices
+        );
 }
 
 bool WireJoiner::helperOpenExportOverrideRootResultWireProducerCanSuppressPendingMember(
-    const EdgeInfo& edgeInfo) const
+    const EdgeInfo& edgeInfo
+) const
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::findSuperEdgesUpdateFirst() sets each member "current->iteration = -1",
@@ -1502,7 +1571,8 @@ bool WireJoiner::helperOpenExportOverrideRootResultWireProducerCanSuppressPendin
 }
 
 bool WireJoiner::helperOpenExportOverrideCandidateHasSafeAHistoryProducerEvidence(
-    const EdgeInfo& edgeInfo) const
+    const EdgeInfo& edgeInfo
+) const
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::buildClosedWire() separates the removed target
@@ -1515,12 +1585,16 @@ bool WireJoiner::helperOpenExportOverrideCandidateHasSafeAHistoryProducerEvidenc
         return true;
     }
     return !edgeInfo.sourceEdgeIndices.empty()
-        && sourceEdgeIndicesIntersect(edgeInfo.sourceEdgeIndices,
-                                      edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeIndices);
+        && sourceEdgeIndicesIntersect(
+            edgeInfo.sourceEdgeIndices,
+            edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeIndices
+        );
 }
 
-std::optional<std::size_t> WireJoiner::superEdgeRootIndexForMember(const WireInfo& info,
-                                                                   const EdgeInfo& edgeInfo) const
+std::optional<std::size_t> WireJoiner::superEdgeRootIndexForMember(
+    const WireInfo& info,
+    const EdgeInfo& edgeInfo
+) const
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::findSuperEdgesUpdateFirst() sets each non-root member to
@@ -1541,7 +1615,8 @@ std::optional<std::size_t> WireJoiner::superEdgeRootIndexForMember(const WireInf
 
 std::vector<std::size_t> WireJoiner::strictRemovedSourceEdgeInfoIndicesForSourceLineage(
     const WireInfo& info,
-    const EdgeInfo& edgeInfo) const
+    const EdgeInfo& edgeInfo
+) const
 {
     std::vector<std::size_t> indices;
     if (edgeInfo.sourceEdgeIndices.empty()) {
@@ -1563,7 +1638,8 @@ std::vector<std::size_t> WireJoiner::strictRemovedSourceEdgeInfoIndicesForSource
 std::optional<std::size_t> WireJoiner::sourceShapeReadyAHistoryRemoveProducerIndex(
     const WireInfo& info,
     const EdgeInfo& edgeInfo,
-    const TopoDS_Edge* resultEdge) const
+    const TopoDS_Edge* resultEdge
+) const
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::buildClosedWire() records the actual result-wire producer with
@@ -1584,11 +1660,11 @@ std::optional<std::size_t> WireJoiner::sourceShapeReadyAHistoryRemoveProducerInd
             // "aHistory->Remove(info.edge)". The source-shaped open export is preferred when it
             // already matches, but a strict Remove producer may still be represented by the
             // underlying EdgeInfo::edge curve and the legacy result-slot vertices.
-            const bool openExportMatches =
-                edgeEquivalentByGeometryAndEndpoints(producer.openExportEdge(), *resultEdge)
+            const bool openExportMatches
+                = edgeEquivalentByGeometryAndEndpoints(producer.openExportEdge(), *resultEdge)
                 || edgeSamplesLieOnEdge(*resultEdge, producer.openExportEdge());
-            const bool producerEdgeMatches =
-                edgeEquivalentByGeometryAndEndpoints(producer.edge, *resultEdge)
+            const bool producerEdgeMatches
+                = edgeEquivalentByGeometryAndEndpoints(producer.edge, *resultEdge)
                 || edgeSamplesLieOnEdge(*resultEdge, producer.edge);
             if (!openExportMatches && !producerEdgeMatches) {
                 continue;
@@ -1602,13 +1678,14 @@ std::optional<std::size_t> WireJoiner::sourceShapeReadyAHistoryRemoveProducerInd
 std::optional<std::size_t> WireJoiner::sourceShapeReadySameSourceSidecarProducerIndex(
     const WireInfo& info,
     const EdgeInfo& edgeInfo,
-    const TopoDS_Edge* resultEdge) const
+    const TopoDS_Edge* resultEdge
+) const
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-    // ::WireJoinerP::buildClosedWire() records producer evidence with "aHistory->Remove(info.edge)".
-    // If another strict Remove source in the same sourceEdgeArray lineage already has source-shaped
-    // output, it can provide the producer curve for this legacy result slot only when that curve
-    // either matches or contains the result-slot edge.
+    // ::WireJoinerP::buildClosedWire() records producer evidence with
+    // "aHistory->Remove(info.edge)". If another strict Remove source in the same sourceEdgeArray
+    // lineage already has source-shaped output, it can provide the producer curve for this legacy
+    // result slot only when that curve either matches or contains the result-slot edge.
     for (const std::size_t sourceIndex :
          strictRemovedSourceEdgeInfoIndicesForSourceLineage(info, edgeInfo)) {
         if (sourceIndex >= info.edges.size()) {
@@ -1623,11 +1700,11 @@ std::optional<std::size_t> WireJoiner::sourceShapeReadySameSourceSidecarProducer
             // Same-source sidecars are still strict Remove producers from
             // "aHistory->Remove(info.edge)"; if their already-exported source-shaped edge does not
             // contain this result, the original producer edge can still be the valid curve source.
-            const bool openExportMatches =
-                edgeEquivalentByGeometryAndEndpoints(producer.openExportEdge(), *resultEdge)
+            const bool openExportMatches
+                = edgeEquivalentByGeometryAndEndpoints(producer.openExportEdge(), *resultEdge)
                 || edgeSamplesLieOnEdge(*resultEdge, producer.openExportEdge());
-            const bool producerEdgeMatches =
-                edgeEquivalentByGeometryAndEndpoints(producer.edge, *resultEdge)
+            const bool producerEdgeMatches
+                = edgeEquivalentByGeometryAndEndpoints(producer.edge, *resultEdge)
                 || edgeSamplesLieOnEdge(*resultEdge, producer.edge);
             if (!openExportMatches && !producerEdgeMatches) {
                 continue;
@@ -1638,8 +1715,10 @@ std::optional<std::size_t> WireJoiner::sourceShapeReadySameSourceSidecarProducer
     return std::nullopt;
 }
 
-ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(const WireInfo& info,
-                                                                       std::size_t edgeInfoIndex) const
+ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(
+    const WireInfo& info,
+    std::size_t edgeInfoIndex
+) const
 {
     ResultWireProducerIdentity identity;
     if (edgeInfoIndex >= info.edges.size()) {
@@ -1658,15 +1737,15 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(const Wire
     identity.rootEdgeInfoIndex = edgeInfo.helperOpenExportOverrideSuperEdgeRootEdgeInfo
         ? edgeInfo.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex
         : resultWireProducerNpos;
-    identity.currentMemberEdgeInfoIndex =
-        edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo
-            ? edgeInfoIndex
-            : resultWireProducerNpos;
+    identity.currentMemberEdgeInfoIndex
+        = edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo
+        ? edgeInfoIndex
+        : resultWireProducerNpos;
     identity.hasSourceLineage = !edgeInfo.sourceEdgeIndices.empty();
     identity.hasStrictRemoveSource = edgeInfo.buildClosedWireAHistoryRemoved;
     identity.hasRemovedTarget = edgeInfo.buildClosedWireRemoved;
-    identity.hasSameSourceRemoveLineage =
-        edgeInfo.helperOpenExportOverrideAHistoryRemoveSameSourceLineage;
+    identity.hasSameSourceRemoveLineage
+        = edgeInfo.helperOpenExportOverrideAHistoryRemoveSameSourceLineage;
     identity.hasFullAHistoryEvidence = edgeInfo.helperOpenExportOverrideFullAHistoryProducerEvidence;
     identity.finalGateEligible = edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo;
     identity.sourceShapeReady = edgeInfo.helperOpenExportOverrideSourceEdgeExportShape;
@@ -1675,26 +1754,21 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(const Wire
     // EdgeInfo source while marking removed targets separately through "vertex.edgeInfo()".
     // P5 accepts a same-source strict Remove sidecar as producer evidence availability, but does
     // not relabel this target EdgeInfo itself as the strict Remove source.
-    const bool hasSameSourceStrictRemoveSourceEvidence =
-        edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo;
-    const bool hasRootFullAHistoryProducerEvidence =
-        edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence;
-    const bool hasAHistoryRemoveSourceEvidence =
-        edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo
-        || identity.hasStrictRemoveSource
-        || hasSameSourceStrictRemoveSourceEvidence
+    const bool hasSameSourceStrictRemoveSourceEvidence
+        = edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo;
+    const bool hasRootFullAHistoryProducerEvidence
+        = edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence;
+    const bool hasAHistoryRemoveSourceEvidence = edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo
+        || identity.hasStrictRemoveSource || hasSameSourceStrictRemoveSourceEvidence
         || hasRootFullAHistoryProducerEvidence;
-    const bool hasFullAHistoryProducerEvidence =
-        identity.hasFullAHistoryEvidence
+    const bool hasFullAHistoryProducerEvidence = identity.hasFullAHistoryEvidence
         || hasRootFullAHistoryProducerEvidence
         || (identity.hasRemovedTarget && identity.hasSourceLineage
             && hasSameSourceStrictRemoveSourceEvidence);
-    const bool isLiveFinalGateOpenEdgeProducer =
-        edgeInfo.helperOpenExportOverrideSourceEdgeInfo
+    const bool isLiveFinalGateOpenEdgeProducer = edgeInfo.helperOpenExportOverrideSourceEdgeInfo
         && edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo
         && !edgeInfo.helperOpenExportOverrideSourceEdgeInfoConsumed;
-    const bool isRootOpenCurrentMemberProducer =
-        edgeInfo.helperOpenExportOverrideSuperEdgeMemberEdgeInfo
+    const bool isRootOpenCurrentMemberProducer = edgeInfo.helperOpenExportOverrideSuperEdgeMemberEdgeInfo
         && edgeInfo.helperOpenExportOverrideSuperEdgeRootEdgeInfo
         && edgeInfo.helperOpenExportOverrideSuperEdgeRootOpenLifecycleEdgeInfo
         && edgeInfo.helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo;
@@ -1745,24 +1819,23 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(const Wire
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
         // ::WireJoinerP::getOpenWires(noOriginal=true) erases a wire when every edge is found by
         // "source.findSubShapesWithSharedVertex(TopoShape(edge, -1))". Root-open current-member
-        // producers must keep that purge gate separate from the remaining child-wire vertex identity
-        // blocker, because both are part of the same source-shape readiness check.
+        // producers must keep that purge gate separate from the remaining child-wire vertex
+        // identity blocker, because both are part of the same source-shape readiness check.
         const TopoDS_Edge& rootOpenCurrentMemberPurgeCandidate = edgeInfo.openExportEdge();
-        const bool rootOpenCurrentMemberWouldBePurgedAsOriginal =
-            !sourceEdges_.empty()
+        const bool rootOpenCurrentMemberWouldBePurgedAsOriginal = !sourceEdges_.empty()
             && edgeMatchesSourceSharedVertexSearch(
-                rootOpenCurrentMemberPurgeCandidate.IsNull()
-                    ? edgeInfo.edge
-                    : rootOpenCurrentMemberPurgeCandidate,
-                sourceEdges_);
+                rootOpenCurrentMemberPurgeCandidate.IsNull() ? edgeInfo.edge
+                                                             : rootOpenCurrentMemberPurgeCandidate,
+                sourceEdges_
+            );
         if (rootOpenCurrentMemberWouldBePurgedAsOriginal) {
-            identity.blocker =
-                ResultWireBlocker::CurrentMemberSourceShapeWouldPurgeOriginal;
+            identity.blocker = ResultWireBlocker::CurrentMemberSourceShapeWouldPurgeOriginal;
         }
-        else if (!edgeInfo
-                       .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo) {
-            const std::vector<std::size_t> sameSourceStrictRemoveSourceIndices =
-                strictRemovedSourceEdgeInfoIndicesForSourceLineage(info, edgeInfo);
+        else if (
+            !edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo
+        ) {
+            const std::vector<std::size_t> sameSourceStrictRemoveSourceIndices
+                = strictRemovedSourceEdgeInfoIndicesForSourceLineage(info, edgeInfo);
             std::optional<std::size_t> sameSourceSourceShapedSidecarIndex;
             for (const std::size_t sourceIndex : sameSourceStrictRemoveSourceIndices) {
                 if (sourceIndex >= info.edges.size()) {
@@ -1774,8 +1847,8 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(const Wire
                 }
             }
             const TopoDS_Edge& resultEdge = edgeInfo.openExportEdge();
-            const std::optional<std::size_t> sameSourceSidecarSourceShapeReadyIndex =
-                sourceShapeReadySameSourceSidecarProducerIndex(info, edgeInfo, &resultEdge);
+            const std::optional<std::size_t> sameSourceSidecarSourceShapeReadyIndex
+                = sourceShapeReadySameSourceSidecarProducerIndex(info, edgeInfo, &resultEdge);
             if (sameSourceSourceShapedSidecarIndex) {
                 identity.sourceEdgeInfoIndex = *sameSourceSourceShapedSidecarIndex;
             }
@@ -1804,8 +1877,8 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(const Wire
     if (edgeInfo.helperOpenExportOverrideAHistoryRemoveForeignSourceLineage
         && hasSameSourceStrictRemoveSourceEvidence) {
         const TopoDS_Edge& resultEdge = edgeInfo.openExportEdge();
-        const std::vector<std::size_t> sameSourceStrictRemoveSourceIndices =
-            strictRemovedSourceEdgeInfoIndicesForSourceLineage(info, edgeInfo);
+        const std::vector<std::size_t> sameSourceStrictRemoveSourceIndices
+            = strictRemovedSourceEdgeInfoIndicesForSourceLineage(info, edgeInfo);
         std::optional<std::size_t> sameSourceSourceShapedSidecarIndex;
         for (const std::size_t sourceIndex : sameSourceStrictRemoveSourceIndices) {
             if (sourceIndex >= info.edges.size()) {
@@ -1816,8 +1889,8 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(const Wire
                 break;
             }
         }
-        const std::optional<std::size_t> sameSourceSidecarSourceShapeReadyIndex =
-            sourceShapeReadySameSourceSidecarProducerIndex(info, edgeInfo, &resultEdge);
+        const std::optional<std::size_t> sameSourceSidecarSourceShapeReadyIndex
+            = sourceShapeReadySameSourceSidecarProducerIndex(info, edgeInfo, &resultEdge);
         if (sameSourceSidecarSourceShapeReadyIndex && identity.sourceShapeReady) {
             identity.sourceEdgeInfoIndex = *sameSourceSidecarSourceShapeReadyIndex;
             identity.state = ResultWireProducerState::SourceShapeReady;
@@ -1848,23 +1921,24 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(const Wire
             identity.sourceEdgeInfoIndex = sameSourceStrictRemoveSourceIndices.front();
         }
         identity.state = ResultWireProducerState::AHistoryEvidenceReady;
-        identity.blocker = (!sameSourceSidecarSourceShapeReadyIndex && sameSourceSourceShapedSidecarIndex)
+        identity.blocker = (!sameSourceSidecarSourceShapeReadyIndex
+                            && sameSourceSourceShapedSidecarIndex)
             ? ResultWireBlocker::SameSourceSidecarGeometryMismatch
             : ResultWireBlocker::SameSourceSidecarSourceShapeIdentityNotReady;
         return identity;
     }
     if (edgeInfo.helperOpenExportOverrideAHistoryRemoveForeignSourceLineage) {
         const TopoDS_Edge& resultEdge = edgeInfo.openExportEdge();
-        const std::optional<std::size_t> matchingForeignRemoveSourceShapeReadyIndex =
-            sourceShapeReadyAHistoryRemoveProducerIndex(info, edgeInfo, &resultEdge);
+        const std::optional<std::size_t> matchingForeignRemoveSourceShapeReadyIndex
+            = sourceShapeReadyAHistoryRemoveProducerIndex(info, edgeInfo, &resultEdge);
         if (matchingForeignRemoveSourceShapeReadyIndex && identity.sourceShapeReady) {
             identity.sourceEdgeInfoIndex = *matchingForeignRemoveSourceShapeReadyIndex;
             identity.state = ResultWireProducerState::SourceShapeReady;
             identity.blocker = ResultWireBlocker::None;
             return identity;
         }
-        const std::optional<std::size_t> foreignRemoveSourceShapeReadyIndex =
-            sourceShapeReadyAHistoryRemoveProducerIndex(info, edgeInfo);
+        const std::optional<std::size_t> foreignRemoveSourceShapeReadyIndex
+            = sourceShapeReadyAHistoryRemoveProducerIndex(info, edgeInfo);
         if (identity.sourceShapeReady && edgeInfo.sourceLineageFromSplitterHistory) {
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
             // ::WireJoinerP::splitEdges() records source-to-fragment ownership with
@@ -1895,14 +1969,13 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(const Wire
             // lineage. If cad-core has rebuilt this helper child from that exact producer curve
             // and the current result vertices, the source-shape identity is ready even though the
             // producer EdgeInfo did not independently export an openWireCompound child.
-            identity.sourceEdgeInfoIndex =
-                edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices.front();
+            identity.sourceEdgeInfoIndex
+                = edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices.front();
             identity.state = ResultWireProducerState::SourceShapeReady;
             identity.blocker = ResultWireBlocker::None;
             return identity;
         }
-        if (!edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices.empty()
-            && ![&]() {
+        if (!edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices.empty() && ![&]() {
                 for (const std::size_t sourceIndex :
                      edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices) {
                     if (sourceIndex >= info.edges.size()) {
@@ -1912,8 +1985,7 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(const Wire
                     if (edgeWithProducerCurveAndResultVertices(producer.edge, resultEdge)) {
                         return true;
                     }
-                    if (edgeWithProducerCurveAndResultVertices(producer.openExportEdge(),
-                                                               resultEdge)) {
+                    if (edgeWithProducerCurveAndResultVertices(producer.openExportEdge(), resultEdge)) {
                         return true;
                     }
                 }
@@ -1924,8 +1996,8 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(const Wire
             // "aHistory->Remove(info.edge)". If that producer cannot be rebuilt on this helper
             // result edge, keeping the blocker as source-shape identity not ready hides a geometry
             // ownership mismatch in the producer ledger.
-            identity.sourceEdgeInfoIndex =
-                edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices.front();
+            identity.sourceEdgeInfoIndex
+                = edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices.front();
             identity.state = ResultWireProducerState::AHistoryEvidenceReady;
             identity.blocker = ResultWireBlocker::ForeignAHistorySourceGeometryMismatch;
             return identity;
@@ -1936,8 +2008,8 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(const Wire
         // Keep that actual Remove-source EdgeInfo in the identity while the blocker explains why it
         // cannot be used as the helper slot's source-shaped output.
         if (!edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices.empty()) {
-            identity.sourceEdgeInfoIndex =
-                edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices.front();
+            identity.sourceEdgeInfoIndex
+                = edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices.front();
             identity.state = ResultWireProducerState::AHistoryEvidenceReady;
             identity.blocker = ResultWireBlocker::ForeignAHistorySourceShapeIdentityNotReady;
             return identity;
@@ -1960,19 +2032,19 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(const Wire
         return identity;
     }
 
-    identity.state = isLiveFinalGateOpenEdgeProducer ? ResultWireProducerState::ChildWireReady
-                                                     : ResultWireProducerState::AHistoryEvidenceReady;
+    identity.state = isLiveFinalGateOpenEdgeProducer
+        ? ResultWireProducerState::ChildWireReady
+        : ResultWireProducerState::AHistoryEvidenceReady;
     if (identity.sourceShapeReady) {
         identity.state = ResultWireProducerState::SourceShapeReady;
     }
     if (isLiveFinalGateOpenEdgeProducer && !identity.sourceShapeReady) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
         // ::WireJoinerP::getOpenWires(), with noOriginal=true, removes a wire only when every edge
-        // is found by "source.findSubShapesWithSharedVertex(TopoShape(edge, -1))". A live final-gate
-        // producer that would be purged as an original source edge cannot replace the helper shape
-        // without losing the openWireCompound child.
-        const bool liveFinalGateWouldBePurgedAsOriginal =
-            !sourceEdges_.empty()
+        // is found by "source.findSubShapesWithSharedVertex(TopoShape(edge, -1))". A live
+        // final-gate producer that would be purged as an original source edge cannot replace the
+        // helper shape without losing the openWireCompound child.
+        const bool liveFinalGateWouldBePurgedAsOriginal = !sourceEdges_.empty()
             && edgeUsesOnlyOriginalSourceVerticesByIdentity(edgeInfo.edge, sourceEdges_);
         identity.blocker = liveFinalGateWouldBePurgedAsOriginal
             ? ResultWireBlocker::LiveResetSourceShapeWouldPurgeOriginal
@@ -1980,16 +2052,16 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(const Wire
         return identity;
     }
 
-    const bool rootIterationBlockedMissingRemovalBranch =
-        edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
+    const bool rootIterationBlockedMissingRemovalBranch
+        = edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
         && !edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval
         && !edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedPrimaryRemoval
         && !edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedSecondaryRemoval;
-    const bool helperExportBlockedByIteration =
-        !edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo
+    const bool helperExportBlockedByIteration
+        = !edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo
         && edgeInfo.iteration < 0 && edgeInfo.iteration != -3;
-    const bool helperExportBlockedByWireInfo =
-        !edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo
+    const bool helperExportBlockedByWireInfo
+        = !edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo
         && edgeInfo.iteration >= 0 && edgeInfo.wireInfo != 0U;
     if (rootIterationBlockedMissingRemovalBranch) {
         identity.blocker = ResultWireBlocker::UnknownInvariant;
@@ -2026,7 +2098,8 @@ void WireJoiner::attachResultWireProducerLedger(WireInfo& info)
 ResultWireProducerIdentity WireJoiner::childWireResultWireProducerIdentity(
     const WireInfo& info,
     const OpenWireCompoundWireInfo& childWire,
-    std::size_t childWireIndex) const
+    std::size_t childWireIndex
+) const
 {
     ResultWireProducerIdentity identity;
     if (!childWire.helperOpenExportOverride) {
@@ -2052,27 +2125,31 @@ ResultWireProducerIdentity WireJoiner::childWireResultWireProducerIdentity(
         identity.sourceShapeReady = true;
         return identity;
     }
-    if (childWire
-            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerReady) {
+    if (
+        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerReady
+    ) {
         identity.kind = ResultWireProducerKind::CurrentMemberChildWire;
         identity.state = ResultWireProducerState::ChildWireReady;
-        if (childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShape) {
+        if (
+            childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShape
+        ) {
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
             // ::WireJoinerP::build() adds final child wires with "builder.Add(openWireCompound,
             // info.wire())"; ::getOpenWires(noOriginal=true) can then remove original source wires.
             // Keep purge and vertex-identity blockers separate so the current-member path does not
             // hide a missing child-wire vertex ledger behind the generic source-shape gate.
-            const bool memberSuppressedWouldBePurgedAsOriginal =
-                !sourceEdges_.empty()
+            const bool memberSuppressedWouldBePurgedAsOriginal = !sourceEdges_.empty()
                 && allEdgesShareOriginalSourceVertexByIdentity(
-                    childWire
-                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWire,
-                    sourceEdges_);
+                    childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWire,
+                    sourceEdges_
+                );
             identity.blocker = memberSuppressedWouldBePurgedAsOriginal
                 ? ResultWireBlocker::CurrentMemberSourceShapeWouldPurgeOriginal
                 : ResultWireBlocker::SourceShapeMemberVertexIdentityNotReady;
         }
-        else if (childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedByPendingMember) {
+        else if (
+            childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedByPendingMember
+        ) {
             identity.blocker = ResultWireBlocker::MultiMemberRootPendingSuppression;
         }
         else if (!identity.sourceShapeReady) {
@@ -2100,30 +2177,25 @@ ResultWireProducerIdentity WireJoiner::childWireResultWireProducerIdentity(
 
 bool WireJoiner::memberSuppressedCurrentMemberSourceShapeReady(
     const WireInfo& info,
-    const OpenWireCompoundWireInfo& childWire) const
+    const OpenWireCompoundWireInfo& childWire
+) const
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::findSuperEdgesUpdateFirst() stores open current-member output on
     // "first->superEdge"; that producer reaches ::build() through openWireCompound, not through a
     // synthetic buildClosedWire() "aHistory->Remove(info.edge)" event.
-    const bool rootOpenCurrentMemberProducerEvidence =
-        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo
+    const bool rootOpenCurrentMemberProducerEvidence
+        = childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo
         && childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex < info.edges.size()
         && childWire.helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo
-        && info.edges[childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex]
-               .superEdgeLifecycleOpenRoot
-        && info.edges[childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex]
-               .superEdgeMaterialized
-        && !info.edges[childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex]
-                .superEdge.IsNull();
-    if (!childWire
-             .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerReady
-        || !childWire
-                .helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWireBuilt) {
+        && info.edges[childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex].superEdgeLifecycleOpenRoot
+        && info.edges[childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex].superEdgeMaterialized
+        && !info.edges[childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex].superEdge.IsNull();
+    if (!childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerReady
+        || !childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWireBuilt) {
         return false;
     }
-    if (!childWire
-             .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerFullAHistoryEvidence
+    if (!childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerFullAHistoryEvidence
         && !rootOpenCurrentMemberProducerEvidence) {
         return false;
     }
@@ -2145,14 +2217,15 @@ bool WireJoiner::memberSuppressedCurrentMemberSourceShapeReady(
         // current-member producers, the current member EdgeInfo input vertices are therefore part
         // of the same request-local producer ledger even when the member itself is not exported by
         // openWireCompound.
-        const std::vector<TopoDS_Vertex> memberVertices =
-            edgeVertices(info.edges[childWire.edgeIndex].edge);
+        const std::vector<TopoDS_Vertex> memberVertices = edgeVertices(
+            info.edges[childWire.edgeIndex].edge
+        );
         ledgerVertices.insert(ledgerVertices.end(), memberVertices.begin(), memberVertices.end());
     }
     const std::vector<TopoDS_Vertex> producerVertices = wireVertices(
-        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWire);
-    const bool producerVerticesCoveredByLedger =
-        !producerVertices.empty()
+        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWire
+    );
+    const bool producerVerticesCoveredByLedger = !producerVertices.empty()
         && std::all_of(producerVertices.begin(), producerVertices.end(), [&](const TopoDS_Vertex& vertex) {
                return vertexMatchesAnyByIdentity(vertex, ledgerVertices);
            });
@@ -2173,7 +2246,8 @@ bool WireJoiner::memberSuppressedCurrentMemberSourceShapeReady(
 
 ResultWireProducerLedgerEntry WireJoiner::resultWireProducerLedgerEntryForChildWire(
     const OpenWireCompoundWireInfo& childWire,
-    std::size_t childWireIndex) const
+    std::size_t childWireIndex
+) const
 {
     ResultWireProducerLedgerEntry entry;
     entry.openExportIndex = childWireIndex + 1U;
@@ -2187,8 +2261,10 @@ ResultWireProducerLedgerEntry WireJoiner::resultWireProducerLedgerEntryForChildW
     return entry;
 }
 
-void WireJoiner::applyHelperOpenExportOverridePlan(WireInfo& info,
-                                                   const HelperOpenExportOverridePlan& helperPlan)
+void WireJoiner::applyHelperOpenExportOverridePlan(
+    WireInfo& info,
+    const HelperOpenExportOverridePlan& helperPlan
+)
 {
     if (!helperPlan.needed) {
         return;
@@ -2209,13 +2285,13 @@ void WireJoiner::applyHelperOpenExportOverridePlan(WireInfo& info,
                 if (!acceptCandidate(candidate)) {
                     continue;
                 }
-                return std::optional<std::size_t>{candidateIndex};
+                return std::optional<std::size_t> {candidateIndex};
             }
-            return std::optional<std::size_t>{};
+            return std::optional<std::size_t> {};
         };
         selectedSourceEdgeInfoIndex = selectCandidate([&](const EdgeInfo& candidate) {
-            return edgeInfoExportsOpenWireCompound(candidate) && candidate.buildClosedWireAHistoryRemoved
-                && !candidate.sourceEdgeIndices.empty();
+            return edgeInfoExportsOpenWireCompound(candidate)
+                && candidate.buildClosedWireAHistoryRemoved && !candidate.sourceEdgeIndices.empty();
         });
         if (!selectedSourceEdgeInfoIndex) {
             selectedSourceEdgeInfoIndex = selectCandidate([&](const EdgeInfo& candidate) {
@@ -2231,12 +2307,14 @@ void WireJoiner::applyHelperOpenExportOverridePlan(WireInfo& info,
         }
         if (!selectedSourceEdgeInfoIndex) {
             selectedSourceEdgeInfoIndex = selectCandidate([&](const EdgeInfo& candidate) {
-                return edgeInfoExportsOpenWireCompound(candidate) && !candidate.sourceEdgeIndices.empty();
+                return edgeInfoExportsOpenWireCompound(candidate)
+                    && !candidate.sourceEdgeIndices.empty();
             });
         }
         if (!selectedSourceEdgeInfoIndex) {
             selectedSourceEdgeInfoIndex = selectCandidate([](const EdgeInfo& candidate) {
-                return candidate.buildClosedWireAHistoryRemoved && !candidate.sourceEdgeIndices.empty();
+                return candidate.buildClosedWireAHistoryRemoved
+                    && !candidate.sourceEdgeIndices.empty();
             });
         }
         if (!selectedSourceEdgeInfoIndex) {
@@ -2265,14 +2343,12 @@ void WireJoiner::applyHelperOpenExportOverridePlan(WireInfo& info,
             });
         }
         if (!selectedSourceEdgeInfoIndex) {
-            selectedSourceEdgeInfoIndex = selectCandidate([](const EdgeInfo&) {
-                return true;
-            });
+            selectedSourceEdgeInfoIndex = selectCandidate([](const EdgeInfo&) { return true; });
         }
 
         if (selectedSourceEdgeInfoIndex) {
-            std::vector<std::size_t> openWireCompoundEligibleCandidateIndices =
-                binding.openWireCompoundEligibleCandidateIndices;
+            std::vector<std::size_t> openWireCompoundEligibleCandidateIndices
+                = binding.openWireCompoundEligibleCandidateIndices;
             for (const std::size_t candidateIndex : binding.sourceEdgeInfoCandidateIndices) {
                 if (candidateIndex >= info.edges.size()) {
                     continue;
@@ -2288,29 +2364,30 @@ void WireJoiner::applyHelperOpenExportOverridePlan(WireInfo& info,
             // diagnostic slots; final output must come from producer EdgeInfo/WireInfo/aHistory
             // identity. Prefer candidates already marked by
             // aHistory->Remove() source and splitter/source lineage so helper evidence follows the
-            // real aHistory producer ledger instead of whichever equivalent edge happened to appear first.
+            // real aHistory producer ledger instead of whichever equivalent edge happened to appear
+            // first.
             const bool sourceExportsOpenEdge = edgeInfoExportsOpenWireCompound(edgeInfo);
-            const bool sourceConsumedByBuildClosedWire =
-                edgeInfo.buildClosedWireRemoved || edgeInfo.buildClosedWireAHistoryRemoved;
+            const bool sourceConsumedByBuildClosedWire = edgeInfo.buildClosedWireRemoved
+                || edgeInfo.buildClosedWireAHistoryRemoved;
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
             // ::WireJoinerP::build() calls "builder.Add(openWireCompound, info.wire())" from the
             // final EdgeInfo, not from a generated helper copy. When buildClosedWire() records full
             // "aHistory->Remove(info.edge)" evidence, the selected EdgeInfo supplies the producer
             // curve; reuse the equivalent result edge vertices so switching away from helper output
             // does not introduce extra topological vertices before P6 removes the helper finder.
-            const bool hasFullAHistoryProducerEvidence =
-                helperOpenExportOverrideCandidateHasFullAHistoryProducerEvidence(edgeInfo);
-            const std::vector<std::size_t> sourceLineageRemovedSourceEdgeInfoIndices =
-                strictRemovedSourceEdgeInfoIndicesForSourceLineage(info, edgeInfo);
-            const bool hasSameSourceStrictRemoveSourceEvidence =
-                !sourceLineageRemovedSourceEdgeInfoIndices.empty();
-            const bool hasForeignAHistoryRemoveSourceLineage =
-                !edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeIndices.empty()
+            const bool hasFullAHistoryProducerEvidence
+                = helperOpenExportOverrideCandidateHasFullAHistoryProducerEvidence(edgeInfo);
+            const std::vector<std::size_t> sourceLineageRemovedSourceEdgeInfoIndices
+                = strictRemovedSourceEdgeInfoIndicesForSourceLineage(info, edgeInfo);
+            const bool hasSameSourceStrictRemoveSourceEvidence
+                = !sourceLineageRemovedSourceEdgeInfoIndices.empty();
+            const bool hasForeignAHistoryRemoveSourceLineage
+                = !edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeIndices.empty()
                 && !sourceEdgeIndicesIntersect(
                     edgeInfo.sourceEdgeIndices,
-                    edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeIndices);
-            const bool hasFullResultWireProducerEvidence =
-                hasFullAHistoryProducerEvidence
+                    edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeIndices
+                );
+            const bool hasFullResultWireProducerEvidence = hasFullAHistoryProducerEvidence
                 || (edgeInfo.buildClosedWireRemoved && !edgeInfo.sourceEdgeIndices.empty()
                     && hasSameSourceStrictRemoveSourceEvidence
                     && !hasForeignAHistoryRemoveSourceLineage);
@@ -2320,35 +2397,39 @@ void WireJoiner::applyHelperOpenExportOverridePlan(WireInfo& info,
             // live final-gate producer, not a buildClosedWire() "aHistory->Remove(info.edge)"
             // producer. It can replace the result-slot edge only if getOpenWires(noOriginal=true)'s
             // source shared-vertex search would not purge the source-shaped result edge.
-            const bool hasLiveFinalGateProducerEvidence =
-                sourceExportsOpenEdge && !sourceConsumedByBuildClosedWire
-                && !edgeInfo.sourceEdgeIndices.empty() && !hasForeignAHistoryRemoveSourceLineage;
-        const std::optional<std::size_t> sourceShapeReadyForeignAHistoryRemoveProducerIndex =
-            hasForeignAHistoryRemoveSourceLineage && !hasSameSourceStrictRemoveSourceEvidence
-            ? sourceShapeReadyAHistoryRemoveProducerIndex(info, edgeInfo, &binding.resultSlotEdge)
-            : std::optional<std::size_t>{};
-        std::optional<TopoDS_Edge> foreignAHistoryRemoveProducerExportShape;
-        if (hasForeignAHistoryRemoveSourceLineage && !hasSameSourceStrictRemoveSourceEvidence
-            && !sourceShapeReadyForeignAHistoryRemoveProducerIndex) {
-            for (const std::size_t sourceIndex :
-                 edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices) {
+            const bool hasLiveFinalGateProducerEvidence = sourceExportsOpenEdge
+                && !sourceConsumedByBuildClosedWire && !edgeInfo.sourceEdgeIndices.empty()
+                && !hasForeignAHistoryRemoveSourceLineage;
+            const std::optional<std::size_t> sourceShapeReadyForeignAHistoryRemoveProducerIndex
+                = hasForeignAHistoryRemoveSourceLineage && !hasSameSourceStrictRemoveSourceEvidence
+                ? sourceShapeReadyAHistoryRemoveProducerIndex(info, edgeInfo, &binding.resultSlotEdge)
+                : std::optional<std::size_t> {};
+            std::optional<TopoDS_Edge> foreignAHistoryRemoveProducerExportShape;
+            if (hasForeignAHistoryRemoveSourceLineage && !hasSameSourceStrictRemoveSourceEvidence
+                && !sourceShapeReadyForeignAHistoryRemoveProducerIndex) {
+                for (const std::size_t sourceIndex :
+                     edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices) {
                     if (sourceIndex >= info.edges.size()) {
                         continue;
                     }
                     const EdgeInfo& producer = info.edges[sourceIndex];
-                    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                    // FreeCAD:
+                    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
                     // ::WireJoinerP::buildClosedWire() calls "aHistory->Remove(info.edge)" with
                     // the producer EdgeInfo, not with the removed target. For true foreign
                     // producer evidence, reuse that exact producer curve only when it can
-                    // represent the legacy result-slot edge with the result vertices; this is still a
-                    // producer-ledger switch, not a helper geometry guess.
-                    foreignAHistoryRemoveProducerExportShape =
-                        edgeWithProducerCurveAndResultVertices(producer.edge, binding.resultSlotEdge);
+                    // represent the legacy result-slot edge with the result vertices; this is still
+                    // a producer-ledger switch, not a helper geometry guess.
+                    foreignAHistoryRemoveProducerExportShape = edgeWithProducerCurveAndResultVertices(
+                        producer.edge,
+                        binding.resultSlotEdge
+                    );
                     if (!foreignAHistoryRemoveProducerExportShape
                         || foreignAHistoryRemoveProducerExportShape->IsNull()) {
-                        foreignAHistoryRemoveProducerExportShape =
-                            edgeWithProducerCurveAndResultVertices(producer.openExportEdge(),
-                                                                   binding.resultSlotEdge);
+                        foreignAHistoryRemoveProducerExportShape = edgeWithProducerCurveAndResultVertices(
+                            producer.openExportEdge(),
+                            binding.resultSlotEdge
+                        );
                     }
                     if (foreignAHistoryRemoveProducerExportShape
                         && !foreignAHistoryRemoveProducerExportShape->IsNull()) {
@@ -2356,96 +2437,103 @@ void WireJoiner::applyHelperOpenExportOverridePlan(WireInfo& info,
                     }
                 }
             }
-            const std::optional<std::size_t> sourceShapeReadySameSourceSidecarProducerIndex =
-                hasForeignAHistoryRemoveSourceLineage && hasSameSourceStrictRemoveSourceEvidence
+            const std::optional<std::size_t> sourceShapeReadySameSourceSidecarProducerIndex
+                = hasForeignAHistoryRemoveSourceLineage && hasSameSourceStrictRemoveSourceEvidence
                 ? this->sourceShapeReadySameSourceSidecarProducerIndex(
                       info,
                       edgeInfo,
-                      &binding.resultSlotEdge)
-                : std::optional<std::size_t>{};
+                      &binding.resultSlotEdge
+                  )
+                : std::optional<std::size_t> {};
             std::optional<TopoDS_Edge> sourceEdgeExportShape;
             std::optional<TopoDS_Edge> candidateSourceEdgeExportShape;
             if (edgeInfo.edge.IsSame(binding.resultSlotEdge)) {
                 candidateSourceEdgeExportShape = edgeInfo.edge;
             }
             else if (hasFullResultWireProducerEvidence || hasLiveFinalGateProducerEvidence) {
-                candidateSourceEdgeExportShape =
-                    edgeWithEquivalentResultVertices(edgeInfo.edge, binding.resultSlotEdge);
+                candidateSourceEdgeExportShape
+                    = edgeWithEquivalentResultVertices(edgeInfo.edge, binding.resultSlotEdge);
             }
-            else if (hasForeignAHistoryRemoveSourceLineage && edgeInfo.sourceLineageFromSplitterHistory) {
+            else if (
+                hasForeignAHistoryRemoveSourceLineage && edgeInfo.sourceLineageFromSplitterHistory
+            ) {
                 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
                 // ::WireJoinerP::splitEdges() records split-result ownership with
                 // "aHistory->AddModified(split.intersectShape, newInfo.edge)". If a later
                 // buildClosedWire() removal points at a foreign Remove source, the current
                 // source-lineage split fragment is still a request-local result-wire producer, but
                 // it may need to be rebuilt with the legacy result-slot vertices.
-                candidateSourceEdgeExportShape =
-                    edgeWithProducerCurveAndResultVertices(edgeInfo.edge, binding.resultSlotEdge);
+                candidateSourceEdgeExportShape
+                    = edgeWithProducerCurveAndResultVertices(edgeInfo.edge, binding.resultSlotEdge);
             }
             else if (sourceShapeReadyForeignAHistoryRemoveProducerIndex) {
-                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                // FreeCAD:
+                // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
                 // ::WireJoinerP::buildClosedWire() records the result-wire source as
                 // "aHistory->Remove(info.edge)". For a true foreign Remove source, only switch the
-                // slot when that exact source already has a source-shaped producer and can be rebuilt
-                // with the legacy result-slot vertices.
-                const EdgeInfo& producer =
-                    info.edges[*sourceShapeReadyForeignAHistoryRemoveProducerIndex];
+                // slot when that exact source already has a source-shaped producer and can be
+                // rebuilt with the legacy result-slot vertices.
+                const EdgeInfo& producer
+                    = info.edges[*sourceShapeReadyForeignAHistoryRemoveProducerIndex];
                 candidateSourceEdgeExportShape = edgeWithEquivalentResultVertices(
                     producer.openExportEdge(),
-                    binding.resultSlotEdge);
-                if (!candidateSourceEdgeExportShape
-                    || candidateSourceEdgeExportShape->IsNull()) {
-                    candidateSourceEdgeExportShape =
-                        edgeWithProducerCurveAndResultVertices(producer.edge, binding.resultSlotEdge);
+                    binding.resultSlotEdge
+                );
+                if (!candidateSourceEdgeExportShape || candidateSourceEdgeExportShape->IsNull()) {
+                    candidateSourceEdgeExportShape = edgeWithProducerCurveAndResultVertices(
+                        producer.edge,
+                        binding.resultSlotEdge
+                    );
                 }
             }
             else if (foreignAHistoryRemoveProducerExportShape) {
                 candidateSourceEdgeExportShape = *foreignAHistoryRemoveProducerExportShape;
             }
             else if (sourceShapeReadySameSourceSidecarProducerIndex) {
-                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                // FreeCAD:
+                // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
                 // ::WireJoinerP::buildClosedWire() can remove this target from a foreign
                 // aHistory source while a strict same-lineage sidecar also records
                 // "aHistory->Remove(info.edge)". When that sidecar already has source-shaped
-                // output, reuse its producer curve or contained subsegment with the legacy result-slot
-                // vertices instead of keeping the legacy helper child.
-                const EdgeInfo& producer =
-                    info.edges[*sourceShapeReadySameSourceSidecarProducerIndex];
+                // output, reuse its producer curve or contained subsegment with the legacy
+                // result-slot vertices instead of keeping the legacy helper child.
+                const EdgeInfo& producer = info.edges[*sourceShapeReadySameSourceSidecarProducerIndex];
                 candidateSourceEdgeExportShape = edgeWithProducerCurveAndResultVertices(
                     producer.openExportEdge(),
-                    binding.resultSlotEdge);
-                if (!candidateSourceEdgeExportShape
-                    || candidateSourceEdgeExportShape->IsNull()) {
-                    candidateSourceEdgeExportShape =
-                        edgeWithProducerCurveAndResultVertices(producer.edge, binding.resultSlotEdge);
+                    binding.resultSlotEdge
+                );
+                if (!candidateSourceEdgeExportShape || candidateSourceEdgeExportShape->IsNull()) {
+                    candidateSourceEdgeExportShape = edgeWithProducerCurveAndResultVertices(
+                        producer.edge,
+                        binding.resultSlotEdge
+                    );
                 }
             }
             if (candidateSourceEdgeExportShape && !candidateSourceEdgeExportShape->IsNull()) {
-                const bool liveFinalGateWouldBePurgedAsOriginal =
-                    hasLiveFinalGateProducerEvidence && !hasFullResultWireProducerEvidence
-                    && !sourceEdges_.empty()
+                const bool liveFinalGateWouldBePurgedAsOriginal = hasLiveFinalGateProducerEvidence
+                    && !hasFullResultWireProducerEvidence && !sourceEdges_.empty()
                     && edgeUsesOnlyOriginalSourceVerticesByIdentity(*candidateSourceEdgeExportShape,
                                                                     sourceEdges_);
                 if (!liveFinalGateWouldBePurgedAsOriginal) {
                     sourceEdgeExportShape = *candidateSourceEdgeExportShape;
                 }
             }
-            const bool useSourceEdgeExportShape =
-                sourceEdgeExportShape.has_value() && !sourceEdgeExportShape->IsNull();
-            const std::optional<std::size_t> superEdgeRootIndex =
-                superEdgeRootIndexForMember(info, edgeInfo);
-            const bool useResultSlotSeedForCurrentMemberProducer =
-                !useSourceEdgeExportShape && edgeInfo.superEdgeLifecycleMemberMinusOne
-                && superEdgeRootIndex.has_value();
+            const bool useSourceEdgeExportShape = sourceEdgeExportShape.has_value()
+                && !sourceEdgeExportShape->IsNull();
+            const std::optional<std::size_t> superEdgeRootIndex
+                = superEdgeRootIndexForMember(info, edgeInfo);
+            const bool useResultSlotSeedForCurrentMemberProducer = !useSourceEdgeExportShape
+                && edgeInfo.superEdgeLifecycleMemberMinusOne && superEdgeRootIndex.has_value();
             if (useSourceEdgeExportShape) {
                 edgeInfo.openExportOverride = *sourceEdgeExportShape;
             }
             else if (useResultSlotSeedForCurrentMemberProducer) {
-                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-                // ::WireJoinerP::findSuperEdgesUpdateFirst() stores current-member output through the
-                // root "first->superEdge". The selected EdgeInfo supplies the export gate, while
-                // result-slot topology is kept only as child-wire vertex evidence for rebuilding
-                // the root/current-member producer wire.
+                // FreeCAD:
+                // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                // ::WireJoinerP::findSuperEdgesUpdateFirst() stores current-member output through
+                // the root "first->superEdge". The selected EdgeInfo supplies the export gate,
+                // while result-slot topology is kept only as child-wire vertex evidence for
+                // rebuilding the root/current-member producer wire.
                 edgeInfo.openExportOverride = edgeInfo.edge;
                 edgeInfo.resultSlotVertexEvidenceEdge = binding.resultSlotEdge;
             }
@@ -2453,8 +2541,8 @@ void WireJoiner::applyHelperOpenExportOverridePlan(WireInfo& info,
             edgeInfo.helperOpenExportOverrideReason = binding.reason;
             edgeInfo.helperOpenExportOverrideSourceEdgeInfo = true;
             edgeInfo.helperOpenExportOverrideSourceEdgeInfoIndex = *selectedSourceEdgeInfoIndex;
-            edgeInfo.helperOpenExportOverrideSourceEdgeInfoConsumed =
-                !sourceExportsOpenEdge || sourceConsumedByBuildClosedWire;
+            edgeInfo.helperOpenExportOverrideSourceEdgeInfoConsumed = !sourceExportsOpenEdge
+                || sourceConsumedByBuildClosedWire;
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
             // ::WireJoinerP::build() adds to "openWireCompound" only when
             // "info.iteration == -3 || (!info.wireInfo && info.iteration >= 0)". Track whether
@@ -2462,71 +2550,69 @@ void WireJoiner::applyHelperOpenExportOverridePlan(WireInfo& info,
             // "openExportOverride"; a forced export is the remaining M3 lifecycle gap.
             edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo = sourceExportsOpenEdge;
             edgeInfo.helperOpenExportOverrideSourceEdgeExportShape = useSourceEdgeExportShape;
-            edgeInfo.helperOpenExportOverrideFullAHistoryProducerEvidence =
-                hasFullAHistoryProducerEvidence;
-            edgeInfo.helperOpenExportOverrideSuperEdgeMemberEdgeInfo =
-                edgeInfo.superEdgeLifecycleMemberMinusOne;
+            edgeInfo.helperOpenExportOverrideFullAHistoryProducerEvidence
+                = hasFullAHistoryProducerEvidence;
+            edgeInfo.helperOpenExportOverrideSuperEdgeMemberEdgeInfo
+                = edgeInfo.superEdgeLifecycleMemberMinusOne;
             edgeInfo.helperOpenExportOverrideSuperEdgeRootEdgeInfo = superEdgeRootIndex.has_value();
             if (superEdgeRootIndex) {
                 const EdgeInfo& rootEdgeInfo = info.edges[*superEdgeRootIndex];
                 const bool rootExportsOpenEdge = edgeInfoExportsOpenWireCompound(rootEdgeInfo);
                 edgeInfo.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex = *superEdgeRootIndex;
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo =
-                    rootExportsOpenEdge;
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootOpenLifecycleEdgeInfo =
-                    rootEdgeInfo.superEdgeLifecycleOpenRoot;
-                const bool rootFullAHistoryProducerEvidence =
-                    helperOpenExportOverrideRootResultWireProducerHasFullAHistoryProducerEvidence(rootEdgeInfo);
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration =
-                    !rootExportsOpenEdge && rootEdgeInfo.iteration < 0 && rootEdgeInfo.iteration != -3;
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval =
-                    edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo
+                    = rootExportsOpenEdge;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootOpenLifecycleEdgeInfo
+                    = rootEdgeInfo.superEdgeLifecycleOpenRoot;
+                const bool rootFullAHistoryProducerEvidence
+                    = helperOpenExportOverrideRootResultWireProducerHasFullAHistoryProducerEvidence(
+                        rootEdgeInfo
+                    );
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration = !rootExportsOpenEdge
+                    && rootEdgeInfo.iteration < 0 && rootEdgeInfo.iteration != -3;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval
+                    = edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
                     && rootEdgeInfo.buildClosedWireRemovedByUnowned;
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedPrimaryRemoval =
-                    edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedPrimaryRemoval
+                    = edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
                     && rootEdgeInfo.buildClosedWireRemovedByPrimaryOwner;
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedSecondaryRemoval =
-                    edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedSecondaryRemoval
+                    = edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
                     && rootEdgeInfo.buildClosedWireRemovedBySecondaryOwner;
                 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
                 // ::WireJoinerP::findSuperEdgesUpdateFirst() stores an open root wire in
                 // "first->superEdge = makeCleanWire(false)"; ::buildClosedWire() can later remove
                 // that root before ::build() exports openWireCompound. Track this as the next M3
                 // producer candidate, but do not export root.superEdge from the helper path yet.
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate =
-                    edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
-                    && rootEdgeInfo.superEdgeLifecycleOpenRoot
-                    && rootEdgeInfo.superEdgeMaterialized
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
+                    = edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
+                    && rootEdgeInfo.superEdgeLifecycleOpenRoot && rootEdgeInfo.superEdgeMaterialized
                     && !rootEdgeInfo.superEdge.IsNull();
-                edgeInfo
-                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence =
-                    edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence
+                    = edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
                     && rootFullAHistoryProducerEvidence;
-                const bool rootResultWireProducerCandidateUnownedRemoval =
-                    edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
+                const bool rootResultWireProducerCandidateUnownedRemoval
+                    = edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
                     && edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval;
-                edgeInfo
-                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady =
-                    rootResultWireProducerCandidateUnownedRemoval
-                    && edgeInfo
-                           .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence;
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidatePrimaryRemoval =
-                    edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady
+                    = rootResultWireProducerCandidateUnownedRemoval
+                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence;
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidatePrimaryRemoval
+                    = edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
                     && edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedPrimaryRemoval;
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateSecondaryRemoval =
-                    edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
+                edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateSecondaryRemoval
+                    = edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
                     && edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedSecondaryRemoval;
-                const bool rootOpenCurrentMemberProducerCandidate =
-                    !edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
+                const bool rootOpenCurrentMemberProducerCandidate
+                    = !edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
                     && edgeInfo.helperOpenExportOverrideSuperEdgeMemberEdgeInfo
                     && edgeInfo.helperOpenExportOverrideSuperEdgeRootOpenLifecycleEdgeInfo
-                    && edgeInfo
-                           .helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo
+                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo
                     && rootEdgeInfo.superEdgeMaterialized && !rootEdgeInfo.superEdge.IsNull();
                 if ((edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
                      || rootOpenCurrentMemberProducerCandidate)
                     && rootEdgeInfo.superEdgeInfo != 0U) {
-                    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                    // FreeCAD:
+                    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
                     // ::WireJoinerP::findSuperEdgesUpdateFirst() walks every "current" member,
                     // sets members to "current->iteration = -1", and stores the materialized
                     // result on the root "first->superEdge". Track the whole member set here so
@@ -2538,65 +2624,64 @@ void WireJoiner::applyHelperOpenExportOverridePlan(WireInfo& info,
                             continue;
                         }
                         appendUniqueSourceIndex(
-                            edgeInfo
-                                .helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices,
-                            memberIndex);
+                            edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices,
+                            memberIndex
+                        );
                         if (memberIndex == *selectedSourceEdgeInfoIndex) {
-                            edgeInfo
-                                .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo =
-                                true;
+                            edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo
+                                = true;
                         }
                         else {
                             appendUniqueSourceIndex(
-                                edgeInfo
-                                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices,
-                                memberIndex);
+                                edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices,
+                                memberIndex
+                            );
                         }
                     }
                 }
             }
-            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo =
-                !edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices.empty();
-            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices =
-                edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices;
-            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeIndices =
-                edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeIndices;
-            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceLineage =
-                !edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeIndices.empty();
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo
+                = !edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices.empty();
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices
+                = edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices;
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeIndices
+                = edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeIndices;
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceLineage
+                = !edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeIndices.empty();
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
             // ::WireJoinerP::buildClosedWire() calls "aHistory->Remove(info.edge)" from the
             // outer EdgeInfo that caused removal. Record whether that Remove source is in the
             // selected helper EdgeInfo's request-local sourceEdgeArray lineage; foreign lineage is
             // still a producer gap, not a reason to force removed targets into openWireCompound.
-            edgeInfo.helperOpenExportOverrideAHistoryRemoveSameSourceLineage =
-                sourceEdgeIndicesIntersect(edgeInfo.sourceEdgeIndices,
-                                           edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeIndices);
-            edgeInfo.helperOpenExportOverrideAHistoryRemoveForeignSourceLineage =
-                edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceLineage
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveSameSourceLineage = sourceEdgeIndicesIntersect(
+                edgeInfo.sourceEdgeIndices,
+                edgeInfo.buildClosedWireAHistoryRemoveSourceEdgeIndices
+            );
+            edgeInfo.helperOpenExportOverrideAHistoryRemoveForeignSourceLineage
+                = edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceLineage
                 && !edgeInfo.helperOpenExportOverrideAHistoryRemoveSameSourceLineage;
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
             // ::WireJoinerP::build() keeps the original "sourceEdges" set, while ::getOpenWires()
             // consumes "MapperHistory(aHistory)". This records whether the selected helper export's
             // request-local sourceEdgeArray lineage group already contains an EdgeInfo that was
-            // strictly passed to "aHistory->Remove(info.edge)"; it does not promote this EdgeInfo to
-            // that Remove source.
-            edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices =
-                sourceLineageRemovedSourceEdgeInfoIndices;
-            edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo =
-                !edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices.empty();
+            // strictly passed to "aHistory->Remove(info.edge)"; it does not promote this EdgeInfo
+            // to that Remove source.
+            edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices
+                = sourceLineageRemovedSourceEdgeInfoIndices;
+            edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo
+                = !edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices.empty();
             edgeInfo.purgeAsOriginalOpenEdge = false;
             continue;
         }
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
         // ::WireJoinerP::build() never appends a detached EdgeInfo for result-wire export; it only
-        // emits existing final EdgeInfo states through "openWireCompound". If the transitional helper
-        // cannot bind one generated export edge to one final EdgeInfo, keep it as M3 risk evidence
-        // instead of turning it into output geometry.
+        // emits existing final EdgeInfo states through "openWireCompound". If the transitional
+        // helper cannot bind one generated export edge to one final EdgeInfo, keep it as M3 risk
+        // evidence instead of turning it into output geometry.
     }
 
     for (EdgeInfo& edgeInfo : info.edges) {
-        if (!edgeInfo.helperOpenExportOverride
-            || edgeInfo.helperOpenExportOverrideSourceEdgeExportShape
+        if (!edgeInfo.helperOpenExportOverride || edgeInfo.helperOpenExportOverrideSourceEdgeExportShape
             || !edgeInfo.helperOpenExportOverrideAHistoryRemoveForeignSourceLineage
             || !edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo) {
             continue;
@@ -2616,13 +2701,13 @@ void WireJoiner::applyHelperOpenExportOverridePlan(WireInfo& info,
             // ::WireJoinerP::buildClosedWire() records producer evidence with
             // "aHistory->Remove(info.edge)". If a foreign Remove source blocks this helper slot but
             // a strict same-lineage sidecar is already source-shaped, reuse that sidecar's producer
-            // curve with the current result vertices. Prefer the already-shaped sidecar output, then
-            // fall back to the exact EdgeInfo::edge that FreeCAD passed to aHistory.
-            sidecarSourceEdgeExportShape =
-                edgeWithProducerCurveAndResultVertices(sidecar.openExportEdge(), resultEdge);
+            // curve with the current result vertices. Prefer the already-shaped sidecar output,
+            // then fall back to the exact EdgeInfo::edge that FreeCAD passed to aHistory.
+            sidecarSourceEdgeExportShape
+                = edgeWithProducerCurveAndResultVertices(sidecar.openExportEdge(), resultEdge);
             if (!sidecarSourceEdgeExportShape || sidecarSourceEdgeExportShape->IsNull()) {
-                sidecarSourceEdgeExportShape =
-                    edgeWithProducerCurveAndResultVertices(sidecar.edge, resultEdge);
+                sidecarSourceEdgeExportShape
+                    = edgeWithProducerCurveAndResultVertices(sidecar.edge, resultEdge);
             }
             if (sidecarSourceEdgeExportShape && !sidecarSourceEdgeExportShape->IsNull()) {
                 break;
@@ -2636,12 +2721,14 @@ void WireJoiner::applyHelperOpenExportOverridePlan(WireInfo& info,
     }
 }
 
-void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
-                                         const std::vector<TopoDS_Wire>* closedWires,
-                                         const std::vector<TopoDS_Edge>* openEdges,
-                                         bool splitProducedBoundedFaces)
+void WireJoiner::buildFinalEdgeOwnership(
+    const TopoDS_Shape* boundedFaceShape,
+    const std::vector<TopoDS_Wire>* closedWires,
+    const std::vector<TopoDS_Edge>* openEdges,
+    bool splitProducedBoundedFaces
+)
 {
-    historySummary_ = WireJoinerHistorySummary{};
+    historySummary_ = WireJoinerHistorySummary {};
     std::vector<TopoDS_Edge> inputEdges;
     for (const WireInfo& info : openWires_) {
         for (const EdgeInfo& edgeInfo : info.edges) {
@@ -2662,9 +2749,8 @@ void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
     }
     historySummary_ = splitResult.history;
     const std::vector<TopoDS_Face> boundedFaces = boundedFaceShape ? facesForShape(*boundedFaceShape)
-                                                                   : std::vector<TopoDS_Face>{};
-    const bool assignTightBoundOwners =
-        splitProducedBoundedFaces || !openEdges || openEdges->empty();
+                                                                   : std::vector<TopoDS_Face> {};
+    const bool assignTightBoundOwners = splitProducedBoundedFaces || !openEdges || openEdges->empty();
     WireInfo finalInfo;
     finalInfo.id = nextWireInfoId_++;
     const std::vector<TopoDS_Wire> finalWires = wiresFromEdges(splitEdges);
@@ -2682,8 +2768,8 @@ void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
         // vertices. This temporary bridge is now constrained to unsplit EdgeInfo entries that
         // still share an original source vertex identity; bounded-face midpoint checks are not
         // part of FreeCAD's noOriginal purge rule.
-        edgeInfo.purgeAsOriginalOpenEdge =
-            !edgeInfo.splitFromInputEdge && (edgeInfo.sourceVertexIdentity[0] || edgeInfo.sourceVertexIdentity[1]);
+        edgeInfo.purgeAsOriginalOpenEdge = !edgeInfo.splitFromInputEdge
+            && (edgeInfo.sourceVertexIdentity[0] || edgeInfo.sourceVertexIdentity[1]);
         finalInfo.edges.push_back(edgeInfo);
     }
 
@@ -2702,23 +2788,27 @@ void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
         recordTightBoundLifecycle(finalInfo);
     }
     else {
-        finalInfo.done = std::any_of(finalInfo.edges.begin(), finalInfo.edges.end(), [](const EdgeInfo& edgeInfo) {
-            return edgeInfo.wireInfo != 0U;
-        });
+        finalInfo.done = std::any_of(
+            finalInfo.edges.begin(),
+            finalInfo.edges.end(),
+            [](const EdgeInfo& edgeInfo) { return edgeInfo.wireInfo != 0U; }
+        );
     }
-    const bool hasOpenWireOutput = std::any_of(finalInfo.edges.begin(),
-                                               finalInfo.edges.end(),
-                                               [this](const EdgeInfo& edgeInfo) {
-                                                   return edgeInfoExportsOpenWireCompound(edgeInfo);
-                                               });
+    const bool hasOpenWireOutput = std::any_of(
+        finalInfo.edges.begin(),
+        finalInfo.edges.end(),
+        [this](const EdgeInfo& edgeInfo) { return edgeInfoExportsOpenWireCompound(edgeInfo); }
+    );
     HelperOpenExportOverridePlan helperOpenExportOverridePlan;
     if (boundedFaceShape && closedWires && openEdges) {
-        helperOpenExportOverridePlan = computeHelperOpenExportOverridePlan(finalInfo,
-                                                                           *boundedFaceShape,
-                                                                           *closedWires,
-                                                                           *openEdges,
-                                                                           splitProducedBoundedFaces,
-                                                                           hasOpenWireOutput);
+        helperOpenExportOverridePlan = computeHelperOpenExportOverridePlan(
+            finalInfo,
+            *boundedFaceShape,
+            *closedWires,
+            *openEdges,
+            splitProducedBoundedFaces,
+            hasOpenWireOutput
+        );
     }
     if (finalInfo.done) {
         recordExhaustTightBoundLifecycle(finalInfo);
@@ -2733,7 +2823,8 @@ void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
     std::size_t openExportIndex = 0;
     for (std::size_t edgeInfoIndex = 0; edgeInfoIndex < finalInfo.edges.size(); ++edgeInfoIndex) {
         const EdgeInfo& edgeInfo = finalInfo.edges[edgeInfoIndex];
-        const bool exportsOpenEdge = edgeInfo.hasOpenExportOverride() || edgeInfoExportsOpenWireCompound(edgeInfo);
+        const bool exportsOpenEdge = edgeInfo.hasOpenExportOverride()
+            || edgeInfoExportsOpenWireCompound(edgeInfo);
         if (!exportsOpenEdge) {
             continue;
         }
@@ -2741,12 +2832,14 @@ void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
         WireJoinerOpenExportHistoryEntry entry;
         entry.openExportIndex = openExportIndex;
         entry.edgeInfoIndex = edgeInfoIndex;
+        entry.openExportWire = edgeInfo.openExportWire();
+        entry.openExportEdge = edgeInfo.openExportEdge();
         entry.sourceEdgeIndices = edgeInfo.sourceEdgeIndices;
         entry.sourceLineageFromSplitterHistory = edgeInfo.sourceLineageFromSplitterHistory;
         entry.helperOpenExportOverride = edgeInfo.helperOpenExportOverride;
         entry.helperOpenExportOverrideReason = edgeInfo.helperOpenExportOverrideReason;
-        entry.purgeBridge =
-            edgeInfo.helperOpenExportOverride ? false : edgeInfo.purgeAsOriginalOpenEdge;
+        entry.purgeBridge = edgeInfo.helperOpenExportOverride ? false
+                                                              : edgeInfo.purgeAsOriginalOpenEdge;
         entry.resultWireProducer = edgeInfo.resultWireProducer;
         historySummary_.openExportEntries.push_back(std::move(entry));
     }
@@ -2868,7 +2961,7 @@ void WireJoiner::rebuildAdjacentList(WireInfo& info)
         if (edge.edge.IsNull() || edge.iteration < 0) {
             continue;
         }
-        const std::array<gp_Pnt, 2> endpoints{edge.p1, edge.p2};
+        const std::array<gp_Pnt, 2> endpoints {edge.p1, edge.p2};
         for (int endpointIndex = 0; endpointIndex < 2; ++endpointIndex) {
             if (edge.iStart[endpointIndex] >= 0) {
                 continue;
@@ -2880,10 +2973,10 @@ void WireJoiner::rebuildAdjacentList(WireInfo& info)
                     continue;
                 }
                 if (samePoint(other.p1, endpoints[endpointIndex])) {
-                    info.adjacentVertices.push_back(WireVertex{otherIndex, true});
+                    info.adjacentVertices.push_back(WireVertex {otherIndex, true});
                 }
                 if (samePoint(other.p2, endpoints[endpointIndex])) {
-                    info.adjacentVertices.push_back(WireVertex{otherIndex, false});
+                    info.adjacentVertices.push_back(WireVertex {otherIndex, false});
                 }
             }
             const int rangeEnd = static_cast<int>(info.adjacentVertices.size());
@@ -2902,9 +2995,11 @@ void WireJoiner::rebuildAdjacentList(WireInfo& info)
     }
 }
 
-std::optional<WireJoiner::WireVertex> WireJoiner::soleActiveAdjacentEdge(const WireInfo& info,
-                                                                         std::size_t edgeIndex,
-                                                                         int endpointIndex) const
+std::optional<WireJoiner::WireVertex> WireJoiner::soleActiveAdjacentEdge(
+    const WireInfo& info,
+    std::size_t edgeIndex,
+    int endpointIndex
+) const
 {
     if (edgeIndex >= info.edges.size() || endpointIndex < 0 || endpointIndex > 1) {
         return std::nullopt;
@@ -2915,8 +3010,10 @@ std::optional<WireJoiner::WireVertex> WireJoiner::soleActiveAdjacentEdge(const W
     }
 
     std::optional<WireVertex> found;
-    for (int adjacentIndex = edge.iStart[endpointIndex]; adjacentIndex < edge.iEnd[endpointIndex]; ++adjacentIndex) {
-        if (adjacentIndex < 0 || static_cast<std::size_t>(adjacentIndex) >= info.adjacentVertices.size()) {
+    for (int adjacentIndex = edge.iStart[endpointIndex]; adjacentIndex < edge.iEnd[endpointIndex];
+         ++adjacentIndex) {
+        if (adjacentIndex < 0
+            || static_cast<std::size_t>(adjacentIndex) >= info.adjacentVertices.size()) {
             continue;
         }
         const WireVertex& adjacent = info.adjacentVertices[static_cast<std::size_t>(adjacentIndex)];
@@ -2935,11 +3032,13 @@ std::optional<WireJoiner::WireVertex> WireJoiner::soleActiveAdjacentEdge(const W
     return found;
 }
 
-void WireJoiner::extendSuperEdgeCandidate(const WireInfo& info,
-                                          std::deque<WireVertex>& vertices,
-                                          std::vector<bool>& used,
-                                          bool appendBack,
-                                          bool& closed) const
+void WireJoiner::extendSuperEdgeCandidate(
+    const WireInfo& info,
+    std::deque<WireVertex>& vertices,
+    std::vector<bool>& used,
+    bool appendBack,
+    bool& closed
+) const
 {
     while (!closed && !vertices.empty()) {
         const WireVertex current = appendBack ? vertices.back() : vertices.front();
@@ -2948,8 +3047,8 @@ void WireJoiner::extendSuperEdgeCandidate(const WireInfo& info,
         }
 
         const int endpointIndex = appendBack ? (current.start ? 1 : 0) : (current.start ? 0 : 1);
-        const std::optional<WireVertex> adjacent =
-            soleActiveAdjacentEdge(info, current.edgeIndex, endpointIndex);
+        const std::optional<WireVertex> adjacent
+            = soleActiveAdjacentEdge(info, current.edgeIndex, endpointIndex);
         if (!adjacent) {
             return;
         }
@@ -2963,10 +3062,10 @@ void WireJoiner::extendSuperEdgeCandidate(const WireInfo& info,
 
         used[adjacent->edgeIndex] = true;
         if (appendBack) {
-            vertices.push_back(WireVertex{adjacent->edgeIndex, adjacent->start});
+            vertices.push_back(WireVertex {adjacent->edgeIndex, adjacent->start});
         }
         else {
-            vertices.push_front(WireVertex{adjacent->edgeIndex, !adjacent->start});
+            vertices.push_front(WireVertex {adjacent->edgeIndex, !adjacent->start});
         }
     }
 }
@@ -2976,8 +3075,8 @@ void WireJoiner::recordSuperEdgeCandidates(WireInfo& info)
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::buildAdjacentListSkipEdges(), calls findSuperEdges() before the
     // "Skip edges that are connected to only one end" loop when merge/tight-bound is enabled.
-    // This records equivalent request-local candidate chains but does not yet replace EdgeInfo::edge
-    // with EdgeInfo::superEdge or change openWireCompound export.
+    // This records equivalent request-local candidate chains but does not yet replace
+    // EdgeInfo::edge with EdgeInfo::superEdge or change openWireCompound export.
     info.superEdges.clear();
     for (EdgeInfo& edge : info.edges) {
         edge.superEdgeInfo = 0;
@@ -3015,7 +3114,7 @@ void WireJoiner::recordSuperEdgeCandidates(WireInfo& info)
 
         std::deque<WireVertex> vertices;
         std::vector<bool> used(info.edges.size(), false);
-        vertices.push_back(WireVertex{edgeIndex, true});
+        vertices.push_back(WireVertex {edgeIndex, true});
         used[edgeIndex] = true;
         bool closed = false;
         extendSuperEdgeCandidate(info, vertices, used, false, closed);
@@ -3084,30 +3183,38 @@ void WireJoiner::recordSuperEdgeCandidates(WireInfo& info)
                         else if (member.superEdgeEndpointRewriteIndex == 1) {
                             member.p2 = member.superEdgeEndpointRewritePoint;
                         }
-                        if (member.superEdgeAdjacentRangeStart >= 0 && member.superEdgeAdjacentRangeEnd >= 0) {
+                        if (member.superEdgeAdjacentRangeStart >= 0
+                            && member.superEdgeAdjacentRangeEnd >= 0) {
                             member.iStart[rootRewriteEndpoint] = member.superEdgeAdjacentRangeStart;
                             member.iEnd[rootRewriteEndpoint] = member.superEdgeAdjacentRangeEnd;
                             for (int adjacentIndex = member.superEdgeAdjacentRangeStart;
                                  adjacentIndex < member.superEdgeAdjacentRangeEnd;
                                  ++adjacentIndex) {
                                 if (adjacentIndex < 0
-                                    || static_cast<std::size_t>(adjacentIndex) >= info.adjacentVertices.size()) {
+                                    || static_cast<std::size_t>(adjacentIndex)
+                                        >= info.adjacentVertices.size()) {
                                     continue;
                                 }
-                                WireVertex& adjacent =
-                                    info.adjacentVertices[static_cast<std::size_t>(adjacentIndex)];
+                                WireVertex& adjacent
+                                    = info.adjacentVertices[static_cast<std::size_t>(adjacentIndex)];
                                 if (adjacent.edgeIndex == lastVertex.edgeIndex) {
                                     adjacent.edgeIndex = rootVertex.edgeIndex;
                                     adjacent.start = !rootVertex.start;
                                 }
                             }
                         }
-                        const bool rootEndpointSourceIdentity = rootVertex.edgeIndex < info.edges.size()
-                            && info.edges[rootVertex.edgeIndex].sourceVertexIdentity[rootVertex.start ? 0 : 1];
-                        const bool rewrittenEndpointSourceIdentity = lastVertex.edgeIndex < info.edges.size()
-                            && info.edges[lastVertex.edgeIndex].sourceVertexIdentity[lastVertex.start ? 1 : 0];
-                        member.sourceVertexIdentity[rootVertex.start ? 0 : 1] = rootEndpointSourceIdentity;
-                        member.sourceVertexIdentity[rootRewriteEndpoint] = rewrittenEndpointSourceIdentity;
+                        const bool rootEndpointSourceIdentity = rootVertex.edgeIndex
+                                < info.edges.size()
+                            && info.edges[rootVertex.edgeIndex]
+                                   .sourceVertexIdentity[rootVertex.start ? 0 : 1];
+                        const bool rewrittenEndpointSourceIdentity = lastVertex.edgeIndex
+                                < info.edges.size()
+                            && info.edges[lastVertex.edgeIndex]
+                                   .sourceVertexIdentity[lastVertex.start ? 1 : 0];
+                        member.sourceVertexIdentity[rootVertex.start ? 0 : 1]
+                            = rootEndpointSourceIdentity;
+                        member.sourceVertexIdentity[rootRewriteEndpoint]
+                            = rewrittenEndpointSourceIdentity;
                     }
                 }
                 rootAssigned = true;
@@ -3147,10 +3254,12 @@ bool WireJoiner::markOpenLeafEdges(WireInfo& info)
                 for (int adjacentIndex = edge.iStart[endpointIndex];
                      adjacentIndex < edge.iEnd[endpointIndex];
                      ++adjacentIndex) {
-                    if (adjacentIndex < 0 || static_cast<std::size_t>(adjacentIndex) >= info.adjacentVertices.size()) {
+                    if (adjacentIndex < 0
+                        || static_cast<std::size_t>(adjacentIndex) >= info.adjacentVertices.size()) {
                         continue;
                     }
-                    const WireVertex& adjacent = info.adjacentVertices[static_cast<std::size_t>(adjacentIndex)];
+                    const WireVertex& adjacent
+                        = info.adjacentVertices[static_cast<std::size_t>(adjacentIndex)];
                     if (adjacent.edgeIndex >= info.edges.size() || adjacent.edgeIndex == edgeIndex) {
                         continue;
                     }
@@ -3286,7 +3395,7 @@ void WireJoiner::rebuildOrderedVertices(WireInfo& info)
         }
 
         std::deque<WireVertex> component;
-        component.push_back(WireVertex{startIndex, true});
+        component.push_back(WireVertex {startIndex, true});
         used[startIndex] = true;
         auto [currentStart, currentEnd] = edgeEndpoints(info.edges[startIndex].edge);
 
@@ -3299,28 +3408,28 @@ void WireJoiner::rebuildOrderedVertices(WireInfo& info)
                 }
                 const auto [edgeStart, edgeEnd] = edgeEndpoints(info.edges[index].edge);
                 if (samePoint(edgeStart, currentEnd)) {
-                    component.push_back(WireVertex{index, true});
+                    component.push_back(WireVertex {index, true});
                     currentEnd = edgeEnd;
                     used[index] = true;
                     extended = true;
                     break;
                 }
                 if (samePoint(edgeEnd, currentEnd)) {
-                    component.push_back(WireVertex{index, false});
+                    component.push_back(WireVertex {index, false});
                     currentEnd = edgeStart;
                     used[index] = true;
                     extended = true;
                     break;
                 }
                 if (samePoint(edgeEnd, currentStart)) {
-                    component.push_front(WireVertex{index, true});
+                    component.push_front(WireVertex {index, true});
                     currentStart = edgeStart;
                     used[index] = true;
                     extended = true;
                     break;
                 }
                 if (samePoint(edgeStart, currentStart)) {
-                    component.push_front(WireVertex{index, false});
+                    component.push_front(WireVertex {index, false});
                     currentStart = edgeEnd;
                     used[index] = true;
                     extended = true;
@@ -3343,7 +3452,8 @@ void WireJoiner::rebuildOrderedVertices(WireInfo& info)
 
 std::optional<WireJoiner::ClosedWireSearchResult> WireJoiner::findClosedWirePath(
     const WireInfo& info,
-    std::size_t beginEdgeIndex) const
+    std::size_t beginEdgeIndex
+) const
 {
     if (beginEdgeIndex >= info.edges.size()) {
         return std::nullopt;
@@ -3354,7 +3464,7 @@ std::optional<WireJoiner::ClosedWireSearchResult> WireJoiner::findClosedWirePath
     }
 
     ClosedWireSearchResult result;
-    result.vertices.push_back(WireVertex{beginEdgeIndex, true});
+    result.vertices.push_back(WireVertex {beginEdgeIndex, true});
     if (samePoint(beginInfo.p1, beginInfo.p2)) {
         return result;
     }
@@ -3394,8 +3504,10 @@ std::optional<WireJoiner::ClosedWireSearchResult> WireJoiner::findClosedWirePath
                     || static_cast<std::size_t>(adjacentIndex) >= info.adjacentVertices.size()) {
                     continue;
                 }
-                const WireVertex& adjacent = info.adjacentVertices[static_cast<std::size_t>(adjacentIndex)];
-                if (adjacent.edgeIndex >= info.edges.size() || adjacent.edgeIndex == currentEdgeIndex) {
+                const WireVertex& adjacent
+                    = info.adjacentVertices[static_cast<std::size_t>(adjacentIndex)];
+                if (adjacent.edgeIndex >= info.edges.size()
+                    || adjacent.edgeIndex == currentEdgeIndex) {
                     continue;
                 }
                 const EdgeInfo& candidate = info.edges[adjacent.edgeIndex];
@@ -3432,7 +3544,10 @@ std::optional<WireJoiner::ClosedWireSearchResult> WireJoiner::findClosedWirePath
                 break;
             }
 
-            vertexStack.erase(vertexStack.begin() + static_cast<long>(currentFrame.start), vertexStack.end());
+            vertexStack.erase(
+                vertexStack.begin() + static_cast<long>(currentFrame.start),
+                vertexStack.end()
+            );
             stack.pop_back();
             ++result.backtrackCount;
             if (stack.size() == stackEnd) {
@@ -3456,7 +3571,7 @@ std::optional<WireJoiner::ClosedWireSearchResult> WireJoiner::findClosedWirePath
         }
 
         result.vertices.clear();
-        result.vertices.push_back(WireVertex{beginEdgeIndex, true});
+        result.vertices.push_back(WireVertex {beginEdgeIndex, true});
         for (const ClosedWireSearchFrame& selectedFrame : stack) {
             if (selectedFrame.current < vertexStack.size()) {
                 result.vertices.push_back(vertexStack[selectedFrame.current]);
@@ -3533,8 +3648,10 @@ gp_Pnt WireJoiner::vertexOtherPoint(const WireInfo& info, const WireVertex& vert
     return vertex.start ? edge.p2 : edge.p1;
 }
 
-std::optional<std::size_t> WireJoiner::ownerVertexIndex(const OwnerWireInfo& owner,
-                                                        const WireVertex& vertex) const
+std::optional<std::size_t> WireJoiner::ownerVertexIndex(
+    const OwnerWireInfo& owner,
+    const WireVertex& vertex
+) const
 {
     for (std::size_t index = 0; index < owner.vertices.size(); ++index) {
         const WireVertex& ownerVertex = owner.vertices[index];
@@ -3548,7 +3665,8 @@ std::optional<std::size_t> WireJoiner::ownerVertexIndex(const OwnerWireInfo& own
 WireJoiner::TightBoundExistingWireSearchTrace WireJoiner::traceExistingWireSearchForCandidate(
     const WireInfo& info,
     const OwnerWireInfo& owner,
-    const TightBoundBranchCandidate& candidate) const
+    const TightBoundBranchCandidate& candidate
+) const
 {
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::_findClosedWiresWithExisting(), called from
@@ -3556,7 +3674,8 @@ WireJoiner::TightBoundExistingWireSearchTrace WireJoiner::traceExistingWireSearc
     // existing "wireInfo" vertex, the reversed vertex, or an already visited edgeSet entry before
     // it decides idxVertex/stackPos or marks "wireInfo->purge = true".
     TightBoundExistingWireSearchTrace trace;
-    if (!candidate.inside || !candidate.transfersOwnerEdge || candidate.adjacentVertex.edgeIndex >= info.edges.size()) {
+    if (!candidate.inside || !candidate.transfersOwnerEdge
+        || candidate.adjacentVertex.edgeIndex >= info.edges.size()) {
         return trace;
     }
 
@@ -3593,13 +3712,16 @@ WireJoiner::TightBoundExistingWireSearchTrace WireJoiner::traceExistingWireSearc
         }
 
         ++trace.stackFrameCount;
-        for (int adjacentIndex = current.iStart[endpointIndex]; adjacentIndex < current.iEnd[endpointIndex];
+        for (int adjacentIndex = current.iStart[endpointIndex];
+             adjacentIndex < current.iEnd[endpointIndex];
              ++adjacentIndex) {
-            if (adjacentIndex < 0 || static_cast<std::size_t>(adjacentIndex) >= info.adjacentVertices.size()) {
+            if (adjacentIndex < 0
+                || static_cast<std::size_t>(adjacentIndex) >= info.adjacentVertices.size()) {
                 continue;
             }
             const WireVertex& adjacent = info.adjacentVertices[static_cast<std::size_t>(adjacentIndex)];
-            if (adjacent.edgeIndex >= info.edges.size() || adjacent.edgeIndex == currentVertex.edgeIndex) {
+            if (adjacent.edgeIndex >= info.edges.size()
+                || adjacent.edgeIndex == currentVertex.edgeIndex) {
                 continue;
             }
             const EdgeInfo& next = info.edges[adjacent.edgeIndex];
@@ -3674,22 +3796,26 @@ WireJoiner::TightBoundExistingWireSearchTrace WireJoiner::traceExistingWireSearc
     return trace;
 }
 
-bool WireJoiner::findTightBoundBranchPathToPoint(const WireInfo& info,
-                                                 const OwnerWireInfo& owner,
-                                                 const gp_Pnt& current,
-                                                 const gp_Pnt& target,
-                                                 std::vector<bool>& usedEdges,
-                                                 std::vector<WireVertex>& path) const
+bool WireJoiner::findTightBoundBranchPathToPoint(
+    const WireInfo& info,
+    const OwnerWireInfo& owner,
+    const gp_Pnt& current,
+    const gp_Pnt& target,
+    std::vector<bool>& usedEdges,
+    std::vector<WireVertex>& path
+) const
 {
     return findBranchPathToPointSkippingOwner(info, owner.id, current, target, usedEdges, path);
 }
 
-bool WireJoiner::findBranchPathToPointSkippingOwner(const WireInfo& info,
-                                                    std::size_t skipOwnerId,
-                                                    const gp_Pnt& current,
-                                                    const gp_Pnt& target,
-                                                    std::vector<bool>& usedEdges,
-                                                    std::vector<WireVertex>& path) const
+bool WireJoiner::findBranchPathToPointSkippingOwner(
+    const WireInfo& info,
+    std::size_t skipOwnerId,
+    const gp_Pnt& current,
+    const gp_Pnt& target,
+    std::vector<bool>& usedEdges,
+    std::vector<WireVertex>& path
+) const
 {
     if (samePoint(current, target)) {
         return true;
@@ -3707,11 +3833,11 @@ bool WireJoiner::findBranchPathToPointSkippingOwner(const WireInfo& info,
         std::optional<WireVertex> nextVertex;
         gp_Pnt nextPoint;
         if (samePoint(edge.p1, current)) {
-            nextVertex = WireVertex{edgeIndex, true, 0U};
+            nextVertex = WireVertex {edgeIndex, true, 0U};
             nextPoint = edge.p2;
         }
         else if (samePoint(edge.p2, current)) {
-            nextVertex = WireVertex{edgeIndex, false, 0U};
+            nextVertex = WireVertex {edgeIndex, false, 0U};
             nextPoint = edge.p1;
         }
         else {
@@ -3732,7 +3858,8 @@ bool WireJoiner::findBranchPathToPointSkippingOwner(const WireInfo& info,
 std::optional<WireJoiner::TightBoundTransferPath> WireJoiner::tightBoundTransferPathForCandidate(
     const WireInfo& info,
     const OwnerWireInfo& owner,
-    const TightBoundBranchCandidate& candidate) const
+    const TightBoundBranchCandidate& candidate
+) const
 {
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::findTightBoundByVertices(), calls
@@ -3743,12 +3870,11 @@ std::optional<WireJoiner::TightBoundTransferPath> WireJoiner::tightBoundTransfer
         return std::nullopt;
     }
 
-    const auto ownerVertexIt = std::find_if(owner.vertices.begin(),
-                                            owner.vertices.end(),
-                                            [&](const WireVertex& vertex) {
-                                                return vertex.edgeIndex == candidate.ownerVertex.edgeIndex
-                                                    && vertex.start == candidate.ownerVertex.start;
-                                            });
+    const auto ownerVertexIt
+        = std::find_if(owner.vertices.begin(), owner.vertices.end(), [&](const WireVertex& vertex) {
+              return vertex.edgeIndex == candidate.ownerVertex.edgeIndex
+                  && vertex.start == candidate.ownerVertex.start;
+          });
     if (ownerVertexIt == owner.vertices.end()) {
         return std::nullopt;
     }
@@ -3804,7 +3930,8 @@ std::optional<WireJoiner::TightBoundTransferPath> WireJoiner::tightBoundTransfer
     const OwnerWireInfo& owner,
     const TightBoundBranchCandidate& candidate,
     const TightBoundExistingWireSearchTrace& trace,
-    TightBoundExistingWirePathBlockReason* blockReason) const
+    TightBoundExistingWirePathBlockReason* blockReason
+) const
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::_findClosedWiresWithExisting() writes "idxVertex" and "stackPos" when the
@@ -3816,12 +3943,11 @@ std::optional<WireJoiner::TightBoundTransferPath> WireJoiner::tightBoundTransfer
     if (!trace.hit || trace.idxVertex < 0 || trace.stackPos < 0 || trace.hitPath.empty()) {
         return std::nullopt;
     }
-    const auto ownerVertexIt = std::find_if(owner.vertices.begin(),
-                                            owner.vertices.end(),
-                                            [&](const WireVertex& vertex) {
-                                                return vertex.edgeIndex == candidate.ownerVertex.edgeIndex
-                                                    && vertex.start == candidate.ownerVertex.start;
-                                            });
+    const auto ownerVertexIt
+        = std::find_if(owner.vertices.begin(), owner.vertices.end(), [&](const WireVertex& vertex) {
+              return vertex.edgeIndex == candidate.ownerVertex.edgeIndex
+                  && vertex.start == candidate.ownerVertex.start;
+          });
     if (ownerVertexIt == owner.vertices.end()) {
         if (blockReason != nullptr) {
             *blockReason = TightBoundExistingWirePathBlockReason::OwnerVertexMissing;
@@ -3829,7 +3955,8 @@ std::optional<WireJoiner::TightBoundTransferPath> WireJoiner::tightBoundTransfer
         return std::nullopt;
     }
     const std::size_t ownerVertexIndex = static_cast<std::size_t>(
-        std::distance(owner.vertices.begin(), ownerVertexIt));
+        std::distance(owner.vertices.begin(), ownerVertexIt)
+    );
     const std::size_t hitIndex = static_cast<std::size_t>(trace.idxVertex);
     if (hitIndex >= owner.vertices.size() || ownerVertexIndex + 1U > hitIndex) {
         if (blockReason != nullptr) {
@@ -3840,7 +3967,8 @@ std::optional<WireJoiner::TightBoundTransferPath> WireJoiner::tightBoundTransfer
 
     TightBoundTransferPath path;
     path.transferVertices.push_back(owner.vertices.front());
-    path.transferVertices.insert(path.transferVertices.end(), trace.hitPath.begin(), trace.hitPath.end());
+    path.transferVertices
+        .insert(path.transferVertices.end(), trace.hitPath.begin(), trace.hitPath.end());
     for (std::size_t index = hitIndex + 1U; index < owner.vertices.size(); ++index) {
         path.transferVertices.push_back(owner.vertices[index]);
     }
@@ -3921,7 +4049,8 @@ WireJoiner::ExhaustAdjacentSearchTrace WireJoiner::traceExhaustAdjacentSearch(
     const WireInfo& info,
     const WireVertex& beginVertex,
     const WireVertex& adjacentVertex,
-    std::size_t seedOwnerId) const
+    std::size_t seedOwnerId
+) const
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::exhaustTightBoundWithAdjacent(), seeds "edgeSet.insert(next)" and
@@ -3968,11 +4097,14 @@ WireJoiner::ExhaustAdjacentSearchTrace WireJoiner::traceExhaustAdjacentSearch(
         for (int adjacentIndex = current.iStart[endpointIndex];
              adjacentIndex < current.iEnd[endpointIndex];
              ++adjacentIndex) {
-            if (adjacentIndex < 0 || static_cast<std::size_t>(adjacentIndex) >= info.adjacentVertices.size()) {
+            if (adjacentIndex < 0
+                || static_cast<std::size_t>(adjacentIndex) >= info.adjacentVertices.size()) {
                 continue;
             }
-            const WireVertex& nextVertex = info.adjacentVertices[static_cast<std::size_t>(adjacentIndex)];
-            if (nextVertex.edgeIndex >= info.edges.size() || nextVertex.edgeIndex == currentVertex.edgeIndex) {
+            const WireVertex& nextVertex
+                = info.adjacentVertices[static_cast<std::size_t>(adjacentIndex)];
+            if (nextVertex.edgeIndex >= info.edges.size()
+                || nextVertex.edgeIndex == currentVertex.edgeIndex) {
                 continue;
             }
             const EdgeInfo& next = info.edges[nextVertex.edgeIndex];
@@ -4034,14 +4166,16 @@ void WireJoiner::recordExhaustAdjacentSecondaryOwners(WireInfo& info)
             if (edge.iStart[endpointIndex] < 0 || edge.iEnd[endpointIndex] < 0) {
                 continue;
             }
-            const WireVertex beginVertex{edgeIndex, endpointIndex == 0, 0U};
+            const WireVertex beginVertex {edgeIndex, endpointIndex == 0, 0U};
             for (int adjacentIndex = edge.iStart[endpointIndex];
                  adjacentIndex < edge.iEnd[endpointIndex];
                  ++adjacentIndex) {
-                if (adjacentIndex < 0 || static_cast<std::size_t>(adjacentIndex) >= info.adjacentVertices.size()) {
+                if (adjacentIndex < 0
+                    || static_cast<std::size_t>(adjacentIndex) >= info.adjacentVertices.size()) {
                     continue;
                 }
-                const WireVertex& adjacent = info.adjacentVertices[static_cast<std::size_t>(adjacentIndex)];
+                const WireVertex& adjacent
+                    = info.adjacentVertices[static_cast<std::size_t>(adjacentIndex)];
                 if (adjacent.edgeIndex >= info.edges.size() || adjacent.edgeIndex == edgeIndex) {
                     continue;
                 }
@@ -4051,8 +4185,8 @@ void WireJoiner::recordExhaustAdjacentSecondaryOwners(WireInfo& info)
                     || !isDoneOwner(info, candidate.wireInfo)) {
                     continue;
                 }
-                const ExhaustAdjacentSearchTrace trace =
-                    traceExhaustAdjacentSearch(info, beginVertex, adjacent, candidate.wireInfo);
+                const ExhaustAdjacentSearchTrace trace
+                    = traceExhaustAdjacentSearch(info, beginVertex, adjacent, candidate.wireInfo);
                 ++info.exhaustAdjacentSearchCount;
                 info.exhaustAdjacentSearchStackFrameCount += trace.stackFrameCount;
                 info.exhaustAdjacentSearchVertexStackCount += trace.vertexStackCount;
@@ -4096,9 +4230,11 @@ void WireJoiner::recordExhaustTightBoundLifecycle(WireInfo& info)
                 // done2 seed/search/removal while leaving the primary EdgeInfo owner intact
                 // until full repeated split/exhaust can replace the generated result-wire bridge.
                 owner.exhaustVisited = true;
-                const std::vector<WireVertex>& ownerVertices =
-                    owner.splitOwnerVertices.empty() ? owner.vertices : owner.splitOwnerVertices;
-                const std::size_t exhaustOwnerId = owner.splitWireId == 0U ? owner.id : owner.splitWireId;
+                const std::vector<WireVertex>& ownerVertices = owner.splitOwnerVertices.empty()
+                    ? owner.vertices
+                    : owner.splitOwnerVertices;
+                const std::size_t exhaustOwnerId = owner.splitWireId == 0U ? owner.id
+                                                                           : owner.splitWireId;
                 if (owner.purge) {
                     owner.exhaustDiscardedByPurge = true;
                     owner.exhaustDone = false;
@@ -4218,15 +4354,20 @@ void WireJoiner::recordBuildClosedWireRemovalLifecycle(WireInfo& info)
                     edge.buildClosedWireRemovedByPrimaryOwner = true;
                 }
                 if (aHistoryRemoveSourceEdgeIndex < info.edges.size()) {
-                    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                    // FreeCAD:
+                    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
                     // ::WireJoinerP::buildClosedWire(), after "vertex.edgeInfo()->iteration = -1",
                     // calls "aHistory->Remove(info.edge)" using the outer loop EdgeInfo. Keep the
                     // iteration-removal target and the aHistory Remove source as separate evidence.
                     info.edges[aHistoryRemoveSourceEdgeIndex].buildClosedWireAHistoryRemoved = true;
-                    appendUniqueSourceIndex(edge.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices,
-                                            aHistoryRemoveSourceEdgeIndex);
-                    appendUniqueSourceIndices(edge.buildClosedWireAHistoryRemoveSourceEdgeIndices,
-                                              info.edges[aHistoryRemoveSourceEdgeIndex].sourceEdgeIndices);
+                    appendUniqueSourceIndex(
+                        edge.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices,
+                        aHistoryRemoveSourceEdgeIndex
+                    );
+                    appendUniqueSourceIndices(
+                        edge.buildClosedWireAHistoryRemoveSourceEdgeIndices,
+                        info.edges[aHistoryRemoveSourceEdgeIndex].sourceEdgeIndices
+                    );
                 }
                 ++removedCount;
                 if (secondaryOwner) {
@@ -4254,17 +4395,23 @@ void WireJoiner::recordBuildClosedWireRemovalLifecycle(WireInfo& info)
                 edge.buildClosedWireRemoved = true;
                 edge.buildClosedWireRemovedByUnowned = true;
                 edge.buildClosedWireAHistoryRemoved = true;
-                appendUniqueSourceIndex(edge.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices, edgeIndex);
-                appendUniqueSourceIndices(edge.buildClosedWireAHistoryRemoveSourceEdgeIndices,
-                                          edge.sourceEdgeIndices);
+                appendUniqueSourceIndex(
+                    edge.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices,
+                    edgeIndex
+                );
+                appendUniqueSourceIndices(
+                    edge.buildClosedWireAHistoryRemoveSourceEdgeIndices,
+                    edge.sourceEdgeIndices
+                );
                 ++removedCount;
                 ++removedUnownedCount;
                 if (resetDiscardedPrimaryOwner) {
-                    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                    // FreeCAD:
+                    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
                     // ::WireJoinerP::exhaustTightBoundUpdateEdge(), "wireInfo.reset()" for a purged
-                    // owner; ::buildClosedWire() immediately removes still-active unowned edges with
-                    // "info.iteration = -1". Apply both transitions together so the reset does not
-                    // create a transient openWireCompound export.
+                    // owner; ::buildClosedWire() immediately removes still-active unowned edges
+                    // with "info.iteration = -1". Apply both transitions together so the reset does
+                    // not create a transient openWireCompound export.
                     edge.wireInfo = 0U;
                     ++info.tightBoundExhaustPrimaryResetEdgeInfoCount;
                 }
@@ -4291,9 +4438,11 @@ void WireJoiner::recordBuildClosedWireRemovalLifecycle(WireInfo& info)
     }
 }
 
-void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
-                                                          const std::vector<TopoDS_Face>& boundedFaces,
-                                                          const HelperOpenExportOverridePlan& helperPlan)
+void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(
+    WireInfo& info,
+    const std::vector<TopoDS_Face>& boundedFaces,
+    const HelperOpenExportOverridePlan& helperPlan
+)
 {
     if (info.repeatedSplitExhaustCycleCount == 0U) {
         return;
@@ -4304,19 +4453,20 @@ void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
     // "findClosedWires(true); findTightBound();" again. ::findClosedWires(true) first clears
     // "info.wireInfo" and "info.wireInfo2" for every EdgeInfo, then rebuilds owners from the
     // current "iteration" state. cad-core records that reset/rebuild on a temporary WireInfo copy
-    // so the M1 ledger can prove the next search boundary without changing openWireCompound/getOpenWires
-    // output before generated result-wire identity is migrated.
+    // so the M1 ledger can prove the next search boundary without changing
+    // openWireCompound/getOpenWires output before generated result-wire identity is migrated.
     WireInfo rerunInfo = info;
     const std::size_t existingOwnerCount = rerunInfo.ownerWires.size();
     const std::size_t savedNextWireInfoId = nextWireInfoId_;
     const int nextIteration2 = nextIteration2_;
-    const bool helperIdentityUnsafe =
-        helperOpenExportOverridePlanHasUnsafeProducer(info, helperPlan);
+    const bool helperIdentityUnsafe = helperOpenExportOverridePlanHasUnsafeProducer(info, helperPlan);
     const auto helperPlanHasCandidateEdgeInfo = [&](std::size_t edgeIndex) {
         for (const HelperOpenExportOverrideBinding& binding : helperPlan.bindings) {
-            if (std::find(binding.sourceEdgeInfoCandidateIndices.begin(),
-                          binding.sourceEdgeInfoCandidateIndices.end(),
-                          edgeIndex)
+            if (std::find(
+                    binding.sourceEdgeInfoCandidateIndices.begin(),
+                    binding.sourceEdgeInfoCandidateIndices.end(),
+                    edgeIndex
+                )
                 != binding.sourceEdgeInfoCandidateIndices.end()) {
                 return true;
             }
@@ -4347,8 +4497,8 @@ void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
             continue;
         }
         ++info.repeatedSplitExhaustRerunActiveEdgeInfoCount;
-        const bool wasOwnedActive =
-            edgeIndex < info.edges.size() && info.edges[edgeIndex].wireInfo != 0U;
+        const bool wasOwnedActive = edgeIndex < info.edges.size()
+            && info.edges[edgeIndex].wireInfo != 0U;
         if (wasOwnedActive) {
             ++info.repeatedSplitExhaustRerunOwnedActiveEdgeInfoCount;
         }
@@ -4359,10 +4509,12 @@ void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
         const std::optional<ClosedWireSearchResult> search = findClosedWirePath(rerunInfo, edgeIndex);
         if (!search) {
             ++info.repeatedSplitExhaustRerunClosedWireMissCount;
-            if (wasOwnedActive && helperPlanHasCandidateEdgeInfo(edgeIndex) && edgeIndex < info.edges.size()) {
+            if (wasOwnedActive && helperPlanHasCandidateEdgeInfo(edgeIndex)
+                && edgeIndex < info.edges.size()) {
                 EdgeInfo& liveEdge = info.edges[edgeIndex];
                 if (liveEdge.iteration >= 0 && liveEdge.wireInfo != 0U) {
-                    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                    // FreeCAD:
+                    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
                     // ::WireJoinerP::findClosedWires(true), called from ::buildClosedWire() after
                     // consumed-edge removal, first clears "info.wireInfo" and "info.wireInfo2".
                     // If the rerun closed-wire search misses, the active EdgeInfo remains unowned
@@ -4447,18 +4599,19 @@ void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
         return needsPrimaryReset ? assignedEdgeIndices.size() : 0U;
     };
 
-    for (std::size_t ownerIndex = existingOwnerCount; ownerIndex < rerunInfo.ownerWires.size(); ++ownerIndex) {
+    for (std::size_t ownerIndex = existingOwnerCount; ownerIndex < rerunInfo.ownerWires.size();
+         ++ownerIndex) {
         OwnerWireInfo& owner = rerunInfo.ownerWires[ownerIndex];
         info.repeatedSplitExhaustRerunClosedWireVertexCount += owner.vertices.size();
         recordBranchSearchCandidatesForOwner(rerunInfo, owner, boundedFaces);
         info.repeatedSplitExhaustRerunBranchSearchCandidateCount += owner.branchSearchCandidateCount;
-        info.repeatedSplitExhaustRerunBranchSearchInsideCandidateCount +=
-            owner.branchSearchInsideCandidateCount;
-        info.repeatedSplitExhaustRerunBranchSearchOutsideCandidateCount +=
-            owner.branchSearchOutsideCandidateCount;
+        info.repeatedSplitExhaustRerunBranchSearchInsideCandidateCount
+            += owner.branchSearchInsideCandidateCount;
+        info.repeatedSplitExhaustRerunBranchSearchOutsideCandidateCount
+            += owner.branchSearchOutsideCandidateCount;
         if (owner.hasNewWireSeed) {
-            info.repeatedSplitExhaustRerunNewWireSeedCandidateCount +=
-                owner.branchSearchInsideCandidateCount;
+            info.repeatedSplitExhaustRerunNewWireSeedCandidateCount
+                += owner.branchSearchInsideCandidateCount;
         }
 
         const std::size_t resettableAssignedEdges = resettableRerunOwnerAssignedEdgeCount(owner);
@@ -4471,11 +4624,13 @@ void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
             && (owner.branchSearchCandidateCount == 0U || !helperIdentityUnsafe);
         if (!canApplyWithoutReset && !canApplyWithLiveReset) {
             if (helperIdentityUnsafe && resettableAssignedEdges > 0U) {
-                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                // FreeCAD:
+                // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
                 // ::WireJoinerP::buildClosedWire() reruns findClosedWires(true)/findTightBound()
                 // before ::build() emits openWireCompound. If the only live-reset path would mutate
                 // owners while generated result-wire identity is still helper-produced, record the
-                // actual rejected owner edges here instead of deriving it later from generated output count.
+                // actual rejected owner edges here instead of deriving it later from generated
+                // output count.
                 info.repeatedSplitExhaustGeneratedIdentityBlockedEdgeInfoCount += resettableAssignedEdges;
             }
             continue;
@@ -4485,9 +4640,9 @@ void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
         // ::WireJoinerP::buildClosedWire(), after marking consumed edges "iteration = -1",
         // immediately repeats "findClosedWires(true); findTightBound()". If the rerun finds a
         // closed WireInfo whose EdgeInfo entries are still active and unowned, or can be rebuilt by
-        // the FreeCAD reset-before-rerun path without generated open-export identity, cad-core writes
-        // that owner back to the live EdgeInfo ledger. Generated/open-export identity cases still
-        // remain outside this path.
+        // the FreeCAD reset-before-rerun path without generated open-export identity, cad-core
+        // writes that owner back to the live EdgeInfo ledger. Generated/open-export identity cases
+        // still remain outside this path.
         OwnerWireInfo liveOwner;
         liveOwner.id = nextWireInfoId_++;
         liveOwner.vertices = owner.vertices;
@@ -4504,18 +4659,20 @@ void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
         for (const WireVertex& vertex : liveOwner.vertices) {
             EdgeInfo& edge = info.edges[vertex.edgeIndex];
             if (canApplyWithLiveReset && edge.wireInfo != 0U
-                && std::find(liveResetPrimaryEdgeIndices.begin(),
-                             liveResetPrimaryEdgeIndices.end(),
-                             vertex.edgeIndex)
-                    == liveResetPrimaryEdgeIndices.end()) {
+                && std::find(
+                       liveResetPrimaryEdgeIndices.begin(),
+                       liveResetPrimaryEdgeIndices.end(),
+                       vertex.edgeIndex
+                   ) == liveResetPrimaryEdgeIndices.end()) {
                 liveResetPrimaryEdgeIndices.push_back(vertex.edgeIndex);
                 ++info.repeatedSplitExhaustRerunLiveResetPrimaryEdgeInfoCount;
             }
             if (canApplyWithLiveReset && edge.wireInfo2 != 0U
-                && std::find(liveResetSecondaryEdgeIndices.begin(),
-                             liveResetSecondaryEdgeIndices.end(),
-                             vertex.edgeIndex)
-                    == liveResetSecondaryEdgeIndices.end()) {
+                && std::find(
+                       liveResetSecondaryEdgeIndices.begin(),
+                       liveResetSecondaryEdgeIndices.end(),
+                       vertex.edgeIndex
+                   ) == liveResetSecondaryEdgeIndices.end()) {
                 liveResetSecondaryEdgeIndices.push_back(vertex.edgeIndex);
                 ++info.repeatedSplitExhaustRerunLiveResetSecondaryEdgeInfoCount;
                 edge.wireInfo2 = 0U;
@@ -4530,26 +4687,25 @@ void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
         info.ownerWires.push_back(std::move(liveOwner));
         OwnerWireInfo& insertedOwner = info.ownerWires.back();
         recordBranchSearchCandidatesForOwner(info, insertedOwner, boundedFaces);
-        info.repeatedSplitExhaustRerunLiveBranchSearchCandidateCount +=
-            insertedOwner.branchSearchCandidateCount;
-        info.repeatedSplitExhaustRerunLiveBranchSearchInsideCandidateCount +=
-            insertedOwner.branchSearchInsideCandidateCount;
-        info.repeatedSplitExhaustRerunLiveBranchSearchOutsideCandidateCount +=
-            insertedOwner.branchSearchOutsideCandidateCount;
+        info.repeatedSplitExhaustRerunLiveBranchSearchCandidateCount
+            += insertedOwner.branchSearchCandidateCount;
+        info.repeatedSplitExhaustRerunLiveBranchSearchInsideCandidateCount
+            += insertedOwner.branchSearchInsideCandidateCount;
+        info.repeatedSplitExhaustRerunLiveBranchSearchOutsideCandidateCount
+            += insertedOwner.branchSearchOutsideCandidateCount;
 
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
         // ::WireJoinerP::findTightBound(), after a rerun-created WireInfo is found, checks adjacent
         // branch candidates and either creates a new transfer WireInfo or calls
         // ::findTightBoundUpdateVertices() to mark the current WireInfo done. This is limited to the
         // live rerun owner; the next buildClosedWire() removal pass is tracked separately below.
-        const bool transferRecorded =
-            insertedOwner.branchSearchInsideCandidateCount > 0U
+        const bool transferRecorded = insertedOwner.branchSearchInsideCandidateCount > 0U
             && recordTightBoundTransferWire(info, insertedOwner);
         if (transferRecorded) {
             ++info.repeatedSplitExhaustRerunLiveTransferWireInfoCount;
             const TightBoundTransferWire& transfer = insertedOwner.transferWires.back();
-            info.repeatedSplitExhaustRerunLiveTransferredOwnerEdgeInfoCount +=
-                transfer.transferredOwnerEdgeCount;
+            info.repeatedSplitExhaustRerunLiveTransferredOwnerEdgeInfoCount
+                += transfer.transferredOwnerEdgeCount;
             insertedOwner.hasSplitWireCandidate = true;
             insertedOwner.splitWireCandidateCount = 1;
             info.hasSplitWireCandidate = true;
@@ -4597,7 +4753,8 @@ void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
             return nullptr;
         };
         const auto ownerAlreadyCounted = [&](std::size_t ownerId) {
-            return std::find(countedOwners.begin(), countedOwners.end(), ownerId) != countedOwners.end();
+            return std::find(countedOwners.begin(), countedOwners.end(), ownerId)
+                != countedOwners.end();
         };
         const auto countOwner = [&](std::size_t ownerId,
                                     bool secondaryOwner,
@@ -4628,10 +4785,14 @@ void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
                     }
                     if (aHistoryRemoveSourceEdgeIndex < info.edges.size()) {
                         info.edges[aHistoryRemoveSourceEdgeIndex].buildClosedWireAHistoryRemoved = true;
-                        appendUniqueSourceIndex(edge.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices,
-                                                aHistoryRemoveSourceEdgeIndex);
-                        appendUniqueSourceIndices(edge.buildClosedWireAHistoryRemoveSourceEdgeIndices,
-                                                  info.edges[aHistoryRemoveSourceEdgeIndex].sourceEdgeIndices);
+                        appendUniqueSourceIndex(
+                            edge.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices,
+                            aHistoryRemoveSourceEdgeIndex
+                        );
+                        appendUniqueSourceIndices(
+                            edge.buildClosedWireAHistoryRemoveSourceEdgeIndices,
+                            info.edges[aHistoryRemoveSourceEdgeIndex].sourceEdgeIndices
+                        );
                     }
                     ++removalCount;
                     if (secondaryOwner) {
@@ -4653,9 +4814,14 @@ void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
                 edge.buildClosedWireRemoved = true;
                 edge.buildClosedWireRemovedByUnowned = true;
                 edge.buildClosedWireAHistoryRemoved = true;
-                appendUniqueSourceIndex(edge.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices, edgeIndex);
-                appendUniqueSourceIndices(edge.buildClosedWireAHistoryRemoveSourceEdgeIndices,
-                                          edge.sourceEdgeIndices);
+                appendUniqueSourceIndex(
+                    edge.buildClosedWireAHistoryRemoveSourceEdgeInfoIndices,
+                    edgeIndex
+                );
+                appendUniqueSourceIndices(
+                    edge.buildClosedWireAHistoryRemoveSourceEdgeIndices,
+                    edge.sourceEdgeIndices
+                );
                 ++removalCount;
                 ++unownedRemovalCount;
                 continue;
@@ -4676,9 +4842,11 @@ void WireJoiner::recordRepeatedSplitExhaustRerunLifecycle(WireInfo& info,
     }
 }
 
-void WireJoiner::recordBranchSearchCandidatesForOwner(WireInfo& info,
-                                                      OwnerWireInfo& owner,
-                                                      const std::vector<TopoDS_Face>& boundedFaces)
+void WireJoiner::recordBranchSearchCandidatesForOwner(
+    WireInfo& info,
+    OwnerWireInfo& owner,
+    const std::vector<TopoDS_Face>& boundedFaces
+)
 {
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::findTightBound(), for each "wireInfo->vertices", marks
@@ -4712,7 +4880,8 @@ void WireJoiner::recordBranchSearchCandidatesForOwner(WireInfo& info,
         for (int adjacentIndex = current.iStart[adjacentEndpointIndex];
              adjacentIndex < current.iEnd[adjacentEndpointIndex];
              ++adjacentIndex) {
-            if (adjacentIndex < 0 || static_cast<std::size_t>(adjacentIndex) >= info.adjacentVertices.size()) {
+            if (adjacentIndex < 0
+                || static_cast<std::size_t>(adjacentIndex) >= info.adjacentVertices.size()) {
                 continue;
             }
             const WireVertex& adjacent = info.adjacentVertices[static_cast<std::size_t>(adjacentIndex)];
@@ -4736,24 +4905,28 @@ void WireJoiner::recordBranchSearchCandidatesForOwner(WireInfo& info,
                 ++insideCandidates;
                 ++newWireSeeds;
                 const bool transfersOwnerEdge = current.wireInfo == owner.id;
-                owner.branchCandidates.push_back(TightBoundBranchCandidate{
-                    vertex,
-                    adjacent,
-                    true,
-                    transfersOwnerEdge,
-                });
+                owner.branchCandidates.push_back(
+                    TightBoundBranchCandidate {
+                        vertex,
+                        adjacent,
+                        true,
+                        transfersOwnerEdge,
+                    }
+                );
                 if (transfersOwnerEdge) {
                     current.tightBoundOwnerTransferCandidate = true;
                 }
             }
             else {
                 ++outsideCandidates;
-                owner.branchCandidates.push_back(TightBoundBranchCandidate{
-                    vertex,
-                    adjacent,
-                    false,
-                    false,
-                });
+                owner.branchCandidates.push_back(
+                    TightBoundBranchCandidate {
+                        vertex,
+                        adjacent,
+                        false,
+                        false,
+                    }
+                );
             }
         }
         vertex.branchCandidateCount = candidates;
@@ -4803,7 +4976,8 @@ void WireJoiner::recordBranchSearchCandidates(WireInfo& info, const std::vector<
         for (int adjacentIndex = current.iStart[adjacentEndpointIndex];
              adjacentIndex < current.iEnd[adjacentEndpointIndex];
              ++adjacentIndex) {
-            if (adjacentIndex < 0 || static_cast<std::size_t>(adjacentIndex) >= info.adjacentVertices.size()) {
+            if (adjacentIndex < 0
+                || static_cast<std::size_t>(adjacentIndex) >= info.adjacentVertices.size()) {
                 continue;
             }
             const WireVertex& adjacent = info.adjacentVertices[static_cast<std::size_t>(adjacentIndex)];
@@ -4856,8 +5030,8 @@ bool WireJoiner::recordTightBoundTransferWire(WireInfo& info, OwnerWireInfo& own
     for (const TightBoundBranchCandidate& candidate : owner.branchCandidates) {
         std::optional<TightBoundExistingWireSearchTrace> candidateTrace;
         if (candidate.inside && candidate.transfersOwnerEdge) {
-            const TightBoundExistingWireSearchTrace trace =
-                traceExistingWireSearchForCandidate(info, owner, candidate);
+            const TightBoundExistingWireSearchTrace trace
+                = traceExistingWireSearchForCandidate(info, owner, candidate);
             candidateTrace = trace;
             ++owner.tightBoundExistingWireSearchCount;
             owner.tightBoundExistingWireSearchStackFrameCount += trace.stackFrameCount;
@@ -4912,15 +5086,16 @@ bool WireJoiner::recordTightBoundTransferWire(WireInfo& info, OwnerWireInfo& own
             }
         }
         transferPath = tightBoundTransferPathForCandidate(info, owner, candidate);
-        TightBoundExistingWirePathBlockReason existingWireBlockReason =
-            TightBoundExistingWirePathBlockReason::None;
+        TightBoundExistingWirePathBlockReason existingWireBlockReason
+            = TightBoundExistingWirePathBlockReason::None;
         if (!transferPath && candidateTrace && candidateTrace->hit) {
             transferPath = tightBoundTransferPathForExistingWireHit(
                 info,
                 owner,
                 candidate,
                 *candidateTrace,
-                &existingWireBlockReason);
+                &existingWireBlockReason
+            );
         }
         if (!transferPath && candidateTrace && candidateTrace->hit) {
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
@@ -4934,7 +5109,9 @@ bool WireJoiner::recordTightBoundTransferWire(WireInfo& info, OwnerWireInfo& own
             else if (existingWireBlockReason == TightBoundExistingWirePathBlockReason::OrderBlocked) {
                 ++owner.tightBoundExistingWireSearchOnlyOrderBlockedCount;
             }
-            else if (existingWireBlockReason == TightBoundExistingWirePathBlockReason::WireBuildBlocked) {
+            else if (
+                existingWireBlockReason == TightBoundExistingWirePathBlockReason::WireBuildBlocked
+            ) {
                 ++owner.tightBoundExistingWireSearchOnlyWireBuildBlockedCount;
             }
         }
@@ -4972,8 +5149,8 @@ bool WireJoiner::recordTightBoundTransferWire(WireInfo& info, OwnerWireInfo& own
         }
     }
     transfer.wireBuilt = !wireFromVertices(info, transfer.vertices).IsNull();
-    transfer.splitWireBuilt =
-        !transfer.splitWireVertices.empty() && !wireFromVertices(info, transfer.splitWireVertices).IsNull();
+    transfer.splitWireBuilt = !transfer.splitWireVertices.empty()
+        && !wireFromVertices(info, transfer.splitWireVertices).IsNull();
     transfer.done = transfer.transferredOwnerEdgeCount > 0U;
 
     if (!transferPath->splitOwnerVertices.empty()
@@ -5000,7 +5177,8 @@ void WireJoiner::recordTightBoundLifecycle(WireInfo& info)
     std::vector<bool> unassignedPropagationRecorded(info.edges.size(), false);
     std::vector<bool> otherWirePropagationRecorded(info.edges.size(), false);
     std::vector<bool> otherWireLivePropagationRecorded(info.edges.size(), false);
-    const auto recordDoneOwnerPropagation = [&](std::size_t ownerId, const std::vector<WireVertex>& vertices) {
+    const auto recordDoneOwnerPropagation = [&](std::size_t ownerId,
+                                                const std::vector<WireVertex>& vertices) {
         for (const WireVertex& vertex : vertices) {
             if (vertex.edgeIndex >= info.edges.size()) {
                 continue;
@@ -5023,10 +5201,10 @@ void WireJoiner::recordTightBoundLifecycle(WireInfo& info)
             }
             if (!otherWirePropagationRecorded[vertex.edgeIndex]) {
                 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-                // ::WireJoinerP::findTightBoundUpdateVertices(), after "beginInfo.wireInfo->done = true",
-                // keeps done owners stable while edges owned by an unfinished "otherWire" are reassigned
-                // to the just-completed owner. cad-core records this propagation branch without using it
-                // to prune openWireCompound/getOpenWires output.
+                // ::WireJoinerP::findTightBoundUpdateVertices(), after "beginInfo.wireInfo->done =
+                // true", keeps done owners stable while edges owned by an unfinished "otherWire" are
+                // reassigned to the just-completed owner. cad-core records this propagation branch
+                // without using it to prune openWireCompound/getOpenWires output.
                 ++info.ownerPropagationCandidateCount;
                 ++info.ownerPropagationOtherWireCandidateCount;
                 ++edge.ownerPropagationCandidateCount;
@@ -5043,8 +5221,8 @@ void WireJoiner::recordTightBoundLifecycle(WireInfo& info)
     if (!info.ownerWires.empty()) {
         bool anyDone = false;
         for (OwnerWireInfo& owner : info.ownerWires) {
-            const bool transferRecorded =
-                owner.branchSearchInsideCandidateCount > 0U && recordTightBoundTransferWire(info, owner);
+            const bool transferRecorded = owner.branchSearchInsideCandidateCount > 0U
+                && recordTightBoundTransferWire(info, owner);
             if (transferRecorded) {
                 owner.hasSplitWireCandidate = true;
                 owner.splitWireCandidateCount = 1;
@@ -5060,11 +5238,12 @@ void WireJoiner::recordTightBoundLifecycle(WireInfo& info)
                     }
                 }
             }
-            const bool hasOwnerVertices =
-                !owner.splitOwnerVertices.empty() || (!owner.vertices.empty() && owner.transferWires.empty());
+            const bool hasOwnerVertices = !owner.splitOwnerVertices.empty()
+                || (!owner.vertices.empty() && owner.transferWires.empty());
             if (hasOwnerVertices) {
                 if (!owner.splitOwnerVertices.empty() && owner.splitWireId == 0U) {
-                    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                    // FreeCAD:
+                    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
                     // ::WireJoinerP::findTightBoundSplitWire(), "splitWire.reset(new WireInfo())"
                     // followed by "info->wireInfo = splitWire" for remaining old-owner vertices.
                     // cad-core keeps that split owner live in EdgeInfo while output export still
@@ -5086,9 +5265,11 @@ void WireJoiner::recordTightBoundLifecycle(WireInfo& info)
                 anyDone = true;
             }
             if (owner.done) {
-                const std::vector<WireVertex>& ownerVertices =
-                    owner.splitOwnerVertices.empty() ? owner.vertices : owner.splitOwnerVertices;
-                const std::size_t propagationOwnerId = owner.splitWireId == 0U ? owner.id : owner.splitWireId;
+                const std::vector<WireVertex>& ownerVertices = owner.splitOwnerVertices.empty()
+                    ? owner.vertices
+                    : owner.splitOwnerVertices;
+                const std::size_t propagationOwnerId = owner.splitWireId == 0U ? owner.id
+                                                                               : owner.splitWireId;
                 recordDoneOwnerPropagation(propagationOwnerId, ownerVertices);
             }
             for (const TightBoundTransferWire& transfer : owner.transferWires) {
@@ -5133,162 +5314,156 @@ void WireJoiner::recordOpenWireCompoundLedger(WireInfo& info)
 {
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::build(), after buildClosedWire(), loops final EdgeInfo states and adds
-    // "info.wire()" to openWireCompound when "iteration == -3 || (!info.wireInfo && info.iteration >= 0)".
-    // This is a request-local mirror of that child-wire boundary. getOpenWires() consumes this
-    // child-wire ledger first, while the ledger still carries helper override shape debt until M3
-    // can replace each transitional child wire with a true producer.
+    // "info.wire()" to openWireCompound when "iteration == -3 || (!info.wireInfo && info.iteration
+    // >= 0)". This is a request-local mirror of that child-wire boundary. getOpenWires() consumes
+    // this child-wire ledger first, while the ledger still carries helper override shape debt until
+    // M3 can replace each transitional child wire with a true producer.
     info.openWireCompoundWires.clear();
     for (std::size_t edgeIndex = 0; edgeIndex < info.edges.size(); ++edgeIndex) {
         const EdgeInfo& edgeInfo = info.edges[edgeIndex];
-        const bool exportsOpenEdge = edgeInfo.hasOpenExportOverride() || edgeInfoExportsOpenWireCompound(edgeInfo);
+        const bool exportsOpenEdge = edgeInfo.hasOpenExportOverride()
+            || edgeInfoExportsOpenWireCompound(edgeInfo);
         if (!exportsOpenEdge) {
             continue;
         }
 
         OpenWireCompoundWireInfo childWire;
         childWire.edgeIndex = edgeIndex;
-        childWire.wire =
-            edgeInfo.resultSlotVertexEvidenceEdge && !edgeInfo.resultSlotVertexEvidenceEdge->IsNull()
+        childWire.wire = edgeInfo.resultSlotVertexEvidenceEdge
+                && !edgeInfo.resultSlotVertexEvidenceEdge->IsNull()
             ? BRepBuilderAPI_MakeWire(*edgeInfo.resultSlotVertexEvidenceEdge).Wire()
             : edgeInfo.openExportWire();
         childWire.wireBuilt = !childWire.wire.IsNull();
         childWire.superEdgeWire = !edgeInfo.superEdge.IsNull() && !edgeInfo.hasOpenExportOverride();
         childWire.helperOpenExportOverride = edgeInfo.helperOpenExportOverride;
         childWire.helperOpenExportOverrideReason = edgeInfo.helperOpenExportOverrideReason;
-        childWire.helperOpenExportOverrideSourceEdgeInfo = edgeInfo.helperOpenExportOverrideSourceEdgeInfo;
-        childWire.helperOpenExportOverrideSourceEdgeInfoIndex =
-            edgeInfo.helperOpenExportOverrideSourceEdgeInfoIndex;
-        childWire.helperOpenExportOverrideSourceEdgeInfoConsumed =
-            edgeInfo.helperOpenExportOverrideSourceEdgeInfoConsumed;
-        childWire.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo =
-            edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo;
-        childWire.helperOpenExportOverrideSourceEdgeExportShape =
-            edgeInfo.helperOpenExportOverrideSourceEdgeExportShape;
-        childWire.helperOpenExportOverrideSourceEdgeProducerOutput =
-            edgeInfo.helperOpenExportOverrideSourceEdgeExportShape;
-        childWire.helperOpenExportOverrideFullAHistoryProducerEvidence =
-            edgeInfo.helperOpenExportOverrideFullAHistoryProducerEvidence;
-        childWire.helperOpenExportOverrideSuperEdgeMemberEdgeInfo =
-            edgeInfo.helperOpenExportOverrideSuperEdgeMemberEdgeInfo;
-        childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfo =
-            edgeInfo.helperOpenExportOverrideSuperEdgeRootEdgeInfo;
-        childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex =
-            edgeInfo.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex;
-        childWire.helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo =
-            edgeInfo.helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo;
-        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate =
-            edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate;
-        childWire
-            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady =
-            edgeInfo
-                .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady;
-        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo =
-            edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo;
-        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices =
-            edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices;
-        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices =
-            edgeInfo
-                .helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices;
+        childWire.helperOpenExportOverrideSourceEdgeInfo
+            = edgeInfo.helperOpenExportOverrideSourceEdgeInfo;
+        childWire.helperOpenExportOverrideSourceEdgeInfoIndex
+            = edgeInfo.helperOpenExportOverrideSourceEdgeInfoIndex;
+        childWire.helperOpenExportOverrideSourceEdgeInfoConsumed
+            = edgeInfo.helperOpenExportOverrideSourceEdgeInfoConsumed;
+        childWire.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo
+            = edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo;
+        childWire.helperOpenExportOverrideSourceEdgeExportShape
+            = edgeInfo.helperOpenExportOverrideSourceEdgeExportShape;
+        childWire.helperOpenExportOverrideSourceEdgeProducerOutput
+            = edgeInfo.helperOpenExportOverrideSourceEdgeExportShape;
+        childWire.helperOpenExportOverrideFullAHistoryProducerEvidence
+            = edgeInfo.helperOpenExportOverrideFullAHistoryProducerEvidence;
+        childWire.helperOpenExportOverrideSuperEdgeMemberEdgeInfo
+            = edgeInfo.helperOpenExportOverrideSuperEdgeMemberEdgeInfo;
+        childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfo
+            = edgeInfo.helperOpenExportOverrideSuperEdgeRootEdgeInfo;
+        childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex
+            = edgeInfo.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex;
+        childWire.helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo
+            = edgeInfo.helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo;
+        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
+            = edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate;
+        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady
+            = edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady;
+        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo
+            = edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo;
+        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices
+            = edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices;
+        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices
+            = edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices;
         if (childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex < info.edges.size()) {
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
             // ::WireJoinerP::findSuperEdgesUpdateFirst() materializes the open root with
             // "first->superEdge = makeCleanWire(false)"; ::build() later emits child wires with
             // "builder.Add(openWireCompound, info.wire())". Once the root is from a branch that has
-            // been migrated (P3 unowned, P4 primary) and carries full aHistory producer evidence, the
-            // child-wire ledger can export that root producer wire directly instead of the
+            // been migrated (P3 unowned, P4 primary) and carries full aHistory producer evidence,
+            // the child-wire ledger can export that root producer wire directly instead of the
             // transitional helper override.
-            const EdgeInfo& rootEdgeInfo =
-                info.edges[childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex];
-            const bool rootOpenCurrentMemberChildWireProducerReady =
-                !childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
-                && childWire
-                       .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo
+            const EdgeInfo& rootEdgeInfo
+                = info.edges[childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex];
+            const bool rootOpenCurrentMemberChildWireProducerReady
+                = !childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
+                && childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo
                 && edgeInfo.helperOpenExportOverrideSuperEdgeRootOpenLifecycleEdgeInfo
-                && childWire
-                       .helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo
+                && childWire.helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo
                 && rootEdgeInfo.superEdgeMaterialized && !rootEdgeInfo.superEdge.IsNull();
             if (childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
                 || rootOpenCurrentMemberChildWireProducerReady) {
-                childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerWire =
-                    rootEdgeInfo.superEdge;
-                const bool primaryBranchChildWireProducerReady =
-                    edgeInfo
-                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidatePrimaryRemoval
-                    && edgeInfo
-                           .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence;
-                const bool secondaryBranchChildWireProducerReady =
-                    edgeInfo
-                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateSecondaryRemoval
-                    && edgeInfo
-                           .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence;
-                const bool rootBranchChildWireProducerReady =
-                    childWire
-                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady
+                childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerWire
+                    = rootEdgeInfo.superEdge;
+                const bool primaryBranchChildWireProducerReady
+                    = edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidatePrimaryRemoval
+                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence;
+                const bool secondaryBranchChildWireProducerReady
+                    = edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateSecondaryRemoval
+                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence;
+                const bool rootBranchChildWireProducerReady
+                    = childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady
                     || primaryBranchChildWireProducerReady || secondaryBranchChildWireProducerReady
                     || rootOpenCurrentMemberChildWireProducerReady;
-                const bool useRootResultWireProducer =
-                    rootBranchChildWireProducerReady
+                const bool useRootResultWireProducer = rootBranchChildWireProducerReady
                     && !childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerWire.IsNull();
                 const bool rootProducerIsSingleMember = rootEdgeInfo.superEdgeMemberCount <= 1U;
                 if (useRootResultWireProducer && rootProducerIsSingleMember) {
-                    childWire.wire =
-                        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerWire;
+                    childWire.wire
+                        = childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerWire;
                     childWire.wireBuilt = true;
                     childWire.superEdgeWire = true;
                 }
                 else if (useRootResultWireProducer) {
-                    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                    // FreeCAD:
+                    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
                     // ::WireJoinerP::findSuperEdgesUpdateFirst() stores a multi-member
                     // "superEdge" on the root. Exporting that whole root from a member helper
                     // child-wire carries sibling members; this needs a formal child-wire member
                     // suppression step before it can replace the helper shape.
-                    childWire
-                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppression =
-                        true;
+                    childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppression
+                        = true;
                 }
             }
         }
-        childWire.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo =
-            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo;
-        childWire.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices =
-            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices;
-        childWire.helperOpenExportOverrideAHistoryRemoveSourceEdgeIndices =
-            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeIndices;
-        childWire.helperOpenExportOverrideAHistoryRemoveSourceLineage =
-            edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceLineage;
-        childWire.helperOpenExportOverrideAHistoryRemoveSameSourceLineage =
-            edgeInfo.helperOpenExportOverrideAHistoryRemoveSameSourceLineage;
-        childWire.helperOpenExportOverrideAHistoryRemoveForeignSourceLineage =
-            edgeInfo.helperOpenExportOverrideAHistoryRemoveForeignSourceLineage;
-        childWire.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo =
-            edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo;
-        childWire.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices =
-            edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices;
-        childWire.purgeBridge =
-            edgeInfo.helperOpenExportOverride ? false : edgeInfo.purgeAsOriginalOpenEdge;
-        childWire.sourceSharedVertexPurgeMatch =
-            !sourceEdges_.empty() && allEdgesHaveSharedOriginalSourceVertexByIdentity(childWire.wire, sourceEdges_);
+        childWire.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo
+            = edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo;
+        childWire.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices
+            = edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices;
+        childWire.helperOpenExportOverrideAHistoryRemoveSourceEdgeIndices
+            = edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceEdgeIndices;
+        childWire.helperOpenExportOverrideAHistoryRemoveSourceLineage
+            = edgeInfo.helperOpenExportOverrideAHistoryRemoveSourceLineage;
+        childWire.helperOpenExportOverrideAHistoryRemoveSameSourceLineage
+            = edgeInfo.helperOpenExportOverrideAHistoryRemoveSameSourceLineage;
+        childWire.helperOpenExportOverrideAHistoryRemoveForeignSourceLineage
+            = edgeInfo.helperOpenExportOverrideAHistoryRemoveForeignSourceLineage;
+        childWire.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo
+            = edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo;
+        childWire.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices
+            = edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices;
+        childWire.purgeBridge = edgeInfo.helperOpenExportOverride ? false
+                                                                  : edgeInfo.purgeAsOriginalOpenEdge;
+        childWire.sourceSharedVertexPurgeMatch = !sourceEdges_.empty()
+            && allEdgesHaveSharedOriginalSourceVertexByIdentity(childWire.wire, sourceEdges_);
         info.openWireCompoundWires.push_back(std::move(childWire));
     }
 
-    struct MemberSuppressionOutputGroup {
+    struct MemberSuppressionOutputGroup
+    {
         std::size_t rootEdgeInfoIndex = 0;
         std::vector<std::size_t> childWireIndices;
         std::vector<std::size_t> coveredMemberEdgeInfoIndices;
         std::vector<std::size_t> currentMemberEdgeInfoIndices;
         std::vector<std::size_t> suppressedPendingMemberEdgeInfoIndices;
     };
-    auto outputGroupFor =
-        [](std::vector<MemberSuppressionOutputGroup>& groups,
-           std::size_t rootEdgeInfoIndex) -> MemberSuppressionOutputGroup& {
+    auto outputGroupFor = [](std::vector<MemberSuppressionOutputGroup>& groups,
+                             std::size_t rootEdgeInfoIndex) -> MemberSuppressionOutputGroup& {
         const auto groupIt = std::find_if(
-            groups.begin(), groups.end(), [&](const MemberSuppressionOutputGroup& group) {
+            groups.begin(),
+            groups.end(),
+            [&](const MemberSuppressionOutputGroup& group) {
                 return group.rootEdgeInfoIndex == rootEdgeInfoIndex;
-            });
+            }
+        );
         if (groupIt != groups.end()) {
             return *groupIt;
         }
-        groups.push_back(MemberSuppressionOutputGroup{rootEdgeInfoIndex, {}, {}, {}, {}});
+        groups.push_back(MemberSuppressionOutputGroup {rootEdgeInfoIndex, {}, {}, {}, {}});
         return groups.back();
     };
 
@@ -5305,7 +5480,8 @@ void WireJoiner::recordOpenWireCompoundLedger(WireInfo& info)
                 // ownership rather than output-side sibling pruning.
                 return ledgerChildWire.edgeIndex == memberIndex
                     && ledgerChildWire.helperOpenExportOverrideSourceEdgeProducerOutput;
-            });
+            }
+        );
     };
 
     std::vector<MemberSuppressionOutputGroup> memberSuppressionOutputGroups;
@@ -5325,8 +5501,8 @@ void WireJoiner::recordOpenWireCompoundLedger(WireInfo& info)
         // the same root group has an explicit child owner.
         TopoDS_Wire memberSuppressedWire;
         if (childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex < info.edges.size()) {
-            const EdgeInfo& rootEdgeInfo =
-                info.edges[childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex];
+            const EdgeInfo& rootEdgeInfo
+                = info.edges[childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex];
             std::vector<TopoDS_Vertex> ledgerVertices;
             for (const OpenWireCompoundWireInfo& ledgerChildWire : info.openWireCompoundWires) {
                 if (ledgerChildWire.wire.IsNull()) {
@@ -5344,9 +5520,11 @@ void WireJoiner::recordOpenWireCompoundLedger(WireInfo& info)
                 // member input vertices when rebuilding a request-local child-wire from that root
                 // producer; this preserves producer identity without accepting arbitrary coordinate
                 // matches from outside the WireJoiner ledger.
-                const std::vector<TopoDS_Vertex> memberVertices =
-                    edgeVertices(info.edges[childWire.edgeIndex].edge);
-                ledgerVertices.insert(ledgerVertices.end(), memberVertices.begin(), memberVertices.end());
+                const std::vector<TopoDS_Vertex> memberVertices = edgeVertices(
+                    info.edges[childWire.edgeIndex].edge
+                );
+                ledgerVertices
+                    .insert(ledgerVertices.end(), memberVertices.begin(), memberVertices.end());
             }
             if (!sourceEdges_.empty()) {
                 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
@@ -5360,7 +5538,8 @@ void WireJoiner::recordOpenWireCompoundLedger(WireInfo& info)
                     ledgerVertices.end(),
                     [this](const TopoDS_Vertex& vertex) {
                         return !vertexIsOriginalSourceByIdentity(vertex, sourceEdges_);
-                    });
+                    }
+                );
             }
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
             // ::WireJoinerP::findSuperEdgesUpdateFirst() gathers member shapes into wireData and
@@ -5368,30 +5547,33 @@ void WireJoiner::recordOpenWireCompoundLedger(WireInfo& info)
             // ShapeFix_Wire history into aHistory. ::build() later exports final child wires with
             // "builder.Add(openWireCompound, info.wire())". For current-member output in migrated
             // branches, match that current child-wire geometry against the clean root producer and
-            // reuse request-local child-wire vertices when they are already present, so the producer
-            // shape can enter the ledger without creating new topological vertices.
-            memberSuppressedWire =
-                currentMemberWireFromRootSuperEdge(rootEdgeInfo.superEdge,
-                                                   childWire.wire,
-                                                   info.edges[childWire.edgeIndex].edge,
-                                                   ledgerVertices);
+            // reuse request-local child-wire vertices when they are already present, so the
+            // producer shape can enter the ledger without creating new topological vertices.
+            memberSuppressedWire = currentMemberWireFromRootSuperEdge(
+                rootEdgeInfo.superEdge,
+                childWire.wire,
+                info.edges[childWire.edgeIndex].edge,
+                ledgerVertices
+            );
         }
         if (memberSuppressedWire.IsNull()) {
             memberSuppressedWire = info.edges[childWire.edgeIndex].wire();
         }
-        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWire =
-            memberSuppressedWire;
-        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWireBuilt =
-            !childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWire.IsNull();
+        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWire
+            = memberSuppressedWire;
+        childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWireBuilt
+            = !childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWire
+                   .IsNull();
 
         MemberSuppressionOutputGroup& group = outputGroupFor(
             memberSuppressionOutputGroups,
-            childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex);
+            childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex
+        );
         appendUniqueSourceIndex(group.childWireIndices, childWireIndex);
         appendUniqueSourceIndices(
             group.coveredMemberEdgeInfoIndices,
-            childWire
-                .helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices);
+            childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices
+        );
         if (childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo) {
             appendUniqueSourceIndex(group.currentMemberEdgeInfoIndices, childWire.edgeIndex);
         }
@@ -5400,14 +5582,17 @@ void WireJoiner::recordOpenWireCompoundLedger(WireInfo& info)
     for (const MemberSuppressionOutputGroup& group : memberSuppressionOutputGroups) {
         std::vector<std::size_t> pendingMemberEdgeInfoIndices;
         for (const std::size_t memberIndex : group.coveredMemberEdgeInfoIndices) {
-            if (std::find(group.currentMemberEdgeInfoIndices.begin(),
-                          group.currentMemberEdgeInfoIndices.end(),
-                          memberIndex)
+            if (std::find(
+                    group.currentMemberEdgeInfoIndices.begin(),
+                    group.currentMemberEdgeInfoIndices.end(),
+                    memberIndex
+                )
                 == group.currentMemberEdgeInfoIndices.end()) {
                 if (memberIndex < info.edges.size()
                     && (memberHasRequestLocalSourceEdgeProducerChild(memberIndex)
                         || helperOpenExportOverrideRootResultWireProducerCanSuppressPendingMember(
-                            info.edges[memberIndex]))) {
+                            info.edges[memberIndex]
+                        ))) {
                     continue;
                 }
                 appendUniqueSourceIndex(pendingMemberEdgeInfoIndices, memberIndex);
@@ -5419,56 +5604,46 @@ void WireJoiner::recordOpenWireCompoundLedger(WireInfo& info)
                 continue;
             }
             OpenWireCompoundWireInfo& childWire = info.openWireCompoundWires[childWireIndex];
-            if (!childWire
-                     .helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWireBuilt) {
+            if (
+                !childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWireBuilt
+            ) {
                 continue;
             }
             if (!groupChildOwnershipComplete) {
-                childWire
-                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedByPendingMember =
-                    true;
+                childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedByPendingMember
+                    = true;
                 continue;
             }
             const EdgeInfo& currentEdgeInfo = info.edges[childWire.edgeIndex];
-            const bool currentMemberPrimaryBranchChildWireProducerReady =
-                currentEdgeInfo
-                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidatePrimaryRemoval
+            const bool currentMemberPrimaryBranchChildWireProducerReady
+                = currentEdgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidatePrimaryRemoval
                 && currentEdgeInfo
                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence;
-            const bool currentMemberSecondaryBranchChildWireProducerReady =
-                currentEdgeInfo
-                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateSecondaryRemoval
+            const bool currentMemberSecondaryBranchChildWireProducerReady
+                = currentEdgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateSecondaryRemoval
                 && currentEdgeInfo
                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence;
-            const bool currentMemberBranchChildWireProducerReady =
-                childWire
-                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady
+            const bool currentMemberBranchChildWireProducerReady
+                = childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady
                 || currentMemberPrimaryBranchChildWireProducerReady
                 || currentMemberSecondaryBranchChildWireProducerReady;
-            const bool currentMemberRootOpenChildWireProducerReady =
-                childWire
-                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo
+            const bool currentMemberRootOpenChildWireProducerReady
+                = childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo
                 && childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex < info.edges.size()
                 && currentEdgeInfo.helperOpenExportOverrideSuperEdgeRootOpenLifecycleEdgeInfo
-                && childWire
-                       .helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo
-                && info.edges[childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex]
-                       .superEdgeMaterialized
+                && childWire.helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo
+                && info.edges[childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex].superEdgeMaterialized
                 && !info.edges[childWire.helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex]
                         .superEdge.IsNull();
-            childWire
-                .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerReady =
-                (currentMemberBranchChildWireProducerReady
-                 || currentMemberRootOpenChildWireProducerReady)
-                && childWire
-                       .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo;
-            childWire
-                .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerFullAHistoryEvidence =
-                currentMemberBranchChildWireProducerReady
-                && childWire
-                       .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo;
-            const bool memberSuppressedSourceShapeReady =
-                childWire.helperOpenExportOverrideSourceEdgeExportShape
+            childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerReady
+                = (currentMemberBranchChildWireProducerReady
+                   || currentMemberRootOpenChildWireProducerReady)
+                && childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo;
+            childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerFullAHistoryEvidence
+                = currentMemberBranchChildWireProducerReady
+                && childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo;
+            const bool memberSuppressedSourceShapeReady
+                = childWire.helperOpenExportOverrideSourceEdgeExportShape
                 || memberSuppressedCurrentMemberSourceShapeReady(info, childWire);
             if (!memberSuppressedSourceShapeReady) {
                 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
@@ -5476,18 +5651,17 @@ void WireJoiner::recordOpenWireCompoundLedger(WireInfo& info)
                 // every non-current member is formally suppressible, cad-core cannot replace the
                 // helper child shape with EdgeInfo::wire() until M2/source-edge child-wire identity
                 // and getOpenWires(noOriginal=true) purge behavior are ready for this child.
-                childWire
-                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShape =
-                    true;
+                childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShape
+                    = true;
                 continue;
             }
-            childWire.wire =
-                childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWire;
+            childWire.wire
+                = childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWire;
             childWire.wireBuilt = true;
             childWire.superEdgeWire = false;
-            childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutput = true;
-            childWire.sourceSharedVertexPurgeMatch =
-                !sourceEdges_.empty()
+            childWire.helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutput
+                = true;
+            childWire.sourceSharedVertexPurgeMatch = !sourceEdges_.empty()
                 && allEdgesHaveSharedOriginalSourceVertexByIdentity(childWire.wire, sourceEdges_);
         }
     }
@@ -5495,28 +5669,25 @@ void WireJoiner::recordOpenWireCompoundLedger(WireInfo& info)
     for (std::size_t childWireIndex = 0; childWireIndex < info.openWireCompoundWires.size();
          ++childWireIndex) {
         OpenWireCompoundWireInfo& childWire = info.openWireCompoundWires[childWireIndex];
-        childWire.resultWireProducer =
-            childWireResultWireProducerIdentity(info, childWire, childWireIndex);
+        childWire.resultWireProducer
+            = childWireResultWireProducerIdentity(info, childWire, childWireIndex);
         if (childWire.edgeIndex < info.edges.size()) {
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
             // ::WireJoinerP::build() emits final open-wire children with
             // "builder.Add(openWireCompound, info.wire())". Keep the edge-level producer identity
             // linked to that request-local child-wire slot so history / ElementMap consumers do not
             // have to recover the openWireCompound child from helper geometry later.
-            ResultWireProducerIdentity& edgeProducer =
-                info.edges[childWire.edgeIndex].resultWireProducer;
+            ResultWireProducerIdentity& edgeProducer = info.edges[childWire.edgeIndex].resultWireProducer;
             edgeProducer.childWireInfoIndex = childWireIndex;
-            const bool branchProducerBlockedByChildWireSourceShape =
-                edgeProducer.kind == ResultWireProducerKind::SuperEdgeRoot
+            const bool branchProducerBlockedByChildWireSourceShape = edgeProducer.kind
+                    == ResultWireProducerKind::SuperEdgeRoot
                 && (edgeProducer.blocker == ResultWireBlocker::RootRemovedByUnownedBranch
                     || edgeProducer.blocker == ResultWireBlocker::RootRemovedByPrimaryBranch
                     || edgeProducer.blocker == ResultWireBlocker::RootRemovedBySecondaryBranch)
-                && childWire.resultWireProducer.kind
-                    == ResultWireProducerKind::CurrentMemberChildWire
+                && childWire.resultWireProducer.kind == ResultWireProducerKind::CurrentMemberChildWire
                 && resultWireProducerStateAtLeast(childWire.resultWireProducer.state,
                                                   ResultWireProducerState::ChildWireReady)
-                && (childWire.resultWireProducer.blocker
-                        == ResultWireBlocker::SourceShapeIdentityNotReady
+                && (childWire.resultWireProducer.blocker == ResultWireBlocker::SourceShapeIdentityNotReady
                     || childWire.resultWireProducer.blocker
                         == ResultWireBlocker::SourceShapeWouldPurgeOriginal
                     || childWire.resultWireProducer.blocker
@@ -5526,16 +5697,17 @@ void WireJoiner::recordOpenWireCompoundLedger(WireInfo& info)
                     || childWire.resultWireProducer.blocker
                         == ResultWireBlocker::CurrentMemberChildWireIdentityNotReady);
             if (branchProducerBlockedByChildWireSourceShape) {
-                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                // FreeCAD:
+                // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
                 // ::WireJoinerP::getOpenWires(noOriginal=true) applies the source-shape purge gate
                 // after ::build() has materialized openWireCompound children. If a migrated
-                // RootRemoved branch reaches child-wire readiness but is rejected by that child-wire
-                // source-shape gate, expose the child-wire blocker on the producer identity instead
-                // of leaving it as an untraceable summary-only count.
+                // RootRemoved branch reaches child-wire readiness but is rejected by that
+                // child-wire source-shape gate, expose the child-wire blocker on the producer
+                // identity instead of leaving it as an untraceable summary-only count.
                 edgeProducer = childWire.resultWireProducer;
             }
-            const bool currentMemberProducerBlockedByChildWire =
-                edgeProducer.kind == ResultWireProducerKind::CurrentMemberChildWire
+            const bool currentMemberProducerBlockedByChildWire = edgeProducer.kind
+                    == ResultWireProducerKind::CurrentMemberChildWire
                 && edgeProducer.blocker == ResultWireBlocker::SourceShapeMemberVertexIdentityNotReady
                 && childWire.resultWireProducer.blocker
                     == ResultWireBlocker::MultiMemberRootPendingSuppression
@@ -5551,11 +5723,12 @@ void WireJoiner::recordOpenWireCompoundLedger(WireInfo& info)
                 // producer identity.
                 edgeProducer = childWire.resultWireProducer;
             }
-            const bool currentMemberProducerResolvedByChildWire =
-                edgeProducer.kind == ResultWireProducerKind::CurrentMemberChildWire
+            const bool currentMemberProducerResolvedByChildWire = edgeProducer.kind
+                    == ResultWireProducerKind::CurrentMemberChildWire
                 && edgeProducer.blocker == ResultWireBlocker::SourceShapeMemberVertexIdentityNotReady
                 && childWire.resultWireProducer.kind == ResultWireProducerKind::CurrentMemberChildWire
-                && childWire.resultWireProducer.state == ResultWireProducerState::ExportedWithoutHelper;
+                && childWire.resultWireProducer.state
+                    == ResultWireProducerState::ExportedWithoutHelper;
             if (currentMemberProducerResolvedByChildWire) {
                 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
                 // ::WireJoinerP::build() emits the final child wire after member suppression; once
@@ -5564,8 +5737,7 @@ void WireJoiner::recordOpenWireCompoundLedger(WireInfo& info)
                 // pre-output vertex-identity blocker.
                 edgeProducer = childWire.resultWireProducer;
             }
-            if (childWire.resultWireProducer.state
-                == ResultWireProducerState::ExportedWithoutHelper) {
+            if (childWire.resultWireProducer.state == ResultWireProducerState::ExportedWithoutHelper) {
                 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
                 // ::WireJoinerP::build() exports the final "info.wire()" child into
                 // openWireCompound. Preserve the edge-level producer kind/index that explains why
@@ -5584,7 +5756,8 @@ void WireJoiner::recordOpenWireCompoundLedger(WireInfo& info)
 WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
 {
     WireJoinerLedgerSummary summary;
-    struct MemberSuppressionRootGroup {
+    struct MemberSuppressionRootGroup
+    {
         std::size_t rootEdgeInfoIndex = 0;
         std::vector<std::size_t> coveredMemberEdgeInfoIndices;
         std::vector<std::size_t> currentMemberEdgeInfoIndices;
@@ -5592,14 +5765,14 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
     auto memberSuppressionRootGroupFor =
         [](std::vector<MemberSuppressionRootGroup>& groups,
            std::size_t rootEdgeInfoIndex) -> MemberSuppressionRootGroup& {
-        const auto groupIt = std::find_if(
-            groups.begin(), groups.end(), [&](const MemberSuppressionRootGroup& group) {
-                return group.rootEdgeInfoIndex == rootEdgeInfoIndex;
-            });
+        const auto groupIt
+            = std::find_if(groups.begin(), groups.end(), [&](const MemberSuppressionRootGroup& group) {
+                  return group.rootEdgeInfoIndex == rootEdgeInfoIndex;
+              });
         if (groupIt != groups.end()) {
             return *groupIt;
         }
-        groups.push_back(MemberSuppressionRootGroup{rootEdgeInfoIndex, {}, {}});
+        groups.push_back(MemberSuppressionRootGroup {rootEdgeInfoIndex, {}, {}});
         return groups.back();
     };
     for (const WireInfo& info : openWires_) {
@@ -5669,26 +5842,34 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
             summary.tightBoundFullWireSetInsertCount += owner.tightBoundFullWireSetInsertCount;
             summary.tightBoundFullWireSetEraseCount += owner.tightBoundFullWireSetEraseCount;
             summary.tightBoundFullWireSetAbortCount += owner.tightBoundFullWireSetAbortCount;
-            summary.tightBoundFullWireSetPurgeCandidateCount += owner.tightBoundFullWireSetPurgeCandidateCount;
-            summary.tightBoundFullWireSetBlockedTransferCount += owner.tightBoundFullWireSetBlockedTransferCount;
+            summary.tightBoundFullWireSetPurgeCandidateCount
+                += owner.tightBoundFullWireSetPurgeCandidateCount;
+            summary.tightBoundFullWireSetBlockedTransferCount
+                += owner.tightBoundFullWireSetBlockedTransferCount;
             summary.tightBoundFullWireSetAbortSearchCount += owner.tightBoundFullWireSetAbortSearchCount;
-            summary.tightBoundFullWireSetAbortResolvedByHitCount +=
-                owner.tightBoundFullWireSetAbortResolvedByHitCount;
-            summary.tightBoundFullWireSetAbortBlockedSearchCount +=
-                owner.tightBoundFullWireSetAbortBlockedSearchCount;
+            summary.tightBoundFullWireSetAbortResolvedByHitCount
+                += owner.tightBoundFullWireSetAbortResolvedByHitCount;
+            summary.tightBoundFullWireSetAbortBlockedSearchCount
+                += owner.tightBoundFullWireSetAbortBlockedSearchCount;
             if (owner.tightBoundExistingWireSearchCount > 1U) {
                 ++summary.tightBoundExistingWireMultiRoundWireInfoCount;
-                summary.tightBoundExistingWireMultiRoundSearchCount +=
-                    owner.tightBoundExistingWireSearchCount - 1U;
+                summary.tightBoundExistingWireMultiRoundSearchCount
+                    += owner.tightBoundExistingWireSearchCount - 1U;
             }
-            summary.tightBoundExistingWireSearchStackFrameCount += owner.tightBoundExistingWireSearchStackFrameCount;
-            summary.tightBoundExistingWireSearchVertexStackCount += owner.tightBoundExistingWireSearchVertexStackCount;
-            summary.tightBoundExistingWireSearchEdgeSetVisitCount += owner.tightBoundExistingWireSearchEdgeSetVisitCount;
-            summary.tightBoundExistingWireSearchBacktrackCount += owner.tightBoundExistingWireSearchBacktrackCount;
-            summary.tightBoundExistingWireSearchIdxVertexCount += owner.tightBoundExistingWireSearchIdxVertexCount;
-            summary.tightBoundExistingWireSearchStackPosCount += owner.tightBoundExistingWireSearchStackPosCount;
-            summary.tightBoundExistingWireSearchPathVertexCount +=
-                owner.tightBoundExistingWireSearchPathVertexCount;
+            summary.tightBoundExistingWireSearchStackFrameCount
+                += owner.tightBoundExistingWireSearchStackFrameCount;
+            summary.tightBoundExistingWireSearchVertexStackCount
+                += owner.tightBoundExistingWireSearchVertexStackCount;
+            summary.tightBoundExistingWireSearchEdgeSetVisitCount
+                += owner.tightBoundExistingWireSearchEdgeSetVisitCount;
+            summary.tightBoundExistingWireSearchBacktrackCount
+                += owner.tightBoundExistingWireSearchBacktrackCount;
+            summary.tightBoundExistingWireSearchIdxVertexCount
+                += owner.tightBoundExistingWireSearchIdxVertexCount;
+            summary.tightBoundExistingWireSearchStackPosCount
+                += owner.tightBoundExistingWireSearchStackPosCount;
+            summary.tightBoundExistingWireSearchPathVertexCount
+                += owner.tightBoundExistingWireSearchPathVertexCount;
             for (const TightBoundBranchCandidate& candidate : owner.branchCandidates) {
                 if (!candidate.inside) {
                     continue;
@@ -5726,21 +5907,24 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
             summary.tightBoundExistingWireIdxVertexCount += selectedExistingWireIdxVertexCount;
             summary.tightBoundExistingWireStackPosCount += selectedExistingWireStackPosCount;
             if (owner.tightBoundExistingWireHitCount > selectedExistingWireHitCount) {
-                summary.tightBoundExistingWireSearchOnlyHitCount +=
-                    owner.tightBoundExistingWireHitCount - selectedExistingWireHitCount;
+                summary.tightBoundExistingWireSearchOnlyHitCount += owner.tightBoundExistingWireHitCount
+                    - selectedExistingWireHitCount;
             }
-            if (owner.tightBoundExistingWireSearchIdxVertexCount > selectedExistingWireIdxVertexCount) {
-                summary.tightBoundExistingWireSearchOnlyIdxVertexCount +=
-                    owner.tightBoundExistingWireSearchIdxVertexCount - selectedExistingWireIdxVertexCount;
+            if (owner.tightBoundExistingWireSearchIdxVertexCount
+                > selectedExistingWireIdxVertexCount) {
+                summary.tightBoundExistingWireSearchOnlyIdxVertexCount
+                    += owner.tightBoundExistingWireSearchIdxVertexCount
+                    - selectedExistingWireIdxVertexCount;
             }
             if (owner.tightBoundExistingWireSearchStackPosCount > selectedExistingWireStackPosCount) {
-                summary.tightBoundExistingWireSearchOnlyStackPosCount +=
-                    owner.tightBoundExistingWireSearchStackPosCount - selectedExistingWireStackPosCount;
+                summary.tightBoundExistingWireSearchOnlyStackPosCount
+                    += owner.tightBoundExistingWireSearchStackPosCount
+                    - selectedExistingWireStackPosCount;
             }
-            summary.tightBoundExistingWireSearchOnlyPathBlockedCount +=
-                owner.tightBoundExistingWireSearchOnlyPathBlockedCount;
-            summary.tightBoundExistingWireSearchOnlyOrderBlockedCount +=
-                owner.tightBoundExistingWireSearchOnlyOrderBlockedCount;
+            summary.tightBoundExistingWireSearchOnlyPathBlockedCount
+                += owner.tightBoundExistingWireSearchOnlyPathBlockedCount;
+            summary.tightBoundExistingWireSearchOnlyOrderBlockedCount
+                += owner.tightBoundExistingWireSearchOnlyOrderBlockedCount;
             if (!owner.splitOwnerVertices.empty()) {
                 ++summary.tightBoundSplitOwnerWireInfoCount;
                 summary.tightBoundSplitOwnerVertexCount += owner.splitOwnerVertices.size();
@@ -5763,8 +5947,8 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
         std::size_t producerLedgerOpenExportIndex = 0;
         for (std::size_t edgeInfoIndex = 0; edgeInfoIndex < info.edges.size(); ++edgeInfoIndex) {
             const EdgeInfo& edgeInfo = info.edges[edgeInfoIndex];
-            const bool producerLedgerExportsOpenEdge =
-                edgeInfo.hasOpenExportOverride() || edgeInfoExportsOpenWireCompound(edgeInfo);
+            const bool producerLedgerExportsOpenEdge = edgeInfo.hasOpenExportOverride()
+                || edgeInfoExportsOpenWireCompound(edgeInfo);
             if (producerLedgerExportsOpenEdge) {
                 ++producerLedgerOpenExportIndex;
             }
@@ -5777,8 +5961,8 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
                 producerEntry.openExportIndex = producerLedgerOpenExportIndex;
                 producerEntry.sourceEdgeInfoIndex = edgeInfo.resultWireProducer.sourceEdgeInfoIndex;
                 producerEntry.rootEdgeInfoIndex = edgeInfo.resultWireProducer.rootEdgeInfoIndex;
-                producerEntry.currentMemberEdgeInfoIndex =
-                    edgeInfo.resultWireProducer.currentMemberEdgeInfoIndex;
+                producerEntry.currentMemberEdgeInfoIndex
+                    = edgeInfo.resultWireProducer.currentMemberEdgeInfoIndex;
                 if (edgeInfoIndex < childWireIndexByEdgeInfo.size()) {
                     producerEntry.childWireInfoIndex = childWireIndexByEdgeInfo[edgeInfoIndex];
                 }
@@ -5821,12 +6005,13 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
             if (edgeInfo.superEdgeAdjacentRangeStart >= 0
                 && edgeInfo.superEdgeAdjacentRangeEnd >= edgeInfo.superEdgeAdjacentRangeStart) {
                 summary.superEdgeLifecycleAdjacentRangeVertexCount += static_cast<std::size_t>(
-                    edgeInfo.superEdgeAdjacentRangeEnd - edgeInfo.superEdgeAdjacentRangeStart);
+                    edgeInfo.superEdgeAdjacentRangeEnd - edgeInfo.superEdgeAdjacentRangeStart
+                );
             }
-            const bool hasSourceIdentityVertex =
-                edgeInfo.sourceVertexIdentity[0] || edgeInfo.sourceVertexIdentity[1];
-            const bool hasOnlySourceIdentityVertices =
-                edgeInfo.sourceVertexIdentity[0] && edgeInfo.sourceVertexIdentity[1];
+            const bool hasSourceIdentityVertex = edgeInfo.sourceVertexIdentity[0]
+                || edgeInfo.sourceVertexIdentity[1];
+            const bool hasOnlySourceIdentityVertices = edgeInfo.sourceVertexIdentity[0]
+                && edgeInfo.sourceVertexIdentity[1];
             if (hasSourceIdentityVertex) {
                 ++summary.sourceIdentitySharedVertexEdgeInfoCount;
             }
@@ -5905,11 +6090,11 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
         if (!info.orderedVertices.empty()) {
             ++summary.orderedWireInfoCount;
             summary.orderedVertexCount += info.orderedVertices.size();
-            if (std::any_of(info.orderedVertices.begin(),
-                            info.orderedVertices.end(),
-                            [](const WireVertex& vertex) {
-                                return vertex.branchCandidateCount > 0U;
-                            })) {
+            if (std::any_of(
+                    info.orderedVertices.begin(),
+                    info.orderedVertices.end(),
+                    [](const WireVertex& vertex) { return vertex.branchCandidateCount > 0U; }
+                )) {
                 ++summary.branchSearchSeedWireInfoCount;
             }
             if (info.hasNewWireSeed) {
@@ -5921,16 +6106,16 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
             if (info.done) {
                 ++summary.doneWireInfoCount;
             }
-            summary.doneOwnedEdgeInfoCount += std::count_if(info.edges.begin(),
-                                                            info.edges.end(),
-                                                            [](const EdgeInfo& edgeInfo) {
-                                                                return edgeInfo.wireInfo != 0U;
-                                                            });
+            summary.doneOwnedEdgeInfoCount += std::count_if(
+                info.edges.begin(),
+                info.edges.end(),
+                [](const EdgeInfo& edgeInfo) { return edgeInfo.wireInfo != 0U; }
+            );
         }
         summary.ownerPropagationCandidateCount += info.ownerPropagationCandidateCount;
         summary.ownerPropagationOtherWireCandidateCount += info.ownerPropagationOtherWireCandidateCount;
-        summary.ownerPropagationOtherWireLiveEdgeInfoCount +=
-            info.ownerPropagationOtherWireLiveEdgeInfoCount;
+        summary.ownerPropagationOtherWireLiveEdgeInfoCount
+            += info.ownerPropagationOtherWireLiveEdgeInfoCount;
         summary.exhaustAdjacentSearchCount += info.exhaustAdjacentSearchCount;
         summary.exhaustAdjacentSearchHitCount += info.exhaustAdjacentSearchHitCount;
         summary.exhaustAdjacentSearchMissCount += info.exhaustAdjacentSearchMissCount;
@@ -5942,72 +6127,72 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
         summary.exhaustAdjacentWireSetEraseCount += info.exhaustAdjacentWireSetEraseCount;
         summary.exhaustAdjacentWireSetAbortCount += info.exhaustAdjacentWireSetAbortCount;
         summary.exhaustAdjacentWireInfo2AbortCount += info.exhaustAdjacentWireInfo2AbortCount;
-        summary.tightBoundExhaustPrimaryResetEdgeInfoCount +=
-            info.tightBoundExhaustPrimaryResetEdgeInfoCount;
+        summary.tightBoundExhaustPrimaryResetEdgeInfoCount
+            += info.tightBoundExhaustPrimaryResetEdgeInfoCount;
         summary.repeatedSplitExhaustCycleCount += info.repeatedSplitExhaustCycleCount;
         summary.repeatedSplitExhaustRemovedEdgeInfoCount += info.repeatedSplitExhaustRemovedEdgeInfoCount;
-        summary.repeatedSplitExhaustRemovedUnownedEdgeInfoCount +=
-            info.repeatedSplitExhaustRemovedUnownedEdgeInfoCount;
-        summary.repeatedSplitExhaustRemovedSecondaryEdgeInfoCount +=
-            info.repeatedSplitExhaustRemovedSecondaryEdgeInfoCount;
-        summary.repeatedSplitExhaustRemovedPrimaryEdgeInfoCount +=
-            info.repeatedSplitExhaustRemovedPrimaryEdgeInfoCount;
-        summary.repeatedSplitExhaustRerunActiveEdgeInfoCount +=
-            info.repeatedSplitExhaustRerunActiveEdgeInfoCount;
-        summary.repeatedSplitExhaustRerunOwnedActiveEdgeInfoCount +=
-            info.repeatedSplitExhaustRerunOwnedActiveEdgeInfoCount;
-        summary.repeatedSplitExhaustRerunResetPrimaryEdgeInfoCount +=
-            info.repeatedSplitExhaustRerunResetPrimaryEdgeInfoCount;
-        summary.repeatedSplitExhaustRerunResetSecondaryEdgeInfoCount +=
-            info.repeatedSplitExhaustRerunResetSecondaryEdgeInfoCount;
-        summary.repeatedSplitExhaustRerunSkippedOpenLeafEdgeInfoCount +=
-            info.repeatedSplitExhaustRerunSkippedOpenLeafEdgeInfoCount;
-        summary.repeatedSplitExhaustRerunNoActiveSearchCount +=
-            info.repeatedSplitExhaustRerunNoActiveSearchCount;
-        summary.repeatedSplitExhaustRerunClosedWireSearchCount +=
-            info.repeatedSplitExhaustRerunClosedWireSearchCount;
-        summary.repeatedSplitExhaustRerunClosedWireMissCount +=
-            info.repeatedSplitExhaustRerunClosedWireMissCount;
-        summary.repeatedSplitExhaustRerunMissLiveResetEdgeInfoCount +=
-            info.repeatedSplitExhaustRerunMissLiveResetEdgeInfoCount;
-        summary.repeatedSplitExhaustRerunClosedWireInfoCount +=
-            info.repeatedSplitExhaustRerunClosedWireInfoCount;
-        summary.repeatedSplitExhaustRerunClosedWireAssignedEdgeInfoCount +=
-            info.repeatedSplitExhaustRerunClosedWireAssignedEdgeInfoCount;
-        summary.repeatedSplitExhaustRerunClosedWireVertexCount +=
-            info.repeatedSplitExhaustRerunClosedWireVertexCount;
-        summary.repeatedSplitExhaustRerunResettableClosedWireInfoCount +=
-            info.repeatedSplitExhaustRerunResettableClosedWireInfoCount;
-        summary.repeatedSplitExhaustRerunResettableAssignedEdgeInfoCount +=
-            info.repeatedSplitExhaustRerunResettableAssignedEdgeInfoCount;
-        summary.repeatedSplitExhaustRerunLiveResetPrimaryEdgeInfoCount +=
-            info.repeatedSplitExhaustRerunLiveResetPrimaryEdgeInfoCount;
-        summary.repeatedSplitExhaustRerunLiveResetSecondaryEdgeInfoCount +=
-            info.repeatedSplitExhaustRerunLiveResetSecondaryEdgeInfoCount;
-        summary.repeatedSplitExhaustRerunLiveClosedWireInfoCount +=
-            info.repeatedSplitExhaustRerunLiveClosedWireInfoCount;
-        summary.repeatedSplitExhaustRerunLiveAssignedEdgeInfoCount +=
-            info.repeatedSplitExhaustRerunLiveAssignedEdgeInfoCount;
-        summary.repeatedSplitExhaustRerunLiveClosedWireVertexCount +=
-            info.repeatedSplitExhaustRerunLiveClosedWireVertexCount;
-        summary.repeatedSplitExhaustRerunLiveBranchSearchCandidateCount +=
-            info.repeatedSplitExhaustRerunLiveBranchSearchCandidateCount;
-        summary.repeatedSplitExhaustRerunLiveBranchSearchInsideCandidateCount +=
-            info.repeatedSplitExhaustRerunLiveBranchSearchInsideCandidateCount;
-        summary.repeatedSplitExhaustRerunLiveDoneWireInfoCount +=
-            info.repeatedSplitExhaustRerunLiveDoneWireInfoCount;
-        summary.repeatedSplitExhaustRerunRemovalScanCount +=
-            info.repeatedSplitExhaustRerunRemovalScanCount;
-        summary.repeatedSplitExhaustRerunLoopExitNoRemovalCount +=
-            info.repeatedSplitExhaustRerunLoopExitNoRemovalCount;
-        summary.repeatedSplitExhaustRerunBranchSearchCandidateCount +=
-            info.repeatedSplitExhaustRerunBranchSearchCandidateCount;
-        summary.repeatedSplitExhaustRerunBranchSearchInsideCandidateCount +=
-            info.repeatedSplitExhaustRerunBranchSearchInsideCandidateCount;
-        summary.repeatedSplitExhaustRerunNewWireSeedCandidateCount +=
-            info.repeatedSplitExhaustRerunNewWireSeedCandidateCount;
-        summary.repeatedSplitExhaustGeneratedIdentityBlockedEdgeInfoCount +=
-            info.repeatedSplitExhaustGeneratedIdentityBlockedEdgeInfoCount;
+        summary.repeatedSplitExhaustRemovedUnownedEdgeInfoCount
+            += info.repeatedSplitExhaustRemovedUnownedEdgeInfoCount;
+        summary.repeatedSplitExhaustRemovedSecondaryEdgeInfoCount
+            += info.repeatedSplitExhaustRemovedSecondaryEdgeInfoCount;
+        summary.repeatedSplitExhaustRemovedPrimaryEdgeInfoCount
+            += info.repeatedSplitExhaustRemovedPrimaryEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunActiveEdgeInfoCount
+            += info.repeatedSplitExhaustRerunActiveEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunOwnedActiveEdgeInfoCount
+            += info.repeatedSplitExhaustRerunOwnedActiveEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunResetPrimaryEdgeInfoCount
+            += info.repeatedSplitExhaustRerunResetPrimaryEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunResetSecondaryEdgeInfoCount
+            += info.repeatedSplitExhaustRerunResetSecondaryEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunSkippedOpenLeafEdgeInfoCount
+            += info.repeatedSplitExhaustRerunSkippedOpenLeafEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunNoActiveSearchCount
+            += info.repeatedSplitExhaustRerunNoActiveSearchCount;
+        summary.repeatedSplitExhaustRerunClosedWireSearchCount
+            += info.repeatedSplitExhaustRerunClosedWireSearchCount;
+        summary.repeatedSplitExhaustRerunClosedWireMissCount
+            += info.repeatedSplitExhaustRerunClosedWireMissCount;
+        summary.repeatedSplitExhaustRerunMissLiveResetEdgeInfoCount
+            += info.repeatedSplitExhaustRerunMissLiveResetEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunClosedWireInfoCount
+            += info.repeatedSplitExhaustRerunClosedWireInfoCount;
+        summary.repeatedSplitExhaustRerunClosedWireAssignedEdgeInfoCount
+            += info.repeatedSplitExhaustRerunClosedWireAssignedEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunClosedWireVertexCount
+            += info.repeatedSplitExhaustRerunClosedWireVertexCount;
+        summary.repeatedSplitExhaustRerunResettableClosedWireInfoCount
+            += info.repeatedSplitExhaustRerunResettableClosedWireInfoCount;
+        summary.repeatedSplitExhaustRerunResettableAssignedEdgeInfoCount
+            += info.repeatedSplitExhaustRerunResettableAssignedEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunLiveResetPrimaryEdgeInfoCount
+            += info.repeatedSplitExhaustRerunLiveResetPrimaryEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunLiveResetSecondaryEdgeInfoCount
+            += info.repeatedSplitExhaustRerunLiveResetSecondaryEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunLiveClosedWireInfoCount
+            += info.repeatedSplitExhaustRerunLiveClosedWireInfoCount;
+        summary.repeatedSplitExhaustRerunLiveAssignedEdgeInfoCount
+            += info.repeatedSplitExhaustRerunLiveAssignedEdgeInfoCount;
+        summary.repeatedSplitExhaustRerunLiveClosedWireVertexCount
+            += info.repeatedSplitExhaustRerunLiveClosedWireVertexCount;
+        summary.repeatedSplitExhaustRerunLiveBranchSearchCandidateCount
+            += info.repeatedSplitExhaustRerunLiveBranchSearchCandidateCount;
+        summary.repeatedSplitExhaustRerunLiveBranchSearchInsideCandidateCount
+            += info.repeatedSplitExhaustRerunLiveBranchSearchInsideCandidateCount;
+        summary.repeatedSplitExhaustRerunLiveDoneWireInfoCount
+            += info.repeatedSplitExhaustRerunLiveDoneWireInfoCount;
+        summary.repeatedSplitExhaustRerunRemovalScanCount
+            += info.repeatedSplitExhaustRerunRemovalScanCount;
+        summary.repeatedSplitExhaustRerunLoopExitNoRemovalCount
+            += info.repeatedSplitExhaustRerunLoopExitNoRemovalCount;
+        summary.repeatedSplitExhaustRerunBranchSearchCandidateCount
+            += info.repeatedSplitExhaustRerunBranchSearchCandidateCount;
+        summary.repeatedSplitExhaustRerunBranchSearchInsideCandidateCount
+            += info.repeatedSplitExhaustRerunBranchSearchInsideCandidateCount;
+        summary.repeatedSplitExhaustRerunNewWireSeedCandidateCount
+            += info.repeatedSplitExhaustRerunNewWireSeedCandidateCount;
+        summary.repeatedSplitExhaustGeneratedIdentityBlockedEdgeInfoCount
+            += info.repeatedSplitExhaustGeneratedIdentityBlockedEdgeInfoCount;
     }
     return summary;
 }
@@ -6066,8 +6251,9 @@ std::optional<TopoDS_Shape> WireJoiner::getOpenWires(const std::string& historyP
             if (!exportsOpenEdge) {
                 continue;
             }
-            const bool purgeBridge =
-                edgeInfo.helperOpenExportOverride ? false : edgeInfo.purgeAsOriginalOpenEdge;
+            const bool purgeBridge = edgeInfo.helperOpenExportOverride
+                ? false
+                : edgeInfo.purgeAsOriginalOpenEdge;
             if (!edgeInfo.superEdge.IsNull() && !edgeInfo.hasOpenExportOverride()) {
                 const TopoDS_Wire wire = edgeInfo.openExportWire();
                 if (wire.IsNull()) {
@@ -6109,18 +6295,23 @@ std::optional<TopoDS_Shape> WireJoiner::getOpenWires(const std::string& historyP
         liveWires.insert(liveWires.end(), mergedWires.begin(), mergedWires.end());
     }
     if (noOriginal && !sourceEdges_.empty()) {
-        liveWires.erase(std::remove_if(liveWires.begin(),
-                                       liveWires.end(),
-                                       [&](const TopoDS_Wire& wire) {
-                                           // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-                                           // ::WireJoinerP::getOpenWires(), calls
-                                           // "source.findSubShapesWithSharedVertex(TopoShape(edge, -1))".
-                                           // Keep the main path topological: same-coordinate source endpoint
-                                           // matching and bounded-face boundary-touch retention are diagnostic
-                                           // compatibility probes, not FreeCAD's open-wire export rule.
-                                           return allEdgesShareOriginalSourceVertexByIdentity(wire, sourceEdges_);
-                                       }),
-                        liveWires.end());
+        liveWires.erase(
+            std::remove_if(
+                liveWires.begin(),
+                liveWires.end(),
+                [&](const TopoDS_Wire& wire) {
+                    // FreeCAD:
+                    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+                    // ::WireJoinerP::getOpenWires(), calls
+                    // "source.findSubShapesWithSharedVertex(TopoShape(edge, -1))".
+                    // Keep the main path topological: same-coordinate source endpoint
+                    // matching and bounded-face boundary-touch retention are diagnostic
+                    // compatibility probes, not FreeCAD's open-wire export rule.
+                    return allEdgesShareOriginalSourceVertexByIdentity(wire, sourceEdges_);
+                }
+            ),
+            liveWires.end()
+        );
     }
     if (liveWires.empty()) {
         return std::nullopt;
