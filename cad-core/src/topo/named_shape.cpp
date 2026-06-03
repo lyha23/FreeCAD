@@ -944,6 +944,78 @@ void consumeSketchInternalTerminalHistory(NamedShape& namedShape,
     }
 }
 
+bool resultWireOpenExportEntryRequiresProducerIdentity(
+    const SketchInternalWireJoinerOpenExportHistoryEntry& entry)
+{
+    return entry.helperOpenExportOverride || entry.generatedOpenExport;
+}
+
+bool resultWireProducerIdentityMissing(const SketchInternalWireJoinerOpenExportHistoryEntry& entry)
+{
+    if (!resultWireOpenExportEntryRequiresProducerIdentity(entry)) {
+        return false;
+    }
+    if (entry.resultWireProducerKind.empty() || entry.resultWireProducerState.empty()
+        || entry.resultWireProducerBlocker.empty()) {
+        return true;
+    }
+    return entry.resultWireProducerKind == "None" && entry.resultWireProducerBlocker == "None";
+}
+
+bool sourceEdgeLineageConsumedByNamedShape(const NamedShape& namedShape,
+                                           const std::string& sourceName)
+{
+    if (namedShape.elementMap.count(sourceName) != 0U) {
+        return true;
+    }
+    return std::any_of(
+        namedShape.history.begin(),
+        namedShape.history.end(),
+        [&](const ElementHistory& entry) {
+            return std::find(entry.sources.begin(), entry.sources.end(), sourceName)
+                != entry.sources.end();
+        });
+}
+
+bool resultWireElementMapIdentityMismatch(const NamedShape& namedShape,
+                                          const SketchInternalWireJoinerOpenExportHistoryEntry& entry)
+{
+    if (!resultWireOpenExportEntryRequiresProducerIdentity(entry)) {
+        return false;
+    }
+    if (entry.sourceEdgeIndices.empty()) {
+        return true;
+    }
+
+    return std::any_of(
+        entry.sourceEdgeIndices.begin(),
+        entry.sourceEdgeIndices.end(),
+        [&](std::size_t sourceEdgeIndex) {
+            const std::string sourceName = "Edge" + std::to_string(sourceEdgeIndex + 1U);
+            return !sourceEdgeLineageConsumedByNamedShape(namedShape, sourceName);
+        });
+}
+
+void refreshSketchInternalResultWireIdentityCounters(NamedShape& namedShape)
+{
+    if (!namedShape.sketchInternalHistory) {
+        return;
+    }
+
+    SketchInternalHistoryContext& history = *namedShape.sketchInternalHistory;
+    history.namedShapeHistoryMissingResultWireIdentityCount = 0;
+    history.elementMapResultWireIdentityMismatchCount = 0;
+    for (const SketchInternalWireJoinerOpenExportHistoryEntry& entry :
+         history.wireJoinerOpenExportHistoryEntries) {
+        if (resultWireProducerIdentityMissing(entry)) {
+            ++history.namedShapeHistoryMissingResultWireIdentityCount;
+        }
+        if (resultWireElementMapIdentityMismatch(namedShape, entry)) {
+            ++history.elementMapResultWireIdentityMismatchCount;
+        }
+    }
+}
+
 nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& history)
 {
     nlohmann::json wireJoinerOpenExportEntries = nlohmann::json::array();
@@ -952,6 +1024,16 @@ nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& h
         wireJoinerOpenExportEntries.push_back({
             {"open_export_index", entry.openExportIndex},
             {"edge_info_index", entry.edgeInfoIndex},
+            {"result_wire_producer_kind", entry.resultWireProducerKind},
+            {"result_wire_producer_state", entry.resultWireProducerState},
+            {"result_wire_producer_blocker", entry.resultWireProducerBlocker},
+            {"result_wire_producer_source_edge_info_index",
+             entry.resultWireProducerSourceEdgeInfoIndex},
+            {"result_wire_producer_root_edge_info_index", entry.resultWireProducerRootEdgeInfoIndex},
+            {"result_wire_producer_current_member_edge_info_index",
+             entry.resultWireProducerCurrentMemberEdgeInfoIndex},
+            {"result_wire_producer_child_wire_info_index",
+             entry.resultWireProducerChildWireInfoIndex},
             {"source_edge_indices", entry.sourceEdgeIndices},
             {"source_lineage_from_splitter_history", entry.sourceLineageFromSplitterHistory},
             {"generated_open_export", entry.generatedOpenExport},
@@ -1289,6 +1371,10 @@ nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& h
         {"wire_joiner_open_export_purge_bridge_edge_count",
          history.wireJoinerOpenExportPurgeBridgeEdgeCount},
         {"wire_joiner_open_export_history_entries", std::move(wireJoinerOpenExportEntries)},
+        {"named_shape_history_missing_result_wire_identity_count",
+         history.namedShapeHistoryMissingResultWireIdentityCount},
+        {"element_map_result_wire_identity_mismatch_count",
+         history.elementMapResultWireIdentityMismatchCount},
         {"wire_joiner_modified_source_edge_count", history.wireJoinerModifiedSourceEdgeCount},
         {"wire_joiner_modified_history_count", history.wireJoinerModifiedHistoryCount},
         {"wire_joiner_generated_history_count", history.wireJoinerGeneratedHistoryCount},
@@ -1423,6 +1509,7 @@ NamedShape namedShapeForSketchInternalShape(
     if (historyContext && historyContext->wireJoinerFinalExportHistory) {
         addDistinctString(namedShape.elementHistoryStatus, "wire_joiner_history:open_export");
     }
+    refreshSketchInternalResultWireIdentityCounters(namedShape);
 
     return namedShape;
 }

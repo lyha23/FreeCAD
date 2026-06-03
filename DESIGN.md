@@ -57,3 +57,50 @@ Chili/FreeCAD/docs/CADCore方案/细化方案', 要把每一个步骤干什么�
 ---
 
 我的FreeCAD 仓库中docs/偏移处理/CADCore临时诊断主路径偏移整改方案-细分/M3-generated-result-wire-identity.md' 这个里程碑执行过程始终无法收敛，无法结束。 我希望你给我出一个 用于修改  CADCore临时诊断主路径偏移整改方案-细分 中内容 的 独立的 .patch 文件，不要尝试修改github中的内容，你没有权限
+
+
+---
+
+
+
+
+  继续在 /Users/li/Chili3DProject/重构Chili/FreeCAD 里实现 CADCore 偏移处理 / WireJoiner 临时诊断主路径偏移整改，不要从头规划，直
+  接接当前未提交工作区继续。
+
+  先做：
+
+1. 运行 git status --short，确认当前 dirty files，不要回退任何现有改动。
+2. 读取 docs/偏移处理/CADCore临时诊断主路径偏移整改方案-细分/README.md、03-实施切片与文件落点.md、04-验收矩阵与回归命令.md、05-
+   旧计数器映射表.md。
+3. 对照 cad-core/include/cad_core/geometry/wire_joiner.h、cad-core/src/geometry/wire_joiner.cpp、cad-core/src/features/
+   sketch_object.cpp、cad-core/src/topo/named_shape.cpp、cad-core/tests/test_p5_sketch.py 当前 diff 继续实现。
+
+  当前已完成并通过验证：
+
+- P0 / P1 / M2S 主账本落地：ResultWireProducerKind / State / Blocker / Identity / LedgerEntry 已接入 EdgeInfo、
+  OpenWireCompoundWireInfo、open-export history 和 JSON。
+- P3 unowned-removal + member-suppressed current-member ready 子集已切到 ExportedWithoutHelper。
+- P5 strict-source sidecar 子步已完成。
+- P5 full-evidence source-shape 子步已完成。
+- P5 live final-gate open edge 子步已完成。
+- P4 primary-removal current-member 子步已完成；secondary branch 还没开放。
+- 当前 build 和 tests 已通过：cmake --build build、python3 -m unittest tests/test_p5_sketch.py、tests/test_mvp.py、tests/
+  test_p6_topology.py，git diff --check 也通过。
+
+  下一步重点：
+
+- 继续处理 P5 missing/foreign evidence。
+- 继续处理 P4 secondary branch。
+- 继续压缩剩余 SourceShapeIdentityNotReady。
+- 等 open_wire_compound_legacy_helper_shape_wire_info_count == 0 后，才进入 P6 删除 legacy helper shape /
+  generatedOpenExportShapeForSketchInternals 最终重命名或删除。
+
+  硬性约束：
+
+- 不要新增 helper_open_export_override_* 这类继续扩散的细分字段；确需扩展必须走 ResultWireBlocker enum。
+- 不要通过 fixture 名称、输出数量、几何猜测、getOpenWires() 输出端裁剪、sibling member pruning 来凑结果。
+- 保持 FreeCAD 语义来源：优先读本仓库 src/Mod/Part/App/WireJoiner.cpp，并在新增承载语义的 public API / enum / struct / 主路径注
+  释里写 FreeCAD 依据。
+- 文档只在大节点更新，不写流水账。
+- 完成一个实质切片后运行：cmake --build build；python3 -m unittest tests/test_p5_sketch.py；必要时补 tests/test_mvp.py 和
+  tests/test_p6_topology.py；最后 git diff --check。

@@ -4965,6 +4965,20 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
                     topo::SketchInternalWireJoinerOpenExportHistoryEntry topoEntry;
                     topoEntry.openExportIndex = entry.openExportIndex;
                     topoEntry.edgeInfoIndex = entry.edgeInfoIndex;
+                    topoEntry.resultWireProducerKind =
+                        geometry::resultWireProducerKindName(entry.resultWireProducer.kind);
+                    topoEntry.resultWireProducerState =
+                        geometry::resultWireProducerStateName(entry.resultWireProducer.state);
+                    topoEntry.resultWireProducerBlocker =
+                        geometry::resultWireBlockerName(entry.resultWireProducer.blocker);
+                    topoEntry.resultWireProducerSourceEdgeInfoIndex =
+                        entry.resultWireProducer.sourceEdgeInfoIndex;
+                    topoEntry.resultWireProducerRootEdgeInfoIndex =
+                        entry.resultWireProducer.rootEdgeInfoIndex;
+                    topoEntry.resultWireProducerCurrentMemberEdgeInfoIndex =
+                        entry.resultWireProducer.currentMemberEdgeInfoIndex;
+                    topoEntry.resultWireProducerChildWireInfoIndex =
+                        entry.resultWireProducer.childWireInfoIndex;
                     topoEntry.sourceEdgeIndices = entry.sourceEdgeIndices;
                     topoEntry.sourceLineageFromSplitterHistory = entry.sourceLineageFromSplitterHistory;
                     topoEntry.generatedOpenExport = entry.generatedOpenExport;
@@ -5182,6 +5196,20 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
              + externalGeometry->ellipseArcs.size()},
     };
     if (wireJoinerLedger) {
+        nlohmann::json resultWireProducerLedgerEntries = nlohmann::json::array();
+        for (const geometry::ResultWireProducerLedgerEntry& entry :
+             wireJoinerLedger->resultWireProducerLedgerEntries) {
+            resultWireProducerLedgerEntries.push_back({
+                {"open_export_index", entry.openExportIndex},
+                {"source_edge_info_index", entry.sourceEdgeInfoIndex},
+                {"root_edge_info_index", entry.rootEdgeInfoIndex},
+                {"current_member_edge_info_index", entry.currentMemberEdgeInfoIndex},
+                {"child_wire_info_index", entry.childWireInfoIndex},
+                {"kind", geometry::resultWireProducerKindName(entry.kind)},
+                {"state", geometry::resultWireProducerStateName(entry.state)},
+                {"blocker", geometry::resultWireBlockerName(entry.blocker)},
+            });
+        }
         context.objects[object.name]["wire_joiner_ledger"] = {
             {"edge_info_count", wireJoinerLedger->edgeInfoCount},
             {"split_edge_info_count", wireJoinerLedger->splitEdgeInfoCount},
@@ -5406,6 +5434,105 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
              wireJoinerLedger->generatedOpenExportUnboundEdgeCount},
             {"generated_open_export_duplicate_source_edge_info_count",
              wireJoinerLedger->generatedOpenExportDuplicateSourceEdgeInfoCount},
+            {"result_wire_producer_ledger_entry_count",
+             wireJoinerLedger->resultWireProducerLedgerEntryCount},
+            {"migrated_legacy_helper_slot_count", wireJoinerLedger->migratedLegacyHelperSlotCount},
+            {"result_wire_producer_none_count", wireJoinerLedger->resultWireProducerNoneCount},
+            {"result_wire_producer_none_without_blocker_count",
+             wireJoinerLedger->resultWireProducerNoneWithoutBlockerCount},
+            {"result_wire_producer_existing_source_edge_count",
+             wireJoinerLedger->resultWireProducerExistingSourceEdgeCount},
+            {"result_wire_producer_partial_shared_closed_wire_count",
+             wireJoinerLedger->resultWireProducerPartialSharedClosedWireCount},
+            {"result_wire_producer_live_reset_open_edge_count",
+             wireJoinerLedger->resultWireProducerLiveResetOpenEdgeCount},
+            {"result_wire_producer_super_edge_root_count",
+             wireJoinerLedger->resultWireProducerSuperEdgeRootCount},
+            {"result_wire_producer_current_member_child_wire_count",
+             wireJoinerLedger->resultWireProducerCurrentMemberChildWireCount},
+            {"result_wire_producer_legacy_helper_candidate_count",
+             wireJoinerLedger->resultWireProducerLegacyHelperCandidateCount},
+            {"result_wire_producer_located_count", wireJoinerLedger->resultWireProducerLocatedCount},
+            {"result_wire_producer_ahistory_evidence_ready_count",
+             wireJoinerLedger->resultWireProducerAHistoryEvidenceReadyCount},
+            {"result_wire_producer_child_wire_ready_count",
+             wireJoinerLedger->resultWireProducerChildWireReadyCount},
+            {"result_wire_producer_source_shape_ready_count",
+             wireJoinerLedger->resultWireProducerSourceShapeReadyCount},
+            {"result_wire_producer_source_shape_not_ready_count",
+             wireJoinerLedger->resultWireProducerSourceShapeNotReadyCount},
+            {"result_wire_producer_exported_without_helper_wire_info_count",
+             wireJoinerLedger->resultWireProducerExportedWithoutHelperWireInfoCount},
+            {"result_wire_producer_blocker_missing_source_lineage_count",
+             wireJoinerLedger->resultWireProducerBlockerMissingSourceLineageCount},
+            {"result_wire_producer_blocker_missing_ahistory_remove_source_count",
+             wireJoinerLedger->resultWireProducerBlockerMissingAHistoryRemoveSourceCount},
+            {"result_wire_producer_blocker_foreign_ahistory_source_lineage_count",
+             wireJoinerLedger->resultWireProducerBlockerForeignAHistorySourceLineageCount},
+            {"result_wire_producer_blocker_foreign_ahistory_source_shape_ready_lineage_mismatch_count",
+             wireJoinerLedger
+                 ->resultWireProducerBlockerForeignAHistorySourceShapeReadyLineageMismatchCount},
+            {"result_wire_producer_blocker_foreign_ahistory_source_shape_identity_not_ready_count",
+             wireJoinerLedger
+                 ->resultWireProducerBlockerForeignAHistorySourceShapeIdentityNotReadyCount},
+            {"result_wire_producer_blocker_foreign_ahistory_source_geometry_mismatch_count",
+             wireJoinerLedger
+                 ->resultWireProducerBlockerForeignAHistorySourceGeometryMismatchCount},
+            {"result_wire_producer_blocker_missing_removed_target_evidence_count",
+             wireJoinerLedger->resultWireProducerBlockerMissingRemovedTargetEvidenceCount},
+            {"result_wire_producer_blocker_missing_full_ahistory_producer_evidence_count",
+             wireJoinerLedger->resultWireProducerBlockerMissingFullAHistoryProducerEvidenceCount},
+            {"result_wire_producer_blocker_final_gate_blocked_by_iteration_count",
+             wireJoinerLedger->resultWireProducerBlockerFinalGateBlockedByIterationCount},
+            {"result_wire_producer_blocker_final_gate_blocked_by_wire_info_count",
+             wireJoinerLedger->resultWireProducerBlockerFinalGateBlockedByWireInfoCount},
+            {"result_wire_producer_blocker_root_removed_by_unowned_branch_count",
+             wireJoinerLedger->resultWireProducerBlockerRootRemovedByUnownedBranchCount},
+            {"result_wire_producer_blocker_root_removed_by_primary_branch_count",
+             wireJoinerLedger->resultWireProducerBlockerRootRemovedByPrimaryBranchCount},
+            {"result_wire_producer_blocker_root_removed_by_secondary_branch_count",
+             wireJoinerLedger->resultWireProducerBlockerRootRemovedBySecondaryBranchCount},
+            {"result_wire_producer_blocker_multi_member_root_pending_suppression_count",
+             wireJoinerLedger->resultWireProducerBlockerMultiMemberRootPendingSuppressionCount},
+            {"result_wire_producer_blocker_source_shape_identity_not_ready_count",
+             wireJoinerLedger->resultWireProducerBlockerSourceShapeIdentityNotReadyCount},
+            {"result_wire_producer_blocker_source_shape_would_purge_original_count",
+             wireJoinerLedger->resultWireProducerBlockerSourceShapeWouldPurgeOriginalCount},
+            {"result_wire_producer_blocker_live_reset_source_shape_would_purge_original_count",
+             wireJoinerLedger
+                 ->resultWireProducerBlockerLiveResetSourceShapeWouldPurgeOriginalCount},
+            {"result_wire_producer_blocker_current_member_source_shape_would_purge_original_count",
+             wireJoinerLedger
+                 ->resultWireProducerBlockerCurrentMemberSourceShapeWouldPurgeOriginalCount},
+            {"result_wire_producer_blocker_same_source_sidecar_source_shape_identity_not_ready_count",
+             wireJoinerLedger
+                 ->resultWireProducerBlockerSameSourceSidecarSourceShapeIdentityNotReadyCount},
+            {"result_wire_producer_blocker_same_source_sidecar_geometry_mismatch_count",
+             wireJoinerLedger->resultWireProducerBlockerSameSourceSidecarGeometryMismatchCount},
+            {"result_wire_producer_blocker_source_shape_member_vertex_identity_not_ready_count",
+             wireJoinerLedger->resultWireProducerBlockerSourceShapeMemberVertexIdentityNotReadyCount},
+            {"result_wire_producer_blocker_current_member_child_wire_identity_not_ready_count",
+             wireJoinerLedger->resultWireProducerBlockerCurrentMemberChildWireIdentityNotReadyCount},
+            {"result_wire_producer_blocker_current_member_missing_sidecar_evidence_count",
+             wireJoinerLedger->resultWireProducerBlockerCurrentMemberMissingSidecarEvidenceCount},
+            {"result_wire_producer_blocker_current_member_root_open_producer_not_ready_count",
+             wireJoinerLedger->resultWireProducerBlockerCurrentMemberRootOpenProducerNotReadyCount},
+            {"result_wire_producer_blocker_current_member_sidecar_geometry_mismatch_count",
+             wireJoinerLedger->resultWireProducerBlockerCurrentMemberSidecarGeometryMismatchCount},
+            {"result_wire_producer_blocker_legacy_helper_shape_still_used_count",
+             wireJoinerLedger->resultWireProducerBlockerLegacyHelperShapeStillUsedCount},
+            {"result_wire_producer_unknown_invariant_count",
+             wireJoinerLedger->resultWireProducerUnknownInvariantCount},
+            {"source_shape_identity_unknown_count", wireJoinerLedger->sourceShapeIdentityUnknownCount},
+            {"open_wire_compound_legacy_helper_shape_wire_info_count",
+             wireJoinerLedger->openWireCompoundLegacyHelperShapeWireInfoCount},
+            {"unowned_removal_ready_slot_count", wireJoinerLedger->unownedRemovalReadySlotCount},
+            {"unowned_removal_ready_legacy_helper_shape_output_count",
+             wireJoinerLedger->unownedRemovalReadyLegacyHelperShapeOutputCount},
+            {"unowned_removal_current_member_producer_output_count",
+             wireJoinerLedger->unownedRemovalCurrentMemberProducerOutputCount},
+            {"multi_member_root_direct_output_count", wireJoinerLedger->multiMemberRootDirectOutputCount},
+            {"result_wire_producer_ledger_entries", resultWireProducerLedgerEntries},
             {"helper_open_export_override_edge_info_count",
              wireJoinerLedger->helperOpenExportOverrideEdgeInfoCount},
             {"helper_open_export_override_source_edge_info_count",
@@ -5868,6 +5995,20 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
             openExportHistoryEntries.push_back({
                 {"open_export_index", entry.openExportIndex},
                 {"edge_info_index", entry.edgeInfoIndex},
+                {"result_wire_producer_kind",
+                 geometry::resultWireProducerKindName(entry.resultWireProducer.kind)},
+                {"result_wire_producer_state",
+                 geometry::resultWireProducerStateName(entry.resultWireProducer.state)},
+                {"result_wire_producer_blocker",
+                 geometry::resultWireBlockerName(entry.resultWireProducer.blocker)},
+                {"result_wire_producer_source_edge_info_index",
+                 entry.resultWireProducer.sourceEdgeInfoIndex},
+                {"result_wire_producer_root_edge_info_index",
+                 entry.resultWireProducer.rootEdgeInfoIndex},
+                {"result_wire_producer_current_member_edge_info_index",
+                 entry.resultWireProducer.currentMemberEdgeInfoIndex},
+                {"result_wire_producer_child_wire_info_index",
+                 entry.resultWireProducer.childWireInfoIndex},
                 {"source_edge_indices", entry.sourceEdgeIndices},
                 {"source_lineage_from_splitter_history", entry.sourceLineageFromSplitterHistory},
                 {"generated_open_export", entry.generatedOpenExport},

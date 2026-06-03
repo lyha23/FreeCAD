@@ -43,6 +43,13 @@ struct SketchInternalWireJoinerOpenExportHistoryEntry
 {
     std::size_t openExportIndex = 0;
     std::size_t edgeInfoIndex = 0;
+    std::string resultWireProducerKind;
+    std::string resultWireProducerState;
+    std::string resultWireProducerBlocker;
+    std::size_t resultWireProducerSourceEdgeInfoIndex = 0;
+    std::size_t resultWireProducerRootEdgeInfoIndex = 0;
+    std::size_t resultWireProducerCurrentMemberEdgeInfoIndex = 0;
+    std::size_t resultWireProducerChildWireInfoIndex = 0;
     std::vector<std::size_t> sourceEdgeIndices;
     bool sourceLineageFromSplitterHistory = false;
     bool generatedOpenExport = false;
@@ -274,6 +281,16 @@ struct SketchInternalHistoryContext
     std::size_t wireJoinerOpenExportHelperOverrideMissingSourceLineageEdgeCount = 0;
     std::size_t wireJoinerOpenExportPurgeBridgeEdgeCount = 0;
     std::vector<SketchInternalWireJoinerOpenExportHistoryEntry> wireJoinerOpenExportHistoryEntries;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build() exports result wires into "openWireCompound", then calls
+    // "shape.makeShapeWithElementMap(..., MapperHistory(aHistory), ...)"; topo must consume the
+    // same producer identity in history instead of re-inferring source ownership from geometry.
+    std::size_t namedShapeHistoryMissingResultWireIdentityCount = 0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeShapeWithElementMap(), calls "mapSubElement(shapes)" before mapper history.
+    // A result-wire source lineage is accepted only when ElementMap or terminal history carries the
+    // same source edge evidence.
+    std::size_t elementMapResultWireIdentityMismatchCount = 0;
     std::size_t wireJoinerModifiedSourceEdgeCount = 0;
     std::size_t wireJoinerModifiedHistoryCount = 0;
     std::size_t wireJoinerGeneratedHistoryCount = 0;
