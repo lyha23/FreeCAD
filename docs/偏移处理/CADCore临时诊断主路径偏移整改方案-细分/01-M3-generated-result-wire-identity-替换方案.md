@@ -208,7 +208,7 @@ all result_wire_producer_ledger_entries have state == ExportedWithoutHelper and 
 result_wire_producer_ledger_entries align with wire_joiner_history_detail.open_export_history_entries
 repeated_split_exhaust_generated_identity_blocked_edge_info_count == 0
 source_lineage_missing_open_export_edge_info_count == 0
-open_export_helper_override_missing_source_lineage_edge_count == 0
+count(open_export_history_entries where helper_open_export_override and source_edge_indices is empty) == 0
 ```
 
 以下字段不再作为 M3 单独清零前置条件，而是被映射到 state/blocker：

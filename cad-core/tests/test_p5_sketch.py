@@ -421,6 +421,15 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                             )
                         )
                         if isinstance(obj.get("wire_joiner_history_detail"), dict):
+                            removed_history_summary_fields = (
+                                "open_export_source_lineage_edge_count",
+                                "open_export_missing_source_lineage_edge_count",
+                                "open_export_helper_override_edge_count",
+                                "open_export_helper_override_missing_source_lineage_edge_count",
+                                "open_export_purge_bridge_edge_count",
+                            )
+                            for field in removed_history_summary_fields:
+                                self.assertNotIn(field, obj["wire_joiner_history_detail"])
                             self.assert_result_wire_producer_ledger(obj)
 
     def test_p7_sketch_internal_history_consumes_result_wire_producer_identity(self) -> None:
@@ -441,22 +450,27 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         runtime_entries = runtime_history["open_export_history_entries"]
         internal_entries = internal_history["wire_joiner_open_export_history_entries"]
         producer_entries = ledger["result_wire_producer_ledger_entries"]
+        runtime_entry_counts = self.open_export_entry_counts(runtime_entries)
+        internal_entry_counts = self.open_export_entry_counts(internal_entries)
 
         self.assertEqual(named_shape["sketch_internal_history_status"], "history_partial:facemaker_buildface")
         self.assertIn("wire_joiner_history:open_export", named_shape["element_history_status"])
-        self.assertEqual(len(runtime_entries), runtime_history["open_export_edge_count"])
-        self.assertEqual(len(internal_entries), internal_history["wire_joiner_open_export_edge_count"])
         self.assertEqual(len(internal_entries), len(runtime_entries))
-        self.assertEqual(
-            internal_history["wire_joiner_open_export_helper_override_edge_count"],
-            runtime_history["open_export_helper_override_edge_count"],
-        )
+        self.assertEqual(internal_entry_counts, runtime_entry_counts)
         self.assertEqual(internal_history["named_shape_history_missing_result_wire_identity_count"], 0)
         self.assertEqual(internal_history["element_map_result_wire_identity_mismatch_count"], 0)
-        self.assertEqual(
-            len(producer_entries),
-            runtime_history["open_export_helper_override_edge_count"],
+        self.assertEqual(len(producer_entries), runtime_entry_counts["helper_override"])
+        removed_internal_summary_fields = (
+            "wire_joiner_open_export_edge_count",
+            "wire_joiner_open_export_source_lineage_edge_count",
+            "wire_joiner_open_export_missing_source_lineage_edge_count",
+            "wire_joiner_open_export_helper_override_edge_count",
+            "wire_joiner_open_export_helper_override_missing_source_lineage_edge_count",
+            "wire_joiner_open_export_purge_bridge_edge_count",
+            "wire_joiner_final_export_history",
         )
+        for field in removed_internal_summary_fields:
+            self.assertNotIn(field, internal_history)
 
         identity_pairs = (
             ("kind", "result_wire_producer_kind"),
@@ -592,27 +606,21 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def assert_open_export_history_entries(self, history: dict[str, object]) -> list[dict[str, object]]:
         entries = history["open_export_history_entries"]
         self.assertIsInstance(entries, list)
-        self.assertEqual(len(entries), history["open_export_edge_count"])
-        self.assertEqual(
-            sum(1 for entry in entries if entry["source_edge_indices"]),
-            history["open_export_source_lineage_edge_count"],
-        )
-        self.assertEqual(
-            sum(1 for entry in entries if not entry["source_edge_indices"]),
-            history["open_export_missing_source_lineage_edge_count"],
-        )
         self.assertNotIn("open_export_generated_edge_count", history)
+        removed_history_summary_fields = (
+            "open_export_edge_count",
+            "open_export_source_lineage_edge_count",
+            "open_export_missing_source_lineage_edge_count",
+            "open_export_helper_override_edge_count",
+            "open_export_helper_override_missing_source_lineage_edge_count",
+            "open_export_purge_bridge_edge_count",
+            "final_export_history",
+        )
+        for field in removed_history_summary_fields:
+            self.assertNotIn(field, history)
         for entry in entries:
             self.assertNotIn("generated_open_export", entry)
             self.assertNotIn("generated_open_export_reason", entry)
-        self.assertEqual(
-            sum(1 for entry in entries if entry["helper_open_export_override"]),
-            history["open_export_helper_override_edge_count"],
-        )
-        self.assertEqual(
-            sum(1 for entry in entries if entry["helper_open_export_override_reason"]),
-            history["open_export_helper_override_edge_count"],
-        )
         self.assertTrue(
             all(
                 bool(entry["helper_open_export_override_reason"]) == entry["helper_open_export_override"]
@@ -620,22 +628,24 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             )
         )
         self.assertEqual(
-            sum(
-                1
-                for entry in entries
-                if entry["helper_open_export_override"] and not entry["source_edge_indices"]
-            ),
-            history["open_export_helper_override_missing_source_lineage_edge_count"],
-        )
-        self.assertEqual(
-            sum(1 for entry in entries if entry["purge_bridge"]),
-            history["open_export_purge_bridge_edge_count"],
-        )
-        self.assertEqual(
             [entry["open_export_index"] for entry in entries],
             list(range(1, len(entries) + 1)),
         )
         return entries
+
+    @staticmethod
+    def open_export_entry_counts(entries: list[dict[str, object]]) -> dict[str, int]:
+        return {
+            "source_lineage": sum(1 for entry in entries if entry["source_edge_indices"]),
+            "missing_source_lineage": sum(1 for entry in entries if not entry["source_edge_indices"]),
+            "helper_override": sum(1 for entry in entries if entry["helper_open_export_override"]),
+            "helper_override_missing_source_lineage": sum(
+                1
+                for entry in entries
+                if entry["helper_open_export_override"] and not entry["source_edge_indices"]
+            ),
+            "purge_bridge": sum(1 for entry in entries if entry["purge_bridge"]),
+        }
 
     def assert_repeated_split_exhaust_removal_ledger(self, ledger: dict[str, int]) -> None:
         rerun_keys = (
@@ -788,13 +798,13 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         entries = self.assert_open_export_history_entries(history)
         helper_entries = [entry for entry in entries if entry["helper_open_export_override"]]
         reason_counts = Counter(entry["helper_open_export_override_reason"] for entry in helper_entries)
+        entry_counts = self.open_export_entry_counts(entries)
 
         self.assertEqual(reason_counts, Counter(expected_counts))
         self.assertEqual(sum(expected_counts.values()), len(helper_entries))
         self.assertEqual(sum(expected_counts.values()), len(ledger["result_wire_producer_ledger_entries"]))
-        self.assertEqual(sum(expected_counts.values()), history["open_export_helper_override_edge_count"])
         self.assertEqual(
-            history["open_export_helper_override_missing_source_lineage_edge_count"],
+            entry_counts["helper_override_missing_source_lineage"],
             ledger["source_lineage_missing_open_export_edge_info_count"],
         )
         self.assert_exhaust_adjacent_search_ledger(ledger)
@@ -838,7 +848,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(
             len(producer_entries),
-            history["open_export_helper_override_edge_count"],
+            self.open_export_entry_counts(history["open_export_history_entries"])["helper_override"],
         )
         valid_kinds = {
             "None",
@@ -1463,14 +1473,12 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(ledger["source_lineage_missing_open_export_edge_info_count"], 0)
         history = sketch["wire_joiner_history_detail"]
-        self.assertEqual(history["open_export_edge_count"], ledger["open_export_edge_info_count"])
-        self.assertEqual(
-            history["open_export_source_lineage_edge_count"],
-            ledger["source_lineage_open_export_edge_info_count"],
-        )
-        self.assertEqual(history["open_export_missing_source_lineage_edge_count"], 0)
-        self.assertEqual(history["open_export_purge_bridge_edge_count"], 0)
         entries = self.assert_open_export_history_entries(history)
+        self.assertEqual(len(entries), ledger["open_export_edge_info_count"])
+        entry_counts = self.open_export_entry_counts(entries)
+        self.assertEqual(entry_counts["source_lineage"], ledger["source_lineage_open_export_edge_info_count"])
+        self.assertEqual(entry_counts["missing_source_lineage"], 0)
+        self.assertEqual(entry_counts["purge_bridge"], 0)
         self.assertTrue(all(entry["source_edge_indices"] for entry in entries))
         self.assertTrue(all(not entry["purge_bridge"] for entry in entries))
         self.assertEqual(ledger["source_lineage_multi_source_edge_info_count"], 0)
@@ -1536,16 +1544,11 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(internal_history["wire_joiner_modified_history_count"], 0)
         self.assertGreater(internal_history["wire_joiner_generated_history_count"], 0)
         self.assertGreater(internal_history["wire_joiner_deleted_history_count"], 0)
-        self.assertGreater(internal_history["wire_joiner_open_export_edge_count"], 0)
         internal_entries = internal_history["wire_joiner_open_export_history_entries"]
         self.assertIsInstance(internal_entries, list)
-        self.assertEqual(
-            len(internal_entries),
-            internal_history["wire_joiner_open_export_edge_count"],
-        )
+        self.assertGreater(len(internal_entries), 0)
         self.assertTrue(all(entry["source_edge_indices"] for entry in internal_entries))
         self.assertTrue(internal_history["wire_joiner_splitter_history"])
-        self.assertTrue(internal_history["wire_joiner_final_export_history"])
         self.assertNotIn("Edge5", named_shape["element_map"])
         self.assertGreaterEqual(len(split_entries), 2)
         for entry in split_entries:
@@ -1697,32 +1700,28 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(ledger["exhaust_adjacent_wire_info2_abort_count"], 0)
         self.assertGreater(ledger["open_export_edge_info_count"], 0)
         self.assert_open_wire_compound_ledger(ledger)
-        self.assertEqual(history["open_export_edge_count"], ledger["open_export_edge_info_count"])
-        self.assertEqual(
-            history["open_export_helper_override_edge_count"],
-            len(ledger["result_wire_producer_ledger_entries"]),
-        )
-        self.assertEqual(
-            history["open_export_helper_override_missing_source_lineage_edge_count"],
-            ledger["source_lineage_missing_open_export_edge_info_count"],
-        )
-        self.assertGreater(history["open_export_source_lineage_edge_count"], 0)
-        self.assertEqual(history["open_export_missing_source_lineage_edge_count"], 0)
-        self.assertEqual(
-            history["open_export_source_lineage_edge_count"],
-            history["open_export_edge_count"],
-        )
         entries = self.assert_helper_open_export_override_reason_ledger(
             sketch,
             {"partial_junction_open_cutter": 8},
         )
+        self.assertEqual(len(entries), ledger["open_export_edge_info_count"])
+        entry_counts = self.open_export_entry_counts(entries)
+        self.assertEqual(entry_counts["helper_override"], len(ledger["result_wire_producer_ledger_entries"]))
+        self.assertEqual(
+            entry_counts["helper_override_missing_source_lineage"],
+            ledger["source_lineage_missing_open_export_edge_info_count"],
+        )
+        self.assertGreater(entry_counts["source_lineage"], 0)
+        self.assertEqual(entry_counts["missing_source_lineage"], 0)
+        self.assertEqual(entry_counts["source_lineage"], len(entries))
         self.assertTrue(all(entry["source_edge_indices"] for entry in entries))
         self.assertTrue(all(entry["helper_open_export_override"] for entry in entries))
         self.assertTrue(
             all(entry["helper_open_export_override_reason"] == "partial_junction_open_cutter" for entry in entries)
         )
         self.assertTrue(all(not entry["purge_bridge"] for entry in entries))
-        internal_history = result["named_shapes"]["Sketch.InternalShape"]["sketch_internal_history"]
+        named_shape = result["named_shapes"]["Sketch.InternalShape"]
+        internal_history = named_shape["sketch_internal_history"]
         internal_entries = internal_history["wire_joiner_open_export_history_entries"]
         self.assertEqual(
             [entry["helper_open_export_override_reason"] for entry in internal_entries],
@@ -1731,7 +1730,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(history["modified_history_count"], 0)
         self.assertGreater(history["deleted_history_count"], 0)
         self.assertTrue(history["splitter_history"])
-        self.assertTrue(history["final_export_history"])
+        self.assertIn("wire_joiner_history:open_export", named_shape["element_history_status"])
         self.assertGreater(len(ledger["result_wire_producer_ledger_entries"]), 0)
         self.assertEqual(
             len(ledger["result_wire_producer_ledger_entries"]),
@@ -1893,7 +1892,12 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             {"partial_shared_closed_wire": 1},
         )
         self.assertEqual(ledger["source_lineage_missing_open_export_edge_info_count"], 0)
-        self.assertEqual(history["open_export_helper_override_missing_source_lineage_edge_count"], 0)
+        self.assertEqual(
+            self.open_export_entry_counts(history["open_export_history_entries"])[
+                "helper_override_missing_source_lineage"
+            ],
+            0,
+        )
         self.assert_existing_wire_search_ledger(ledger)
         self.assert_existing_wire_search_only_order_blocked_ledger(ledger)
         self.assert_object_matches_expected(result, "p5", "sketch-internal-face-arc-lens")
@@ -2072,17 +2076,12 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(ledger["source_lineage_missing_open_export_edge_info_count"], 0)
         history = sketch["wire_joiner_history_detail"]
-        self.assertEqual(history["open_export_edge_count"], ledger["open_export_edge_info_count"])
-        self.assertEqual(
-            history["open_export_source_lineage_edge_count"],
-            ledger["source_lineage_open_export_edge_info_count"],
-        )
-        self.assertEqual(
-            history["open_export_purge_bridge_edge_count"],
-            ledger["source_identity_purge_bridge_edge_info_count"],
-        )
-        self.assertEqual(history["open_export_missing_source_lineage_edge_count"], 0)
         entries = self.assert_open_export_history_entries(history)
+        self.assertEqual(len(entries), ledger["open_export_edge_info_count"])
+        entry_counts = self.open_export_entry_counts(entries)
+        self.assertEqual(entry_counts["source_lineage"], ledger["source_lineage_open_export_edge_info_count"])
+        self.assertEqual(entry_counts["purge_bridge"], ledger["source_identity_purge_bridge_edge_info_count"])
+        self.assertEqual(entry_counts["missing_source_lineage"], 0)
         self.assertEqual(len(entries), 1)
         self.assertTrue(entries[0]["source_edge_indices"])
         self.assertTrue(entries[0]["purge_bridge"])

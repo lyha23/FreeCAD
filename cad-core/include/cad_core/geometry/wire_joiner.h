@@ -344,19 +344,12 @@ struct WireJoinerOpenExportHistoryEntry {
 struct WireJoinerHistorySummary {
     std::size_t sourceEdgeCount = 0;
     std::size_t splitResultEdgeCount = 0;
-    std::size_t openExportEdgeCount = 0;
-    std::size_t openExportSourceLineageEdgeCount = 0;
-    std::size_t openExportMissingSourceLineageEdgeCount = 0;
-    std::size_t openExportHelperOverrideEdgeCount = 0;
-    std::size_t openExportHelperOverrideMissingSourceLineageEdgeCount = 0;
-    std::size_t openExportPurgeBridgeEdgeCount = 0;
     std::vector<WireJoinerOpenExportHistoryEntry> openExportEntries;
     std::size_t modifiedSourceEdgeCount = 0;
     std::size_t modifiedHistoryCount = 0;
     std::size_t generatedHistoryCount = 0;
     std::size_t deletedHistoryCount = 0;
     bool splitterHistory = false;
-    bool finalExportHistory = false;
 };
 
 class WireJoiner {

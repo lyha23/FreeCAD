@@ -272,13 +272,13 @@ tight_bound_live_split_wire_info_count
 完成前四批后，`wire_joiner_ledger` 应只保留：
 
 - `result_wire_producer_ledger_entries`
-- source lineage / open-export history 对齐仍需要的少量 count
+- source lineage / open-export history 对齐仍需要、且无法从 entries 直接派生的少量 count
 - WireJoiner ownership/search/exhaust 仍被 fixture 覆盖、且没有更好结构化 entry 的 count
 
 `wire_joiner_history_detail` 应保留：
 
 - `open_export_history_entries`
-- `open_export_*_count`
+- open-export 数量由 `open_export_history_entries.size()` 派生，不再输出单独 count
 - modified/generated/deleted history count
 - splitter/final export history 状态
 

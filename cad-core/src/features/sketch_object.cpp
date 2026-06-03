@@ -4712,17 +4712,6 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
                 // infer WireJoiner split/generated/deleted history from raw/internal geometry.
                 internalHistoryContext->wireJoinerSourceEdgeCount = wireJoinerHistory->sourceEdgeCount;
                 internalHistoryContext->wireJoinerSplitResultEdgeCount = wireJoinerHistory->splitResultEdgeCount;
-                internalHistoryContext->wireJoinerOpenExportEdgeCount = wireJoinerHistory->openExportEdgeCount;
-                internalHistoryContext->wireJoinerOpenExportSourceLineageEdgeCount =
-                    wireJoinerHistory->openExportSourceLineageEdgeCount;
-                internalHistoryContext->wireJoinerOpenExportMissingSourceLineageEdgeCount =
-                    wireJoinerHistory->openExportMissingSourceLineageEdgeCount;
-                internalHistoryContext->wireJoinerOpenExportHelperOverrideEdgeCount =
-                    wireJoinerHistory->openExportHelperOverrideEdgeCount;
-                internalHistoryContext->wireJoinerOpenExportHelperOverrideMissingSourceLineageEdgeCount =
-                    wireJoinerHistory->openExportHelperOverrideMissingSourceLineageEdgeCount;
-                internalHistoryContext->wireJoinerOpenExportPurgeBridgeEdgeCount =
-                    wireJoinerHistory->openExportPurgeBridgeEdgeCount;
                 for (const geometry::WireJoinerOpenExportHistoryEntry& entry :
                      wireJoinerHistory->openExportEntries) {
                     topo::SketchInternalWireJoinerOpenExportHistoryEntry topoEntry;
@@ -4755,7 +4744,6 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
                 internalHistoryContext->wireJoinerGeneratedHistoryCount = wireJoinerHistory->generatedHistoryCount;
                 internalHistoryContext->wireJoinerDeletedHistoryCount = wireJoinerHistory->deletedHistoryCount;
                 internalHistoryContext->wireJoinerSplitterHistory = wireJoinerHistory->splitterHistory;
-                internalHistoryContext->wireJoinerFinalExportHistory = wireJoinerHistory->finalExportHistory;
             }
         }
         shapeValue.internalNamedShape =
@@ -5122,21 +5110,12 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
         context.objects[object.name]["wire_joiner_history_detail"] = {
             {"source_edge_count", wireJoinerHistory->sourceEdgeCount},
             {"split_result_edge_count", wireJoinerHistory->splitResultEdgeCount},
-            {"open_export_edge_count", wireJoinerHistory->openExportEdgeCount},
-            {"open_export_source_lineage_edge_count", wireJoinerHistory->openExportSourceLineageEdgeCount},
-            {"open_export_missing_source_lineage_edge_count",
-             wireJoinerHistory->openExportMissingSourceLineageEdgeCount},
-            {"open_export_helper_override_edge_count", wireJoinerHistory->openExportHelperOverrideEdgeCount},
-            {"open_export_helper_override_missing_source_lineage_edge_count",
-             wireJoinerHistory->openExportHelperOverrideMissingSourceLineageEdgeCount},
-            {"open_export_purge_bridge_edge_count", wireJoinerHistory->openExportPurgeBridgeEdgeCount},
             {"open_export_history_entries", std::move(openExportHistoryEntries)},
             {"modified_source_edge_count", wireJoinerHistory->modifiedSourceEdgeCount},
             {"modified_history_count", wireJoinerHistory->modifiedHistoryCount},
             {"generated_history_count", wireJoinerHistory->generatedHistoryCount},
             {"deleted_history_count", wireJoinerHistory->deletedHistoryCount},
             {"splitter_history", wireJoinerHistory->splitterHistory},
-            {"final_export_history", wireJoinerHistory->finalExportHistory},
         };
     }
     if (faceMakerHistory) {

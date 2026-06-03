@@ -1050,17 +1050,6 @@ nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& h
         {"splitter_history", history.splitterHistory},
         {"wire_joiner_source_edge_count", history.wireJoinerSourceEdgeCount},
         {"wire_joiner_split_result_edge_count", history.wireJoinerSplitResultEdgeCount},
-        {"wire_joiner_open_export_edge_count", history.wireJoinerOpenExportEdgeCount},
-        {"wire_joiner_open_export_source_lineage_edge_count",
-         history.wireJoinerOpenExportSourceLineageEdgeCount},
-        {"wire_joiner_open_export_missing_source_lineage_edge_count",
-         history.wireJoinerOpenExportMissingSourceLineageEdgeCount},
-        {"wire_joiner_open_export_helper_override_edge_count",
-         history.wireJoinerOpenExportHelperOverrideEdgeCount},
-        {"wire_joiner_open_export_helper_override_missing_source_lineage_edge_count",
-         history.wireJoinerOpenExportHelperOverrideMissingSourceLineageEdgeCount},
-        {"wire_joiner_open_export_purge_bridge_edge_count",
-         history.wireJoinerOpenExportPurgeBridgeEdgeCount},
         {"wire_joiner_open_export_history_entries", std::move(wireJoinerOpenExportEntries)},
         {"named_shape_history_missing_result_wire_identity_count",
          history.namedShapeHistoryMissingResultWireIdentityCount},
@@ -1071,7 +1060,6 @@ nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& h
         {"wire_joiner_generated_history_count", history.wireJoinerGeneratedHistoryCount},
         {"wire_joiner_deleted_history_count", history.wireJoinerDeletedHistoryCount},
         {"wire_joiner_splitter_history", history.wireJoinerSplitterHistory},
-        {"wire_joiner_final_export_history", history.wireJoinerFinalExportHistory},
     };
 }
 
@@ -1197,7 +1185,7 @@ NamedShape namedShapeForSketchInternalShape(
     if (historyContext && historyContext->wireJoinerDeletedHistoryCount > 0U) {
         addDistinctString(namedShape.elementHistoryStatus, "wire_joiner_history:deleted");
     }
-    if (historyContext && historyContext->wireJoinerFinalExportHistory) {
+    if (historyContext && !historyContext->wireJoinerOpenExportHistoryEntries.empty()) {
         addDistinctString(namedShape.elementHistoryStatus, "wire_joiner_history:open_export");
     }
     refreshSketchInternalResultWireIdentityCounters(namedShape);

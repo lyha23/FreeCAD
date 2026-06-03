@@ -2730,12 +2730,6 @@ void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
 
     rebuildAdjacentList(finalInfo);
     recordOpenWireCompoundLedger(finalInfo);
-    historySummary_.openExportEdgeCount = std::count_if(
-        finalInfo.edges.begin(),
-        finalInfo.edges.end(),
-        [this](const EdgeInfo& edgeInfo) {
-            return edgeInfo.hasOpenExportOverride() || edgeInfoExportsOpenWireCompound(edgeInfo);
-        });
     std::size_t openExportIndex = 0;
     for (std::size_t edgeInfoIndex = 0; edgeInfoIndex < finalInfo.edges.size(); ++edgeInfoIndex) {
         const EdgeInfo& edgeInfo = finalInfo.edges[edgeInfoIndex];
@@ -2755,23 +2749,7 @@ void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
             edgeInfo.helperOpenExportOverride ? false : edgeInfo.purgeAsOriginalOpenEdge;
         entry.resultWireProducer = edgeInfo.resultWireProducer;
         historySummary_.openExportEntries.push_back(std::move(entry));
-        if (edgeInfo.sourceEdgeIndices.empty()) {
-            ++historySummary_.openExportMissingSourceLineageEdgeCount;
-        }
-        else {
-            ++historySummary_.openExportSourceLineageEdgeCount;
-        }
-        if (edgeInfo.helperOpenExportOverride) {
-            ++historySummary_.openExportHelperOverrideEdgeCount;
-            if (edgeInfo.sourceEdgeIndices.empty()) {
-                ++historySummary_.openExportHelperOverrideMissingSourceLineageEdgeCount;
-            }
-        }
-        if (edgeInfo.purgeAsOriginalOpenEdge) {
-            ++historySummary_.openExportPurgeBridgeEdgeCount;
-        }
     }
-    historySummary_.finalExportHistory = historySummary_.openExportEdgeCount > 0U;
     openWires_.clear();
     openWires_.push_back(std::move(finalInfo));
 }

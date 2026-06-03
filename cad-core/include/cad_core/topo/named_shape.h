@@ -67,12 +67,6 @@ struct SketchInternalHistoryContext
     bool splitterHistory = false;
     std::size_t wireJoinerSourceEdgeCount = 0;
     std::size_t wireJoinerSplitResultEdgeCount = 0;
-    std::size_t wireJoinerOpenExportEdgeCount = 0;
-    std::size_t wireJoinerOpenExportSourceLineageEdgeCount = 0;
-    std::size_t wireJoinerOpenExportMissingSourceLineageEdgeCount = 0;
-    std::size_t wireJoinerOpenExportHelperOverrideEdgeCount = 0;
-    std::size_t wireJoinerOpenExportHelperOverrideMissingSourceLineageEdgeCount = 0;
-    std::size_t wireJoinerOpenExportPurgeBridgeEdgeCount = 0;
     std::vector<SketchInternalWireJoinerOpenExportHistoryEntry> wireJoinerOpenExportHistoryEntries;
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::build() exports result wires into "openWireCompound", then calls
@@ -89,7 +83,6 @@ struct SketchInternalHistoryContext
     std::size_t wireJoinerGeneratedHistoryCount = 0;
     std::size_t wireJoinerDeletedHistoryCount = 0;
     bool wireJoinerSplitterHistory = false;
-    bool wireJoinerFinalExportHistory = false;
 };
 
 struct NamedElement
