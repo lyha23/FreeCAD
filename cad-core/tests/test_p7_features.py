@@ -1017,6 +1017,23 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertIn("history_consumed:generated_modified", history_status)
                 self.assertIn("terminal_history:split_deleted", history_status)
                 self.assertIn("history_consumed:merge", history_status)
+                if code == "split_stable_subname":
+                    named_shape = result["named_shapes"]["Mirrored"]
+                    split_events = [
+                        event
+                        for event in named_shape["mapper_history"]
+                        if event["relation"] == "split"
+                        and event["source"] == {"object": "Body", "subname": "Edge1"}
+                    ]
+
+                    self.assertGreaterEqual(len(split_events), 2)
+                    self.assertNotIn("Body.Edge1", named_shape["element_map"])
+                    self.assertTrue(
+                        all(event["recoverability"] == "needs_reselect" for event in split_events)
+                    )
+                    self.assertTrue(
+                        all(event["diagnostic_status"] == "split_stable_subname" for event in split_events)
+                    )
 
     def test_p7_multi_transform_combines_linear_pattern_and_mirror(self) -> None:
         result = self.run_recompute("multi-transform-linear-mirror", "p7")

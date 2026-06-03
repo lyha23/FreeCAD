@@ -1535,6 +1535,13 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("wire_joiner_history:open_export", named_shape["element_history_status"])
         self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
         self.assertIn("terminal_history:split_deleted", named_shape["element_history_status"])
+        mapper_history_stages = {event["maker_stage"] for event in named_shape["mapper_history"]}
+        mapper_history_diagnostics = {
+            event["diagnostic_status"] for event in named_shape["mapper_history"]
+        }
+        self.assertIn("facemaker:splitter", mapper_history_stages)
+        self.assertIn("wire_joiner:open_export", mapper_history_stages)
+        self.assertIn("wire_joiner_history:open_export", mapper_history_diagnostics)
         self.assertEqual(internal_history["source_edge_count"], 5)
         self.assertEqual(internal_history["bounded_face_count"], 2)
         self.assertFalse(internal_history["pre_split_history"])
@@ -2533,6 +2540,16 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(diagnostic["target"], "Sketch")
         self.assertEqual(diagnostic["subname"], "InternalFace99")
         self.assertIn("multiple", diagnostic["message"])
+        self.assertEqual(result["elementReferenceUpdates"], [])
+        ambiguous_events = [
+            event
+            for event in result["named_shapes"]["Sketch.InternalShape"]["mapper_history"]
+            if event["recoverability"] == "ambiguous"
+            and event["diagnostic_status"] == "subname_resolve_ambiguous"
+        ]
+        self.assertEqual(len(ambiguous_events), 1)
+        self.assertEqual(ambiguous_events[0]["source"], {"object": "Sketch", "subname": "InternalFace99"})
+        self.assertEqual(ambiguous_events[0]["target"], {"object": "Sketch.InternalShape", "subname": ""})
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_rejects_missing_reference_shadow_recovery(self) -> None:

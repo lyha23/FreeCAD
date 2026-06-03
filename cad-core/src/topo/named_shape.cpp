@@ -58,6 +58,70 @@ std::string historyKindName(ElementHistoryKind kind)
     return "unknown";
 }
 
+MapperHistoryRelation mapperRelationForHistoryKind(ElementHistoryKind kind)
+{
+    switch (kind) {
+        case ElementHistoryKind::Indexed:
+            return MapperHistoryRelation::Identity;
+        case ElementHistoryKind::Generated:
+            return MapperHistoryRelation::Generated;
+        case ElementHistoryKind::Modified:
+            return MapperHistoryRelation::Modified;
+        case ElementHistoryKind::Deleted:
+            return MapperHistoryRelation::Deleted;
+        case ElementHistoryKind::Split:
+            return MapperHistoryRelation::Split;
+        case ElementHistoryKind::Merge:
+            return MapperHistoryRelation::Merge;
+    }
+    return MapperHistoryRelation::Modified;
+}
+
+MapperHistoryRecoverability mapperRecoverabilityForHistoryKind(ElementHistoryKind kind)
+{
+    switch (kind) {
+        case ElementHistoryKind::Indexed:
+        case ElementHistoryKind::Generated:
+        case ElementHistoryKind::Modified:
+        case ElementHistoryKind::Merge:
+            return MapperHistoryRecoverability::Resolved;
+        case ElementHistoryKind::Deleted:
+            return MapperHistoryRecoverability::Deleted;
+        case ElementHistoryKind::Split:
+            return MapperHistoryRecoverability::NeedsReselect;
+    }
+    return MapperHistoryRecoverability::Unknown;
+}
+
+std::string mapperStageForHistoryKind(ElementHistoryKind kind)
+{
+    switch (kind) {
+        case ElementHistoryKind::Indexed:
+            return "indexed";
+        case ElementHistoryKind::Generated:
+        case ElementHistoryKind::Modified:
+            return "maker_history";
+        case ElementHistoryKind::Deleted:
+        case ElementHistoryKind::Split:
+            return "terminal_history";
+        case ElementHistoryKind::Merge:
+            return "element_map_merge";
+    }
+    return "unknown";
+}
+
+std::string diagnosticStatusForHistoryKind(ElementHistoryKind kind)
+{
+    switch (kind) {
+        case ElementHistoryKind::Deleted:
+            return "deleted_stable_subname";
+        case ElementHistoryKind::Split:
+            return "split_stable_subname";
+        default:
+            return {};
+    }
+}
+
 void addIndexedElements(
     NamedShape& namedShape,
     const TopTools_IndexedMapOfShape& shapes,
@@ -117,6 +181,26 @@ std::optional<TopAbs_ShapeEnum> elementKindFromName(const std::string& elementNa
         return std::nullopt;
     }
     return parsed->kind;
+}
+
+MapperHistoryEndpoint mapperEndpointForElement(const std::string& fallbackObject,
+                                               const std::string& elementName)
+{
+    if (elementName.empty()) {
+        return MapperHistoryEndpoint {fallbackObject, {}};
+    }
+    const std::size_t dot = elementName.rfind('.');
+    if (dot == std::string::npos) {
+        return MapperHistoryEndpoint {fallbackObject, elementName};
+    }
+    const std::string objectName = elementName.substr(0, dot);
+    return MapperHistoryEndpoint {objectName.empty() ? fallbackObject : objectName, elementName.substr(dot + 1)};
+}
+
+std::string shapeKindForHistoryElement(const std::string& elementName)
+{
+    const auto kind = elementKindFromName(elementName);
+    return kind ? subshapeKindName(*kind) : "shape";
 }
 
 std::set<std::string> targetsOfKind(const std::set<std::string>& targets, TopAbs_ShapeEnum kind)
@@ -1063,6 +1147,177 @@ nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& h
     };
 }
 
+bool legacyHistoryCoversElementMap(const std::vector<ElementHistory>& history,
+                                   const std::string& stableName,
+                                   const std::string& currentName)
+{
+    return std::any_of(
+        history.begin(),
+        history.end(),
+        [&](const ElementHistory& entry) {
+            if (entry.kind == ElementHistoryKind::Indexed || entry.element != currentName) {
+                return false;
+            }
+            return std::find(entry.sources.begin(), entry.sources.end(), stableName)
+                != entry.sources.end();
+        });
+}
+
+void appendLegacyMapperHistoryEvent(std::vector<MapperHistoryEvent>& events,
+                                    const std::string& owner,
+                                    const ElementHistory& history)
+{
+    const auto append = [&](const std::string& sourceName) {
+        const bool terminalDeleted = history.kind == ElementHistoryKind::Deleted;
+        MapperHistoryEvent event;
+        event.source = mapperEndpointForElement(owner, sourceName.empty() ? history.element : sourceName);
+        event.target = terminalDeleted ? MapperHistoryEndpoint {owner, {}}
+                                       : mapperEndpointForElement(owner, history.element);
+        event.shapeKind = shapeKindForHistoryElement(
+            terminalDeleted ? event.source.subname : event.target.subname);
+        event.relation = mapperRelationForHistoryKind(history.kind);
+        event.makerStage = mapperStageForHistoryKind(history.kind);
+        event.evidence = {
+            {"legacy_history_kind", historyKindName(history.kind)},
+            {"legacy_element", history.element},
+        };
+        event.recoverability = mapperRecoverabilityForHistoryKind(history.kind);
+        event.diagnosticStatus = diagnosticStatusForHistoryKind(history.kind);
+        addMapperHistoryEvent(events, std::move(event));
+    };
+
+    if (history.sources.empty()) {
+        append(history.element);
+        return;
+    }
+    for (const std::string& sourceName : history.sources) {
+        append(sourceName);
+    }
+}
+
+void appendElementMapMapperHistoryEvents(std::vector<MapperHistoryEvent>& events,
+                                         const NamedShape& namedShape)
+{
+    for (const auto& [stableName, currentName] : namedShape.elementMap) {
+        if (stableName == currentName) {
+            continue;
+        }
+        if (legacyHistoryCoversElementMap(namedShape.history, stableName, currentName)) {
+            continue;
+        }
+        MapperHistoryEvent event;
+        event.source = mapperEndpointForElement(namedShape.owner, stableName);
+        event.target = mapperEndpointForElement(namedShape.owner, currentName);
+        event.shapeKind = shapeKindForHistoryElement(event.target.subname);
+        event.relation = MapperHistoryRelation::Preserved;
+        event.makerStage = "element_map_preserved";
+        event.evidence = {
+            {"element_map", true},
+            {"stable_subname", stableName},
+            {"current_subname", currentName},
+        };
+        event.recoverability = MapperHistoryRecoverability::Resolved;
+        addMapperHistoryEvent(events, std::move(event));
+    }
+}
+
+void appendSketchInternalMapperSummaryEvent(std::vector<MapperHistoryEvent>& events,
+                                            const NamedShape& namedShape,
+                                            MapperHistoryRelation relation,
+                                            const std::string& makerStage,
+                                            const std::string& diagnosticStatus,
+                                            const nlohmann::json& evidence)
+{
+    MapperHistoryEvent event;
+    event.source = MapperHistoryEndpoint {namedShape.owner, {}};
+    event.target = MapperHistoryEndpoint {namedShape.owner, {}};
+    event.shapeKind = "shape";
+    event.relation = relation;
+    event.makerStage = makerStage;
+    event.evidence = evidence;
+    event.recoverability = MapperHistoryRecoverability::Diagnostic;
+    event.diagnosticStatus = diagnosticStatus;
+    addMapperHistoryEvent(events, std::move(event));
+}
+
+void appendSketchInternalMapperHistoryEvents(std::vector<MapperHistoryEvent>& events,
+                                             const NamedShape& namedShape)
+{
+    if (!namedShape.sketchInternalHistory) {
+        return;
+    }
+
+    const SketchInternalHistoryContext& history = *namedShape.sketchInternalHistory;
+    const nlohmann::json evidence = sketchInternalHistoryToJson(history);
+    if (history.preSplitHistory) {
+        appendSketchInternalMapperSummaryEvent(events,
+                                               namedShape,
+                                               MapperHistoryRelation::Split,
+                                               "facemaker:pre_split",
+                                               "facemaker_history:pre_split",
+                                               evidence);
+    }
+    if (history.splitterHistory) {
+        appendSketchInternalMapperSummaryEvent(events,
+                                               namedShape,
+                                               MapperHistoryRelation::Split,
+                                               "facemaker:splitter",
+                                               "facemaker_history:splitter",
+                                               evidence);
+    }
+    if (history.wireJoinerSplitterHistory) {
+        appendSketchInternalMapperSummaryEvent(events,
+                                               namedShape,
+                                               MapperHistoryRelation::Split,
+                                               "wire_joiner:splitter",
+                                               "wire_joiner_history:splitter",
+                                               evidence);
+    }
+    if (history.wireJoinerModifiedHistoryCount > 0U) {
+        appendSketchInternalMapperSummaryEvent(events,
+                                               namedShape,
+                                               MapperHistoryRelation::Modified,
+                                               "wire_joiner:modified",
+                                               "wire_joiner_history:modified",
+                                               evidence);
+    }
+    if (history.wireJoinerGeneratedHistoryCount > 0U) {
+        appendSketchInternalMapperSummaryEvent(events,
+                                               namedShape,
+                                               MapperHistoryRelation::Generated,
+                                               "wire_joiner:generated",
+                                               "wire_joiner_history:generated",
+                                               evidence);
+    }
+    if (history.wireJoinerDeletedHistoryCount > 0U) {
+        appendSketchInternalMapperSummaryEvent(events,
+                                               namedShape,
+                                               MapperHistoryRelation::Deleted,
+                                               "wire_joiner:deleted",
+                                               "wire_joiner_history:deleted",
+                                               evidence);
+    }
+    if (!history.wireJoinerOpenExportHistoryEntries.empty()) {
+        appendSketchInternalMapperSummaryEvent(events,
+                                               namedShape,
+                                               MapperHistoryRelation::Preserved,
+                                               "wire_joiner:open_export",
+                                               "wire_joiner_history:open_export",
+                                               evidence);
+    }
+}
+
+std::vector<MapperHistoryEvent> mapperHistoryForNamedShape(const NamedShape& namedShape)
+{
+    std::vector<MapperHistoryEvent> events = namedShape.mapperHistory;
+    for (const ElementHistory& history : namedShape.history) {
+        appendLegacyMapperHistoryEvent(events, namedShape.owner, history);
+    }
+    appendElementMapMapperHistoryEvents(events, namedShape);
+    appendSketchInternalMapperHistoryEvents(events, namedShape);
+    return events;
+}
+
 std::vector<std::string> elementHistoryStatusForNamedShape(const NamedShape& namedShape)
 {
     std::vector<std::string> statuses;
@@ -1985,6 +2240,7 @@ nlohmann::json namedShapeToJson(const NamedShape& namedShape)
     for (const auto& entry : namedShape.history) {
         history.push_back(historyToJson(entry));
     }
+    const std::vector<MapperHistoryEvent> mapperHistory = mapperHistoryForNamedShape(namedShape);
 
     const bool hasMappedHistory = std::any_of(
                                       namedShape.history.begin(),
@@ -2008,6 +2264,7 @@ nlohmann::json namedShapeToJson(const NamedShape& namedShape)
         {"element_map", namedShape.elementMap},
         {"elements", elements},
         {"history", history},
+        {"mapper_history", mapperHistoryToJson(mapperHistory)},
     };
     if (namedShape.sketchInternalHistory) {
         result["sketch_internal_history"] = sketchInternalHistoryToJson(*namedShape.sketchInternalHistory);

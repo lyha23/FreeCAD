@@ -286,6 +286,93 @@ std::string referenceRecoveryDiagnosticReason(const ReferenceSubshapeRecovery& r
     return "does not match a current ReferenceShadow candidate";
 }
 
+std::string referenceMatchStatusName(topo::ReferenceMatchStatus status)
+{
+    switch (status) {
+        case topo::ReferenceMatchStatus::Unique:
+            return "unique";
+        case topo::ReferenceMatchStatus::Missing:
+            return "missing";
+        case topo::ReferenceMatchStatus::Ambiguous:
+            return "ambiguous";
+        case topo::ReferenceMatchStatus::Split:
+            return "split";
+        case topo::ReferenceMatchStatus::Deleted:
+            return "deleted";
+    }
+    return "unknown";
+}
+
+std::string referenceSubnameShapeKind(const std::string& subname)
+{
+    if (const auto internal = topo::parseInternalSubshapeName(subname)) {
+        return topo::subshapeKindName(internal->kind);
+    }
+    if (const auto parsed = topo::parseSubshapeName(subname)) {
+        return topo::subshapeKindName(parsed->kind);
+    }
+    return "shape";
+}
+
+topo::MapperHistoryRecoverability referenceRecoverability(topo::ReferenceMatchStatus status)
+{
+    switch (status) {
+        case topo::ReferenceMatchStatus::Ambiguous:
+            return topo::MapperHistoryRecoverability::Ambiguous;
+        case topo::ReferenceMatchStatus::Split:
+            return topo::MapperHistoryRecoverability::NeedsReselect;
+        case topo::ReferenceMatchStatus::Deleted:
+            return topo::MapperHistoryRecoverability::Deleted;
+        default:
+            return topo::MapperHistoryRecoverability::Diagnostic;
+    }
+}
+
+topo::MapperHistoryRelation referenceRelation(topo::ReferenceMatchStatus status)
+{
+    switch (status) {
+        case topo::ReferenceMatchStatus::Deleted:
+            return topo::MapperHistoryRelation::Deleted;
+        case topo::ReferenceMatchStatus::Ambiguous:
+        case topo::ReferenceMatchStatus::Split:
+            return topo::MapperHistoryRelation::Split;
+        default:
+            return topo::MapperHistoryRelation::Modified;
+    }
+}
+
+void recordReferenceRecoveryMapperDiagnostic(ComputeContext& context,
+                                             const document::Link& link,
+                                             const document::ReferenceShadow& shadow,
+                                             const std::string& requestedSubname,
+                                             const ReferenceSubshapeRecovery& recovery)
+{
+    const bool internalReference = topo::parseInternalSubshapeName(requestedSubname).has_value()
+        || shadow.property == "InternalShape";
+    const std::string namedShapeKey = internalReference ? link.object + ".InternalShape" : link.object;
+    auto namedShapeIt = context.namedShapes.find(namedShapeKey);
+    if (namedShapeIt == context.namedShapes.end()) {
+        return;
+    }
+
+    const std::string diagnosticCode = referenceRecoveryDiagnosticCode(recovery);
+    topo::MapperHistoryEvent event;
+    event.source = topo::MapperHistoryEndpoint {link.object, requestedSubname};
+    event.target = topo::MapperHistoryEndpoint {namedShapeIt->second.owner, {}};
+    event.shapeKind = referenceSubnameShapeKind(requestedSubname);
+    event.relation = referenceRelation(recovery.status);
+    event.makerStage = "reference_shadow_recovery";
+    event.evidence = {
+        {"reference_shadow", true},
+        {"requested_subname", requestedSubname},
+        {"status", referenceMatchStatusName(recovery.status)},
+        {"reason", referenceRecoveryDiagnosticReason(recovery)},
+    };
+    event.recoverability = referenceRecoverability(recovery.status);
+    event.diagnosticStatus = diagnosticCode;
+    topo::addMapperHistoryEvent(namedShapeIt->second.mapperHistory, std::move(event));
+}
+
 std::string indexedSubnameForReference(const std::string& subname)
 {
     constexpr const char* internalPrefix = "Internal";
@@ -657,7 +744,9 @@ bool validateReferenceShadows(const document::DocumentObject& object,
                         currentSubshape = recovery.resolution;
                     }
                     else {
-                        const std::string subname = index < link.subnames.size() ? link.subnames.at(index) : shadow.subname;
+                        const std::string subname =
+                            index < link.subnames.size() ? link.subnames.at(index) : shadow.subname;
+                        recordReferenceRecoveryMapperDiagnostic(context, link, shadow, subname, recovery);
                         const std::string code = referenceRecoveryDiagnosticCode(recovery);
                         const std::string reason = referenceRecoveryDiagnosticReason(recovery);
                         addDiagnostic(context.diagnostics,
@@ -729,12 +818,15 @@ bool validateReferenceShadows(const document::DocumentObject& object,
                                  || recovery.status == topo::ReferenceMatchStatus::Ambiguous
                                  || recovery.status == topo::ReferenceMatchStatus::Split
                                  || recovery.status == topo::ReferenceMatchStatus::Deleted) {
+                            recordReferenceRecoveryMapperDiagnostic(
+                                context, link, shadow, requestedSubname, recovery);
                             const std::string code = referenceRecoveryDiagnosticCode(recovery);
                             const std::string reason = referenceRecoveryDiagnosticReason(recovery);
                             addDiagnostic(context.diagnostics,
                                           "error",
                                           code,
-                                          propertyName + " target " + link.object + " subname " + requestedSubname + " " + reason,
+                                          propertyName + " target " + link.object + " subname "
+                                              + requestedSubname + " " + reason,
                                           object.name,
                                           propertyName,
                                           "runtime",

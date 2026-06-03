@@ -1,5 +1,6 @@
 #pragma once
 
+#include "cad_core/topo/mapper_history.h"
 #include "cad_core/topo/subshape_map.h"
 
 #include <BRepBuilderAPI_MakeShape.hxx>
@@ -100,6 +101,7 @@ struct NamedShape
     std::map<std::string, NamedElement> elements;
     std::map<std::string, std::string> elementMap;
     std::vector<ElementHistory> history;
+    std::vector<MapperHistoryEvent> mapperHistory;
     // FreeCAD:
     // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeMapper.cpp,
     // MapperHistory can carry generated/modified/split/merge/deleted outcomes independently

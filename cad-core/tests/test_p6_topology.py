@@ -68,6 +68,65 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(result["diagnostics"], [])
                 self.assert_result_matches_expected(result, "p6", fixture)
 
+    def test_p6_mapper_history_core_serializes_legacy_history_and_preserved_aliases(self) -> None:
+        result = self.run_recompute("body-boolean-history", "p6")
+        named_shape = result["named_shapes"]["Body"]
+        mapper_history = named_shape["mapper_history"]
+
+        self.assertGreater(len(mapper_history), 0)
+        for event in mapper_history[:20]:
+            self.assertEqual(
+                {
+                    "source",
+                    "target",
+                    "shape_kind",
+                    "relation",
+                    "maker_stage",
+                    "evidence",
+                    "recoverability",
+                    "diagnostic_status",
+                },
+                set(event),
+            )
+            self.assertIn("object", event["source"])
+            self.assertIn("subname", event["source"])
+            self.assertIn("object", event["target"])
+            self.assertIn("subname", event["target"])
+
+        modified = next(
+            event
+            for event in mapper_history
+            if event["relation"] == "modified"
+            and event["source"] == {"object": "Pad", "subname": "Face5"}
+            and event["target"] == {"object": "Body", "subname": "Face4"}
+        )
+        self.assertEqual(modified["shape_kind"], "face")
+        self.assertEqual(modified["maker_stage"], "maker_history")
+        self.assertEqual(modified["recoverability"], "resolved")
+        self.assertEqual(modified["evidence"]["legacy_history_kind"], "modified")
+
+        preserved = next(
+            event
+            for event in mapper_history
+            if event["relation"] == "preserved"
+            and event["source"] == {"object": "Pad", "subname": "Edge1"}
+            and event["target"] == {"object": "Body", "subname": "Edge1"}
+        )
+        self.assertEqual(preserved["maker_stage"], "element_map_preserved")
+        self.assertEqual(preserved["evidence"]["element_map"], True)
+        self.assertEqual(named_shape["element_map"]["Pad.Edge1"], "Edge1")
+
+        deleted = next(
+            event
+            for event in mapper_history
+            if event["relation"] == "deleted"
+            and event["source"] == {"object": "Pocket", "subname": "Face5"}
+        )
+        self.assertEqual(deleted["target"], {"object": "Body", "subname": ""})
+        self.assertEqual(deleted["recoverability"], "deleted")
+        self.assertEqual(deleted["diagnostic_status"], "deleted_stable_subname")
+        self.assertNotIn("Pocket.Face5", named_shape["element_map"])
+
     def test_p6_body_boolean_propagates_nested_element_map_aliases(self) -> None:
         result = self.run_recompute("sketch-external-edge-stable-body-profile-source", "p6")
         sketch = result["objects"]["ProbeSketch"]

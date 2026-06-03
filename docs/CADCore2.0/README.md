@@ -8,6 +8,14 @@
 
 按可用工程能力估算，当前约完成 65%-70%；按接近完整 FreeCAD 几何 / 拓扑语义 parity 估算，约完成 45%-50%。差距主要集中在深层引用和 history 生命周期，而不是单个几何 API。
 
+## C2-M0 / C2-M1 当前基线
+
+当前 C2-M0 基线已锁定：进入任务时 `git status --short` 无输出；`cad-core` 构建通过；指定回归命令覆盖 314 个测试，结果 `OK (skipped=9)`。capabilities 仍显式暴露 2.0 剩余缺口，包括 FaceMaker / WireJoiner 完整 history producer、taper 完整 history、transformed / pattern 完整 history、导入 shape ElementMap 和 assembly solver。
+
+C2-M1 已在 `cad-core/topo` 建立统一 `MapperHistory` core：新增统一 event schema，表达 source / target endpoint、shape kind、relation、maker stage、evidence、recoverability 和 diagnostic status；`NamedShape` JSON 保留旧 `history` / `element_history_status`，同时新增 `mapper_history` 字段。现有 maker history、preserved ElementMap alias、terminal split / deleted、merge、Link retag、transformed copy 和 Sketch InternalShape 的 FaceMaker / WireJoiner summary 子集已通过统一入口序列化或转换。
+
+当前仍非目标：不展开 C2-M2 的 FaceMaker / WireJoiner 完整 producer 迁移，不实现 C2-M3 ExternalGeometry 完整状态机，不收敛 C2-M5+ PartDesign 全量 history。
+
 ## 文档索引
 
 | 文档 | 用途 |

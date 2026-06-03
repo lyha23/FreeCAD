@@ -66,6 +66,7 @@ add_library(cad-core-lib STATIC
   src/runtime/io.cpp
   src/runtime/recompute.cpp
   src/topo/element_map.cpp
+  src/topo/mapper_history.cpp
   src/topo/named_shape.cpp
   src/topo/reference_matcher.cpp
   src/topo/subshape_map.cpp

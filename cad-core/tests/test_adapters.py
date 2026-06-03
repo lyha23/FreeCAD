@@ -318,6 +318,21 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "reference_shadow_recovery",
             ],
         )
+        self.assertEqual(
+            capabilities["topo_history"]["mapper_history_core"],
+            [
+                "source_endpoint",
+                "target_endpoint",
+                "shape_kind",
+                "relation",
+                "maker_stage",
+                "evidence",
+                "recoverability",
+                "diagnostic_status",
+                "legacy_history_conversion",
+                "element_map_preserved_aliases",
+            ],
+        )
         self.assertIn("refine_modified_deleted_generated", capabilities["topo_history"]["maker_history"])
         self.assertEqual(capabilities["topo_history"]["terminal_history"], ["deleted", "split", "merge"])
         self.assertEqual(

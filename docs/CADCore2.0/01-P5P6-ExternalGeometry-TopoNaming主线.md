@@ -48,6 +48,19 @@
 - `ElementMap` 只包含可唯一解析的 target。
 - P3 / P5 / P6 / P7 / P8 现有 expected 不发生语义倒退。
 
+当前状态：
+
+- 已新增 `cad-core/include/cad_core/topo/mapper_history.h` 与 `cad-core/src/topo/mapper_history.cpp`，作为 `topo` 层统一 history event core。
+- `NamedShape` JSON 保持旧 `history` 兼容，并新增 `mapper_history`；旧 `ElementHistory`、唯一 `element_map` preserved alias、terminal split / deleted、merge、Link retag、transformed copy 和 Sketch InternalShape 的 FaceMaker / WireJoiner summary 状态会序列化或转换为统一 event。
+- `mapper_history` event 当前字段固定为 source endpoint、target endpoint、shape kind、relation、maker stage、evidence、recoverability、diagnostic status。
+- `ElementMap` 唯一性规则保持不变：只有可唯一解析的 target 写入 `element_map`；split / deleted 只进入 terminal history、`mapper_history` 和 diagnostics，不猜唯一目标。
+
+剩余缺口：
+
+- FaceMaker / WireJoiner 的完整 producer evidence 仍属于 C2-M2，本阶段只消费现有 summary / ledger。
+- ExternalGeometry Defining / Frozen / Detached / Missing / Sync 完整状态机仍属于 C2-M3。
+- taper、transformed / pattern、DressUp 等完整 PartDesign history 收敛仍属于 C2-M5+。
+
 ## C2-M2：FaceMaker / WireJoiner history producer
 
 交付内容：
