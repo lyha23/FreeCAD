@@ -101,7 +101,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertEqual(ledger["tight_bound_purged_wire_info_count"], 0)
             self.assertEqual(ledger["tight_bound_exhaust_discarded_purged_wire_info_count"], 0)
             self.assertEqual(ledger["tight_bound_exhaust_primary_reset_edge_info_count"], 0)
-            self.assertEqual(ledger["tight_bound_exhaust_primary_reset_blocked_edge_info_count"], 0)
             self.assertEqual(ledger["tight_bound_full_wire_set_insert_count"], 0)
             self.assertEqual(ledger["tight_bound_full_wire_set_erase_count"], 0)
             self.assertEqual(ledger["tight_bound_full_wire_set_abort_count"], 0)
@@ -123,9 +122,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertEqual(ledger["tight_bound_existing_wire_search_only_idx_vertex_count"], 0)
             self.assertEqual(ledger["tight_bound_existing_wire_search_only_stack_pos_count"], 0)
             self.assertEqual(ledger["tight_bound_existing_wire_search_only_path_blocked_count"], 0)
-            self.assertEqual(ledger["tight_bound_existing_wire_search_only_owner_vertex_blocked_count"], 0)
             self.assertEqual(ledger["tight_bound_existing_wire_search_only_order_blocked_count"], 0)
-            self.assertEqual(ledger["tight_bound_existing_wire_search_only_wire_build_blocked_count"], 0)
             self.assertEqual(ledger["tight_bound_existing_wire_idx_vertex_count"], 0)
             self.assertEqual(ledger["tight_bound_existing_wire_stack_pos_count"], 0)
             self.assertEqual(ledger["tight_bound_transfer_wire_info_count"], 0)
@@ -166,9 +163,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(
             ledger["tight_bound_existing_wire_search_only_path_blocked_count"],
-            ledger["tight_bound_existing_wire_search_only_owner_vertex_blocked_count"]
-            + ledger["tight_bound_existing_wire_search_only_order_blocked_count"]
-            + ledger["tight_bound_existing_wire_search_only_wire_build_blocked_count"],
+            ledger["tight_bound_existing_wire_search_only_order_blocked_count"],
         )
         if ledger["tight_bound_existing_wire_search_only_hit_count"] > 0:
             self.assertGreater(ledger["tight_bound_existing_wire_search_only_path_blocked_count"], 0)
@@ -181,18 +176,9 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 ledger["tight_bound_exhaust_discarded_purged_wire_info_count"],
                 ledger["tight_bound_purged_wire_info_count"],
             )
-            self.assertGreater(
-                ledger["tight_bound_exhaust_primary_reset_edge_info_count"]
-                + ledger["tight_bound_exhaust_primary_reset_blocked_edge_info_count"],
-                0,
-            )
         self.assertLessEqual(
             ledger["tight_bound_exhaust_primary_reset_edge_info_count"],
             ledger["repeated_split_exhaust_removed_unowned_edge_info_count"],
-        )
-        self.assertLessEqual(
-            ledger["tight_bound_exhaust_primary_reset_blocked_edge_info_count"],
-            ledger["primary_owned_edge_info_count"],
         )
         self.assertLessEqual(
             ledger["tight_bound_exhaust_done_wire_info_count"]
@@ -318,8 +304,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def assert_existing_wire_search_only_order_blocked_ledger(self, ledger: dict[str, int]) -> None:
         blocked = ledger["tight_bound_existing_wire_search_only_path_blocked_count"]
         self.assertEqual(ledger["tight_bound_existing_wire_search_only_order_blocked_count"], blocked)
-        self.assertEqual(ledger["tight_bound_existing_wire_search_only_owner_vertex_blocked_count"], 0)
-        self.assertEqual(ledger["tight_bound_existing_wire_search_only_wire_build_blocked_count"], 0)
 
     def test_p5_existing_wire_search_only_path_blocks_are_order_limited(self) -> None:
         for fixture in [
@@ -356,38 +340,88 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                         continue
                     with self.subTest(fixture=fixture_path.stem, object=object_name):
                         producer_entries = ledger["result_wire_producer_ledger_entries"]
-                        self.assertNotIn("generated_open_export_edge_info_count", ledger)
-                        self.assertNotIn("open_wire_compound_generated_wire_info_count", ledger)
-                        self.assertNotIn("open_wire_compound_legacy_helper_shape_wire_info_count", ledger)
-                        self.assertNotIn("result_wire_producer_blocker_legacy_helper_shape_still_used_count", ledger)
-                        self.assertNotIn("unowned_removal_ready_legacy_helper_shape_output_count", ledger)
-                        self.assertNotIn("result_wire_producer_ledger_entry_count", ledger)
-                        self.assertNotIn("migrated_legacy_helper_slot_count", ledger)
-                        self.assertNotIn("open_wire_compound_helper_open_export_override_wire_info_count", ledger)
-                        self.assertNotIn("helper_open_export_override_edge_info_count", ledger)
-                        self.assertNotIn("result_wire_producer_exported_without_helper_wire_info_count", ledger)
-                        self.assertNotIn("result_wire_producer_none_count", ledger)
-                        self.assertNotIn("result_wire_producer_existing_source_edge_count", ledger)
-                        self.assertNotIn("result_wire_producer_partial_shared_closed_wire_count", ledger)
-                        self.assertNotIn("result_wire_producer_live_reset_open_edge_count", ledger)
-                        self.assertNotIn("result_wire_producer_super_edge_root_count", ledger)
-                        self.assertNotIn("result_wire_producer_current_member_child_wire_count", ledger)
-                        self.assertNotIn("result_wire_producer_located_count", ledger)
-                        self.assertNotIn("result_wire_producer_ahistory_evidence_ready_count", ledger)
-                        self.assertNotIn("result_wire_producer_none_without_blocker_count", ledger)
-                        self.assertNotIn("source_shape_identity_unknown_count", ledger)
-                        self.assertNotIn("result_wire_producer_child_wire_ready_count", ledger)
-                        self.assertNotIn("result_wire_producer_source_shape_ready_count", ledger)
-                        self.assertNotIn("result_wire_producer_source_shape_not_ready_count", ledger)
-                        self.assertNotIn("graph_fallback_assigned_edge_info_count", ledger)
-                        self.assertNotIn("graph_secondary_owner_edge_info_count", ledger)
-                        self.assertEqual(ledger["result_wire_producer_unknown_invariant_count"], 0)
+                        removed_summary_fields = (
+                            "generated_open_export_edge_info_count",
+                            "open_wire_compound_generated_wire_info_count",
+                            "open_wire_compound_legacy_helper_shape_wire_info_count",
+                            "result_wire_producer_blocker_legacy_helper_shape_still_used_count",
+                            "unowned_removal_ready_legacy_helper_shape_output_count",
+                            "result_wire_producer_ledger_entry_count",
+                            "migrated_legacy_helper_slot_count",
+                            "open_wire_compound_helper_open_export_override_wire_info_count",
+                            "helper_open_export_override_edge_info_count",
+                            "result_wire_producer_exported_without_helper_wire_info_count",
+                            "result_wire_producer_none_count",
+                            "result_wire_producer_existing_source_edge_count",
+                            "result_wire_producer_partial_shared_closed_wire_count",
+                            "result_wire_producer_live_reset_open_edge_count",
+                            "result_wire_producer_super_edge_root_count",
+                            "result_wire_producer_current_member_child_wire_count",
+                            "result_wire_producer_located_count",
+                            "result_wire_producer_ahistory_evidence_ready_count",
+                            "result_wire_producer_none_without_blocker_count",
+                            "source_shape_identity_unknown_count",
+                            "result_wire_producer_child_wire_ready_count",
+                            "result_wire_producer_source_shape_ready_count",
+                            "result_wire_producer_source_shape_not_ready_count",
+                            "graph_fallback_assigned_edge_info_count",
+                            "graph_secondary_owner_edge_info_count",
+                            "result_wire_producer_unknown_invariant_count",
+                            "result_wire_producer_blocker_missing_source_lineage_count",
+                            "result_wire_producer_blocker_missing_ahistory_remove_source_count",
+                            "result_wire_producer_blocker_foreign_ahistory_source_lineage_count",
+                            "result_wire_producer_blocker_foreign_ahistory_source_shape_ready_lineage_mismatch_count",
+                            "result_wire_producer_blocker_foreign_ahistory_source_shape_identity_not_ready_count",
+                            "result_wire_producer_blocker_foreign_ahistory_source_geometry_mismatch_count",
+                            "result_wire_producer_blocker_missing_removed_target_evidence_count",
+                            "result_wire_producer_blocker_missing_full_ahistory_producer_evidence_count",
+                            "result_wire_producer_blocker_final_gate_blocked_by_iteration_count",
+                            "result_wire_producer_blocker_final_gate_blocked_by_wire_info_count",
+                            "result_wire_producer_blocker_root_removed_by_unowned_branch_count",
+                            "result_wire_producer_blocker_root_removed_by_primary_branch_count",
+                            "result_wire_producer_blocker_root_removed_by_secondary_branch_count",
+                            "result_wire_producer_blocker_multi_member_root_pending_suppression_count",
+                            "result_wire_producer_blocker_source_shape_identity_not_ready_count",
+                            "result_wire_producer_blocker_source_shape_would_purge_original_count",
+                            "result_wire_producer_blocker_live_reset_source_shape_would_purge_original_count",
+                            "result_wire_producer_blocker_current_member_source_shape_would_purge_original_count",
+                            "result_wire_producer_blocker_same_source_sidecar_source_shape_identity_not_ready_count",
+                            "result_wire_producer_blocker_same_source_sidecar_geometry_mismatch_count",
+                            "result_wire_producer_blocker_source_shape_member_vertex_identity_not_ready_count",
+                            "result_wire_producer_blocker_current_member_child_wire_identity_not_ready_count",
+                            "result_wire_producer_blocker_current_member_missing_sidecar_evidence_count",
+                            "result_wire_producer_blocker_current_member_root_open_producer_not_ready_count",
+                            "result_wire_producer_blocker_current_member_sidecar_geometry_mismatch_count",
+                            "unowned_removal_ready_slot_count",
+                            "unowned_removal_current_member_producer_output_count",
+                            "multi_member_root_direct_output_count",
+                            "branch_search_outside_candidate_count",
+                            "owner_propagation_unassigned_candidate_count",
+                            "repeated_split_exhaust_rerun_branch_search_outside_candidate_count",
+                            "repeated_split_exhaust_rerun_live_branch_search_outside_candidate_count",
+                            "repeated_split_exhaust_rerun_live_transfer_wire_info_count",
+                            "repeated_split_exhaust_rerun_live_transferred_owner_edge_info_count",
+                            "repeated_split_exhaust_rerun_removal_edge_info_count",
+                            "repeated_split_exhaust_rerun_removal_primary_edge_info_count",
+                            "repeated_split_exhaust_rerun_removal_secondary_edge_info_count",
+                            "repeated_split_exhaust_rerun_removal_unowned_edge_info_count",
+                            "tight_bound_exhaust_primary_reset_blocked_edge_info_count",
+                            "tight_bound_existing_wire_search_intersect_skip_count",
+                            "tight_bound_existing_wire_search_only_owner_vertex_blocked_count",
+                            "tight_bound_existing_wire_search_only_wire_build_blocked_count",
+                            "tight_bound_live_split_wire_edge_info_count",
+                            "tight_bound_live_split_wire_info_count",
+                        )
+                        for field in removed_summary_fields:
+                            self.assertNotIn(field, ledger)
                         self.assertTrue(
                             all(
                                 entry["state"] == "ExportedWithoutHelper" and entry["blocker"] == "None"
                                 for entry in producer_entries
                             )
                         )
+                        if isinstance(obj.get("wire_joiner_history_detail"), dict):
+                            self.assert_result_wire_producer_ledger(obj)
 
     def test_p7_sketch_internal_history_consumes_result_wire_producer_identity(self) -> None:
         for fixture in self.P7_RESULT_WIRE_IDENTITY_FIXTURES:
@@ -625,19 +659,11 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "repeated_split_exhaust_rerun_live_closed_wire_vertex_count",
             "repeated_split_exhaust_rerun_live_branch_search_candidate_count",
             "repeated_split_exhaust_rerun_live_branch_search_inside_candidate_count",
-            "repeated_split_exhaust_rerun_live_branch_search_outside_candidate_count",
-            "repeated_split_exhaust_rerun_live_transfer_wire_info_count",
-            "repeated_split_exhaust_rerun_live_transferred_owner_edge_info_count",
             "repeated_split_exhaust_rerun_live_done_wire_info_count",
             "repeated_split_exhaust_rerun_removal_scan_count",
-            "repeated_split_exhaust_rerun_removal_edge_info_count",
-            "repeated_split_exhaust_rerun_removal_unowned_edge_info_count",
-            "repeated_split_exhaust_rerun_removal_secondary_edge_info_count",
-            "repeated_split_exhaust_rerun_removal_primary_edge_info_count",
             "repeated_split_exhaust_rerun_loop_exit_no_removal_count",
             "repeated_split_exhaust_rerun_branch_search_candidate_count",
             "repeated_split_exhaust_rerun_branch_search_inside_candidate_count",
-            "repeated_split_exhaust_rerun_branch_search_outside_candidate_count",
             "repeated_split_exhaust_rerun_new_wire_seed_candidate_count",
         )
         self.assertEqual(
@@ -697,8 +723,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(
             ledger["repeated_split_exhaust_rerun_live_branch_search_candidate_count"],
-            ledger["repeated_split_exhaust_rerun_live_branch_search_inside_candidate_count"]
-            + ledger["repeated_split_exhaust_rerun_live_branch_search_outside_candidate_count"],
+            ledger["repeated_split_exhaust_rerun_live_branch_search_inside_candidate_count"],
         )
         self.assertLessEqual(
             ledger["repeated_split_exhaust_rerun_live_branch_search_candidate_count"],
@@ -709,41 +734,12 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ledger["repeated_split_exhaust_rerun_branch_search_inside_candidate_count"],
         )
         self.assertLessEqual(
-            ledger["repeated_split_exhaust_rerun_live_branch_search_outside_candidate_count"],
-            ledger["repeated_split_exhaust_rerun_branch_search_outside_candidate_count"],
-        )
-        self.assertLessEqual(
-            ledger["repeated_split_exhaust_rerun_live_transfer_wire_info_count"],
-            ledger["repeated_split_exhaust_rerun_live_branch_search_inside_candidate_count"],
-        )
-        self.assertLessEqual(
-            ledger["repeated_split_exhaust_rerun_live_transferred_owner_edge_info_count"],
-            ledger["repeated_split_exhaust_rerun_live_assigned_edge_info_count"],
-        )
-        self.assertLessEqual(
-            ledger["repeated_split_exhaust_rerun_live_transfer_wire_info_count"]
-            + ledger["repeated_split_exhaust_rerun_live_done_wire_info_count"],
-            ledger["repeated_split_exhaust_rerun_live_closed_wire_info_count"],
-        )
-        self.assertEqual(
-            ledger["repeated_split_exhaust_rerun_removal_edge_info_count"],
-            ledger["repeated_split_exhaust_rerun_removal_unowned_edge_info_count"]
-            + ledger["repeated_split_exhaust_rerun_removal_secondary_edge_info_count"]
-            + ledger["repeated_split_exhaust_rerun_removal_primary_edge_info_count"],
-        )
-        self.assertLessEqual(
             ledger["repeated_split_exhaust_rerun_loop_exit_no_removal_count"],
             ledger["repeated_split_exhaust_rerun_removal_scan_count"],
         )
-        if ledger["repeated_split_exhaust_rerun_removal_edge_info_count"] == 0:
-            self.assertEqual(
-                ledger["repeated_split_exhaust_rerun_loop_exit_no_removal_count"],
-                ledger["repeated_split_exhaust_rerun_removal_scan_count"],
-            )
         self.assertEqual(
             ledger["repeated_split_exhaust_rerun_branch_search_candidate_count"],
-            ledger["repeated_split_exhaust_rerun_branch_search_inside_candidate_count"]
-            + ledger["repeated_split_exhaust_rerun_branch_search_outside_candidate_count"],
+            ledger["repeated_split_exhaust_rerun_branch_search_inside_candidate_count"],
         )
         self.assertEqual(
             ledger["repeated_split_exhaust_rerun_new_wire_seed_candidate_count"],
@@ -761,15 +757,8 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertEqual(ledger["repeated_split_exhaust_rerun_live_closed_wire_vertex_count"], 0)
             self.assertEqual(ledger["repeated_split_exhaust_rerun_live_branch_search_candidate_count"], 0)
             self.assertEqual(ledger["repeated_split_exhaust_rerun_live_branch_search_inside_candidate_count"], 0)
-            self.assertEqual(ledger["repeated_split_exhaust_rerun_live_branch_search_outside_candidate_count"], 0)
-            self.assertEqual(ledger["repeated_split_exhaust_rerun_live_transfer_wire_info_count"], 0)
-            self.assertEqual(ledger["repeated_split_exhaust_rerun_live_transferred_owner_edge_info_count"], 0)
             self.assertEqual(ledger["repeated_split_exhaust_rerun_live_done_wire_info_count"], 0)
             self.assertEqual(ledger["repeated_split_exhaust_rerun_removal_scan_count"], 0)
-            self.assertEqual(ledger["repeated_split_exhaust_rerun_removal_edge_info_count"], 0)
-            self.assertEqual(ledger["repeated_split_exhaust_rerun_removal_unowned_edge_info_count"], 0)
-            self.assertEqual(ledger["repeated_split_exhaust_rerun_removal_secondary_edge_info_count"], 0)
-            self.assertEqual(ledger["repeated_split_exhaust_rerun_removal_primary_edge_info_count"], 0)
             self.assertEqual(ledger["repeated_split_exhaust_rerun_loop_exit_no_removal_count"], 0)
             self.assertEqual(ledger["repeated_split_exhaust_rerun_branch_search_candidate_count"], 0)
         if ledger["repeated_split_exhaust_cycle_count"] == 0:
@@ -810,28 +799,9 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assert_exhaust_adjacent_search_ledger(ledger)
         self.assert_repeated_split_exhaust_removal_ledger(ledger)
-        self.assertLessEqual(
-            ledger["tight_bound_live_split_wire_info_count"],
-            ledger["tight_bound_split_owner_wire_info_count"],
-        )
-        self.assertLessEqual(
-            ledger["tight_bound_live_split_wire_edge_info_count"],
-            ledger["tight_bound_split_owner_vertex_count"],
-        )
-        if ledger["tight_bound_live_split_wire_info_count"] == 0:
-            self.assertEqual(ledger["tight_bound_live_split_wire_edge_info_count"], 0)
-        else:
-            self.assertGreater(ledger["tight_bound_live_split_wire_edge_info_count"], 0)
-        if ledger["tight_bound_exhaust_discarded_purged_wire_info_count"] > 0:
-            self.assertGreater(
-                ledger["tight_bound_exhaust_primary_reset_edge_info_count"]
-                + ledger["tight_bound_exhaust_primary_reset_blocked_edge_info_count"],
-                0,
-            )
         self.assertEqual(
             ledger["owner_propagation_candidate_count"],
-            ledger["owner_propagation_unassigned_candidate_count"]
-            + ledger["owner_propagation_other_wire_candidate_count"],
+            ledger["owner_propagation_other_wire_candidate_count"],
         )
         self.assertEqual(
             ledger["owner_propagation_other_wire_live_edge_info_count"],
@@ -848,8 +818,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertGreater(ledger["repeated_split_exhaust_cycle_count"], 0)
         self.assertGreaterEqual(
             history["deleted_history_count"],
-            ledger["repeated_split_exhaust_removed_edge_info_count"]
-            + ledger["repeated_split_exhaust_rerun_removal_edge_info_count"],
+            ledger["repeated_split_exhaust_removed_edge_info_count"],
         )
         self.assert_result_wire_producer_ledger(sketch)
         return entries
@@ -870,22 +839,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(
             len(producer_entries),
             history["open_export_helper_override_edge_count"],
-        )
-        self.assertEqual(ledger["result_wire_producer_unknown_invariant_count"], 0)
-        self.assertEqual(ledger["multi_member_root_direct_output_count"], 0)
-        self.assertEqual(
-            ledger["result_wire_producer_blocker_source_shape_identity_not_ready_count"]
-            + ledger["result_wire_producer_blocker_source_shape_would_purge_original_count"]
-            + ledger["result_wire_producer_blocker_live_reset_source_shape_would_purge_original_count"]
-            + ledger["result_wire_producer_blocker_current_member_source_shape_would_purge_original_count"]
-            + ledger["result_wire_producer_blocker_same_source_sidecar_source_shape_identity_not_ready_count"]
-            + ledger["result_wire_producer_blocker_same_source_sidecar_geometry_mismatch_count"]
-            + ledger["result_wire_producer_blocker_source_shape_member_vertex_identity_not_ready_count"]
-            + ledger["result_wire_producer_blocker_current_member_child_wire_identity_not_ready_count"]
-            + ledger["result_wire_producer_blocker_current_member_missing_sidecar_evidence_count"]
-            + ledger["result_wire_producer_blocker_current_member_root_open_producer_not_ready_count"]
-            + ledger["result_wire_producer_blocker_current_member_sidecar_geometry_mismatch_count"],
-            0,
         )
         valid_kinds = {
             "None",
@@ -978,24 +931,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             sum(1 for entry in helper_entries if entry["result_wire_producer_kind"] == "LiveResetOpenEdge"),
             self.result_wire_producer_kind_count(ledger, "LiveResetOpenEdge"),
         )
-        source_shape_purge_blockers = {
-            "SourceShapeWouldPurgeOriginal",
-            "LiveResetSourceShapeWouldPurgeOriginal",
-            "CurrentMemberSourceShapeWouldPurgeOriginal",
-        }
-        self.assertEqual(
-            sum(1 for entry in helper_entries if entry["result_wire_producer_blocker"] in source_shape_purge_blockers),
-            ledger["result_wire_producer_blocker_source_shape_would_purge_original_count"]
-            + ledger["result_wire_producer_blocker_live_reset_source_shape_would_purge_original_count"]
-            + ledger["result_wire_producer_blocker_current_member_source_shape_would_purge_original_count"],
-        )
-
-        if ledger["unowned_removal_ready_slot_count"] > 0:
-            self.assertEqual(
-                ledger["unowned_removal_current_member_producer_output_count"],
-                ledger["unowned_removal_ready_slot_count"],
-            )
-
     def test_p5_coincident_constraints_merge_profile_endpoints(self) -> None:
         result = self.run_recompute("sketch-coincident-profile", "p5")
         sketch = result["objects"]["Sketch"]
@@ -1490,8 +1425,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(ledger["tight_bound_split_wire_vertex_count"], 0)
         self.assertEqual(ledger["tight_bound_split_owner_vertex_count"], 0)
-        self.assertEqual(ledger["tight_bound_live_split_wire_info_count"], 0)
-        self.assertEqual(ledger["tight_bound_live_split_wire_edge_info_count"], 0)
         self.assertEqual(
             ledger["tight_bound_split_wire_built_count"],
             ledger["tight_bound_transfer_wire_info_count"],
@@ -1548,7 +1481,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(ledger["branch_search_candidate_count"], 0)
         self.assertGreaterEqual(ledger["branch_search_seed_wire_info_count"], 1)
         self.assertGreater(ledger["branch_search_inside_candidate_count"], 0)
-        self.assertEqual(ledger["branch_search_outside_candidate_count"], 0)
+        self.assertEqual(ledger["branch_search_candidate_count"], ledger["branch_search_inside_candidate_count"])
         self.assertEqual(ledger["new_wire_seed_candidate_count"], ledger["branch_search_inside_candidate_count"])
         self.assertGreaterEqual(ledger["new_wire_seed_wire_info_count"], 1)
         self.assertEqual(ledger["split_wire_candidate_count"], 0)
@@ -1556,14 +1489,12 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreaterEqual(ledger["done_wire_info_count"], 1)
         self.assertGreaterEqual(ledger["done_owned_edge_info_count"], ledger["primary_owned_edge_info_count"])
         self.assertEqual(ledger["owner_propagation_candidate_count"], 0)
-        self.assertEqual(ledger["owner_propagation_unassigned_candidate_count"], 0)
         self.assertEqual(ledger["owner_propagation_other_wire_candidate_count"], 0)
         self.assertEqual(ledger["tight_bound_exhaust_done_wire_info_count"], 0)
         self.assertEqual(
             ledger["tight_bound_exhaust_primary_reset_edge_info_count"],
             ledger["repeated_split_exhaust_removed_unowned_edge_info_count"],
         )
-        self.assertEqual(ledger["tight_bound_exhaust_primary_reset_blocked_edge_info_count"], 0)
         self.assertEqual(ledger["exhaust_seed_edge_info_count"], 0)
         self.assertEqual(
             ledger["secondary_owned_edge_info_count"]
@@ -1664,8 +1595,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ledger["tight_bound_split_wire_vertex_count"],
             ledger["tight_bound_split_owner_vertex_count"],
         )
-        self.assertEqual(ledger["tight_bound_live_split_wire_info_count"], 0)
-        self.assertEqual(ledger["tight_bound_live_split_wire_edge_info_count"], 0)
         self.assertEqual(
             ledger["tight_bound_split_wire_built_count"],
             ledger["tight_bound_transfer_wire_info_count"],
@@ -1699,46 +1628,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertTrue(all(entry["source_edge_indices"] for entry in entries))
         self.assertEqual(ledger["repeated_split_exhaust_rerun_miss_live_reset_edge_info_count"], 1)
         self.assertEqual(self.result_wire_producer_kind_count(ledger, "LiveResetOpenEdge"), 1)
-        self.assertEqual(ledger["result_wire_producer_blocker_missing_full_ahistory_producer_evidence_count"], 0)
-        self.assertEqual(ledger["result_wire_producer_blocker_missing_removed_target_evidence_count"], 0)
-        self.assertEqual(ledger["result_wire_producer_blocker_foreign_ahistory_source_lineage_count"], 0)
-        self.assertEqual(
-            ledger[
-                "result_wire_producer_blocker_foreign_ahistory_source_shape_ready_lineage_mismatch_count"
-            ],
-            0,
-        )
-        self.assertEqual(
-            ledger[
-                "result_wire_producer_blocker_foreign_ahistory_source_shape_identity_not_ready_count"
-            ],
-            0,
-        )
-        self.assertEqual(
-            ledger[
-                "result_wire_producer_blocker_foreign_ahistory_source_geometry_mismatch_count"
-            ],
-            0,
-        )
-        self.assertEqual(ledger["result_wire_producer_blocker_same_source_sidecar_geometry_mismatch_count"], 0)
-        self.assertEqual(ledger["result_wire_producer_blocker_current_member_sidecar_geometry_mismatch_count"], 0)
-        self.assertEqual(
-            ledger["result_wire_producer_blocker_current_member_root_open_producer_not_ready_count"],
-            0,
-        )
-        self.assertEqual(ledger["result_wire_producer_blocker_source_shape_would_purge_original_count"], 0)
-        self.assertEqual(
-            ledger[
-                "result_wire_producer_blocker_live_reset_source_shape_would_purge_original_count"
-            ],
-            0,
-        )
-        self.assertEqual(
-            ledger[
-                "result_wire_producer_blocker_current_member_source_shape_would_purge_original_count"
-            ],
-            0,
-        )
         self.assert_object_matches_expected(result, "p5", "sketch-internal-face-cross-cutters")
 
     def test_p5_t_junction_cutter_records_result_wire_open_export(self) -> None:
@@ -1867,42 +1756,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(ledger["repeated_split_exhaust_rerun_miss_live_reset_edge_info_count"], 2)
         self.assertEqual(self.result_wire_producer_kind_count(ledger, "LiveResetOpenEdge"), 2)
-        self.assertEqual(ledger["result_wire_producer_blocker_missing_full_ahistory_producer_evidence_count"], 0)
-        self.assertEqual(ledger["result_wire_producer_blocker_missing_ahistory_remove_source_count"], 0)
-        self.assertEqual(ledger["result_wire_producer_blocker_missing_removed_target_evidence_count"], 0)
-        self.assertEqual(
-            ledger[
-                "result_wire_producer_blocker_source_shape_member_vertex_identity_not_ready_count"
-            ],
-            0,
-        )
-        self.assertEqual(ledger["result_wire_producer_blocker_multi_member_root_pending_suppression_count"], 0)
-        self.assertEqual(
-            ledger[
-                "result_wire_producer_blocker_current_member_child_wire_identity_not_ready_count"
-            ],
-            0,
-        )
-        self.assertEqual(ledger["result_wire_producer_blocker_current_member_missing_sidecar_evidence_count"], 0)
-        self.assertEqual(
-            ledger["result_wire_producer_blocker_current_member_root_open_producer_not_ready_count"],
-            0,
-        )
-        self.assertEqual(ledger["result_wire_producer_blocker_current_member_sidecar_geometry_mismatch_count"], 0)
-        self.assertEqual(ledger["result_wire_producer_blocker_same_source_sidecar_geometry_mismatch_count"], 0)
-        self.assertEqual(ledger["result_wire_producer_blocker_source_shape_would_purge_original_count"], 0)
-        self.assertEqual(
-            ledger[
-                "result_wire_producer_blocker_live_reset_source_shape_would_purge_original_count"
-            ],
-            0,
-        )
-        self.assertEqual(
-            ledger[
-                "result_wire_producer_blocker_current_member_source_shape_would_purge_original_count"
-            ],
-            0,
-        )
         self.assert_super_edge_lifecycle_ledger(ledger)
         self.assertGreaterEqual(ledger["ordered_wire_info_count"], 1)
         self.assertLessEqual(ledger["ordered_vertex_count"], ledger["edge_info_count"])
@@ -1911,32 +1764,23 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(ledger["branch_search_candidate_count"], 0)
         self.assertGreaterEqual(ledger["branch_search_seed_wire_info_count"], 1)
         self.assertGreater(ledger["branch_search_inside_candidate_count"], 0)
-        self.assertEqual(ledger["branch_search_outside_candidate_count"], 0)
+        self.assertEqual(ledger["branch_search_candidate_count"], ledger["branch_search_inside_candidate_count"])
         self.assertEqual(ledger["new_wire_seed_candidate_count"], ledger["branch_search_inside_candidate_count"])
         self.assertGreaterEqual(ledger["new_wire_seed_wire_info_count"], 1)
         self.assertGreaterEqual(ledger["done_wire_info_count"], 1)
         self.assertGreaterEqual(ledger["done_owned_edge_info_count"], ledger["primary_owned_edge_info_count"])
         self.assertGreaterEqual(ledger["split_wire_candidate_count"], 1)
         self.assertGreater(ledger["split_wire_edge_info_count"], 0)
-        self.assertEqual(ledger["tight_bound_live_split_wire_info_count"], 0)
-        self.assertEqual(ledger["tight_bound_live_split_wire_edge_info_count"], 0)
         self.assertEqual(
             ledger["owner_propagation_candidate_count"],
-            ledger["owner_propagation_unassigned_candidate_count"]
-            + ledger["owner_propagation_other_wire_candidate_count"],
+            ledger["owner_propagation_other_wire_candidate_count"],
         )
-        self.assertEqual(ledger["owner_propagation_unassigned_candidate_count"], 0)
         self.assertGreater(ledger["owner_propagation_other_wire_candidate_count"], 0)
         self.assertEqual(
             ledger["owner_propagation_other_wire_live_edge_info_count"],
             ledger["owner_propagation_other_wire_candidate_count"],
         )
         self.assertGreater(ledger["tight_bound_exhaust_done_wire_info_count"], 0)
-        self.assertGreater(
-            ledger["tight_bound_exhaust_primary_reset_edge_info_count"]
-            + ledger["tight_bound_exhaust_primary_reset_blocked_edge_info_count"],
-            0,
-        )
         self.assertEqual(ledger["exhaust_seed_edge_info_count"], 0)
         self.assertEqual(ledger["secondary_owned_edge_info_count"], ledger["exhaust_secondary_owner_edge_info_count"])
         self.assertEqual(ledger["exhaust_shared_owner_edge_info_count"], ledger["exhaust_secondary_owner_edge_info_count"])
@@ -1968,48 +1812,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(ledger["source_lineage_missing_open_export_edge_info_count"], 0)
         self.assertEqual(ledger["repeated_split_exhaust_rerun_miss_live_reset_edge_info_count"], 1)
         self.assertEqual(self.result_wire_producer_kind_count(ledger, "LiveResetOpenEdge"), 1)
-        self.assertEqual(ledger["result_wire_producer_blocker_missing_full_ahistory_producer_evidence_count"], 0)
-        self.assertEqual(ledger["result_wire_producer_blocker_missing_removed_target_evidence_count"], 0)
-        self.assertEqual(ledger["result_wire_producer_blocker_foreign_ahistory_source_lineage_count"], 0)
-        self.assertEqual(
-            ledger[
-                "result_wire_producer_blocker_foreign_ahistory_source_shape_ready_lineage_mismatch_count"
-            ],
-            0,
-        )
-        self.assertEqual(
-            ledger[
-                "result_wire_producer_blocker_foreign_ahistory_source_shape_identity_not_ready_count"
-            ],
-            0,
-        )
-        self.assertEqual(
-            ledger[
-                "result_wire_producer_blocker_foreign_ahistory_source_geometry_mismatch_count"
-            ],
-            0,
-        )
-        self.assertEqual(ledger["result_wire_producer_blocker_same_source_sidecar_geometry_mismatch_count"], 0)
-        self.assertEqual(ledger["result_wire_producer_blocker_current_member_sidecar_geometry_mismatch_count"], 0)
-        self.assertEqual(ledger["result_wire_producer_blocker_current_member_missing_sidecar_evidence_count"], 0)
-        self.assertEqual(
-            ledger["result_wire_producer_blocker_current_member_root_open_producer_not_ready_count"],
-            0,
-        )
-        self.assertEqual(ledger["result_wire_producer_blocker_source_shape_identity_not_ready_count"], 0)
-        self.assertEqual(ledger["result_wire_producer_blocker_source_shape_would_purge_original_count"], 0)
-        self.assertEqual(
-            ledger[
-                "result_wire_producer_blocker_live_reset_source_shape_would_purge_original_count"
-            ],
-            0,
-        )
-        self.assertEqual(
-            ledger[
-                "result_wire_producer_blocker_current_member_source_shape_would_purge_original_count"
-            ],
-            0,
-        )
         self.assert_object_matches_expected(result, "p5", "sketch-internal-face-segmented-cross-cutter")
 
     def test_p5_overlapping_closed_profiles_split_into_disjoint_internal_faces(self) -> None:
@@ -2072,49 +1874,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(ledger["repeated_split_exhaust_rerun_miss_live_reset_edge_info_count"], 3)
         self.assertEqual(self.result_wire_producer_kind_count(ledger, "LiveResetOpenEdge"), 3)
-        self.assertEqual(ledger["result_wire_producer_blocker_missing_full_ahistory_producer_evidence_count"], 0)
-        self.assertEqual(ledger["result_wire_producer_blocker_foreign_ahistory_source_lineage_count"], 0)
-        self.assertEqual(ledger["result_wire_producer_blocker_missing_removed_target_evidence_count"], 0)
-        self.assertEqual(ledger["result_wire_producer_blocker_source_shape_identity_not_ready_count"], 0)
-        self.assertEqual(
-            ledger[
-                "result_wire_producer_blocker_same_source_sidecar_source_shape_identity_not_ready_count"
-            ],
-            0,
-        )
-        self.assertEqual(ledger["result_wire_producer_blocker_same_source_sidecar_geometry_mismatch_count"], 0)
-        self.assertEqual(
-            ledger[
-                "result_wire_producer_blocker_source_shape_member_vertex_identity_not_ready_count"
-            ],
-            0,
-        )
-        self.assertEqual(ledger["result_wire_producer_blocker_multi_member_root_pending_suppression_count"], 0)
-        self.assertEqual(
-            ledger[
-                "result_wire_producer_blocker_current_member_child_wire_identity_not_ready_count"
-            ],
-            0,
-        )
-        self.assertEqual(ledger["result_wire_producer_blocker_current_member_missing_sidecar_evidence_count"], 0)
-        self.assertEqual(
-            ledger["result_wire_producer_blocker_current_member_root_open_producer_not_ready_count"],
-            0,
-        )
-        self.assertEqual(ledger["result_wire_producer_blocker_current_member_sidecar_geometry_mismatch_count"], 0)
-        self.assertEqual(ledger["result_wire_producer_blocker_source_shape_would_purge_original_count"], 0)
-        self.assertEqual(
-            ledger[
-                "result_wire_producer_blocker_live_reset_source_shape_would_purge_original_count"
-            ],
-            0,
-        )
-        self.assertEqual(
-            ledger[
-                "result_wire_producer_blocker_current_member_source_shape_would_purge_original_count"
-            ],
-            0,
-        )
         self.assertGreater(ledger["exhaust_adjacent_search_miss_count"], 0)
         self.assertGreater(ledger["exhaust_adjacent_search_hit_count"], 0)
         self.assertGreater(ledger["exhaust_adjacent_search_backtrack_count"], 0)
@@ -2335,17 +2094,13 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(ledger["branch_search_candidate_count"], 0)
         self.assertEqual(ledger["branch_search_seed_wire_info_count"], 0)
         self.assertEqual(ledger["branch_search_inside_candidate_count"], 0)
-        self.assertEqual(ledger["branch_search_outside_candidate_count"], 0)
         self.assertEqual(ledger["new_wire_seed_candidate_count"], ledger["branch_search_inside_candidate_count"])
         self.assertEqual(ledger["new_wire_seed_wire_info_count"], 0)
         self.assertEqual(ledger["split_wire_candidate_count"], 0)
         self.assertEqual(ledger["split_wire_edge_info_count"], 0)
-        self.assertEqual(ledger["tight_bound_live_split_wire_info_count"], 0)
-        self.assertEqual(ledger["tight_bound_live_split_wire_edge_info_count"], 0)
         self.assertEqual(ledger["done_wire_info_count"], 0)
         self.assertEqual(ledger["done_owned_edge_info_count"], 0)
         self.assertEqual(ledger["owner_propagation_candidate_count"], 0)
-        self.assertEqual(ledger["owner_propagation_unassigned_candidate_count"], 0)
         self.assertEqual(ledger["owner_propagation_other_wire_candidate_count"], 0)
         self.assertEqual(ledger["exhaust_seed_edge_info_count"], 0)
         self.assertEqual(ledger["exhaust_shared_owner_edge_info_count"], 0)

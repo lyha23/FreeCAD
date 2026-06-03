@@ -202,11 +202,10 @@ unowned-removal 闭环后，再按 branch 迁移：
 M3 最终完成必须满足：
 
 ```text
-generated_open_export_edge_info_count == 0
-open_wire_compound_generated_wire_info_count == 0
-result_wire_producer_unknown_invariant_count == 0
-open_wire_compound_legacy_helper_shape_wire_info_count == 0
-open_wire_compound_helper_open_export_override_helper_shape_wire_info_count == 0
+generated/helper output diagnostics are not emitted
+result-wire blocker summary diagnostics are not emitted
+all result_wire_producer_ledger_entries have state == ExportedWithoutHelper and blocker == None
+result_wire_producer_ledger_entries align with wire_joiner_history_detail.open_export_history_entries
 repeated_split_exhaust_generated_identity_blocked_edge_info_count == 0
 source_lineage_missing_open_export_edge_info_count == 0
 open_export_helper_override_missing_source_lineage_edge_count == 0

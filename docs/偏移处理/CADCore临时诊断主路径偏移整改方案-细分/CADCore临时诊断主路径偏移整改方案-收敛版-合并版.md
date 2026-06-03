@@ -351,11 +351,10 @@ unowned-removal 闭环后，再按 branch 迁移：
 M3 最终完成必须满足：
 
 ```text
-generated_open_export_edge_info_count == 0
-open_wire_compound_generated_wire_info_count == 0
-result_wire_producer_unknown_invariant_count == 0
-open_wire_compound_legacy_helper_shape_wire_info_count == 0
-open_wire_compound_helper_open_export_override_helper_shape_wire_info_count == 0
+generated/helper output diagnostics are not emitted
+result-wire blocker summary diagnostics are not emitted
+all result_wire_producer_ledger_entries have state == ExportedWithoutHelper and blocker == None
+result_wire_producer_ledger_entries align with wire_joiner_history_detail.open_export_history_entries
 repeated_split_exhaust_generated_identity_blocked_edge_info_count == 0
 source_lineage_missing_open_export_edge_info_count == 0
 open_export_helper_override_missing_source_lineage_edge_count == 0
@@ -572,10 +571,10 @@ generatedOpenExportShapeForSketchInternals()
 
 新增断言：
 
-- `result_wire_producer_unknown_invariant_count == 0`
-- 每个 `result_wire_producer_ledger_entries` 条目都是 `state == ExportedWithoutHelper` 且 `blocker == None`
-- `open_wire_compound_legacy_helper_shape_wire_info_count == 0`
-- 每个重点 fixture 的 blocker 分布符合阶段矩阵。
+- 每个 `result_wire_producer_ledger_entries` 条目都是 `state == ExportedWithoutHelper` 且 `blocker == None`。
+- 每个 producer entry 与 `wire_joiner_history_detail.open_export_history_entries` 中的 kind/state/blocker/index 字段逐条一致。
+- 全量 P5 fixture 不再输出 generated/helper output 诊断键、result-wire blocker summary、P3/P4 current-member summary 或 owner/search/exhaust 临时 JSON summary。
+- producer ledger、runtime open-export history 与 `Sketch.InternalShape.sketch_internal_history` 三方 identity 对齐。
 
 ## 2. P0 切片：冻结诊断扩散
 
@@ -590,7 +589,7 @@ generatedOpenExportShapeForSketchInternals()
 
 ```text
 len(result_wire_producer_ledger_entries) == wire_joiner_history_detail.open_export_helper_override_edge_count
-result_wire_producer_unknown_invariant_count == 0
+all result_wire_producer_ledger_entries have blocker != UnknownInvariant
 ```
 
 ## 3. P1 切片：producer identity contract
@@ -623,7 +622,6 @@ source_lineage_missing_open_export_edge_info_count == 0
 验收：
 
 ```text
-result_wire_producer_unknown_invariant_count == 0
 result_wire_producer_ledger_entries[*].state/blocker 覆盖 source-shape gate
 ```
 
@@ -640,9 +638,8 @@ result_wire_producer_ledger_entries[*].state/blocker 覆盖 source-shape gate
 验收：
 
 ```text
-unowned_removal_ready_legacy_helper_shape_output_count == 0
-unowned_removal_current_member_producer_output_count == unowned_removal_ready_slot_count
-multi_member_root_direct_output_count == 0
+current-member ready 子集必须逐条表现为 producer entry/state/history 对齐
+multi-member root 不得作为直接输出；若需要约束 sibling ownership，使用 per-entry covered/current/non-current member evidence
 ```
 
 ## 6. P4 切片：primary / secondary removal
@@ -734,11 +731,11 @@ element_map_result_wire_identity_mismatch_count == 0
 最终完成必须满足：
 
 ```text
-generated_open_export_edge_info_count == 0
-open_wire_compound_generated_wire_info_count == 0
-open_wire_compound_helper_open_export_override_helper_shape_wire_info_count == 0
-open_wire_compound_legacy_helper_shape_wire_info_count == 0
-result_wire_producer_unknown_invariant_count == 0
+generated/helper output diagnostics are not emitted
+result-wire blocker/current-member summary diagnostics are not emitted
+owner/search/exhaust temporary JSON summary diagnostics are not emitted
+all result_wire_producer_ledger_entries have state == ExportedWithoutHelper and blocker == None
+result_wire_producer_ledger_entries align with wire_joiner_history_detail.open_export_history_entries
 source_lineage_missing_open_export_edge_info_count == 0
 open_export_helper_override_missing_source_lineage_edge_count == 0
 repeated_split_exhaust_generated_identity_blocked_edge_info_count == 0
@@ -796,7 +793,7 @@ pytest cad-core/tests/test_p5_sketch.py   -k "sketch-internal-face-cross-cutters
 
 任一情况出现即失败：
 
-- `UnknownInvariant > 0`
+- 任一 producer entry/history 的 blocker 为 `UnknownInvariant`
 - helper shape 在 P6 后仍被输出
 - generated shape 在 P6 后仍被输出
 - multi-member root 直接输出
@@ -848,9 +845,6 @@ pytest cad-core/tests/test_p5_sketch.py   -k "sketch-internal-face-cross-cutters
 ## 派生规则
 
 ```text
-result_wire_producer_unknown_invariant_count
-  = count(entries where blocker == UnknownInvariant)
-
 open_wire_compound_legacy_helper_shape_wire_info_count
   = count(childWires where producer.state != ExportedWithoutHelper and legacyHelperShapeUsed)
 

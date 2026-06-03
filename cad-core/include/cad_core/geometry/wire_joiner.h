@@ -181,8 +181,6 @@ struct WireJoinerLedgerSummary {
     std::size_t tightBoundSplitOwnerWireInfoCount = 0;
     std::size_t tightBoundSplitOwnerVertexCount = 0;
     std::size_t tightBoundSplitOwnerBuiltWireCount = 0;
-    std::size_t tightBoundLiveSplitWireInfoCount = 0;
-    std::size_t tightBoundLiveSplitWireEdgeInfoCount = 0;
     std::size_t tightBoundSplitWireVertexCount = 0;
     std::size_t tightBoundSplitWireBuiltCount = 0;
     std::size_t tightBoundExistingWireSearchCount = 0;
@@ -194,7 +192,6 @@ struct WireJoinerLedgerSummary {
     std::size_t tightBoundExhaustDoneWireInfoCount = 0;
     std::size_t tightBoundExhaustDiscardedPurgedWireInfoCount = 0;
     std::size_t tightBoundExhaustPrimaryResetEdgeInfoCount = 0;
-    std::size_t tightBoundExhaustPrimaryResetBlockedEdgeInfoCount = 0;
     std::size_t tightBoundFullWireSetInsertCount = 0;
     std::size_t tightBoundFullWireSetEraseCount = 0;
     std::size_t tightBoundFullWireSetAbortCount = 0;
@@ -235,26 +232,17 @@ struct WireJoinerLedgerSummary {
     // repeated findTightBound branch/transfer lifecycle.
     std::size_t repeatedSplitExhaustRerunLiveBranchSearchCandidateCount = 0;
     std::size_t repeatedSplitExhaustRerunLiveBranchSearchInsideCandidateCount = 0;
-    std::size_t repeatedSplitExhaustRerunLiveBranchSearchOutsideCandidateCount = 0;
-    std::size_t repeatedSplitExhaustRerunLiveTransferWireInfoCount = 0;
-    std::size_t repeatedSplitExhaustRerunLiveTransferredOwnerEdgeInfoCount = 0;
     std::size_t repeatedSplitExhaustRerunLiveDoneWireInfoCount = 0;
     std::size_t repeatedSplitExhaustRerunRemovalScanCount = 0;
-    std::size_t repeatedSplitExhaustRerunRemovalEdgeInfoCount = 0;
-    std::size_t repeatedSplitExhaustRerunRemovalUnownedEdgeInfoCount = 0;
-    std::size_t repeatedSplitExhaustRerunRemovalSecondaryEdgeInfoCount = 0;
-    std::size_t repeatedSplitExhaustRerunRemovalPrimaryEdgeInfoCount = 0;
     std::size_t repeatedSplitExhaustRerunLoopExitNoRemovalCount = 0;
     std::size_t repeatedSplitExhaustRerunBranchSearchCandidateCount = 0;
     std::size_t repeatedSplitExhaustRerunBranchSearchInsideCandidateCount = 0;
-    std::size_t repeatedSplitExhaustRerunBranchSearchOutsideCandidateCount = 0;
     std::size_t repeatedSplitExhaustRerunNewWireSeedCandidateCount = 0;
     std::size_t repeatedSplitExhaustGeneratedIdentityBlockedEdgeInfoCount = 0;
     std::size_t tightBoundExistingWireSearchStackFrameCount = 0;
     std::size_t tightBoundExistingWireSearchVertexStackCount = 0;
     std::size_t tightBoundExistingWireSearchEdgeSetVisitCount = 0;
     std::size_t tightBoundExistingWireSearchBacktrackCount = 0;
-    std::size_t tightBoundExistingWireSearchIntersectSkipCount = 0;
     std::size_t tightBoundExistingWireSearchIdxVertexCount = 0;
     std::size_t tightBoundExistingWireSearchStackPosCount = 0;
     std::size_t tightBoundExistingWireSearchPathVertexCount = 0;
@@ -266,9 +254,7 @@ struct WireJoinerLedgerSummary {
     std::size_t tightBoundExistingWireSearchOnlyIdxVertexCount = 0;
     std::size_t tightBoundExistingWireSearchOnlyStackPosCount = 0;
     std::size_t tightBoundExistingWireSearchOnlyPathBlockedCount = 0;
-    std::size_t tightBoundExistingWireSearchOnlyOwnerVertexBlockedCount = 0;
     std::size_t tightBoundExistingWireSearchOnlyOrderBlockedCount = 0;
-    std::size_t tightBoundExistingWireSearchOnlyWireBuildBlockedCount = 0;
     std::size_t tightBoundExistingWireIdxVertexCount = 0;
     std::size_t tightBoundExistingWireStackPosCount = 0;
     std::size_t sourceIdentitySharedVertexEdgeInfoCount = 0;
@@ -311,7 +297,6 @@ struct WireJoinerLedgerSummary {
     std::size_t branchSearchCandidateCount = 0;
     std::size_t branchSearchSeedWireInfoCount = 0;
     std::size_t branchSearchInsideCandidateCount = 0;
-    std::size_t branchSearchOutsideCandidateCount = 0;
     std::size_t newWireSeedCandidateCount = 0;
     std::size_t newWireSeedWireInfoCount = 0;
     std::size_t splitWireCandidateCount = 0;
@@ -319,7 +304,6 @@ struct WireJoinerLedgerSummary {
     std::size_t doneWireInfoCount = 0;
     std::size_t doneOwnedEdgeInfoCount = 0;
     std::size_t ownerPropagationCandidateCount = 0;
-    std::size_t ownerPropagationUnassignedCandidateCount = 0;
     std::size_t ownerPropagationOtherWireCandidateCount = 0;
     std::size_t ownerPropagationOtherWireLiveEdgeInfoCount = 0;
     std::size_t exhaustSeedEdgeInfoCount = 0;
@@ -338,35 +322,6 @@ struct WireJoinerLedgerSummary {
     std::size_t exhaustAdjacentWireSetEraseCount = 0;
     std::size_t exhaustAdjacentWireSetAbortCount = 0;
     std::size_t exhaustAdjacentWireInfo2AbortCount = 0;
-    std::size_t resultWireProducerBlockerMissingSourceLineageCount = 0;
-    std::size_t resultWireProducerBlockerMissingAHistoryRemoveSourceCount = 0;
-    std::size_t resultWireProducerBlockerForeignAHistorySourceLineageCount = 0;
-    std::size_t resultWireProducerBlockerForeignAHistorySourceShapeReadyLineageMismatchCount = 0;
-    std::size_t resultWireProducerBlockerForeignAHistorySourceShapeIdentityNotReadyCount = 0;
-    std::size_t resultWireProducerBlockerForeignAHistorySourceGeometryMismatchCount = 0;
-    std::size_t resultWireProducerBlockerMissingRemovedTargetEvidenceCount = 0;
-    std::size_t resultWireProducerBlockerMissingFullAHistoryProducerEvidenceCount = 0;
-    std::size_t resultWireProducerBlockerFinalGateBlockedByIterationCount = 0;
-    std::size_t resultWireProducerBlockerFinalGateBlockedByWireInfoCount = 0;
-    std::size_t resultWireProducerBlockerRootRemovedByUnownedBranchCount = 0;
-    std::size_t resultWireProducerBlockerRootRemovedByPrimaryBranchCount = 0;
-    std::size_t resultWireProducerBlockerRootRemovedBySecondaryBranchCount = 0;
-    std::size_t resultWireProducerBlockerMultiMemberRootPendingSuppressionCount = 0;
-    std::size_t resultWireProducerBlockerSourceShapeIdentityNotReadyCount = 0;
-    std::size_t resultWireProducerBlockerSourceShapeWouldPurgeOriginalCount = 0;
-    std::size_t resultWireProducerBlockerLiveResetSourceShapeWouldPurgeOriginalCount = 0;
-    std::size_t resultWireProducerBlockerCurrentMemberSourceShapeWouldPurgeOriginalCount = 0;
-    std::size_t resultWireProducerBlockerSameSourceSidecarSourceShapeIdentityNotReadyCount = 0;
-    std::size_t resultWireProducerBlockerSameSourceSidecarGeometryMismatchCount = 0;
-    std::size_t resultWireProducerBlockerSourceShapeMemberVertexIdentityNotReadyCount = 0;
-    std::size_t resultWireProducerBlockerCurrentMemberChildWireIdentityNotReadyCount = 0;
-    std::size_t resultWireProducerBlockerCurrentMemberMissingSidecarEvidenceCount = 0;
-    std::size_t resultWireProducerBlockerCurrentMemberRootOpenProducerNotReadyCount = 0;
-    std::size_t resultWireProducerBlockerCurrentMemberSidecarGeometryMismatchCount = 0;
-    std::size_t resultWireProducerUnknownInvariantCount = 0;
-    std::size_t unownedRemovalReadySlotCount = 0;
-    std::size_t unownedRemovalCurrentMemberProducerOutputCount = 0;
-    std::size_t multiMemberRootDirectOutputCount = 0;
     std::vector<ResultWireProducerLedgerEntry> resultWireProducerLedgerEntries;
 };
 
@@ -474,7 +429,6 @@ private:
         std::size_t helperOpenExportOverrideSourceEdgeInfoIndex = 0;
         bool helperOpenExportOverrideSourceEdgeInfoConsumed = false;
         bool helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo = false;
-        bool helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo = false;
         bool helperOpenExportOverrideSourceEdgeExportShape = false;
         bool helperOpenExportOverrideSourceEdgeProducerOutput = false;
         bool helperOpenExportOverrideFullAHistoryProducerEvidence = false;
@@ -497,17 +451,12 @@ private:
             helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices;
         std::vector<std::size_t>
             helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices;
-        bool helperOpenExportOverrideExportBlockedByIteration = false;
-        bool helperOpenExportOverrideExportBlockedByWireInfo = false;
-        bool helperOpenExportOverrideRemovedSourceEdgeInfo = false;
-        bool helperOpenExportOverrideRemovedTargetEdgeInfo = false;
         bool helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo = false;
         std::vector<std::size_t> helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices;
         std::vector<std::size_t> helperOpenExportOverrideAHistoryRemoveSourceEdgeIndices;
         bool helperOpenExportOverrideAHistoryRemoveSourceLineage = false;
         bool helperOpenExportOverrideAHistoryRemoveSameSourceLineage = false;
         bool helperOpenExportOverrideAHistoryRemoveForeignSourceLineage = false;
-        bool helperOpenExportOverrideSafeAHistoryProducerEvidence = false;
         bool helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo = false;
         std::vector<std::size_t> helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices;
         bool buildClosedWireRemoved = false;
@@ -667,7 +616,6 @@ private:
         std::size_t helperOpenExportOverrideSourceEdgeInfoIndex = 0;
         bool helperOpenExportOverrideSourceEdgeInfoConsumed = false;
         bool helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo = false;
-        bool helperOpenExportOverrideForcedOpenWireCompoundEdgeInfo = false;
         bool helperOpenExportOverrideSourceEdgeExportShape = false;
         bool helperOpenExportOverrideSourceEdgeProducerOutput = false;
         bool helperOpenExportOverrideFullAHistoryProducerEvidence = false;
@@ -678,11 +626,7 @@ private:
         bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate = false;
         bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady = false;
         TopoDS_Wire helperOpenExportOverrideSuperEdgeRootResultWireProducerWire;
-        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerWireBuilt = false;
-        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerOutput = false;
-        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerUnownedRemovalChildWireProducerReadyOutput = false;
         bool helperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppression = false;
-        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerOutputBlockedByMultiMemberSuperEdge = false;
         bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo = false;
         std::vector<std::size_t>
             helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices;
@@ -694,7 +638,6 @@ private:
         // member wire so M3 can suppress sibling members without exporting the full root superEdge.
         TopoDS_Wire helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWire;
         bool helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWireBuilt = false;
-        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputCandidate = false;
         bool
             helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedByPendingMember =
                 false;
@@ -708,15 +651,12 @@ private:
             helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerFullAHistoryEvidence =
                 false;
         bool helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutput = false;
-        bool helperOpenExportOverrideRemovedSourceEdgeInfo = false;
-        bool helperOpenExportOverrideRemovedTargetEdgeInfo = false;
         bool helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo = false;
         std::vector<std::size_t> helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices;
         std::vector<std::size_t> helperOpenExportOverrideAHistoryRemoveSourceEdgeIndices;
         bool helperOpenExportOverrideAHistoryRemoveSourceLineage = false;
         bool helperOpenExportOverrideAHistoryRemoveSameSourceLineage = false;
         bool helperOpenExportOverrideAHistoryRemoveForeignSourceLineage = false;
-        bool helperOpenExportOverrideSafeAHistoryProducerEvidence = false;
         bool helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo = false;
         std::vector<std::size_t> helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices;
         bool purgeBridge = false;
