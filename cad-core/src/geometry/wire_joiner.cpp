@@ -1980,7 +1980,12 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(const Wire
         return identity;
     }
 
-    if (edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedMissingRemovalBranch) {
+    const bool rootIterationBlockedMissingRemovalBranch =
+        edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
+        && !edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval
+        && !edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedPrimaryRemoval
+        && !edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedSecondaryRemoval;
+    if (rootIterationBlockedMissingRemovalBranch) {
         identity.blocker = ResultWireBlocker::UnknownInvariant;
     }
     else if (edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval) {
@@ -2449,10 +2454,6 @@ void WireJoiner::applyHelperOpenExportOverridePlan(WireInfo& info,
             edgeInfo.helperOpenExportOverrideSourceEdgeInfoIndex = *selectedSourceEdgeInfoIndex;
             edgeInfo.helperOpenExportOverrideSourceEdgeInfoConsumed =
                 !sourceExportsOpenEdge || sourceConsumedByBuildClosedWire;
-            edgeInfo.helperOpenExportOverrideCandidateEdgeInfoIndices =
-                binding.sourceEdgeInfoCandidateIndices;
-            edgeInfo.helperOpenExportOverrideOpenWireCompoundEligibleCandidateEdgeInfoIndices =
-                openWireCompoundEligibleCandidateIndices;
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
             // ::WireJoinerP::build() adds to "openWireCompound" only when
             // "info.iteration == -3 || (!info.wireInfo && info.iteration >= 0)". Track whether
@@ -2474,34 +2475,10 @@ void WireJoiner::applyHelperOpenExportOverridePlan(WireInfo& info,
                     rootExportsOpenEdge;
                 edgeInfo.helperOpenExportOverrideSuperEdgeRootOpenLifecycleEdgeInfo =
                     rootEdgeInfo.superEdgeLifecycleOpenRoot;
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootClosedLifecycleEdgeInfo =
-                    rootEdgeInfo.superEdgeLifecycleClosedRoot;
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootRemovedByUnowned =
-                    rootEdgeInfo.buildClosedWireRemovedByUnowned;
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootRemovedByPrimaryOwner =
-                    rootEdgeInfo.buildClosedWireRemovedByPrimaryOwner;
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootRemovedBySecondaryOwner =
-                    rootEdgeInfo.buildClosedWireRemovedBySecondaryOwner;
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidence =
-                    helperOpenExportOverrideCandidateHasSafeAHistoryProducerEvidence(rootEdgeInfo);
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidence =
+                const bool rootFullAHistoryProducerEvidence =
                     helperOpenExportOverrideRootResultWireProducerHasFullAHistoryProducerEvidence(rootEdgeInfo);
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootSelectedIteration = rootEdgeInfo.iteration;
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootSelectedWireInfo = rootEdgeInfo.wireInfo;
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootSelectedWireInfo2 = rootEdgeInfo.wireInfo2;
                 edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration =
                     !rootExportsOpenEdge && rootEdgeInfo.iteration < 0 && rootEdgeInfo.iteration != -3;
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByWireInfo =
-                    !rootExportsOpenEdge && rootEdgeInfo.iteration >= 0 && rootEdgeInfo.wireInfo != 0U;
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidenceIterationBlocked =
-                    edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
-                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidence;
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidenceIterationBlocked =
-                    edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
-                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidence;
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootMissingSafeAHistoryProducerEvidenceIterationBlocked =
-                    edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
-                    && !edgeInfo.helperOpenExportOverrideSuperEdgeRootSafeAHistoryProducerEvidence;
                 edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval =
                     edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
                     && rootEdgeInfo.buildClosedWireRemovedByUnowned;
@@ -2511,11 +2488,6 @@ void WireJoiner::applyHelperOpenExportOverridePlan(WireInfo& info,
                 edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedSecondaryRemoval =
                     edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
                     && rootEdgeInfo.buildClosedWireRemovedBySecondaryOwner;
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedMissingRemovalBranch =
-                    edgeInfo.helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration
-                    && !rootEdgeInfo.buildClosedWireRemovedByUnowned
-                    && !rootEdgeInfo.buildClosedWireRemovedByPrimaryOwner
-                    && !rootEdgeInfo.buildClosedWireRemovedBySecondaryOwner;
                 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
                 // ::WireJoinerP::findSuperEdgesUpdateFirst() stores an open root wire in
                 // "first->superEdge = makeCleanWire(false)"; ::buildClosedWire() can later remove
@@ -2529,17 +2501,13 @@ void WireJoiner::applyHelperOpenExportOverridePlan(WireInfo& info,
                 edgeInfo
                     .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence =
                     edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
-                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidence;
-                edgeInfo
-                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidence =
-                    edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
-                    && !edgeInfo.helperOpenExportOverrideSuperEdgeRootFullAHistoryProducerEvidence;
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemoval =
+                    && rootFullAHistoryProducerEvidence;
+                const bool rootResultWireProducerCandidateUnownedRemoval =
                     edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
                     && edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval;
                 edgeInfo
                     .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady =
-                    edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemoval
+                    rootResultWireProducerCandidateUnownedRemoval
                     && edgeInfo
                            .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence;
                 edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidatePrimaryRemoval =
@@ -2548,29 +2516,6 @@ void WireJoiner::applyHelperOpenExportOverridePlan(WireInfo& info,
                 edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateSecondaryRemoval =
                     edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
                     && edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedSecondaryRemoval;
-                edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingRemovalBranch =
-                    edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
-                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedMissingRemovalBranch;
-                edgeInfo
-                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceUnownedRemoval =
-                    edgeInfo
-                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidence
-                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval;
-                edgeInfo
-                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidencePrimaryRemoval =
-                    edgeInfo
-                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidence
-                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedPrimaryRemoval;
-                edgeInfo
-                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceSecondaryRemoval =
-                    edgeInfo
-                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidence
-                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedSecondaryRemoval;
-                edgeInfo
-                    .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidenceMissingRemovalBranch =
-                    edgeInfo
-                        .helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateMissingFullAHistoryProducerEvidence
-                    && edgeInfo.helperOpenExportOverrideSuperEdgeRootIterationBlockedMissingRemovalBranch;
                 const bool rootOpenCurrentMemberProducerCandidate =
                     !edgeInfo.helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate
                     && edgeInfo.helperOpenExportOverrideSuperEdgeMemberEdgeInfo
@@ -2610,9 +2555,6 @@ void WireJoiner::applyHelperOpenExportOverridePlan(WireInfo& info,
                     }
                 }
             }
-            edgeInfo.helperOpenExportOverrideSelectedIteration = edgeInfo.iteration;
-            edgeInfo.helperOpenExportOverrideSelectedWireInfo = edgeInfo.wireInfo;
-            edgeInfo.helperOpenExportOverrideSelectedWireInfo2 = edgeInfo.wireInfo2;
             edgeInfo.helperOpenExportOverrideExportBlockedByIteration = exportBlockedByIteration;
             edgeInfo.helperOpenExportOverrideExportBlockedByWireInfo = exportBlockedByWireInfo;
             edgeInfo.helperOpenExportOverrideRemovedSourceEdgeInfo = edgeInfo.buildClosedWireAHistoryRemoved;
@@ -5718,28 +5660,6 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
         groups.push_back(MemberSuppressionRootGroup{rootEdgeInfoIndex, {}, {}});
         return groups.back();
     };
-    auto countProducerKind = [&](ResultWireProducerKind kind) {
-        switch (kind) {
-        case ResultWireProducerKind::None:
-            ++summary.resultWireProducerNoneCount;
-            break;
-        case ResultWireProducerKind::ExistingSourceEdge:
-            ++summary.resultWireProducerExistingSourceEdgeCount;
-            break;
-        case ResultWireProducerKind::PartialSharedClosedWire:
-            ++summary.resultWireProducerPartialSharedClosedWireCount;
-            break;
-        case ResultWireProducerKind::LiveResetOpenEdge:
-            ++summary.resultWireProducerLiveResetOpenEdgeCount;
-            break;
-        case ResultWireProducerKind::SuperEdgeRoot:
-            ++summary.resultWireProducerSuperEdgeRootCount;
-            break;
-        case ResultWireProducerKind::CurrentMemberChildWire:
-            ++summary.resultWireProducerCurrentMemberChildWireCount;
-            break;
-        }
-    };
     auto countProducerBlocker = [&](ResultWireBlocker blocker) {
         switch (blocker) {
         case ResultWireBlocker::None:
@@ -5822,7 +5742,6 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
             ++summary.resultWireProducerBlockerCurrentMemberSidecarGeometryMismatchCount;
             break;
         case ResultWireBlocker::LegacyHelperShapeStillUsed:
-            ++summary.resultWireProducerBlockerLegacyHelperShapeStillUsedCount;
             break;
         case ResultWireBlocker::UnknownInvariant:
             ++summary.resultWireProducerUnknownInvariantCount;
@@ -5858,22 +5777,6 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
                 ++summary.openWireCompoundSuperEdgeWireInfoCount;
             }
             if (childWire.helperOpenExportOverride) {
-                ++summary.openWireCompoundHelperOpenExportOverrideWireInfoCount;
-                if (resultWireProducerStateAtLeast(childWire.resultWireProducer.state,
-                                                   ResultWireProducerState::ChildWireReady)) {
-                    ++summary.resultWireProducerChildWireReadyCount;
-                }
-                if (resultWireProducerStateAtLeast(childWire.resultWireProducer.state,
-                                                   ResultWireProducerState::SourceShapeReady)) {
-                    ++summary.resultWireProducerSourceShapeReadyCount;
-                }
-                else if (resultWireProducerStateAtLeast(childWire.resultWireProducer.state,
-                                                        ResultWireProducerState::ChildWireReady)) {
-                    ++summary.resultWireProducerSourceShapeNotReadyCount;
-                }
-                if (childWire.resultWireProducer.state == ResultWireProducerState::ExportedWithoutHelper) {
-                    ++summary.resultWireProducerExportedWithoutHelperWireInfoCount;
-                }
                 const bool childWireBlockerMirrorsEdgeInfo =
                     childWire.edgeIndex < info.edges.size()
                     && info.edges[childWire.edgeIndex].resultWireProducer.blocker
@@ -5942,29 +5845,18 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
                              == ResultWireBlocker::CurrentMemberSidecarGeometryMismatch) {
                         ++summary.resultWireProducerBlockerCurrentMemberSidecarGeometryMismatchCount;
                     }
-                    else if (childWire.resultWireProducer.blocker == ResultWireBlocker::LegacyHelperShapeStillUsed) {
-                        ++summary.resultWireProducerBlockerLegacyHelperShapeStillUsedCount;
-                    }
                     else if (childWire.resultWireProducer.blocker
                              == ResultWireBlocker::MultiMemberRootPendingSuppression) {
                         ++summary.resultWireProducerBlockerMultiMemberRootPendingSuppressionCount;
                     }
                     else if (childWire.resultWireProducer.blocker == ResultWireBlocker::UnknownInvariant) {
                         ++summary.resultWireProducerUnknownInvariantCount;
-                        ++summary.sourceShapeIdentityUnknownCount;
                     }
-                }
-                if (childWire.resultWireProducer.blocker == ResultWireBlocker::LegacyHelperShapeStillUsed) {
-                    ++summary.openWireCompoundLegacyHelperShapeWireInfoCount;
                 }
                 if (childWire
                         .helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerReady
                     && childWire.resultWireProducer.sourceShapeReady) {
                     ++summary.unownedRemovalReadySlotCount;
-                    if (!childWire
-                             .helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutput) {
-                        ++summary.unownedRemovalReadyLegacyHelperShapeOutputCount;
-                    }
                 }
                 if (childWire
                         .helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutput) {
@@ -6155,25 +6047,7 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
                 ++summary.splitEdgeInfoCount;
             }
             if (edgeInfo.helperOpenExportOverride) {
-                ++summary.helperOpenExportOverrideEdgeInfoCount;
-                ++summary.resultWireProducerLedgerEntryCount;
-                ++summary.migratedLegacyHelperSlotCount;
-                countProducerKind(edgeInfo.resultWireProducer.kind);
-                if (edgeInfo.resultWireProducer.state == ResultWireProducerState::LegacyHelperCandidate) {
-                    ++summary.resultWireProducerLegacyHelperCandidateCount;
-                }
-                else if (edgeInfo.resultWireProducer.state == ResultWireProducerState::ProducerLocated) {
-                    ++summary.resultWireProducerLocatedCount;
-                }
-                else if (edgeInfo.resultWireProducer.state
-                         == ResultWireProducerState::AHistoryEvidenceReady) {
-                    ++summary.resultWireProducerAHistoryEvidenceReadyCount;
-                }
                 countProducerBlocker(edgeInfo.resultWireProducer.blocker);
-                if (edgeInfo.resultWireProducer.kind == ResultWireProducerKind::None
-                    && edgeInfo.resultWireProducer.blocker == ResultWireBlocker::None) {
-                    ++summary.resultWireProducerNoneWithoutBlockerCount;
-                }
                 ResultWireProducerLedgerEntry producerEntry;
                 producerEntry.openExportIndex = producerLedgerOpenExportIndex;
                 producerEntry.sourceEdgeInfoIndex = edgeInfo.resultWireProducer.sourceEdgeInfoIndex;

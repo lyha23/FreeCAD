@@ -296,7 +296,7 @@ computeHelperOpenExportOverridePlan()
 
 验收：
 
-- `helper_open_export_override_edge_info_count` 可以作为 legacy slot 数存在。
+- `helper_open_export_override_edge_info_count` 已删除；legacy slot 数直接使用 `len(result_wire_producer_ledger_entries)` 和 open-export history 的 helper override count。
 - 但 `open_wire_compound_helper_open_export_override_helper_shape_wire_info_count` 必须被拆成 `LegacyHelperShapeStillUsed` blocker，而不是继续新增下游字段。
 
 ### M3-2：partial_shared_closed_wire 作为首个 source-edge producer 输出闭环
@@ -354,7 +354,6 @@ M3 最终完成必须满足：
 generated_open_export_edge_info_count == 0
 open_wire_compound_generated_wire_info_count == 0
 result_wire_producer_unknown_invariant_count == 0
-result_wire_producer_exported_without_helper_wire_info_count == migrated_legacy_helper_slot_count
 open_wire_compound_legacy_helper_shape_wire_info_count == 0
 open_wire_compound_helper_open_export_override_helper_shape_wire_info_count == 0
 repeated_split_exhaust_generated_identity_blocked_edge_info_count == 0
@@ -574,7 +573,7 @@ generatedOpenExportShapeForSketchInternals()
 新增断言：
 
 - `result_wire_producer_unknown_invariant_count == 0`
-- `result_wire_producer_exported_without_helper_wire_info_count == migrated_legacy_helper_slot_count`
+- 每个 `result_wire_producer_ledger_entries` 条目都是 `state == ExportedWithoutHelper` 且 `blocker == None`
 - `open_wire_compound_legacy_helper_shape_wire_info_count == 0`
 - 每个重点 fixture 的 blocker 分布符合阶段矩阵。
 
@@ -590,7 +589,7 @@ generatedOpenExportShapeForSketchInternals()
 验收：
 
 ```text
-result_wire_producer_ledger_entry_count == helper_open_export_override_edge_info_count
+len(result_wire_producer_ledger_entries) == wire_joiner_history_detail.open_export_helper_override_edge_count
 result_wire_producer_unknown_invariant_count == 0
 ```
 
@@ -624,8 +623,8 @@ source_lineage_missing_open_export_edge_info_count == 0
 验收：
 
 ```text
-source_shape_identity_unknown_count == 0
-result_wire_producer_source_shape_ready_count + result_wire_producer_source_shape_not_ready_count == child_wire_ready_count
+result_wire_producer_unknown_invariant_count == 0
+result_wire_producer_ledger_entries[*].state/blocker 覆盖 source-shape gate
 ```
 
 ## 5. P3 切片：unowned-removal + member-suppressed output
@@ -740,7 +739,6 @@ open_wire_compound_generated_wire_info_count == 0
 open_wire_compound_helper_open_export_override_helper_shape_wire_info_count == 0
 open_wire_compound_legacy_helper_shape_wire_info_count == 0
 result_wire_producer_unknown_invariant_count == 0
-result_wire_producer_exported_without_helper_wire_info_count == migrated_legacy_helper_slot_count
 source_lineage_missing_open_export_edge_info_count == 0
 open_export_helper_override_missing_source_lineage_edge_count == 0
 repeated_split_exhaust_generated_identity_blocked_edge_info_count == 0
@@ -752,7 +750,7 @@ repeated_split_exhaust_generated_identity_blocked_edge_info_count == 0
 |---|---|---|---|
 | P0 | `UnknownInvariant` | `LegacyHelperShapeStillUsed` | 只冻结诊断扩散，不切输出 |
 | P1 | `ProducerKind::None` with no blocker | `SourceShapeIdentityNotReady` | producer contract ready |
-| M2S | `source_shape_identity_unknown_count` | branch-specific blocker | source-shape gate ready |
+| M2S | `UnknownInvariant` | branch-specific blocker | source-shape gate ready |
 | P3 | unowned 子集的 `LegacyHelperShapeStillUsed` | primary/secondary blocker | 只切 unowned-removal ready 子集 |
 | P4 | primary/secondary 子集 unknown | 尚未处理 reason blocker | 分 branch 迁移 |
 | P5 | reason-specific legacy helper output | 无 | reason 全闭环 |
@@ -782,7 +780,7 @@ pytest cad-core/tests/test_p5_sketch.py   -k "sketch-internal-face-cross-cutters
 
 ## 5. 禁止的验收方式
 
-- 禁止把 `helper_open_export_override_edge_info_count == 0` 作为 P0/P1 验收；它只是 legacy slot 数。
+- 禁止把 legacy helper summary count 作为 P0/P1 验收；slot 数以 producer ledger entries 与 open-export history 对齐为准。
 - 禁止把 source-edge export shape 自然满足当成 final lifecycle 完成。
 - 禁止用输出数量反推 `wireInfo` ownership。
 - 禁止因为某个 fixture expected 数量变了就调整 oracle。
@@ -817,7 +815,7 @@ pytest cad-core/tests/test_p5_sketch.py   -k "sketch-internal-face-cross-cutters
 |---|---|---|---|
 | `generated_open_export_edge_info_count` | `LegacyHelperCandidate` | `LegacyHelperShapeStillUsed` | P6 删除 generated helper shape |
 | `open_wire_compound_generated_wire_info_count` | `LegacyHelperCandidate` | `LegacyHelperShapeStillUsed` | P6 |
-| `helper_open_export_override_edge_info_count` | legacy slot count | None 或具体 blocker | 只作为 slot 总数，不作为推进目标 |
+| `helper_open_export_override_edge_info_count` | ledger entry count | None 或具体 blocker | 已删除；直接使用 `len(result_wire_producer_ledger_entries)` |
 | `helper_open_export_override_candidate_edge_count` | legacy candidate count | None | P0 后不得驱动新增切片 |
 | `helper_open_export_override_unbound_edge_count` | `LegacyHelperCandidate` | `MissingSourceLineage` | M3 source lineage |
 | `helper_open_export_override_duplicate_source_edge_info_count` | `LegacyHelperCandidate` | `UnknownInvariant` 或 source ambiguity | P0 失败后细化 enum |
@@ -856,11 +854,7 @@ result_wire_producer_unknown_invariant_count
 open_wire_compound_legacy_helper_shape_wire_info_count
   = count(childWires where producer.state != ExportedWithoutHelper and legacyHelperShapeUsed)
 
-result_wire_producer_exported_without_helper_wire_info_count
-  = count(childWires where producer.state == ExportedWithoutHelper)
 
-migrated_legacy_helper_slot_count
-  = count(entries originally created from HelperOpenExportOverridePlan)
 ```
 
 ## 清理顺序

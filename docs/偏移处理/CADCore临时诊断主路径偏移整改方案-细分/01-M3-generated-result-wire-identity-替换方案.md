@@ -147,7 +147,7 @@ computeHelperOpenExportOverridePlan()
 
 验收：
 
-- `helper_open_export_override_edge_info_count` 可以作为 legacy slot 数存在。
+- `helper_open_export_override_edge_info_count` 已删除；legacy slot 数直接使用 `len(result_wire_producer_ledger_entries)` 和 open-export history 的 helper override count。
 - 但 `open_wire_compound_helper_open_export_override_helper_shape_wire_info_count` 必须被拆成 `LegacyHelperShapeStillUsed` blocker，而不是继续新增下游字段。
 
 ### M3-2：partial_shared_closed_wire 作为首个 source-edge producer 输出闭环
@@ -205,7 +205,6 @@ M3 最终完成必须满足：
 generated_open_export_edge_info_count == 0
 open_wire_compound_generated_wire_info_count == 0
 result_wire_producer_unknown_invariant_count == 0
-result_wire_producer_exported_without_helper_wire_info_count == migrated_legacy_helper_slot_count
 open_wire_compound_legacy_helper_shape_wire_info_count == 0
 open_wire_compound_helper_open_export_override_helper_shape_wire_info_count == 0
 repeated_split_exhaust_generated_identity_blocked_edge_info_count == 0
