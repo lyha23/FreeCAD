@@ -2821,11 +2821,6 @@ void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
         entry.edgeInfoIndex = edgeInfoIndex;
         entry.sourceEdgeIndices = edgeInfo.sourceEdgeIndices;
         entry.sourceLineageFromSplitterHistory = edgeInfo.sourceLineageFromSplitterHistory;
-        entry.generatedOpenExport = edgeInfo.generatedOpenExportEdge;
-        entry.generatedOpenExportReason = edgeInfo.generatedOpenExportReason;
-        entry.generatedOpenExportSourceEdgeInfo = edgeInfo.generatedOpenExportSourceEdgeInfo;
-        entry.generatedOpenExportSourceEdgeInfoIndex = edgeInfo.generatedOpenExportSourceEdgeInfoIndex;
-        entry.generatedOpenExportSourceEdgeInfoConsumed = edgeInfo.generatedOpenExportSourceEdgeInfoConsumed;
         entry.helperOpenExportOverride = edgeInfo.helperOpenExportOverride;
         entry.helperOpenExportOverrideReason = edgeInfo.helperOpenExportOverrideReason;
         entry.helperOpenExportOverrideSourceEdgeInfo = edgeInfo.helperOpenExportOverrideSourceEdgeInfo;
@@ -2968,9 +2963,8 @@ void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
             edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo;
         entry.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices =
             edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices;
-        entry.purgeBridge = edgeInfo.generatedOpenExportEdge || edgeInfo.helperOpenExportOverride
-            ? false
-            : edgeInfo.purgeAsOriginalOpenEdge;
+        entry.purgeBridge =
+            edgeInfo.helperOpenExportOverride ? false : edgeInfo.purgeAsOriginalOpenEdge;
         entry.resultWireProducer = edgeInfo.resultWireProducer;
         historySummary_.openExportEntries.push_back(std::move(entry));
         if (edgeInfo.sourceEdgeIndices.empty()) {
@@ -2978,18 +2972,6 @@ void WireJoiner::buildFinalEdgeOwnership(const TopoDS_Shape* boundedFaceShape,
         }
         else {
             ++historySummary_.openExportSourceLineageEdgeCount;
-        }
-        if (edgeInfo.generatedOpenExportEdge) {
-            ++historySummary_.openExportGeneratedEdgeCount;
-            if (edgeInfo.generatedOpenExportSourceEdgeInfo) {
-                ++historySummary_.openExportGeneratedSourceEdgeInfoCount;
-            }
-            if (edgeInfo.generatedOpenExportSourceEdgeInfoConsumed) {
-                ++historySummary_.openExportGeneratedSourceEdgeInfoConsumedCount;
-            }
-            if (edgeInfo.sourceEdgeIndices.empty()) {
-                ++historySummary_.openExportGeneratedMissingSourceLineageEdgeCount;
-            }
         }
         if (edgeInfo.helperOpenExportOverride) {
             ++historySummary_.openExportHelperOverrideEdgeCount;
@@ -5677,12 +5659,6 @@ void WireJoiner::recordOpenWireCompoundLedger(WireInfo& info)
             : edgeInfo.openExportWire();
         childWire.wireBuilt = !childWire.wire.IsNull();
         childWire.superEdgeWire = !edgeInfo.superEdge.IsNull() && !edgeInfo.hasOpenExportOverride();
-        childWire.generatedOpenExport = edgeInfo.generatedOpenExportEdge;
-        childWire.generatedOpenExportReason = edgeInfo.generatedOpenExportReason;
-        childWire.generatedOpenExportSourceEdgeInfo = edgeInfo.generatedOpenExportSourceEdgeInfo;
-        childWire.generatedOpenExportSourceEdgeInfoIndex = edgeInfo.generatedOpenExportSourceEdgeInfoIndex;
-        childWire.generatedOpenExportSourceEdgeInfoConsumed =
-            edgeInfo.generatedOpenExportSourceEdgeInfoConsumed;
         childWire.helperOpenExportOverride = edgeInfo.helperOpenExportOverride;
         childWire.helperOpenExportOverrideReason = edgeInfo.helperOpenExportOverrideReason;
         childWire.helperOpenExportOverrideSourceEdgeInfo = edgeInfo.helperOpenExportOverrideSourceEdgeInfo;
@@ -5811,9 +5787,8 @@ void WireJoiner::recordOpenWireCompoundLedger(WireInfo& info)
             edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo;
         childWire.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices =
             edgeInfo.helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices;
-        childWire.purgeBridge = edgeInfo.generatedOpenExportEdge || edgeInfo.helperOpenExportOverride
-            ? false
-            : edgeInfo.purgeAsOriginalOpenEdge;
+        childWire.purgeBridge =
+            edgeInfo.helperOpenExportOverride ? false : edgeInfo.purgeAsOriginalOpenEdge;
         childWire.sourceSharedVertexPurgeMatch =
             !sourceEdges_.empty() && allEdgesHaveSharedOriginalSourceVertexByIdentity(childWire.wire, sourceEdges_);
         info.openWireCompoundWires.push_back(std::move(childWire));
@@ -6303,27 +6278,6 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
             }
             if (childWire.superEdgeWire) {
                 ++summary.openWireCompoundSuperEdgeWireInfoCount;
-            }
-            if (childWire.generatedOpenExport) {
-                ++summary.openWireCompoundGeneratedWireInfoCount;
-                if (childWire.generatedOpenExportSourceEdgeInfo) {
-                    ++summary.openWireCompoundGeneratedSourceEdgeInfoWireInfoCount;
-                }
-                if (childWire.generatedOpenExportSourceEdgeInfoConsumed) {
-                    ++summary.openWireCompoundGeneratedSourceEdgeInfoConsumedWireInfoCount;
-                }
-                if (childWire.generatedOpenExportReason == "consumed_open_cutter_graph") {
-                    ++summary.openWireCompoundGeneratedConsumedOpenCutterGraphWireInfoCount;
-                }
-                else if (childWire.generatedOpenExportReason == "partial_junction_open_cutter") {
-                    ++summary.openWireCompoundGeneratedPartialJunctionOpenCutterWireInfoCount;
-                }
-                else if (childWire.generatedOpenExportReason == "closed_wire_cycle") {
-                    ++summary.openWireCompoundGeneratedClosedWireCycleWireInfoCount;
-                }
-                else if (childWire.generatedOpenExportReason == "partial_shared_closed_wire") {
-                    ++summary.openWireCompoundGeneratedPartialSharedClosedWireWireInfoCount;
-                }
             }
             if (childWire.helperOpenExportOverride) {
                 ++summary.openWireCompoundHelperOpenExportOverrideWireInfoCount;
@@ -6912,27 +6866,6 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
             if (edgeInfo.splitFromInputEdge) {
                 ++summary.splitEdgeInfoCount;
             }
-            if (edgeInfo.generatedOpenExportEdge) {
-                ++summary.generatedOpenExportEdgeInfoCount;
-                if (edgeInfo.generatedOpenExportSourceEdgeInfo) {
-                    ++summary.generatedOpenExportSourceEdgeInfoCount;
-                }
-                if (edgeInfo.generatedOpenExportSourceEdgeInfoConsumed) {
-                    ++summary.generatedOpenExportSourceEdgeInfoConsumedCount;
-                }
-                if (edgeInfo.generatedOpenExportReason == "consumed_open_cutter_graph") {
-                    ++summary.generatedOpenExportConsumedOpenCutterGraphEdgeInfoCount;
-                }
-                else if (edgeInfo.generatedOpenExportReason == "partial_junction_open_cutter") {
-                    ++summary.generatedOpenExportPartialJunctionOpenCutterEdgeInfoCount;
-                }
-                else if (edgeInfo.generatedOpenExportReason == "closed_wire_cycle") {
-                    ++summary.generatedOpenExportClosedWireCycleEdgeInfoCount;
-                }
-                else if (edgeInfo.generatedOpenExportReason == "partial_shared_closed_wire") {
-                    ++summary.generatedOpenExportPartialSharedClosedWireEdgeInfoCount;
-                }
-            }
             if (edgeInfo.helperOpenExportOverride) {
                 ++summary.helperOpenExportOverrideEdgeInfoCount;
                 ++summary.resultWireProducerLedgerEntryCount;
@@ -7353,8 +7286,8 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
                 if (hasOnlySourceIdentityVertices) {
                     ++summary.sourceIdentityOpenExportOnlySourceVerticesEdgeInfoCount;
                 }
-                if (!edgeInfo.generatedOpenExportEdge && !edgeInfo.helperOpenExportOverride
-                    && edgeInfo.purgeAsOriginalOpenEdge && hasSourceIdentityVertex) {
+                if (!edgeInfo.helperOpenExportOverride && edgeInfo.purgeAsOriginalOpenEdge
+                    && hasSourceIdentityVertex) {
                     ++summary.sourceIdentityPurgeBridgeEdgeInfoCount;
                 }
                 if (hasSourceLineage) {
@@ -7488,9 +7421,6 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
             info.repeatedSplitExhaustRerunNewWireSeedCandidateCount;
         summary.repeatedSplitExhaustGeneratedIdentityBlockedEdgeInfoCount +=
             info.repeatedSplitExhaustGeneratedIdentityBlockedEdgeInfoCount;
-        summary.generatedOpenExportUnboundEdgeCount += info.generatedOpenExportUnboundEdgeCount;
-        summary.generatedOpenExportDuplicateSourceEdgeInfoCount +=
-            info.generatedOpenExportDuplicateSourceEdgeInfoCount;
         summary.helperOpenExportOverrideCandidateEdgeCount +=
             info.helperOpenExportOverrideCandidateEdgeCount;
         summary.helperOpenExportOverrideUnboundEdgeCount +=
@@ -7555,9 +7485,8 @@ std::optional<TopoDS_Shape> WireJoiner::getOpenWires(const std::string& historyP
             if (!exportsOpenEdge) {
                 continue;
             }
-            const bool purgeBridge = edgeInfo.generatedOpenExportEdge || edgeInfo.helperOpenExportOverride
-                ? false
-                : edgeInfo.purgeAsOriginalOpenEdge;
+            const bool purgeBridge =
+                edgeInfo.helperOpenExportOverride ? false : edgeInfo.purgeAsOriginalOpenEdge;
             if (!edgeInfo.superEdge.IsNull() && !edgeInfo.hasOpenExportOverride()) {
                 const TopoDS_Wire wire = edgeInfo.openExportWire();
                 if (wire.IsNull()) {

@@ -273,15 +273,6 @@ struct WireJoinerLedgerSummary {
     std::size_t tightBoundExistingWireIdxVertexCount = 0;
     std::size_t tightBoundExistingWireStackPosCount = 0;
     std::size_t temporaryResultWireEdgeInfoCount = 0;
-    std::size_t generatedOpenExportEdgeInfoCount = 0;
-    std::size_t generatedOpenExportSourceEdgeInfoCount = 0;
-    std::size_t generatedOpenExportSourceEdgeInfoConsumedCount = 0;
-    std::size_t generatedOpenExportConsumedOpenCutterGraphEdgeInfoCount = 0;
-    std::size_t generatedOpenExportPartialJunctionOpenCutterEdgeInfoCount = 0;
-    std::size_t generatedOpenExportClosedWireCycleEdgeInfoCount = 0;
-    std::size_t generatedOpenExportPartialSharedClosedWireEdgeInfoCount = 0;
-    std::size_t generatedOpenExportUnboundEdgeCount = 0;
-    std::size_t generatedOpenExportDuplicateSourceEdgeInfoCount = 0;
     std::size_t helperOpenExportOverrideEdgeInfoCount = 0;
     std::size_t helperOpenExportOverrideSourceEdgeInfoCount = 0;
     std::size_t helperOpenExportOverrideSourceEdgeInfoConsumedCount = 0;
@@ -469,13 +460,6 @@ struct WireJoinerLedgerSummary {
     std::size_t openWireCompoundBuiltWireInfoCount = 0;
     std::size_t openWireCompoundEdgeInfoCount = 0;
     std::size_t openWireCompoundSuperEdgeWireInfoCount = 0;
-    std::size_t openWireCompoundGeneratedWireInfoCount = 0;
-    std::size_t openWireCompoundGeneratedSourceEdgeInfoWireInfoCount = 0;
-    std::size_t openWireCompoundGeneratedSourceEdgeInfoConsumedWireInfoCount = 0;
-    std::size_t openWireCompoundGeneratedConsumedOpenCutterGraphWireInfoCount = 0;
-    std::size_t openWireCompoundGeneratedPartialJunctionOpenCutterWireInfoCount = 0;
-    std::size_t openWireCompoundGeneratedClosedWireCycleWireInfoCount = 0;
-    std::size_t openWireCompoundGeneratedPartialSharedClosedWireWireInfoCount = 0;
     std::size_t openWireCompoundHelperOpenExportOverrideWireInfoCount = 0;
     std::size_t openWireCompoundHelperOpenExportOverrideSourceEdgeInfoWireInfoCount = 0;
     std::size_t openWireCompoundHelperOpenExportOverrideSourceEdgeInfoConsumedWireInfoCount = 0;
@@ -744,11 +728,6 @@ struct WireJoinerOpenExportHistoryEntry {
     std::size_t edgeInfoIndex = 0;
     std::vector<std::size_t> sourceEdgeIndices;
     bool sourceLineageFromSplitterHistory = false;
-    bool generatedOpenExport = false;
-    std::string generatedOpenExportReason;
-    bool generatedOpenExportSourceEdgeInfo = false;
-    std::size_t generatedOpenExportSourceEdgeInfoIndex = 0;
-    bool generatedOpenExportSourceEdgeInfoConsumed = false;
     bool helperOpenExportOverride = false;
     std::string helperOpenExportOverrideReason;
     bool helperOpenExportOverrideSourceEdgeInfo = false;
@@ -827,10 +806,6 @@ struct WireJoinerHistorySummary {
     std::size_t openExportEdgeCount = 0;
     std::size_t openExportSourceLineageEdgeCount = 0;
     std::size_t openExportMissingSourceLineageEdgeCount = 0;
-    std::size_t openExportGeneratedEdgeCount = 0;
-    std::size_t openExportGeneratedSourceEdgeInfoCount = 0;
-    std::size_t openExportGeneratedSourceEdgeInfoConsumedCount = 0;
-    std::size_t openExportGeneratedMissingSourceLineageEdgeCount = 0;
     std::size_t openExportHelperOverrideEdgeCount = 0;
     std::size_t openExportHelperOverrideSourceEdgeInfoCount = 0;
     std::size_t openExportHelperOverrideSourceEdgeInfoConsumedCount = 0;
@@ -1050,10 +1025,6 @@ private:
         // This request-local lineage records which sourceEdgeArray entries produced this EdgeInfo.
         std::vector<std::size_t> sourceEdgeIndices;
         bool sourceLineageFromSplitterHistory = false;
-        std::string generatedOpenExportReason;
-        bool generatedOpenExportSourceEdgeInfo = false;
-        std::size_t generatedOpenExportSourceEdgeInfoIndex = 0;
-        bool generatedOpenExportSourceEdgeInfoConsumed = false;
         bool helperOpenExportOverride = false;
         std::string helperOpenExportOverrideReason;
         bool helperOpenExportOverrideSourceEdgeInfo = false;
@@ -1183,7 +1154,6 @@ private:
         bool closedWireOwner = false;
         bool splitFromInputEdge = false;
         bool purgeAsOriginalOpenEdge = false;
-        bool generatedOpenExportEdge = false;
         std::size_t branchCandidateCount = 0;
         std::size_t branchInsideCandidateCount = 0;
         std::size_t branchOutsideCandidateCount = 0;
@@ -1274,11 +1244,6 @@ private:
         TopoDS_Wire wire;
         bool wireBuilt = false;
         bool superEdgeWire = false;
-        bool generatedOpenExport = false;
-        std::string generatedOpenExportReason;
-        bool generatedOpenExportSourceEdgeInfo = false;
-        std::size_t generatedOpenExportSourceEdgeInfoIndex = 0;
-        bool generatedOpenExportSourceEdgeInfoConsumed = false;
         bool helperOpenExportOverride = false;
         std::string helperOpenExportOverrideReason;
         bool helperOpenExportOverrideSourceEdgeInfo = false;
@@ -1557,12 +1522,6 @@ private:
         // This field records live rerun owners rejected because their result-wire identity still comes
         // from the generated open-export transition instead of real EdgeInfo/WireInfo/aHistory state.
         std::size_t repeatedSplitExhaustGeneratedIdentityBlockedEdgeInfoCount = 0;
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-        // ::WireJoinerP::build() only exports existing final EdgeInfo states into openWireCompound.
-        // These M3 risk counters record helper-produced export candidates that cannot bind to one
-        // final EdgeInfo and therefore must not be appended as detached EdgeInfo output.
-        std::size_t generatedOpenExportUnboundEdgeCount = 0;
-        std::size_t generatedOpenExportDuplicateSourceEdgeInfoCount = 0;
         std::size_t helperOpenExportOverrideCandidateEdgeCount = 0;
         std::size_t helperOpenExportOverrideUnboundEdgeCount = 0;
         std::size_t helperOpenExportOverrideDuplicateSourceEdgeInfoCount = 0;

@@ -947,7 +947,7 @@ void consumeSketchInternalTerminalHistory(NamedShape& namedShape,
 bool resultWireOpenExportEntryRequiresProducerIdentity(
     const SketchInternalWireJoinerOpenExportHistoryEntry& entry)
 {
-    return entry.helperOpenExportOverride || entry.generatedOpenExport;
+    return entry.helperOpenExportOverride;
 }
 
 bool resultWireProducerIdentityMissing(const SketchInternalWireJoinerOpenExportHistoryEntry& entry)
@@ -1036,12 +1036,6 @@ nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& h
              entry.resultWireProducerChildWireInfoIndex},
             {"source_edge_indices", entry.sourceEdgeIndices},
             {"source_lineage_from_splitter_history", entry.sourceLineageFromSplitterHistory},
-            {"generated_open_export", entry.generatedOpenExport},
-            {"generated_open_export_reason", entry.generatedOpenExportReason},
-            {"generated_open_export_source_edge_info", entry.generatedOpenExportSourceEdgeInfo},
-            {"generated_open_export_source_edge_info_index", entry.generatedOpenExportSourceEdgeInfoIndex},
-            {"generated_open_export_source_edge_info_consumed",
-             entry.generatedOpenExportSourceEdgeInfoConsumed},
             {"helper_open_export_override", entry.helperOpenExportOverride},
             {"helper_open_export_override_reason", entry.helperOpenExportOverrideReason},
             {"helper_open_export_override_source_edge_info", entry.helperOpenExportOverrideSourceEdgeInfo},
@@ -1187,13 +1181,6 @@ nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& h
          history.wireJoinerOpenExportSourceLineageEdgeCount},
         {"wire_joiner_open_export_missing_source_lineage_edge_count",
          history.wireJoinerOpenExportMissingSourceLineageEdgeCount},
-        {"wire_joiner_open_export_generated_edge_count", history.wireJoinerOpenExportGeneratedEdgeCount},
-        {"wire_joiner_open_export_generated_source_edge_info_count",
-         history.wireJoinerOpenExportGeneratedSourceEdgeInfoCount},
-        {"wire_joiner_open_export_generated_source_edge_info_consumed_count",
-         history.wireJoinerOpenExportGeneratedSourceEdgeInfoConsumedCount},
-        {"wire_joiner_open_export_generated_missing_source_lineage_edge_count",
-         history.wireJoinerOpenExportGeneratedMissingSourceLineageEdgeCount},
         {"wire_joiner_open_export_helper_override_edge_count",
          history.wireJoinerOpenExportHelperOverrideEdgeCount},
         {"wire_joiner_open_export_helper_override_source_edge_info_count",

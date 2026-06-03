@@ -4717,14 +4717,6 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
                     wireJoinerHistory->openExportSourceLineageEdgeCount;
                 internalHistoryContext->wireJoinerOpenExportMissingSourceLineageEdgeCount =
                     wireJoinerHistory->openExportMissingSourceLineageEdgeCount;
-                internalHistoryContext->wireJoinerOpenExportGeneratedEdgeCount =
-                    wireJoinerHistory->openExportGeneratedEdgeCount;
-                internalHistoryContext->wireJoinerOpenExportGeneratedSourceEdgeInfoCount =
-                    wireJoinerHistory->openExportGeneratedSourceEdgeInfoCount;
-                internalHistoryContext->wireJoinerOpenExportGeneratedSourceEdgeInfoConsumedCount =
-                    wireJoinerHistory->openExportGeneratedSourceEdgeInfoConsumedCount;
-                internalHistoryContext->wireJoinerOpenExportGeneratedMissingSourceLineageEdgeCount =
-                    wireJoinerHistory->openExportGeneratedMissingSourceLineageEdgeCount;
                 internalHistoryContext->wireJoinerOpenExportHelperOverrideEdgeCount =
                     wireJoinerHistory->openExportHelperOverrideEdgeCount;
                 internalHistoryContext->wireJoinerOpenExportHelperOverrideSourceEdgeInfoCount =
@@ -4981,13 +4973,6 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
                         entry.resultWireProducer.childWireInfoIndex;
                     topoEntry.sourceEdgeIndices = entry.sourceEdgeIndices;
                     topoEntry.sourceLineageFromSplitterHistory = entry.sourceLineageFromSplitterHistory;
-                    topoEntry.generatedOpenExport = entry.generatedOpenExport;
-                    topoEntry.generatedOpenExportReason = entry.generatedOpenExportReason;
-                    topoEntry.generatedOpenExportSourceEdgeInfo = entry.generatedOpenExportSourceEdgeInfo;
-                    topoEntry.generatedOpenExportSourceEdgeInfoIndex =
-                        entry.generatedOpenExportSourceEdgeInfoIndex;
-                    topoEntry.generatedOpenExportSourceEdgeInfoConsumed =
-                        entry.generatedOpenExportSourceEdgeInfoConsumed;
                     topoEntry.helperOpenExportOverride = entry.helperOpenExportOverride;
                     topoEntry.helperOpenExportOverrideReason = entry.helperOpenExportOverrideReason;
                     topoEntry.helperOpenExportOverrideSourceEdgeInfo =
@@ -5417,23 +5402,6 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
             {"tight_bound_existing_wire_stack_pos_count",
              wireJoinerLedger->tightBoundExistingWireStackPosCount},
             {"temporary_result_wire_edge_info_count", wireJoinerLedger->temporaryResultWireEdgeInfoCount},
-            {"generated_open_export_edge_info_count", wireJoinerLedger->generatedOpenExportEdgeInfoCount},
-            {"generated_open_export_source_edge_info_count",
-             wireJoinerLedger->generatedOpenExportSourceEdgeInfoCount},
-            {"generated_open_export_source_edge_info_consumed_count",
-             wireJoinerLedger->generatedOpenExportSourceEdgeInfoConsumedCount},
-            {"generated_open_export_consumed_open_cutter_graph_edge_info_count",
-             wireJoinerLedger->generatedOpenExportConsumedOpenCutterGraphEdgeInfoCount},
-            {"generated_open_export_partial_junction_open_cutter_edge_info_count",
-             wireJoinerLedger->generatedOpenExportPartialJunctionOpenCutterEdgeInfoCount},
-            {"generated_open_export_closed_wire_cycle_edge_info_count",
-             wireJoinerLedger->generatedOpenExportClosedWireCycleEdgeInfoCount},
-            {"generated_open_export_partial_shared_closed_wire_edge_info_count",
-             wireJoinerLedger->generatedOpenExportPartialSharedClosedWireEdgeInfoCount},
-            {"generated_open_export_unbound_edge_count",
-             wireJoinerLedger->generatedOpenExportUnboundEdgeCount},
-            {"generated_open_export_duplicate_source_edge_info_count",
-             wireJoinerLedger->generatedOpenExportDuplicateSourceEdgeInfoCount},
             {"result_wire_producer_ledger_entry_count",
              wireJoinerLedger->resultWireProducerLedgerEntryCount},
             {"migrated_legacy_helper_slot_count", wireJoinerLedger->migratedLegacyHelperSlotCount},
@@ -5777,20 +5745,6 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
             {"open_wire_compound_edge_info_count", wireJoinerLedger->openWireCompoundEdgeInfoCount},
             {"open_wire_compound_super_edge_wire_info_count",
              wireJoinerLedger->openWireCompoundSuperEdgeWireInfoCount},
-            {"open_wire_compound_generated_wire_info_count",
-             wireJoinerLedger->openWireCompoundGeneratedWireInfoCount},
-            {"open_wire_compound_generated_source_edge_info_wire_info_count",
-             wireJoinerLedger->openWireCompoundGeneratedSourceEdgeInfoWireInfoCount},
-            {"open_wire_compound_generated_source_edge_info_consumed_wire_info_count",
-             wireJoinerLedger->openWireCompoundGeneratedSourceEdgeInfoConsumedWireInfoCount},
-            {"open_wire_compound_generated_consumed_open_cutter_graph_wire_info_count",
-             wireJoinerLedger->openWireCompoundGeneratedConsumedOpenCutterGraphWireInfoCount},
-            {"open_wire_compound_generated_partial_junction_open_cutter_wire_info_count",
-             wireJoinerLedger->openWireCompoundGeneratedPartialJunctionOpenCutterWireInfoCount},
-            {"open_wire_compound_generated_closed_wire_cycle_wire_info_count",
-             wireJoinerLedger->openWireCompoundGeneratedClosedWireCycleWireInfoCount},
-            {"open_wire_compound_generated_partial_shared_closed_wire_wire_info_count",
-             wireJoinerLedger->openWireCompoundGeneratedPartialSharedClosedWireWireInfoCount},
             {"open_wire_compound_helper_open_export_override_wire_info_count",
              wireJoinerLedger->openWireCompoundHelperOpenExportOverrideWireInfoCount},
             {"open_wire_compound_helper_open_export_override_source_edge_info_wire_info_count",
@@ -6011,12 +5965,6 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
                  entry.resultWireProducer.childWireInfoIndex},
                 {"source_edge_indices", entry.sourceEdgeIndices},
                 {"source_lineage_from_splitter_history", entry.sourceLineageFromSplitterHistory},
-                {"generated_open_export", entry.generatedOpenExport},
-                {"generated_open_export_reason", entry.generatedOpenExportReason},
-                {"generated_open_export_source_edge_info", entry.generatedOpenExportSourceEdgeInfo},
-                {"generated_open_export_source_edge_info_index", entry.generatedOpenExportSourceEdgeInfoIndex},
-                {"generated_open_export_source_edge_info_consumed",
-                 entry.generatedOpenExportSourceEdgeInfoConsumed},
                 {"helper_open_export_override", entry.helperOpenExportOverride},
                 {"helper_open_export_override_reason", entry.helperOpenExportOverrideReason},
                 {"helper_open_export_override_source_edge_info",
@@ -6166,13 +6114,6 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
             {"open_export_source_lineage_edge_count", wireJoinerHistory->openExportSourceLineageEdgeCount},
             {"open_export_missing_source_lineage_edge_count",
              wireJoinerHistory->openExportMissingSourceLineageEdgeCount},
-            {"open_export_generated_edge_count", wireJoinerHistory->openExportGeneratedEdgeCount},
-            {"open_export_generated_source_edge_info_count",
-             wireJoinerHistory->openExportGeneratedSourceEdgeInfoCount},
-            {"open_export_generated_source_edge_info_consumed_count",
-             wireJoinerHistory->openExportGeneratedSourceEdgeInfoConsumedCount},
-            {"open_export_generated_missing_source_lineage_edge_count",
-             wireJoinerHistory->openExportGeneratedMissingSourceLineageEdgeCount},
             {"open_export_helper_override_edge_count", wireJoinerHistory->openExportHelperOverrideEdgeCount},
             {"open_export_helper_override_source_edge_info_count",
              wireJoinerHistory->openExportHelperOverrideSourceEdgeInfoCount},

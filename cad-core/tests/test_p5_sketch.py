@@ -364,7 +364,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(ledger["repeated_split_exhaust_rerun_closed_wire_search_count"], 0)
                 self.assertEqual(ledger["repeated_split_exhaust_rerun_no_active_search_count"], 1)
 
-    def test_p5_all_fixtures_disable_generated_and_legacy_helper_output(self) -> None:
+    def test_p5_all_fixtures_omit_generated_and_disable_legacy_helper_output(self) -> None:
         p5_fixture_dir = ROOT / "fixtures" / "p5"
         for fixture_path in sorted(p5_fixture_dir.glob("*.json")):
             with self.subTest(fixture=fixture_path.stem):
@@ -374,8 +374,8 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     if not isinstance(ledger, dict):
                         continue
                     with self.subTest(fixture=fixture_path.stem, object=object_name):
-                        self.assertEqual(ledger["generated_open_export_edge_info_count"], 0)
-                        self.assertEqual(ledger["open_wire_compound_generated_wire_info_count"], 0)
+                        self.assertNotIn("generated_open_export_edge_info_count", ledger)
+                        self.assertNotIn("open_wire_compound_generated_wire_info_count", ledger)
                         self.assertEqual(
                             ledger["open_wire_compound_helper_open_export_override_helper_shape_wire_info_count"],
                             0,
@@ -451,7 +451,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "open_export_index",
             "edge_info_index",
             "helper_open_export_override",
-            "generated_open_export",
             "source_edge_indices",
         )
         for runtime_entry, internal_entry in zip(runtime_entries, internal_entries):
@@ -462,7 +461,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     self.assertIn(history_key, internal_entry)
                     self.assertEqual(internal_entry[history_key], runtime_entry[history_key])
                 if internal_entry["helper_open_export_override"]:
-                    self.assertFalse(internal_entry["generated_open_export"])
                     self.assertIn(
                         internal_entry["result_wire_producer_state"],
                         {
@@ -531,7 +529,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertEqual(ledger["open_wire_compound_built_wire_info_count"], 0)
             self.assertEqual(ledger["open_wire_compound_edge_info_count"], 0)
             self.assertEqual(ledger["open_wire_compound_super_edge_wire_info_count"], 0)
-            self.assertEqual(ledger["open_wire_compound_generated_wire_info_count"], 0)
             self.assertEqual(ledger["open_wire_compound_helper_open_export_override_wire_info_count"], 0)
             self.assertEqual(
                 ledger[
@@ -608,11 +605,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ledger["open_wire_compound_built_wire_info_count"],
             ledger["open_wire_compound_wire_info_count"],
         )
-        self.assertEqual(
-            ledger["open_wire_compound_generated_wire_info_count"],
-            ledger["generated_open_export_edge_info_count"],
-        )
-        self.assertEqual(ledger["generated_open_export_edge_info_count"], 0)
         self.assertEqual(
             ledger["open_wire_compound_helper_open_export_override_wire_info_count"],
             ledger["helper_open_export_override_edge_info_count"],
@@ -1010,26 +1002,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             sum(1 for entry in entries if not entry["source_edge_indices"]),
             history["open_export_missing_source_lineage_edge_count"],
         )
-        self.assertEqual(
-            sum(1 for entry in entries if entry["generated_open_export"]),
-            history["open_export_generated_edge_count"],
-        )
-        self.assertEqual(history["open_export_generated_edge_count"], 0)
-        self.assertEqual(
-            sum(1 for entry in entries if entry["generated_open_export_reason"]),
-            history["open_export_generated_edge_count"],
-        )
-        self.assertTrue(
-            all(bool(entry["generated_open_export_reason"]) == entry["generated_open_export"] for entry in entries)
-        )
-        self.assertEqual(
-            sum(
-                1
-                for entry in entries
-                if entry["generated_open_export"] and not entry["source_edge_indices"]
-            ),
-            history["open_export_generated_missing_source_lineage_edge_count"],
-        )
+        self.assertNotIn("open_export_generated_edge_count", history)
+        for entry in entries:
+            self.assertNotIn("generated_open_export", entry)
+            self.assertNotIn("generated_open_export_reason", entry)
         self.assertEqual(
             sum(1 for entry in entries if entry["helper_open_export_override"]),
             history["open_export_helper_override_edge_count"],
@@ -1263,18 +1239,8 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
 
         self.assertEqual(reason_counts, Counter(expected_counts))
-        self.assertEqual(ledger["generated_open_export_edge_info_count"], 0)
-        self.assertEqual(ledger["generated_open_export_source_edge_info_count"], 0)
-        self.assertEqual(ledger["generated_open_export_source_edge_info_consumed_count"], 0)
-        self.assertEqual(ledger["open_wire_compound_generated_wire_info_count"], 0)
-        self.assertEqual(history["open_export_generated_edge_count"], 0)
-        self.assertEqual(history["open_export_generated_source_edge_info_count"], 0)
-        self.assertEqual(history["open_export_generated_source_edge_info_consumed_count"], 0)
-        self.assertEqual(history["open_export_generated_missing_source_lineage_edge_count"], 0)
         self.assertEqual(sum(expected_counts.values()), ledger["helper_open_export_override_edge_info_count"])
         self.assertEqual(sum(expected_counts.values()), history["open_export_helper_override_edge_count"])
-        self.assertEqual(ledger["generated_open_export_unbound_edge_count"], 0)
-        self.assertEqual(ledger["generated_open_export_duplicate_source_edge_info_count"], 0)
         self.assertEqual(
             sum(expected_counts.values()),
             ledger["helper_open_export_override_candidate_edge_count"],
@@ -4518,7 +4484,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(ledger["repeated_split_exhaust_rerun_no_active_search_count"], 1)
         self.assertEqual(ledger["repeated_split_exhaust_rerun_closed_wire_search_count"], 0)
         self.assertEqual(ledger["temporary_result_wire_edge_info_count"], 0)
-        self.assertEqual(ledger["generated_open_export_edge_info_count"], 0)
         self.assertGreaterEqual(ledger["open_export_edge_info_count"], 1)
         self.assertEqual(
             ledger["repeated_split_exhaust_rerun_skipped_open_leaf_edge_info_count"],
@@ -4548,11 +4513,9 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ledger["source_lineage_open_export_edge_info_count"],
         )
         self.assertEqual(history["open_export_missing_source_lineage_edge_count"], 0)
-        self.assertEqual(history["open_export_generated_edge_count"], 0)
         self.assertEqual(history["open_export_purge_bridge_edge_count"], 0)
         entries = self.assert_open_export_history_entries(history)
         self.assertTrue(all(entry["source_edge_indices"] for entry in entries))
-        self.assertTrue(all(not entry["generated_open_export"] for entry in entries))
         self.assertTrue(all(not entry["purge_bridge"] for entry in entries))
         self.assertEqual(ledger["source_lineage_multi_source_edge_info_count"], 0)
         self.assert_super_edge_lifecycle_ledger(ledger)
@@ -4655,7 +4618,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
         self.assertEqual(ledger["temporary_result_wire_edge_info_count"], 0)
-        self.assertEqual(ledger["generated_open_export_edge_info_count"], 0)
         self.assertGreater(ledger["helper_open_export_override_edge_info_count"], 0)
         self.assertEqual(
             ledger["helper_open_export_override_edge_info_count"],
@@ -4910,8 +4872,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(ledger["open_export_edge_info_count"], 0)
         self.assert_open_wire_compound_ledger(ledger)
         self.assertEqual(history["open_export_edge_count"], ledger["open_export_edge_info_count"])
-        self.assertEqual(history["open_export_generated_edge_count"], 0)
-        self.assertEqual(ledger["generated_open_export_edge_info_count"], 0)
         self.assertEqual(
             history["open_export_helper_override_edge_count"],
             ledger["helper_open_export_override_edge_info_count"],
@@ -4932,7 +4892,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertTrue(all(entry["source_edge_indices"] for entry in entries))
         self.assertTrue(all(entry["helper_open_export_override"] for entry in entries))
-        self.assertTrue(all(not entry["generated_open_export"] for entry in entries))
         self.assertTrue(
             all(entry["helper_open_export_override_reason"] == "partial_junction_open_cutter" for entry in entries)
         )
@@ -5386,7 +5345,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertTrue(history["splitter_history"])
         self.assertTrue(history["final_export_history"])
         self.assertEqual(ledger["temporary_result_wire_edge_info_count"], 0)
-        self.assertEqual(ledger["generated_open_export_edge_info_count"], 0)
         self.assertGreater(ledger["helper_open_export_override_edge_info_count"], 0)
         self.assertEqual(
             ledger["helper_open_export_override_edge_info_count"],
@@ -6037,7 +5995,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
         self.assert_repeated_split_exhaust_removal_ledger(ledger)
-        self.assertEqual(ledger["generated_open_export_edge_info_count"], 0)
         self.assertEqual(
             ledger["repeated_split_exhaust_rerun_live_closed_wire_info_count"],
             ledger["repeated_split_exhaust_rerun_closed_wire_info_count"],
@@ -6134,7 +6091,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
         self.assert_repeated_split_exhaust_removal_ledger(ledger)
-        self.assertEqual(ledger["generated_open_export_edge_info_count"], 0)
         self.assertEqual(
             ledger["repeated_split_exhaust_rerun_live_closed_wire_info_count"],
             ledger["repeated_split_exhaust_rerun_closed_wire_info_count"],
@@ -6184,7 +6140,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(ledger["tight_bound_split_wire_built_count"], 0)
         self.assert_existing_wire_search_ledger(ledger)
         self.assertEqual(ledger["temporary_result_wire_edge_info_count"], 0)
-        self.assertEqual(ledger["generated_open_export_edge_info_count"], 0)
         self.assertEqual(ledger["open_export_edge_info_count"], 1)
         self.assert_open_wire_compound_ledger(ledger)
         self.assertGreater(ledger["source_identity_shared_vertex_edge_info_count"], 0)
@@ -6221,7 +6176,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         entries = self.assert_open_export_history_entries(history)
         self.assertEqual(len(entries), 1)
         self.assertTrue(entries[0]["source_edge_indices"])
-        self.assertFalse(entries[0]["generated_open_export"])
         self.assertTrue(entries[0]["purge_bridge"])
         self.assertEqual(ledger["source_lineage_multi_source_edge_info_count"], 0)
         self.assert_super_edge_lifecycle_ledger(ledger)

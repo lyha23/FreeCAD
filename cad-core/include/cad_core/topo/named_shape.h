@@ -52,11 +52,6 @@ struct SketchInternalWireJoinerOpenExportHistoryEntry
     std::size_t resultWireProducerChildWireInfoIndex = 0;
     std::vector<std::size_t> sourceEdgeIndices;
     bool sourceLineageFromSplitterHistory = false;
-    bool generatedOpenExport = false;
-    std::string generatedOpenExportReason;
-    bool generatedOpenExportSourceEdgeInfo = false;
-    std::size_t generatedOpenExportSourceEdgeInfoIndex = 0;
-    bool generatedOpenExportSourceEdgeInfoConsumed = false;
     bool helperOpenExportOverride = false;
     std::string helperOpenExportOverrideReason;
     bool helperOpenExportOverrideSourceEdgeInfo = false;
@@ -136,10 +131,6 @@ struct SketchInternalHistoryContext
     std::size_t wireJoinerOpenExportEdgeCount = 0;
     std::size_t wireJoinerOpenExportSourceLineageEdgeCount = 0;
     std::size_t wireJoinerOpenExportMissingSourceLineageEdgeCount = 0;
-    std::size_t wireJoinerOpenExportGeneratedEdgeCount = 0;
-    std::size_t wireJoinerOpenExportGeneratedSourceEdgeInfoCount = 0;
-    std::size_t wireJoinerOpenExportGeneratedSourceEdgeInfoConsumedCount = 0;
-    std::size_t wireJoinerOpenExportGeneratedMissingSourceLineageEdgeCount = 0;
     std::size_t wireJoinerOpenExportHelperOverrideEdgeCount = 0;
     std::size_t wireJoinerOpenExportHelperOverrideSourceEdgeInfoCount = 0;
     std::size_t wireJoinerOpenExportHelperOverrideSourceEdgeInfoConsumedCount = 0;
