@@ -33,6 +33,58 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(named_shape["element_map_status"], "history_partial")
         self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
 
+    def test_c3m4_part_section_records_source_qualified_history(self) -> None:
+        result = self.run_recompute("part-section-stable-history", "c3m4")
+        section = result["objects"]["Section"]
+        named_shape = result["named_shapes"]["Section"]
+        history = named_shape["history"]
+        mapper_history = named_shape["mapper_history"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(section["status"], "ok")
+        self.assertEqual(section["boolean"], "section")
+        self.assertEqual(section["base"], "Box")
+        self.assertEqual(section["tool"], "Plane")
+        self.assertEqual(section["approximation"], False)
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
+        self.assertIn("terminal_history:split_deleted", named_shape["element_history_status"])
+        self.assertEqual(named_shape["element_map"]["Plane.Edge1"], "Edge1")
+        self.assertEqual(named_shape["element_map"]["Plane.Edge2"], "Edge2")
+        self.assertTrue(
+            any(
+                item["kind"] == "modified"
+                and "Plane.Edge1" in item.get("sources", [])
+                for item in history
+            )
+        )
+        self.assertTrue(
+            any(
+                item["kind"] == "deleted"
+                and "Box.Edge1" in item.get("sources", [])
+                for item in history
+            )
+        )
+        self.assertTrue(
+            any(
+                item["relation"] == "modified"
+                and item.get("maker_stage") == "maker_history"
+                and item["source"] == {"object": "Plane", "subname": "Edge1"}
+                and item["target"] == {"object": "Section", "subname": "Edge1"}
+                for item in mapper_history
+            )
+        )
+        self.assertTrue(
+            any(
+                item["relation"] == "deleted"
+                and item.get("maker_stage") == "terminal_history"
+                and item["source"] == {"object": "Box", "subname": "Edge1"}
+                and item["target"] == {"object": "Section", "subname": ""}
+                for item in mapper_history
+            )
+        )
+        self.assert_object_matches_expected(result, "c3m4", "part-section-stable-history")
+
     def test_p8_app_link_proxies_linked_shape_with_link_placement(self) -> None:
         result = self.run_recompute("app-link-box", "p8")
         link = result["objects"]["BoxLink"]

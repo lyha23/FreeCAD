@@ -5,6 +5,7 @@
 #include "cad_core/geometry/shape_fix.h"
 #include "cad_core/topo/element_map.h"
 
+#include <BRepBndLib.hxx>
 #include <BRepAlgoAPI_BooleanOperation.hxx>
 #include <BRepAlgoAPI_BuilderAlgo.hxx>
 #include <BRepAlgoAPI_Common.hxx>
@@ -17,7 +18,9 @@
 #include <BRepOffsetAPI_ThruSections.hxx>
 #include <BRepOffset_Mode.hxx>
 #include <BRepTools_History.hxx>
+#include <Bnd_Box.hxx>
 #include <GeomAbs_JoinType.hxx>
+#include <Precision.hxx>
 #include <ShapeBuild_ReShape.hxx>
 #include <ShapeFix_Root.hxx>
 #include <Standard_Failure.hxx>
@@ -34,6 +37,7 @@
 #include <TopoDS_Wire.hxx>
 
 #include <algorithm>
+#include <cmath>
 #include <map>
 #include <memory>
 #include <set>
@@ -150,6 +154,24 @@ void addDistinctString(std::vector<std::string>& values, const std::string& valu
     if (std::find(values.begin(), values.end(), value) == values.end()) {
         values.push_back(value);
     }
+}
+
+double autoFuzzyValueForSources(const std::vector<NamedShapeSource>& sources)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/
+    // FCBRepAlgoAPI_BooleanOperation.cpp::FCBRepAlgoAPIHelper::setAutoFuzzy(),
+    // computes "sqrt(bounds.SquareExtent()) * Precision::Confusion()" from
+    // Arguments() and Tools() before calling SetFuzzyValue().
+    Bnd_Box bounds;
+    for (const auto& source : sources) {
+        if (!source.shape.IsNull()) {
+            BRepBndLib::Add(source.shape, bounds);
+        }
+    }
+    if (bounds.IsVoid()) {
+        return Precision::Confusion();
+    }
+    return std::sqrt(bounds.SquareExtent()) * Precision::Confusion();
 }
 
 std::string prefixForKind(TopAbs_ShapeEnum kind)
@@ -2768,6 +2790,9 @@ NamedShapeBuild makeElementSectionFromSources(
         maker.Init1(sources.front().shape);
         maker.Init2(sources.back().shape);
         maker.Approximation(approximate);
+        maker.SetRunParallel(Standard_True);
+        maker.SetNonDestructive(Standard_True);
+        maker.SetFuzzyValue(autoFuzzyValueForSources(sources));
         maker.Build();
         if (!maker.IsDone()) {
             return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Section failed"};

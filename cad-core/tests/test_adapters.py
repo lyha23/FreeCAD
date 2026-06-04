@@ -363,7 +363,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(capabilities["sketcher"]["solver"]["status"], "done_first_slice")
         self.assertEqual(
             capabilities["sketcher"]["solver"]["diagnostics"],
-            ["sketch_solver_conflict", "sketch_solver_redundant"],
+            [
+                "sketch_solver_conflict",
+                "sketch_solver_malformed_constraint",
+                "sketch_solver_redundant",
+            ],
         )
         self.assertIn(
             "horizontal_vertical_same_target_conflict",
@@ -374,11 +378,23 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             capabilities["sketcher"]["solver"]["covered"],
         )
         self.assertIn(
+            "malformed_constraint_diagnostics",
+            capabilities["sketcher"]["solver"]["covered"],
+        )
+        self.assertIn(
             "diagnostics_only_without_backend_solver_session",
+            capabilities["sketcher"]["solver"]["request_local_boundaries"],
+        )
+        self.assertIn(
+            "malformed_blocks_profile_output",
             capabilities["sketcher"]["solver"]["request_local_boundaries"],
         )
         self.assertIn("full_solver_dof", capabilities["sketcher"]["solver"]["remaining_gaps"])
         self.assertIn("solver_geometry_update", capabilities["sketcher"]["solver"]["remaining_gaps"])
+        self.assertNotIn(
+            "malformed_constraint_diagnostics",
+            capabilities["sketcher"]["solver"]["remaining_gaps"],
+        )
         self.assertEqual(
             capabilities["part_design"]["body_chain"]["document_object_updates"],
             [
@@ -581,6 +597,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "unsupported_assembly_solver",
             "unsupported_reference_shadow_brep",
             "sketch_solver_conflict",
+            "sketch_solver_malformed_constraint",
             "sketch_solver_redundant",
         ]:
             self.assertIn(code, capabilities["diagnostic_codes"])
@@ -645,6 +662,17 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             producer_matrix["refine"]["covered"],
             ["modified", "deleted", "generated"],
         )
+        self.assertEqual(producer_matrix["section"]["status"], "covered")
+        self.assertEqual(
+            producer_matrix["section"]["covered"],
+            [
+                "approximation_property",
+                "auto_fuzzy_value",
+                "source_qualified_edge_history",
+                "terminal_deleted_history",
+            ],
+        )
+        self.assertEqual(producer_matrix["section"]["remaining"], [])
         self.assertEqual(producer_matrix["part_offset"]["status"], "done_first_slice")
         self.assertIn("face_source_offset", producer_matrix["part_offset"]["covered"])
         self.assertIn("fill_offset", producer_matrix["part_offset"]["remaining"])

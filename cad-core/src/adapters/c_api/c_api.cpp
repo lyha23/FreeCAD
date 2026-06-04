@@ -120,6 +120,7 @@ nlohmann::json diagnosticCodeList()
         "parse_error",
         "refine_failed",
         "sketch_solver_conflict",
+        "sketch_solver_malformed_constraint",
         "sketch_solver_redundant",
         "split_stable_subname",
         "subname_deleted",
@@ -292,23 +293,29 @@ nlohmann::json capabilitiesJson()
                   // FreeCAD:
                   // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectConstraints.cpp
                   // ::SketchObject::solve(), "At this point we have the solver information about
-                  // conflicting/redundant/over-constrained"; SketchObject.cpp::execute() returns
-                  // "Sketch with conflicting constraints" and "Sketch with redundant constraints".
+                  // conflicting/redundant/over-constrained"; the same file records
+                  // "lastHasMalformedConstraints = solvedSketch.hasMalformedConstraints()".
+                  // SketchObject.cpp::execute() returns "Sketch with conflicting constraints",
+                  // "Sketch with redundant constraints", and "Sketch with malformed constraints".
                   {"status", "done_first_slice"},
-                  {"diagnostics", {"sketch_solver_conflict", "sketch_solver_redundant"}},
+                  {"diagnostics",
+                   {"sketch_solver_conflict",
+                    "sketch_solver_malformed_constraint",
+                    "sketch_solver_redundant"}},
                   {"covered",
                    {"horizontal_vertical_same_target_conflict",
+                    "malformed_constraint_diagnostics",
                     "duplicate_orientation_constraint_redundant",
                     "conflicting_same_target_datums",
                     "duplicate_same_target_datums"}},
                   {"request_local_boundaries",
                    {"diagnostics_only_without_backend_solver_session",
-                    "conflict_or_redundant_blocks_profile_output"}},
+                    "conflict_or_redundant_blocks_profile_output",
+                    "malformed_blocks_profile_output"}},
                   {"remaining_gaps",
                    {"full_solver_dof",
                     "underconstrained_state",
                     "solver_geometry_update",
-                    "malformed_constraint_diagnostics",
                     "partial_redundancy_diagnostics"}},
               }},
          }},
@@ -518,7 +525,19 @@ nlohmann::json capabilitiesJson()
                   {"prism", {{"status", "covered"}, {"covered", {"maker_history"}}}},
                   {"body_boolean", {{"status", "covered"}, {"covered", {"maker_history"}}}},
                   {"part_boolean", {{"status", "covered"}, {"covered", {"maker_history"}}}},
-                  {"section", {{"status", "covered"}, {"covered", {"maker_history"}}}},
+                  // FreeCAD:
+                  // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/
+                  // FeaturePartSection.cpp::Section::makeOperation(), reads "Approximation",
+                  // calls "setAutoFuzzy()", and Part::Boolean::execute() consumes
+                  // "res.makeElementShape(*mkBool, shapes, opCode())".
+                  {"section",
+                   {{"status", "covered"},
+                    {"covered",
+                     {"approximation_property",
+                      "auto_fuzzy_value",
+                      "source_qualified_edge_history",
+                      "terminal_deleted_history"}},
+                    {"remaining", nlohmann::json::array()}}},
                   {"part_offset",
                    {{"status", "done_first_slice"},
                     {"covered", {"face_source_offset", "maker_history"}},

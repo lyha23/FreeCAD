@@ -1,0 +1,48 @@
+{
+  "Objects": [
+    {
+      "Name": "Box",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 2,
+        "Height": 2
+      }
+    },
+    {
+      "Name": "Plane",
+      "ID": 2,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 2,
+        "Width": 2,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 1],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "Section",
+      "ID": 3,
+      "TypeId": "Part::Section",
+      "Properties": {
+        "Base": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Box"
+        },
+        "Tool": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Plane"
+        },
+        "Approximation": false,
+        "Refine": false
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Section"]
+  }
+}

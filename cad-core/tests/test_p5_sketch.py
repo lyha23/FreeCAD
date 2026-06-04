@@ -1280,6 +1280,28 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["solver_conflicting_constraints"], [])
         self.assertEqual(sketch["solver_redundant_constraints"], [1, 2])
 
+    def test_c3m3_sketch_malformed_constraints_block_profile_output(self) -> None:
+        result = self.run_recompute("sketch-malformed-constraints", "c3m3")
+        diagnostic = result["diagnostics"][0]
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(
+            [item["code"] for item in result["diagnostics"]],
+            ["sketch_solver_malformed_constraint"],
+        )
+        self.assertEqual(diagnostic["severity"], "error")
+        self.assertEqual(diagnostic["object"], "Sketch")
+        self.assertEqual(diagnostic["property"], "Constraints")
+        self.assertEqual(diagnostic["stage"], "solver")
+        self.assertEqual(diagnostic["target"], "Constraints[1,2]")
+        self.assertEqual(sketch["status"], "error")
+        self.assertEqual(sketch["profile"], "none")
+        self.assertFalse(sketch["profile_ready"])
+        self.assertEqual(sketch["solver_state"], "malformed")
+        self.assertEqual(sketch["solver_malformed_constraints"], [1, 2])
+        self.assertEqual(sketch["solver_conflicting_constraints"], [])
+        self.assertEqual(sketch["solver_redundant_constraints"], [])
+
     def test_p5_circle_profile_outputs_pad(self) -> None:
         result = self.run_recompute("sketch-circle-profile", "p5")
         sketch = result["objects"]["Sketch"]

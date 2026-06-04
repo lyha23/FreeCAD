@@ -370,6 +370,7 @@ struct BlockConstraintRef
 enum class SketchSolverState
 {
     Accepted,
+    Malformed,
     Redundant,
     Conflict,
 };
@@ -377,6 +378,7 @@ enum class SketchSolverState
 struct SketchSolverSummary
 {
     SketchSolverState state = SketchSolverState::Accepted;
+    std::vector<int> malformedConstraints;
     std::vector<int> conflictingConstraints;
     std::vector<int> redundantConstraints;
 };
@@ -1067,6 +1069,9 @@ void addUniqueConstraintIndex(std::vector<int>& indexes, int index)
 
 std::string solverStateName(SketchSolverState state)
 {
+    if (state == SketchSolverState::Malformed) {
+        return "malformed";
+    }
     if (state == SketchSolverState::Conflict) {
         return "conflict";
     }
@@ -1096,6 +1101,13 @@ std::string constraintIndexTarget(const std::vector<int>& indexes)
     }
     target += "]";
     return target;
+}
+
+bool isDimensionSolverConstraint(SketchConstraintKind kind)
+{
+    return kind == SketchConstraintKind::Distance || kind == SketchConstraintKind::DistanceX
+        || kind == SketchConstraintKind::DistanceY || kind == SketchConstraintKind::Radius
+        || kind == SketchConstraintKind::Diameter;
 }
 
 std::string normalizedConstraintValue(double value)
@@ -1343,6 +1355,62 @@ std::optional<DimensionConstraintRef> readDimensionConstraintRef(
         return std::nullopt;
     }
     return DimensionConstraintRef {kind, *geometryIndex, *value, std::nullopt, std::nullopt};
+}
+
+std::optional<double> dimensionConstraintValue(
+    const DimensionConstraintRef& constraint,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchArc>& arcs
+);
+
+SketchSolverSummary analyzeMalformedSketchConstraints(
+    const nlohmann::json& constraints,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchArc>& arcs
+)
+{
+    SketchSolverSummary summary;
+    if (!constraints.is_array()) {
+        return summary;
+    }
+
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/PropertyConstraintList.cpp
+    // ::PropertyConstraintList::checkConstraintIndices() rejects invalid constraint geometry
+    // indices; /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/
+    // SketchObjectConstraints.cpp::SketchObject::retrieveSolverDiagnostics() records
+    // "lastHasMalformedConstraints = solvedSketch.hasMalformedConstraints()";
+    // SketchObject.cpp::SketchObject::execute() reports "Sketch with malformed constraints".
+    for (std::size_t offset = 0; offset < constraints.size(); ++offset) {
+        const int constraintIndex = static_cast<int>(offset + 1U);
+        const auto& constraint = constraints[offset];
+        if (!constraint.is_object()) {
+            addUniqueConstraintIndex(summary.malformedConstraints, constraintIndex);
+            continue;
+        }
+
+        const SketchConstraintKind kind = readSketchConstraintKind(constraint);
+        if (kind == SketchConstraintKind::Horizontal || kind == SketchConstraintKind::Vertical) {
+            if (!readOrientationConstraintRef(constraint, kind, segments)) {
+                addUniqueConstraintIndex(summary.malformedConstraints, constraintIndex);
+            }
+            continue;
+        }
+
+        if (isDimensionSolverConstraint(kind)) {
+            const auto dimension = readDimensionConstraintRef(constraint, kind, segments);
+            if (!dimension || !dimensionConstraintValue(*dimension, segments, circles, arcs)) {
+                addUniqueConstraintIndex(summary.malformedConstraints, constraintIndex);
+            }
+        }
+    }
+
+    if (!summary.malformedConstraints.empty()) {
+        summary.state = SketchSolverState::Malformed;
+    }
+    return summary;
 }
 
 std::optional<LinePairConstraintRef> readLinePairConstraintRef(
@@ -3220,6 +3288,21 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
     std::vector<PointOnObjectConstraintRef> pointOnObjectConstraints;
     std::vector<SymmetricConstraintRef> symmetricConstraints;
     std::vector<BlockConstraintRef> blockConstraints;
+    applied.solver = analyzeMalformedSketchConstraints(constraints, segments, circles, arcs);
+    if (applied.solver.state == SketchSolverState::Malformed) {
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "sketch_solver_malformed_constraint",
+            "Sketch has malformed constraints",
+            object.name,
+            "Constraints",
+            "solver",
+            constraintIndexTarget(applied.solver.malformedConstraints)
+        );
+        return applied;
+    }
+
     for (const auto& constraint : constraints) {
         if (!constraint.is_object()) {
             runtime::addDiagnostic(
@@ -3554,9 +3637,7 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
             continue;
         }
 
-        if (kind == SketchConstraintKind::Distance || kind == SketchConstraintKind::DistanceX
-            || kind == SketchConstraintKind::DistanceY || kind == SketchConstraintKind::Radius
-            || kind == SketchConstraintKind::Diameter) {
+        if (isDimensionSolverConstraint(kind)) {
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.h,
             // addDistance*Constraint(..., double* value) and addRadiusConstraint(..., double*
             // value) / addDiameterConstraint(..., double* value) attach a datum to the solver
@@ -3893,7 +3974,8 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
 
 bool solverStateBlocksProfile(SketchSolverState state)
 {
-    return state == SketchSolverState::Conflict || state == SketchSolverState::Redundant;
+    return state == SketchSolverState::Malformed || state == SketchSolverState::Conflict
+        || state == SketchSolverState::Redundant;
 }
 
 nlohmann::json sketchSolverFailureObject(const AppliedSketchConstraints& applied)
@@ -3904,6 +3986,7 @@ nlohmann::json sketchSolverFailureObject(const AppliedSketchConstraints& applied
         {"profile", "none"},
         {"profile_ready", false},
         {"solver_state", solverStateName(applied.solver.state)},
+        {"solver_malformed_constraints", constraintIndexArray(applied.solver.malformedConstraints)},
         {"solver_conflicting_constraints", constraintIndexArray(applied.solver.conflictingConstraints)},
         {"solver_redundant_constraints", constraintIndexArray(applied.solver.redundantConstraints)},
         {"coincident_constraints_applied", applied.coincident},
@@ -6729,6 +6812,8 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
         {"profile", profileShapeLabel(profileShape)},
         {"profile_ready", profileShape.has_value()},
         {"solver_state", solverStateName(appliedConstraints->solver.state)},
+        {"solver_malformed_constraints",
+         constraintIndexArray(appliedConstraints->solver.malformedConstraints)},
         {"solver_conflicting_constraints",
          constraintIndexArray(appliedConstraints->solver.conflictingConstraints)},
         {"solver_redundant_constraints",

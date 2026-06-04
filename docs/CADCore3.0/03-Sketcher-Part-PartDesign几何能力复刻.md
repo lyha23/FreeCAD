@@ -16,15 +16,15 @@ FreeCAD 依据：
 
 交付内容：
 
-- solver-facing diagnostics 第一切片已覆盖：同一 target 的 Horizontal / Vertical 冲突、重复 orientation 约束冗余、同一 datum target 不同值冲突、重复 datum 冗余；这些状态在 profile 构造前输出 `sketch_solver_conflict` / `sketch_solver_redundant`，并返回 `profile_ready=false`。
-- 后续继续补完整 solver-facing geometry / constraints 数据模型，区分建模几何、construction geometry、external geometry；full DoF、under-constrained、partial redundancy、malformed constraint 和 solver geometry update 仍是剩余 gap。
+- solver-facing diagnostics 第一切片已覆盖：同一 target 的 Horizontal / Vertical 冲突、重复 orientation 约束冗余、同一 datum target 不同值冲突、重复 datum 冗余，以及已迁移 orientation / dimension 约束的 malformed index / datum；这些状态在 profile 构造前输出 `sketch_solver_conflict` / `sketch_solver_redundant` / `sketch_solver_malformed_constraint`，并返回 `profile_ready=false`。
+- 后续继续补完整 solver-facing geometry / constraints 数据模型，区分建模几何、construction geometry、external geometry；full DoF、under-constrained、partial redundancy 和 solver geometry update 仍是剩余 gap。
 - 补 ExternalGeometry 的 projection / intersection 复杂路径，包括非简单 planar face、datum、linked target、missing target。
 - InternalShape 的 bounded face + open wire 混合场景已有第一切片 oracle；后续补复杂 self-intersection、solver-facing split diagnostics 和更多 inter-edge split 组合。
 
 完成判定：
 
 - Sketcher fixture 不只覆盖 profile 成功，还覆盖 solver state、diagnostics、ExternalGeometry flags update 和 stable subname。
-- open profile / open wire 不伪装为 profile-ready face；solver conflict / redundant 不继续生成 fake profile。
+- open profile / open wire 不伪装为 profile-ready face；solver conflict / redundant / malformed 不继续生成 fake profile。
 - InternalFace / InternalEdge / InternalVertex 仍只由 producer evidence / MapperHistory / diagnostics 解释。
 
 ## C3-M4：Part Workbench 复刻
@@ -45,6 +45,7 @@ FreeCAD 依据：
 - 系统覆盖 Part primitives：Box、Cylinder、Cone、Sphere、Torus、Plane、Line、Circle、Ellipse 等。
 - 系统覆盖 Part operations：Boolean、Extrude、Revolve、Sweep、Loft、Section、Offset、Thickness、Refine、Compound、CompoundFilter。
 - `Part::Offset` 面源第一切片已覆盖：`Source`、`Value`、`Mode`、`Join`、`Intersection`、`SelfIntersection`、`Fill=false` 进入 `topo::makeElementOffsetFromSource()`，并通过 maker history 输出 `Plane.Face/Edge/Vertex -> Offset.*`；`Fill=true`、solid source `makeElementSolid()` 恢复、Offset2D 和 Thickness 仍保持显式 capability gap。
+- `Part::Section` 稳定 history 第一切片已覆盖：`FeaturePartSection.cpp::Section::makeOperation()` 读取 `Approximation`，`FCBRepAlgoAPI_Section::setAutoFuzzy()` 按输入 bbox 设置 fuzzy value，`Part::Boolean::execute()` 消费 `makeElementShape` history；`cad-core` 输出 `Plane.Edge* -> Section.Edge*` source-qualified history 与 `Box.Edge*` terminal deleted history。
 - import/export 建立 ElementMap 或明确不可恢复 diagnostics。
 - ShapeFix、BOPCheck、invalid shape diagnostics 进入统一 runtime 输出。
 

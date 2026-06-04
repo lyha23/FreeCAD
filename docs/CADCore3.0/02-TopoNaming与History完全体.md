@@ -49,7 +49,7 @@ C3-M1 / C3-M2 的目标是把 CAD Core 2.0 中显式暴露的拓扑命名与引�
 - `shapefix_history` 已拆为 `shapefix_deleted_small_edge`、`shapefix_root_modified_history` 和 `generated_empty_review`；`import_shape_element_map` 已进入 `topo_history.maker_history`，当前覆盖 STEP / IGES / BREP owner-qualified alias；`sketch_internalshape` 已覆盖 FaceMaker / WireJoiner producer evidence 和 bounded-face/open-wire mixed oracle 第一切片。
 - `tests/src/Mod/Part/App/WireJoiner.cpp::Generated` 明确记录 ShapeFix_Wire history 未调用 `AddGenerated()`，因此 ShapeFix generated 已从 implementation gap 降级为 native-empty 证据项，不新增 generated 假 fixture。
 - ElementMapPolicy::Drop 和 ambiguous split 已有 C3-M1 probe；后续不把 split reselect 当唯一 target 恢复。
-- P5 / P6 / P7 / P8 / C3-M5 的稳定引用更新不因 ShapeFix、import、DressUp、transformed/pattern 或 Link retag 中断；DressUp Face selection 已记录请求 subname 到实际 EdgeN 的展开证据，DressUp empty / invalid / unsupported selection 与 invalid parameter 已有结构化 diagnostics，链式 DressUp + Pattern 已覆盖 SupportTransform AddSubShape cache 与 terminal split/deleted 传播，`transformed_pattern_full_history` 已用 LinearPattern multi-original + App::Link retag 组合 fixture 收口。
+- P5 / P6 / P7 / P8 / C3-M4 / C3-M5 的稳定引用更新不因 ShapeFix、import、Part Section、DressUp、transformed/pattern 或 Link retag 中断；Part Section 已覆盖 source-qualified edge history、terminal deleted history、`Approximation` 与 auto-fuzzy 第一片；DressUp Face selection 已记录请求 subname 到实际 EdgeN 的展开证据，DressUp empty / invalid / unsupported selection 与 invalid parameter 已有结构化 diagnostics，链式 DressUp + Pattern 已覆盖 SupportTransform AddSubShape cache 与 terminal split/deleted 传播，`transformed_pattern_full_history` 已用 LinearPattern multi-original + App::Link retag 组合 fixture 收口。
 
 ## C3-M2：ExternalGeometry native 生命周期
 

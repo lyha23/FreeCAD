@@ -172,3 +172,54 @@ Chili/FreeCAD/docs/CADCore方案/细化方案', 要把每一个步骤干什么�
   文档同步 docs/CADCore2.0/{README.md,00-总览.md,01-P5P6-ExternalGeometry-TopoNaming主线.md,02-P6P7-History-PartDesign收敛.md,03-P8-Link-Assembly-Adapter产品化.md,04-验收矩阵与交付规则.md}，只写当前基线、完成语义、FreeCAD 依据、cad-core 落点、缺口、验收命令、下一步、非目标，不写流水账。
 
   最终标准：P5/P6 ExternalGeometry、InternalShape、stable subname 共用 MapperHistory/ElementMap/resolver；FaceMaker/WireJoiner ownership 可被消费；旧引用恢复统一走 resolver；PartDesign history、transformed/pattern/DressUp/Link retag 后 terminal history 可传播；Link transaction 与 Assembly solver 有基础路径和 diagnostics；adapter 复用 core；remaining gaps 显式暴露；重型收口通过；工作区无 build、__pycache__ 等生成物。
+
+
+ '/Users/li/Chili3DProject/重构Chili/FreeCAD/cad-core/fixtures' 现在我这个里面的测试都通过了吗？
+那这个测试的覆盖的量相比于整个FreeCAD的几何库的功能来说，能占到多少呢？
+
+---
+
+ 目标：在 /Users/li/Chili3DProject/重构Chili/FreeCAD 继续 CAD Core 3.0，从当前 C3-M1~C3-M5 first slice 基线推进到 C3-M8 freeze。以本地 FreeCAD src/ 为唯一语
+  义权威；不查网页；不从 fixture 输出倒推业务逻辑。
+
+  开始先复核 live 状态：
+  cd /Users/li/Chili3DProject/重构Chili/FreeCAD
+  git rev-parse --short HEAD
+  git log -1 --oneline
+  git status --short -uall
+
+  必读：AGENTS.md；docs/CADCore3.0/README.md、00-总览.md、02-TopoNaming与History完全体.md、03-Sketcher-Part-PartDesign几何能力复刻.md、04-Link-Assembly-运行时
+  产品化.md、05-验收矩阵与交付规则.md、FreeCAD语义矩阵.md、capabilities-gap对照表.md、oracle-fixture队列.md；cad-core/src/adapters/c_api/c_api.cpp；cad-core/
+  tests/test_adapters.py。以 live docs/capabilities/tests 领取 remaining gaps，不重复实现已完成切片。
+
+  执行原则：每轮只领取一个最小可验收切片，先读 FreeCAD 调用链并写清 cad-core 落点，再改代码。新增/修改核心语义 API、字段、enum、executor 主路径、mapper/
+  history 规则时，在相邻 C++ 注释标明 FreeCAD 绝对路径、类/函数、关键短句或字段名。语义分层：document 管 graph/属性/链接/writeback；graph 管依赖/recompute
+  plan；runtime 管 registry/diagnostics/调度；features 管 Sketcher/Part/PartDesign/Link/Assembly；geometry 管 OCCT/FaceMaker/WireJoiner/ShapeFix/mesh；topo 管
+  NamedShape/ElementMap/MapperHistory/stable subname/reference recovery；adapters 只做 CLI/C ABI/Worker/WASM 协议转换。
+
+  禁止：不把 BREP 作为长期状态，唯一例外是 ReferenceShadow.brep 单 subshape snapshot；不在 adapter/runtime 输出层修 subname；不把 FreeCAD 业务语义塞进
+  adapter；不为单个 fixture 特判；不靠 fixture 名、bbox、面积、几何类型、输出顺序或 sketch executor 中的几何形态猜 source ownership；不维护后端跨请求
+  session。不要自动提交，除非用户另行要求。
+
+  优先队列：
+  1. C3-M1 TopoNaming 收口：继续收敛 complete_mapper_history producer matrix，明确 ShapeFix/import/boolean/section/general_fuse/refine/part_offset/
+  transformed/dressup/sketch_internalshape 等 producer 是 covered、partial、review 还是 diagnostic-only。
+  2. C3-M3 Sketcher：full_solver_dof、underconstrained_state、solver_geometry_update、malformed_constraint_diagnostics、partial_redundancy_diagnostics，以及复
+  杂 InternalShape/FaceMaker/WireJoiner oracle。
+  3. C3-M4 Part：Part Section stable history、GeneralFuse/Boolean history、Part Offset Fill/solid source makeElementSolid/Offset2D、Part Workbench Thickness、
+  Sweep/Loft/import-export history。语义优先落 features/part*.cpp、geometry、topo。
+  4. C3-M5 PartDesign：hole_cut_history_full_element_map_freeze、更多 point profile/head cut 组合。Hole 必须按 FeatureHole.cpp::Hole::execute()/findHoles() 与
+  TopoShapeExpansion.cpp::makeShapeWithElementMap() 语义实现；已完成的 Body/DressUp/transformed 只做必要收敛。
+  5. C3-M6 Link+Assembly：full_child_cache_lifecycle、copy_on_change_deep_copy_lifecycle、full_ondsel_solver、solver_placement_updates；placement write-back
+  通过 documentObjectUpdates 表达。
+  cmake --build build
+  python3 -m unittest <本轮相关测试>
+  按范围补：topo/adapter 跑 tests.test_p6_topology tests.test_adapters；sketch 跑 tests.test_p5_sketch tests.test_adapters；PartDesign 跑
+  tests.test_p7_features tests.test_adapters；Part/Link/Assembly 跑 tests.test_p8_features tests.test_adapters；expected fixture 改动跑
+  tests.test_expected_fixtures。
+  收口再执行：
+  cd /Users/li/Chili3DProject/重构Chili/FreeCAD
+  git diff --check
+  graphify update cad-core
+  graphify update docs/CADCore3.0
+  M8 更新 05。只写当前基线、已完成语义、剩余缺口、验收命令、下一步和非目标，不写流水账。
