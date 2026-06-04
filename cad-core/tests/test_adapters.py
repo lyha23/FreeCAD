@@ -219,10 +219,58 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("ShadowSub", capabilities["document"]["link_property_fields"])
         self.assertIn("ReferenceShadow", capabilities["document"]["link_property_fields"])
         self.assertIn("ExternalFlags", capabilities["document"]["link_property_fields"])
+        self.assertIn("Document", capabilities["document"]["link_property_fields"])
         self.assertIn("SubSet", capabilities["document"]["link_property_fields"])
+        self.assertEqual(
+            capabilities["document"]["document_reference_fields"],
+            [
+                "file",
+                "name",
+                "label",
+                "stamp",
+                "status",
+                "currentName",
+                "currentLabel",
+                "currentStamp",
+                "currentStatus",
+                "allowPartial",
+            ],
+        )
+        self.assertEqual(
+            capabilities["document"]["external_geometry_native_slot_fields"],
+            ["ExternalGeo", "Geometry", "Values", "Items", "Ref", "RefIndex", "ExternalFlags", "Flags"],
+        )
         self.assertEqual(
             capabilities["document"]["external_geometry_flags"],
             ["Defining", "Frozen", "Detached", "Missing", "Sync"],
+        )
+        self.assertEqual(
+            capabilities["document"]["external_geometry_lifecycle"]["state_updates"],
+            [
+                "sync_clears_sync_flag",
+                "missing_clears_when_reference_resolves",
+                "frozen_reuses_reference_shadow_brep",
+                "missing_unresolved_reuses_reference_shadow_brep",
+                "frozen_reuses_native_external_geo",
+                "missing_unresolved_reuses_native_external_geo",
+                "detached_keeps_native_external_geo_and_clears_ref",
+                "detached_removes_external_geometry_link",
+            ],
+        )
+        self.assertEqual(
+            capabilities["document"]["external_geometry_lifecycle"]["request_local_boundaries"],
+            [
+                "frozen_current_source_without_reference_shadow_brep_skips_projection",
+                "native_external_geo_pool_is_request_local_not_backend_session",
+            ],
+        )
+        self.assertEqual(
+            capabilities["document"]["external_geometry_lifecycle"]["diagnostics"],
+            ["missing_external_geometry_snapshot"],
+        )
+        self.assertEqual(
+            capabilities["document"]["external_geometry_lifecycle"]["remaining_gaps"],
+            [],
         )
         self.assertEqual(
             capabilities["document"]["document_update_channels"],
@@ -280,19 +328,131 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(
             capabilities["link_reference_lifecycle"]["reference_update_fields"],
-            ["FullSubList", "StableSubList", "ShadowSub", "ReferenceShadow", "ExternalFlags"],
+            [
+                "FullSubList",
+                "StableSubList",
+                "ShadowSub",
+                "ReferenceShadow",
+                "ExternalFlags",
+                "labelReferenceRename",
+                "documentReference",
+            ],
         )
-        self.assertIn(
-            "document_hash_lifecycle",
+        self.assertEqual(
+            capabilities["link_reference_lifecycle"]["reference_recovery"],
+            [
+                "source_object_rename_by_reference_shadow_target_id",
+                "label_rename_by_link_target_label",
+                "label_rename_nested_by_link_group_path",
+                "label_rename_cross_document_nested_by_full_sublist",
+                "document_name_label_restore",
+                "missing_external_document_diagnostic",
+                "external_document_pending_reload_diagnostic",
+                "external_document_unloaded_diagnostic",
+            ],
+        )
+        self.assertEqual(capabilities["link_reference_lifecycle"]["remaining_gaps"], [])
+        self.assertNotIn("missing_external_document_lifecycle", capabilities["link_reference_lifecycle"]["remaining_gaps"])
+        self.assertNotIn("source_object_rename_recovery", capabilities["link_reference_lifecycle"]["remaining_gaps"])
+        self.assertNotIn("label_rename_recovery", capabilities["link_reference_lifecycle"]["remaining_gaps"])
+        self.assertNotIn("label_rename_nested_lifecycle", capabilities["link_reference_lifecycle"]["remaining_gaps"])
+        self.assertNotIn(
+            "label_rename_cross_document_nested_lifecycle",
             capabilities["link_reference_lifecycle"]["remaining_gaps"],
         )
-        self.assertIn(
-            "source_object_rename_recovery",
-            capabilities["link_reference_lifecycle"]["remaining_gaps"],
+        self.assertEqual(capabilities["sketcher"]["solver"]["status"], "done_first_slice")
+        self.assertEqual(
+            capabilities["sketcher"]["solver"]["diagnostics"],
+            ["sketch_solver_conflict", "sketch_solver_redundant"],
         )
         self.assertIn(
-            "label_rename_recovery",
-            capabilities["link_reference_lifecycle"]["remaining_gaps"],
+            "horizontal_vertical_same_target_conflict",
+            capabilities["sketcher"]["solver"]["covered"],
+        )
+        self.assertIn(
+            "duplicate_orientation_constraint_redundant",
+            capabilities["sketcher"]["solver"]["covered"],
+        )
+        self.assertIn(
+            "diagnostics_only_without_backend_solver_session",
+            capabilities["sketcher"]["solver"]["request_local_boundaries"],
+        )
+        self.assertIn("full_solver_dof", capabilities["sketcher"]["solver"]["remaining_gaps"])
+        self.assertIn("solver_geometry_update", capabilities["sketcher"]["solver"]["remaining_gaps"])
+        self.assertEqual(
+            capabilities["part_design"]["body_chain"]["document_object_updates"],
+            [
+                "body_basefeature_featurebase_create",
+                "body_basefeature_group_sync",
+                "body_feature_basefeature_sync",
+                "body_tip_deleted_feature_reroute",
+                "body_feature_basefeature_delete_reroute",
+                "body_origin_datum_relink",
+            ],
+        )
+        self.assertEqual(
+            capabilities["part_design"]["body_chain"]["writeback_properties"],
+            ["Body.Group", "Body.Tip", "Body.Origin", "FeatureBase.BaseFeature", "Feature.BaseFeature"],
+        )
+        self.assertEqual(
+            capabilities["part_design"]["body_chain"]["origin_lifecycle"],
+            ["explicit_body_origin_link", "origin_global_placement_from_body", "origin_feature_role_relink"],
+        )
+        self.assertEqual(
+            capabilities["part_design"]["body_chain"]["addsub_replay"],
+            ["group_order_replay", "additive_fuse", "subtractive_cut", "stop_at_tip"],
+        )
+        self.assertEqual(
+            capabilities["part_design"]["body_chain"]["request_local_boundaries"],
+            [
+                "body_basefeature_writeback_keeps_request_graph_immutable",
+                "body_delete_reroute_uses_request_local_stale_tip_evidence",
+                "body_origin_parent_placement_without_backend_session",
+            ],
+        )
+        self.assertEqual(
+            capabilities["part_design"]["body_chain"]["remaining_gaps"],
+            [],
+        )
+        self.assertEqual(
+            capabilities["part_design"]["hole"]["thread_tables"],
+            [
+                "ISOMetricProfile",
+                "ISOMetricFineProfile",
+                "UNC",
+                "UNF",
+                "UNEF",
+                "NPT",
+                "BSP",
+                "BSW",
+                "BSF",
+                "ISOTyre",
+            ],
+        )
+        self.assertIn("thread_tap_drill", capabilities["part_design"]["hole"]["diameter_sources"])
+        self.assertIn("thread_clearance", capabilities["part_design"]["hole"]["diameter_sources"])
+        self.assertIn("thread_whitworth_fallback", capabilities["part_design"]["hole"]["diameter_sources"])
+        self.assertEqual(
+            capabilities["part_design"]["hole"]["head_cut_types"],
+            ["None", "Counterbore", "Countersink", "Counterdrill"],
+        )
+        self.assertIn("iso2009.json", capabilities["part_design"]["hole"]["head_cut_definition_files"])
+        self.assertIn("din7984.json", capabilities["part_design"]["hole"]["head_cut_definition_files"])
+        self.assertEqual(capabilities["part_design"]["hole"]["model_thread"]["status"], "done_first_slice")
+        self.assertEqual(capabilities["part_design"]["hole"]["model_thread"]["geometry"], "pipe_shell")
+        self.assertIn("ThreadClass", capabilities["part_design"]["hole"]["model_thread"]["properties"])
+        self.assertEqual(capabilities["part_design"]["hole"]["history"]["status"], "history_partial")
+        self.assertIn(
+            "find_holes_make_shape_with_element_map",
+            capabilities["part_design"]["hole"]["history"]["covered"],
+        )
+        self.assertIn(
+            "p7/hole-supported-model-thread-metric",
+            capabilities["part_design"]["hole"]["native_oracle_fixtures"],
+        )
+        self.assertEqual(
+            capabilities["part_design"]["hole"]["remaining_gaps"],
+            ["hole_cut_history_full_element_map_freeze"],
         )
         self.assertEqual(
             capabilities["adapters"]["core_entrypoints"],
@@ -326,6 +486,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "ShadowSub",
             "ReferenceShadow",
             "ExternalFlags",
+            "Document",
         ]
         self.assertEqual(
             capabilities["document"]["link_property_shapes"]["App::PropertyLink"],
@@ -386,8 +547,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         for type_id in [
             "Sketcher::SketchObject",
+            "PartDesign::Draft",
+            "PartDesign::Thickness",
             "PartDesign::Hole",
             "Part::Box",
+            "Part::Offset",
             "Part::BooleanFragments",
             "App::Link",
             "Assembly::AssemblyObject",
@@ -396,12 +560,19 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         for code in [
             "parse_error",
+            "document_hash_mismatch",
+            "external_document_pending_reload",
+            "external_document_unloaded",
+            "missing_external_document",
+            "missing_external_geometry_snapshot",
             "missing_target",
             "missing_link_target",
             "cycle_dependency",
             "unsupported_type",
             "invalid_subshape",
+            "unsupported_subshape_kind",
             "unsupported_stable_subname",
+            "label_reference_ambiguous",
             "subname_resolve_ambiguous",
             "subname_resolve_failed",
             "subname_semantic_drift",
@@ -409,6 +580,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "deleted_stable_subname",
             "unsupported_assembly_solver",
             "unsupported_reference_shadow_brep",
+            "sketch_solver_conflict",
+            "sketch_solver_redundant",
         ]:
             self.assertIn(code, capabilities["diagnostic_codes"])
 
@@ -449,24 +622,88 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("sketch_internalshape_producer_evidence", capabilities["topo_history"]["maker_history"])
         self.assertIn("taper_thru_sections", capabilities["topo_history"]["maker_history"])
         self.assertIn("dressup_addsubshape_slot", capabilities["topo_history"]["maker_history"])
+        self.assertIn("dressup_multi_selection_history", capabilities["topo_history"]["maker_history"])
+        self.assertIn("dressup_draft_parameter_variants", capabilities["topo_history"]["maker_history"])
+        self.assertIn("dressup_thickness_parameter_variants", capabilities["topo_history"]["maker_history"])
+        self.assertIn("thickness_multi_solid_fuse_history", capabilities["topo_history"]["maker_history"])
+        self.assertIn("chain_dressup_pattern_history", capabilities["topo_history"]["maker_history"])
+        self.assertIn("shapefix_deleted_small_edge", capabilities["topo_history"]["maker_history"])
+        self.assertIn("shapefix_root_modified_history", capabilities["topo_history"]["maker_history"])
+        self.assertIn("import_shape_element_map", capabilities["topo_history"]["maker_history"])
+        self.assertIn("part_offset", capabilities["topo_history"]["maker_history"])
         self.assertIn("transformed_pattern_addsub_ownership", capabilities["topo_history"]["maker_history"])
+        self.assertIn("transformed_pattern_full_history", capabilities["topo_history"]["maker_history"])
+        producer_matrix = capabilities["topo_history"]["producer_matrix"]
+        self.assertEqual(producer_matrix["shape_fix"]["status"], "covered_no_generated_producer")
+        self.assertEqual(
+            producer_matrix["shape_fix"]["covered"],
+            ["deleted_small_edge", "root_modified", "generated_empty_review"],
+        )
+        self.assertEqual(producer_matrix["shape_fix"]["remaining"], [])
+        self.assertEqual(producer_matrix["refine"]["status"], "covered")
+        self.assertEqual(
+            producer_matrix["refine"]["covered"],
+            ["modified", "deleted", "generated"],
+        )
+        self.assertEqual(producer_matrix["part_offset"]["status"], "done_first_slice")
+        self.assertIn("face_source_offset", producer_matrix["part_offset"]["covered"])
+        self.assertIn("fill_offset", producer_matrix["part_offset"]["remaining"])
+        self.assertEqual(producer_matrix["import_shape"]["status"], "done_first_slice")
+        self.assertIn("owner_qualified_alias", producer_matrix["import_shape"]["covered"])
+        self.assertEqual(producer_matrix["sketch_internalshape"]["status"], "done_first_slice")
+        self.assertIn(
+            "mixed_bounded_faces_open_wires_oracle",
+            producer_matrix["sketch_internalshape"]["covered"],
+        )
+        self.assertEqual(producer_matrix["sketch_internalshape"]["remaining"], [])
+        self.assertEqual(producer_matrix["dressup"]["status"], "done_first_slice")
+        self.assertIn("multi_selection_history", producer_matrix["dressup"]["covered"])
+        self.assertIn("chamfer_parameter_variants", producer_matrix["dressup"]["covered"])
+        self.assertIn("draft_datum_plane_line", producer_matrix["dressup"]["covered"])
+        self.assertIn("draft_auto_neutral_plane_guess", producer_matrix["dressup"]["covered"])
+        self.assertIn("thickness_parameter_variants", producer_matrix["dressup"]["covered"])
+        self.assertIn("thickness_multi_solid_fuse_history", producer_matrix["dressup"]["covered"])
+        self.assertIn("failure_diagnostics", producer_matrix["dressup"]["covered"])
+        self.assertIn("chain_dressup_pattern_history", producer_matrix["dressup"]["covered"])
+        self.assertNotIn("multi_selection_history", producer_matrix["dressup"]["remaining"])
+        self.assertNotIn("chamfer_parameter_variants", producer_matrix["dressup"]["remaining"])
+        self.assertNotIn("draft_datum_plane_line", producer_matrix["dressup"]["remaining"])
+        self.assertNotIn("draft_auto_neutral_plane_guess", producer_matrix["dressup"]["remaining"])
+        self.assertNotIn("thickness_parameter_variants", producer_matrix["dressup"]["remaining"])
+        self.assertNotIn("thickness_multi_solid_fuse_history", producer_matrix["dressup"]["remaining"])
+        self.assertNotIn("failure_diagnostics", producer_matrix["dressup"]["remaining"])
+        self.assertNotIn("chain_dressup_pattern_history", producer_matrix["dressup"]["remaining"])
+        self.assertEqual(producer_matrix["dressup"]["remaining"], [])
+        self.assertEqual(producer_matrix["transformed"]["status"], "covered")
+        self.assertIn("link_retag_composition", producer_matrix["transformed"]["covered"])
+        self.assertIn("terminal_split_deleted", producer_matrix["transformed"]["covered"])
+        self.assertEqual(producer_matrix["transformed"]["remaining"], [])
         self.assertEqual(capabilities["topo_history"]["terminal_history"], ["deleted", "split", "merge"])
         self.assertEqual(
             capabilities["topo_history"]["element_history_status"],
             [
                 "generated_modified",
                 "terminal_split_deleted",
+                "subname_split_requires_reselect",
                 "merge",
                 "facemaker_pre_split",
                 "facemaker_splitter",
                 "facemaker_summary_only",
+                "import_shape_element_map",
+                "shapefix_root_history_modified",
+                "element_map_policy_drop",
             ],
         )
         self.assertNotIn("sketch_internalshape_main_path", capabilities["topo_history"]["remaining_gaps"])
         self.assertNotIn("taper_full_history", capabilities["topo_history"]["remaining_gaps"])
-        self.assertIn("shapefix_history", capabilities["topo_history"]["remaining_gaps"])
-        self.assertIn("transformed_pattern_full_history", capabilities["topo_history"]["remaining_gaps"])
-        self.assertIn("import_shape_element_map", capabilities["topo_history"]["remaining_gaps"])
+        self.assertNotIn("shapefix_history", capabilities["topo_history"]["remaining_gaps"])
+        self.assertNotIn("import_shape_element_map", capabilities["topo_history"]["remaining_gaps"])
+        self.assertNotIn("shapefix_modified_generated_history", capabilities["topo_history"]["remaining_gaps"])
+        self.assertNotIn("shapefix_generated_history", capabilities["topo_history"]["remaining_gaps"])
+        self.assertNotIn("transformed_pattern_full_history", capabilities["topo_history"]["remaining_gaps"])
+        self.assertEqual(capabilities["part_workbench"]["offset"]["status"], "done_first_slice")
+        self.assertIn("Part::Offset", capabilities["part_workbench"]["offset"]["type_ids"])
+        self.assertIn("fill_offset", capabilities["part_workbench"]["offset"]["remaining_gaps"])
         self.assertIn("complete_mapper_history", capabilities["known_gaps"])
         self.assertNotIn("show_element_missing_child_lifecycle", capabilities["known_gaps"])
 

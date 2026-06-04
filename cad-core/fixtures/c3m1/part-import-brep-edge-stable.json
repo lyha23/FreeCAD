@@ -1,0 +1,15 @@
+{
+  "Objects": [
+    {
+      "Name": "ImportedCylinder",
+      "ID": 1,
+      "TypeId": "Part::ImportBrep",
+      "Properties": {
+        "FileName": "fixtures/p8/assets/cylinder1.brep"
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["ImportedCylinder"]
+  }
+}

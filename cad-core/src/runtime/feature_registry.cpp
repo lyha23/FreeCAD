@@ -6,6 +6,7 @@
 #include "cad_core/features/datum_line.h"
 #include "cad_core/features/datum_plane.h"
 #include "cad_core/features/datum_point.h"
+#include "cad_core/features/draft.h"
 #include "cad_core/features/feature_base.h"
 #include "cad_core/features/fillet.h"
 #include "cad_core/features/hole.h"
@@ -21,6 +22,7 @@
 #include "cad_core/features/polar_pattern.h"
 #include "cad_core/features/scaled.h"
 #include "cad_core/features/sketch_object.h"
+#include "cad_core/features/thickness.h"
 
 #include <utility>
 
@@ -80,6 +82,7 @@ FeatureRegistry buildDefaultRegistry()
     registry.registerExecutor("Part::Helix", features::executePartHelix);
     registry.registerExecutor("Part::Spiral", features::executePartSpiral);
     registry.registerExecutor("Part::Extrusion", features::executePartExtrusion);
+    registry.registerExecutor("Part::Offset", features::executePartOffset);
     registry.registerExecutor("Part::ImportBrep", features::executePartImportBrep);
     registry.registerExecutor("Part::ImportStep", features::executePartImportStep);
     registry.registerExecutor("Part::ImportIges", features::executePartImportIges);
@@ -101,6 +104,8 @@ FeatureRegistry buildDefaultRegistry()
     registry.registerExecutor("PartDesign::Point", features::executeDatumPoint);
     registry.registerExecutor("PartDesign::FeatureBase", features::executeFeatureBase);
     registry.registerExecutor("PartDesign::Fillet", features::executeFillet);
+    registry.registerExecutor("PartDesign::Draft", features::executeDraft);
+    registry.registerExecutor("PartDesign::Thickness", features::executeThickness);
     registry.registerExecutor("PartDesign::Hole", features::executeHole);
     registry.registerExecutor("PartDesign::LinearPattern", features::executeLinearPattern);
     registry.registerExecutor("PartDesign::Mirrored", features::executeMirrored);

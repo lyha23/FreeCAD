@@ -16,7 +16,9 @@ void executeDatumPlane(const document::DocumentObject& object, runtime::ComputeC
     // ::Plane::Plane() creates a planar face on gp_Pln(..., gp_Dir(0,0,1)) and
     // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/DatumFeature.cpp::Datum::getShape()
     // applies the object's Placement to that datum shape.
-    if (!rejectUnsupportedProperties(object, context, {"ResizeMode", "Length", "Width", "AttachmentSupport", "MapMode"})) {
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Datums.cpp::DatumElement::DatumElement()
+    // adds "Role" for lookup by LocalCoordinateSystem::getDatumElement().
+    if (!rejectUnsupportedProperties(object, context, {"ResizeMode", "Length", "Width", "AttachmentSupport", "MapMode", "Role"})) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }

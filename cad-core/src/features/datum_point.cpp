@@ -23,7 +23,9 @@ void executeDatumPoint(const document::DocumentObject& object, runtime::ComputeC
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/DatumPoint.cpp::Point::makeShape(),
     // creates "BRepBuilderAPI_MakeVertex(gp_Pnt(0, 0, 0))" and then sets the shape placement
     // from the object's Placement.
-    if (!rejectUnsupportedProperties(object, context, {"AttachmentSupport", "MapMode"})) {
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Datums.cpp::DatumElement::DatumElement()
+    // adds "Role" for lookup by LocalCoordinateSystem::getDatumElement().
+    if (!rejectUnsupportedProperties(object, context, {"AttachmentSupport", "MapMode", "Role"})) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }

@@ -1,0 +1,92 @@
+{
+  "Objects": [
+    {
+      "Name": "BoxA",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 1,
+        "Width": 1,
+        "Height": 1
+      }
+    },
+    {
+      "Name": "BoxB",
+      "ID": 2,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 1,
+        "Height": 1,
+        "Label": "PrettyB",
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [3, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "SubGroup",
+      "ID": 3,
+      "TypeId": "App::DocumentObjectGroup",
+      "Properties": {
+        "Label": "PrettySub",
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["BoxB"]
+        }
+      }
+    },
+    {
+      "Name": "PlainGroup",
+      "ID": 4,
+      "TypeId": "App::DocumentObjectGroup",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["BoxA", "SubGroup"]
+        }
+      }
+    },
+    {
+      "Name": "GroupLink",
+      "ID": 5,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "PlainGroup"
+        },
+        "LinkPlacement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [10, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "NestedExternalGroupFaceLink",
+      "ID": 6,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "value": "GroupLink",
+          "SubList": ["$OldPrettySub.$PrettyB.Face1"],
+          "FullSubList": ["ExternalDoc#$OldPrettySub.$PrettyB.Face1"],
+          "Document": {
+            "file": "external.FCStd",
+            "name": "ExternalDoc",
+            "label": "External Assembly",
+            "currentName": "ExternalDocRestored",
+            "currentLabel": "External Assembly Restored"
+          }
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["GroupLink", "NestedExternalGroupFaceLink"]
+  }
+}

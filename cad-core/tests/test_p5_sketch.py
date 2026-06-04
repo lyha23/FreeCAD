@@ -68,6 +68,47 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "recompute": {"objs": ["Sketch"]},
         }
 
+    def native_external_geo_state_payload(self, flags: list[str]) -> dict:
+        ref = "MissingBox.Face5"
+        old_geometry = [
+            {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
+            {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
+            {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
+            {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]},
+        ]
+        for item in old_geometry:
+            item["construction"] = True
+            item["Ref"] = ref
+            item["ExternalFlags"] = flags
+        return {
+            "Objects": [
+                {
+                    "Name": "Sketch",
+                    "ID": 2,
+                    "TypeId": "Sketcher::SketchObject",
+                    "Properties": {
+                        "Geometry": [],
+                        "ExternalGeo": {
+                            "PropertyType": "Part::PropertyGeometryList",
+                            "Geometry": old_geometry,
+                        },
+                        "ExternalGeometry": {
+                            "PropertyType": "App::PropertyLinkSubList",
+                            "SubSet": [
+                                {
+                                    "value": "MissingBox",
+                                    "SubList": ["Face5"],
+                                    "ExternalFlags": flags,
+                                }
+                            ],
+                        },
+                        "Constraints": [],
+                    },
+                },
+            ],
+            "recompute": {"objs": ["Sketch"]},
+        }
+
     def assert_super_edge_lifecycle_ledger(self, ledger: dict[str, int]) -> None:
         self.assertGreater(ledger["super_edge_candidate_count"], 0)
         self.assertEqual(ledger["super_edge_root_edge_info_count"], ledger["super_edge_candidate_count"])
@@ -1203,6 +1244,42 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("requires solver movement", diagnostic["message"])
         self.assertEqual(result["objects"]["Sketch"]["status"], "error")
 
+    def test_c3m3_sketch_conflicting_constraints_block_profile_output(self) -> None:
+        result = self.run_recompute("sketch-conflicting-constraints", "c3m3")
+        diagnostic = result["diagnostics"][0]
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["sketch_solver_conflict"])
+        self.assertEqual(diagnostic["severity"], "error")
+        self.assertEqual(diagnostic["object"], "Sketch")
+        self.assertEqual(diagnostic["property"], "Constraints")
+        self.assertEqual(diagnostic["stage"], "solver")
+        self.assertEqual(diagnostic["target"], "Constraints[1,2]")
+        self.assertEqual(sketch["status"], "error")
+        self.assertEqual(sketch["profile"], "none")
+        self.assertFalse(sketch["profile_ready"])
+        self.assertEqual(sketch["solver_state"], "conflict")
+        self.assertEqual(sketch["solver_conflicting_constraints"], [1, 2])
+        self.assertEqual(sketch["solver_redundant_constraints"], [])
+
+    def test_c3m3_sketch_redundant_constraints_block_profile_output(self) -> None:
+        result = self.run_recompute("sketch-redundant-constraints", "c3m3")
+        diagnostic = result["diagnostics"][0]
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["sketch_solver_redundant"])
+        self.assertEqual(diagnostic["severity"], "error")
+        self.assertEqual(diagnostic["object"], "Sketch")
+        self.assertEqual(diagnostic["property"], "Constraints")
+        self.assertEqual(diagnostic["stage"], "solver")
+        self.assertEqual(diagnostic["target"], "Constraints[1,2]")
+        self.assertEqual(sketch["status"], "error")
+        self.assertEqual(sketch["profile"], "none")
+        self.assertFalse(sketch["profile_ready"])
+        self.assertEqual(sketch["solver_state"], "redundant")
+        self.assertEqual(sketch["solver_conflicting_constraints"], [])
+        self.assertEqual(sketch["solver_redundant_constraints"], [1, 2])
+
     def test_p5_circle_profile_outputs_pad(self) -> None:
         result = self.run_recompute("sketch-circle-profile", "p5")
         sketch = result["objects"]["Sketch"]
@@ -1377,6 +1454,20 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(sketch["external_geometry_count"], 0)
                 self.assertEqual(sketch["external_geometry_state_counts"][state], 1)
 
+    def test_p5_external_geometry_detached_removes_link_from_request_graph(self) -> None:
+        result = self.run_payload(self.external_geometry_state_payload(["Detached", "Missing"]))
+        sketch = result["objects"]["Sketch"]
+        updates = result["documentObjectUpdates"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["external_geometry_count"], 0)
+        self.assertEqual(sketch["external_geometry_state_counts"]["detached"], 1)
+        self.assertEqual(sketch["external_geometry_state_counts"]["missing"], 1)
+        self.assertEqual([item["reason"] for item in updates], ["external_geometry_detach"])
+        self.assertEqual(updates[0]["object"], "Sketch")
+        self.assertEqual(updates[0]["properties"]["ExternalGeometry"]["SubSet"], [])
+
     def test_p5_external_geometry_sync_refreshes_and_clears_sync_flag(self) -> None:
         result = self.run_payload(self.external_geometry_state_payload(["Frozen", "Sync"]))
         sketch = result["objects"]["Sketch"]
@@ -1404,6 +1495,120 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual([item["reason"] for item in updates], ["external_geometry_flags_sync"])
         sub_set = updates[0]["properties"]["ExternalGeometry"]["SubSet"]
         self.assertNotIn("ExternalFlags", sub_set[0])
+
+    def test_c3m2_external_geometry_missing_recovery_fixture_clears_missing_flag(self) -> None:
+        result = self.run_recompute("sketch-external-missing-fix", "c3m2")
+        sketch = result["objects"]["Sketch"]
+        updates = result["documentObjectUpdates"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["external_geometry_count"], 4)
+        self.assertEqual(sketch["external_geometry_state_counts"]["missing"], 1)
+        self.assertEqual(sketch["external_geometry_state_counts"]["recovered_missing"], 1)
+        self.assertEqual([item["reason"] for item in updates], ["external_geometry_flags_sync"])
+        sub_set = updates[0]["properties"]["ExternalGeometry"]["SubSet"]
+        self.assertEqual(sub_set[0]["value"], "Box")
+        self.assertEqual(sub_set[0]["SubList"], ["Face5"])
+        self.assertNotIn("ExternalFlags", sub_set[0])
+
+    def test_c3m2_external_geometry_frozen_brep_snapshot_reuses_old_subshape(self) -> None:
+        result = self.run_recompute("sketch-external-frozen-brep-reuse", "c3m2")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertFalse(sketch["profile_ready"])
+        self.assertEqual(sketch["edge_count"], 0)
+        self.assertEqual(sketch["external_geometry_count"], 4)
+        self.assertEqual(sketch["external_geometry_state_counts"]["frozen"], 1)
+        self.assertNotIn("missing_link_target", [item["code"] for item in result["diagnostics"]])
+
+    def test_c3m2_external_geometry_frozen_missing_snapshot_reports_diagnostic(self) -> None:
+        result = self.run_recompute("sketch-external-frozen-missing-snapshot", "c3m2")
+        diagnostics = result["diagnostics"]
+
+        self.assertEqual([item["code"] for item in diagnostics], ["missing_external_geometry_snapshot"])
+        self.assertNotIn("missing_link_target", [item["code"] for item in diagnostics])
+        self.assertEqual(diagnostics[0]["stage"], "graph")
+        self.assertEqual(diagnostics[0]["object"], "Sketch")
+        self.assertEqual(diagnostics[0]["property"], "ExternalGeometry")
+        self.assertEqual(diagnostics[0]["target"], "MissingBox")
+        self.assertEqual(diagnostics[0]["subname"], "Face5")
+
+    def test_c3m2_external_geometry_missing_brep_snapshot_reuses_old_subshape(self) -> None:
+        result = self.run_recompute("sketch-external-missing-brep-reuse", "c3m2")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertFalse(sketch["profile_ready"])
+        self.assertEqual(sketch["edge_count"], 0)
+        self.assertEqual(sketch["external_geometry_count"], 4)
+        self.assertEqual(sketch["external_geometry_state_counts"]["missing"], 1)
+        self.assertEqual(sketch["external_geometry_state_counts"]["recovered_missing"], 0)
+        self.assertNotIn("missing_link_target", [item["code"] for item in result["diagnostics"]])
+
+    def test_c3m2_external_geometry_missing_without_snapshot_reports_diagnostic(self) -> None:
+        result = self.run_recompute("sketch-external-missing-missing-snapshot", "c3m2")
+        diagnostics = result["diagnostics"]
+
+        self.assertEqual([item["code"] for item in diagnostics], ["missing_external_geometry_snapshot"])
+        self.assertIn("Missing ExternalGeometry target MissingBox", diagnostics[0]["message"])
+        self.assertNotIn("missing_link_target", [item["code"] for item in diagnostics])
+        self.assertEqual(diagnostics[0]["stage"], "graph")
+        self.assertEqual(diagnostics[0]["object"], "Sketch")
+        self.assertEqual(diagnostics[0]["property"], "ExternalGeometry")
+        self.assertEqual(diagnostics[0]["target"], "MissingBox")
+        self.assertEqual(diagnostics[0]["subname"], "Face5")
+
+    def test_c3m2_external_geometry_frozen_native_external_geo_reuses_old_geometry(self) -> None:
+        result = self.run_payload(self.native_external_geo_state_payload(["Frozen"]))
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertFalse(sketch["profile_ready"])
+        self.assertEqual(sketch["edge_count"], 0)
+        self.assertEqual(sketch["external_geometry_count"], 4)
+        self.assertEqual(sketch["external_geometry_state_counts"]["frozen"], 1)
+
+    def test_c3m2_external_geometry_missing_native_external_geo_keeps_missing_flag(self) -> None:
+        result = self.run_payload(self.native_external_geo_state_payload(["Missing"]))
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertFalse(sketch["profile_ready"])
+        self.assertEqual(sketch["edge_count"], 0)
+        self.assertEqual(sketch["external_geometry_count"], 4)
+        self.assertEqual(sketch["external_geometry_state_counts"]["missing"], 1)
+        self.assertEqual(sketch["external_geometry_state_counts"]["recovered_missing"], 0)
+
+    def test_c3m2_external_geometry_detached_native_external_geo_clears_ref_update(self) -> None:
+        result = self.run_payload(self.native_external_geo_state_payload(["Detached", "Missing"]))
+        sketch = result["objects"]["Sketch"]
+        updates = result["documentObjectUpdates"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertFalse(sketch["profile_ready"])
+        self.assertEqual(sketch["edge_count"], 0)
+        self.assertEqual(sketch["external_geometry_count"], 4)
+        self.assertEqual(sketch["external_geometry_state_counts"]["detached"], 1)
+        self.assertEqual(sketch["external_geometry_state_counts"]["missing"], 1)
+        self.assertEqual([item["reason"] for item in updates], ["external_geometry_detach"])
+        properties = updates[0]["properties"]
+        self.assertEqual(properties["ExternalGeometry"]["SubSet"], [])
+        external_geo = properties["ExternalGeo"]["Geometry"]
+        self.assertEqual(len(external_geo), 4)
+        for item in external_geo:
+            self.assertNotIn("Ref", item)
+            self.assertNotIn("ExternalFlags", item)
 
     def test_p5_non_parallel_external_circle_edge_projection_variants(self) -> None:
         for fixture, expected_curve_count in {

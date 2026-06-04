@@ -94,6 +94,28 @@ std::set<std::string> findTransformationTemplateObjects(const document::Document
     return templates;
 }
 
+bool isFrozenExternalGeometryReference(const std::string& propertyName, const document::Link& link)
+{
+    return propertyName == "ExternalGeometry" && link.externalGeometryFlags.count("Frozen") != 0U
+        && link.externalGeometryFlags.count("Sync") == 0U;
+}
+
+bool isMissingOldExternalGeometrySnapshotReference(const std::string& propertyName,
+                                                   const document::Link& link,
+                                                   const ComputeContext& context)
+{
+    if (propertyName != "ExternalGeometry" || link.externalGeometryFlags.count("Missing") == 0U
+        || link.externalGeometryFlags.count("Sync") != 0U) {
+        return false;
+    }
+    if (context.documentObjects.count(link.object) != 0U) {
+        return false;
+    }
+    return std::any_of(link.referenceShadows.begin(), link.referenceShadows.end(), [](const auto& shadow) {
+        return shadow.brep.has_value();
+    });
+}
+
 struct ReferenceSubshapeResolution {
     std::string subname;
     TopoDS_Shape shape;
@@ -411,6 +433,60 @@ nlohmann::json externalGeometryFlagsToJson(const std::set<std::string>& flags)
     return items;
 }
 
+nlohmann::json labelReferenceRenamesToJson(const std::vector<document::LabelReferenceRename>& renames)
+{
+    nlohmann::json items = nlohmann::json::array();
+    for (const auto& rename : renames) {
+        items.push_back({
+            {"index", rename.index},
+            {"oldLabel", rename.oldLabel},
+            {"newLabel", rename.newLabel},
+            {"oldSubname", rename.oldSubname},
+            {"newSubname", rename.newSubname},
+            {"method", "PropertyLinkBase.updateLabelReference"},
+        });
+    }
+    return items;
+}
+
+void setIfNotEmpty(nlohmann::json& value, const std::string& field, const std::string& item)
+{
+    if (!item.empty()) {
+        value[field] = item;
+    }
+}
+
+nlohmann::json documentReferenceToJson(const document::LinkDocumentRef& ref)
+{
+    nlohmann::json value = {
+        {"method", "PropertyXLinkContainer.DocMap"},
+    };
+    setIfNotEmpty(value, "file", ref.file);
+    setIfNotEmpty(value, "oldName", ref.name);
+    setIfNotEmpty(value, "newName", ref.currentName);
+    setIfNotEmpty(value, "oldLabel", ref.label);
+    setIfNotEmpty(value, "newLabel", ref.currentLabel);
+    setIfNotEmpty(value, "oldStamp", ref.stamp);
+    setIfNotEmpty(value, "currentStamp", ref.currentStamp);
+    setIfNotEmpty(value, "status", ref.status);
+    setIfNotEmpty(value, "currentStatus", ref.currentStatus);
+    if (ref.allowPartialExplicit) {
+        value["allowPartial"] = ref.allowPartial;
+    }
+    return value;
+}
+
+bool documentReferenceRenameChanged(const document::LinkDocumentRef& ref)
+{
+    return (!ref.name.empty() && !ref.currentName.empty() && ref.name != ref.currentName)
+        || (!ref.label.empty() && !ref.currentLabel.empty() && ref.label != ref.currentLabel);
+}
+
+bool documentReferenceStampChanged(const document::LinkDocumentRef& ref)
+{
+    return !ref.stamp.empty() && !ref.currentStamp.empty() && ref.stamp != ref.currentStamp;
+}
+
 bool requestLocalInternalSubname(const std::string& subname)
 {
     return topo::parseInternalSubshapeName(subname).has_value();
@@ -615,6 +691,13 @@ nlohmann::json referenceShadowUpdateJson(const document::ReferenceShadow& shadow
         update["reference_recovery"] = recoveryMethod;
         update["reference_recovery_reason"] = recoveryReason;
     }
+    if (!link.resolvedObjectFrom.empty() && link.resolvedObjectFrom != link.object) {
+        update["sourceObjectRename"] = {
+            {"oldName", link.resolvedObjectFrom},
+            {"newName", link.object},
+            {"method", "ReferenceShadow.targetId"},
+        };
+    }
     return update;
 }
 
@@ -648,6 +731,16 @@ void appendElementReferenceUpdate(const document::DocumentObject& object,
     if (!link.externalGeometryFlags.empty()) {
         update["ExternalFlags"] = externalGeometryFlagsToJson(link.externalGeometryFlags);
     }
+    if (!link.labelReferenceRenames.empty()) {
+        update["labelReferenceRename"] = labelReferenceRenamesToJson(link.labelReferenceRenames);
+    }
+    if (!link.resolvedObjectFrom.empty() && link.resolvedObjectFrom != link.object) {
+        update["sourceObjectRename"] = {
+            {"oldName", link.resolvedObjectFrom},
+            {"newName", link.object},
+            {"method", "ReferenceShadow.targetId"},
+        };
+    }
     nlohmann::json shadowSubs = shadowSubsForReferenceUpdate(link, subnames, stableSubnames);
     if (!shadowSubs.empty()) {
         update["ShadowSub"] = std::move(shadowSubs);
@@ -663,6 +756,13 @@ nlohmann::json linkSubListItemUpdateJson(const document::Link& link,
         {"value", link.object},
         {"SubList", subnames},
     };
+    if (!link.resolvedObjectFrom.empty() && link.resolvedObjectFrom != link.object) {
+        item["sourceObjectRename"] = {
+            {"oldName", link.resolvedObjectFrom},
+            {"newName", link.object},
+            {"method", "ReferenceShadow.targetId"},
+        };
+    }
     const auto stableSubnames = stableSubnamesForReferenceUpdate(link, referenceShadows, subnames.size());
     if (stableSubnames) {
         item["StableSubList"] = *stableSubnames;
@@ -672,6 +772,9 @@ nlohmann::json linkSubListItemUpdateJson(const document::Link& link,
     }
     if (!link.externalGeometryFlags.empty()) {
         item["ExternalFlags"] = externalGeometryFlagsToJson(link.externalGeometryFlags);
+    }
+    if (!link.labelReferenceRenames.empty()) {
+        item["labelReferenceRename"] = labelReferenceRenamesToJson(link.labelReferenceRenames);
     }
     nlohmann::json shadowSubs = shadowSubsForReferenceUpdate(link, subnames, stableSubnames);
     if (!shadowSubs.empty()) {
@@ -717,6 +820,112 @@ void appendElementReferenceSubListUpdate(const document::DocumentObject& object,
     });
 }
 
+bool hasStandaloneLabelReferenceRename(const document::Link& link)
+{
+    return !link.labelReferenceRenames.empty() && link.referenceShadows.empty();
+}
+
+bool hasStandaloneDocumentReferenceRename(const document::Link& link)
+{
+    return link.referenceShadows.empty() && link.documentRef
+        && documentReferenceRenameChanged(*link.documentRef);
+}
+
+bool hasStandaloneReferenceMetadataUpdate(const document::Link& link)
+{
+    return hasStandaloneLabelReferenceRename(link) || hasStandaloneDocumentReferenceRename(link);
+}
+
+nlohmann::json referenceMetadataLinkUpdateJson(const document::Link& link)
+{
+    nlohmann::json item = {
+        {"value", link.object},
+        {"SubList", link.subnames},
+    };
+    if (!link.labelReferenceRenames.empty()) {
+        item["labelReferenceRename"] = labelReferenceRenamesToJson(link.labelReferenceRenames);
+    }
+    if (link.documentRef && documentReferenceRenameChanged(*link.documentRef)) {
+        item["documentReference"] = documentReferenceToJson(*link.documentRef);
+    }
+    if (link.stableSubnamesExplicit) {
+        item["StableSubList"] = link.stableSubnames;
+    }
+    if (link.fullSubnamesExplicit) {
+        item["FullSubList"] = link.fullSubnames;
+    }
+    if (!link.externalGeometryFlags.empty()) {
+        item["ExternalFlags"] = externalGeometryFlagsToJson(link.externalGeometryFlags);
+    }
+    if (!link.shadowSubs.empty()) {
+        item["ShadowSub"] = shadowSubsToJson(link.shadowSubs);
+    }
+    return item;
+}
+
+void appendReferenceMetadataUpdates(const document::DocumentObject& object,
+                                    ComputeContext& context)
+{
+    for (const auto& [propertyName, propertyValue] : object.propertyValues) {
+        if (propertyValue.kind == document::PropertyKind::LinkSub) {
+            for (const auto& link : propertyValue.links) {
+                if (!hasStandaloneReferenceMetadataUpdate(link)) {
+                    continue;
+                }
+                nlohmann::json update = referenceMetadataLinkUpdateJson(link);
+                update["object"] = object.name;
+                update["property"] = propertyName;
+                update["PropertyType"] = propertyValue.propertyType;
+                context.elementReferenceUpdates.push_back(std::move(update));
+            }
+            continue;
+        }
+        if (propertyValue.kind != document::PropertyKind::LinkSubList) {
+            continue;
+        }
+
+        bool changed = false;
+        nlohmann::json subSet = nlohmann::json::array();
+        for (const auto& link : propertyValue.links) {
+            if (hasStandaloneReferenceMetadataUpdate(link)) {
+                changed = true;
+            }
+            subSet.push_back(referenceMetadataLinkUpdateJson(link));
+        }
+        if (changed) {
+            context.elementReferenceUpdates.push_back({
+                {"object", object.name},
+                {"property", propertyName},
+                {"PropertyType", propertyValue.propertyType},
+                {"SubSet", std::move(subSet)},
+            });
+        }
+    }
+}
+
+void appendDocumentReferenceDiagnostics(const document::DocumentObject& object,
+                                        ComputeContext& context)
+{
+    for (const auto& [propertyName, propertyValue] : object.propertyValues) {
+        for (const auto& link : propertyValue.links) {
+            if (!link.documentRef) {
+                continue;
+            }
+            if (documentReferenceStampChanged(*link.documentRef)) {
+                addDiagnostic(context.diagnostics,
+                              "warning",
+                              "document_hash_mismatch",
+                              propertyName + " target " + link.object
+                                  + " linked document stamp changed",
+                              object.name,
+                              propertyName,
+                              "runtime",
+                              link.object);
+            }
+        }
+    }
+}
+
 bool validateReferenceShadows(const document::DocumentObject& object,
                               ComputeContext& context)
 {
@@ -727,13 +936,23 @@ bool validateReferenceShadows(const document::DocumentObject& object,
         std::map<std::size_t, std::vector<std::string>> subListSubnameUpdates;
         for (std::size_t linkIndex = 0; linkIndex < propertyValue.links.size(); ++linkIndex) {
             const auto& link = propertyValue.links.at(linkIndex);
-            if (link.referenceShadows.empty()) {
-                continue;
-            }
+                if (link.referenceShadows.empty()) {
+                    continue;
+                }
+                if (isFrozenExternalGeometryReference(propertyName, link)
+                    || isMissingOldExternalGeometrySnapshotReference(propertyName, link, context)) {
+                    // FreeCAD:
+                    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+                    // ::SketchObject::rebuildExternalGeometry(), for frozen refs, inserts "key" into
+                    // "refSet" before source object validation; for missing refs, the old ExternalGeo
+                    // remains when the source object cannot be found. cad-core therefore must not
+                    // validate request-local old snapshots against a current source subshape.
+                    continue;
+                }
 
-            bool linkValid = true;
-            nlohmann::json updatedReferenceShadows = nlohmann::json::array();
-            std::vector<std::string> updatedSubnames = link.subnames;
+                bool linkValid = true;
+                nlohmann::json updatedReferenceShadows = nlohmann::json::array();
+                std::vector<std::string> updatedSubnames = link.subnames;
             const auto setUpdatedSubname = [&](std::size_t index, const std::string& subname) {
                 if (index >= updatedSubnames.size()) {
                     updatedSubnames.resize(index + 1U);
@@ -742,7 +961,8 @@ bool validateReferenceShadows(const document::DocumentObject& object,
             };
             for (std::size_t index = 0; index < link.referenceShadows.size(); ++index) {
                 const auto& shadow = link.referenceShadows.at(index);
-                if (!shadow.target.empty() && shadow.target != link.object) {
+                if (!shadow.target.empty() && shadow.target != link.object
+                    && shadow.target != link.resolvedObjectFrom) {
                     continue;
                 }
                 const auto targetObjectIt = context.documentObjects.find(link.object);
@@ -782,6 +1002,12 @@ bool validateReferenceShadows(const document::DocumentObject& object,
                 }
                 if (!currentSubshape || currentSubshape->shape.IsNull()) {
                     continue;
+                }
+                if (!link.resolvedObjectFrom.empty() && link.resolvedObjectFrom != link.object
+                    && currentSubshape->recoveryMethod.empty()) {
+                    currentSubshape->recovered = true;
+                    currentSubshape->recoveryMethod = "source_object_rename";
+                    currentSubshape->recoveryReason = "ReferenceShadow.targetId matched current object ID";
                 }
                 // Failed ReferenceShadow validation reports the persisted property subname; only
                 // successful updates below replace SubList with the recovered current subshape.
@@ -1151,6 +1377,8 @@ ComputeContext recomputeContext(const document::Document& document,
             context.objects[object.name] = {{"status", "error"}};
             continue;
         }
+        appendReferenceMetadataUpdates(object, context);
+        appendDocumentReferenceDiagnostics(object, context);
 
         auto executor = registry.executorFor(object.typeId);
         if (executor == nullptr) {

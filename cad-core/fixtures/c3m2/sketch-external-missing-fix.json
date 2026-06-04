@@ -1,0 +1,36 @@
+{
+  "Objects": [
+    {
+      "Name": "Box",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 10,
+        "Width": 5,
+        "Height": 1
+      }
+    },
+    {
+      "Name": "Sketch",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [],
+        "ExternalGeometry": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Box",
+              "SubList": ["Face5"],
+              "ExternalFlags": ["Missing"]
+            }
+          ]
+        },
+        "Constraints": []
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Sketch"]
+  }
+}

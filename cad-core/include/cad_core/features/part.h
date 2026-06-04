@@ -23,6 +23,7 @@ void executePartEllipse(const document::DocumentObject& object, runtime::Compute
 void executePartHelix(const document::DocumentObject& object, runtime::ComputeContext& context);
 void executePartSpiral(const document::DocumentObject& object, runtime::ComputeContext& context);
 void executePartExtrusion(const document::DocumentObject& object, runtime::ComputeContext& context);
+void executePartOffset(const document::DocumentObject& object, runtime::ComputeContext& context);
 void executePartImportBrep(const document::DocumentObject& object, runtime::ComputeContext& context);
 void executePartImportStep(const document::DocumentObject& object, runtime::ComputeContext& context);
 void executePartImportIges(const document::DocumentObject& object, runtime::ComputeContext& context);

@@ -56,6 +56,7 @@ add_library(cad-core-lib STATIC
   src/geometry/face_maker.cpp
   src/geometry/placement.cpp
   src/geometry/refine_model.cpp
+  src/geometry/shape_fix.cpp
   src/geometry/shape_exporter.cpp
   src/geometry/sketch_internal_builder.cpp
   src/geometry/wire_joiner.cpp
@@ -66,6 +67,7 @@ add_library(cad-core-lib STATIC
   src/runtime/io.cpp
   src/runtime/recompute.cpp
   src/topo/element_map.cpp
+  src/topo/import_element_map.cpp
   src/topo/mapper_history.cpp
   src/topo/named_shape.cpp
   src/topo/reference_matcher.cpp
@@ -128,8 +130,18 @@ add_executable(cad-core
 
 target_link_libraries(cad-core PRIVATE cad-core-lib)
 
+add_executable(cad-core-c3m1-topology-probe
+  tests/c3m1_topology_probe.cpp
+)
+
+target_link_libraries(cad-core-c3m1-topology-probe PRIVATE cad-core-lib)
+
 if(APPLE)
   set_target_properties(cad-core PROPERTIES
+    BUILD_RPATH "${OpenCASCADE_LIBRARY_DIR}"
+    INSTALL_RPATH "${OpenCASCADE_LIBRARY_DIR}"
+  )
+  set_target_properties(cad-core-c3m1-topology-probe PROPERTIES
     BUILD_RPATH "${OpenCASCADE_LIBRARY_DIR}"
     INSTALL_RPATH "${OpenCASCADE_LIBRARY_DIR}"
   )

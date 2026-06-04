@@ -215,6 +215,71 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(origin["origin"], [10.0, 0.0, 0.0])
         self.assertEqual(origin["x_axis"], [1.0, 0.0, 0.0])
 
+    def test_c3m5_body_origin_link_places_origin_from_body(self) -> None:
+        result = self.run_recompute("body-origin-link-placement", "c3m5")
+        body = result["objects"]["Body"]
+        origin = result["objects"]["Origin"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(body["status"], "ok")
+        self.assertEqual(body["origin"], "Origin")
+        self.assertEqual(origin["datum"], "origin")
+        self.assertEqual(origin["origin"], [5.0, 2.0, 0.0])
+        self.assertEqual(origin["x_axis"], [1.0, 0.0, 0.0])
+        self.assertEqual(body["bbox"]["min"], [5.0, 2.0, 0.0])
+
+    def test_c3m5_body_relinks_external_origin_datum_to_body_origin_role(self) -> None:
+        result = self.run_recompute("body-origin-datum-relink", "c3m5")
+        body = result["objects"]["Body"]
+        body_z_axis = result["objects"]["Body_Z_Axis"]
+        updates = result["documentObjectUpdates"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(body["status"], "ok")
+        self.assertEqual(body["origin"], "BodyOrigin")
+        self.assertEqual(body_z_axis["base"], [5.0, 2.0, 0.0])
+        self.assertEqual(body_z_axis["direction"], [0.0, 0.0, 1.0])
+        self.assertEqual(len(updates), 1)
+        self.assertEqual(updates[0]["action"], "update")
+        self.assertEqual(updates[0]["reason"], "body_origin_datum_relink")
+        self.assertEqual(updates[0]["object"], "Pad")
+        self.assertEqual(updates[0]["owner"], "Body")
+        self.assertEqual(
+            updates[0]["properties"]["ReferenceAxis"],
+            {
+                "PropertyType": "App::PropertyLinkSub",
+                "value": "Body_Z_Axis",
+                "SubList": [],
+            },
+        )
+
+        applied = json.loads((ROOT / "fixtures" / "c3m5" / "body-origin-datum-relink.json").read_text(encoding="utf-8"))
+        for document_object in applied["Objects"]:
+            if document_object["Name"] == "Pad":
+                document_object["Properties"]["ReferenceAxis"]["value"] = "Body_Z_Axis"
+
+        with tempfile.TemporaryDirectory() as tmp:
+            applied_path = Path(tmp) / "body-origin-datum-relink-applied.json"
+            applied_path.write_text(json.dumps(applied), encoding="utf-8")
+            applied_result = self.run_recompute_file(applied_path)
+        self.assertEqual(applied_result["diagnostics"], [])
+        self.assertEqual(applied_result["documentObjectUpdates"], [])
+        self.assertEqual(applied_result["objects"]["Body"]["status"], "ok")
+
+    def test_c3m5_body_addsub_replay_stops_at_tip(self) -> None:
+        result = self.run_recompute("body-addsub-replay-stops-at-tip", "c3m5")
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(body["status"], "ok")
+        self.assertEqual(body["tip"], "Pocket")
+        self.assertEqual(body["replayed_additive_features"], ["Pad"])
+        self.assertEqual(body["replayed_subtractive_features"], ["Pocket"])
+        self.assertEqual(body["replay_stopped_at_tip"], "Pocket")
+        self.assertNotIn("PadAfterTip", body["replayed_additive_features"])
+        self.assertAlmostEqual(body["volume"], 320.0, delta=1e-7)
+        self.assertEqual(body["bbox"]["max"], [10.0, 5.0, 10.0])
+
     def test_p7_hole_blind_depth_cuts_body(self) -> None:
         result = self.run_recompute("hole-blind-depth", "p7")
         hole = result["objects"]["Hole"]
@@ -546,6 +611,41 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertLess(result["objects"]["Body"]["volume"], plain["objects"]["Body"]["volume"])
         self.assert_object_matches_expected(result, "p7", "hole-supported-model-thread-metric")
 
+    def test_c3m5_hole_thread_table_model_thread_contract_uses_native_oracles(self) -> None:
+        table_result = self.run_recompute("hole-supported-threaded-dynamic-iso2009", "p7")
+        table_hole = table_result["objects"]["Hole"]
+        table_body_history = table_result["named_shapes"]["Body"]["element_history_status"]
+
+        self.assertEqual(table_result["diagnostics"], [])
+        self.assertEqual(table_hole["threaded"], True)
+        self.assertEqual(table_hole["model_thread"], False)
+        self.assertEqual(table_hole["thread_type"], "ISOMetricProfile")
+        self.assertEqual(table_hole["thread_size"], "M4x0.7")
+        self.assertEqual(table_hole["diameter_source"], "thread_tap_drill")
+        self.assertEqual(table_hole["hole_cut_type"], "Countersink")
+        self.assertEqual(table_hole["hole_cut_standard"], "ISO 2009")
+        self.assertEqual(table_hole["hole_cut_definition_source"], "iso2009.json")
+        self.assertAlmostEqual(table_hole["hole_cut_diameter"], 9.5, delta=1e-9)
+        self.assertIn("history_consumed:generated_modified", table_body_history)
+        self.assertIn("terminal_history:split_deleted", table_body_history)
+
+        model_result = self.run_recompute("hole-supported-model-thread-metric", "p7")
+        model_hole = model_result["objects"]["Hole"]
+        model_body_history = model_result["named_shapes"]["Body"]["element_history_status"]
+
+        self.assertEqual(model_result["diagnostics"], [])
+        self.assertEqual(model_hole["threaded"], True)
+        self.assertEqual(model_hole["model_thread"], True)
+        self.assertEqual(model_hole["model_thread_geometry"], "pipe_shell")
+        self.assertEqual(model_hole["thread_class"], "4G")
+        self.assertEqual(model_hole["thread_direction"], "Left")
+        self.assertAlmostEqual(model_hole["thread_pitch"], 0.7, delta=1e-9)
+        self.assertAlmostEqual(model_hole["thread_radius_clearance"], 0.011, delta=1e-9)
+        self.assertIn("history_consumed:generated_modified", model_body_history)
+        self.assertIn("terminal_history:split_deleted", model_body_history)
+        self.assert_object_matches_expected(table_result, "p7", "hole-supported-threaded-dynamic-iso2009")
+        self.assert_object_matches_expected(model_result, "p7", "hole-supported-model-thread-metric")
+
     def test_p7_hole_angled_drill_point_extends_blind_hole_tip(self) -> None:
         result = self.run_recompute("hole-angled-drill-point", "p7")
         hole = result["objects"]["Hole"]
@@ -787,6 +887,187 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(body["tip"], "Chamfer")
         self.assert_object_matches_expected(result, "p7", "chamfer-pad-edge")
 
+    def test_c3m5_chamfer_parameter_variants_build(self) -> None:
+        for fixture, parameters in [
+            (
+                "chamfer-two-distances-edge",
+                {"chamfer_type": "Two distances", "size": 0.3, "size2": 0.8, "flip_direction": False},
+            ),
+            (
+                "chamfer-distance-angle-edge",
+                {"chamfer_type": "Distance and Angle", "size": 0.5, "angle": 45.0, "flip_direction": False},
+            ),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "c3m5")
+                chamfer = result["objects"]["Chamfer"]
+                body = result["objects"]["Body"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(chamfer["status"], "ok")
+                self.assertEqual(chamfer["dress_up"], "chamfer")
+                self.assertEqual(chamfer["body_mode"], "replace")
+                self.assertEqual(chamfer["parameters"], parameters)
+                self.assertEqual(body["tip"], "Chamfer")
+                self.assertEqual(body["replayed_replacement_features"], ["Chamfer"])
+                self.assertGreater(chamfer["volume"], 0)
+
+    def test_c3m5_draft_face_uses_datum_plane_and_line(self) -> None:
+        copy_result = self.run_recompute("draft-no-face-copy", "c3m5")
+        copy_draft = copy_result["objects"]["Draft"]
+        self.assertEqual(copy_result["diagnostics"], [])
+        self.assertEqual(copy_draft["status"], "ok")
+        self.assertEqual(copy_draft["dress_up"], "draft")
+        self.assertEqual(copy_draft["parameters"]["mode"], "copy_no_face_selection")
+        self.assertEqual(copy_draft["parameters"]["selected_faces"], [])
+        self.assertEqual(copy_result["objects"]["Body"]["tip"], "Draft")
+        self.assertAlmostEqual(copy_draft["volume"], copy_result["objects"]["Pad"]["volume"])
+
+        result = self.run_recompute("draft-face-datum-plane-line", "c3m5")
+        draft = result["objects"]["Draft"]
+        body = result["objects"]["Body"]
+        draft_named_shape = result["named_shapes"]["Draft"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(draft["status"], "ok")
+        self.assertEqual(draft["dress_up"], "draft")
+        self.assertEqual(draft["body_mode"], "replace")
+        self.assertEqual(draft["source_base"], "Pad")
+        self.assertEqual(draft["parameters"]["mode"], "draft_angle")
+        self.assertEqual(draft["parameters"]["selected_faces"], ["Face2"])
+        self.assertEqual(draft["parameters"]["pull_direction"], [0.0, 0.0, 1.0])
+        self.assertEqual(draft["parameters"]["neutral_plane_normal"], [0.0, 0.0, 1.0])
+        self.assertEqual(draft["parameters"]["neutral_plane_source"], "explicit_reference")
+        self.assertAlmostEqual(draft["parameters"]["angle"], 5.0)
+        self.assertEqual(body["tip"], "Draft")
+        self.assertEqual(body["replayed_replacement_features"], ["Draft"])
+        self.assertGreater(draft["volume"], 0)
+        self.assertLess(draft["volume"], result["objects"]["Pad"]["volume"])
+        self.assertEqual(draft_named_shape["element_map_status"], "history_partial")
+        self.assertIn("history_consumed:generated_modified", draft_named_shape["element_history_status"])
+        self.assertTrue(any(key.startswith("Pad.") for key in draft_named_shape["element_map"]))
+
+        auto_result = self.run_recompute("draft-face-auto-neutral-plane", "c3m5")
+        auto_draft = auto_result["objects"]["Draft"]
+        auto_named_shape = auto_result["named_shapes"]["Draft"]
+        self.assertEqual(auto_result["diagnostics"], [])
+        self.assertEqual(auto_draft["status"], "ok")
+        self.assertEqual(auto_draft["dress_up"], "draft")
+        self.assertEqual(auto_draft["parameters"]["mode"], "draft_angle")
+        self.assertEqual(auto_draft["parameters"]["selected_faces"], ["Face2"])
+        self.assertEqual(auto_draft["parameters"]["neutral_plane_source"], "guessed_from_linear_edge")
+        self.assertEqual(auto_draft["parameters"]["pull_direction"], [0.0, -1.0, 0.0])
+        self.assertEqual(auto_draft["parameters"]["neutral_plane_normal"], [0.0, -1.0, 0.0])
+        self.assertAlmostEqual(auto_draft["parameters"]["angle"], 5.0)
+        self.assertEqual(auto_result["objects"]["Body"]["tip"], "Draft")
+        self.assertEqual(auto_result["objects"]["Body"]["replayed_replacement_features"], ["Draft"])
+        self.assertGreater(auto_draft["volume"], auto_result["objects"]["Pad"]["volume"])
+        self.assertEqual(auto_named_shape["element_map_status"], "history_partial")
+        self.assertIn("history_consumed:generated_modified", auto_named_shape["element_history_status"])
+
+    def test_c3m5_thickness_face_uses_make_thick_solid_variants(self) -> None:
+        copy_result = self.run_recompute("thickness-no-face-copy", "c3m5")
+        copy_thickness = copy_result["objects"]["Thickness"]
+        self.assertEqual(copy_result["diagnostics"], [])
+        self.assertEqual(copy_thickness["status"], "ok")
+        self.assertEqual(copy_thickness["dress_up"], "thickness")
+        self.assertEqual(copy_thickness["parameters"]["build_mode"], "copy_no_face_selection")
+        self.assertEqual(copy_thickness["parameters"]["selected_faces"], [])
+        self.assertEqual(copy_result["objects"]["Body"]["tip"], "Thickness")
+        self.assertAlmostEqual(copy_thickness["volume"], copy_result["objects"]["Pad"]["volume"])
+
+        for fixture, parameters, expected_volume in [
+            (
+                "thickness-face-skin-arc",
+                {
+                    "build_mode": "thick_solid",
+                    "intersection": False,
+                    "join": "Arc",
+                    "mode": "Skin",
+                    "processed_solids": [1],
+                    "reversed": True,
+                    "selected_faces": ["Face6"],
+                    "selected_faces_by_solid": {"1": ["Face6"]},
+                    "solid_count": 1,
+                    "thickness": -1.0,
+                    "value": 1.0,
+                },
+                284.0,
+            ),
+            (
+                "thickness-face-rectoverso-intersection",
+                {
+                    "build_mode": "thick_solid",
+                    "intersection": True,
+                    "join": "Intersection",
+                    "mode": "RectoVerso",
+                    "processed_solids": [1],
+                    "reversed": False,
+                    "selected_faces": ["Face6"],
+                    "selected_faces_by_solid": {"1": ["Face6"]},
+                    "solid_count": 1,
+                    "thickness": 1.0,
+                    "value": 1.0,
+                },
+                424.0,
+            ),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "c3m5")
+                thickness = result["objects"]["Thickness"]
+                body = result["objects"]["Body"]
+                named_shape = result["named_shapes"]["Thickness"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(thickness["status"], "ok")
+                self.assertEqual(thickness["dress_up"], "thickness")
+                self.assertEqual(thickness["body_mode"], "replace")
+                self.assertEqual(thickness["source_base"], "Pad")
+                self.assertEqual(thickness["parameters"], parameters)
+                self.assertEqual(thickness["base_selection"]["requested_face_count"], 1)
+                self.assertEqual(thickness["base_selection"]["requested_subnames"], ["Face6"])
+                self.assertEqual(body["tip"], "Thickness")
+                self.assertEqual(body["replayed_replacement_features"], ["Thickness"])
+                self.assertAlmostEqual(thickness["volume"], expected_volume, delta=1e-7)
+                self.assertEqual(named_shape["element_map_status"], "history_partial")
+                self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
+                self.assertTrue(any(key.startswith("Pad.") for key in named_shape["element_map"]))
+
+        multi_result = self.run_recompute("thickness-multi-solid-fuse", "c3m5")
+        multi_thickness = multi_result["objects"]["Thickness"]
+        multi_named_shape = multi_result["named_shapes"]["Thickness"]
+        multi_parameters = multi_thickness["parameters"]
+
+        self.assertEqual(multi_result["diagnostics"], [])
+        self.assertEqual(multi_thickness["status"], "ok")
+        self.assertEqual(multi_thickness["dress_up"], "thickness")
+        self.assertEqual(multi_thickness["body_mode"], "replace")
+        self.assertEqual(multi_thickness["source_base"], "MultiFuse")
+        self.assertEqual(multi_thickness["base_selection"]["requested_face_count"], 2)
+        self.assertEqual(multi_thickness["base_selection"]["requested_subnames"], ["Face6", "Face12"])
+        self.assertEqual(multi_parameters["build_mode"], "thick_solid_multi_fuse")
+        self.assertEqual(multi_parameters["selected_faces"], ["Face6", "Face12"])
+        self.assertEqual(multi_parameters["selected_faces_by_solid"], {"1": ["Face6"], "2": ["Face12"]})
+        self.assertEqual(multi_parameters["processed_solids"], [1, 2])
+        self.assertEqual(multi_parameters["solid_count"], 2)
+        self.assertEqual(multi_parameters["mode"], "Skin")
+        self.assertEqual(multi_parameters["join"], "Arc")
+        self.assertEqual(multi_parameters["intersection"], False)
+        self.assertEqual(multi_parameters["reversed"], True)
+        self.assertAlmostEqual(multi_parameters["value"], 0.2)
+        self.assertAlmostEqual(multi_parameters["thickness"], -0.2)
+        self.assertAlmostEqual(multi_result["objects"]["MultiFuse"]["volume"], 16.0, delta=1e-7)
+        self.assertAlmostEqual(multi_thickness["volume"], 6.784, delta=1e-7)
+        self.assertEqual(multi_named_shape["element_map_status"], "history_partial")
+        self.assertIn("history_consumed:generated_modified", multi_named_shape["element_history_status"])
+        self.assertIn("terminal_history:split_deleted", multi_named_shape["element_history_status"])
+        self.assertIn("history_consumed:merge", multi_named_shape["element_history_status"])
+        self.assertTrue(any(key.startswith("BoxA.") for key in multi_named_shape["element_map"]))
+        self.assertTrue(any(key.startswith("BoxB.") for key in multi_named_shape["element_map"]))
+        self.assertTrue(any(key.startswith("MultiFuse.") for key in multi_named_shape["element_map"]))
+        self.assertTrue(any(key.startswith("Thickness.Solid1.") for key in multi_named_shape["element_map"]))
+        self.assertTrue(any(key.startswith("Thickness.Solid2.") for key in multi_named_shape["element_map"]))
+
     def test_p7_dressup_refine_true_uses_refinemodel_path(self) -> None:
         for fixture, object_name in [
             ("fillet-refine-true", "Fillet"),
@@ -826,6 +1107,53 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(diagnostic["code"], "invalid_length")
         self.assertEqual(diagnostic["object"], "Chamfer")
         self.assertEqual(diagnostic["property"], "Size")
+
+    def test_c3m5_dressup_failure_diagnostics_cover_selection_and_parameter_errors(self) -> None:
+        result = self.run_recompute("dressup-failure-diagnostics", "c3m5")
+        diagnostics = {diagnostic["object"]: diagnostic for diagnostic in result["diagnostics"]}
+
+        self.assertEqual(
+            [diagnostic["code"] for diagnostic in result["diagnostics"]],
+            ["invalid_subshape", "invalid_subshape", "unsupported_subshape_kind", "invalid_length"],
+        )
+        self.assertEqual(diagnostics["FilletEmptySelection"]["property"], "Base")
+        self.assertEqual(diagnostics["FilletEmptySelection"]["target"], "Pad")
+        self.assertNotIn("subname", diagnostics["FilletEmptySelection"])
+        self.assertEqual(diagnostics["FilletMissingEdge"]["property"], "Base")
+        self.assertEqual(diagnostics["FilletMissingEdge"]["target"], "Pad")
+        self.assertEqual(diagnostics["FilletMissingEdge"]["subname"], "Edge99")
+        self.assertEqual(diagnostics["FilletVertexSelection"]["property"], "Base")
+        self.assertEqual(diagnostics["FilletVertexSelection"]["target"], "Pad")
+        self.assertEqual(diagnostics["FilletVertexSelection"]["subname"], "Vertex1")
+        self.assertEqual(diagnostics["ChamferInvalidSize"]["code"], "invalid_length")
+        self.assertEqual(diagnostics["ChamferInvalidSize"]["property"], "Size")
+        for object_name in [
+            "FilletEmptySelection",
+            "FilletMissingEdge",
+            "FilletVertexSelection",
+            "ChamferInvalidSize",
+        ]:
+            self.assertEqual(result["objects"][object_name]["status"], "error")
+        self.assert_object_matches_expected(result, "c3m5", "dressup-failure-diagnostics")
+
+    def test_c3m5_dressup_face_selection_records_expanded_edge_history(self) -> None:
+        result = self.run_recompute("fillet-face-selection-history", "c3m5")
+        fillet = result["objects"]["Fillet"]
+        selection = fillet["base_selection"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(fillet["status"], "ok")
+        self.assertEqual(fillet["dress_up"], "fillet")
+        self.assertEqual(result["objects"]["Body"]["tip"], "Fillet")
+        self.assertEqual(selection["requested_subnames"], ["Face1"])
+        self.assertEqual(selection["requested_face_count"], 1)
+        self.assertEqual(selection["requested_edge_count"], 0)
+        self.assertEqual(selection["requested_wire_count"], 0)
+        self.assertEqual(selection["selected_edge_count"], 4)
+        self.assertEqual(set(selection["selected_edge_sources"]), {"Face1"})
+        self.assertEqual(len(selection["selected_edge_subnames"]), 4)
+        self.assertTrue(all(subname.startswith("Edge") for subname in selection["selected_edge_subnames"]))
+        self.assert_object_matches_expected(result, "c3m5", "fillet-face-selection-history")
 
     def test_p7_mirrored_features_mode_fuses_transformed_additive_original(self) -> None:
         result = self.run_recompute("mirrored-pad-datum-plane", "p7")
@@ -1004,6 +1332,170 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             terminal=True,
         )
         self.assert_object_matches_expected(result, "p7", "linear-pattern-pad-pocket-multi-original")
+
+    def test_c3m5_linear_pattern_multi_original_history_survives_link_retag(self) -> None:
+        result = self.run_recompute("linear-pattern-multi-original-link-retag", "c3m5")
+        link = result["objects"]["BodyLink"]
+        named_shape = result["named_shapes"]["BodyLink"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(link["status"], "ok")
+        self.assertEqual(link["link"], "app_link")
+        self.assertEqual(link["linked_object"], "Body")
+        self.assert_transformed_pattern_ownership(
+            named_shape,
+            {"Body.LinearPattern.Transform1", "Body.LinearPattern.Transform2"},
+            {"Body.Pocket", "Pad", "Pocket", "SketchPad", "SketchPocket"},
+            terminal=True,
+        )
+        self.assert_object_matches_expected(result, "c3m5", "linear-pattern-multi-original-link-retag")
+
+    def test_c3m5_chained_dressup_pattern_history_keeps_support_transform_slot(self) -> None:
+        result = self.run_recompute("chained-dressup-pattern-history", "c3m5")
+        fillet = result["objects"]["Fillet"]
+        chamfer = result["objects"]["Chamfer"]
+        pattern = result["objects"]["LinearPattern"]
+        body = result["objects"]["Body"]
+        pattern_named_shape = result["named_shapes"]["LinearPattern"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(fillet["status"], "ok")
+        self.assertEqual(fillet["support_transform_source"], "Pad")
+        self.assertEqual(chamfer["status"], "ok")
+        self.assertEqual(chamfer["support_transform"], True)
+        self.assertEqual(chamfer["support_transform_source"], "Pad")
+        self.assertEqual(chamfer["source_base"], "Fillet")
+        self.assertEqual(chamfer["add_sub_cache"], "support_transform")
+        self.assertEqual(pattern["status"], "ok")
+        self.assertEqual(pattern["transformed"], "linear_pattern")
+        self.assertEqual(pattern["transform_mode"], "Features")
+        self.assertEqual(pattern["originals"], ["Chamfer"])
+        self.assertEqual(body["tip"], "LinearPattern")
+        self.assert_dressup_slot_history(
+            pattern_named_shape,
+            {"Chamfer", "Fillet", "Pad"},
+            "LinearPattern.Transform1",
+        )
+        self.assert_transformed_pattern_ownership(
+            pattern_named_shape,
+            {"LinearPattern.Transform1", "LinearPattern.Transform2"},
+            {"Chamfer", "Fillet", "Pad", "SketchPad"},
+            terminal=True,
+        )
+        self.assert_object_matches_expected(result, "c3m5", "chained-dressup-pattern-history")
+
+    def test_c3m5_body_basefeature_writeback_materializes_featurebase_chain(self) -> None:
+        result = self.run_recompute("body-tip-reroute-basefeature", "c3m5")
+        body = result["objects"]["Body"]
+        updates = result["documentObjectUpdates"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(body["status"], "ok")
+        self.assertEqual(body["tip"], "Pad")
+        self.assertEqual(body["group"], ["TopSketch", "Pad"])
+        self.assertEqual(
+            [(update["action"], update["reason"], update["object"]) for update in updates],
+            [
+                ("create", "body_basefeature_featurebase_create", "BaseFeature"),
+                ("update", "body_basefeature_group_sync", "Body"),
+                ("update", "body_feature_basefeature_sync", "Pad"),
+            ],
+        )
+        self.assertEqual(updates[0]["typeId"], "PartDesign::FeatureBase")
+        self.assertEqual(updates[0]["owner"], "Body")
+        self.assertEqual(updates[0]["properties"]["BaseFeature"]["value"], "BasePad")
+        self.assertEqual(
+            updates[1]["properties"]["Group"],
+            {
+                "PropertyType": "App::PropertyLinkList",
+                "values": ["BaseFeature", "TopSketch", "Pad"],
+            },
+        )
+        self.assertEqual(updates[2]["properties"]["BaseFeature"]["value"], "BaseFeature")
+
+        applied = json.loads((ROOT / "fixtures" / "c3m5" / "body-tip-reroute-basefeature.json").read_text(encoding="utf-8"))
+        applied["Objects"].insert(
+            3,
+            {
+                "Name": "BaseFeature",
+                "ID": 6,
+                "TypeId": "PartDesign::FeatureBase",
+                "Properties": {
+                    "BaseFeature": {
+                        "PropertyType": "App::PropertyLink",
+                        "value": "BasePad",
+                    },
+                },
+            },
+        )
+        for document_object in applied["Objects"]:
+            if document_object["Name"] == "Body":
+                document_object["Properties"]["Group"] = {
+                    "PropertyType": "App::PropertyLinkList",
+                    "values": ["BaseFeature", "TopSketch", "Pad"],
+                }
+            if document_object["Name"] == "Pad":
+                document_object["Properties"]["BaseFeature"] = {
+                    "PropertyType": "App::PropertyLink",
+                    "value": "BaseFeature",
+                }
+
+        with tempfile.TemporaryDirectory() as tmp:
+            applied_path = Path(tmp) / "body-tip-reroute-basefeature-applied.json"
+            applied_path.write_text(json.dumps(applied), encoding="utf-8")
+            applied_result = self.run_recompute_file(applied_path)
+        self.assertEqual(applied_result["diagnostics"], [])
+        self.assertEqual(applied_result["documentObjectUpdates"], [])
+        self.assertEqual(applied_result["objects"]["Body"]["status"], "ok")
+        self.assertEqual(applied_result["objects"]["Body"]["tip"], "Pad")
+        self.assert_object_matches_expected(result, "c3m5", "body-tip-reroute-basefeature")
+
+    def test_c3m5_body_deleted_tip_reroutes_tip_and_next_basefeature(self) -> None:
+        result = self.run_recompute("body-delete-tip-reroute-basefeature", "c3m5")
+        body = result["objects"]["Body"]
+        updates = result["documentObjectUpdates"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(body["status"], "ok")
+        self.assertEqual(body["tip"], "Pad")
+        self.assertEqual(body["group"], ["BaseSketch", "Pad", "PocketSketch", "Pocket"])
+        self.assertEqual(
+            [(update["action"], update["reason"], update["object"]) for update in updates],
+            [
+                ("update", "body_tip_deleted_feature_reroute", "Body"),
+                ("update", "body_feature_basefeature_delete_reroute", "Pocket"),
+            ],
+        )
+        self.assertEqual(updates[0]["properties"]["Tip"]["value"], "Pad")
+        self.assertEqual(updates[1]["properties"]["BaseFeature"]["value"], "Pad")
+
+        applied = json.loads((ROOT / "fixtures" / "c3m5" / "body-delete-tip-reroute-basefeature.json").read_text(encoding="utf-8"))
+        applied["Objects"] = [
+            document_object
+            for document_object in applied["Objects"]
+            if document_object["Name"] not in {"RemovedSketch", "RemovedPad"}
+        ]
+        for document_object in applied["Objects"]:
+            if document_object["Name"] == "Body":
+                document_object["Properties"]["Tip"] = {
+                    "PropertyType": "App::PropertyLink",
+                    "value": "Pad",
+                }
+            if document_object["Name"] == "Pocket":
+                document_object["Properties"]["BaseFeature"] = {
+                    "PropertyType": "App::PropertyLink",
+                    "value": "Pad",
+                }
+
+        with tempfile.TemporaryDirectory() as tmp:
+            applied_path = Path(tmp) / "body-delete-tip-reroute-basefeature-applied.json"
+            applied_path.write_text(json.dumps(applied), encoding="utf-8")
+            applied_result = self.run_recompute_file(applied_path)
+        self.assertEqual(applied_result["diagnostics"], [])
+        self.assertEqual(applied_result["documentObjectUpdates"], [])
+        self.assertEqual(applied_result["objects"]["Body"]["status"], "ok")
+        self.assertEqual(applied_result["objects"]["Body"]["tip"], "Pad")
+        self.assert_object_matches_expected(result, "c3m5", "body-delete-tip-reroute-basefeature")
 
     def test_p7_linear_pattern_can_transform_subtractive_original_only(self) -> None:
         result = self.run_recompute("linear-pattern-pocket-subtractive-original", "p7")

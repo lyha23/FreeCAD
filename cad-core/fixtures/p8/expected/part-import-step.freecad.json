@@ -24,7 +24,32 @@
   "named_shapes": {
     "ImportedStep": {
       "owner": "ImportedStep",
-      "element_map_status": "indexed_only"
+      "element_map_status": "history_partial",
+      "element_history_status_contains": [
+        "import_shape_element_map"
+      ],
+      "element_map_contains": [
+        "ImportedStep.Face1",
+        "ImportedStep.Edge1",
+        "ImportedStep.Vertex1"
+      ],
+      "elements": {
+        "Face1": {
+          "sources": [
+            "ImportedStep.Face1"
+          ]
+        },
+        "Edge1": {
+          "sources": [
+            "ImportedStep.Edge1"
+          ]
+        },
+        "Vertex1": {
+          "sources": [
+            "ImportedStep.Vertex1"
+          ]
+        }
+      }
     }
   }
 }

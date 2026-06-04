@@ -1,0 +1,26 @@
+{
+  "Objects": [
+    {
+      "Name": "ExternalFaceLink",
+      "ID": 1,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "value": "ExternalBox",
+          "SubList": ["Face1"],
+          "Document": {
+            "file": "missing.FCStd",
+            "name": "MissingDoc",
+            "label": "Missing Assembly",
+            "stamp": "2026-01-01T00:00:00Z"
+          }
+        },
+        "LinkTransform": false
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["ExternalFaceLink"]
+  }
+}

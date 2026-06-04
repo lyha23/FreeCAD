@@ -1,0 +1,9 @@
+{
+  "case": "element-map-policy-drop",
+  "shape": {
+    "kind": "box",
+    "length": 2.0,
+    "width": 3.0,
+    "height": 4.0
+  }
+}

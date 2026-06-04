@@ -1,0 +1,25 @@
+{
+  "schema_version": "cad-core.freecad-expected.v1",
+  "object": "ImportedStep",
+  "reference": "C3-M1 import ElementMap oracle: FreeCAD TopoShape::importStep recomputes OneShape from FileName; cad-core keeps owner-qualified face aliases request-local.",
+  "diagnostic_codes": [],
+  "named_shapes": {
+    "ImportedStep": {
+      "owner": "ImportedStep",
+      "element_map_status": "history_partial",
+      "element_history_status_contains": [
+        "import_shape_element_map"
+      ],
+      "element_map": {
+        "ImportedStep.Face1": "Face1"
+      },
+      "elements": {
+        "Face1": {
+          "sources": [
+            "ImportedStep.Face1"
+          ]
+        }
+      }
+    }
+  }
+}

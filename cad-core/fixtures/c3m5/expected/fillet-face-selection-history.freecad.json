@@ -1,0 +1,60 @@
+{
+  "reference": "FreeCAD source-code oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureDressUp.cpp::DressUp::getContinuousEdges() expands Face/Wire Base selections into C0 boundary edges; /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureFillet.cpp::Fillet::execute() passes those selected edges to makeElementFillet().",
+  "objects": {
+    "Fillet": {
+      "object_fields": {
+        "status": "ok",
+        "dress_up": "fillet",
+        "body_mode": "replace",
+        "source_base": "Pad",
+        "add_sub_cache": "delta",
+        "base_selection": {
+          "use_all_edges": false,
+          "requested_subnames": ["Face1"],
+          "requested_edge_count": 0,
+          "requested_face_count": 1,
+          "requested_wire_count": 0,
+          "selected_edge_count": 4,
+          "selected_edge_subnames": ["Edge1", "Edge2", "Edge3", "Edge4"],
+          "selected_edge_sources": ["Face1", "Face1", "Face1", "Face1"]
+        }
+      }
+    },
+    "Body": {
+      "object_fields": {
+        "status": "ok",
+        "tip": "Fillet"
+      }
+    }
+  },
+  "named_shapes": {
+    "Fillet": {
+      "owner": "Fillet",
+      "element_map_status": "history_partial",
+      "element_history_status_contains": [
+        "history_consumed:generated_modified",
+        "terminal_history:split_deleted",
+        "history_consumed:merge"
+      ],
+      "element_map_prefixes": [
+        "Pad.",
+        "SketchPad."
+      ],
+      "history_kinds_include": ["modified", "generated", "deleted", "merge"]
+    },
+    "Body": {
+      "owner": "Body",
+      "element_map_status": "history_partial",
+      "element_history_status_contains": [
+        "history_consumed:generated_modified",
+        "terminal_history:split_deleted",
+        "history_consumed:merge"
+      ],
+      "element_map_prefixes": [
+        "Pad.",
+        "SketchPad."
+      ],
+      "history_kinds_include": ["modified", "generated", "deleted", "merge"]
+    }
+  }
+}

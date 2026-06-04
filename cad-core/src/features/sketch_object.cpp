@@ -1,6 +1,7 @@
 #include "cad_core/features/sketch_object.h"
 
 #include "cad_core/features/feature_executor.h"
+#include "cad_core/geometry/brep_snapshot.h"
 #include "cad_core/geometry/placement.h"
 #include "cad_core/geometry/shape_exporter.h"
 #include "cad_core/geometry/sketch_internal_builder.h"
@@ -199,6 +200,16 @@ struct ExternalGeometryFlags
     bool sync = false;
 };
 
+struct NativeExternalGeometry
+{
+    std::size_t index = 0;
+    std::string ref;
+    int refIndex = -1;
+    ExternalGeometryFlags flags;
+    SketchGeometrySet geometry;
+    nlohmann::json raw;
+};
+
 enum class SketchConstraintKind
 {
     Coincident,
@@ -356,6 +367,20 @@ struct BlockConstraintRef
     int geometryIndex = -1;
 };
 
+enum class SketchSolverState
+{
+    Accepted,
+    Redundant,
+    Conflict,
+};
+
+struct SketchSolverSummary
+{
+    SketchSolverState state = SketchSolverState::Accepted;
+    std::vector<int> conflictingConstraints;
+    std::vector<int> redundantConstraints;
+};
+
 struct AppliedSketchConstraints
 {
     std::size_t coincident = 0;
@@ -363,6 +388,7 @@ struct AppliedSketchConstraints
     std::size_t dimension = 0;
     std::size_t relation = 0;
     std::size_t block = 0;
+    SketchSolverSummary solver;
 };
 
 enum class SketchProfileEdgeKind
@@ -1030,6 +1056,251 @@ std::optional<double> readConstraintValue(const nlohmann::json& constraint)
         }
     }
     return std::nullopt;
+}
+
+void addUniqueConstraintIndex(std::vector<int>& indexes, int index)
+{
+    if (std::find(indexes.begin(), indexes.end(), index) == indexes.end()) {
+        indexes.push_back(index);
+    }
+}
+
+std::string solverStateName(SketchSolverState state)
+{
+    if (state == SketchSolverState::Conflict) {
+        return "conflict";
+    }
+    if (state == SketchSolverState::Redundant) {
+        return "redundant";
+    }
+    return "accepted";
+}
+
+nlohmann::json constraintIndexArray(const std::vector<int>& indexes)
+{
+    nlohmann::json result = nlohmann::json::array();
+    for (const int index : indexes) {
+        result.push_back(index);
+    }
+    return result;
+}
+
+std::string constraintIndexTarget(const std::vector<int>& indexes)
+{
+    std::string target = "Constraints[";
+    for (std::size_t index = 0; index < indexes.size(); ++index) {
+        if (index != 0) {
+            target += ",";
+        }
+        target += std::to_string(indexes[index]);
+    }
+    target += "]";
+    return target;
+}
+
+std::string normalizedConstraintValue(double value)
+{
+    return std::to_string(static_cast<long long>(std::llround(value * 100000000.0)));
+}
+
+bool sameConstraintValue(double lhs, double rhs)
+{
+    return std::abs(lhs - rhs) <= 1e-7;
+}
+
+std::optional<std::string> endpointTargetKey(
+    const nlohmann::json& constraint,
+    const std::string& indexField,
+    const std::string& positionField
+)
+{
+    const auto geometryIndex = readIntField(constraint, indexField);
+    const auto start = readEndpointPosition(constraint, positionField);
+    if (!geometryIndex || !start) {
+        return std::nullopt;
+    }
+    return std::to_string(*geometryIndex) + (*start ? ":start" : ":end");
+}
+
+std::optional<std::string> endpointPairTargetKey(const nlohmann::json& constraint)
+{
+    const auto first = endpointTargetKey(constraint, "First", "FirstPos");
+    const auto second = endpointTargetKey(constraint, "Second", "SecondPos");
+    if (!first || !second) {
+        return std::nullopt;
+    }
+    return *first < *second ? "points:" + *first + "|" + *second
+                            : "points:" + *second + "|" + *first;
+}
+
+std::optional<std::string> wholeGeometryTargetKey(const nlohmann::json& constraint)
+{
+    const auto geometryIndex = readIntField(constraint, "First");
+    if (!geometryIndex) {
+        return std::nullopt;
+    }
+    return "geometry:" + std::to_string(*geometryIndex);
+}
+
+std::optional<std::string> orientationSolverTargetKey(const nlohmann::json& constraint)
+{
+    if (constraint.contains("FirstPos") || constraint.contains("Second")
+        || constraint.contains("SecondPos")) {
+        return endpointPairTargetKey(constraint);
+    }
+    return wholeGeometryTargetKey(constraint);
+}
+
+std::optional<std::string> dimensionSolverTargetKey(
+    const nlohmann::json& constraint,
+    SketchConstraintKind kind
+)
+{
+    const bool hasSecondEndpoint = constraint.contains("Second") || constraint.contains("SecondPos");
+    if ((kind == SketchConstraintKind::DistanceX || kind == SketchConstraintKind::DistanceY)
+        && constraint.contains("FirstPos") && !hasSecondEndpoint) {
+        const auto endpoint = endpointTargetKey(constraint, "First", "FirstPos");
+        if (!endpoint) {
+            return std::nullopt;
+        }
+        return "coordinate:" + *endpoint;
+    }
+    if (kind != SketchConstraintKind::Radius && kind != SketchConstraintKind::Diameter
+        && (constraint.contains("FirstPos") || hasSecondEndpoint)) {
+        return endpointPairTargetKey(constraint);
+    }
+    return wholeGeometryTargetKey(constraint);
+}
+
+std::optional<std::string> angleSolverTargetKey(const nlohmann::json& constraint)
+{
+    if (constraint.contains("FirstPos") || constraint.contains("SecondPos")
+        || constraint.contains("Third") || constraint.contains("ThirdPos")) {
+        return std::nullopt;
+    }
+    const auto firstGeometry = readIntField(constraint, "First");
+    const auto secondGeometry = readIntField(constraint, "Second");
+    if (!firstGeometry || !secondGeometry) {
+        return std::nullopt;
+    }
+    const std::string first = std::to_string(*firstGeometry);
+    const std::string second = std::to_string(*secondGeometry);
+    return first < second ? "geometry_pair:" + first + "|" + second
+                          : "geometry_pair:" + second + "|" + first;
+}
+
+SketchSolverSummary analyzeSketchSolverDiagnostics(const nlohmann::json& constraints)
+{
+    SketchSolverSummary summary;
+    if (!constraints.is_array()) {
+        return summary;
+    }
+
+    std::map<std::string, int> exactConstraints;
+    std::map<std::string, int> horizontalByTarget;
+    std::map<std::string, int> verticalByTarget;
+    std::map<std::string, std::pair<int, double>> datumByTarget;
+    std::map<std::string, std::pair<int, double>> angleByTarget;
+
+    for (std::size_t offset = 0; offset < constraints.size(); ++offset) {
+        const auto& constraint = constraints[offset];
+        if (!constraint.is_object()) {
+            continue;
+        }
+        const int constraintIndex = static_cast<int>(offset + 1U);
+        const SketchConstraintKind kind = readSketchConstraintKind(constraint);
+
+        if (kind == SketchConstraintKind::Horizontal || kind == SketchConstraintKind::Vertical) {
+            const auto target = orientationSolverTargetKey(constraint);
+            if (!target) {
+                continue;
+            }
+            const std::string exactKey
+                = (kind == SketchConstraintKind::Horizontal ? "H:" : "V:") + *target;
+            if (const auto exact = exactConstraints.find(exactKey); exact != exactConstraints.end()) {
+                addUniqueConstraintIndex(summary.redundantConstraints, exact->second);
+                addUniqueConstraintIndex(summary.redundantConstraints, constraintIndex);
+            }
+            else {
+                exactConstraints[exactKey] = constraintIndex;
+            }
+
+            std::map<std::string, int>& sameKindMap
+                = kind == SketchConstraintKind::Horizontal ? horizontalByTarget : verticalByTarget;
+            std::map<std::string, int>& oppositeKindMap
+                = kind == SketchConstraintKind::Horizontal ? verticalByTarget : horizontalByTarget;
+            if (const auto opposite = oppositeKindMap.find(*target); opposite != oppositeKindMap.end()) {
+                addUniqueConstraintIndex(summary.conflictingConstraints, opposite->second);
+                addUniqueConstraintIndex(summary.conflictingConstraints, constraintIndex);
+            }
+            sameKindMap.emplace(*target, constraintIndex);
+            continue;
+        }
+
+        if (kind == SketchConstraintKind::Distance || kind == SketchConstraintKind::DistanceX
+            || kind == SketchConstraintKind::DistanceY || kind == SketchConstraintKind::Radius
+            || kind == SketchConstraintKind::Diameter) {
+            const auto target = dimensionSolverTargetKey(constraint, kind);
+            const auto value = readConstraintValue(constraint);
+            if (!target || !value) {
+                continue;
+            }
+            const std::string familyKey
+                = "datum:" + std::to_string(static_cast<int>(kind)) + ":" + *target;
+            if (const auto previous = datumByTarget.find(familyKey); previous != datumByTarget.end()) {
+                if (!sameConstraintValue(previous->second.second, *value)) {
+                    addUniqueConstraintIndex(summary.conflictingConstraints, previous->second.first);
+                    addUniqueConstraintIndex(summary.conflictingConstraints, constraintIndex);
+                }
+            }
+            else {
+                datumByTarget[familyKey] = {constraintIndex, *value};
+            }
+            const std::string exactKey = familyKey + ":" + normalizedConstraintValue(*value);
+            if (const auto exact = exactConstraints.find(exactKey); exact != exactConstraints.end()) {
+                addUniqueConstraintIndex(summary.redundantConstraints, exact->second);
+                addUniqueConstraintIndex(summary.redundantConstraints, constraintIndex);
+            }
+            else {
+                exactConstraints[exactKey] = constraintIndex;
+            }
+            continue;
+        }
+
+        if (kind == SketchConstraintKind::Angle) {
+            const auto target = angleSolverTargetKey(constraint);
+            const auto value = readConstraintValue(constraint);
+            if (!target || !value) {
+                continue;
+            }
+            const std::string familyKey = "angle:" + *target;
+            if (const auto previous = angleByTarget.find(familyKey); previous != angleByTarget.end()) {
+                if (!sameConstraintValue(previous->second.second, *value)) {
+                    addUniqueConstraintIndex(summary.conflictingConstraints, previous->second.first);
+                    addUniqueConstraintIndex(summary.conflictingConstraints, constraintIndex);
+                }
+            }
+            else {
+                angleByTarget[familyKey] = {constraintIndex, *value};
+            }
+            const std::string exactKey = familyKey + ":" + normalizedConstraintValue(*value);
+            if (const auto exact = exactConstraints.find(exactKey); exact != exactConstraints.end()) {
+                addUniqueConstraintIndex(summary.redundantConstraints, exact->second);
+                addUniqueConstraintIndex(summary.redundantConstraints, constraintIndex);
+            }
+            else {
+                exactConstraints[exactKey] = constraintIndex;
+            }
+        }
+    }
+
+    if (!summary.conflictingConstraints.empty()) {
+        summary.state = SketchSolverState::Conflict;
+    }
+    else if (!summary.redundantConstraints.empty()) {
+        summary.state = SketchSolverState::Redundant;
+    }
+    return summary;
 }
 
 std::optional<DimensionConstraintRef> readDimensionConstraintRef(
@@ -1705,7 +1976,8 @@ bool parseSketchGeometry(
     const nlohmann::json& geometry,
     const document::DocumentObject& object,
     runtime::ComputeContext& context,
-    SketchGeometrySet& parsed
+    SketchGeometrySet& parsed,
+    const std::string& propertyName = "Geometry"
 )
 {
     for (std::size_t index = 0; index < geometry.size(); ++index) {
@@ -1717,7 +1989,7 @@ bool parseSketchGeometry(
                 "unsupported_geometry",
                 "Sketch Geometry item must declare a supported kind",
                 object.name,
-                "Geometry"
+                propertyName
             );
             return false;
         }
@@ -1734,7 +2006,7 @@ bool parseSketchGeometry(
                     "unsupported_geometry",
                     "Point must provide a two-number point",
                     object.name,
-                    "Geometry"
+                    propertyName
                 );
                 return false;
             }
@@ -1762,7 +2034,7 @@ bool parseSketchGeometry(
                     "unsupported_geometry",
                     "LineSegment start/end must be two numbers",
                     object.name,
-                    "Geometry"
+                    propertyName
                 );
                 return false;
             }
@@ -1790,7 +2062,7 @@ bool parseSketchGeometry(
                     "unsupported_geometry",
                     "Circle center must be two numbers and radius must be positive",
                     object.name,
-                    "Geometry"
+                    propertyName
                 );
                 return false;
             }
@@ -1816,7 +2088,7 @@ bool parseSketchGeometry(
                     "unsupported_geometry",
                     "Ellipse center, majorRadius and minorRadius are required",
                     object.name,
-                    "Geometry"
+                    propertyName
                 );
                 return false;
             }
@@ -1849,7 +2121,7 @@ bool parseSketchGeometry(
                     "unsupported_geometry",
                     "ArcOfCircle center, positive radius, startAngle and endAngle are required",
                     object.name,
-                    "Geometry"
+                    propertyName
                 );
                 return false;
             }
@@ -1885,7 +2157,7 @@ bool parseSketchGeometry(
                     "unsupported_geometry",
                     "ArcOfEllipse center, radii, startAngle and endAngle are required",
                     object.name,
-                    "Geometry"
+                    propertyName
                 );
                 return false;
             }
@@ -1930,7 +2202,7 @@ bool parseSketchGeometry(
                     "unsupported_geometry",
                     "BSpline requires a positive degree and at least degree + 1 two-number poles",
                     object.name,
-                    "Geometry"
+                    propertyName
                 );
                 return false;
             }
@@ -1954,7 +2226,7 @@ bool parseSketchGeometry(
             "unsupported_geometry",
             "Sketch Geometry kind " + kind + " is not supported in the current P5 subset",
             object.name,
-            "Geometry"
+            propertyName
         );
         return false;
     }
@@ -3323,6 +3595,44 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
         return std::nullopt;
     }
 
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectConstraints.cpp
+    // ::SketchObject::solve(), after setUpSketch(), says "At this point we have the solver
+    // information about conflicting/redundant/over-constrained"; redundancy is recorded first,
+    // then "lastDoF < 0" and "lastHasConflict" can override the solve error.
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+    // ::SketchObject::execute() returns "Sketch with conflicting constraints" or "Sketch with
+    // redundant constraints" before building normal recompute output. cad-core mirrors that
+    // diagnostic gate for the migrated, non-solving constraint subset instead of producing a
+    // profile after an impossible solver state.
+    applied.solver = analyzeSketchSolverDiagnostics(constraints);
+    if (applied.solver.state == SketchSolverState::Conflict) {
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "sketch_solver_conflict",
+            "Sketch has conflicting constraints",
+            object.name,
+            "Constraints",
+            "solver",
+            constraintIndexTarget(applied.solver.conflictingConstraints)
+        );
+        return applied;
+    }
+    if (applied.solver.state == SketchSolverState::Redundant) {
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "sketch_solver_redundant",
+            "Sketch has redundant constraints",
+            object.name,
+            "Constraints",
+            "solver",
+            constraintIndexTarget(applied.solver.redundantConstraints)
+        );
+        return applied;
+    }
+
     applied.block = blockConstraints.size();
 
     if (endpoints.parent.empty() && !orientationConstraints.empty()) {
@@ -3579,6 +3889,29 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
     }
 
     return applied;
+}
+
+bool solverStateBlocksProfile(SketchSolverState state)
+{
+    return state == SketchSolverState::Conflict || state == SketchSolverState::Redundant;
+}
+
+nlohmann::json sketchSolverFailureObject(const AppliedSketchConstraints& applied)
+{
+    return {
+        {"status", "error"},
+        {"shape", "empty"},
+        {"profile", "none"},
+        {"profile_ready", false},
+        {"solver_state", solverStateName(applied.solver.state)},
+        {"solver_conflicting_constraints", constraintIndexArray(applied.solver.conflictingConstraints)},
+        {"solver_redundant_constraints", constraintIndexArray(applied.solver.redundantConstraints)},
+        {"coincident_constraints_applied", applied.coincident},
+        {"orientation_constraints_applied", applied.orientation},
+        {"dimension_constraints_applied", applied.dimension},
+        {"relation_constraints_applied", applied.relation},
+        {"block_constraints_applied", applied.block},
+    };
 }
 
 std::vector<SketchSegment> profileSegments(const std::vector<SketchSegment>& segments)
@@ -4548,6 +4881,239 @@ ExternalGeometryFlags externalGeometryFlags(const document::Link& link)
     return flags;
 }
 
+ExternalGeometryFlags externalGeometryFlags(const nlohmann::json& value)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/ExternalGeometryExtension.cpp
+    // ::ExternalGeometryExtension::saveAttributes() writes "Flags" as the persisted bitset,
+    // while ::ExternalGeometryExtension::flag2str exposes the stable names.
+    ExternalGeometryFlags flags;
+    const auto addFlag = [&](const std::string& flag) {
+        if (flag == "Defining") {
+            flags.defining = true;
+        }
+        else if (flag == "Frozen") {
+            flags.frozen = true;
+        }
+        else if (flag == "Detached") {
+            flags.detached = true;
+        }
+        else if (flag == "Missing") {
+            flags.missing = true;
+        }
+        else if (flag == "Sync") {
+            flags.sync = true;
+        }
+    };
+    const auto readFlagList = [&](const nlohmann::json& raw) {
+        if (!raw.is_array()) {
+            return;
+        }
+        for (const auto& item : raw) {
+            if (item.is_string()) {
+                addFlag(item.get<std::string>());
+            }
+        }
+    };
+    if (const auto it = value.find("ExternalFlags"); it != value.end()) {
+        readFlagList(*it);
+    }
+    if (const auto it = value.find("Flags"); it != value.end()) {
+        if (it->is_number_integer() || it->is_number_unsigned()) {
+            const long long bits = it->get<long long>();
+            if (bits >= 0) {
+                flags.defining = flags.defining || ((bits & (1LL << 0)) != 0);
+                flags.frozen = flags.frozen || ((bits & (1LL << 1)) != 0);
+                flags.detached = flags.detached || ((bits & (1LL << 2)) != 0);
+                flags.missing = flags.missing || ((bits & (1LL << 3)) != 0);
+                flags.sync = flags.sync || ((bits & (1LL << 4)) != 0);
+            }
+        }
+        else {
+            readFlagList(*it);
+        }
+    }
+    for (const char* flag : {"Defining", "Frozen", "Detached", "Missing", "Sync"}) {
+        if (const auto it = value.find(flag); it != value.end() && it->is_boolean() && it->get<bool>()) {
+            addFlag(flag);
+        }
+    }
+    return flags;
+}
+
+std::string readOptionalStringAlias(const nlohmann::json& value, std::initializer_list<const char*> keys)
+{
+    for (const char* key : keys) {
+        const auto it = value.find(key);
+        if (it != value.end() && it->is_string()) {
+            return it->get<std::string>();
+        }
+    }
+    return {};
+}
+
+int readOptionalIntAlias(const nlohmann::json& value, std::initializer_list<const char*> keys, int fallback)
+{
+    for (const char* key : keys) {
+        const auto it = value.find(key);
+        if (it != value.end() && it->is_number_integer()) {
+            return it->get<int>();
+        }
+    }
+    return fallback;
+}
+
+const nlohmann::json* externalGeoGeometryItems(const document::DocumentObject& object)
+{
+    const auto it = object.properties.find("ExternalGeo");
+    if (it == object.properties.end()) {
+        return nullptr;
+    }
+    const auto& raw = *it;
+    if (raw.is_array()) {
+        return &raw;
+    }
+    if (!raw.is_object()) {
+        return nullptr;
+    }
+    for (const char* key : {"Geometry", "Values", "Items"}) {
+        const auto items = raw.find(key);
+        if (items != raw.end() && items->is_array()) {
+            return &*items;
+        }
+    }
+    return nullptr;
+}
+
+std::optional<std::vector<NativeExternalGeometry>> readNativeExternalGeometry(
+    const document::DocumentObject& object,
+    runtime::ComputeContext& context
+)
+{
+    const auto propertyIt = object.properties.find("ExternalGeo");
+    if (propertyIt == object.properties.end()) {
+        return std::vector<NativeExternalGeometry> {};
+    }
+    const nlohmann::json* items = externalGeoGeometryItems(object);
+    if (items == nullptr) {
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "invalid_property_type",
+            "ExternalGeo must be a Part::PropertyGeometryList-compatible geometry list",
+            object.name,
+            "ExternalGeo",
+            "runtime"
+        );
+        return std::nullopt;
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+    // ::SketchObject::onExternalGeoChanged() reads "ExternalGeo.getValues()" as persisted
+    // Part::Geometry entries and ExternalGeometryExtension stores "Ref", "RefIndex" and "Flags".
+    // cad-core consumes the same request-side pool in a single recompute without keeping a backend
+    // SketchObject session.
+    std::vector<NativeExternalGeometry> result;
+    result.reserve(items->size());
+    for (std::size_t index = 0; index < items->size(); ++index) {
+        const auto& item = items->at(index);
+        if (!item.is_object()) {
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "unsupported_geometry",
+                "ExternalGeo item must be a geometry object",
+                object.name,
+                "ExternalGeo",
+                "runtime"
+            );
+            return std::nullopt;
+        }
+
+        SketchGeometrySet parsed;
+        if (!parseSketchGeometry(nlohmann::json::array({item}), object, context, parsed, "ExternalGeo")) {
+            return std::nullopt;
+        }
+        result.push_back(NativeExternalGeometry {
+            index,
+            readOptionalStringAlias(item, {"Ref", "ref", "reference"}),
+            readOptionalIntAlias(item, {"RefIndex", "refIndex"}, -1),
+            externalGeometryFlags(item),
+            std::move(parsed),
+            item,
+        });
+    }
+    return result;
+}
+
+std::string externalGeometryReferenceKey(const document::Link& link)
+{
+    if (link.subnames.empty() || link.subnames.front().empty()) {
+        return link.object;
+    }
+    return link.object + "." + link.subnames.front();
+}
+
+bool appendNativeExternalGeometry(
+    ExternalGeometryResult& result,
+    const NativeExternalGeometry& native,
+    bool linkDefining
+)
+{
+    const bool defining = linkDefining || native.flags.defining;
+    bool appended = false;
+    for (auto segment : native.geometry.segments) {
+        segment.construction = !defining;
+        result.segments.push_back(segment);
+        appended = true;
+    }
+    for (const auto& point : native.geometry.points) {
+        if (defining) {
+            result.definingPoints.push_back(SketchPoint {point.geometryIndex, point.point, false});
+        }
+        else {
+            result.points.push_back(point.point);
+        }
+        appended = true;
+    }
+    for (auto circle : native.geometry.circles) {
+        circle.construction = !defining;
+        result.circles.push_back(circle);
+        appended = true;
+    }
+    for (auto arc : native.geometry.arcs) {
+        arc.construction = !defining;
+        result.arcs.push_back(arc);
+        appended = true;
+    }
+    for (auto ellipse : native.geometry.ellipses) {
+        ellipse.construction = !defining;
+        result.ellipses.push_back(ellipse);
+        appended = true;
+    }
+    for (auto arc : native.geometry.ellipseArcs) {
+        arc.construction = !defining;
+        result.ellipseArcs.push_back(arc);
+        appended = true;
+    }
+    return appended;
+}
+
+bool appendNativeExternalGeometryForRef(
+    ExternalGeometryResult& result,
+    const std::vector<NativeExternalGeometry>& nativeGeometries,
+    const std::string& ref,
+    bool defining
+)
+{
+    bool appended = false;
+    for (const auto& native : nativeGeometries) {
+        if (native.ref == ref) {
+            appended = appendNativeExternalGeometry(result, native, defining) || appended;
+        }
+    }
+    return appended;
+}
+
 std::set<std::string> normalizedExternalGeometryFlagSet(ExternalGeometryFlags flags)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
@@ -4645,6 +5211,32 @@ nlohmann::json externalGeometryLinkItemJson(const document::Link& link,
     return item;
 }
 
+nlohmann::json nativeExternalGeometryItemJson(const NativeExternalGeometry& native, bool detach)
+{
+    nlohmann::json item = native.raw;
+    if (!detach) {
+        return item;
+    }
+
+    ExternalGeometryFlags flags = native.flags;
+    flags.detached = false;
+    flags.missing = false;
+    item.erase("Ref");
+    item.erase("ref");
+    item.erase("reference");
+    item.erase("RefIndex");
+    item.erase("refIndex");
+    item.erase("Flags");
+    item.erase("ExternalFlags");
+    item.erase("Detached");
+    item.erase("Missing");
+    const auto normalizedFlags = normalizedExternalGeometryFlagSet(flags);
+    if (!normalizedFlags.empty()) {
+        item["ExternalFlags"] = externalGeometryFlagsJson(normalizedFlags);
+    }
+    return item;
+}
+
 void appendExternalGeometryFlagsUpdate(runtime::ComputeContext& context,
                                        const document::DocumentObject& object,
                                        const std::vector<document::Link>& links,
@@ -4686,12 +5278,155 @@ void appendExternalGeometryFlagsUpdate(runtime::ComputeContext& context,
     });
 }
 
+void appendExternalGeometryDetachUpdate(runtime::ComputeContext& context,
+                                        const document::DocumentObject& object,
+                                        const std::vector<document::Link>& links,
+                                        const std::vector<NativeExternalGeometry>& nativeGeometries,
+                                        const std::set<std::size_t>& detachedLinks)
+{
+    if (detachedLinks.empty()) {
+        return;
+    }
+
+    nlohmann::json subSet = nlohmann::json::array();
+    for (std::size_t index = 0; index < links.size(); ++index) {
+        if (detachedLinks.count(index) != 0U) {
+            continue;
+        }
+        subSet.push_back(externalGeometryLinkItemJson(
+            links.at(index),
+            links.at(index).externalGeometryFlags
+        ));
+    }
+
+    std::set<std::string> detachedRefs;
+    for (const std::size_t index : detachedLinks) {
+        if (index < links.size()) {
+            detachedRefs.insert(externalGeometryReferenceKey(links.at(index)));
+        }
+    }
+    nlohmann::json properties = {
+        {"ExternalGeometry",
+         {
+             {"PropertyType", "App::PropertyLinkSubList"},
+             {"SubSet", std::move(subSet)},
+         }},
+    };
+    if (!nativeGeometries.empty()) {
+        nlohmann::json externalGeo = nlohmann::json::array();
+        for (const auto& native : nativeGeometries) {
+            externalGeo.push_back(nativeExternalGeometryItemJson(
+                native,
+                !native.ref.empty() && detachedRefs.count(native.ref) != 0U
+            ));
+        }
+        properties["ExternalGeo"] = {
+            {"PropertyType", "Part::PropertyGeometryList"},
+            {"Geometry", std::move(externalGeo)},
+        };
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+    // ::SketchObject::onExternalGeoChanged(), for Detached old geometry, calls
+    // "egf->setRef(std::string())", clears "Detached" / "Missing", and then erases the matching
+    // entries before "ExternalGeometry.setValues(objs, subs)". cad-core reports the same request-
+    // graph mutation for ExternalGeometry and, when present, the request-local ExternalGeo pool.
+    context.documentObjectUpdates.push_back({
+        {"action", "update"},
+        {"reason", "external_geometry_detach"},
+        {"object", object.name},
+        {"objectId", object.id},
+        {"typeId", object.typeId},
+        {"properties", std::move(properties)},
+    });
+}
+
 struct ExternalSubshape
 {
     TopAbs_ShapeEnum kind = TopAbs_SHAPE;
     TopoDS_Shape shape;
     std::string subname;
 };
+
+std::optional<TopAbs_ShapeEnum> shapeKindFromReferenceShadow(const std::string& shapeType)
+{
+    if (shapeType == "Face") {
+        return TopAbs_FACE;
+    }
+    if (shapeType == "Edge") {
+        return TopAbs_EDGE;
+    }
+    if (shapeType == "Vertex") {
+        return TopAbs_VERTEX;
+    }
+    return std::nullopt;
+}
+
+std::optional<ExternalSubshape> oldExternalSubshapeFromBrepSnapshot(
+    const document::Link& link,
+    const document::DocumentObject& object,
+    runtime::ComputeContext& context
+)
+{
+    for (const auto& shadow : link.referenceShadows) {
+        if (!shadow.target.empty() && shadow.target != link.object) {
+            continue;
+        }
+        if (!shadow.brep) {
+            continue;
+        }
+        const auto shapeKind = shapeKindFromReferenceShadow(shadow.shapeType);
+        if (!shapeKind) {
+            continue;
+        }
+        std::string error;
+        const auto oldShape = geometry::readBrepSnapshot(
+            shadow.brep->format,
+            shadow.brep->data,
+            shadow.brep->byteLength,
+            shadow.brep->sha256,
+            error
+        );
+        if (!oldShape || oldShape->IsNull()) {
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "unsupported_reference_shadow_brep",
+                "ExternalGeometry old snapshot does not decode: " + error,
+                object.name,
+                "ExternalGeometry",
+                "runtime",
+                link.object,
+                shadow.subname
+            );
+            return std::nullopt;
+        }
+        if (oldShape->ShapeType() != *shapeKind) {
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "unsupported_reference_shadow_brep",
+                "ExternalGeometry old snapshot shape type does not match ReferenceShadow shapeType",
+                object.name,
+                "ExternalGeometry",
+                "runtime",
+                link.object,
+                shadow.subname
+            );
+            return std::nullopt;
+        }
+        // FreeCAD:
+        // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+        // ::SketchObject::rebuildExternalGeometry(), for frozen entries, checks
+        // "egf->testFlag(ExternalGeometryExtension::Frozen)" and inserts the key into "refSet"
+        // before source object validation; for missing entries, the pre-pass says the linked
+        // "external geometry will continue to work" and only appends a current object when one
+        // can be resolved. cad-core mirrors the request-local equivalent by consuming the approved
+        // ReferenceShadow.brep single-subshape snapshot.
+        return ExternalSubshape {*shapeKind, *oldShape, shadow.subname.empty() ? shadow.indexed : shadow.subname};
+    }
+    return std::nullopt;
+}
 
 std::optional<ExternalSubshape> resolveSketchInternalSubshape(
     const document::Link& link,
@@ -5233,9 +5968,15 @@ std::optional<ExternalGeometryResult> rebuildExternalGeometry(
     const std::vector<document::Link> links = document::readLinks(object, "ExternalGeometry");
     const std::vector<ExternalGeometryType> externalTypes
         = readExternalGeometryTypes(object, links.size());
+    const auto nativeExternalGeometry = readNativeExternalGeometry(object, context);
+    if (!nativeExternalGeometry) {
+        return std::nullopt;
+    }
     std::map<std::size_t, ExternalGeometryFlags> stateUpdates;
+    std::set<std::size_t> detachedLinks;
     for (std::size_t index = 0; index < links.size(); ++index) {
         const auto& link = links.at(index);
+        const std::string refKey = externalGeometryReferenceKey(link);
         ExternalGeometryFlags flags = externalGeometryFlags(link);
         if (flags.defining) {
             ++result.definingLinkCount;
@@ -5253,9 +5994,113 @@ std::optional<ExternalGeometryResult> rebuildExternalGeometry(
             ++result.syncLinkCount;
         }
         if (flags.detached) {
+            detachedLinks.insert(index);
+            appendNativeExternalGeometryForRef(
+                result,
+                *nativeExternalGeometry,
+                refKey,
+                flags.defining
+            );
             continue;
         }
-        if (flags.frozen && !flags.sync) {
+        const bool unresolvedMissingOldExternal = flags.missing && !flags.sync
+            && context.shapes.find(link.object) == context.shapes.end();
+        if ((flags.frozen && !flags.sync) || unresolvedMissingOldExternal) {
+            // FreeCAD:
+            // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+            // ::SketchObject::rebuildExternalGeometry(), for frozen refs, inserts the key into
+            // "refSet" and keeps the old ExternalGeo entries; for unresolved Missing refs, the
+            // pre-pass says the "linked external geometry will continue to work". cad-core first
+            // consumes the native request-side ExternalGeo pool and only falls back to
+            // ReferenceShadow.brep single-subshape evidence when no native geometry is present.
+            if (appendNativeExternalGeometryForRef(
+                    result,
+                    *nativeExternalGeometry,
+                    refKey,
+                    flags.defining
+                )) {
+                continue;
+            }
+            if (auto oldExternal = oldExternalSubshapeFromBrepSnapshot(link, object, context)) {
+                const ExternalGeometryType externalType = externalTypes.at(index);
+                const bool projection = externalType == ExternalGeometryType::Projection
+                    || externalType == ExternalGeometryType::Both;
+                const bool intersection = externalType == ExternalGeometryType::Intersection
+                    || externalType == ExternalGeometryType::Both;
+                if (projection && oldExternal->kind == TopAbs_VERTEX) {
+                    result.points.push_back(pointInSketchLocalPlane(
+                        BRep_Tool::Pnt(TopoDS::Vertex(oldExternal->shape)),
+                        sketchPlacement
+                    ));
+                    if (flags.defining) {
+                        result.definingPoints.push_back(SketchPoint {0U, result.points.back(), false});
+                    }
+                }
+                if (projection && oldExternal->kind == TopAbs_FACE) {
+                    if (!projectExternalFaceBoundary(
+                            TopoDS::Face(oldExternal->shape),
+                            sketchPlacement,
+                            result,
+                            flags.defining
+                        )) {
+                        runtime::addDiagnostic(
+                            context.diagnostics,
+                            "error",
+                            "unsupported_geometry",
+                            "ExternalGeometry currently projects old planar face boundary edges, "
+                            "line edges, circle edges and ellipse edges",
+                            object.name,
+                            "ExternalGeometry",
+                            "runtime",
+                            link.object,
+                            oldExternal->subname
+                        );
+                        return std::nullopt;
+                    }
+                }
+                if (
+                    projection && oldExternal->kind == TopAbs_EDGE
+                    && !projectExternalEdgeIntoResult(
+                        TopoDS::Edge(oldExternal->shape),
+                        sketchPlacement,
+                        result,
+                        flags.defining
+                    )
+                ) {
+                    runtime::addDiagnostic(
+                            context.diagnostics,
+                            "error",
+                            "unsupported_geometry",
+                            "ExternalGeometry currently projects old line edges, circle edges and "
+                            "ellipse edges",
+                            object.name,
+                            "ExternalGeometry",
+                            "runtime",
+                            link.object,
+                            oldExternal->subname
+                        );
+                    return std::nullopt;
+                }
+                if (intersection && !addExternalGeometryIntersection(
+                        *oldExternal,
+                        sketchPlacement,
+                        result,
+                        flags.defining
+                    )) {
+                    runtime::addDiagnostic(
+                            context.diagnostics,
+                            "error",
+                            "unsupported_geometry",
+                            "ExternalGeometry could not intersect old target with the sketch plane",
+                            object.name,
+                            "ExternalGeometry",
+                            "runtime",
+                            link.object,
+                            oldExternal->subname
+                        );
+                    return std::nullopt;
+                }
+            }
             continue;
         }
         const ExternalGeometryType externalType = externalTypes.at(index);
@@ -5365,6 +6210,7 @@ std::optional<ExternalGeometryResult> rebuildExternalGeometry(
         stateUpdates,
         "external_geometry_flags_sync"
     );
+    appendExternalGeometryDetachUpdate(context, object, links, *nativeExternalGeometry, detachedLinks);
     return result;
 }
 
@@ -5519,6 +6365,7 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
              "AttachmentSupport",
              "MapMode",
              "ExternalGeometry",
+             "ExternalGeo",
              "ExternalTypes",
              "SketchPlaneFrame"}
         )) {
@@ -5565,6 +6412,10 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
     );
     if (!appliedConstraints) {
         context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+    if (solverStateBlocksProfile(appliedConstraints->solver.state)) {
+        context.objects[object.name] = sketchSolverFailureObject(*appliedConstraints);
         return;
     }
 
@@ -5877,6 +6728,11 @@ void executeSketchObject(const document::DocumentObject& object, runtime::Comput
         {"shape", rawShape->IsNull() ? "empty" : "occt_sketch_shape"},
         {"profile", profileShapeLabel(profileShape)},
         {"profile_ready", profileShape.has_value()},
+        {"solver_state", solverStateName(appliedConstraints->solver.state)},
+        {"solver_conflicting_constraints",
+         constraintIndexArray(appliedConstraints->solver.conflictingConstraints)},
+        {"solver_redundant_constraints",
+         constraintIndexArray(appliedConstraints->solver.redundantConstraints)},
         {"edge_count", profileEdgeCount},
         {"raw_edge_count", rawEdgeCount},
         {"raw_point_count", rawPointCount},

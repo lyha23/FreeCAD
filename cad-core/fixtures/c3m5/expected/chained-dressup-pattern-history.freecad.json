@@ -1,0 +1,84 @@
+{
+  "schema_version": "cad-core.freecad-expected.v1",
+  "reference": "Source-code oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureDressUp.cpp::DressUp::getAddSubShape(), key: AddSubShape acts as a shape cache and SupportTransform skips any consecutive DressUp; /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureTransformed.cpp::Transformed::execute(), key: feature->getAddSubShape(fuseShape, cutShape) and makeElementTransform.",
+  "diagnostic_codes": [],
+  "objects": {
+    "Fillet": {
+      "object_fields": {
+        "status": "ok",
+        "dress_up": "fillet",
+        "support_transform": true,
+        "support_transform_source": "Pad",
+        "add_sub_cache": "support_transform",
+        "source_base": "Pad"
+      }
+    },
+    "Chamfer": {
+      "object_fields": {
+        "status": "ok",
+        "dress_up": "chamfer",
+        "support_transform": true,
+        "support_transform_source": "Pad",
+        "add_sub_cache": "support_transform",
+        "source_base": "Fillet"
+      }
+    },
+    "LinearPattern": {
+      "object_fields": {
+        "status": "ok",
+        "transformed": "linear_pattern",
+        "transform_mode": "Features",
+        "originals": ["Chamfer"],
+        "body_mode": "replace"
+      }
+    },
+    "Body": {
+      "object_fields": {
+        "status": "ok",
+        "tip": "LinearPattern"
+      }
+    }
+  },
+  "named_shapes": {
+    "LinearPattern": {
+      "element_map_status": "history_partial",
+      "element_history_status_contains": [
+        "history_consumed:generated_modified",
+        "terminal_history:split_deleted",
+        "subname_split_requires_reselect",
+        "history_consumed:merge"
+      ],
+      "element_map_prefixes": [
+        "Chamfer.",
+        "Fillet.",
+        "Pad.",
+        "SketchPad.",
+        "LinearPattern.Transform1.",
+        "LinearPattern.Transform2."
+      ],
+      "history_source_prefixes": [
+        "Chamfer.",
+        "Fillet.",
+        "Pad.",
+        "SketchPad.",
+        "LinearPattern.Transform1.",
+        "LinearPattern.Transform2."
+      ],
+      "history_kinds_include": ["modified"]
+    },
+    "Body": {
+      "element_map_status": "history_partial",
+      "element_history_status_contains": [
+        "history_consumed:generated_modified",
+        "terminal_history:split_deleted",
+        "history_consumed:merge"
+      ],
+      "history_source_prefixes": [
+        "LinearPattern.",
+        "Chamfer.",
+        "Fillet.",
+        "Pad."
+      ]
+    }
+  }
+}

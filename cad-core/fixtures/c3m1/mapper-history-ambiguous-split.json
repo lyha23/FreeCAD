@@ -1,0 +1,7 @@
+{
+  "case": "mapper-history-ambiguous-split",
+  "shape": {
+    "source_edge": [[-1.0, 0.0, 0.0], [1.0, 0.0, 0.0]],
+    "tool_edge": [[0.0, -1.0, 0.0], [0.0, 1.0, 0.0]]
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "Objects": [
+    {
+      "Name": "BaseSketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
+          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
+          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
+          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "BaseSketch",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 5,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "RemovedSketch",
+      "ID": 3,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 5],
+          "Rotation": [0, 0, 0, 1]
+        },
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
+          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
+          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
+          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "RemovedPad",
+      "ID": 4,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "RemovedSketch",
+          "SubList": []
+        },
+        "BaseFeature": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Pad"
+        },
+        "Type": "Length",
+        "Length": 2,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "PocketSketch",
+      "ID": 5,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [2, 1], "end": [8, 1]},
+          {"kind": "LineSegment", "start": [8, 1], "end": [8, 4]},
+          {"kind": "LineSegment", "start": [8, 4], "end": [2, 4]},
+          {"kind": "LineSegment", "start": [2, 4], "end": [2, 1]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pocket",
+      "ID": 6,
+      "TypeId": "PartDesign::Pocket",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PocketSketch",
+          "SubList": []
+        },
+        "BaseFeature": {
+          "PropertyType": "App::PropertyLink",
+          "value": "RemovedPad"
+        },
+        "Type": "Length",
+        "Length": 1,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 7,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["BaseSketch", "Pad", "PocketSketch", "Pocket"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "RemovedPad"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}

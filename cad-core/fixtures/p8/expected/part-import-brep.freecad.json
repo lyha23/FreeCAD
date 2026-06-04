@@ -24,7 +24,32 @@
   "named_shapes": {
     "ImportedCylinder": {
       "owner": "ImportedCylinder",
-      "element_map_status": "indexed_only"
+      "element_map_status": "history_partial",
+      "element_history_status_contains": [
+        "import_shape_element_map"
+      ],
+      "element_map_contains": [
+        "ImportedCylinder.Face1",
+        "ImportedCylinder.Edge1",
+        "ImportedCylinder.Vertex1"
+      ],
+      "elements": {
+        "Face1": {
+          "sources": [
+            "ImportedCylinder.Face1"
+          ]
+        },
+        "Edge1": {
+          "sources": [
+            "ImportedCylinder.Edge1"
+          ]
+        },
+        "Vertex1": {
+          "sources": [
+            "ImportedCylinder.Vertex1"
+          ]
+        }
+      }
     }
   }
 }

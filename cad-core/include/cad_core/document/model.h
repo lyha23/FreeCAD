@@ -61,6 +61,37 @@ struct ReferenceShadow {
     std::optional<BrepSnapshot> brep;
 };
 
+// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/PropertyLinks.cpp
+// ::PropertyLinkBase::updateLabelReference() replaces "$" + old Label + "."
+// with "$" + new Label + "." after verifying the subobject still resolves to obj.
+struct LabelReferenceRename {
+    std::size_t index = 0;
+    std::string oldLabel;
+    std::string newLabel;
+    std::string oldSubname;
+    std::string newSubname;
+};
+
+// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/PropertyLinks.cpp
+// ::PropertyXLink::Save() persists "file" and "stamp"; PropertyXLinkContainer::Save()
+// persists DocMap "name"/"label" so afterRestore() can populate "_DocMap".
+// ::DocInfo::init() calls "addPendingDocument(...)" for unloaded/partial external docs,
+// and ::DocInfo::slotDeleteDocument() calls "detach()"; cad-core carries those states as
+// request evidence instead of keeping a backend document session.
+struct LinkDocumentRef {
+    std::string file;
+    std::string name;
+    std::string label;
+    std::string stamp;
+    std::string status;
+    std::string currentName;
+    std::string currentLabel;
+    std::string currentStamp;
+    std::string currentStatus;
+    bool allowPartial = false;
+    bool allowPartialExplicit = false;
+};
+
 struct Link {
     std::string object;
     std::vector<std::string> subnames;
@@ -71,6 +102,9 @@ struct Link {
     std::vector<ShadowSub> shadowSubs;
     std::vector<ReferenceShadow> referenceShadows;
     bool fullSubnamesExplicit = false;
+    std::string resolvedObjectFrom;
+    std::vector<LabelReferenceRename> labelReferenceRenames;
+    std::optional<LinkDocumentRef> documentRef;
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/ExternalGeometryExtension.h
     // ::ExternalGeometryExtension::Flag stores "Defining", "Frozen", "Detached", "Missing", "Sync"
     // on external geometry entries. cad-core carries the request-side flag names on normalized

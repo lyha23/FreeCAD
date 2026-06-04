@@ -1,0 +1,47 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [],
+        "ExternalGeometry": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "MissingBox",
+              "SubList": ["Face5"],
+              "ExternalFlags": ["Missing"],
+              "ReferenceShadow": [
+                {
+                  "target": "MissingBox",
+                  "targetId": 2,
+                  "property": "Shape",
+                  "shapeType": "Face",
+                  "indexed": "Face5",
+                  "subname": "Face5",
+                  "fingerprint": {
+                    "area": 25.0,
+                    "edgeCount": 4,
+                    "vertexCount": 4
+                  },
+                  "brep": {
+                    "format": "brep-text",
+                    "byteLength": 662,
+                    "sha256": "fe4b8e0807582f3a9f75af799630727ad12a88998e5f613c9150536519817ff6",
+                    "data": "DBRep_DrawableShape\n\nCASCADE Topology V1, (c) Matra-Datavision\nLocations 0\nCurve2ds 0\nCurves 4\n1 0 0 0 1 0 0 \n1 5 0 0 0 1 0 \n1 5 5 0 -1 0 0 \n1 0 5 0 0 -1 0 \nPolygon3D 0\nPolygonOnTriangulations 0\nSurfaces 1\n1 2.5 2.5 0 0 0 1 1 0 -0 -0 1 0 \nTriangulations 0\n\nTShapes 10\nVe\n1e-07\n0 0 0\n0 0\n\n0101101\n*\nVe\n1e-07\n5 0 0\n0 0\n\n0101101\n*\nEd\n 1e-07 1 1 0\n1  1 0 0 5\n0\n\n0101000\n+10 0 -9 0 *\nVe\n1e-07\n5 5 0\n0 0\n\n0101101\n*\nEd\n 1e-07 1 1 0\n1  2 0 0 5\n0\n\n0101000\n+9 0 -7 0 *\nVe\n1e-07\n0 5 0\n0 0\n\n0101101\n*\nEd\n 1e-07 1 1 0\n1  3 0 0 5\n0\n\n0101000\n+7 0 -5 0 *\nEd\n 1e-07 1 1 0\n1  4 0 0 5\n0\n\n0101000\n+5 0 -10 0 *\nWi\n\n0101100\n+8 0 +6 0 +4 0 +3 0 *\nFa\n0  1e-07 1 0\n\n1101000\n+2 0 *\n\n+1 0 "
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "Constraints": []
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Sketch"]
+  }
+}

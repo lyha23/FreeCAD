@@ -1,0 +1,116 @@
+{
+  "Objects": [
+    {
+      "Name": "ExternalOrigin",
+      "ID": 1,
+      "TypeId": "App::Origin",
+      "Properties": {
+        "OriginFeatures": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["External_Z_Axis"]
+        }
+      }
+    },
+    {
+      "Name": "External_Z_Axis",
+      "ID": 2,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "Role": {
+          "PropertyType": "App::PropertyString",
+          "value": "Z_Axis"
+        }
+      }
+    },
+    {
+      "Name": "BodyOrigin",
+      "ID": 3,
+      "TypeId": "App::Origin",
+      "Properties": {
+        "OriginFeatures": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["Body_Z_Axis"]
+        },
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [77, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "Body_Z_Axis",
+      "ID": 4,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "Role": {
+          "PropertyType": "App::PropertyString",
+          "value": "Z_Axis"
+        }
+      }
+    },
+    {
+      "Name": "Sketch",
+      "ID": 5,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
+          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
+          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
+          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 6,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Sketch",
+          "SubList": []
+        },
+        "ReferenceAxis": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "External_Z_Axis",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 10,
+        "Reversed": false,
+        "SideType": "One side",
+        "AlongSketchNormal": true
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 7,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["Sketch", "Pad"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Pad"
+        },
+        "Origin": {
+          "PropertyType": "App::PropertyLink",
+          "value": "BodyOrigin"
+        },
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [5, 2, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body", "Body_Z_Axis"]
+  }
+}

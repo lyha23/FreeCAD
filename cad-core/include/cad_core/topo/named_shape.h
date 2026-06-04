@@ -17,11 +17,13 @@
 #include <vector>
 
 class BRepOffsetAPI_ThruSections;
+class ShapeFix_Root;
 
 namespace cad_core::geometry
 {
+class ShapeFixHistory;
 struct TaperedExtrusionResult;
-}
+}  // namespace cad_core::geometry
 
 namespace cad_core::topo
 {
@@ -330,6 +332,20 @@ NamedShapeBuild makeElementSectionFromSources(
 );
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+// ::TopoShape::makeElementOffset(), creates "BRepOffsetAPI_MakeOffsetShape mkOffset",
+// calls "PerformByJoin(...)" and then "res.makeElementShape(mkOffset, shape, op)".
+NamedShapeBuild makeElementOffsetFromSource(
+    const std::string& owner,
+    const NamedShapeSource& source,
+    double offset,
+    double tolerance,
+    bool intersection,
+    bool selfIntersection,
+    short offsetMode,
+    short join
+);
+// FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
 // ::TopoShape::makeElementGeneralFuse(), builds "BRepAlgoAPI_BuilderAlgo mkGFA",
 // calls SetArguments(...), then makeElementShape(mkGFA, shapes, OpCodes::GeneralFuse).
 NamedShapeBuild makeElementGeneralFuseFromSources(
@@ -342,6 +358,36 @@ NamedShapeBuild makeElementGeneralFuseFromSources(
 // then "GenericShapeMapper mapper; mkRefine.populate(mapper); mapper.init(shape,
 // mkRefine.Shape())" before makeShapeWithElementMap(...).
 NamedShapeBuild makeElementRefineFromSource(const std::string& owner, const NamedShapeSource& source);
+// FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.cpp
+// ::TopoShape::fix(), calls "makeShapeWithElementMap(fixThis.Shape(), MapperHistory(fixThis),
+// {*this})" because "ShapeFix_Shape may delete (e.g. small edges) or modify the input shape".
+NamedShapeBuild makeElementShapeFixFromSource(
+    const std::string& owner,
+    const NamedShapeSource& source,
+    double precision = 0.0,
+    double smallEdgeTolerance = 0.0
+);
+// FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/tests/src/Mod/Part/App/TopoShapeExpansion.cpp
+// ::MapperHistoryModified constructs "MapperHistory(*fix)" from ShapeFix_Wireframe, and
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+// ::MapperHistory::MapperHistory(ShapeFix_Root& fix), reads "fix.Context()->History()".
+NamedShape namedShapeForShapeFixRootHistory(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const NamedShapeSource& source,
+    ShapeFix_Root& fix
+);
+// FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+// ::TopoShape::makeShapeWithElementMap(), checks "ElementMapPolicy::Drop", calls
+// "dropElementNaming()" and returns before preserving aliases.
+NamedShape namedShapeForElementMapPolicyDrop(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const std::vector<NamedShapeSource>& sources
+);
 std::optional<std::string> resolveElementName(
     const NamedShape& namedShape,
     const std::string& subname,

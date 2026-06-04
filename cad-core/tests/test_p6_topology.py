@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 import tempfile
 from pathlib import Path
 
@@ -9,6 +10,189 @@ from .fixture_runner import CadCoreFixtureTestCase, ROOT
 
 
 class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
+    def run_c3m1_probe(self, fixture: str) -> dict:
+        probe = ROOT / "build" / "cad-core-c3m1-topology-probe"
+        fixture_path = ROOT / "fixtures" / "c3m1" / f"{fixture}.json"
+        completed = subprocess.run(
+            [str(probe), str(fixture_path)],
+            cwd=ROOT,
+            check=True,
+            text=True,
+            capture_output=True,
+        )
+        return json.loads(completed.stdout)
+
+    def test_c3m1_shapefix_delete_small_edge_records_deleted_mapper_history(self) -> None:
+        result = self.run_c3m1_probe("shapefix-delete-small-edge")
+        named_shape = result["named_shapes"]["ShapeFix"]
+        mapper_history = named_shape["mapper_history"]
+        result_edges = [
+            element
+            for element in named_shape["elements"].values()
+            if element["kind"] == "edge"
+        ]
+
+        self.assertLess(len(result_edges), 5)
+        deleted_events = [
+            event
+            for event in mapper_history
+            if event["relation"] == "deleted"
+            and event["maker_stage"] == "terminal_history"
+            and event["source"]["object"] == "Source"
+            and event["source"]["subname"].startswith("Edge")
+        ]
+
+        self.assertGreater(len(deleted_events), 0)
+        self.assertTrue(
+            all(event["target"] == {"object": "ShapeFix", "subname": ""} for event in deleted_events)
+        )
+        self.assertTrue(all(event["recoverability"] == "deleted" for event in deleted_events))
+        self.assertTrue(
+            all(event["diagnostic_status"] == "deleted_stable_subname" for event in deleted_events)
+        )
+        deleted_source_keys = {
+            f'{event["source"]["object"]}.{event["source"]["subname"]}'
+            for event in deleted_events
+        }
+        self.assertFalse(
+            any(key in named_shape["element_map"] for key in deleted_source_keys)
+        )
+
+    def test_c3m1_shapefix_wireframe_records_modified_mapper_history(self) -> None:
+        result = self.run_c3m1_probe("shapefix-modify-face-wire")
+        named_shape = result["named_shapes"]["ShapeFix"]
+        mapper_history = named_shape["mapper_history"]
+
+        self.assertIn("shapefix_root_history:modified", named_shape["element_history_status"])
+        self.assertNotIn("shapefix_root_history:generated", named_shape["element_history_status"])
+        self.assertTrue(any(key.startswith("Source.Edge") for key in named_shape["element_map"]))
+
+        modified_edge_events = [
+            event
+            for event in mapper_history
+            if event["relation"] == "modified"
+            and event["maker_stage"] == "maker_history"
+            and event["shape_kind"] == "edge"
+            and event["source"]["object"] == "Source"
+        ]
+        generated_events = [
+            event
+            for event in mapper_history
+            if event["relation"] == "generated" and event["maker_stage"] == "maker_history"
+        ]
+
+        self.assertGreater(len(modified_edge_events), 0)
+        self.assertEqual(generated_events, [])
+        self.assertTrue(all(event["recoverability"] == "resolved" for event in modified_edge_events))
+        self.assertTrue(all(event["diagnostic_status"] == "" for event in modified_edge_events))
+        self.assertTrue(
+            all(event["target"]["object"] == "ShapeFix" for event in modified_edge_events)
+        )
+        self.assertTrue(
+            all(event["target"]["subname"].startswith("Edge") for event in modified_edge_events)
+        )
+
+    def test_c3m1_element_map_policy_drop_records_dropped_history_without_stale_alias(self) -> None:
+        result = self.run_c3m1_probe("element-map-policy-drop")
+        named_shape = result["named_shapes"]["DropResult"]
+
+        self.assertIn("element_map_policy:drop", named_shape["element_history_status"])
+        self.assertFalse(any(key.startswith("Source.") for key in named_shape["element_map"]))
+        self.assertEqual(
+            {key for key, value in named_shape["element_map"].items() if key == value},
+            set(named_shape["element_map"]),
+        )
+
+        drop_events = [
+            event
+            for event in named_shape["mapper_history"]
+            if event["maker_stage"] == "element_map_policy_drop"
+        ]
+        self.assertGreater(len(drop_events), 0)
+        self.assertTrue(all(event["source"]["object"] == "Source" for event in drop_events))
+        self.assertTrue(all(event["target"] == {"object": "DropResult", "subname": ""} for event in drop_events))
+        self.assertTrue(all(event["recoverability"] == "diagnostic" for event in drop_events))
+        self.assertTrue(all(event["diagnostic_status"] == "element_map_policy_drop" for event in drop_events))
+
+    def test_c3m1_mapper_history_ambiguous_split_requires_reselect(self) -> None:
+        result = self.run_c3m1_probe("mapper-history-ambiguous-split")
+        named_shape = result["named_shapes"]["Split"]
+
+        self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
+        self.assertIn("terminal_history:split_deleted", named_shape["element_history_status"])
+        self.assertIn("subname_split_requires_reselect", named_shape["element_history_status"])
+        self.assertNotIn("Source.Edge1", named_shape["element_map"])
+
+        split_events = [
+            event
+            for event in named_shape["mapper_history"]
+            if event["relation"] == "split"
+            and event["source"] == {"object": "Source", "subname": "Edge1"}
+        ]
+        self.assertEqual(
+            {event["target"]["subname"] for event in split_events},
+            {"Edge1", "Edge2"},
+        )
+        self.assertTrue(all(event["recoverability"] == "needs_reselect" for event in split_events))
+        self.assertTrue(
+            all(event["diagnostic_status"] == "split_stable_subname" for event in split_events)
+        )
+
+        generated_events = [
+            event
+            for event in named_shape["mapper_history"]
+            if event["relation"] == "generated"
+            and event["source"] == {"object": "Source", "subname": "Edge1"}
+        ]
+        modified_events = [
+            event
+            for event in named_shape["mapper_history"]
+            if event["relation"] == "modified"
+            and event["source"] == {"object": "Source", "subname": "Edge1"}
+        ]
+        self.assertGreaterEqual(len(generated_events), 1)
+        self.assertGreaterEqual(len(modified_events), 2)
+
+    def test_c3m1_import_step_records_face_stable_element_map(self) -> None:
+        result = self.run_recompute("part-import-step-face-stable", "c3m1")
+        named_shape = result["named_shapes"]["ImportedStep"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertIn("import_shape_element_map", named_shape["element_history_status"])
+        self.assertEqual(named_shape["element_map"]["ImportedStep.Face1"], "Face1")
+        self.assertIn("ImportedStep.Face1", named_shape["elements"]["Face1"]["sources"])
+
+        import_events = [
+            event
+            for event in named_shape["mapper_history"]
+            if event["maker_stage"] == "import_shape_element_map"
+            and event["target"] == {"object": "ImportedStep", "subname": "Face1"}
+        ]
+        self.assertGreater(len(import_events), 0)
+        self.assertTrue(all(event["relation"] == "preserved" for event in import_events))
+        self.assertTrue(all(event["recoverability"] == "resolved" for event in import_events))
+        self.assertTrue(all(event["evidence"]["format"] == "step" for event in import_events))
+
+    def test_c3m1_import_brep_records_edge_stable_element_map(self) -> None:
+        result = self.run_recompute("part-import-brep-edge-stable", "c3m1")
+        named_shape = result["named_shapes"]["ImportedCylinder"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertIn("import_shape_element_map", named_shape["element_history_status"])
+        self.assertEqual(named_shape["element_map"]["ImportedCylinder.Edge1"], "Edge1")
+        self.assertIn("ImportedCylinder.Edge1", named_shape["elements"]["Edge1"]["sources"])
+
+        import_events = [
+            event
+            for event in named_shape["mapper_history"]
+            if event["maker_stage"] == "import_shape_element_map"
+            and event["target"] == {"object": "ImportedCylinder", "subname": "Edge1"}
+        ]
+        self.assertGreater(len(import_events), 0)
+        self.assertTrue(all(event["relation"] == "preserved" for event in import_events))
+        self.assertTrue(all(event["recoverability"] == "resolved" for event in import_events))
+        self.assertTrue(all(event["evidence"]["format"] == "brep" for event in import_events))
+
     def test_p6_named_shape_exports_indexed_element_ledger(self) -> None:
         result = self.run_recompute("named-shape-indexed-pad", "p6")
 
@@ -259,6 +443,27 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(update["StableSubList"], ["Pad.Face6"])
         self.assertEqual(update["ShadowSub"], [{"newName": "Pad.Face6", "oldName": "Face5"}])
         self.assertEqual(update["ReferenceShadow"][0]["subname"], "Face5")
+
+    def test_c3m2_source_object_rename_recovery_rewrites_link_target(self) -> None:
+        result = self.run_recompute("source-object-rename-recovery", "c3m2")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(result["objects"]["ProbePad"]["status"], "ok")
+        update = result["elementReferenceUpdates"][0]
+        shadow = update["ReferenceShadow"][0]
+
+        self.assertEqual(update["object"], "ProbePad")
+        self.assertEqual(update["property"], "UpToFace")
+        self.assertEqual(update["value"], "RenamedBody")
+        self.assertEqual(update["SubList"], ["Face5"])
+        self.assertEqual(update["StableSubList"], ["Pad.Face6"])
+        self.assertEqual(update["sourceObjectRename"], {
+            "oldName": "Body",
+            "newName": "RenamedBody",
+            "method": "ReferenceShadow.targetId",
+        })
+        self.assertEqual(shadow["target"], "RenamedBody")
+        self.assertEqual(shadow["reference_recovery"], "source_object_rename")
 
     def test_p6_external_geometry_link_sub_list_uses_element_map(self) -> None:
         result = self.run_recompute("sketch-external-edge-stable-indexed-opaque-sublist", "p6")

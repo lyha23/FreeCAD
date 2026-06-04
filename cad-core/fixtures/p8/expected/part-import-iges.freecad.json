@@ -24,7 +24,32 @@
   "named_shapes": {
     "ImportedIges": {
       "owner": "ImportedIges",
-      "element_map_status": "indexed_only"
+      "element_map_status": "history_partial",
+      "element_history_status_contains": [
+        "import_shape_element_map"
+      ],
+      "element_map_contains": [
+        "ImportedIges.Face1",
+        "ImportedIges.Edge1",
+        "ImportedIges.Vertex1"
+      ],
+      "elements": {
+        "Face1": {
+          "sources": [
+            "ImportedIges.Face1"
+          ]
+        },
+        "Edge1": {
+          "sources": [
+            "ImportedIges.Edge1"
+          ]
+        },
+        "Vertex1": {
+          "sources": [
+            "ImportedIges.Vertex1"
+          ]
+        }
+      }
     }
   }
 }

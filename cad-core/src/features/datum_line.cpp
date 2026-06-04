@@ -31,7 +31,9 @@ void executeDatumLine(const document::DocumentObject& object, runtime::ComputeCo
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/DatumLine.cpp::Line::Line(),
     // creates "BRepBuilderAPI_MakeEdge(gp_Lin(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)))"; getDirection()
     // returns Placement rotation applied to "Base::Vector3d(0, 0, 1)".
-    if (!rejectUnsupportedProperties(object, context, {"ResizeMode", "Length", "AttachmentSupport", "MapMode"})) {
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Datums.cpp::DatumElement::DatumElement()
+    // adds "Role" for lookup by LocalCoordinateSystem::getDatumElement().
+    if (!rejectUnsupportedProperties(object, context, {"ResizeMode", "Length", "AttachmentSupport", "MapMode", "Role"})) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }

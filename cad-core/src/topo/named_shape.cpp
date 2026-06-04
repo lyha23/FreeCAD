@@ -2,6 +2,7 @@
 
 #include "cad_core/geometry/extrusion_helper.h"
 #include "cad_core/geometry/refine_model.h"
+#include "cad_core/geometry/shape_fix.h"
 #include "cad_core/topo/element_map.h"
 
 #include <BRepAlgoAPI_BooleanOperation.hxx>
@@ -12,7 +13,13 @@
 #include <BRepAlgoAPI_Section.hxx>
 #include <BRep_Tool.hxx>
 #include <BRepTools.hxx>
+#include <BRepOffsetAPI_MakeOffsetShape.hxx>
 #include <BRepOffsetAPI_ThruSections.hxx>
+#include <BRepOffset_Mode.hxx>
+#include <BRepTools_History.hxx>
+#include <GeomAbs_JoinType.hxx>
+#include <ShapeBuild_ReShape.hxx>
+#include <ShapeFix_Root.hxx>
 #include <Standard_Failure.hxx>
 #include <TopAbs_ShapeEnum.hxx>
 #include <TopExp.hxx>
@@ -1874,6 +1881,14 @@ std::vector<std::string> elementHistoryStatusForNamedShape(const NamedShape& nam
     if (hasSplit || hasDeleted) {
         statuses.push_back("terminal_history:split_deleted");
     }
+    if (hasSplit) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/ElementMap.cpp
+        // ::ElementMap::getElementHistory(), key "history";
+        // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+        // ::TopoShape::makeShapeWithElementMap(), one source with multiple same-kind history
+        // targets is terminal split state and requires the caller to reselect the subname.
+        statuses.push_back("subname_split_requires_reselect");
+    }
     if (hasMerge) {
         statuses.push_back("history_consumed:merge");
     }
@@ -2263,6 +2278,157 @@ NamedShape namedShapeForRefineHistory(
     return namedShape;
 }
 
+NamedShape namedShapeForShapeFixHistory(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const NamedShapeSource& source,
+    geometry::ShapeFixHistory& fixer
+)
+{
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::MapperHistory::modified() and ::generated(), read ShapeFix_Root "Context()->History()".
+    // ::TopoShape::fix() then feeds that mapper into makeShapeWithElementMap() so deleted small
+    // edges become terminal history instead of stale ElementMap aliases.
+    NamedShape namedShape = indexedNamedShapeForObject(owner, resultShape);
+    std::map<std::string, SourceTargets> sourceTargets;
+
+    for (const TopAbs_ShapeEnum kind : mappableKinds()) {
+        const std::string prefix = prefixForKind(kind);
+        if (prefix.empty()) {
+            continue;
+        }
+        TopTools_IndexedMapOfShape sourceElements;
+        TopExp::MapShapes(source.shape, kind, sourceElements);
+        for (int index = 1; index <= sourceElements.Extent(); ++index) {
+            const TopoDS_Shape& sourceElement = sourceElements(index);
+            const std::string localElementName = prefix + std::to_string(index);
+            for (const std::string& sourceName : sourceElementNames(source, localElementName)) {
+                sourceTargets[sourceName];
+                collectSourceElementMap(namedShape, sourceName, sourceElement, kind, sourceTargets);
+                try {
+                    applyHistoryList(
+                        namedShape,
+                        sourceName,
+                        fixer.Generated(sourceElement),
+                        ElementHistoryKind::Generated,
+                        sourceTargets
+                    );
+                    applyHistoryList(
+                        namedShape,
+                        sourceName,
+                        fixer.Modified(sourceElement),
+                        ElementHistoryKind::Modified,
+                        sourceTargets
+                    );
+                    if (fixer.IsDeleted(sourceElement) && sourceTargets[sourceName].preserved.empty()
+                        && sourceTargets[sourceName].history.empty()) {
+                        addTerminalHistory(
+                            namedShape,
+                            ElementHistory {ElementHistoryKind::Deleted, sourceName, {sourceName}}
+                        );
+                    }
+                }
+                catch (const Standard_Failure&) {
+                    continue;
+                }
+            }
+        }
+    }
+
+    applyHistoryElementMap(namedShape, sourceTargets);
+    propagateNestedSourceHistory(namedShape, std::vector<NamedShapeSource> {source});
+    addMergeHistory(namedShape);
+    return namedShape;
+}
+
+NamedShape namedShapeForShapeFixRootHistory(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const NamedShapeSource& source,
+    ShapeFix_Root& fix
+)
+{
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::MapperHistory::MapperHistory(ShapeFix_Root& fix), reads
+    // "history = fix.Context()->History()"; tests/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::MapperHistoryModified verifies ShapeFix_Wireframe history through that constructor.
+    NamedShape namedShape = indexedNamedShapeForObject(owner, resultShape);
+    std::map<std::string, SourceTargets> sourceTargets;
+
+    Handle(BRepTools_History) history;
+    if (fix.Context()) {
+        history = fix.Context()->History();
+    }
+    bool sawGenerated = false;
+    bool sawModified = false;
+    bool sawDeleted = false;
+
+    for (const TopAbs_ShapeEnum kind : mappableKinds()) {
+        const std::string prefix = prefixForKind(kind);
+        if (prefix.empty()) {
+            continue;
+        }
+        TopTools_IndexedMapOfShape sourceElements;
+        TopExp::MapShapes(source.shape, kind, sourceElements);
+        for (int index = 1; index <= sourceElements.Extent(); ++index) {
+            const TopoDS_Shape& sourceElement = sourceElements(index);
+            const std::string localElementName = prefix + std::to_string(index);
+            for (const std::string& sourceName : sourceElementNames(source, localElementName)) {
+                sourceTargets[sourceName];
+                collectSourceElementMap(namedShape, sourceName, sourceElement, kind, sourceTargets);
+                try {
+                    if (!history.IsNull()) {
+                        sawGenerated = applyHistoryList(
+                                           namedShape,
+                                           sourceName,
+                                           history->Generated(sourceElement),
+                                           ElementHistoryKind::Generated,
+                                           sourceTargets
+                                       )
+                            || sawGenerated;
+                        sawModified = applyHistoryList(
+                                          namedShape,
+                                          sourceName,
+                                          history->Modified(sourceElement),
+                                          ElementHistoryKind::Modified,
+                                          sourceTargets
+                                      )
+                            || sawModified;
+                        if (history->IsRemoved(sourceElement)
+                            && sourceTargets[sourceName].preserved.empty()
+                            && sourceTargets[sourceName].history.empty()) {
+                            addTerminalHistory(
+                                namedShape,
+                                ElementHistory {ElementHistoryKind::Deleted, sourceName, {sourceName}}
+                            );
+                            sawDeleted = true;
+                        }
+                    }
+                }
+                catch (const Standard_Failure&) {
+                    continue;
+                }
+            }
+        }
+    }
+
+    applyHistoryElementMap(namedShape, sourceTargets);
+    propagateNestedSourceHistory(namedShape, std::vector<NamedShapeSource> {source});
+    addMergeHistory(namedShape);
+    if (sawGenerated) {
+        addDistinctString(namedShape.elementHistoryStatus, "shapefix_root_history:generated");
+    }
+    if (sawModified) {
+        addDistinctString(namedShape.elementHistoryStatus, "shapefix_root_history:modified");
+    }
+    if (sawDeleted) {
+        addDistinctString(namedShape.elementHistoryStatus, "shapefix_root_history:deleted");
+    }
+    return namedShape;
+}
+
 NamedShape namedShapeForPreservedSources(
     const std::string& owner,
     const TopoDS_Shape& resultShape,
@@ -2625,6 +2791,52 @@ NamedShapeBuild makeElementSectionFromSources(
     }
 }
 
+NamedShapeBuild makeElementOffsetFromSource(
+    const std::string& owner,
+    const NamedShapeSource& source,
+    double offset,
+    double tolerance,
+    bool intersection,
+    bool selfIntersection,
+    short offsetMode,
+    short join
+)
+{
+    if (source.shape.IsNull()) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Null input shape for offset operation"};
+    }
+
+    try {
+        BRepOffsetAPI_MakeOffsetShape maker;
+        maker.PerformByJoin(source.shape,
+                            offset,
+                            tolerance,
+                            BRepOffset_Mode(offsetMode),
+                            intersection ? Standard_True : Standard_False,
+                            selfIntersection ? Standard_True : Standard_False,
+                            GeomAbs_JoinType(join));
+        if (!maker.IsDone()) {
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "BRepOffsetAPI_MakeOffsetShape not done"};
+        }
+        const TopoDS_Shape resultShape = maker.Shape();
+        if (resultShape.IsNull()) {
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Resulting offset shape is null"};
+        }
+        return NamedShapeBuild {
+            resultShape,
+            namedShapeForMakerHistory(owner, resultShape, std::vector<NamedShapeSource> {source}, maker),
+            {},
+        };
+    }
+    catch (const Standard_Failure& failure) {
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            failure.GetMessageString() != nullptr ? failure.GetMessageString() : "Offset failed"
+        };
+    }
+}
+
 NamedShapeBuild makeElementGeneralFuseFromSources(
     const std::string& owner,
     const std::vector<NamedShapeSource>& sources,
@@ -2713,6 +2925,93 @@ NamedShapeBuild makeElementRefineFromSource(const std::string& owner, const Name
                                                   : "Refine operation failed"
         };
     }
+}
+
+NamedShapeBuild makeElementShapeFixFromSource(
+    const std::string& owner,
+    const NamedShapeSource& source,
+    double precision,
+    double smallEdgeTolerance
+)
+{
+    if (source.shape.IsNull()) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Null input shape for ShapeFix"};
+    }
+
+    try {
+        geometry::ShapeFixHistory fixer(source.shape);
+        if (precision > 0.0) {
+            fixer.setPrecision(precision);
+        }
+        if (smallEdgeTolerance > 0.0) {
+            fixer.removeSmallEdges(smallEdgeTolerance);
+        }
+        else {
+            fixer.perform();
+        }
+        const TopoDS_Shape resultShape = fixer.Shape();
+        if (resultShape.IsNull()) {
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "ShapeFix produced a null shape"};
+        }
+        return NamedShapeBuild {
+            resultShape,
+            namedShapeForShapeFixHistory(owner, resultShape, source, fixer),
+            {},
+        };
+    }
+    catch (const Standard_Failure& failure) {
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            failure.GetMessageString() != nullptr ? failure.GetMessageString()
+                                                  : "ShapeFix operation failed"
+        };
+    }
+}
+
+NamedShape namedShapeForElementMapPolicyDrop(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const std::vector<NamedShapeSource>& sources
+)
+{
+    NamedShape namedShape = indexedNamedShapeForObject(owner, resultShape);
+
+    for (const NamedShapeSource& source : sources) {
+        if (source.shape.IsNull()) {
+            continue;
+        }
+        for (const TopAbs_ShapeEnum kind : mappableKinds()) {
+            const std::string prefix = prefixForKind(kind);
+            if (prefix.empty()) {
+                continue;
+            }
+            TopTools_IndexedMapOfShape sourceElements;
+            TopExp::MapShapes(source.shape, kind, sourceElements);
+            for (int index = 1; index <= sourceElements.Extent(); ++index) {
+                const std::string localElementName = prefix + std::to_string(index);
+                for (const std::string& sourceName : sourceElementNames(source, localElementName)) {
+                    MapperHistoryEvent event;
+                    event.source = mapperEndpointForElement(source.owner, sourceName);
+                    event.target = MapperHistoryEndpoint {owner, {}};
+                    event.shapeKind = subshapeKindName(kind);
+                    event.relation = MapperHistoryRelation::Deleted;
+                    event.makerStage = "element_map_policy_drop";
+                    event.evidence = {
+                        {"element_map_policy", "drop"},
+                        {"drop_element_naming", true},
+                        {"source_element", sourceName},
+                    };
+                    event.recoverability = MapperHistoryRecoverability::Diagnostic;
+                    event.diagnosticStatus = "element_map_policy_drop";
+                    addMapperHistoryEvent(namedShape.mapperHistory, std::move(event));
+                }
+            }
+        }
+    }
+
+    addDistinctString(namedShape.elementHistoryStatus, "element_map_policy:drop");
+    return namedShape;
 }
 
 std::optional<std::string> resolveElementName(

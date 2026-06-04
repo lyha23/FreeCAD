@@ -25,6 +25,9 @@ void executePad(const document::DocumentObject& object, runtime::ComputeContext&
                                       "UpToFace2",
                                       "UpToShape",
                                       "UpToShape2",
+                                      // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/Feature.h
+                                      // ::PartDesign::Feature carries "App::PropertyLink BaseFeature".
+                                      "BaseFeature",
                                       "Offset",
                                       "Offset2",
                                       "TaperAngle",

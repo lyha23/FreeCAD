@@ -10,7 +10,9 @@
 #include <gp_TrsfForm.hxx>
 
 #include <algorithm>
+#include <map>
 #include <optional>
+#include <set>
 
 namespace cad_core::features {
 
@@ -34,6 +36,556 @@ struct BooleanBuild {
     TopoDS_Shape shape;
     topo::NamedShape namedShape;
 };
+
+struct OriginFeatureInfo {
+    std::string origin;
+    std::string role;
+};
+
+const document::DocumentObject* documentObjectByName(const runtime::ComputeContext& context,
+                                                     const std::string& name)
+{
+    const auto objectIt = context.documentObjects.find(name);
+    if (objectIt == context.documentObjects.end()) {
+        return nullptr;
+    }
+    return objectIt->second;
+}
+
+bool documentObjectExists(const runtime::ComputeContext& context, const std::string& name)
+{
+    return documentObjectByName(context, name) != nullptr;
+}
+
+bool isPartDesignFeatureBase(const document::DocumentObject& object)
+{
+    return object.typeId == "PartDesign::FeatureBase";
+}
+
+bool groupContains(const std::vector<std::string>& groupNames, const std::string& name)
+{
+    return std::find(groupNames.begin(), groupNames.end(), name) != groupNames.end();
+}
+
+bool isPartDesignSolidFeature(const std::string& name, const runtime::ComputeContext& context)
+{
+    const document::DocumentObject* object = documentObjectByName(context, name);
+    if (object == nullptr || object->typeId.rfind("PartDesign::", 0U) != 0U || isPartDesignFeatureBase(*object)
+        || object->typeId == "PartDesign::Body") {
+        return false;
+    }
+    const auto shapeIt = context.shapes.find(name);
+    if (shapeIt != context.shapes.end() && shapeIt->second.kind == runtime::ShapeValue::Kind::Solid) {
+        return true;
+    }
+    return context.addSubShapes.count(name) != 0U;
+}
+
+nlohmann::json linkPropertyJson(const std::string& target)
+{
+    return {
+        {"PropertyType", "App::PropertyLink"},
+        {"value", target},
+    };
+}
+
+nlohmann::json nullLinkPropertyJson()
+{
+    return {
+        {"PropertyType", "App::PropertyLink"},
+        {"value", nullptr},
+    };
+}
+
+nlohmann::json groupPropertyJson(const document::DocumentObject& body,
+                                 const std::vector<std::string>& groupNames)
+{
+    nlohmann::json values = nlohmann::json::array();
+    for (const auto& groupName : groupNames) {
+        values.push_back(groupName);
+    }
+
+    const auto* groupProperty = document::propertyValue(body, "Group");
+    const std::string propertyType = groupProperty == nullptr ? "App::PropertyLinkList" : groupProperty->propertyType;
+    if (propertyType == "App::PropertyLinkSubList" || propertyType == "App::PropertyLinkSubListHidden"
+        || propertyType == "App::PropertyXLinkSubList") {
+        nlohmann::json subSet = nlohmann::json::array();
+        for (const auto& groupName : groupNames) {
+            subSet.push_back({
+                {"value", groupName},
+                {"SubList", nlohmann::json::array()},
+            });
+        }
+        return {
+            {"PropertyType", propertyType},
+            {"SubSet", std::move(subSet)},
+        };
+    }
+
+    return {
+        {"PropertyType", propertyType.empty() ? "App::PropertyLinkList" : propertyType},
+        {"values", std::move(values)},
+    };
+}
+
+std::string uniqueFeatureBaseName(const runtime::ComputeContext& context, const std::string& bodyName)
+{
+    const auto available = [&context](const std::string& name) {
+        return !documentObjectExists(context, name);
+    };
+    if (available("BaseFeature")) {
+        return "BaseFeature";
+    }
+    const std::string prefix = bodyName + "_BaseFeature";
+    if (available(prefix)) {
+        return prefix;
+    }
+    for (std::size_t index = 1U;; ++index) {
+        const std::string candidate = prefix + std::to_string(index);
+        if (available(candidate)) {
+            return candidate;
+        }
+    }
+}
+
+std::optional<std::string> featureBaseForBodyBaseTarget(const runtime::ComputeContext& context,
+                                                       const std::vector<std::string>& groupNames,
+                                                       const std::string& baseTarget)
+{
+    for (const auto& groupName : groupNames) {
+        const document::DocumentObject* groupObject = documentObjectByName(context, groupName);
+        if (groupObject == nullptr || !isPartDesignFeatureBase(*groupObject)) {
+            continue;
+        }
+        const auto link = document::readLink(*groupObject, "BaseFeature");
+        if (link && link->object == baseTarget) {
+            return groupName;
+        }
+    }
+    return std::nullopt;
+}
+
+std::optional<std::string> firstBodySolidFeature(const runtime::ComputeContext& context,
+                                                const std::vector<std::string>& groupNames)
+{
+    for (const auto& groupName : groupNames) {
+        if (isPartDesignSolidFeature(groupName, context)) {
+            return groupName;
+        }
+    }
+    return std::nullopt;
+}
+
+bool bodyChainSolidFeature(const runtime::ComputeContext& context,
+                           const std::vector<std::string>& groupNames,
+                           const std::string& name)
+{
+    if (!groupContains(groupNames, name)) {
+        return false;
+    }
+    const document::DocumentObject* object = documentObjectByName(context, name);
+    if (object == nullptr || object->typeId.rfind("PartDesign::", 0U) != 0U
+        || object->typeId == "PartDesign::Body") {
+        return false;
+    }
+    const auto shapeIt = context.shapes.find(name);
+    if (shapeIt != context.shapes.end() && shapeIt->second.kind == runtime::ShapeValue::Kind::Solid) {
+        return true;
+    }
+    return context.addSubShapes.count(name) != 0U;
+}
+
+std::optional<std::string> baseFeatureTarget(const document::DocumentObject& object)
+{
+    const auto link = document::readLink(object, "BaseFeature");
+    if (!link) {
+        return std::nullopt;
+    }
+    return link->object;
+}
+
+std::optional<std::string> readBodyOriginName(const document::DocumentObject& body,
+                                              runtime::ComputeContext& context)
+{
+    if (!body.properties.contains("Origin")) {
+        return std::nullopt;
+    }
+
+    const auto originLink = document::readLink(body, "Origin");
+    if (!originLink || originLink->object.empty()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "missing_property",
+                               "Body Origin must link to an App::Origin object",
+                               body.name,
+                               "Origin");
+        return std::nullopt;
+    }
+
+    const document::DocumentObject* originObject = documentObjectByName(context, originLink->object);
+    if (originObject == nullptr) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "missing_link_target",
+                               "Body Origin target " + originLink->object + " is missing",
+                               body.name,
+                               "Origin",
+                               "runtime",
+                               originLink->object);
+        return std::nullopt;
+    }
+    if (originObject->typeId != "App::Origin") {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_link_value",
+                               "Body Origin target " + originLink->object + " must be App::Origin",
+                               body.name,
+                               "Origin",
+                               "runtime",
+                               originLink->object);
+        return std::nullopt;
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/OriginGroupExtension.cpp
+    // ::OriginGroupExtension::getOrigin() returns the hidden "Origin" child link and throws
+    // when it is missing or not an App::Origin; PartDesign::Body inherits BodyBase, which
+    // initializes OriginGroupExtension for Body origin ownership.
+    return originLink->object;
+}
+
+std::map<std::string, OriginFeatureInfo> originFeatureInfoByName(const runtime::ComputeContext& context)
+{
+    std::map<std::string, OriginFeatureInfo> result;
+    for (const auto& item : context.documentObjects) {
+        const document::DocumentObject* origin = item.second;
+        if (origin == nullptr || origin->typeId != "App::Origin") {
+            continue;
+        }
+        for (const auto& link : document::readLinks(*origin, "OriginFeatures")) {
+            const document::DocumentObject* feature = documentObjectByName(context, link.object);
+            const auto role = feature == nullptr ? std::nullopt : document::readString(*feature, "Role");
+            if (!role || role->empty()) {
+                continue;
+            }
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Datums.cpp
+            // ::LocalCoordinateSystem::getDatumElement() searches "OriginFeatures" for
+            // App::DatumElement objects whose "Role" matches X_Axis/Y_Axis/Z_Axis or planes.
+            result.emplace(link.object, OriginFeatureInfo{origin->name, *role});
+        }
+    }
+    return result;
+}
+
+std::map<std::string, std::string> originFeatureByRole(const runtime::ComputeContext& context,
+                                                       const std::string& originName)
+{
+    std::map<std::string, std::string> result;
+    const document::DocumentObject* origin = documentObjectByName(context, originName);
+    if (origin == nullptr) {
+        return result;
+    }
+    for (const auto& link : document::readLinks(*origin, "OriginFeatures")) {
+        const document::DocumentObject* feature = documentObjectByName(context, link.object);
+        const auto role = feature == nullptr ? std::nullopt : document::readString(*feature, "Role");
+        if (!role || role->empty()) {
+            continue;
+        }
+        result.emplace(*role, link.object);
+    }
+    return result;
+}
+
+std::optional<std::string> replacementBodyOriginFeature(const std::string& target,
+                                                        const std::string& bodyOriginName,
+                                                        const std::map<std::string, OriginFeatureInfo>& originFeatures,
+                                                        const std::map<std::string, std::string>& bodyOriginFeatureByRole)
+{
+    const auto targetInfoIt = originFeatures.find(target);
+    if (targetInfoIt == originFeatures.end() || targetInfoIt->second.origin == bodyOriginName) {
+        return std::nullopt;
+    }
+    const auto replacementIt = bodyOriginFeatureByRole.find(targetInfoIt->second.role);
+    if (replacementIt == bodyOriginFeatureByRole.end() || replacementIt->second == target) {
+        return std::nullopt;
+    }
+    return replacementIt->second;
+}
+
+bool relinkOriginFeatureTargets(nlohmann::json& property,
+                                const std::string& bodyOriginName,
+                                const std::map<std::string, OriginFeatureInfo>& originFeatures,
+                                const std::map<std::string, std::string>& bodyOriginFeatureByRole)
+{
+    const auto relinkValue = [&](nlohmann::json& value) {
+        if (!value.is_string()) {
+            return false;
+        }
+        const auto replacement = replacementBodyOriginFeature(value.get<std::string>(),
+                                                             bodyOriginName,
+                                                             originFeatures,
+                                                             bodyOriginFeatureByRole);
+        if (!replacement) {
+            return false;
+        }
+        value = *replacement;
+        return true;
+    };
+
+    bool changed = false;
+    if (property.is_object()) {
+        auto valueIt = property.find("value");
+        if (valueIt != property.end()) {
+            changed = relinkValue(*valueIt) || changed;
+        }
+
+        auto valuesIt = property.find("values");
+        if (valuesIt != property.end() && valuesIt->is_array()) {
+            for (auto& value : *valuesIt) {
+                changed = relinkValue(value) || changed;
+            }
+        }
+
+        auto subSetIt = property.find("SubSet");
+        if (subSetIt != property.end() && subSetIt->is_array()) {
+            for (auto& item : *subSetIt) {
+                if (!item.is_object()) {
+                    continue;
+                }
+                auto itemValueIt = item.find("value");
+                if (itemValueIt != item.end()) {
+                    changed = relinkValue(*itemValueIt) || changed;
+                }
+            }
+        }
+    }
+    return changed;
+}
+
+void appendBodyOriginDatumRelinkUpdates(runtime::ComputeContext& context,
+                                        const document::DocumentObject& body,
+                                        const std::vector<std::string>& groupNames,
+                                        const std::string& bodyOriginName)
+{
+    const auto originFeatures = originFeatureInfoByName(context);
+    const auto bodyOriginFeatures = originFeatureByRole(context, bodyOriginName);
+    if (originFeatures.empty() || bodyOriginFeatures.empty()) {
+        return;
+    }
+
+    for (const auto& groupName : groupNames) {
+        const document::DocumentObject* feature = documentObjectByName(context, groupName);
+        if (feature == nullptr || feature->name == bodyOriginName) {
+            continue;
+        }
+
+        nlohmann::json properties = nlohmann::json::object();
+        for (const auto& property : feature->propertyValues) {
+            if (property.second.links.empty()) {
+                continue;
+            }
+            nlohmann::json updated = property.second.raw;
+            if (!relinkOriginFeatureTargets(updated, bodyOriginName, originFeatures, bodyOriginFeatures)) {
+                continue;
+            }
+            properties[property.first] = std::move(updated);
+        }
+        if (properties.empty()) {
+            continue;
+        }
+
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/OriginGroupExtension.cpp
+        // ::OriginGroupExtension::relinkToOrigin(), when Body::insertObject() adds a feature,
+        // replaces linked origin datum objects with "getOrigin()->getDatumElement(Role)".
+        context.documentObjectUpdates.push_back({
+            {"action", "update"},
+            {"reason", "body_origin_datum_relink"},
+            {"object", feature->name},
+            {"objectId", feature->id},
+            {"typeId", feature->typeId},
+            {"owner", body.name},
+            {"ownerId", body.id},
+            {"properties", std::move(properties)},
+        });
+    }
+}
+
+std::optional<std::string> previousSolidFeatureForRemovedTip(const runtime::ComputeContext& context,
+                                                             const std::vector<std::string>& groupNames,
+                                                             const document::DocumentObject& removedFeature)
+{
+    const auto baseTarget = baseFeatureTarget(removedFeature);
+    if (!baseTarget || !bodyChainSolidFeature(context, groupNames, *baseTarget)) {
+        return std::nullopt;
+    }
+    return baseTarget;
+}
+
+std::optional<std::string> nextSolidFeatureForRemovedTip(const runtime::ComputeContext& context,
+                                                         const std::vector<std::string>& groupNames,
+                                                         const std::string& removedFeature)
+{
+    for (const auto& groupName : groupNames) {
+        const document::DocumentObject* object = documentObjectByName(context, groupName);
+        if (object == nullptr || !bodyChainSolidFeature(context, groupNames, groupName)) {
+            continue;
+        }
+        const auto baseTarget = baseFeatureTarget(*object);
+        if (baseTarget && *baseTarget == removedFeature) {
+            return groupName;
+        }
+    }
+    return std::nullopt;
+}
+
+std::optional<std::string> appendBodyRemovedTipRerouteUpdates(runtime::ComputeContext& context,
+                                                             const document::DocumentObject& body,
+                                                             const std::vector<std::string>& groupNames,
+                                                             const std::string& staleTip)
+{
+    const document::DocumentObject* staleTipObject = documentObjectByName(context, staleTip);
+    if (staleTipObject == nullptr || groupContains(groupNames, staleTip)) {
+        return std::nullopt;
+    }
+    const auto staleTipShapeIt = context.shapes.find(staleTip);
+    if (staleTipShapeIt == context.shapes.end()
+        || staleTipShapeIt->second.kind != runtime::ShapeValue::Kind::Solid) {
+        return std::nullopt;
+    }
+
+    const auto previousSolid = previousSolidFeatureForRemovedTip(context, groupNames, *staleTipObject);
+    const auto nextSolid = nextSolidFeatureForRemovedTip(context, groupNames, staleTip);
+    if (!previousSolid && !nextSolid) {
+        return std::nullopt;
+    }
+    const std::string reroutedTip = previousSolid.value_or(*nextSolid);
+
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+    // ::Body::removeObject(), before erasing the feature from Group, says "Adjust Tip feature
+    // if it is pointing to the deleted object" and sets Tip to prevSolidFeature or nextSolidFeature.
+    context.documentObjectUpdates.push_back({
+        {"action", "update"},
+        {"reason", "body_tip_deleted_feature_reroute"},
+        {"object", body.name},
+        {"objectId", body.id},
+        {"typeId", body.typeId},
+        {"properties",
+         {
+             {"Tip", linkPropertyJson(reroutedTip)},
+         }},
+    });
+
+    if (nextSolid) {
+        const document::DocumentObject* nextObject = documentObjectByName(context, *nextSolid);
+        if (nextObject != nullptr) {
+            const auto nextBase = baseFeatureTarget(*nextObject);
+            if (nextBase && *nextBase == staleTip) {
+                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+                // ::Body::removeObject(), if the next feature points to the deleted feature,
+                // rewrites "nextPD->BaseFeature" to "prevSolidFeature".
+                context.documentObjectUpdates.push_back({
+                    {"action", "update"},
+                    {"reason", "body_feature_basefeature_delete_reroute"},
+                    {"object", nextObject->name},
+                    {"objectId", nextObject->id},
+                    {"typeId", nextObject->typeId},
+                    {"owner", body.name},
+                    {"ownerId", body.id},
+                    {"properties",
+                     {
+                         {"BaseFeature", previousSolid ? linkPropertyJson(*previousSolid) : nullLinkPropertyJson()},
+                     }},
+                });
+            }
+        }
+    }
+
+    return reroutedTip;
+}
+
+void appendBodyBaseFeatureChainUpdates(runtime::ComputeContext& context,
+                                       const document::DocumentObject& body,
+                                       const std::vector<std::string>& groupNames,
+                                       const std::string& baseTarget)
+{
+    const document::DocumentObject* baseObject = documentObjectByName(context, baseTarget);
+    if (baseObject == nullptr || isPartDesignFeatureBase(*baseObject)) {
+        return;
+    }
+
+    std::optional<std::string> featureBaseName = featureBaseForBodyBaseTarget(context, groupNames, baseTarget);
+    if (!featureBaseName) {
+        featureBaseName = uniqueFeatureBaseName(context, body.name);
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+        // ::Body::onChanged(), when "prop == &BaseFeature", creates "PartDesign::FeatureBase"
+        // and then calls "bf->BaseFeature.setValue(BaseFeature.getValue())".
+        context.documentObjectUpdates.push_back({
+            {"action", "create"},
+            {"reason", "body_basefeature_featurebase_create"},
+            {"object", *featureBaseName},
+            {"typeId", "PartDesign::FeatureBase"},
+            {"owner", body.name},
+            {"ownerId", body.id},
+            {"index", 0},
+            {"properties",
+             {
+                 {"BaseFeature", linkPropertyJson(baseTarget)},
+             }},
+        });
+    }
+
+    std::vector<std::string> syncedGroup = groupNames;
+    if (std::find(syncedGroup.begin(), syncedGroup.end(), *featureBaseName) == syncedGroup.end()) {
+        syncedGroup.insert(syncedGroup.begin(), *featureBaseName);
+    }
+    else if (syncedGroup.front() != *featureBaseName) {
+        syncedGroup.erase(std::remove(syncedGroup.begin(), syncedGroup.end(), *featureBaseName), syncedGroup.end());
+        syncedGroup.insert(syncedGroup.begin(), *featureBaseName);
+    }
+    if (syncedGroup != groupNames) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/Feature.cpp
+        // ::Feature::onChanged(), when "prop == &BaseFeature", calls "body->insertObject(this, base)".
+        context.documentObjectUpdates.push_back({
+            {"action", "update"},
+            {"reason", "body_basefeature_group_sync"},
+            {"object", body.name},
+            {"objectId", body.id},
+            {"typeId", body.typeId},
+            {"properties",
+             {
+                 {"Group", groupPropertyJson(body, syncedGroup)},
+             }},
+        });
+    }
+
+    const auto firstSolid = firstBodySolidFeature(context, groupNames);
+    if (!firstSolid) {
+        return;
+    }
+    const document::DocumentObject* solidObject = documentObjectByName(context, *firstSolid);
+    if (solidObject == nullptr) {
+        return;
+    }
+    const auto currentBase = document::readLink(*solidObject, "BaseFeature");
+    if (currentBase && currentBase->object == *featureBaseName) {
+        return;
+    }
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+    // ::Body::setBaseProperty(), after inserting a solid feature, writes the next feature's
+    // "BaseFeature" to preserve the Body chain; Feature::getBaseShape() then reads "BaseFeature".
+    context.documentObjectUpdates.push_back({
+        {"action", "update"},
+        {"reason", "body_feature_basefeature_sync"},
+        {"object", solidObject->name},
+        {"objectId", solidObject->id},
+        {"typeId", solidObject->typeId},
+        {"owner", body.name},
+        {"ownerId", body.id},
+        {"properties",
+         {
+             {"BaseFeature", linkPropertyJson(*featureBaseName)},
+         }},
+    });
+}
 
 topo::NamedShape namedShapeForFeatureOrIndexed(const std::string& feature,
                                                const TopoDS_Shape& shape,
@@ -163,7 +715,7 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
     // FreeCAD semantic sources:
     // src/Mod/PartDesign/App/Body.cpp Body::execute()
     // src/Mod/PartDesign/App/FeatureAddSub.cpp FeatureAddSub::getAddSubShape()
-    if (!rejectUnsupportedProperties(object, context, {"Group", "Tip", "BaseFeature"})) {
+    if (!rejectUnsupportedProperties(object, context, {"Group", "Tip", "BaseFeature", "Origin"})) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -195,7 +747,24 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
     }
     const std::vector<std::string>& groupNames = *group;
 
-    if (std::find(groupNames.begin(), groupNames.end(), tip->object) == groupNames.end()) {
+    const auto bodyOriginName = readBodyOriginName(object, context);
+    if (object.properties.contains("Origin") && !bodyOriginName) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+    if (bodyOriginName) {
+        appendBodyOriginDatumRelinkUpdates(context, object, groupNames, *bodyOriginName);
+    }
+
+    std::string resolvedTip = tip->object;
+    if (!groupContains(groupNames, resolvedTip)) {
+        const auto reroutedTip = appendBodyRemovedTipRerouteUpdates(context, object, groupNames, resolvedTip);
+        if (reroutedTip) {
+            resolvedTip = *reroutedTip;
+        }
+    }
+
+    if (!groupContains(groupNames, resolvedTip)) {
         runtime::addDiagnostic(context.diagnostics,
                                "error",
                                "missing_link_target",
@@ -211,6 +780,9 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
     std::optional<TopoDS_Shape> bodyShape;
     std::optional<topo::NamedShape> bodyNamedShape;
     std::vector<std::string> refinedFeatures;
+    std::vector<std::string> replayedAdditiveFeatures;
+    std::vector<std::string> replayedSubtractiveFeatures;
+    std::vector<std::string> replayedReplacementFeatures;
     if (object.properties.contains("BaseFeature")) {
         const auto baseLink = document::readLink(object, "BaseFeature");
         if (!baseLink) {
@@ -233,6 +805,7 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
         }
         bodyShape = baseIt->second.shape;
         bodyNamedShape = namedShapeForFeatureOrIndexed(baseLink->object, *bodyShape, context);
+        appendBodyBaseFeatureChainUpdates(context, object, groupNames, baseLink->object);
     }
 
     for (const auto& feature : groupNames) {
@@ -248,7 +821,8 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
             // caches for later pattern features.
             bodyShape = shapeIt->second.shape;
             bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
-            if (feature == tip->object) {
+            replayedReplacementFeatures.push_back(feature);
+            if (feature == resolvedTip) {
                 break;
             }
             continue;
@@ -262,7 +836,8 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
                 // must be able to become that replacement solid instead of reusing the previous Pad/Pocket.
                 bodyShape = shapeIt->second.shape;
                 bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
-                if (feature == tip->object) {
+                replayedReplacementFeatures.push_back(feature);
+                if (feature == resolvedTip) {
                     break;
                 }
             }
@@ -271,6 +846,7 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
 
         const runtime::AddSubShape& addSubShape = addSubIt->second;
         if (addSubShape.addShape) {
+            replayedAdditiveFeatures.push_back(feature);
             if (!bodyShape) {
                 bodyShape = *addSubShape.addShape;
                 bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
@@ -293,6 +869,7 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
             }
         }
         else if (addSubShape.subShape) {
+            replayedSubtractiveFeatures.push_back(feature);
             if (!bodyShape) {
                 runtime::addDiagnostic(context.diagnostics,
                                        "error",
@@ -327,7 +904,7 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
             context.objects[object.name] = {{"status", "error"}};
             return;
         }
-        if (feature == tip->object) {
+        if (feature == resolvedTip) {
             break;
         }
     }
@@ -360,13 +937,26 @@ void executeBody(const document::DocumentObject& object, runtime::ComputeContext
     context.subshapes[object.name] = topo::subshapeMapForShape(resultShape);
     nlohmann::json result = {
         {"status", "ok"},
-        {"tip", tip->object},
+        {"tip", resolvedTip},
         {"group", groupNames},
         {"shape", "occt_solid"},
         {"bbox", geometry::bboxForShape(resultShape)},
         {"volume", geometry::volumeForShape(resultShape)},
         {"kernel", geometry::kernelVersion()},
     };
+    if (bodyOriginName) {
+        result["origin"] = *bodyOriginName;
+    }
+    if (!replayedAdditiveFeatures.empty()) {
+        result["replayed_additive_features"] = replayedAdditiveFeatures;
+    }
+    if (!replayedSubtractiveFeatures.empty()) {
+        result["replayed_subtractive_features"] = replayedSubtractiveFeatures;
+    }
+    if (!replayedReplacementFeatures.empty()) {
+        result["replayed_replacement_features"] = replayedReplacementFeatures;
+    }
+    result["replay_stopped_at_tip"] = resolvedTip;
     if (!refinedFeatures.empty()) {
         result["refined_features"] = refinedFeatures;
     }

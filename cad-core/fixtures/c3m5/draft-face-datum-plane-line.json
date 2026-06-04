@@ -1,0 +1,88 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPad",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
+          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
+          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
+          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPad",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 10,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "NeutralPlane",
+      "ID": 3,
+      "TypeId": "PartDesign::Plane",
+      "Properties": {}
+    },
+    {
+      "Name": "PullDirection",
+      "ID": 4,
+      "TypeId": "PartDesign::Line",
+      "Properties": {}
+    },
+    {
+      "Name": "Draft",
+      "ID": 5,
+      "TypeId": "PartDesign::Draft",
+      "Properties": {
+        "Base": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Pad",
+          "SubList": ["Face2"]
+        },
+        "NeutralPlane": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "NeutralPlane",
+          "SubList": []
+        },
+        "PullDirection": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PullDirection",
+          "SubList": []
+        },
+        "Angle": 5.0,
+        "Reversed": false
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 6,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["SketchPad", "Pad", "NeutralPlane", "PullDirection", "Draft"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Draft"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}

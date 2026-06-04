@@ -1,0 +1,30 @@
+{
+  "object": "Body",
+  "reference": "FreeCAD PartDesign Body with external BaseFeature, generated internal FeatureBase, and a 10x5x2 Pad above a 10x5x5 base; geometry-equivalent to the request-local Body replay while documentObjectUpdates carries the writeback.",
+  "freecad_version": "1.2.0 revision 20260519",
+  "bbox": {
+    "min": [0.0, 0.0, 0.0],
+    "max": [10.0, 5.0, 7.0]
+  },
+  "volume": 350.0,
+  "volume_delta": 1e-6,
+  "topology_counts": {
+    "faces": 10,
+    "edges": 20,
+    "vertices": 12
+  },
+  "named_shapes": {
+    "Body": {
+      "owner": "Body",
+      "element_map_status": "history_partial",
+      "element_history_status_contains": [
+        "history_consumed:generated_modified",
+        "history_consumed:merge"
+      ],
+      "element_map_prefixes": [
+        "BasePad.",
+        "Pad."
+      ]
+    }
+  }
+}

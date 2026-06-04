@@ -1,0 +1,26 @@
+{
+  "reference": "FreeCAD source-code oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureTransformed.cpp::Transformed::execute() replays each Original with getAddSubShape() and makeElementTransform(opName); /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp::LinkBaseExtension::checkGeoElementMap() retags linked topology through reTagElementMap.",
+  "named_shapes": {
+    "BodyLink": {
+      "owner": "BodyLink",
+      "element_map_status": "history_partial",
+      "element_map_prefixes": [
+        "Body.LinearPattern.",
+        "Body.LinearPattern.Transform1.",
+        "Body.LinearPattern.Transform2.",
+        "Body.Pocket.",
+        "Pocket."
+      ],
+      "history_kinds_include": ["modified", "generated", "deleted", "split", "merge"],
+      "history_non_indexed_source_prefixes": [
+        "Body.LinearPattern.Transform1.",
+        "Body.LinearPattern.Transform2.",
+        "Body.Pocket.",
+        "Pad.",
+        "Pocket.",
+        "SketchPad.",
+        "SketchPocket."
+      ]
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": "cad-core.freecad-expected.v1",
+  "object": "ImportedCylinder",
+  "reference": "C3-M1 import ElementMap oracle: FreeCAD TopoShape::importBrep reads BREP with BRepTools::Read; cad-core keeps owner-qualified edge aliases request-local.",
+  "diagnostic_codes": [],
+  "named_shapes": {
+    "ImportedCylinder": {
+      "owner": "ImportedCylinder",
+      "element_map_status": "history_partial",
+      "element_history_status_contains": [
+        "import_shape_element_map"
+      ],
+      "element_map": {
+        "ImportedCylinder.Edge1": "Edge1"
+      },
+      "elements": {
+        "Edge1": {
+          "sources": [
+            "ImportedCylinder.Edge1"
+          ]
+        }
+      }
+    }
+  }
+}

@@ -17,6 +17,22 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(box["primitive"], "box")
         self.assert_object_matches_expected(result, "p8", "part-box")
 
+    def test_c3m4_part_offset_face_builds_request_local_history(self) -> None:
+        result = self.run_recompute("part-offset-face", "c3m4")
+        offset = result["objects"]["Offset"]
+        named_shape = result["named_shapes"]["Offset"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(offset["status"], "ok")
+        self.assertEqual(offset["feature"], "part_offset")
+        self.assertEqual(offset["source"], "Plane")
+        self.assertEqual(offset["mode"], "Skin")
+        self.assertEqual(offset["join"], "Arc")
+        self.assertFalse(offset["fill"])
+        self.assertEqual(offset["topo_naming_history"], "maker_history:offset")
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
+
     def test_p8_app_link_proxies_linked_shape_with_link_placement(self) -> None:
         result = self.run_recompute("app-link-box", "p8")
         link = result["objects"]["BoxLink"]
@@ -93,6 +109,213 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(link["linked_object"], "Box")
         self.assertEqual(link["shape"], "occt_face")
         self.assert_object_matches_expected(result, "p8", "app-link-label-qualified-sublist")
+
+    def test_c3m2_app_link_rewrites_stale_label_qualified_subshape_alias(self) -> None:
+        result = self.run_recompute("label-rename-recovery", "c3m2")
+        link = result["objects"]["BoxLink"]
+        update = result["elementReferenceUpdates"][0]
+        rename = update["labelReferenceRename"][0]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(link["status"], "ok")
+        self.assertEqual(link["link"], "app_link")
+        self.assertEqual(link["linked_object"], "Box")
+        self.assertEqual(link["shape"], "occt_face")
+        self.assertEqual(update["object"], "BoxLink")
+        self.assertEqual(update["property"], "LinkedObject")
+        self.assertEqual(update["PropertyType"], "App::PropertyXLinkSub")
+        self.assertEqual(update["value"], "Box")
+        self.assertEqual(update["SubList"], ["$PrettyBox.Face1"])
+        self.assertEqual(rename, {
+            "index": 0,
+            "oldLabel": "OldPrettyBox",
+            "newLabel": "PrettyBox",
+            "oldSubname": "$OldPrettyBox.Face1",
+            "newSubname": "$PrettyBox.Face1",
+            "method": "PropertyLinkBase.updateLabelReference",
+        })
+        self.assert_object_matches_expected(result, "c3m2", "label-rename-recovery")
+
+    def test_c3m2_app_link_reports_duplicate_label_rename_ambiguity(self) -> None:
+        result = self.run_recompute("label-rename-duplicate-target-label", "c3m2")
+        diagnostic = next(
+            item
+            for item in result["diagnostics"]
+            if item["code"] == "label_reference_ambiguous"
+        )
+
+        self.assertEqual(result["elementReferenceUpdates"], [])
+        self.assertEqual(diagnostic["object"], "BoxLink")
+        self.assertEqual(diagnostic["property"], "LinkedObject")
+        self.assertEqual(diagnostic["target"], "Box")
+        self.assertEqual(diagnostic["subname"], "$OldPrettyBox.Face1")
+        self.assertIn("current target Label is not unique", diagnostic["message"])
+
+    def test_c3m2_app_link_rewrites_nested_label_qualified_subshape_alias(self) -> None:
+        result = self.run_recompute("nested-label-rename-recovery", "c3m2")
+        link = result["objects"]["NestedPlainGroupFaceLink"]
+        update = result["elementReferenceUpdates"][0]
+        rename = update["labelReferenceRename"][0]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(link["status"], "ok")
+        self.assertEqual(link["link"], "app_link")
+        self.assertEqual(link["linked_object"], "GroupLink")
+        self.assertEqual(link["shape"], "occt_face")
+        self.assertEqual(link["bbox"]["min"], [13.0, 0.0, 0.0])
+        self.assertEqual(link["bbox"]["max"], [13.0, 1.0, 1.0])
+        self.assertEqual(update["object"], "NestedPlainGroupFaceLink")
+        self.assertEqual(update["property"], "LinkedObject")
+        self.assertEqual(update["PropertyType"], "App::PropertyXLinkSub")
+        self.assertEqual(update["value"], "GroupLink")
+        self.assertEqual(update["SubList"], ["$PrettySub.$PrettyB.Face1"])
+        self.assertEqual(rename, {
+            "index": 0,
+            "oldLabel": "OldPrettySub",
+            "newLabel": "PrettySub",
+            "oldSubname": "$OldPrettySub.$PrettyB.Face1",
+            "newSubname": "$PrettySub.$PrettyB.Face1",
+            "method": "PropertyLinkBase.updateLabelReference",
+        })
+
+    def test_c3m2_app_link_rewrites_cross_document_nested_label_alias(self) -> None:
+        result = self.run_recompute("cross-document-nested-label-rename-recovery", "c3m2")
+        link = result["objects"]["NestedExternalGroupFaceLink"]
+        named_shape = result["named_shapes"]["NestedExternalGroupFaceLink"]
+        update = result["elementReferenceUpdates"][0]
+        rename = update["labelReferenceRename"][0]
+        document_reference = update["documentReference"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(len(result["elementReferenceUpdates"]), 1)
+        self.assertEqual(link["status"], "ok")
+        self.assertEqual(link["link"], "app_link")
+        self.assertEqual(link["linked_object"], "GroupLink")
+        self.assertEqual(link["shape"], "occt_face")
+        self.assertEqual(link["bbox"]["min"], [13.0, 0.0, 0.0])
+        self.assertEqual(link["bbox"]["max"], [13.0, 1.0, 1.0])
+        self.assertEqual(update["object"], "NestedExternalGroupFaceLink")
+        self.assertEqual(update["property"], "LinkedObject")
+        self.assertEqual(update["PropertyType"], "App::PropertyXLinkSub")
+        self.assertEqual(update["value"], "GroupLink")
+        self.assertEqual(update["SubList"], ["$PrettySub.$PrettyB.Face1"])
+        self.assertEqual(update["FullSubList"], ["ExternalDocRestored#$PrettySub.$PrettyB.Face1"])
+        self.assertEqual(rename, {
+            "index": 0,
+            "oldLabel": "OldPrettySub",
+            "newLabel": "PrettySub",
+            "oldSubname": "$OldPrettySub.$PrettyB.Face1",
+            "newSubname": "$PrettySub.$PrettyB.Face1",
+            "method": "PropertyLinkBase.updateLabelReference",
+        })
+        self.assertEqual(document_reference["method"], "PropertyXLinkContainer.DocMap")
+        self.assertEqual(document_reference["file"], "external.FCStd")
+        self.assertEqual(document_reference["oldName"], "ExternalDoc")
+        self.assertEqual(document_reference["newName"], "ExternalDocRestored")
+        self.assertEqual(document_reference["oldLabel"], "External Assembly")
+        self.assertEqual(document_reference["newLabel"], "External Assembly Restored")
+        self.assertEqual(
+            named_shape["element_map"]["ExternalDocRestored#$PrettySub.$PrettyB.Face1"],
+            "Face1",
+        )
+        self.assertEqual(
+            named_shape["element_map"]["Face1;:X;ExternalDocRestored#$PrettySub.$PrettyB.Face1"],
+            "Face1",
+        )
+
+    def test_c3m2_xlink_document_hash_mismatch_reports_doc_reference_update(self) -> None:
+        result = self.run_recompute("xlink-document-hash-mismatch", "c3m2")
+        link = result["objects"]["ExternalFaceLink"]
+        diagnostic = result["diagnostics"][0]
+        update = result["elementReferenceUpdates"][0]
+        document_reference = update["documentReference"]
+
+        self.assertEqual(link["status"], "ok")
+        self.assertEqual(link["shape"], "occt_face")
+        self.assertEqual(diagnostic["code"], "document_hash_mismatch")
+        self.assertEqual(diagnostic["severity"], "warning")
+        self.assertEqual(diagnostic["object"], "ExternalFaceLink")
+        self.assertEqual(diagnostic["property"], "LinkedObject")
+        self.assertEqual(diagnostic["target"], "Box")
+        self.assertEqual(update["object"], "ExternalFaceLink")
+        self.assertEqual(update["property"], "LinkedObject")
+        self.assertEqual(update["PropertyType"], "App::PropertyXLinkSub")
+        self.assertEqual(update["value"], "Box")
+        self.assertEqual(update["SubList"], ["Face1"])
+        self.assertEqual(document_reference["method"], "PropertyXLinkContainer.DocMap")
+        self.assertEqual(document_reference["file"], "external.FCStd")
+        self.assertEqual(document_reference["oldName"], "ExternalDoc")
+        self.assertEqual(document_reference["newName"], "ExternalDocRestored")
+        self.assertEqual(document_reference["oldLabel"], "External Assembly")
+        self.assertEqual(document_reference["newLabel"], "External Assembly Restored")
+        self.assertEqual(document_reference["oldStamp"], "2026-01-01T00:00:00Z")
+        self.assertEqual(document_reference["currentStamp"], "2026-02-01T00:00:00Z")
+
+    def test_c3m2_xlink_missing_external_document_reports_graph_diagnostic(self) -> None:
+        result = self.run_recompute("xlink-missing-external-document", "c3m2")
+        link = result["objects"]["ExternalFaceLink"]
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual(link["status"], "error")
+        self.assertEqual(result["elementReferenceUpdates"], [])
+        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["missing_external_document"])
+        self.assertEqual(diagnostic["severity"], "error")
+        self.assertEqual(diagnostic["object"], "ExternalFaceLink")
+        self.assertEqual(diagnostic["property"], "LinkedObject")
+        self.assertEqual(diagnostic["stage"], "graph")
+        self.assertEqual(diagnostic["target"], "ExternalBox")
+        self.assertEqual(diagnostic["subname"], "Face1")
+        self.assertIn("missing.FCStd", diagnostic["message"])
+        self.assertNotIn("missing_link_target", [item["code"] for item in result["diagnostics"]])
+
+    def test_c3m2_xlink_pending_external_document_reports_reload_diagnostic(self) -> None:
+        result = self.run_recompute("xlink-pending-external-document", "c3m2")
+        link = result["objects"]["ExternalFaceLink"]
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual(link["status"], "error")
+        self.assertEqual(result["elementReferenceUpdates"], [])
+        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["external_document_pending_reload"])
+        self.assertEqual(diagnostic["severity"], "error")
+        self.assertEqual(diagnostic["object"], "ExternalFaceLink")
+        self.assertEqual(diagnostic["property"], "LinkedObject")
+        self.assertEqual(diagnostic["stage"], "graph")
+        self.assertEqual(diagnostic["target"], "ExternalBox")
+        self.assertEqual(diagnostic["subname"], "Face1")
+        self.assertIn("external.FCStd", diagnostic["message"])
+        self.assertIn("pending reload", diagnostic["message"])
+        self.assertIn("partial load allowed", diagnostic["message"])
+
+    def test_c3m2_xlink_unloaded_external_document_reports_detached_diagnostic(self) -> None:
+        result = self.run_recompute("xlink-unloaded-external-document", "c3m2")
+        link = result["objects"]["ExternalFaceLink"]
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual(link["status"], "error")
+        self.assertEqual(result["elementReferenceUpdates"], [])
+        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["external_document_unloaded"])
+        self.assertEqual(diagnostic["severity"], "error")
+        self.assertEqual(diagnostic["object"], "ExternalFaceLink")
+        self.assertEqual(diagnostic["property"], "LinkedObject")
+        self.assertEqual(diagnostic["stage"], "graph")
+        self.assertEqual(diagnostic["target"], "ExternalBox")
+        self.assertEqual(diagnostic["subname"], "Face1")
+        self.assertIn("external.FCStd", diagnostic["message"])
+        self.assertIn("unloaded or deleted", diagnostic["message"])
+
+    def test_c3m2_xlink_pending_external_document_restored_by_request_graph(self) -> None:
+        result = self.run_recompute("xlink-pending-external-document-restored", "c3m2")
+        link = result["objects"]["ExternalFaceLink"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(result["elementReferenceUpdates"], [])
+        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual(link["status"], "ok")
+        self.assertEqual(link["linked_object"], "ExternalBox")
+        self.assertEqual(link["shape"], "occt_face")
 
     def test_p8_app_link_preserves_full_sublist_external_mapped_alias(self) -> None:
         result = self.run_recompute("app-link-full-sublist-external-tag", "p8")
