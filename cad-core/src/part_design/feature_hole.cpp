@@ -27,12 +27,12 @@
 #include <GeomAbs_CurveType.hxx>
 #include <GeomAbs_SurfaceType.hxx>
 #include <Geom2d_TrimmedCurve.hxx>
-#include <Geom_BezierCurve.hxx>
+#include <Geom2d_Line.hxx>
+#include <Geom_ConicalSurface.hxx>
+#include <Geom_CylindricalSurface.hxx>
 #include <Geom_Surface.hxx>
-#include <Geom_SurfaceOfRevolution.hxx>
 #include <Geom_TrimmedCurve.hxx>
 #include <Precision.hxx>
-#include <TColgp_Array1OfPnt.hxx>
 #include <TopAbs_ShapeEnum.hxx>
 #include <TopExp.hxx>
 #include <TopExp_Explorer.hxx>
@@ -48,12 +48,15 @@
 #include <TopoDS_Wire.hxx>
 #include <gp_Ax1.hxx>
 #include <gp_Ax2.hxx>
+#include <gp_Ax2d.hxx>
+#include <gp_Ax3.hxx>
 #include <gp_Dir.hxx>
+#include <gp_Dir2d.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Pnt2d.hxx>
 #include <gp_Trsf.hxx>
 #include <gp_Vec.hxx>
-#include <gp_Vec2d.hxx>
+#include <gp_XYZ.hxx>
 
 #include <algorithm>
 #include <cmath>
@@ -128,6 +131,7 @@ struct PreviousSolidSource {
 struct HoleToolOptions {
     double diameter = 0.0;
     double depth = 0.0;
+    bool cutIntoMaterial = false;
     std::string threadType;
     std::string threadSize;
     std::string holeCutType;
@@ -173,6 +177,9 @@ struct ThreadModelParameters {
     bool useCustomClearance = false;
     double customClearance = 0.0;
 };
+
+std::vector<std::string> threadClassValuesFor(const std::string& threadType);
+double threadClassClearanceFor(const std::string& threadClass, double pitch);
 
 struct CounterboreDimension {
     std::string thread;
@@ -1027,6 +1034,7 @@ std::optional<ThreadDiameterResult> resolveThreadDiameter(const app::DocumentObj
                                                           const std::string& threadType,
                                                           double requestedDiameter,
                                                           bool threaded,
+                                                          bool modelThread,
                                                           runtime::ComputeContext& context)
 {
     ThreadDiameterResult result;
@@ -1045,11 +1053,29 @@ std::optional<ThreadDiameterResult> resolveThreadDiameter(const app::DocumentObj
     result.threadSize = thread->designation;
 
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
-    // ::Hole::determineDiameter(), for Threaded holes uses "TapDrill + clearance";
+    // ::Hole::determineDiameter(), "if (ModelThread.getValue())" reads either
+    // "CustomThreadClearance.getValue()" or "getThreadClassClearance()", then threaded
+    // holes use "TapDrill + clearance" or the fallback diameter plus the same clearance.
     // for non-threaded thread profiles it reads clearance diameters from the ISO 273 table.
     if (threaded) {
+        double clearance = 0.0;
+        if (modelThread) {
+            if (readBoolProperty(object, "UseCustomThreadClearance")) {
+                clearance = readNumberProperty(object, "CustomThreadClearance", 0.0);
+            }
+            else {
+                const std::vector<std::string> threadClasses = threadClassValuesFor(threadType);
+                const std::string threadClass = readEnumProperty(
+                    object,
+                    "ThreadClass",
+                    threadClasses,
+                    threadClasses.empty() ? "None" : threadClasses.front()
+                );
+                clearance = threadClassClearanceFor(threadClass, thread->pitch);
+            }
+        }
         if (thread->tapDrill > Precision::Confusion()) {
-            result.diameter = thread->tapDrill;
+            result.diameter = thread->tapDrill + clearance;
             result.source = "thread_tap_drill";
             return result;
         }
@@ -1059,17 +1085,17 @@ std::optional<ThreadDiameterResult> resolveThreadDiameter(const app::DocumentObj
         // "double thread = 2 * (0.8 * pitch)" before subtracting "thread * 0.75".
         if (isWhitworthThreadType(threadType)) {
             const double threadDepth = 2.0 * (0.640327 * thread->pitch);
-            result.diameter = thread->diameter - threadDepth * 0.75;
+            result.diameter = thread->diameter - threadDepth * 0.75 + clearance;
             result.source = "thread_whitworth_fallback";
             return result;
         }
         if (threadType == "NPT") {
             const double threadDepth = 2.0 * (0.8 * thread->pitch);
-            result.diameter = thread->diameter - threadDepth * 0.75;
+            result.diameter = thread->diameter - threadDepth * 0.75 + clearance;
             result.source = "thread_npt_fallback";
             return result;
         }
-        result.diameter = thread->diameter - thread->pitch;
+        result.diameter = thread->diameter - thread->pitch + clearance;
         result.source = "thread_pitch_fallback";
         return result;
     }
@@ -1188,6 +1214,24 @@ int readBaseProfileType(const app::DocumentObject& object)
         return baseProfileOnPoints | baseProfileOnCircles | baseProfileOnArcs;
     }
     return baseProfileOnCirclesArcs;
+}
+
+bool profileUsesFlatFaceSupport(const std::string& profileObject, const runtime::ComputeContext& context)
+{
+    const auto objectIt = context.documentObjects.find(profileObject);
+    if (objectIt == context.documentObjects.end() || objectIt->second == nullptr) {
+        return false;
+    }
+    const app::DocumentObject& object = *objectIt->second;
+    const std::string mapMode = app::readString(object, "MapMode").value_or("FlatFace");
+    if (mapMode != "FlatFace") {
+        return false;
+    }
+    auto support = app::readLink(object, "AttachmentSupport");
+    if (!support) {
+        support = app::readLink(object, "Support");
+    }
+    return support && !support->subnames.empty() && support->subnames.front().rfind("Face", 0U) == 0U;
 }
 
 double defaultCountersinkAngle(const std::string& threadType)
@@ -1756,6 +1800,36 @@ gp_Vec computePerpendicular(const gp_Dir& direction)
     return xDir;
 }
 
+void rotateShapeToNormal(TopoDS_Shape& shape, const gp_Dir& sourceAxis, const gp_Dir& targetAxis)
+{
+    if (sourceAxis.IsEqual(targetAxis, Precision::Angular())) {
+        return;
+    }
+
+    const double angle = std::acos(sourceAxis * targetAxis);
+    gp_Dir rotationAxis(1.0, 0.0, 0.0);
+    if (sourceAxis.IsOpposite(targetAxis, Precision::Angular())) {
+        gp_XYZ xyz(sourceAxis.XYZ());
+        if (std::fabs(xyz.X()) <= std::fabs(xyz.Y()) && std::fabs(xyz.X()) <= std::fabs(xyz.Z())) {
+            xyz.SetX(1.0);
+        }
+        else if (std::fabs(xyz.Y()) <= std::fabs(xyz.X()) && std::fabs(xyz.Y()) <= std::fabs(xyz.Z())) {
+            xyz.SetY(1.0);
+        }
+        else {
+            xyz.SetZ(1.0);
+        }
+        rotationAxis = sourceAxis.Crossed(gp_Dir(xyz));
+    }
+    else {
+        rotationAxis = sourceAxis.Crossed(targetAxis);
+    }
+
+    gp_Trsf rotation;
+    rotation.SetRotation(gp_Ax1(gp_Pnt(0.0, 0.0, 0.0), rotationAxis), angle);
+    shape.Move(TopLoc_Location(rotation));
+}
+
 bool computeIntersection2d(const gp_Pnt& pa1,
                            const gp_Pnt& pa2,
                            const gp_Pnt& pb1,
@@ -1918,6 +1992,7 @@ std::optional<TopoDS_Shape> buildCylinderTool(const std::vector<gp_Pnt>& centers
                                               const gp_Dir& direction,
                                               double radius,
                                               double depth,
+                                              bool cutIntoMaterial,
                                               const app::DocumentObject& object,
                                               runtime::ComputeContext& context)
 {
@@ -1933,7 +2008,15 @@ std::optional<TopoDS_Shape> buildCylinderTool(const std::vector<gp_Pnt>& centers
 
     std::vector<TopoDS_Shape> holes;
     for (const gp_Pnt& center : centers) {
-        BRepPrimAPI_MakeCylinder builder(gp_Ax2(center, direction), radius, depth);
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+        // ::Hole::execute(), flat hole sections add the bottom point as "-length * zDir";
+        // for Sketch profiles attached with MapMode "FlatFace", zDir is the support face
+        // normal and the tool cuts into material along the opposite sketch normal.
+        gp_Dir cutDirection = direction;
+        if (cutIntoMaterial) {
+            cutDirection.Reverse();
+        }
+        BRepPrimAPI_MakeCylinder builder(gp_Ax2(center, cutDirection), radius, depth);
         builder.Build();
         if (!builder.IsDone()) {
             runtime::addDiagnostic(context.diagnostics,
@@ -2158,22 +2241,41 @@ std::optional<TopoDS_Wire> buildThreadHelix(const gp_Pnt& center,
         return std::nullopt;
     }
 
-    TColgp_Array1OfPnt poles(1, 2);
-    poles(1) = offsetPoint(center, radialDir, gp_Vec(direction), majorRadius, 0.0);
-    poles(2) = offsetPoint(center, radialDir, gp_Vec(direction), topRadius, helixLength);
-    Handle(Geom_BezierCurve) meridian = new Geom_BezierCurve(poles);
-    Handle(Geom_Surface) surface =
-        new Geom_SurfaceOfRevolution(meridian, gp_Ax1(center, direction));
+    (void)radialDir;
+
+    gp_Ax2 cylinderAxis(gp_Pnt(0.0, 0.0, 0.0), gp_Dir(0.0, 0.0, 1.0));
+    Handle(Geom_Surface) surface;
+    const bool isCylinder = std::fabs(helixAngle) < Precision::Confusion();
+    if (isCylinder) {
+        surface = new Geom_CylindricalSurface(cylinderAxis, majorRadius);
+    }
+    else {
+        surface = new Geom_ConicalSurface(gp_Ax3(cylinderAxis), helixAngle, majorRadius);
+    }
 
     const double turns = helixLength / pitch;
     const unsigned long wholeTurns = static_cast<unsigned long>(std::floor(turns));
     const double partTurn = turns - static_cast<double>(wholeTurns);
-    const double handed = leftHanded ? -1.0 : 1.0;
+    const double coneDirection = leftHanded ? -1.0 : 1.0;
     gp_Pnt2d begin(0.0, 0.0);
+    gp_Dir2d lineDirection(2.0 * pi, pitch);
+    if (leftHanded) {
+        lineDirection.SetCoord(-2.0 * pi, pitch);
+    }
+    gp_Ax2d lineAxis(begin, lineDirection);
+    Handle(Geom2d_Line) line = new Geom2d_Line(lineAxis);
+    begin = line->Value(0.0);
+
     BRepBuilderAPI_MakeWire wireBuilder;
     for (unsigned long index = 0; index < wholeTurns; ++index) {
-        const double v = static_cast<double>(index + 1) / turns;
-        const gp_Pnt2d end(handed * static_cast<double>(index + 1) * 2.0 * pi, v);
+        gp_Pnt2d end;
+        if (isCylinder) {
+            end = line->Value(std::sqrt(4.0 * pi * pi + pitch * pitch) * static_cast<double>(index + 1));
+        }
+        else {
+            end = gp_Pnt2d(coneDirection * static_cast<double>(index + 1) * 2.0 * pi,
+                           (static_cast<double>(index + 1) * pitch) / std::cos(helixAngle));
+        }
         Handle(Geom2d_TrimmedCurve) segment = GCE2d_MakeSegment(begin, end);
         BRepBuilderAPI_MakeEdge edgeBuilder(segment, surface);
         if (!edgeBuilder.IsDone()) {
@@ -2189,7 +2291,13 @@ std::optional<TopoDS_Wire> buildThreadHelix(const gp_Pnt& center,
         begin = end;
     }
     if (partTurn > Precision::Confusion()) {
-        const gp_Pnt2d end(handed * turns * 2.0 * pi, 1.0);
+        gp_Pnt2d end;
+        if (isCylinder) {
+            end = line->Value(std::sqrt(4.0 * pi * pi + pitch * pitch) * turns);
+        }
+        else {
+            end = gp_Pnt2d(coneDirection * turns * 2.0 * pi, helixLength / std::cos(helixAngle));
+        }
         Handle(Geom2d_TrimmedCurve) segment = GCE2d_MakeSegment(begin, end);
         BRepBuilderAPI_MakeEdge edgeBuilder(segment, surface);
         if (!edgeBuilder.IsDone()) {
@@ -2216,6 +2324,17 @@ std::optional<TopoDS_Wire> buildThreadHelix(const gp_Pnt& center,
     }
     TopoDS_Wire wire = wireBuilder.Wire();
     BRepLib::BuildCurves3d(wire);
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // ::Hole::makeThread(), after TopoShape::makeLongHelix(), runs "mov.SetRotation(gp_Ax1(origo,
+    // dir_axis2), std::numbers::pi)" with the comment "Reverse the direction of the helix. So
+    // that it goes into the material", then "rotateToNormal(dir_axis1, zDir, helix)".
+    gp_Trsf reverseIntoMaterial;
+    reverseIntoMaterial.SetRotation(gp_Ax1(gp_Pnt(0.0, 0.0, 0.0), gp_Dir(1.0, 0.0, 0.0)), pi);
+    wire.Move(TopLoc_Location(reverseIntoMaterial));
+    rotateShapeToNormal(wire, gp_Dir(0.0, 0.0, 1.0), direction);
+    gp_Trsf translateToCenter;
+    translateToCenter.SetTranslation(gp_Vec(center.X(), center.Y(), center.Z()));
+    wire.Move(TopLoc_Location(translateToCenter));
     return wire;
 }
 
@@ -2285,16 +2404,9 @@ std::optional<TopoDS_Shape> buildModelThreadAtCenter(const gp_Pnt& center,
                                "ModelThread");
         return std::nullopt;
     }
-    pipeBuilder.Build();
-    if (!pipeBuilder.IsDone()) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "execution_failed",
-                               "OCCT could not build Hole model thread pipe shell",
-                               object.name,
-                               "ModelThread");
-        return std::nullopt;
-    }
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // ::Hole::makeThread(), calls "TopoDS_Shape shell = mkPS.Shape()" directly after
+    // IsReady(), then calls "mkPS.Simulate(2, sim)" for the end caps.
     const TopoDS_Shape shell = pipeBuilder.Shape();
     if (shell.IsNull()) {
         runtime::addDiagnostic(context.diagnostics,
@@ -2430,8 +2542,9 @@ std::optional<TopoDS_Shape> combineHoleAndThreadTools(const TopoDS_Shape& holeTo
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
     // ::Hole::execute(), when "Threaded && ModelThread", adds "protoHole" and "protoThread"
     // into one "holeWithThread" compound with "builder.MakeCompound()" and two "builder.Add()"
-    // calls. cad-core returns the same compound; part::makeElementBooleanFromSources() expands
-    // Cut tool compounds before Body consumes the subtractive AddSubShape.
+    // calls. cad-core returns the same compound; Body marks this Hole ModelThread source so
+    // part::makeElementBooleanFromSources() can follow FreeCAD's RecursiveCutFusedTools() path
+    // only for this producer instead of globally rewriting every compound Cut tool.
     TopoDS_Compound holeWithThread;
     BRep_Builder builder;
     builder.MakeCompound(holeWithThread);
@@ -2625,7 +2738,13 @@ std::optional<TopoDS_Shape> buildProfiledToolAtCenter(const gp_Pnt& center,
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
     // ::Hole::execute(), builds a "BRepBuilderAPI_MakeWire" section for HoleCutType and
     // DrillPoint, then calls "BRepPrimAPI_MakeRevol(face, gp_Ax1(firstPoint, zDir), angle)".
-    const gp_Vec axisDir(direction);
+    gp_Vec axisDir(direction);
+    if (options.cutIntoMaterial) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+        // ::Hole::execute(), all section-depth points are expressed as "-holeCutDepth * zDir" /
+        // "-length * zDir" while the revolve axis remains "gp_Ax1(firstPoint, zDir)".
+        axisDir.Reverse();
+    }
     const gp_Vec radialDir = computePerpendicular(direction);
     const double radius = options.diameter / 2.0;
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
@@ -2934,12 +3053,6 @@ part::NamedShape namedShapeForHoleToolHistory(const std::string& owner,
     if (modelThread) {
         addUniqueString(namedShape.elementHistoryStatus, "hole_model_thread:pipe_shell_tool_history");
     }
-    if (threaded && modelThread && toolShape.ShapeType() == TopAbs_COMPOUND) {
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/
-        // TopoShapeExpansion.cpp::TopoShape::makeElementBoolean(), expands Cut compound tools
-        // before SetArguments()/SetTools(); Body reads this producer status into NamedShapeSource.
-        addUniqueString(namedShape.elementHistoryStatus, "boolean_compound_tool:expand_children");
-    }
     return namedShape;
 }
 
@@ -2973,11 +3086,10 @@ nlohmann::json holeHistoryFreezeJson(const app::Link& profile,
         covered.push_back("model_thread_compound_tool_shape");
     }
     const bool hasHeadCut = holeCutType != "None";
-    const bool hasThreadedModelThreadHeadCutGap = threaded && modelThread && hasHeadCut;
-    nlohmann::json remaining = nlohmann::json::array();
-    if (hasThreadedModelThreadHeadCutGap) {
-        remaining.push_back("hole_threaded_model_thread_profile_head_oracle_matrix");
+    if (threaded && modelThread && hasHeadCut) {
+        covered.push_back("threaded_model_thread_head_cut_native_oracle");
     }
+    nlohmann::json remaining = nlohmann::json::array();
 
     nlohmann::json history = {
         {"status", "element_map_freeze_first_slice"},
@@ -2996,13 +3108,6 @@ nlohmann::json holeHistoryFreezeJson(const app::Link& profile,
         {"threaded", threaded},
         {"model_thread", modelThread},
     };
-    if (hasThreadedModelThreadHeadCutGap) {
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
-        // ::Hole::execute(), key "builder.MakeCompound(holeWithThread)" / "builder.Add(...)".
-        // cad-core now keeps the same compound tool shape and relies on Part boolean compound
-        // tool expansion; the remaining gap is the native thread local-frame/head-cut topology.
-        history["topology_gap"] = "model_thread_head_cut_native_topology_pending_local_frame";
-    }
     return history;
 }
 
@@ -3089,7 +3194,7 @@ std::optional<HoleBuild> buildHole(const app::DocumentObject& object, runtime::C
                                                      "ISOTyre"},
                                                     "None");
     const auto threadDiameter =
-        resolveThreadDiameter(object, threadType, requestedDiameter, threaded, context);
+        resolveThreadDiameter(object, threadType, requestedDiameter, threaded, modelThread, context);
     if (!threadDiameter) {
         return std::nullopt;
     }
@@ -3158,6 +3263,7 @@ std::optional<HoleBuild> buildHole(const app::DocumentObject& object, runtime::C
     HoleToolOptions options;
     options.diameter = diameter;
     options.depth = depth;
+    options.cutIntoMaterial = profileUsesFlatFaceSupport(profileLink->object, context);
     options.threadType = threadType;
     options.threadSize = threadDiameter->threadSize;
     options.holeCutType = readEnumProperty(object,
@@ -3179,7 +3285,8 @@ std::optional<HoleBuild> buildHole(const app::DocumentObject& object, runtime::C
 
     std::optional<TopoDS_Shape> toolShape;
     if (options.holeCutType == "None" && options.drillPoint == "Flat" && !options.tapered) {
-        toolShape = buildCylinderTool(centers, *direction, diameter / 2.0, depth, object, context);
+        toolShape =
+            buildCylinderTool(centers, *direction, diameter / 2.0, depth, options.cutIntoMaterial, object, context);
     }
     else {
         toolShape = buildProfiledTool(centers, *direction, options, object, context);

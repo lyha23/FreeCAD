@@ -189,8 +189,10 @@ double autoFuzzyValueForSources(const std::vector<NamedShapeSource>& sources)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/
     // FCBRepAlgoAPI_BooleanOperation.cpp::FCBRepAlgoAPIHelper::setAutoFuzzy(),
-    // computes "sqrt(bounds.SquareExtent()) * Precision::Confusion()" from
-    // Arguments() and Tools() before calling SetFuzzyValue().
+    // computes "Part::FuzzyHelper::getBooleanFuzzy() * sqrt(bounds.SquareExtent()) *
+    // Precision::Confusion()" from Arguments() and Tools(); AppPart.cpp initializes
+    // "BooleanFuzzy" with hGrp->GetFloat("BooleanFuzzy",10.0).
+    constexpr double freeCadDefaultBooleanFuzzy = 10.0;
     Bnd_Box bounds;
     for (const auto& source : sources) {
         if (!source.shape.IsNull()) {
@@ -200,7 +202,7 @@ double autoFuzzyValueForSources(const std::vector<NamedShapeSource>& sources)
     if (bounds.IsVoid()) {
         return Precision::Confusion();
     }
-    return std::sqrt(bounds.SquareExtent()) * Precision::Confusion();
+    return freeCadDefaultBooleanFuzzy * std::sqrt(bounds.SquareExtent()) * Precision::Confusion();
 }
 
 void expandCompoundSource(const NamedShapeSource& source, std::vector<NamedShapeSource>& expanded)
@@ -216,6 +218,7 @@ void expandCompoundSource(const NamedShapeSource& source, std::vector<NamedShape
         NamedShapeSource childSource {source.owner, it.Value(), source.namedShape};
         childSource.ownerAliases = source.ownerAliases;
         childSource.expandCompoundForBoolean = source.expandCompoundForBoolean;
+        childSource.fuseCompoundForCut = source.fuseCompoundForCut;
         expandCompoundSource(childSource, expanded);
     }
 }
@@ -4230,6 +4233,32 @@ NamedShapeBuild makeElementBooleanFromSources(
         namedShape.owner = owner;
         namedShape.shape = booleanSources.front().shape;
         return NamedShapeBuild {booleanSources.front().shape, std::move(namedShape), {}};
+    }
+
+    std::optional<NamedShape> fusedCompoundToolNamedShape;
+    if (operation == BooleanOperation::Cut && booleanSources.size() == 2U && booleanSources.at(1).fuseCompoundForCut
+        && booleanSources.at(1).shape.ShapeType() == TopAbs_COMPOUND) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/
+        // FCBRepAlgoAPI_BooleanOperation.cpp::RecursiveCutFusedTools(), for "cut argument and
+        // compound tool", recursively adds tool children, fuses them when "myTools.Size() >= 2",
+        // then restores BOPAlgo_CUT and cuts the original argument with the fused tool.
+        std::vector<NamedShapeSource> toolChildren;
+        expandCompoundSource(booleanSources.at(1), toolChildren);
+        if (toolChildren.size() >= 2U) {
+            const NamedShapeBuild fusedTool = makeElementBooleanFromSources(owner, toolChildren, BooleanOperation::Fuse);
+            if (!fusedTool.error.empty() || fusedTool.shape.IsNull()) {
+                return NamedShapeBuild {
+                    TopoDS_Shape {},
+                    std::nullopt,
+                    fusedTool.error.empty() ? "OCCT could not fuse compound boolean tool" : fusedTool.error,
+                };
+            }
+            booleanSources.at(1).shape = fusedTool.shape;
+            fusedCompoundToolNamedShape = fusedTool.namedShape;
+            if (fusedCompoundToolNamedShape) {
+                booleanSources.at(1).namedShape = &*fusedCompoundToolNamedShape;
+            }
+        }
     }
 
     std::unique_ptr<BRepAlgoAPI_BooleanOperation> maker;

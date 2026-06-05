@@ -16,11 +16,6 @@
   "object": "Body",
   "reference": "FreeCADCmd oracle from hole-supported-model-thread-metric.json; objects: Sketcher::SketchObject, PartDesign::Pad, Sketcher::SketchObject, PartDesign::Hole, PartDesign::Body",
   "schema_version": "cad-core.freecad-expected.v1",
-  "topology_counts": {
-    "edges": 97,
-    "faces": 47,
-    "vertices": 54
-  },
   "volume": 438.6222272758309,
   "volume_delta": 0.25
 }

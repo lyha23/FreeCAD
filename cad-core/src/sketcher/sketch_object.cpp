@@ -15,11 +15,13 @@
 #include <BRepAlgoAPI_Section.hxx>
 #include <BRepAdaptor_Curve.hxx>
 #include <BRepAdaptor_Surface.hxx>
+#include <BRepBndLib.hxx>
 #include <BRep_Builder.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_MakeVertex.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRep_Tool.hxx>
+#include <Bnd_Box.hxx>
 #include <GeomAbs_CurveType.hxx>
 #include <GeomAbs_SurfaceType.hxx>
 #include <Geom_BSplineCurve.hxx>
@@ -43,6 +45,7 @@
 #include <gp_Circ.hxx>
 #include <gp_Dir.hxx>
 #include <gp_Elips.hxx>
+#include <gp_Pln.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Trsf.hxx>
 #include <gp_Vec.hxx>
@@ -115,11 +118,129 @@ std::optional<app::Link> readSupportLink(const app::DocumentObject& object)
     return app::readLink(object, "Support");
 }
 
+std::optional<TopoDS_Face> supportFace(const app::Link& support, runtime::ComputeContext& context)
+{
+    if (support.subnames.empty() || support.subnames.front().rfind("Face", 0U) != 0U) {
+        return std::nullopt;
+    }
+
+    const auto shapeIt = context.shapes.find(support.object);
+    if (shapeIt == context.shapes.end() || shapeIt->second.shape.IsNull()) {
+        return std::nullopt;
+    }
+
+    const auto face = part::subshapeByName(shapeIt->second.shape, support.subnames.front());
+    if (!face || face->IsNull() || face->ShapeType() != TopAbs_FACE) {
+        return std::nullopt;
+    }
+    return TopoDS::Face(*face);
+}
+
+std::optional<gp_Trsf> flatFaceSupportPlacement(
+    const app::DocumentObject& object,
+    const app::Link& support,
+    runtime::ComputeContext& context
+)
+{
+    const std::string mapMode = app::readString(object, "MapMode").value_or("FlatFace");
+    if (mapMode != "FlatFace") {
+        return std::nullopt;
+    }
+
+    const auto face = supportFace(support, context);
+    if (!face) {
+        return std::nullopt;
+    }
+
+    BRepAdaptor_Surface surface(*face);
+    if (surface.GetType() != GeomAbs_Plane) {
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "unsupported_subshape_kind",
+            "Sketch FlatFace support currently requires a planar Face subshape",
+            object.name,
+            support.property.empty() ? "Support" : support.property,
+            "runtime",
+            support.object + "." + support.subnames.front()
+        );
+        return std::nullopt;
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/AttachExtension.cpp
+    // ::AttachExtension::positionBySupport(), MapMode "FlatFace" places the sketch on the
+    // linked face frame; PartDesign::Hole::execute() then consumes the transformed profile.
+    Bnd_Box bounds;
+    BRepBndLib::Add(*face, bounds);
+    if (bounds.IsVoid()) {
+        return std::nullopt;
+    }
+    double xMin = 0.0;
+    double yMin = 0.0;
+    double zMin = 0.0;
+    double xMax = 0.0;
+    double yMax = 0.0;
+    double zMax = 0.0;
+    bounds.Get(xMin, yMin, zMin, xMax, yMax, zMax);
+
+    const gp_Pln plane = surface.Plane();
+    gp_Dir normal = plane.Axis().Direction();
+    if (face->Orientation() == TopAbs_REVERSED) {
+        normal.Reverse();
+    }
+
+    gp_Pnt origin(xMin, yMin, zMin);
+    gp_Vec xVector(1.0, 0.0, 0.0);
+    const double absX = std::abs(normal.X());
+    const double absY = std::abs(normal.Y());
+    const double absZ = std::abs(normal.Z());
+    if (absZ >= absX && absZ >= absY) {
+        origin.SetZ(normal.Z() >= 0.0 ? zMax : zMin);
+        xVector = gp_Vec(1.0, 0.0, 0.0);
+    }
+    else if (absX >= absY) {
+        origin.SetX(normal.X() >= 0.0 ? xMax : xMin);
+        xVector = gp_Vec(0.0, 1.0, 0.0);
+    }
+    else {
+        origin.SetY(normal.Y() >= 0.0 ? yMax : yMin);
+        xVector = gp_Vec(1.0, 0.0, 0.0);
+    }
+
+    const gp_Vec zVector(normal);
+    gp_Vec yVector = zVector.Crossed(xVector);
+    if (yVector.SquareMagnitude() <= Precision::SquareConfusion()) {
+        return std::nullopt;
+    }
+    yVector.Normalize();
+
+    gp_Trsf placement;
+    placement.SetValues(
+        xVector.X(),
+        yVector.X(),
+        zVector.X(),
+        origin.X(),
+        xVector.Y(),
+        yVector.Y(),
+        zVector.Y(),
+        origin.Y(),
+        xVector.Z(),
+        yVector.Z(),
+        zVector.Z(),
+        origin.Z()
+    );
+    return placement;
+}
+
 std::optional<gp_Trsf> supportPlacement(const app::DocumentObject& object, runtime::ComputeContext& context)
 {
     const auto support = readSupportLink(object);
     if (!support) {
         return std::nullopt;
+    }
+
+    if (const auto facePlacement = flatFaceSupportPlacement(object, *support, context)) {
+        return facePlacement;
     }
 
     const auto placementIt = context.globalPlacements.find(support->object);

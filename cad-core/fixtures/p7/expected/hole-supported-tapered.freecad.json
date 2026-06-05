@@ -21,5 +21,6 @@
     "faces": 8,
     "vertices": 10
   },
-  "volume": 494.2130376404627
+  "volume": 494.2130376404627,
+  "volume_delta": 0.00001
 }

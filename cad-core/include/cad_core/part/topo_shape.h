@@ -192,6 +192,10 @@ struct NamedShapeSource
     // MappedChildElements::postfix before ElementMap::addChildElements() encodes the child map.
     std::string childElementMapPostfix;
     bool expandCompoundForBoolean = false;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/
+    // FCBRepAlgoAPI_BooleanOperation.cpp::RecursiveCutFusedTools(), "cut argument and compound
+    // tool" then "if tool consists of two or more shapes, fuse them together".
+    bool fuseCompoundForCut = false;
 };
 
 struct LinkedSubshapeRetag

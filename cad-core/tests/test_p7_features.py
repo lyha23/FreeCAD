@@ -716,7 +716,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assert_object_matches_expected(table_result, "p7", "hole-supported-threaded-dynamic-iso2009")
         self.assert_object_matches_expected(model_result, "p7", "hole-supported-model-thread-metric")
 
-    def test_c3m5_hole_threaded_model_thread_head_cut_oracle_matrix_is_explicit_gap(self) -> None:
+    def test_c3m5_hole_threaded_model_thread_head_cut_oracle_matrix_matches_native(self) -> None:
         result = self.run_recompute("hole-supported-model-thread-counterbore", "p7")
         expected = self.expected_freecad("p7", "hole-supported-model-thread-counterbore")
         hole = result["objects"]["Hole"]
@@ -728,26 +728,24 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         ]
 
         self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(
-            expected["known_gap"].split(":", maxsplit=1)[0],
-            "hole_threaded_model_thread_profile_head_oracle_matrix",
-        )
+        self.assertNotIn("known_gap", expected)
         self.assertEqual(expected["topology_counts"], {"edges": 106, "faces": 50, "vertices": 60})
         self.assertAlmostEqual(expected["volume"], 434.05359569539525, delta=1e-9)
+        self.assert_object_matches_expected(result, "p7", "hole-supported-model-thread-counterbore")
         self.assertEqual(hole["threaded"], True)
         self.assertEqual(hole["model_thread"], True)
         self.assertEqual(hole["model_thread_geometry"], "pipe_shell")
         self.assertEqual(hole["hole_cut_type"], "Counterbore")
-        self.assertEqual(hole["history"]["remaining"], ["hole_threaded_model_thread_profile_head_oracle_matrix"])
+        self.assertAlmostEqual(hole["diameter"], 3.3219999999999996, delta=1e-9)
+        self.assertEqual(hole["diameter_source"], "thread_tap_drill")
+        self.assertEqual(hole["history"]["remaining"], [])
         self.assertIn("model_thread_compound_tool_shape", hole["history"]["covered"])
-        self.assertEqual(
-            hole["history"]["topology_gap"],
-            "model_thread_head_cut_native_topology_pending_local_frame",
-        )
+        self.assertIn("threaded_model_thread_head_cut_native_oracle", hole["history"]["covered"])
+        self.assertNotIn("topology_gap", hole["history"])
         self.assertNotIn("geometry_fallback", hole["history"])
         self.assertEqual(hole["history"]["center_sources"], [{"subname": "Edge1", "kind": "edge"}])
         self.assertIn("hole_model_thread:pipe_shell_tool_history", named_shape["element_history_status"])
-        self.assertIn("boolean_compound_tool:expand_children", named_shape["element_history_status"])
+        self.assertNotIn("boolean_compound_tool:expand_children", named_shape["element_history_status"])
         self.assertTrue(events)
         self.assertTrue(
             all(

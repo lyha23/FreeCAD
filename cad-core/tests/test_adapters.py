@@ -687,8 +687,20 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             capabilities["part_design"]["hole"]["history"]["covered"],
         )
         self.assertIn(
-            "p7/hole-supported-model-thread-counterbore",
+            "threaded_model_thread_head_cut_native_oracle",
+            capabilities["part_design"]["hole"]["history"]["covered"],
+        )
+        self.assertEqual(
             capabilities["part_design"]["hole"]["history"]["known_gap_fixtures"],
+            [],
+        )
+        self.assertEqual(
+            capabilities["part_design"]["hole"]["history"]["remaining"],
+            [],
+        )
+        self.assertIn(
+            "p7/hole-supported-model-thread-counterbore",
+            capabilities["part_design"]["hole"]["native_oracle_fixtures"],
         )
         self.assertIn(
             "p7/hole-supported-model-thread-metric",
@@ -698,13 +710,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "p7/hole-supported-point-counterbore",
             capabilities["part_design"]["hole"]["native_oracle_fixtures"],
         )
-        self.assertIn(
-            "p7/hole-supported-model-thread-counterbore",
-            capabilities["part_design"]["hole"]["native_oracle_known_gap_fixtures"],
-        )
+        self.assertEqual(capabilities["part_design"]["hole"]["native_oracle_known_gap_fixtures"], [])
         self.assertEqual(
             capabilities["part_design"]["hole"]["remaining_gaps"],
-            ["hole_threaded_model_thread_profile_head_oracle_matrix"],
+            [],
         )
         self.assertEqual(
             capabilities["adapters"]["core_entrypoints"],
@@ -968,20 +977,15 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("profile_source_tool_face_mapper_history", producer_matrix["hole"]["covered"])
         self.assertIn("point_profile_head_cut_history", producer_matrix["hole"]["covered"])
         self.assertIn("model_thread_compound_tool_shape", producer_matrix["hole"]["covered"])
-        self.assertIn(
-            "p7/hole-supported-model-thread-counterbore",
-            producer_matrix["hole"]["known_gap_fixtures"],
-        )
-        self.assertIn(
-            "hole_threaded_model_thread_profile_head_oracle_matrix",
-            producer_matrix["hole"]["remaining"],
-        )
+        self.assertIn("threaded_model_thread_head_cut_native_oracle", producer_matrix["hole"]["covered"])
+        self.assertEqual(producer_matrix["hole"]["known_gap_fixtures"], [])
+        self.assertEqual(producer_matrix["hole"]["remaining"], [])
         hole_capability = capabilities["part_design"]["hole"]
         self.assertEqual(hole_capability["history"]["status"], "element_map_freeze_first_slice")
         self.assertIn("profile_source_tool_face_mapper_history", hole_capability["history"]["covered"])
         self.assertEqual(
             hole_capability["remaining_gaps"],
-            ["hole_threaded_model_thread_profile_head_oracle_matrix"],
+            [],
         )
         self.assertEqual(capabilities["topo_history"]["terminal_history"], ["deleted", "split", "merge"])
         self.assertEqual(
@@ -1116,10 +1120,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "part_offset2d_makeoffsetfix_intersection_compound_collective",
             capabilities["topo_history"]["remaining_gaps"],
         )
-        self.assertIn(
+        self.assertNotIn(
             "hole_threaded_model_thread_profile_head_oracle_matrix",
             capabilities["topo_history"]["remaining_gaps"],
         )
+        self.assertNotIn("hole_threaded_model_thread_profile_head_oracle_matrix", capabilities["known_gaps"])
         self.assertNotIn("complete_mapper_history", capabilities["known_gaps"])
         self.assertNotIn("assembly_joint_solver", capabilities["known_gaps"])
         self.assertNotIn("element_map_child_map_preserve_propagate_lifecycle", capabilities["known_gaps"])
@@ -1143,7 +1148,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "part_offset2d_makeoffsetfix_intersection_compound_collective",
             capabilities["known_gaps"],
         )
-        self.assertIn("hole_threaded_model_thread_profile_head_oracle_matrix", capabilities["known_gaps"])
+        self.assertNotIn("hole_threaded_model_thread_profile_head_oracle_matrix", capabilities["known_gaps"])
         self.assertIn("assembly_full_ondsel_solver", capabilities["known_gaps"])
         self.assertIn("assembly_solver_placement_updates", capabilities["known_gaps"])
         self.assertNotIn("show_element_missing_child_lifecycle", capabilities["known_gaps"])

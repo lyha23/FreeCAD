@@ -617,6 +617,15 @@ part::NamedShapeSource sourceForFeature(const std::string& feature,
                       (*slotNamedShape)->elementHistoryStatus.end(),
                       "boolean_compound_tool:expand_children")
             != (*slotNamedShape)->elementHistoryStatus.end();
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/
+        // FeatureHole.cpp::Hole::execute(), "builder.MakeCompound(holeWithThread)" stores
+        // protoHole/protoThread as the subtractive AddSubShape; Part boolean then handles the
+        // compound tool through FCBRepAlgoAPI_BooleanOperation.cpp::RecursiveCutFusedTools().
+        source.fuseCompoundForCut =
+            std::find((*slotNamedShape)->elementHistoryStatus.begin(),
+                      (*slotNamedShape)->elementHistoryStatus.end(),
+                      "hole_model_thread:pipe_shell_tool_history")
+            != (*slotNamedShape)->elementHistoryStatus.end();
         return source;
     }
     const auto namedShapeIt = context.namedShapes.find(feature);
@@ -628,6 +637,11 @@ part::NamedShapeSource sourceForFeature(const std::string& feature,
             std::find(namedShapeIt->second.elementHistoryStatus.begin(),
                       namedShapeIt->second.elementHistoryStatus.end(),
                       "boolean_compound_tool:expand_children")
+            != namedShapeIt->second.elementHistoryStatus.end();
+        source.fuseCompoundForCut =
+            std::find(namedShapeIt->second.elementHistoryStatus.begin(),
+                      namedShapeIt->second.elementHistoryStatus.end(),
+                      "hole_model_thread:pipe_shell_tool_history")
             != namedShapeIt->second.elementHistoryStatus.end();
     }
     return source;

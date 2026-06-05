@@ -37,7 +37,7 @@ C3-M1 / C3-M2 的目标是把 CAD Core 2.0 中显式暴露的拓扑命名与引�
 
 交付内容：
 
-- `complete_mapper_history` 这类笼统 gap 已在 capabilities 中拆成可执行 producer / lifecycle 残项；当前仅剩 `hole_threaded_model_thread_profile_head_oracle_matrix`。ElementMap child-map source range preserve、nested child-map recursive source range、child-map postfix source range、hashed child-map key evidence、ElementMapPolicy::Propagate `makeElementWires` edge identity、ElementMapPolicy::Propagate `makeElementShell` source-to-shell map、Part::Compound makeElementCompound、Offset2D `Intersection=false` compound child recursion 与 Offset2D `Intersection=true` compound collective MakeOffsetFix 已落为 producer coverage。
+- `complete_mapper_history` 这类笼统 gap 已在 capabilities 中拆成可执行 producer / lifecycle 残项，当前 `topo_history.remaining_gaps` 为空。ElementMap child-map source range preserve、nested child-map recursive source range、child-map postfix source range、hashed child-map key evidence、ElementMapPolicy::Propagate `makeElementWires` edge identity、ElementMapPolicy::Propagate `makeElementShell` source-to-shell map、Part::Compound makeElementCompound、Offset2D `Intersection=false` compound child recursion、Offset2D `Intersection=true` compound collective MakeOffsetFix 与 Hole threaded ModelThread head-cut native oracle 已落为 producer coverage。
 - ShapeFix 主路径 history：已覆盖 deleted-small-edge 和 ShapeFix Root modified 证据；本地 FreeCAD `ShapeFix_Wire` generated history 已审计为空，不补 synthetic generated fixture。
 - import shape ElementMap：导入 STEP / IGES / BREP 等 Part TopoShape 时建立稳定 source ownership；Mesh import 不伪装为 Part TopoShape ElementMap。
 - Part Boolean、General Fuse、Section、Refine、DressUp、Transformed、Link retag 后继续传播 terminal split / deleted / merge。
@@ -46,7 +46,7 @@ C3-M1 / C3-M2 的目标是把 CAD Core 2.0 中显式暴露的拓扑命名与引�
 完成判定：
 
 - `topo_history.remaining_gaps` 不再保留笼统 `complete_mapper_history`；producer matrix 继续暴露已覆盖 producer，未完成项必须落到具体 lifecycle / producer gap。
-- `topo_history.producer_matrix` 已进入 C ABI capabilities：已显式列出 prism、body_boolean、part_boolean、section、general_fuse、refine、shape_fix、import_shape、link_retag、sketch_internalshape、taper_thru_sections、dressup、transformed、Hole 的 covered / remaining 状态；body_boolean / part_boolean 已覆盖 flagged source 的 Cut tool slot compound expansion；Hole 已补 `hole-supported-model-thread-counterbore` native known-gap fixture，remaining 指向 FreeCAD `makeThread()` / `findHoles()` local-frame 与 head-cut residual topology 收敛。
+- `topo_history.producer_matrix` 已进入 C ABI capabilities：已显式列出 prism、body_boolean、part_boolean、section、general_fuse、refine、shape_fix、import_shape、link_retag、sketch_internalshape、taper_thru_sections、dressup、transformed、Hole 的 covered / remaining 状态；body_boolean / part_boolean 已覆盖 flagged source 的 Cut tool slot compound expansion；Hole 已覆盖 `hole-supported-model-thread-counterbore` native oracle，`known_gap_fixtures` 与 `remaining` 为空。
 - `shapefix_history` 已拆为 `shapefix_deleted_small_edge`、`shapefix_root_modified_history` 和 `generated_empty_review`；`import_shape_element_map` 已进入 `topo_history.maker_history`，当前覆盖 STEP / IGES / BREP owner-qualified alias；`sketch_internalshape` 已覆盖 FaceMaker / WireJoiner producer evidence 和 bounded-face/open-wire mixed oracle 第一切片。
 - `tests/src/Mod/Part/App/WireJoiner.cpp::Generated` 明确记录 ShapeFix_Wire history 未调用 `AddGenerated()`，因此 ShapeFix generated 已从 implementation gap 降级为 native-empty 证据项，不新增 generated 假 fixture。
 - ElementMapPolicy::Drop 和 ambiguous split 已有 C3-M1 probe；后续不把 split reselect 当唯一 target 恢复。
