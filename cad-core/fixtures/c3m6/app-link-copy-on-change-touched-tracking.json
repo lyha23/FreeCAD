@@ -1,0 +1,65 @@
+{
+  "Objects": [
+    {
+      "Name": "Box",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 3,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "BoxLink_CopyOnChangeGroup",
+      "ID": 3,
+      "TypeId": "App::DocumentObjectGroup",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": []
+        }
+      }
+    },
+    {
+      "Name": "BoxLink_CopyOnChangeObject",
+      "ID": 4,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 3,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "BoxLink",
+      "ID": 2,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "BoxLink_CopyOnChangeObject"
+        },
+        "LinkCopyOnChange": {
+          "PropertyType": "App::PropertyInteger",
+          "value": 3
+        },
+        "LinkCopyOnChangeSource": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Box"
+        },
+        "LinkCopyOnChangeGroup": {
+          "PropertyType": "App::PropertyLink",
+          "value": "BoxLink_CopyOnChangeGroup"
+        },
+        "LinkCopyOnChangeTouched": {
+          "PropertyType": "App::PropertyBool",
+          "value": true
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["BoxLink"]
+  }
+}

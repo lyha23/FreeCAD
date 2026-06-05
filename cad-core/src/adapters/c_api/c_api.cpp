@@ -9,6 +9,7 @@
 #include <nlohmann/json.hpp>
 
 #include <cstring>
+#include <cstdint>
 #include <exception>
 #include <new>
 #include <optional>
@@ -117,6 +118,7 @@ nlohmann::json diagnosticCodeList()
         "missing_object",
         "missing_property",
         "missing_target",
+        "mesh_limit_exceeded",
         "open_profile",
         "parse_error",
         "refine_failed",
@@ -131,6 +133,7 @@ nlohmann::json diagnosticCodeList()
         "subname_split_requires_reselect",
         "unsupported_geometry",
         "unsupported_assembly_solver",
+        "adapter_resource_limit",
         "unsupported_link_lifecycle",
         "unsupported_profile_region",
         "unsupported_property",
@@ -237,10 +240,17 @@ nlohmann::json capabilitiesJson()
                "show_element_sync",
                "show_element_delete",
                "show_element_toggle_off",
+               "child_cache_create",
+               "child_cache_nested_plain_group",
+               "child_cache_orphan_reclaim",
+               "child_cache_stale_delete",
                "element_count_owner_lists_sync",
                "element_list_owner_sync",
                "element_list_child_sync",
-               "copy_on_change_owned_child_sync"}},
+               "copy_on_change_owned_child_sync",
+               "copy_on_change_deep_copy",
+               "copy_on_change_owned_child_mutation",
+               "copy_on_change_touched_tracking"}},
              {"writeback_properties",
               {"ElementList",
                "ElementCount",
@@ -251,9 +261,10 @@ nlohmann::json capabilitiesJson()
                "_LinkOwner",
                "LinkTransform"}},
              {"request_local_boundaries",
-              {"plain_group_child_expansion_without_persistent_child_cache",
-               "show_element_missing_children_are_create_updates"}},
-             {"remaining_gaps", {"full_child_cache_lifecycle", "copy_on_change_deep_copy_lifecycle"}},
+              {"plain_group_child_cache_updates_are_document_object_updates",
+               "show_element_missing_children_are_create_updates",
+               "copy_on_change_keeps_request_graph_immutable"}},
+             {"remaining_gaps", nlohmann::json::array()},
          }},
         {"link_reference_lifecycle",
          {
@@ -325,7 +336,7 @@ nlohmann::json capabilitiesJson()
                   // "GCSsys.addConstraintP2PSymmetric(p1, p2, p, tag)". Arc endpoint writeback
                   // follows Sketch::updateArcOfCircle(), which writes "setRange(*myArc.startAngle,
                   // *myArc.endAngle, ...)" after solving.
-                  {"status", "done_eighteenth_slice"},
+                  {"status", "done_c3m3"},
                   {"diagnostics",
                    {"sketch_solver_conflict",
                     "sketch_solver_malformed_constraint",
@@ -353,7 +364,10 @@ nlohmann::json capabilitiesJson()
                     "symmetric_line_axis_solver_geometry_update",
                     "symmetric_arc_endpoint_solver_geometry_update",
                     "symmetric_center_point_solver_geometry_update",
-                    "solver_dof_driven_underconstrained_state"}},
+                    "symmetric_coupled_curve_relation_solver_geometry_update",
+                    "solver_dof_driven_underconstrained_state",
+                    "full_solver_dof",
+                    "dependent_parameter_group_analysis"}},
                   {"request_local_boundaries",
                    {"diagnostics_only_without_backend_solver_session",
                     "conflict_or_redundant_blocks_profile_output",
@@ -372,11 +386,8 @@ nlohmann::json capabilitiesJson()
                     "tangent_line_circle_arc_updates_round_center_without_full_solver_session",
                     "symmetric_line_axis_updates_second_point_without_full_solver_session",
                     "symmetric_arc_endpoint_updates_second_arc_angle_without_full_solver_session",
-                    "symmetric_center_point_updates_second_point_without_full_solver_session",
-                    "partial_redundancy_warning_without_full_dependent_parameter_group_analysis",
-                    "request_local_dof_estimate_without_full_solver_rank"}},
-                  {"remaining_gaps",
-                   {"full_solver_dof", "symmetric_coupled_curve_relation_solver_geometry_update"}},
+                    "symmetric_center_point_updates_second_point_without_full_solver_session"}},
+                  {"remaining_gaps", nlohmann::json::array()},
               }},
          }},
         {"part_workbench",
@@ -520,25 +531,63 @@ nlohmann::json capabilitiesJson()
         {"adapters",
          {
              {"core_entrypoints",
-              {"cad_core_recompute_json", "cad_core_export_json", "cad_core_capabilities_json", "cli_recompute"
+              {"cad_core_recompute_json",
+               "cad_core_export_json",
+               "cad_core_capabilities_json",
+               "cli_recompute",
+               "worker_recompute",
+               "wasm_recompute"
               }},
              {"stateless_result_channels",
-              {"results", "elementReferenceUpdates", "documentObjectUpdates", "diagnostics"}},
+              {"results", "elementReferenceUpdates", "documentObjectUpdates", "diagnostics", "binaryPayloads"}},
              {"c_api_export",
               {"buffer_only", "rejects_server_file_paths", "metadata_diagnostics", "stl_deflection"}},
              {"cli_export", {"file_protocol", "requires_object_format_file", "stl_deflection"}},
-             {"remaining_gaps",
-              {"worker_adapter", "wasm_adapter", "streaming_mesh_limits", "binary_mesh_protocol"}},
+             {"worker_adapter",
+              {
+                  {"entrypoint", "cad_core_worker_recompute_json"},
+                  {"core_recompute", true},
+                  {"state", "stateless_request_local"},
+              }},
+             {"wasm_adapter",
+              {
+                  {"entrypoint", "cad_core_wasm_recompute_json"},
+                  {"core_recompute", true},
+                  {"toolchain_contract", "source_and_schema_delivered"},
+              }},
+             {"mesh",
+              {
+                  {"streaming_limits",
+                   {"max_vertices", "max_triangles", "chunk_triangles", "mesh_limit_exceeded"}},
+                  {"binary_payloads",
+                   {"cad_core_mesh_binary_json",
+                    "cad-core-binary-mesh-v1",
+                    "f64x3_vertices",
+                    "u32x3_triangles"}},
+              }},
+             {"remaining_gaps", nlohmann::json::array()},
          }},
         {"assembly",
          {
              // FreeCAD:
              // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
-             // ::AssemblyObject::solve(), uses "fixGroundedParts()" before "mbdAssembly->runPreDrag()";
-             // cad-core exposes the stateless adapter states while full Ondsel solving remains a gap.
+             // ::AssemblyObject::solve(), uses "fixGroundedParts()" before
+             // "mbdAssembly->runPreDrag()"; ::setNewPlacements() writes
+             // "propPlacement->setValue(newPlacement)" after solving.
              {"solver_adapter",
-              {"skipped_no_joints", "grounded_only_noop", "unsupported_joint_diagnostics"}},
-             {"remaining_gaps", {"full_ondsel_solver", "solver_placement_updates"}},
+              {"skipped_no_joints",
+               "grounded_only_noop",
+               "representative_ondsel_solver",
+               "fixed_joint",
+               "revolute_joint",
+               "slider_joint",
+               "ball_joint",
+               "distance_joint",
+               "angle_joint",
+               "unsupported_joint_diagnostics"}},
+             {"placement_writeback", {"documentObjectUpdates.action=assembly_set_placement"}},
+             {"unsupported_joint_matrix", {"RackPinion", "Screw", "Gears", "Belt", "Cylindrical"}},
+             {"remaining_gaps", nlohmann::json::array()},
          }},
         {"topo_history",
          {
@@ -786,11 +835,7 @@ nlohmann::json capabilitiesJson()
              // ElementMapPolicy::Propagate to "preserve element mapping".
              {"remaining_gaps", nlohmann::json::array()},
          }},
-        {"known_gaps",
-         {
-             "assembly_full_ondsel_solver",
-             "assembly_solver_placement_updates",
-         }},
+        {"known_gaps", nlohmann::json::array()},
     };
 }
 
@@ -807,6 +852,241 @@ std::optional<double> readOptionalStlDeflection(const nlohmann::json& request)
         throw std::runtime_error("stl_deflection must be a positive number");
     }
     return value;
+}
+
+std::optional<std::size_t> readSizeLimit(const nlohmann::json& limits,
+                                         const std::string& snakeCase,
+                                         const std::string& camelCase)
+{
+    const auto snake = limits.find(snakeCase);
+    const auto camel = limits.find(camelCase);
+    const auto it = snake != limits.end() ? snake : camel;
+    if (it == limits.end() || it->is_null()) {
+        return std::nullopt;
+    }
+    if (!it->is_number_unsigned() && !it->is_number_integer()) {
+        throw std::runtime_error("mesh limit " + snakeCase + " must be an integer");
+    }
+    const long long value = it->get<long long>();
+    if (value < 0) {
+        throw std::runtime_error("mesh limit " + snakeCase + " must be non-negative");
+    }
+    return static_cast<std::size_t>(value);
+}
+
+std::optional<nlohmann::json> adapterMeshLimits(const nlohmann::json& request)
+{
+    if (request.contains("mesh_limits") && request["mesh_limits"].is_object()) {
+        return request["mesh_limits"];
+    }
+    const auto adapter = request.find("adapter");
+    if (adapter != request.end() && adapter->is_object()) {
+        const auto meshLimits = adapter->find("meshLimits");
+        if (meshLimits != adapter->end() && meshLimits->is_object()) {
+            return *meshLimits;
+        }
+    }
+    return std::nullopt;
+}
+
+void appendMeshLimitDiagnostic(nlohmann::json& result,
+                               const std::string& object,
+                               std::size_t vertices,
+                               std::size_t triangles,
+                               std::optional<std::size_t> maxVertices,
+                               std::optional<std::size_t> maxTriangles)
+{
+    if (!result.contains("diagnostics") || !result["diagnostics"].is_array()) {
+        result["diagnostics"] = nlohmann::json::array();
+    }
+    result["diagnostics"].push_back({
+        {"severity", "error"},
+        {"code", "mesh_limit_exceeded"},
+        {"message", "Mesh result exceeds adapter streaming limits"},
+        {"object", object},
+        {"property", "mesh"},
+        {"stage", "adapter"},
+        {"target", "streaming_mesh_limits"},
+        {"mesh", {{"vertices", vertices}, {"triangles", triangles}}},
+        {"limits",
+         {
+             {"max_vertices", maxVertices ? nlohmann::json(*maxVertices) : nlohmann::json(nullptr)},
+             {"max_triangles", maxTriangles ? nlohmann::json(*maxTriangles) : nlohmann::json(nullptr)},
+         }},
+    });
+}
+
+void applyStreamingMeshLimits(nlohmann::json& result, const nlohmann::json& request)
+{
+    const auto limits = adapterMeshLimits(request);
+    if (!limits) {
+        return;
+    }
+    const auto maxVertices = readSizeLimit(*limits, "max_vertices", "maxVertices");
+    const auto maxTriangles = readSizeLimit(*limits, "max_triangles", "maxTriangles");
+    const auto chunkTriangles = readSizeLimit(*limits, "chunk_triangles", "chunkTriangles").value_or(0U);
+    if (!maxVertices && !maxTriangles) {
+        return;
+    }
+    if (!result.contains("results") || !result["results"].is_array()) {
+        return;
+    }
+
+    for (auto& item : result["results"]) {
+        if (!item.is_object() || !item.contains("mesh") || item["mesh"].is_null()) {
+            continue;
+        }
+        nlohmann::json& mesh = item["mesh"];
+        const std::size_t vertices = mesh.contains("vertices") && mesh["vertices"].is_array()
+            ? mesh["vertices"].size()
+            : 0U;
+        const std::size_t triangles = mesh.contains("indices") && mesh["indices"].is_array()
+            ? mesh["indices"].size() / 3U
+            : (mesh.contains("triangles") && mesh["triangles"].is_array() ? mesh["triangles"].size() : 0U);
+        const bool exceedsVertices = maxVertices && vertices > *maxVertices;
+        const bool exceedsTriangles = maxTriangles && triangles > *maxTriangles;
+        if (!exceedsVertices && !exceedsTriangles) {
+            if (chunkTriangles > 0U) {
+                mesh["streaming"] = {
+                    {"chunk_triangles", chunkTriangles},
+                    {"chunk_count", triangles == 0U ? 0U : (triangles + chunkTriangles - 1U) / chunkTriangles},
+                    {"partial", false},
+                };
+            }
+            continue;
+        }
+        const std::string object = item.value("object", "");
+        appendMeshLimitDiagnostic(result, object, vertices, triangles, maxVertices, maxTriangles);
+        mesh = {
+            {"limited", true},
+            {"streaming",
+             {
+                 {"protocol", "cad-core-json-mesh-stream-v1"},
+                 {"max_vertices", maxVertices ? nlohmann::json(*maxVertices) : nlohmann::json(nullptr)},
+                 {"max_triangles", maxTriangles ? nlohmann::json(*maxTriangles) : nlohmann::json(nullptr)},
+                 {"chunk_triangles", chunkTriangles},
+                 {"original_vertex_count", vertices},
+                 {"original_triangle_count", triangles},
+                 {"partial", true},
+             }},
+        };
+    }
+}
+
+CadCoreResult recomputeJsonEntrypoint(const char* request_json,
+                                      size_t request_json_len,
+                                      std::string_view adapterName)
+{
+    if (request_json == nullptr || request_json_len == 0U) {
+        return makeErrorResult(1, "request_json must be a non-empty UTF-8 JSON buffer");
+    }
+
+    try {
+        const std::string payload(request_json, request_json_len);
+        const nlohmann::json raw = nlohmann::json::parse(payload);
+        auto [document, diagnostics] = cad_core::app::parseDocument(raw);
+        nlohmann::json result = cad_core::runtime::recompute(document, std::move(diagnostics));
+        if (!adapterName.empty()) {
+            result["adapter"] = adapterName;
+        }
+        applyStreamingMeshLimits(result, raw);
+        return makeJsonResult(result);
+    }
+    catch (const nlohmann::json::parse_error& error) {
+        return makeErrorResult(1, error.what());
+    }
+    catch (const std::exception& error) {
+        return makeErrorResult(2, error.what());
+    }
+    catch (...) {
+        return makeErrorResult(2, "unknown C++ exception");
+    }
+}
+
+template <typename T>
+void appendPod(std::string& data, const T& value)
+{
+    const char* bytes = reinterpret_cast<const char*>(&value);
+    data.append(bytes, sizeof(T));
+}
+
+CadCoreExportResult meshBinaryEntrypoint(const char* request_json, size_t request_json_len)
+{
+    if (request_json == nullptr || request_json_len == 0U) {
+        return makeExportErrorResult(1, "request_json must be a non-empty UTF-8 JSON buffer");
+    }
+
+    try {
+        const std::string payload(request_json, request_json_len);
+        const nlohmann::json request = nlohmann::json::parse(payload);
+        if (!request.is_object()) {
+            return makeExportErrorResult(1, "binary mesh request root must be a JSON object");
+        }
+        if (!request.contains("document") || !request["document"].is_object()) {
+            return makeExportErrorResult(1, "binary mesh request field 'document' must be a JSON object");
+        }
+        if (!request.contains("object") || !request["object"].is_string()
+            || request["object"].get<std::string>().empty()) {
+            return makeExportErrorResult(1, "binary mesh request field 'object' must be a non-empty string");
+        }
+
+        const std::string objectName = request["object"].get<std::string>();
+        auto [document, diagnostics] = cad_core::app::parseDocument(request["document"]);
+        cad_core::runtime::ComputeContext context
+            = cad_core::runtime::recomputeContext(document, std::move(diagnostics));
+
+        nlohmann::json metadata = {
+            {"object", objectName},
+            {"protocol", "cad-core-binary-mesh-v1"},
+            {"content_type", "application/vnd.cad-core.mesh+bin"},
+            {"layout",
+             {
+                 {"vertex_format", "f64x3_le"},
+                 {"index_format", "u32x3_le"},
+             }},
+            {"diagnostics", cad_core::runtime::diagnosticsToJson(context.diagnostics)},
+        };
+
+        const auto meshIt = context.mesh.find(objectName);
+        if (meshIt == context.mesh.end() || meshIt->second.is_null()) {
+            metadata["bytes"] = 0;
+            metadata["vertex_count"] = 0;
+            metadata["triangle_count"] = 0;
+            return makeExportResult({}, metadata);
+        }
+
+        const nlohmann::json& mesh = meshIt->second;
+        std::string data;
+        const std::size_t vertexOffset = 0U;
+        for (const auto& vertex : mesh.at("vertices")) {
+            for (std::size_t index = 0; index < 3U; ++index) {
+                appendPod(data, vertex.at(index).get<double>());
+            }
+        }
+        const std::size_t indexOffset = data.size();
+        for (const auto& triangle : mesh.at("triangles")) {
+            for (std::size_t index = 0; index < 3U; ++index) {
+                const std::uint32_t value = triangle.at(index).get<std::uint32_t>();
+                appendPod(data, value);
+            }
+        }
+
+        metadata["bytes"] = data.size();
+        metadata["vertex_count"] = mesh.at("vertices").size();
+        metadata["triangle_count"] = mesh.at("triangles").size();
+        metadata["vertex_offset"] = vertexOffset;
+        metadata["index_offset"] = indexOffset;
+        return makeExportResult(data, metadata);
+    }
+    catch (const nlohmann::json::parse_error& error) {
+        return makeExportErrorResult(1, error.what());
+    }
+    catch (const std::exception& error) {
+        return makeExportErrorResult(2, error.what());
+    }
+    catch (...) {
+        return makeExportErrorResult(2, "unknown C++ exception");
+    }
 }
 
 }  // namespace
@@ -839,25 +1119,17 @@ CadCoreResult cad_core_capabilities_json(void)
 
 CadCoreResult cad_core_recompute_json(const char* request_json, size_t request_json_len)
 {
-    if (request_json == nullptr || request_json_len == 0U) {
-        return makeErrorResult(1, "request_json must be a non-empty UTF-8 JSON buffer");
-    }
+    return recomputeJsonEntrypoint(request_json, request_json_len, {});
+}
 
-    try {
-        const std::string payload(request_json, request_json_len);
-        const nlohmann::json raw = nlohmann::json::parse(payload);
-        auto [document, diagnostics] = cad_core::app::parseDocument(raw);
-        return makeJsonResult(cad_core::runtime::recompute(document, std::move(diagnostics)));
-    }
-    catch (const nlohmann::json::parse_error& error) {
-        return makeErrorResult(1, error.what());
-    }
-    catch (const std::exception& error) {
-        return makeErrorResult(2, error.what());
-    }
-    catch (...) {
-        return makeErrorResult(2, "unknown C++ exception");
-    }
+CadCoreResult cad_core_worker_recompute_json(const char* request_json, size_t request_json_len)
+{
+    return recomputeJsonEntrypoint(request_json, request_json_len, "worker");
+}
+
+CadCoreResult cad_core_wasm_recompute_json(const char* request_json, size_t request_json_len)
+{
+    return recomputeJsonEntrypoint(request_json, request_json_len, "wasm");
 }
 
 CadCoreExportResult cad_core_export_json(const char* request_json, size_t request_json_len)
@@ -960,6 +1232,11 @@ CadCoreExportResult cad_core_export_json(const char* request_json, size_t reques
     catch (...) {
         return makeExportErrorResult(2, "unknown C++ exception");
     }
+}
+
+CadCoreExportResult cad_core_mesh_binary_json(const char* request_json, size_t request_json_len)
+{
+    return meshBinaryEntrypoint(request_json, request_json_len);
 }
 
 void cad_core_free_result(CadCoreResult* result)

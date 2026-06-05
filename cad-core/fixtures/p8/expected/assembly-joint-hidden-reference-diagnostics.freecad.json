@@ -1,9 +1,7 @@
 {
-  "reference": "FreeCAD Assembly migrationScript7 notes old Joint references may be App::PropertyXLinkSubHidden; cad-core parses those hidden links for solver input metadata without making them graph dependencies.",
+  "reference": "FreeCAD Assembly migrationScript7 notes old Joint references may be App::PropertyXLinkSubHidden; cad-core parses those hidden links for solver input metadata and returns representative stateless placement writebacks.",
   "freecad_version": "1.2.0 revision 20260519",
-  "diagnostic_codes": [
-    "unsupported_assembly_solver"
-  ],
+  "diagnostic_codes": [],
   "objects": {
     "FixedJoint": {
       "object_fields": {
@@ -51,7 +49,7 @@
         "joints": [
           "FixedJoint"
         ],
-        "solve": "unsupported"
+        "solve": "solved"
       },
       "bbox": {
         "min": [

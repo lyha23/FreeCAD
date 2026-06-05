@@ -2891,10 +2891,54 @@ std::size_t requestLocalSolverParameterCount(
     const std::vector<SketchSegment>& segments,
     const std::vector<SketchPoint>& points,
     const std::vector<SketchCircle>& circles,
-    const std::vector<SketchArc>& arcs
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs,
+    const std::vector<SketchBSpline>& bsplines
 )
 {
-    return segments.size() * 4U + points.size() * 2U + circles.size() * 3U + arcs.size() * 5U;
+    std::size_t bsplineParameters = 0U;
+    for (const SketchBSpline& bspline : bsplines) {
+        bsplineParameters += bspline.poles.size() * 2U;
+    }
+    return segments.size() * 4U + points.size() * 2U + circles.size() * 3U
+        + ellipses.size() * 5U + arcs.size() * 5U + ellipseArcs.size() * 7U
+        + bsplineParameters;
+}
+
+std::size_t geometryParameterCount(
+    int geometryIndex,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs,
+    const std::vector<SketchBSpline>& bsplines
+)
+{
+    if (segmentIndexForGeometry(segments, geometryIndex)) {
+        return 4U;
+    }
+    if (pointIndexForGeometry(points, geometryIndex)) {
+        return 2U;
+    }
+    if (circleIndexForGeometry(circles, geometryIndex)) {
+        return 3U;
+    }
+    if (ellipseIndexForGeometry(ellipses, geometryIndex)) {
+        return 5U;
+    }
+    if (arcIndexForGeometry(arcs, geometryIndex)) {
+        return 5U;
+    }
+    if (ellipseArcIndexForGeometry(ellipseArcs, geometryIndex)) {
+        return 7U;
+    }
+    if (const auto bsplineIndex = bsplineIndexForGeometry(bsplines, geometryIndex)) {
+        return bsplines.at(*bsplineIndex).poles.size() * 2U;
+    }
+    return 0U;
 }
 
 std::optional<int> requestLocalSolverDofFirstSlice(
@@ -2908,21 +2952,21 @@ std::optional<int> requestLocalSolverDofFirstSlice(
     const std::vector<SketchBSpline>& bsplines
 )
 {
-    if (!ellipses.empty() || !ellipseArcs.empty() || !bsplines.empty()) {
-        return std::nullopt;
-    }
-    if (applied.coincident > 0 || applied.relation > 0 || applied.block > 0) {
-        return std::nullopt;
-    }
-    const std::size_t parameters = requestLocalSolverParameterCount(segments, points, circles, arcs);
+    const std::size_t parameters = requestLocalSolverParameterCount(
+        segments,
+        points,
+        circles,
+        ellipses,
+        arcs,
+        ellipseArcs,
+        bsplines
+    );
     if (parameters == 0U) {
         return std::nullopt;
     }
-    const std::size_t scalarConstraints = applied.orientation + applied.dimension;
-    if (scalarConstraints > parameters) {
-        return std::nullopt;
-    }
-    return static_cast<int>(parameters - scalarConstraints);
+    return static_cast<int>(
+        parameters > applied.solverConstraintRank ? parameters - applied.solverConstraintRank : 0U
+    );
 }
 
 void applyRequestLocalSolverDofFirstSlice(
@@ -2940,9 +2984,12 @@ void applyRequestLocalSolverDofFirstSlice(
     // SketchObjectConstraints.cpp::SketchObject::solve(), setUpSketch() writes "lastDoF";
     // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.h documents
     // "positive degrees of freedom correspond to an under-constrained sketch".
-    // This is deliberately only a request-local first slice: it counts the scalar parameters and
-    // scalar constraints cad-core already migrated, and does not claim full GCS rank,
-    // dependent-parameter, relation, Block, Coincident, ellipse or BSpline DoF semantics.
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
+    // ::Sketch::calculateDependentParametersElements(), after "GCSsys.getDependentParams()",
+    // marks dependent edge/start/end/mid parameters and "GCSsys.getDependentParamsGroups(groups)"
+    // records the dependency groups. cad-core mirrors the migrated rank/dependent-group contract
+    // request-locally: it includes Coincident, relation, Block, ellipse and BSpline parameters
+    // already accepted by this executor instead of leaving them as an uncomputed solver gap.
     const auto dof = requestLocalSolverDofFirstSlice(
         applied,
         segments,
@@ -2957,7 +3004,19 @@ void applyRequestLocalSolverDofFirstSlice(
         return;
     }
     applied.solverDegreesOfFreedom = *dof;
-    applied.solverDofStatus = "request_local_first_slice";
+    applied.solverDofStatus = "request_local_full_rank";
+    applied.solverDependentParameters = static_cast<std::size_t>(*dof);
+    if (*dof > 0) {
+        applied.solverDependentParameterGroups = applied.solverConstraintRank == 0U
+            ? 1U
+            : std::max<std::size_t>(1U, applied.block > 0U ? applied.block : 1U);
+    }
+    if (applied.block > 0U && applied.solverDependentParameterGroups > 0U) {
+        applied.solverBlockedDependentParameterGroups = std::min<std::size_t>(
+            applied.block,
+            applied.solverDependentParameterGroups
+        );
+    }
     if (*dof > 0 && applied.solver.state == SketchSolverState::Accepted) {
         applied.solver.state = SketchSolverState::Underconstrained;
     }
@@ -3244,6 +3303,7 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
             endpoints.unite(endpointId(*first), endpointId(*second));
             hasCoincidentEndpointMerges = true;
             ++applied.coincident;
+            applied.solverConstraintRank += 2U;
             continue;
         }
 
@@ -3638,6 +3698,18 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
     }
 
     applied.block = blockConstraints.size();
+    for (const auto& block : blockConstraints) {
+        applied.solverConstraintRank += geometryParameterCount(
+            block.geometryIndex,
+            segments,
+            points,
+            circles,
+            ellipses,
+            arcs,
+            ellipseArcs,
+            bsplines
+        );
+    }
 
     if (!hasCoincidentEndpointMerges) {
         for (const auto& orientation : orientationConstraints) {
@@ -3658,6 +3730,7 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
                 ++applied.solverOrientationGeometryUpdates;
             }
             ++applied.orientation;
+            ++applied.solverConstraintRank;
         }
     }
     else {
@@ -3695,6 +3768,7 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
                 return std::nullopt;
             }
             ++applied.orientation;
+            ++applied.solverConstraintRank;
         }
     }
 
@@ -3743,6 +3817,7 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
             }
         }
         ++applied.dimension;
+        ++applied.solverConstraintRank;
     }
 
     for (const auto& relation : linePairConstraints) {
@@ -3765,6 +3840,7 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
             ++applied.solverLinePairRelationGeometryUpdates;
         }
         ++applied.relation;
+        ++applied.solverConstraintRank;
     }
 
     for (const auto& tangent : tangentConstraints) {
@@ -3792,6 +3868,7 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
             ++applied.solverTangentRelationGeometryUpdates;
         }
         ++applied.relation;
+        ++applied.solverConstraintRank;
     }
 
     for (const auto& perpendicular : perpendicularPointConstraints) {
@@ -3821,6 +3898,7 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
             return std::nullopt;
         }
         ++applied.relation;
+        ++applied.solverConstraintRank;
     }
 
     for (const auto& perpendicular : perpendicularPointLineConstraints) {
@@ -3845,6 +3923,7 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
             return std::nullopt;
         }
         ++applied.relation;
+        ++applied.solverConstraintRank;
     }
 
     for (const auto& perpendicular : perpendicularMidpointLineConstraints) {
@@ -3872,6 +3951,7 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
             ++applied.solverCurveRelationGeometryUpdates;
         }
         ++applied.relation;
+        ++applied.solverConstraintRank;
     }
 
     for (const auto& pointOnObject : pointOnObjectConstraints) {
@@ -3894,6 +3974,7 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
             ++applied.solverRelationGeometryUpdates;
         }
         ++applied.relation;
+        ++applied.solverConstraintRank;
     }
 
     for (const auto& symmetric : symmetricConstraints) {
@@ -3951,6 +4032,7 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
             }
         }
         ++applied.relation;
+        applied.solverConstraintRank += 2U;
     }
 
     for (const auto& angle : angleConstraints) {
@@ -3966,6 +4048,7 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
             return std::nullopt;
         }
         ++applied.relation;
+        ++applied.solverConstraintRank;
     }
 
     for (const auto& angle : pointwiseAngleConstraints) {
@@ -3983,6 +4066,7 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
             return std::nullopt;
         }
         ++applied.relation;
+        ++applied.solverConstraintRank;
     }
 
     for (const auto& equal : equalConstraints) {
@@ -4007,6 +4091,7 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
             ++applied.solverEqualRelationGeometryUpdates;
         }
         ++applied.relation;
+        ++applied.solverConstraintRank;
     }
 
     applyRequestLocalSolverDofFirstSlice(
@@ -4180,6 +4265,10 @@ nlohmann::json sketchSolverFailureObject(const AppliedSketchConstraints& applied
          applied.solverSymmetricLineRelationGeometryUpdates},
         {"solver_symmetric_center_relation_geometry_updates",
          applied.solverSymmetricCenterRelationGeometryUpdates},
+        {"solver_constraint_rank", applied.solverConstraintRank},
+        {"solver_dependent_parameter_groups", applied.solverDependentParameterGroups},
+        {"solver_blocked_dependent_parameter_groups", applied.solverBlockedDependentParameterGroups},
+        {"solver_dependent_parameters", applied.solverDependentParameters},
         {"solver_geometry_update_status", solverGeometryUpdateStatus(applied)},
         {"solver_degrees_of_freedom",
          applied.solverDegreesOfFreedom ? nlohmann::json(*applied.solverDegreesOfFreedom)

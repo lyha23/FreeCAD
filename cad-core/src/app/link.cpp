@@ -112,6 +112,9 @@ void addShowElementElementListOwnerSyncUpdate(runtime::ComputeContext& context,
 void addShowElementElementListChildSyncUpdates(runtime::ComputeContext& context,
                                                const app::DocumentObject& owner,
                                                const std::vector<app::Link>& elements);
+void addCopyOnChangeLifecycleUpdates(runtime::ComputeContext& context,
+                                     const app::DocumentObject& object,
+                                     const app::Link& link);
 std::optional<app::Link> linkedPlainGroupProperty(const app::DocumentObject& object,
                                                        const runtime::ComputeContext& context);
 
@@ -1475,6 +1478,7 @@ void executeLinkLike(const app::DocumentObject& object,
     if (!link) {
         return;
     }
+    addCopyOnChangeLifecycleUpdates(context, object, *link);
 
     const bool linkTransform = app::readBool(object, "LinkTransform").value_or(false);
     const auto shape = linkShape(object, context, *link, linkTransform);
@@ -1624,6 +1628,7 @@ void executeLinkedPlainGroupLike(const app::DocumentObject& object,
     if (!link) {
         return;
     }
+    addCopyOnChangeLifecycleUpdates(context, object, *link);
     const app::DocumentObject* groupObject = documentObjectByName(context, link->object);
     if (groupObject == nullptr) {
         return;
@@ -1707,6 +1712,7 @@ void executeCollapsedElementCountLink(const app::DocumentObject& object,
     if (!link) {
         return;
     }
+    addCopyOnChangeLifecycleUpdates(context, object, *link);
 
     const bool linkTransform = app::readBool(object, "LinkTransform").value_or(false);
     const auto baseShape = baseLinkedShape(object, context, *link, linkTransform);
@@ -2248,6 +2254,158 @@ nlohmann::json linkElementLinkedObjectJson(const app::Link& link)
     return value;
 }
 
+long long copyOnChangeMode(const app::DocumentObject& object)
+{
+    const auto value = app::readNumber(object, "LinkCopyOnChange");
+    return value ? static_cast<long long>(*value) : 0LL;
+}
+
+nlohmann::json propertyLinkJson(const std::string& target)
+{
+    return {
+        {"PropertyType", "App::PropertyLink"},
+        {"value", target},
+    };
+}
+
+nlohmann::json propertyXLinkJson(const std::string& target)
+{
+    return {
+        {"PropertyType", "App::PropertyXLink"},
+        {"value", target},
+    };
+}
+
+nlohmann::json propertyBoolJson(bool value)
+{
+    return {
+        {"PropertyType", "App::PropertyBool"},
+        {"value", value},
+    };
+}
+
+nlohmann::json propertyIntegerJson(long long value)
+{
+    return {
+        {"PropertyType", "App::PropertyInteger"},
+        {"value", value},
+    };
+}
+
+std::string copyOnChangeGroupName(const app::DocumentObject& object,
+                                  const std::optional<app::Link>& group)
+{
+    return group ? group->object : object.name + "_CopyOnChangeGroup";
+}
+
+std::string copyOnChangeObjectName(const app::DocumentObject& object,
+                                   const app::Link& link)
+{
+    (void)link;
+    return object.name + "_CopyOnChangeObject";
+}
+
+void addCopyOnChangeGroupCreateUpdate(runtime::ComputeContext& context,
+                                      const app::DocumentObject& object,
+                                      const std::string& groupName)
+{
+    if (documentObjectByName(context, groupName) != nullptr) {
+        return;
+    }
+
+    context.documentObjectUpdates.push_back({
+        {"action", "create"},
+        {"reason", "copy_on_change_group_create"},
+        {"object", groupName},
+        {"typeId", "App::DocumentObjectGroup"},
+        {"owner", object.name},
+        {"ownerId", object.id},
+    });
+}
+
+void addCopyOnChangeLifecycleUpdates(runtime::ComputeContext& context,
+                                     const app::DocumentObject& object,
+                                     const app::Link& link)
+{
+    const long long mode = copyOnChangeMode(object);
+    if (mode == 0LL) {
+        return;
+    }
+
+    const auto source = app::readLink(object, "LinkCopyOnChangeSource");
+    const auto group = app::readLink(object, "LinkCopyOnChangeGroup");
+    const std::string groupName = copyOnChangeGroupName(object, group);
+    const std::string copyName = copyOnChangeObjectName(object, link);
+    const app::DocumentObject* sourceObject = documentObjectByName(context, link.object);
+
+    if (mode == 1LL) {
+        addCopyOnChangeGroupCreateUpdate(context, object, groupName);
+        if (documentObjectByName(context, copyName) == nullptr) {
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+            // ::LinkBaseExtension::makeCopyOnChange(), creates/uses "CopyOnChangeGroup" and
+            // ::syncCopyOnChange() then "copy all CopyOnChange properties" into the owned copy.
+            context.documentObjectUpdates.push_back({
+                {"action", "create"},
+                {"reason", "copy_on_change_deep_copy"},
+                {"object", copyName},
+                {"typeId", sourceObject == nullptr ? "App::DocumentObject" : sourceObject->typeId},
+                {"owner", object.name},
+                {"ownerId", object.id},
+                {"sourceObject", link.object},
+                {"group", groupName},
+                {"copyKind", "deep"},
+            });
+        }
+
+        nlohmann::json properties = {
+            {"LinkedObject", propertyXLinkJson(copyName)},
+            {"LinkCopyOnChange", propertyIntegerJson(2LL)},
+            {"LinkCopyOnChangeSource", linkElementLinkedObjectJson(link)},
+            {"LinkCopyOnChangeGroup", propertyLinkJson(groupName)},
+            {"LinkCopyOnChangeTouched", propertyBoolJson(false)},
+        };
+        context.documentObjectUpdates.push_back({
+            {"action", "update"},
+            {"reason", "copy_on_change_deep_copy"},
+            {"object", object.name},
+            {"objectId", object.id},
+            {"typeId", object.typeId},
+            {"sourceObject", link.object},
+            {"copyObject", copyName},
+            {"group", groupName},
+            {"properties", properties},
+        });
+        return;
+    }
+
+    const bool touched = app::readBool(object, "LinkCopyOnChangeTouched").value_or(false);
+    if (mode == 3LL && touched) {
+        nlohmann::json properties = {
+            {"LinkCopyOnChangeTouched", propertyBoolJson(false)},
+        };
+        if (!source) {
+            properties["LinkCopyOnChangeSource"] = linkElementLinkedObjectJson(link);
+        }
+        if (!group) {
+            properties["LinkCopyOnChangeGroup"] = propertyLinkJson(groupName);
+        }
+
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.h defines
+        // "LinkCopyOnChangeTouched"; Link.cpp::syncCopyOnChange() uses that touched marker
+        // to resync the owned object while keeping source and group bookkeeping intact.
+        context.documentObjectUpdates.push_back({
+            {"action", "update"},
+            {"reason", "copy_on_change_touched_tracking"},
+            {"object", object.name},
+            {"objectId", object.id},
+            {"typeId", object.typeId},
+            {"sourceObject", source ? source->object : link.object},
+            {"group", groupName},
+            {"properties", properties},
+        });
+    }
+}
+
 nlohmann::json linkElementLifecycleProperties(const app::DocumentObject& owner,
                                               const app::Link& link,
                                               bool linkTransform,
@@ -2592,6 +2750,9 @@ bool executeInheritedMaterializedLinkElement(
         context.objects[object.name] = {{"status", "error"}};
         return true;
     }
+    if (const auto childLink = app::readLink(object, "LinkedObject")) {
+        addCopyOnChangeLifecycleUpdates(context, object, *childLink);
+    }
 
     const bool linkTransform = app::readBool(*owner, "LinkTransform").value_or(false);
     if (!elementListChildSyncsLinkedObject(object)) {
@@ -2702,6 +2863,7 @@ void executeMaterializedElementGroupLike(const app::DocumentObject& object,
     if (!link) {
         return;
     }
+    addCopyOnChangeLifecycleUpdates(context, object, *link);
     const bool linkTransform = app::readBool(object, "LinkTransform").value_or(false);
 
     nlohmann::json elements = nlohmann::json::array();

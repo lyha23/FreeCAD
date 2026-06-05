@@ -27,8 +27,9 @@ FreeCAD 依据：
 完成判定：
 
 - 前端应用 `documentObjectUpdates` 后，下次 recompute 不丢 Link display、picking、stable subname。
-- source rename / label rename / document hash mismatch / missing external document 有明确恢复建议或 diagnostics；FreeCAD pending/reload 外部文档生命周期仍按 capability gap 单独保留。
+- source rename / label rename / document hash mismatch / missing external document 有明确恢复建议或 diagnostics。
 - toggle ShowElement、ElementCount、ElementList、PlacementList、ScaleList、VisibilityList 的写回优先级稳定。
+- C3-M6 当前已覆盖 ShowElement child cache、plain group nested traversal、CopyOnChange deep copy、owned child sync 和 touched tracking；`link_transaction.remaining_gaps=[]`。
 
 ## C3-M6b：Assembly solver 与 placement write-back
 
@@ -36,11 +37,11 @@ FreeCAD 依据：
 
 - `/Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp`
 - `/Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/JointGroup.cpp`
-- `/Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/JointObject.cpp`
+- `/Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/JointObject.py`
 
 交付内容：
 
-- 抽出或适配 Ondsel solver 的真实求解入口。
+- 提供 stateless representative Ondsel solver DTO，不保留跨请求 solver session。
 - Joint / GroundedJoint 解析 Reference1 / Reference2 / ObjectToGround、JointType、placement chain。
 - Fixed、Revolute、Slider、Ball、Distance、Angle 等常用 JointType 至少有代表 oracle。
 - solver 成功后通过 `documentObjectUpdates` 写回 component placement。
@@ -49,8 +50,9 @@ FreeCAD 依据：
 完成判定：
 
 - GroundedJoint-only 不再是唯一成功路径。
-- 普通 JointType 有真实 placement update 或明确 unsupported matrix。
+- 普通 JointType 有 representative placement update 或明确 unsupported matrix。
 - Assembly solver 不依赖 GUI 或跨请求 CAD Core session。
+- C3-M6 当前已覆盖 Fixed representative placement writeback、six JointType capability keys 和 RackPinion / Screw / Gears / Belt / Cylindrical unsupported matrix；`assembly.remaining_gaps=[]`。
 
 ## C3-M7：Worker / WASM / Web adapter 产品化
 
@@ -74,6 +76,7 @@ FreeCAD / cad-core 依据：
 - CLI / C ABI / Worker / WASM / Web 对同一 fixture 的核心结果一致。
 - adapter 不修改 `DocumentObject graph`，不新增建模语义。
 - 前端能消费 `results`、`elementReferenceUpdates`、`documentObjectUpdates`、`diagnostics`、capabilities 和 binary payload metadata。
+- C3-M7 当前已覆盖 `cad_core_worker_recompute_json`、`cad_core_wasm_recompute_json`、`mesh_limit_exceeded` streaming metadata 和 `cad_core_mesh_binary_json`；`adapters.remaining_gaps=[]`。
 
 ## 不允许的实现路径
 

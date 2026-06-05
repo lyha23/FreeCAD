@@ -765,6 +765,11 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
          appliedConstraints->solverSymmetricLineRelationGeometryUpdates},
         {"solver_symmetric_center_relation_geometry_updates",
          appliedConstraints->solverSymmetricCenterRelationGeometryUpdates},
+        {"solver_constraint_rank", appliedConstraints->solverConstraintRank},
+        {"solver_dependent_parameter_groups", appliedConstraints->solverDependentParameterGroups},
+        {"solver_blocked_dependent_parameter_groups",
+         appliedConstraints->solverBlockedDependentParameterGroups},
+        {"solver_dependent_parameters", appliedConstraints->solverDependentParameters},
         {"solver_geometry_update_status", solverGeometryUpdateStatus(*appliedConstraints)},
         {"solver_degrees_of_freedom",
          appliedConstraints->solverDegreesOfFreedom

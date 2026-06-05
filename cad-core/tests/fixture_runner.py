@@ -65,10 +65,16 @@ class CadCoreFixtureTestCase(unittest.TestCase):
         library = ctypes.CDLL(str(self.ffi_library_path()))
         library.cad_core_recompute_json.argtypes = [ctypes.c_char_p, ctypes.c_size_t]
         library.cad_core_recompute_json.restype = CadCoreResult
+        library.cad_core_worker_recompute_json.argtypes = [ctypes.c_char_p, ctypes.c_size_t]
+        library.cad_core_worker_recompute_json.restype = CadCoreResult
+        library.cad_core_wasm_recompute_json.argtypes = [ctypes.c_char_p, ctypes.c_size_t]
+        library.cad_core_wasm_recompute_json.restype = CadCoreResult
         library.cad_core_capabilities_json.argtypes = []
         library.cad_core_capabilities_json.restype = CadCoreResult
         library.cad_core_export_json.argtypes = [ctypes.c_char_p, ctypes.c_size_t]
         library.cad_core_export_json.restype = CadCoreExportResult
+        library.cad_core_mesh_binary_json.argtypes = [ctypes.c_char_p, ctypes.c_size_t]
+        library.cad_core_mesh_binary_json.restype = CadCoreExportResult
         library.cad_core_free_result.argtypes = [ctypes.POINTER(CadCoreResult)]
         library.cad_core_free_result.restype = None
         library.cad_core_free_export_result.argtypes = [ctypes.POINTER(CadCoreExportResult)]
@@ -81,17 +87,43 @@ class CadCoreFixtureTestCase(unittest.TestCase):
 
     def run_recompute_ffi_payload(self, payload: bytes | dict) -> dict:
         library = self.ffi_library()
+        return self.run_recompute_ffi_payload_with(
+            library,
+            library.cad_core_recompute_json,
+            payload,
+            "cad_core_recompute_json",
+        )
+
+    def run_recompute_ffi_payload_with(self, library, function, payload: bytes | dict, function_name: str) -> dict:
         if isinstance(payload, dict):
             payload = json.dumps(payload).encode("utf-8")
-        result = library.cad_core_recompute_json(payload, len(payload))
+        result = function(payload, len(payload))
         try:
             if result.status != 0:
                 error = ctypes.string_at(result.error.ptr, result.error.len).decode("utf-8") if result.error.ptr else ""
-                self.fail(f"cad_core_recompute_json failed with status {result.status}: {error}")
+                self.fail(f"{function_name} failed with status {result.status}: {error}")
             raw = ctypes.string_at(result.json.ptr, result.json.len).decode("utf-8")
             return json.loads(raw)
         finally:
             library.cad_core_free_result(ctypes.byref(result))
+
+    def run_worker_recompute_ffi_payload(self, payload: bytes | dict) -> dict:
+        library = self.ffi_library()
+        return self.run_recompute_ffi_payload_with(
+            library,
+            library.cad_core_worker_recompute_json,
+            payload,
+            "cad_core_worker_recompute_json",
+        )
+
+    def run_wasm_recompute_ffi_payload(self, payload: bytes | dict) -> dict:
+        library = self.ffi_library()
+        return self.run_recompute_ffi_payload_with(
+            library,
+            library.cad_core_wasm_recompute_json,
+            payload,
+            "cad_core_wasm_recompute_json",
+        )
 
     def run_capabilities_ffi(self) -> dict:
         library = self.ffi_library()
@@ -109,6 +141,21 @@ class CadCoreFixtureTestCase(unittest.TestCase):
         library = self.ffi_library()
         payload = json.dumps(request).encode("utf-8")
         result = library.cad_core_export_json(payload, len(payload))
+        try:
+            metadata = None
+            if result.json.ptr:
+                raw = ctypes.string_at(result.json.ptr, result.json.len).decode("utf-8")
+                metadata = json.loads(raw)
+            data = ctypes.string_at(result.data.ptr, result.data.len) if result.data.ptr else b""
+            error = ctypes.string_at(result.error.ptr, result.error.len).decode("utf-8") if result.error.ptr else ""
+            return result.status, metadata, data, error
+        finally:
+            library.cad_core_free_export_result(ctypes.byref(result))
+
+    def call_mesh_binary_ffi(self, request: dict) -> tuple[int, dict | None, bytes, str]:
+        library = self.ffi_library()
+        payload = json.dumps(request).encode("utf-8")
+        result = library.cad_core_mesh_binary_json(payload, len(payload))
         try:
             metadata = None
             if result.json.ptr:

@@ -16,6 +16,21 @@ except ImportError:  # pragma: no cover - supports `unittest discover tests`.
 
 
 class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
+    def assert_c3m3_full_rank_solver(
+        self,
+        sketch: dict,
+        degrees_of_freedom: int,
+        constraint_rank: int,
+        blocked_groups: int = 0,
+    ) -> None:
+        self.assertEqual(sketch["solver_state"], "underconstrained")
+        self.assertEqual(sketch["solver_degrees_of_freedom"], degrees_of_freedom)
+        self.assertEqual(sketch["solver_dof_status"], "request_local_full_rank")
+        self.assertEqual(sketch["solver_constraint_rank"], constraint_rank)
+        self.assertEqual(sketch["solver_dependent_parameter_groups"], 1)
+        self.assertEqual(sketch["solver_blocked_dependent_parameter_groups"], blocked_groups)
+        self.assertEqual(sketch["solver_dependent_parameters"], degrees_of_freedom)
+
     P7_RESULT_WIRE_IDENTITY_FIXTURES = (
         "sketch-internal-face-cross-cutters",
         "sketch-internal-face-segmented-cross-cutter",
@@ -1254,9 +1269,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assertEqual(sketch["solver_state"], "underconstrained")
-        self.assertEqual(sketch["solver_degrees_of_freedom"], 3)
-        self.assertEqual(sketch["solver_dof_status"], "request_local_first_slice")
+        self.assert_c3m3_full_rank_solver(sketch, 3, 1)
         self.assertEqual(sketch["edge_count"], 1)
         self.assertEqual(sketch["orientation_constraints_applied"], 1)
         self.assertEqual(sketch["solver_geometry_updates"], 1)
@@ -1276,9 +1289,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assertEqual(sketch["solver_state"], "underconstrained")
-        self.assertEqual(sketch["solver_degrees_of_freedom"], 2)
-        self.assertEqual(sketch["solver_dof_status"], "request_local_first_slice")
+        self.assert_c3m3_full_rank_solver(sketch, 2, 2)
         self.assertEqual(sketch["edge_count"], 1)
         self.assertEqual(sketch["dimension_constraints_applied"], 2)
         self.assertEqual(sketch["solver_geometry_updates"], 2)
@@ -1299,9 +1310,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assertEqual(sketch["solver_state"], "underconstrained")
-        self.assertEqual(sketch["solver_degrees_of_freedom"], 2)
-        self.assertEqual(sketch["solver_dof_status"], "request_local_first_slice")
+        self.assert_c3m3_full_rank_solver(sketch, 2, 1)
         self.assertEqual(sketch["dimension_constraints_applied"], 1)
         self.assertEqual(sketch["solver_geometry_updates"], 1)
         self.assertEqual(sketch["solver_orientation_geometry_updates"], 0)
@@ -1322,9 +1331,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assertEqual(sketch["solver_state"], "underconstrained")
-        self.assertEqual(sketch["solver_degrees_of_freedom"], 15)
-        self.assertEqual(sketch["solver_dof_status"], "request_local_first_slice")
+        self.assert_c3m3_full_rank_solver(sketch, 15, 1)
         self.assertEqual(sketch["edge_count"], 4)
         self.assertEqual(sketch["dimension_constraints_applied"], 1)
         self.assertEqual(sketch["solver_geometry_updates"], 1)
@@ -1346,9 +1353,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assertEqual(sketch["solver_state"], "underconstrained")
-        self.assertEqual(sketch["solver_degrees_of_freedom"], 8)
-        self.assertEqual(sketch["solver_dof_status"], "request_local_first_slice")
+        self.assert_c3m3_full_rank_solver(sketch, 8, 1)
         self.assertEqual(sketch["edge_count"], 2)
         self.assertEqual(sketch["dimension_constraints_applied"], 1)
         self.assertEqual(sketch["solver_geometry_updates"], 1)
@@ -1370,9 +1375,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assertEqual(sketch["solver_state"], "accepted")
-        self.assertIsNone(sketch["solver_degrees_of_freedom"])
-        self.assertEqual(sketch["solver_dof_status"], "not_computed")
+        self.assert_c3m3_full_rank_solver(sketch, 7, 1)
         self.assertEqual(sketch["edge_count"], 2)
         self.assertEqual(sketch["relation_constraints_applied"], 1)
         self.assertEqual(sketch["solver_geometry_updates"], 1)
@@ -1396,9 +1399,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assertEqual(sketch["solver_state"], "accepted")
-        self.assertIsNone(sketch["solver_degrees_of_freedom"])
-        self.assertEqual(sketch["solver_dof_status"], "not_computed")
+        self.assert_c3m3_full_rank_solver(sketch, 7, 1)
         self.assertEqual(sketch["edge_count"], 2)
         self.assertEqual(sketch["relation_constraints_applied"], 1)
         self.assertEqual(sketch["solver_geometry_updates"], 1)
@@ -1422,9 +1423,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assertEqual(sketch["solver_state"], "accepted")
-        self.assertIsNone(sketch["solver_degrees_of_freedom"])
-        self.assertEqual(sketch["solver_dof_status"], "not_computed")
+        self.assert_c3m3_full_rank_solver(sketch, 7, 1)
         self.assertEqual(sketch["edge_count"], 2)
         self.assertEqual(sketch["relation_constraints_applied"], 1)
         self.assertEqual(sketch["solver_geometry_updates"], 1)
@@ -1448,9 +1447,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assertEqual(sketch["solver_state"], "accepted")
-        self.assertIsNone(sketch["solver_degrees_of_freedom"])
-        self.assertEqual(sketch["solver_dof_status"], "not_computed")
+        self.assert_c3m3_full_rank_solver(sketch, 6, 1)
         self.assertEqual(sketch["edge_count"], 1)
         self.assertEqual(sketch["relation_constraints_applied"], 1)
         self.assertEqual(sketch["solver_geometry_updates"], 1)
@@ -1475,9 +1472,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assertEqual(sketch["solver_state"], "accepted")
-        self.assertIsNone(sketch["solver_degrees_of_freedom"])
-        self.assertEqual(sketch["solver_dof_status"], "not_computed")
+        self.assert_c3m3_full_rank_solver(sketch, 5, 1)
         self.assertEqual(sketch["edge_count"], 1)
         self.assertEqual(sketch["relation_constraints_applied"], 1)
         self.assertEqual(sketch["solver_geometry_updates"], 1)
@@ -1503,9 +1498,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assertEqual(sketch["solver_state"], "accepted")
-        self.assertIsNone(sketch["solver_degrees_of_freedom"])
-        self.assertEqual(sketch["solver_dof_status"], "not_computed")
+        self.assert_c3m3_full_rank_solver(sketch, 6, 1)
         self.assertEqual(sketch["edge_count"], 1)
         self.assertEqual(sketch["relation_constraints_applied"], 1)
         self.assertEqual(sketch["solver_geometry_updates"], 1)
@@ -1532,9 +1525,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assertEqual(sketch["solver_state"], "accepted")
-        self.assertIsNone(sketch["solver_degrees_of_freedom"])
-        self.assertEqual(sketch["solver_dof_status"], "not_computed")
+        self.assert_c3m3_full_rank_solver(sketch, 6, 2)
         self.assertEqual(sketch["edge_count"], 1)
         self.assertEqual(sketch["relation_constraints_applied"], 1)
         self.assertEqual(sketch["solver_geometry_updates"], 1)
@@ -1564,9 +1555,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assertEqual(sketch["solver_state"], "accepted")
-        self.assertIsNone(sketch["solver_degrees_of_freedom"])
-        self.assertEqual(sketch["solver_dof_status"], "not_computed")
+        self.assert_c3m3_full_rank_solver(sketch, 4, 2)
         self.assertEqual(sketch["edge_count"], 1)
         self.assertEqual(sketch["relation_constraints_applied"], 1)
         self.assertEqual(sketch["solver_geometry_updates"], 1)
@@ -1596,9 +1585,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
-        self.assertEqual(sketch["solver_state"], "accepted")
-        self.assertIsNone(sketch["solver_degrees_of_freedom"])
-        self.assertEqual(sketch["solver_dof_status"], "not_computed")
+        self.assert_c3m3_full_rank_solver(sketch, 7, 2)
         self.assertEqual(sketch["edge_count"], 1)
         self.assertEqual(sketch["relation_constraints_applied"], 1)
         self.assertEqual(sketch["solver_geometry_updates"], 1)
@@ -1623,6 +1610,28 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(extrude["bbox"]["max"][0], 0.9)
         self.assertGreater(extrude["bbox"]["max"][1], 0.9)
 
+    def test_c3m3_sketch_symmetric_coupled_curve_relation_updates_solver_geometry(self) -> None:
+        result = self.run_recompute("sketch-symmetric-coupled-curve-relation-solver-geometry-update", "c3m3")
+        sketch = result["objects"]["Sketch"]
+        extrude = result["objects"]["Extrude"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assert_c3m3_full_rank_solver(sketch, 8, 3)
+        self.assertEqual(sketch["edge_count"], 2)
+        self.assertEqual(sketch["relation_constraints_applied"], 2)
+        self.assertEqual(sketch["solver_geometry_updates"], 2)
+        self.assertEqual(sketch["solver_relation_geometry_updates"], 2)
+        self.assertEqual(sketch["solver_tangent_relation_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_symmetric_relation_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_symmetric_line_relation_geometry_updates"], 1)
+        self.assertEqual(
+            sketch["solver_geometry_update_status"],
+            "request_local_solver_geometry_first_slices",
+        )
+        self.assertLessEqual(extrude["bbox"]["min"][0], -1.0)
+        self.assertGreaterEqual(extrude["bbox"]["max"][0], 3.0)
+
     def test_c3m3_sketch_dof_underconstrained_after_satisfied_constraint(self) -> None:
         result = self.run_recompute("sketch-dof-underconstrained-after-constraint", "c3m3")
         sketch = result["objects"]["Sketch"]
@@ -1630,14 +1639,25 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
         self.assertFalse(sketch["profile_ready"])
-        self.assertEqual(sketch["solver_state"], "underconstrained")
-        self.assertEqual(sketch["solver_degrees_of_freedom"], 3)
-        self.assertEqual(sketch["solver_dof_status"], "request_local_first_slice")
+        self.assert_c3m3_full_rank_solver(sketch, 3, 1)
         self.assertEqual(sketch["solver_geometry_updates"], 0)
         self.assertEqual(sketch["solver_geometry_update_status"], "none")
         self.assertEqual(sketch["orientation_constraints_applied"], 1)
         self.assertEqual(sketch["dimension_constraints_applied"], 0)
         self.assertEqual(sketch["relation_constraints_applied"], 0)
+
+    def test_c3m3_sketch_full_solver_dof_reports_dependent_groups(self) -> None:
+        result = self.run_recompute("sketch-full-solver-dof-dependent-group", "c3m3")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assert_c3m3_full_rank_solver(sketch, 3, 6, blocked_groups=1)
+        self.assertEqual(sketch["block_constraints_applied"], 1)
+        self.assertEqual(sketch["relation_constraints_applied"], 1)
+        self.assertEqual(sketch["dimension_constraints_applied"], 1)
+        self.assertEqual(sketch["solver_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_geometry_update_status"], "none")
 
     def test_c3m3_sketch_conflicting_constraints_block_profile_output(self) -> None:
         result = self.run_recompute("sketch-conflicting-constraints", "c3m3")
@@ -1692,9 +1712,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["status"], "ok")
         self.assertTrue(sketch["profile_ready"])
         self.assertEqual(sketch["edge_count"], 4)
-        self.assertEqual(sketch["solver_state"], "accepted")
-        self.assertEqual(sketch["solver_degrees_of_freedom"], None)
-        self.assertEqual(sketch["solver_dof_status"], "not_computed")
+        self.assert_c3m3_full_rank_solver(sketch, 11, 5, blocked_groups=1)
         self.assertEqual(sketch["solver_conflicting_constraints"], [])
         self.assertEqual(sketch["solver_redundant_constraints"], [])
         self.assertEqual(sketch["solver_partially_redundant_constraints"], [1, 2])
@@ -1730,9 +1748,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
         self.assertTrue(sketch["profile_ready"])
-        self.assertEqual(sketch["solver_state"], "underconstrained")
-        self.assertEqual(sketch["solver_degrees_of_freedom"], 16)
-        self.assertEqual(sketch["solver_dof_status"], "request_local_first_slice")
+        self.assert_c3m3_full_rank_solver(sketch, 16, 0)
         self.assertEqual(sketch["solver_malformed_constraints"], [])
         self.assertEqual(sketch["solver_conflicting_constraints"], [])
         self.assertEqual(sketch["solver_redundant_constraints"], [])

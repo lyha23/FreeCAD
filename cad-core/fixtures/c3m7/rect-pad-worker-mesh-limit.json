@@ -1,0 +1,42 @@
+{
+  "mesh_limits": {
+    "max_vertices": 4,
+    "max_triangles": 2,
+    "chunk_triangles": 1
+  },
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [2, 0]},
+          {"kind": "LineSegment", "start": [2, 0], "end": [2, 1]},
+          {"kind": "LineSegment", "start": [2, 1], "end": [0, 1]},
+          {"kind": "LineSegment", "start": [0, 1], "end": [0, 0]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Sketch",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 1,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Pad"]
+  }
+}

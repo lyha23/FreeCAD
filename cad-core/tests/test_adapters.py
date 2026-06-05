@@ -288,10 +288,17 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "show_element_sync",
                 "show_element_delete",
                 "show_element_toggle_off",
+                "child_cache_create",
+                "child_cache_nested_plain_group",
+                "child_cache_orphan_reclaim",
+                "child_cache_stale_delete",
                 "element_count_owner_lists_sync",
                 "element_list_owner_sync",
                 "element_list_child_sync",
                 "copy_on_change_owned_child_sync",
+                "copy_on_change_deep_copy",
+                "copy_on_change_owned_child_mutation",
+                "copy_on_change_touched_tracking",
             ],
         )
         self.assertEqual(
@@ -308,17 +315,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ],
         )
         self.assertIn(
-            "plain_group_child_expansion_without_persistent_child_cache",
+            "plain_group_child_cache_updates_are_document_object_updates",
             capabilities["link_transaction"]["request_local_boundaries"],
         )
-        self.assertIn(
-            "full_child_cache_lifecycle",
-            capabilities["link_transaction"]["remaining_gaps"],
-        )
-        self.assertIn(
-            "copy_on_change_deep_copy_lifecycle",
-            capabilities["link_transaction"]["remaining_gaps"],
-        )
+        self.assertIn("copy_on_change_keeps_request_graph_immutable", capabilities["link_transaction"]["request_local_boundaries"])
+        self.assertEqual(capabilities["link_transaction"]["remaining_gaps"], [])
         self.assertEqual(
             capabilities["link_reference_lifecycle"]["retag_aliases"],
             [
@@ -364,7 +365,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "label_rename_cross_document_nested_lifecycle",
             capabilities["link_reference_lifecycle"]["remaining_gaps"],
         )
-        self.assertEqual(capabilities["sketcher"]["solver"]["status"], "done_eighteenth_slice")
+        self.assertEqual(capabilities["sketcher"]["solver"]["status"], "done_c3m3")
         self.assertEqual(
             capabilities["sketcher"]["solver"]["diagnostics"],
             [
@@ -451,9 +452,15 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             capabilities["sketcher"]["solver"]["covered"],
         )
         self.assertIn(
+            "symmetric_coupled_curve_relation_solver_geometry_update",
+            capabilities["sketcher"]["solver"]["covered"],
+        )
+        self.assertIn(
             "solver_dof_driven_underconstrained_state",
             capabilities["sketcher"]["solver"]["covered"],
         )
+        self.assertIn("full_solver_dof", capabilities["sketcher"]["solver"]["covered"])
+        self.assertIn("dependent_parameter_group_analysis", capabilities["sketcher"]["solver"]["covered"])
         self.assertIn(
             "whole_line_orientation_update_without_full_solver_session",
             capabilities["sketcher"]["solver"]["request_local_boundaries"],
@@ -510,15 +517,16 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "symmetric_center_point_updates_second_point_without_full_solver_session",
             capabilities["sketcher"]["solver"]["request_local_boundaries"],
         )
-        self.assertIn(
+        self.assertNotIn(
             "request_local_dof_estimate_without_full_solver_rank",
             capabilities["sketcher"]["solver"]["request_local_boundaries"],
         )
-        self.assertIn(
+        self.assertNotIn(
             "partial_redundancy_warning_without_full_dependent_parameter_group_analysis",
             capabilities["sketcher"]["solver"]["request_local_boundaries"],
         )
-        self.assertIn(
+        self.assertEqual(capabilities["sketcher"]["solver"]["remaining_gaps"], [])
+        self.assertNotIn(
             "symmetric_coupled_curve_relation_solver_geometry_update",
             capabilities["sketcher"]["solver"]["remaining_gaps"],
         )
@@ -558,10 +566,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "relation_solver_geometry_update",
             capabilities["sketcher"]["solver"]["remaining_gaps"],
         )
-        self.assertIn(
-            "full_solver_dof",
-            capabilities["sketcher"]["solver"]["remaining_gaps"],
-        )
+        self.assertNotIn("full_solver_dof", capabilities["sketcher"]["solver"]["remaining_gaps"])
         self.assertNotIn(
             "solver_dof_driven_underconstrained_state",
             capabilities["sketcher"]["solver"]["remaining_gaps"],
@@ -722,11 +727,13 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "cad_core_export_json",
                 "cad_core_capabilities_json",
                 "cli_recompute",
+                "worker_recompute",
+                "wasm_recompute",
             ],
         )
         self.assertEqual(
             capabilities["adapters"]["stateless_result_channels"],
-            ["results", "elementReferenceUpdates", "documentObjectUpdates", "diagnostics"],
+            ["results", "elementReferenceUpdates", "documentObjectUpdates", "diagnostics", "binaryPayloads"],
         )
         self.assertEqual(
             capabilities["adapters"]["c_api_export"],
@@ -736,9 +743,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             capabilities["adapters"]["cli_export"],
             ["file_protocol", "requires_object_format_file", "stl_deflection"],
         )
-        self.assertIn("worker_adapter", capabilities["adapters"]["remaining_gaps"])
-        self.assertIn("wasm_adapter", capabilities["adapters"]["remaining_gaps"])
-        self.assertIn("streaming_mesh_limits", capabilities["adapters"]["remaining_gaps"])
+        self.assertEqual(capabilities["adapters"]["worker_adapter"]["entrypoint"], "cad_core_worker_recompute_json")
+        self.assertEqual(capabilities["adapters"]["wasm_adapter"]["entrypoint"], "cad_core_wasm_recompute_json")
+        self.assertIn("max_vertices", capabilities["adapters"]["mesh"]["streaming_limits"])
+        self.assertIn("cad_core_mesh_binary_json", capabilities["adapters"]["mesh"]["binary_payloads"])
+        self.assertEqual(capabilities["adapters"]["remaining_gaps"], [])
         link_sub_fields = [
             "value",
             "SubList",
@@ -842,6 +851,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "split_stable_subname",
             "deleted_stable_subname",
             "unsupported_assembly_solver",
+            "mesh_limit_exceeded",
+            "adapter_resource_limit",
             "unsupported_reference_shadow_brep",
             "sketch_solver_conflict",
             "sketch_solver_malformed_constraint",
@@ -851,10 +862,21 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(
             capabilities["assembly"]["solver_adapter"],
-            ["skipped_no_joints", "grounded_only_noop", "unsupported_joint_diagnostics"],
+            [
+                "skipped_no_joints",
+                "grounded_only_noop",
+                "representative_ondsel_solver",
+                "fixed_joint",
+                "revolute_joint",
+                "slider_joint",
+                "ball_joint",
+                "distance_joint",
+                "angle_joint",
+                "unsupported_joint_diagnostics",
+            ],
         )
-        self.assertIn("full_ondsel_solver", capabilities["assembly"]["remaining_gaps"])
-        self.assertIn("solver_placement_updates", capabilities["assembly"]["remaining_gaps"])
+        self.assertEqual(capabilities["assembly"]["placement_writeback"], ["documentObjectUpdates.action=assembly_set_placement"])
+        self.assertEqual(capabilities["assembly"]["remaining_gaps"], [])
 
         self.assertEqual(
             capabilities["topo_history"]["stable_subname_resolution"],
@@ -1149,9 +1171,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             capabilities["known_gaps"],
         )
         self.assertNotIn("hole_threaded_model_thread_profile_head_oracle_matrix", capabilities["known_gaps"])
-        self.assertIn("assembly_full_ondsel_solver", capabilities["known_gaps"])
-        self.assertIn("assembly_solver_placement_updates", capabilities["known_gaps"])
+        self.assertNotIn("assembly_full_ondsel_solver", capabilities["known_gaps"])
+        self.assertNotIn("assembly_solver_placement_updates", capabilities["known_gaps"])
         self.assertNotIn("show_element_missing_child_lifecycle", capabilities["known_gaps"])
+        self.assertEqual(capabilities["known_gaps"], [])
 
     def test_c_api_recompute_reports_show_element_lifecycle_updates(self) -> None:
         ffi_result = self.run_recompute_ffi("app-link-show-element-synthetic", "p8")
@@ -1161,6 +1184,46 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual([item["action"] for item in updates], ["create", "create"])
         self.assertEqual(updates[0]["object"], "ArrayLink_i0")
         self.assertEqual(updates[0]["properties"]["LinkedObject"]["value"], "Box")
+
+    def test_c3m7_worker_and_wasm_adapters_apply_streaming_mesh_limits(self) -> None:
+        payload = (ROOT / "fixtures" / "c3m7" / "rect-pad-worker-mesh-limit.json").read_bytes()
+
+        for adapter, runner in [
+            ("worker", self.run_worker_recompute_ffi_payload),
+            ("wasm", self.run_wasm_recompute_ffi_payload),
+        ]:
+            with self.subTest(adapter=adapter):
+                result = runner(payload)
+                diagnostic = result["diagnostics"][0]
+                mesh = result["results"][0]["mesh"]
+
+                self.assertEqual(result["adapter"], adapter)
+                self.assertEqual(diagnostic["code"], "mesh_limit_exceeded")
+                self.assertEqual(diagnostic["stage"], "adapter")
+                self.assertEqual(diagnostic["target"], "streaming_mesh_limits")
+                self.assertTrue(mesh["limited"])
+                self.assertEqual(mesh["streaming"]["protocol"], "cad-core-json-mesh-stream-v1")
+                self.assertEqual(mesh["streaming"]["max_vertices"], 4)
+                self.assertEqual(mesh["streaming"]["max_triangles"], 2)
+                self.assertEqual(mesh["streaming"]["chunk_triangles"], 1)
+
+    def test_c3m7_c_api_exports_binary_mesh_payload(self) -> None:
+        document = json.loads((ROOT / "fixtures" / "mvp" / "rect-pad.json").read_text(encoding="utf-8"))
+
+        status, metadata, data, error = self.call_mesh_binary_ffi({"document": document, "object": "Pad"})
+
+        self.assertEqual(status, 0, error)
+        self.assertIsNotNone(metadata)
+        assert metadata is not None
+        self.assertEqual(metadata["protocol"], "cad-core-binary-mesh-v1")
+        self.assertEqual(metadata["content_type"], "application/vnd.cad-core.mesh+bin")
+        self.assertEqual(metadata["layout"]["vertex_format"], "f64x3_le")
+        self.assertEqual(metadata["layout"]["index_format"], "u32x3_le")
+        self.assertEqual(metadata["diagnostics"], [])
+        self.assertEqual(metadata["bytes"], len(data))
+        self.assertGreater(metadata["vertex_count"], 0)
+        self.assertGreater(metadata["triangle_count"], 0)
+        self.assertEqual(metadata["index_offset"], metadata["vertex_count"] * 3 * 8)
 
     def test_c_api_exports_recomputed_shape_buffers(self) -> None:
         document = json.loads((ROOT / "fixtures" / "p8" / "part-box.json").read_text(encoding="utf-8"))

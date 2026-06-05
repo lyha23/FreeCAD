@@ -1,0 +1,58 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "start": [0, -2],
+            "end": [0, 2],
+            "construction": true
+          },
+          {
+            "kind": "LineSegment",
+            "start": [-1, 1],
+            "end": [3, 1]
+          },
+          {
+            "kind": "Circle",
+            "center": [2, 3],
+            "radius": 1
+          }
+        ],
+        "Constraints": [
+          {"Type": "Tangent", "First": 1, "Second": 2},
+          {
+            "Type": "Symmetric",
+            "First": 1,
+            "FirstPos": "start",
+            "Second": 1,
+            "SecondPos": "end",
+            "Third": 0
+          }
+        ]
+      }
+    },
+    {
+      "Name": "Extrude",
+      "ID": 2,
+      "TypeId": "Part::Extrusion",
+      "Properties": {
+        "Base": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Sketch"
+        },
+        "Dir": [0, 0, 1],
+        "LengthFwd": 1,
+        "LengthRev": 0,
+        "Solid": false
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Extrude"]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "Objects": [
+    {
+      "Name": "Box",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 3,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "BoxLink",
+      "ID": 2,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Box"
+        },
+        "LinkCopyOnChange": {
+          "PropertyType": "App::PropertyInteger",
+          "value": 1
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["BoxLink"]
+  }
+}

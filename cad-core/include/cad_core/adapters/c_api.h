@@ -31,7 +31,13 @@ CadCoreResult cad_core_capabilities_json(void);
 
 CadCoreResult cad_core_recompute_json(const char* request_json, size_t request_json_len);
 
+CadCoreResult cad_core_worker_recompute_json(const char* request_json, size_t request_json_len);
+
+CadCoreResult cad_core_wasm_recompute_json(const char* request_json, size_t request_json_len);
+
 CadCoreExportResult cad_core_export_json(const char* request_json, size_t request_json_len);
+
+CadCoreExportResult cad_core_mesh_binary_json(const char* request_json, size_t request_json_len);
 
 void cad_core_free_result(CadCoreResult* result);
 

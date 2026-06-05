@@ -217,10 +217,20 @@ struct AppliedSketchConstraints
     std::size_t solverSymmetricRelationGeometryUpdates = 0;
     std::size_t solverSymmetricLineRelationGeometryUpdates = 0;
     std::size_t solverSymmetricCenterRelationGeometryUpdates = 0;
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
+    // ::Sketch::setUpSketch(), calls "GCSsys.declareUnknowns(Parameters)" and
+    // "GCSsys.getDependentParamsGroups(groups)" after all constraints are added. cad-core
+    // mirrors that request-local solver-facing rank for the migrated constraint families and
+    // exposes dependent groups so Block post-analysis has a durable contract.
+    std::size_t solverConstraintRank = 0;
+    std::size_t solverDependentParameterGroups = 0;
+    std::size_t solverBlockedDependentParameterGroups = 0;
+    std::size_t solverDependentParameters = 0;
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.h
     // ::Sketch::setUpSketch(), "positive degrees of freedom correspond to an
-    // under-constrained sketch". cad-core exposes only a request-local first-slice estimate here;
-    // full GCS rank/dependent-parameter DoF remains a separate solver gap.
+    // under-constrained sketch". cad-core computes this from the request-local parameter count
+    // and the migrated solver constraint rank/dependent groups.
     std::optional<int> solverDegreesOfFreedom;
     std::string solverDofStatus = "not_computed";
     SketchSolverSummary solver;
