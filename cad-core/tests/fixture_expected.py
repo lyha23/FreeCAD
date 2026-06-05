@@ -3,7 +3,10 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from .fixture_runner import ROOT
+try:
+    from .fixture_runner import ROOT
+except ImportError:  # pragma: no cover - supports `unittest discover tests`.
+    from fixture_runner import ROOT
 
 
 def discover_expected_cases(root: Path = ROOT) -> list[tuple[str, str, Path]]:

@@ -10,9 +10,3 @@ namespace cad_core::sketcher {
 void executeSketchObject(const app::DocumentObject& object, runtime::ComputeContext& context);
 
 }  // namespace cad_core::sketcher
-
-namespace cad_core::features {
-
-using sketcher::executeSketchObject;
-
-}  // namespace cad_core::features

@@ -99,18 +99,3 @@ std::vector<Link> readLinks(const nlohmann::json& value);
 std::optional<Link> readLink(const nlohmann::json& value);
 
 }  // namespace cad_core::app
-
-namespace cad_core::document {
-
-using cad_core::app::BrepSnapshot;
-using cad_core::app::LabelReferenceRename;
-using cad_core::app::Link;
-using cad_core::app::LinkDocumentRef;
-using cad_core::app::ReferenceShadow;
-using cad_core::app::ShadowSub;
-using cad_core::app::collectLinks;
-using cad_core::app::isLink;
-using cad_core::app::readLink;
-using cad_core::app::readLinks;
-
-}  // namespace cad_core::document

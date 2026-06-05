@@ -2,8 +2,12 @@ from __future__ import annotations
 
 import json
 
-from .fixture_expected import ExpectedFixtureAssertions, discover_expected_cases
-from .fixture_runner import CadCoreFixtureTestCase
+try:
+    from .fixture_expected import ExpectedFixtureAssertions, discover_expected_cases
+    from .fixture_runner import CadCoreFixtureTestCase
+except ImportError:  # pragma: no cover - supports `unittest discover tests`.
+    from fixture_expected import ExpectedFixtureAssertions, discover_expected_cases
+    from fixture_runner import CadCoreFixtureTestCase
 
 
 class CadCoreExpectedFixtureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):

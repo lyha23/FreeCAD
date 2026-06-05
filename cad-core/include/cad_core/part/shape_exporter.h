@@ -37,20 +37,3 @@ std::string exportShapeBuffer(const TopoDS_Shape& shape,
 std::string kernelVersion();
 
 }  // namespace cad_core::part
-
-namespace cad_core::geometry {
-
-using cad_core::part::ShapeFileFormat;
-using cad_core::part::bboxForShape;
-using cad_core::part::exportShapeBuffer;
-using cad_core::part::exportShapeFile;
-using cad_core::part::kernelVersion;
-using cad_core::part::meshForShape;
-using cad_core::part::shapeFileFormatContentType;
-using cad_core::part::shapeFileFormatExtension;
-using cad_core::part::shapeFileFormatFromString;
-using cad_core::part::shapeFileFormatName;
-using cad_core::part::supportedShapeFileFormats;
-using cad_core::part::volumeForShape;
-
-}  // namespace cad_core::geometry

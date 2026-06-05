@@ -11,9 +11,3 @@ namespace cad_core::app {
 nlohmann::json internalElementMapForSketch(const TopoDS_Shape& rawShape, const TopoDS_Shape& internalShape);
 
 }  // namespace cad_core::app
-
-namespace cad_core::topo {
-
-using cad_core::app::internalElementMapForSketch;
-
-}  // namespace cad_core::topo

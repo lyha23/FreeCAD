@@ -26,7 +26,6 @@
 
 // Part-layer refine helper aligned with FreeCAD
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/modelRefine.h.
-// The namespace remains cad_core::geometry during the compatibility phase.
 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/modelRefine.h,
 // class "Part::BRepBuilderAPI_RefineModel" exposes Build(), Shape(), Modified() and
 // IsDeleted() for TopoShape::makeElementRefine().
@@ -263,10 +262,3 @@ protected:
     TopTools_ListOfShape myDeleted;
 };
 }  // namespace cad_core::part
-
-namespace cad_core::geometry {
-
-namespace model_refine = cad_core::part::model_refine;
-using cad_core::part::BRepBuilderAPI_RefineModel;
-
-}  // namespace cad_core::geometry

@@ -10,9 +10,3 @@ namespace cad_core::part_design {
 void executeMirrored(const app::DocumentObject& object, runtime::ComputeContext& context);
 
 }  // namespace cad_core::part_design
-
-namespace cad_core::features {
-
-using part_design::executeMirrored;
-
-}  // namespace cad_core::features

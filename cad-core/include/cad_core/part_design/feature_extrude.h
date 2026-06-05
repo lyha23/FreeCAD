@@ -34,11 +34,3 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
                                                    const std::string& featureName);
 
 }  // namespace cad_core::part_design
-
-namespace cad_core::features {
-
-using part_design::AddSubMode;
-using part_design::ExtrudeResult;
-using part_design::buildFeatureExtrusion;
-
-}  // namespace cad_core::features

@@ -43,16 +43,3 @@ std::optional<RefineShapeResult> applyRefinePropertyForOwner(
 );
 
 } // namespace cad_core::runtime
-
-namespace cad_core::features
-{
-
-using runtime::ExecuteFn;
-using runtime::RefineShapeResult;
-using runtime::applyRefineProperty;
-using runtime::applyRefinePropertyForOwner;
-using runtime::isFeatureGroupedByBody;
-using runtime::rejectActiveRefineProperty;
-using runtime::rejectUnsupportedProperties;
-
-} // namespace cad_core::features

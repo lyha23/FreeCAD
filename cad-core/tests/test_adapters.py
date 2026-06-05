@@ -4,8 +4,12 @@ import json
 import tempfile
 from pathlib import Path
 
-from .fixture_expected import ExpectedFixtureAssertions
-from .fixture_runner import ROOT, CadCoreFixtureTestCase
+try:
+    from .fixture_expected import ExpectedFixtureAssertions
+    from .fixture_runner import ROOT, CadCoreFixtureTestCase
+except ImportError:  # pragma: no cover - supports `unittest discover tests`.
+    from fixture_expected import ExpectedFixtureAssertions
+    from fixture_runner import ROOT, CadCoreFixtureTestCase
 
 
 class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):

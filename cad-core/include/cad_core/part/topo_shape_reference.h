@@ -81,9 +81,3 @@ bool referenceShadowMatchesCurrentSubshape(const TopoDS_Shape& currentShape,
                                            const app::ReferenceShadow& shadow);
 
 }  // namespace cad_core::part
-
-namespace cad_core::topo {
-
-using namespace cad_core::part;
-
-}  // namespace cad_core::topo

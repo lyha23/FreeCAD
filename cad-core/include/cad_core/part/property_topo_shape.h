@@ -29,14 +29,3 @@ std::optional<TopoDS_Shape> subshapeByName(const TopoDS_Shape& shape, const std:
 std::string subshapeKindName(TopAbs_ShapeEnum kind);
 
 }  // namespace cad_core::part
-
-namespace cad_core::topo {
-
-using cad_core::part::SubshapeName;
-using cad_core::part::parseInternalSubshapeName;
-using cad_core::part::parseSubshapeName;
-using cad_core::part::subshapeByName;
-using cad_core::part::subshapeKindName;
-using cad_core::part::subshapeMapForShape;
-
-}  // namespace cad_core::topo

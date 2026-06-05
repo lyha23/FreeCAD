@@ -19,16 +19,3 @@ void executePartBooleanFragments(
 );
 
 }  // namespace cad_core::part
-
-namespace cad_core::features {
-
-using part::executePartBooleanFragments;
-using part::executePartCommon;
-using part::executePartCut;
-using part::executePartFuse;
-using part::executePartMultiCommon;
-using part::executePartMultiFuse;
-using part::executePartSection;
-using part::executePartXor;
-
-}  // namespace cad_core::features

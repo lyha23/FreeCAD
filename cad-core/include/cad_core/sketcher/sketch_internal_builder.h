@@ -42,11 +42,3 @@ struct SketchInternalBuildResult
 SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& input);
 
 }  // namespace cad_core::sketcher
-
-namespace cad_core::geometry {
-
-using sketcher::SketchInternalBuildInput;
-using sketcher::SketchInternalBuildResult;
-using sketcher::buildSketchInternals;
-
-}  // namespace cad_core::geometry

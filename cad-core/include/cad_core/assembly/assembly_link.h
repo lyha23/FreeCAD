@@ -8,9 +8,3 @@ namespace cad_core::assembly {
 void executeAssemblyLink(const app::DocumentObject& object, runtime::ComputeContext& context);
 
 }  // namespace cad_core::assembly
-
-namespace cad_core::features {
-
-using assembly::executeAssemblyLink;
-
-}  // namespace cad_core::features

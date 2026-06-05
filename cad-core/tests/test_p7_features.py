@@ -6,8 +6,12 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from .fixture_expected import ExpectedFixtureAssertions
-from .fixture_runner import BIN, ROOT, CadCoreFixtureTestCase
+try:
+    from .fixture_expected import ExpectedFixtureAssertions
+    from .fixture_runner import BIN, ROOT, CadCoreFixtureTestCase
+except ImportError:  # pragma: no cover - supports `unittest discover tests`.
+    from fixture_expected import ExpectedFixtureAssertions
+    from fixture_runner import BIN, ROOT, CadCoreFixtureTestCase
 
 
 class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):

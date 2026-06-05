@@ -62,9 +62,3 @@ nlohmann::json mapperHistoryToJson(const std::vector<MapperHistoryEvent>& events
 void addMapperHistoryEvent(std::vector<MapperHistoryEvent>& events, MapperHistoryEvent event);
 
 }  // namespace cad_core::part
-
-namespace cad_core::topo {
-
-using namespace cad_core::part;
-
-}  // namespace cad_core::topo

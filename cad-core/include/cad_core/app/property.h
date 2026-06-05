@@ -34,10 +34,3 @@ struct PropertyValue {
 };
 
 }  // namespace cad_core::app
-
-namespace cad_core::document {
-
-using cad_core::app::PropertyKind;
-using cad_core::app::PropertyValue;
-
-}  // namespace cad_core::document

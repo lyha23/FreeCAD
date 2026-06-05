@@ -29,18 +29,3 @@ std::optional<Placement> readPlacement(const DocumentObject& object, const std::
 std::pair<Document, std::vector<runtime::Diagnostic>> parseDocument(const nlohmann::json& raw);
 
 }  // namespace cad_core::app
-
-namespace cad_core::document {
-
-using cad_core::app::hasPropertyType;
-using cad_core::app::parseDocument;
-using cad_core::app::propertyValue;
-using cad_core::app::readBool;
-using cad_core::app::readLink;
-using cad_core::app::readLinks;
-using cad_core::app::readNumber;
-using cad_core::app::readPlacement;
-using cad_core::app::readString;
-using cad_core::app::readVector3;
-
-}  // namespace cad_core::document

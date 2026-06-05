@@ -8,9 +8,3 @@ namespace cad_core::part_design {
 void executeDatumCoordinateSystem(const app::DocumentObject& object, runtime::ComputeContext& context);
 
 }  // namespace cad_core::part_design
-
-namespace cad_core::features {
-
-using part_design::executeDatumCoordinateSystem;
-
-}  // namespace cad_core::features

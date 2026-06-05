@@ -29,29 +29,3 @@ void executePartImportStep(const app::DocumentObject& object, runtime::ComputeCo
 void executePartImportIges(const app::DocumentObject& object, runtime::ComputeContext& context);
 
 }  // namespace cad_core::part
-
-namespace cad_core::features {
-
-using part::executePart;
-using part::executePartBox;
-using part::executePartCone;
-using part::executePartCylinder;
-using part::executePartEllipse;
-using part::executePartEllipsoid;
-using part::executePartExtrusion;
-using part::executePartHelix;
-using part::executePartImportBrep;
-using part::executePartImportIges;
-using part::executePartImportStep;
-using part::executePartLine;
-using part::executePartOffset;
-using part::executePartPlane;
-using part::executePartPrism;
-using part::executePartRegularPolygon;
-using part::executePartSphere;
-using part::executePartSpiral;
-using part::executePartTorus;
-using part::executePartVertex;
-using part::executePartWedge;
-
-}  // namespace cad_core::features

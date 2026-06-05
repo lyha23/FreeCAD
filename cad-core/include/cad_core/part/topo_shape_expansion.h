@@ -27,10 +27,3 @@ NamedShape namedShapeForImportedShape(
 );
 
 }  // namespace cad_core::part
-
-namespace cad_core::topo {
-
-using cad_core::part::ImportElementMapSource;
-using cad_core::part::namedShapeForImportedShape;
-
-}  // namespace cad_core::topo

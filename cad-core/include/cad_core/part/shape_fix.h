@@ -1,8 +1,7 @@
 #pragma once
 
 // Part-layer ShapeFix history helper aligned with FreeCAD Part/App TopoShape
-// ShapeFix consumption. The namespace remains cad_core::geometry during the
-// compatibility phase.
+// ShapeFix consumption.
 #include <TopoDS_Shape.hxx>
 #include <TopTools_ListOfShape.hxx>
 #include <Standard_Handle.hxx>
@@ -52,9 +51,3 @@ private:
 };
 
 }  // namespace cad_core::part
-
-namespace cad_core::geometry {
-
-using cad_core::part::ShapeFixHistory;
-
-}  // namespace cad_core::geometry

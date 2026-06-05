@@ -45,12 +45,3 @@ std::optional<TaperedExtrusionResult> makeTaperedExtrusion(const TopoDS_Shape& p
                                                            std::string& error);
 
 }  // namespace cad_core::part
-
-namespace cad_core::geometry {
-
-using cad_core::part::TaperedExtrusionHistoryComponent;
-using cad_core::part::TaperedExtrusionOptions;
-using cad_core::part::TaperedExtrusionResult;
-using cad_core::part::makeTaperedExtrusion;
-
-}  // namespace cad_core::geometry

@@ -11,12 +11,3 @@ void executeAppLinkGroup(const app::DocumentObject& object, runtime::ComputeCont
 void executeDocumentObjectGroup(const app::DocumentObject& object, runtime::ComputeContext& context);
 
 }  // namespace cad_core::app
-
-namespace cad_core::features {
-
-using app::executeAppLink;
-using app::executeAppLinkElement;
-using app::executeAppLinkGroup;
-using app::executeDocumentObjectGroup;
-
-}  // namespace cad_core::features

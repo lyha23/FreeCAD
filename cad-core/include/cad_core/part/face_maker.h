@@ -2,7 +2,6 @@
 
 // Part-layer FaceMaker implementation aligned with FreeCAD
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMaker*.cpp.
-// The namespace remains cad_core::geometry during the compatibility phase.
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Shape.hxx>
@@ -110,9 +109,3 @@ std::optional<TopoDS_Shape> makeFacesFromClosedWiresAndSplitEdges(
 );
 
 }  // namespace cad_core::part
-
-namespace cad_core::geometry {
-
-using namespace cad_core::part;
-
-}  // namespace cad_core::geometry

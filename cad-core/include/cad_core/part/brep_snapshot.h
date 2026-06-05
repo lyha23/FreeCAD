@@ -35,13 +35,3 @@ std::optional<TopoDS_Shape> readBrepSnapshot(const std::string& format,
 std::string sha256Hex(const std::string& data);
 
 }  // namespace cad_core::part
-
-namespace cad_core::geometry {
-
-using cad_core::part::BrepTextSnapshot;
-using cad_core::part::brepTextSnapshotForShape;
-using cad_core::part::readBrepSnapshot;
-using cad_core::part::readBrepTextSnapshot;
-using cad_core::part::sha256Hex;
-
-}  // namespace cad_core::geometry

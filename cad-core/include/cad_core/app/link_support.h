@@ -16,9 +16,3 @@ void executeAppLinkBaseLike(const app::DocumentObject& object,
                             const std::string& kind);
 
 }  // namespace cad_core::app
-
-namespace cad_core::features {
-
-using app::executeAppLinkBaseLike;
-
-}  // namespace cad_core::features

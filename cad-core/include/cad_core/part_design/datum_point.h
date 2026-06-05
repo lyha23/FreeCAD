@@ -8,9 +8,3 @@ namespace cad_core::part_design {
 void executeDatumPoint(const app::DocumentObject& object, runtime::ComputeContext& context);
 
 }  // namespace cad_core::part_design
-
-namespace cad_core::features {
-
-using part_design::executeDatumPoint;
-
-}  // namespace cad_core::features

@@ -1,7 +1,11 @@
 from __future__ import annotations
 
-from .fixture_expected import ExpectedFixtureAssertions
-from .fixture_runner import CadCoreFixtureTestCase
+try:
+    from .fixture_expected import ExpectedFixtureAssertions
+    from .fixture_runner import CadCoreFixtureTestCase
+except ImportError:  # pragma: no cover - supports `unittest discover tests`.
+    from fixture_expected import ExpectedFixtureAssertions
+    from fixture_runner import CadCoreFixtureTestCase
 
 
 class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):

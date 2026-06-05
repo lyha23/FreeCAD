@@ -11,9 +11,3 @@ namespace cad_core::part_design {
 void executeThickness(const app::DocumentObject& object, runtime::ComputeContext& context);
 
 }  // namespace cad_core::part_design
-
-namespace cad_core::features {
-
-using part_design::executeThickness;
-
-}  // namespace cad_core::features

@@ -12,9 +12,3 @@ struct Placement {
 };
 
 }  // namespace cad_core::app
-
-namespace cad_core::document {
-
-using cad_core::app::Placement;
-
-}  // namespace cad_core::document

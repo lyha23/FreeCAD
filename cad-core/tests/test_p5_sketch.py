@@ -7,8 +7,12 @@ import tempfile
 from collections import Counter
 from pathlib import Path
 
-from .fixture_expected import ExpectedFixtureAssertions
-from .fixture_runner import ROOT, CadCoreFixtureTestCase
+try:
+    from .fixture_expected import ExpectedFixtureAssertions
+    from .fixture_runner import ROOT, CadCoreFixtureTestCase
+except ImportError:  # pragma: no cover - supports `unittest discover tests`.
+    from fixture_expected import ExpectedFixtureAssertions
+    from fixture_runner import ROOT, CadCoreFixtureTestCase
 
 
 class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):

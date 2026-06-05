@@ -13,10 +13,3 @@ gp_Trsf placementFromComponents(const std::array<double, 3>& base, const std::ar
 TopoDS_Shape transformShape(const TopoDS_Shape& shape, const gp_Trsf& transform);
 
 }  // namespace cad_core::base
-
-namespace cad_core::geometry {
-
-using cad_core::base::placementFromComponents;
-using cad_core::base::transformShape;
-
-}  // namespace cad_core::geometry

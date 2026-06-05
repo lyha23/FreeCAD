@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-from .fixture_runner import CadCoreFixtureTestCase
+try:
+    from .fixture_runner import CadCoreFixtureTestCase
+except ImportError:  # pragma: no cover - supports `unittest discover tests`.
+    from fixture_runner import CadCoreFixtureTestCase
 
 
 class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):

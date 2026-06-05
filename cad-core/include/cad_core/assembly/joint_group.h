@@ -9,10 +9,3 @@ void executeAssemblyJointGroup(const app::DocumentObject& object, runtime::Compu
 void executeAssemblyFeaturePython(const app::DocumentObject& object, runtime::ComputeContext& context);
 
 }  // namespace cad_core::assembly
-
-namespace cad_core::features {
-
-using assembly::executeAssemblyFeaturePython;
-using assembly::executeAssemblyJointGroup;
-
-}  // namespace cad_core::features

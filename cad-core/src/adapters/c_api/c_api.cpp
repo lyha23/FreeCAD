@@ -1,4 +1,4 @@
-#include "cad_core/c_api.h"
+#include "cad_core/adapters/c_api.h"
 
 #include "cad_core/app/document.h"
 #include "cad_core/part/shape_exporter.h"

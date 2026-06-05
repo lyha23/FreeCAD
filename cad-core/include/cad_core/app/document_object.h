@@ -30,10 +30,3 @@ struct Document {
 };
 
 }  // namespace cad_core::app
-
-namespace cad_core::document {
-
-using cad_core::app::Document;
-using cad_core::app::DocumentObject;
-
-}  // namespace cad_core::document

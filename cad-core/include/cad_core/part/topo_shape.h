@@ -2,7 +2,6 @@
 
 // Part-layer TopoShape / NamedShape facade aligned with FreeCAD
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape*.cpp.
-// The namespace remains cad_core::topo during the compatibility phase.
 #include "cad_core/part/topo_shape_mapper.h"
 #include "cad_core/part/property_topo_shape.h"
 
@@ -27,12 +26,6 @@ namespace cad_core::part
 class ShapeFixHistory;
 struct TaperedExtrusionResult;
 }  // namespace cad_core::part
-
-namespace cad_core::topo {
-
-using namespace cad_core::part;
-
-}  // namespace cad_core::topo
 
 namespace cad_core::part
 {
