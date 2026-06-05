@@ -4,15 +4,16 @@
 
 本地 FreeCAD 依据统一使用 `/Users/li/Chili3DProject/重构Chili/FreeCAD/src`。当前 include/namespace 兼容层移除工作不应被本方案扩大成行为重写。
 
-## 当前结论
+## 当前基线
 
-需要优先拆的不是所有大文件，而是 FreeCAD 本身已经按功能拆开的文件族：
+2026-06-05 已完成本轮同构拆分，范围只限 FreeCAD 本身已经按功能拆开的文件族：
 
-- `cad-core/src/part_design/feature_dress_up.cpp` 应按 FreeCAD 的 `FeatureDressUp.cpp`、`FeatureFillet.cpp`、`FeatureChamfer.cpp`、`FeatureDraft.cpp`、`FeatureThickness.cpp` 拆。
-- `cad-core/src/part_design/feature_transformed.cpp` 应按 FreeCAD 的 `FeatureTransformed.cpp`、`FeatureMirrored.cpp`、`FeatureLinearPattern.cpp`、`FeaturePolarPattern.cpp`、`FeatureMultiTransform.cpp`、`FeatureScaled.cpp` 拆。
-- `cad-core/src/part/part_feature.cpp` 应按 FreeCAD Part 模块的 primitive、import、offset、extrusion、boolean 等源文件边界继续拆细。
+- `cad-core/src/part_design/feature_dress_up.cpp` 已按 FreeCAD 的 `FeatureDressUp.cpp`、`FeatureFillet.cpp`、`FeatureChamfer.cpp`、`FeatureDraft.cpp`、`FeatureThickness.cpp` 拆开。
+- `cad-core/src/part_design/feature_transformed.cpp` 已按 FreeCAD 的 `FeatureTransformed.cpp`、`FeatureMirrored.cpp`、`FeatureLinearPattern.cpp`、`FeaturePolarPattern.cpp`、`FeatureMultiTransform.cpp`、`FeatureScaled.cpp` 拆开。
+- `cad-core/src/part/part_feature.cpp` 已按 FreeCAD Part 模块的 primitive、import、offset、extrusion 源文件边界拆开；既有 `part_boolean.cpp`、`extrusion_helper.cpp`、`shape_exporter.cpp` 边界保持不变。
+- 新增的 `feature_dress_up_support.h`、`feature_transformed_support.h`、`part_feature_support.{h,cpp}` 都是对应文件族内部 support，不是 public include facade，也没有落入 `runtime`、`graph` 或 `adapters`。
 
-暂不建议拆：
+继续不拆：
 
 - `cad-core/src/part/wire_joiner.cpp`：FreeCAD 也是单个 `src/Mod/Part/App/WireJoiner.cpp`，它是状态机账本文件，大并不代表边界错误。
 - `cad-core/src/part_design/feature_hole.cpp`：FreeCAD 基本也是单个 `src/Mod/PartDesign/App/FeatureHole.cpp`，可后续抽资源解析 / thread / tool helper，但不作为本轮同构拆分重点。
@@ -20,14 +21,14 @@
 
 ## FreeCAD 对照基线
 
-| cad-core 当前文件 | 当前行数 | FreeCAD 对照 | FreeCAD 组织方式 | 判断 |
-| --- | ---: | --- | --- | --- |
-| `src/app/link.cpp` | 3053 | `src/App/Link.cpp` 约 2821 行，`src/App/PropertyLinks.cpp` 约 6022 行 | Link 与 PropertyLinks 分开，但 Link 本身仍大 | 可后置拆，不是第一优先级 |
-| `src/part/part_feature.cpp` | 2764 | `PartFeature.cpp`、`PrimitiveFeature.cpp`、`FeaturePartBox.cpp`、`FeaturePartImportBrep.cpp`、`FeaturePartImportStep.cpp`、`FeatureOffset.cpp`、`FeatureExtrusion.cpp` 等 | FreeCAD Part 功能拆得更细 | 应拆 |
-| `src/part_design/feature_dress_up.cpp` | 2190 | `FeatureDressUp.cpp`、`FeatureFillet.cpp`、`FeatureChamfer.cpp`、`FeatureDraft.cpp`、`FeatureThickness.cpp` | FreeCAD 按 DressUp 基类与子特征拆开 | 应拆 |
-| `src/part_design/feature_transformed.cpp` | 2273 | `FeatureTransformed.cpp`、`FeatureMirrored.cpp`、`FeatureLinearPattern.cpp`、`FeaturePolarPattern.cpp`、`FeatureMultiTransform.cpp`、`FeatureScaled.cpp` | FreeCAD 按 transformed 基类与子特征拆开 | 应拆 |
-| `src/part_design/feature_hole.cpp` | 3111 | `src/Mod/PartDesign/App/FeatureHole.cpp` 约 2714 行 | FreeCAD 基本单文件 | 暂不因行数拆 |
-| `src/part/wire_joiner.cpp` | 6332 | `src/Mod/Part/App/WireJoiner.cpp` 约 3217 行 | FreeCAD 单文件状态机 | 不拆 |
+| cad-core 当前文件 | 当前行数 | FreeCAD 对照 | 当前状态 |
+| --- | ---: | --- | --- |
+| `src/part_design/feature_dress_up.cpp` + `feature_fillet.cpp` / `feature_chamfer.cpp` / `feature_draft.cpp` / `feature_thickness.cpp` | 1114 + 143 / 280 / 550 / 441 | `FeatureDressUp.cpp`、`FeatureFillet.cpp`、`FeatureChamfer.cpp`、`FeatureDraft.cpp`、`FeatureThickness.cpp` | 已拆；shared base/source/AddSub cache 留在 DressUp support 边界 |
+| `src/part_design/feature_transformed.cpp` + `feature_mirrored.cpp` / `feature_linear_pattern.cpp` / `feature_polar_pattern.cpp` / `feature_multi_transform.cpp` / `feature_scaled.cpp` | 1498 + 215 / 264 / 220 / 385 / 184 | `FeatureTransformed.cpp`、`FeatureMirrored.cpp`、`FeatureLinearPattern.cpp`、`FeaturePolarPattern.cpp`、`FeatureMultiTransform.cpp`、`FeatureScaled.cpp` | 已拆；TransformSource、copy/fuse/cut/apply 留在 transformed support 边界 |
+| `src/part/part_feature.cpp` + `primitive_feature.cpp` / `part_extrusion.cpp` / `part_import.cpp` / `part_offset.cpp` | 75 + 1395 / 784 / 296 / 179 | `PartFeature.cpp`、`PrimitiveFeature.cpp`、`FeatureExtrusion.cpp`、`FeaturePartImport*.cpp`、`FeatureOffset.cpp` | 已拆；Part 基础入口留在 `part_feature.cpp`，通用发布/source link 放在 `part_feature_support.{h,cpp}` |
+| `src/app/link.cpp` | 3053 | `src/App/Link.cpp` 约 2821 行，`src/App/PropertyLinks.cpp` 约 6022 行 | 本轮只评估，不拆 |
+| `src/part_design/feature_hole.cpp` | 3111 | `src/Mod/PartDesign/App/FeatureHole.cpp` 约 2714 行 | FreeCAD 基本单文件，本轮不拆 |
+| `src/part/wire_joiner.cpp` | 6332 | `src/Mod/Part/App/WireJoiner.cpp` 约 3217 行 | FreeCAD 单文件状态机，不拆 |
 
 ## 拆分原则
 
@@ -231,6 +232,11 @@ FreeCAD 对照：
 - `feature_dress_up.cpp` 收敛为 shared support + DressUp 基类语义。
 - 更新 `cad-core/CMakeLists.txt` source list。
 
+状态：
+
+- 已完成。新增 `feature_fillet.cpp`、`feature_chamfer.cpp`、`feature_draft.cpp`、`feature_thickness.cpp` 和内部 `feature_dress_up_support.h`。
+- `feature_dress_up.cpp` 保留 DressUp base/source 解析、AddSubShape cache、refine 和结果发布 support。
+
 验收：
 
 ```bash
@@ -242,6 +248,8 @@ git diff --check -- cad-core docs/框架
 cd cad-core && graphify update .
 ```
 
+结果：构建通过；`tests.test_p7_features tests.test_feature_flows` 106 个测试通过；`git diff --check -- cad-core docs/框架` 通过；`graphify update .` 完成。
+
 ### M2：拆 Transformed 家族
 
 目标：
@@ -249,6 +257,11 @@ cd cad-core && graphify update .
 - 新增 `feature_mirrored.cpp`、`feature_linear_pattern.cpp`、`feature_polar_pattern.cpp`、`feature_multi_transform.cpp`、`feature_scaled.cpp`。
 - `feature_transformed.cpp` 收敛为 transformed shared support。
 - 更新 CMake source list。
+
+状态：
+
+- 已完成。新增 `feature_mirrored.cpp`、`feature_linear_pattern.cpp`、`feature_polar_pattern.cpp`、`feature_multi_transform.cpp`、`feature_scaled.cpp` 和内部 `feature_transformed_support.h`。
+- `feature_transformed.cpp` 保留 TransformSource、support source、copy/fuse/cut/apply、结果发布和 refine support。
 
 验收：
 
@@ -261,6 +274,8 @@ git diff --check -- cad-core docs/框架
 cd cad-core && graphify update .
 ```
 
+结果：构建通过；`tests.test_p7_features tests.test_feature_flows tests.test_adapters` 123 个测试通过；`git diff --check -- cad-core docs/框架` 通过；`graphify update .` 完成。
+
 ### M3：拆 Part Feature 家族
 
 目标：
@@ -268,6 +283,12 @@ cd cad-core && graphify update .
 - 新增 `primitive_feature.cpp`、`part_extrusion.cpp`、`part_import.cpp`、`part_offset.cpp`。
 - `part_feature.cpp` 只保留 Part::Feature 通用入口和 shared source resolution。
 - 保持 `part_boolean.cpp`、`shape_exporter.cpp`、`extrusion_helper.cpp` 的既有边界。
+
+状态：
+
+- 已完成。新增 `primitive_feature.cpp`、`part_extrusion.cpp`、`part_import.cpp`、`part_offset.cpp` 和内部 `part_feature_support.{h,cpp}`。
+- `part_feature.cpp` 只保留 App::Part / Part::Feature 基础入口；primitive、Part::Extrusion、Part::Offset、Part Import executor 已拆到对应文件。
+- `part_boolean.cpp`、`extrusion_helper.cpp`、`shape_exporter.cpp` 没有并回或改名。
 
 验收：
 
@@ -279,6 +300,8 @@ cd ..
 git diff --check -- cad-core docs/框架
 cd cad-core && graphify update .
 ```
+
+结果：构建通过；`tests.test_p8_features tests.test_adapters` 99 个测试通过；`git diff --check -- cad-core docs/框架` 通过；`graphify update .` 完成。
 
 ### M4：评估 Link 是否需要拆
 
@@ -315,3 +338,9 @@ cd cad-core && graphify update .
 - public header 仍只暴露 FreeCAD 同构模块路径。
 - 每个阶段的 diff 以文件移动 / helper 提取为主，不夹带行为修复。
 - 对应阶段测试、`git diff --check` 和 `graphify update .` 完成。
+
+## 验收结果
+
+- 最终构建通过：`cd cad-core && cmake --build build`。
+- 最终测试通过：`python3 -m unittest tests.test_include_boundaries tests.test_feature_flows tests.test_p7_features tests.test_p8_features tests.test_adapters`，210 个测试 OK。
+- 最终检查项：`git diff --check -- cad-core docs/框架` 通过；`graphify update .` 完成。

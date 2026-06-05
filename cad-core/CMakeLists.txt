@@ -50,7 +50,12 @@ add_library(cad-core-lib STATIC
   src/part/extrusion_helper.cpp
   src/part/face_maker.cpp
   src/part/part_boolean.cpp
+  src/part/part_extrusion.cpp
   src/part/part_feature.cpp
+  src/part/part_feature_support.cpp
+  src/part/part_import.cpp
+  src/part/part_offset.cpp
+  src/part/primitive_feature.cpp
   src/part/property_topo_shape.cpp
   src/part/refine_model.cpp
   src/part/shape_fix.cpp
@@ -66,11 +71,20 @@ add_library(cad-core-lib STATIC
   src/part_design/datum_plane.cpp
   src/part_design/datum_point.cpp
   src/part_design/feature_base.cpp
+  src/part_design/feature_chamfer.cpp
   src/part_design/feature_dress_up.cpp
+  src/part_design/feature_draft.cpp
   src/part_design/feature_extrude.cpp
+  src/part_design/feature_fillet.cpp
   src/part_design/feature_hole.cpp
+  src/part_design/feature_linear_pattern.cpp
+  src/part_design/feature_mirrored.cpp
+  src/part_design/feature_multi_transform.cpp
   src/part_design/feature_pad.cpp
   src/part_design/feature_pocket.cpp
+  src/part_design/feature_polar_pattern.cpp
+  src/part_design/feature_scaled.cpp
+  src/part_design/feature_thickness.cpp
   src/part_design/feature_transformed.cpp
   src/runtime/compute_context.cpp
   src/runtime/diagnostics.cpp
