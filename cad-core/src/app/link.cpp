@@ -2344,9 +2344,12 @@ void addCopyOnChangeLifecycleUpdates(runtime::ComputeContext& context,
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
             // ::LinkBaseExtension::makeCopyOnChange(), creates/uses "CopyOnChangeGroup" and
             // ::syncCopyOnChange() then "copy all CopyOnChange properties" into the owned copy.
+            // cad-core currently emits only the stateless writeback contract. Delete this
+            // partial path after full property-tree copy, child-object copy, dependency relink,
+            // and NamedShape/ElementMap history preservation are migrated.
             context.documentObjectUpdates.push_back({
                 {"action", "create"},
-                {"reason", "copy_on_change_deep_copy"},
+                {"reason", "copy_on_change_writeback_contract"},
                 {"object", copyName},
                 {"typeId", sourceObject == nullptr ? "App::DocumentObject" : sourceObject->typeId},
                 {"owner", object.name},
@@ -2366,7 +2369,7 @@ void addCopyOnChangeLifecycleUpdates(runtime::ComputeContext& context,
         };
         context.documentObjectUpdates.push_back({
             {"action", "update"},
-            {"reason", "copy_on_change_deep_copy"},
+            {"reason", "copy_on_change_writeback_contract"},
             {"object", object.name},
             {"objectId", object.id},
             {"typeId", object.typeId},

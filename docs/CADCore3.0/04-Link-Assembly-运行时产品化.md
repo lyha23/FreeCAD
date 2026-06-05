@@ -19,7 +19,7 @@ FreeCAD 依据：
 交付内容：
 
 - 完整 `_ChildCache` 生命周期：create、claim、sync、delete、nested plain group child cache、orphan reclaim。
-- copy-on-change deep copy：source group、owned child、touched / mutated 传播、属性监听边界。
+- copy-on-change writeback contract：source group、owned child、touched / mutated 传播写回建议；完整 deep copy lifecycle 仍需复制属性树、子对象、依赖 relink 与 history。
 - document hash lifecycle：跨文档引用、文档缺失、hash 变化、source object rename、label rename。
 - Link retag 与 MapperHistory 统一：FullSubList、mapped postfix、source-prefixed stable key、多层 LinkSub 不建立专用旁路。
 - `documentObjectUpdates` schema 冻结到前端可直接应用。
@@ -29,7 +29,7 @@ FreeCAD 依据：
 - 前端应用 `documentObjectUpdates` 后，下次 recompute 不丢 Link display、picking、stable subname。
 - source rename / label rename / document hash mismatch / missing external document 有明确恢复建议或 diagnostics。
 - toggle ShowElement、ElementCount、ElementList、PlacementList、ScaleList、VisibilityList 的写回优先级稳定。
-- C3-M6 当前已覆盖 ShowElement child cache、plain group nested traversal、CopyOnChange deep copy、owned child sync 和 touched tracking；`link_transaction.remaining_gaps=[]`。
+- C3-M6 当前已覆盖 ShowElement child cache、plain group nested traversal、CopyOnChange writeback contract、owned child sync 和 touched tracking；`copy_on_change_deep_copy_lifecycle.status=partial`，`link_transaction.remaining_gaps` 保留 `copy_on_change_property_tree_copy`、`copy_on_change_child_object_copy`、`copy_on_change_dependency_relink`、`copy_on_change_history_preserve`。
 
 ## C3-M6b：Assembly solver 与 placement write-back
 
@@ -41,7 +41,7 @@ FreeCAD 依据：
 
 交付内容：
 
-- 提供 stateless representative Ondsel solver DTO，不保留跨请求 solver session。
+- 提供 stateless representative solver DTO，不保留跨请求 Ondsel solver session；该路径不能命名为 full Ondsel solver。
 - Joint / GroundedJoint 解析 Reference1 / Reference2 / ObjectToGround、JointType、placement chain。
 - Fixed、Revolute、Slider、Ball、Distance、Angle 等常用 JointType 至少有代表 oracle。
 - solver 成功后通过 `documentObjectUpdates` 写回 component placement。
@@ -52,7 +52,7 @@ FreeCAD 依据：
 - GroundedJoint-only 不再是唯一成功路径。
 - 普通 JointType 有 representative placement update 或明确 unsupported matrix。
 - Assembly solver 不依赖 GUI 或跨请求 CAD Core session。
-- C3-M6 当前已覆盖 Fixed representative placement writeback、six JointType capability keys 和 RackPinion / Screw / Gears / Belt / Cylindrical unsupported matrix；`assembly.remaining_gaps=[]`。
+- C3-M6 当前已覆盖 Fixed representative placement writeback、six JointType capability keys 和 RackPinion / Screw / Gears / Belt / Cylindrical unsupported matrix；`representative_solver_adapter.status=covered_representative`，`placement_writeback.status=covered_contract`，`ondsel_solver_adapter.status=not_implemented`，`assembly.remaining_gaps` 保留 `ondsel_solver_session`、`joint_constraint_solve`、`validated_new_placements`。
 
 ## C3-M7：Worker / WASM / Web adapter 产品化
 

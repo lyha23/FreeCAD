@@ -979,7 +979,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(properties["LinkTransform"]["value"], False)
         self.assertNotIn("LinkedObject", properties)
 
-    def test_c3m6_app_link_copy_on_change_deep_copy_reports_lifecycle_updates(self) -> None:
+    def test_c3m6_app_link_copy_on_change_reports_writeback_contract_updates(self) -> None:
         result = self.run_recompute("app-link-copy-on-change-deep-copy", "c3m6")
         link = result["objects"]["BoxLink"]
         updates = result["documentObjectUpdates"]
@@ -990,8 +990,8 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual([item["action"] for item in updates], ["create", "create", "update"])
         self.assertEqual([item["reason"] for item in updates], [
             "copy_on_change_group_create",
-            "copy_on_change_deep_copy",
-            "copy_on_change_deep_copy",
+            "copy_on_change_writeback_contract",
+            "copy_on_change_writeback_contract",
         ])
         self.assertEqual(updates[1]["object"], "BoxLink_CopyOnChangeObject")
         self.assertEqual(updates[1]["sourceObject"], "Box")

@@ -296,9 +296,26 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "element_list_owner_sync",
                 "element_list_child_sync",
                 "copy_on_change_owned_child_sync",
-                "copy_on_change_deep_copy",
+                "copy_on_change_writeback_contract",
                 "copy_on_change_owned_child_mutation",
                 "copy_on_change_touched_tracking",
+            ],
+        )
+        self.assertEqual(
+            capabilities["link_transaction"]["copy_on_change_writeback_contract"]["status"],
+            "covered",
+        )
+        self.assertEqual(
+            capabilities["link_transaction"]["copy_on_change_deep_copy_lifecycle"]["status"],
+            "partial",
+        )
+        self.assertEqual(
+            capabilities["link_transaction"]["remaining_gaps"],
+            [
+                "copy_on_change_property_tree_copy",
+                "copy_on_change_child_object_copy",
+                "copy_on_change_dependency_relink",
+                "copy_on_change_history_preserve",
             ],
         )
         self.assertEqual(
@@ -319,7 +336,6 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             capabilities["link_transaction"]["request_local_boundaries"],
         )
         self.assertIn("copy_on_change_keeps_request_graph_immutable", capabilities["link_transaction"]["request_local_boundaries"])
-        self.assertEqual(capabilities["link_transaction"]["remaining_gaps"], [])
         self.assertEqual(
             capabilities["link_reference_lifecycle"]["retag_aliases"],
             [
@@ -861,22 +877,37 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertIn(code, capabilities["diagnostic_codes"])
 
         self.assertEqual(
-            capabilities["assembly"]["solver_adapter"],
-            [
-                "skipped_no_joints",
-                "grounded_only_noop",
-                "representative_ondsel_solver",
-                "fixed_joint",
-                "revolute_joint",
-                "slider_joint",
-                "ball_joint",
-                "distance_joint",
-                "angle_joint",
-                "unsupported_joint_diagnostics",
-            ],
+            capabilities["assembly"]["representative_solver_adapter"]["status"],
+            "covered_representative",
         )
-        self.assertEqual(capabilities["assembly"]["placement_writeback"], ["documentObjectUpdates.action=assembly_set_placement"])
-        self.assertEqual(capabilities["assembly"]["remaining_gaps"], [])
+        self.assertEqual(
+            capabilities["assembly"]["representative_solver_adapter"]["mode"],
+            "stateless_representative_solver",
+        )
+        self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["status"], "not_implemented")
+        self.assertEqual(capabilities["assembly"]["placement_writeback"]["status"], "covered_contract")
+        self.assertEqual(
+            capabilities["assembly"]["placement_writeback"]["updates"],
+            ["documentObjectUpdates.action=assembly_set_placement"],
+        )
+        self.assertEqual(
+            capabilities["assembly"]["remaining_gaps"],
+            ["ondsel_solver_session", "joint_constraint_solve", "validated_new_placements"],
+        )
+        self.assertEqual(capabilities["wire_joiner"]["generated_open_export_bridge"]["status"], "bridge")
+        self.assertEqual(capabilities["wire_joiner"]["purge_as_original_bridge"]["status"], "bridge")
+        self.assertIn(
+            "part_design.pad.taper_history",
+            capabilities["object_metadata_gaps"]["local_history_gaps"],
+        )
+        self.assertIn(
+            "part_design.pocket.taper_history",
+            capabilities["object_metadata_gaps"]["local_history_gaps"],
+        )
+        self.assertIn(
+            "part.extrusion.taper_history",
+            capabilities["object_metadata_gaps"]["local_history_gaps"],
+        )
 
         self.assertEqual(
             capabilities["topo_history"]["stable_subname_resolution"],

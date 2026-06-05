@@ -1324,7 +1324,9 @@ WireJoiner::HelperOpenExportOverridePlan WireJoiner::computeHelperOpenExportOver
                 // ::WireJoinerP::buildClosedWire() removes partial shared closed-wire result edges
                 // through the real EdgeInfo/aHistory lifecycle; the P6 path binds these slots from
                 // EdgeInfo source lineage instead of asking the legacy bounded-face locator to
-                // rediscover the same result edge.
+                // rediscover the same result edge. Bridge deletion condition: WireInfo/wireInfo2
+                // exhaust lifecycle plus myShapesToReturn must identify the surviving child wire
+                // without helperOpenExportOverride/openExportOverride.
                 ++plan.candidateEdgeCount;
                 HelperOpenExportOverrideBinding binding;
                 binding.resultSlotEdge = edgeInfo.edge;
@@ -1443,7 +1445,9 @@ WireJoiner::HelperOpenExportOverridePlan WireJoiner::computeHelperOpenExportOver
             // ::WireJoinerP::splitEdges() records source-to-fragment history before
             // ::buildClosedWire() and ::build() export closed-cycle result wires from final
             // EdgeInfo states. This P6 path binds closed-cycle slots from those EdgeInfo rows
-            // instead of the legacy bounded-face result-slot finder.
+            // instead of the legacy bounded-face result-slot finder. Bridge deletion condition:
+            // aHistory plus openWireCompound child-wire ownership must produce the result edge
+            // identity without helperOpenExportOverride/openExportOverride.
             ++plan.candidateEdgeCount;
             resultSlotSeeds.push_back(edgeInfo.edge);
             HelperOpenExportOverrideBinding binding;

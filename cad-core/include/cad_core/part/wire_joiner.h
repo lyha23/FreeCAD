@@ -437,6 +437,9 @@ private:
         // produced this EdgeInfo.
         std::vector<std::size_t> sourceEdgeIndices;
         bool sourceLineageFromSplitterHistory = false;
+        // Bridge, not FreeCAD-equivalent ownership: delete helperOpenExportOverride once
+        // aHistory, myShapesToReturn, openWireCompound child-wire ownership, and the live
+        // WireInfo/EdgeInfo lifecycle produce generated open-export identity directly.
         bool helperOpenExportOverride = false;
         std::string helperOpenExportOverrideReason;
         bool helperOpenExportOverrideSourceEdgeInfo = false;
@@ -489,7 +492,8 @@ private:
         // ::WireJoinerP::build() exports final EdgeInfo identity into "openWireCompound" by calling
         // "builder.Add(openWireCompound, info.wire())". While M3 is replacing the helper-generated
         // result edge source, keep the owner lifecycle on "edge" and override only the export shape
-        // recorded in OpenWireCompoundWireInfo.
+        // recorded in OpenWireCompoundWireInfo. This is a bridge; delete it when aHistory /
+        // myShapesToReturn and openWireCompound child-wire ownership provide the result edge.
         std::optional<TopoDS_Edge> openExportOverride;
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
         // ::WireJoinerP::build() exports final "info.wire()" children. Keep transitional
@@ -535,6 +539,8 @@ private:
         std::size_t wireInfo2 = 0;
         bool closedWireOwner = false;
         bool splitFromInputEdge = false;
+        // Bridge for getOpenWires(noOriginal): delete after sourceEdgeArray -> split EdgeInfo
+        // identity and openWireCompound child-wire ownership replace the request-local purge flag.
         bool purgeAsOriginalOpenEdge = false;
         std::size_t branchCandidateCount = 0;
         std::size_t branchInsideCandidateCount = 0;
@@ -633,6 +639,8 @@ private:
         TopoDS_Wire wire;
         bool wireBuilt = false;
         bool superEdgeWire = false;
+        // Diagnostic bridge copied from EdgeInfo; it must not grow new fixture-shaped reasons.
+        // Deletion is tied to real aHistory / myShapesToReturn / openWireCompound ownership.
         bool helperOpenExportOverride = false;
         std::string helperOpenExportOverrideReason;
         bool helperOpenExportOverrideSourceEdgeInfo = false;
