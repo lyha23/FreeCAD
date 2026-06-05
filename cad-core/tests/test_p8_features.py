@@ -1,16 +1,52 @@
 from __future__ import annotations
 
+import json
+import tempfile
+from pathlib import Path
+
 try:
     from .fixture_expected import ExpectedFixtureAssertions
+    from .fixture_runner import ROOT
     from .fixture_runner import CadCoreFixtureTestCase
 except ImportError:  # pragma: no cover - supports `unittest discover tests`.
     from fixture_expected import ExpectedFixtureAssertions
+    from fixture_runner import ROOT
     from fixture_runner import CadCoreFixtureTestCase
 
 
 class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def assert_update_property_type(self, update: dict, property_name: str, property_type: str) -> None:
         self.assertEqual(update["properties"][property_name]["PropertyType"], property_type)
+
+    def run_with_document_updates_applied(self, fixture: str, group: str, updates: list[dict]) -> dict:
+        payload = json.loads((ROOT / "fixtures" / group / f"{fixture}.json").read_text(encoding="utf-8"))
+        by_name = {document_object["Name"]: document_object for document_object in payload["Objects"]}
+        next_id = max(document_object["ID"] for document_object in payload["Objects"]) + 1
+
+        for update in updates:
+            action = update["action"]
+            name = update["object"]
+            properties = update.get("properties", {})
+            if action == "create" and name not in by_name:
+                object_id = update.get("objectId", next_id)
+                next_id = max(next_id, object_id + 1)
+                document_object = {
+                    "Name": name,
+                    "ID": object_id,
+                    "TypeId": update["typeId"],
+                    "Properties": dict(properties),
+                }
+                payload["Objects"].append(document_object)
+                by_name[name] = document_object
+                continue
+
+            document_object = by_name[name]
+            document_object["Properties"].update(properties)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            applied_path = Path(tmp) / f"{fixture}-applied.json"
+            applied_path.write_text(json.dumps(payload), encoding="utf-8")
+            return self.run_recompute_file(applied_path)
 
     def test_p8_part_box_builds_occt_solid(self) -> None:
         result = self.run_recompute("part-box", "p8")
@@ -979,7 +1015,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(properties["LinkTransform"]["value"], False)
         self.assertNotIn("LinkedObject", properties)
 
-    def test_c3m6_app_link_copy_on_change_reports_writeback_contract_updates(self) -> None:
+    def test_c3m6_app_link_copy_on_change_builds_deep_copy_lifecycle_updates(self) -> None:
         result = self.run_recompute("app-link-copy-on-change-deep-copy", "c3m6")
         link = result["objects"]["BoxLink"]
         updates = result["documentObjectUpdates"]
@@ -989,12 +1025,18 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(link["linked_object"], "Box")
         self.assertEqual([item["action"] for item in updates], ["create", "create", "update"])
         self.assertEqual([item["reason"] for item in updates], [
-            "copy_on_change_group_create",
-            "copy_on_change_writeback_contract",
-            "copy_on_change_writeback_contract",
+            "copy_on_change_group_sync",
+            "copy_on_change_deep_copy_lifecycle",
+            "copy_on_change_deep_copy_lifecycle",
         ])
+        self.assertEqual(updates[0]["properties"]["Group"]["values"], ["BoxLink_CopyOnChangeObject"])
         self.assertEqual(updates[1]["object"], "BoxLink_CopyOnChangeObject")
         self.assertEqual(updates[1]["sourceObject"], "Box")
+        self.assertEqual(updates[1]["properties"]["Length"], 2)
+        self.assertEqual(updates[1]["properties"]["Width"], 3)
+        self.assertEqual(updates[1]["properties"]["Height"], 4)
+        self.assertEqual(updates[1]["properties"]["Visibility"]["value"], False)
+        self.assertEqual(updates[1]["historyPreserve"]["propertyTree"], "deep_copy")
         properties = updates[2]["properties"]
         self.assertEqual(properties["LinkedObject"]["value"], "BoxLink_CopyOnChangeObject")
         self.assertEqual(properties["LinkCopyOnChange"]["value"], 2)
@@ -1002,7 +1044,58 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(properties["LinkCopyOnChangeGroup"]["value"], "BoxLink_CopyOnChangeGroup")
         self.assertEqual(properties["LinkCopyOnChangeTouched"]["value"], False)
 
-    def test_c3m6_app_link_copy_on_change_touched_tracking_reports_resync(self) -> None:
+        applied_result = self.run_with_document_updates_applied(
+            "app-link-copy-on-change-deep-copy",
+            "c3m6",
+            updates,
+        )
+        self.assertEqual(applied_result["diagnostics"], [])
+        self.assertEqual(applied_result["documentObjectUpdates"], [])
+        self.assertEqual(applied_result["objects"]["BoxLink_CopyOnChangeObject"]["status"], "ok")
+        self.assertEqual(applied_result["objects"]["BoxLink"]["linked_object"], "BoxLink_CopyOnChangeObject")
+
+    def test_c3m6_app_link_copy_on_change_copies_subtree_relinks_and_preserves_history(self) -> None:
+        result = self.run_recompute("app-link-copy-on-change-subtree-relink-history", "c3m6")
+        updates = result["documentObjectUpdates"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(
+            [(update["action"], update["reason"], update["object"]) for update in updates],
+            [
+                ("create", "copy_on_change_group_sync", "GroupLink_CopyOnChangeGroup"),
+                ("create", "copy_on_change_deep_copy_lifecycle", "GroupLink_CopyOnChange_ChildBox"),
+                ("create", "copy_on_change_deep_copy_lifecycle", "GroupLink_CopyOnChange_SourceLink"),
+                ("create", "copy_on_change_deep_copy_lifecycle", "GroupLink_CopyOnChangeObject"),
+                ("update", "copy_on_change_deep_copy_lifecycle", "GroupLink"),
+            ],
+        )
+        group_copy = updates[3]
+        self.assertEqual(
+            group_copy["properties"]["Group"]["values"],
+            ["GroupLink_CopyOnChange_SourceLink", "ExternalBox"],
+        )
+        self.assertNotIn("ExternalBox", group_copy["dependencyRewrite"])
+
+        source_link_copy = updates[2]
+        linked_object = source_link_copy["properties"]["LinkedObject"]
+        self.assertEqual(linked_object["value"], "GroupLink_CopyOnChange_ChildBox")
+        self.assertEqual(linked_object["StableSubList"], ["GroupLink_CopyOnChange_ChildBox.Face1"])
+        self.assertEqual(linked_object["FullSubList"], ["GroupLink_CopyOnChange_ChildBox.Face1"])
+        self.assertEqual(linked_object["ReferenceShadow"][0]["target"], "GroupLink_CopyOnChange_ChildBox")
+        self.assertEqual(linked_object["ReferenceShadow"][0]["targetId"], updates[1]["objectId"])
+        self.assertEqual(source_link_copy["historyPreserve"]["referenceShadow"], "preserved_and_retargeted")
+
+        applied_result = self.run_with_document_updates_applied(
+            "app-link-copy-on-change-subtree-relink-history",
+            "c3m6",
+            updates,
+        )
+        self.assertEqual(applied_result["diagnostics"], [])
+        self.assertEqual(applied_result["documentObjectUpdates"], [])
+        self.assertEqual(applied_result["objects"]["GroupLink"]["linked_object"], "GroupLink_CopyOnChangeObject")
+        self.assertEqual(applied_result["objects"]["GroupLink_CopyOnChangeObject"]["group"], ["GroupLink_CopyOnChange_SourceLink", "ExternalBox"])
+
+    def test_c3m6_app_link_copy_on_change_touched_tracking_resyncs_existing_copy(self) -> None:
         result = self.run_recompute("app-link-copy-on-change-touched-tracking", "c3m6")
         link = result["objects"]["BoxLink"]
         updates = result["documentObjectUpdates"]
@@ -1010,11 +1103,18 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(link["status"], "ok")
         self.assertEqual(link["linked_object"], "BoxLink_CopyOnChangeObject")
-        self.assertEqual([item["action"] for item in updates], ["update"])
-        self.assertEqual(updates[0]["reason"], "copy_on_change_touched_tracking")
-        self.assertEqual(updates[0]["sourceObject"], "Box")
-        self.assertEqual(updates[0]["group"], "BoxLink_CopyOnChangeGroup")
-        self.assertEqual(updates[0]["properties"]["LinkCopyOnChangeTouched"]["value"], False)
+        self.assertEqual(
+            [(update["action"], update["reason"], update["object"]) for update in updates],
+            [
+                ("update", "copy_on_change_group_sync", "BoxLink_CopyOnChangeGroup"),
+                ("update", "copy_on_change_deep_copy_lifecycle", "BoxLink_CopyOnChangeObject"),
+                ("update", "copy_on_change_deep_copy_lifecycle", "BoxLink"),
+            ],
+        )
+        self.assertEqual(updates[1]["sourceObject"], "Box")
+        self.assertEqual(updates[1]["properties"]["Length"], 2)
+        self.assertEqual(updates[2]["properties"]["LinkCopyOnChange"]["value"], 3)
+        self.assertEqual(updates[2]["properties"]["LinkCopyOnChangeTouched"]["value"], False)
 
     def test_p8_app_link_element_count_resolves_indexed_subshape_alias(self) -> None:
         result = self.run_recompute("app-link-element-count-sublist-index", "p8")

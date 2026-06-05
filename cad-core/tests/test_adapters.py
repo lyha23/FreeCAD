@@ -297,6 +297,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "element_list_child_sync",
                 "copy_on_change_owned_child_sync",
                 "copy_on_change_writeback_contract",
+                "copy_on_change_group_sync",
+                "copy_on_change_deep_copy_lifecycle",
                 "copy_on_change_owned_child_mutation",
                 "copy_on_change_touched_tracking",
             ],
@@ -307,16 +309,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(
             capabilities["link_transaction"]["copy_on_change_deep_copy_lifecycle"]["status"],
-            "partial",
+            "covered_full",
         )
         self.assertEqual(
             capabilities["link_transaction"]["remaining_gaps"],
-            [
-                "copy_on_change_property_tree_copy",
-                "copy_on_change_child_object_copy",
-                "copy_on_change_dependency_relink",
-                "copy_on_change_history_preserve",
-            ],
+            [],
         )
         self.assertEqual(
             capabilities["link_transaction"]["writeback_properties"],
@@ -327,8 +324,16 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "ScaleList",
                 "VisibilityList",
                 "LinkedObject",
+                "LinkCopyOnChange",
+                "LinkCopyOnChangeSource",
+                "LinkCopyOnChangeGroup",
+                "LinkCopyOnChangeTouched",
                 "_LinkOwner",
                 "LinkTransform",
+                "_CopyOnChangeControl",
+                "_CopyOnChangeOwner",
+                "_CopyOnChangeSourceObject",
+                "_CopyOnChangeSourceId",
             ],
         )
         self.assertIn(
@@ -336,6 +341,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             capabilities["link_transaction"]["request_local_boundaries"],
         )
         self.assertIn("copy_on_change_keeps_request_graph_immutable", capabilities["link_transaction"]["request_local_boundaries"])
+        self.assertIn(
+            "copy_on_change_frontend_persists_copied_graph_between_requests",
+            capabilities["link_transaction"]["request_local_boundaries"],
+        )
         self.assertEqual(
             capabilities["link_reference_lifecycle"]["retag_aliases"],
             [

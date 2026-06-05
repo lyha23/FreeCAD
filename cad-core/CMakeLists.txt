@@ -36,6 +36,7 @@ add_library(cad-core-lib STATIC
   src/assembly/assembly_object.cpp
   src/assembly/assembly_utils.cpp
   src/assembly/joint_group.cpp
+  src/app/copy_on_change.cpp
   src/app/document.cpp
   src/app/document_object.cpp
   src/app/element_map.cpp

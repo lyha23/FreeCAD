@@ -19,7 +19,7 @@ FreeCAD 依据：
 交付内容：
 
 - 完整 `_ChildCache` 生命周期：create、claim、sync、delete、nested plain group child cache、orphan reclaim。
-- copy-on-change writeback contract：source group、owned child、touched / mutated 传播写回建议；完整 deep copy lifecycle 仍需复制属性树、子对象、依赖 relink 与 history。
+- copy-on-change complete deep copy lifecycle：source group、owned child、touched / mutated 传播写回建议，属性树 deep copy、child/group copy、copied subtree relink、依赖 graph rewrite 与 ReferenceShadow / stable subname evidence preserve。
 - document hash lifecycle：跨文档引用、文档缺失、hash 变化、source object rename、label rename。
 - Link retag 与 MapperHistory 统一：FullSubList、mapped postfix、source-prefixed stable key、多层 LinkSub 不建立专用旁路。
 - `documentObjectUpdates` schema 冻结到前端可直接应用。
@@ -29,7 +29,7 @@ FreeCAD 依据：
 - 前端应用 `documentObjectUpdates` 后，下次 recompute 不丢 Link display、picking、stable subname。
 - source rename / label rename / document hash mismatch / missing external document 有明确恢复建议或 diagnostics。
 - toggle ShowElement、ElementCount、ElementList、PlacementList、ScaleList、VisibilityList 的写回优先级稳定。
-- C3-M6 当前已覆盖 ShowElement child cache、plain group nested traversal、CopyOnChange writeback contract、owned child sync 和 touched tracking；`copy_on_change_deep_copy_lifecycle.status=partial`，`link_transaction.remaining_gaps` 保留 `copy_on_change_property_tree_copy`、`copy_on_change_child_object_copy`、`copy_on_change_dependency_relink`、`copy_on_change_history_preserve`。
+- C3-M6 当前已覆盖 ShowElement child cache、plain group nested traversal、CopyOnChange writeback transport、complete deep copy lifecycle、owned child sync 和 touched sync；`copy_on_change_deep_copy_lifecycle.status=covered_full`，`link_transaction.remaining_gaps=[]`。
 
 ## C3-M6b：Assembly solver 与 placement write-back
 

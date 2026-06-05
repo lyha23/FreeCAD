@@ -1,0 +1,84 @@
+{
+  "Objects": [
+    {
+      "Name": "ChildBox",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 3,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "ExternalBox",
+      "ID": 2,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 5,
+        "Width": 5,
+        "Height": 1,
+        "_CopyOnChangeControl": {
+          "PropertyType": "App::PropertyMap",
+          "values": {
+            "*": "-"
+          }
+        }
+      }
+    },
+    {
+      "Name": "SourceLink",
+      "ID": 3,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "ChildBox",
+          "SubList": ["Face1"],
+          "StableSubList": ["ChildBox.Face1"],
+          "FullSubList": ["ChildBox.Face1"],
+          "ReferenceShadow": [
+            {
+              "target": "ChildBox",
+              "targetId": 1,
+              "property": "LinkedObject",
+              "shapeType": "Face",
+              "indexed": "Face1",
+              "subname": "Face1",
+              "stableSubname": "ChildBox.Face1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "Name": "SourceGroup",
+      "ID": 4,
+      "TypeId": "App::DocumentObjectGroup",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["SourceLink", "ExternalBox"]
+        }
+      }
+    },
+    {
+      "Name": "GroupLink",
+      "ID": 5,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "SourceGroup"
+        },
+        "LinkCopyOnChange": {
+          "PropertyType": "App::PropertyInteger",
+          "value": 1
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["GroupLink"]
+  }
+}

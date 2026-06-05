@@ -1,5 +1,6 @@
 #include "cad_core/app/link.h"
 
+#include "cad_core/app/copy_on_change.h"
 #include "cad_core/app/link_support.h"
 #include "cad_core/runtime/feature_executor.h"
 #include "cad_core/base/placement.h"
@@ -2327,85 +2328,14 @@ void addCopyOnChangeLifecycleUpdates(runtime::ComputeContext& context,
                                      const app::DocumentObject& object,
                                      const app::Link& link)
 {
-    const long long mode = copyOnChangeMode(object);
-    if (mode == 0LL) {
-        return;
+    const app::CopyOnChangeDocumentView view {&context.documentObjects, &context.dependencies};
+    const app::CopyOnChangeLifecycleResult result =
+        app::buildCopyOnChangeLifecycleUpdates(object, link, view);
+    for (const auto& diagnostic : result.diagnostics) {
+        context.diagnostics.push_back(diagnostic);
     }
-
-    const auto source = app::readLink(object, "LinkCopyOnChangeSource");
-    const auto group = app::readLink(object, "LinkCopyOnChangeGroup");
-    const std::string groupName = copyOnChangeGroupName(object, group);
-    const std::string copyName = copyOnChangeObjectName(object, link);
-    const app::DocumentObject* sourceObject = documentObjectByName(context, link.object);
-
-    if (mode == 1LL) {
-        addCopyOnChangeGroupCreateUpdate(context, object, groupName);
-        if (documentObjectByName(context, copyName) == nullptr) {
-            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
-            // ::LinkBaseExtension::makeCopyOnChange(), creates/uses "CopyOnChangeGroup" and
-            // ::syncCopyOnChange() then "copy all CopyOnChange properties" into the owned copy.
-            // cad-core currently emits only the stateless writeback contract. Delete this
-            // partial path after full property-tree copy, child-object copy, dependency relink,
-            // and NamedShape/ElementMap history preservation are migrated.
-            context.documentObjectUpdates.push_back({
-                {"action", "create"},
-                {"reason", "copy_on_change_writeback_contract"},
-                {"object", copyName},
-                {"typeId", sourceObject == nullptr ? "App::DocumentObject" : sourceObject->typeId},
-                {"owner", object.name},
-                {"ownerId", object.id},
-                {"sourceObject", link.object},
-                {"group", groupName},
-                {"copyKind", "deep"},
-            });
-        }
-
-        nlohmann::json properties = {
-            {"LinkedObject", propertyXLinkJson(copyName)},
-            {"LinkCopyOnChange", propertyIntegerJson(2LL)},
-            {"LinkCopyOnChangeSource", linkElementLinkedObjectJson(link)},
-            {"LinkCopyOnChangeGroup", propertyLinkJson(groupName)},
-            {"LinkCopyOnChangeTouched", propertyBoolJson(false)},
-        };
-        context.documentObjectUpdates.push_back({
-            {"action", "update"},
-            {"reason", "copy_on_change_writeback_contract"},
-            {"object", object.name},
-            {"objectId", object.id},
-            {"typeId", object.typeId},
-            {"sourceObject", link.object},
-            {"copyObject", copyName},
-            {"group", groupName},
-            {"properties", properties},
-        });
-        return;
-    }
-
-    const bool touched = app::readBool(object, "LinkCopyOnChangeTouched").value_or(false);
-    if (mode == 3LL && touched) {
-        nlohmann::json properties = {
-            {"LinkCopyOnChangeTouched", propertyBoolJson(false)},
-        };
-        if (!source) {
-            properties["LinkCopyOnChangeSource"] = linkElementLinkedObjectJson(link);
-        }
-        if (!group) {
-            properties["LinkCopyOnChangeGroup"] = propertyLinkJson(groupName);
-        }
-
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.h defines
-        // "LinkCopyOnChangeTouched"; Link.cpp::syncCopyOnChange() uses that touched marker
-        // to resync the owned object while keeping source and group bookkeeping intact.
-        context.documentObjectUpdates.push_back({
-            {"action", "update"},
-            {"reason", "copy_on_change_touched_tracking"},
-            {"object", object.name},
-            {"objectId", object.id},
-            {"typeId", object.typeId},
-            {"sourceObject", source ? source->object : link.object},
-            {"group", groupName},
-            {"properties", properties},
-        });
+    for (const auto& update : result.documentObjectUpdates) {
+        context.documentObjectUpdates.push_back(update);
     }
 }
 

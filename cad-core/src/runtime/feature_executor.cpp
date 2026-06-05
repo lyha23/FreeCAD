@@ -16,6 +16,15 @@ bool rejectUnsupportedProperties(const app::DocumentObject& object,
         "Visibility",
         "Placement",
         "_ElementMapVersion",
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
+        // ::LinkBaseExtension::getOnChangeCopyObjects() reads hidden
+        // "_CopyOnChangeControl"; ::syncCopyOnChange() matches old/new copies through copy
+        // provenance. cad-core keeps equivalent hidden metadata request-local so copied
+        // objects can recompute as normal feature objects after the frontend persists updates.
+        "_CopyOnChangeControl",
+        "_CopyOnChangeOwner",
+        "_CopyOnChangeSourceObject",
+        "_CopyOnChangeSourceId",
     };
 
     bool ok = true;
