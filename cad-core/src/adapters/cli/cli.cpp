@@ -1,11 +1,11 @@
 #include "cad_core/adapters/cli.h"
 
-#include "cad_core/document/model.h"
-#include "cad_core/geometry/shape_exporter.h"
+#include "cad_core/app/document.h"
+#include "cad_core/part/shape_exporter.h"
 #include "cad_core/runtime/diagnostics.h"
 #include "cad_core/runtime/io.h"
 #include "cad_core/runtime/recompute.h"
-#include "cad_core/topo/named_shape.h"
+#include "cad_core/part/topo_shape.h"
 
 #include <nlohmann/json.hpp>
 
@@ -23,7 +23,7 @@ namespace {
 
 struct ExportRequest {
     std::string object;
-    geometry::ShapeFileFormat format;
+    cad_core::part::ShapeFileFormat format;
     std::filesystem::path path;
     double stlDeflection = 0.01;
 };
@@ -40,7 +40,7 @@ bool useLegacyTestOutput()
     return value != nullptr && std::string(value) == "1";
 }
 
-nlohmann::json legacyTestResultJson(const document::Document& document,
+nlohmann::json legacyTestResultJson(const app::Document& document,
                                     const runtime::ComputeContext& context)
 {
     nlohmann::json objects = nlohmann::json::object();
@@ -53,7 +53,7 @@ nlohmann::json legacyTestResultJson(const document::Document& document,
         {"objects", objects},
         {"mesh", context.mesh},
         {"subshapes", context.subshapes},
-        {"named_shapes", topo::namedShapesToJson(context.namedShapes)},
+        {"named_shapes", part::namedShapesToJson(context.namedShapes)},
         {"elementReferenceUpdates", context.elementReferenceUpdates},
         {"documentObjectUpdates", context.documentObjectUpdates},
         {"diagnostics", runtime::diagnosticsToJson(context.diagnostics)},
@@ -79,7 +79,7 @@ bool parseRecomputeOptions(int argc, char** argv, RecomputeOptions& options, std
 
     options.inputPath = argv[2];
     std::optional<std::string> exportObject;
-    std::optional<geometry::ShapeFileFormat> exportFormat;
+    std::optional<cad_core::part::ShapeFileFormat> exportFormat;
     std::optional<std::filesystem::path> exportFile;
     double stlDeflection = 0.01;
 
@@ -100,7 +100,7 @@ bool parseRecomputeOptions(int argc, char** argv, RecomputeOptions& options, std
         }
         else if (option == "--export-format") {
             try {
-                exportFormat = geometry::shapeFileFormatFromString(value);
+                exportFormat = cad_core::part::shapeFileFormatFromString(value);
             }
             catch (const std::exception& parseError) {
                 error = parseError.what();
@@ -174,7 +174,7 @@ int runRecompute(const RecomputeOptions& options)
         return 0;
     }
 
-    auto [document, diagnostics] = document::parseDocument(raw);
+    auto [document, diagnostics] = app::parseDocument(raw);
     const runtime::ComputeContext context = runtime::recomputeContext(document, std::move(diagnostics));
     nlohmann::json result = useLegacyTestOutput()
         ? legacyTestResultJson(document, context)
@@ -186,11 +186,11 @@ int runRecompute(const RecomputeOptions& options)
         if (shapeIt == context.shapes.end()) {
             throw std::runtime_error("Export object has no computed shape: " + request.object);
         }
-        geometry::exportShapeFile(shapeIt->second.shape, request.path, request.format, request.stlDeflection);
+        cad_core::part::exportShapeFile(shapeIt->second.shape, request.path, request.format, request.stlDeflection);
         result["exports"] = nlohmann::json::array({
             {
                 {"object", request.object},
-                {"format", geometry::shapeFileFormatName(request.format)},
+                {"format", cad_core::part::shapeFileFormatName(request.format)},
                 {"file", request.path.string()},
             },
         });
@@ -213,7 +213,7 @@ int cliMain(int argc, char** argv)
 {
     try {
         if (argc == 2 && std::string(argv[1]) == "--version") {
-            std::cout << "cad-core 0.1.0 (" << geometry::kernelVersion() << ")\n";
+            std::cout << "cad-core 0.1.0 (" << cad_core::part::kernelVersion() << ")\n";
             return 0;
         }
         if (argc == 2 && (std::string(argv[1]) == "--help" || std::string(argv[1]) == "-h")) {

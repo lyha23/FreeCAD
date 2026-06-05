@@ -1,13 +1,13 @@
 #include "cad_core/runtime/recompute.h"
 
 #include "cad_core/graph/recompute_plan.h"
-#include "cad_core/geometry/brep_snapshot.h"
-#include "cad_core/geometry/placement.h"
+#include "cad_core/part/brep_snapshot.h"
+#include "cad_core/base/placement.h"
 #include "cad_core/runtime/compute_context.h"
 #include "cad_core/runtime/feature_registry.h"
-#include "cad_core/topo/named_shape.h"
-#include "cad_core/topo/reference_matcher.h"
-#include "cad_core/topo/subshape_map.h"
+#include "cad_core/part/topo_shape.h"
+#include "cad_core/part/topo_shape_reference.h"
+#include "cad_core/part/property_topo_shape.h"
 
 #include <algorithm>
 #include <map>
@@ -19,7 +19,7 @@ namespace cad_core::runtime {
 
 namespace {
 
-gp_Trsf objectPlacement(const document::DocumentObject& object)
+gp_Trsf objectPlacement(const app::DocumentObject& object)
 {
     if (object.typeId == "App::Origin") {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Origin.cpp::Origin::Origin(),
@@ -27,13 +27,13 @@ gp_Trsf objectPlacement(const document::DocumentObject& object)
         // placement is still applied by resolveGlobalPlacement().
         return gp_Trsf();
     }
-    if (const auto placement = document::readPlacement(object, "Placement")) {
-        return geometry::placementFromComponents(placement->base, placement->rotation);
+    if (const auto placement = app::readPlacement(object, "Placement")) {
+        return base::placementFromComponents(placement->base, placement->rotation);
     }
     return gp_Trsf();
 }
 
-gp_Trsf resolveGlobalPlacement(const document::Document& document,
+gp_Trsf resolveGlobalPlacement(const app::Document& document,
                                const std::string& objectName,
                                std::map<std::string, gp_Trsf>& placements,
                                std::set<std::string>& visiting)
@@ -61,7 +61,7 @@ gp_Trsf resolveGlobalPlacement(const document::Document& document,
     return placement;
 }
 
-std::map<std::string, gp_Trsf> buildGlobalPlacements(const document::Document& document)
+std::map<std::string, gp_Trsf> buildGlobalPlacements(const app::Document& document)
 {
     std::map<std::string, gp_Trsf> placements;
     std::set<std::string> visiting;
@@ -71,37 +71,37 @@ std::map<std::string, gp_Trsf> buildGlobalPlacements(const document::Document& d
     return placements;
 }
 
-std::map<std::string, const document::DocumentObject*> buildDocumentObjectMap(const document::Document& document)
+std::map<std::string, const app::DocumentObject*> buildDocumentObjectMap(const app::Document& document)
 {
-    std::map<std::string, const document::DocumentObject*> objects;
+    std::map<std::string, const app::DocumentObject*> objects;
     for (const auto& object : document.objects) {
         objects[object.name] = &object;
     }
     return objects;
 }
 
-std::set<std::string> findTransformationTemplateObjects(const document::Document& document)
+std::set<std::string> findTransformationTemplateObjects(const app::Document& document)
 {
     std::set<std::string> templates;
     for (const auto& object : document.objects) {
         if (object.typeId != "PartDesign::MultiTransform") {
             continue;
         }
-        for (const auto& link : document::readLinks(object, "Transformations")) {
+        for (const auto& link : app::readLinks(object, "Transformations")) {
             templates.insert(link.object);
         }
     }
     return templates;
 }
 
-bool isFrozenExternalGeometryReference(const std::string& propertyName, const document::Link& link)
+bool isFrozenExternalGeometryReference(const std::string& propertyName, const app::Link& link)
 {
     return propertyName == "ExternalGeometry" && link.externalGeometryFlags.count("Frozen") != 0U
         && link.externalGeometryFlags.count("Sync") == 0U;
 }
 
 bool isMissingOldExternalGeometrySnapshotReference(const std::string& propertyName,
-                                                   const document::Link& link,
+                                                   const app::Link& link,
                                                    const ComputeContext& context)
 {
     if (propertyName != "ExternalGeometry" || link.externalGeometryFlags.count("Missing") == 0U
@@ -125,7 +125,7 @@ struct ReferenceSubshapeResolution {
 };
 
 struct ReferenceSubshapeRecovery {
-    topo::ReferenceMatchStatus status = topo::ReferenceMatchStatus::Missing;
+    part::ReferenceMatchStatus status = part::ReferenceMatchStatus::Missing;
     std::optional<ReferenceSubshapeResolution> resolution;
     std::string reason;
     std::string diagnosticCode;
@@ -160,18 +160,18 @@ std::string internalSubnameFromStableElementMap(const ComputeContext& context,
 std::optional<ReferenceSubshapeResolution> internalSubshapeForCurrentName(const ShapeValue& shapeValue,
                                                                           const std::string& subname)
 {
-    const auto internal = topo::parseInternalSubshapeName(subname);
+    const auto internal = part::parseInternalSubshapeName(subname);
     if (!internal || !shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
         return std::nullopt;
     }
-    const auto subshape = topo::subshapeByName(*shapeValue.internalShape, *internal);
+    const auto subshape = part::subshapeByName(*shapeValue.internalShape, *internal);
     if (!subshape) {
         return std::nullopt;
     }
     return ReferenceSubshapeResolution {subname, *subshape, false};
 }
 
-std::optional<ReferenceSubshapeResolution> currentSubshapeForReference(const document::Link& link,
+std::optional<ReferenceSubshapeResolution> currentSubshapeForReference(const app::Link& link,
                                                                        std::size_t index,
                                                                        const ComputeContext& context)
 {
@@ -186,7 +186,7 @@ std::optional<ReferenceSubshapeResolution> currentSubshapeForReference(const doc
 
     const std::string& subname = link.subnames.at(index);
     const std::string stableSubname = index < link.stableSubnames.size() ? link.stableSubnames.at(index) : std::string{};
-    if (const auto internal = topo::parseInternalSubshapeName(subname)) {
+    if (const auto internal = part::parseInternalSubshapeName(subname)) {
         const auto current = internalSubshapeForCurrentName(shapeIt->second, subname);
         if (current) {
             return current;
@@ -209,9 +209,9 @@ std::optional<ReferenceSubshapeResolution> currentSubshapeForReference(const doc
         // before updating "shadow" and the persisted subname. cad-core mirrors that by
         // resolving StableSubList through the current NamedShape ElementMap before validating
         // ReferenceShadow evidence.
-        const auto resolved = topo::resolveElementReference(namedShapeIt->second, subname, stableSubname);
-        if (resolved.status == topo::ElementResolveStatus::Resolved && resolved.element) {
-            if (const auto subshape = topo::subshapeByName(namedShapeIt->second, *resolved.element)) {
+        const auto resolved = part::resolveElementReference(namedShapeIt->second, subname, stableSubname);
+        if (resolved.status == part::ElementResolveStatus::Resolved && resolved.element) {
+            if (const auto subshape = part::subshapeByName(namedShapeIt->second, *resolved.element)) {
                 return ReferenceSubshapeResolution {
                     *resolved.element,
                     *subshape,
@@ -220,16 +220,16 @@ std::optional<ReferenceSubshapeResolution> currentSubshapeForReference(const doc
             }
         }
     }
-    const auto subshape = topo::subshapeByName(shapeIt->second.shape, subname);
+    const auto subshape = part::subshapeByName(shapeIt->second.shape, subname);
     if (!subshape) {
         return std::nullopt;
     }
     return ReferenceSubshapeResolution {subname, *subshape, false};
 }
 
-ReferenceSubshapeRecovery recoverSubshapeForReference(const document::Link& link,
+ReferenceSubshapeRecovery recoverSubshapeForReference(const app::Link& link,
                                                       std::size_t index,
-                                                      const document::ReferenceShadow& shadow,
+                                                      const app::ReferenceShadow& shadow,
                                                       const ComputeContext& context)
 {
     if (index >= link.subnames.size() || link.subnames.at(index).empty()) {
@@ -241,7 +241,7 @@ ReferenceSubshapeRecovery recoverSubshapeForReference(const document::Link& link
     }
 
     const std::string& subname = link.subnames.at(index);
-    const bool internalReference = topo::parseInternalSubshapeName(subname).has_value()
+    const bool internalReference = part::parseInternalSubshapeName(subname).has_value()
         || shadow.property == "InternalShape";
     const TopoDS_Shape* searchShape = nullptr;
     std::string prefix;
@@ -256,8 +256,8 @@ ReferenceSubshapeRecovery recoverSubshapeForReference(const document::Link& link
         searchShape = &shapeIt->second.shape;
     }
 
-    const auto recovery = topo::recoverReferenceShadowSubshape(*searchShape, prefix, shadow);
-    if (recovery.status != topo::ReferenceMatchStatus::Unique || !recovery.shape) {
+    const auto recovery = part::recoverReferenceShadowSubshape(*searchShape, prefix, shadow);
+    if (recovery.status != part::ReferenceMatchStatus::Unique || !recovery.shape) {
         return ReferenceSubshapeRecovery {
             recovery.status,
             std::nullopt,
@@ -284,14 +284,14 @@ std::string referenceRecoveryDiagnosticCode(const ReferenceSubshapeRecovery& rec
     if (!recovery.diagnosticCode.empty()) {
         return recovery.diagnosticCode;
     }
-    const topo::ReferenceMatchStatus status = recovery.status;
-    if (status == topo::ReferenceMatchStatus::Ambiguous) {
+    const part::ReferenceMatchStatus status = recovery.status;
+    if (status == part::ReferenceMatchStatus::Ambiguous) {
         return "subname_resolve_ambiguous";
     }
-    if (status == topo::ReferenceMatchStatus::Split) {
+    if (status == part::ReferenceMatchStatus::Split) {
         return "subname_split_requires_reselect";
     }
-    if (status == topo::ReferenceMatchStatus::Deleted) {
+    if (status == part::ReferenceMatchStatus::Deleted) {
         return "subname_deleted";
     }
     return "subname_resolve_failed";
@@ -302,24 +302,24 @@ std::string referenceRecoveryDiagnosticReason(const ReferenceSubshapeRecovery& r
     if (!recovery.reason.empty()) {
         return recovery.reason;
     }
-    if (recovery.status == topo::ReferenceMatchStatus::Ambiguous) {
+    if (recovery.status == part::ReferenceMatchStatus::Ambiguous) {
         return "matches multiple ReferenceShadow candidates";
     }
     return "does not match a current ReferenceShadow candidate";
 }
 
-std::string referenceMatchStatusName(topo::ReferenceMatchStatus status)
+std::string referenceMatchStatusName(part::ReferenceMatchStatus status)
 {
     switch (status) {
-        case topo::ReferenceMatchStatus::Unique:
+        case part::ReferenceMatchStatus::Unique:
             return "unique";
-        case topo::ReferenceMatchStatus::Missing:
+        case part::ReferenceMatchStatus::Missing:
             return "missing";
-        case topo::ReferenceMatchStatus::Ambiguous:
+        case part::ReferenceMatchStatus::Ambiguous:
             return "ambiguous";
-        case topo::ReferenceMatchStatus::Split:
+        case part::ReferenceMatchStatus::Split:
             return "split";
-        case topo::ReferenceMatchStatus::Deleted:
+        case part::ReferenceMatchStatus::Deleted:
             return "deleted";
     }
     return "unknown";
@@ -327,49 +327,49 @@ std::string referenceMatchStatusName(topo::ReferenceMatchStatus status)
 
 std::string referenceSubnameShapeKind(const std::string& subname)
 {
-    if (const auto internal = topo::parseInternalSubshapeName(subname)) {
-        return topo::subshapeKindName(internal->kind);
+    if (const auto internal = part::parseInternalSubshapeName(subname)) {
+        return part::subshapeKindName(internal->kind);
     }
-    if (const auto parsed = topo::parseSubshapeName(subname)) {
-        return topo::subshapeKindName(parsed->kind);
+    if (const auto parsed = part::parseSubshapeName(subname)) {
+        return part::subshapeKindName(parsed->kind);
     }
     return "shape";
 }
 
-topo::MapperHistoryRecoverability referenceRecoverability(topo::ReferenceMatchStatus status)
+part::MapperHistoryRecoverability referenceRecoverability(part::ReferenceMatchStatus status)
 {
     switch (status) {
-        case topo::ReferenceMatchStatus::Ambiguous:
-            return topo::MapperHistoryRecoverability::Ambiguous;
-        case topo::ReferenceMatchStatus::Split:
-            return topo::MapperHistoryRecoverability::NeedsReselect;
-        case topo::ReferenceMatchStatus::Deleted:
-            return topo::MapperHistoryRecoverability::Deleted;
+        case part::ReferenceMatchStatus::Ambiguous:
+            return part::MapperHistoryRecoverability::Ambiguous;
+        case part::ReferenceMatchStatus::Split:
+            return part::MapperHistoryRecoverability::NeedsReselect;
+        case part::ReferenceMatchStatus::Deleted:
+            return part::MapperHistoryRecoverability::Deleted;
         default:
-            return topo::MapperHistoryRecoverability::Diagnostic;
+            return part::MapperHistoryRecoverability::Diagnostic;
     }
 }
 
-topo::MapperHistoryRelation referenceRelation(topo::ReferenceMatchStatus status)
+part::MapperHistoryRelation referenceRelation(part::ReferenceMatchStatus status)
 {
     switch (status) {
-        case topo::ReferenceMatchStatus::Deleted:
-            return topo::MapperHistoryRelation::Deleted;
-        case topo::ReferenceMatchStatus::Ambiguous:
-        case topo::ReferenceMatchStatus::Split:
-            return topo::MapperHistoryRelation::Split;
+        case part::ReferenceMatchStatus::Deleted:
+            return part::MapperHistoryRelation::Deleted;
+        case part::ReferenceMatchStatus::Ambiguous:
+        case part::ReferenceMatchStatus::Split:
+            return part::MapperHistoryRelation::Split;
         default:
-            return topo::MapperHistoryRelation::Modified;
+            return part::MapperHistoryRelation::Modified;
     }
 }
 
 void recordReferenceRecoveryMapperDiagnostic(ComputeContext& context,
-                                             const document::Link& link,
-                                             const document::ReferenceShadow& shadow,
+                                             const app::Link& link,
+                                             const app::ReferenceShadow& shadow,
                                              const std::string& requestedSubname,
                                              const ReferenceSubshapeRecovery& recovery)
 {
-    const bool internalReference = topo::parseInternalSubshapeName(requestedSubname).has_value()
+    const bool internalReference = part::parseInternalSubshapeName(requestedSubname).has_value()
         || shadow.property == "InternalShape";
     const std::string namedShapeKey = internalReference ? link.object + ".InternalShape" : link.object;
     auto namedShapeIt = context.namedShapes.find(namedShapeKey);
@@ -378,9 +378,9 @@ void recordReferenceRecoveryMapperDiagnostic(ComputeContext& context,
     }
 
     const std::string diagnosticCode = referenceRecoveryDiagnosticCode(recovery);
-    topo::MapperHistoryEvent event;
-    event.source = topo::MapperHistoryEndpoint {link.object, requestedSubname};
-    event.target = topo::MapperHistoryEndpoint {namedShapeIt->second.owner, {}};
+    part::MapperHistoryEvent event;
+    event.source = part::MapperHistoryEndpoint {link.object, requestedSubname};
+    event.target = part::MapperHistoryEndpoint {namedShapeIt->second.owner, {}};
     event.shapeKind = referenceSubnameShapeKind(requestedSubname);
     event.relation = referenceRelation(recovery.status);
     event.makerStage = "reference_shadow_recovery";
@@ -392,7 +392,7 @@ void recordReferenceRecoveryMapperDiagnostic(ComputeContext& context,
     };
     event.recoverability = referenceRecoverability(recovery.status);
     event.diagnosticStatus = diagnosticCode;
-    topo::addMapperHistoryEvent(namedShapeIt->second.mapperHistory, std::move(event));
+    part::addMapperHistoryEvent(namedShapeIt->second.mapperHistory, std::move(event));
 }
 
 std::string indexedSubnameForReference(const std::string& subname)
@@ -405,7 +405,7 @@ std::string indexedSubnameForReference(const std::string& subname)
     return subname;
 }
 
-nlohmann::json shadowSubToJson(const document::ShadowSub& shadowSub)
+nlohmann::json shadowSubToJson(const app::ShadowSub& shadowSub)
 {
     return {
         {"newName", shadowSub.newName},
@@ -413,7 +413,7 @@ nlohmann::json shadowSubToJson(const document::ShadowSub& shadowSub)
     };
 }
 
-nlohmann::json shadowSubsToJson(const std::vector<document::ShadowSub>& shadowSubs)
+nlohmann::json shadowSubsToJson(const std::vector<app::ShadowSub>& shadowSubs)
 {
     nlohmann::json items = nlohmann::json::array();
     for (const auto& shadowSub : shadowSubs) {
@@ -433,7 +433,7 @@ nlohmann::json externalGeometryFlagsToJson(const std::set<std::string>& flags)
     return items;
 }
 
-nlohmann::json labelReferenceRenamesToJson(const std::vector<document::LabelReferenceRename>& renames)
+nlohmann::json labelReferenceRenamesToJson(const std::vector<app::LabelReferenceRename>& renames)
 {
     nlohmann::json items = nlohmann::json::array();
     for (const auto& rename : renames) {
@@ -456,7 +456,7 @@ void setIfNotEmpty(nlohmann::json& value, const std::string& field, const std::s
     }
 }
 
-nlohmann::json documentReferenceToJson(const document::LinkDocumentRef& ref)
+nlohmann::json documentReferenceToJson(const app::LinkDocumentRef& ref)
 {
     nlohmann::json value = {
         {"method", "PropertyXLinkContainer.DocMap"},
@@ -476,25 +476,25 @@ nlohmann::json documentReferenceToJson(const document::LinkDocumentRef& ref)
     return value;
 }
 
-bool documentReferenceRenameChanged(const document::LinkDocumentRef& ref)
+bool documentReferenceRenameChanged(const app::LinkDocumentRef& ref)
 {
     return (!ref.name.empty() && !ref.currentName.empty() && ref.name != ref.currentName)
         || (!ref.label.empty() && !ref.currentLabel.empty() && ref.label != ref.currentLabel);
 }
 
-bool documentReferenceStampChanged(const document::LinkDocumentRef& ref)
+bool documentReferenceStampChanged(const app::LinkDocumentRef& ref)
 {
     return !ref.stamp.empty() && !ref.currentStamp.empty() && ref.stamp != ref.currentStamp;
 }
 
 bool requestLocalInternalSubname(const std::string& subname)
 {
-    return topo::parseInternalSubshapeName(subname).has_value();
+    return part::parseInternalSubshapeName(subname).has_value();
 }
 
-std::vector<std::string> stableNameCandidatesForReference(const document::Link& link,
+std::vector<std::string> stableNameCandidatesForReference(const app::Link& link,
                                                           std::size_t index,
-                                                          const document::ReferenceShadow& shadow)
+                                                          const app::ReferenceShadow& shadow)
 {
     std::vector<std::string> candidates;
     const auto addCandidate = [&](const std::string& stableSubname) {
@@ -516,21 +516,21 @@ std::vector<std::string> stableNameCandidatesForReference(const document::Link& 
 bool internalSubshapeMatchesReferenceShadow(const ShapeValue& shapeValue,
                                             const std::string& subname,
                                             const TopoDS_Shape& subshape,
-                                            const document::ReferenceShadow& shadow)
+                                            const app::ReferenceShadow& shadow)
 {
     if (!shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
         return false;
     }
-    return topo::referenceShadowMatchesCurrentSubshape(*shapeValue.internalShape,
+    return part::referenceShadowMatchesCurrentSubshape(*shapeValue.internalShape,
                                                        "Internal",
                                                        subname,
                                                        subshape,
                                                        shadow);
 }
 
-std::optional<ReferenceSubshapeResolution> internalSubshapeFromShadowSub(const document::Link& link,
+std::optional<ReferenceSubshapeResolution> internalSubshapeFromShadowSub(const app::Link& link,
                                                                          std::size_t index,
-                                                                         const document::ReferenceShadow& shadow,
+                                                                         const app::ReferenceShadow& shadow,
                                                                          const ComputeContext& context)
 {
     if (link.shadowSubs.empty()) {
@@ -568,7 +568,7 @@ std::optional<ReferenceSubshapeResolution> internalSubshapeFromShadowSub(const d
 }
 
 std::optional<std::vector<std::string>> stableSubnamesForReferenceUpdate(
-    const document::Link& link,
+    const app::Link& link,
     const nlohmann::json& referenceShadows,
     std::size_t subnameCount)
 {
@@ -595,7 +595,7 @@ std::optional<std::vector<std::string>> stableSubnamesForReferenceUpdate(
     return stableSubnames;
 }
 
-std::optional<std::vector<std::string>> fullSubnamesForReferenceUpdate(const document::Link& link,
+std::optional<std::vector<std::string>> fullSubnamesForReferenceUpdate(const app::Link& link,
                                                                        std::size_t subnameCount)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
@@ -608,7 +608,7 @@ std::optional<std::vector<std::string>> fullSubnamesForReferenceUpdate(const doc
     return link.fullSubnames;
 }
 
-nlohmann::json shadowSubsForReferenceUpdate(const document::Link& link,
+nlohmann::json shadowSubsForReferenceUpdate(const app::Link& link,
                                             const std::vector<std::string>& subnames,
                                             const std::optional<std::vector<std::string>>& stableSubnames)
 {
@@ -631,7 +631,7 @@ nlohmann::json shadowSubsForReferenceUpdate(const document::Link& link,
     return nlohmann::json::array();
 }
 
-nlohmann::json brepSnapshotToJson(const document::BrepSnapshot& brep)
+nlohmann::json brepSnapshotToJson(const app::BrepSnapshot& brep)
 {
     return {
         {"format", brep.format},
@@ -641,7 +641,7 @@ nlohmann::json brepSnapshotToJson(const document::BrepSnapshot& brep)
     };
 }
 
-std::optional<document::BrepSnapshot> brepTextSnapshotForCurrentSubshape(const TopoDS_Shape& shape)
+std::optional<app::BrepSnapshot> brepTextSnapshotForCurrentSubshape(const TopoDS_Shape& shape)
 {
     if (shape.IsNull()) {
         return std::nullopt;
@@ -650,11 +650,11 @@ std::optional<document::BrepSnapshot> brepTextSnapshotForCurrentSubshape(const T
     // ::Feature::onBeforeChange() stores the old referenced subshape in ElementCache before
     // a shape changes. cad-core's stateless ReferenceShadow update must therefore refresh the
     // single-subshape BREP evidence after a successful resolve, not return the stale snapshot.
-    const auto snapshot = geometry::brepTextSnapshotForShape(shape);
+    const auto snapshot = cad_core::part::brepTextSnapshotForShape(shape);
     if (!snapshot) {
         return std::nullopt;
     }
-    return document::BrepSnapshot {
+    return app::BrepSnapshot {
         snapshot->format,
         snapshot->byteLength,
         snapshot->sha256,
@@ -662,8 +662,8 @@ std::optional<document::BrepSnapshot> brepTextSnapshotForCurrentSubshape(const T
     };
 }
 
-nlohmann::json referenceShadowUpdateJson(const document::ReferenceShadow& shadow,
-                                         const document::Link& link,
+nlohmann::json referenceShadowUpdateJson(const app::ReferenceShadow& shadow,
+                                         const app::Link& link,
                                          const std::string& subname,
                                          const TopoDS_Shape& currentSubshape,
                                          const std::string& recoveryMethod = {},
@@ -677,7 +677,7 @@ nlohmann::json referenceShadowUpdateJson(const document::ReferenceShadow& shadow
         {"indexed", indexedSubnameForReference(subname)},
         {"subname", subname},
         {"stableSubname", shadow.stableSubname},
-        {"fingerprint", topo::referenceFingerprintForShape(currentSubshape)},
+        {"fingerprint", part::referenceFingerprintForShape(currentSubshape)},
     };
     if (shadow.brep) {
         if (const auto currentBrep = brepTextSnapshotForCurrentSubshape(currentSubshape)) {
@@ -701,15 +701,15 @@ nlohmann::json referenceShadowUpdateJson(const document::ReferenceShadow& shadow
     return update;
 }
 
-void appendElementReferenceUpdate(const document::DocumentObject& object,
+void appendElementReferenceUpdate(const app::DocumentObject& object,
                                   const std::string& propertyName,
-                                  const document::PropertyValue& propertyValue,
-                                  const document::Link& link,
+                                  const app::PropertyValue& propertyValue,
+                                  const app::Link& link,
                                   const std::vector<std::string>& subnames,
                                   const nlohmann::json& referenceShadows,
                                   nlohmann::json& updates)
 {
-    if (propertyValue.kind != document::PropertyKind::LinkSub || referenceShadows.empty()) {
+    if (propertyValue.kind != app::PropertyKind::LinkSub || referenceShadows.empty()) {
         return;
     }
 
@@ -748,7 +748,7 @@ void appendElementReferenceUpdate(const document::DocumentObject& object,
     updates.push_back(std::move(update));
 }
 
-nlohmann::json linkSubListItemUpdateJson(const document::Link& link,
+nlohmann::json linkSubListItemUpdateJson(const app::Link& link,
                                          const std::vector<std::string>& subnames,
                                          const nlohmann::json& referenceShadows)
 {
@@ -786,14 +786,14 @@ nlohmann::json linkSubListItemUpdateJson(const document::Link& link,
     return item;
 }
 
-void appendElementReferenceSubListUpdate(const document::DocumentObject& object,
+void appendElementReferenceSubListUpdate(const app::DocumentObject& object,
                                          const std::string& propertyName,
-                                         const document::PropertyValue& propertyValue,
+                                         const app::PropertyValue& propertyValue,
                                          const std::map<std::size_t, nlohmann::json>& referenceShadowUpdates,
                                          const std::map<std::size_t, std::vector<std::string>>& subnameUpdates,
                                          nlohmann::json& updates)
 {
-    if (propertyValue.kind != document::PropertyKind::LinkSubList || referenceShadowUpdates.empty()) {
+    if (propertyValue.kind != app::PropertyKind::LinkSubList || referenceShadowUpdates.empty()) {
         return;
     }
 
@@ -820,23 +820,23 @@ void appendElementReferenceSubListUpdate(const document::DocumentObject& object,
     });
 }
 
-bool hasStandaloneLabelReferenceRename(const document::Link& link)
+bool hasStandaloneLabelReferenceRename(const app::Link& link)
 {
     return !link.labelReferenceRenames.empty() && link.referenceShadows.empty();
 }
 
-bool hasStandaloneDocumentReferenceRename(const document::Link& link)
+bool hasStandaloneDocumentReferenceRename(const app::Link& link)
 {
     return link.referenceShadows.empty() && link.documentRef
         && documentReferenceRenameChanged(*link.documentRef);
 }
 
-bool hasStandaloneReferenceMetadataUpdate(const document::Link& link)
+bool hasStandaloneReferenceMetadataUpdate(const app::Link& link)
 {
     return hasStandaloneLabelReferenceRename(link) || hasStandaloneDocumentReferenceRename(link);
 }
 
-nlohmann::json referenceMetadataLinkUpdateJson(const document::Link& link)
+nlohmann::json referenceMetadataLinkUpdateJson(const app::Link& link)
 {
     nlohmann::json item = {
         {"value", link.object},
@@ -863,11 +863,11 @@ nlohmann::json referenceMetadataLinkUpdateJson(const document::Link& link)
     return item;
 }
 
-void appendReferenceMetadataUpdates(const document::DocumentObject& object,
+void appendReferenceMetadataUpdates(const app::DocumentObject& object,
                                     ComputeContext& context)
 {
     for (const auto& [propertyName, propertyValue] : object.propertyValues) {
-        if (propertyValue.kind == document::PropertyKind::LinkSub) {
+        if (propertyValue.kind == app::PropertyKind::LinkSub) {
             for (const auto& link : propertyValue.links) {
                 if (!hasStandaloneReferenceMetadataUpdate(link)) {
                     continue;
@@ -880,7 +880,7 @@ void appendReferenceMetadataUpdates(const document::DocumentObject& object,
             }
             continue;
         }
-        if (propertyValue.kind != document::PropertyKind::LinkSubList) {
+        if (propertyValue.kind != app::PropertyKind::LinkSubList) {
             continue;
         }
 
@@ -903,7 +903,7 @@ void appendReferenceMetadataUpdates(const document::DocumentObject& object,
     }
 }
 
-void appendDocumentReferenceDiagnostics(const document::DocumentObject& object,
+void appendDocumentReferenceDiagnostics(const app::DocumentObject& object,
                                         ComputeContext& context)
 {
     for (const auto& [propertyName, propertyValue] : object.propertyValues) {
@@ -926,7 +926,7 @@ void appendDocumentReferenceDiagnostics(const document::DocumentObject& object,
     }
 }
 
-bool validateReferenceShadows(const document::DocumentObject& object,
+bool validateReferenceShadows(const app::DocumentObject& object,
                               ComputeContext& context)
 {
     bool valid = true;
@@ -977,7 +977,7 @@ bool validateReferenceShadows(const document::DocumentObject& object,
                 }
                 if (!currentSubshape) {
                     const auto recovery = recoverSubshapeForReference(link, index, shadow, context);
-                    if (recovery.status == topo::ReferenceMatchStatus::Unique) {
+                    if (recovery.status == part::ReferenceMatchStatus::Unique) {
                         currentSubshape = recovery.resolution;
                     }
                     else {
@@ -1018,11 +1018,11 @@ bool validateReferenceShadows(const document::DocumentObject& object,
                 }
                 const std::string subname = currentSubshape->subname;
                 const auto driftReason =
-                    topo::referenceFingerprintDriftReason(currentSubshape->shape, shadow.fingerprint, shadow.shapeType);
+                    part::referenceFingerprintDriftReason(currentSubshape->shape, shadow.fingerprint, shadow.shapeType);
                 if (driftReason) {
                     if (const auto shadowSubResolution = internalSubshapeFromShadowSub(link, index, shadow, context);
                         shadowSubResolution && shadowSubResolution->subname != subname
-                        && !topo::referenceFingerprintDriftReason(shadowSubResolution->shape,
+                        && !part::referenceFingerprintDriftReason(shadowSubResolution->shape,
                                                                    shadow.fingerprint,
                                                                   shadow.shapeType)) {
                         currentSubshape = shadowSubResolution;
@@ -1038,12 +1038,12 @@ bool validateReferenceShadows(const document::DocumentObject& object,
                     }
                     if (shadow.brep) {
                         const auto recovery = recoverSubshapeForReference(link, index, shadow, context);
-                        if (recovery.status == topo::ReferenceMatchStatus::Unique && recovery.resolution
+                        if (recovery.status == part::ReferenceMatchStatus::Unique && recovery.resolution
                             && !recovery.resolution->shape.IsNull()) {
                             currentSubshape = recovery.resolution;
                             setUpdatedSubname(index, currentSubshape->subname);
                             const auto recoveredDriftReason =
-                                topo::referenceFingerprintDriftReason(currentSubshape->shape,
+                                part::referenceFingerprintDriftReason(currentSubshape->shape,
                                                                        shadow.fingerprint,
                                                                        shadow.shapeType);
                             if (!recoveredDriftReason) {
@@ -1058,9 +1058,9 @@ bool validateReferenceShadows(const document::DocumentObject& object,
                             }
                         }
                         else if (!recovery.diagnosticCode.empty()
-                                 || recovery.status == topo::ReferenceMatchStatus::Ambiguous
-                                 || recovery.status == topo::ReferenceMatchStatus::Split
-                                 || recovery.status == topo::ReferenceMatchStatus::Deleted) {
+                                 || recovery.status == part::ReferenceMatchStatus::Ambiguous
+                                 || recovery.status == part::ReferenceMatchStatus::Split
+                                 || recovery.status == part::ReferenceMatchStatus::Deleted) {
                             recordReferenceRecoveryMapperDiagnostic(
                                 context, link, shadow, requestedSubname, recovery);
                             const std::string code = referenceRecoveryDiagnosticCode(recovery);
@@ -1110,7 +1110,7 @@ bool validateReferenceShadows(const document::DocumentObject& object,
                                              updatedSubnames,
                                              updatedReferenceShadows,
                                              pendingReferenceUpdates);
-                if (propertyValue.kind == document::PropertyKind::LinkSubList) {
+                if (propertyValue.kind == app::PropertyKind::LinkSubList) {
                     subListReferenceUpdates[linkIndex] = updatedReferenceShadows;
                     subListSubnameUpdates[linkIndex] = updatedSubnames;
                 }
@@ -1138,7 +1138,7 @@ void registerIndexedNamedShape(const std::string& name, ComputeContext& context)
     }
     const auto shapeIt = context.shapes.find(name);
     if (shapeIt != context.shapes.end()) {
-        context.namedShapes[name] = topo::indexedNamedShapeForObject(name, shapeIt->second.shape);
+        context.namedShapes[name] = part::indexedNamedShapeForObject(name, shapeIt->second.shape);
         return;
     }
     const auto addSubIt = context.addSubShapes.find(name);
@@ -1152,10 +1152,10 @@ void registerIndexedNamedShape(const std::string& name, ComputeContext& context)
         context.namedShapes[name] = *addSubIt->second.subNamedShape;
     }
     else if (addSubIt->second.addShape) {
-        context.namedShapes[name] = topo::indexedNamedShapeForObject(name, *addSubIt->second.addShape);
+        context.namedShapes[name] = part::indexedNamedShapeForObject(name, *addSubIt->second.addShape);
     }
     else if (addSubIt->second.subShape) {
-        context.namedShapes[name] = topo::indexedNamedShapeForObject(name, *addSubIt->second.subShape);
+        context.namedShapes[name] = part::indexedNamedShapeForObject(name, *addSubIt->second.subShape);
     }
 }
 
@@ -1175,7 +1175,7 @@ std::string displayKind(const nlohmann::json& subshape)
 }
 
 std::string stableSubnameFor(const std::string& indexed,
-                             const topo::NamedShape* namedShape)
+                             const part::NamedShape* namedShape)
 {
     const bool internalIndexed = indexed.rfind("InternalFace", 0) == 0
         || indexed.rfind("InternalEdge", 0) == 0
@@ -1295,7 +1295,7 @@ nlohmann::json responseSubshapes(const std::string& objectName,
         return subshapes;
     }
 
-    const topo::NamedShape* namedShape = nullptr;
+    const part::NamedShape* namedShape = nullptr;
     const auto namedShapeIt = context.namedShapes.find(objectName);
     if (namedShapeIt != context.namedShapes.end()) {
         namedShape = &namedShapeIt->second;
@@ -1310,7 +1310,7 @@ nlohmann::json responseSubshapes(const std::string& objectName,
         const bool internalIndexed = indexed.rfind("InternalFace", 0) == 0
             || indexed.rfind("InternalEdge", 0) == 0
             || indexed.rfind("InternalVertex", 0) == 0;
-        const topo::NamedShape* stableSource = namedShape;
+        const part::NamedShape* stableSource = namedShape;
         if (internalIndexed && shapeValue != nullptr && shapeValue->internalNamedShape) {
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
             // ::getInternalElementMap() maps InternalEdge/InternalVertex through InternalShape,
@@ -1335,7 +1335,7 @@ nlohmann::json responseSubshapes(const std::string& objectName,
 
 }  // namespace
 
-ComputeContext recomputeContext(const document::Document& document,
+ComputeContext recomputeContext(const app::Document& document,
                                 std::vector<Diagnostic> diagnostics)
 {
     graph::RecomputePlan plan = graph::buildPlan(document, diagnostics);
@@ -1394,7 +1394,7 @@ ComputeContext recomputeContext(const document::Document& document,
     return context;
 }
 
-nlohmann::json recomputeResultJson(const document::Document& document,
+nlohmann::json recomputeResultJson(const app::Document& document,
                                    const ComputeContext& context)
 {
     nlohmann::json results = nlohmann::json::array();
@@ -1418,7 +1418,7 @@ nlohmann::json recomputeResultJson(const document::Document& document,
     };
 }
 
-nlohmann::json recompute(const document::Document& document,
+nlohmann::json recompute(const app::Document& document,
                          std::vector<Diagnostic> diagnostics)
 {
     const ComputeContext context = recomputeContext(document, std::move(diagnostics));

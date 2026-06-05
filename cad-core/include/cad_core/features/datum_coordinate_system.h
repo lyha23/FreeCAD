@@ -1,10 +1,5 @@
 #pragma once
 
-#include "cad_core/document/model.h"
-#include "cad_core/runtime/compute_context.h"
-
-namespace cad_core::features {
-
-void executeDatumCoordinateSystem(const document::DocumentObject& object, runtime::ComputeContext& context);
-
-}  // namespace cad_core::features
+// Compatibility facade: PartDesign DatumCS now lives in
+// cad_core/part_design/datum_coordinate_system.h.
+#include "cad_core/part_design/datum_coordinate_system.h"

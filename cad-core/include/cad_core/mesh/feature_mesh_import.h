@@ -1,0 +1,18 @@
+#pragma once
+
+#include "cad_core/app/document.h"
+#include "cad_core/runtime/compute_context.h"
+
+namespace cad_core::mesh
+{
+
+void executeMeshImport(const app::DocumentObject& object, runtime::ComputeContext& context);
+
+}  // namespace cad_core::mesh
+
+namespace cad_core::features
+{
+
+using mesh::executeMeshImport;
+
+}  // namespace cad_core::features

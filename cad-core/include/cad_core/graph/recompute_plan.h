@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cad_core/document/model.h"
+#include "cad_core/app/document.h"
 #include "cad_core/runtime/diagnostics.h"
 
 #include <map>
@@ -16,7 +16,7 @@ struct RecomputePlan {
     std::set<std::string> blockedObjects;
 };
 
-RecomputePlan buildPlan(const document::Document& document, std::vector<runtime::Diagnostic>& diagnostics);
+RecomputePlan buildPlan(const app::Document& document, std::vector<runtime::Diagnostic>& diagnostics);
 
 }  // namespace cad_core::graph
 

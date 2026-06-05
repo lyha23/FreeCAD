@@ -1,41 +1,6 @@
 #pragma once
 
-#include "cad_core/geometry/face_maker.h"
-#include "cad_core/geometry/wire_joiner.h"
-
-#include <TopoDS_Edge.hxx>
-#include <TopoDS_Shape.hxx>
-#include <TopoDS_Wire.hxx>
-
-#include <optional>
-#include <vector>
-
-namespace cad_core::geometry {
-
-struct SketchInternalBuildInput {
-    std::vector<TopoDS_Wire> faceWires;
-    std::vector<TopoDS_Wire> openWires;
-    std::vector<TopoDS_Edge> openEdges;
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-    // ::WireJoinerP::getOpenWires(), builds a source compound from sourceEdgeArray before
-    // noOriginal filtering; cad-core keeps the same source-edge set for open-wire filtering.
-    std::vector<TopoDS_Edge> sourceEdges;
-};
-
-struct SketchInternalBuildResult {
-    std::optional<TopoDS_Shape> profileShape;
-    std::optional<TopoDS_Shape> internalShape;
-    bool faceMakerFailed = false;
-    bool splitProducedBoundedFaces = false;
-    bool requiresSubshapeSelection = false;
-    std::optional<FaceMakerHistorySummary> faceMakerHistory;
-    std::optional<WireJoinerLedgerSummary> wireJoinerLedger;
-    std::optional<WireJoinerHistorySummary> wireJoinerHistory;
-};
-
-// FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
-// ::SketchObject::buildInternals(), calls "Part::FaceMakerBuildFace", then
-// WireJoiner::getOpenWires(), then makeElementCompound({result, openWires}).
-SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& input);
-
-}  // namespace cad_core::geometry
+// Compatibility facade: SketchObject::buildInternals orchestration now lives under
+// cad_core/sketcher, aligned with FreeCAD src/Mod/Sketcher/App/SketchObject.cpp.
+// New internal code should include cad_core/sketcher/sketch_internal_builder.h.
+#include "cad_core/sketcher/sketch_internal_builder.h"

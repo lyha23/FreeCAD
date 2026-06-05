@@ -1,11 +1,6 @@
 #pragma once
 
-#include "cad_core/document/model.h"
-#include "cad_core/runtime/compute_context.h"
-
-namespace cad_core::features
-{
-
-void executeMeshImport(const document::DocumentObject& object, runtime::ComputeContext& context);
-
-}  // namespace cad_core::features
+// Compatibility facade: Mesh::Import now lives under the Mesh module path,
+// aligned with FreeCAD src/Mod/Mesh/App/FeatureMeshImport.cpp.
+// New internal code should include cad_core/mesh/feature_mesh_import.h.
+#include "cad_core/mesh/feature_mesh_import.h"

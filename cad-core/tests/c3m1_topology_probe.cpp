@@ -1,5 +1,5 @@
-#include "cad_core/geometry/shape_exporter.h"
-#include "cad_core/topo/named_shape.h"
+#include "cad_core/part/shape_exporter.h"
+#include "cad_core/part/topo_shape.h"
 
 #include <BRepAlgoAPI_Splitter.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
@@ -92,14 +92,14 @@ TopoDS_Shape boxFromFixture(const nlohmann::json& fixture)
 nlohmann::json runShapeFixDeleteSmallEdge(const nlohmann::json& fixture)
 {
     const TopoDS_Shape sourceShape = polygonShapeFromFixture(fixture);
-    const cad_core::topo::NamedShape sourceNamedShape
-        = cad_core::topo::indexedNamedShapeForObject("Source", sourceShape);
-    const cad_core::topo::NamedShapeSource source {
+    const cad_core::part::NamedShape sourceNamedShape
+        = cad_core::part::indexedNamedShapeForObject("Source", sourceShape);
+    const cad_core::part::NamedShapeSource source {
         "Source",
         sourceShape,
         &sourceNamedShape,
     };
-    const cad_core::topo::NamedShapeBuild fixed = cad_core::topo::makeElementShapeFixFromSource(
+    const cad_core::part::NamedShapeBuild fixed = cad_core::part::makeElementShapeFixFromSource(
         "ShapeFix",
         source,
         fixture.at("shape").value("shape_fix_precision", 0.0),
@@ -114,26 +114,26 @@ nlohmann::json runShapeFixDeleteSmallEdge(const nlohmann::json& fixture)
     return {
         {"case", fixture.value("case", "shapefix-delete-small-edge")},
         {"objects", {{"ShapeFix", {{"status", "ok"}, {"shape", "shape_fix"}}}}},
-        {"named_shapes", {{"ShapeFix", cad_core::topo::namedShapeToJson(*fixed.namedShape)}}},
+        {"named_shapes", {{"ShapeFix", cad_core::part::namedShapeToJson(*fixed.namedShape)}}},
     };
 }
 
 nlohmann::json runElementMapPolicyDrop(const nlohmann::json& fixture)
 {
     const TopoDS_Shape sourceShape = boxFromFixture(fixture);
-    const cad_core::topo::NamedShape sourceNamedShape
-        = cad_core::topo::indexedNamedShapeForObject("Source", sourceShape);
-    const cad_core::topo::NamedShapeSource source {
+    const cad_core::part::NamedShape sourceNamedShape
+        = cad_core::part::indexedNamedShapeForObject("Source", sourceShape);
+    const cad_core::part::NamedShapeSource source {
         "Source",
         sourceShape,
         &sourceNamedShape,
     };
-    const cad_core::topo::NamedShape dropped
-        = cad_core::topo::namedShapeForElementMapPolicyDrop("DropResult", sourceShape, {source});
+    const cad_core::part::NamedShape dropped
+        = cad_core::part::namedShapeForElementMapPolicyDrop("DropResult", sourceShape, {source});
     return {
         {"case", "element-map-policy-drop"},
         {"objects", {{"DropResult", {{"status", "ok"}, {"shape", "element_map_policy_drop"}}}}},
-        {"named_shapes", {{"DropResult", cad_core::topo::namedShapeToJson(dropped)}}},
+        {"named_shapes", {{"DropResult", cad_core::part::namedShapeToJson(dropped)}}},
     };
 }
 
@@ -172,19 +172,19 @@ nlohmann::json runShapeFixWireframeModifiedHistory(const nlohmann::json& fixture
         throw std::runtime_error("ShapeFix Wireframe modified history produced a null shape");
     }
 
-    const cad_core::topo::NamedShape sourceNamedShape
-        = cad_core::topo::indexedNamedShapeForObject("Source", wire);
-    const cad_core::topo::NamedShapeSource source {
+    const cad_core::part::NamedShape sourceNamedShape
+        = cad_core::part::indexedNamedShapeForObject("Source", wire);
+    const cad_core::part::NamedShapeSource source {
         "Source",
         wire,
         &sourceNamedShape,
     };
-    const cad_core::topo::NamedShape namedShape
-        = cad_core::topo::namedShapeForShapeFixRootHistory("ShapeFix", resultShape, source, *fix);
+    const cad_core::part::NamedShape namedShape
+        = cad_core::part::namedShapeForShapeFixRootHistory("ShapeFix", resultShape, source, *fix);
     return {
         {"case", fixture.value("case", "shapefix-modify-face-wire")},
         {"objects", {{"ShapeFix", {{"status", "ok"}, {"shape", "shape_fix_wireframe"}}}}},
-        {"named_shapes", {{"ShapeFix", cad_core::topo::namedShapeToJson(namedShape)}}},
+        {"named_shapes", {{"ShapeFix", cad_core::part::namedShapeToJson(namedShape)}}},
     };
 }
 
@@ -217,14 +217,14 @@ nlohmann::json runMapperHistoryAmbiguousSplit(const nlohmann::json& fixture)
         throw std::runtime_error("splitter did not produce a result shape");
     }
 
-    const cad_core::topo::NamedShape sourceNamedShape
-        = cad_core::topo::indexedNamedShapeForObject("Source", sourceEdge.Edge());
-    const cad_core::topo::NamedShapeSource source {
+    const cad_core::part::NamedShape sourceNamedShape
+        = cad_core::part::indexedNamedShapeForObject("Source", sourceEdge.Edge());
+    const cad_core::part::NamedShapeSource source {
         "Source",
         sourceEdge.Edge(),
         &sourceNamedShape,
     };
-    const cad_core::topo::NamedShape namedShape = cad_core::topo::namedShapeForMakerHistory(
+    const cad_core::part::NamedShape namedShape = cad_core::part::namedShapeForMakerHistory(
         "Split",
         splitter.Shape(),
         {source},
@@ -233,7 +233,7 @@ nlohmann::json runMapperHistoryAmbiguousSplit(const nlohmann::json& fixture)
     return {
         {"case", "mapper-history-ambiguous-split"},
         {"objects", {{"Split", {{"status", "ok"}, {"shape", "splitter"}}}}},
-        {"named_shapes", {{"Split", cad_core::topo::namedShapeToJson(namedShape)}}},
+        {"named_shapes", {{"Split", cad_core::part::namedShapeToJson(namedShape)}}},
     };
 }
 

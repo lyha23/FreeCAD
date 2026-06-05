@@ -1,17 +1,7 @@
 #pragma once
 
-#include "cad_core/document/model.h"
-#include "cad_core/runtime/compute_context.h"
-
-namespace cad_core::features {
-
-void executeAppLink(const document::DocumentObject& object, runtime::ComputeContext& context);
-void executeAppLinkElement(const document::DocumentObject& object, runtime::ComputeContext& context);
-void executeAppLinkGroup(const document::DocumentObject& object, runtime::ComputeContext& context);
-void executeDocumentObjectGroup(const document::DocumentObject& object, runtime::ComputeContext& context);
-void executeAssemblyObject(const document::DocumentObject& object, runtime::ComputeContext& context);
-void executeAssemblyLink(const document::DocumentObject& object, runtime::ComputeContext& context);
-void executeAssemblyJointGroup(const document::DocumentObject& object, runtime::ComputeContext& context);
-void executeAssemblyFeaturePython(const document::DocumentObject& object, runtime::ComputeContext& context);
-
-}  // namespace cad_core::features
+// Compatibility facade for the legacy cad_core/features/link.h path.
+#include "cad_core/app/link.h"
+#include "cad_core/assembly/assembly_link.h"
+#include "cad_core/assembly/assembly_object.h"
+#include "cad_core/assembly/joint_group.h"

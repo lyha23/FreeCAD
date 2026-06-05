@@ -1,10 +1,5 @@
 #pragma once
 
-#include "cad_core/document/model.h"
-#include "cad_core/runtime/compute_context.h"
-
-namespace cad_core::features {
-
-void executePocket(const document::DocumentObject& object, runtime::ComputeContext& context);
-
-}  // namespace cad_core::features
+// Compatibility facade: PartDesign Pocket now lives in
+// cad_core/part_design/feature_pocket.h.
+#include "cad_core/part_design/feature_pocket.h"

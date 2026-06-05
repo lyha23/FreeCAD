@@ -1,8 +1,8 @@
 #pragma once
 
-#include "cad_core/document/model.h"
+#include "cad_core/app/document.h"
 #include "cad_core/runtime/diagnostics.h"
-#include "cad_core/topo/named_shape.h"
+#include "cad_core/part/topo_shape.h"
 
 #include <TopoDS_Shape.hxx>
 #include <gp_Trsf.hxx>
@@ -54,7 +54,7 @@ struct ShapeValue
     // returns a single CheckGeometry match. cad-core keeps that auxiliary ElementMap separate from
     // the raw Sketch Shape NamedShape so raw EdgeN links and InternalEdgeN links do not overwrite
     // each other.
-    std::optional<topo::NamedShape> internalNamedShape;
+    std::optional<part::NamedShape> internalNamedShape;
     // Split-derived InternalFace regions are individually selectable profile domains; closed
     // wire compounds such as face-with-island can still be consumed as a whole profile.
     bool profileRequiresSubshapeSelection = false;
@@ -68,8 +68,8 @@ struct AddSubShape
     // ::FeatureAddSub::getAddSubShape() exposes additive/subtractive tools separately from the
     // feature's final Shape. DressUp::getAddSubShape() can publish delta slots whose ElementMap
     // is not the same as the replacement solid, so cad-core keeps slot-level NamedShape history.
-    std::optional<topo::NamedShape> addNamedShape;
-    std::optional<topo::NamedShape> subNamedShape;
+    std::optional<part::NamedShape> addNamedShape;
+    std::optional<part::NamedShape> subNamedShape;
 };
 
 struct ComputeContext
@@ -82,9 +82,9 @@ struct ComputeContext
     std::map<std::string, nlohmann::json> subshapes;
     nlohmann::json elementReferenceUpdates = nlohmann::json::array();
     nlohmann::json documentObjectUpdates = nlohmann::json::array();
-    std::map<std::string, topo::NamedShape> namedShapes;
+    std::map<std::string, part::NamedShape> namedShapes;
     std::map<std::string, std::vector<std::string>> dependencies;
-    std::map<std::string, const document::DocumentObject*> documentObjects;
+    std::map<std::string, const app::DocumentObject*> documentObjects;
     std::map<std::string, std::string> parentGroupByObject;
     std::set<std::string> transformationTemplateObjects;
     std::map<std::string, gp_Trsf> globalPlacements;

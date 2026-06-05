@@ -1,40 +1,43 @@
 #include "cad_core/runtime/feature_registry.h"
 
-#include "cad_core/features/body.h"
-#include "cad_core/features/chamfer.h"
-#include "cad_core/features/datum_coordinate_system.h"
-#include "cad_core/features/datum_line.h"
-#include "cad_core/features/datum_plane.h"
-#include "cad_core/features/datum_point.h"
-#include "cad_core/features/draft.h"
-#include "cad_core/features/feature_base.h"
-#include "cad_core/features/fillet.h"
-#include "cad_core/features/hole.h"
-#include "cad_core/features/link.h"
-#include "cad_core/features/linear_pattern.h"
-#include "cad_core/features/mesh.h"
-#include "cad_core/features/mirrored.h"
-#include "cad_core/features/multi_transform.h"
-#include "cad_core/features/part.h"
-#include "cad_core/features/part_boolean.h"
-#include "cad_core/features/pad.h"
-#include "cad_core/features/pocket.h"
-#include "cad_core/features/polar_pattern.h"
-#include "cad_core/features/scaled.h"
-#include "cad_core/features/sketch_object.h"
-#include "cad_core/features/thickness.h"
+#include "cad_core/app/link.h"
+#include "cad_core/assembly/assembly_link.h"
+#include "cad_core/assembly/assembly_object.h"
+#include "cad_core/assembly/joint_group.h"
+#include "cad_core/part_design/body.h"
+#include "cad_core/part_design/feature_chamfer.h"
+#include "cad_core/part_design/datum_coordinate_system.h"
+#include "cad_core/part_design/datum_line.h"
+#include "cad_core/part_design/datum_plane.h"
+#include "cad_core/part_design/datum_point.h"
+#include "cad_core/part_design/feature_draft.h"
+#include "cad_core/part_design/feature_base.h"
+#include "cad_core/part_design/feature_fillet.h"
+#include "cad_core/part_design/feature_hole.h"
+#include "cad_core/part_design/feature_linear_pattern.h"
+#include "cad_core/mesh/feature_mesh_import.h"
+#include "cad_core/part_design/feature_mirrored.h"
+#include "cad_core/part_design/feature_multi_transform.h"
+#include "cad_core/part/part_boolean.h"
+#include "cad_core/part/part_feature.h"
+#include "cad_core/part_design/feature_pad.h"
+#include "cad_core/part_design/feature_pocket.h"
+#include "cad_core/part_design/feature_polar_pattern.h"
+#include "cad_core/part_design/feature_scaled.h"
+#include "cad_core/sketcher/sketch_object.h"
+#include "cad_core/part_design/feature_thickness.h"
 
 #include <utility>
 
 namespace cad_core::runtime
 {
 
-void FeatureRegistry::registerExecutor(std::string typeId, features::ExecuteFn executor)
+void FeatureRegistry::registerExecutor(std::string typeId, runtime::ExecuteFn executor)
 {
     executors_[std::move(typeId)] = executor;
 }
 
-features::ExecuteFn FeatureRegistry::executorFor(const std::string& typeId) const
+runtime::ExecuteFn FeatureRegistry::executorFor(const std::string& typeId) const
 {
     const auto it = executors_.find(typeId);
     return it == executors_.end() ? nullptr : it->second;
@@ -54,67 +57,67 @@ std::vector<std::string> FeatureRegistry::typeIds() const
 FeatureRegistry buildDefaultRegistry()
 {
     FeatureRegistry registry;
-    registry.registerExecutor("Sketcher::SketchObject", features::executeSketchObject);
-    registry.registerExecutor("Mesh::Import", features::executeMeshImport);
-    registry.registerExecutor("App::Part", features::executePart);
-    registry.registerExecutor("App::Link", features::executeAppLink);
-    registry.registerExecutor("App::LinkElement", features::executeAppLinkElement);
-    registry.registerExecutor("App::LinkGroup", features::executeAppLinkGroup);
-    registry.registerExecutor("App::DocumentObjectGroup", features::executeDocumentObjectGroup);
-    registry.registerExecutor("App::DocumentObjectGroupPython", features::executeDocumentObjectGroup);
-    registry.registerExecutor("App::FeaturePython", features::executeAssemblyFeaturePython);
-    registry.registerExecutor("Assembly::AssemblyObject", features::executeAssemblyObject);
-    registry.registerExecutor("Assembly::AssemblyLink", features::executeAssemblyLink);
-    registry.registerExecutor("Assembly::JointGroup", features::executeAssemblyJointGroup);
-    registry.registerExecutor("Part::Vertex", features::executePartVertex);
-    registry.registerExecutor("Part::Line", features::executePartLine);
-    registry.registerExecutor("Part::Plane", features::executePartPlane);
-    registry.registerExecutor("Part::Box", features::executePartBox);
-    registry.registerExecutor("Part::Cylinder", features::executePartCylinder);
-    registry.registerExecutor("Part::Prism", features::executePartPrism);
-    registry.registerExecutor("Part::RegularPolygon", features::executePartRegularPolygon);
-    registry.registerExecutor("Part::Sphere", features::executePartSphere);
-    registry.registerExecutor("Part::Ellipsoid", features::executePartEllipsoid);
-    registry.registerExecutor("Part::Cone", features::executePartCone);
-    registry.registerExecutor("Part::Torus", features::executePartTorus);
-    registry.registerExecutor("Part::Wedge", features::executePartWedge);
-    registry.registerExecutor("Part::Ellipse", features::executePartEllipse);
-    registry.registerExecutor("Part::Helix", features::executePartHelix);
-    registry.registerExecutor("Part::Spiral", features::executePartSpiral);
-    registry.registerExecutor("Part::Extrusion", features::executePartExtrusion);
-    registry.registerExecutor("Part::Offset", features::executePartOffset);
-    registry.registerExecutor("Part::ImportBrep", features::executePartImportBrep);
-    registry.registerExecutor("Part::ImportStep", features::executePartImportStep);
-    registry.registerExecutor("Part::ImportIges", features::executePartImportIges);
-    registry.registerExecutor("Part::Fuse", features::executePartFuse);
-    registry.registerExecutor("Part::Cut", features::executePartCut);
-    registry.registerExecutor("Part::Common", features::executePartCommon);
-    registry.registerExecutor("Part::Section", features::executePartSection);
-    registry.registerExecutor("Part::MultiFuse", features::executePartMultiFuse);
-    registry.registerExecutor("Part::MultiCommon", features::executePartMultiCommon);
-    registry.registerExecutor("Part::XOR", features::executePartXor);
-    registry.registerExecutor("Part::FeatureXOR", features::executePartXor);
-    registry.registerExecutor("Part::BooleanFragments", features::executePartBooleanFragments);
-    registry.registerExecutor("Part::FeatureBooleanFragments", features::executePartBooleanFragments);
-    registry.registerExecutor("App::Origin", features::executeDatumCoordinateSystem);
-    registry.registerExecutor("PartDesign::Body", features::executeBody);
-    registry.registerExecutor("PartDesign::CoordinateSystem", features::executeDatumCoordinateSystem);
-    registry.registerExecutor("PartDesign::Line", features::executeDatumLine);
-    registry.registerExecutor("PartDesign::Plane", features::executeDatumPlane);
-    registry.registerExecutor("PartDesign::Point", features::executeDatumPoint);
-    registry.registerExecutor("PartDesign::FeatureBase", features::executeFeatureBase);
-    registry.registerExecutor("PartDesign::Fillet", features::executeFillet);
-    registry.registerExecutor("PartDesign::Draft", features::executeDraft);
-    registry.registerExecutor("PartDesign::Thickness", features::executeThickness);
-    registry.registerExecutor("PartDesign::Hole", features::executeHole);
-    registry.registerExecutor("PartDesign::LinearPattern", features::executeLinearPattern);
-    registry.registerExecutor("PartDesign::Mirrored", features::executeMirrored);
-    registry.registerExecutor("PartDesign::MultiTransform", features::executeMultiTransform);
-    registry.registerExecutor("PartDesign::Pad", features::executePad);
-    registry.registerExecutor("PartDesign::Pocket", features::executePocket);
-    registry.registerExecutor("PartDesign::PolarPattern", features::executePolarPattern);
-    registry.registerExecutor("PartDesign::Scaled", features::executeScaled);
-    registry.registerExecutor("PartDesign::Chamfer", features::executeChamfer);
+    registry.registerExecutor("Sketcher::SketchObject", sketcher::executeSketchObject);
+    registry.registerExecutor("Mesh::Import", mesh::executeMeshImport);
+    registry.registerExecutor("App::Part", part::executePart);
+    registry.registerExecutor("App::Link", app::executeAppLink);
+    registry.registerExecutor("App::LinkElement", app::executeAppLinkElement);
+    registry.registerExecutor("App::LinkGroup", app::executeAppLinkGroup);
+    registry.registerExecutor("App::DocumentObjectGroup", app::executeDocumentObjectGroup);
+    registry.registerExecutor("App::DocumentObjectGroupPython", app::executeDocumentObjectGroup);
+    registry.registerExecutor("App::FeaturePython", assembly::executeAssemblyFeaturePython);
+    registry.registerExecutor("Assembly::AssemblyObject", assembly::executeAssemblyObject);
+    registry.registerExecutor("Assembly::AssemblyLink", assembly::executeAssemblyLink);
+    registry.registerExecutor("Assembly::JointGroup", assembly::executeAssemblyJointGroup);
+    registry.registerExecutor("Part::Vertex", part::executePartVertex);
+    registry.registerExecutor("Part::Line", part::executePartLine);
+    registry.registerExecutor("Part::Plane", part::executePartPlane);
+    registry.registerExecutor("Part::Box", part::executePartBox);
+    registry.registerExecutor("Part::Cylinder", part::executePartCylinder);
+    registry.registerExecutor("Part::Prism", part::executePartPrism);
+    registry.registerExecutor("Part::RegularPolygon", part::executePartRegularPolygon);
+    registry.registerExecutor("Part::Sphere", part::executePartSphere);
+    registry.registerExecutor("Part::Ellipsoid", part::executePartEllipsoid);
+    registry.registerExecutor("Part::Cone", part::executePartCone);
+    registry.registerExecutor("Part::Torus", part::executePartTorus);
+    registry.registerExecutor("Part::Wedge", part::executePartWedge);
+    registry.registerExecutor("Part::Ellipse", part::executePartEllipse);
+    registry.registerExecutor("Part::Helix", part::executePartHelix);
+    registry.registerExecutor("Part::Spiral", part::executePartSpiral);
+    registry.registerExecutor("Part::Extrusion", part::executePartExtrusion);
+    registry.registerExecutor("Part::Offset", part::executePartOffset);
+    registry.registerExecutor("Part::ImportBrep", part::executePartImportBrep);
+    registry.registerExecutor("Part::ImportStep", part::executePartImportStep);
+    registry.registerExecutor("Part::ImportIges", part::executePartImportIges);
+    registry.registerExecutor("Part::Fuse", part::executePartFuse);
+    registry.registerExecutor("Part::Cut", part::executePartCut);
+    registry.registerExecutor("Part::Common", part::executePartCommon);
+    registry.registerExecutor("Part::Section", part::executePartSection);
+    registry.registerExecutor("Part::MultiFuse", part::executePartMultiFuse);
+    registry.registerExecutor("Part::MultiCommon", part::executePartMultiCommon);
+    registry.registerExecutor("Part::XOR", part::executePartXor);
+    registry.registerExecutor("Part::FeatureXOR", part::executePartXor);
+    registry.registerExecutor("Part::BooleanFragments", part::executePartBooleanFragments);
+    registry.registerExecutor("Part::FeatureBooleanFragments", part::executePartBooleanFragments);
+    registry.registerExecutor("App::Origin", part_design::executeDatumCoordinateSystem);
+    registry.registerExecutor("PartDesign::Body", part_design::executeBody);
+    registry.registerExecutor("PartDesign::CoordinateSystem", part_design::executeDatumCoordinateSystem);
+    registry.registerExecutor("PartDesign::Line", part_design::executeDatumLine);
+    registry.registerExecutor("PartDesign::Plane", part_design::executeDatumPlane);
+    registry.registerExecutor("PartDesign::Point", part_design::executeDatumPoint);
+    registry.registerExecutor("PartDesign::FeatureBase", part_design::executeFeatureBase);
+    registry.registerExecutor("PartDesign::Fillet", part_design::executeFillet);
+    registry.registerExecutor("PartDesign::Draft", part_design::executeDraft);
+    registry.registerExecutor("PartDesign::Thickness", part_design::executeThickness);
+    registry.registerExecutor("PartDesign::Hole", part_design::executeHole);
+    registry.registerExecutor("PartDesign::LinearPattern", part_design::executeLinearPattern);
+    registry.registerExecutor("PartDesign::Mirrored", part_design::executeMirrored);
+    registry.registerExecutor("PartDesign::MultiTransform", part_design::executeMultiTransform);
+    registry.registerExecutor("PartDesign::Pad", part_design::executePad);
+    registry.registerExecutor("PartDesign::Pocket", part_design::executePocket);
+    registry.registerExecutor("PartDesign::PolarPattern", part_design::executePolarPattern);
+    registry.registerExecutor("PartDesign::Scaled", part_design::executeScaled);
+    registry.registerExecutor("PartDesign::Chamfer", part_design::executeChamfer);
     return registry;
 }
 

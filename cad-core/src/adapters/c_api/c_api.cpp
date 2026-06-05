@@ -1,7 +1,7 @@
 #include "cad_core/c_api.h"
 
-#include "cad_core/document/model.h"
-#include "cad_core/geometry/shape_exporter.h"
+#include "cad_core/app/document.h"
+#include "cad_core/part/shape_exporter.h"
 #include "cad_core/runtime/diagnostics.h"
 #include "cad_core/runtime/feature_registry.h"
 #include "cad_core/runtime/recompute.h"
@@ -84,7 +84,7 @@ nlohmann::json cadCoreVersionJson()
     return {
         {"version", "0.1.0"},
         {"api", "cad_core_ffi"},
-        {"kernel", cad_core::geometry::kernelVersion()},
+        {"kernel", cad_core::part::kernelVersion()},
     };
 }
 
@@ -423,7 +423,7 @@ nlohmann::json capabilitiesJson()
               }},
          }},
         {"supported_type_ids", registry.typeIds()},
-        {"export_formats", cad_core::geometry::supportedShapeFileFormats()},
+        {"export_formats", cad_core::part::supportedShapeFileFormats()},
         {"diagnostic_codes", diagnosticCodeList()},
         {"adapters",
          {
@@ -672,7 +672,7 @@ CadCoreResult cad_core_recompute_json(const char* request_json, size_t request_j
     try {
         const std::string payload(request_json, request_json_len);
         const nlohmann::json raw = nlohmann::json::parse(payload);
-        auto [document, diagnostics] = cad_core::document::parseDocument(raw);
+        auto [document, diagnostics] = cad_core::app::parseDocument(raw);
         return makeJsonResult(cad_core::runtime::recompute(document, std::move(diagnostics)));
     }
     catch (const nlohmann::json::parse_error& error) {
@@ -713,9 +713,9 @@ CadCoreExportResult cad_core_export_json(const char* request_json, size_t reques
         }
 
         const std::string objectName = request["object"].get<std::string>();
-        cad_core::geometry::ShapeFileFormat format;
+        cad_core::part::ShapeFileFormat format;
         try {
-            format = cad_core::geometry::shapeFileFormatFromString(request["format"].get<std::string>());
+            format = cad_core::part::shapeFileFormatFromString(request["format"].get<std::string>());
         }
         catch (const std::exception& error) {
             return makeExportErrorResult(1, error.what());
@@ -729,7 +729,7 @@ CadCoreExportResult cad_core_export_json(const char* request_json, size_t reques
             return makeExportErrorResult(1, error.what());
         }
 
-        auto [document, diagnostics] = cad_core::document::parseDocument(request["document"]);
+        auto [document, diagnostics] = cad_core::app::parseDocument(request["document"]);
         cad_core::runtime::ComputeContext context =
             cad_core::runtime::recomputeContext(document, std::move(diagnostics));
 
@@ -757,9 +757,9 @@ CadCoreExportResult cad_core_export_json(const char* request_json, size_t reques
 
         nlohmann::json metadata = {
             {"object", objectName},
-            {"format", cad_core::geometry::shapeFileFormatName(format)},
-            {"content_type", cad_core::geometry::shapeFileFormatContentType(format)},
-            {"filename", objectName + "." + cad_core::geometry::shapeFileFormatExtension(format)},
+            {"format", cad_core::part::shapeFileFormatName(format)},
+            {"content_type", cad_core::part::shapeFileFormatContentType(format)},
+            {"filename", objectName + "." + cad_core::part::shapeFileFormatExtension(format)},
             {"diagnostics", cad_core::runtime::diagnosticsToJson(context.diagnostics)},
         };
 
@@ -769,7 +769,7 @@ CadCoreExportResult cad_core_export_json(const char* request_json, size_t reques
         }
 
         const std::string data =
-            cad_core::geometry::exportShapeBuffer(shapeIt->second.shape, format, stlDeflection);
+            cad_core::part::exportShapeBuffer(shapeIt->second.shape, format, stlDeflection);
         metadata["bytes"] = data.size();
         return makeExportResult(data, metadata);
     }

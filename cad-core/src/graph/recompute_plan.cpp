@@ -11,7 +11,7 @@ using runtime::addDiagnostic;
 
 namespace {
 
-std::string linkedDocumentName(const document::LinkDocumentRef& documentRef)
+std::string linkedDocumentName(const app::LinkDocumentRef& documentRef)
 {
     if (!documentRef.file.empty()) {
         return documentRef.file;
@@ -43,7 +43,7 @@ std::string normalizedDocumentStatus(const std::string& status)
     return normalized;
 }
 
-bool documentRefPendingReload(const document::LinkDocumentRef& documentRef)
+bool documentRefPendingReload(const app::LinkDocumentRef& documentRef)
 {
     const std::string status = normalizedDocumentStatus(documentRef.status);
     const std::string currentStatus = normalizedDocumentStatus(documentRef.currentStatus);
@@ -52,7 +52,7 @@ bool documentRefPendingReload(const document::LinkDocumentRef& documentRef)
         || effectiveStatus == "partial";
 }
 
-bool documentRefUnloaded(const document::LinkDocumentRef& documentRef)
+bool documentRefUnloaded(const app::LinkDocumentRef& documentRef)
 {
     const std::string status = normalizedDocumentStatus(documentRef.status);
     const std::string currentStatus = normalizedDocumentStatus(documentRef.currentStatus);
@@ -61,31 +61,31 @@ bool documentRefUnloaded(const document::LinkDocumentRef& documentRef)
         || effectiveStatus == "detached";
 }
 
-bool isFrozenExternalGeometryReference(const document::Link& link)
+bool isFrozenExternalGeometryReference(const app::Link& link)
 {
     return link.property == "ExternalGeometry" && link.externalGeometryFlags.count("Frozen") != 0U
         && link.externalGeometryFlags.count("Sync") == 0U;
 }
 
-bool isMissingExternalGeometryReference(const document::Link& link)
+bool isMissingExternalGeometryReference(const app::Link& link)
 {
     return link.property == "ExternalGeometry" && link.externalGeometryFlags.count("Missing") != 0U
         && link.externalGeometryFlags.count("Sync") == 0U;
 }
 
-bool isDetachedExternalGeometryReference(const document::Link& link)
+bool isDetachedExternalGeometryReference(const app::Link& link)
 {
     return link.property == "ExternalGeometry" && link.externalGeometryFlags.count("Detached") != 0U;
 }
 
-bool hasReferenceShadowBrepSnapshot(const document::Link& link)
+bool hasReferenceShadowBrepSnapshot(const app::Link& link)
 {
     return std::any_of(link.referenceShadows.begin(), link.referenceShadows.end(), [](const auto& shadow) {
         return shadow.brep.has_value();
     });
 }
 
-std::string externalGeometryReferenceKey(const document::Link& link)
+std::string externalGeometryReferenceKey(const app::Link& link)
 {
     if (link.subnames.empty() || link.subnames.front().empty()) {
         return link.object;
@@ -93,7 +93,7 @@ std::string externalGeometryReferenceKey(const document::Link& link)
     return link.object + "." + link.subnames.front();
 }
 
-const nlohmann::json* externalGeoGeometryItems(const document::DocumentObject& object)
+const nlohmann::json* externalGeoGeometryItems(const app::DocumentObject& object)
 {
     const auto it = object.properties.find("ExternalGeo");
     if (it == object.properties.end()) {
@@ -127,8 +127,8 @@ std::string readExternalGeoRef(const nlohmann::json& value)
 }
 
 bool hasNativeExternalGeoEvidence(
-    const document::DocumentObject& object,
-    const document::Link& link
+    const app::DocumentObject& object,
+    const app::Link& link
 )
 {
     const auto* items = externalGeoGeometryItems(object);
@@ -142,7 +142,7 @@ bool hasNativeExternalGeoEvidence(
 }
 
 void visitObject(const std::string& name,
-                 const document::Document& document,
+                 const app::Document& document,
                  RecomputePlan& plan,
                  std::vector<runtime::Diagnostic>& diagnostics,
                  std::vector<std::string>& visiting,
@@ -298,7 +298,7 @@ void visitObject(const std::string& name,
 
 }  // namespace
 
-RecomputePlan buildPlan(const document::Document& document, std::vector<runtime::Diagnostic>& diagnostics)
+RecomputePlan buildPlan(const app::Document& document, std::vector<runtime::Diagnostic>& diagnostics)
 {
     RecomputePlan plan;
     std::set<std::string> visited;

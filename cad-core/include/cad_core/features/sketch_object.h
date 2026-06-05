@@ -1,11 +1,5 @@
 #pragma once
 
-#include "cad_core/document/model.h"
-#include "cad_core/runtime/compute_context.h"
-
-namespace cad_core::features {
-
-void executeSketchObject(const document::DocumentObject& object, runtime::ComputeContext& context);
-
-}  // namespace cad_core::features
-
+// Compatibility facade: Sketcher SketchObject executor now lives in
+// cad_core/sketcher/sketch_object.h.
+#include "cad_core/sketcher/sketch_object.h"

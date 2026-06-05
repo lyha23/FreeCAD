@@ -1,10 +1,5 @@
 #pragma once
 
-#include "cad_core/document/model.h"
-#include "cad_core/runtime/compute_context.h"
-
-namespace cad_core::features {
-
-void executeDatumLine(const document::DocumentObject& object, runtime::ComputeContext& context);
-
-}  // namespace cad_core::features
+// Compatibility facade: PartDesign DatumLine now lives in
+// cad_core/part_design/datum_line.h.
+#include "cad_core/part_design/datum_line.h"

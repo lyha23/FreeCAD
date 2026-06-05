@@ -32,46 +32,58 @@ if(NOT ZSTD_INCLUDE_DIR OR NOT ZSTD_LIBRARY)
 endif()
 
 add_library(cad-core-lib STATIC
-  src/document/model.cpp
-  src/features/body.cpp
-  src/features/datum_coordinate_system.cpp
-  src/features/datum_line.cpp
-  src/features/datum_plane.cpp
-  src/features/datum_point.cpp
-  src/features/dress_up.cpp
-  src/features/feature_base.cpp
-  src/features/feature_extrude.cpp
-  src/features/feature_executor.cpp
-  src/features/hole.cpp
-  src/features/link.cpp
-  src/features/mesh.cpp
-  src/features/part.cpp
-  src/features/part_boolean.cpp
-  src/features/pad.cpp
-  src/features/pocket.cpp
-  src/features/sketch_object.cpp
-  src/features/transformed.cpp
-  src/geometry/brep_snapshot.cpp
-  src/geometry/extrusion_helper.cpp
-  src/geometry/face_maker.cpp
-  src/geometry/placement.cpp
-  src/geometry/refine_model.cpp
-  src/geometry/shape_fix.cpp
-  src/geometry/shape_exporter.cpp
-  src/geometry/sketch_internal_builder.cpp
-  src/geometry/wire_joiner.cpp
+  src/assembly/assembly_link.cpp
+  src/assembly/assembly_object.cpp
+  src/assembly/assembly_utils.cpp
+  src/assembly/joint_group.cpp
+  src/app/document.cpp
+  src/app/document_object.cpp
+  src/app/element_map.cpp
+  src/app/link.cpp
+  src/app/property.cpp
+  src/app/property_geo.cpp
+  src/app/property_links.cpp
+  src/base/placement.cpp
   src/graph/recompute_plan.cpp
+  src/mesh/feature_mesh_import.cpp
+  src/part/brep_snapshot.cpp
+  src/part/extrusion_helper.cpp
+  src/part/face_maker.cpp
+  src/part/part_boolean.cpp
+  src/part/part_feature.cpp
+  src/part/property_topo_shape.cpp
+  src/part/refine_model.cpp
+  src/part/shape_fix.cpp
+  src/part/shape_exporter.cpp
+  src/part/topo_shape.cpp
+  src/part/topo_shape_expansion.cpp
+  src/part/topo_shape_mapper.cpp
+  src/part/topo_shape_reference.cpp
+  src/part/wire_joiner.cpp
+  src/part_design/body.cpp
+  src/part_design/datum_coordinate_system.cpp
+  src/part_design/datum_line.cpp
+  src/part_design/datum_plane.cpp
+  src/part_design/datum_point.cpp
+  src/part_design/feature_base.cpp
+  src/part_design/feature_dress_up.cpp
+  src/part_design/feature_extrude.cpp
+  src/part_design/feature_hole.cpp
+  src/part_design/feature_pad.cpp
+  src/part_design/feature_pocket.cpp
+  src/part_design/feature_transformed.cpp
   src/runtime/compute_context.cpp
   src/runtime/diagnostics.cpp
+  src/runtime/feature_executor.cpp
   src/runtime/feature_registry.cpp
   src/runtime/io.cpp
   src/runtime/recompute.cpp
-  src/topo/element_map.cpp
-  src/topo/import_element_map.cpp
-  src/topo/mapper_history.cpp
-  src/topo/named_shape.cpp
-  src/topo/reference_matcher.cpp
-  src/topo/subshape_map.cpp
+  src/sketcher/sketch_object_constraints.cpp
+  src/sketcher/sketch_object_external.cpp
+  src/sketcher/sketch_object_geometry.cpp
+  src/sketcher/sketch_object_operations.cpp
+  src/sketcher/sketch_object.cpp
+  src/sketcher/sketch_internal_builder.cpp
 )
 
 set_target_properties(cad-core-lib PROPERTIES POSITION_INDEPENDENT_CODE ON)
