@@ -18,6 +18,11 @@ namespace
 {
 
 std::optional<bool> readEndpointPosition(const nlohmann::json& constraint, const std::string& field);
+bool readPointPositionIsNone(
+    const nlohmann::json& constraint,
+    const std::string& field,
+    bool absentIsNone
+);
 
 std::optional<double> readNumberField(const nlohmann::json& value, const std::string& field)
 {
@@ -67,8 +72,7 @@ std::optional<std::string> endpointPairTargetKey(const nlohmann::json& constrain
     if (!first || !second) {
         return std::nullopt;
     }
-    return *first < *second ? "points:" + *first + "|" + *second
-                            : "points:" + *second + "|" + *first;
+    return *first < *second ? "points:" + *first + "|" + *second : "points:" + *second + "|" + *first;
 }
 
 std::optional<std::string> wholeGeometryTargetKey(const nlohmann::json& constraint)
@@ -125,6 +129,31 @@ std::optional<std::string> angleSolverTargetKey(const nlohmann::json& constraint
     const std::string second = std::to_string(*secondGeometry);
     return first < second ? "geometry_pair:" + first + "|" + second
                           : "geometry_pair:" + second + "|" + first;
+}
+
+std::optional<std::string> blockPartialRedundancyFirstSliceTargetKey(
+    const nlohmann::json& constraint,
+    SketchConstraintKind kind
+)
+{
+    if (constraint.contains("Second") || constraint.contains("SecondPos")
+        || constraint.contains("Third") || constraint.contains("ThirdPos")) {
+        return std::nullopt;
+    }
+    if (constraint.contains("FirstPos") && !readPointPositionIsNone(constraint, "FirstPos", false)) {
+        return std::nullopt;
+    }
+    if (kind != SketchConstraintKind::Block && kind != SketchConstraintKind::Horizontal
+        && kind != SketchConstraintKind::Vertical && kind != SketchConstraintKind::Distance
+        && kind != SketchConstraintKind::Radius && kind != SketchConstraintKind::Diameter) {
+        return std::nullopt;
+    }
+
+    const auto geometryIndex = readIntField(constraint, "First");
+    if (!geometryIndex || *geometryIndex < 0) {
+        return std::nullopt;
+    }
+    return "geo:" + std::to_string(*geometryIndex);
 }
 
 
@@ -1102,6 +1131,11 @@ gp_Pnt endpointPoint(const std::vector<SketchSegment>& segments, const EndpointR
     return endpointPoint(segments.at(endpoint.segmentIndex), endpoint.start);
 }
 
+double arcParameterSpan(const SketchArc& arc)
+{
+    return std::abs(arc.endAngle - arc.startAngle);
+}
+
 bool orientationConstraintSatisfied(
     const OrientationConstraintRef& constraint,
     const std::vector<SketchSegment>& segments
@@ -1128,6 +1162,463 @@ bool orientationConstraintSatisfied(
     if (constraint.kind == SketchConstraintKind::Vertical) {
         return std::abs(first->X() - second->X()) <= Precision::Confusion();
     }
+    return false;
+}
+
+// FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectConstraints.cpp
+// ::SketchObject::solve(), after a successful solve, runs "solvedSketch.extractGeometry()" and
+// moves it into "Geometry" when "updateGeoAfterSolving" is true.
+// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.h
+// exposes whole-geometry "addHorizontalConstraint(int geoId)" and
+// "addVerticalConstraint(int geoId)"; cad-core mirrors only that first whole-line orientation
+// geometry update here, while dimensional and relation solver movement still require the full
+// GCS-backed solver path.
+bool applyWholeLineOrientationSolverUpdate(
+    const OrientationConstraintRef& constraint,
+    std::vector<SketchSegment>& segments
+)
+{
+    if (!constraint.segmentIndex || constraint.firstEndpoint || constraint.secondEndpoint) {
+        return false;
+    }
+
+    SketchSegment& segment = segments.at(*constraint.segmentIndex);
+    gp_Pnt updatedEnd = segment.end;
+    if (constraint.kind == SketchConstraintKind::Horizontal) {
+        updatedEnd.SetY(segment.start.Y());
+    }
+    else if (constraint.kind == SketchConstraintKind::Vertical) {
+        updatedEnd.SetX(segment.start.X());
+    }
+    else {
+        return false;
+    }
+    if (segment.start.Distance(updatedEnd) <= Precision::Confusion()) {
+        return false;
+    }
+    segment.end = updatedEnd;
+    return true;
+}
+
+// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
+// ::Sketch::addConstraint(), DistanceX / DistanceY single-point cases are "point on fixed
+// x-coordinate" / "point on fixed y-coordinate" and call addCoordinateXConstraint() /
+// addCoordinateYConstraint(); those methods call "GCSsys.addConstraintCoordinateX/Y".
+bool applyEndpointCoordinateDimensionSolverUpdate(
+    const DimensionConstraintRef& constraint,
+    std::vector<SketchSegment>& segments
+)
+{
+    if (!constraint.coordinateEndpoint) {
+        return false;
+    }
+
+    gp_Pnt& point = endpointPoint(
+        segments.at(constraint.coordinateEndpoint->segmentIndex),
+        constraint.coordinateEndpoint->start
+    );
+    if (constraint.kind == SketchConstraintKind::DistanceX) {
+        point.SetX(constraint.value);
+        return true;
+    }
+    if (constraint.kind == SketchConstraintKind::DistanceY) {
+        point.SetY(constraint.value);
+        return true;
+    }
+    return false;
+}
+
+// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
+// ::Sketch::addRadiusConstraint(), Circle branch calls "GCSsys.addConstraintCircleRadius";
+// ::Sketch::addDiameterConstraint(), Circle branch calls "GCSsys.addConstraintCircleDiameter".
+// cad-core only mirrors the request-local Circle update here; Arc radius/diameter remains part of
+// the broader solver geometry gap because changing an arc radius also has endpoint consistency.
+bool applyCircleRadiusDimensionSolverUpdate(
+    const DimensionConstraintRef& constraint,
+    std::vector<SketchCircle>& circles
+)
+{
+    if (constraint.geometryIndex < 0
+        || (constraint.kind != SketchConstraintKind::Radius
+            && constraint.kind != SketchConstraintKind::Diameter)) {
+        return false;
+    }
+    const double radius = constraint.kind == SketchConstraintKind::Diameter ? constraint.value * 0.5
+                                                                            : constraint.value;
+    if (radius <= Precision::Confusion()) {
+        return false;
+    }
+    for (SketchCircle& circle : circles) {
+        if (circle.geometryIndex == static_cast<std::size_t>(constraint.geometryIndex)) {
+            circle.radius = radius;
+            return true;
+        }
+    }
+    return false;
+}
+
+// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
+// ::Sketch::addConstraint(), Distance with no point positions is the "line length, arc length"
+// branch; ::Sketch::addDistanceConstraint(int geoId, double* value, bool driving) calls
+// "GCSsys.addConstraintP2PDistance(l.p1, l.p2, value, tag, driving)" for Line.
+// cad-core mirrors only the request-local Line first slice here: it keeps p1 fixed and moves p2
+// along the current line direction, without claiming Arc length or relation solving.
+bool applyLineLengthDimensionSolverUpdate(
+    const DimensionConstraintRef& constraint,
+    std::vector<SketchSegment>& segments
+)
+{
+    if (constraint.kind != SketchConstraintKind::Distance || constraint.geometryIndex < 0
+        || constraint.firstEndpoint || constraint.secondEndpoint || constraint.coordinateEndpoint) {
+        return false;
+    }
+    const auto segmentIndex = segmentIndexForGeometry(segments, constraint.geometryIndex);
+    if (!segmentIndex) {
+        return false;
+    }
+    SketchSegment& segment = segments.at(*segmentIndex);
+    const double dx = segment.end.X() - segment.start.X();
+    const double dy = segment.end.Y() - segment.start.Y();
+    const double length = std::hypot(dx, dy);
+    if (length <= Precision::Confusion()) {
+        return false;
+    }
+    const double scale = constraint.value / length;
+    segment.end.SetX(segment.start.X() + dx * scale);
+    segment.end.SetY(segment.start.Y() + dy * scale);
+    segment.end.SetZ(segment.start.Z());
+    return true;
+}
+
+// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
+// ::Sketch::addDistanceConstraint(int geoId, double* value, bool driving) handles Arc through
+// "GCSsys.addConstraintArcLength(a, value, tag, driving)"; ::Sketch::updateArcOfCircle() then
+// writes back "setRadius(*myArc.rad)" and "setRange(*myArc.startAngle, *myArc.endAngle)".
+// cad-core mirrors only the request-local ArcOfCircle length first slice here by scaling radius
+// for the existing angular span; relation solving and endpoint-coupled arcs remain outside it.
+bool applyArcLengthDimensionSolverUpdate(
+    const DimensionConstraintRef& constraint,
+    std::vector<SketchArc>& arcs
+)
+{
+    if (constraint.kind != SketchConstraintKind::Distance || constraint.geometryIndex < 0
+        || constraint.firstEndpoint || constraint.secondEndpoint || constraint.coordinateEndpoint) {
+        return false;
+    }
+    const auto arcIndex = arcIndexForGeometry(arcs, constraint.geometryIndex);
+    if (!arcIndex) {
+        return false;
+    }
+    SketchArc& arc = arcs.at(*arcIndex);
+    const double span = arcParameterSpan(arc);
+    if (span <= Precision::Confusion()) {
+        return false;
+    }
+    const double radius = constraint.value / span;
+    if (radius <= Precision::Confusion()) {
+        return false;
+    }
+    arc.radius = radius;
+    return true;
+}
+
+std::optional<gp_Pnt> projectPointToSegmentLine(const gp_Pnt& point, const SketchSegment& segment)
+{
+    const double dx = segment.end.X() - segment.start.X();
+    const double dy = segment.end.Y() - segment.start.Y();
+    const double lengthSquared = dx * dx + dy * dy;
+    const double tolerance = Precision::Confusion();
+    if (lengthSquared <= tolerance * tolerance) {
+        return std::nullopt;
+    }
+    const double t = ((point.X() - segment.start.X()) * dx + (point.Y() - segment.start.Y()) * dy)
+        / lengthSquared;
+    return gp_Pnt(segment.start.X() + t * dx, segment.start.Y() + t * dy, point.Z());
+}
+
+std::optional<std::pair<double, double>> segmentDirection2d(const SketchSegment& segment);
+std::optional<double> equalConstraintMeasure(
+    int geometryIndex,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchArc>& arcs
+);
+
+// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
+// ::Sketch::addConstraint(), case PointOnObject routes to
+// "addPointOnObjectConstraint(constraint->First, constraint->FirstPos, constraint->Second)".
+// The Line target overload calls "GCSsys.addConstraintPointOnLine(p1, l2, tag, driving)".
+// cad-core mirrors only the request-local line-endpoint -> line projection first slice here;
+// point-on-circle/arc/ellipse and coupled relation solving remain part of the full solver gap.
+bool applyPointOnLineRelationSolverUpdate(
+    const PointOnObjectConstraintRef& constraint,
+    std::vector<SketchSegment>& segments
+)
+{
+    if (constraint.point.kind != ConstraintPointKind::SegmentEndpoint) {
+        return false;
+    }
+    const auto targetSegmentIndex = segmentIndexForGeometry(segments, constraint.objectGeometryIndex);
+    if (!targetSegmentIndex) {
+        return false;
+    }
+
+    SketchSegment& constrainedSegment = segments.at(constraint.point.index);
+    gp_Pnt& constrainedPoint = endpointPoint(constrainedSegment, constraint.point.start);
+    const auto projected
+        = projectPointToSegmentLine(constrainedPoint, segments.at(*targetSegmentIndex));
+    if (!projected || constrainedPoint.Distance(*projected) <= Precision::Confusion()) {
+        return false;
+    }
+    constrainedPoint = *projected;
+    return true;
+}
+
+// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
+// ::Sketch::addConstraint(), case Parallel routes to
+// "addParallelConstraint(constraint->First, constraint->Second)"; that overload accepts two
+// Line geometries and calls "GCSsys.addConstraintParallel(l1, l2, tag)". The simple
+// Perpendicular branch routes to "addPerpendicularConstraint(constraint->First,
+// constraint->Second)"; its two-Line branch calls "GCSsys.addConstraintPerpendicular(l1, l2,
+// tag)".
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectConstraints.cpp
+// ::SketchObject::solve() later moves "solvedSketch.extractGeometry()" into "Geometry" when
+// "updateGeoAfterSolving" is true. cad-core mirrors only this request-local two-line first slice:
+// keep line1 fixed, preserve line2 start and length, and rotate line2 to the nearest parallel or
+// perpendicular direction. Curve and coupled relation movement remain part of the full solver gap.
+bool applyLinePairRelationSolverUpdate(
+    const LinePairConstraintRef& constraint,
+    std::vector<SketchSegment>& segments
+)
+{
+    if (constraint.kind != SketchConstraintKind::Parallel
+        && constraint.kind != SketchConstraintKind::Perpendicular) {
+        return false;
+    }
+
+    const auto firstDirection = segmentDirection2d(segments.at(constraint.firstSegmentIndex));
+    const auto secondDirection = segmentDirection2d(segments.at(constraint.secondSegmentIndex));
+    if (!firstDirection || !secondDirection) {
+        return false;
+    }
+
+    SketchSegment& second = segments.at(constraint.secondSegmentIndex);
+    const double dx = second.end.X() - second.start.X();
+    const double dy = second.end.Y() - second.start.Y();
+    const double length = std::sqrt(dx * dx + dy * dy);
+    if (length <= Precision::Confusion()) {
+        return false;
+    }
+
+    const std::pair<double, double> targetDirection = constraint.kind == SketchConstraintKind::Parallel
+        ? *firstDirection
+        : std::pair<double, double> {-firstDirection->second, firstDirection->first};
+    const double dot = targetDirection.first * secondDirection->first
+        + targetDirection.second * secondDirection->second;
+    const double sign = dot < 0.0 ? -1.0 : 1.0;
+    const gp_Pnt updatedEnd(
+        second.start.X() + sign * targetDirection.first * length,
+        second.start.Y() + sign * targetDirection.second * length,
+        second.start.Z()
+    );
+    if (second.end.Distance(updatedEnd) <= Precision::Confusion()) {
+        return false;
+    }
+    second.end = updatedEnd;
+    return true;
+}
+
+// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
+// ::Sketch::addPerpendicularConstraint(int geoId1, int geoId2), for Line + Circle/Arc, takes
+// "Points[Geoms[geoId2].midPointId]" and calls "GCSsys.addConstraintPointOnLine(p2, l1, tag)".
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectConstraints.cpp
+// ::SketchObject::solve() writes "solvedSketch.extractGeometry()" back into "Geometry" when
+// "updateGeoAfterSolving" is true. cad-core mirrors only this request-local center projection first
+// slice: keep the line and curve radius/range fixed, and project the Circle/Arc center onto the line.
+bool applyPerpendicularMidpointLineRelationSolverUpdate(
+    const PerpendicularMidpointLineConstraintRef& constraint,
+    const std::vector<SketchSegment>& segments,
+    std::vector<SketchCircle>& circles,
+    std::vector<SketchArc>& arcs
+)
+{
+    const SketchSegment& line = segments.at(constraint.lineSegmentIndex);
+    gp_Pnt& center = constraint.targetKind == PerpendicularMidpointTargetKind::Circle
+        ? circles.at(constraint.targetIndex).center
+        : arcs.at(constraint.targetIndex).center;
+    const auto projected = projectPointToSegmentLine(center, line);
+    if (!projected || center.Distance(*projected) <= Precision::Confusion()) {
+        return false;
+    }
+    center = *projected;
+    return true;
+}
+
+// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
+// ::Sketch::addConstraint(), case Tangent routes simple whole-geometry tangency to
+// "addTangentConstraint(constraint->First, constraint->Second, constraint->Orientation)".
+// ::Sketch::addTangentConstraint() handles Line + Circle/Arc through
+// "GCSsys.addConstraintTangent(l, c, ...)" / "GCSsys.addConstraintTangent(l, a, ...)" and
+// converts Circle/Arc + Line by swapping the geometry ids. ::SketchObject::solve() writes
+// "solvedSketch.extractGeometry()" back into "Geometry" when "updateGeoAfterSolving" is true.
+// cad-core mirrors only this request-local first slice: keep the line and round radius/range
+// fixed, then move the Circle/Arc center along the line normal to the nearest tangent side.
+bool applyTangentLineRoundRelationSolverUpdate(
+    const TangentConstraintRef& constraint,
+    const std::vector<SketchSegment>& segments,
+    std::vector<SketchCircle>& circles,
+    std::vector<SketchArc>& arcs
+)
+{
+    if (constraint.firstPoint || constraint.secondPoint || constraint.viaPoint) {
+        return false;
+    }
+
+    std::optional<std::size_t> lineSegmentIndex;
+    std::optional<TangentGeometryRef> roundGeometry;
+    if (constraint.first.kind == TangentGeometryKind::Line
+        && (constraint.second.kind == TangentGeometryKind::Circle
+            || constraint.second.kind == TangentGeometryKind::Arc)) {
+        lineSegmentIndex = constraint.first.index;
+        roundGeometry = constraint.second;
+    }
+    else if (
+        constraint.second.kind == TangentGeometryKind::Line
+        && (constraint.first.kind == TangentGeometryKind::Circle
+            || constraint.first.kind == TangentGeometryKind::Arc)
+    ) {
+        lineSegmentIndex = constraint.second.index;
+        roundGeometry = constraint.first;
+    }
+    if (!lineSegmentIndex || !roundGeometry) {
+        return false;
+    }
+
+    gp_Pnt* center = nullptr;
+    double radius = 0.0;
+    if (roundGeometry->kind == TangentGeometryKind::Circle) {
+        SketchCircle& circle = circles.at(roundGeometry->index);
+        center = &circle.center;
+        radius = circle.radius;
+    }
+    else {
+        SketchArc& arc = arcs.at(roundGeometry->index);
+        center = &arc.center;
+        radius = arc.radius;
+    }
+    if (center == nullptr || radius <= Precision::Confusion()) {
+        return false;
+    }
+
+    const SketchSegment& line = segments.at(*lineSegmentIndex);
+    const auto direction = segmentDirection2d(line);
+    const auto projected = projectPointToSegmentLine(*center, line);
+    if (!direction || !projected) {
+        return false;
+    }
+
+    const double normalX = -direction->second;
+    const double normalY = direction->first;
+    const double signedDistance = (center->X() - line.start.X()) * normalX
+        + (center->Y() - line.start.Y()) * normalY;
+    const double side = signedDistance < 0.0 ? -1.0 : 1.0;
+    const gp_Pnt updatedCenter(
+        projected->X() + side * normalX * radius,
+        projected->Y() + side * normalY * radius,
+        center->Z()
+    );
+    if (center->Distance(updatedCenter) <= Precision::Confusion()) {
+        return false;
+    }
+    *center = updatedCenter;
+    return true;
+}
+
+bool equalConstraintSupportedPair(
+    const EqualConstraintRef& constraint,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchArc>& arcs
+)
+{
+    const bool firstLine = segmentIndexForGeometry(segments, constraint.firstGeometryIndex).has_value();
+    const bool secondLine
+        = segmentIndexForGeometry(segments, constraint.secondGeometryIndex).has_value();
+    if (firstLine || secondLine) {
+        return firstLine && secondLine;
+    }
+
+    const bool firstRound = circleIndexForGeometry(circles, constraint.firstGeometryIndex).has_value()
+        || arcIndexForGeometry(arcs, constraint.firstGeometryIndex).has_value();
+    const bool secondRound = circleIndexForGeometry(circles, constraint.secondGeometryIndex).has_value()
+        || arcIndexForGeometry(arcs, constraint.secondGeometryIndex).has_value();
+    return firstRound && secondRound;
+}
+
+// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
+// ::Sketch::addConstraint(), case Equal routes to "addEqualConstraint(constraint->First,
+// constraint->Second)". That method calls "GCSsys.addConstraintEqualLength(l1, l2, tag)" for two
+// Lines and "GCSsys.addConstraintEqualRadius" for Circle/Arc combinations.
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectConstraints.cpp
+// ::SketchObject::solve() writes "solvedSketch.extractGeometry()" back into "Geometry" when
+// "updateGeoAfterSolving" is true. cad-core mirrors only the request-local first slice here: keep
+// the first geometry fixed and update the second line length or round radius.
+bool applyEqualRelationSolverUpdate(
+    const EqualConstraintRef& constraint,
+    std::vector<SketchSegment>& segments,
+    std::vector<SketchCircle>& circles,
+    std::vector<SketchArc>& arcs
+)
+{
+    if (!equalConstraintSupportedPair(constraint, segments, circles, arcs)) {
+        return false;
+    }
+    const auto firstMeasure
+        = equalConstraintMeasure(constraint.firstGeometryIndex, segments, circles, arcs);
+    if (!firstMeasure || *firstMeasure <= Precision::Confusion()) {
+        return false;
+    }
+
+    if (const auto secondSegmentIndex
+        = segmentIndexForGeometry(segments, constraint.secondGeometryIndex)) {
+        SketchSegment& second = segments.at(*secondSegmentIndex);
+        const double dx = second.end.X() - second.start.X();
+        const double dy = second.end.Y() - second.start.Y();
+        const double length = std::hypot(dx, dy);
+        if (length <= Precision::Confusion()) {
+            return false;
+        }
+        const gp_Pnt updatedEnd(
+            second.start.X() + dx * (*firstMeasure / length),
+            second.start.Y() + dy * (*firstMeasure / length),
+            second.start.Z()
+        );
+        if (second.end.Distance(updatedEnd) <= Precision::Confusion()) {
+            return false;
+        }
+        second.end = updatedEnd;
+        return true;
+    }
+
+    if (const auto secondCircleIndex = circleIndexForGeometry(circles, constraint.secondGeometryIndex)) {
+        SketchCircle& second = circles.at(*secondCircleIndex);
+        if (std::abs(second.radius - *firstMeasure) <= Precision::Confusion()) {
+            return false;
+        }
+        second.radius = *firstMeasure;
+        return true;
+    }
+
+    if (const auto secondArcIndex = arcIndexForGeometry(arcs, constraint.secondGeometryIndex)) {
+        SketchArc& second = arcs.at(*secondArcIndex);
+        if (std::abs(second.radius - *firstMeasure) <= Precision::Confusion()) {
+            return false;
+        }
+        second.radius = *firstMeasure;
+        return true;
+    }
+
     return false;
 }
 
@@ -1159,12 +1650,19 @@ std::optional<double> dimensionConstraintValue(
         }
         else {
             const auto segmentIndex = segmentIndexForGeometry(segments, constraint.geometryIndex);
-            if (!segmentIndex) {
-                return std::nullopt;
+            if (segmentIndex) {
+                const SketchSegment& segment = segments.at(*segmentIndex);
+                first = segment.start;
+                second = segment.end;
             }
-            const SketchSegment& segment = segments.at(*segmentIndex);
-            first = segment.start;
-            second = segment.end;
+            else {
+                const auto arcIndex = arcIndexForGeometry(arcs, constraint.geometryIndex);
+                if (!arcIndex) {
+                    return std::nullopt;
+                }
+                const SketchArc& arc = arcs.at(*arcIndex);
+                return arc.radius * arcParameterSpan(arc);
+            }
         }
         if (!first || !second) {
             return std::nullopt;
@@ -1732,9 +2230,12 @@ bool equalConstraintSatisfied(
 )
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
-    // ::Sketch::addEqualConstraint(), for two lines calls "addConstraintEqualLength";
-    // for circles/arcs calls equal-radius constraints. cad-core verifies only already
-    // satisfied line-length and circle/arc-radius equality, without invoking the solver.
+    // ::Sketch::addEqualConstraint(), for two lines calls "addConstraintEqualLength"; for
+    // Circle/Arc combinations calls equal-radius constraints. Unsupported combinations such as
+    // Line + Circle must not pass just because their numeric measures match.
+    if (!equalConstraintSupportedPair(constraint, segments, circles, arcs)) {
+        return false;
+    }
     const auto first = equalConstraintMeasure(constraint.firstGeometryIndex, segments, circles, arcs);
     const auto second = equalConstraintMeasure(constraint.secondGeometryIndex, segments, circles, arcs);
     if (!first || !second) {
@@ -1900,6 +2401,198 @@ bool symmetricAroundLineSatisfied(const gp_Pnt& first, const gp_Pnt& second, con
         && std::abs(vx * dx + vy * dy) / length <= 1e-7;
 }
 
+gp_Pnt* mutableDirectConstraintPoint(
+    const ConstraintPointRef& point,
+    std::vector<SketchSegment>& segments,
+    std::vector<SketchCircle>& circles
+)
+{
+    switch (point.kind) {
+        case ConstraintPointKind::SegmentEndpoint:
+            return &endpointPoint(segments.at(point.index), point.start);
+        case ConstraintPointKind::CircleCenter:
+            return &circles.at(point.index).center;
+        case ConstraintPointKind::PointGeometry:
+        case ConstraintPointKind::EllipseCenter:
+        case ConstraintPointKind::ArcEndpoint:
+        case ConstraintPointKind::EllipseArcEndpoint:
+            return nullptr;
+    }
+    return nullptr;
+}
+
+std::optional<double> arcEndpointAngleForPoint(const SketchArc& arc, const gp_Pnt& target)
+{
+    const double dx = target.X() - arc.center.X();
+    const double dy = target.Y() - arc.center.Y();
+    const double radius = std::sqrt(dx * dx + dy * dy);
+    if (arc.radius <= Precision::Confusion() || radius <= Precision::Confusion()) {
+        return std::nullopt;
+    }
+    if (std::abs(radius - arc.radius) > 1e-7) {
+        return std::nullopt;
+    }
+    return std::atan2(dy, dx);
+}
+
+bool writeMutableConstraintPoint(
+    const ConstraintPointRef& point,
+    const gp_Pnt& target,
+    std::vector<SketchSegment>& segments,
+    std::vector<SketchCircle>& circles,
+    std::vector<SketchArc>& arcs
+)
+{
+    if (gp_Pnt* direct = mutableDirectConstraintPoint(point, segments, circles)) {
+        *direct = gp_Pnt(target.X(), target.Y(), direct->Z());
+        return true;
+    }
+
+    if (point.kind != ConstraintPointKind::ArcEndpoint) {
+        return false;
+    }
+
+    SketchArc& arc = arcs.at(point.index);
+    const auto angle = arcEndpointAngleForPoint(arc, target);
+    if (!angle) {
+        return false;
+    }
+
+    const double otherAngle = point.start ? arc.endAngle : arc.startAngle;
+    if (std::abs(*angle - otherAngle) <= Precision::Confusion()) {
+        return false;
+    }
+
+    double& angleToUpdate = point.start ? arc.startAngle : arc.endAngle;
+    if (std::abs(angleToUpdate - *angle) <= Precision::Confusion()) {
+        return false;
+    }
+    angleToUpdate = *angle;
+    return true;
+}
+
+// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
+// ::Sketch::addConstraint(), case Symmetric dispatches to
+// "addSymmetricConstraint(..., constraint->Third)" when "ThirdPos" is none.
+// ::Sketch::addSymmetricConstraint(int,int,int,int,int) requires "Geoms[geoId3].type == Line" and
+// calls "GCSsys.addConstraintP2PSymmetric(p1, p2, l, tag)" for point-point symmetry about that
+// line. ::SketchObject::solve() writes "solvedSketch.extractGeometry()" back into "Geometry" when
+// "updateGeoAfterSolving" is true; ::Sketch::updateArcOfCircle() then writes "setRange(*myArc.startAngle,
+// *myArc.endAngle, ...)" for Arc endpoints. cad-core mirrors only this request-local first slice:
+// keep the first point and symmetry line fixed, and update the second directly mutable point
+// reference or ArcOfCircle endpoint parameter.
+bool applySymmetricLineRelationSolverUpdate(
+    const SymmetricConstraintRef& constraint,
+    const std::vector<SketchSegment>& readOnlySegments,
+    std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
+{
+    if (!constraint.axisSegmentIndex || constraint.centerPoint) {
+        return false;
+    }
+    const auto first = constraintPointValue(
+        constraint.first,
+        readOnlySegments,
+        points,
+        circles,
+        ellipses,
+        arcs,
+        ellipseArcs
+    );
+    if (!first) {
+        return false;
+    }
+
+    const auto secondCurrent
+        = constraintPointValue(constraint.second, segments, points, circles, ellipses, arcs, ellipseArcs);
+    if (!secondCurrent) {
+        return false;
+    }
+
+    const SketchSegment& axis = readOnlySegments.at(*constraint.axisSegmentIndex);
+    const auto projected = projectPointToSegmentLine(*first, axis);
+    if (!projected) {
+        return false;
+    }
+    const gp_Pnt mirrored(
+        2.0 * projected->X() - first->X(),
+        2.0 * projected->Y() - first->Y(),
+        secondCurrent->Z()
+    );
+    if (secondCurrent->Distance(mirrored) <= Precision::Confusion()) {
+        return false;
+    }
+    return writeMutableConstraintPoint(constraint.second, mirrored, segments, circles, arcs);
+}
+
+// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
+// ::Sketch::addConstraint(), case Symmetric dispatches to
+// "addSymmetricConstraint(..., constraint->Third, constraint->ThirdPos)" when "ThirdPos" is not
+// none. ::Sketch::addSymmetricConstraint(int,int,int,int,int,PointPos) calls
+// "GCSsys.addConstraintP2PSymmetric(p1, p2, p, tag)" for point-point symmetry about a center point.
+// ::SketchObject::solve() writes "solvedSketch.extractGeometry()" back into "Geometry" when
+// "updateGeoAfterSolving" is true; ::Sketch::updateArcOfCircle() then writes "setRange(*myArc.startAngle,
+// *myArc.endAngle, ...)" for Arc endpoints. cad-core mirrors only this request-local first slice:
+// keep the first and center points fixed, and update the second directly mutable point reference or
+// ArcOfCircle endpoint parameter.
+bool applySymmetricCenterRelationSolverUpdate(
+    const SymmetricConstraintRef& constraint,
+    const std::vector<SketchSegment>& readOnlySegments,
+    std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs
+)
+{
+    if (constraint.axisSegmentIndex || !constraint.centerPoint) {
+        return false;
+    }
+    const auto first = constraintPointValue(
+        constraint.first,
+        readOnlySegments,
+        points,
+        circles,
+        ellipses,
+        arcs,
+        ellipseArcs
+    );
+    const auto center = constraintPointValue(
+        *constraint.centerPoint,
+        readOnlySegments,
+        points,
+        circles,
+        ellipses,
+        arcs,
+        ellipseArcs
+    );
+    if (!first || !center) {
+        return false;
+    }
+
+    const auto secondCurrent
+        = constraintPointValue(constraint.second, segments, points, circles, ellipses, arcs, ellipseArcs);
+    if (!secondCurrent) {
+        return false;
+    }
+
+    const gp_Pnt mirrored(
+        2.0 * center->X() - first->X(),
+        2.0 * center->Y() - first->Y(),
+        secondCurrent->Z()
+    );
+    if (secondCurrent->Distance(mirrored) <= Precision::Confusion()) {
+        return false;
+    }
+    return writeMutableConstraintPoint(constraint.second, mirrored, segments, circles, arcs);
+}
+
 bool perpendicularPointLineConstraintSatisfied(
     const PerpendicularPointLineConstraintRef& constraint,
     const std::vector<SketchSegment>& segments,
@@ -1999,7 +2692,7 @@ bool symmetricConstraintSatisfied(
 }
 
 
-} // namespace
+}  // namespace
 
 std::optional<std::string> readStringField(const nlohmann::json& value, const std::string& field)
 {
@@ -2180,6 +2873,96 @@ bool isDimensionSolverConstraint(SketchConstraintKind kind)
         || kind == SketchConstraintKind::Diameter;
 }
 
+bool hasRequestLocalSolverGeometry(
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs,
+    const std::vector<SketchBSpline>& bsplines
+)
+{
+    return !segments.empty() || !points.empty() || !circles.empty() || !ellipses.empty()
+        || !arcs.empty() || !ellipseArcs.empty() || !bsplines.empty();
+}
+
+std::size_t requestLocalSolverParameterCount(
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchArc>& arcs
+)
+{
+    return segments.size() * 4U + points.size() * 2U + circles.size() * 3U + arcs.size() * 5U;
+}
+
+std::optional<int> requestLocalSolverDofFirstSlice(
+    const AppliedSketchConstraints& applied,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs,
+    const std::vector<SketchBSpline>& bsplines
+)
+{
+    if (!ellipses.empty() || !ellipseArcs.empty() || !bsplines.empty()) {
+        return std::nullopt;
+    }
+    if (applied.coincident > 0 || applied.relation > 0 || applied.block > 0) {
+        return std::nullopt;
+    }
+    const std::size_t parameters = requestLocalSolverParameterCount(segments, points, circles, arcs);
+    if (parameters == 0U) {
+        return std::nullopt;
+    }
+    const std::size_t scalarConstraints = applied.orientation + applied.dimension;
+    if (scalarConstraints > parameters) {
+        return std::nullopt;
+    }
+    return static_cast<int>(parameters - scalarConstraints);
+}
+
+void applyRequestLocalSolverDofFirstSlice(
+    AppliedSketchConstraints& applied,
+    const std::vector<SketchSegment>& segments,
+    const std::vector<SketchPoint>& points,
+    const std::vector<SketchCircle>& circles,
+    const std::vector<SketchEllipse>& ellipses,
+    const std::vector<SketchArc>& arcs,
+    const std::vector<SketchEllipseArc>& ellipseArcs,
+    const std::vector<SketchBSpline>& bsplines
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/
+    // SketchObjectConstraints.cpp::SketchObject::solve(), setUpSketch() writes "lastDoF";
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.h documents
+    // "positive degrees of freedom correspond to an under-constrained sketch".
+    // This is deliberately only a request-local first slice: it counts the scalar parameters and
+    // scalar constraints cad-core already migrated, and does not claim full GCS rank,
+    // dependent-parameter, relation, Block, Coincident, ellipse or BSpline DoF semantics.
+    const auto dof = requestLocalSolverDofFirstSlice(
+        applied,
+        segments,
+        points,
+        circles,
+        ellipses,
+        arcs,
+        ellipseArcs,
+        bsplines
+    );
+    if (!dof) {
+        return;
+    }
+    applied.solverDegreesOfFreedom = *dof;
+    applied.solverDofStatus = "request_local_first_slice";
+    if (*dof > 0 && applied.solver.state == SketchSolverState::Accepted) {
+        applied.solver.state = SketchSolverState::Underconstrained;
+    }
+}
+
 SketchSolverSummary analyzeSketchSolverDiagnostics(const nlohmann::json& constraints)
 {
     SketchSolverSummary summary;
@@ -2192,6 +2975,8 @@ SketchSolverSummary analyzeSketchSolverDiagnostics(const nlohmann::json& constra
     std::map<std::string, int> verticalByTarget;
     std::map<std::string, std::pair<int, double>> datumByTarget;
     std::map<std::string, std::pair<int, double>> angleByTarget;
+    std::map<std::string, std::vector<int>> blockIndexesByTarget;
+    std::map<std::string, std::vector<int>> blockAffectedConstraintIndexesByTarget;
 
     for (std::size_t offset = 0; offset < constraints.size(); ++offset) {
         const auto& constraint = constraints[offset];
@@ -2200,14 +2985,22 @@ SketchSolverSummary analyzeSketchSolverDiagnostics(const nlohmann::json& constra
         }
         const int constraintIndex = static_cast<int>(offset + 1U);
         const SketchConstraintKind kind = readSketchConstraintKind(constraint);
+        if (const auto blockTarget = blockPartialRedundancyFirstSliceTargetKey(constraint, kind)) {
+            if (kind == SketchConstraintKind::Block) {
+                blockIndexesByTarget[*blockTarget].push_back(constraintIndex);
+            }
+            else {
+                blockAffectedConstraintIndexesByTarget[*blockTarget].push_back(constraintIndex);
+            }
+        }
 
         if (kind == SketchConstraintKind::Horizontal || kind == SketchConstraintKind::Vertical) {
             const auto target = orientationSolverTargetKey(constraint);
             if (!target) {
                 continue;
             }
-            const std::string exactKey
-                = (kind == SketchConstraintKind::Horizontal ? "H:" : "V:") + *target;
+            const std::string exactKey = (kind == SketchConstraintKind::Horizontal ? "H:" : "V:")
+                + *target;
             if (const auto exact = exactConstraints.find(exactKey); exact != exactConstraints.end()) {
                 addUniqueConstraintIndex(summary.redundantConstraints, exact->second);
                 addUniqueConstraintIndex(summary.redundantConstraints, constraintIndex);
@@ -2216,11 +3009,14 @@ SketchSolverSummary analyzeSketchSolverDiagnostics(const nlohmann::json& constra
                 exactConstraints[exactKey] = constraintIndex;
             }
 
-            std::map<std::string, int>& sameKindMap
-                = kind == SketchConstraintKind::Horizontal ? horizontalByTarget : verticalByTarget;
-            std::map<std::string, int>& oppositeKindMap
-                = kind == SketchConstraintKind::Horizontal ? verticalByTarget : horizontalByTarget;
-            if (const auto opposite = oppositeKindMap.find(*target); opposite != oppositeKindMap.end()) {
+            std::map<std::string, int>& sameKindMap = kind == SketchConstraintKind::Horizontal
+                ? horizontalByTarget
+                : verticalByTarget;
+            std::map<std::string, int>& oppositeKindMap = kind == SketchConstraintKind::Horizontal
+                ? verticalByTarget
+                : horizontalByTarget;
+            if (const auto opposite = oppositeKindMap.find(*target);
+                opposite != oppositeKindMap.end()) {
                 addUniqueConstraintIndex(summary.conflictingConstraints, opposite->second);
                 addUniqueConstraintIndex(summary.conflictingConstraints, constraintIndex);
             }
@@ -2236,8 +3032,8 @@ SketchSolverSummary analyzeSketchSolverDiagnostics(const nlohmann::json& constra
             if (!target || !value) {
                 continue;
             }
-            const std::string familyKey
-                = "datum:" + std::to_string(static_cast<int>(kind)) + ":" + *target;
+            const std::string familyKey = "datum:" + std::to_string(static_cast<int>(kind)) + ":"
+                + *target;
             if (const auto previous = datumByTarget.find(familyKey); previous != datumByTarget.end()) {
                 if (!sameConstraintValue(previous->second.second, *value)) {
                     addUniqueConstraintIndex(summary.conflictingConstraints, previous->second.first);
@@ -2285,6 +3081,25 @@ SketchSolverSummary analyzeSketchSolverDiagnostics(const nlohmann::json& constra
         }
     }
 
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
+    // ::Sketch::analyseBlockedGeometry(), "doesBlockAffectOtherConstraints" is true when a Block
+    // target also has another driving constraint;
+    // Sketch.h::analyseBlockedConstraintDependentParameters() says "some combinations lead to
+    // partially redundant constraints". cad-core reports this request-local first slice as a
+    // warning and leaves full QR dependent-parameter grouping to full_solver_dof.
+    for (const auto& [target, blockIndexes] : blockIndexesByTarget) {
+        const auto affected = blockAffectedConstraintIndexesByTarget.find(target);
+        if (affected == blockAffectedConstraintIndexesByTarget.end()) {
+            continue;
+        }
+        for (const int index : blockIndexes) {
+            addUniqueConstraintIndex(summary.partiallyRedundantConstraints, index);
+        }
+        for (const int index : affected->second) {
+            addUniqueConstraintIndex(summary.partiallyRedundantConstraints, index);
+        }
+    }
+
     if (!summary.conflictingConstraints.empty()) {
         summary.state = SketchSolverState::Conflict;
     }
@@ -2300,15 +3115,37 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
     runtime::ComputeContext& context,
     std::vector<SketchSegment>& segments,
     const std::vector<SketchPoint>& points,
-    const std::vector<SketchCircle>& circles,
+    std::vector<SketchCircle>& circles,
     const std::vector<SketchEllipse>& ellipses,
-    const std::vector<SketchArc>& arcs,
+    std::vector<SketchArc>& arcs,
     const std::vector<SketchEllipseArc>& ellipseArcs,
     const std::vector<SketchBSpline>& bsplines
 )
 {
     if (constraints.is_null()) {
-        return AppliedSketchConstraints {};
+        AppliedSketchConstraints applied;
+        if (
+            hasRequestLocalSolverGeometry(segments, points, circles, ellipses, arcs, ellipseArcs, bsplines)
+        ) {
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/
+            // SketchObjectConstraints.cpp::SketchObject::solve(), setUpSketch() updates
+            // "lastDoF"; /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/
+            // SketchObject.cpp::SketchObject::execute() still calls buildShape() when err == 0.
+            // cad-core does not claim a full DoF count here; for request-local geometry with no
+            // solver constraints, it only exposes the non-blocking underconstrained state.
+            applied.solver.state = SketchSolverState::Underconstrained;
+        }
+        applyRequestLocalSolverDofFirstSlice(
+            applied,
+            segments,
+            points,
+            circles,
+            ellipses,
+            arcs,
+            ellipseArcs,
+            bsplines
+        );
+        return applied;
     }
     if (!constraints.is_array()) {
         runtime::addDiagnostic(
@@ -2324,6 +3161,7 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
 
     UnionFind endpoints(segments.size() * 2U);
     AppliedSketchConstraints applied;
+    bool hasCoincidentEndpointMerges = false;
     std::vector<OrientationConstraintRef> orientationConstraints;
     std::vector<DimensionConstraintRef> dimensionConstraints;
     std::vector<LinePairConstraintRef> linePairConstraints;
@@ -2337,6 +3175,28 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
     std::vector<PointOnObjectConstraintRef> pointOnObjectConstraints;
     std::vector<SymmetricConstraintRef> symmetricConstraints;
     std::vector<BlockConstraintRef> blockConstraints;
+    if (
+        constraints.empty()
+        && hasRequestLocalSolverGeometry(segments, points, circles, ellipses, arcs, ellipseArcs, bsplines)
+    ) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/
+        // SketchObjectConstraints.cpp::SketchObject::solve(), setUpSketch() updates "lastDoF"
+        // before solve(); SketchObject.cpp::SketchObject::execute() proceeds to buildShape()
+        // unless solve() returns an error. This request-local subset has geometry but no solver
+        // constraints, so it is underconstrained metadata, not a profile-blocking diagnostic.
+        applied.solver.state = SketchSolverState::Underconstrained;
+        applyRequestLocalSolverDofFirstSlice(
+            applied,
+            segments,
+            points,
+            circles,
+            ellipses,
+            arcs,
+            ellipseArcs,
+            bsplines
+        );
+        return applied;
+    }
     applied.solver = analyzeMalformedSketchConstraints(constraints, segments, circles, arcs);
     if (applied.solver.state == SketchSolverState::Malformed) {
         runtime::addDiagnostic(
@@ -2382,6 +3242,7 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
             }
 
             endpoints.unite(endpointId(*first), endpointId(*second));
+            hasCoincidentEndpointMerges = true;
             ++applied.coincident;
             continue;
         }
@@ -2692,9 +3553,10 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
             // value) / addDiameterConstraint(..., double* value) attach a datum to the solver
             // constraint. /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.cpp
             // ::Sketch::addDiameterConstraint() calls "addConstraintCircleDiameter" /
-            // "addConstraintArcDiameter". This P5 subset verifies datums that are already
-            // satisfied after Coincident endpoint merging; it does not run the solver or move
-            // geometry to satisfy a datum.
+            // "addConstraintArcDiameter"; ::Sketch::addDistanceConstraint(int geoId, ...)
+            // calls "GCSsys.addConstraintP2PDistance" for line length. cad-core first accepts
+            // already-satisfied datums, then applies only the explicitly covered request-local
+            // geometry update slices without claiming a full GCS solver session.
             const auto dimension = readDimensionConstraintRef(constraint, kind, segments);
             if (!dimension) {
                 runtime::addDiagnostic(
@@ -2762,18 +3624,71 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
         );
         return applied;
     }
+    if (!applied.solver.partiallyRedundantConstraints.empty()) {
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "warning",
+            "sketch_solver_partially_redundant",
+            "Sketch has partially redundant constraints",
+            object.name,
+            "Constraints",
+            "solver",
+            constraintIndexTarget(applied.solver.partiallyRedundantConstraints)
+        );
+    }
 
     applied.block = blockConstraints.size();
 
-    if (endpoints.parent.empty() && !orientationConstraints.empty()) {
+    if (!hasCoincidentEndpointMerges) {
+        for (const auto& orientation : orientationConstraints) {
+            if (!orientationConstraintSatisfied(orientation, segments)) {
+                if (!applyWholeLineOrientationSolverUpdate(orientation, segments)) {
+                    runtime::addDiagnostic(
+                        context.diagnostics,
+                        "error",
+                        "unsupported_property",
+                        "Horizontal/Vertical constraint requires solver movement beyond the "
+                        "current C3-M3 whole-line orientation subset",
+                        object.name,
+                        "Constraints"
+                    );
+                    return std::nullopt;
+                }
+                ++applied.solverGeometryUpdates;
+                ++applied.solverOrientationGeometryUpdates;
+            }
+            ++applied.orientation;
+        }
+    }
+    else {
+        std::vector<std::optional<gp_Pnt>> mergedPoints(segments.size() * 2U);
+        for (std::size_t index = 0; index < segments.size(); ++index) {
+            for (bool start : {true, false}) {
+                const EndpointRef endpoint {index, start};
+                const std::size_t root = endpoints.find(endpointId(endpoint));
+                if (!mergedPoints[root]) {
+                    mergedPoints[root] = endpointPoint(segments[index], start);
+                }
+            }
+        }
+        for (std::size_t index = 0; index < segments.size(); ++index) {
+            for (bool start : {true, false}) {
+                const EndpointRef endpoint {index, start};
+                const std::size_t root = endpoints.find(endpointId(endpoint));
+                if (mergedPoints[root]) {
+                    endpointPoint(segments[index], start) = *mergedPoints[root];
+                }
+            }
+        }
+
         for (const auto& orientation : orientationConstraints) {
             if (!orientationConstraintSatisfied(orientation, segments)) {
                 runtime::addDiagnostic(
                     context.diagnostics,
                     "error",
                     "unsupported_property",
-                    "Horizontal/Vertical constraint requires solver movement in the current P5 "
-                    "subset",
+                    "Horizontal/Vertical constraint with endpoint coupling requires solver "
+                    "movement beyond the current C3-M3 whole-line orientation subset",
                     object.name,
                     "Constraints"
                 );
@@ -2781,72 +3696,73 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
             }
             ++applied.orientation;
         }
-        return applied;
-    }
-
-    std::vector<std::optional<gp_Pnt>> mergedPoints(segments.size() * 2U);
-    for (std::size_t index = 0; index < segments.size(); ++index) {
-        for (bool start : {true, false}) {
-            const EndpointRef endpoint {index, start};
-            const std::size_t root = endpoints.find(endpointId(endpoint));
-            if (!mergedPoints[root]) {
-                mergedPoints[root] = endpointPoint(segments[index], start);
-            }
-        }
-    }
-    for (std::size_t index = 0; index < segments.size(); ++index) {
-        for (bool start : {true, false}) {
-            const EndpointRef endpoint {index, start};
-            const std::size_t root = endpoints.find(endpointId(endpoint));
-            if (mergedPoints[root]) {
-                endpointPoint(segments[index], start) = *mergedPoints[root];
-            }
-        }
-    }
-
-    for (const auto& orientation : orientationConstraints) {
-        if (!orientationConstraintSatisfied(orientation, segments)) {
-            runtime::addDiagnostic(
-                context.diagnostics,
-                "error",
-                "unsupported_property",
-                "Horizontal/Vertical constraint requires solver movement in the current P5 subset",
-                object.name,
-                "Constraints"
-            );
-            return std::nullopt;
-        }
-        ++applied.orientation;
     }
 
     for (const auto& dimension : dimensionConstraints) {
         if (!dimensionConstraintSatisfied(dimension, segments, circles, arcs)) {
-            runtime::addDiagnostic(
-                context.diagnostics,
-                "error",
-                "unsupported_property",
-                "Distance/Radius/Diameter constraint requires solver movement in the current P5 "
-                "subset",
-                object.name,
-                "Constraints"
-            );
-            return std::nullopt;
+            bool coordinateUpdate = false;
+            bool lineLengthUpdate = false;
+            bool arcLengthUpdate = false;
+            bool radiusUpdate = false;
+            if (!hasCoincidentEndpointMerges) {
+                coordinateUpdate = applyEndpointCoordinateDimensionSolverUpdate(dimension, segments);
+                if (!coordinateUpdate) {
+                    lineLengthUpdate = applyLineLengthDimensionSolverUpdate(dimension, segments);
+                }
+                if (!coordinateUpdate && !lineLengthUpdate) {
+                    arcLengthUpdate = applyArcLengthDimensionSolverUpdate(dimension, arcs);
+                }
+                if (!coordinateUpdate && !lineLengthUpdate && !arcLengthUpdate) {
+                    radiusUpdate = applyCircleRadiusDimensionSolverUpdate(dimension, circles);
+                }
+            }
+            if (!coordinateUpdate && !lineLengthUpdate && !arcLengthUpdate && !radiusUpdate) {
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_property",
+                    "Distance/Radius/Diameter constraint requires solver movement beyond the "
+                    "current C3-M3 request-local dimension subset",
+                    object.name,
+                    "Constraints"
+                );
+                return std::nullopt;
+            }
+            ++applied.solverGeometryUpdates;
+            if (coordinateUpdate) {
+                ++applied.solverCoordinateGeometryUpdates;
+            }
+            else if (radiusUpdate) {
+                ++applied.solverRadiusGeometryUpdates;
+            }
+            else if (arcLengthUpdate) {
+                ++applied.solverArcGeometryUpdates;
+            }
+            else if (lineLengthUpdate) {
+                ++applied.solverLengthGeometryUpdates;
+            }
         }
         ++applied.dimension;
     }
 
     for (const auto& relation : linePairConstraints) {
         if (!linePairConstraintSatisfied(relation, segments)) {
-            runtime::addDiagnostic(
-                context.diagnostics,
-                "error",
-                "unsupported_property",
-                "Parallel/Perpendicular constraint requires solver movement in the current P5 "
-                "subset",
-                object.name,
-                "Constraints"
-            );
-            return std::nullopt;
+            const bool relationUpdate = applyLinePairRelationSolverUpdate(relation, segments);
+            if (!relationUpdate) {
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_property",
+                    "Parallel/Perpendicular constraint requires solver movement in the current P5 "
+                    "subset",
+                    object.name,
+                    "Constraints"
+                );
+                return std::nullopt;
+            }
+            ++applied.solverGeometryUpdates;
+            ++applied.solverRelationGeometryUpdates;
+            ++applied.solverLinePairRelationGeometryUpdates;
         }
         ++applied.relation;
     }
@@ -2855,15 +3771,25 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
         if (
             !tangentConstraintSatisfied(tangent, segments, points, circles, ellipses, arcs, ellipseArcs)
         ) {
-            runtime::addDiagnostic(
-                context.diagnostics,
-                "error",
-                "unsupported_property",
-                "Tangent constraint requires solver movement in the current P5 subset",
-                object.name,
-                "Constraints"
-            );
-            return std::nullopt;
+            bool relationUpdate = false;
+            if (!hasCoincidentEndpointMerges) {
+                relationUpdate
+                    = applyTangentLineRoundRelationSolverUpdate(tangent, segments, circles, arcs);
+            }
+            if (!relationUpdate) {
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_property",
+                    "Tangent constraint requires solver movement in the current P5 subset",
+                    object.name,
+                    "Constraints"
+                );
+                return std::nullopt;
+            }
+            ++applied.solverGeometryUpdates;
+            ++applied.solverRelationGeometryUpdates;
+            ++applied.solverTangentRelationGeometryUpdates;
         }
         ++applied.relation;
     }
@@ -2923,16 +3849,27 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
 
     for (const auto& perpendicular : perpendicularMidpointLineConstraints) {
         if (!perpendicularMidpointLineConstraintSatisfied(perpendicular, segments, circles, arcs)) {
-            runtime::addDiagnostic(
-                context.diagnostics,
-                "error",
-                "unsupported_property",
-                "Perpendicular line-circle/arc midpoint constraint requires solver movement in the "
-                "current P5 subset",
-                object.name,
-                "Constraints"
+            const bool relationUpdate = applyPerpendicularMidpointLineRelationSolverUpdate(
+                perpendicular,
+                segments,
+                circles,
+                arcs
             );
-            return std::nullopt;
+            if (!relationUpdate) {
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_property",
+                    "Perpendicular line-circle/arc midpoint constraint requires solver movement in "
+                    "the current P5 subset",
+                    object.name,
+                    "Constraints"
+                );
+                return std::nullopt;
+            }
+            ++applied.solverGeometryUpdates;
+            ++applied.solverRelationGeometryUpdates;
+            ++applied.solverCurveRelationGeometryUpdates;
         }
         ++applied.relation;
     }
@@ -2941,15 +3878,20 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
         if (
             !pointOnObjectConstraintSatisfied(pointOnObject, segments, points, circles, ellipses, arcs, ellipseArcs)
         ) {
-            runtime::addDiagnostic(
-                context.diagnostics,
-                "error",
-                "unsupported_property",
-                "PointOnObject constraint requires solver movement in the current P5 subset",
-                object.name,
-                "Constraints"
-            );
-            return std::nullopt;
+            const bool relationUpdate = applyPointOnLineRelationSolverUpdate(pointOnObject, segments);
+            if (!relationUpdate) {
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_property",
+                    "PointOnObject constraint requires solver movement in the current P5 subset",
+                    object.name,
+                    "Constraints"
+                );
+                return std::nullopt;
+            }
+            ++applied.solverGeometryUpdates;
+            ++applied.solverRelationGeometryUpdates;
         }
         ++applied.relation;
     }
@@ -2958,15 +3900,55 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
         if (
             !symmetricConstraintSatisfied(symmetric, segments, points, circles, ellipses, arcs, ellipseArcs)
         ) {
-            runtime::addDiagnostic(
-                context.diagnostics,
-                "error",
-                "unsupported_property",
-                "Symmetric constraint requires solver movement in the current P5 subset",
-                object.name,
-                "Constraints"
-            );
-            return std::nullopt;
+            bool relationUpdate = false;
+            bool lineRelationUpdate = false;
+            bool centerRelationUpdate = false;
+            if (!hasCoincidentEndpointMerges) {
+                relationUpdate = applySymmetricLineRelationSolverUpdate(
+                    symmetric,
+                    segments,
+                    segments,
+                    points,
+                    circles,
+                    ellipses,
+                    arcs,
+                    ellipseArcs
+                );
+                lineRelationUpdate = relationUpdate;
+                if (!relationUpdate) {
+                    relationUpdate = applySymmetricCenterRelationSolverUpdate(
+                        symmetric,
+                        segments,
+                        segments,
+                        points,
+                        circles,
+                        ellipses,
+                        arcs,
+                        ellipseArcs
+                    );
+                    centerRelationUpdate = relationUpdate;
+                }
+            }
+            if (!relationUpdate) {
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_property",
+                    "Symmetric constraint requires solver movement in the current P5 subset",
+                    object.name,
+                    "Constraints"
+                );
+                return std::nullopt;
+            }
+            ++applied.solverGeometryUpdates;
+            ++applied.solverRelationGeometryUpdates;
+            ++applied.solverSymmetricRelationGeometryUpdates;
+            if (lineRelationUpdate) {
+                ++applied.solverSymmetricLineRelationGeometryUpdates;
+            }
+            if (centerRelationUpdate) {
+                ++applied.solverSymmetricCenterRelationGeometryUpdates;
+            }
         }
         ++applied.relation;
     }
@@ -3005,25 +3987,47 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
 
     for (const auto& equal : equalConstraints) {
         if (!equalConstraintSatisfied(equal, segments, circles, arcs)) {
-            runtime::addDiagnostic(
-                context.diagnostics,
-                "error",
-                "unsupported_property",
-                "Equal constraint requires solver movement in the current P5 subset",
-                object.name,
-                "Constraints"
-            );
-            return std::nullopt;
+            bool relationUpdate = false;
+            if (!hasCoincidentEndpointMerges) {
+                relationUpdate = applyEqualRelationSolverUpdate(equal, segments, circles, arcs);
+            }
+            if (!relationUpdate) {
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_property",
+                    "Equal constraint requires solver movement in the current P5 subset",
+                    object.name,
+                    "Constraints"
+                );
+                return std::nullopt;
+            }
+            ++applied.solverGeometryUpdates;
+            ++applied.solverRelationGeometryUpdates;
+            ++applied.solverEqualRelationGeometryUpdates;
         }
         ++applied.relation;
     }
 
+    applyRequestLocalSolverDofFirstSlice(
+        applied,
+        segments,
+        points,
+        circles,
+        ellipses,
+        arcs,
+        ellipseArcs,
+        bsplines
+    );
     return applied;
 }
 
 
 std::string solverStateName(SketchSolverState state)
 {
+    if (state == SketchSolverState::Underconstrained) {
+        return "underconstrained";
+    }
     if (state == SketchSolverState::Malformed) {
         return "malformed";
     }
@@ -3034,6 +4038,101 @@ std::string solverStateName(SketchSolverState state)
         return "redundant";
     }
     return "accepted";
+}
+
+std::string solverGeometryUpdateStatus(const AppliedSketchConstraints& applied)
+{
+    if (applied.solverGeometryUpdates == 0) {
+        return "none";
+    }
+    if (applied.solverOrientationGeometryUpdates > 0
+        && (applied.solverCoordinateGeometryUpdates > 0 || applied.solverRadiusGeometryUpdates > 0
+            || applied.solverLengthGeometryUpdates > 0 || applied.solverArcGeometryUpdates > 0
+            || applied.solverRelationGeometryUpdates > 0)) {
+        return "request_local_solver_geometry_first_slices";
+    }
+    if (applied.solverCoordinateGeometryUpdates > 0
+        && (applied.solverRadiusGeometryUpdates > 0 || applied.solverLengthGeometryUpdates > 0
+            || applied.solverArcGeometryUpdates > 0 || applied.solverRelationGeometryUpdates > 0)) {
+        return "request_local_solver_geometry_first_slices";
+    }
+    if (applied.solverRadiusGeometryUpdates > 0
+        && (applied.solverLengthGeometryUpdates > 0 || applied.solverArcGeometryUpdates > 0
+            || applied.solverRelationGeometryUpdates > 0)) {
+        return "request_local_solver_geometry_first_slices";
+    }
+    if (applied.solverLengthGeometryUpdates > 0
+        && (applied.solverArcGeometryUpdates > 0 || applied.solverRelationGeometryUpdates > 0)) {
+        return "request_local_solver_geometry_first_slices";
+    }
+    if (applied.solverArcGeometryUpdates > 0 && applied.solverRelationGeometryUpdates > 0) {
+        return "request_local_solver_geometry_first_slices";
+    }
+    if (applied.solverLinePairRelationGeometryUpdates > 0
+        && applied.solverRelationGeometryUpdates > applied.solverLinePairRelationGeometryUpdates) {
+        return "request_local_solver_geometry_first_slices";
+    }
+    if (applied.solverCurveRelationGeometryUpdates > 0
+        && applied.solverRelationGeometryUpdates > applied.solverCurveRelationGeometryUpdates) {
+        return "request_local_solver_geometry_first_slices";
+    }
+    if (applied.solverEqualRelationGeometryUpdates > 0
+        && applied.solverRelationGeometryUpdates > applied.solverEqualRelationGeometryUpdates) {
+        return "request_local_solver_geometry_first_slices";
+    }
+    if (applied.solverTangentRelationGeometryUpdates > 0
+        && applied.solverRelationGeometryUpdates > applied.solverTangentRelationGeometryUpdates) {
+        return "request_local_solver_geometry_first_slices";
+    }
+    if (applied.solverSymmetricRelationGeometryUpdates > 0
+        && applied.solverRelationGeometryUpdates > applied.solverSymmetricRelationGeometryUpdates) {
+        return "request_local_solver_geometry_first_slices";
+    }
+    if (applied.solverLinePairRelationGeometryUpdates > 0) {
+        return "line_pair_relation_first_slice";
+    }
+    if (applied.solverCurveRelationGeometryUpdates > 0) {
+        return "perpendicular_curve_midpoint_relation_first_slice";
+    }
+    if (applied.solverEqualRelationGeometryUpdates > 0) {
+        return "equal_relation_first_slice";
+    }
+    if (applied.solverTangentRelationGeometryUpdates > 0) {
+        return "tangent_line_round_relation_first_slice";
+    }
+    if (applied.solverSymmetricLineRelationGeometryUpdates > 0
+        && applied.solverSymmetricCenterRelationGeometryUpdates > 0) {
+        return "request_local_solver_geometry_first_slices";
+    }
+    if (applied.solverSymmetricCenterRelationGeometryUpdates > 0
+        && applied.solverSymmetricRelationGeometryUpdates
+            == applied.solverSymmetricCenterRelationGeometryUpdates) {
+        return "symmetric_center_point_relation_first_slice";
+    }
+    if (applied.solverSymmetricLineRelationGeometryUpdates > 0
+        && applied.solverSymmetricRelationGeometryUpdates
+            == applied.solverSymmetricLineRelationGeometryUpdates) {
+        return "symmetric_line_axis_relation_first_slice";
+    }
+    if (applied.solverSymmetricRelationGeometryUpdates > 0) {
+        return "request_local_solver_geometry_first_slices";
+    }
+    if (applied.solverRelationGeometryUpdates > 0) {
+        return "point_on_object_line_first_slice";
+    }
+    if (applied.solverArcGeometryUpdates > 0) {
+        return "arc_length_first_slice";
+    }
+    if (applied.solverLengthGeometryUpdates > 0) {
+        return "line_length_first_slice";
+    }
+    if (applied.solverRadiusGeometryUpdates > 0) {
+        return "circle_radius_diameter_first_slice";
+    }
+    if (applied.solverCoordinateGeometryUpdates > 0) {
+        return "endpoint_coordinate_first_slice";
+    }
+    return "whole_line_orientation_first_slice";
 }
 
 nlohmann::json constraintIndexArray(const std::vector<int>& indexes)
@@ -3060,8 +4159,32 @@ nlohmann::json sketchSolverFailureObject(const AppliedSketchConstraints& applied
         {"profile_ready", false},
         {"solver_state", solverStateName(applied.solver.state)},
         {"solver_malformed_constraints", constraintIndexArray(applied.solver.malformedConstraints)},
-        {"solver_conflicting_constraints", constraintIndexArray(applied.solver.conflictingConstraints)},
+        {"solver_conflicting_constraints",
+         constraintIndexArray(applied.solver.conflictingConstraints)},
         {"solver_redundant_constraints", constraintIndexArray(applied.solver.redundantConstraints)},
+        {"solver_partially_redundant_constraints",
+         constraintIndexArray(applied.solver.partiallyRedundantConstraints)},
+        {"solver_geometry_updates", applied.solverGeometryUpdates},
+        {"solver_orientation_geometry_updates", applied.solverOrientationGeometryUpdates},
+        {"solver_coordinate_geometry_updates", applied.solverCoordinateGeometryUpdates},
+        {"solver_radius_geometry_updates", applied.solverRadiusGeometryUpdates},
+        {"solver_length_geometry_updates", applied.solverLengthGeometryUpdates},
+        {"solver_arc_geometry_updates", applied.solverArcGeometryUpdates},
+        {"solver_relation_geometry_updates", applied.solverRelationGeometryUpdates},
+        {"solver_line_pair_relation_geometry_updates", applied.solverLinePairRelationGeometryUpdates},
+        {"solver_curve_relation_geometry_updates", applied.solverCurveRelationGeometryUpdates},
+        {"solver_equal_relation_geometry_updates", applied.solverEqualRelationGeometryUpdates},
+        {"solver_tangent_relation_geometry_updates", applied.solverTangentRelationGeometryUpdates},
+        {"solver_symmetric_relation_geometry_updates", applied.solverSymmetricRelationGeometryUpdates},
+        {"solver_symmetric_line_relation_geometry_updates",
+         applied.solverSymmetricLineRelationGeometryUpdates},
+        {"solver_symmetric_center_relation_geometry_updates",
+         applied.solverSymmetricCenterRelationGeometryUpdates},
+        {"solver_geometry_update_status", solverGeometryUpdateStatus(applied)},
+        {"solver_degrees_of_freedom",
+         applied.solverDegreesOfFreedom ? nlohmann::json(*applied.solverDegreesOfFreedom)
+                                        : nlohmann::json(nullptr)},
+        {"solver_dof_status", applied.solverDofStatus},
         {"coincident_constraints_applied", applied.coincident},
         {"orientation_constraints_applied", applied.orientation},
         {"dimension_constraints_applied", applied.dimension},
@@ -3070,4 +4193,4 @@ nlohmann::json sketchSolverFailureObject(const AppliedSketchConstraints& applied
     };
 }
 
-} // namespace cad_core::sketcher
+}  // namespace cad_core::sketcher

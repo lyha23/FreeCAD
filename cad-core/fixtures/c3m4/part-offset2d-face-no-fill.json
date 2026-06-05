@@ -1,0 +1,32 @@
+{
+  "Objects": [
+    {
+      "Name": "Plane",
+      "ID": 1,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 4,
+        "Width": 3
+      }
+    },
+    {
+      "Name": "Offset2D",
+      "ID": 2,
+      "TypeId": "Part::Offset2D",
+      "Properties": {
+        "Source": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Plane"
+        },
+        "Value": 0.2,
+        "Mode": "Skin",
+        "Join": "Arc",
+        "Fill": false,
+        "Intersection": false
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Offset2D"]
+  }
+}

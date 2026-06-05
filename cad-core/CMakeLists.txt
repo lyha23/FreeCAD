@@ -50,11 +50,13 @@ add_library(cad-core-lib STATIC
   src/part/extrusion_helper.cpp
   src/part/face_maker.cpp
   src/part/part_boolean.cpp
+  src/part/part_compound.cpp
   src/part/part_extrusion.cpp
   src/part/part_feature.cpp
   src/part/part_feature_support.cpp
   src/part/part_import.cpp
   src/part/part_offset.cpp
+  src/part/part_thickness.cpp
   src/part/primitive_feature.cpp
   src/part/property_topo_shape.cpp
   src/part/refine_model.cpp

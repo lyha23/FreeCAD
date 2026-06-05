@@ -1,0 +1,4 @@
+{
+  "case": "element-map-propagate-wire",
+  "description": "C3-M1 probe for FreeCAD TopoShape::makeElementWires() ElementMapPolicy::Propagate after MakeWire updates connected edge identity."
+}

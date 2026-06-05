@@ -40,5 +40,5 @@ CAD Core 3.0 要把 `cad-core` 从“可支撑常用无状态建模主链”推�
 
 - 本地 FreeCAD `src/` 是唯一语义来源；不从 fixture 输出倒推业务逻辑。
 - 先建矩阵，再实现阶段；没有矩阵项、FreeCAD 依据和验收项的 feature 不进入 3.0 主线。
-- 优先修复共享语义层：`topo`、`geometry`、`features`、`runtime`，而不是在 executor、adapter 或输出 JSON 中补丁式修正。
+- 优先修复 FreeCAD 同构语义层：`app`、`sketcher`、`part`、`part_design`、`assembly` 与 `runtime`，而不是在 adapter 或输出 JSON 中补丁式修正。
 - 每个阶段只更新当前基线、已完成语义、剩余缺口、验收命令和下一步，不记录流水账。

@@ -1,0 +1,49 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "start": [0, 0],
+            "end": [0, 1]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [-5, 5],
+            "end": [-4, 4]
+          }
+        ],
+        "Constraints": [
+          {
+            "Type": "PointOnObject",
+            "First": 1,
+            "FirstPos": "start",
+            "Second": 0
+          }
+        ]
+      }
+    },
+    {
+      "Name": "Extrude",
+      "ID": 2,
+      "TypeId": "Part::Extrusion",
+      "Properties": {
+        "Base": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Sketch"
+        },
+        "Dir": [0, 0, 1],
+        "LengthFwd": 1,
+        "LengthRev": 0,
+        "Solid": false
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Extrude"]
+  }
+}

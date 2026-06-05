@@ -15,7 +15,7 @@ C3-M0 的目标是先建立“要复刻什么”的权威矩阵，再进入实�
 | FreeCAD 模块 | `src/App`、`src/Mod/Sketcher/App`、`src/Mod/Part/App`、`src/Mod/PartDesign/App`、`src/Mod/Assembly/App` |
 | FreeCAD 源码依据 | 绝对路径、类 / 函数、关键字段或短句 |
 | 语义对象 | DocumentObject、Property、Feature、Maker、Mapper、Solver、Adapter contract |
-| cad-core 落点 | `document`、`graph`、`runtime`、`features`、`geometry`、`topo`、`adapters` |
+| cad-core 落点 | `app`、`base`、`graph`、`runtime`、`sketcher`、`part`、`part_design`、`mesh`、`assembly`、`adapters` |
 | 当前状态 | `done`、`partial`、`diagnostic_only`、`known_gap`、`not_started` |
 | oracle 来源 | FreeCADCmd collector、expected fixture、unit test、C ABI contract、manual probe |
 | 验收方式 | build/test 命令、expected fields、diagnostic codes、capabilities 字段 |
@@ -34,11 +34,11 @@ C3-M0 的目标是先建立“要复刻什么”的权威矩阵，再进入实�
 
 cad-core 落点：
 
-- `document/model.*`：输入模型、属性解析、link schema。
+- `app/document.*`、`app/document_object.*`、`app/property*.*`：输入模型、属性解析、link schema。
 - `graph/*`：依赖、循环、recompute target。
 - `runtime/recompute.*`：执行计划、写回建议、diagnostics。
-- `topo/element_map.*`、`topo/named_shape.*`：stable key、mapped postfix、reference update。
-- `features/link.*`：Link / LinkSub / LinkGroup / Assembly display。
+- `app/element_map.*`、`part/topo_shape.*`、`part/topo_shape_expansion.*`：stable key、mapped postfix、reference update。
+- `app/link.*`：Link / LinkSub / LinkGroup / Assembly display。
 
 ### `src/Mod/Sketcher/App`
 
@@ -50,9 +50,9 @@ cad-core 落点：
 
 cad-core 落点：
 
-- `features/sketch_object.*`：SketchObject 调用顺序和属性语义。
-- `geometry/face_maker.*`、`geometry/wire_joiner.*`：InternalShape producer evidence。
-- `topo/*`：InternalFace / InternalEdge / InternalVertex naming。
+- `sketcher/sketch_object*.*`：SketchObject 调用顺序和属性语义。
+- `part/face_maker.*`、`part/wire_joiner.*`：InternalShape producer evidence。
+- `part/topo_shape.*`、`part/property_topo_shape.*`：InternalFace / InternalEdge / InternalVertex naming。
 
 ### `src/Mod/Part/App`
 
@@ -65,9 +65,9 @@ cad-core 落点：
 
 cad-core 落点：
 
-- `geometry/*`：OCCT maker、shape construction、mesh、bbox、volume、file import/export。
-- `topo/*`：MapperHistory、ElementMap、ShapeFix history、import shape history。
-- `features/*`：Part::Feature、Part Boolean、Part primitive executor。
+- `part/topo_shape.*`、`part/shape_exporter.*`、`part/part_import.*`：OCCT maker、shape construction、mesh、bbox、volume、file import/export。
+- `part/topo_shape.*`、`part/property_topo_shape.*`：MapperHistory、ElementMap、ShapeFix history、import shape history。
+- `part/part_feature.*`、`part_design/feature_*.*`、`mesh/feature_mesh_import.*`：Part::Feature、Part Boolean、Part primitive executor。
 
 ### `src/Mod/PartDesign/App`
 
@@ -80,9 +80,9 @@ cad-core 落点：
 
 cad-core 落点：
 
-- `features/feature_extrude.*`、`features/pad.*`、`features/pocket.*`、`features/transformed.*`、`features/dress_up.*`。
-- `geometry/extrusion_helper.*`、`geometry/refine_model.*`、新增对应 maker helper。
-- `topo/named_shape.*`：maker history 消费与 terminal history 传播。
+- `part_design/feature_extrude.*`、`part_design/feature_pad.*`、`part_design/feature_pocket.*`、`part_design/feature_transformed.*`、`part_design/feature_dress_up.*`、`part_design/feature_fillet.*`、`part_design/feature_chamfer.*`。
+- `part/extrusion_helper.*`、`part/refine_model.*`、新增对应 maker helper。
+- `part/topo_shape.*`、`part/topo_shape_expansion.*`：maker history 消费与 terminal history 传播。
 
 ### `src/Mod/Assembly/App`
 
@@ -94,7 +94,7 @@ cad-core 落点：
 
 cad-core 落点：
 
-- `features/link.*` 或后续 `features/assembly.*`：AssemblyObject / Joint 输入。
+- `app/link.*` 或后续 `assembly/assembly_object.*`、`assembly/joint_group.*`：AssemblyObject / Joint 输入。
 - `runtime/*`：solver 调度与 `documentObjectUpdates`。
 - `adapters/*`：统一暴露 solver diagnostics，不承载求解语义。
 

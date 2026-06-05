@@ -313,6 +313,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ("hole-supported-angled-drill-point", {"drill_point": "Angled", "drill_for_depth": False}),
             ("hole-supported-tapered", {"tapered": True, "tapered_angle": 80.0}),
             ("hole-supported-point-profile", {"method": "Dimension"}),
+            ("hole-supported-point-counterbore", {"hole_cut_type": "Counterbore", "hole_cut_diameter": 4.0}),
         ]:
             with self.subTest(fixture=fixture):
                 result = self.run_recompute(fixture, "p7")
@@ -324,6 +325,38 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 for field, value in expected_fields.items():
                     self.assertEqual(hole[field], value)
                 self.assert_object_matches_expected(result, "p7", fixture)
+
+    def test_c3m5_hole_point_profile_counterbore_extends_history_matrix(self) -> None:
+        result = self.run_recompute("hole-supported-point-counterbore", "p7")
+        hole = result["objects"]["Hole"]
+        named_shape = result["named_shapes"]["Hole"]
+        body_history = result["named_shapes"]["Body"]["element_history_status"]
+        events = [
+            event
+            for event in named_shape["mapper_history"]
+            if event["maker_stage"] == "hole_find_holes"
+        ]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(hole["hole_cut_type"], "Counterbore")
+        self.assertEqual(hole["history"]["status"], "element_map_freeze_first_slice")
+        self.assertEqual(hole["history"]["remaining"], [])
+        self.assertEqual(hole["history"]["center_sources"], [{"subname": "Vertex1", "kind": "vertex"}])
+        self.assertEqual(hole["history"]["tool_faces"], 5)
+        self.assertTrue(events)
+        self.assertTrue(
+            all(
+                event["source"] == {"object": "SketchHole", "subname": "Vertex1"}
+                and event["relation"] == "modified"
+                and event["evidence"]["source_kind"] == "vertex"
+                and event["target"]["object"] == "Hole"
+                and event["target"]["subname"].startswith("Face")
+                for event in events
+            )
+        )
+        self.assertIn("history_consumed:generated_modified", body_history)
+        self.assertIn("terminal_history:split_deleted", body_history)
+        self.assert_object_matches_expected(result, "p7", "hole-supported-point-counterbore")
 
     def test_p7_hole_supported_threaded_heads_match_native_oracle(self) -> None:
         for fixture, expected_fields in [
@@ -618,6 +651,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_c3m5_hole_thread_table_model_thread_contract_uses_native_oracles(self) -> None:
         table_result = self.run_recompute("hole-supported-threaded-dynamic-iso2009", "p7")
         table_hole = table_result["objects"]["Hole"]
+        table_hole_named_shape = table_result["named_shapes"]["Hole"]
         table_body_history = table_result["named_shapes"]["Body"]["element_history_status"]
 
         self.assertEqual(table_result["diagnostics"], [])
@@ -630,11 +664,37 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(table_hole["hole_cut_standard"], "ISO 2009")
         self.assertEqual(table_hole["hole_cut_definition_source"], "iso2009.json")
         self.assertAlmostEqual(table_hole["hole_cut_diameter"], 9.5, delta=1e-9)
+        self.assertEqual(table_hole["history"]["status"], "element_map_freeze_first_slice")
+        self.assertEqual(table_hole["history"]["remaining"], [])
+        self.assertEqual(table_hole["history"]["source_profile"], "SketchHole")
+        self.assertIn("profile_source_tool_face_mapper_history", table_hole["history"]["covered"])
+        self.assertEqual(table_hole_named_shape["element_map_status"], "history_partial")
+        self.assertIn("hole_find_holes:profile_source", table_hole_named_shape["element_history_status"])
+        self.assertIn("hole_cut_history:element_map_freeze", table_hole_named_shape["element_history_status"])
+        table_hole_events = [
+            event
+            for event in table_hole_named_shape["mapper_history"]
+            if event["maker_stage"] == "hole_find_holes"
+        ]
+        self.assertTrue(table_hole_events)
+        self.assertTrue(
+            any(
+                event["relation"] == "modified"
+                and event["source"]["object"] == "SketchHole"
+                and event["source"]["subname"].startswith("Edge")
+                and event["target"]["object"] == "Hole"
+                and event["target"]["subname"].startswith("Face")
+                and event["evidence"]["producer"] == "PartDesign::Hole::findHoles"
+                and event["evidence"]["make_shape_with_element_map"]
+                for event in table_hole_events
+            )
+        )
         self.assertIn("history_consumed:generated_modified", table_body_history)
         self.assertIn("terminal_history:split_deleted", table_body_history)
 
         model_result = self.run_recompute("hole-supported-model-thread-metric", "p7")
         model_hole = model_result["objects"]["Hole"]
+        model_hole_named_shape = model_result["named_shapes"]["Hole"]
         model_body_history = model_result["named_shapes"]["Body"]["element_history_status"]
 
         self.assertEqual(model_result["diagnostics"], [])
@@ -645,10 +705,62 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(model_hole["thread_direction"], "Left")
         self.assertAlmostEqual(model_hole["thread_pitch"], 0.7, delta=1e-9)
         self.assertAlmostEqual(model_hole["thread_radius_clearance"], 0.011, delta=1e-9)
+        self.assertEqual(model_hole["history"]["remaining"], [])
+        self.assertIn("model_thread_tool_face_history", model_hole["history"]["covered"])
+        self.assertIn(
+            "hole_model_thread:pipe_shell_tool_history",
+            model_hole_named_shape["element_history_status"],
+        )
         self.assertIn("history_consumed:generated_modified", model_body_history)
         self.assertIn("terminal_history:split_deleted", model_body_history)
         self.assert_object_matches_expected(table_result, "p7", "hole-supported-threaded-dynamic-iso2009")
         self.assert_object_matches_expected(model_result, "p7", "hole-supported-model-thread-metric")
+
+    def test_c3m5_hole_threaded_model_thread_head_cut_oracle_matrix_is_explicit_gap(self) -> None:
+        result = self.run_recompute("hole-supported-model-thread-counterbore", "p7")
+        expected = self.expected_freecad("p7", "hole-supported-model-thread-counterbore")
+        hole = result["objects"]["Hole"]
+        named_shape = result["named_shapes"]["Hole"]
+        events = [
+            event
+            for event in named_shape["mapper_history"]
+            if event["maker_stage"] == "hole_find_holes"
+        ]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(
+            expected["known_gap"].split(":", maxsplit=1)[0],
+            "hole_threaded_model_thread_profile_head_oracle_matrix",
+        )
+        self.assertEqual(expected["topology_counts"], {"edges": 106, "faces": 50, "vertices": 60})
+        self.assertAlmostEqual(expected["volume"], 434.05359569539525, delta=1e-9)
+        self.assertEqual(hole["threaded"], True)
+        self.assertEqual(hole["model_thread"], True)
+        self.assertEqual(hole["model_thread_geometry"], "pipe_shell")
+        self.assertEqual(hole["hole_cut_type"], "Counterbore")
+        self.assertEqual(hole["history"]["remaining"], ["hole_threaded_model_thread_profile_head_oracle_matrix"])
+        self.assertIn("model_thread_compound_tool_shape", hole["history"]["covered"])
+        self.assertEqual(
+            hole["history"]["topology_gap"],
+            "model_thread_head_cut_native_topology_pending_local_frame",
+        )
+        self.assertNotIn("geometry_fallback", hole["history"])
+        self.assertEqual(hole["history"]["center_sources"], [{"subname": "Edge1", "kind": "edge"}])
+        self.assertIn("hole_model_thread:pipe_shell_tool_history", named_shape["element_history_status"])
+        self.assertIn("boolean_compound_tool:expand_children", named_shape["element_history_status"])
+        self.assertTrue(events)
+        self.assertTrue(
+            all(
+                event["source"] == {"object": "SketchHole", "subname": "Edge1"}
+                and event["relation"] == "modified"
+                and event["evidence"]["threaded"]
+                and event["evidence"]["model_thread"]
+                and event["evidence"]["source_kind"] == "edge"
+                and event["target"]["object"] == "Hole"
+                and event["target"]["subname"].startswith("Face")
+                for event in events
+            )
+        )
 
     def test_p7_hole_angled_drill_point_extends_blind_hole_tip(self) -> None:
         result = self.run_recompute("hole-angled-drill-point", "p7")
@@ -671,6 +783,20 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["profile_ready"], False)
         self.assertEqual(hole["method"], "Dimension")
         self.assertEqual(hole["source_profile"], "SketchHole")
+        self.assertEqual(hole["history"]["status"], "element_map_freeze_first_slice")
+        self.assertIn({"subname": "Vertex1", "kind": "vertex"}, hole["history"]["center_sources"])
+        point_events = [
+            event
+            for event in result["named_shapes"]["Hole"]["mapper_history"]
+            if event["maker_stage"] == "hole_find_holes"
+        ]
+        self.assertTrue(
+            any(
+                event["source"] == {"object": "SketchHole", "subname": "Vertex1"}
+                and event["relation"] == "modified"
+                for event in point_events
+            )
+        )
         self.assert_object_matches_expected(result, "p7", "hole-point-profile")
 
     def test_p7_hole_tapered_profile_uses_tapered_angle_bottom_radius(self) -> None:

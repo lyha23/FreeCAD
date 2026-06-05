@@ -84,8 +84,12 @@ FeatureRegistry buildDefaultRegistry()
     registry.registerExecutor("Part::Ellipse", part::executePartEllipse);
     registry.registerExecutor("Part::Helix", part::executePartHelix);
     registry.registerExecutor("Part::Spiral", part::executePartSpiral);
+    registry.registerExecutor("Part::Compound", part::executePartCompound);
+    registry.registerExecutor("Part::Compound2", part::executePartCompound);
     registry.registerExecutor("Part::Extrusion", part::executePartExtrusion);
     registry.registerExecutor("Part::Offset", part::executePartOffset);
+    registry.registerExecutor("Part::Offset2D", part::executePartOffset2D);
+    registry.registerExecutor("Part::Thickness", part::executePartThickness);
     registry.registerExecutor("Part::ImportBrep", part::executePartImportBrep);
     registry.registerExecutor("Part::ImportStep", part::executePartImportStep);
     registry.registerExecutor("Part::ImportIges", part::executePartImportIges);

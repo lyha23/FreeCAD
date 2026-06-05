@@ -23,7 +23,6 @@ using part_feature_detail::addPartOffsetDiagnostic;
 using part_feature_detail::publishPartShape;
 using part_feature_detail::readNumberProperty;
 using part_feature_detail::resolvePartSourceLink;
-using part_feature_detail::shapeContainsKind;
 using part_feature_detail::sourceForPartLinkedShape;
 
 std::optional<short> readEnumIndexProperty(
@@ -95,45 +94,10 @@ void executePartOffset(const app::DocumentObject& object, runtime::ComputeContex
     }
 
     const bool fill = app::readBool(object, "Fill").value_or(false);
-    if (fill) {
-        // FreeCAD:
-        // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
-        // ::TopoShape::makeElementOffset(), FillType::fill follows the free-bound wires and
-        // OffsetEdgesFromShapes() images after mkOffset. cad-core keeps that branch explicit until
-        // the fill-face/solid history route is migrated.
-        addPartOffsetDiagnostic(
-            object,
-            context,
-            "unsupported_property",
-            "Part::Offset Fill=true requires FreeCAD fill-bound offset history and is not in the "
-            "C3-M4 first slice",
-            "Fill"
-        );
-        return;
-    }
-
     const auto source = resolvePartSourceLink(object, context, "Source", "Part::Offset");
     if (!source) {
         return;
     }
-    if (shapeContainsKind(source->shape, TopAbs_SOLID)) {
-        // FreeCAD:
-        // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
-        // ::TopoShape::makeElementOffset(), when the source "hasSubShape(TopAbs_SOLID)" but the
-        // offset result lacks one, tries "res.makeElementSolid()". The first C3-M4 slice is limited
-        // to face/shell offset history, so solid-source recovery is diagnosed instead of approximated.
-        addPartOffsetDiagnostic(
-            object,
-            context,
-            "unsupported_geometry",
-            "Part::Offset solid Source requires makeElementSolid recovery and is not in the C3-M4 "
-            "first slice",
-            "Source",
-            source->objectName
-        );
-        return;
-    }
-
     const double offset = readNumberProperty(object, "Value", 1.0);
     const bool intersection = app::readBool(object, "Intersection").value_or(false);
     const bool selfIntersection = app::readBool(object, "SelfIntersection").value_or(false);
@@ -145,7 +109,8 @@ void executePartOffset(const app::DocumentObject& object, runtime::ComputeContex
         intersection,
         selfIntersection,
         *mode,
-        *join
+        *join,
+        fill
     );
     if (!build.error.empty() || build.shape.IsNull()) {
         addPartOffsetDiagnostic(
@@ -172,6 +137,110 @@ void executePartOffset(const app::DocumentObject& object, runtime::ComputeContex
          {"self_intersection", selfIntersection},
          {"fill", fill},
          {"topo_naming_history", "maker_history:offset"}},
+        build.namedShape
+    );
+}
+
+void executePartOffset2D(const app::DocumentObject& object, runtime::ComputeContext& context)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FeatureOffset.cpp
+    // ::Offset2D::execute(), reads "Source", "Value", "Mode", "Join", "Fill" and
+    // "Intersection"; mode 0 maps to "OpenResult::allowOpenResult", while mode 2 returns
+    // "Mode 'Recto-Verso' is not supported for 2D offset."
+    if (!runtime::rejectUnsupportedProperties(
+            object,
+            context,
+            {"Source", "Value", "Mode", "Join", "Fill", "Intersection"}
+        )) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+
+    constexpr std::array<const char*, 3> offsetModes = {"Skin", "Pipe", "RectoVerso"};
+    constexpr std::array<const char*, 3> joinTypes = {"Arc", "Tangent", "Intersection"};
+    const auto mode = readEnumIndexProperty(object, "Mode", offsetModes, 0);
+    if (!mode) {
+        addPartOffsetDiagnostic(
+            object,
+            context,
+            "unsupported_property",
+            "Part::Offset2D Mode must be Skin, Pipe or RectoVerso",
+            "Mode"
+        );
+        return;
+    }
+    if (*mode == 2) {
+        addPartOffsetDiagnostic(
+            object,
+            context,
+            "unsupported_property",
+            "Mode 'Recto-Verso' is not supported for 2D offset.",
+            "Mode"
+        );
+        return;
+    }
+    const auto join = readEnumIndexProperty(object, "Join", joinTypes, 0);
+    if (!join) {
+        addPartOffsetDiagnostic(
+            object,
+            context,
+            "unsupported_property",
+            "Part::Offset2D Join must be Arc, Tangent or Intersection",
+            "Join"
+        );
+        return;
+    }
+
+    const auto source = resolvePartSourceLink(object, context, "Source", "Part::Offset2D");
+    if (!source) {
+        return;
+    }
+    const double offset = readNumberProperty(object, "Value", 1.0);
+    const bool fill = app::readBool(object, "Fill").value_or(false);
+    const bool intersection = app::readBool(object, "Intersection").value_or(false);
+    const bool allowOpenResult = *mode == 0;
+    const bool faceSource = source->shape.ShapeType() == TopAbs_FACE;
+    const bool compoundSource = source->shape.ShapeType() == TopAbs_COMPOUND;
+    const part::NamedShapeBuild build = part::makeElementOffset2DFromSource(
+        object.name,
+        sourceForPartLinkedShape(*source),
+        offset,
+        *join,
+        fill,
+        allowOpenResult,
+        intersection
+    );
+    if (!build.error.empty() || build.shape.IsNull()) {
+        addPartOffsetDiagnostic(
+            object,
+            context,
+            "execution_failed",
+            build.error.empty() ? "Part::Offset2D failed" : build.error,
+            "Source",
+            source->objectName
+        );
+        return;
+    }
+
+    publishPartShape(
+        object,
+        context,
+        build.shape,
+        {{"feature", "part_offset2d"},
+         {"source", source->objectName},
+         {"offset", offset},
+         {"mode", offsetModes[*mode]},
+         {"join", joinTypes[*join]},
+         {"fill", fill},
+         {"intersection", intersection},
+         {"open_result", allowOpenResult},
+         {"topo_naming_history",
+          compoundSource ? (intersection ? "maker_history:offset2d_compound_collective"
+                                         : "maker_history:offset2d_compound_recursive")
+                         : (fill ? (faceSource ? "maker_history:offset2d_face_fill_closed"
+                                               : "maker_history:offset2d_wire_fill_open")
+                                 : (faceSource ? "maker_history:offset2d_face_no_fill"
+                                               : "maker_history:offset2d_wire_no_fill"))}},
         build.namedShape
     );
 }

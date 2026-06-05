@@ -1,6 +1,7 @@
 #include "cad_core/part/topo_shape.h"
 
 #include "cad_core/part/extrusion_helper.h"
+#include "cad_core/part/face_maker.h"
 #include "cad_core/part/refine_model.h"
 #include "cad_core/part/shape_fix.h"
 #include "cad_core/app/element_map.h"
@@ -11,36 +12,64 @@
 #include <BRepAlgoAPI_Common.hxx>
 #include <BRepAlgoAPI_Cut.hxx>
 #include <BRepAlgoAPI_Fuse.hxx>
+#include <BRepAlgo_Image.hxx>
+#include <BRep_Builder.hxx>
+#include <BRepCheck_Analyzer.hxx>
+#include <BRepBuilderAPI_MakeSolid.hxx>
+#include <BRepBuilderAPI_MakeWire.hxx>
+#include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepAlgoAPI_Section.hxx>
+#include <BRepBuilderAPI_Sewing.hxx>
+#include <BRepLib.hxx>
 #include <BRep_Tool.hxx>
 #include <BRepTools.hxx>
+#include <BRepTools_WireExplorer.hxx>
+#include <BRepOffsetAPI_MakeOffset.hxx>
 #include <BRepOffsetAPI_MakeOffsetShape.hxx>
+#include <BRepOffsetAPI_MakeThickSolid.hxx>
 #include <BRepOffsetAPI_ThruSections.hxx>
 #include <BRepOffset_Mode.hxx>
 #include <BRepTools_History.hxx>
 #include <Bnd_Box.hxx>
 #include <GeomAbs_JoinType.hxx>
+#include <Message_ProgressRange.hxx>
+#include <gp_Vec.hxx>
 #include <Precision.hxx>
 #include <ShapeBuild_ReShape.hxx>
+#include <ShapeAnalysis_FreeBoundsProperties.hxx>
 #include <ShapeFix_Root.hxx>
+#include <ShapeUpgrade_ShellSewing.hxx>
 #include <Standard_Failure.hxx>
+#include <Standard_Version.hxx>
 #include <TopAbs_ShapeEnum.hxx>
 #include <TopExp.hxx>
 #include <TopExp_Explorer.hxx>
+#include <TopLoc_Location.hxx>
 #include <TopTools_IndexedDataMapOfShapeListOfShape.hxx>
 #include <TopTools_ListIteratorOfListOfShape.hxx>
 #include <TopTools_IndexedMapOfShape.hxx>
 #include <TopTools_ListOfShape.hxx>
+#include <TopTools_MapOfShape.hxx>
 #include <TopoDS.hxx>
+#include <TopoDS_CompSolid.hxx>
+#include <TopoDS_Compound.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
+#include <TopoDS_Iterator.hxx>
+#include <TopoDS_Shell.hxx>
+#include <TopoDS_Solid.hxx>
+#include <TopoDS_Vertex.hxx>
 #include <TopoDS_Wire.hxx>
 
 #include <algorithm>
 #include <cmath>
+#include <cstdint>
+#include <iomanip>
+#include <list>
 #include <map>
 #include <memory>
 #include <set>
+#include <sstream>
 #include <utility>
 #include <vector>
 
@@ -174,6 +203,59 @@ double autoFuzzyValueForSources(const std::vector<NamedShapeSource>& sources)
     return std::sqrt(bounds.SquareExtent()) * Precision::Confusion();
 }
 
+void expandCompoundSource(const NamedShapeSource& source, std::vector<NamedShapeSource>& expanded)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/
+    // TopoShapeExpansion.cpp::expandCompound(), recursively replaces a TopAbs_COMPOUND boolean
+    // input with its child shapes before makeElementBoolean() fills Arguments and Tools.
+    if (source.shape.ShapeType() != TopAbs_COMPOUND) {
+        expanded.push_back(source);
+        return;
+    }
+    for (TopoDS_Iterator it(source.shape); it.More(); it.Next()) {
+        NamedShapeSource childSource {source.owner, it.Value(), source.namedShape};
+        childSource.ownerAliases = source.ownerAliases;
+        childSource.expandCompoundForBoolean = source.expandCompoundForBoolean;
+        expandCompoundSource(childSource, expanded);
+    }
+}
+
+void appendBooleanSource(const NamedShapeSource& source, std::vector<NamedShapeSource>& sources)
+{
+    if (source.expandCompoundForBoolean) {
+        expandCompoundSource(source, sources);
+        return;
+    }
+    sources.push_back(source);
+}
+
+std::vector<NamedShapeSource> expandBooleanSourcesLikeFreeCad(
+    const std::vector<NamedShapeSource>& sources,
+    BooleanOperation operation
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/
+    // TopoShapeExpansion.cpp::TopoShape::makeElementBoolean(), expands Fuse/Cut compound inputs
+    // before calling SetArguments()/SetTools(). cad-core gates this per source until compound
+    // child alias propagation is complete for every producer.
+    std::vector<NamedShapeSource> expanded;
+    if (operation == BooleanOperation::Fuse) {
+        for (const NamedShapeSource& source : sources) {
+            appendBooleanSource(source, expanded);
+        }
+    }
+    else if (operation == BooleanOperation::Cut) {
+        expanded.push_back(sources.front());
+        for (std::size_t index = 1; index < sources.size(); ++index) {
+            appendBooleanSource(sources.at(index), expanded);
+        }
+    }
+    if (expanded.empty()) {
+        return sources;
+    }
+    return expanded;
+}
+
 std::string prefixForKind(TopAbs_ShapeEnum kind)
 {
     switch (kind) {
@@ -193,10 +275,102 @@ std::vector<TopAbs_ShapeEnum> mappableKinds()
     return {TopAbs_FACE, TopAbs_EDGE, TopAbs_VERTEX};
 }
 
+std::vector<TopAbs_ShapeEnum> childMapKinds()
+{
+    return {TopAbs_VERTEX, TopAbs_EDGE, TopAbs_FACE};
+}
+
+std::string childMapTargetName(const std::string& prefix, int offset, int count)
+{
+    if (count <= 0) {
+        return {};
+    }
+    return prefix + std::to_string(offset + count);
+}
+
+std::string composeChildMapPostfix(const std::string& parentPostfix, const std::string& childPostfix)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/ElementMap.cpp
+    // ::ElementMap::addChildElements(), when expanding a grandchild map, assigns
+    // "entry->postfix = grandchild.postfix + ELEMENT_MAP_PREFIX + entry->postfix" unless the
+    // parent postfix already starts with ELEMENT_MAP_PREFIX.
+    if (childPostfix.empty()) {
+        return parentPostfix;
+    }
+    if (parentPostfix.empty()) {
+        return childPostfix;
+    }
+    return childPostfix + (parentPostfix.front() == ';' ? std::string() : std::string(";"))
+        + parentPostfix;
+}
+
+void mixStableChildMapHash(std::uint64_t& hash, const std::string& value)
+{
+    constexpr std::uint64_t fnvPrime = 1099511628211ULL;
+    for (const unsigned char byte : value) {
+        hash ^= byte;
+        hash *= fnvPrime;
+    }
+    hash ^= 0xffU;
+    hash *= fnvPrime;
+}
+
+void mixStableChildMapHash(std::uint64_t& hash, int value)
+{
+    mixStableChildMapHash(hash, std::to_string(value));
+}
+
+std::string encodedChildMapKey(const NamedShapeChildMap& childMap)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/ElementMap.cpp
+    // ::ElementMap::hashChildMaps(), writes keys with "MAPPED_CHILD_ELEMENTS_PREFIX" (";:R")
+    // after hashing the mapped child postfix. This is cad-core's stable request-local key
+    // evidence; it deliberately does not claim FreeCAD MappedName binary compatibility.
+    std::uint64_t hash = 1469598103934665603ULL;
+    mixStableChildMapHash(hash, childMap.sourceOwner);
+    mixStableChildMapHash(hash, childMap.kind);
+    mixStableChildMapHash(hash, childMap.indexedName);
+    mixStableChildMapHash(hash, childMap.offset);
+    mixStableChildMapHash(hash, childMap.count);
+    mixStableChildMapHash(hash, childMap.targetStart);
+    mixStableChildMapHash(hash, childMap.targetEnd);
+    mixStableChildMapHash(hash, childMap.postfix);
+    mixStableChildMapHash(hash, static_cast<int>(childMap.sourceElementMapSize));
+    mixStableChildMapHash(hash, static_cast<int>(childMap.sourceChildMapCount));
+
+    std::ostringstream out;
+    out << ";:R" << std::hex << std::setw(16) << std::setfill('0') << hash;
+    return out.str();
+}
+
+bool shouldEncodeChildMapKey(const NamedShapeChildMap& childMap)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/ElementMap.cpp
+    // ::ElementMap::addChildElements(), "do child mapping only if the child element count >= 5",
+    // with a tag-specific count==5 skip branch before hashChildMaps() can rewrite the key. This
+    // tagless slice records encoded keys for no-map entries and source element-map ranges above
+    // that threshold; exact tag hashing remains part of the Propagate lifecycle gap.
+    return !childMap.hasSourceElementMap || childMap.count > 5;
+}
+
 struct SourceTargets
 {
     std::set<std::string> preserved;
     std::set<std::string> history;
+};
+
+struct FilledOffsetBuild
+{
+    TopoDS_Shape shape;
+    std::string error;
+};
+
+struct SolidRecoveryBuild
+{
+    TopoDS_Shape shape;
+    std::optional<NamedShape> namedShape;
+    bool applied = false;
+    std::string error;
 };
 
 void addTerminalHistory(NamedShape& namedShape, const ElementHistory& entry);
@@ -361,6 +535,963 @@ bool applyHistoryList(
     return applied;
 }
 
+std::vector<TopoDS_Edge> edgesFromWire(const TopoDS_Wire& wire)
+{
+    std::vector<TopoDS_Edge> edges;
+    for (TopExp_Explorer explorer(wire, TopAbs_EDGE); explorer.More(); explorer.Next()) {
+        edges.push_back(TopoDS::Edge(explorer.Current()));
+    }
+    return edges;
+}
+
+bool singleOffsetImageEdge(const BRepAlgo_Image& images, const TopoDS_Edge& sourceEdge, TopoDS_Edge& edge)
+{
+    if (!images.HasImage(sourceEdge)) {
+        return false;
+    }
+    int edgeCount = 0;
+    for (TopTools_ListIteratorOfListOfShape it(images.Image(sourceEdge)); it.More(); it.Next()) {
+        if (it.Value().ShapeType() != TopAbs_EDGE) {
+            continue;
+        }
+        edge = TopoDS::Edge(it.Value());
+        ++edgeCount;
+    }
+    return edgeCount == 1;
+}
+
+class MakeOffset2DFix: public BRepBuilderAPI_MakeShape
+{
+public:
+    MakeOffset2DFix() = default;
+
+    MakeOffset2DFix(const GeomAbs_JoinType join, const Standard_Boolean isOpenResult)
+    {
+        maker_.Init(join, isOpenResult);
+    }
+
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/BRepOffsetAPI_MakeOffsetFix.cpp
+    // ::BRepOffsetAPI_MakeOffsetFix::AddWire(), resets a single-edge wire location before
+    // BRepOffsetAPI_MakeOffset and later reapplies it in Shape()/MakeWire(); TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementOffset2D() uses this wrapper for the collective "AddWire" path.
+    void AddWire(const TopoDS_Wire& spine)
+    {
+        TopoDS_Wire wire = spine;
+        int edgeCount = 0;
+        for (TopExp_Explorer explorer(wire, TopAbs_EDGE); explorer.More(); explorer.Next()) {
+            ++edgeCount;
+        }
+        if (edgeCount == 1) {
+            BRepBuilderAPI_MakeWire wireMaker;
+            for (TopExp_Explorer explorer(wire, TopAbs_EDGE); explorer.More(); explorer.Next()) {
+                TopoDS_Edge edge = TopoDS::Edge(explorer.Current());
+                const TopLoc_Location edgeLocation = edge.Location();
+                edge.Location(TopLoc_Location());
+                wireMaker.Add(edge);
+                locations_.emplace_back(edge, edgeLocation);
+            }
+            wire = wireMaker.Wire();
+            wire.Orientation(spine.Orientation());
+        }
+        maker_.AddWire(wire);
+        result_.Nullify();
+    }
+
+    void Perform(const Standard_Real offset, const Standard_Real alt = 0.0)
+    {
+        maker_.Perform(offset, alt);
+        result_.Nullify();
+    }
+
+#if OCC_VERSION_HEX >= 0x070600
+    void Build(const Message_ProgressRange& progress = Message_ProgressRange()) override
+    {
+        (void)progress;
+        maker_.Build();
+        result_.Nullify();
+    }
+#else
+    void Build() override
+    {
+        maker_.Build();
+        result_.Nullify();
+    }
+#endif
+
+    void Init(
+        const TopoDS_Face& spine,
+        const GeomAbs_JoinType join = GeomAbs_Arc,
+        const Standard_Boolean isOpenResult = Standard_False
+    )
+    {
+        maker_.Init(spine, join, isOpenResult);
+        result_.Nullify();
+    }
+
+    void Init(
+        const GeomAbs_JoinType join = GeomAbs_Arc,
+        const Standard_Boolean isOpenResult = Standard_False
+    )
+    {
+        maker_.Init(join, isOpenResult);
+        result_.Nullify();
+    }
+
+    Standard_Boolean IsDone() const override
+    {
+        return maker_.IsDone();
+    }
+
+    const TopoDS_Shape& Shape() override
+    {
+        if (result_.IsNull()) {
+            TopoDS_Shape result = maker_.Shape();
+            if (result.IsNull()) {
+                result_ = result;
+                return result_;
+            }
+            if (result.ShapeType() == TopAbs_WIRE) {
+                makeWire(result);
+            }
+            else if (result.ShapeType() == TopAbs_COMPOUND) {
+                BRep_Builder builder;
+                TopoDS_Compound compound;
+                builder.MakeCompound(compound);
+                for (TopExp_Explorer explorer(result, TopAbs_WIRE); explorer.More(); explorer.Next()) {
+                    TopoDS_Shape wire = TopoDS::Wire(explorer.Current());
+                    makeWire(wire);
+                    builder.Add(compound, wire);
+                }
+                result = compound;
+            }
+            result_ = result;
+        }
+        return result_;
+    }
+
+    const TopTools_ListOfShape& Generated(const TopoDS_Shape& shape) override
+    {
+        return maker_.Generated(shape);
+    }
+
+    const TopTools_ListOfShape& Modified(const TopoDS_Shape& shape) override
+    {
+        return maker_.Modified(shape);
+    }
+
+    Standard_Boolean IsDeleted(const TopoDS_Shape& shape) override
+    {
+        return maker_.IsDeleted(shape);
+    }
+
+private:
+    void makeWire(TopoDS_Shape& wire)
+    {
+        TopTools_MapOfShape resultEdges;
+        for (TopExp_Explorer explorer(wire, TopAbs_EDGE); explorer.More(); explorer.Next()) {
+            resultEdges.Add(explorer.Current());
+        }
+
+        std::list<TopoDS_Edge> edges;
+        for (const auto& location : locations_) {
+            TopTools_ListOfShape generatedShapes = maker_.Generated(location.first);
+            for (TopExp_Explorer vertexExplorer(location.first, TopAbs_VERTEX); vertexExplorer.More();
+                 vertexExplorer.Next()) {
+                TopTools_ListOfShape generatedFromVertex = maker_.Generated(vertexExplorer.Current());
+                if (!generatedFromVertex.IsEmpty()) {
+                    generatedShapes.Append(generatedFromVertex);
+                }
+            }
+            for (TopTools_ListIteratorOfListOfShape it(generatedShapes); it.More(); it.Next()) {
+                TopoDS_Shape generated = it.Value();
+                if (resultEdges.Contains(generated)) {
+                    generated.Move(location.second);
+                    edges.push_back(TopoDS::Edge(generated));
+                }
+            }
+        }
+        if (edges.empty()) {
+            return;
+        }
+
+        BRepBuilderAPI_MakeWire wireMaker;
+        wireMaker.Add(edges.front());
+        edges.pop_front();
+        wire = wireMaker.Wire();
+        bool found = false;
+        do {
+            found = false;
+            for (auto edgeIt = edges.begin(); edgeIt != edges.end(); ++edgeIt) {
+                wireMaker.Add(*edgeIt);
+                if (wireMaker.Error() != BRepBuilderAPI_DisconnectedWire) {
+                    found = true;
+                    edges.erase(edgeIt);
+                    wire = wireMaker.Wire();
+                    break;
+                }
+            }
+        } while (found);
+    }
+
+    BRepOffsetAPI_MakeOffset maker_;
+    std::list<std::pair<TopoDS_Shape, TopLoc_Location>> locations_;
+    TopoDS_Shape result_;
+};
+
+TopoDS_Shape compoundFromShapes(const std::vector<TopoDS_Shape>& shapes)
+{
+    BRep_Builder builder;
+    TopoDS_Compound compound;
+    builder.MakeCompound(compound);
+    for (const TopoDS_Shape& shape : shapes) {
+        if (!shape.IsNull()) {
+            builder.Add(compound, shape);
+        }
+    }
+    return compound;
+}
+
+std::vector<TopoDS_Wire> wiresFromShape(const TopoDS_Shape& shape)
+{
+    std::vector<TopoDS_Wire> wires;
+    if (shape.IsNull()) {
+        return wires;
+    }
+    if (shape.ShapeType() == TopAbs_WIRE) {
+        wires.push_back(TopoDS::Wire(shape));
+        return wires;
+    }
+    for (TopExp_Explorer explorer(shape, TopAbs_WIRE); explorer.More(); explorer.Next()) {
+        wires.push_back(TopoDS::Wire(explorer.Current()));
+    }
+    return wires;
+}
+
+std::optional<TopoDS_Wire> wireFromEdge(const TopoDS_Edge& edge)
+{
+    BRepBuilderAPI_MakeWire maker;
+    maker.Add(edge);
+    if (!maker.IsDone()) {
+        return std::nullopt;
+    }
+    return maker.Wire();
+}
+
+TopoDS_Shape shapeFromWires(const std::vector<TopoDS_Wire>& wires)
+{
+    if (wires.size() == 1U) {
+        return wires.front();
+    }
+    std::vector<TopoDS_Shape> shapes;
+    shapes.reserve(wires.size());
+    for (const TopoDS_Wire& wire : wires) {
+        shapes.push_back(wire);
+    }
+    return compoundFromShapes(shapes);
+}
+
+NamedShapeBuild makeOffset2DWireShapeWithMakeOffsetFix(
+    const std::string& owner,
+    const std::vector<TopoDS_Wire>& sourceWires,
+    const std::vector<NamedShapeSource>& sources,
+    double offset,
+    short join,
+    bool allowOpenResult
+)
+{
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementOffset2D(), builds one "BRepOffsetAPI_MakeOffsetFix mkOffset",
+    // calls "mkOffset.AddWire(...)" for every source wire, then consumes "shape.makeElementShape(
+    // mkOffset, op)" so Generated/Modified history belongs in the Part-layer NamedShape ledger.
+    if (sourceWires.empty()) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Part::Offset2D source has no wires"};
+    }
+    if (std::fabs(offset) <= Precision::Confusion()) {
+        const TopoDS_Shape wireShape = shapeFromWires(sourceWires);
+        return NamedShapeBuild {wireShape, namedShapeForPreservedSources(owner, wireShape, sources), {}};
+    }
+
+    MakeOffset2DFix maker(GeomAbs_JoinType(join), allowOpenResult ? Standard_True : Standard_False);
+    for (const TopoDS_Wire& wire : sourceWires) {
+        maker.AddWire(wire);
+    }
+    maker.Perform(offset);
+    if (!maker.IsDone()) {
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            "BRepOffsetAPI_MakeOffsetFix not done for Part::Offset2D"
+        };
+    }
+    const TopoDS_Shape offsetWireShape = maker.Shape();
+    if (offsetWireShape.IsNull()) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Part::Offset2D offset result is null"};
+    }
+    return NamedShapeBuild {
+        offsetWireShape,
+        namedShapeForMakerHistory(owner, offsetWireShape, sources, maker),
+        {},
+    };
+}
+
+std::optional<std::pair<TopoDS_Vertex, TopoDS_Vertex>> openWireEndpoints(const TopoDS_Wire& wire)
+{
+    BRepTools_WireExplorer explorer;
+    explorer.Init(wire);
+    TopoDS_Vertex first = explorer.CurrentVertex();
+    for (; explorer.More(); explorer.Next()) {
+    }
+    TopoDS_Vertex last = explorer.CurrentVertex();
+    if (first.IsNull() || last.IsNull()) {
+        return std::nullopt;
+    }
+    return std::make_pair(first, last);
+}
+
+bool offsetEndpointDistanceMatches(const TopoDS_Vertex& left, const TopoDS_Vertex& right, double offset)
+{
+    return std::fabs(
+               gp_Vec(BRep_Tool::Pnt(left), BRep_Tool::Pnt(right)).Magnitude() - std::fabs(offset)
+           )
+        <= BRep_Tool::Tolerance(left) + BRep_Tool::Tolerance(right);
+}
+
+std::optional<TopoDS_Wire> connectOpenOffsetWiresLikeFreeCad(
+    TopoDS_Wire openWire1,
+    TopoDS_Wire openWire2,
+    double offset,
+    std::string& error
+)
+{
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementOffset2D(), FillType::fill branch says "We need to connect open
+    // wires to form closed wires" and supports exactly two open wires before adding two
+    // BRepBuilderAPI_MakeEdge connector edges.
+    auto endpoints1 = openWireEndpoints(openWire1);
+    auto endpoints2 = openWireEndpoints(openWire2);
+    if (!endpoints1 || !endpoints2) {
+        error = "makeOffset2D: fill offset: failed to find open wire endpoints.";
+        return std::nullopt;
+    }
+    TopoDS_Vertex v1 = endpoints1->first;
+    TopoDS_Vertex v2 = endpoints1->second;
+    TopoDS_Vertex v3 = endpoints2->first;
+    TopoDS_Vertex v4 = endpoints2->second;
+
+    if (offsetEndpointDistanceMatches(v2, v3, offset)) {
+        openWire2.Reverse();
+        std::swap(v3, v4);
+        v3.Reverse();
+        v4.Reverse();
+    }
+    else if (!offsetEndpointDistanceMatches(v2, v4, offset)) {
+        error = "makeOffset2D: fill offset: failed to establish open vertex relationship.";
+        return std::nullopt;
+    }
+
+    BRepBuilderAPI_MakeWire wireMaker;
+    BRepTools_WireExplorer explorer;
+    for (explorer.Init(openWire1); explorer.More(); explorer.Next()) {
+        wireMaker.Add(explorer.Current());
+    }
+    wireMaker.Add(BRepBuilderAPI_MakeEdge(v2, v4).Edge());
+    openWire2.Reverse();
+    for (explorer.Init(openWire2); explorer.More(); explorer.Next()) {
+        wireMaker.Add(explorer.Current());
+    }
+    wireMaker.Add(BRepBuilderAPI_MakeEdge(v3, v1).Edge());
+    wireMaker.Build();
+    if (!wireMaker.IsDone() || wireMaker.Wire().IsNull()) {
+        error = "makeOffset2D: fill offset: failed to build connected open wire.";
+        return std::nullopt;
+    }
+    return wireMaker.Wire();
+}
+
+FilledOffsetBuild makeFilledOffsetShape(
+    const TopoDS_Shape& sourceShape,
+    const TopoDS_Shape& offsetShape,
+    BRepOffsetAPI_MakeOffsetShape& offsetMaker
+)
+{
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementOffset(), FillType::fill uses
+    // "ShapeAnalysis_FreeBoundsProperties", "OffsetEdgesFromShapes()", "BRepOffsetAPI_ThruSections",
+    // then sews source, perimeter, and offset result with "BRepBuilderAPI_Sewing".
+    ShapeAnalysis_FreeBoundsProperties freeCheck(sourceShape);
+    freeCheck.Perform();
+    if (freeCheck.NbClosedFreeBounds() < 1) {
+        return FilledOffsetBuild {TopoDS_Shape {}, "Part::Offset Fill=true found no closed bounds"};
+    }
+
+    const BRepAlgo_Image& images = offsetMaker.MakeOffset().OffsetEdgesFromShapes();
+    std::vector<TopoDS_Shape> perimeterFaces;
+    for (int index = 1; index <= freeCheck.NbClosedFreeBounds(); ++index) {
+        TopoDS_Wire originalWire = TopoDS::Wire(freeCheck.ClosedFreeBound(index)->FreeBound());
+        BRep_Builder builder;
+        TopoDS_Wire offsetWire;
+        builder.MakeWire(offsetWire);
+        for (const TopoDS_Edge& sourceEdge : edgesFromWire(originalWire)) {
+            TopoDS_Edge offsetEdge;
+            if (!singleOffsetImageEdge(images, sourceEdge, offsetEdge)) {
+                return FilledOffsetBuild {
+                    TopoDS_Shape {},
+                    "Part::Offset Fill=true could not map a source boundary edge to one offset edge"
+                };
+            }
+            builder.Add(offsetWire, offsetEdge);
+        }
+
+        BRepOffsetAPI_ThruSections thruSections;
+        thruSections.AddWire(originalWire);
+        thruSections.AddWire(offsetWire);
+        thruSections.Build();
+        if (!thruSections.IsDone() || thruSections.Shape().IsNull()) {
+            return FilledOffsetBuild {TopoDS_Shape {}, "Part::Offset Fill=true ThruSections failed"};
+        }
+        perimeterFaces.push_back(thruSections.Shape());
+    }
+
+    const TopoDS_Shape perimeterCompound = compoundFromShapes(perimeterFaces);
+    BRepBuilderAPI_Sewing sewing;
+    sewing.Add(sourceShape);
+    sewing.Add(perimeterCompound);
+    sewing.Add(offsetShape);
+    sewing.Perform();
+
+    TopoDS_Shape outputShape = sewing.SewedShape();
+    if (outputShape.IsNull()) {
+        return FilledOffsetBuild {TopoDS_Shape {}, "Part::Offset Fill=true sewing produced null shape"};
+    }
+    if (outputShape.ShapeType() == TopAbs_SHELL && outputShape.Closed()) {
+        BRepBuilderAPI_MakeSolid solidMaker(TopoDS::Shell(outputShape));
+        if (solidMaker.IsDone()) {
+            TopoDS_Solid solid = solidMaker.Solid();
+            if (BRepLib::OrientClosedSolid(solid)) {
+                outputShape = solid;
+            }
+        }
+    }
+    return FilledOffsetBuild {outputShape, {}};
+}
+
+NamedShapeBuild makeOffset2DFaceLikeFreeCad(
+    const std::string& owner,
+    const NamedShapeSource& source,
+    const TopoDS_Face& face,
+    double offset,
+    short join,
+    bool fill,
+    bool allowOpenResult
+)
+{
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementOffset2D(), when "haveFaces" forces "OpenResult::noOpenResult",
+    // expands the offset result wires; "FillType::noFill" feeds only offset wires to FaceMaker,
+    // while "FillType::fill" collects "source wires and result wires are closed (simplest) -> make
+    // face from source wire + offset wire". cad-core routes the wire offset through the local
+    // MakeOffset2DFix wrapper so mapper history comes from the same MakeOffsetFix-style maker.
+    const std::vector<TopoDS_Wire> sourceWires = wiresFromShape(face);
+    if (sourceWires.empty()) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Part::Offset2D face source has no wires"};
+    }
+    if (fill && std::fabs(offset) < Precision::Confusion()) {
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            "makeOffset2D: offset distance is zero. Can't fill offset."
+        };
+    }
+
+    NamedShapeBuild offsetWireBuild = makeOffset2DWireShapeWithMakeOffsetFix(
+        owner + ".Offset2DWires",
+        sourceWires,
+        std::vector<NamedShapeSource> {source},
+        offset,
+        join,
+        allowOpenResult
+    );
+    if (!offsetWireBuild.error.empty() || offsetWireBuild.shape.IsNull()) {
+        return offsetWireBuild;
+    }
+    const TopoDS_Shape offsetWireShape = offsetWireBuild.shape;
+    std::optional<NamedShape> offsetWireNamedShape = offsetWireBuild.namedShape;
+
+    const std::vector<TopoDS_Wire> offsetWires = wiresFromShape(offsetWireShape);
+    if (offsetWires.empty()) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "makeOffset2D: offset result has no wires"};
+    }
+
+    NamedShapeSource offsetWireSource {
+        owner + ".Offset2DWires",
+        offsetWireShape,
+        offsetWireNamedShape ? &*offsetWireNamedShape : nullptr
+    };
+    if (!fill) {
+        const auto faceShape = makeFaceWithHolesFromClosedWires(offsetWires);
+        if (!faceShape || faceShape->IsNull()) {
+            return NamedShapeBuild {
+                TopoDS_Shape {},
+                std::nullopt,
+                "Part::Offset2D could not rebuild no-fill face from offset wires"
+            };
+        }
+
+        NamedShape namedShape = namedShapeForPreservedSources(owner, *faceShape, {offsetWireSource});
+        addDistinctString(namedShape.elementHistoryStatus, "part_offset2d:face_no_fill_makeoffset");
+        return NamedShapeBuild {*faceShape, namedShape, {}};
+    }
+
+    std::vector<TopoDS_Wire> faceWires;
+    faceWires.reserve(sourceWires.size() + offsetWires.size());
+    for (const auto& wire : sourceWires) {
+        if (!BRep_Tool::IsClosed(wire)) {
+            return NamedShapeBuild {
+                TopoDS_Shape {},
+                std::nullopt,
+                "Part::Offset2D Fill=true first slice supports closed source and result wires only"
+            };
+        }
+        faceWires.push_back(wire);
+    }
+    for (const auto& wire : offsetWires) {
+        if (!BRep_Tool::IsClosed(wire)) {
+            return NamedShapeBuild {
+                TopoDS_Shape {},
+                std::nullopt,
+                "Part::Offset2D Fill=true first slice supports closed source and result wires only"
+            };
+        }
+        faceWires.push_back(wire);
+    }
+
+    const auto filledFaceShape = makeFaceWithHolesFromClosedWires(faceWires);
+    if (!filledFaceShape || filledFaceShape->IsNull()) {
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            "Part::Offset2D could not rebuild fill face from source and offset wires"
+        };
+    }
+
+    NamedShape namedShape
+        = namedShapeForPreservedSources(owner, *filledFaceShape, {source, offsetWireSource});
+    addDistinctString(namedShape.elementHistoryStatus, "part_offset2d:face_fill_closed_makeoffset");
+    return NamedShapeBuild {*filledFaceShape, namedShape, {}};
+}
+
+NamedShapeBuild makeOffset2DWireLikeFreeCad(
+    const std::string& owner,
+    const NamedShapeSource& source,
+    const std::vector<TopoDS_Wire>& sourceWires,
+    double offset,
+    short join,
+    bool fill,
+    bool allowOpenResult
+)
+{
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementOffset2D(), for Edge/Wire sources pushes source wires into
+    // "sourceWires", calls "BRepOffsetAPI_MakeOffsetFix", and for "FillType::noFill" appends
+    // "offsetWires" directly to shapesToReturn. For FillType::fill it splits closed/open wires;
+    // the single-open-wire case connects source and offset result with two generated edges before
+    // FaceMaker. cad-core keeps the MakeOffsetFix-style wrapper in the Part layer so adapters only
+    // publish the resulting NamedShape ledger.
+    if (sourceWires.empty()) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Part::Offset2D wire source has no wires"};
+    }
+    if (fill && std::fabs(offset) < Precision::Confusion()) {
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            "makeOffset2D: offset distance is zero. Can't fill offset."
+        };
+    }
+
+    NamedShapeBuild offsetWireBuild = makeOffset2DWireShapeWithMakeOffsetFix(
+        owner,
+        sourceWires,
+        std::vector<NamedShapeSource> {source},
+        offset,
+        join,
+        allowOpenResult
+    );
+    if (!offsetWireBuild.error.empty() || offsetWireBuild.shape.IsNull()) {
+        return offsetWireBuild;
+    }
+    const TopoDS_Shape offsetWireShape = offsetWireBuild.shape;
+    std::optional<NamedShape> offsetWireNamedShape = offsetWireBuild.namedShape;
+
+    const std::vector<TopoDS_Wire> offsetWires = wiresFromShape(offsetWireShape);
+    if (offsetWires.empty()) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "makeOffset2D: offset result has no wires"};
+    }
+
+    if (!fill) {
+        TopoDS_Shape resultShape = shapeFromWires(offsetWires);
+        NamedShape namedShape = offsetWireNamedShape
+            ? *offsetWireNamedShape
+            : namedShapeForPreservedSources(owner, resultShape, {source});
+        addDistinctString(namedShape.elementHistoryStatus, "part_offset2d:wire_no_fill_makeoffset");
+        return NamedShapeBuild {resultShape, namedShape, {}};
+    }
+
+    std::vector<TopoDS_Wire> faceWires;
+    std::vector<TopoDS_Wire> openWires;
+    for (const TopoDS_Wire& wire : sourceWires) {
+        if (BRep_Tool::IsClosed(wire)) {
+            faceWires.push_back(wire);
+        }
+        else {
+            openWires.push_back(wire);
+        }
+    }
+    for (const TopoDS_Wire& wire : offsetWires) {
+        if (BRep_Tool::IsClosed(wire)) {
+            faceWires.push_back(wire);
+        }
+        else {
+            openWires.push_back(wire);
+        }
+    }
+    if (allowOpenResult && !openWires.empty()) {
+        if (openWires.size() != 2U) {
+            return NamedShapeBuild {
+                TopoDS_Shape {},
+                std::nullopt,
+                "makeOffset2D: collective offset with filling of multiple wires is not supported "
+                "yet."
+            };
+        }
+        std::string error;
+        auto connected
+            = connectOpenOffsetWiresLikeFreeCad(openWires.front(), openWires.back(), offset, error);
+        if (!connected) {
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, error};
+        }
+        faceWires.push_back(*connected);
+    }
+
+    const auto filledFaceShape = makeFaceWithHolesFromClosedWires(faceWires);
+    if (!filledFaceShape || filledFaceShape->IsNull()) {
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            "Part::Offset2D could not rebuild fill face from open source and offset wires"
+        };
+    }
+
+    NamedShapeSource offsetWireSource {
+        owner + ".Offset2DWires",
+        offsetWireShape,
+        offsetWireNamedShape ? &*offsetWireNamedShape : nullptr
+    };
+    NamedShape namedShape
+        = namedShapeForPreservedSources(owner, *filledFaceShape, {source, offsetWireSource});
+    addDistinctString(namedShape.elementHistoryStatus, "part_offset2d:wire_fill_open_makeoffset");
+    return NamedShapeBuild {*filledFaceShape, namedShape, {}};
+}
+
+NamedShapeBuild makeOffset2DCompoundChildrenLikeFreeCad(
+    const std::string& owner,
+    const NamedShapeSource& source,
+    double offset,
+    short join,
+    bool fill,
+    bool allowOpenResult
+)
+{
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementOffset2D(), for a compound with !intersection says "simply
+    // recursively process the children, independently" and sets the output policy to
+    // "forceCompound".
+    std::vector<TopoDS_Shape> childShapes;
+    std::vector<std::string> childStatuses;
+    for (TopoDS_Iterator it(source.shape); it.More(); it.Next()) {
+        const TopoDS_Shape child = it.Value();
+        if (child.IsNull()) {
+            continue;
+        }
+        NamedShapeSource childSource {source.owner, child, source.namedShape};
+        NamedShapeBuild childBuild
+            = makeElementOffset2DFromSource(owner, childSource, offset, join, fill, allowOpenResult, false);
+        if (!childBuild.error.empty() || childBuild.shape.IsNull()) {
+            return childBuild;
+        }
+        childShapes.push_back(childBuild.shape);
+        if (childBuild.namedShape) {
+            for (const std::string& status : childBuild.namedShape->elementHistoryStatus) {
+                addDistinctString(childStatuses, status);
+            }
+        }
+    }
+    if (childShapes.empty()) {
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            "makeOffset2D: compound input has no offsettable children"
+        };
+    }
+
+    const TopoDS_Shape compound = compoundFromShapes(childShapes);
+    NamedShape namedShape = namedShapeForPreservedSources(owner, compound, {source});
+    addDistinctString(namedShape.elementHistoryStatus, "part_offset2d:compound_child_recursive");
+    for (const std::string& status : childStatuses) {
+        addDistinctString(namedShape.elementHistoryStatus, status);
+    }
+    return NamedShapeBuild {compound, namedShape, {}};
+}
+
+void appendExpandedCompoundLeaves(const TopoDS_Shape& shape, std::vector<TopoDS_Shape>& shapes)
+{
+    if (shape.IsNull()) {
+        return;
+    }
+    if (shape.ShapeType() != TopAbs_COMPOUND) {
+        shapes.push_back(shape);
+        return;
+    }
+    bool addedChild = false;
+    for (TopoDS_Iterator it(shape); it.More(); it.Next()) {
+        appendExpandedCompoundLeaves(it.Value(), shapes);
+        addedChild = true;
+    }
+    if (!addedChild) {
+        shapes.push_back(shape);
+    }
+}
+
+NamedShapeBuild makeOffset2DCompoundCollectiveLikeFreeCad(
+    const std::string& owner,
+    const NamedShapeSource& source,
+    double offset,
+    short join,
+    bool fill,
+    bool allowOpenResult
+)
+{
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementOffset2D(), for a compound with "intersection" says "collect
+    // non-compounds from this compound for collective offset. Process other shapes independently.";
+    // after collecting source wires it creates one "BRepOffsetAPI_MakeOffsetFix mkOffset" and
+    // calls "mkOffset.AddWire(...)" for every collected wire before facemaking / makeElementCompound.
+    std::vector<NamedShapeSource> processSources;
+    std::vector<TopoDS_Shape> shapesToReturn;
+    std::vector<std::string> childStatuses;
+    TopoDS_Shape collectiveOffsetWireShape;
+    std::optional<NamedShape> collectiveOffsetWireNamedShape;
+    bool forceCompound = false;
+
+    for (TopoDS_Iterator it(source.shape); it.More(); it.Next()) {
+        const TopoDS_Shape child = it.Value();
+        if (child.IsNull()) {
+            continue;
+        }
+        NamedShapeSource childSource {source.owner, child, source.namedShape};
+        childSource.ownerAliases = source.ownerAliases;
+        if (child.ShapeType() == TopAbs_COMPOUND) {
+            NamedShapeBuild childBuild = makeElementOffset2DFromSource(
+                owner,
+                childSource,
+                offset,
+                join,
+                fill,
+                allowOpenResult,
+                true
+            );
+            if (!childBuild.error.empty() || childBuild.shape.IsNull()) {
+                return childBuild;
+            }
+            appendExpandedCompoundLeaves(childBuild.shape, shapesToReturn);
+            if (childBuild.namedShape) {
+                for (const std::string& status : childBuild.namedShape->elementHistoryStatus) {
+                    addDistinctString(childStatuses, status);
+                }
+            }
+            forceCompound = true;
+        }
+        else {
+            processSources.push_back(childSource);
+        }
+    }
+
+    if (!processSources.empty()) {
+        std::vector<TopoDS_Wire> sourceWires;
+        bool haveWires = false;
+        bool haveFaces = false;
+        for (const NamedShapeSource& processSource : processSources) {
+            switch (processSource.shape.ShapeType()) {
+                case TopAbs_EDGE: {
+                    const auto wire = wireFromEdge(TopoDS::Edge(processSource.shape));
+                    if (!wire) {
+                        return NamedShapeBuild {
+                            TopoDS_Shape {},
+                            std::nullopt,
+                            "Part::Offset2D could not convert source edge to wire"
+                        };
+                    }
+                    sourceWires.push_back(*wire);
+                    haveWires = true;
+                    break;
+                }
+                case TopAbs_WIRE:
+                    sourceWires.push_back(TopoDS::Wire(processSource.shape));
+                    haveWires = true;
+                    break;
+                case TopAbs_FACE: {
+                    const std::vector<TopoDS_Wire> faceWires = wiresFromShape(processSource.shape);
+                    sourceWires.insert(sourceWires.end(), faceWires.begin(), faceWires.end());
+                    haveFaces = true;
+                    break;
+                }
+                default:
+                    return NamedShapeBuild {
+                        TopoDS_Shape {},
+                        std::nullopt,
+                        "makeOffset2D: input shape is not an edge, wire or face or compound of "
+                        "those."
+                    };
+            }
+        }
+        if (haveWires && haveFaces) {
+            return NamedShapeBuild {
+                TopoDS_Shape {},
+                std::nullopt,
+                "makeOffset2D: collective offset of a mix of wires and faces is not supported"
+            };
+        }
+        if (fill && std::fabs(offset) < Precision::Confusion()) {
+            return NamedShapeBuild {
+                TopoDS_Shape {},
+                std::nullopt,
+                "makeOffset2D: offset distance is zero. Can't fill offset."
+            };
+        }
+
+        const bool effectiveOpenResult = allowOpenResult && !haveFaces;
+        NamedShapeBuild offsetWireBuild = makeOffset2DWireShapeWithMakeOffsetFix(
+            owner + ".Offset2DCollectiveWires",
+            sourceWires,
+            processSources,
+            offset,
+            join,
+            effectiveOpenResult
+        );
+        if (!offsetWireBuild.error.empty() || offsetWireBuild.shape.IsNull()) {
+            return offsetWireBuild;
+        }
+        const std::vector<TopoDS_Wire> offsetWires = wiresFromShape(offsetWireBuild.shape);
+        if (offsetWires.empty()) {
+            return NamedShapeBuild {
+                TopoDS_Shape {},
+                std::nullopt,
+                "makeOffset2D: offset result has no wires"
+            };
+        }
+
+        if (!fill) {
+            if (haveFaces) {
+                const auto faceShape = makeFaceWithHolesFromClosedWires(offsetWires);
+                if (!faceShape || faceShape->IsNull()) {
+                    return NamedShapeBuild {
+                        TopoDS_Shape {},
+                        std::nullopt,
+                        "Part::Offset2D could not rebuild no-fill face from collective offset wires"
+                    };
+                }
+                appendExpandedCompoundLeaves(*faceShape, shapesToReturn);
+            }
+            else {
+                appendExpandedCompoundLeaves(offsetWireBuild.shape, shapesToReturn);
+            }
+        }
+        else {
+            std::vector<TopoDS_Wire> faceWires;
+            std::vector<TopoDS_Wire> openWires;
+            for (const TopoDS_Wire& wire : sourceWires) {
+                (BRep_Tool::IsClosed(wire) ? faceWires : openWires).push_back(wire);
+            }
+            for (const TopoDS_Wire& wire : offsetWires) {
+                (BRep_Tool::IsClosed(wire) ? faceWires : openWires).push_back(wire);
+            }
+            if (effectiveOpenResult && !openWires.empty()) {
+                if (openWires.size() != 2U) {
+                    return NamedShapeBuild {
+                        TopoDS_Shape {},
+                        std::nullopt,
+                        "makeOffset2D: collective offset with filling of multiple wires is not "
+                        "supported "
+                        "yet."
+                    };
+                }
+                std::string error;
+                auto connected = connectOpenOffsetWiresLikeFreeCad(
+                    openWires.front(),
+                    openWires.back(),
+                    offset,
+                    error
+                );
+                if (!connected) {
+                    return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, error};
+                }
+                faceWires.push_back(*connected);
+            }
+
+            const auto filledFaceShape = makeFaceWithHolesFromClosedWires(faceWires);
+            if (!filledFaceShape || filledFaceShape->IsNull()) {
+                return NamedShapeBuild {
+                    TopoDS_Shape {},
+                    std::nullopt,
+                    "Part::Offset2D could not rebuild fill face from collective source and offset "
+                    "wires"
+                };
+            }
+            appendExpandedCompoundLeaves(*filledFaceShape, shapesToReturn);
+        }
+        if (offsetWireBuild.namedShape) {
+            for (const std::string& status : offsetWireBuild.namedShape->elementHistoryStatus) {
+                addDistinctString(childStatuses, status);
+            }
+        }
+        collectiveOffsetWireShape = offsetWireBuild.shape;
+        collectiveOffsetWireNamedShape = offsetWireBuild.namedShape;
+    }
+
+    if (shapesToReturn.empty()) {
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            "makeOffset2D: compound input has no offsettable children"
+        };
+    }
+
+    const TopoDS_Shape resultShape = shapesToReturn.size() == 1U && !forceCompound
+        ? shapesToReturn.front()
+        : compoundFromShapes(shapesToReturn);
+    std::vector<NamedShapeSource> resultSources {source};
+    if (collectiveOffsetWireNamedShape && !collectiveOffsetWireShape.IsNull()) {
+        resultSources.push_back(NamedShapeSource {
+            owner + ".Offset2DCollectiveWires",
+            collectiveOffsetWireShape,
+            &*collectiveOffsetWireNamedShape,
+        });
+    }
+    NamedShape namedShape = namedShapeForPreservedSources(owner, resultShape, resultSources);
+    addDistinctString(namedShape.elementHistoryStatus, "part_offset2d:compound_collective_makeoffset");
+    for (const std::string& status : childStatuses) {
+        addDistinctString(namedShape.elementHistoryStatus, status);
+    }
+    return NamedShapeBuild {resultShape, namedShape, {}};
+}
+
 bool shapeContains(const TopoDS_Shape& container, const TopoDS_Shape& shape)
 {
     if (container.IsNull() || shape.IsNull()) {
@@ -378,6 +1509,53 @@ bool shapeContains(const TopoDS_Shape& container, const TopoDS_Shape& shape)
         }
     }
     return false;
+}
+
+bool shapeContainsKind(const TopoDS_Shape& shape, TopAbs_ShapeEnum kind)
+{
+    if (shape.IsNull()) {
+        return false;
+    }
+    if (shape.ShapeType() == kind) {
+        return true;
+    }
+    for (TopExp_Explorer explorer(shape, kind); explorer.More(); explorer.Next()) {
+        return true;
+    }
+    return false;
+}
+
+SolidRecoveryBuild recoverOffsetSolidLikeFreeCad(
+    const std::string& owner,
+    const NamedShapeSource& source,
+    const TopoDS_Shape& offsetShape,
+    const NamedShape& offsetNamedShape
+)
+{
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementOffset(), after "res.makeElementShape(mkOffset, shape, op)",
+    // checks "shape.hasSubShape(TopAbs_SOLID) && !res.hasSubShape(TopAbs_SOLID)" and then
+    // calls "res.makeElementSolid()"; ::TopoShape::makeElementSolid() accepts one compsolid or
+    // all shells through BRepBuilderAPI_MakeSolid.
+    if (!shapeContainsKind(source.shape, TopAbs_SOLID)
+        || shapeContainsKind(offsetShape, TopAbs_SOLID)) {
+        return SolidRecoveryBuild {offsetShape, offsetNamedShape, false, {}};
+    }
+
+    NamedShapeSource offsetSource {owner + ".Offset", offsetShape, &offsetNamedShape};
+    NamedShapeBuild solidBuild = makeElementSolidFromSource(owner, offsetSource);
+    if (!solidBuild.error.empty() || solidBuild.shape.IsNull() || !solidBuild.namedShape) {
+        return SolidRecoveryBuild {
+            offsetShape,
+            offsetNamedShape,
+            false,
+            solidBuild.error.empty() ? "Part::Offset makeElementSolid failed" : solidBuild.error
+        };
+    }
+    NamedShape namedShape = *solidBuild.namedShape;
+    addDistinctString(namedShape.elementHistoryStatus, "part_offset_solid_source:make_element_solid");
+    return SolidRecoveryBuild {solidBuild.shape, namedShape, true, {}};
 }
 
 bool applyThruSectionsGeneratedHistory(
@@ -500,15 +1678,13 @@ NamedShape namedShapeForTaperComponent(
         sources.reserve(component.historySources.size());
         sources.push_back(NamedShapeSource {profileSource.owner, profile, profileSource.namedShape});
         for (std::size_t index = 1; index < component.historySources.size(); ++index) {
-            sources.push_back(
-                NamedShapeSource {
-                    componentOwner + ".TaperSection" + std::to_string(index + 1),
-                    component.historySources.at(index)
-                }
-            );
+            sources.push_back(NamedShapeSource {
+                componentOwner + ".TaperSection" + std::to_string(index + 1),
+                component.historySources.at(index)
+            });
         }
-        if (auto* thruSections
-            = dynamic_cast<BRepOffsetAPI_ThruSections*>(component.historyMaker.get())) {
+        if (auto* thruSections = dynamic_cast<BRepOffsetAPI_ThruSections*>(component.historyMaker.get(
+            ))) {
             // FreeCAD:
             // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
             // ::MapperThruSections::generated(), adds "GeneratedFace(s)", "FirstShape()" and
@@ -545,11 +1721,153 @@ void collectSourceElementMap(
     sourceTargets[sourceName].preserved.insert(*elementName);
 }
 
+int subshapeCount(const TopoDS_Shape& shape, TopAbs_ShapeEnum kind)
+{
+    TopTools_IndexedMapOfShape subshapes;
+    TopExp::MapShapes(shape, kind, subshapes);
+    return subshapes.Extent();
+}
+
+bool directCompoundChildrenPartnerSources(
+    const TopoDS_Shape& resultShape,
+    const std::vector<NamedShapeSource>& sources
+)
+{
+    if (resultShape.IsNull() || resultShape.ShapeType() != TopAbs_COMPOUND || sources.empty()) {
+        return false;
+    }
+
+    TopoDS_Iterator childIt(resultShape);
+    for (const NamedShapeSource& source : sources) {
+        if (source.shape.IsNull() || !childIt.More()) {
+            return false;
+        }
+        if (!childIt.Value().IsPartner(source.shape)) {
+            return false;
+        }
+        childIt.Next();
+    }
+    return !childIt.More();
+}
+
+void collectChildElementMaps(
+    NamedShape& namedShape,
+    const TopoDS_Shape& resultShape,
+    const std::vector<NamedShapeSource>& sources
+)
+{
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::mapSubElement(const std::vector<TopoShape>& shapes, const char* op), for
+    // compound partner children calls "setMappedChildElements(children)" instead of flattening
+    // every child subelement immediately. This records the same request-local source ranges so
+    // later mapper/history consumers can see that a preserved alias came from a child map ledger.
+    if (!directCompoundChildrenPartnerSources(resultShape, sources)) {
+        return;
+    }
+
+    bool sawRecursiveChildMap = false;
+    bool sawPostfixChildMap = false;
+    bool sawEncodedChildMapKey = false;
+    for (const TopAbs_ShapeEnum kind : childMapKinds()) {
+        const std::string prefix = prefixForKind(kind);
+        if (prefix.empty()) {
+            continue;
+        }
+        const std::string kindName = subshapeKindName(kind);
+
+        int offset = 0;
+        for (const NamedShapeSource& source : sources) {
+            const int count = subshapeCount(source.shape, kind);
+            if (count == 0) {
+                continue;
+            }
+
+            NamedShapeChildMap childMap;
+            childMap.sourceOwner = source.owner;
+            childMap.kind = kindName;
+            childMap.indexedName = prefix + "1";
+            childMap.offset = offset;
+            childMap.count = count;
+            childMap.targetStart = prefix + std::to_string(offset + 1);
+            childMap.targetEnd = childMapTargetName(prefix, offset, count);
+            childMap.postfix = source.childElementMapPostfix;
+            if (!childMap.postfix.empty()) {
+                sawPostfixChildMap = true;
+            }
+            childMap.hasSourceElementMap = source.namedShape != nullptr
+                && !source.namedShape->elementMap.empty();
+            childMap.sourceElementMapSize = source.namedShape != nullptr
+                ? source.namedShape->elementMap.size()
+                : 0U;
+            childMap.sourceChildMapCount = source.namedShape != nullptr
+                ? source.namedShape->childElementMaps.size()
+                : 0U;
+            if (shouldEncodeChildMapKey(childMap)) {
+                childMap.encodedChildMapKey = encodedChildMapKey(childMap);
+                sawEncodedChildMapKey = true;
+            }
+            namedShape.childElementMaps.push_back(childMap);
+
+            if (source.namedShape != nullptr && childMap.sourceChildMapCount != 0U) {
+                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/
+                // ElementMap.cpp::ElementMap::addChildElements(), key sentence:
+                // "try to resolve the grand child map now."  cad-core composes the already
+                // request-local child ranges here so nested compound sources do not need output
+                // layer geometry guessing to recover the grandchild ledger.
+                for (const NamedShapeChildMap& sourceChildMap : source.namedShape->childElementMaps) {
+                    if (sourceChildMap.kind != kindName || sourceChildMap.count <= 0) {
+                        continue;
+                    }
+                    NamedShapeChildMap recursiveChildMap = sourceChildMap;
+                    recursiveChildMap.offset = childMap.offset + sourceChildMap.offset;
+                    recursiveChildMap.targetStart = prefix
+                        + std::to_string(recursiveChildMap.offset + 1);
+                    recursiveChildMap.targetEnd = childMapTargetName(
+                        prefix,
+                        recursiveChildMap.offset,
+                        recursiveChildMap.count
+                    );
+                    recursiveChildMap.postfix
+                        = composeChildMapPostfix(childMap.postfix, sourceChildMap.postfix);
+                    if (!recursiveChildMap.postfix.empty()) {
+                        sawPostfixChildMap = true;
+                    }
+                    if (shouldEncodeChildMapKey(recursiveChildMap)) {
+                        recursiveChildMap.encodedChildMapKey = encodedChildMapKey(recursiveChildMap);
+                        sawEncodedChildMapKey = true;
+                    }
+                    namedShape.childElementMaps.push_back(std::move(recursiveChildMap));
+                    sawRecursiveChildMap = true;
+                }
+            }
+            offset += count;
+        }
+    }
+
+    if (!namedShape.childElementMaps.empty()) {
+        addDistinctString(
+            namedShape.elementHistoryStatus,
+            "element_map_child_map:preserve_source_ranges"
+        );
+    }
+    if (sawRecursiveChildMap) {
+        addDistinctString(
+            namedShape.elementHistoryStatus,
+            "element_map_child_map:recursive_source_ranges"
+        );
+    }
+    if (sawPostfixChildMap) {
+        addDistinctString(namedShape.elementHistoryStatus, "element_map_child_map:postfix_source_ranges");
+    }
+    if (sawEncodedChildMapKey) {
+        addDistinctString(namedShape.elementHistoryStatus, "element_map_child_map:hashed_child_map_keys");
+    }
+}
+
 bool sameRefineSurface(const TopoDS_Face& sourceFace, const TopoDS_Face& resultFace)
 {
-    const GeomAbs_SurfaceType sourceType = part::model_refine::FaceTypedBase::getFaceType(
-        sourceFace
-    );
+    const GeomAbs_SurfaceType sourceType = part::model_refine::FaceTypedBase::getFaceType(sourceFace);
     if (sourceType != part::model_refine::FaceTypedBase::getFaceType(resultFace)) {
         return false;
     }
@@ -751,6 +2069,64 @@ void applyPreservedElementMap(
     }
 }
 
+std::optional<std::string> sourceLocalElementName(
+    const NamedShapeSource& source,
+    TopAbs_ShapeEnum kind,
+    const TopoDS_Shape& sourceElement
+)
+{
+    const std::string prefix = prefixForKind(kind);
+    if (prefix.empty() || source.shape.IsNull() || sourceElement.IsNull()) {
+        return std::nullopt;
+    }
+    TopTools_IndexedMapOfShape sourceElements;
+    TopExp::MapShapes(source.shape, kind, sourceElements);
+    const int index = findSameShapeIndex(sourceElements, sourceElement);
+    if (index <= 0) {
+        return std::nullopt;
+    }
+    return prefix + std::to_string(index);
+}
+
+TopoDS_Vertex propagatedVertexClosestTo(
+    const TopoDS_Vertex& originalVertex,
+    const TopoDS_Edge& propagatedEdge
+)
+{
+    TopoDS_Vertex first;
+    TopoDS_Vertex last;
+    TopExp::Vertices(propagatedEdge, first, last);
+    if (first.IsNull()) {
+        return last;
+    }
+    if (last.IsNull()) {
+        return first;
+    }
+    const gp_Pnt originalPoint = BRep_Tool::Pnt(originalVertex);
+    const double firstDistance = originalPoint.SquareDistance(BRep_Tool::Pnt(first));
+    const double lastDistance = originalPoint.SquareDistance(BRep_Tool::Pnt(last));
+    return firstDistance <= lastDistance ? first : last;
+}
+
+void collectPropagatedWireElement(
+    NamedShape& namedShape,
+    const NamedShapeSource& source,
+    const TopoDS_Shape& originalElement,
+    const TopoDS_Shape& propagatedElement,
+    TopAbs_ShapeEnum kind,
+    std::map<std::string, SourceTargets>& sourceTargets
+)
+{
+    const auto localName = sourceLocalElementName(source, kind, originalElement);
+    if (!localName) {
+        return;
+    }
+    for (const std::string& sourceName : sourceElementNames(source, *localName)) {
+        sourceTargets[sourceName];
+        collectSourceElementMap(namedShape, sourceName, propagatedElement, kind, sourceTargets);
+    }
+}
+
 void addMergeHistory(NamedShape& namedShape)
 {
     std::map<std::string, std::set<std::string>> aliasesByTarget;
@@ -870,10 +2246,8 @@ void addNestedHistory(
     if (kind == ElementHistoryKind::Merge && elementIt->second.status != ElementHistoryKind::Split) {
         elementIt->second.status = kind;
     }
-    else if (
-        elementIt->second.status == ElementHistoryKind::Indexed
-        && (kind == ElementHistoryKind::Generated || kind == ElementHistoryKind::Modified)
-    ) {
+    else if (elementIt->second.status == ElementHistoryKind::Indexed
+             && (kind == ElementHistoryKind::Generated || kind == ElementHistoryKind::Modified)) {
         elementIt->second.status = kind;
     }
     for (const std::string& source : sources) {
@@ -982,6 +2356,24 @@ nlohmann::json elementToJson(const NamedElement& element)
         {"index", element.subshape.index},
         {"status", historyKindName(element.status)},
         {"sources", element.sources},
+    };
+}
+
+nlohmann::json childElementMapToJson(const NamedShapeChildMap& childMap)
+{
+    return {
+        {"source_owner", childMap.sourceOwner},
+        {"kind", childMap.kind},
+        {"indexed_name", childMap.indexedName},
+        {"offset", childMap.offset},
+        {"count", childMap.count},
+        {"target_start", childMap.targetStart},
+        {"target_end", childMap.targetEnd},
+        {"postfix", childMap.postfix},
+        {"encoded_child_map_key", childMap.encodedChildMapKey},
+        {"has_source_element_map", childMap.hasSourceElementMap},
+        {"source_element_map_size", childMap.sourceElementMapSize},
+        {"source_child_map_count", childMap.sourceChildMapCount},
     };
 }
 
@@ -2479,10 +3871,198 @@ NamedShape namedShapeForPreservedSources(
         }
     }
     applyPreservedElementMap(namedShape, sourceTargets);
+    collectChildElementMaps(namedShape, resultShape, sources);
     propagateNestedSourceHistory(namedShape, sources);
     addMergeHistory(namedShape);
 
     return namedShape;
+}
+
+NamedShapeBuild makeElementWiresWithPropagatedSources(
+    const std::string& owner,
+    const std::vector<NamedShapeSource>& sources,
+    const std::string& op
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/
+    // TopoShapeExpansion.cpp::TopoShape::makeElementWires(), key comment:
+    // "MakeWire will replace vertex of connected edge ... update the shape in order to preserve
+    // element mapping." cad-core keeps this in the Part-layer NamedShape ledger so adapters do
+    // not infer Propagate aliases from result geometry.
+    (void)op;
+    BRepBuilderAPI_MakeWire wireMaker;
+    struct PropagatedEdge
+    {
+        const NamedShapeSource* source = nullptr;
+        TopoDS_Edge originalEdge;
+        TopoDS_Edge propagatedEdge;
+    };
+    std::vector<PropagatedEdge> propagatedEdges;
+
+    for (const NamedShapeSource& source : sources) {
+        if (source.shape.IsNull()) {
+            continue;
+        }
+        TopTools_IndexedMapOfShape sourceEdges;
+        TopExp::MapShapes(source.shape, TopAbs_EDGE, sourceEdges);
+        for (int index = 1; index <= sourceEdges.Extent(); ++index) {
+            const TopoDS_Edge originalEdge = TopoDS::Edge(sourceEdges(index));
+            try {
+                wireMaker.Add(originalEdge);
+            }
+            catch (const Standard_Failure& failure) {
+                return NamedShapeBuild {
+                    TopoDS_Shape {},
+                    std::nullopt,
+                    failure.GetMessageString() != nullptr
+                        ? failure.GetMessageString()
+                        : "makeElementWires: could not add source edge"
+                };
+            }
+            if (!wireMaker.IsDone()) {
+                return NamedShapeBuild {
+                    TopoDS_Shape {},
+                    std::nullopt,
+                    "makeElementWires: source edges did not form a wire"
+                };
+            }
+            TopoDS_Edge propagatedEdge = wireMaker.Edge();
+            if (propagatedEdge.IsNull()) {
+                propagatedEdge = originalEdge;
+            }
+            propagatedEdges.push_back(PropagatedEdge {&source, originalEdge, propagatedEdge});
+        }
+    }
+
+    if (propagatedEdges.empty()) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "makeElementWires: no source edges"};
+    }
+    if (!wireMaker.IsDone() || wireMaker.Wire().IsNull()) {
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            "makeElementWires: failed to build result wire"
+        };
+    }
+
+    const TopoDS_Wire resultWire = wireMaker.Wire();
+    NamedShape namedShape = indexedNamedShapeForObject(owner, resultWire);
+    std::map<std::string, SourceTargets> sourceTargets;
+
+    for (const PropagatedEdge& edge : propagatedEdges) {
+        if (edge.source == nullptr) {
+            continue;
+        }
+        collectPropagatedWireElement(
+            namedShape,
+            *edge.source,
+            edge.originalEdge,
+            edge.propagatedEdge,
+            TopAbs_EDGE,
+            sourceTargets
+        );
+
+        TopoDS_Vertex originalFirst;
+        TopoDS_Vertex originalLast;
+        TopExp::Vertices(edge.originalEdge, originalFirst, originalLast);
+        if (!originalFirst.IsNull()) {
+            collectPropagatedWireElement(
+                namedShape,
+                *edge.source,
+                originalFirst,
+                propagatedVertexClosestTo(originalFirst, edge.propagatedEdge),
+                TopAbs_VERTEX,
+                sourceTargets
+            );
+        }
+        if (!originalLast.IsNull()) {
+            collectPropagatedWireElement(
+                namedShape,
+                *edge.source,
+                originalLast,
+                propagatedVertexClosestTo(originalLast, edge.propagatedEdge),
+                TopAbs_VERTEX,
+                sourceTargets
+            );
+        }
+    }
+
+    applyPreservedElementMap(namedShape, sourceTargets);
+    propagateNestedSourceHistory(namedShape, sources);
+    addMergeHistory(namedShape);
+    addDistinctString(namedShape.elementHistoryStatus, "element_map_policy_propagate:make_element_wires");
+    return NamedShapeBuild {resultWire, namedShape, {}};
+}
+
+NamedShapeBuild makeElementShellWithPropagatedSource(
+    const std::string& owner,
+    const NamedShapeSource& source,
+    const std::string& op
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/
+    // TopoShapeExpansion.cpp::TopoShape::makeElementShell(), "builder.MakeShell(shell)" then
+    // adds every "getSubShapes(TopAbs_FACE)" face; with ElementMapPolicy::Propagate it builds
+    // "TopoShape tmp(..., shell)", calls "tmp.mapSubElement(*this, op)", and reuses that
+    // ElementMap after possible ShapeUpgrade_ShellSewing repair.
+    (void)op;
+    if (source.shape.IsNull()) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "makeElementShell: null source shape"};
+    }
+
+    try {
+        BRep_Builder builder;
+        TopoDS_Shell shell;
+        builder.MakeShell(shell);
+        int faceCount = 0;
+        for (TopExp_Explorer explorer(source.shape, TopAbs_FACE); explorer.More(); explorer.Next()) {
+            builder.Add(shell, TopoDS::Face(explorer.Current()));
+            ++faceCount;
+        }
+        if (faceCount == 0) {
+            return NamedShapeBuild {
+                TopoDS_Shape {},
+                std::nullopt,
+                "makeElementShell: cannot make shell without face"
+            };
+        }
+
+        TopoDS_Shape resultShape = shell;
+        BRepCheck_Analyzer check(shell);
+        if (!check.IsValid()) {
+            ShapeUpgrade_ShellSewing sewShell;
+            resultShape = sewShell.ApplySewing(shell);
+        }
+        if (resultShape.IsNull()) {
+            return NamedShapeBuild {
+                TopoDS_Shape {},
+                std::nullopt,
+                "makeElementShell: produced null shell"
+            };
+        }
+        if (resultShape.ShapeType() != TopAbs_SHELL) {
+            return NamedShapeBuild {
+                TopoDS_Shape {},
+                std::nullopt,
+                "makeElementShell: unexpected output shape type"
+            };
+        }
+
+        NamedShape namedShape = namedShapeForPreservedSources(owner, resultShape, {source});
+        addDistinctString(
+            namedShape.elementHistoryStatus,
+            "element_map_policy_propagate:make_element_shell"
+        );
+        return NamedShapeBuild {resultShape, namedShape, {}};
+    }
+    catch (const Standard_Failure& failure) {
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            failure.GetMessageString() != nullptr ? failure.GetMessageString()
+                                                  : "makeElementShell failed"
+        };
+    }
 }
 
 NamedShape namedShapeForLinkedShape(
@@ -2642,6 +4222,16 @@ NamedShapeBuild makeElementBooleanFromSources(
         return NamedShapeBuild {sources.front().shape, std::move(namedShape), {}};
     }
 
+    std::vector<NamedShapeSource> booleanSources = expandBooleanSourcesLikeFreeCad(sources, operation);
+    if (booleanSources.size() == 1U) {
+        NamedShape namedShape = booleanSources.front().namedShape != nullptr
+            ? *booleanSources.front().namedShape
+            : indexedNamedShapeForObject(owner, booleanSources.front().shape);
+        namedShape.owner = owner;
+        namedShape.shape = booleanSources.front().shape;
+        return NamedShapeBuild {booleanSources.front().shape, std::move(namedShape), {}};
+    }
+
     std::unique_ptr<BRepAlgoAPI_BooleanOperation> maker;
     switch (operation) {
         case BooleanOperation::Fuse:
@@ -2657,13 +4247,16 @@ NamedShapeBuild makeElementBooleanFromSources(
 
     TopTools_ListOfShape arguments;
     TopTools_ListOfShape tools;
-    arguments.Append(sources.front().shape);
-    for (std::size_t index = 1; index < sources.size(); ++index) {
-        tools.Append(sources.at(index).shape);
+    arguments.Append(booleanSources.front().shape);
+    for (std::size_t index = 1; index < booleanSources.size(); ++index) {
+        tools.Append(booleanSources.at(index).shape);
     }
 
+    maker->SetRunParallel(Standard_True);
+    maker->SetNonDestructive(Standard_True);
     maker->SetArguments(arguments);
     maker->SetTools(tools);
+    maker->SetFuzzyValue(autoFuzzyValueForSources(booleanSources));
     maker->Build();
     if (!maker->IsDone()) {
         return NamedShapeBuild {
@@ -2676,7 +4269,7 @@ NamedShapeBuild makeElementBooleanFromSources(
     const TopoDS_Shape resultShape = maker->Shape();
     return NamedShapeBuild {
         resultShape,
-        namedShapeForMakerHistory(owner, resultShape, sources, *maker),
+        namedShapeForMakerHistory(owner, resultShape, booleanSources, *maker),
         {}
     };
 }
@@ -2824,7 +4417,8 @@ NamedShapeBuild makeElementOffsetFromSource(
     bool intersection,
     bool selfIntersection,
     short offsetMode,
-    short join
+    short join,
+    bool fill
 )
 {
     if (source.shape.IsNull()) {
@@ -2833,23 +4427,62 @@ NamedShapeBuild makeElementOffsetFromSource(
 
     try {
         BRepOffsetAPI_MakeOffsetShape maker;
-        maker.PerformByJoin(source.shape,
-                            offset,
-                            tolerance,
-                            BRepOffset_Mode(offsetMode),
-                            intersection ? Standard_True : Standard_False,
-                            selfIntersection ? Standard_True : Standard_False,
-                            GeomAbs_JoinType(join));
+        maker.PerformByJoin(
+            source.shape,
+            offset,
+            tolerance,
+            BRepOffset_Mode(offsetMode),
+            intersection ? Standard_True : Standard_False,
+            selfIntersection ? Standard_True : Standard_False,
+            GeomAbs_JoinType(join)
+        );
         if (!maker.IsDone()) {
-            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "BRepOffsetAPI_MakeOffsetShape not done"};
+            return NamedShapeBuild {
+                TopoDS_Shape {},
+                std::nullopt,
+                "BRepOffsetAPI_MakeOffsetShape not done"
+            };
         }
-        const TopoDS_Shape resultShape = maker.Shape();
-        if (resultShape.IsNull()) {
+        const TopoDS_Shape offsetShape = maker.Shape();
+        if (offsetShape.IsNull()) {
             return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Resulting offset shape is null"};
         }
+        if (fill) {
+            FilledOffsetBuild filled = makeFilledOffsetShape(source.shape, offsetShape, maker);
+            if (!filled.error.empty() || filled.shape.IsNull()) {
+                return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, filled.error};
+            }
+            NamedShape namedShape = namedShapeForPreservedSources(owner, filled.shape, {source});
+            addDistinctString(namedShape.elementHistoryStatus, "part_offset_fill:sewing_history");
+            addDistinctString(namedShape.elementHistoryStatus, "part_offset_fill:perimeter_faces");
+            return NamedShapeBuild {filled.shape, namedShape, {}};
+        }
+        NamedShape offsetNamedShape = namedShapeForMakerHistory(
+            owner,
+            offsetShape,
+            std::vector<NamedShapeSource> {source},
+            maker
+        );
+        SolidRecoveryBuild solidRecovery
+            = recoverOffsetSolidLikeFreeCad(owner, source, offsetShape, offsetNamedShape);
+        if (!solidRecovery.error.empty()) {
+            NamedShape namedShape = solidRecovery.namedShape.value_or(offsetNamedShape);
+            addDistinctString(
+                namedShape.elementHistoryStatus,
+                "part_offset_solid_source:make_element_solid_failed"
+            );
+            return NamedShapeBuild {solidRecovery.shape, namedShape, {}};
+        }
+        if (solidRecovery.applied) {
+            return NamedShapeBuild {
+                solidRecovery.shape,
+                solidRecovery.namedShape,
+                {},
+            };
+        }
         return NamedShapeBuild {
-            resultShape,
-            namedShapeForMakerHistory(owner, resultShape, std::vector<NamedShapeSource> {source}, maker),
+            offsetShape,
+            offsetNamedShape,
             {},
         };
     }
@@ -2858,6 +4491,259 @@ NamedShapeBuild makeElementOffsetFromSource(
             TopoDS_Shape {},
             std::nullopt,
             failure.GetMessageString() != nullptr ? failure.GetMessageString() : "Offset failed"
+        };
+    }
+}
+
+NamedShapeBuild makeElementOffset2DFromSource(
+    const std::string& owner,
+    const NamedShapeSource& source,
+    double offset,
+    short join,
+    bool fill,
+    bool allowOpenResult,
+    bool intersection
+)
+{
+    if (source.shape.IsNull()) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Null input shape for 2D offset operation"};
+    }
+    if (source.shape.ShapeType() == TopAbs_COMPOUND) {
+        if (intersection) {
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/
+            // TopoShapeExpansion.cpp::TopoShape::makeElementOffset2D(), "intersection" collects
+            // non-compound children for collective offset and processes nested compounds
+            // recursively.
+            return makeOffset2DCompoundCollectiveLikeFreeCad(
+                owner,
+                source,
+                offset,
+                join,
+                fill,
+                allowOpenResult
+            );
+        }
+        return makeOffset2DCompoundChildrenLikeFreeCad(owner, source, offset, join, fill, allowOpenResult);
+    }
+    if (intersection) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/
+        // TopoShapeExpansion.cpp::TopoShape::makeElementOffset2D(), "intersection" changes
+        // compound handling by collecting non-compound children for collective offset. This slice
+        // handles single face/edge/wire sources only, so collective intersection remains metadata.
+    }
+    const bool effectiveOpenResult = allowOpenResult && source.shape.ShapeType() != TopAbs_FACE;
+
+    try {
+        if (source.shape.ShapeType() == TopAbs_EDGE) {
+            const auto sourceWire = wireFromEdge(TopoDS::Edge(source.shape));
+            if (!sourceWire) {
+                return NamedShapeBuild {
+                    TopoDS_Shape {},
+                    std::nullopt,
+                    "Part::Offset2D could not convert source edge to wire"
+                };
+            }
+            return makeOffset2DWireLikeFreeCad(
+                owner,
+                source,
+                std::vector<TopoDS_Wire> {*sourceWire},
+                offset,
+                join,
+                fill,
+                effectiveOpenResult
+            );
+        }
+        if (source.shape.ShapeType() == TopAbs_WIRE) {
+            return makeOffset2DWireLikeFreeCad(
+                owner,
+                source,
+                std::vector<TopoDS_Wire> {TopoDS::Wire(source.shape)},
+                offset,
+                join,
+                fill,
+                effectiveOpenResult
+            );
+        }
+        if (source.shape.ShapeType() != TopAbs_FACE) {
+            return NamedShapeBuild {
+                TopoDS_Shape {},
+                std::nullopt,
+                "makeOffset2D: input shape is not an edge, wire or face or compound of those."
+            };
+        }
+        return makeOffset2DFaceLikeFreeCad(
+            owner,
+            source,
+            TopoDS::Face(source.shape),
+            offset,
+            join,
+            fill,
+            effectiveOpenResult
+        );
+    }
+    catch (const Standard_Failure& failure) {
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            failure.GetMessageString() != nullptr ? failure.GetMessageString() : "Offset2D failed"
+        };
+    }
+}
+
+NamedShapeBuild makeElementThickSolidFromSource(
+    const std::string& owner,
+    const NamedShapeSource& source,
+    const std::vector<TopoDS_Face>& faces,
+    double offset,
+    double tolerance,
+    bool intersection,
+    bool selfIntersection,
+    short offsetMode,
+    short join
+)
+{
+    if (source.shape.IsNull()) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Null shape"};
+    }
+    if (faces.empty()) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Null input shape"};
+    }
+    if (std::fabs(offset) <= 2.0 * tolerance) {
+        NamedShape namedShape = namedShapeForPreservedSources(owner, source.shape, {source});
+        addDistinctString(namedShape.elementHistoryStatus, "part_thickness:zero_thickness_copy");
+        return NamedShapeBuild {source.shape, namedShape, {}};
+    }
+
+    TopTools_ListOfShape removeFaces;
+    for (const TopoDS_Face& face : faces) {
+        if (face.IsNull()) {
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Null input shape"};
+        }
+        if (!shapeContains(source.shape, face)) {
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "face does not belong to the shape"};
+        }
+        removeFaces.Append(face);
+    }
+
+    short effectiveJoin = join;
+    if (effectiveJoin != 0 && effectiveJoin != 2) {
+        // FreeCAD:
+        // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+        // ::TopoShape::makeElementThickSolid(), "we do not offer tangent join type", so any
+        // non Arc / Intersection join is treated as JoinType::intersection before OCCT.
+        effectiveJoin = 2;
+    }
+
+    try {
+        BRepOffsetAPI_MakeThickSolid maker;
+        maker.MakeThickSolidByJoin(
+            source.shape,
+            removeFaces,
+            offset,
+            tolerance,
+            BRepOffset_Mode(offsetMode),
+            intersection ? Standard_True : Standard_False,
+            selfIntersection ? Standard_True : Standard_False,
+            GeomAbs_JoinType(effectiveJoin)
+        );
+        const TopoDS_Shape resultShape = maker.Shape();
+        if (resultShape.IsNull()) {
+            return NamedShapeBuild {
+                TopoDS_Shape {},
+                std::nullopt,
+                "Part::Thickness produced a null shape"
+            };
+        }
+        NamedShape namedShape = namedShapeForMakerHistory(
+            owner,
+            resultShape,
+            std::vector<NamedShapeSource> {source},
+            maker
+        );
+        addDistinctString(namedShape.elementHistoryStatus, "part_thickness:make_thick_solid");
+        return NamedShapeBuild {resultShape, namedShape, {}};
+    }
+    catch (const Standard_Failure& failure) {
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            failure.GetMessageString() != nullptr ? failure.GetMessageString() : "Thickness failed"
+        };
+    }
+}
+
+NamedShapeBuild makeElementSolidFromSource(const std::string& owner, const NamedShapeSource& source)
+{
+    if (source.shape.IsNull()) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Null input shape for makeElementSolid"};
+    }
+
+    try {
+        int compsolidCount = 0;
+        TopoDS_CompSolid compsolid;
+        for (TopExp_Explorer explorer(source.shape, TopAbs_COMPSOLID); explorer.More();
+             explorer.Next()) {
+            ++compsolidCount;
+            compsolid = TopoDS::CompSolid(explorer.Current());
+            if (compsolidCount > 1) {
+                break;
+            }
+        }
+
+        if (compsolidCount == 1) {
+            BRepBuilderAPI_MakeSolid solidMaker(compsolid);
+            TopoDS_Shape solidShape = solidMaker.Shape();
+            if (solidShape.IsNull()) {
+                return NamedShapeBuild {
+                    TopoDS_Shape {},
+                    std::nullopt,
+                    "makeElementSolid returned null solid"
+                };
+            }
+            NamedShape namedShape = namedShapeForMakerHistory(owner, solidShape, {source}, solidMaker);
+            addDistinctString(namedShape.elementHistoryStatus, "part_make_solid:make_element_solid");
+            return NamedShapeBuild {solidShape, namedShape, {}};
+        }
+        if (compsolidCount > 1) {
+            return NamedShapeBuild {
+                TopoDS_Shape {},
+                std::nullopt,
+                "Only one compsolid can be accepted in makeElementSolid"
+            };
+        }
+
+        BRepBuilderAPI_MakeSolid solidMaker;
+        int shellCount = 0;
+        for (TopExp_Explorer explorer(source.shape, TopAbs_SHELL); explorer.More(); explorer.Next()) {
+            solidMaker.Add(TopoDS::Shell(explorer.Current()));
+            ++shellCount;
+        }
+        if (shellCount == 0) {
+            return NamedShapeBuild {
+                TopoDS_Shape {},
+                std::nullopt,
+                "No shells or compsolids found in shape"
+            };
+        }
+        if (!solidMaker.IsDone()) {
+            return NamedShapeBuild {
+                TopoDS_Shape {},
+                std::nullopt,
+                "Failed to create a solid in makeElementSolid"
+            };
+        }
+        TopoDS_Solid solid = TopoDS::Solid(solidMaker.Shape());
+        BRepLib::OrientClosedSolid(solid);
+        NamedShape namedShape = namedShapeForMakerHistory(owner, solid, {source}, solidMaker);
+        addDistinctString(namedShape.elementHistoryStatus, "part_make_solid:make_element_solid");
+        return NamedShapeBuild {solid, namedShape, {}};
+    }
+    catch (const Standard_Failure& failure) {
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            failure.GetMessageString() != nullptr ? failure.GetMessageString()
+                                                  : "makeElementSolid failed"
         };
     }
 }
@@ -3134,6 +5020,10 @@ nlohmann::json namedShapeToJson(const NamedShape& namedShape)
     for (const auto& entry : namedShape.history) {
         history.push_back(historyToJson(entry));
     }
+    nlohmann::json childElementMaps = nlohmann::json::array();
+    for (const NamedShapeChildMap& childMap : namedShape.childElementMaps) {
+        childElementMaps.push_back(childElementMapToJson(childMap));
+    }
     const std::vector<MapperHistoryEvent> mapperHistory = mapperHistoryForNamedShape(namedShape);
 
     const bool hasMappedHistory = std::any_of(
@@ -3145,7 +5035,8 @@ nlohmann::json namedShapeToJson(const NamedShape& namedShape)
                                   )
         || std::any_of(namedShape.elementMap.begin(),
                        namedShape.elementMap.end(),
-                       [](const auto& item) { return item.first != item.second; });
+                       [](const auto& item) { return item.first != item.second; })
+        || !namedShape.childElementMaps.empty();
     std::vector<std::string> elementHistoryStatus = namedShape.elementHistoryStatus;
     for (const std::string& status : elementHistoryStatusForNamedShape(namedShape)) {
         addDistinctString(elementHistoryStatus, status);
@@ -3156,6 +5047,7 @@ nlohmann::json namedShapeToJson(const NamedShape& namedShape)
         {"element_map_status", hasMappedHistory ? "history_partial" : "indexed_only"},
         {"element_history_status", elementHistoryStatus},
         {"element_map", namedShape.elementMap},
+        {"child_element_maps", childElementMaps},
         {"elements", elements},
         {"history", history},
         {"mapper_history", mapperHistoryToJson(mapperHistory)},

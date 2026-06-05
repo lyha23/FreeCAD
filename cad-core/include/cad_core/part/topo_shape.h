@@ -138,12 +138,37 @@ struct NamedElement
     std::vector<std::string> sources;
 };
 
+struct NamedShapeChildMap
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/ElementMap.cpp
+    // ::ElementMap::addChildElements(), stores MappedChildElements ranges and may defer lookup
+    // through "child.elementMap"; TopoShapeExpansion.cpp::TopoShape::createChildMap() fills
+    // "indexedName", "offset", "count", "elementMap" and "postfix" for compound child sources.
+    std::string sourceOwner;
+    std::string kind;
+    std::string indexedName;
+    int offset = 0;
+    int count = 0;
+    std::string targetStart;
+    std::string targetEnd;
+    std::string postfix;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/ElementMap.cpp
+    // ::ElementMap::hashChildMaps(), rewrites eligible child map postfixes into encoded
+    // child-map keys using "MAPPED_CHILD_ELEMENTS_PREFIX". cad-core keeps this as request-local
+    // evidence, not as a FreeCAD MappedName byte-for-byte serialization.
+    std::string encodedChildMapKey;
+    bool hasSourceElementMap = false;
+    std::size_t sourceElementMapSize = 0;
+    std::size_t sourceChildMapCount = 0;
+};
+
 struct NamedShape
 {
     std::string owner;
     TopoDS_Shape shape;
     std::map<std::string, NamedElement> elements;
     std::map<std::string, std::string> elementMap;
+    std::vector<NamedShapeChildMap> childElementMaps;
     std::vector<ElementHistory> history;
     std::vector<MapperHistoryEvent> mapperHistory;
     // FreeCAD:
@@ -161,6 +186,12 @@ struct NamedShapeSource
     TopoDS_Shape shape;
     const NamedShape* namedShape = nullptr;
     std::vector<std::string> ownerAliases;
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::createChildMap(), when an operation string is supplied, stores it in
+    // MappedChildElements::postfix before ElementMap::addChildElements() encodes the child map.
+    std::string childElementMapPostfix;
+    bool expandCompoundForBoolean = false;
 };
 
 struct LinkedSubshapeRetag
@@ -269,6 +300,26 @@ NamedShape namedShapeForPreservedSources(
     const std::vector<NamedShapeSource>& sources
 );
 // FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+// ::TopoShape::makeElementWires(), after BRepBuilderAPI_MakeWire may replace connected
+// vertices, updates the edge shape so ElementMapPolicy::Propagate can call
+// "wires.back().mapSubElement(edges, op)" with the post-maker edge identity.
+NamedShapeBuild makeElementWiresWithPropagatedSources(
+    const std::string& owner,
+    const std::vector<NamedShapeSource>& sources,
+    const std::string& op
+);
+// FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+// ::TopoShape::makeElementShell(), builds a TopoDS_Shell from source faces, then for
+// ElementMapPolicy::Propagate calls "tmp.mapSubElement(*this, op)" before resetting the shell
+// ElementMap.
+NamedShapeBuild makeElementShellWithPropagatedSource(
+    const std::string& owner,
+    const NamedShapeSource& source,
+    const std::string& op
+);
+// FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
 // ::LinkBaseExtension::checkGeoElementMap(), calls "geoData->reTagElementMap(obj->getID(), ...)"
 // after resolving the linked object. cad-core exposes the same source-alias retag as ElementMap.
@@ -335,7 +386,8 @@ NamedShapeBuild makeElementSectionFromSources(
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
 // ::TopoShape::makeElementOffset(), creates "BRepOffsetAPI_MakeOffsetShape mkOffset",
-// calls "PerformByJoin(...)" and then "res.makeElementShape(mkOffset, shape, op)".
+// calls "PerformByJoin(...)" and when "FillType::fill" is requested, sews the original
+// shape, offset result, and free-bound perimeter faces before makeShapeWithElementMap().
 NamedShapeBuild makeElementOffsetFromSource(
     const std::string& owner,
     const NamedShapeSource& source,
@@ -344,8 +396,49 @@ NamedShapeBuild makeElementOffsetFromSource(
     bool intersection,
     bool selfIntersection,
     short offsetMode,
+    short join,
+    bool fill = false
+);
+// FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FeatureOffset.cpp
+// ::Offset2D::execute(), calls "TopoShape(0).makeElementOffset2D(shape, offset, join, fill,
+// openresult, inter)"; /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/
+// TopoShapeExpansion.cpp::TopoShape::makeElementOffset2D(), for face offsets "extracts source
+// wires", calls "BRepOffsetAPI_MakeOffsetFix", remakes no-fill faces from offset wires, and for
+// FillType::fill handles the closed-wire case by making a face from source wire + offset wire.
+// cad-core currently covers the OCCT MakeOffset-compatible planar face no-fill and closed-fill
+// subsets.
+NamedShapeBuild makeElementOffset2DFromSource(
+    const std::string& owner,
+    const NamedShapeSource& source,
+    double offset,
+    short join,
+    bool fill,
+    bool allowOpenResult,
+    bool intersection
+);
+// FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/PartFeatures.cpp
+// ::Thickness::execute(), calls "TopoShape(0, ...).makeElementThickSolid(base, shapes,
+// thickness, tol, inter, self, mode, static_cast<JoinType>(join))"; /Users/li/.../src/Mod/Part/
+// App/TopoShapeExpansion.cpp::TopoShape::makeElementThickSolid(), calls
+// "mkThick.MakeThickSolidByJoin(...)" and then makeElementShape(mkThick, shape, op).
+NamedShapeBuild makeElementThickSolidFromSource(
+    const std::string& owner,
+    const NamedShapeSource& source,
+    const std::vector<TopoDS_Face>& faces,
+    double offset,
+    double tolerance,
+    bool intersection,
+    bool selfIntersection,
+    short offsetMode,
     short join
 );
+// FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+// ::TopoShape::makeElementSolid(), accepts one compsolid or all shells through
+// "BRepBuilderAPI_MakeSolid", then calls makeElementShape(mkSolid, shape, op).
+NamedShapeBuild makeElementSolidFromSource(const std::string& owner, const NamedShapeSource& source);
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
 // ::TopoShape::makeElementGeneralFuse(), builds "BRepAlgoAPI_BuilderAlgo mkGFA",

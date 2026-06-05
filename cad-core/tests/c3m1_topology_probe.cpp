@@ -11,8 +11,13 @@
 #include <ShapeBuild_ReShape.hxx>
 #include <ShapeFix_Wireframe.hxx>
 #include <Standard_Failure.hxx>
+#include <TopAbs_ShapeEnum.hxx>
+#include <TopExp_Explorer.hxx>
 #include <TopoDS.hxx>
+#include <TopoDS_Compound.hxx>
+#include <TopoDS_Face.hxx>
 #include <TopoDS_Shape.hxx>
+#include <TopoDS_Shell.hxx>
 #include <TopoDS_Vertex.hxx>
 #include <TopTools_ListOfShape.hxx>
 #include <nlohmann/json.hpp>
@@ -89,6 +94,67 @@ TopoDS_Shape boxFromFixture(const nlohmann::json& fixture)
     return box.Shape();
 }
 
+TopoDS_Shape twoEdgeWire(double xOffset)
+{
+    BRepBuilderAPI_MakeWire wire;
+    BRepBuilderAPI_MakeEdge edge1(gp_Pnt(xOffset, 0.0, 0.0), gp_Pnt(xOffset + 1.0, 0.0, 0.0));
+    BRepBuilderAPI_MakeEdge edge2(gp_Pnt(xOffset + 1.0, 0.0, 0.0), gp_Pnt(xOffset + 1.0, 1.0, 0.0));
+    if (!edge1.IsDone() || !edge2.IsDone()) {
+        throw std::runtime_error("could not build source wire edges");
+    }
+    wire.Add(edge1.Edge());
+    wire.Add(edge2.Edge());
+    if (!wire.IsDone()) {
+        throw std::runtime_error("could not build source wire");
+    }
+    return wire.Shape();
+}
+
+TopoDS_Shape oneEdgeWire(double xOffset)
+{
+    BRepBuilderAPI_MakeEdge edge(gp_Pnt(xOffset, 0.0, 0.0), gp_Pnt(xOffset + 1.0, 0.0, 0.0));
+    if (!edge.IsDone()) {
+        throw std::runtime_error("could not build single edge wire source");
+    }
+    BRepBuilderAPI_MakeWire wire(edge.Edge());
+    if (!wire.IsDone()) {
+        throw std::runtime_error("could not build single edge wire");
+    }
+    return wire.Shape();
+}
+
+TopoDS_Shape multiEdgeWire(double xOffset, int edgeCount)
+{
+    BRepBuilderAPI_MakeWire wire;
+    for (int index = 0; index < edgeCount; ++index) {
+        BRepBuilderAPI_MakeEdge edge(
+            gp_Pnt(xOffset + static_cast<double>(index), 0.0, 0.0),
+            gp_Pnt(xOffset + static_cast<double>(index + 1), 0.0, 0.0)
+        );
+        if (!edge.IsDone()) {
+            throw std::runtime_error("could not build multi-edge wire source");
+        }
+        wire.Add(edge.Edge());
+    }
+    if (!wire.IsDone()) {
+        throw std::runtime_error("could not build multi-edge wire");
+    }
+    return wire.Shape();
+}
+
+TopoDS_Shape makePartnerCompound(const std::vector<TopoDS_Shape>& shapes)
+{
+    BRep_Builder builder;
+    TopoDS_Compound compound;
+    builder.MakeCompound(compound);
+    for (const TopoDS_Shape& shape : shapes) {
+        if (!shape.IsNull()) {
+            builder.Add(compound, shape);
+        }
+    }
+    return compound;
+}
+
 nlohmann::json runShapeFixDeleteSmallEdge(const nlohmann::json& fixture)
 {
     const TopoDS_Shape sourceShape = polygonShapeFromFixture(fixture);
@@ -134,6 +200,177 @@ nlohmann::json runElementMapPolicyDrop(const nlohmann::json& fixture)
         {"case", "element-map-policy-drop"},
         {"objects", {{"DropResult", {{"status", "ok"}, {"shape", "element_map_policy_drop"}}}}},
         {"named_shapes", {{"DropResult", cad_core::part::namedShapeToJson(dropped)}}},
+    };
+}
+
+nlohmann::json runElementMapPolicyPropagateWire(const nlohmann::json& fixture)
+{
+    (void)fixture;
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementWires(), after MakeWire updates connected edge identity, preserves
+    // mapping with "wires.back().mapSubElement(edges, op)" under ElementMapPolicy::Propagate.
+    BRepBuilderAPI_MakeEdge edgeA(gp_Pnt(0.0, 0.0, 0.0), gp_Pnt(1.0, 0.0, 0.0));
+    BRepBuilderAPI_MakeEdge edgeB(gp_Pnt(1.0, 0.0, 0.0), gp_Pnt(1.0, 1.0, 0.0));
+    if (!edgeA.IsDone() || !edgeB.IsDone()) {
+        throw std::runtime_error("could not build propagated wire source edges");
+    }
+    const cad_core::part::NamedShape namedA
+        = cad_core::part::indexedNamedShapeForObject("EdgeA", edgeA.Edge());
+    const cad_core::part::NamedShape namedB
+        = cad_core::part::indexedNamedShapeForObject("EdgeB", edgeB.Edge());
+    const std::vector<cad_core::part::NamedShapeSource> sources {
+        {"EdgeA", edgeA.Edge(), &namedA},
+        {"EdgeB", edgeB.Edge(), &namedB},
+    };
+    const cad_core::part::NamedShapeBuild propagated
+        = cad_core::part::makeElementWiresWithPropagatedSources("Wire", sources, "WIR");
+    if (!propagated.error.empty()) {
+        throw std::runtime_error(propagated.error);
+    }
+    if (!propagated.namedShape) {
+        throw std::runtime_error("makeElementWires did not return NamedShape history");
+    }
+    return {
+        {"case", fixture.value("case", "element-map-propagate-wire")},
+        {"objects", {{"Wire", {{"status", "ok"}, {"shape", "occt_wire"}}}}},
+        {"named_shapes", {{"Wire", cad_core::part::namedShapeToJson(*propagated.namedShape)}}},
+    };
+}
+
+nlohmann::json runElementMapPolicyPropagateShell(const nlohmann::json& fixture)
+{
+    (void)fixture;
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementShell(), adds every source Face to a TopoDS_Shell, then under
+    // ElementMapPolicy::Propagate calls "tmp.mapSubElement(*this, op)" for the shell map.
+    const TopoDS_Shape box = BRepPrimAPI_MakeBox(2.0, 3.0, 4.0).Shape();
+    BRep_Builder builder;
+    TopoDS_Compound faceCompound;
+    builder.MakeCompound(faceCompound);
+    int faceCount = 0;
+    for (TopExp_Explorer explorer(box, TopAbs_FACE); explorer.More(); explorer.Next()) {
+        builder.Add(faceCompound, TopoDS::Face(explorer.Current()));
+        ++faceCount;
+    }
+    if (faceCount != 6) {
+        throw std::runtime_error("box did not expose six faces");
+    }
+
+    const cad_core::part::NamedShape sourceNamedShape
+        = cad_core::part::indexedNamedShapeForObject("FaceCompound", faceCompound);
+    const cad_core::part::NamedShapeSource source {
+        "FaceCompound",
+        faceCompound,
+        &sourceNamedShape,
+    };
+    const cad_core::part::NamedShapeBuild shell
+        = cad_core::part::makeElementShellWithPropagatedSource("Shell", source, "SH1");
+    if (!shell.error.empty()) {
+        throw std::runtime_error(shell.error);
+    }
+    if (!shell.namedShape) {
+        throw std::runtime_error("makeElementShell did not return NamedShape history");
+    }
+    return {
+        {"case", fixture.value("case", "element-map-propagate-shell")},
+        {"objects", {{"Shell", {{"status", "ok"}, {"shape", "occt_shell"}}}}},
+        {"named_shapes", {{"Shell", cad_core::part::namedShapeToJson(*shell.namedShape)}}},
+    };
+}
+
+nlohmann::json runElementMapChildMapPostfix(const nlohmann::json& fixture)
+{
+    (void)fixture;
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::createChildMap(), copies the operation string into
+    // "MappedChildElements::postfix"; ElementMap.cpp::ElementMap::addChildElements() composes
+    // grandchild postfixes before storing the child map.
+    const TopoDS_Shape sketchA = twoEdgeWire(0.0);
+    const TopoDS_Shape sketchB = twoEdgeWire(10.0);
+    const TopoDS_Shape sketchC = oneEdgeWire(20.0);
+    const cad_core::part::NamedShape namedA
+        = cad_core::part::indexedNamedShapeForObject("SketchA", sketchA);
+    const cad_core::part::NamedShape namedB
+        = cad_core::part::indexedNamedShapeForObject("SketchB", sketchB);
+    const cad_core::part::NamedShape namedC
+        = cad_core::part::indexedNamedShapeForObject("SketchC", sketchC);
+
+    const TopoDS_Shape compoundAB = makePartnerCompound({sketchA, sketchB});
+    const cad_core::part::NamedShape compoundABNamedShape = cad_core::part::namedShapeForPreservedSources(
+        "CompoundAB",
+        compoundAB,
+        {
+            cad_core::part::NamedShapeSource {"SketchA", sketchA, &namedA, {}, ";:SOURCE"},
+            cad_core::part::NamedShapeSource {"SketchB", sketchB, &namedB, {}, ";:SOURCE"},
+        }
+    );
+
+    const TopoDS_Shape compoundNested = makePartnerCompound({compoundAB, sketchC});
+    const cad_core::part::NamedShape compoundNestedNamedShape = cad_core::part::namedShapeForPreservedSources(
+        "CompoundNested",
+        compoundNested,
+        {
+            cad_core::part::NamedShapeSource {"CompoundAB", compoundAB, &compoundABNamedShape, {}, ";:PARENT"},
+            cad_core::part::NamedShapeSource {"SketchC", sketchC, &namedC, {}, ";:PARENT"},
+        }
+    );
+
+    return {
+        {"case", "element-map-child-map-postfix-compound"},
+        {"objects", {{"CompoundNested", {{"status", "ok"}, {"shape", "occt_compound"}}}}},
+        {"named_shapes",
+         {
+             {"CompoundAB", cad_core::part::namedShapeToJson(compoundABNamedShape)},
+             {"CompoundNested", cad_core::part::namedShapeToJson(compoundNestedNamedShape)},
+         }},
+    };
+}
+
+nlohmann::json runElementMapChildMapHashKey(const nlohmann::json& fixture)
+{
+    (void)fixture;
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/ElementMap.cpp
+    // ::ElementMap::addChildElements(), "do child mapping only if the child element count >= 5";
+    // ::ElementMap::hashChildMaps(), rewrites eligible child map postfixes under
+    // "MAPPED_CHILD_ELEMENTS_PREFIX". Six edges keeps this probe out of the count==5 tag skip.
+    const TopoDS_Shape sketchA = multiEdgeWire(0.0, 6);
+    const TopoDS_Shape sketchB = multiEdgeWire(20.0, 6);
+    const cad_core::part::NamedShape namedA
+        = cad_core::part::indexedNamedShapeForObject("SketchA", sketchA);
+    const cad_core::part::NamedShape namedB
+        = cad_core::part::indexedNamedShapeForObject("SketchB", sketchB);
+
+    const TopoDS_Shape compoundAB = makePartnerCompound({sketchA, sketchB});
+    const cad_core::part::NamedShape compoundABNamedShape = cad_core::part::namedShapeForPreservedSources(
+        "CompoundAB",
+        compoundAB,
+        {
+            cad_core::part::NamedShapeSource {"SketchA", sketchA, &namedA, {}, ";:SOURCE"},
+            cad_core::part::NamedShapeSource {"SketchB", sketchB, &namedB, {}, ";:SOURCE"},
+        }
+    );
+
+    const TopoDS_Shape compoundNested = makePartnerCompound({compoundAB});
+    const cad_core::part::NamedShape compoundNestedNamedShape = cad_core::part::namedShapeForPreservedSources(
+        "CompoundNested",
+        compoundNested,
+        {
+            cad_core::part::NamedShapeSource {"CompoundAB", compoundAB, &compoundABNamedShape, {}, ";:PARENT"},
+        }
+    );
+
+    return {
+        {"case", "element-map-child-map-hash-key-compound"},
+        {"objects", {{"CompoundNested", {{"status", "ok"}, {"shape", "occt_compound"}}}}},
+        {"named_shapes",
+         {
+             {"CompoundAB", cad_core::part::namedShapeToJson(compoundABNamedShape)},
+             {"CompoundNested", cad_core::part::namedShapeToJson(compoundNestedNamedShape)},
+         }},
     };
 }
 
@@ -224,16 +461,47 @@ nlohmann::json runMapperHistoryAmbiguousSplit(const nlohmann::json& fixture)
         sourceEdge.Edge(),
         &sourceNamedShape,
     };
-    const cad_core::part::NamedShape namedShape = cad_core::part::namedShapeForMakerHistory(
-        "Split",
-        splitter.Shape(),
-        {source},
-        splitter
-    );
+    const cad_core::part::NamedShape namedShape
+        = cad_core::part::namedShapeForMakerHistory("Split", splitter.Shape(), {source}, splitter);
     return {
         {"case", "mapper-history-ambiguous-split"},
         {"objects", {{"Split", {{"status", "ok"}, {"shape", "splitter"}}}}},
         {"named_shapes", {{"Split", cad_core::part::namedShapeToJson(namedShape)}}},
+    };
+}
+
+nlohmann::json runMakeElementSolidFromShell(const nlohmann::json& fixture)
+{
+    (void)fixture;
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementSolid(), when no compsolid exists, iterates shells and calls
+    // "mkSolid.Add(TopoDS::Shell(s))" before makeElementShape(mkSolid, shape, op).
+    const TopoDS_Shape box = BRepPrimAPI_MakeBox(2.0, 3.0, 4.0).Shape();
+    TopExp_Explorer shellExplorer(box, TopAbs_SHELL);
+    if (!shellExplorer.More()) {
+        throw std::runtime_error("box did not expose a shell");
+    }
+    const TopoDS_Shape shell = TopoDS::Shell(shellExplorer.Current());
+    const cad_core::part::NamedShape sourceNamedShape
+        = cad_core::part::indexedNamedShapeForObject("SourceShell", shell);
+    const cad_core::part::NamedShapeSource source {
+        "SourceShell",
+        shell,
+        &sourceNamedShape,
+    };
+    const cad_core::part::NamedShapeBuild solid
+        = cad_core::part::makeElementSolidFromSource("Solid", source);
+    if (!solid.error.empty()) {
+        throw std::runtime_error(solid.error);
+    }
+    if (!solid.namedShape) {
+        throw std::runtime_error("makeElementSolid did not return NamedShape history");
+    }
+    return {
+        {"case", fixture.value("case", "make-element-solid-from-shell")},
+        {"objects", {{"Solid", {{"status", "ok"}, {"shape", "occt_solid"}}}}},
+        {"named_shapes", {{"Solid", cad_core::part::namedShapeToJson(*solid.namedShape)}}},
     };
 }
 
@@ -246,11 +514,26 @@ nlohmann::json runFixture(const nlohmann::json& fixture)
     if (fixtureCase == "element-map-policy-drop") {
         return runElementMapPolicyDrop(fixture);
     }
+    if (fixtureCase == "element-map-propagate-wire") {
+        return runElementMapPolicyPropagateWire(fixture);
+    }
+    if (fixtureCase == "element-map-propagate-shell") {
+        return runElementMapPolicyPropagateShell(fixture);
+    }
+    if (fixtureCase == "element-map-child-map-postfix-compound") {
+        return runElementMapChildMapPostfix(fixture);
+    }
+    if (fixtureCase == "element-map-child-map-hash-key-compound") {
+        return runElementMapChildMapHashKey(fixture);
+    }
     if (fixtureCase == "shapefix-wireframe-modified-history") {
         return runShapeFixWireframeModifiedHistory(fixture);
     }
     if (fixtureCase == "mapper-history-ambiguous-split") {
         return runMapperHistoryAmbiguousSplit(fixture);
+    }
+    if (fixtureCase == "make-element-solid-from-shell") {
+        return runMakeElementSolidFromShell(fixture);
     }
     throw std::runtime_error("unsupported C3-M1 topology probe case: " + fixtureCase);
 }

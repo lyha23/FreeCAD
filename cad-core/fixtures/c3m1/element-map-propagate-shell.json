@@ -1,0 +1,4 @@
+{
+  "case": "element-map-propagate-shell",
+  "description": "C3-M1 probe for FreeCAD TopoShape::makeElementShell() ElementMapPolicy::Propagate source-to-shell ElementMap."
+}

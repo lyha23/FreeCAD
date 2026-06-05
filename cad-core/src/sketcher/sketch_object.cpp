@@ -115,10 +115,7 @@ std::optional<app::Link> readSupportLink(const app::DocumentObject& object)
     return app::readLink(object, "Support");
 }
 
-std::optional<gp_Trsf> supportPlacement(
-    const app::DocumentObject& object,
-    runtime::ComputeContext& context
-)
+std::optional<gp_Trsf> supportPlacement(const app::DocumentObject& object, runtime::ComputeContext& context)
 {
     const auto support = readSupportLink(object);
     if (!support) {
@@ -393,7 +390,8 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         externalGeometry->circles.end()
     );
     std::vector<SketchArc> resolvedArcs = parsed.arcs;
-    resolvedArcs.insert(resolvedArcs.end(), externalGeometry->arcs.begin(), externalGeometry->arcs.end());
+    resolvedArcs
+        .insert(resolvedArcs.end(), externalGeometry->arcs.begin(), externalGeometry->arcs.end());
     std::vector<SketchEllipse> resolvedEllipses = parsed.ellipses;
     resolvedEllipses.insert(
         resolvedEllipses.end(),
@@ -623,6 +621,35 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
          constraintIndexArray(appliedConstraints->solver.conflictingConstraints)},
         {"solver_redundant_constraints",
          constraintIndexArray(appliedConstraints->solver.redundantConstraints)},
+        {"solver_partially_redundant_constraints",
+         constraintIndexArray(appliedConstraints->solver.partiallyRedundantConstraints)},
+        {"solver_geometry_updates", appliedConstraints->solverGeometryUpdates},
+        {"solver_orientation_geometry_updates", appliedConstraints->solverOrientationGeometryUpdates},
+        {"solver_coordinate_geometry_updates", appliedConstraints->solverCoordinateGeometryUpdates},
+        {"solver_radius_geometry_updates", appliedConstraints->solverRadiusGeometryUpdates},
+        {"solver_length_geometry_updates", appliedConstraints->solverLengthGeometryUpdates},
+        {"solver_arc_geometry_updates", appliedConstraints->solverArcGeometryUpdates},
+        {"solver_relation_geometry_updates", appliedConstraints->solverRelationGeometryUpdates},
+        {"solver_line_pair_relation_geometry_updates",
+         appliedConstraints->solverLinePairRelationGeometryUpdates},
+        {"solver_curve_relation_geometry_updates",
+         appliedConstraints->solverCurveRelationGeometryUpdates},
+        {"solver_equal_relation_geometry_updates",
+         appliedConstraints->solverEqualRelationGeometryUpdates},
+        {"solver_tangent_relation_geometry_updates",
+         appliedConstraints->solverTangentRelationGeometryUpdates},
+        {"solver_symmetric_relation_geometry_updates",
+         appliedConstraints->solverSymmetricRelationGeometryUpdates},
+        {"solver_symmetric_line_relation_geometry_updates",
+         appliedConstraints->solverSymmetricLineRelationGeometryUpdates},
+        {"solver_symmetric_center_relation_geometry_updates",
+         appliedConstraints->solverSymmetricCenterRelationGeometryUpdates},
+        {"solver_geometry_update_status", solverGeometryUpdateStatus(*appliedConstraints)},
+        {"solver_degrees_of_freedom",
+         appliedConstraints->solverDegreesOfFreedom
+             ? nlohmann::json(*appliedConstraints->solverDegreesOfFreedom)
+             : nlohmann::json(nullptr)},
+        {"solver_dof_status", appliedConstraints->solverDofStatus},
         {"edge_count", profileEdgeCount},
         {"raw_edge_count", rawEdgeCount},
         {"raw_point_count", rawPointCount},

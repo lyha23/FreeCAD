@@ -118,6 +118,36 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertTrue(all(event["recoverability"] == "diagnostic" for event in drop_events))
         self.assertTrue(all(event["diagnostic_status"] == "element_map_policy_drop" for event in drop_events))
 
+    def test_c3m1_element_map_policy_propagate_wire_preserves_makewire_edges(self) -> None:
+        result = self.run_c3m1_probe("element-map-propagate-wire")
+        named_shape = result["named_shapes"]["Wire"]
+
+        self.assertIn(
+            "element_map_policy_propagate:make_element_wires",
+            named_shape["element_history_status"],
+        )
+        self.assertEqual(named_shape["element_map"]["EdgeA.Edge1"], "Edge1")
+        self.assertEqual(named_shape["element_map"]["EdgeB.Edge1"], "Edge2")
+        self.assertIn(named_shape["element_map"]["EdgeA.Vertex2"], {"Vertex1", "Vertex2", "Vertex3"})
+        self.assertIn(named_shape["element_map"]["EdgeB.Vertex1"], {"Vertex1", "Vertex2", "Vertex3"})
+        self.assertEqual(
+            named_shape["element_map"]["EdgeA.Vertex2"],
+            named_shape["element_map"]["EdgeB.Vertex1"],
+        )
+
+    def test_c3m1_element_map_policy_propagate_shell_preserves_source_faces(self) -> None:
+        result = self.run_c3m1_probe("element-map-propagate-shell")
+        named_shape = result["named_shapes"]["Shell"]
+
+        self.assertIn(
+            "element_map_policy_propagate:make_element_shell",
+            named_shape["element_history_status"],
+        )
+        self.assertEqual(named_shape["element_map"]["FaceCompound.Face1"], "Face1")
+        self.assertEqual(named_shape["element_map"]["FaceCompound.Face6"], "Face6")
+        self.assertTrue(any(key.startswith("FaceCompound.Edge") for key in named_shape["element_map"]))
+        self.assertTrue(any(key.startswith("FaceCompound.Vertex") for key in named_shape["element_map"]))
+
     def test_c3m1_mapper_history_ambiguous_split_requires_reselect(self) -> None:
         result = self.run_c3m1_probe("mapper-history-ambiguous-split")
         named_shape = result["named_shapes"]["Split"]
@@ -156,6 +186,199 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         ]
         self.assertGreaterEqual(len(generated_events), 1)
         self.assertGreaterEqual(len(modified_events), 2)
+
+    def test_c3m1_make_element_solid_from_shell_records_maker_history(self) -> None:
+        result = self.run_c3m1_probe("make-element-solid-from-shell")
+        named_shape = result["named_shapes"]["Solid"]
+
+        self.assertIn("part_make_solid:make_element_solid", named_shape["element_history_status"])
+        self.assertTrue(any(key.startswith("SourceShell.Face") for key in named_shape["element_map"]))
+        self.assertTrue(
+            any(
+                event["maker_stage"] == "element_map_preserved"
+                and event["source"]["object"] == "SourceShell"
+                for event in named_shape["mapper_history"]
+            )
+        )
+
+    def test_c3m1_element_map_child_map_recurses_nested_compound_ranges(self) -> None:
+        result = self.run_recompute("element-map-child-map-recursive-compound", "c3m1")
+        compound_ab = result["named_shapes"]["CompoundAB"]
+        compound_nested = result["named_shapes"]["CompoundNested"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertIn(
+            "element_map_child_map:preserve_source_ranges",
+            compound_ab["element_history_status"],
+        )
+        self.assertIn(
+            "element_map_child_map:preserve_source_ranges",
+            compound_nested["element_history_status"],
+        )
+        self.assertIn(
+            "element_map_child_map:recursive_source_ranges",
+            compound_nested["element_history_status"],
+        )
+        self.assertEqual(compound_nested["element_map"]["SketchA.Edge1"], "Edge1")
+        self.assertEqual(compound_nested["element_map"]["SketchB.Edge1"], "Edge3")
+        self.assertEqual(compound_nested["element_map"]["SketchC.Edge1"], "Edge5")
+
+        edge_child_maps = [
+            item for item in compound_nested["child_element_maps"] if item["kind"] == "edge"
+        ]
+        self.assertEqual(
+            [
+                (
+                    item["source_owner"],
+                    item["offset"],
+                    item["count"],
+                    item["target_start"],
+                    item["target_end"],
+                    item["source_child_map_count"],
+                )
+                for item in edge_child_maps
+            ],
+            [
+                ("CompoundAB", 0, 4, "Edge1", "Edge4", 4),
+                ("SketchA", 0, 2, "Edge1", "Edge2", 0),
+                ("SketchB", 2, 2, "Edge3", "Edge4", 0),
+                ("SketchC", 4, 1, "Edge5", "Edge5", 0),
+            ],
+        )
+
+        vertex_child_maps = [
+            item for item in compound_nested["child_element_maps"] if item["kind"] == "vertex"
+        ]
+        self.assertEqual(
+            [
+                (
+                    item["source_owner"],
+                    item["offset"],
+                    item["count"],
+                    item["target_start"],
+                    item["target_end"],
+                    item["source_child_map_count"],
+                )
+                for item in vertex_child_maps
+            ],
+            [
+                ("CompoundAB", 0, 6, "Vertex1", "Vertex6", 4),
+                ("SketchA", 0, 3, "Vertex1", "Vertex3", 0),
+                ("SketchB", 3, 3, "Vertex4", "Vertex6", 0),
+                ("SketchC", 6, 2, "Vertex7", "Vertex8", 0),
+            ],
+        )
+
+    def test_c3m1_element_map_child_map_preserves_and_composes_postfix(self) -> None:
+        result = self.run_c3m1_probe("element-map-child-map-postfix-compound")
+        compound_ab = result["named_shapes"]["CompoundAB"]
+        compound_nested = result["named_shapes"]["CompoundNested"]
+
+        self.assertIn(
+            "element_map_child_map:postfix_source_ranges",
+            compound_ab["element_history_status"],
+        )
+        self.assertIn(
+            "element_map_child_map:postfix_source_ranges",
+            compound_nested["element_history_status"],
+        )
+
+        compound_ab_edge_maps = [
+            item for item in compound_ab["child_element_maps"] if item["kind"] == "edge"
+        ]
+        self.assertEqual(
+            [
+                (
+                    item["source_owner"],
+                    item["offset"],
+                    item["count"],
+                    item["postfix"],
+                )
+                for item in compound_ab_edge_maps
+            ],
+            [
+                ("SketchA", 0, 2, ";:SOURCE"),
+                ("SketchB", 2, 2, ";:SOURCE"),
+            ],
+        )
+
+        compound_nested_edge_maps = [
+            item for item in compound_nested["child_element_maps"] if item["kind"] == "edge"
+        ]
+        self.assertEqual(
+            [
+                (
+                    item["source_owner"],
+                    item["offset"],
+                    item["count"],
+                    item["postfix"],
+                )
+                for item in compound_nested_edge_maps
+            ],
+            [
+                ("CompoundAB", 0, 4, ";:PARENT"),
+                ("SketchA", 0, 2, ";:SOURCE;:PARENT"),
+                ("SketchB", 2, 2, ";:SOURCE;:PARENT"),
+                ("SketchC", 4, 1, ";:PARENT"),
+            ],
+        )
+
+    def test_c3m1_element_map_child_map_records_hash_keys(self) -> None:
+        result = self.run_c3m1_probe("element-map-child-map-hash-key-compound")
+        compound_ab = result["named_shapes"]["CompoundAB"]
+        compound_nested = result["named_shapes"]["CompoundNested"]
+
+        self.assertIn(
+            "element_map_child_map:hashed_child_map_keys",
+            compound_ab["element_history_status"],
+        )
+        self.assertIn(
+            "element_map_child_map:hashed_child_map_keys",
+            compound_nested["element_history_status"],
+        )
+
+        compound_ab_edge_maps = [
+            item for item in compound_ab["child_element_maps"] if item["kind"] == "edge"
+        ]
+        self.assertEqual(
+            [
+                (
+                    item["source_owner"],
+                    item["offset"],
+                    item["count"],
+                    item["postfix"],
+                    item["encoded_child_map_key"].startswith(";:R"),
+                )
+                for item in compound_ab_edge_maps
+            ],
+            [
+                ("SketchA", 0, 6, ";:SOURCE", True),
+                ("SketchB", 6, 6, ";:SOURCE", True),
+            ],
+        )
+
+        compound_nested_edge_maps = [
+            item for item in compound_nested["child_element_maps"] if item["kind"] == "edge"
+        ]
+        self.assertEqual(
+            [
+                (
+                    item["source_owner"],
+                    item["offset"],
+                    item["count"],
+                    item["postfix"],
+                    item["encoded_child_map_key"].startswith(";:R"),
+                )
+                for item in compound_nested_edge_maps
+            ],
+            [
+                ("CompoundAB", 0, 12, ";:PARENT", True),
+                ("SketchA", 0, 6, ";:SOURCE;:PARENT", True),
+                ("SketchB", 6, 6, ";:SOURCE;:PARENT", True),
+            ],
+        )
+        encoded_keys = [item["encoded_child_map_key"] for item in compound_nested_edge_maps]
+        self.assertEqual(len(encoded_keys), len(set(encoded_keys)))
 
     def test_c3m1_import_step_records_face_stable_element_map(self) -> None:
         result = self.run_recompute("part-import-step-face-stable", "c3m1")

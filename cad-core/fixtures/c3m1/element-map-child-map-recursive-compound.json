@@ -1,0 +1,64 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchA",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
+          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "SketchB",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [20, 0], "end": [30, 0]},
+          {"kind": "LineSegment", "start": [30, 0], "end": [30, 5]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "CompoundAB",
+      "ID": 3,
+      "TypeId": "Part::Compound",
+      "Properties": {
+        "Links": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["SketchA", "SketchB"]
+        }
+      }
+    },
+    {
+      "Name": "SketchC",
+      "ID": 4,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [40, 0], "end": [45, 0]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "CompoundNested",
+      "ID": 5,
+      "TypeId": "Part::Compound",
+      "Properties": {
+        "Links": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["CompoundAB", "SketchC"]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["CompoundNested"]
+  }
+}

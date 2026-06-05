@@ -611,12 +611,26 @@ part::NamedShapeSource sourceForFeature(const std::string& feature,
                                         const std::optional<part::NamedShape>* slotNamedShape = nullptr)
 {
     if (slotNamedShape != nullptr && *slotNamedShape) {
-        return part::NamedShapeSource{(*slotNamedShape)->owner, shape, &**slotNamedShape};
+        part::NamedShapeSource source{(*slotNamedShape)->owner, shape, &**slotNamedShape};
+        source.expandCompoundForBoolean =
+            std::find((*slotNamedShape)->elementHistoryStatus.begin(),
+                      (*slotNamedShape)->elementHistoryStatus.end(),
+                      "boolean_compound_tool:expand_children")
+            != (*slotNamedShape)->elementHistoryStatus.end();
+        return source;
     }
     const auto namedShapeIt = context.namedShapes.find(feature);
-    return part::NamedShapeSource{namedShapeIt != context.namedShapes.end() ? namedShapeIt->second.owner : feature,
+    part::NamedShapeSource source{namedShapeIt != context.namedShapes.end() ? namedShapeIt->second.owner : feature,
                                   shape,
                                   namedShapeIt != context.namedShapes.end() ? &namedShapeIt->second : nullptr};
+    if (namedShapeIt != context.namedShapes.end()) {
+        source.expandCompoundForBoolean =
+            std::find(namedShapeIt->second.elementHistoryStatus.begin(),
+                      namedShapeIt->second.elementHistoryStatus.end(),
+                      "boolean_compound_tool:expand_children")
+            != namedShapeIt->second.elementHistoryStatus.end();
+    }
+    return source;
 }
 
 std::optional<BooleanBuild> fuseShapes(const TopoDS_Shape& base,

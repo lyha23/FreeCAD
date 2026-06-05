@@ -37,6 +37,262 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(named_shape["element_map_status"], "history_partial")
         self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
 
+    def test_c3m4_part_offset_face_fill_uses_free_bound_sewing_path(self) -> None:
+        result = self.run_recompute("part-offset-face-fill", "c3m4")
+        offset = result["objects"]["Offset"]
+        named_shape = result["named_shapes"]["Offset"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(offset["status"], "ok")
+        self.assertEqual(offset["feature"], "part_offset")
+        self.assertEqual(offset["source"], "Plane")
+        self.assertTrue(offset["fill"])
+        self.assertEqual(offset["topo_naming_history"], "maker_history:offset")
+        self.assertIn("part_offset_fill:sewing_history", named_shape["element_history_status"])
+        self.assertIn("part_offset_fill:perimeter_faces", named_shape["element_history_status"])
+        self.assertNotEqual(named_shape["element_map_status"], "indexed_only")
+
+    def test_c3m4_part_offset_solid_source_recovers_solid_result(self) -> None:
+        result = self.run_recompute("part-offset-box-solid-source", "c3m4")
+        offset = result["objects"]["Offset"]
+        named_shape = result["named_shapes"]["Offset"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(offset["status"], "ok")
+        self.assertEqual(offset["feature"], "part_offset")
+        self.assertEqual(offset["source"], "Box")
+        self.assertEqual(offset["shape"], "occt_solid")
+        self.assertFalse(offset["fill"])
+        self.assertNotIn(
+            "part_offset_solid_source:make_element_solid_failed",
+            named_shape["element_history_status"],
+        )
+
+    def test_c3m4_part_offset2d_face_no_fill_rebuilds_face_from_offset_wires(self) -> None:
+        result = self.run_recompute("part-offset2d-face-no-fill", "c3m4")
+        offset = result["objects"]["Offset2D"]
+        named_shape = result["named_shapes"]["Offset2D"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(offset["status"], "ok")
+        self.assertEqual(offset["feature"], "part_offset2d")
+        self.assertEqual(offset["source"], "Plane")
+        self.assertEqual(offset["shape"], "occt_face")
+        self.assertEqual(offset["mode"], "Skin")
+        self.assertEqual(offset["join"], "Arc")
+        self.assertFalse(offset["fill"])
+        self.assertFalse(offset["intersection"])
+        self.assertEqual(offset["topo_naming_history"], "maker_history:offset2d_face_no_fill")
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertIn("part_offset2d:face_no_fill_makeoffset", named_shape["element_history_status"])
+        self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
+        self.assertEqual(named_shape["element_map"]["Plane.Edge1"], "Edge1")
+
+    def test_c3m4_part_offset2d_face_fill_uses_closed_source_and_offset_wires(self) -> None:
+        result = self.run_recompute("part-offset2d-face-fill", "c3m4")
+        offset = result["objects"]["Offset2D"]
+        named_shape = result["named_shapes"]["Offset2D"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(offset["status"], "ok")
+        self.assertEqual(offset["feature"], "part_offset2d")
+        self.assertEqual(offset["source"], "Plane")
+        self.assertEqual(offset["shape"], "occt_face")
+        self.assertEqual(offset["mode"], "Skin")
+        self.assertEqual(offset["join"], "Arc")
+        self.assertTrue(offset["fill"])
+        self.assertFalse(offset["intersection"])
+        self.assertEqual(offset["topo_naming_history"], "maker_history:offset2d_face_fill_closed")
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertIn("part_offset2d:face_fill_closed_makeoffset", named_shape["element_history_status"])
+        self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
+        self.assertIn("Offset2D.Offset2DWires.Edge1", named_shape["element_map"])
+
+    def test_c3m4_part_offset2d_open_wire_no_fill_returns_offset_wire(self) -> None:
+        result = self.run_recompute("part-offset2d-open-wire-no-fill", "c3m4")
+        offset = result["objects"]["Offset2D"]
+        named_shape = result["named_shapes"]["Offset2D"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(offset["status"], "ok")
+        self.assertEqual(offset["feature"], "part_offset2d")
+        self.assertEqual(offset["source"], "Sketch")
+        self.assertEqual(offset["shape"], "occt_wire")
+        self.assertEqual(offset["mode"], "Skin")
+        self.assertEqual(offset["join"], "Arc")
+        self.assertFalse(offset["fill"])
+        self.assertFalse(offset["intersection"])
+        self.assertEqual(offset["topo_naming_history"], "maker_history:offset2d_wire_no_fill")
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertIn("part_offset2d:wire_no_fill_makeoffset", named_shape["element_history_status"])
+        self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
+        self.assertIn("Sketch.Edge1", named_shape["element_map"])
+
+    def test_c3m4_part_offset2d_open_wire_fill_connects_source_and_offset_wires(self) -> None:
+        result = self.run_recompute("part-offset2d-open-wire-fill", "c3m4")
+        offset = result["objects"]["Offset2D"]
+        named_shape = result["named_shapes"]["Offset2D"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(offset["status"], "ok")
+        self.assertEqual(offset["feature"], "part_offset2d")
+        self.assertEqual(offset["source"], "Sketch")
+        self.assertEqual(offset["shape"], "occt_face")
+        self.assertEqual(offset["mode"], "Skin")
+        self.assertEqual(offset["join"], "Arc")
+        self.assertTrue(offset["fill"])
+        self.assertFalse(offset["intersection"])
+        self.assertEqual(offset["topo_naming_history"], "maker_history:offset2d_wire_fill_open")
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertIn("part_offset2d:wire_fill_open_makeoffset", named_shape["element_history_status"])
+        self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
+        self.assertIn("Offset2D.Offset2DWires.Edge1", named_shape["element_map"])
+
+    def test_c3m4_part_offset2d_compound_fill_recurses_children(self) -> None:
+        result = self.run_recompute("part-offset2d-compound-open-wire-fill", "c3m4")
+        compound = result["objects"]["Compound"]
+        offset = result["objects"]["Offset2D"]
+        compound_named_shape = result["named_shapes"]["Compound"]
+        offset_named_shape = result["named_shapes"]["Offset2D"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(compound["status"], "ok")
+        self.assertEqual(compound["feature"], "part_compound")
+        self.assertEqual(compound["shape"], "occt_compound")
+        self.assertEqual(compound["links"], ["SketchA", "SketchB"])
+        self.assertIn("part_compound:make_element_compound", compound_named_shape["element_history_status"])
+        self.assertIn(
+            "element_map_child_map:preserve_source_ranges",
+            compound_named_shape["element_history_status"],
+        )
+        edge_child_maps = [
+            item for item in compound_named_shape["child_element_maps"] if item["kind"] == "edge"
+        ]
+        vertex_child_maps = [
+            item for item in compound_named_shape["child_element_maps"] if item["kind"] == "vertex"
+        ]
+        self.assertEqual(
+            [
+                (
+                    item["source_owner"],
+                    item["indexed_name"],
+                    item["offset"],
+                    item["count"],
+                    item["target_start"],
+                    item["target_end"],
+                    item["has_source_element_map"],
+                    item["source_child_map_count"],
+                )
+                for item in edge_child_maps
+            ],
+            [
+                ("SketchA", "Edge1", 0, 2, "Edge1", "Edge2", True, 0),
+                ("SketchB", "Edge1", 2, 2, "Edge3", "Edge4", True, 0),
+            ],
+        )
+        self.assertEqual(
+            [
+                (
+                    item["source_owner"],
+                    item["indexed_name"],
+                    item["offset"],
+                    item["count"],
+                    item["target_start"],
+                    item["target_end"],
+                    item["has_source_element_map"],
+                    item["source_child_map_count"],
+                )
+                for item in vertex_child_maps
+            ],
+            [
+                ("SketchA", "Vertex1", 0, 3, "Vertex1", "Vertex3", True, 0),
+                ("SketchB", "Vertex1", 3, 3, "Vertex4", "Vertex6", True, 0),
+            ],
+        )
+        self.assertTrue(
+            all(item["source_element_map_size"] > 0 for item in edge_child_maps + vertex_child_maps)
+        )
+
+        self.assertEqual(offset["status"], "ok")
+        self.assertEqual(offset["feature"], "part_offset2d")
+        self.assertEqual(offset["source"], "Compound")
+        self.assertEqual(offset["shape"], "occt_compound")
+        self.assertEqual(offset["mode"], "Skin")
+        self.assertEqual(offset["join"], "Arc")
+        self.assertTrue(offset["fill"])
+        self.assertFalse(offset["intersection"])
+        self.assertEqual(offset["topo_naming_history"], "maker_history:offset2d_compound_recursive")
+        self.assertEqual(offset_named_shape["element_map_status"], "history_partial")
+        self.assertIn("part_offset2d:compound_child_recursive", offset_named_shape["element_history_status"])
+        self.assertIn("part_offset2d:wire_fill_open_makeoffset", offset_named_shape["element_history_status"])
+        self.assertIn("history_consumed:merge", offset_named_shape["element_history_status"])
+
+    def test_c3m4_part_offset2d_compound_intersection_offsets_children_collectively(self) -> None:
+        result = self.run_recompute("part-offset2d-compound-intersection-no-fill", "c3m4")
+        compound = result["objects"]["Compound"]
+        offset = result["objects"]["Offset2D"]
+        named_shape = result["named_shapes"]["Offset2D"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(compound["status"], "ok")
+        self.assertEqual(compound["feature"], "part_compound")
+        self.assertEqual(compound["links"], ["PlaneA", "PlaneB"])
+        self.assertEqual(offset["status"], "ok")
+        self.assertEqual(offset["feature"], "part_offset2d")
+        self.assertEqual(offset["source"], "Compound")
+        self.assertEqual(offset["shape"], "occt_compound")
+        self.assertEqual(offset["mode"], "Skin")
+        self.assertEqual(offset["join"], "Arc")
+        self.assertFalse(offset["fill"])
+        self.assertTrue(offset["intersection"])
+        self.assertEqual(offset["topo_naming_history"], "maker_history:offset2d_compound_collective")
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertIn(
+            "part_offset2d:compound_collective_makeoffset",
+            named_shape["element_history_status"],
+        )
+        self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
+
+    def test_c3m4_part_thickness_single_solid_face_uses_make_thick_solid_history(self) -> None:
+        result = self.run_recompute("part-thickness-box-face", "c3m4")
+        thickness = result["objects"]["Thickness"]
+        named_shape = result["named_shapes"]["Thickness"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(thickness["status"], "ok")
+        self.assertEqual(thickness["feature"], "part_thickness")
+        self.assertEqual(thickness["source"], "Box")
+        self.assertEqual(thickness["shape"], "occt_solid")
+        self.assertEqual(thickness["mode"], "Skin")
+        self.assertEqual(thickness["join"], "Arc")
+        self.assertEqual(thickness["effective_join"], "Arc")
+        self.assertEqual(thickness["selected_faces"], ["Face6"])
+        self.assertEqual(thickness["topo_naming_history"], "maker_history:thick_solid")
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertIn("part_thickness:make_thick_solid", named_shape["element_history_status"])
+        self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
+        self.assertEqual(named_shape["element_map"]["Box.Face6"], "Face6")
+
+    def test_c3m4_part_thickness_rectoverso_tangent_uses_intersection_join(self) -> None:
+        result = self.run_recompute("part-thickness-box-face-rectoverso-tangent", "c3m4")
+        thickness = result["objects"]["Thickness"]
+        named_shape = result["named_shapes"]["Thickness"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(thickness["status"], "ok")
+        self.assertEqual(thickness["feature"], "part_thickness")
+        self.assertEqual(thickness["source"], "Box")
+        self.assertEqual(thickness["shape"], "occt_solid")
+        self.assertEqual(thickness["mode"], "RectoVerso")
+        self.assertEqual(thickness["join"], "Tangent")
+        self.assertEqual(thickness["effective_join"], "Intersection")
+        self.assertTrue(thickness["intersection"])
+        self.assertEqual(thickness["selected_faces"], ["Face6"])
+        self.assertEqual(thickness["topo_naming_history"], "maker_history:thick_solid")
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertIn("part_thickness:make_thick_solid", named_shape["element_history_status"])
+        self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
+
     def test_c3m4_part_section_records_source_qualified_history(self) -> None:
         result = self.run_recompute("part-section-stable-history", "c3m4")
         section = result["objects"]["Section"]

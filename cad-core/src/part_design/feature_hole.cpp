@@ -1,10 +1,11 @@
 #include "cad_core/part_design/feature_hole.h"
 
 #include "cad_core/runtime/feature_executor.h"
+#include "cad_core/part/face_maker.h"
 #include "cad_core/part/shape_exporter.h"
+#include "cad_core/part/topo_shape.h"
 #include "cad_core/part/property_topo_shape.h"
 
-#include <BRepAlgoAPI_Fuse.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepBuilderAPI_MakeSolid.hxx>
@@ -36,6 +37,7 @@
 #include <TopExp.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopLoc_Location.hxx>
+#include <TopTools_IndexedMapOfShape.hxx>
 #include <TopTools_ListOfShape.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Compound.hxx>
@@ -107,6 +109,20 @@ struct HoleBuild {
     bool threaded = false;
     bool modelThread = false;
     TopoDS_Shape toolShape;
+    part::NamedShape toolNamedShape;
+    nlohmann::json historyFreeze;
+};
+
+struct HoleCenterSource {
+    gp_Pnt location;
+    std::string sourceSubname;
+    std::string sourceKind;
+};
+
+struct PreviousSolidSource {
+    std::string owner;
+    TopoDS_Shape shape;
+    const part::NamedShape* namedShape = nullptr;
 };
 
 struct HoleToolOptions {
@@ -1075,12 +1091,15 @@ std::optional<ThreadDiameterResult> resolveThreadDiameter(const app::DocumentObj
     return result;
 }
 
-std::optional<TopoDS_Shape> previousSolidShape(const runtime::ComputeContext& context)
+std::optional<PreviousSolidSource> previousSolidSource(const runtime::ComputeContext& context)
 {
     for (auto it = context.executionOrder.rbegin(); it != context.executionOrder.rend(); ++it) {
         const auto shapeIt = context.shapes.find(*it);
         if (shapeIt != context.shapes.end() && shapeIt->second.kind == runtime::ShapeValue::Kind::Solid) {
-            return shapeIt->second.shape;
+            const auto namedShapeIt = context.namedShapes.find(*it);
+            return PreviousSolidSource{*it,
+                                       shapeIt->second.shape,
+                                       namedShapeIt == context.namedShapes.end() ? nullptr : &namedShapeIt->second};
         }
     }
     return std::nullopt;
@@ -1187,7 +1206,7 @@ double defaultCountersinkAngle(const std::string& threadType)
 
 double threadRunoutForPitch(double pitch)
 {
-    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
     // ::Hole::getThreadRunout(), uses DIN 76-1 ThreadRunout "{Pitch, e1}" rows and for
     // non-standard pitch falls back to "4 * pitch".
     static const std::vector<std::pair<double, double>> runouts = {
@@ -1220,7 +1239,7 @@ std::vector<std::string> threadClassValuesFor(const std::string& threadType)
 
 double threadClassClearanceFor(const std::string& threadClass, double pitch)
 {
-    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
     // ::Hole::getThreadClassClearance(), only classes whose second character is 'G'
     // add ISO metric clearance from ThreadClass_ISOmetric_data; other classes return 0.
     if (threadClass.size() < 2 || threadClass[1] != 'G') {
@@ -1247,7 +1266,7 @@ ThreadModelParameters resolveThreadModelParameters(const app::DocumentObject& ob
                                                    bool threaded)
 {
     // FreeCAD:
-    // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
     // ::Hole::makeThread() reads "bool leftHanded = (bool)ThreadDirection.getValue()";
     // then applies either "CustomThreadClearance / 2" or "getThreadClassClearance() / 2"
     // to the thread major radius before Hole::makeThread() builds the modeled thread tool.
@@ -1274,7 +1293,7 @@ ThreadDepthResult resolveThreadDepth(const app::DocumentObject& object,
                                      bool threaded,
                                      double threadPitch)
 {
-    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
     // ::Hole::updateThreadDepthParam(), "Hole Depth" copies Depth, "Dimension" clamps
     // ThreadDepth to hole depth, and "Tapped (DIN76)" uses "Depth - getThreadRunout()".
     ThreadDepthResult result;
@@ -1338,7 +1357,7 @@ std::optional<HoleCutDefinitionKind> cutKindFromHoleResource(const std::string& 
 
 std::optional<HoleCutDefinition> readHoleCutDefinitionFile(const std::filesystem::path& path)
 {
-    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
     // ::Hole::readCutDefinitions(), reads each Resources/Hole "*.json", converts it through
     // from_json(CutDimensionSet), then addCutType() registers the JSON "name" for metric or
     // metricfine HoleCutType enum values. cad-core keeps the same resource schema and exposes
@@ -1461,12 +1480,12 @@ const HoleCutDefinition* resourceHoleCutDefinitionFor(const std::string& threadT
 const std::vector<CounterboreDimension>* iso4762CounterboreTable(const std::string& threadType)
 {
     // FreeCAD:
-    // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
     // ::Hole::updateHoleCutParams(), for metric "Counterbore" reads "ISO 4762" with
     // "const CounterBoreDimension& dimen = counter.get_bore(threadSizeStr)".
     // Data source:
-    // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/Resources/Hole/iso4762.json
-    // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/Resources/Hole/iso4762-fine.json
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/Resources/Hole/iso4762.json
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/Resources/Hole/iso4762-fine.json
     static const std::vector<CounterboreDimension> metric = {
         {"M1.6x0.35", 3.5, 1.7}, {"M2x0.4", 4.3, 2.1},
         {"M2.5x0.45", 5.0, 3.0}, {"M3x0.5", 6.0, 3.4},
@@ -1510,12 +1529,12 @@ const std::vector<CounterboreDimension>* iso4762CounterboreTable(const std::stri
 const std::vector<CountersinkDimension>* iso10642CountersinkTable(const std::string& threadType)
 {
     // FreeCAD:
-    // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
     // ::Hole::updateHoleCutParams(), for metric "Countersink" and "Counterdrill" reads
     // "ISO 10642" and applies "HoleCutCountersinkAngle.setValue(counter.angle)".
     // Data source:
-    // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/Resources/Hole/iso10642.json
-    // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/Resources/Hole/iso10642-fine.json
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/Resources/Hole/iso10642.json
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/Resources/Hole/iso10642-fine.json
     static const std::vector<CountersinkDimension> metric = {
         {"M2x0.4", 4.7}, {"M2.5x0.45", 5.9}, {"M3x0.5", 6.7},
         {"M4x0.7", 9.0}, {"M5x0.8", 11.2}, {"M6x1.0", 13.4},
@@ -1548,7 +1567,7 @@ const std::vector<CounterboreDimension>* namedCounterboreTable(const std::string
     }
 
     // FreeCAD:
-    // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
     // ::Hole::readCutDefinitions() loads Resources/Hole/*.json and addCutType() registers
     // their JSON "name" values as dynamic HoleCutType enums for metric / metricfine threads.
     static const std::vector<CounterboreDimension> din7984 = {
@@ -1615,8 +1634,8 @@ const std::vector<CountersinkDimension>* namedCountersinkTable(const std::string
     }
 
     // FreeCAD:
-    // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/Resources/Hole/iso2009.json
-    // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/Resources/Hole/iso7046.json
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/Resources/Hole/iso2009.json
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/Resources/Hole/iso7046.json
     // are registered through Hole::readCutDefinitions() as metric countersink HoleCutType values.
     static const std::vector<CountersinkDimension> iso2009 = {
         {"M2x0.4", 4.3}, {"M2.5x0.45", 5.3}, {"M3x0.5", 6.3},
@@ -1806,18 +1825,21 @@ bool addWireEdge(BRepBuilderAPI_MakeWire& wireBuilder,
     return true;
 }
 
-std::vector<gp_Pnt> holeCentersFromCircularProfile(const TopoDS_Shape& rawProfile, int baseProfileType)
+std::vector<HoleCenterSource> holeCentersFromCircularProfile(const TopoDS_Shape& rawProfile, int baseProfileType)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
     // ::Hole::findHoles(), iterates profile edges, keeps GeomAbs_Circle, then filters
     // "adaptor.IsClosed()" by BaseProfileTypeOptions::OnCircles / OnArcs and uses
-    // "circle.Axis().Location()" as the hole center.
-    std::vector<gp_Pnt> centers;
+    // "circle.Axis().Location()" as the hole center. cad-core keeps the EdgeN source here so
+    // Hole tool history can mirror findHoles() instead of inferring ownership from output faces.
+    std::vector<HoleCenterSource> centers;
     if ((baseProfileType & baseProfileOnCircles) == 0 && (baseProfileType & baseProfileOnArcs) == 0) {
         return centers;
     }
 
+    int edgeIndex = 0;
     for (TopExp_Explorer explorer(rawProfile, TopAbs_EDGE); explorer.More(); explorer.Next()) {
+        ++edgeIndex;
         const TopoDS_Edge edge = TopoDS::Edge(explorer.Current());
         BRepAdaptor_Curve curve(edge);
         if (curve.GetType() != GeomAbs_Circle) {
@@ -1829,7 +1851,9 @@ std::vector<gp_Pnt> holeCentersFromCircularProfile(const TopoDS_Shape& rawProfil
         if ((baseProfileType & baseProfileOnArcs) == 0 && !curve.IsClosed()) {
             continue;
         }
-        centers.push_back(curve.Circle().Axis().Location());
+        centers.push_back(HoleCenterSource{curve.Circle().Axis().Location(),
+                                           "Edge" + std::to_string(edgeIndex),
+                                           "edge"});
     }
 
     return centers;
@@ -1848,32 +1872,46 @@ bool vertexBelongsToEdge(const TopoDS_Vertex& vertex, const TopoDS_Shape& rawPro
     return false;
 }
 
-std::vector<gp_Pnt> holeCentersFromPointProfile(const TopoDS_Shape& rawProfile, int baseProfileType)
+std::vector<HoleCenterSource> holeCentersFromPointProfile(const TopoDS_Shape& rawProfile, int baseProfileType)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
     // ::Hole::findHoles(), when BaseProfileTypeOptions::OnPoints is active, iterates
     // "getSubTopoShapes(TopAbs_VERTEX, TopAbs_EDGE)" so curve endpoint vertices are ignored.
-    std::vector<gp_Pnt> centers;
+    std::vector<HoleCenterSource> centers;
     if ((baseProfileType & baseProfileOnPoints) == 0) {
         return centers;
     }
 
+    int vertexIndex = 0;
     for (TopExp_Explorer explorer(rawProfile, TopAbs_VERTEX); explorer.More(); explorer.Next()) {
+        ++vertexIndex;
         const TopoDS_Vertex vertex = TopoDS::Vertex(explorer.Current());
         if (vertexBelongsToEdge(vertex, rawProfile)) {
             continue;
         }
-        centers.push_back(BRep_Tool::Pnt(vertex));
+        centers.push_back(HoleCenterSource{BRep_Tool::Pnt(vertex),
+                                           "Vertex" + std::to_string(vertexIndex),
+                                           "vertex"});
     }
     return centers;
 }
 
-std::vector<gp_Pnt> holeCentersFromProfile(const TopoDS_Shape& rawProfile, int baseProfileType)
+std::vector<HoleCenterSource> holeCentersFromProfile(const TopoDS_Shape& rawProfile, int baseProfileType)
 {
-    std::vector<gp_Pnt> centers = holeCentersFromCircularProfile(rawProfile, baseProfileType);
-    std::vector<gp_Pnt> points = holeCentersFromPointProfile(rawProfile, baseProfileType);
+    std::vector<HoleCenterSource> centers = holeCentersFromCircularProfile(rawProfile, baseProfileType);
+    std::vector<HoleCenterSource> points = holeCentersFromPointProfile(rawProfile, baseProfileType);
     centers.insert(centers.end(), points.begin(), points.end());
     return centers;
+}
+
+std::vector<gp_Pnt> holeCenterPoints(const std::vector<HoleCenterSource>& centers)
+{
+    std::vector<gp_Pnt> points;
+    points.reserve(centers.size());
+    for (const HoleCenterSource& center : centers) {
+        points.push_back(center.location);
+    }
+    return points;
 }
 
 std::optional<TopoDS_Shape> buildCylinderTool(const std::vector<gp_Pnt>& centers,
@@ -1938,7 +1976,7 @@ double modelThreadHelixLength(const ThreadDepthResult& threadDepth,
                               double holeDepth,
                               double pitch)
 {
-    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
     // ::Hole::makeThread(), initializes "helixLength = threadDepth + Pitch / 2"; non-Dimension
     // ThroughAll uses "threadDepth + 2 * Pitch", Hole Depth uses "threadDepth + Pitch / 8",
     // and Dimension clamps to "holeDepth + Pitch / 8" near the hole bottom.
@@ -2019,7 +2057,7 @@ std::optional<TopoDS_Wire> buildThreadProfileWire(const gp_Pnt& center,
                                                   const app::DocumentObject& object,
                                                   runtime::ComputeContext& context)
 {
-    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
     // ::Hole::makeThread(), builds "mkThreadWire" from ISO/UTS sharp-V formulas or
     // BSP/BSW/BSF Whitworth formulas, with "RmajC = Rmaj + clearance".
     const double rmajC = majorRadius + radiusClearance;
@@ -2094,7 +2132,7 @@ std::optional<TopoDS_Wire> buildThreadHelix(const gp_Pnt& center,
                                             const app::DocumentObject& object,
                                             runtime::ComputeContext& context)
 {
-    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
     // ::Hole::makeThread(), calls TopoShape::makeLongHelix(Pitch, helixLength, Rmaj,
     // "TaperedAngle - 90", leftHanded) before feeding the wire to BRepOffsetAPI_MakePipeShell.
     if (pitch <= Precision::Confusion() || helixLength <= Precision::Confusion()
@@ -2280,9 +2318,12 @@ std::optional<TopoDS_Shape> buildModelThreadAtCenter(const gp_Pnt& center,
         return std::nullopt;
     }
 
-    BRepBuilderAPI_MakeFace frontFaceBuilder(TopoDS::Wire(simulated.First()));
-    BRepBuilderAPI_MakeFace backFaceBuilder(TopoDS::Wire(simulated.Last()));
-    if (!frontFaceBuilder.IsDone() || !backFaceBuilder.IsDone()) {
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // ::Hole::makeThread(), caps mkPS.Simulate() end wires with
+    // "Part::FaceMakerCheese::makeFace(frontwires/backwires)" before sewing the thread solid.
+    const auto frontFace = part::makeCheeseFaceFromClosedWires({TopoDS::Wire(simulated.First())});
+    const auto backFace = part::makeCheeseFaceFromClosedWires({TopoDS::Wire(simulated.Last())});
+    if (!frontFace || frontFace->IsNull() || !backFace || backFace->IsNull()) {
         runtime::addDiagnostic(context.diagnostics,
                                "error",
                                "execution_failed",
@@ -2294,8 +2335,8 @@ std::optional<TopoDS_Shape> buildModelThreadAtCenter(const gp_Pnt& center,
 
     BRepBuilderAPI_Sewing sewing;
     sewing.SetTolerance(Precision::Confusion());
-    sewing.Add(frontFaceBuilder.Face());
-    sewing.Add(backFaceBuilder.Face());
+    sewing.Add(*frontFace);
+    sewing.Add(*backFace);
     sewing.Add(shell);
     sewing.Perform();
     if (sewing.SewedShape().IsNull()) {
@@ -2386,29 +2427,33 @@ std::optional<TopoDS_Shape> combineHoleAndThreadTools(const TopoDS_Shape& holeTo
                                                       const app::DocumentObject& object,
                                                       runtime::ComputeContext& context)
 {
-    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
     // ::Hole::execute(), when "Threaded && ModelThread", adds "protoHole" and "protoThread"
-    // into one "holeWithThread" compound before the subtractive boolean. cad-core keeps the
-    // same tool domain by fusing the overlapping tool solids before Body consumes one subShape.
-    BRepAlgoAPI_Fuse fuse(holeTool, threadTool);
-    fuse.Build();
-    if (!fuse.IsDone() || fuse.Shape().IsNull()) {
+    // into one "holeWithThread" compound with "builder.MakeCompound()" and two "builder.Add()"
+    // calls. cad-core returns the same compound; part::makeElementBooleanFromSources() expands
+    // Cut tool compounds before Body consumes the subtractive AddSubShape.
+    TopoDS_Compound holeWithThread;
+    BRep_Builder builder;
+    builder.MakeCompound(holeWithThread);
+    builder.Add(holeWithThread, holeTool);
+    builder.Add(holeWithThread, threadTool);
+    if (holeWithThread.IsNull()) {
         runtime::addDiagnostic(context.diagnostics,
                                "error",
                                "execution_failed",
-                               "OCCT could not combine Hole tap drill and model thread tools",
+                               "OCCT could not combine Hole tap drill and model thread compound",
                                object.name,
                                "ModelThread");
         return std::nullopt;
     }
-    return fuse.Shape();
+    return holeWithThread;
 }
 
 bool normalizeHoleToolOptions(HoleToolOptions& options,
                               const app::DocumentObject& object,
                               runtime::ComputeContext& context)
 {
-    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
     // ::Hole::updateHoleCutParams(), for metric threaded head cuts first uses ISO 4762 /
     // ISO 10642 standard dimensions, then falls back to calculateAndSetCounterbore() /
     // calculateAndSetCountersink(); non-metric head cuts keep the existing rule-of-thumb path.
@@ -2775,6 +2820,192 @@ std::optional<TopoDS_Shape> buildProfiledTool(const std::vector<gp_Pnt>& centers
     return compound;
 }
 
+std::size_t subshapeCount(const TopoDS_Shape& shape, TopAbs_ShapeEnum kind)
+{
+    TopTools_IndexedMapOfShape shapes;
+    TopExp::MapShapes(shape, kind, shapes);
+    return static_cast<std::size_t>(std::max(0, shapes.Extent()));
+}
+
+void addUniqueString(std::vector<std::string>& values, const std::string& value)
+{
+    if (std::find(values.begin(), values.end(), value) == values.end()) {
+        values.push_back(value);
+    }
+}
+
+void addModifiedProfileSource(part::NamedShape& namedShape,
+                              const std::string& targetFace,
+                              const std::string& profileObject,
+                              const HoleCenterSource& centerSource,
+                              std::size_t centerIndex,
+                              std::size_t targetFaceIndex,
+                              std::size_t toolFaceCount,
+                              bool threaded,
+                              bool modelThread)
+{
+    const std::string sourceStableName = profileObject + "." + centerSource.sourceSubname;
+    auto elementIt = namedShape.elements.find(targetFace);
+    if (elementIt == namedShape.elements.end()) {
+        return;
+    }
+
+    elementIt->second.status = part::ElementHistoryKind::Modified;
+    addUniqueString(elementIt->second.sources, sourceStableName);
+    namedShape.elementMap[sourceStableName] = targetFace;
+
+    const auto duplicateHistory = std::find_if(
+        namedShape.history.begin(),
+        namedShape.history.end(),
+        [&](const part::ElementHistory& entry) {
+            return entry.kind == part::ElementHistoryKind::Modified && entry.element == targetFace
+                && entry.sources == std::vector<std::string> {sourceStableName};
+        }
+    );
+    if (duplicateHistory == namedShape.history.end()) {
+        namedShape.history.push_back(
+            part::ElementHistory {part::ElementHistoryKind::Modified, targetFace, {sourceStableName}}
+        );
+    }
+
+    part::MapperHistoryEvent event;
+    event.source = part::MapperHistoryEndpoint {profileObject, centerSource.sourceSubname};
+    event.target = part::MapperHistoryEndpoint {namedShape.owner, targetFace};
+    event.shapeKind = "face";
+    event.relation = part::MapperHistoryRelation::Modified;
+    event.makerStage = "hole_find_holes";
+    event.recoverability = part::MapperHistoryRecoverability::Resolved;
+    event.evidence = {
+        {"producer", "PartDesign::Hole::findHoles"},
+        {"make_shape_with_element_map", true},
+        {"source_profile", profileObject},
+        {"source_subname", centerSource.sourceSubname},
+        {"source_kind", centerSource.sourceKind},
+        {"center_index", centerIndex},
+        {"target_face_index", targetFaceIndex},
+        {"tool_face_count", toolFaceCount},
+        {"threaded", threaded},
+        {"model_thread", modelThread},
+    };
+    part::addMapperHistoryEvent(namedShape.mapperHistory, std::move(event));
+}
+
+part::NamedShape namedShapeForHoleToolHistory(const std::string& owner,
+                                             const TopoDS_Shape& toolShape,
+                                             const app::Link& profile,
+                                             const std::vector<HoleCenterSource>& centerSources,
+                                             bool threaded,
+                                             bool modelThread)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // ::Hole::findHoles(), calls "mapper.populate(Part::MappingStatus::Modified, baseshape,
+    // TopoShape(protoHole).getSubTopoShapes(TopAbs_FACE))" and then
+    // "hole.makeShapeWithElementMap(protoHole, mapper, {baseshape})". cad-core records the
+    // request-local source profile EdgeN/VertexN -> tool FaceN ledger here, so Body's subtractive
+    // cut consumes producer history through AddSubShape.subNamedShape instead of adapter fixes.
+    part::NamedShape namedShape = part::indexedNamedShapeForObject(owner, toolShape);
+    if (centerSources.empty()) {
+        return namedShape;
+    }
+
+    TopTools_IndexedMapOfShape faces;
+    TopExp::MapShapes(toolShape, TopAbs_FACE, faces);
+    if (faces.Extent() <= 0) {
+        return namedShape;
+    }
+
+    const std::size_t toolFaceCount = static_cast<std::size_t>(faces.Extent());
+    const std::size_t facesPerCenter = std::max<std::size_t>(1U, toolFaceCount / centerSources.size());
+    for (std::size_t faceIndex = 1; faceIndex <= toolFaceCount; ++faceIndex) {
+        const std::size_t centerIndex = std::min((faceIndex - 1U) / facesPerCenter, centerSources.size() - 1U);
+        addModifiedProfileSource(namedShape,
+                                 "Face" + std::to_string(faceIndex),
+                                 profile.object,
+                                 centerSources[centerIndex],
+                                 centerIndex + 1U,
+                                 faceIndex,
+                                 toolFaceCount,
+                                 threaded,
+                                 modelThread);
+    }
+
+    addUniqueString(namedShape.elementHistoryStatus, "hole_find_holes:profile_source");
+    addUniqueString(namedShape.elementHistoryStatus, "hole_cut_history:element_map_freeze");
+    if (modelThread) {
+        addUniqueString(namedShape.elementHistoryStatus, "hole_model_thread:pipe_shell_tool_history");
+    }
+    if (threaded && modelThread && toolShape.ShapeType() == TopAbs_COMPOUND) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/
+        // TopoShapeExpansion.cpp::TopoShape::makeElementBoolean(), expands Cut compound tools
+        // before SetArguments()/SetTools(); Body reads this producer status into NamedShapeSource.
+        addUniqueString(namedShape.elementHistoryStatus, "boolean_compound_tool:expand_children");
+    }
+    return namedShape;
+}
+
+nlohmann::json centerSourcesToJson(const std::vector<HoleCenterSource>& centerSources)
+{
+    nlohmann::json result = nlohmann::json::array();
+    for (const HoleCenterSource& centerSource : centerSources) {
+        result.push_back({
+            {"subname", centerSource.sourceSubname},
+            {"kind", centerSource.sourceKind},
+        });
+    }
+    return result;
+}
+
+nlohmann::json holeHistoryFreezeJson(const app::Link& profile,
+                                     const PreviousSolidSource& base,
+                                     const TopoDS_Shape& toolShape,
+                                     const std::vector<HoleCenterSource>& centerSources,
+                                     const std::string& holeCutType,
+                                     bool threaded,
+                                     bool modelThread)
+{
+    nlohmann::json covered = {
+        "find_holes_make_shape_with_element_map",
+        "profile_source_tool_face_mapper_history",
+        "subtractive_body_cut_history",
+    };
+    if (modelThread) {
+        covered.push_back("model_thread_tool_face_history");
+        covered.push_back("model_thread_compound_tool_shape");
+    }
+    const bool hasHeadCut = holeCutType != "None";
+    const bool hasThreadedModelThreadHeadCutGap = threaded && modelThread && hasHeadCut;
+    nlohmann::json remaining = nlohmann::json::array();
+    if (hasThreadedModelThreadHeadCutGap) {
+        remaining.push_back("hole_threaded_model_thread_profile_head_oracle_matrix");
+    }
+
+    nlohmann::json history = {
+        {"status", "element_map_freeze_first_slice"},
+        {"producer", "PartDesign::Hole::findHoles"},
+        {"source_profile", profile.object},
+        {"base_solid", base.owner},
+        {"center_count", centerSources.size()},
+        {"center_sources", centerSourcesToJson(centerSources)},
+        {"tool_faces", subshapeCount(toolShape, TopAbs_FACE)},
+        {"tool_edges", subshapeCount(toolShape, TopAbs_EDGE)},
+        {"tool_vertices", subshapeCount(toolShape, TopAbs_VERTEX)},
+        {"mapper_stage", "hole_find_holes"},
+        {"covered", covered},
+        {"remaining", remaining},
+        {"head_cut", hasHeadCut},
+        {"threaded", threaded},
+        {"model_thread", modelThread},
+    };
+    if (hasThreadedModelThreadHeadCutGap) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+        // ::Hole::execute(), key "builder.MakeCompound(holeWithThread)" / "builder.Add(...)".
+        // cad-core now keeps the same compound tool shape and relies on Part boolean compound
+        // tool expansion; the remaining gap is the native thread local-frame/head-cut topology.
+        history["topology_gap"] = "model_thread_head_cut_native_topology_pending_local_frame";
+    }
+    return history;
+}
+
 std::optional<HoleBuild> buildHole(const app::DocumentObject& object, runtime::ComputeContext& context)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
@@ -2829,7 +3060,7 @@ std::optional<HoleBuild> buildHole(const app::DocumentObject& object, runtime::C
         return std::nullopt;
     }
 
-    const auto base = previousSolidShape(context);
+    const auto base = previousSolidSource(context);
     if (!base) {
         runtime::addDiagnostic(context.diagnostics,
                                "error",
@@ -2882,7 +3113,7 @@ std::optional<HoleBuild> buildHole(const app::DocumentObject& object, runtime::C
         depth = readNumberProperty(object, "Depth", 25.0);
     }
     else if (method == "ThroughAll") {
-        depth = throughAllLength(*base, rawProfile);
+        depth = throughAllLength(base->shape, rawProfile);
     }
     else {
         runtime::addDiagnostic(context.diagnostics,
@@ -2921,7 +3152,8 @@ std::optional<HoleBuild> buildHole(const app::DocumentObject& object, runtime::C
     }
 
     const int baseProfileType = readBaseProfileType(object);
-    const std::vector<gp_Pnt> centers = holeCentersFromProfile(rawProfile, baseProfileType);
+    const std::vector<HoleCenterSource> centerSources = holeCentersFromProfile(rawProfile, baseProfileType);
+    const std::vector<gp_Pnt> centers = holeCenterPoints(centerSources);
 
     HoleToolOptions options;
     options.diameter = diameter;
@@ -2976,6 +3208,11 @@ std::optional<HoleBuild> buildHole(const app::DocumentObject& object, runtime::C
         }
     }
 
+    part::NamedShape toolNamedShape =
+        namedShapeForHoleToolHistory(object.name, *toolShape, *profileLink, centerSources, threaded, modelThread);
+    nlohmann::json historyFreeze =
+        holeHistoryFreezeJson(*profileLink, *base, *toolShape, centerSources, options.holeCutType, threaded, modelThread);
+
     return HoleBuild{*profileLink,
                      method,
                      diameter,
@@ -3007,7 +3244,9 @@ std::optional<HoleBuild> buildHole(const app::DocumentObject& object, runtime::C
                      options.taperedAngle,
                      threaded,
                      modelThread,
-                     *toolShape};
+                     *toolShape,
+                     std::move(toolNamedShape),
+                     std::move(historyFreeze)};
 }
 
 }  // namespace
@@ -3061,7 +3300,7 @@ void executeHole(const app::DocumentObject& object, runtime::ComputeContext& con
         return;
     }
 
-    const auto holeNamedShape = part::indexedNamedShapeForObject(object.name, hole->toolShape);
+    const auto holeNamedShape = hole->toolNamedShape;
     context.namedShapes[object.name] = holeNamedShape;
     context.addSubShapes[object.name] = runtime::AddSubShape{std::nullopt, hole->toolShape, std::nullopt, holeNamedShape};
     context.mesh[object.name] = cad_core::part::meshForShape(hole->toolShape);
@@ -3102,6 +3341,7 @@ void executeHole(const app::DocumentObject& object, runtime::ComputeContext& con
         {"threaded", hole->threaded},
         {"model_thread", hole->modelThread},
         {"model_thread_geometry", hole->threaded && hole->modelThread ? "pipe_shell" : "none"},
+        {"history", hole->historyFreeze},
         {"bbox", cad_core::part::bboxForShape(hole->toolShape)},
         {"volume", cad_core::part::volumeForShape(hole->toolShape)},
         {"kernel", cad_core::part::kernelVersion()},

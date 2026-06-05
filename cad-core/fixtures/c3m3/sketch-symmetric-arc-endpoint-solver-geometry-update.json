@@ -1,0 +1,54 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "start": [0, -2],
+            "end": [0, 2],
+            "construction": true
+          },
+          {
+            "kind": "ArcOfCircle",
+            "center": [0, 0],
+            "radius": 1,
+            "startAngle": 0,
+            "endAngle": 1.5707963267948966
+          }
+        ],
+        "Constraints": [
+          {
+            "Type": "Symmetric",
+            "First": 1,
+            "FirstPos": "start",
+            "Second": 1,
+            "SecondPos": "end",
+            "Third": 0
+          }
+        ]
+      }
+    },
+    {
+      "Name": "Extrude",
+      "ID": 2,
+      "TypeId": "Part::Extrusion",
+      "Properties": {
+        "Base": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Sketch"
+        },
+        "Dir": [0, 0, 1],
+        "LengthFwd": 1,
+        "LengthRev": 0,
+        "Solid": false
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Extrude"]
+  }
+}

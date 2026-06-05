@@ -17,16 +17,17 @@
 #include <utility>
 #include <vector>
 
-namespace {
+namespace
+{
 
 CadCoreBuffer emptyBuffer()
 {
-    return CadCoreBuffer{nullptr, 0};
+    return CadCoreBuffer {nullptr, 0};
 }
 
 bool copyBuffer(std::string_view value, CadCoreBuffer& buffer) noexcept
 {
-    buffer = CadCoreBuffer{nullptr, value.size()};
+    buffer = CadCoreBuffer {nullptr, value.size()};
     if (value.empty()) {
         return true;
     }
@@ -44,7 +45,7 @@ CadCoreResult makeErrorResult(int32_t status, std::string_view message) noexcept
 {
     CadCoreBuffer error = emptyBuffer();
     copyBuffer(message, error);
-    return CadCoreResult{status, emptyBuffer(), error};
+    return CadCoreResult {status, emptyBuffer(), error};
 }
 
 CadCoreResult makeJsonResult(const nlohmann::json& payload)
@@ -53,14 +54,14 @@ CadCoreResult makeJsonResult(const nlohmann::json& payload)
     if (!copyBuffer(payload.dump(), json)) {
         return makeErrorResult(2, "cad-core FFI failed to allocate result buffer");
     }
-    return CadCoreResult{0, json, emptyBuffer()};
+    return CadCoreResult {0, json, emptyBuffer()};
 }
 
 CadCoreExportResult makeExportErrorResult(int32_t status, std::string_view message) noexcept
 {
     CadCoreBuffer error = emptyBuffer();
     copyBuffer(message, error);
-    return CadCoreExportResult{status, emptyBuffer(), emptyBuffer(), error};
+    return CadCoreExportResult {status, emptyBuffer(), emptyBuffer(), error};
 }
 
 CadCoreExportResult makeExportResult(std::string_view data, const nlohmann::json& payload)
@@ -76,7 +77,7 @@ CadCoreExportResult makeExportResult(std::string_view data, const nlohmann::json
         return makeExportErrorResult(2, "cad-core FFI failed to allocate export metadata buffer");
     }
 
-    return CadCoreExportResult{0, dataBuffer, jsonBuffer, emptyBuffer()};
+    return CadCoreExportResult {0, dataBuffer, jsonBuffer, emptyBuffer()};
 }
 
 nlohmann::json cadCoreVersionJson()
@@ -144,7 +145,15 @@ nlohmann::json capabilitiesJson()
 {
     const cad_core::runtime::FeatureRegistry registry = cad_core::runtime::buildDefaultRegistry();
     const auto linkSubShapeFields = nlohmann::json::array(
-        {"value", "SubList", "StableSubList", "FullSubList", "ShadowSub", "ReferenceShadow", "ExternalFlags", "Document"});
+        {"value",
+         "SubList",
+         "StableSubList",
+         "FullSubList",
+         "ShadowSub",
+         "ReferenceShadow",
+         "ExternalFlags",
+         "Document"}
+    );
     return {
         {"status", "ok"},
         {"schema_version", "cad-web-v1"},
@@ -165,18 +174,11 @@ nlohmann::json capabilitiesJson()
                "Document",
                "SubSet"}},
              {"document_reference_fields",
-              {"file",
-               "name",
-               "label",
-               "stamp",
-               "status",
-               "currentName",
-               "currentLabel",
-               "currentStamp",
-               "currentStatus",
-               "allowPartial"}},
+              {"file", "name", "label", "stamp", "status", "currentName", "currentLabel", "currentStamp", "currentStatus", "allowPartial"
+              }},
              {"external_geometry_native_slot_fields",
-              {"ExternalGeo", "Geometry", "Values", "Items", "Ref", "RefIndex", "ExternalFlags", "Flags"}},
+              {"ExternalGeo", "Geometry", "Values", "Items", "Ref", "RefIndex", "ExternalFlags", "Flags"
+              }},
              {"external_geometry_flags", {"Defining", "Frozen", "Detached", "Missing", "Sync"}},
              {"external_geometry_lifecycle",
               {
@@ -251,8 +253,7 @@ nlohmann::json capabilitiesJson()
              {"request_local_boundaries",
               {"plain_group_child_expansion_without_persistent_child_cache",
                "show_element_missing_children_are_create_updates"}},
-             {"remaining_gaps",
-              {"full_child_cache_lifecycle", "copy_on_change_deep_copy_lifecycle"}},
+             {"remaining_gaps", {"full_child_cache_lifecycle", "copy_on_change_deep_copy_lifecycle"}},
          }},
         {"link_reference_lifecycle",
          {
@@ -296,44 +297,120 @@ nlohmann::json capabilitiesJson()
                   // conflicting/redundant/over-constrained"; the same file records
                   // "lastHasMalformedConstraints = solvedSketch.hasMalformedConstraints()".
                   // SketchObject.cpp::execute() returns "Sketch with conflicting constraints",
-                  // "Sketch with redundant constraints", and "Sketch with malformed constraints".
-                  {"status", "done_first_slice"},
+                  // "Sketch with redundant constraints", and "Sketch with malformed constraints";
+                  // the same solve() stores "lastDoF", while execute() proceeds to "buildShape()"
+                  // when no solver error is returned. The same solve() path moves
+                  // "solvedSketch.extractGeometry()" into "Geometry" when
+                  // "updateGeoAfterSolving" is true. Sketch.cpp::Sketch::addConstraint()
+                  // routes DistanceX / DistanceY single-point constraints through
+                  // "addCoordinateXConstraint" / "addCoordinateYConstraint"; it routes Circle
+                  // Radius / Diameter through "addConstraintCircleRadius/Diameter"; Distance
+                  // line length calls "GCSsys.addConstraintP2PDistance(l.p1, l.p2, ...)" and
+                  // arc length calls "GCSsys.addConstraintArcLength(a, ...)". Sketch.h documents
+                  // that "positive degrees of freedom correspond to an under-constrained sketch".
+                  // PointOnObject on a Line target calls
+                  // "GCSsys.addConstraintPointOnLine(p1, l2, tag, driving)". Parallel line pairs
+                  // route through "addParallelConstraint(constraint->First, constraint->Second)"
+                  // and then "GCSsys.addConstraintParallel(l1, l2, tag)"; simple
+                  // Perpendicular line pairs route through "addPerpendicularConstraint" and then
+                  // "GCSsys.addConstraintPerpendicular(l1, l2, tag)". Line + Circle/Arc
+                  // Perpendicular uses "Points[Geoms[geoId2].midPointId]" and
+                  // "GCSsys.addConstraintPointOnLine(p2, l1, tag)". Equal constraints route to
+                  // "GCSsys.addConstraintEqualLength" for Lines and
+                  // "GCSsys.addConstraintEqualRadius" for Circle/Arc combinations. Tangent
+                  // Line + Circle/Arc routes to "GCSsys.addConstraintTangent(l, c, ...)" /
+                  // "GCSsys.addConstraintTangent(l, a, ...)". Symmetric point pairs about a
+                  // Line route to "GCSsys.addConstraintP2PSymmetric(p1, p2, l, tag)";
+                  // Symmetric point pairs about a center point route to
+                  // "GCSsys.addConstraintP2PSymmetric(p1, p2, p, tag)". Arc endpoint writeback
+                  // follows Sketch::updateArcOfCircle(), which writes "setRange(*myArc.startAngle,
+                  // *myArc.endAngle, ...)" after solving.
+                  {"status", "done_eighteenth_slice"},
                   {"diagnostics",
                    {"sketch_solver_conflict",
                     "sketch_solver_malformed_constraint",
+                    "sketch_solver_partially_redundant",
                     "sketch_solver_redundant"}},
                   {"covered",
                    {"horizontal_vertical_same_target_conflict",
                     "malformed_constraint_diagnostics",
+                    "partial_redundancy_diagnostics",
                     "duplicate_orientation_constraint_redundant",
                     "conflicting_same_target_datums",
-                    "duplicate_same_target_datums"}},
+                    "duplicate_same_target_datums",
+                    "unconstrained_geometry_underconstrained_state",
+                    "whole_line_orientation_solver_geometry_update",
+                    "endpoint_coordinate_solver_geometry_update",
+                    "circle_radius_diameter_solver_geometry_update",
+                    "line_length_solver_geometry_update",
+                    "arc_length_solver_geometry_update",
+                    "point_on_object_line_solver_geometry_update",
+                    "parallel_line_pair_solver_geometry_update",
+                    "perpendicular_line_pair_solver_geometry_update",
+                    "perpendicular_line_circle_arc_midpoint_solver_geometry_update",
+                    "equal_line_circle_arc_solver_geometry_update",
+                    "tangent_line_circle_arc_solver_geometry_update",
+                    "symmetric_line_axis_solver_geometry_update",
+                    "symmetric_arc_endpoint_solver_geometry_update",
+                    "symmetric_center_point_solver_geometry_update",
+                    "solver_dof_driven_underconstrained_state"}},
                   {"request_local_boundaries",
                    {"diagnostics_only_without_backend_solver_session",
                     "conflict_or_redundant_blocks_profile_output",
-                    "malformed_blocks_profile_output"}},
+                    "malformed_blocks_profile_output",
+                    "whole_line_orientation_update_without_full_solver_session",
+                    "endpoint_coordinate_update_without_full_solver_session",
+                    "circle_radius_diameter_update_without_full_solver_session",
+                    "line_length_update_preserves_start_point_without_full_solver_session",
+                    "arc_length_update_scales_radius_without_full_solver_session",
+                    "point_on_object_line_projection_without_full_solver_session",
+                    "line_pair_parallel_update_preserves_second_start_without_full_solver_session",
+                    "line_pair_perpendicular_update_preserves_second_start_without_full_solver_"
+                    "session",
+                    "line_circle_arc_perpendicular_midpoint_projection_without_full_solver_session",
+                    "equal_relation_updates_second_geometry_without_full_solver_session",
+                    "tangent_line_circle_arc_updates_round_center_without_full_solver_session",
+                    "symmetric_line_axis_updates_second_point_without_full_solver_session",
+                    "symmetric_arc_endpoint_updates_second_arc_angle_without_full_solver_session",
+                    "symmetric_center_point_updates_second_point_without_full_solver_session",
+                    "partial_redundancy_warning_without_full_dependent_parameter_group_analysis",
+                    "request_local_dof_estimate_without_full_solver_rank"}},
                   {"remaining_gaps",
-                   {"full_solver_dof",
-                    "underconstrained_state",
-                    "solver_geometry_update",
-                    "partial_redundancy_diagnostics"}},
+                   {"full_solver_dof", "symmetric_coupled_curve_relation_solver_geometry_update"}},
               }},
          }},
         {"part_workbench",
          {
              {"offset",
               {
-                  // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FeatureOffset.cpp
+                  // FreeCAD:
+                  // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FeatureOffset.cpp
                   // ::Offset::execute(), reads "Source", "Value", "Mode", "Join",
                   // "Intersection", "SelfIntersection" and "Fill" before calling
-                  // TopoShape::makeElementOffset().
-                  {"status", "done_first_slice"},
-                  {"type_ids", {"Part::Offset"}},
+                  // TopoShape::makeElementOffset(); ::Offset2D::execute() calls
+                  // "makeElementOffset2D(shape, offset, join, fill, openresult, inter)";
+                  // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/PartFeatures.cpp
+                  // ::Thickness::execute() calls "makeElementThickSolid(base, shapes, ...)".
+                  {"status", "done_second_slice"},
+                  {"type_ids", {"Part::Compound", "Part::Offset", "Part::Offset2D", "Part::Thickness"}},
                   {"properties",
-                   {"Source", "Value", "Mode", "Join", "Intersection", "SelfIntersection", "Fill"}},
-                  {"covered", {"face_source_offset", "maker_history_generated_modified"}},
+                   {"Source", "Faces", "Value", "Mode", "Join", "Intersection", "SelfIntersection", "Fill"
+                   }},
+                  {"covered",
+                   {"face_source_offset",
+                    "maker_history_generated_modified",
+                    "fill_offset",
+                    "solid_source_make_element_solid",
+                    "offset2d_face_no_fill",
+                    "offset2d_face_fill_closed",
+                    "offset2d_open_wire_no_fill",
+                    "offset2d_open_wire_fill",
+                    "offset2d_compound_child_recursive",
+                    "offset2d_compound_collective",
+                    "thickness_single_solid_face",
+                    "thickness_mode_join_oracle"}},
                   {"request_local_boundaries", {"source_shape_recomputed_from_document_graph"}},
-                  {"remaining_gaps", {"fill_offset", "solid_source_make_element_solid", "offset2d", "thickness"}},
+                  {"remaining_gaps", nlohmann::json::array()},
               }},
          }},
         {"part_design",
@@ -342,8 +419,9 @@ nlohmann::json capabilitiesJson()
               {
                   // FreeCAD:
                   // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/Body.cpp
-                  // ::Body::onChanged(), "createObject(\"PartDesign::FeatureBase\",\"BaseFeature\")"
-                  // and "bf->BaseFeature.setValue(BaseFeature.getValue())"; ::Body::setBaseProperty()
+                  // ::Body::onChanged(),
+                  // "createObject(\"PartDesign::FeatureBase\",\"BaseFeature\")" and
+                  // "bf->BaseFeature.setValue(BaseFeature.getValue())"; ::Body::setBaseProperty()
                   // rewrites the next solid feature's "BaseFeature"; ::Body::removeObject()
                   // "Adjust Tip feature if it is pointing to the deleted object".
                   // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/OriginGroupExtension.cpp
@@ -358,10 +436,13 @@ nlohmann::json capabilitiesJson()
                     "body_feature_basefeature_delete_reroute",
                     "body_origin_datum_relink"}},
                   {"writeback_properties",
-                   {"Body.Group", "Body.Tip", "Body.Origin", "FeatureBase.BaseFeature", "Feature.BaseFeature"}},
+                   {"Body.Group", "Body.Tip", "Body.Origin", "FeatureBase.BaseFeature", "Feature.BaseFeature"
+                   }},
                   {"origin_lifecycle",
-                   {"explicit_body_origin_link", "origin_global_placement_from_body", "origin_feature_role_relink"}},
-                  {"addsub_replay", {"group_order_replay", "additive_fuse", "subtractive_cut", "stop_at_tip"}},
+                   {"explicit_body_origin_link", "origin_global_placement_from_body", "origin_feature_role_relink"
+                   }},
+                  {"addsub_replay",
+                   {"group_order_replay", "additive_fuse", "subtractive_cut", "stop_at_tip"}},
                   {"request_local_boundaries",
                    {"body_basefeature_writeback_keeps_request_graph_immutable",
                     "body_delete_reroute_uses_request_local_stale_tip_evidence",
@@ -376,7 +457,8 @@ nlohmann::json capabilitiesJson()
                   // loads "Resources/Hole", ::Hole::makeThread() builds the model thread, and
                   // ::Hole::findHoles() calls "makeShapeWithElementMap(protoHole, mapper, {baseshape})".
                   {"thread_tables",
-                   {"ISOMetricProfile", "ISOMetricFineProfile", "UNC", "UNF", "UNEF", "NPT", "BSP", "BSW", "BSF", "ISOTyre"}},
+                   {"ISOMetricProfile", "ISOMetricFineProfile", "UNC", "UNF", "UNEF", "NPT", "BSP", "BSW", "BSF", "ISOTyre"
+                   }},
                   {"diameter_sources",
                    {"Diameter",
                     "thread_tap_drill",
@@ -404,22 +486,30 @@ nlohmann::json capabilitiesJson()
                        {"status", "done_first_slice"},
                        {"geometry", "pipe_shell"},
                        {"properties",
-                        {"ModelThread",
-                         "ThreadClass",
-                         "ThreadDirection",
-                         "UseCustomThreadClearance",
-                         "CustomThreadClearance"}},
+                        {"ModelThread", "ThreadClass", "ThreadDirection", "UseCustomThreadClearance", "CustomThreadClearance"
+                        }},
                    }},
                   {"history",
                    {
-                       {"status", "history_partial"},
-                       {"covered", {"find_holes_make_shape_with_element_map", "subtractive_body_cut_history"}},
+                       {"status", "element_map_freeze_first_slice"},
+                       {"covered",
+                        {"find_holes_make_shape_with_element_map",
+                         "profile_source_tool_face_mapper_history",
+                         "point_profile_head_cut_history",
+                         "subtractive_body_cut_history",
+                         "model_thread_tool_face_history",
+                         "model_thread_compound_tool_shape"}},
+                       {"known_gap_fixtures", {"p7/hole-supported-model-thread-counterbore"}},
+                       {"remaining", {"hole_threaded_model_thread_profile_head_oracle_matrix"}},
                    }},
                   {"native_oracle_fixtures",
                    {"p7/hole-supported-threaded-dynamic-iso2009",
                     "p7/hole-supported-threaded-dynamic-din7984",
-                    "p7/hole-supported-model-thread-metric"}},
-                  {"remaining_gaps", {"hole_cut_history_full_element_map_freeze"}},
+                    "p7/hole-supported-model-thread-metric",
+                    "p7/hole-point-profile",
+                    "p7/hole-supported-point-counterbore"}},
+                  {"native_oracle_known_gap_fixtures", {"p7/hole-supported-model-thread-counterbore"}},
+                  {"remaining_gaps", {"hole_threaded_model_thread_profile_head_oracle_matrix"}},
               }},
          }},
         {"supported_type_ids", registry.typeIds()},
@@ -428,22 +518,20 @@ nlohmann::json capabilitiesJson()
         {"adapters",
          {
              {"core_entrypoints",
-              {"cad_core_recompute_json",
-               "cad_core_export_json",
-               "cad_core_capabilities_json",
-               "cli_recompute"}},
+              {"cad_core_recompute_json", "cad_core_export_json", "cad_core_capabilities_json", "cli_recompute"
+              }},
              {"stateless_result_channels",
               {"results", "elementReferenceUpdates", "documentObjectUpdates", "diagnostics"}},
              {"c_api_export",
               {"buffer_only", "rejects_server_file_paths", "metadata_diagnostics", "stl_deflection"}},
-             {"cli_export",
-              {"file_protocol", "requires_object_format_file", "stl_deflection"}},
+             {"cli_export", {"file_protocol", "requires_object_format_file", "stl_deflection"}},
              {"remaining_gaps",
               {"worker_adapter", "wasm_adapter", "streaming_mesh_limits", "binary_mesh_protocol"}},
          }},
         {"assembly",
          {
-             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+             // FreeCAD:
+             // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
              // ::AssemblyObject::solve(), uses "fixGroundedParts()" before "mbdAssembly->runPreDrag()";
              // cad-core exposes the stateless adapter states while full Ondsel solving remains a gap.
              {"solver_adapter",
@@ -465,11 +553,8 @@ nlohmann::json capabilitiesJson()
                "legacy_history_conversion",
                "element_map_preserved_aliases"}},
              {"stable_subname_resolution",
-              {"indexed",
-               "source_preserved",
-               "one_to_one_history",
-               "unique_same_kind_split_recovery",
-               "reference_shadow_recovery"}},
+              {"indexed", "source_preserved", "one_to_one_history", "unique_same_kind_split_recovery", "reference_shadow_recovery"
+              }},
              {"maker_history",
               {"prism",
                "body_boolean",
@@ -483,18 +568,21 @@ nlohmann::json capabilitiesJson()
                "dressup_addsubshape_slot",
                "dressup_multi_selection_history",
                "dressup_chamfer_parameter_variants",
-               // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureDraft.cpp::Draft::execute(),
+               // FreeCAD:
+               // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureDraft.cpp::Draft::execute(),
                // reads "Angle", "NeutralPlane", "PullDirection" and selected FaceN before
                // calling TopoShape::makeElementDraft().
                "dressup_draft_parameter_variants",
-               // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureThickness.cpp
+               // FreeCAD:
+               // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureThickness.cpp
                // ::Thickness::execute(), reads "Value", "Mode", "Join", "Reversed" and
                // "Intersection" before calling TopoShape::makeElementThickSolid().
                "dressup_thickness_parameter_variants",
                "thickness_multi_solid_fuse_history",
                "chain_dressup_pattern_history",
                "transformed_copy_terminal",
-               // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.cpp::TopoShape::fix(),
+               // FreeCAD:
+               // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.cpp::TopoShape::fix(),
                // calls "makeShapeWithElementMap(fixThis.Shape(), MapperHistory(fixThis), {*this})"
                // because "ShapeFix_Shape may delete ... or modify the input shape".
                // This C3-M1 slice covers ShapeFix small-edge deleted history and
@@ -504,11 +592,18 @@ nlohmann::json capabilitiesJson()
                // audited non-producer rather than a fixture to synthesize.
                "shapefix_deleted_small_edge",
                "shapefix_root_modified_history",
-               // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureTransformed.cpp::Transformed::execute(),
+               // FreeCAD:
+               // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureTransformed.cpp::Transformed::execute(),
                // Features mode calls "feature->getAddSubShape(fuseShape, cutShape)" and transforms
                // each original with "makeElementTransform", while WholeShape transforms the support.
                "transformed_pattern_addsub_ownership",
                "transformed_pattern_full_history",
+               // FreeCAD:
+               // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/
+               // FeatureHole.cpp::Hole::findHoles(), calls
+               // "makeShapeWithElementMap(protoHole, mapper, {baseshape})" after populating
+               // Modified history from profile Edge/Vertex sources to protoHole faces.
+               "hole_find_holes_profile_source_history",
                // FreeCAD:
                // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.cpp
                // ::TopoShape::read(), dispatches importStep/importIges/importBrep and stores the
@@ -523,8 +618,12 @@ nlohmann::json capabilitiesJson()
              {"producer_matrix",
               {
                   {"prism", {{"status", "covered"}, {"covered", {"maker_history"}}}},
-                  {"body_boolean", {{"status", "covered"}, {"covered", {"maker_history"}}}},
-                  {"part_boolean", {{"status", "covered"}, {"covered", {"maker_history"}}}},
+                  {"body_boolean",
+                   {{"status", "covered"},
+                    {"covered", {"maker_history", "flagged_compound_tool_expansion"}}}},
+                  {"part_boolean",
+                   {{"status", "covered"},
+                    {"covered", {"maker_history", "flagged_compound_tool_expansion"}}}},
                   // FreeCAD:
                   // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/
                   // FeaturePartSection.cpp::Section::makeOperation(), reads "Approximation",
@@ -533,15 +632,25 @@ nlohmann::json capabilitiesJson()
                   {"section",
                    {{"status", "covered"},
                     {"covered",
-                     {"approximation_property",
-                      "auto_fuzzy_value",
-                      "source_qualified_edge_history",
-                      "terminal_deleted_history"}},
+                     {"approximation_property", "auto_fuzzy_value", "source_qualified_edge_history", "terminal_deleted_history"
+                     }},
                     {"remaining", nlohmann::json::array()}}},
                   {"part_offset",
-                   {{"status", "done_first_slice"},
-                    {"covered", {"face_source_offset", "maker_history"}},
-                    {"remaining", {"fill_offset", "solid_source_make_element_solid", "offset2d", "thickness"}}}},
+                   {{"status", "done_second_slice"},
+                    {"covered",
+                     {"face_source_offset",
+                      "maker_history",
+                      "fill_offset",
+                      "solid_source_make_element_solid",
+                      "offset2d_face_no_fill",
+                      "offset2d_face_fill_closed",
+                      "offset2d_open_wire_no_fill",
+                      "offset2d_open_wire_fill",
+                      "offset2d_compound_child_recursive",
+                      "offset2d_compound_collective",
+                      "thickness_single_solid_face",
+                      "thickness_mode_join_oracle"}},
+                    {"remaining", nlohmann::json::array()}}},
                   {"general_fuse", {{"status", "covered"}, {"covered", {"maker_history"}}}},
                   {"refine",
                    {{"status", "covered"},
@@ -561,12 +670,10 @@ nlohmann::json capabilitiesJson()
                   {"sketch_internalshape",
                    {{"status", "done_first_slice"},
                     {"covered",
-                     {"facemaker",
-                      "wire_joiner_producer_evidence",
-                      "mixed_bounded_faces_open_wires_oracle"}},
+                     {"facemaker", "wire_joiner_producer_evidence", "mixed_bounded_faces_open_wires_oracle"
+                     }},
                     {"remaining", nlohmann::json::array()}}},
-                  {"taper_thru_sections",
-                   {{"status", "covered"}, {"covered", {"generated_history"}}}},
+                  {"taper_thru_sections", {{"status", "covered"}, {"covered", {"generated_history"}}}},
                   {"dressup",
                    {{"status", "done_first_slice"},
                     {"covered",
@@ -593,6 +700,17 @@ nlohmann::json capabilitiesJson()
                       "link_retag_composition",
                       "terminal_split_deleted"}},
                     {"remaining", nlohmann::json::array()}}},
+                  {"hole",
+                   {{"status", "done_first_slice"},
+                    {"covered",
+                     {"find_holes_make_shape_with_element_map",
+                      "profile_source_tool_face_mapper_history",
+                      "point_profile_head_cut_history",
+                      "model_thread_tool_face_history",
+                      "model_thread_compound_tool_shape",
+                      "subtractive_body_cut_history"}},
+                    {"known_gap_fixtures", {"p7/hole-supported-model-thread-counterbore"}},
+                    {"remaining", {"hole_threaded_model_thread_profile_head_oracle_matrix"}}}},
               }},
              {"terminal_history", {"deleted", "split", "merge"}},
              {"element_history_status",
@@ -609,13 +727,67 @@ nlohmann::json capabilitiesJson()
                // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
                // ::TopoShape::makeShapeWithElementMap(), checks "ElementMapPolicy::Drop", calls
                // "dropElementNaming()" and returns before preserving aliases.
-               "element_map_policy_drop"}},
-             {"remaining_gaps", {"complete_mapper_history"}},
+               "element_map_policy_drop",
+               // FreeCAD:
+               // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+               // ::TopoShape::mapSubElement(shapes), calls "setMappedChildElements(children)"
+               // when compound children are partner shapes.
+               "element_map_child_map:preserve_source_ranges",
+               // FreeCAD:
+               // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/ElementMap.cpp
+               // ::ElementMap::addChildElements(), "try to resolve the grand child map now."
+               "element_map_child_map:recursive_source_ranges",
+               // FreeCAD:
+               // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+               // ::TopoShape::createChildMap(), writes "child.postfix = op" before
+               // ElementMap::addChildElements() encodes the child map.
+               "element_map_child_map:postfix_source_ranges",
+               // FreeCAD:
+               // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/ElementMap.cpp
+               // ::ElementMap::hashChildMaps(), rewrites eligible child map entries under
+               // "MAPPED_CHILD_ELEMENTS_PREFIX" after addChildElements() creates the child map.
+               "element_map_child_map:hashed_child_map_keys",
+               // FreeCAD:
+               // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+               // ::TopoShape::makeElementWires(), "MakeWire will replace vertex of connected
+               // edge" and ElementMapPolicy::Propagate then maps the post-maker edges.
+               "element_map_policy_propagate:make_element_wires",
+               // FreeCAD:
+               // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+               // ::TopoShape::makeElementShell(), calls "tmp.mapSubElement(*this, op)" before
+               // resetting ElementMap on the generated shell.
+               "element_map_policy_propagate:make_element_shell",
+               "hole_find_holes:profile_source",
+               "hole_cut_history:element_map_freeze",
+               "hole_model_thread:pipe_shell_tool_history",
+               "boolean_compound_tool:expand_children",
+               "part_compound:make_element_compound",
+               "part_offset_fill:sewing_history",
+               "part_make_solid:make_element_solid",
+               "part_offset2d:face_no_fill_makeoffset",
+               "part_offset2d:face_fill_closed_makeoffset",
+               "part_offset2d:wire_no_fill_makeoffset",
+               "part_offset2d:wire_fill_open_makeoffset",
+               "part_offset2d:compound_child_recursive",
+               // FreeCAD:
+               // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+               // ::TopoShape::makeElementOffset2D(), "intersection" compound branch collects
+               // "non-compounds from this compound for collective offset" before one
+               // BRepOffsetAPI_MakeOffsetFix AddWire/Perform pass.
+               "part_offset2d:compound_collective_makeoffset",
+               "part_thickness:make_thick_solid"}},
+             // FreeCAD:
+             // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/ElementMap.cpp
+             // ::ElementMap::addChildElements(), "To avoid possibly very long recursive child
+             // map lookup"; ::hashChildMaps() hashes child maps. TopoShapeExpansion.cpp uses
+             // ElementMapPolicy::Propagate to "preserve element mapping".
+             {"remaining_gaps", {"hole_threaded_model_thread_profile_head_oracle_matrix"}},
          }},
         {"known_gaps",
          {
-             "complete_mapper_history",
-             "assembly_joint_solver",
+             "hole_threaded_model_thread_profile_head_oracle_matrix",
+             "assembly_full_ondsel_solver",
+             "assembly_solver_placement_updates",
          }},
     };
 }
@@ -730,29 +902,33 @@ CadCoreExportResult cad_core_export_json(const char* request_json, size_t reques
         }
 
         auto [document, diagnostics] = cad_core::app::parseDocument(request["document"]);
-        cad_core::runtime::ComputeContext context =
-            cad_core::runtime::recomputeContext(document, std::move(diagnostics));
+        cad_core::runtime::ComputeContext context
+            = cad_core::runtime::recomputeContext(document, std::move(diagnostics));
 
         const auto shapeIt = context.shapes.find(objectName);
         if (document.indexByName.count(objectName) == 0U) {
-            cad_core::runtime::addDiagnostic(context.diagnostics,
-                                             "error",
-                                             "missing_object",
-                                             "Export object does not exist: " + objectName,
-                                             objectName,
-                                             "object",
-                                             "export",
-                                             objectName);
+            cad_core::runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "missing_object",
+                "Export object does not exist: " + objectName,
+                objectName,
+                "object",
+                "export",
+                objectName
+            );
         }
         else if (shapeIt == context.shapes.end()) {
-            cad_core::runtime::addDiagnostic(context.diagnostics,
-                                             "error",
-                                             "execution_failed",
-                                             "Export object has no computed shape: " + objectName,
-                                             objectName,
-                                             "object",
-                                             "export",
-                                             objectName);
+            cad_core::runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "execution_failed",
+                "Export object has no computed shape: " + objectName,
+                objectName,
+                "object",
+                "export",
+                objectName
+            );
         }
 
         nlohmann::json metadata = {
@@ -768,8 +944,8 @@ CadCoreExportResult cad_core_export_json(const char* request_json, size_t reques
             return makeExportResult({}, metadata);
         }
 
-        const std::string data =
-            cad_core::part::exportShapeBuffer(shapeIt->second.shape, format, stlDeflection);
+        const std::string data
+            = cad_core::part::exportShapeBuffer(shapeIt->second.shape, format, stlDeflection);
         metadata["bytes"] = data.size();
         return makeExportResult(data, metadata);
     }
@@ -793,8 +969,8 @@ void cad_core_free_result(CadCoreResult* result)
     delete[] result->json.ptr;
     delete[] result->error.ptr;
     result->status = 0;
-    result->json = CadCoreBuffer{nullptr, 0};
-    result->error = CadCoreBuffer{nullptr, 0};
+    result->json = CadCoreBuffer {nullptr, 0};
+    result->error = CadCoreBuffer {nullptr, 0};
 }
 
 void cad_core_free_export_result(CadCoreExportResult* result)
@@ -807,7 +983,7 @@ void cad_core_free_export_result(CadCoreExportResult* result)
     delete[] result->json.ptr;
     delete[] result->error.ptr;
     result->status = 0;
-    result->data = CadCoreBuffer{nullptr, 0};
-    result->json = CadCoreBuffer{nullptr, 0};
-    result->error = CadCoreBuffer{nullptr, 0};
+    result->data = CadCoreBuffer {nullptr, 0};
+    result->json = CadCoreBuffer {nullptr, 0};
+    result->error = CadCoreBuffer {nullptr, 0};
 }

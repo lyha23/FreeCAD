@@ -1,0 +1,57 @@
+{
+  "Objects": [
+    {
+      "Name": "PlaneA",
+      "ID": 1,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 4,
+        "Width": 3
+      }
+    },
+    {
+      "Name": "PlaneB",
+      "ID": 2,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 4,
+        "Width": 3,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [6, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "Compound",
+      "ID": 3,
+      "TypeId": "Part::Compound",
+      "Properties": {
+        "Links": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["PlaneA", "PlaneB"]
+        }
+      }
+    },
+    {
+      "Name": "Offset2D",
+      "ID": 4,
+      "TypeId": "Part::Offset2D",
+      "Properties": {
+        "Source": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Compound"
+        },
+        "Value": 0.2,
+        "Mode": "Skin",
+        "Join": "Arc",
+        "Fill": false,
+        "Intersection": true
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Offset2D"]
+  }
+}

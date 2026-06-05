@@ -12,7 +12,8 @@
 namespace cad_core::sketcher
 {
 
-// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectConstraints.cpp
+// FreeCAD:
+// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectConstraints.cpp
 // ::SketchObject::retrieveSolverDiagnostics(), fields "lastConflicting",
 // "lastRedundant", and "lastMalformedConstraints" carry solver-facing constraint state.
 enum class SketchConstraintKind
@@ -175,6 +176,7 @@ struct BlockConstraintRef
 enum class SketchSolverState
 {
     Accepted,
+    Underconstrained,
     Malformed,
     Redundant,
     Conflict,
@@ -186,6 +188,7 @@ struct SketchSolverSummary
     std::vector<int> malformedConstraints;
     std::vector<int> conflictingConstraints;
     std::vector<int> redundantConstraints;
+    std::vector<int> partiallyRedundantConstraints;
 };
 
 struct AppliedSketchConstraints
@@ -195,6 +198,31 @@ struct AppliedSketchConstraints
     std::size_t dimension = 0;
     std::size_t relation = 0;
     std::size_t block = 0;
+    // FreeCAD:
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectConstraints.cpp
+    // ::SketchObject::solve(), "solvedSketch.extractGeometry()" is moved into "Geometry" when
+    // "updateGeoAfterSolving" is true. These counters expose cad-core's request-local first
+    // slices that update sketch geometry without claiming a full GCS solver session.
+    std::size_t solverGeometryUpdates = 0;
+    std::size_t solverOrientationGeometryUpdates = 0;
+    std::size_t solverCoordinateGeometryUpdates = 0;
+    std::size_t solverRadiusGeometryUpdates = 0;
+    std::size_t solverLengthGeometryUpdates = 0;
+    std::size_t solverArcGeometryUpdates = 0;
+    std::size_t solverRelationGeometryUpdates = 0;
+    std::size_t solverLinePairRelationGeometryUpdates = 0;
+    std::size_t solverCurveRelationGeometryUpdates = 0;
+    std::size_t solverEqualRelationGeometryUpdates = 0;
+    std::size_t solverTangentRelationGeometryUpdates = 0;
+    std::size_t solverSymmetricRelationGeometryUpdates = 0;
+    std::size_t solverSymmetricLineRelationGeometryUpdates = 0;
+    std::size_t solverSymmetricCenterRelationGeometryUpdates = 0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/Sketch.h
+    // ::Sketch::setUpSketch(), "positive degrees of freedom correspond to an
+    // under-constrained sketch". cad-core exposes only a request-local first-slice estimate here;
+    // full GCS rank/dependent-parameter DoF remains a separate solver gap.
+    std::optional<int> solverDegreesOfFreedom;
+    std::string solverDofStatus = "not_computed";
     SketchSolverSummary solver;
 };
 
@@ -212,15 +240,16 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
     runtime::ComputeContext& context,
     std::vector<SketchSegment>& segments,
     const std::vector<SketchPoint>& points,
-    const std::vector<SketchCircle>& circles,
+    std::vector<SketchCircle>& circles,
     const std::vector<SketchEllipse>& ellipses,
-    const std::vector<SketchArc>& arcs,
+    std::vector<SketchArc>& arcs,
     const std::vector<SketchEllipseArc>& ellipseArcs,
     const std::vector<SketchBSpline>& bsplines
 );
 std::string solverStateName(SketchSolverState state);
+std::string solverGeometryUpdateStatus(const AppliedSketchConstraints& applied);
 nlohmann::json constraintIndexArray(const std::vector<int>& indexes);
 bool solverStateBlocksProfile(SketchSolverState state);
 nlohmann::json sketchSolverFailureObject(const AppliedSketchConstraints& applied);
 
-} // namespace cad_core::sketcher
+}  // namespace cad_core::sketcher

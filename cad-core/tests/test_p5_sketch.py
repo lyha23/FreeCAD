@@ -1248,6 +1248,397 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("requires solver movement", diagnostic["message"])
         self.assertEqual(result["objects"]["Sketch"]["status"], "error")
 
+    def test_c3m3_sketch_horizontal_constraint_updates_solver_geometry(self) -> None:
+        result = self.run_recompute("sketch-horizontal-solver-geometry-update", "c3m3")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["solver_state"], "underconstrained")
+        self.assertEqual(sketch["solver_degrees_of_freedom"], 3)
+        self.assertEqual(sketch["solver_dof_status"], "request_local_first_slice")
+        self.assertEqual(sketch["edge_count"], 1)
+        self.assertEqual(sketch["orientation_constraints_applied"], 1)
+        self.assertEqual(sketch["solver_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_orientation_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_coordinate_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_radius_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_length_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_arc_geometry_updates"], 0)
+        self.assertEqual(
+            sketch["solver_geometry_update_status"],
+            "whole_line_orientation_first_slice",
+        )
+
+    def test_c3m3_sketch_coordinate_constraint_updates_solver_geometry(self) -> None:
+        result = self.run_recompute("sketch-coordinate-solver-geometry-update", "c3m3")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["solver_state"], "underconstrained")
+        self.assertEqual(sketch["solver_degrees_of_freedom"], 2)
+        self.assertEqual(sketch["solver_dof_status"], "request_local_first_slice")
+        self.assertEqual(sketch["edge_count"], 1)
+        self.assertEqual(sketch["dimension_constraints_applied"], 2)
+        self.assertEqual(sketch["solver_geometry_updates"], 2)
+        self.assertEqual(sketch["solver_orientation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_coordinate_geometry_updates"], 2)
+        self.assertEqual(sketch["solver_radius_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_length_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_arc_geometry_updates"], 0)
+        self.assertEqual(
+            sketch["solver_geometry_update_status"],
+            "endpoint_coordinate_first_slice",
+        )
+
+    def test_c3m3_sketch_circle_radius_constraint_updates_solver_geometry(self) -> None:
+        result = self.run_recompute("sketch-circle-radius-solver-geometry-update", "c3m3")
+        sketch = result["objects"]["Sketch"]
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["solver_state"], "underconstrained")
+        self.assertEqual(sketch["solver_degrees_of_freedom"], 2)
+        self.assertEqual(sketch["solver_dof_status"], "request_local_first_slice")
+        self.assertEqual(sketch["dimension_constraints_applied"], 1)
+        self.assertEqual(sketch["solver_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_orientation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_coordinate_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_radius_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_length_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_arc_geometry_updates"], 0)
+        self.assertEqual(
+            sketch["solver_geometry_update_status"],
+            "circle_radius_diameter_first_slice",
+        )
+        self.assertEqual(pad["bbox"], {"min": [-3.0, -3.0, 0.0], "max": [3.0, 3.0, 4.0]})
+
+    def test_c3m3_sketch_line_length_constraint_updates_solver_geometry(self) -> None:
+        result = self.run_recompute("sketch-line-length-solver-geometry-update", "c3m3")
+        sketch = result["objects"]["Sketch"]
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["solver_state"], "underconstrained")
+        self.assertEqual(sketch["solver_degrees_of_freedom"], 15)
+        self.assertEqual(sketch["solver_dof_status"], "request_local_first_slice")
+        self.assertEqual(sketch["edge_count"], 4)
+        self.assertEqual(sketch["dimension_constraints_applied"], 1)
+        self.assertEqual(sketch["solver_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_orientation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_coordinate_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_radius_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_length_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_arc_geometry_updates"], 0)
+        self.assertEqual(
+            sketch["solver_geometry_update_status"],
+            "line_length_first_slice",
+        )
+        self.assertEqual(pad["bbox"], {"min": [0.0, 0.0, 0.0], "max": [5.0, 2.0, 3.0]})
+
+    def test_c3m3_sketch_arc_length_constraint_updates_solver_geometry(self) -> None:
+        result = self.run_recompute("sketch-arc-length-solver-geometry-update", "c3m3")
+        sketch = result["objects"]["Sketch"]
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["solver_state"], "underconstrained")
+        self.assertEqual(sketch["solver_degrees_of_freedom"], 8)
+        self.assertEqual(sketch["solver_dof_status"], "request_local_first_slice")
+        self.assertEqual(sketch["edge_count"], 2)
+        self.assertEqual(sketch["dimension_constraints_applied"], 1)
+        self.assertEqual(sketch["solver_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_orientation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_coordinate_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_radius_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_length_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_arc_geometry_updates"], 1)
+        self.assertEqual(
+            sketch["solver_geometry_update_status"],
+            "arc_length_first_slice",
+        )
+        self.assertEqual(pad["bbox"], {"min": [-1.0, 0.0, 0.0], "max": [1.0, 1.0, 3.0]})
+
+    def test_c3m3_sketch_point_on_line_constraint_updates_solver_geometry(self) -> None:
+        result = self.run_recompute("sketch-point-on-line-solver-geometry-update", "c3m3")
+        sketch = result["objects"]["Sketch"]
+        extrude = result["objects"]["Extrude"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["solver_state"], "accepted")
+        self.assertIsNone(sketch["solver_degrees_of_freedom"])
+        self.assertEqual(sketch["solver_dof_status"], "not_computed")
+        self.assertEqual(sketch["edge_count"], 2)
+        self.assertEqual(sketch["relation_constraints_applied"], 1)
+        self.assertEqual(sketch["solver_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_orientation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_coordinate_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_radius_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_length_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_arc_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_relation_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_line_pair_relation_geometry_updates"], 0)
+        self.assertEqual(
+            sketch["solver_geometry_update_status"],
+            "point_on_object_line_first_slice",
+        )
+        self.assertEqual(extrude["bbox"], {"min": [-4.0, 0.0, 0.0], "max": [0.0, 5.0, 1.0]})
+
+    def test_c3m3_sketch_parallel_line_pair_constraint_updates_solver_geometry(self) -> None:
+        result = self.run_recompute("sketch-parallel-line-pair-solver-geometry-update", "c3m3")
+        sketch = result["objects"]["Sketch"]
+        extrude = result["objects"]["Extrude"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["solver_state"], "accepted")
+        self.assertIsNone(sketch["solver_degrees_of_freedom"])
+        self.assertEqual(sketch["solver_dof_status"], "not_computed")
+        self.assertEqual(sketch["edge_count"], 2)
+        self.assertEqual(sketch["relation_constraints_applied"], 1)
+        self.assertEqual(sketch["solver_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_orientation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_coordinate_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_radius_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_length_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_arc_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_relation_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_line_pair_relation_geometry_updates"], 1)
+        self.assertEqual(
+            sketch["solver_geometry_update_status"],
+            "line_pair_relation_first_slice",
+        )
+        self.assertEqual(extrude["bbox"], {"min": [0.0, 0.0, 0.0], "max": [4.0, 2.0, 1.0]})
+
+    def test_c3m3_sketch_perpendicular_line_pair_constraint_updates_solver_geometry(self) -> None:
+        result = self.run_recompute("sketch-perpendicular-line-pair-solver-geometry-update", "c3m3")
+        sketch = result["objects"]["Sketch"]
+        extrude = result["objects"]["Extrude"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["solver_state"], "accepted")
+        self.assertIsNone(sketch["solver_degrees_of_freedom"])
+        self.assertEqual(sketch["solver_dof_status"], "not_computed")
+        self.assertEqual(sketch["edge_count"], 2)
+        self.assertEqual(sketch["relation_constraints_applied"], 1)
+        self.assertEqual(sketch["solver_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_orientation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_coordinate_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_radius_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_length_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_arc_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_relation_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_line_pair_relation_geometry_updates"], 1)
+        self.assertEqual(
+            sketch["solver_geometry_update_status"],
+            "line_pair_relation_first_slice",
+        )
+        self.assertEqual(extrude["bbox"], {"min": [0.0, 0.0, 0.0], "max": [4.0, 6.0, 1.0]})
+
+    def test_c3m3_sketch_perpendicular_line_circle_constraint_updates_solver_geometry(self) -> None:
+        result = self.run_recompute("sketch-perpendicular-line-circle-solver-geometry-update", "c3m3")
+        sketch = result["objects"]["Sketch"]
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["solver_state"], "accepted")
+        self.assertIsNone(sketch["solver_degrees_of_freedom"])
+        self.assertEqual(sketch["solver_dof_status"], "not_computed")
+        self.assertEqual(sketch["edge_count"], 1)
+        self.assertEqual(sketch["relation_constraints_applied"], 1)
+        self.assertEqual(sketch["solver_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_orientation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_coordinate_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_radius_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_length_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_arc_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_relation_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_line_pair_relation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_curve_relation_geometry_updates"], 1)
+        self.assertEqual(
+            sketch["solver_geometry_update_status"],
+            "perpendicular_curve_midpoint_relation_first_slice",
+        )
+        self.assertEqual(pad["bbox"], {"min": [1.0, -1.0, 0.0], "max": [3.0, 1.0, 2.0]})
+
+    def test_c3m3_sketch_equal_circle_radius_constraint_updates_solver_geometry(self) -> None:
+        result = self.run_recompute("sketch-equal-circle-radius-solver-geometry-update", "c3m3")
+        sketch = result["objects"]["Sketch"]
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["solver_state"], "accepted")
+        self.assertIsNone(sketch["solver_degrees_of_freedom"])
+        self.assertEqual(sketch["solver_dof_status"], "not_computed")
+        self.assertEqual(sketch["edge_count"], 1)
+        self.assertEqual(sketch["relation_constraints_applied"], 1)
+        self.assertEqual(sketch["solver_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_orientation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_coordinate_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_radius_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_length_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_arc_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_relation_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_line_pair_relation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_curve_relation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_equal_relation_geometry_updates"], 1)
+        self.assertEqual(
+            sketch["solver_geometry_update_status"],
+            "equal_relation_first_slice",
+        )
+        self.assertEqual(pad["bbox"], {"min": [3.0, -2.0, 0.0], "max": [7.0, 2.0, 2.0]})
+
+    def test_c3m3_sketch_tangent_line_circle_constraint_updates_solver_geometry(self) -> None:
+        result = self.run_recompute("sketch-tangent-line-circle-solver-geometry-update", "c3m3")
+        sketch = result["objects"]["Sketch"]
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["solver_state"], "accepted")
+        self.assertIsNone(sketch["solver_degrees_of_freedom"])
+        self.assertEqual(sketch["solver_dof_status"], "not_computed")
+        self.assertEqual(sketch["edge_count"], 1)
+        self.assertEqual(sketch["relation_constraints_applied"], 1)
+        self.assertEqual(sketch["solver_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_orientation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_coordinate_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_radius_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_length_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_arc_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_relation_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_line_pair_relation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_curve_relation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_equal_relation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_tangent_relation_geometry_updates"], 1)
+        self.assertEqual(
+            sketch["solver_geometry_update_status"],
+            "tangent_line_round_relation_first_slice",
+        )
+        self.assertEqual(pad["bbox"], {"min": [1.0, 0.0, 0.0], "max": [3.0, 2.0, 2.0]})
+
+    def test_c3m3_sketch_symmetric_line_axis_constraint_updates_solver_geometry(self) -> None:
+        result = self.run_recompute("sketch-symmetric-line-axis-solver-geometry-update", "c3m3")
+        sketch = result["objects"]["Sketch"]
+        extrude = result["objects"]["Extrude"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["solver_state"], "accepted")
+        self.assertIsNone(sketch["solver_degrees_of_freedom"])
+        self.assertEqual(sketch["solver_dof_status"], "not_computed")
+        self.assertEqual(sketch["edge_count"], 1)
+        self.assertEqual(sketch["relation_constraints_applied"], 1)
+        self.assertEqual(sketch["solver_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_orientation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_coordinate_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_radius_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_length_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_arc_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_relation_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_line_pair_relation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_curve_relation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_equal_relation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_tangent_relation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_symmetric_relation_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_symmetric_line_relation_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_symmetric_center_relation_geometry_updates"], 0)
+        self.assertEqual(
+            sketch["solver_geometry_update_status"],
+            "symmetric_line_axis_relation_first_slice",
+        )
+        self.assertEqual(extrude["bbox"], {"min": [-1.0, 1.0, 0.0], "max": [1.0, 1.0, 1.0]})
+
+    def test_c3m3_sketch_symmetric_center_point_constraint_updates_solver_geometry(self) -> None:
+        result = self.run_recompute("sketch-symmetric-center-point-solver-geometry-update", "c3m3")
+        sketch = result["objects"]["Sketch"]
+        extrude = result["objects"]["Extrude"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["solver_state"], "accepted")
+        self.assertIsNone(sketch["solver_degrees_of_freedom"])
+        self.assertEqual(sketch["solver_dof_status"], "not_computed")
+        self.assertEqual(sketch["edge_count"], 1)
+        self.assertEqual(sketch["relation_constraints_applied"], 1)
+        self.assertEqual(sketch["solver_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_orientation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_coordinate_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_radius_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_length_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_arc_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_relation_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_line_pair_relation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_curve_relation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_equal_relation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_tangent_relation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_symmetric_relation_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_symmetric_line_relation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_symmetric_center_relation_geometry_updates"], 1)
+        self.assertEqual(
+            sketch["solver_geometry_update_status"],
+            "symmetric_center_point_relation_first_slice",
+        )
+        self.assertEqual(extrude["bbox"], {"min": [-1.0, 1.0, 0.0], "max": [1.0, 1.0, 1.0]})
+
+    def test_c3m3_sketch_symmetric_arc_endpoint_constraint_updates_solver_geometry(self) -> None:
+        result = self.run_recompute("sketch-symmetric-arc-endpoint-solver-geometry-update", "c3m3")
+        sketch = result["objects"]["Sketch"]
+        extrude = result["objects"]["Extrude"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["solver_state"], "accepted")
+        self.assertIsNone(sketch["solver_degrees_of_freedom"])
+        self.assertEqual(sketch["solver_dof_status"], "not_computed")
+        self.assertEqual(sketch["edge_count"], 1)
+        self.assertEqual(sketch["relation_constraints_applied"], 1)
+        self.assertEqual(sketch["solver_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_orientation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_coordinate_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_radius_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_length_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_arc_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_relation_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_line_pair_relation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_curve_relation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_equal_relation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_tangent_relation_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_symmetric_relation_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_symmetric_line_relation_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_symmetric_center_relation_geometry_updates"], 0)
+        self.assertEqual(
+            sketch["solver_geometry_update_status"],
+            "symmetric_line_axis_relation_first_slice",
+        )
+        self.assertLess(extrude["bbox"]["min"][0], -0.9)
+        self.assertGreater(extrude["bbox"]["max"][0], 0.9)
+        self.assertGreater(extrude["bbox"]["max"][1], 0.9)
+
+    def test_c3m3_sketch_dof_underconstrained_after_satisfied_constraint(self) -> None:
+        result = self.run_recompute("sketch-dof-underconstrained-after-constraint", "c3m3")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertFalse(sketch["profile_ready"])
+        self.assertEqual(sketch["solver_state"], "underconstrained")
+        self.assertEqual(sketch["solver_degrees_of_freedom"], 3)
+        self.assertEqual(sketch["solver_dof_status"], "request_local_first_slice")
+        self.assertEqual(sketch["solver_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_geometry_update_status"], "none")
+        self.assertEqual(sketch["orientation_constraints_applied"], 1)
+        self.assertEqual(sketch["dimension_constraints_applied"], 0)
+        self.assertEqual(sketch["relation_constraints_applied"], 0)
+
     def test_c3m3_sketch_conflicting_constraints_block_profile_output(self) -> None:
         result = self.run_recompute("sketch-conflicting-constraints", "c3m3")
         diagnostic = result["diagnostics"][0]
@@ -1284,6 +1675,32 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["solver_conflicting_constraints"], [])
         self.assertEqual(sketch["solver_redundant_constraints"], [1, 2])
 
+    def test_c3m3_sketch_partially_redundant_constraints_warn_without_blocking_profile(self) -> None:
+        result = self.run_recompute("sketch-partially-redundant-block-horizontal", "c3m3")
+        diagnostic = result["diagnostics"][0]
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(
+            [item["code"] for item in result["diagnostics"]],
+            ["sketch_solver_partially_redundant"],
+        )
+        self.assertEqual(diagnostic["severity"], "warning")
+        self.assertEqual(diagnostic["object"], "Sketch")
+        self.assertEqual(diagnostic["property"], "Constraints")
+        self.assertEqual(diagnostic["stage"], "solver")
+        self.assertEqual(diagnostic["target"], "Constraints[1,2]")
+        self.assertEqual(sketch["status"], "ok")
+        self.assertTrue(sketch["profile_ready"])
+        self.assertEqual(sketch["edge_count"], 4)
+        self.assertEqual(sketch["solver_state"], "accepted")
+        self.assertEqual(sketch["solver_degrees_of_freedom"], None)
+        self.assertEqual(sketch["solver_dof_status"], "not_computed")
+        self.assertEqual(sketch["solver_conflicting_constraints"], [])
+        self.assertEqual(sketch["solver_redundant_constraints"], [])
+        self.assertEqual(sketch["solver_partially_redundant_constraints"], [1, 2])
+        self.assertEqual(sketch["orientation_constraints_applied"], 1)
+        self.assertEqual(sketch["block_constraints_applied"], 1)
+
     def test_c3m3_sketch_malformed_constraints_block_profile_output(self) -> None:
         result = self.run_recompute("sketch-malformed-constraints", "c3m3")
         diagnostic = result["diagnostics"][0]
@@ -1303,6 +1720,20 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertFalse(sketch["profile_ready"])
         self.assertEqual(sketch["solver_state"], "malformed")
         self.assertEqual(sketch["solver_malformed_constraints"], [1, 2])
+        self.assertEqual(sketch["solver_conflicting_constraints"], [])
+        self.assertEqual(sketch["solver_redundant_constraints"], [])
+
+    def test_c3m3_sketch_without_constraints_reports_underconstrained_state(self) -> None:
+        result = self.run_recompute("sketch-underconstrained-no-constraints", "c3m3")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertTrue(sketch["profile_ready"])
+        self.assertEqual(sketch["solver_state"], "underconstrained")
+        self.assertEqual(sketch["solver_degrees_of_freedom"], 16)
+        self.assertEqual(sketch["solver_dof_status"], "request_local_first_slice")
+        self.assertEqual(sketch["solver_malformed_constraints"], [])
         self.assertEqual(sketch["solver_conflicting_constraints"], [])
         self.assertEqual(sketch["solver_redundant_constraints"], [])
 

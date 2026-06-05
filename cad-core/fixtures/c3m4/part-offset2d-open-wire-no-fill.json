@@ -1,0 +1,35 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
+          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Offset2D",
+      "ID": 2,
+      "TypeId": "Part::Offset2D",
+      "Properties": {
+        "Source": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Sketch"
+        },
+        "Value": 0.5,
+        "Mode": "Skin",
+        "Join": "Arc",
+        "Fill": false,
+        "Intersection": false
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Offset2D"]
+  }
+}

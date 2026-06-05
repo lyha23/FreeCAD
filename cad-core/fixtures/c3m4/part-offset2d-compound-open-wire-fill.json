@@ -1,0 +1,58 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchA",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
+          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "SketchB",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [20, 0], "end": [30, 0]},
+          {"kind": "LineSegment", "start": [30, 0], "end": [30, 5]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Compound",
+      "ID": 3,
+      "TypeId": "Part::Compound",
+      "Properties": {
+        "Links": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["SketchA", "SketchB"]
+        }
+      }
+    },
+    {
+      "Name": "Offset2D",
+      "ID": 4,
+      "TypeId": "Part::Offset2D",
+      "Properties": {
+        "Source": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Compound"
+        },
+        "Value": 0.5,
+        "Mode": "Skin",
+        "Join": "Arc",
+        "Fill": true,
+        "Intersection": false
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Offset2D"]
+  }
+}
