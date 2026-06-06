@@ -1,25 +1,33 @@
 {
-  "bbox": {
-    "max": [
-      10.0,
-      5.0,
-      10.0
-    ],
-    "min": [
-      0.0,
-      0.0,
-      0.0
-    ]
-  },
   "freecad_version": "1.2.0 revision 20260519",
-  "object": "Body",
   "reference": "FreeCAD Part base box cut by tapered Pocket tool built with makeOffset2D(join=intersection)+ruled loft, TaperAngle=5",
-  "topology_counts": {
-    "edges": 24,
-    "faces": 12,
-    "vertices": 16
+  "objects": {
+    "Body": {
+      "bbox": {
+        "max": [
+          10.0,
+          5.0,
+          10.0
+        ],
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "topology_counts": {
+        "edges": 24,
+        "faces": 12,
+        "vertices": 16
+      },
+      "volume": 389.0393396657417
+    },
+    "Pocket": {
+      "object_fields": {
+        "topo_naming_history": "maker_history:taper_thru_sections"
+      }
+    }
   },
-  "volume": 389.0393396657417,
   "named_shapes": {
     "Pocket": {
       "element_map_status": "history_partial",

@@ -182,7 +182,7 @@ class CadCoreFeatureFlowTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertNotIn("topo_naming", pad)
-        self.assertNotIn("topo_naming_history", pad)
+        self.assertEqual(pad["topo_naming_history"], "maker_history:taper_thru_sections")
         self.assert_object_matches_expected(result, "p3b", "pad-length-taper")
 
         result = self.run_recompute("pad-two-sides-taper", "p3b")
@@ -190,7 +190,7 @@ class CadCoreFeatureFlowTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertNotIn("topo_naming", pad)
-        self.assertNotIn("topo_naming_history", pad)
+        self.assertEqual(pad["topo_naming_history"], "maker_history:taper_thru_sections")
         self.assertEqual(pad["method"], "Two sides")
         self.assert_object_matches_expected(result, "p3b", "pad-two-sides-taper")
 
@@ -199,7 +199,7 @@ class CadCoreFeatureFlowTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertNotIn("topo_naming", pad)
-        self.assertNotIn("topo_naming_history", pad)
+        self.assertEqual(pad["topo_naming_history"], "maker_history:taper_thru_sections")
         self.assertEqual(pad["method"], "Symmetric")
         self.assert_object_matches_expected(result, "p3b", "pad-symmetric-taper")
 
@@ -212,7 +212,7 @@ class CadCoreFeatureFlowTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["profile_ready"], True)
         self.assertEqual(sketch["edge_count"], 8)
         self.assertNotIn("topo_naming", pad)
-        self.assertNotIn("topo_naming_history", pad)
+        self.assertEqual(pad["topo_naming_history"], "maker_history:taper_thru_sections")
         self.assert_object_matches_expected(result, "p3b", "pad-length-taper-inner-wire")
 
     def test_p3b_pocket_taper_cuts_body(self) -> None:
@@ -221,7 +221,7 @@ class CadCoreFeatureFlowTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(result["diagnostics"], [])
         self.assertNotIn("topo_naming", pocket)
-        self.assertNotIn("topo_naming_history", pocket)
+        self.assertEqual(pocket["topo_naming_history"], "maker_history:taper_thru_sections")
         self.assert_object_matches_expected(result, "p3b", "pocket-length-taper")
 
     def test_p4_normalized_links_drive_graph_and_executors(self) -> None:

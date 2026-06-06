@@ -24,6 +24,9 @@
         ]
       },
       "volume": 735.2890094646057,
+      "object_fields": {
+        "topo_naming_history": "maker_history:taper_thru_sections"
+      },
       "topology_counts": {
         "faces": 10,
         "edges": 24,

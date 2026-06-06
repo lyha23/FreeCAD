@@ -59,6 +59,10 @@ struct PartExtrusionShapeBuild
 {
     TopoDS_Shape shape;
     bool topoNamingKnownGap = false;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/
+    // FeatureExtrusion.cpp::Extrusion::extrudeShape() calls
+    // "ExtrusionHelper::makeElementDraft" for tapered extrusion.
+    bool taperHistory = false;
     std::optional<part::NamedShape> namedShape;
 };
 enum class PartExtrusionFaceMaker
@@ -571,6 +575,7 @@ std::optional<PartExtrusionShapeBuild> makePartExtrusionShape(
         return PartExtrusionShapeBuild {
             tapered->shape,
             tapered->topoNamingKnownGap,
+            !tapered->topoNamingKnownGap,
             std::move(namedShape)
         };
     }
@@ -633,7 +638,7 @@ std::optional<PartExtrusionShapeBuild> makePartExtrusionShape(
             std::vector<part::NamedShapeSource> {profileSource},
             prism
         );
-        return PartExtrusionShapeBuild {prism.Shape(), false, std::move(namedShape)};
+        return PartExtrusionShapeBuild {prism.Shape(), false, false, std::move(namedShape)};
     }
     catch (const Standard_Failure& failure) {
         addPartExtrusionDiagnostic(object, context, "execution_failed", failure.GetMessageString(), "Base");
@@ -771,7 +776,10 @@ void executePartExtrusion(const app::DocumentObject& object, runtime::ComputeCon
         {"reversed", app::readBool(object, "Reversed").value_or(false)},
         {"symmetric", app::readBool(object, "Symmetric").value_or(false)}
     };
-    if (shape->topoNamingKnownGap) {
+    if (shape->taperHistory) {
+        metadata["topo_naming_history"] = "maker_history:taper_thru_sections";
+    }
+    else if (shape->topoNamingKnownGap) {
         metadata["topo_naming"] = "known_gap:taper_history";
         if (shape->namedShape) {
             metadata["topo_naming_history"] = "history_partial:taper";

@@ -25,6 +25,10 @@ struct ExtrudeResult {
     nlohmann::json bbox;
     double volume = 0.0;
     bool topoNamingKnownGap = false;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/
+    // FeatureExtrude.cpp calls "Part::ExtrusionHelper::makeElementDraft" for taper; the Part
+    // layer then consumes TopoShapeExpansion.cpp::MapperThruSections "GeneratedFace(s)" history.
+    bool taperHistory = false;
     std::optional<part::NamedShape> namedShape;
 };
 

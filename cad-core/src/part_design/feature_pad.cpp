@@ -80,7 +80,10 @@ void executePad(const app::DocumentObject& object, runtime::ComputeContext& cont
         {"volume", extrusion->volume},
         {"kernel", cad_core::part::kernelVersion()},
     };
-    if (extrusion->topoNamingKnownGap) {
+    if (extrusion->taperHistory) {
+        result["topo_naming_history"] = "maker_history:taper_thru_sections";
+    }
+    else if (extrusion->topoNamingKnownGap) {
         result["topo_naming"] = "known_gap:taper_history";
         if (namedShape) {
             result["topo_naming_history"] = "history_partial:taper";

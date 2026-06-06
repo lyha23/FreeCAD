@@ -926,13 +926,37 @@ nlohmann::json capabilitiesJson()
              // ElementMapPolicy::Propagate to "preserve element mapping".
              {"remaining_gaps", nlohmann::json::array()},
          }},
-        {"object_metadata_gaps",
+        {"object_metadata",
          {
-             {"scope", "object result metadata local history gaps, not broad CADCore3 capability-board gaps"},
-             {"local_history_gaps",
-              {"part_design.pad.taper_history",
-               "part_design.pocket.taper_history",
-               "part.extrusion.taper_history"}},
+             {"local_history",
+              {
+                  // FreeCAD:
+                  // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/
+                  // FeatureExtrusion.cpp::Extrusion::extrudeShape(), taper calls
+                  // "ExtrusionHelper::makeElementDraft"; PartDesign FeatureExtrude.cpp
+                  // calls the same helper. TopoShapeExpansion.cpp::MapperThruSections
+                  // maps "GeneratedFace(s)", "FirstShape()" and "LastShape()".
+                  {"taper_history",
+                   {
+                       {"status", "covered_full"},
+                       {"objects", {"part_design.pad", "part_design.pocket", "part.extrusion"}},
+                        {"metadata",
+                        {"NamedShape.element_map_status=history_partial",
+                         "mapper_history.maker_stage=maker_history",
+                         "object_result.topo_naming_history=maker_history:taper_thru_sections"}},
+                       {"fixtures",
+                        {"p3b/pad-length-taper",
+                         "p3b/pad-two-sides-taper",
+                         "p3b/pad-symmetric-taper",
+                         "p3b/pad-length-taper-inner-wire",
+                         "p3b/pocket-length-taper",
+                         "p5/part-extrusion-taper",
+                         "p5/part-extrusion-reverse-taper",
+                         "p5/part-extrusion-two-sided-taper"}},
+                       {"remaining_gaps", nlohmann::json::array()},
+                   }},
+              }},
+             {"remaining_gaps", nlohmann::json::array()},
          }},
         {"known_gaps", nlohmann::json::array()},
     };

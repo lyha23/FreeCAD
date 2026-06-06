@@ -928,18 +928,22 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "purgeAsOriginalOpenEdge",
             capabilities["wire_joiner"]["purge_as_original_bridge"]["deleted_fields"],
         )
-        self.assertIn(
-            "part_design.pad.taper_history",
-            capabilities["object_metadata_gaps"]["local_history_gaps"],
+        self.assertNotIn("object_metadata_gaps", capabilities)
+        taper_history = capabilities["object_metadata"]["local_history"]["taper_history"]
+        self.assertEqual(taper_history["status"], "covered_full")
+        self.assertEqual(taper_history["remaining_gaps"], [])
+        self.assertEqual(
+            taper_history["objects"],
+            ["part_design.pad", "part_design.pocket", "part.extrusion"],
         )
         self.assertIn(
-            "part_design.pocket.taper_history",
-            capabilities["object_metadata_gaps"]["local_history_gaps"],
+            "object_result.topo_naming_history=maker_history:taper_thru_sections",
+            taper_history["metadata"],
         )
-        self.assertIn(
-            "part.extrusion.taper_history",
-            capabilities["object_metadata_gaps"]["local_history_gaps"],
-        )
+        self.assertIn("p3b/pad-length-taper", taper_history["fixtures"])
+        self.assertIn("p3b/pocket-length-taper", taper_history["fixtures"])
+        self.assertIn("p5/part-extrusion-taper", taper_history["fixtures"])
+        self.assertEqual(capabilities["object_metadata"]["remaining_gaps"], [])
 
         self.assertEqual(
             capabilities["topo_history"]["stable_subname_resolution"],

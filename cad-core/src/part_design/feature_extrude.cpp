@@ -60,6 +60,9 @@ struct SideBuild {
     double length = 0.0;
     TopoDS_Shape shape;
     bool topoNamingKnownGap = false;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/
+    // FeatureExtrude.cpp taper branch calls "Part::ExtrusionHelper::makeElementDraft".
+    bool taperHistory = false;
     std::optional<part::NamedShape> namedShape;
 };
 
@@ -1228,7 +1231,7 @@ std::optional<SideBuild> makePrismSide(const TopoDS_Shape& profile,
                                                       profileLink.object,
                                                       profile,
                                                       prism);
-    return SideBuild{method, length, prism.Shape(), false, std::move(namedShape)};
+    return SideBuild{method, length, prism.Shape(), false, false, std::move(namedShape)};
 }
 
 std::optional<SideBuild> makeExtrusionShape(const app::DocumentObject& object,
@@ -1272,7 +1275,14 @@ std::optional<SideBuild> makeExtrusionShape(const app::DocumentObject& object,
     }
     auto namedShape = part::namedShapeForTaperedExtrusionHistory(historyOwner, *tapered, profile, profileSource)
         .value_or(part::namedShapeForPreservedSources(historyOwner, tapered->shape, {profileSource}));
-    return SideBuild{method, length, tapered->shape, tapered->topoNamingKnownGap, std::move(namedShape)};
+    return SideBuild{
+        method,
+        length,
+        tapered->shape,
+        tapered->topoNamingKnownGap,
+        !tapered->topoNamingKnownGap,
+        std::move(namedShape)
+    };
 }
 
 std::optional<ToolShapeBuild> xorToolShapes(const std::vector<SideBuild>& sides,
@@ -1397,7 +1407,7 @@ std::optional<SideBuild> buildSingleSide(const app::DocumentObject& object,
     }
 
     if (std::abs(length) < Precision::Confusion()) {
-        return SideBuild{method, length, TopoDS_Shape{}, false};
+        return SideBuild{method, length, TopoDS_Shape{}, false, false};
     }
 
     return makeExtrusionShape(
@@ -1511,6 +1521,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
     std::string method = readStringProperty(object, "Type", "Length");
     double reportedLength = 0.0;
     bool topoNamingKnownGap = false;
+    bool taperHistory = false;
     std::optional<part::NamedShape> resultNamedShape;
 
     if (sideType == "One side") {
@@ -1532,6 +1543,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
         method = side->method;
         reportedLength = side->length;
         topoNamingKnownGap = side->topoNamingKnownGap;
+        taperHistory = side->taperHistory;
         resultNamedShape = side->namedShape;
     }
     else if (sideType == "Two sides") {
@@ -1579,6 +1591,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
             prisms.push_back(*prism);
             reportedLength = totalLength;
             resultNamedShape = prism->namedShape;
+            taperHistory = prism->taperHistory;
         }
         else {
             auto first = buildSingleSide(object,
@@ -1613,6 +1626,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
             }
             reportedLength = first->length + second->length;
             topoNamingKnownGap = first->topoNamingKnownGap || second->topoNamingKnownGap;
+            taperHistory = first->taperHistory || second->taperHistory;
         }
         method = "Two sides";
     }
@@ -1678,6 +1692,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
             prisms.push_back(*first);
             prisms.push_back(*second);
             topoNamingKnownGap = first->topoNamingKnownGap || second->topoNamingKnownGap;
+            taperHistory = first->taperHistory || second->taperHistory;
         }
         else {
             const TopoDS_Shape movedProfile = translatedShape(*profileShape,
@@ -1699,6 +1714,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
             }
             prisms.push_back(*prism);
             resultNamedShape = prism->namedShape;
+            taperHistory = prism->taperHistory;
         }
         method = "Symmetric";
         reportedLength = scaledLength;
@@ -1730,6 +1746,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
         cad_core::part::bboxForShape(toolShape->shape),
         cad_core::part::volumeForShape(toolShape->shape),
         topoNamingKnownGap,
+        taperHistory,
         resultNamedShape,
     };
 }

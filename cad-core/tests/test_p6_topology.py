@@ -473,7 +473,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
                 self.assertEqual(result["diagnostics"], [])
                 self.assertNotIn("topo_naming", owner_object)
-                self.assertNotIn("topo_naming_history", owner_object)
+                self.assertEqual(owner_object["topo_naming_history"], "maker_history:taper_thru_sections")
                 self.assert_object_matches_expected(result, "p3b", fixture)
                 self.assertEqual(named_shape["element_map_status"], "history_partial")
                 self.assertIn("generated", history_kinds)
