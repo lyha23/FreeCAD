@@ -1508,6 +1508,55 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     solver_scalar,
                 )
 
+    def test_c3m6_assembly_placement_writeback_applies_to_next_request_graph(self) -> None:
+        result = self.run_recompute("assembly-grounded-distance-joint-real-solver", "c3m6")
+        updates = result["documentObjectUpdates"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(len(updates), 1)
+        self.assertEqual(updates[0]["action"], "assembly_set_placement")
+        self.assertEqual(updates[0]["object"], "ComponentB")
+        self.assertEqual(set(updates[0]["properties"].keys()), {"Placement"})
+        self.assert_update_property_type(updates[0], "Placement", "App::PropertyPlacement")
+        self.assertEqual(updates[0]["properties"]["Placement"]["Base"], [2.0, 0.0, 0.0])
+
+        applied_result = self.run_with_document_updates_applied(
+            "assembly-grounded-distance-joint-real-solver",
+            "c3m6",
+            updates,
+        )
+        assembly = applied_result["objects"]["Assembly"]
+        self.assertEqual(applied_result["diagnostics"], [])
+        self.assertEqual(applied_result["documentObjectUpdates"], [])
+        self.assertEqual(assembly["solver_adapter"]["mode"], "real_ondsel_solver")
+        self.assertEqual(assembly["solver_adapter"]["placement_updates"], [])
+
+    def test_c3m6_assembly_multi_component_writeback_order_and_target_fields(self) -> None:
+        result = self.run_recompute("assembly-multi-component-placement-writeback", "c3m6")
+        assembly = result["objects"]["Assembly"]
+        updates = result["documentObjectUpdates"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(assembly["solver_adapter"]["mode"], "real_ondsel_solver")
+        self.assertEqual(assembly["solver_adapter"]["joints"], ["DistanceJointB", "DistanceJointC"])
+        self.assertEqual([update["object"] for update in updates], ["ComponentB", "ComponentC"])
+        self.assertEqual([update["objectId"] for update in updates], [5, 6])
+        self.assertEqual([update["typeId"] for update in updates], ["Assembly::AssemblyLink", "Assembly::AssemblyLink"])
+        self.assertEqual([update["action"] for update in updates], ["assembly_set_placement", "assembly_set_placement"])
+        self.assertEqual([update["joint"] for update in updates], ["OndselSolver", "OndselSolver"])
+        self.assertEqual([update["joint_type"] for update in updates], ["solver_result", "solver_result"])
+        self.assertEqual([set(update["properties"].keys()) for update in updates], [{"Placement"}, {"Placement"}])
+        self.assertEqual(updates[0]["properties"]["Placement"]["Base"], [2.0, 0.0, 0.0])
+        self.assertEqual(updates[1]["properties"]["Placement"]["Base"], [4.0, 0.0, 0.0])
+
+        applied_result = self.run_with_document_updates_applied(
+            "assembly-multi-component-placement-writeback",
+            "c3m6",
+            updates,
+        )
+        self.assertEqual(applied_result["diagnostics"], [])
+        self.assertEqual(applied_result["documentObjectUpdates"], [])
+
     def test_c3m6_assembly_invalid_grounded_distance_rejects_solver_writeback(self) -> None:
         result = self.run_recompute("assembly-invalid-grounded-distance-real-solver", "c3m6")
         assembly = result["objects"]["Assembly"]

@@ -780,10 +780,7 @@ void executePartExtrusion(const app::DocumentObject& object, runtime::ComputeCon
         metadata["topo_naming_history"] = "maker_history:taper_thru_sections";
     }
     else if (shape->topoNamingKnownGap) {
-        metadata["topo_naming"] = "known_gap:taper_history";
-        if (shape->namedShape) {
-            metadata["topo_naming_history"] = "history_partial:taper";
-        }
+        metadata["topo_naming_history"] = "history_partial:taper_thru_sections";
     }
 
     publishPartShape(object, context, shape->shape, metadata, shape->namedShape);

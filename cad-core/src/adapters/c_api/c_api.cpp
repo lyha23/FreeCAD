@@ -459,6 +459,23 @@ nlohmann::json capabilitiesJson()
          }},
         {"part_design",
          {
+             {"pad_pocket",
+              {
+                  // FreeCAD:
+                  // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/
+                  // FeaturePad.cpp::Pad::execute() and FeaturePocket.cpp::Pocket::execute()
+                  // delegate UpToFace / UpToShape to FeatureExtrude.cpp. CAD Core keeps
+                  // multi-face UpToShape as a design boundary until the full FreeCAD support
+                  // face-selection and mapper-history path is implemented.
+                  {"up_to_shape_multi_face",
+                   {
+                       {"status", "diagnostic_only_boundary"},
+                       {"objects", {"part_design.pad", "part_design.pocket"}},
+                       {"diagnostic", "unsupported_subshape_kind"},
+                       {"fixture", "p3a/pocket-up-to-shape-multi-face-unsupported"},
+                   }},
+                  {"remaining_gaps", nlohmann::json::array()},
+              }},
              {"body_chain",
               {
                   // FreeCAD:
@@ -641,8 +658,15 @@ nlohmann::json capabilitiesJson()
               }},
              {"placement_writeback",
               {
-                  {"status", "covered_contract"},
+                  {"status", "covered_full"},
                   {"updates", {"documentObjectUpdates.action=assembly_set_placement"}},
+                  {"covered",
+                   {"solver_placement_delta",
+                    "unchanged_noop",
+                    "invalid_grounded_placement_rejected",
+                    "request_graph_apply_next_recompute_noop",
+                    "multi_component_writeback_order",
+                    "target_field_Placement"}},
                   {"remaining_gaps", nlohmann::json::array()},
               }},
              {"unsupported_joint_matrix", {"RackPinion", "Screw", "Gears", "Belt", "Cylindrical"}},

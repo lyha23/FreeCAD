@@ -669,6 +669,15 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             capabilities["part_design"]["body_chain"]["remaining_gaps"],
             [],
         )
+        up_to_shape_multi_face = capabilities["part_design"]["pad_pocket"]["up_to_shape_multi_face"]
+        self.assertEqual(up_to_shape_multi_face["status"], "diagnostic_only_boundary")
+        self.assertEqual(up_to_shape_multi_face["diagnostic"], "unsupported_subshape_kind")
+        self.assertEqual(up_to_shape_multi_face["objects"], ["part_design.pad", "part_design.pocket"])
+        self.assertEqual(
+            up_to_shape_multi_face["fixture"],
+            "p3a/pocket-up-to-shape-multi-face-unsupported",
+        )
+        self.assertEqual(capabilities["part_design"]["pad_pocket"]["remaining_gaps"], [])
         self.assertEqual(
             capabilities["part_design"]["hole"]["thread_tables"],
             [
@@ -905,10 +914,18 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "invalid_grounded_placement_rejected",
             capabilities["assembly"]["ondsel_solver_adapter"]["covered"],
         )
-        self.assertEqual(capabilities["assembly"]["placement_writeback"]["status"], "covered_contract")
+        self.assertEqual(capabilities["assembly"]["placement_writeback"]["status"], "covered_full")
         self.assertEqual(
             capabilities["assembly"]["placement_writeback"]["updates"],
             ["documentObjectUpdates.action=assembly_set_placement"],
+        )
+        self.assertIn(
+            "request_graph_apply_next_recompute_noop",
+            capabilities["assembly"]["placement_writeback"]["covered"],
+        )
+        self.assertIn(
+            "multi_component_writeback_order",
+            capabilities["assembly"]["placement_writeback"]["covered"],
         )
         self.assertEqual(capabilities["assembly"]["placement_writeback"]["remaining_gaps"], [])
         self.assertEqual(capabilities["assembly"]["remaining_gaps"], [])
