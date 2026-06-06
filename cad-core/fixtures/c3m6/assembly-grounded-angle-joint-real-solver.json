@@ -1,0 +1,114 @@
+{
+  "Objects": [
+    {
+      "Name": "BoxA",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 2,
+        "Height": 2
+      }
+    },
+    {
+      "Name": "BoxB",
+      "ID": 2,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 2,
+        "Height": 2
+      }
+    },
+    {
+      "Name": "ComponentA",
+      "ID": 3,
+      "TypeId": "Assembly::AssemblyLink",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "BoxA"
+        },
+        "Rigid": true
+      }
+    },
+    {
+      "Name": "ComponentB",
+      "ID": 4,
+      "TypeId": "Assembly::AssemblyLink",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "BoxB"
+        },
+        "Rigid": true,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [4, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "GroundedJoint",
+      "ID": 5,
+      "TypeId": "App::FeaturePython",
+      "Properties": {
+        "ObjectToGround": {
+          "PropertyType": "App::PropertyLinkGlobal",
+          "value": "ComponentA"
+        }
+      }
+    },
+    {
+      "Name": "AngleJoint",
+      "ID": 6,
+      "TypeId": "App::FeaturePython",
+      "Properties": {
+        "JointType": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Angle"
+        },
+        "Angle": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 30
+        },
+        "Reference1": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "value": "ComponentA",
+          "SubList": []
+        },
+        "Reference2": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "value": "ComponentB",
+          "SubList": []
+        }
+      }
+    },
+    {
+      "Name": "Joints",
+      "ID": 7,
+      "TypeId": "Assembly::JointGroup",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["GroundedJoint", "AngleJoint"]
+        }
+      }
+    },
+    {
+      "Name": "Assembly",
+      "ID": 8,
+      "TypeId": "Assembly::AssemblyObject",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["ComponentA", "ComponentB", "Joints"]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Assembly"]
+  }
+}

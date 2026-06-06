@@ -1404,15 +1404,129 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(assembly["joints"], ["GroundedJoint", "FixedJoint"])
         self.assertEqual(assembly["solve"], "solved")
         self.assertEqual(assembly["solver_adapter"]["status"], "solved")
-        self.assertEqual(assembly["solver_adapter"]["mode"], "representative_ondsel_solver")
+        self.assertEqual(assembly["solver_adapter"]["mode"], "real_ondsel_solver")
         self.assertEqual(assembly["solver_adapter"]["grounded_joints"], ["GroundedJoint"])
         self.assertEqual(assembly["solver_adapter"]["joints"], ["FixedJoint"])
         self.assertEqual(len(updates), 1)
         self.assertEqual(updates[0]["action"], "assembly_set_placement")
         self.assertEqual(updates[0]["reason"], "assembly_solver_placement_writeback")
+        self.assertEqual(updates[0]["joint"], "OndselSolver")
+        self.assertEqual(updates[0]["joint_type"], "solver_result")
         self.assertEqual(updates[0]["object"], "ComponentB")
         self.assertEqual(updates[0]["properties"]["Placement"]["Base"], [0.0, 0.0, 0.0])
         self.assert_object_matches_expected(result, "p8", "assembly-joint-group-diagnostics")
+
+    def assert_c3m6_grounded_joint_uses_real_ondsel_solver(
+        self,
+        fixture: str,
+        joint_name: str,
+        joint_type: str,
+        expected_update_base: list[float] | None,
+        solver_scalar: tuple[str, float] | None = None,
+    ) -> None:
+        result = self.run_recompute(fixture, "c3m6")
+        assembly = result["objects"]["Assembly"]
+        joint = result["objects"][joint_name]
+        updates = result["documentObjectUpdates"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(joint["status"], "ok")
+        self.assertEqual(joint["assembly"], "joint")
+        self.assertEqual(joint["joint_type"], joint_type)
+        self.assertEqual(joint["reference1"]["object"], "ComponentA")
+        self.assertEqual(joint["reference2"]["object"], "ComponentB")
+        self.assertEqual(joint["solve"], "joint_input")
+
+        self.assertEqual(assembly["status"], "ok")
+        self.assertEqual(assembly["solve"], "solved")
+        self.assertEqual(assembly["solver_adapter"]["status"], "solved")
+        self.assertEqual(assembly["solver_adapter"]["mode"], "real_ondsel_solver")
+        self.assertEqual(assembly["solver_adapter"]["grounded_joints"], ["GroundedJoint"])
+        self.assertEqual(assembly["solver_adapter"]["joints"], [joint_name])
+        solver_joint = assembly["solver_adapter"]["solver_joints"][0]
+        self.assertEqual(solver_joint["joint_type"], joint_type)
+        if solver_scalar:
+            field, expected = solver_scalar
+            self.assertEqual(solver_joint[field], expected)
+        self.assertEqual(assembly["solver_adapter"]["unsupported_joints"], [])
+        if expected_update_base is None:
+            self.assertEqual(updates, [])
+            return
+        self.assertEqual(len(updates), 1)
+        self.assertEqual(updates[0]["action"], "assembly_set_placement")
+        self.assertEqual(updates[0]["joint"], "OndselSolver")
+        self.assertEqual(updates[0]["joint_type"], "solver_result")
+        self.assertEqual(updates[0]["object"], "ComponentB")
+        self.assertEqual(updates[0]["properties"]["Placement"]["Base"], expected_update_base)
+
+    def test_c3m6_assembly_grounded_ball_joint_uses_real_ondsel_solver(self) -> None:
+        self.assert_c3m6_grounded_joint_uses_real_ondsel_solver(
+            "assembly-grounded-ball-joint-real-solver",
+            "BallJoint",
+            "Ball",
+            [0.0, 0.0, 0.0],
+        )
+
+    def test_c3m6_assembly_grounded_joint_matrix_uses_real_ondsel_solver(self) -> None:
+        cases = [
+            (
+                "assembly-grounded-revolute-joint-real-solver",
+                "RevoluteJoint",
+                "Revolute",
+                [0.0, 0.0, 0.0],
+                None,
+            ),
+            (
+                "assembly-grounded-slider-joint-real-solver",
+                "SliderJoint",
+                "Slider",
+                [0.0, 0.0, 0.0],
+                ("distance", 0.0),
+            ),
+            (
+                "assembly-grounded-distance-joint-real-solver",
+                "DistanceJoint",
+                "Distance",
+                [2.0, 0.0, 0.0],
+                ("distance", 2.0),
+            ),
+            (
+                "assembly-grounded-angle-joint-real-solver",
+                "AngleJoint",
+                "Angle",
+                None,
+                ("angle", 30.0),
+            ),
+        ]
+        for fixture, joint_name, joint_type, expected_update_base, solver_scalar in cases:
+            with self.subTest(fixture=fixture):
+                self.assert_c3m6_grounded_joint_uses_real_ondsel_solver(
+                    fixture,
+                    joint_name,
+                    joint_type,
+                    expected_update_base,
+                    solver_scalar,
+                )
+
+    def test_c3m6_assembly_invalid_grounded_distance_rejects_solver_writeback(self) -> None:
+        result = self.run_recompute("assembly-invalid-grounded-distance-real-solver", "c3m6")
+        assembly = result["objects"]["Assembly"]
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual(diagnostic["severity"], "warning")
+        self.assertEqual(diagnostic["code"], "invalid_assembly_solver_result")
+        self.assertEqual(diagnostic["target"], "ComponentA")
+        self.assertEqual(assembly["solve"], "invalid")
+        self.assertEqual(assembly["solver_adapter"]["status"], "invalid")
+        self.assertEqual(assembly["solver_adapter"]["reason"], "grounded_object_moved")
+        self.assertEqual(
+            assembly["solver_adapter"]["grounded_joints"],
+            ["GroundedJointA", "GroundedJointB"],
+        )
+        self.assertEqual(assembly["solver_adapter"]["joints"], ["DistanceJoint"])
+        self.assertEqual(assembly["solver_adapter"]["solver_joints"][0]["joint_type"], "Distance")
+        self.assertEqual(assembly["solver_adapter"]["solver_joints"][0]["distance"], 2.0)
+        self.assertEqual(result["documentObjectUpdates"], [])
 
     def test_p8_assembly_joint_reads_hidden_xlinksub_solver_references(self) -> None:
         result = self.run_recompute("assembly-joint-hidden-reference-diagnostics", "p8")

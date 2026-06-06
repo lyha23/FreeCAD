@@ -674,6 +674,13 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
                         = entry.resultWireProducer.childWireInfoIndex;
                     topoEntry.sourceEdgeIndices = entry.sourceEdgeIndices;
                     topoEntry.sourceLineageFromSplitterHistory = entry.sourceLineageFromSplitterHistory;
+                    topoEntry.sourceVertexIdentity = entry.sourceVertexIdentity;
+                    topoEntry.sourceVertexReplacementSourceEdgeIndices
+                        = entry.sourceVertexReplacementSourceEdgeIndices;
+                    topoEntry.sourceVertexReplacementEndpoints
+                        = entry.sourceVertexReplacementEndpoints;
+                    topoEntry.sourceVertexReplacementIdentity
+                        = entry.sourceVertexReplacementIdentity;
                     topoEntry.helperOpenExportOverride = entry.helperOpenExportOverride;
                     topoEntry.helperOpenExportOverrideReason = entry.helperOpenExportOverrideReason;
                     topoEntry.purgeBridge = entry.purgeBridge;
@@ -1065,6 +1072,8 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
             {"open_wire_compound_edge_info_count", wireJoinerLedger->openWireCompoundEdgeInfoCount},
             {"open_wire_compound_super_edge_wire_info_count",
              wireJoinerLedger->openWireCompoundSuperEdgeWireInfoCount},
+            {"open_wire_compound_result_slot_vertex_evidence_wire_info_count",
+             wireJoinerLedger->openWireCompoundResultSlotVertexEvidenceWireInfoCount},
             {"open_wire_compound_purge_bridge_wire_info_count",
              wireJoinerLedger->openWireCompoundPurgeBridgeWireInfoCount},
             {"open_wire_compound_source_shared_vertex_wire_info_count",
@@ -1127,8 +1136,18 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
                  entry.resultWireProducer.childWireInfoIndex},
                 {"source_edge_indices", entry.sourceEdgeIndices},
                 {"source_lineage_from_splitter_history", entry.sourceLineageFromSplitterHistory},
+                {"source_vertex_identity", entry.sourceVertexIdentity},
+                {"source_vertex_identity_any",
+                 entry.sourceVertexIdentity[0] || entry.sourceVertexIdentity[1]},
+                {"source_vertex_identity_all",
+                 entry.sourceVertexIdentity[0] && entry.sourceVertexIdentity[1]},
+                {"source_vertex_replacement_source_edge_indices",
+                 entry.sourceVertexReplacementSourceEdgeIndices},
+                {"source_vertex_replacement_endpoints", entry.sourceVertexReplacementEndpoints},
+                {"source_vertex_replacement_identity", entry.sourceVertexReplacementIdentity},
                 {"helper_open_export_override", entry.helperOpenExportOverride},
                 {"helper_open_export_override_reason", entry.helperOpenExportOverrideReason},
+                {"result_slot_vertex_evidence_output", entry.resultSlotVertexEvidenceOutput},
                 {"purge_bridge", entry.purgeBridge},
             });
         }

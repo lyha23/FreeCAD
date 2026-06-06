@@ -1,5 +1,6 @@
 #include "assembly_support.h"
 
+#include "cad_core/assembly/joint_solver.h"
 #include "cad_core/app/property_geo.h"
 #include "cad_core/base/placement.h"
 #include "cad_core/part/shape_exporter.h"
@@ -11,11 +12,9 @@
 #include <TopExp_Explorer.hxx>
 #include <TopoDS_Compound.hxx>
 
-#include <array>
 #include <cmath>
 #include <map>
 #include <optional>
-#include <set>
 
 namespace cad_core::assembly::assembly_detail {
 
@@ -62,33 +61,6 @@ nlohmann::json jointReferenceJson(const app::DocumentObject& object, const std::
 
 namespace {
 
-bool isSupportedRepresentativeJointType(const std::string& jointType)
-{
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/
-    // AssemblyObject.cpp::makeMbdJointOfType(), maps "Fixed", "Revolute", "Slider",
-    // "Ball", "Distance" and "Angle" to Ondsel ASMT joint classes. cad-core mirrors these
-    // as stateless representative solver DTO paths.
-    static const std::set<std::string> supported = {
-        "Fixed",
-        "Revolute",
-        "Slider",
-        "Ball",
-        "Distance",
-        "Angle",
-    };
-    return supported.count(jointType) != 0U;
-}
-
-std::array<double, 4> identityRotation()
-{
-    return {0.0, 0.0, 0.0, 1.0};
-}
-
-app::Placement placementForObject(const app::DocumentObject& object)
-{
-    return app::readPlacement(object, "Placement").value_or(app::Placement{{0.0, 0.0, 0.0}, identityRotation()});
-}
-
 nlohmann::json placementJson(const app::Placement& placement)
 {
     return {
@@ -102,45 +74,81 @@ nlohmann::json placementJson(const app::Placement& placement)
     };
 }
 
-bool samePlacement(const app::Placement& left, const app::Placement& right)
+nlohmann::json jointReferenceJson(const AssemblyJointReference& reference)
 {
-    for (std::size_t index = 0; index < 3U; ++index) {
-        if (std::abs(left.base.at(index) - right.base.at(index)) > 1e-9) {
-            return false;
-        }
+    if (reference.object.empty()) {
+        return nullptr;
     }
-    for (std::size_t index = 0; index < 4U; ++index) {
-        if (std::abs(left.rotation.at(index) - right.rotation.at(index)) > 1e-9) {
-            return false;
-        }
-    }
-    return true;
+    return {
+        {"object", reference.object},
+        {"subnames", reference.subnames},
+    };
 }
 
-std::optional<app::Placement> representativeSolvedPlacement(
-    const app::DocumentObject& joint,
-    const app::DocumentObject& reference1,
-    const app::DocumentObject& reference2
-)
+nlohmann::json solverJointJson(const JointConstraint& joint)
 {
-    const std::string jointType = app::readString(joint, "JointType").value_or("");
-    app::Placement solved = placementForObject(reference1);
-    if (jointType == "Slider" || jointType == "Distance") {
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/
-        // AssemblyObject.cpp::makeMbdJointDistance(), reads "getJointDistance(joint)";
-        // Slider also adds translation limits from "LengthMin" / "LengthMax". This stateless
-        // representative path uses the Distance property as the translation delta along the
-        // Reference1 local X axis.
-        solved.base.at(0) += app::readNumber(joint, "Distance").value_or(0.0);
+    nlohmann::json solverJoint = {
+        {"object", joint.object},
+        {"joint_type", joint.jointType},
+        {"reference1", jointReferenceJson(joint.reference1)},
+        {"reference2", jointReferenceJson(joint.reference2)},
+        {"suppressed", joint.suppressed},
+    };
+    if (joint.distance) {
+        solverJoint["distance"] = *joint.distance;
     }
-    if (jointType == "Angle") {
-        // FreeCAD: AssemblyObject.cpp::makeMbdJointOfType(), for Angle stores
-        // "mbdJoint->theIzJz = angle"; placement writeback still happens through
-        // setNewPlacements(), so the representative DTO keeps translation from Reference1.
-        (void)app::readNumber(joint, "Angle");
+    if (joint.angle) {
+        solverJoint["angle"] = *joint.angle;
     }
-    const app::Placement current = placementForObject(reference2);
-    return samePlacement(current, solved) ? std::nullopt : std::optional<app::Placement>{solved};
+    return solverJoint;
+}
+
+nlohmann::json solverJointsJson(const std::vector<JointConstraint>& joints)
+{
+    nlohmann::json result = nlohmann::json::array();
+    for (const JointConstraint& joint : joints) {
+        result.push_back(solverJointJson(joint));
+    }
+    return result;
+}
+
+nlohmann::json unsupportedJointsJson(const std::vector<UnsupportedAssemblyJoint>& unsupportedJoints)
+{
+    nlohmann::json result = nlohmann::json::array();
+    for (const UnsupportedAssemblyJoint& unsupported : unsupportedJoints) {
+        result.push_back({
+            {"object", unsupported.object},
+            {"joint_type", unsupported.jointType},
+            {"supported_representative_path", unsupported.supportedRepresentativePath},
+        });
+    }
+    return result;
+}
+
+nlohmann::json placementUpdateJson(const AssemblyPlacementUpdate& update,
+                                   const std::string& assemblyObject)
+{
+    return {
+        {"action", "assembly_set_placement"},
+        {"reason", "assembly_solver_placement_writeback"},
+        {"object", update.object},
+        {"objectId", update.objectId},
+        {"typeId", update.typeId},
+        {"assembly", assemblyObject},
+        {"joint", update.joint},
+        {"joint_type", update.jointType},
+        {"properties", {{"Placement", placementJson(update.placement)}}},
+    };
+}
+
+nlohmann::json placementUpdatesJson(const std::vector<AssemblyPlacementUpdate>& updates,
+                                    const std::string& assemblyObject)
+{
+    nlohmann::json result = nlohmann::json::array();
+    for (const AssemblyPlacementUpdate& update : updates) {
+        result.push_back(placementUpdateJson(update, assemblyObject));
+    }
+    return result;
 }
 
 }  // namespace
@@ -189,84 +197,25 @@ SolverSummary solverSummary(const app::DocumentObject& object, runtime::ComputeC
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
     // ::AssemblyObject::solve(), calls "syncGroundedJoints()", "fixGroundedParts()",
     // builds joints with "makeMbdJointOfType()", then runs "mbdAssembly->runPreDrag()";
-    // ::setNewPlacements() writes "propPlacement->setValue(newPlacement)". cad-core mirrors a
-    // stateless representative solver DTO for migrated JointTypes and returns the same writeback
-    // as documentObjectUpdates without retaining an Ondsel session.
-    nlohmann::json groundedJoints = nlohmann::json::array();
-    nlohmann::json supportedJoints = nlohmann::json::array();
-    nlohmann::json unsupportedJoints = nlohmann::json::array();
-    nlohmann::json solverJoints = nlohmann::json::array();
-    nlohmann::json placementUpdates = nlohmann::json::array();
-
-    for (const auto& jointName : jointNames(object, context)) {
-        const app::DocumentObject* joint = documentObjectByName(context, jointName);
-        if (joint == nullptr) {
-            continue;
-        }
-        if (app::propertyValue(*joint, "ObjectToGround") != nullptr) {
-            groundedJoints.push_back(jointName);
-            continue;
-        }
-        if (app::propertyValue(*joint, "JointType") != nullptr) {
-            const std::string jointType = app::readString(*joint, "JointType").value_or("");
-            nlohmann::json solverJoint = {
-                {"object", jointName},
-                {"joint_type", jointType},
-                {"reference1", jointReferenceJson(*joint, "Reference1")},
-                {"reference2", jointReferenceJson(*joint, "Reference2")},
-                {"suppressed", app::readBool(*joint, "Suppressed").value_or(false)},
-            };
-            if (jointType == "Distance" || jointType == "Slider") {
-                solverJoint["distance"] = app::readNumber(*joint, "Distance").value_or(0.0);
-            }
-            if (jointType == "Angle") {
-                solverJoint["angle"] = app::readNumber(*joint, "Angle").value_or(0.0);
-            }
-            solverJoints.push_back(solverJoint);
-            supportedJoints.push_back(jointName);
-            if (!isSupportedRepresentativeJointType(jointType)) {
-                unsupportedJoints.push_back({
-                    {"object", jointName},
-                    {"joint_type", jointType},
-                    {"supported_representative_path", false},
-                });
-                continue;
-            }
-
-            const auto reference1 = app::readLink(*joint, "Reference1");
-            const auto reference2 = app::readLink(*joint, "Reference2");
-            const app::DocumentObject* reference1Object =
-                reference1 ? documentObjectByName(context, reference1->object) : nullptr;
-            const app::DocumentObject* reference2Object =
-                reference2 ? documentObjectByName(context, reference2->object) : nullptr;
-            if (reference1Object == nullptr || reference2Object == nullptr) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "missing_target",
-                                       "Assembly joint reference target is missing",
-                                       object.name,
-                                       "Group",
-                                       "runtime",
-                                       jointName);
-                continue;
-            }
-            if (const auto solved = representativeSolvedPlacement(*joint, *reference1Object, *reference2Object)) {
-                nlohmann::json update = {
-                    {"action", "assembly_set_placement"},
-                    {"reason", "assembly_solver_placement_writeback"},
-                    {"object", reference2Object->name},
-                    {"objectId", reference2Object->id},
-                    {"typeId", reference2Object->typeId},
-                    {"assembly", object.name},
-                    {"joint", jointName},
-                    {"joint_type", jointType},
-                    {"properties", {{"Placement", placementJson(*solved)}}},
-                };
-                placementUpdates.push_back(update);
-                context.documentObjectUpdates.push_back(update);
-            }
-        }
+    // ::setNewPlacements() writes "propPlacement->setValue(newPlacement)". CAD Core builds a
+    // request-local Ondsel adapter when linked, and keeps the representative DTO only as fallback
+    // without retaining a backend solver session.
+    const std::vector<std::string> requestJointNames = jointNames(object, context);
+    const AssemblySolveRequest request =
+        buildAssemblySolveRequest(object, context, requestJointNames, jointGroupNames(object, context));
+    AssemblySolveResult result = solveAssemblyWithOndselAdapter(request);
+    for (const runtime::Diagnostic& diagnostic : result.diagnostics) {
+        context.diagnostics.push_back(diagnostic);
     }
+    for (const AssemblyPlacementUpdate& update : result.placementUpdates) {
+        context.documentObjectUpdates.push_back(placementUpdateJson(update, object.name));
+    }
+
+    nlohmann::json groundedJoints = result.groundedJoints;
+    nlohmann::json supportedJoints = result.joints;
+    nlohmann::json unsupportedJoints = unsupportedJointsJson(result.unsupportedJoints);
+    nlohmann::json solverJoints = solverJointsJson(result.solverJoints);
+    nlohmann::json placementUpdates = placementUpdatesJson(result.placementUpdates, object.name);
 
     if (groundedJoints.empty() && supportedJoints.empty()) {
         return {
@@ -295,17 +244,6 @@ SolverSummary solverSummary(const app::DocumentObject& object, runtime::ComputeC
     }
 
     if (!unsupportedJoints.empty()) {
-        for (const auto& unsupported : unsupportedJoints) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "warning",
-                                   "unsupported_assembly_solver",
-                                   "Assembly solver adapter does not yet solve JointType "
-                                       + unsupported["joint_type"].get<std::string>(),
-                                   object.name,
-                                   "Group",
-                                   "runtime",
-                                   unsupported["object"].get<std::string>());
-        }
         return {
             "unsupported",
             {
@@ -319,11 +257,26 @@ SolverSummary solverSummary(const app::DocumentObject& object, runtime::ComputeC
         };
     }
 
+    if (result.status == "invalid") {
+        return {
+            result.solveState,
+            {
+                {"status", result.status},
+                {"reason", result.reason},
+                {"grounded_joints", groundedJoints},
+                {"joints", supportedJoints},
+                {"solver_joints", solverJoints},
+                {"placement_updates", placementUpdates},
+                {"unsupported_joints", unsupportedJoints},
+            },
+        };
+    }
+
     return {
         "solved",
         {
             {"status", "solved"},
-            {"mode", "representative_ondsel_solver"},
+            {"mode", result.mode},
             {"grounded_joints", groundedJoints},
             {"joints", supportedJoints},
             {"solver_joints", solverJoints},

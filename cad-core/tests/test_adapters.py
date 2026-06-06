@@ -891,20 +891,43 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(
             capabilities["assembly"]["representative_solver_adapter"]["mode"],
-            "stateless_representative_solver",
+            "stateless_representative_fallback",
         )
-        self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["status"], "not_implemented")
+        self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["status"], "covered_full")
+        self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["mode"], "request_local_runPreDrag")
+        self.assertIn("grounded_fixed_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
+        self.assertIn("grounded_ball_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
+        self.assertIn("grounded_revolute_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
+        self.assertIn("grounded_slider_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
+        self.assertIn("grounded_distance_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
+        self.assertIn("grounded_angle_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
+        self.assertIn(
+            "invalid_grounded_placement_rejected",
+            capabilities["assembly"]["ondsel_solver_adapter"]["covered"],
+        )
         self.assertEqual(capabilities["assembly"]["placement_writeback"]["status"], "covered_contract")
         self.assertEqual(
             capabilities["assembly"]["placement_writeback"]["updates"],
             ["documentObjectUpdates.action=assembly_set_placement"],
         )
+        self.assertEqual(capabilities["assembly"]["placement_writeback"]["remaining_gaps"], [])
+        self.assertEqual(capabilities["assembly"]["remaining_gaps"], [])
         self.assertEqual(
-            capabilities["assembly"]["remaining_gaps"],
-            ["ondsel_solver_session", "joint_constraint_solve", "validated_new_placements"],
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["status"],
+            "covered_main_path",
         )
-        self.assertEqual(capabilities["wire_joiner"]["generated_open_export_bridge"]["status"], "bridge")
-        self.assertEqual(capabilities["wire_joiner"]["purge_as_original_bridge"]["status"], "bridge")
+        self.assertIn(
+            "result_slot_vertex_evidence_output_count_zero",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertEqual(
+            capabilities["wire_joiner"]["purge_as_original_bridge"]["status"],
+            "covered_main_path",
+        )
+        self.assertIn(
+            "purgeAsOriginalOpenEdge",
+            capabilities["wire_joiner"]["purge_as_original_bridge"]["deleted_fields"],
+        )
         self.assertIn(
             "part_design.pad.taper_history",
             capabilities["object_metadata_gaps"]["local_history_gaps"],

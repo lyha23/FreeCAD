@@ -31,10 +31,21 @@ if(NOT ZSTD_INCLUDE_DIR OR NOT ZSTD_LIBRARY)
   message(FATAL_ERROR "libzstd was not found")
 endif()
 
+set(CAD_CORE_ONDSEL_SOLVER_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../src/3rdParty/OndselSolver")
+if(EXISTS "${CAD_CORE_ONDSEL_SOLVER_DIR}/CMakeLists.txt")
+  set(CAD_CORE_HAS_ONDSEL_SOLVER ON)
+  set(ONDSELSOLVER_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+  set(ONDSELSOLVER_BUILD_EXE OFF CACHE BOOL "" FORCE)
+  add_subdirectory("${CAD_CORE_ONDSEL_SOLVER_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/ondsel_solver" EXCLUDE_FROM_ALL)
+else()
+  set(CAD_CORE_HAS_ONDSEL_SOLVER OFF)
+endif()
+
 add_library(cad-core-lib STATIC
   src/assembly/assembly_link.cpp
   src/assembly/assembly_object.cpp
   src/assembly/assembly_utils.cpp
+  src/assembly/joint_solver.cpp
   src/assembly/joint_group.cpp
   src/app/copy_on_change.cpp
   src/app/document.cpp
@@ -119,6 +130,14 @@ target_compile_definitions(cad-core-lib PRIVATE
   CAD_CORE_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}"
 )
 
+if(CAD_CORE_HAS_ONDSEL_SOLVER)
+  target_compile_definitions(cad-core-lib PRIVATE CAD_CORE_HAS_ONDSEL_SOLVER=1)
+  target_include_directories(cad-core-lib PRIVATE "${CAD_CORE_ONDSEL_SOLVER_DIR}")
+  target_link_libraries(cad-core-lib PUBLIC OndselSolver)
+else()
+  target_compile_definitions(cad-core-lib PRIVATE CAD_CORE_HAS_ONDSEL_SOLVER=0)
+endif()
+
 target_link_directories(cad-core-lib PUBLIC
   ${OpenCASCADE_LIBRARY_DIR}
 )
@@ -166,17 +185,22 @@ add_executable(cad-core-c3m1-topology-probe
 target_link_libraries(cad-core-c3m1-topology-probe PRIVATE cad-core-lib)
 
 if(APPLE)
+  if(CAD_CORE_HAS_ONDSEL_SOLVER)
+    set(CAD_CORE_ONDSEL_RPATH "$<TARGET_FILE_DIR:OndselSolver>")
+  else()
+    set(CAD_CORE_ONDSEL_RPATH "")
+  endif()
   set_target_properties(cad-core PROPERTIES
-    BUILD_RPATH "${OpenCASCADE_LIBRARY_DIR}"
-    INSTALL_RPATH "${OpenCASCADE_LIBRARY_DIR}"
+    BUILD_RPATH "${OpenCASCADE_LIBRARY_DIR};${CAD_CORE_ONDSEL_RPATH}"
+    INSTALL_RPATH "${OpenCASCADE_LIBRARY_DIR};${CAD_CORE_ONDSEL_RPATH}"
   )
   set_target_properties(cad-core-c3m1-topology-probe PROPERTIES
-    BUILD_RPATH "${OpenCASCADE_LIBRARY_DIR}"
-    INSTALL_RPATH "${OpenCASCADE_LIBRARY_DIR}"
+    BUILD_RPATH "${OpenCASCADE_LIBRARY_DIR};${CAD_CORE_ONDSEL_RPATH}"
+    INSTALL_RPATH "${OpenCASCADE_LIBRARY_DIR};${CAD_CORE_ONDSEL_RPATH}"
   )
   set_target_properties(cad_core_ffi PROPERTIES
-    BUILD_RPATH "${OpenCASCADE_LIBRARY_DIR}"
-    INSTALL_RPATH "${OpenCASCADE_LIBRARY_DIR}"
+    BUILD_RPATH "${OpenCASCADE_LIBRARY_DIR};${CAD_CORE_ONDSEL_RPATH}"
+    INSTALL_RPATH "${OpenCASCADE_LIBRARY_DIR};${CAD_CORE_ONDSEL_RPATH}"
     INSTALL_NAME_DIR "${CMAKE_CURRENT_BINARY_DIR}"
     BUILD_WITH_INSTALL_NAME_DIR ON
   )

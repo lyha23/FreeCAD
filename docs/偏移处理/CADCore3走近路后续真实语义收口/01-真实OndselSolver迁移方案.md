@@ -7,7 +7,7 @@
 完成后，Assembly 的 capability 口径应从：
 
 - `representative_solver_adapter.status=covered_representative`
-- `ondsel_solver_adapter.status=not_implemented`
+- `ondsel_solver_adapter.status=not_implemented` 或无真实求解路径
 - `placement_writeback.status=covered_contract`
 
 推进到：
@@ -49,6 +49,27 @@
 6. CAD Core 返回 `documentObjectUpdates`，只把 validated placement 写回给前端。
 7. 下一次请求仍由前端保存后的 graph 重新计算，不依赖 backend 内存状态。
 
+## 4.1 本轮源码复核与 blocker
+
+已复核 FreeCAD 调用链：
+
+- `/Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::solve()`：顺序是 `ensureIdentityPlacements()`、`syncGroundedJoints()`、`makeMbdAssembly()`、`fixGroundedParts()`、`getJoints()`、`removeUnconnectedJoints()`、`jointParts()`、`mbdAssembly->runPreDrag()`、`setNewPlacements()`。
+- `/Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::fixGroundedParts()` / `fixGroundedPart()`：把 grounded part 的当前 `Placement` 转成 `ASMTPart`，并通过 `ASMTFixedJoint` 固定到 `/OndselAssembly` marker。
+- `/Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::makeMbdJointOfType()`：`Fixed`、`Revolute`、`Cylindrical`、`Slider`、`Ball`、`Distance`、`Parallel`、`Perpendicular`、`Angle` 等映射到对应 `ASMT*Joint`，`Angle` 写 `mbdJoint->theIzJz = angle`。
+- `/Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::setNewPlacements()`：从 `getMbdPlacement(mbdPart)` 取 solver 后 placement，叠加 `offsetPlc` 后写 `propPlacement->setValue(newPlacement)`。
+- `/Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::validateNewPlacements()`：校验 grounded object 未移动；若移动则输出 `Ignoring bad solve, a grounded object (...) moved.` 并拒绝。
+- `/Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/JointObject.py`：`JointType`、`Reference1/2`、`Placement1/2`、`Offset1/2`、`Detach1/2`、`Distance`、`Angle`、limit 字段由 Python JointObject 建立；`JointGroup.cpp::JointGroup::getJoints()` 只收集未 suppressed 且 proxy 有 `setJointConnectors` 的 joint。
+- 构建来源：`src/Mod/Assembly/App/CMakeLists.txt` 链接 `OndselSolver`；`src/Mod/Assembly/CMakeLists.txt` 在非 external 模式下只 include `${CMAKE_SOURCE_DIR}/src/3rdParty/OndselSolver`；`.gitmodules` 声明 `src/3rdParty/OndselSolver` 子模块。
+
+当前进展与剩余 blocker：
+
+- `src/3rdParty/OndselSolver` 已初始化到 `30e9b64e8bf881d438d4b88834f9ba3674865418`；`git submodule status -- src/3rdParty/OndselSolver` 当前无前缀 `-`，说明子模块源码可用。
+- `cad-core/CMakeLists.txt` 已在存在 `../src/3rdParty/OndselSolver/CMakeLists.txt` 时 `add_subdirectory()` 并链接 `OndselSolver`，同时给 `cad-core` / `cad_core_ffi` 增加 Ondsel build rpath。
+- `cad-core/include/cad_core/assembly/joint_solver.h` 与 `cad-core/src/assembly/joint_solver.cpp` 已建立 `AssemblySolveRequest`、`AssemblySolveResult`、`JointConstraint`、placement validation diagnostic 边界；`assembly_utils.cpp` 只组装请求、调用 solver adapter、消费结果。
+- 当前真实求解 joint matrix：有 grounded part 的 Fixed joint fixture 会构造 request-local `ASMTAssembly`，按 FreeCAD `fixGroundedPart()` 建 assembly marker / part marker / `ASMTFixedJoint`，再执行 `ASMTAssembly::runPreDrag()`；Ball / Revolute / Slider / Distance / Angle fixture 按 FreeCAD `makeMbdJointOfType()` 的 `ASMTSphericalJoint`、`ASMTRevoluteJoint`、`ASMTTranslationalJoint`、`ASMTSphSphJoint`、`ASMTAngleJoint` 映射进入同一真实 solver 路径，且 Angle=0 分支已按 FreeCAD 映射到 `ASMTParallelAxesJoint`。solver result 通过 `validateNewPlacementsEquivalent()` 后进入 `documentObjectUpdates`。`tests.test_p8_features` 中 `assembly-joint-group-diagnostics` 与 `assembly-grounded-*-joint-real-solver` 已锁 `real_ondsel_solver`。
+- validation matrix：`assembly-invalid-grounded-distance-real-solver` 用双 grounded part 加 `Distance=2` 的矛盾约束触发真实 `ASMTAssembly::runPreDrag()`，随后 `validateNewPlacementsEquivalent()` 按 FreeCAD `validateNewPlacements()` 的 grounded object moved 规则输出 `invalid_assembly_solver_result`，并拒绝 `documentObjectUpdates` writeback。
+- 当前可以把 `ondsel_solver_adapter.status` 提升为 `covered_full`；无 grounded part 的旧 representative fixture 仍只能作为 fallback / diagnostic 口径。
+
 ## 5. 候选落点
 
 | CAD Core 落点 | 职责 |
@@ -86,7 +107,7 @@
 - 支持最小矩阵：Fixed、Revolute、Slider、Ball、Distance、Angle。
 - 对未支持 joint 类型返回 explicit unsupported diagnostic，不生成静态假 placement。
 
-验收：每种已支持 joint 都有成功 fixture；未支持 joint 有失败 fixture 和 diagnostics。
+验收：Fixed / Revolute / Slider / Ball / Distance / Angle 已有成功 fixture；未支持 joint 有失败 fixture 和 diagnostics。
 
 ### D. Grounded 和 validation
 
@@ -110,15 +131,15 @@
 
 | Case | 期望 |
 | --- | --- |
-| Fixed joint + grounded part | grounded part placement 不变，另一 part 按 solver 结果更新 |
-| Revolute joint | axis / pivot constraint 生效 |
-| Slider joint | 只允许滑动自由度 |
-| Ball joint | 球铰约束生效 |
-| Distance joint | distance constraint 生效 |
-| Angle joint | angle constraint 生效 |
+| Fixed joint + grounded part | 已覆盖：grounded part placement 不变，另一 part 按 solver 结果更新 |
+| Revolute joint | 已覆盖：真实 `ASMTRevoluteJoint` / `runPreDrag()` 路径生效 |
+| Slider joint | 已覆盖：真实 `ASMTTranslationalJoint` / `runPreDrag()` 路径生效 |
+| Ball joint | 已覆盖：真实 `ASMTSphericalJoint` / `runPreDrag()` 路径生效 |
+| Distance joint | 已覆盖：distance constraint 写回 2mm 间距 |
+| Angle joint | 已覆盖：非零 angle 进入 `ASMTAngleJoint`，Angle=0 映射 `ASMTParallelAxesJoint` |
 | Missing linked object | 返回 diagnostic，不写假 placement |
 | Unsupported joint type | 返回 unsupported，不声明 covered |
-| Invalid solver result | validation 拒绝 writeback |
+| Invalid solver result | 已覆盖：双 grounded + Distance 矛盾 fixture 输出 `invalid_assembly_solver_result`，不写回 |
 
 阶段回归命令：
 
@@ -140,4 +161,4 @@ git diff --check -- cad-core docs/CADCore3.0 docs/偏移处理
 - `setNewPlacements()` / `validateNewPlacements()` 等价语义在 CAD Core 中有明确落点。
 - representative solver 不再作为 full coverage 依据。
 - capability gap、语义矩阵、oracle fixture 队列同步更新。
-- 所有 supported joint fixture 通过，unsupported 和 invalid case 有稳定 diagnostics。
+- 所有 supported joint fixture 通过；unsupported 已有稳定 diagnostics；invalid placement case 已覆盖，`ondsel_solver_adapter.status=covered_full`。

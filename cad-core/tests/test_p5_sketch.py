@@ -594,6 +594,12 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "helper_open_export_override",
             "helper_open_export_override_reason",
             "source_edge_indices",
+            "source_vertex_identity",
+            "source_vertex_identity_any",
+            "source_vertex_identity_all",
+            "source_vertex_replacement_source_edge_indices",
+            "source_vertex_replacement_endpoints",
+            "source_vertex_replacement_identity",
         )
         for runtime_entry, internal_entry in zip(runtime_entries, internal_entries):
             with self.subTest(open_export_index=runtime_entry["open_export_index"]):
@@ -671,6 +677,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertEqual(ledger["open_wire_compound_built_wire_info_count"], 0)
             self.assertEqual(ledger["open_wire_compound_edge_info_count"], 0)
             self.assertEqual(ledger["open_wire_compound_super_edge_wire_info_count"], 0)
+            self.assertEqual(
+                ledger["open_wire_compound_result_slot_vertex_evidence_wire_info_count"],
+                0,
+            )
             self.assertEqual(ledger["open_wire_compound_purge_bridge_wire_info_count"], 0)
             self.assertEqual(ledger["open_wire_compound_source_shared_vertex_wire_info_count"], 0)
             self.assertEqual(
@@ -691,6 +701,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(
             ledger["open_wire_compound_built_wire_info_count"],
             ledger["open_wire_compound_wire_info_count"],
+        )
+        self.assertEqual(
+            ledger["open_wire_compound_result_slot_vertex_evidence_wire_info_count"],
+            0,
         )
         self.assertEqual(
             ledger["open_wire_compound_purge_bridge_wire_info_count"],
@@ -728,6 +742,34 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         for entry in entries:
             self.assertNotIn("generated_open_export", entry)
             self.assertNotIn("generated_open_export_reason", entry)
+            self.assertFalse(entry["result_slot_vertex_evidence_output"])
+            self.assertEqual(len(entry["source_vertex_identity"]), 2)
+            self.assertEqual(len(entry["source_vertex_replacement_source_edge_indices"]), 2)
+            self.assertEqual(len(entry["source_vertex_replacement_endpoints"]), 2)
+            self.assertEqual(len(entry["source_vertex_replacement_identity"]), 2)
+            self.assertEqual(
+                entry["source_vertex_identity_any"],
+                any(entry["source_vertex_identity"]),
+            )
+            self.assertEqual(
+                entry["source_vertex_identity_all"],
+                all(entry["source_vertex_identity"]),
+            )
+            for endpoint_index in range(2):
+                replacement_source = entry["source_vertex_replacement_source_edge_indices"][
+                    endpoint_index
+                ]
+                replacement_endpoint = entry["source_vertex_replacement_endpoints"][endpoint_index]
+                replacement_identity = entry["source_vertex_replacement_identity"][endpoint_index]
+                if replacement_source < 0:
+                    self.assertEqual(replacement_endpoint, -1)
+                    self.assertFalse(replacement_identity)
+                else:
+                    self.assertGreaterEqual(replacement_endpoint, 0)
+                    self.assertLessEqual(replacement_endpoint, 1)
+                if entry["source_vertex_identity"][endpoint_index]:
+                    self.assertGreaterEqual(replacement_source, 0)
+                    self.assertTrue(replacement_identity)
         self.assertTrue(
             all(
                 bool(entry["helper_open_export_override_reason"]) == entry["helper_open_export_override"]
@@ -752,6 +794,8 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 if entry["helper_open_export_override"] and not entry["source_edge_indices"]
             ),
             "purge_bridge": sum(1 for entry in entries if entry["purge_bridge"]),
+            "source_vertex_identity_any": sum(1 for entry in entries if entry["source_vertex_identity_any"]),
+            "source_vertex_identity_all": sum(1 for entry in entries if entry["source_vertex_identity_all"]),
         }
 
     def assert_repeated_split_exhaust_removal_ledger(self, ledger: dict[str, int]) -> None:
@@ -2256,6 +2300,14 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(len(entries), ledger["open_export_edge_info_count"])
         entry_counts = self.open_export_entry_counts(entries)
         self.assertEqual(entry_counts["source_lineage"], ledger["source_lineage_open_export_edge_info_count"])
+        self.assertEqual(
+            entry_counts["source_vertex_identity_any"],
+            ledger["source_identity_open_export_shared_vertex_edge_info_count"],
+        )
+        self.assertEqual(
+            entry_counts["source_vertex_identity_all"],
+            ledger["source_identity_open_export_only_source_vertices_edge_info_count"],
+        )
         self.assertEqual(entry_counts["missing_source_lineage"], 0)
         self.assertEqual(entry_counts["purge_bridge"], 0)
         self.assertTrue(all(entry["source_edge_indices"] for entry in entries))
@@ -2638,6 +2690,14 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         entry_counts = self.open_export_entry_counts(entries)
         self.assertEqual(entry_counts["helper_override"], len(ledger["result_wire_producer_ledger_entries"]))
         self.assertEqual(
+            entry_counts["source_vertex_identity_any"],
+            ledger["source_identity_open_export_shared_vertex_edge_info_count"],
+        )
+        self.assertEqual(
+            entry_counts["source_vertex_identity_all"],
+            ledger["source_identity_open_export_only_source_vertices_edge_info_count"],
+        )
+        self.assertEqual(
             entry_counts["helper_override_missing_source_lineage"],
             ledger["source_lineage_missing_open_export_edge_info_count"],
         )
@@ -3010,6 +3070,14 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(len(entries), ledger["open_export_edge_info_count"])
         entry_counts = self.open_export_entry_counts(entries)
         self.assertEqual(entry_counts["source_lineage"], ledger["source_lineage_open_export_edge_info_count"])
+        self.assertEqual(
+            entry_counts["source_vertex_identity_any"],
+            ledger["source_identity_open_export_shared_vertex_edge_info_count"],
+        )
+        self.assertEqual(
+            entry_counts["source_vertex_identity_all"],
+            ledger["source_identity_open_export_only_source_vertices_edge_info_count"],
+        )
         self.assertEqual(entry_counts["purge_bridge"], ledger["source_identity_purge_bridge_edge_info_count"])
         self.assertEqual(entry_counts["missing_source_lineage"], 0)
         self.assertEqual(len(entries), 1)

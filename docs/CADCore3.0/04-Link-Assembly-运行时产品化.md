@@ -52,7 +52,7 @@ FreeCAD 依据：
 - GroundedJoint-only 不再是唯一成功路径。
 - 普通 JointType 有 representative placement update 或明确 unsupported matrix。
 - Assembly solver 不依赖 GUI 或跨请求 CAD Core session。
-- C3-M6 当前已覆盖 Fixed representative placement writeback、six JointType capability keys 和 RackPinion / Screw / Gears / Belt / Cylindrical unsupported matrix；`representative_solver_adapter.status=covered_representative`，`placement_writeback.status=covered_contract`，`ondsel_solver_adapter.status=not_implemented`，`assembly.remaining_gaps` 保留 `ondsel_solver_session`、`joint_constraint_solve`、`validated_new_placements`。
+- C3-M6 当前已覆盖 Fixed / Revolute / Slider / Ball / Distance / Angle grounded real Ondsel `runPreDrag()` fixture、双 grounded + Distance 矛盾 validation fixture、representative fallback、six JointType fallback capability keys 和 RackPinion / Screw / Gears / Belt / Cylindrical unsupported matrix；`representative_solver_adapter.status=covered_representative` 仅表示 fallback，`placement_writeback.status=covered_contract`，`ondsel_solver_adapter.status=covered_full`，`assembly.remaining_gaps=[]`。
 
 ## C3-M7：Worker / WASM / Web adapter 产品化
 

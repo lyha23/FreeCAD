@@ -12,6 +12,7 @@
 #include <TopoDS_Wire.hxx>
 #include <nlohmann/json.hpp>
 
+#include <array>
 #include <map>
 #include <optional>
 #include <utility>
@@ -62,6 +63,10 @@ struct SketchInternalWireJoinerOpenExportHistoryEntry
     std::size_t resultWireProducerChildWireInfoIndex = 0;
     std::vector<std::size_t> sourceEdgeIndices;
     bool sourceLineageFromSplitterHistory = false;
+    std::array<bool, 2> sourceVertexIdentity {{false, false}};
+    std::array<int, 2> sourceVertexReplacementSourceEdgeIndices {{-1, -1}};
+    std::array<int, 2> sourceVertexReplacementEndpoints {{-1, -1}};
+    std::array<bool, 2> sourceVertexReplacementIdentity {{false, false}};
     bool helperOpenExportOverride = false;
     std::string helperOpenExportOverrideReason;
     bool purgeBridge = false;
