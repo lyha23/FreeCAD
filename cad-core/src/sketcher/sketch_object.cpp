@@ -705,6 +705,30 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
                         = entry.resultWireProducer.childWireInfoIndex;
                     topoEntry.openWireCompoundChildWireInfoIndex =
                         entry.openWireCompoundChildWireInfoIndex;
+                    topoEntry.openWireCompoundExportSource =
+                        part::openWireCompoundExportSourceName(
+                            entry.openWireCompoundExportSource
+                        );
+                    topoEntry.openWireCompoundEdgeInfoIteration =
+                        entry.openWireCompoundEdgeInfoIteration;
+                    topoEntry.openWireCompoundEdgeInfoIteration2 =
+                        entry.openWireCompoundEdgeInfoIteration2;
+                    topoEntry.openWireCompoundOwnerWireInfo =
+                        entry.openWireCompoundOwnerWireInfo;
+                    topoEntry.openWireCompoundOwnerWireInfo2 =
+                        entry.openWireCompoundOwnerWireInfo2;
+                    topoEntry.openWireCompoundOpenLeafExport =
+                        entry.openWireCompoundOpenLeafExport;
+                    topoEntry.openWireCompoundUnownedOpenEdgeExport =
+                        entry.openWireCompoundUnownedOpenEdgeExport;
+                    topoEntry.openWireCompoundRootCurrentMemberChildProducer =
+                        entry.openWireCompoundRootCurrentMemberChildProducer;
+                    topoEntry.openWireCompoundChildShapeIdentityRecorded =
+                        entry.openWireCompoundChildShapeIdentityRecorded;
+                    topoEntry.openWireCompoundChildWireEdgeCount =
+                        entry.openWireCompoundChildWireEdgeCount;
+                    topoEntry.openWireCompoundChildWireVertexCount =
+                        entry.openWireCompoundChildWireVertexCount;
                     topoEntry.openWireCompoundSourceEdgeIndices =
                         entry.openWireCompoundSourceEdgeIndices;
                     topoEntry.openWireCompoundSourceLineageFromSplitterHistory =
@@ -775,6 +799,20 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
                             .openWireCompoundCurrentMemberSplitLedgerOutputCandidateMatchedVertexCount;
                     topoEntry.openWireCompoundCurrentMemberSplitLedgerOutputUnmatchedVertexCount =
                         entry.openWireCompoundCurrentMemberSplitLedgerOutputUnmatchedVertexCount;
+                    for (const part::WireJoinerEndpointIdentityDebt& debt :
+                         entry.openWireCompoundCurrentMemberSplitLedgerOutputVertexDebt) {
+                        part::SketchInternalWireJoinerEndpointIdentityDebt topoDebt;
+                        topoDebt.outputVertexIndex = debt.outputVertexIndex;
+                        topoDebt.matchedMemberSplitLedger = debt.matchedMemberSplitLedger;
+                        topoDebt.matchedCandidateLedger = debt.matchedCandidateLedger;
+                        topoDebt.matchedEndpointMaterializationEvidence =
+                            debt.matchedEndpointMaterializationEvidence;
+                        topoDebt.resultSlotOnlyIdentity = debt.resultSlotOnlyIdentity;
+                        topoDebt.explanation = debt.explanation;
+                        topoEntry.openWireCompoundCurrentMemberSplitLedgerOutputVertexDebt.push_back(
+                            std::move(topoDebt)
+                        );
+                    }
                     topoEntry.openWireCompoundCurrentMemberSplitLedgerResultSlotOnlyVertexCount =
                         entry.openWireCompoundCurrentMemberSplitLedgerResultSlotOnlyVertexCount;
                     topoEntry.openWireCompoundCurrentMemberSplitLedgerVertexMultiplicityBlocked =
@@ -940,17 +978,41 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         nlohmann::json resultWireProducerLedgerEntries = nlohmann::json::array();
         for (const part::ResultWireProducerLedgerEntry& entry :
              wireJoinerLedger->resultWireProducerLedgerEntries) {
-            resultWireProducerLedgerEntries.push_back({
-                {"open_export_index", entry.openExportIndex},
-                {"source_edge_info_index", entry.sourceEdgeInfoIndex},
-                {"root_edge_info_index", entry.rootEdgeInfoIndex},
-                {"current_member_edge_info_index", entry.currentMemberEdgeInfoIndex},
-                {"child_wire_info_index", entry.childWireInfoIndex},
-                {"kind", part::resultWireProducerKindName(entry.kind)},
-                {"state", part::resultWireProducerStateName(entry.state)},
-                {"blocker", part::resultWireBlockerName(entry.blocker)},
-            });
-        }
+                    resultWireProducerLedgerEntries.push_back({
+                        {"open_export_index", entry.openExportIndex},
+                        {"source_edge_info_index", entry.sourceEdgeInfoIndex},
+                        {"root_edge_info_index", entry.rootEdgeInfoIndex},
+                        {"current_member_edge_info_index", entry.currentMemberEdgeInfoIndex},
+                        {"child_wire_info_index", entry.childWireInfoIndex},
+                        {"kind", part::resultWireProducerKindName(entry.kind)},
+                        {"state", part::resultWireProducerStateName(entry.state)},
+                        {"blocker", part::resultWireBlockerName(entry.blocker)},
+                        {"open_wire_compound_export_source",
+                         part::openWireCompoundExportSourceName(
+                             entry.openWireCompoundExportSource
+                         )},
+                        {"open_wire_compound_edge_info_iteration",
+                         entry.openWireCompoundEdgeInfoIteration},
+                        {"open_wire_compound_edge_info_iteration2",
+                         entry.openWireCompoundEdgeInfoIteration2},
+                        {"open_wire_compound_owner_wire_info",
+                         entry.openWireCompoundOwnerWireInfo},
+                        {"open_wire_compound_owner_wire_info2",
+                         entry.openWireCompoundOwnerWireInfo2},
+                        {"open_wire_compound_open_leaf_export",
+                         entry.openWireCompoundOpenLeafExport},
+                        {"open_wire_compound_unowned_open_edge_export",
+                         entry.openWireCompoundUnownedOpenEdgeExport},
+                        {"open_wire_compound_root_current_member_child_producer",
+                         entry.openWireCompoundRootCurrentMemberChildProducer},
+                        {"wire_joiner_history_event_index",
+                         entry.wireJoinerHistoryEventIndex},
+                        {"child_shape_identity_recorded", entry.childShapeIdentityRecorded},
+                        {"child_wire_edge_count", entry.childWireEdgeCount},
+                        {"child_wire_vertex_count", entry.childWireVertexCount},
+                        {"source_edge_indices", entry.sourceEdgeIndices},
+                    });
+                }
         context.objects[object.name]["wire_joiner_ledger"] = {
             {"edge_info_count", wireJoinerLedger->edgeInfoCount},
             {"split_edge_info_count", wireJoinerLedger->splitEdgeInfoCount},
@@ -1346,9 +1408,44 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         nlohmann::json openExportHistoryEntries = nlohmann::json::array();
         for (const part::WireJoinerOpenExportHistoryEntry& entry :
              wireJoinerHistory->openExportEntries) {
+            nlohmann::json currentMemberSplitOutputVertexDebt = nlohmann::json::array();
+            for (const part::WireJoinerEndpointIdentityDebt& debt :
+                 entry.openWireCompoundCurrentMemberSplitLedgerOutputVertexDebt) {
+                currentMemberSplitOutputVertexDebt.push_back({
+                    {"output_vertex_index", debt.outputVertexIndex},
+                    {"matched_member_split_ledger", debt.matchedMemberSplitLedger},
+                    {"matched_candidate_ledger", debt.matchedCandidateLedger},
+                    {"matched_endpoint_materialization_evidence",
+                     debt.matchedEndpointMaterializationEvidence},
+                    {"result_slot_only_identity", debt.resultSlotOnlyIdentity},
+                    {"explanation", debt.explanation},
+                });
+            }
             openExportHistoryEntries.push_back({
                 {"open_export_index", entry.openExportIndex},
                 {"edge_info_index", entry.edgeInfoIndex},
+                {"open_wire_compound_export_source",
+                 part::openWireCompoundExportSourceName(entry.openWireCompoundExportSource)},
+                {"open_wire_compound_edge_info_iteration",
+                 entry.openWireCompoundEdgeInfoIteration},
+                {"open_wire_compound_edge_info_iteration2",
+                 entry.openWireCompoundEdgeInfoIteration2},
+                {"open_wire_compound_owner_wire_info",
+                 entry.openWireCompoundOwnerWireInfo},
+                {"open_wire_compound_owner_wire_info2",
+                 entry.openWireCompoundOwnerWireInfo2},
+                {"open_wire_compound_open_leaf_export",
+                 entry.openWireCompoundOpenLeafExport},
+                {"open_wire_compound_unowned_open_edge_export",
+                 entry.openWireCompoundUnownedOpenEdgeExport},
+                {"open_wire_compound_root_current_member_child_producer",
+                 entry.openWireCompoundRootCurrentMemberChildProducer},
+                {"open_wire_compound_child_shape_identity_recorded",
+                 entry.openWireCompoundChildShapeIdentityRecorded},
+                {"open_wire_compound_child_wire_edge_count",
+                 entry.openWireCompoundChildWireEdgeCount},
+                {"open_wire_compound_child_wire_vertex_count",
+                 entry.openWireCompoundChildWireVertexCount},
                 {"wire_joiner_history_relation",
                  entry.historyRelationFromChildWireLedger
                      ? part::wireJoinerHistoryRelationName(entry.historyRelation)
@@ -1440,6 +1537,8 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
                  entry.openWireCompoundCurrentMemberSplitLedgerOutputCandidateMatchedVertexCount},
                 {"open_wire_compound_current_member_split_ledger_output_unmatched_vertex_count",
                  entry.openWireCompoundCurrentMemberSplitLedgerOutputUnmatchedVertexCount},
+                {"open_wire_compound_current_member_split_ledger_output_vertex_debt",
+                 currentMemberSplitOutputVertexDebt},
                 {"open_wire_compound_current_member_split_ledger_result_slot_only_vertex_count",
                  entry.openWireCompoundCurrentMemberSplitLedgerResultSlotOnlyVertexCount},
                 {"open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked",

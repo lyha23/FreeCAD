@@ -48,12 +48,33 @@ struct ElementHistory
     std::vector<std::string> sources;
 };
 
+struct SketchInternalWireJoinerEndpointIdentityDebt
+{
+    std::size_t outputVertexIndex = 0;
+    bool matchedMemberSplitLedger = false;
+    bool matchedCandidateLedger = false;
+    bool matchedEndpointMaterializationEvidence = false;
+    bool resultSlotOnlyIdentity = false;
+    std::string explanation;
+};
+
 struct SketchInternalWireJoinerOpenExportHistoryEntry
 {
     std::size_t openExportIndex = 0;
     std::size_t edgeInfoIndex = 0;
     TopoDS_Wire openExportWire;
     TopoDS_Edge openExportEdge;
+    std::string openWireCompoundExportSource;
+    int openWireCompoundEdgeInfoIteration = 0;
+    int openWireCompoundEdgeInfoIteration2 = 0;
+    std::size_t openWireCompoundOwnerWireInfo = 0;
+    std::size_t openWireCompoundOwnerWireInfo2 = 0;
+    bool openWireCompoundOpenLeafExport = false;
+    bool openWireCompoundUnownedOpenEdgeExport = false;
+    bool openWireCompoundRootCurrentMemberChildProducer = false;
+    bool openWireCompoundChildShapeIdentityRecorded = false;
+    std::size_t openWireCompoundChildWireEdgeCount = 0;
+    std::size_t openWireCompoundChildWireVertexCount = 0;
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::getOpenWires(), key "MapperHistory(aHistory)". This relation is assigned by
     // the part-layer WireJoiner history ledger and consumed by topo evidence instead of being
@@ -116,6 +137,8 @@ struct SketchInternalWireJoinerOpenExportHistoryEntry
     std::size_t openWireCompoundCurrentMemberSplitLedgerOutputMatchedVertexCount = 0;
     std::size_t openWireCompoundCurrentMemberSplitLedgerOutputCandidateMatchedVertexCount = 0;
     std::size_t openWireCompoundCurrentMemberSplitLedgerOutputUnmatchedVertexCount = 0;
+    std::vector<SketchInternalWireJoinerEndpointIdentityDebt>
+        openWireCompoundCurrentMemberSplitLedgerOutputVertexDebt;
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::build() adds "info.wire()" to openWireCompound before MapperHistory(aHistory).
     // This keeps result-slot-only vertex identity debt visible to ElementMap diagnostics.

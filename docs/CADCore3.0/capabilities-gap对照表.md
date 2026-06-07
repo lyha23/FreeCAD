@@ -36,6 +36,10 @@ WireJoiner relation 补充：`generated_open_export_bridge.covered` 现在包含
 
 WireJoiner history event 补充：`generated_open_export_bridge.covered` 现在包含 `wire_joiner_history_event_ledger` 与 `topo_consumes_wire_joiner_history_event_ledger`，`diagnostic_fields` 包含 `wire_joiner_history_event_count` 与 `wire_joiner_history_event_from_child_wire_ledger_count`。该 event ledger 在 `WireJoinerHistorySummary` 中记录每条 open-export 的 relation、source edge indices、splitter lineage、actual noOriginal purge 和 Modified / Generated fragment 标记，并由 runtime history / `SketchInternalHistoryContext` / topo evidence 通过 event index 转发；`topo_shape.cpp` mapper evidence 优先从 event 读取 relation/source lineage。它仍是 `MapperHistory(aHistory)` full 消费前的 bridge 收敛证据，不改变 `generated_open_export_bridge.status=covered_main_path`。
 
+WireJoiner child-wire ownership 补充：`generated_open_export_bridge.covered` 现在包含 `child_wire_open_export_ownership_source_ledger`、`child_wire_shape_identity_inventory`、`result_wire_producer_entry_consumes_child_wire_ownership`。`diagnostic_fields` 包含 `open_wire_compound_export_source`、EdgeInfo iteration / owner WireInfo 字段、root/current-member child producer 标记、child shape identity 和 edge/vertex count。该字段固定 result-wire producer entry 直接消费 `OpenWireCompoundWireInfo` child-wire ownership；`ResultWireProducerPlanLedger::producerOpenExportEdges` 仍只是建账边界 temporary bridge，不能把状态升级为 full。
+
+WireJoiner endpoint debt 补充：`generated_open_export_bridge.covered` 现在包含 `current_member_endpoint_identity_debt_per_endpoint`，`diagnostic_fields` 包含 `open_wire_compound_current_member_split_ledger_output_vertex_debt`。three-overlap 当前 3 个 blocked child 的 6 个输出端点均记录为 member/split 未命中、candidate 未命中、endpoint materialization 命中且 result-slot-only；该 per-endpoint explanation 只说明剩余 identity debt，不允许直接切 candidate wire 或恢复输出端 pruning。
+
 ## `topo_history` gap 拆分
 
 | Gap 项 | FreeCAD / 本地依据 | 可执行拆分 | 当前状态 | 优先级 | C3 阶段 | capability / diagnostics 目标 | 验收入口 |

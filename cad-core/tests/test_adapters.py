@@ -1114,6 +1114,22 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
         self.assertIn(
+            "child_wire_open_export_ownership_source_ledger",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
+            "child_wire_shape_identity_inventory",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
+            "result_wire_producer_entry_consumes_child_wire_ownership",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
+            "current_member_endpoint_identity_debt_per_endpoint",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
             "child_wire_source_vmap_endpoint_ledger",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
@@ -1250,6 +1266,50 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
         self.assertIn(
+            "open_wire_compound_export_source",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_edge_info_iteration",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_edge_info_iteration2",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_owner_wire_info",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_owner_wire_info2",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_open_leaf_export",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_unowned_open_edge_export",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_root_current_member_child_producer",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_child_shape_identity_recorded",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_child_wire_edge_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_child_wire_vertex_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
             "open_wire_compound_source_vmap_endpoint_ledger",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
@@ -1307,6 +1367,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertIn(
             "open_wire_compound_current_member_split_ledger_output_candidate_matched_vertex_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_current_member_split_ledger_output_vertex_debt",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
         self.assertIn(

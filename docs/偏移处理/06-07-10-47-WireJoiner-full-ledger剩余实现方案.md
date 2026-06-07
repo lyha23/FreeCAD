@@ -32,6 +32,8 @@ sourceEdgeArray
 - 本轮新增 request-local `WireJoinerHistoryRelation`，在 `WireJoiner` open-export entry 建账时由 `OpenWireCompoundWireInfo` child-wire ledger 发布 `preserved / split / generated / deleted` 关系；`sketcher` 只转发该关系，`topo_shape.cpp` 只消费该 typed relation，旧的 topo 层 relation 拼装 fallback 已删除。
 - 本轮继续新增 request-local `WireJoinerHistoryEvent`：每条 open-export entry 都挂 `wire_joiner_history_event_index`，并由 `wire_joiner_history_events` 记录 relation、source edge indices、splitter lineage、noOriginal actual purge 与 Modified / Generated fragment 标记。该 event 仍来自 child-wire ledger，只把 relation 从 entry 字段推进到 part 层可枚举 history event，不改变输出拓扑，也不替代完整 `MapperHistory(aHistory)`。
 - 本轮再把 `WireJoinerHistoryEvent` 列表转入 `SketchInternalHistoryContext`：`Sketch.InternalShape.sketch_internal_history` 现在输出 `wire_joiner_history_events`，`topo_shape.cpp` 通过 event index lookup 消费 event relation/source lineage，mapper evidence 输出 `wire_joiner_history_event_consumed_by_topo=true`。entry 里的 relation/source 字段仍保留为兼容转发和诊断，但 topo 主路径不再只靠 entry 字段消费 relation。
+- 本轮继续把 open-export ownership 前移到 `OpenWireCompoundWireInfo` child-wire slot：child-wire 现在记录 `OpenLeafIterationMinus3 / UnownedOpenEdge / RootCurrentMemberChildProducer` 来源、EdgeInfo iteration / iteration2、owner WireInfo / wireInfo2、child shape edge/vertex inventory、history event index 与 source edge indices；`result_wire_producer_ledger_entries` 直接消费这些 child-wire ownership 字段，不再在公开 entry 层重新解释 raw EdgeInfo candidate。
+- 本轮把 three-overlap current-member vertex debt 从 count-only 继续推进到 per-output-endpoint 账本：每个 blocked child 的输出端点都记录是否匹配 member/split ledger、candidate ledger、endpoint materialization evidence，以及当前是否仍是 result-slot-only identity。当前 3 个 blocked child 的 6 个输出端点均是 `member=false / candidate=false / endpoint_materialization=true / result_slot_only=true`，解释为 `output_endpoint_uses_endpoint_materialization_evidence_not_member_or_candidate_vertex`。
 
 但仍有两个 capability 不能升级：
 
@@ -46,6 +48,7 @@ sourceEdgeArray
 open_wire_compound_producer_ledger_wire_from_result_slot_evidence_wire_info_count = 3
 open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked_wire_info_count = 3
 open_wire_compound_current_member_split_ledger_output_unmatched_vertex_count = 6
+open_wire_compound_current_member_split_ledger_output_vertex_debt = 6 endpoints
 open_wire_compound_current_member_split_ledger_result_slot_only_vertex_count = 6
 open_wire_compound_current_member_split_ledger_output_candidate_matched_vertex_count = 0
 open_wire_compound_endpoint_provenance_wire_info_count = 15
@@ -134,11 +137,13 @@ open_wire_compound_endpoint_provenance_unmatched_vertex_count = 24
 
 - `OpenWireCompoundWireInfo` 已承接 source lineage、splitter lineage、producer ledger wire、noOriginal verdict、current-member blocker。
 - open-export history 和 topo evidence 读取 child-wire ledger，不回读 EdgeInfo helper。
+- child-wire slot 已显式记录 open export source、EdgeInfo iteration / iteration2、owner WireInfo / wireInfo2、root/current-member child producer 标记、history event index 和 child shape identity inventory。
+- `resultWireProducerLedgerEntryForChildWire()` 已直接消费 child-wire ownership，并把同一字段转发到 `wire_joiner_ledger` / `wire_joiner_history_detail` / `Sketch.InternalShape` history / topo evidence。
 
 剩余：
 
-- child-wire 的完整 owner 来源还不是 FreeCAD `WireJoinerP::build()` 自然产物。
-- `resultWireProducerLedgerEntry` 仍作为 producer entry / noOriginal candidate gate。
+- child-wire ownership 已接近 `WireJoinerP::build()` export condition，但 `ResultWireProducerPlanLedger::producerOpenExportEdges` 仍在建账边界提供 scoped producer edge。
+- EdgeInfo `resultWireProducer*` 仍作为内部临时诊断和 producer entry / noOriginal candidate gate 的前置 evidence。
 
 删除条件：
 
@@ -152,6 +157,7 @@ open_wire_compound_endpoint_provenance_unmatched_vertex_count = 24
 - current-member split vertex debt 已进入 child-wire ledger。
 - `wire_joiner_current_member_vertex_multiplicity_blocked` mapper diagnostic 固定 three-overlap 3 个 blocked child。
 - endpoint provenance ledger 已把 three-overlap 3 个 blocked child 的 6 个输出端点定位为 `source_vmap=0`、`candidate=0`、`endpoint_materialization=6`。
+- per-endpoint output vertex debt 已记录每个输出端点的 member/split、candidate、endpoint materialization 和 result-slot-only identity 状态；当前 6 个输出端点都只由 endpoint materialization evidence 保住 identity，尚未命中 member/split 或 candidate 顶点。
 
 剩余：
 
@@ -424,6 +430,8 @@ makeShapeWithElementMap(comp, MapperHistory(wireJoinerHistory), sourceEdges, op)
 本轮进度：
 
 - open-export relation 已从 topo 层字段推断前移到 WireJoiner child-wire ledger，并以 typed relation 和 request-local `WireJoinerHistoryEvent` 进入 runtime history / `SketchInternalHistoryContext` / topo evidence；topo legacy relation fallback 已删除，且 open-export mapper evidence 已通过 event index 消费 event relation/source lineage。这只是 `MapperHistory(aHistory)` 正式消费前的第一片，尚未替代 `TopoShape::makeShapeWithElementMap(..., MapperHistory(aHistory), sourceEdges, op)`。
+- openWireCompound child-wire ownership 已新增 export source / owner WireInfo / child shape identity / history event index，并由 result-wire producer entry 直接消费；`ResultWireProducerPlanLedger::producerOpenExportEdges` 仍只是建账边界的 temporary bridge，尚未删除。
+- three-overlap current-member vertex debt 已新增 per-endpoint explanation，明确 6 个输出端点仍是 endpoint materialization evidence 命中、member/split 与 candidate 身份均未命中，因此只能维持诊断账本，不能直接切 candidate wire。
 - `ResultWireProducerPlanLedger::producerOpenExportEdges`、EdgeInfo `resultWireProducer*`、`endpointMaterializationEvidenceVertices`、noOriginal split/source candidate bridge 仍保留，因此 `generated_open_export_bridge` 与 `purge_as_original_bridge` 继续保持 `covered_main_path`。
 
 ## 字段删除顺序

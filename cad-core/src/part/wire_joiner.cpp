@@ -152,6 +152,23 @@ const char* wireJoinerHistoryRelationName(WireJoinerHistoryRelation relation)
     return "preserved";
 }
 
+const char* openWireCompoundExportSourceName(OpenWireCompoundExportSource source)
+{
+    switch (source) {
+        case OpenWireCompoundExportSource::None:
+            return "None";
+        case OpenWireCompoundExportSource::OpenLeafIterationMinus3:
+            return "OpenLeafIterationMinus3";
+        case OpenWireCompoundExportSource::UnownedOpenEdge:
+            return "UnownedOpenEdge";
+        case OpenWireCompoundExportSource::ResultWireProducerSlot:
+            return "ResultWireProducerSlot";
+        case OpenWireCompoundExportSource::RootCurrentMemberChildProducer:
+            return "RootCurrentMemberChildProducer";
+    }
+    return "None";
+}
+
 namespace
 {
 
@@ -2926,6 +2943,20 @@ ResultWireProducerLedgerEntry WireJoiner::resultWireProducerLedgerEntryForChildW
     entry.kind = childWire.resultWireProducer.kind;
     entry.state = childWire.resultWireProducer.state;
     entry.blocker = childWire.resultWireProducer.blocker;
+    entry.openWireCompoundExportSource = childWire.openExportSource;
+    entry.openWireCompoundEdgeInfoIteration = childWire.edgeInfoIteration;
+    entry.openWireCompoundEdgeInfoIteration2 = childWire.edgeInfoIteration2;
+    entry.openWireCompoundOwnerWireInfo = childWire.ownerWireInfo;
+    entry.openWireCompoundOwnerWireInfo2 = childWire.ownerWireInfo2;
+    entry.openWireCompoundOpenLeafExport = childWire.openLeafIterationMinus3;
+    entry.openWireCompoundUnownedOpenEdgeExport = childWire.unownedOpenEdge;
+    entry.openWireCompoundRootCurrentMemberChildProducer =
+        childWire.rootCurrentMemberChildProducer;
+    entry.wireJoinerHistoryEventIndex = childWire.wireJoinerHistoryEventIndex;
+    entry.childShapeIdentityRecorded = childWire.childShapeIdentityRecorded;
+    entry.childWireEdgeCount = childWire.childWireEdgeCount;
+    entry.childWireVertexCount = childWire.childWireVertexCount;
+    entry.sourceEdgeIndices = childWire.sourceEdgeIndices;
     return entry;
 }
 
@@ -3593,6 +3624,19 @@ void WireJoiner::buildFinalEdgeOwnership(
             entry.openWireCompoundChildWireInfoIndex = static_cast<std::size_t>(
                 childWireIt - finalInfo.openWireCompoundWires.begin()
             );
+            entry.openWireCompoundExportSource = childWireIt->openExportSource;
+            entry.openWireCompoundEdgeInfoIteration = childWireIt->edgeInfoIteration;
+            entry.openWireCompoundEdgeInfoIteration2 = childWireIt->edgeInfoIteration2;
+            entry.openWireCompoundOwnerWireInfo = childWireIt->ownerWireInfo;
+            entry.openWireCompoundOwnerWireInfo2 = childWireIt->ownerWireInfo2;
+            entry.openWireCompoundOpenLeafExport = childWireIt->openLeafIterationMinus3;
+            entry.openWireCompoundUnownedOpenEdgeExport = childWireIt->unownedOpenEdge;
+            entry.openWireCompoundRootCurrentMemberChildProducer =
+                childWireIt->rootCurrentMemberChildProducer;
+            entry.openWireCompoundChildShapeIdentityRecorded =
+                childWireIt->childShapeIdentityRecorded;
+            entry.openWireCompoundChildWireEdgeCount = childWireIt->childWireEdgeCount;
+            entry.openWireCompoundChildWireVertexCount = childWireIt->childWireVertexCount;
             entry.openWireCompoundSourceEdgeIndices = childWireIt->sourceEdgeIndices;
             entry.openWireCompoundSourceLineageFromSplitterHistory =
                 childWireIt->sourceLineageFromSplitterHistory;
@@ -3657,6 +3701,21 @@ void WireJoiner::buildFinalEdgeOwnership(
                 childWireIt->currentMemberSplitLedgerOutputCandidateMatchedVertexCount;
             entry.openWireCompoundCurrentMemberSplitLedgerOutputUnmatchedVertexCount =
                 childWireIt->currentMemberSplitLedgerOutputUnmatchedVertexCount;
+            entry.openWireCompoundCurrentMemberSplitLedgerOutputVertexDebt.clear();
+            entry.openWireCompoundCurrentMemberSplitLedgerOutputVertexDebt.reserve(
+                childWireIt->currentMemberSplitLedgerOutputVertexDebt.size()
+            );
+            for (const auto& debt :
+                 childWireIt->currentMemberSplitLedgerOutputVertexDebt) {
+                entry.openWireCompoundCurrentMemberSplitLedgerOutputVertexDebt.push_back({
+                    debt.outputVertexIndex,
+                    debt.matchedMemberSplitLedger,
+                    debt.matchedCandidateLedger,
+                    debt.matchedEndpointMaterializationEvidence,
+                    debt.resultSlotOnlyIdentity,
+                    debt.explanation,
+                });
+            }
             entry.openWireCompoundCurrentMemberSplitLedgerResultSlotOnlyVertexCount =
                 childWireIt->currentMemberSplitLedgerResultSlotOnlyVertexCount;
             entry.openWireCompoundCurrentMemberSplitLedgerVertexMultiplicityBlocked =
@@ -3734,6 +3793,7 @@ void WireJoiner::buildFinalEdgeOwnership(
             entry.wireJoinerHistoryEventIndex = event.eventIndex;
             entry.wireJoinerHistoryEventFromChildWireLedger =
                 event.relationFromChildWireLedger;
+            childWireIt->wireJoinerHistoryEventIndex = event.eventIndex;
             if (event.relationFromChildWireLedger) {
                 ++historySummary_.historyEventFromChildWireLedgerCount;
             }
@@ -6367,6 +6427,21 @@ void WireJoiner::recordOpenWireCompoundLedger(
 
         OpenWireCompoundWireInfo childWire;
         childWire.edgeIndex = edgeIndex;
+        childWire.edgeInfoIteration = edgeInfo.iteration;
+        childWire.edgeInfoIteration2 = edgeInfo.iteration2;
+        childWire.ownerWireInfo = edgeInfo.wireInfo;
+        childWire.ownerWireInfo2 = edgeInfo.wireInfo2;
+        childWire.openLeafIterationMinus3 = edgeInfo.iteration == -3;
+        childWire.unownedOpenEdge = edgeInfo.wireInfo == 0U && edgeInfo.iteration >= 0;
+        if (childWire.openLeafIterationMinus3) {
+            childWire.openExportSource = OpenWireCompoundExportSource::OpenLeafIterationMinus3;
+        }
+        else if (childWire.unownedOpenEdge) {
+            childWire.openExportSource = OpenWireCompoundExportSource::UnownedOpenEdge;
+        }
+        else if (edgeInfo.resultWireProducerCandidate) {
+            childWire.openExportSource = OpenWireCompoundExportSource::ResultWireProducerSlot;
+        }
         if (edgeIndex < producerPlanLedger.endpointMaterializationEvidenceVertices.size()
             && producerPlanLedger.endpointMaterializationEvidenceVertices[edgeIndex].size()
                 >= 2U
@@ -6538,6 +6613,14 @@ void WireJoiner::recordOpenWireCompoundLedger(
             = edgeInfo.resultWireProducerSuperEdgeRootProducerUnownedRemovalChildWireReady;
         childWire.currentMemberEdgeInfo
             = edgeInfo.resultWireProducerSuperEdgeRootCurrentMember;
+        childWire.rootCurrentMemberChildProducer = childWire.currentMemberEdgeInfo
+            || edgeInfo.resultWireProducerSuperEdgeMember
+            || edgeInfo.resultWireProducerSuperEdgeRootOpenLifecycle;
+        if (childWire.rootCurrentMemberChildProducer
+            && childWire.openExportSource == OpenWireCompoundExportSource::ResultWireProducerSlot) {
+            childWire.openExportSource =
+                OpenWireCompoundExportSource::RootCurrentMemberChildProducer;
+        }
         childWire.rootResultWireProducerCoveredMemberEdgeInfoIndices
             = edgeInfo.resultWireProducerSuperEdgeRootCoveredMemberIndices;
         if (childWire.superEdgeRootEdgeInfoIndex < info.edges.size()) {
@@ -6768,16 +6851,48 @@ void WireJoiner::recordOpenWireCompoundLedger(
                     childWire.currentMemberSplitLedgerOutputVertexDebt.reserve(
                         outputVertices.size()
                     );
-                    for (const TopoDS_Vertex& vertex : outputVertices) {
+                    for (std::size_t outputVertexIndex = 0;
+                         outputVertexIndex < outputVertices.size();
+                         ++outputVertexIndex) {
+                        const TopoDS_Vertex& vertex = outputVertices[outputVertexIndex];
                         OpenWireCompoundWireInfo::CurrentMemberSplitLedgerVertexDebt debt;
+                        debt.outputVertexIndex = outputVertexIndex;
                         debt.outputVertex = vertex;
                         debt.matchedMemberSplitLedger =
                             vertexMatchesAnyByIdentity(vertex, memberLedgerVertices);
                         debt.matchedCandidateLedger =
                             vertexMatchesAnyByIdentity(vertex, candidateVertices);
+                        debt.matchedEndpointMaterializationEvidence =
+                            vertexMatchesAnyByIdentity(
+                                vertex,
+                                childWire.endpointMaterializationEvidenceVertices
+                            );
                         debt.resultSlotOnlyIdentity =
                             !debt.matchedMemberSplitLedger
                             && vertexMatchesAnyByIdentity(vertex, resultSlotVertices);
+                        if (
+                            !debt.matchedMemberSplitLedger && !debt.matchedCandidateLedger
+                            && debt.resultSlotOnlyIdentity
+                            && debt.matchedEndpointMaterializationEvidence
+                        ) {
+                            debt.explanation =
+                                "output_endpoint_uses_endpoint_materialization_evidence_not_member_or_candidate_vertex";
+                        }
+                        else if (!debt.matchedMemberSplitLedger && !debt.matchedCandidateLedger) {
+                            debt.explanation =
+                                "output_endpoint_missing_member_split_and_candidate_identity";
+                        }
+                        else if (!debt.matchedMemberSplitLedger) {
+                            debt.explanation =
+                                "output_endpoint_matches_candidate_but_not_member_split_identity";
+                        }
+                        else if (!debt.matchedCandidateLedger) {
+                            debt.explanation =
+                                "output_endpoint_matches_member_split_but_not_candidate_identity";
+                        }
+                        else {
+                            debt.explanation = "output_endpoint_matches_member_split_and_candidate_identity";
+                        }
                         childWire.currentMemberSplitLedgerOutputVertexDebt.push_back(
                             std::move(debt)
                         );
@@ -6955,6 +7070,10 @@ void WireJoiner::recordOpenWireCompoundLedger(
          ++childWireIndex) {
         OpenWireCompoundWireInfo& childWire = info.openWireCompoundWires[childWireIndex];
         recordEndpointProvenance(childWire, false);
+        const std::vector<TopoDS_Edge> childWireEdges = wireEdges(childWire.wire);
+        childWire.childShapeIdentityRecorded = childWire.wireBuilt && !childWire.wire.IsNull();
+        childWire.childWireEdgeCount = childWireEdges.size();
+        childWire.childWireVertexCount = wireVertices(childWire.wire).size();
         childWire.resultWireProducer
             = childWireResultWireProducerIdentity(info, childWire, childWireIndex);
         if (childWire.edgeIndex < info.edges.size()) {

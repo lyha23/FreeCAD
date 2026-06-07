@@ -2857,6 +2857,19 @@ nlohmann::json wireJoinerOpenExportEvidenceJson(
 )
 {
     const std::string relation = wireJoinerRelationForOpenExportEntry(entry, event);
+    nlohmann::json currentMemberSplitOutputVertexDebt = nlohmann::json::array();
+    for (const SketchInternalWireJoinerEndpointIdentityDebt& debt :
+         entry.openWireCompoundCurrentMemberSplitLedgerOutputVertexDebt) {
+        currentMemberSplitOutputVertexDebt.push_back({
+            {"output_vertex_index", debt.outputVertexIndex},
+            {"matched_member_split_ledger", debt.matchedMemberSplitLedger},
+            {"matched_candidate_ledger", debt.matchedCandidateLedger},
+            {"matched_endpoint_materialization_evidence",
+             debt.matchedEndpointMaterializationEvidence},
+            {"result_slot_only_identity", debt.resultSlotOnlyIdentity},
+            {"explanation", debt.explanation},
+        });
+    }
     return {
         {"producer", "WireJoiner"},
         {"source_edge_index", sourceEdgeIndex},
@@ -2891,6 +2904,22 @@ nlohmann::json wireJoinerOpenExportEvidenceJson(
          entry.resultWireProducerCurrentMemberEdgeInfoIndex},
         {"result_wire_producer_child_wire_info_index", entry.resultWireProducerChildWireInfoIndex},
         {"open_wire_compound_child_wire_info_index", entry.openWireCompoundChildWireInfoIndex},
+        {"open_wire_compound_export_source", entry.openWireCompoundExportSource},
+        {"open_wire_compound_edge_info_iteration", entry.openWireCompoundEdgeInfoIteration},
+        {"open_wire_compound_edge_info_iteration2", entry.openWireCompoundEdgeInfoIteration2},
+        {"open_wire_compound_owner_wire_info", entry.openWireCompoundOwnerWireInfo},
+        {"open_wire_compound_owner_wire_info2", entry.openWireCompoundOwnerWireInfo2},
+        {"open_wire_compound_open_leaf_export", entry.openWireCompoundOpenLeafExport},
+        {"open_wire_compound_unowned_open_edge_export",
+         entry.openWireCompoundUnownedOpenEdgeExport},
+        {"open_wire_compound_root_current_member_child_producer",
+         entry.openWireCompoundRootCurrentMemberChildProducer},
+        {"open_wire_compound_child_shape_identity_recorded",
+         entry.openWireCompoundChildShapeIdentityRecorded},
+        {"open_wire_compound_child_wire_edge_count",
+         entry.openWireCompoundChildWireEdgeCount},
+        {"open_wire_compound_child_wire_vertex_count",
+         entry.openWireCompoundChildWireVertexCount},
         {"open_wire_compound_source_edge_indices", entry.openWireCompoundSourceEdgeIndices},
         {"open_wire_compound_source_lineage_from_splitter_history",
          entry.openWireCompoundSourceLineageFromSplitterHistory},
@@ -2955,6 +2984,8 @@ nlohmann::json wireJoinerOpenExportEvidenceJson(
          entry.openWireCompoundCurrentMemberSplitLedgerOutputCandidateMatchedVertexCount},
         {"open_wire_compound_current_member_split_ledger_output_unmatched_vertex_count",
          entry.openWireCompoundCurrentMemberSplitLedgerOutputUnmatchedVertexCount},
+        {"open_wire_compound_current_member_split_ledger_output_vertex_debt",
+         currentMemberSplitOutputVertexDebt},
         {"open_wire_compound_current_member_split_ledger_result_slot_only_vertex_count",
          entry.openWireCompoundCurrentMemberSplitLedgerResultSlotOnlyVertexCount},
         {"open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked",
@@ -3243,9 +3274,40 @@ nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& h
     nlohmann::json wireJoinerOpenExportEntries = nlohmann::json::array();
     for (const SketchInternalWireJoinerOpenExportHistoryEntry& entry :
          history.wireJoinerOpenExportHistoryEntries) {
+        nlohmann::json currentMemberSplitOutputVertexDebt = nlohmann::json::array();
+        for (const SketchInternalWireJoinerEndpointIdentityDebt& debt :
+             entry.openWireCompoundCurrentMemberSplitLedgerOutputVertexDebt) {
+            currentMemberSplitOutputVertexDebt.push_back({
+                {"output_vertex_index", debt.outputVertexIndex},
+                {"matched_member_split_ledger", debt.matchedMemberSplitLedger},
+                {"matched_candidate_ledger", debt.matchedCandidateLedger},
+                {"matched_endpoint_materialization_evidence",
+                 debt.matchedEndpointMaterializationEvidence},
+                {"result_slot_only_identity", debt.resultSlotOnlyIdentity},
+                {"explanation", debt.explanation},
+            });
+        }
         wireJoinerOpenExportEntries.push_back({
             {"open_export_index", entry.openExportIndex},
             {"edge_info_index", entry.edgeInfoIndex},
+            {"open_wire_compound_export_source", entry.openWireCompoundExportSource},
+            {"open_wire_compound_edge_info_iteration",
+             entry.openWireCompoundEdgeInfoIteration},
+            {"open_wire_compound_edge_info_iteration2",
+             entry.openWireCompoundEdgeInfoIteration2},
+            {"open_wire_compound_owner_wire_info", entry.openWireCompoundOwnerWireInfo},
+            {"open_wire_compound_owner_wire_info2", entry.openWireCompoundOwnerWireInfo2},
+            {"open_wire_compound_open_leaf_export", entry.openWireCompoundOpenLeafExport},
+            {"open_wire_compound_unowned_open_edge_export",
+             entry.openWireCompoundUnownedOpenEdgeExport},
+            {"open_wire_compound_root_current_member_child_producer",
+             entry.openWireCompoundRootCurrentMemberChildProducer},
+            {"open_wire_compound_child_shape_identity_recorded",
+             entry.openWireCompoundChildShapeIdentityRecorded},
+            {"open_wire_compound_child_wire_edge_count",
+             entry.openWireCompoundChildWireEdgeCount},
+            {"open_wire_compound_child_wire_vertex_count",
+             entry.openWireCompoundChildWireVertexCount},
             {"wire_joiner_history_relation", entry.wireJoinerHistoryRelation},
             {"wire_joiner_history_relation_from_child_wire_ledger",
              entry.wireJoinerHistoryRelationFromChildWireLedger},
@@ -3327,6 +3389,8 @@ nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& h
              entry.openWireCompoundCurrentMemberSplitLedgerOutputCandidateMatchedVertexCount},
             {"open_wire_compound_current_member_split_ledger_output_unmatched_vertex_count",
              entry.openWireCompoundCurrentMemberSplitLedgerOutputUnmatchedVertexCount},
+            {"open_wire_compound_current_member_split_ledger_output_vertex_debt",
+             currentMemberSplitOutputVertexDebt},
             {"open_wire_compound_current_member_split_ledger_result_slot_only_vertex_count",
              entry.openWireCompoundCurrentMemberSplitLedgerResultSlotOnlyVertexCount},
             {"open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked",
