@@ -2867,7 +2867,21 @@ nlohmann::json wireJoinerOpenExportEvidenceJson(
             {"matched_endpoint_materialization_evidence",
              debt.matchedEndpointMaterializationEvidence},
             {"result_slot_only_identity", debt.resultSlotOnlyIdentity},
+            {"current_child_wire_output_vertex_matches_other_output",
+             debt.currentChildWireOutputVertexMatchesOtherOutput},
+            {"candidate_wire_vertex_matches_other_output",
+             debt.candidateWireVertexMatchesOtherOutput},
+            {"endpoint_materialization_evidence_vertex_matches_other_output",
+             debt.endpointMaterializationEvidenceVertexMatchesOtherOutput},
             {"explanation", debt.explanation},
+            {"current_child_wire_output_vertex_identity",
+             debt.currentChildWireOutputVertexIdentity},
+            {"member_split_ledger_vertex_identity",
+             debt.memberSplitLedgerVertexIdentity},
+            {"candidate_wire_vertex_identity", debt.candidateWireVertexIdentity},
+            {"endpoint_materialization_evidence_vertex_identity",
+             debt.endpointMaterializationEvidenceVertexIdentity},
+            {"mismatch_reason", debt.mismatchReason},
         });
     }
     return {
@@ -3284,7 +3298,21 @@ nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& h
                 {"matched_endpoint_materialization_evidence",
                  debt.matchedEndpointMaterializationEvidence},
                 {"result_slot_only_identity", debt.resultSlotOnlyIdentity},
+                {"current_child_wire_output_vertex_matches_other_output",
+                 debt.currentChildWireOutputVertexMatchesOtherOutput},
+                {"candidate_wire_vertex_matches_other_output",
+                 debt.candidateWireVertexMatchesOtherOutput},
+                {"endpoint_materialization_evidence_vertex_matches_other_output",
+                 debt.endpointMaterializationEvidenceVertexMatchesOtherOutput},
                 {"explanation", debt.explanation},
+                {"current_child_wire_output_vertex_identity",
+                 debt.currentChildWireOutputVertexIdentity},
+                {"member_split_ledger_vertex_identity",
+                 debt.memberSplitLedgerVertexIdentity},
+                {"candidate_wire_vertex_identity", debt.candidateWireVertexIdentity},
+                {"endpoint_materialization_evidence_vertex_identity",
+                 debt.endpointMaterializationEvidenceVertexIdentity},
+                {"mismatch_reason", debt.mismatchReason},
             });
         }
         wireJoinerOpenExportEntries.push_back({

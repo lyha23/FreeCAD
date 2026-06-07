@@ -50,12 +50,23 @@ struct ElementHistory
 
 struct SketchInternalWireJoinerEndpointIdentityDebt
 {
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::getOpenWires(), key "MapperHistory(aHistory)". Topo only forwards the
+    // part-layer endpoint identity resolver; it does not infer replacement from output geometry.
     std::size_t outputVertexIndex = 0;
     bool matchedMemberSplitLedger = false;
     bool matchedCandidateLedger = false;
     bool matchedEndpointMaterializationEvidence = false;
     bool resultSlotOnlyIdentity = false;
+    bool currentChildWireOutputVertexMatchesOtherOutput = false;
+    bool candidateWireVertexMatchesOtherOutput = false;
+    bool endpointMaterializationEvidenceVertexMatchesOtherOutput = false;
     std::string explanation;
+    std::string currentChildWireOutputVertexIdentity;
+    std::string memberSplitLedgerVertexIdentity;
+    std::string candidateWireVertexIdentity;
+    std::string endpointMaterializationEvidenceVertexIdentity;
+    std::string mismatchReason;
 };
 
 struct SketchInternalWireJoinerOpenExportHistoryEntry

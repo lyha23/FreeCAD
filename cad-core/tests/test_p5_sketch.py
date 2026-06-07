@@ -880,6 +880,66 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             )
             self.assertEqual(
                 ledger[
+                    "open_wire_compound_current_member_split_ledger_output_candidate_matched_vertex_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                ledger[
+                    "open_wire_compound_current_member_split_ledger_output_distinct_vertex_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                ledger[
+                    "open_wire_compound_current_member_split_ledger_candidate_distinct_vertex_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                ledger[
+                    "open_wire_compound_current_member_split_ledger_endpoint_materialization_distinct_vertex_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                ledger[
+                    "open_wire_compound_current_member_split_ledger_candidate_vertex_multiplicity_loss_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                ledger[
+                    "open_wire_compound_current_member_split_ledger_output_other_output_matched_vertex_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                ledger[
+                    "open_wire_compound_current_member_split_ledger_candidate_other_output_matched_vertex_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                ledger[
+                    "open_wire_compound_current_member_split_ledger_endpoint_materialization_other_output_matched_vertex_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                ledger[
+                    "open_wire_compound_current_member_split_ledger_candidate_vertex_reuse_risk_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                ledger[
+                    "open_wire_compound_current_member_split_ledger_candidate_missing_shared_output_identity_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                ledger[
                     "open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked_wire_info_count"
                 ],
                 0,
@@ -1029,6 +1089,73 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ],
             ledger[
                 "open_wire_compound_current_member_split_ledger_vertex_candidate_wire_info_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_current_member_split_ledger_candidate_distinct_vertex_count"
+            ],
+            ledger[
+                "open_wire_compound_current_member_split_ledger_output_distinct_vertex_count"
+            ],
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_current_member_split_ledger_candidate_vertex_multiplicity_loss_count"
+            ],
+            ledger[
+                "open_wire_compound_current_member_split_ledger_output_distinct_vertex_count"
+            ]
+            - ledger[
+                "open_wire_compound_current_member_split_ledger_candidate_distinct_vertex_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_current_member_split_ledger_endpoint_materialization_distinct_vertex_count"
+            ],
+            ledger[
+                "open_wire_compound_current_member_split_ledger_output_distinct_vertex_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_current_member_split_ledger_output_other_output_matched_vertex_count"
+            ],
+            ledger[
+                "open_wire_compound_current_member_split_ledger_output_vertex_ledger_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_current_member_split_ledger_candidate_other_output_matched_vertex_count"
+            ],
+            ledger[
+                "open_wire_compound_current_member_split_ledger_output_vertex_ledger_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_current_member_split_ledger_endpoint_materialization_other_output_matched_vertex_count"
+            ],
+            ledger[
+                "open_wire_compound_current_member_split_ledger_output_vertex_ledger_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_current_member_split_ledger_candidate_vertex_reuse_risk_count"
+            ],
+            ledger[
+                "open_wire_compound_current_member_split_ledger_candidate_other_output_matched_vertex_count"
+            ],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_current_member_split_ledger_candidate_missing_shared_output_identity_count"
+            ],
+            ledger[
+                "open_wire_compound_current_member_split_ledger_output_other_output_matched_vertex_count"
             ],
         )
         self.assertLessEqual(
@@ -1491,7 +1618,18 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     self.assertIn("matched_candidate_ledger", debt)
                     self.assertIn("matched_endpoint_materialization_evidence", debt)
                     self.assertIn("result_slot_only_identity", debt)
+                    self.assertIn("current_child_wire_output_vertex_matches_other_output", debt)
+                    self.assertIn("candidate_wire_vertex_matches_other_output", debt)
+                    self.assertIn(
+                        "endpoint_materialization_evidence_vertex_matches_other_output",
+                        debt,
+                    )
                     self.assertIn("explanation", debt)
+                    self.assertIn("current_child_wire_output_vertex_identity", debt)
+                    self.assertIn("member_split_ledger_vertex_identity", debt)
+                    self.assertIn("candidate_wire_vertex_identity", debt)
+                    self.assertIn("endpoint_materialization_evidence_vertex_identity", debt)
+                    self.assertIn("mismatch_reason", debt)
                     self.assertFalse(debt["matched_member_split_ledger"])
                     self.assertFalse(debt["matched_candidate_ledger"])
                     self.assertTrue(debt["matched_endpoint_materialization_evidence"])
@@ -1500,6 +1638,46 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                         debt["explanation"],
                         "output_endpoint_uses_endpoint_materialization_evidence_not_member_or_candidate_vertex",
                     )
+                    self.assertEqual(
+                        debt["current_child_wire_output_vertex_identity"],
+                        "current_child_wire_output_vertex",
+                    )
+                    self.assertEqual(
+                        debt["member_split_ledger_vertex_identity"],
+                        "no_identity_match",
+                    )
+                    self.assertEqual(
+                        debt["candidate_wire_vertex_identity"],
+                        "different_from_current_child_wire_output",
+                    )
+                    self.assertEqual(
+                        debt["endpoint_materialization_evidence_vertex_identity"],
+                        "same_as_current_child_wire_output",
+                    )
+                    self.assertIn(
+                        debt["mismatch_reason"],
+                        {
+                            "candidate_wire_endpoint_does_not_preserve_current_shared_output_identity",
+                            "candidate_wire_endpoint_reuses_other_child_output_vertex_while_current_output_is_result_slot_only_identity",
+                            "candidate_wire_endpoint_identity_differs_from_current_output_result_slot_only_vertex",
+                        },
+                    )
+                    if (
+                        debt["current_child_wire_output_vertex_matches_other_output"]
+                        and not debt["candidate_wire_vertex_matches_other_output"]
+                    ):
+                        self.assertEqual(
+                            debt["mismatch_reason"],
+                            "candidate_wire_endpoint_does_not_preserve_current_shared_output_identity",
+                        )
+                    if (
+                        debt["candidate_wire_vertex_matches_other_output"]
+                        and not debt["current_child_wire_output_vertex_matches_other_output"]
+                    ):
+                        self.assertEqual(
+                            debt["mismatch_reason"],
+                            "candidate_wire_endpoint_reuses_other_child_output_vertex_while_current_output_is_result_slot_only_identity",
+                        )
                 self.assertFalse(entry["open_wire_compound_current_member_producer_output"])
                 self.assertEqual(entry["result_wire_producer_kind"], "CurrentMemberChildWire")
                 self.assertEqual(entry["result_wire_producer_state"], "ChildWireReady")
@@ -4077,6 +4255,60 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             6,
         )
         self.assertEqual(
+            ledger[
+                "open_wire_compound_current_member_split_ledger_output_distinct_vertex_count"
+            ],
+            5,
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_current_member_split_ledger_candidate_distinct_vertex_count"
+            ],
+            5,
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_current_member_split_ledger_endpoint_materialization_distinct_vertex_count"
+            ],
+            5,
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_current_member_split_ledger_candidate_vertex_multiplicity_loss_count"
+            ],
+            0,
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_current_member_split_ledger_output_other_output_matched_vertex_count"
+            ],
+            6,
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_current_member_split_ledger_candidate_other_output_matched_vertex_count"
+            ],
+            0,
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_current_member_split_ledger_endpoint_materialization_other_output_matched_vertex_count"
+            ],
+            6,
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_current_member_split_ledger_candidate_vertex_reuse_risk_count"
+            ],
+            0,
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_current_member_split_ledger_candidate_missing_shared_output_identity_count"
+            ],
+            6,
+        )
+        self.assertEqual(
             ledger["open_wire_compound_endpoint_provenance_wire_info_count"],
             15,
         )
@@ -4261,6 +4493,47 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 {
                     "output_endpoint_uses_endpoint_materialization_evidence_not_member_or_candidate_vertex"
                 },
+            )
+            self.assertEqual(
+                {debt["current_child_wire_output_vertex_identity"] for debt in vertex_debt},
+                {"current_child_wire_output_vertex"},
+            )
+            self.assertEqual(
+                {debt["member_split_ledger_vertex_identity"] for debt in vertex_debt},
+                {"no_identity_match"},
+            )
+            self.assertEqual(
+                {debt["candidate_wire_vertex_identity"] for debt in vertex_debt},
+                {"different_from_current_child_wire_output"},
+            )
+            self.assertEqual(
+                {debt["endpoint_materialization_evidence_vertex_identity"] for debt in vertex_debt},
+                {"same_as_current_child_wire_output"},
+            )
+            self.assertLessEqual(
+                {debt["mismatch_reason"] for debt in vertex_debt},
+                {
+                    "candidate_wire_endpoint_does_not_preserve_current_shared_output_identity",
+                    "candidate_wire_endpoint_reuses_other_child_output_vertex_while_current_output_is_result_slot_only_identity",
+                    "candidate_wire_endpoint_identity_differs_from_current_output_result_slot_only_vertex",
+                },
+            )
+            self.assertTrue(
+                all(
+                    debt["current_child_wire_output_vertex_matches_other_output"]
+                    for debt in vertex_debt
+                )
+            )
+            self.assertFalse(
+                any(debt["candidate_wire_vertex_matches_other_output"] for debt in vertex_debt)
+            )
+            self.assertTrue(
+                all(
+                    debt[
+                        "endpoint_materialization_evidence_vertex_matches_other_output"
+                    ]
+                    for debt in vertex_debt
+                )
             )
         self.assert_object_matches_expected(result, "p5", "sketch-internal-face-three-overlap-circles")
 

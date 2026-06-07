@@ -1222,6 +1222,14 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
         self.assertIn(
+            "current_member_split_ledger_endpoint_identity_resolver",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
+            "current_member_split_ledger_candidate_multiplicity_loss_diagnostic",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
             "current_member_closed_source_result_slot_bridge_diagnostic_removed",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
@@ -1367,6 +1375,46 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertIn(
             "open_wire_compound_current_member_split_ledger_output_candidate_matched_vertex_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_current_member_split_ledger_output_distinct_vertex_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_current_member_split_ledger_candidate_distinct_vertex_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_current_member_split_ledger_endpoint_materialization_distinct_vertex_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_current_member_split_ledger_candidate_vertex_multiplicity_loss_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_current_member_split_ledger_output_other_output_matched_vertex_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_current_member_split_ledger_candidate_other_output_matched_vertex_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_current_member_split_ledger_endpoint_materialization_other_output_matched_vertex_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_current_member_split_ledger_candidate_vertex_reuse_risk_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_current_member_split_ledger_candidate_missing_shared_output_identity_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_current_member_split_ledger_endpoint_identity_resolver",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
         self.assertIn(

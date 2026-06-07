@@ -1607,6 +1607,26 @@ bool vertexMatchesAnyByIdentity(const TopoDS_Vertex& vertex, const std::vector<T
     });
 }
 
+void appendUniqueVertexByIdentity(std::vector<TopoDS_Vertex>& vertices, const TopoDS_Vertex& vertex)
+{
+    if (vertex.IsNull()) {
+        return;
+    }
+    if (!vertexMatchesAnyByIdentity(vertex, vertices)) {
+        vertices.push_back(vertex);
+    }
+}
+
+std::vector<TopoDS_Vertex> uniqueVerticesByIdentity(const std::vector<TopoDS_Vertex>& vertices)
+{
+    std::vector<TopoDS_Vertex> uniqueVertices;
+    uniqueVertices.reserve(vertices.size());
+    for (const TopoDS_Vertex& vertex : vertices) {
+        appendUniqueVertexByIdentity(uniqueVertices, vertex);
+    }
+    return uniqueVertices;
+}
+
 std::vector<TopoDS_Vertex> edgeEndpointVertices(const std::vector<TopoDS_Edge>& edges)
 {
     std::vector<TopoDS_Vertex> vertices;
@@ -3707,14 +3727,31 @@ void WireJoiner::buildFinalEdgeOwnership(
             );
             for (const auto& debt :
                  childWireIt->currentMemberSplitLedgerOutputVertexDebt) {
-                entry.openWireCompoundCurrentMemberSplitLedgerOutputVertexDebt.push_back({
-                    debt.outputVertexIndex,
-                    debt.matchedMemberSplitLedger,
-                    debt.matchedCandidateLedger,
-                    debt.matchedEndpointMaterializationEvidence,
-                    debt.resultSlotOnlyIdentity,
-                    debt.explanation,
-                });
+                WireJoinerEndpointIdentityDebt entryDebt;
+                entryDebt.outputVertexIndex = debt.outputVertexIndex;
+                entryDebt.matchedMemberSplitLedger = debt.matchedMemberSplitLedger;
+                entryDebt.matchedCandidateLedger = debt.matchedCandidateLedger;
+                entryDebt.matchedEndpointMaterializationEvidence =
+                    debt.matchedEndpointMaterializationEvidence;
+                entryDebt.resultSlotOnlyIdentity = debt.resultSlotOnlyIdentity;
+                entryDebt.currentChildWireOutputVertexMatchesOtherOutput =
+                    debt.currentChildWireOutputVertexMatchesOtherOutput;
+                entryDebt.candidateWireVertexMatchesOtherOutput =
+                    debt.candidateWireVertexMatchesOtherOutput;
+                entryDebt.endpointMaterializationEvidenceVertexMatchesOtherOutput =
+                    debt.endpointMaterializationEvidenceVertexMatchesOtherOutput;
+                entryDebt.explanation = debt.explanation;
+                entryDebt.currentChildWireOutputVertexIdentity =
+                    debt.currentChildWireOutputVertexIdentity;
+                entryDebt.memberSplitLedgerVertexIdentity =
+                    debt.memberSplitLedgerVertexIdentity;
+                entryDebt.candidateWireVertexIdentity = debt.candidateWireVertexIdentity;
+                entryDebt.endpointMaterializationEvidenceVertexIdentity =
+                    debt.endpointMaterializationEvidenceVertexIdentity;
+                entryDebt.mismatchReason = debt.mismatchReason;
+                entry.openWireCompoundCurrentMemberSplitLedgerOutputVertexDebt.push_back(
+                    std::move(entryDebt)
+                );
             }
             entry.openWireCompoundCurrentMemberSplitLedgerResultSlotOnlyVertexCount =
                 childWireIt->currentMemberSplitLedgerResultSlotOnlyVertexCount;
@@ -6845,12 +6882,43 @@ void WireJoiner::recordOpenWireCompoundLedger(
                         childWire.producerLedgerWireFromEndpointMaterializationEvidence
                         ? outputVertices
                         : std::vector<TopoDS_Vertex> {};
+                    std::vector<TopoDS_Vertex> otherOutputVertices;
+                    for (const OpenWireCompoundWireInfo& ledgerChildWire :
+                         info.openWireCompoundWires) {
+                        if (ledgerChildWire.edgeIndex == childWire.edgeIndex
+                            || ledgerChildWire.wire.IsNull()) {
+                            continue;
+                        }
+                        const std::vector<TopoDS_Vertex> vertices =
+                            wireVertices(ledgerChildWire.wire);
+                        for (const TopoDS_Vertex& otherVertex : vertices) {
+                            appendUniqueVertexByIdentity(otherOutputVertices, otherVertex);
+                        }
+                    }
                     childWire.currentMemberSplitLedgerMemberVertices = memberLedgerVertices;
                     childWire.currentMemberSplitLedgerCandidateVertices = candidateVertices;
                     childWire.currentMemberSplitLedgerOutputVertexDebt.clear();
                     childWire.currentMemberSplitLedgerOutputVertexDebt.reserve(
                         outputVertices.size()
                     );
+                    auto indexedVertexIdentity = [](const std::vector<TopoDS_Vertex>& vertices,
+                                                    std::size_t vertexIndex,
+                                                    const TopoDS_Vertex& outputVertex,
+                                                    bool matchedAny,
+                                                    const char* missingReason) {
+                        if (vertexIndex >= vertices.size() || vertices[vertexIndex].IsNull()) {
+                            return matchedAny
+                                ? std::string("same_as_current_child_wire_output_other_endpoint")
+                                : std::string(missingReason);
+                        }
+                        if (outputVertex.IsSame(vertices[vertexIndex])) {
+                            return std::string("same_as_current_child_wire_output");
+                        }
+                        if (matchedAny) {
+                            return std::string("same_as_current_child_wire_output_other_endpoint");
+                        }
+                        return std::string("different_from_current_child_wire_output");
+                    };
                     for (std::size_t outputVertexIndex = 0;
                          outputVertexIndex < outputVertices.size();
                          ++outputVertexIndex) {
@@ -6870,6 +6938,49 @@ void WireJoiner::recordOpenWireCompoundLedger(
                         debt.resultSlotOnlyIdentity =
                             !debt.matchedMemberSplitLedger
                             && vertexMatchesAnyByIdentity(vertex, resultSlotVertices);
+                        debt.currentChildWireOutputVertexMatchesOtherOutput =
+                            vertexMatchesAnyByIdentity(vertex, otherOutputVertices);
+                        if (outputVertexIndex < candidateVertices.size()
+                            && !candidateVertices[outputVertexIndex].IsNull()) {
+                            debt.candidateWireVertexMatchesOtherOutput =
+                                vertexMatchesAnyByIdentity(
+                                    candidateVertices[outputVertexIndex],
+                                    otherOutputVertices
+                                );
+                        }
+                        if (outputVertexIndex
+                                < childWire.endpointMaterializationEvidenceVertices.size()
+                            && !childWire
+                                    .endpointMaterializationEvidenceVertices[outputVertexIndex]
+                                    .IsNull()) {
+                            debt.endpointMaterializationEvidenceVertexMatchesOtherOutput =
+                                vertexMatchesAnyByIdentity(
+                                    childWire
+                                        .endpointMaterializationEvidenceVertices[outputVertexIndex],
+                                    otherOutputVertices
+                                );
+                        }
+                        debt.currentChildWireOutputVertexIdentity =
+                            vertex.IsNull() ? "missing_current_child_wire_output_vertex"
+                                            : "current_child_wire_output_vertex";
+                        debt.memberSplitLedgerVertexIdentity = debt.matchedMemberSplitLedger
+                            ? "same_as_current_child_wire_output"
+                            : "no_identity_match";
+                        debt.candidateWireVertexIdentity = indexedVertexIdentity(
+                            candidateVertices,
+                            outputVertexIndex,
+                            vertex,
+                            debt.matchedCandidateLedger,
+                            "missing_candidate_wire_endpoint"
+                        );
+                        debt.endpointMaterializationEvidenceVertexIdentity =
+                            indexedVertexIdentity(
+                                childWire.endpointMaterializationEvidenceVertices,
+                                outputVertexIndex,
+                                vertex,
+                                debt.matchedEndpointMaterializationEvidence,
+                                "missing_endpoint_materialization_evidence_vertex"
+                            );
                         if (
                             !debt.matchedMemberSplitLedger && !debt.matchedCandidateLedger
                             && debt.resultSlotOnlyIdentity
@@ -6892,6 +7003,28 @@ void WireJoiner::recordOpenWireCompoundLedger(
                         }
                         else {
                             debt.explanation = "output_endpoint_matches_member_split_and_candidate_identity";
+                        }
+                        if (!debt.matchedCandidateLedger && debt.resultSlotOnlyIdentity
+                            && debt.currentChildWireOutputVertexMatchesOtherOutput
+                            && !debt.candidateWireVertexMatchesOtherOutput) {
+                            debt.mismatchReason =
+                                "candidate_wire_endpoint_does_not_preserve_current_shared_output_identity";
+                        }
+                        else if (!debt.matchedCandidateLedger && debt.resultSlotOnlyIdentity
+                            && debt.candidateWireVertexMatchesOtherOutput
+                            && !debt.currentChildWireOutputVertexMatchesOtherOutput) {
+                            debt.mismatchReason =
+                                "candidate_wire_endpoint_reuses_other_child_output_vertex_while_current_output_is_result_slot_only_identity";
+                        }
+                        else if (!debt.matchedCandidateLedger && debt.resultSlotOnlyIdentity
+                            && debt.matchedEndpointMaterializationEvidence
+                            && debt.candidateWireVertexIdentity
+                                == "different_from_current_child_wire_output") {
+                            debt.mismatchReason =
+                                "candidate_wire_endpoint_identity_differs_from_current_output_result_slot_only_vertex";
+                        }
+                        else {
+                            debt.mismatchReason = debt.explanation;
                         }
                         childWire.currentMemberSplitLedgerOutputVertexDebt.push_back(
                             std::move(debt)
@@ -7198,6 +7331,9 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
         groups.push_back(MemberSuppressionRootGroup {rootEdgeInfoIndex, {}, {}});
         return groups.back();
     };
+    std::vector<TopoDS_Vertex> currentMemberSplitOutputDistinctVertices;
+    std::vector<TopoDS_Vertex> currentMemberSplitCandidateDistinctVertices;
+    std::vector<TopoDS_Vertex> currentMemberSplitEndpointMaterializationDistinctVertices;
     for (const WireInfo& info : openWires_) {
         summary.superEdgeCandidateCount += info.superEdges.size();
         for (const SuperEdgeInfo& superEdge : info.superEdges) {
@@ -7286,6 +7422,51 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
                 += childWire.currentMemberSplitLedgerOutputMatchedVertexCount;
             summary.openWireCompoundCurrentMemberSplitLedgerOutputCandidateMatchedVertexCount
                 += childWire.currentMemberSplitLedgerOutputCandidateMatchedVertexCount;
+            for (const OpenWireCompoundWireInfo::CurrentMemberSplitLedgerVertexDebt& debt :
+                 childWire.currentMemberSplitLedgerOutputVertexDebt) {
+                appendUniqueVertexByIdentity(
+                    currentMemberSplitOutputDistinctVertices,
+                    debt.outputVertex
+                );
+                if (debt.currentChildWireOutputVertexMatchesOtherOutput) {
+                    ++summary
+                        .openWireCompoundCurrentMemberSplitLedgerOutputOtherOutputMatchedVertexCount;
+                }
+                if (debt.candidateWireVertexMatchesOtherOutput) {
+                    ++summary
+                        .openWireCompoundCurrentMemberSplitLedgerCandidateOtherOutputMatchedVertexCount;
+                }
+                if (debt.endpointMaterializationEvidenceVertexMatchesOtherOutput) {
+                    ++summary
+                        .openWireCompoundCurrentMemberSplitLedgerEndpointMaterializationOtherOutputMatchedVertexCount;
+                }
+                if (!debt.currentChildWireOutputVertexMatchesOtherOutput
+                    && debt.candidateWireVertexMatchesOtherOutput) {
+                    ++summary
+                        .openWireCompoundCurrentMemberSplitLedgerCandidateVertexReuseRiskCount;
+                }
+                if (debt.currentChildWireOutputVertexMatchesOtherOutput
+                    && !debt.candidateWireVertexMatchesOtherOutput) {
+                    ++summary
+                        .openWireCompoundCurrentMemberSplitLedgerCandidateMissingSharedOutputIdentityCount;
+                }
+            }
+            if (!childWire.currentMemberSplitLedgerOutputVertexDebt.empty()) {
+                for (const TopoDS_Vertex& vertex :
+                     childWire.currentMemberSplitLedgerCandidateVertices) {
+                    appendUniqueVertexByIdentity(
+                        currentMemberSplitCandidateDistinctVertices,
+                        vertex
+                    );
+                }
+                for (const TopoDS_Vertex& vertex :
+                     childWire.endpointMaterializationEvidenceVertices) {
+                    appendUniqueVertexByIdentity(
+                        currentMemberSplitEndpointMaterializationDistinctVertices,
+                        vertex
+                    );
+                }
+            }
             if (childWire.currentMemberSplitLedgerVertexMultiplicityBlocked) {
                 ++summary
                     .openWireCompoundCurrentMemberSplitLedgerVertexMultiplicityBlockedWireInfoCount;
@@ -7699,6 +7880,18 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
             += info.repeatedSplitExhaustRerunNewWireSeedCandidateCount;
         summary.repeatedSplitExhaustGeneratedIdentityBlockedEdgeInfoCount
             += info.repeatedSplitExhaustGeneratedIdentityBlockedEdgeInfoCount;
+    }
+    summary.openWireCompoundCurrentMemberSplitLedgerOutputDistinctVertexCount =
+        currentMemberSplitOutputDistinctVertices.size();
+    summary.openWireCompoundCurrentMemberSplitLedgerCandidateDistinctVertexCount =
+        currentMemberSplitCandidateDistinctVertices.size();
+    summary.openWireCompoundCurrentMemberSplitLedgerEndpointMaterializationDistinctVertexCount =
+        currentMemberSplitEndpointMaterializationDistinctVertices.size();
+    if (summary.openWireCompoundCurrentMemberSplitLedgerOutputDistinctVertexCount
+        > summary.openWireCompoundCurrentMemberSplitLedgerCandidateDistinctVertexCount) {
+        summary.openWireCompoundCurrentMemberSplitLedgerCandidateVertexMultiplicityLossCount =
+            summary.openWireCompoundCurrentMemberSplitLedgerOutputDistinctVertexCount
+            - summary.openWireCompoundCurrentMemberSplitLedgerCandidateDistinctVertexCount;
     }
     return summary;
 }

@@ -185,12 +185,24 @@ const char* openWireCompoundExportSourceName(OpenWireCompoundExportSource source
 
 struct WireJoinerEndpointIdentityDebt
 {
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::add(), key "Make sure coincident vertices are actually the same
+    // TopoDS_Vertex"; ::WireJoinerP::build(), key "builder.Add(openWireCompound, info.wire())".
+    // These fields compare output/candidate/evidence endpoint identity without geometry guessing.
     std::size_t outputVertexIndex = 0;
     bool matchedMemberSplitLedger = false;
     bool matchedCandidateLedger = false;
     bool matchedEndpointMaterializationEvidence = false;
     bool resultSlotOnlyIdentity = false;
+    bool currentChildWireOutputVertexMatchesOtherOutput = false;
+    bool candidateWireVertexMatchesOtherOutput = false;
+    bool endpointMaterializationEvidenceVertexMatchesOtherOutput = false;
     std::string explanation;
+    std::string currentChildWireOutputVertexIdentity;
+    std::string memberSplitLedgerVertexIdentity;
+    std::string candidateWireVertexIdentity;
+    std::string endpointMaterializationEvidenceVertexIdentity;
+    std::string mismatchReason;
 };
 
 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
@@ -461,6 +473,20 @@ struct WireJoinerLedgerSummary
     // already reuse candidate-wire TopoDS_Vertex identity, the next deletion gate before replacing
     // result-slot endpoint materialization.
     std::size_t openWireCompoundCurrentMemberSplitLedgerOutputCandidateMatchedVertexCount = 0;
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::add(), key "Make sure coincident vertices are actually the same
+    // TopoDS_Vertex"; ::build() emits child wires after that lifecycle. These counts compare the
+    // blocked current-member output endpoints against candidate endpoint identities by TopoDS_Vertex
+    // identity only, exposing why a direct candidate switch would merge vertex multiplicity.
+    std::size_t openWireCompoundCurrentMemberSplitLedgerOutputDistinctVertexCount = 0;
+    std::size_t openWireCompoundCurrentMemberSplitLedgerCandidateDistinctVertexCount = 0;
+    std::size_t openWireCompoundCurrentMemberSplitLedgerEndpointMaterializationDistinctVertexCount = 0;
+    std::size_t openWireCompoundCurrentMemberSplitLedgerCandidateVertexMultiplicityLossCount = 0;
+    std::size_t openWireCompoundCurrentMemberSplitLedgerOutputOtherOutputMatchedVertexCount = 0;
+    std::size_t openWireCompoundCurrentMemberSplitLedgerCandidateOtherOutputMatchedVertexCount = 0;
+    std::size_t openWireCompoundCurrentMemberSplitLedgerEndpointMaterializationOtherOutputMatchedVertexCount = 0;
+    std::size_t openWireCompoundCurrentMemberSplitLedgerCandidateVertexReuseRiskCount = 0;
+    std::size_t openWireCompoundCurrentMemberSplitLedgerCandidateMissingSharedOutputIdentityCount = 0;
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::getOpenWires() consumes "MapperHistory(aHistory)" after build() has emitted
     // openWireCompound. A non-zero count means the split/member candidate exists, but the currently
@@ -1085,7 +1111,15 @@ private:
             bool matchedCandidateLedger = false;
             bool matchedEndpointMaterializationEvidence = false;
             bool resultSlotOnlyIdentity = false;
+            bool currentChildWireOutputVertexMatchesOtherOutput = false;
+            bool candidateWireVertexMatchesOtherOutput = false;
+            bool endpointMaterializationEvidenceVertexMatchesOtherOutput = false;
             std::string explanation;
+            std::string currentChildWireOutputVertexIdentity;
+            std::string memberSplitLedgerVertexIdentity;
+            std::string candidateWireVertexIdentity;
+            std::string endpointMaterializationEvidenceVertexIdentity;
+            std::string mismatchReason;
         };
         // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
         // ::WireJoinerP::findSuperEdgesUpdateFirst(), key "wireData->Add(current->shape(...))",

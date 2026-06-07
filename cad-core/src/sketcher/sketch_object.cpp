@@ -808,7 +808,21 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
                         topoDebt.matchedEndpointMaterializationEvidence =
                             debt.matchedEndpointMaterializationEvidence;
                         topoDebt.resultSlotOnlyIdentity = debt.resultSlotOnlyIdentity;
+                        topoDebt.currentChildWireOutputVertexMatchesOtherOutput =
+                            debt.currentChildWireOutputVertexMatchesOtherOutput;
+                        topoDebt.candidateWireVertexMatchesOtherOutput =
+                            debt.candidateWireVertexMatchesOtherOutput;
+                        topoDebt.endpointMaterializationEvidenceVertexMatchesOtherOutput =
+                            debt.endpointMaterializationEvidenceVertexMatchesOtherOutput;
                         topoDebt.explanation = debt.explanation;
+                        topoDebt.currentChildWireOutputVertexIdentity =
+                            debt.currentChildWireOutputVertexIdentity;
+                        topoDebt.memberSplitLedgerVertexIdentity =
+                            debt.memberSplitLedgerVertexIdentity;
+                        topoDebt.candidateWireVertexIdentity = debt.candidateWireVertexIdentity;
+                        topoDebt.endpointMaterializationEvidenceVertexIdentity =
+                            debt.endpointMaterializationEvidenceVertexIdentity;
+                        topoDebt.mismatchReason = debt.mismatchReason;
                         topoEntry.openWireCompoundCurrentMemberSplitLedgerOutputVertexDebt.push_back(
                             std::move(topoDebt)
                         );
@@ -1335,6 +1349,33 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
             {"open_wire_compound_current_member_split_ledger_output_candidate_matched_vertex_count",
              wireJoinerLedger
                  ->openWireCompoundCurrentMemberSplitLedgerOutputCandidateMatchedVertexCount},
+            {"open_wire_compound_current_member_split_ledger_output_distinct_vertex_count",
+             wireJoinerLedger
+                 ->openWireCompoundCurrentMemberSplitLedgerOutputDistinctVertexCount},
+            {"open_wire_compound_current_member_split_ledger_candidate_distinct_vertex_count",
+             wireJoinerLedger
+                 ->openWireCompoundCurrentMemberSplitLedgerCandidateDistinctVertexCount},
+            {"open_wire_compound_current_member_split_ledger_endpoint_materialization_distinct_vertex_count",
+             wireJoinerLedger
+                 ->openWireCompoundCurrentMemberSplitLedgerEndpointMaterializationDistinctVertexCount},
+            {"open_wire_compound_current_member_split_ledger_candidate_vertex_multiplicity_loss_count",
+             wireJoinerLedger
+                 ->openWireCompoundCurrentMemberSplitLedgerCandidateVertexMultiplicityLossCount},
+            {"open_wire_compound_current_member_split_ledger_output_other_output_matched_vertex_count",
+             wireJoinerLedger
+                 ->openWireCompoundCurrentMemberSplitLedgerOutputOtherOutputMatchedVertexCount},
+            {"open_wire_compound_current_member_split_ledger_candidate_other_output_matched_vertex_count",
+             wireJoinerLedger
+                 ->openWireCompoundCurrentMemberSplitLedgerCandidateOtherOutputMatchedVertexCount},
+            {"open_wire_compound_current_member_split_ledger_endpoint_materialization_other_output_matched_vertex_count",
+             wireJoinerLedger
+                 ->openWireCompoundCurrentMemberSplitLedgerEndpointMaterializationOtherOutputMatchedVertexCount},
+            {"open_wire_compound_current_member_split_ledger_candidate_vertex_reuse_risk_count",
+             wireJoinerLedger
+                 ->openWireCompoundCurrentMemberSplitLedgerCandidateVertexReuseRiskCount},
+            {"open_wire_compound_current_member_split_ledger_candidate_missing_shared_output_identity_count",
+             wireJoinerLedger
+                 ->openWireCompoundCurrentMemberSplitLedgerCandidateMissingSharedOutputIdentityCount},
             {"open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked_wire_info_count",
              wireJoinerLedger
                  ->openWireCompoundCurrentMemberSplitLedgerVertexMultiplicityBlockedWireInfoCount},
@@ -1418,7 +1459,21 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
                     {"matched_endpoint_materialization_evidence",
                      debt.matchedEndpointMaterializationEvidence},
                     {"result_slot_only_identity", debt.resultSlotOnlyIdentity},
+                    {"current_child_wire_output_vertex_matches_other_output",
+                     debt.currentChildWireOutputVertexMatchesOtherOutput},
+                    {"candidate_wire_vertex_matches_other_output",
+                     debt.candidateWireVertexMatchesOtherOutput},
+                    {"endpoint_materialization_evidence_vertex_matches_other_output",
+                     debt.endpointMaterializationEvidenceVertexMatchesOtherOutput},
                     {"explanation", debt.explanation},
+                    {"current_child_wire_output_vertex_identity",
+                     debt.currentChildWireOutputVertexIdentity},
+                    {"member_split_ledger_vertex_identity",
+                     debt.memberSplitLedgerVertexIdentity},
+                    {"candidate_wire_vertex_identity", debt.candidateWireVertexIdentity},
+                    {"endpoint_materialization_evidence_vertex_identity",
+                     debt.endpointMaterializationEvidenceVertexIdentity},
+                    {"mismatch_reason", debt.mismatchReason},
                 });
             }
             openExportHistoryEntries.push_back({

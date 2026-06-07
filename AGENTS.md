@@ -103,8 +103,7 @@
 - 处理 FreeCAD parity、fixture 或 oracle 问题时，先明确当前问题属于 oracle 采集、`cad-core` 实现、命名顺序差异、pending/known-mismatch 分组还是文档状态；结论必须直接回答 expected 与当前 `cad-core` 表现是否一致，并列出剩余不一致项。
 - 用户指定文档落点时，结果要写入对应仓库目录，而不是只在聊天里总结：CAD Core 抽取方案、fixture 偏差和排查方案优先放 `docs/CADCore方案`；建模链路和已经接受的业务语义优先放 `docs/建模过程说明`；后续计划或暂不实现方案放到对应主题目录或新增清晰命名的方案文件。
 - 写方案、排查记录、实现状态或回归文档时，不要记录流水账，只记录值得关注的内容：当前基线、关键结论、FreeCAD / OpenCascade 依据、已完成的语义性调整、剩余风险、验收命令和下一步。不要逐条追加“修改某处后执行构建、结果通过、格式化 warning”这类过程日志；若验证结果重要，只保留最终验证结论或对判断有影响的失败输出。
-- 写方案、实施步骤或 goal prompt 时，必须让结果可以快速验证：验收命令按“本轮短跑 / 阶段回归 / 重型收口”分层列出，普通 goal 默认只要求本轮相关的粗 filter、`git diff --check`，以及代码修改后的 `graphify update .`；不得把历史已锁 case、阶段回归、ignored fixture、全量 build/check 直接塞进普通 goal 的必跑项。只有阶段收口、oracle/runner 改动或用户明确要求时，才把阶段回归和重型收口列为必须执行。
-- `graphify` 只作为轻量代码图谱导航和代码修改后的图谱同步工具：已有 `graphify-out/graph.json` 时可先用 `graphify query/path/explain` 缩小搜索面；若查询只返回无关节点、仓库范围过大或结果不能直接支撑判断，应立即切回 `rg` / `sed` / 本地 FreeCAD 源码 / fixture harness 复核，不要把 graphify 结果当作 FreeCAD 语义依据。代码修改完成后再运行一次 `graphify update .`；文档-only 修改通常不需要运行。
+- 写方案、实施步骤或 goal prompt 时，必须让结果可以快速验证：验收命令按“本轮短跑 / 阶段回归 / 重型收口”分层列出，普通 goal 默认只要求本轮相关的粗 filter、`git diff --check`；不得把历史已锁 case、阶段回归、ignored fixture、全量 build/check 直接塞进普通 goal 的必跑项。只有阶段收口、oracle/runner 改动或用户明确要求时，才把阶段回归和重型收口列为必须执行。
 - 用户说“不需要太详细，只需要把框架说清楚”时，文档保持框架级和短结论；用户说“大白话解释一下”时，先解释具体流程和对象关系，再进入源码、实现或文档更新。
 - 解释草图内部面时必须区分 sketch 的原始 `Shape` 和辅助结果 `InternalShape`：`FaceMakerBuildFace` 失败后得到空 `InternalShape` 是 FreeCAD parity，不代表原始 sketch 边丢失；open profile/open wire 语义应单独表达，不要强行混回 FreeCAD 风格 `InternalShape`。
 - 扩展 Pad/Pocket fixture 或 executor 前，先盘点 `cad-core/fixtures/{mvp,p2}`、`cad-core/src/features/feature_extrude.cpp`、`cad-core/src/features/pad.cpp`、`cad-core/src/features/pocket.cpp` 和对应 FreeCAD 源码的当前覆盖和缺口；优先新增或补齐 oracle case，只有证明 collector 或 expected 本身错误时才先改采集脚本/期望数据。
