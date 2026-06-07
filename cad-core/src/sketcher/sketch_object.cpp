@@ -672,8 +672,87 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
                         = entry.resultWireProducer.currentMemberEdgeInfoIndex;
                     topoEntry.resultWireProducerChildWireInfoIndex
                         = entry.resultWireProducer.childWireInfoIndex;
+                    topoEntry.openWireCompoundChildWireInfoIndex =
+                        entry.openWireCompoundChildWireInfoIndex;
+                    topoEntry.openWireCompoundSourceEdgeIndices =
+                        entry.openWireCompoundSourceEdgeIndices;
+                    topoEntry.openWireCompoundSourceLineageFromSplitterHistory =
+                        entry.openWireCompoundSourceLineageFromSplitterHistory;
+                    topoEntry.openWireCompoundNoOriginalPurgeCandidate =
+                        entry.openWireCompoundNoOriginalPurgeCandidate;
+                    topoEntry.openWireCompoundNoOriginalPurgeMatch =
+                        entry.openWireCompoundNoOriginalPurgeMatch;
+                    topoEntry.openWireCompoundNoOriginalPurgedByLedger =
+                        entry.openWireCompoundNoOriginalPurgedByLedger;
+                    topoEntry.openWireCompoundNoOriginalSharedSourceLedgerRecorded =
+                        entry.openWireCompoundNoOriginalSharedSourceLedgerRecorded;
+                    topoEntry.openWireCompoundNoOriginalSharedSourceEdgeCount =
+                        entry.openWireCompoundNoOriginalSharedSourceEdgeCount;
+                    topoEntry.openWireCompoundNoOriginalSharedSourceMatchedEdgeCount =
+                        entry.openWireCompoundNoOriginalSharedSourceMatchedEdgeCount;
+                    topoEntry.openWireCompoundNoOriginalSharedSourceUnmatchedEdgeCount =
+                        entry.openWireCompoundNoOriginalSharedSourceUnmatchedEdgeCount;
+                    topoEntry.openWireCompoundProducerLedgerEdgeMaterialized =
+                        entry.openWireCompoundProducerLedgerEdgeMaterialized;
+                    topoEntry.openWireCompoundProducerLedgerWireBuilt =
+                        entry.openWireCompoundProducerLedgerWireBuilt;
+                    topoEntry.openWireCompoundProducerLedgerWireFromSourceVmap =
+                        entry.openWireCompoundProducerLedgerWireFromSourceVmap;
+                    topoEntry.openWireCompoundSourceVmapEndpointLedgerRecorded =
+                        entry.openWireCompoundSourceVmapEndpointLedgerRecorded;
+                    topoEntry.openWireCompoundSourceVmapEndpointLedgerOutputVertexCount =
+                        entry.openWireCompoundSourceVmapEndpointLedgerOutputVertexCount;
+                    topoEntry.openWireCompoundSourceVmapEndpointLedgerMatchedVertexCount =
+                        entry.openWireCompoundSourceVmapEndpointLedgerMatchedVertexCount;
+                    topoEntry.openWireCompoundProducerLedgerWireFromResultSlotEvidence =
+                        entry.openWireCompoundProducerLedgerWireFromResultSlotEvidence;
+                    topoEntry.openWireCompoundSourceEdgeProducerOutput =
+                        entry.openWireCompoundSourceEdgeProducerOutput;
+                    topoEntry.openWireCompoundCurrentMemberProducerOutput =
+                        entry.openWireCompoundCurrentMemberProducerOutput;
+                    topoEntry.openWireCompoundCurrentMemberSplitLedgerVertexCandidate =
+                        entry.openWireCompoundCurrentMemberSplitLedgerVertexCandidate;
+                    topoEntry.openWireCompoundCurrentMemberSplitLedgerVertexDebtRecorded =
+                        entry.openWireCompoundCurrentMemberSplitLedgerVertexDebtRecorded;
+                    topoEntry.openWireCompoundCurrentMemberSplitLedgerMemberVertexCount =
+                        entry.openWireCompoundCurrentMemberSplitLedgerMemberVertexCount;
+                    topoEntry.openWireCompoundCurrentMemberSplitLedgerCandidateVertexCount =
+                        entry.openWireCompoundCurrentMemberSplitLedgerCandidateVertexCount;
+                    topoEntry.openWireCompoundCurrentMemberSplitLedgerOutputVertexCount =
+                        entry.openWireCompoundCurrentMemberSplitLedgerOutputVertexCount;
+                    topoEntry.openWireCompoundCurrentMemberSplitLedgerOutputVertexLedgerCount =
+                        entry.openWireCompoundCurrentMemberSplitLedgerOutputVertexLedgerCount;
+                    topoEntry.openWireCompoundCurrentMemberSplitLedgerOutputMatchedVertexCount =
+                        entry.openWireCompoundCurrentMemberSplitLedgerOutputMatchedVertexCount;
+                    topoEntry
+                        .openWireCompoundCurrentMemberSplitLedgerOutputCandidateMatchedVertexCount =
+                        entry
+                            .openWireCompoundCurrentMemberSplitLedgerOutputCandidateMatchedVertexCount;
+                    topoEntry.openWireCompoundCurrentMemberSplitLedgerOutputUnmatchedVertexCount =
+                        entry.openWireCompoundCurrentMemberSplitLedgerOutputUnmatchedVertexCount;
+                    topoEntry.openWireCompoundCurrentMemberSplitLedgerResultSlotOnlyVertexCount =
+                        entry.openWireCompoundCurrentMemberSplitLedgerResultSlotOnlyVertexCount;
+                    topoEntry.openWireCompoundCurrentMemberSplitLedgerVertexMultiplicityBlocked =
+                        entry.openWireCompoundCurrentMemberSplitLedgerVertexMultiplicityBlocked;
+                    topoEntry.missingOpenWireCompoundChildWire =
+                        entry.missingOpenWireCompoundChildWire;
                     topoEntry.sourceEdgeIndices = entry.sourceEdgeIndices;
                     topoEntry.sourceLineageFromSplitterHistory = entry.sourceLineageFromSplitterHistory;
+                    topoEntry.splitFragmentSourceEdgeIndices = entry.splitFragmentSourceEdgeIndices;
+                    topoEntry.splitFragmentModifiedSourceEdgeIndices =
+                        entry.splitFragmentModifiedSourceEdgeIndices;
+                    topoEntry.splitFragmentGeneratedSourceEdgeIndices =
+                        entry.splitFragmentGeneratedSourceEdgeIndices;
+                    topoEntry.splitFragmentFromModifiedHistory =
+                        entry.splitFragmentFromModifiedHistory;
+                    topoEntry.splitFragmentFromGeneratedHistory =
+                        entry.splitFragmentFromGeneratedHistory;
+                    topoEntry.splitFragmentSourceLineageFromIdentityFallback =
+                        entry.splitFragmentSourceLineageFromIdentityFallback;
+                    topoEntry.splitFragmentSourceLineageFromSourceIdentityFallback =
+                        entry.splitFragmentSourceLineageFromSourceIdentityFallback;
+                    topoEntry.splitFragmentHistoryShapeGeometryBridge =
+                        entry.splitFragmentHistoryShapeGeometryBridge;
                     topoEntry.sourceVertexIdentity = entry.sourceVertexIdentity;
                     topoEntry.sourceVertexReplacementSourceEdgeIndices
                         = entry.sourceVertexReplacementSourceEdgeIndices;
@@ -681,9 +760,6 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
                         = entry.sourceVertexReplacementEndpoints;
                     topoEntry.sourceVertexReplacementIdentity
                         = entry.sourceVertexReplacementIdentity;
-                    topoEntry.helperOpenExportOverride = entry.helperOpenExportOverride;
-                    topoEntry.helperOpenExportOverrideReason = entry.helperOpenExportOverrideReason;
-                    topoEntry.purgeBridge = entry.purgeBridge;
                     internalHistoryContext->wireJoinerOpenExportHistoryEntries.push_back(
                         std::move(topoEntry)
                     );
@@ -1028,8 +1104,8 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
              wireJoinerLedger->sourceIdentityOpenExportSharedVertexEdgeInfoCount},
             {"source_identity_open_export_only_source_vertices_edge_info_count",
              wireJoinerLedger->sourceIdentityOpenExportOnlySourceVerticesEdgeInfoCount},
-            {"source_identity_purge_bridge_edge_info_count",
-             wireJoinerLedger->sourceIdentityPurgeBridgeEdgeInfoCount},
+            {"source_identity_no_original_purge_candidate_edge_info_count",
+             wireJoinerLedger->sourceIdentityNoOriginalPurgeCandidateEdgeInfoCount},
             {"source_lineage_edge_info_count", wireJoinerLedger->sourceLineageEdgeInfoCount},
             {"source_lineage_split_edge_info_count",
              wireJoinerLedger->sourceLineageSplitEdgeInfoCount},
@@ -1039,6 +1115,22 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
              wireJoinerLedger->sourceLineageMissingOpenExportEdgeInfoCount},
             {"source_lineage_multi_source_edge_info_count",
              wireJoinerLedger->sourceLineageMultiSourceEdgeInfoCount},
+            {"split_fragment_source_lineage_edge_info_count",
+             wireJoinerLedger->splitFragmentSourceLineageEdgeInfoCount},
+            {"split_fragment_modified_history_edge_info_count",
+             wireJoinerLedger->splitFragmentModifiedHistoryEdgeInfoCount},
+            {"split_fragment_generated_history_edge_info_count",
+             wireJoinerLedger->splitFragmentGeneratedHistoryEdgeInfoCount},
+            {"split_fragment_identity_fallback_edge_info_count",
+             wireJoinerLedger->splitFragmentIdentityFallbackEdgeInfoCount},
+            {"split_fragment_source_identity_fallback_edge_info_count",
+             wireJoinerLedger->splitFragmentSourceIdentityFallbackEdgeInfoCount},
+            {"split_fragment_history_shape_geometry_bridge_edge_info_count",
+             wireJoinerLedger->splitFragmentHistoryShapeGeometryBridgeEdgeInfoCount},
+            {"closed_wire_cycle_split_ledger_source_edge_count",
+             wireJoinerLedger->closedWireCycleSplitLedgerSourceEdgeCount},
+            {"closed_wire_cycle_split_ledger_open_export_decision_count",
+             wireJoinerLedger->closedWireCycleSplitLedgerOpenExportDecisionCount},
             {"super_edge_candidate_count", wireJoinerLedger->superEdgeCandidateCount},
             {"super_edge_candidate_edge_info_count",
              wireJoinerLedger->superEdgeCandidateEdgeInfoCount},
@@ -1072,16 +1164,75 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
             {"open_wire_compound_edge_info_count", wireJoinerLedger->openWireCompoundEdgeInfoCount},
             {"open_wire_compound_super_edge_wire_info_count",
              wireJoinerLedger->openWireCompoundSuperEdgeWireInfoCount},
-            {"open_wire_compound_result_slot_vertex_evidence_wire_info_count",
-             wireJoinerLedger->openWireCompoundResultSlotVertexEvidenceWireInfoCount},
-            {"open_wire_compound_purge_bridge_wire_info_count",
-             wireJoinerLedger->openWireCompoundPurgeBridgeWireInfoCount},
+            {"open_wire_compound_source_lineage_wire_info_count",
+             wireJoinerLedger->openWireCompoundSourceLineageWireInfoCount},
+            {"open_wire_compound_splitter_lineage_wire_info_count",
+             wireJoinerLedger->openWireCompoundSplitterLineageWireInfoCount},
+            {"open_wire_compound_no_original_purge_candidate_wire_info_count",
+             wireJoinerLedger->openWireCompoundNoOriginalPurgeCandidateWireInfoCount},
+            {"open_wire_compound_no_original_purge_match_wire_info_count",
+             wireJoinerLedger->openWireCompoundNoOriginalPurgeMatchWireInfoCount},
+            {"open_wire_compound_no_original_purge_unmatched_wire_info_count",
+             wireJoinerLedger->openWireCompoundNoOriginalPurgeUnmatchedWireInfoCount},
+            {"open_wire_compound_no_original_shared_source_ledger_wire_info_count",
+             wireJoinerLedger->openWireCompoundNoOriginalSharedSourceLedgerWireInfoCount},
+            {"open_wire_compound_no_original_shared_source_edge_count",
+             wireJoinerLedger->openWireCompoundNoOriginalSharedSourceEdgeCount},
+            {"open_wire_compound_no_original_shared_source_matched_edge_count",
+             wireJoinerLedger->openWireCompoundNoOriginalSharedSourceMatchedEdgeCount},
+            {"open_wire_compound_no_original_shared_source_unmatched_edge_count",
+             wireJoinerLedger->openWireCompoundNoOriginalSharedSourceUnmatchedEdgeCount},
+            {"open_wire_compound_source_edge_producer_output_wire_info_count",
+             wireJoinerLedger->openWireCompoundSourceEdgeProducerOutputWireInfoCount},
+            {"open_wire_compound_producer_ledger_wire_built_wire_info_count",
+             wireJoinerLedger->openWireCompoundProducerLedgerWireBuiltWireInfoCount},
+            {"open_wire_compound_producer_ledger_wire_from_source_vmap_wire_info_count",
+             wireJoinerLedger->openWireCompoundProducerLedgerWireFromSourceVmapWireInfoCount},
+            {"open_wire_compound_source_vmap_endpoint_ledger_wire_info_count",
+             wireJoinerLedger->openWireCompoundSourceVmapEndpointLedgerWireInfoCount},
+            {"open_wire_compound_source_vmap_endpoint_ledger_output_vertex_count",
+             wireJoinerLedger->openWireCompoundSourceVmapEndpointLedgerOutputVertexCount},
+            {"open_wire_compound_source_vmap_endpoint_ledger_matched_vertex_count",
+             wireJoinerLedger->openWireCompoundSourceVmapEndpointLedgerMatchedVertexCount},
+            {"open_wire_compound_producer_ledger_wire_from_result_slot_evidence_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundProducerLedgerWireFromResultSlotEvidenceWireInfoCount},
+            {"open_wire_compound_current_member_split_ledger_vertex_candidate_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundCurrentMemberSplitLedgerVertexCandidateWireInfoCount},
+            {"open_wire_compound_current_member_split_ledger_vertex_debt_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundCurrentMemberSplitLedgerVertexDebtWireInfoCount},
+            {"open_wire_compound_current_member_split_ledger_member_vertex_count",
+             wireJoinerLedger
+                 ->openWireCompoundCurrentMemberSplitLedgerMemberVertexCount},
+            {"open_wire_compound_current_member_split_ledger_output_vertex_ledger_count",
+             wireJoinerLedger
+                 ->openWireCompoundCurrentMemberSplitLedgerOutputVertexLedgerCount},
+            {"open_wire_compound_current_member_split_ledger_output_matched_vertex_count",
+             wireJoinerLedger
+                 ->openWireCompoundCurrentMemberSplitLedgerOutputMatchedVertexCount},
+            {"open_wire_compound_current_member_split_ledger_output_candidate_matched_vertex_count",
+             wireJoinerLedger
+                 ->openWireCompoundCurrentMemberSplitLedgerOutputCandidateMatchedVertexCount},
+            {"open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundCurrentMemberSplitLedgerVertexMultiplicityBlockedWireInfoCount},
+            {"open_wire_compound_current_member_split_ledger_output_unmatched_vertex_count",
+             wireJoinerLedger
+                 ->openWireCompoundCurrentMemberSplitLedgerOutputUnmatchedVertexCount},
+            {"open_wire_compound_current_member_split_ledger_result_slot_only_vertex_wire_info_count",
+             wireJoinerLedger
+                 ->openWireCompoundCurrentMemberSplitLedgerResultSlotOnlyVertexWireInfoCount},
+            {"open_wire_compound_current_member_split_ledger_result_slot_only_vertex_count",
+             wireJoinerLedger
+                 ->openWireCompoundCurrentMemberSplitLedgerResultSlotOnlyVertexCount},
+            {"open_wire_compound_missing_child_wire_history_edge_info_count",
+             wireJoinerLedger->openWireCompoundMissingChildWireHistoryEdgeInfoCount},
+            {"open_wire_compound_root_current_member_producer_output_wire_info_count",
+             wireJoinerLedger->openWireCompoundRootCurrentMemberProducerOutputWireInfoCount},
             {"open_wire_compound_source_shared_vertex_wire_info_count",
              wireJoinerLedger->openWireCompoundSourceSharedVertexWireInfoCount},
-            {"open_wire_compound_purge_bridge_source_shared_vertex_wire_info_count",
-             wireJoinerLedger->openWireCompoundPurgeBridgeSourceSharedVertexWireInfoCount},
-            {"open_wire_compound_purge_bridge_unmatched_wire_info_count",
-             wireJoinerLedger->openWireCompoundPurgeBridgeUnmatchedWireInfoCount},
             {"ordered_wire_info_count", wireJoinerLedger->orderedWireInfoCount},
             {"ordered_vertex_count", wireJoinerLedger->orderedVertexCount},
             {"iteration2_marked_edge_info_count", wireJoinerLedger->iteration2MarkedEdgeInfoCount},
@@ -1134,8 +1285,82 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
                  entry.resultWireProducer.currentMemberEdgeInfoIndex},
                 {"result_wire_producer_child_wire_info_index",
                  entry.resultWireProducer.childWireInfoIndex},
+                {"open_wire_compound_child_wire_info_index",
+                 entry.openWireCompoundChildWireInfoIndex},
+                {"open_wire_compound_source_edge_indices",
+                 entry.openWireCompoundSourceEdgeIndices},
+                {"open_wire_compound_source_lineage_from_splitter_history",
+                 entry.openWireCompoundSourceLineageFromSplitterHistory},
+                {"open_wire_compound_no_original_purge_candidate",
+                 entry.openWireCompoundNoOriginalPurgeCandidate},
+                {"open_wire_compound_no_original_purge_match",
+                 entry.openWireCompoundNoOriginalPurgeMatch},
+                {"open_wire_compound_no_original_purged_by_ledger",
+                 entry.openWireCompoundNoOriginalPurgedByLedger},
+                {"open_wire_compound_no_original_shared_source_ledger_recorded",
+                 entry.openWireCompoundNoOriginalSharedSourceLedgerRecorded},
+                {"open_wire_compound_no_original_shared_source_edge_count",
+                 entry.openWireCompoundNoOriginalSharedSourceEdgeCount},
+                {"open_wire_compound_no_original_shared_source_matched_edge_count",
+                 entry.openWireCompoundNoOriginalSharedSourceMatchedEdgeCount},
+                {"open_wire_compound_no_original_shared_source_unmatched_edge_count",
+                 entry.openWireCompoundNoOriginalSharedSourceUnmatchedEdgeCount},
+                {"open_wire_compound_producer_ledger_edge_materialized",
+                 entry.openWireCompoundProducerLedgerEdgeMaterialized},
+                {"open_wire_compound_producer_ledger_wire_built",
+                 entry.openWireCompoundProducerLedgerWireBuilt},
+                {"open_wire_compound_producer_ledger_wire_from_source_vmap",
+                 entry.openWireCompoundProducerLedgerWireFromSourceVmap},
+                {"open_wire_compound_source_vmap_endpoint_ledger_recorded",
+                 entry.openWireCompoundSourceVmapEndpointLedgerRecorded},
+                {"open_wire_compound_source_vmap_endpoint_ledger_output_vertex_count",
+                 entry.openWireCompoundSourceVmapEndpointLedgerOutputVertexCount},
+                {"open_wire_compound_source_vmap_endpoint_ledger_matched_vertex_count",
+                 entry.openWireCompoundSourceVmapEndpointLedgerMatchedVertexCount},
+                {"open_wire_compound_producer_ledger_wire_from_result_slot_evidence",
+                 entry.openWireCompoundProducerLedgerWireFromResultSlotEvidence},
+                {"open_wire_compound_source_edge_producer_output",
+                 entry.openWireCompoundSourceEdgeProducerOutput},
+                {"open_wire_compound_current_member_producer_output",
+                 entry.openWireCompoundCurrentMemberProducerOutput},
+                {"open_wire_compound_current_member_split_ledger_vertex_candidate",
+                 entry.openWireCompoundCurrentMemberSplitLedgerVertexCandidate},
+                {"open_wire_compound_current_member_split_ledger_vertex_debt_recorded",
+                 entry.openWireCompoundCurrentMemberSplitLedgerVertexDebtRecorded},
+                {"open_wire_compound_current_member_split_ledger_member_vertex_count",
+                 entry.openWireCompoundCurrentMemberSplitLedgerMemberVertexCount},
+                {"open_wire_compound_current_member_split_ledger_candidate_vertex_count",
+                 entry.openWireCompoundCurrentMemberSplitLedgerCandidateVertexCount},
+                {"open_wire_compound_current_member_split_ledger_output_vertex_count",
+                 entry.openWireCompoundCurrentMemberSplitLedgerOutputVertexCount},
+                {"open_wire_compound_current_member_split_ledger_output_vertex_ledger_count",
+                 entry.openWireCompoundCurrentMemberSplitLedgerOutputVertexLedgerCount},
+                {"open_wire_compound_current_member_split_ledger_output_matched_vertex_count",
+                 entry.openWireCompoundCurrentMemberSplitLedgerOutputMatchedVertexCount},
+                {"open_wire_compound_current_member_split_ledger_output_candidate_matched_vertex_count",
+                 entry.openWireCompoundCurrentMemberSplitLedgerOutputCandidateMatchedVertexCount},
+                {"open_wire_compound_current_member_split_ledger_output_unmatched_vertex_count",
+                 entry.openWireCompoundCurrentMemberSplitLedgerOutputUnmatchedVertexCount},
+                {"open_wire_compound_current_member_split_ledger_result_slot_only_vertex_count",
+                 entry.openWireCompoundCurrentMemberSplitLedgerResultSlotOnlyVertexCount},
+                {"open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked",
+                 entry.openWireCompoundCurrentMemberSplitLedgerVertexMultiplicityBlocked},
+                {"missing_open_wire_compound_child_wire", entry.missingOpenWireCompoundChildWire},
                 {"source_edge_indices", entry.sourceEdgeIndices},
                 {"source_lineage_from_splitter_history", entry.sourceLineageFromSplitterHistory},
+                {"split_fragment_source_edge_indices", entry.splitFragmentSourceEdgeIndices},
+                {"split_fragment_modified_source_edge_indices",
+                 entry.splitFragmentModifiedSourceEdgeIndices},
+                {"split_fragment_generated_source_edge_indices",
+                 entry.splitFragmentGeneratedSourceEdgeIndices},
+                {"split_fragment_from_modified_history", entry.splitFragmentFromModifiedHistory},
+                {"split_fragment_from_generated_history", entry.splitFragmentFromGeneratedHistory},
+                {"split_fragment_source_lineage_from_identity_fallback",
+                 entry.splitFragmentSourceLineageFromIdentityFallback},
+                {"split_fragment_source_lineage_from_source_identity_fallback",
+                 entry.splitFragmentSourceLineageFromSourceIdentityFallback},
+                {"split_fragment_history_shape_geometry_bridge",
+                 entry.splitFragmentHistoryShapeGeometryBridge},
                 {"source_vertex_identity", entry.sourceVertexIdentity},
                 {"source_vertex_identity_any",
                  entry.sourceVertexIdentity[0] || entry.sourceVertexIdentity[1]},
@@ -1145,10 +1370,6 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
                  entry.sourceVertexReplacementSourceEdgeIndices},
                 {"source_vertex_replacement_endpoints", entry.sourceVertexReplacementEndpoints},
                 {"source_vertex_replacement_identity", entry.sourceVertexReplacementIdentity},
-                {"helper_open_export_override", entry.helperOpenExportOverride},
-                {"helper_open_export_override_reason", entry.helperOpenExportOverrideReason},
-                {"result_slot_vertex_evidence_output", entry.resultSlotVertexEvidenceOutput},
-                {"purge_bridge", entry.purgeBridge},
             });
         }
         context.objects[object.name]["wire_joiner_history_detail"] = {

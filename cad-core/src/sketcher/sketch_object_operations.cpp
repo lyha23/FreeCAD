@@ -358,12 +358,20 @@ std::optional<SketchProfileWires> makeProfileWiresFromEdges(const std::vector<Sk
         if (!wireBuilder.IsDone()) {
             return std::nullopt;
         }
+        std::vector<std::size_t> wireSourceEdgeIndices;
+        wireSourceEdgeIndices.reserve(builtEdges.size());
+        const std::size_t sourceEdgeOffset = result.sourceEdges.size();
+        for (std::size_t edgeIndex = 0; edgeIndex < builtEdges.size(); ++edgeIndex) {
+            wireSourceEdgeIndices.push_back(sourceEdgeOffset + edgeIndex);
+        }
         result.sourceEdges.insert(result.sourceEdges.end(), builtEdges.begin(), builtEdges.end());
         if (samePoint(firstStart, currentEnd)) {
             result.closedWires.push_back(wireBuilder.Wire());
+            result.closedWireSourceEdgeIndices.push_back(std::move(wireSourceEdgeIndices));
         }
         else {
             result.openWires.push_back(wireBuilder.Wire());
+            result.openWireSourceEdgeIndices.push_back(std::move(wireSourceEdgeIndices));
             result.openEdges.insert(result.openEdges.end(), builtEdges.begin(), builtEdges.end());
         }
     }
@@ -382,11 +390,17 @@ std::optional<std::vector<TopoDS_Wire>> makeClosedWiresFromEdges(
     return wires->closedWires;
 }
 
-void appendSourceEdgesFromWire(std::vector<TopoDS_Edge>& sourceEdges, const TopoDS_Wire& wire)
+std::vector<std::size_t> appendSourceEdgesFromWire(
+    std::vector<TopoDS_Edge>& sourceEdges,
+    const TopoDS_Wire& wire
+)
 {
+    std::vector<std::size_t> sourceEdgeIndices;
     for (TopExp_Explorer explorer(wire, TopAbs_EDGE); explorer.More(); explorer.Next()) {
+        sourceEdgeIndices.push_back(sourceEdges.size());
         sourceEdges.push_back(TopoDS::Edge(explorer.Current()));
     }
+    return sourceEdgeIndices;
 }
 
 TopoDS_Shape compoundOrSingleShape(const std::vector<TopoDS_Shape>& shapes)
@@ -540,8 +554,18 @@ ProfileFaceBuild buildOptionalProfileFace(
             edgeWires->closedWires.begin(),
             edgeWires->closedWires.end()
         );
+        input.faceWireSourceEdgeIndices.insert(
+            input.faceWireSourceEdgeIndices.end(),
+            edgeWires->closedWireSourceEdgeIndices.begin(),
+            edgeWires->closedWireSourceEdgeIndices.end()
+        );
         input.openWires
             .insert(input.openWires.end(), edgeWires->openWires.begin(), edgeWires->openWires.end());
+        input.openWireSourceEdgeIndices.insert(
+            input.openWireSourceEdgeIndices.end(),
+            edgeWires->openWireSourceEdgeIndices.begin(),
+            edgeWires->openWireSourceEdgeIndices.end()
+        );
         input.openEdges
             .insert(input.openEdges.end(), edgeWires->openEdges.begin(), edgeWires->openEdges.end());
         input.sourceEdges.insert(
@@ -556,7 +580,7 @@ ProfileFaceBuild buildOptionalProfileFace(
             return {};
         }
         input.faceWires.push_back(*wire);
-        appendSourceEdgesFromWire(input.sourceEdges, *wire);
+        input.faceWireSourceEdgeIndices.push_back(appendSourceEdgesFromWire(input.sourceEdges, *wire));
     }
     for (const auto& ellipse : ellipses) {
         const auto wire = makeWireFromEllipse(ellipse);
@@ -564,7 +588,7 @@ ProfileFaceBuild buildOptionalProfileFace(
             return {};
         }
         input.faceWires.push_back(*wire);
-        appendSourceEdgesFromWire(input.sourceEdges, *wire);
+        input.faceWireSourceEdgeIndices.push_back(appendSourceEdgesFromWire(input.sourceEdges, *wire));
     }
 
     if (input.faceWires.empty() && input.openWires.empty() && input.openEdges.empty()) {

@@ -57,6 +57,8 @@ struct SketchProfileWires
     std::vector<TopoDS_Wire> closedWires;
     std::vector<TopoDS_Wire> openWires;
     std::vector<TopoDS_Edge> openEdges;
+    std::vector<std::vector<std::size_t>> closedWireSourceEdgeIndices;
+    std::vector<std::vector<std::size_t>> openWireSourceEdgeIndices;
     std::vector<TopoDS_Edge> sourceEdges;
 };
 

@@ -5,6 +5,7 @@
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Shape.hxx>
+#include <TopoDS_Vertex.hxx>
 #include <TopoDS_Wire.hxx>
 #include <gp_Pnt.hxx>
 
@@ -32,12 +33,20 @@ enum class ResultWireProducerKind
 
 enum class ResultWireProducerState
 {
-    LegacyHelperCandidate,
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build() publishes only concrete "info.wire()" open children; an empty
+    // result-wire producer identity is unpublished diagnostic state, not a transitional result-slot.
+    Unpublished,
     ProducerLocated,
     AHistoryEvidenceReady,
     ChildWireReady,
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build() publishes concrete open children with
+    // "builder.Add(openWireCompound, info.wire())"; this legacy public JSON state means the
+    // producer ledger has a materialized open-export edge, not that identity owns a source-shape
+    // sidecar field.
     SourceShapeReady,
-    ExportedWithoutHelper,
+    ExportedWithoutTransitionalSlot,
 };
 
 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
@@ -51,18 +60,18 @@ enum class ResultWireBlocker
     ForeignAHistorySourceLineage,
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::buildClosedWire() records the actual producer with
-    // "aHistory->Remove(info.edge)"; if that foreign source is already source-shape ready, the
-    // remaining blocker is lineage mismatch, not missing producer geometry.
+    // "aHistory->Remove(info.edge)"; if that foreign source is already producer-ledger ready
+    // (legacy SourceShapeReady diagnostic), the remaining blocker is lineage mismatch.
     ForeignAHistorySourceShapeReadyLineageMismatch,
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::buildClosedWire() records the actual foreign producer with
-    // "aHistory->Remove(info.edge)". If that producer has a matching EdgeInfo but no source-shaped
-    // result-wire output, the gap is source-shape identity readiness, not missing lineage evidence.
+    // "aHistory->Remove(info.edge)". If that producer has a matching EdgeInfo but no
+    // producer-ledger result-wire output, the gap is producer readiness, not missing lineage evidence.
     ForeignAHistorySourceShapeIdentityNotReady,
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::buildClosedWire() stores the result-wire producer as
-    // "aHistory->Remove(info.edge)". If that foreign producer curve cannot represent the helper
-    // result edge, the blocker is geometry ownership, not missing source-shape identity.
+    // "aHistory->Remove(info.edge)". If that foreign producer curve cannot represent the result-wire
+    // candidate edge, the blocker is geometry ownership, not missing source-shape identity.
     ForeignAHistorySourceGeometryMismatch,
     MissingRemovedTargetEvidence,
     MissingFullAHistoryProducerEvidence,
@@ -88,21 +97,26 @@ enum class ResultWireBlocker
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::buildClosedWire() writes the true producer through
     // "aHistory->Remove(info.edge)"; a foreign Remove source plus a same-lineage strict sidecar
-    // still needs source-shape identity before it can replace the helper child.
+    // still needs source-shape identity before it can replace the result-wire candidate child.
     SameSourceSidecarSourceShapeIdentityNotReady,
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::buildClosedWire() stores producer evidence with
-    // "aHistory->Remove(info.edge)". If a same-lineage strict sidecar is already source-shaped but
-    // its edge curve does not match or contain this result edge, the blocker is geometry ownership,
-    // not missing source-shape identity.
+    // "aHistory->Remove(info.edge)". If a same-lineage strict sidecar already has producer-ledger
+    // output but its edge curve does not match or contain this result edge, the blocker is geometry
+    // ownership, not missing source-shape identity.
     SameSourceSidecarGeometryMismatch,
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::build() exports final "info.wire()" children; current-member replacement
     // must not introduce vertices that are absent from the request-local openWireCompound ledger.
     SourceShapeMemberVertexIdentityNotReady,
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::findSuperEdgesUpdateFirst() builds current-member output from member shapes,
+    // and ::getOpenWires() consumes MapperHistory(aHistory). If cad-core's split/member candidate
+    // would change vertex multiplicity, the result-slot child remains diagnostic instead of exported.
+    CurrentMemberVertexMultiplicityBlocked,
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::findSuperEdgesUpdateFirst() sets member edges to "iteration = -1" while the
-    // open root can still satisfy ::build()'s openWireCompound gate. A member helper slot cannot
+    // open root can still satisfy ::build()'s openWireCompound gate. A member result-wire candidate slot cannot
     // switch output until it is represented by the child-wire producer ledger, not just by the
     // edge-level root-open classifier.
     CurrentMemberChildWireIdentityNotReady,
@@ -118,11 +132,10 @@ enum class ResultWireBlocker
     CurrentMemberRootOpenProducerNotReady,
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::findSuperEdgesUpdateFirst() marks current members with "iteration = -1" while
-    // strict sidecars may still record "aHistory->Remove(info.edge)". If such a source-shaped
+    // strict sidecars may still record "aHistory->Remove(info.edge)". If such a producer-ledger
     // sidecar cannot represent the member result edge, the remaining blocker is geometry ownership,
     // not missing child-wire evidence.
     CurrentMemberSidecarGeometryMismatch,
-    LegacyHelperShapeStillUsed,
     UnknownInvariant,
 };
 
@@ -133,24 +146,17 @@ const char* resultWireBlockerName(ResultWireBlocker blocker);
 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
 // ::WireJoinerP::buildClosedWire() records producer evidence with "aHistory->Remove(info.edge)"
 // and ::WireJoinerP::build() exports only final "info.wire()" states into openWireCompound.
-// This identity keeps result-wire producer state finite while cad-core replaces helper output.
+// This identity keeps result-wire producer state finite while cad-core replaces result-wire candidate output.
 struct ResultWireProducerIdentity
 {
     ResultWireProducerKind kind = ResultWireProducerKind::None;
-    ResultWireProducerState state = ResultWireProducerState::LegacyHelperCandidate;
+    ResultWireProducerState state = ResultWireProducerState::Unpublished;
     ResultWireBlocker blocker = ResultWireBlocker::None;
     std::size_t sourceEdgeInfoIndex = resultWireProducerNpos;
     std::size_t rootEdgeInfoIndex = resultWireProducerNpos;
     std::size_t currentMemberEdgeInfoIndex = resultWireProducerNpos;
     std::size_t childWireInfoIndex = resultWireProducerNpos;
-    bool hasSourceLineage = false;
-    bool hasStrictRemoveSource = false;
-    bool hasRemovedTarget = false;
-    bool hasSameSourceRemoveLineage = false;
-    bool hasFullAHistoryEvidence = false;
-    bool finalGateEligible = false;
     bool childWireBuilt = false;
-    bool sourceShapeReady = false;
 };
 
 struct ResultWireProducerLedgerEntry
@@ -161,7 +167,7 @@ struct ResultWireProducerLedgerEntry
     std::size_t currentMemberEdgeInfoIndex = resultWireProducerNpos;
     std::size_t childWireInfoIndex = resultWireProducerNpos;
     ResultWireProducerKind kind = ResultWireProducerKind::None;
-    ResultWireProducerState state = ResultWireProducerState::LegacyHelperCandidate;
+    ResultWireProducerState state = ResultWireProducerState::Unpublished;
     ResultWireBlocker blocker = ResultWireBlocker::None;
 };
 
@@ -270,12 +276,35 @@ struct WireJoinerLedgerSummary
     std::size_t sourceIdentityOnlySourceVerticesEdgeInfoCount = 0;
     std::size_t sourceIdentityOpenExportSharedVertexEdgeInfoCount = 0;
     std::size_t sourceIdentityOpenExportOnlySourceVerticesEdgeInfoCount = 0;
-    std::size_t sourceIdentityPurgeBridgeEdgeInfoCount = 0;
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::getOpenWires(noOriginal=true) filters after openWireCompound child wires are
+    // built. Keep the legacy JSON field name stable, but count child-wire ledger candidates rather
+    // than recomputing the verdict from EdgeInfo after the child-wire boundary.
+    std::size_t sourceIdentityNoOriginalPurgeCandidateEdgeInfoCount = 0;
     std::size_t sourceLineageEdgeInfoCount = 0;
     std::size_t sourceLineageSplitEdgeInfoCount = 0;
     std::size_t sourceLineageOpenExportEdgeInfoCount = 0;
     std::size_t sourceLineageMissingOpenExportEdgeInfoCount = 0;
     std::size_t sourceLineageMultiSourceEdgeInfoCount = 0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::splitEdges() records "aHistory->AddModified(split.intersectShape,
+    // newInfo.edge)" after sourceEdgeArray is copied into sourceEdges. These counters expose how much
+    // of the fragment-to-source ledger is backed by splitter history versus remaining request-local
+    // bridges. The aggregate identity fallback remains compatibility debt; the split counters below
+    // distinguish source-edge identity recovery from history-shape-to-result geometry binding.
+    std::size_t splitFragmentSourceLineageEdgeInfoCount = 0;
+    std::size_t splitFragmentModifiedHistoryEdgeInfoCount = 0;
+    std::size_t splitFragmentGeneratedHistoryEdgeInfoCount = 0;
+    std::size_t splitFragmentIdentityFallbackEdgeInfoCount = 0;
+    std::size_t splitFragmentSourceIdentityFallbackEdgeInfoCount = 0;
+    std::size_t splitFragmentHistoryShapeGeometryBridgeEdgeInfoCount = 0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::splitEdges() records "aHistory->AddModified(split.intersectShape,
+    // newInfo.edge)" before ::build() exports openWireCompound. These counters expose the
+    // closed-cycle generated-open-export precheck that now reads split fragment history instead of
+    // resampling bounded result edges.
+    std::size_t closedWireCycleSplitLedgerSourceEdgeCount = 0;
+    std::size_t closedWireCycleSplitLedgerOpenExportDecisionCount = 0;
     std::size_t superEdgeCandidateCount = 0;
     std::size_t superEdgeCandidateEdgeInfoCount = 0;
     std::size_t superEdgeRootEdgeInfoCount = 0;
@@ -296,11 +325,101 @@ struct WireJoinerLedgerSummary
     std::size_t openWireCompoundBuiltWireInfoCount = 0;
     std::size_t openWireCompoundEdgeInfoCount = 0;
     std::size_t openWireCompoundSuperEdgeWireInfoCount = 0;
-    std::size_t openWireCompoundResultSlotVertexEvidenceWireInfoCount = 0;
-    std::size_t openWireCompoundPurgeBridgeWireInfoCount = 0;
+    std::size_t openWireCompoundSourceLineageWireInfoCount = 0;
+    std::size_t openWireCompoundSplitterLineageWireInfoCount = 0;
+    std::size_t openWireCompoundNoOriginalPurgeCandidateWireInfoCount = 0;
+    std::size_t openWireCompoundNoOriginalPurgeMatchWireInfoCount = 0;
+    std::size_t openWireCompoundNoOriginalPurgeUnmatchedWireInfoCount = 0;
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::getOpenWires(noOriginal=true), key
+    // "source.findSubShapesWithSharedVertex(TopoShape(edge, -1)).empty()". These counters expose the
+    // per-child-wire edge ledger used by the noOriginal purge verdict.
+    std::size_t openWireCompoundNoOriginalSharedSourceLedgerWireInfoCount = 0;
+    std::size_t openWireCompoundNoOriginalSharedSourceEdgeCount = 0;
+    std::size_t openWireCompoundNoOriginalSharedSourceMatchedEdgeCount = 0;
+    std::size_t openWireCompoundNoOriginalSharedSourceUnmatchedEdgeCount = 0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build() exports final child wires with
+    // "builder.Add(openWireCompound, info.wire())", then ::getOpenWires() consumes
+    // MapperHistory(aHistory). Count child-wire slots whose emitted shape already comes from the
+    // source/aHistory producer ledger instead of being recovered from EdgeInfo output getters.
+    std::size_t openWireCompoundSourceEdgeProducerOutputWireInfoCount = 0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build() stores the emitted "info.wire()" in openWireCompound. This counter
+    // keeps the request-local child-wire materialized producer wire visible so history consumers use
+    // the child-wire ledger instead of any EdgeInfo output re-export helper.
+    std::size_t openWireCompoundProducerLedgerWireBuiltWireInfoCount = 0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::add(), key: "Make sure coincident vertices are actually the same TopoDS_Vertex",
+    // drives endpoint identity through the mutable vmap/sourceEdges ledger before ::build() emits
+    // openWireCompound children. This counter tracks producer wires materialized from that ledger.
+    std::size_t openWireCompoundProducerLedgerWireFromSourceVmapWireInfoCount = 0;
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::add(), key "Make sure coincident vertices are actually the same TopoDS_Vertex".
+    // These counters expose how many materialized openWireCompound child vertices already match the
+    // request-local source/vmap ledger before any endpoint materialization fallback is considered.
+    std::size_t openWireCompoundSourceVmapEndpointLedgerWireInfoCount = 0;
+    std::size_t openWireCompoundSourceVmapEndpointLedgerOutputVertexCount = 0;
+    std::size_t openWireCompoundSourceVmapEndpointLedgerMatchedVertexCount = 0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build() emits final "info.wire()" topology. cad-core still needs this
+    // diagnostic count when the source/vmap ledger cannot yet supply the child-wire vertices and the
+    // temporary result-slot endpoint evidence is used instead.
+    std::size_t openWireCompoundProducerLedgerWireFromResultSlotEvidenceWireInfoCount = 0;
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::findSuperEdgesUpdateFirst() gathers member "shape(...)" entries into
+    // wireData before "first->superEdge = makeCleanWire(false)"; ::splitEdges() records
+    // "aHistory->AddModified(split.intersectShape, newInfo.edge)". This counter tracks
+    // current-member children whose split/member vertex ledger can form a producer candidate, but
+    // whose output still waits for MapperHistory/ElementMap vertex multiplicity parity.
+    std::size_t openWireCompoundCurrentMemberSplitLedgerVertexCandidateWireInfoCount = 0;
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::findSuperEdgesUpdateFirst() stores member shapes before ::build() exports
+    // "info.wire()". This counts child-wire entries with recorded per-output vertex debt records.
+    std::size_t openWireCompoundCurrentMemberSplitLedgerVertexDebtWireInfoCount = 0;
+    std::size_t openWireCompoundCurrentMemberSplitLedgerMemberVertexCount = 0;
+    std::size_t openWireCompoundCurrentMemberSplitLedgerOutputVertexLedgerCount = 0;
+    std::size_t openWireCompoundCurrentMemberSplitLedgerOutputMatchedVertexCount = 0;
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::findSuperEdgesUpdateFirst() builds a current-member candidate from member
+    // shapes before ::build() emits "info.wire()". This aggregate counts emitted child vertices that
+    // already reuse candidate-wire TopoDS_Vertex identity, the next deletion gate before replacing
+    // result-slot endpoint materialization.
+    std::size_t openWireCompoundCurrentMemberSplitLedgerOutputCandidateMatchedVertexCount = 0;
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::getOpenWires() consumes "MapperHistory(aHistory)" after build() has emitted
+    // openWireCompound. A non-zero count means the split/member candidate exists, but the currently
+    // emitted child still carries vertex identities that the member/split ledger cannot preserve yet.
+    std::size_t openWireCompoundCurrentMemberSplitLedgerVertexMultiplicityBlockedWireInfoCount = 0;
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::findSuperEdgesUpdateFirst() writes current-member shapes into wireData before
+    // "first->superEdge = makeCleanWire(false)", and ::getOpenWires() maps the final child through
+    // MapperHistory(aHistory). This aggregate is the total number of emitted child vertices not yet
+    // covered by the member/split ledger, used as the hard deletion gate for result-slot endpoints.
+    std::size_t openWireCompoundCurrentMemberSplitLedgerOutputUnmatchedVertexCount = 0;
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build() emits "info.wire()" after vmap/sourceEdges vertex replacement. This
+    // count keeps the remaining current-member blocker tied to result-slot-only TopoDS_Vertex
+    // identities, not to geometry or output-order guessing.
+    std::size_t openWireCompoundCurrentMemberSplitLedgerResultSlotOnlyVertexWireInfoCount = 0;
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build() emits final "info.wire()" topology into openWireCompound. This aggregate
+    // counts unmatched emitted child vertices that are still exactly the transitional result-slot
+    // TopoDS_Vertex identities; it must reach zero before endpoint materialization evidence can be deleted.
+    std::size_t openWireCompoundCurrentMemberSplitLedgerResultSlotOnlyVertexCount = 0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build() is the open-wire export boundary: it calls
+    // "builder.Add(openWireCompound, info.wire())" for exportable final EdgeInfo states. A non-zero
+    // value means cad-core found an exportable EdgeInfo without a matching child-wire ledger and must
+    // report that invariant instead of rebuilding output through an EdgeInfo wire helper.
+    std::size_t openWireCompoundMissingChildWireHistoryEdgeInfoCount = 0;
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::findSuperEdgesUpdateFirst() stores open member output on the root
+    // "first->superEdge" after marking members with "current->iteration = -1". This counter fixes
+    // the child-wire path that consumes root/current-member ledger output instead of a result-slot
+    // locator edge.
+    std::size_t openWireCompoundRootCurrentMemberProducerOutputWireInfoCount = 0;
     std::size_t openWireCompoundSourceSharedVertexWireInfoCount = 0;
-    std::size_t openWireCompoundPurgeBridgeSourceSharedVertexWireInfoCount = 0;
-    std::size_t openWireCompoundPurgeBridgeUnmatchedWireInfoCount = 0;
     std::size_t orderedWireInfoCount = 0;
     std::size_t orderedVertexCount = 0;
     std::size_t iteration2MarkedEdgeInfoCount = 0;
@@ -346,16 +465,69 @@ struct WireJoinerOpenExportHistoryEntry
     std::size_t edgeInfoIndex = 0;
     TopoDS_Wire openExportWire;
     TopoDS_Edge openExportEdge;
+    std::size_t openWireCompoundChildWireInfoIndex = resultWireProducerNpos;
+    std::vector<std::size_t> openWireCompoundSourceEdgeIndices;
+    bool openWireCompoundSourceLineageFromSplitterHistory = false;
+    bool openWireCompoundNoOriginalPurgeCandidate = false;
+    bool openWireCompoundNoOriginalPurgeMatch = false;
+    bool openWireCompoundNoOriginalPurgedByLedger = false;
+    bool openWireCompoundNoOriginalSharedSourceLedgerRecorded = false;
+    std::size_t openWireCompoundNoOriginalSharedSourceEdgeCount = 0;
+    std::size_t openWireCompoundNoOriginalSharedSourceMatchedEdgeCount = 0;
+    std::size_t openWireCompoundNoOriginalSharedSourceUnmatchedEdgeCount = 0;
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build() emits the final child with "builder.Add(openWireCompound,
+    // info.wire())"; ::getOpenWires() maps that child through MapperHistory(aHistory). This flag
+    // proves the source/aHistory producer edge reached the openWireCompound child ledger before
+    // history/topo consumers read the entry.
+    bool openWireCompoundProducerLedgerEdgeMaterialized = false;
+    bool openWireCompoundProducerLedgerWireBuilt = false;
+    bool openWireCompoundProducerLedgerWireFromSourceVmap = false;
+    bool openWireCompoundProducerLedgerWireFromResultSlotEvidence = false;
+    bool openWireCompoundSourceVmapEndpointLedgerRecorded = false;
+    std::size_t openWireCompoundSourceVmapEndpointLedgerOutputVertexCount = 0;
+    std::size_t openWireCompoundSourceVmapEndpointLedgerMatchedVertexCount = 0;
+    bool openWireCompoundSourceEdgeProducerOutput = false;
+    bool openWireCompoundCurrentMemberProducerOutput = false;
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::findSuperEdgesUpdateFirst() uses "wireData->Add(current->shape(...))"; the
+    // split ledger comes from ::splitEdges() "aHistory->AddModified(split.intersectShape,
+    // newInfo.edge)". This candidate remains diagnostic until ElementMap preserves the same vertex
+    // multiplicity as FreeCAD.
+    bool openWireCompoundCurrentMemberSplitLedgerVertexCandidate = false;
+    bool openWireCompoundCurrentMemberSplitLedgerVertexDebtRecorded = false;
+    std::size_t openWireCompoundCurrentMemberSplitLedgerMemberVertexCount = 0;
+    std::size_t openWireCompoundCurrentMemberSplitLedgerCandidateVertexCount = 0;
+    std::size_t openWireCompoundCurrentMemberSplitLedgerOutputVertexCount = 0;
+    std::size_t openWireCompoundCurrentMemberSplitLedgerOutputVertexLedgerCount = 0;
+    std::size_t openWireCompoundCurrentMemberSplitLedgerOutputMatchedVertexCount = 0;
+    std::size_t openWireCompoundCurrentMemberSplitLedgerOutputCandidateMatchedVertexCount = 0;
+    std::size_t openWireCompoundCurrentMemberSplitLedgerOutputUnmatchedVertexCount = 0;
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build() exports "info.wire()"; this diagnostic counts output vertices that are
+    // still only backed by cad-core's transitional result-slot endpoint identity.
+    std::size_t openWireCompoundCurrentMemberSplitLedgerResultSlotOnlyVertexCount = 0;
+    bool openWireCompoundCurrentMemberSplitLedgerVertexMultiplicityBlocked = false;
+    bool missingOpenWireCompoundChildWire = false;
     std::vector<std::size_t> sourceEdgeIndices;
     bool sourceLineageFromSplitterHistory = false;
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::splitEdges(), after "add(split.edge, ...)", records
+    // "aHistory->AddModified(split.intersectShape, newInfo.edge)". Keep this public history detail
+    // separate from sourceVertexIdentity/noOriginal purge evidence so topo can consume actual
+    // fragment lineage instead of endpoint geometry guesses.
+    std::vector<std::size_t> splitFragmentSourceEdgeIndices;
+    std::vector<std::size_t> splitFragmentModifiedSourceEdgeIndices;
+    std::vector<std::size_t> splitFragmentGeneratedSourceEdgeIndices;
+    bool splitFragmentFromModifiedHistory = false;
+    bool splitFragmentFromGeneratedHistory = false;
+    bool splitFragmentSourceLineageFromIdentityFallback = false;
+    bool splitFragmentSourceLineageFromSourceIdentityFallback = false;
+    bool splitFragmentHistoryShapeGeometryBridge = false;
     std::array<bool, 2> sourceVertexIdentity {{false, false}};
     std::array<int, 2> sourceVertexReplacementSourceEdgeIndices {{-1, -1}};
     std::array<int, 2> sourceVertexReplacementEndpoints {{-1, -1}};
     std::array<bool, 2> sourceVertexReplacementIdentity {{false, false}};
-    bool helperOpenExportOverride = false;
-    std::string helperOpenExportOverrideReason;
-    bool resultSlotVertexEvidenceOutput = false;
-    bool purgeBridge = false;
     ResultWireProducerIdentity resultWireProducer;
 };
 
@@ -382,7 +554,10 @@ public:
     // ::WireJoiner::setMergeEdges(), SketchObject::buildInternals() enables merge before
     // getOpenWires().
     void setMergeEdges(bool enabled);
-    void addOpenWire(const TopoDS_Wire& wire);
+    void addOpenWire(
+        const TopoDS_Wire& wire,
+        const std::vector<std::size_t>& sourceEdgeIndices = {}
+    );
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::build(), calls splitEdges(), buildClosedWire(), findTightBound() and
     // exhaustTightBound() before exporting openWireCompound from final EdgeInfo ownership.
@@ -451,47 +626,59 @@ private:
         // produced this EdgeInfo.
         std::vector<std::size_t> sourceEdgeIndices;
         bool sourceLineageFromSplitterHistory = false;
-        // Bridge, not FreeCAD-equivalent ownership: delete helperOpenExportOverride once
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::splitEdges(), after "add(split.edge, ...)", records
+        // "aHistory->AddModified(split.intersectShape, newInfo.edge)". These fields keep the
+        // fragment-to-source ledger separate from sourceVertexIdentity/noOriginal purge evidence.
+        std::vector<std::size_t> splitFragmentSourceEdgeIndices;
+        std::vector<std::size_t> splitFragmentModifiedSourceEdgeIndices;
+        std::vector<std::size_t> splitFragmentGeneratedSourceEdgeIndices;
+        bool splitFragmentFromModifiedHistory = false;
+        bool splitFragmentFromGeneratedHistory = false;
+        bool splitFragmentSourceLineageFromIdentityFallback = false;
+        bool splitFragmentSourceLineageFromSourceIdentityFallback = false;
+        bool splitFragmentHistoryShapeGeometryBridge = false;
+        // Bridge, not FreeCAD-equivalent ownership: delete resultWireProducerCandidate once
         // aHistory, myShapesToReturn, openWireCompound child-wire ownership, and the live
         // WireInfo/EdgeInfo lifecycle produce generated open-export identity directly.
-        bool helperOpenExportOverride = false;
-        std::string helperOpenExportOverrideReason;
-        bool helperOpenExportOverrideSourceEdgeInfo = false;
-        std::size_t helperOpenExportOverrideSourceEdgeInfoIndex = 0;
-        bool helperOpenExportOverrideSourceEdgeInfoConsumed = false;
-        bool helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo = false;
-        bool helperOpenExportOverrideSourceEdgeExportShape = false;
-        bool helperOpenExportOverrideSourceEdgeProducerOutput = false;
-        bool helperOpenExportOverrideFullAHistoryProducerEvidence = false;
-        bool helperOpenExportOverrideSuperEdgeMemberEdgeInfo = false;
-        bool helperOpenExportOverrideSuperEdgeRootEdgeInfo = false;
-        std::size_t helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex = 0;
-        bool helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo = false;
-        bool helperOpenExportOverrideSuperEdgeRootOpenLifecycleEdgeInfo = false;
-        bool helperOpenExportOverrideSuperEdgeRootExportBlockedByIteration = false;
-        bool helperOpenExportOverrideSuperEdgeRootIterationBlockedUnownedRemoval = false;
-        bool helperOpenExportOverrideSuperEdgeRootIterationBlockedPrimaryRemoval = false;
-        bool helperOpenExportOverrideSuperEdgeRootIterationBlockedSecondaryRemoval = false;
-        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate = false;
-        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateFullAHistoryProducerEvidence
+        bool resultWireProducerCandidate = false;
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::buildClosedWire() removes partial shared closed-wire result edges
+        // through EdgeInfo/aHistory; keep this typed producer classifier instead of copying a
+        // legacy helper reason string through topo/sketch history.
+        bool partialSharedClosedWireProducer = false;
+        bool resultWireProducerSourceEdgeInfo = false;
+        std::size_t resultWireProducerSourceEdgeInfoIndex = 0;
+        bool resultWireProducerSourceEdgeInfoConsumed = false;
+        bool resultWireProducerOpenWireCompoundEligible = false;
+        bool resultWireProducerFullAHistoryEvidence = false;
+        bool resultWireProducerSuperEdgeMember = false;
+        bool resultWireProducerSuperEdgeRoot = false;
+        std::size_t resultWireProducerSuperEdgeRootIndex = 0;
+        bool resultWireProducerSuperEdgeRootOpenWireCompoundEligible = false;
+        bool resultWireProducerSuperEdgeRootOpenLifecycle = false;
+        bool resultWireProducerSuperEdgeRootExportBlockedByIteration = false;
+        bool resultWireProducerSuperEdgeRootIterationBlockedUnownedRemoval = false;
+        bool resultWireProducerSuperEdgeRootIterationBlockedPrimaryRemoval = false;
+        bool resultWireProducerSuperEdgeRootIterationBlockedSecondaryRemoval = false;
+        bool resultWireProducerSuperEdgeRootProducerCandidate = false;
+        bool resultWireProducerSuperEdgeRootProducerFullAHistoryEvidence
             = false;
-        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady
+        bool resultWireProducerSuperEdgeRootProducerUnownedRemovalChildWireReady
             = false;
-        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidatePrimaryRemoval = false;
-        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateSecondaryRemoval = false;
-        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo = false;
+        bool resultWireProducerSuperEdgeRootProducerPrimaryRemoval = false;
+        bool resultWireProducerSuperEdgeRootProducerSecondaryRemoval = false;
+        bool resultWireProducerSuperEdgeRootCurrentMember = false;
         std::vector<std::size_t>
-            helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices;
-        std::vector<std::size_t>
-            helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices;
-        bool helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo = false;
-        std::vector<std::size_t> helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices;
-        std::vector<std::size_t> helperOpenExportOverrideAHistoryRemoveSourceEdgeIndices;
-        bool helperOpenExportOverrideAHistoryRemoveSourceLineage = false;
-        bool helperOpenExportOverrideAHistoryRemoveSameSourceLineage = false;
-        bool helperOpenExportOverrideAHistoryRemoveForeignSourceLineage = false;
-        bool helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo = false;
-        std::vector<std::size_t> helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices;
+            resultWireProducerSuperEdgeRootCoveredMemberIndices;
+        bool resultWireProducerAHistoryRemoveSourceEdgeInfo = false;
+        std::vector<std::size_t> resultWireProducerAHistoryRemoveSourceEdgeInfoIndices;
+        std::vector<std::size_t> resultWireProducerAHistoryRemoveSourceEdgeIndices;
+        bool resultWireProducerAHistoryRemoveSourceLineage = false;
+        bool resultWireProducerAHistoryRemoveSameSourceLineage = false;
+        bool resultWireProducerAHistoryRemoveForeignSourceLineage = false;
+        bool resultWireProducerSourceLineageRemovedSourceEdgeInfo = false;
+        std::vector<std::size_t> resultWireProducerSourceLineageRemovedSourceEdgeInfoIndices;
         bool buildClosedWireRemoved = false;
         bool buildClosedWireRemovedByUnowned = false;
         bool buildClosedWireRemovedByPrimaryOwner = false;
@@ -502,19 +689,6 @@ private:
         bool buildClosedWireAHistoryRemoved = false;
         std::vector<std::size_t> buildClosedWireAHistoryRemoveSourceEdgeInfoIndices;
         std::vector<std::size_t> buildClosedWireAHistoryRemoveSourceEdgeIndices;
-        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-        // ::WireJoinerP::buildClosedWire() records the result producer with
-        // "aHistory->Remove(info.edge)", and ::WireJoinerP::build() exports final EdgeInfo identity
-        // through "builder.Add(openWireCompound, info.wire())". This stores producer-owned export
-        // geometry when source/aHistory evidence already proves the final child shape; it is not
-        // counted as the legacy helper override bridge.
-        std::optional<TopoDS_Edge> producerOpenExportShape;
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-        // ::WireJoinerP::build() exports final "info.wire()" children. Keep transitional
-        // result-slot topology as request-local child-wire vertex evidence for root/current-member
-        // producers until aHistory/myShapesToReturn and openWireCompound child ownership replace
-        // this bridge.
-        std::optional<TopoDS_Edge> resultSlotVertexEvidenceEdge;
         // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
         // ::WireJoinerP::findSuperEdges(), "Join edges (let's call it super edge) that are connected
         // to only one other edges". The regular child-wire ledger can consume final superEdge wires;
@@ -545,9 +719,6 @@ private:
         ResultWireProducerIdentity resultWireProducer;
         const TopoDS_Shape& shape(bool forward = true) const;
         TopoDS_Wire wire(bool forward = true) const;
-        TopoDS_Wire openExportWire() const;
-        const TopoDS_Edge& openExportEdge() const;
-        bool hasOpenExportShape() const;
         int iteration = 0;
         int iteration2 = 0;
         std::size_t wireInfo = 0;
@@ -651,64 +822,154 @@ private:
         TopoDS_Wire wire;
         bool wireBuilt = false;
         bool superEdgeWire = false;
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::build() materializes "openWireCompound" child wires before
+        // ::getOpenWires(noOriginal=true) filters that compound. Carry source lineage on the
+        // child-wire slot itself so downstream history can consume openWireCompound ownership
+        // without re-deriving it from EdgeInfo/result-slot geometry.
+        std::vector<std::size_t> sourceEdgeIndices;
+        bool sourceLineageFromSplitterHistory = false;
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::build() materializes openWireCompound children from final EdgeInfo states;
+        // ::getOpenWires() then consumes MapperHistory(aHistory). Carry split fragment provenance
+        // on the child-wire ledger so topo does not infer split ownership from output geometry.
+        std::vector<std::size_t> splitFragmentSourceEdgeIndices;
+        std::vector<std::size_t> splitFragmentModifiedSourceEdgeIndices;
+        std::vector<std::size_t> splitFragmentGeneratedSourceEdgeIndices;
+        bool splitFragmentFromModifiedHistory = false;
+        bool splitFragmentFromGeneratedHistory = false;
+        bool splitFragmentSourceLineageFromIdentityFallback = false;
+        bool splitFragmentSourceLineageFromSourceIdentityFallback = false;
+        bool splitFragmentHistoryShapeGeometryBridge = false;
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::build() emits openWireCompound children before
+        // ::getOpenWires(noOriginal) compares those children with the original "sourceEdgeArray".
+        // Keep source-vertex and split-fragment exclusion evidence on the child-wire slot so the
+        // purge candidate verdict is not recomputed through an EdgeInfo helper after materialization.
+        bool splitFromInputEdge = false;
+        std::array<bool, 2> sourceVertexIdentity {{false, false}};
+        std::array<int, 2> sourceVertexReplacementSourceEdgeIndices {{-1, -1}};
+        std::array<int, 2> sourceVertexReplacementEndpoints {{-1, -1}};
+        std::array<bool, 2> sourceVertexReplacementIdentity {{false, false}};
+        bool noOriginalPurgeCandidate = false;
+        bool noOriginalPurgeMatch = false;
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::getOpenWires(noOriginal=true) purges a child only when every child edge has
+        // at least one sourceEdgeArray shared vertex. Keep the edge counts on the child-wire ledger so
+        // noOriginal decisions are auditable without rebuilding them from output geometry later.
+        bool noOriginalSharedSourceEdgeLedgerRecorded = false;
+        std::size_t noOriginalSharedSourceEdgeCount = 0;
+        std::size_t noOriginalSharedSourceMatchedEdgeCount = 0;
+        std::size_t noOriginalSharedSourceUnmatchedEdgeCount = 0;
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::build() emits final children with
+        // "builder.Add(openWireCompound, info.wire())", then ::getOpenWires() consumes that child with
+        // MapperHistory(aHistory). The public result-wire producer entry is therefore a child-wire slot
+        // decision. EdgeInfo still discovers transitional candidate slots, but downstream purge/history
+        // gates read this child-wire ledger bit instead of an EdgeInfo candidate copy.
+        bool resultWireProducerLedgerEntry = false;
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-        // ::WireJoinerP::build() exports final EdgeInfo "info.wire()" children. This flag is
-        // diagnostic debt only: it is true only when cad-core still has to build an emitted child
-        // from transitional result-slot vertex evidence instead of producer/aHistory output.
-        bool resultSlotVertexEvidenceOutput = false;
-        // Diagnostic bridge copied from EdgeInfo; it must not grow new fixture-shaped reasons.
-        // Deletion is tied to real aHistory / myShapesToReturn / openWireCompound ownership.
-        bool helperOpenExportOverride = false;
-        std::string helperOpenExportOverrideReason;
-        bool helperOpenExportOverrideSourceEdgeInfo = false;
-        std::size_t helperOpenExportOverrideSourceEdgeInfoIndex = 0;
-        bool helperOpenExportOverrideSourceEdgeInfoConsumed = false;
-        bool helperOpenExportOverrideOpenWireCompoundEligibleEdgeInfo = false;
-        bool helperOpenExportOverrideSourceEdgeExportShape = false;
-        bool helperOpenExportOverrideSourceEdgeProducerOutput = false;
-        bool helperOpenExportOverrideFullAHistoryProducerEvidence = false;
-        bool helperOpenExportOverrideSuperEdgeMemberEdgeInfo = false;
-        bool helperOpenExportOverrideSuperEdgeRootEdgeInfo = false;
-        std::size_t helperOpenExportOverrideSuperEdgeRootEdgeInfoIndex = 0;
-        bool helperOpenExportOverrideSuperEdgeRootOpenWireCompoundEligibleEdgeInfo = false;
-        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidate = false;
-        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCandidateUnownedRemovalChildWireProducerReady
-            = false;
-        TopoDS_Wire helperOpenExportOverrideSuperEdgeRootResultWireProducerWire;
-        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerRequiresMemberSuppression = false;
-        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberEdgeInfo = false;
-        std::vector<std::size_t>
-            helperOpenExportOverrideSuperEdgeRootResultWireProducerCoveredMemberEdgeInfoIndices;
-        std::vector<std::size_t>
-            helperOpenExportOverrideSuperEdgeRootResultWireProducerNonCurrentMemberEdgeInfoIndices;
+        // ::WireJoinerP::build() emits "info.wire()" into "openWireCompound"; the emitted child is
+        // later consumed by ::getOpenWires() with MapperHistory(aHistory). Store the materialized
+        // producer edge/wire on the child-wire slot so topo evidence does not recover output shape
+        // through an EdgeInfo output helper after the openWireCompound boundary.
+        std::optional<TopoDS_Edge> producerLedgerEdge;
+        TopoDS_Wire producerLedgerWire;
+        bool producerLedgerWireBuilt = false;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::add(), key: "Make sure coincident vertices are actually the same
+        // TopoDS_Vertex"; true when this child-wire producer was materialized from the mutable
+        // vmap/sourceEdges vertex ledger.
+        bool producerLedgerWireFromSourceVmap = false;
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::add(), key "Make sure coincident vertices are actually the same
+        // TopoDS_Vertex". Keep this as child-wire vertex ledger evidence so later deletion of
+        // endpoint materialization can be gated by TopoDS_Vertex identity, not geometry matching.
+        bool sourceVmapEndpointLedgerRecorded = false;
+        std::size_t sourceVmapEndpointLedgerOutputVertexCount = 0;
+        std::size_t sourceVmapEndpointLedgerMatchedVertexCount = 0;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::build() exports final "info.wire()" children. This remains temporary bridge
+        // evidence for children whose vertices still come from endpoint materialization evidence
+        // instead of the formal vmap/sourceEdges lifecycle.
+        bool producerLedgerWireFromEndpointMaterializationEvidence = false;
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::add(), key "Make sure coincident vertices are actually the same
+        // TopoDS_Vertex"; ::build() then materializes "openWireCompound" children before
+        // ::getOpenWires() maps them with MapperHistory(aHistory). This is child-wire-local
+        // endpoint identity evidence copied from the scoped result-wire producer plan at the
+        // openWireCompound boundary; downstream producer output reads vertex ledger identity, not a
+        // child-wire-local result-slot edge shape.
+        std::vector<TopoDS_Vertex> endpointMaterializationEvidenceVertices;
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::findSuperEdgesUpdateFirst() stores "first->superEdge" on the root
+        // EdgeInfo, while member EdgeInfos are marked "current->iteration = -1". These fields are
+        // the child-wire ledger for that root/member producer lifecycle; EdgeInfo still carries the
+        // transitional result-wire classifier used to discover the candidate.
+        std::size_t superEdgeRootEdgeInfoIndex = 0;
+        bool superEdgeRootOpenWireCompoundEligible = false;
+        bool rootResultWireProducerCandidate = false;
+        bool rootResultWireProducerUnownedRemovalReady = false;
+        TopoDS_Wire rootResultWireProducerWire;
+        bool rootResultWireProducerRequiresMemberSuppression = false;
+        bool currentMemberEdgeInfo = false;
+        std::vector<std::size_t> rootResultWireProducerCoveredMemberEdgeInfoIndices;
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
         // ::WireJoinerP::findSuperEdgesUpdateFirst() stores one root "superEdge" after setting
         // each member "current->iteration = -1". This candidate keeps only the current child
         // member wire so M3 can suppress sibling members without exporting the full root superEdge.
-        TopoDS_Wire helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWire;
-        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedWireBuilt = false;
-        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedByPendingMember
-            = false;
-        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutputBlockedBySourceShape
-            = false;
-        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerReady
-            = false;
-        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerCurrentMemberChildWireProducerFullAHistoryEvidence
-            = false;
-        bool helperOpenExportOverrideSuperEdgeRootResultWireProducerMemberSuppressedOutput = false;
-        bool helperOpenExportOverrideAHistoryRemoveSourceEdgeInfo = false;
-        std::vector<std::size_t> helperOpenExportOverrideAHistoryRemoveSourceEdgeInfoIndices;
-        std::vector<std::size_t> helperOpenExportOverrideAHistoryRemoveSourceEdgeIndices;
-        bool helperOpenExportOverrideAHistoryRemoveSourceLineage = false;
-        bool helperOpenExportOverrideAHistoryRemoveSameSourceLineage = false;
-        bool helperOpenExportOverrideAHistoryRemoveForeignSourceLineage = false;
-        bool helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfo = false;
-        std::vector<std::size_t> helperOpenExportOverrideSourceLineageRemovedSourceEdgeInfoIndices;
-        bool purgeBridge = false;
+        TopoDS_Wire currentMemberProducerWire;
+        bool currentMemberProducerWireBuilt = false;
+        bool currentMemberProducerBlockedByPendingMember = false;
+        bool currentMemberProducerBlockedBySourceShape = false;
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::getOpenWires() consumes MapperHistory(aHistory) after openWireCompound
+        // export. This blocks current-member export while cad-core's member/split candidate would
+        // collapse or otherwise change the vertex multiplicity.
+        bool currentMemberProducerBlockedByVertexMultiplicity = false;
+        bool currentMemberChildWireProducerReady = false;
+        bool currentMemberChildWireProducerFullAHistoryEvidence = false;
+        bool currentMemberProducerOutput = false;
+        struct CurrentMemberSplitLedgerVertexDebt
+        {
+            // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+            // ::WireJoinerP::findSuperEdgesUpdateFirst(), key "wireData->Add(current->shape(...))";
+            // ::splitEdges(), key "aHistory->AddModified(split.intersectShape, newInfo.edge)".
+            // This records each emitted child vertex against the member/split vertex ledger so
+            // result-slot endpoint debt is represented as child-wire ledger state, not output repair.
+            TopoDS_Vertex outputVertex;
+            bool matchedMemberSplitLedger = false;
+            bool matchedCandidateLedger = false;
+            bool resultSlotOnlyIdentity = false;
+        };
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::findSuperEdgesUpdateFirst(), key "wireData->Add(current->shape(...))",
+        // builds root/current-member output from member shapes; ::splitEdges() records
+        // "aHistory->AddModified(split.intersectShape, newInfo.edge)". True means the current
+        // member split ledger can construct a producer candidate, but cad-core still keeps the
+        // result-slot child until MapperHistory/ElementMap vertex multiplicity matches FreeCAD.
+        bool currentMemberSplitLedgerVertexCandidate = false;
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::build() exports "info.wire()" after the EdgeInfo/WireInfo ledger has
+        // stabilized. Keep the current-member split vertex inventory on the child-wire ledger so
+        // diagnostics and topo evidence consume ledger records instead of recomputing from geometry.
+        std::vector<TopoDS_Vertex> currentMemberSplitLedgerMemberVertices;
+        std::vector<TopoDS_Vertex> currentMemberSplitLedgerCandidateVertices;
+        std::vector<CurrentMemberSplitLedgerVertexDebt> currentMemberSplitLedgerOutputVertexDebt;
+        std::size_t currentMemberSplitLedgerCandidateVertexCount = 0;
+        std::size_t currentMemberSplitLedgerOutputVertexCount = 0;
+        std::size_t currentMemberSplitLedgerOutputMatchedVertexCount = 0;
+        std::size_t currentMemberSplitLedgerOutputCandidateMatchedVertexCount = 0;
+        std::size_t currentMemberSplitLedgerOutputUnmatchedVertexCount = 0;
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::add() vmap replacement runs before openWireCompound export. This count marks
+        // output vertices that have not entered that member/split ledger and still come from result-slot evidence.
+        std::size_t currentMemberSplitLedgerResultSlotOnlyVertexCount = 0;
+        bool currentMemberSplitLedgerVertexMultiplicityBlocked = false;
         bool sourceSharedVertexPurgeMatch = false;
         ResultWireProducerIdentity resultWireProducer;
     };
-    struct HelperOpenExportOverrideBinding
+    struct ResultWireProducerBinding
     {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
         // ::WireJoinerP::build() exports result-wire identity from final EdgeInfo states before
@@ -716,20 +977,42 @@ private:
         // result-slot edge used to locate the pre-existing EdgeInfo it mirrors; producer identity
         // must come from EdgeInfo/WireInfo/aHistory, not from this locator edge.
         TopoDS_Edge resultSlotEdge;
-        std::string reason;
+        bool partialSharedClosedWireProducer = false;
         std::vector<std::size_t> sourceEdgeInfoCandidateIndices;
         std::vector<std::size_t> openWireCompoundEligibleCandidateIndices;
     };
-    struct HelperOpenExportOverridePlan
+    struct ResultWireProducerPlan
     {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
         // ::WireJoinerP::buildClosedWire() reruns findClosedWires(true)/findTightBound() before
         // final openWireCompound export. The rerun gate must know whether result-wire identity is
-        // still a transitional helper override before it mutates live EdgeInfo owners.
+        // still a transitional result-wire producer candidate before it mutates live EdgeInfo owners.
         bool needed = false;
         std::size_t candidateEdgeCount = 0;
         std::size_t unboundEdgeCount = 0;
-        std::vector<HelperOpenExportOverrideBinding> bindings;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::build(), sourceEdgeArray -> sourceEdges -> splitEdges() -> buildClosedWire().
+        // A closed-cycle generated export is now detected from the EdgeInfo split ledger, not from
+        // bounded-face result-edge sampling.
+        std::size_t closedWireCycleSplitLedgerSourceEdgeCount = 0;
+        bool closedWireCycleSplitLedgerOpenExport = false;
+        std::vector<ResultWireProducerBinding> bindings;
+    };
+    struct ResultWireProducerPlanLedger
+    {
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::buildClosedWire() records producer evidence with
+        // "aHistory->Remove(info.edge)", then ::build() exports final children with
+        // "builder.Add(openWireCompound, info.wire())". These scoped edges are the request-local
+        // producer-plan outputs copied once into openWireCompound child-wire ledger slots; they are
+        // not part of the long-lived EdgeInfo lifecycle.
+        std::vector<std::optional<TopoDS_Edge>> producerOpenExportEdges;
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::add(), key "Make sure coincident vertices are actually the same
+        // TopoDS_Vertex"; ::findSuperEdgesUpdateFirst() stores current-member output through the root
+        // "first->superEdge". Until that ownership is materialized directly, only endpoint vertex
+        // identity stays scoped to the producer plan and is copied once into the child-wire slot.
+        std::vector<std::vector<TopoDS_Vertex>> endpointMaterializationEvidenceVertices;
     };
     struct OwnerWireInfo
     {
@@ -861,6 +1144,11 @@ private:
         std::size_t exhaustAdjacentWireSetEraseCount = 0;
         std::size_t exhaustAdjacentWireSetAbortCount = 0;
         std::size_t exhaustAdjacentWireInfo2AbortCount = 0;
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::splitEdges() replaces source EdgeInfo rows with multiple Modified
+        // fragments before ::buildClosedWire(); this records the request-local closed-cycle precheck.
+        std::size_t closedWireCycleSplitLedgerSourceEdgeCount = 0;
+        bool closedWireCycleSplitLedgerOpenExport = false;
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
         // ::WireJoinerP::buildClosedWire() removes consumed EdgeInfo entries, then loops back
         // through "findClosedWires(true); findTightBound();" until no more removal happens.
@@ -1026,9 +1314,9 @@ private:
     void recordRepeatedSplitExhaustRerunLifecycle(
         WireInfo& info,
         const std::vector<TopoDS_Face>& boundedFaces,
-        const HelperOpenExportOverridePlan& helperPlan
+        const ResultWireProducerPlan& producerPlan
     );
-    HelperOpenExportOverridePlan computeHelperOpenExportOverridePlan(
+    ResultWireProducerPlan computeResultWireProducerPlan(
         const WireInfo& info,
         const TopoDS_Shape& boundedFaceShape,
         const std::vector<TopoDS_Wire>& closedWires,
@@ -1036,24 +1324,38 @@ private:
         bool splitProducedBoundedFaces,
         bool hasOpenWireOutput
     ) const;
-    bool helperOpenExportOverridePlanHasUnsafeProducer(
+    std::size_t closedWireCycleSplitLedgerSourceEdgeCount(
         const WireInfo& info,
-        const HelperOpenExportOverridePlan& helperPlan
+        const std::vector<TopoDS_Wire>& closedWires
+    ) const;
+    bool resultWireProducerPlanHasUnsafeProducer(
+        const WireInfo& info,
+        const ResultWireProducerPlan& producerPlan
     ) const;
     bool edgeInfoExportsOpenWireCompound(const EdgeInfo& edgeInfo) const;
-    bool helperOpenExportOverrideCandidateHasFullAHistoryProducerEvidence(
+    bool edgeInfoHasOpenWireCompoundLedgerSlot(const EdgeInfo& edgeInfo) const;
+    bool resultWireProducerCandidateHasFullAHistoryEvidence(
         const EdgeInfo& edgeInfo
     ) const;
-    bool helperOpenExportOverrideRootResultWireProducerHasFullAHistoryProducerEvidence(
+    bool resultWireProducerRootHasFullAHistoryEvidence(
         const EdgeInfo& edgeInfo
     ) const;
-    bool helperOpenExportOverrideRootResultWireProducerCanSuppressPendingMember(
+    bool resultWireProducerRootCanSuppressPendingMember(
         const EdgeInfo& edgeInfo
     ) const;
-    bool helperOpenExportOverrideCandidateHasSafeAHistoryProducerEvidence(
+    bool resultWireProducerCandidateHasSafeAHistoryEvidence(
         const EdgeInfo& edgeInfo
     ) const;
-    bool sourceEdgeArrayOriginalOpenEdgeCandidate(const EdgeInfo& edgeInfo) const;
+    bool openWireCompoundNoOriginalPurgeCandidate(
+        const OpenWireCompoundWireInfo& childWire
+    ) const;
+    void updateOpenWireCompoundNoOriginalPurgeVerdict(
+        OpenWireCompoundWireInfo& childWire
+    ) const;
+    bool openWireCompoundChildWirePurgedByNoOriginal(
+        const OpenWireCompoundWireInfo& childWire,
+        bool noOriginal
+    ) const;
     std::optional<std::size_t> superEdgeRootIndexForMember(
         const WireInfo& info,
         const EdgeInfo& edgeInfo
@@ -1062,37 +1364,80 @@ private:
         const WireInfo& info,
         const EdgeInfo& edgeInfo
     ) const;
-    std::optional<std::size_t> sourceShapeReadyAHistoryRemoveProducerIndex(
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::buildClosedWire() records source producer evidence with
+    // "aHistory->Remove(info.edge)", and ::build() publishes only concrete children through
+    // "builder.Add(openWireCompound, info.wire())". A cad-core producer-ledger-ready slot must carry
+    // a non-null scoped producer export edge before consumers can treat it as materialized output.
+    bool resultWireProducerPlanLedgerHasProducerOpenExportEdge(
+        const ResultWireProducerPlanLedger& producerPlanLedger,
+        std::size_t edgeInfoIndex
+    ) const;
+    const TopoDS_Edge& resultWireProducerOpenExportEdge(
+        const EdgeInfo& edgeInfo,
+        const ResultWireProducerPlanLedger& producerPlanLedger,
+        std::size_t edgeInfoIndex
+    ) const;
+    std::optional<std::size_t> producerLedgerReadyAHistoryRemoveProducerIndex(
         const WireInfo& info,
         const EdgeInfo& edgeInfo,
+        const ResultWireProducerPlanLedger& producerPlanLedger,
         const TopoDS_Edge* resultEdge = nullptr
     ) const;
-    std::optional<std::size_t> sourceShapeReadySameSourceSidecarProducerIndex(
+    std::optional<std::size_t> producerLedgerReadySameSourceSidecarProducerIndex(
         const WireInfo& info,
         const EdgeInfo& edgeInfo,
+        const ResultWireProducerPlanLedger& producerPlanLedger,
         const TopoDS_Edge* resultEdge = nullptr
     ) const;
     ResultWireProducerIdentity classifyResultWireProducerSlot(
         const WireInfo& info,
-        std::size_t edgeInfoIndex
+        std::size_t edgeInfoIndex,
+        const ResultWireProducerPlanLedger& producerPlanLedger
     ) const;
-    void attachResultWireProducerLedger(WireInfo& info);
+    void attachResultWireProducerLedger(
+        WireInfo& info,
+        const ResultWireProducerPlanLedger& producerPlanLedger
+    );
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build() emits final children through
+    // "builder.Add(openWireCompound, info.wire())", then ::getOpenWires() consumes
+    // MapperHistory(aHistory). Publish a child-wire producer entry only after the
+    // EdgeInfo candidate has been classified into a finite producer identity or blocker; the raw
+    // candidate bit stays an internal diagnostic.
+    bool resultWireProducerIdentityPublishesChildWireLedgerEntry(
+        const ResultWireProducerIdentity& identity
+    ) const;
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build() emits child wires with
+    // "builder.Add(openWireCompound, info.wire())"; ::getOpenWires() then consumes
+    // MapperHistory(aHistory). A child source-edge producer output is proven by the child-wire
+    // producer edge ledger, not by a copied EdgeInfo/result-slot sidecar flag.
+    bool openWireCompoundChildWireHasSourceEdgeProducerOutput(
+        const OpenWireCompoundWireInfo& childWire
+    ) const;
     ResultWireProducerIdentity childWireResultWireProducerIdentity(
         const WireInfo& info,
         const OpenWireCompoundWireInfo& childWire,
         std::size_t childWireIndex
     ) const;
-    bool memberSuppressedCurrentMemberSourceShapeReady(
+    bool memberSuppressedCurrentMemberProducerLedgerReady(
         const WireInfo& info,
-        const OpenWireCompoundWireInfo& childWire
+        const OpenWireCompoundWireInfo& childWire,
+        std::size_t childWireIndex
     ) const;
     ResultWireProducerLedgerEntry resultWireProducerLedgerEntryForChildWire(
         const OpenWireCompoundWireInfo& childWire,
         std::size_t childWireIndex
     ) const;
-    void applyHelperOpenExportOverridePlan(
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build() exports final children from EdgeInfo state with
+    // "builder.Add(openWireCompound, info.wire())". The temporary result-slot endpoint vertex debt
+    // is scoped to the producer plan and copied into OpenWireCompoundWireInfo once; it is not a
+    // WireInfo lifecycle field or an endpoint edge-shape bridge.
+    ResultWireProducerPlanLedger applyResultWireProducerPlan(
         WireInfo& info,
-        const HelperOpenExportOverridePlan& helperPlan
+        const ResultWireProducerPlan& producerPlan
     );
     void recordBranchSearchCandidatesForOwner(
         WireInfo& info,
@@ -1103,7 +1448,10 @@ private:
     bool recordTightBoundTransferWire(WireInfo& info, OwnerWireInfo& owner);
     void recordTightBoundLifecycle(WireInfo& info);
     void recordExhaustTightBoundLifecycle(WireInfo& info);
-    void recordOpenWireCompoundLedger(WireInfo& info);
+    void recordOpenWireCompoundLedger(
+        WireInfo& info,
+        const ResultWireProducerPlanLedger& producerPlanLedger
+    );
 };
 
 }  // namespace cad_core::part

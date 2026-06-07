@@ -68,11 +68,21 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
         for (const TopoDS_Edge& edge : input.sourceEdges) {
             joiner.addSourceEdge(edge);
         }
-        for (const TopoDS_Wire& wire : input.faceWires) {
-            joiner.addOpenWire(wire);
+        for (std::size_t wireIndex = 0; wireIndex < input.faceWires.size(); ++wireIndex) {
+            const std::vector<std::size_t> emptySourceIndices;
+            const std::vector<std::size_t>& sourceIndices =
+                wireIndex < input.faceWireSourceEdgeIndices.size()
+                ? input.faceWireSourceEdgeIndices[wireIndex]
+                : emptySourceIndices;
+            joiner.addOpenWire(input.faceWires[wireIndex], sourceIndices);
         }
-        for (const TopoDS_Wire& wire : input.openWires) {
-            joiner.addOpenWire(wire);
+        for (std::size_t wireIndex = 0; wireIndex < input.openWires.size(); ++wireIndex) {
+            const std::vector<std::size_t> emptySourceIndices;
+            const std::vector<std::size_t>& sourceIndices =
+                wireIndex < input.openWireSourceEdgeIndices.size()
+                ? input.openWireSourceEdgeIndices[wireIndex]
+                : emptySourceIndices;
+            joiner.addOpenWire(input.openWires[wireIndex], sourceIndices);
         }
         const std::optional<TopoDS_Shape>& wireJoinerFaceResult =
             faceResult.internalShape ? faceResult.internalShape : faceResult.shape;

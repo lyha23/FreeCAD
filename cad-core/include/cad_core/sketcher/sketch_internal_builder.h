@@ -7,6 +7,7 @@
 #include <TopoDS_Shape.hxx>
 #include <TopoDS_Wire.hxx>
 
+#include <cstddef>
 #include <optional>
 #include <vector>
 
@@ -18,6 +19,13 @@ struct SketchInternalBuildInput
     std::vector<TopoDS_Wire> faceWires;
     std::vector<TopoDS_Wire> openWires;
     std::vector<TopoDS_Edge> openEdges;
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build() copies sourceEdgeArray into sourceEdges before ::splitEdges() writes
+    // "aHistory->AddModified(split.intersectShape, newInfo.edge)". Keep each wire edge's
+    // sourceEdgeArray slot as explicit request-local ledger input instead of recovering it from
+    // copied edge geometry in WireJoiner.
+    std::vector<std::vector<std::size_t>> faceWireSourceEdgeIndices;
+    std::vector<std::vector<std::size_t>> openWireSourceEdgeIndices;
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::getOpenWires(), builds a source compound from sourceEdgeArray before
     // noOriginal filtering; cad-core keeps the same source-edge set for open-wire filtering.
