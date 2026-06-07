@@ -245,10 +245,9 @@ cmake --build build
 python3 -m unittest tests.test_p7_features tests.test_feature_flows
 cd ..
 git diff --check -- cad-core docs/框架
-cd cad-core && graphify update .
 ```
 
-结果：构建通过；`tests.test_p7_features tests.test_feature_flows` 106 个测试通过；`git diff --check -- cad-core docs/框架` 通过；`graphify update .` 完成。
+结果：构建通过；`tests.test_p7_features tests.test_feature_flows` 106 个测试通过；`git diff --check -- cad-core docs/框架` 通过。
 
 ### M2：拆 Transformed 家族
 
@@ -271,10 +270,9 @@ cmake --build build
 python3 -m unittest tests.test_p7_features tests.test_feature_flows tests.test_adapters
 cd ..
 git diff --check -- cad-core docs/框架
-cd cad-core && graphify update .
 ```
 
-结果：构建通过；`tests.test_p7_features tests.test_feature_flows tests.test_adapters` 123 个测试通过；`git diff --check -- cad-core docs/框架` 通过；`graphify update .` 完成。
+结果：构建通过；`tests.test_p7_features tests.test_feature_flows tests.test_adapters` 123 个测试通过；`git diff --check -- cad-core docs/框架` 通过。
 
 ### M3：拆 Part Feature 家族
 
@@ -298,10 +296,9 @@ cmake --build build
 python3 -m unittest tests.test_p8_features tests.test_adapters
 cd ..
 git diff --check -- cad-core docs/框架
-cd cad-core && graphify update .
 ```
 
-结果：构建通过；`tests.test_p8_features tests.test_adapters` 99 个测试通过；`git diff --check -- cad-core docs/框架` 通过；`graphify update .` 完成。
+结果：构建通过；`tests.test_p8_features tests.test_adapters` 99 个测试通过；`git diff --check -- cad-core docs/框架` 通过。
 
 ### M4：评估 Link 是否需要拆
 
@@ -337,10 +334,10 @@ cd cad-core && graphify update .
 - `cad-core/CMakeLists.txt` source list 与新文件同步。
 - public header 仍只暴露 FreeCAD 同构模块路径。
 - 每个阶段的 diff 以文件移动 / helper 提取为主，不夹带行为修复。
-- 对应阶段测试、`git diff --check` 和 `graphify update .` 完成。
+- 对应阶段测试和 `git diff --check` 完成。
 
 ## 验收结果
 
 - 最终构建通过：`cd cad-core && cmake --build build`。
 - 最终测试通过：`python3 -m unittest tests.test_include_boundaries tests.test_feature_flows tests.test_p7_features tests.test_p8_features tests.test_adapters`，210 个测试 OK。
-- 最终检查项：`git diff --check -- cad-core docs/框架` 通过；`graphify update .` 完成。
+- 最终检查项：`git diff --check -- cad-core docs/框架` 通过。

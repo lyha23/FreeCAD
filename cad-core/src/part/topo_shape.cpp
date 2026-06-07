@@ -2884,6 +2884,25 @@ nlohmann::json wireJoinerOpenExportEvidenceJson(
             {"mismatch_reason", debt.mismatchReason},
         });
     }
+    nlohmann::json vmapReplacementEvents = nlohmann::json::array();
+    for (const SketchInternalWireJoinerVmapReplacementEvent& replacementEvent :
+         entry.openWireCompoundVmapReplacementEvents) {
+        vmapReplacementEvents.push_back({
+            {"event_index", replacementEvent.eventIndex},
+            {"affected_source_edge_index", replacementEvent.affectedSourceEdgeIndex},
+            {"affected_child_wire_edge_info_index",
+             replacementEvent.affectedChildWireEdgeInfoIndex},
+            {"affected_endpoint", replacementEvent.affectedEndpoint},
+            {"affected_source_endpoint", replacementEvent.affectedSourceEndpoint},
+            {"affected_child_wire_endpoint", replacementEvent.affectedChildWireEndpoint},
+            {"replacement_source_edge_index", replacementEvent.replacementSourceEdgeIndex},
+            {"replacement_source_endpoint", replacementEvent.replacementSourceEndpoint},
+            {"replacement_from_mutable_source_edge_ledger",
+             replacementEvent.replacementFromMutableSourceEdgeLedger},
+            {"replacement_from_split_fragment_ledger",
+             replacementEvent.replacementFromSplitFragmentLedger},
+        });
+    }
     return {
         {"producer", "WireJoiner"},
         {"source_edge_index", sourceEdgeIndex},
@@ -2968,12 +2987,17 @@ nlohmann::json wireJoinerOpenExportEvidenceJson(
          entry.openWireCompoundEndpointProvenanceOutputVertexCount},
         {"open_wire_compound_endpoint_provenance_source_vmap_matched_vertex_count",
          entry.openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount},
+        {"open_wire_compound_endpoint_provenance_vmap_replacement_matched_vertex_count",
+         entry.openWireCompoundEndpointProvenanceVmapReplacementMatchedVertexCount},
         {"open_wire_compound_endpoint_provenance_candidate_matched_vertex_count",
          entry.openWireCompoundEndpointProvenanceCandidateMatchedVertexCount},
         {"open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count",
          entry.openWireCompoundEndpointProvenanceEndpointMaterializationMatchedVertexCount},
         {"open_wire_compound_endpoint_provenance_unmatched_vertex_count",
          entry.openWireCompoundEndpointProvenanceUnmatchedVertexCount},
+        {"open_wire_compound_vmap_replacement_event_count",
+         entry.openWireCompoundVmapReplacementEventCount},
+        {"open_wire_compound_vmap_replacement_events", vmapReplacementEvents},
         {"open_wire_compound_producer_ledger_wire_from_result_slot_evidence",
          entry.openWireCompoundProducerLedgerWireFromResultSlotEvidence},
         {"open_wire_compound_source_edge_producer_output",
@@ -3315,6 +3339,25 @@ nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& h
                 {"mismatch_reason", debt.mismatchReason},
             });
         }
+        nlohmann::json vmapReplacementEvents = nlohmann::json::array();
+        for (const SketchInternalWireJoinerVmapReplacementEvent& replacementEvent :
+             entry.openWireCompoundVmapReplacementEvents) {
+            vmapReplacementEvents.push_back({
+                {"event_index", replacementEvent.eventIndex},
+                {"affected_source_edge_index", replacementEvent.affectedSourceEdgeIndex},
+                {"affected_child_wire_edge_info_index",
+                 replacementEvent.affectedChildWireEdgeInfoIndex},
+                {"affected_endpoint", replacementEvent.affectedEndpoint},
+                {"affected_source_endpoint", replacementEvent.affectedSourceEndpoint},
+                {"affected_child_wire_endpoint", replacementEvent.affectedChildWireEndpoint},
+                {"replacement_source_edge_index", replacementEvent.replacementSourceEdgeIndex},
+                {"replacement_source_endpoint", replacementEvent.replacementSourceEndpoint},
+                {"replacement_from_mutable_source_edge_ledger",
+                 replacementEvent.replacementFromMutableSourceEdgeLedger},
+                {"replacement_from_split_fragment_ledger",
+                 replacementEvent.replacementFromSplitFragmentLedger},
+            });
+        }
         wireJoinerOpenExportEntries.push_back({
             {"open_export_index", entry.openExportIndex},
             {"edge_info_index", entry.edgeInfoIndex},
@@ -3387,12 +3430,17 @@ nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& h
              entry.openWireCompoundEndpointProvenanceOutputVertexCount},
             {"open_wire_compound_endpoint_provenance_source_vmap_matched_vertex_count",
              entry.openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount},
+            {"open_wire_compound_endpoint_provenance_vmap_replacement_matched_vertex_count",
+             entry.openWireCompoundEndpointProvenanceVmapReplacementMatchedVertexCount},
             {"open_wire_compound_endpoint_provenance_candidate_matched_vertex_count",
              entry.openWireCompoundEndpointProvenanceCandidateMatchedVertexCount},
             {"open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count",
              entry.openWireCompoundEndpointProvenanceEndpointMaterializationMatchedVertexCount},
             {"open_wire_compound_endpoint_provenance_unmatched_vertex_count",
              entry.openWireCompoundEndpointProvenanceUnmatchedVertexCount},
+            {"open_wire_compound_vmap_replacement_event_count",
+             entry.openWireCompoundVmapReplacementEventCount},
+            {"open_wire_compound_vmap_replacement_events", vmapReplacementEvents},
             {"open_wire_compound_producer_ledger_wire_from_result_slot_evidence",
              entry.openWireCompoundProducerLedgerWireFromResultSlotEvidence},
             {"open_wire_compound_source_edge_producer_output",

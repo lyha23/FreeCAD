@@ -87,6 +87,27 @@ struct WireJoinerHistoryEvent
     bool splitFragmentFromGeneratedHistory = false;
 };
 
+struct WireJoinerVmapReplacementEvent
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::add(), key "Make sure coincident vertices are actually the same
+    // TopoDS_Vertex", rebuilds an added edge against the existing vmap/sourceEdges vertex. This
+    // event is the part-layer identity ledger for that replacement; sketch/topo consumers may
+    // forward it, but must not infer replacement from output geometry.
+    std::size_t eventIndex = resultWireProducerNpos;
+    TopoDS_Vertex oldVertex;
+    TopoDS_Vertex newSharedVertex;
+    std::size_t affectedSourceEdgeIndex = resultWireProducerNpos;
+    std::size_t affectedChildWireEdgeInfoIndex = resultWireProducerNpos;
+    int affectedEndpoint = -1;
+    int affectedSourceEndpoint = -1;
+    int affectedChildWireEndpoint = -1;
+    std::size_t replacementSourceEdgeIndex = resultWireProducerNpos;
+    int replacementSourceEndpoint = -1;
+    bool replacementFromMutableSourceEdgeLedger = false;
+    bool replacementFromSplitFragmentLedger = false;
+};
+
 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
 // ::WireJoinerP::buildClosedWire() marks removed targets with "vertex.edgeInfo()->iteration = -1"
 // but records the producer source separately through "aHistory->Remove(info.edge)".
@@ -445,9 +466,12 @@ struct WireJoinerLedgerSummary
     std::size_t openWireCompoundEndpointProvenanceWireInfoCount = 0;
     std::size_t openWireCompoundEndpointProvenanceOutputVertexCount = 0;
     std::size_t openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount = 0;
+    std::size_t openWireCompoundEndpointProvenanceVmapReplacementMatchedVertexCount = 0;
     std::size_t openWireCompoundEndpointProvenanceCandidateMatchedVertexCount = 0;
     std::size_t openWireCompoundEndpointProvenanceEndpointMaterializationMatchedVertexCount = 0;
     std::size_t openWireCompoundEndpointProvenanceUnmatchedVertexCount = 0;
+    std::size_t openWireCompoundVmapReplacementEventWireInfoCount = 0;
+    std::size_t openWireCompoundVmapReplacementEventCount = 0;
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::build() emits final "info.wire()" topology. cad-core still needs this
     // diagnostic count when the source/vmap ledger cannot yet supply the child-wire vertices and the
@@ -610,9 +634,12 @@ struct WireJoinerOpenExportHistoryEntry
     bool openWireCompoundEndpointProvenanceRecorded = false;
     std::size_t openWireCompoundEndpointProvenanceOutputVertexCount = 0;
     std::size_t openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount = 0;
+    std::size_t openWireCompoundEndpointProvenanceVmapReplacementMatchedVertexCount = 0;
     std::size_t openWireCompoundEndpointProvenanceCandidateMatchedVertexCount = 0;
     std::size_t openWireCompoundEndpointProvenanceEndpointMaterializationMatchedVertexCount = 0;
     std::size_t openWireCompoundEndpointProvenanceUnmatchedVertexCount = 0;
+    std::vector<WireJoinerVmapReplacementEvent> openWireCompoundVmapReplacementEvents;
+    std::size_t openWireCompoundVmapReplacementEventCount = 0;
     bool openWireCompoundSourceEdgeProducerOutput = false;
     bool openWireCompoundCurrentMemberProducerOutput = false;
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
@@ -1046,16 +1073,21 @@ private:
             // every emitted child endpoint; this is ledger evidence, not an output rewrite.
             TopoDS_Vertex outputVertex;
             bool matchedSourceVmapLedger = false;
+            bool matchedVmapReplacementLedger = false;
             bool matchedCurrentMemberCandidateLedger = false;
             bool matchedEndpointMaterializationEvidence = false;
+            std::size_t vmapReplacementEventIndex = resultWireProducerNpos;
         };
         std::vector<EndpointProvenance> endpointProvenance;
         bool endpointProvenanceRecorded = false;
         std::size_t endpointProvenanceOutputVertexCount = 0;
         std::size_t endpointProvenanceSourceVmapMatchedVertexCount = 0;
+        std::size_t endpointProvenanceVmapReplacementMatchedVertexCount = 0;
         std::size_t endpointProvenanceCandidateMatchedVertexCount = 0;
         std::size_t endpointProvenanceEndpointMaterializationMatchedVertexCount = 0;
         std::size_t endpointProvenanceUnmatchedVertexCount = 0;
+        std::vector<WireJoinerVmapReplacementEvent> vmapReplacementEvents;
+        std::size_t vmapReplacementEventCount = 0;
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
         // ::WireJoinerP::build() exports final "info.wire()" children. This remains temporary bridge
         // evidence for children whose vertices still come from endpoint materialization evidence
@@ -1416,6 +1448,7 @@ private:
     // sourceEdgeArray equivalent for getOpenWires(noOriginal) purge, and keep this separate ledger
     // as FreeCAD's mutable internal sourceEdges equivalent for split/history vertex identity.
     std::vector<TopoDS_Edge> sourceEdgeLedgerEdges_;
+    std::vector<WireJoinerVmapReplacementEvent> sourceEdgeLedgerReplacementEvents_;
     std::vector<TopoDS_Edge> sourceEdges_;
     WireJoinerHistorySummary historySummary_;
     void initializeEdgeInfo(EdgeInfo& edgeInfo, const TopoDS_Edge& edge) const;

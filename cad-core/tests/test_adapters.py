@@ -1134,6 +1134,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
         self.assertIn(
+            "child_wire_vmap_replacement_event_ledger",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
             "child_wire_endpoint_provenance_ledger",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
@@ -1334,7 +1338,19 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
         self.assertIn(
+            "open_wire_compound_endpoint_provenance_vmap_replacement_matched_vertex_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
             "open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_vmap_replacement_event_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_vmap_replacement_events",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
         self.assertIn(

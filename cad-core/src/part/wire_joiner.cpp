@@ -869,6 +869,8 @@ struct LedgerVertexReplacementCandidate
 {
     TopoDS_Edge edge;
     TopoDS_Vertex vertex;
+    std::size_t sourceEdgeIndex = resultWireProducerNpos;
+    int sourceEndpoint = -1;
 };
 
 std::optional<LedgerVertexReplacementCandidate> ledgerVertexReplacementCandidate(
@@ -883,7 +885,8 @@ std::optional<LedgerVertexReplacementCandidate> ledgerVertexReplacementCandidate
     const gp_Pnt point = BRep_Tool::Pnt(vertex);
     std::optional<LedgerVertexReplacementCandidate> bestCandidate;
     double bestSquareDistance = std::numeric_limits<double>::infinity();
-    for (const TopoDS_Edge& ledgerEdge : ledgerEdges) {
+    for (std::size_t edgeIndex = 0; edgeIndex < ledgerEdges.size(); ++edgeIndex) {
+        const TopoDS_Edge& ledgerEdge = ledgerEdges[edgeIndex];
         if (ledgerEdge.IsNull()) {
             continue;
         }
@@ -891,12 +894,18 @@ std::optional<LedgerVertexReplacementCandidate> ledgerVertexReplacementCandidate
             TopExp::FirstVertex(ledgerEdge),
             TopExp::LastVertex(ledgerEdge),
         };
-        for (const TopoDS_Vertex& ledgerVertex : ledgerVertices) {
+        for (std::size_t endpoint = 0; endpoint < ledgerVertices.size(); ++endpoint) {
+            const TopoDS_Vertex& ledgerVertex = ledgerVertices[endpoint];
             if (ledgerVertex.IsNull()) {
                 continue;
             }
             if (vertex.IsSame(ledgerVertex)) {
-                return LedgerVertexReplacementCandidate {ledgerEdge, ledgerVertex};
+                return LedgerVertexReplacementCandidate {
+                    ledgerEdge,
+                    ledgerVertex,
+                    edgeIndex,
+                    static_cast<int>(endpoint),
+                };
             }
             const double squareDistance = point.SquareDistance(BRep_Tool::Pnt(ledgerVertex));
             const double tolerance = std::max(
@@ -906,7 +915,12 @@ std::optional<LedgerVertexReplacementCandidate> ledgerVertexReplacementCandidate
                 continue;
             }
             bestSquareDistance = squareDistance;
-            bestCandidate = LedgerVertexReplacementCandidate {ledgerEdge, ledgerVertex};
+            bestCandidate = LedgerVertexReplacementCandidate {
+                ledgerEdge,
+                ledgerVertex,
+                edgeIndex,
+                static_cast<int>(endpoint),
+            };
         }
     }
     return bestCandidate;
@@ -914,7 +928,12 @@ std::optional<LedgerVertexReplacementCandidate> ledgerVertexReplacementCandidate
 
 TopoDS_Edge edgeWithLedgerVertexReplacements(
     const TopoDS_Edge& edge,
-    const std::vector<TopoDS_Edge>& ledgerEdges
+    const std::vector<TopoDS_Edge>& ledgerEdges,
+    std::vector<WireJoinerVmapReplacementEvent>* replacementEvents = nullptr,
+    std::size_t affectedSourceEdgeIndex = resultWireProducerNpos,
+    std::size_t affectedChildWireEdgeInfoIndex = resultWireProducerNpos,
+    bool replacementFromMutableSourceEdgeLedger = true,
+    bool replacementFromSplitFragmentLedger = false
 )
 {
     if (edge.IsNull() || ledgerEdges.empty()) {
@@ -927,7 +946,10 @@ TopoDS_Edge edgeWithLedgerVertexReplacements(
     TopoDS_Vertex lastVertex = originalLast;
     bool firstReplaced = false;
     bool lastReplaced = false;
-    auto replacementVertex = [&](const TopoDS_Vertex& endpoint) -> std::optional<TopoDS_Vertex> {
+    std::array<std::optional<LedgerVertexReplacementCandidate>, 2> replacementCandidates;
+    auto replacementVertex =
+        [&](const TopoDS_Vertex& endpoint,
+            std::size_t endpointIndex) -> std::optional<TopoDS_Vertex> {
         if (endpoint.IsNull()) {
             return std::nullopt;
         }
@@ -951,14 +973,15 @@ TopoDS_Edge edgeWithLedgerVertexReplacements(
             ShapeFix_ShapeTolerance fix;
             fix.SetTolerance(endpoint, std::max(tolerance * 0.5, Precision::Confusion()), TopAbs_VERTEX);
         }
+        replacementCandidates[endpointIndex] = candidate;
         return candidate->vertex;
     };
 
-    if (const std::optional<TopoDS_Vertex> replacement = replacementVertex(originalFirst)) {
+    if (const std::optional<TopoDS_Vertex> replacement = replacementVertex(originalFirst, 0U)) {
         firstVertex = *replacement;
         firstReplaced = true;
     }
-    if (const std::optional<TopoDS_Vertex> replacement = replacementVertex(originalLast)) {
+    if (const std::optional<TopoDS_Vertex> replacement = replacementVertex(originalLast, 1U)) {
         lastVertex = *replacement;
         lastReplaced = true;
     }
@@ -994,6 +1017,35 @@ TopoDS_Edge edgeWithLedgerVertexReplacements(
     if ((firstReplaced && !resultContainsVertex(firstVertex))
         || (lastReplaced && !resultContainsVertex(lastVertex))) {
         return edge;
+    }
+    if (replacementEvents != nullptr) {
+        const std::array<TopoDS_Vertex, 2> originalVertices {originalFirst, originalLast};
+        for (std::size_t endpoint = 0; endpoint < replacementCandidates.size(); ++endpoint) {
+            if (!replacementCandidates[endpoint]) {
+                continue;
+            }
+            WireJoinerVmapReplacementEvent event;
+            event.oldVertex = originalVertices[endpoint];
+            event.newSharedVertex = replacementCandidates[endpoint]->vertex;
+            event.affectedSourceEdgeIndex = affectedSourceEdgeIndex;
+            event.affectedChildWireEdgeInfoIndex = affectedChildWireEdgeInfoIndex;
+            event.affectedEndpoint = static_cast<int>(endpoint);
+            event.affectedSourceEndpoint = affectedSourceEdgeIndex == resultWireProducerNpos
+                ? -1
+                : static_cast<int>(endpoint);
+            event.affectedChildWireEndpoint =
+                affectedChildWireEdgeInfoIndex == resultWireProducerNpos
+                ? -1
+                : static_cast<int>(endpoint);
+            event.replacementSourceEdgeIndex =
+                replacementCandidates[endpoint]->sourceEdgeIndex;
+            event.replacementSourceEndpoint =
+                replacementCandidates[endpoint]->sourceEndpoint;
+            event.replacementFromMutableSourceEdgeLedger =
+                replacementFromMutableSourceEdgeLedger;
+            event.replacementFromSplitFragmentLedger = replacementFromSplitFragmentLedger;
+            replacementEvents->push_back(std::move(event));
+        }
     }
     return result;
 }
@@ -1716,8 +1768,23 @@ void WireJoiner::addOpenWire(
 void WireJoiner::addSourceEdge(const TopoDS_Edge& edge)
 {
     if (!edge.IsNull()) {
+        const std::size_t sourceEdgeIndex = sourceEdges_.size();
+        std::vector<WireJoinerVmapReplacementEvent> replacementEvents;
         sourceEdges_.push_back(edge);
-        sourceEdgeLedgerEdges_.push_back(edgeWithLedgerVertexReplacements(edge, sourceEdgeLedgerEdges_));
+        TopoDS_Edge ledgerEdge = edgeWithLedgerVertexReplacements(
+            edge,
+            sourceEdgeLedgerEdges_,
+            &replacementEvents,
+            sourceEdgeIndex
+        );
+        if (ledgerEdge.IsNull()) {
+            ledgerEdge = edge;
+        }
+        for (WireJoinerVmapReplacementEvent& event : replacementEvents) {
+            event.eventIndex = sourceEdgeLedgerReplacementEvents_.size();
+            sourceEdgeLedgerReplacementEvents_.push_back(std::move(event));
+        }
+        sourceEdgeLedgerEdges_.push_back(ledgerEdge);
     }
 }
 
@@ -3693,12 +3760,18 @@ void WireJoiner::buildFinalEdgeOwnership(
                 childWireIt->endpointProvenanceOutputVertexCount;
             entry.openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount =
                 childWireIt->endpointProvenanceSourceVmapMatchedVertexCount;
+            entry.openWireCompoundEndpointProvenanceVmapReplacementMatchedVertexCount =
+                childWireIt->endpointProvenanceVmapReplacementMatchedVertexCount;
             entry.openWireCompoundEndpointProvenanceCandidateMatchedVertexCount =
                 childWireIt->endpointProvenanceCandidateMatchedVertexCount;
             entry.openWireCompoundEndpointProvenanceEndpointMaterializationMatchedVertexCount =
                 childWireIt->endpointProvenanceEndpointMaterializationMatchedVertexCount;
             entry.openWireCompoundEndpointProvenanceUnmatchedVertexCount =
                 childWireIt->endpointProvenanceUnmatchedVertexCount;
+            entry.openWireCompoundVmapReplacementEvents =
+                childWireIt->vmapReplacementEvents;
+            entry.openWireCompoundVmapReplacementEventCount =
+                childWireIt->vmapReplacementEventCount;
             entry.openWireCompoundSourceEdgeProducerOutput =
                 openWireCompoundChildWireHasSourceEdgeProducerOutput(*childWireIt);
             entry.openWireCompoundCurrentMemberProducerOutput =
@@ -6326,7 +6399,10 @@ void WireJoiner::recordOpenWireCompoundLedger(
     // output is materialized from producer/source/root/current-member ledger state.
     info.openWireCompoundWires.clear();
     std::vector<TopoDS_Edge> splitFragmentProducerLedgerEdgesByEdgeInfo(info.edges.size());
+    std::vector<std::vector<WireJoinerVmapReplacementEvent>>
+        splitFragmentProducerLedgerEventsByEdgeInfo(info.edges.size());
     std::vector<TopoDS_Edge> splitFragmentProducerLedgerEdges = sourceEdgeLedgerEdges_;
+    std::size_t nextVmapReplacementEventIndex = sourceEdgeLedgerReplacementEvents_.size();
     for (std::size_t edgeInfoIndex = 0; edgeInfoIndex < info.edges.size(); ++edgeInfoIndex) {
         const EdgeInfo& edgeInfo = info.edges[edgeInfoIndex];
         if (edgeInfo.edge.IsNull() || !edgeInfo.sourceLineageFromSplitterHistory) {
@@ -6338,10 +6414,28 @@ void WireJoiner::recordOpenWireCompoundLedger(
         // back into the same request-local vmap ledger used by ::add() so openWireCompound child-wire
         // materialization can consume split-fragment ownership instead of borrowing result-slot
         // endpoint evidence.
+        std::vector<WireJoinerVmapReplacementEvent> splitReplacementEvents;
+        const std::size_t affectedSourceEdgeIndex = edgeInfo.sourceEdgeIndices.size() == 1U
+            ? edgeInfo.sourceEdgeIndices.front()
+            : resultWireProducerNpos;
         TopoDS_Edge ledgerEdge =
-            edgeWithLedgerVertexReplacements(edgeInfo.edge, splitFragmentProducerLedgerEdges);
+            edgeWithLedgerVertexReplacements(
+                edgeInfo.edge,
+                splitFragmentProducerLedgerEdges,
+                &splitReplacementEvents,
+                affectedSourceEdgeIndex,
+                edgeInfoIndex,
+                true,
+                true
+            );
         if (ledgerEdge.IsNull()) {
             ledgerEdge = edgeInfo.edge;
+        }
+        for (WireJoinerVmapReplacementEvent& event : splitReplacementEvents) {
+            event.eventIndex = nextVmapReplacementEventIndex++;
+            splitFragmentProducerLedgerEventsByEdgeInfo[edgeInfoIndex].push_back(
+                std::move(event)
+            );
         }
         splitFragmentProducerLedgerEdgesByEdgeInfo[edgeInfoIndex] = ledgerEdge;
         splitFragmentProducerLedgerEdges.push_back(ledgerEdge);
@@ -6382,6 +6476,43 @@ void WireJoiner::recordOpenWireCompoundLedger(
         }
         return false;
     };
+    auto vmapReplacementEventsFor = [&](std::size_t edgeInfoIndex,
+                                        const std::vector<std::size_t>& sourceEdgeIndices) {
+        std::vector<WireJoinerVmapReplacementEvent> events;
+        for (const WireJoinerVmapReplacementEvent& event : sourceEdgeLedgerReplacementEvents_) {
+            const bool sourceRelevant = std::find(
+                                            sourceEdgeIndices.begin(),
+                                            sourceEdgeIndices.end(),
+                                            event.affectedSourceEdgeIndex
+                                        )
+                    != sourceEdgeIndices.end()
+                || std::find(
+                       sourceEdgeIndices.begin(),
+                       sourceEdgeIndices.end(),
+                       event.replacementSourceEdgeIndex
+                   )
+                    != sourceEdgeIndices.end();
+            if (sourceEdgeIndices.empty() || sourceRelevant) {
+                events.push_back(event);
+            }
+        }
+        for (std::size_t splitEdgeInfoIndex = 0;
+             splitEdgeInfoIndex < splitFragmentProducerLedgerEventsByEdgeInfo.size();
+             ++splitEdgeInfoIndex) {
+            if (splitEdgeInfoIndex != edgeInfoIndex
+                && splitEdgeInfoIndex < info.edges.size()
+                && !sourceEdgeIndicesIntersect(
+                    info.edges[splitEdgeInfoIndex].sourceEdgeIndices,
+                    sourceEdgeIndices
+                )) {
+                continue;
+            }
+            const std::vector<WireJoinerVmapReplacementEvent>& splitEvents =
+                splitFragmentProducerLedgerEventsByEdgeInfo[splitEdgeInfoIndex];
+            events.insert(events.end(), splitEvents.begin(), splitEvents.end());
+        }
+        return events;
+    };
     auto recordEndpointProvenance = [&](OpenWireCompoundWireInfo& childWire,
                                         bool updateSourceVmapEndpointLedger) {
         // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
@@ -6392,24 +6523,53 @@ void WireJoiner::recordOpenWireCompoundLedger(
         const std::vector<TopoDS_Vertex> outputVertices = wireVertices(childWire.wire);
         const std::vector<TopoDS_Vertex> sourceVmapLedgerVertices =
             edgeEndpointVertices(producerLedgerEdgesFor(childWire.edgeIndex));
+        std::vector<WireJoinerVmapReplacementEvent> replacementEvents =
+            vmapReplacementEventsFor(childWire.edgeIndex, childWire.sourceEdgeIndices);
         const std::vector<TopoDS_Vertex>& candidateVertices =
             childWire.currentMemberSplitLedgerCandidateVertices;
         const std::vector<TopoDS_Vertex>& endpointMaterializationVertices =
             childWire.endpointMaterializationEvidenceVertices;
+        const bool endpointMaterializationIsCurrentMemberDebt =
+            childWire.currentMemberSplitLedgerVertexMultiplicityBlocked
+            || childWire.currentMemberProducerBlockedByVertexMultiplicity
+            || childWire.currentMemberSplitLedgerResultSlotOnlyVertexCount > 0U;
 
         childWire.endpointProvenance.clear();
+        childWire.vmapReplacementEvents.clear();
         childWire.endpointProvenance.reserve(outputVertices.size());
-        for (const TopoDS_Vertex& vertex : outputVertices) {
+        for (std::size_t outputVertexIndex = 0; outputVertexIndex < outputVertices.size();
+             ++outputVertexIndex) {
+            const TopoDS_Vertex& vertex = outputVertices[outputVertexIndex];
             OpenWireCompoundWireInfo::EndpointProvenance provenance;
             provenance.outputVertex = vertex;
+            const auto replacementEventIt = std::find_if(
+                replacementEvents.begin(),
+                replacementEvents.end(),
+                [&](const WireJoinerVmapReplacementEvent& event) {
+                    return !vertex.IsNull() && !event.newSharedVertex.IsNull()
+                        && vertex.IsSame(event.newSharedVertex);
+                }
+            );
+            if (replacementEventIt != replacementEvents.end()) {
+                provenance.matchedVmapReplacementLedger = true;
+                provenance.vmapReplacementEventIndex = replacementEventIt->eventIndex;
+                WireJoinerVmapReplacementEvent childEvent = *replacementEventIt;
+                childEvent.affectedChildWireEdgeInfoIndex = childWire.edgeIndex;
+                childEvent.affectedChildWireEndpoint =
+                    static_cast<int>(outputVertexIndex);
+                childWire.vmapReplacementEvents.push_back(std::move(childEvent));
+            }
             provenance.matchedSourceVmapLedger =
-                vertexMatchesAnyByIdentity(vertex, sourceVmapLedgerVertices);
+                vertexMatchesAnyByIdentity(vertex, sourceVmapLedgerVertices)
+                || provenance.matchedVmapReplacementLedger;
             provenance.matchedCurrentMemberCandidateLedger =
                 vertexMatchesAnyByIdentity(vertex, candidateVertices);
             provenance.matchedEndpointMaterializationEvidence =
-                vertexMatchesAnyByIdentity(vertex, endpointMaterializationVertices);
+                endpointMaterializationIsCurrentMemberDebt
+                && vertexMatchesAnyByIdentity(vertex, endpointMaterializationVertices);
             childWire.endpointProvenance.push_back(std::move(provenance));
         }
+        childWire.vmapReplacementEventCount = childWire.vmapReplacementEvents.size();
         childWire.endpointProvenanceRecorded = !childWire.endpointProvenance.empty();
         childWire.endpointProvenanceOutputVertexCount =
             childWire.endpointProvenance.size();
@@ -6419,6 +6579,14 @@ void WireJoiner::recordOpenWireCompoundLedger(
                 childWire.endpointProvenance.end(),
                 [](const OpenWireCompoundWireInfo::EndpointProvenance& provenance) {
                     return provenance.matchedSourceVmapLedger;
+                }
+            ));
+        childWire.endpointProvenanceVmapReplacementMatchedVertexCount =
+            static_cast<std::size_t>(std::count_if(
+                childWire.endpointProvenance.begin(),
+                childWire.endpointProvenance.end(),
+                [](const OpenWireCompoundWireInfo::EndpointProvenance& provenance) {
+                    return provenance.matchedVmapReplacementLedger;
                 }
             ));
         childWire.endpointProvenanceCandidateMatchedVertexCount =
@@ -6443,6 +6611,7 @@ void WireJoiner::recordOpenWireCompoundLedger(
                 childWire.endpointProvenance.end(),
                 [](const OpenWireCompoundWireInfo::EndpointProvenance& provenance) {
                     return !provenance.matchedSourceVmapLedger
+                        && !provenance.matchedVmapReplacementLedger
                         && !provenance.matchedCurrentMemberCandidateLedger
                         && !provenance.matchedEndpointMaterializationEvidence;
                 }
@@ -6566,7 +6735,13 @@ void WireJoiner::recordOpenWireCompoundLedger(
                 && !edgeInfoReferencesClosedSourceEdge(edgeInfo);
             const bool hasResultSlotEndpointMaterializationEvidence =
                 childWire.endpointMaterializationEvidenceVertices.size() >= 2U;
-            if (!currentMemberProducerShape && !producerChildEdgeBackedBySplitLedger && producerChildEdge
+            const bool currentMemberEndpointMaterializationDebt =
+                edgeInfo.resultWireProducer.kind == ResultWireProducerKind::CurrentMemberChildWire
+                || edgeInfo.resultWireProducerSuperEdgeRootCurrentMember
+                || edgeInfo.resultWireProducerSuperEdgeMember
+                || edgeInfo.resultWireProducerSuperEdgeRootOpenLifecycle;
+            if (currentMemberEndpointMaterializationDebt && !producerChildEdgeBackedBySplitLedger
+                && producerChildEdge
                 && hasResultSlotEndpointMaterializationEvidence) {
                 const std::vector<TopoDS_Vertex> producerVertices = edgeVertices(*producerChildEdge);
                 const std::vector<TopoDS_Vertex> locatorVertices =
@@ -6588,7 +6763,7 @@ void WireJoiner::recordOpenWireCompoundLedger(
                     producerChildEdgeFromSourceVmap = false;
                 }
             }
-            if (!currentMemberProducerShape
+            if (currentMemberEndpointMaterializationDebt
                 && (!producerChildEdge || producerChildEdge->IsNull())
                 && hasResultSlotEndpointMaterializationEvidence) {
                 producerChildEdge = edgeWithProducerCurveAndResultVertices(
@@ -7399,12 +7574,19 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
                 += childWire.endpointProvenanceOutputVertexCount;
             summary.openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount
                 += childWire.endpointProvenanceSourceVmapMatchedVertexCount;
+            summary.openWireCompoundEndpointProvenanceVmapReplacementMatchedVertexCount
+                += childWire.endpointProvenanceVmapReplacementMatchedVertexCount;
             summary.openWireCompoundEndpointProvenanceCandidateMatchedVertexCount
                 += childWire.endpointProvenanceCandidateMatchedVertexCount;
             summary.openWireCompoundEndpointProvenanceEndpointMaterializationMatchedVertexCount
                 += childWire.endpointProvenanceEndpointMaterializationMatchedVertexCount;
             summary.openWireCompoundEndpointProvenanceUnmatchedVertexCount
                 += childWire.endpointProvenanceUnmatchedVertexCount;
+            if (!childWire.vmapReplacementEvents.empty()) {
+                ++summary.openWireCompoundVmapReplacementEventWireInfoCount;
+            }
+            summary.openWireCompoundVmapReplacementEventCount
+                += childWire.vmapReplacementEventCount;
             if (childWire.producerLedgerWireFromEndpointMaterializationEvidence) {
                 ++summary.openWireCompoundProducerLedgerWireFromResultSlotEvidenceWireInfoCount;
             }

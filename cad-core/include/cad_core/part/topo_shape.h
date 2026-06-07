@@ -69,6 +69,24 @@ struct SketchInternalWireJoinerEndpointIdentityDebt
     std::string mismatchReason;
 };
 
+struct SketchInternalWireJoinerVmapReplacementEvent
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::add() replaces coincident endpoints through vmap/sourceEdges before
+    // ::getOpenWires() calls MapperHistory(aHistory). Topo forwards this typed ledger event instead
+    // of deriving vertex ownership from exported geometry.
+    std::size_t eventIndex = 0;
+    std::size_t affectedSourceEdgeIndex = 0;
+    std::size_t affectedChildWireEdgeInfoIndex = 0;
+    int affectedEndpoint = -1;
+    int affectedSourceEndpoint = -1;
+    int affectedChildWireEndpoint = -1;
+    std::size_t replacementSourceEdgeIndex = 0;
+    int replacementSourceEndpoint = -1;
+    bool replacementFromMutableSourceEdgeLedger = false;
+    bool replacementFromSplitFragmentLedger = false;
+};
+
 struct SketchInternalWireJoinerOpenExportHistoryEntry
 {
     std::size_t openExportIndex = 0;
@@ -129,9 +147,13 @@ struct SketchInternalWireJoinerOpenExportHistoryEntry
     bool openWireCompoundEndpointProvenanceRecorded = false;
     std::size_t openWireCompoundEndpointProvenanceOutputVertexCount = 0;
     std::size_t openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount = 0;
+    std::size_t openWireCompoundEndpointProvenanceVmapReplacementMatchedVertexCount = 0;
     std::size_t openWireCompoundEndpointProvenanceCandidateMatchedVertexCount = 0;
     std::size_t openWireCompoundEndpointProvenanceEndpointMaterializationMatchedVertexCount = 0;
     std::size_t openWireCompoundEndpointProvenanceUnmatchedVertexCount = 0;
+    std::vector<SketchInternalWireJoinerVmapReplacementEvent>
+        openWireCompoundVmapReplacementEvents;
+    std::size_t openWireCompoundVmapReplacementEventCount = 0;
     bool openWireCompoundSourceEdgeProducerOutput = false;
     bool openWireCompoundCurrentMemberProducerOutput = false;
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp

@@ -34,6 +34,7 @@ sourceEdgeArray
 - 本轮再把 `WireJoinerHistoryEvent` 列表转入 `SketchInternalHistoryContext`：`Sketch.InternalShape.sketch_internal_history` 现在输出 `wire_joiner_history_events`，`topo_shape.cpp` 通过 event index lookup 消费 event relation/source lineage，mapper evidence 输出 `wire_joiner_history_event_consumed_by_topo=true`。entry 里的 relation/source 字段仍保留为兼容转发和诊断，但 topo 主路径不再只靠 entry 字段消费 relation。
 - 本轮继续把 open-export ownership 前移到 `OpenWireCompoundWireInfo` child-wire slot：child-wire 现在记录 `OpenLeafIterationMinus3 / UnownedOpenEdge / RootCurrentMemberChildProducer` 来源、EdgeInfo iteration / iteration2、owner WireInfo / wireInfo2、child shape edge/vertex inventory、history event index 与 source edge indices；`result_wire_producer_ledger_entries` 直接消费这些 child-wire ownership 字段，不再在公开 entry 层重新解释 raw EdgeInfo candidate。
 - 本轮把 three-overlap current-member vertex debt 从 count-only 继续推进到 per-output-endpoint resolver：每个 blocked child 的输出端点都记录 member/split ledger、candidate wire、current child-wire output、endpoint materialization evidence 的 `TopoDS_Vertex` identity 关系，以及 result-slot-only 标记和 mismatch reason。当前 3 个 blocked child 的 6 个输出端点均是 `member=false / candidate=false / endpoint_materialization=true / result_slot_only=true`；进一步的 resolver 证明 current output / endpoint materialization evidence 均复用其它 child-wire output identity（6/6），但 candidate endpoint 不复用这些 shared output identity（0/6），因此 candidate 不能替换当前输出。
+- 本轮推进阶段 B/E 交界：`WireJoinerVmapReplacementEvent` 记录 `WireJoinerP::add()` vmap replacement 的 old vertex、new shared vertex、affected source edge / child-wire endpoint 与 replacement source edge index；`OpenWireCompoundWireInfo::EndpointProvenance` 先消费 `sourceEdgeLedgerEdges_`、vmap-replaced sourceEdges 与 split fragment ledger，endpoint materialization evidence 只保留为 current-member vertex debt 诊断。当前 P5 cross / segmented 的 vmap replacement event matched endpoint 均为 8，endpoint materialization matched 为 0；three-overlap 仍为 vmap replacement event 0、endpoint materialization matched 6，缺口更明确但不改变输出拓扑。
 
 但仍有两个 capability 不能升级：
 
@@ -96,6 +97,13 @@ open_wire_compound_endpoint_provenance_unmatched_vertex_count = 24
   - 承接 `TopoShape` mapper 消费和 subshape history。
 - `/Users/admin/Chili3DProject/重构Chili/FreeCAD/src/App/ElementMap.cpp`
   - 承接 stable subname、child map、terminal split / deleted / ambiguous history。
+
+### 本轮 cad-core 分层映射
+
+- `WireJoinerP::add()` vmap replacement：落在 `cad-core/src/part/wire_joiner.cpp::edgeWithLedgerVertexReplacements()`、`sourceEdgeLedgerEdges_` 与 `WireJoinerVmapReplacementEvent`；只记录 typed vertex identity，不在 sketcher / topo 输出端猜 ownership。
+- `WireJoinerP::splitEdges()` history：落在 `splitEdgesAtIntersections()`、`SplitEdgeRecord`、`splitFragmentProducerLedgerEdgesByEdgeInfo` 与 `splitFragmentProducerLedgerEventsByEdgeInfo`；Modified / Generated / input EdgeInfo sidecar 只提供 source lineage 和 replacement event evidence。
+- `WireJoinerP::build()` openWireCompound：落在 `recordOpenWireCompoundLedger()` 与 `OpenWireCompoundWireInfo`；child-wire endpoint provenance 优先消费 mutable source/vmap/split ledger，endpoint materialization evidence 只作为 current-member vertex debt。
+- `WireJoinerP::getOpenWires(noOriginal)` + `MapperHistory(aHistory)`：当前只由 `getOpenWires()`、`WireJoinerHistoryEvent`、`wire_joiner_history_detail` 和 `topo_shape.cpp` evidence 消费 typed child-wire ledger；完整 `MapperHistory(aHistory) -> ElementMap` full 仍是后续，不在本轮实现。
 
 ## cad-core 剩余债务
 
@@ -525,16 +533,8 @@ makeShapeWithElementMap(comp, MapperHistory(wireJoinerHistory), sourceEdges, op)
 ```bash
 cd /Users/admin/Chili3DProject/重构Chili/FreeCAD
 git diff --check
-graphify update .
 cd cad-core
 python3 -m unittest tests.test_p5_sketch tests.test_p6_topology tests.test_adapters
-```
-
-若本机 `graphify` 不在 PATH，可用当前机器已验证的 fallback：
-
-```bash
-cd /Users/admin/Chili3DProject/重构Chili/FreeCAD
-/Users/admin/.cargo/bin/graphify-rs build --path . --update --format json
 ```
 
 ### 阶段回归

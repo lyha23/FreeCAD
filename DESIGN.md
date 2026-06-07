@@ -160,14 +160,14 @@ Chili/FreeCAD/docs/CADCore方案/细化方案', 要把每一个步骤干什么�
 
   禁止：fixture 名称分支；bbox/面积/输出顺序/几何类型/source edge 猜测；在 adapter/runtime 输出层/document parser/sketch executor 塞 topo 规则；Link/Assembly 绕过 MapperHistory/resolver；完整 FreeCAD 全仓库构建；未经要求提交代码；partial complete。
 
-  验证分层执行。每轮代码修改只跑相关粗 filter：C2-M2/M4 跑 tests.test_p5_sketch tests.test_p6_topology；C2-M3 跑 tests.test_diagnostics tests.test_feature_flows tests.test_p6_topology；C2-M5/M6 跑 tests.test_p7_features tests.test_p8_features；C2-M7 跑 tests.test_adapters tests.test_feature_flows tests.test_p8_features。随后仓库根跑 git diff --check；代码修改后跑 graphify update .。
+  验证分层执行。每轮代码修改只跑相关粗 filter：C2-M2/M4 跑 tests.test_p5_sketch tests.test_p6_topology；C2-M3 跑 tests.test_diagnostics tests.test_feature_flows tests.test_p6_topology；C2-M5/M6 跑 tests.test_p7_features tests.test_p8_features；C2-M7 跑 tests.test_adapters tests.test_feature_flows tests.test_p8_features。随后仓库根跑 git diff --check。
 
   阶段收口或改 oracle/runner 时运行：
   cd /Users/li/Chili3DProject/重构Chili/FreeCAD/cad-core
   cmake --build build
   python3 -m unittest tests.test_mvp tests.test_diagnostics tests.test_feature_flows tests.test_adapters tests.test_p5_sketch tests.test_p6_topology tests.test_p7_features tests.test_p8_features
 
-  C2-M8 冻结前再加 tests.test_expected_fixtures，并在仓库根运行 git diff --check、graphify update .。
+  C2-M8 冻结前再加 tests.test_expected_fixtures，并在仓库根运行 git diff --check。
 
   文档同步 docs/CADCore2.0/{README.md,00-总览.md,01-P5P6-ExternalGeometry-TopoNaming主线.md,02-P6P7-History-PartDesign收敛.md,03-P8-Link-Assembly-Adapter产品化.md,04-验收矩阵与交付规则.md}，只写当前基线、完成语义、FreeCAD 依据、cad-core 落点、缺口、验收命令、下一步、非目标，不写流水账。
 
@@ -220,6 +220,4 @@ Chili/FreeCAD/docs/CADCore方案/细化方案', 要把每一个步骤干什么�
   收口再执行：
   cd /Users/li/Chili3DProject/重构Chili/FreeCAD
   git diff --check
-  graphify update cad-core
-  graphify update docs/CADCore3.0
   M8 更新 05。只写当前基线、已完成语义、剩余缺口、验收命令、下一步和非目标，不写流水账。

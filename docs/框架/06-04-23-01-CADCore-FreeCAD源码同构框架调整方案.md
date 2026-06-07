@@ -387,7 +387,6 @@ python3 -m unittest tests.test_p5_sketch tests.test_p6_topology
 python3 -m unittest tests.test_p7_features tests.test_p8_features tests.test_adapters
 cd /Users/li/Chili3DProject/重构Chili/FreeCAD
 git diff --check
-graphify update .
 ```
 
 ### M2：Part TopoShape / ElementMap / FaceMaker / WireJoiner 归位

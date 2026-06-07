@@ -91,7 +91,6 @@ capability 状态必须准确：transport 只能是 `covered_contract`；represe
 
 ```bash
 git diff --check -- cad-core docs/CADCore3.0 docs/偏移处理
-graphify update .
 ```
 
 CopyOnChange / Assembly 阶段回归：

@@ -93,7 +93,7 @@ rg -n '#include [<"]cad_core/(document|features|geometry|topo)/' cad-core/includ
 - `cad-core/src`
 - `cad-core/tests`
 
-不扫描 build、graphify 输出和缓存目录。
+不扫描 build 和缓存目录。
 
 ### 第三步：删除旧 namespace alias
 
@@ -144,8 +144,6 @@ cd /Users/li/Chili3DProject/重构Chili/FreeCAD/cad-core
 python3 -m unittest tests/test_include_boundaries.py
 cd ..
 git diff --check -- cad-core docs/temp/6-5-12-12-CADCore移除旧include兼容层方案.md
-cd cad-core
-graphify update .
 ```
 
 ### 阶段回归

@@ -765,6 +765,10 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
                         entry.openWireCompoundEndpointProvenanceOutputVertexCount;
                     topoEntry.openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount =
                         entry.openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount;
+                    topoEntry
+                        .openWireCompoundEndpointProvenanceVmapReplacementMatchedVertexCount =
+                        entry
+                            .openWireCompoundEndpointProvenanceVmapReplacementMatchedVertexCount;
                     topoEntry.openWireCompoundEndpointProvenanceCandidateMatchedVertexCount =
                         entry.openWireCompoundEndpointProvenanceCandidateMatchedVertexCount;
                     topoEntry
@@ -773,6 +777,30 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
                             .openWireCompoundEndpointProvenanceEndpointMaterializationMatchedVertexCount;
                     topoEntry.openWireCompoundEndpointProvenanceUnmatchedVertexCount =
                         entry.openWireCompoundEndpointProvenanceUnmatchedVertexCount;
+                    topoEntry.openWireCompoundVmapReplacementEventCount =
+                        entry.openWireCompoundVmapReplacementEventCount;
+                    for (const part::WireJoinerVmapReplacementEvent& event :
+                         entry.openWireCompoundVmapReplacementEvents) {
+                        part::SketchInternalWireJoinerVmapReplacementEvent topoEvent;
+                        topoEvent.eventIndex = event.eventIndex;
+                        topoEvent.affectedSourceEdgeIndex = event.affectedSourceEdgeIndex;
+                        topoEvent.affectedChildWireEdgeInfoIndex =
+                            event.affectedChildWireEdgeInfoIndex;
+                        topoEvent.affectedEndpoint = event.affectedEndpoint;
+                        topoEvent.affectedSourceEndpoint = event.affectedSourceEndpoint;
+                        topoEvent.affectedChildWireEndpoint = event.affectedChildWireEndpoint;
+                        topoEvent.replacementSourceEdgeIndex =
+                            event.replacementSourceEdgeIndex;
+                        topoEvent.replacementSourceEndpoint =
+                            event.replacementSourceEndpoint;
+                        topoEvent.replacementFromMutableSourceEdgeLedger =
+                            event.replacementFromMutableSourceEdgeLedger;
+                        topoEvent.replacementFromSplitFragmentLedger =
+                            event.replacementFromSplitFragmentLedger;
+                        topoEntry.openWireCompoundVmapReplacementEvents.push_back(
+                            std::move(topoEvent)
+                        );
+                    }
                     topoEntry.openWireCompoundProducerLedgerWireFromResultSlotEvidence =
                         entry.openWireCompoundProducerLedgerWireFromResultSlotEvidence;
                     topoEntry.openWireCompoundSourceEdgeProducerOutput =
@@ -1321,6 +1349,9 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
              wireJoinerLedger->openWireCompoundEndpointProvenanceOutputVertexCount},
             {"open_wire_compound_endpoint_provenance_source_vmap_matched_vertex_count",
              wireJoinerLedger->openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount},
+            {"open_wire_compound_endpoint_provenance_vmap_replacement_matched_vertex_count",
+             wireJoinerLedger
+                 ->openWireCompoundEndpointProvenanceVmapReplacementMatchedVertexCount},
             {"open_wire_compound_endpoint_provenance_candidate_matched_vertex_count",
              wireJoinerLedger->openWireCompoundEndpointProvenanceCandidateMatchedVertexCount},
             {"open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count",
@@ -1328,6 +1359,10 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
                  ->openWireCompoundEndpointProvenanceEndpointMaterializationMatchedVertexCount},
             {"open_wire_compound_endpoint_provenance_unmatched_vertex_count",
              wireJoinerLedger->openWireCompoundEndpointProvenanceUnmatchedVertexCount},
+            {"open_wire_compound_vmap_replacement_event_wire_info_count",
+             wireJoinerLedger->openWireCompoundVmapReplacementEventWireInfoCount},
+            {"open_wire_compound_vmap_replacement_event_count",
+             wireJoinerLedger->openWireCompoundVmapReplacementEventCount},
             {"open_wire_compound_producer_ledger_wire_from_result_slot_evidence_wire_info_count",
              wireJoinerLedger
                  ->openWireCompoundProducerLedgerWireFromResultSlotEvidenceWireInfoCount},
@@ -1476,6 +1511,25 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
                     {"mismatch_reason", debt.mismatchReason},
                 });
             }
+            nlohmann::json vmapReplacementEvents = nlohmann::json::array();
+            for (const part::WireJoinerVmapReplacementEvent& event :
+                 entry.openWireCompoundVmapReplacementEvents) {
+                vmapReplacementEvents.push_back({
+                    {"event_index", event.eventIndex},
+                    {"affected_source_edge_index", event.affectedSourceEdgeIndex},
+                    {"affected_child_wire_edge_info_index",
+                     event.affectedChildWireEdgeInfoIndex},
+                    {"affected_endpoint", event.affectedEndpoint},
+                    {"affected_source_endpoint", event.affectedSourceEndpoint},
+                    {"affected_child_wire_endpoint", event.affectedChildWireEndpoint},
+                    {"replacement_source_edge_index", event.replacementSourceEdgeIndex},
+                    {"replacement_source_endpoint", event.replacementSourceEndpoint},
+                    {"replacement_from_mutable_source_edge_ledger",
+                     event.replacementFromMutableSourceEdgeLedger},
+                    {"replacement_from_split_fragment_ledger",
+                     event.replacementFromSplitFragmentLedger},
+                });
+            }
             openExportHistoryEntries.push_back({
                 {"open_export_index", entry.openExportIndex},
                 {"edge_info_index", entry.edgeInfoIndex},
@@ -1562,12 +1616,17 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
                  entry.openWireCompoundEndpointProvenanceOutputVertexCount},
                 {"open_wire_compound_endpoint_provenance_source_vmap_matched_vertex_count",
                  entry.openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount},
+                {"open_wire_compound_endpoint_provenance_vmap_replacement_matched_vertex_count",
+                 entry.openWireCompoundEndpointProvenanceVmapReplacementMatchedVertexCount},
                 {"open_wire_compound_endpoint_provenance_candidate_matched_vertex_count",
                  entry.openWireCompoundEndpointProvenanceCandidateMatchedVertexCount},
                 {"open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count",
                  entry.openWireCompoundEndpointProvenanceEndpointMaterializationMatchedVertexCount},
                 {"open_wire_compound_endpoint_provenance_unmatched_vertex_count",
                  entry.openWireCompoundEndpointProvenanceUnmatchedVertexCount},
+                {"open_wire_compound_vmap_replacement_event_count",
+                 entry.openWireCompoundVmapReplacementEventCount},
+                {"open_wire_compound_vmap_replacement_events", vmapReplacementEvents},
                 {"open_wire_compound_producer_ledger_wire_from_result_slot_evidence",
                  entry.openWireCompoundProducerLedgerWireFromResultSlotEvidence},
                 {"open_wire_compound_source_edge_producer_output",
