@@ -2751,28 +2751,22 @@ bool resultWireOpenExportEntryRequiresProducerIdentity(
 }
 
 const std::vector<std::size_t>& wireJoinerOpenCompoundSourceEdgeIndices(
-    const SketchInternalWireJoinerOpenExportHistoryEntry& entry
+    const SketchInternalWireJoinerOpenExportHistoryEntry& entry,
+    const SketchInternalWireJoinerHistoryEvent* event
 )
 {
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::build() exports "openWireCompound" children first, then
-    // ::getOpenWires() consumes "MapperHistory(aHistory)" with sourceEdges. Prefer the child-wire
-    // ledger source lineage over the legacy EdgeInfo sidecar so ElementMap evidence follows the
-    // openWireCompound ownership boundary.
+    // ::getOpenWires() consumes "MapperHistory(aHistory)" with sourceEdges. Prefer the
+    // request-local WireJoiner history event over entry-side lineage so ElementMap evidence follows
+    // the same event ledger used for relation.
+    if (event && !event->sourceEdgeIndices.empty()) {
+        return event->sourceEdgeIndices;
+    }
     if (!entry.openWireCompoundSourceEdgeIndices.empty()) {
         return entry.openWireCompoundSourceEdgeIndices;
     }
     return entry.sourceEdgeIndices;
-}
-
-bool wireJoinerOpenCompoundLineageFromSplitter(
-    const SketchInternalWireJoinerOpenExportHistoryEntry& entry
-)
-{
-    if (!entry.openWireCompoundSourceEdgeIndices.empty()) {
-        return entry.openWireCompoundSourceLineageFromSplitterHistory;
-    }
-    return entry.sourceLineageFromSplitterHistory;
 }
 
 bool wireJoinerOpenCompoundNoOriginalPurged(
@@ -2787,26 +2781,40 @@ bool wireJoinerOpenCompoundNoOriginalPurged(
 }
 
 std::string wireJoinerRelationForOpenExportEntry(
+    const SketchInternalWireJoinerOpenExportHistoryEntry& entry,
+    const SketchInternalWireJoinerHistoryEvent* event
+)
+{
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::getOpenWires() consumes MapperHistory(aHistory). The relation must come from
+    // the part-layer WireJoiner child-wire ledger; topo must not reconstruct split/generated/deleted
+    // ownership from source arrays, split flags, producer kind, or exported geometry.
+    if (event && event->relationFromChildWireLedger) {
+        return event->relation;
+    }
+    return entry.wireJoinerHistoryRelation;
+}
+
+const SketchInternalWireJoinerHistoryEvent* wireJoinerHistoryEventForOpenExportEntry(
+    const SketchInternalHistoryContext& history,
     const SketchInternalWireJoinerOpenExportHistoryEntry& entry
 )
 {
-    const std::vector<std::size_t>& sourceEdgeIndices =
-        wireJoinerOpenCompoundSourceEdgeIndices(entry);
-    if (wireJoinerOpenCompoundNoOriginalPurged(entry)) {
-        return "deleted";
+    if (!entry.wireJoinerHistoryEventFromChildWireLedger) {
+        return nullptr;
     }
-    if (entry.splitFragmentFromModifiedHistory || wireJoinerOpenCompoundLineageFromSplitter(entry)
-        || sourceEdgeIndices.size() > 1U) {
-        return "split";
+    const auto eventIt = std::find_if(
+        history.wireJoinerHistoryEvents.begin(),
+        history.wireJoinerHistoryEvents.end(),
+        [&](const SketchInternalWireJoinerHistoryEvent& event) {
+            return event.eventIndex == entry.wireJoinerHistoryEventIndex
+                && event.openExportIndex == entry.openExportIndex;
+        }
+    );
+    if (eventIt == history.wireJoinerHistoryEvents.end()) {
+        return nullptr;
     }
-    if (entry.splitFragmentFromGeneratedHistory) {
-        return "generated";
-    }
-    if (entry.resultWireProducerKind == "ExistingSourceEdge"
-        || !resultWireOpenExportEntryRequiresProducerIdentity(entry)) {
-        return "preserved";
-    }
-    return "generated";
+    return &(*eventIt);
 }
 
 std::string wireJoinerDiagnosticStatusForOpenExportEntry(
@@ -2843,10 +2851,12 @@ std::string wireJoinerDiagnosticStatusForOpenExportEntry(
 
 nlohmann::json wireJoinerOpenExportEvidenceJson(
     const SketchInternalWireJoinerOpenExportHistoryEntry& entry,
+    const SketchInternalWireJoinerHistoryEvent* event,
     std::size_t sourceEdgeIndex,
     const std::string& targetName
 )
 {
+    const std::string relation = wireJoinerRelationForOpenExportEntry(entry, event);
     return {
         {"producer", "WireJoiner"},
         {"source_edge_index", sourceEdgeIndex},
@@ -2854,6 +2864,24 @@ nlohmann::json wireJoinerOpenExportEvidenceJson(
         {"target_internal_element", targetName},
         {"open_export_index", entry.openExportIndex},
         {"edge_info_index", entry.edgeInfoIndex},
+        {"wire_joiner_history_relation", relation},
+        {"wire_joiner_history_relation_from_child_wire_ledger",
+         entry.wireJoinerHistoryRelationFromChildWireLedger},
+        {"wire_joiner_history_event_index", entry.wireJoinerHistoryEventIndex},
+        {"wire_joiner_history_event_from_child_wire_ledger",
+         entry.wireJoinerHistoryEventFromChildWireLedger},
+        {"wire_joiner_history_event_consumed_by_topo", event != nullptr},
+        {"wire_joiner_history_event_relation", event ? event->relation : std::string()},
+        {"wire_joiner_history_event_source_edge_indices",
+         event ? event->sourceEdgeIndices : std::vector<std::size_t>()},
+        {"wire_joiner_history_event_source_lineage_from_splitter_history",
+         event ? event->sourceLineageFromSplitterHistory : false},
+        {"wire_joiner_history_event_no_original_purged_by_ledger",
+         event ? event->noOriginalPurgedByLedger : false},
+        {"wire_joiner_history_event_split_fragment_from_modified_history",
+         event ? event->splitFragmentFromModifiedHistory : false},
+        {"wire_joiner_history_event_split_fragment_from_generated_history",
+         event ? event->splitFragmentFromGeneratedHistory : false},
         {"result_wire_producer_kind", entry.resultWireProducerKind},
         {"result_wire_producer_state", entry.resultWireProducerState},
         {"result_wire_producer_blocker", entry.resultWireProducerBlocker},
@@ -2891,6 +2919,18 @@ nlohmann::json wireJoinerOpenExportEvidenceJson(
          entry.openWireCompoundSourceVmapEndpointLedgerOutputVertexCount},
         {"open_wire_compound_source_vmap_endpoint_ledger_matched_vertex_count",
          entry.openWireCompoundSourceVmapEndpointLedgerMatchedVertexCount},
+        {"open_wire_compound_endpoint_provenance_recorded",
+         entry.openWireCompoundEndpointProvenanceRecorded},
+        {"open_wire_compound_endpoint_provenance_output_vertex_count",
+         entry.openWireCompoundEndpointProvenanceOutputVertexCount},
+        {"open_wire_compound_endpoint_provenance_source_vmap_matched_vertex_count",
+         entry.openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount},
+        {"open_wire_compound_endpoint_provenance_candidate_matched_vertex_count",
+         entry.openWireCompoundEndpointProvenanceCandidateMatchedVertexCount},
+        {"open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count",
+         entry.openWireCompoundEndpointProvenanceEndpointMaterializationMatchedVertexCount},
+        {"open_wire_compound_endpoint_provenance_unmatched_vertex_count",
+         entry.openWireCompoundEndpointProvenanceUnmatchedVertexCount},
         {"open_wire_compound_producer_ledger_wire_from_result_slot_evidence",
          entry.openWireCompoundProducerLedgerWireFromResultSlotEvidence},
         {"open_wire_compound_source_edge_producer_output",
@@ -2971,7 +3011,9 @@ void consumeSketchInternalWireJoinerProducerEvidence(
     const std::string sourceOwner = sketchSourceOwnerForInternalShape(namedShape);
     for (const SketchInternalWireJoinerOpenExportHistoryEntry& entry :
          history.wireJoinerOpenExportHistoryEntries) {
-        const std::string relation = wireJoinerRelationForOpenExportEntry(entry);
+        const SketchInternalWireJoinerHistoryEvent* historyEvent =
+            wireJoinerHistoryEventForOpenExportEntry(history, entry);
+        const std::string relation = wireJoinerRelationForOpenExportEntry(entry, historyEvent);
         int internalEdgeIndex = 0;
         if (!entry.openExportEdge.IsNull()) {
             internalEdgeIndex = findSameShapeIndex(internalEdges, entry.openExportEdge);
@@ -2984,7 +3026,7 @@ void consumeSketchInternalWireJoinerProducerEvidence(
             = wireJoinerDiagnosticStatusForOpenExportEntry(entry, targetFound);
 
         const std::vector<std::size_t>& sourceEdgeIndices =
-            wireJoinerOpenCompoundSourceEdgeIndices(entry);
+            wireJoinerOpenCompoundSourceEdgeIndices(entry, historyEvent);
         if (sourceEdgeIndices.empty()) {
             appendSketchInternalProducerMapperEvent(
                 namedShape,
@@ -2994,7 +3036,7 @@ void consumeSketchInternalWireJoinerProducerEvidence(
                 "edge",
                 relation,
                 "wire_joiner:open_export",
-                wireJoinerOpenExportEvidenceJson(entry, 0U, targetName),
+                wireJoinerOpenExportEvidenceJson(entry, historyEvent, 0U, targetName),
                 diagnosticStatus.empty() ? "missing_producer_identity" : diagnosticStatus
             );
             continue;
@@ -3062,7 +3104,7 @@ void consumeSketchInternalWireJoinerProducerEvidence(
                 "edge",
                 relation,
                 "wire_joiner:open_export",
-                wireJoinerOpenExportEvidenceJson(entry, sourceEdgeIndex, targetName),
+                wireJoinerOpenExportEvidenceJson(entry, historyEvent, sourceEdgeIndex, targetName),
                 diagnosticStatus
             );
         }
@@ -3104,8 +3146,12 @@ bool resultWireElementMapIdentityMismatch(
     if (!resultWireOpenExportEntryRequiresProducerIdentity(entry)) {
         return false;
     }
+    const SketchInternalWireJoinerHistoryEvent* historyEvent =
+        namedShape.sketchInternalHistory
+        ? wireJoinerHistoryEventForOpenExportEntry(*namedShape.sketchInternalHistory, entry)
+        : nullptr;
     const std::vector<std::size_t>& sourceEdgeIndices =
-        wireJoinerOpenCompoundSourceEdgeIndices(entry);
+        wireJoinerOpenCompoundSourceEdgeIndices(entry, historyEvent);
     if (sourceEdgeIndices.empty()) {
         return true;
     }
@@ -3173,12 +3219,39 @@ nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& h
             {"outer_boundary", std::move(boundary)},
         });
     }
+    nlohmann::json wireJoinerHistoryEvents = nlohmann::json::array();
+    std::size_t wireJoinerHistoryEventFromChildWireLedgerCount = 0;
+    for (const SketchInternalWireJoinerHistoryEvent& event : history.wireJoinerHistoryEvents) {
+        if (event.relationFromChildWireLedger) {
+            ++wireJoinerHistoryEventFromChildWireLedgerCount;
+        }
+        wireJoinerHistoryEvents.push_back({
+            {"event_index", event.eventIndex},
+            {"open_export_index", event.openExportIndex},
+            {"edge_info_index", event.edgeInfoIndex},
+            {"open_wire_compound_child_wire_info_index",
+             event.openWireCompoundChildWireInfoIndex},
+            {"relation", event.relation},
+            {"relation_from_child_wire_ledger", event.relationFromChildWireLedger},
+            {"source_edge_indices", event.sourceEdgeIndices},
+            {"source_lineage_from_splitter_history", event.sourceLineageFromSplitterHistory},
+            {"no_original_purged_by_ledger", event.noOriginalPurgedByLedger},
+            {"split_fragment_from_modified_history", event.splitFragmentFromModifiedHistory},
+            {"split_fragment_from_generated_history", event.splitFragmentFromGeneratedHistory},
+        });
+    }
     nlohmann::json wireJoinerOpenExportEntries = nlohmann::json::array();
     for (const SketchInternalWireJoinerOpenExportHistoryEntry& entry :
          history.wireJoinerOpenExportHistoryEntries) {
         wireJoinerOpenExportEntries.push_back({
             {"open_export_index", entry.openExportIndex},
             {"edge_info_index", entry.edgeInfoIndex},
+            {"wire_joiner_history_relation", entry.wireJoinerHistoryRelation},
+            {"wire_joiner_history_relation_from_child_wire_ledger",
+             entry.wireJoinerHistoryRelationFromChildWireLedger},
+            {"wire_joiner_history_event_index", entry.wireJoinerHistoryEventIndex},
+            {"wire_joiner_history_event_from_child_wire_ledger",
+             entry.wireJoinerHistoryEventFromChildWireLedger},
             {"result_wire_producer_kind", entry.resultWireProducerKind},
             {"result_wire_producer_state", entry.resultWireProducerState},
             {"result_wire_producer_blocker", entry.resultWireProducerBlocker},
@@ -3218,6 +3291,18 @@ nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& h
              entry.openWireCompoundSourceVmapEndpointLedgerOutputVertexCount},
             {"open_wire_compound_source_vmap_endpoint_ledger_matched_vertex_count",
              entry.openWireCompoundSourceVmapEndpointLedgerMatchedVertexCount},
+            {"open_wire_compound_endpoint_provenance_recorded",
+             entry.openWireCompoundEndpointProvenanceRecorded},
+            {"open_wire_compound_endpoint_provenance_output_vertex_count",
+             entry.openWireCompoundEndpointProvenanceOutputVertexCount},
+            {"open_wire_compound_endpoint_provenance_source_vmap_matched_vertex_count",
+             entry.openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount},
+            {"open_wire_compound_endpoint_provenance_candidate_matched_vertex_count",
+             entry.openWireCompoundEndpointProvenanceCandidateMatchedVertexCount},
+            {"open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count",
+             entry.openWireCompoundEndpointProvenanceEndpointMaterializationMatchedVertexCount},
+            {"open_wire_compound_endpoint_provenance_unmatched_vertex_count",
+             entry.openWireCompoundEndpointProvenanceUnmatchedVertexCount},
             {"open_wire_compound_producer_ledger_wire_from_result_slot_evidence",
              entry.openWireCompoundProducerLedgerWireFromResultSlotEvidence},
             {"open_wire_compound_source_edge_producer_output",
@@ -3282,6 +3367,10 @@ nlohmann::json sketchInternalHistoryToJson(const SketchInternalHistoryContext& h
         {"facemaker_bounded_face_evidence", std::move(faceMakerBoundedFaceEvidence)},
         {"wire_joiner_source_edge_count", history.wireJoinerSourceEdgeCount},
         {"wire_joiner_split_result_edge_count", history.wireJoinerSplitResultEdgeCount},
+        {"wire_joiner_history_event_count", history.wireJoinerHistoryEvents.size()},
+        {"wire_joiner_history_event_from_child_wire_ledger_count",
+         wireJoinerHistoryEventFromChildWireLedgerCount},
+        {"wire_joiner_history_events", std::move(wireJoinerHistoryEvents)},
         {"wire_joiner_open_export_history_entries", std::move(wireJoinerOpenExportEntries)},
         {"named_shape_history_missing_result_wire_identity_count",
          history.namedShapeHistoryMissingResultWireIdentityCount},

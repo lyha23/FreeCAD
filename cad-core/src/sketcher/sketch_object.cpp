@@ -648,6 +648,27 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
                 internalHistoryContext->wireJoinerSourceEdgeCount = wireJoinerHistory->sourceEdgeCount;
                 internalHistoryContext->wireJoinerSplitResultEdgeCount
                     = wireJoinerHistory->splitResultEdgeCount;
+                for (const part::WireJoinerHistoryEvent& event : wireJoinerHistory->historyEvents) {
+                    part::SketchInternalWireJoinerHistoryEvent topoEvent;
+                    topoEvent.eventIndex = event.eventIndex;
+                    topoEvent.openExportIndex = event.openExportIndex;
+                    topoEvent.edgeInfoIndex = event.edgeInfoIndex;
+                    topoEvent.openWireCompoundChildWireInfoIndex =
+                        event.openWireCompoundChildWireInfoIndex;
+                    topoEvent.relation = part::wireJoinerHistoryRelationName(event.relation);
+                    topoEvent.relationFromChildWireLedger = event.relationFromChildWireLedger;
+                    topoEvent.sourceEdgeIndices = event.sourceEdgeIndices;
+                    topoEvent.sourceLineageFromSplitterHistory =
+                        event.sourceLineageFromSplitterHistory;
+                    topoEvent.noOriginalPurgedByLedger = event.noOriginalPurgedByLedger;
+                    topoEvent.splitFragmentFromModifiedHistory =
+                        event.splitFragmentFromModifiedHistory;
+                    topoEvent.splitFragmentFromGeneratedHistory =
+                        event.splitFragmentFromGeneratedHistory;
+                    internalHistoryContext->wireJoinerHistoryEvents.push_back(
+                        std::move(topoEvent)
+                    );
+                }
                 for (const part::WireJoinerOpenExportHistoryEntry& entry :
                      wireJoinerHistory->openExportEntries) {
                     part::SketchInternalWireJoinerOpenExportHistoryEntry topoEntry;
@@ -655,6 +676,16 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
                     topoEntry.edgeInfoIndex = entry.edgeInfoIndex;
                     topoEntry.openExportWire = entry.openExportWire;
                     topoEntry.openExportEdge = entry.openExportEdge;
+                    topoEntry.wireJoinerHistoryRelation =
+                        entry.historyRelationFromChildWireLedger
+                        ? part::wireJoinerHistoryRelationName(entry.historyRelation)
+                        : std::string();
+                    topoEntry.wireJoinerHistoryRelationFromChildWireLedger =
+                        entry.historyRelationFromChildWireLedger;
+                    topoEntry.wireJoinerHistoryEventIndex =
+                        entry.wireJoinerHistoryEventIndex;
+                    topoEntry.wireJoinerHistoryEventFromChildWireLedger =
+                        entry.wireJoinerHistoryEventFromChildWireLedger;
                     topoEntry.resultWireProducerKind = part::resultWireProducerKindName(
                         entry.resultWireProducer.kind
                     );
@@ -704,6 +735,20 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
                         entry.openWireCompoundSourceVmapEndpointLedgerOutputVertexCount;
                     topoEntry.openWireCompoundSourceVmapEndpointLedgerMatchedVertexCount =
                         entry.openWireCompoundSourceVmapEndpointLedgerMatchedVertexCount;
+                    topoEntry.openWireCompoundEndpointProvenanceRecorded =
+                        entry.openWireCompoundEndpointProvenanceRecorded;
+                    topoEntry.openWireCompoundEndpointProvenanceOutputVertexCount =
+                        entry.openWireCompoundEndpointProvenanceOutputVertexCount;
+                    topoEntry.openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount =
+                        entry.openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount;
+                    topoEntry.openWireCompoundEndpointProvenanceCandidateMatchedVertexCount =
+                        entry.openWireCompoundEndpointProvenanceCandidateMatchedVertexCount;
+                    topoEntry
+                        .openWireCompoundEndpointProvenanceEndpointMaterializationMatchedVertexCount =
+                        entry
+                            .openWireCompoundEndpointProvenanceEndpointMaterializationMatchedVertexCount;
+                    topoEntry.openWireCompoundEndpointProvenanceUnmatchedVertexCount =
+                        entry.openWireCompoundEndpointProvenanceUnmatchedVertexCount;
                     topoEntry.openWireCompoundProducerLedgerWireFromResultSlotEvidence =
                         entry.openWireCompoundProducerLedgerWireFromResultSlotEvidence;
                     topoEntry.openWireCompoundSourceEdgeProducerOutput =
@@ -1194,6 +1239,19 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
              wireJoinerLedger->openWireCompoundSourceVmapEndpointLedgerOutputVertexCount},
             {"open_wire_compound_source_vmap_endpoint_ledger_matched_vertex_count",
              wireJoinerLedger->openWireCompoundSourceVmapEndpointLedgerMatchedVertexCount},
+            {"open_wire_compound_endpoint_provenance_wire_info_count",
+             wireJoinerLedger->openWireCompoundEndpointProvenanceWireInfoCount},
+            {"open_wire_compound_endpoint_provenance_output_vertex_count",
+             wireJoinerLedger->openWireCompoundEndpointProvenanceOutputVertexCount},
+            {"open_wire_compound_endpoint_provenance_source_vmap_matched_vertex_count",
+             wireJoinerLedger->openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount},
+            {"open_wire_compound_endpoint_provenance_candidate_matched_vertex_count",
+             wireJoinerLedger->openWireCompoundEndpointProvenanceCandidateMatchedVertexCount},
+            {"open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count",
+             wireJoinerLedger
+                 ->openWireCompoundEndpointProvenanceEndpointMaterializationMatchedVertexCount},
+            {"open_wire_compound_endpoint_provenance_unmatched_vertex_count",
+             wireJoinerLedger->openWireCompoundEndpointProvenanceUnmatchedVertexCount},
             {"open_wire_compound_producer_ledger_wire_from_result_slot_evidence_wire_info_count",
              wireJoinerLedger
                  ->openWireCompoundProducerLedgerWireFromResultSlotEvidenceWireInfoCount},
@@ -1265,12 +1323,41 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
             = "history_partial:edge_info_wire_info_split_done_exhaust";
     }
     if (wireJoinerHistory) {
+        nlohmann::json wireJoinerHistoryEvents = nlohmann::json::array();
+        for (const part::WireJoinerHistoryEvent& event : wireJoinerHistory->historyEvents) {
+            wireJoinerHistoryEvents.push_back({
+                {"event_index", event.eventIndex},
+                {"open_export_index", event.openExportIndex},
+                {"edge_info_index", event.edgeInfoIndex},
+                {"open_wire_compound_child_wire_info_index",
+                 event.openWireCompoundChildWireInfoIndex},
+                {"relation", part::wireJoinerHistoryRelationName(event.relation)},
+                {"relation_from_child_wire_ledger", event.relationFromChildWireLedger},
+                {"source_edge_indices", event.sourceEdgeIndices},
+                {"source_lineage_from_splitter_history",
+                 event.sourceLineageFromSplitterHistory},
+                {"no_original_purged_by_ledger", event.noOriginalPurgedByLedger},
+                {"split_fragment_from_modified_history",
+                 event.splitFragmentFromModifiedHistory},
+                {"split_fragment_from_generated_history",
+                 event.splitFragmentFromGeneratedHistory},
+            });
+        }
         nlohmann::json openExportHistoryEntries = nlohmann::json::array();
         for (const part::WireJoinerOpenExportHistoryEntry& entry :
              wireJoinerHistory->openExportEntries) {
             openExportHistoryEntries.push_back({
                 {"open_export_index", entry.openExportIndex},
                 {"edge_info_index", entry.edgeInfoIndex},
+                {"wire_joiner_history_relation",
+                 entry.historyRelationFromChildWireLedger
+                     ? part::wireJoinerHistoryRelationName(entry.historyRelation)
+                     : ""},
+                {"wire_joiner_history_relation_from_child_wire_ledger",
+                 entry.historyRelationFromChildWireLedger},
+                {"wire_joiner_history_event_index", entry.wireJoinerHistoryEventIndex},
+                {"wire_joiner_history_event_from_child_wire_ledger",
+                 entry.wireJoinerHistoryEventFromChildWireLedger},
                 {"result_wire_producer_kind",
                  part::resultWireProducerKindName(entry.resultWireProducer.kind)},
                 {"result_wire_producer_state",
@@ -1317,6 +1404,18 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
                  entry.openWireCompoundSourceVmapEndpointLedgerOutputVertexCount},
                 {"open_wire_compound_source_vmap_endpoint_ledger_matched_vertex_count",
                  entry.openWireCompoundSourceVmapEndpointLedgerMatchedVertexCount},
+                {"open_wire_compound_endpoint_provenance_recorded",
+                 entry.openWireCompoundEndpointProvenanceRecorded},
+                {"open_wire_compound_endpoint_provenance_output_vertex_count",
+                 entry.openWireCompoundEndpointProvenanceOutputVertexCount},
+                {"open_wire_compound_endpoint_provenance_source_vmap_matched_vertex_count",
+                 entry.openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount},
+                {"open_wire_compound_endpoint_provenance_candidate_matched_vertex_count",
+                 entry.openWireCompoundEndpointProvenanceCandidateMatchedVertexCount},
+                {"open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count",
+                 entry.openWireCompoundEndpointProvenanceEndpointMaterializationMatchedVertexCount},
+                {"open_wire_compound_endpoint_provenance_unmatched_vertex_count",
+                 entry.openWireCompoundEndpointProvenanceUnmatchedVertexCount},
                 {"open_wire_compound_producer_ledger_wire_from_result_slot_evidence",
                  entry.openWireCompoundProducerLedgerWireFromResultSlotEvidence},
                 {"open_wire_compound_source_edge_producer_output",
@@ -1375,6 +1474,10 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         context.objects[object.name]["wire_joiner_history_detail"] = {
             {"source_edge_count", wireJoinerHistory->sourceEdgeCount},
             {"split_result_edge_count", wireJoinerHistory->splitResultEdgeCount},
+            {"wire_joiner_history_event_count", wireJoinerHistory->historyEvents.size()},
+            {"wire_joiner_history_event_from_child_wire_ledger_count",
+             wireJoinerHistory->historyEventFromChildWireLedgerCount},
+            {"wire_joiner_history_events", std::move(wireJoinerHistoryEvents)},
             {"open_export_history_entries", std::move(openExportHistoryEntries)},
             {"modified_source_edge_count", wireJoinerHistory->modifiedSourceEdgeCount},
             {"modified_history_count", wireJoinerHistory->modifiedHistoryCount},

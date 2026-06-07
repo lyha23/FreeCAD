@@ -137,6 +137,21 @@ const char* resultWireBlockerName(ResultWireBlocker blocker)
     return "UnknownInvariant";
 }
 
+const char* wireJoinerHistoryRelationName(WireJoinerHistoryRelation relation)
+{
+    switch (relation) {
+        case WireJoinerHistoryRelation::Preserved:
+            return "preserved";
+        case WireJoinerHistoryRelation::Split:
+            return "split";
+        case WireJoinerHistoryRelation::Generated:
+            return "generated";
+        case WireJoinerHistoryRelation::Deleted:
+            return "deleted";
+    }
+    return "preserved";
+}
+
 namespace
 {
 
@@ -3608,6 +3623,18 @@ void WireJoiner::buildFinalEdgeOwnership(
                 childWireIt->sourceVmapEndpointLedgerOutputVertexCount;
             entry.openWireCompoundSourceVmapEndpointLedgerMatchedVertexCount =
                 childWireIt->sourceVmapEndpointLedgerMatchedVertexCount;
+            entry.openWireCompoundEndpointProvenanceRecorded =
+                childWireIt->endpointProvenanceRecorded;
+            entry.openWireCompoundEndpointProvenanceOutputVertexCount =
+                childWireIt->endpointProvenanceOutputVertexCount;
+            entry.openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount =
+                childWireIt->endpointProvenanceSourceVmapMatchedVertexCount;
+            entry.openWireCompoundEndpointProvenanceCandidateMatchedVertexCount =
+                childWireIt->endpointProvenanceCandidateMatchedVertexCount;
+            entry.openWireCompoundEndpointProvenanceEndpointMaterializationMatchedVertexCount =
+                childWireIt->endpointProvenanceEndpointMaterializationMatchedVertexCount;
+            entry.openWireCompoundEndpointProvenanceUnmatchedVertexCount =
+                childWireIt->endpointProvenanceUnmatchedVertexCount;
             entry.openWireCompoundSourceEdgeProducerOutput =
                 openWireCompoundChildWireHasSourceEdgeProducerOutput(*childWireIt);
             entry.openWireCompoundCurrentMemberProducerOutput =
@@ -3661,6 +3688,56 @@ void WireJoiner::buildFinalEdgeOwnership(
             // ::getOpenWires() maps them with MapperHistory(aHistory). Keep history producer identity
             // on the child-wire ledger boundary so topo evidence and summary entries do not diverge.
             entry.resultWireProducer = childWireIt->resultWireProducer;
+            const std::vector<std::size_t>& relationSourceEdgeIndices =
+                entry.openWireCompoundSourceEdgeIndices.empty()
+                ? entry.sourceEdgeIndices
+                : entry.openWireCompoundSourceEdgeIndices;
+            const bool relationLineageFromSplitter =
+                entry.openWireCompoundSourceEdgeIndices.empty()
+                ? entry.sourceLineageFromSplitterHistory
+                : entry.openWireCompoundSourceLineageFromSplitterHistory;
+            entry.historyRelationFromChildWireLedger = true;
+            if (entry.openWireCompoundNoOriginalPurgedByLedger) {
+                entry.historyRelation = WireJoinerHistoryRelation::Deleted;
+            }
+            else if (
+                entry.splitFragmentFromModifiedHistory || relationLineageFromSplitter
+                || relationSourceEdgeIndices.size() > 1U
+            ) {
+                entry.historyRelation = WireJoinerHistoryRelation::Split;
+            }
+            else if (entry.splitFragmentFromGeneratedHistory) {
+                entry.historyRelation = WireJoinerHistoryRelation::Generated;
+            }
+            else if (
+                entry.resultWireProducer.kind == ResultWireProducerKind::ExistingSourceEdge
+                || entry.resultWireProducer.kind == ResultWireProducerKind::None
+            ) {
+                entry.historyRelation = WireJoinerHistoryRelation::Preserved;
+            }
+            else {
+                entry.historyRelation = WireJoinerHistoryRelation::Generated;
+            }
+            WireJoinerHistoryEvent event;
+            event.eventIndex = historySummary_.historyEvents.size();
+            event.openExportIndex = entry.openExportIndex;
+            event.edgeInfoIndex = entry.edgeInfoIndex;
+            event.openWireCompoundChildWireInfoIndex =
+                entry.openWireCompoundChildWireInfoIndex;
+            event.relation = entry.historyRelation;
+            event.relationFromChildWireLedger = entry.historyRelationFromChildWireLedger;
+            event.sourceEdgeIndices = relationSourceEdgeIndices;
+            event.sourceLineageFromSplitterHistory = relationLineageFromSplitter;
+            event.noOriginalPurgedByLedger = entry.openWireCompoundNoOriginalPurgedByLedger;
+            event.splitFragmentFromModifiedHistory = entry.splitFragmentFromModifiedHistory;
+            event.splitFragmentFromGeneratedHistory = entry.splitFragmentFromGeneratedHistory;
+            entry.wireJoinerHistoryEventIndex = event.eventIndex;
+            entry.wireJoinerHistoryEventFromChildWireLedger =
+                event.relationFromChildWireLedger;
+            if (event.relationFromChildWireLedger) {
+                ++historySummary_.historyEventFromChildWireLedgerCount;
+            }
+            historySummary_.historyEvents.push_back(std::move(event));
         }
         else {
             // FreeCAD:
@@ -6208,6 +6285,79 @@ void WireJoiner::recordOpenWireCompoundLedger(
         }
         return false;
     };
+    auto recordEndpointProvenance = [&](OpenWireCompoundWireInfo& childWire,
+                                        bool updateSourceVmapEndpointLedger) {
+        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::add(), key "Make sure coincident vertices are actually the same
+        // TopoDS_Vertex"; ::build() then emits the final "info.wire()" into openWireCompound.
+        // Record per-output endpoint identity at the child-wire boundary instead of proving
+        // endpoint debt from aggregate counts or result-slot output shape.
+        const std::vector<TopoDS_Vertex> outputVertices = wireVertices(childWire.wire);
+        const std::vector<TopoDS_Vertex> sourceVmapLedgerVertices =
+            edgeEndpointVertices(producerLedgerEdgesFor(childWire.edgeIndex));
+        const std::vector<TopoDS_Vertex>& candidateVertices =
+            childWire.currentMemberSplitLedgerCandidateVertices;
+        const std::vector<TopoDS_Vertex>& endpointMaterializationVertices =
+            childWire.endpointMaterializationEvidenceVertices;
+
+        childWire.endpointProvenance.clear();
+        childWire.endpointProvenance.reserve(outputVertices.size());
+        for (const TopoDS_Vertex& vertex : outputVertices) {
+            OpenWireCompoundWireInfo::EndpointProvenance provenance;
+            provenance.outputVertex = vertex;
+            provenance.matchedSourceVmapLedger =
+                vertexMatchesAnyByIdentity(vertex, sourceVmapLedgerVertices);
+            provenance.matchedCurrentMemberCandidateLedger =
+                vertexMatchesAnyByIdentity(vertex, candidateVertices);
+            provenance.matchedEndpointMaterializationEvidence =
+                vertexMatchesAnyByIdentity(vertex, endpointMaterializationVertices);
+            childWire.endpointProvenance.push_back(std::move(provenance));
+        }
+        childWire.endpointProvenanceRecorded = !childWire.endpointProvenance.empty();
+        childWire.endpointProvenanceOutputVertexCount =
+            childWire.endpointProvenance.size();
+        childWire.endpointProvenanceSourceVmapMatchedVertexCount =
+            static_cast<std::size_t>(std::count_if(
+                childWire.endpointProvenance.begin(),
+                childWire.endpointProvenance.end(),
+                [](const OpenWireCompoundWireInfo::EndpointProvenance& provenance) {
+                    return provenance.matchedSourceVmapLedger;
+                }
+            ));
+        childWire.endpointProvenanceCandidateMatchedVertexCount =
+            static_cast<std::size_t>(std::count_if(
+                childWire.endpointProvenance.begin(),
+                childWire.endpointProvenance.end(),
+                [](const OpenWireCompoundWireInfo::EndpointProvenance& provenance) {
+                    return provenance.matchedCurrentMemberCandidateLedger;
+                }
+            ));
+        childWire.endpointProvenanceEndpointMaterializationMatchedVertexCount =
+            static_cast<std::size_t>(std::count_if(
+                childWire.endpointProvenance.begin(),
+                childWire.endpointProvenance.end(),
+                [](const OpenWireCompoundWireInfo::EndpointProvenance& provenance) {
+                    return provenance.matchedEndpointMaterializationEvidence;
+                }
+            ));
+        childWire.endpointProvenanceUnmatchedVertexCount =
+            static_cast<std::size_t>(std::count_if(
+                childWire.endpointProvenance.begin(),
+                childWire.endpointProvenance.end(),
+                [](const OpenWireCompoundWireInfo::EndpointProvenance& provenance) {
+                    return !provenance.matchedSourceVmapLedger
+                        && !provenance.matchedCurrentMemberCandidateLedger
+                        && !provenance.matchedEndpointMaterializationEvidence;
+                }
+            ));
+        if (updateSourceVmapEndpointLedger) {
+            childWire.sourceVmapEndpointLedgerRecorded =
+                !outputVertices.empty() && !sourceVmapLedgerVertices.empty();
+            childWire.sourceVmapEndpointLedgerOutputVertexCount = outputVertices.size();
+            childWire.sourceVmapEndpointLedgerMatchedVertexCount =
+                childWire.endpointProvenanceSourceVmapMatchedVertexCount;
+        }
+    };
     for (std::size_t edgeIndex = 0; edgeIndex < info.edges.size(); ++edgeIndex) {
         const EdgeInfo& edgeInfo = info.edges[edgeIndex];
         const bool exportsOpenEdge = edgeInfoHasOpenWireCompoundLedgerSlot(edgeInfo);
@@ -6375,27 +6525,7 @@ void WireJoiner::recordOpenWireCompoundLedger(
             = edgeInfo.sourceVertexReplacementSourceEdgeIndices;
         childWire.sourceVertexReplacementEndpoints = edgeInfo.sourceVertexReplacementEndpoints;
         childWire.sourceVertexReplacementIdentity = edgeInfo.sourceVertexReplacementIdentity;
-        {
-            // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-            // ::WireJoinerP::add(), key "Make sure coincident vertices are actually the same
-            // TopoDS_Vertex". Count only request-local source/vmap/split-ledger TopoDS_Vertex
-            // identity already present in the materialized child-wire output; this is ledger
-            // evidence for later endpoint-debt removal, not an output rewrite.
-            const std::vector<TopoDS_Vertex> outputVertices = wireVertices(childWire.wire);
-            const std::vector<TopoDS_Vertex> sourceVmapLedgerVertices =
-                edgeEndpointVertices(producerLedgerEdgesFor(edgeIndex));
-            childWire.sourceVmapEndpointLedgerRecorded =
-                !outputVertices.empty() && !sourceVmapLedgerVertices.empty();
-            childWire.sourceVmapEndpointLedgerOutputVertexCount = outputVertices.size();
-            childWire.sourceVmapEndpointLedgerMatchedVertexCount =
-                static_cast<std::size_t>(std::count_if(
-                    outputVertices.begin(),
-                    outputVertices.end(),
-                    [&](const TopoDS_Vertex& vertex) {
-                        return vertexMatchesAnyByIdentity(vertex, sourceVmapLedgerVertices);
-                    }
-                ));
-        }
+        recordEndpointProvenance(childWire, true);
         childWire.noOriginalPurgeCandidate =
             openWireCompoundNoOriginalPurgeCandidate(childWire);
         childWire.superEdgeRootEdgeInfoIndex
@@ -6824,6 +6954,7 @@ void WireJoiner::recordOpenWireCompoundLedger(
     for (std::size_t childWireIndex = 0; childWireIndex < info.openWireCompoundWires.size();
          ++childWireIndex) {
         OpenWireCompoundWireInfo& childWire = info.openWireCompoundWires[childWireIndex];
+        recordEndpointProvenance(childWire, false);
         childWire.resultWireProducer
             = childWireResultWireProducerIdentity(info, childWire, childWireIndex);
         if (childWire.edgeIndex < info.edges.size()) {
@@ -7006,6 +7137,19 @@ WireJoinerLedgerSummary WireJoiner::ledgerSummary() const
                 += childWire.sourceVmapEndpointLedgerOutputVertexCount;
             summary.openWireCompoundSourceVmapEndpointLedgerMatchedVertexCount
                 += childWire.sourceVmapEndpointLedgerMatchedVertexCount;
+            if (childWire.endpointProvenanceRecorded) {
+                ++summary.openWireCompoundEndpointProvenanceWireInfoCount;
+            }
+            summary.openWireCompoundEndpointProvenanceOutputVertexCount
+                += childWire.endpointProvenanceOutputVertexCount;
+            summary.openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount
+                += childWire.endpointProvenanceSourceVmapMatchedVertexCount;
+            summary.openWireCompoundEndpointProvenanceCandidateMatchedVertexCount
+                += childWire.endpointProvenanceCandidateMatchedVertexCount;
+            summary.openWireCompoundEndpointProvenanceEndpointMaterializationMatchedVertexCount
+                += childWire.endpointProvenanceEndpointMaterializationMatchedVertexCount;
+            summary.openWireCompoundEndpointProvenanceUnmatchedVertexCount
+                += childWire.endpointProvenanceUnmatchedVertexCount;
             if (childWire.producerLedgerWireFromEndpointMaterializationEvidence) {
                 ++summary.openWireCompoundProducerLedgerWireFromResultSlotEvidenceWireInfoCount;
             }

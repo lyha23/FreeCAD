@@ -28,7 +28,10 @@ sourceEdgeArray
 - `splitEdges()` fragment-to-source ledger 已区分 Modified / Generated / input EdgeInfo source sidecar，P5 open-cutter / cross / T / segmented / arc-lens 的旧 `split_fragment_identity_fallback_edge_info_count` 已固定为 0。
 - open-export history / topo evidence 已直接消费 `OpenWireCompoundWireInfo::wire`，缺 child-wire 只能输出 `missing_open_wire_compound_child_wire` 诊断。
 - noOriginal candidate / shared-source match 已集中到 `OpenWireCompoundWireInfo` child-wire ledger，`getOpenWires(noOriginal)` 只消费 child-wire actual purged verdict。
-- `source/vmap endpoint ledger` 与 `noOriginal shared-source edge ledger` 已作为 child-wire 诊断账本暴露。
+- `source/vmap endpoint ledger`、`endpoint provenance ledger` 与 `noOriginal shared-source edge ledger` 已作为 child-wire 诊断账本暴露。
+- 本轮新增 request-local `WireJoinerHistoryRelation`，在 `WireJoiner` open-export entry 建账时由 `OpenWireCompoundWireInfo` child-wire ledger 发布 `preserved / split / generated / deleted` 关系；`sketcher` 只转发该关系，`topo_shape.cpp` 只消费该 typed relation，旧的 topo 层 relation 拼装 fallback 已删除。
+- 本轮继续新增 request-local `WireJoinerHistoryEvent`：每条 open-export entry 都挂 `wire_joiner_history_event_index`，并由 `wire_joiner_history_events` 记录 relation、source edge indices、splitter lineage、noOriginal actual purge 与 Modified / Generated fragment 标记。该 event 仍来自 child-wire ledger，只把 relation 从 entry 字段推进到 part 层可枚举 history event，不改变输出拓扑，也不替代完整 `MapperHistory(aHistory)`。
+- 本轮再把 `WireJoinerHistoryEvent` 列表转入 `SketchInternalHistoryContext`：`Sketch.InternalShape.sketch_internal_history` 现在输出 `wire_joiner_history_events`，`topo_shape.cpp` 通过 event index lookup 消费 event relation/source lineage，mapper evidence 输出 `wire_joiner_history_event_consumed_by_topo=true`。entry 里的 relation/source 字段仍保留为兼容转发和诊断，但 topo 主路径不再只靠 entry 字段消费 relation。
 
 但仍有两个 capability 不能升级：
 
@@ -45,9 +48,15 @@ open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked_wire_
 open_wire_compound_current_member_split_ledger_output_unmatched_vertex_count = 6
 open_wire_compound_current_member_split_ledger_result_slot_only_vertex_count = 6
 open_wire_compound_current_member_split_ledger_output_candidate_matched_vertex_count = 0
+open_wire_compound_endpoint_provenance_wire_info_count = 15
+open_wire_compound_endpoint_provenance_output_vertex_count = 30
+open_wire_compound_endpoint_provenance_source_vmap_matched_vertex_count = 0
+open_wire_compound_endpoint_provenance_candidate_matched_vertex_count = 0
+open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count = 6
+open_wire_compound_endpoint_provenance_unmatched_vertex_count = 24
 ```
 
-这说明 member/split ledger 已能构造 candidate，但 candidate wire 不能直接替换输出；直接切换会改变 three-overlap `InternalVertex` multiplicity。后续必须让 output vertex identity 被正式 member/split/candidate ledger 覆盖，而不是用 result-slot endpoint evidence 保住输出。
+这说明 member/split ledger 已能构造 candidate，但 candidate wire 不能直接替换输出；直接切换会改变 three-overlap `InternalVertex` multiplicity。新增 endpoint provenance 进一步证明 3 个 blocked child 各有 2 个输出端点仍由 endpoint materialization evidence 支撑，source/vmap 和 candidate 身份命中都为 0。后续必须让 output vertex identity 被正式 member/split/candidate ledger 覆盖，而不是用 result-slot endpoint evidence 保住输出。
 
 ## FreeCAD 依据与调用链
 
@@ -90,10 +99,12 @@ open_wire_compound_current_member_split_ledger_output_candidate_matched_vertex_c
 
 - `sourceEdgeLedgerEdges_` 保存 mutable source/vmap ledger。
 - `open_wire_compound_source_vmap_endpoint_ledger_*` 统计 output endpoint 是否被 source/vmap/split ledger 覆盖。
+- `open_wire_compound_endpoint_provenance_*` 保存最终 child-wire 输出端点对 source/vmap、current-member candidate 与 endpoint materialization evidence 的 identity 覆盖计数。
 
 剩余：
 
 - three-overlap 仍是 `30` 个 output endpoint、`0` 个 source/vmap matched endpoint。
+- three-overlap endpoint provenance 显示 `candidate_matched=0`、`endpoint_materialization_matched=6`；P5 cross / T 等非退化 gate 仍保留原 source-vmap producer matched 12 / 11，但最终输出 provenance 继续暴露 endpoint materialization 命中，说明旧 gate 与最终输出身份仍未完全合一。
 - `endpointMaterializationEvidenceVertices` 还在 child-wire 建账边界兜住 output vertex identity。
 
 删除条件：
@@ -140,6 +151,7 @@ open_wire_compound_current_member_split_ledger_output_candidate_matched_vertex_c
 
 - current-member split vertex debt 已进入 child-wire ledger。
 - `wire_joiner_current_member_vertex_multiplicity_blocked` mapper diagnostic 固定 three-overlap 3 个 blocked child。
+- endpoint provenance ledger 已把 three-overlap 3 个 blocked child 的 6 个输出端点定位为 `source_vmap=0`、`candidate=0`、`endpoint_materialization=6`。
 
 剩余：
 
@@ -238,6 +250,13 @@ python3 -m unittest tests.test_p5_sketch tests.test_p6_topology tests.test_adapt
 - P5 cross / segmented / T：source-vmap producer 计数保持 4，result-slot 计数保持 0，matched endpoint 不退化。
 - P5 three-overlap：保留当前输出，但新增 per-endpoint provenance，证明 6 个 result-slot-only vertex 的具体缺口。
 
+本轮进度：
+
+- 已新增 `OpenWireCompoundWireInfo::EndpointProvenance` child-wire 账本，记录每个最终输出端点是否命中 source/vmap ledger、current-member candidate ledger 或 endpoint materialization evidence。
+- `wire_joiner_ledger` / `wire_joiner_history_detail` / `Sketch.InternalShape` history / `topo_shape.cpp` evidence 均转发 `open_wire_compound_endpoint_provenance_*`；`generated_open_export_bridge.covered` 新增 `child_wire_endpoint_provenance_ledger`。
+- 旧 `open_wire_compound_source_vmap_endpoint_ledger_*` 仍保留为 producer materialization gate，不被最终 current-member 输出覆盖；新增 endpoint provenance 才表达最终 child-wire 输出端点状态。
+- 本轮没有删除 bridge 字段：`endpointMaterializationEvidenceVertices`、`producerLedgerWireFromEndpointMaterializationEvidence`、`ResultWireProducerPlanLedger::producerOpenExportEdges` 与 EdgeInfo `resultWireProducer*` 仍保留。
+
 删除条件：
 
 - `producerLedgerWireFromEndpointMaterializationEvidence` 对非 current-member case 归零。
@@ -266,6 +285,15 @@ python3 -m unittest tests.test_p5_sketch tests.test_p6_topology tests.test_adapt
 4. `openWireCompound` child-wire 构造时保存 history handle / relation id。
 5. `topo_shape.cpp` 的 producer evidence 从 child-wire history 读 relation，不再拼装 split source arrays。
 
+本轮进度：
+
+- 已完成第 1 / 4 / 5 项的第一片：`WireJoinerHistoryRelation` 先覆盖 open-export relation id，来源是 child-wire ledger 上已存在的 source lineage、splitter lineage、actual noOriginal purge verdict 与 result-wire producer identity。
+- 已完成第 1 项的第二片：`WireJoinerHistoryEvent` 已进入 `WireJoinerHistorySummary`，runtime `wire_joiner_history_detail` 输出 `wire_joiner_history_events`、`wire_joiner_history_event_count` 和 `wire_joiner_history_event_from_child_wire_ledger_count`；open-export entry、`Sketch.InternalShape` history 和 topo evidence 只转发 `wire_joiner_history_event_index` / `wire_joiner_history_event_from_child_wire_ledger`。
+- 已完成第 1 / 5 项的第三片：`SketchInternalHistoryContext` 现在持有 `SketchInternalWireJoinerHistoryEvent` 列表，`topo_shape.cpp` 的 open-export mapper evidence 通过 event index 查找该列表，并优先使用 event relation/source edge indices；`generated_open_export_bridge.covered` 新增 `topo_consumes_wire_joiner_history_event_ledger`。
+- `wire_joiner_history_relation_from_child_wire_ledger` 已进入 open-export history、`Sketch.InternalShape` history、topo evidence 与 C ABI capability covered list；测试固定 topo 消费该字段后仍得到原有 `preserved / split / generated / deleted` 关系。
+- `topo_open_export_relation_fallback_removed` 已进入 C ABI capability covered list；`topo_shape.cpp` 不再从 source arrays、split flags、producer kind 或 exported geometry 重建 relation，缺 child-wire ledger 时不转发默认 `Preserved` relation。
+- 这还不是完整 `WireJoinerHistory`：`splitEdges()` / `buildClosedWire()` 的 aHistory producer matrix、ambiguous split 与 ElementMap terminal relation 仍未全部迁入正式 mapper。
+
 测试：
 
 - open-cutter：一条 source edge 一对多 split fragment。
@@ -275,6 +303,7 @@ python3 -m unittest tests.test_p5_sketch tests.test_p6_topology tests.test_adapt
 删除条件：
 
 - `split_fragment_source_identity_fallback_*` 和 `split_fragment_history_shape_geometry_bridge_*` 在 P5/P6 保持 0 后，降为内部 debug 或删除公开字段。
+- topo 层 legacy relation 拼装 fallback 已删除；后续不得用 sketcher / adapter 合成 relation，也不得恢复 topo 层按 source arrays、split flags 或 producer kind 的 relation 推断。
 
 ### 阶段 D：补齐 openWireCompound child-wire ownership
 
@@ -391,6 +420,11 @@ makeShapeWithElementMap(comp, MapperHistory(wireJoinerHistory), sourceEdges, op)
 
 - WireJoiner producer evidence 不再需要解释 subname 修正，只作为 debug / audit。
 - `generated_open_export_bridge.status` 可从 `covered_main_path` 推进到更接近 full 的状态。
+
+本轮进度：
+
+- open-export relation 已从 topo 层字段推断前移到 WireJoiner child-wire ledger，并以 typed relation 和 request-local `WireJoinerHistoryEvent` 进入 runtime history / `SketchInternalHistoryContext` / topo evidence；topo legacy relation fallback 已删除，且 open-export mapper evidence 已通过 event index 消费 event relation/source lineage。这只是 `MapperHistory(aHistory)` 正式消费前的第一片，尚未替代 `TopoShape::makeShapeWithElementMap(..., MapperHistory(aHistory), sourceEdges, op)`。
+- `ResultWireProducerPlanLedger::producerOpenExportEdges`、EdgeInfo `resultWireProducer*`、`endpointMaterializationEvidenceVertices`、noOriginal split/source candidate bridge 仍保留，因此 `generated_open_export_bridge` 与 `purge_as_original_bridge` 继续保持 `covered_main_path`。
 
 ## 字段删除顺序
 

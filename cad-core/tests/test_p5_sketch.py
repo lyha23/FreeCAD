@@ -570,7 +570,9 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         named_shape = result["named_shapes"]["Sketch.InternalShape"]
         internal_history = named_shape["sketch_internal_history"]
         runtime_entries = runtime_history["open_export_history_entries"]
+        runtime_events = runtime_history["wire_joiner_history_events"]
         internal_entries = internal_history["wire_joiner_open_export_history_entries"]
+        internal_events = internal_history["wire_joiner_history_events"]
         producer_entries = ledger["result_wire_producer_ledger_entries"]
         runtime_entry_counts = self.open_export_entry_counts(runtime_entries)
         internal_entry_counts = self.open_export_entry_counts(internal_entries)
@@ -578,6 +580,12 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(named_shape["sketch_internal_history_status"], "history_evidence:facemaker_wirejoiner")
         self.assertIn("wire_joiner_history:open_export", named_shape["element_history_status"])
         self.assertEqual(len(internal_entries), len(runtime_entries))
+        self.assertEqual(len(internal_events), len(runtime_events))
+        self.assertEqual(internal_history["wire_joiner_history_event_count"], len(internal_events))
+        self.assertEqual(
+            internal_history["wire_joiner_history_event_from_child_wire_ledger_count"],
+            runtime_history["wire_joiner_history_event_from_child_wire_ledger_count"],
+        )
         self.assertEqual(internal_entry_counts, runtime_entry_counts)
         self.assertEqual(internal_history["named_shape_history_missing_result_wire_identity_count"], 0)
         self.assertEqual(internal_history["element_map_result_wire_identity_mismatch_count"], 0)
@@ -629,6 +637,25 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 for _, history_key in identity_pairs:
                     self.assertIn(history_key, internal_entry)
                     self.assertEqual(internal_entry[history_key], runtime_entry[history_key])
+                self.assertEqual(
+                    internal_entry["wire_joiner_history_event_index"],
+                    runtime_entry["wire_joiner_history_event_index"],
+                )
+                self.assertTrue(internal_entry["wire_joiner_history_event_from_child_wire_ledger"])
+
+        runtime_events_by_index = {
+            event["event_index"]: event
+            for event in runtime_events
+        }
+        internal_events_by_index = {
+            event["event_index"]: event
+            for event in internal_events
+        }
+        self.assertEqual(set(internal_events_by_index), set(runtime_events_by_index))
+        for event_index, runtime_event in runtime_events_by_index.items():
+            with self.subTest(history_event_index=event_index):
+                internal_event = internal_events_by_index[event_index]
+                self.assertEqual(internal_event, runtime_event)
 
         internal_by_open_export = {
             entry["open_export_index"]: entry
@@ -764,6 +791,36 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 0,
             )
             self.assertEqual(
+                ledger["open_wire_compound_endpoint_provenance_wire_info_count"],
+                0,
+            )
+            self.assertEqual(
+                ledger["open_wire_compound_endpoint_provenance_output_vertex_count"],
+                0,
+            )
+            self.assertEqual(
+                ledger[
+                    "open_wire_compound_endpoint_provenance_source_vmap_matched_vertex_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                ledger[
+                    "open_wire_compound_endpoint_provenance_candidate_matched_vertex_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                ledger[
+                    "open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                ledger["open_wire_compound_endpoint_provenance_unmatched_vertex_count"],
+                0,
+            )
+            self.assertEqual(
                 ledger[
                     "open_wire_compound_no_original_shared_source_ledger_wire_info_count"
                 ],
@@ -868,6 +925,36 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(
             ledger["open_wire_compound_built_wire_info_count"],
             ledger["open_wire_compound_wire_info_count"],
+        )
+        self.assertEqual(
+            ledger["open_wire_compound_endpoint_provenance_wire_info_count"],
+            ledger["open_wire_compound_wire_info_count"],
+        )
+        self.assertEqual(
+            ledger["open_wire_compound_endpoint_provenance_output_vertex_count"],
+            ledger["open_wire_compound_source_vmap_endpoint_ledger_output_vertex_count"],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_endpoint_provenance_source_vmap_matched_vertex_count"
+            ],
+            ledger["open_wire_compound_endpoint_provenance_output_vertex_count"],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_endpoint_provenance_candidate_matched_vertex_count"
+            ],
+            ledger["open_wire_compound_endpoint_provenance_output_vertex_count"],
+        )
+        self.assertLessEqual(
+            ledger[
+                "open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count"
+            ],
+            ledger["open_wire_compound_endpoint_provenance_output_vertex_count"],
+        )
+        self.assertLessEqual(
+            ledger["open_wire_compound_endpoint_provenance_unmatched_vertex_count"],
+            ledger["open_wire_compound_endpoint_provenance_output_vertex_count"],
         )
         self.assertEqual(
             ledger["open_wire_compound_no_original_purge_candidate_wire_info_count"],
@@ -994,6 +1081,19 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def assert_open_export_history_entries(self, history: dict[str, object]) -> list[dict[str, object]]:
         entries = history["open_export_history_entries"]
         self.assertIsInstance(entries, list)
+        events = history["wire_joiner_history_events"]
+        self.assertIsInstance(events, list)
+        self.assertEqual(history["wire_joiner_history_event_count"], len(events))
+        self.assertEqual(len(events), len(entries))
+        self.assertEqual(
+            history["wire_joiner_history_event_from_child_wire_ledger_count"],
+            sum(1 for event in events if event["relation_from_child_wire_ledger"]),
+        )
+        event_by_index = {}
+        for index, event in enumerate(events):
+            self.assertEqual(event["event_index"], index)
+            self.assertTrue(event["relation_from_child_wire_ledger"])
+            event_by_index[event["event_index"]] = event
         self.assertNotIn("open_export_generated_edge_count", history)
         removed_history_summary_fields = (
             "open_export_edge_count",
@@ -1013,6 +1113,13 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertNotIn("generated_open_export_reason", entry)
             self.assertNotIn("purge_bridge", entry)
             self.assertNotIn("result_slot_vertex_evidence_output", entry)
+            self.assertIn("wire_joiner_history_relation", entry)
+            self.assertIn("wire_joiner_history_relation_from_child_wire_ledger", entry)
+            self.assertTrue(entry["wire_joiner_history_relation_from_child_wire_ledger"])
+            self.assertIn("wire_joiner_history_event_index", entry)
+            self.assertIn("wire_joiner_history_event_from_child_wire_ledger", entry)
+            self.assertTrue(entry["wire_joiner_history_event_from_child_wire_ledger"])
+            self.assertIn(entry["wire_joiner_history_event_index"], event_by_index)
             self.assertIn("open_wire_compound_child_wire_info_index", entry)
             self.assertEqual(
                 entry["open_wire_compound_source_edge_indices"],
@@ -1027,6 +1134,54 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 entry["open_wire_compound_no_original_purge_candidate"]
                 and entry["open_wire_compound_no_original_purge_match"],
             )
+            relation_sources = entry["open_wire_compound_source_edge_indices"] or entry[
+                "source_edge_indices"
+            ]
+            relation_lineage_from_splitter = (
+                entry["open_wire_compound_source_lineage_from_splitter_history"]
+                if entry["open_wire_compound_source_edge_indices"]
+                else entry["source_lineage_from_splitter_history"]
+            )
+            if entry["open_wire_compound_no_original_purged_by_ledger"]:
+                expected_relation = "deleted"
+            elif (
+                entry["split_fragment_from_modified_history"]
+                or relation_lineage_from_splitter
+                or len(relation_sources) > 1
+            ):
+                expected_relation = "split"
+            elif entry["split_fragment_from_generated_history"]:
+                expected_relation = "generated"
+            elif entry["result_wire_producer_kind"] in ("ExistingSourceEdge", "None"):
+                expected_relation = "preserved"
+            else:
+                expected_relation = "generated"
+            self.assertEqual(entry["wire_joiner_history_relation"], expected_relation)
+            event = event_by_index[entry["wire_joiner_history_event_index"]]
+            self.assertEqual(event["open_export_index"], entry["open_export_index"])
+            self.assertEqual(event["edge_info_index"], entry["edge_info_index"])
+            self.assertEqual(
+                event["open_wire_compound_child_wire_info_index"],
+                entry["open_wire_compound_child_wire_info_index"],
+            )
+            self.assertEqual(event["relation"], expected_relation)
+            self.assertEqual(event["source_edge_indices"], relation_sources)
+            self.assertEqual(
+                event["source_lineage_from_splitter_history"],
+                relation_lineage_from_splitter,
+            )
+            self.assertEqual(
+                event["no_original_purged_by_ledger"],
+                entry["open_wire_compound_no_original_purged_by_ledger"],
+            )
+            self.assertEqual(
+                event["split_fragment_from_modified_history"],
+                entry["split_fragment_from_modified_history"],
+            )
+            self.assertEqual(
+                event["split_fragment_from_generated_history"],
+                entry["split_fragment_from_generated_history"],
+            )
             self.assertIn("open_wire_compound_source_edge_producer_output", entry)
             self.assertIn("open_wire_compound_producer_ledger_edge_materialized", entry)
             self.assertIn("open_wire_compound_producer_ledger_wire_built", entry)
@@ -1038,6 +1193,27 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             )
             self.assertIn(
                 "open_wire_compound_source_vmap_endpoint_ledger_matched_vertex_count",
+                entry,
+            )
+            self.assertIn("open_wire_compound_endpoint_provenance_recorded", entry)
+            self.assertIn(
+                "open_wire_compound_endpoint_provenance_output_vertex_count",
+                entry,
+            )
+            self.assertIn(
+                "open_wire_compound_endpoint_provenance_source_vmap_matched_vertex_count",
+                entry,
+            )
+            self.assertIn(
+                "open_wire_compound_endpoint_provenance_candidate_matched_vertex_count",
+                entry,
+            )
+            self.assertIn(
+                "open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count",
+                entry,
+            )
+            self.assertIn(
+                "open_wire_compound_endpoint_provenance_unmatched_vertex_count",
                 entry,
             )
             self.assertIn(
@@ -1118,6 +1294,33 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 entry["open_wire_compound_source_vmap_endpoint_ledger_matched_vertex_count"],
                 entry["open_wire_compound_source_vmap_endpoint_ledger_output_vertex_count"],
             )
+            self.assertTrue(entry["open_wire_compound_endpoint_provenance_recorded"])
+            self.assertEqual(
+                entry["open_wire_compound_endpoint_provenance_output_vertex_count"],
+                entry["open_wire_compound_source_vmap_endpoint_ledger_output_vertex_count"],
+            )
+            self.assertLessEqual(
+                entry[
+                    "open_wire_compound_endpoint_provenance_source_vmap_matched_vertex_count"
+                ],
+                entry["open_wire_compound_endpoint_provenance_output_vertex_count"],
+            )
+            self.assertLessEqual(
+                entry[
+                    "open_wire_compound_endpoint_provenance_candidate_matched_vertex_count"
+                ],
+                entry["open_wire_compound_endpoint_provenance_output_vertex_count"],
+            )
+            self.assertLessEqual(
+                entry[
+                    "open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count"
+                ],
+                entry["open_wire_compound_endpoint_provenance_output_vertex_count"],
+            )
+            self.assertLessEqual(
+                entry["open_wire_compound_endpoint_provenance_unmatched_vertex_count"],
+                entry["open_wire_compound_endpoint_provenance_output_vertex_count"],
+            )
             self.assertEqual(
                 entry["open_wire_compound_no_original_shared_source_matched_edge_count"]
                 + entry["open_wire_compound_no_original_shared_source_unmatched_edge_count"],
@@ -1152,6 +1355,12 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             if entry["open_wire_compound_producer_ledger_wire_from_result_slot_evidence"]:
                 self.assertTrue(entry["open_wire_compound_producer_ledger_wire_built"])
                 self.assertFalse(entry["open_wire_compound_producer_ledger_wire_from_source_vmap"])
+                self.assertGreater(
+                    entry[
+                        "open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count"
+                    ],
+                    0,
+                )
             if entry["open_wire_compound_source_edge_producer_output"]:
                 self.assertTrue(entry["open_wire_compound_producer_ledger_edge_materialized"])
                 self.assertTrue(entry["open_wire_compound_producer_ledger_wire_built"])
@@ -1221,6 +1430,22 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     ],
                     entry[
                         "open_wire_compound_current_member_split_ledger_output_unmatched_vertex_count"
+                    ],
+                )
+                self.assertEqual(
+                    entry[
+                        "open_wire_compound_endpoint_provenance_candidate_matched_vertex_count"
+                    ],
+                    entry[
+                        "open_wire_compound_current_member_split_ledger_output_candidate_matched_vertex_count"
+                    ],
+                )
+                self.assertEqual(
+                    entry[
+                        "open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count"
+                    ],
+                    entry[
+                        "open_wire_compound_current_member_split_ledger_result_slot_only_vertex_count"
                     ],
                 )
                 self.assertFalse(entry["open_wire_compound_current_member_producer_output"])
@@ -3180,6 +3405,20 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertTrue(any(event["relation"] == "split" for event in events))
         for event in events:
             self.assertEqual(event["evidence"]["producer"], "WireJoiner")
+            self.assertEqual(event["relation"], event["evidence"]["wire_joiner_history_relation"])
+            self.assertTrue(
+                event["evidence"]["wire_joiner_history_relation_from_child_wire_ledger"]
+            )
+            self.assertTrue(event["evidence"]["wire_joiner_history_event_consumed_by_topo"])
+            self.assertEqual(
+                event["relation"],
+                event["evidence"]["wire_joiner_history_event_relation"],
+            )
+            self.assertEqual(
+                event["evidence"]["wire_joiner_history_event_source_edge_indices"],
+                event["evidence"]["open_wire_compound_source_edge_indices"]
+                or event["evidence"]["source_edge_indices"],
+            )
             self.assertIn("result_wire_producer_kind", event["evidence"])
             self.assertIn(event["evidence"]["result_wire_producer_state"], {
                 "Unpublished",
@@ -3747,6 +3986,36 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ],
             6,
         )
+        self.assertEqual(
+            ledger["open_wire_compound_endpoint_provenance_wire_info_count"],
+            15,
+        )
+        self.assertEqual(
+            ledger["open_wire_compound_endpoint_provenance_output_vertex_count"],
+            30,
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_endpoint_provenance_source_vmap_matched_vertex_count"
+            ],
+            0,
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_endpoint_provenance_candidate_matched_vertex_count"
+            ],
+            0,
+        )
+        self.assertEqual(
+            ledger[
+                "open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count"
+            ],
+            6,
+        )
+        self.assertEqual(
+            ledger["open_wire_compound_endpoint_provenance_unmatched_vertex_count"],
+            24,
+        )
         self.assertGreater(ledger["exhaust_adjacent_search_miss_count"], 0)
         self.assertGreater(ledger["exhaust_adjacent_search_hit_count"], 0)
         self.assertGreater(ledger["exhaust_adjacent_search_backtrack_count"], 0)
@@ -3840,6 +4109,35 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 event["evidence"][
                     "open_wire_compound_producer_ledger_wire_from_result_slot_evidence"
                 ]
+            )
+            self.assertTrue(
+                event["evidence"]["open_wire_compound_endpoint_provenance_recorded"]
+            )
+            self.assertEqual(
+                event["evidence"]["open_wire_compound_endpoint_provenance_output_vertex_count"],
+                2,
+            )
+            self.assertEqual(
+                event["evidence"][
+                    "open_wire_compound_endpoint_provenance_source_vmap_matched_vertex_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                event["evidence"][
+                    "open_wire_compound_endpoint_provenance_candidate_matched_vertex_count"
+                ],
+                0,
+            )
+            self.assertEqual(
+                event["evidence"][
+                    "open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count"
+                ],
+                2,
+            )
+            self.assertEqual(
+                event["evidence"]["open_wire_compound_endpoint_provenance_unmatched_vertex_count"],
+                0,
             )
         self.assert_object_matches_expected(result, "p5", "sketch-internal-face-three-overlap-circles")
 

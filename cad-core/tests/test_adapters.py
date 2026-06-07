@@ -1098,7 +1098,27 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
         self.assertIn(
+            "wire_joiner_history_relation_from_child_wire_ledger",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
+            "wire_joiner_history_event_ledger",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
+            "topo_consumes_wire_joiner_history_event_ledger",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
+            "topo_open_export_relation_fallback_removed",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
             "child_wire_source_vmap_endpoint_ledger",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
+            "child_wire_endpoint_provenance_ledger",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
         self.assertIn(
@@ -1235,6 +1255,26 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertIn(
             "open_wire_compound_source_vmap_endpoint_ledger_matched_vertex_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_endpoint_provenance_recorded",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_endpoint_provenance_source_vmap_matched_vertex_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "wire_joiner_history_event_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "wire_joiner_history_event_from_child_wire_ledger_count",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
         self.assertIn(

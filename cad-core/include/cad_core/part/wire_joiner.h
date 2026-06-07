@@ -49,6 +49,35 @@ enum class ResultWireProducerState
     ExportedWithoutTransitionalSlot,
 };
 
+enum class WireJoinerHistoryRelation
+{
+    Preserved,
+    Split,
+    Generated,
+    Deleted,
+};
+
+struct WireJoinerHistoryEvent
+{
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::splitEdges() records "aHistory->AddModified(split.intersectShape,
+    // newInfo.edge)", ::WireJoinerP::buildClosedWire() records "aHistory->Remove(info.edge)",
+    // and ::WireJoinerP::getOpenWires() consumes "MapperHistory(aHistory)". This request-local
+    // event is the part-layer history record that topo/sketch consumers forward instead of
+    // deriving open-export relation from output geometry.
+    std::size_t eventIndex = 0;
+    std::size_t openExportIndex = 0;
+    std::size_t edgeInfoIndex = resultWireProducerNpos;
+    std::size_t openWireCompoundChildWireInfoIndex = resultWireProducerNpos;
+    WireJoinerHistoryRelation relation = WireJoinerHistoryRelation::Preserved;
+    bool relationFromChildWireLedger = false;
+    std::vector<std::size_t> sourceEdgeIndices;
+    bool sourceLineageFromSplitterHistory = false;
+    bool noOriginalPurgedByLedger = false;
+    bool splitFragmentFromModifiedHistory = false;
+    bool splitFragmentFromGeneratedHistory = false;
+};
+
 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
 // ::WireJoinerP::buildClosedWire() marks removed targets with "vertex.edgeInfo()->iteration = -1"
 // but records the producer source separately through "aHistory->Remove(info.edge)".
@@ -142,6 +171,7 @@ enum class ResultWireBlocker
 const char* resultWireProducerKindName(ResultWireProducerKind kind);
 const char* resultWireProducerStateName(ResultWireProducerState state);
 const char* resultWireBlockerName(ResultWireBlocker blocker);
+const char* wireJoinerHistoryRelationName(WireJoinerHistoryRelation relation);
 
 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
 // ::WireJoinerP::buildClosedWire() records producer evidence with "aHistory->Remove(info.edge)"
@@ -361,6 +391,17 @@ struct WireJoinerLedgerSummary
     std::size_t openWireCompoundSourceVmapEndpointLedgerWireInfoCount = 0;
     std::size_t openWireCompoundSourceVmapEndpointLedgerOutputVertexCount = 0;
     std::size_t openWireCompoundSourceVmapEndpointLedgerMatchedVertexCount = 0;
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::add(), key "Make sure coincident vertices are actually the same
+    // TopoDS_Vertex"; ::build() then exports "info.wire()" children into openWireCompound. These
+    // counters expose per-output endpoint provenance on the child-wire ledger so endpoint
+    // materialization debt is deleted only after source/vmap or member/split identity covers it.
+    std::size_t openWireCompoundEndpointProvenanceWireInfoCount = 0;
+    std::size_t openWireCompoundEndpointProvenanceOutputVertexCount = 0;
+    std::size_t openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount = 0;
+    std::size_t openWireCompoundEndpointProvenanceCandidateMatchedVertexCount = 0;
+    std::size_t openWireCompoundEndpointProvenanceEndpointMaterializationMatchedVertexCount = 0;
+    std::size_t openWireCompoundEndpointProvenanceUnmatchedVertexCount = 0;
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::build() emits final "info.wire()" topology. cad-core still needs this
     // diagnostic count when the source/vmap ledger cannot yet supply the child-wire vertices and the
@@ -465,6 +506,13 @@ struct WireJoinerOpenExportHistoryEntry
     std::size_t edgeInfoIndex = 0;
     TopoDS_Wire openExportWire;
     TopoDS_Edge openExportEdge;
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::getOpenWires(), calls
+    // "shape.makeShapeWithElementMap(comp, MapperHistory(aHistory), {sourceEdges.begin(),
+    // sourceEdges.end()}, op)". Keep the request-local mapper relation on the WireJoiner entry so
+    // topo consumers do not infer split/generated/deleted ownership from output geometry.
+    WireJoinerHistoryRelation historyRelation = WireJoinerHistoryRelation::Preserved;
+    bool historyRelationFromChildWireLedger = false;
     std::size_t openWireCompoundChildWireInfoIndex = resultWireProducerNpos;
     std::vector<std::size_t> openWireCompoundSourceEdgeIndices;
     bool openWireCompoundSourceLineageFromSplitterHistory = false;
@@ -487,6 +535,12 @@ struct WireJoinerOpenExportHistoryEntry
     bool openWireCompoundSourceVmapEndpointLedgerRecorded = false;
     std::size_t openWireCompoundSourceVmapEndpointLedgerOutputVertexCount = 0;
     std::size_t openWireCompoundSourceVmapEndpointLedgerMatchedVertexCount = 0;
+    bool openWireCompoundEndpointProvenanceRecorded = false;
+    std::size_t openWireCompoundEndpointProvenanceOutputVertexCount = 0;
+    std::size_t openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount = 0;
+    std::size_t openWireCompoundEndpointProvenanceCandidateMatchedVertexCount = 0;
+    std::size_t openWireCompoundEndpointProvenanceEndpointMaterializationMatchedVertexCount = 0;
+    std::size_t openWireCompoundEndpointProvenanceUnmatchedVertexCount = 0;
     bool openWireCompoundSourceEdgeProducerOutput = false;
     bool openWireCompoundCurrentMemberProducerOutput = false;
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
@@ -516,6 +570,8 @@ struct WireJoinerOpenExportHistoryEntry
     // "aHistory->AddModified(split.intersectShape, newInfo.edge)". Keep this public history detail
     // separate from sourceVertexIdentity/noOriginal purge evidence so topo can consume actual
     // fragment lineage instead of endpoint geometry guesses.
+    std::size_t wireJoinerHistoryEventIndex = resultWireProducerNpos;
+    bool wireJoinerHistoryEventFromChildWireLedger = false;
     std::vector<std::size_t> splitFragmentSourceEdgeIndices;
     std::vector<std::size_t> splitFragmentModifiedSourceEdgeIndices;
     std::vector<std::size_t> splitFragmentGeneratedSourceEdgeIndices;
@@ -536,6 +592,8 @@ struct WireJoinerHistorySummary
     std::size_t sourceEdgeCount = 0;
     std::size_t splitResultEdgeCount = 0;
     std::vector<WireJoinerOpenExportHistoryEntry> openExportEntries;
+    std::vector<WireJoinerHistoryEvent> historyEvents;
+    std::size_t historyEventFromChildWireLedgerCount = 0;
     std::size_t modifiedSourceEdgeCount = 0;
     std::size_t modifiedHistoryCount = 0;
     std::size_t generatedHistoryCount = 0;
@@ -888,6 +946,24 @@ private:
         bool sourceVmapEndpointLedgerRecorded = false;
         std::size_t sourceVmapEndpointLedgerOutputVertexCount = 0;
         std::size_t sourceVmapEndpointLedgerMatchedVertexCount = 0;
+        struct EndpointProvenance
+        {
+            // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+            // ::WireJoinerP::add() shares coincident endpoints through vmap/sourceEdges before
+            // ::build() exports openWireCompound. Record exact TopoDS_Vertex identity coverage for
+            // every emitted child endpoint; this is ledger evidence, not an output rewrite.
+            TopoDS_Vertex outputVertex;
+            bool matchedSourceVmapLedger = false;
+            bool matchedCurrentMemberCandidateLedger = false;
+            bool matchedEndpointMaterializationEvidence = false;
+        };
+        std::vector<EndpointProvenance> endpointProvenance;
+        bool endpointProvenanceRecorded = false;
+        std::size_t endpointProvenanceOutputVertexCount = 0;
+        std::size_t endpointProvenanceSourceVmapMatchedVertexCount = 0;
+        std::size_t endpointProvenanceCandidateMatchedVertexCount = 0;
+        std::size_t endpointProvenanceEndpointMaterializationMatchedVertexCount = 0;
+        std::size_t endpointProvenanceUnmatchedVertexCount = 0;
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
         // ::WireJoinerP::build() exports final "info.wire()" children. This remains temporary bridge
         // evidence for children whose vertices still come from endpoint materialization evidence
