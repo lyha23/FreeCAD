@@ -113,7 +113,7 @@ C3-M0 完成后应新增或更新：
 
 - `docs/CADCore3.0/FreeCAD语义矩阵.md`：完整矩阵。
 - `docs/CADCore3.0/capabilities-gap对照表.md`：当前 `cad-core` capabilities、remaining gaps、对应 C3 阶段和暴露方式。
-- `docs/CADCore3.0/oracle-fixture队列.md`：新增 oracle、待迁移 known gap、可删除旧 skipped 和第一批可执行 fixture。
+- `docs/CADCore3.0/oracle-fixture队列.md`：oracle 队列、待迁移 known gap、可删除旧 skipped 和第一批可执行 fixture。
 - `FreeCADCmd` collector 队列：需要采集的 native oracle case。
 
 ## C3-M0 验收

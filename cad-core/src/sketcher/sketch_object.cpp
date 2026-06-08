@@ -1367,15 +1367,6 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
             {"open_wire_compound_current_member_split_ledger_candidate_vertex_reuse_risk_count",
              wireJoinerLedger
                  ->openWireCompoundCurrentMemberSplitLedgerCandidateVertexReuseRiskCount},
-            {"open_wire_compound_current_member_split_ledger_candidate_missing_shared_output_identity_count",
-             wireJoinerLedger
-                 ->openWireCompoundCurrentMemberSplitLedgerCandidateMissingSharedOutputIdentityCount},
-            {"open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked_wire_info_count",
-             wireJoinerLedger
-                 ->openWireCompoundCurrentMemberSplitLedgerVertexMultiplicityBlockedWireInfoCount},
-            {"open_wire_compound_current_member_split_ledger_output_unmatched_vertex_count",
-             wireJoinerLedger
-                 ->openWireCompoundCurrentMemberSplitLedgerOutputUnmatchedVertexCount},
             {"open_wire_compound_missing_child_wire_history_edge_info_count",
              wireJoinerLedger->openWireCompoundMissingChildWireHistoryEdgeInfoCount},
             {"open_wire_compound_root_current_member_producer_output_wire_info_count",

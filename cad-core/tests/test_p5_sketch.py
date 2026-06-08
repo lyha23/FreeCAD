@@ -919,23 +919,17 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 ],
                 0,
             )
-            self.assertEqual(
-                ledger[
-                    "open_wire_compound_current_member_split_ledger_candidate_missing_shared_output_identity_count"
-                ],
-                0,
+            self.assertNotIn(
+                "open_wire_compound_current_member_split_ledger_candidate_missing_shared_output_identity_count",
+                ledger,
             )
-            self.assertEqual(
-                ledger[
-                    "open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked_wire_info_count"
-                ],
-                0,
+            self.assertNotIn(
+                "open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked_wire_info_count",
+                ledger,
             )
-            self.assertEqual(
-                ledger[
-                    "open_wire_compound_current_member_split_ledger_output_unmatched_vertex_count"
-                ],
-                0,
+            self.assertNotIn(
+                "open_wire_compound_current_member_split_ledger_output_unmatched_vertex_count",
+                ledger,
             )
             self.assertNotIn(
                 "open_wire_compound_current_member_split_ledger_result_slot_only_vertex_wire_info_count",
@@ -1062,13 +1056,9 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ],
             ledger["open_wire_compound_wire_info_count"],
         )
-        self.assertLessEqual(
-            ledger[
-                "open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked_wire_info_count"
-            ],
-            ledger[
-                "open_wire_compound_current_member_split_ledger_vertex_candidate_wire_info_count"
-            ],
+        self.assertNotIn(
+            "open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked_wire_info_count",
+            ledger,
         )
         self.assertLessEqual(
             ledger[
@@ -1113,13 +1103,9 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "open_wire_compound_current_member_split_ledger_candidate_other_output_matched_vertex_count"
             ],
         )
-        self.assertLessEqual(
-            ledger[
-                "open_wire_compound_current_member_split_ledger_candidate_missing_shared_output_identity_count"
-            ],
-            ledger[
-                "open_wire_compound_current_member_split_ledger_output_other_output_matched_vertex_count"
-            ],
+        self.assertNotIn(
+            "open_wire_compound_current_member_split_ledger_candidate_missing_shared_output_identity_count",
+            ledger,
         )
         self.assertNotIn(
             "open_wire_compound_current_member_split_ledger_result_slot_only_vertex_wire_info_count",
@@ -4202,17 +4188,13 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ],
             6,
         )
-        self.assertEqual(
-            ledger[
-                "open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked_wire_info_count"
-            ],
-            0,
+        self.assertNotIn(
+            "open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked_wire_info_count",
+            ledger,
         )
-        self.assertEqual(
-            ledger[
-                "open_wire_compound_current_member_split_ledger_output_unmatched_vertex_count"
-            ],
-            0,
+        self.assertNotIn(
+            "open_wire_compound_current_member_split_ledger_output_unmatched_vertex_count",
+            ledger,
         )
         self.assertNotIn(
             "open_wire_compound_current_member_split_ledger_result_slot_only_vertex_wire_info_count",
@@ -4258,11 +4240,9 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ],
             0,
         )
-        self.assertEqual(
-            ledger[
-                "open_wire_compound_current_member_split_ledger_candidate_missing_shared_output_identity_count"
-            ],
-            0,
+        self.assertNotIn(
+            "open_wire_compound_current_member_split_ledger_candidate_missing_shared_output_identity_count",
+            ledger,
         )
         self.assertEqual(
             ledger["open_wire_compound_endpoint_provenance_wire_info_count"],

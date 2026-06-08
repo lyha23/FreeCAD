@@ -1559,7 +1559,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "open_wire_compound_current_member_split_ledger_candidate_vertex_reuse_risk_count",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
-        self.assertIn(
+        self.assertNotIn(
             "open_wire_compound_current_member_split_ledger_candidate_missing_shared_output_identity_count",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
@@ -1571,11 +1571,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "open_wire_compound_current_member_split_ledger_output_vertex_debt",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
-        self.assertIn(
+        self.assertNotIn(
             "open_wire_compound_current_member_split_ledger_output_unmatched_vertex_total",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
-        self.assertIn(
+        self.assertNotIn(
             "open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
@@ -1597,6 +1597,26 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertIn(
             "open_wire_compound_current_member_split_ledger_result_slot_only_vertex_total",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_current_member_split_ledger_candidate_missing_shared_output_identity_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked_wire_info_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_current_member_split_ledger_output_unmatched_vertex_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_current_member_split_ledger_output_unmatched_vertex_total",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
         )
         self.assertNotIn(

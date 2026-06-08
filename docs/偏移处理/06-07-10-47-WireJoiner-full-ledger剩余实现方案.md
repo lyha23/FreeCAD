@@ -37,7 +37,7 @@ sourceEdgeArray
 - 本轮继续收束 topo mapper evidence：`Sketch.InternalShape.mapper_history` 的 concrete `wire_joiner:open_export` evidence 不再携带 `result_wire_producer_*` identity 字段，mapper diagnostic 也不再从 `result_wire_producer_blocker` 派生 `producer_blocker:*` 状态，缺 source lineage 时输出 `missing_open_wire_compound_source_lineage` 而不是 `missing_producer_identity`；producer audit 仍保留在 `wire_joiner_ledger` / `wire_joiner_history_detail` / `Sketch.InternalShape.sketch_internal_history` entry 中。C ABI capability 新增 `topo_mapper_evidence_result_wire_producer_identity_removed` / `topo_mapper_diagnostic_result_wire_producer_blocker_removed` / `topo_mapper_diagnostic_missing_producer_identity_removed`，并把对应 mapper producer identity 字段列入 deleted_fields；这不改变 remaining per-edge producer bridge。
 - 本轮新增 WireJoiner -> ElementMap 第一片：`topo_shape.cpp` 只在 event / child-wire slot 对齐、child shape identity 已记录、source->target 唯一且不覆盖既有 `element_map` 时，把 child-wire-consumed open-export history 写成 `Sketch.InternalShape.element_map` alias。当前 branch open-cutter 固定 `Edge5 -> InternalEdge10`，`element_history_status` 新增 `wire_joiner_history:element_map`；一对多 split、deleted relation 和已有 alias 仍保留 terminal mapper history，不做猜测。
 - 本轮继续把 open-export ownership 前移到 `OpenWireCompoundWireInfo` child-wire slot：child-wire 现在记录 `OpenLeafIterationMinus3 / UnownedOpenEdge / AHistoryProducerChildWire / RootCurrentMemberChildProducer` 来源、EdgeInfo iteration / iteration2、owner WireInfo / wireInfo2、child shape edge/vertex inventory、history event index 与 source edge indices；公开 `open_wire_compound_export_source` 已在 final child-wire pass 中从 open-leaf / unowned / root-current-member / materialized producer-wire ledger 推导，不再直接复制 materialization edge entry 的 `openWireCompoundExportSource`；`result_wire_producer_ledger_entries` 直接消费这些 child-wire ownership 字段，并且 entry 发布 gate 已后移到 child-wire final identity，不再由 materialization edge entry 的预分类直接决定。
-- 本轮把 three-overlap current-member vertex debt 从 blocked 诊断推进到 child-wire producer 输出：每个 current-member child 的输出端点都记录 member/split ledger、candidate wire 与 current child-wire output 的 `TopoDS_Vertex` identity 关系；当前 3 个 child 的 6 个输出端点均由 candidate ledger 覆盖，并以 `CurrentMemberChildWire / ExportedWithoutTransitionalSlot` 发布，不再输出 `wire_joiner_current_member_vertex_multiplicity_blocked`，endpoint-materialization 与 result-slot-only 公开诊断也已删除。
+- 本轮把 three-overlap current-member vertex debt 从 blocked 诊断推进到 child-wire producer 输出：每个 current-member child 的输出端点都记录 member/split ledger、candidate wire 与 current child-wire output 的 `TopoDS_Vertex` identity 关系；当前 3 个 child 的 6 个输出端点均由 candidate ledger 覆盖，并以 `CurrentMemberChildWire / ExportedWithoutTransitionalSlot` 发布，不再输出 `wire_joiner_current_member_vertex_multiplicity_blocked`，endpoint-materialization、result-slot-only 以及已归零的 aggregate blocker 公开诊断也已删除。
 - 本轮推进阶段 B/E 交界：`WireJoinerVmapReplacementEvent` 记录 `WireJoinerP::add()` vmap replacement 的 old vertex、new shared vertex、affected source edge / child-wire endpoint 与 replacement source edge index；`OpenWireCompoundWireInfo::EndpointProvenance` 消费 `sourceEdgeLedgerEdges_`、vmap-replaced sourceEdges、split fragment ledger 与 current-member candidate ledger。内部 `producerLedgerWireFromEndpointMaterializationEvidence`、`endpointMaterializationEvidenceVertices` 与 `WireJoinerEndpointMaterializationLedger` 已删除；公开 endpoint-materialization 兼容诊断字段也已移入 capability `deleted_fields`；three-overlap 当前 source-vmap producer wire 为 3、source-vmap endpoint matched 为 6、endpoint provenance source-vmap matched 为 1、candidate matched 为 6，`InternalVertex` oracle 更新为 19 且不退化到 16。
 - 本轮继续删除公开 source-edge producer output 诊断：`openWireCompoundSourceEdgeProducerOutput`、JSON `open_wire_compound_source_edge_producer_output` 与 summary count 已移入 capability `deleted_fields`；内部 readiness helper 只私有服务 producer identity，公开历史/topo 只保留 `open_wire_compound_producer_ledger_wire_built` 证明 child-wire producer wire 物化，`open_wire_compound_producer_ledger_edge_materialized` 已移入 deleted_fields。
 - 本轮继续删除 edge-level producer-ready gate：`classifyResultWireProducerSlot()` 不再因为 history materialization per-edge `openExportProducerEdge` 非空而发布 `ProducerLedgerReady`；C ABI 将 `source_shape_ready_derived_from_history_materialization_ledger_open_export_edge` 与 `edge_level_producer_ledger_ready_from_history_materialization_ledger` 移入 deleted_fields，剩余 gap 只保留 per-edge `openExportProducerEdge` / `historyProducerChildWireCandidate` 本体，child-wire producer edge copy gate 已移入 deleted_fields。
@@ -53,15 +53,15 @@ sourceEdgeArray
 
 ```text
 open_wire_compound_producer_ledger_wire_from_result_slot_evidence* 已从公开 JSON 删除
-open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked_wire_info_count = 0
-open_wire_compound_current_member_split_ledger_output_unmatched_vertex_count = 0
+open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked_wire_info_count 已从公开 JSON 删除
+open_wire_compound_current_member_split_ledger_output_unmatched_vertex_count 已从公开 JSON 删除
 open_wire_compound_current_member_split_ledger_output_vertex_debt = 6 endpoints
 open_wire_compound_current_member_split_ledger_result_slot_only_vertex* 已从公开 JSON 删除
 open_wire_compound_current_member_split_ledger_output_candidate_matched_vertex_count = 6
 open_wire_compound_current_member_split_ledger_output_matched_vertex_count = 1
 open_wire_compound_current_member_split_ledger_output_distinct_vertex_count = 6
 open_wire_compound_current_member_split_ledger_candidate_distinct_vertex_count = 6
-open_wire_compound_current_member_split_ledger_candidate_missing_shared_output_identity_count = 0
+open_wire_compound_current_member_split_ledger_candidate_missing_shared_output_identity_count 已从公开 JSON 删除
 open_wire_compound_producer_ledger_wire_from_source_vmap_wire_info_count = 3
 open_wire_compound_source_vmap_endpoint_ledger_matched_vertex_count = 6
 open_wire_compound_endpoint_provenance_wire_info_count = 15
@@ -71,7 +71,7 @@ open_wire_compound_endpoint_provenance_candidate_matched_vertex_count = 6
 open_wire_compound_endpoint_provenance_unmatched_vertex_count = 24
 ```
 
-这说明 member/split ledger 仍未完全直接命中输出端点，但 request-local candidate ledger 已能覆盖 three-overlap 当前输出顶点，source/vmap producer 已接管 3 个 current-member child，且未引入 `InternalVertex` 16 退化。后续不再是继续堆 result-slot endpoint evidence，而是继续收敛 `WireJoinerHistoryMaterializationLedger` binding / history materialization per-edge materialized child-slot bridge，并让 MapperHistory / ElementMap 正式消费 child-wire producer 账本。
+这说明 member/split ledger 仍未完全直接命中输出端点，但 request-local candidate ledger 已能覆盖 three-overlap 当前输出顶点，source/vmap producer 已接管 3 个 current-member child，已归零的 aggregate blocker 不再作为公开 JSON / capability diagnostic_fields 暴露，且未引入 `InternalVertex` 16 退化。后续不再是继续堆 result-slot endpoint evidence，而是继续收敛 `WireJoinerHistoryMaterializationLedger` binding / history materialization per-edge materialized child-slot bridge，并让 MapperHistory / ElementMap 正式消费 child-wire producer 账本。
 
 ## FreeCAD 依据与调用链
 
@@ -378,8 +378,8 @@ python3 -m unittest tests.test_p5_sketch tests.test_p6_topology tests.test_adapt
 新增测试：
 
 - three-overlap 专项断言：
-  - `vertex_multiplicity_blocked_wire_info_count=0`。
-  - `output_unmatched_vertex_count=0`，旧 `result_slot_only_vertex*` 字段不存在。
+  - `vertex_multiplicity_blocked_wire_info_count` 公开字段不存在，旧值只保留在 capability `deleted_fields`。
+  - `output_unmatched_vertex_count` 公开字段不存在，旧 `result_slot_only_vertex*` 字段不存在。
   - `output_candidate_matched_vertex_count=6` 覆盖当前输出顶点。
 - 必须验证 `InternalVertex` 数量不退化。
 
@@ -453,8 +453,8 @@ makeShapeWithElementMap(comp, MapperHistory(wireJoinerHistory), sourceEdges, op)
 - WireJoiner ElementMap 第一片已接入：唯一 child-wire-consumed source->InternalEdge relation 现在可成为 `Sketch.InternalShape.element_map` alias，branch open-cutter 固定 `Edge5 -> InternalEdge10`；ambiguous split 和 existing alias 不覆盖，full lifecycle 仍未完成。
 - openWireCompound child-wire ownership 已新增 export source / owner WireInfo / child shape identity / history event index，并由 result-wire producer entry 直接消费；producer entry 是否发布现在由 child-wire final identity 后置决定，`result_wire_producer_entry_gate_from_materialization_entry_identity` 已进入 deleted_fields。公开 `open_wire_compound_export_source` 也已由 final child-wire identity 推导，`open_wire_compound_export_source_from_materialization_entry` 已进入 deleted_fields。history materialization per-edge `openExportProducerEdge` / `historyProducerChildWireCandidate` 仍是建账边界的 temporary bridge，尚未删除。
 - C ABI 已用 `result_wire_producer_entry_gate_after_child_wire_identity` 固定该后置 gate：public entry 只由 `OpenWireCompoundWireInfo::resultWireProducer` final identity 发布，不再由 `WireJoinerHistoryMaterializationEdgeEntry::resultWireProducer` 预分类直接发布。
-- three-overlap current-member vertex debt 已从 blocked 诊断推进为 producer 输出：6 个输出端点均命中 candidate ledger，source-vmap endpoint ledger matched 为 6，旧 result-slot-only 字段已删除，mapper history 不再输出 `wire_joiner_current_member_vertex_multiplicity_blocked`。
-- 当前 three-overlap `open_wire_compound_current_member_split_ledger_candidate_missing_shared_output_identity_count=0`、`output_candidate_matched_vertex_count=6`、`open_wire_compound_producer_ledger_wire_from_source_vmap_wire_info_count=3`，`CurrentMemberChildWire / ExportedWithoutTransitionalSlot` 已覆盖原 `SuperEdgeRoot` current-member 输出；`InternalVertex` oracle 固定为 19。
+- three-overlap current-member vertex debt 已从 blocked 诊断推进为 producer 输出：6 个输出端点均命中 candidate ledger，source-vmap endpoint ledger matched 为 6，旧 result-slot-only 字段和已归零 aggregate blocker 字段已删除，mapper history 不再输出 `wire_joiner_current_member_vertex_multiplicity_blocked`。
+- 当前 three-overlap `output_candidate_matched_vertex_count=6`、`open_wire_compound_producer_ledger_wire_from_source_vmap_wire_info_count=3`，`CurrentMemberChildWire / ExportedWithoutTransitionalSlot` 已覆盖原 `SuperEdgeRoot` current-member 输出；`InternalVertex` oracle 固定为 19。旧 `candidate_missing_shared_output_identity_count` / `vertex_multiplicity_blocked_wire_info_count` / `output_unmatched_vertex_count` 只作为已删除字段保存在 capability `deleted_fields`。
 - history materialization per-edge `openExportProducerEdge` / `historyProducerChildWireCandidate` 与 MapperHistory / ElementMap full lifecycle 仍未收口；当前 ElementMap 只覆盖唯一 child-wire alias 第一片，noOriginal 公开 candidate bridge 已删除，但 cad-core 仍通过重组账本模拟 FreeCAD child-wire 粒度，因此 `generated_open_export_bridge` 与 `purge_as_original_bridge` 继续保持 `covered_main_path`。
 
 ## 字段删除顺序
@@ -464,7 +464,7 @@ makeShapeWithElementMap(comp, MapperHistory(wireJoinerHistory), sourceEdges, op)
 1. 非 current-member 的 endpoint materialization evidence 归零后，删除对应公开诊断或改成 current-member-only。
 2. `split_fragment_source_identity_fallback_*` / `split_fragment_history_shape_geometry_bridge_*` 保持 0 后，降为内部 debug。
 3. child-wire ownership 自足后，删除 history materialization per-edge `openExportProducerEdge` / `historyProducerChildWireCandidate` 与公开 `result_wire_producer_ledger_entries` 对 EdgeInfo candidate 的依赖。
-4. 已删除 `endpointMaterializationEvidenceVertices`、`producerLedgerWireFromEndpointMaterializationEvidence`、公开 endpoint-materialization 兼容诊断、独立 result-wire producer plan 类型、binding 内 openWireCompound eligible 候选缓存、per-edge source EdgeInfo bool/index 恒等缓存、per-edge open-export gate 缓存、full AHistory 缓存、aHistory/source-lineage 复制字段和 source EdgeInfo candidate list；下一步收敛 history materialization per-edge producer bridge。
+4. 已删除 `endpointMaterializationEvidenceVertices`、`producerLedgerWireFromEndpointMaterializationEvidence`、公开 endpoint-materialization 兼容诊断、独立 result-wire producer plan 类型、binding 内 openWireCompound eligible 候选缓存、per-edge source EdgeInfo bool/index 恒等缓存、per-edge open-export gate 缓存、full AHistory 缓存、aHistory/source-lineage 复制字段、source EdgeInfo candidate list，以及 three-overlap 已归零 aggregate blocker 公开字段；下一步收敛 history materialization per-edge producer bridge。
 5. noOriginal full 前，公开 source/split candidate bridge 必须保持删除状态；剩余收口只补真实 child-wire ownership 与 FreeCAD shared-source predicate。
 6. MapperHistory / ElementMap full 后，再考虑把 `generated_open_export_bridge` / `purge_as_original_bridge` 从 `covered_main_path` 改状态。
 
