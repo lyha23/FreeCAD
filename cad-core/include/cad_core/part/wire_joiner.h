@@ -1086,12 +1086,6 @@ private:
     };
     struct WireJoinerHistoryMaterializationEdgeEntry
     {
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-        // ::WireJoinerP::build() exports from final EdgeInfo rows, while producer/source evidence is
-        // scoped to the request-local aHistory materialization. This is a temporary candidate bit
-        // until MapperHistory(aHistory) / ElementMap can provide the producer child without a staged
-        // per-edge materialization entry; it is not a public child-wire source.
-        bool historyProducerChildWireCandidate = false;
         bool superEdgeMember = false;
         bool superEdgeRoot = false;
         std::size_t superEdgeRootIndex = 0;
@@ -1495,6 +1489,10 @@ private:
     // "aHistory->Remove(info.edge)", and ::build() publishes only concrete children through
     // "builder.Add(openWireCompound, info.wire())". A cad-core producer-ledger-ready slot must carry
     // a non-null scoped producer export edge before consumers can treat it as materialized output.
+    bool wireJoinerHistoryMaterializationLedgerHasChildWireCandidate(
+        const WireJoinerHistoryMaterializationLedger& materializationLedger,
+        std::size_t edgeInfoIndex
+    ) const;
     bool wireJoinerHistoryMaterializationLedgerHasOpenExportProducerEdge(
         const WireJoinerHistoryMaterializationLedger& materializationLedger,
         std::size_t edgeInfoIndex

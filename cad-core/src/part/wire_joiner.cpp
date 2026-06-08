@@ -2052,6 +2052,25 @@ bool WireJoiner::edgeInfoHasOpenWireCompoundLedgerSlot(
     return edgeInfoExportsOpenWireCompound(edgeInfo) || materializedChildSlot;
 }
 
+bool WireJoiner::wireJoinerHistoryMaterializationLedgerHasChildWireCandidate(
+    const WireJoinerHistoryMaterializationLedger& materializationLedger,
+    std::size_t edgeInfoIndex
+) const
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::build() exports from final EdgeInfo rows, and ::getOpenWires() consumes
+    // MapperHistory(aHistory). A cad-core materialized child candidate is therefore derived from
+    // the final EdgeInfo row bound by the request-local materialization ledger, not copied into a
+    // separate per-edge candidate flag.
+    return std::any_of(
+        materializationLedger.bindings.begin(),
+        materializationLedger.bindings.end(),
+        [edgeInfoIndex](const WireJoinerHistoryMaterializationBinding& binding) {
+            return binding.edgeInfoIndex == edgeInfoIndex && !binding.resultSlotEdge.IsNull();
+        }
+    );
+}
+
 bool WireJoiner::resultWireProducerSlotHasFullAHistoryEvidence(
     const EdgeInfo& edgeInfo
 ) const
@@ -2439,7 +2458,10 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(
         edgeInfoIndex < materializationLedger.edgeEntries.size()
         ? materializationLedger.edgeEntries[edgeInfoIndex]
         : emptyMaterializationEntry;
-    if (!materializationEntry.historyProducerChildWireCandidate) {
+    if (!wireJoinerHistoryMaterializationLedgerHasChildWireCandidate(
+            materializationLedger,
+            edgeInfoIndex
+        )) {
         return identity;
     }
 
@@ -2793,7 +2815,10 @@ void WireJoiner::attachResultWireProducerLedger(
         materializationLedger.edgeEntries.resize(info.edges.size());
     }
     for (std::size_t edgeInfoIndex = 0; edgeInfoIndex < info.edges.size(); ++edgeInfoIndex) {
-        if (!materializationLedger.edgeEntries[edgeInfoIndex].historyProducerChildWireCandidate) {
+        if (!wireJoinerHistoryMaterializationLedgerHasChildWireCandidate(
+                materializationLedger,
+                edgeInfoIndex
+            )) {
             continue;
         }
         materializationLedger.edgeEntries[edgeInfoIndex].resultWireProducer =
@@ -3303,7 +3328,6 @@ void WireJoiner::applyWireJoinerHistoryMaterialization(
             if (useSourceEdgeExportShape) {
                 materializationEntry.openExportProducerEdge = *sourceEdgeExportShape;
             }
-            materializationEntry.historyProducerChildWireCandidate = true;
             materializationEntry.superEdgeMember
                 = edgeInfo.superEdgeLifecycleMemberMinusOne;
             materializationEntry.superEdgeRoot = superEdgeRootIndex.has_value();
@@ -3407,7 +3431,10 @@ void WireJoiner::applyWireJoinerHistoryMaterialization(
             );
         const bool hasSourceLineageRemovedSourceEdgeInfo =
             !strictRemovedSourceEdgeInfoIndicesForSourceLineage(info, edgeInfo).empty();
-        if (!materializationEntry.historyProducerChildWireCandidate
+        if (!wireJoinerHistoryMaterializationLedgerHasChildWireCandidate(
+                materializationLedger,
+                edgeInfoIndex
+            )
             || wireJoinerHistoryMaterializationLedgerHasOpenExportProducerEdge(
                 materializationLedger,
                 edgeInfoIndex
@@ -3585,8 +3612,10 @@ void WireJoiner::buildFinalEdgeOwnership(
     for (std::size_t edgeInfoIndex = 0; edgeInfoIndex < finalInfo.edges.size(); ++edgeInfoIndex) {
         const EdgeInfo& edgeInfo = finalInfo.edges[edgeInfoIndex];
         const bool historyProducerChildWireSource =
-            edgeInfoIndex < materializationLedger.edgeEntries.size()
-            && materializationLedger.edgeEntries[edgeInfoIndex].historyProducerChildWireCandidate;
+            wireJoinerHistoryMaterializationLedgerHasChildWireCandidate(
+                materializationLedger,
+                edgeInfoIndex
+            );
         const bool exportsOpenEdge =
             edgeInfoHasOpenWireCompoundLedgerSlot(edgeInfo, historyProducerChildWireSource);
         if (!exportsOpenEdge) {
@@ -6500,7 +6529,10 @@ void WireJoiner::recordOpenWireCompoundLedger(
             materializationLedger.edgeEntries[edgeIndex];
         const bool exportsOpenEdge = edgeInfoHasOpenWireCompoundLedgerSlot(
             edgeInfo,
-            materializationEntry.historyProducerChildWireCandidate
+            wireJoinerHistoryMaterializationLedgerHasChildWireCandidate(
+                materializationLedger,
+                edgeIndex
+            )
         );
         if (!exportsOpenEdge) {
             continue;
@@ -6560,7 +6592,10 @@ void WireJoiner::recordOpenWireCompoundLedger(
         const bool currentMemberProducerShape = hasChildProducerLedgerEdge
             && materializationEntry.resultWireProducer.kind
                 == ResultWireProducerKind::CurrentMemberChildWire;
-        if (materializationEntry.historyProducerChildWireCandidate
+        if (wireJoinerHistoryMaterializationLedgerHasChildWireCandidate(
+                materializationLedger,
+                edgeIndex
+            )
             && (!hasChildProducerLedgerEdge || currentMemberProducerShape)
             && !sourceEdgeLedgerEdges_.empty()) {
             // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
