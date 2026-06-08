@@ -950,7 +950,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
         )
         self.assertIn(
-            "result_wire_producer_plan_endpoint_materialization_edge_seed",
+            "endpoint_materialization_edge_seed_removed",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
         )
         self.assertIn(
@@ -993,6 +993,45 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "child_wire_producer_ledger_wire_from_result_slot_evidence_field",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
         )
+        self.assertIn(
+            "open_wire_compound_producer_ledger_wire_from_result_slot_evidence",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
+        )
+        self.assertIn(
+            "edgeInfo_resultWireProducerCandidate_internal",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
+        )
+        for deleted_field in [
+            "wire_joiner_endpoint_materialization_ledger_vertex_seed",
+            "child_wire_result_slot_endpoint_materialization_vertex_ledger",
+            "producer_child_wire_result_slot_endpoint_materialization_counted",
+            "wire_joiner_endpoint_materialization_ledger_current_member_debt_scoped",
+            "child_wire_endpoint_materialization_evidence_field_renamed",
+            "child_wire_producer_ledger_wire_endpoint_materialization_evidence_field_renamed",
+            "result_slot_endpoint_materialization_ledger",
+            "matched_endpoint_materialization_evidence",
+            "endpoint_materialization_evidence_vertex_matches_other_output",
+            "endpoint_materialization_evidence_vertex_identity",
+            "open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count",
+            "open_wire_compound_current_member_split_ledger_endpoint_materialization_distinct_vertex_count",
+            "open_wire_compound_current_member_split_ledger_endpoint_materialization_other_output_matched_vertex_count",
+            "open_wire_compound_export_source_result_wire_producer_slot_value",
+            "open_wire_compound_export_source_history_materialized_child_slot_value",
+            "result_wire_producer_state_source_shape_ready",
+            "history_materialization_entry_open_wire_compound_child_wire_candidate_bool",
+            "mapper_evidence_result_wire_producer_identity_fields",
+            "mapper_diagnostic_result_wire_producer_blocker_status",
+            "mapper_diagnostic_missing_producer_identity_fallback",
+            "result_wire_producer_entry_gate_from_materialization_entry_identity",
+            "open_wire_compound_export_source_from_materialization_entry",
+            "history_materialization_entry_typed_open_wire_compound_export_source",
+            "named_shape_history_missing_result_wire_identity_count",
+            "element_map_result_wire_identity_mismatch_count",
+        ]:
+            self.assertIn(
+                deleted_field,
+                capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
+            )
         self.assertNotIn(
             "result_slot_vertex_evidence_output_count_zero",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
@@ -1006,23 +1045,82 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
         self.assertIn(
-            "result_wire_producer_plan_producer_open_export_edge_scoped",
+            "wire_joiner_history_materialization_ledger_open_export_producer_edge",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["remaining_gaps"],
+        )
+        self.assertNotIn(
+            "child_wire_producer_ledger_edge_copy_gate_from_history_materialization_ledger",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["remaining_gaps"],
+        )
+        self.assertNotIn(
+            "wire_joiner_history_materialization_ledger_result_slot_source_candidate_locator",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["remaining_gaps"],
+        )
+        self.assertIn(
+            "history_materialization_binding_source_edgeinfo_candidate_list",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
+        )
+        self.assertIn(
+            "history_materialization_binding_final_edgeinfo_index",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
         self.assertIn(
-            "child_wire_producer_ledger_edge_copy_gate_from_plan_ledger",
+            "open_wire_compound_export_source_ahistory_producer_child_wire",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
+        self.assertIn(
+            "open_wire_compound_export_source_from_child_wire_final_identity",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        for covered_field in [
+            "history_materialization_binding_open_wire_compound_eligible_cache_removed",
+            "history_materialization_entry_source_edgeinfo_identity_cache_removed",
+            "history_materialization_entry_open_export_gate_cache_removed",
+            "history_materialization_entry_full_ahistory_cache_removed",
+            "history_materialization_entry_ahistory_source_lineage_cache_removed",
+        ]:
+            self.assertIn(
+                covered_field,
+                capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+            )
         self.assertNotIn(
             "plan_ledger_producer_open_export_edge_gated_by_classified_identity",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
+        for removed_gap in [
+            "source_shape_ready_derived_from_history_materialization_ledger_open_export_edge",
+            "producer_ledger_ready_gate_direct_history_materialization_ledger",
+        ]:
+            self.assertNotIn(
+                removed_gap,
+                capabilities["wire_joiner"]["generated_open_export_bridge"]["remaining_gaps"],
+            )
         self.assertIn(
-            "source_shape_ready_derived_from_plan_ledger_producer_open_export_edge",
+            "source_shape_ready_derived_from_history_materialization_ledger_open_export_edge",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
+        )
+        self.assertIn(
+            "edge_level_producer_ledger_ready_from_history_materialization_ledger",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
+        )
+        self.assertNotIn(
+            "result_wire_producer_state_producer_ledger_ready",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
         self.assertIn(
-            "producer_ledger_ready_gate_direct_plan_ledger",
+            "producer_readiness_promoted_after_openWireCompound_child_materialization",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
+            "edge_level_producer_ledger_ready_gate_removed",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
+            "history_materialization_entry_typed_open_wire_compound_export_source",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
+        )
+        self.assertIn(
+            "history_materialization_entry_open_wire_compound_export_source_removed",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
         self.assertIn(
@@ -1070,10 +1168,26 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
         self.assertIn(
+            "result_wire_producer_entry_gate_after_child_wire_identity",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
             "edge_info_open_export_wire_helper_removed",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
         self.assertIn(
+            "open_wire_compound_source_edge_producer_output",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_source_edge_producer_output_wire_info_count",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
+        )
+        self.assertIn(
+            "child_wire_source_edge_producer_output_public_diagnostic",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
+        )
+        self.assertNotIn(
             "child_wire_source_edge_producer_output_ledger",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
@@ -1085,12 +1199,24 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "child_wire_source_edge_producer_output_from_classified_identity",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
-        self.assertIn(
+        self.assertNotIn(
             "child_wire_source_edge_producer_output_derived_from_producer_ledger_edge",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["remaining_gaps"],
+        )
+        self.assertNotIn(
+            "child_wire_producer_ledger_edge_materialized",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
         self.assertIn(
-            "child_wire_producer_ledger_edge_materialized",
+            "child_wire_producer_ledger_edge_copy_gate_from_history_materialization_ledger",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
+        )
+        self.assertIn(
+            "child_wire_producer_ledger_edge_copy_gate_removed",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
+            "child_wire_producer_readiness_from_materialized_wire",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
         self.assertIn(
@@ -1107,6 +1233,34 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertIn(
             "topo_consumes_wire_joiner_history_event_ledger",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
+            "topo_consumes_openWireCompound_child_wire_ownership_ledger",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
+            "wire_joiner_open_export_mapper_history_concrete_events",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
+            "topo_mapper_evidence_result_wire_producer_identity_removed",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
+            "topo_mapper_diagnostic_result_wire_producer_blocker_removed",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
+            "topo_mapper_diagnostic_missing_producer_identity_removed",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
+            "topo_result_wire_identity_counters_removed",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
+            "wire_joiner_open_export_element_map_unique_child_wire_alias",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
         self.assertIn(
@@ -1182,19 +1336,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
         self.assertIn(
-            "child_wire_result_slot_endpoint_materialization_vertex_ledger",
-            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
-        )
-        self.assertIn(
-            "result_wire_producer_plan_endpoint_materialization_vertex_seed",
-            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
-        )
-        self.assertIn(
             "producer_child_wire_prefers_vmap_vertex_ledger",
-            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
-        )
-        self.assertIn(
-            "producer_child_wire_result_slot_endpoint_materialization_counted",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
         self.assertIn(
@@ -1246,19 +1388,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
         self.assertIn(
-            "child_wire_endpoint_materialization_evidence_field_renamed",
-            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
-        )
-        self.assertIn(
-            "child_wire_producer_ledger_wire_endpoint_materialization_evidence_field_renamed",
-            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
-        )
-        self.assertIn(
             "edge_info_result_slot_vertex_evidence_removed",
-            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
-        )
-        self.assertIn(
-            "result_wire_producer_plan_endpoint_materialization_debt_scoped",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
         self.assertNotIn(
@@ -1269,13 +1399,17 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "resultSlotVertexEvidenceEdge",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
-        self.assertIn(
+        self.assertNotIn(
             "result_slot_endpoint_materialization_ledger",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertNotIn(
+            "open_wire_compound_producer_ledger_edge_materialized",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
         self.assertIn(
             "open_wire_compound_producer_ledger_edge_materialized",
-            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
         )
         self.assertIn(
             "open_wire_compound_export_source",
@@ -1341,7 +1475,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "open_wire_compound_endpoint_provenance_vmap_replacement_matched_vertex_count",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
-        self.assertIn(
+        self.assertNotIn(
             "open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
@@ -1361,7 +1495,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "wire_joiner_history_event_from_child_wire_ledger_count",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
-        self.assertIn(
+        self.assertNotIn(
             "open_wire_compound_producer_ledger_wire_from_result_slot_evidence",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
@@ -1401,7 +1535,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "open_wire_compound_current_member_split_ledger_candidate_distinct_vertex_count",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
-        self.assertIn(
+        self.assertNotIn(
             "open_wire_compound_current_member_split_ledger_endpoint_materialization_distinct_vertex_count",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
@@ -1417,7 +1551,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "open_wire_compound_current_member_split_ledger_candidate_other_output_matched_vertex_count",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
-        self.assertIn(
+        self.assertNotIn(
             "open_wire_compound_current_member_split_ledger_endpoint_materialization_other_output_matched_vertex_count",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
@@ -1438,20 +1572,32 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
         self.assertIn(
-            "open_wire_compound_current_member_split_ledger_result_slot_only_vertex",
-            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
-        )
-        self.assertIn(
             "open_wire_compound_current_member_split_ledger_output_unmatched_vertex_total",
-            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
-        )
-        self.assertIn(
-            "open_wire_compound_current_member_split_ledger_result_slot_only_vertex_total",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
         )
         self.assertIn(
             "open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertNotIn(
+            "open_wire_compound_current_member_split_ledger_result_slot_only_vertex",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertNotIn(
+            "open_wire_compound_current_member_split_ledger_result_slot_only_vertex_total",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["diagnostic_fields"],
+        )
+        self.assertIn(
+            "result_slot_only_identity",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_current_member_split_ledger_result_slot_only_vertex",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
+        )
+        self.assertIn(
+            "open_wire_compound_current_member_split_ledger_result_slot_only_vertex_total",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["deleted_fields"],
         )
         self.assertNotIn(
             "result_slot_vertex_evidence_output",
@@ -1461,16 +1607,34 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             capabilities["wire_joiner"]["purge_as_original_bridge"]["status"],
             "covered_main_path",
         )
+        self.assertEqual(
+            capabilities["wire_joiner"]["purge_as_original_bridge"]["mode"],
+            "grouped_shared_source_verdict",
+        )
         self.assertIn(
-            "openWireCompound_child_wire_noOriginal_candidate",
+            "openWireCompound_noOriginal_candidate_public_bridge_removed",
             capabilities["wire_joiner"]["purge_as_original_bridge"]["covered"],
         )
+        for deleted_field in [
+            "open_wire_compound_no_original_purge_candidate",
+            "open_wire_compound_no_original_purge_candidate_wire_info_count",
+            "source_identity_no_original_purge_candidate_edge_info_count",
+            "open_wire_compound_no_original_purge_unmatched_wire_info_count",
+        ]:
+            self.assertIn(
+                deleted_field,
+                capabilities["wire_joiner"]["purge_as_original_bridge"]["deleted_fields"],
+            )
         self.assertIn(
             "openWireCompound_child_wire_noOriginal_match",
             capabilities["wire_joiner"]["purge_as_original_bridge"]["covered"],
         )
         self.assertIn(
             "openWireCompound_child_wire_noOriginal_purge_verdict",
+            capabilities["wire_joiner"]["purge_as_original_bridge"]["covered"],
+        )
+        self.assertIn(
+            "openWireCompound_noOriginal_group_purge_verdict",
             capabilities["wire_joiner"]["purge_as_original_bridge"]["covered"],
         )
         self.assertIn(
@@ -1672,6 +1836,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "facemaker_pre_split",
                 "facemaker_splitter",
                 "facemaker_summary_only",
+                "wire_joiner_history:element_map",
                 "import_shape_element_map",
                 "shapefix_root_history_modified",
                 "element_map_policy_drop",

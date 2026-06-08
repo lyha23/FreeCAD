@@ -56,16 +56,12 @@ struct SketchInternalWireJoinerEndpointIdentityDebt
     std::size_t outputVertexIndex = 0;
     bool matchedMemberSplitLedger = false;
     bool matchedCandidateLedger = false;
-    bool matchedEndpointMaterializationEvidence = false;
-    bool resultSlotOnlyIdentity = false;
     bool currentChildWireOutputVertexMatchesOtherOutput = false;
     bool candidateWireVertexMatchesOtherOutput = false;
-    bool endpointMaterializationEvidenceVertexMatchesOtherOutput = false;
     std::string explanation;
     std::string currentChildWireOutputVertexIdentity;
     std::string memberSplitLedgerVertexIdentity;
     std::string candidateWireVertexIdentity;
-    std::string endpointMaterializationEvidenceVertexIdentity;
     std::string mismatchReason;
 };
 
@@ -120,24 +116,14 @@ struct SketchInternalWireJoinerOpenExportHistoryEntry
     std::size_t openWireCompoundChildWireInfoIndex = 0;
     std::vector<std::size_t> openWireCompoundSourceEdgeIndices;
     bool openWireCompoundSourceLineageFromSplitterHistory = false;
-    bool openWireCompoundNoOriginalPurgeCandidate = false;
     bool openWireCompoundNoOriginalPurgeMatch = false;
     bool openWireCompoundNoOriginalPurgedByLedger = false;
     bool openWireCompoundNoOriginalSharedSourceLedgerRecorded = false;
     std::size_t openWireCompoundNoOriginalSharedSourceEdgeCount = 0;
     std::size_t openWireCompoundNoOriginalSharedSourceMatchedEdgeCount = 0;
     std::size_t openWireCompoundNoOriginalSharedSourceUnmatchedEdgeCount = 0;
-    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-    // ::WireJoinerP::getOpenWires() consumes openWireCompound with MapperHistory(aHistory).
-    // Topo evidence keeps this child-wire producer edge materialization bit so it does not infer
-    // producer identity from the exported wire geometry.
-    bool openWireCompoundProducerLedgerEdgeMaterialized = false;
     bool openWireCompoundProducerLedgerWireBuilt = false;
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-    // ::WireJoinerP::add() uses vmap/sourceEdges vertex replacement before ::build() emits
-    // openWireCompound; result-slot evidence is a temporary cad-core bridge and stays diagnostic here.
     bool openWireCompoundProducerLedgerWireFromSourceVmap = false;
-    bool openWireCompoundProducerLedgerWireFromResultSlotEvidence = false;
     bool openWireCompoundSourceVmapEndpointLedgerRecorded = false;
     std::size_t openWireCompoundSourceVmapEndpointLedgerOutputVertexCount = 0;
     std::size_t openWireCompoundSourceVmapEndpointLedgerMatchedVertexCount = 0;
@@ -149,12 +135,10 @@ struct SketchInternalWireJoinerOpenExportHistoryEntry
     std::size_t openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount = 0;
     std::size_t openWireCompoundEndpointProvenanceVmapReplacementMatchedVertexCount = 0;
     std::size_t openWireCompoundEndpointProvenanceCandidateMatchedVertexCount = 0;
-    std::size_t openWireCompoundEndpointProvenanceEndpointMaterializationMatchedVertexCount = 0;
     std::size_t openWireCompoundEndpointProvenanceUnmatchedVertexCount = 0;
     std::vector<SketchInternalWireJoinerVmapReplacementEvent>
         openWireCompoundVmapReplacementEvents;
     std::size_t openWireCompoundVmapReplacementEventCount = 0;
-    bool openWireCompoundSourceEdgeProducerOutput = false;
     bool openWireCompoundCurrentMemberProducerOutput = false;
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::findSuperEdgesUpdateFirst() uses "wireData->Add(current->shape(...))"; the
@@ -175,7 +159,6 @@ struct SketchInternalWireJoinerOpenExportHistoryEntry
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::build() adds "info.wire()" to openWireCompound before MapperHistory(aHistory).
     // This keeps result-slot-only vertex identity debt visible to ElementMap diagnostics.
-    std::size_t openWireCompoundCurrentMemberSplitLedgerResultSlotOnlyVertexCount = 0;
     bool openWireCompoundCurrentMemberSplitLedgerVertexMultiplicityBlocked = false;
     bool missingOpenWireCompoundChildWire = false;
     std::vector<std::size_t> sourceEdgeIndices;
@@ -267,16 +250,6 @@ struct SketchInternalHistoryContext
     std::size_t wireJoinerSplitResultEdgeCount = 0;
     std::vector<SketchInternalWireJoinerHistoryEvent> wireJoinerHistoryEvents;
     std::vector<SketchInternalWireJoinerOpenExportHistoryEntry> wireJoinerOpenExportHistoryEntries;
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-    // ::WireJoinerP::build() exports result wires into "openWireCompound", then calls
-    // "shape.makeShapeWithElementMap(..., MapperHistory(aHistory), ...)"; topo must consume the
-    // same producer identity in history instead of re-inferring source ownership from geometry.
-    std::size_t namedShapeHistoryMissingResultWireIdentityCount = 0;
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
-    // ::TopoShape::makeShapeWithElementMap(), calls "mapSubElement(shapes)" before mapper history.
-    // A result-wire source lineage is accepted only when ElementMap or terminal history carries the
-    // same source edge evidence.
-    std::size_t elementMapResultWireIdentityMismatchCount = 0;
     std::size_t wireJoinerModifiedSourceEdgeCount = 0;
     std::size_t wireJoinerModifiedHistoryCount = 0;
     std::size_t wireJoinerGeneratedHistoryCount = 0;
