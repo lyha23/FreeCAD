@@ -464,15 +464,19 @@ nlohmann::json capabilitiesJson()
                   // FreeCAD:
                   // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/
                   // FeaturePad.cpp::Pad::execute() and FeaturePocket.cpp::Pocket::execute()
-                  // delegate UpToFace / UpToShape to FeatureExtrude.cpp. CAD Core keeps
-                  // multi-face UpToShape as a design boundary until the full FreeCAD support
-                  // face-selection and mapper-history path is implemented.
+                  // delegate UpToFace / UpToShape to FeatureExtrude.cpp, whose
+                  // getUpToShapeFromLinkSubList path collects selected faces before prism-until.
                   {"up_to_shape_multi_face",
                    {
-                       {"status", "diagnostic_only_boundary"},
+                       {"status", "supported"},
                        {"objects", {"part_design.pad", "part_design.pocket"}},
-                       {"diagnostic", "unsupported_subshape_kind"},
-                       {"fixture", "p3a/pocket-up-to-shape-multi-face-unsupported"},
+                       {"fixtures",
+                        {"p3a/pocket-up-to-shape-multi-face", "p3a/pad-up-to-shape-multi-face"}},
+                       {"failure_fixtures",
+                        {{"offset", "p3a/pocket-up-to-shape-multiple-faces-offset"},
+                         {"invalid_subshape", "p3a/pocket-up-to-shape-edge-subshape"}}},
+                       {"diagnostics",
+                        {"unsupported_property", "unsupported_subshape_kind", "invalid_subshape", "missing_link_target"}},
                    }},
                   {"remaining_gaps", nlohmann::json::array()},
               }},

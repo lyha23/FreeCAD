@@ -13,7 +13,7 @@
 | `sketcher.solver` | conflict / redundancy / malformed / partial redundancy diagnostics、request-local DoF、dependent group metadata、常用几何关系 request-local 写回已覆盖 | remaining gaps 为空 |
 | `part_workbench.offset` | `Part::Compound`、`Part::Offset`、`Part::Offset2D`、`Part::Thickness`、`Part::Section` 第一批 maker history 和 diagnostics 已覆盖 | remaining gaps 为空 |
 | `part_design.body_chain` | BaseFeature / Group / Tip reroute、Origin / Datum relink、Add/Sub replay first slice 已覆盖 | remaining gaps 为空 |
-| `part_design.pad_pocket` | `UpToShape` single target solid / face 主路径覆盖 | multi-face `UpToShape` 保留 diagnostic-only boundary：`unsupported_subshape_kind` |
+| `part_design.pad_pocket` | `UpToShape` single target solid / face 与多面 LinkSubList 主路径覆盖；Pad / Pocket 成功 fixture 已覆盖，offset 多面和非 face selection 保留结构化失败诊断 | remaining gaps 为空；失败边界 diagnostics 为 `unsupported_property`、`unsupported_subshape_kind`、`invalid_subshape`、`missing_link_target` |
 | `part_design.hole` | thread table、head cut resource、ModelThread、profile source mapper history、compound tool shape、subtractive cut history first slice 已覆盖 | remaining gaps 为空 |
 | `assembly` | grounded Fixed / Revolute / Slider / Ball / Distance / Angle 走真实 Ondsel；placement writeback lifecycle 已覆盖；representative fallback 保留 | `ondsel_solver_adapter.status=covered_full`；`representative_solver_adapter.status=covered_representative` 只表示 fallback |
 | `adapters` | CLI / C ABI / Worker / WASM / streaming mesh / binary mesh 复用同一 core recompute | remaining gaps 为空；adapter 不承载建模语义 |

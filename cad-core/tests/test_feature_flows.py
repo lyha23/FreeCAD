@@ -58,6 +58,7 @@ class CadCoreFeatureFlowTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         for fixture in [
             "pocket-up-to-shape-solid",
             "pocket-up-to-shape-face",
+            "pocket-up-to-shape-multi-face",
         ]:
             with self.subTest(fixture=fixture):
                 result = self.run_recompute(fixture, "p3a")
@@ -73,6 +74,27 @@ class CadCoreFeatureFlowTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pad["method"], "UpToFace")
         self.assert_object_matches_expected(result, "p3a", "pad-up-to-face")
+
+    def test_p3a_pad_up_to_shape_multi_face_outputs_solid(self) -> None:
+        result = self.run_recompute("pad-up-to-shape-multi-face", "p3a")
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pad["method"], "UpToShape")
+        self.assert_object_matches_expected(result, "p3a", "pad-up-to-shape-multi-face")
+
+    def test_p3a_up_to_shape_multi_face_failure_boundaries_are_structured(self) -> None:
+        offset = self.run_recompute("pocket-up-to-shape-multiple-faces-offset", "p3a")
+        invalid = self.run_recompute("pocket-up-to-shape-edge-subshape", "p3a")
+
+        self.assertEqual([item["code"] for item in offset["diagnostics"]], ["unsupported_property"])
+        self.assertEqual(offset["diagnostics"][0]["message"], "Extrude: Can only offset one face")
+        self.assertEqual(offset["diagnostics"][0]["property"], "Offset")
+        self.assertEqual(offset["objects"]["Pocket"]["status"], "error")
+        self.assertEqual([item["code"] for item in invalid["diagnostics"]], ["unsupported_subshape_kind"])
+        self.assertEqual(invalid["diagnostics"][0]["property"], "UpToShape")
+        self.assertEqual(invalid["diagnostics"][0]["subname"], "Edge1")
+        self.assertEqual(invalid["objects"]["Pocket"]["status"], "error")
 
     def test_p3b_two_sides_length_outputs_expected_extents(self) -> None:
         result = self.run_recompute("pad-two-sides-length", "p3b")

@@ -153,6 +153,7 @@ target_link_libraries(cad-core-lib PUBLIC
   TKGeomAlgo
   TKTopAlgo
   TKPrim
+  TKFeat
   TKOffset
   TKShHealing
   TKMesh

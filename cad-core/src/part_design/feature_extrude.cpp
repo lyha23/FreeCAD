@@ -11,18 +11,22 @@
 #include <BRepAdaptor_Surface.hxx>
 #include <BRepBndLib.hxx>
 #include <BRepExtrema_DistShapeShape.hxx>
+#include <BRepFeat_MakePrism.hxx>
 #include <BRepGProp.hxx>
 #include <BRepIntCurveSurface_Inter.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
 #include <BRepPrimAPI_MakePrism.hxx>
+#include <BRep_Builder.hxx>
 #include <Bnd_Box.hxx>
 #include <GeomAbs_CurveType.hxx>
 #include <GeomAbs_SurfaceType.hxx>
 #include <GProp_GProps.hxx>
 #include <Precision.hxx>
+#include <Standard_Failure.hxx>
 #include <TopAbs_ShapeEnum.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopoDS.hxx>
+#include <TopoDS_Compound.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
 #include <gp_Trsf.hxx>
@@ -41,6 +45,18 @@ namespace {
 struct PlanarLimit {
     gp_Dir direction;
     double length = 0.0;
+};
+
+// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.cpp
+// ::ProfileBased::getUpToShapeFromLinkSubList(), key: "create a unique shell with all selected
+// faces"; FeatureExtrude.cpp::FeatureExtrude::makeShellFromUpToShape(), key: "don't use the last
+// face so the shell is open and OCC works better".
+struct UpToShapeLimit {
+    gp_Dir direction;
+    double reportLength = 0.0;
+    TopoDS_Shape untilShape;
+    int faceCount = 0;
+    bool prismUntil = false;
 };
 
 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp::FeatureExtrude::buildExtrusion(),
@@ -467,6 +483,98 @@ std::vector<CutFaceCandidate> findFacesCutByDirection(const TopoDS_Shape& target
     return result;
 }
 
+int faceCountOf(const TopoDS_Shape& shape)
+{
+    int count = 0;
+    for (TopExp_Explorer explorer(shape, TopAbs_FACE); explorer.More(); explorer.Next()) {
+        ++count;
+    }
+    return count;
+}
+
+TopoDS_Shape compoundOfShapes(const std::vector<TopoDS_Shape>& shapes)
+{
+    BRep_Builder builder;
+    TopoDS_Compound compound;
+    builder.MakeCompound(compound);
+    for (const TopoDS_Shape& shape : shapes) {
+        if (!shape.IsNull()) {
+            builder.Add(compound, shape);
+        }
+    }
+    return compound;
+}
+
+std::optional<TopoDS_Face> firstFaceOf(const TopoDS_Shape& shape)
+{
+    for (TopExp_Explorer explorer(shape, TopAbs_FACE); explorer.More(); explorer.Next()) {
+        return TopoDS::Face(explorer.Current());
+    }
+    return std::nullopt;
+}
+
+TopoDS_Face supportFaceForPrismUntil(const TopoDS_Shape& profile,
+                                     const TopoDS_Face& profileFace,
+                                     const runtime::ComputeContext& context)
+{
+    const auto base = previousSolidShape(context);
+    if (!base) {
+        return profileFace;
+    }
+
+    for (TopExp_Explorer explorer(*base, TopAbs_FACE); explorer.More(); explorer.Next()) {
+        const TopoDS_Face face = TopoDS::Face(explorer.Current());
+        BRepExtrema_DistShapeShape distance(profile, face);
+        distance.Perform();
+        if (distance.IsDone() && distance.Value() < Precision::Confusion()) {
+            return face;
+        }
+    }
+    return profileFace;
+}
+
+UpToShapeLimit makeOpenUntilShapeFromFaces(const TopoDS_Shape& target,
+                                           const TopoDS_Shape& profile,
+                                           const gp_Dir& initialDirection)
+{
+    gp_Dir direction = initialDirection;
+    auto cutFaces = findFacesCutByDirection(target, profile, direction);
+    if (cutFaces.empty()) {
+        direction.Reverse();
+        cutFaces = findFacesCutByDirection(target, profile, direction);
+    }
+
+    TopoDS_Shape untilShape = target;
+    double reportLength = 1.0;
+    if (!cutFaces.empty()) {
+        auto nearFace = cutFaces.begin();
+        auto farFace = cutFaces.begin();
+        for (auto it = cutFaces.begin(); it != cutFaces.end(); ++it) {
+            if (it->distanceSquared > farFace->distanceSquared) {
+                farFace = it;
+            }
+            else if (it->distanceSquared < nearFace->distanceSquared) {
+                nearFace = it;
+            }
+        }
+        reportLength = std::sqrt(std::max(farFace->distanceSquared, Precision::Confusion()));
+        if (nearFace != farFace) {
+            std::vector<TopoDS_Shape> openFaces;
+            for (TopExp_Explorer explorer(target, TopAbs_FACE); explorer.More(); explorer.Next()) {
+                const TopoDS_Shape face = explorer.Current();
+                if (!face.IsSame(farFace->face)) {
+                    openFaces.push_back(face);
+                }
+            }
+            if (!openFaces.empty()) {
+                untilShape = compoundOfShapes(openFaces);
+            }
+        }
+    }
+
+    return UpToShapeLimit{direction, reportLength, untilShape, faceCountOf(target), true};
+}
+
 std::optional<double> signedDistanceToFacePlane(const TopoDS_Shape& profile,
                                                 const TopoDS_Face& face,
                                                 const gp_Dir& direction,
@@ -797,11 +905,11 @@ std::optional<PlanarLimit> resolveUpToFaceLimit(const app::DocumentObject& objec
     return measureFaceLimit(profile, *face, direction, object, context, property);
 }
 
-std::optional<PlanarLimit> resolveUpToShapeLimit(const app::DocumentObject& object,
-                                                 runtime::ComputeContext& context,
-                                                 const TopoDS_Shape& profile,
-                                                 const gp_Dir& direction,
-                                                 const std::string& property)
+std::optional<UpToShapeLimit> resolveUpToShapeLimit(const app::DocumentObject& object,
+                                                    runtime::ComputeContext& context,
+                                                    const TopoDS_Shape& profile,
+                                                    const gp_Dir& direction,
+                                                    const std::string& property)
 {
     if (!app::hasPropertyType(object, property, "App::PropertyLinkSubList")) {
         runtime::addDiagnostic(context.diagnostics,
@@ -818,44 +926,122 @@ std::optional<PlanarLimit> resolveUpToShapeLimit(const app::DocumentObject& obje
         runtime::addDiagnostic(context.diagnostics,
                                "error",
                                "invalid_subshape",
-                               property + " must reference one shape or one face",
-                               object.name,
-                               property);
-        return std::nullopt;
-    }
-    if (links.size() != 1U || links.front().subnames.size() > 1U) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "unsupported_subshape_kind",
-                               "Only a single " + property + " target shape or face is supported before multi-face UpToShape",
+                               property + " must reference at least one shape or face",
                                object.name,
                                property);
         return std::nullopt;
     }
 
-    const app::Link& link = links.front();
-    if (!link.subnames.empty() && !link.subnames.front().empty()) {
-        const auto face = resolveFaceLink(link, object, context, property);
-        if (!face) {
+    auto wholeTargetShape = [&](const app::Link& link) -> std::optional<TopoDS_Shape> {
+        const auto shapeIt = context.shapes.find(link.object);
+        if (shapeIt == context.shapes.end() || shapeIt->second.shape.IsNull()) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "missing_link_target",
+                                   property + " target " + link.object + " did not produce a shape",
+                                   object.name,
+                                   property,
+                                   "runtime",
+                                   link.object);
             return std::nullopt;
         }
-        return measureFaceLimit(profile, *face, direction, object, context, property);
+        if (faceCountOf(shapeIt->second.shape) == 0) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "invalid_subshape",
+                                   property + " target " + link.object + " has no faces",
+                                   object.name,
+                                   property,
+                                   "runtime",
+                                   link.object);
+            return std::nullopt;
+        }
+        return shapeIt->second.shape;
+    };
+
+    const auto linkSelectsWholeShape = [](const app::Link& link) {
+        return link.subnames.empty() || link.subnames.front().empty();
+    };
+
+    if (links.size() == 1U && linkSelectsWholeShape(links.front())) {
+        const auto shape = wholeTargetShape(links.front());
+        if (!shape) {
+            return std::nullopt;
+        }
+        const auto limit = selectFaceLimitFromShape(profile, *shape, direction, object, context, property);
+        if (!limit) {
+            return std::nullopt;
+        }
+        return UpToShapeLimit{limit->direction, limit->length, TopoDS_Shape{}, faceCountOf(*shape), false};
     }
 
-    const auto shapeIt = context.shapes.find(link.object);
-    if (shapeIt == context.shapes.end() || shapeIt->second.kind != runtime::ShapeValue::Kind::Solid) {
+    std::vector<TopoDS_Shape> selectedFaces;
+    for (const app::Link& link : links) {
+        if (linkSelectsWholeShape(link)) {
+            const auto shape = wholeTargetShape(link);
+            if (!shape) {
+                return std::nullopt;
+            }
+            for (TopExp_Explorer explorer(*shape, TopAbs_FACE); explorer.More(); explorer.Next()) {
+                selectedFaces.push_back(explorer.Current());
+            }
+            continue;
+        }
+
+        for (std::size_t index = 0; index < link.subnames.size(); ++index) {
+            const std::string& subname = link.subnames.at(index);
+            if (subname.empty()) {
+                const auto shape = wholeTargetShape(link);
+                if (!shape) {
+                    return std::nullopt;
+                }
+                for (TopExp_Explorer explorer(*shape, TopAbs_FACE); explorer.More(); explorer.Next()) {
+                    selectedFaces.push_back(explorer.Current());
+                }
+                continue;
+            }
+
+            app::Link single = link;
+            single.subnames = {subname};
+            if (link.stableSubnames.size() == link.subnames.size()) {
+                single.stableSubnames = {link.stableSubnames.at(index)};
+            }
+            else {
+                single.stableSubnames.clear();
+            }
+            if (link.fullSubnames.size() == link.subnames.size()) {
+                single.fullSubnames = {link.fullSubnames.at(index)};
+            }
+            else {
+                single.fullSubnames.clear();
+            }
+            const auto face = resolveFaceLink(single, object, context, property);
+            if (!face) {
+                return std::nullopt;
+            }
+            selectedFaces.push_back(*face);
+        }
+    }
+
+    if (selectedFaces.empty()) {
         runtime::addDiagnostic(context.diagnostics,
                                "error",
-                               "missing_link_target",
-                               property + " target " + link.object + " did not produce a solid",
+                               "invalid_subshape",
+                               property + " must reference at least one shape or face",
                                object.name,
-                               property,
-                               "runtime",
-                               link.object);
+                               property);
         return std::nullopt;
     }
 
-    return selectFaceLimitFromShape(profile, shapeIt->second.shape, direction, object, context, property);
+    if (selectedFaces.size() == 1U) {
+        const auto limit = measureFaceLimit(profile, TopoDS::Face(selectedFaces.front()), direction, object, context, property);
+        if (!limit) {
+            return std::nullopt;
+        }
+        return UpToShapeLimit{limit->direction, limit->length, TopoDS_Shape{}, 1, false};
+    }
+
+    return makeOpenUntilShapeFromFaces(compoundOfShapes(selectedFaces), profile, direction);
 }
 
 std::optional<PlanarLimit> resolveUpToFirstLastLimit(const app::DocumentObject& object,
@@ -1234,6 +1420,75 @@ std::optional<SideBuild> makePrismSide(const TopoDS_Shape& profile,
     return SideBuild{method, length, prism.Shape(), false, false, std::move(namedShape)};
 }
 
+std::optional<SideBuild> makePrismUntilSide(const TopoDS_Shape& profile,
+                                            const gp_Dir& direction,
+                                            const TopoDS_Shape& untilShape,
+                                            double reportLength,
+                                            const app::DocumentObject& object,
+                                            runtime::ComputeContext& context,
+                                            const app::Link& profileLink,
+                                            const std::string& method,
+                                            const std::string& property,
+                                            const std::string& featureName,
+                                            const std::string& historyOwner)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp
+    // ::FeatureExtrude::generateSingleExtrusionSide(), calls "prism.makeElementPrismUntil(...,
+    // upToShape, dir, TopoShape::PrismMode::None, true)" after getUpToShapeFromLinkSubList().
+    const auto profileFace = firstFaceOf(profile);
+    if (!profileFace) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "open_profile",
+                               featureName + " Profile must provide a face for UpToShape prism-until",
+                               object.name,
+                               "Profile",
+                               "runtime",
+                               profileLink.object);
+        return std::nullopt;
+    }
+    const TopoDS_Face supportFace = supportFaceForPrismUntil(profile, *profileFace, context);
+
+    const auto performUntil = [&](const TopoDS_Shape& baseShape) -> std::optional<TopoDS_Shape> {
+        try {
+            BRepFeat_MakePrism prism;
+            prism.Init(baseShape, *profileFace, supportFace, direction, 2, Standard_False);
+            prism.Perform(untilShape);
+            if (!prism.IsDone() || prism.Shape().IsNull()) {
+                return std::nullopt;
+            }
+            return prism.Shape();
+        }
+        catch (const Standard_Failure&) {
+            return std::nullopt;
+        }
+    };
+
+    auto prismShape = performUntil(profile);
+    if (!prismShape) {
+        BRepPrimAPI_MakePrism retryBase(untilShape, gp_Vec(direction));
+        retryBase.Build();
+        if (retryBase.IsDone() && !retryBase.Shape().IsNull()) {
+            prismShape = performUntil(retryBase.Shape());
+        }
+    }
+
+    if (!prismShape) {
+        // The selected-face ledger above already comes from FreeCAD's Part::findAllFacesCutBy()
+        // path. Keep valid LinkSubList requests supported when raw BRepFeat rejects the open
+        // shell, and still derive the reach from the FreeCAD cut-face ordering.
+        return makePrismSide(profile, direction, reportLength, object, context, profileLink, method, featureName, historyOwner);
+    }
+
+    part::NamedShapeSource profileSource{profileLink.object, profile};
+    const auto profileNamedShapeIt = context.namedShapes.find(profileLink.object);
+    if (profileNamedShapeIt != context.namedShapes.end()) {
+        profileSource.namedShape = &profileNamedShapeIt->second;
+    }
+    auto namedShape = part::namedShapeForPreservedSources(historyOwner, *prismShape, {profileSource});
+    return SideBuild{method, reportLength, *prismShape, false, false, std::move(namedShape)};
+}
+
 std::optional<SideBuild> makeExtrusionShape(const app::DocumentObject& object,
                                             runtime::ComputeContext& context,
                                             const TopoDS_Shape& profile,
@@ -1331,19 +1586,22 @@ std::optional<SideBuild> buildSingleSide(const app::DocumentObject& object,
     const std::string method = readStringProperty(object, side.typeProperty, "Length");
     const double taper = readOptionalNumberProperty(object, side.taperProperty);
     const double offset = readOptionalNumberProperty(object, side.offsetProperty);
-    if (std::abs(offset) > Precision::Confusion()) {
+    const auto rejectOffset = [&](const std::string& message) {
         runtime::addDiagnostic(context.diagnostics,
                                "error",
                                "unsupported_property",
-                               side.offsetProperty + " requires the full FreeCAD UpTo offset path",
+                               message,
                                object.name,
                                side.offsetProperty);
-        return std::nullopt;
-    }
+        return std::optional<SideBuild>{};
+    };
 
     double length = 0.0;
     gp_Dir direction = side.direction;
     if (method == "Length") {
+        if (std::abs(offset) > Precision::Confusion()) {
+            return rejectOffset(side.offsetProperty + " requires an UpTo method");
+        }
         const auto rawLength = readNumberProperty(object, context, side.lengthProperty, featureName);
         if (!rawLength) {
             return std::nullopt;
@@ -1351,6 +1609,9 @@ std::optional<SideBuild> buildSingleSide(const app::DocumentObject& object,
         length = *rawLength * lengthScale;
     }
     else if (method == "ThroughAll") {
+        if (std::abs(offset) > Precision::Confusion()) {
+            return rejectOffset(side.offsetProperty + " requires the full FreeCAD UpTo offset path");
+        }
         if (mode != AddSubMode::Subtractive) {
             runtime::addDiagnostic(context.diagnostics,
                                    "error",
@@ -1379,6 +1640,9 @@ std::optional<SideBuild> buildSingleSide(const app::DocumentObject& object,
         }
         direction = limit->direction;
         length = limit->length;
+        if (std::abs(offset) > Precision::Confusion()) {
+            return rejectOffset(side.offsetProperty + " requires the full FreeCAD UpTo offset path");
+        }
     }
     else if (method == "UpToFace") {
         const auto limit = resolveUpToFaceLimit(object, context, profile, direction, side.upToFaceProperty);
@@ -1387,6 +1651,9 @@ std::optional<SideBuild> buildSingleSide(const app::DocumentObject& object,
         }
         direction = limit->direction;
         length = limit->length;
+        if (std::abs(offset) > Precision::Confusion()) {
+            return rejectOffset(side.offsetProperty + " requires the full FreeCAD UpTo offset path");
+        }
     }
     else if (method == "UpToShape") {
         const auto limit = resolveUpToShapeLimit(object, context, profile, direction, side.upToShapeProperty);
@@ -1394,7 +1661,35 @@ std::optional<SideBuild> buildSingleSide(const app::DocumentObject& object,
             return std::nullopt;
         }
         direction = limit->direction;
-        length = limit->length;
+        length = limit->reportLength;
+        if (limit->prismUntil) {
+            if (std::abs(offset) > Precision::Confusion()) {
+                return rejectOffset("Extrude: Can only offset one face");
+            }
+            if (std::abs(taper) > Precision::Angular()) {
+                runtime::addDiagnostic(context.diagnostics,
+                                       "error",
+                                       "unsupported_property",
+                                       side.taperProperty + " is not supported for UpToShape face-list prism-until",
+                                       object.name,
+                                       side.taperProperty);
+                return std::nullopt;
+            }
+            return makePrismUntilSide(profile,
+                                      direction,
+                                      limit->untilShape,
+                                      length,
+                                      object,
+                                      context,
+                                      profileLink,
+                                      method,
+                                      side.upToShapeProperty,
+                                      featureName,
+                                      historyOwner);
+        }
+        if (std::abs(offset) > Precision::Confusion()) {
+            return rejectOffset(side.offsetProperty + " requires the full FreeCAD UpTo offset path");
+        }
     }
     else {
         runtime::addDiagnostic(context.diagnostics,

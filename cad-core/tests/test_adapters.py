@@ -670,12 +670,23 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             [],
         )
         up_to_shape_multi_face = capabilities["part_design"]["pad_pocket"]["up_to_shape_multi_face"]
-        self.assertEqual(up_to_shape_multi_face["status"], "diagnostic_only_boundary")
-        self.assertEqual(up_to_shape_multi_face["diagnostic"], "unsupported_subshape_kind")
+        self.assertEqual(up_to_shape_multi_face["status"], "supported")
         self.assertEqual(up_to_shape_multi_face["objects"], ["part_design.pad", "part_design.pocket"])
         self.assertEqual(
-            up_to_shape_multi_face["fixture"],
-            "p3a/pocket-up-to-shape-multi-face-unsupported",
+            up_to_shape_multi_face["fixtures"],
+            ["p3a/pocket-up-to-shape-multi-face", "p3a/pad-up-to-shape-multi-face"],
+        )
+        self.assertEqual(
+            up_to_shape_multi_face["failure_fixtures"]["offset"],
+            "p3a/pocket-up-to-shape-multiple-faces-offset",
+        )
+        self.assertEqual(
+            up_to_shape_multi_face["failure_fixtures"]["invalid_subshape"],
+            "p3a/pocket-up-to-shape-edge-subshape",
+        )
+        self.assertEqual(
+            up_to_shape_multi_face["diagnostics"],
+            ["unsupported_property", "unsupported_subshape_kind", "invalid_subshape", "missing_link_target"],
         )
         self.assertEqual(capabilities["part_design"]["pad_pocket"]["remaining_gaps"], [])
         self.assertEqual(
