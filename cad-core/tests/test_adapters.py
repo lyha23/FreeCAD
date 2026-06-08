@@ -931,7 +931,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(capabilities["assembly"]["remaining_gaps"], [])
         self.assertEqual(
             capabilities["wire_joiner"]["generated_open_export_bridge"]["status"],
-            "covered_main_path",
+            "covered_full",
         )
         self.assertIn(
             "result_slot_vertex_evidence_output",
@@ -1044,9 +1044,9 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "producer_identity_consumed_without_legacy_helper_flag",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
-        self.assertIn(
-            "wire_joiner_history_materialization_ledger_open_export_producer_edge",
+        self.assertEqual(
             capabilities["wire_joiner"]["generated_open_export_bridge"]["remaining_gaps"],
+            [],
         )
         self.assertNotIn(
             "child_wire_producer_ledger_edge_copy_gate_from_history_materialization_ledger",
@@ -1070,6 +1070,18 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertIn(
             "open_wire_compound_export_source_from_child_wire_final_identity",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
+            "mapper_history_aHistory_open_export_element_map_lifecycle",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
+            "mapper_history_aHistory_split_deleted_terminal_history",
+            capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
+        )
+        self.assertIn(
+            "wire_joiner_noOriginal_deleted_relation_from_mapper_history",
             capabilities["wire_joiner"]["generated_open_export_bridge"]["covered"],
         )
         for covered_field in [
@@ -1625,11 +1637,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(
             capabilities["wire_joiner"]["purge_as_original_bridge"]["status"],
-            "covered_main_path",
+            "covered_full",
         )
         self.assertEqual(
             capabilities["wire_joiner"]["purge_as_original_bridge"]["mode"],
-            "grouped_shared_source_verdict",
+            "mapper_history_noOriginal_deleted_lifecycle",
         )
         self.assertIn(
             "openWireCompound_noOriginal_candidate_public_bridge_removed",
@@ -1671,6 +1683,14 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertIn(
             "noOriginal_final_output_prune_removed",
+            capabilities["wire_joiner"]["purge_as_original_bridge"]["covered"],
+        )
+        self.assertIn(
+            "noOriginal_deleted_relation_from_mapper_history",
+            capabilities["wire_joiner"]["purge_as_original_bridge"]["covered"],
+        )
+        self.assertIn(
+            "noOriginal_split_deleted_terminal_history",
             capabilities["wire_joiner"]["purge_as_original_bridge"]["covered"],
         )
         self.assertIn(

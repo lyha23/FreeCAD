@@ -1414,24 +1414,24 @@ TopoDS_Edge edgeWithReusedVertices(
 }
 
 std::optional<TopoDS_Edge> edgeWithEquivalentResultVertices(
-    const TopoDS_Edge& producerEdge,
+    const TopoDS_Edge& producerShape,
     const TopoDS_Edge& resultEdge
 )
 {
-    if (producerEdge.IsNull() || resultEdge.IsNull()
-        || !edgeEquivalentByGeometryAndEndpoints(producerEdge, resultEdge)) {
+    if (producerShape.IsNull() || resultEdge.IsNull()
+        || !edgeEquivalentByGeometryAndEndpoints(producerShape, resultEdge)) {
         return std::nullopt;
     }
 
     const std::vector<TopoDS_Vertex> resultVertices = edgeVertices(resultEdge);
-    const auto [firstPoint, lastPoint] = edgeEndpoints(producerEdge);
+    const auto [firstPoint, lastPoint] = edgeEndpoints(producerShape);
     const std::optional<TopoDS_Vertex> firstVertex = vertexAtPoint(resultVertices, firstPoint);
     const std::optional<TopoDS_Vertex> lastVertex = vertexAtPoint(resultVertices, lastPoint);
     if (!firstVertex || !lastVertex) {
         return std::nullopt;
     }
 
-    TopoDS_Edge outputEdge = edgeWithReusedVertices(producerEdge, *firstVertex, *lastVertex);
+    TopoDS_Edge outputEdge = edgeWithReusedVertices(producerShape, *firstVertex, *lastVertex);
     if (outputEdge.IsNull()) {
         return std::nullopt;
     }
@@ -1439,14 +1439,14 @@ std::optional<TopoDS_Edge> edgeWithEquivalentResultVertices(
 }
 
 std::optional<TopoDS_Edge> edgeSubsegmentWithReusedVertices(
-    const TopoDS_Edge& producerEdge,
+    const TopoDS_Edge& producerShape,
     const TopoDS_Vertex& firstVertex,
     const TopoDS_Vertex& lastVertex
 )
 {
     Standard_Real first = 0.0;
     Standard_Real last = 0.0;
-    const Handle(Geom_Curve) curve = BRep_Tool::Curve(producerEdge, first, last);
+    const Handle(Geom_Curve) curve = BRep_Tool::Curve(producerShape, first, last);
     if (curve.IsNull()) {
         return std::nullopt;
     }
@@ -1470,16 +1470,16 @@ std::optional<TopoDS_Edge> edgeSubsegmentWithReusedVertices(
 }
 
 std::optional<TopoDS_Edge> edgeWithProducerCurveAndResultVertices(
-    const TopoDS_Edge& producerEdge,
+    const TopoDS_Edge& producerShape,
     const TopoDS_Edge& resultEdge
 )
 {
     if (const std::optional<TopoDS_Edge> equivalent
-        = edgeWithEquivalentResultVertices(producerEdge, resultEdge)) {
+        = edgeWithEquivalentResultVertices(producerShape, resultEdge)) {
         return equivalent;
     }
-    if (producerEdge.IsNull() || resultEdge.IsNull()
-        || !edgeSamplesLieOnEdge(resultEdge, producerEdge)) {
+    if (producerShape.IsNull() || resultEdge.IsNull()
+        || !edgeSamplesLieOnEdge(resultEdge, producerShape)) {
         return std::nullopt;
     }
     const std::vector<TopoDS_Vertex> resultVertices = edgeVertices(resultEdge);
@@ -1489,7 +1489,7 @@ std::optional<TopoDS_Edge> edgeWithProducerCurveAndResultVertices(
     if (!firstVertex || !lastVertex) {
         return std::nullopt;
     }
-    return edgeSubsegmentWithReusedVertices(producerEdge, *firstVertex, *lastVertex);
+    return edgeSubsegmentWithReusedVertices(producerShape, *firstVertex, *lastVertex);
 }
 
 // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
@@ -1497,11 +1497,11 @@ std::optional<TopoDS_Edge> edgeWithProducerCurveAndResultVertices(
 // ::build() exports "info.wire()" after that vertex replacement. Rebuild a producer subsegment
 // only from child-wire endpoint vertex identity, not from an output-side result edge shape.
 std::optional<TopoDS_Edge> edgeWithProducerCurveAndResultVertices(
-    const TopoDS_Edge& producerEdge,
+    const TopoDS_Edge& producerShape,
     const std::vector<TopoDS_Vertex>& resultVertices
 )
 {
-    if (producerEdge.IsNull() || resultVertices.size() < 2U) {
+    if (producerShape.IsNull() || resultVertices.size() < 2U) {
         return std::nullopt;
     }
     const TopoDS_Vertex& firstVertex = resultVertices.front();
@@ -1509,11 +1509,11 @@ std::optional<TopoDS_Edge> edgeWithProducerCurveAndResultVertices(
     if (firstVertex.IsNull() || lastVertex.IsNull()) {
         return std::nullopt;
     }
-    if (!pointOnEdge(BRep_Tool::Pnt(firstVertex), producerEdge)
-        || !pointOnEdge(BRep_Tool::Pnt(lastVertex), producerEdge)) {
+    if (!pointOnEdge(BRep_Tool::Pnt(firstVertex), producerShape)
+        || !pointOnEdge(BRep_Tool::Pnt(lastVertex), producerShape)) {
         return std::nullopt;
     }
-    return edgeSubsegmentWithReusedVertices(producerEdge, firstVertex, lastVertex);
+    return edgeSubsegmentWithReusedVertices(producerShape, firstVertex, lastVertex);
 }
 
 TopoDS_Wire currentMemberWireFromRootSuperEdge(
@@ -2312,7 +2312,7 @@ std::vector<std::size_t> WireJoiner::strictRemovedSourceEdgeInfoIndicesForSource
     return indices;
 }
 
-const TopoDS_Edge* WireJoiner::wireJoinerHistoryMaterializationAHistoryProducerEdge(
+const TopoDS_Edge* WireJoiner::wireJoinerMapperHistoryProducerEvidenceEdge(
     const WireJoinerHistoryMaterializationLedger& materializationLedger,
     std::size_t edgeInfoIndex
 ) const
@@ -2321,21 +2321,21 @@ const TopoDS_Edge* WireJoiner::wireJoinerHistoryMaterializationAHistoryProducerE
         materializationLedger.mapperHistoryProducerEvidence.begin(),
         materializationLedger.mapperHistoryProducerEvidence.end(),
         [edgeInfoIndex](const WireJoinerMapperHistoryProducerEvidence& evidence) {
-            return evidence.edgeInfoIndex == edgeInfoIndex && !evidence.producerEdge.IsNull();
+            return evidence.edgeInfoIndex == edgeInfoIndex && !evidence.producerShape.IsNull();
         }
     );
     if (evidenceIt == materializationLedger.mapperHistoryProducerEvidence.end()) {
         return nullptr;
     }
-    return &evidenceIt->producerEdge;
+    return &evidenceIt->producerShape;
 }
 
-bool WireJoiner::wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
+bool WireJoiner::wireJoinerMapperHistoryProducerEvidenceReady(
     const WireJoinerHistoryMaterializationLedger& materializationLedger,
     std::size_t edgeInfoIndex
 ) const
 {
-    return wireJoinerHistoryMaterializationAHistoryProducerEdge(
+    return wireJoinerMapperHistoryProducerEvidenceEdge(
         materializationLedger,
         edgeInfoIndex
     ) != nullptr;
@@ -2344,10 +2344,10 @@ bool WireJoiner::wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEviden
 void WireJoiner::recordWireJoinerMapperHistoryProducerEvidence(
     WireJoinerHistoryMaterializationLedger& materializationLedger,
     std::size_t edgeInfoIndex,
-    const TopoDS_Edge& producerEdge
+    const TopoDS_Edge& producerShape
 ) const
 {
-    if (producerEdge.IsNull()) {
+    if (producerShape.IsNull()) {
         return;
     }
     const auto evidenceIt = std::find_if(
@@ -2358,16 +2358,16 @@ void WireJoiner::recordWireJoinerMapperHistoryProducerEvidence(
         }
     );
     if (evidenceIt != materializationLedger.mapperHistoryProducerEvidence.end()) {
-        evidenceIt->producerEdge = producerEdge;
+        evidenceIt->producerShape = producerShape;
         return;
     }
     WireJoinerMapperHistoryProducerEvidence evidence;
     evidence.edgeInfoIndex = edgeInfoIndex;
-    evidence.producerEdge = producerEdge;
+    evidence.producerShape = producerShape;
     materializationLedger.mapperHistoryProducerEvidence.push_back(std::move(evidence));
 }
 
-bool WireJoiner::wireJoinerHistoryMaterializationEntryHasAHistoryProducerChildWire(
+bool WireJoiner::wireJoinerMapperHistoryProducerEvidenceHasChildWire(
     const WireJoinerHistoryMaterializationLedger& materializationLedger,
     std::size_t edgeInfoIndex
 ) const
@@ -2375,27 +2375,26 @@ bool WireJoiner::wireJoinerHistoryMaterializationEntryHasAHistoryProducerChildWi
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::buildClosedWire() writes "aHistory->Remove(info.edge)", while
     // ::WireJoinerP::build() later publishes final children through
-    // "builder.Add(openWireCompound, info.wire())". Today cad-core proves this child-wire
-    // producer slot through the request-local MapperHistory producer evidence ledger; keep that
-    // gate in one helper so the next ElementMap step can replace the evidence source without
-    // letting source/vmap fallback over-claim every result slot.
-    return wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
+    // "builder.Add(openWireCompound, info.wire())". cad-core proves this child-wire producer slot
+    // through the request-local MapperHistory producer evidence ledger so source/vmap fallback
+    // cannot over-claim result slots outside the aHistory/openWireCompound lifecycle.
+    return wireJoinerMapperHistoryProducerEvidenceReady(
         materializationLedger,
         edgeInfoIndex
     );
 }
 
-const TopoDS_Edge& WireJoiner::resultWireProducerOpenExportEdge(
+const TopoDS_Edge& WireJoiner::resultWireProducerMapperHistoryInputEdge(
     const EdgeInfo& edgeInfo,
     const WireJoinerHistoryMaterializationLedger& materializationLedger,
     std::size_t edgeInfoIndex
 ) const
 {
-    if (wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
+    if (wireJoinerMapperHistoryProducerEvidenceReady(
             materializationLedger,
             edgeInfoIndex
         )) {
-        return *wireJoinerHistoryMaterializationAHistoryProducerEdge(
+        return *wireJoinerMapperHistoryProducerEvidenceEdge(
             materializationLedger,
             edgeInfoIndex
         );
@@ -2420,7 +2419,7 @@ std::optional<std::size_t> WireJoiner::producerLedgerReadyAHistoryRemoveProducer
             continue;
         }
         const EdgeInfo& producer = info.edges[sourceIndex];
-        if (!wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
+        if (!wireJoinerMapperHistoryProducerEvidenceReady(
                 materializationLedger,
                 sourceIndex
             )) {
@@ -2434,17 +2433,17 @@ std::optional<std::size_t> WireJoiner::producerLedgerReadyAHistoryRemoveProducer
             // underlying EdgeInfo::edge curve and the legacy result-slot vertices.
             const bool openExportMatches
                 = edgeEquivalentByGeometryAndEndpoints(
-                      resultWireProducerOpenExportEdge(producer, materializationLedger, sourceIndex),
+                      resultWireProducerMapperHistoryInputEdge(producer, materializationLedger, sourceIndex),
                       *resultEdge
                   )
                 || edgeSamplesLieOnEdge(
                     *resultEdge,
-                    resultWireProducerOpenExportEdge(producer, materializationLedger, sourceIndex)
+                    resultWireProducerMapperHistoryInputEdge(producer, materializationLedger, sourceIndex)
                 );
-            const bool producerEdgeMatches
+            const bool producerShapeMatches
                 = edgeEquivalentByGeometryAndEndpoints(producer.edge, *resultEdge)
                 || edgeSamplesLieOnEdge(*resultEdge, producer.edge);
-            if (!openExportMatches && !producerEdgeMatches) {
+            if (!openExportMatches && !producerShapeMatches) {
                 continue;
             }
         }
@@ -2471,7 +2470,7 @@ std::optional<std::size_t> WireJoiner::producerLedgerReadySameSourceSidecarProdu
             continue;
         }
         const EdgeInfo& producer = info.edges[sourceIndex];
-        if (!wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
+        if (!wireJoinerMapperHistoryProducerEvidenceReady(
                 materializationLedger,
                 sourceIndex
             )) {
@@ -2480,21 +2479,21 @@ std::optional<std::size_t> WireJoiner::producerLedgerReadySameSourceSidecarProdu
         if (resultEdge) {
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
             // Same-source sidecars are still strict Remove producers from
-            // "aHistory->Remove(info.edge)"; if their already-exported producer edge does not
-            // contain this result, the original producer edge can still be the valid curve source.
+            // "aHistory->Remove(info.edge)"; if their already-exported producer shape does not
+            // contain this result, the original producer shape can still be the valid curve source.
             const bool openExportMatches
                 = edgeEquivalentByGeometryAndEndpoints(
-                      resultWireProducerOpenExportEdge(producer, materializationLedger, sourceIndex),
+                      resultWireProducerMapperHistoryInputEdge(producer, materializationLedger, sourceIndex),
                       *resultEdge
                   )
                 || edgeSamplesLieOnEdge(
                     *resultEdge,
-                    resultWireProducerOpenExportEdge(producer, materializationLedger, sourceIndex)
+                    resultWireProducerMapperHistoryInputEdge(producer, materializationLedger, sourceIndex)
                 );
-            const bool producerEdgeMatches
+            const bool producerShapeMatches
                 = edgeEquivalentByGeometryAndEndpoints(producer.edge, *resultEdge)
                 || edgeSamplesLieOnEdge(*resultEdge, producer.edge);
-            if (!openExportMatches && !producerEdgeMatches) {
+            if (!openExportMatches && !producerShapeMatches) {
                 continue;
             }
         }
@@ -2636,7 +2635,7 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(
         // producers must keep that purge gate separate from the remaining child-wire vertex
         // identity blocker, because both are part of the same source-shape readiness check.
         const TopoDS_Edge& rootOpenCurrentMemberPurgeCandidate =
-            resultWireProducerOpenExportEdge(edgeInfo, materializationLedger, edgeInfoIndex);
+            resultWireProducerMapperHistoryInputEdge(edgeInfo, materializationLedger, edgeInfoIndex);
         const bool rootOpenCurrentMemberWouldBePurgedAsOriginal = !sourceEdges_.empty()
             && edgeMatchesSourceSharedVertexSearch(
                 rootOpenCurrentMemberPurgeCandidate.IsNull() ? edgeInfo.edge
@@ -2656,7 +2655,7 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(
                 if (sourceIndex >= info.edges.size()) {
                     continue;
                 }
-                if (wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
+                if (wireJoinerMapperHistoryProducerEvidenceReady(
                         materializationLedger,
                         sourceIndex
                     )) {
@@ -2665,7 +2664,7 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(
                 }
             }
             const TopoDS_Edge& resultEdge =
-                resultWireProducerOpenExportEdge(edgeInfo, materializationLedger, edgeInfoIndex);
+                resultWireProducerMapperHistoryInputEdge(edgeInfo, materializationLedger, edgeInfoIndex);
             const std::optional<std::size_t> sameSourceSidecarProducerLedgerReadyIndex
                 = producerLedgerReadySameSourceSidecarProducerIndex(
                     info,
@@ -2700,7 +2699,7 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(
     }
     if (hasAHistoryRemoveForeignSourceLineage && hasSameSourceStrictRemoveSourceEvidence) {
         const TopoDS_Edge& resultEdge =
-            resultWireProducerOpenExportEdge(edgeInfo, materializationLedger, edgeInfoIndex);
+            resultWireProducerMapperHistoryInputEdge(edgeInfo, materializationLedger, edgeInfoIndex);
         const std::vector<std::size_t> sameSourceStrictRemoveSourceIndices
             = strictRemovedSourceEdgeInfoIndicesForSourceLineage(info, edgeInfo);
         std::optional<std::size_t> sameSourceProducerLedgerSidecarIndex;
@@ -2708,7 +2707,7 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(
             if (sourceIndex >= info.edges.size()) {
                 continue;
             }
-            if (wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
+            if (wireJoinerMapperHistoryProducerEvidenceReady(
                     materializationLedger,
                     sourceIndex
                 )) {
@@ -2747,7 +2746,7 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(
     }
     if (hasAHistoryRemoveForeignSourceLineage) {
         const TopoDS_Edge& resultEdge =
-            resultWireProducerOpenExportEdge(edgeInfo, materializationLedger, edgeInfoIndex);
+            resultWireProducerMapperHistoryInputEdge(edgeInfo, materializationLedger, edgeInfoIndex);
         const std::optional<std::size_t> foreignRemoveProducerLedgerReadyIndex
             = producerLedgerReadyAHistoryRemoveProducerIndex(info, edgeInfo, materializationLedger);
         if (foreignRemoveProducerLedgerReadyIndex) {
@@ -2771,7 +2770,7 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(
                         return true;
                     }
                     if (edgeWithProducerCurveAndResultVertices(
-                            resultWireProducerOpenExportEdge(
+                            resultWireProducerMapperHistoryInputEdge(
                                 producer,
                                 materializationLedger,
                                 sourceIndex
@@ -3192,7 +3191,7 @@ void WireJoiner::applyWireJoinerHistoryMaterialization(
             continue;
         }
         if (binding.edgeInfoIndex >= info.edges.size()
-            || wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
+            || wireJoinerMapperHistoryProducerEvidenceReady(
                 materializationLedger,
                 binding.edgeInfoIndex
             )) {
@@ -3205,8 +3204,8 @@ void WireJoiner::applyWireJoinerHistoryMaterialization(
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
             // ::WireJoinerP::build() exports "info.wire()" from final EdgeInfo states. The
             // materialization binding now points at that final EdgeInfo row directly; the
-            // resultSlotEdge remains request-local endpoint evidence until the full MapperHistory
-            // path can provide the producer child without a staged edge.
+            // resultSlotEdge remains request-local endpoint evidence; the producer child is now
+            // published through MapperHistory producer evidence plus the openWireCompound ledger.
             const bool sourceExportsOpenEdge = edgeInfoExportsOpenWireCompound(edgeInfo);
             const bool sourceConsumedByBuildClosedWire = edgeInfo.buildClosedWireRemoved
                 || edgeInfo.buildClosedWireAHistoryRemoved;
@@ -3273,7 +3272,7 @@ void WireJoiner::applyWireJoinerHistoryMaterialization(
                     if (!foreignAHistoryRemoveProducerExportShape
                         || foreignAHistoryRemoveProducerExportShape->IsNull()) {
                         foreignAHistoryRemoveProducerExportShape = edgeWithProducerCurveAndResultVertices(
-                            resultWireProducerOpenExportEdge(
+                            resultWireProducerMapperHistoryInputEdge(
                                 producer,
                                 materializationLedger,
                                 sourceIndex
@@ -3304,7 +3303,7 @@ void WireJoiner::applyWireJoinerHistoryMaterialization(
             else if (hasFullResultWireProducerEvidence || hasLiveFinalGateProducerEvidence) {
                 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
                 // ::WireJoinerP::build() exports the producer EdgeInfo's "info.wire()" and
-                // ::getOpenWires() consumes MapperHistory(aHistory). Use the producer edge curve or
+                // ::getOpenWires() consumes MapperHistory(aHistory). Use the producer shape curve or
                 // contained subsegment with result-slot vertices, so result-slot endpoint
                 // materialization stays ledger evidence while the emitted child wire keeps the
                 // same vertex identity.
@@ -3333,7 +3332,7 @@ void WireJoiner::applyWireJoinerHistoryMaterialization(
                 const EdgeInfo& producer
                     = info.edges[*producerLedgerReadyForeignAHistoryRemoveProducerIndex];
                 candidateSourceEdgeExportShape = edgeWithEquivalentResultVertices(
-                    resultWireProducerOpenExportEdge(
+                    resultWireProducerMapperHistoryInputEdge(
                         producer,
                         materializationLedger,
                         *producerLedgerReadyForeignAHistoryRemoveProducerIndex
@@ -3360,7 +3359,7 @@ void WireJoiner::applyWireJoinerHistoryMaterialization(
                 // result-slot vertices instead of keeping the legacy result-wire candidate child.
                 const EdgeInfo& producer = info.edges[*producerLedgerReadySameSourceSidecarProducerIndex];
                 candidateSourceEdgeExportShape = edgeWithProducerCurveAndResultVertices(
-                    resultWireProducerOpenExportEdge(
+                    resultWireProducerMapperHistoryInputEdge(
                         producer,
                         materializationLedger,
                         *producerLedgerReadySameSourceSidecarProducerIndex
@@ -3503,7 +3502,7 @@ void WireJoiner::applyWireJoinerHistoryMaterialization(
                 materializationLedger,
                 edgeInfoIndex
             )
-            || wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
+            || wireJoinerMapperHistoryProducerEvidenceReady(
                 materializationLedger,
                 edgeInfoIndex
             )
@@ -3512,7 +3511,7 @@ void WireJoiner::applyWireJoinerHistoryMaterialization(
             continue;
         }
         const TopoDS_Edge resultEdge =
-            resultWireProducerOpenExportEdge(edgeInfo, materializationLedger, edgeInfoIndex);
+            resultWireProducerMapperHistoryInputEdge(edgeInfo, materializationLedger, edgeInfoIndex);
         std::optional<TopoDS_Edge> sidecarSourceEdgeExportShape;
         for (const std::size_t sidecarIndex :
              strictRemovedSourceEdgeInfoIndicesForSourceLineage(info, edgeInfo)) {
@@ -3520,7 +3519,7 @@ void WireJoiner::applyWireJoinerHistoryMaterialization(
                 continue;
             }
             const EdgeInfo& sidecar = info.edges[sidecarIndex];
-            if (!wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
+            if (!wireJoinerMapperHistoryProducerEvidenceReady(
                     materializationLedger,
                     sidecarIndex
                 )) {
@@ -3534,7 +3533,7 @@ void WireJoiner::applyWireJoinerHistoryMaterialization(
             // then fall back to the exact EdgeInfo::edge that FreeCAD passed to aHistory.
             sidecarSourceEdgeExportShape
             = edgeWithProducerCurveAndResultVertices(
-                resultWireProducerOpenExportEdge(sidecar, materializationLedger, sidecarIndex),
+                resultWireProducerMapperHistoryInputEdge(sidecar, materializationLedger, sidecarIndex),
                 resultEdge
             );
             if (!sidecarSourceEdgeExportShape || sidecarSourceEdgeExportShape->IsNull()) {
@@ -6625,7 +6624,7 @@ void WireJoiner::recordOpenWireCompoundLedger(
             childWire.openExportSource = OpenWireCompoundExportSource::UnownedOpenEdge;
         }
         const bool hasHistoryMaterializationProducerOpenExportShape =
-            wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
+            wireJoinerMapperHistoryProducerEvidenceReady(
                 materializationLedger,
                 edgeIndex
             );
@@ -6634,10 +6633,10 @@ void WireJoiner::recordOpenWireCompoundLedger(
         // ::WireJoinerP::build() stores final child wires in openWireCompound with
         // "builder.Add(openWireCompound, info.wire())", then ::getOpenWires() consumes
         // MapperHistory(aHistory). Use the source/aHistory producer shape only to materialize the
-        // child-wire producer wire; do not store a copied producer edge on the child-wire ledger.
+        // child-wire producer wire; do not store a copied producer shape on the child-wire ledger.
         const TopoDS_Edge* historyMaterializationProducerEdge =
             hasHistoryMaterializationProducerOpenExportShape
-            ? wireJoinerHistoryMaterializationAHistoryProducerEdge(
+            ? wireJoinerMapperHistoryProducerEvidenceEdge(
                 materializationLedger,
                 edgeIndex
             )
@@ -6653,7 +6652,8 @@ void WireJoiner::recordOpenWireCompoundLedger(
             // ::WireJoinerP::build() exports the final child through "info.wire()" into
             // openWireCompound, and ::getOpenWires() later consumes that compound with
             // MapperHistory(aHistory). The materialized output wire belongs to the child-wire ledger;
-            // the scoped per-edge producer shape remains a temporary history materialization bridge.
+            // the scoped producer shape is request-local MapperHistory input and is not published as
+            // a per-edge output bridge.
             childWire.producerLedgerWire
                 = BRepBuilderAPI_MakeWire(childProducerEdge).Wire();
             childWire.producerLedgerWireBuilt = !childWire.producerLedgerWire.IsNull();
@@ -6668,7 +6668,7 @@ void WireJoiner::recordOpenWireCompoundLedger(
             && materializationEntry.resultWireProducer.kind
                 == ResultWireProducerKind::CurrentMemberChildWire;
         const bool aHistoryProducerChildWire =
-            wireJoinerHistoryMaterializationEntryHasAHistoryProducerChildWire(
+            wireJoinerMapperHistoryProducerEvidenceHasChildWire(
                 materializationLedger,
                 edgeIndex
             );

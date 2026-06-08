@@ -1,8 +1,10 @@
 # WireJoiner MapperHistory 接管方案
 
-## 目标
+## 收口结论
 
-继续移除剩余 `openExportProducerEdge` history materialization staged producer edge，并保持 `historyProducerChildWireCandidate` 已删除状态，让 `MapperHistory(aHistory) -> ElementMap` 正式接管 WireJoiner 的 open-export、noOriginal、split、deleted 关系。
+WireJoiner full ledger 已完成当前收口：`MapperHistory(aHistory) -> ElementMap` 正式接管 open-export、noOriginal、split、deleted 关系；`generated_open_export_bridge` 与 `purge_as_original_bridge` 均声明 `covered_full`。
+
+已删除公开字段保持删除状态：不恢复 `historyProducerChildWireCandidate`，不恢复 result-slot、endpoint materialization、helper override、noOriginal candidate 等公开字段。当前源码和 tests 不再引用 `openExportProducerEdge` 或旧 capability gap。
 
 本方案只处理 WireJoiner full ledger。GCS / Sketch solver、Pad / Pocket UpToShape multi-face、Assembly representative fallback、Worker / WASM adapter 不在当前范围。
 
@@ -10,11 +12,11 @@
 
 当前 C3-M8 后状态：
 
-- `cad-core/src/adapters/c_api/c_api.cpp::capabilitiesJson()` 仍标记 `wire_joiner.generated_open_export_bridge.status=covered_main_path`，并保留 `wire_joiner_history_materialization_ledger_open_export_producer_edge`。
-- `cad-core/include/cad_core/part/wire_joiner.h::WireJoinerHistoryMaterializationEdgeEntry` 已删除 `historyProducerChildWireCandidate`；child-wire materialization candidate 由 `WireJoinerHistoryMaterializationLedger::bindings` 的 final `EdgeInfo` row 推导。该 entry 仍有 `openExportProducerEdge` staged producer edge。
-- `cad-core/src/part/wire_joiner.cpp::resultWireProducerOpenExportEdge()` 已通过 `wireJoinerHistoryMaterializationAHistoryProducerEdge()` 读取 producer edge，缺失时回落到当前 `EdgeInfo.edge`；`recordOpenWireCompoundLedger()` 的 source/vmap fallback gate 也集中到 `wireJoinerHistoryMaterializationEntryHasAHistoryProducerChildWire()`。当前 resolver/gate 仍以 `openExportProducerEdge` 为证据，直接取消会让 cross / T / segmented / three-overlap 的 source/vmap producer 过度认领。
-- `cad-core/src/part/topo_shape.cpp` 已能消费 WireJoiner history event、child-wire ownership，并把唯一 child-wire source -> InternalEdge relation 写入 `Sketch.InternalShape.element_map`。
-- P5 / P6 oracle 已约束：open-cutter / cross / T / segmented cutter 不丢 InternalEdge 与 split history；three-overlap `InternalVertex` 为 19；branch open-cutter 唯一 alias `Edge5 -> InternalEdge10` 成立。
+- `cad-core/src/adapters/c_api/c_api.cpp::capabilitiesJson()` 标记 `wire_joiner.generated_open_export_bridge.status=covered_full`、`wire_joiner.purge_as_original_bridge.status=covered_full`，两者 `remaining_gaps` 为空。
+- `cad-core/include/cad_core/part/wire_joiner.h::WireJoinerMapperHistoryProducerEvidence` 承接 `aHistory` producer shape；`WireJoinerHistoryMaterializationEdgeEntry` 只保留 EdgeInfo / WireInfo lifecycle 状态，不拥有 staged producer shape 字段。
+- `cad-core/src/part/wire_joiner.cpp` 通过 `wireJoinerMapperHistoryProducerEvidenceReady()`、`wireJoinerMapperHistoryProducerEvidenceEdge()` 和 `resultWireProducerMapperHistoryInputEdge()` 消费正式 mapper evidence；source/vmap fallback gate 只在 aHistory/openWireCompound 生命周期内生效。
+- `cad-core/src/part/topo_shape.cpp` 消费 WireJoiner history event、child-wire ownership 和 mapper evidence；唯一 child-wire source -> InternalEdge relation 写入 `Sketch.InternalShape.element_map`，split / deleted / ambiguous 留在 mapper history / terminal history / diagnostics。
+- P5 / P6 oracle 约束保持：open-cutter / cross / T / segmented cutter 不丢 InternalEdge 与 split history；three-overlap `InternalVertex` 为 19；branch open-cutter 唯一 alias `Edge5 -> InternalEdge10` 成立。
 
 ## FreeCAD 依据
 
@@ -34,57 +36,19 @@
 | `app/element_map` | `cad-core/include/cad_core/app/element_map.h`, `cad-core/src/app/element_map.cpp` | 只承接唯一 target alias；split / deleted / ambiguous 继续留在 mapper history 或 diagnostics |
 | tests / fixtures | `cad-core/tests/test_p5_sketch.py`, `cad-core/tests/test_p6_topology.py`, `cad-core/tests/test_adapters.py`, `cad-core/fixtures/p5` | 固定删除 bridge 后的几何、history、ElementMap 和 capability 边界 |
 
-## 实施步骤
+## 已完成语义
 
-### M0：冻结当前保护门
-
-- 保留并复核 P5 open-cutter / cross / T / segmented cutter、three-overlap、branch open-cutter 的 expected。
-- 在 tests 中明确断言已删除字段不得恢复：`open_wire_compound_producer_ledger_edge_materialized`、公开 noOriginal candidate、result-slot evidence、source-edge producer output/count、`summary_only:wire_joiner_history:open_export`。
-- 继续允许 `generated_open_export_bridge=covered_main_path`，但只作为迁移期状态。
-
-### M1：把 relation 统一成 `MapperHistory(aHistory)` 事件
-
-- 在 WireJoiner part 层把 open-export relation 的来源收敛到 aHistory / sourceEdges / child-wire ownership，而不是 `ResultWireProducerIdentity` 或 output endpoint evidence。
-- 事件必须覆盖：
-  - open-export preserved / generated / split；
-  - noOriginal deleted；
-  - source edge one-to-many split；
-  - source edge one-to-zero deleted；
-  - ambiguous split 需要 reselect 的诊断。
-- `topo_shape.cpp` 只能消费 typed mapper event，不再拼装 relation。
-
-### M2：移除 per-edge staged producer bridge
-
-- 删除或替换 `WireJoinerHistoryMaterializationEdgeEntry::openExportProducerEdge`。
-- 保持 `WireJoinerHistoryMaterializationEdgeEntry::historyProducerChildWireCandidate` 已删除状态；不要恢复 per-edge candidate bool。
-- 用正式 MapperHistory/ElementMap producer evidence 替换 `wireJoinerHistoryMaterializationAHistoryProducerEdge()` 与 `wireJoinerHistoryMaterializationEntryHasAHistoryProducerChildWire()` 当前对 materialization entry producer edge 的依赖。
-- 删除 capability remaining gap `wire_joiner_history_materialization_ledger_open_export_producer_edge`。
-- 如果仍需要中间结构，必须命名为正式 `MapperHistory` 输入账本，而不是 producer bridge / candidate / result-slot。
-
-### M3：ElementMap 正式接管唯一关系
-
-- WireJoiner open-export 的唯一 source -> InternalEdge relation 写入 `ElementMap`。
-- split / deleted / ambiguous 不写唯一 alias，统一留在 `NamedShape.mapper_history`、terminal history 或 diagnostics。
-- noOriginal purge 后的 deleted relation 必须能从 mapper history 查到，不再只依赖 child-wire group verdict 字段解释。
-
-### M4：capabilities 与文档冻结
-
-- `wire_joiner.generated_open_export_bridge.status` 从 `covered_main_path` 改为 `covered_full` 的前提：
-  - `openExportProducerEdge` 已从 public capability、tests 和源码结构删除，且 `historyProducerChildWireCandidate` 保持已删除；
-  - open-export / noOriginal / split / deleted 关系均由正式 mapper history 进入 topo / ElementMap；
-  - P5 / P6 保护 fixture 无退化；
-  - adapter capability 不再保留 `wire_joiner_history_materialization_ledger_open_export_producer_edge`。
-- `wire_joiner.purge_as_original_bridge.status` 升级为 full 的前提：
-  - noOriginal 决策不再依赖 cad-core 独立重组账本作为语义来源；
-  - deleted relation 能从 `MapperHistory(aHistory)` 消费路径证明；
-  - open-cutter / cross / T / segmented cutter 不退化。
+- Open-export relation 来源收敛到 `aHistory` producer evidence、`sourceEdges`、openWireCompound child-wire ownership 和 typed `wire_joiner:open_export` event；不从 `ResultWireProducerIdentity`、endpoint evidence、输出顺序或 fixture 名称猜 relation。
+- Mapper history event 覆盖 preserved / generated / split / deleted，noOriginal purge 写 terminal deleted history，ambiguous split 保持 `needs_reselect`。
+- `ElementMap` 只写唯一 target alias；branch open-cutter 保持 `Sketch.InternalShape.element_map.Edge5=InternalEdge10`。split / deleted / ambiguous 不写成唯一 alias。
+- Adapter capability 删除 WireJoiner open-export producer-edge remaining gap；两个 bridge 均为 `covered_full`。
 
 ## 验收矩阵
 
 | 验收项 | 必须证明 |
 | --- | --- |
-| bridge 删除 | 源码和 tests 不再引用 `openExportProducerEdge`；`historyProducerChildWireCandidate` 保持已删除 |
-| capability 收口 | `generated_open_export_bridge.remaining_gaps` 不再包含 `wire_joiner_history_materialization_ledger_open_export_producer_edge` |
+| bridge 删除 | 源码和 tests 不再引用旧 per-edge producer bridge；已删除公开字段保持删除 |
+| capability 收口 | `generated_open_export_bridge.remaining_gaps=[]`，`purge_as_original_bridge.remaining_gaps=[]` |
 | open-export history | `Sketch.InternalShape.mapper_history` 仍输出 concrete `wire_joiner:open_export` event，且 relation 来自 mapper history |
 | ElementMap 唯一 alias | branch open-cutter 仍固定 `Edge5 -> InternalEdge10` |
 | split / deleted | split / deleted relation 不被写成错误唯一 alias，仍可在 mapper history / terminal history 查询 |

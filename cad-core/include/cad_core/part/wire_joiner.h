@@ -1090,10 +1090,10 @@ private:
         // ::WireJoinerP::buildClosedWire() records producer history with
         // "aHistory->Remove(info.edge)", and ::getOpenWires() later consumes
         // "MapperHistory(aHistory)". This request-local evidence is the MapperHistory input for a
-        // final EdgeInfo child-wire producer; it is kept outside the per-edge materialization entry
-        // so the entry no longer owns staged producer shape state.
+        // final EdgeInfo child-wire producer; the per-edge materialization entry only carries
+        // EdgeInfo/WireInfo lifecycle state.
         std::size_t edgeInfoIndex = resultWireProducerNpos;
-        TopoDS_Edge producerEdge;
+        TopoDS_Edge producerShape;
     };
     struct WireJoinerHistoryMaterializationEdgeEntry
     {
@@ -1492,30 +1492,30 @@ private:
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::buildClosedWire() records source producer evidence with
     // "aHistory->Remove(info.edge)", and ::build() publishes only concrete children through
-    // "builder.Add(openWireCompound, info.wire())". A cad-core producer-ledger-ready slot must carry
-    // a non-null scoped producer export edge before consumers can treat it as materialized output.
+    // "builder.Add(openWireCompound, info.wire())". A cad-core producer-ledger-ready slot is proven
+    // by MapperHistory producer evidence plus the materialized openWireCompound child lifecycle.
     bool wireJoinerHistoryMaterializationLedgerHasChildWireCandidate(
         const WireJoinerHistoryMaterializationLedger& materializationLedger,
         std::size_t edgeInfoIndex
     ) const;
-    const TopoDS_Edge* wireJoinerHistoryMaterializationAHistoryProducerEdge(
+    const TopoDS_Edge* wireJoinerMapperHistoryProducerEvidenceEdge(
         const WireJoinerHistoryMaterializationLedger& materializationLedger,
         std::size_t edgeInfoIndex
     ) const;
-    bool wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
+    bool wireJoinerMapperHistoryProducerEvidenceReady(
         const WireJoinerHistoryMaterializationLedger& materializationLedger,
         std::size_t edgeInfoIndex
     ) const;
     void recordWireJoinerMapperHistoryProducerEvidence(
         WireJoinerHistoryMaterializationLedger& materializationLedger,
         std::size_t edgeInfoIndex,
-        const TopoDS_Edge& producerEdge
+        const TopoDS_Edge& producerShape
     ) const;
-    bool wireJoinerHistoryMaterializationEntryHasAHistoryProducerChildWire(
+    bool wireJoinerMapperHistoryProducerEvidenceHasChildWire(
         const WireJoinerHistoryMaterializationLedger& materializationLedger,
         std::size_t edgeInfoIndex
     ) const;
-    const TopoDS_Edge& resultWireProducerOpenExportEdge(
+    const TopoDS_Edge& resultWireProducerMapperHistoryInputEdge(
         const EdgeInfo& edgeInfo,
         const WireJoinerHistoryMaterializationLedger& materializationLedger,
         std::size_t edgeInfoIndex
@@ -1554,7 +1554,7 @@ private:
     // ::WireJoinerP::build() emits child wires with
     // "builder.Add(openWireCompound, info.wire())"; ::getOpenWires() then consumes
     // MapperHistory(aHistory). A child source-edge producer output is proven by the child-wire
-    // producer edge ledger, not by a copied EdgeInfo/result-slot sidecar flag.
+    // producer wire ledger, not by a copied EdgeInfo/result-slot sidecar flag.
     bool openWireCompoundChildWireHasSourceEdgeProducerOutput(
         const OpenWireCompoundWireInfo& childWire
     ) const;
