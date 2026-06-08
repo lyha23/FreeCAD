@@ -12,7 +12,7 @@
 
 - `cad-core/src/adapters/c_api/c_api.cpp::capabilitiesJson()` 仍标记 `wire_joiner.generated_open_export_bridge.status=covered_main_path`，并保留 `wire_joiner_history_materialization_ledger_open_export_producer_edge`。
 - `cad-core/include/cad_core/part/wire_joiner.h::WireJoinerHistoryMaterializationEdgeEntry` 已删除 `historyProducerChildWireCandidate`；child-wire materialization candidate 由 `WireJoinerHistoryMaterializationLedger::bindings` 的 final `EdgeInfo` row 推导。该 entry 仍有 `openExportProducerEdge` staged producer edge。
-- `cad-core/src/part/wire_joiner.cpp::resultWireProducerOpenExportEdge()` 仍从 history materialization entry 取 producer edge，缺失时回落到当前 `EdgeInfo.edge`。
+- `cad-core/src/part/wire_joiner.cpp::resultWireProducerOpenExportEdge()` 已通过 `wireJoinerHistoryMaterializationAHistoryProducerEdge()` 读取 producer edge，缺失时回落到当前 `EdgeInfo.edge`；`recordOpenWireCompoundLedger()` 的 source/vmap fallback gate 也集中到 `wireJoinerHistoryMaterializationEntryHasAHistoryProducerChildWire()`。当前 resolver/gate 仍以 `openExportProducerEdge` 为证据，直接取消会让 cross / T / segmented / three-overlap 的 source/vmap producer 过度认领。
 - `cad-core/src/part/topo_shape.cpp` 已能消费 WireJoiner history event、child-wire ownership，并把唯一 child-wire source -> InternalEdge relation 写入 `Sketch.InternalShape.element_map`。
 - P5 / P6 oracle 已约束：open-cutter / cross / T / segmented cutter 不丢 InternalEdge 与 split history；three-overlap `InternalVertex` 为 19；branch open-cutter 唯一 alias `Edge5 -> InternalEdge10` 成立。
 
@@ -57,7 +57,7 @@
 
 - 删除或替换 `WireJoinerHistoryMaterializationEdgeEntry::openExportProducerEdge`。
 - 保持 `WireJoinerHistoryMaterializationEdgeEntry::historyProducerChildWireCandidate` 已删除状态；不要恢复 per-edge candidate bool。
-- 删除 `resultWireProducerOpenExportEdge()` 对 materialization entry producer edge 的依赖。
+- 用正式 MapperHistory/ElementMap producer evidence 替换 `wireJoinerHistoryMaterializationAHistoryProducerEdge()` 与 `wireJoinerHistoryMaterializationEntryHasAHistoryProducerChildWire()` 当前对 materialization entry producer edge 的依赖。
 - 删除 capability remaining gap `wire_joiner_history_materialization_ledger_open_export_producer_edge`。
 - 如果仍需要中间结构，必须命名为正式 `MapperHistory` 输入账本，而不是 producer bridge / candidate / result-slot。
 

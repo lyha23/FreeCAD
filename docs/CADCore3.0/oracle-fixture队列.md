@@ -6,7 +6,7 @@
 
 - C3-M1 到 C3-M7 的 fixture 队列已覆盖当前 capability 表中的大类能力。已完成队列保留在下方表格中，避免后续重复领取。
 - C3-M8 后的真实剩余项集中在 WireJoiner full ledger：当前 `wire_joiner.generated_open_export_bridge` 与 `wire_joiner.purge_as_original_bridge` 仍是 `covered_main_path`，不是 `covered_full`。
-- 当前源码已删除 `historyProducerChildWireCandidate`，child-wire materialization candidate 由 binding final `EdgeInfo` row 推导；但仍保留 `openExportProducerEdge` 作为 history materialization staged producer edge。删除该字段前，oracle 必须证明 open-export、noOriginal、split、deleted 关系已经由正式 `MapperHistory(aHistory) -> ElementMap` 消费。
+- 当前源码已删除 `historyProducerChildWireCandidate`，child-wire materialization candidate 由 binding final `EdgeInfo` row 推导；`openExportProducerEdge` 读取已集中到 `wireJoinerHistoryMaterializationAHistoryProducerEdge()` / `wireJoinerHistoryMaterializationEntryHasAHistoryProducerChildWire()`，但仍保留该 field 作为 history materialization staged producer edge。删除该字段前，oracle 必须证明 open-export、noOriginal、split、deleted 关系已经由正式 `MapperHistory(aHistory) -> ElementMap` 消费，并且 cross / T / segmented / three-overlap 不出现 source/vmap producer 过度认领。
 - WireJoiner 已删除的公开字段和 fallback 不得恢复：`openExportOverride`、`purgeAsOriginalOpenEdge`、公开 noOriginal candidate、公开 source-edge producer output/count、result-slot output diagnostics、endpoint-materialization 公开诊断、EdgeInfo open-wire 重导出 fallback。
 - 当前关键保护 fixture：P5 open-cutter / cross / T / segmented cutter 不得丢 InternalEdge 或 split history；three-overlap `InternalVertex` 必须保持 19；branch open-cutter 的唯一 child-wire alias `Edge5 -> InternalEdge10` 必须保持。
 - 所有 native oracle 仍以本地 FreeCAD `src/` 语义为准，必要时通过 `/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd` 采集。

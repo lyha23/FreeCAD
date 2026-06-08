@@ -2312,17 +2312,77 @@ std::vector<std::size_t> WireJoiner::strictRemovedSourceEdgeInfoIndicesForSource
     return indices;
 }
 
-bool WireJoiner::wireJoinerHistoryMaterializationLedgerHasOpenExportProducerEdge(
+const TopoDS_Edge* WireJoiner::wireJoinerHistoryMaterializationAHistoryProducerEdge(
     const WireJoinerHistoryMaterializationLedger& materializationLedger,
     std::size_t edgeInfoIndex
 ) const
 {
-    if (edgeInfoIndex >= materializationLedger.edgeEntries.size()) {
-        return false;
+    const auto evidenceIt = std::find_if(
+        materializationLedger.mapperHistoryProducerEvidence.begin(),
+        materializationLedger.mapperHistoryProducerEvidence.end(),
+        [edgeInfoIndex](const WireJoinerMapperHistoryProducerEvidence& evidence) {
+            return evidence.edgeInfoIndex == edgeInfoIndex && !evidence.producerEdge.IsNull();
+        }
+    );
+    if (evidenceIt == materializationLedger.mapperHistoryProducerEvidence.end()) {
+        return nullptr;
     }
-    const std::optional<TopoDS_Edge>& producerEdge =
-        materializationLedger.edgeEntries[edgeInfoIndex].openExportProducerEdge;
-    return producerEdge && !producerEdge->IsNull();
+    return &evidenceIt->producerEdge;
+}
+
+bool WireJoiner::wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
+    const WireJoinerHistoryMaterializationLedger& materializationLedger,
+    std::size_t edgeInfoIndex
+) const
+{
+    return wireJoinerHistoryMaterializationAHistoryProducerEdge(
+        materializationLedger,
+        edgeInfoIndex
+    ) != nullptr;
+}
+
+void WireJoiner::recordWireJoinerMapperHistoryProducerEvidence(
+    WireJoinerHistoryMaterializationLedger& materializationLedger,
+    std::size_t edgeInfoIndex,
+    const TopoDS_Edge& producerEdge
+) const
+{
+    if (producerEdge.IsNull()) {
+        return;
+    }
+    const auto evidenceIt = std::find_if(
+        materializationLedger.mapperHistoryProducerEvidence.begin(),
+        materializationLedger.mapperHistoryProducerEvidence.end(),
+        [edgeInfoIndex](const WireJoinerMapperHistoryProducerEvidence& evidence) {
+            return evidence.edgeInfoIndex == edgeInfoIndex;
+        }
+    );
+    if (evidenceIt != materializationLedger.mapperHistoryProducerEvidence.end()) {
+        evidenceIt->producerEdge = producerEdge;
+        return;
+    }
+    WireJoinerMapperHistoryProducerEvidence evidence;
+    evidence.edgeInfoIndex = edgeInfoIndex;
+    evidence.producerEdge = producerEdge;
+    materializationLedger.mapperHistoryProducerEvidence.push_back(std::move(evidence));
+}
+
+bool WireJoiner::wireJoinerHistoryMaterializationEntryHasAHistoryProducerChildWire(
+    const WireJoinerHistoryMaterializationLedger& materializationLedger,
+    std::size_t edgeInfoIndex
+) const
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+    // ::WireJoinerP::buildClosedWire() writes "aHistory->Remove(info.edge)", while
+    // ::WireJoinerP::build() later publishes final children through
+    // "builder.Add(openWireCompound, info.wire())". Today cad-core proves this child-wire
+    // producer slot through the request-local MapperHistory producer evidence ledger; keep that
+    // gate in one helper so the next ElementMap step can replace the evidence source without
+    // letting source/vmap fallback over-claim every result slot.
+    return wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
+        materializationLedger,
+        edgeInfoIndex
+    );
 }
 
 const TopoDS_Edge& WireJoiner::resultWireProducerOpenExportEdge(
@@ -2331,11 +2391,14 @@ const TopoDS_Edge& WireJoiner::resultWireProducerOpenExportEdge(
     std::size_t edgeInfoIndex
 ) const
 {
-    if (wireJoinerHistoryMaterializationLedgerHasOpenExportProducerEdge(
+    if (wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
             materializationLedger,
             edgeInfoIndex
         )) {
-        return *materializationLedger.edgeEntries[edgeInfoIndex].openExportProducerEdge;
+        return *wireJoinerHistoryMaterializationAHistoryProducerEdge(
+            materializationLedger,
+            edgeInfoIndex
+        );
     }
     return edgeInfo.edge;
 }
@@ -2357,7 +2420,7 @@ std::optional<std::size_t> WireJoiner::producerLedgerReadyAHistoryRemoveProducer
             continue;
         }
         const EdgeInfo& producer = info.edges[sourceIndex];
-        if (!wireJoinerHistoryMaterializationLedgerHasOpenExportProducerEdge(
+        if (!wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
                 materializationLedger,
                 sourceIndex
             )) {
@@ -2408,7 +2471,7 @@ std::optional<std::size_t> WireJoiner::producerLedgerReadySameSourceSidecarProdu
             continue;
         }
         const EdgeInfo& producer = info.edges[sourceIndex];
-        if (!wireJoinerHistoryMaterializationLedgerHasOpenExportProducerEdge(
+        if (!wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
                 materializationLedger,
                 sourceIndex
             )) {
@@ -2593,7 +2656,7 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(
                 if (sourceIndex >= info.edges.size()) {
                     continue;
                 }
-                if (wireJoinerHistoryMaterializationLedgerHasOpenExportProducerEdge(
+                if (wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
                         materializationLedger,
                         sourceIndex
                     )) {
@@ -2645,7 +2708,7 @@ ResultWireProducerIdentity WireJoiner::classifyResultWireProducerSlot(
             if (sourceIndex >= info.edges.size()) {
                 continue;
             }
-            if (wireJoinerHistoryMaterializationLedgerHasOpenExportProducerEdge(
+            if (wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
                     materializationLedger,
                     sourceIndex
                 )) {
@@ -3123,12 +3186,13 @@ void WireJoiner::applyWireJoinerHistoryMaterialization(
         info.edges.size(),
         WireJoinerHistoryMaterializationEdgeEntry {}
     );
+    materializationLedger.mapperHistoryProducerEvidence.clear();
     for (const WireJoinerHistoryMaterializationBinding& binding : materializationLedger.bindings) {
         if (binding.resultSlotEdge.IsNull()) {
             continue;
         }
         if (binding.edgeInfoIndex >= info.edges.size()
-            || wireJoinerHistoryMaterializationLedgerHasOpenExportProducerEdge(
+            || wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
                 materializationLedger,
                 binding.edgeInfoIndex
             )) {
@@ -3326,7 +3390,11 @@ void WireJoiner::applyWireJoinerHistoryMaterialization(
             WireJoinerHistoryMaterializationEdgeEntry& materializationEntry =
                 materializationLedger.edgeEntries[selectedSourceEdgeInfoIndex];
             if (useSourceEdgeExportShape) {
-                materializationEntry.openExportProducerEdge = *sourceEdgeExportShape;
+                recordWireJoinerMapperHistoryProducerEvidence(
+                    materializationLedger,
+                    selectedSourceEdgeInfoIndex,
+                    *sourceEdgeExportShape
+                );
             }
             materializationEntry.superEdgeMember
                 = edgeInfo.superEdgeLifecycleMemberMinusOne;
@@ -3435,7 +3503,7 @@ void WireJoiner::applyWireJoinerHistoryMaterialization(
                 materializationLedger,
                 edgeInfoIndex
             )
-            || wireJoinerHistoryMaterializationLedgerHasOpenExportProducerEdge(
+            || wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
                 materializationLedger,
                 edgeInfoIndex
             )
@@ -3452,7 +3520,7 @@ void WireJoiner::applyWireJoinerHistoryMaterialization(
                 continue;
             }
             const EdgeInfo& sidecar = info.edges[sidecarIndex];
-            if (!wireJoinerHistoryMaterializationLedgerHasOpenExportProducerEdge(
+            if (!wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
                     materializationLedger,
                     sidecarIndex
                 )) {
@@ -3480,7 +3548,11 @@ void WireJoiner::applyWireJoinerHistoryMaterialization(
         if (!sidecarSourceEdgeExportShape || sidecarSourceEdgeExportShape->IsNull()) {
             continue;
         }
-        materializationEntry.openExportProducerEdge = *sidecarSourceEdgeExportShape;
+        recordWireJoinerMapperHistoryProducerEvidence(
+            materializationLedger,
+            edgeInfoIndex,
+            *sidecarSourceEdgeExportShape
+        );
     }
 }
 
@@ -6553,7 +6625,7 @@ void WireJoiner::recordOpenWireCompoundLedger(
             childWire.openExportSource = OpenWireCompoundExportSource::UnownedOpenEdge;
         }
         const bool hasHistoryMaterializationProducerOpenExportShape =
-            wireJoinerHistoryMaterializationLedgerHasOpenExportProducerEdge(
+            wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
                 materializationLedger,
                 edgeIndex
             );
@@ -6563,10 +6635,13 @@ void WireJoiner::recordOpenWireCompoundLedger(
         // "builder.Add(openWireCompound, info.wire())", then ::getOpenWires() consumes
         // MapperHistory(aHistory). Use the source/aHistory producer shape only to materialize the
         // child-wire producer wire; do not store a copied producer edge on the child-wire ledger.
-        std::optional<TopoDS_Edge> historyMaterializationProducerEdge =
+        const TopoDS_Edge* historyMaterializationProducerEdge =
             hasHistoryMaterializationProducerOpenExportShape
-            ? materializationEntry.openExportProducerEdge
-            : std::optional<TopoDS_Edge> {};
+            ? wireJoinerHistoryMaterializationAHistoryProducerEdge(
+                materializationLedger,
+                edgeIndex
+            )
+            : nullptr;
         const bool hasChildProducerLedgerEdge =
             historyMaterializationProducerEdge && !historyMaterializationProducerEdge->IsNull();
         const TopoDS_Edge& childProducerEdge = hasChildProducerLedgerEdge
@@ -6592,11 +6667,16 @@ void WireJoiner::recordOpenWireCompoundLedger(
         const bool currentMemberProducerShape = hasChildProducerLedgerEdge
             && materializationEntry.resultWireProducer.kind
                 == ResultWireProducerKind::CurrentMemberChildWire;
+        const bool aHistoryProducerChildWire =
+            wireJoinerHistoryMaterializationEntryHasAHistoryProducerChildWire(
+                materializationLedger,
+                edgeIndex
+            );
         if (wireJoinerHistoryMaterializationLedgerHasChildWireCandidate(
                 materializationLedger,
                 edgeIndex
             )
-            && (!hasChildProducerLedgerEdge || currentMemberProducerShape)
+            && (!aHistoryProducerChildWire || currentMemberProducerShape)
             && !sourceEdgeLedgerEdges_.empty()) {
             // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
             // ::WireJoinerP::add(), key: "Make sure coincident vertices are actually the same

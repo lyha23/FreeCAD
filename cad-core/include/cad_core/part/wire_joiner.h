@@ -1084,6 +1084,17 @@ private:
         bool partialSharedClosedWireProducer = false;
         std::size_t edgeInfoIndex = resultWireProducerNpos;
     };
+    struct WireJoinerMapperHistoryProducerEvidence
+    {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
+        // ::WireJoinerP::buildClosedWire() records producer history with
+        // "aHistory->Remove(info.edge)", and ::getOpenWires() later consumes
+        // "MapperHistory(aHistory)". This request-local evidence is the MapperHistory input for a
+        // final EdgeInfo child-wire producer; it is kept outside the per-edge materialization entry
+        // so the entry no longer owns staged producer shape state.
+        std::size_t edgeInfoIndex = resultWireProducerNpos;
+        TopoDS_Edge producerEdge;
+    };
     struct WireJoinerHistoryMaterializationEdgeEntry
     {
         bool superEdgeMember = false;
@@ -1102,13 +1113,6 @@ private:
         bool superEdgeRootProducerSecondaryRemoval = false;
         bool superEdgeRootCurrentMember = false;
         std::vector<std::size_t> superEdgeRootCoveredMemberIndices;
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-        // ::WireJoinerP::buildClosedWire() records producer evidence with
-        // "aHistory->Remove(info.edge)", then ::build() exports final children with
-        // "builder.Add(openWireCompound, info.wire())". Keep the scoped source/aHistory producer
-        // materialization on the same per-edge history entry until MapperHistory/ElementMap can
-        // provide the child-wire producer without a staged edge.
-        std::optional<TopoDS_Edge> openExportProducerEdge;
         ResultWireProducerIdentity resultWireProducer;
     };
     struct WireJoinerHistoryMaterializationLedger
@@ -1128,6 +1132,7 @@ private:
         std::size_t closedWireCycleSplitLedgerSourceEdgeCount = 0;
         bool closedWireCycleSplitLedgerOpenExport = false;
         std::vector<WireJoinerHistoryMaterializationBinding> bindings;
+        std::vector<WireJoinerMapperHistoryProducerEvidence> mapperHistoryProducerEvidence;
         std::vector<WireJoinerHistoryMaterializationEdgeEntry> edgeEntries;
     };
     struct OwnerWireInfo
@@ -1493,7 +1498,20 @@ private:
         const WireJoinerHistoryMaterializationLedger& materializationLedger,
         std::size_t edgeInfoIndex
     ) const;
-    bool wireJoinerHistoryMaterializationLedgerHasOpenExportProducerEdge(
+    const TopoDS_Edge* wireJoinerHistoryMaterializationAHistoryProducerEdge(
+        const WireJoinerHistoryMaterializationLedger& materializationLedger,
+        std::size_t edgeInfoIndex
+    ) const;
+    bool wireJoinerHistoryMaterializationLedgerHasAHistoryProducerEvidence(
+        const WireJoinerHistoryMaterializationLedger& materializationLedger,
+        std::size_t edgeInfoIndex
+    ) const;
+    void recordWireJoinerMapperHistoryProducerEvidence(
+        WireJoinerHistoryMaterializationLedger& materializationLedger,
+        std::size_t edgeInfoIndex,
+        const TopoDS_Edge& producerEdge
+    ) const;
+    bool wireJoinerHistoryMaterializationEntryHasAHistoryProducerChildWire(
         const WireJoinerHistoryMaterializationLedger& materializationLedger,
         std::size_t edgeInfoIndex
     ) const;
