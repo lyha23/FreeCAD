@@ -6,11 +6,131 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-find_package(OpenCASCADE CONFIG REQUIRED COMPONENTS FoundationClasses ModelingData ModelingAlgorithms)
+set(CAD_CORE_OCCT_COMPONENTS
+  FoundationClasses
+  ModelingData
+  ModelingAlgorithms
+  DataExchange
+)
+
+find_package(OpenCASCADE CONFIG QUIET COMPONENTS ${CAD_CORE_OCCT_COMPONENTS})
+
+if(OpenCASCADE_FOUND AND UNIX AND OpenCASCADE_DIR MATCHES "^/mnt/[A-Za-z]/")
+  message(STATUS "Ignoring OpenCASCADE package from Windows path: ${OpenCASCADE_DIR}")
+  set(OpenCASCADE_FOUND FALSE)
+  unset(OpenCASCADE_DIR CACHE)
+endif()
+
+if(OpenCASCADE_FOUND)
+  set(CAD_CORE_OCCT_INCLUDE_DIRS ${OpenCASCADE_INCLUDE_DIR})
+  set(CAD_CORE_OCCT_LIBRARY_DIRS ${OpenCASCADE_LIBRARY_DIR})
+  set(CAD_CORE_OCCT_LIBRARIES
+    TKernel
+    TKMath
+    TKG2d
+    TKG3d
+    TKGeomBase
+    TKBRep
+    TKGeomAlgo
+    TKTopAlgo
+    TKPrim
+    TKFeat
+    TKOffset
+    TKShHealing
+    TKMesh
+    TKBO
+    TKFillet
+    TKBool
+    TKXSBase
+  )
+  if(TARGET TKDE)
+    list(APPEND CAD_CORE_OCCT_LIBRARIES TKDE)
+  endif()
+  if(TARGET TKDESTL)
+    list(APPEND CAD_CORE_OCCT_LIBRARIES TKDESTL)
+  else()
+    list(APPEND CAD_CORE_OCCT_LIBRARIES TKSTL)
+  endif()
+  if(TARGET TKDEIGES)
+    list(APPEND CAD_CORE_OCCT_LIBRARIES TKDEIGES)
+  else()
+    list(APPEND CAD_CORE_OCCT_LIBRARIES TKIGES)
+  endif()
+  if(TARGET TKDESTEP)
+    list(APPEND CAD_CORE_OCCT_LIBRARIES TKDESTEP)
+  else()
+    list(APPEND CAD_CORE_OCCT_LIBRARIES TKSTEPBase TKSTEPAttr TKSTEP209 TKSTEP)
+  endif()
+else()
+  find_path(CAD_CORE_OCCT_INCLUDE_DIR
+    NAMES Standard_Version.hxx
+    PATHS
+      /usr/include/opencascade
+      /usr/local/include/opencascade
+      /opt/homebrew/include/opencascade
+  )
+
+  set(CAD_CORE_OCCT_LIBRARY_NAMES
+    TKernel
+    TKMath
+    TKG2d
+    TKG3d
+    TKGeomBase
+    TKBRep
+    TKGeomAlgo
+    TKTopAlgo
+    TKPrim
+    TKFeat
+    TKFillet
+    TKBool
+    TKOffset
+    TKShHealing
+    TKMesh
+    TKBO
+    TKXSBase
+    TKSTEPBase
+    TKSTEPAttr
+    TKSTEP209
+    TKSTEP
+    TKIGES
+    TKSTL
+  )
+
+  set(CAD_CORE_OCCT_LIBRARIES)
+  set(CAD_CORE_OCCT_LIBRARY_DIRS)
+  foreach(CAD_CORE_OCCT_LIBRARY_NAME IN LISTS CAD_CORE_OCCT_LIBRARY_NAMES)
+    find_library(CAD_CORE_OCCT_${CAD_CORE_OCCT_LIBRARY_NAME}_LIBRARY
+      NAMES ${CAD_CORE_OCCT_LIBRARY_NAME}
+      PATHS
+        /usr/lib/x86_64-linux-gnu
+        /usr/local/lib
+        /opt/homebrew/lib
+    )
+    if(NOT CAD_CORE_OCCT_${CAD_CORE_OCCT_LIBRARY_NAME}_LIBRARY)
+      message(FATAL_ERROR "OpenCASCADE library ${CAD_CORE_OCCT_LIBRARY_NAME} was not found")
+    endif()
+    list(APPEND CAD_CORE_OCCT_LIBRARIES ${CAD_CORE_OCCT_${CAD_CORE_OCCT_LIBRARY_NAME}_LIBRARY})
+    get_filename_component(CAD_CORE_OCCT_LIBRARY_DIR
+      "${CAD_CORE_OCCT_${CAD_CORE_OCCT_LIBRARY_NAME}_LIBRARY}"
+      DIRECTORY
+    )
+    list(APPEND CAD_CORE_OCCT_LIBRARY_DIRS ${CAD_CORE_OCCT_LIBRARY_DIR})
+  endforeach()
+
+  list(REMOVE_DUPLICATES CAD_CORE_OCCT_LIBRARY_DIRS)
+  set(CAD_CORE_OCCT_INCLUDE_DIRS ${CAD_CORE_OCCT_INCLUDE_DIR})
+endif()
+
+if(NOT CAD_CORE_OCCT_INCLUDE_DIRS)
+  message(FATAL_ERROR "OpenCASCADE headers were not found")
+endif()
 
 find_path(NLOHMANN_JSON_INCLUDE_DIR
   NAMES nlohmann/json.hpp
-  PATHS /opt/homebrew/include /usr/local/include
+  PATHS
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/3rdParty/json/single_include
+    /opt/homebrew/include
+    /usr/local/include
 )
 
 if(NOT NLOHMANN_JSON_INCLUDE_DIR)
@@ -118,7 +238,7 @@ set_target_properties(cad-core-lib PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 target_include_directories(cad-core-lib PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${OpenCASCADE_INCLUDE_DIR}
+  ${CAD_CORE_OCCT_INCLUDE_DIRS}
   ${NLOHMANN_JSON_INCLUDE_DIR}
 )
 
@@ -138,31 +258,15 @@ else()
   target_compile_definitions(cad-core-lib PRIVATE CAD_CORE_HAS_ONDSEL_SOLVER=0)
 endif()
 
-target_link_directories(cad-core-lib PUBLIC
-  ${OpenCASCADE_LIBRARY_DIR}
-)
+if(CAD_CORE_OCCT_LIBRARY_DIRS)
+  target_link_directories(cad-core-lib PUBLIC
+    ${CAD_CORE_OCCT_LIBRARY_DIRS}
+  )
+endif()
 
 target_link_libraries(cad-core-lib PUBLIC
   ${ZSTD_LIBRARY}
-  TKernel
-  TKMath
-  TKG2d
-  TKG3d
-  TKGeomBase
-  TKBRep
-  TKGeomAlgo
-  TKTopAlgo
-  TKPrim
-  TKFeat
-  TKOffset
-  TKShHealing
-  TKMesh
-  TKBO
-  TKDE
-  TKDESTL
-  TKDEIGES
-  TKDESTEP
-  TKXSBase
+  ${CAD_CORE_OCCT_LIBRARIES}
 )
 
 add_library(cad_core_ffi SHARED
@@ -191,17 +295,18 @@ if(APPLE)
   else()
     set(CAD_CORE_ONDSEL_RPATH "")
   endif()
+  list(JOIN CAD_CORE_OCCT_LIBRARY_DIRS ";" CAD_CORE_OCCT_RPATH)
   set_target_properties(cad-core PROPERTIES
-    BUILD_RPATH "${OpenCASCADE_LIBRARY_DIR};${CAD_CORE_ONDSEL_RPATH}"
-    INSTALL_RPATH "${OpenCASCADE_LIBRARY_DIR};${CAD_CORE_ONDSEL_RPATH}"
+    BUILD_RPATH "${CAD_CORE_OCCT_RPATH};${CAD_CORE_ONDSEL_RPATH}"
+    INSTALL_RPATH "${CAD_CORE_OCCT_RPATH};${CAD_CORE_ONDSEL_RPATH}"
   )
   set_target_properties(cad-core-c3m1-topology-probe PROPERTIES
-    BUILD_RPATH "${OpenCASCADE_LIBRARY_DIR};${CAD_CORE_ONDSEL_RPATH}"
-    INSTALL_RPATH "${OpenCASCADE_LIBRARY_DIR};${CAD_CORE_ONDSEL_RPATH}"
+    BUILD_RPATH "${CAD_CORE_OCCT_RPATH};${CAD_CORE_ONDSEL_RPATH}"
+    INSTALL_RPATH "${CAD_CORE_OCCT_RPATH};${CAD_CORE_ONDSEL_RPATH}"
   )
   set_target_properties(cad_core_ffi PROPERTIES
-    BUILD_RPATH "${OpenCASCADE_LIBRARY_DIR};${CAD_CORE_ONDSEL_RPATH}"
-    INSTALL_RPATH "${OpenCASCADE_LIBRARY_DIR};${CAD_CORE_ONDSEL_RPATH}"
+    BUILD_RPATH "${CAD_CORE_OCCT_RPATH};${CAD_CORE_ONDSEL_RPATH}"
+    INSTALL_RPATH "${CAD_CORE_OCCT_RPATH};${CAD_CORE_ONDSEL_RPATH}"
     INSTALL_NAME_DIR "${CMAKE_CURRENT_BINARY_DIR}"
     BUILD_WITH_INSTALL_NAME_DIR ON
   )

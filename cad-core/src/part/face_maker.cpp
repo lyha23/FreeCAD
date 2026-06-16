@@ -41,6 +41,7 @@
 #include <TopoDS_Vertex.hxx>
 #include <TopTools_ListIteratorOfListOfShape.hxx>
 #include <TopTools_ListOfShape.hxx>
+#include <gp_Pln.hxx>
 
 #include <algorithm>
 #include <array>

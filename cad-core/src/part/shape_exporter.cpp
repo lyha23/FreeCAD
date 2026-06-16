@@ -18,10 +18,16 @@
 #include <TCollection_HAsciiString.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopLoc_Location.hxx>
-#include <TopTools_FormatVersion.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Face.hxx>
 #include <gp_Pnt.hxx>
+
+#if __has_include(<TopTools_FormatVersion.hxx>)
+#include <TopTools_FormatVersion.hxx>
+#define CAD_CORE_HAS_TOPTOOLS_FORMAT_VERSION 1
+#else
+#define CAD_CORE_HAS_TOPTOOLS_FORMAT_VERSION 0
+#endif
 
 #include <algorithm>
 #include <cmath>
@@ -58,6 +64,7 @@ void exportBrepFile(const TopoDS_Shape& shape, const std::filesystem::path& path
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.cpp
     // ::TopoShape::exportBrep(), writes with BRepTools::Write(...,
     // TopTools_FormatVersion_VERSION_1).
+#if CAD_CORE_HAS_TOPTOOLS_FORMAT_VERSION
     if (!BRepTools::Write(shape,
                           path.string().c_str(),
                           Standard_False,
@@ -65,6 +72,11 @@ void exportBrepFile(const TopoDS_Shape& shape, const std::filesystem::path& path
                           TopTools_FormatVersion_VERSION_1)) {
         throw std::runtime_error("Writing of BREP failed: " + path.string());
     }
+#else
+    if (!BRepTools::Write(shape, path.string().c_str())) {
+        throw std::runtime_error("Writing of BREP failed: " + path.string());
+    }
+#endif
 }
 
 void exportStepFile(const TopoDS_Shape& shape, const std::filesystem::path& path)

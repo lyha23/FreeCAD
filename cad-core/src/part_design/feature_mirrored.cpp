@@ -11,6 +11,7 @@
 #include <TopoDS.hxx>
 #include <TopoDS_Face.hxx>
 #include <gp_Ax2.hxx>
+#include <gp_Pln.hxx>
 #include <gp_Trsf.hxx>
 
 #include <optional>
