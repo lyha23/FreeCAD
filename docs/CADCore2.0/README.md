@@ -41,9 +41,9 @@ C2-M8 当前验收冻结已完成到“显式能力 + 显式 gap”状态：orac
 | 文档 | 用途 |
 | --- | --- |
 | `00-总览.md` | 2.0 目标、边界、阶段拆分和推进顺序 |
-| `01-P5P6-ExternalGeometry-TopoNaming主线.md` | ExternalGeometry、MapperHistory、FaceMaker / WireJoiner、旧引用恢复主线 |
-| `02-P6P7-History-PartDesign收敛.md` | ShapeFix / Refine / taper / transformed / DressUp / PartDesign ownership 收敛 |
-| `03-P8-Link-Assembly-Adapter产品化.md` | Link 账本、ShowElement 写回生命周期、Assembly solver、Worker / WASM / Web adapter |
+| `01-【已实现】P5P6-ExternalGeometry-TopoNaming主线.md` | ExternalGeometry、MapperHistory、FaceMaker / WireJoiner、旧引用恢复主线 |
+| `02-【已实现】P6P7-History-PartDesign收敛.md` | ShapeFix / Refine / taper / transformed / DressUp / PartDesign ownership 收敛 |
+| `03-【已实现】P8-Link-Assembly-Adapter产品化.md` | Link 账本、ShowElement 写回生命周期、Assembly solver、Worker / WASM / Web adapter |
 | `04-验收矩阵与交付规则.md` | fixture / oracle / diagnostics / 回归命令 / 完成判定 |
 
 ## 执行原则

@@ -131,4 +131,4 @@ python3 -m unittest tests.test_mvp tests.test_diagnostics tests.test_feature_flo
 
 ## 下一步建议
 
-C3-M8 freeze 已固定 capabilities / docs / oracle 清单，避免重新领取已完成的 C3-M1 到 C3-M7 条目。下一步只推进 `07-WireJoiner-MapperHistory接管方案.md` 中的 full ledger 接管；若发现新的 FreeCAD / OCCT 语义缺口，先拆成新的具体 producer、lifecycle、feature-family、JointType 或 adapter contract 项，再补 fixture 和 diagnostics。
+C3-M8 freeze 已固定 capabilities / docs / oracle 清单，避免重新领取已完成的 C3-M1 到 C3-M7 条目。下一步只推进 `07-【已实现】WireJoiner-MapperHistory接管方案.md` 中的 full ledger 接管；若发现新的 FreeCAD / OCCT 语义缺口，先拆成新的具体 producer、lifecycle、feature-family、JointType 或 adapter contract 项，再补 fixture 和 diagnostics。

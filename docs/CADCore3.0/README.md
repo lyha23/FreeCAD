@@ -28,12 +28,12 @@ CAD Core 3.0 要把 `cad-core` 从“可支撑常用无状态建模主链”推�
 | --- | --- |
 | `00-总览.md` | 3.0 目标、阶段拆分、推进顺序和非目标 |
 | `01-FreeCAD语义盘点与差距矩阵.md` | 按 FreeCAD 模块盘点需要复刻的对象、属性、maker、history 和 oracle |
-| `02-TopoNaming与History完全体.md` | ShapeFix、import shape、full MapperHistory、ExternalGeometry native 生命周期和引用恢复 |
-| `03-Sketcher-Part-PartDesign几何能力复刻.md` | Sketcher solver、Part workbench、PartDesign feature family 与复杂参数余量 |
-| `04-Link-Assembly-运行时产品化.md` | Link `_ChildCache`、copy-on-change、cross-document、Assembly solver、Worker / WASM / Web adapter |
+| `02-【已实现】TopoNaming与History完全体.md` | ShapeFix、import shape、full MapperHistory、ExternalGeometry native 生命周期和引用恢复 |
+| `03-【已实现】Sketcher-Part-PartDesign几何能力复刻.md` | Sketcher solver、Part workbench、PartDesign feature family 与复杂参数余量 |
+| `04-【已实现】Link-Assembly-运行时产品化.md` | Link `_ChildCache`、copy-on-change、cross-document、Assembly solver、Worker / WASM / Web adapter |
 | `05-验收矩阵与交付规则.md` | 分阶段验收、fixture / oracle 策略、回归命令和完成判定 |
 | `06-C3-M8后续收口清单.md` | C3-M8 后的冻结状态表、非 `covered_full` 项和下一阶段入口 |
-| `07-WireJoiner-MapperHistory接管方案.md` | 移除 WireJoiner history materialization bridge，并让 `MapperHistory(aHistory) -> ElementMap` 接管 open-export / noOriginal / split / deleted 关系 |
+| `07-【已实现】WireJoiner-MapperHistory接管方案.md` | 移除 WireJoiner history materialization bridge，并让 `MapperHistory(aHistory) -> ElementMap` 接管 open-export / noOriginal / split / deleted 关系 |
 | `FreeCAD语义矩阵.md` | C3-M0 可执行语义矩阵，按 FreeCAD 模块追踪源码依据、cad-core 落点、gap、阶段和 oracle |
 | `capabilities-gap对照表.md` | C2-M8 capabilities / remaining gaps 到 C3 可执行项的对照表 |
 | `oracle-fixture队列.md` | C3-M1 到 C3-M7 的 oracle / fixture 队列和第一批实现切片 |

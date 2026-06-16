@@ -69,7 +69,7 @@
 - `openExportOverride`、`purgeAsOriginalOpenEdge`、EdgeInfo open-wire 重导出、公开 noOriginal candidate、result-slot evidence、公开 source-edge producer output/count、summary-only WireJoiner open-export mapper event 已删除，不得恢复。
 - 旧 per-edge candidate / producer bridge 已删除或替换为 `WireJoinerMapperHistoryProducerEvidence`；不得恢复 result-slot、endpoint materialization、helper override 或 noOriginal candidate 公开字段。
 - `ElementMap` 只承接唯一 target alias；split / deleted / ambiguous relation 继续由 `MapperHistory`、terminal history 或 diagnostics 表达。
-- `07-WireJoiner-MapperHistory接管方案.md` 作为 WireJoiner full ledger 回归依据。
+- `07-【已实现】WireJoiner-MapperHistory接管方案.md` 作为 WireJoiner full ledger 回归依据。
 
 ## `src/Mod/PartDesign/App`
 
