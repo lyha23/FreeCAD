@@ -18,7 +18,7 @@
 
 - P5 已有 Sketch profile、基础约束、ExternalGeometry 子集、InternalShape bounded split 子集、FaceMakerBuildFace pre-split / splitter summary、WireJoiner EdgeInfo / WireInfo 部分账本和 terminal split / deleted history。
 - P6 已有 `NamedShape` / `ElementMap` 基础、prism / Body boolean / RefineModel / transformed copy / Link retag 的 maker history 子集、ReferenceShadow 恢复和 split / deleted diagnostics。
-- S2 已确认 MapperHistory event schema、ElementMap child-map / mapped postfix、resolver、ReferenceShadow、ExternalGeometry 基础投影和 PartDesign 下游消费者有 checked-in evidence；S3 已确认 projection/intersection、flags parse/capability 和 source-prefixed Missing recovery 保持 supported，同时保留 Defining 与 Frozen/Sync/Detached/Missing 的未采 oracle 队列；S4 已确认 MapperHistory / ElementMap / ReferenceShadow 的 request-local 生命周期边界，保持 `P5P6-SCOPE-001/002/003` supported，`P5P6-SCOPE-012` unsupported，`P5P6-SCOPE-013` releaseGate。剩余可执行队列集中在 ExternalGeometry 状态 oracle、FaceMaker concrete producer、WireJoiner vertex multiplicity parity、InternalFace stable selector diagnostic 和 fallback release gate。
+- S2 已确认 MapperHistory event schema、ElementMap child-map / mapped postfix、resolver、ReferenceShadow、ExternalGeometry 基础投影和 PartDesign 下游消费者有 checked-in evidence；S3 已确认 projection/intersection、flags parse/capability 和 source-prefixed Missing recovery 保持 supported，同时保留 Defining 与 Frozen/Sync/Detached/Missing 的未采 oracle 队列；S4 已确认 MapperHistory / ElementMap / ReferenceShadow 的 request-local 生命周期边界，保持 `P5P6-SCOPE-001/002/003` supported，`P5P6-SCOPE-012` unsupported，`P5P6-SCOPE-013` releaseGate；S5 已确认 FaceMaker / WireJoiner producer 主路径和 fallback 删除边界，保持 `P5P6-SCOPE-009/010` backendGap、`P5P6-SCOPE-011/013` releaseGate、`P5P6-SCOPE-012` unsupported。剩余可执行队列集中在 ExternalGeometry 状态 oracle、FaceMaker concrete producer、WireJoiner vertex multiplicity parity、InternalFace stable selector diagnostic 和 S6 fallback release gate。
 
 ## 证明链条
 
@@ -79,11 +79,11 @@ live 基线复核
 | S6 发布闸门 | `工作步骤细分/6-17-12-03-P5P6-S6-Oracle实现与发布闸门.md` | 消费 blocker 队列，执行 oracle / 实现 / 验证 / 台账回写 |
 | source candidates | `矩阵/p5p6_source_candidates.tsv` | FreeCAD 源码候选清单，S1 已扩充为 47 条；候选不等于实现任务 |
 | scope review | `矩阵/p5p6_scope_review_matrix.tsv` | S2 已分类 15 条 scope，记录状态、依据、cad-core evidence、落点和下一步 |
-| blocker queue | `矩阵/p5p6_blocker_queue.tsv` | S2 已收敛为 6 条，可由 S3-S6 消费 |
+| blocker queue | `矩阵/p5p6_blocker_queue.tsv` | S5 已把 `P5P6-BLOCK-003/004/006` 细化为 S6 可执行项；`P5P6-BLOCK-001/002/005` 保持原队列 |
 | nonGoal registry | `矩阵/p5p6_non_goal_registry.tsv` | S2 已整理 6 条公开排除项、用户表现和重新打开条件 |
-| backendGap 分类 | `矩阵/p5p6_backend_gap_classification.tsv` | S2 仅保留 2 条有 FreeCAD 依据和 cad-core 缺口证据的 FaceMaker / WireJoiner backendGap |
+| backendGap 分类 | `矩阵/p5p6_backend_gap_classification.tsv` | S5 继续仅保留 2 条 P0 backendGap：FaceMaker concrete producer 与 WireJoiner vertex multiplicity / openWireCompound parity |
 
-当前 S0 已实现，已冻结声明口径与 live 基线复核；S1 已实现，已把本地 FreeCAD 源码入口扩充为候选矩阵；S2 已实现，已完成范围准入与 blocker 矩阵；S3 已实现，已完成 ExternalGeometry 状态机专项复审；S4 已实现，已完成 MapperHistory / ElementMap 生命周期专项复审；S5-S6 仍为待执行状态。候选矩阵、S2 分类、S3 裁决和 S4 生命周期复审都不是发布闸门结论。
+当前 S0 已实现，已冻结声明口径与 live 基线复核；S1 已实现，已把本地 FreeCAD 源码入口扩充为候选矩阵；S2 已实现，已完成范围准入与 blocker 矩阵；S3 已实现，已完成 ExternalGeometry 状态机专项复审；S4 已实现，已完成 MapperHistory / ElementMap 生命周期专项复审；S5 已实现，已完成 FaceMaker / WireJoiner history producer 专项复审；S6 仍为待执行发布闸门。候选矩阵、S2 分类、S3/S4/S5 裁决都不是发布完成结论。
 
 ## 实施边界
 
