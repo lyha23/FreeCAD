@@ -14,11 +14,11 @@
 
 ## 当前基线
 
-当前 P5/P6 已具备主路径骨架，S2 已完成范围准入分类，但仍不是发布完成状态：
+当前 P5/P6 已具备主路径骨架，S3 已完成 ExternalGeometry 状态机专项复审，但仍不是发布完成状态：
 
 - P5 已有 Sketch profile、基础约束、ExternalGeometry 子集、InternalShape bounded split 子集、FaceMakerBuildFace pre-split / splitter summary、WireJoiner EdgeInfo / WireInfo 部分账本和 terminal split / deleted history。
 - P6 已有 `NamedShape` / `ElementMap` 基础、prism / Body boolean / RefineModel / transformed copy / Link retag 的 maker history 子集、ReferenceShadow 恢复和 split / deleted diagnostics。
-- S2 已确认 MapperHistory event schema、ElementMap child-map / mapped postfix、resolver、ReferenceShadow、ExternalGeometry 基础投影和 PartDesign 下游消费者有 checked-in evidence；剩余可执行队列集中在 ExternalGeometry 状态 oracle、FaceMaker concrete producer、WireJoiner vertex multiplicity parity、InternalFace stable selector diagnostic 和 fallback release gate。
+- S2 已确认 MapperHistory event schema、ElementMap child-map / mapped postfix、resolver、ReferenceShadow、ExternalGeometry 基础投影和 PartDesign 下游消费者有 checked-in evidence；S3 已确认 projection/intersection、flags parse/capability 和 source-prefixed Missing recovery 保持 supported，同时保留 Defining 与 Frozen/Sync/Detached/Missing 的未采 oracle 队列。剩余可执行队列集中在 ExternalGeometry 状态 oracle、FaceMaker concrete producer、WireJoiner vertex multiplicity parity、InternalFace stable selector diagnostic 和 fallback release gate。
 
 ## 证明链条
 
@@ -73,7 +73,7 @@ live 基线复核
 | S0 声明口径 | `工作步骤细分/6-17-11-57-P5P6-S0-声明口径与live基线复核.md` | 已冻结本主线纳入 / 排除清单、禁用话术、状态词典和 S1-S6 准入边界 |
 | S1 源码候选 | `工作步骤细分/6-17-11-58-P5P6-S1-FreeCAD源码候选矩阵.md` | 已从 FreeCAD 源码生成候选清单，不判定 supported |
 | S2 范围准入 | `工作步骤细分/6-17-11-59-P5P6-S2-范围准入与blocker矩阵.md` | 已把候选转成 scope review、nonGoal、blocker 和 backendGap 分类 |
-| S3 ExternalGeometry | `工作步骤细分/6-17-12-00-P5P6-S3-ExternalGeometry状态机专项复审.md` | 裁决 Defining / Frozen / Detached / Missing / Sync 与 solver/live editing 边界 |
+| S3 ExternalGeometry | `工作步骤细分/6-17-12-00-P5P6-S3-ExternalGeometry状态机专项复审.md` | 已裁决 Defining / Frozen / Detached / Missing / Sync 与 solver/live editing 边界；`P5P6-BLOCK-001/002` 继续等待 FreeCAD oracle |
 | S4 MapperHistory / ElementMap | `工作步骤细分/6-17-12-01-P5P6-S4-MapperHistory与ElementMap生命周期专项复审.md` | 裁决 request-local history lifecycle 与跨请求持久状态边界 |
 | S5 FaceMaker / WireJoiner | `工作步骤细分/6-17-12-02-P5P6-S5-FaceMaker-WireJoiner-history-producer专项复审.md` | 裁决 history producer、InternalShape 主路径和 fallback 删除边界 |
 | S6 发布闸门 | `工作步骤细分/6-17-12-03-P5P6-S6-Oracle实现与发布闸门.md` | 消费 blocker 队列，执行 oracle / 实现 / 验证 / 台账回写 |
@@ -83,7 +83,7 @@ live 基线复核
 | nonGoal registry | `矩阵/p5p6_non_goal_registry.tsv` | S2 已整理 6 条公开排除项、用户表现和重新打开条件 |
 | backendGap 分类 | `矩阵/p5p6_backend_gap_classification.tsv` | S2 仅保留 2 条有 FreeCAD 依据和 cad-core 缺口证据的 FaceMaker / WireJoiner backendGap |
 
-当前 S0 已实现，已冻结声明口径与 live 基线复核；S1 已实现，已把本地 FreeCAD 源码入口扩充为候选矩阵；S2 已实现，已完成范围准入与 blocker 矩阵；S3-S6 仍为待执行状态。候选矩阵和 S2 分类都不是发布闸门结论。
+当前 S0 已实现，已冻结声明口径与 live 基线复核；S1 已实现，已把本地 FreeCAD 源码入口扩充为候选矩阵；S2 已实现，已完成范围准入与 blocker 矩阵；S3 已实现，已完成 ExternalGeometry 状态机专项复审；S4-S6 仍为待执行状态。候选矩阵、S2 分类和 S3 裁决都不是发布闸门结论。
 
 ## 实施边界
 
@@ -109,6 +109,6 @@ live 基线复核
 - `p5p6_blocker_queue.tsv` 中没有未关闭的 `notCollected` 或 `backendGap` 行。
 - P5/P6 的 InternalShape、ExternalGeometry、UpToFace / LinkSub 旧引用恢复使用同一套 MapperHistory / ElementMap / resolver。
 - FaceMaker / WireJoiner 的关键 ownership 不再只是 summary 或几何匹配 fallback，而能被 `NamedShape` / `ElementMap` 或稳定 diagnostics 消费。
-- ExternalGeometryExtension 五类状态均有 fixture 或 focused semantic test 覆盖。
+- ExternalGeometryExtension 五类状态均有 FreeCAD oracle / fixture / focused semantic test 覆盖，或被明确保留为 `notCollected` / `unsupported` / `nonGoal` 路由且 blocker 未关闭。
 - 旧 fallback 和 fixture-specific 输出修正已删除；保留的 fallback 必须有 FreeCAD 依据、适用边界、删除条件和 diagnostic。
 - 文档台账回写到 `docs/CADCore方案/细化方案/08-P5-Sketcher核心与内部元素.md`、`09-P6-TopoNaming主路径.md`、`13-ExternalGeometry-TopoNaming下一阶段主线.md`。
