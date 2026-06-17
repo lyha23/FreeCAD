@@ -6,6 +6,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+set(CAD_CORE_OCCT_ROOT "" CACHE PATH "Preferred OpenCASCADE/OCCT installation prefix")
+if(NOT CAD_CORE_OCCT_ROOT
+   AND EXISTS "$ENV{HOME}/.local/share/occt-7.8.1/.pixi/envs/default/include/opencascade/Standard_Version.hxx")
+  set(CAD_CORE_OCCT_ROOT "$ENV{HOME}/.local/share/occt-7.8.1/.pixi/envs/default" CACHE PATH "Preferred OpenCASCADE/OCCT installation prefix" FORCE)
+endif()
+
 set(CAD_CORE_OCCT_COMPONENTS
   FoundationClasses
   ModelingData
@@ -13,7 +19,10 @@ set(CAD_CORE_OCCT_COMPONENTS
   DataExchange
 )
 
-find_package(OpenCASCADE CONFIG QUIET COMPONENTS ${CAD_CORE_OCCT_COMPONENTS})
+find_package(OpenCASCADE CONFIG QUIET
+  PATHS ${CAD_CORE_OCCT_ROOT}
+  COMPONENTS ${CAD_CORE_OCCT_COMPONENTS}
+)
 
 if(OpenCASCADE_FOUND AND UNIX AND OpenCASCADE_DIR MATCHES "^/mnt/[A-Za-z]/")
   message(STATUS "Ignoring OpenCASCADE package from Windows path: ${OpenCASCADE_DIR}")
@@ -65,9 +74,17 @@ else()
   find_path(CAD_CORE_OCCT_INCLUDE_DIR
     NAMES Standard_Version.hxx
     PATHS
+      ${CAD_CORE_OCCT_ROOT}/include/opencascade
       /usr/include/opencascade
       /usr/local/include/opencascade
       /opt/homebrew/include/opencascade
+  )
+
+  set(CAD_CORE_OCCT_LIBRARY_SEARCH_PATHS
+    ${CAD_CORE_OCCT_ROOT}/lib
+    /usr/lib/x86_64-linux-gnu
+    /usr/local/lib
+    /opt/homebrew/lib
   )
 
   set(CAD_CORE_OCCT_LIBRARY_NAMES
@@ -88,12 +105,6 @@ else()
     TKMesh
     TKBO
     TKXSBase
-    TKSTEPBase
-    TKSTEPAttr
-    TKSTEP209
-    TKSTEP
-    TKIGES
-    TKSTL
   )
 
   set(CAD_CORE_OCCT_LIBRARIES)
@@ -101,10 +112,7 @@ else()
   foreach(CAD_CORE_OCCT_LIBRARY_NAME IN LISTS CAD_CORE_OCCT_LIBRARY_NAMES)
     find_library(CAD_CORE_OCCT_${CAD_CORE_OCCT_LIBRARY_NAME}_LIBRARY
       NAMES ${CAD_CORE_OCCT_LIBRARY_NAME}
-      PATHS
-        /usr/lib/x86_64-linux-gnu
-        /usr/local/lib
-        /opt/homebrew/lib
+      PATHS ${CAD_CORE_OCCT_LIBRARY_SEARCH_PATHS}
     )
     if(NOT CAD_CORE_OCCT_${CAD_CORE_OCCT_LIBRARY_NAME}_LIBRARY)
       message(FATAL_ERROR "OpenCASCADE library ${CAD_CORE_OCCT_LIBRARY_NAME} was not found")
@@ -116,6 +124,49 @@ else()
     )
     list(APPEND CAD_CORE_OCCT_LIBRARY_DIRS ${CAD_CORE_OCCT_LIBRARY_DIR})
   endforeach()
+
+  find_library(CAD_CORE_OCCT_TKDE_LIBRARY NAMES TKDE PATHS ${CAD_CORE_OCCT_LIBRARY_SEARCH_PATHS})
+  if(CAD_CORE_OCCT_TKDE_LIBRARY)
+    list(APPEND CAD_CORE_OCCT_LIBRARIES ${CAD_CORE_OCCT_TKDE_LIBRARY})
+  endif()
+
+  find_library(CAD_CORE_OCCT_TKDESTL_LIBRARY NAMES TKDESTL PATHS ${CAD_CORE_OCCT_LIBRARY_SEARCH_PATHS})
+  if(CAD_CORE_OCCT_TKDESTL_LIBRARY)
+    list(APPEND CAD_CORE_OCCT_LIBRARIES ${CAD_CORE_OCCT_TKDESTL_LIBRARY})
+  else()
+    find_library(CAD_CORE_OCCT_TKSTL_LIBRARY NAMES TKSTL PATHS ${CAD_CORE_OCCT_LIBRARY_SEARCH_PATHS})
+    if(NOT CAD_CORE_OCCT_TKSTL_LIBRARY)
+      message(FATAL_ERROR "OpenCASCADE library TKDESTL or TKSTL was not found")
+    endif()
+    list(APPEND CAD_CORE_OCCT_LIBRARIES ${CAD_CORE_OCCT_TKSTL_LIBRARY})
+  endif()
+
+  find_library(CAD_CORE_OCCT_TKDEIGES_LIBRARY NAMES TKDEIGES PATHS ${CAD_CORE_OCCT_LIBRARY_SEARCH_PATHS})
+  if(CAD_CORE_OCCT_TKDEIGES_LIBRARY)
+    list(APPEND CAD_CORE_OCCT_LIBRARIES ${CAD_CORE_OCCT_TKDEIGES_LIBRARY})
+  else()
+    find_library(CAD_CORE_OCCT_TKIGES_LIBRARY NAMES TKIGES PATHS ${CAD_CORE_OCCT_LIBRARY_SEARCH_PATHS})
+    if(NOT CAD_CORE_OCCT_TKIGES_LIBRARY)
+      message(FATAL_ERROR "OpenCASCADE library TKDEIGES or TKIGES was not found")
+    endif()
+    list(APPEND CAD_CORE_OCCT_LIBRARIES ${CAD_CORE_OCCT_TKIGES_LIBRARY})
+  endif()
+
+  find_library(CAD_CORE_OCCT_TKDESTEP_LIBRARY NAMES TKDESTEP PATHS ${CAD_CORE_OCCT_LIBRARY_SEARCH_PATHS})
+  if(CAD_CORE_OCCT_TKDESTEP_LIBRARY)
+    list(APPEND CAD_CORE_OCCT_LIBRARIES ${CAD_CORE_OCCT_TKDESTEP_LIBRARY})
+  else()
+    foreach(CAD_CORE_OCCT_STEP_LIBRARY_NAME IN ITEMS TKSTEPBase TKSTEPAttr TKSTEP209 TKSTEP)
+      find_library(CAD_CORE_OCCT_${CAD_CORE_OCCT_STEP_LIBRARY_NAME}_LIBRARY
+        NAMES ${CAD_CORE_OCCT_STEP_LIBRARY_NAME}
+        PATHS ${CAD_CORE_OCCT_LIBRARY_SEARCH_PATHS}
+      )
+      if(NOT CAD_CORE_OCCT_${CAD_CORE_OCCT_STEP_LIBRARY_NAME}_LIBRARY)
+        message(FATAL_ERROR "OpenCASCADE library ${CAD_CORE_OCCT_STEP_LIBRARY_NAME} was not found")
+      endif()
+      list(APPEND CAD_CORE_OCCT_LIBRARIES ${CAD_CORE_OCCT_${CAD_CORE_OCCT_STEP_LIBRARY_NAME}_LIBRARY})
+    endforeach()
+  endif()
 
   list(REMOVE_DUPLICATES CAD_CORE_OCCT_LIBRARY_DIRS)
   set(CAD_CORE_OCCT_INCLUDE_DIRS ${CAD_CORE_OCCT_INCLUDE_DIR})
@@ -137,15 +188,22 @@ if(NOT NLOHMANN_JSON_INCLUDE_DIR)
   message(FATAL_ERROR "nlohmann/json.hpp was not found")
 endif()
 
-find_path(ZSTD_INCLUDE_DIR
-  NAMES zstd.h
-  PATHS /opt/homebrew/include /opt/homebrew/opt/zstd/include /usr/local/include
-)
+if(CAD_CORE_OCCT_ROOT
+   AND EXISTS "${CAD_CORE_OCCT_ROOT}/include/zstd.h"
+   AND EXISTS "${CAD_CORE_OCCT_ROOT}/lib/libzstd.so")
+  set(ZSTD_INCLUDE_DIR "${CAD_CORE_OCCT_ROOT}/include" CACHE PATH "zstd include directory" FORCE)
+  set(ZSTD_LIBRARY "${CAD_CORE_OCCT_ROOT}/lib/libzstd.so" CACHE FILEPATH "zstd library" FORCE)
+else()
+  find_path(ZSTD_INCLUDE_DIR
+    NAMES zstd.h
+    PATHS /opt/homebrew/include /opt/homebrew/opt/zstd/include /usr/local/include
+  )
 
-find_library(ZSTD_LIBRARY
-  NAMES zstd
-  PATHS /opt/homebrew/lib /opt/homebrew/opt/zstd/lib /usr/local/lib
-)
+  find_library(ZSTD_LIBRARY
+    NAMES zstd
+    PATHS /opt/homebrew/lib /opt/homebrew/opt/zstd/lib /usr/local/lib
+  )
+endif()
 
 if(NOT ZSTD_INCLUDE_DIR OR NOT ZSTD_LIBRARY)
   message(FATAL_ERROR "libzstd was not found")

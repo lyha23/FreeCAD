@@ -1,7 +1,7 @@
 # Repository Guidelines（仓库指南）
 
 ## 仓库目标
-- 本仓库是本地 FreeCAD 源码树，也是抽取 CAD Core 的语义来源；当前目标是基于 `~/Chili3DProject/重构Chili/FreeCAD` 中的 FreeCAD 实现，把几何建模核心逻辑抽到 `~/Chili3DProject/重构Chili/FreeCAD/cad-core`。
+- 本仓库是本地 FreeCAD 源码树，也是抽取 CAD Core 的语义来源；当前目标是基于 `~/Chili3DProject/FreeCAD` 中的 FreeCAD 实现，把几何建模核心逻辑抽到 `~/Chili3DProject/FreeCAD/cad-core`。
 - 抽取范围重点包括文档对象图、属性与链接、依赖分析、recompute、草图、PartDesign 特征链、几何建立、拓扑命名、拓扑元素追踪、几何结果映射与前端 CAD 运行时需要的几何内核能力。
 - 做架构取舍、API 设计、实现拆分或文档整理时，优先服务上述抽取目标；若“通用后端框架”风格与 FreeCAD 几何库抽取需求冲突，以 FreeCAD 业务语义、可重建能力和 `cad-core` 清晰边界为准。
 - 需要确认行为语义时，优先读取本仓库 `src/` 中对应 FreeCAD 实现，再决定 `cad-core` 中的 C++ API、拓扑命名模型、重建流程和 fixture 期望。
@@ -46,27 +46,32 @@
 - 上游 FreeCAD 的完整构建遵循仓库原有 `CMakeLists.txt`、`CMakePresets.json`、`pixi.toml` 与 `.github/workflows`；不要为了 `cad-core` 任务随意改动上游构建系统。
 - `cad-core` 使用 CMake、C++17、OpenCASCADE CONFIG package 和 `nlohmann/json.hpp`：
   ```bash
-  cd ~/Chili3DProject/重构Chili/FreeCAD/cad-core
+  cd ~/Chili3DProject/FreeCAD/cad-core
   cmake -S . -B build
   cmake --build build
   ```
 - 运行 MVP recompute：
   ```bash
-  cd ~/Chili3DProject/重构Chili/FreeCAD/cad-core
+  cd ~/Chili3DProject/FreeCAD/cad-core
   mkdir -p out
   ./cad-core recompute fixtures/mvp/rect-pad.json --output out/rect-pad.result.json
   ```
 - 运行当前 Python 验收测试：
   ```bash
-  cd ~/Chili3DProject/重构Chili/FreeCAD/cad-core
+  cd ~/Chili3DProject/FreeCAD/cad-core
   python3 -m unittest tests/test_mvp.py
   ```
 - `cad-core-lib` 是核心库 target；`cad-core` 是 CLI adapter；`cad_core_ffi` 是 C ABI adapter。新增能力时先保证核心库边界成立，再暴露到 adapter。
 - `cad-core/build/`、`cad-core/cad-core`、`__pycache__/` 属于生成物或本地构建产物；除非任务明确要求，不要把它们当作源码编辑。
-- 本机已安装 FreeCAD.app，调试时直接调用 `FreeCADCmd`，指向 `/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd`。
+- 采集 FreeCAD expected 前先确认本地 `FreeCADCmd` 可用。优先让 `freecadcmd`、`FreeCADCmd` 或 `freecadcmd-daily` 出现在 `PATH`；也可用 `FREECADCMD` 覆盖。常见平台路径示例：
+  - Ubuntu / Debian：`/usr/bin/freecadcmd`、`/usr/bin/FreeCADCmd`。
+  - macOS：`/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd`。
 - 原生 FreeCAD 当前可用；但在 Codex sandbox 内直接运行 `FreeCADCmd` 可能报 `Incompatible processor. This Qt build requires the following features: neon`。这只说明 sandbox 执行环境不适合启动该 Qt/FreeCAD 进程，不代表本机 FreeCAD 不可用。
 - 需要重新采集 FreeCAD fixture、运行 oracle collector、或执行原生 FreeCAD/WireJoiner probe 时，应在本机非 sandbox 环境运行 `FreeCADCmd`，再以该输出作为 oracle 判断依据。
 - 临时 probe 不能假设普通 Python `__main__` 会被 FreeCAD CLI 执行；若 `FreeCADCmd` 启动成功但没有执行脚本主体，应改成和现有采集脚本一致的 FreeCAD CLI 触发方式后再重跑。
+- CAD Core 的 fixture expected、oracle 采集和阶段验收基线以采集 expected 时使用的 FreeCAD / LibPack 版本为准；不要把当前机器偶然安装的系统 OCCT（例如 Linux 发行版自带 OCCT 7.5.x）作为判断 expected 正误或修改几何语义的基线。
+- 若 `cad-core` 在非 expected 采集基线的 OCCT 上出现 BREP topology 版本、bbox 细微偏移或 data-exchange 读写差异，应先归类为环境 / OCCT 兼容性问题并写入 `docs/temp`，不要直接改 fixture expected、放宽断言、增加输出端修剪或加入几何特判。
+- 需要验证 FreeCAD parity、刷新 expected 或关闭 known gap 时，优先让 `cad-core` 与 oracle collector 使用同一套 FreeCAD / LibPack / OCCT；若只能在另一套 OCCT 上 smoke test，结论必须标明为兼容性探测，不能替代正式 parity 验收。
 
 ## OpenCascade / OCCT 使用规则
 - `cad-core` 直接使用 OCCT C++ API；新增几何能力时先确认 FreeCAD 在 `src/Mod/Part/App`、`src/Mod/PartDesign/App` 或相关模块中的调用路径，再决定是否封装到 `geometry/`、`features/` 或 `topo/`。
@@ -83,7 +88,7 @@
 - 核心逻辑放 `cad-core-lib`；CLI 和 C ABI 只做参数解析、协议转换和错误封装，不承载建模语义。
 - 拓扑命名相关改动优先查看 FreeCAD 的 `TopoShape*`、`TopoShapeMapper*`、`PropertyTopoShape*`、FaceMaker、WireJoiner 和 `cad-core/src/topo/`，保持命名、映射与索引语义一致。
 - 修复 FreeCAD parity、拓扑命名、内部面、几何排序或 fixture 偏差时，起初就必须按完整通用语义设计，优先补齐 FreeCAD / OpenCascade 对应的通用流程、历史映射与排序规则；不得用只覆盖单一 fixture 形态的窄路径或特异化处理替代通用实现。若短期不得不落窄路径，必须在相邻代码注释和方案文档中说明临时性、适用边界、FreeCAD 依据与后续通用化路径，并避免继续扩大 fixture 特判。
-- 公开 API、核心语义类型、executor、mapper/history 规则等承载 FreeCAD 几何库抽取语义的新增函数、结构体、枚举或字段，必须在相邻 C++ 注释或实现注释中标注 FreeCAD 依据：写明 FreeCAD 源文件绝对路径、类/函数名，并摘录能支撑当前语义的 FreeCAD 原文短句或字段名；不要只写“参考 FreeCAD”。普通 helper、内部实现细节、测试辅助结构若不承载 FreeCAD 语义，不强制标注。示例：`// FreeCAD: ~/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeaturePad.cpp::Pad::execute(), calls "buildExtrusion(ExtrudeOption::MakeFace | ExtrudeOption::MakeFuse)".`
+- 公开 API、核心语义类型、executor、mapper/history 规则等承载 FreeCAD 几何库抽取语义的新增函数、结构体、枚举或字段，必须在相邻 C++ 注释或实现注释中标注 FreeCAD 依据：写明 FreeCAD 源文件绝对路径、类/函数名，并摘录能支撑当前语义的 FreeCAD 原文短句或字段名；不要只写“参考 FreeCAD”。普通 helper、内部实现细节、测试辅助结构若不承载 FreeCAD 语义，不强制标注。示例：`// FreeCAD: ~/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePad.cpp::Pad::execute(), calls "buildExtrusion(ExtrudeOption::MakeFace | ExtrudeOption::MakeFuse)".`
 - 审计 FreeCAD 依据路径时，`/Users/li/...` 与 `/Users/admin/...` 只代表不同机器上的本地用户目录；只要后续仓库相对路径、源码文件、类/函数和关键短句一致，不得仅因 `li` / `admin` 用户目录不同判定依据路径不可追溯。若需要在当前机器复核，可把这两个前缀视为同一 FreeCAD 源码树根的等价用户目录前缀。
 
 ## FreeCAD 迁移实现纪律
@@ -122,13 +127,13 @@
 - 排查、检查和验证时只看本次任务相关文件与目录，不要扫描无关目录。
 - `cad-core` 功能变更优先使用：
   ```bash
-  cd ~/Chili3DProject/重构Chili/FreeCAD/cad-core
+  cd ~/Chili3DProject/FreeCAD/cad-core
   cmake --build build
   python3 -m unittest tests/test_mvp.py
   ```
 - 如果 build 目录不存在或 CMake 配置过期，先运行：
   ```bash
-  cd ~/Chili3DProject/重构Chili/FreeCAD/cad-core
+  cd ~/Chili3DProject/FreeCAD/cad-core
   cmake -S . -B build
   ```
 - 涉及 OCCT、FreeCAD 原生 runtime、oracle 采集或 GUI/Qt 的验证可能依赖本机环境；运行前先确认是否确实需要，sandbox 中的 FreeCADCmd/Qt 错误不能直接当作实现失败。
