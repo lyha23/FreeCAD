@@ -63,7 +63,7 @@ FreeCAD expected 必须来自本地 FreeCAD 行为或 focused probe，不能从 
 - `p5p6_scope_review_matrix.tsv`：S3 仅细化 `P5P6-SCOPE-007` / `P5P6-SCOPE-008` 的 FreeCAD 依据、cad-core evidence 和下一步；两行继续保持 `notCollected`。
 - `p5p6_blocker_queue.tsv`：保留 `P5P6-BLOCK-001` / `P5P6-BLOCK-002`，把它们作为可执行 FreeCAD oracle 队列，不关闭。
 - `p5p6_non_goal_registry.tsv`：明确 Python facade、GUI/live editing 和完整 solver 的 nonGoal 路由与 reopen 条件。
-- 步骤总览和主线入口只把 S3 标为已实现；S4-S6 仍待执行。
+- S3 完成时，步骤总览和主线入口只把 S3 标为已实现；后续步骤状态以 live 总览为准。
 
 ## 验收
 
