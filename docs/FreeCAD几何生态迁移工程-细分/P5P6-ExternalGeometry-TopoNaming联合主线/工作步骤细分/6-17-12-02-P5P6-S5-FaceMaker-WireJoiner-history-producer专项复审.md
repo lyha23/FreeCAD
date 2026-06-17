@@ -55,10 +55,11 @@ P5P6-S5 单独裁决 FaceMaker / WireJoiner 的 history producer 主路径和 fa
 
 ## 矩阵回写
 
-- `p5p6_scope_review_matrix.tsv`：`P5P6-SCOPE-009/010` 保持 `backendGap` 并细化 producer / diagnostic 边界；`P5P6-SCOPE-011/013` 保持 `releaseGate`；`P5P6-SCOPE-012` 保持 `unsupported`。
-- `p5p6_backend_gap_classification.tsv`：仍只保留 FaceMaker concrete producer 和 WireJoiner vertex multiplicity / child-wire parity 两条 P0 backendGap；summary-only 不得代替 producer。
-- `p5p6_blocker_queue.tsv`：`P5P6-BLOCK-003/004/006` 作为 S6 可执行项，写清 FreeCAD source 账本、cad-core 缺口、允许诊断边界和关闭条件。
-- 主线入口和步骤总览只把 S5 标为已实现；S6 仍是待执行发布闸门。
+- 本节记录 S5 当时的裁决；S6 已按 live matrix 关闭可实现项，当前状态以 `p5p6_scope_review_matrix.tsv` 和 S6 文档为准。
+- S5 当时的 `p5p6_scope_review_matrix.tsv` 回写：`P5P6-SCOPE-009/010` 保持 `backendGap` 并细化 producer / diagnostic 边界；`P5P6-SCOPE-011/013` 保持 `releaseGate`；`P5P6-SCOPE-012` 保持 `unsupported`。
+- S5 当时的 `p5p6_backend_gap_classification.tsv` 回写：只保留 FaceMaker concrete producer 和 WireJoiner vertex multiplicity / child-wire parity 两条 P0 backendGap；summary-only 不得代替 producer。
+- S5 当时的 `p5p6_blocker_queue.tsv` 回写：`P5P6-BLOCK-003/004/006` 作为交给 S6 的执行项，写清 FreeCAD source 账本、cad-core 缺口、允许诊断边界和关闭条件。
+- S5 当时主线入口和步骤总览只把 S5 标为已实现；S6 后续状态以 S6 文档和矩阵 live 结果为准。
 
 ## 验收
 
