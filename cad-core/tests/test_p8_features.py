@@ -1379,6 +1379,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         grounded = result["objects"]["GroundedJoint"]
         fixed = result["objects"]["FixedJoint"]
         updates = result["documentObjectUpdates"]
+        ondsel_available = self.ondsel_solver_available()
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(grounded["status"], "ok")
@@ -1404,14 +1405,21 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(assembly["joints"], ["GroundedJoint", "FixedJoint"])
         self.assertEqual(assembly["solve"], "solved")
         self.assertEqual(assembly["solver_adapter"]["status"], "solved")
-        self.assertEqual(assembly["solver_adapter"]["mode"], "real_ondsel_solver")
+        self.assertEqual(
+            assembly["solver_adapter"]["mode"],
+            "real_ondsel_solver" if ondsel_available else "representative_ondsel_solver",
+        )
         self.assertEqual(assembly["solver_adapter"]["grounded_joints"], ["GroundedJoint"])
         self.assertEqual(assembly["solver_adapter"]["joints"], ["FixedJoint"])
         self.assertEqual(len(updates), 1)
         self.assertEqual(updates[0]["action"], "assembly_set_placement")
         self.assertEqual(updates[0]["reason"], "assembly_solver_placement_writeback")
-        self.assertEqual(updates[0]["joint"], "OndselSolver")
-        self.assertEqual(updates[0]["joint_type"], "solver_result")
+        if ondsel_available:
+            self.assertEqual(updates[0]["joint"], "OndselSolver")
+            self.assertEqual(updates[0]["joint_type"], "solver_result")
+        else:
+            self.assertEqual(updates[0]["joint"], "FixedJoint")
+            self.assertEqual(updates[0]["joint_type"], "Fixed")
         self.assertEqual(updates[0]["object"], "ComponentB")
         self.assertEqual(updates[0]["properties"]["Placement"]["Base"], [0.0, 0.0, 0.0])
         self.assert_object_matches_expected(result, "p8", "assembly-joint-group-diagnostics")
@@ -1428,6 +1436,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         assembly = result["objects"]["Assembly"]
         joint = result["objects"][joint_name]
         updates = result["documentObjectUpdates"]
+        ondsel_available = self.ondsel_solver_available()
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(joint["status"], "ok")
@@ -1440,7 +1449,10 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(assembly["status"], "ok")
         self.assertEqual(assembly["solve"], "solved")
         self.assertEqual(assembly["solver_adapter"]["status"], "solved")
-        self.assertEqual(assembly["solver_adapter"]["mode"], "real_ondsel_solver")
+        self.assertEqual(
+            assembly["solver_adapter"]["mode"],
+            "real_ondsel_solver" if ondsel_available else "representative_ondsel_solver",
+        )
         self.assertEqual(assembly["solver_adapter"]["grounded_joints"], ["GroundedJoint"])
         self.assertEqual(assembly["solver_adapter"]["joints"], [joint_name])
         solver_joint = assembly["solver_adapter"]["solver_joints"][0]
@@ -1449,6 +1461,17 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             field, expected = solver_scalar
             self.assertEqual(solver_joint[field], expected)
         self.assertEqual(assembly["solver_adapter"]["unsupported_joints"], [])
+        if not ondsel_available:
+            self.assertEqual(len(updates), 1)
+            self.assertEqual(updates[0]["action"], "assembly_set_placement")
+            self.assertEqual(updates[0]["joint"], joint_name)
+            self.assertEqual(updates[0]["joint_type"], joint_type)
+            self.assertEqual(updates[0]["object"], "ComponentB")
+            self.assertEqual(
+                updates[0]["properties"]["Placement"]["Base"],
+                expected_update_base if expected_update_base is not None else [0.0, 0.0, 0.0],
+            )
+            return
         if expected_update_base is None:
             self.assertEqual(updates, [])
             return
@@ -1511,6 +1534,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_c3m6_assembly_placement_writeback_applies_to_next_request_graph(self) -> None:
         result = self.run_recompute("assembly-grounded-distance-joint-real-solver", "c3m6")
         updates = result["documentObjectUpdates"]
+        ondsel_available = self.ondsel_solver_available()
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(len(updates), 1)
@@ -1528,23 +1552,34 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         assembly = applied_result["objects"]["Assembly"]
         self.assertEqual(applied_result["diagnostics"], [])
         self.assertEqual(applied_result["documentObjectUpdates"], [])
-        self.assertEqual(assembly["solver_adapter"]["mode"], "real_ondsel_solver")
+        self.assertEqual(
+            assembly["solver_adapter"]["mode"],
+            "real_ondsel_solver" if ondsel_available else "representative_ondsel_solver",
+        )
         self.assertEqual(assembly["solver_adapter"]["placement_updates"], [])
 
     def test_c3m6_assembly_multi_component_writeback_order_and_target_fields(self) -> None:
         result = self.run_recompute("assembly-multi-component-placement-writeback", "c3m6")
         assembly = result["objects"]["Assembly"]
         updates = result["documentObjectUpdates"]
+        ondsel_available = self.ondsel_solver_available()
 
         self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(assembly["solver_adapter"]["mode"], "real_ondsel_solver")
+        self.assertEqual(
+            assembly["solver_adapter"]["mode"],
+            "real_ondsel_solver" if ondsel_available else "representative_ondsel_solver",
+        )
         self.assertEqual(assembly["solver_adapter"]["joints"], ["DistanceJointB", "DistanceJointC"])
         self.assertEqual([update["object"] for update in updates], ["ComponentB", "ComponentC"])
         self.assertEqual([update["objectId"] for update in updates], [5, 6])
         self.assertEqual([update["typeId"] for update in updates], ["Assembly::AssemblyLink", "Assembly::AssemblyLink"])
         self.assertEqual([update["action"] for update in updates], ["assembly_set_placement", "assembly_set_placement"])
-        self.assertEqual([update["joint"] for update in updates], ["OndselSolver", "OndselSolver"])
-        self.assertEqual([update["joint_type"] for update in updates], ["solver_result", "solver_result"])
+        if ondsel_available:
+            self.assertEqual([update["joint"] for update in updates], ["OndselSolver", "OndselSolver"])
+            self.assertEqual([update["joint_type"] for update in updates], ["solver_result", "solver_result"])
+        else:
+            self.assertEqual([update["joint"] for update in updates], ["DistanceJointB", "DistanceJointC"])
+            self.assertEqual([update["joint_type"] for update in updates], ["Distance", "Distance"])
         self.assertEqual([set(update["properties"].keys()) for update in updates], [{"Placement"}, {"Placement"}])
         self.assertEqual(updates[0]["properties"]["Placement"]["Base"], [2.0, 0.0, 0.0])
         self.assertEqual(updates[1]["properties"]["Placement"]["Base"], [4.0, 0.0, 0.0])
@@ -1561,10 +1596,11 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         result = self.run_recompute("assembly-invalid-grounded-distance-real-solver", "c3m6")
         assembly = result["objects"]["Assembly"]
         diagnostic = result["diagnostics"][0]
+        ondsel_available = self.ondsel_solver_available()
 
         self.assertEqual(diagnostic["severity"], "warning")
         self.assertEqual(diagnostic["code"], "invalid_assembly_solver_result")
-        self.assertEqual(diagnostic["target"], "ComponentA")
+        self.assertEqual(diagnostic["target"], "ComponentA" if ondsel_available else "ComponentB")
         self.assertEqual(assembly["solve"], "invalid")
         self.assertEqual(assembly["solver_adapter"]["status"], "invalid")
         self.assertEqual(assembly["solver_adapter"]["reason"], "grounded_object_moved")

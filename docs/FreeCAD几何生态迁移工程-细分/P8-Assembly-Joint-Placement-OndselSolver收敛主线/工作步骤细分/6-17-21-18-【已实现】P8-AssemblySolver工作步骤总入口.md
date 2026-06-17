@@ -2,9 +2,9 @@
 
 ## 目标
 
-把 P8 Assembly solver 从“输入元数据 + `solve=not_migrated` 文档边界”收敛为可验证的 request-local solver 子集：先复核 live code、FreeCAD authority 和 focused tests，再决定哪些 releaseGate 进入发布回写，哪些 unsupported JointType 进入 C++ 实现，哪些缺 oracle 的路径保持 `notCollected`。
+把 P8 Assembly solver 从旧的静态发布口径收敛为可验证的 request-local solver 子集：先复核 live code、FreeCAD authority 和 focused tests，再决定哪些 releaseGate 进入发布回写，哪些 unsupported JointType 进入 C++ 实现，哪些缺 oracle 的路径保持 `notCollected`。
 
-当前收口状态：本文只是索引文件，创建和链接校验已完成；S0 已完成声明口径与 live 基线复核，结论是正式 P8 文档、C ABI capabilities、focused tests、fixtures 与当前 C++ 之间存在 publication drift。S1 已完成 FreeCAD / cad-core source authority 候选补证。S2 已完成范围准入与 blocker 矩阵裁决：当前没有 evidence-backed backendGap，缺 oracle 的保持 notCollected，复杂 JointType 保持 unsupported，GUI / session / 完整 Link 写回保持 nonGoal。S3 已完成 Ondsel adapter 专项复审，确认当前 build 为 `CAD_CORE_HAS_ONDSEL_SOLVER=0` 时 focused real-solver test 会走 representative fallback，capability wording 与 test route 需 S6 按 build mode 收口。S4 已完成 PlacementWriteback 生命周期专项复审，确认 `documentObjectUpdates` 只表达 `Placement` 更新建议、下一请求由前端 graph 消费、invalid grounded rejection 会清空 updates；本轮 focused test 失败归因 S3 build-mode/test-route，native oracle 仍 `notCollected`。S5 已完成 JointType 裁决：Fixed / Revolute / Slider / Ball / Distance / Angle 是当前 releaseGate 子集，Cylindrical / Parallel / Perpendicular / RackPinion / Screw / Gears / Belt 仍为 diagnostic-only，复杂 Distance geometry 仍 `notCollected`。S6 仍待执行，尚未完成 oracle、实现或发布闸门；不得把整个主线写成“已实现”。
+当前收口状态：本文只是索引文件，创建和链接校验已完成；S0 已完成声明口径与 live 基线复核，结论是正式 P8 文档、C ABI capabilities、focused tests、fixtures 与当前 C++ 之间的 publication drift 已收敛为 build-mode aware 口径。S1 已完成 FreeCAD / cad-core source authority 候选补证。S2 已完成范围准入与 blocker 矩阵裁决：当前没有 evidence-backed backendGap，缺 oracle 的保持 notCollected，复杂 JointType 保持 unsupported，GUI / session / 完整 Link 写回保持 nonGoal。S3 已完成 Ondsel adapter 专项复审，build-mode aware capability wording 与 test route 已对齐，当前 linked build 发布 real Ondsel adapter，unlinked build 发布 representative fallback。S4 已完成 PlacementWriteback 生命周期专项复审，`documentObjectUpdates` 只表达 `Placement` 更新建议、下一请求由前端 graph 消费、invalid grounded rejection 会清空 updates。S5 已完成 JointType 裁决：Fixed / Revolute / Slider / Ball / Distance / Angle 是当前 releaseGate 子集，Cylindrical / Parallel / Perpendicular / RackPinion / Screw / Gears / Belt 仍为 diagnostic-only，复杂 Distance geometry 仍 `notCollected`。S6 已完成 oracle、实现和发布闸门收口；native FreeCAD solver placement oracle 仍未入库，不能把 representative fallback 当 native golden。
 
 ## 步骤索引
 
@@ -16,7 +16,7 @@
 | S3 | [OndselSolver 适配专项复审](6-17-21-22-【已实现】P8-AssemblySolver-S3-OndselSolver适配专项复审.md) | 已实现 | 已复核 real solver、representative fallback、CMake link 和 diagnostics；unlinked build 缺口路由 S6 |
 | S4 | [PlacementWriteback 生命周期专项复审](6-17-21-23-【已实现】P8-AssemblySolver-S4-PlacementWriteback生命周期专项复审.md) | 已实现 | 已复核 writeback updates、grounded validation、下一请求应用和多组件顺序；build-mode 缺口路由 S6 |
 | S5 | [JointType 覆盖与 unsupported 矩阵专项复审](6-17-21-24-【已实现】P8-AssemblySolver-S5-JointType覆盖与unsupported矩阵专项复审.md) | 已实现 | 已裁决 supported / releaseGate 子集、diagnostic-only JointType 和复杂 Distance 边界 |
-| S6 | [Oracle 实现与发布闸门](6-17-21-25-P8-AssemblySolver-S6-Oracle实现与发布闸门.md) | 待执行 | 消费 blocker，落 C++ / expected / docs / capability 发布 |
+| S6 | [Oracle 实现与发布闸门](6-17-21-25-【已实现】P8-AssemblySolver-S6-Oracle实现与发布闸门.md) | 已实现 | 消费 blocker，落 C++ / expected / docs / capability 发布 |
 
 ## 执行顺序
 
@@ -31,8 +31,8 @@
 | 矩阵 | 当前用途 | 当前结论 |
 | --- | --- | --- |
 | `p8_assembly_solver_source_candidates.tsv` | 源码候选 | S1 已补齐 P8ASM-CAND-001..018；候选不等于状态裁决 |
-| `p8_assembly_solver_scope_review_matrix.tsv` | scope 状态 | S4 已回写 P8ASM-SCOPE-002/003/005/006：writeback 是 stateless update 建议，invalid rejection 已有 gate，oracle 仍 notCollected |
-| `p8_assembly_solver_blocker_queue.tsv` | 阻塞队列 | S5 已回写 P8ASM-BLOCK-005：unsupported JointType matrix 已裁决，capability / focused matrix 和实现项留给 S6 |
+| `p8_assembly_solver_scope_review_matrix.tsv` | scope 状态 | S6 已回写 P8ASM-SCOPE-001..009：build-mode aware publication、writeback、unsupported matrix 和 native oracle 缺口已与当前代码一致 |
+| `p8_assembly_solver_blocker_queue.tsv` | 阻塞队列 | S6 已回写 P8ASM-BLOCK-001..006：文档、capability、oracle 和 diagnostic matrix 均已收口 |
 | `p8_assembly_solver_non_goal_registry.tsv` | 非目标 | S2 已明确 GUI、跨请求 session、完整 Link 写回、Worker/WASM、无 oracle 复杂 joint 的排除和 reopen 条件 |
 | `p8_assembly_solver_backend_gap_classification.tsv` | 聚合 | S4 已补充 `releaseGate_placement_writeback_contract` 结论；不代表已有 C++ backendGap |
 
@@ -49,7 +49,7 @@
 ```bash
 git diff --check
 awk -F '\t' 'FNR==1 {n=NF; next} NF!=n {print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END {exit bad}' docs/FreeCAD几何生态迁移工程-细分/P8-Assembly-Joint-Placement-OndselSolver收敛主线/矩阵/*.tsv
-rg -n "solve=not_migrated|representative_solver_adapter|ondsel_solver_adapter|assembly_set_placement" docs/CADCore方案/细化方案 cad-core/src cad-core/tests
+rg -n "representative_solver_adapter|ondsel_solver_adapter|assembly_set_placement|unsupported_joint_matrix" docs/CADCore方案/细化方案 cad-core/src cad-core/tests
 ```
 
 代码修改后本轮 focused 验收优先使用：

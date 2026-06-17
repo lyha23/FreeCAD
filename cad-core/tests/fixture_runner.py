@@ -10,10 +10,13 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BIN = ROOT / "build" / "cad-core"
+BUILD_DIR = Path(os.environ.get("CAD_CORE_TEST_BUILD_DIR", ROOT / "build"))
+if not BUILD_DIR.is_absolute():
+    BUILD_DIR = ROOT / BUILD_DIR
+BIN = BUILD_DIR / "cad-core"
 FFI_LIB_CANDIDATES = [
-    ROOT / "build" / "libcad_core_ffi.dylib",
-    ROOT / "build" / "libcad_core_ffi.so",
+    BUILD_DIR / "libcad_core_ffi.dylib",
+    BUILD_DIR / "libcad_core_ffi.so",
 ]
 
 
@@ -136,6 +139,9 @@ class CadCoreFixtureTestCase(unittest.TestCase):
             return json.loads(raw)
         finally:
             library.cad_core_free_result(ctypes.byref(result))
+
+    def ondsel_solver_available(self) -> bool:
+        return bool(self.run_capabilities_ffi()["assembly"]["ondsel_solver_adapter"]["available"])
 
     def call_export_ffi(self, request: dict) -> tuple[int, dict | None, bytes, str]:
         library = self.ffi_library()
