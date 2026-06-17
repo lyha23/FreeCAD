@@ -1,0 +1,6 @@
+category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
+P5P6-BG-TOPO	MapperHistory and ElementMap lifecycle	P0	P5P6-SCOPE-001;P5P6-SCOPE-002	no	Implement event schema and ElementMap APIs before producer/consumer work
+P5P6-BG-PART-HISTORY	FaceMaker and WireJoiner history producer	P0	P5P6-SCOPE-003;P5P6-SCOPE-004	no	Move summary evidence into consumable history events and keep ambiguous cases diagnostic-only
+P5P6-BG-RUNTIME-RESOLVER	Unified reference resolver and ReferenceShadow evidence	P0	P5P6-SCOPE-005;P5P6-SCOPE-006;P5P6-SCOPE-010	no	Define resolver result enum and route LinkSub/ExternalGeometry/UpToFace through it
+P5P6-BG-SKETCHER-EXTGEO	ExternalGeometryExtension state machine	P1	P5P6-SCOPE-007;P5P6-SCOPE-008;P5P6-SCOPE-009;P5P6-SCOPE-010	no after oracle	Collect missing oracle first, then implement Defining/Frozen/Detached/Missing/Sync consumers
+P5P6-BG-CONSUMER-SWITCH	Sketch InternalShape and ExternalGeometry consumer switch	P1	P5P6-SCOPE-011;P5P6-SCOPE-012	no	Switch only after topo/part/runtime foundations land; delete old fallback at release gate
