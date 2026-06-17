@@ -91,6 +91,8 @@ TRANSFORMED_TYPES = {
 }
 
 BODY_RESULT_TARGET_TYPES = DRESS_UP_TYPES | TRANSFORMED_TYPES
+EXTERNAL_GEOMETRY_FLAG_NAMES = ("Defining", "Frozen", "Detached", "Missing", "Sync")
+
 
 class UnsupportedFixture(RuntimeError):
     pass
@@ -201,6 +203,32 @@ def list_field(value: dict, *names: str) -> list:
         if item is not None:
             return list(item)
     return []
+
+
+def external_geometry_flags_from_item(item: dict) -> set[str]:
+    flags: set[str] = set()
+
+    def add_flag(name: str) -> None:
+        if name in EXTERNAL_GEOMETRY_FLAG_NAMES:
+            flags.add(name)
+
+    for field in ("ExternalFlags", "Flags"):
+        raw_flags = item.get(field)
+        if isinstance(raw_flags, list):
+            for raw_flag in raw_flags:
+                if isinstance(raw_flag, str):
+                    add_flag(raw_flag)
+        elif isinstance(raw_flags, str):
+            add_flag(raw_flags)
+        elif isinstance(raw_flags, int) and raw_flags >= 0:
+            for bit, name in enumerate(EXTERNAL_GEOMETRY_FLAG_NAMES):
+                if raw_flags & (1 << bit):
+                    flags.add(name)
+
+    for name in EXTERNAL_GEOMETRY_FLAG_NAMES:
+        if item.get(name) is True:
+            flags.add(name)
+    return flags
 
 
 def resolve_external_subname(created: dict[str, Any], target_name: str, subname: str) -> tuple[str, str]:
@@ -402,10 +430,16 @@ def set_sketch_external_geometry(created: dict[str, Any], obj: Any, value: Any) 
         # "ObjectName" and "SubName", then stores ExternalGeometry.setValues(Objects,
         # SubElements). In oracle mode, feed StableSubList first to collect post-resolution
         # geometry for CAD Core stable-subname fixtures.
+        flags = external_geometry_flags_from_item(item)
         for subname in list_field(item, "StableSubList", "SubList"):
             external_target_name, external_subname = resolve_external_subname(created, target_name, subname)
             try:
-                obj.addExternal(external_target_name, external_subname)
+                # FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObjectPyImp.cpp
+                # ::SketchObjectPy::addExternal(), parses "ss|O!O!" and forwards "defining" to
+                # /home/user/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+                # ::SketchObject::addExternal(), which sets ExternalGeometryExtension::Defining
+                # during rebuildExternalGeometry().
+                obj.addExternal(external_target_name, external_subname, "Defining" in flags)
             except Exception as exc:
                 raise UnsupportedFixture(
                     f"Sketch ExternalGeometry cannot add {external_target_name}.{external_subname}"
@@ -1217,6 +1251,41 @@ def sketch_external_geometry_counts(obj: Any) -> dict[str, int]:
     }
 
 
+def sketch_external_geometry_flag_payload(obj: Any) -> dict[str, Any]:
+    try:
+        import Sketcher  # type: ignore
+    except Exception:
+        return {"flags": [], "flag_counts": {name: 0 for name in EXTERNAL_GEOMETRY_FLAG_NAMES}}
+
+    flags_by_geometry = []
+    flag_counts = {name: 0 for name in EXTERNAL_GEOMETRY_FLAG_NAMES}
+    construction_count = 0
+    for geometry in sketch_external_geometry(obj):
+        try:
+            facade = Sketcher.ExternalGeometryFacade(geometry)
+        except Exception:
+            continue
+        flags = []
+        for name in EXTERNAL_GEOMETRY_FLAG_NAMES:
+            try:
+                if facade.testFlag(name):
+                    flags.append(name)
+                    flag_counts[name] += 1
+            except Exception:
+                continue
+        try:
+            if bool(facade.Construction):
+                construction_count += 1
+        except Exception:
+            pass
+        flags_by_geometry.append(flags)
+    return {
+        "flags": flags_by_geometry,
+        "flag_counts": flag_counts,
+        "construction_count": construction_count,
+    }
+
+
 def sketch_summary(obj: Any) -> dict:
     shape = getattr(obj, "Shape", None)
     internal_shape = getattr(obj, "InternalShape", None)
@@ -1248,6 +1317,7 @@ def sketch_summary(obj: Any) -> dict:
             "shape": "empty",
             "raw_edge_count": len(getattr(shape, "Edges", [])),
         }
+    payload["sketch_external"] = sketch_external_geometry_flag_payload(obj)
     return payload
 
 
@@ -1464,6 +1534,11 @@ def compare_object_expected(existing: dict, generated: dict) -> list[str]:
         errors.append("volume")
     if "topology_counts" in existing and existing["topology_counts"] != generated["topology_counts"]:
         errors.append("topology_counts")
+    if "sketch_external" in existing:
+        generated_external = generated.get("sketch_external", {})
+        for key, expected_value in existing["sketch_external"].items():
+            if generated_external.get(key) != expected_value:
+                errors.append(f"sketch_external.{key}")
     return errors
 
 

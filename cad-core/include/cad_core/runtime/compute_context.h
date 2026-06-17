@@ -5,6 +5,7 @@
 #include "cad_core/part/topo_shape.h"
 
 #include <TopoDS_Shape.hxx>
+#include <gp_Dir.hxx>
 #include <gp_Trsf.hxx>
 #include <nlohmann/json.hpp>
 
@@ -44,6 +45,11 @@ struct ShapeValue
     // sets the raw sketch "Shape" separately from PartDesign's later profile face construction.
     // cad-core keeps the raw sketch shape in shape and the PartDesign-ready closed face here.
     std::optional<TopoDS_Shape> profileShape;
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.cpp
+    // ::ProfileBased::getProfileNormal(), for "Part::Part2DObject", returns the object's
+    // Placement rotation applied to "Base::Vector3d(0, 0, 1)" instead of deriving the normal from
+    // the generated profile face orientation.
+    std::optional<gp_Dir> profileNormal;
     // FreeCAD:
     // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::buildInternals(),
     // writes "InternalShape" from FaceMakerBuildFace and WireJoiner open-wire results.

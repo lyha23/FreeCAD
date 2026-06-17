@@ -87,6 +87,29 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "recompute": {"objs": ["Sketch"]},
         }
 
+    def external_geometry_pad_payload(self, flags: list[str]) -> dict:
+        payload = self.external_geometry_state_payload(flags)
+        payload["Objects"].append(
+            {
+                "Name": "Pad",
+                "ID": 3,
+                "TypeId": "PartDesign::Pad",
+                "Properties": {
+                    "Profile": {
+                        "PropertyType": "App::PropertyLinkSub",
+                        "value": "Sketch",
+                        "SubList": [],
+                    },
+                    "Type": "Length",
+                    "Length": 4,
+                    "Reversed": False,
+                    "SideType": "One side",
+                },
+            }
+        )
+        payload["recompute"] = {"objs": ["Sketch", "Pad"]}
+        return payload
+
     def native_external_geo_state_payload(self, flags: list[str]) -> dict:
         ref = "MissingBox.Face5"
         old_geometry = [
@@ -2928,8 +2951,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assert_object_matches_expected(result, "p5", fixture)
 
     def test_p5_external_geometry_defining_participates_in_profile(self) -> None:
-        result = self.run_payload(self.external_geometry_state_payload(["Defining"]))
+        result = self.run_recompute("sketch-external-defining-profile", "p5")
         sketch = result["objects"]["Sketch"]
+        expected = self.expected_freecad("p5", "sketch-external-defining-profile")
+        sketch_expected = expected["objects"]["Sketch"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["status"], "ok")
@@ -2939,6 +2964,25 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["raw_edge_count"], 4)
         self.assertEqual(sketch["external_geometry_count"], 4)
         self.assertEqual(sketch["external_geometry_state_counts"]["defining"], 1)
+        self.assertEqual(sketch_expected["sketch_external"]["flag_counts"]["Defining"], 4)
+        self.assertEqual(sketch_expected["sketch_external"]["construction_count"], 4)
+        self.assert_object_matches_expected(result, "p5", "sketch-external-defining-profile")
+
+    def test_p5_reference_only_external_geometry_does_not_build_profile(self) -> None:
+        result = self.run_payload(self.external_geometry_pad_payload([]))
+        sketch = result["objects"]["Sketch"]
+        pad = result["objects"]["Pad"]
+        diagnostics = result["diagnostics"]
+
+        self.assertEqual([item["code"] for item in diagnostics], ["open_profile"])
+        self.assertEqual(diagnostics[0]["object"], "Pad")
+        self.assertEqual(diagnostics[0]["property"], "Profile")
+        self.assertEqual(sketch["status"], "ok")
+        self.assertFalse(sketch["profile_ready"])
+        self.assertEqual(sketch["edge_count"], 0)
+        self.assertEqual(sketch["external_geometry_count"], 4)
+        self.assertEqual(sketch["external_geometry_state_counts"]["defining"], 0)
+        self.assertEqual(pad["status"], "error")
 
     def test_p5_external_geometry_frozen_and_detached_do_not_follow_source(self) -> None:
         for flags, state in [(["Frozen"], "frozen"), (["Detached"], "detached")]:

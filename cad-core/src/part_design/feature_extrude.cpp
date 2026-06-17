@@ -1512,11 +1512,14 @@ std::optional<DirectionSpec> computeDirection(const app::DocumentObject& object,
                                               runtime::ComputeContext& context,
                                               const app::Link& profileLink,
                                               const TopoDS_Shape& profile,
-                                              AddSubMode mode)
+                                              AddSubMode mode,
+                                              const std::optional<gp_Dir>& profileObjectNormal)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp::FeatureExtrude::computeDirection(),
     // falls back to the sketch normal, reads "UseCustomVector", "Direction", "ReferenceAxis" and later applies "AlongSketchNormal".
-    gp_Dir sketchNormal = profileNormal(profile).value_or(gp_Dir(0.0, 0.0, 1.0));
+    gp_Dir sketchNormal = profileObjectNormal.value_or(
+        profileNormal(profile).value_or(gp_Dir(0.0, 0.0, 1.0))
+    );
     if (mode == AddSubMode::Subtractive) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeaturePocket.cpp::Pocket::getProfileNormal(),
         // returns FeatureExtrude::getProfileNormal() * -1.
@@ -1971,7 +1974,16 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
     }
 
     const bool reversed = readBoolProperty(object, "Reversed", false);
-    auto direction = computeDirection(object, context, *profileLink, *profileShape, mode);
+    auto direction = computeDirection(
+        object,
+        context,
+        *profileLink,
+        *profileShape,
+        mode,
+        shapeIt->second.kind == runtime::ShapeValue::Kind::Sketch
+            ? shapeIt->second.profileNormal
+            : std::optional<gp_Dir> {}
+    );
     if (!direction) {
         return std::nullopt;
     }

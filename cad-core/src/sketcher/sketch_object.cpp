@@ -357,6 +357,16 @@ std::optional<gp_Trsf> readSketchPlaneFramePlacement(
     return placement;
 }
 
+gp_Dir sketchProfileNormalFromPlacement(const gp_Trsf& placement)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.cpp
+    // ::ProfileBased::getProfileNormal(), for "Part::Part2DObject", multiplies the sketch
+    // Placement rotation into "Base::Vector3d(0, 0, 1)".
+    gp_Dir normal(0.0, 0.0, 1.0);
+    normal.Transform(placement);
+    return normal;
+}
+
 }  // namespace
 
 void executeSketchObject(const app::DocumentObject& object, runtime::ComputeContext& context)
@@ -584,6 +594,7 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
 
     runtime::ShapeValue shapeValue {runtime::ShapeValue::Kind::Sketch, *rawShape};
     shapeValue.profileShape = profileShape;
+    shapeValue.profileNormal = sketchProfileNormalFromPlacement(hasPlacement ? placement : gp_Trsf {});
     shapeValue.internalShape = internalShape;
     shapeValue.profileRequiresSubshapeSelection = profileFace.requiresSubshapeSelection;
     const bool hasNonEmptyInternalShape = internalShape && !internalShape->IsNull();

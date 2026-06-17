@@ -5,7 +5,8 @@
 ## S6 当前状态
 
 - P5P6-S6 已关闭 FaceMaker concrete producer、WireJoiner recoverable child-wire/current-member parity 和 fallback retirement audit：`P5P6-SCOPE-009/010/011` 为 supported，`P5P6-SCOPE-013` 为 closed。
-- `P5P6-SCOPE-007/008` 继续 `notCollected`：本机 `/home/user/.local/bin/freecadcmd` 可启动并报告 `FreeCAD 1.2.0 Revision: 20260519 (Git shallow)`，但最小 `Sketch.addExternal('Box','Face1')` probe 退出并输出 `Application unexpectedly terminated`，因此不能伪造 Defining / Frozen / Sync / Detached / Missing native oracle。
+- `P5P6-SCOPE-007` 已关闭为 `supported`：collector 通过 `Sketch.addExternal(..., defining=True)` 采集 Defining external profile native oracle；checked-in expected 证明 FreeCAD 的 projected `ExternalGeo` 仍为 construction，但带 `Defining` 标志并参与 `InternalShape` / downstream Pad profile。cad-core 已按 FreeCAD `ProfileBased::getProfileNormal()` 的 `Part2DObject` placement-normal 语义修正外部 Defining-only sketch 的 Pad 方向。
+- `P5P6-SCOPE-008` 继续 `notCollected`：Frozen / Sync / Detached / Missing source-changed 和 deleted-target 原生状态机 oracle 仍待可靠 probe；本轮不扩大到 BLOCK-002。
 - `P5P6-SCOPE-012` 已关闭为 `supported`：`Profile.StableSubList=InternalFaceN` 可在同一请求内通过 `Sketch.InternalShape` NamedShape / ElementMap evidence 解析；缺证据、不存在或非 face 仍输出稳定 diagnostic，且不引入跨请求 InternalShape BREP 状态。
 - 因仍有 notCollected blocker，本主线不能标为发布完成；S6 文档只记录可验证的部分收口。
 
@@ -89,7 +90,7 @@
 2. 补 FaceMaker / WireJoiner history producer：S6 已把 FaceMaker pre-split / splitter concrete evidence、WireJoiner child-wire/current-member ledger 升级为 topo 可消费 history；`noOriginal` 过滤、open-wire carry-through、bounded owner slot、self-intersection split、source edge 一对多 fragment 和 source edge deleted 均走 producer evidence 或 stable diagnostic。
 3. 补 reference resolver：在 `runtime` 统一处理旧 `SubList`、`StableSubList`、source-prefixed key、mapped postfix、`ReferenceShadow` fingerprint 和 split/deleted diagnostics，产出前端可应用的 `elementReferenceUpdates`。
 4. 补 `ExternalGeometryExtension` 状态机：在 `document` 解析并在 `features/sketch_object.*` 消费 Defining / Frozen / Detached / Missing / Sync；Frozen 可复用冻结几何或返回明确 diagnostics，Missing 必须走 resolver 和 shadow evidence，Detached 不再追随源对象，Sync 控制是否刷新投影。
-5. 切换 Sketch InternalShape / ExternalGeometry 主路径：InternalShape 的 `InternalFaceN` / `InternalEdgeN` / `InternalVertexN` 已通过 topo producer evidence、request-local ElementMap stable selector 或 stable diagnostics 解析；ExternalGeometry projection 的 Defining / Frozen / Sync / Detached / Missing native oracle 仍待可靠 `Sketch.addExternal()` probe。
+5. 切换 Sketch InternalShape / ExternalGeometry 主路径：InternalShape 的 `InternalFaceN` / `InternalEdgeN` / `InternalVertexN` 已通过 topo producer evidence、request-local ElementMap stable selector 或 stable diagnostics 解析；ExternalGeometry projection 的 Defining native oracle 已采集并对齐，Frozen / Sync / Detached / Missing native state-machine oracle 仍待可靠 probe。
 6. 删除临时 fallback：S6 已关闭本轮 fallback audit；保留的 `facemaker_history:summary_only`、simple-alias `internalElementMapForSketch` 和 `wire_joiner_current_member_vertex_multiplicity_blocked` 都是 diagnostic / bounded baseline，不得按 fixture 名、几何类型、source index、split order、输出排序或面积长度猜测扩展。
 
 ## 验收矩阵
@@ -98,7 +99,7 @@
 | --- | --- |
 | ExternalGeometry indexed edge / face / vertex | 旧 subname 通过 ElementMap 更新到当前 subname，投影结果与 FreeCAD oracle 对齐 |
 | source-prefixed stable key | Body / Pad / Pocket / Sketch source key 经 MapperHistory 解析，不从当前输出反推 |
-| Defining external profile | defining external geometry 能参与 profile 语义，且与 construction / reference-only 外部几何区分；当前 native oracle 仍 notCollected |
+| Defining external profile | supported：FreeCAD expected 记录 4 个 projected `ExternalGeo` 均为 construction 且带 `Defining`，Sketch `InternalShape` 有 1 face，downstream Pad 为 10x5x4；cad-core focused test 同时覆盖 reference-only 不参与 profile 并触发 Pad `open_profile` diagnostic |
 | Frozen / Sync | 源对象变化时 Frozen 不刷新或给出冻结能力诊断，Sync 控制投影刷新建议；当前 native source-changed oracle 仍 notCollected |
 | Detached | detached geometry 不再跟随源对象更新，但仍保留可显示 / 可约束几何；当前 native state-machine oracle 仍 notCollected |
 | Missing | 缺失对象、缺失 subshape、deleted target 输出结构化 diagnostics，并尽量用 ReferenceShadow / MapperHistory 给出恢复建议；当前部分 native state oracle 仍 notCollected |
@@ -117,7 +118,7 @@
 
 ## 完成判定
 
-- P5 / P6 中 InternalShape 和 stable subname 的 producer 路径已能引用同一个 MapperHistory / ElementMap 账本；ExternalGeometry Defining / Frozen / Sync / Detached / Missing native state oracle 仍是未完成发布条件。
+- P5 / P6 中 InternalShape 和 stable subname 的 producer 路径已能引用同一个 MapperHistory / ElementMap 账本；ExternalGeometry Defining native oracle 已关闭，Frozen / Sync / Detached / Missing native state oracle 仍是未完成发布条件。
 - FaceMaker / WireJoiner 的关键 ownership 不再只作为 summary 旁路存在，而能被 `NamedShape` / `ElementMap` 或诊断消费。
 - 旧引用恢复有统一 resolver，成功时返回当前 subname 和写回建议，失败时返回稳定诊断。
-- 相关 fixture / oracle 覆盖成功恢复、split 无法唯一恢复、deleted target、InternalShape split / deleted 传播；Missing / Detached / Frozen / Sync 与 Defining 的 native oracle 仍因当前 `Sketch.addExternal()` probe 崩溃保持 `notCollected`。
+- 相关 fixture / oracle 覆盖成功恢复、split 无法唯一恢复、deleted target、InternalShape split / deleted 传播和 Defining external profile；Missing / Detached / Frozen / Sync 的 native state oracle 仍保持 `notCollected`。
