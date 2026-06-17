@@ -2968,6 +2968,65 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch_expected["sketch_external"]["construction_count"], 4)
         self.assert_object_matches_expected(result, "p5", "sketch-external-defining-profile")
 
+    def test_p5_external_geometry_frozen_source_change_matches_freecad_oracle(self) -> None:
+        result = self.run_recompute("sketch-external-frozen-source-changed", "p5")
+        expected = self.expected_freecad("p5", "sketch-external-frozen-source-changed")
+        sketch_expected = expected["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual(result["objects"]["Sketch"]["external_geometry_state_counts"]["frozen"], 1)
+        self.assertEqual(sketch_expected["sketch_external"]["flag_counts"]["Frozen"], 4)
+        self.assertEqual(sketch_expected["sketch_external"]["flag_counts"]["Sync"], 0)
+        self.assert_object_matches_expected(result, "p5", "sketch-external-frozen-source-changed")
+
+    def test_p5_external_geometry_frozen_sync_source_change_matches_freecad_oracle(self) -> None:
+        result = self.run_recompute("sketch-external-frozen-sync-source-changed", "p5")
+        expected = self.expected_freecad("p5", "sketch-external-frozen-sync-source-changed")
+        sketch_expected = expected["objects"]["Sketch"]
+        updates = result["documentObjectUpdates"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual([item["reason"] for item in updates], ["external_geometry_flags_sync"])
+        sub_set = updates[0]["properties"]["ExternalGeometry"]["SubSet"]
+        self.assertEqual(sub_set[0]["ExternalFlags"], ["Defining", "Frozen"])
+        self.assertEqual(result["objects"]["Sketch"]["external_geometry_state_counts"]["sync"], 1)
+        self.assertEqual(sketch_expected["sketch_external"]["flag_counts"]["Frozen"], 4)
+        self.assertEqual(sketch_expected["sketch_external"]["flag_counts"]["Sync"], 0)
+        self.assert_object_matches_expected(result, "p5", "sketch-external-frozen-sync-source-changed")
+
+    def test_p5_external_geometry_detached_source_change_matches_freecad_oracle(self) -> None:
+        result = self.run_recompute("sketch-external-detached-source-changed", "p5")
+        expected = self.expected_freecad("p5", "sketch-external-detached-source-changed")
+        sketch_expected = expected["objects"]["Sketch"]
+        updates = result["documentObjectUpdates"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual([item["reason"] for item in updates], ["external_geometry_detach"])
+        properties = updates[0]["properties"]
+        self.assertEqual(properties["ExternalGeometry"]["SubSet"], [])
+        for item in properties["ExternalGeo"]["Geometry"]:
+            self.assertEqual(item["ExternalFlags"], ["Defining"])
+            self.assertNotIn("Ref", item)
+        self.assertEqual(result["objects"]["Sketch"]["external_geometry_state_counts"]["detached"], 1)
+        self.assertEqual(sketch_expected["sketch_external"]["flag_counts"]["Detached"], 0)
+        self.assert_object_matches_expected(result, "p5", "sketch-external-detached-source-changed")
+
+    def test_p5_external_geometry_missing_source_recovery_matches_freecad_oracle(self) -> None:
+        result = self.run_recompute("sketch-external-missing-source-recovered", "p5")
+        expected = self.expected_freecad("p5", "sketch-external-missing-source-recovered")
+        sketch_expected = expected["objects"]["Sketch"]
+        updates = result["documentObjectUpdates"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual([item["reason"] for item in updates], ["external_geometry_flags_sync"])
+        sub_set = updates[0]["properties"]["ExternalGeometry"]["SubSet"]
+        self.assertEqual(sub_set[0]["ExternalFlags"], ["Defining"])
+        self.assertEqual(result["objects"]["Sketch"]["external_geometry_state_counts"]["missing"], 1)
+        self.assertEqual(result["objects"]["Sketch"]["external_geometry_state_counts"]["recovered_missing"], 1)
+        self.assertEqual(sketch_expected["sketch_external"]["flag_counts"]["Missing"], 0)
+        self.assert_object_matches_expected(result, "p5", "sketch-external-missing-source-recovered")
+
     def test_p5_reference_only_external_geometry_does_not_build_profile(self) -> None:
         result = self.run_payload(self.external_geometry_pad_payload([]))
         sketch = result["objects"]["Sketch"]

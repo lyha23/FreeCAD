@@ -397,6 +397,58 @@ def set_sketch_geometry(FreeCAD: Any, obj: Any, value: Any) -> None:
         obj.addGeometry(geometry, construction)
 
 
+def external_geometry_facade(geometry: Any) -> Any:
+    import Sketcher  # type: ignore
+
+    return Sketcher.ExternalGeometryFacade(geometry)
+
+
+def apply_external_geometry_metadata(geometry: Any, item: dict, index: int) -> Any:
+    facade = external_geometry_facade(geometry)
+    try:
+        facade.Construction = bool(item.get("construction", True))
+    except Exception as exc:
+        raise UnsupportedFixture(f"failed to set ExternalGeo construction flag: {exc}") from exc
+    try:
+        facade.Id = int(item.get("Id", index + 1))
+    except Exception as exc:
+        raise UnsupportedFixture(f"failed to set ExternalGeo Id: {exc}") from exc
+    ref = item.get("Ref")
+    if isinstance(ref, str):
+        try:
+            facade.Ref = ref
+        except Exception as exc:
+            raise UnsupportedFixture(f"failed to set ExternalGeo Ref {ref}: {exc}") from exc
+    for flag in external_geometry_flags_from_item(item):
+        try:
+            facade.setFlag(flag, True)
+        except Exception as exc:
+            raise UnsupportedFixture(f"failed to set ExternalGeo flag {flag}: {exc}") from exc
+    return facade.Geometry
+
+
+def set_sketch_external_geo(FreeCAD: Any, obj: Any, value: Any) -> None:
+    if not isinstance(value, dict) or value.get("PropertyType") != "Part::PropertyGeometryList":
+        raise UnsupportedFixture("Sketch ExternalGeo must be Part::PropertyGeometryList")
+    items = list_field(value, "Geometry", "Values", "Items")
+    if not items:
+        raise UnsupportedFixture("Sketch ExternalGeo must contain Geometry items")
+
+    geos = []
+    for index, item in enumerate(items):
+        if not isinstance(item, dict):
+            raise UnsupportedFixture("Sketch ExternalGeo Geometry items must be objects")
+        geometry, _construction = sketch_geometry_value(FreeCAD, item)
+        geos.append(apply_external_geometry_metadata(geometry, item, index))
+
+    # FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+    # ::SketchObject::fixMissingAxisInExternalGeo() expects the first two ExternalGeo entries to
+    # be the root horizontal / vertical axes. CAD Core fixtures only declare persisted native
+    # external entries, so preserve the SketchObject-created root axes and append the fixture geos.
+    existing = list(getattr(obj, "ExternalGeo", []) or [])
+    obj.ExternalGeo = existing[:2] + geos
+
+
 def set_sketch_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, value: Any) -> None:
     if name == "Geometry":
         set_sketch_geometry(FreeCAD, obj, value)
@@ -404,6 +456,9 @@ def set_sketch_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: s
     if name == "Constraints":
         if value:
             raise UnsupportedFixture("Sketch Constraints are not enabled in this collector yet")
+        return
+    if name == "ExternalGeo":
+        set_sketch_external_geo(FreeCAD, obj, value)
         return
     if name == "ExternalGeometry":
         set_sketch_external_geometry(created, obj, value)
@@ -827,6 +882,7 @@ def create_objects(FreeCAD: Any, doc: Any, fixture: dict) -> dict[str, Any]:
     fixture_id_to_actual_id: dict[int, int] = {}
     deferred_link_owners: list[tuple[Any, Any]] = []
     deferred_after_shape: list[tuple[Any, str, Any]] = []
+    deferred_external_geo: list[tuple[Any, Any]] = []
     deferred_external_geometry: list[tuple[Any, Any]] = []
     deferred_after_body: list[tuple[str, Any, str, Any]] = []
     for spec in fixture.get("Objects", []):
@@ -867,6 +923,9 @@ def create_objects(FreeCAD: Any, doc: Any, fixture: dict) -> dict[str, Any]:
                 continue
             if type_id == "Sketcher::SketchObject" and prop_name in SKETCH_SHAPE_DEPENDENT_PROPERTIES:
                 deferred_after_shape.append((obj, prop_name, prop_value))
+                continue
+            if type_id == "Sketcher::SketchObject" and prop_name == "ExternalGeo":
+                deferred_external_geo.append((obj, prop_value))
                 continue
             if type_id == "Sketcher::SketchObject" and prop_name == "ExternalGeometry":
                 deferred_external_geometry.append((obj, prop_value))
@@ -936,6 +995,13 @@ def create_objects(FreeCAD: Any, doc: Any, fixture: dict) -> dict[str, Any]:
         doc.recompute()
         for obj, prop_value in deferred_external_geometry:
             set_sketch_external_geometry(created, obj, prop_value)
+
+    if deferred_external_geo:
+        # Restore persisted old ExternalGeo only after addExternal() has established the native
+        # ExternalGeometry link list. The final collect_one() recompute then exercises FreeCAD's
+        # Frozen / Sync / Detached / Missing state machine from a real document state.
+        for obj, prop_value in deferred_external_geo:
+            set_sketch_external_geo(FreeCAD, obj, prop_value)
     return created
 
 
