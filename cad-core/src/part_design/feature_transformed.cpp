@@ -1481,7 +1481,7 @@ bool applyTransformedRefine(
     // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureTransformed.cpp
     // ::Transformed::execute(), after Features / WholeShape fuse-cut composition calls
     // "supportShape = refineShapeIfActive((supportShape))" before setting Shape.
-    const auto refined = runtime::applyRefineProperty(object, context, result.shape, result.namedShape);
+    const auto refined = runtime::applyPartDesignFeatureRefineProperty(object, context, result.shape, result.namedShape);
     if (!refined) {
         return false;
     }

@@ -17,7 +17,12 @@
           2.0
         ]
       },
-      "volume": 7.9828318530717945
+      "volume": 7.9828318530717945,
+      "topology_counts": {
+        "edges": 15,
+        "faces": 7,
+        "vertices": 10
+      }
     },
     "Mirrored": {
       "bbox": {
@@ -32,7 +37,12 @@
           2.0
         ]
       },
-      "volume": 15.965663706143589
+      "volume": 15.965663706143589,
+      "topology_counts": {
+        "edges": 18,
+        "faces": 8,
+        "vertices": 12
+      }
     },
     "Body": {
       "bbox": {
@@ -47,7 +57,12 @@
           2.0
         ]
       },
-      "volume": 15.965663706143589
+      "volume": 15.965663706143589,
+      "topology_counts": {
+        "edges": 18,
+        "faces": 8,
+        "vertices": 12
+      }
     }
   },
   "named_shapes": {

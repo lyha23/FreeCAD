@@ -19,10 +19,8 @@
   "named_shapes": {
     "Mirrored": {
       "element_map_status": "history_partial",
-      "element_map_prefixes": [
-        "Pad."
-      ],
       "history_source_prefixes": [
+        "Pad.",
         "Mirrored.Transform1."
       ],
       "history_sources_any": [

@@ -15,7 +15,12 @@
           2.0
         ]
       },
-      "volume": 24.0
+      "volume": 24.0,
+      "topology_counts": {
+        "edges": 12,
+        "faces": 6,
+        "vertices": 8
+      }
     },
     "Body": {
       "bbox": {
@@ -30,7 +35,12 @@
           2.0
         ]
       },
-      "volume": 24.0
+      "volume": 24.0,
+      "topology_counts": {
+        "edges": 12,
+        "faces": 6,
+        "vertices": 8
+      }
     }
   },
   "named_shapes": {

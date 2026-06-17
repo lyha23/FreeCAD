@@ -4,6 +4,47 @@
 
 namespace cad_core::runtime
 {
+namespace
+{
+
+std::optional<RefineShapeResult> applyRefinePropertyForOwner(
+    const app::DocumentObject& propertyObject,
+    const std::string& outputOwner,
+    ComputeContext& context,
+    const TopoDS_Shape& shape,
+    const std::optional<part::NamedShape>& namedShape,
+    bool refine
+)
+{
+    if (!refine) {
+        return RefineShapeResult {shape, namedShape, false};
+    }
+
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureRefine.cpp
+    // ::FeatureRefine::refineShapeIfActive(), calls "shape.makeElementRefine()" when
+    // Refine is true and returns the old shape only if the maker throws under Warn policy.
+    const part::NamedShapeSource source {
+        namedShape ? namedShape->owner : outputOwner,
+        shape,
+        namedShape ? &*namedShape : nullptr,
+    };
+    part::NamedShapeBuild refined = part::makeElementRefineFromSource(outputOwner, source);
+    if (refined.error.empty() && !refined.shape.IsNull()) {
+        return RefineShapeResult {refined.shape, refined.namedShape, true};
+    }
+
+    runtime::addDiagnostic(
+        context.diagnostics,
+        "warning",
+        "refine_failed",
+        refined.error.empty() ? "Refine operation failed; keeping the unrefined shape" : refined.error,
+        propertyObject.name,
+        "Refine"
+    );
+    return RefineShapeResult {shape, namedShape, false};
+}
+
+} // namespace
 
 bool rejectUnsupportedProperties(const app::DocumentObject& object,
                                  ComputeContext& context,
@@ -99,32 +140,49 @@ std::optional<RefineShapeResult> applyRefinePropertyForOwner(
 )
 {
     const auto refine = app::readBool(propertyObject, "Refine");
-    if (!refine.value_or(false)) {
-        return RefineShapeResult {shape, namedShape, false};
+    return applyRefinePropertyForOwner(propertyObject, outputOwner, context, shape, namedShape, refine.value_or(false));
+}
+
+bool readPartDesignFeatureRefine(const app::DocumentObject& object)
+{
+    const auto refine = app::readBool(object, "Refine");
+    if (refine) {
+        return *refine;
     }
 
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureRefine.cpp
-    // ::FeatureRefine::refineShapeIfActive(), calls "shape.makeElementRefine()" when
-    // Refine is true and returns the old shape only if the maker throws under Warn policy.
-    const part::NamedShapeSource source {
-        namedShape ? namedShape->owner : outputOwner,
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureRefine.cpp
+    // ::FeatureRefine::FeatureRefine(), initializes Refine from "GetBool(\"RefineModel\", true)".
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Feature.cpp
+    // ::getPDRefineModelParameter(), returns "GetBool(\"RefineModel\", true)".
+    return true;
+}
+
+std::optional<RefineShapeResult> applyPartDesignFeatureRefineProperty(
+    const app::DocumentObject& object,
+    ComputeContext& context,
+    const TopoDS_Shape& shape,
+    const std::optional<part::NamedShape>& namedShape
+)
+{
+    return applyPartDesignFeatureRefinePropertyForOwner(object, object.name, context, shape, namedShape);
+}
+
+std::optional<RefineShapeResult> applyPartDesignFeatureRefinePropertyForOwner(
+    const app::DocumentObject& propertyObject,
+    const std::string& outputOwner,
+    ComputeContext& context,
+    const TopoDS_Shape& shape,
+    const std::optional<part::NamedShape>& namedShape
+)
+{
+    return applyRefinePropertyForOwner(
+        propertyObject,
+        outputOwner,
+        context,
         shape,
-        namedShape ? &*namedShape : nullptr,
-    };
-    part::NamedShapeBuild refined = part::makeElementRefineFromSource(outputOwner, source);
-    if (refined.error.empty() && !refined.shape.IsNull()) {
-        return RefineShapeResult {refined.shape, refined.namedShape, true};
-    }
-
-    runtime::addDiagnostic(
-        context.diagnostics,
-        "warning",
-        "refine_failed",
-        refined.error.empty() ? "Refine operation failed; keeping the unrefined shape" : refined.error,
-        propertyObject.name,
-        "Refine"
+        namedShape,
+        readPartDesignFeatureRefine(propertyObject)
     );
-    return RefineShapeResult {shape, namedShape, false};
 }
 
 } // namespace cad_core::runtime

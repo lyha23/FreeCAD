@@ -8,14 +8,16 @@
         "min": [0.0, -2.0, -2.0],
         "max": [2.0, 2.0, 2.0]
       },
-      "volume": 32.0
+      "volume": 32.0,
+      "topology_counts": {"edges": 12, "faces": 6, "vertices": 8}
     },
     "Body": {
       "bbox": {
         "min": [0.0, -2.0, -2.0],
         "max": [2.0, 2.0, 2.0]
       },
-      "volume": 32.0
+      "volume": 32.0,
+      "topology_counts": {"edges": 12, "faces": 6, "vertices": 8}
     }
   },
   "named_shapes": {

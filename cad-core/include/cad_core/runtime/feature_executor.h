@@ -41,5 +41,22 @@ std::optional<RefineShapeResult> applyRefinePropertyForOwner(
     const TopoDS_Shape& shape,
     const std::optional<part::NamedShape>& namedShape
 );
+// FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureRefine.cpp
+// ::FeatureRefine::FeatureRefine(), initializes Refine from "GetBool(\"RefineModel\", true)";
+// Feature.cpp::getPDRefineModelParameter() returns "GetBool(\"RefineModel\", true)".
+bool readPartDesignFeatureRefine(const app::DocumentObject& object);
+std::optional<RefineShapeResult> applyPartDesignFeatureRefineProperty(
+    const app::DocumentObject& object,
+    ComputeContext& context,
+    const TopoDS_Shape& shape,
+    const std::optional<part::NamedShape>& namedShape
+);
+std::optional<RefineShapeResult> applyPartDesignFeatureRefinePropertyForOwner(
+    const app::DocumentObject& propertyObject,
+    const std::string& outputOwner,
+    ComputeContext& context,
+    const TopoDS_Shape& shape,
+    const std::optional<part::NamedShape>& namedShape
+);
 
 } // namespace cad_core::runtime

@@ -4,11 +4,21 @@
   "objects": {
     "LinearPattern": {
       "bbox": {"min": [0.0, 0.0, 0.0], "max": [9.0, 2.0, 2.0]},
-      "volume": 24.0
+      "volume": 24.0,
+      "topology_counts": {
+        "faces": 18,
+        "edges": 36,
+        "vertices": 24
+      }
     },
     "Body": {
       "bbox": {"min": [0.0, 0.0, 0.0], "max": [9.0, 2.0, 2.0]},
-      "volume": 24.0
+      "volume": 24.0,
+      "topology_counts": {
+        "faces": 18,
+        "edges": 36,
+        "vertices": 24
+      }
     }
   }
 }

@@ -4,5 +4,6 @@
   "freecad_version": "1.2.0 revision 20260519",
   "object": "MultiTransform",
   "bbox": {"min": [0.0, 0.0, 0.0], "max": [3.0, 1.0, 1.0]},
-  "volume": 3.0
+  "volume": 3.0,
+  "topology_counts": {"edges": 12, "faces": 6, "vertices": 8}
 }

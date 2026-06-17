@@ -15,7 +15,12 @@
           -9.948097816163189e-18
         ]
       },
-      "volume": 15.955943757827143
+      "volume": 15.955943757827143,
+      "topology_counts": {
+        "edges": 29,
+        "faces": 13,
+        "vertices": 18
+      }
     },
     "Chamfer": {
       "bbox": {
@@ -30,7 +35,12 @@
           -1.4787126774855188e-17
         ]
       },
-      "volume": 7.977971878913572
+      "volume": 7.977971878913572,
+      "topology_counts": {
+        "edges": 22,
+        "faces": 10,
+        "vertices": 14
+      }
     },
     "Fillet": {
       "bbox": {
@@ -45,7 +55,12 @@
           0.0
         ]
       },
-      "volume": 7.9828318530717945
+      "volume": 7.9828318530717945,
+      "topology_counts": {
+        "edges": 15,
+        "faces": 7,
+        "vertices": 10
+      }
     },
     "Mirrored": {
       "bbox": {
@@ -60,7 +75,12 @@
           -9.948097816163189e-18
         ]
       },
-      "volume": 15.955943757827143
+      "volume": 15.955943757827143,
+      "topology_counts": {
+        "edges": 29,
+        "faces": 13,
+        "vertices": 18
+      }
     }
   },
   "named_shapes": {

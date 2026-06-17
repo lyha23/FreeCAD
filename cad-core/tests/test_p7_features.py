@@ -32,8 +32,9 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("terminal_history:split_deleted", named_shape["element_history_status"])
         self.assertIn("history_consumed:merge", named_shape["element_history_status"])
         for source_object in source_objects:
-            self.assertTrue(
-                any(key.startswith(f"{source_object}.") for key in named_shape["element_map"]),
+            self.assert_source_prefix_visible(
+                named_shape,
+                f"{source_object}.",
                 f"{source_object} aliases should survive DressUp AddSubShape slot propagation",
             )
             self.assertTrue(
@@ -104,6 +105,22 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 ),
                 f"{source_object}.{source_subname} should remain terminal deleted RefineModel history",
             )
+
+    def assert_source_prefix_visible(self, named_shape: dict, source_prefix: str, message: str) -> None:
+        self.assertTrue(
+            any(key.startswith(source_prefix) for key in named_shape["element_map"])
+            or any(
+                source.startswith(source_prefix)
+                for item in named_shape.get("history", [])
+                if item["kind"] != "indexed"
+                for source in item.get("sources", [])
+            )
+            or any(
+                event["source"]["object"] == source_prefix.removesuffix(".")
+                for event in named_shape.get("mapper_history", [])
+            ),
+            message,
+        )
 
     def assert_transformed_pattern_ownership(
         self,
@@ -1300,8 +1317,9 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             any(key.startswith("Mirrored.Transform1.") for key in mirrored_named_shape["element_map"]),
             "transformed copy source aliases should survive into ElementMap",
         )
-        self.assertTrue(
-            any(key.startswith("Pad.") for key in mirrored_named_shape["element_map"]),
+        self.assert_source_prefix_visible(
+            mirrored_named_shape,
+            "Pad.",
             "source feature stable aliases should survive transformed copy propagation",
         )
         self.assertTrue(
