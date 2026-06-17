@@ -71,7 +71,7 @@ PartDesign::MultiTransform
 | 阶段 | 当前状态 |
 | --- | --- |
 | P0-P2 | document / graph / runtime 底座、Sketch + Body + Pad、FeatureBase / Pocket / Body fuse-cut 主链稳定 |
-| P3a/P3b | shared `FeatureExtrude` 已覆盖主要长度、终止、双侧、方向、placement 和 taper 几何子集；taper 对象级 partial history 状态已暴露 |
+| P3a/P3b | shared `FeatureExtrude` 已覆盖主要长度、终止、双侧、方向、placement 和 taper 几何子集；taper ThruSections maker history 已由 P6 发布为 `covered_full` |
 | P4 | typed property、`PropertyLink*`、placement、GeoFeatureGroup 基础、graph edge 和结构化 diagnostics 已接入 |
 | P5 | Sketcher profile、基础约束与 datum constraint 子集、ExternalGeometry 子集、closed / open / split internal geometry、BSpline InternalShape oracle、`FaceMakerBuildFace` bounded split 子集、pre-split / splitter history summary、WireJoiner EdgeInfo / WireInfo 边级账本子集、ordered `WireInfo::vertices` / `iteration2` 标记、branch-search candidate inside/outside、`newWire` seed、splitWire / done lifecycle 与 `exhaustTightBound()` 二次 owner 诊断账本、bounded tight-bound primary / secondary owner slot 汇总、基础 `InternalShape`、internal element map 与 terminal split / deleted history 已接入 |
 | P6 | `NamedShape` / `ElementMap` 主路径、Sketch InternalShape FaceMaker history context 与通用 `element_history_status` expected / C ABI capabilities 验收、prism / Body boolean / Part::Extrusion maker history 子集、RefineModel `Modified()` / `IsDeleted()` + GenericShapeMapper history、AddSubShape slot ownership、stable subname 引用更新、ReferenceShadow 恢复、split / deleted diagnostics、Link retag 和 transformed copy terminal history 传播已接入 |
@@ -87,7 +87,7 @@ P8 Link display 已新增 `App::DocumentObjectGroup` plain group 请求内 child
 ## 未完成边界
 
 - Sketcher 完整 solver、BSpline solver/control-point 语义、完整 `ExternalGeometryExtension` 状态机、WireJoiner EdgeInfo / WireInfo 的 `findTightBoundSplitWire()` / `findTightBoundUpdateVertices()` / `exhaustTightBound()` 已有 splitWire / done / secondary-owner lifecycle 诊断账本，但尚未替代 bounded ownership classifier，也尚未执行 `exhaustTightBoundUpdateWire()` 搜索主路径；真实 `openWireCompound` history 过滤、FaceMaker / WireJoiner history summary 到正式 `NamedShape` / `ElementMap` 的完整 MapperHistory 消费仍待迁移；FaceMaker summary 当前进入 `Sketch.InternalShape` 的 `NamedShape` 元数据和通用 `element_history_status`。
-- Topo Naming 完整 MapperHistory、复杂 split 自动旧引用恢复、ExternalGeometry 旧引用恢复链路、ShapeFix / transformed / DressUp 的完整 maker history，以及 taper partial history 收敛；merge history 已有 Body boolean 与 Link retag 传播回归，但仍要纳入完整 MapperHistory 生命周期。
+- Topo Naming 完整 MapperHistory 发布边界仍按 maker 分阶段复核；P6 MakerHistory S3-S5 已确认 ShapeFix、DressUp / Refine / transformed 和 taper 当前 focused scope 为 supported，复杂 split / deleted 旧引用恢复仍保留为 `notCollected`，只有专项复核证明当前 cad-core 与 FreeCAD authority 或 checked-in expected 不匹配时才转为 `backendGap`；merge history 已有 Body boolean 与 Link retag 传播回归，但仍要纳入完整 MapperHistory 生命周期。
 - PartDesign transformed / pattern 完整 MapperHistory 与更复杂 ownership。
 - Assembly 求解器、完整 Joint placement / constraint 求解、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、`ShowElement=true` LinkElement / LinkGroup 持久写回事务生命周期、完整 cross-document 文档哈希 / postfix 生命周期和更复杂多层 LinkSub 链。
 
@@ -106,12 +106,12 @@ P8 Link display 已新增 `App::DocumentObjectGroup` plain group 请求内 child
 | P6 | `09-P6-TopoNaming主路径.md` | 主路径骨架已落地，完整 MapperHistory 待补 |
 | P7 | `10-P7-PartDesign常用生态.md` | 常用生态基础子集已落地 |
 | P8 | `11-P8-Part导入导出与Assembly后续.md` | 已覆盖 Part primitives、导入导出、常用 Part Boolean、基础 Link / LinkSub / LinkGroup / LinkElement display、ShowElement 请求内生命周期建议、XLink / FullSubList / mapped alias、plain group 展开、Assembly display 与 Joint 输入元数据 |
-| 下一阶段主线 | `13-ExternalGeometry-TopoNaming下一阶段主线.md` | 待实施：完整 ExternalGeometryExtension 状态机、完整 MapperHistory、FaceMaker / WireJoiner history 消费和复杂引用恢复 |
+| P5/P6 联合主线 | `13-【已实现】ExternalGeometry-TopoNaming下一阶段主线.md` | 已实现：ExternalGeometryExtension 状态机、MapperHistory、FaceMaker / WireJoiner history 消费和复杂引用恢复已按 P5P6 主线收口 |
 
 ## 后续队列
 
-1. 按 `13-ExternalGeometry-TopoNaming下一阶段主线.md` 补 P5/P6 联合主线：完整 MapperHistory、FaceMaker / WireJoiner history、ExternalGeometryExtension 状态机和复杂引用恢复。
-2. 补 P6 余量：ShapeFix history、RefineModel / taper partial history 到正式 MapperHistory 的收敛，以及 transformed / DressUp history 的完整传播。
+1. P5/P6 联合主线已按 `13-【已实现】ExternalGeometry-TopoNaming下一阶段主线.md` 收口；后续只在阶段发布时复跑验收和回写台账。
+2. 补 P6 MakerHistory 余量：S0-S6 已完成 ShapeFix、RefineModel、taper、transformed / DressUp 的 capability / tests / expected 与正式文档一致性复核；当前无 C++ backendGap，后续只在复杂 split / deleted oracle 证明 mismatch 时重新打开实现任务。
 3. 补 P7：transformed / pattern 完整 MapperHistory 与更复杂 ownership。
 4. 扩展 P8：Assembly 求解器与完整 Joint placement / constraint、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、`ShowElement=true` LinkElement / LinkGroup 持久写回事务生命周期、完整 cross-document 文档哈希 / postfix 生命周期和更复杂多层 LinkSub 链。
 
@@ -128,7 +128,7 @@ P8 Link display 已新增 `App::DocumentObjectGroup` plain group 请求内 child
 功能修改优先执行：
 
 ```bash
-cd /Users/li/Chili3DProject/重构Chili/FreeCAD/cad-core
+cd /home/user/Chili3DProject/FreeCAD/cad-core
 cmake --build build
 python3 -m unittest tests/test_mvp.py
 ```

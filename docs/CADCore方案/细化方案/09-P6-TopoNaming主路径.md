@@ -2,15 +2,15 @@
 
 P6 把稳定引用从导出层补丁升级为 CAD Core 的正式账本。目标是让 Pad / Pocket / Sketch external reference / DressUp / Pattern 都通过 `NamedShape`、`ElementMap` 和 MapperHistory 传播 stable subname。
 
-下一阶段 P6 不再只补零散 maker helper，而要按 `13-ExternalGeometry-TopoNaming下一阶段主线.md` 与 P5 联合推进：完整 MapperHistory、FaceMaker / WireJoiner history、ExternalGeometryExtension 状态机和复杂旧引用恢复必须进入同一条引用更新主路径。
+P6 已按 `13-【已实现】ExternalGeometry-TopoNaming下一阶段主线.md` 与 P5 联合收口：完整 MapperHistory、FaceMaker / WireJoiner history、ExternalGeometryExtension 状态机和复杂旧引用恢复进入同一条引用更新主路径。
 
 ## 当前基线
 
 - `topo/named_shape` 建立 object-local indexed `FaceN` / `EdgeN` / `VertexN` 账本。
 - 支持 identity、source-preserved、一对一 history-derived `ElementMap` 和多个旧 stable key 指向同一当前元素的 merge history。
 - 普通 prism、非 taper Two sides / Symmetric 单-prism、Two sides UpTo 多 prism XOR 子流程已消费 maker history 子集。
-- taper 已暴露 `BRepOffsetAPI_ThruSections` maker 与 loft section，并按 FreeCAD `MapperThruSections` 补 `GeneratedFace()` / first-section 映射，记录一侧 / 内环 taper 的 source face first-section history，以及各 taper source edge 和 offset section 的 generated history；该 ThruSections history 现在下沉为 `topo::namedShapeForTaperedExtrusionHistory()`，Pad / Pocket 和 Part::Extrusion 复用同一账本。source edge / offset section history 可通过 XOR / boolean 组合透传到一侧、多侧和内环 taper 结果；对象级结果暴露 `topo_naming_history=history_partial:taper`，但仍保留 `known_gap:taper_history`，因为完整 MapperHistory 生命周期尚未迁移。
-- `BRepBuilderAPI_RefineModel` 已按 FreeCAD `modelRefine` / `FaceUniter` 路径迁入 `geometry/refine_model.*`，Refine history 已按 FreeCAD `MyRefineMaker::populate()` + `GenericShapeMapper::init()` 收敛：先消费 `Modified()` / `IsDeleted()` 账本，再对 result face 补共享边 / 同面 generated 映射；Pad standalone、Body AddSub final-result（Pad / Pocket / Hole）和 Fillet / Chamfer / Transformed family replacement refine 均走该路径。
+- taper 已暴露 `BRepOffsetAPI_ThruSections` maker 与 loft section，并按 FreeCAD `MapperThruSections` 补 `GeneratedFace()` / first-section 映射，记录一侧 / 内环 taper 的 source face first-section history，以及各 taper source edge 和 offset section 的 generated history；该 ThruSections history 现在下沉为 `topo::namedShapeForTaperedExtrusionHistory()`，Pad / Pocket 和 Part::Extrusion 复用同一账本。source edge / offset section history 可通过 XOR / boolean 组合透传到一侧、多侧和内环 taper 结果；S5 已确认对象级 `topo_naming_history=maker_history:taper_thru_sections`、C ABI `taper_history=covered_full`、focused expected 和 tests 均不再保留 `known_gap:taper_history`。
+- `BRepBuilderAPI_RefineModel` 已按 FreeCAD `modelRefine` / `FaceUniter` 路径迁入 `part/refine_model.*`，Refine history 已按 FreeCAD `MyRefineMaker::populate()` + `GenericShapeMapper::init()` 收敛：先消费 `Modified()` / `IsDeleted()` 账本，再对 result face 补共享边 / 同面 generated 映射；Pad standalone、Body AddSub final-result（Pad / Pocket / Hole）和 Fillet / Chamfer / Transformed family replacement refine 均走该路径。
 - `AddSubShape` cache 已保存 slot 级 `NamedShape`：Pad/Pocket/Hole 的 add/sub tool、DressUp delta cache 和 `SupportTransform` cache 不再被迫复用对象最终 Shape 的 ElementMap；Body boolean 和 transformed family 消费 add/sub slot 时使用对应 slot history。
 - transformed family 按 BaseFeature / Body 前缀恢复 support 时，会消费前序 AddSub feature 的 final-result `Refine=true` Shape 和 RefineModel history，而不是只使用未 refine 的 add/sub tool cache。
 - `makeElementXorFromSources` 和 `makeElementBooleanFromSources` 已下沉到 topo。
@@ -26,9 +26,8 @@ P6 把稳定引用从导出层补丁升级为 CAD Core 的正式账本。目标�
 
 ## 已知缺口
 
-- 完整 MapperHistory 生命周期仍按 maker 分阶段迁移；FaceMaker / WireJoiner 的 recoverable InternalShape producer 主路径已在 S6 关闭，后续重点转向未采 native ExternalGeometry 状态 oracle、ShapeFix / DressUp / transformed 等剩余 maker history，以及更复杂引用恢复。
-- ShapeFix、DressUp、transformed copy 的完整 maker history 仍未覆盖；taper 当前仍按 partial history 和 `known_gap:taper_history` 验收。
-- split 的完整自动旧引用恢复还不完整；当前只恢复 MapperHistory 能证明同类唯一 target 或 ExternalGeometry collapsed point 的旧 stable 引用；merge 已能记录并跨 Link retag 传播，但 ShapeFix / transformed / DressUp 等完整 MapperHistory 生命周期仍待收敛。
+- 完整 MapperHistory 生命周期仍按 maker 分阶段迁移；FaceMaker / WireJoiner 的 recoverable InternalShape producer 主路径已在 S6 关闭，ShapeFix、DressUp / Refine / transformed 与 taper 已通过 P6 MakerHistory S3-S5 专项复审核定为当前 focused scope supported，后续重点转向未采 native ExternalGeometry 状态 oracle和更复杂引用恢复。
+- split 的完整自动旧引用恢复还不完整；当前只恢复 MapperHistory 能证明同类唯一 target 或 ExternalGeometry collapsed point 的旧 stable 引用；merge 已能记录并跨 Link retag 传播，ShapeFix / transformed / DressUp / taper 相关复杂恢复仍保持 `notCollected`，只有后续 oracle 证明 mismatch 后才进入 backendGap。
 - FaceMaker / WireJoiner 的 recoverable history consumption 已与 P5 geometry 账本联动：concrete producer evidence 先于几何匹配式 internal map 消费，summary / current-member blocked 分支只保留诊断边界。request-local `InternalFaceN` stable selector 只能在本次 recompute 已有 `Sketch.InternalShape` NamedShape / ElementMap 证据时解析；缺证据、同类一对多、deleted 和 producer-missing 情况继续输出结构化诊断。
 - 更复杂的 source-prefixed stable key 仍要服从完整 MapperHistory；同类一对多 split 和 deleted 只输出结构化诊断，不伪造可解析投影。
 
@@ -41,7 +40,7 @@ P6 把稳定引用从导出层补丁升级为 CAD Core 的正式账本。目标�
 | `features/feature_extrude.*` | prism source history |
 | `features/part.*` | Part::Extrusion prism / taper maker history 发布 |
 | `geometry/extrusion_helper.*` | taper `BRepOffsetAPI_ThruSections` maker 与 section 来源 |
-| `geometry/refine_model.*` | FreeCAD `BRepBuilderAPI_RefineModel` / `FaceUniter` maker |
+| `part/refine_model.*` | FreeCAD `BRepBuilderAPI_RefineModel` / `FaceUniter` maker |
 | `geometry/face_maker.*` | P5 closed-wire face-with-holes / island 构面，后续接入 FaceMaker history |
 | `features/body.*` | Body boolean history 和 AddSubShape slot 级 NamedShape 消费 |
 | `features/transformed.*` | transformed copy source alias 和 AddSubShape slot 级 NamedShape 消费 |
@@ -66,7 +65,7 @@ P6 把稳定引用从导出层补丁升级为 CAD Core 的正式账本。目标�
 - P6 Sketch ExternalGeometry direct indexed 与 source-prefixed stable-subname 子集成功几何 expected 来自本机 FreeCADCmd；source-prefixed 走 FreeCAD `resolveElement().oldName` 恢复路径，不从 cad-core 当前输出回填；嵌套 Body profile-source 已固定 native projection oldName oracle。
 - P6 split fixture 约束 `Pad.Face5 -> Face4`、`Pocket.Edge1 -> Edge22` 这类同类唯一 target 写入 ElementMap；Sketch ExternalGeometry split edge 进入 FreeCAD native collapsed point 投影，不再退化为 `split_stable_subname` 或 `unsupported_geometry`。
 - Body boolean fixture 约束多个旧 stable key 指向同一当前元素时记录 `merge` history。
-- P3b taper fixture 约束一侧 / 内环 taper 的 ThruSections source face first-section history，以及一侧、多侧和内环 taper 的 source edge / offset section generated history；Pad / Pocket / Part::Extrusion taper 对象必须同时暴露 `topo_naming_history=history_partial:taper` 和 `topo_naming=known_gap:taper_history`。
+- P3b / P5 taper focused fixture 约束一侧 / 内环 taper 的 ThruSections source face first-section history，以及一侧、多侧和内环 taper 的 source edge / offset section generated history；当前 live tests 约束 Pad / Pocket / Part::Extrusion taper 对象暴露 `topo_naming_history=maker_history:taper_thru_sections`，且不再输出对象级 `topo_naming` known-gap 字段。
 - P7 Refine fixture 约束 Pad standalone、Body AddSub final-result（Pad / Pocket / Hole）和 Fillet / Chamfer / Transformed family replacement refine 走 RefineModel + GenericShapeMapper history，并导出包含 modified / generated / deleted / merge 关键来源的 history_partial `NamedShape`；Pocket final-result refine 已固定 `IsDeleted()` 输出的 `Pocket.Face5` / `Pocket.Face6` / `SketchPocket.Face1` terminal deleted history。
 - P7 DressUp / transformed fixture 约束 `SupportTransform` cache、refined prefix support 的 transformed copy 和 Body 后续 history 传播保留原 feature、transformed copy 与 support source。
 - 一对多 fragment 只能记录 split history，不写入可解析 `ElementMap`；P5 through-open-cutter 已约束 raw open cutter split 为多个 `InternalEdgeN` 时只记录 split history。

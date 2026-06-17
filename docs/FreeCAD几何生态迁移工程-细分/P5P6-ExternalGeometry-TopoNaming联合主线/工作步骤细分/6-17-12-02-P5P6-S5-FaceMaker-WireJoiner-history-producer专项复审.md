@@ -1,4 +1,4 @@
-# 【已实现】P5P6-S5 FaceMaker / WireJoiner history producer 专项复审
+# P5P6-S5 FaceMaker / WireJoiner history producer 专项复审
 
 ## 目标
 
@@ -12,6 +12,8 @@ P5P6-S5 单独裁决 FaceMaker / WireJoiner 的 history producer 主路径和 fa
 | `git rev-parse --short HEAD` | `97205127d3` |
 | `git log -1 --oneline` | `97205127d3 docs: 完成 P5P6 S4 生命周期复审` |
 | 初始非本步 dirty | `AGENTS.md`、`DESIGN.md`、`cad-core/CMakeLists.txt` 已在本步骤开始时存在 dirty；S5 不编辑、不暂存、不提交这些文件。 |
+
+当前 live 状态说明：本文件记录 S5 当时的 producer / fallback 复审结论；S6 后 `P5P6-SCOPE-009/010/011/012` 已变为 supported，`P5P6-SCOPE-013` 已变为 closed，`P5P6-BLOCK-003/004/005/006` 均已 closed。
 
 ## FreeCAD 依据
 
@@ -59,7 +61,7 @@ P5P6-S5 单独裁决 FaceMaker / WireJoiner 的 history producer 主路径和 fa
 - S5 当时的 `p5p6_scope_review_matrix.tsv` 回写：`P5P6-SCOPE-009/010` 保持 `backendGap` 并细化 producer / diagnostic 边界；`P5P6-SCOPE-011/013` 保持 `releaseGate`；`P5P6-SCOPE-012` 保持 `unsupported`。
 - S5 当时的 `p5p6_backend_gap_classification.tsv` 回写：只保留 FaceMaker concrete producer 和 WireJoiner vertex multiplicity / child-wire parity 两条 P0 backendGap；summary-only 不得代替 producer。
 - S5 当时的 `p5p6_blocker_queue.tsv` 回写：`P5P6-BLOCK-003/004/006` 作为交给 S6 的执行项，写清 FreeCAD source 账本、cad-core 缺口、允许诊断边界和关闭条件。
-- S5 当时主线入口和步骤总览只把 S5 标为已实现；S6 后续状态以 S6 文档和矩阵 live 结果为准。
+- S5 当时主线入口和步骤总览只把 S5 标为已完成复审；S6 后续状态以 S6 文档和矩阵 live 结果为准。
 
 ## 验收
 
@@ -73,19 +75,20 @@ root = Path('docs/FreeCAD几何生态迁移工程-细分/P5P6-ExternalGeometry-T
 with (root / 'p5p6_scope_review_matrix.tsv').open(newline='') as f:
     scope = {row['scope_id']: row for row in csv.DictReader(f, delimiter='\t')}
 expected = {
-    'P5P6-SCOPE-009': 'backendGap',
-    'P5P6-SCOPE-010': 'backendGap',
-    'P5P6-SCOPE-011': 'releaseGate',
-    'P5P6-SCOPE-013': 'releaseGate',
+    'P5P6-SCOPE-009': 'supported',
+    'P5P6-SCOPE-010': 'supported',
+    'P5P6-SCOPE-011': 'supported',
+    'P5P6-SCOPE-012': 'supported',
+    'P5P6-SCOPE-013': 'closed',
 }
 for sid, status in expected.items():
     assert scope[sid]['current_status'] == status, (sid, scope[sid]['current_status'])
-assert scope['P5P6-SCOPE-012']['current_status'] == 'unsupported'
 with (root / 'p5p6_blocker_queue.tsv').open(newline='') as f:
     blockers = {row['blocker_id']: row for row in csv.DictReader(f, delimiter='\t')}
-for bid in ['P5P6-BLOCK-003', 'P5P6-BLOCK-004', 'P5P6-BLOCK-006']:
+for bid in ['P5P6-BLOCK-003', 'P5P6-BLOCK-004', 'P5P6-BLOCK-005', 'P5P6-BLOCK-006']:
     row = blockers[bid]
     assert row['scope_id'] in scope, row
+    assert row['scope_status'] == 'closed', row
     assert row['next_step'] and row['close_condition'], row
 PY
 git diff --check

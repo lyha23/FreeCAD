@@ -212,7 +212,7 @@ P8 当前实现边界：
 
 ## 下一阶段重点
 
-下一阶段把 P5 Sketcher 外部几何与 P6 topo naming 合并为一条主线推进：完整 `ExternalGeometryExtension` 状态机、完整 MapperHistory、FaceMaker / WireJoiner history 消费和复杂旧引用恢复。细化方案见 `细化方案/13-ExternalGeometry-TopoNaming下一阶段主线.md`。
+P5 Sketcher 外部几何与 P6 topo naming 联合主线已收口：完整 `ExternalGeometryExtension` 状态机、完整 MapperHistory、FaceMaker / WireJoiner history 消费和复杂旧引用恢复已按主线落地。细化方案见 `细化方案/13-【已实现】ExternalGeometry-TopoNaming下一阶段主线.md`。
 
 这条主线的正确顺序是先补 `topo` 中的 MapperHistory / ElementMap 生命周期，再让 `geometry` 中的 FaceMaker / WireJoiner / ShapeFix 产出可消费 history，然后在 `runtime` / `document` 中统一旧引用解析与 `elementReferenceUpdates`，最后由 `features/sketch_object.*` 表达 FreeCAD `SketchObjectExternal` 的外部几何状态机。不得把 ExternalGeometry 恢复、InternalShape 命名或 split fragment 归属继续放在 sketch executor、adapter 或输出层靠几何猜测完成。
 
@@ -220,7 +220,7 @@ P8 当前实现边界：
 
 后续推进优先级：
 
-1. P5/P6 联合主线：按 `细化方案/13-ExternalGeometry-TopoNaming下一阶段主线.md` 补完整 MapperHistory、FaceMaker / WireJoiner history、ExternalGeometryExtension 状态机和复杂引用恢复。
+1. P5/P6 联合主线：已按 `细化方案/13-【已实现】ExternalGeometry-TopoNaming下一阶段主线.md` 收口完整 MapperHistory、FaceMaker / WireJoiner history、ExternalGeometryExtension 状态机和复杂引用恢复；后续只在阶段发布时复跑验收和回写台账。
 2. P6 余量收敛：ShapeFix history、RefineModel / taper partial history 到正式 MapperHistory 的收敛，以及 transformed / DressUp history 的完整传播。
 3. P7 PartDesign 补强：Hole ModelThread、标准件表驱动头部尺寸迁移、链式 DressUp SupportTransform ownership、复杂 transformed / pattern ownership。
 4. P8 后置能力：继续补 Assembly solver、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、完整 FreeCAD Link 账本、`ShowElement=true` LinkElement / LinkGroup 持久写回事务生命周期、完整 cross-document 文档哈希 / postfix 生命周期和更复杂多层 LinkSub 链。

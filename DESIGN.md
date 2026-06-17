@@ -221,3 +221,55 @@ Chili/FreeCAD/docs/CADCore方案/细化方案', 要把每一个步骤干什么�
   cd /Users/li/Chili3DProject/重构Chili/FreeCAD
   git diff --check
   M8 更新 05。只写当前基线、已完成语义、剩余缺口、验收命令、下一步和非目标，不写流水账。
+
+
+---
+ 1. P5/P6 联合主线
+     实现完整 MapperHistory / ElementMap 生命周期、FaceMaker / WireJoiner history producer、统一 reference
+     resolver，以及 ExternalGeometryExtension 的 Defining / Frozen / Detached / Missing / Sync 状态机。这个是
+     下一阶段主线，落点在 topo、part、runtime、document、sketcher，见 docs/CADCore方案/细化方案/13-
+     ExternalGeometry-TopoNaming下一阶段主线.md:79。
+
+  2. Topo Naming 收敛
+     补完整 MapperHistory 消费、复杂 split 旧引用恢复、ExternalGeometry 旧引用恢复、ShapeFix / Refine /
+     transformed / DressUp 的命名传播。当前只是主路径骨架和若干 producer 子集，见 docs/CADCore方案/00-CAD-Core
+     抽取方案.md:207。
+
+  3. Sketcher 深水区
+     补完整约束求解、BSpline solver / control-point 语义、复杂 getInternalElementMap()、FaceMakerBuildFace /
+     WireJoiner history 到 InternalShape / internal element 的正式消费，见 docs/CADCore方案/细化方案/00-CAD-
+     Core完整抽取执行总览.md:89。
+
+  4. FeatureExtrude / PartDesign 补强
+     FeatureExtrude 还缺多 face / shell UpToShape、非平面终止、完整 attachment/support/subname 恢复。
+     PartDesign 还缺 Hole ModelThread、标准件表驱动头部尺寸、复杂 Fillet/Chamfer、链式 DressUp
+     SupportTransform ownership、复杂 transformed/pattern ownership，见 docs/CADCore方案/00-CAD-Core抽取方
+     案.md:205。
+
+  5. P8 后置能力
+     Assembly solver、完整 Joint placement / constraint、Worker / WASM / Web adapter、导入 shape 完整
+     ElementMap、完整 FreeCAD Link 账本、ShowElement=true LinkElement / LinkGroup 持久写回事务、cross-document
+     文档哈希 / postfix 生命周期和复杂多层 LinkSub 链还没完整迁移，见 docs/CADCore方案/细化方案/00-CAD-Core完
+     整抽取执行总览.md:92。
+
+
+下一步应该做 P5P6-SCOPE-008 / P5P6-BLOCK-002：ExternalGeometry 的 Frozen / Sync / Detached / Missing
+  原生 FreeCAD 状态机 oracle。
+
+  理由很直接：当前矩阵里 SCOPE-007 已经是 supported，BLOCK-001 已关闭；剩下唯一明确的 notCollected
+  blocker 是 BLOCK-002，落在 docs/FreeCAD几何生态迁移工程-细分/P5P6-ExternalGeometry-TopoNaming联合主
+  线/矩阵/p5p6_blocker_queue.tsv:3。
+
+  建议按这个顺序做：
+
+  1. 先修 native oracle harness / collector，不先写业务 C++。
+      - Frozen 源对象变化不刷新
+      - Frozen + Sync 本次刷新并建议清除 Sync
+      - Detached 不再追随源对象
+      - Missing object/subshape、deleted target、snapshot present/missing
+     为。
+
+  4. 只有 native expected 证明不一致时，再做最小 C++ 修正。
+  5. 回写 SCOPE-008 和 BLOCK-002 为 supported/backendGap/unsupported。
+
+  不要先碰 FaceMaker/WireJoiner/MapperHistory 主线；这些在当前矩阵里已经是 supported/closed 基线。

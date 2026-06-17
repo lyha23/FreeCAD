@@ -1,4 +1,4 @@
-# 【已实现】P5P6-S3 ExternalGeometry 状态机专项复审
+# P5P6-S3 ExternalGeometry 状态机专项复审
 
 ## 目标
 
@@ -12,6 +12,8 @@ P5P6-S3 只裁决 `ExternalGeometryExtension` 状态机的 request-local 边界�
 | `git rev-parse --short HEAD` | `96ad379ba0` |
 | `git log -1 --oneline` | `96ad379ba0 docs: 完成 P5P6 S2 范围准入矩阵` |
 | 初始非本步 dirty | `AGENTS.md`、`DESIGN.md`、`cad-core/CMakeLists.txt` 已在本步骤开始时存在 dirty；S3 不编辑、不暂存、不提交这些文件。 |
+
+当前 live 状态说明：本文件记录 S3 当时的复审结论；S6 后 `P5P6-SCOPE-007/008` 均已变为 supported，`P5P6-BLOCK-001/002` 均已 closed。
 
 ## FreeCAD 依据
 
@@ -32,8 +34,8 @@ P5P6-S3 只裁决 `ExternalGeometryExtension` 状态机的 request-local 边界�
 | ExternalGeometry projection / intersection baseline | `supported` | 保持 `P5P6-SCOPE-005` supported：edge / vertex / face / whole-shape、`ExternalTypes=Projection/Intersection/Both` 已有 P5 expected 和 focused tests。复杂 HLR / 非平面扩展不由 S3 放大。 |
 | ExternalGeometry flags parse / capability | `supported` | 保持 `P5P6-SCOPE-006` supported：协议字段、`ExternalFlags` parse、capability 暴露和 request-local update payload 已存在；这只证明字段与能力通道，不证明五类状态 FreeCAD parity。 |
 | source-prefixed Missing recovery | `supported` | 保持 `P5P6-SCOPE-004` supported：已有 FreeCADCmd oracle 的 source-prefixed recovery 和 C3M2 Missing focused recovery；deleted / unresolved state-machine parity 仍归 `P5P6-SCOPE-008`。 |
-| `Defining` external profile | `notCollected` | 保持 `P5P6-SCOPE-007` notCollected。cad-core 有 `test_p5_external_geometry_defining_participates_in_profile`，但缺 FreeCAD oracle 区分 Defining 与 reference-only external geometry，不能写 supported。 |
-| `Frozen` / `Frozen + Sync` / `Detached` / unresolved `Missing` | `notCollected` | 保持 `P5P6-SCOPE-008` notCollected。cad-core 有 request-local focused tests、native `ExternalGeo` tests 和 C3M2 snapshot fixtures，但缺 FreeCAD source-changed oracle，不能关闭 blocker。 |
+| `Defining` external profile | S3 当时 `notCollected`，当前 supported | S3 当时缺 FreeCAD oracle，不能写 supported；S6 已补 Defining native oracle 和 focused parity，当前 live 矩阵中 `P5P6-SCOPE-007` 为 supported。 |
+| `Frozen` / `Frozen + Sync` / `Detached` / unresolved `Missing` | S3 当时 `notCollected`，当前 supported | S3 当时缺 FreeCAD source-changed oracle，不能关闭 blocker；S6 已补 Frozen/Sync/Detached/Missing native expected 和 focused parity，当前 live 矩阵中 `P5P6-SCOPE-008` 为 supported。 |
 | Missing / deleted recovery 路径 | resolver-only | Missing/deleted 必须先走 `GeoFeature::resolveElement()` 对应的统一 resolver、MapperHistory / ElementMap 和 `ReferenceShadow` evidence。没有唯一 evidence 时输出 stable diagnostic；不得在 `cad-core/src/sketcher/sketch_object_external.cpp` 中猜恢复目标。 |
 | Python facade / GUI / live editing | `nonGoal` | 保持 `P5P6-NG-003`。后端只暴露 flags、diagnostics、mesh/subshape 和 update 建议；不迁移 FreeCAD Python facade、editor session、GUI command、TaskPanel、ViewProvider 或 live editing workflow。 |
 | 完整 Sketcher solver | `nonGoal` | 保持 `P5P6-NG-001`。本主线只保留 solver-facing 输入、状态和 diagnostics，不迁移会移动几何的完整约束求解器。 |
@@ -49,7 +51,7 @@ P5P6-S3 只裁决 `ExternalGeometryExtension` 状态机的 request-local 边界�
 
 ## Oracle 队列
 
-S3 保留并细化两个未关闭 blocker：
+S3 当时保留并细化两个未关闭 blocker；当前 live 状态是两者均已由 S6 关闭：
 
 | blocker | scope | 必采 oracle |
 | --- | --- | --- |
@@ -60,10 +62,10 @@ FreeCAD expected 必须来自本地 FreeCAD 行为或 focused probe，不能从 
 
 ## 矩阵回写
 
-- `p5p6_scope_review_matrix.tsv`：S3 仅细化 `P5P6-SCOPE-007` / `P5P6-SCOPE-008` 的 FreeCAD 依据、cad-core evidence 和下一步；两行继续保持 `notCollected`。
-- `p5p6_blocker_queue.tsv`：保留 `P5P6-BLOCK-001` / `P5P6-BLOCK-002`，把它们作为可执行 FreeCAD oracle 队列，不关闭。
+- `p5p6_scope_review_matrix.tsv`：S3 当时仅细化 `P5P6-SCOPE-007` / `P5P6-SCOPE-008` 的 FreeCAD 依据、cad-core evidence 和下一步；两行在 S3 当时继续保持 `notCollected`。
+- `p5p6_blocker_queue.tsv`：S3 当时保留 `P5P6-BLOCK-001` / `P5P6-BLOCK-002`，把它们作为可执行 FreeCAD oracle 队列，不关闭。
 - `p5p6_non_goal_registry.tsv`：明确 Python facade、GUI/live editing 和完整 solver 的 nonGoal 路由与 reopen 条件。
-- S3 完成时，步骤总览和主线入口只把 S3 标为已实现；后续步骤状态以 live 总览为准。
+- S3 完成时，步骤总览和主线入口只把 S3 标为已完成复审；后续步骤状态以 live 总览为准。
 
 ## 验收
 

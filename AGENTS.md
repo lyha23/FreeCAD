@@ -3,6 +3,7 @@
 ## 仓库目标
 - 本仓库是本地 FreeCAD 源码树，也是抽取 CAD Core 的语义来源；当前目标是基于 `~/Chili3DProject/FreeCAD` 中的 FreeCAD 实现，把几何建模核心逻辑抽到 `~/Chili3DProject/FreeCAD/cad-core`。
 - 抽取范围重点包括文档对象图、属性与链接、依赖分析、recompute、草图、PartDesign 特征链、几何建立、拓扑命名、拓扑元素追踪、几何结果映射与前端 CAD 运行时需要的几何内核能力。
+- 草图约束求解器不属于当前 `cad-core` 迁移实现目标；只保留 Sketcher solver-facing 输入、约束状态、diagnostics、几何更新入口和与几何 / 拓扑命名相关的必要语义，不要把完整约束求解当作待实现缺口。
 - 做架构取舍、API 设计、实现拆分或文档整理时，优先服务上述抽取目标；若“通用后端框架”风格与 FreeCAD 几何库抽取需求冲突，以 FreeCAD 业务语义、可重建能力和 `cad-core` 清晰边界为准。
 - 需要确认行为语义时，优先读取本仓库 `src/` 中对应 FreeCAD 实现，再决定 `cad-core` 中的 C++ API、拓扑命名模型、重建流程和 fixture 期望。
 
@@ -113,11 +114,14 @@
 - 解释草图内部面时必须区分 sketch 的原始 `Shape` 和辅助结果 `InternalShape`：`FaceMakerBuildFace` 失败后得到空 `InternalShape` 是 FreeCAD parity，不代表原始 sketch 边丢失；open profile/open wire 语义应单独表达，不要强行混回 FreeCAD 风格 `InternalShape`。
 - 扩展 Pad/Pocket fixture 或 executor 前，先盘点 `cad-core/fixtures/{mvp,p2}`、`cad-core/src/features/feature_extrude.cpp`、`cad-core/src/features/pad.cpp`、`cad-core/src/features/pocket.cpp` 和对应 FreeCAD 源码的当前覆盖和缺口；优先新增或补齐 oracle case，只有证明 collector 或 expected 本身错误时才先改采集脚本/期望数据。
 
-## 文档命名规范
-- 当前仓库已有两类文档风格：`docs/建模过程说明` 使用编号式系列文档，`docs/CADCore方案` 使用主题式方案文档；新增文档优先沿用所在目录的现有命名风格。
-- 若新增临时排查、修复方案、重构方案且所在目录没有既有编号规范，可沿用 `M-D-HH-mm-主题名称.md` 格式。
-- 修复方案、重构方案、实施方案等方案类文档在代码实现完成并验证后，可将文件重命名为 `M-D-HH-mm-【已实现】主题名称.md`，保持原时间前缀不变；已有编号系列不强制套用该规则。
-- 已存在的上游说明文档（如 `README.md`、`CONTRIBUTING.md`）不因该规则强制改名，除非用户明确要求统一整理。
+## 文档规则
+- 用户指定文档落点时，必须写入对应仓库路径，不要只在聊天里总结。
+- 接口契约写入 `docs/接口规定/`；CAD Core 阶段边界和抽取方案写入 `docs/CADCore方案/`；具体补齐或临时方案写入 `docs/补齐/`。
+- 写方案、排查记录或验收文档时，保留当前基线、关键结论、FreeCAD / OCCT 依据、代码落点、剩余风险、验收命令和下一步；不要写流水账。
+- Markdown 文件（`*.md`）统一命名格式：`M-D-HH-mm-主题名称.md`，例如 `2-21-14-38-图求解实现核查问题清单.md`。
+- 修复方案、重构方案、实施方案等方案类文档在代码实现完成并验证后，应将文件重命名为 `M-D-HH-mm-【已实现】主题名称.md`，保持原时间前缀不变。
+- 已存在文档不要因为命名规则无关改名。
+- 文档里的能力状态要从当前代码、fixtures 和 docs 复核后再写；不要直接复制旧 memory 或旧方案里的数量和状态。
 
 ## 测试指南
 - 代码检查默认只覆盖本次修改涉及的文件、target 或 fixture 范围；仅在用户明确要求时执行全量 FreeCAD 构建或全量 CI 等重操作。

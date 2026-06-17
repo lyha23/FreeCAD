@@ -2,7 +2,7 @@
 
 本文是 `docs/FreeCAD几何生态迁移工程-细分` 下的第一条实施主线：把 P5 Sketcher 外部几何 / 内部元素与 P6 TopoNaming / 引用恢复合并推进。
 
-对应上游方案入口是 `docs/CADCore方案/细化方案/13-ExternalGeometry-TopoNaming下一阶段主线.md` 的实施顺序：补完整 MapperHistory / ElementMap 生命周期、FaceMaker / WireJoiner history producer、统一 reference resolver，以及 `ExternalGeometryExtension` 的 Defining / Frozen / Detached / Missing / Sync 状态机。
+对应上游方案入口是 `docs/CADCore方案/细化方案/13-【已实现】ExternalGeometry-TopoNaming下一阶段主线.md` 的实施顺序：补完整 MapperHistory / ElementMap 生命周期、FaceMaker / WireJoiner history producer、统一 reference resolver，以及 `ExternalGeometryExtension` 的 Defining / Frozen / Detached / Missing / Sync 状态机。
 
 ## 主线目标
 
@@ -109,6 +109,6 @@ live 基线复核
 - `p5p6_blocker_queue.tsv` 中没有未关闭的 `notCollected` 或 `backendGap` 行。
 - P5/P6 的 InternalShape、ExternalGeometry、UpToFace / LinkSub 旧引用恢复使用同一套 MapperHistory / ElementMap / resolver。
 - FaceMaker / WireJoiner 的关键 ownership 不再只是 summary 或几何匹配 fallback，而能被 `NamedShape` / `ElementMap` 或稳定 diagnostics 消费。
-- ExternalGeometryExtension 五类状态均有 FreeCAD oracle / fixture / focused semantic test 覆盖，或被明确保留为 `notCollected` / `unsupported` / `nonGoal` 路由且 blocker 未关闭。
+- ExternalGeometryExtension 五类状态均有 FreeCAD oracle / fixture / focused semantic test 覆盖，当前不保留未关闭 state-machine blocker。
 - 旧 fallback 和 fixture-specific 输出修正已删除；保留的 fallback 必须有 FreeCAD 依据、适用边界、删除条件和 diagnostic。
-- 文档台账回写到 `docs/CADCore方案/细化方案/08-P5-Sketcher核心与内部元素.md`、`09-P6-TopoNaming主路径.md`、`13-ExternalGeometry-TopoNaming下一阶段主线.md`。
+- 文档台账回写到 `docs/CADCore方案/细化方案/08-P5-Sketcher核心与内部元素.md`、`09-P6-TopoNaming主路径.md`、`13-【已实现】ExternalGeometry-TopoNaming下一阶段主线.md`。

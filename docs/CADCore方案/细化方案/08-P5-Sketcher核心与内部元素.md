@@ -2,7 +2,7 @@
 
 P5 让 Sketch 不只是 Pad 的简单 profile，而能承载 FreeCAD 风格外部引用、内部元素和 solver-facing 子集。
 
-下一阶段的 Sketcher 重点不再单独扩大 ExternalGeometry fixture，而是按 `13-ExternalGeometry-TopoNaming下一阶段主线.md` 与 P6 联合推进：ExternalGeometryExtension 状态机、FaceMaker / WireJoiner history 和复杂引用恢复必须落到同一套 MapperHistory / ElementMap 主路径。
+Sketcher 的 ExternalGeometry 状态机、FaceMaker / WireJoiner history 和复杂引用恢复已按 `13-【已实现】ExternalGeometry-TopoNaming下一阶段主线.md` 与 P6 联合收口，并落到同一套 MapperHistory / ElementMap 主路径。
 
 ## 当前基线
 
@@ -18,9 +18,9 @@ P5 让 Sketch 不只是 Pad 的简单 profile，而能承载 FreeCAD 风格外�
 
 ## 已知缺口
 
-- 完整 constraint solver、会移动几何的 Horizontal / Vertical / Distance / Radius 等约束、BSpline solver/control-point 语义仍未迁移；`ExternalGeometryExtension` Defining / Frozen / Detached / Missing / Sync 的 request-local 子集已有 cad-core evidence，但 Defining / state-machine native oracle 仍因本机 `Sketch.addExternal()` probe 崩溃保持 `notCollected`。
+- 完整 constraint solver、会移动几何的 Horizontal / Vertical / Distance / Radius 等约束、BSpline solver/control-point 语义仍未迁移；`ExternalGeometryExtension` Defining / Frozen / Detached / Missing / Sync 已有 native oracle、checked-in expected 和 focused tests 覆盖，继续保持 request-local recompute 语义，不引入跨请求 ExternalGeo shape cache。
 - ExternalGeometry 非平行 circle/ellipse arc edge、非平面 face HLR 投影等复杂场景仍未完整。
-- S6 已关闭 FaceMaker concrete producer 与 WireJoiner recoverable child-wire/current-member parity：producer evidence 先于 `internalElementMapForSketch()` 被 topo 消费；`facemaker_history:summary_only` 和 `wire_joiner_current_member_vertex_multiplicity_blocked` 只作为 diagnostic / 不可证明一对多边界。复杂近切线、重合边、非平面/复杂投影和 native ExternalGeometry state oracle 仍需后续采集。
+- S6 已关闭 FaceMaker concrete producer、WireJoiner recoverable child-wire/current-member parity 和 ExternalGeometry native state oracle：producer evidence 先于 `internalElementMapForSketch()` 被 topo 消费；`facemaker_history:summary_only` 和 `wire_joiner_current_member_vertex_multiplicity_blocked` 只作为 diagnostic / 不可证明一对多边界。复杂近切线、重合边、非平面/复杂投影仍需后续扩展。
 - `Profile.StableSubList=InternalFaceN` 已支持 request-local 证据路径：只有本次 recompute 已导出 `Sketch.InternalShape` 的 `NamedShape` / `ElementMap` 时，Pad / Pocket 才能把 stable selector 解析回当前 `InternalFaceN`；缺证据、不存在或非 face 仍输出稳定 diagnostic，仍不写 raw `FaceN` alias，也不把 InternalShape BREP 做跨请求状态。
 
 ## cad-core 落点
@@ -43,6 +43,6 @@ P5 让 Sketch 不只是 Pad 的简单 profile，而能承载 FreeCAD 风格外�
 
 ## 验收
 
-- `fixtures/p5` 覆盖 profile、BSpline profile、mixed/nested closed-wire face-with-holes、closed-wire hole 的 profile / InternalShape 分离、construction、Coincident、已满足的 Horizontal / Vertical orientation constraint、已满足的 Parallel whole-line relation constraint、已满足的 Perpendicular whole-line / line-circle-arc midpoint / endpoint-to-curve / endpoint-to-endpoint / via-point / point-point-line relation constraint、已满足的 Tangent whole-geometry direct / endpoint-to-curve / endpoint-to-endpoint / tangent-via-point relation constraint、已满足的 PointOnObject point-on-curve constraint、已满足的 Symmetric point-point relation constraint、Block fixed-geometry constraint、已满足的 Angle whole-line / endpoint-to-curve / endpoint-to-endpoint / via-point datum constraint、已满足的 Equal line-length / circle-radius constraint、已满足的 line / line-end-pair Distance / DistanceX / DistanceY / Radius / Diameter datum constraint、已满足的 line endpoint fixed coordinate datum、ExternalGeometry edge / vertex / planar face boundary / normal-face single-line projection / whole-shape Face expansion / ExternalTypes Intersection 和 Both、InternalShape bounded split / overlapping / self-intersection / dangling open-wire 子集、InternalFace SubList / StableSubList Pad 和 unsupported Sketcher 能力；点几何当前由 P7 Hole point fixture 约束。
+- `fixtures/p5` 覆盖 profile、BSpline profile、mixed/nested closed-wire face-with-holes、closed-wire hole 的 profile / InternalShape 分离、construction、Coincident、已满足的 Horizontal / Vertical orientation constraint、已满足的 Parallel whole-line relation constraint、已满足的 Perpendicular whole-line / line-circle-arc midpoint / endpoint-to-curve / endpoint-to-endpoint / via-point / point-point-line relation constraint、已满足的 Tangent whole-geometry direct / endpoint-to-curve / endpoint-to-endpoint / tangent-via-point relation constraint、已满足的 PointOnObject point-on-curve constraint、已满足的 Symmetric point-point relation constraint、Block fixed-geometry constraint、已满足的 Angle whole-line / endpoint-to-curve / endpoint-to-endpoint / via-point datum constraint、已满足的 Equal line-length / circle-radius constraint、已满足的 line / line-end-pair Distance / DistanceX / DistanceY / Radius / Diameter datum constraint、已满足的 line endpoint fixed coordinate datum、ExternalGeometry edge / vertex / planar face boundary / normal-face single-line projection / whole-shape Face expansion / ExternalTypes Intersection 和 Both、Defining external profile、Frozen source-changed、Frozen+Sync source-changed、Detached source-changed、Missing source recovery、InternalShape bounded split / overlapping / self-intersection / dangling open-wire 子集、InternalFace SubList / StableSubList Pad 和 unsupported Sketcher 能力；点几何当前由 P7 Hole point fixture 约束。
 - open profile 不得伪造成 closed face。
 - internal name 解析只在 Sketch `InternalShape` 上生效；`InternalFaceN` 可以有 outer-boundary generated history，但 raw `FaceN` 仍不能解析为稳定 `InternalFaceN`。

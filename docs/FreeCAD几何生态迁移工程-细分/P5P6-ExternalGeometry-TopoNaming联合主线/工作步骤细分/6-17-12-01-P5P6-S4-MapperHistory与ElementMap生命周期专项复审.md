@@ -1,4 +1,4 @@
-# 【已实现】P5P6-S4 MapperHistory 与 ElementMap 生命周期专项复审
+# P5P6-S4 MapperHistory 与 ElementMap 生命周期专项复审
 
 ## 目标
 
@@ -13,11 +13,13 @@ P5P6-S4 只裁决 request-local `MapperHistory` / `ElementMap` / `ReferenceShado
 | `git log -1 --oneline` | `baae7d9419 docs: 完成 P5P6 S3 ExternalGeometry 状态机复审` |
 | 初始非本步 dirty | `AGENTS.md`、`DESIGN.md`、`cad-core/CMakeLists.txt` 已在本步骤开始时存在 dirty；S4 不编辑、不暂存、不提交这些文件。 |
 
+当前 live 状态说明：本文件记录 S4 当时的生命周期复审结论；S6 后 `P5P6-SCOPE-012` 已变为 supported，`P5P6-SCOPE-013` 已变为 closed，`P5P6-BLOCK-005/006` 均已 closed。
+
 ## 输入
 
-- P5P6 主线入口、步骤总览、S0-S3 已实现文档和 live TSV 矩阵。
+- P5P6 主线入口、步骤总览、S0-S3 已完成步骤文档和 live TSV 矩阵。
 - `docs/CADCore方案/细化方案/09-P6-TopoNaming主路径.md`
-- `docs/CADCore方案/细化方案/13-ExternalGeometry-TopoNaming下一阶段主线.md`
+- `docs/CADCore方案/细化方案/13-【已实现】ExternalGeometry-TopoNaming下一阶段主线.md`
 - FreeCAD authority：`src/App/ElementMap.cpp`、`MappedName.cpp`、`GeoFeature.cpp`、`PropertyLinks.cpp`、`src/Mod/Part/App/TopoShapeExpansion.cpp`、`PropertyTopoShape.cpp`、`PartFeature.cpp`。
 - cad-core 只读 evidence：`cad-core/include/cad_core/part/topo_shape_mapper.h`、`topo_shape.h`、`cad-core/src/part/topo_shape.cpp`、`cad-core/src/runtime/recompute.cpp`、`cad-core/tests/test_p6_topology.py`、`test_adapters.py`、`test_diagnostics.py`。
 
@@ -44,24 +46,24 @@ P5P6-S4 只裁决 request-local `MapperHistory` / `ElementMap` / `ReferenceShado
 | 跨请求 `ElementMap` / `NamedShape` / topomap / mesh / shape cache | `nonGoal` | 继续由 `P5P6-NG-002` 排除。`DocumentObject graph` 是唯一真实数据；请求结束后的几何结果不能作为后端长期状态。 |
 | ambiguous split 自动唯一恢复 | `nonGoal` | 继续由 `P5P6-NG-005` 排除。只有 `MapperHistory` / `ElementMap` 能证明同类唯一 replacement 时才可恢复；一对多 split 继续输出 `split_stable_subname` / `subname_resolve_ambiguous` 类 diagnostic。 |
 | 完整对象 BREP protocol | `nonGoal` | 继续由 `P5P6-NG-006` 排除。完整对象 BREP 不进入请求/响应长期协议，也不作为跨请求几何状态。 |
-| `P5P6-SCOPE-012` `Profile.StableSubList=InternalFaceN` without `ReferenceShadow` | `unsupported` | 继续保持 unsupported diagnostic。当前没有 FreeCAD evidence 证明 request-local `InternalFaceN` 可以直接升级成持久 stable selector；若 S5/S6 通过 FaceMaker / WireJoiner producer 和 ElementMap 证明可解析，再重新开 scope。 |
-| `P5P6-SCOPE-013` fallback retirement | `releaseGate` | 继续保持 releaseGate。S4 只确认 fallback 不能替代生命周期主路径；删除或保留临时 fallback 的证据审计等 S5/S6。 |
+| `P5P6-SCOPE-012` `Profile.StableSubList=InternalFaceN` without `ReferenceShadow` | S4 当时 `unsupported`，当前 supported | S4 当时没有 FreeCAD evidence 证明 request-local `InternalFaceN` 可以直接升级成持久 stable selector；S6 已通过 ElementMap-backed InternalShape stable selector support 关闭该行。 |
+| `P5P6-SCOPE-013` fallback retirement | S4 当时 `releaseGate`，当前 closed | S4 只确认 fallback 不能替代生命周期主路径；S6 已完成 fallback audit 并关闭该行。 |
 | MapperHistory / ElementMap backendGap | none | S4 不新增 lifecycle backendGap。live backendGap 仍只保留 FaceMaker concrete producer 和 WireJoiner vertex multiplicity parity。 |
 
 ## 矩阵回写
 
-- `p5p6_scope_review_matrix.tsv`：`P5P6-SCOPE-001/002/003` 保持 supported；`P5P6-SCOPE-012` 保持 unsupported；`P5P6-SCOPE-013` 保持 releaseGate。
-- `p5p6_blocker_queue.tsv`：`P5P6-BLOCK-005` 继续作为 unsupported diagnostic / capability 队列；`P5P6-BLOCK-006` 继续作为 S5/S6 fallback release gate。
+- `p5p6_scope_review_matrix.tsv`：S4 当时 `P5P6-SCOPE-001/002/003` 保持 supported，`P5P6-SCOPE-012` 保持 unsupported，`P5P6-SCOPE-013` 保持 releaseGate；当前 live matrix 中 `P5P6-SCOPE-012` 为 supported，`P5P6-SCOPE-013` 为 closed。
+- `p5p6_blocker_queue.tsv`：S4 当时 `P5P6-BLOCK-005` 继续作为 unsupported diagnostic / capability 队列，`P5P6-BLOCK-006` 继续作为 S5/S6 fallback release gate；当前两者均已 closed。
 - `p5p6_non_goal_registry.tsv`：`persistent_shape_cache`、`automatic_unique_recovery_for_ambiguous_split`、`full_object_brep_protocol` 保持 nonGoal，并保留 reopen condition。
 - `p5p6_backend_gap_classification.tsv`：不加入 MapperHistory / ElementMap lifecycle gap；FaceMaker / WireJoiner producer gap 继续要求喂入既有 MapperHistory / ElementMap 主路径。
-- 主线入口和步骤总览只把 S4 标为已实现；S5-S6 保持待执行。
+- 主线入口和步骤总览只把 S4 标为已完成复审；S5-S6 保持待执行。
 
 ## 后续队列
 
 | 队列 | 保留原因 |
 | --- | --- |
-| `P5P6-BLOCK-005` | `InternalFaceN` stable selector without `ReferenceShadow` 仍缺 FreeCAD evidence；发布前必须有 diagnostic/capability 说明，或由 S5/S6 改为 ElementMap-backed supported。 |
-| `P5P6-BLOCK-006` | summary-only、geometry-match、diagnostic-only fallback 是否可删，必须等 FaceMaker / WireJoiner producer 复审和 S6 发布闸门。 |
+| `P5P6-BLOCK-005` | S4 当时：`InternalFaceN` stable selector without `ReferenceShadow` 仍缺 FreeCAD evidence；当前：已由 S6 改为 ElementMap-backed supported 并关闭。 |
+| `P5P6-BLOCK-006` | S4 当时：summary-only、geometry-match、diagnostic-only fallback 是否可删，必须等 FaceMaker / WireJoiner producer 复审和 S6 发布闸门；当前：已由 S6 fallback audit 关闭。 |
 
 ## 验收
 
