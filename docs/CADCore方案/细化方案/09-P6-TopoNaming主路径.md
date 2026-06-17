@@ -29,7 +29,7 @@ P6 把稳定引用从导出层补丁升级为 CAD Core 的正式账本。目标�
 - 完整 MapperHistory 生命周期仍按 maker 分阶段迁移；FaceMaker / WireJoiner 的 recoverable InternalShape producer 主路径已在 S6 关闭，后续重点转向未采 native ExternalGeometry 状态 oracle、ShapeFix / DressUp / transformed 等剩余 maker history，以及更复杂引用恢复。
 - ShapeFix、DressUp、transformed copy 的完整 maker history 仍未覆盖；taper 当前仍按 partial history 和 `known_gap:taper_history` 验收。
 - split 的完整自动旧引用恢复还不完整；当前只恢复 MapperHistory 能证明同类唯一 target 或 ExternalGeometry collapsed point 的旧 stable 引用；merge 已能记录并跨 Link retag 传播，但 ShapeFix / transformed / DressUp 等完整 MapperHistory 生命周期仍待收敛。
-- FaceMaker / WireJoiner 的 recoverable history consumption 已与 P5 geometry 账本联动：concrete producer evidence 先于几何匹配式 internal map 消费，summary / current-member blocked 分支只保留诊断边界。仍未支持把 request-local `InternalFaceN` without `ReferenceShadow` 作为持久 stable selector；同类一对多、deleted 和 producer-missing 情况继续输出结构化诊断。
+- FaceMaker / WireJoiner 的 recoverable history consumption 已与 P5 geometry 账本联动：concrete producer evidence 先于几何匹配式 internal map 消费，summary / current-member blocked 分支只保留诊断边界。request-local `InternalFaceN` stable selector 只能在本次 recompute 已有 `Sketch.InternalShape` NamedShape / ElementMap 证据时解析；缺证据、同类一对多、deleted 和 producer-missing 情况继续输出结构化诊断。
 - 更复杂的 source-prefixed stable key 仍要服从完整 MapperHistory；同类一对多 split 和 deleted 只输出结构化诊断，不伪造可解析投影。
 
 ## cad-core 落点
@@ -74,4 +74,5 @@ P6 把稳定引用从导出层补丁升级为 CAD Core 的正式账本。目标�
 - FaceMakerBuildFace concrete producer evidence 必须随 `Sketch.InternalShape` 的 `NamedShape` 导出并优先于 summary diagnostic 被消费；P5 through-open-cutter 约束 splitter history，cubic figure-8 BSpline 约束 pre-split history。
 - 无目标 source 只能记录 deleted history，不写入可解析 `ElementMap`；P5 dangling-line 已约束 filtered raw open edge 及其 free endpoint vertex 只记录 deleted history。
 - `InternalFaceN` 只能记录 outer-boundary generated history，不写入 raw `FaceN` alias；P5 closed internal face 已约束 `InternalFace1` 来源于 `Edge1..Edge4` 且 `Face1` 不可解析，closed-wire hole 已约束 hole edge 不混入外框 face 来源。
+- `Profile.StableSubList=InternalFaceN` 只能消费 request-local `Sketch.InternalShape` NamedShape / ElementMap evidence；P5 stable-sublist fixture 约束成功路径，missing-face / missing-evidence focused tests 约束诊断路径，ReferenceShadow recovery 继续走独立 fingerprint evidence。
 - 不能靠输出端排序或 fixture 名称修正稳定引用。

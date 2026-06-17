@@ -4773,8 +4773,44 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pad["status"], "ok")
         self.assert_object_matches_expected(result, "p5", "pad-internal-face-sublist")
 
-    def test_p5_pad_rejects_internal_face_stable_sublist_until_element_map_exists(self) -> None:
-        result = self.run_recompute("pad-internal-face-stable-sublist-unsupported", "p5")
+    def test_p5_pad_accepts_internal_face_stable_sublist_with_internal_named_shape(self) -> None:
+        result = self.run_recompute("pad-internal-face-stable-sublist", "p5")
+        pad = result["objects"]["Pad"]
+        named_shape = result["named_shapes"]["Sketch.InternalShape"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pad["status"], "ok")
+        self.assertEqual(pad["shape"], "occt_solid")
+        self.assertAlmostEqual(pad["volume"], 250.0)
+        self.assertEqual(named_shape["element_map"]["InternalFace1"], "InternalFace1")
+        self.assertIn("InternalFace1", named_shape["elements"])
+        self.assert_object_matches_expected(result, "p5", "pad-internal-face-stable-sublist")
+
+    def test_p5_pad_rejects_missing_internal_face_stable_sublist(self) -> None:
+        fixture_path = ROOT / "fixtures" / "p5" / "pad-internal-face-stable-sublist.json"
+        payload = json.loads(fixture_path.read_text(encoding="utf-8"))
+        profile = payload["Objects"][1]["Properties"]["Profile"]
+        profile["SubList"] = ["InternalFace99"]
+        profile["StableSubList"] = ["InternalFace99"]
+
+        result = self.run_payload(payload)
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_stable_subname"])
+        self.assertEqual(diagnostic["object"], "Pad")
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], "Sketch")
+        self.assertEqual(diagnostic["subname"], "InternalFace99")
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
+
+    def test_p5_pad_rejects_internal_face_stable_sublist_without_internal_shape_evidence(self) -> None:
+        fixture_path = ROOT / "fixtures" / "p5" / "pad-open-wire-profile.json"
+        payload = json.loads(fixture_path.read_text(encoding="utf-8"))
+        profile = payload["Objects"][1]["Properties"]["Profile"]
+        profile["SubList"] = ["InternalFace1"]
+        profile["StableSubList"] = ["InternalFace1"]
+
+        result = self.run_payload(payload)
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_stable_subname"])
@@ -4782,6 +4818,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(diagnostic["property"], "Profile")
         self.assertEqual(diagnostic["target"], "Sketch")
         self.assertEqual(diagnostic["subname"], "InternalFace1")
+        self.assertIn("Sketch.InternalShape NamedShape/ElementMap evidence", diagnostic["message"])
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_accepts_reference_shadow_as_recovery_evidence_only(self) -> None:

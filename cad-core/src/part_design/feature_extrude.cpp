@@ -148,6 +148,113 @@ bool requestLocalInternalSubname(const std::string& subname)
     return part::parseInternalSubshapeName(subname).has_value();
 }
 
+bool requestLocalInternalFaceSubname(const std::string& subname)
+{
+    const auto parsed = part::parseInternalSubshapeName(subname);
+    return parsed && parsed->kind == TopAbs_FACE;
+}
+
+void addUnsupportedInternalStableSubnameDiagnostic(runtime::ComputeContext& context,
+                                                   const app::DocumentObject& object,
+                                                   const app::Link& profileLink,
+                                                   const std::string& featureName,
+                                                   const std::string& stableSubname,
+                                                   const std::string& reason)
+{
+    runtime::addDiagnostic(context.diagnostics,
+                           "error",
+                           "unsupported_stable_subname",
+                           featureName + " Profile.StableSubList cannot reference request-local "
+                               + stableSubname + " without " + reason,
+                           object.name,
+                           "Profile",
+                           "runtime",
+                           profileLink.object,
+                           stableSubname);
+}
+
+const part::NamedShape* sketchInternalNamedShapeEvidence(const app::Link& profileLink,
+                                                         const runtime::ComputeContext& context,
+                                                         const runtime::ShapeValue& shapeValue)
+{
+    const auto namedShapeIt = context.namedShapes.find(profileLink.object + ".InternalShape");
+    if (namedShapeIt != context.namedShapes.end()) {
+        return &namedShapeIt->second;
+    }
+    if (shapeValue.internalNamedShape) {
+        return &*shapeValue.internalNamedShape;
+    }
+    return nullptr;
+}
+
+std::optional<std::string> resolveInternalFaceStableSubname(const app::DocumentObject& object,
+                                                            runtime::ComputeContext& context,
+                                                            const app::Link& profileLink,
+                                                            const runtime::ShapeValue& shapeValue,
+                                                            const std::string& requestedSubname,
+                                                            const std::string& stableSubname,
+                                                            const std::string& featureName)
+{
+    const part::NamedShape* internalNamedShape =
+        sketchInternalNamedShapeEvidence(profileLink, context, shapeValue);
+    if (internalNamedShape == nullptr
+        || internalNamedShape->elements.empty()
+        || internalNamedShape->elementMap.empty()
+        || !shapeValue.internalShape
+        || shapeValue.internalShape->IsNull()) {
+        addUnsupportedInternalStableSubnameDiagnostic(
+            context,
+            object,
+            profileLink,
+            featureName,
+            stableSubname,
+            "Sketch.InternalShape NamedShape/ElementMap evidence");
+        return std::nullopt;
+    }
+
+    const std::string subname = requestedSubname.empty() ? stableSubname : requestedSubname;
+    const auto resolved = part::resolveElementReference(*internalNamedShape, subname, stableSubname);
+    if (resolved.status != part::ElementResolveStatus::Resolved || !resolved.element) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               stableSubnameDiagnosticCode(resolved.status),
+                               stableSubnameDiagnosticMessage("Profile", profileLink.object, stableSubname, resolved.status),
+                               object.name,
+                               "Profile",
+                               "runtime",
+                               profileLink.object,
+                               stableSubname);
+        return std::nullopt;
+    }
+
+    if (!requestLocalInternalFaceSubname(*resolved.element)) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "unsupported_subshape_kind",
+                               featureName + " Profile.StableSubList resolved to non-face " + *resolved.element,
+                               object.name,
+                               "Profile",
+                               "runtime",
+                               profileLink.object,
+                               *resolved.element);
+        return std::nullopt;
+    }
+    if (!part::subshapeByName(*internalNamedShape, *resolved.element)) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_subshape",
+                               featureName + " Profile target " + profileLink.object + " has no subshape "
+                                   + *resolved.element,
+                               object.name,
+                               "Profile",
+                               "runtime",
+                               profileLink.object,
+                               *resolved.element);
+        return std::nullopt;
+    }
+    return *resolved.element;
+}
+
 std::vector<std::string> stableNameCandidatesForProfile(const app::Link& profileLink,
                                                         const app::ReferenceShadow& shadow)
 {
@@ -227,13 +334,16 @@ std::optional<TopoDS_Shape> resolveSketchInternalFaceProfile(const app::Document
 {
     if (profileLink.subnames.empty()) {
         if (profileLink.stableSubnamesExplicit) {
+            std::vector<std::string> internalFaceStableSubnames;
             for (const auto& stableSubname : profileLink.stableSubnames) {
-                if (requestLocalInternalSubname(stableSubname)) {
+                if (requestLocalInternalFaceSubname(stableSubname)) {
+                    internalFaceStableSubnames.push_back(stableSubname);
+                }
+                else if (requestLocalInternalSubname(stableSubname)) {
                     runtime::addDiagnostic(context.diagnostics,
                                            "error",
-                                           "unsupported_stable_subname",
-                                           featureName + " Profile.StableSubList cannot reference request-local "
-                                               + stableSubname + " before Sketch InternalShape ElementMap is available",
+                                           "unsupported_subshape_kind",
+                                           featureName + " Profile.StableSubList requires an InternalFaceN subshape",
                                            object.name,
                                            "Profile",
                                            "runtime",
@@ -241,6 +351,39 @@ std::optional<TopoDS_Shape> resolveSketchInternalFaceProfile(const app::Document
                                            stableSubname);
                     return std::nullopt;
                 }
+            }
+            if (internalFaceStableSubnames.size() > 1U) {
+                runtime::addDiagnostic(context.diagnostics,
+                                       "error",
+                                       "invalid_subshape",
+                                       featureName + " Profile.StableSubList must select exactly one InternalFaceN",
+                                       object.name,
+                                       "Profile",
+                                       "runtime",
+                                       profileLink.object);
+                return std::nullopt;
+            }
+            if (internalFaceStableSubnames.size() == 1U) {
+                // FreeCAD: ~/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+                // ::getInternalElementMap(), key "InternalFace"; PartDesign ProfileBased
+                // consumes selected sketch faces through Profile LinkSub. cad-core accepts a
+                // request-local StableSubList=InternalFaceN only when this recompute already has
+                // the same Sketch.InternalShape NamedShape/ElementMap evidence.
+                const auto currentSubname = resolveInternalFaceStableSubname(object,
+                                                                             context,
+                                                                             profileLink,
+                                                                             shapeValue,
+                                                                             {},
+                                                                             internalFaceStableSubnames.front(),
+                                                                             featureName);
+                if (!currentSubname) {
+                    return std::nullopt;
+                }
+                const auto parsed = part::parseInternalSubshapeName(*currentSubname);
+                if (!parsed || parsed->kind != TopAbs_FACE) {
+                    return std::nullopt;
+                }
+                return part::subshapeByName(*shapeValue.internalShape, *parsed);
             }
         }
         if (shapeValue.profileRequiresSubshapeSelection) {
@@ -284,6 +427,65 @@ std::optional<TopoDS_Shape> resolveSketchInternalFaceProfile(const app::Document
                                profileLink.object);
         return std::nullopt;
     }
+
+    const std::string& subname = profileLink.subnames.front();
+    const auto parsed = part::parseInternalSubshapeName(subname);
+    if (!parsed || parsed->kind != TopAbs_FACE) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "unsupported_subshape_kind",
+                               featureName + " Profile.SubList requires an InternalFaceN subshape",
+                               object.name,
+                               "Profile",
+                               "runtime",
+                               profileLink.object,
+                               subname);
+        return std::nullopt;
+    }
+
+    std::string currentSubname = subname;
+    std::string nonInternalStableSubname;
+    if (profileLink.stableSubnamesExplicit) {
+        const std::string stableSubname =
+            profileLink.stableSubnames.size() == 1U ? profileLink.stableSubnames.front() : std::string{};
+        if (!stableSubname.empty()) {
+            const bool requestLocalStableSubname = part::parseInternalSubshapeName(stableSubname).has_value();
+            if (requestLocalStableSubname) {
+                if (!requestLocalInternalFaceSubname(stableSubname)) {
+                    runtime::addDiagnostic(context.diagnostics,
+                                           "error",
+                                           "unsupported_subshape_kind",
+                                           featureName + " Profile.StableSubList requires an InternalFaceN subshape",
+                                           object.name,
+                                           "Profile",
+                                           "runtime",
+                                           profileLink.object,
+                                           stableSubname);
+                    return std::nullopt;
+                }
+                // FreeCAD: ~/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+                // ::getInternalElementMap(), key "InternalFace"; PartDesign ProfileBased
+                // consumes selected sketch faces through Profile LinkSub. cad-core accepts a
+                // request-local StableSubList=InternalFaceN only when this recompute already has
+                // the same Sketch.InternalShape NamedShape/ElementMap evidence.
+                const auto resolvedSubname = resolveInternalFaceStableSubname(object,
+                                                                              context,
+                                                                              profileLink,
+                                                                              shapeValue,
+                                                                              subname,
+                                                                              stableSubname,
+                                                                              featureName);
+                if (!resolvedSubname) {
+                    return std::nullopt;
+                }
+                currentSubname = *resolvedSubname;
+            }
+            else {
+                nonInternalStableSubname = stableSubname;
+            }
+        }
+    }
+
     if (!shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.cpp
         // ::getTopoShapeVerifiedFace(), throws "Cannot make face from profile" when the linked sketch
@@ -302,9 +504,22 @@ std::optional<TopoDS_Shape> resolveSketchInternalFaceProfile(const app::Document
         return std::nullopt;
     }
 
-    const std::string& subname = profileLink.subnames.front();
-    const auto parsed = part::parseInternalSubshapeName(subname);
-    if (!parsed || parsed->kind != TopAbs_FACE) {
+    if (!nonInternalStableSubname.empty() && profileLink.referenceShadows.empty()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "unsupported_stable_subname",
+                               featureName + " Profile.StableSubList cannot reference stable subname "
+                                   + nonInternalStableSubname + " without ReferenceShadow evidence",
+                               object.name,
+                               "Profile",
+                               "runtime",
+                               profileLink.object,
+                               nonInternalStableSubname);
+        return std::nullopt;
+    }
+
+    const auto currentParsed = part::parseInternalSubshapeName(currentSubname);
+    if (!currentParsed || currentParsed->kind != TopAbs_FACE) {
         runtime::addDiagnostic(context.diagnostics,
                                "error",
                                "unsupported_subshape_kind",
@@ -313,40 +528,11 @@ std::optional<TopoDS_Shape> resolveSketchInternalFaceProfile(const app::Document
                                "Profile",
                                "runtime",
                                profileLink.object,
-                               subname);
+                               currentSubname);
         return std::nullopt;
     }
-    if (profileLink.stableSubnamesExplicit) {
-        const std::string stableSubname =
-            profileLink.stableSubnames.size() == 1U ? profileLink.stableSubnames.front() : std::string{};
-        if (!stableSubname.empty()) {
-            const bool requestLocalStableSubname = part::parseInternalSubshapeName(stableSubname).has_value();
-            if (!requestLocalStableSubname && !profileLink.referenceShadows.empty()) {
-                // ReferenceShadow is the approved stateless evidence channel while Sketch
-                // InternalShape ElementMap is still incomplete; part/topo_shape_reference owns
-                // the actual fingerprint check, not the Pad executor.
-            }
-            else {
-                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
-                // ::getInternalElementMap() is what makes Internal* names traceable through ElementMap.
-                // cad-core has not yet migrated that Sketch InternalShape NamedShape/ElementMap, so an
-                // explicit StableSubList for InternalFaceN would persist a request-local selector as stable.
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "unsupported_stable_subname",
-                                       featureName + " Profile.StableSubList cannot reference request-local " + stableSubname
-                                           + " before Sketch InternalShape ElementMap is available",
-                                       object.name,
-                                       "Profile",
-                                       "runtime",
-                                       profileLink.object,
-                                       stableSubname);
-                return std::nullopt;
-            }
-        }
-    }
 
-    const auto subshape = part::subshapeByName(*shapeValue.internalShape, *parsed);
+    const auto subshape = part::subshapeByName(*shapeValue.internalShape, *currentParsed);
     if (!subshape || subshape->IsNull()) {
         for (const auto& shadow : profileLink.referenceShadows) {
             if (!shadow.target.empty() && shadow.target != profileLink.object) {
@@ -369,12 +555,12 @@ std::optional<TopoDS_Shape> resolveSketchInternalFaceProfile(const app::Document
         runtime::addDiagnostic(context.diagnostics,
                                "error",
                                "invalid_subshape",
-                               featureName + " Profile target " + profileLink.object + " has no subshape " + subname,
+                               featureName + " Profile target " + profileLink.object + " has no subshape " + currentSubname,
                                object.name,
                                "Profile",
                                "runtime",
                                profileLink.object,
-                               subname);
+                               currentSubname);
         return std::nullopt;
     }
     for (const auto& shadow : profileLink.referenceShadows) {
