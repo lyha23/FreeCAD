@@ -71,19 +71,19 @@ live 基线复核
 | --- | --- | --- |
 | 工作步骤总入口 | `工作步骤细分/6-17-11-56-P5P6工作步骤与矩阵拆分逻辑总览.md` | 和 L2 工作步骤总入口一致，索引 S0-S6、执行顺序、当前闸门和状态纪律 |
 | S0 声明口径 | `工作步骤细分/6-17-11-57-P5P6-S0-声明口径与live基线复核.md` | 已冻结本主线纳入 / 排除清单、禁用话术、状态词典和 S1-S6 准入边界 |
-| S1 源码候选 | `工作步骤细分/6-17-11-58-P5P6-S1-FreeCAD源码候选矩阵.md` | 从 FreeCAD 源码生成候选清单，不判定 supported |
+| S1 源码候选 | `工作步骤细分/6-17-11-58-P5P6-S1-FreeCAD源码候选矩阵.md` | 已从 FreeCAD 源码生成候选清单，不判定 supported |
 | S2 范围准入 | `工作步骤细分/6-17-11-59-P5P6-S2-范围准入与blocker矩阵.md` | 把候选转成 scope review、nonGoal、blocker 和 backendGap 分类 |
 | S3 ExternalGeometry | `工作步骤细分/6-17-12-00-P5P6-S3-ExternalGeometry状态机专项复审.md` | 裁决 Defining / Frozen / Detached / Missing / Sync 与 solver/live editing 边界 |
 | S4 MapperHistory / ElementMap | `工作步骤细分/6-17-12-01-P5P6-S4-MapperHistory与ElementMap生命周期专项复审.md` | 裁决 request-local history lifecycle 与跨请求持久状态边界 |
 | S5 FaceMaker / WireJoiner | `工作步骤细分/6-17-12-02-P5P6-S5-FaceMaker-WireJoiner-history-producer专项复审.md` | 裁决 history producer、InternalShape 主路径和 fallback 删除边界 |
 | S6 发布闸门 | `工作步骤细分/6-17-12-03-P5P6-S6-Oracle实现与发布闸门.md` | 消费 blocker 队列，执行 oracle / 实现 / 验证 / 台账回写 |
-| source candidates | `矩阵/p5p6_source_candidates.tsv` | FreeCAD 源码候选清单，候选不等于实现任务 |
+| source candidates | `矩阵/p5p6_source_candidates.tsv` | FreeCAD 源码候选清单，S1 已扩充为 47 条；候选不等于实现任务 |
 | scope review | `矩阵/p5p6_scope_review_matrix.tsv` | 每个语义项的状态、落点、证据和下一步 |
 | blocker queue | `矩阵/p5p6_blocker_queue.tsv` | 本主线实际可消费队列 |
 | nonGoal registry | `矩阵/p5p6_non_goal_registry.tsv` | 公开排除项、用户表现和重新打开条件 |
 | backendGap 分类 | `矩阵/p5p6_backend_gap_classification.tsv` | 把实现缺口按 topo / part / runtime / sketcher 等类别聚合 |
 
-当前 S0 已实现，只冻结声明口径与 live 基线复核；S1-S6 仍为待执行状态。矩阵仍是 seed，不是发布闸门结论。
+当前 S0 已实现，已冻结声明口径与 live 基线复核；S1 已实现，已把本地 FreeCAD 源码入口扩充为候选矩阵；S2-S6 仍为待执行状态。候选矩阵不是发布闸门结论。
 
 ## 实施边界
 
