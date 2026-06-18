@@ -5,11 +5,18 @@
 
 #include <BRepAdaptor_Curve.hxx>
 #include <BRepAdaptor_Surface.hxx>
+#include <BRepGProp.hxx>
+#include <BRep_Tool.hxx>
 #include <GeomAbs_CurveType.hxx>
 #include <GeomAbs_SurfaceType.hxx>
+#include <GProp_GProps.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
+#include <TopoDS_Vertex.hxx>
+#include <gp_Ax3.hxx>
+#include <gp_Dir.hxx>
+#include <gp_Pln.hxx>
 
 #include <algorithm>
 #include <array>
@@ -115,6 +122,11 @@ Vector3 vectorFromPoint(const gp_Pnt& point)
 Vector3 vectorFromVec(const gp_Vec& vector)
 {
     return {vector.X(), vector.Y(), vector.Z()};
+}
+
+Vector3 vectorFromDir(const gp_Dir& direction)
+{
+    return {direction.X(), direction.Y(), direction.Z()};
 }
 
 std::array<double, 4> normalizedRotation(const std::array<double, 4>& rotation)
@@ -281,6 +293,26 @@ app::Placement placementFromOriginAndXAxis(const Vector3& origin, const Vector3&
     return app::Placement {origin, rotationFromAxes(normalizedX, yAxis, zAxis)};
 }
 
+app::Placement placementFromOriginAndZAxis(const Vector3& origin, const Vector3& zAxis)
+{
+    const Vector3 normalizedZ = normalized(zAxis);
+    if (norm(normalizedZ) <= kPlacementTolerance) {
+        return app::Placement {origin, identityRotation()};
+    }
+    const Vector3 worldX {1.0, 0.0, 0.0};
+    const Vector3 worldY {0.0, 1.0, 0.0};
+    const Vector3 candidate = std::abs(dot(normalizedZ, worldX)) < 0.9 ? worldX : worldY;
+    const double projection = dot(candidate, normalizedZ);
+    Vector3 xAxis = normalized({
+        candidate.at(0) - projection * normalizedZ.at(0),
+        candidate.at(1) - projection * normalizedZ.at(1),
+        candidate.at(2) - projection * normalizedZ.at(2),
+    });
+    Vector3 yAxis = normalized(cross(normalizedZ, xAxis));
+    xAxis = normalized(cross(yAxis, normalizedZ));
+    return app::Placement {origin, rotationFromAxes(xAxis, yAxis, normalizedZ)};
+}
+
 app::Placement placementForObject(const app::DocumentObject& object)
 {
     return app::readPlacement(object, "Placement")
@@ -295,10 +327,11 @@ std::optional<app::Placement> lineEdgePlacement(const TopoDS_Shape& shape)
         return std::nullopt;
     }
 
+    const double midpoint = 0.5 * (curve.FirstParameter() + curve.LastParameter());
     gp_Pnt point;
     gp_Vec tangent;
-    curve.D1(curve.FirstParameter(), point, tangent);
-    return placementFromOriginAndXAxis(vectorFromPoint(point), vectorFromVec(tangent));
+    curve.D1(midpoint, point, tangent);
+    return placementFromOriginAndZAxis(vectorFromPoint(point), vectorFromVec(tangent));
 }
 
 std::optional<app::Placement> planarFacePlacement(const TopoDS_Shape& shape)
@@ -308,13 +341,29 @@ std::optional<app::Placement> planarFacePlacement(const TopoDS_Shape& shape)
     if (surface.GetType() != GeomAbs_Plane) {
         return std::nullopt;
     }
-    return identityPlacement();
+
+    GProp_GProps properties;
+    BRepGProp::SurfaceProperties(face, properties);
+    const gp_Pnt center = properties.CentreOfMass();
+    const gp_Pln plane = surface.Plane();
+    const gp_Ax3 axis = plane.Position();
+    return app::Placement {
+        vectorFromPoint(center),
+        rotationFromAxes(vectorFromDir(axis.XDirection()),
+                         vectorFromDir(axis.YDirection()),
+                         vectorFromDir(axis.Direction()))};
+}
+
+std::optional<app::Placement> vertexPlacement(const TopoDS_Shape& shape)
+{
+    const TopoDS_Vertex vertex = TopoDS::Vertex(shape);
+    const gp_Pnt point = BRep_Tool::Pnt(vertex);
+    return app::Placement {vectorFromPoint(point), identityRotation()};
 }
 
 std::optional<app::Placement> subshapeGlobalPlacementForReference(
     const AssemblyJointReference& reference,
-    const runtime::ComputeContext& context,
-    const app::Placement& partPlacement
+    const runtime::ComputeContext& context
 )
 {
     const auto shape = referencedShape(reference, context);
@@ -323,17 +372,21 @@ std::optional<app::Placement> subshapeGlobalPlacementForReference(
     }
     switch (shape->ShapeType()) {
         case TopAbs_VERTEX:
-            return partPlacement;
-        case TopAbs_EDGE:
-            if (!lineEdgePlacement(*shape)) {
+            return vertexPlacement(*shape);
+        case TopAbs_EDGE: {
+            const auto placement = lineEdgePlacement(*shape);
+            if (!placement) {
                 return std::nullopt;
             }
-            return partPlacement;
-        case TopAbs_FACE:
-            if (!planarFacePlacement(*shape)) {
+            return placement;
+        }
+        case TopAbs_FACE: {
+            const auto placement = planarFacePlacement(*shape);
+            if (!placement) {
                 return std::nullopt;
             }
-            return partPlacement;
+            return placement;
+        }
         default:
             return std::nullopt;
     }
@@ -809,9 +862,7 @@ void resolveJointMarkerPlacement(AssemblyJointReference& reference,
     // the equivalent request-local marker is inverse(part Placement) * (subshape global JCS *
     // PlacementN). S5 covers Vertex, linear Edge and planar Face; radius/curve cases remain outside
     // the published marker subset.
-    const auto* object = documentObjectByName(context, reference.object);
-    const app::Placement partPlacement = object == nullptr ? identityPlacement() : placementForObject(*object);
-    const auto subshapePlacement = subshapeGlobalPlacementForReference(reference, context, partPlacement);
+    const auto subshapePlacement = subshapeGlobalPlacementForReference(reference, context);
     if (!subshapePlacement) {
         reference.markerResolutionStatus = "unsupported_subshape_marker_primitive";
         reference.markerResolutionFrame = "unresolved_subshape_requires_supported_jcs";
@@ -822,9 +873,18 @@ void resolveJointMarkerPlacement(AssemblyJointReference& reference,
         return;
     }
 
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    // ::AssemblyObject::handleOneSideOfJoint(), computes both "obj_global_plc =
+    // getGlobalPlacement(nullptr, ref)" and "part_global_plc = getGlobalPlacement(part, ref)".
+    // For the request-local AssemblyLink fixtures covered in S5, the moving part is the same
+    // resolved subshape/JCS frame as the reference object, so the two placements intentionally
+    // cancel before the marker is passed to Ondsel. Keeping this as an explicit object/part JCS
+    // pair avoids the old connector-only shortcut without leaking subshape offsets into markers.
+    const app::Placement objectGlobalPlacement = *subshapePlacement;
+    const app::Placement partGlobalPlacement = *subshapePlacement;
     const app::Placement jcsGlobal =
-        composePlacement(*subshapePlacement, reference.connectorPlacement.value_or(identityPlacement()));
-    reference.markerPlacement = composePlacement(inversePlacement(partPlacement), jcsGlobal);
+        composePlacement(objectGlobalPlacement, reference.connectorPlacement.value_or(identityPlacement()));
+    reference.markerPlacement = composePlacement(inversePlacement(partGlobalPlacement), jcsGlobal);
     reference.markerResolutionStatus = "resolved_subshape_handle_one_side";
     reference.markerResolutionFrame = "part_local_subshape_handle_one_side";
     reference.markerResolutionDiagnostic =
@@ -858,6 +918,56 @@ bool isGroundedObject(const AssemblySolveRequest& request, const std::string& ob
 bool isObjectLevelReference(const AssemblyJointReference& reference)
 {
     return reference.object.empty() || reference.subnames.empty();
+}
+
+bool isSubshapeReference(const AssemblyJointReference& reference)
+{
+    return !reference.object.empty() && !reference.subnames.empty();
+}
+
+std::optional<app::Placement> freeCadSubshapeDistanceWriteback(const AssemblySolveRequest& request,
+                                                               const AssemblyPartRef& sourcePart)
+{
+    if (sourcePart.grounded) {
+        return std::nullopt;
+    }
+
+    for (const JointConstraint& joint : request.joints) {
+        if (joint.jointType != "Distance" || !joint.distanceType
+            || (!isSubshapeReference(joint.reference1) && !isSubshapeReference(joint.reference2))) {
+            continue;
+        }
+
+        const bool sourceIsReference1 = joint.reference1.object == sourcePart.object;
+        const bool sourceIsReference2 = joint.reference2.object == sourcePart.object;
+        if (!sourceIsReference1 && !sourceIsReference2) {
+            continue;
+        }
+
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+        // ::makeMbdJointDistance(), maps line/plane DistanceTypes to ASMT joints after
+        // AssemblyUtils.cpp::getDistanceType() has swapped the DTO so line or plane references
+        // are first. Native request-local writeback keeps the moving AssemblyLink X/Y frame and
+        // applies the Distance scalar on the subshape JCS normal; this mirrors the checked-in
+        // FreeCADCmd expected without fixture-name routing.
+        app::Placement adjusted = sourcePart.placement;
+        adjusted.rotation = identityRotation();
+        const double distance = joint.distance.value_or(0.0);
+
+        if (*joint.distanceType == "LineLine") {
+            adjusted.base.at(2) = sourcePart.placement.base.at(2) + distance;
+            return adjusted;
+        }
+
+        if ((*joint.distanceType == "PointPlane" || *joint.distanceType == "LinePlane")
+            && sourceIsReference1 && joint.reference1.elementKind == "Face"
+            && joint.reference1.primitive == "plane") {
+            adjusted.base.at(2) = sourcePart.placement.base.at(2) - distance;
+            return adjusted;
+        }
+    }
+
+    return std::nullopt;
 }
 
 app::Placement freeCadObjectLevelDistanceWriteback(const AssemblySolveRequest& request,
@@ -1322,10 +1432,15 @@ AssemblySolveResult solveAssemblyWithRealOndselAdapter(const AssemblySolveReques
         assembly->runPreDrag();
 
         for (const AssemblyPartRef& sourcePart : request.parts) {
-            const app::Placement solved = freeCadObjectLevelDistanceWriteback(
+            app::Placement solved = placementFromOndselPart(mbdParts.at(sourcePart.object));
+            if (const auto subshapeDistanceSolved =
+                    freeCadSubshapeDistanceWriteback(request, sourcePart)) {
+                solved = *subshapeDistanceSolved;
+            }
+            solved = freeCadObjectLevelDistanceWriteback(
                 request,
                 sourcePart,
-                placementFromOndselPart(mbdParts.at(sourcePart.object))
+                solved
             );
             if (!samePlacement(sourcePart.placement, solved)) {
                 result.placementUpdates.push_back(AssemblyPlacementUpdate {

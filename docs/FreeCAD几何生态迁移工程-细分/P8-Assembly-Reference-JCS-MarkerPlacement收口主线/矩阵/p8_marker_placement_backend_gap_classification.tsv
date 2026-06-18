@@ -1,13 +1,13 @@
 category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
 MP-BG-001	ordinary_reference_validation_and_dispatch	P0	MP-SCOPE-002	no	S5 resolves ordinary supported marker sides and returns explicit unsupported reasons for missing marker placement; release remains blocked by placement parity gaps only
-MP-BG-002	object_subshape_global_transform	P0	MP-SCOPE-003	no	S5 closes object/subshape transform for 11 representative expected; LineLine PointLine PointPlane LinePlane still need native placement parity
-MP-BG-003	containing_part_local_transform_and_offset	P0	MP-SCOPE-004	no	S5 implements request-local part-local marker boundary for the closed identity-offset AssemblyLink fixtures; remaining 4 Distance Line/mixed cases keep this partially open
+MP-BG-002	object_subshape_global_transform	P0	MP-SCOPE-003	no	S5 closes object/subshape transform for 14 representative expected; PointLine still needs native placement parity
+MP-BG-003	containing_part_local_transform_and_offset	P0	MP-SCOPE-004	no	S5 implements request-local part-local marker boundary for the closed identity-offset AssemblyLink fixtures; remaining PointLine case keeps this partially open
 MP-BG-004	vertex_jcs_marker_parity	P1	MP-SCOPE-005;MP-SCOPE-012	no	S5 deleted known_gap from Ball Vertex and Distance PointPoint zero/nonzero; keep as active regression evidence
-MP-BG-005	edge_jcs_marker_parity	P1	MP-SCOPE-006;MP-SCOPE-012	no	S5 deleted known_gap from Revolute Slider Cylindrical Edge; LineLine and PointLine remain known_gap
-MP-BG-006	face_jcs_marker_parity	P1	MP-SCOPE-007;MP-SCOPE-012	no	S5 deleted known_gap from Fixed Parallel Perpendicular Angle Face and PlanePlane; PointPlane and LinePlane remain known_gap
-MP-BG-007	mixed_reference_swap_marker_sync	P0	MP-SCOPE-008	no	S5 keeps PointLine PointPlane LinePlane known_gap because real placement_updates still differ from checked-in native expected
-MP-BG-008	current_value_jcs_parity	P1	MP-SCOPE-009	no	S5 consumes current-value evidence for closed PointPoint PlanePlane Angle cases; remaining Distance Line/mixed current value path still blocks release
-MP-BG-009	real_ondsel_consumption_gate	P1	MP-SCOPE-011	no	S5 proves resolved markerPlacement is consumed by addConstraintToOndselAssembly for 11 active expected and removes identity fallback; 4 expected still block full release
+MP-BG-005	edge_jcs_marker_parity	P1	MP-SCOPE-006;MP-SCOPE-012	no	S5 deleted known_gap from Revolute Slider Cylindrical Edge and LineLine; PointLine remains known_gap
+MP-BG-006	face_jcs_marker_parity	P1	MP-SCOPE-007;MP-SCOPE-012	no	S5 deleted known_gap from Fixed Parallel Perpendicular Angle Face, PlanePlane, PointPlane and LinePlane
+MP-BG-007	mixed_reference_swap_marker_sync	P0	MP-SCOPE-008	no	S5 keeps PointLine known_gap because real placement_updates still differ from checked-in native expected
+MP-BG-008	current_value_jcs_parity	P1	MP-SCOPE-009	no	S5 consumes current-value evidence for closed PointPoint PlanePlane Angle PointPlane and LinePlane cases; PointLine current value path still blocks release
+MP-BG-009	real_ondsel_consumption_gate	P1	MP-SCOPE-011	no	S5 proves resolved markerPlacement is consumed by addConstraintToOndselAssembly for 14 active expected and removes identity fallback; 1 expected still blocks full release
 MP-BG-010	special_rewrite_regression_gate	P1	MP-SCOPE-010	no	S5 keeps RackPinion Screw Gears Belt focused tests green after ordinary resolver switch and RackPinion marker rewrite remains active expected
-MP-BG-011	capability_publication_gate	P1	MP-SCOPE-013	no	S6 remains blocked; do not publish C ABI marker capability until remaining 4 Distance Line/mixed expected close or scope is formally narrowed
+MP-BG-011	capability_publication_gate	P1	MP-SCOPE-013	no	S6 remains blocked; do not publish C ABI marker capability until the remaining PointLine expected closes or scope is formally narrowed
 MP-BG-012	radius_curve_gui_session_non_goal	P2	MP-SCOPE-014	yes	S2 confirmed nonGoal; keep radius-bearing curve/default GUI session persistent solver state and connector-only shortcut outside the published supported subset

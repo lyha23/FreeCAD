@@ -20,19 +20,16 @@
 
 - `cad-core/src/assembly/joint_solver.cpp::resolveJointMarkerPlacement()` 已从 S3 的 subshape withholding 切到 S5 resolver：Reference 缺失 / missing object 仍给稳定 diagnostic；Vertex、linear Edge、planar Face subshape 进入 `resolved_subshape_handle_one_side`，并输出 request-local part-local `markerPlacement`。
 - real Ondsel adapter 不再对缺失 marker 做 identity fallback：supported joint 两侧 marker 缺失时进入 `unsupported_assembly_solver`，`addConstraintToOndselAssembly()` 只消费 resolver 输出。
-- `CadCoreExpectedFixtureTest` 已解锁 11 个 S4 subshape expected：Ball Vertex、Revolute / Slider / Cylindrical Edge、Fixed / Parallel / Perpendicular / Angle Face、Distance PointPoint zero / nonzero、Distance PlanePlane。
-- 仍保留 4 个 checked-in expected 的 `known_gap`：`assembly-distance-line-line-real-solver`、`assembly-distance-point-line-real-solver`、`assembly-distance-point-plane-real-solver`、`assembly-distance-line-plane-real-solver`。这些 case 当前 real Ondsel `placement_updates` 仍与 native expected 不一致，集中在 Distance Line / mixed PointLine / PointPlane / LinePlane 的 FreeCAD JCS / marker initialization parity。
+- `CadCoreExpectedFixtureTest` 已解锁 14 个 S4 subshape expected：Ball Vertex、Revolute / Slider / Cylindrical Edge、Fixed / Parallel / Perpendicular / Angle Face、Distance PointPoint zero / nonzero、Distance LineLine、Distance PointPlane、Distance LinePlane、Distance PlanePlane。
+- 仍保留 1 个 checked-in expected 的 `known_gap`：`assembly-distance-point-line-real-solver`。这个 case 当前 real Ondsel `placement_updates` 仍与 native expected 不一致，集中在 Distance PointLine 的 FreeCAD JCS / marker initialization parity。
 - RackPinion / Screw special regression 未回退；`assembly-screw-rackpinion-sliding-swap-diagnostic` 现在因 marker resolver 可用进入 real solver path，focused test 已改为验证 request-local swap、Screw scalar、RackPinion rewrite 和 writeback。
-- S5 未发布 C ABI capability；S6 不能进入发布闸门，除非上述 4 个 remaining expected 继续关闭或 upstream scope 文档明确收窄发布范围。
+- S5 未发布 C ABI capability；S6 不能进入发布闸门，除非上述 1 个 remaining expected 继续关闭或 upstream scope 文档明确收窄发布范围。
 
 ## remaining known_gap
 
 | fixture | 当前 cad-core 表现 | native expected | blocker |
 | --- | --- | --- | --- |
-| `assembly-distance-line-line-real-solver` | `ComponentB` 写到 `[1.5, 0, 0]` | `[4, 0, 1.5]` | `MP-BLOCK-002/003/006` |
 | `assembly-distance-point-line-real-solver` | `ComponentB` 写到 `[1.5, 0, 0]` | 近似 `[4.003128620988115, 0, -0.007784756160183933]` 且有 Y 轴旋转 | `MP-BLOCK-002/003/005/006` |
-| `assembly-distance-point-plane-real-solver` | 走 rotated line-style solve | `[4, 0, -1.5]` | `MP-BLOCK-002/003/005/006` |
-| `assembly-distance-line-plane-real-solver` | 走 rotated line-style solve | `[4, 0, -1.5]` | `MP-BLOCK-002/003/005/006` |
 
 ## 验收
 
@@ -50,7 +47,7 @@ git diff --check -- cad-core/include/cad_core/assembly cad-core/src/assembly cad
 
 - `cmake --build cad-core/build` 通过。
 - `python3 -m unittest cad-core.tests.test_p8_features.CadCoreP8FeatureTest -k 'assembly|distance_type|marker'` 在当前 `unittest` 中按字面匹配，结果 0 tests / exit 5；等价多 `-k` 命令 `python3 -m unittest cad-core.tests.test_p8_features.CadCoreP8FeatureTest -k assembly -k distance_type -k marker` 通过，`Ran 19 tests`。
-- `python3 -m unittest cad-core.tests.test_expected_fixtures.CadCoreExpectedFixtureTest -k c3m6` 同样按测试方法名匹配，结果 0 tests / exit 5；实际执行 `python3 -m unittest cad-core.tests.test_expected_fixtures.CadCoreExpectedFixtureTest` 通过，`OK (skipped=13)`，其中本包 remaining c3m6 skip 为上述 4 个 expected。
+- `python3 -m unittest cad-core.tests.test_expected_fixtures.CadCoreExpectedFixtureTest -k c3m6` 同样按测试方法名匹配，结果 0 tests / exit 5；实际执行 `python3 -m unittest cad-core.tests.test_expected_fixtures.CadCoreExpectedFixtureTest` 通过，`OK (skipped=10)`，其中本包 remaining c3m6 skip 为上述 1 个 expected。
 
 ## 非目标
 

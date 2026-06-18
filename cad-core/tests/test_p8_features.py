@@ -1976,11 +1976,11 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ("assembly-marker-angle-face-real-solver", "Angle", False, False),
             ("assembly-distance-point-point-nonzero-real-solver", "Distance", False, False),
             ("assembly-distance-point-point-zero-real-solver", "Distance", False, False),
-            ("assembly-distance-line-line-real-solver", "Distance", False, True),
+            ("assembly-distance-line-line-real-solver", "Distance", False, False),
             ("assembly-distance-point-line-real-solver", "Distance", True, True),
             ("assembly-distance-plane-plane-real-solver", "Distance", False, False),
-            ("assembly-distance-point-plane-real-solver", "Distance", True, True),
-            ("assembly-distance-line-plane-real-solver", "Distance", True, True),
+            ("assembly-distance-point-plane-real-solver", "Distance", True, False),
+            ("assembly-distance-line-plane-real-solver", "Distance", True, False),
         ]
         for fixture, joint_type, swapped, remains_gap in subshape_cases:
             with self.subTest(fixture=fixture):
