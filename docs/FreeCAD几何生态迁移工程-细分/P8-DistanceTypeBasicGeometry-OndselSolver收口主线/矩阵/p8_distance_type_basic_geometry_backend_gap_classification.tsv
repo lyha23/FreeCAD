@@ -1,0 +1,9 @@
+category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
+DTC-BG-001	reference_element_classification_gap	P1	DTC-SCOPE-002	no	S3 add DistanceType DTO fields request-local JCS ordering and solver JSON evidence
+DTC-BG-002	pointpoint_distance_mapping_gap	P1	DTC-SCOPE-003	no	S4 implement PointPoint zero ASMTSphericalJoint and nonzero ASMTSphSphJoint distanceIJ
+DTC-BG-003	edge_basic_distance_mapping_gap	P1	DTC-SCOPE-004	no	S4 implement LineLine ASMTRevCylJoint distanceIJ and PointLine ASMTCylSphJoint distanceIJ
+DTC-BG-004	plane_basic_distance_mapping_gap	P1	DTC-SCOPE-005	no	S4 implement PlanePlane ASMTPlanarJoint offset PointPlane ASMTPointInPlaneJoint offset LinePlane ASMTLineInPlaneJoint offset
+DTC-BG-005	native_expected_collection_gate	P1	DTC-SCOPE-006	no	S5 add c3m6 fixtures and collect FreeCADCmd expected for seven basic DistanceType cases
+DTC-BG-006	capability_publication_release_gate	P1	DTC-SCOPE-007	no	S5 S6 publish basic DistanceType support in C ABI capabilities and update upstream P8 matrix
+DTC-BG-007	radius_bearing_next_batch	P2	DTC-SCOPE-008	yes	Open a second DistanceType radius package for getEdgeRadius getFaceRadius and circle cylinder sphere torus cases
+DTC-BG-008	curve_default_and_gui_non_goal	P3	DTC-SCOPE-009	yes	Keep curve default GUI session and persistent solver behavior out of this package
