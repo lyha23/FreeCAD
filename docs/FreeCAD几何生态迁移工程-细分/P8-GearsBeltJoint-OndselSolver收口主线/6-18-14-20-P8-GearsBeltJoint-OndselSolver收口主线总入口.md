@@ -58,7 +58,7 @@
 | 类型 | 路径 | 用途 |
 | --- | --- | --- |
 | 工作步骤总入口 | `工作步骤细分/6-18-14-20-【已实现】P8-GearsBeltJoint工作步骤总入口.md` | S0-S6 执行索引，已完成索引校验 |
-| S0 声明口径 | `工作步骤细分/6-18-14-21-P8-GearsBeltJoint-S0-声明口径与live基线复核.md` | 冻结 claims、非目标和 current unsupported 基线 |
+| S0 声明口径 | `工作步骤细分/6-18-14-21-【已实现】P8-GearsBeltJoint-S0-声明口径与live基线复核.md` | 冻结 claims、非目标和 current unsupported 基线，已完成 live baseline 复核 |
 | S1 FreeCAD 源码候选 | `工作步骤细分/6-18-14-22-P8-GearsBeltJoint-S1-FreeCAD源码候选矩阵.md` | 建立 source authority 和 candidate TSV |
 | S2 范围准入 | `工作步骤细分/6-18-14-23-P8-GearsBeltJoint-S2-范围准入与blocker矩阵.md` | 将候选路由到 unsupportedImplementable / notCollected / nonGoal |
 | S3 DTO / 映射复审 | `工作步骤细分/6-18-14-24-P8-GearsBeltJoint-S3-Distance2与ASMTGearJoint映射专项复审.md` | 收口 `Distance2` DTO 和 `ASMTGearJoint` adapter |
@@ -71,4 +71,4 @@
 | non goal registry | `矩阵/p8_gears_belt_joint_non_goal_registry.tsv` | 不进入本轮实现的边界 |
 | backend gap classification | `矩阵/p8_gears_belt_joint_backend_gap_classification.tsv` | unsupported / notCollected / releaseGate / nonGoal 分类 |
 
-当前工作步骤索引已完成校验；S0-S6 均为 `待执行`；矩阵是 seed，不是发布闸门结论。
+当前工作步骤索引已完成校验；S0 已完成 live baseline 复核，S1-S6 仍为 `待执行`；矩阵是 seed，不是发布闸门结论。

@@ -4,7 +4,7 @@
 
 把 Gears / Belt 两个 `ASMTGearJoint` 族 JointType 从 remaining unsupported 队列推进到 real Ondsel request-local supported 子集，并保持 RackPinion / Screw 和复杂 Distance geometry 不被误发布。
 
-当前收口状态：S0 到 S6 均为待执行。已建立初始矩阵骨架，但尚未完成 `Distance2` DTO、ASMTGearJoint 映射、oracle、focused tests 或发布闸门；不得把整个主线写成“已实现”。
+当前收口状态：S0 已完成 live baseline 复核，S1 到 S6 均为待执行。已建立初始矩阵骨架，但尚未完成 `Distance2` DTO、ASMTGearJoint 映射、oracle、focused tests 或发布闸门；不得把整个主线写成“已实现”。
 
 索引关闭口径：本文件只表示工作步骤索引、矩阵文件名和轻量验收命令已经复核；S0-S6 仍由各自文件推进，不能因为本文件改名为 `【已实现】` 而跳过后续队列。
 
@@ -12,7 +12,7 @@
 
 | 步骤 | 文件 | 当前状态 | 解决的问题 |
 | --- | --- | --- | --- |
-| S0 | `6-18-14-21-P8-GearsBeltJoint-S0-声明口径与live基线复核.md` | 待执行 | 冻结支持声明、禁止声明和 current unsupported 基线 |
+| S0 | `6-18-14-21-【已实现】P8-GearsBeltJoint-S0-声明口径与live基线复核.md` | 已实现 | 冻结支持声明、禁止声明和 current unsupported 基线 |
 | S1 | `6-18-14-22-P8-GearsBeltJoint-S1-FreeCAD源码候选矩阵.md` | 待执行 | 建立 FreeCAD / cad-core source candidates |
 | S2 | `6-18-14-23-P8-GearsBeltJoint-S2-范围准入与blocker矩阵.md` | 待执行 | 将候选路由到 unsupportedImplementable、notCollected、releaseGate、nonGoal |
 | S3 | `6-18-14-24-P8-GearsBeltJoint-S3-Distance2与ASMTGearJoint映射专项复审.md` | 待执行 | 收口 `Distance2` DTO、Gears/Belt ASMT 映射和 supported predicate |
