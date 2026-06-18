@@ -10,7 +10,7 @@
 
 | 步骤 | 文件 | 当前状态 | 解决的问题 |
 | --- | --- | --- | --- |
-| S0 | `6-19-06-42-P8-DistanceTypeExtendedGeometry-S0-声明口径与live基线复核.md` | 待执行 | 冻结当前 supported basic subset、MarkerPlacement subset、剩余 DistanceType 范围和非目标 |
+| S0 | `6-19-06-42-【已实现】P8-DistanceTypeExtendedGeometry-S0-声明口径与live基线复核.md` | 已实现 | 已冻结当前 supported basic subset、MarkerPlacement subset、剩余 DistanceType 范围和非目标 |
 | S1 | `6-19-06-43-P8-DistanceTypeExtendedGeometry-S1-FreeCAD源码候选矩阵.md` | 待执行 | 复核 DistanceType enum、classification、radius helper、ASMT switch、cad-core landing |
 | S2 | `6-19-06-44-P8-DistanceTypeExtendedGeometry-S2-范围准入与blocker矩阵.md` | 待执行 | 将 remaining cases 分类为 implementation batch、oracle-first、default/TODO boundary、nonGoal |
 | S3 | `6-19-06-45-P8-DistanceTypeExtendedGeometry-S3-RadiusPrimitive证据专项复审.md` | 待执行 | 补 DTO / JSON radius evidence 和 primitive resolver 设计 |
