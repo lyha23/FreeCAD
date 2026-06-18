@@ -1937,13 +1937,13 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 for side, solver_ref in (("reference1", solver_ref1), ("reference2", solver_ref2)):
                     reference = solver_joint[side]
                     self.assertEqual(reference["object"], solver_ref["object"])
-                    self.assertEqual(reference["markerResolutionStatus"], "requires_subshape_handle_one_side_evidence")
-                    self.assertEqual(reference["markerResolutionFrame"], "unresolved_subshape_requires_part_local_marker")
-                    self.assertTrue(reference["markerResolutionRequiresHandleOneSide"])
+                    self.assertEqual(reference["markerResolutionStatus"], "resolved_subshape_handle_one_side")
+                    self.assertEqual(reference["markerResolutionFrame"], "part_local_subshape_handle_one_side")
+                    self.assertFalse(reference["markerResolutionRequiresHandleOneSide"])
                     self.assertFalse(reference["markerResolutionUsedObjectLevelBaseline"])
                     self.assertTrue(reference["markerResolutionConnectorDefaulted"])
                     self.assert_identity_placement(reference["connectorPlacement"])
-                    self.assertIsNone(reference["markerPlacement"])
+                    self.assert_identity_placement(reference["markerPlacement"])
                     self.assertIn("handleOneSideOfJoint", reference["markerResolutionDiagnostic"])
 
     def test_c3m6_assembly_marker_resolver_exposes_object_level_baseline_evidence(self) -> None:
@@ -1966,27 +1966,31 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def test_c3m6_assembly_marker_placement_s4_native_oracle_expected_batch(self) -> None:
         subshape_cases = [
-            ("assembly-marker-ball-vertex-real-solver", "Ball", False),
-            ("assembly-marker-revolute-edge-real-solver", "Revolute", False),
-            ("assembly-marker-slider-edge-real-solver", "Slider", False),
-            ("assembly-marker-cylindrical-edge-real-solver", "Cylindrical", False),
-            ("assembly-marker-fixed-face-real-solver", "Fixed", False),
-            ("assembly-marker-parallel-face-real-solver", "Parallel", False),
-            ("assembly-marker-perpendicular-face-real-solver", "Perpendicular", False),
-            ("assembly-marker-angle-face-real-solver", "Angle", False),
-            ("assembly-distance-point-point-nonzero-real-solver", "Distance", False),
-            ("assembly-distance-point-point-zero-real-solver", "Distance", False),
-            ("assembly-distance-line-line-real-solver", "Distance", False),
-            ("assembly-distance-point-line-real-solver", "Distance", True),
-            ("assembly-distance-plane-plane-real-solver", "Distance", False),
-            ("assembly-distance-point-plane-real-solver", "Distance", True),
-            ("assembly-distance-line-plane-real-solver", "Distance", True),
+            ("assembly-marker-ball-vertex-real-solver", "Ball", False, False),
+            ("assembly-marker-revolute-edge-real-solver", "Revolute", False, False),
+            ("assembly-marker-slider-edge-real-solver", "Slider", False, False),
+            ("assembly-marker-cylindrical-edge-real-solver", "Cylindrical", False, False),
+            ("assembly-marker-fixed-face-real-solver", "Fixed", False, False),
+            ("assembly-marker-parallel-face-real-solver", "Parallel", False, False),
+            ("assembly-marker-perpendicular-face-real-solver", "Perpendicular", False, False),
+            ("assembly-marker-angle-face-real-solver", "Angle", False, False),
+            ("assembly-distance-point-point-nonzero-real-solver", "Distance", False, False),
+            ("assembly-distance-point-point-zero-real-solver", "Distance", False, False),
+            ("assembly-distance-line-line-real-solver", "Distance", False, True),
+            ("assembly-distance-point-line-real-solver", "Distance", True, True),
+            ("assembly-distance-plane-plane-real-solver", "Distance", False, False),
+            ("assembly-distance-point-plane-real-solver", "Distance", True, True),
+            ("assembly-distance-line-plane-real-solver", "Distance", True, True),
         ]
-        for fixture, joint_type, swapped in subshape_cases:
+        for fixture, joint_type, swapped, remains_gap in subshape_cases:
             with self.subTest(fixture=fixture):
                 expected = self.expected_freecad("c3m6", fixture)
-                self.assertIn("MP-BLOCK-002/003/006", expected["known_gap"])
-                self.assertEqual(expected["backendGap"]["ids"], ["MP-BLOCK-002", "MP-BLOCK-003", "MP-BLOCK-006"])
+                if remains_gap:
+                    self.assertIn("known_gap", expected)
+                    self.assertIn("MP-BLOCK-006", expected["backendGap"]["ids"])
+                else:
+                    self.assertNotIn("known_gap", expected)
+                    self.assertNotIn("backendGap", expected)
                 self.assertEqual(expected["solver_adapter"]["status"], "solved")
                 self.assertIn("placement_updates", expected["solver_adapter"])
                 self.assertGreaterEqual(len(expected["solver_adapter"]["solver_joints"]), 1)
@@ -2173,15 +2177,11 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         screw = result["objects"]["ScrewJoint"]
         rack_pinion = result["objects"]["RackPinionJoint"]
 
-        self.assertEqual(assembly["solve"], "unsupported")
-        self.assertEqual(assembly["solver_adapter"]["status"], "unsupported")
-        self.assertEqual(assembly["solver_adapter"]["reason"], "unsupported_joint_type")
-        self.assertEqual(
-            assembly["solver_adapter"]["unsupported_joints"],
-            [
-                {"object": "ScrewJoint", "joint_type": "Screw"},
-            ],
-        )
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(assembly["solve"], "solved")
+        self.assertEqual(assembly["solver_adapter"]["status"], "solved")
+        self.assertEqual(assembly["solver_adapter"]["mode"], "real_ondsel_solver")
+        self.assertEqual(assembly["solver_adapter"]["unsupported_joints"], [])
         self.assertEqual(screw["reference1"]["object"], "ComponentB")
         self.assertEqual(screw["reference2"]["object"], "ComponentA")
         self.assertEqual(rack_pinion["reference1"]["object"], "ComponentB")
@@ -2206,7 +2206,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(rewrite["rack_object"], "ComponentA")
         self.assertEqual(rewrite["pinion_object"], "ComponentB")
         self.assertAlmostEqual(rewrite["yaw_adjustment"], math.pi / 2.0, delta=1e-12)
-        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual([update["object"] for update in result["documentObjectUpdates"]], ["ComponentB"])
 
     def test_c3m6_assembly_rackpinion_marker_rewrite_exposes_pitch_radius(self) -> None:
         result = self.run_recompute("assembly-rackpinion-marker-rewrite-real-solver", "c3m6")

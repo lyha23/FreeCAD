@@ -1,9 +1,10 @@
 {
   "backendGap": {
-    "delete_condition": "S5 implements FreeCAD handleOneSideOfJoint object-global to part-local marker resolution and focused expected parity passes for this fixture.",
+    "delete_condition": "A later S5 follow-up implements FreeCAD Distance marker initialization parity for this fixture and CadCoreExpectedFixtureTest no longer skips it.",
     "ids": [
       "MP-BLOCK-002",
       "MP-BLOCK-003",
+      "MP-BLOCK-005",
       "MP-BLOCK-006"
     ]
   },
@@ -20,7 +21,7 @@
     ]
   },
   "freecad_version": "1.2.0 revision 20260519",
-  "known_gap": "MP-BLOCK-002/003/006: S4 native marker oracle is checked in, but current cad-core S3 resolver still withholds subshape markerPlacement and the real Ondsel path falls back to identity markers; delete this in S5 after resolver parity makes placement_updates match this native expected.",
+  "known_gap": "MP-BLOCK-002/003/005/006: S5 resolves subshape marker evidence for this mixed fixture, but PointLine real Ondsel placement_updates still write ComponentB [1.5, 0, 0] instead of native rotated placement near [4.003128620988115, 0, -0.007784756160183933]; keep skipped until FreeCAD mixed line JCS / Distance marker initialization parity lands.",
   "native_marker_oracle": {
     "requires_cad_core_marker_parity": true,
     "solver_joints": [

@@ -125,6 +125,7 @@ struct AssemblyPlacementUpdate {
 struct UnsupportedAssemblyJoint {
     std::string object;
     std::string jointType;
+    std::string reason;
 };
 
 struct AssemblySolveResult {

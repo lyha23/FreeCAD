@@ -5,7 +5,11 @@
 
 #include <BRepAdaptor_Curve.hxx>
 #include <BRepAdaptor_Surface.hxx>
+#include <GeomAbs_CurveType.hxx>
+#include <GeomAbs_SurfaceType.hxx>
 #include <TopoDS.hxx>
+#include <TopoDS_Edge.hxx>
+#include <TopoDS_Face.hxx>
 
 #include <algorithm>
 #include <array>
@@ -51,6 +55,9 @@ struct YawPitchRoll {
     double pitch = 0.0;
     double roll = 0.0;
 };
+
+std::optional<TopoDS_Shape> referencedShape(const AssemblyJointReference& reference,
+                                            const runtime::ComputeContext& context);
 
 const app::DocumentObject* documentObjectByName(const runtime::ComputeContext& context,
                                                 const std::string& name)
@@ -98,6 +105,16 @@ Vector3 normalized(const Vector3& value)
         return {0.0, 0.0, 0.0};
     }
     return {value.at(0) / length, value.at(1) / length, value.at(2) / length};
+}
+
+Vector3 vectorFromPoint(const gp_Pnt& point)
+{
+    return {point.X(), point.Y(), point.Z()};
+}
+
+Vector3 vectorFromVec(const gp_Vec& vector)
+{
+    return {vector.X(), vector.Y(), vector.Z()};
 }
 
 std::array<double, 4> normalizedRotation(const std::array<double, 4>& rotation)
@@ -203,10 +220,123 @@ std::array<double, 4> rotationAroundAxis(const Vector3& axis, double angle)
     });
 }
 
+std::array<double, 4> rotationFromAxes(Vector3 xAxis, Vector3 yAxis, Vector3 zAxis)
+{
+    xAxis = normalized(xAxis);
+    yAxis = normalized(yAxis);
+    zAxis = normalized(zAxis);
+    if (norm(xAxis) <= kPlacementTolerance || norm(yAxis) <= kPlacementTolerance
+        || norm(zAxis) <= kPlacementTolerance) {
+        return identityRotation();
+    }
+
+    const double m00 = xAxis.at(0);
+    const double m01 = yAxis.at(0);
+    const double m02 = zAxis.at(0);
+    const double m10 = xAxis.at(1);
+    const double m11 = yAxis.at(1);
+    const double m12 = zAxis.at(1);
+    const double m20 = xAxis.at(2);
+    const double m21 = yAxis.at(2);
+    const double m22 = zAxis.at(2);
+    const double trace = m00 + m11 + m22;
+
+    std::array<double, 4> rotation {};
+    if (trace > 0.0) {
+        const double s = std::sqrt(trace + 1.0) * 2.0;
+        rotation = {(m21 - m12) / s, (m02 - m20) / s, (m10 - m01) / s, 0.25 * s};
+    }
+    else if (m00 > m11 && m00 > m22) {
+        const double s = std::sqrt(1.0 + m00 - m11 - m22) * 2.0;
+        rotation = {0.25 * s, (m01 + m10) / s, (m02 + m20) / s, (m21 - m12) / s};
+    }
+    else if (m11 > m22) {
+        const double s = std::sqrt(1.0 + m11 - m00 - m22) * 2.0;
+        rotation = {(m01 + m10) / s, 0.25 * s, (m12 + m21) / s, (m02 - m20) / s};
+    }
+    else {
+        const double s = std::sqrt(1.0 + m22 - m00 - m11) * 2.0;
+        rotation = {(m02 + m20) / s, (m12 + m21) / s, 0.25 * s, (m10 - m01) / s};
+    }
+    return normalizedRotation(rotation);
+}
+
+app::Placement placementFromOriginAndXAxis(const Vector3& origin, const Vector3& xAxis)
+{
+    const Vector3 normalizedX = normalized(xAxis);
+    if (norm(normalizedX) <= kPlacementTolerance) {
+        return app::Placement {origin, identityRotation()};
+    }
+    const Vector3 worldZ {0.0, 0.0, 1.0};
+    const Vector3 worldY {0.0, 1.0, 0.0};
+    const Vector3 candidate = std::abs(dot(normalizedX, worldZ)) < 0.9 ? worldZ : worldY;
+    const double projection = dot(candidate, normalizedX);
+    Vector3 zAxis = normalized({
+        candidate.at(0) - projection * normalizedX.at(0),
+        candidate.at(1) - projection * normalizedX.at(1),
+        candidate.at(2) - projection * normalizedX.at(2),
+    });
+    Vector3 yAxis = normalized(cross(zAxis, normalizedX));
+    zAxis = normalized(cross(normalizedX, yAxis));
+    return app::Placement {origin, rotationFromAxes(normalizedX, yAxis, zAxis)};
+}
+
 app::Placement placementForObject(const app::DocumentObject& object)
 {
     return app::readPlacement(object, "Placement")
         .value_or(app::Placement {{0.0, 0.0, 0.0}, identityRotation()});
+}
+
+std::optional<app::Placement> lineEdgePlacement(const TopoDS_Shape& shape)
+{
+    const TopoDS_Edge edge = TopoDS::Edge(shape);
+    BRepAdaptor_Curve curve(edge);
+    if (curve.GetType() != GeomAbs_Line) {
+        return std::nullopt;
+    }
+
+    gp_Pnt point;
+    gp_Vec tangent;
+    curve.D1(curve.FirstParameter(), point, tangent);
+    return placementFromOriginAndXAxis(vectorFromPoint(point), vectorFromVec(tangent));
+}
+
+std::optional<app::Placement> planarFacePlacement(const TopoDS_Shape& shape)
+{
+    const TopoDS_Face face = TopoDS::Face(shape);
+    BRepAdaptor_Surface surface(face);
+    if (surface.GetType() != GeomAbs_Plane) {
+        return std::nullopt;
+    }
+    return identityPlacement();
+}
+
+std::optional<app::Placement> subshapeGlobalPlacementForReference(
+    const AssemblyJointReference& reference,
+    const runtime::ComputeContext& context,
+    const app::Placement& partPlacement
+)
+{
+    const auto shape = referencedShape(reference, context);
+    if (!shape || shape->IsNull()) {
+        return std::nullopt;
+    }
+    switch (shape->ShapeType()) {
+        case TopAbs_VERTEX:
+            return partPlacement;
+        case TopAbs_EDGE:
+            if (!lineEdgePlacement(*shape)) {
+                return std::nullopt;
+            }
+            return partPlacement;
+        case TopAbs_FACE:
+            if (!planarFacePlacement(*shape)) {
+                return std::nullopt;
+            }
+            return partPlacement;
+        default:
+            return std::nullopt;
+    }
 }
 
 bool samePlacement(const app::Placement& left, const app::Placement& right)
@@ -674,15 +804,33 @@ void resolveJointMarkerPlacement(AssemblyJointReference& reference,
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
     // ::AssemblyObject::handleOneSideOfJoint(), uses "obj_global_plc =
     // getGlobalPlacement(nullptr, ref)" then "part_global_plc.inverse() * plc" and finally
-    // applies "data.offsetPlc" before marker creation. CAD Core does not yet carry the subshape
-    // placement / containing-part offset evidence required for that conversion, so it withholds
-    // markerPlacement instead of treating the connector PlacementN as a resolved subshape marker.
-    reference.markerResolutionStatus = "requires_subshape_handle_one_side_evidence";
-    reference.markerResolutionFrame = "unresolved_subshape_requires_part_local_marker";
+    // applies "data.offsetPlc" before marker creation. CAD Core's ASMTPart is initialized from
+    // the moving object's Placement, while context.shapes carries the object/subshape global shape;
+    // the equivalent request-local marker is inverse(part Placement) * (subshape global JCS *
+    // PlacementN). S5 covers Vertex, linear Edge and planar Face; radius/curve cases remain outside
+    // the published marker subset.
+    const auto* object = documentObjectByName(context, reference.object);
+    const app::Placement partPlacement = object == nullptr ? identityPlacement() : placementForObject(*object);
+    const auto subshapePlacement = subshapeGlobalPlacementForReference(reference, context, partPlacement);
+    if (!subshapePlacement) {
+        reference.markerResolutionStatus = "unsupported_subshape_marker_primitive";
+        reference.markerResolutionFrame = "unresolved_subshape_requires_supported_jcs";
+        reference.markerResolutionDiagnostic =
+            "Subshape reference requires a Vertex, linear Edge, or planar Face placement for "
+            "FreeCAD handleOneSideOfJoint() marker resolution";
+        reference.markerResolutionRequiresHandleOneSide = true;
+        return;
+    }
+
+    const app::Placement jcsGlobal =
+        composePlacement(*subshapePlacement, reference.connectorPlacement.value_or(identityPlacement()));
+    reference.markerPlacement = composePlacement(inversePlacement(partPlacement), jcsGlobal);
+    reference.markerResolutionStatus = "resolved_subshape_handle_one_side";
+    reference.markerResolutionFrame = "part_local_subshape_handle_one_side";
     reference.markerResolutionDiagnostic =
-        "Subshape reference requires FreeCAD handleOneSideOfJoint() object-global to part-local "
-        "marker resolution; cad-core lacks subshape placement, containing-part, or offsetPlc evidence";
-    reference.markerResolutionRequiresHandleOneSide = true;
+        "Resolved subshape marker through FreeCAD handleOneSideOfJoint() object-global to "
+        "moving-part-local placement; bundled offsetPlc is identity for this request-local part";
+    reference.markerResolutionRequiresHandleOneSide = false;
 }
 
 AssemblyJointReference jointReference(const app::DocumentObject& joint,
@@ -977,23 +1125,38 @@ std::shared_ptr<MbD::ASMTJoint> makeOndselJointOfType(const JointConstraint& joi
     return nullptr;
 }
 
-bool isConvertibleOndselJointInRequest(const JointConstraint& joint)
+std::optional<std::string> unsupportedReasonForOndselJoint(const JointConstraint& joint)
 {
     if (!isSupportedOndselJointType(joint.jointType)) {
-        return false;
+        return "unsupported_joint_type";
+    }
+    if (!joint.reference1.markerPlacement || !joint.reference2.markerPlacement) {
+        return "missing_marker_placement";
     }
     if (joint.jointType == "RackPinion") {
-        return joint.slidingPartIndex && *joint.slidingPartIndex != 0 && joint.rackPinionMarkerRewrite
-            && joint.rackPinionMarkerRewrite->applied;
+        if (!joint.slidingPartIndex || *joint.slidingPartIndex == 0) {
+            return "missing_sliding_precondition";
+        }
+        if (!joint.rackPinionMarkerRewrite || !joint.rackPinionMarkerRewrite->applied) {
+            return "missing_rack_pinion_marker_rewrite";
+        }
+        return std::nullopt;
     }
     if (joint.jointType == "Screw") {
-        return joint.slidingPartIndex && *joint.slidingPartIndex != 0;
+        if (!joint.slidingPartIndex || *joint.slidingPartIndex == 0) {
+            return "missing_sliding_precondition";
+        }
+        return std::nullopt;
     }
-    return true;
+    return std::nullopt;
 }
 
 std::string unsupportedJointMessage(const UnsupportedAssemblyJoint& unsupported)
 {
+    if (unsupported.reason == "missing_marker_placement") {
+        return "Ondsel solver adapter cannot convert " + unsupported.jointType
+            + " without resolved FreeCAD marker placement";
+    }
     if (unsupported.jointType == "RackPinion") {
         return "Ondsel solver adapter cannot convert RackPinion without a matching Slider precondition";
     }
@@ -1039,11 +1202,13 @@ void addConstraintToOndselAssembly(
     }
     const std::string markerI = "marker-" + joint.object + "-I";
     const std::string markerJ = "marker-" + joint.object + "-J";
-    const app::Placement identity {{0.0, 0.0, 0.0}, identityRotation()};
+    if (!joint.reference1.markerPlacement || !joint.reference2.markerPlacement) {
+        return;
+    }
     const auto& partI = parts.at(joint.reference1.object);
     const auto& partJ = parts.at(joint.reference2.object);
-    partI->addMarker(makeOndselMarker(markerI, joint.reference1.markerPlacement.value_or(identity)));
-    partJ->addMarker(makeOndselMarker(markerJ, joint.reference2.markerPlacement.value_or(identity)));
+    partI->addMarker(makeOndselMarker(markerI, *joint.reference1.markerPlacement));
+    partJ->addMarker(makeOndselMarker(markerJ, *joint.reference2.markerPlacement));
 
     mbdJoint->setName(joint.object);
     mbdJoint->setMarkerI("/OndselAssembly/" + joint.reference1.object + "/" + markerI);
@@ -1059,17 +1224,20 @@ AssemblySolveResult solveAssemblyWithRealOndselAdapter(const AssemblySolveReques
     for (const JointConstraint& joint : request.joints) {
         result.joints.push_back(joint.object);
         result.solverJoints.push_back(joint);
-        if (!isConvertibleOndselJointInRequest(joint)) {
+        if (const auto unsupportedReason = unsupportedReasonForOndselJoint(joint)) {
             result.unsupportedJoints.push_back(UnsupportedAssemblyJoint {
                 joint.object,
                 joint.jointType,
+                *unsupportedReason,
             });
         }
     }
     if (!result.unsupportedJoints.empty()) {
         result.solveState = "unsupported";
         result.status = "unsupported";
-        result.reason = "unsupported_joint_type";
+        result.reason = result.unsupportedJoints.front().reason.empty()
+            ? "unsupported_joint_type"
+            : result.unsupportedJoints.front().reason;
         for (const UnsupportedAssemblyJoint& unsupported : result.unsupportedJoints) {
             result.diagnostics.push_back(runtime::Diagnostic {
                 "warning",

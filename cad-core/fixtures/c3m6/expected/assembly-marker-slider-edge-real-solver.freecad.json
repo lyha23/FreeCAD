@@ -1,12 +1,4 @@
 {
-  "backendGap": {
-    "delete_condition": "S5 implements FreeCAD handleOneSideOfJoint object-global to part-local marker resolution and focused expected parity passes for this fixture.",
-    "ids": [
-      "MP-BLOCK-002",
-      "MP-BLOCK-003",
-      "MP-BLOCK-006"
-    ]
-  },
   "bbox": {
     "max": [
       2.0,
@@ -20,7 +12,6 @@
     ]
   },
   "freecad_version": "1.2.0 revision 20260519",
-  "known_gap": "MP-BLOCK-002/003/006: S4 native marker oracle is checked in, but current cad-core S3 resolver still withholds subshape markerPlacement and the real Ondsel path falls back to identity markers; delete this in S5 after resolver parity makes placement_updates match this native expected.",
   "native_marker_oracle": {
     "requires_cad_core_marker_parity": true,
     "solver_joints": [

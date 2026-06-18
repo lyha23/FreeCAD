@@ -15,6 +15,7 @@
 #include <cmath>
 #include <map>
 #include <optional>
+#include <utility>
 
 namespace cad_core::assembly::assembly_detail {
 
@@ -191,10 +192,14 @@ nlohmann::json unsupportedJointsJson(const std::vector<UnsupportedAssemblyJoint>
 {
     nlohmann::json result = nlohmann::json::array();
     for (const UnsupportedAssemblyJoint& unsupported : unsupportedJoints) {
-        result.push_back({
+        nlohmann::json item = {
             {"object", unsupported.object},
             {"joint_type", unsupported.jointType},
-        });
+        };
+        if (!unsupported.reason.empty()) {
+            item["reason"] = unsupported.reason;
+        }
+        result.push_back(std::move(item));
     }
     return result;
 }
