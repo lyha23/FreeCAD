@@ -59,7 +59,7 @@
 
 | 类型 | 路径 | 用途 |
 | --- | --- | --- |
-| 工作步骤总入口 | `工作步骤细分/6-18-18-29-P8-DistanceTypeBasicGeometry工作步骤总入口.md` | S0-S6 执行索引 |
+| 工作步骤总入口 | `工作步骤细分/6-18-18-29-【已实现】P8-DistanceTypeBasicGeometry工作步骤总入口.md` | S0-S6 执行索引 |
 | S0 声明口径 | `工作步骤细分/6-18-18-30-P8-DistanceTypeBasicGeometry-S0-声明口径与live基线复核.md` | 冻结 claims、禁止声明、状态字典和 current scalar-only 基线 |
 | S1 FreeCAD 源码候选 | `工作步骤细分/6-18-18-31-P8-DistanceTypeBasicGeometry-S1-FreeCAD源码候选矩阵.md` | 建立 DistanceType source candidates 和候选证据 |
 | S2 范围准入 | `工作步骤细分/6-18-18-32-P8-DistanceTypeBasicGeometry-S2-范围准入与blocker矩阵.md` | 路由 scope、backendGap、notCollected、releaseGate 和 nonGoal |
