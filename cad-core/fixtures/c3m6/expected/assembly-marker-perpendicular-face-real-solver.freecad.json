@@ -11,12 +11,12 @@
     "max": [
       6.0,
       2.0,
-      3.5
+      2.0
     ],
     "min": [
       0.0,
       0.0,
-      0.0
+      -2.0
     ]
   },
   "freecad_version": "1.2.0 revision 20260519",
@@ -25,12 +25,8 @@
     "requires_cad_core_marker_parity": true,
     "solver_joints": [
       {
-        "current_value": {
-          "linear_distance_from_jcs_placements": 4.272001872658765,
-          "source": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/UtilsAssembly.py::getJointDistance()"
-        },
         "jcs_swapped_for_solver": false,
-        "joint_type": "Distance",
+        "joint_type": "Perpendicular",
         "native_reference1": {
           "connector_placement": {
             "Base": [
@@ -135,14 +131,14 @@
             "Base": [
               4.0,
               0.0,
-              1.5
+              0.0
             ],
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [
               0.0,
+              0.7071067811865476,
               0.0,
-              0.0,
-              1.0
+              0.7071067811865475
             ]
           },
           "marker_placement": {
@@ -154,7 +150,7 @@
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [
               0.0,
-              0.0,
+              1.0146536357569526e-17,
               0.0,
               1.0
             ]
@@ -164,14 +160,14 @@
             "Base": [
               4.0,
               0.0,
-              1.5
+              0.0
             ],
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [
               0.0,
+              0.7071067811865476,
               0.0,
-              0.0,
-              1.0
+              0.7071067811865475
             ]
           },
           "offset_boundary": "identity_offset_for_two_box_assembly_link_fixture",
@@ -179,14 +175,14 @@
             "Base": [
               4.0,
               0.0,
-              1.5
+              0.0
             ],
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [
               0.0,
+              0.7071067811865476,
               0.0,
-              0.0,
-              1.0
+              0.7071067811865475
             ]
           },
           "reference": {
@@ -199,7 +195,7 @@
           "status": "resolved_native_handle_one_side",
           "subshape_reference": true
         },
-        "object": "DistanceJoint",
+        "object": "PerpendicularJoint",
         "solver_reference1": {
           "connector_placement": {
             "Base": [
@@ -304,14 +300,14 @@
             "Base": [
               4.0,
               0.0,
-              1.5
+              0.0
             ],
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [
               0.0,
+              0.7071067811865476,
               0.0,
-              0.0,
-              1.0
+              0.7071067811865475
             ]
           },
           "marker_placement": {
@@ -323,7 +319,7 @@
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [
               0.0,
-              0.0,
+              1.0146536357569526e-17,
               0.0,
               1.0
             ]
@@ -333,14 +329,14 @@
             "Base": [
               4.0,
               0.0,
-              1.5
+              0.0
             ],
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [
               0.0,
+              0.7071067811865476,
               0.0,
-              0.0,
-              1.0
+              0.7071067811865475
             ]
           },
           "offset_boundary": "identity_offset_for_two_box_assembly_link_fixture",
@@ -348,14 +344,14 @@
             "Base": [
               4.0,
               0.0,
-              1.5
+              0.0
             ],
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [
               0.0,
+              0.7071067811865476,
               0.0,
-              0.0,
-              1.0
+              0.7071067811865475
             ]
           },
           "reference": {
@@ -388,73 +384,37 @@
     ],
     "joints": [
       "GroundedJoint",
-      "DistanceJoint"
+      "PerpendicularJoint"
     ],
     "solve": "solved"
   },
-  "reference": "FreeCADCmd oracle from assembly-distance-plane-plane-real-solver.json; objects: Part::Box, Part::Box, Assembly::AssemblyLink, Assembly::AssemblyLink, App::FeaturePython, App::FeaturePython, Assembly::JointGroup, Assembly::AssemblyObject",
+  "reference": "FreeCADCmd oracle from assembly-marker-perpendicular-face-real-solver.json; objects: Part::Box, Part::Box, Assembly::AssemblyLink, Assembly::AssemblyLink, App::FeaturePython, App::FeaturePython, Assembly::JointGroup, Assembly::AssemblyObject",
   "schema_version": "cad-core.freecad-expected.v1",
   "solver_adapter": {
     "grounded_joints": [
       "GroundedJoint"
     ],
     "joints": [
-      "DistanceJoint"
+      "PerpendicularJoint"
     ],
     "mode": "real_ondsel_solver",
-    "placement_updates": [
-      {
-        "action": "assembly_set_placement",
-        "assembly": "Assembly",
-        "joint": "OndselSolver",
-        "joint_type": "solver_result",
-        "object": "ComponentB",
-        "objectId": 4,
-        "properties": {
-          "Placement": {
-            "Base": [
-              4.0,
-              0.0,
-              1.5
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              0.0,
-              1.0
-            ]
-          }
-        },
-        "reason": "assembly_solver_placement_writeback",
-        "typeId": "Assembly::AssemblyLink"
-      }
-    ],
+    "placement_updates": [],
     "solver_joints": [
       {
-        "distance": 1.5,
-        "distance_type": "PlanePlane",
-        "jcs_swapped_for_solver": false,
-        "joint_type": "Distance",
-        "object": "DistanceJoint",
-        "offset": 1.5,
+        "joint_type": "Perpendicular",
+        "object": "PerpendicularJoint",
         "reference1": {
           "object": "ComponentA",
           "subnames": [
             "Face1"
           ]
         },
-        "reference1_element_kind": "Face",
-        "reference1_primitive": "plane",
         "reference2": {
           "object": "ComponentB",
           "subnames": [
             "Face1"
           ]
         },
-        "reference2_element_kind": "Face",
-        "reference2_primitive": "plane",
-        "solver_joint_class": "ASMTPlanarJoint",
         "suppressed": false
       }
     ],

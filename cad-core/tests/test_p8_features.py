@@ -1742,11 +1742,12 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 for key, value in solver_scalars.items():
                     self.assertEqual(actual_joint[key], value)
                     self.assertEqual(expected_joint[key], value)
+                for key in ("reference1", "reference2"):
+                    self.assertEqual(actual_joint[key]["object"], expected_joint[key]["object"])
+                    self.assertEqual(actual_joint[key]["subnames"], expected_joint[key]["subnames"])
                 for key in (
-                    "reference1",
                     "reference1_element_kind",
                     "reference1_primitive",
-                    "reference2",
                     "reference2_element_kind",
                     "reference2_primitive",
                 ):
@@ -1962,6 +1963,58 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assert_identity_placement(reference["connectorPlacement"])
             self.assert_identity_placement(reference["markerPlacement"])
             self.assertIn("Object-level reference", reference["markerResolutionDiagnostic"])
+
+    def test_c3m6_assembly_marker_placement_s4_native_oracle_expected_batch(self) -> None:
+        subshape_cases = [
+            ("assembly-marker-ball-vertex-real-solver", "Ball", False),
+            ("assembly-marker-revolute-edge-real-solver", "Revolute", False),
+            ("assembly-marker-slider-edge-real-solver", "Slider", False),
+            ("assembly-marker-cylindrical-edge-real-solver", "Cylindrical", False),
+            ("assembly-marker-fixed-face-real-solver", "Fixed", False),
+            ("assembly-marker-parallel-face-real-solver", "Parallel", False),
+            ("assembly-marker-perpendicular-face-real-solver", "Perpendicular", False),
+            ("assembly-marker-angle-face-real-solver", "Angle", False),
+            ("assembly-distance-point-point-nonzero-real-solver", "Distance", False),
+            ("assembly-distance-point-point-zero-real-solver", "Distance", False),
+            ("assembly-distance-line-line-real-solver", "Distance", False),
+            ("assembly-distance-point-line-real-solver", "Distance", True),
+            ("assembly-distance-plane-plane-real-solver", "Distance", False),
+            ("assembly-distance-point-plane-real-solver", "Distance", True),
+            ("assembly-distance-line-plane-real-solver", "Distance", True),
+        ]
+        for fixture, joint_type, swapped in subshape_cases:
+            with self.subTest(fixture=fixture):
+                expected = self.expected_freecad("c3m6", fixture)
+                self.assertIn("MP-BLOCK-002/003/006", expected["known_gap"])
+                self.assertEqual(expected["backendGap"]["ids"], ["MP-BLOCK-002", "MP-BLOCK-003", "MP-BLOCK-006"])
+                self.assertEqual(expected["solver_adapter"]["status"], "solved")
+                self.assertIn("placement_updates", expected["solver_adapter"])
+                self.assertGreaterEqual(len(expected["solver_adapter"]["solver_joints"]), 1)
+
+                oracle = expected["native_marker_oracle"]
+                self.assertTrue(oracle["requires_cad_core_marker_parity"])
+                oracle_joint = oracle["solver_joints"][0]
+                self.assertEqual(oracle_joint["joint_type"], joint_type)
+                self.assertEqual(oracle_joint["jcs_swapped_for_solver"], swapped)
+                for side in ("native_reference1", "native_reference2", "solver_reference1", "solver_reference2"):
+                    reference = oracle_joint[side]
+                    self.assertEqual(reference["status"], "resolved_native_handle_one_side")
+                    self.assertTrue(reference["subshape_reference"])
+                    self.assertIn("AssemblyObject.cpp", reference["source"])
+                    self.assertEqual(reference["marker_placement"]["PropertyType"], "App::PropertyPlacement")
+                if joint_type == "Distance":
+                    self.assertIn("linear_distance_from_jcs_placements", oracle_joint["current_value"])
+                if joint_type == "Angle":
+                    self.assertIn("xy_angle_radians_from_jcs_placements", oracle_joint["current_value"])
+
+        special = self.expected_freecad("c3m6", "assembly-rackpinion-marker-rewrite-real-solver")
+        self.assertNotIn("known_gap", special)
+        self.assertEqual(special["solver_adapter"]["status"], "solved")
+        self.assertEqual(
+            [joint["joint_type"] for joint in special["solver_adapter"]["solver_joints"]],
+            ["Slider", "RackPinion"],
+        )
+        self.assertFalse(special["native_marker_oracle"]["requires_cad_core_marker_parity"])
 
     def test_c3m6_assembly_placement_writeback_applies_to_next_request_graph(self) -> None:
         result = self.run_recompute("assembly-grounded-distance-joint-real-solver", "c3m6")

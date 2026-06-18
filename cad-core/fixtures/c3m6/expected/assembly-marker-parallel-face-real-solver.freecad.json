@@ -11,7 +11,7 @@
     "max": [
       6.0,
       2.0,
-      3.5
+      2.0
     ],
     "min": [
       0.0,
@@ -25,12 +25,8 @@
     "requires_cad_core_marker_parity": true,
     "solver_joints": [
       {
-        "current_value": {
-          "linear_distance_from_jcs_placements": 4.272001872658765,
-          "source": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/UtilsAssembly.py::getJointDistance()"
-        },
         "jcs_swapped_for_solver": false,
-        "joint_type": "Distance",
+        "joint_type": "Parallel",
         "native_reference1": {
           "connector_placement": {
             "Base": [
@@ -135,7 +131,7 @@
             "Base": [
               4.0,
               0.0,
-              1.5
+              0.0
             ],
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [
@@ -164,7 +160,7 @@
             "Base": [
               4.0,
               0.0,
-              1.5
+              0.0
             ],
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [
@@ -179,7 +175,7 @@
             "Base": [
               4.0,
               0.0,
-              1.5
+              0.0
             ],
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [
@@ -199,7 +195,7 @@
           "status": "resolved_native_handle_one_side",
           "subshape_reference": true
         },
-        "object": "DistanceJoint",
+        "object": "ParallelJoint",
         "solver_reference1": {
           "connector_placement": {
             "Base": [
@@ -304,7 +300,7 @@
             "Base": [
               4.0,
               0.0,
-              1.5
+              0.0
             ],
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [
@@ -333,7 +329,7 @@
             "Base": [
               4.0,
               0.0,
-              1.5
+              0.0
             ],
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [
@@ -348,7 +344,7 @@
             "Base": [
               4.0,
               0.0,
-              1.5
+              0.0
             ],
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [
@@ -388,73 +384,37 @@
     ],
     "joints": [
       "GroundedJoint",
-      "DistanceJoint"
+      "ParallelJoint"
     ],
     "solve": "solved"
   },
-  "reference": "FreeCADCmd oracle from assembly-distance-plane-plane-real-solver.json; objects: Part::Box, Part::Box, Assembly::AssemblyLink, Assembly::AssemblyLink, App::FeaturePython, App::FeaturePython, Assembly::JointGroup, Assembly::AssemblyObject",
+  "reference": "FreeCADCmd oracle from assembly-marker-parallel-face-real-solver.json; objects: Part::Box, Part::Box, Assembly::AssemblyLink, Assembly::AssemblyLink, App::FeaturePython, App::FeaturePython, Assembly::JointGroup, Assembly::AssemblyObject",
   "schema_version": "cad-core.freecad-expected.v1",
   "solver_adapter": {
     "grounded_joints": [
       "GroundedJoint"
     ],
     "joints": [
-      "DistanceJoint"
+      "ParallelJoint"
     ],
     "mode": "real_ondsel_solver",
-    "placement_updates": [
-      {
-        "action": "assembly_set_placement",
-        "assembly": "Assembly",
-        "joint": "OndselSolver",
-        "joint_type": "solver_result",
-        "object": "ComponentB",
-        "objectId": 4,
-        "properties": {
-          "Placement": {
-            "Base": [
-              4.0,
-              0.0,
-              1.5
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              0.0,
-              1.0
-            ]
-          }
-        },
-        "reason": "assembly_solver_placement_writeback",
-        "typeId": "Assembly::AssemblyLink"
-      }
-    ],
+    "placement_updates": [],
     "solver_joints": [
       {
-        "distance": 1.5,
-        "distance_type": "PlanePlane",
-        "jcs_swapped_for_solver": false,
-        "joint_type": "Distance",
-        "object": "DistanceJoint",
-        "offset": 1.5,
+        "joint_type": "Parallel",
+        "object": "ParallelJoint",
         "reference1": {
           "object": "ComponentA",
           "subnames": [
             "Face1"
           ]
         },
-        "reference1_element_kind": "Face",
-        "reference1_primitive": "plane",
         "reference2": {
           "object": "ComponentB",
           "subnames": [
             "Face1"
           ]
         },
-        "reference2_element_kind": "Face",
-        "reference2_primitive": "plane",
-        "solver_joint_class": "ASMTPlanarJoint",
         "suppressed": false
       }
     ],
@@ -466,5 +426,5 @@
     "faces": 12,
     "vertices": 16
   },
-  "volume": 16.0
+  "volume": 15.999999999999996
 }

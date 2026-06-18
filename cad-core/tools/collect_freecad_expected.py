@@ -1591,12 +1591,156 @@ def resolve_fixture_distance_type(solver_joint: dict, specs: dict[str, dict]) ->
     resolve_fixture_distance_mapping(solver_joint)
 
 
-def native_assembly_solver_payload(obj: Any, fixture: dict, created: dict[str, Any]) -> dict:
+def normalized_link_sub_payload(value: Any) -> dict:
+    payload = link_sub_payload(value)
+    payload["subnames"] = [subname for subname in payload["subnames"] if subname]
+    return payload
+
+
+def reference_payload_key(reference: dict) -> tuple[str, tuple[str, ...]]:
+    return str(reference.get("object", "")), tuple(str(item) for item in reference.get("subnames", []))
+
+
+def native_joint_reference_marker_evidence(joint: Any, ref_name: str, plc_name: str) -> dict:
+    import FreeCAD  # type: ignore
+    import UtilsAssembly  # type: ignore
+
+    ref = getattr(joint, ref_name, None)
+    connector = getattr(joint, plc_name, FreeCAD.Placement())
+    reference = normalized_link_sub_payload(ref)
+    evidence: dict[str, Any] = {
+        "source": (
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp"
+            "::AssemblyObject::handleOneSideOfJoint()"
+        ),
+        "reference": reference,
+        "connector_placement": placement_payload(connector),
+        "subshape_reference": bool(reference["subnames"]),
+        "status": "unresolved",
+    }
+    if ref is None or not isinstance(ref, tuple) or len(ref) != 2 or ref[0] is None:
+        evidence["status"] = "missing_reference"
+        evidence["diagnostic"] = f"{ref_name} is not a native Assembly Joint reference"
+        return evidence
+
+    try:
+        part = UtilsAssembly.getMovingPart(ref)
+        if part is None:
+            evidence["status"] = "missing_moving_part"
+            evidence["diagnostic"] = f"{ref_name} has no moving part"
+            return evidence
+        # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+        # ::AssemblyObject::handleOneSideOfJoint(), computes "obj_global_plc =
+        # getGlobalPlacement(nullptr, ref)", then "plc = obj_global_plc * plc", then
+        # "part_global_plc.inverse() * plc" before marker creation.
+        obj_global = UtilsAssembly.getGlobalPlacement(ref)
+        part_global = UtilsAssembly.getGlobalPlacement(ref, part)
+        jcs_global = obj_global * connector
+        marker = part_global.inverse() * jcs_global
+        evidence.update({
+            "status": "resolved_native_handle_one_side",
+            "frame": "part_local",
+            "moving_part": link_name(part),
+            "object_global_placement": placement_payload(obj_global),
+            "part_global_placement": placement_payload(part_global),
+            "jcs_global_placement": placement_payload(jcs_global),
+            "marker_placement": placement_payload(marker),
+            "offset_boundary": "identity_offset_for_two_box_assembly_link_fixture",
+        })
+    except Exception as exc:
+        evidence["status"] = "collector_error"
+        evidence["diagnostic"] = str(exc)
+    return evidence
+
+
+def native_current_value_evidence(joint: Any, joint_type: str) -> dict | None:
+    import UtilsAssembly  # type: ignore
+
+    if joint_type == "Distance":
+        # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/UtilsAssembly.py
+        # ::getJointDistance(), calls "getJcsGlobalPlc(joint.PlacementN, joint.ReferenceN)"
+        # for both sides and signs the scalar from "plc3.Base.z".
+        return {
+            "source": (
+                "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/UtilsAssembly.py"
+                "::getJointDistance()"
+            ),
+            "linear_distance_from_jcs_placements": float(UtilsAssembly.getJointDistance(joint)),
+        }
+    if joint_type == "Angle":
+        # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/UtilsAssembly.py
+        # ::getJointXYAngle(), multiplies Placement1/2 by reference global placements and
+        # returns atan2() of the relative X axis.
+        return {
+            "source": (
+                "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/UtilsAssembly.py"
+                "::getJointXYAngle()"
+            ),
+            "xy_angle_radians_from_jcs_placements": float(UtilsAssembly.getJointXYAngle(joint)),
+        }
+    return None
+
+
+def native_marker_oracle_payload(created: dict[str, Any], solver_joints: list[dict]) -> dict:
+    entries = []
+    requires_marker_parity = False
+    for solver_joint in solver_joints:
+        joint = created.get(str(solver_joint.get("object", "")))
+        if joint is None or not hasattr(joint, "JointType"):
+            continue
+        joint_type = str(getattr(joint, "JointType", solver_joint.get("joint_type", "")))
+        native_reference1 = native_joint_reference_marker_evidence(joint, "Reference1", "Placement1")
+        native_reference2 = native_joint_reference_marker_evidence(joint, "Reference2", "Placement2")
+        by_reference = {
+            reference_payload_key(native_reference1["reference"]): native_reference1,
+            reference_payload_key(native_reference2["reference"]): native_reference2,
+        }
+        solver_reference1 = by_reference.get(
+            reference_payload_key(solver_joint.get("reference1", {})),
+            native_reference1,
+        )
+        solver_reference2 = by_reference.get(
+            reference_payload_key(solver_joint.get("reference2", {})),
+            native_reference2,
+        )
+        current_value = native_current_value_evidence(joint, joint_type)
+        requires_marker_parity = requires_marker_parity or bool(
+            native_reference1.get("subshape_reference")
+            or native_reference2.get("subshape_reference")
+        )
+        entry = {
+            "object": solver_joint.get("object", ""),
+            "joint_type": joint_type,
+            "jcs_swapped_for_solver": bool(solver_joint.get("jcs_swapped_for_solver", False)),
+            "native_reference1": native_reference1,
+            "native_reference2": native_reference2,
+            "solver_reference1": solver_reference1,
+            "solver_reference2": solver_reference2,
+        }
+        if current_value is not None:
+            entry["current_value"] = current_value
+        entries.append(entry)
+    if not entries:
+        return {}
+    return {
+        "source": (
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp"
+            "::AssemblyObject::handleOneSideOfJoint(); "
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.cpp"
+            "::getJointCurrentValue()"
+        ),
+        "requires_cad_core_marker_parity": requires_marker_parity,
+        "solver_joints": entries,
+    }
+
+
+def native_assembly_solver_payload(obj: Any, fixture: dict, created: dict[str, Any]) -> tuple[dict, dict]:
     # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
     # ::AssemblyObject::solve(), calls "fixGroundedParts()", returns "-6" when no grounded
     # part exists, then runs "mbdAssembly->runPreDrag()" and "setNewPlacements()". CAD Core
     # expected fixtures use this native writeback as the Assembly placement oracle.
     grounded_joints, joints, solver_joints = joint_payloads_from_fixture(fixture, str(obj.Name))
+    native_marker_oracle = native_marker_oracle_payload(created, solver_joints)
     solve_code = int(obj.solve(False))
     if solve_code == -6:
         return {
@@ -1608,7 +1752,7 @@ def native_assembly_solver_payload(obj: Any, fixture: dict, created: dict[str, A
             "unsupported_joints": [],
             "placement_updates": [],
             "native_solver_return": solve_code,
-        }
+        }, native_marker_oracle
     if solve_code != 0:
         return {
             "status": "error",
@@ -1619,7 +1763,7 @@ def native_assembly_solver_payload(obj: Any, fixture: dict, created: dict[str, A
             "unsupported_joints": [],
             "placement_updates": [],
             "native_solver_return": solve_code,
-        }
+        }, native_marker_oracle
 
     placement_updates = []
     for component_spec in assembly_link_specs_for_object(fixture, str(obj.Name)):
@@ -1658,7 +1802,7 @@ def native_assembly_solver_payload(obj: Any, fixture: dict, created: dict[str, A
         "unsupported_joints": [],
         "placement_updates": placement_updates,
         "native_solver_return": solve_code,
-    }
+    }, native_marker_oracle
 
 
 def assembly_object_payload(obj: Any, fixture: dict | None = None, created: dict[str, Any] | None = None) -> dict:
@@ -1680,10 +1824,12 @@ def assembly_object_payload(obj: Any, fixture: dict | None = None, created: dict
         }
     }
     if fixture is not None and created is not None:
-        solver_adapter = native_assembly_solver_payload(obj, fixture, created)
+        solver_adapter, native_marker_oracle = native_assembly_solver_payload(obj, fixture, created)
         native_solver_return = solver_adapter.pop("native_solver_return")
         payload["native_solver"] = {"return_code": native_solver_return}
         payload["solver_adapter"] = solver_adapter
+        if native_marker_oracle:
+            payload["native_marker_oracle"] = native_marker_oracle
         if solver_adapter["status"] == "solved":
             payload["object_fields"]["solve"] = "solved_noop" if solver_adapter.get("mode") == "grounded_only_noop" else "solved"
         elif solver_adapter.get("reason") == "no_grounded_part":
@@ -2011,6 +2157,15 @@ def expected_target_names(path: Path) -> list[str] | None:
     return None
 
 
+def payload_requires_marker_parity(payload: dict) -> bool:
+    if payload.get("native_marker_oracle", {}).get("requires_cad_core_marker_parity"):
+        return True
+    for summary in payload.get("objects", {}).values():
+        if summary.get("native_marker_oracle", {}).get("requires_cad_core_marker_parity"):
+            return True
+    return False
+
+
 def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = None) -> dict:
     import FreeCAD  # type: ignore
 
@@ -2043,6 +2198,20 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
             payload.update(summary)
         else:
             payload["objects"] = object_payloads
+        if payload_requires_marker_parity(payload):
+            payload["known_gap"] = (
+                "MP-BLOCK-002/003/006: S4 native marker oracle is checked in, but current "
+                "cad-core S3 resolver still withholds subshape markerPlacement and the real "
+                "Ondsel path falls back to identity markers; delete this in S5 after resolver "
+                "parity makes placement_updates match this native expected."
+            )
+            payload["backendGap"] = {
+                "ids": ["MP-BLOCK-002", "MP-BLOCK-003", "MP-BLOCK-006"],
+                "delete_condition": (
+                    "S5 implements FreeCAD handleOneSideOfJoint object-global to part-local "
+                    "marker resolution and focused expected parity passes for this fixture."
+                ),
+            }
         diagnostic_codes = []
         for summary in object_payloads.values():
             if summary.get("native_solver", {}).get("return_code") == -6:

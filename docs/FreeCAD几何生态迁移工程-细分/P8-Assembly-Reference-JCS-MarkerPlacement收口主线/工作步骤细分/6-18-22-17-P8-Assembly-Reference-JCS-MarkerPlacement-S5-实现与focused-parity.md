@@ -11,6 +11,7 @@
 - object/subshape global transform、part-local transform、offsetPlc 边界、mixed swap sync 都必须在同一轮实现或明确写为阻塞，不能只实现 Vertex 或单个 Distance fixture。
 - DistanceType S5 的 7 个 basic fixtures 可以从 solver DTO parity 升级到 placement parity 覆盖。
 - `addConstraintToOndselAssembly()` 必须消费 resolver 输出；focused parity 不能只看 JSON evidence。
+- 删除 S4 expected 顶层 `known_gap` 的条件固定为：对应 fixture 的 FreeCAD `native_marker_oracle` 已被 cad-core resolver 消费，`solver_adapter.placement_updates` 与 checked-in expected 对齐，且 `CadCoreExpectedFixtureTest` 对该 fixture 不再跳过。
 - RackPinion / Screw special rewrite focused tests 继续通过。
 - object-level baseline expected 继续通过。
 - `MP-BLOCK-010` fallback audit 必须关闭：无 fixture 名称分支、bbox heuristic、输出端修剪、silent connector fallback。
