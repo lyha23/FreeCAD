@@ -2,35 +2,32 @@
 
 ## 目标
 
-消费 S2-S5 留下的 `unsupportedImplementable`、`notCollected` 和 `releaseGate`，把 Screw / RackPinion 作为 request-local JointType 支持发布，或者明确阻断原因。
+复核 S5 发布后的剩余边界：确认 Screw / RackPinion 已作为 request-local scalar JointType 支持发布，并确认 complex Distance、GUI/session 和 full transaction 未被误发布。
 
 ## 输入
 
-- `SRJ-BLOCK-001` 到 `SRJ-BLOCK-007`
+- `SRJ-BLOCK-007`
+- S5 已关闭的 `SRJ-BLOCK-002` / `SRJ-BLOCK-005` / `SRJ-BLOCK-006`
 - FreeCAD source authority：`AssemblyObject::makeMbdJointOfType()`、`AssemblyObject::makeMbdJoint()`、`slidingPartIndex()`、`swapJCS()`、`getRackPinionMarkers()`
 - c3m6 fixture / expected
 - hard-linked real Ondsel build
 
 ## 实施顺序
 
-1. 关闭 `SRJ-BLOCK-001`：实现 request-local `slidingPartIndex()` / `swapJCS()` 等价语义。
-2. 关闭 `SRJ-BLOCK-002`：实现 Screw `ASMTScrewJoint` conversion、pitch output 和 supported predicate。
-3. 关闭 `SRJ-BLOCK-003`：实现 RackPinion `ASMTRackPinionJoint` conversion、pitchRadius output。
-4. 关闭 `SRJ-BLOCK-004`：实现 RackPinion rack / pinion marker rewrite。
-5. 关闭 `SRJ-BLOCK-005`：新增 Screw / RackPinion c3m6 fixtures、FreeCADCmd expected 和 focused runtime assertions。
-6. 关闭 `SRJ-BLOCK-006`：更新 `c_api.cpp` capabilities、`test_adapters.py` 和既有 P8 docs / TSV。
-7. 关闭或保留 `SRJ-BLOCK-007`：确认 complex Distance、GUI/session、full transaction 边界未被误发布。
+1. 复核 `SRJ-BLOCK-001` 到 `SRJ-BLOCK-006` 均已由 S3-S5 关闭，且不需要重新实现。
+2. 复核 `SRJ-BLOCK-007`：complex Distance 保持 `notCollected`；GUI/session/full transaction 保持 `nonGoal`。
+3. 如发现发布文字误把 scalar `Distance` 扩成 full `DistanceType`，只修正文档 / capability 声明，不新增代码特判。
 
-## 下一轮代码落点
+## 下一轮复核落点
 
 | blocker | C++ / 测试 / 文档落点 | 成功标准 |
 | --- | --- | --- |
-| `SRJ-BLOCK-001` | `cad-core/include/cad_core/assembly/joint_solver.h`、`cad-core/src/assembly/joint_solver.cpp` | request-local helper 能从同一 Assembly 的 Slider joint 计算 sliding side；不满足条件时输出 diagnostic，不猜测 |
-| `SRJ-BLOCK-002` | `cad-core/src/assembly/joint_solver.cpp`、`cad-core/src/assembly/assembly_utils.cpp` | Screw 映射到 `ASMTScrewJoint`，`pitch=Distance`，`solver_joints` 暴露 pitch / sliding evidence |
-| `SRJ-BLOCK-003` | `cad-core/src/assembly/joint_solver.cpp`、`cad-core/src/assembly/assembly_utils.cpp` | RackPinion 映射到 `ASMTRackPinionJoint`，`pitchRadius=Distance`，`solver_joints` 暴露 pitch_radius |
-| `SRJ-BLOCK-004` | `cad-core/src/assembly/joint_solver.cpp` | RackPinion marker rewrite 发生在 Ondsel marker 创建前，符合 FreeCAD rack / pinion side 和 yaw adjustment 依据 |
-| `SRJ-BLOCK-005` | `cad-core/fixtures/c3m6`、`cad-core/tools/collect_freecad_expected.py`、`cad-core/tests/test_p8_features.py` | Screw / RackPinion fixture 和 FreeCADCmd expected 入库，focused parity pass |
-| `SRJ-BLOCK-006` | `cad-core/src/adapters/c_api/c_api.cpp`、`cad-core/tests/test_adapters.py`、P8 AssemblySolver 矩阵 | `supported_joint_matrix` 与 focused tests 一致，`unsupported_joint_matrix` 不保留 stale Screw / RackPinion |
+| `SRJ-BLOCK-001` | 已由 S3 关闭 | request-local helper 能从同一 Assembly 的 Slider joint 计算 sliding side；不满足条件时输出 diagnostic，不猜测 |
+| `SRJ-BLOCK-002` | 已由 S5 关闭 | Screw 映射到 `ASMTScrewJoint`，`pitch=Distance`，`solver_joints` 暴露 pitch / sliding evidence |
+| `SRJ-BLOCK-003` | 已由 S4 关闭 | RackPinion 映射到 `ASMTRackPinionJoint`，`pitchRadius=Distance`，`solver_joints` 暴露 pitch_radius |
+| `SRJ-BLOCK-004` | 已由 S4 关闭 | RackPinion marker rewrite 发生在 Ondsel marker 创建前，符合 FreeCAD rack / pinion side 和 yaw adjustment 依据 |
+| `SRJ-BLOCK-005` | 已由 S5 关闭 | Screw / RackPinion fixture 和 FreeCADCmd expected 入库，focused parity pass |
+| `SRJ-BLOCK-006` | 已由 S5 关闭 | `supported_joint_matrix` 与 focused tests 一致，`unsupported_joint_matrix` 不保留 stale Screw / RackPinion |
 | `SRJ-BLOCK-007` | 本包 TSV、P8 AssemblySolver nonGoal / backend gap TSV | complex Distance 保持 notCollected，GUI/session 和 full transaction 保持 nonGoal |
 
 ## 禁止路径

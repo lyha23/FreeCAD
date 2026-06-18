@@ -4,7 +4,7 @@
 
 把 `Screw` / `RackPinion` 两个 remaining special JointType 从 unsupported 队列推进到 real Ondsel request-local supported 子集，并保持 complex Distance geometry、GUI/session lifecycle 不被误发布。
 
-当前收口状态：工作步骤索引已完成校验；S0 已完成 live 基线复核；S1 已完成 FreeCAD / cad-core source candidates 复核；S2 已完成范围准入与 blocker 队列路由；S3 已完成 request-local `slidingPartIndex()` / DTO-level `swapJCS()`；S4 已完成 RackPinion `ASMTRackPinionJoint(pitchRadius=Distance)` conversion 与 marker rewrite focused evidence；S5 到 S6 仍为待执行。尚未完成 native expected、C ABI capability publication 或发布闸门；不得把整个主线写成“已实现”。
+当前收口状态：工作步骤索引已完成校验；S0 已完成 live 基线复核；S1 已完成 FreeCAD / cad-core source candidates 复核；S2 已完成范围准入与 blocker 队列路由；S3 已完成 request-local `slidingPartIndex()` / DTO-level `swapJCS()`；S4 已完成 RackPinion `ASMTRackPinionJoint(pitchRadius=Distance)` conversion 与 marker rewrite focused evidence；S5 已完成 Screw `ASMTScrewJoint(pitch=Distance)`、Screw / RackPinion native expected、focused tests 与 C ABI capability publication。S6 仍为后续边界收口步骤，主要复核 complex Distance / GUI session / full transaction 未被误发布。
 
 索引关闭口径：本文件只表示工作步骤索引、矩阵文件名和轻量验收命令已经复核；S0-S6 仍由各自文件推进，不能因为本文件改名为 `【已实现】` 而跳过后续队列。
 
@@ -17,7 +17,7 @@
 | S2 | `6-18-16-38-【已实现】P8-ScrewRackPinionJoint-S2-范围准入与blocker矩阵.md` | 已实现 | 已将候选路由到 implementable unsupported、notCollected、releaseGate、nonGoal |
 | S3 | `6-18-16-39-【已实现】P8-ScrewRackPinionJoint-S3-SlidingAxis与swapJCS专项复审.md` | 已实现 | 已收口 `slidingPartIndex()` / `swapJCS()` 共享前置，未发布 Screw / RackPinion capability |
 | S4 | `6-18-16-40-【已实现】P8-ScrewRackPinionJoint-S4-RackPinionMarker重写专项复审.md` | 已实现 | 已收口 RackPinion `pitchRadius=Distance` conversion 与 rack / pinion marker rewrite focused evidence |
-| S5 | `6-18-16-41-P8-ScrewRackPinionJoint-S5-NativeOracle与Capability专项复审.md` | 待执行 | 同步 fixtures、FreeCADCmd expected、focused tests 和 capabilities |
+| S5 | `6-18-16-41-【已实现】P8-ScrewRackPinionJoint-S5-NativeOracle与Capability专项复审.md` | 已实现 | 已同步 fixtures、FreeCADCmd expected、focused tests 和 capabilities |
 | S6 | `6-18-16-42-P8-ScrewRackPinionJoint-S6-Oracle实现与发布闸门.md` | 待执行 | 消费 blockers 并给出代码落点和验收命令 |
 
 ## 执行顺序
@@ -27,23 +27,23 @@
 3. S2 已将候选路由到 implementable unsupported、notCollected、releaseGate、nonGoal，并建立 S3-S6 可消费 blocker。
 4. S3 已落地 `slidingPartIndex()` / `swapJCS()` 的 request-local 等价语义，并保持 Screw / RackPinion diagnostic-only。
 5. S4 已落地 RackPinion marker side detection、rack marker 旋转重写、`pitch_radius` JSON 证据和 RackPinion-only focused runtime fixture；C ABI publication 仍不改。
-6. 执行 S5，增加 Screw / RackPinion FreeCADCmd expected、capability 断言和发布矩阵同步。
-7. 执行 S6，关闭 blocker 后再提交；未关闭前不得改名为 `【已实现】`。
+6. S5 已增加 Screw / RackPinion FreeCADCmd expected、capability 断言和发布矩阵同步。
+7. 执行 S6 时只复核剩余边界：`SRJ-SCOPE-007` complex Distance 保持 `notCollected`，`SRJ-SCOPE-008` GUI/session/full transaction 保持 `nonGoal`。
 
 ## 当前矩阵闸门
 
 | 矩阵 | 当前用途 | 当前结论 |
 | --- | --- | --- |
 | `p8_screw_rackpinion_joint_source_candidates.tsv` | FreeCAD / cad-core 证据入口 | 已复核 Screw / RackPinion mapping、shared sliding、DTO swap、RackPinion marker rewrite、Ondsel fields、cad-core gap、c3m6 route 和当前 unsupported publication |
-| `p8_screw_rackpinion_joint_scope_review_matrix.tsv` | 当前能力路由 | SRJ-SCOPE-002 已由 S3 关闭；SRJ-SCOPE-004 已有 S4 runtime evidence 但仍等 S5 native expected / capability；SRJ-SCOPE-003 / 005 / 006 仍待执行 |
-| `p8_screw_rackpinion_joint_blocker_queue.tsv` | 发布前 blocker | `SRJ-BLOCK-001` 已由 S3 关闭；`SRJ-BLOCK-003` / `SRJ-BLOCK-004` 已由 S4 focused evidence 关闭；Screw adapter、oracle、capability、nonGoal boundary 仍待 S5-S6 |
+| `p8_screw_rackpinion_joint_scope_review_matrix.tsv` | 当前能力路由 | SRJ-SCOPE-002/003/004/005/006 已为 request-local scalar support 关闭；SRJ-SCOPE-007 仍为 complex Distance `notCollected`；SRJ-SCOPE-008 仍为 `nonGoal` |
+| `p8_screw_rackpinion_joint_blocker_queue.tsv` | 发布前 blocker | `SRJ-BLOCK-001` 已由 S3 关闭；`SRJ-BLOCK-003` / `SRJ-BLOCK-004` 已由 S4 focused evidence 关闭；`SRJ-BLOCK-002` / `005` / `006` 已由 S5 关闭；`SRJ-BLOCK-007` 仅保留边界保护 |
 | `p8_screw_rackpinion_joint_non_goal_registry.tsv` | 非目标边界 | complex Distance、GUI/session、full transaction 不进入本包 |
 | `p8_screw_rackpinion_joint_backend_gap_classification.tsv` | 分类与优先级 | 本包只推进 Screw / RackPinion |
 
 ## 状态纪律
 
 - `supported` 只能在 build、focused tests、expected parity、capability/docs 同步全部通过后使用。
-- 当前 Screw / RackPinion 是 `unsupportedImplementable`，不是 `backendGap`。
+- 当前 Screw / RackPinion 已在 request-local scalar Distance + sliding precondition 范围内发布为 `supported`，不是 `backendGap`。
 - complex Distance geometry 保持 `notCollected`；GUI/session lifecycle 保持 `nonGoal`。
 - 不允许靠 JointType 名称存在来跳过 FreeCADCmd expected。
 - 不允许恢复 representative fallback、adapter 层业务补丁或跨请求 solver session。

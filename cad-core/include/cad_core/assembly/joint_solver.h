@@ -56,6 +56,11 @@ struct JointConstraint {
     std::optional<double> distance2;
     std::optional<double> angle;
     // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    // ::AssemblyObject::makeMbdJointOfType(), Screw first checks "slidingPartIndex(joint)" and
+    // then sets "mbdJoint->pitch = getJointDistance(joint)"; CAD Core keeps the scalar
+    // Distance-to-pitch conversion request-local on the solver DTO.
+    std::optional<double> pitch;
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
     // ::AssemblyObject::slidingPartIndex(), returns 1/2/0 after scanning "Slider" joints and
     // comparing JCS "pitch and roll"; used by Screw/RackPinion before solver marker creation.
     std::optional<int> slidingPartIndex;

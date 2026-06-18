@@ -1423,19 +1423,22 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         joint_name: str,
         joint_type: str,
         expected_update_base: list[float] | None,
-        solver_scalars: dict[str, float] | None = None,
+        solver_scalars: dict[str, object] | None = None,
+        joint_reference_objects: tuple[str, str] = ("ComponentA", "ComponentB"),
+        expected_solver_joints: list[str] | None = None,
     ) -> None:
         result = self.run_recompute(fixture, "c3m6")
         assembly = result["objects"]["Assembly"]
         joint = result["objects"][joint_name]
         updates = result["documentObjectUpdates"]
+        expected_solver_joints = expected_solver_joints or [joint_name]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(joint["status"], "ok")
         self.assertEqual(joint["assembly"], "joint")
         self.assertEqual(joint["joint_type"], joint_type)
-        self.assertEqual(joint["reference1"]["object"], "ComponentA")
-        self.assertEqual(joint["reference2"]["object"], "ComponentB")
+        self.assertEqual(joint["reference1"]["object"], joint_reference_objects[0])
+        self.assertEqual(joint["reference2"]["object"], joint_reference_objects[1])
         self.assertEqual(joint["solve"], "joint_input")
 
         self.assertEqual(assembly["status"], "ok")
@@ -1443,8 +1446,12 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(assembly["solver_adapter"]["status"], "solved")
         self.assertEqual(assembly["solver_adapter"]["mode"], "real_ondsel_solver")
         self.assertEqual(assembly["solver_adapter"]["grounded_joints"], ["GroundedJoint"])
-        self.assertEqual(assembly["solver_adapter"]["joints"], [joint_name])
-        solver_joint = assembly["solver_adapter"]["solver_joints"][0]
+        self.assertEqual(assembly["solver_adapter"]["joints"], expected_solver_joints)
+        solver_joints = {
+            solver_joint["object"]: solver_joint
+            for solver_joint in assembly["solver_adapter"]["solver_joints"]
+        }
+        solver_joint = solver_joints[joint_name]
         self.assertEqual(solver_joint["joint_type"], joint_type)
         if solver_scalars:
             for field, expected in solver_scalars.items():
@@ -1459,7 +1466,8 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(updates[0]["joint"], "OndselSolver")
         self.assertEqual(updates[0]["joint_type"], "solver_result")
         self.assertEqual(updates[0]["object"], "ComponentB")
-        self.assertEqual(updates[0]["properties"]["Placement"]["Base"], expected_update_base)
+        for actual, expected in zip(updates[0]["properties"]["Placement"]["Base"], expected_update_base):
+            self.assertAlmostEqual(actual, expected, delta=1e-9)
         self.assert_object_matches_expected(result, "c3m6", fixture)
 
     def test_c3m6_assembly_grounded_ball_joint_uses_real_ondsel_solver(self) -> None:
@@ -1535,8 +1543,28 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 None,
                 {"distance": 2.0, "distance2": 1.0, "radius_i": 2.0, "radius_j": -1.0},
             ),
+            (
+                "assembly-grounded-rackpinion-joint-real-solver",
+                "RackPinionJoint",
+                "RackPinion",
+                [0.0, 0.0, 0.0],
+                {"distance": 2.5, "pitch_radius": 2.5, "sliding_part_index": 2, "jcs_swapped_for_solver": True},
+                ("ComponentB", "ComponentA"),
+                ["SliderJoint", "RackPinionJoint"],
+            ),
+            (
+                "assembly-grounded-screw-joint-real-solver",
+                "ScrewJoint",
+                "Screw",
+                [0.0, 0.0, 0.0],
+                {"distance": 1.25, "pitch": 1.25, "sliding_part_index": 2, "jcs_swapped_for_solver": True},
+                ("ComponentB", "ComponentA"),
+                ["SliderJoint", "ScrewJoint"],
+            ),
         ]
-        for fixture, joint_name, joint_type, expected_update_base, solver_scalars in cases:
+        for fixture, joint_name, joint_type, expected_update_base, solver_scalars, *extra in cases:
+            joint_reference_objects = extra[0] if len(extra) >= 1 else ("ComponentA", "ComponentB")
+            expected_solver_joints = extra[1] if len(extra) >= 2 else None
             with self.subTest(fixture=fixture):
                 self.assert_c3m6_grounded_joint_uses_real_ondsel_solver(
                     fixture,
@@ -1544,6 +1572,8 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     joint_type,
                     expected_update_base,
                     solver_scalars,
+                    joint_reference_objects,
+                    expected_solver_joints,
                 )
 
     def test_c3m6_assembly_placement_writeback_applies_to_next_request_graph(self) -> None:
@@ -1775,6 +1805,51 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertAlmostEqual(rotation[1], 0.0, delta=1e-12)
         self.assertAlmostEqual(rotation[2], -0.7071067811865475, delta=1e-12)
         self.assertAlmostEqual(rotation[3], 0.0, delta=1e-12)
+
+    def test_c3m6_assembly_s5_screw_rackpinion_grounded_fixtures_are_published_supported(self) -> None:
+        cases = [
+            (
+                "assembly-grounded-screw-joint-real-solver",
+                "ScrewJoint",
+                "Screw",
+                "pitch",
+                1.25,
+                None,
+            ),
+            (
+                "assembly-grounded-rackpinion-joint-real-solver",
+                "RackPinionJoint",
+                "RackPinion",
+                "pitch_radius",
+                2.5,
+                "rack_pinion_marker_rewrite",
+            ),
+        ]
+        for fixture, joint_name, joint_type, scalar_field, scalar_value, rewrite_field in cases:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "c3m6")
+                assembly = result["objects"]["Assembly"]
+                solver_joints = {
+                    solver_joint["object"]: solver_joint
+                    for solver_joint in assembly["solver_adapter"]["solver_joints"]
+                }
+                solver_joint = solver_joints[joint_name]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(assembly["solve"], "solved")
+                self.assertEqual(assembly["solver_adapter"]["mode"], "real_ondsel_solver")
+                self.assertEqual(assembly["solver_adapter"]["unsupported_joints"], [])
+                self.assertEqual(solver_joint["joint_type"], joint_type)
+                self.assertEqual(solver_joint["distance"], scalar_value)
+                self.assertEqual(solver_joint[scalar_field], scalar_value)
+                self.assertEqual(solver_joint["sliding_part_index"], 2)
+                self.assertTrue(solver_joint["jcs_swapped_for_solver"])
+                self.assertEqual(solver_joint["reference1"]["object"], "ComponentA")
+                self.assertEqual(solver_joint["reference2"]["object"], "ComponentB")
+                if rewrite_field:
+                    self.assertIn(rewrite_field, solver_joint)
+                    self.assertTrue(solver_joint[rewrite_field]["applied"])
+                self.assert_object_matches_expected(result, "c3m6", fixture)
 
     def test_p8_part_cylinder_builds_prism_extension_solid(self) -> None:
         result = self.run_recompute("part-cylinder", "p8")

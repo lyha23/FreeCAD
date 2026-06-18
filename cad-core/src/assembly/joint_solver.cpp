@@ -24,6 +24,7 @@
 #include <OndselSolver/ASMTRevoluteJoint.h>
 #include <OndselSolver/ASMTSphericalJoint.h>
 #include <OndselSolver/ASMTSphSphJoint.h>
+#include <OndselSolver/ASMTScrewJoint.h>
 #include <OndselSolver/ASMTTranslationalJoint.h>
 
 namespace cad_core::assembly {
@@ -637,6 +638,15 @@ std::shared_ptr<MbD::ASMTJoint> makeOndselJointOfType(const JointConstraint& joi
         return rackPinionJoint;
     }
     // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    // ::AssemblyObject::makeMbdJointOfType(), "case JointType::Screw" requires a non-zero
+    // "slidingPartIndex(joint)", optionally calls "swapJCS(joint)", then creates
+    // ASMTScrewJoint and sets "mbdJoint->pitch = getJointDistance(joint)".
+    if (joint.jointType == "Screw") {
+        auto screwJoint = MbD::ASMTScrewJoint::With();
+        screwJoint->pitch = joint.pitch.value_or(joint.distance.value_or(0.0));
+        return screwJoint;
+    }
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
     // ::AssemblyObject::makeMbdJointOfType(), direct case JointType::Parallel returns
     // ASMTParallelAxesJoint and JointType::Perpendicular returns ASMTPerpendicularJoint.
     if (joint.jointType == "Parallel") {
@@ -670,6 +680,9 @@ bool isConvertibleOndselJointInRequest(const JointConstraint& joint)
         return joint.slidingPartIndex && *joint.slidingPartIndex != 0 && joint.rackPinionMarkerRewrite
             && joint.rackPinionMarkerRewrite->applied;
     }
+    if (joint.jointType == "Screw") {
+        return joint.slidingPartIndex && *joint.slidingPartIndex != 0;
+    }
     return true;
 }
 
@@ -677,6 +690,9 @@ std::string unsupportedJointMessage(const UnsupportedAssemblyJoint& unsupported)
 {
     if (unsupported.jointType == "RackPinion") {
         return "Ondsel solver adapter cannot convert RackPinion without a matching Slider precondition";
+    }
+    if (unsupported.jointType == "Screw") {
+        return "Ondsel solver adapter cannot convert Screw without a matching Slider precondition";
     }
     return "Ondsel solver adapter does not yet convert JointType " + unsupported.jointType;
 }
@@ -944,8 +960,11 @@ AssemblySolveRequest buildAssemblySolveRequest(
         constraint.suppressed = app::readBool(*joint, "Suppressed").value_or(false);
         if (constraint.jointType == "Distance" || constraint.jointType == "Slider"
             || constraint.jointType == "Gears" || constraint.jointType == "Belt"
-            || constraint.jointType == "RackPinion") {
+            || constraint.jointType == "RackPinion" || constraint.jointType == "Screw") {
             constraint.distance = app::readNumber(*joint, "Distance").value_or(0.0);
+        }
+        if (constraint.jointType == "Screw") {
+            constraint.pitch = constraint.distance.value_or(0.0);
         }
         if (constraint.jointType == "RackPinion") {
             constraint.pitchRadius = constraint.distance.value_or(0.0);
@@ -1016,9 +1035,9 @@ bool isSupportedOndselJointType(const std::string& jointType)
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/
     // AssemblyObject.cpp::AssemblyObject::makeMbdJointOfType(), maps "Fixed", "Revolute",
     // "Cylindrical", "Slider", "Ball", "Distance", direct "Parallel" / "Perpendicular",
-    // "Angle", the Gears / Belt ASMTGearJoint subset, and RackPinion after
-    // getRackPinionMarkers() has rewritten the rack marker. Screw still requires its separate
-    // FreeCAD sliding-part path and remains outside this set in S4.
+    // "Angle", the Gears / Belt ASMTGearJoint subset, RackPinion after getRackPinionMarkers()
+    // has rewritten the rack marker, and Screw after the "slidingPartIndex(joint)" precondition
+    // succeeds.
     static const std::set<std::string> supported = {
         "Fixed",
         "Revolute",
@@ -1032,6 +1051,7 @@ bool isSupportedOndselJointType(const std::string& jointType)
         "Gears",
         "Belt",
         "RackPinion",
+        "Screw",
     };
     return supported.count(jointType) != 0U;
 }

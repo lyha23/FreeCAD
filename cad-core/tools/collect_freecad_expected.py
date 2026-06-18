@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import subprocess
 import sys
@@ -530,7 +531,14 @@ def set_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, val
             safe_setattr(obj, name, assembly_joint_reference_value(created, value))
             return
         if property_type == "App::PropertyPlacement":
-            set_placement(FreeCAD, obj, value)
+            if name == "Placement":
+                set_placement(FreeCAD, obj, value)
+            else:
+                # FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/JointObject.py
+                # ::Joint.__init__() creates FeaturePython joint properties "Placement1" /
+                # "Placement2"; these are property slots on the joint, not the object's own
+                # App::GeoFeature "Placement".
+                safe_setattr(obj, name, placement_value(FreeCAD, value))
             return
         if property_type in {
             "App::PropertyBool",
@@ -1263,6 +1271,100 @@ def assembly_link_specs_for_object(fixture: dict, assembly_name: str) -> list[di
     return result
 
 
+def fixture_placement_for_property(value: Any) -> dict:
+    if isinstance(value, dict) and value.get("PropertyType") == "App::PropertyPlacement":
+        return {
+            "Base": [float(item) for item in value.get("Base", [0, 0, 0])],
+            "Rotation": [float(item) for item in value.get("Rotation", [0, 0, 0, 1])],
+        }
+    return {
+        "Base": [0.0, 0.0, 0.0],
+        "Rotation": [0.0, 0.0, 0.0, 1.0],
+    }
+
+
+def yaw_pitch_roll_from_fixture_placement(placement: dict) -> tuple[float, float, float]:
+    # FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Base/Rotation.cpp
+    # ::Rotation::getYawPitchRoll(), returns yaw/pitch/roll in degrees. The collector mirrors the
+    # pitch/roll comparison used by AssemblyObject::slidingPartIndex() for native expected JSON.
+    x, y, z, w = [float(item) for item in placement["Rotation"]]
+    length = math.sqrt(x * x + y * y + z * z + w * w)
+    if length <= 0.0:
+        return 0.0, 0.0, 0.0
+    x /= length
+    y /= length
+    z /= length
+    w /= length
+    q00 = x * x
+    q11 = y * y
+    q22 = z * z
+    q33 = w * w
+    q01 = x * y
+    q02 = x * z
+    q03 = x * w
+    q12 = y * z
+    q13 = y * w
+    q23 = z * w
+    qd2 = 2.0 * (q13 - q02)
+    tolerance = 16.0 * sys.float_info.epsilon
+    if abs(qd2 - 1.0) <= tolerance:
+        return 0.0, math.degrees(math.pi / 2.0), math.degrees(2.0 * math.atan2(x, w))
+    if abs(qd2 + 1.0) <= tolerance:
+        return 0.0, math.degrees(-math.pi / 2.0), math.degrees(2.0 * math.atan2(x, w))
+    yaw = math.degrees(math.atan2(2.0 * (q01 + q23), (q00 + q33) - (q11 + q22)))
+    pitch = math.degrees(math.asin(max(-1.0, min(1.0, qd2))))
+    roll = math.degrees(math.atan2(2.0 * (q12 + q03), (q22 + q33) - (q00 + q11)))
+    return yaw, pitch, roll
+
+
+def same_fixture_pitch_and_roll(slider_placement: dict, target_placement: dict) -> bool:
+    _, slider_pitch, slider_roll = yaw_pitch_roll_from_fixture_placement(slider_placement)
+    _, target_pitch, target_roll = yaw_pitch_roll_from_fixture_placement(target_placement)
+    return abs(slider_pitch - target_pitch) < 1e-7 and abs(slider_roll - target_roll) < 1e-7
+
+
+def apply_screw_rackpinion_fixture_sliding(
+    solver_joints: list[dict],
+    joint_placements: dict[str, tuple[dict, dict]],
+) -> None:
+    for target in solver_joints:
+        if target["joint_type"] not in {"Screw", "RackPinion"}:
+            continue
+        target_placements = joint_placements[target["object"]]
+        sliding_found = 0
+        for slider in solver_joints:
+            if slider["joint_type"] != "Slider":
+                continue
+            slider_placements = joint_placements[slider["object"]]
+            found = 0
+            slider_placement = None
+            target_placement = None
+            slider_reference1 = slider["reference1"]["object"]
+            slider_reference2 = slider["reference2"]["object"]
+            target_reference1 = target["reference1"]["object"]
+            target_reference2 = target["reference2"]["object"]
+            if slider_reference1 and slider_reference1 in {target_reference1, target_reference2}:
+                found = 1 if slider_reference1 == target_reference1 else 2
+                slider_placement = slider_placements[0]
+                target_placement = target_placements[0 if found == 1 else 1]
+            elif slider_reference2 and slider_reference2 in {target_reference1, target_reference2}:
+                found = 1 if slider_reference2 == target_reference1 else 2
+                slider_placement = slider_placements[1]
+                target_placement = target_placements[0 if found == 1 else 1]
+            if (
+                found != 0
+                and slider_placement is not None
+                and target_placement is not None
+                and same_fixture_pitch_and_roll(slider_placement, target_placement)
+            ):
+                sliding_found = found
+        target["sliding_part_index"] = sliding_found
+        target["jcs_swapped_for_solver"] = False
+        if sliding_found == 2:
+            target["reference1"], target["reference2"] = target["reference2"], target["reference1"]
+            target["jcs_swapped_for_solver"] = True
+
+
 def joint_payloads_from_fixture(fixture: dict, assembly_name: str) -> tuple[list[str], list[str], list[dict]]:
     specs = {spec.get("Name"): spec for spec in fixture.get("Objects", []) if isinstance(spec, dict)}
     assembly_spec = specs.get(assembly_name)
@@ -1279,6 +1381,7 @@ def joint_payloads_from_fixture(fixture: dict, assembly_name: str) -> tuple[list
     grounded_joints: list[str] = []
     joints: list[str] = []
     solver_joints: list[dict] = []
+    joint_placements: dict[str, tuple[dict, dict]] = {}
     for joint_group_name in joint_group_names:
         joint_group_spec = specs.get(joint_group_name)
         joint_group = joint_group_spec.get("Properties", {}).get("Group") if isinstance(joint_group_spec, dict) else None
@@ -1296,6 +1399,7 @@ def joint_payloads_from_fixture(fixture: dict, assembly_name: str) -> tuple[list
             if joint_type is None:
                 continue
             joints.append(str(joint_name))
+            distance = float(scalar_property_value(properties.get("Distance", 0.0)) or 0.0)
             solver_joint = {
                 "object": str(joint_name),
                 "joint_type": str(joint_type),
@@ -1303,8 +1407,21 @@ def joint_payloads_from_fixture(fixture: dict, assembly_name: str) -> tuple[list
                 "reference2": link_sub_payload_from_fixture(properties.get("Reference2")),
                 "suppressed": bool(scalar_property_value(properties.get("Suppressed", False))),
             }
-            if joint_type in {"Distance", "Slider", "Gears", "Belt"}:
-                solver_joint["distance"] = float(scalar_property_value(properties.get("Distance", 0.0)) or 0.0)
+            joint_placements[str(joint_name)] = (
+                fixture_placement_for_property(properties.get("Placement1")),
+                fixture_placement_for_property(properties.get("Placement2")),
+            )
+            if joint_type in {"Distance", "Slider", "Gears", "Belt", "RackPinion", "Screw"}:
+                solver_joint["distance"] = distance
+            if joint_type == "Screw":
+                # FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+                # ::AssemblyObject::makeMbdJointOfType(), Screw writes "pitch=getJointDistance".
+                solver_joint["pitch"] = distance
+            if joint_type == "RackPinion":
+                # FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+                # ::AssemblyObject::makeMbdJointOfType(), RackPinion writes
+                # "pitchRadius=getJointDistance".
+                solver_joint["pitch_radius"] = distance
             if joint_type in {"Gears", "Belt"}:
                 distance2 = float(scalar_property_value(properties.get("Distance2", 0.0)) or 0.0)
                 # FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
@@ -1316,6 +1433,7 @@ def joint_payloads_from_fixture(fixture: dict, assembly_name: str) -> tuple[list
             if joint_type == "Angle":
                 solver_joint["angle"] = float(scalar_property_value(properties.get("Angle", 0.0)) or 0.0)
             solver_joints.append(solver_joint)
+    apply_screw_rackpinion_fixture_sliding(solver_joints, joint_placements)
     return grounded_joints, joints, solver_joints
 
 

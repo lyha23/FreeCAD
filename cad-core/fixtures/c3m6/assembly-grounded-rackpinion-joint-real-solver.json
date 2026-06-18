@@ -1,0 +1,159 @@
+{
+  "Objects": [
+    {
+      "Name": "BoxA",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 2,
+        "Height": 2
+      }
+    },
+    {
+      "Name": "BoxB",
+      "ID": 2,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 2,
+        "Height": 2
+      }
+    },
+    {
+      "Name": "ComponentA",
+      "ID": 3,
+      "TypeId": "Assembly::AssemblyLink",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "BoxA"
+        },
+        "Rigid": true
+      }
+    },
+    {
+      "Name": "ComponentB",
+      "ID": 4,
+      "TypeId": "Assembly::AssemblyLink",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "BoxB"
+        },
+        "Rigid": true,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [4, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "GroundedJoint",
+      "ID": 5,
+      "TypeId": "App::FeaturePython",
+      "Properties": {
+        "ObjectToGround": {
+          "PropertyType": "App::PropertyLinkGlobal",
+          "value": "ComponentA"
+        }
+      }
+    },
+    {
+      "Name": "SliderJoint",
+      "ID": 6,
+      "TypeId": "App::FeaturePython",
+      "Properties": {
+        "JointType": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Slider"
+        },
+        "Distance": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 0
+        },
+        "Reference1": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "value": "ComponentA",
+          "SubList": []
+        },
+        "Placement1": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        },
+        "Reference2": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "value": "ComponentB",
+          "SubList": []
+        },
+        "Placement2": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "RackPinionJoint",
+      "ID": 7,
+      "TypeId": "App::FeaturePython",
+      "Properties": {
+        "JointType": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "RackPinion"
+        },
+        "Distance": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 2.5
+        },
+        "Reference1": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "value": "ComponentB",
+          "SubList": []
+        },
+        "Placement1": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 0],
+          "Rotation": [0, 0.7071067811865475, 0, 0.7071067811865476]
+        },
+        "Reference2": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "value": "ComponentA",
+          "SubList": []
+        },
+        "Placement2": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "Joints",
+      "ID": 8,
+      "TypeId": "Assembly::JointGroup",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["GroundedJoint", "SliderJoint", "RackPinionJoint"]
+        }
+      }
+    },
+    {
+      "Name": "Assembly",
+      "ID": 9,
+      "TypeId": "Assembly::AssemblyObject",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["ComponentA", "ComponentB", "Joints"]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Assembly"]
+  }
+}

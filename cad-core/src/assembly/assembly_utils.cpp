@@ -100,6 +100,12 @@ nlohmann::json solverJointJson(const JointConstraint& joint)
     if (joint.distance2) {
         solverJoint["distance2"] = *joint.distance2;
     }
+    if (joint.pitch) {
+        // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+        // ::AssemblyObject::makeMbdJointOfType(), Screw maps "getJointDistance(joint)" to
+        // ASMTScrewJoint "pitch"; JSON exposes focused S5 conversion evidence.
+        solverJoint["pitch"] = *joint.pitch;
+    }
     if (joint.pitchRadius) {
         // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
         // ::AssemblyObject::makeMbdJointOfType(), RackPinion maps "getJointDistance(joint)" to

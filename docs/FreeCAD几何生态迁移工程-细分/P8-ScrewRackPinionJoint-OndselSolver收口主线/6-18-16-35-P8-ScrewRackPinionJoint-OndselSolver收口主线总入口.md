@@ -13,10 +13,10 @@
 
 ## 当前基线
 
-- 当前 supported subset 是 `Fixed / Revolute / Cylindrical / Slider / Ball / Distance / Parallel / Perpendicular / Angle / Gears / Belt`；`unsupported_joint_matrix` 只剩 `RackPinion / Screw`。
+- 当前 supported subset 是 `Fixed / Revolute / Cylindrical / Slider / Ball / Distance / Parallel / Perpendicular / Angle / Gears / Belt / RackPinion / Screw`；`unsupported_joint_matrix` 为空。
 - FreeCAD `AssemblyObject::makeMbdJointOfType()` 对 Screw 创建 `ASMTScrewJoint` 并设置 `pitch=Distance`，但要求 `slidingPartIndex(joint) != 0`，必要时执行 `swapJCS(joint)`。
 - FreeCAD `AssemblyObject::makeMbdJointOfType()` 对 RackPinion 创建 `ASMTRackPinionJoint` 并设置 `pitchRadius=Distance`；`makeMbdJoint()` 对 RackPinion 走 `getRackPinionMarkers()`，不是普通 `handleOneSideOfJoint()`。
-- `cad-core/src/assembly/joint_solver.cpp::isSupportedOndselJointType()` 当前不包含 RackPinion / Screw；`cad-core/src/adapters/c_api/c_api.cpp` 当前仍把它们发布在 `unsupported_joint_matrix`。
+- `cad-core/src/assembly/joint_solver.cpp::isSupportedOndselJointType()` 当前包含 RackPinion / Screw；`cad-core/src/adapters/c_api/c_api.cpp` 当前已把它们发布在 `supported_joint_matrix`。
 - `cad-core` 已有 Slider、Distance、Gears/Belt 的 scalar DTO、real Ondsel adapter、fixture / expected 和 capability 发布路径，可复用为本包的输入输出骨架。
 
 ## 证明链条
@@ -67,12 +67,12 @@
 | S2 范围准入 | `工作步骤细分/6-18-16-38-【已实现】P8-ScrewRackPinionJoint-S2-范围准入与blocker矩阵.md` | 已将候选路由到 implementable unsupported、notCollected、releaseGate、nonGoal |
 | S3 sliding 前置复审 | `工作步骤细分/6-18-16-39-【已实现】P8-ScrewRackPinionJoint-S3-SlidingAxis与swapJCS专项复审.md` | 已收口 `slidingPartIndex()` / `swapJCS()` 共享前置，仍不发布 Screw / RackPinion capability |
 | S4 RackPinion marker 复审 | `工作步骤细分/6-18-16-40-【已实现】P8-ScrewRackPinionJoint-S4-RackPinionMarker重写专项复审.md` | 已收口 RackPinion `pitchRadius=Distance` conversion 与 rack / pinion marker rewrite focused evidence |
-| S5 oracle / 发布复审 | `工作步骤细分/6-18-16-41-P8-ScrewRackPinionJoint-S5-NativeOracle与Capability专项复审.md` | 收口 fixtures、FreeCADCmd expected、focused tests 和 capability |
-| S6 发布闸门 | `工作步骤细分/6-18-16-42-P8-ScrewRackPinionJoint-S6-Oracle实现与发布闸门.md` | 指定代码落点、验收命令和禁止路径 |
+| S5 oracle / 发布复审 | `工作步骤细分/6-18-16-41-【已实现】P8-ScrewRackPinionJoint-S5-NativeOracle与Capability专项复审.md` | 已收口 fixtures、FreeCADCmd expected、focused tests 和 capability |
+| S6 发布闸门 | `工作步骤细分/6-18-16-42-P8-ScrewRackPinionJoint-S6-Oracle实现与发布闸门.md` | 复核剩余边界和禁止路径 |
 | source candidates | `矩阵/p8_screw_rackpinion_joint_source_candidates.tsv` | FreeCAD / cad-core 候选证据 |
 | scope review | `矩阵/p8_screw_rackpinion_joint_scope_review_matrix.tsv` | scope 状态和验收路由 |
 | blocker queue | `矩阵/p8_screw_rackpinion_joint_blocker_queue.tsv` | 发布前必须关闭的 blocker |
 | non goal registry | `矩阵/p8_screw_rackpinion_joint_non_goal_registry.tsv` | 不进入本轮实现的边界 |
 | backend gap classification | `矩阵/p8_screw_rackpinion_joint_backend_gap_classification.tsv` | unsupported / notCollected / releaseGate / nonGoal 分类 |
 
-当前工作步骤索引已完成校验；S0 已完成 live 基线复核；S1 已完成 source candidates 复核；S2 已完成范围准入与 blocker 队列路由；S3 已完成 request-local sliding side / DTO swap；S4 已完成 RackPinion runtime conversion / marker rewrite focused evidence；S5-S6 仍为 `待执行`。矩阵是后续路由输入，不是发布闸门结论。
+当前工作步骤索引已完成校验；S0 已完成 live 基线复核；S1 已完成 source candidates 复核；S2 已完成范围准入与 blocker 队列路由；S3 已完成 request-local sliding side / DTO swap；S4 已完成 RackPinion runtime conversion / marker rewrite focused evidence；S5 已完成 native oracle、focused tests 和 C ABI publication；S6 仍为后续边界复核步骤。矩阵是后续路由输入，不是 full DistanceType 或 GUI/session 发布结论。
