@@ -922,6 +922,28 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("grounded_belt_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
         self.assertIn("grounded_rackpinion_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
         self.assertIn("grounded_screw_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
+        self.assertIn("basic_distance_type", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
+        basic_distance = capabilities["assembly"]["ondsel_solver_adapter"]["distance_type_basic_geometry"]
+        self.assertEqual(basic_distance["status"], "covered_full")
+        self.assertEqual(
+            basic_distance["supported"],
+            ["PointPoint", "LineLine", "PointLine", "PlanePlane", "PointPlane", "LinePlane"],
+        )
+        self.assertEqual(
+            basic_distance["solver_joint_classes"]["PointPoint"],
+            ["ASMTSphericalJoint", "ASMTSphSphJoint"],
+        )
+        self.assertEqual(basic_distance["solver_joint_classes"]["LineLine"], ["ASMTRevCylJoint"])
+        self.assertEqual(basic_distance["solver_joint_classes"]["PointLine"], ["ASMTCylSphJoint"])
+        self.assertEqual(basic_distance["solver_joint_classes"]["PlanePlane"], ["ASMTPlanarJoint"])
+        self.assertEqual(basic_distance["solver_joint_classes"]["PointPlane"], ["ASMTPointInPlaneJoint"])
+        self.assertEqual(basic_distance["solver_joint_classes"]["LinePlane"], ["ASMTLineInPlaneJoint"])
+        self.assertEqual(basic_distance["scalar_fields"], ["distance_ij", "offset"])
+        self.assertIn("LineCircle", basic_distance["remaining_radius_gaps"])
+        self.assertIn("PlaneCylinder", basic_distance["remaining_radius_gaps"])
+        self.assertIn("PointCylinder", basic_distance["remaining_radius_gaps"])
+        self.assertIn("PointCurve", basic_distance["non_goals"])
+        self.assertIn("persistent_solver_state", basic_distance["non_goals"])
         self.assertIn(
             "invalid_grounded_placement_rejected",
             capabilities["assembly"]["ondsel_solver_adapter"]["covered"],

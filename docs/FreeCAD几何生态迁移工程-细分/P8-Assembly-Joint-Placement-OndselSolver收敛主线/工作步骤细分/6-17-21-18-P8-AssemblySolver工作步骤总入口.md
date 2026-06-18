@@ -4,7 +4,7 @@
 
 把 P8 Assembly solver 从旧的静态发布口径收敛为可验证的 request-local solver 子集：先复核 live code、FreeCAD authority 和 focused tests，再决定哪些 releaseGate 进入发布回写，哪些 unsupported JointType 进入 C++ 实现，哪些缺 oracle 的路径保持 `notCollected`。
 
-当前收口状态：本文是执行索引。S0-S7 各自步骤已完成：正式 P8 文档、C ABI capabilities、focused tests、fixtures 与当前 C++ 之间的 publication drift 已按硬依赖 OndselSolver 收敛，representative fallback 已删除，FreeCADCmd native solver placement expected 已入库并通过 cad-core parity。S7 后 `P8ASM-SCOPE-006` 已从 `backendGap` 转为 supported。2026-06-18 后续最小范围 `P8ASM-SCOPE-010` 已把 Cylindrical 以 checked-in native expected 和 real `ASMTCylindricalJoint` adapter 转为 supported；复杂 Distance geometry 仍 `notCollected`，GUI / session / 完整 Link 写回保持 nonGoal。
+当前收口状态：本文是执行索引。S0-S7 各自步骤已完成：正式 P8 文档、C ABI capabilities、focused tests、fixtures 与当前 C++ 之间的 publication drift 已按硬依赖 OndselSolver 收敛，representative fallback 已删除，FreeCADCmd native solver placement expected 已入库并通过 cad-core parity。S7 后 `P8ASM-SCOPE-006` 已从 `backendGap` 转为 supported。2026-06-18 后续最小范围 `P8ASM-SCOPE-010` 已把 Cylindrical 以 checked-in native expected 和 real `ASMTCylindricalJoint` adapter 转为 supported；DistanceType 后续已把基础 Point / Line / Plane geometry 以 checked-in expected、focused tests 和 `basic_distance_type` capability 转为 supported；半径类和曲线 Distance 仍保持后续范围，GUI / session / 完整 Link 写回保持 nonGoal。
 
 ## 步骤索引
 

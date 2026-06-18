@@ -4,11 +4,11 @@
 
 把 `Distance` JointType 的基础 `DistanceType` 几何映射从 scalar-only `ASMTSphSphJoint` 推进到 FreeCAD `makeMbdJointDistance()` 等价的 request-local Ondsel 子集，覆盖 `PointPoint`、`LineLine`、`PointLine`、`PlanePlane`、`PointPlane`、`LinePlane`。
 
-当前收口状态：S0 已完成声明口径与 live scalar-only 基线复核；S1 已完成 FreeCAD 源码候选矩阵复核；S2 已完成范围准入与 blocker 矩阵复核；S3 已完成 request-local reference classification；S4 已完成基础 Ondsel Distance mapping；S5 到 S6 仍为待执行。已建立 runtime mapping evidence，但尚未完成 native oracle、capability 或发布闸门；不得把整个主线写成“已实现”。
+当前收口状态：S0 已完成声明口径与 live scalar-only 基线复核；S1 已完成 FreeCAD 源码候选矩阵复核；S2 已完成范围准入与 blocker 矩阵复核；S3 已完成 request-local reference classification；S4 已完成基础 Ondsel Distance mapping；S5 已完成 native oracle、focused fixtures/tests 和 C ABI capability 发布；S6 仍待执行发布边界审计。已建立 basic DistanceType solver DTO / class / scalar 证据，但 full native subshape marker placement parity 仍不能作为本包已支持声明。
 
 ## 入口校验状态
 
-2026-06-18 已校验：本文作为后续队列入口已成立，步骤索引、执行顺序、状态纪律、矩阵闸门和通用验收均与当前文件树一致。该状态只表示本入口文件已完成；S5-S6、native oracle、capability 和发布闸门仍保持待执行。
+2026-06-18 已校验：本文作为后续队列入口已成立，步骤索引、执行顺序、状态纪律、矩阵闸门和通用验收均与当前文件树一致。该状态只表示本入口文件已完成；S6、半径类 / 曲线边界和发布闸门仍保持待执行。
 
 ## 步骤索引
 
@@ -19,7 +19,7 @@
 | S2 | `6-18-18-32-【已实现】P8-DistanceTypeBasicGeometry-S2-范围准入与blocker矩阵.md` | 已实现 | 将候选路由到 backendGap、notCollected、releaseGate、nonGoal |
 | S3 | `6-18-18-33-【已实现】P8-DistanceTypeBasicGeometry-S3-ReferenceElement分类与JCS顺序专项复审.md` | 已实现 | 复审 Reference element 分类、primitive 判断和 request-local `swapJCS` |
 | S4 | `6-18-18-34-【已实现】P8-DistanceTypeBasicGeometry-S4-OndselDistanceJoint映射专项复审.md` | 已实现 | 复审基础 DistanceType 到 Ondsel joint class、`distanceIJ`、`offset` 的映射 |
-| S5 | `6-18-18-35-P8-DistanceTypeBasicGeometry-S5-NativeOracle与Capability专项复审.md` | 待执行 | 复审 fixtures、FreeCADCmd expected、focused tests 和 capability publication |
+| S5 | `6-18-18-35-【已实现】P8-DistanceTypeBasicGeometry-S5-NativeOracle与Capability专项复审.md` | 已实现 | 复审 fixtures、FreeCADCmd expected、focused tests 和 capability publication |
 | S6 | `6-18-18-36-P8-DistanceTypeBasicGeometry-S6-Oracle实现与发布闸门.md` | 待执行 | 消费 blockers，落代码，完成发布边界复核 |
 
 ## 执行顺序
@@ -29,18 +29,18 @@
 3. S2 把所有候选路由到 scope matrix、blocker queue、nonGoal registry 和 backend gap 分类。
 4. S3 落 `JointConstraint` / request builder 的基础 element classification 与 JCS ordering 证据，不发布 capability。
 5. S4 落基础 DistanceType 到 Ondsel joint 的 request-local adapter 映射和 JSON 证据。
-6. S5 增加 c3m6 fixtures、FreeCADCmd expected、focused runtime tests 和 C ABI capability docs。
-7. S6 复核所有 blocker，确认 radius-bearing / curve / GUI-session 仍未被误发布。
+6. S5 已增加 c3m6 fixtures、FreeCADCmd expected、focused runtime tests 和 C ABI capability docs。
+7. S6 复核剩余发布 blocker，确认 radius-bearing / curve / GUI-session 仍未被误发布。
 
 ## 当前矩阵闸门
 
 | 矩阵 | 当前用途 | 当前结论 |
 | --- | --- | --- |
 | `p8_distance_type_basic_geometry_source_candidates.tsv` | FreeCAD / cad-core 证据入口 | S1 已复核 DistanceType enum、classification、makeMbdJointDistance、cad-core scalar-only gap、collector 和 capability 路由 |
-| `p8_distance_type_basic_geometry_scope_review_matrix.tsv` | 当前能力路由 | `DTC-SCOPE-002..005` 已为 `supportedFoundation`；native oracle / capability 仍为 notCollected / releaseGate；半径类保持 notCollected；曲线和 GUI/session 为 nonGoal |
-| `p8_distance_type_basic_geometry_blocker_queue.tsv` | 发布前 blocker | `DTC-BLOCK-001..004` 已关闭；S5-S6 仍必须依次关闭 oracle、capability 和边界保护 |
+| `p8_distance_type_basic_geometry_scope_review_matrix.tsv` | 当前能力路由 | `DTC-SCOPE-002..005` 已为 `supportedFoundation`；`DTC-SCOPE-006..007` 已完成 basic DistanceType solver oracle 与 capability 发布；半径类保持 notCollected；曲线和 GUI/session 为 nonGoal |
+| `p8_distance_type_basic_geometry_blocker_queue.tsv` | 发布前 blocker | `DTC-BLOCK-001..006` 已关闭；S6 仍必须审计边界保护 |
 | `p8_distance_type_basic_geometry_non_goal_registry.tsv` | 非目标边界 | radius-bearing DistanceType、curve/default、GUI/session、persistent solver state 不进入本包 |
-| `p8_distance_type_basic_geometry_backend_gap_classification.tsv` | 分类与优先级 | `DTC-BG-001..004` 已关闭；剩余 P1 闸门是 native expected 与 capability publication |
+| `p8_distance_type_basic_geometry_backend_gap_classification.tsv` | 分类与优先级 | `DTC-BG-001..006` 已关闭；剩余开放项是半径类第二批与曲线 / GUI nonGoal 边界 |
 
 ## 状态纪律
 

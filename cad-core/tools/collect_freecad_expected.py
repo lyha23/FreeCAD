@@ -17,6 +17,7 @@ DEFAULT_FREECADCMD = "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcm
 SCHEMA_VERSION = "cad-core.freecad-expected.v1"
 ENV_ARG_MARKER = "__cad_core_expected_args_env__"
 ENV_ARG_NAME = "CAD_CORE_EXPECTED_ARGS_JSON"
+FREECAD_PRECISION_CONFUSION = 1e-7
 SUPPORTED_NATIVE_TYPES = {
     "App::FeaturePython",
     "App::Link",
@@ -1413,6 +1414,8 @@ def joint_payloads_from_fixture(fixture: dict, assembly_name: str) -> tuple[list
             )
             if joint_type in {"Distance", "Slider", "Gears", "Belt", "RackPinion", "Screw"}:
                 solver_joint["distance"] = distance
+            if joint_type == "Distance":
+                resolve_fixture_distance_type(solver_joint, specs)
             if joint_type == "Screw":
                 # FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
                 # ::AssemblyObject::makeMbdJointOfType(), Screw writes "pitch=getJointDistance".
@@ -1444,6 +1447,148 @@ def link_sub_payload_from_fixture(value: Any) -> dict:
         "object": str(value.get("value", "")),
         "subnames": [str(item) for item in list_field(value, "SubList", "StableSubList")],
     }
+
+
+def fixture_reference_element(reference: dict, specs: dict[str, dict]) -> tuple[str, str]:
+    subnames = reference.get("subnames", [])
+    subname = str(subnames[0]) if subnames else ""
+    if subname.startswith("Vertex"):
+        return "Vertex", "point"
+    if subname.startswith("Edge"):
+        return "Edge", "line"
+    if subname.startswith("Face"):
+        return "Face", "plane"
+
+    target = specs.get(str(reference.get("object", "")), {})
+    type_id = str(target.get("TypeId", ""))
+    if type_id == "Part::Vertex":
+        return "Vertex", "point"
+    if type_id == "Part::Line":
+        return "Edge", "line"
+    if type_id == "Part::Plane":
+        return "Face", "plane"
+    return "", ""
+
+
+def is_basic_distance_reference(reference: dict, element_kind: str, primitive: str) -> bool:
+    return (
+        reference.get("element_kind") == element_kind
+        and reference.get("primitive") == primitive
+    )
+
+
+def swap_solver_joint_references(solver_joint: dict) -> None:
+    solver_joint["reference1"], solver_joint["reference2"] = (
+        solver_joint["reference2"],
+        solver_joint["reference1"],
+    )
+    solver_joint["jcs_swapped_for_solver"] = True
+
+
+def resolve_fixture_distance_mapping(solver_joint: dict) -> None:
+    distance = float(solver_joint.get("distance", 0.0) or 0.0)
+    distance_type = solver_joint.get("distance_type")
+
+    # FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    # ::makeMbdJointDistance(), maps basic DistanceTypes to resolved ASMT classes and stores
+    # the scalar as "distanceIJ" or "offset".
+    if distance_type == "PointPoint":
+        if distance < FREECAD_PRECISION_CONFUSION:
+            solver_joint["solver_joint_class"] = "ASMTSphericalJoint"
+            return
+        solver_joint["solver_joint_class"] = "ASMTSphSphJoint"
+        solver_joint["distance_ij"] = distance
+    elif distance_type == "LineLine":
+        solver_joint["solver_joint_class"] = "ASMTRevCylJoint"
+        solver_joint["distance_ij"] = distance
+    elif distance_type == "PointLine":
+        solver_joint["solver_joint_class"] = "ASMTCylSphJoint"
+        solver_joint["distance_ij"] = distance
+    elif distance_type == "PlanePlane":
+        solver_joint["solver_joint_class"] = "ASMTPlanarJoint"
+        solver_joint["offset"] = distance
+    elif distance_type == "PointPlane":
+        solver_joint["solver_joint_class"] = "ASMTPointInPlaneJoint"
+        solver_joint["offset"] = distance
+    elif distance_type == "LinePlane":
+        solver_joint["solver_joint_class"] = "ASMTLineInPlaneJoint"
+        solver_joint["offset"] = distance
+
+
+def resolve_fixture_distance_type(solver_joint: dict, specs: dict[str, dict]) -> None:
+    if solver_joint.get("joint_type") != "Distance":
+        return
+
+    # FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.cpp
+    # ::getDistanceType(), reads Reference1/Reference2 element kind and calls "swapJCS(joint)"
+    # so line or face references are first for basic point / line / plane DistanceTypes.
+    for key in ("reference1", "reference2"):
+        element_kind, primitive = fixture_reference_element(solver_joint[key], specs)
+        solver_joint[key]["element_kind"] = element_kind
+        solver_joint[key]["primitive"] = primitive
+
+    solver_joint["jcs_swapped_for_solver"] = False
+    if (
+        is_basic_distance_reference(solver_joint["reference1"], "Vertex", "point")
+        and is_basic_distance_reference(solver_joint["reference2"], "Vertex", "point")
+    ):
+        solver_joint["distance_type"] = "PointPoint"
+    elif (
+        is_basic_distance_reference(solver_joint["reference1"], "Edge", "line")
+        and is_basic_distance_reference(solver_joint["reference2"], "Edge", "line")
+    ):
+        solver_joint["distance_type"] = "LineLine"
+    elif (
+        is_basic_distance_reference(solver_joint["reference1"], "Face", "plane")
+        and is_basic_distance_reference(solver_joint["reference2"], "Face", "plane")
+    ):
+        solver_joint["distance_type"] = "PlanePlane"
+    elif (
+        is_basic_distance_reference(solver_joint["reference1"], "Vertex", "point")
+        and is_basic_distance_reference(solver_joint["reference2"], "Face", "plane")
+    ):
+        swap_solver_joint_references(solver_joint)
+        solver_joint["distance_type"] = "PointPlane"
+    elif (
+        is_basic_distance_reference(solver_joint["reference1"], "Face", "plane")
+        and is_basic_distance_reference(solver_joint["reference2"], "Vertex", "point")
+    ):
+        solver_joint["distance_type"] = "PointPlane"
+    elif (
+        is_basic_distance_reference(solver_joint["reference1"], "Edge", "line")
+        and is_basic_distance_reference(solver_joint["reference2"], "Face", "plane")
+    ):
+        swap_solver_joint_references(solver_joint)
+        solver_joint["distance_type"] = "LinePlane"
+    elif (
+        is_basic_distance_reference(solver_joint["reference1"], "Face", "plane")
+        and is_basic_distance_reference(solver_joint["reference2"], "Edge", "line")
+    ):
+        solver_joint["distance_type"] = "LinePlane"
+    elif (
+        is_basic_distance_reference(solver_joint["reference1"], "Vertex", "point")
+        and is_basic_distance_reference(solver_joint["reference2"], "Edge", "line")
+    ):
+        swap_solver_joint_references(solver_joint)
+        solver_joint["distance_type"] = "PointLine"
+    elif (
+        is_basic_distance_reference(solver_joint["reference1"], "Edge", "line")
+        and is_basic_distance_reference(solver_joint["reference2"], "Vertex", "point")
+    ):
+        solver_joint["distance_type"] = "PointLine"
+
+    if "distance_type" not in solver_joint:
+        for key in ("reference1", "reference2"):
+            solver_joint[key].pop("element_kind", None)
+            solver_joint[key].pop("primitive", None)
+        solver_joint.pop("jcs_swapped_for_solver", None)
+        return
+
+    solver_joint["reference1_element_kind"] = solver_joint["reference1"].pop("element_kind")
+    solver_joint["reference1_primitive"] = solver_joint["reference1"].pop("primitive")
+    solver_joint["reference2_element_kind"] = solver_joint["reference2"].pop("element_kind")
+    solver_joint["reference2_primitive"] = solver_joint["reference2"].pop("primitive")
+    resolve_fixture_distance_mapping(solver_joint)
 
 
 def native_assembly_solver_payload(obj: Any, fixture: dict, created: dict[str, Any]) -> dict:

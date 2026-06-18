@@ -1650,6 +1650,103 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     expected_solver_joints,
                 )
 
+    def test_c3m6_assembly_distance_type_fixtures_match_native_expected(self) -> None:
+        cases = [
+            (
+                "assembly-distance-point-point-nonzero-real-solver",
+                {
+                    "distance": 1.5,
+                    "distance_type": "PointPoint",
+                    "solver_joint_class": "ASMTSphSphJoint",
+                    "distance_ij": 1.5,
+                    "jcs_swapped_for_solver": False,
+                },
+            ),
+            (
+                "assembly-distance-point-point-zero-real-solver",
+                {
+                    "distance": 0.0,
+                    "distance_type": "PointPoint",
+                    "solver_joint_class": "ASMTSphericalJoint",
+                    "jcs_swapped_for_solver": False,
+                },
+            ),
+            (
+                "assembly-distance-line-line-real-solver",
+                {
+                    "distance": 1.5,
+                    "distance_type": "LineLine",
+                    "solver_joint_class": "ASMTRevCylJoint",
+                    "distance_ij": 1.5,
+                    "jcs_swapped_for_solver": False,
+                },
+            ),
+            (
+                "assembly-distance-point-line-real-solver",
+                {
+                    "distance": 1.5,
+                    "distance_type": "PointLine",
+                    "solver_joint_class": "ASMTCylSphJoint",
+                    "distance_ij": 1.5,
+                    "jcs_swapped_for_solver": True,
+                },
+            ),
+            (
+                "assembly-distance-plane-plane-real-solver",
+                {
+                    "distance": 1.5,
+                    "distance_type": "PlanePlane",
+                    "solver_joint_class": "ASMTPlanarJoint",
+                    "offset": 1.5,
+                    "jcs_swapped_for_solver": False,
+                },
+            ),
+            (
+                "assembly-distance-point-plane-real-solver",
+                {
+                    "distance": 1.5,
+                    "distance_type": "PointPlane",
+                    "solver_joint_class": "ASMTPointInPlaneJoint",
+                    "offset": 1.5,
+                    "jcs_swapped_for_solver": True,
+                },
+            ),
+            (
+                "assembly-distance-line-plane-real-solver",
+                {
+                    "distance": 1.5,
+                    "distance_type": "LinePlane",
+                    "solver_joint_class": "ASMTLineInPlaneJoint",
+                    "offset": 1.5,
+                    "jcs_swapped_for_solver": True,
+                },
+            ),
+        ]
+
+        for fixture, solver_scalars in cases:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "c3m6")
+                expected = self.expected_freecad("c3m6", fixture)
+                assembly = result["objects"]["Assembly"]
+                actual_joint = assembly["solver_adapter"]["solver_joints"][0]
+                expected_joint = expected["solver_adapter"]["solver_joints"][0]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(assembly["solver_adapter"]["status"], "solved")
+                self.assertEqual(expected["solver_adapter"]["status"], "solved")
+                for key, value in solver_scalars.items():
+                    self.assertEqual(actual_joint[key], value)
+                    self.assertEqual(expected_joint[key], value)
+                for key in (
+                    "reference1",
+                    "reference1_element_kind",
+                    "reference1_primitive",
+                    "reference2",
+                    "reference2_element_kind",
+                    "reference2_primitive",
+                ):
+                    self.assertEqual(actual_joint[key], expected_joint[key])
+
     def test_c3m6_assembly_distance_type_reference_classification_exposes_solver_dto(self) -> None:
         point_a = {
             "object": "PointA",
