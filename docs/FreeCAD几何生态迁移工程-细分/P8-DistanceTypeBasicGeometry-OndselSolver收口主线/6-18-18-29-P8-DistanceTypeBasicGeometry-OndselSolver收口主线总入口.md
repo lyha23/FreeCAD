@@ -60,7 +60,7 @@
 | 类型 | 路径 | 用途 |
 | --- | --- | --- |
 | 工作步骤总入口 | `工作步骤细分/6-18-18-29-【已实现】P8-DistanceTypeBasicGeometry工作步骤总入口.md` | S0-S6 执行索引 |
-| S0 声明口径 | `工作步骤细分/6-18-18-30-P8-DistanceTypeBasicGeometry-S0-声明口径与live基线复核.md` | 冻结 claims、禁止声明、状态字典和 current scalar-only 基线 |
+| S0 声明口径 | `工作步骤细分/6-18-18-30-【已实现】P8-DistanceTypeBasicGeometry-S0-声明口径与live基线复核.md` | 冻结 claims、禁止声明、状态字典和 current scalar-only 基线 |
 | S1 FreeCAD 源码候选 | `工作步骤细分/6-18-18-31-P8-DistanceTypeBasicGeometry-S1-FreeCAD源码候选矩阵.md` | 建立 DistanceType source candidates 和候选证据 |
 | S2 范围准入 | `工作步骤细分/6-18-18-32-P8-DistanceTypeBasicGeometry-S2-范围准入与blocker矩阵.md` | 路由 scope、backendGap、notCollected、releaseGate 和 nonGoal |
 | S3 引用分类复审 | `工作步骤细分/6-18-18-33-P8-DistanceTypeBasicGeometry-S3-ReferenceElement分类与JCS顺序专项复审.md` | 收口 element kind / primitive / swapJCS 的 request-local DTO 设计 |
@@ -73,4 +73,4 @@
 | non goal registry | `矩阵/p8_distance_type_basic_geometry_non_goal_registry.tsv` | 不进入本轮实现的边界 |
 | backend gap classification | `矩阵/p8_distance_type_basic_geometry_backend_gap_classification.tsv` | backendGap / notCollected / releaseGate / nonGoal 分类 |
 
-当前 S0-S6 都是待执行状态；矩阵是 seed，不是发布闸门结论。
+当前 S0 已完成声明口径与 live scalar-only 基线复核；S1-S6 仍是待执行状态。矩阵是 seed，不是发布闸门结论。

@@ -4,7 +4,7 @@
 
 把 `Distance` JointType 的基础 `DistanceType` 几何映射从 scalar-only `ASMTSphSphJoint` 推进到 FreeCAD `makeMbdJointDistance()` 等价的 request-local Ondsel 子集，覆盖 `PointPoint`、`LineLine`、`PointLine`、`PlanePlane`、`PointPlane`、`LinePlane`。
 
-当前收口状态：S0 到 S6 均为待执行。已建立初始矩阵骨架，但尚未完成 oracle、实现或发布闸门；不得把整个主线写成“已实现”。
+当前收口状态：S0 已完成声明口径与 live scalar-only 基线复核；S1 到 S6 均为待执行。已建立初始矩阵骨架，但尚未完成 oracle、实现或发布闸门；不得把整个主线写成“已实现”。
 
 ## 入口校验状态
 
@@ -14,7 +14,7 @@
 
 | 步骤 | 文件 | 当前状态 | 解决的问题 |
 | --- | --- | --- | --- |
-| S0 | `6-18-18-30-P8-DistanceTypeBasicGeometry-S0-声明口径与live基线复核.md` | 待执行 | 冻结支持声明、禁止声明、状态字典和 current scalar-only 基线 |
+| S0 | `6-18-18-30-【已实现】P8-DistanceTypeBasicGeometry-S0-声明口径与live基线复核.md` | 已实现 | 冻结支持声明、禁止声明、状态字典和 current scalar-only 基线 |
 | S1 | `6-18-18-31-P8-DistanceTypeBasicGeometry-S1-FreeCAD源码候选矩阵.md` | 待执行 | 建立 DistanceType FreeCAD / cad-core source candidates |
 | S2 | `6-18-18-32-P8-DistanceTypeBasicGeometry-S2-范围准入与blocker矩阵.md` | 待执行 | 将候选路由到 backendGap、notCollected、releaseGate、nonGoal |
 | S3 | `6-18-18-33-P8-DistanceTypeBasicGeometry-S3-ReferenceElement分类与JCS顺序专项复审.md` | 待执行 | 复审 Reference element 分类、primitive 判断和 request-local `swapJCS` |
