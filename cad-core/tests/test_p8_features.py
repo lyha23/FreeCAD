@@ -19,6 +19,11 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def assert_update_property_type(self, update: dict, property_name: str, property_type: str) -> None:
         self.assertEqual(update["properties"][property_name]["PropertyType"], property_type)
 
+    def assert_identity_placement(self, placement: dict) -> None:
+        self.assertEqual(placement["PropertyType"], "App::PropertyPlacement")
+        self.assertEqual(placement["Base"], [0, 0, 0])
+        self.assertEqual(placement["Rotation"], [0, 0, 0, 1])
+
     def run_with_document_updates_applied(self, fixture: str, group: str, updates: list[dict]) -> dict:
         payload = json.loads((ROOT / "fixtures" / group / f"{fixture}.json").read_text(encoding="utf-8"))
         by_name = {document_object["Name"]: document_object for document_object in payload["Objects"]}
@@ -1928,6 +1933,35 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     "Part::Line": "line",
                     "Part::Plane": "plane",
                 }[solver_ref2["type_id"]])
+                for side, solver_ref in (("reference1", solver_ref1), ("reference2", solver_ref2)):
+                    reference = solver_joint[side]
+                    self.assertEqual(reference["object"], solver_ref["object"])
+                    self.assertEqual(reference["markerResolutionStatus"], "requires_subshape_handle_one_side_evidence")
+                    self.assertEqual(reference["markerResolutionFrame"], "unresolved_subshape_requires_part_local_marker")
+                    self.assertTrue(reference["markerResolutionRequiresHandleOneSide"])
+                    self.assertFalse(reference["markerResolutionUsedObjectLevelBaseline"])
+                    self.assertTrue(reference["markerResolutionConnectorDefaulted"])
+                    self.assert_identity_placement(reference["connectorPlacement"])
+                    self.assertIsNone(reference["markerPlacement"])
+                    self.assertIn("handleOneSideOfJoint", reference["markerResolutionDiagnostic"])
+
+    def test_c3m6_assembly_marker_resolver_exposes_object_level_baseline_evidence(self) -> None:
+        result = self.run_recompute("assembly-grounded-distance-joint-real-solver", "c3m6")
+        assembly = result["objects"]["Assembly"]
+        solver_joint = assembly["solver_adapter"]["solver_joints"][0]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(solver_joint["joint_type"], "Distance")
+        for side in ("reference1", "reference2"):
+            reference = solver_joint[side]
+            self.assertEqual(reference["markerResolutionStatus"], "resolved_object_level_baseline")
+            self.assertEqual(reference["markerResolutionFrame"], "part_local_object_level")
+            self.assertFalse(reference["markerResolutionRequiresHandleOneSide"])
+            self.assertTrue(reference["markerResolutionUsedObjectLevelBaseline"])
+            self.assertTrue(reference["markerResolutionConnectorDefaulted"])
+            self.assert_identity_placement(reference["connectorPlacement"])
+            self.assert_identity_placement(reference["markerPlacement"])
+            self.assertIn("Object-level reference", reference["markerResolutionDiagnostic"])
 
     def test_c3m6_assembly_placement_writeback_applies_to_next_request_graph(self) -> None:
         result = self.run_recompute("assembly-grounded-distance-joint-real-solver", "c3m6")

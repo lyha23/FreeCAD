@@ -22,7 +22,8 @@
 - 本包现在按最小完整语义批次组织：20 条 source candidates、14 个 scope、12 类 backend/release 分类、10 个发布前 blocker。后续实现不得退回只采单个 oracle case 或只修单个 fixture。
 - S0 已完成 live 复核：上述三条仍成立；object-level native placement 只是 `supportedBaseline`，RackPinion / Screw 已支持子集只作为本包后续 regression gate，S2-S6 仍不得提前写成 supported。
 - S1 已完成 live 源码候选矩阵复核：20 条 candidates 和 14 个 scope 只代表 source authority / route，不代表 supported；S2-S6 仍不得提前写成 supported。
-- S2 已完成范围准入与 blocker 矩阵复核：14 个 scope 路由为 `supportedBaseline=1`、`backendGap=4`、`notCollected=5`、`releaseGate=3`、`nonGoal=1`；`MP-BLOCK-001..010`、`MP-BG-001..012` 和 `MP-NG-001..006` 已对齐到 S3-S6。S3-S6 仍不得提前写成 supported。
+- S2 已完成范围准入与 blocker 矩阵复核：14 个 scope 路由为 `supportedBaseline=1`、`backendGap=4`、`notCollected=5`、`releaseGate=3`、`nonGoal=1`；`MP-BLOCK-001..010`、`MP-BG-001..012` 和 `MP-NG-001..006` 已对齐到 S3-S6。
+- S3 已完成 MarkerPlacementResolver evidence / diagnostic 前置：object-level baseline 保持安全路径，subshape refs 输出 `requires_subshape_handle_one_side_evidence`，mixed swap 证明 request-local reference / connector / marker evidence 同步。S4-S6 仍不得提前写成 supported。
 
 ## 证明链条
 
@@ -69,7 +70,7 @@
 | S0 声明口径 | `工作步骤细分/6-18-22-12-【已实现】P8-Assembly-Reference-JCS-MarkerPlacement-S0-声明口径与live基线复核.md` | 已完成：冻结 claims、非目标和 current marker baseline |
 | S1 FreeCAD 源码候选 | `工作步骤细分/6-18-22-13-【已实现】P8-Assembly-Reference-JCS-MarkerPlacement-S1-FreeCAD源码候选矩阵.md` | 已完成：建立 FreeCAD / cad-core source candidates |
 | S2 范围准入 | `工作步骤细分/6-18-22-14-【已实现】P8-Assembly-Reference-JCS-MarkerPlacement-S2-范围准入与blocker矩阵.md` | 已完成：将候选路由到 backendGap、notCollected、releaseGate、nonGoal，并确认 blocker / backend / nonGoal 矩阵一致 |
-| S3 marker resolver 复审 | `工作步骤细分/6-18-22-15-P8-Assembly-Reference-JCS-MarkerPlacement-S3-MarkerPlacementResolver专项复审.md` | 复审统一 resolver、diagnostic 和 special rewrite 边界 |
+| S3 marker resolver 复审 | `工作步骤细分/6-18-22-15-【已实现】P8-Assembly-Reference-JCS-MarkerPlacement-S3-MarkerPlacementResolver专项复审.md` | 已完成：统一 resolver evidence / diagnostic、object-level baseline、subshape 缺证据 status、swap sync 和 special rewrite 边界 |
 | S4 native oracle 复审 | `工作步骤细分/6-18-22-16-P8-Assembly-Reference-JCS-MarkerPlacement-S4-NativeOracle与代表fixture专项复审.md` | 批量采集 representative native expected |
 | S5 实现与 parity | `工作步骤细分/6-18-22-17-P8-Assembly-Reference-JCS-MarkerPlacement-S5-实现与focused-parity.md` | 切换 cad-core 主路径并补 focused tests |
 | S6 发布闸门 | `工作步骤细分/6-18-22-18-P8-Assembly-Reference-JCS-MarkerPlacement-S6-Capability与发布闸门.md` | 回写 capabilities、docs、matrices 和 remaining boundaries |
@@ -79,4 +80,4 @@
 | non goal registry | `矩阵/p8_marker_placement_non_goal_registry.tsv` | 不进入本轮实现的边界 |
 | backend gap classification | `矩阵/p8_marker_placement_backend_gap_classification.tsv` | 12 类 backendGap / notCollected / releaseGate / nonGoal 聚合 |
 
-当前本文已执行 S0-S2，S3-S6 尚未执行。矩阵是 evidence / route，不是 supported 结论；不得把 subshape marker placement、S3-S6、capability publication 或 oracle parity 提前标为 supported。
+当前本文已执行 S0-S3，S4-S6 尚未执行。矩阵是 evidence / route，不是 supported 结论；不得把 subshape marker placement、native oracle parity、capability publication 或 S4-S6 提前标为 supported。

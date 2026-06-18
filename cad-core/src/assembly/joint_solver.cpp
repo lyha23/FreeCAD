@@ -637,6 +637,54 @@ void applyRackPinionMarkerRewrite(AssemblySolveRequest& request)
     }
 }
 
+void resolveJointMarkerPlacement(AssemblyJointReference& reference,
+                                 const runtime::ComputeContext& context,
+                                 const std::string& referenceProperty,
+                                 bool connectorDefaulted)
+{
+    reference.markerPlacement.reset();
+    reference.markerResolutionConnectorDefaulted = connectorDefaulted;
+
+    if (reference.object.empty()) {
+        reference.markerResolutionStatus = "missing_reference";
+        reference.markerResolutionFrame = "unresolved";
+        reference.markerResolutionDiagnostic = referenceProperty
+            + " is missing; FreeCAD handleOneSideOfJoint() would reject this joint side";
+        return;
+    }
+
+    if (documentObjectByName(context, reference.object) == nullptr) {
+        reference.markerResolutionStatus = "missing_reference_object";
+        reference.markerResolutionFrame = "unresolved";
+        reference.markerResolutionDiagnostic = referenceProperty + " points to missing object "
+            + reference.object + "; FreeCAD handleOneSideOfJoint() requires a linked object";
+        return;
+    }
+
+    if (reference.subnames.empty()) {
+        reference.markerResolutionStatus = "resolved_object_level_baseline";
+        reference.markerResolutionFrame = "part_local_object_level";
+        reference.markerResolutionDiagnostic =
+            "Object-level reference uses PlacementN as request-local marker placement baseline";
+        reference.markerResolutionUsedObjectLevelBaseline = true;
+        reference.markerPlacement = reference.connectorPlacement.value_or(identityPlacement());
+        return;
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    // ::AssemblyObject::handleOneSideOfJoint(), uses "obj_global_plc =
+    // getGlobalPlacement(nullptr, ref)" then "part_global_plc.inverse() * plc" and finally
+    // applies "data.offsetPlc" before marker creation. CAD Core does not yet carry the subshape
+    // placement / containing-part offset evidence required for that conversion, so it withholds
+    // markerPlacement instead of treating the connector PlacementN as a resolved subshape marker.
+    reference.markerResolutionStatus = "requires_subshape_handle_one_side_evidence";
+    reference.markerResolutionFrame = "unresolved_subshape_requires_part_local_marker";
+    reference.markerResolutionDiagnostic =
+        "Subshape reference requires FreeCAD handleOneSideOfJoint() object-global to part-local "
+        "marker resolution; cad-core lacks subshape placement, containing-part, or offsetPlc evidence";
+    reference.markerResolutionRequiresHandleOneSide = true;
+}
+
 AssemblyJointReference jointReference(const app::DocumentObject& joint,
                                       const runtime::ComputeContext& context,
                                       const std::string& referenceProperty,
@@ -647,8 +695,9 @@ AssemblyJointReference jointReference(const app::DocumentObject& joint,
         reference.object = link->object;
         reference.subnames = link->subnames;
     }
-    reference.connectorPlacement = app::readPlacement(joint, placementProperty);
-    reference.markerPlacement = reference.connectorPlacement;
+    const auto connectorPlacement = app::readPlacement(joint, placementProperty);
+    reference.connectorPlacement = connectorPlacement.value_or(identityPlacement());
+    resolveJointMarkerPlacement(reference, context, referenceProperty, !connectorPlacement.has_value());
     return reference;
 }
 

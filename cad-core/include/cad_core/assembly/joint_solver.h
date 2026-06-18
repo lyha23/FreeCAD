@@ -15,6 +15,17 @@ struct AssemblyJointReference {
     std::vector<std::string> subnames;
     std::optional<app::Placement> connectorPlacement;
     std::optional<app::Placement> markerPlacement;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    // ::AssemblyObject::handleOneSideOfJoint(), "plc which is the JCS placement" is first
+    // converted through "getGlobalPlacement(nullptr, ref)" and then through
+    // "getGlobalPlacement(part, ref).inverse()". CAD Core keeps this resolver evidence
+    // request-local so subshape refs do not look like object-level marker parity.
+    std::string markerResolutionStatus;
+    std::string markerResolutionFrame;
+    std::string markerResolutionDiagnostic;
+    bool markerResolutionRequiresHandleOneSide = false;
+    bool markerResolutionUsedObjectLevelBaseline = false;
+    bool markerResolutionConnectorDefaulted = false;
     std::string elementKind;
     std::string primitive;
 };

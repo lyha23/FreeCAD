@@ -1,11 +1,11 @@
 category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
-MP-BG-001	ordinary_reference_validation_and_dispatch	P0	MP-SCOPE-002	no	S2 confirmed backendGap; S3 implement FreeCAD-equivalent ordinary marker dispatch diagnostics for missing moving part object reference and ReferenceN
-MP-BG-002	object_subshape_global_transform	P0	MP-SCOPE-003	no	S2 confirmed backendGap; S3/S5 replace markerPlacement = connectorPlacement with getGlobalPlacement(nullptr, ref) equivalent object/subshape global conversion
-MP-BG-003	containing_part_local_transform_and_offset	P0	MP-SCOPE-004	no	S2 confirmed backendGap; S3/S5 convert global JCS to moving part local markerPlacement and handle or diagnose offsetPlc boundary
+MP-BG-001	ordinary_reference_validation_and_dispatch	P0	MP-SCOPE-002	no	S3 completed resolver DTO diagnostics for missing ReferenceN/object; S5 still closes with focused real-solver parity
+MP-BG-002	object_subshape_global_transform	P0	MP-SCOPE-003	no	S3 completed subshape evidence boundary by withholding markerPlacement when getGlobalPlacement(nullptr, ref) equivalent evidence is missing; S4/S5 still close native transform parity
+MP-BG-003	containing_part_local_transform_and_offset	P0	MP-SCOPE-004	no	S3 completed explicit part-local/offset diagnostic evidence; S5 still implements moving-part-local markerPlacement or locks final unsupported boundary
 MP-BG-004	vertex_jcs_marker_parity	P1	MP-SCOPE-005;MP-SCOPE-012	no	S2 confirmed notCollected; S4 collect Vertex representative native expected and S5 prove placement_updates parity
 MP-BG-005	edge_jcs_marker_parity	P1	MP-SCOPE-006;MP-SCOPE-012	no	S2 confirmed notCollected; S4 collect Edge representative native expected and S5 prove placement_updates parity
 MP-BG-006	face_jcs_marker_parity	P1	MP-SCOPE-007;MP-SCOPE-012	no	S2 confirmed notCollected; S4 collect Face representative native expected and S5 prove placement_updates parity
-MP-BG-007	mixed_reference_swap_marker_sync	P0	MP-SCOPE-008	no	S2 confirmed backendGap; S3/S5 synchronize ReferenceN PlacementN connectorPlacement markerPlacement and DistanceType DTO during request-local swap
+MP-BG-007	mixed_reference_swap_marker_sync	P0	MP-SCOPE-008	no	S3 completed request-local swap evidence for ReferenceN PlacementN connectorPlacement markerPlacement and DistanceType DTO; S4/S5 still close current-value/native parity
 MP-BG-008	current_value_jcs_parity	P1	MP-SCOPE-009	no	S2 confirmed notCollected; S4/S5 capture representative getJointCurrentValue evidence where Distance or Angle scalar depends on subshape JCS placement
 MP-BG-009	real_ondsel_consumption_gate	P1	MP-SCOPE-011	no	S2 confirmed releaseGate; S5 prove the resolved markerPlacement is consumed by addConstraintToOndselAssembly and reflected in placement_updates
 MP-BG-010	special_rewrite_regression_gate	P1	MP-SCOPE-010	no	S2 confirmed releaseGate; S5 keep RackPinion Screw Gears Belt focused tests green after ordinary resolver switch

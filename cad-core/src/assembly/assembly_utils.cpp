@@ -76,13 +76,21 @@ nlohmann::json placementJson(const app::Placement& placement)
 
 nlohmann::json jointReferenceJson(const AssemblyJointReference& reference)
 {
-    if (reference.object.empty()) {
-        return nullptr;
-    }
-    return {
-        {"object", reference.object},
+    nlohmann::json result = {
+        {"object", reference.object.empty() ? nlohmann::json(nullptr) : nlohmann::json(reference.object)},
         {"subnames", reference.subnames},
+        {"connectorPlacement",
+         reference.connectorPlacement ? placementJson(*reference.connectorPlacement) : nlohmann::json(nullptr)},
+        {"markerPlacement",
+         reference.markerPlacement ? placementJson(*reference.markerPlacement) : nlohmann::json(nullptr)},
+        {"markerResolutionStatus", reference.markerResolutionStatus},
+        {"markerResolutionFrame", reference.markerResolutionFrame},
+        {"markerResolutionDiagnostic", reference.markerResolutionDiagnostic},
+        {"markerResolutionRequiresHandleOneSide", reference.markerResolutionRequiresHandleOneSide},
+        {"markerResolutionUsedObjectLevelBaseline", reference.markerResolutionUsedObjectLevelBaseline},
+        {"markerResolutionConnectorDefaulted", reference.markerResolutionConnectorDefaulted},
     };
+    return result;
 }
 
 nlohmann::json solverJointJson(const JointConstraint& joint)
