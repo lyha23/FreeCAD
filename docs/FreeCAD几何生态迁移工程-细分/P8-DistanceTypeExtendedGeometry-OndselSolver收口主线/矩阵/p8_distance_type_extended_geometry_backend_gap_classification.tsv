@@ -1,0 +1,9 @@
+category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
+DTE-BG-001	full_enum_matrix_gate	P0	DTE-SCOPE-002	no	S0/S1 must prove all remaining DistanceType enum values are classified before any C++ implementation
+DTE-BG-002	radius_primitive_dto_gap	P0	DTE-SCOPE-003	no	S3 should add request-local radius evidence and JSON fields; backendGap only after source-backed DTO mismatch is proven
+DTE-BG-003	edge_circle_radius_batch	P0	DTE-SCOPE-004	no	S4/S5/S6 should implement LineCircle and CircleCircle together after native expected
+DTE-BG-004	face_radius_batch	P0	DTE-SCOPE-005	no	S4/S5/S6 should implement PlaneCylinder PlaneSphere CylinderCylinder CylinderSphere PointCylinder PointSphere together after native expected
+DTE-BG-005	torus_sphere_explicit_audit	P1	DTE-SCOPE-006	yes	S5 must decide whether explicit torus/sphere switch cases are supported, diagnostic-only or deferred based on native expected
+DTE-BG-006	point_curve_boundary	P1	DTE-SCOPE-007	yes	S5 must prove PointCurve native behavior before support; otherwise keep diagnostic or nonGoal
+DTE-BG-007	default_todo_boundary	P1	DTE-SCOPE-008;DTE-SCOPE-009	yes	Do not publish cone line-surface curve-face or Other default branch without oracle and product decision
+DTE-BG-008	capability_publication_gate	P1	DTE-SCOPE-011	no	S6 publishes distance_type_extended_geometry only after oracle/tests/docs agree
