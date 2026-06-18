@@ -4,6 +4,8 @@
 
 把 S1 候选路由成明确的 scope、blocker、nonGoal 和 releaseGate，确保本包只实现 Gears / Belt。
 
+当前状态：已完成。S2 只关闭范围准入和 blocker 队列路由，不关闭任何 blocker，不声明 Gears / Belt supported。
+
 ## 分类规则
 
 | 状态 | 准入条件 | 本包动作 |
@@ -35,6 +37,14 @@
 - `GBJ-BLOCK-004`：Belt native expected / fixture / focused assertion。
 - `GBJ-BLOCK-005`：capabilities 和 unsupported matrix 同步。
 - `GBJ-BLOCK-006`：remaining RackPinion / Screw / complex Distance 边界保护。
+
+## 关闭结论
+
+- `GBJ-SCOPE-002` / `GBJ-SCOPE-003` 继续保持 `unsupportedImplementable`，只进入 S3-S6 的 DTO、adapter、oracle 和发布闸门。
+- `GBJ-SCOPE-004` 继续保持 `notCollected`，Gears / Belt native expected 必须由 S4 采集或验证后才能支持声明。
+- `GBJ-SCOPE-005` 继续保持 `releaseGate`，capability、focused tests、P8 docs / TSV 必须由 S5-S6 同步。
+- `GBJ-SCOPE-006`、`GBJ-SCOPE-007`、`GBJ-SCOPE-008` 分别保持 `unsupported`、`notCollected`、`nonGoal`；RackPinion / Screw、complex Distance 和 GUI/session 不进入本包实现。
+- `GBJ-BLOCK-001` 到 `GBJ-BLOCK-006` 均指向有效 scope，并保留 `next_step` 与 `close_condition`；S2 不尝试关闭这些 blocker。
 
 ## 验收标准
 
