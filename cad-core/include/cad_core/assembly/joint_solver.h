@@ -56,6 +56,12 @@ struct JointConstraint {
     // then calls "swapJCS(joint)" for solver ordering. CAD Core keeps the DistanceType and
     // reference primitive evidence request-local on this solver DTO.
     std::optional<std::string> distanceType;
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    // ::makeMbdJointDistance(), maps each basic "DistanceType" to a resolved ASMT joint class
+    // and writes either "distanceIJ" or "offset" from "getJointDistance(joint)".
+    std::optional<std::string> solverJointClass;
+    std::optional<double> distanceIJ;
+    std::optional<double> offset;
     // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/JointObject.py
     // ::JointUsingDistance2 contains "Gears" / "Belt"; AssemblyObject.cpp
     // ::AssemblyObject::makeMbdJointOfType() reads "getJointDistance2(joint)" into

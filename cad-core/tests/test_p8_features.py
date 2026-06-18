@@ -54,6 +54,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         case_name: str,
         reference1: dict,
         reference2: dict,
+        distance: float = 1.5,
     ) -> dict:
         objects = [
             {
@@ -79,7 +80,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     },
                     "Distance": {
                         "PropertyType": "App::PropertyFloat",
-                        "value": 1.5,
+                        "value": distance,
                     },
                     "Reference1": {
                         "PropertyType": "App::PropertyXLinkSub",
@@ -1687,17 +1688,114 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "subname": "Face1",
         }
         cases = [
-            ("point_point", point_a, point_b, "PointPoint", False, point_a, point_b),
-            ("line_line", line_a, line_b, "LineLine", False, line_a, line_b),
-            ("point_line", point_a, line_b, "PointLine", True, line_b, point_a),
-            ("plane_plane", plane_a, plane_b, "PlanePlane", False, plane_a, plane_b),
-            ("point_plane", point_a, plane_b, "PointPlane", True, plane_b, point_a),
-            ("line_plane", line_a, plane_b, "LinePlane", True, plane_b, line_a),
+            (
+                "point_point_zero",
+                point_a,
+                point_b,
+                0.0,
+                "PointPoint",
+                False,
+                point_a,
+                point_b,
+                "ASMTSphericalJoint",
+                None,
+                None,
+            ),
+            (
+                "point_point",
+                point_a,
+                point_b,
+                1.5,
+                "PointPoint",
+                False,
+                point_a,
+                point_b,
+                "ASMTSphSphJoint",
+                "distance_ij",
+                1.5,
+            ),
+            (
+                "line_line",
+                line_a,
+                line_b,
+                1.5,
+                "LineLine",
+                False,
+                line_a,
+                line_b,
+                "ASMTRevCylJoint",
+                "distance_ij",
+                1.5,
+            ),
+            (
+                "point_line",
+                point_a,
+                line_b,
+                1.5,
+                "PointLine",
+                True,
+                line_b,
+                point_a,
+                "ASMTCylSphJoint",
+                "distance_ij",
+                1.5,
+            ),
+            (
+                "plane_plane",
+                plane_a,
+                plane_b,
+                1.5,
+                "PlanePlane",
+                False,
+                plane_a,
+                plane_b,
+                "ASMTPlanarJoint",
+                "offset",
+                1.5,
+            ),
+            (
+                "point_plane",
+                point_a,
+                plane_b,
+                1.5,
+                "PointPlane",
+                True,
+                plane_b,
+                point_a,
+                "ASMTPointInPlaneJoint",
+                "offset",
+                1.5,
+            ),
+            (
+                "line_plane",
+                line_a,
+                plane_b,
+                1.5,
+                "LinePlane",
+                True,
+                plane_b,
+                line_a,
+                "ASMTLineInPlaneJoint",
+                "offset",
+                1.5,
+            ),
         ]
 
-        for case_name, reference1, reference2, distance_type, swapped, solver_ref1, solver_ref2 in cases:
+        for (
+            case_name,
+            reference1,
+            reference2,
+            distance,
+            distance_type,
+            swapped,
+            solver_ref1,
+            solver_ref2,
+            solver_joint_class,
+            scalar_field,
+            scalar_value,
+        ) in cases:
             with self.subTest(case=case_name):
-                result = self.run_distance_type_reference_case(case_name, reference1, reference2)
+                result = self.run_distance_type_reference_case(case_name, reference1, reference2, distance)
                 assembly = result["objects"]["Assembly"]
                 joint = result["objects"]["DistanceJoint"]
                 solver_joint = assembly["solver_adapter"]["solver_joints"][0]
@@ -1707,7 +1805,15 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(joint["reference1"]["object"], reference1["object"])
                 self.assertEqual(joint["reference2"]["object"], reference2["object"])
                 self.assertEqual(solver_joint["distance_type"], distance_type)
-                self.assertEqual(solver_joint["distance"], 1.5)
+                self.assertEqual(solver_joint["distance"], distance)
+                self.assertEqual(solver_joint["solver_joint_class"], solver_joint_class)
+                if scalar_field is None:
+                    self.assertNotIn("distance_ij", solver_joint)
+                    self.assertNotIn("offset", solver_joint)
+                else:
+                    self.assertAlmostEqual(solver_joint[scalar_field], scalar_value)
+                    other_scalar = "offset" if scalar_field == "distance_ij" else "distance_ij"
+                    self.assertNotIn(other_scalar, solver_joint)
                 self.assertEqual(solver_joint["jcs_swapped_for_solver"], swapped)
                 self.assertEqual(solver_joint["reference1"]["object"], solver_ref1["object"])
                 self.assertEqual(solver_joint["reference1"]["subnames"], [solver_ref1["subname"]])

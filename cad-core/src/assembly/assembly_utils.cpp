@@ -108,6 +108,18 @@ nlohmann::json solverJointJson(const JointConstraint& joint)
         solverJoint["reference2_element_kind"] = joint.reference2.elementKind;
         solverJoint["reference2_primitive"] = joint.reference2.primitive;
     }
+    if (joint.solverJointClass) {
+        // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+        // ::makeMbdJointDistance(), stores basic DistanceType scalars on resolved ASMT joint
+        // classes as either "distanceIJ" or "offset".
+        solverJoint["solver_joint_class"] = *joint.solverJointClass;
+    }
+    if (joint.distanceIJ) {
+        solverJoint["distance_ij"] = *joint.distanceIJ;
+    }
+    if (joint.offset) {
+        solverJoint["offset"] = *joint.offset;
+    }
     if (joint.distance2) {
         solverJoint["distance2"] = *joint.distance2;
     }

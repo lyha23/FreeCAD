@@ -17,15 +17,20 @@
 
 #include <OndselSolver/ASMTAssembly.h>
 #include <OndselSolver/ASMTAngleJoint.h>
+#include <OndselSolver/ASMTCylSphJoint.h>
 #include <OndselSolver/ASMTCylindricalJoint.h>
 #include <OndselSolver/ASMTFixedJoint.h>
 #include <OndselSolver/ASMTGearJoint.h>
+#include <OndselSolver/ASMTLineInPlaneJoint.h>
 #include <OndselSolver/ASMTMarker.h>
 #include <OndselSolver/ASMTParallelAxesJoint.h>
 #include <OndselSolver/ASMTPerpendicularJoint.h>
+#include <OndselSolver/ASMTPlanarJoint.h>
 #include <OndselSolver/ASMTPart.h>
+#include <OndselSolver/ASMTPointInPlaneJoint.h>
 #include <OndselSolver/ASMTPrincipalMassMarker.h>
 #include <OndselSolver/ASMTRackPinionJoint.h>
+#include <OndselSolver/ASMTRevCylJoint.h>
 #include <OndselSolver/ASMTRevoluteJoint.h>
 #include <OndselSolver/ASMTSphericalJoint.h>
 #include <OndselSolver/ASMTSphSphJoint.h>
@@ -498,6 +503,55 @@ void classifyDistanceType(JointConstraint& joint, const runtime::ComputeContext&
     }
 }
 
+void resolveDistanceJointMapping(JointConstraint& joint)
+{
+    if (joint.jointType != "Distance" || !joint.distanceType) {
+        return;
+    }
+
+    const double distance = joint.distance.value_or(0.0);
+    joint.solverJointClass.reset();
+    joint.distanceIJ.reset();
+    joint.offset.reset();
+
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    // ::makeMbdJointDistance(), switches on "DistanceType type = getDistanceType(joint)" and
+    // maps basic point / line / plane cases to ASMT joint classes with "distanceIJ" or "offset".
+    if (*joint.distanceType == "PointPoint") {
+        if (distance < kFreeCadPrecisionConfusion) {
+            joint.solverJointClass = "ASMTSphericalJoint";
+            return;
+        }
+        joint.solverJointClass = "ASMTSphSphJoint";
+        joint.distanceIJ = distance;
+        return;
+    }
+    if (*joint.distanceType == "LineLine") {
+        joint.solverJointClass = "ASMTRevCylJoint";
+        joint.distanceIJ = distance;
+        return;
+    }
+    if (*joint.distanceType == "PointLine") {
+        joint.solverJointClass = "ASMTCylSphJoint";
+        joint.distanceIJ = distance;
+        return;
+    }
+    if (*joint.distanceType == "PlanePlane") {
+        joint.solverJointClass = "ASMTPlanarJoint";
+        joint.offset = distance;
+        return;
+    }
+    if (*joint.distanceType == "PointPlane") {
+        joint.solverJointClass = "ASMTPointInPlaneJoint";
+        joint.offset = distance;
+        return;
+    }
+    if (*joint.distanceType == "LinePlane") {
+        joint.solverJointClass = "ASMTLineInPlaneJoint";
+        joint.offset = distance;
+    }
+}
+
 void applyScrewRackPinionSlidingPrecondition(AssemblySolveRequest& request)
 {
     for (JointConstraint& joint : request.joints) {
@@ -747,6 +801,49 @@ app::Placement placementFromOndselPart(const std::shared_ptr<MbD::ASMTPart>& par
     return app::Placement {{x, y, z}, {qx, qy, qz, qw}};
 }
 
+std::shared_ptr<MbD::ASMTJoint> makeOndselDistanceJoint(const JointConstraint& joint)
+{
+    const double distance = joint.distance.value_or(0.0);
+    const std::string solverJointClass = joint.solverJointClass.value_or("");
+    if (solverJointClass == "ASMTSphericalJoint") {
+        return MbD::ASMTSphericalJoint::With();
+    }
+    if (solverJointClass == "ASMTSphSphJoint") {
+        auto distanceJoint = MbD::ASMTSphSphJoint::With();
+        distanceJoint->distanceIJ = joint.distanceIJ.value_or(distance);
+        return distanceJoint;
+    }
+    if (solverJointClass == "ASMTRevCylJoint") {
+        auto distanceJoint = MbD::ASMTRevCylJoint::With();
+        distanceJoint->distanceIJ = joint.distanceIJ.value_or(distance);
+        return distanceJoint;
+    }
+    if (solverJointClass == "ASMTCylSphJoint") {
+        auto distanceJoint = MbD::ASMTCylSphJoint::With();
+        distanceJoint->distanceIJ = joint.distanceIJ.value_or(distance);
+        return distanceJoint;
+    }
+    if (solverJointClass == "ASMTPlanarJoint") {
+        auto distanceJoint = MbD::ASMTPlanarJoint::With();
+        distanceJoint->offset = joint.offset.value_or(distance);
+        return distanceJoint;
+    }
+    if (solverJointClass == "ASMTPointInPlaneJoint") {
+        auto distanceJoint = MbD::ASMTPointInPlaneJoint::With();
+        distanceJoint->offset = joint.offset.value_or(distance);
+        return distanceJoint;
+    }
+    if (solverJointClass == "ASMTLineInPlaneJoint") {
+        auto distanceJoint = MbD::ASMTLineInPlaneJoint::With();
+        distanceJoint->offset = joint.offset.value_or(distance);
+        return distanceJoint;
+    }
+
+    auto distanceJoint = MbD::ASMTSphSphJoint::With();
+    distanceJoint->distanceIJ = distance;
+    return distanceJoint;
+}
+
 std::shared_ptr<MbD::ASMTJoint> makeOndselJointOfType(const JointConstraint& joint)
 {
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/
@@ -772,9 +869,10 @@ std::shared_ptr<MbD::ASMTJoint> makeOndselJointOfType(const JointConstraint& joi
         return MbD::ASMTSphericalJoint::With();
     }
     if (joint.jointType == "Distance") {
-        auto distanceJoint = MbD::ASMTSphSphJoint::With();
-        distanceJoint->distanceIJ = joint.distance.value_or(0.0);
-        return distanceJoint;
+        // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+        // ::makeMbdJointDistance(), "PointPoint" may become "ASMTSphericalJoint" while line and
+        // plane DistanceTypes map to distinct ASMT joint classes with "distanceIJ" / "offset".
+        return makeOndselDistanceJoint(joint);
     }
     // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
     // ::AssemblyObject::makeMbdJointOfType(), "case JointType::Gears" creates
@@ -1135,6 +1233,7 @@ AssemblySolveRequest buildAssemblySolveRequest(
         if (constraint.jointType == "Angle") {
             constraint.angle = app::readNumber(*joint, "Angle").value_or(0.0);
         }
+        resolveDistanceJointMapping(constraint);
         request.joints.push_back(std::move(constraint));
     }
 
