@@ -14,7 +14,7 @@
 | S1 | `6-19-06-43-【已实现】P8-DistanceTypeExtendedGeometry-S1-FreeCAD源码候选矩阵.md` | 已实现 | 已复核 DistanceType enum、classification、radius helper、ASMT switch、cad-core landing |
 | S2 | `6-19-06-44-【已实现】P8-DistanceTypeExtendedGeometry-S2-范围准入与blocker矩阵.md` | 已实现 | 已冻结 remaining cases 的 implementation batch、oracle-first、default/TODO boundary、nonGoal 和 blocker ownership |
 | S3 | `6-19-06-45-【已实现】P8-DistanceTypeExtendedGeometry-S3-RadiusPrimitive证据专项复审.md` | 已实现 | 已补 DTO / JSON radius evidence、primitive resolver、scalar correction 和 boundary evidence |
-| S4 | `6-19-06-46-P8-DistanceTypeExtendedGeometry-S4-OndselDistanceJoint扩展映射专项复审.md` | 待执行 | 裁决 ASMT class、`distanceIJ` / `offset` 和 default branch 行为 |
+| S4 | `6-19-06-46-【已实现】P8-DistanceTypeExtendedGeometry-S4-OndselDistanceJoint扩展映射专项复审.md` | 已实现 | 已裁决显式 extended cases 的 ASMT class、`distanceIJ` / `offset`，并保持 default branch unmapped |
 | S5 | `6-19-06-47-P8-DistanceTypeExtendedGeometry-S5-NativeOracle与代表fixture专项复审.md` | 待执行 | 批量采集 FreeCADCmd expected，并把 supported / diagnostic / nonGoal 固化 |
 | S6 | `6-19-06-48-P8-DistanceTypeExtendedGeometry-S6-实现与发布闸门.md` | 待执行 | 落 C++、fixtures、focused tests、capability/docs 和矩阵回写 |
 
@@ -24,7 +24,7 @@
 2. S1 补全 source candidates，不把候选直接写成 supported。
 3. S2 按最小完整语义批次分类；显式 switch cases 原则上同批实现，default / TODO cases 必须有边界结论。
 4. S3 先补 radius / primitive evidence 设计；没有 DTO 和 JSON evidence 不进入 native expected 判断。
-5. S4 裁决 `ASMTRevCylJoint`、`ASMTCylSphJoint`、`ASMTPlanarJoint`、`ASMTPointInPlaneJoint`、`ASMTLineInPlaneJoint`、`ASMTSphSphJoint` 等映射。
+5. S4 已裁决 `ASMTRevCylJoint`、`ASMTCylSphJoint`、`ASMTPlanarJoint`、`ASMTPointInPlaneJoint`、`ASMTLineInPlaneJoint`、`ASMTSphSphJoint` 等映射。
 6. S5 批量采集 representative native expected；oracle 不稳定的 case 保留 notCollected 或 nonGoal，不写 C++ 猜测。
 7. S6 才做实现和发布。完成后必须把本步骤文件和已实现步骤按仓库规则改名为 `【已实现】`。
 
@@ -34,7 +34,7 @@
 | --- | --- | --- |
 | `p8_distance_type_extended_geometry_source_candidates.tsv` | FreeCAD / cad-core source authority | S1 已复核完整 source authority，可作为 S2-S6 后续依据 |
 | `p8_distance_type_extended_geometry_scope_review_matrix.tsv` | 范围分类 | S2 已冻结显式 switch / radius / torus / point-curve 主批次和 default / curve boundary |
-| `p8_distance_type_extended_geometry_blocker_queue.tsv` | 可执行 blocker | S2 已消费 enum 覆盖 blocker，S3 已消费 DTO evidence blocker；S4-S6 blocker 仍 open |
+| `p8_distance_type_extended_geometry_blocker_queue.tsv` | 可执行 blocker | S2 已消费 enum 覆盖 blocker，S3 已消费 DTO evidence blocker，S4 已完成 ASMT mapping；S5-S6 blocker 仍 open |
 | `p8_distance_type_extended_geometry_backend_gap_classification.tsv` | gap 聚合 | S2 已冻结 notCollected / oracleFirst / releaseGate 口径，backendGap 必须等 oracle 和 mismatch 同时存在 |
 | `p8_distance_type_extended_geometry_non_goal_registry.tsv` | 非目标和 reopen 条件 | S2 已补 default/TODO boundary 和单 fixture 缩批禁令；GUI/session、persistent solver state、unsupported default claim 等不得发布 |
 
@@ -46,7 +46,7 @@ awk -F '\t' 'FNR==1{n=NF} NF!=n{print FILENAME ":" FNR ": expected " n " fields,
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/FreeCAD几何生态迁移工程-细分/P8-DistanceTypeExtendedGeometry-OndselSolver收口主线/工作步骤细分 --format markdown
 ```
 
-后续 ASMT 映射、oracle 和 capability 发布阶段由 S4-S6 再指定 focused build / tests。
+后续 oracle 和 capability 发布阶段由 S5-S6 再指定 focused build / tests。
 
 ## 非目标
 

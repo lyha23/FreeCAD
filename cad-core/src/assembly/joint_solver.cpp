@@ -996,9 +996,27 @@ void resolveDistanceJointMapping(JointConstraint& joint)
     joint.distanceIJ.reset();
     joint.offset.reset();
 
+    const auto markExtendedMapping = [&joint]() {
+        joint.distanceTypeMappingStatus = "mapped_s4_extended";
+        joint.distanceTypeBoundary = "extended_mapping_pending_s5_oracle";
+    };
+    const auto setDistanceIJ = [&](const std::string& solverJointClass, double scalar) {
+        joint.solverJointClass = solverJointClass;
+        joint.distanceIJ = scalar;
+        markExtendedMapping();
+    };
+    const auto setOffset = [&](const std::string& solverJointClass, double scalar) {
+        joint.solverJointClass = solverJointClass;
+        joint.offset = scalar;
+        markExtendedMapping();
+    };
+
     // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
     // ::makeMbdJointDistance(), switches on "DistanceType type = getDistanceType(joint)" and
-    // maps basic point / line / plane cases to ASMT joint classes with "distanceIJ" or "offset".
+    // maps point / line / plane / radius-bearing cases to ASMT joint classes with "distanceIJ"
+    // or "offset"; extended cases add "getEdgeRadius(...)" / "getFaceRadius(...)" to the
+    // distance scalar. CAD Core consumes S3 scalarCorrection evidence and keeps S5 oracle as the
+    // publication gate.
     if (*joint.distanceType == "PointPoint") {
         if (distance < kFreeCadPrecisionConfusion) {
             joint.solverJointClass = "ASMTSphericalJoint";
@@ -1011,6 +1029,10 @@ void resolveDistanceJointMapping(JointConstraint& joint)
     if (*joint.distanceType == "LineLine") {
         joint.solverJointClass = "ASMTRevCylJoint";
         joint.distanceIJ = distance;
+        return;
+    }
+    if (*joint.distanceType == "LineCircle" || *joint.distanceType == "CircleCircle") {
+        setDistanceIJ("ASMTRevCylJoint", distance + joint.scalarCorrection.value_or(0.0));
         return;
     }
     if (*joint.distanceType == "PointLine") {
@@ -1028,14 +1050,55 @@ void resolveDistanceJointMapping(JointConstraint& joint)
         joint.offset = distance;
         return;
     }
+    if (*joint.distanceType == "PlaneCylinder") {
+        setOffset("ASMTLineInPlaneJoint", distance + joint.scalarCorrection.value_or(0.0));
+        return;
+    }
+    if (*joint.distanceType == "PlaneSphere") {
+        setOffset("ASMTPointInPlaneJoint", distance + joint.scalarCorrection.value_or(0.0));
+        return;
+    }
+    if (*joint.distanceType == "PlaneTorus") {
+        setOffset("ASMTPlanarJoint", distance);
+        return;
+    }
+    if (*joint.distanceType == "CylinderCylinder" || *joint.distanceType == "CylinderTorus") {
+        setDistanceIJ("ASMTRevCylJoint", distance + joint.scalarCorrection.value_or(0.0));
+        return;
+    }
+    if (*joint.distanceType == "CylinderSphere" || *joint.distanceType == "TorusSphere") {
+        setDistanceIJ("ASMTCylSphJoint", distance + joint.scalarCorrection.value_or(0.0));
+        return;
+    }
+    if (*joint.distanceType == "TorusTorus") {
+        setOffset("ASMTPlanarJoint", distance);
+        return;
+    }
+    if (*joint.distanceType == "SphereSphere") {
+        setDistanceIJ("ASMTSphSphJoint", distance + joint.scalarCorrection.value_or(0.0));
+        return;
+    }
     if (*joint.distanceType == "PointPlane") {
         joint.solverJointClass = "ASMTPointInPlaneJoint";
         joint.offset = distance;
         return;
     }
+    if (*joint.distanceType == "PointCylinder") {
+        setDistanceIJ("ASMTCylSphJoint", distance + joint.scalarCorrection.value_or(0.0));
+        return;
+    }
+    if (*joint.distanceType == "PointSphere") {
+        setDistanceIJ("ASMTSphSphJoint", distance + joint.scalarCorrection.value_or(0.0));
+        return;
+    }
     if (*joint.distanceType == "LinePlane") {
         joint.solverJointClass = "ASMTLineInPlaneJoint";
         joint.offset = distance;
+        return;
+    }
+    if (*joint.distanceType == "PointCurve") {
+        setOffset("ASMTPointInPlaneJoint", distance);
+        return;
     }
 }
 
