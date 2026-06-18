@@ -37,6 +37,11 @@ struct JointConstraint {
     AssemblyJointReference reference2;
     bool suppressed = false;
     std::optional<double> distance;
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/JointObject.py
+    // ::JointUsingDistance2 contains "Gears" / "Belt"; AssemblyObject.cpp
+    // ::AssemblyObject::makeMbdJointOfType() reads "getJointDistance2(joint)" into
+    // ASMTGearJoint "radiusJ".
+    std::optional<double> distance2;
     std::optional<double> angle;
 };
 

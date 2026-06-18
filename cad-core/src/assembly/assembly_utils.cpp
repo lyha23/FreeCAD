@@ -97,6 +97,9 @@ nlohmann::json solverJointJson(const JointConstraint& joint)
     if (joint.distance) {
         solverJoint["distance"] = *joint.distance;
     }
+    if (joint.distance2) {
+        solverJoint["distance2"] = *joint.distance2;
+    }
     if (joint.angle) {
         solverJoint["angle"] = *joint.angle;
     }

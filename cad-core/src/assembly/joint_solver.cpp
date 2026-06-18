@@ -12,6 +12,7 @@
 #include <OndselSolver/ASMTAngleJoint.h>
 #include <OndselSolver/ASMTCylindricalJoint.h>
 #include <OndselSolver/ASMTFixedJoint.h>
+#include <OndselSolver/ASMTGearJoint.h>
 #include <OndselSolver/ASMTMarker.h>
 #include <OndselSolver/ASMTParallelAxesJoint.h>
 #include <OndselSolver/ASMTPerpendicularJoint.h>
@@ -271,6 +272,18 @@ std::shared_ptr<MbD::ASMTJoint> makeOndselJointOfType(const JointConstraint& joi
         auto distanceJoint = MbD::ASMTSphSphJoint::With();
         distanceJoint->distanceIJ = joint.distance.value_or(0.0);
         return distanceJoint;
+    }
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    // ::AssemblyObject::makeMbdJointOfType(), "case JointType::Gears" creates
+    // ASMTGearJoint with "radiusI = getJointDistance(joint)" and
+    // "radiusJ = getJointDistance2(joint)"; "case JointType::Belt" uses
+    // "radiusJ = -getJointDistance2(joint)".
+    if (joint.jointType == "Gears" || joint.jointType == "Belt") {
+        auto gearJoint = MbD::ASMTGearJoint::With();
+        gearJoint->radiusI = joint.distance.value_or(0.0);
+        gearJoint->radiusJ = joint.jointType == "Belt" ? -joint.distance2.value_or(0.0)
+                                                        : joint.distance2.value_or(0.0);
+        return gearJoint;
     }
     // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
     // ::AssemblyObject::makeMbdJointOfType(), direct case JointType::Parallel returns
@@ -558,8 +571,12 @@ AssemblySolveRequest buildAssemblySolveRequest(
         constraint.reference1 = jointReference(*joint, context, "Reference1", "Placement1");
         constraint.reference2 = jointReference(*joint, context, "Reference2", "Placement2");
         constraint.suppressed = app::readBool(*joint, "Suppressed").value_or(false);
-        if (constraint.jointType == "Distance" || constraint.jointType == "Slider") {
+        if (constraint.jointType == "Distance" || constraint.jointType == "Slider"
+            || constraint.jointType == "Gears" || constraint.jointType == "Belt") {
             constraint.distance = app::readNumber(*joint, "Distance").value_or(0.0);
+        }
+        if (constraint.jointType == "Gears" || constraint.jointType == "Belt") {
+            constraint.distance2 = app::readNumber(*joint, "Distance2").value_or(0.0);
         }
         if (constraint.jointType == "Angle") {
             constraint.angle = app::readNumber(*joint, "Angle").value_or(0.0);
@@ -621,8 +638,10 @@ bool isSupportedOndselJointType(const std::string& jointType)
 {
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/
     // AssemblyObject.cpp::AssemblyObject::makeMbdJointOfType(), maps "Fixed", "Revolute",
-    // "Cylindrical", "Slider", "Ball", "Distance", direct "Parallel" / "Perpendicular"
-    // and "Angle" to ASMT joint classes in the current Ondsel adapter subset.
+    // "Cylindrical", "Slider", "Ball", "Distance", direct "Parallel" / "Perpendicular",
+    // "Angle", and the Gears / Belt ASMTGearJoint subset to ASMT joint classes in the current
+    // Ondsel adapter subset. RackPinion and Screw still require their separate FreeCAD marker /
+    // sliding-part paths and remain outside this set.
     static const std::set<std::string> supported = {
         "Fixed",
         "Revolute",
@@ -633,6 +652,8 @@ bool isSupportedOndselJointType(const std::string& jointType)
         "Parallel",
         "Perpendicular",
         "Angle",
+        "Gears",
+        "Belt",
     };
     return supported.count(jointType) != 0U;
 }
