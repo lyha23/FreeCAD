@@ -1,13 +1,22 @@
-# P8 ScrewRackPinionJoint S2 范围准入与 blocker 矩阵
+# 【已实现】P8 ScrewRackPinionJoint S2 范围准入与 blocker 矩阵
 
 ## 目标
 
 把 S1 候选路由成明确的 scope、blocker、nonGoal 和 releaseGate，确保本包只实现 Screw / RackPinion 及其 shared sliding 前置。
 
+## S2 判定
+
+- `p8_screw_rackpinion_joint_scope_review_matrix.tsv` 已覆盖 `SRJ-SCOPE-001` 到 `SRJ-SCOPE-008`，每行都有当前状态、落点、fixture / test route 和 `next_step`；S2 只完成范围准入，不把任何行升级为 `supported`。
+- `p8_screw_rackpinion_joint_blocker_queue.tsv` 已覆盖 `SRJ-BLOCK-001` 到 `SRJ-BLOCK-007`，每个 blocker 都绑定 scope、代码落点、验证路线、下一步和关闭条件，可直接供 S3-S6 消费。
+- `p8_screw_rackpinion_joint_backend_gap_classification.tsv` 将 shared sliding、Screw mapping、RackPinion mapping、native expected 和 capability publication 归入本包；`complex_distance_not_collected` 保持 `SRJ-SCOPE-007`，不混入 Screw / RackPinion scalar `Distance` 实现。
+- `p8_screw_rackpinion_joint_non_goal_registry.tsv` 继续保留 complex Distance、GUI drag / postDrag / Reverse UI、persistent solver session、full Assembly transaction 和 Link worker lifecycle 边界。
+- S2 不关闭 `SRJ-BLOCK-*`、不关闭 `P8ASM-SCOPE-007`、不采集 native oracle、不修改 C++、不新增 fixture；S3-S6 仍需逐项关闭 blocker 后才能发布 supported。
+
 ## 分类规则
 
 | 状态 | 准入条件 | 本包动作 |
 | --- | --- | --- |
+| `supportedBaseline` | 上游 P8 / GearsBelt 已证明且本包只作为依赖前提引用 | 保持基线，不在本包重新实现 |
 | `unsupportedImplementable` | 当前发布为 unsupported，但有直接 FreeCAD source、cad-core 落点和可建 fixture/oracle | 进入 S3-S6 |
 | `notCollected` | 需要 native oracle 或 expected | S5 采集或验证后再进入 supported |
 | `releaseGate` | 实现后需同步 capability / docs / tests | S5-S6 关闭 |

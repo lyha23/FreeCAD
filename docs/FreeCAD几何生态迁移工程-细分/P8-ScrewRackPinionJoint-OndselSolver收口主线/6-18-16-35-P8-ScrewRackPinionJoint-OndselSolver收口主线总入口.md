@@ -64,7 +64,7 @@
 | 工作步骤总入口 | `工作步骤细分/6-18-16-35-【已实现】P8-ScrewRackPinionJoint工作步骤总入口.md` | S0-S6 执行索引，已完成索引校验 |
 | S0 声明口径 | `工作步骤细分/6-18-16-36-【已实现】P8-ScrewRackPinionJoint-S0-声明口径与live基线复核.md` | 冻结 claims、非目标和 current unsupported 基线 |
 | S1 FreeCAD 源码候选 | `工作步骤细分/6-18-16-37-【已实现】P8-ScrewRackPinionJoint-S1-FreeCAD源码候选矩阵.md` | 已建立 source authority 和 candidate TSV |
-| S2 范围准入 | `工作步骤细分/6-18-16-38-P8-ScrewRackPinionJoint-S2-范围准入与blocker矩阵.md` | 将候选路由到 implementable unsupported、notCollected、releaseGate、nonGoal |
+| S2 范围准入 | `工作步骤细分/6-18-16-38-【已实现】P8-ScrewRackPinionJoint-S2-范围准入与blocker矩阵.md` | 已将候选路由到 implementable unsupported、notCollected、releaseGate、nonGoal |
 | S3 sliding 前置复审 | `工作步骤细分/6-18-16-39-P8-ScrewRackPinionJoint-S3-SlidingAxis与swapJCS专项复审.md` | 收口 `slidingPartIndex()` / `swapJCS()` 共享前置 |
 | S4 RackPinion marker 复审 | `工作步骤细分/6-18-16-40-P8-ScrewRackPinionJoint-S4-RackPinionMarker重写专项复审.md` | 收口 RackPinion rack / pinion marker rewrite |
 | S5 oracle / 发布复审 | `工作步骤细分/6-18-16-41-P8-ScrewRackPinionJoint-S5-NativeOracle与Capability专项复审.md` | 收口 fixtures、FreeCADCmd expected、focused tests 和 capability |
@@ -75,4 +75,4 @@
 | non goal registry | `矩阵/p8_screw_rackpinion_joint_non_goal_registry.tsv` | 不进入本轮实现的边界 |
 | backend gap classification | `矩阵/p8_screw_rackpinion_joint_backend_gap_classification.tsv` | unsupported / notCollected / releaseGate / nonGoal 分类 |
 
-当前工作步骤索引已完成校验；S0 已完成 live 基线复核；S1 已完成 source candidates 复核；S2-S6 仍为 `待执行`。矩阵是后续路由输入，不是发布闸门结论。
+当前工作步骤索引已完成校验；S0 已完成 live 基线复核；S1 已完成 source candidates 复核；S2 已完成范围准入与 blocker 队列路由；S3-S6 仍为 `待执行`。矩阵是后续路由输入，不是发布闸门结论。
