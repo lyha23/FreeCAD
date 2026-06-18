@@ -5,5 +5,5 @@ DTC-BG-003	edge_basic_distance_mapping_gap	Closed	DTC-SCOPE-004	no	Closed by S4:
 DTC-BG-004	plane_basic_distance_mapping_gap	Closed	DTC-SCOPE-005	no	Closed by S4: PlanePlane maps to ASMTPlanarJoint offset PointPlane maps to ASMTPointInPlaneJoint offset and LinePlane maps to ASMTLineInPlaneJoint offset; S5 still owns native expected parity
 DTC-BG-005	native_expected_collection_gate	Closed	DTC-SCOPE-006	no	Closed by S5: seven c3m6 basic DistanceType fixtures and FreeCADCmd expected files are checked in and focused tests compare solver DTO class scalar evidence
 DTC-BG-006	capability_publication_release_gate	Closed	DTC-SCOPE-007	no	Closed by S5: C ABI capabilities publish basic_distance_type support and upstream P8 matrix distinguishes basic support from remaining radius curve gaps
-DTC-BG-007	radius_bearing_next_batch	P2	DTC-SCOPE-008	yes	Open a second DistanceType radius package for getEdgeRadius getFaceRadius and circle cylinder sphere torus cases
-DTC-BG-008	curve_default_and_gui_non_goal	P3	DTC-SCOPE-009	yes	Keep curve default GUI session and persistent solver behavior out of this package
+DTC-BG-007	radius_bearing_next_batch	P2	DTC-SCOPE-008	yes	S6 boundary closed: open a second DistanceType radius package for getEdgeRadius getFaceRadius and circle cylinder sphere torus cases before claiming support
+DTC-BG-008	curve_default_and_gui_non_goal	P3	DTC-SCOPE-009	yes	S6 boundary closed: keep curve default GUI session and persistent solver behavior out of this package
