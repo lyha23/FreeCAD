@@ -20,7 +20,8 @@
 - `cad-core/src/assembly/joint_solver.cpp::jointReference()` 当前仍把 `markerPlacement` 直接设为 `PlacementN`，这对 object-level baseline 可用，但没有完整表达 FreeCAD `handleOneSideOfJoint()` 的 subshape reference 坐标系换算；该 connector-only shortcut 已在 non-goal registry 中标为不得发布的已知缺口。
 - DistanceType S6 已明确：S5 native oracle 只覆盖 solver DTO、resolved Ondsel class、`distance_ij` / `offset` 和 request-local `jcs_swapped_for_solver`，不声明 full native subshape marker placement parity。
 - 本包现在按最小完整语义批次组织：20 条 source candidates、14 个 scope、12 类 backend/release 分类、10 个发布前 blocker。后续实现不得退回只采单个 oracle case 或只修单个 fixture。
-- S0 已完成 live 复核：上述三条仍成立；object-level native placement 只是 `supportedBaseline`，RackPinion / Screw 已支持子集只作为本包后续 regression gate，S1-S6 仍不得提前写成 supported。
+- S0 已完成 live 复核：上述三条仍成立；object-level native placement 只是 `supportedBaseline`，RackPinion / Screw 已支持子集只作为本包后续 regression gate，S2-S6 仍不得提前写成 supported。
+- S1 已完成 live 源码候选矩阵复核：20 条 candidates 和 14 个 scope 只代表 source authority / route，不代表 supported；S2-S6 仍不得提前写成 supported。
 
 ## 证明链条
 
@@ -65,7 +66,7 @@
 | --- | --- | --- |
 | 工作步骤总入口 | `工作步骤细分/6-18-22-11-P8-Assembly-Reference-JCS-MarkerPlacement工作步骤总入口.md` | S0-S6 执行索引 |
 | S0 声明口径 | `工作步骤细分/6-18-22-12-【已实现】P8-Assembly-Reference-JCS-MarkerPlacement-S0-声明口径与live基线复核.md` | 已完成：冻结 claims、非目标和 current marker baseline |
-| S1 FreeCAD 源码候选 | `工作步骤细分/6-18-22-13-P8-Assembly-Reference-JCS-MarkerPlacement-S1-FreeCAD源码候选矩阵.md` | 建立 FreeCAD / cad-core source candidates |
+| S1 FreeCAD 源码候选 | `工作步骤细分/6-18-22-13-【已实现】P8-Assembly-Reference-JCS-MarkerPlacement-S1-FreeCAD源码候选矩阵.md` | 已完成：建立 FreeCAD / cad-core source candidates |
 | S2 范围准入 | `工作步骤细分/6-18-22-14-P8-Assembly-Reference-JCS-MarkerPlacement-S2-范围准入与blocker矩阵.md` | 将候选路由到 backendGap、notCollected、releaseGate、nonGoal |
 | S3 marker resolver 复审 | `工作步骤细分/6-18-22-15-P8-Assembly-Reference-JCS-MarkerPlacement-S3-MarkerPlacementResolver专项复审.md` | 复审统一 resolver、diagnostic 和 special rewrite 边界 |
 | S4 native oracle 复审 | `工作步骤细分/6-18-22-16-P8-Assembly-Reference-JCS-MarkerPlacement-S4-NativeOracle与代表fixture专项复审.md` | 批量采集 representative native expected |
@@ -77,4 +78,4 @@
 | non goal registry | `矩阵/p8_marker_placement_non_goal_registry.tsv` | 不进入本轮实现的边界 |
 | backend gap classification | `矩阵/p8_marker_placement_backend_gap_classification.tsv` | 12 类 backendGap / notCollected / releaseGate / nonGoal 聚合 |
 
-当前本文已执行 S0，S1-S6 尚未执行。矩阵是 evidence / route，不是 supported 结论；不得把 subshape marker placement、S1-S6、capability publication 或 oracle parity 提前标为 supported。
+当前本文已执行 S0-S1，S2-S6 尚未执行。矩阵是 evidence / route，不是 supported 结论；不得把 subshape marker placement、S2-S6、capability publication 或 oracle parity 提前标为 supported。
