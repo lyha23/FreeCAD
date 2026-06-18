@@ -1,10 +1,10 @@
-# P8 Assembly Reference / JCS MarkerPlacement 工作步骤总入口
+# 【已实现】P8 Assembly Reference / JCS MarkerPlacement 工作步骤总入口
 
 ## 目标
 
 把 P8 Assembly solver 已发布子集中，Joint `Reference1/2` + `Placement1/2` 的 subshape JCS marker placement 从当前 connector-only baseline 推进到 FreeCAD `handleOneSideOfJoint()` 等价语义。本包按最小完整语义批次推进，覆盖 ordinary dispatch、object/subshape global transform、part-local transform、offsetPlc、Vertex / Edge / Face oracle、mixed swap/current value、special rewrite regression 和 capability publication。
 
-当前收口状态：本文件是执行索引。S0 已完成 live 基线复核；S1 已完成 FreeCAD 源码候选矩阵复核；S2 已完成范围准入与 blocker 矩阵复核；S3 已完成 MarkerPlacementResolver evidence / diagnostic 前置；S4 已完成 NativeOracle 与代表 fixture 专项复审；S5 已完成 resolver focused parity，15 个 expected 解锁，PointLine blocker 已关闭；S6 capability 发布闸门待单独执行。
+当前收口状态：本文件是执行索引。S0 已完成 live 基线复核；S1 已完成 FreeCAD 源码候选矩阵复核；S2 已完成范围准入与 blocker 矩阵复核；S3 已完成 MarkerPlacementResolver evidence / diagnostic 前置；S4 已完成 NativeOracle 与代表 fixture 专项复审；S5 已完成 resolver focused parity，15 个 expected 解锁，PointLine blocker 已关闭；S6 已发布 `assembly.ondsel_solver_adapter.subshape_marker_placement` representative subset，队列已收口。
 
 ## 步骤索引
 
@@ -16,7 +16,7 @@
 | S3 | `6-18-22-15-【已实现】P8-Assembly-Reference-JCS-MarkerPlacement-S3-MarkerPlacementResolver专项复审.md` | 已实现 | 已落 cad-core 统一 marker resolver evidence / diagnostic、object-level baseline、subshape 缺证据 status、swap sync 和 fallback audit 前置 |
 | S4 | `6-18-22-16-【已实现】P8-Assembly-Reference-JCS-MarkerPlacement-S4-NativeOracle与代表fixture专项复审.md` | 已实现 | 批量采集 Vertex / Edge / Face / mixed / current value / special regression native expected |
 | S5 | `6-18-22-17-【已实现】P8-Assembly-Reference-JCS-MarkerPlacement-S5-实现与focused-parity.md` | 已实现 | resolver 主路径已接入并解锁 15 个 expected；PointLine 已按 native ASMT in-plane offset 路径关闭 |
-| S6 | `6-18-22-18-P8-Assembly-Reference-JCS-MarkerPlacement-S6-Capability与发布闸门.md` | 待执行发布闸门 | PointLine 已不再阻塞；capability/docs 发布仍需单独审计 |
+| S6 | `6-18-22-18-【已实现】P8-Assembly-Reference-JCS-MarkerPlacement-S6-Capability与发布闸门.md` | 已实现 | 发布 object / Vertex / Edge / Face / mixed representative subset；active expected 15，remaining gaps 为空 |
 
 ## 执行顺序
 
@@ -26,17 +26,17 @@
 4. S3 已完成 marker resolver 前置：object-level baseline 有稳定 evidence，subshape refs 输出需要 `handleOneSideOfJoint()` 等价证据的 diagnostic，不按 fixture 名称、JointType、bbox 或 subshape 顺序补输出。
 5. S4 已批量采集 object / vertex / edge / face / mixed / current value / special rewrite representative expected。
 6. S5 已落 C++、fixtures、focused tests；15 个 subshape expected 删除 `known_gap`，RackPinion / Screw 特例不回退，real Ondsel adapter 不再 silent fallback 缺失 marker。
-7. S6 暂未执行；PointLine blocker 已关闭，下一步是单独完成 capability / docs 发布闸门审计。
+7. S6 已完成 capability / docs 发布闸门审计；PointLine capability 对齐 native `ASMTLineInPlaneJoint` 证据，未证明边界继续留在 nonGoal。
 
 ## 当前矩阵闸门
 
 | 矩阵 | 当前用途 | 当前结论 |
 | --- | --- | --- |
 | `p8_marker_placement_source_candidates.tsv` | FreeCAD / cad-core 证据入口 | 20 条 candidates，S1 已复核；候选不等于 supported |
-| `p8_marker_placement_scope_review_matrix.tsv` | 当前能力路由 | S5 后 Vertex / Edge / Face / PointPoint / LineLine / PointLine / PointPlane / LinePlane / PlanePlane expected 均已有 focused parity；S6 publication 仍是 release gate |
-| `p8_marker_placement_blocker_queue.tsv` | 发布前 blocker | S5 关闭 `MP-BLOCK-001..007/010` 的实现与 regression blocker；`MP-BLOCK-008/009` 留给 S6 发布边界 |
+| `p8_marker_placement_scope_review_matrix.tsv` | 当前能力路由 | Vertex / Edge / Face / PointPoint / LineLine / PointLine / PointPlane / LinePlane / PlanePlane expected 均已有 focused parity；`MP-SCOPE-013` 已发布 representative subset |
+| `p8_marker_placement_blocker_queue.tsv` | 发布前 blocker | `MP-BLOCK-001..010` 均已有 closed 结论；`MP-BLOCK-008/009` 由 S6 capability / boundary audit 关闭 |
 | `p8_marker_placement_non_goal_registry.tsv` | 非目标边界 | S2 确认 radius-bearing、curve/default、GUI/session、persistent solver state、connector-only shortcut 排除与 reopen condition |
-| `p8_marker_placement_backend_gap_classification.tsv` | 分类与优先级 | S5 已关闭本包 backendGap；publication gate 和 non-goal boundary 继续由 S6 审计 |
+| `p8_marker_placement_backend_gap_classification.tsv` | 分类与优先级 | S5 已关闭本包 backendGap；publication gate 和 non-goal boundary 已由 S6 审计关闭 |
 
 ## 状态纪律
 

@@ -906,24 +906,26 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertIn(code, capabilities["diagnostic_codes"])
 
         self.assertTrue(self.ondsel_solver_available())
-        self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["status"], "covered_full")
-        self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["mode"], "request_local_runPreDrag")
-        self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["available"], True)
-        self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["build_mode"], "CAD_CORE_HAS_ONDSEL_SOLVER=1")
-        self.assertIn("grounded_fixed_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
-        self.assertIn("grounded_ball_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
-        self.assertIn("grounded_revolute_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
-        self.assertIn("grounded_slider_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
-        self.assertIn("grounded_distance_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
-        self.assertIn("grounded_parallel_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
-        self.assertIn("grounded_perpendicular_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
-        self.assertIn("grounded_angle_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
-        self.assertIn("grounded_gears_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
-        self.assertIn("grounded_belt_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
-        self.assertIn("grounded_rackpinion_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
-        self.assertIn("grounded_screw_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
-        self.assertIn("basic_distance_type", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
-        basic_distance = capabilities["assembly"]["ondsel_solver_adapter"]["distance_type_basic_geometry"]
+        ondsel_adapter = capabilities["assembly"]["ondsel_solver_adapter"]
+        self.assertEqual(ondsel_adapter["status"], "covered_full")
+        self.assertEqual(ondsel_adapter["mode"], "request_local_runPreDrag")
+        self.assertEqual(ondsel_adapter["available"], True)
+        self.assertEqual(ondsel_adapter["build_mode"], "CAD_CORE_HAS_ONDSEL_SOLVER=1")
+        self.assertIn("grounded_fixed_joint", ondsel_adapter["covered"])
+        self.assertIn("grounded_ball_joint", ondsel_adapter["covered"])
+        self.assertIn("grounded_revolute_joint", ondsel_adapter["covered"])
+        self.assertIn("grounded_slider_joint", ondsel_adapter["covered"])
+        self.assertIn("grounded_distance_joint", ondsel_adapter["covered"])
+        self.assertIn("grounded_parallel_joint", ondsel_adapter["covered"])
+        self.assertIn("grounded_perpendicular_joint", ondsel_adapter["covered"])
+        self.assertIn("grounded_angle_joint", ondsel_adapter["covered"])
+        self.assertIn("grounded_gears_joint", ondsel_adapter["covered"])
+        self.assertIn("grounded_belt_joint", ondsel_adapter["covered"])
+        self.assertIn("grounded_rackpinion_joint", ondsel_adapter["covered"])
+        self.assertIn("grounded_screw_joint", ondsel_adapter["covered"])
+        self.assertIn("basic_distance_type", ondsel_adapter["covered"])
+        self.assertIn("subshape_marker_placement", ondsel_adapter["covered"])
+        basic_distance = ondsel_adapter["distance_type_basic_geometry"]
         self.assertEqual(basic_distance["status"], "covered_full")
         self.assertEqual(
             basic_distance["supported"],
@@ -934,7 +936,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ["ASMTSphericalJoint", "ASMTSphSphJoint"],
         )
         self.assertEqual(basic_distance["solver_joint_classes"]["LineLine"], ["ASMTRevCylJoint"])
-        self.assertEqual(basic_distance["solver_joint_classes"]["PointLine"], ["ASMTCylSphJoint"])
+        self.assertEqual(basic_distance["solver_joint_classes"]["PointLine"], ["ASMTLineInPlaneJoint"])
         self.assertEqual(basic_distance["solver_joint_classes"]["PlanePlane"], ["ASMTPlanarJoint"])
         self.assertEqual(basic_distance["solver_joint_classes"]["PointPlane"], ["ASMTPointInPlaneJoint"])
         self.assertEqual(basic_distance["solver_joint_classes"]["LinePlane"], ["ASMTLineInPlaneJoint"])
@@ -946,9 +948,31 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("persistent_solver_state", basic_distance["non_goals"])
         self.assertIn(
             "invalid_grounded_placement_rejected",
-            capabilities["assembly"]["ondsel_solver_adapter"]["covered"],
+            ondsel_adapter["covered"],
         )
-        self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["remaining_gaps"], [])
+        subshape_marker = ondsel_adapter["subshape_marker_placement"]
+        self.assertEqual(subshape_marker["status"], "covered_representative_subset")
+        self.assertEqual(subshape_marker["mode"], "request_local_handleOneSide_markerPlacement")
+        self.assertEqual(subshape_marker["build_mode"], "CAD_CORE_HAS_ONDSEL_SOLVER=1")
+        self.assertEqual(subshape_marker["supported_reference_kinds"], ["object", "Vertex", "Edge", "Face", "mixed"])
+        self.assertIn("object_level_baseline", subshape_marker["covered"])
+        self.assertIn("vertex_jcs_marker", subshape_marker["covered"])
+        self.assertIn("edge_jcs_marker", subshape_marker["covered"])
+        self.assertIn("face_jcs_marker", subshape_marker["covered"])
+        self.assertIn("mixed_swap_marker_sync", subshape_marker["covered"])
+        self.assertIn("real_ondsel_marker_consumption", subshape_marker["covered"])
+        self.assertIn("placement_updates_native_parity", subshape_marker["covered"])
+        self.assertEqual(subshape_marker["active_expected_count"], 15)
+        self.assertIn("identity_offset_assembly_link_subset", subshape_marker["request_local_boundaries"])
+        self.assertIn("request_graph_no_persistent_solver_state", subshape_marker["request_local_boundaries"])
+        self.assertIn("radius_bearing_distance_type", subshape_marker["non_goals"])
+        self.assertIn("curve_default_distance_type", subshape_marker["non_goals"])
+        self.assertIn("GUI/session", subshape_marker["non_goals"])
+        self.assertIn("persistent_solver_state", subshape_marker["non_goals"])
+        self.assertIn("connector_only_subshape_marker_shortcut", subshape_marker["non_goals"])
+        self.assertIn("non_identity_bundled_offsetPlc", subshape_marker["non_goals"])
+        self.assertEqual(subshape_marker["remaining_gaps"], [])
+        self.assertEqual(ondsel_adapter["remaining_gaps"], [])
         self.assertEqual(
             capabilities["assembly"]["placement_writeback"]["solver_modes"],
             ["real_ondsel_solver"],

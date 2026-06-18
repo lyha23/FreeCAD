@@ -24,7 +24,8 @@
 - S1 已完成 live 源码候选矩阵复核：20 条 candidates 和 14 个 scope 只代表 source authority / route，不代表 supported；S2-S6 仍不得提前写成 supported。
 - S2 已完成范围准入与 blocker 矩阵复核：14 个 scope 路由已按当前 matrix 对齐；PointLine 原 remaining backendGap 已在 S5 follow-up 中关闭，`MP-BLOCK-001..010`、`MP-BG-001..012` 和 `MP-NG-001..006` 已对齐到 S3-S6。
 - S3 已完成 MarkerPlacementResolver evidence / diagnostic 前置：object-level baseline 保持安全路径，subshape refs 输出 `requires_subshape_handle_one_side_evidence`，mixed swap 证明 request-local reference / connector / marker evidence 同步。
-- S4 已完成 native oracle 与代表 fixture 专项复审；S5 已完成 resolver focused parity：15 个 subshape expected 均删除 `known_gap`，`assembly-distance-point-line-real-solver` 已按 FreeCADCmd ASMT `tInPlaneJointE` / `offset` 路径关闭。RackPinion / Screw regression 继续通过。S6 进入 capability 发布闸门前仍需单独执行发布审计。
+- S4 已完成 native oracle 与代表 fixture 专项复审；S5 已完成 resolver focused parity：15 个 subshape expected 均删除 `known_gap`，`assembly-distance-point-line-real-solver` 已按 FreeCADCmd ASMT `tInPlaneJointE` / `offset` 路径关闭。RackPinion / Screw regression 继续通过。S6 已完成 capability 发布闸门：`assembly.ondsel_solver_adapter.subshape_marker_placement` 只发布 object / Vertex / Edge / Face / mixed representative subset，`active_expected_count=15`，`remaining_gaps=[]`。
+- 当前 S0-S6 已收口；radius-bearing DistanceType、curve/default DistanceType、GUI/session、persistent solver state、connector-only subshape marker shortcut 和非 identity bundled `offsetPlc` 仍在本包 support claim 之外。
 
 ## 证明链条
 
@@ -74,11 +75,11 @@
 | S3 marker resolver 复审 | `工作步骤细分/6-18-22-15-【已实现】P8-Assembly-Reference-JCS-MarkerPlacement-S3-MarkerPlacementResolver专项复审.md` | 已完成：统一 resolver evidence / diagnostic、object-level baseline、subshape 缺证据 status、swap sync 和 special rewrite 边界 |
 | S4 native oracle 复审 | `工作步骤细分/6-18-22-16-【已实现】P8-Assembly-Reference-JCS-MarkerPlacement-S4-NativeOracle与代表fixture专项复审.md` | 已完成：批量采集 representative native expected，并以 `known_gap` 路由待实现 subshape parity |
 | S5 实现与 parity | `工作步骤细分/6-18-22-17-【已实现】P8-Assembly-Reference-JCS-MarkerPlacement-S5-实现与focused-parity.md` | 已完成 resolver focused parity：15 个 expected 解锁，PointLine blocker 已关闭 |
-| S6 发布闸门 | `工作步骤细分/6-18-22-18-P8-Assembly-Reference-JCS-MarkerPlacement-S6-Capability与发布闸门.md` | 回写 capabilities、docs、matrices 和 remaining boundaries |
+| S6 发布闸门 | `工作步骤细分/6-18-22-18-【已实现】P8-Assembly-Reference-JCS-MarkerPlacement-S6-Capability与发布闸门.md` | 已完成 capability、docs、matrices 和 remaining boundaries 发布审计 |
 | source candidates | `矩阵/p8_marker_placement_source_candidates.tsv` | 20 条 FreeCAD / cad-core 候选证据，覆盖 dispatch、resolver、oracle、special regression、capability |
 | scope review | `矩阵/p8_marker_placement_scope_review_matrix.tsv` | 14 个 scope 状态和验收路由 |
 | blocker queue | `矩阵/p8_marker_placement_blocker_queue.tsv` | 10 个发布前必须关闭的 blocker |
 | non goal registry | `矩阵/p8_marker_placement_non_goal_registry.tsv` | 不进入本轮实现的边界 |
 | backend gap classification | `矩阵/p8_marker_placement_backend_gap_classification.tsv` | 12 类 backendGap / notCollected / releaseGate / nonGoal 聚合 |
 
-当前本文已执行 S0-S5，其中 S5 focused parity 已收口。矩阵是 evidence / route，不是 capability supported 结论；S6 capability publication 仍需按发布闸门单独执行。
+当前本文已执行 S0-S6，其中 S6 只发布 S3-S5 已证明的 representative subshape marker placement 子集。矩阵是 evidence / route；未证明的 radius / curve / GUI / session / persistent solver state / connector-only shortcut 继续按 nonGoal 或后续专包处理。
