@@ -4,6 +4,10 @@
 
 复核 current `cad-core` Assembly solver adapter 是否真实对齐 FreeCAD `AssemblyObject::solve()` 的 request-local 子集：grounded part、Joint DTO、real Ondsel adapter、representative fallback、unsupported diagnostics、CMake optional link 和 capability wording。S3 不改 C++，只记录 live 证据并把可执行缺口路由到 S6。
 
+## 后续修正
+
+2026-06-18 后续实现已删除 representative fallback 和 optional unlinked build 路径；下文关于 fallback / `CAD_CORE_HAS_ONDSEL_SOLVER=0` 的记录只保留为当时问题定位，不代表当前运行路径。native solver placement expected 已在 S6 之后入库，并已在 S7 修复到 supported；当前状态以 S7、矩阵、C++ 和 C ABI capabilities 的 real-only 口径为准。
+
 ## 本轮 live 基线
 
 | 项 | 结果 |

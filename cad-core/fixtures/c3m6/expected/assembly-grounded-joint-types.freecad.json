@@ -32,7 +32,7 @@
     ],
     "solve": "solved"
   },
-  "reference": "FreeCADCmd oracle from assembly-joint-group-diagnostics.json; objects: Part::Box, Part::Box, Assembly::AssemblyLink, Assembly::AssemblyLink, App::FeaturePython, App::FeaturePython, Assembly::JointGroup, Assembly::AssemblyObject",
+  "reference": "FreeCADCmd oracle from assembly-grounded-joint-types.json; objects: Part::Box, Part::Box, Assembly::AssemblyLink, Assembly::AssemblyLink, App::FeaturePython, App::FeaturePython, Assembly::JointGroup, Assembly::AssemblyObject",
   "schema_version": "cad-core.freecad-expected.v1",
   "solver_adapter": {
     "grounded_joints": [

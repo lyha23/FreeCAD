@@ -52,6 +52,24 @@ class ExpectedFixtureAssertions:
         for actual_value, expected_value in zip(actual["max"], expected_max):
             self.assertAlmostEqual(actual_value, expected_value, delta=delta)
 
+    def assert_nested_matches_expected(self, actual, expected, path: str = "value") -> None:
+        if isinstance(expected, dict):
+            self.assertIsInstance(actual, dict, path)
+            for key, value in expected.items():
+                self.assertIn(key, actual, f"{path}.{key}")
+                self.assert_nested_matches_expected(actual[key], value, f"{path}.{key}")
+            return
+        if isinstance(expected, list):
+            self.assertIsInstance(actual, list, path)
+            self.assertEqual(len(actual), len(expected), path)
+            for index, value in enumerate(expected):
+                self.assert_nested_matches_expected(actual[index], value, f"{path}[{index}]")
+            return
+        if isinstance(expected, float):
+            self.assertAlmostEqual(float(actual), expected, delta=1e-6, msg=path)
+            return
+        self.assertEqual(actual, expected, path)
+
     def expected_freecad(self, group: str, fixture: str) -> dict:
         return json.loads((ROOT / "fixtures" / group / "expected" / f"{fixture}.freecad.json").read_text())
 
@@ -139,6 +157,9 @@ class ExpectedFixtureAssertions:
                     self.assertEqual(summary[key], expected_summary[key])
         if "sketch_internal" in expected:
             self.assert_sketch_internal_matches_expected(result, object_name, expected)
+        if "solver_adapter" in expected:
+            self.assertIn("solver_adapter", obj)
+            self.assert_nested_matches_expected(obj["solver_adapter"], expected["solver_adapter"], "solver_adapter")
 
     def assert_named_shape_matches_expected(
         self,

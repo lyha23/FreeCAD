@@ -28,18 +28,18 @@
     ],
     "joints": [
       "GroundedJoint",
-      "FixedJoint"
+      "BallJoint"
     ],
     "solve": "solved"
   },
-  "reference": "FreeCADCmd oracle from assembly-joint-group-diagnostics.json; objects: Part::Box, Part::Box, Assembly::AssemblyLink, Assembly::AssemblyLink, App::FeaturePython, App::FeaturePython, Assembly::JointGroup, Assembly::AssemblyObject",
+  "reference": "FreeCADCmd oracle from assembly-grounded-ball-joint-real-solver.json; objects: Part::Box, Part::Box, Assembly::AssemblyLink, Assembly::AssemblyLink, App::FeaturePython, App::FeaturePython, Assembly::JointGroup, Assembly::AssemblyObject",
   "schema_version": "cad-core.freecad-expected.v1",
   "solver_adapter": {
     "grounded_joints": [
       "GroundedJoint"
     ],
     "joints": [
-      "FixedJoint"
+      "BallJoint"
     ],
     "mode": "real_ondsel_solver",
     "placement_updates": [
@@ -72,8 +72,8 @@
     ],
     "solver_joints": [
       {
-        "joint_type": "Fixed",
-        "object": "FixedJoint",
+        "joint_type": "Ball",
+        "object": "BallJoint",
         "reference1": {
           "object": "ComponentA",
           "subnames": []

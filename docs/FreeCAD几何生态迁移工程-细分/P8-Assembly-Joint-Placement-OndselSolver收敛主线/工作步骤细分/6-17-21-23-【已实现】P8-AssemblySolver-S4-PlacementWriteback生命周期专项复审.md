@@ -4,6 +4,10 @@
 
 复核 solver placement writeback 是否符合 CAD Core 无状态边界：本次请求只返回 `documentObjectUpdates` 建议，前端把更新应用到 `DocumentObject graph` 后，下一次 recompute 才消费新的 `Placement`。S4 不在后端直接改写请求 graph，不引入跨请求 placement cache，不扩展完整 FreeCAD Link writeback transaction。
 
+## 后续修正
+
+2026-06-18 后续实现已删除 representative fallback 和 optional unlinked build 路径；下文关于 unlinked representative 的失败记录只保留为当时问题定位，不代表当前运行路径。native solver placement expected 已在 S6 之后入库，并已在 S7 修复到 supported；当前状态以 S7、矩阵、C++ 和 C ABI capabilities 的 real-only 口径为准。
+
 ## 本轮 live 基线
 
 | 项 | 结果 |

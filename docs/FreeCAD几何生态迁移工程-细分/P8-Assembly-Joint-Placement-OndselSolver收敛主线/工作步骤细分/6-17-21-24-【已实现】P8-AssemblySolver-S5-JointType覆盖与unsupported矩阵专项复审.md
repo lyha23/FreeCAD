@@ -4,6 +4,10 @@
 
 裁决当前 CAD Core 支持的 JointType 子集、diagnostic-only JointType 和下一轮可实现顺序。S5 不允许把复杂 JointType 只按名称塞进 supported，必须有 FreeCAD source、DTO 字段、fixture / oracle 和 focused tests。
 
+## 后续修正
+
+2026-06-18 后续实现已删除 representative fallback 和 optional unlinked build 路径；下文关于 unlinked build 的发布约束只保留为当时裁决，不代表当前发布状态。native solver placement expected 已在 S6 之后入库，并已在 S7 修复到 supported；当前状态以 S7、矩阵、C++ 和 C ABI capabilities 的 real-only 口径为准。
+
 ## 本轮 live 基线
 
 | 项 | 结果 |

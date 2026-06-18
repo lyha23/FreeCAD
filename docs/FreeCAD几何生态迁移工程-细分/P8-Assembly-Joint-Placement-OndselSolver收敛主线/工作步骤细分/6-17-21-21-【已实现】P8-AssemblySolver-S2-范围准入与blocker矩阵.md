@@ -4,6 +4,10 @@
 
 消费 S1 候选，把 Assembly solver 主线分类为 `releaseGate`、`notCollected`、`unsupported`、`backendGap` 或 `nonGoal`。S2 不写 C++，不采 FreeCAD oracle，只形成 S3-S6 可执行队列。
 
+## 后续修正
+
+2026-06-18 后续实现已删除 representative fallback 和 optional unlinked build 路径；下文关于 fallback / linked-unlinked 的裁决只保留为当时分流依据，不代表当前发布状态。native solver placement expected 已在 S6 之后入库，并已在 S7 修复到 supported；当前状态以 S7、矩阵、C++ 和 C ABI capabilities 的 real-only 口径为准。
+
 ## 本轮 live 基线
 
 | 项 | 结果 |

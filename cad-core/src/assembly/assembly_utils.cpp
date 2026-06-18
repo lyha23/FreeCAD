@@ -119,7 +119,6 @@ nlohmann::json unsupportedJointsJson(const std::vector<UnsupportedAssemblyJoint>
         result.push_back({
             {"object", unsupported.object},
             {"joint_type", unsupported.jointType},
-            {"supported_representative_path", unsupported.supportedRepresentativePath},
         });
     }
     return result;
@@ -198,8 +197,7 @@ SolverSummary solverSummary(const app::DocumentObject& object, runtime::ComputeC
     // ::AssemblyObject::solve(), calls "syncGroundedJoints()", "fixGroundedParts()",
     // builds joints with "makeMbdJointOfType()", then runs "mbdAssembly->runPreDrag()";
     // ::setNewPlacements() writes "propPlacement->setValue(newPlacement)". CAD Core builds a
-    // request-local Ondsel adapter when linked, and keeps the representative DTO only as fallback
-    // without retaining a backend solver session.
+    // request-local Ondsel adapter without retaining a backend solver session.
     const std::vector<std::string> requestJointNames = jointNames(object, context);
     const AssemblySolveRequest request =
         buildAssemblySolveRequest(object, context, requestJointNames, jointGroupNames(object, context));
@@ -227,6 +225,7 @@ SolverSummary solverSummary(const app::DocumentObject& object, runtime::ComputeC
                 {"joints", supportedJoints},
                 {"unsupported_joints", unsupportedJoints},
             },
+            result.placementUpdates,
         };
     }
 
@@ -240,6 +239,7 @@ SolverSummary solverSummary(const app::DocumentObject& object, runtime::ComputeC
                 {"joints", supportedJoints},
                 {"unsupported_joints", unsupportedJoints},
             },
+            result.placementUpdates,
         };
     }
 
@@ -254,6 +254,22 @@ SolverSummary solverSummary(const app::DocumentObject& object, runtime::ComputeC
                 {"solver_joints", solverJoints},
                 {"unsupported_joints", unsupportedJoints},
             },
+            result.placementUpdates,
+        };
+    }
+
+    if (result.status == "error") {
+        return {
+            result.solveState,
+            {
+                {"status", result.status},
+                {"reason", result.reason},
+                {"grounded_joints", groundedJoints},
+                {"joints", supportedJoints},
+                {"solver_joints", solverJoints},
+                {"unsupported_joints", unsupportedJoints},
+            },
+            result.placementUpdates,
         };
     }
 
@@ -269,6 +285,7 @@ SolverSummary solverSummary(const app::DocumentObject& object, runtime::ComputeC
                 {"placement_updates", placementUpdates},
                 {"unsupported_joints", unsupportedJoints},
             },
+            result.placementUpdates,
         };
     }
 
@@ -283,6 +300,7 @@ SolverSummary solverSummary(const app::DocumentObject& object, runtime::ComputeC
             {"placement_updates", placementUpdates},
             {"unsupported_joints", unsupportedJoints},
         },
+        result.placementUpdates,
     };
 }
 

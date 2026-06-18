@@ -76,11 +76,11 @@ PartDesign::MultiTransform
 | P5 | Sketcher profile、基础约束与 datum constraint 子集、ExternalGeometry 子集、closed / open / split internal geometry、BSpline InternalShape oracle、`FaceMakerBuildFace` bounded split 子集、pre-split / splitter history summary、WireJoiner EdgeInfo / WireInfo 边级账本子集、ordered `WireInfo::vertices` / `iteration2` 标记、branch-search candidate inside/outside、`newWire` seed、splitWire / done lifecycle 与 `exhaustTightBound()` 二次 owner 诊断账本、bounded tight-bound primary / secondary owner slot 汇总、基础 `InternalShape`、internal element map 与 terminal split / deleted history 已接入 |
 | P6 | `NamedShape` / `ElementMap` 主路径、Sketch InternalShape FaceMaker history context 与通用 `element_history_status` expected / C ABI capabilities 验收、prism / Body boolean / Part::Extrusion maker history 子集、RefineModel `Modified()` / `IsDeleted()` + GenericShapeMapper history、AddSubShape slot ownership、stable subname 引用更新、ReferenceShadow 恢复、split / deleted diagnostics、Link retag 和 transformed copy terminal history 传播已接入 |
 | P7 | Datum / Origin、RefineModel 主路径子集、Hole 常用孔与资源表、ModelThread pipe-shell 子集、Fillet / Chamfer、DressUp cache、Mirrored / LinearPattern / PolarPattern / Scaled / MultiTransform 基础路径、Whole shape / Features support、Add/Sub replay 与 terminal history diagnostics 已接入 |
-| P8 | Part primitives、BREP / STEP / IGES / STL 导入、BREP / STEP / STL CLI 导出、常用 Part Boolean、基础 Link / LinkSub / LinkGroup / LinkElement display、ShowElement 请求内子元素合成与 `documentObjectUpdates` 建议、`PropertyXLink*` / `FullSubList` / mapped postfix alias、`App::DocumentObjectGroup` plain group 展开、Assembly display、Joint 输入元数据、build-mode aware Ondsel adapter 与 stateless placement writeback 已接入 |
+| P8 | Part primitives、BREP / STEP / IGES / STL 导入、BREP / STEP / STL CLI 导出、常用 Part Boolean、基础 Link / LinkSub / LinkGroup / LinkElement display、ShowElement 请求内子元素合成与 `documentObjectUpdates` 建议、`PropertyXLink*` / `FullSubList` / mapped postfix alias、`App::DocumentObjectGroup` plain group 展开、Assembly display、Joint 输入元数据、硬依赖 real Ondsel adapter 与 stateless placement writeback 已接入 |
 
 当前 P8 只固定可用于显示、拾取和单次 recompute 的基础能力。Part primitive、ImportBrep / ImportStep / Mesh::Import STL 和 Section native oracle 已按 FreeCAD `optimalBoundingBox()` / OCCT `AddOptimal` 口径冻结，导入 shape 或 section edge 的 runtime tolerance 差异用显式 `bbox_delta` 标明；导入 shape 仍使用 indexed `NamedShape`。Part Boolean 已消费 boolean / section / generalFuse maker-history 子集，XOR / BooleanFragments expected 走 FreeCADCmd BOPTools native proxy oracle。
 
-Link display 已覆盖源对象 alias retag、单/多 subshape compound、Link placement / scale、对象名和 `$Label` 前缀路由、显式 `ElementList`、`ElementCount` 折叠数组、ShowElement 已物化子元素认领、缺失子元素请求内合成、owner / child sync、toggle-off 收回与删除建议、hidden link 解析、`PropertyXLink*` / `FullSubList` / mapped postfix alias、Link retag 后 terminal / merge history 传播，以及 plain group children 请求内 display 展开。`documentObjectUpdates` 只作为前端更新 `DocumentObject graph` 的建议返回，CAD Core 不在后端持久化或隐式改写请求 graph。这些能力不等价于完整 FreeCAD Link 账本。Assembly 已能显示 component group，并把 `Assembly::JointGroup` 下的 `App::FeaturePython` Joint / GroundedJoint 输入输出为 request-local solver DTO；linked build 走 real Ondsel adapter，unlinked build 走 representative fallback，native solver placement oracle 仍未入库。
+Link display 已覆盖源对象 alias retag、单/多 subshape compound、Link placement / scale、对象名和 `$Label` 前缀路由、显式 `ElementList`、`ElementCount` 折叠数组、ShowElement 已物化子元素认领、缺失子元素请求内合成、owner / child sync、toggle-off 收回与删除建议、hidden link 解析、`PropertyXLink*` / `FullSubList` / mapped postfix alias、Link retag 后 terminal / merge history 传播，以及 plain group children 请求内 display 展开。`documentObjectUpdates` 只作为前端更新 `DocumentObject graph` 的建议返回，CAD Core 不在后端持久化或隐式改写请求 graph。这些能力不等价于完整 FreeCAD Link 账本。Assembly 已能显示 component group，并把 `Assembly::JointGroup` 下的 `App::FeaturePython` Joint / GroundedJoint 输入输出为 request-local solver DTO；CAD Core 构建时硬依赖 bundled OndselSolver，只发布 real Ondsel adapter。`cad-core/fixtures/c3m6/expected` 已采集并验收 9 个 FreeCADCmd native solver placement expected，覆盖 object-level JCS placement、Distance / multi-component writeback、invalid grounded 和 ungrounded 行为；当前无 SCOPE-006 known-gap expected。
 
 P8 Link display 已新增 `App::DocumentObjectGroup` plain group 请求内 child-cache-style 展开：`App::DocumentObjectGroup` 作为轻量容器 executor 保留 `Group` children；`App::Link.LinkedObject -> App::DocumentObjectGroup` 和显式 `ElementList` 内的 plain group 都按 FreeCAD `linkedPlainGroup()` / `updateGroup()` 递归读取 `Group` children 并组合为本次请求内 display compound，同时保留 flattened index、object-name、group path 和 `$Label` LinkSub alias。当前只覆盖请求内 display、shape 聚合和 nested child subshape picking，不声明完整 `_ChildCache` 持久生命周期、copy-on-change / linked-owner 矩阵或完整 Link 写回事务。
 
@@ -89,7 +89,7 @@ P8 Link display 已新增 `App::DocumentObjectGroup` plain group 请求内 child
 - Sketcher 完整 solver、BSpline solver/control-point 语义、完整 `ExternalGeometryExtension` 状态机、WireJoiner EdgeInfo / WireInfo 的 `findTightBoundSplitWire()` / `findTightBoundUpdateVertices()` / `exhaustTightBound()` 已有 splitWire / done / secondary-owner lifecycle 诊断账本，但尚未替代 bounded ownership classifier，也尚未执行 `exhaustTightBoundUpdateWire()` 搜索主路径；真实 `openWireCompound` history 过滤、FaceMaker / WireJoiner history summary 到正式 `NamedShape` / `ElementMap` 的完整 MapperHistory 消费仍待迁移；FaceMaker summary 当前进入 `Sketch.InternalShape` 的 `NamedShape` 元数据和通用 `element_history_status`。
 - Topo Naming 完整 MapperHistory 发布边界仍按 maker 分阶段复核；P6 MakerHistory S3-S5 已确认 ShapeFix、DressUp / Refine / transformed 和 taper 当前 focused scope 为 supported，复杂 split / deleted 旧引用恢复仍保留为 `notCollected`，只有专项复核证明当前 cad-core 与 FreeCAD authority 或 checked-in expected 不匹配时才转为 `backendGap`；merge history 已有 Body boolean 与 Link retag 传播回归，但仍要纳入完整 MapperHistory 生命周期。
 - PartDesign transformed / pattern 完整 MapperHistory 与更复杂 ownership。
-- Assembly solver native FreeCAD placement oracle、完整 Joint placement / constraint 求解、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、`ShowElement=true` LinkElement / LinkGroup 持久写回事务生命周期、完整 cross-document 文档哈希 / postfix 生命周期和更复杂多层 LinkSub 链。
+- 完整 Joint placement / constraint 求解、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、`ShowElement=true` LinkElement / LinkGroup 持久写回事务生命周期、完整 cross-document 文档哈希 / postfix 生命周期和更复杂多层 LinkSub 链。
 
 ## 阶段索引
 
@@ -105,7 +105,7 @@ P8 Link display 已新增 `App::DocumentObjectGroup` plain group 请求内 child
 | P5 | `08-P5-Sketcher核心与内部元素.md` | 已接入 solver-facing 子集 |
 | P6 | `09-P6-TopoNaming主路径.md` | 主路径骨架已落地，完整 MapperHistory 待补 |
 | P7 | `10-P7-PartDesign常用生态.md` | 常用生态基础子集已落地 |
-| P8 | `11-P8-Part导入导出与Assembly后续.md` | 已覆盖 Part primitives、导入导出、常用 Part Boolean、基础 Link / LinkSub / LinkGroup / LinkElement display、ShowElement 请求内生命周期建议、XLink / FullSubList / mapped alias、plain group 展开、Assembly display、Joint 输入元数据、build-mode aware Ondsel adapter 与 stateless placement writeback |
+| P8 | `11-P8-Part导入导出与Assembly后续.md` | 已覆盖 Part primitives、导入导出、常用 Part Boolean、基础 Link / LinkSub / LinkGroup / LinkElement display、ShowElement 请求内生命周期建议、XLink / FullSubList / mapped alias、plain group 展开、Assembly display、Joint 输入元数据、硬依赖 real Ondsel adapter 与 stateless placement writeback |
 | P5/P6 联合主线 | `13-【已实现】ExternalGeometry-TopoNaming下一阶段主线.md` | 已实现：ExternalGeometryExtension 状态机、MapperHistory、FaceMaker / WireJoiner history 消费和复杂引用恢复已按 P5P6 主线收口 |
 
 ## 后续队列
@@ -113,7 +113,7 @@ P8 Link display 已新增 `App::DocumentObjectGroup` plain group 请求内 child
 1. P5/P6 联合主线已按 `13-【已实现】ExternalGeometry-TopoNaming下一阶段主线.md` 收口；后续只在阶段发布时复跑验收和回写台账。
 2. 补 P6 MakerHistory 余量：S0-S6 已完成 ShapeFix、RefineModel、taper、transformed / DressUp 的 capability / tests / expected 与正式文档一致性复核；当前无 C++ backendGap，后续只在复杂 split / deleted oracle 证明 mismatch 时重新打开实现任务。
 3. 补 P7：transformed / pattern 完整 MapperHistory 与更复杂 ownership。
-4. 扩展 P8：Assembly solver native FreeCAD placement oracle、完整 Joint placement / constraint、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、`ShowElement=true` LinkElement / LinkGroup 持久写回事务生命周期、完整 cross-document 文档哈希 / postfix 生命周期和更复杂多层 LinkSub 链。
+4. 扩展 P8：完整 Joint placement / constraint、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、`ShowElement=true` LinkElement / LinkGroup 持久写回事务生命周期、完整 cross-document 文档哈希 / postfix 生命周期和更复杂多层 LinkSub 链。
 
 ## 全局规则
 

@@ -202,16 +202,14 @@ if(NOT ZSTD_INCLUDE_DIR OR NOT ZSTD_LIBRARY)
   message(FATAL_ERROR "libzstd was not found")
 endif()
 
-option(CAD_CORE_ENABLE_ONDSEL_SOLVER "Build CAD Core with the bundled OndselSolver adapter" ON)
 set(CAD_CORE_ONDSEL_SOLVER_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../src/3rdParty/OndselSolver")
-if(CAD_CORE_ENABLE_ONDSEL_SOLVER AND EXISTS "${CAD_CORE_ONDSEL_SOLVER_DIR}/CMakeLists.txt")
-  set(CAD_CORE_HAS_ONDSEL_SOLVER ON)
-  set(ONDSELSOLVER_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-  set(ONDSELSOLVER_BUILD_EXE OFF CACHE BOOL "" FORCE)
-  add_subdirectory("${CAD_CORE_ONDSEL_SOLVER_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/ondsel_solver" EXCLUDE_FROM_ALL)
-else()
-  set(CAD_CORE_HAS_ONDSEL_SOLVER OFF)
+if(NOT EXISTS "${CAD_CORE_ONDSEL_SOLVER_DIR}/CMakeLists.txt")
+  message(FATAL_ERROR "CAD Core requires the bundled OndselSolver adapter at ${CAD_CORE_ONDSEL_SOLVER_DIR}")
 endif()
+set(CAD_CORE_HAS_ONDSEL_SOLVER ON)
+set(ONDSELSOLVER_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(ONDSELSOLVER_BUILD_EXE OFF CACHE BOOL "" FORCE)
+add_subdirectory("${CAD_CORE_ONDSEL_SOLVER_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/ondsel_solver" EXCLUDE_FROM_ALL)
 
 add_library(cad-core-lib STATIC
   src/assembly/assembly_link.cpp
@@ -300,15 +298,10 @@ target_include_directories(cad-core-lib PRIVATE
 
 target_compile_definitions(cad-core-lib PRIVATE
   CAD_CORE_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}"
+  CAD_CORE_HAS_ONDSEL_SOLVER=1
 )
-
-if(CAD_CORE_HAS_ONDSEL_SOLVER)
-  target_compile_definitions(cad-core-lib PRIVATE CAD_CORE_HAS_ONDSEL_SOLVER=1)
-  target_include_directories(cad-core-lib PRIVATE "${CAD_CORE_ONDSEL_SOLVER_DIR}")
-  target_link_libraries(cad-core-lib PUBLIC OndselSolver)
-else()
-  target_compile_definitions(cad-core-lib PRIVATE CAD_CORE_HAS_ONDSEL_SOLVER=0)
-endif()
+target_include_directories(cad-core-lib PRIVATE "${CAD_CORE_ONDSEL_SOLVER_DIR}")
+target_link_libraries(cad-core-lib PUBLIC OndselSolver)
 
 if(CAD_CORE_OCCT_LIBRARY_DIRS)
   target_link_directories(cad-core-lib PUBLIC
@@ -342,11 +335,7 @@ add_executable(cad-core-c3m1-topology-probe
 target_link_libraries(cad-core-c3m1-topology-probe PRIVATE cad-core-lib)
 
 if(APPLE)
-  if(CAD_CORE_HAS_ONDSEL_SOLVER)
-    set(CAD_CORE_ONDSEL_RPATH "$<TARGET_FILE_DIR:OndselSolver>")
-  else()
-    set(CAD_CORE_ONDSEL_RPATH "")
-  endif()
+  set(CAD_CORE_ONDSEL_RPATH "$<TARGET_FILE_DIR:OndselSolver>")
   list(JOIN CAD_CORE_OCCT_LIBRARY_DIRS ";" CAD_CORE_OCCT_RPATH)
   set_target_properties(cad-core PROPERTIES
     BUILD_RPATH "${CAD_CORE_OCCT_RPATH};${CAD_CORE_ONDSEL_RPATH}"

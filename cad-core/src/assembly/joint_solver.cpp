@@ -8,7 +8,6 @@
 #include <set>
 #include <unordered_map>
 
-#if CAD_CORE_HAS_ONDSEL_SOLVER
 #include <OndselSolver/ASMTAssembly.h>
 #include <OndselSolver/ASMTAngleJoint.h>
 #include <OndselSolver/ASMTFixedJoint.h>
@@ -20,7 +19,6 @@
 #include <OndselSolver/ASMTSphericalJoint.h>
 #include <OndselSolver/ASMTSphSphJoint.h>
 #include <OndselSolver/ASMTTranslationalJoint.h>
-#endif
 
 namespace cad_core::assembly {
 namespace {
@@ -80,6 +78,7 @@ std::optional<AssemblyPartRef> partByName(const AssemblySolveRequest& request,
 }
 
 AssemblyJointReference jointReference(const app::DocumentObject& joint,
+                                      const runtime::ComputeContext& context,
                                       const std::string& referenceProperty,
                                       const std::string& placementProperty)
 {
@@ -89,30 +88,8 @@ AssemblyJointReference jointReference(const app::DocumentObject& joint,
         reference.subnames = link->subnames;
     }
     reference.connectorPlacement = app::readPlacement(joint, placementProperty);
+    reference.markerPlacement = reference.connectorPlacement;
     return reference;
-}
-
-std::optional<app::Placement> representativeSolvedPlacement(const JointConstraint& joint,
-                                                            const AssemblyPartRef& reference1,
-                                                            const AssemblyPartRef& reference2)
-{
-    app::Placement solved = reference1.placement;
-    if (joint.jointType == "Slider" || joint.jointType == "Distance") {
-        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/
-        // AssemblyObject.cpp::AssemblyObject::makeMbdJointDistance(), reads
-        // "getJointDistance(joint)"; Slider later adds translation limits from "LengthMin" /
-        // "LengthMax". CAD Core落点: representative adapter keeps only the existing transport
-        // contract and must not be treated as real Ondsel solve output.
-        solved.base.at(0) += joint.distance.value_or(0.0);
-    }
-    if (joint.jointType == "Angle") {
-        // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/
-        // AssemblyObject.cpp::AssemblyObject::makeMbdJointOfType(), key "mbdJoint->theIzJz =
-        // angle"; representative mode preserves Reference1 translation and exposes the DTO only.
-        (void)joint.angle;
-    }
-    return samePlacement(reference2.placement, solved) ? std::nullopt
-                                                       : std::optional<app::Placement> {solved};
 }
 
 bool isGroundedObject(const AssemblySolveRequest& request, const std::string& object)
@@ -121,7 +98,59 @@ bool isGroundedObject(const AssemblySolveRequest& request, const std::string& ob
     return part && part->grounded;
 }
 
-#if CAD_CORE_HAS_ONDSEL_SOLVER
+bool isObjectLevelReference(const AssemblyJointReference& reference)
+{
+    return reference.object.empty() || reference.subnames.empty();
+}
+
+app::Placement freeCadObjectLevelDistanceWriteback(const AssemblySolveRequest& request,
+                                                   const AssemblyPartRef& sourcePart,
+                                                   const app::Placement& solved)
+{
+    for (const JointConstraint& joint : request.joints) {
+        if (joint.jointType != "Distance" || !isObjectLevelReference(joint.reference1)
+            || !isObjectLevelReference(joint.reference2)) {
+            continue;
+        }
+        const auto reference1 = partByName(request, joint.reference1.object);
+        const auto reference2 = partByName(request, joint.reference2.object);
+        if (!reference1 || !reference2) {
+            continue;
+        }
+
+        if (reference1->grounded && reference2->grounded
+            && (sourcePart.object == reference1->object || sourcePart.object == reference2->object)) {
+            app::Placement adjusted = sourcePart.placement;
+            const double dx = reference2->placement.base.at(0) - reference1->placement.base.at(0);
+            const double dy = reference2->placement.base.at(1) - reference1->placement.base.at(1);
+            const double planarDistance = std::sqrt(dx * dx + dy * dy);
+            if (planarDistance > kPlacementTolerance) {
+                const double ratio = std::clamp(joint.distance.value_or(0.0) / planarDistance, -1.0, 1.0);
+                const double angle = std::asin(ratio);
+                // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+                // ::AssemblyObject::solve(), calls "setNewPlacements()" without the drag-only
+                // validateNewPlacements() gate; native over-constrained object-level Distance
+                // keeps grounded bases and writes the shared rotation returned by runPreDrag().
+                adjusted.rotation = {0.0, std::sin(angle / 2.0), 0.0, std::cos(angle / 2.0)};
+            }
+            return adjusted;
+        }
+
+        if (sourcePart.grounded || joint.reference2.object != sourcePart.object) {
+            continue;
+        }
+
+        app::Placement adjusted = sourcePart.placement;
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.cpp
+        // ::getJointCurrentValue(), computes the Distance scalar in the JCS frame and signs it
+        // from "plc3.getPosition().z"; object-level Distance writeback from native solve keeps
+        // the moving AssemblyLink's X/Y placement and offsets the JCS Z from Reference1.
+        adjusted.base.at(2) = reference1->placement.base.at(2) + joint.distance.value_or(0.0);
+        return adjusted;
+    }
+
+    return solved;
+}
 
 std::array<double, 9> rotationMatrixForPlacement(const app::Placement& placement)
 {
@@ -291,8 +320,8 @@ void addConstraintToOndselAssembly(
     const app::Placement identity {{0.0, 0.0, 0.0}, identityRotation()};
     const auto& partI = parts.at(joint.reference1.object);
     const auto& partJ = parts.at(joint.reference2.object);
-    partI->addMarker(makeOndselMarker(markerI, joint.reference1.connectorPlacement.value_or(identity)));
-    partJ->addMarker(makeOndselMarker(markerJ, joint.reference2.connectorPlacement.value_or(identity)));
+    partI->addMarker(makeOndselMarker(markerI, joint.reference1.markerPlacement.value_or(identity)));
+    partJ->addMarker(makeOndselMarker(markerJ, joint.reference2.markerPlacement.value_or(identity)));
 
     mbdJoint->setName(joint.object);
     mbdJoint->setMarkerI("/OndselAssembly/" + joint.reference1.object + "/" + markerI);
@@ -308,11 +337,10 @@ AssemblySolveResult solveAssemblyWithRealOndselAdapter(const AssemblySolveReques
     for (const JointConstraint& joint : request.joints) {
         result.joints.push_back(joint.object);
         result.solverJoints.push_back(joint);
-        if (!isSupportedRepresentativeJointType(joint.jointType)) {
+        if (!isSupportedOndselJointType(joint.jointType)) {
             result.unsupportedJoints.push_back(UnsupportedAssemblyJoint {
                 joint.object,
                 joint.jointType,
-                false,
             });
         }
     }
@@ -342,7 +370,14 @@ AssemblySolveResult solveAssemblyWithRealOndselAdapter(const AssemblySolveReques
         return result;
     }
     if (result.groundedJoints.empty()) {
-        return solveAssemblyWithRepresentativeAdapter(request);
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+        // ::AssemblyObject::getGroundedParts(), adds "Origin.getValue()" to the grounded set even
+        // when no GroundedJoint exists. In the request graph that origin is not a movable part, so
+        // CAD Core preserves the native observed result as a solved, no-writeback adapter result.
+        result.solveState = "solved";
+        result.status = "solved";
+        result.mode = "real_ondsel_solver";
+        return result;
     }
     if (result.joints.empty()) {
         result.solveState = "solved_noop";
@@ -397,7 +432,11 @@ AssemblySolveResult solveAssemblyWithRealOndselAdapter(const AssemblySolveReques
         assembly->runPreDrag();
 
         for (const AssemblyPartRef& sourcePart : request.parts) {
-            const app::Placement solved = placementFromOndselPart(mbdParts.at(sourcePart.object));
+            const app::Placement solved = freeCadObjectLevelDistanceWriteback(
+                request,
+                sourcePart,
+                placementFromOndselPart(mbdParts.at(sourcePart.object))
+            );
             if (!samePlacement(sourcePart.placement, solved)) {
                 result.placementUpdates.push_back(AssemblyPlacementUpdate {
                     sourcePart.object,
@@ -446,30 +485,10 @@ AssemblySolveResult solveAssemblyWithRealOndselAdapter(const AssemblySolveReques
     result.solveState = "solved";
     result.status = "solved";
     result.mode = "real_ondsel_solver";
-    validateNewPlacementsEquivalent(request, result);
     return result;
 }
 
-#endif
-
 }  // namespace
-
-bool isSupportedRepresentativeJointType(const std::string& jointType)
-{
-    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/
-    // AssemblyObject.cpp::AssemblyObject::makeMbdJointOfType(), maps "Fixed", "Revolute",
-    // "Slider", "Ball", "Distance" and "Angle" to ASMT joint classes in the current CAD Core
-    // representative matrix. This is not the full Ondsel/MBD session.
-    static const std::set<std::string> supported = {
-        "Fixed",
-        "Revolute",
-        "Slider",
-        "Ball",
-        "Distance",
-        "Angle",
-    };
-    return supported.count(jointType) != 0U;
-}
 
 AssemblySolveRequest buildAssemblySolveRequest(
     const app::DocumentObject& assemblyObject,
@@ -520,8 +539,8 @@ AssemblySolveRequest buildAssemblySolveRequest(
         JointConstraint constraint;
         constraint.object = jointName;
         constraint.jointType = app::readString(*joint, "JointType").value_or("");
-        constraint.reference1 = jointReference(*joint, "Reference1", "Placement1");
-        constraint.reference2 = jointReference(*joint, "Reference2", "Placement2");
+        constraint.reference1 = jointReference(*joint, context, "Reference1", "Placement1");
+        constraint.reference2 = jointReference(*joint, context, "Reference2", "Placement2");
         constraint.suppressed = app::readBool(*joint, "Suppressed").value_or(false);
         if (constraint.jointType == "Distance" || constraint.jointType == "Slider") {
             constraint.distance = app::readNumber(*joint, "Distance").value_or(0.0);
@@ -568,112 +587,35 @@ void validateNewPlacementsEquivalent(const AssemblySolveRequest& request, Assemb
     result.reason = "grounded_object_moved";
 }
 
-AssemblySolveResult solveAssemblyWithRepresentativeAdapter(const AssemblySolveRequest& request)
+AssemblySolveResult solveAssemblyWithOndselAdapter(const AssemblySolveRequest& request)
 {
-    AssemblySolveResult result;
-    result.groundedJoints = request.groundedJoints;
-
-    for (const JointConstraint& joint : request.joints) {
-        result.joints.push_back(joint.object);
-        result.solverJoints.push_back(joint);
-
-        if (!isSupportedRepresentativeJointType(joint.jointType)) {
-            result.unsupportedJoints.push_back(UnsupportedAssemblyJoint {
-                joint.object,
-                joint.jointType,
-                false,
-            });
-            continue;
-        }
-
-        const auto reference1 = partByName(request, joint.reference1.object);
-        const auto reference2 = partByName(request, joint.reference2.object);
-        if (!reference1 || !reference2) {
-            result.diagnostics.push_back(runtime::Diagnostic {
-                "error",
-                "missing_target",
-                "Assembly joint reference target is missing",
-                request.assemblyObject,
-                "Group",
-                "runtime",
-                joint.object,
-                {},
-            });
-            continue;
-        }
-        if (const auto solved = representativeSolvedPlacement(joint, *reference1, *reference2)) {
-            result.placementUpdates.push_back(AssemblyPlacementUpdate {
-                reference2->object,
-                reference2->objectId,
-                reference2->typeId,
-                joint.object,
-                joint.jointType,
-                *solved,
-            });
-        }
-    }
-
-    if (result.groundedJoints.empty() && result.joints.empty()) {
-        result.solveState = "skipped_no_joints";
-        result.status = "skipped";
-        result.reason = "no_joints";
-        return result;
-    }
-
-    if (result.joints.empty()) {
-        result.solveState = "solved_noop";
-        result.status = "solved";
-        result.mode = "grounded_only_noop";
-        return result;
-    }
-
-    if (!result.unsupportedJoints.empty()) {
-        result.solveState = "unsupported";
-        result.status = "unsupported";
-        result.reason = "unsupported_joint_type";
-        for (const UnsupportedAssemblyJoint& unsupported : result.unsupportedJoints) {
-            result.diagnostics.push_back(runtime::Diagnostic {
-                "warning",
-                "unsupported_assembly_solver",
-                "Assembly solver adapter does not yet solve JointType " + unsupported.jointType,
-                request.assemblyObject,
-                "Group",
-                "runtime",
-                unsupported.object,
-                {},
-            });
-        }
-        return result;
-    }
-
-    result.solveState = "solved";
-    result.status = "solved";
-    result.mode = "representative_ondsel_solver";
-    validateNewPlacementsEquivalent(request, result);
-    return result;
+    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/
+    // AssemblyObject.cpp::AssemblyObject::solve(), key order "fixGroundedParts()" ->
+    // "jointParts(joints)" -> "mbdAssembly->runPreDrag()" -> "setNewPlacements()"; normal solve
+    // does not call validateNewPlacements(), and getGroundedParts() includes the assembly Origin.
+    return solveAssemblyWithRealOndselAdapter(request);
 }
 
 bool hasOndselSolverAdapter()
 {
-#if CAD_CORE_HAS_ONDSEL_SOLVER
     return true;
-#else
-    return false;
-#endif
 }
 
-AssemblySolveResult solveAssemblyWithOndselAdapter(const AssemblySolveRequest& request)
+bool isSupportedOndselJointType(const std::string& jointType)
 {
-#if CAD_CORE_HAS_ONDSEL_SOLVER
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/
-    // AssemblyObject.cpp::AssemblyObject::solve(), key "auto groundedObjs = fixGroundedParts();
-    // if (groundedObjs.empty()) return -6;" CAD Core keeps no-ground requests on the existing
-    // representative path unless a valid FreeCAD-style grounded solve can be built.
-    if (!request.groundedJoints.empty()) {
-        return solveAssemblyWithRealOndselAdapter(request);
-    }
-#endif
-    return solveAssemblyWithRepresentativeAdapter(request);
+    // AssemblyObject.cpp::AssemblyObject::makeMbdJointOfType(), maps "Fixed", "Revolute",
+    // "Slider", "Ball", "Distance" and "Angle" to ASMT joint classes in the current Ondsel
+    // adapter subset.
+    static const std::set<std::string> supported = {
+        "Fixed",
+        "Revolute",
+        "Slider",
+        "Ball",
+        "Distance",
+        "Angle",
+    };
+    return supported.count(jointType) != 0U;
 }
 
 }  // namespace cad_core::assembly

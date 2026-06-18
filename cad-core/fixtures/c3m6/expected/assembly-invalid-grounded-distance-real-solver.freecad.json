@@ -1,14 +1,14 @@
 {
   "bbox": {
     "max": [
+      6.732050807568878,
       2.0,
-      2.0,
-      2.0
+      1.7320508075688774
     ],
     "min": [
       0.0,
       0.0,
-      0.0
+      -1.0000000000000002
     ]
   },
   "freecad_version": "1.2.0 revision 20260519",
@@ -27,19 +27,21 @@
       "Joints"
     ],
     "joints": [
-      "GroundedJoint",
-      "FixedJoint"
+      "GroundedJointA",
+      "GroundedJointB",
+      "DistanceJoint"
     ],
     "solve": "solved"
   },
-  "reference": "FreeCADCmd oracle from assembly-joint-group-diagnostics.json; objects: Part::Box, Part::Box, Assembly::AssemblyLink, Assembly::AssemblyLink, App::FeaturePython, App::FeaturePython, Assembly::JointGroup, Assembly::AssemblyObject",
+  "reference": "FreeCADCmd oracle from assembly-invalid-grounded-distance-real-solver.json; objects: Part::Box, Part::Box, Assembly::AssemblyLink, Assembly::AssemblyLink, App::FeaturePython, App::FeaturePython, App::FeaturePython, Assembly::JointGroup, Assembly::AssemblyObject",
   "schema_version": "cad-core.freecad-expected.v1",
   "solver_adapter": {
     "grounded_joints": [
-      "GroundedJoint"
+      "GroundedJointA",
+      "GroundedJointB"
     ],
     "joints": [
-      "FixedJoint"
+      "DistanceJoint"
     ],
     "mode": "real_ondsel_solver",
     "placement_updates": [
@@ -48,8 +50,8 @@
         "assembly": "Assembly",
         "joint": "OndselSolver",
         "joint_type": "solver_result",
-        "object": "ComponentB",
-        "objectId": 4,
+        "object": "ComponentA",
+        "objectId": 3,
         "properties": {
           "Placement": {
             "Base": [
@@ -60,9 +62,35 @@
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [
               0.0,
+              0.2588190451025208,
               0.0,
+              0.9659258262890683
+            ]
+          }
+        },
+        "reason": "assembly_solver_placement_writeback",
+        "typeId": "Assembly::AssemblyLink"
+      },
+      {
+        "action": "assembly_set_placement",
+        "assembly": "Assembly",
+        "joint": "OndselSolver",
+        "joint_type": "solver_result",
+        "object": "ComponentB",
+        "objectId": 4,
+        "properties": {
+          "Placement": {
+            "Base": [
+              4.0,
               0.0,
-              1.0
+              -4.93509773273493e-35
+            ],
+            "PropertyType": "App::PropertyPlacement",
+            "Rotation": [
+              0.0,
+              0.25881904510252074,
+              0.0,
+              0.9659258262890683
             ]
           }
         },
@@ -72,8 +100,9 @@
     ],
     "solver_joints": [
       {
-        "joint_type": "Fixed",
-        "object": "FixedJoint",
+        "distance": 2.0,
+        "joint_type": "Distance",
+        "object": "DistanceJoint",
         "reference1": {
           "object": "ComponentA",
           "subnames": []
@@ -93,5 +122,5 @@
     "faces": 12,
     "vertices": 16
   },
-  "volume": 15.999999999999993
+  "volume": 15.999999999999995
 }

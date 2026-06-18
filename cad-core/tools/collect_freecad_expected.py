@@ -269,6 +269,20 @@ def link_sub_value(created: dict[str, Any], value: dict) -> Any:
     return target
 
 
+def assembly_joint_reference_value(created: dict[str, Any], value: dict) -> Any:
+    target_name = value["value"]
+    if target_name not in created:
+        raise UnsupportedFixture(f"assembly joint reference target {target_name} was not created")
+    target = created[target_name]
+    sub_list = list_field(value, "StableSubList", "SubList")
+    if sub_list:
+        return target, [native_link_subname(target, subname) for subname in sub_list]
+    # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/UtilsAssembly.py
+    # ::getObject(), returns None when "len(subs) < 1"; an empty string sub-token is the
+    # native representation of an object-level Assembly Joint reference.
+    return target, [""]
+
+
 def native_link_subname(target: Any, subname: str) -> str:
     if "." not in subname:
         return subname
@@ -512,6 +526,9 @@ def safe_setattr(obj: Any, name: str, value: Any) -> None:
 def set_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, value: Any) -> None:
     if isinstance(value, dict):
         property_type = value.get("PropertyType")
+        if value.get("__assembly_joint_reference"):
+            safe_setattr(obj, name, assembly_joint_reference_value(created, value))
+            return
         if property_type == "App::PropertyPlacement":
             set_placement(FreeCAD, obj, value)
             return
@@ -866,6 +883,17 @@ def create_assembly_objects(FreeCAD: Any, doc: Any, fixture: dict) -> dict[str, 
     for spec in fixture.get("Objects", []):
         obj = created[spec["Name"]]
         for prop_name, prop_value in spec.get("Properties", {}).items():
+            if spec["TypeId"] == "Assembly::JointGroup" and prop_name == "Group":
+                # Parent-created Joint objects are already owned by JointGroup. Reassigning the
+                # same child list through the raw Group property produces native out-of-scope
+                # warnings in FreeCADCmd and is not needed for the oracle document shape.
+                continue
+            if spec["TypeId"] == "App::FeaturePython" and prop_name in {"Reference1", "Reference2"}:
+                set_property(FreeCAD, created, obj, prop_name, {
+                    **prop_value,
+                    "__assembly_joint_reference": True,
+                })
+                continue
             if spec["TypeId"] == "Sketcher::SketchObject":
                 set_sketch_property(FreeCAD, created, obj, prop_name, prop_value)
             else:
@@ -1185,7 +1213,184 @@ def assembly_joint_group_payload(obj: Any) -> dict:
     }
 
 
-def assembly_object_payload(obj: Any) -> dict:
+def placement_payload(placement: Any) -> dict:
+    base = placement.Base
+    rotation = placement.Rotation
+    q = list(rotation.Q)
+    return {
+        "PropertyType": "App::PropertyPlacement",
+        "Base": [float(base.x), float(base.y), float(base.z)],
+        "Rotation": [float(q[0]), float(q[1]), float(q[2]), float(q[3])],
+    }
+
+
+def same_placement_payload(left: dict, right: dict, tolerance: float = 1e-9) -> bool:
+    for field in ("Base", "Rotation"):
+        for left_value, right_value in zip(left[field], right[field]):
+            if abs(float(left_value) - float(right_value)) > tolerance:
+                return False
+    return True
+
+
+def fixture_placement_payload(spec: dict) -> dict:
+    placement = spec.get("Properties", {}).get("Placement")
+    if isinstance(placement, dict) and placement.get("PropertyType") == "App::PropertyPlacement":
+        return {
+            "PropertyType": "App::PropertyPlacement",
+            "Base": [float(value) for value in placement.get("Base", [0, 0, 0])],
+            "Rotation": [float(value) for value in placement.get("Rotation", [0, 0, 0, 1])],
+        }
+    return {
+        "PropertyType": "App::PropertyPlacement",
+        "Base": [0.0, 0.0, 0.0],
+        "Rotation": [0.0, 0.0, 0.0, 1.0],
+    }
+
+
+def assembly_link_specs_for_object(fixture: dict, assembly_name: str) -> list[dict]:
+    specs = {spec.get("Name"): spec for spec in fixture.get("Objects", []) if isinstance(spec, dict)}
+    assembly_spec = specs.get(assembly_name)
+    if not isinstance(assembly_spec, dict):
+        return []
+    group = assembly_spec.get("Properties", {}).get("Group")
+    if not isinstance(group, dict):
+        return []
+    result = []
+    for child_name in list_field(group, "values", "value"):
+        child_spec = specs.get(child_name)
+        if isinstance(child_spec, dict) and child_spec.get("TypeId") == "Assembly::AssemblyLink":
+            result.append(child_spec)
+    return result
+
+
+def joint_payloads_from_fixture(fixture: dict, assembly_name: str) -> tuple[list[str], list[str], list[dict]]:
+    specs = {spec.get("Name"): spec for spec in fixture.get("Objects", []) if isinstance(spec, dict)}
+    assembly_spec = specs.get(assembly_name)
+    if not isinstance(assembly_spec, dict):
+        return [], [], []
+    group = assembly_spec.get("Properties", {}).get("Group")
+    joint_group_names = []
+    if isinstance(group, dict):
+        for child_name in list_field(group, "values", "value"):
+            child_spec = specs.get(child_name)
+            if isinstance(child_spec, dict) and child_spec.get("TypeId") == "Assembly::JointGroup":
+                joint_group_names.append(str(child_name))
+
+    grounded_joints: list[str] = []
+    joints: list[str] = []
+    solver_joints: list[dict] = []
+    for joint_group_name in joint_group_names:
+        joint_group_spec = specs.get(joint_group_name)
+        joint_group = joint_group_spec.get("Properties", {}).get("Group") if isinstance(joint_group_spec, dict) else None
+        if not isinstance(joint_group, dict):
+            continue
+        for joint_name in list_field(joint_group, "values", "value"):
+            joint_spec = specs.get(joint_name)
+            if not isinstance(joint_spec, dict) or joint_spec.get("TypeId") != "App::FeaturePython":
+                continue
+            properties = joint_spec.get("Properties", {})
+            if "ObjectToGround" in properties:
+                grounded_joints.append(str(joint_name))
+                continue
+            joint_type = scalar_property_value(properties.get("JointType"))
+            if joint_type is None:
+                continue
+            joints.append(str(joint_name))
+            solver_joint = {
+                "object": str(joint_name),
+                "joint_type": str(joint_type),
+                "reference1": link_sub_payload_from_fixture(properties.get("Reference1")),
+                "reference2": link_sub_payload_from_fixture(properties.get("Reference2")),
+                "suppressed": bool(scalar_property_value(properties.get("Suppressed", False))),
+            }
+            if joint_type in {"Distance", "Slider"}:
+                solver_joint["distance"] = float(scalar_property_value(properties.get("Distance", 0.0)) or 0.0)
+            if joint_type == "Angle":
+                solver_joint["angle"] = float(scalar_property_value(properties.get("Angle", 0.0)) or 0.0)
+            solver_joints.append(solver_joint)
+    return grounded_joints, joints, solver_joints
+
+
+def link_sub_payload_from_fixture(value: Any) -> dict:
+    if not isinstance(value, dict):
+        return {"object": "", "subnames": []}
+    return {
+        "object": str(value.get("value", "")),
+        "subnames": [str(item) for item in list_field(value, "SubList", "StableSubList")],
+    }
+
+
+def native_assembly_solver_payload(obj: Any, fixture: dict, created: dict[str, Any]) -> dict:
+    # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    # ::AssemblyObject::solve(), calls "fixGroundedParts()", returns "-6" when no grounded
+    # part exists, then runs "mbdAssembly->runPreDrag()" and "setNewPlacements()". CAD Core
+    # expected fixtures use this native writeback as the Assembly placement oracle.
+    grounded_joints, joints, solver_joints = joint_payloads_from_fixture(fixture, str(obj.Name))
+    solve_code = int(obj.solve(False))
+    if solve_code == -6:
+        return {
+            "status": "error",
+            "reason": "no_grounded_part",
+            "grounded_joints": grounded_joints,
+            "joints": joints,
+            "solver_joints": solver_joints,
+            "unsupported_joints": [],
+            "placement_updates": [],
+            "native_solver_return": solve_code,
+        }
+    if solve_code != 0:
+        return {
+            "status": "error",
+            "reason": "native_solver_failed",
+            "grounded_joints": grounded_joints,
+            "joints": joints,
+            "solver_joints": solver_joints,
+            "unsupported_joints": [],
+            "placement_updates": [],
+            "native_solver_return": solve_code,
+        }
+
+    placement_updates = []
+    for component_spec in assembly_link_specs_for_object(fixture, str(obj.Name)):
+        component_name = str(component_spec["Name"])
+        component = created.get(component_name)
+        if component is None:
+            continue
+        old_placement = fixture_placement_payload(component_spec)
+        new_placement = placement_payload(component.Placement)
+        if same_placement_payload(old_placement, new_placement):
+            continue
+        placement_updates.append({
+            "action": "assembly_set_placement",
+            "assembly": str(obj.Name),
+            "joint": "OndselSolver",
+            "joint_type": "solver_result",
+            "object": component_name,
+            "objectId": int(component_spec.get("ID", 0)),
+            "typeId": str(component_spec.get("TypeId", "")),
+            "reason": "assembly_solver_placement_writeback",
+            "properties": {
+                "Placement": new_placement,
+            },
+        })
+
+    if not joints:
+        mode = "grounded_only_noop"
+    else:
+        mode = "real_ondsel_solver"
+    return {
+        "status": "solved",
+        "mode": mode,
+        "grounded_joints": grounded_joints,
+        "joints": joints,
+        "solver_joints": solver_joints,
+        "unsupported_joints": [],
+        "placement_updates": placement_updates,
+        "native_solver_return": solve_code,
+    }
+
+
+def assembly_object_payload(obj: Any, fixture: dict | None = None, created: dict[str, Any] | None = None) -> dict:
     group = list(getattr(obj, "Group", []))
     joint_groups = [child for child in group if getattr(child, "TypeId", "") == "Assembly::JointGroup"]
     joints = []
@@ -1203,6 +1408,15 @@ def assembly_object_payload(obj: Any) -> dict:
             "solve": "not_migrated",
         }
     }
+    if fixture is not None and created is not None:
+        solver_adapter = native_assembly_solver_payload(obj, fixture, created)
+        native_solver_return = solver_adapter.pop("native_solver_return")
+        payload["native_solver"] = {"return_code": native_solver_return}
+        payload["solver_adapter"] = solver_adapter
+        if solver_adapter["status"] == "solved":
+            payload["object_fields"]["solve"] = "solved_noop" if solver_adapter.get("mode") == "grounded_only_noop" else "solved"
+        elif solver_adapter.get("reason") == "no_grounded_part":
+            payload["object_fields"]["solve"] = "error"
     display_shape = assembly_object_display_shape(obj, set())
     if display_shape is not None:
         payload.update(shape_summary(display_shape))
@@ -1224,12 +1438,12 @@ def assembly_link_payload(obj: Any) -> dict:
     return payload
 
 
-def object_expected_payload(obj: Any) -> dict:
+def object_expected_payload(obj: Any, fixture: dict | None = None, created: dict[str, Any] | None = None) -> dict:
     type_id = getattr(obj, "TypeId", "")
     if type_id == "Assembly::AssemblyLink":
         return assembly_link_payload(obj)
     if type_id == "Assembly::AssemblyObject":
-        return assembly_object_payload(obj)
+        return assembly_object_payload(obj, fixture, created)
     if type_id == "Assembly::JointGroup":
         return assembly_joint_group_payload(obj)
     if type_id == "App::FeaturePython":
@@ -1544,7 +1758,7 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
             obj = created.get(name)
             if obj is None:
                 raise UnsupportedFixture(f"target object {name} was not created")
-            object_payloads[name] = object_expected_payload(obj)
+            object_payloads[name] = object_expected_payload(obj, fixture, created)
 
         reference_types = ", ".join(spec["TypeId"] for spec in fixture.get("Objects", []))
         payload: dict[str, Any] = {
@@ -1558,6 +1772,12 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
             payload.update(summary)
         else:
             payload["objects"] = object_payloads
+        diagnostic_codes = []
+        for summary in object_payloads.values():
+            if summary.get("native_solver", {}).get("return_code") == -6:
+                diagnostic_codes.append("missing_grounded_part")
+        if diagnostic_codes:
+            payload["diagnostic_codes"] = sorted(set(diagnostic_codes))
         return payload
     finally:
         FreeCAD.closeDocument(doc.Name)
@@ -1605,6 +1825,10 @@ def compare_object_expected(existing: dict, generated: dict) -> list[str]:
         for key, expected_value in existing["sketch_external"].items():
             if generated_external.get(key) != expected_value:
                 errors.append(f"sketch_external.{key}")
+    if "solver_adapter" in existing and existing["solver_adapter"] != generated.get("solver_adapter"):
+        errors.append("solver_adapter")
+    if "native_solver" in existing and existing["native_solver"] != generated.get("native_solver"):
+        errors.append("native_solver")
     return errors
 
 

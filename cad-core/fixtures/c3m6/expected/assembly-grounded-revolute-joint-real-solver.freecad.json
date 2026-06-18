@@ -28,18 +28,18 @@
     ],
     "joints": [
       "GroundedJoint",
-      "FixedJoint"
+      "RevoluteJoint"
     ],
     "solve": "solved"
   },
-  "reference": "FreeCADCmd oracle from assembly-joint-group-diagnostics.json; objects: Part::Box, Part::Box, Assembly::AssemblyLink, Assembly::AssemblyLink, App::FeaturePython, App::FeaturePython, Assembly::JointGroup, Assembly::AssemblyObject",
+  "reference": "FreeCADCmd oracle from assembly-grounded-revolute-joint-real-solver.json; objects: Part::Box, Part::Box, Assembly::AssemblyLink, Assembly::AssemblyLink, App::FeaturePython, App::FeaturePython, Assembly::JointGroup, Assembly::AssemblyObject",
   "schema_version": "cad-core.freecad-expected.v1",
   "solver_adapter": {
     "grounded_joints": [
       "GroundedJoint"
     ],
     "joints": [
-      "FixedJoint"
+      "RevoluteJoint"
     ],
     "mode": "real_ondsel_solver",
     "placement_updates": [
@@ -72,8 +72,8 @@
     ],
     "solver_joints": [
       {
-        "joint_type": "Fixed",
-        "object": "FixedJoint",
+        "joint_type": "Revolute",
+        "object": "RevoluteJoint",
         "reference1": {
           "object": "ComponentA",
           "subnames": []

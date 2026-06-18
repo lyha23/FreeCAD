@@ -4,6 +4,10 @@
 
 建立 Assembly solver、Joint input、placement writeback、JointType mapping 和 cad-core adapter 的 source authority。S1 只补候选，不裁决 supported / backendGap。
 
+## 后续修正
+
+2026-06-18 后续实现已删除 representative fallback 和 optional unlinked build 路径；下文候选搜索语句中的旧 token 只保留为历史定位信息，不代表当前运行路径。native solver placement expected 已在 S6 之后入库，并已在 S7 修复到 supported；当前状态以 S7、矩阵、C++ 和 C ABI capabilities 的 real-only 口径为准。
+
 ## 本轮 live 基线
 
 | 项 | 结果 |

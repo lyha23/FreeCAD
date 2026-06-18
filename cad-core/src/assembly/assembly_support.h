@@ -1,5 +1,6 @@
 #pragma once
 
+#include "cad_core/assembly/joint_solver.h"
 #include "cad_core/app/document.h"
 #include "cad_core/part/topo_shape.h"
 #include "cad_core/runtime/compute_context.h"
@@ -16,6 +17,7 @@ namespace cad_core::assembly::assembly_detail {
 struct SolverSummary {
     std::string solve;
     nlohmann::json adapter;
+    std::vector<AssemblyPlacementUpdate> placementUpdates;
 };
 
 const app::DocumentObject* documentObjectByName(const runtime::ComputeContext& context,

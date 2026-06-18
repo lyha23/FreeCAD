@@ -1,6 +1,5 @@
 #include "cad_core/adapters/c_api.h"
 
-#include "cad_core/assembly/joint_solver.h"
 #include "cad_core/app/document.h"
 #include "cad_core/part/shape_exporter.h"
 #include "cad_core/runtime/diagnostics.h"
@@ -120,6 +119,7 @@ nlohmann::json diagnosticCodeList()
         "missing_object",
         "missing_property",
         "missing_target",
+        "missing_grounded_part",
         "mesh_limit_exceeded",
         "ondsel_solver_failed",
         "open_profile",
@@ -147,55 +147,34 @@ nlohmann::json diagnosticCodeList()
     });
 }
 
-nlohmann::json representativeSolverFallbackReasons(bool hasOndselSolver)
+nlohmann::json ondselSolverCapabilityJson()
 {
-    if (hasOndselSolver) {
-        return nlohmann::json::array({"no_grounded_part"});
-    }
-    return nlohmann::json::array({"no_grounded_part", "ondsel_solver_not_linked"});
-}
-
-nlohmann::json ondselSolverCapabilityJson(bool hasOndselSolver)
-{
-    if (hasOndselSolver) {
-        return {
-            {"status", "covered_full"},
-            {"mode", "request_local_runPreDrag"},
-            {"available", true},
-            {"build_mode", "CAD_CORE_HAS_ONDSEL_SOLVER=1"},
-            {"covered",
-             {"grounded_fixed_joint",
-              "grounded_ball_joint",
-              "grounded_revolute_joint",
-              "grounded_slider_joint",
-              "grounded_distance_joint",
-              "grounded_angle_joint",
-              "runPreDrag",
-              "grounded_placement_validation",
-              "invalid_grounded_placement_rejected"}},
-            {"remaining_gaps", nlohmann::json::array()},
-        };
-    }
     return {
-        {"status", "not_linked"},
-        {"mode", "representative_fallback_only"},
-        {"available", false},
-        {"build_mode", "CAD_CORE_HAS_ONDSEL_SOLVER=0"},
-        {"covered", nlohmann::json::array()},
-        {"fallback_reasons", nlohmann::json::array({"ondsel_solver_not_linked"})},
+        {"status", "covered_full"},
+        {"mode", "request_local_runPreDrag"},
+        {"available", true},
+        {"build_mode", "CAD_CORE_HAS_ONDSEL_SOLVER=1"},
+        {"covered",
+         {"grounded_fixed_joint",
+          "grounded_ball_joint",
+          "grounded_revolute_joint",
+          "grounded_slider_joint",
+          "grounded_distance_joint",
+          "grounded_angle_joint",
+          "runPreDrag",
+          "grounded_placement_validation",
+          "invalid_grounded_placement_rejected"}},
         {"remaining_gaps", nlohmann::json::array()},
     };
 }
 
-nlohmann::json placementWritebackCapabilityJson(bool hasOndselSolver)
+nlohmann::json placementWritebackCapabilityJson()
 {
     return {
         {"status", "covered_full"},
-        {"mode", hasOndselSolver ? "request_local_runPreDrag" : "representative_writeback_contract"},
-        {"build_mode", hasOndselSolver ? "CAD_CORE_HAS_ONDSEL_SOLVER=1" : "CAD_CORE_HAS_ONDSEL_SOLVER=0"},
-        {"solver_modes",
-         hasOndselSolver ? nlohmann::json::array({"representative_ondsel_solver", "real_ondsel_solver"})
-                         : nlohmann::json::array({"representative_ondsel_solver"})},
+        {"mode", "request_local_runPreDrag"},
+        {"build_mode", "CAD_CORE_HAS_ONDSEL_SOLVER=1"},
+        {"solver_modes", nlohmann::json::array({"real_ondsel_solver"})},
         {"updates", {"documentObjectUpdates.action=assembly_set_placement"}},
         {"covered",
          {"solver_placement_delta",
@@ -211,7 +190,6 @@ nlohmann::json placementWritebackCapabilityJson(bool hasOndselSolver)
 nlohmann::json capabilitiesJson()
 {
     const cad_core::runtime::FeatureRegistry registry = cad_core::runtime::buildDefaultRegistry();
-    const bool hasOndselSolver = cad_core::assembly::hasOndselSolverAdapter();
     const auto linkSubShapeFields = nlohmann::json::array(
         {"value",
          "SubList",
@@ -690,30 +668,10 @@ nlohmann::json capabilitiesJson()
              // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
              // ::AssemblyObject::solve(), uses "fixGroundedParts()" before
              // "mbdAssembly->runPreDrag()"; ::setNewPlacements() writes
-             // "propPlacement->setValue(newPlacement)" after solving. CAD Core publishes the
-             // representative fallback when OndselSolver is not linked and the real request-local
-             // adapter only when CAD_CORE_HAS_ONDSEL_SOLVER=1.
-             {"representative_solver_adapter",
-              {
-                  {"status", "covered_representative"},
-                  {"mode", "stateless_representative_fallback"},
-                  {"available", true},
-                  {"build_mode", hasOndselSolver ? "CAD_CORE_HAS_ONDSEL_SOLVER=1"
-                                                  : "CAD_CORE_HAS_ONDSEL_SOLVER=0"},
-                  {"covered",
-                   {"skipped_no_joints",
-                    "grounded_only_noop",
-                    "fixed_joint",
-                    "revolute_joint",
-                    "slider_joint",
-                    "ball_joint",
-                    "distance_joint",
-                    "angle_joint",
-                    "unsupported_joint_diagnostics"}},
-                  {"fallback_reasons", representativeSolverFallbackReasons(hasOndselSolver)},
-              }},
-             {"ondsel_solver_adapter", ondselSolverCapabilityJson(hasOndselSolver)},
-             {"placement_writeback", placementWritebackCapabilityJson(hasOndselSolver)},
+             // "propPlacement->setValue(newPlacement)" after solving. CAD Core requires
+             // OndselSolver at build time and publishes only the real request-local mode.
+             {"ondsel_solver_adapter", ondselSolverCapabilityJson()},
+             {"placement_writeback", placementWritebackCapabilityJson()},
              {"unsupported_joint_matrix",
               {"Cylindrical", "Parallel", "Perpendicular", "RackPinion", "Screw", "Gears", "Belt"}},
              {"remaining_gaps", nlohmann::json::array()},

@@ -14,6 +14,7 @@ struct AssemblyJointReference {
     std::string object;
     std::vector<std::string> subnames;
     std::optional<app::Placement> connectorPlacement;
+    std::optional<app::Placement> markerPlacement;
 };
 
 struct AssemblyPartRef {
@@ -27,8 +28,8 @@ struct AssemblyPartRef {
 // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/
 // AssemblyObject.cpp::AssemblyObject::makeMbdJoint(), calls "makeMbdJointOfType(joint,
 // jointType)" after resolving "Reference1"/"Reference2" and "Placement1"/"Placement2".
-// CAD Core落点: assembly DTO for the solver adapter boundary; executor builds this request,
-// adapter converts it to representative or real Ondsel/MBD input.
+// CAD Core落点: assembly DTO for the Ondsel solver adapter boundary; executor builds this
+// request and adapter converts it to Ondsel/MBD input.
 struct JointConstraint {
     std::string object;
     std::string jointType;
@@ -64,7 +65,6 @@ struct AssemblyPlacementUpdate {
 struct UnsupportedAssemblyJoint {
     std::string object;
     std::string jointType;
-    bool supportedRepresentativePath = false;
 };
 
 struct AssemblySolveResult {
@@ -90,22 +90,19 @@ AssemblySolveRequest buildAssemblySolveRequest(
 // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/
 // AssemblyObject.cpp::AssemblyObject::validateNewPlacements(), key "Ignoring bad solve, a
 // grounded object (...) moved." CAD Core落点: solver result validation diagnostic before
-// documentObjectUpdates emission. CAD Core applies this to both representative fallback results
-// and request-local Ondsel results before exposing placement writeback updates.
+// documentObjectUpdates emission. CAD Core applies this to the request-local Ondsel results
+// before exposing placement writeback updates.
 void validateNewPlacementsEquivalent(const AssemblySolveRequest& request, AssemblySolveResult& result);
-
-AssemblySolveResult solveAssemblyWithRepresentativeAdapter(const AssemblySolveRequest& request);
 
 // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/
 // AssemblyObject.cpp::AssemblyObject::solve(), key order "makeMbdAssembly()" ->
 // "fixGroundedParts()" -> "jointParts(joints)" -> "mbdAssembly->runPreDrag()" ->
 // "validateNewPlacements()" / "setNewPlacements()". CAD Core落点: request-local solver
-// adapter. When OndselSolver is linked it builds an ASMTAssembly from this DTO; otherwise it
-// returns the representative path without claiming full coverage.
+// adapter. It builds an ASMTAssembly from this DTO and requires OndselSolver at build time.
 AssemblySolveResult solveAssemblyWithOndselAdapter(const AssemblySolveRequest& request);
 
 bool hasOndselSolverAdapter();
 
-bool isSupportedRepresentativeJointType(const std::string& jointType);
+bool isSupportedOndselJointType(const std::string& jointType);
 
 }  // namespace cad_core::assembly

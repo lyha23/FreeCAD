@@ -79,18 +79,14 @@
           "value": "Fixed"
         },
         "Reference1": {
-          "PropertyType": "App::PropertyXLinkSubHidden",
+          "PropertyType": "App::PropertyXLinkSub",
           "value": "ComponentA",
-          "SubList": [
-            "Face1"
-          ]
+          "SubList": []
         },
         "Reference2": {
-          "PropertyType": "App::PropertyXLinkSubHidden",
+          "PropertyType": "App::PropertyXLinkSub",
           "value": "ComponentB",
-          "SubList": [
-            "Face1"
-          ]
+          "SubList": []
         }
       }
     },

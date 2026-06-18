@@ -4,6 +4,10 @@
 
 冻结本主线的声明边界，复核当前 P8 文档、C ABI capabilities、focused tests、fixtures 和 C++ 之间的 live 状态。S0 不写 C++，不采 oracle，不把 releaseGate 提升为 supported。
 
+## 后续修正
+
+2026-06-18 后续实现已删除 representative fallback 和 optional unlinked build 路径；下文关于 representative / build-mode 的记录只保留为当时 live 基线，不代表当前发布状态。native solver placement expected 已在 S6 之后入库，并已在 S7 修复到 supported；当前状态以 S7、矩阵、C++ 和 C ABI capabilities 的 real-only 口径为准。
+
 ## 本轮 live 基线
 
 | 项 | 结果 |

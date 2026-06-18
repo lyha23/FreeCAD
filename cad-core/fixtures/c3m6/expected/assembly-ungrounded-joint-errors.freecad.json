@@ -1,7 +1,7 @@
 {
   "bbox": {
     "max": [
-      2.0,
+      6.0,
       2.0,
       2.0
     ],
@@ -27,49 +27,19 @@
       "Joints"
     ],
     "joints": [
-      "GroundedJoint",
       "FixedJoint"
     ],
     "solve": "solved"
   },
-  "reference": "FreeCADCmd oracle from assembly-joint-group-diagnostics.json; objects: Part::Box, Part::Box, Assembly::AssemblyLink, Assembly::AssemblyLink, App::FeaturePython, App::FeaturePython, Assembly::JointGroup, Assembly::AssemblyObject",
+  "reference": "FreeCADCmd oracle from assembly-ungrounded-joint-errors.json; objects: Part::Box, Part::Box, Assembly::AssemblyLink, Assembly::AssemblyLink, App::FeaturePython, Assembly::JointGroup, Assembly::AssemblyObject",
   "schema_version": "cad-core.freecad-expected.v1",
   "solver_adapter": {
-    "grounded_joints": [
-      "GroundedJoint"
-    ],
+    "grounded_joints": [],
     "joints": [
       "FixedJoint"
     ],
     "mode": "real_ondsel_solver",
-    "placement_updates": [
-      {
-        "action": "assembly_set_placement",
-        "assembly": "Assembly",
-        "joint": "OndselSolver",
-        "joint_type": "solver_result",
-        "object": "ComponentB",
-        "objectId": 4,
-        "properties": {
-          "Placement": {
-            "Base": [
-              0.0,
-              0.0,
-              0.0
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              0.0,
-              1.0
-            ]
-          }
-        },
-        "reason": "assembly_solver_placement_writeback",
-        "typeId": "Assembly::AssemblyLink"
-      }
-    ],
+    "placement_updates": [],
     "solver_joints": [
       {
         "joint_type": "Fixed",
@@ -93,5 +63,5 @@
     "faces": 12,
     "vertices": 16
   },
-  "volume": 15.999999999999993
+  "volume": 15.999999999999996
 }

@@ -905,52 +905,31 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         ]:
             self.assertIn(code, capabilities["diagnostic_codes"])
 
-        ondsel_available = self.ondsel_solver_available()
-        self.assertEqual(capabilities["assembly"]["representative_solver_adapter"]["status"], "covered_representative")
-        self.assertEqual(
-            capabilities["assembly"]["representative_solver_adapter"]["mode"],
-            "stateless_representative_fallback",
+        self.assertTrue(self.ondsel_solver_available())
+        self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["status"], "covered_full")
+        self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["mode"], "request_local_runPreDrag")
+        self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["available"], True)
+        self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["build_mode"], "CAD_CORE_HAS_ONDSEL_SOLVER=1")
+        self.assertIn("grounded_fixed_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
+        self.assertIn("grounded_ball_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
+        self.assertIn("grounded_revolute_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
+        self.assertIn("grounded_slider_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
+        self.assertIn("grounded_distance_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
+        self.assertIn("grounded_angle_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
+        self.assertIn(
+            "invalid_grounded_placement_rejected",
+            capabilities["assembly"]["ondsel_solver_adapter"]["covered"],
         )
+        self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["remaining_gaps"], [])
         self.assertEqual(
-            capabilities["assembly"]["representative_solver_adapter"]["fallback_reasons"],
-            ["no_grounded_part"] if ondsel_available else ["no_grounded_part", "ondsel_solver_not_linked"],
+            capabilities["assembly"]["placement_writeback"]["solver_modes"],
+            ["real_ondsel_solver"],
         )
-        if ondsel_available:
-            self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["status"], "covered_full")
-            self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["mode"], "request_local_runPreDrag")
-            self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["available"], True)
-            self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["build_mode"], "CAD_CORE_HAS_ONDSEL_SOLVER=1")
-            self.assertIn("grounded_fixed_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
-            self.assertIn("grounded_ball_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
-            self.assertIn("grounded_revolute_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
-            self.assertIn("grounded_slider_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
-            self.assertIn("grounded_distance_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
-            self.assertIn("grounded_angle_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
-            self.assertIn(
-                "invalid_grounded_placement_rejected",
-                capabilities["assembly"]["ondsel_solver_adapter"]["covered"],
-            )
-            self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["remaining_gaps"], [])
-            self.assertEqual(
-                capabilities["assembly"]["placement_writeback"]["solver_modes"],
-                ["representative_ondsel_solver", "real_ondsel_solver"],
-            )
-        else:
-            self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["status"], "not_linked")
-            self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["mode"], "representative_fallback_only")
-            self.assertFalse(capabilities["assembly"]["ondsel_solver_adapter"]["available"])
-            self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["build_mode"], "CAD_CORE_HAS_ONDSEL_SOLVER=0")
-            self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["covered"], [])
-            self.assertEqual(
-                capabilities["assembly"]["placement_writeback"]["solver_modes"],
-                ["representative_ondsel_solver"],
-            )
-            self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["fallback_reasons"], ["ondsel_solver_not_linked"])
-            self.assertEqual(capabilities["assembly"]["ondsel_solver_adapter"]["remaining_gaps"], [])
+        self.assertNotIn("representative_solver_adapter", capabilities["assembly"])
         self.assertEqual(capabilities["assembly"]["placement_writeback"]["status"], "covered_full")
         self.assertEqual(
             capabilities["assembly"]["placement_writeback"]["build_mode"],
-            "CAD_CORE_HAS_ONDSEL_SOLVER=1" if ondsel_available else "CAD_CORE_HAS_ONDSEL_SOLVER=0",
+            "CAD_CORE_HAS_ONDSEL_SOLVER=1",
         )
         self.assertEqual(
             capabilities["assembly"]["placement_writeback"]["updates"],
@@ -958,7 +937,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(
             capabilities["assembly"]["placement_writeback"]["mode"],
-            "request_local_runPreDrag" if ondsel_available else "representative_writeback_contract",
+            "request_local_runPreDrag",
         )
         self.assertIn(
             "request_graph_apply_next_recompute_noop",

@@ -1,9 +1,9 @@
 {
   "bbox": {
     "max": [
+      6.0,
       2.0,
-      2.0,
-      2.0
+      4.0
     ],
     "min": [
       0.0,
@@ -28,18 +28,18 @@
     ],
     "joints": [
       "GroundedJoint",
-      "FixedJoint"
+      "DistanceJoint"
     ],
     "solve": "solved"
   },
-  "reference": "FreeCADCmd oracle from assembly-joint-group-diagnostics.json; objects: Part::Box, Part::Box, Assembly::AssemblyLink, Assembly::AssemblyLink, App::FeaturePython, App::FeaturePython, Assembly::JointGroup, Assembly::AssemblyObject",
+  "reference": "FreeCADCmd oracle from assembly-grounded-distance-joint-real-solver.json; objects: Part::Box, Part::Box, Assembly::AssemblyLink, Assembly::AssemblyLink, App::FeaturePython, App::FeaturePython, Assembly::JointGroup, Assembly::AssemblyObject",
   "schema_version": "cad-core.freecad-expected.v1",
   "solver_adapter": {
     "grounded_joints": [
       "GroundedJoint"
     ],
     "joints": [
-      "FixedJoint"
+      "DistanceJoint"
     ],
     "mode": "real_ondsel_solver",
     "placement_updates": [
@@ -53,9 +53,9 @@
         "properties": {
           "Placement": {
             "Base": [
+              4.0,
               0.0,
-              0.0,
-              0.0
+              2.0
             ],
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [
@@ -72,8 +72,9 @@
     ],
     "solver_joints": [
       {
-        "joint_type": "Fixed",
-        "object": "FixedJoint",
+        "distance": 2.0,
+        "joint_type": "Distance",
+        "object": "DistanceJoint",
         "reference1": {
           "object": "ComponentA",
           "subnames": []
@@ -93,5 +94,5 @@
     "faces": 12,
     "vertices": 16
   },
-  "volume": 15.999999999999993
+  "volume": 15.999999999999998
 }
