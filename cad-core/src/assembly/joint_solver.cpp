@@ -14,6 +14,7 @@
 #include <OndselSolver/ASMTFixedJoint.h>
 #include <OndselSolver/ASMTMarker.h>
 #include <OndselSolver/ASMTParallelAxesJoint.h>
+#include <OndselSolver/ASMTPerpendicularJoint.h>
 #include <OndselSolver/ASMTPart.h>
 #include <OndselSolver/ASMTPrincipalMassMarker.h>
 #include <OndselSolver/ASMTRevoluteJoint.h>
@@ -270,6 +271,15 @@ std::shared_ptr<MbD::ASMTJoint> makeOndselJointOfType(const JointConstraint& joi
         auto distanceJoint = MbD::ASMTSphSphJoint::With();
         distanceJoint->distanceIJ = joint.distance.value_or(0.0);
         return distanceJoint;
+    }
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    // ::AssemblyObject::makeMbdJointOfType(), direct case JointType::Parallel returns
+    // ASMTParallelAxesJoint and JointType::Perpendicular returns ASMTPerpendicularJoint.
+    if (joint.jointType == "Parallel") {
+        return MbD::ASMTParallelAxesJoint::With();
+    }
+    if (joint.jointType == "Perpendicular") {
+        return MbD::ASMTPerpendicularJoint::With();
     }
     if (joint.jointType == "Angle") {
         constexpr double degreesToRadians = 3.14159265358979323846 / 180.0;
@@ -611,8 +621,8 @@ bool isSupportedOndselJointType(const std::string& jointType)
 {
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/
     // AssemblyObject.cpp::AssemblyObject::makeMbdJointOfType(), maps "Fixed", "Revolute",
-    // "Cylindrical", "Slider", "Ball", "Distance" and "Angle" to ASMT joint classes in
-    // the current Ondsel adapter subset.
+    // "Cylindrical", "Slider", "Ball", "Distance", direct "Parallel" / "Perpendicular"
+    // and "Angle" to ASMT joint classes in the current Ondsel adapter subset.
     static const std::set<std::string> supported = {
         "Fixed",
         "Revolute",
@@ -620,6 +630,8 @@ bool isSupportedOndselJointType(const std::string& jointType)
         "Slider",
         "Ball",
         "Distance",
+        "Parallel",
+        "Perpendicular",
         "Angle",
     };
     return supported.count(jointType) != 0U;

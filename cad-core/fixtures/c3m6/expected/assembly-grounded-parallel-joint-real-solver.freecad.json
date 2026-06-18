@@ -1,0 +1,70 @@
+{
+  "bbox": {
+    "max": [
+      6.0,
+      2.0,
+      2.0
+    ],
+    "min": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "freecad_version": "1.2.0 revision 20260519",
+  "native_solver": {
+    "return_code": 0
+  },
+  "object": "Assembly",
+  "object_fields": {
+    "assembly": "object",
+    "group": [
+      "ComponentA",
+      "ComponentB",
+      "Joints"
+    ],
+    "joint_groups": [
+      "Joints"
+    ],
+    "joints": [
+      "GroundedJoint",
+      "ParallelJoint"
+    ],
+    "solve": "solved"
+  },
+  "reference": "FreeCADCmd oracle from assembly-grounded-parallel-joint-real-solver.json; objects: Part::Box, Part::Box, Assembly::AssemblyLink, Assembly::AssemblyLink, App::FeaturePython, App::FeaturePython, Assembly::JointGroup, Assembly::AssemblyObject",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "solver_adapter": {
+    "grounded_joints": [
+      "GroundedJoint"
+    ],
+    "joints": [
+      "ParallelJoint"
+    ],
+    "mode": "real_ondsel_solver",
+    "placement_updates": [],
+    "solver_joints": [
+      {
+        "joint_type": "Parallel",
+        "object": "ParallelJoint",
+        "reference1": {
+          "object": "ComponentA",
+          "subnames": []
+        },
+        "reference2": {
+          "object": "ComponentB",
+          "subnames": []
+        },
+        "suppressed": false
+      }
+    ],
+    "status": "solved",
+    "unsupported_joints": []
+  },
+  "topology_counts": {
+    "edges": 24,
+    "faces": 12,
+    "vertices": 16
+  },
+  "volume": 15.999999999999996
+}

@@ -1,0 +1,7 @@
+category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
+PPJ-BG-001	parallel_jointtype_supported	P1	PPJ-SCOPE-002	no	Direct FreeCAD Parallel mapping, cad-core real Ondsel adapter, native expected, focused test and C ABI capability publication are closed for the request-local grounded subset
+PPJ-BG-002	perpendicular_jointtype_supported	P1	PPJ-SCOPE-003	no	Direct FreeCAD Perpendicular mapping, cad-core real Ondsel adapter, native expected, focused test and C ABI capability publication are closed for the request-local grounded subset
+PPJ-BG-003	native_expected_supported	P1	PPJ-SCOPE-004	no	Parallel and Perpendicular c3m6 FreeCADCmd expected are checked in and S4 collector --check evidence remains the native oracle baseline
+PPJ-BG-004	capability_docs_releaseGate_closed	P1	PPJ-SCOPE-005	no	S5 aligned C ABI capabilities, adapter assertions and P8 AssemblySolver docs/matrix publication; Parallel and Perpendicular are no longer unsupported_remaining
+PPJ-BG-005	remaining_complex_jointtypes_unsupported	P2	PPJ-SCOPE-006	yes	Keep RackPinion, Screw, Gears and Belt unsupported until a separate source+DTO+oracle+tests package exists
+PPJ-BG-006	gui_session_nonGoal	P3	PPJ-SCOPE-007	yes	Keep GUI drag, postDrag, persistent solver session and cross-request backend state out of stateless cad-core

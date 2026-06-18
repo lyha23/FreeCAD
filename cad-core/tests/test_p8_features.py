@@ -1451,6 +1451,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(assembly["solver_adapter"]["unsupported_joints"], [])
         if expected_update_base is None:
             self.assertEqual(updates, [])
+            self.assert_object_matches_expected(result, "c3m6", fixture)
             return
         self.assertEqual(len(updates), 1)
         self.assertEqual(updates[0]["action"], "assembly_set_placement")
@@ -1458,6 +1459,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(updates[0]["joint_type"], "solver_result")
         self.assertEqual(updates[0]["object"], "ComponentB")
         self.assertEqual(updates[0]["properties"]["Placement"]["Base"], expected_update_base)
+        self.assert_object_matches_expected(result, "c3m6", fixture)
 
     def test_c3m6_assembly_grounded_ball_joint_uses_real_ondsel_solver(self) -> None:
         self.assert_c3m6_grounded_joint_uses_real_ondsel_solver(
@@ -1496,6 +1498,20 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "Distance",
                 [4.0, 0.0, 2.0],
                 ("distance", 2.0),
+            ),
+            (
+                "assembly-grounded-parallel-joint-real-solver",
+                "ParallelJoint",
+                "Parallel",
+                None,
+                None,
+            ),
+            (
+                "assembly-grounded-perpendicular-joint-real-solver",
+                "PerpendicularJoint",
+                "Perpendicular",
+                None,
+                None,
             ),
             (
                 "assembly-grounded-angle-joint-real-solver",
