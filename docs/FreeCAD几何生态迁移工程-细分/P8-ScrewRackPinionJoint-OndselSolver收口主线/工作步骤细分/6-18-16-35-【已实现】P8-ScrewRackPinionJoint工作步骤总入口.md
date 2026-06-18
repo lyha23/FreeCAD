@@ -4,7 +4,7 @@
 
 把 `Screw` / `RackPinion` 两个 remaining special JointType 从 unsupported 队列推进到 real Ondsel request-local supported 子集，并保持 complex Distance geometry、GUI/session lifecycle 不被误发布。
 
-当前收口状态：工作步骤索引已完成校验；S0 已完成 live 基线复核；S1 已完成 FreeCAD / cad-core source candidates 复核；S2 已完成范围准入与 blocker 队列路由；S3 已完成 request-local `slidingPartIndex()` / DTO-level `swapJCS()`；S4 已完成 RackPinion `ASMTRackPinionJoint(pitchRadius=Distance)` conversion 与 marker rewrite focused evidence；S5 已完成 Screw `ASMTScrewJoint(pitch=Distance)`、Screw / RackPinion native expected、focused tests 与 C ABI capability publication。S6 仍为后续边界收口步骤，主要复核 complex Distance / GUI session / full transaction 未被误发布。
+当前收口状态：工作步骤索引已完成校验；S0 已完成 live 基线复核；S1 已完成 FreeCAD / cad-core source candidates 复核；S2 已完成范围准入与 blocker 队列路由；S3 已完成 request-local `slidingPartIndex()` / DTO-level `swapJCS()`；S4 已完成 RackPinion `ASMTRackPinionJoint(pitchRadius=Distance)` conversion 与 marker rewrite focused evidence；S5 已完成 Screw `ASMTScrewJoint(pitch=Distance)`、Screw / RackPinion native expected、focused tests 与 C ABI capability publication。S6 已完成发布闸门复核，确认 complex Distance / GUI session / full transaction 未被误发布。
 
 索引关闭口径：本文件只表示工作步骤索引、矩阵文件名和轻量验收命令已经复核；S0-S6 仍由各自文件推进，不能因为本文件改名为 `【已实现】` 而跳过后续队列。
 
@@ -18,7 +18,7 @@
 | S3 | `6-18-16-39-【已实现】P8-ScrewRackPinionJoint-S3-SlidingAxis与swapJCS专项复审.md` | 已实现 | 已收口 `slidingPartIndex()` / `swapJCS()` 共享前置，未发布 Screw / RackPinion capability |
 | S4 | `6-18-16-40-【已实现】P8-ScrewRackPinionJoint-S4-RackPinionMarker重写专项复审.md` | 已实现 | 已收口 RackPinion `pitchRadius=Distance` conversion 与 rack / pinion marker rewrite focused evidence |
 | S5 | `6-18-16-41-【已实现】P8-ScrewRackPinionJoint-S5-NativeOracle与Capability专项复审.md` | 已实现 | 已同步 fixtures、FreeCADCmd expected、focused tests 和 capabilities |
-| S6 | `6-18-16-42-P8-ScrewRackPinionJoint-S6-Oracle实现与发布闸门.md` | 待执行 | 消费 blockers 并给出代码落点和验收命令 |
+| S6 | `6-18-16-42-【已实现】P8-ScrewRackPinionJoint-S6-Oracle实现与发布闸门.md` | 已实现 | 已消费 blockers 并确认发布边界 |
 
 ## 执行顺序
 
@@ -28,7 +28,7 @@
 4. S3 已落地 `slidingPartIndex()` / `swapJCS()` 的 request-local 等价语义，并保持 Screw / RackPinion diagnostic-only。
 5. S4 已落地 RackPinion marker side detection、rack marker 旋转重写、`pitch_radius` JSON 证据和 RackPinion-only focused runtime fixture；C ABI publication 仍不改。
 6. S5 已增加 Screw / RackPinion FreeCADCmd expected、capability 断言和发布矩阵同步。
-7. 执行 S6 时只复核剩余边界：`SRJ-SCOPE-007` complex Distance 保持 `notCollected`，`SRJ-SCOPE-008` GUI/session/full transaction 保持 `nonGoal`。
+7. S6 已复核剩余边界：`SRJ-SCOPE-007` complex Distance 保持 `notCollected`，`SRJ-SCOPE-008` GUI/session/full transaction 保持 `nonGoal`。
 
 ## 当前矩阵闸门
 

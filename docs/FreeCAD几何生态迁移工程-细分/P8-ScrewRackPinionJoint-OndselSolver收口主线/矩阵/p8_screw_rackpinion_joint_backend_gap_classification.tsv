@@ -4,5 +4,5 @@ SRJ-BG-002	screw_jointtype_supported	closed	SRJ-SCOPE-003	no	Closed in S5: ASMTS
 SRJ-BG-003	rackpinion_jointtype_supported	closed	SRJ-SCOPE-004	no	Closed in S5: S4 RackPinion pitchRadius/marker rewrite now has grounded native expected, focused parity and C ABI publication
 SRJ-BG-004	native_expected_collection_gate_closed	closed	SRJ-SCOPE-005	no	Closed in S5: c3m6 Screw and RackPinion FreeCADCmd expected files are checked in and verified with --check
 SRJ-BG-005	capability_publication_release_gate_closed	closed	SRJ-SCOPE-006	no	Closed in S5: supported_joint_matrix includes RackPinion/Screw, unsupported_joint_matrix is empty, tests and upstream matrix references are aligned
-SRJ-BG-006	complex_distance_not_collected	P2	SRJ-SCOPE-007	yes	Keep DistanceType geometry matrix notCollected outside this scalar Screw/RackPinion package
-SRJ-BG-007	persistent_assembly_non_goal	P3	SRJ-SCOPE-008	yes	Keep GUI drag, postDrag, Reverse UI and cross-request solver state out of cad-core
+SRJ-BG-006	complex_distance_not_collected	P2	SRJ-SCOPE-007	yes	S6 confirmed: keep DistanceType geometry matrix notCollected outside this scalar Screw/RackPinion package
+SRJ-BG-007	persistent_assembly_non_goal	P3	SRJ-SCOPE-008	yes	S6 confirmed: keep GUI drag, postDrag, Reverse UI and cross-request solver state out of cad-core
