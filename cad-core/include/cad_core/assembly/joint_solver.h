@@ -15,6 +15,9 @@ struct AssemblyJointReference {
     std::vector<std::string> subnames;
     std::optional<app::Placement> connectorPlacement;
     std::optional<app::Placement> markerPlacement;
+    std::optional<app::Placement> objectGlobalPlacement;
+    std::optional<app::Placement> partGlobalPlacement;
+    std::optional<app::Placement> jcsGlobalPlacement;
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
     // ::AssemblyObject::handleOneSideOfJoint(), "plc which is the JCS placement" is first
     // converted through "getGlobalPlacement(nullptr, ref)" and then through

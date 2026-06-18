@@ -715,8 +715,13 @@ void resolveDistanceJointMapping(JointConstraint& joint)
         return;
     }
     if (*joint.distanceType == "PointLine") {
-        joint.solverJointClass = "ASMTCylSphJoint";
-        joint.distanceIJ = distance;
+        // FreeCAD oracle evidence: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/
+        // AssemblyObject.cpp::makeMbdJointDistance() maps PointLine to ASMTCylSphJoint in source,
+        // but FreeCADCmd 1.2.0 revision 20260519 exports the collected PointLine ASMT as
+        // "tInPlaneJointE" with "offset"; this is the native placement parity path for the
+        // request-local AssemblyLink PointLine subset.
+        joint.solverJointClass = "ASMTLineInPlaneJoint";
+        joint.offset = distance;
         return;
     }
     if (*joint.distanceType == "PlanePlane") {
@@ -826,6 +831,9 @@ void resolveJointMarkerPlacement(AssemblyJointReference& reference,
                                  bool connectorDefaulted)
 {
     reference.markerPlacement.reset();
+    reference.objectGlobalPlacement.reset();
+    reference.partGlobalPlacement.reset();
+    reference.jcsGlobalPlacement.reset();
     reference.markerResolutionConnectorDefaulted = connectorDefaulted;
 
     if (reference.object.empty()) {
@@ -851,6 +859,10 @@ void resolveJointMarkerPlacement(AssemblyJointReference& reference,
             "Object-level reference uses PlacementN as request-local marker placement baseline";
         reference.markerResolutionUsedObjectLevelBaseline = true;
         reference.markerPlacement = reference.connectorPlacement.value_or(identityPlacement());
+        reference.objectGlobalPlacement = placementForObject(*documentObjectByName(context, reference.object));
+        reference.partGlobalPlacement = *reference.objectGlobalPlacement;
+        reference.jcsGlobalPlacement =
+            composePlacement(*reference.objectGlobalPlacement, reference.connectorPlacement.value_or(identityPlacement()));
         return;
     }
 
@@ -884,6 +896,9 @@ void resolveJointMarkerPlacement(AssemblyJointReference& reference,
     const app::Placement partGlobalPlacement = *subshapePlacement;
     const app::Placement jcsGlobal =
         composePlacement(objectGlobalPlacement, reference.connectorPlacement.value_or(identityPlacement()));
+    reference.objectGlobalPlacement = objectGlobalPlacement;
+    reference.partGlobalPlacement = partGlobalPlacement;
+    reference.jcsGlobalPlacement = jcsGlobal;
     reference.markerPlacement = composePlacement(inversePlacement(partGlobalPlacement), jcsGlobal);
     reference.markerResolutionStatus = "resolved_subshape_handle_one_side";
     reference.markerResolutionFrame = "part_local_subshape_handle_one_side";

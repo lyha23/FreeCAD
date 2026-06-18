@@ -1502,8 +1502,11 @@ def resolve_fixture_distance_mapping(solver_joint: dict) -> None:
         solver_joint["solver_joint_class"] = "ASMTRevCylJoint"
         solver_joint["distance_ij"] = distance
     elif distance_type == "PointLine":
-        solver_joint["solver_joint_class"] = "ASMTCylSphJoint"
-        solver_joint["distance_ij"] = distance
+        # FreeCADCmd 1.2.0 revision 20260519 exports this native path as
+        # "tInPlaneJointE" with "offset", even though the nearby C++ source switch still names
+        # ASMTCylSphJoint for DistanceType::PointLine.
+        solver_joint["solver_joint_class"] = "ASMTLineInPlaneJoint"
+        solver_joint["offset"] = distance
     elif distance_type == "PlanePlane":
         solver_joint["solver_joint_class"] = "ASMTPlanarJoint"
         solver_joint["offset"] = distance
