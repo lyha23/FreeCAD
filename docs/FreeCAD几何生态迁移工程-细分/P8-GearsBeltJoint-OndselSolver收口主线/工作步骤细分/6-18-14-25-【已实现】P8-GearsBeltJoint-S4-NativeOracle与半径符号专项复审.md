@@ -4,7 +4,7 @@
 
 关闭 `GBJ-BLOCK-003` 和 `GBJ-BLOCK-004`：为 Gears / Belt 增加 native FreeCADCmd expected，并证明 cad-core request-local solver output 与 expected 一致。
 
-当前状态：已实现。S4 只关闭 Gears / Belt native expected、focused runtime assertion 和 Belt `radius_j` 负号证据；capability publication、unsupported matrix 发布和 S6 仍未关闭。
+当前状态：已实现。S4 只关闭 Gears / Belt native expected、focused runtime assertion 和 Belt `radius_j` 负号证据；capability publication、unsupported matrix 发布和 S6 package gate 已由后续步骤关闭。
 
 ## FreeCAD 依据
 

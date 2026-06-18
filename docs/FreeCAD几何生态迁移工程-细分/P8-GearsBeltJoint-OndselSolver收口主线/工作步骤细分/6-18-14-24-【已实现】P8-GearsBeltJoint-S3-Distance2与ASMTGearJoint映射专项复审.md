@@ -4,7 +4,7 @@
 
 关闭 `GBJ-BLOCK-001` 和 `GBJ-BLOCK-002`：确认 cad-core real Ondsel adapter 按 FreeCAD 映射 Gears / Belt，并补齐 `Distance2` DTO。
 
-当前状态：已实现。S3 只关闭 `Distance2` DTO / request parser 和 Gears / Belt `ASMTGearJoint` runtime mapping；S4 native expected、S5 capability / unsupported matrix 发布和 S6 oracle 收口仍未关闭。
+当前状态：已实现。S3 只关闭 `Distance2` DTO / request parser 和 Gears / Belt `ASMTGearJoint` runtime mapping；S4 native expected、S5 capability / unsupported matrix 发布和 S6 oracle 收口已由后续步骤关闭。
 
 ## FreeCAD 依据
 

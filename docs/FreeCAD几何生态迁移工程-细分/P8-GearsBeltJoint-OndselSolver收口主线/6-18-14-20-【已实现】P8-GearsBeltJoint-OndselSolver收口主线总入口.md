@@ -4,6 +4,8 @@
 
 对应上游方案入口是 `docs/FreeCAD几何生态迁移工程-细分/P8-Assembly-Joint-Placement-OndselSolver收敛主线`、`docs/FreeCAD几何生态迁移工程-细分/P8-ParallelPerpendicularJoint-OndselSolver收口主线` 和 `docs/CADCore3.0/04-【已实现】Link-Assembly-运行时产品化.md`。
 
+当前状态：已实现。S0-S6 均已完成，包级发布闸门已通过；本包只发布 Gears / Belt 的 request-local real Ondsel 支持，不扩大到 RackPinion / Screw、复杂 Distance geometry 或 GUI/session 生命周期。
+
 ## 主线目标
 
 - 把 FreeCAD `Gears -> ASMTGearJoint(radiusI=Distance, radiusJ=Distance2)` 和 `Belt -> ASMTGearJoint(radiusI=Distance, radiusJ=-Distance2)` 的最小 request-local 语义迁入 `cad-core` real Ondsel adapter。
@@ -64,11 +66,11 @@
 | S3 DTO / 映射复审 | `工作步骤细分/6-18-14-24-【已实现】P8-GearsBeltJoint-S3-Distance2与ASMTGearJoint映射专项复审.md` | 已收口 `Distance2` DTO 和 `ASMTGearJoint` adapter |
 | S4 oracle 复审 | `工作步骤细分/6-18-14-25-【已实现】P8-GearsBeltJoint-S4-NativeOracle与半径符号专项复审.md` | 已收口 FreeCADCmd expected、`radiusJ` 符号和 request-local solver output |
 | S5 发布复审 | `工作步骤细分/6-18-14-26-【已实现】P8-GearsBeltJoint-S5-Capability与unsupported矩阵专项复审.md` | 已同步 capabilities、tests、P8 docs / TSV |
-| S6 发布闸门 | `工作步骤细分/6-18-14-27-P8-GearsBeltJoint-S6-Oracle实现与发布闸门.md` | 指定代码落点、验收命令和禁止路径 |
+| S6 发布闸门 | `工作步骤细分/6-18-14-27-【已实现】P8-GearsBeltJoint-S6-Oracle实现与发布闸门.md` | 已完成包级 oracle / publication gate，记录最终验证证据 |
 | source candidates | `矩阵/p8_gears_belt_joint_source_candidates.tsv` | FreeCAD / cad-core 候选证据 |
 | scope review | `矩阵/p8_gears_belt_joint_scope_review_matrix.tsv` | scope 状态和验收路由 |
 | blocker queue | `矩阵/p8_gears_belt_joint_blocker_queue.tsv` | 发布前必须关闭的 blocker |
 | non goal registry | `矩阵/p8_gears_belt_joint_non_goal_registry.tsv` | 不进入本轮实现的边界 |
 | backend gap classification | `矩阵/p8_gears_belt_joint_backend_gap_classification.tsv` | unsupported / notCollected / releaseGate / nonGoal 分类 |
 
-当前工作步骤索引已完成校验；S0 已完成 live baseline 复核，S1 已完成 FreeCAD 源码候选矩阵复核，S2 已完成范围准入与 blocker 路由，S3 已完成 DTO / adapter code landing，S4 已完成 native oracle 与半径符号复核，S5 已完成 capability 与 unsupported 矩阵发布同步；S6 仍为 `待执行`。矩阵已记录 Gears / Belt 的 request-local real Ondsel supported 发布结论，但不扩大到 RackPinion / Screw、复杂 Distance 或完整 Assembly transaction lifecycle。
+当前工作步骤索引已完成校验；S0 已完成 live baseline 复核，S1 已完成 FreeCAD 源码候选矩阵复核，S2 已完成范围准入与 blocker 路由，S3 已完成 DTO / adapter code landing，S4 已完成 native oracle 与半径符号复核，S5 已完成 capability 与 unsupported 矩阵发布同步，S6 已完成最终 oracle / publication gate。矩阵已记录 Gears / Belt 的 request-local real Ondsel supported 发布结论，但不扩大到 RackPinion / Screw、复杂 Distance 或完整 Assembly transaction lifecycle。

@@ -4,9 +4,9 @@
 
 把 Gears / Belt 两个 `ASMTGearJoint` 族 JointType 从 remaining unsupported 队列推进到 real Ondsel request-local supported 子集，并保持 RackPinion / Screw 和复杂 Distance geometry 不被误发布。
 
-当前收口状态：S0 已完成 live baseline 复核，S1 已完成 FreeCAD 源码候选矩阵复核，S2 已完成范围准入与 blocker 路由，S3 已完成 `Distance2` DTO 与 `ASMTGearJoint` runtime 映射，S4 已完成 native oracle、focused tests 与半径符号复核，S5 已完成 capability 与 unsupported 矩阵发布同步；S6 仍为待执行。不得把整个主线写成“已实现”。
+当前收口状态：S0 已完成 live baseline 复核，S1 已完成 FreeCAD 源码候选矩阵复核，S2 已完成范围准入与 blocker 路由，S3 已完成 `Distance2` DTO 与 `ASMTGearJoint` runtime 映射，S4 已完成 native oracle、focused tests 与半径符号复核，S5 已完成 capability 与 unsupported 矩阵发布同步，S6 已完成最终 oracle / publication gate。整个 Gears / Belt 包已支持发布。
 
-索引关闭口径：本文件只表示工作步骤索引、矩阵文件名和轻量验收命令已经复核；S0-S6 仍由各自文件推进，不能因为本文件改名为 `【已实现】` 而跳过后续队列。
+索引关闭口径：本文件表示工作步骤索引、矩阵文件名和轻量验收命令已经复核；S0-S6 均已由各自文件关闭，队列应为空。
 
 ## 步骤索引
 
@@ -18,7 +18,7 @@
 | S3 | `6-18-14-24-【已实现】P8-GearsBeltJoint-S3-Distance2与ASMTGearJoint映射专项复审.md` | 已实现 | 收口 `Distance2` DTO、Gears/Belt ASMT 映射和 supported predicate |
 | S4 | `6-18-14-25-【已实现】P8-GearsBeltJoint-S4-NativeOracle与半径符号专项复审.md` | 已实现 | 对齐 FreeCADCmd expected、`radiusJ` 符号和 request-local solver output |
 | S5 | `6-18-14-26-【已实现】P8-GearsBeltJoint-S5-Capability与unsupported矩阵专项复审.md` | 已实现 | 同步 capabilities、focused tests、P8 docs / TSV |
-| S6 | `6-18-14-27-P8-GearsBeltJoint-S6-Oracle实现与发布闸门.md` | 待执行 | 消费 blockers 并给出代码落点和验收命令 |
+| S6 | `6-18-14-27-【已实现】P8-GearsBeltJoint-S6-Oracle实现与发布闸门.md` | 已实现 | 已消费 blockers 并完成包级 oracle / publication gate |
 
 ## 执行顺序
 
@@ -27,7 +27,7 @@
 3. 执行 S3，落地 `Distance2` DTO、`ASMTGearJoint` include / conversion 和 supported predicate。
 4. 执行 S4，增加 Gears / Belt c3m6 fixtures、FreeCADCmd expected 和 focused expected parity。
 5. 执行 S5，同步 capabilities、focused tests 和既有 P8 AssemblySolver 矩阵。
-6. 执行 S6，关闭 blocker 后再提交；未关闭前不得改名为 `【已实现】`。
+6. S6 已执行，blocker 与发布闸门均已关闭；S6 文件已按规则改名为 `【已实现】`。
 
 ## 当前矩阵闸门
 
