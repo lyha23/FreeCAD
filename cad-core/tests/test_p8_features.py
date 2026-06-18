@@ -1681,6 +1681,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         result = self.run_recompute("assembly-unsupported-joint-diagnostic", "c3m6")
         assembly = result["objects"]["Assembly"]
         diagnostic = result["diagnostics"][0]
+        solver_joint = assembly["solver_adapter"]["solver_joints"][0]
 
         self.assertEqual(diagnostic["severity"], "warning")
         self.assertEqual(diagnostic["code"], "unsupported_assembly_solver")
@@ -1689,6 +1690,43 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(assembly["solver_adapter"]["status"], "unsupported")
         self.assertEqual(assembly["solver_adapter"]["reason"], "unsupported_joint_type")
         self.assertEqual(assembly["solver_adapter"]["unsupported_joints"][0]["joint_type"], "RackPinion")
+        self.assertEqual(solver_joint["sliding_part_index"], 0)
+        self.assertFalse(solver_joint["jcs_swapped_for_solver"])
+        self.assertEqual(result["documentObjectUpdates"], [])
+
+    def test_c3m6_assembly_screw_rackpinion_sliding_precondition_swaps_solver_dto(self) -> None:
+        result = self.run_recompute("assembly-screw-rackpinion-sliding-swap-diagnostic", "c3m6")
+        assembly = result["objects"]["Assembly"]
+        screw = result["objects"]["ScrewJoint"]
+        rack_pinion = result["objects"]["RackPinionJoint"]
+
+        self.assertEqual(assembly["solve"], "unsupported")
+        self.assertEqual(assembly["solver_adapter"]["status"], "unsupported")
+        self.assertEqual(assembly["solver_adapter"]["reason"], "unsupported_joint_type")
+        self.assertEqual(
+            assembly["solver_adapter"]["unsupported_joints"],
+            [
+                {"object": "ScrewJoint", "joint_type": "Screw"},
+                {"object": "RackPinionJoint", "joint_type": "RackPinion"},
+            ],
+        )
+        self.assertEqual(screw["reference1"]["object"], "ComponentB")
+        self.assertEqual(screw["reference2"]["object"], "ComponentA")
+        self.assertEqual(rack_pinion["reference1"]["object"], "ComponentB")
+        self.assertEqual(rack_pinion["reference2"]["object"], "ComponentA")
+
+        solver_joints = {
+            solver_joint["object"]: solver_joint
+            for solver_joint in assembly["solver_adapter"]["solver_joints"]
+        }
+        self.assertNotIn("sliding_part_index", solver_joints["SliderJoint"])
+        for joint_name in ("ScrewJoint", "RackPinionJoint"):
+            with self.subTest(joint_name=joint_name):
+                solver_joint = solver_joints[joint_name]
+                self.assertEqual(solver_joint["sliding_part_index"], 2)
+                self.assertTrue(solver_joint["jcs_swapped_for_solver"])
+                self.assertEqual(solver_joint["reference1"]["object"], "ComponentA")
+                self.assertEqual(solver_joint["reference2"]["object"], "ComponentB")
         self.assertEqual(result["documentObjectUpdates"], [])
 
     def test_p8_part_cylinder_builds_prism_extension_solid(self) -> None:

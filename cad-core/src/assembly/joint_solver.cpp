@@ -5,8 +5,10 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <limits>
 #include <set>
 #include <unordered_map>
+#include <utility>
 
 #include <OndselSolver/ASMTAssembly.h>
 #include <OndselSolver/ASMTAngleJoint.h>
@@ -27,6 +29,14 @@ namespace cad_core::assembly {
 namespace {
 
 constexpr double kPlacementTolerance = 1e-9;
+constexpr double kPi = 3.14159265358979323846;
+constexpr double kFreeCadPrecisionConfusion = 1e-7;
+
+struct YawPitchRoll {
+    double yaw = 0.0;
+    double pitch = 0.0;
+    double roll = 0.0;
+};
 
 const app::DocumentObject* documentObjectByName(const runtime::ComputeContext& context,
                                                 const std::string& name)
@@ -41,6 +51,11 @@ const app::DocumentObject* documentObjectByName(const runtime::ComputeContext& c
 std::array<double, 4> identityRotation()
 {
     return {0.0, 0.0, 0.0, 1.0};
+}
+
+app::Placement identityPlacement()
+{
+    return app::Placement {{0.0, 0.0, 0.0}, identityRotation()};
 }
 
 app::Placement placementForObject(const app::DocumentObject& object)
@@ -62,6 +77,145 @@ bool samePlacement(const app::Placement& left, const app::Placement& right)
         }
     }
     return true;
+}
+
+double toDegrees(double radians)
+{
+    return radians * 180.0 / kPi;
+}
+
+YawPitchRoll yawPitchRollForPlacement(const app::Placement& placement)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Base/Rotation.cpp
+    // ::Rotation::getYawPitchRoll(), "Euler angles (yaw,pitch,roll) are in XY'Z''-notation" and
+    // returns degrees. CAD Core mirrors the same pitch/roll values for slidingPartIndex().
+    double x = placement.rotation.at(0);
+    double y = placement.rotation.at(1);
+    double z = placement.rotation.at(2);
+    double w = placement.rotation.at(3);
+    const double norm = std::sqrt(x * x + y * y + z * z + w * w);
+    if (norm <= 0.0) {
+        return {};
+    }
+    x /= norm;
+    y /= norm;
+    z /= norm;
+    w /= norm;
+
+    const double q00 = x * x;
+    const double q11 = y * y;
+    const double q22 = z * z;
+    const double q33 = w * w;
+    const double q01 = x * y;
+    const double q02 = x * z;
+    const double q03 = x * w;
+    const double q12 = y * z;
+    const double q13 = y * w;
+    const double q23 = z * w;
+    const double qd2 = 2.0 * (q13 - q02);
+    constexpr double tolerance = 16.0 * std::numeric_limits<double>::epsilon();
+
+    YawPitchRoll result;
+    if (std::abs(qd2 - 1.0) <= tolerance) {
+        result.yaw = 0.0;
+        result.pitch = toDegrees(kPi / 2.0);
+        result.roll = toDegrees(2.0 * std::atan2(x, w));
+        return result;
+    }
+    if (std::abs(qd2 + 1.0) <= tolerance) {
+        result.yaw = 0.0;
+        result.pitch = toDegrees(-kPi / 2.0);
+        result.roll = toDegrees(2.0 * std::atan2(x, w));
+        return result;
+    }
+
+    result.yaw = toDegrees(std::atan2(2.0 * (q01 + q23), (q00 + q33) - (q11 + q22)));
+    result.pitch = toDegrees(qd2 > 1.0 ? kPi / 2.0 : (qd2 < -1.0 ? -kPi / 2.0 : std::asin(qd2)));
+    result.roll = toDegrees(std::atan2(2.0 * (q12 + q03), (q22 + q33) - (q00 + q11)));
+    return result;
+}
+
+app::Placement placementForReference(const AssemblyJointReference& reference)
+{
+    return reference.connectorPlacement.value_or(identityPlacement());
+}
+
+bool samePitchAndRoll(const AssemblyJointReference& sliderReference,
+                      const AssemblyJointReference& targetReference)
+{
+    const YawPitchRoll slider = yawPitchRollForPlacement(placementForReference(sliderReference));
+    const YawPitchRoll target = yawPitchRollForPlacement(placementForReference(targetReference));
+    return std::abs(slider.pitch - target.pitch) < kFreeCadPrecisionConfusion
+        && std::abs(slider.roll - target.roll) < kFreeCadPrecisionConfusion;
+}
+
+bool sameReferencedPart(const AssemblyJointReference& left, const AssemblyJointReference& right)
+{
+    return !left.object.empty() && left.object == right.object;
+}
+
+int slidingPartIndex(const AssemblySolveRequest& request, const JointConstraint& target)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    // ::AssemblyObject::slidingPartIndex(), scans "getJoints()" for "JointType::Slider", matches
+    // moving parts, then checks whether the Slider JCS and target JCS "pitch and roll are the
+    // same." CAD Core limits this to the current AssemblySolveRequest.
+    int slidingFound = 0;
+    for (const JointConstraint& slider : request.joints) {
+        if (slider.jointType != "Slider") {
+            continue;
+        }
+
+        int found = 0;
+        const AssemblyJointReference* sliderReference = nullptr;
+        const AssemblyJointReference* targetReference = nullptr;
+        if (sameReferencedPart(slider.reference1, target.reference1)
+            || sameReferencedPart(slider.reference1, target.reference2)) {
+            found = sameReferencedPart(slider.reference1, target.reference1) ? 1 : 2;
+            sliderReference = &slider.reference1;
+            targetReference = found == 1 ? &target.reference1 : &target.reference2;
+        }
+        else if (sameReferencedPart(slider.reference2, target.reference1)
+                 || sameReferencedPart(slider.reference2, target.reference2)) {
+            found = sameReferencedPart(slider.reference2, target.reference1) ? 1 : 2;
+            sliderReference = &slider.reference2;
+            targetReference = found == 1 ? &target.reference1 : &target.reference2;
+        }
+
+        if (found != 0 && sliderReference != nullptr && targetReference != nullptr
+            && samePitchAndRoll(*sliderReference, *targetReference)) {
+            slidingFound = found;
+        }
+    }
+    return slidingFound;
+}
+
+bool requiresSlidingSide(const JointConstraint& joint)
+{
+    return joint.jointType == "Screw" || joint.jointType == "RackPinion";
+}
+
+void swapJointConstraintJcs(JointConstraint& joint)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.cpp
+    // ::swapJCS(), swaps "Placement1"/"Placement2" and "Reference1"/"Reference2". CAD Core swaps
+    // only the in-memory solver DTO so the frontend DocumentObject graph remains unchanged.
+    std::swap(joint.reference1, joint.reference2);
+    joint.jcsSwappedForSolver = true;
+}
+
+void applyScrewRackPinionSlidingPrecondition(AssemblySolveRequest& request)
+{
+    for (JointConstraint& joint : request.joints) {
+        if (!requiresSlidingSide(joint)) {
+            continue;
+        }
+        joint.slidingPartIndex = slidingPartIndex(request, joint);
+        joint.jcsSwappedForSolver = false;
+        if (*joint.slidingPartIndex == 2) {
+            swapJointConstraintJcs(joint);
+        }
+    }
 }
 
 std::optional<AssemblyPartRef> partByName(const AssemblySolveRequest& request,
@@ -584,6 +738,7 @@ AssemblySolveRequest buildAssemblySolveRequest(
         request.joints.push_back(std::move(constraint));
     }
 
+    applyScrewRackPinionSlidingPrecondition(request);
     return request;
 }
 

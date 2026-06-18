@@ -112,6 +112,13 @@ nlohmann::json solverJointJson(const JointConstraint& joint)
     if (joint.angle) {
         solverJoint["angle"] = *joint.angle;
     }
+    if (joint.slidingPartIndex) {
+        // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+        // ::AssemblyObject::slidingPartIndex() returns "slidingFound" 1/2/0; DTO JSON exposes the
+        // request-local value used before any future Screw/RackPinion Ondsel conversion.
+        solverJoint["sliding_part_index"] = *joint.slidingPartIndex;
+        solverJoint["jcs_swapped_for_solver"] = joint.jcsSwappedForSolver;
+    }
     return solverJoint;
 }
 

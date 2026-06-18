@@ -4,7 +4,7 @@
 
 把 `Screw` / `RackPinion` 两个 remaining special JointType 从 unsupported 队列推进到 real Ondsel request-local supported 子集，并保持 complex Distance geometry、GUI/session lifecycle 不被误发布。
 
-当前收口状态：工作步骤索引已完成校验；S0 已完成 live 基线复核；S1 已完成 FreeCAD / cad-core source candidates 复核；S2 已完成范围准入与 blocker 队列路由；S3 到 S6 仍为待执行。尚未完成 `slidingPartIndex()`、`swapJCS()`、RackPinion marker rewrite、native expected、focused tests 或发布闸门；不得把整个主线写成“已实现”。
+当前收口状态：工作步骤索引已完成校验；S0 已完成 live 基线复核；S1 已完成 FreeCAD / cad-core source candidates 复核；S2 已完成范围准入与 blocker 队列路由；S3 已完成 request-local `slidingPartIndex()` / DTO-level `swapJCS()`；S4 到 S6 仍为待执行。尚未完成 RackPinion marker rewrite、native expected、supported capability 或发布闸门；不得把整个主线写成“已实现”。
 
 索引关闭口径：本文件只表示工作步骤索引、矩阵文件名和轻量验收命令已经复核；S0-S6 仍由各自文件推进，不能因为本文件改名为 `【已实现】` 而跳过后续队列。
 
@@ -15,7 +15,7 @@
 | S0 | `6-18-16-36-【已实现】P8-ScrewRackPinionJoint-S0-声明口径与live基线复核.md` | 已实现 | 冻结支持声明、禁止声明和 current unsupported 基线 |
 | S1 | `6-18-16-37-【已实现】P8-ScrewRackPinionJoint-S1-FreeCAD源码候选矩阵.md` | 已实现 | 建立 Screw / RackPinion FreeCAD / cad-core source candidates |
 | S2 | `6-18-16-38-【已实现】P8-ScrewRackPinionJoint-S2-范围准入与blocker矩阵.md` | 已实现 | 已将候选路由到 implementable unsupported、notCollected、releaseGate、nonGoal |
-| S3 | `6-18-16-39-P8-ScrewRackPinionJoint-S3-SlidingAxis与swapJCS专项复审.md` | 待执行 | 收口 `slidingPartIndex()` / `swapJCS()` 共享前置 |
+| S3 | `6-18-16-39-【已实现】P8-ScrewRackPinionJoint-S3-SlidingAxis与swapJCS专项复审.md` | 已实现 | 已收口 `slidingPartIndex()` / `swapJCS()` 共享前置，未发布 Screw / RackPinion capability |
 | S4 | `6-18-16-40-P8-ScrewRackPinionJoint-S4-RackPinionMarker重写专项复审.md` | 待执行 | 收口 RackPinion rack / pinion marker rewrite |
 | S5 | `6-18-16-41-P8-ScrewRackPinionJoint-S5-NativeOracle与Capability专项复审.md` | 待执行 | 同步 fixtures、FreeCADCmd expected、focused tests 和 capabilities |
 | S6 | `6-18-16-42-P8-ScrewRackPinionJoint-S6-Oracle实现与发布闸门.md` | 待执行 | 消费 blockers 并给出代码落点和验收命令 |
@@ -25,7 +25,7 @@
 1. S0 已确认当前 `supported_joint_matrix` / `unsupported_joint_matrix`、Screw / RackPinion 的禁止声明和工作区状态。
 2. S1 已锁定 FreeCAD source authority，并把 shared sliding 前置、DTO swap、Screw pitch、RackPinion marker rewrite、c3m6 route 和当前 publication 分开。
 3. S2 已将候选路由到 implementable unsupported、notCollected、releaseGate、nonGoal，并建立 S3-S6 可消费 blocker。
-4. 执行 S3，落地 `slidingPartIndex()` / `swapJCS()` 的 request-local 等价语义。
+4. S3 已落地 `slidingPartIndex()` / `swapJCS()` 的 request-local 等价语义，并保持 Screw / RackPinion diagnostic-only。
 5. 执行 S4，落地 RackPinion 的 marker side detection 与 rack marker 旋转重写。
 6. 执行 S5，增加 Screw / RackPinion c3m6 fixtures、FreeCADCmd expected、focused tests 和 capability 断言。
 7. 执行 S6，关闭 blocker 后再提交；未关闭前不得改名为 `【已实现】`。
@@ -36,7 +36,7 @@
 | --- | --- | --- |
 | `p8_screw_rackpinion_joint_source_candidates.tsv` | FreeCAD / cad-core 证据入口 | 已复核 Screw / RackPinion mapping、shared sliding、DTO swap、RackPinion marker rewrite、Ondsel fields、cad-core gap、c3m6 route 和当前 unsupported publication |
 | `p8_screw_rackpinion_joint_scope_review_matrix.tsv` | 当前能力路由 | SRJ-SCOPE-002 / 003 / 004 / 005 / 006 为 implementable unsupported / notCollected / releaseGate |
-| `p8_screw_rackpinion_joint_blocker_queue.tsv` | 发布前 blocker | shared sliding、Screw adapter、RackPinion adapter / marker、oracle、capability、nonGoal boundary 均已排入 S3-S6，仍待关闭 |
+| `p8_screw_rackpinion_joint_blocker_queue.tsv` | 发布前 blocker | `SRJ-BLOCK-001` 已由 S3 关闭；Screw adapter、RackPinion adapter / marker、oracle、capability、nonGoal boundary 仍待 S4-S6 |
 | `p8_screw_rackpinion_joint_non_goal_registry.tsv` | 非目标边界 | complex Distance、GUI/session、full transaction 不进入本包 |
 | `p8_screw_rackpinion_joint_backend_gap_classification.tsv` | 分类与优先级 | 本包只推进 Screw / RackPinion |
 

@@ -43,6 +43,14 @@ struct JointConstraint {
     // ASMTGearJoint "radiusJ".
     std::optional<double> distance2;
     std::optional<double> angle;
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    // ::AssemblyObject::slidingPartIndex(), returns 1/2/0 after scanning "Slider" joints and
+    // comparing JCS "pitch and roll"; used by Screw/RackPinion before solver marker creation.
+    std::optional<int> slidingPartIndex;
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.cpp
+    // ::swapJCS(), swaps "Placement1"/"Placement2" and "Reference1"/"Reference2"; CAD Core keeps
+    // this as request-local DTO ordering only and never mutates the DocumentObject graph.
+    bool jcsSwappedForSolver = false;
 };
 
 // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/
