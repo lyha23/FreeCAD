@@ -97,6 +97,17 @@ nlohmann::json solverJointJson(const JointConstraint& joint)
     if (joint.distance) {
         solverJoint["distance"] = *joint.distance;
     }
+    if (joint.distanceType) {
+        // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.cpp
+        // ::getDistanceType(), returns "PointPoint", "LineLine", "PlanePlane", "PointPlane",
+        // "LinePlane" or "PointLine" after Reference element and primitive checks.
+        solverJoint["distance_type"] = *joint.distanceType;
+        solverJoint["jcs_swapped_for_solver"] = joint.jcsSwappedForSolver;
+        solverJoint["reference1_element_kind"] = joint.reference1.elementKind;
+        solverJoint["reference1_primitive"] = joint.reference1.primitive;
+        solverJoint["reference2_element_kind"] = joint.reference2.elementKind;
+        solverJoint["reference2_primitive"] = joint.reference2.primitive;
+    }
     if (joint.distance2) {
         solverJoint["distance2"] = *joint.distance2;
     }

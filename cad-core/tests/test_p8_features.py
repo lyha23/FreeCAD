@@ -49,6 +49,79 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             applied_path.write_text(json.dumps(payload), encoding="utf-8")
             return self.run_recompute_file(applied_path)
 
+    def run_distance_type_reference_case(
+        self,
+        case_name: str,
+        reference1: dict,
+        reference2: dict,
+    ) -> dict:
+        objects = [
+            {
+                "Name": reference1["object"],
+                "ID": 1,
+                "TypeId": reference1["type_id"],
+                "Properties": reference1["properties"],
+            },
+            {
+                "Name": reference2["object"],
+                "ID": 2,
+                "TypeId": reference2["type_id"],
+                "Properties": reference2["properties"],
+            },
+            {
+                "Name": "DistanceJoint",
+                "ID": 3,
+                "TypeId": "App::FeaturePython",
+                "Properties": {
+                    "JointType": {
+                        "PropertyType": "App::PropertyEnumeration",
+                        "value": "Distance",
+                    },
+                    "Distance": {
+                        "PropertyType": "App::PropertyFloat",
+                        "value": 1.5,
+                    },
+                    "Reference1": {
+                        "PropertyType": "App::PropertyXLinkSub",
+                        "value": reference1["object"],
+                        "SubList": [reference1["subname"]],
+                    },
+                    "Reference2": {
+                        "PropertyType": "App::PropertyXLinkSub",
+                        "value": reference2["object"],
+                        "SubList": [reference2["subname"]],
+                    },
+                },
+            },
+            {
+                "Name": "Joints",
+                "ID": 4,
+                "TypeId": "Assembly::JointGroup",
+                "Properties": {
+                    "Group": {
+                        "PropertyType": "App::PropertyLinkList",
+                        "values": ["DistanceJoint"],
+                    }
+                },
+            },
+            {
+                "Name": "Assembly",
+                "ID": 5,
+                "TypeId": "Assembly::AssemblyObject",
+                "Properties": {
+                    "Group": {
+                        "PropertyType": "App::PropertyLinkList",
+                        "values": [reference1["object"], reference2["object"], "Joints"],
+                    }
+                },
+            },
+        ]
+        payload = {"Objects": objects, "recompute": {"objs": ["Assembly"]}}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / f"{case_name}.json"
+            path.write_text(json.dumps(payload), encoding="utf-8")
+            return self.run_recompute_file(path)
+
     def test_p8_part_box_builds_occt_solid(self) -> None:
         result = self.run_recompute("part-box", "p8")
         box = result["objects"]["Box"]
@@ -1575,6 +1648,83 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     joint_reference_objects,
                     expected_solver_joints,
                 )
+
+    def test_c3m6_assembly_distance_type_reference_classification_exposes_solver_dto(self) -> None:
+        point_a = {
+            "object": "PointA",
+            "type_id": "Part::Vertex",
+            "properties": {"X": 0, "Y": 0, "Z": 0},
+            "subname": "Vertex1",
+        }
+        point_b = {
+            "object": "PointB",
+            "type_id": "Part::Vertex",
+            "properties": {"X": 1, "Y": 0, "Z": 0},
+            "subname": "Vertex1",
+        }
+        line_a = {
+            "object": "LineA",
+            "type_id": "Part::Line",
+            "properties": {"X1": 0, "Y1": 0, "Z1": 0, "X2": 0, "Y2": 0, "Z2": 1},
+            "subname": "Edge1",
+        }
+        line_b = {
+            "object": "LineB",
+            "type_id": "Part::Line",
+            "properties": {"X1": 1, "Y1": 0, "Z1": 0, "X2": 1, "Y2": 0, "Z2": 1},
+            "subname": "Edge1",
+        }
+        plane_a = {
+            "object": "PlaneA",
+            "type_id": "Part::Plane",
+            "properties": {"Length": 2, "Width": 2},
+            "subname": "Face1",
+        }
+        plane_b = {
+            "object": "PlaneB",
+            "type_id": "Part::Plane",
+            "properties": {"Length": 3, "Width": 2},
+            "subname": "Face1",
+        }
+        cases = [
+            ("point_point", point_a, point_b, "PointPoint", False, point_a, point_b),
+            ("line_line", line_a, line_b, "LineLine", False, line_a, line_b),
+            ("point_line", point_a, line_b, "PointLine", True, line_b, point_a),
+            ("plane_plane", plane_a, plane_b, "PlanePlane", False, plane_a, plane_b),
+            ("point_plane", point_a, plane_b, "PointPlane", True, plane_b, point_a),
+            ("line_plane", line_a, plane_b, "LinePlane", True, plane_b, line_a),
+        ]
+
+        for case_name, reference1, reference2, distance_type, swapped, solver_ref1, solver_ref2 in cases:
+            with self.subTest(case=case_name):
+                result = self.run_distance_type_reference_case(case_name, reference1, reference2)
+                assembly = result["objects"]["Assembly"]
+                joint = result["objects"]["DistanceJoint"]
+                solver_joint = assembly["solver_adapter"]["solver_joints"][0]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(assembly["solver_adapter"]["mode"], "real_ondsel_solver")
+                self.assertEqual(joint["reference1"]["object"], reference1["object"])
+                self.assertEqual(joint["reference2"]["object"], reference2["object"])
+                self.assertEqual(solver_joint["distance_type"], distance_type)
+                self.assertEqual(solver_joint["distance"], 1.5)
+                self.assertEqual(solver_joint["jcs_swapped_for_solver"], swapped)
+                self.assertEqual(solver_joint["reference1"]["object"], solver_ref1["object"])
+                self.assertEqual(solver_joint["reference1"]["subnames"], [solver_ref1["subname"]])
+                self.assertEqual(solver_joint["reference1_element_kind"], solver_ref1["subname"].rstrip("0123456789"))
+                self.assertEqual(solver_joint["reference1_primitive"], {
+                    "Part::Vertex": "point",
+                    "Part::Line": "line",
+                    "Part::Plane": "plane",
+                }[solver_ref1["type_id"]])
+                self.assertEqual(solver_joint["reference2"]["object"], solver_ref2["object"])
+                self.assertEqual(solver_joint["reference2"]["subnames"], [solver_ref2["subname"]])
+                self.assertEqual(solver_joint["reference2_element_kind"], solver_ref2["subname"].rstrip("0123456789"))
+                self.assertEqual(solver_joint["reference2_primitive"], {
+                    "Part::Vertex": "point",
+                    "Part::Line": "line",
+                    "Part::Plane": "plane",
+                }[solver_ref2["type_id"]])
 
     def test_c3m6_assembly_placement_writeback_applies_to_next_request_graph(self) -> None:
         result = self.run_recompute("assembly-grounded-distance-joint-real-solver", "c3m6")

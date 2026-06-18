@@ -1,5 +1,5 @@
 category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
-DTC-BG-001	reference_element_classification_gap	P1	DTC-SCOPE-002	no	S3 add DistanceType DTO fields request-local JCS ordering and solver JSON evidence
+DTC-BG-001	reference_element_classification_gap	Closed	DTC-SCOPE-002	no	Closed by S3: DistanceType DTO fields request-local JCS ordering and solver JSON evidence now exist; S4 mapping remains in DTC-BG-002 through DTC-BG-004
 DTC-BG-002	pointpoint_distance_mapping_gap	P1	DTC-SCOPE-003	no	S4 implement PointPoint zero ASMTSphericalJoint and nonzero ASMTSphSphJoint distanceIJ
 DTC-BG-003	edge_basic_distance_mapping_gap	P1	DTC-SCOPE-004	no	S4 implement LineLine ASMTRevCylJoint distanceIJ and PointLine ASMTCylSphJoint distanceIJ
 DTC-BG-004	plane_basic_distance_mapping_gap	P1	DTC-SCOPE-005	no	S4 implement PlanePlane ASMTPlanarJoint offset PointPlane ASMTPointInPlaneJoint offset LinePlane ASMTLineInPlaneJoint offset

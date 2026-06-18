@@ -15,6 +15,8 @@ struct AssemblyJointReference {
     std::vector<std::string> subnames;
     std::optional<app::Placement> connectorPlacement;
     std::optional<app::Placement> markerPlacement;
+    std::string elementKind;
+    std::string primitive;
 };
 
 struct AssemblyPartRef {
@@ -49,6 +51,11 @@ struct JointConstraint {
     AssemblyJointReference reference2;
     bool suppressed = false;
     std::optional<double> distance;
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.cpp
+    // ::getDistanceType(), reads "Reference1" / "Reference2" element kind and line/plane primitive,
+    // then calls "swapJCS(joint)" for solver ordering. CAD Core keeps the DistanceType and
+    // reference primitive evidence request-local on this solver DTO.
+    std::optional<std::string> distanceType;
     // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/JointObject.py
     // ::JointUsingDistance2 contains "Gears" / "Belt"; AssemblyObject.cpp
     // ::AssemblyObject::makeMbdJointOfType() reads "getJointDistance2(joint)" into

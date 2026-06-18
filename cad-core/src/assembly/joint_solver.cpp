@@ -1,6 +1,11 @@
 #include "cad_core/assembly/joint_solver.h"
 
 #include "cad_core/app/property_geo.h"
+#include "cad_core/part/property_topo_shape.h"
+
+#include <BRepAdaptor_Curve.hxx>
+#include <BRepAdaptor_Surface.hxx>
+#include <TopoDS.hxx>
 
 #include <algorithm>
 #include <array>
@@ -337,6 +342,160 @@ void swapJointConstraintJcs(JointConstraint& joint)
     // only the in-memory solver DTO so the frontend DocumentObject graph remains unchanged.
     std::swap(joint.reference1, joint.reference2);
     joint.jcsSwappedForSolver = true;
+}
+
+std::string elementKindName(TopAbs_ShapeEnum kind)
+{
+    switch (kind) {
+        case TopAbs_VERTEX:
+            return "Vertex";
+        case TopAbs_EDGE:
+            return "Edge";
+        case TopAbs_FACE:
+            return "Face";
+        default:
+            return {};
+    }
+}
+
+std::string edgePrimitiveName(const TopoDS_Shape& shape)
+{
+    BRepAdaptor_Curve curve(TopoDS::Edge(shape));
+    switch (curve.GetType()) {
+        case GeomAbs_Line:
+            return "line";
+        case GeomAbs_Circle:
+            return "circle";
+        default:
+            return "curve";
+    }
+}
+
+std::string facePrimitiveName(const TopoDS_Shape& shape)
+{
+    BRepAdaptor_Surface surface(TopoDS::Face(shape));
+    switch (surface.GetType()) {
+        case GeomAbs_Plane:
+            return "plane";
+        case GeomAbs_Cylinder:
+            return "cylinder";
+        case GeomAbs_Sphere:
+            return "sphere";
+        case GeomAbs_Cone:
+            return "cone";
+        case GeomAbs_Torus:
+            return "torus";
+        default:
+            return "surface";
+    }
+}
+
+std::optional<TopoDS_Shape> referencedShape(const AssemblyJointReference& reference,
+                                            const runtime::ComputeContext& context)
+{
+    const auto shapeIt = context.shapes.find(reference.object);
+    if (shapeIt == context.shapes.end()) {
+        return std::nullopt;
+    }
+    const TopoDS_Shape& shape = shapeIt->second.shape;
+    if (shape.IsNull()) {
+        return std::nullopt;
+    }
+    if (!reference.subnames.empty()) {
+        return part::subshapeByName(shape, reference.subnames.front());
+    }
+    if (shape.ShapeType() == TopAbs_VERTEX || shape.ShapeType() == TopAbs_EDGE
+        || shape.ShapeType() == TopAbs_FACE) {
+        return shape;
+    }
+    return std::nullopt;
+}
+
+void classifyDistanceReference(AssemblyJointReference& reference, const runtime::ComputeContext& context)
+{
+    const auto shape = referencedShape(reference, context);
+    if (!shape || shape->IsNull()) {
+        return;
+    }
+    reference.elementKind = elementKindName(shape->ShapeType());
+    if (shape->ShapeType() == TopAbs_VERTEX) {
+        reference.primitive = "point";
+    }
+    else if (shape->ShapeType() == TopAbs_EDGE) {
+        reference.primitive = edgePrimitiveName(*shape);
+    }
+    else if (shape->ShapeType() == TopAbs_FACE) {
+        reference.primitive = facePrimitiveName(*shape);
+    }
+}
+
+bool isReference(const AssemblyJointReference& reference,
+                 const std::string& elementKind,
+                 const std::string& primitive)
+{
+    return reference.elementKind == elementKind && reference.primitive == primitive;
+}
+
+void classifyDistanceType(JointConstraint& joint, const runtime::ComputeContext& context)
+{
+    if (joint.jointType != "Distance") {
+        return;
+    }
+
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.cpp
+    // ::getDistanceType(), reads "Reference1"/"Reference2" element type, checks "GeomAbs_Line" /
+    // "GeomAbs_Plane", and calls "swapJCS(joint)" so face or edge reference order matches the
+    // solver-side DistanceType. CAD Core mutates only this request-local JointConstraint.
+    classifyDistanceReference(joint.reference1, context);
+    classifyDistanceReference(joint.reference2, context);
+
+    if (isReference(joint.reference1, "Vertex", "point")
+        && isReference(joint.reference2, "Vertex", "point")) {
+        joint.distanceType = "PointPoint";
+        return;
+    }
+    if (isReference(joint.reference1, "Edge", "line")
+        && isReference(joint.reference2, "Edge", "line")) {
+        joint.distanceType = "LineLine";
+        return;
+    }
+    if (isReference(joint.reference1, "Face", "plane")
+        && isReference(joint.reference2, "Face", "plane")) {
+        joint.distanceType = "PlanePlane";
+        return;
+    }
+    if (isReference(joint.reference1, "Vertex", "point")
+        && isReference(joint.reference2, "Face", "plane")) {
+        swapJointConstraintJcs(joint);
+        joint.distanceType = "PointPlane";
+        return;
+    }
+    if (isReference(joint.reference1, "Face", "plane")
+        && isReference(joint.reference2, "Vertex", "point")) {
+        joint.distanceType = "PointPlane";
+        return;
+    }
+    if (isReference(joint.reference1, "Edge", "line")
+        && isReference(joint.reference2, "Face", "plane")) {
+        swapJointConstraintJcs(joint);
+        joint.distanceType = "LinePlane";
+        return;
+    }
+    if (isReference(joint.reference1, "Face", "plane")
+        && isReference(joint.reference2, "Edge", "line")) {
+        joint.distanceType = "LinePlane";
+        return;
+    }
+    if (isReference(joint.reference1, "Vertex", "point")
+        && isReference(joint.reference2, "Edge", "line")) {
+        swapJointConstraintJcs(joint);
+        joint.distanceType = "PointLine";
+        return;
+    }
+    if (isReference(joint.reference1, "Edge", "line")
+        && isReference(joint.reference2, "Vertex", "point")) {
+        joint.distanceType = "PointLine";
+    }
 }
 
 void applyScrewRackPinionSlidingPrecondition(AssemblySolveRequest& request)
@@ -963,6 +1122,7 @@ AssemblySolveRequest buildAssemblySolveRequest(
             || constraint.jointType == "RackPinion" || constraint.jointType == "Screw") {
             constraint.distance = app::readNumber(*joint, "Distance").value_or(0.0);
         }
+        classifyDistanceType(constraint, context);
         if (constraint.jointType == "Screw") {
             constraint.pitch = constraint.distance.value_or(0.0);
         }
