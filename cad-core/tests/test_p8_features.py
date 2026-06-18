@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import math
 import tempfile
 from pathlib import Path
 
@@ -1692,6 +1693,8 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(assembly["solver_adapter"]["unsupported_joints"][0]["joint_type"], "RackPinion")
         self.assertEqual(solver_joint["sliding_part_index"], 0)
         self.assertFalse(solver_joint["jcs_swapped_for_solver"])
+        self.assertEqual(solver_joint["pitch_radius"], 0.0)
+        self.assertNotIn("rack_pinion_marker_rewrite", solver_joint)
         self.assertEqual(result["documentObjectUpdates"], [])
 
     def test_c3m6_assembly_screw_rackpinion_sliding_precondition_swaps_solver_dto(self) -> None:
@@ -1707,7 +1710,6 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             assembly["solver_adapter"]["unsupported_joints"],
             [
                 {"object": "ScrewJoint", "joint_type": "Screw"},
-                {"object": "RackPinionJoint", "joint_type": "RackPinion"},
             ],
         )
         self.assertEqual(screw["reference1"]["object"], "ComponentB")
@@ -1727,7 +1729,52 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertTrue(solver_joint["jcs_swapped_for_solver"])
                 self.assertEqual(solver_joint["reference1"]["object"], "ComponentA")
                 self.assertEqual(solver_joint["reference2"]["object"], "ComponentB")
+        self.assertEqual(solver_joints["RackPinionJoint"]["distance"], 2.5)
+        self.assertEqual(solver_joints["RackPinionJoint"]["pitch_radius"], 2.5)
+        rewrite = solver_joints["RackPinionJoint"]["rack_pinion_marker_rewrite"]
+        self.assertTrue(rewrite["applied"])
+        self.assertEqual(rewrite["rack_object"], "ComponentA")
+        self.assertEqual(rewrite["pinion_object"], "ComponentB")
+        self.assertAlmostEqual(rewrite["yaw_adjustment"], math.pi / 2.0, delta=1e-12)
         self.assertEqual(result["documentObjectUpdates"], [])
+
+    def test_c3m6_assembly_rackpinion_marker_rewrite_exposes_pitch_radius(self) -> None:
+        result = self.run_recompute("assembly-rackpinion-marker-rewrite-real-solver", "c3m6")
+        assembly = result["objects"]["Assembly"]
+        rack_pinion = result["objects"]["RackPinionJoint"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(assembly["solve"], "solved")
+        self.assertEqual(assembly["solver_adapter"]["status"], "solved")
+        self.assertEqual(assembly["solver_adapter"]["mode"], "real_ondsel_solver")
+        self.assertEqual(assembly["solver_adapter"]["unsupported_joints"], [])
+        self.assertEqual(rack_pinion["reference1"]["object"], "ComponentB")
+        self.assertEqual(rack_pinion["reference2"]["object"], "ComponentA")
+
+        solver_joints = {
+            solver_joint["object"]: solver_joint
+            for solver_joint in assembly["solver_adapter"]["solver_joints"]
+        }
+        solver_joint = solver_joints["RackPinionJoint"]
+        self.assertEqual(solver_joint["joint_type"], "RackPinion")
+        self.assertEqual(solver_joint["distance"], 2.5)
+        self.assertEqual(solver_joint["pitch_radius"], 2.5)
+        self.assertEqual(solver_joint["sliding_part_index"], 2)
+        self.assertTrue(solver_joint["jcs_swapped_for_solver"])
+        self.assertEqual(solver_joint["reference1"]["object"], "ComponentA")
+        self.assertEqual(solver_joint["reference2"]["object"], "ComponentB")
+
+        rewrite = solver_joint["rack_pinion_marker_rewrite"]
+        self.assertTrue(rewrite["applied"])
+        self.assertEqual(rewrite["rack_object"], "ComponentA")
+        self.assertEqual(rewrite["pinion_object"], "ComponentB")
+        self.assertAlmostEqual(rewrite["yaw_adjustment"], math.pi, delta=1e-12)
+        self.assertEqual(rewrite["rack_marker_placement"]["Base"], [0, 0, 0])
+        rotation = rewrite["rack_marker_placement"]["Rotation"]
+        self.assertAlmostEqual(rotation[0], 0.7071067811865476, delta=1e-12)
+        self.assertAlmostEqual(rotation[1], 0.0, delta=1e-12)
+        self.assertAlmostEqual(rotation[2], -0.7071067811865475, delta=1e-12)
+        self.assertAlmostEqual(rotation[3], 0.0, delta=1e-12)
 
     def test_p8_part_cylinder_builds_prism_extension_solid(self) -> None:
         result = self.run_recompute("part-cylinder", "p8")

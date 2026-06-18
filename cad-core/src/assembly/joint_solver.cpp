@@ -20,6 +20,7 @@
 #include <OndselSolver/ASMTPerpendicularJoint.h>
 #include <OndselSolver/ASMTPart.h>
 #include <OndselSolver/ASMTPrincipalMassMarker.h>
+#include <OndselSolver/ASMTRackPinionJoint.h>
 #include <OndselSolver/ASMTRevoluteJoint.h>
 #include <OndselSolver/ASMTSphericalJoint.h>
 #include <OndselSolver/ASMTSphSphJoint.h>
@@ -31,6 +32,8 @@ namespace {
 constexpr double kPlacementTolerance = 1e-9;
 constexpr double kPi = 3.14159265358979323846;
 constexpr double kFreeCadPrecisionConfusion = 1e-7;
+
+using Vector3 = std::array<double, 3>;
 
 struct YawPitchRoll {
     double yaw = 0.0;
@@ -56,6 +59,137 @@ std::array<double, 4> identityRotation()
 app::Placement identityPlacement()
 {
     return app::Placement {{0.0, 0.0, 0.0}, identityRotation()};
+}
+
+double dot(const Vector3& left, const Vector3& right)
+{
+    return left.at(0) * right.at(0) + left.at(1) * right.at(1) + left.at(2) * right.at(2);
+}
+
+Vector3 cross(const Vector3& left, const Vector3& right)
+{
+    return {
+        left.at(1) * right.at(2) - left.at(2) * right.at(1),
+        left.at(2) * right.at(0) - left.at(0) * right.at(2),
+        left.at(0) * right.at(1) - left.at(1) * right.at(0),
+    };
+}
+
+double norm(const Vector3& value)
+{
+    return std::sqrt(dot(value, value));
+}
+
+Vector3 normalized(const Vector3& value)
+{
+    const double length = norm(value);
+    if (length <= kPlacementTolerance) {
+        return {0.0, 0.0, 0.0};
+    }
+    return {value.at(0) / length, value.at(1) / length, value.at(2) / length};
+}
+
+std::array<double, 4> normalizedRotation(const std::array<double, 4>& rotation)
+{
+    const double length = std::sqrt(rotation.at(0) * rotation.at(0) + rotation.at(1) * rotation.at(1)
+                                    + rotation.at(2) * rotation.at(2)
+                                    + rotation.at(3) * rotation.at(3));
+    if (length <= 0.0) {
+        return identityRotation();
+    }
+    return {
+        rotation.at(0) / length,
+        rotation.at(1) / length,
+        rotation.at(2) / length,
+        rotation.at(3) / length,
+    };
+}
+
+std::array<double, 4> multiplyRotations(const std::array<double, 4>& left,
+                                        const std::array<double, 4>& right)
+{
+    const auto a = normalizedRotation(left);
+    const auto b = normalizedRotation(right);
+    const double ax = a.at(0);
+    const double ay = a.at(1);
+    const double az = a.at(2);
+    const double aw = a.at(3);
+    const double bx = b.at(0);
+    const double by = b.at(1);
+    const double bz = b.at(2);
+    const double bw = b.at(3);
+    return normalizedRotation({
+        aw * bx + ax * bw + ay * bz - az * by,
+        aw * by - ax * bz + ay * bw + az * bx,
+        aw * bz + ax * by - ay * bx + az * bw,
+        aw * bw - ax * bx - ay * by - az * bz,
+    });
+}
+
+std::array<double, 4> inverseRotation(const std::array<double, 4>& rotation)
+{
+    const auto normalizedValue = normalizedRotation(rotation);
+    return {-normalizedValue.at(0), -normalizedValue.at(1), -normalizedValue.at(2), normalizedValue.at(3)};
+}
+
+Vector3 rotateVector(const std::array<double, 4>& rotation, const Vector3& vector)
+{
+    const auto q = normalizedRotation(rotation);
+    const Vector3 qVector {q.at(0), q.at(1), q.at(2)};
+    const Vector3 t = cross(qVector, vector);
+    const Vector3 scaledT {2.0 * t.at(0), 2.0 * t.at(1), 2.0 * t.at(2)};
+    const Vector3 qCrossT = cross(qVector, scaledT);
+    return {
+        vector.at(0) + q.at(3) * scaledT.at(0) + qCrossT.at(0),
+        vector.at(1) + q.at(3) * scaledT.at(1) + qCrossT.at(1),
+        vector.at(2) + q.at(3) * scaledT.at(2) + qCrossT.at(2),
+    };
+}
+
+app::Placement composePlacement(const app::Placement& left, const app::Placement& right)
+{
+    const Vector3 rotatedBase = rotateVector(left.rotation, right.base);
+    return app::Placement {{
+                               left.base.at(0) + rotatedBase.at(0),
+                               left.base.at(1) + rotatedBase.at(1),
+                               left.base.at(2) + rotatedBase.at(2),
+                           },
+                          multiplyRotations(left.rotation, right.rotation)};
+}
+
+app::Placement inversePlacement(const app::Placement& placement)
+{
+    const auto inverse = inverseRotation(placement.rotation);
+    const Vector3 negativeBase {-placement.base.at(0), -placement.base.at(1), -placement.base.at(2)};
+    const Vector3 inverseBase = rotateVector(inverse, negativeBase);
+    return app::Placement {inverseBase, inverse};
+}
+
+double angleBetween(const Vector3& left, const Vector3& right)
+{
+    const double leftNorm = norm(left);
+    const double rightNorm = norm(right);
+    if (leftNorm <= kPlacementTolerance || rightNorm <= kPlacementTolerance) {
+        return 0.0;
+    }
+    const double cosine = std::clamp(dot(left, right) / (leftNorm * rightNorm), -1.0, 1.0);
+    return std::acos(cosine);
+}
+
+std::array<double, 4> rotationAroundAxis(const Vector3& axis, double angle)
+{
+    const Vector3 unitAxis = normalized(axis);
+    if (norm(unitAxis) <= kPlacementTolerance) {
+        return identityRotation();
+    }
+    const double halfAngle = angle / 2.0;
+    const double sine = std::sin(halfAngle);
+    return normalizedRotation({
+        unitAxis.at(0) * sine,
+        unitAxis.at(1) * sine,
+        unitAxis.at(2) * sine,
+        std::cos(halfAngle),
+    });
 }
 
 app::Placement placementForObject(const app::DocumentObject& object)
@@ -232,6 +366,61 @@ std::optional<AssemblyPartRef> partByName(const AssemblySolveRequest& request,
         return std::nullopt;
     }
     return *partIt;
+}
+
+void applyRackPinionMarkerRewrite(AssemblySolveRequest& request)
+{
+    for (JointConstraint& joint : request.joints) {
+        if (joint.jointType != "RackPinion") {
+            continue;
+        }
+        joint.pitchRadius = joint.distance.value_or(0.0);
+        if (!joint.slidingPartIndex || *joint.slidingPartIndex == 0 || !joint.reference1.markerPlacement
+            || !joint.reference2.markerPlacement) {
+            continue;
+        }
+
+        const auto rackPart = partByName(request, joint.reference1.object);
+        const auto pinionPart = partByName(request, joint.reference2.object);
+        if (!rackPart || !pinionPart) {
+            continue;
+        }
+
+        // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+        // ::AssemblyObject::getRackPinionMarkers(), after optional "swapJCS(joint)" it computes
+        // pinion placement relative to rack, then adjusts rack placement rotation so pinion Z
+        // stays rack Z and rack X follows the Slider Z axis before handleOneSideOfJoint creates
+        // the Ondsel marker. CAD Core mutates only this request-local DTO marker placement.
+        app::Placement rackMarker = *joint.reference1.markerPlacement;
+        const app::Placement pinionGlobalMarker = composePlacement(
+            pinionPart->placement,
+            *joint.reference2.markerPlacement
+        );
+        const app::Placement pinionRelativeToRack = composePlacement(
+            inversePlacement(rackPart->placement),
+            pinionGlobalMarker
+        );
+
+        const Vector3 currentZAxis = rotateVector(pinionRelativeToRack.rotation, {0.0, 0.0, 1.0});
+        const Vector3 currentXAxis = rotateVector(pinionRelativeToRack.rotation, {1.0, 0.0, 0.0});
+        const Vector3 targetXAxis = rotateVector(rackMarker.rotation, {0.0, 0.0, 1.0});
+        double yawAdjustment = angleBetween(currentXAxis, targetXAxis);
+        const Vector3 crossProduct = cross(currentXAxis, targetXAxis);
+        if (dot(currentZAxis, crossProduct) < 0.0) {
+            yawAdjustment = -yawAdjustment;
+        }
+
+        const auto yawRotation = rotationAroundAxis(currentZAxis, yawAdjustment);
+        rackMarker.rotation = multiplyRotations(pinionRelativeToRack.rotation, yawRotation);
+        joint.reference1.markerPlacement = rackMarker;
+        joint.rackPinionMarkerRewrite = RackPinionMarkerRewrite {
+            true,
+            joint.reference1.object,
+            joint.reference2.object,
+            yawAdjustment,
+            rackMarker,
+        };
+    }
 }
 
 AssemblyJointReference jointReference(const app::DocumentObject& joint,
@@ -440,6 +629,14 @@ std::shared_ptr<MbD::ASMTJoint> makeOndselJointOfType(const JointConstraint& joi
         return gearJoint;
     }
     // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    // ::AssemblyObject::makeMbdJointOfType(), "case JointType::RackPinion" creates
+    // ASMTRackPinionJoint and sets "mbdJoint->pitchRadius = getJointDistance(joint)".
+    if (joint.jointType == "RackPinion") {
+        auto rackPinionJoint = MbD::ASMTRackPinionJoint::With();
+        rackPinionJoint->pitchRadius = joint.pitchRadius.value_or(joint.distance.value_or(0.0));
+        return rackPinionJoint;
+    }
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
     // ::AssemblyObject::makeMbdJointOfType(), direct case JointType::Parallel returns
     // ASMTParallelAxesJoint and JointType::Perpendicular returns ASMTPerpendicularJoint.
     if (joint.jointType == "Parallel") {
@@ -462,6 +659,26 @@ std::shared_ptr<MbD::ASMTJoint> makeOndselJointOfType(const JointConstraint& joi
         return angleJoint;
     }
     return nullptr;
+}
+
+bool isConvertibleOndselJointInRequest(const JointConstraint& joint)
+{
+    if (!isSupportedOndselJointType(joint.jointType)) {
+        return false;
+    }
+    if (joint.jointType == "RackPinion") {
+        return joint.slidingPartIndex && *joint.slidingPartIndex != 0 && joint.rackPinionMarkerRewrite
+            && joint.rackPinionMarkerRewrite->applied;
+    }
+    return true;
+}
+
+std::string unsupportedJointMessage(const UnsupportedAssemblyJoint& unsupported)
+{
+    if (unsupported.jointType == "RackPinion") {
+        return "Ondsel solver adapter cannot convert RackPinion without a matching Slider precondition";
+    }
+    return "Ondsel solver adapter does not yet convert JointType " + unsupported.jointType;
 }
 
 void addGroundedJointToOndselAssembly(
@@ -520,7 +737,7 @@ AssemblySolveResult solveAssemblyWithRealOndselAdapter(const AssemblySolveReques
     for (const JointConstraint& joint : request.joints) {
         result.joints.push_back(joint.object);
         result.solverJoints.push_back(joint);
-        if (!isSupportedOndselJointType(joint.jointType)) {
+        if (!isConvertibleOndselJointInRequest(joint)) {
             result.unsupportedJoints.push_back(UnsupportedAssemblyJoint {
                 joint.object,
                 joint.jointType,
@@ -535,7 +752,7 @@ AssemblySolveResult solveAssemblyWithRealOndselAdapter(const AssemblySolveReques
             result.diagnostics.push_back(runtime::Diagnostic {
                 "warning",
                 "unsupported_assembly_solver",
-                "Ondsel solver adapter does not yet convert JointType " + unsupported.jointType,
+                unsupportedJointMessage(unsupported),
                 request.assemblyObject,
                 "Group",
                 "runtime",
@@ -726,8 +943,12 @@ AssemblySolveRequest buildAssemblySolveRequest(
         constraint.reference2 = jointReference(*joint, context, "Reference2", "Placement2");
         constraint.suppressed = app::readBool(*joint, "Suppressed").value_or(false);
         if (constraint.jointType == "Distance" || constraint.jointType == "Slider"
-            || constraint.jointType == "Gears" || constraint.jointType == "Belt") {
+            || constraint.jointType == "Gears" || constraint.jointType == "Belt"
+            || constraint.jointType == "RackPinion") {
             constraint.distance = app::readNumber(*joint, "Distance").value_or(0.0);
+        }
+        if (constraint.jointType == "RackPinion") {
+            constraint.pitchRadius = constraint.distance.value_or(0.0);
         }
         if (constraint.jointType == "Gears" || constraint.jointType == "Belt") {
             constraint.distance2 = app::readNumber(*joint, "Distance2").value_or(0.0);
@@ -739,6 +960,7 @@ AssemblySolveRequest buildAssemblySolveRequest(
     }
 
     applyScrewRackPinionSlidingPrecondition(request);
+    applyRackPinionMarkerRewrite(request);
     return request;
 }
 
@@ -794,9 +1016,9 @@ bool isSupportedOndselJointType(const std::string& jointType)
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/
     // AssemblyObject.cpp::AssemblyObject::makeMbdJointOfType(), maps "Fixed", "Revolute",
     // "Cylindrical", "Slider", "Ball", "Distance", direct "Parallel" / "Perpendicular",
-    // "Angle", and the Gears / Belt ASMTGearJoint subset to ASMT joint classes in the current
-    // Ondsel adapter subset. RackPinion and Screw still require their separate FreeCAD marker /
-    // sliding-part paths and remain outside this set.
+    // "Angle", the Gears / Belt ASMTGearJoint subset, and RackPinion after
+    // getRackPinionMarkers() has rewritten the rack marker. Screw still requires its separate
+    // FreeCAD sliding-part path and remains outside this set in S4.
     static const std::set<std::string> supported = {
         "Fixed",
         "Revolute",
@@ -809,6 +1031,7 @@ bool isSupportedOndselJointType(const std::string& jointType)
         "Angle",
         "Gears",
         "Belt",
+        "RackPinion",
     };
     return supported.count(jointType) != 0U;
 }

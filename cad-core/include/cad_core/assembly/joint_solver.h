@@ -25,6 +25,18 @@ struct AssemblyPartRef {
     bool grounded = false;
 };
 
+// FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+// ::AssemblyObject::getRackPinionMarkers(), requires rack marker I / pinion marker J, then
+// rewrites rack marker rotation so its "X axis parallel to the sliding axis" before marker
+// creation. CAD Core keeps this request-local evidence on the solver DTO only.
+struct RackPinionMarkerRewrite {
+    bool applied = false;
+    std::string rackObject;
+    std::string pinionObject;
+    double yawAdjustment = 0.0;
+    app::Placement rackMarkerPlacement;
+};
+
 // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/
 // AssemblyObject.cpp::AssemblyObject::makeMbdJoint(), calls "makeMbdJointOfType(joint,
 // jointType)" after resolving "Reference1"/"Reference2" and "Placement1"/"Placement2".
@@ -51,6 +63,12 @@ struct JointConstraint {
     // ::swapJCS(), swaps "Placement1"/"Placement2" and "Reference1"/"Reference2"; CAD Core keeps
     // this as request-local DTO ordering only and never mutates the DocumentObject graph.
     bool jcsSwappedForSolver = false;
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    // ::AssemblyObject::makeMbdJointOfType(), RackPinion sets "mbdJoint->pitchRadius =
+    // getJointDistance(joint)"; CAD Core exposes the scalar conversion evidence before public
+    // capability publication.
+    std::optional<double> pitchRadius;
+    std::optional<RackPinionMarkerRewrite> rackPinionMarkerRewrite;
 };
 
 // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/

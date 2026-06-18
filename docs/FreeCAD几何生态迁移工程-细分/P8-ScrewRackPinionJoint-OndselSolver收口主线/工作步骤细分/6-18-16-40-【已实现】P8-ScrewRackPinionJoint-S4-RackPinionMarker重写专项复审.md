@@ -1,8 +1,26 @@
-# P8 ScrewRackPinionJoint S4 RackPinion Marker 重写专项复审
+# 【已实现】P8 ScrewRackPinionJoint S4 RackPinion Marker 重写专项复审
 
 ## 目标
 
 关闭 `SRJ-BLOCK-003` 和 `SRJ-BLOCK-004`：确认 RackPinion 既能映射 `ASMTRackPinionJoint(pitchRadius=Distance)`，又能按 FreeCAD `getRackPinionMarkers()` 重写 rack marker placement。
+
+## S4 复核结论
+
+- `cad-core/src/assembly/joint_solver.cpp` 已新增 RackPinion request-local marker rewrite：复用 S3 的 `slidingPartIndex` / DTO `swapJCS` 结果，让 rack 位于 I 侧，重写 `reference1.markerPlacement` 后再进入 `addConstraintToOndselAssembly()`。
+- `makeOndselJointOfType()` 已映射 `RackPinion -> MbD::ASMTRackPinionJoint::With()`，并设置 `pitchRadius=Distance`；S4 仍不实现 Screw。
+- `solver_joints` JSON 已暴露 `distance`、`pitch_radius` 与 `rack_pinion_marker_rewrite` 摘要，focused test 可验证 rack / pinion side、yaw adjustment 和重写后的 rack marker placement。
+- 缺少 Slider 前置的 RackPinion 继续输出 `unsupported_assembly_solver`，不进入 fake solve；RackPinion marker rewrite 不写回前端 DocumentObject graph。
+- S4 未修改 C ABI capabilities、supported / unsupported publication matrix、native expected、上游 `P8ASM-SCOPE-007` 或 complex Distance scope。
+
+## 代码落点
+
+| 落点 | S4 行为 |
+| --- | --- |
+| `cad-core/include/cad_core/assembly/joint_solver.h` | 新增 `pitchRadius` 与 `RackPinionMarkerRewrite` request-local 证据字段 |
+| `cad-core/src/assembly/joint_solver.cpp` | 实现 `ASMTRackPinionJoint(pitchRadius=Distance)` conversion、RackPinion marker rewrite 和 Slider precondition gate |
+| `cad-core/src/assembly/assembly_utils.cpp` | `solver_joints` 输出 `pitch_radius` 与 marker rewrite 摘要 |
+| `cad-core/fixtures/c3m6/assembly-rackpinion-marker-rewrite-real-solver.json` | RackPinion-only focused runtime fixture，覆盖 side=2 DTO swap 与 marker rewrite |
+| `cad-core/tests/test_p8_features.py` | 锁定缺 Slider diagnostic、S3 DTO swap 回归、S4 RackPinion focused evidence |
 
 ## FreeCAD 依据
 
@@ -42,6 +60,9 @@
 rg -n "ASMTRackPinionJoint|pitchRadius|pitch_radius|getRackPinionMarkers|rack|pinion|yaw|marker" cad-core/src/assembly/joint_solver.cpp cad-core/src/assembly/assembly_utils.cpp cad-core/tests/test_p8_features.py
 cd /home/user/Chili3DProject/FreeCAD/cad-core
 cmake --build build --target cad-core cad_core_ffi
+python3 -m unittest tests.test_p8_features.CadCoreP8FeatureTest.test_c3m6_assembly_unsupported_joint_stays_diagnostic
+python3 -m unittest tests.test_p8_features.CadCoreP8FeatureTest.test_c3m6_assembly_screw_rackpinion_sliding_precondition_swaps_solver_dto
+python3 -m unittest tests.test_p8_features.CadCoreP8FeatureTest.test_c3m6_assembly_rackpinion_marker_rewrite_exposes_pitch_radius
 ```
 
 ## 非目标

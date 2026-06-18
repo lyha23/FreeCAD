@@ -100,6 +100,12 @@ nlohmann::json solverJointJson(const JointConstraint& joint)
     if (joint.distance2) {
         solverJoint["distance2"] = *joint.distance2;
     }
+    if (joint.pitchRadius) {
+        // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+        // ::AssemblyObject::makeMbdJointOfType(), RackPinion maps "getJointDistance(joint)" to
+        // ASMTRackPinionJoint "pitchRadius"; JSON keeps focused S4 conversion evidence.
+        solverJoint["pitch_radius"] = *joint.pitchRadius;
+    }
     if (joint.jointType == "Gears" || joint.jointType == "Belt") {
         // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
         // ::AssemblyObject::makeMbdJointOfType(), Gears maps "radiusJ = getJointDistance2(joint)"
@@ -118,6 +124,19 @@ nlohmann::json solverJointJson(const JointConstraint& joint)
         // request-local value used before any future Screw/RackPinion Ondsel conversion.
         solverJoint["sliding_part_index"] = *joint.slidingPartIndex;
         solverJoint["jcs_swapped_for_solver"] = joint.jcsSwappedForSolver;
+    }
+    if (joint.rackPinionMarkerRewrite) {
+        // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+        // ::AssemblyObject::getRackPinionMarkers(), rewrites rack marker placement before marker
+        // creation; JSON exposes the request-local evidence without mutating the frontend graph.
+        const RackPinionMarkerRewrite& rewrite = *joint.rackPinionMarkerRewrite;
+        solverJoint["rack_pinion_marker_rewrite"] = {
+            {"applied", rewrite.applied},
+            {"rack_object", rewrite.rackObject},
+            {"pinion_object", rewrite.pinionObject},
+            {"yaw_adjustment", rewrite.yawAdjustment},
+            {"rack_marker_placement", placementJson(rewrite.rackMarkerPlacement)},
+        };
     }
     return solverJoint;
 }

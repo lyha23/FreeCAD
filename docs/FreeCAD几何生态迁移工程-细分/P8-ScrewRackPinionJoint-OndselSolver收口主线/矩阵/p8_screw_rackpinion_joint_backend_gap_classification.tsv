@@ -1,7 +1,7 @@
 category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
 SRJ-BG-001	shared_sliding_side_gap	P1	SRJ-SCOPE-002	no	Closed in S3: request-local slidingPartIndex and DTO-level swapJCS evidence added; S4/S5 consume without publishing capability yet
 SRJ-BG-002	screw_jointtype_implementable_unsupported	P1	SRJ-SCOPE-003	no	Implement ASMTScrewJoint mapping, fixture, native expected, focused test and capability publication for Screw
-SRJ-BG-003	rackpinion_jointtype_implementable_unsupported	P1	SRJ-SCOPE-004	no	Implement ASMTRackPinionJoint mapping, rack marker rewrite, fixture, native expected, focused test and capability publication for RackPinion
+SRJ-BG-003	rackpinion_jointtype_implementable_unsupported	P1	SRJ-SCOPE-004	no	S4 implemented ASMTRackPinionJoint mapping, rack marker rewrite, RackPinion focused fixture and runtime test; S5 still must collect native expected and publish capability for RackPinion
 SRJ-BG-004	native_expected_collection_gate	P1	SRJ-SCOPE-005	no	Collect or verify c3m6 Screw and RackPinion FreeCADCmd expected before supported claim
 SRJ-BG-005	capability_publication_release_gate	P1	SRJ-SCOPE-006	no	Align supported_joint_matrix, unsupported_joint_matrix, tests and existing P8 docs/matrix references
 SRJ-BG-006	complex_distance_not_collected	P2	SRJ-SCOPE-007	yes	Keep DistanceType geometry matrix notCollected outside this scalar Screw/RackPinion package
