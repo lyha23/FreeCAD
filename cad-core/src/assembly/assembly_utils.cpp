@@ -114,14 +114,34 @@ nlohmann::json solverJointJson(const JointConstraint& joint)
     }
     if (joint.distanceType) {
         // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.cpp
-        // ::getDistanceType(), returns "PointPoint", "LineLine", "PlanePlane", "PointPlane",
-        // "LinePlane" or "PointLine" after Reference element and primitive checks.
+        // ::getDistanceType(), returns basic and extended DistanceType values after Reference
+        // element and primitive checks, while getEdgeRadius()/getFaceRadius() provide request-local
+        // scalar correction evidence for circle/cylinder/sphere cases.
         solverJoint["distance_type"] = *joint.distanceType;
         solverJoint["jcs_swapped_for_solver"] = joint.jcsSwappedForSolver;
         solverJoint["reference1_element_kind"] = joint.reference1.elementKind;
         solverJoint["reference1_primitive"] = joint.reference1.primitive;
         solverJoint["reference2_element_kind"] = joint.reference2.elementKind;
         solverJoint["reference2_primitive"] = joint.reference2.primitive;
+        if (joint.reference1.radius) {
+            solverJoint["reference1_radius"] = *joint.reference1.radius;
+            solverJoint["reference1_radius_source"] = joint.reference1.radiusSource;
+        }
+        if (joint.reference2.radius) {
+            solverJoint["reference2_radius"] = *joint.reference2.radius;
+            solverJoint["reference2_radius_source"] = joint.reference2.radiusSource;
+        }
+        if (joint.scalarCorrection) {
+            solverJoint["scalar_correction"] = *joint.scalarCorrection;
+            solverJoint["scalar_correction_source"] = joint.scalarCorrectionSource;
+            solverJoint["radius_source_side"] = joint.radiusSourceSide;
+        }
+        if (!joint.distanceTypeMappingStatus.empty()) {
+            solverJoint["distance_type_mapping_status"] = joint.distanceTypeMappingStatus;
+        }
+        if (!joint.distanceTypeBoundary.empty()) {
+            solverJoint["distance_type_boundary"] = joint.distanceTypeBoundary;
+        }
     }
     if (joint.solverJointClass) {
         // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp

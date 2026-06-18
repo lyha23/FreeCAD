@@ -31,6 +31,12 @@ struct AssemblyJointReference {
     bool markerResolutionConnectorDefaulted = false;
     std::string elementKind;
     std::string primitive;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.cpp
+    // ::getEdgeRadius() returns "sf.Circle().Radius()" only for "GeomAbs_Circle";
+    // ::getFaceRadius() returns Cylinder/Sphere "Radius()" and 0.0 for other faces.
+    // CAD Core keeps this primitive evidence on the request-local solver DTO.
+    std::optional<double> radius;
+    std::string radiusSource;
 };
 
 struct AssemblyPartRef {
@@ -76,6 +82,15 @@ struct JointConstraint {
     std::optional<std::string> solverJointClass;
     std::optional<double> distanceIJ;
     std::optional<double> offset;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    // ::makeMbdJointDistance(), extended radius cases add "getEdgeRadius(...)" or
+    // "getFaceRadius(...)" to distanceIJ/offset. S3 exposes the scalar correction evidence only;
+    // S4/S6 own ASMT class publication for non-basic DistanceTypes.
+    std::optional<double> scalarCorrection;
+    std::string scalarCorrectionSource;
+    std::string radiusSourceSide;
+    std::string distanceTypeMappingStatus;
+    std::string distanceTypeBoundary;
     // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/JointObject.py
     // ::JointUsingDistance2 contains "Gears" / "Belt"; AssemblyObject.cpp
     // ::AssemblyObject::makeMbdJointOfType() reads "getJointDistance2(joint)" into

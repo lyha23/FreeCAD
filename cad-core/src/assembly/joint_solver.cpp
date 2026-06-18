@@ -559,6 +559,14 @@ std::string edgePrimitiveName(const TopoDS_Shape& shape)
     }
 }
 
+double edgeRadiusEvidence(const TopoDS_Shape& shape)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.cpp
+    // ::getEdgeRadius(), "return sf.GetType() == GeomAbs_Circle ? sf.Circle().Radius() : 0.0".
+    BRepAdaptor_Curve curve(TopoDS::Edge(shape));
+    return curve.GetType() == GeomAbs_Circle ? curve.Circle().Radius() : 0.0;
+}
+
 std::string facePrimitiveName(const TopoDS_Shape& shape)
 {
     BRepAdaptor_Surface surface(TopoDS::Face(shape));
@@ -576,6 +584,22 @@ std::string facePrimitiveName(const TopoDS_Shape& shape)
         default:
             return "surface";
     }
+}
+
+double faceRadiusEvidence(const TopoDS_Shape& shape)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.cpp
+    // ::getFaceRadius(), "GeomAbs_Cylinder ? sf.Cylinder().Radius()" and
+    // "GeomAbs_Sphere ? sf.Sphere().Radius()" otherwise 0.0.
+    BRepAdaptor_Surface surface(TopoDS::Face(shape));
+    const auto type = surface.GetType();
+    if (type == GeomAbs_Cylinder) {
+        return surface.Cylinder().Radius();
+    }
+    if (type == GeomAbs_Sphere) {
+        return surface.Sphere().Radius();
+    }
+    return 0.0;
 }
 
 std::optional<TopoDS_Shape> referencedShape(const AssemblyJointReference& reference,
@@ -611,17 +635,247 @@ void classifyDistanceReference(AssemblyJointReference& reference, const runtime:
     }
     else if (shape->ShapeType() == TopAbs_EDGE) {
         reference.primitive = edgePrimitiveName(*shape);
+        reference.radius = edgeRadiusEvidence(*shape);
+        reference.radiusSource = "getEdgeRadius";
     }
     else if (shape->ShapeType() == TopAbs_FACE) {
         reference.primitive = facePrimitiveName(*shape);
+        reference.radius = faceRadiusEvidence(*shape);
+        reference.radiusSource = "getFaceRadius";
     }
 }
 
-bool isReference(const AssemblyJointReference& reference,
-                 const std::string& elementKind,
-                 const std::string& primitive)
+bool isKind(const AssemblyJointReference& reference, const std::string& elementKind)
 {
-    return reference.elementKind == elementKind && reference.primitive == primitive;
+    return reference.elementKind == elementKind;
+}
+
+bool isFacePrimitive(const AssemblyJointReference& reference, const std::string& primitive)
+{
+    return isKind(reference, "Face") && reference.primitive == primitive;
+}
+
+bool isEdgePrimitive(const AssemblyJointReference& reference, const std::string& primitive)
+{
+    return isKind(reference, "Edge") && reference.primitive == primitive;
+}
+
+bool isBasicDistanceType(const std::string& distanceType)
+{
+    static const std::set<std::string> basicDistanceTypes = {
+        "PointPoint",
+        "LineLine",
+        "PlanePlane",
+        "PointPlane",
+        "LinePlane",
+        "PointLine",
+    };
+    return basicDistanceTypes.count(distanceType) != 0U;
+}
+
+bool isExplicitExtendedDistanceType(const std::string& distanceType)
+{
+    static const std::set<std::string> explicitExtendedDistanceTypes = {
+        "LineCircle",
+        "CircleCircle",
+        "PlaneCylinder",
+        "PlaneSphere",
+        "PlaneTorus",
+        "CylinderCylinder",
+        "CylinderSphere",
+        "CylinderTorus",
+        "TorusTorus",
+        "TorusSphere",
+        "SphereSphere",
+        "PointCylinder",
+        "PointSphere",
+        "PointCurve",
+    };
+    return explicitExtendedDistanceTypes.count(distanceType) != 0U;
+}
+
+double radiusOrZero(const AssemblyJointReference& reference)
+{
+    return reference.radius.value_or(0.0);
+}
+
+void setScalarCorrectionEvidence(JointConstraint& joint,
+                                 double correction,
+                                 std::string source,
+                                 std::string sourceSide)
+{
+    joint.scalarCorrection = correction;
+    joint.scalarCorrectionSource = std::move(source);
+    joint.radiusSourceSide = std::move(sourceSide);
+}
+
+void recordDistanceTypeEvidence(JointConstraint& joint)
+{
+    if (!joint.distanceType) {
+        return;
+    }
+
+    setScalarCorrectionEvidence(joint, 0.0, "none", "none");
+    const std::string& type = *joint.distanceType;
+    if (type == "LineCircle") {
+        setScalarCorrectionEvidence(
+            joint,
+            radiusOrZero(joint.reference2),
+            "getEdgeRadius(reference2)",
+            "reference2"
+        );
+    }
+    else if (type == "CircleCircle") {
+        setScalarCorrectionEvidence(
+            joint,
+            radiusOrZero(joint.reference1) + radiusOrZero(joint.reference2),
+            "getEdgeRadius(reference1)+getEdgeRadius(reference2)",
+            "reference1+reference2"
+        );
+    }
+    else if (type == "PlaneCylinder" || type == "PlaneSphere") {
+        setScalarCorrectionEvidence(
+            joint,
+            radiusOrZero(joint.reference2),
+            "getFaceRadius(reference2)",
+            "reference2"
+        );
+    }
+    else if (type == "CylinderCylinder" || type == "CylinderSphere" || type == "CylinderTorus"
+             || type == "TorusSphere" || type == "SphereSphere") {
+        setScalarCorrectionEvidence(
+            joint,
+            radiusOrZero(joint.reference1) + radiusOrZero(joint.reference2),
+            "getFaceRadius(reference1)+getFaceRadius(reference2)",
+            "reference1+reference2"
+        );
+    }
+    else if (type == "PointCylinder" || type == "PointSphere") {
+        setScalarCorrectionEvidence(
+            joint,
+            radiusOrZero(joint.reference1),
+            "getFaceRadius(reference1)",
+            "reference1"
+        );
+    }
+
+    if (isBasicDistanceType(type)) {
+        joint.distanceTypeMappingStatus = "mapped_basic";
+        joint.distanceTypeBoundary = "basic_supported";
+    }
+    else if (isExplicitExtendedDistanceType(type)) {
+        joint.distanceTypeMappingStatus = "pending_s4_mapping";
+        joint.distanceTypeBoundary = "extended_evidence_only";
+    }
+    else {
+        joint.distanceTypeMappingStatus = "default_boundary_not_mapped";
+        joint.distanceTypeBoundary = "default_or_todo_boundary";
+    }
+}
+
+void setDistanceType(JointConstraint& joint, std::string distanceType)
+{
+    joint.distanceType = std::move(distanceType);
+    recordDistanceTypeEvidence(joint);
+}
+
+std::string facePairDistanceType(const AssemblyJointReference& first,
+                                 const AssemblyJointReference& second)
+{
+    if (isFacePrimitive(second, "plane")) {
+        return "PlanePlane";
+    }
+    if (isFacePrimitive(first, "plane")) {
+        if (isFacePrimitive(second, "cylinder")) {
+            return "PlaneCylinder";
+        }
+        if (isFacePrimitive(second, "sphere")) {
+            return "PlaneSphere";
+        }
+        if (isFacePrimitive(second, "cone")) {
+            return "PlaneCone";
+        }
+        if (isFacePrimitive(second, "torus")) {
+            return "PlaneTorus";
+        }
+    }
+    if (isFacePrimitive(second, "cylinder")) {
+        return "CylinderCylinder";
+    }
+    if (isFacePrimitive(first, "cylinder")) {
+        if (isFacePrimitive(second, "sphere")) {
+            return "CylinderSphere";
+        }
+        if (isFacePrimitive(second, "cone")) {
+            return "CylinderCone";
+        }
+        if (isFacePrimitive(second, "torus")) {
+            return "CylinderTorus";
+        }
+    }
+    if (isFacePrimitive(second, "cone")) {
+        return "ConeCone";
+    }
+    if (isFacePrimitive(first, "cone")) {
+        if (isFacePrimitive(second, "torus")) {
+            return "ConeTorus";
+        }
+        if (isFacePrimitive(second, "sphere")) {
+            return "ConeSphere";
+        }
+    }
+    if (isFacePrimitive(second, "torus")) {
+        return "TorusTorus";
+    }
+    if (isFacePrimitive(first, "torus") && isFacePrimitive(second, "sphere")) {
+        return "TorusSphere";
+    }
+    if (isFacePrimitive(first, "sphere") && isFacePrimitive(second, "sphere")) {
+        return "SphereSphere";
+    }
+    return "Other";
+}
+
+std::string pointFaceDistanceType(const AssemblyJointReference& face)
+{
+    if (isFacePrimitive(face, "plane")) {
+        return "PointPlane";
+    }
+    if (isFacePrimitive(face, "cylinder")) {
+        return "PointCylinder";
+    }
+    if (isFacePrimitive(face, "sphere")) {
+        return "PointSphere";
+    }
+    if (isFacePrimitive(face, "cone")) {
+        return "PointCone";
+    }
+    if (isFacePrimitive(face, "torus")) {
+        return "PointTorus";
+    }
+    return "Other";
+}
+
+std::string edgeFaceDistanceType(const AssemblyJointReference& face,
+                                 const AssemblyJointReference& edge)
+{
+    const std::string prefix = isEdgePrimitive(edge, "line") ? "Line" : "Curve";
+    if (isFacePrimitive(face, "plane")) {
+        return prefix + "Plane";
+    }
+    if (isFacePrimitive(face, "cylinder")) {
+        return prefix + "Cylinder";
+    }
+    if (isFacePrimitive(face, "sphere")) {
+        return prefix + "Sphere";
+    }
+    if (isFacePrimitive(face, "cone")) {
+        return prefix + "Cone";
+    }
+    if (isFacePrimitive(face, "torus")) {
+        return prefix + "Torus";
+    }
+    return "Other";
 }
 
 void classifyDistanceType(JointConstraint& joint, const runtime::ComputeContext& context)
@@ -631,58 +885,103 @@ void classifyDistanceType(JointConstraint& joint, const runtime::ComputeContext&
     }
 
     // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.cpp
-    // ::getDistanceType(), reads "Reference1"/"Reference2" element type, checks "GeomAbs_Line" /
-    // "GeomAbs_Plane", and calls "swapJCS(joint)" so face or edge reference order matches the
-    // solver-side DistanceType. CAD Core mutates only this request-local JointConstraint.
+    // ::getDistanceType(), reads "Reference1"/"Reference2" element type, checks line/circle
+    // edges and plane/cylinder/cone/torus/sphere faces, and calls "swapJCS(joint)" so the
+    // solver-side DistanceType follows FreeCAD ordering. CAD Core mutates only this request-local
+    // JointConstraint and keeps extended cases evidence-only until S4/S6 mapping.
     classifyDistanceReference(joint.reference1, context);
     classifyDistanceReference(joint.reference2, context);
 
-    if (isReference(joint.reference1, "Vertex", "point")
-        && isReference(joint.reference2, "Vertex", "point")) {
-        joint.distanceType = "PointPoint";
+    if (isKind(joint.reference1, "Vertex") && isKind(joint.reference2, "Vertex")) {
+        setDistanceType(joint, "PointPoint");
         return;
     }
-    if (isReference(joint.reference1, "Edge", "line")
-        && isReference(joint.reference2, "Edge", "line")) {
-        joint.distanceType = "LineLine";
+    if (isKind(joint.reference1, "Edge") && isKind(joint.reference2, "Edge")) {
+        if (isEdgePrimitive(joint.reference1, "line") || isEdgePrimitive(joint.reference2, "line")) {
+            if (!isEdgePrimitive(joint.reference1, "line")) {
+                swapJointConstraintJcs(joint);
+            }
+            if (isEdgePrimitive(joint.reference2, "line")) {
+                setDistanceType(joint, "LineLine");
+                return;
+            }
+            if (isEdgePrimitive(joint.reference2, "circle")) {
+                setDistanceType(joint, "LineCircle");
+                return;
+            }
+            setDistanceType(joint, "Other");
+            return;
+        }
+        if (isEdgePrimitive(joint.reference1, "circle") || isEdgePrimitive(joint.reference2, "circle")) {
+            if (!isEdgePrimitive(joint.reference1, "circle")) {
+                swapJointConstraintJcs(joint);
+            }
+            if (isEdgePrimitive(joint.reference2, "circle")) {
+                setDistanceType(joint, "CircleCircle");
+                return;
+            }
+            setDistanceType(joint, "Other");
+            return;
+        }
+        setDistanceType(joint, "Other");
         return;
     }
-    if (isReference(joint.reference1, "Face", "plane")
-        && isReference(joint.reference2, "Face", "plane")) {
-        joint.distanceType = "PlanePlane";
+    if (isKind(joint.reference1, "Face") && isKind(joint.reference2, "Face")) {
+        if (isFacePrimitive(joint.reference1, "plane") || isFacePrimitive(joint.reference2, "plane")) {
+            if (!isFacePrimitive(joint.reference1, "plane")) {
+                swapJointConstraintJcs(joint);
+            }
+        }
+        else if (isFacePrimitive(joint.reference1, "cylinder")
+                 || isFacePrimitive(joint.reference2, "cylinder")) {
+            if (!isFacePrimitive(joint.reference1, "cylinder")) {
+                swapJointConstraintJcs(joint);
+            }
+        }
+        else if (isFacePrimitive(joint.reference1, "cone") || isFacePrimitive(joint.reference2, "cone")) {
+            if (!isFacePrimitive(joint.reference1, "cone")) {
+                swapJointConstraintJcs(joint);
+            }
+        }
+        else if (isFacePrimitive(joint.reference1, "torus") || isFacePrimitive(joint.reference2, "torus")) {
+            if (!isFacePrimitive(joint.reference1, "torus")) {
+                swapJointConstraintJcs(joint);
+            }
+        }
+        else if (isFacePrimitive(joint.reference1, "sphere") || isFacePrimitive(joint.reference2, "sphere")) {
+            if (!isFacePrimitive(joint.reference1, "sphere")) {
+                swapJointConstraintJcs(joint);
+            }
+        }
+        setDistanceType(joint, facePairDistanceType(joint.reference1, joint.reference2));
         return;
     }
-    if (isReference(joint.reference1, "Vertex", "point")
-        && isReference(joint.reference2, "Face", "plane")) {
-        swapJointConstraintJcs(joint);
-        joint.distanceType = "PointPlane";
+    if ((isKind(joint.reference1, "Vertex") && isKind(joint.reference2, "Face"))
+        || (isKind(joint.reference1, "Face") && isKind(joint.reference2, "Vertex"))) {
+        if (isKind(joint.reference1, "Vertex")) {
+            swapJointConstraintJcs(joint);
+        }
+        setDistanceType(joint, pointFaceDistanceType(joint.reference1));
         return;
     }
-    if (isReference(joint.reference1, "Face", "plane")
-        && isReference(joint.reference2, "Vertex", "point")) {
-        joint.distanceType = "PointPlane";
+    if ((isKind(joint.reference1, "Edge") && isKind(joint.reference2, "Face"))
+        || (isKind(joint.reference1, "Face") && isKind(joint.reference2, "Edge"))) {
+        if (isKind(joint.reference1, "Edge")) {
+            swapJointConstraintJcs(joint);
+        }
+        setDistanceType(joint, edgeFaceDistanceType(joint.reference1, joint.reference2));
         return;
     }
-    if (isReference(joint.reference1, "Edge", "line")
-        && isReference(joint.reference2, "Face", "plane")) {
-        swapJointConstraintJcs(joint);
-        joint.distanceType = "LinePlane";
+    if ((isKind(joint.reference1, "Vertex") && isKind(joint.reference2, "Edge"))
+        || (isKind(joint.reference1, "Edge") && isKind(joint.reference2, "Vertex"))) {
+        if (isKind(joint.reference1, "Vertex")) {
+            swapJointConstraintJcs(joint);
+        }
+        setDistanceType(joint, isEdgePrimitive(joint.reference1, "line") ? "PointLine" : "PointCurve");
         return;
     }
-    if (isReference(joint.reference1, "Face", "plane")
-        && isReference(joint.reference2, "Edge", "line")) {
-        joint.distanceType = "LinePlane";
-        return;
-    }
-    if (isReference(joint.reference1, "Vertex", "point")
-        && isReference(joint.reference2, "Edge", "line")) {
-        swapJointConstraintJcs(joint);
-        joint.distanceType = "PointLine";
-        return;
-    }
-    if (isReference(joint.reference1, "Edge", "line")
-        && isReference(joint.reference2, "Vertex", "point")) {
-        joint.distanceType = "PointLine";
+    if (!joint.reference1.elementKind.empty() || !joint.reference2.elementKind.empty()) {
+        setDistanceType(joint, "Other");
     }
 }
 
@@ -1160,10 +1459,12 @@ std::shared_ptr<MbD::ASMTJoint> makeOndselDistanceJoint(const JointConstraint& j
         distanceJoint->offset = joint.offset.value_or(distance);
         return distanceJoint;
     }
-
-    auto distanceJoint = MbD::ASMTSphSphJoint::With();
-    distanceJoint->distanceIJ = distance;
-    return distanceJoint;
+    if (!joint.distanceType) {
+        auto distanceJoint = MbD::ASMTSphSphJoint::With();
+        distanceJoint->distanceIJ = distance;
+        return distanceJoint;
+    }
+    return nullptr;
 }
 
 std::shared_ptr<MbD::ASMTJoint> makeOndselJointOfType(const JointConstraint& joint)
@@ -1255,6 +1556,10 @@ std::optional<std::string> unsupportedReasonForOndselJoint(const JointConstraint
     if (!isSupportedOndselJointType(joint.jointType)) {
         return "unsupported_joint_type";
     }
+    if (joint.jointType == "Distance" && joint.distanceType && !joint.solverJointClass) {
+        return joint.distanceTypeMappingStatus.empty() ? "distance_type_mapping_pending"
+                                                       : joint.distanceTypeMappingStatus;
+    }
     if (!joint.reference1.markerPlacement || !joint.reference2.markerPlacement) {
         return "missing_marker_placement";
     }
@@ -1281,6 +1586,15 @@ std::string unsupportedJointMessage(const UnsupportedAssemblyJoint& unsupported)
     if (unsupported.reason == "missing_marker_placement") {
         return "Ondsel solver adapter cannot convert " + unsupported.jointType
             + " without resolved FreeCAD marker placement";
+    }
+    if (unsupported.reason == "pending_s4_mapping") {
+        return "Ondsel solver adapter keeps extended DistanceType evidence request-local until S4 mapping";
+    }
+    if (unsupported.reason == "default_boundary_not_mapped") {
+        return "Ondsel solver adapter keeps default/TODO DistanceType boundary unsupported";
+    }
+    if (unsupported.reason == "distance_type_mapping_pending") {
+        return "Ondsel solver adapter cannot convert Distance without a published solver_joint_class";
     }
     if (unsupported.jointType == "RackPinion") {
         return "Ondsel solver adapter cannot convert RackPinion without a matching Slider precondition";

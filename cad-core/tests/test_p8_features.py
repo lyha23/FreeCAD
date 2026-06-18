@@ -1790,6 +1790,92 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "properties": {"Length": 3, "Width": 2},
             "subname": "Face1",
         }
+        circle_edge = {
+            "object": "CircleEdge",
+            "type_id": "Part::Cylinder",
+            "properties": {"Radius": 2.25, "Height": 4},
+            "subname": "Edge2",
+            "element_kind": "Edge",
+            "primitive": "circle",
+            "radius": 2.25,
+            "radius_source": "getEdgeRadius",
+        }
+        ellipse_edge = {
+            "object": "EllipseEdge",
+            "type_id": "Part::Ellipse",
+            "properties": {"MajorRadius": 4, "MinorRadius": 2, "Angle1": 0, "Angle2": 360},
+            "subname": "Edge1",
+            "element_kind": "Edge",
+            "primitive": "curve",
+            "radius": 0.0,
+            "radius_source": "getEdgeRadius",
+        }
+        cylinder_face = {
+            "object": "CylinderFace",
+            "type_id": "Part::Cylinder",
+            "properties": {"Radius": 3.5, "Height": 4},
+            "subname": "Face1",
+            "element_kind": "Face",
+            "primitive": "cylinder",
+            "radius": 3.5,
+            "radius_source": "getFaceRadius",
+        }
+        sphere_face = {
+            "object": "SphereFace",
+            "type_id": "Part::Sphere",
+            "properties": {"Radius": 4.5, "Angle1": -90, "Angle2": 90, "Angle3": 360},
+            "subname": "Face1",
+            "element_kind": "Face",
+            "primitive": "sphere",
+            "radius": 4.5,
+            "radius_source": "getFaceRadius",
+        }
+        cone_face = {
+            "object": "ConeFace",
+            "type_id": "Part::Cone",
+            "properties": {"Radius1": 2, "Radius2": 4, "Height": 6, "Angle": 360},
+            "subname": "Face1",
+            "element_kind": "Face",
+            "primitive": "cone",
+            "radius": 0.0,
+            "radius_source": "getFaceRadius",
+        }
+        torus_face = {
+            "object": "TorusFace",
+            "type_id": "Part::Torus",
+            "properties": {"Radius1": 5, "Radius2": 1, "Angle1": -180, "Angle2": 180, "Angle3": 360},
+            "subname": "Face1",
+            "element_kind": "Face",
+            "primitive": "torus",
+            "radius": 0.0,
+            "radius_source": "getFaceRadius",
+        }
+
+        def expected_element_kind(reference: dict) -> str:
+            return reference.get("element_kind", reference["subname"].rstrip("0123456789"))
+
+        def expected_primitive(reference: dict) -> str:
+            if "primitive" in reference:
+                return reference["primitive"]
+            return {
+                "Part::Vertex": "point",
+                "Part::Line": "line",
+                "Part::Plane": "plane",
+            }[reference["type_id"]]
+
+        def assert_solver_reference(solver_joint: dict, side: str, expected_reference: dict) -> None:
+            self.assertEqual(solver_joint[side]["object"], expected_reference["object"])
+            self.assertEqual(solver_joint[side]["subnames"], [expected_reference["subname"]])
+            self.assertEqual(solver_joint[f"{side}_element_kind"], expected_element_kind(expected_reference))
+            self.assertEqual(solver_joint[f"{side}_primitive"], expected_primitive(expected_reference))
+            if "radius" in expected_reference:
+                self.assertAlmostEqual(solver_joint[f"{side}_radius"], expected_reference["radius"])
+                self.assertEqual(solver_joint[f"{side}_radius_source"], expected_reference["radius_source"])
+            elif f"{side}_radius" in solver_joint:
+                self.assertAlmostEqual(solver_joint[f"{side}_radius"], 0.0)
+            else:
+                self.assertNotIn(f"{side}_radius", solver_joint)
+
         cases = [
             (
                 "point_point_zero",
@@ -1910,6 +1996,11 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(solver_joint["distance_type"], distance_type)
                 self.assertEqual(solver_joint["distance"], distance)
                 self.assertEqual(solver_joint["solver_joint_class"], solver_joint_class)
+                self.assertEqual(solver_joint["distance_type_mapping_status"], "mapped_basic")
+                self.assertEqual(solver_joint["distance_type_boundary"], "basic_supported")
+                self.assertEqual(solver_joint["scalar_correction"], 0.0)
+                self.assertEqual(solver_joint["scalar_correction_source"], "none")
+                self.assertEqual(solver_joint["radius_source_side"], "none")
                 if scalar_field is None:
                     self.assertNotIn("distance_ij", solver_joint)
                     self.assertNotIn("offset", solver_joint)
@@ -1918,22 +2009,8 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     other_scalar = "offset" if scalar_field == "distance_ij" else "distance_ij"
                     self.assertNotIn(other_scalar, solver_joint)
                 self.assertEqual(solver_joint["jcs_swapped_for_solver"], swapped)
-                self.assertEqual(solver_joint["reference1"]["object"], solver_ref1["object"])
-                self.assertEqual(solver_joint["reference1"]["subnames"], [solver_ref1["subname"]])
-                self.assertEqual(solver_joint["reference1_element_kind"], solver_ref1["subname"].rstrip("0123456789"))
-                self.assertEqual(solver_joint["reference1_primitive"], {
-                    "Part::Vertex": "point",
-                    "Part::Line": "line",
-                    "Part::Plane": "plane",
-                }[solver_ref1["type_id"]])
-                self.assertEqual(solver_joint["reference2"]["object"], solver_ref2["object"])
-                self.assertEqual(solver_joint["reference2"]["subnames"], [solver_ref2["subname"]])
-                self.assertEqual(solver_joint["reference2_element_kind"], solver_ref2["subname"].rstrip("0123456789"))
-                self.assertEqual(solver_joint["reference2_primitive"], {
-                    "Part::Vertex": "point",
-                    "Part::Line": "line",
-                    "Part::Plane": "plane",
-                }[solver_ref2["type_id"]])
+                assert_solver_reference(solver_joint, "reference1", solver_ref1)
+                assert_solver_reference(solver_joint, "reference2", solver_ref2)
                 for side, solver_ref in (("reference1", solver_ref1), ("reference2", solver_ref2)):
                     reference = solver_joint[side]
                     self.assertEqual(reference["object"], solver_ref["object"])
@@ -1945,6 +2022,147 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     self.assert_identity_placement(reference["connectorPlacement"])
                     self.assert_identity_placement(reference["markerPlacement"])
                     self.assertIn("handleOneSideOfJoint", reference["markerResolutionDiagnostic"])
+
+        extended_cases = [
+            {
+                "case": "line_circle",
+                "reference1": line_a,
+                "reference2": circle_edge,
+                "distance_type": "LineCircle",
+                "swapped": False,
+                "solver_ref1": line_a,
+                "solver_ref2": circle_edge,
+                "scalar_correction": 2.25,
+                "scalar_correction_source": "getEdgeRadius(reference2)",
+                "radius_source_side": "reference2",
+                "mapping_status": "pending_s4_mapping",
+                "boundary": "extended_evidence_only",
+                "unsupported_reason": "pending_s4_mapping",
+            },
+            {
+                "case": "plane_cylinder",
+                "reference1": plane_a,
+                "reference2": cylinder_face,
+                "distance_type": "PlaneCylinder",
+                "swapped": False,
+                "solver_ref1": plane_a,
+                "solver_ref2": cylinder_face,
+                "scalar_correction": 3.5,
+                "scalar_correction_source": "getFaceRadius(reference2)",
+                "radius_source_side": "reference2",
+                "mapping_status": "pending_s4_mapping",
+                "boundary": "extended_evidence_only",
+                "unsupported_reason": "pending_s4_mapping",
+            },
+            {
+                "case": "point_sphere",
+                "reference1": point_a,
+                "reference2": sphere_face,
+                "distance_type": "PointSphere",
+                "swapped": True,
+                "solver_ref1": sphere_face,
+                "solver_ref2": point_a,
+                "scalar_correction": 4.5,
+                "scalar_correction_source": "getFaceRadius(reference1)",
+                "radius_source_side": "reference1",
+                "mapping_status": "pending_s4_mapping",
+                "boundary": "extended_evidence_only",
+                "unsupported_reason": "pending_s4_mapping",
+            },
+            {
+                "case": "torus_sphere",
+                "reference1": sphere_face,
+                "reference2": torus_face,
+                "distance_type": "TorusSphere",
+                "swapped": True,
+                "solver_ref1": torus_face,
+                "solver_ref2": sphere_face,
+                "scalar_correction": 4.5,
+                "scalar_correction_source": "getFaceRadius(reference1)+getFaceRadius(reference2)",
+                "radius_source_side": "reference1+reference2",
+                "mapping_status": "pending_s4_mapping",
+                "boundary": "extended_evidence_only",
+                "unsupported_reason": "pending_s4_mapping",
+            },
+            {
+                "case": "plane_cone_default_boundary",
+                "reference1": plane_a,
+                "reference2": cone_face,
+                "distance_type": "PlaneCone",
+                "swapped": False,
+                "solver_ref1": plane_a,
+                "solver_ref2": cone_face,
+                "scalar_correction": 0.0,
+                "scalar_correction_source": "none",
+                "radius_source_side": "none",
+                "mapping_status": "default_boundary_not_mapped",
+                "boundary": "default_or_todo_boundary",
+                "unsupported_reason": "default_boundary_not_mapped",
+            },
+            {
+                "case": "curve_plane_default_boundary",
+                "reference1": ellipse_edge,
+                "reference2": plane_a,
+                "distance_type": "CurvePlane",
+                "swapped": True,
+                "solver_ref1": plane_a,
+                "solver_ref2": ellipse_edge,
+                "scalar_correction": 0.0,
+                "scalar_correction_source": "none",
+                "radius_source_side": "none",
+                "mapping_status": "default_boundary_not_mapped",
+                "boundary": "default_or_todo_boundary",
+                "unsupported_reason": "default_boundary_not_mapped",
+            },
+            {
+                "case": "line_curve_other_default_boundary",
+                "reference1": ellipse_edge,
+                "reference2": line_a,
+                "distance_type": "Other",
+                "swapped": True,
+                "solver_ref1": line_a,
+                "solver_ref2": ellipse_edge,
+                "scalar_correction": 0.0,
+                "scalar_correction_source": "none",
+                "radius_source_side": "none",
+                "mapping_status": "default_boundary_not_mapped",
+                "boundary": "default_or_todo_boundary",
+                "unsupported_reason": "default_boundary_not_mapped",
+            },
+        ]
+        for case in extended_cases:
+            with self.subTest(case=case["case"]):
+                result = self.run_distance_type_reference_case(
+                    case["case"],
+                    case["reference1"],
+                    case["reference2"],
+                    1.5,
+                )
+                assembly = result["objects"]["Assembly"]
+                joint = result["objects"]["DistanceJoint"]
+                solver_joint = assembly["solver_adapter"]["solver_joints"][0]
+
+                self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_assembly_solver"])
+                self.assertEqual(assembly["solver_adapter"]["status"], "unsupported")
+                self.assertEqual(
+                    assembly["solver_adapter"]["unsupported_joints"],
+                    [{"object": "DistanceJoint", "joint_type": "Distance", "reason": case["unsupported_reason"]}],
+                )
+                self.assertEqual(joint["reference1"]["object"], case["reference1"]["object"])
+                self.assertEqual(joint["reference2"]["object"], case["reference2"]["object"])
+                self.assertEqual(solver_joint["distance_type"], case["distance_type"])
+                self.assertEqual(solver_joint["distance"], 1.5)
+                self.assertNotIn("solver_joint_class", solver_joint)
+                self.assertNotIn("distance_ij", solver_joint)
+                self.assertNotIn("offset", solver_joint)
+                self.assertEqual(solver_joint["jcs_swapped_for_solver"], case["swapped"])
+                self.assertEqual(solver_joint["distance_type_mapping_status"], case["mapping_status"])
+                self.assertEqual(solver_joint["distance_type_boundary"], case["boundary"])
+                self.assertAlmostEqual(solver_joint["scalar_correction"], case["scalar_correction"])
+                self.assertEqual(solver_joint["scalar_correction_source"], case["scalar_correction_source"])
+                self.assertEqual(solver_joint["radius_source_side"], case["radius_source_side"])
+                assert_solver_reference(solver_joint, "reference1", case["solver_ref1"])
+                assert_solver_reference(solver_joint, "reference2", case["solver_ref2"])
 
     def test_c3m6_assembly_marker_resolver_exposes_object_level_baseline_evidence(self) -> None:
         result = self.run_recompute("assembly-grounded-distance-joint-real-solver", "c3m6")
