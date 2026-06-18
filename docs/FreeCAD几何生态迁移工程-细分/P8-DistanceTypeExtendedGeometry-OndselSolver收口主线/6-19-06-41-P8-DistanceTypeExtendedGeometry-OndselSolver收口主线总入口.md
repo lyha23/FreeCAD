@@ -62,7 +62,7 @@
 | 工作步骤总入口 | `工作步骤细分/6-19-06-41-【已实现】P8-DistanceTypeExtendedGeometry工作步骤总入口.md` | S0-S6 执行索引，已校验索引 / 矩阵文件名 / 轻量验收 |
 | S0 声明口径 | `工作步骤细分/6-19-06-42-【已实现】P8-DistanceTypeExtendedGeometry-S0-声明口径与live基线复核.md` | 已完成：冻结 claims、non-goals、现有 basic / marker baseline 和拆分纪律 |
 | S1 源码候选 | `工作步骤细分/6-19-06-43-【已实现】P8-DistanceTypeExtendedGeometry-S1-FreeCAD源码候选矩阵.md` | 已完成：完整 DistanceType source authority 和 cad-core landing |
-| S2 范围准入 | `工作步骤细分/6-19-06-44-P8-DistanceTypeExtendedGeometry-S2-范围准入与blocker矩阵.md` | 把所有剩余 cases 分为 supportedCandidate、oracleFirst、defaultBoundary、nonGoal |
+| S2 范围准入 | `工作步骤细分/6-19-06-44-【已实现】P8-DistanceTypeExtendedGeometry-S2-范围准入与blocker矩阵.md` | 已完成：冻结 supportedCandidate / oracleFirst / defaultBoundary / nonGoal 边界和 blocker ownership |
 | S3 radius / primitive | `工作步骤细分/6-19-06-45-P8-DistanceTypeExtendedGeometry-S3-RadiusPrimitive证据专项复审.md` | 设计 DTO / primitive / radius evidence，不进入 ASMT 发布 |
 | S4 ASMT mapping | `工作步骤细分/6-19-06-46-P8-DistanceTypeExtendedGeometry-S4-OndselDistanceJoint扩展映射专项复审.md` | 裁决 extended cases 的 ASMT class 与 scalar field |
 | S5 oracle / fixtures | `工作步骤细分/6-19-06-47-P8-DistanceTypeExtendedGeometry-S5-NativeOracle与代表fixture专项复审.md` | 批量采集 expected，锁定 supported / diagnostic / nonGoal |
@@ -75,7 +75,7 @@
 
 ## 当前执行建议
 
-下一轮用 `goal-step-runner` 刷新 `工作步骤细分/` 队列；已校验的 `工作步骤细分/6-19-06-41-【已实现】P8-DistanceTypeExtendedGeometry工作步骤总入口.md`、S0 和 S1 会被跳过，当前应从 S2 开始。S2 只复核和冻结范围矩阵；S3-S5 先补 oracle / DTO / mapping 证据；S6 才进入 C++ 实现和发布。
+下一轮用 `goal-step-runner` 刷新 `工作步骤细分/` 队列；已校验的 `工作步骤细分/6-19-06-41-【已实现】P8-DistanceTypeExtendedGeometry工作步骤总入口.md`、S0、S1 和 S2 会被跳过，当前应从 S3 开始。S3-S5 先补 DTO / mapping / oracle 证据；S6 才进入 C++ 实现和发布。
 
 ## 非目标
 
