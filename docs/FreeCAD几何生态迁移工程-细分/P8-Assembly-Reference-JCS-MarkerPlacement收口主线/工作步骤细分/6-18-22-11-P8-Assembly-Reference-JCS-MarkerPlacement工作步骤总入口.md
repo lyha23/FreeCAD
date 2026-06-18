@@ -26,7 +26,7 @@
 4. S3 已完成 marker resolver 前置：object-level baseline 有稳定 evidence，subshape refs 输出需要 `handleOneSideOfJoint()` 等价证据的 diagnostic，不按 fixture 名称、JointType、bbox 或 subshape 顺序补输出。
 5. S4 已批量采集 object / vertex / edge / face / mixed / current value / special rewrite representative expected。
 6. S5 已落 C++、fixtures、focused tests；14 个 subshape expected 删除 `known_gap`，RackPinion / Screw 特例不回退，real Ondsel adapter 不再 silent fallback 缺失 marker。
-7. S6 暂不执行；需先关闭 `assembly-distance-line-line-real-solver`、`assembly-distance-point-line-real-solver`、`assembly-distance-point-plane-real-solver`、`assembly-distance-line-plane-real-solver` 的 remaining blocker。
+7. S6 暂不执行；需先关闭剩余 `assembly-distance-point-line-real-solver` 的 PointLine marker/current-value blocker。
 
 ## 当前矩阵闸门
 
