@@ -1,9 +1,9 @@
 category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
 GBJ-BG-001	distance2_dto_gap	P1	GBJ-SCOPE-002;GBJ-SCOPE-003	no	S3 closed DTO/parser/output; keep S4 native expected and S5 publication gates
-GBJ-BG-002	gears_jointtype_implementable_unsupported	P1	GBJ-SCOPE-002	no	S4 closed fixture, native expected and focused runtime assertions for Gears; S5 still needs capability publication
-GBJ-BG-003	belt_jointtype_implementable_unsupported	P1	GBJ-SCOPE-003	no	S4 closed fixture, native expected and focused runtime assertions for Belt with negative radius_j; S5 still needs capability publication
-GBJ-BG-004	native_expected_collection_gate	P1	GBJ-SCOPE-004	no	S4 closed c3m6 Gears and Belt FreeCADCmd expected; keep S5/S6 release gate before supported claim
-GBJ-BG-005	capability_publication_release_gate	P1	GBJ-SCOPE-005	no	Align supported_joint_matrix, unsupported_joint_matrix, tests and existing P8 docs/matrix references
+GBJ-BG-002	gears_jointtype_implementable_unsupported	P1	GBJ-SCOPE-002	no	S5 closed capability publication after S4 fixture, native expected and focused runtime assertions for Gears
+GBJ-BG-003	belt_jointtype_implementable_unsupported	P1	GBJ-SCOPE-003	no	S5 closed capability publication after S4 fixture, native expected and focused runtime assertions for Belt with negative radius_j
+GBJ-BG-004	native_expected_collection_gate	P1	GBJ-SCOPE-004	no	S4 closed c3m6 Gears and Belt FreeCADCmd expected; S5 consumed it for supported publication
+GBJ-BG-005	capability_publication_release_gate	P1	GBJ-SCOPE-005	no	S5 closed supported_joint_matrix, unsupported_joint_matrix, tests and existing P8 docs/matrix references
 GBJ-BG-006	remaining_rackpinion_screw_unsupported	P2	GBJ-SCOPE-006	yes	Keep RackPinion and Screw unsupported until separate source+DTO+oracle+tests package exists
 GBJ-BG-007	complex_distance_not_collected	P2	GBJ-SCOPE-007	yes	Keep DistanceType geometry matrix notCollected outside this scalar Gears/Belt package
 GBJ-BG-008	persistent_assembly_non_goal	P3	GBJ-SCOPE-008	yes	Keep GUI drag, postDrag and cross-request solver state out of cad-core

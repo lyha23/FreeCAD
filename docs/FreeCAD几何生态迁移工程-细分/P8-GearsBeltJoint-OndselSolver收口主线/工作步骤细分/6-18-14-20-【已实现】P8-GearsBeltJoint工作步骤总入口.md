@@ -4,7 +4,7 @@
 
 把 Gears / Belt 两个 `ASMTGearJoint` 族 JointType 从 remaining unsupported 队列推进到 real Ondsel request-local supported 子集，并保持 RackPinion / Screw 和复杂 Distance geometry 不被误发布。
 
-当前收口状态：S0 已完成 live baseline 复核，S1 已完成 FreeCAD 源码候选矩阵复核，S2 已完成范围准入与 blocker 路由，S3 已完成 `Distance2` DTO 与 `ASMTGearJoint` runtime 映射，S4 已完成 native oracle、focused tests 与半径符号复核；S5 到 S6 仍为待执行。尚未完成 capability 发布闸门；不得把整个主线写成“已实现”。
+当前收口状态：S0 已完成 live baseline 复核，S1 已完成 FreeCAD 源码候选矩阵复核，S2 已完成范围准入与 blocker 路由，S3 已完成 `Distance2` DTO 与 `ASMTGearJoint` runtime 映射，S4 已完成 native oracle、focused tests 与半径符号复核，S5 已完成 capability 与 unsupported 矩阵发布同步；S6 仍为待执行。不得把整个主线写成“已实现”。
 
 索引关闭口径：本文件只表示工作步骤索引、矩阵文件名和轻量验收命令已经复核；S0-S6 仍由各自文件推进，不能因为本文件改名为 `【已实现】` 而跳过后续队列。
 
@@ -17,7 +17,7 @@
 | S2 | `6-18-14-23-【已实现】P8-GearsBeltJoint-S2-范围准入与blocker矩阵.md` | 已实现 | 将候选路由到 unsupportedImplementable、notCollected、releaseGate、nonGoal |
 | S3 | `6-18-14-24-【已实现】P8-GearsBeltJoint-S3-Distance2与ASMTGearJoint映射专项复审.md` | 已实现 | 收口 `Distance2` DTO、Gears/Belt ASMT 映射和 supported predicate |
 | S4 | `6-18-14-25-【已实现】P8-GearsBeltJoint-S4-NativeOracle与半径符号专项复审.md` | 已实现 | 对齐 FreeCADCmd expected、`radiusJ` 符号和 request-local solver output |
-| S5 | `6-18-14-26-P8-GearsBeltJoint-S5-Capability与unsupported矩阵专项复审.md` | 待执行 | 同步 capabilities、focused tests、P8 docs / TSV |
+| S5 | `6-18-14-26-【已实现】P8-GearsBeltJoint-S5-Capability与unsupported矩阵专项复审.md` | 已实现 | 同步 capabilities、focused tests、P8 docs / TSV |
 | S6 | `6-18-14-27-P8-GearsBeltJoint-S6-Oracle实现与发布闸门.md` | 待执行 | 消费 blockers 并给出代码落点和验收命令 |
 
 ## 执行顺序
@@ -33,16 +33,16 @@
 
 | 矩阵 | 当前用途 | 当前结论 |
 | --- | --- | --- |
-| `p8_gears_belt_joint_source_candidates.tsv` | FreeCAD / cad-core 证据入口 | 已记录 S4 native expected 与 focused test 关闭，当前 unsupported publication 仍待 S5 |
-| `p8_gears_belt_joint_scope_review_matrix.tsv` | 当前能力路由 | GBJ-SCOPE-002 / 003 代码与 oracle 已落地但仍等 capability；GBJ-SCOPE-004 已完成 native expected |
-| `p8_gears_belt_joint_blocker_queue.tsv` | 发布前 blocker | GBJ-BLOCK-001 / 002 已由 S3 关闭，GBJ-BLOCK-003 / 004 已由 S4 关闭；capability、remaining unsupported boundary 待关闭 |
+| `p8_gears_belt_joint_source_candidates.tsv` | FreeCAD / cad-core 证据入口 | 已记录 S4 native expected 与 focused test 关闭，S5 已完成 supported / unsupported publication |
+| `p8_gears_belt_joint_scope_review_matrix.tsv` | 当前能力路由 | GBJ-SCOPE-002 / 003 / 004 / 005 已转为 supported；GBJ-SCOPE-006 / 007 / 008 保持边界 |
+| `p8_gears_belt_joint_blocker_queue.tsv` | 发布前 blocker | GBJ-BLOCK-001 / 002 已由 S3 关闭，GBJ-BLOCK-003 / 004 已由 S4 关闭，GBJ-BLOCK-005 / 006 已由 S5 关闭 |
 | `p8_gears_belt_joint_non_goal_registry.tsv` | 非目标边界 | RackPinion / Screw、复杂 Distance、GUI/session 不进入本包 |
 | `p8_gears_belt_joint_backend_gap_classification.tsv` | 分类与优先级 | 本包只推进 Gears / Belt |
 
 ## 状态纪律
 
 - `supported` 只能在 build、focused tests、expected parity、capability/docs 同步全部通过后使用。
-- 当前 Gears / Belt 是 `unsupportedImplementable`，不是 `backendGap`。
+- 当前 Gears / Belt 是 request-local real Ondsel supported subset，不是完整 Assembly transaction lifecycle。
 - `RackPinion` / `Screw` 保持 unsupported；复杂 Distance geometry 保持 notCollected。
 - 不允许用 `ASMTGearJoint` 存在来跳过 FreeCADCmd expected。
 - 不允许恢复 representative fallback 或 adapter 层业务补丁。

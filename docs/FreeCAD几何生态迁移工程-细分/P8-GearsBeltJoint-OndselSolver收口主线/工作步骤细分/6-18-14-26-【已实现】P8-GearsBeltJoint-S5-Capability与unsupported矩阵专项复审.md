@@ -4,6 +4,8 @@
 
 关闭 `GBJ-BLOCK-005` 和 `GBJ-BLOCK-006`：同步 C ABI capabilities、focused tests、既有 P8 AssemblySolver docs / TSV，并保护 remaining unsupported matrix。
 
+当前状态：已实现。S5 只关闭 capability publication 与 unsupported boundary；不新增 solver 逻辑、不刷新 expected、不推进 RackPinion / Screw 或复杂 Distance geometry。
+
 ## FreeCAD 依据
 
 - Gears / Belt 已有直接 `ASMTGearJoint` mapping。
@@ -26,6 +28,20 @@
 - `GBJ-CAND-012`
 - `GBJ-BLOCK-005`
 - `GBJ-BLOCK-006`
+
+## 关闭结论
+
+- `cad-core/src/adapters/c_api/c_api.cpp` 已发布 `grounded_gears_joint`、`grounded_belt_joint`，`supported_joint_matrix` 包含 `Gears` / `Belt`。
+- `unsupported_joint_matrix` 只保留 `RackPinion` / `Screw`。
+- `cad-core/tests/test_adapters.py` 已同步 C ABI capability 断言。
+- `cad-core/tests/test_p8_features.py` 的 S4 focused matrix 已覆盖 Gears / Belt real solver、`unsupported_joints=[]`、`distance2` 与 Belt 负 `radius_j`，本轮无须改动。
+- GBJ 矩阵已将 `GBJ-BLOCK-005` / `GBJ-BLOCK-006` 标记为 S5 关闭；P8 AssemblySolver 矩阵只同步 `P8ASM-SCOPE-007`、`P8ASM-BLOCK-005`、`P8ASM-BG-004` 和直接匹配的 non-goal wording。
+
+## 验收记录
+
+- `cmake --build build --target cad_core_ffi` 通过。
+- `python3 -m unittest tests.test_adapters.CadCoreAdapterTest.test_c_api_capabilities_exposes_web_contract_facts tests.test_p8_features.CadCoreP8FeatureTest.test_c3m6_assembly_grounded_joint_matrix_uses_real_ondsel_solver tests.test_p8_features.CadCoreP8FeatureTest.test_c3m6_assembly_unsupported_joint_stays_diagnostic` 通过。
+- GBJ 与 P8 AssemblySolver 两个矩阵目录的 TSV field-count 检查通过。
 
 ## 验收标准
 

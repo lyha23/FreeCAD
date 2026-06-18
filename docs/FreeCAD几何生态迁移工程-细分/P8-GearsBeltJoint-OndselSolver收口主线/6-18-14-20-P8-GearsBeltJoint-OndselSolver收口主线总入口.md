@@ -12,11 +12,11 @@
 
 ## 当前基线
 
-- 当前 supported subset 是 `Fixed / Revolute / Cylindrical / Slider / Ball / Distance / Parallel / Perpendicular / Angle`；`unsupported_joint_matrix` 只剩 `RackPinion / Screw / Gears / Belt`。
+- 当前 supported subset 是 `Fixed / Revolute / Cylindrical / Slider / Ball / Distance / Parallel / Perpendicular / Angle / Gears / Belt`；`unsupported_joint_matrix` 只剩 `RackPinion / Screw`。
 - FreeCAD `AssemblyObject::makeMbdJointOfType()` 对 Gears / Belt 均创建 `ASMTGearJoint`，差异只在 `radiusJ` 符号。
 - S3 已在 `cad-core/include/cad_core/assembly/joint_solver.h::JointConstraint` 增加 `distance2`，并为 Gears / Belt 读取 `Distance` / `Distance2`。
 - S3 已在 `cad-core/src/assembly/joint_solver.cpp::makeOndselJointOfType()` 将 Gears / Belt 映射到 `ASMTGearJoint`；S4 已补齐 Gears / Belt native expected、`radius_i` / `radius_j` solver output 与 focused parity。
-- `cad-core/src/adapters/c_api/c_api.cpp` 当前仍把 `Gears` / `Belt` 发布在 `unsupported_joint_matrix`。
+- `cad-core/src/adapters/c_api/c_api.cpp` 当前已把 `Gears` / `Belt` 发布在 `supported_joint_matrix`，并在 `unsupported_joint_matrix` 中只保留 `RackPinion` / `Screw`。
 
 ## 证明链条
 
@@ -63,7 +63,7 @@
 | S2 范围准入 | `工作步骤细分/6-18-14-23-【已实现】P8-GearsBeltJoint-S2-范围准入与blocker矩阵.md` | 已完成候选到 unsupportedImplementable / notCollected / releaseGate / nonGoal 的路由 |
 | S3 DTO / 映射复审 | `工作步骤细分/6-18-14-24-【已实现】P8-GearsBeltJoint-S3-Distance2与ASMTGearJoint映射专项复审.md` | 已收口 `Distance2` DTO 和 `ASMTGearJoint` adapter |
 | S4 oracle 复审 | `工作步骤细分/6-18-14-25-【已实现】P8-GearsBeltJoint-S4-NativeOracle与半径符号专项复审.md` | 已收口 FreeCADCmd expected、`radiusJ` 符号和 request-local solver output |
-| S5 发布复审 | `工作步骤细分/6-18-14-26-P8-GearsBeltJoint-S5-Capability与unsupported矩阵专项复审.md` | 同步 capabilities、tests、P8 docs / TSV |
+| S5 发布复审 | `工作步骤细分/6-18-14-26-【已实现】P8-GearsBeltJoint-S5-Capability与unsupported矩阵专项复审.md` | 已同步 capabilities、tests、P8 docs / TSV |
 | S6 发布闸门 | `工作步骤细分/6-18-14-27-P8-GearsBeltJoint-S6-Oracle实现与发布闸门.md` | 指定代码落点、验收命令和禁止路径 |
 | source candidates | `矩阵/p8_gears_belt_joint_source_candidates.tsv` | FreeCAD / cad-core 候选证据 |
 | scope review | `矩阵/p8_gears_belt_joint_scope_review_matrix.tsv` | scope 状态和验收路由 |
@@ -71,4 +71,4 @@
 | non goal registry | `矩阵/p8_gears_belt_joint_non_goal_registry.tsv` | 不进入本轮实现的边界 |
 | backend gap classification | `矩阵/p8_gears_belt_joint_backend_gap_classification.tsv` | unsupported / notCollected / releaseGate / nonGoal 分类 |
 
-当前工作步骤索引已完成校验；S0 已完成 live baseline 复核，S1 已完成 FreeCAD 源码候选矩阵复核，S2 已完成范围准入与 blocker 路由，S3 已完成 DTO / adapter code landing，S4 已完成 native oracle 与半径符号复核；S5-S6 仍为 `待执行`。矩阵已记录 S4 oracle 关闭，但不是 supported 发布闸门结论。
+当前工作步骤索引已完成校验；S0 已完成 live baseline 复核，S1 已完成 FreeCAD 源码候选矩阵复核，S2 已完成范围准入与 blocker 路由，S3 已完成 DTO / adapter code landing，S4 已完成 native oracle 与半径符号复核，S5 已完成 capability 与 unsupported 矩阵发布同步；S6 仍为 `待执行`。矩阵已记录 Gears / Belt 的 request-local real Ondsel supported 发布结论，但不扩大到 RackPinion / Screw、复杂 Distance 或完整 Assembly transaction lifecycle。

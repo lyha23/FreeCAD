@@ -918,6 +918,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("grounded_parallel_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
         self.assertIn("grounded_perpendicular_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
         self.assertIn("grounded_angle_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
+        self.assertIn("grounded_gears_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
+        self.assertIn("grounded_belt_joint", capabilities["assembly"]["ondsel_solver_adapter"]["covered"])
         self.assertIn(
             "invalid_grounded_placement_rejected",
             capabilities["assembly"]["ondsel_solver_adapter"]["covered"],
@@ -952,11 +954,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(capabilities["assembly"]["placement_writeback"]["remaining_gaps"], [])
         self.assertEqual(
             capabilities["assembly"]["supported_joint_matrix"],
-            ["Fixed", "Revolute", "Cylindrical", "Slider", "Ball", "Distance", "Parallel", "Perpendicular", "Angle"],
+            ["Fixed", "Revolute", "Cylindrical", "Slider", "Ball", "Distance", "Parallel", "Perpendicular", "Angle", "Gears", "Belt"],
         )
         self.assertEqual(
             capabilities["assembly"]["unsupported_joint_matrix"],
-            ["RackPinion", "Screw", "Gears", "Belt"],
+            ["RackPinion", "Screw"],
         )
         self.assertEqual(capabilities["assembly"]["remaining_gaps"], [])
         self.assertEqual(
