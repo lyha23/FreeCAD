@@ -7,6 +7,7 @@
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_MakeVertex.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
+#include <Geom_BezierCurve.hxx>
 #include <Geom_BSplineCurve.hxx>
 #include <Standard_Failure.hxx>
 #include <TColStd_Array1OfInteger.hxx>
@@ -84,7 +85,8 @@ std::vector<SketchProfileEdge> profileEdges(
     const std::vector<SketchSegment>& segments,
     const std::vector<SketchArc>& arcs,
     const std::vector<SketchEllipseArc>& ellipseArcs,
-    const std::vector<SketchBSpline>& bsplines
+    const std::vector<SketchBSpline>& bsplines,
+    const std::vector<SketchBezier>& beziers
 )
 {
     std::vector<SketchProfileEdge> edges;
@@ -153,6 +155,31 @@ std::vector<SketchProfileEdge> profileEdges(
             }
         );
     }
+    for (const auto& bezier : beziers) {
+        // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp
+        // ::GeomBezierCurve::Restore() reads "PolesCount" and each Pole's
+        // "X/Y/Z/Weight"; Sketcher consumes the curve as a normal profile edge.
+        if (bezier.poles.size() < 2U) {
+            continue;
+        }
+        edges.push_back(
+            SketchProfileEdge {
+                SketchProfileEdgeKind::Bezier,
+                bezier.poles.front(),
+                bezier.poles.back(),
+                gp_Pnt {},
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                static_cast<int>(bezier.poles.size() - 1U),
+                bezier.poles,
+                bezier.weights
+            }
+        );
+    }
     return edges;
 }
 
@@ -195,6 +222,40 @@ std::optional<Handle(Geom_BSplineCurve)> makeBSplineCurve(int degree, const std:
     }
 }
 
+std::optional<Handle(Geom_BezierCurve)> makeBezierCurve(
+    const std::vector<gp_Pnt>& poles,
+    const std::vector<double>& weights
+)
+{
+    if (poles.size() < 2U || (!weights.empty() && weights.size() != poles.size())) {
+        return std::nullopt;
+    }
+
+    const int poleCount = static_cast<int>(poles.size());
+    TColgp_Array1OfPnt poleArray(1, poleCount);
+    for (int index = 1; index <= poleCount; ++index) {
+        poleArray.SetValue(index, poles[static_cast<std::size_t>(index - 1)]);
+    }
+
+    try {
+        if (weights.empty()) {
+            return Handle(Geom_BezierCurve)(new Geom_BezierCurve(poleArray));
+        }
+        TColStd_Array1OfReal weightArray(1, poleCount);
+        for (int index = 1; index <= poleCount; ++index) {
+            const double weight = weights[static_cast<std::size_t>(index - 1)];
+            if (weight <= 0.0) {
+                return std::nullopt;
+            }
+            weightArray.SetValue(index, weight);
+        }
+        return Handle(Geom_BezierCurve)(new Geom_BezierCurve(poleArray, weightArray));
+    }
+    catch (const Standard_Failure&) {
+        return std::nullopt;
+    }
+}
+
 std::optional<TopoDS_Edge> makeProfileEdge(const SketchProfileEdge& edge, bool reversed)
 {
     BRepBuilderAPI_MakeEdge edgeBuilder;
@@ -220,11 +281,20 @@ std::optional<TopoDS_Edge> makeProfileEdge(const SketchProfileEdge& edge, bool r
             edge.endAngle
         );
     }
-    else {
+    else if (edge.kind == SketchProfileEdgeKind::BSpline) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/Geometry.cpp
         // GeomBSplineCurve stores "Poles", "Knots", "Multiplicity" and "Degree"; this P5
         // subset rebuilds a non-periodic clamped curve from fixture poles and degree.
         const auto curve = makeBSplineCurve(edge.degree, edge.poles);
+        if (!curve) {
+            return std::nullopt;
+        }
+        edgeBuilder = BRepBuilderAPI_MakeEdge(*curve);
+    }
+    else {
+        // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp
+        // ::GeomBezierCurve::Restore() rebuilds from Pole "X/Y/Z/Weight" values.
+        const auto curve = makeBezierCurve(edge.poles, edge.weights);
         if (!curve) {
             return std::nullopt;
         }

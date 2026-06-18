@@ -33,7 +33,8 @@ enum class SketchProfileEdgeKind
     Line,
     ArcOfCircle,
     ArcOfEllipse,
-    BSpline
+    BSpline,
+    Bezier
 };
 
 struct SketchProfileEdge
@@ -50,6 +51,7 @@ struct SketchProfileEdge
     double endAngle = 0.0;
     int degree = 0;
     std::vector<gp_Pnt> poles;
+    std::vector<double> weights;
 };
 
 struct SketchProfileWires
@@ -78,7 +80,8 @@ std::string faceMakerRuntimeSourceName(part::FaceMakerBuildFaceRuntimeSource sou
 std::vector<SketchProfileEdge> profileEdges(const std::vector<SketchSegment>& segments,
                                             const std::vector<SketchArc>& arcs,
                                             const std::vector<SketchEllipseArc>& ellipseArcs,
-                                            const std::vector<SketchBSpline>& bsplines);
+                                            const std::vector<SketchBSpline>& bsplines,
+                                            const std::vector<SketchBezier>& beziers);
 
 std::optional<TopoDS_Shape> buildRawSketchShape(const app::DocumentObject& object,
                                                 runtime::ComputeContext& context,

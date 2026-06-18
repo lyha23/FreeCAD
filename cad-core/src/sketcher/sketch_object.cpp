@@ -535,13 +535,27 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         externalGeometry->ellipseArcs.begin(),
         externalGeometry->ellipseArcs.end()
     );
+    std::vector<SketchBSpline> resolvedBSplines = parsed.bsplines;
+    resolvedBSplines.insert(
+        resolvedBSplines.end(),
+        externalGeometry->bsplines.begin(),
+        externalGeometry->bsplines.end()
+    );
+    std::vector<SketchBezier> resolvedBeziers = parsed.beziers;
+    resolvedBeziers.insert(
+        resolvedBeziers.end(),
+        externalGeometry->beziers.begin(),
+        externalGeometry->beziers.end()
+    );
 
     const std::vector<SketchSegment> profile = profileSegments(resolvedSegments);
     const std::vector<SketchPoint> points = profilePoints(resolvedPoints);
     const std::vector<SketchArc> arcs = profileArcs(resolvedArcs);
     const std::vector<SketchEllipseArc> ellipseArcs = profileEllipseArcs(resolvedEllipseArcs);
-    const std::vector<SketchBSpline> bsplines = profileBSplines(parsed.bsplines);
-    const std::vector<SketchProfileEdge> edges = profileEdges(profile, arcs, ellipseArcs, bsplines);
+    const std::vector<SketchBSpline> bsplines = profileBSplines(resolvedBSplines);
+    const std::vector<SketchBezier> beziers = profileBeziers(resolvedBeziers);
+    const std::vector<SketchProfileEdge> edges
+        = profileEdges(profile, arcs, ellipseArcs, bsplines, beziers);
     const std::vector<SketchCircle> circles = profileCircles(resolvedCircles);
     const std::vector<SketchEllipse> ellipses = profileEllipses(resolvedEllipses);
     auto rawShape = buildRawSketchShape(object, context, edges, points, circles, ellipses);
@@ -991,11 +1005,13 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         {"external_geometry_count",
          externalGeometry->segments.size() + externalGeometry->points.size()
              + externalGeometry->circles.size() + externalGeometry->arcs.size()
-             + externalGeometry->ellipses.size() + externalGeometry->ellipseArcs.size()},
+             + externalGeometry->ellipses.size() + externalGeometry->ellipseArcs.size()
+             + externalGeometry->bsplines.size() + externalGeometry->beziers.size()},
         {"external_point_count", externalGeometry->points.size()},
         {"external_curve_count",
          externalGeometry->circles.size() + externalGeometry->arcs.size()
-             + externalGeometry->ellipses.size() + externalGeometry->ellipseArcs.size()},
+             + externalGeometry->ellipses.size() + externalGeometry->ellipseArcs.size()
+             + externalGeometry->bsplines.size() + externalGeometry->beziers.size()},
         {"external_geometry_state_counts",
          {
              {"defining", externalGeometry->definingLinkCount},

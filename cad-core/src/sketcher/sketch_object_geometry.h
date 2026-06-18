@@ -71,6 +71,14 @@ struct SketchBSpline
     bool construction = false;
 };
 
+struct SketchBezier
+{
+    std::size_t geometryIndex = 0;
+    std::vector<gp_Pnt> poles;
+    std::vector<double> weights;
+    bool construction = false;
+};
+
 struct SketchEllipseArc
 {
     std::size_t geometryIndex = 0;
@@ -92,6 +100,7 @@ struct SketchGeometrySet
     std::vector<SketchArc> arcs;
     std::vector<SketchEllipseArc> ellipseArcs;
     std::vector<SketchBSpline> bsplines;
+    std::vector<SketchBezier> beziers;
 };
 
 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectGeometry.cpp
@@ -109,6 +118,7 @@ std::vector<SketchEllipse> profileEllipses(const std::vector<SketchEllipse>& ell
 std::vector<SketchArc> profileArcs(const std::vector<SketchArc>& arcs);
 std::vector<SketchEllipseArc> profileEllipseArcs(const std::vector<SketchEllipseArc>& arcs);
 std::vector<SketchBSpline> profileBSplines(const std::vector<SketchBSpline>& bsplines);
+std::vector<SketchBezier> profileBeziers(const std::vector<SketchBezier>& beziers);
 
 gp_Pnt pointAtAngle(const gp_Pnt& center, double radius, double angle);
 gp_Pnt pointAtEllipseAngle(const gp_Pnt& center,

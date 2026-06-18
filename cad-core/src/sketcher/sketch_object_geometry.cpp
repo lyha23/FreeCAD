@@ -360,6 +360,79 @@ bool parseSketchGeometry(
             continue;
         }
 
+        if (kind == "Bezier" || kind == "BezierCurve" || kind == "GeomBezierCurve") {
+            const auto polesIt = item.find("poles");
+            std::vector<gp_Pnt> poles;
+            if (polesIt != item.end() && polesIt->is_array()) {
+                poles.reserve(polesIt->size());
+                for (const auto& pole : *polesIt) {
+                    const auto point = readPoint2Field(pole);
+                    if (!point) {
+                        break;
+                    }
+                    poles.push_back(*point);
+                }
+            }
+            const std::size_t rawPoleCount = polesIt != item.end() && polesIt->is_array()
+                ? polesIt->size()
+                : 0U;
+            std::vector<double> weights;
+            auto weightsIt = item.find("weights");
+            if (weightsIt == item.end()) {
+                weightsIt = item.find("Weights");
+            }
+            if (weightsIt != item.end()) {
+                if (!weightsIt->is_array()) {
+                    runtime::addDiagnostic(
+                        context.diagnostics,
+                        "error",
+                        "unsupported_geometry",
+                        "Bezier weights must be an array when provided",
+                        object.name,
+                        propertyName
+                    );
+                    return false;
+                }
+                weights.reserve(weightsIt->size());
+                for (const auto& weight : *weightsIt) {
+                    if (!weight.is_number()) {
+                        break;
+                    }
+                    const double value = weight.get<double>();
+                    if (!std::isfinite(value) || value <= 0.0) {
+                        break;
+                    }
+                    weights.push_back(value);
+                }
+            }
+            if (poles.size() != rawPoleCount || poles.size() < 2U
+                || (!weights.empty() && weights.size() != poles.size())) {
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_geometry",
+                    "Bezier requires at least two two-number poles and optional positive weights",
+                    object.name,
+                    propertyName
+                );
+                return false;
+            }
+
+            // FreeCAD:
+            // /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp
+            // ::GeomBezierCurve::Restore(), reads "PolesCount" and each Pole's
+            // "X/Y/Z/Weight" fields.
+            parsed.beziers.push_back(
+                SketchBezier {
+                    index,
+                    std::move(poles),
+                    std::move(weights),
+                    readBoolField(item, "construction", false)
+                }
+            );
+            continue;
+        }
+
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchGeometry.cpp
         // registers geometry families independently. cad-core keeps unsupported families explicit
         // until their profile and internal-shape paths are migrated.
@@ -448,6 +521,17 @@ std::vector<SketchBSpline> profileBSplines(const std::vector<SketchBSpline>& bsp
     for (const auto& bspline : bsplines) {
         if (!bspline.construction) {
             profile.push_back(bspline);
+        }
+    }
+    return profile;
+}
+
+std::vector<SketchBezier> profileBeziers(const std::vector<SketchBezier>& beziers)
+{
+    std::vector<SketchBezier> profile;
+    for (const auto& bezier : beziers) {
+        if (!bezier.construction) {
+            profile.push_back(bezier);
         }
     }
     return profile;

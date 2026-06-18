@@ -1115,6 +1115,8 @@ void appendExternalGeometry(ExternalGeometryResult& result, const ExternalGeomet
     result.ellipses.insert(result.ellipses.end(), source.ellipses.begin(), source.ellipses.end());
     result.ellipseArcs
         .insert(result.ellipseArcs.end(), source.ellipseArcs.begin(), source.ellipseArcs.end());
+    result.bsplines.insert(result.bsplines.end(), source.bsplines.begin(), source.bsplines.end());
+    result.beziers.insert(result.beziers.end(), source.beziers.begin(), source.beziers.end());
 }
 
 bool appendUnifiedNormalFaceLine(
@@ -1124,7 +1126,8 @@ bool appendUnifiedNormalFaceLine(
 )
 {
     if (!boundary.points.empty() || !boundary.circles.empty() || !boundary.arcs.empty()
-        || !boundary.ellipses.empty() || !boundary.ellipseArcs.empty() || boundary.segments.empty()) {
+        || !boundary.ellipses.empty() || !boundary.ellipseArcs.empty()
+        || !boundary.bsplines.empty() || !boundary.beziers.empty() || boundary.segments.empty()) {
         return false;
     }
 
@@ -1182,7 +1185,8 @@ bool projectExternalFaceBoundary(
         }
     }
     if (boundary.segments.empty() && boundary.points.empty() && boundary.circles.empty()
-        && boundary.arcs.empty() && boundary.ellipses.empty() && boundary.ellipseArcs.empty()) {
+        && boundary.arcs.empty() && boundary.ellipses.empty() && boundary.ellipseArcs.empty()
+        && boundary.bsplines.empty() && boundary.beziers.empty()) {
         return false;
     }
 
@@ -1388,6 +1392,16 @@ bool appendNativeExternalGeometry(
     for (auto arc : native.geometry.ellipseArcs) {
         arc.construction = !defining;
         result.ellipseArcs.push_back(arc);
+        appended = true;
+    }
+    for (auto bspline : native.geometry.bsplines) {
+        bspline.construction = !defining;
+        result.bsplines.push_back(bspline);
+        appended = true;
+    }
+    for (auto bezier : native.geometry.beziers) {
+        bezier.construction = !defining;
+        result.beziers.push_back(bezier);
         appended = true;
     }
     return appended;
