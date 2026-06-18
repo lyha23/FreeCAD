@@ -13,10 +13,10 @@
 
 ## 实施顺序
 
-1. 关闭 `GBJ-BLOCK-001`：在 `JointConstraint` 增加 `distance2`，request builder 读取 Gears / Belt 的 `Distance` / `Distance2`。
-2. 关闭 `GBJ-BLOCK-002`：在 `joint_solver.cpp` 增加 `ASMTGearJoint` include、Gears / Belt factory mapping 和 supported predicate。
-3. 关闭 `GBJ-BLOCK-003`：新增 Gears c3m6 fixture、native expected、focused runtime assertion。
-4. 关闭 `GBJ-BLOCK-004`：新增 Belt c3m6 fixture、native expected、focused runtime assertion。
+1. 复核 S3 已关闭的 `GBJ-BLOCK-001`：`JointConstraint.distance2` 与 Gears / Belt 的 `Distance` / `Distance2` request builder 不回退。
+2. 复核 S3 已关闭的 `GBJ-BLOCK-002`：`ASMTGearJoint` include、Gears / Belt factory mapping 和 supported predicate 不回退。
+3. 复核 S4 已关闭的 `GBJ-BLOCK-003`：Gears c3m6 fixture、native expected、focused runtime assertion 不回退。
+4. 复核 S4 已关闭的 `GBJ-BLOCK-004`：Belt c3m6 fixture、native expected、focused runtime assertion 与负 `radius_j` 不回退。
 5. 关闭 `GBJ-BLOCK-005`：更新 `c_api.cpp` capabilities 和 `test_adapters.py`。
 6. 关闭 `GBJ-BLOCK-006`：更新既有 P8 docs / TSV，只移除 Gears / Belt 的 unsupported 状态，保留 RackPinion / Screw。
 
@@ -24,10 +24,10 @@
 
 | blocker | C++ / 测试 / 文档落点 | 成功标准 |
 | --- | --- | --- |
-| `GBJ-BLOCK-001` | `cad-core/include/cad_core/assembly/joint_solver.h`、`cad-core/src/assembly/joint_solver.cpp` | `JointConstraint.distance2` 存在，Gears / Belt 读取 `Distance` / `Distance2` |
-| `GBJ-BLOCK-002` | `cad-core/src/assembly/joint_solver.cpp` | `Gears` / `Belt` 返回 `MbD::ASMTGearJoint::With()`；Gears `radiusJ=distance2`，Belt `radiusJ=-distance2`；supported predicate 包含两者 |
-| `GBJ-BLOCK-003` | `cad-core/fixtures/c3m6/assembly-grounded-gears-joint-real-solver.json`、expected、`cad-core/tests/test_p8_features.py` | Gears fixture 通过 real_ondsel_solver focused test 和 expected parity |
-| `GBJ-BLOCK-004` | `cad-core/fixtures/c3m6/assembly-grounded-belt-joint-real-solver.json`、expected、`cad-core/tests/test_p8_features.py` | Belt fixture 通过 real_ondsel_solver focused test 和 expected parity，`radiusJ` 负号被断言 |
+| `GBJ-BLOCK-001` | `cad-core/include/cad_core/assembly/joint_solver.h`、`cad-core/src/assembly/joint_solver.cpp` | 已由 S3 关闭；S6 只复核 `JointConstraint.distance2` 与 request builder 不回退 |
+| `GBJ-BLOCK-002` | `cad-core/src/assembly/joint_solver.cpp` | 已由 S3 关闭；S6 只复核 `Gears` / `Belt` 的 `ASMTGearJoint` 映射与 supported predicate 不回退 |
+| `GBJ-BLOCK-003` | `cad-core/fixtures/c3m6/assembly-grounded-gears-joint-real-solver.json`、expected、`cad-core/tests/test_p8_features.py` | 已由 S4 关闭；S6 只复核 real_ondsel_solver focused test 和 expected parity 不回退 |
+| `GBJ-BLOCK-004` | `cad-core/fixtures/c3m6/assembly-grounded-belt-joint-real-solver.json`、expected、`cad-core/tests/test_p8_features.py` | 已由 S4 关闭；S6 只复核 expected parity 与负 `radius_j` 不回退 |
 | `GBJ-BLOCK-005` | `cad-core/src/adapters/c_api/c_api.cpp`、`cad-core/tests/test_adapters.py` | supported matrix 加入 Gears / Belt，unsupported matrix 移除它们 |
 | `GBJ-BLOCK-006` | 既有 P8 AssemblySolver docs / matrices、本包 TSV | RackPinion / Screw 仍为 unsupported；complex Distance 仍为 notCollected；GUI/session 仍为 nonGoal |
 

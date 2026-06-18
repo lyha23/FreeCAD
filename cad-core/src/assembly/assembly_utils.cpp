@@ -100,6 +100,15 @@ nlohmann::json solverJointJson(const JointConstraint& joint)
     if (joint.distance2) {
         solverJoint["distance2"] = *joint.distance2;
     }
+    if (joint.jointType == "Gears" || joint.jointType == "Belt") {
+        // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+        // ::AssemblyObject::makeMbdJointOfType(), Gears maps "radiusJ = getJointDistance2(joint)"
+        // and Belt maps "radiusJ = -getJointDistance2(joint)" for ASMTGearJoint.
+        const double distance = joint.distance.value_or(0.0);
+        const double distance2 = joint.distance2.value_or(0.0);
+        solverJoint["radius_i"] = distance;
+        solverJoint["radius_j"] = joint.jointType == "Belt" ? -distance2 : distance2;
+    }
     if (joint.angle) {
         solverJoint["angle"] = *joint.angle;
     }

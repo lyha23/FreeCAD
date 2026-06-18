@@ -1303,8 +1303,16 @@ def joint_payloads_from_fixture(fixture: dict, assembly_name: str) -> tuple[list
                 "reference2": link_sub_payload_from_fixture(properties.get("Reference2")),
                 "suppressed": bool(scalar_property_value(properties.get("Suppressed", False))),
             }
-            if joint_type in {"Distance", "Slider"}:
+            if joint_type in {"Distance", "Slider", "Gears", "Belt"}:
                 solver_joint["distance"] = float(scalar_property_value(properties.get("Distance", 0.0)) or 0.0)
+            if joint_type in {"Gears", "Belt"}:
+                distance2 = float(scalar_property_value(properties.get("Distance2", 0.0)) or 0.0)
+                # FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+                # ::AssemblyObject::makeMbdJointOfType(), Gears sets "radiusJ = getJointDistance2(joint)"
+                # while Belt sets "radiusJ = -getJointDistance2(joint)".
+                solver_joint["distance2"] = distance2
+                solver_joint["radius_i"] = solver_joint["distance"]
+                solver_joint["radius_j"] = -distance2 if joint_type == "Belt" else distance2
             if joint_type == "Angle":
                 solver_joint["angle"] = float(scalar_property_value(properties.get("Angle", 0.0)) or 0.0)
             solver_joints.append(solver_joint)

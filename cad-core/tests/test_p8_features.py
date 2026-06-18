@@ -1422,7 +1422,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         joint_name: str,
         joint_type: str,
         expected_update_base: list[float] | None,
-        solver_scalar: tuple[str, float] | None = None,
+        solver_scalars: dict[str, float] | None = None,
     ) -> None:
         result = self.run_recompute(fixture, "c3m6")
         assembly = result["objects"]["Assembly"]
@@ -1445,9 +1445,9 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(assembly["solver_adapter"]["joints"], [joint_name])
         solver_joint = assembly["solver_adapter"]["solver_joints"][0]
         self.assertEqual(solver_joint["joint_type"], joint_type)
-        if solver_scalar:
-            field, expected = solver_scalar
-            self.assertEqual(solver_joint[field], expected)
+        if solver_scalars:
+            for field, expected in solver_scalars.items():
+                self.assertEqual(solver_joint[field], expected)
         self.assertEqual(assembly["solver_adapter"]["unsupported_joints"], [])
         if expected_update_base is None:
             self.assertEqual(updates, [])
@@ -1490,14 +1490,14 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "SliderJoint",
                 "Slider",
                 [0.0, 0.0, 0.0],
-                ("distance", 0.0),
+                {"distance": 0.0},
             ),
             (
                 "assembly-grounded-distance-joint-real-solver",
                 "DistanceJoint",
                 "Distance",
                 [4.0, 0.0, 2.0],
-                ("distance", 2.0),
+                {"distance": 2.0},
             ),
             (
                 "assembly-grounded-parallel-joint-real-solver",
@@ -1518,17 +1518,31 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "AngleJoint",
                 "Angle",
                 None,
-                ("angle", 30.0),
+                {"angle": 30.0},
+            ),
+            (
+                "assembly-grounded-gears-joint-real-solver",
+                "GearsJoint",
+                "Gears",
+                None,
+                {"distance": 2.0, "distance2": 1.0, "radius_i": 2.0, "radius_j": 1.0},
+            ),
+            (
+                "assembly-grounded-belt-joint-real-solver",
+                "BeltJoint",
+                "Belt",
+                None,
+                {"distance": 2.0, "distance2": 1.0, "radius_i": 2.0, "radius_j": -1.0},
             ),
         ]
-        for fixture, joint_name, joint_type, expected_update_base, solver_scalar in cases:
+        for fixture, joint_name, joint_type, expected_update_base, solver_scalars in cases:
             with self.subTest(fixture=fixture):
                 self.assert_c3m6_grounded_joint_uses_real_ondsel_solver(
                     fixture,
                     joint_name,
                     joint_type,
                     expected_update_base,
-                    solver_scalar,
+                    solver_scalars,
                 )
 
     def test_c3m6_assembly_placement_writeback_applies_to_next_request_graph(self) -> None:
