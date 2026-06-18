@@ -672,8 +672,10 @@ nlohmann::json capabilitiesJson()
              // OndselSolver at build time and publishes only the real request-local mode.
              {"ondsel_solver_adapter", ondselSolverCapabilityJson()},
              {"placement_writeback", placementWritebackCapabilityJson()},
+             {"supported_joint_matrix",
+              {"Fixed", "Revolute", "Cylindrical", "Slider", "Ball", "Distance", "Angle"}},
              {"unsupported_joint_matrix",
-              {"Cylindrical", "Parallel", "Perpendicular", "RackPinion", "Screw", "Gears", "Belt"}},
+              {"Parallel", "Perpendicular", "RackPinion", "Screw", "Gears", "Belt"}},
              {"remaining_gaps", nlohmann::json::array()},
          }},
         {"wire_joiner",

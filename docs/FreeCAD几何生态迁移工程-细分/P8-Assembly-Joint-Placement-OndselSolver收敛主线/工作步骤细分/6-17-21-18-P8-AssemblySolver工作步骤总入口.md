@@ -4,7 +4,7 @@
 
 把 P8 Assembly solver 从旧的静态发布口径收敛为可验证的 request-local solver 子集：先复核 live code、FreeCAD authority 和 focused tests，再决定哪些 releaseGate 进入发布回写，哪些 unsupported JointType 进入 C++ 实现，哪些缺 oracle 的路径保持 `notCollected`。
 
-当前收口状态：本文是执行索引。S0-S7 各自步骤已完成：正式 P8 文档、C ABI capabilities、focused tests、fixtures 与当前 C++ 之间的 publication drift 已按硬依赖 OndselSolver 收敛，representative fallback 已删除，FreeCADCmd native solver placement expected 已入库并通过 cad-core parity。S7 后 `P8ASM-SCOPE-006` 已从 `backendGap` 转为 supported。复杂 Distance geometry 仍 `notCollected`，GUI / session / 完整 Link 写回保持 nonGoal。
+当前收口状态：本文是执行索引。S0-S7 各自步骤已完成：正式 P8 文档、C ABI capabilities、focused tests、fixtures 与当前 C++ 之间的 publication drift 已按硬依赖 OndselSolver 收敛，representative fallback 已删除，FreeCADCmd native solver placement expected 已入库并通过 cad-core parity。S7 后 `P8ASM-SCOPE-006` 已从 `backendGap` 转为 supported。2026-06-18 后续最小范围 `P8ASM-SCOPE-010` 已把 Cylindrical 以 checked-in native expected 和 real `ASMTCylindricalJoint` adapter 转为 supported；复杂 Distance geometry 仍 `notCollected`，GUI / session / 完整 Link 写回保持 nonGoal。
 
 ## 步骤索引
 
@@ -33,10 +33,10 @@
 | 矩阵 | 当前用途 | 当前结论 |
 | --- | --- | --- |
 | `p8_assembly_solver_source_candidates.tsv` | 源码候选 | S1 已补齐 P8ASM-CAND-001..018；候选不等于状态裁决 |
-| `p8_assembly_solver_scope_review_matrix.tsv` | scope 状态 | S7 已回写 P8ASM-SCOPE-001..009；real-only publication、writeback、unsupported matrix 和 native oracle parity 与当前代码一致 |
-| `p8_assembly_solver_blocker_queue.tsv` | 阻塞队列 | S7 已回写 P8ASM-BLOCK-001..006：文档、capability、oracle 采集、native parity 和 diagnostic matrix 均已收口 |
+| `p8_assembly_solver_scope_review_matrix.tsv` | scope 状态 | S7 已回写 P8ASM-SCOPE-001..009，S7 后续新增 P8ASM-SCOPE-010；real-only publication、writeback、Cylindrical supported、剩余 unsupported matrix 和 native oracle parity 与当前代码一致 |
+| `p8_assembly_solver_blocker_queue.tsv` | 阻塞队列 | S7 已回写 P8ASM-BLOCK-001..006，S7 后续新增 P8ASM-BLOCK-007：文档、capability、oracle 采集、native parity、Cylindrical support 和剩余 diagnostic matrix 均已收口 |
 | `p8_assembly_solver_non_goal_registry.tsv` | 非目标 | S2 已明确 GUI、跨请求 session、完整 Link 写回、Worker/WASM、无 oracle 复杂 joint 的排除和 reopen 条件 |
-| `p8_assembly_solver_backend_gap_classification.tsv` | 聚合 | S7 已关闭 native solver placement backendGap；当前无 SCOPE-006 known_gap，后续只保留 unsupported / nonGoal 扩张边界 |
+| `p8_assembly_solver_backend_gap_classification.tsv` | 聚合 | S7 已关闭 native solver placement backendGap；S7 后续已新增 P8ASM-SCOPE-010 / P8ASM-BLOCK-007 / P8ASM-BG-006 记录 Cylindrical supported；当前无 SCOPE-006 known_gap，后续只保留剩余 unsupported / nonGoal 扩张边界 |
 
 ## 状态纪律
 

@@ -10,6 +10,7 @@
 
 #include <OndselSolver/ASMTAssembly.h>
 #include <OndselSolver/ASMTAngleJoint.h>
+#include <OndselSolver/ASMTCylindricalJoint.h>
 #include <OndselSolver/ASMTFixedJoint.h>
 #include <OndselSolver/ASMTMarker.h>
 #include <OndselSolver/ASMTParallelAxesJoint.h>
@@ -245,7 +246,9 @@ std::shared_ptr<MbD::ASMTJoint> makeOndselJointOfType(const JointConstraint& joi
 {
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/
     // AssemblyObject.cpp::AssemblyObject::makeMbdJointOfType(), maps "Fixed" to
-    // ASMTFixedJoint, "Revolute" to ASMTRevoluteJoint, "Slider" to ASMTTranslationalJoint,
+    // ASMTFixedJoint, "Revolute" to ASMTRevoluteJoint, "Cylindrical" to
+    // ASMTCylindricalJoint via "case JointType::Cylindrical: return
+    // CREATE<ASMTCylindricalJoint>::With();", "Slider" to ASMTTranslationalJoint,
     // "Ball" to ASMTSphericalJoint and "Angle" to ASMTAngleJoint with "theIzJz".
     // CAD Core落点: real Ondsel adapter joint DTO conversion.
     if (joint.jointType == "Fixed") {
@@ -253,6 +256,9 @@ std::shared_ptr<MbD::ASMTJoint> makeOndselJointOfType(const JointConstraint& joi
     }
     if (joint.jointType == "Revolute") {
         return MbD::ASMTRevoluteJoint::With();
+    }
+    if (joint.jointType == "Cylindrical") {
+        return MbD::ASMTCylindricalJoint::With();
     }
     if (joint.jointType == "Slider") {
         return MbD::ASMTTranslationalJoint::With();
@@ -605,11 +611,12 @@ bool isSupportedOndselJointType(const std::string& jointType)
 {
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Assembly/App/
     // AssemblyObject.cpp::AssemblyObject::makeMbdJointOfType(), maps "Fixed", "Revolute",
-    // "Slider", "Ball", "Distance" and "Angle" to ASMT joint classes in the current Ondsel
-    // adapter subset.
+    // "Cylindrical", "Slider", "Ball", "Distance" and "Angle" to ASMT joint classes in
+    // the current Ondsel adapter subset.
     static const std::set<std::string> supported = {
         "Fixed",
         "Revolute",
+        "Cylindrical",
         "Slider",
         "Ball",
         "Distance",

@@ -1,0 +1,7 @@
+category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
+CYL-BG-001	ondsel_build_release_gate	P0	CYL-SCOPE-001	no	closed: src/3rdParty/OndselSolver initialized and hard-linked cad-core / cad_core_ffi build passed; no fallback restored
+CYL-BG-002	cylindrical_adapter_release_gate	P1	CYL-SCOPE-002	no	closed: ASMTCylindricalJoint mapping, supported predicate and focused runtime test pass under real Ondsel build
+CYL-BG-003	native_expected_release_gate	P1	CYL-SCOPE-003	no	closed: c3m6 Cylindrical expected passes native collector --check and cad-core expected parity without known_gap
+CYL-BG-004	capability_publication_release_gate	P1	CYL-SCOPE-004	no	closed: supported_joint_matrix, unsupported_joint_matrix, tests and existing P8 docs/matrix references agree
+CYL-BG-005	remaining_jointtypes_unsupported	P2	CYL-SCOPE-005	yes	Keep remaining JointTypes and Cylindrical limits unsupported or notCollected until a separate source+oracle+tests package exists
+CYL-BG-006	persistent_assembly_non_goal	P3	CYL-SCOPE-006	yes	Keep GUI drag, postDrag and cross-request solver state out of cad-core

@@ -11,6 +11,8 @@ S6 已把 S2-S5 留下的 `releaseGate` 发布成 real-only supported 子集，�
 - 有 Joint 但没有 GroundedJoint 时按 FreeCAD `AssemblyObject::solve()` 的 grounded gate 返回 `missing_grounded_part` / `no_grounded_part`，不再用代表路径写回 placement。
 - `P8ASM-SCOPE-006` 已采集：`cad-core/fixtures/c3m6/expected` 保存 9 个 FreeCADCmd native solver placement expected，`--phase c3m6 --check --skip-unsupported` 得到 `processed=9 skipped=4 failed=0`。后续 S7 已移除 `known_gap`，现在 9 个 expected 都通过 cad-core parity。
 
+2026-06-18 后续状态：Cylindrical 已在 `P8ASM-SCOPE-010` 中以 checked-in FreeCADCmd native expected 和 real `ASMTCylindricalJoint` adapter 转为 supported；当前 unsupported matrix 只保留 Parallel、Perpendicular、RackPinion、Screw、Gears、Belt，c3m6 native expected 为 10 个。上方列表保留为 S6 当时发布闸门记录。
+
 ## Blocker 结果
 
 | blocker | S6 结果 | 证据 |

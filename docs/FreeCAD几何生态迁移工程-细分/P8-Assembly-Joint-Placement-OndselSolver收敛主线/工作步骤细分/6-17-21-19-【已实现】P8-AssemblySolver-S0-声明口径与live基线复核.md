@@ -6,7 +6,7 @@
 
 ## 后续修正
 
-2026-06-18 后续实现已删除 representative fallback 和 optional unlinked build 路径；下文关于 representative / build-mode 的记录只保留为当时 live 基线，不代表当前发布状态。native solver placement expected 已在 S6 之后入库，并已在 S7 修复到 supported；当前状态以 S7、矩阵、C++ 和 C ABI capabilities 的 real-only 口径为准。
+2026-06-18 后续实现已删除 representative fallback 和 optional unlinked build 路径；下文关于 representative / build-mode 的记录只保留为当时 live 基线，不代表当前发布状态。native solver placement expected 已在 S6 之后入库，并已在 S7 修复到 supported；Cylindrical 已在 S7 后续 `P8ASM-SCOPE-010` 中以 FreeCADCmd oracle 和 real `ASMTCylindricalJoint` adapter 转为 supported。当前状态以 S7 后续矩阵、C++ 和 C ABI capabilities 的 real-only 口径为准。
 
 ## 本轮 live 基线
 

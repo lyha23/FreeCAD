@@ -949,8 +949,12 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(capabilities["assembly"]["placement_writeback"]["remaining_gaps"], [])
         self.assertEqual(
+            capabilities["assembly"]["supported_joint_matrix"],
+            ["Fixed", "Revolute", "Cylindrical", "Slider", "Ball", "Distance", "Angle"],
+        )
+        self.assertEqual(
             capabilities["assembly"]["unsupported_joint_matrix"],
-            ["Cylindrical", "Parallel", "Perpendicular", "RackPinion", "Screw", "Gears", "Belt"],
+            ["Parallel", "Perpendicular", "RackPinion", "Screw", "Gears", "Belt"],
         )
         self.assertEqual(capabilities["assembly"]["remaining_gaps"], [])
         self.assertEqual(

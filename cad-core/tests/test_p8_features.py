@@ -1477,6 +1477,13 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 None,
             ),
             (
+                "assembly-grounded-cylindrical-joint-real-solver",
+                "CylindricalJoint",
+                "Cylindrical",
+                [0.0, 0.0, 0.0],
+                None,
+            ),
+            (
                 "assembly-grounded-slider-joint-real-solver",
                 "SliderJoint",
                 "Slider",

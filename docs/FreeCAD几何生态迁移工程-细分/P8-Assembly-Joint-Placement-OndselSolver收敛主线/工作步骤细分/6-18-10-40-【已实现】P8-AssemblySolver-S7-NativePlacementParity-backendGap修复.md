@@ -4,6 +4,8 @@
 
 S7 已实现。`P8ASM-SCOPE-006` 从 `backendGap` 转为 `supported`：9 个 `cad-core/fixtures/c3m6/expected/*.freecad.json` 已全部移除 `known_gap`，`CadCoreExpectedFixtureTest` 不再跳过 native solver placement parity。
 
+2026-06-18 后续状态：Cylindrical 已在 `P8ASM-SCOPE-010` 中以 checked-in FreeCADCmd native expected 和 real `ASMTCylindricalJoint` adapter 转为 supported；当前 c3m6 native expected 为 10 个，S7 上方 9 个保留为当时收口结论。
+
 ## 当前基线
 
 - cad-core 保持 hard-linked real OndselSolver；未恢复 `representative_ondsel_solver` 或 `CAD_CORE_ENABLE_ONDSEL_SOLVER`。
