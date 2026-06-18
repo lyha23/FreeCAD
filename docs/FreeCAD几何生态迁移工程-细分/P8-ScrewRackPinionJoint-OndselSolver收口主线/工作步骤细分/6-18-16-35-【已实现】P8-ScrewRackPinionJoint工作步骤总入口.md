@@ -4,7 +4,7 @@
 
 把 `Screw` / `RackPinion` 两个 remaining special JointType 从 unsupported 队列推进到 real Ondsel request-local supported 子集，并保持 complex Distance geometry、GUI/session lifecycle 不被误发布。
 
-当前收口状态：工作步骤索引已完成校验；S0 到 S6 均为待执行。已建立初始矩阵骨架，但尚未完成 `slidingPartIndex()`、`swapJCS()`、RackPinion marker rewrite、native expected、focused tests 或发布闸门；不得把整个主线写成“已实现”。
+当前收口状态：工作步骤索引已完成校验；S0 已完成 live 基线复核，S1 到 S6 仍为待执行。已建立初始矩阵骨架，但尚未完成 `slidingPartIndex()`、`swapJCS()`、RackPinion marker rewrite、native expected、focused tests 或发布闸门；不得把整个主线写成“已实现”。
 
 索引关闭口径：本文件只表示工作步骤索引、矩阵文件名和轻量验收命令已经复核；S0-S6 仍由各自文件推进，不能因为本文件改名为 `【已实现】` 而跳过后续队列。
 
@@ -12,7 +12,7 @@
 
 | 步骤 | 文件 | 当前状态 | 解决的问题 |
 | --- | --- | --- | --- |
-| S0 | `6-18-16-36-P8-ScrewRackPinionJoint-S0-声明口径与live基线复核.md` | 待执行 | 冻结支持声明、禁止声明和 current unsupported 基线 |
+| S0 | `6-18-16-36-【已实现】P8-ScrewRackPinionJoint-S0-声明口径与live基线复核.md` | 已实现 | 冻结支持声明、禁止声明和 current unsupported 基线 |
 | S1 | `6-18-16-37-P8-ScrewRackPinionJoint-S1-FreeCAD源码候选矩阵.md` | 待执行 | 建立 Screw / RackPinion FreeCAD / cad-core source candidates |
 | S2 | `6-18-16-38-P8-ScrewRackPinionJoint-S2-范围准入与blocker矩阵.md` | 待执行 | 将候选路由到 implementable unsupported、notCollected、releaseGate、nonGoal |
 | S3 | `6-18-16-39-P8-ScrewRackPinionJoint-S3-SlidingAxis与swapJCS专项复审.md` | 待执行 | 收口 `slidingPartIndex()` / `swapJCS()` 共享前置 |
@@ -22,7 +22,7 @@
 
 ## 执行顺序
 
-1. 先执行 S0，确认当前 `supported_joint_matrix` / `unsupported_joint_matrix`、Screw / RackPinion 的禁止声明和工作区状态。
+1. S0 已确认当前 `supported_joint_matrix` / `unsupported_joint_matrix`、Screw / RackPinion 的禁止声明和工作区状态。
 2. 执行 S1 / S2，锁定 FreeCAD source authority，并把 shared sliding 前置、Screw pitch、RackPinion marker rewrite 和 nonGoal 分开。
 3. 执行 S3，落地 `slidingPartIndex()` / `swapJCS()` 的 request-local 等价语义。
 4. 执行 S4，落地 RackPinion 的 marker side detection 与 rack marker 旋转重写。

@@ -1,4 +1,4 @@
-# P8 ScrewRackPinionJoint S0 声明口径与 live 基线复核
+# 【已实现】P8 ScrewRackPinionJoint S0 声明口径与 live 基线复核
 
 ## 目标
 
@@ -12,6 +12,23 @@
 - `cad-core/src/adapters/c_api/c_api.cpp`
 - `docs/FreeCAD几何生态迁移工程-细分/P8-Assembly-Joint-Placement-OndselSolver收敛主线/矩阵/*.tsv`
 - `docs/FreeCAD几何生态迁移工程-细分/P8-GearsBeltJoint-OndselSolver收口主线/矩阵/*.tsv`
+
+## live 基线复核结果
+
+- `pwd`：`/home/user/Chili3DProject/FreeCAD`
+- `git rev-parse --short HEAD`：`602e17172c`
+- `git log -1 --oneline`：`602e17172c docs: 新增P8螺旋齿条关节收口方案`
+- `git -c core.quotepath=false status --short -uall`：S0 编辑前无输出，工作区干净。
+- 队列复核：`step_goal_queue.py` 从 S0 起仍列出 S0-S6；本轮只执行 S0，S1-S6 不推进。
+
+## S0 判定
+
+- `cad-core/src/adapters/c_api/c_api.cpp` 的 `supported_joint_matrix` 仅发布 `Fixed / Revolute / Cylindrical / Slider / Ball / Distance / Parallel / Perpendicular / Angle / Gears / Belt`，`unsupported_joint_matrix` 仍为 `RackPinion / Screw`。
+- `cad-core/src/assembly/joint_solver.cpp::isSupportedOndselJointType()` 不包含 `RackPinion` / `Screw`，并注明两者仍缺 FreeCAD marker / sliding-part 专项路径。
+- `cad-core/include/cad_core/assembly/joint_solver.h::JointConstraint` 当前只有 scalar `distance`、`distance2`、`angle`，尚无 `Screw` / `RackPinion` sliding-side、JCS order 或 marker rewrite 证据字段。
+- FreeCAD `AssemblyObject.cpp` 仍把 `Screw` 映射为 `ASMTScrewJoint(pitch=Distance)`，前置要求 `slidingPartIndex()`，必要时 `swapJCS()`；`RackPinion` 映射为 `ASMTRackPinionJoint(pitchRadius=Distance)`，并通过 `getRackPinionMarkers()` 重写 rack marker。
+- `p8_screw_rackpinion_joint_scope_review_matrix.tsv` 中 S0 相关行保持 `unsupportedImplementable` / `notCollected` / `releaseGate` / `nonGoal`，没有 `supported` 抢跑；`non_goal_registry` 已包含 complex Distance、GUI/session、full transaction 边界。
+- 结论：S0 证据通过；本轮不改 C++、不采集 oracle、不关闭 P8ASM-SCOPE-007，也不把 scalar `Distance` 的 pitch / pitchRadius 推广成完整 `DistanceType` geometry 支持。
 
 ## 声明口径
 
