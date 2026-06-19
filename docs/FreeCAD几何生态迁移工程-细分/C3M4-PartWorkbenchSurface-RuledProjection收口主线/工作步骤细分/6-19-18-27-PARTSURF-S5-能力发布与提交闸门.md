@@ -2,7 +2,7 @@
 
 ## 目标
 
-完成 Part surface 主线发布：同步 CADCore3.0 文档、capability metadata、fixture 队列和矩阵状态，确保只发布已验证的 RuledSurface / 可选 ProjectionOnSurface 窄批次，不 overclaim full surface family。
+完成 Part surface 主线发布：同步 CADCore3.0 文档、capability metadata、fixture 队列和矩阵状态，确保只发布已验证的 `Part::RuledSurface` edge/edge 第一批；`Part::ProjectOnSurface` 只能列为 source-audited / planned，不 overclaim full surface family。
 
 ## 必读
 
@@ -18,13 +18,14 @@
 
 1. 更新 CADCore3.0 能力文档和 oracle fixture 队列，列出具体 fixtures、FreeCAD source authority、cad-core 落点和剩余 gaps。
 2. 如需 capability metadata，新增 `part_workbench.ruled_surface` 或同等精确 key；不得写成 `full_surface_family`。
-3. 更新 adapter tests，断言 capability JSON 只声明已验证范围，并列出 ProjectOnSurface/full surface family remaining gaps。
+3. 更新 adapter tests，断言 capability JSON 只声明已验证 RuledSurface 范围，并列出 ProjectOnSurface/full surface family remaining gaps。
 4. 运行本轮短跑和必要 focused tests。
 5. 本步骤完成后执行中文 commit 工作流，但必须先确认暂存内容不包含既有 Sketcher 改动或本地生成物。
 
 ## 非目标
 
 - 不补未验证的 ProjectOnSurface 分支。
+- 不发布 ProjectOnSurface supported 或可用窄批次；S4 已把它拆入独立后续主线。
 - 不跑全量 FreeCAD 构建。
 - 不清理或回退用户既有工作区改动。
 
