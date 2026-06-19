@@ -1,0 +1,9 @@
+id	non_goal	reason	revisit_condition	status
+PARTSURF-NG-001	完整 Part surface family	Loft, Sweep, Filling, PipeShell, GeomPlate 等各自有独立 state machine 和 history 语义	A later source-backed surface-family mainline scopes one family with oracle	active
+PARTSURF-NG-002	一次性实现完整 ProjectOnSurface	ProjectOnSurface 同时包含 projection, filtering, wire repair, face rebuild, solid, offset placement 分支	S4 proves a narrow projection batch is ready or opens独立主线	active
+PARTSURF-NG-003	GUI / ViewProvider / TaskPanel	cad-core 抽取目标是无状态几何计算，不迁移 GUI 命令和视图交互	前端或 GUI parity 任务明确要求	active
+PARTSURF-NG-004	BREP 请求或长期状态	仓库架构只允许 ReferenceShadow.brep 作为旧 subshape snapshot 例外	仅作为临时 oracle artifact，不进入请求/响应模型	active
+PARTSURF-NG-005	输出端修剪或 fixture 名特判	会掩盖 BRepFill / ElementMap / projection history 缺口	有 FreeCAD source-backed mapper/history 方案后替换	active
+PARTSURF-NG-006	把 PartConicCurveDTO 伪装成 FreeCAD DocumentObject	PARTCONIC 已裁决 conic wrapper 是请求级 producer，不是 Part::Hyperbola/Part::Parabola TypeId	FreeCAD 源码新增真实 Part::Hyperbola/Part::Parabola DocumentObject	active-locked
+PARTSURF-NG-007	没有 oracle 的 wire/wire RuledSurface support	Wire shell 分支可能依赖额外 wire construction 与 shell topo mapping	S2 收集到 wire/wire expected 且 cad-core input schema 清晰	candidate
+PARTSURF-NG-008	DistanceType / Assembly conic default TODO	这是 P8 DistanceTypeExtended 的产品边界，不属于 Part surface executor	产品决策改变并打开 Assembly distance 主线	active
