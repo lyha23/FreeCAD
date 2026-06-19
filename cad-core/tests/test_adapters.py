@@ -872,6 +872,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "Part::Loft",
             "Part::Sweep",
             "Part::FilledFace",
+            "Part::GeomPlateSurface",
             "Part::BooleanFragments",
             "App::Link",
             "Assembly::AssemblyObject",
@@ -888,10 +889,18 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "missing_target",
             "missing_link_target",
             "missing_property",
+            "missing_constraints",
+            "missing_curve_source",
             "cycle_dependency",
             "execution_failed",
+            "perform_failed",
+            "surface_not_done",
+            "approximation_failed",
             "unsupported_type",
             "unsupported_property",
+            "invalid_curve_source",
+            "invalid_point_constraint",
+            "invalid_parameter",
             "invalid_subshape",
             "unsupported_subshape_kind",
             "unsupported_stable_subname",
@@ -2365,6 +2374,86 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("native_freecad_part_filledface_document_object", filling["non_goals"])
         self.assertIn("advanced_brepoffsetapi_makefilling_wrapper", filling["non_goals"])
         self.assertIn("surface_workbench_filling_feature", filling["non_goals"])
+        geomplate = capabilities["part_workbench"]["geomplate"]
+        self.assertEqual(geomplate["status"], "supported_expected_backed_first_batch")
+        self.assertIn("Part::GeomPlateSurface", geomplate["type_ids"])
+        self.assertEqual(geomplate["helper"], "Part.GeomPlate.BuildPlateSurface")
+        self.assertEqual(geomplate["dto"], "PartGeomPlateSurfaceDTO")
+        self.assertFalse(geomplate["freecad_native_document_object"])
+        self.assertEqual(geomplate["operation_model"], "source_backed_geometry_helper")
+        for prop in (
+            "CurveConstraints",
+            "PointConstraints",
+            "Degree",
+            "NbPtsOnCur",
+            "ApproxMaxSegments",
+            "ApproxContinuity",
+        ):
+            self.assertIn(prop, geomplate["properties"])
+        for property_type in (
+            "App::PropertyLinkSubList",
+            "JSON::PointConstraintList",
+            "JSON::NumericParams",
+        ):
+            self.assertIn(property_type, geomplate["property_types"])
+        for covered in (
+            "part_geomplate_surface_source_backed_helper",
+            "buildplate_surface_helper",
+            "source_backed_3d_curve_g0_constraints",
+            "point_3d_constraints",
+            "default_build_params_metadata",
+            "approximation_metadata",
+            "geomplate_makeapprox_face",
+            "source_evidence",
+            "expected_backed_fixtures",
+            "invalid_diagnostics",
+        ):
+            self.assertIn(covered, geomplate["covered"])
+        for fixture in (
+            "c3m4/part-geomplate-curve-point-default",
+            "c3m4/part-geomplate-invalid-inputs",
+        ):
+            self.assertIn(fixture, geomplate["fixtures"])
+        for diagnostic in (
+            "missing_constraints",
+            "missing_curve_source",
+            "invalid_curve_source",
+            "invalid_point_constraint",
+            "invalid_parameter",
+            "perform_failed",
+            "surface_not_done",
+            "approximation_failed",
+            "unsupported_property",
+        ):
+            self.assertIn(diagnostic, geomplate["diagnostics"])
+        for boundary in (
+            "source_backed_helper_not_freecad_document_object",
+            "request_local_geomplate_surface_not_persistent_geometry",
+            "curve_constraints_are_3d_edge_sources",
+            "point_constraints_are_3d_vectors",
+            "g0_curve_constraints_first_batch",
+            "filling_capability_not_expanded",
+        ):
+            self.assertIn(boundary, geomplate["request_local_boundaries"])
+        for gap in (
+            "initial_surface_reference_contract",
+            "g1_curve_on_surface",
+            "projected_2d_curve",
+            "point_2d_on_surface",
+            "custom_constraint_criteria",
+            "part_platesurface_curves_wrapper",
+            "full_part_surface_family",
+        ):
+            self.assertIn(gap, geomplate["remaining_gaps"])
+        for non_goal in (
+            "gui_geomplate_feature",
+            "native_freecad_part_geomplate_document_object",
+            "fake_part_geomplate_document_object",
+            "filling_brepoffsetapi_makefilling_extension",
+        ):
+            self.assertIn(non_goal, geomplate["non_goals"])
+        self.assertNotIn("Part::GeomPlate", geomplate["type_ids"])
+        self.assertNotIn("part_platesurface_curves_wrapper", geomplate["covered"])
         self.assertNotIn("complete_mapper_history", capabilities["topo_history"]["remaining_gaps"])
         self.assertNotIn(
             "element_map_child_map_preserve_propagate_lifecycle",
