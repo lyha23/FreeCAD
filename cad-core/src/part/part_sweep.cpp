@@ -237,6 +237,82 @@ std::optional<int> readSweepTransition(
     return transition;
 }
 
+std::string firstAdvancedTarget(const app::DocumentObject& object, const std::string& property)
+{
+    if (const auto link = app::readLink(object, property)) {
+        if (!link->object.empty()) {
+            return link->object;
+        }
+    }
+    const std::vector<app::Link> links = app::readLinks(object, property);
+    if (!links.empty() && !links.front().object.empty()) {
+        return links.front().object;
+    }
+    return object.name;
+}
+
+std::string firstAdvancedSubname(const app::DocumentObject& object, const std::string& property)
+{
+    if (const auto link = app::readLink(object, property)) {
+        if (!link->stableSubnames.empty() && !link->stableSubnames.front().empty()) {
+            return link->stableSubnames.front();
+        }
+        if (!link->subnames.empty()) {
+            return link->subnames.front();
+        }
+    }
+    const std::vector<app::Link> links = app::readLinks(object, property);
+    if (!links.empty()) {
+        if (!links.front().stableSubnames.empty() && !links.front().stableSubnames.front().empty()) {
+            return links.front().stableSubnames.front();
+        }
+        if (!links.front().subnames.empty()) {
+            return links.front().subnames.front();
+        }
+    }
+    return property;
+}
+
+bool rejectDeferredSweepAdvancedProperties(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/AppPartPy.cpp
+    // ::makeSweepSurface(), exposes a helper tolerance/fillMode wrapper; PartFeatures.cpp
+    // ::Sweep::execute() only publishes Sections/Spine/Solid/Frenet/Transition/Linearize.
+    static const std::vector<std::string> deferred {
+        "AuxiliarySpine",
+        "SupportMode",
+        "BiNormal",
+        "LocationMode",
+        "Tolerance",
+    };
+    bool ok = true;
+    for (const std::string& property : deferred) {
+        if (app::propertyValue(object, property) == nullptr) {
+            continue;
+        }
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "unsupported_property",
+            "Part::Sweep advanced PipeShell wrapper property " + property
+                + " is deferred; this executor follows Sweep::execute() only",
+            object.name,
+            property,
+            "runtime",
+            firstAdvancedTarget(object, property),
+            firstAdvancedSubname(object, property)
+        );
+        ok = false;
+    }
+    if (!ok) {
+        context.objects[object.name] = {{"status", "error"}, {"feature", "part_sweep"}};
+    }
+    return ok;
+}
+
 nlohmann::json sectionNamesJson(const std::vector<SweepInput>& sections)
 {
     nlohmann::json names = nlohmann::json::array();
@@ -282,24 +358,27 @@ void executePartSweep(const app::DocumentObject& object, runtime::ComputeContext
     if (!runtime::rejectUnsupportedProperties(
             object,
             context,
-            {"Sections", "Spine", "Solid", "Frenet", "Linearize", "Transition"}
+            {"Sections",
+             "Spine",
+             "Solid",
+             "Frenet",
+             "Linearize",
+             "Transition",
+             "AuxiliarySpine",
+             "SupportMode",
+             "BiNormal",
+             "LocationMode",
+             "Tolerance"}
         )) {
         context.objects[object.name] = {{"status", "error"}, {"feature", "part_sweep"}};
         return;
     }
 
-    const bool linearize = app::readBool(object, "Linearize").value_or(false);
-    if (linearize) {
-        addSweepDiagnostic(
-            object,
-            context,
-            "unsupported_property",
-            "Part::Sweep Linearize=true is deferred until post-processing parity is published",
-            "Linearize"
-        );
+    if (!rejectDeferredSweepAdvancedProperties(object, context)) {
         return;
     }
 
+    const bool linearize = app::readBool(object, "Linearize").value_or(false);
     const auto transition = readSweepTransition(object, context);
     if (!transition) {
         return;
@@ -320,7 +399,8 @@ void executePartSweep(const app::DocumentObject& object, runtime::ComputeContext
         sweepSources(*spine, *sections),
         solid,
         frenet,
-        *transition
+        *transition,
+        linearize
     );
     if (!build.error.empty() || build.shape.IsNull()) {
         addSweepDiagnostic(
@@ -344,7 +424,7 @@ void executePartSweep(const app::DocumentObject& object, runtime::ComputeContext
             {"solid", solid},
             {"frenet", frenet},
             {"transition", transitionLabel(*transition)},
-            {"linearize", false},
+            {"linearize", linearize},
             {"topo_naming_history", "maker_history:pipeshell"},
         },
         build.namedShape

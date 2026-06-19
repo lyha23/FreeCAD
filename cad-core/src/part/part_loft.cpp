@@ -48,14 +48,13 @@ void addLoftDiagnostic(
     context.objects[object.name] = {{"status", "error"}, {"feature", "part_loft"}};
 }
 
-std::optional<int> readLoftMaxDegree(
-    const app::DocumentObject& object,
-    runtime::ComputeContext& context
-)
+std::optional<int> readLoftMaxDegree(const app::DocumentObject& object, runtime::ComputeContext& context)
 {
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PartFeatures.cpp
     // ::Loft::Degrees initializes MaxDegree constraints as "{2, Geom_BSplineSurface::MaxDegree(), 1}".
-    const int maxDegree = static_cast<int>(std::llround(app::readNumber(object, "MaxDegree").value_or(5.0)));
+    const int maxDegree = static_cast<int>(
+        std::llround(app::readNumber(object, "MaxDegree").value_or(5.0))
+    );
     if (maxDegree < 2 || maxDegree > Geom_BSplineSurface::MaxDegree()) {
         addLoftDiagnostic(
             object,
@@ -153,17 +152,6 @@ void executePartLoft(const app::DocumentObject& object, runtime::ComputeContext&
     }
 
     const bool linearize = app::readBool(object, "Linearize").value_or(false);
-    if (linearize) {
-        addLoftDiagnostic(
-            object,
-            context,
-            "unsupported_property",
-            "Part::Loft Linearize=true is deferred until post-processing parity is published",
-            "Linearize"
-        );
-        return;
-    }
-
     const auto sections = resolveLoftSections(object, context);
     if (!sections) {
         return;
@@ -182,7 +170,8 @@ void executePartLoft(const app::DocumentObject& object, runtime::ComputeContext&
         solid,
         ruled,
         closed,
-        *maxDegree
+        *maxDegree,
+        linearize
     );
     if (!build.error.empty() || build.shape.IsNull()) {
         addLoftDiagnostic(
@@ -205,7 +194,7 @@ void executePartLoft(const app::DocumentObject& object, runtime::ComputeContext&
             {"solid", solid},
             {"ruled", ruled},
             {"closed", closed},
-            {"linearize", false},
+            {"linearize", linearize},
             {"max_degree", *maxDegree},
             {"topo_naming_history", "maker_history:loft_thru_sections"},
         },

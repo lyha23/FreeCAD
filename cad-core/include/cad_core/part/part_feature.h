@@ -27,6 +27,10 @@ void executePartExtrusion(const app::DocumentObject& object, runtime::ComputeCon
 void executePartRuledSurface(const app::DocumentObject& object, runtime::ComputeContext& context);
 void executePartLoft(const app::DocumentObject& object, runtime::ComputeContext& context);
 void executePartSweep(const app::DocumentObject& object, runtime::ComputeContext& context);
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp
+// ::ProjectOnSurface::tryExecute(), reads "Mode", "Height", "Offset", "Direction",
+// "SupportFace" and "Projection" before projecting edges with BRepProj_Projection.
+void executePartProjectOnSurface(const app::DocumentObject& object, runtime::ComputeContext& context);
 void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeContext& context);
 void executePartGeomPlateSurface(const app::DocumentObject& object, runtime::ComputeContext& context);
 void executePartOffset(const app::DocumentObject& object, runtime::ComputeContext& context);

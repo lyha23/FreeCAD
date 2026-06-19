@@ -1,0 +1,40 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchRevolution",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [2, 0], "end": [3, 0] },
+          { "kind": "LineSegment", "start": [3, 0], "end": [3, 1] },
+          { "kind": "LineSegment", "start": [3, 1], "end": [2, 1] },
+          { "kind": "LineSegment", "start": [2, 1], "end": [2, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Revolution",
+      "ID": 2,
+      "TypeId": "PartDesign::Revolution",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchRevolution",
+          "SubList": []
+        },
+        "Type": "Angle",
+        "Angle": 0,
+        "ReferenceAxis": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchRevolution",
+          "SubList": ["V_Axis"]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Revolution"]
+  }
+}

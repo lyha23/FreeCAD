@@ -1,0 +1,62 @@
+{
+  "Objects": [
+    {
+      "Name": "Path",
+      "ID": 1,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 0,
+        "Y2": 0,
+        "Z2": 5
+      }
+    },
+    {
+      "Name": "LowerProfile",
+      "ID": 2,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 0.6
+      }
+    },
+    {
+      "Name": "UpperProfile",
+      "ID": 3,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 1.0,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 5],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "Sweep",
+      "ID": 4,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Path"
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["LowerProfile", "UpperProfile"]
+        },
+        "Solid": false,
+        "Frenet": true,
+        "Transition": 1,
+        "Linearize": true
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Sweep"]
+  }
+}

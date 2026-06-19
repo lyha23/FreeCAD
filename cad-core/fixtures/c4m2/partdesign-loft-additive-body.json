@@ -1,0 +1,80 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchLoftProfile",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [4, 0] },
+          { "kind": "LineSegment", "start": [4, 0], "end": [4, 3] },
+          { "kind": "LineSegment", "start": [4, 3], "end": [0, 3] },
+          { "kind": "LineSegment", "start": [0, 3], "end": [0, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "SketchLoftSection",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 4],
+          "Rotation": [0, 0, 0, 1]
+        },
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0.5, 0.5], "end": [3.5, 0.5] },
+          { "kind": "LineSegment", "start": [3.5, 0.5], "end": [3.5, 2.5] },
+          { "kind": "LineSegment", "start": [3.5, 2.5], "end": [0.5, 2.5] },
+          { "kind": "LineSegment", "start": [0.5, 2.5], "end": [0.5, 0.5] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "AdditiveLoft",
+      "ID": 3,
+      "TypeId": "PartDesign::AdditiveLoft",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchLoftProfile",
+          "SubList": []
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyXLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchLoftSection",
+              "SubList": []
+            }
+          ]
+        },
+        "Ruled": false,
+        "Closed": false,
+        "Refine": false,
+        "FuzzyTolerance": 0.0
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 4,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["SketchLoftProfile", "SketchLoftSection", "AdditiveLoft"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "AdditiveLoft"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}

@@ -461,7 +461,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assert_object_matches_expected(result, "c3m4", "part-section-stable-history")
 
-    def assert_part_loft_history(self, result: dict, sections: list[str]) -> None:
+    def assert_part_loft_history(self, result: dict, sections: list[str], *, linearize: bool = False) -> None:
         loft = result["objects"]["Loft"]
         named_shape = result["named_shapes"]["Loft"]
         mapper_history = named_shape["mapper_history"]
@@ -469,7 +469,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(loft["status"], "ok")
         self.assertEqual(loft["feature"], "part_loft")
         self.assertEqual(loft["sections"], sections)
-        self.assertEqual(loft["linearize"], False)
+        self.assertEqual(loft["linearize"], linearize)
         self.assertEqual(loft["topo_naming_history"], "maker_history:loft_thru_sections")
         self.assertEqual(named_shape["element_map_status"], "history_partial")
         self.assertIn("part_loft:thru_sections_history", named_shape["element_history_status"])
@@ -558,6 +558,34 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["MissingTarget"]["status"], "error")
         self.assert_object_matches_expected(result, "c3m4", "part-loft-invalid-sections")
 
+    def test_c4m1_part_loft_linearize_face_profile_is_expected_backed(self) -> None:
+        result = self.run_recompute("part-loft-linearize-profile-face", "c4m1")
+        loft = result["objects"]["Loft"]
+        named_shape = result["named_shapes"]["Loft"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(loft["shape"], "occt_shell")
+        self.assertEqual(loft["solid"], False)
+        self.assertEqual(loft["ruled"], False)
+        self.assertEqual(loft["max_degree"], 5)
+        self.assert_part_loft_history(result, ["LowerFace", "UpperProfile"], linearize=True)
+        self.assertTrue(
+            any(status.startswith("part_loft:linearize") for status in named_shape["element_history_status"])
+        )
+        self.assert_object_matches_expected(result, "c4m1", "part-loft-linearize-profile-face")
+
+    def test_c4m1_part_loft_vertex_profile_is_expected_backed(self) -> None:
+        result = self.run_recompute("part-loft-linearize-profile-vertex", "c4m1")
+        loft = result["objects"]["Loft"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(loft["shape"], "occt_shell")
+        self.assertEqual(loft["solid"], False)
+        self.assertEqual(loft["ruled"], True)
+        self.assertEqual(loft["max_degree"], 2)
+        self.assert_part_loft_history(result, ["BaseProfile", "TipVertex"], linearize=True)
+        self.assert_object_matches_expected(result, "c4m1", "part-loft-linearize-profile-vertex")
+
     def assert_part_sweep_history(
         self,
         result: dict,
@@ -567,6 +595,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         transition: str,
         solid: bool = False,
         frenet: bool = True,
+        linearize: bool = False,
     ) -> None:
         sweep = result["objects"]["Sweep"]
         named_shape = result["named_shapes"]["Sweep"]
@@ -579,7 +608,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sweep["solid"], solid)
         self.assertEqual(sweep["frenet"], frenet)
         self.assertEqual(sweep["transition"], transition)
-        self.assertEqual(sweep["linearize"], False)
+        self.assertEqual(sweep["linearize"], linearize)
         self.assertEqual(sweep["topo_naming_history"], "maker_history:pipeshell")
         self.assertEqual(named_shape["element_map_status"], "history_partial")
         self.assertIn("part_sweep:pipeshell_history", named_shape["element_history_status"])
@@ -684,6 +713,38 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["InvalidSectionLink"]["status"], "error")
         self.assert_object_matches_expected(result, "c3m4", "part-sweep-invalid-inputs")
 
+    def test_c4m1_part_sweep_multi_profile_linearize_is_expected_backed(self) -> None:
+        result = self.run_recompute("part-sweep-multi-profile-linearize", "c4m1")
+        sweep = result["objects"]["Sweep"]
+        named_shape = result["named_shapes"]["Sweep"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertIn(sweep["shape"], {"occt_shell", "occt_solid"})
+        self.assert_part_sweep_history(
+            result,
+            "Path",
+            ["LowerProfile", "UpperProfile"],
+            transition="Right corner",
+            linearize=True,
+        )
+        self.assertTrue(
+            any(status.startswith("part_sweep:linearize") for status in named_shape["element_history_status"])
+        )
+        self.assert_object_matches_expected(result, "c4m1", "part-sweep-multi-profile-linearize")
+
+    def test_c4m1_part_sweep_advanced_wrapper_has_locatable_diagnostics(self) -> None:
+        result = self.run_recompute("part-sweep-advanced-deferred", "c4m1")
+        diagnostics = result["diagnostics"]
+
+        self.assertEqual([item["code"] for item in diagnostics], ["unsupported_property", "unsupported_property"])
+        self.assertEqual(result["objects"]["AdvancedSweep"]["status"], "error")
+        self.assertEqual(result["objects"]["AdvancedSweep"]["feature"], "part_sweep")
+        for diagnostic in diagnostics:
+            self.assertEqual(diagnostic["object"], "AdvancedSweep")
+            self.assertIn(diagnostic["property"], {"AuxiliarySpine", "Tolerance"})
+            self.assertIn("target", diagnostic)
+            self.assertIn("subname", diagnostic)
+
     def assert_part_filling_history(self, result: dict, boundary_mode: str) -> None:
         filled = result["objects"]["FilledFace"]
         named_shape = result["named_shapes"]["FilledFace"]
@@ -767,6 +828,33 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["MissingTarget"]["status"], "error")
         self.assert_object_matches_expected(result, "c3m4", "part-filling-invalid-inputs")
 
+    def test_c4m1_part_filling_advanced_kwargs_are_concrete_deferred(self) -> None:
+        result = self.run_recompute("part-filling-advanced-deferred", "c4m1")
+        diagnostics = result["diagnostics"]
+
+        self.assertEqual(
+            [item["code"] for item in diagnostics],
+            [
+                "unsupported_property",
+                "unsupported_property",
+                "unsupported_property",
+                "unsupported_property",
+            ],
+        )
+        for object_name in (
+            "SurfaceDeferred",
+            "SupportsDeferred",
+            "OrdersDeferred",
+            "NonDefaultParamsDeferred",
+        ):
+            self.assertEqual(result["objects"][object_name]["status"], "error")
+            self.assertEqual(result["objects"][object_name]["feature"], "part_filled_face")
+            self.assertEqual(result["objects"][object_name]["helper"], "Part.makeFilledFace")
+        for diagnostic in diagnostics:
+            self.assertIn("property", diagnostic)
+            self.assertIn("target", diagnostic)
+            self.assertIn("subname", diagnostic)
+
     def test_c3m4_part_geomplate_curve_point_default_is_helper_expected_backed(self) -> None:
         result = self.run_recompute("part-geomplate-curve-point-default", "c3m4")
         geomplate = result["objects"]["GeomPlate"]
@@ -826,6 +914,118 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertTrue(result["objects"][object_name]["source_backed_helper"])
             self.assertFalse(result["objects"][object_name]["freecad_native_document_object"])
         self.assert_object_matches_expected(result, "c3m4", "part-geomplate-invalid-inputs")
+
+    def test_c4m1_part_geomplate_advanced_constraints_are_expected_backed(self) -> None:
+        result = self.run_recompute("part-geomplate-advanced-constraints", "c4m1")
+        geomplate = result["objects"]["GeomPlate"]
+        source_evidence = geomplate["source_evidence"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(geomplate["status"], "ok")
+        self.assertEqual(geomplate["feature"], "part_geomplate_surface")
+        self.assertEqual(geomplate["helper"], "Part.GeomPlate.BuildPlateSurface")
+        self.assertEqual(geomplate["curve_constraint_count"], 4)
+        self.assertEqual(geomplate["point_constraint_count"], 1)
+        self.assertEqual(geomplate["build_params"]["degree"], 3)
+        self.assertEqual(geomplate["build_params"]["nb_pts_on_cur"], 10)
+        self.assertEqual(geomplate["approximation"]["continuity"], "C1")
+        self.assertEqual(geomplate["approximation"]["max_segments"], 12)
+        self.assertEqual(geomplate["approximation"]["max_degree"], 4)
+        self.assertTrue(any(item["kind"] == "curve3d" and item["nb_pts"] == 10 for item in source_evidence))
+        self.assertTrue(any(item["kind"] == "point3d" and item["order"] == 0 for item in source_evidence))
+        self.assert_object_matches_expected(result, "c4m1", "part-geomplate-advanced-constraints")
+
+    def test_c4m1_part_geomplate_advanced_wrappers_are_concrete_deferred(self) -> None:
+        result = self.run_recompute("part-geomplate-advanced-deferred", "c4m1")
+        diagnostics = result["diagnostics"]
+
+        self.assertEqual(
+            [item["code"] for item in diagnostics],
+            [
+                "unsupported_property",
+                "unsupported_property",
+                "unsupported_property",
+                "unsupported_property",
+            ],
+        )
+        for object_name in (
+            "InitialSurfaceDeferred",
+            "Curve2dDeferred",
+            "Point2dDeferred",
+            "PlateSurfaceCurvesDeferred",
+        ):
+            self.assertEqual(result["objects"][object_name]["status"], "error")
+            self.assertEqual(result["objects"][object_name]["feature"], "part_geomplate_surface")
+            self.assertEqual(result["objects"][object_name]["helper"], "Part.GeomPlate.BuildPlateSurface")
+        for diagnostic in diagnostics:
+            self.assertIn("property", diagnostic)
+            self.assertIn("target", diagnostic)
+            self.assertIn("subname", diagnostic)
+
+    def test_c4m1_part_project_on_surface_edge_plane_is_expected_backed(self) -> None:
+        result = self.run_recompute("part-project-on-surface-edge-plane", "c4m1")
+        projected = result["objects"]["ProjectedEdges"]
+        named_shape = result["named_shapes"]["ProjectedEdges"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(projected["status"], "ok")
+        self.assertEqual(projected["feature"], "part_project_on_surface")
+        self.assertEqual(projected["shape"], "occt_compound")
+        self.assertEqual(projected["source_support"], "SupportPlane")
+        self.assertEqual(projected["support_face"], "Face1")
+        self.assertEqual(projected["source_projection"], "ProjectionLine")
+        self.assertEqual(projected["projection_subshape"], "Edge1")
+        self.assertEqual(projected["mode"], "Edges")
+        self.assertEqual(projected["height"], 0.0)
+        self.assertEqual(projected["offset"], 0.0)
+        self.assertEqual(projected["topo_naming_history"], "indexed_projected_edges_no_mapper_history")
+        self.assertEqual(sum(name.startswith("Edge") for name in result["subshapes"]["ProjectedEdges"]), 1)
+        self.assertEqual(sum(name.startswith("Face") for name in result["subshapes"]["ProjectedEdges"]), 0)
+        self.assertEqual(named_shape["element_map_status"], "indexed_only")
+        self.assertNotIn("ProjectionLine.Edge1", named_shape["element_map"])
+        self.assert_object_matches_expected(result, "c4m1", "part-project-on-surface-edge-plane")
+
+    def test_c4m1_part_project_on_surface_deferred_boundaries_have_stable_diagnostics(self) -> None:
+        result = self.run_recompute("part-project-on-surface-deferred-boundaries", "c4m1")
+        codes = [item["code"] for item in result["diagnostics"]]
+
+        self.assertEqual(
+            codes,
+            [
+                "unsupported_property",
+                "unsupported_property",
+                "unsupported_property",
+                "unsupported_property",
+                "missing_property",
+            ],
+        )
+        for object_name in (
+            "ModeFacesDeferred",
+            "HeightDeferred",
+            "OffsetDeferred",
+            "MultiProjectionDeferred",
+            "MissingSupport",
+        ):
+            self.assertEqual(result["objects"][object_name]["status"], "error")
+            self.assertEqual(result["objects"][object_name]["feature"], "part_project_on_surface")
+
+    def test_c4m1_part_ruled_surface_wire_wire_builds_shell_with_provenance(self) -> None:
+        result = self.run_recompute("part-ruled-surface-wire-wire", "c4m1")
+        ruled = result["objects"]["RuledSurface"]
+        named_shape = result["named_shapes"]["RuledSurface"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(ruled["status"], "ok")
+        self.assertEqual(ruled["feature"], "part_ruled_surface")
+        self.assertEqual(ruled["shape"], "occt_shell")
+        self.assertEqual(ruled["source_curve1"], "LowerWire")
+        self.assertEqual(ruled["source_curve2"], "UpperWire")
+        self.assertEqual(ruled["orientation"], "Automatic")
+        self.assertGreaterEqual(sum(name.startswith("Face") for name in result["subshapes"]["RuledSurface"]), 1)
+        self.assert_ruled_surface_source_edge(result, "RuledSurface", "LowerWire.Edge1")
+        self.assert_ruled_surface_source_edge(result, "RuledSurface", "UpperWire.Edge1")
+        self.assertIn("part_ruled_surface:wire_wire_brepfill_shell", named_shape["element_history_status"])
+        self.assert_object_matches_expected(result, "c4m1", "part-ruled-surface-wire-wire")
 
     def test_p8_app_link_proxies_linked_shape_with_link_placement(self) -> None:
         result = self.run_recompute("app-link-box", "p8")
@@ -3156,6 +3356,82 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(assembly["solver_adapter"]["joints"], ["FixedJoint"])
         self.assertEqual(result["documentObjectUpdates"], [])
         self.assert_object_matches_expected(result, "c3m6", "assembly-ungrounded-joint-errors")
+
+    def test_c4m5_assembly_missing_grounded_part_has_locatable_diagnostic(self) -> None:
+        result = self.run_recompute(
+            "assembly-runtime-adapter-missing-grounded-part-diagnostic",
+            "c4m5",
+        )
+        assembly = result["objects"]["Assembly"]
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["missing_grounded_part"])
+        self.assertEqual(diagnostic["severity"], "error")
+        self.assertEqual(diagnostic["object"], "Assembly")
+        self.assertEqual(diagnostic["property"], "Group")
+        self.assertEqual(diagnostic["stage"], "runtime")
+        self.assertEqual(diagnostic["target"], "GroundedJointMissing")
+        self.assertEqual(assembly["solve"], "error")
+        self.assertEqual(assembly["solver_adapter"]["status"], "error")
+        self.assertEqual(assembly["solver_adapter"]["reason"], "missing_grounded_part")
+        self.assertEqual(assembly["solver_adapter"]["grounded_joints"], ["GroundedJointMissing"])
+        self.assertEqual(assembly["solver_adapter"]["joints"], ["FixedJoint"])
+        self.assertEqual(result["documentObjectUpdates"], [])
+
+    def test_c4m5_assembly_pointcurve_distance_stays_unsupported_diagnostic(self) -> None:
+        result = self.run_recompute(
+            "assembly-runtime-adapter-pointcurve-unsupported-diagnostic",
+            "c4m5",
+        )
+        assembly = result["objects"]["Assembly"]
+        diagnostic = result["diagnostics"][0]
+        solver_joint = assembly["solver_adapter"]["solver_joints"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_assembly_solver"])
+        self.assertEqual(diagnostic["target"], "DistanceJoint")
+        self.assertEqual(assembly["solve"], "unsupported")
+        self.assertEqual(assembly["solver_adapter"]["status"], "unsupported")
+        self.assertEqual(assembly["solver_adapter"]["reason"], "unsupported_joint_type")
+        self.assertEqual(
+            assembly["solver_adapter"]["unsupported_joints"],
+            [
+                {
+                    "object": "DistanceJoint",
+                    "joint_type": "Distance",
+                    "reason": "point_curve_diagnostic_boundary",
+                }
+            ],
+        )
+        self.assertEqual(solver_joint["distance_type"], "PointCurve")
+        self.assertEqual(solver_joint["distance_type_mapping_status"], "mapped_s4_extended")
+        self.assertEqual(result["documentObjectUpdates"], [])
+
+    def test_c4m5_assembly_partial_writeback_updates_only_changed_components(self) -> None:
+        result = self.run_recompute("assembly-runtime-adapter-partial-writeback", "c4m5")
+        assembly = result["objects"]["Assembly"]
+        updates = result["documentObjectUpdates"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(assembly["solve"], "solved")
+        self.assertEqual(assembly["solver_adapter"]["status"], "solved")
+        self.assertEqual(assembly["solver_adapter"]["mode"], "real_ondsel_solver")
+        self.assertEqual(assembly["solver_adapter"]["joints"], ["DistanceJointB", "DistanceJointC"])
+        self.assertEqual([update["object"] for update in updates], ["ComponentC"])
+        self.assertEqual(updates[0]["action"], "assembly_set_placement")
+        self.assertEqual(updates[0]["reason"], "assembly_solver_placement_writeback")
+        self.assertEqual(updates[0]["properties"]["Placement"]["Base"], [8.0, 0.0, 4.0])
+        self.assertEqual(
+            [update["object"] for update in assembly["solver_adapter"]["placement_updates"]],
+            ["ComponentC"],
+        )
+
+        applied_result = self.run_with_document_updates_applied(
+            "assembly-runtime-adapter-partial-writeback",
+            "c4m5",
+            updates,
+        )
+        self.assertEqual(applied_result["diagnostics"], [])
+        self.assertEqual(applied_result["documentObjectUpdates"], [])
 
     def test_c3m6_assembly_unsupported_joint_stays_diagnostic(self) -> None:
         result = self.run_recompute("assembly-unsupported-joint-diagnostic", "c3m6")

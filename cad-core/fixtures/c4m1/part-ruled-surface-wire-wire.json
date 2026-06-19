@@ -1,0 +1,49 @@
+{
+  "Objects": [
+    {
+      "Name": "LowerWire",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 2
+      }
+    },
+    {
+      "Name": "UpperWire",
+      "ID": 2,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 1.25,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0.25, 0.5, 3.0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "RuledSurface",
+      "ID": 3,
+      "TypeId": "Part::RuledSurface",
+      "Properties": {
+        "Curve1": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "LowerWire"
+        },
+        "Curve2": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "UpperWire"
+        },
+        "Orientation": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Automatic"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["RuledSurface"]
+  }
+}

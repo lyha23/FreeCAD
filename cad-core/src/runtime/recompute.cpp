@@ -1415,6 +1415,7 @@ nlohmann::json recomputeResultJson(const app::Document& document,
         {"elementReferenceUpdates", context.elementReferenceUpdates},
         {"documentObjectUpdates", context.documentObjectUpdates},
         {"diagnostics", diagnosticsToJson(context.diagnostics)},
+        {"binaryPayloads", nlohmann::json::array()},
     };
 }
 

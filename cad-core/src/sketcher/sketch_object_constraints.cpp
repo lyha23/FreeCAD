@@ -2846,6 +2846,27 @@ std::optional<double> readConstraintValue(const nlohmann::json& constraint)
     return std::nullopt;
 }
 
+std::string sketchConstraintDiagnosticTarget(const nlohmann::json& constraint, std::size_t index)
+{
+    std::string target = "Constraints[" + std::to_string(index + 1U) + "]";
+    if (const auto type = readStringField(constraint, "Type")) {
+        target += ".Type=" + *type;
+    }
+    else if (const auto type = readIntField(constraint, "Type")) {
+        target += ".Type=" + std::to_string(*type);
+    }
+
+    for (const std::string& field : {"First", "FirstPos", "Second", "SecondPos", "Third", "ThirdPos"}) {
+        if (const auto value = readStringField(constraint, field)) {
+            target += ";" + field + "=" + *value;
+        }
+        else if (const auto value = readIntField(constraint, field)) {
+            target += ";" + field + "=" + std::to_string(*value);
+        }
+    }
+    return target;
+}
+
 void addUniqueConstraintIndex(std::vector<int>& indexes, int index)
 {
     if (std::find(indexes.begin(), indexes.end(), index) == indexes.end()) {
@@ -3271,7 +3292,8 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
         return applied;
     }
 
-    for (const auto& constraint : constraints) {
+    for (std::size_t constraintIndex = 0; constraintIndex < constraints.size(); ++constraintIndex) {
+        const auto& constraint = constraints.at(constraintIndex);
         if (!constraint.is_object()) {
             runtime::addDiagnostic(
                 context.diagnostics,
@@ -3637,12 +3659,12 @@ std::optional<AppliedSketchConstraints> applySketchConstraints(
         runtime::addDiagnostic(
             context.diagnostics,
             "error",
-            "unsupported_property",
-            "Only Sketcher Coincident and already-satisfied "
-            "Horizontal/Vertical/Parallel/Tangent/Perpendicular/PointOnObject/Symmetric/Block/"
-            "Angle/Distance/Radius/Diameter/Equal constraints are applied in the current P5 subset",
+            "unsupported_sketch_constraint_relation",
+            "Sketcher constraint relation is outside the request-local solver-facing subset",
             object.name,
-            "Constraints"
+            "Constraints",
+            "solver_constraint",
+            sketchConstraintDiagnosticTarget(constraint, constraintIndex)
         );
         return std::nullopt;
     }

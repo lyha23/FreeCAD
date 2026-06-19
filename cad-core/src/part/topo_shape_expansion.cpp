@@ -4,19 +4,25 @@
 #include "cad_core/part/property_topo_shape.h"
 
 #include <BRepAdaptor_Curve.hxx>
+#include <BRepAdaptor_CompCurve.hxx>
+#include <BRepAdaptor_Surface.hxx>
 #include <BRepBndLib.hxx>
 #include <BRepBuilderAPI_Copy.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRepBuilderAPI_TransitionMode.hxx>
+#include <BRep_Builder.hxx>
 #include <BRepFill.hxx>
 #include <BRepGProp.hxx>
 #include <BRepLib.hxx>
+#include <BRepLib_FindSurface.hxx>
 #include <BRepOffsetAPI_MakeFilling.hxx>
 #include <BRepOffsetAPI_MakePipeShell.hxx>
 #include <BRepOffsetAPI_ThruSections.hxx>
+#include <BRepPrimAPI_MakeRevol.hxx>
 #include <BRep_Tool.hxx>
 #include <BRepTools_WireExplorer.hxx>
 #include <Bnd_Box.hxx>
+#include <GeomAdaptor_Surface.hxx>
 #include <GeomAbs_Shape.hxx>
 #include <GProp_GProps.hxx>
 #include <Precision.hxx>
@@ -43,10 +49,12 @@ namespace cad_core::part
 namespace
 {
 
-void addImportAlias(NamedShape& namedShape,
-                    const std::string& owner,
-                    const std::string& elementName,
-                    const ImportElementMapSource& source)
+void addImportAlias(
+    NamedShape& namedShape,
+    const std::string& owner,
+    const std::string& elementName,
+    const ImportElementMapSource& source
+)
 {
     const auto elementIt = namedShape.elements.find(elementName);
     if (elementIt == namedShape.elements.end()) {
@@ -79,13 +87,18 @@ void addImportAlias(NamedShape& namedShape,
     addMapperHistoryEvent(namedShape.mapperHistory, std::move(event));
 }
 
+TopoDS_Shape copiedShape(const TopoDS_Shape& shape)
+{
+    BRepBuilderAPI_Copy copy(shape, Standard_True, Standard_True);
+    if (copy.IsDone() && !copy.Shape().IsNull()) {
+        return copy.Shape();
+    }
+    return shape;
+}
+
 TopoDS_Edge copiedEdge(const TopoDS_Edge& edge)
 {
-    BRepBuilderAPI_Copy copy(edge, Standard_True, Standard_True);
-    if (copy.IsDone() && !copy.Shape().IsNull()) {
-        return TopoDS::Edge(copy.Shape());
-    }
-    return edge;
+    return TopoDS::Edge(copiedShape(edge));
 }
 
 std::array<gp_Pnt, 2> edgeEndpoints(const TopoDS_Edge& edge)
@@ -116,30 +129,39 @@ bool sameEndpointPair(const TopoDS_Edge& left, const TopoDS_Edge& right)
             && samePoint(leftEndpoints[1], rightEndpoints[0]));
 }
 
-bool automaticRuledSurfaceReversesSecondEdge(const TopoDS_Edge& first, const TopoDS_Edge& second)
+std::array<gp_Pnt, 2> curveSamplePoints(const TopoDS_Shape& curveShape)
 {
-    BRepAdaptor_Curve firstCurve(first);
-    BRepAdaptor_Curve secondCurve(second);
-
-    gp_Pnt p1 = firstCurve.Value(
-        0.9 * firstCurve.FirstParameter() + 0.1 * firstCurve.LastParameter()
-    );
-    gp_Pnt p2 = firstCurve.Value(
-        0.1 * firstCurve.FirstParameter() + 0.9 * firstCurve.LastParameter()
-    );
-    if (first.Orientation() == TopAbs_REVERSED) {
-        std::swap(p1, p2);
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementRuledSurface(), Automatic orientation samples
+    // "0.9 * FirstParameter() + 0.1 * LastParameter()" and the opposite point on either a
+    // BRepAdaptor_HCurve edge or BRepAdaptor_HCompCurve wire.
+    if (curveShape.ShapeType() == TopAbs_WIRE) {
+        BRepAdaptor_CompCurve curve(TopoDS::Wire(curveShape));
+        gp_Pnt first = curve.Value(0.9 * curve.FirstParameter() + 0.1 * curve.LastParameter());
+        gp_Pnt second = curve.Value(0.1 * curve.FirstParameter() + 0.9 * curve.LastParameter());
+        if (curveShape.Orientation() == TopAbs_REVERSED) {
+            std::swap(first, second);
+        }
+        return {first, second};
     }
 
-    gp_Pnt p3 = secondCurve.Value(
-        0.9 * secondCurve.FirstParameter() + 0.1 * secondCurve.LastParameter()
-    );
-    gp_Pnt p4 = secondCurve.Value(
-        0.1 * secondCurve.FirstParameter() + 0.9 * secondCurve.LastParameter()
-    );
-    if (second.Orientation() == TopAbs_REVERSED) {
-        std::swap(p3, p4);
+    BRepAdaptor_Curve curve(TopoDS::Edge(curveShape));
+    gp_Pnt first = curve.Value(0.9 * curve.FirstParameter() + 0.1 * curve.LastParameter());
+    gp_Pnt second = curve.Value(0.1 * curve.FirstParameter() + 0.9 * curve.LastParameter());
+    if (curveShape.Orientation() == TopAbs_REVERSED) {
+        std::swap(first, second);
     }
+    return {first, second};
+}
+
+bool automaticRuledSurfaceReversesSecondCurve(const TopoDS_Shape& first, const TopoDS_Shape& second)
+{
+    const auto firstPoints = curveSamplePoints(first);
+    const auto secondPoints = curveSamplePoints(second);
+    const gp_Pnt& p1 = firstPoints[0];
+    const gp_Pnt& p2 = firstPoints[1];
+    const gp_Pnt& p3 = secondPoints[0];
+    const gp_Pnt& p4 = secondPoints[1];
 
     const gp_Vec n1 = gp_Vec(p1, p2).Crossed(gp_Vec(p1, p3));
     const gp_Vec n2 = gp_Vec(p4, p3).Crossed(gp_Vec(p4, p2));
@@ -178,14 +200,12 @@ void addDistinctEvidence(
     const FilledFaceBoundaryEvidence& value
 )
 {
-    const auto duplicate = std::find_if(
-        values.begin(),
-        values.end(),
-        [&](const FilledFaceBoundaryEvidence& current) {
-            return current.objectName == value.objectName && current.subname == value.subname
-                && current.stableSubname == value.stableSubname && current.shapeKind == value.shapeKind;
-        }
-    );
+    const auto duplicate
+        = std::find_if(values.begin(), values.end(), [&](const FilledFaceBoundaryEvidence& current) {
+              return current.objectName == value.objectName && current.subname == value.subname
+                  && current.stableSubname == value.stableSubname
+                  && current.shapeKind == value.shapeKind;
+          });
     if (duplicate == values.end()) {
         values.push_back(value);
     }
@@ -365,13 +385,11 @@ std::vector<FilledFaceWorkingShape> expandedFilledFaceSources(
     return output;
 }
 
-std::optional<std::string> sourceEdgeElementName(
-    const FilledFaceSource& source,
-    const TopoDS_Edge& edge
-)
+std::optional<std::string> sourceEdgeElementName(const FilledFaceSource& source, const TopoDS_Edge& edge)
 {
     if (!source.subname.empty() && source.shape.ShapeType() == TopAbs_EDGE) {
-        return source.objectName + "." + (source.stableSubname.empty() ? source.subname : source.stableSubname);
+        return source.objectName + "."
+            + (source.stableSubname.empty() ? source.subname : source.stableSubname);
     }
     if (source.namedShape == nullptr) {
         return std::nullopt;
@@ -415,10 +433,7 @@ FilledFaceBoundaryEvidence evidenceFromFullName(
     };
 }
 
-FilledFaceBoundaryEvidence fallbackEvidence(
-    const FilledFaceSource& source,
-    TopAbs_ShapeEnum kind
-)
+FilledFaceBoundaryEvidence fallbackEvidence(const FilledFaceSource& source, TopAbs_ShapeEnum kind)
 {
     return FilledFaceBoundaryEvidence {
         source.objectName,
@@ -573,7 +588,10 @@ void addFilledFaceBoundaryHistory(
 
     for (const FilledFaceBoundaryEvidence& source : boundarySources) {
         MapperHistoryEvent event;
-        event.source = MapperHistoryEndpoint {source.objectName, source.stableSubname.empty() ? source.subname : source.stableSubname};
+        event.source = MapperHistoryEndpoint {
+            source.objectName,
+            source.stableSubname.empty() ? source.subname : source.stableSubname
+        };
         event.target = MapperHistoryEndpoint {owner, *targetFace};
         event.shapeKind = "face";
         event.relation = MapperHistoryRelation::Generated;
@@ -688,8 +706,10 @@ bool loftProfilesHaveSufficientSeparation(const TopoDS_Shape& left, const TopoDS
                 || shape.ShapeType() == TopAbs_COMPSOLID) {
                 BRepGProp::VolumeProperties(shape, properties);
             }
-            else if (subshapeCount(shape, TopAbs_FACE) > 0 || shape.ShapeType() == TopAbs_FACE
-                     || shape.ShapeType() == TopAbs_SHELL) {
+            else if (
+                subshapeCount(shape, TopAbs_FACE) > 0 || shape.ShapeType() == TopAbs_FACE
+                || shape.ShapeType() == TopAbs_SHELL
+            ) {
                 BRepGProp::SurfaceProperties(shape, properties);
             }
             else {
@@ -716,10 +736,42 @@ bool loftProfilesHaveSufficientSeparation(const TopoDS_Shape& left, const TopoDS
     return !leftCenter->IsEqual(*rightCenter, Precision::Confusion());
 }
 
+bool linearizePlanarFaces(TopoDS_Shape& shape)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PartFeatures.cpp
+    // ::Loft::execute(), after makeElementLoft() calls
+    // "result.linearize(LinearizeFace::linearizeFaces, LinearizeEdge::noEdges)".
+    // TopoShapeExpansion.cpp::TopoShape::linearize() skips existing GeomAbs_Plane faces and
+    // replaces planar non-plane face geometry through "builder.UpdateFace(...)".
+    bool touched = false;
+    BRep_Builder builder;
+    for (TopExp_Explorer explorer(shape, TopAbs_FACE); explorer.More(); explorer.Next()) {
+        TopoDS_Face face = TopoDS::Face(explorer.Current());
+        BRepAdaptor_Surface current(face);
+        if (current.GetType() == GeomAbs_Plane) {
+            continue;
+        }
+
+        BRepLib_FindSurface planeFinder(face, -1, Standard_True);
+        if (!planeFinder.Found() || planeFinder.Surface().IsNull()) {
+            continue;
+        }
+        GeomAdaptor_Surface surface(planeFinder.Surface());
+        if (surface.GetType() != GeomAbs_Plane) {
+            continue;
+        }
+
+        builder.UpdateFace(face, planeFinder.Surface(), face.Location(), BRep_Tool::Tolerance(face));
+        touched = true;
+    }
+    return touched;
+}
+
 void addRuledSurfaceSourceRelation(
     NamedShape& namedShape,
     const std::string& owner,
-    const RuledSurfaceEdgeSource& source
+    const std::string& objectName,
+    const RuledSurfaceEdgeEvidence& source
 )
 {
     const auto targetName = targetEdgeNameForSource(namedShape, source.edge);
@@ -740,14 +792,12 @@ void addRuledSurfaceSourceRelation(
         if (elementIt != namedShape.elements.end()) {
             addDistinct(elementIt->second.sources, sourceName);
         }
-        namedShape.history.push_back(ElementHistory {
-            ElementHistoryKind::Modified,
-            *targetName,
-            {sourceName}
-        });
+        namedShape.history.push_back(
+            ElementHistory {ElementHistoryKind::Modified, *targetName, {sourceName}}
+        );
 
         MapperHistoryEvent event;
-        event.source = MapperHistoryEndpoint {source.objectName, sourceName};
+        event.source = MapperHistoryEndpoint {objectName, sourceName};
         event.target = MapperHistoryEndpoint {owner, *targetName};
         event.shapeKind = "edge";
         event.relation = MapperHistoryRelation::Modified;
@@ -763,6 +813,31 @@ void addRuledSurfaceSourceRelation(
     }
 }
 
+void addRuledSurfaceSourceRelations(
+    NamedShape& namedShape,
+    const std::string& owner,
+    const RuledSurfaceCurveSource& source
+)
+{
+    for (const auto& edge : source.edges) {
+        addRuledSurfaceSourceRelation(namedShape, owner, source.objectName, edge);
+    }
+}
+
+std::optional<TopoDS_Wire> curveAsWire(const TopoDS_Shape& curve)
+{
+    if (curve.ShapeType() == TopAbs_WIRE) {
+        TopoDS_Wire wire = TopoDS::Wire(curve);
+        BRepLib::BuildCurves3d(wire);
+        BRepLib::SameParameter(wire, Precision::Confusion(), Standard_True);
+        return wire;
+    }
+    if (curve.ShapeType() == TopAbs_EDGE) {
+        return wireFromEdges(curve);
+    }
+    return std::nullopt;
+}
+
 }  // namespace
 
 NamedShapeBuild makeElementLoftFromSources(
@@ -771,7 +846,8 @@ NamedShapeBuild makeElementLoftFromSources(
     bool solid,
     bool ruled,
     bool closed,
-    int maxDegree
+    int maxDegree,
+    bool linearizeFaces
 )
 {
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
@@ -800,10 +876,7 @@ NamedShapeBuild makeElementLoftFromSources(
 
         for (std::size_t index = 0; index < profiles->size(); ++index) {
             if (index > 0U
-                && !loftProfilesHaveSufficientSeparation(
-                    profiles->at(index),
-                    profiles->at(index - 1U)
-                )) {
+                && !loftProfilesHaveSufficientSeparation(profiles->at(index), profiles->at(index - 1U))) {
                 return NamedShapeBuild {
                     TopoDS_Shape {},
                     std::nullopt,
@@ -834,17 +907,25 @@ NamedShapeBuild makeElementLoftFromSources(
         if (!generator.IsDone() || generator.Shape().IsNull()) {
             return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "ThruSections failed"};
         }
+        TopoDS_Shape resultShape = generator.Shape();
+        const bool linearized = linearizeFaces && linearizePlanarFaces(resultShape);
 
         NamedShape namedShape = namedShapeForThruSectionsHistory(
             owner,
-            generator.Shape(),
+            resultShape,
             sources,
             generator,
             profiles->front(),
             profiles->back()
         );
         addDistinct(namedShape.elementHistoryStatus, "part_loft:thru_sections_history");
-        return NamedShapeBuild {generator.Shape(), std::move(namedShape), {}};
+        if (linearizeFaces) {
+            addDistinct(
+                namedShape.elementHistoryStatus,
+                linearized ? "part_loft:linearized_planar_faces" : "part_loft:linearize_noop"
+            );
+        }
+        return NamedShapeBuild {resultShape, std::move(namedShape), {}};
     }
     catch (const Standard_Failure& failure) {
         return NamedShapeBuild {
@@ -855,20 +936,40 @@ NamedShapeBuild makeElementLoftFromSources(
     }
 }
 
-NamedShapeBuild makeElementRuledSurfaceFromEdges(
+NamedShapeBuild makeElementRuledSurfaceFromCurves(
     const std::string& owner,
-    const std::array<RuledSurfaceEdgeSource, 2>& sources,
+    const std::array<RuledSurfaceCurveSource, 2>& sources,
     short orientation
 )
 {
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
-    // ::TopoShape::makeElementRuledSurface(), "Automatic" samples two curve endpoint pairs and
-    // flips S2 when the triangle-normal dot product is negative; "Reversed" directly reverses S2.
+    // ::TopoShape::makeElementRuledSurface(), normalizes edge/wire inputs, converts mixed edge/wire
+    // pairs to wires, "Automatic" samples two curve endpoint pairs and flips S2 when the
+    // triangle-normal dot product is negative; "Reversed" directly reverses S2.
     try {
-        TopoDS_Edge first = copiedEdge(sources[0].edge);
-        TopoDS_Edge second = copiedEdge(sources[1].edge);
+        TopoDS_Shape first = copiedShape(sources[0].curve);
+        TopoDS_Shape second = copiedShape(sources[1].curve);
+        if (first.ShapeType() != second.ShapeType()) {
+            const auto firstWire = curveAsWire(first);
+            const auto secondWire = curveAsWire(second);
+            if (!firstWire || !secondWire) {
+                return NamedShapeBuild {
+                    TopoDS_Shape {},
+                    std::nullopt,
+                    "Input shape forms more than one wire"
+                };
+            }
+            first = *firstWire;
+            second = *secondWire;
+        }
+
+        const bool isWire = first.ShapeType() == TopAbs_WIRE;
+        if (first.ShapeType() != TopAbs_EDGE && first.ShapeType() != TopAbs_WIRE) {
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Input shape has no edge"};
+        }
+
         if (orientation == 0) {
-            if (automaticRuledSurfaceReversesSecondEdge(first, second)) {
+            if (automaticRuledSurfaceReversesSecondCurve(first, second)) {
                 second.Reverse();
             }
         }
@@ -883,17 +984,28 @@ NamedShapeBuild makeElementRuledSurfaceFromEdges(
             };
         }
 
-        TopoDS_Shape ruledShape = BRepFill::Face(first, second);
+        TopoDS_Shape ruledShape;
+        if (isWire) {
+            ruledShape = BRepFill::Shell(TopoDS::Wire(first), TopoDS::Wire(second));
+        }
+        else {
+            ruledShape = BRepFill::Face(TopoDS::Edge(first), TopoDS::Edge(second));
+        }
         if (ruledShape.IsNull()) {
-            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "BRepFill::Face produced null shape"};
+            return NamedShapeBuild {
+                TopoDS_Shape {},
+                std::nullopt,
+                isWire ? "BRepFill::Shell produced null shape" : "BRepFill::Face produced null shape"
+            };
         }
 
         NamedShape namedShape = indexedNamedShapeForObject(owner, ruledShape);
-        addRuledSurfaceSourceRelation(namedShape, owner, sources[0]);
-        addRuledSurfaceSourceRelation(namedShape, owner, sources[1]);
+        addRuledSurfaceSourceRelations(namedShape, owner, sources[0]);
+        addRuledSurfaceSourceRelations(namedShape, owner, sources[1]);
         addDistinct(
             namedShape.elementHistoryStatus,
-            "part_ruled_surface:shared_vertex_edge_relation"
+            isWire ? "part_ruled_surface:wire_wire_brepfill_shell"
+                   : "part_ruled_surface:shared_vertex_edge_relation"
         );
         return NamedShapeBuild {ruledShape, std::move(namedShape), {}};
     }
@@ -912,7 +1024,8 @@ NamedShapeBuild makeElementPipeShellFromSources(
     const std::vector<NamedShapeSource>& sources,
     bool solid,
     bool frenet,
-    int transition
+    int transition,
+    bool linearizeFaces
 )
 {
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
@@ -952,15 +1065,59 @@ NamedShapeBuild makeElementPipeShellFromSources(
             return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Part::Sweep failed"};
         }
 
-        NamedShape namedShape = namedShapeForMakerHistory(owner, pipeShell.Shape(), sources, pipeShell);
+        TopoDS_Shape resultShape = pipeShell.Shape();
+        const bool linearized = linearizeFaces && linearizePlanarFaces(resultShape);
+
+        NamedShape namedShape = namedShapeForMakerHistory(owner, resultShape, sources, pipeShell);
         addDistinct(namedShape.elementHistoryStatus, "part_sweep:pipeshell_history");
-        return NamedShapeBuild {pipeShell.Shape(), std::move(namedShape), {}};
+        if (linearizeFaces) {
+            addDistinct(
+                namedShape.elementHistoryStatus,
+                linearized ? "part_sweep:linearized_planar_faces" : "part_sweep:linearize_noop"
+            );
+        }
+        return NamedShapeBuild {resultShape, std::move(namedShape), {}};
     }
     catch (const Standard_Failure& failure) {
         return NamedShapeBuild {
             TopoDS_Shape {},
             std::nullopt,
             failure.GetMessageString() != nullptr ? failure.GetMessageString() : "Part::Sweep failed"
+        };
+    }
+}
+
+NamedShapeBuild makeElementRevolveFromSource(
+    const std::string& owner,
+    const NamedShapeSource& source,
+    const gp_Ax1& axis,
+    double angleRadians
+)
+{
+    if (source.shape.IsNull()) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Null input shape for revolve operation"};
+    }
+
+    try {
+        BRepPrimAPI_MakeRevol revolver(source.shape, axis, angleRadians);
+        revolver.Build();
+        if (!revolver.IsDone()) {
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "PartDesign Revolution/Groove revolve failed"};
+        }
+        const TopoDS_Shape resultShape = revolver.Shape();
+        if (resultShape.IsNull()) {
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Revolve produced a null shape"};
+        }
+        NamedShape namedShape = namedShapeForMakerHistory(owner, resultShape, std::vector<NamedShapeSource> {source}, revolver);
+        addDistinct(namedShape.elementHistoryStatus, "part_design_revolve:make_revol_history");
+        return NamedShapeBuild {resultShape, std::move(namedShape), {}};
+    }
+    catch (const Standard_Failure& failure) {
+        const char* message = failure.GetMessageString();
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            std::string("PartDesign revolve failed: ") + (message != nullptr ? message : "unknown OCCT error"),
         };
     }
 }
@@ -1027,20 +1184,18 @@ FilledFaceBuild makeElementFilledFaceFromSources(
         if (sourcesForHistory.empty()) {
             sourcesForHistory.reserve(boundarySources.size());
             for (const FilledFaceSource& source : boundarySources) {
-                sourcesForHistory.push_back(NamedShapeSource {
-                    source.objectName,
-                    source.shape,
-                    source.namedShape,
-                });
+                sourcesForHistory.push_back(
+                    NamedShapeSource {
+                        source.objectName,
+                        source.shape,
+                        source.namedShape,
+                    }
+                );
             }
         }
 
-        NamedShape namedShape = namedShapeForMakerHistory(
-            owner,
-            maker.Shape(),
-            sourcesForHistory,
-            maker
-        );
+        NamedShape namedShape
+            = namedShapeForMakerHistory(owner, maker.Shape(), sourcesForHistory, maker);
         addDistinct(namedShape.elementHistoryStatus, "part_filling:filling_history");
         addFilledFaceBoundaryHistory(
             namedShape,

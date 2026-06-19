@@ -1,0 +1,42 @@
+{
+  "Objects": [
+    {
+      "Name": "BaseProfile",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 5,
+        "Circumradius": 2
+      }
+    },
+    {
+      "Name": "TipVertex",
+      "ID": 2,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 0.25,
+        "Y": 0.25,
+        "Z": 3.5
+      }
+    },
+    {
+      "Name": "Loft",
+      "ID": 3,
+      "TypeId": "Part::Loft",
+      "Properties": {
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["BaseProfile", "TipVertex"]
+        },
+        "Solid": false,
+        "Ruled": true,
+        "Closed": false,
+        "Linearize": true,
+        "MaxDegree": 2
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Loft"]
+  }
+}

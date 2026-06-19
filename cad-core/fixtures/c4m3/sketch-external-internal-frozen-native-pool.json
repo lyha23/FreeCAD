@@ -1,0 +1,89 @@
+{
+  "Objects": [
+    {
+      "Name": "Box",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 20,
+        "Width": 5,
+        "Height": 1
+      }
+    },
+    {
+      "Name": "Sketch",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [],
+        "ExternalGeo": {
+          "PropertyType": "Part::PropertyGeometryList",
+          "Geometry": [
+            {
+              "kind": "LineSegment",
+              "start": [0, 0],
+              "end": [10, 0],
+              "construction": true,
+              "Ref": "Box.Face5",
+              "ExternalFlags": ["Defining", "Frozen"]
+            },
+            {
+              "kind": "LineSegment",
+              "start": [10, 0],
+              "end": [10, 5],
+              "construction": true,
+              "Ref": "Box.Face5",
+              "ExternalFlags": ["Defining", "Frozen"]
+            },
+            {
+              "kind": "LineSegment",
+              "start": [10, 5],
+              "end": [0, 5],
+              "construction": true,
+              "Ref": "Box.Face5",
+              "ExternalFlags": ["Defining", "Frozen"]
+            },
+            {
+              "kind": "LineSegment",
+              "start": [0, 5],
+              "end": [0, 0],
+              "construction": true,
+              "Ref": "Box.Face5",
+              "ExternalFlags": ["Defining", "Frozen"]
+            }
+          ]
+        },
+        "ExternalGeometry": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Box",
+              "SubList": ["Face5"],
+              "ExternalFlags": ["Defining", "Frozen"]
+            }
+          ]
+        },
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 3,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Sketch",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 4,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Sketch", "Pad"]
+  }
+}

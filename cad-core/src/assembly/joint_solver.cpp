@@ -1322,6 +1322,17 @@ bool isGroundedObject(const AssemblySolveRequest& request, const std::string& ob
     return part && part->grounded;
 }
 
+bool hasResolvedGroundedPart(const AssemblySolveRequest& request)
+{
+    return std::any_of(
+        request.parts.begin(),
+        request.parts.end(),
+        [](const AssemblyPartRef& part) {
+            return part.grounded;
+        }
+    );
+}
+
 bool isObjectLevelReference(const AssemblyJointReference& reference)
 {
     return reference.object.empty() || reference.subnames.empty();
@@ -1798,6 +1809,22 @@ AssemblySolveResult solveAssemblyWithRealOndselAdapter(const AssemblySolveReques
                 *unsupportedReason,
             });
         }
+    }
+    if (!result.groundedJoints.empty() && !hasResolvedGroundedPart(request)) {
+        result.solveState = "error";
+        result.status = "error";
+        result.reason = "missing_grounded_part";
+        result.diagnostics.push_back(runtime::Diagnostic {
+            "error",
+            "missing_grounded_part",
+            "Assembly GroundedJoint did not resolve ObjectToGround to an Assembly part",
+            request.assemblyObject,
+            "Group",
+            "runtime",
+            result.groundedJoints.front(),
+            {},
+        });
+        return result;
     }
     if (!result.unsupportedJoints.empty()) {
         result.solveState = "unsupported";

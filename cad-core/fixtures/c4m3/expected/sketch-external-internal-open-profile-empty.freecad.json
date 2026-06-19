@@ -1,0 +1,15 @@
+{
+  "object": "Sketch",
+  "reference": "FreeCAD oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildInternals() returns an empty InternalShape when FaceMakerBuildFace cannot build a profile face from an open wire.",
+  "freecad_version": "1.2.0 revision 20260519",
+  "sketch_internal": {
+    "profile": "none",
+    "profile_ready": false,
+    "raw_edge_count": 3,
+    "shape": "empty",
+    "public_counts": {
+      "edges": 3
+    },
+    "element_map": {}
+  }
+}

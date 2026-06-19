@@ -1,0 +1,74 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchRevolution",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [2, 0], "end": [3, 0] },
+          { "kind": "LineSegment", "start": [3, 0], "end": [3, 1] },
+          { "kind": "LineSegment", "start": [3, 1], "end": [2, 1] },
+          { "kind": "LineSegment", "start": [2, 1], "end": [2, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "RevolutionTwoAngles",
+      "ID": 2,
+      "TypeId": "PartDesign::Revolution",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchRevolution",
+          "SubList": []
+        },
+        "Type": "TwoAngles",
+        "Angle": 45,
+        "Angle2": 45,
+        "ReferenceAxis": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchRevolution",
+          "SubList": ["V_Axis"]
+        }
+      }
+    },
+    {
+      "Name": "SketchGroove",
+      "ID": 3,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [1, 0], "end": [2, 0] },
+          { "kind": "LineSegment", "start": [2, 0], "end": [2, 1] },
+          { "kind": "LineSegment", "start": [2, 1], "end": [1, 1] },
+          { "kind": "LineSegment", "start": [1, 1], "end": [1, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "GrooveUpToFace",
+      "ID": 4,
+      "TypeId": "PartDesign::Groove",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchGroove",
+          "SubList": []
+        },
+        "Type": "UpToFace",
+        "Angle": 180,
+        "ReferenceAxis": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchGroove",
+          "SubList": ["V_Axis"]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["RevolutionTwoAngles", "GrooveUpToFace"]
+  }
+}

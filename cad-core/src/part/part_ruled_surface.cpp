@@ -8,6 +8,7 @@
 
 #include <TopAbs_ShapeEnum.hxx>
 #include <TopExp.hxx>
+#include <TopExp_Explorer.hxx>
 #include <TopTools_IndexedMapOfShape.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Edge.hxx>
@@ -28,8 +29,8 @@ namespace
 struct PartRuledSurfaceCurve
 {
     std::string objectName;
-    TopoDS_Edge edge;
-    std::vector<std::string> stableEdgeNames;
+    TopoDS_Shape curve;
+    std::vector<RuledSurfaceEdgeEvidence> edgeEvidence;
 };
 
 void addRuledSurfaceDiagnostic(
@@ -123,7 +124,7 @@ std::string qualifiedSubname(const std::string& objectName, const std::string& s
     return objectName + "." + subname;
 }
 
-std::vector<std::string> stableEdgeNamesForLink(const app::Link& link)
+std::vector<std::string> stableEdgeNamesForSingleEdgeLink(const app::Link& link)
 {
     std::vector<std::string> names;
     if (link.subnames.empty() || link.subnames.front().empty()) {
@@ -137,6 +138,84 @@ std::vector<std::string> stableEdgeNamesForLink(const app::Link& link)
     addDistinct(names, qualifiedSubname(link.object, stable));
     addDistinct(names, qualifiedSubname(link.object, current));
     return names;
+}
+
+std::vector<TopoDS_Edge> edgesForCurve(const TopoDS_Shape& curve)
+{
+    std::vector<TopoDS_Edge> edges;
+    for (TopExp_Explorer explorer(curve, TopAbs_EDGE); explorer.More(); explorer.Next()) {
+        edges.push_back(TopoDS::Edge(explorer.Current()));
+    }
+    return edges;
+}
+
+void addAliasesForNamedElement(
+    std::vector<std::string>& names,
+    const part::NamedShape& namedShape,
+    const std::string& objectName,
+    const std::string& elementName
+)
+{
+    addDistinct(names, qualifiedSubname(objectName, elementName));
+    for (const auto& [alias, target] : namedShape.elementMap) {
+        if (target == elementName) {
+            addDistinct(names, qualifiedSubname(objectName, alias));
+        }
+    }
+}
+
+std::vector<std::string> stableEdgeNamesForCurveEdge(
+    const std::string& objectName,
+    const TopoDS_Edge& edge,
+    const part::NamedShape* namedShape,
+    int fallbackIndex
+)
+{
+    std::vector<std::string> names;
+    if (namedShape != nullptr) {
+        for (const auto& [elementName, element] : namedShape->elements) {
+            if (element.subshape.kind != TopAbs_EDGE) {
+                continue;
+            }
+            const auto candidate = part::subshapeByName(namedShape->shape, element.subshape);
+            if (candidate && !candidate->IsNull() && candidate->ShapeType() == TopAbs_EDGE
+                && candidate->IsSame(edge)) {
+                addAliasesForNamedElement(names, *namedShape, objectName, elementName);
+            }
+        }
+    }
+    if (names.empty()) {
+        addDistinct(names, objectName + ".Edge" + std::to_string(fallbackIndex));
+    }
+    return names;
+}
+
+std::vector<RuledSurfaceEdgeEvidence> edgeEvidenceForCurve(
+    const app::Link& link,
+    const TopoDS_Shape& curve,
+    const part::NamedShape* namedShape
+)
+{
+    std::vector<RuledSurfaceEdgeEvidence> evidence;
+    const auto edges = edgesForCurve(curve);
+    evidence.reserve(edges.size());
+    const bool explicitSingleEdge = !link.subnames.empty() && link.subnames.size() == 1U
+        && link.subnames.front().rfind("Edge", 0) == 0 && curve.ShapeType() == TopAbs_EDGE;
+    for (std::size_t index = 0; index < edges.size(); ++index) {
+        evidence.push_back(
+            RuledSurfaceEdgeEvidence {
+                edges[index],
+                explicitSingleEdge ? stableEdgeNamesForSingleEdgeLink(link)
+                                   : stableEdgeNamesForCurveEdge(
+                                         link.object,
+                                         edges[index],
+                                         namedShape,
+                                         static_cast<int>(index + 1U)
+                                     ),
+            }
+        );
+    }
+    return evidence;
 }
 
 std::optional<TopoDS_Shape> linkedSubshape(
@@ -184,25 +263,13 @@ std::optional<PartRuledSurfaceCurve> resolveRuledSurfaceCurve(
     // ::RuledSurface::execute(), reads Curve1/Curve2 through getTopoShape with
     // "ResolveLink | Transform" and, when a sub-value exists, "NeedSubElement".
     if (app::propertyValue(object, property) == nullptr) {
-        addRuledSurfaceDiagnostic(
-            object,
-            context,
-            "missing_property",
-            "No shape linked.",
-            property
-        );
+        addRuledSurfaceDiagnostic(object, context, "missing_property", "No shape linked.", property);
         return std::nullopt;
     }
 
     const auto links = app::readLinks(object, property);
     if (links.empty() || links.front().object.empty()) {
-        addRuledSurfaceDiagnostic(
-            object,
-            context,
-            "missing_link_target",
-            "No shape linked.",
-            property
-        );
+        addRuledSurfaceDiagnostic(object, context, "missing_link_target", "No shape linked.", property);
         return std::nullopt;
     }
     if (links.size() != 1U || links.front().subnames.size() > 1U) {
@@ -237,24 +304,28 @@ std::optional<PartRuledSurfaceCurve> resolveRuledSurfaceCurve(
         : nullptr;
     const auto selected = linkedSubshape(shapeIt->second.shape, namedShape, link);
     if (!selected || selected->IsNull()) {
+        addRuledSurfaceDiagnostic(object, context, "invalid_link", "Invalid link.", property, link.object);
+        return std::nullopt;
+    }
+
+    const int selectedEdgeCount = edgeCount(*selected);
+    if (selectedEdgeCount == 0) {
         addRuledSurfaceDiagnostic(
             object,
             context,
-            "invalid_link",
-            "Invalid link.",
+            "no_edge",
+            "Input shape has no edge",
             property,
             link.object
         );
         return std::nullopt;
     }
-
-    if (selected->ShapeType() != TopAbs_EDGE) {
+    if (selected->ShapeType() != TopAbs_EDGE && selected->ShapeType() != TopAbs_WIRE) {
         addRuledSurfaceDiagnostic(
             object,
             context,
-            edgeCount(*selected) == 0 ? "no_edge" : "unsupported_subshape_kind",
-            edgeCount(*selected) == 0 ? "Input shape has no edge"
-                                      : "Part::RuledSurface edge/edge batch requires an edge",
+            "unsupported_subshape_kind",
+            "Part::RuledSurface edge/wire batch requires an edge or wire",
             property,
             link.object
         );
@@ -263,8 +334,8 @@ std::optional<PartRuledSurfaceCurve> resolveRuledSurfaceCurve(
 
     return PartRuledSurfaceCurve {
         link.object,
-        TopoDS::Edge(*selected),
-        stableEdgeNamesForLink(link)
+        *selected,
+        edgeEvidenceForCurve(link, *selected, namedShape)
     };
 }
 
@@ -322,11 +393,11 @@ void executePartRuledSurface(const app::DocumentObject& object, runtime::Compute
         return;
     }
 
-    const auto build = makeElementRuledSurfaceFromEdges(
+    const auto build = makeElementRuledSurfaceFromCurves(
         object.name,
-        std::array<RuledSurfaceEdgeSource, 2> {{
-            RuledSurfaceEdgeSource {curve1->objectName, curve1->edge, curve1->stableEdgeNames},
-            RuledSurfaceEdgeSource {curve2->objectName, curve2->edge, curve2->stableEdgeNames},
+        std::array<RuledSurfaceCurveSource, 2> {{
+            RuledSurfaceCurveSource {curve1->objectName, curve1->curve, curve1->edgeEvidence},
+            RuledSurfaceCurveSource {curve2->objectName, curve2->curve, curve2->edgeEvidence},
         }},
         *orientation
     );

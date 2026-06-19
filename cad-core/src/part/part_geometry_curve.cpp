@@ -645,6 +645,7 @@ nlohmann::json partGeometryCurveResultJson(const runtime::ComputeContext& contex
         {"elementReferenceUpdates", context.elementReferenceUpdates},
         {"documentObjectUpdates", context.documentObjectUpdates},
         {"diagnostics", runtime::diagnosticsToJson(context.diagnostics)},
+        {"binaryPayloads", nlohmann::json::array()},
     };
 }
 

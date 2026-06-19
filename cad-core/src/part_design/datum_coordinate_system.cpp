@@ -1,5 +1,7 @@
 #include "cad_core/part_design/datum_coordinate_system.h"
 
+#include "datum_attachment.h"
+
 #include "cad_core/runtime/feature_executor.h"
 #include "cad_core/base/placement.h"
 
@@ -35,6 +37,10 @@ void executeDatumCoordinateSystem(const app::DocumentObject& object, runtime::Co
     // documents "App::Origin is a LCS for which placement is fixed to identity".
     if (!runtime::rejectUnsupportedProperties(
             object, context, {"ResizeMode", "Length", "Width", "AttachmentSupport", "MapMode", "OriginFeatures"})) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+    if (!detail::rejectUnsupportedDatumAttachment(object, context)) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }

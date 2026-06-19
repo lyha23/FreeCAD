@@ -1,0 +1,128 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Sketch",
+          "SubList": []
+        },
+        "Length": 10,
+        "Reversed": false,
+        "SideType": "One side",
+        "Refine": true,
+        "FuzzyTolerance": 0
+      }
+    },
+    {
+      "Name": "ProbeSketch",
+      "ID": 3,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              1,
+              0
+            ]
+          }
+        ],
+        "ExternalGeometry": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Pad",
+              "SubList": [
+                "OldRefineFace"
+              ],
+              "StableSubList": [
+                "Sketch.Face1"
+              ],
+              "ReferenceShadow": [
+                {
+                  "target": "Pad",
+                  "targetId": 2,
+                  "property": "Shape",
+                  "shapeType": "Face",
+                  "indexed": "OldRefineFace",
+                  "subname": "OldRefineFace",
+                  "stableSubname": "Sketch.Face1",
+                  "fingerprint": {}
+                }
+              ]
+            }
+          ]
+        },
+        "Constraints": []
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Pad",
+      "ProbeSketch"
+    ]
+  }
+}

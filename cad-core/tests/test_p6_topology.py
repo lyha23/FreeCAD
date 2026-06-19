@@ -26,6 +26,208 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         return json.loads(completed.stdout)
 
+    def c4m4_result(self, fixture: str) -> dict:
+        return self.run_recompute(fixture, "c4m4")
+
+    def single_reference_update_item(self, result: dict) -> dict:
+        self.assertEqual(len(result["elementReferenceUpdates"]), 1)
+        update = result["elementReferenceUpdates"][0]
+        if "SubSet" in update:
+            self.assertEqual(len(update["SubSet"]), 1)
+            return update["SubSet"][0]
+        return update
+
+    def assert_c4m4_update(
+        self,
+        fixture: str,
+        stable_subname: str,
+        current_subname: str,
+        *,
+        object_name: str,
+        property_name: str,
+    ) -> dict:
+        result = self.c4m4_result(fixture)
+
+        self.assertEqual(result["diagnostics"], [])
+        item = self.single_reference_update_item(result)
+        self.assertEqual(item["StableSubList"], [stable_subname])
+        self.assertEqual(item["SubList"], [current_subname])
+        self.assertEqual(
+            item["ShadowSub"],
+            [{"newName": stable_subname, "oldName": current_subname}],
+        )
+        self.assertEqual(item["ReferenceShadow"][0]["stableSubname"], stable_subname)
+        update = result["elementReferenceUpdates"][0]
+        self.assertEqual(update["object"], object_name)
+        self.assertEqual(update["property"], property_name)
+        return result
+
+    def assert_c4m4_diagnostic(
+        self,
+        fixture: str,
+        code: str,
+        object_name: str,
+        property_name: str,
+        target: str,
+        subname: str,
+    ) -> dict:
+        result = self.c4m4_result(fixture)
+
+        self.assertEqual(result["elementReferenceUpdates"], [])
+        diagnostic = result["diagnostics"][0]
+        self.assertEqual(diagnostic["code"], code)
+        self.assertEqual(diagnostic["object"], object_name)
+        self.assertEqual(diagnostic["property"], property_name)
+        self.assertEqual(diagnostic["target"], target)
+        self.assertEqual(diagnostic["subname"], subname)
+        return result
+
+    def test_c4m4_topo_reference_pressure_updated_rows_publish_reference_updates(self) -> None:
+        result = self.assert_c4m4_update(
+            "topo-reference-pressure-multi-producer-updated",
+            "Pad.Face6",
+            "Face5",
+            object_name="ProbePad",
+            property_name="UpToFace",
+        )
+        self.assertEqual(result["objects"]["ProbePad"]["status"], "ok")
+        self.assertIn("history_consumed:merge", result["named_shapes"]["Body"]["element_history_status"])
+
+        result = self.c4m4_result("topo-reference-pressure-rename-label-updated")
+        self.assertEqual(result["diagnostics"], [])
+        update = result["elementReferenceUpdates"][0]
+        self.assertEqual(update["SubList"], ["$PrettyBox.Face1"])
+        self.assertEqual(
+            update["labelReferenceRename"][0],
+            {
+                "index": 0,
+                "oldLabel": "OldPrettyBox",
+                "newLabel": "PrettyBox",
+                "oldSubname": "$OldPrettyBox.Face1",
+                "newSubname": "$PrettyBox.Face1",
+                "method": "PropertyLinkBase.updateLabelReference",
+            },
+        )
+
+        result = self.assert_c4m4_update(
+            "topo-reference-pressure-link-retag-updated",
+            "Body.SketchPocket.Edge1",
+            "Edge12",
+            object_name="ProbeSketch",
+            property_name="ExternalGeometry",
+        )
+        self.assertIn(
+            "Body.SketchPocket.Edge1",
+            result["named_shapes"]["BodyLink"]["element_map"],
+        )
+
+        result = self.assert_c4m4_update(
+            "topo-reference-pressure-shapefix-refine-updated",
+            "Sketch.Face1",
+            "Face5",
+            object_name="ProbeSketch",
+            property_name="ExternalGeometry",
+        )
+        self.assertIn("history_consumed:merge", result["named_shapes"]["Pad"]["element_history_status"])
+
+        result = self.assert_c4m4_update(
+            "topo-reference-pressure-dressup-transformed-updated",
+            "Mirrored.Transform1.Face1",
+            "Face5",
+            object_name="ProbeSketch",
+            property_name="ExternalGeometry",
+        )
+        mirrored_history = result["named_shapes"]["Mirrored"]["element_history_status"]
+        self.assertIn("terminal_history:split_deleted", mirrored_history)
+        self.assertIn("subname_split_requires_reselect", mirrored_history)
+
+    def test_c4m4_topo_reference_pressure_copy_on_change_asserts_both_update_channels(self) -> None:
+        result = self.assert_c4m4_update(
+            "topo-reference-pressure-copy-on-change-owned-child",
+            "OwnedCopyBox.Face1",
+            "Face1",
+            object_name="ProbeSketch",
+            property_name="ExternalGeometry",
+        )
+
+        self.assertEqual(
+            [(update["action"], update["reason"], update["object"]) for update in result["documentObjectUpdates"]],
+            [("update", "show_element_element_list_child_sync", "ArrayLink_i0")],
+        )
+        self.assertEqual(result["objects"]["ArrayLink_i0"]["linked_object"], "OwnedCopyBox")
+        self.assertIn("OwnedCopyBox.Face1", result["named_shapes"]["ArrayLink_i0"]["element_map"])
+
+    def test_c4m4_topo_reference_pressure_unchanged_import_keeps_update_channel_quiet(self) -> None:
+        result = self.c4m4_result("topo-reference-pressure-import-unchanged")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(result["elementReferenceUpdates"], [])
+        self.assertEqual(result["documentObjectUpdates"], [])
+        named_shape = result["named_shapes"]["ImportedStep"]
+        self.assertIn("import_shape_element_map", named_shape["element_history_status"])
+        self.assertEqual(named_shape["element_map"]["ImportedStep.Face1"], "Face1")
+
+    def test_c4m4_topo_reference_pressure_needs_reselect_and_diagnostic_rows_are_locatable(self) -> None:
+        self.assert_c4m4_diagnostic(
+            "topo-reference-pressure-rename-label-ambiguous-diagnostic",
+            "label_reference_ambiguous",
+            "BoxLink",
+            "LinkedObject",
+            "Box",
+            "$OldPrettyBox.Face1",
+        )
+
+        result = self.assert_c4m4_diagnostic(
+            "topo-reference-pressure-import-change-deleted",
+            "deleted_stable_subname",
+            "ProbePad",
+            "UpToFace",
+            "ImportedStep",
+            "ImportedStep.Face999",
+        )
+        self.assertIn("import_shape_element_map", result["named_shapes"]["ImportedStep"]["element_history_status"])
+
+        self.assert_c4m4_diagnostic(
+            "topo-reference-pressure-import-change-ambiguous-diagnostic",
+            "subname_resolve_ambiguous",
+            "ProbePad",
+            "UpToFace",
+            "ImportedStep",
+            "OldImportFace",
+        )
+
+        result = self.assert_c4m4_diagnostic(
+            "topo-reference-pressure-shapefix-refine-deleted",
+            "deleted_stable_subname",
+            "ProbePad",
+            "UpToFace",
+            "Body",
+            "Pocket.Face5",
+        )
+        self.assertTrue(
+            any(
+                item["kind"] == "deleted" and item["element"] == "Pocket.Face5"
+                for item in result["named_shapes"]["Body"]["history"]
+            )
+        )
+
+        result = self.assert_c4m4_diagnostic(
+            "topo-reference-pressure-boolean-split-needs-reselect",
+            "split_stable_subname",
+            "ProbePad",
+            "UpToFace",
+            "BooleanFragments",
+            "BoxA.Face3",
+        )
+        named_shape = result["named_shapes"]["BooleanFragments"]
+        self.assertIn("subname_split_requires_reselect", named_shape["element_history_status"])
+        self.assertTrue(
+            any(
+                item["kind"] == "split" and "BoxA.Face3" in item["sources"]
+                for item in named_shape["history"]
+            )
+        )
+
     def test_c3m1_shapefix_delete_small_edge_records_deleted_mapper_history(self) -> None:
         result = self.run_c3m1_probe("shapefix-delete-small-edge")
         named_shape = result["named_shapes"]["ShapeFix"]
@@ -599,6 +801,18 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(diagnostic["property"], property_name)
                 self.assertEqual(diagnostic["target"], "Body")
                 self.assertEqual(diagnostic["subname"], stable_subname)
+
+    def test_c4m3_stable_subname_loss_is_locatable_diagnostic(self) -> None:
+        diagnostic = self.run_recompute(
+            "sketch-external-internal-stable-deleted-diagnostic",
+            "c4m3",
+        )["diagnostics"][0]
+
+        self.assertEqual(diagnostic["code"], "deleted_stable_subname")
+        self.assertEqual(diagnostic["object"], "ProbeSketch")
+        self.assertEqual(diagnostic["property"], "ExternalGeometry")
+        self.assertEqual(diagnostic["target"], "Body")
+        self.assertEqual(diagnostic["subname"], "Pocket.Edge11")
 
     def test_p6_split_stable_subname_reaches_downstream_geometry_after_recovery(self) -> None:
         diagnostic = self.run_recompute("up-to-face-stable-body-split", "p6")["diagnostics"][0]

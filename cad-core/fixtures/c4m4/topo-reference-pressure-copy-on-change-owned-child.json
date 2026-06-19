@@ -1,0 +1,140 @@
+{
+  "Objects": [
+    {
+      "Name": "SourceBox",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 3,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "OwnedCopyBox",
+      "ID": 3,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 1,
+        "Width": 1,
+        "Height": 1
+      }
+    },
+    {
+      "Name": "ArrayLink_i0",
+      "ID": 4,
+      "TypeId": "App::LinkElement",
+      "Properties": {
+        "_LinkOwner": {
+          "PropertyType": "App::PropertyInteger",
+          "value": 2
+        },
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "OwnedCopyBox"
+        },
+        "LinkTransform": true,
+        "LinkCopyOnChange": 2,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "Name": "ArrayLink",
+      "ID": 2,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "SourceBox"
+        },
+        "LinkTransform": false,
+        "ShowElement": {
+          "PropertyType": "App::PropertyBool",
+          "value": true
+        },
+        "ElementCount": {
+          "PropertyType": "App::PropertyInteger",
+          "value": 1
+        },
+        "ElementList": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "ArrayLink_i0"
+          ]
+        },
+        "VisibilityList": {
+          "PropertyType": "App::PropertyBoolList",
+          "value": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "Name": "ProbeSketch",
+      "ID": 5,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              1,
+              0
+            ]
+          }
+        ],
+        "ExternalGeometry": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "ArrayLink_i0",
+              "SubList": [
+                "OldOwnedFace"
+              ],
+              "StableSubList": [
+                "OwnedCopyBox.Face1"
+              ],
+              "ReferenceShadow": [
+                {
+                  "target": "ArrayLink_i0",
+                  "targetId": 4,
+                  "property": "Shape",
+                  "shapeType": "Face",
+                  "indexed": "OldOwnedFace",
+                  "subname": "OldOwnedFace",
+                  "stableSubname": "OwnedCopyBox.Face1",
+                  "fingerprint": {}
+                }
+              ]
+            }
+          ]
+        },
+        "Constraints": []
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "ArrayLink",
+      "ProbeSketch"
+    ]
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "Objects": [
+    {
+      "Name": "Box",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Label": {
+          "PropertyType": "App::PropertyString",
+          "value": "PrettyBox"
+        },
+        "Length": 2,
+        "Width": 3,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "OtherBox",
+      "ID": 2,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Label": {
+          "PropertyType": "App::PropertyString",
+          "value": "PrettyBox"
+        },
+        "Length": 1,
+        "Width": 1,
+        "Height": 1
+      }
+    },
+    {
+      "Name": "BoxLink",
+      "ID": 3,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "value": "Box",
+          "SubList": [
+            "$OldPrettyBox.Face1"
+          ]
+        },
+        "LinkTransform": false
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Box"
+    ]
+  }
+}

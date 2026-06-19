@@ -32,7 +32,8 @@ PropertyKind kindFromPropertyType(const std::string& propertyType)
     if (propertyType == "App::PropertyEnumeration") {
         return PropertyKind::Enumeration;
     }
-    if (propertyType == "App::PropertyVector" || propertyType == "App::PropertyVectorDistance") {
+    if (propertyType == "App::PropertyVector" || propertyType == "App::PropertyVectorDistance"
+        || propertyType == "App::PropertyDirection") {
         return PropertyKind::Vector;
     }
     if (propertyType == "App::PropertyPlacement") {

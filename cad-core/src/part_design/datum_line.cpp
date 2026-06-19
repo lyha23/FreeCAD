@@ -1,5 +1,7 @@
 #include "cad_core/part_design/datum_line.h"
 
+#include "datum_attachment.h"
+
 #include "cad_core/runtime/feature_executor.h"
 #include "cad_core/base/placement.h"
 
@@ -34,6 +36,10 @@ void executeDatumLine(const app::DocumentObject& object, runtime::ComputeContext
     // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Datums.cpp::DatumElement::DatumElement()
     // adds "Role" for lookup by LocalCoordinateSystem::getDatumElement().
     if (!runtime::rejectUnsupportedProperties(object, context, {"ResizeMode", "Length", "AttachmentSupport", "MapMode", "Role"})) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+    if (!detail::rejectUnsupportedDatumAttachment(object, context)) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }

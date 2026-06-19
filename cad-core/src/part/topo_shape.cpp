@@ -5335,6 +5335,27 @@ std::optional<std::string> resolveElementName(
     return std::nullopt;
 }
 
+bool isDeletedImportStableSubname(const NamedShape& namedShape, const std::string& stableSubname)
+{
+    if (std::find(namedShape.elementHistoryStatus.begin(),
+                  namedShape.elementHistoryStatus.end(),
+                  "import_shape_element_map")
+        == namedShape.elementHistoryStatus.end()) {
+        return false;
+    }
+
+    for (const MapperHistoryEvent& event : namedShape.mapperHistory) {
+        if (event.makerStage != "import_shape_element_map" || event.source.object.empty()) {
+            continue;
+        }
+        const std::string ownerPrefix = event.source.object + ".";
+        if (stableSubname.rfind(ownerPrefix, 0) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
 ElementResolveResult resolveElementReference(
     const NamedShape& namedShape,
     const std::string& subname,
@@ -5355,6 +5376,14 @@ ElementResolveResult resolveElementReference(
             if (entry.kind == ElementHistoryKind::Deleted && entry.element == stableSubname) {
                 return ElementResolveResult {ElementResolveStatus::Deleted, std::nullopt};
             }
+        }
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeaturePartImportStep.cpp
+        // ::ImportStep::execute(), calls "TopoShape aShape; aShape.importStep(...)" and then stores
+        // the imported shape as the feature Shape. cad-core records that request-local owner map as
+        // "import_shape_element_map"; when a stable key under the same import owner disappears after
+        // a file change, the reference is deleted rather than an ambiguous current alias.
+        if (isDeletedImportStableSubname(namedShape, stableSubname)) {
+            return ElementResolveResult {ElementResolveStatus::Deleted, std::nullopt};
         }
         bool split = false;
         for (const ElementHistory& entry : namedShape.history) {

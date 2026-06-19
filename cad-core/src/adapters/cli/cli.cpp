@@ -170,6 +170,7 @@ int runRecompute(const RecomputeOptions& options)
                   {"elementReferenceUpdates", nlohmann::json::array()},
                   {"documentObjectUpdates", nlohmann::json::array()},
                   {"diagnostics", diagnostics},
+                  {"binaryPayloads", nlohmann::json::array()},
               };
         runtime::writeJsonFile(options.outputPath, payload);
         return 0;

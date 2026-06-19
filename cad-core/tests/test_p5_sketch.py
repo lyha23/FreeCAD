@@ -2312,6 +2312,61 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("requires solver movement", diagnostic["message"])
         self.assertEqual(result["objects"]["Sketch"]["status"], "error")
 
+    def test_c4m3_sketch_constraint_supported_state_fixture(self) -> None:
+        result = self.run_recompute("sketch-constraint-supported-state", "c4m3")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertTrue(sketch["profile_ready"])
+        self.assertEqual(sketch["solver_state"], "underconstrained")
+        self.assertEqual(sketch["solver_geometry_updates"], 0)
+        self.assertEqual(sketch["solver_geometry_update_status"], "none")
+        self.assertEqual(sketch["orientation_constraints_applied"], 4)
+
+    def test_c4m3_sketch_constraint_geometry_update_fixture(self) -> None:
+        result = self.run_recompute("sketch-constraint-geometry-update", "c4m3")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertFalse(sketch["profile_ready"])
+        self.assertEqual(sketch["solver_state"], "underconstrained")
+        self.assertEqual(sketch["solver_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_orientation_geometry_updates"], 1)
+        self.assertEqual(sketch["solver_geometry_update_status"], "whole_line_orientation_first_slice")
+
+    def test_c4m3_sketch_constraint_conflict_diagnostic_fixture(self) -> None:
+        result = self.run_recompute("sketch-constraint-conflict-diagnostic", "c4m3")
+        diagnostic = result["diagnostics"][0]
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["sketch_solver_conflict"])
+        self.assertEqual(diagnostic["object"], "Sketch")
+        self.assertEqual(diagnostic["property"], "Constraints")
+        self.assertEqual(diagnostic["stage"], "solver")
+        self.assertEqual(diagnostic["target"], "Constraints[1,2]")
+        self.assertEqual(sketch["status"], "error")
+        self.assertFalse(sketch["profile_ready"])
+        self.assertEqual(sketch["solver_state"], "conflict")
+
+    def test_c4m3_sketch_constraint_unsupported_relation_has_locator(self) -> None:
+        result = self.run_recompute("sketch-constraint-unsupported-relation", "c4m3")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual(
+            [item["code"] for item in result["diagnostics"]],
+            ["unsupported_sketch_constraint_relation"],
+        )
+        self.assertEqual(diagnostic["object"], "Sketch")
+        self.assertEqual(diagnostic["property"], "Constraints")
+        self.assertEqual(diagnostic["stage"], "solver_constraint")
+        self.assertEqual(
+            diagnostic["target"],
+            "Constraints[1].Type=SnellsLaw;First=0;FirstPos=start;Second=1;SecondPos=end;Third=2",
+        )
+        self.assertEqual(result["objects"]["Sketch"]["status"], "error")
+
     def test_c3m3_sketch_horizontal_constraint_updates_solver_geometry(self) -> None:
         result = self.run_recompute("sketch-horizontal-solver-geometry-update", "c3m3")
         sketch = result["objects"]["Sketch"]
@@ -3228,6 +3283,44 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["external_geometry_count"], 4)
         self.assertEqual(sketch["external_geometry_state_counts"]["missing"], 1)
         self.assertEqual(sketch["external_geometry_state_counts"]["recovered_missing"], 0)
+
+    def test_c4m3_external_geometry_lifecycle_pressure_package(self) -> None:
+        for fixture, state_counts, update_reason, expected_backed in [
+            ("sketch-external-internal-frozen-native-pool", {"frozen": 1}, None, True),
+            ("sketch-external-internal-detached-native-pool", {"detached": 1}, "external_geometry_detach", True),
+            (
+                "sketch-external-internal-missing-recovered",
+                {"missing": 1, "recovered_missing": 1},
+                "external_geometry_flags_sync",
+                True,
+            ),
+            ("sketch-external-internal-frozen-brep-snapshot", {"frozen": 1}, None, False),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "c4m3")
+                sketch = result["objects"]["Sketch"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(sketch["status"], "ok")
+                for state, count in state_counts.items():
+                    self.assertEqual(sketch["external_geometry_state_counts"][state], count)
+                if update_reason is None:
+                    self.assertEqual(result["documentObjectUpdates"], [])
+                else:
+                    self.assertEqual([item["reason"] for item in result["documentObjectUpdates"]], [update_reason])
+                if expected_backed:
+                    self.assert_result_matches_expected(result, "c4m3", fixture)
+
+    def test_c4m3_external_geometry_missing_snapshot_is_locatable_diagnostic(self) -> None:
+        result = self.run_recompute("sketch-external-internal-frozen-missing-snapshot-diagnostic", "c4m3")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["missing_external_geometry_snapshot"])
+        self.assertEqual(diagnostic["stage"], "graph")
+        self.assertEqual(diagnostic["object"], "Sketch")
+        self.assertEqual(diagnostic["property"], "ExternalGeometry")
+        self.assertEqual(diagnostic["target"], "MissingBox")
+        self.assertEqual(diagnostic["subname"], "Face5")
 
     def test_p5_conic_native_external_geo_reuses_old_geometry(self) -> None:
         result = self.run_recompute("sketch-conic-arcs-external-geometry-native", "p5")
@@ -4975,6 +5068,30 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assert_object_matches_expected(result, "p5", "sketch-internal-face-split-and-dangling")
         self.assertIn("Sketch", result["mesh"])
 
+    def test_c4m3_internal_shape_expected_backed_pressure_package(self) -> None:
+        for fixture in [
+            "sketch-external-internal-open-profile-empty",
+            "sketch-external-internal-bounded-cross-cutters",
+            "sketch-external-internal-self-intersection-bowtie",
+            "sketch-external-internal-split-dangling-mixed",
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "c4m3")
+                sketch = result["objects"]["Sketch"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(sketch["status"], "ok")
+                self.assert_result_matches_expected(result, "c4m3", fixture)
+
+        mixed = self.run_recompute("sketch-external-internal-split-dangling-mixed", "c4m3")
+        named_shape = mixed["named_shapes"]["Sketch.InternalShape"]
+        self.assertIn("wire_joiner_history:splitter", named_shape["element_history_status"])
+        self.assertIn("wire_joiner_history:modified", named_shape["element_history_status"])
+        self.assertIn("wire_joiner_history:deleted", named_shape["element_history_status"])
+        self.assertIn("wire_joiner_history:open_export", named_shape["element_history_status"])
+        self.assertIn("terminal_history:split_deleted", named_shape["element_history_status"])
+        self.assertIn("InternalEdge", "".join(named_shape["elements"]))
+
     def test_p5_pad_uses_selected_internal_face_sublist(self) -> None:
         result = self.run_recompute("pad-internal-face-sublist", "p5")
         pad = result["objects"]["Pad"]
@@ -5046,6 +5163,35 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(update["StableSubList"], ["g305:split1"])
         self.assertEqual(update["ShadowSub"], [{"newName": "g305:split1", "oldName": "InternalFace1"}])
         self.assertEqual(update["ReferenceShadow"][0]["stableSubname"], "g305:split1")
+
+    def test_c4m3_reference_shadow_single_subshape_pressure_package(self) -> None:
+        ffi_result = self.run_recompute_ffi("sketch-external-internal-reference-shadow-edge-stable", "c4m3")
+        update = ffi_result["elementReferenceUpdates"][0]["SubSet"][0]
+        shadow = update["ReferenceShadow"][0]
+
+        self.assertEqual(ffi_result["diagnostics"], [])
+        self.assertEqual(update["SubList"], ["InternalEdge1"])
+        self.assertEqual(update["StableSubList"], ["Edge1"])
+        self.assertEqual(update["ShadowSub"], [{"newName": "Edge1", "oldName": "InternalEdge1"}])
+        self.assertEqual(len(update["ReferenceShadow"]), 1)
+        self.assertEqual(shadow["target"], "BaseSketch")
+        self.assertEqual(shadow["property"], "InternalShape")
+        self.assertEqual(shadow["shapeType"], "Edge")
+        self.assertEqual(shadow["subname"], "InternalEdge1")
+        self.assertEqual(shadow["stableSubname"], "Edge1")
+
+        payload = json.loads(
+            (ROOT / "fixtures" / "c4m3" / "sketch-external-internal-frozen-brep-snapshot.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        snapshot_shadow = payload["Objects"][0]["Properties"]["ExternalGeometry"]["SubSet"][0]["ReferenceShadow"][0]
+        self.assertEqual(snapshot_shadow["target"], "MissingBox")
+        self.assertEqual(snapshot_shadow["property"], "Shape")
+        self.assertEqual(snapshot_shadow["shapeType"], "Face")
+        self.assertEqual(snapshot_shadow["subname"], "Face5")
+        self.assertIn("brep", snapshot_shadow)
+        self.assertEqual(len(payload["Objects"][0]["Properties"]["ExternalGeometry"]["SubSet"][0]["ReferenceShadow"]), 1)
 
     def test_p5_pad_uses_shadow_sub_before_global_reference_shadow_recovery(self) -> None:
         fixture_path = ROOT / "fixtures" / "p5" / "pad-internal-face-reference-shadow.json"
@@ -5419,6 +5565,40 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(ambiguous_events[0]["source"], {"object": "Sketch", "subname": "InternalFace99"})
         self.assertEqual(ambiguous_events[0]["target"], {"object": "Sketch.InternalShape", "subname": ""})
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
+
+    def test_c4m3_reference_shadow_deferred_diagnostics_are_locatable(self) -> None:
+        for fixture, code in [
+            (
+                "sketch-external-internal-reference-shadow-brep-split-diagnostic",
+                "subname_split_requires_reselect",
+            ),
+            ("sketch-external-internal-reference-shadow-brep-deleted-diagnostic", "subname_deleted"),
+            ("sketch-external-internal-reference-shadow-ambiguous-diagnostic", "subname_resolve_ambiguous"),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "c4m3")
+                diagnostic = result["diagnostics"][0]
+
+                self.assertEqual([item["code"] for item in result["diagnostics"]], [code])
+                self.assertEqual(diagnostic["object"], "Pad")
+                self.assertEqual(diagnostic["property"], "Profile")
+                self.assertEqual(diagnostic["target"], "Sketch")
+                self.assertEqual(diagnostic["subname"], "InternalFace99")
+                self.assertEqual(result["objects"]["Pad"]["status"], "error")
+
+    def test_c4m3_external_geometry_unsupported_reference_shadow_brep_is_locatable(self) -> None:
+        result = self.run_recompute(
+            "sketch-external-internal-unsupported-reference-shadow-brep-diagnostic",
+            "c4m3",
+        )
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_reference_shadow_brep"])
+        self.assertEqual(diagnostic["stage"], "runtime")
+        self.assertEqual(diagnostic["object"], "Sketch")
+        self.assertEqual(diagnostic["property"], "ExternalGeometry")
+        self.assertEqual(diagnostic["target"], "MissingBox")
+        self.assertEqual(diagnostic["subname"], "Face5")
 
     def test_p5_pad_rejects_missing_reference_shadow_recovery(self) -> None:
         result = self.run_recompute("pad-internal-face-reference-shadow-missing", "p5")

@@ -1,0 +1,35 @@
+{
+  "Objects": [
+    {
+      "Name": "BooleanCutMissingBase",
+      "ID": 1,
+      "TypeId": "PartDesign::Boolean",
+      "Properties": {
+        "Type": "Cut",
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": []
+        },
+        "Refine": false,
+        "FuzzyTolerance": 0.0
+      }
+    },
+    {
+      "Name": "BooleanUnsupportedType",
+      "ID": 2,
+      "TypeId": "PartDesign::Boolean",
+      "Properties": {
+        "Type": "Section",
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": []
+        },
+        "Refine": false,
+        "FuzzyTolerance": 0.0
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["BooleanCutMissingBase", "BooleanUnsupportedType"]
+  }
+}

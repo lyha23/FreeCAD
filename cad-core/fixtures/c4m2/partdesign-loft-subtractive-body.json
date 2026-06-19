@@ -1,0 +1,112 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchBase",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [8, 0] },
+          { "kind": "LineSegment", "start": [8, 0], "end": [8, 6] },
+          { "kind": "LineSegment", "start": [8, 6], "end": [0, 6] },
+          { "kind": "LineSegment", "start": [0, 6], "end": [0, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "BasePad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchBase",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 5,
+        "Reversed": false,
+        "SideType": "One side",
+        "Refine": false,
+        "FuzzyTolerance": 0.0
+      }
+    },
+    {
+      "Name": "SketchLoftProfile",
+      "ID": 3,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [2, 2], "end": [6, 2] },
+          { "kind": "LineSegment", "start": [6, 2], "end": [6, 4] },
+          { "kind": "LineSegment", "start": [6, 4], "end": [2, 4] },
+          { "kind": "LineSegment", "start": [2, 4], "end": [2, 2] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "SketchLoftSection",
+      "ID": 4,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 5],
+          "Rotation": [0, 0, 0, 1]
+        },
+        "Geometry": [
+          { "kind": "LineSegment", "start": [3, 2.5], "end": [5, 2.5] },
+          { "kind": "LineSegment", "start": [5, 2.5], "end": [5, 3.5] },
+          { "kind": "LineSegment", "start": [5, 3.5], "end": [3, 3.5] },
+          { "kind": "LineSegment", "start": [3, 3.5], "end": [3, 2.5] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "SubtractiveLoft",
+      "ID": 5,
+      "TypeId": "PartDesign::SubtractiveLoft",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchLoftProfile",
+          "SubList": []
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyXLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchLoftSection",
+              "SubList": []
+            }
+          ]
+        },
+        "Ruled": false,
+        "Closed": false,
+        "Refine": false,
+        "FuzzyTolerance": 0.0
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 6,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["SketchBase", "BasePad", "SketchLoftProfile", "SketchLoftSection", "SubtractiveLoft"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "SubtractiveLoft"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}

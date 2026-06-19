@@ -1,0 +1,81 @@
+{
+  "Objects": [
+    {
+      "Name": "SupportBox",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 10,
+        "Width": 8,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "DatumPointOnVertex",
+      "ID": 2,
+      "TypeId": "PartDesign::Point",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportBox",
+          "SubList": ["Vertex1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ObjectOrigin"
+        }
+      }
+    },
+    {
+      "Name": "DatumLineOnEdge",
+      "ID": 3,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportBox",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ObjectZ"
+        }
+      }
+    },
+    {
+      "Name": "DatumPlaneOnFace",
+      "ID": 4,
+      "TypeId": "PartDesign::Plane",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportBox",
+          "SubList": ["Face1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "FlatFace"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSOnFace",
+      "ID": 5,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportBox",
+          "SubList": ["Face1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ObjectXY"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["DatumPointOnVertex", "DatumLineOnEdge", "DatumPlaneOnFace", "DatumCSOnFace"]
+  }
+}

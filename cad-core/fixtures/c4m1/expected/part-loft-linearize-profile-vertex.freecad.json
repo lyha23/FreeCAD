@@ -1,0 +1,47 @@
+{
+  "bbox": {
+    "max": [
+      2.0000001,
+      1.9021131325903073,
+      3.5000001
+    ],
+    "min": [
+      -1.618034088749895,
+      -1.9021131325903071,
+      -1e-07
+    ]
+  },
+  "freecad_version": "1.2.0 revision 20260519",
+  "named_shapes": {
+    "Loft": {
+      "element_history_status_contains": [
+        "part_loft:thru_sections_history"
+      ],
+      "owner": "Loft"
+    }
+  },
+  "object": "Loft",
+  "object_fields": {
+    "closed": false,
+    "feature": "part_loft",
+    "linearize": true,
+    "max_degree": 2,
+    "ruled": true,
+    "sections": [
+      "BaseProfile",
+      "TipVertex"
+    ],
+    "shape": "occt_shell",
+    "solid": false,
+    "status": "ok",
+    "topo_naming_history": "maker_history:loft_thru_sections"
+  },
+  "reference": "FreeCADCmd oracle from part-loft-linearize-profile-vertex.json; objects: Part::RegularPolygon, Part::Vertex, Part::Loft",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "topology_counts": {
+    "edges": 10,
+    "faces": 5,
+    "vertices": 6
+  },
+  "volume": 7.397106237851195
+}

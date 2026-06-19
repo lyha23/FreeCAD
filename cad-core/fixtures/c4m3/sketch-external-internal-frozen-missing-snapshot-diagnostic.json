@@ -1,0 +1,26 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [],
+        "ExternalGeometry": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "MissingBox",
+              "SubList": ["Face5"],
+              "ExternalFlags": ["Frozen"]
+            }
+          ]
+        },
+        "Constraints": []
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Sketch"]
+  }
+}

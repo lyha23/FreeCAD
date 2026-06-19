@@ -242,6 +242,7 @@ add_library(cad-core-lib STATIC
   src/part/part_import.cpp
   src/part/part_loft.cpp
   src/part/part_offset.cpp
+  src/part/part_project_on_surface.cpp
   src/part/part_ruled_surface.cpp
   src/part/part_sweep.cpp
   src/part/part_thickness.cpp
@@ -261,18 +262,24 @@ add_library(cad-core-lib STATIC
   src/part_design/datum_plane.cpp
   src/part_design/datum_point.cpp
   src/part_design/feature_base.cpp
+  src/part_design/feature_boolean.cpp
   src/part_design/feature_chamfer.cpp
   src/part_design/feature_dress_up.cpp
   src/part_design/feature_draft.cpp
   src/part_design/feature_extrude.cpp
   src/part_design/feature_fillet.cpp
+  src/part_design/feature_groove.cpp
   src/part_design/feature_hole.cpp
   src/part_design/feature_linear_pattern.cpp
+  src/part_design/feature_loft.cpp
   src/part_design/feature_mirrored.cpp
   src/part_design/feature_multi_transform.cpp
   src/part_design/feature_pad.cpp
+  src/part_design/feature_pipe.cpp
   src/part_design/feature_pocket.cpp
   src/part_design/feature_polar_pattern.cpp
+  src/part_design/feature_revolved.cpp
+  src/part_design/feature_revolution.cpp
   src/part_design/feature_scaled.cpp
   src/part_design/feature_thickness.cpp
   src/part_design/feature_transformed.cpp

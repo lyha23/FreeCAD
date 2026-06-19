@@ -1,0 +1,46 @@
+{
+  "Objects": [
+    {
+      "Name": "LowerFace",
+      "ID": 1,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 4,
+        "Width": 3
+      }
+    },
+    {
+      "Name": "UpperProfile",
+      "ID": 2,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 1.25,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0.5, 0.25, 3.0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "Loft",
+      "ID": 3,
+      "TypeId": "Part::Loft",
+      "Properties": {
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["LowerFace", "UpperProfile"]
+        },
+        "Solid": false,
+        "Ruled": false,
+        "Closed": false,
+        "Linearize": true,
+        "MaxDegree": 5
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Loft"]
+  }
+}

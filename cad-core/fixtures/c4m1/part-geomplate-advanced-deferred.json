@@ -1,0 +1,68 @@
+{
+  "Objects": [
+    {"Name": "BoundaryA", "ID": 1, "TypeId": "Part::Line", "Properties": {"X1": 0, "Y1": 0, "Z1": 0, "X2": 4, "Y2": 0, "Z2": 0}},
+    {
+      "Name": "SupportPlane",
+      "ID": 2,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 4,
+        "Width": 4
+      }
+    },
+    {
+      "Name": "InitialSurfaceDeferred",
+      "ID": 3,
+      "TypeId": "Part::GeomPlateSurface",
+      "Properties": {
+        "PointConstraints": [{"Point": [0, 0, 0]}],
+        "InitialSurface": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportPlane",
+          "SubList": ["Face1"],
+          "StableSubList": ["Face1"]
+        }
+      }
+    },
+    {
+      "Name": "Curve2dDeferred",
+      "ID": 4,
+      "TypeId": "Part::GeomPlateSurface",
+      "Properties": {
+        "PointConstraints": [{"Point": [0, 0, 0]}],
+        "Curve2dOnSurface": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "BoundaryA",
+          "SubList": ["Edge1"],
+          "StableSubList": ["Edge1"]
+        }
+      }
+    },
+    {
+      "Name": "Point2dDeferred",
+      "ID": 5,
+      "TypeId": "Part::GeomPlateSurface",
+      "Properties": {
+        "PointConstraints": [{"Point": [0, 0, 0]}],
+        "Point2dOnSurface": [0.5, 0.5]
+      }
+    },
+    {
+      "Name": "PlateSurfaceCurvesDeferred",
+      "ID": 6,
+      "TypeId": "Part::GeomPlateSurface",
+      "Properties": {
+        "PointConstraints": [{"Point": [0, 0, 0]}],
+        "PlateSurfaceCurves": true
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "InitialSurfaceDeferred",
+      "Curve2dDeferred",
+      "Point2dDeferred",
+      "PlateSurfaceCurvesDeferred"
+    ]
+  }
+}

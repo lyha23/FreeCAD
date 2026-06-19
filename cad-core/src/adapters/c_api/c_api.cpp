@@ -156,10 +156,47 @@ nlohmann::json diagnosticCodeList()
         "unsupported_profile_region",
         "unsupported_property",
         "unsupported_reference_shadow_brep",
+        "unsupported_sketch_constraint_relation",
         "unsupported_stable_subname",
         "unsupported_subshape_kind",
         "unsupported_type",
     });
+}
+
+nlohmann::json adapterResourceLimitDiagnostic(const std::string& message,
+                                              const std::string& object,
+                                              const std::string& property,
+                                              const std::string& target,
+                                              const nlohmann::json& details)
+{
+    nlohmann::json diagnostic = {
+        {"severity", "error"},
+        {"code", "adapter_resource_limit"},
+        {"message", message},
+        {"object", object},
+        {"property", property},
+        {"stage", "adapter"},
+        {"target", target},
+    };
+    if (!details.is_null() && (!details.is_object() || !details.empty())) {
+        diagnostic["details"] = details;
+    }
+    return diagnostic;
+}
+
+void appendAdapterResourceLimitDiagnostic(nlohmann::json& payload,
+                                          const std::string& message,
+                                          const std::string& object,
+                                          const std::string& property,
+                                          const std::string& target,
+                                          const nlohmann::json& details)
+{
+    if (!payload.contains("diagnostics") || !payload["diagnostics"].is_array()) {
+        payload["diagnostics"] = nlohmann::json::array();
+    }
+    payload["diagnostics"].push_back(
+        adapterResourceLimitDiagnostic(message, object, property, target, details)
+    );
 }
 
 nlohmann::json ondselSolverCapabilityJson()
@@ -193,12 +230,7 @@ nlohmann::json ondselSolverCapabilityJson()
              {"status", "covered_full"},
              {"mode", "request_local_getDistanceType_makeMbdJointDistance_basic"},
              {"supported",
-              {"PointPoint",
-               "LineLine",
-               "PointLine",
-               "PlanePlane",
-               "PointPlane",
-               "LinePlane"}},
+              {"PointPoint", "LineLine", "PointLine", "PlanePlane", "PointPlane", "LinePlane"}},
              {"solver_joint_classes",
               {{"PointPoint", {"ASMTSphericalJoint", "ASMTSphSphJoint"}},
                {"LineLine", {"ASMTRevCylJoint"}},
@@ -208,7 +240,8 @@ nlohmann::json ondselSolverCapabilityJson()
                {"LinePlane", {"ASMTLineInPlaneJoint"}}}},
              {"source_notes",
               {{"PointLine",
-                "FreeCADCmd native marker parity exports tInPlaneJointE/offset; nearby C++ source switch "
+                "FreeCADCmd native marker parity exports tInPlaneJointE/offset; nearby C++ source "
+                "switch "
                 "historically names ASMTCylSphJoint."}}},
              {"scalar_fields", {"distance_ij", "offset"}},
              {"remaining_radius_gaps", nlohmann::json::array()},
@@ -293,8 +326,8 @@ nlohmann::json ondselSolverCapabilityJson()
         {"subshape_marker_placement",
          {
              // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
-             // ::AssemblyObject::handleOneSideOfJoint(), applies "getGlobalPlacement(nullptr, ref)",
-             // then "getGlobalPlacement(part, ref).inverse()" before "offsetPlc".
+             // ::AssemblyObject::handleOneSideOfJoint(), applies "getGlobalPlacement(nullptr,
+             // ref)", then "getGlobalPlacement(part, ref).inverse()" before "offsetPlc".
              {"status", "covered_representative_subset"},
              {"mode", "request_local_handleOneSide_markerPlacement"},
              {"build_mode", "CAD_CORE_HAS_ONDSEL_SOLVER=1"},
@@ -312,8 +345,7 @@ nlohmann::json ondselSolverCapabilityJson()
              {"active_expected_count", 28},
              {"active_expected_groups", {"S4/S5 marker expected", "S6 extended DistanceType expected"}},
              {"request_local_boundaries",
-              {"identity_offset_assembly_link_subset",
-               "request_graph_no_persistent_solver_state"}},
+              {"identity_offset_assembly_link_subset", "request_graph_no_persistent_solver_state"}},
              {"non_goals",
               {"curve_default_distance_type",
                "GUI/session",
@@ -340,8 +372,49 @@ nlohmann::json placementWritebackCapabilityJson()
           "invalid_grounded_placement_rejected",
           "request_graph_apply_next_recompute_noop",
           "multi_component_writeback_order",
+          "partial_writeback_subset",
           "target_field_Placement"}},
         {"remaining_gaps", nlohmann::json::array()},
+    };
+}
+
+nlohmann::json representativeSolverCapabilityJson()
+{
+    return {
+        {"status", "covered_representative"},
+        {"mode", "fallback_metadata_only"},
+        {"available", false},
+        {"build_mode", "CAD_CORE_HAS_ONDSEL_SOLVER=1"},
+        {"reason",
+         "current cad-core build requires the real Ondsel adapter; representative output is "
+         "retained only as fallback contract metadata"},
+        {"diagnostics", {"missing_grounded_part", "unsupported_assembly_solver"}},
+        {"non_goals", {"full_solver", "persistent_solver_state", "cross_request_assembly_session"}},
+    };
+}
+
+nlohmann::json assemblyValidationCapabilityJson()
+{
+    return {
+        {"status", "covered_diagnostic_boundaries"},
+        {"mode", "request_local_product_validation"},
+        {"diagnostic_codes",
+         {"unsupported_assembly_solver",
+          "missing_grounded_part",
+          "ondsel_solver_failed",
+          "invalid_assembly_solver_result"}},
+        {"fixture_rows",
+         {"assembly-runtime-adapter-missing-grounded-part-diagnostic",
+          "assembly-runtime-adapter-pointcurve-unsupported-diagnostic",
+          "assembly-runtime-adapter-partial-writeback"}},
+        {"source_boundaries",
+         {"AssemblyObject.cpp::solve() real runPreDrag path",
+          "AssemblyObject.cpp::setNewPlacements() request-local Placement writeback",
+          "AssemblyObject.cpp::validateNewPlacements() is a drag validation boundary, not a backend session"}},
+        {"request_local_boundaries",
+         {"documentObjectUpdates_only",
+          "frontend_graph_is_source_of_truth",
+          "no_backend_assembly_session"}},
     };
 }
 
@@ -378,11 +451,18 @@ nlohmann::json capabilitiesJson()
                "Document",
                "SubSet"}},
              {"document_reference_fields",
-              {"file", "name", "label", "stamp", "status", "currentName", "currentLabel", "currentStamp", "currentStatus", "allowPartial"
-              }},
+              {"file",
+               "name",
+               "label",
+               "stamp",
+               "status",
+               "currentName",
+               "currentLabel",
+               "currentStamp",
+               "currentStatus",
+               "allowPartial"}},
              {"external_geometry_native_slot_fields",
-              {"ExternalGeo", "Geometry", "Values", "Items", "Ref", "RefIndex", "ExternalFlags", "Flags"
-              }},
+              {"ExternalGeo", "Geometry", "Values", "Items", "Ref", "RefIndex", "ExternalFlags", "Flags"}},
              {"external_geometry_flags", {"Defining", "Frozen", "Detached", "Missing", "Sync"}},
              {"external_geometry_lifecycle",
               {
@@ -436,11 +516,11 @@ nlohmann::json capabilitiesJson()
              // LinkElement children, and ::syncElementList() writes "_LinkOwner",
              // "LinkTransform" and "LinkedObject" back to owned children.
              {"document_object_updates",
-             {"show_element_create",
-              "show_element_claim",
-              "show_element_sync",
-              "show_element_delete",
-              "show_element_toggle_off",
+              {"show_element_create",
+               "show_element_claim",
+               "show_element_sync",
+               "show_element_delete",
+               "show_element_toggle_off",
                "child_cache_create",
                "child_cache_nested_plain_group",
                "child_cache_orphan_reclaim",
@@ -457,9 +537,7 @@ nlohmann::json capabilitiesJson()
              {"copy_on_change_writeback_contract",
               {
                   {"status", "covered"},
-                  {"updates",
-                   {"copy_on_change_group_sync",
-                    "copy_on_change_deep_copy_lifecycle"}},
+                  {"updates", {"copy_on_change_group_sync", "copy_on_change_deep_copy_lifecycle"}},
                   {"scope", "documentObjectUpdates transport for persisted CopyOnChange copied graph"},
               }},
              {"copy_on_change_deep_copy_lifecycle",
@@ -530,6 +608,55 @@ nlohmann::json capabilitiesJson()
                "external_document_unloaded_diagnostic"}},
              {"remaining_gaps", nlohmann::json::array()},
          }},
+        {"topo_reference_pressure",
+         {
+             {"status", "done_c4m4_topo_reference_pressure"},
+             {"fixtures",
+              {"topo-reference-pressure-multi-producer-updated",
+               "topo-reference-pressure-rename-label-updated",
+               "topo-reference-pressure-rename-label-ambiguous-diagnostic",
+               "topo-reference-pressure-link-retag-updated",
+               "topo-reference-pressure-copy-on-change-owned-child",
+               "topo-reference-pressure-import-unchanged",
+               "topo-reference-pressure-import-change-deleted",
+               "topo-reference-pressure-import-change-ambiguous-diagnostic",
+               "topo-reference-pressure-shapefix-refine-updated",
+               "topo-reference-pressure-shapefix-refine-deleted",
+               "topo-reference-pressure-boolean-split-needs-reselect",
+               "topo-reference-pressure-dressup-transformed-updated"}},
+             {"classifications",
+              {
+                  {"updated",
+                   {"C4M4-TR-PRESS-001",
+                    "C4M4-TR-PRESS-002",
+                    "C4M4-TR-PRESS-004",
+                    "C4M4-TR-PRESS-005",
+                    "C4M4-TR-PRESS-009",
+                    "C4M4-TR-PRESS-012"}},
+                  {"unchanged", {"C4M4-TR-PRESS-006"}},
+                  {"needs_reselect",
+                   {"C4M4-TR-PRESS-007", "C4M4-TR-PRESS-010", "C4M4-TR-PRESS-011"}},
+                  {"diagnostic_only", {"C4M4-TR-PRESS-003", "C4M4-TR-PRESS-008"}},
+              }},
+             {"update_fields",
+              {"elementReferenceUpdates",
+               "documentObjectUpdates",
+               "StableSubList",
+               "ShadowSub",
+               "ReferenceShadow",
+               "labelReferenceRename"}},
+             {"diagnostics",
+              {"label_reference_ambiguous",
+               "deleted_stable_subname",
+               "split_stable_subname",
+               "subname_resolve_ambiguous"}},
+             {"request_local_boundaries",
+              {"ReferenceShadow.brep_single_subshape_only",
+               "split_deleted_ambiguous_remain_reselect_or_diagnostic",
+               "no_output_order_bbox_or_fixture_name_alias",
+               "adapter_publishes_contract_metadata_only"}},
+             {"remaining_gaps", nlohmann::json::array()},
+         }},
         {"sketcher",
          {
              {"solver",
@@ -568,12 +695,13 @@ nlohmann::json capabilitiesJson()
                   // "GCSsys.addConstraintP2PSymmetric(p1, p2, p, tag)". Arc endpoint writeback
                   // follows Sketch::updateArcOfCircle(), which writes "setRange(*myArc.startAngle,
                   // *myArc.endAngle, ...)" after solving.
-                  {"status", "done_c3m3"},
+                  {"status", "done_c4m3_constraint_facing_audit"},
                   {"diagnostics",
                    {"sketch_solver_conflict",
                     "sketch_solver_malformed_constraint",
                     "sketch_solver_partially_redundant",
-                    "sketch_solver_redundant"}},
+                    "sketch_solver_redundant",
+                    "unsupported_sketch_constraint_relation"}},
                   {"covered",
                    {"horizontal_vertical_same_target_conflict",
                     "malformed_constraint_diagnostics",
@@ -599,7 +727,8 @@ nlohmann::json capabilitiesJson()
                     "symmetric_coupled_curve_relation_solver_geometry_update",
                     "solver_dof_driven_underconstrained_state",
                     "full_solver_dof",
-                    "dependent_parameter_group_analysis"}},
+                    "dependent_parameter_group_analysis",
+                    "unsupported_relation_adapter_visible_diagnostic"}},
                   {"request_local_boundaries",
                    {"diagnostics_only_without_backend_solver_session",
                     "conflict_or_redundant_blocks_profile_output",
@@ -618,7 +747,44 @@ nlohmann::json capabilitiesJson()
                     "tangent_line_circle_arc_updates_round_center_without_full_solver_session",
                     "symmetric_line_axis_updates_second_point_without_full_solver_session",
                     "symmetric_arc_endpoint_updates_second_arc_angle_without_full_solver_session",
-                    "symmetric_center_point_updates_second_point_without_full_solver_session"}},
+                    "symmetric_center_point_updates_second_point_without_full_solver_session",
+                    "unsupported_relation_fails_without_fake_profile"}},
+                  {"remaining_gaps", nlohmann::json::array()},
+              }},
+             {"external_internal_pressure",
+              {
+                  // FreeCAD:
+                  // /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+                  // ::SketchObject::rebuildExternalGeometry(), skips frozen entries, clears
+                  // "Missing" when a reference resolves, and keeps unresolved entries working
+                  // from old external geometry. SketchObject.cpp::buildInternals() calls
+                  // "Part::FaceMakerBuildFace" and appends "WireJoiner" open wires; FaceMaker.cpp
+                  // consumes "myPreSplitHistory", while WireJoiner.cpp records "aHistory".
+                  {"status", "done_c4m3_external_internal_pressure"},
+                  {"expected_backed",
+                   {"external_geometry_frozen_native_pool",
+                    "external_geometry_detached_native_pool",
+                    "external_geometry_missing_recovered",
+                    "internal_shape_open_profile_empty",
+                    "internal_shape_bounded_cross_cutters",
+                    "internal_shape_self_intersection_bowtie",
+                    "internal_shape_split_dangling_mixed"}},
+                  {"reference_shadow",
+                   {"single_subshape_snapshot_only",
+                    "external_geometry_brep_snapshot_request_local",
+                    "internal_shape_edge_stable_shadow_sub_update"}},
+                  {"deferred_diagnostics",
+                   {"missing_external_geometry_snapshot",
+                    "unsupported_reference_shadow_brep",
+                    "subname_split_requires_reselect",
+                    "subname_deleted",
+                    "subname_resolve_ambiguous",
+                    "deleted_stable_subname"}},
+                  {"request_local_boundaries",
+                   {"no_full_brep_document_state",
+                    "no_backend_external_geometry_session",
+                    "no_sketch_executor_split_ownership_guess",
+                    "no_wire_joiner_fallback_candidate_fields"}},
                   {"remaining_gaps", nlohmann::json::array()},
               }},
          }},
@@ -637,8 +803,7 @@ nlohmann::json capabilitiesJson()
                   {"status", "done_second_slice"},
                   {"type_ids", {"Part::Compound", "Part::Offset", "Part::Offset2D", "Part::Thickness"}},
                   {"properties",
-                   {"Source", "Faces", "Value", "Mode", "Join", "Intersection", "SelfIntersection", "Fill"
-                   }},
+                   {"Source", "Faces", "Value", "Mode", "Join", "Intersection", "SelfIntersection", "Fill"}},
                   {"covered",
                    {"face_source_offset",
                     "maker_history_generated_modified",
@@ -700,6 +865,76 @@ nlohmann::json capabilitiesJson()
                     "full_sketcher_solver_conic_constraints",
                     "distance_type_default_todo"}},
               }},
+             {"project_on_surface",
+              {
+                  // FreeCAD:
+                  // /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.h
+                  // declares Mode/Height/Offset/Direction/SupportFace/Projection; the matching
+                  // FeatureProjectOnSurface.cpp::tryExecute() calls getSupportFace(),
+                  // getProjectionShapes(), createProjectedWire(), filterShapes() and
+                  // createCompound(). The C4-M1 first slice only publishes the Edges path where
+                  // projectWire() uses BRepProj_Projection and returns projected edges.
+                  {"status", "supported_expected_backed_first_slice"},
+                  {"type_ids", {"Part::ProjectOnSurface"}},
+                  {"payload_keys",
+                   {"Objects[].TypeId",
+                    "Objects[].Properties.Mode.value",
+                    "Objects[].Properties.Height.value",
+                    "Objects[].Properties.Offset.value",
+                    "Objects[].Properties.Direction.value",
+                    "Objects[].Properties.SupportFace.value",
+                    "Objects[].Properties.SupportFace.SubList",
+                    "Objects[].Properties.Projection.SubSet",
+                    "recompute.objs"}},
+                  {"properties", {"Mode", "Height", "Offset", "Direction", "SupportFace", "Projection"}},
+                  {"property_types",
+                   {"App::PropertyEnumeration",
+                    "App::PropertyLength",
+                    "App::PropertyDistance",
+                    "App::PropertyDirection",
+                    "App::PropertyLinkSub",
+                    "App::PropertyLinkSubList"}},
+                  {"mode_values", {"Edges"}},
+                  {"covered",
+                   {"source_backed_document_object_executor",
+                    "support_face_property_link_sub",
+                    "projection_property_link_sub_list_single_edge_or_wire",
+                    "mode_edges_project_wire",
+                    "height_zero_offset_zero",
+                    "brepproj_projection_nearest_wire",
+                    "ordinary_indexed_named_shape",
+                    "expected_backed_fixture",
+                    "deferred_branch_diagnostics"}},
+                  {"fixtures",
+                   {"c4m1/part-project-on-surface-edge-plane",
+                    "c4m1/part-project-on-surface-deferred-boundaries"}},
+                  {"diagnostics",
+                   {"missing_property",
+                    "missing_link_target",
+                    "invalid_subshape",
+                    "unsupported_subshape_kind",
+                    "unsupported_property",
+                    "invalid_direction",
+                    "execution_failed"}},
+                  {"request_local_boundaries",
+                   {"source_shape_recomputed_from_document_graph",
+                    "mode_edges_only_first_slice",
+                    "single_support_face",
+                    "single_edge_or_wire_projection",
+                    "ordinary_indexed_named_shape_without_freecad_mapper_history"}},
+                  {"remaining_gaps",
+                   {"mode_faces_all_expected",
+                    "height_offset_solid_expected",
+                    "face_rebuild_expected",
+                    "multi_projection_expected",
+                    "advanced_branch_expected"}},
+                  {"non_goals",
+                   {"gui_projection_task_panel",
+                    "mode_faces_all_first_slice",
+                    "height_offset_solid_first_slice",
+                    "face_rebuild_first_slice",
+                    "multi_projection_first_slice"}},
+              }},
              {"ruled_surface",
               {
                   // FreeCAD:
@@ -709,7 +944,7 @@ nlohmann::json capabilitiesJson()
                   // /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
                   // ::TopoShape::makeElementRuledSurface(), edge inputs call
                   // "BRepFill::Face" and wire inputs call "BRepFill::Shell".
-                  {"status", "supported_edge_edge_first_batch"},
+                  {"status", "supported_wire_wire_expected_backed"},
                   {"type_ids", {"Part::RuledSurface"}},
                   {"payload_keys",
                    {"Objects[].TypeId",
@@ -727,13 +962,17 @@ nlohmann::json capabilitiesJson()
                     "curve1_curve2_property_link_sub",
                     "orientation_automatic_forward_reversed",
                     "edge_edge_brepfill_face",
+                    "wire_wire_brepfill_shell",
                     "source_edge_provenance",
-                    "conic_edge_consumer"}},
+                    "wire_edge_provenance",
+                    "conic_edge_consumer",
+                    "expected_backed_fixtures"}},
                   {"fixtures",
                    {"p8/part-ruled-surface-line-line",
                     "p8/part-ruled-surface-conic-line",
                     "p8/part-ruled-surface-orientation-reversed",
-                    "p8/part-ruled-surface-invalid-input"}},
+                    "p8/part-ruled-surface-invalid-input",
+                    "c4m1/part-ruled-surface-wire-wire"}},
                   {"diagnostics",
                    {"missing_property",
                     "missing_link_target",
@@ -742,16 +981,11 @@ nlohmann::json capabilitiesJson()
                     "no_edge"}},
                   {"request_local_boundaries",
                    {"source_shape_recomputed_from_document_graph",
-                    "edge_edge_only_first_batch",
+                    "edge_edge_brepfill_face",
+                    "wire_wire_brepfill_shell",
                     "conic_line_expected_uses_make_ruled_surface_after_link_resolve"}},
-                  {"remaining_gaps",
-                   {"wire_wire_brepfill_shell",
-                    "projection_on_surface_source_audited_planned",
-                    "full_part_surface_family"}},
-                  {"non_goals",
-                   {"wire_wire_brepfill_shell_first_batch",
-                    "part_project_on_surface",
-                    "full_part_surface_family"}},
+                  {"remaining_gaps", nlohmann::json::array()},
+                  {"non_goals", nlohmann::json::array()},
               }},
              {"loft",
               {
@@ -764,7 +998,7 @@ nlohmann::json capabilitiesJson()
                   // ::TopoShape::makeElementLoft(), uses BRepOffsetAPI_ThruSections,
                   // "SetMaxDegree()", "CheckCompatibility(Standard_True)" and
                   // MapperThruSections history.
-                  {"status", "supported_expected_backed_first_batch"},
+                  {"status", "supported_profile_linearize_expected_backed"},
                   {"type_ids", {"Part::Loft"}},
                   {"payload_keys",
                    {"Objects[].TypeId",
@@ -776,13 +1010,16 @@ nlohmann::json capabilitiesJson()
                     "Objects[].Properties.MaxDegree",
                     "recompute.objs"}},
                   {"properties", {"Sections", "Solid", "Ruled", "Closed", "Linearize", "MaxDegree"}},
-                  {"property_types", {"App::PropertyLinkList", "App::PropertyBool", "App::PropertyInteger"}},
+                  {"property_types",
+                   {"App::PropertyLinkList", "App::PropertyBool", "App::PropertyInteger"}},
                   {"covered",
                    {"source_backed_document_object_executor",
                     "sections_property_link_list",
                     "solid_ruled_closed_max_degree",
                     "prepare_profiles_edge_wire_expected_batch",
+                    "prepare_profiles_face_vertex_expected_batch",
                     "thru_sections_brepoffsetapi",
+                    "linearize_planar_faces_post_processing",
                     "loft_thru_sections_maker_history",
                     "expected_backed_fixtures",
                     "invalid_sections_diagnostics"}},
@@ -791,7 +1028,9 @@ nlohmann::json capabilitiesJson()
                     "c3m4/part-loft-solid",
                     "c3m4/part-loft-ruled",
                     "c3m4/part-loft-closed",
-                    "c3m4/part-loft-invalid-sections"}},
+                    "c3m4/part-loft-invalid-sections",
+                    "c4m1/part-loft-linearize-profile-face",
+                    "c4m1/part-loft-linearize-profile-vertex"}},
                   {"diagnostics",
                    {"missing_property",
                     "missing_link_target",
@@ -801,19 +1040,11 @@ nlohmann::json capabilitiesJson()
                   {"request_local_boundaries",
                    {"source_shape_recomputed_from_document_graph",
                     "source_backed_part_loft_document_object_only",
-                    "linearize_true_deferred",
-                    "face_vertex_profile_expected_deferred",
+                    "linearize_faces_no_edges_post_processing",
+                    "face_vertex_profile_expected_backed",
                     "complex_profile_family_deferred"}},
-                  {"remaining_gaps",
-                   {"linearize_post_processing",
-                    "face_vertex_profile_expected",
-                    "complex_profile_family",
-                    "full_part_surface_family"}},
-                  {"non_goals",
-                   {"linearize_post_processing_first_batch",
-                    "face_vertex_profile_expected_first_batch",
-                    "complex_profile_family",
-                    "full_part_surface_family"}},
+                  {"remaining_gaps", {"complex_profile_family"}},
+                  {"non_goals", {"complex_profile_family"}},
               }},
              {"sweep",
               {
@@ -825,7 +1056,7 @@ nlohmann::json capabilitiesJson()
                   // ::TopoShape::makeElementPipeShell(), returns
                   // "makeElementShape(mkPipeShell, shapes, op)" so BRepOffsetAPI_MakePipeShell
                   // Modified/Generated history is part of the published boundary.
-                  {"status", "supported_expected_backed_first_batch"},
+                  {"status", "supported_multi_profile_linearize_expected_backed"},
                   {"type_ids", {"Part::Sweep"}},
                   {"payload_keys",
                    {"Objects[].TypeId",
@@ -837,7 +1068,18 @@ nlohmann::json capabilitiesJson()
                     "Objects[].Properties.Transition",
                     "Objects[].Properties.Linearize",
                     "recompute.objs"}},
-                  {"properties", {"Sections", "Spine", "Solid", "Frenet", "Transition", "Linearize"}},
+                  {"properties",
+                   {"Sections",
+                    "Spine",
+                    "Solid",
+                    "Frenet",
+                    "Transition",
+                    "Linearize",
+                    "AuxiliarySpine",
+                    "SupportMode",
+                    "BiNormal",
+                    "LocationMode",
+                    "Tolerance"}},
                   {"property_types",
                    {"App::PropertyLinkList",
                     "App::PropertyLinkSub",
@@ -846,11 +1088,14 @@ nlohmann::json capabilitiesJson()
                   {"covered",
                    {"source_backed_document_object_executor",
                     "spine_property_link_sub_sublist_compound",
-                    "one_profile_sections_property_link_list",
+                    "sections_property_link_list",
+                    "multi_profile_sections_expected_backed",
                     "solid_frenet_transition_modes",
+                    "linearize_faces_no_edges_post_processing",
                     "pipeshell_maker_history",
                     "expected_backed_fixtures",
-                    "invalid_input_diagnostics"}},
+                    "invalid_input_diagnostics",
+                    "advanced_pipeshell_wrapper_deferred_diagnostics"}},
                   {"fixtures",
                    {"c3m4/part-sweep-right-corner-surface",
                     "c3m4/part-sweep-solid",
@@ -859,15 +1104,21 @@ nlohmann::json capabilitiesJson()
                     "c3m4/part-sweep-transition-round-corner",
                     "c3m4/part-sweep-spine-subedges",
                     "c3m4/part-sweep-open-profile-surface",
-                    "c3m4/part-sweep-invalid-inputs"}},
+                    "c3m4/part-sweep-invalid-inputs",
+                    "c4m1/part-sweep-multi-profile-linearize",
+                    "c4m1/part-sweep-advanced-deferred"}},
                   {"diagnostics",
-                   {"missing_property", "missing_link_target", "invalid_subshape", "execution_failed"}},
+                   {"missing_property",
+                    "missing_link_target",
+                    "invalid_subshape",
+                    "unsupported_property",
+                    "execution_failed"}},
                   {"request_local_boundaries",
                    {"source_shape_recomputed_from_document_graph",
                     "source_backed_part_sweep_document_object_only",
-                    "one_profile_first_batch",
-                    "linearize_true_deferred",
-                    "advanced_pipeshell_wrapper_non_goal",
+                    "multi_profile_sections_expected_backed",
+                    "linearize_faces_no_edges_post_processing",
+                    "advanced_pipeshell_wrapper_deferred_diagnostic",
                     "hole_model_thread_internal_pipeshell_not_part_sweep"}},
                   {"non_goals",
                    {"advanced_pipeshell_wrapper",
@@ -877,7 +1128,11 @@ nlohmann::json capabilitiesJson()
                     "trihedron_binormal_modes",
                     "hole_model_thread_internal_pipeshell"}},
                   {"remaining_gaps",
-                   {"linearize_post_processing", "multi_profile_sections_expected", "full_part_surface_family"}},
+                   {"part_sweep_auxiliary_spine_contract",
+                    "part_sweep_support_mode_contract",
+                    "part_sweep_binormal_contract",
+                    "part_sweep_location_mode_contract",
+                    "part_sweep_tolerance_contract"}},
               }},
              {"filling",
               {
@@ -890,7 +1145,7 @@ nlohmann::json capabilitiesJson()
                   // and returns makeElementShape(maker, _shapes, FilledFace). cad-core
                   // Part::FilledFace is a source-backed helper request type, not a native
                   // FreeCAD DocumentObject TypeId.
-                  {"status", "supported_expected_backed_first_batch"},
+                  {"status", "supported_expected_backed_first_batch_with_deferred_advanced_kwargs"},
                   {"type_ids", {"Part::FilledFace"}},
                   {"helper", "Part.makeFilledFace"},
                   {"payload_keys",
@@ -917,7 +1172,10 @@ nlohmann::json capabilitiesJson()
                     "TolG1",
                     "TolG2",
                     "MaxDegree",
-                    "MaxSegments"}},
+                    "MaxSegments",
+                    "Surface",
+                    "Supports",
+                    "Orders"}},
                   {"property_types", {"App::PropertyLinkSubList"}},
                   {"covered",
                    {"part_filled_face_source_backed_helper",
@@ -933,7 +1191,8 @@ nlohmann::json capabilitiesJson()
                   {"fixtures",
                    {"c3m4/part-filling-closed-wire-default",
                     "c3m4/part-filling-boundary-edges-default",
-                    "c3m4/part-filling-invalid-inputs"}},
+                    "c3m4/part-filling-invalid-inputs",
+                    "c4m1/part-filling-advanced-deferred"}},
                   {"diagnostics",
                    {"missing_property",
                     "missing_link_target",
@@ -945,18 +1204,17 @@ nlohmann::json capabilitiesJson()
                     "source_backed_helper_not_freecad_document_object",
                     "boundary_property_link_sub_list_only",
                     "default_params_only",
-                    "surface_kwargs_blocked_deferred",
-                    "support_order_blocked_deferred",
-                    "non_boundary_constraints_deferred",
+                    "surface_kwargs_deferred_diagnostic",
+                    "support_order_deferred_diagnostic",
+                    "non_default_params_native_wrapper_parse_blocked",
+                    "non_boundary_constraints_deferred_diagnostic",
                     "compound_boundary_optional_not_published",
-                    "full_part_surface_family_not_claimed"}},
+                    "native_surface_workbench_filling_feature_not_claimed"}},
                   {"remaining_gaps",
-                   {"surface_kwarg_blocked_until_freecadcmd_probe",
-                    "supports_orders_blocked_until_freecadcmd_probe",
-                    "non_default_params_deferred",
+                   {"surface_support_order_source_map_deferred",
+                    "non_default_params_native_wrapper_parse_blocked",
                     "non_boundary_constraints_expected_deferred",
-                    "compound_boundary_optional_expected",
-                    "full_part_surface_family"}},
+                    "compound_boundary_optional_expected"}},
                   {"non_goals",
                    {"native_freecad_part_filledface_document_object",
                     "advanced_brepoffsetapi_makefilling_wrapper",
@@ -973,7 +1231,7 @@ nlohmann::json capabilitiesJson()
                   // "GeomPlateSurface". cad-core Part::GeomPlateSurface is a source-backed
                   // geometry helper request type, not a GUI feature or native FreeCAD
                   // DocumentObject TypeId.
-                  {"status", "supported_expected_backed_first_batch"},
+                  {"status", "supported_expected_backed_advanced_constraints_with_deferred_wrappers"},
                   {"type_ids", {"Part::GeomPlateSurface"}},
                   {"helper", "Part.GeomPlate.BuildPlateSurface"},
                   {"dto", "PartGeomPlateSurfaceDTO"},
@@ -1010,7 +1268,13 @@ nlohmann::json capabilitiesJson()
                     "ApproxMaxDistance",
                     "ApproxCritOrder",
                     "ApproxContinuity",
-                    "ApproxEnlargeCoeff"}},
+                    "ApproxEnlargeCoeff",
+                    "InitialSurface",
+                    "Surface",
+                    "Curve2dOnSurface",
+                    "ProjectedCurve2d",
+                    "Point2dOnSurface",
+                    "PlateSurfaceCurves"}},
                   {"property_types",
                    {"App::PropertyLinkSubList", "JSON::PointConstraintList", "JSON::NumericParams"}},
                   {"covered",
@@ -1020,12 +1284,17 @@ nlohmann::json capabilitiesJson()
                     "point_3d_constraints",
                     "default_build_params_metadata",
                     "approximation_metadata",
+                    "advanced_approximation_params_expected_backed",
                     "geomplate_makeapprox_face",
                     "source_evidence",
                     "expected_backed_fixtures",
-                    "invalid_diagnostics"}},
+                    "invalid_diagnostics",
+                    "initial_surface_2d_wrapper_deferred_diagnostics"}},
                   {"fixtures",
-                   {"c3m4/part-geomplate-curve-point-default", "c3m4/part-geomplate-invalid-inputs"}},
+                   {"c3m4/part-geomplate-curve-point-default",
+                    "c3m4/part-geomplate-invalid-inputs",
+                    "c4m1/part-geomplate-advanced-constraints",
+                    "c4m1/part-geomplate-advanced-deferred"}},
                   {"diagnostics",
                    {"missing_constraints",
                     "missing_curve_source",
@@ -1045,6 +1314,8 @@ nlohmann::json capabilitiesJson()
                     "g0_curve_constraints_first_batch",
                     "default_and_explicit_build_params",
                     "explicit_approximation_params",
+                    "advanced_approximation_params_expected_backed",
+                    "initial_surface_2d_constraints_deferred_diagnostic",
                     "filling_capability_not_expanded"}},
                   {"remaining_gaps",
                    {"initial_surface_reference_contract",
@@ -1052,8 +1323,7 @@ nlohmann::json capabilitiesJson()
                     "projected_2d_curve",
                     "point_2d_on_surface",
                     "custom_constraint_criteria",
-                    "part_platesurface_curves_wrapper",
-                    "full_part_surface_family"}},
+                    "part_platesurface_curves_wrapper"}},
                   {"non_goals",
                    {"gui_geomplate_feature",
                     "native_freecad_part_geomplate_document_object",
@@ -1084,12 +1354,15 @@ nlohmann::json capabilitiesJson()
                         {{"offset", "p3a/pocket-up-to-shape-multiple-faces-offset"},
                          {"invalid_subshape", "p3a/pocket-up-to-shape-edge-subshape"}}},
                        {"diagnostics",
-                        {"unsupported_property", "unsupported_subshape_kind", "invalid_subshape", "missing_link_target"}},
+                        {"unsupported_property",
+                         "unsupported_subshape_kind",
+                         "invalid_subshape",
+                         "missing_link_target"}},
                    }},
                   {"remaining_gaps", nlohmann::json::array()},
               }},
-             {"body_chain",
-              {
+                 {"body_chain",
+                  {
                   // FreeCAD:
                   // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/Body.cpp
                   // ::Body::onChanged(),
@@ -1109,11 +1382,11 @@ nlohmann::json capabilitiesJson()
                     "body_feature_basefeature_delete_reroute",
                     "body_origin_datum_relink"}},
                   {"writeback_properties",
-                   {"Body.Group", "Body.Tip", "Body.Origin", "FeatureBase.BaseFeature", "Feature.BaseFeature"
-                   }},
+                   {"Body.Group", "Body.Tip", "Body.Origin", "FeatureBase.BaseFeature", "Feature.BaseFeature"}},
                   {"origin_lifecycle",
-                   {"explicit_body_origin_link", "origin_global_placement_from_body", "origin_feature_role_relink"
-                   }},
+                   {"explicit_body_origin_link",
+                    "origin_global_placement_from_body",
+                    "origin_feature_role_relink"}},
                   {"addsub_replay",
                    {"group_order_replay", "additive_fuse", "subtractive_cut", "stop_at_tip"}},
                   {"request_local_boundaries",
@@ -1122,6 +1395,196 @@ nlohmann::json capabilitiesJson()
                     "body_origin_parent_placement_without_backend_session"}},
                   {"remaining_gaps", nlohmann::json::array()},
               }},
+             {"revolution_groove",
+              {
+                  // FreeCAD:
+                  // /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureRevolution.cpp
+                  // ::Revolution::execute() calls "executeRevolved(Part::RevolMode::FuseWithBase)";
+                  // FeatureGroove.cpp::Groove::execute() calls
+                  // "executeRevolved(Part::RevolMode::CutFromBase)"; FeatureRevolved.cpp
+                  // ::generateRevolution() uses "BRepPrimAPI_MakeRevol" for Type=Angle.
+                  {"status", "supported_angle_first_slice"},
+                  {"type_ids", {"PartDesign::Revolution", "PartDesign::Groove"}},
+                  {"supported",
+                   {"Type=Angle",
+                    "Sketch H_Axis/V_Axis ReferenceAxis",
+                    "linear_edge ReferenceAxis",
+                    "Angle degrees",
+                    "Reversed",
+                    "Midplane",
+                    "Body additive fuse replay",
+                    "Body subtractive cut replay",
+                    "maker_history:revolve"}},
+                  {"fixtures",
+                   {"c4m2/partdesign-revolution-axis-angle-body",
+                    "c4m2/partdesign-groove-axis-angle-body"}},
+                  {"diagnostics", {"invalid_angle", "invalid_axis", "unsupported_property"}},
+                  {"deferred",
+                   {"Type=TwoAngles",
+                    "Type=ThroughAll",
+                    "Type=UpToFirst",
+                    "Type=UpToLast",
+                    "Type=UpToFace",
+                    "FuseOrder=FeatureFirst",
+                    "explicit InternalFace profile selection"}},
+                  {"remaining_gaps",
+                   {"partdesign_revolution_groove_brepfeat_upto",
+                    "partdesign_revolution_groove_two_angles"}},
+              }},
+             {"boolean",
+              {
+                  // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureBoolean.cpp
+                  // ::Boolean::execute(), accepts Type "Fuse", "Cut" and "Common", reads Group
+                  // tool solids, rejects Cut without BaseFeature, and calls
+                  // "result.makeElementBoolean(op, shapes, nullptr, FuzzyTolerance.getValue())".
+                  {"status", "supported_body_tool_first_slice"},
+                  {"type_ids", {"PartDesign::Boolean"}},
+                  {"supported",
+                   {"Type=Fuse",
+                    "Type=Cut",
+                    "Type=Common",
+                    "Group Body tool solids",
+                    "BaseFeature Body chain",
+                    "Body replacement Tip replay",
+                    "single solid result rule",
+                    "maker_history:boolean"}},
+                  {"fixtures",
+                   {"c4m2/partdesign-boolean-cut-body-tool",
+                    "c4m2/partdesign-boolean-fuse-body-tool",
+                    "c4m2/partdesign-boolean-common-body-tool",
+                    "c4m2/partdesign-boolean-deferred-diagnostics"}},
+                  {"diagnostics", {"missing_property", "missing_link_target", "missing_target", "unsupported_property", "execution_failed"}},
+                  {"deferred",
+                   {"LinkStage3 Compound/Section Boolean types",
+                    "AllowCompound multi-solid Body policy",
+                    "advanced multi-body ownership stress fixtures"}},
+                  {"remaining_gaps",
+                   {"partdesign_boolean_linkstage3_types",
+                    "partdesign_boolean_allow_compound_policy",
+                    "partdesign_boolean_multi_body_ownership_pressure"}},
+              }},
+             {"loft",
+              {
+                  // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureLoft.cpp
+                  // ::Loft::execute(), resolves "Profile" and "Sections", builds ThruSections
+                  // shells, sews front/back faces, converts shells to solids, then exposes the
+                  // result through AddSubShape for Body additive/subtractive replay.
+                  {"status", "supported_profile_section_body_first_slice"},
+                  {"type_ids", {"PartDesign::AdditiveLoft", "PartDesign::SubtractiveLoft"}},
+                  {"supported",
+                   {"Profile full sketch",
+                    "Sections App::PropertyXLinkSubList full sketch",
+                    "Ruled=false/true shell loft flag",
+                    "Closed=false first slice",
+                    "front/back cap sewing",
+                    "solidification",
+                    "Body additive fuse replay",
+                    "Body subtractive cut replay",
+                    "maker_history:partdesign_loft"}},
+                  {"fixtures",
+                   {"c4m2/partdesign-loft-additive-body",
+                    "c4m2/partdesign-loft-subtractive-body"}},
+                  {"diagnostics",
+                   {"missing_property",
+                    "missing_link_target",
+                    "invalid_subshape",
+                    "invalid_profile",
+                    "invalid_sections",
+                    "open_profile",
+                    "execution_failed",
+                    "unsupported_property"}},
+                  {"deferred",
+                   {"explicit Profile/Sections sub-element selection beyond Vertex",
+                    "Closed=true three-or-more-section native expected",
+                    "multi-wire profile/section ordering pressure",
+                    "AllowCompound multi-solid Body policy",
+                    "full MapperSewing element-map propagation"}},
+                  {"remaining_gaps",
+                   {"partdesign_loft_selection_matrix",
+                    "partdesign_loft_closed_multisection",
+                    "partdesign_loft_multi_wire_ordering",
+                    "partdesign_loft_allow_compound_policy",
+                    "partdesign_loft_mapper_sewing_full_history"}},
+              }},
+             {"pipe",
+              {
+                  // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp
+                  // ::Pipe::execute(), resolves "Profile" and "Spine", calls
+                  // setupAlgorithm(BRepOffsetAPI_MakePipeShell), writes AddSubShape, then Body
+                  // applies additive/subtractive fuse/cut replay.
+                  {"status", "supported_profile_spine_body_first_slice"},
+                  {"type_ids", {"PartDesign::AdditivePipe", "PartDesign::SubtractivePipe"}},
+                  {"supported",
+                   {"Profile full sketch",
+                    "Spine single Edge/Wire path",
+                    "Mode=Standard",
+                    "Transformation=Constant",
+                    "Transition=Transformed",
+                    "PipeShell maker history",
+                    "Body additive fuse replay",
+                    "Body subtractive cut replay",
+                    "maker_history:partdesign_pipe"}},
+                  {"fixtures",
+                   {"c4m2/partdesign-pipe-additive-body",
+                    "c4m2/partdesign-pipe-subtractive-body",
+                    "c4m2/partdesign-pipe-deferred-diagnostics"}},
+                  {"diagnostics",
+                   {"missing_property",
+                    "missing_link_target",
+                    "invalid_property",
+                    "invalid_subshape",
+                    "execution_failed",
+                    "unsupported_property"}},
+                  {"deferred",
+                   {"Sections / Transformation=Multisection",
+                    "Transition=Right corner/Round corner native expected",
+                    "Mode=Auxiliary",
+                    "Mode=Binormal",
+                    "Mode=Fixed/Frenet orientation parity",
+                    "SpineTangent continuous-edge expansion",
+                    "scaling law Transformation=Linear/S-shape/Interpolation",
+                    "front/back sewing MapperHistory full propagation"}},
+                  {"remaining_gaps",
+                   {"partdesign_pipe_multisection",
+                    "partdesign_pipe_auxiliary_spine",
+                    "partdesign_pipe_binormal",
+                    "partdesign_pipe_transformation_laws",
+                    "partdesign_pipe_spine_tangent",
+                    "partdesign_pipe_sewing_full_history"}},
+              }},
+             {"datum_attachment",
+              {
+                  // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/DatumPoint.cpp,
+                  // DatumLine.cpp, DatumPlane.cpp and DatumCS.cpp create point/line/plane/LCS
+                  // shapes from Placement; Body.cpp relinks datum roles through Origin.
+                  {"status", "supported_existing_placement_link_slice"},
+                  {"type_ids",
+                   {"PartDesign::Point",
+                    "PartDesign::Line",
+                    "PartDesign::Plane",
+                    "PartDesign::CoordinateSystem",
+                    "App::Origin"}},
+                  {"supported",
+                   {"DatumPoint Placement vertex",
+                    "DatumLine Placement direction",
+                    "DatumPlane Placement face",
+                    "Datum CoordinateSystem axes",
+                    "Body Origin datum role relink",
+                    "downstream ReferenceAxis DatumLine/DatumCS use"}},
+                  {"fixtures",
+                   {"p7/datum-coordinate-system-reference-axis",
+                    "p7/datum-coordinate-system-sketch-support",
+                    "c3m5/body-origin-link-placement",
+                    "c4m2/partdesign-datum-attachment-deferred-diagnostics"}},
+                  {"diagnostics", {"invalid_placement", "missing_link_target", "unsupported_property"}},
+                  {"deferred",
+                   {"GUI Attachment editor",
+                    "full AttachEngine map-mode solver",
+                    "Datum AttachmentSupport/MapMode non-default pressure",
+                    "interactive datum resize visual behavior"}},
+                  {"remaining_gaps",
+                   {"attachment_engine_map_mode_solver"}},
+              }},
              {"hole",
               {
                   // FreeCAD:
@@ -1129,9 +1592,10 @@ nlohmann::json capabilitiesJson()
                   // ::Hole::threadDescription[] stores thread rows, ::Hole::readCutDefinitions()
                   // loads "Resources/Hole", ::Hole::makeThread() builds the model thread, and
                   // ::Hole::findHoles() calls "makeShapeWithElementMap(protoHole, mapper, {baseshape})".
-                  {"thread_tables",
-                   {"ISOMetricProfile", "ISOMetricFineProfile", "UNC", "UNF", "UNEF", "NPT", "BSP", "BSW", "BSF", "ISOTyre"
-                   }},
+                  {
+                      "thread_tables",
+                      {"ISOMetricProfile", "ISOMetricFineProfile", "UNC", "UNF", "UNEF", "NPT", "BSP", "BSW", "BSF", "ISOTyre"}
+                  },
                   {"diameter_sources",
                    {"Diameter",
                     "thread_tap_drill",
@@ -1159,8 +1623,11 @@ nlohmann::json capabilitiesJson()
                        {"status", "done_first_slice"},
                        {"geometry", "pipe_shell"},
                        {"properties",
-                        {"ModelThread", "ThreadClass", "ThreadDirection", "UseCustomThreadClearance", "CustomThreadClearance"
-                        }},
+                        {"ModelThread",
+                         "ThreadClass",
+                         "ThreadDirection",
+                         "UseCustomThreadClearance",
+                         "CustomThreadClearance"}},
                    }},
                   {"history",
                    {
@@ -1192,16 +1659,25 @@ nlohmann::json capabilitiesJson()
         {"diagnostic_codes", diagnosticCodeList()},
         {"adapters",
          {
+             {"contract_version", "cad-core-result-v1"},
              {"core_entrypoints",
               {"cad_core_recompute_json",
                "cad_core_export_json",
                "cad_core_capabilities_json",
                "cli_recompute",
                "worker_recompute",
-               "wasm_recompute"
+               "wasm_recompute"}},
+             {"schema_parity",
+              {
+                  {"core_result_producers",
+                   {"cad_core::runtime::recomputeResultJson",
+                    "cad_core::part::partGeometryCurveResultJson"}},
+                  {"entrypoints", {"cli_recompute", "cad_core_recompute_json", "worker_recompute", "wasm_recompute"}},
+                  {"contract", "same_request_local_core_result"},
               }},
              {"stateless_result_channels",
               {"results", "elementReferenceUpdates", "documentObjectUpdates", "diagnostics", "binaryPayloads"}},
+             {"resource_diagnostics", {"mesh_limit_exceeded", "adapter_resource_limit"}},
              {"c_api_export",
               {"buffer_only", "rejects_server_file_paths", "metadata_diagnostics", "stl_deflection"}},
              {"cli_export", {"file_protocol", "requires_object_format_file", "stl_deflection"}},
@@ -1209,23 +1685,29 @@ nlohmann::json capabilitiesJson()
               {
                   {"entrypoint", "cad_core_worker_recompute_json"},
                   {"core_recompute", true},
+                  {"result_contract", "cad-core-result-v1"},
+                  {"resource_diagnostics", {"mesh_limit_exceeded", "adapter_resource_limit"}},
                   {"state", "stateless_request_local"},
               }},
              {"wasm_adapter",
               {
                   {"entrypoint", "cad_core_wasm_recompute_json"},
                   {"core_recompute", true},
+                  {"result_contract", "cad-core-result-v1"},
+                  {"resource_diagnostics", {"mesh_limit_exceeded", "adapter_resource_limit"}},
                   {"toolchain_contract", "source_and_schema_delivered"},
               }},
              {"mesh",
               {
                   {"streaming_limits",
                    {"max_vertices", "max_triangles", "chunk_triangles", "mesh_limit_exceeded"}},
+                  {"binary_payload_limits", {"max_bytes", "adapter_resource_limit", "metadata_diagnostics"}},
                   {"binary_payloads",
                    {"cad_core_mesh_binary_json",
                     "cad-core-binary-mesh-v1",
                     "f64x3_vertices",
-                    "u32x3_triangles"}},
+                    "u32x3_triangles",
+                    "metadata_diagnostics"}},
               }},
              {"remaining_gaps", nlohmann::json::array()},
          }},
@@ -1238,16 +1720,30 @@ nlohmann::json capabilitiesJson()
              // "propPlacement->setValue(newPlacement)" after solving. CAD Core requires
              // OndselSolver at build time and publishes only the real request-local mode.
              {"ondsel_solver_adapter", ondselSolverCapabilityJson()},
+             {"representative_solver_adapter", representativeSolverCapabilityJson()},
+             {"solver_validation", assemblyValidationCapabilityJson()},
              {"placement_writeback", placementWritebackCapabilityJson()},
              {"supported_joint_matrix",
-              {"Fixed", "Revolute", "Cylindrical", "Slider", "Ball", "Distance", "Parallel", "Perpendicular", "Angle", "Gears", "Belt", "RackPinion", "Screw"}},
+              {"Fixed",
+               "Revolute",
+               "Cylindrical",
+               "Slider",
+               "Ball",
+               "Distance",
+               "Parallel",
+               "Perpendicular",
+               "Angle",
+               "Gears",
+               "Belt",
+               "RackPinion",
+               "Screw"}},
              {"unsupported_joint_matrix", nlohmann::json::array()},
              {"remaining_gaps", nlohmann::json::array()},
          }},
         {"wire_joiner",
          {
              {"generated_open_export_bridge",
-             {
+              {
                   {"status", "covered_full"},
                   {"mode", "wire_joiner_mapper_history_producer_evidence"},
                   {"deleted_fields",
@@ -1261,7 +1757,8 @@ nlohmann::json capabilitiesJson()
                     "result_wire_producer_identity_source_shape_ready",
                     "result_wire_producer_identity_classifier_booleans",
                     "open_wire_compound_current_member_closed_source_result_slot_bridge",
-                    "open_wire_compound_current_member_closed_source_result_slot_bridge_wire_info_count",
+                    "open_wire_compound_current_member_closed_source_result_slot_bridge_wire_info_"
+                    "count",
                     "result_wire_producer_blocker_transitional_result_slot_shape_still_used",
                     "result_wire_producer_state_transitional_result_slot_candidate",
                     "edgeInfo_resultWireProducerCandidate_internal",
@@ -1273,14 +1770,18 @@ nlohmann::json capabilitiesJson()
                     "producer_child_wire_result_slot_endpoint_materialization_counted",
                     "wire_joiner_endpoint_materialization_ledger_current_member_debt_scoped",
                     "child_wire_endpoint_materialization_evidence_field_renamed",
-                    "child_wire_producer_ledger_wire_endpoint_materialization_evidence_field_renamed",
+                    "child_wire_producer_ledger_wire_endpoint_materialization_evidence_field_"
+                    "renamed",
                     "result_slot_endpoint_materialization_ledger",
                     "matched_endpoint_materialization_evidence",
                     "endpoint_materialization_evidence_vertex_matches_other_output",
                     "endpoint_materialization_evidence_vertex_identity",
-                    "open_wire_compound_endpoint_provenance_endpoint_materialization_matched_vertex_count",
-                    "open_wire_compound_current_member_split_ledger_endpoint_materialization_distinct_vertex_count",
-                    "open_wire_compound_current_member_split_ledger_endpoint_materialization_other_output_matched_vertex_count",
+                    "open_wire_compound_endpoint_provenance_endpoint_materialization_matched_"
+                    "vertex_count",
+                    "open_wire_compound_current_member_split_ledger_endpoint_materialization_"
+                    "distinct_vertex_count",
+                    "open_wire_compound_current_member_split_ledger_endpoint_materialization_other_"
+                    "output_matched_vertex_count",
                     "result_slot_only_identity",
                     "open_wire_compound_current_member_split_ledger_result_slot_only_vertex",
                     "open_wire_compound_current_member_split_ledger_result_slot_only_vertex_total",
@@ -1293,7 +1794,8 @@ nlohmann::json capabilitiesJson()
                     "open_wire_compound_source_edge_producer_output_wire_info_count",
                     "child_wire_source_edge_producer_output_public_diagnostic",
                     "edge_level_producer_ledger_ready_from_history_materialization_ledger",
-                    "source_shape_ready_derived_from_history_materialization_ledger_open_export_edge",
+                    "source_shape_ready_derived_from_history_materialization_ledger_open_export_"
+                    "edge",
                     "open_wire_compound_producer_ledger_edge_materialized",
                     "child_wire_producer_ledger_edge_copy_gate_from_history_materialization_ledger",
                     "mapper_evidence_result_wire_producer_identity_fields",
@@ -1305,8 +1807,10 @@ nlohmann::json capabilitiesJson()
                     "wire_joiner_history_materialization_entry_open_export_producer_edge",
                     "named_shape_history_missing_result_wire_identity_count",
                     "element_map_result_wire_identity_mismatch_count",
-                    "open_wire_compound_current_member_split_ledger_candidate_missing_shared_output_identity_count",
-                    "open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked_wire_info_count",
+                    "open_wire_compound_current_member_split_ledger_candidate_missing_shared_"
+                    "output_identity_count",
+                    "open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked_"
+                    "wire_info_count",
                     "open_wire_compound_current_member_split_ledger_output_unmatched_vertex_count",
                     "open_wire_compound_current_member_split_ledger_output_unmatched_vertex_total",
                     "open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked"}},
@@ -1420,13 +1924,19 @@ nlohmann::json capabilitiesJson()
                     "open_wire_compound_current_member_split_ledger_member_vertex_count",
                     "open_wire_compound_current_member_split_ledger_output_vertex_ledger_count",
                     "open_wire_compound_current_member_split_ledger_output_matched_vertex_count",
-                    "open_wire_compound_current_member_split_ledger_output_candidate_matched_vertex_count",
+                    "open_wire_compound_current_member_split_ledger_output_candidate_matched_"
+                    "vertex_count",
                     "open_wire_compound_current_member_split_ledger_output_distinct_vertex_count",
-                    "open_wire_compound_current_member_split_ledger_candidate_distinct_vertex_count",
-                    "open_wire_compound_current_member_split_ledger_candidate_vertex_multiplicity_loss_count",
-                    "open_wire_compound_current_member_split_ledger_output_other_output_matched_vertex_count",
-                    "open_wire_compound_current_member_split_ledger_candidate_other_output_matched_vertex_count",
-                    "open_wire_compound_current_member_split_ledger_candidate_vertex_reuse_risk_count",
+                    "open_wire_compound_current_member_split_ledger_candidate_distinct_vertex_"
+                    "count",
+                    "open_wire_compound_current_member_split_ledger_candidate_vertex_multiplicity_"
+                    "loss_count",
+                    "open_wire_compound_current_member_split_ledger_output_other_output_matched_"
+                    "vertex_count",
+                    "open_wire_compound_current_member_split_ledger_candidate_other_output_matched_"
+                    "vertex_count",
+                    "open_wire_compound_current_member_split_ledger_candidate_vertex_reuse_risk_"
+                    "count",
                     "open_wire_compound_current_member_split_ledger_endpoint_identity_resolver",
                     "open_wire_compound_current_member_split_ledger_output_vertex_debt"}},
                   {"remaining_gaps", nlohmann::json::array()},
@@ -1484,14 +1994,20 @@ nlohmann::json capabilitiesJson()
                "legacy_history_conversion",
                "element_map_preserved_aliases"}},
              {"stable_subname_resolution",
-              {"indexed", "source_preserved", "one_to_one_history", "unique_same_kind_split_recovery", "reference_shadow_recovery"
-              }},
+              {"indexed",
+               "source_preserved",
+               "one_to_one_history",
+               "unique_same_kind_split_recovery",
+               "reference_shadow_recovery"}},
              {"maker_history",
               {"prism",
+               "part_design_revolve",
                "body_boolean",
                "part_boolean",
                "section",
                "part_offset",
+               "part_design_loft",
+               "part_design_pipe",
                "general_fuse",
                "link_retag",
                "sketch_internalshape_producer_evidence",
@@ -1579,8 +2095,10 @@ nlohmann::json capabilitiesJson()
                   {"section",
                    {{"status", "covered"},
                     {"covered",
-                     {"approximation_property", "auto_fuzzy_value", "source_qualified_edge_history", "terminal_deleted_history"
-                     }},
+                     {"approximation_property",
+                      "auto_fuzzy_value",
+                      "source_qualified_edge_history",
+                      "terminal_deleted_history"}},
                     {"remaining", nlohmann::json::array()}}},
                   {"part_offset",
                    {{"status", "done_second_slice"},
@@ -1620,8 +2138,7 @@ nlohmann::json capabilitiesJson()
                      {"facemaker",
                       "wire_joiner_producer_evidence",
                       "wire_joiner_history_element_map_unique_child_wire_alias",
-                      "mixed_bounded_faces_open_wires_oracle"
-                     }},
+                      "mixed_bounded_faces_open_wires_oracle"}},
                     {"remaining", nlohmann::json::array()}}},
                   {"taper_thru_sections", {{"status", "covered"}, {"covered", {"generated_history"}}}},
                   {"loft_thru_sections",
@@ -1705,8 +2222,8 @@ nlohmann::json capabilitiesJson()
                // FreeCAD:
                // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
                // ::WireJoinerP::getOpenWires(), calls
-               // "shape.makeShapeWithElementMap(comp, MapperHistory(aHistory), {sourceEdges.begin(),
-               // sourceEdges.end()}, op)".
+               // "shape.makeShapeWithElementMap(comp, MapperHistory(aHistory),
+               // {sourceEdges.begin(), sourceEdges.end()}, op)".
                "wire_joiner_history:element_map",
                "import_shape_element_map",
                "shapefix_root_history_modified",
@@ -1785,7 +2302,7 @@ nlohmann::json capabilitiesJson()
                    {
                        {"status", "covered_full"},
                        {"objects", {"part_design.pad", "part_design.pocket", "part.extrusion"}},
-                        {"metadata",
+                       {"metadata",
                         {"NamedShape.element_map_status=history_partial",
                          "mapper_history.maker_stage=maker_history",
                          "object_result.topo_naming_history=maker_history:taper_thru_sections"}},
@@ -1822,9 +2339,11 @@ std::optional<double> readOptionalStlDeflection(const nlohmann::json& request)
     return value;
 }
 
-std::optional<std::size_t> readSizeLimit(const nlohmann::json& limits,
-                                         const std::string& snakeCase,
-                                         const std::string& camelCase)
+std::optional<std::size_t> readSizeLimit(
+    const nlohmann::json& limits,
+    const std::string& snakeCase,
+    const std::string& camelCase
+)
 {
     const auto snake = limits.find(snakeCase);
     const auto camel = limits.find(camelCase);
@@ -1857,12 +2376,29 @@ std::optional<nlohmann::json> adapterMeshLimits(const nlohmann::json& request)
     return std::nullopt;
 }
 
-void appendMeshLimitDiagnostic(nlohmann::json& result,
-                               const std::string& object,
-                               std::size_t vertices,
-                               std::size_t triangles,
-                               std::optional<std::size_t> maxVertices,
-                               std::optional<std::size_t> maxTriangles)
+std::optional<nlohmann::json> adapterBinaryPayloadLimits(const nlohmann::json& request)
+{
+    if (request.contains("binary_payload_limits") && request["binary_payload_limits"].is_object()) {
+        return request["binary_payload_limits"];
+    }
+    const auto adapter = request.find("adapter");
+    if (adapter != request.end() && adapter->is_object()) {
+        const auto payloadLimits = adapter->find("binaryPayloadLimits");
+        if (payloadLimits != adapter->end() && payloadLimits->is_object()) {
+            return *payloadLimits;
+        }
+    }
+    return std::nullopt;
+}
+
+void appendMeshLimitDiagnostic(
+    nlohmann::json& result,
+    const std::string& object,
+    std::size_t vertices,
+    std::size_t triangles,
+    std::optional<std::size_t> maxVertices,
+    std::optional<std::size_t> maxTriangles
+)
 {
     if (!result.contains("diagnostics") || !result["diagnostics"].is_array()) {
         result["diagnostics"] = nlohmann::json::array();
@@ -1890,9 +2426,25 @@ void applyStreamingMeshLimits(nlohmann::json& result, const nlohmann::json& requ
     if (!limits) {
         return;
     }
-    const auto maxVertices = readSizeLimit(*limits, "max_vertices", "maxVertices");
-    const auto maxTriangles = readSizeLimit(*limits, "max_triangles", "maxTriangles");
-    const auto chunkTriangles = readSizeLimit(*limits, "chunk_triangles", "chunkTriangles").value_or(0U);
+    std::optional<std::size_t> maxVertices;
+    std::optional<std::size_t> maxTriangles;
+    std::size_t chunkTriangles = 0U;
+    try {
+        maxVertices = readSizeLimit(*limits, "max_vertices", "maxVertices");
+        maxTriangles = readSizeLimit(*limits, "max_triangles", "maxTriangles");
+        chunkTriangles = readSizeLimit(*limits, "chunk_triangles", "chunkTriangles").value_or(0U);
+    }
+    catch (const std::exception& error) {
+        appendAdapterResourceLimitDiagnostic(
+            result,
+            error.what(),
+            "",
+            "mesh_limits",
+            "mesh_limits",
+            {{"contract", "cad-core-result-v1"}}
+        );
+        return;
+    }
     if (!maxVertices && !maxTriangles) {
         return;
     }
@@ -1910,14 +2462,16 @@ void applyStreamingMeshLimits(nlohmann::json& result, const nlohmann::json& requ
             : 0U;
         const std::size_t triangles = mesh.contains("indices") && mesh["indices"].is_array()
             ? mesh["indices"].size() / 3U
-            : (mesh.contains("triangles") && mesh["triangles"].is_array() ? mesh["triangles"].size() : 0U);
+            : (mesh.contains("triangles") && mesh["triangles"].is_array() ? mesh["triangles"].size()
+                                                                          : 0U);
         const bool exceedsVertices = maxVertices && vertices > *maxVertices;
         const bool exceedsTriangles = maxTriangles && triangles > *maxTriangles;
         if (!exceedsVertices && !exceedsTriangles) {
             if (chunkTriangles > 0U) {
                 mesh["streaming"] = {
                     {"chunk_triangles", chunkTriangles},
-                    {"chunk_count", triangles == 0U ? 0U : (triangles + chunkTriangles - 1U) / chunkTriangles},
+                    {"chunk_count",
+                     triangles == 0U ? 0U : (triangles + chunkTriangles - 1U) / chunkTriangles},
                     {"partial", false},
                 };
             }
@@ -1931,7 +2485,8 @@ void applyStreamingMeshLimits(nlohmann::json& result, const nlohmann::json& requ
              {
                  {"protocol", "cad-core-json-mesh-stream-v1"},
                  {"max_vertices", maxVertices ? nlohmann::json(*maxVertices) : nlohmann::json(nullptr)},
-                 {"max_triangles", maxTriangles ? nlohmann::json(*maxTriangles) : nlohmann::json(nullptr)},
+                 {"max_triangles",
+                  maxTriangles ? nlohmann::json(*maxTriangles) : nlohmann::json(nullptr)},
                  {"chunk_triangles", chunkTriangles},
                  {"original_vertex_count", vertices},
                  {"original_triangle_count", triangles},
@@ -1941,9 +2496,11 @@ void applyStreamingMeshLimits(nlohmann::json& result, const nlohmann::json& requ
     }
 }
 
-CadCoreResult recomputeJsonEntrypoint(const char* request_json,
-                                      size_t request_json_len,
-                                      std::string_view adapterName)
+CadCoreResult recomputeJsonEntrypoint(
+    const char* request_json,
+    size_t request_json_len,
+    std::string_view adapterName
+)
 {
     if (request_json == nullptr || request_json_len == 0U) {
         return makeErrorResult(1, "request_json must be a non-empty UTF-8 JSON buffer");
@@ -1981,7 +2538,7 @@ CadCoreResult recomputeJsonEntrypoint(const char* request_json,
     }
 }
 
-template <typename T>
+template<typename T>
 void appendPod(std::string& data, const T& value)
 {
     const char* bytes = reinterpret_cast<const char*>(&value);
@@ -2005,7 +2562,10 @@ CadCoreExportResult meshBinaryEntrypoint(const char* request_json, size_t reques
         }
         if (!request.contains("object") || !request["object"].is_string()
             || request["object"].get<std::string>().empty()) {
-            return makeExportErrorResult(1, "binary mesh request field 'object' must be a non-empty string");
+            return makeExportErrorResult(
+                1,
+                "binary mesh request field 'object' must be a non-empty string"
+            );
         }
 
         const std::string objectName = request["object"].get<std::string>();
@@ -2024,6 +2584,26 @@ CadCoreExportResult meshBinaryEntrypoint(const char* request_json, size_t reques
              }},
             {"diagnostics", cad_core::runtime::diagnosticsToJson(context.diagnostics)},
         };
+
+        std::optional<std::size_t> maxBinaryBytes;
+        if (const auto payloadLimits = adapterBinaryPayloadLimits(request)) {
+            try {
+                maxBinaryBytes = readSizeLimit(*payloadLimits, "max_bytes", "maxBytes");
+            }
+            catch (const std::exception& error) {
+                metadata["bytes"] = 0;
+                metadata["limited"] = true;
+                appendAdapterResourceLimitDiagnostic(
+                    metadata,
+                    error.what(),
+                    objectName,
+                    "binaryPayloads",
+                    "binary_payload_limits",
+                    {{"protocol", "cad-core-binary-mesh-v1"}}
+                );
+                return makeExportResult({}, metadata);
+            }
+        }
 
         const auto meshIt = context.mesh.find(objectName);
         if (meshIt == context.mesh.end() || meshIt->second.is_null()) {
@@ -2054,6 +2634,26 @@ CadCoreExportResult meshBinaryEntrypoint(const char* request_json, size_t reques
         metadata["triangle_count"] = mesh.at("triangles").size();
         metadata["vertex_offset"] = vertexOffset;
         metadata["index_offset"] = indexOffset;
+        if (maxBinaryBytes && data.size() > *maxBinaryBytes) {
+            metadata["bytes"] = 0;
+            metadata["limited"] = true;
+            metadata["original_bytes"] = data.size();
+            metadata["byte_limit"] = *maxBinaryBytes;
+            appendAdapterResourceLimitDiagnostic(
+                metadata,
+                "Binary mesh payload exceeds adapter byte limit",
+                objectName,
+                "binaryPayloads",
+                "binary_payload_limits.max_bytes",
+                {
+                    {"protocol", "cad-core-binary-mesh-v1"},
+                    {"actual_bytes", data.size()},
+                    {"max_bytes", *maxBinaryBytes},
+                }
+            );
+            return makeExportResult({}, metadata);
+        }
+        metadata["limited"] = false;
         return makeExportResult(data, metadata);
     }
     catch (const nlohmann::json::parse_error& error) {

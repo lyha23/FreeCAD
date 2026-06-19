@@ -28,6 +28,9 @@ SUPPORTED_NATIVE_TYPES = {
     "Assembly::JointGroup",
     "Mesh::Import",
     "PartDesign::Body",
+    "PartDesign::AdditiveLoft",
+    "PartDesign::AdditivePipe",
+    "PartDesign::Boolean",
     "PartDesign::Chamfer",
     "PartDesign::Fillet",
     "PartDesign::Hole",
@@ -39,6 +42,10 @@ SUPPORTED_NATIVE_TYPES = {
     "PartDesign::Plane",
     "PartDesign::PolarPattern",
     "PartDesign::Pocket",
+    "PartDesign::Revolution",
+    "PartDesign::Groove",
+    "PartDesign::SubtractiveLoft",
+    "PartDesign::SubtractivePipe",
     "PartDesign::Scaled",
     "Part::Box",
     "Part::BooleanFragments",
@@ -60,6 +67,7 @@ SUPPORTED_NATIVE_TYPES = {
     "Part::MultiFuse",
     "Part::Plane",
     "Part::Prism",
+    "Part::ProjectOnSurface",
     "Part::RegularPolygon",
     "Part::RuledSurface",
     "Part::Section",
@@ -96,7 +104,7 @@ TRANSFORMED_TYPES = {
     "PartDesign::Scaled",
 }
 
-BODY_RESULT_TARGET_TYPES = DRESS_UP_TYPES | TRANSFORMED_TYPES
+BODY_RESULT_TARGET_TYPES = DRESS_UP_TYPES | TRANSFORMED_TYPES | {"PartDesign::Boolean"}
 PART_HELPER_TYPES = {
     "Part::FilledFace",
     "Part::GeomPlateSurface",
@@ -592,9 +600,16 @@ def set_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, val
             "App::PropertyInteger",
             "App::PropertyFloat",
             "App::PropertyLength",
+            "App::PropertyDistance",
             "App::PropertyString",
         }:
             safe_setattr(obj, name, value.get("value"))
+            return
+        if property_type in {"App::PropertyVector", "App::PropertyVectorDistance", "App::PropertyDirection"}:
+            vector = value.get("value")
+            if not isinstance(vector, list) or len(vector) != 3:
+                raise UnsupportedFixture(f"{name} must be a 3D vector")
+            safe_setattr(obj, name, FreeCAD.Vector(float(vector[0]), float(vector[1]), float(vector[2])))
             return
         if property_type == "App::PropertyPlacementList":
             safe_setattr(obj, name, [placement_value(FreeCAD, item) for item in value.get("value", [])])
@@ -628,7 +643,11 @@ def set_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, val
         if property_type in {"App::PropertyLinkList", "App::PropertyLinkListHidden"}:
             safe_setattr(obj, name, [created[target] for target in list_field(value, "values", "value")])
             return
-        if property_type == "App::PropertyLinkSubListHidden":
+        if property_type in {
+            "App::PropertyLinkSubList",
+            "App::PropertyLinkSubListHidden",
+            "App::PropertyXLinkSubList",
+        }:
             safe_setattr(obj, name, [link_sub_value(created, item) for item in value.get("SubSet", [])])
             return
         raise UnsupportedFixture(f"unsupported structured property {name}: {property_type or sorted(value)}")
@@ -3248,6 +3267,34 @@ def link_property_object_names(properties: dict[str, Any], name: str) -> list[st
     return []
 
 
+def link_sublist_object_names(properties: dict[str, Any], name: str) -> list[str]:
+    value = properties.get(name, {})
+    if not isinstance(value, dict):
+        return []
+    names: list[str] = []
+    for item in value.get("SubSet", []):
+        if isinstance(item, dict) and item.get("value"):
+            names.append(str(item["value"]))
+    return names
+
+
+def first_link_subname(properties: dict[str, Any], name: str) -> str:
+    value = properties.get(name, {})
+    if not isinstance(value, dict):
+        return ""
+    sub_list = list_field(value, "StableSubList", "SubList")
+    if sub_list:
+        return str(sub_list[0])
+    sub_set = value.get("SubSet")
+    if isinstance(sub_set, list) and sub_set:
+        item = sub_set[0]
+        if isinstance(item, dict):
+            sub_names = list_field(item, "StableSubList", "SubList")
+            if sub_names:
+                return str(sub_names[0])
+    return ""
+
+
 def ruled_surface_orientation_from_properties(properties: dict[str, Any]) -> str:
     labels = ["Automatic", "Forward", "Reversed"]
     value = consumer_property(properties, "Orientation", "Automatic")
@@ -3274,6 +3321,50 @@ def ruled_surface_payload(obj: Any, fixture: dict | None = None) -> dict:
         "source_curve1": link_property_object_name(properties, "Curve1"),
         "source_curve2": link_property_object_name(properties, "Curve2"),
         "orientation": ruled_surface_orientation_from_properties(properties),
+    }
+    return payload
+
+
+def project_on_surface_mode_from_properties(properties: dict[str, Any]) -> str:
+    labels = ["All", "Faces", "Edges"]
+    value = consumer_property(properties, "Mode", "All")
+    if isinstance(value, str) and value in labels:
+        return value
+    if isinstance(value, (int, float)):
+        index = int(value)
+        if 0 <= index < len(labels):
+            return labels[index]
+    return "All"
+
+
+def float_from_properties(properties: dict[str, Any], name: str, fallback: float) -> float:
+    value = consumer_property(properties, name, fallback)
+    if isinstance(value, (int, float)):
+        return float(value)
+    return fallback
+
+
+def project_on_surface_payload(obj: Any, fixture: dict | None = None) -> dict:
+    shape = getattr(obj, "Shape", None)
+    if shape is None or shape.isNull():
+        raise UnsupportedFixture(f"target object {obj.Name} has no shape")
+    spec = fixture_spec_for_object(fixture, str(obj.Name))
+    properties = spec.get("Properties", {}) if isinstance(spec.get("Properties", {}), dict) else {}
+    projection_sources = link_sublist_object_names(properties, "Projection")
+    payload = shape_summary(shape)
+    payload["bbox_delta"] = 0.11
+    payload["object_fields"] = {
+        "status": "ok",
+        "shape": shape_kind(shape),
+        "feature": "part_project_on_surface",
+        "source_support": link_property_object_name(properties, "SupportFace"),
+        "support_face": first_link_subname(properties, "SupportFace"),
+        "source_projection": projection_sources[0] if projection_sources else "",
+        "projection_subshape": first_link_subname(properties, "Projection"),
+        "mode": project_on_surface_mode_from_properties(properties),
+        "height": float_from_properties(properties, "Height", 0.0),
+        "offset": float_from_properties(properties, "Offset", 0.0),
+        "topo_naming_history": "indexed_projected_edges_no_mapper_history",
     }
     return payload
 
@@ -3352,6 +3443,58 @@ def sweep_payload(obj: Any, fixture: dict | None = None) -> dict:
     return payload
 
 
+def pipe_transition_from_properties(properties: dict[str, Any]) -> str:
+    labels = ["Transformed", "Right corner", "Round corner"]
+    value = consumer_property(properties, "Transition", "Transformed")
+    if isinstance(value, str) and value in labels:
+        return value
+    if isinstance(value, (int, float)):
+        index = int(value)
+        if 0 <= index < len(labels):
+            return labels[index]
+    return "Transformed"
+
+
+def pipe_payload(obj: Any, fixture: dict | None = None) -> dict:
+    shape = getattr(obj, "Shape", None)
+    if shape is None or shape.isNull():
+        raise UnsupportedFixture(f"target object {obj.Name} has no shape")
+    spec = fixture_spec_for_object(fixture, str(obj.Name))
+    properties = spec.get("Properties", {}) if isinstance(spec.get("Properties", {}), dict) else {}
+    payload = shape_summary(shape)
+    payload["object_fields"] = {
+        "status": "ok",
+        "shape": shape_kind(shape),
+        "feature": "partdesign_pipe",
+        "add_sub": "sub" if getattr(obj, "TypeId", "") == "PartDesign::SubtractivePipe" else "add",
+        "source_profile": link_property_object_name(properties, "Profile"),
+        "spine": link_property_object_name(properties, "Spine"),
+        "mode": str(consumer_property(properties, "Mode", "Standard")),
+        "transformation": str(consumer_property(properties, "Transformation", "Constant")),
+        "transition": pipe_transition_from_properties(properties),
+        "topo_naming_history": "maker_history:partdesign_pipe",
+    }
+    return payload
+
+
+def boolean_payload(obj: Any, fixture: dict | None = None) -> dict:
+    shape = getattr(obj, "Shape", None)
+    if shape is None or shape.isNull():
+        raise UnsupportedFixture(f"target object {obj.Name} has no shape")
+    spec = fixture_spec_for_object(fixture, str(obj.Name))
+    properties = spec.get("Properties", {}) if isinstance(spec.get("Properties", {}), dict) else {}
+    payload = shape_summary(shape)
+    payload["object_fields"] = {
+        "status": "ok",
+        "shape": shape_kind(shape),
+        "body_mode": "replace",
+        "boolean_type": str(consumer_property(properties, "Type", "Fuse")),
+        "tools": link_property_object_names(properties, "Group"),
+        "topo_naming_history": "maker_history:boolean",
+    }
+    return payload
+
+
 def object_expected_payload(obj: Any, fixture: dict | None = None, created: dict[str, Any] | None = None) -> dict:
     type_id = getattr(obj, "TypeId", "")
     if type_id == "Assembly::AssemblyLink":
@@ -3372,6 +3515,12 @@ def object_expected_payload(obj: Any, fixture: dict | None = None, created: dict
         return loft_payload(obj, fixture)
     if type_id == "Part::Sweep":
         return sweep_payload(obj, fixture)
+    if type_id == "Part::ProjectOnSurface":
+        return project_on_surface_payload(obj, fixture)
+    if type_id == "PartDesign::Boolean":
+        return boolean_payload(obj, fixture)
+    if type_id in {"PartDesign::AdditivePipe", "PartDesign::SubtractivePipe"}:
+        return pipe_payload(obj, fixture)
 
     shape = getattr(obj, "Shape", None)
     if type_id == "Mesh::Import":

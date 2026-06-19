@@ -4,6 +4,8 @@
 #include "cad_core/part/topo_shape.h"
 
 #include <TopoDS_Edge.hxx>
+#include <TopoDS_Shape.hxx>
+#include <gp_Ax1.hxx>
 
 #include <array>
 #include <optional>
@@ -19,11 +21,17 @@ struct ImportElementMapSource
     std::string fileName;
 };
 
-struct RuledSurfaceEdgeSource
+struct RuledSurfaceEdgeEvidence
 {
-    std::string objectName;
     TopoDS_Edge edge;
     std::vector<std::string> stableEdgeNames;
+};
+
+struct RuledSurfaceCurveSource
+{
+    std::string objectName;
+    TopoDS_Shape curve;
+    std::vector<RuledSurfaceEdgeEvidence> edges;
 };
 
 struct FilledFaceDefaultParams
@@ -69,11 +77,12 @@ struct FilledFaceBuild
 
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
 // ::TopoShape::makeElementRuledSurface(), for two edges calls "BRepFill::Face(Edge, Edge)"
-// after applying "Automatic" / "Reversed" orientation and then rebuilds edge relation because
-// "Both BRepFill::Face() and Shell() modifies the original input edges".
-NamedShapeBuild makeElementRuledSurfaceFromEdges(
+// and for two wires calls "BRepFill::Shell(Wire, Wire)" after applying "Automatic" / "Reversed"
+// orientation; it then rebuilds edge relation because "Both BRepFill::Face() and Shell()
+// modifies the original input edges".
+NamedShapeBuild makeElementRuledSurfaceFromCurves(
     const std::string& owner,
-    const std::array<RuledSurfaceEdgeSource, 2>& sources,
+    const std::array<RuledSurfaceCurveSource, 2>& sources,
     short orientation
 );
 
@@ -87,7 +96,8 @@ NamedShapeBuild makeElementLoftFromSources(
     bool solid,
     bool ruled,
     bool closed,
-    int maxDegree
+    int maxDegree,
+    bool linearizeFaces = false
 );
 
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
@@ -99,7 +109,18 @@ NamedShapeBuild makeElementPipeShellFromSources(
     const std::vector<NamedShapeSource>& sources,
     bool solid,
     bool frenet,
-    int transition
+    int transition,
+    bool linearizeFaces = false
+);
+
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+// ::TopoShape::makeElementRevolve(), calls "BRepPrimAPI_MakeRevol" and then
+// makeElementShape(mkRevol, base, Part::OpCodes::Revolve) so MapperMaker history is consumed.
+NamedShapeBuild makeElementRevolveFromSource(
+    const std::string& owner,
+    const NamedShapeSource& source,
+    const gp_Ax1& axis,
+    double angleRadians
 );
 
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp

@@ -82,7 +82,8 @@ void addGeomPlateDiagnostic(
     const std::string& code,
     const std::string& message,
     const std::string& property = {},
-    const std::string& target = {}
+    const std::string& target = {},
+    const std::string& subname = {}
 )
 {
     runtime::addDiagnostic(
@@ -93,9 +94,84 @@ void addGeomPlateDiagnostic(
         object.name,
         property,
         "runtime",
-        target
+        target,
+        subname
     );
     context.objects[object.name] = errorObject();
+}
+
+std::string firstGeomPlateDeferredTarget(const app::DocumentObject& object, const std::string& property)
+{
+    if (const auto link = app::readLink(object, property)) {
+        if (!link->object.empty()) {
+            return link->object;
+        }
+    }
+    const std::vector<app::Link> links = app::readLinks(object, property);
+    if (!links.empty() && !links.front().object.empty()) {
+        return links.front().object;
+    }
+    return object.name;
+}
+
+std::string firstGeomPlateDeferredSubname(const app::DocumentObject& object, const std::string& property)
+{
+    if (const auto link = app::readLink(object, property)) {
+        if (!link->stableSubnames.empty() && !link->stableSubnames.front().empty()) {
+            return link->stableSubnames.front();
+        }
+        if (!link->subnames.empty()) {
+            return link->subnames.front();
+        }
+    }
+    const std::vector<app::Link> links = app::readLinks(object, property);
+    if (!links.empty()) {
+        if (!links.front().stableSubnames.empty() && !links.front().stableSubnames.front().empty()) {
+            return links.front().stableSubnames.front();
+        }
+        if (!links.front().subnames.empty()) {
+            return links.front().subnames.front();
+        }
+    }
+    return property;
+}
+
+bool rejectDeferredGeomPlateAdvancedProperties(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate
+    // /BuildPlateSurfacePyImp.cpp::BuildPlateSurfacePy::LoadInitSurface(),
+    // CurveConstraintPyImp.cpp::setCurve2dOnSurf()/setProjectedCurve(), and
+    // PointConstraintPyImp.cpp::setPnt2dOnSurf() expose advanced wrapper state that is not yet
+    // represented in cad-core's request DTO.
+    static const std::vector<std::string> deferred {
+        "InitialSurface",
+        "Surface",
+        "Curve2dOnSurface",
+        "ProjectedCurve2d",
+        "Point2dOnSurface",
+        "PlateSurfaceCurves",
+    };
+    bool ok = true;
+    for (const std::string& property : deferred) {
+        if (app::propertyValue(object, property) == nullptr) {
+            continue;
+        }
+        addGeomPlateDiagnostic(
+            object,
+            context,
+            "unsupported_property",
+            "Part.GeomPlate.BuildPlateSurface " + property
+                + " is deferred until initial-surface/2D constraint DTO support is expected-backed",
+            property,
+            firstGeomPlateDeferredTarget(object, property),
+            firstGeomPlateDeferredSubname(object, property)
+        );
+        ok = false;
+    }
+    return ok;
 }
 
 const nlohmann::json* rawPropertyPayload(const app::DocumentObject& object, const std::string& property)
@@ -830,9 +906,19 @@ void executePartGeomPlateSurface(const app::DocumentObject& object, runtime::Com
              "ApproxMaxDistance",
              "ApproxCritOrder",
              "ApproxContinuity",
-             "ApproxEnlargeCoeff"}
+             "ApproxEnlargeCoeff",
+             "InitialSurface",
+             "Surface",
+             "Curve2dOnSurface",
+             "ProjectedCurve2d",
+             "Point2dOnSurface",
+             "PlateSurfaceCurves"}
         )) {
         context.objects[object.name] = errorObject();
+        return;
+    }
+
+    if (!rejectDeferredGeomPlateAdvancedProperties(object, context)) {
         return;
     }
 

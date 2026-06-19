@@ -1,0 +1,224 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPad",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              2,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              0
+            ],
+            "end": [
+              2,
+              2
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              2
+            ],
+            "end": [
+              0,
+              2
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              2
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPad",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 2,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Fillet",
+      "ID": 3,
+      "TypeId": "PartDesign::Fillet",
+      "Properties": {
+        "Base": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Pad",
+          "SubList": [
+            "Edge1"
+          ]
+        },
+        "Radius": 0.2,
+        "UseAllEdges": false,
+        "SupportTransform": true
+      }
+    },
+    {
+      "Name": "Chamfer",
+      "ID": 4,
+      "TypeId": "PartDesign::Chamfer",
+      "Properties": {
+        "Base": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Fillet",
+          "SubList": [
+            "Edge1"
+          ]
+        },
+        "ChamferType": "Equal distance",
+        "Size": 0.05,
+        "UseAllEdges": false,
+        "SupportTransform": true
+      }
+    },
+    {
+      "Name": "MirrorPlane",
+      "ID": 5,
+      "TypeId": "PartDesign::Plane",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [
+            2,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0.7071067811865475,
+            0,
+            0.7071067811865476
+          ]
+        }
+      }
+    },
+    {
+      "Name": "Mirrored",
+      "ID": 6,
+      "TypeId": "PartDesign::Mirrored",
+      "Properties": {
+        "Originals": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "Chamfer"
+          ]
+        },
+        "MirrorPlane": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "MirrorPlane",
+          "SubList": []
+        },
+        "TransformMode": "Features"
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 7,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "SketchPad",
+            "Pad",
+            "Fillet",
+            "Chamfer",
+            "MirrorPlane",
+            "Mirrored"
+          ]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Mirrored"
+        }
+      }
+    },
+    {
+      "Name": "ProbeSketch",
+      "ID": 8,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              1,
+              0
+            ]
+          }
+        ],
+        "ExternalGeometry": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Mirrored",
+              "SubList": [
+                "OldDressupFace"
+              ],
+              "StableSubList": [
+                "Mirrored.Transform1.Face1"
+              ],
+              "ReferenceShadow": [
+                {
+                  "target": "Mirrored",
+                  "targetId": 6,
+                  "property": "Shape",
+                  "shapeType": "Face",
+                  "indexed": "OldDressupFace",
+                  "subname": "OldDressupFace",
+                  "stableSubname": "Mirrored.Transform1.Face1",
+                  "fingerprint": {}
+                }
+              ]
+            }
+          ]
+        },
+        "Constraints": []
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Mirrored",
+      "ProbeSketch"
+    ]
+  }
+}

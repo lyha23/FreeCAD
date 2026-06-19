@@ -12,17 +12,22 @@
 #include "cad_core/part_design/datum_point.h"
 #include "cad_core/part_design/feature_draft.h"
 #include "cad_core/part_design/feature_base.h"
+#include "cad_core/part_design/feature_boolean.h"
 #include "cad_core/part_design/feature_fillet.h"
+#include "cad_core/part_design/feature_groove.h"
 #include "cad_core/part_design/feature_hole.h"
 #include "cad_core/part_design/feature_linear_pattern.h"
+#include "cad_core/part_design/feature_loft.h"
 #include "cad_core/mesh/feature_mesh_import.h"
 #include "cad_core/part_design/feature_mirrored.h"
 #include "cad_core/part_design/feature_multi_transform.h"
 #include "cad_core/part/part_boolean.h"
 #include "cad_core/part/part_feature.h"
 #include "cad_core/part_design/feature_pad.h"
+#include "cad_core/part_design/feature_pipe.h"
 #include "cad_core/part_design/feature_pocket.h"
 #include "cad_core/part_design/feature_polar_pattern.h"
+#include "cad_core/part_design/feature_revolution.h"
 #include "cad_core/part_design/feature_scaled.h"
 #include "cad_core/sketcher/sketch_object.h"
 #include "cad_core/part_design/feature_thickness.h"
@@ -90,6 +95,7 @@ FeatureRegistry buildDefaultRegistry()
     registry.registerExecutor("Part::RuledSurface", part::executePartRuledSurface);
     registry.registerExecutor("Part::Loft", part::executePartLoft);
     registry.registerExecutor("Part::Sweep", part::executePartSweep);
+    registry.registerExecutor("Part::ProjectOnSurface", part::executePartProjectOnSurface);
     registry.registerExecutor("Part::FilledFace", part::executePartFilledFace);
     registry.registerExecutor("Part::GeomPlateSurface", part::executePartGeomPlateSurface);
     registry.registerExecutor("Part::Offset", part::executePartOffset);
@@ -115,6 +121,7 @@ FeatureRegistry buildDefaultRegistry()
     registry.registerExecutor("PartDesign::Plane", part_design::executeDatumPlane);
     registry.registerExecutor("PartDesign::Point", part_design::executeDatumPoint);
     registry.registerExecutor("PartDesign::FeatureBase", part_design::executeFeatureBase);
+    registry.registerExecutor("PartDesign::Boolean", part_design::executeBoolean);
     registry.registerExecutor("PartDesign::Fillet", part_design::executeFillet);
     registry.registerExecutor("PartDesign::Draft", part_design::executeDraft);
     registry.registerExecutor("PartDesign::Thickness", part_design::executeThickness);
@@ -123,7 +130,13 @@ FeatureRegistry buildDefaultRegistry()
     registry.registerExecutor("PartDesign::Mirrored", part_design::executeMirrored);
     registry.registerExecutor("PartDesign::MultiTransform", part_design::executeMultiTransform);
     registry.registerExecutor("PartDesign::Pad", part_design::executePad);
+    registry.registerExecutor("PartDesign::AdditivePipe", part_design::executeAdditivePipe);
+    registry.registerExecutor("PartDesign::SubtractivePipe", part_design::executeSubtractivePipe);
     registry.registerExecutor("PartDesign::Pocket", part_design::executePocket);
+    registry.registerExecutor("PartDesign::AdditiveLoft", part_design::executeAdditiveLoft);
+    registry.registerExecutor("PartDesign::SubtractiveLoft", part_design::executeSubtractiveLoft);
+    registry.registerExecutor("PartDesign::Revolution", part_design::executeRevolution);
+    registry.registerExecutor("PartDesign::Groove", part_design::executeGroove);
     registry.registerExecutor("PartDesign::PolarPattern", part_design::executePolarPattern);
     registry.registerExecutor("PartDesign::Scaled", part_design::executeScaled);
     registry.registerExecutor("PartDesign::Chamfer", part_design::executeChamfer);

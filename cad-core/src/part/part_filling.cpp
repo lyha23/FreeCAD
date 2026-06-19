@@ -33,7 +33,8 @@ void addFillingDiagnostic(
     const std::string& code,
     const std::string& message,
     const std::string& property = {},
-    const std::string& target = {}
+    const std::string& target = {},
+    const std::string& subname = {}
 )
 {
     runtime::addDiagnostic(
@@ -44,7 +45,8 @@ void addFillingDiagnostic(
         object.name,
         property,
         "runtime",
-        target
+        target,
+        subname
     );
     context.objects[object.name] = {
         {"status", "error"},
@@ -56,6 +58,42 @@ void addFillingDiagnostic(
 bool sameDefault(double actual, double expected)
 {
     return std::abs(actual - expected) <= 1e-12;
+}
+
+std::string firstDeferredTarget(const app::DocumentObject& object, const std::string& property)
+{
+    if (const auto link = app::readLink(object, property)) {
+        if (!link->object.empty()) {
+            return link->object;
+        }
+    }
+    const std::vector<app::Link> links = app::readLinks(object, property);
+    if (!links.empty() && !links.front().object.empty()) {
+        return links.front().object;
+    }
+    return object.name;
+}
+
+std::string firstDeferredSubname(const app::DocumentObject& object, const std::string& property)
+{
+    if (const auto link = app::readLink(object, property)) {
+        if (!link->stableSubnames.empty() && !link->stableSubnames.front().empty()) {
+            return link->stableSubnames.front();
+        }
+        if (!link->subnames.empty()) {
+            return link->subnames.front();
+        }
+    }
+    const std::vector<app::Link> links = app::readLinks(object, property);
+    if (!links.empty()) {
+        if (!links.front().stableSubnames.empty() && !links.front().stableSubnames.front().empty()) {
+            return links.front().stableSubnames.front();
+        }
+        if (!links.front().subnames.empty()) {
+            return links.front().subnames.front();
+        }
+    }
+    return property;
 }
 
 bool rejectNonDefaultNumber(
@@ -74,6 +112,8 @@ bool rejectNonDefaultNumber(
         context,
         "unsupported_property",
         "Part.makeFilledFace non-default " + property + " is deferred until helper kwargs are expected-backed",
+        property,
+        object.name,
         property
     );
     return true;
@@ -95,9 +135,41 @@ bool rejectNonDefaultBool(
         context,
         "unsupported_property",
         "Part.makeFilledFace non-default " + property + " is deferred until helper kwargs are expected-backed",
+        property,
+        object.name,
         property
     );
     return true;
+}
+
+bool rejectDeferredAdvancedFillingProperties(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementFilledFace(), maps "params.surface", "params.supports" and
+    // "params.orders" into BRepOffsetAPI_MakeFilling::LoadInitSurface/Add(...). cad-core must
+    // first model those source-shape maps before publishing them as supported helper kwargs.
+    static const std::vector<std::string> deferred {"Surface", "Supports", "Orders"};
+    bool ok = true;
+    for (const std::string& property : deferred) {
+        if (app::propertyValue(object, property) == nullptr) {
+            continue;
+        }
+        addFillingDiagnostic(
+            object,
+            context,
+            "unsupported_property",
+            "Part.makeFilledFace " + property
+                + " is deferred until support/order/source-shape maps are expected-backed",
+            property,
+            firstDeferredTarget(object, property),
+            firstDeferredSubname(object, property)
+        );
+        ok = false;
+    }
+    return ok;
 }
 
 std::optional<FilledFaceDefaultParams> readDefaultFillingParams(
@@ -297,13 +369,20 @@ void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeCo
              "TolG1",
              "TolG2",
              "MaxDegree",
-             "MaxSegments"}
+             "MaxSegments",
+             "Surface",
+             "Supports",
+             "Orders"}
         )) {
         context.objects[object.name] = {
             {"status", "error"},
             {"feature", "part_filled_face"},
             {"helper", "Part.makeFilledFace"},
         };
+        return;
+    }
+
+    if (!rejectDeferredAdvancedFillingProperties(object, context)) {
         return;
     }
 

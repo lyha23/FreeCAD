@@ -1,0 +1,54 @@
+{
+  "Objects": [
+    {
+      "Name": "Path",
+      "ID": 1,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 0,
+        "Y2": 0,
+        "Z2": 5
+      }
+    },
+    {
+      "Name": "Profile",
+      "ID": 2,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 0.6
+      }
+    },
+    {
+      "Name": "AdvancedSweep",
+      "ID": 3,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Path"
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["Profile"]
+        },
+        "AuxiliarySpine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Path",
+          "SubList": ["Edge1"],
+          "StableSubList": ["Edge1"]
+        },
+        "Tolerance": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 0.005
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["AdvancedSweep"]
+  }
+}
