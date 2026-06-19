@@ -15,19 +15,21 @@
 ## 当前基线
 
 - `P8-DistanceTypeBasicGeometry-OndselSolver收口主线` 已发布 `PointPoint`、`LineLine`、`PointLine`、`PlanePlane`、`PointPlane`、`LinePlane`；`DTC-SCOPE-008` 仍标记 radius-bearing `notCollected`，`DTC-SCOPE-009` 仍保留 curve/default boundary。
-- `P8-Assembly-Reference-JCS-MarkerPlacement收口主线` 已发布 representative subshape marker placement subset，`active_expected_count=15`，但 radius / curve / GUI / persistent solver state 仍不在 support claim 内。
-- 当前 `cad-core/src/assembly/joint_solver.cpp::classifyDistanceType()` 只识别 point / line / plane basic cases；`resolveDistanceJointMapping()` 只映射 basic cases；`makeOndselDistanceJoint()` 已有可复用的 ASMT joint constructors。
-- 当前 C ABI capability 的 `distance_type_basic_geometry.remaining_radius_gaps` 只列出 8 个 radius cases，不足以表达 FreeCAD enum 中所有剩余 surface / curve / default cases；本包必须把完整 remaining matrix 写清楚。
+- `P8-Assembly-Reference-JCS-MarkerPlacement收口主线` 的 representative subshape marker placement subset 已被本包消费到 request-local `Assembly::AssemblyLink` identity-offset 场景；非 identity bundled `offsetPlc`、GUI/session 和 persistent solver state 仍不在 support claim 内。
+- S6 已发布 `distance_type_extended_geometry` capability。当前 supported extended cases 为 13 个：`LineCircle`、`CircleCircle`、`PlaneCylinder`、`PlaneSphere`、`CylinderCylinder`、`CylinderSphere`、`PointCylinder`、`PointSphere`、`PlaneTorus`、`CylinderTorus`、`TorusTorus`、`TorusSphere`、`SphereSphere`。
+- 13 个 supported expected 已删除 `known_gap` / `backendGap` 并通过 `CadCoreExpectedFixtureTest`；这些 expected 的 `solver_adapter` 精确对齐 FreeCAD native oracle，`bbox_delta=0.2` 只用于 cad-core display primitive bbox 与 FreeCAD exact bbox 的局部容差。
+- `PointCurve` 保留 diagnostic / nonGoal：native expected 已采集，但 FreeCAD 源码仍是 TODO-like plane-of-curve 语义，未进入 supported capability。
+- cone、line-surface、curve-face、`Other` default/TODO 代表 case 继续为 diagnostic / nonGoal，不发布为 supported。
 
 ## 最小完整语义批次
 
-本主线不按单 fixture 推进。S6 实现批次必须至少覆盖：
+本主线不按单 fixture 推进。S6 已按以下批次关闭：
 
-1. Edge circle radius cases：`LineCircle`、`CircleCircle`，通过 `getEdgeRadius()` 对 `distanceIJ` 做 FreeCAD 等价修正。
-2. Face radius / direct surface cases：`PlaneCylinder`、`PlaneSphere`、`CylinderCylinder`、`CylinderSphere`、`PointCylinder`、`PointSphere`，通过 `getFaceRadius()` 对 `offset` 或 `distanceIJ` 做 FreeCAD 等价修正。
-3. Explicit torus / sphere switch cases：`PlaneTorus`、`CylinderTorus`、`TorusTorus`、`TorusSphere`、`SphereSphere`，按 FreeCAD 当前 switch 的 ASMT class 和 scalar 字段采 oracle 后实现或保留差异诊断。
-4. Explicit point-curve fallback：`PointCurve`，必须用 native expected 证明 FreeCAD 当前 `ASMTPointInPlaneJoint.offset` 语义后才发布。
-5. Default / TODO cases 不能漏项：cone、line-surface、curve-face 和 `Other` 至少要形成 checked-in oracle / diagnostic / nonGoal 结论，不能从 supported capability 中消失。
+1. Edge circle radius cases：`LineCircle`、`CircleCircle`，通过 `getEdgeRadius()` 对 `distanceIJ` 做 FreeCAD 等价修正，已进入 supported。
+2. Face radius / direct surface cases：`PlaneCylinder`、`PlaneSphere`、`CylinderCylinder`、`CylinderSphere`、`PointCylinder`、`PointSphere`，通过 `getFaceRadius()` 对 `offset` 或 `distanceIJ` 做 FreeCAD 等价修正，已进入 supported。
+3. Explicit torus / sphere switch cases：`PlaneTorus`、`CylinderTorus`、`TorusTorus`、`TorusSphere`、`SphereSphere`，按 FreeCAD 当前 switch 的 ASMT class 和 scalar 字段进入 supported；torus radius 仍按 FreeCAD helper 行为贡献 0。
+4. Explicit point-curve fallback：`PointCurve` 已采 native expected，但保留 diagnostic / nonGoal，不发布。
+5. Default / TODO cases：cone、line-surface、curve-face 和 `Other` 已形成 checked-in diagnostic / nonGoal 结论，不从 capability 中消失，也不被标为 supported。
 
 如 native oracle 无法稳定采集或 FreeCAD TODO / default 行为与产品语义冲突，允许把 default / curve cases 拆成后续专包；但必须在 S2/S5 文档说明拆分原因、下一批次范围和防止长期单 fixture 推进的措施。
 
@@ -66,16 +68,16 @@
 | S3 radius / primitive | `工作步骤细分/6-19-06-45-【已实现】P8-DistanceTypeExtendedGeometry-S3-RadiusPrimitive证据专项复审.md` | 已完成：DTO / primitive / radius / scalar correction / boundary evidence，不进入 ASMT 发布 |
 | S4 ASMT mapping | `工作步骤细分/6-19-06-46-【已实现】P8-DistanceTypeExtendedGeometry-S4-OndselDistanceJoint扩展映射专项复审.md` | 已完成：显式 extended cases 的 ASMT class 与 scalar field 已映射，S5 oracle 仍是 parity 闸门 |
 | S5 oracle / fixtures | `工作步骤细分/6-19-06-47-【已实现】P8-DistanceTypeExtendedGeometry-S5-NativeOracle与代表fixture专项复审.md` | 已完成：批量采集 expected，锁定 supported-candidate / diagnostic / nonGoal |
-| S6 实现发布 | `工作步骤细分/6-19-06-48-P8-DistanceTypeExtendedGeometry-S6-实现与发布闸门.md` | 落 C++、fixtures、tests、capability/docs，并关闭 queue |
+| S6 实现发布 | `工作步骤细分/6-19-06-48-【已实现】P8-DistanceTypeExtendedGeometry-S6-实现与发布闸门.md` | 已完成：13 个 extended cases 发布为 supported，PointCurve/default 边界保持 diagnostic / nonGoal，queue 为空 |
 | source candidates | `矩阵/p8_distance_type_extended_geometry_source_candidates.tsv` | FreeCAD / cad-core 候选证据 |
 | scope review | `矩阵/p8_distance_type_extended_geometry_scope_review_matrix.tsv` | scope 状态和验收路由 |
 | blocker queue | `矩阵/p8_distance_type_extended_geometry_blocker_queue.tsv` | 发布前必须关闭的 blocker |
 | backend gap classification | `矩阵/p8_distance_type_extended_geometry_backend_gap_classification.tsv` | backendGap / notCollected / defaultBoundary / nonGoal 聚合 |
 | non goal registry | `矩阵/p8_distance_type_extended_geometry_non_goal_registry.tsv` | 不进入本轮实现或不得发布的边界 |
 
-## 当前执行建议
+## 当前执行结论
 
-下一轮用 `goal-step-runner` 刷新 `工作步骤细分/` 队列；已校验的 `工作步骤细分/6-19-06-41-【已实现】P8-DistanceTypeExtendedGeometry工作步骤总入口.md`、S0、S1、S2、S3、S4 和 S5 会被跳过，当前应从 S6 实现与发布闸门开始。S6 才进入 capability 发布。
+`goal-step-runner` 队列已清空。后续只在产品明确接受 `PointCurve` 或 default/TODO branch 的具体行为时，另开专包重审并补 expected / capability；不得把这些 diagnostic expected 直接升级为 supported。
 
 ## 非目标
 

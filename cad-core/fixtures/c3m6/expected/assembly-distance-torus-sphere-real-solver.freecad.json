@@ -1,14 +1,5 @@
 {
-  "backendGap": {
-    "delete_condition": "S6 keeps this case in the supported subset, cad-core resolves the same DistanceType ASMT class/scalar and any required marker placement, and CadCoreExpectedFixtureTest passes without skipping this expected file.",
-    "ids": [
-      "DTE-BLOCK-005",
-      "DTE-BLOCK-007",
-      "MP-BLOCK-002",
-      "MP-BLOCK-003",
-      "MP-BLOCK-006"
-    ]
-  },
+  "bbox_delta": 0.2,
   "bbox": {
     "max": [
       12.5,
@@ -22,7 +13,6 @@
     ]
   },
   "freecad_version": "1.2.0 revision 20260519",
-  "known_gap": "DTE-S5 native extended DistanceType oracle is checked in (TorusSphere), but cad-core has not completed the S6 publication/parity gate for this expected file; delete after the listed blockers are closed and focused expected parity passes.",
   "native_marker_oracle": {
     "requires_cad_core_marker_parity": true,
     "solver_joints": [

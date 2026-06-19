@@ -1753,8 +1753,8 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 ):
                     self.assertEqual(actual_joint[key], expected_joint[key])
 
-    def test_c3m6_assembly_distance_type_s5_expected_batch_records_known_boundaries(self) -> None:
-        mapped_cases = {
+    def test_c3m6_assembly_distance_type_s6_supported_expected_batch_matches_native(self) -> None:
+        supported_cases = {
             "assembly-distance-line-circle-real-solver": ("LineCircle", "ASMTRevCylJoint", "distance_ij", 3.75),
             "assembly-distance-circle-circle-real-solver": ("CircleCircle", "ASMTRevCylJoint", "distance_ij", 5.5),
             "assembly-distance-plane-cylinder-real-solver": ("PlaneCylinder", "ASMTLineInPlaneJoint", "offset", 5.0),
@@ -1803,7 +1803,14 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "distance_ij",
                 8.0,
             ),
-            "assembly-distance-point-curve-real-solver": ("PointCurve", "ASMTPointInPlaneJoint", "offset", 1.5),
+        }
+        diagnostic_cases = {
+            "assembly-distance-point-curve-real-solver": (
+                "PointCurve",
+                "mapped_s4_extended",
+                "extended_mapping_pending_s5_oracle",
+                "point_curve_diagnostic_boundary",
+            ),
         }
         default_cases = {
             "assembly-distance-plane-cone-default-boundary": "PlaneCone",
@@ -1812,37 +1819,64 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "assembly-distance-other-default-boundary": "Other",
         }
 
-        for fixture, (distance_type, solver_class, scalar_field, scalar_value) in mapped_cases.items():
+        for fixture, (distance_type, solver_class, scalar_field, scalar_value) in supported_cases.items():
             with self.subTest(fixture=fixture):
                 expected = self.expected_freecad("c3m6", fixture)
                 expected_joint = expected["solver_adapter"]["solver_joints"][0]
                 result = self.run_recompute(fixture, "c3m6")
-                actual_joint = result["objects"]["Assembly"]["solver_adapter"]["solver_joints"][0]
+                adapter = result["objects"]["Assembly"]["solver_adapter"]
+                actual_joint = adapter["solver_joints"][0]
 
-                self.assertIn("known_gap", expected)
-                self.assertIn("delete_condition", expected["backendGap"])
-                self.assertIn("DTE-BLOCK-007", expected["backendGap"]["ids"])
+                self.assertNotIn("known_gap", expected)
+                self.assertNotIn("backendGap", expected)
                 self.assertEqual(expected_joint["distance_type"], distance_type)
                 self.assertEqual(expected_joint["solver_joint_class"], solver_class)
                 self.assertAlmostEqual(expected_joint[scalar_field], scalar_value)
                 self.assertEqual(expected_joint["distance_type_mapping_status"], "mapped_s4_extended")
                 self.assertEqual(expected_joint["distance_type_boundary"], "extended_mapping_pending_s5_oracle")
 
-                self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_assembly_solver"])
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(adapter["status"], "solved")
+                self.assertEqual(adapter["unsupported_joints"], [])
+                self.assertEqual(adapter["placement_updates"], expected["solver_adapter"]["placement_updates"])
                 self.assertEqual(actual_joint["distance_type"], distance_type)
                 self.assertEqual(actual_joint["solver_joint_class"], solver_class)
                 self.assertAlmostEqual(actual_joint[scalar_field], scalar_value)
+                self.assertEqual(actual_joint["distance_type_mapping_status"], "mapped_s4_extended")
                 self.assertEqual(
-                    result["objects"]["Assembly"]["solver_adapter"]["unsupported_joints"][0]["reason"],
-                    "missing_marker_placement",
+                    actual_joint["distance_type_boundary"],
+                    "extended_mapping_pending_s5_oracle",
                 )
+
+        for fixture, (distance_type, mapping_status, boundary, unsupported_reason) in diagnostic_cases.items():
+            with self.subTest(fixture=fixture):
+                expected = self.expected_freecad("c3m6", fixture)
+                expected_joint = expected["solver_adapter"]["solver_joints"][0]
+                result = self.run_recompute(fixture, "c3m6")
+                adapter = result["objects"]["Assembly"]["solver_adapter"]
+                actual_joint = adapter["solver_joints"][0]
+
+                self.assertIn("known_gap", expected)
+                self.assertIn("delete_condition", expected["nonGoal"])
+                self.assertNotIn("backendGap", expected)
+                self.assertEqual(expected["nonGoal"]["ids"], ["DTE-NG-003"])
+                self.assertEqual(expected_joint["distance_type"], distance_type)
+                self.assertEqual(expected_joint["distance_type_mapping_status"], mapping_status)
+                self.assertEqual(expected_joint["distance_type_boundary"], boundary)
+                self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_assembly_solver"])
+                self.assertEqual(adapter["status"], "unsupported")
+                self.assertEqual(adapter["unsupported_joints"][0]["reason"], unsupported_reason)
+                self.assertEqual(actual_joint["distance_type"], distance_type)
+                self.assertEqual(actual_joint["distance_type_mapping_status"], mapping_status)
+                self.assertEqual(actual_joint["distance_type_boundary"], boundary)
 
         for fixture, distance_type in default_cases.items():
             with self.subTest(fixture=fixture):
                 expected = self.expected_freecad("c3m6", fixture)
                 expected_joint = expected["solver_adapter"]["solver_joints"][0]
                 result = self.run_recompute(fixture, "c3m6")
-                actual_joint = result["objects"]["Assembly"]["solver_adapter"]["solver_joints"][0]
+                adapter = result["objects"]["Assembly"]["solver_adapter"]
+                actual_joint = adapter["solver_joints"][0]
 
                 self.assertIn("known_gap", expected)
                 self.assertIn("delete_condition", expected["nonGoal"])
@@ -1852,10 +1886,12 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(expected_joint["distance_type_mapping_status"], "default_boundary_not_mapped")
                 self.assertEqual(expected_joint["distance_type_boundary"], "default_or_todo_boundary")
                 self.assertNotIn("solver_joint_class", expected_joint)
+                self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_assembly_solver"])
+                self.assertEqual(adapter["status"], "unsupported")
                 self.assertEqual(actual_joint["distance_type"], distance_type)
                 self.assertEqual(actual_joint["distance_type_mapping_status"], "default_boundary_not_mapped")
                 self.assertEqual(
-                    result["objects"]["Assembly"]["solver_adapter"]["unsupported_joints"][0]["reason"],
+                    adapter["unsupported_joints"][0]["reason"],
                     "default_boundary_not_mapped",
                 )
 
@@ -2420,7 +2456,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "solver_joint_class": "ASMTPointInPlaneJoint",
                 "scalar_field": "offset",
                 "scalar_value": 1.5,
-                "unsupported_reason": "missing_marker_placement",
+                "unsupported_reason": "point_curve_diagnostic_boundary",
             },
             {
                 "case": "plane_cone_default_boundary",
@@ -2507,12 +2543,26 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 joint = result["objects"]["DistanceJoint"]
                 solver_joint = assembly["solver_adapter"]["solver_joints"][0]
 
-                self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_assembly_solver"])
-                self.assertEqual(assembly["solver_adapter"]["status"], "unsupported")
-                self.assertEqual(
-                    assembly["solver_adapter"]["unsupported_joints"],
-                    [{"object": "DistanceJoint", "joint_type": "Distance", "reason": case["unsupported_reason"]}],
-                )
+                if case["unsupported_reason"] is None:
+                    self.assertEqual(result["diagnostics"], [])
+                    self.assertEqual(assembly["solver_adapter"]["status"], "solved")
+                    self.assertEqual(assembly["solver_adapter"]["unsupported_joints"], [])
+                else:
+                    self.assertEqual(
+                        [item["code"] for item in result["diagnostics"]],
+                        ["unsupported_assembly_solver"],
+                    )
+                    self.assertEqual(assembly["solver_adapter"]["status"], "unsupported")
+                    self.assertEqual(
+                        assembly["solver_adapter"]["unsupported_joints"],
+                        [
+                            {
+                                "object": "DistanceJoint",
+                                "joint_type": "Distance",
+                                "reason": case["unsupported_reason"],
+                            }
+                        ],
+                    )
                 self.assertEqual(joint["reference1"]["object"], case["reference1"]["object"])
                 self.assertEqual(joint["reference2"]["object"], case["reference2"]["object"])
                 self.assertEqual(solver_joint["distance_type"], case["distance_type"])

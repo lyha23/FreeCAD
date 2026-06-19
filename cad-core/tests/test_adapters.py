@@ -924,6 +924,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("grounded_rackpinion_joint", ondsel_adapter["covered"])
         self.assertIn("grounded_screw_joint", ondsel_adapter["covered"])
         self.assertIn("basic_distance_type", ondsel_adapter["covered"])
+        self.assertIn("distance_type_extended_geometry", ondsel_adapter["covered"])
         self.assertIn("subshape_marker_placement", ondsel_adapter["covered"])
         basic_distance = ondsel_adapter["distance_type_basic_geometry"]
         self.assertEqual(basic_distance["status"], "covered_full")
@@ -941,11 +942,50 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(basic_distance["solver_joint_classes"]["PointPlane"], ["ASMTPointInPlaneJoint"])
         self.assertEqual(basic_distance["solver_joint_classes"]["LinePlane"], ["ASMTLineInPlaneJoint"])
         self.assertEqual(basic_distance["scalar_fields"], ["distance_ij", "offset"])
-        self.assertIn("LineCircle", basic_distance["remaining_radius_gaps"])
-        self.assertIn("PlaneCylinder", basic_distance["remaining_radius_gaps"])
-        self.assertIn("PointCylinder", basic_distance["remaining_radius_gaps"])
-        self.assertIn("PointCurve", basic_distance["non_goals"])
+        self.assertEqual(basic_distance["remaining_radius_gaps"], [])
+        self.assertEqual(basic_distance["extended_geometry_capability"], "distance_type_extended_geometry")
         self.assertIn("persistent_solver_state", basic_distance["non_goals"])
+        extended_distance = ondsel_adapter["distance_type_extended_geometry"]
+        self.assertEqual(extended_distance["status"], "covered_supported_subset")
+        self.assertEqual(extended_distance["native_expected_count"], 13)
+        self.assertEqual(
+            extended_distance["supported"],
+            [
+                "LineCircle",
+                "CircleCircle",
+                "PlaneCylinder",
+                "PlaneSphere",
+                "CylinderCylinder",
+                "CylinderSphere",
+                "PointCylinder",
+                "PointSphere",
+                "PlaneTorus",
+                "CylinderTorus",
+                "TorusTorus",
+                "TorusSphere",
+                "SphereSphere",
+            ],
+        )
+        self.assertEqual(extended_distance["solver_joint_classes"]["LineCircle"], ["ASMTRevCylJoint"])
+        self.assertEqual(extended_distance["solver_joint_classes"]["PlaneCylinder"], ["ASMTLineInPlaneJoint"])
+        self.assertEqual(extended_distance["solver_joint_classes"]["PointSphere"], ["ASMTSphSphJoint"])
+        self.assertIn("reference1_primitive", extended_distance["evidence_fields"])
+        self.assertIn("reference2_radius", extended_distance["evidence_fields"])
+        self.assertIn("scalar_correction", extended_distance["scalar_correction_fields"])
+        self.assertIn("scalar_correction_source", extended_distance["scalar_correction_fields"])
+        self.assertIn("identity_offset_assembly_link_subset", extended_distance["request_local_boundaries"])
+        self.assertIn(
+            "distance_writeback_uses_user_distance_not_radius_corrected_scalar",
+            extended_distance["request_local_boundaries"],
+        )
+        self.assertEqual(extended_distance["deferred_diagnostic_cases"], ["PointCurve"])
+        self.assertIn("PlaneCone", extended_distance["default_or_todo_boundaries"])
+        self.assertIn("LineCylinder", extended_distance["default_or_todo_boundaries"])
+        self.assertIn("CurvePlane", extended_distance["default_or_todo_boundaries"])
+        self.assertIn("Other", extended_distance["default_or_todo_boundaries"])
+        self.assertIn("PointCurve", extended_distance["non_goals"])
+        self.assertIn("default_or_todo_branch_support", extended_distance["non_goals"])
+        self.assertNotIn("PointCurve", extended_distance["supported"])
         self.assertIn(
             "invalid_grounded_placement_rejected",
             ondsel_adapter["covered"],
@@ -959,17 +999,19 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("vertex_jcs_marker", subshape_marker["covered"])
         self.assertIn("edge_jcs_marker", subshape_marker["covered"])
         self.assertIn("face_jcs_marker", subshape_marker["covered"])
+        self.assertIn("assembly_link_identity_offset_subshape_marker", subshape_marker["covered"])
+        self.assertIn("non_linear_edge_and_non_planar_face_identity_offset", subshape_marker["covered"])
         self.assertIn("mixed_swap_marker_sync", subshape_marker["covered"])
         self.assertIn("real_ondsel_marker_consumption", subshape_marker["covered"])
         self.assertIn("placement_updates_native_parity", subshape_marker["covered"])
-        self.assertEqual(subshape_marker["active_expected_count"], 15)
+        self.assertEqual(subshape_marker["active_expected_count"], 28)
         self.assertIn("identity_offset_assembly_link_subset", subshape_marker["request_local_boundaries"])
         self.assertIn("request_graph_no_persistent_solver_state", subshape_marker["request_local_boundaries"])
-        self.assertIn("radius_bearing_distance_type", subshape_marker["non_goals"])
+        self.assertNotIn("radius_bearing_distance_type", subshape_marker["non_goals"])
         self.assertIn("curve_default_distance_type", subshape_marker["non_goals"])
         self.assertIn("GUI/session", subshape_marker["non_goals"])
         self.assertIn("persistent_solver_state", subshape_marker["non_goals"])
-        self.assertIn("connector_only_subshape_marker_shortcut", subshape_marker["non_goals"])
+        self.assertIn("non_assembly_link_subshape_primitive_frame_generalization", subshape_marker["non_goals"])
         self.assertIn("non_identity_bundled_offsetPlc", subshape_marker["non_goals"])
         self.assertEqual(subshape_marker["remaining_gaps"], [])
         self.assertEqual(ondsel_adapter["remaining_gaps"], [])

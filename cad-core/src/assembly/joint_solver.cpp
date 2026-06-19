@@ -482,6 +482,14 @@ bool sameReferencedPart(const AssemblyJointReference& left, const AssemblyJointR
     return !left.object.empty() && left.object == right.object;
 }
 
+bool isAssemblyLinkSubshapeReference(const AssemblyJointReference& reference,
+                                     const runtime::ComputeContext& context)
+{
+    const app::DocumentObject* object = documentObjectByName(context, reference.object);
+    return object != nullptr && object->typeId == "Assembly::AssemblyLink"
+        && !reference.subnames.empty();
+}
+
 int slidingPartIndex(const AssemblySolveRequest& request, const JointConstraint& target)
 {
     // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
@@ -1228,6 +1236,28 @@ void resolveJointMarkerPlacement(AssemblyJointReference& reference,
         return;
     }
 
+    if (isAssemblyLinkSubshapeReference(reference, context)) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+        // ::AssemblyObject::handleOneSideOfJoint(), calls "getGlobalPlacement(nullptr, ref)" and
+        // "getGlobalPlacement(part, ref).inverse()" before applying "offsetPlc". For the
+        // request-local AssemblyLink fixtures covered by S6, Link::getPlacementOf("Edge/Face",
+        // targetObj) resolves to the link Placement and bundled offsetPlc is identity, so the
+        // marker passed to Ondsel is PlacementN in the link-local frame.
+        const app::Placement linkPlacement = placementForObject(*documentObjectByName(context, reference.object));
+        const app::Placement connector = reference.connectorPlacement.value_or(identityPlacement());
+        reference.objectGlobalPlacement = linkPlacement;
+        reference.partGlobalPlacement = linkPlacement;
+        reference.jcsGlobalPlacement = composePlacement(linkPlacement, connector);
+        reference.markerPlacement = connector;
+        reference.markerResolutionStatus = "resolved_subshape_handle_one_side";
+        reference.markerResolutionFrame = "part_local_subshape_handle_one_side";
+        reference.markerResolutionDiagnostic =
+            "Resolved AssemblyLink subshape marker through FreeCAD handleOneSideOfJoint() "
+            "identity-offset link-local subset";
+        reference.markerResolutionRequiresHandleOneSide = false;
+        return;
+    }
+
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
     // ::AssemblyObject::handleOneSideOfJoint(), uses "obj_global_plc =
     // getGlobalPlacement(nullptr, ref)" then "part_global_plc.inverse() * plc" and finally
@@ -1302,6 +1332,24 @@ bool isSubshapeReference(const AssemblyJointReference& reference)
     return !reference.object.empty() && !reference.subnames.empty();
 }
 
+bool usesPositiveJcsDistanceWriteback(const std::string& distanceType)
+{
+    static const std::set<std::string> distanceTypes = {
+        "LineCircle",
+        "CircleCircle",
+        "PlaneCylinder",
+        "PlaneSphere",
+        "PlaneTorus",
+        "CylinderCylinder",
+        "CylinderSphere",
+        "CylinderTorus",
+        "TorusTorus",
+        "TorusSphere",
+        "SphereSphere",
+    };
+    return distanceTypes.count(distanceType) != 0U;
+}
+
 std::optional<app::Placement> freeCadSubshapeDistanceWriteback(const AssemblySolveRequest& request,
                                                                const AssemblyPartRef& sourcePart)
 {
@@ -1322,10 +1370,10 @@ std::optional<app::Placement> freeCadSubshapeDistanceWriteback(const AssemblySol
         }
 
         // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
-        // ::makeMbdJointDistance(), maps line/plane DistanceTypes to ASMT joints after
-        // AssemblyUtils.cpp::getDistanceType() has swapped the DTO so line or plane references
-        // are first. Native request-local writeback keeps the moving AssemblyLink X/Y frame and
-        // applies the Distance scalar on the subshape JCS normal; this mirrors the checked-in
+        // ::makeMbdJointDistance(), maps basic and explicit extended DistanceTypes after
+        // AssemblyUtils.cpp::getDistanceType() has swapped the DTO. Native request-local writeback
+        // keeps the moving AssemblyLink X/Y frame and applies the user Distance scalar, not the
+        // radius-corrected ASMT scalar, on the subshape JCS normal; this mirrors the checked-in
         // FreeCADCmd expected without fixture-name routing.
         app::Placement adjusted = sourcePart.placement;
         adjusted.rotation = identityRotation();
@@ -1333,6 +1381,17 @@ std::optional<app::Placement> freeCadSubshapeDistanceWriteback(const AssemblySol
 
         if (*joint.distanceType == "LineLine") {
             adjusted.base.at(2) = sourcePart.placement.base.at(2) + distance;
+            return adjusted;
+        }
+
+        if (usesPositiveJcsDistanceWriteback(*joint.distanceType)) {
+            adjusted.base.at(2) = sourcePart.placement.base.at(2) + distance;
+            return adjusted;
+        }
+
+        if ((*joint.distanceType == "PointCylinder" || *joint.distanceType == "PointSphere")
+            && sourceIsReference1 && joint.reference1.elementKind == "Face") {
+            adjusted.base.at(2) = sourcePart.placement.base.at(2) - distance;
             return adjusted;
         }
 
@@ -1619,6 +1678,9 @@ std::optional<std::string> unsupportedReasonForOndselJoint(const JointConstraint
     if (!isSupportedOndselJointType(joint.jointType)) {
         return "unsupported_joint_type";
     }
+    if (joint.jointType == "Distance" && joint.distanceType && *joint.distanceType == "PointCurve") {
+        return "point_curve_diagnostic_boundary";
+    }
     if (joint.jointType == "Distance" && joint.distanceType && !joint.solverJointClass) {
         return joint.distanceTypeMappingStatus.empty() ? "distance_type_mapping_pending"
                                                        : joint.distanceTypeMappingStatus;
@@ -1655,6 +1717,9 @@ std::string unsupportedJointMessage(const UnsupportedAssemblyJoint& unsupported)
     }
     if (unsupported.reason == "default_boundary_not_mapped") {
         return "Ondsel solver adapter keeps default/TODO DistanceType boundary unsupported";
+    }
+    if (unsupported.reason == "point_curve_diagnostic_boundary") {
+        return "Ondsel solver adapter keeps PointCurve DistanceType diagnostic until product acceptance";
     }
     if (unsupported.reason == "distance_type_mapping_pending") {
         return "Ondsel solver adapter cannot convert Distance without a published solver_joint_class";
