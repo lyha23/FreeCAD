@@ -1,0 +1,6 @@
+id	scope	current_signal	target	status
+GEOMPLATE-SCOPE-001	source	Tools::makeSurface and GeomPlate wrappers exist	Define source-backed geometry helper scope	planned
+GEOMPLATE-SCOPE-002	constraints	CurveConstraint/PointConstraint carry order and tolerances	Implement DTO parse and diagnostics	planned
+GEOMPLATE-SCOPE-003	build	BuildPlateSurface performs and returns surface/errors	Implement build + result metadata	planned
+GEOMPLATE-SCOPE-004	oracle	Python GeomPlate API can collect expected	Collect geometry/shape expected fixtures	planned
+GEOMPLATE-SCOPE-005	publish	No GeomPlate capability yet	Publish exact geometry backend scope	planned

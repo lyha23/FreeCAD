@@ -1,0 +1,6 @@
+id	scope	target	status
+FREEZE-SCOPE-001	docs	CADCore3.0 capability docs list exact surface supported ranges	planned
+FREEZE-SCOPE-002	oracle	oracle-fixture队列 contains all surface family fixtures and statuses	planned
+FREEZE-SCOPE-003	adapter	C API capability metadata exposes surface family accurately	planned
+FREEZE-SCOPE-004	tests	Focused and stage regression pass	planned
+FREEZE-SCOPE-005	cleanup	Package-local non-goals are converted to remaining boundaries or closed	planned

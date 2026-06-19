@@ -342,6 +342,12 @@ class SketchObject(Part2DObject):
         """
         ...
 
+    def toggleExternalGeometryFlag(self, geoIds: List[int], flags: List[str], /) -> int:
+        """
+        Oracle-only wrapper for SketchObject::toggleExternalGeometryFlag.
+        """
+        ...
+
     def delExternal(self, extGeoId: int, /) -> None:
         """
         Delete an external geometry link from the sketch.

@@ -1001,6 +1001,15 @@ public:  // geometry extension functionalities for single element sketch object 
     int setGeometryId(int GeoId, long id);
     int setGeometryIds(std::vector<std::pair<int, long>> GeoIdsToIds);
     int getGeometryId(int GeoId, long& id) const;
+    // Oracle-only access for local FreeCADCmd collectors. It delegates to the protected
+    // SketchObject::toggleExternalGeometryFlag() implementation without changing its semantics.
+    int toggleExternalGeometryFlagForOracle(
+        const std::vector<int>& geoIds,
+        const std::vector<ExternalGeometryExtension::Flag>& flags
+    )
+    {
+        return toggleExternalGeometryFlag(geoIds, flags);
+    }
 
     /// Replaces geometries at `oldGeoIds` with `newGeos`, lower Ids first.
     /// If `oldGeoIds` is bigger, deletes the remaining.

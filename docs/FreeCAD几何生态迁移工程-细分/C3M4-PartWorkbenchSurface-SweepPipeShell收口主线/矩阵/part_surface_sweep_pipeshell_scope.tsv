@@ -1,0 +1,6 @@
+id	scope	current_signal	target	status
+SWEEP-SCOPE-001	source	Part::Sweep DocumentObject exists with Sections/Spine/Solid/Frenet/Transition	Implement source-backed Sweep executor	planned
+SWEEP-SCOPE-002	geometry	makeElementPipeShell uses BRepOffsetAPI_MakePipeShell	Implement spine wire plus section profiles	planned
+SWEEP-SCOPE-003	parameters	Transition and Frenet map to OCCT modes	Fixture coverage for modes	planned
+SWEEP-SCOPE-004	topo	makeElementShape consumes PipeShell maker	Preserve generated/modified history	planned
+SWEEP-SCOPE-005	publish	No explicit Part::Sweep/PipeShell capability yet	Publish precise supported range	planned

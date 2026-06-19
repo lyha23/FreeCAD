@@ -1,0 +1,7 @@
+order	queue_path	must_finish_before	status
+1	docs/FreeCAD几何生态迁移工程-细分/C3M4-PartWorkbenchSurface-RuledProjection收口主线/工作步骤细分	Loft/Sweep/Filling/GeomPlate implementation	planned-existing
+2	docs/FreeCAD几何生态迁移工程-细分/C3M4-PartWorkbenchSurface-Loft收口主线/工作步骤细分	SweepPipeShell	planned-new
+3	docs/FreeCAD几何生态迁移工程-细分/C3M4-PartWorkbenchSurface-SweepPipeShell收口主线/工作步骤细分	Filling	planned-new
+4	docs/FreeCAD几何生态迁移工程-细分/C3M4-PartWorkbenchSurface-Filling收口主线/工作步骤细分	GeomPlate	planned-new
+5	docs/FreeCAD几何生态迁移工程-细分/C3M4-PartWorkbenchSurface-GeomPlate收口主线/工作步骤细分	Family freeze	planned-new
+6	docs/FreeCAD几何生态迁移工程-细分/C3M4-PartWorkbenchSurface-Family冻结收口主线/工作步骤细分	final cad-core backend required freeze	planned-new

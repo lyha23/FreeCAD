@@ -689,6 +689,54 @@ PyObject* SketchObjectPy::delExternal(PyObject* args)
     Py_Return;
 }
 
+PyObject* SketchObjectPy::toggleExternalGeometryFlag(PyObject* args)
+{
+    PyObject* geoIdsObj = nullptr;
+    PyObject* flagsObj = nullptr;
+    if (!PyArg_ParseTuple(args, "OO", &geoIdsObj, &flagsObj)) {
+        return nullptr;
+    }
+
+    if (!PyObject_TypeCheck(geoIdsObj, &(PyList_Type))
+        && !PyObject_TypeCheck(geoIdsObj, &(PyTuple_Type))) {
+        throw Py::TypeError("geoIds must be a list or tuple of int");
+    }
+    if (!PyObject_TypeCheck(flagsObj, &(PyList_Type))
+        && !PyObject_TypeCheck(flagsObj, &(PyTuple_Type))) {
+        throw Py::TypeError("flags must be a list or tuple of ExternalGeometry flag names");
+    }
+
+    std::vector<int> geoIds;
+    Py::Sequence geoIdList(geoIdsObj);
+    for (const auto& item : geoIdList) {
+        if (!PyLong_Check(item.ptr())) {
+            throw Py::TypeError("geoIds items must be int");
+        }
+        geoIds.push_back(static_cast<int>(PyLong_AsLong(item.ptr())));
+    }
+
+    std::vector<ExternalGeometryExtension::Flag> flags;
+    Py::Sequence flagList(flagsObj);
+    for (const auto& item : flagList) {
+        if (!PyUnicode_Check(item.ptr())) {
+            throw Py::TypeError("flags items must be strings");
+        }
+        const char* flagName = PyUnicode_AsUTF8(item.ptr());
+        if (!flagName) {
+            return nullptr;
+        }
+        ExternalGeometryExtension::Flag flag;
+        if (!ExternalGeometryExtension::getFlagsFromName(flagName, flag)) {
+            PyErr_SetString(PyExc_TypeError, "Flag string does not exist.");
+            return nullptr;
+        }
+        flags.push_back(flag);
+    }
+
+    int ret = this->getSketchObjectPtr()->toggleExternalGeometryFlagForOracle(geoIds, flags);
+    return Py::new_reference_to(Py::Long(ret));
+}
+
 PyObject* SketchObjectPy::delExternals(PyObject* args)
 {
     PyObject* pcObj;

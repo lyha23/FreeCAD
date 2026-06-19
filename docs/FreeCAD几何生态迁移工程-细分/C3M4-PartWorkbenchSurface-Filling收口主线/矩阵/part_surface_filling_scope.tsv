@@ -1,0 +1,6 @@
+id	scope	current_signal	target	status
+FILLING-SCOPE-001	source	AppPartPy::makeFilledFace parses BRepFillingParams	Define request/schema and oracle path	planned
+FILLING-SCOPE-002	geometry	makeElementFilledFace uses BRepFill_Filling	Implement boundary to filled face	planned
+FILLING-SCOPE-003	diagnostics	Invalid boundaries can fail inside OCCT	Emit stable diagnostics before generic failure	planned
+FILLING-SCOPE-004	topo	Filling must preserve boundary source relation where possible	Publish subshape/history evidence	planned
+FILLING-SCOPE-005	publish	No filling capability yet	Publish exact backend filled-face scope	planned
