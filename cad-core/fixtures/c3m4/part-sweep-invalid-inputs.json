@@ -1,0 +1,195 @@
+{
+  "Objects": [
+    {
+      "Name": "PathEdgeA",
+      "ID": 1,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 0,
+        "Y2": 0,
+        "Z2": 4
+      }
+    },
+    {
+      "Name": "PathEdgeB",
+      "ID": 2,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 4,
+        "X2": 3,
+        "Y2": 0,
+        "Z2": 4
+      }
+    },
+    {
+      "Name": "DisconnectedEdge",
+      "ID": 3,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 10,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 12,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "PathWire",
+      "ID": 4,
+      "TypeId": "Part::Compound",
+      "Properties": {
+        "Links": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["PathEdgeA", "PathEdgeB"]
+        }
+      }
+    },
+    {
+      "Name": "DisconnectedWire",
+      "ID": 5,
+      "TypeId": "Part::Compound",
+      "Properties": {
+        "Links": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["PathEdgeA", "DisconnectedEdge"]
+        }
+      }
+    },
+    {
+      "Name": "Profile",
+      "ID": 6,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 0.5
+      }
+    },
+    {
+      "Name": "BoxSection",
+      "ID": 7,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 1,
+        "Width": 1,
+        "Height": 1
+      }
+    },
+    {
+      "Name": "EmptySections",
+      "ID": 8,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PathWire"
+        }
+      }
+    },
+    {
+      "Name": "MissingSpine",
+      "ID": 9,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["Profile"]
+        }
+      }
+    },
+    {
+      "Name": "InvalidSpineTarget",
+      "ID": 10,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "NoSuchPath"
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["Profile"]
+        }
+      }
+    },
+    {
+      "Name": "InvalidSpineSubList",
+      "ID": 11,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PathWire",
+          "SubList": ["Edge99"]
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["Profile"]
+        }
+      }
+    },
+    {
+      "Name": "DisconnectedSpine",
+      "ID": 12,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "DisconnectedWire"
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["Profile"]
+        },
+        "Solid": false
+      }
+    },
+    {
+      "Name": "InvalidSectionLink",
+      "ID": 13,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PathWire"
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["NoSuchProfile"]
+        }
+      }
+    },
+    {
+      "Name": "NonProfileSection",
+      "ID": 14,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PathWire"
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["BoxSection"]
+        },
+        "Solid": false
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "EmptySections",
+      "MissingSpine",
+      "InvalidSpineTarget",
+      "InvalidSpineSubList",
+      "DisconnectedSpine",
+      "InvalidSectionLink",
+      "NonProfileSection"
+    ]
+  }
+}

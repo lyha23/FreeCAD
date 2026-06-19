@@ -558,6 +558,132 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["MissingTarget"]["status"], "error")
         self.assert_object_matches_expected(result, "c3m4", "part-loft-invalid-sections")
 
+    def assert_part_sweep_history(
+        self,
+        result: dict,
+        spine: str,
+        sections: list[str],
+        *,
+        transition: str,
+        solid: bool = False,
+        frenet: bool = True,
+    ) -> None:
+        sweep = result["objects"]["Sweep"]
+        named_shape = result["named_shapes"]["Sweep"]
+        mapper_history = named_shape["mapper_history"]
+
+        self.assertEqual(sweep["status"], "ok")
+        self.assertEqual(sweep["feature"], "part_sweep")
+        self.assertEqual(sweep["spine"], spine)
+        self.assertEqual(sweep["sections"], sections)
+        self.assertEqual(sweep["solid"], solid)
+        self.assertEqual(sweep["frenet"], frenet)
+        self.assertEqual(sweep["transition"], transition)
+        self.assertEqual(sweep["linearize"], False)
+        self.assertEqual(sweep["topo_naming_history"], "maker_history:pipeshell")
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertIn("part_sweep:pipeshell_history", named_shape["element_history_status"])
+        self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
+        for source in [spine, *sections]:
+            self.assertTrue(
+                any(
+                    event["maker_stage"] == "maker_history"
+                    and event["relation"] in {"generated", "modified"}
+                    and event["source"]["object"] == source
+                    for event in mapper_history
+                ),
+                source,
+            )
+
+    def test_c3m4_part_sweep_right_corner_surface_uses_pipeshell_history(self) -> None:
+        result = self.run_recompute("part-sweep-right-corner-surface", "c3m4")
+        sweep = result["objects"]["Sweep"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sweep["shape"], "occt_shell")
+        self.assert_part_sweep_history(result, "PathWire", ["Profile"], transition="Right corner")
+        self.assert_object_matches_expected(result, "c3m4", "part-sweep-right-corner-surface")
+
+    def test_c3m4_part_sweep_solid_builds_solid_not_surface_only(self) -> None:
+        result = self.run_recompute("part-sweep-solid", "c3m4")
+        sweep = result["objects"]["Sweep"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sweep["shape"], "occt_solid")
+        self.assertGreater(sweep["volume"], 0.0)
+        self.assert_part_sweep_history(result, "PathWire", ["Profile"], transition="Right corner", solid=True)
+        self.assert_object_matches_expected(result, "c3m4", "part-sweep-solid")
+
+    def test_c3m4_part_sweep_frenet_false_routes_set_mode_false(self) -> None:
+        result = self.run_recompute("part-sweep-frenet-off", "c3m4")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assert_part_sweep_history(
+            result,
+            "PathWire",
+            ["Profile"],
+            transition="Right corner",
+            frenet=False,
+        )
+        self.assert_object_matches_expected(result, "c3m4", "part-sweep-frenet-off")
+
+    def test_c3m4_part_sweep_transition_transformed_is_expected_backed(self) -> None:
+        result = self.run_recompute("part-sweep-transition-transformed", "c3m4")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assert_part_sweep_history(result, "PathWire", ["Profile"], transition="Transformed")
+        self.assert_object_matches_expected(result, "c3m4", "part-sweep-transition-transformed")
+
+    def test_c3m4_part_sweep_transition_round_corner_is_expected_backed(self) -> None:
+        result = self.run_recompute("part-sweep-transition-round-corner", "c3m4")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assert_part_sweep_history(result, "PathWire", ["OpenProfile"], transition="Round corner")
+        self.assert_object_matches_expected(result, "c3m4", "part-sweep-transition-round-corner")
+
+    def test_c3m4_part_sweep_spine_subedges_compound_before_pipeshell(self) -> None:
+        result = self.run_recompute("part-sweep-spine-subedges", "c3m4")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assert_part_sweep_history(result, "PathSource", ["Profile"], transition="Right corner")
+        self.assert_object_matches_expected(result, "c3m4", "part-sweep-spine-subedges")
+
+    def test_c3m4_part_sweep_open_profile_surface_accepts_edge_profile(self) -> None:
+        result = self.run_recompute("part-sweep-open-profile-surface", "c3m4")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assert_part_sweep_history(result, "PathWire", ["OpenProfile"], transition="Right corner")
+        self.assert_object_matches_expected(result, "c3m4", "part-sweep-open-profile-surface")
+
+    def test_c3m4_part_sweep_invalid_inputs_have_stable_diagnostics(self) -> None:
+        result = self.run_recompute("part-sweep-invalid-inputs", "c3m4")
+        codes = [item["code"] for item in result["diagnostics"]]
+
+        self.assertEqual(
+            codes,
+            [
+                "missing_link_target",
+                "missing_link_target",
+                "missing_property",
+                "missing_property",
+                "invalid_subshape",
+                "execution_failed",
+                "execution_failed",
+            ],
+        )
+        for object_name in (
+            "EmptySections",
+            "MissingSpine",
+            "InvalidSpineSubList",
+            "DisconnectedSpine",
+            "NonProfileSection",
+        ):
+            self.assertEqual(result["objects"][object_name]["status"], "error")
+            self.assertEqual(result["objects"][object_name]["feature"], "part_sweep")
+        self.assertEqual(result["objects"]["InvalidSpineTarget"]["status"], "error")
+        self.assertEqual(result["objects"]["InvalidSectionLink"]["status"], "error")
+        self.assert_object_matches_expected(result, "c3m4", "part-sweep-invalid-inputs")
+
     def test_p8_app_link_proxies_linked_shape_with_link_placement(self) -> None:
         result = self.run_recompute("app-link-box", "p8")
         link = result["objects"]["BoxLink"]

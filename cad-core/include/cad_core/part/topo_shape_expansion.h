@@ -48,6 +48,18 @@ NamedShapeBuild makeElementLoftFromSources(
     int maxDegree
 );
 
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+// ::TopoShape::makeElementPipeShell(), first source is converted with "makeElementWires()",
+// profiles are prepared with "prepareProfiles(shapes, 1)", then BRepOffsetAPI_MakePipeShell
+// keeps Modified/Generated history for makeElementShape(mkPipeShell, shapes, op).
+NamedShapeBuild makeElementPipeShellFromSources(
+    const std::string& owner,
+    const std::vector<NamedShapeSource>& sources,
+    bool solid,
+    bool frenet,
+    int transition
+);
+
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.cpp::TopoShape::read(),
 // dispatches to "importStep", "importIges" and "importBrep"; ImportStep::execute() then stores

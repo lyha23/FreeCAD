@@ -1,0 +1,38 @@
+{
+  "bbox": {
+    "max": [
+      4.0,
+      0.6000000000000001,
+      5.6000000000000005
+    ],
+    "min": [
+      -0.6000000000000001,
+      -0.6000000000000002,
+      0.0
+    ]
+  },
+  "freecad_version": "1.2.0 revision 20260519",
+  "object": "Sweep",
+  "object_fields": {
+    "feature": "part_sweep",
+    "frenet": true,
+    "linearize": false,
+    "sections": [
+      "Profile"
+    ],
+    "shape": "occt_shell",
+    "solid": false,
+    "spine": "PathWire",
+    "status": "ok",
+    "topo_naming_history": "maker_history:pipeshell",
+    "transition": "Right corner"
+  },
+  "reference": "FreeCADCmd oracle from part-sweep-right-corner-surface.json; objects: Part::Line, Part::Line, Part::Compound, Part::RegularPolygon, Part::Sweep",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "topology_counts": {
+    "edges": 20,
+    "faces": 8,
+    "vertices": 12
+  },
+  "volume": 4.8599999999999985
+}

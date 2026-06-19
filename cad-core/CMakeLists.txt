@@ -241,6 +241,7 @@ add_library(cad-core-lib STATIC
   src/part/part_loft.cpp
   src/part/part_offset.cpp
   src/part/part_ruled_surface.cpp
+  src/part/part_sweep.cpp
   src/part/part_thickness.cpp
   src/part/primitive_feature.cpp
   src/part/property_topo_shape.cpp

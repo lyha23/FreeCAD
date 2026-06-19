@@ -43,6 +43,7 @@ SUPPORTED_NATIVE_TYPES = {
     "Part::Box",
     "Part::BooleanFragments",
     "Part::Common",
+    "Part::Compound",
     "Part::Cone",
     "Part::Cut",
     "Part::Cylinder",
@@ -64,6 +65,7 @@ SUPPORTED_NATIVE_TYPES = {
     "Part::Section",
     "Part::Sphere",
     "Part::Spiral",
+    "Part::Sweep",
     "Part::Torus",
     "Part::Vertex",
     "Part::Wedge",
@@ -2827,6 +2829,40 @@ def loft_payload(obj: Any, fixture: dict | None = None) -> dict:
     return payload
 
 
+def sweep_transition_from_properties(properties: dict[str, Any]) -> str:
+    labels = ["Transformed", "Right corner", "Round corner"]
+    value = consumer_property(properties, "Transition", "Right corner")
+    if isinstance(value, str) and value in labels:
+        return value
+    if isinstance(value, (int, float)):
+        index = int(value)
+        if 0 <= index < len(labels):
+            return labels[index]
+    return "Right corner"
+
+
+def sweep_payload(obj: Any, fixture: dict | None = None) -> dict:
+    shape = getattr(obj, "Shape", None)
+    if shape is None or shape.isNull():
+        raise UnsupportedFixture(f"target object {obj.Name} has no shape")
+    spec = fixture_spec_for_object(fixture, str(obj.Name))
+    properties = spec.get("Properties", {}) if isinstance(spec.get("Properties", {}), dict) else {}
+    payload = shape_summary(shape)
+    payload["object_fields"] = {
+        "status": "ok",
+        "shape": shape_kind(shape),
+        "feature": "part_sweep",
+        "spine": link_property_object_name(properties, "Spine"),
+        "sections": link_property_object_names(properties, "Sections"),
+        "solid": bool_from_properties(properties, "Solid", True),
+        "frenet": bool_from_properties(properties, "Frenet", True),
+        "transition": sweep_transition_from_properties(properties),
+        "linearize": bool_from_properties(properties, "Linearize", False),
+        "topo_naming_history": "maker_history:pipeshell",
+    }
+    return payload
+
+
 def object_expected_payload(obj: Any, fixture: dict | None = None, created: dict[str, Any] | None = None) -> dict:
     type_id = getattr(obj, "TypeId", "")
     if type_id == "Assembly::AssemblyLink":
@@ -2845,6 +2881,8 @@ def object_expected_payload(obj: Any, fixture: dict | None = None, created: dict
         return ruled_surface_payload(obj, fixture)
     if type_id == "Part::Loft":
         return loft_payload(obj, fixture)
+    if type_id == "Part::Sweep":
+        return sweep_payload(obj, fixture)
 
     shape = getattr(obj, "Shape", None)
     if type_id == "Mesh::Import":

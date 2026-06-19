@@ -1,0 +1,38 @@
+{
+  "bbox": {
+    "max": [
+      4.0,
+      0.3,
+      5.4
+    ],
+    "min": [
+      -0.4,
+      -0.3,
+      0.0
+    ]
+  },
+  "freecad_version": "1.2.0 revision 20260519",
+  "object": "Sweep",
+  "object_fields": {
+    "feature": "part_sweep",
+    "frenet": true,
+    "linearize": false,
+    "sections": [
+      "OpenProfile"
+    ],
+    "shape": "occt_shell",
+    "solid": false,
+    "spine": "PathWire",
+    "status": "ok",
+    "topo_naming_history": "maker_history:pipeshell",
+    "transition": "Round corner"
+  },
+  "reference": "FreeCADCmd oracle from part-sweep-transition-round-corner.json; objects: Part::Line, Part::Line, Part::Compound, Part::Line, Part::Sweep",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "topology_counts": {
+    "edges": 11,
+    "faces": 3,
+    "vertices": 8
+  },
+  "volume": -1.2452237672306226
+}

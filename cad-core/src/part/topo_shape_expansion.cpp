@@ -7,8 +7,11 @@
 #include <BRepBndLib.hxx>
 #include <BRepBuilderAPI_Copy.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
+#include <BRepBuilderAPI_TransitionMode.hxx>
 #include <BRepFill.hxx>
 #include <BRepGProp.hxx>
+#include <BRepLib.hxx>
+#include <BRepOffsetAPI_MakePipeShell.hxx>
 #include <BRepOffsetAPI_ThruSections.hxx>
 #include <BRep_Tool.hxx>
 #include <Bnd_Box.hxx>
@@ -197,17 +200,46 @@ std::optional<TopoDS_Wire> wireFromEdges(const TopoDS_Shape& shape)
     if (!wireBuilder.IsDone() || wireBuilder.Wire().IsNull()) {
         return std::nullopt;
     }
-    return wireBuilder.Wire();
+    TopoDS_Wire wire = wireBuilder.Wire();
+    BRepLib::BuildCurves3d(wire);
+    BRepLib::SameParameter(wire, Precision::Confusion(), Standard_True);
+    return wire;
+}
+
+std::optional<TopoDS_Wire> singleWireFromShape(const TopoDS_Shape& shape, std::string& error)
+{
+    if (shape.IsNull()) {
+        error = "Null input shape";
+        return std::nullopt;
+    }
+
+    if (subshapeCount(shape, TopAbs_WIRE) == 1) {
+        TopoDS_Wire wire = TopoDS::Wire(*singleSubshape(shape, TopAbs_WIRE));
+        BRepLib::BuildCurves3d(wire);
+        BRepLib::SameParameter(wire, Precision::Confusion(), Standard_True);
+        return wire;
+    }
+    if (subshapeCount(shape, TopAbs_WIRE) == 0 && subshapeCount(shape, TopAbs_EDGE) > 0) {
+        const auto wire = wireFromEdges(shape);
+        if (wire) {
+            return wire;
+        }
+    }
+
+    error = "Spine shape cannot form a single wire";
+    return std::nullopt;
 }
 
 std::optional<std::vector<TopoDS_Shape>> prepareLoftProfiles(
     const std::vector<NamedShapeSource>& sources,
-    std::string& error
+    std::string& error,
+    std::size_t offset = 0U
 )
 {
     std::vector<TopoDS_Shape> profiles;
-    profiles.reserve(sources.size());
-    for (const auto& source : sources) {
+    profiles.reserve(sources.size() > offset ? sources.size() - offset : 0U);
+    for (std::size_t sourceIndex = offset; sourceIndex < sources.size(); ++sourceIndex) {
+        const auto& source = sources[sourceIndex];
         TopoDS_Shape shape = source.shape;
         if (shape.IsNull()) {
             error = "Null input shape";
@@ -245,6 +277,20 @@ std::optional<std::vector<TopoDS_Shape>> prepareLoftProfiles(
         return std::nullopt;
     }
     return profiles;
+}
+
+BRepBuilderAPI_TransitionMode pipeShellTransitionMode(int transition)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PartFeatures.cpp
+    // ::Sweep::TransitionEnums order is "Transformed", "Right corner", "Round corner".
+    switch (transition) {
+        case 1:
+            return BRepBuilderAPI_RightCorner;
+        case 2:
+            return BRepBuilderAPI_RoundCorner;
+        default:
+            return BRepBuilderAPI_Transformed;
+    }
 }
 
 bool loftProfilesHaveSufficientSeparation(const TopoDS_Shape& left, const TopoDS_Shape& right)
@@ -494,6 +540,64 @@ NamedShapeBuild makeElementRuledSurfaceFromEdges(
             std::nullopt,
             failure.GetMessageString() != nullptr ? failure.GetMessageString()
                                                   : "Part::RuledSurface failed"
+        };
+    }
+}
+
+NamedShapeBuild makeElementPipeShellFromSources(
+    const std::string& owner,
+    const std::vector<NamedShapeSource>& sources,
+    bool solid,
+    bool frenet,
+    int transition
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementPipeShell(), requires "shapes.size() >= 2", converts the first
+    // source to a single wire, calls "SetMode(isFrenet)", "SetTransitionMode(transMode)",
+    // "Add(profile)", "IsReady()", "Build()", optional "MakeSolid()", then makeElementShape().
+    if (sources.size() < 2U) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Not enough input shapes"};
+    }
+
+    std::string error;
+    const auto spine = singleWireFromShape(sources.front().shape, error);
+    if (!spine) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, error};
+    }
+    const auto profiles = prepareLoftProfiles(sources, error, 1U);
+    if (!profiles) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, error};
+    }
+
+    try {
+        BRepOffsetAPI_MakePipeShell pipeShell(*spine);
+        pipeShell.SetMode(frenet ? Standard_True : Standard_False);
+        pipeShell.SetTransitionMode(pipeShellTransitionMode(transition));
+        for (std::size_t index = 0; index < profiles->size(); ++index) {
+            pipeShell.Add(profiles->at(index));
+        }
+
+        if (!pipeShell.IsReady()) {
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "shape is not ready to build"};
+        }
+        pipeShell.Build();
+        if (solid) {
+            pipeShell.MakeSolid();
+        }
+        if (!pipeShell.IsDone() || pipeShell.Shape().IsNull()) {
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Part::Sweep failed"};
+        }
+
+        NamedShape namedShape = namedShapeForMakerHistory(owner, pipeShell.Shape(), sources, pipeShell);
+        addDistinct(namedShape.elementHistoryStatus, "part_sweep:pipeshell_history");
+        return NamedShapeBuild {pipeShell.Shape(), std::move(namedShape), {}};
+    }
+    catch (const Standard_Failure& failure) {
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            failure.GetMessageString() != nullptr ? failure.GetMessageString() : "Part::Sweep failed"
         };
     }
 }

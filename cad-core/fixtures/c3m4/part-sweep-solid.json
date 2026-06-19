@@ -1,0 +1,72 @@
+{
+  "Objects": [
+    {
+      "Name": "PathEdgeA",
+      "ID": 1,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 0,
+        "Y2": 0,
+        "Z2": 4
+      }
+    },
+    {
+      "Name": "PathEdgeB",
+      "ID": 2,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 4,
+        "X2": 3,
+        "Y2": 0,
+        "Z2": 4
+      }
+    },
+    {
+      "Name": "PathWire",
+      "ID": 3,
+      "TypeId": "Part::Compound",
+      "Properties": {
+        "Links": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["PathEdgeA", "PathEdgeB"]
+        }
+      }
+    },
+    {
+      "Name": "Profile",
+      "ID": 4,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 0.5
+      }
+    },
+    {
+      "Name": "Sweep",
+      "ID": 5,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PathWire"
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["Profile"]
+        },
+        "Solid": true,
+        "Frenet": true,
+        "Transition": 1,
+        "Linearize": false
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Sweep"]
+  }
+}
