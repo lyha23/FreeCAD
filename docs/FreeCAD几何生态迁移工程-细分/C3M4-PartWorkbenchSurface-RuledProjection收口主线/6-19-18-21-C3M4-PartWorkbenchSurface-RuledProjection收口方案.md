@@ -4,10 +4,10 @@
 
 - 方案时间：2026-06-19。
 - 当前仓库：`/Users/li/Chili3DProject/FreeCAD`。
-- live HEAD：`a8080d9b30`（`a8080d9b30 feat: 收口PARTCONIC S5能力发布`）。
-- 脏工作区边界：当前仍有既有未暂存 `src/Mod/Sketcher/App/SketchObject.h`、`src/Mod/Sketcher/App/SketchObjectPyImp.cpp` 改动；本主线只新增 docs/矩阵/步骤方案，不暂存、不回退、不覆盖这两个 Sketcher 改动。
-- S0 live 队列结论：`step_goal_queue.py` 对 PARTCONIC `工作步骤细分` 返回空队列；对 PARTSURF `工作步骤细分` 返回 6 个 pending，起点为 `6-19-18-22-PARTSURF-S0-live基线与范围冻结.md`。
-- S0 冻结边界：本步骤只冻结 live 基线、队列起点和范围口径，不改代码、不采集 oracle、不实现 cad-core；full Part surface family 和 `Part::ProjectOnSurface` 仍不得发布为 supported。
+- S1 live HEAD：`90fba4c359`（`90fba4c359 docs: 冻结PARTSURF S0基线`）。
+- 脏工作区边界：当前仍有既有未暂存 `src/Mod/Sketcher/App/SketchObject.h`、`src/Mod/Sketcher/App/SketchObjectPyImp.cpp` 改动；S1 只更新本 PartSurface 主线 docs/矩阵/步骤文件，不暂存、不回退、不覆盖这两个 Sketcher 改动。
+- S0 已冻结边界：PARTCONIC `工作步骤细分` 队列为空；PARTSURF 队列在 S0 重命名后推进到 S1；full Part surface family 和 `Part::ProjectOnSurface` 仍不得发布为 supported。
+- S1 裁决边界：`Part::RuledSurface` 是 source-backed `DocumentObject`；cad-core 落点是 Part executor + `TopoShapeExpansion` 等价 helper + topo provenance，不是 adapter 特例。S3 第一批默认只纳入 edge/edge；wire/wire 只有在 S2 oracle/input 证明可控时才扩入；`Part::ProjectOnSurface` 只做 S4 裁决，禁止混入 S3。
 - 上一轮 PARTCONIC 已收口：`Part.Hyperbola` / `Part.Parabola` geometry wrapper 已通过 `PartConicCurveDTO` 输出有限 edge，并已验证 Hyperbola / Parabola edge 可进入 `Part::Extrusion` consumer 输出 `occt_face`。
 - 新主线定位：把 PARTCONIC 明确保留的 full Part surface family / RuledSurface / ProjectionOnSurface gap 拆成 source-backed Part Workbench surface 主线；第一实现批次优先 `Part::RuledSurface`，`Part::ProjectOnSurface` 先做源码裁决和 fixture 分批，不和 RuledSurface 直接混成一个实现任务。
 
@@ -21,25 +21,25 @@
 
 - `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PartFeatures.h::Part::RuledSurface`：声明 `Orientation`、`Curve1`、`Curve2`，并覆盖 `execute()` / `mustExecute()`。
 - `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PartFeatures.cpp::RuledSurface::RuledSurface()`：属性组为 `"Ruled Surface"`，`OrientationEnums` 为 `Automatic` / `Forward` / `Reversed`。
-- `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PartFeatures.cpp::RuledSurface::execute()`：依次读取 `Curve1` / `Curve2`，通过 `Part::Feature::getTopoShape(... ShapeOption::ResolveLink | ShapeOption::Transform)` 或 `NeedSubElement` 获取 shape，随后调用 `res.makeElementRuledSurface(shapes, Orientation.getValue())` 并写入 `Shape`。
-- `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementRuledSurface()`：要求两个输入；接受 edge / wire，非 edge/wire 时从输入提取 single wire / single edge 或 `makeElementWires()`；edge/wire 类型不一致时把 edge 转 wire。
+- `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PartFeatures.cpp::RuledSurface::execute()`：依次读取 `Curve1` / `Curve2`，通过 `Part::Feature::getTopoShape(... ShapeOption::ResolveLink | ShapeOption::Transform)` 或 `NeedSubElement` 获取 shape，错误短句包括 `"No shape linked."`、`"Not exactly one sub-shape linked."`、`"Invalid link."`，随后调用 `res.makeElementRuledSurface(shapes, Orientation.getValue())` 并写入 `Shape`。
+- `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementRuledSurface()`：要求两个输入，错误短句包括 `"Wrong number of input shapes"`、`"Null input shape"`、`"Input shape has no edge"`、`"Input shape forms more than one wire"`；接受 edge / wire，非 edge/wire 时从输入提取 single wire / single edge 或 `makeElementWires()`；edge/wire 类型不一致时把 edge 转 wire。
 - `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementRuledSurface()`：`Automatic` orientation 通过两条曲线端点附近采样和三角面法向点积判断是否反转第二条曲线；`Reversed` 直接反转第二条曲线。
 - `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementRuledSurface()`：edge 分支调用 `BRepFill::Face(Edge, Edge)`，wire 分支调用 `BRepFill::Shell(Wire, Wire)`；由于 OCCT 会修改输入边，FreeCAD 用 `findSubShapesWithSharedVertex()` 找回输出边并 `resetElementMap()`，最后 `makeShapeWithElementMap(res.getShape(), Mapper(), edges, op)`。
 - `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.h::Part::ProjectOnSurface`：声明 `Mode`、`Height`、`Offset`、`Direction`、`SupportFace`、`Projection`，并有 `createProjectedWire()`、`projectFace()`、`projectWire()`、`fixWire()`、`createFaceFromParametricWire()`、`createSolidIfHeight()` 等内部步骤。
-- `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp::ProjectOnSurface::tryExecute()`：读取 support face 与 projection shapes，按 `Direction` 投影，经过 `filterShapes()` 后写 `Shape`，并恢复原 `Placement`。
+- `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp::ProjectOnSurface::tryExecute()`：读取 support face 与 projection shapes，按 `Direction` 投影，经过 `filterShapes()` 后写 `Shape`，并恢复原 `Placement`；相关错误短句包括 `"No support face specified"`、`"Expect exactly one support face"`、`"Number of objects and sub-names differ"`。
 - `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp::ProjectOnSurface::projectWire()`：使用 `BRepProj_Projection(wire, supportFace, dir)`，取距离参考形状最近的 projected wire，再拆成 edge 输出。
-- `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp::ProjectOnSurface::projectFace()`：对 face wires 投影、`fixWire()`，再可能通过 surface parametric wire rebuild face，并在 `Height > 0 && Mode == All` 时生成 prism solid。
+- `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp::ProjectOnSurface::projectFace()`：对 face wires 投影、`fixWire()`，再可能通过 surface parametric wire rebuild face，并在 `Height > 0 && Mode == All` 时生成 prism solid；`filterShapes()` 还会按 `"All"` / `"Faces"` / `"Edges"` 改变输出集合。
 
 ## cad-core 当前落点
 
 - `cad-core/src/runtime/feature_registry.cpp` 当前注册了 `Part::Extrusion`、`Part::Offset`、`Part::Thickness`、`Part::Section`、`Part::BooleanFragments` 等 Part executor，但没有 `Part::RuledSurface` 或 `Part::ProjectOnSurface`。
-- `cad-core/include/cad_core/part/part_feature.h` 当前没有 `executePartRuledSurface()` / `executePartProjectOnSurface()` 声明；S3 第一批需要新增 source-backed executor，而不是通过 adapter 特例直接输出 shape。
+- `cad-core/include/cad_core/part/part_feature.h` 当前没有 `executePartRuledSurface()` / `executePartProjectOnSurface()` 声明；S3 第一批需要新增 source-backed `Part::RuledSurface` executor，而不是通过 adapter 特例直接输出 shape。
 - `cad-core/src/part/part_geometry_curve.cpp` 已能创建 request-local Hyperbola / Parabola edge，并有 `partGeometryCurveConsumers` 喂给 `Part::Extrusion` 的先例。RuledSurface 第一批可以复用这条 producer 证据，但不应把 surface 逻辑塞回 `part_geometry_curve.cpp`。
-- 建议新增或扩展 `cad-core/src/part/part_ruled_surface.cpp` / `cad-core/include/cad_core/part/part_ruled_surface.h`，并在需要时补 `cad-core/src/part/topo_shape_expansion.*` 的 `makeElementRuledSurface` 等价 helper。`ProjectOnSurface` 若进入实现，应另起 `part_project_on_surface.*`，不和 RuledSurface 混在一个 executor。
+- S1 裁决的 cad-core 落点：新增或扩展 `cad-core/src/part/part_ruled_surface.cpp` / `cad-core/include/cad_core/part/part_ruled_surface.h`，补 `cad-core/src/part/topo_shape_expansion.*` 或同等 Part 层 helper 承接 `makeElementRuledSurface`，并由 `cad-core/src/topo` 记录源 edge 到输出 edge/subshape 的 provenance；adapter 只做协议转换。`ProjectOnSurface` 若后续进入实现，应另起 `part_project_on_surface.*`，不和 RuledSurface 混在一个 executor。
 
 ## 最小完整语义批次
 
-第一批不追求 full Part surface family，只实现 source-backed `Part::RuledSurface` 的 edge 分支闭环：
+第一批不追求 full Part surface family，默认只实现 source-backed `Part::RuledSurface` 的 edge/edge 分支闭环：
 
 - `Part::RuledSurface` `DocumentObject` executor 注册、属性解析、`Curve1` / `Curve2` link-sub shape acquisition、`Orientation` enum 解析。
 - Edge / edge 输入输出 `TopoDS_Face`，覆盖 `Automatic`、`Forward`、`Reversed` 三种 orientation 的可验证行为。
@@ -47,11 +47,11 @@
 - Invalid link / wrong input shape / missing edge 输出稳定 diagnostics，不坠落为笼统 `execution_failed`。
 - 输出 subshape / element map 至少保护源 edge 到输出边的可追溯关系；不得靠 fixture 名、bbox、face 数量或输出端修剪猜测所有权。
 
-Wire / wire 的 `BRepFill::Shell` 分支和非 edge/wire 输入自动提取 wire 的分支先在 S1/S2 矩阵中列为 candidate。若 oracle 和 cad-core shape acquisition 已具备清晰路径，S3 可一起纳入；否则必须在 S3 文档中说明为何拆到后续批次，避免假装 full RuledSurface 已支持。
+Wire / wire 的 `BRepFill::Shell` 分支和非 edge/wire 输入自动提取 wire 的分支先在 S1/S2 矩阵中列为 candidate。S3 第一批默认不纳入 wire/wire；只有 S2 同时证明 FreeCAD oracle 可采集、cad-core input/link schema 可控、shell/topo provenance 有验收约束时才允许扩入。否则必须在 S3 文档中说明拆到后续批次，避免假装 full RuledSurface 已支持。
 
 ## ProjectionOnSurface 分批原则
 
-`Part::ProjectOnSurface` 保留在本主线内，但不作为 S3 第一实现批次。S4 必须基于 S1/S2 的源码与 fixture 结果做以下裁决：
+`Part::ProjectOnSurface` 保留在本主线内，但只做 S4 裁决，禁止混入 S3 第一实现批次。S4 必须基于 S1/S2 的源码与 fixture 结果做以下裁决：
 
 - 若只需要小批次实现，第一批仅允许 `Mode=Edges`、`Height=0`、`Offset=0`、单 edge/wire 投影到单 support face，直接对齐 `projectWire()` / `BRepProj_Projection`。
 - `Mode=Faces` / `All`、face rebuild、holes、`ShapeFix_Wire`、`createSolidIfHeight()`、offset placement、多个 projection shape 的 compound 顺序，必须单独列入后续 fixture，不得在没有 oracle 的情况下随手实现。
