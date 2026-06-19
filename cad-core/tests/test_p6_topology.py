@@ -717,3 +717,26 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(sketch["external_geometry_count"], 1)
                 self.assertEqual(sketch["external_curve_count"], 0)
                 self.assertEqual(sketch["external_point_count"], point_count)
+
+    def test_p6_complex_reference_recovery_oracles_match_freecad_expected(self) -> None:
+        for fixture in [
+            "sketch-external-edge-stable-chamfer-refine",
+            "sketch-external-edge-stable-two-sides-taper",
+        ]:
+            with self.subTest(fixture=fixture):
+                expected = self.expected_freecad("p6", fixture)
+                result = self.run_recompute(fixture, "p6")
+                sketch = result["objects"][expected["object"]]
+                flag_counts = expected["sketch_external"]["flag_counts"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assert_result_matches_expected(result, "p6", fixture)
+                self.assertEqual(
+                    sketch["external_geometry_count"],
+                    expected["sketch_external"]["construction_count"],
+                )
+                self.assertEqual(sketch["external_geometry_state_counts"]["missing"], flag_counts["Missing"])
+                self.assertEqual(sketch["external_geometry_state_counts"]["detached"], flag_counts["Detached"])
+                self.assertEqual(sketch["external_geometry_state_counts"]["frozen"], flag_counts["Frozen"])
+                self.assertEqual(sketch["external_geometry_state_counts"]["sync"], flag_counts["Sync"])
+                self.assertEqual(sketch["external_geometry_state_counts"]["defining"], flag_counts["Defining"])

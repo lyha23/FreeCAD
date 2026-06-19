@@ -27,6 +27,7 @@
 - 2026-06-17 S4 DressUp / Refine 传播专项复审已完成：`P6MH-SCOPE-003` 为 `supported`，AddSubShape slot、RefineModel 和 transformed / pattern 传播有 focused tests，完整 GUI 参数全集仍不在本主线扩大范围内。
 - 2026-06-17 S5 taper partial/full history 专项复审已完成：`P6MH-SCOPE-004` 为 `supported`，当前 object metadata / capability / tests 不再暴露 `known_gap:taper_history`；旧 P3b 文档残留已由 S6 发布回写关闭。
 - 2026-06-17 S6 发布闸门已完成：P3b、P6 和总览文档已回写到 supported 口径，当前无 C++ backendGap；复杂 split / deleted 旧引用恢复保留为 `notCollected` oracle 队列。
+- 2026-06-19 P6CR-S4 发布同步已完成：DressUp / Refine 与 two-sided taper 复杂引用恢复 oracle 由 checked-in FreeCAD expected 和 cad-core focused tests 关闭为 `supported`；ShapeFix 仍缺 expected，保留 `collectorGap` / `notCollected`；当前仍无 backendGap。
 - 本次复核只确认执行索引、分类矩阵和闸门纪律，不把 `releaseGate` / `notCollected` 直接升级为 `backendGap`，也不宣称整条 P6 主线已实现。
 
 ## 证明链条
@@ -80,4 +81,4 @@
 | non-goal registry | `矩阵/p6_maker_history_non_goal_registry.tsv` | 非目标与 reopen 条件 |
 | backend gap classification | `矩阵/p6_maker_history_backend_gap_classification.tsv` | backendGap / releaseGate 聚合 |
 
-当前 S0-S6 已完成：5 个 scope 为 `supported`，`P6MH-SCOPE-005` 保留 `notCollected`，当前无 `backendGap`。矩阵是本主线发布闸门结论；若后续要关闭复杂 split / deleted 恢复，必须先补 FreeCAD oracle 或 focused mismatch 证据。
+当前 S0-S6 已完成：5 个 scope 为 `supported`，`P6MH-SCOPE-005` 保留 `notCollected`，当前无 `backendGap`。P6CR-S4 已部分关闭复杂引用恢复 oracle：DressUp / Refine 与 two-sided taper 为 supported，ShapeFix 仍需 collector/probe expected；若后续要继续收口，必须先补 ShapeFix FreeCAD oracle 或 focused mismatch 证据。
