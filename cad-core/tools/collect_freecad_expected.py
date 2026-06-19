@@ -1449,25 +1449,78 @@ def link_sub_payload_from_fixture(value: Any) -> dict:
     }
 
 
-def fixture_reference_element(reference: dict, specs: dict[str, dict]) -> tuple[str, str]:
+def scalar_fixture_property(properties: dict, name: str, default: float = 0.0) -> float:
+    value = properties.get(name)
+    if isinstance(value, dict):
+        value = value.get("value", default)
+    if isinstance(value, (int, float)):
+        return float(value)
+    return float(default)
+
+
+def linked_fixture_spec(reference: dict, specs: dict[str, dict]) -> dict:
+    target = specs.get(str(reference.get("object", "")), {})
+    properties = target.get("Properties", {}) if isinstance(target, dict) else {}
+    if target.get("TypeId") in {"Assembly::AssemblyLink", "App::Link"}:
+        linked_object = properties.get("LinkedObject")
+        if isinstance(linked_object, dict):
+            linked_name = str(linked_object.get("value", ""))
+            return specs.get(linked_name, target)
+    return target
+
+
+def fixture_subshape_token(reference: dict) -> str:
     subnames = reference.get("subnames", [])
     subname = str(subnames[0]) if subnames else ""
-    if subname.startswith("Vertex"):
-        return "Vertex", "point"
-    if subname.startswith("Edge"):
-        return "Edge", "line"
-    if subname.startswith("Face"):
-        return "Face", "plane"
+    if "." in subname:
+        subname = subname.split(".")[-1]
+    return subname
 
-    target = specs.get(str(reference.get("object", "")), {})
+
+def fixture_reference_element(reference: dict, specs: dict[str, dict]) -> tuple[str, str, float | None, str | None]:
+    subname = fixture_subshape_token(reference)
+    target = linked_fixture_spec(reference, specs)
     type_id = str(target.get("TypeId", ""))
+    properties = target.get("Properties", {}) if isinstance(target, dict) else {}
+
+    if subname.startswith("Vertex"):
+        return "Vertex", "point", None, None
+    if subname.startswith("Edge"):
+        primitive = "curve"
+        radius = 0.0
+        if type_id in {"Part::Line", "Part::Box"}:
+            primitive = "line"
+        elif type_id in {"Part::Cylinder", "Part::Circle"}:
+            primitive = "circle"
+            radius = scalar_fixture_property(properties, "Radius")
+        elif type_id == "Part::Cone" and subname in {"Edge1", "Edge2"}:
+            primitive = "circle"
+            radius = scalar_fixture_property(properties, "Radius1")
+        return "Edge", primitive, radius, "getEdgeRadius"
+    if subname.startswith("Face"):
+        primitive = "surface"
+        radius = 0.0
+        if type_id in {"Part::Plane", "Part::Box"}:
+            primitive = "plane"
+        elif type_id == "Part::Cylinder":
+            primitive = "cylinder" if subname == "Face1" else "plane"
+            radius = scalar_fixture_property(properties, "Radius") if primitive == "cylinder" else 0.0
+        elif type_id == "Part::Sphere":
+            primitive = "sphere"
+            radius = scalar_fixture_property(properties, "Radius")
+        elif type_id == "Part::Cone":
+            primitive = "cone" if subname == "Face1" else "plane"
+        elif type_id == "Part::Torus":
+            primitive = "torus"
+        return "Face", primitive, radius, "getFaceRadius"
+
     if type_id == "Part::Vertex":
-        return "Vertex", "point"
+        return "Vertex", "point", None, None
     if type_id == "Part::Line":
-        return "Edge", "line"
+        return "Edge", "line", 0.0, "getEdgeRadius"
     if type_id == "Part::Plane":
-        return "Face", "plane"
-    return "", ""
+        return "Face", "plane", 0.0, "getFaceRadius"
+    return "", "", None, None
 
 
 def is_basic_distance_reference(reference: dict, element_kind: str, primitive: str) -> bool:
@@ -1477,12 +1530,194 @@ def is_basic_distance_reference(reference: dict, element_kind: str, primitive: s
     )
 
 
+def is_distance_reference(reference: dict, element_kind: str, primitive: str) -> bool:
+    return is_basic_distance_reference(reference, element_kind, primitive)
+
+
 def swap_solver_joint_references(solver_joint: dict) -> None:
     solver_joint["reference1"], solver_joint["reference2"] = (
         solver_joint["reference2"],
         solver_joint["reference1"],
     )
     solver_joint["jcs_swapped_for_solver"] = True
+
+
+def reference_radius(solver_joint: dict, key: str) -> float:
+    value = solver_joint.get(key, {}).get("radius")
+    if value is None:
+        value = solver_joint.get(f"{key}_radius")
+    return float(value) if isinstance(value, (int, float)) else 0.0
+
+
+def set_extended_scalar(
+    solver_joint: dict,
+    solver_joint_class: str,
+    scalar_field: str,
+    scalar_correction: float,
+    scalar_correction_source: str,
+    radius_source_side: str,
+) -> None:
+    distance = float(solver_joint.get("distance", 0.0) or 0.0)
+    solver_joint["solver_joint_class"] = solver_joint_class
+    solver_joint[scalar_field] = distance + scalar_correction
+    solver_joint["scalar_correction"] = scalar_correction
+    solver_joint["scalar_correction_source"] = scalar_correction_source
+    solver_joint["radius_source_side"] = radius_source_side
+    solver_joint["distance_type_mapping_status"] = "mapped_s4_extended"
+    solver_joint["distance_type_boundary"] = "extended_mapping_pending_s5_oracle"
+
+
+def mark_default_distance_boundary(solver_joint: dict) -> None:
+    solver_joint["scalar_correction"] = 0.0
+    solver_joint["scalar_correction_source"] = "none"
+    solver_joint["radius_source_side"] = "none"
+    solver_joint["distance_type_mapping_status"] = "default_boundary_not_mapped"
+    solver_joint["distance_type_boundary"] = "default_or_todo_boundary"
+
+
+def resolve_extended_fixture_distance_mapping(solver_joint: dict) -> bool:
+    distance_type = solver_joint.get("distance_type")
+    if distance_type == "LineCircle":
+        set_extended_scalar(
+            solver_joint,
+            "ASMTRevCylJoint",
+            "distance_ij",
+            reference_radius(solver_joint, "reference2"),
+            "getEdgeRadius(reference2)",
+            "reference2",
+        )
+    elif distance_type == "CircleCircle":
+        set_extended_scalar(
+            solver_joint,
+            "ASMTRevCylJoint",
+            "distance_ij",
+            reference_radius(solver_joint, "reference1") + reference_radius(solver_joint, "reference2"),
+            "getEdgeRadius(reference1)+getEdgeRadius(reference2)",
+            "reference1+reference2",
+        )
+    elif distance_type == "PlaneCylinder":
+        set_extended_scalar(
+            solver_joint,
+            "ASMTLineInPlaneJoint",
+            "offset",
+            reference_radius(solver_joint, "reference2"),
+            "getFaceRadius(reference2)",
+            "reference2",
+        )
+    elif distance_type == "PlaneSphere":
+        set_extended_scalar(
+            solver_joint,
+            "ASMTPointInPlaneJoint",
+            "offset",
+            reference_radius(solver_joint, "reference2"),
+            "getFaceRadius(reference2)",
+            "reference2",
+        )
+    elif distance_type == "PlaneTorus":
+        set_extended_scalar(solver_joint, "ASMTPlanarJoint", "offset", 0.0, "none", "none")
+    elif distance_type == "CylinderCylinder":
+        set_extended_scalar(
+            solver_joint,
+            "ASMTRevCylJoint",
+            "distance_ij",
+            reference_radius(solver_joint, "reference1") + reference_radius(solver_joint, "reference2"),
+            "getFaceRadius(reference1)+getFaceRadius(reference2)",
+            "reference1+reference2",
+        )
+    elif distance_type == "CylinderSphere":
+        set_extended_scalar(
+            solver_joint,
+            "ASMTCylSphJoint",
+            "distance_ij",
+            reference_radius(solver_joint, "reference1") + reference_radius(solver_joint, "reference2"),
+            "getFaceRadius(reference1)+getFaceRadius(reference2)",
+            "reference1+reference2",
+        )
+    elif distance_type == "CylinderTorus":
+        set_extended_scalar(
+            solver_joint,
+            "ASMTRevCylJoint",
+            "distance_ij",
+            reference_radius(solver_joint, "reference1") + reference_radius(solver_joint, "reference2"),
+            "getFaceRadius(reference1)+getFaceRadius(reference2)",
+            "reference1+reference2",
+        )
+    elif distance_type == "TorusTorus":
+        set_extended_scalar(solver_joint, "ASMTPlanarJoint", "offset", 0.0, "none", "none")
+    elif distance_type == "TorusSphere":
+        set_extended_scalar(
+            solver_joint,
+            "ASMTCylSphJoint",
+            "distance_ij",
+            reference_radius(solver_joint, "reference1") + reference_radius(solver_joint, "reference2"),
+            "getFaceRadius(reference1)+getFaceRadius(reference2)",
+            "reference1+reference2",
+        )
+    elif distance_type == "SphereSphere":
+        set_extended_scalar(
+            solver_joint,
+            "ASMTSphSphJoint",
+            "distance_ij",
+            reference_radius(solver_joint, "reference1") + reference_radius(solver_joint, "reference2"),
+            "getFaceRadius(reference1)+getFaceRadius(reference2)",
+            "reference1+reference2",
+        )
+    elif distance_type == "PointCylinder":
+        set_extended_scalar(
+            solver_joint,
+            "ASMTCylSphJoint",
+            "distance_ij",
+            reference_radius(solver_joint, "reference1"),
+            "getFaceRadius(reference1)",
+            "reference1",
+        )
+    elif distance_type == "PointSphere":
+        set_extended_scalar(
+            solver_joint,
+            "ASMTSphSphJoint",
+            "distance_ij",
+            reference_radius(solver_joint, "reference1"),
+            "getFaceRadius(reference1)",
+            "reference1",
+        )
+    elif distance_type == "PointCurve":
+        set_extended_scalar(solver_joint, "ASMTPointInPlaneJoint", "offset", 0.0, "none", "none")
+    else:
+        return False
+    return True
+
+
+def distance_type_is_basic(distance_type: str | None) -> bool:
+    return distance_type in {
+        "PointPoint",
+        "LineLine",
+        "PlanePlane",
+        "PointPlane",
+        "LinePlane",
+        "PointLine",
+    }
+
+
+def distance_type_is_default_boundary(distance_type: str | None) -> bool:
+    return distance_type in {
+        "PlaneCone",
+        "CylinderCone",
+        "ConeCone",
+        "ConeTorus",
+        "ConeSphere",
+        "PointCone",
+        "PointTorus",
+        "LineCylinder",
+        "LineSphere",
+        "LineCone",
+        "LineTorus",
+        "CurvePlane",
+        "CurveCylinder",
+        "CurveSphere",
+        "CurveCone",
+        "CurveTorus",
+        "Other",
+    }
 
 
 def resolve_fixture_distance_mapping(solver_joint: dict) -> None:
@@ -1516,6 +1751,10 @@ def resolve_fixture_distance_mapping(solver_joint: dict) -> None:
     elif distance_type == "LinePlane":
         solver_joint["solver_joint_class"] = "ASMTLineInPlaneJoint"
         solver_joint["offset"] = distance
+    elif resolve_extended_fixture_distance_mapping(solver_joint):
+        return
+    elif distance_type_is_default_boundary(distance_type):
+        mark_default_distance_boundary(solver_joint)
 
 
 def resolve_fixture_distance_type(solver_joint: dict, specs: dict[str, dict]) -> None:
@@ -1526,9 +1765,13 @@ def resolve_fixture_distance_type(solver_joint: dict, specs: dict[str, dict]) ->
     # ::getDistanceType(), reads Reference1/Reference2 element kind and calls "swapJCS(joint)"
     # so line or face references are first for basic point / line / plane DistanceTypes.
     for key in ("reference1", "reference2"):
-        element_kind, primitive = fixture_reference_element(solver_joint[key], specs)
+        element_kind, primitive, radius, radius_source = fixture_reference_element(solver_joint[key], specs)
         solver_joint[key]["element_kind"] = element_kind
         solver_joint[key]["primitive"] = primitive
+        if radius is not None:
+            solver_joint[key]["radius"] = radius
+        if radius_source is not None:
+            solver_joint[key]["radius_source"] = radius_source
 
     solver_joint["jcs_swapped_for_solver"] = False
     if (
@@ -1579,6 +1822,230 @@ def resolve_fixture_distance_type(solver_joint: dict, specs: dict[str, dict]) ->
         and is_basic_distance_reference(solver_joint["reference2"], "Vertex", "point")
     ):
         solver_joint["distance_type"] = "PointLine"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Edge", "line")
+        and is_distance_reference(solver_joint["reference2"], "Edge", "circle")
+    ):
+        solver_joint["distance_type"] = "LineCircle"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Edge", "circle")
+        and is_distance_reference(solver_joint["reference2"], "Edge", "line")
+    ):
+        swap_solver_joint_references(solver_joint)
+        solver_joint["distance_type"] = "LineCircle"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Edge", "circle")
+        and is_distance_reference(solver_joint["reference2"], "Edge", "circle")
+    ):
+        solver_joint["distance_type"] = "CircleCircle"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "plane")
+        and is_distance_reference(solver_joint["reference2"], "Face", "cylinder")
+    ):
+        solver_joint["distance_type"] = "PlaneCylinder"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "cylinder")
+        and is_distance_reference(solver_joint["reference2"], "Face", "plane")
+    ):
+        swap_solver_joint_references(solver_joint)
+        solver_joint["distance_type"] = "PlaneCylinder"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "plane")
+        and is_distance_reference(solver_joint["reference2"], "Face", "sphere")
+    ):
+        solver_joint["distance_type"] = "PlaneSphere"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "sphere")
+        and is_distance_reference(solver_joint["reference2"], "Face", "plane")
+    ):
+        swap_solver_joint_references(solver_joint)
+        solver_joint["distance_type"] = "PlaneSphere"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "plane")
+        and is_distance_reference(solver_joint["reference2"], "Face", "cone")
+    ):
+        solver_joint["distance_type"] = "PlaneCone"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "cone")
+        and is_distance_reference(solver_joint["reference2"], "Face", "plane")
+    ):
+        swap_solver_joint_references(solver_joint)
+        solver_joint["distance_type"] = "PlaneCone"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "plane")
+        and is_distance_reference(solver_joint["reference2"], "Face", "torus")
+    ):
+        solver_joint["distance_type"] = "PlaneTorus"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "torus")
+        and is_distance_reference(solver_joint["reference2"], "Face", "plane")
+    ):
+        swap_solver_joint_references(solver_joint)
+        solver_joint["distance_type"] = "PlaneTorus"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "cylinder")
+        and is_distance_reference(solver_joint["reference2"], "Face", "cylinder")
+    ):
+        solver_joint["distance_type"] = "CylinderCylinder"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "cylinder")
+        and is_distance_reference(solver_joint["reference2"], "Face", "sphere")
+    ):
+        solver_joint["distance_type"] = "CylinderSphere"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "sphere")
+        and is_distance_reference(solver_joint["reference2"], "Face", "cylinder")
+    ):
+        swap_solver_joint_references(solver_joint)
+        solver_joint["distance_type"] = "CylinderSphere"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "cylinder")
+        and is_distance_reference(solver_joint["reference2"], "Face", "cone")
+    ):
+        solver_joint["distance_type"] = "CylinderCone"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "cone")
+        and is_distance_reference(solver_joint["reference2"], "Face", "cylinder")
+    ):
+        swap_solver_joint_references(solver_joint)
+        solver_joint["distance_type"] = "CylinderCone"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "cylinder")
+        and is_distance_reference(solver_joint["reference2"], "Face", "torus")
+    ):
+        solver_joint["distance_type"] = "CylinderTorus"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "torus")
+        and is_distance_reference(solver_joint["reference2"], "Face", "cylinder")
+    ):
+        swap_solver_joint_references(solver_joint)
+        solver_joint["distance_type"] = "CylinderTorus"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "cone")
+        and is_distance_reference(solver_joint["reference2"], "Face", "cone")
+    ):
+        solver_joint["distance_type"] = "ConeCone"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "cone")
+        and is_distance_reference(solver_joint["reference2"], "Face", "torus")
+    ):
+        solver_joint["distance_type"] = "ConeTorus"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "torus")
+        and is_distance_reference(solver_joint["reference2"], "Face", "cone")
+    ):
+        swap_solver_joint_references(solver_joint)
+        solver_joint["distance_type"] = "ConeTorus"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "cone")
+        and is_distance_reference(solver_joint["reference2"], "Face", "sphere")
+    ):
+        solver_joint["distance_type"] = "ConeSphere"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "sphere")
+        and is_distance_reference(solver_joint["reference2"], "Face", "cone")
+    ):
+        swap_solver_joint_references(solver_joint)
+        solver_joint["distance_type"] = "ConeSphere"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "torus")
+        and is_distance_reference(solver_joint["reference2"], "Face", "torus")
+    ):
+        solver_joint["distance_type"] = "TorusTorus"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "torus")
+        and is_distance_reference(solver_joint["reference2"], "Face", "sphere")
+    ):
+        solver_joint["distance_type"] = "TorusSphere"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "sphere")
+        and is_distance_reference(solver_joint["reference2"], "Face", "torus")
+    ):
+        swap_solver_joint_references(solver_joint)
+        solver_joint["distance_type"] = "TorusSphere"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Face", "sphere")
+        and is_distance_reference(solver_joint["reference2"], "Face", "sphere")
+    ):
+        solver_joint["distance_type"] = "SphereSphere"
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Vertex", "point")
+        and solver_joint["reference2"].get("element_kind") == "Face"
+    ):
+        swap_solver_joint_references(solver_joint)
+        solver_joint["distance_type"] = {
+            "cylinder": "PointCylinder",
+            "sphere": "PointSphere",
+            "cone": "PointCone",
+            "torus": "PointTorus",
+        }.get(solver_joint["reference1"].get("primitive"), "Other")
+    elif (
+        solver_joint["reference1"].get("element_kind") == "Face"
+        and is_distance_reference(solver_joint["reference2"], "Vertex", "point")
+    ):
+        solver_joint["distance_type"] = {
+            "cylinder": "PointCylinder",
+            "sphere": "PointSphere",
+            "cone": "PointCone",
+            "torus": "PointTorus",
+        }.get(solver_joint["reference1"].get("primitive"), "Other")
+    elif (
+        solver_joint["reference1"].get("element_kind") == "Edge"
+        and solver_joint["reference2"].get("element_kind") == "Face"
+    ):
+        swap_solver_joint_references(solver_joint)
+        primitive = solver_joint["reference1"].get("primitive")
+        edge_primitive = solver_joint["reference2"].get("primitive")
+        solver_joint["distance_type"] = {
+            (True, "cylinder"): "LineCylinder",
+            (True, "sphere"): "LineSphere",
+            (True, "cone"): "LineCone",
+            (True, "torus"): "LineTorus",
+            (False, "plane"): "CurvePlane",
+            (False, "cylinder"): "CurveCylinder",
+            (False, "sphere"): "CurveSphere",
+            (False, "cone"): "CurveCone",
+            (False, "torus"): "CurveTorus",
+        }.get((edge_primitive == "line", primitive), "Other")
+    elif (
+        solver_joint["reference1"].get("element_kind") == "Face"
+        and solver_joint["reference2"].get("element_kind") == "Edge"
+    ):
+        primitive = solver_joint["reference1"].get("primitive")
+        edge_primitive = solver_joint["reference2"].get("primitive")
+        solver_joint["distance_type"] = {
+            (True, "cylinder"): "LineCylinder",
+            (True, "sphere"): "LineSphere",
+            (True, "cone"): "LineCone",
+            (True, "torus"): "LineTorus",
+            (False, "plane"): "CurvePlane",
+            (False, "cylinder"): "CurveCylinder",
+            (False, "sphere"): "CurveSphere",
+            (False, "cone"): "CurveCone",
+            (False, "torus"): "CurveTorus",
+        }.get((edge_primitive == "line", primitive), "Other")
+    elif (
+        is_distance_reference(solver_joint["reference1"], "Vertex", "point")
+        and solver_joint["reference2"].get("element_kind") == "Edge"
+    ):
+        swap_solver_joint_references(solver_joint)
+        solver_joint["distance_type"] = (
+            "PointLine" if solver_joint["reference1"].get("primitive") == "line" else "PointCurve"
+        )
+    elif (
+        solver_joint["reference1"].get("element_kind") == "Edge"
+        and is_distance_reference(solver_joint["reference2"], "Vertex", "point")
+    ):
+        solver_joint["distance_type"] = (
+            "PointLine" if solver_joint["reference1"].get("primitive") == "line" else "PointCurve"
+        )
+    elif (
+        solver_joint["reference1"].get("element_kind") == "Edge"
+        and solver_joint["reference2"].get("element_kind") == "Edge"
+    ):
+        if solver_joint["reference1"].get("primitive") != "line" and solver_joint["reference2"].get("primitive") == "line":
+            swap_solver_joint_references(solver_joint)
+        solver_joint["distance_type"] = "Other"
 
     if "distance_type" not in solver_joint:
         for key in ("reference1", "reference2"):
@@ -1587,10 +2054,16 @@ def resolve_fixture_distance_type(solver_joint: dict, specs: dict[str, dict]) ->
         solver_joint.pop("jcs_swapped_for_solver", None)
         return
 
-    solver_joint["reference1_element_kind"] = solver_joint["reference1"].pop("element_kind")
-    solver_joint["reference1_primitive"] = solver_joint["reference1"].pop("primitive")
-    solver_joint["reference2_element_kind"] = solver_joint["reference2"].pop("element_kind")
-    solver_joint["reference2_primitive"] = solver_joint["reference2"].pop("primitive")
+    include_radius_evidence = not distance_type_is_basic(solver_joint.get("distance_type"))
+    for side in ("reference1", "reference2"):
+        solver_joint[f"{side}_element_kind"] = solver_joint[side].pop("element_kind")
+        solver_joint[f"{side}_primitive"] = solver_joint[side].pop("primitive")
+        radius = solver_joint[side].pop("radius", None)
+        radius_source = solver_joint[side].pop("radius_source", None)
+        if include_radius_evidence and radius is not None:
+            solver_joint[f"{side}_radius"] = float(radius)
+        if include_radius_evidence and radius_source is not None:
+            solver_joint[f"{side}_radius_source"] = radius_source
     resolve_fixture_distance_mapping(solver_joint)
 
 
@@ -2169,6 +2642,98 @@ def payload_requires_marker_parity(payload: dict) -> bool:
     return False
 
 
+def solver_distance_types_from_payload(payload: dict) -> set[str]:
+    distance_types: set[str] = set()
+    summaries = list(payload.get("objects", {}).values())
+    if "solver_adapter" in payload:
+        summaries.append(payload)
+    for summary in summaries:
+        for solver_joint in summary.get("solver_adapter", {}).get("solver_joints", []):
+            if solver_joint.get("joint_type") != "Distance":
+                continue
+            distance_type = solver_joint.get("distance_type")
+            if isinstance(distance_type, str):
+                distance_types.add(distance_type)
+    return distance_types
+
+
+def distance_type_gap_metadata(payload: dict) -> dict[str, Any] | None:
+    distance_types = solver_distance_types_from_payload(payload)
+    if not distance_types:
+        return None
+
+    mapped_extended = distance_types & {
+        "LineCircle",
+        "CircleCircle",
+        "PlaneCylinder",
+        "PlaneSphere",
+        "PlaneTorus",
+        "CylinderCylinder",
+        "CylinderSphere",
+        "CylinderTorus",
+        "TorusTorus",
+        "TorusSphere",
+        "SphereSphere",
+        "PointCylinder",
+        "PointSphere",
+        "PointCurve",
+    }
+    default_boundary = {item for item in distance_types if distance_type_is_default_boundary(item)}
+    if default_boundary:
+        return {
+            "known_gap": (
+                "DTE-BLOCK-006/DTE-NG-003: native FreeCAD default/TODO DistanceType "
+                f"oracle collected for diagnostic review only ({', '.join(sorted(default_boundary))}); "
+                "cad-core must keep default_boundary_not_mapped out of supported capability until "
+                "S6 or a later product decision explicitly reopens this boundary."
+            ),
+            "nonGoal": {
+                "ids": ["DTE-NG-003"],
+                "delete_condition": (
+                    "A later DistanceType scope update accepts the FreeCAD default/TODO behavior, "
+                    "cad-core implements the reopened case with focused tests, and capability docs "
+                    "publish it explicitly instead of inheriting default support."
+                ),
+            },
+        }
+    if mapped_extended:
+        ids = ["DTE-BLOCK-007"]
+        if mapped_extended & {"LineCircle", "CircleCircle"}:
+            ids.append("DTE-BLOCK-003")
+        if mapped_extended & {
+            "PlaneCylinder",
+            "PlaneSphere",
+            "CylinderCylinder",
+            "CylinderSphere",
+            "PointCylinder",
+            "PointSphere",
+        }:
+            ids.append("DTE-BLOCK-004")
+        if mapped_extended & {"PlaneTorus", "CylinderTorus", "TorusTorus", "TorusSphere", "SphereSphere"}:
+            ids.append("DTE-BLOCK-005")
+        if mapped_extended & {"PointCurve"}:
+            ids.append("DTE-BLOCK-006")
+        if payload_requires_marker_parity(payload):
+            ids.extend(["MP-BLOCK-002", "MP-BLOCK-003", "MP-BLOCK-006"])
+        return {
+            "known_gap": (
+                "DTE-S5 native extended DistanceType oracle is checked in "
+                f"({', '.join(sorted(mapped_extended))}), but cad-core has not completed the "
+                "S6 publication/parity gate for this expected file; delete after the listed "
+                "blockers are closed and focused expected parity passes."
+            ),
+            "backendGap": {
+                "ids": sorted(dict.fromkeys(ids)),
+                "delete_condition": (
+                    "S6 keeps this case in the supported subset, cad-core resolves the same "
+                    "DistanceType ASMT class/scalar and any required marker placement, and "
+                    "CadCoreExpectedFixtureTest passes without skipping this expected file."
+                ),
+            },
+        }
+    return None
+
+
 def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = None) -> dict:
     import FreeCAD  # type: ignore
 
@@ -2201,7 +2766,10 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
             payload.update(summary)
         else:
             payload["objects"] = object_payloads
-        if payload_requires_marker_parity(payload):
+        distance_type_gap = distance_type_gap_metadata(payload)
+        if distance_type_gap is not None:
+            payload.update(distance_type_gap)
+        elif payload_requires_marker_parity(payload):
             payload["known_gap"] = (
                 "MP-BLOCK-002/003/006: S4 native marker oracle is checked in, but current "
                 "cad-core S3 resolver still withholds subshape markerPlacement and the real "

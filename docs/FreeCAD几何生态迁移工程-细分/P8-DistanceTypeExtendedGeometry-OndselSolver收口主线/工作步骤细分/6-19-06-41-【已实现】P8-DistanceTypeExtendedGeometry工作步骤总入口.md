@@ -15,7 +15,7 @@
 | S2 | `6-19-06-44-【已实现】P8-DistanceTypeExtendedGeometry-S2-范围准入与blocker矩阵.md` | 已实现 | 已冻结 remaining cases 的 implementation batch、oracle-first、default/TODO boundary、nonGoal 和 blocker ownership |
 | S3 | `6-19-06-45-【已实现】P8-DistanceTypeExtendedGeometry-S3-RadiusPrimitive证据专项复审.md` | 已实现 | 已补 DTO / JSON radius evidence、primitive resolver、scalar correction 和 boundary evidence |
 | S4 | `6-19-06-46-【已实现】P8-DistanceTypeExtendedGeometry-S4-OndselDistanceJoint扩展映射专项复审.md` | 已实现 | 已裁决显式 extended cases 的 ASMT class、`distanceIJ` / `offset`，并保持 default branch unmapped |
-| S5 | `6-19-06-47-P8-DistanceTypeExtendedGeometry-S5-NativeOracle与代表fixture专项复审.md` | 待执行 | 批量采集 FreeCADCmd expected，并把 supported / diagnostic / nonGoal 固化 |
+| S5 | `6-19-06-47-【已实现】P8-DistanceTypeExtendedGeometry-S5-NativeOracle与代表fixture专项复审.md` | 已实现 | 已批量采集 FreeCADCmd expected，并把 supported-candidate / diagnostic / nonGoal 固化 |
 | S6 | `6-19-06-48-P8-DistanceTypeExtendedGeometry-S6-实现与发布闸门.md` | 待执行 | 落 C++、fixtures、focused tests、capability/docs 和矩阵回写 |
 
 ## 执行顺序
@@ -34,9 +34,9 @@
 | --- | --- | --- |
 | `p8_distance_type_extended_geometry_source_candidates.tsv` | FreeCAD / cad-core source authority | S1 已复核完整 source authority，可作为 S2-S6 后续依据 |
 | `p8_distance_type_extended_geometry_scope_review_matrix.tsv` | 范围分类 | S2 已冻结显式 switch / radius / torus / point-curve 主批次和 default / curve boundary |
-| `p8_distance_type_extended_geometry_blocker_queue.tsv` | 可执行 blocker | S2 已消费 enum 覆盖 blocker，S3 已消费 DTO evidence blocker，S4 已完成 ASMT mapping；S5-S6 blocker 仍 open |
-| `p8_distance_type_extended_geometry_backend_gap_classification.tsv` | gap 聚合 | S2 已冻结 notCollected / oracleFirst / releaseGate 口径，backendGap 必须等 oracle 和 mismatch 同时存在 |
-| `p8_distance_type_extended_geometry_non_goal_registry.tsv` | 非目标和 reopen 条件 | S2 已补 default/TODO boundary 和单 fixture 缩批禁令；GUI/session、persistent solver state、unsupported default claim 等不得发布 |
+| `p8_distance_type_extended_geometry_blocker_queue.tsv` | 可执行 blocker | S5 已关闭 native oracle 采集部分；S6 publication gate 仍 open |
+| `p8_distance_type_extended_geometry_backend_gap_classification.tsv` | gap 聚合 | S5 已把 mapped extended expected 记录为 known_gap，把 default/TODO representative 记录为 nonGoal diagnostic |
+| `p8_distance_type_extended_geometry_non_goal_registry.tsv` | 非目标和 reopen 条件 | S5 已补 default/TODO representative expected；GUI/session、persistent solver state、unsupported default claim 等仍不得发布 |
 
 ## 通用验收
 

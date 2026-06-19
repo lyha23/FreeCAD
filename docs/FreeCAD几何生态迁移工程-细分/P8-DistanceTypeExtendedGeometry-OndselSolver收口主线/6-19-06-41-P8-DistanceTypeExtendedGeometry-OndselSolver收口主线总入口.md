@@ -65,7 +65,7 @@
 | S2 范围准入 | `工作步骤细分/6-19-06-44-【已实现】P8-DistanceTypeExtendedGeometry-S2-范围准入与blocker矩阵.md` | 已完成：冻结 supportedCandidate / oracleFirst / defaultBoundary / nonGoal 边界和 blocker ownership |
 | S3 radius / primitive | `工作步骤细分/6-19-06-45-【已实现】P8-DistanceTypeExtendedGeometry-S3-RadiusPrimitive证据专项复审.md` | 已完成：DTO / primitive / radius / scalar correction / boundary evidence，不进入 ASMT 发布 |
 | S4 ASMT mapping | `工作步骤细分/6-19-06-46-【已实现】P8-DistanceTypeExtendedGeometry-S4-OndselDistanceJoint扩展映射专项复审.md` | 已完成：显式 extended cases 的 ASMT class 与 scalar field 已映射，S5 oracle 仍是 parity 闸门 |
-| S5 oracle / fixtures | `工作步骤细分/6-19-06-47-P8-DistanceTypeExtendedGeometry-S5-NativeOracle与代表fixture专项复审.md` | 批量采集 expected，锁定 supported / diagnostic / nonGoal |
+| S5 oracle / fixtures | `工作步骤细分/6-19-06-47-【已实现】P8-DistanceTypeExtendedGeometry-S5-NativeOracle与代表fixture专项复审.md` | 已完成：批量采集 expected，锁定 supported-candidate / diagnostic / nonGoal |
 | S6 实现发布 | `工作步骤细分/6-19-06-48-P8-DistanceTypeExtendedGeometry-S6-实现与发布闸门.md` | 落 C++、fixtures、tests、capability/docs，并关闭 queue |
 | source candidates | `矩阵/p8_distance_type_extended_geometry_source_candidates.tsv` | FreeCAD / cad-core 候选证据 |
 | scope review | `矩阵/p8_distance_type_extended_geometry_scope_review_matrix.tsv` | scope 状态和验收路由 |
@@ -75,7 +75,7 @@
 
 ## 当前执行建议
 
-下一轮用 `goal-step-runner` 刷新 `工作步骤细分/` 队列；已校验的 `工作步骤细分/6-19-06-41-【已实现】P8-DistanceTypeExtendedGeometry工作步骤总入口.md`、S0、S1、S2、S3 和 S4 会被跳过，当前应从 S5 native oracle 开始。S5 继续补 oracle / fixture 证据；S6 才进入 capability 发布。
+下一轮用 `goal-step-runner` 刷新 `工作步骤细分/` 队列；已校验的 `工作步骤细分/6-19-06-41-【已实现】P8-DistanceTypeExtendedGeometry工作步骤总入口.md`、S0、S1、S2、S3、S4 和 S5 会被跳过，当前应从 S6 实现与发布闸门开始。S6 才进入 capability 发布。
 
 ## 非目标
 

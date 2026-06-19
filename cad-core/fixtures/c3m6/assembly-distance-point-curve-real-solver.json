@@ -1,0 +1,13 @@
+{
+  "Objects": [
+    {"Name": "PointA", "ID": 1, "TypeId": "Part::Vertex", "Properties": {"X": 0, "Y": 0, "Z": 0}},
+    {"Name": "EllipseB", "ID": 2, "TypeId": "Part::Ellipse", "Properties": {"MajorRadius": 4, "MinorRadius": 2, "Angle1": 0, "Angle2": 360}},
+    {"Name": "ComponentA", "ID": 3, "TypeId": "Assembly::AssemblyLink", "Properties": {"LinkedObject": {"PropertyType": "App::PropertyXLink", "value": "PointA"}, "Rigid": true}},
+    {"Name": "ComponentB", "ID": 4, "TypeId": "Assembly::AssemblyLink", "Properties": {"LinkedObject": {"PropertyType": "App::PropertyXLink", "value": "EllipseB"}, "Rigid": true, "Placement": {"PropertyType": "App::PropertyPlacement", "Base": [6, 0, 0], "Rotation": [0, 0, 0, 1]}}},
+    {"Name": "GroundedJoint", "ID": 5, "TypeId": "App::FeaturePython", "Properties": {"ObjectToGround": {"PropertyType": "App::PropertyLinkGlobal", "value": "ComponentA"}}},
+    {"Name": "DistanceJoint", "ID": 6, "TypeId": "App::FeaturePython", "Properties": {"JointType": {"PropertyType": "App::PropertyEnumeration", "value": "Distance"}, "Distance": {"PropertyType": "App::PropertyFloat", "value": 1.5}, "Reference1": {"PropertyType": "App::PropertyXLinkSub", "value": "ComponentA", "SubList": ["Vertex1"]}, "Reference2": {"PropertyType": "App::PropertyXLinkSub", "value": "ComponentB", "SubList": ["Edge1"]}}},
+    {"Name": "Joints", "ID": 7, "TypeId": "Assembly::JointGroup", "Properties": {"Group": {"PropertyType": "App::PropertyLinkList", "values": ["GroundedJoint", "DistanceJoint"]}}},
+    {"Name": "Assembly", "ID": 8, "TypeId": "Assembly::AssemblyObject", "Properties": {"Group": {"PropertyType": "App::PropertyLinkList", "values": ["ComponentA", "ComponentB", "Joints"]}}}
+  ],
+  "recompute": {"objs": ["Assembly"]}
+}

@@ -1753,6 +1753,112 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 ):
                     self.assertEqual(actual_joint[key], expected_joint[key])
 
+    def test_c3m6_assembly_distance_type_s5_expected_batch_records_known_boundaries(self) -> None:
+        mapped_cases = {
+            "assembly-distance-line-circle-real-solver": ("LineCircle", "ASMTRevCylJoint", "distance_ij", 3.75),
+            "assembly-distance-circle-circle-real-solver": ("CircleCircle", "ASMTRevCylJoint", "distance_ij", 5.5),
+            "assembly-distance-plane-cylinder-real-solver": ("PlaneCylinder", "ASMTLineInPlaneJoint", "offset", 5.0),
+            "assembly-distance-plane-sphere-real-solver": ("PlaneSphere", "ASMTPointInPlaneJoint", "offset", 6.0),
+            "assembly-distance-cylinder-cylinder-real-solver": (
+                "CylinderCylinder",
+                "ASMTRevCylJoint",
+                "distance_ij",
+                6.25,
+            ),
+            "assembly-distance-cylinder-sphere-real-solver": (
+                "CylinderSphere",
+                "ASMTCylSphJoint",
+                "distance_ij",
+                9.5,
+            ),
+            "assembly-distance-point-cylinder-real-solver": (
+                "PointCylinder",
+                "ASMTCylSphJoint",
+                "distance_ij",
+                5.0,
+            ),
+            "assembly-distance-point-sphere-real-solver": (
+                "PointSphere",
+                "ASMTSphSphJoint",
+                "distance_ij",
+                6.0,
+            ),
+            "assembly-distance-plane-torus-real-solver": ("PlaneTorus", "ASMTPlanarJoint", "offset", 1.5),
+            "assembly-distance-cylinder-torus-real-solver": (
+                "CylinderTorus",
+                "ASMTRevCylJoint",
+                "distance_ij",
+                5.0,
+            ),
+            "assembly-distance-torus-torus-real-solver": ("TorusTorus", "ASMTPlanarJoint", "offset", 1.5),
+            "assembly-distance-torus-sphere-real-solver": (
+                "TorusSphere",
+                "ASMTCylSphJoint",
+                "distance_ij",
+                6.0,
+            ),
+            "assembly-distance-sphere-sphere-real-solver": (
+                "SphereSphere",
+                "ASMTSphSphJoint",
+                "distance_ij",
+                8.0,
+            ),
+            "assembly-distance-point-curve-real-solver": ("PointCurve", "ASMTPointInPlaneJoint", "offset", 1.5),
+        }
+        default_cases = {
+            "assembly-distance-plane-cone-default-boundary": "PlaneCone",
+            "assembly-distance-line-cylinder-default-boundary": "LineCylinder",
+            "assembly-distance-curve-plane-default-boundary": "CurvePlane",
+            "assembly-distance-other-default-boundary": "Other",
+        }
+
+        for fixture, (distance_type, solver_class, scalar_field, scalar_value) in mapped_cases.items():
+            with self.subTest(fixture=fixture):
+                expected = self.expected_freecad("c3m6", fixture)
+                expected_joint = expected["solver_adapter"]["solver_joints"][0]
+                result = self.run_recompute(fixture, "c3m6")
+                actual_joint = result["objects"]["Assembly"]["solver_adapter"]["solver_joints"][0]
+
+                self.assertIn("known_gap", expected)
+                self.assertIn("delete_condition", expected["backendGap"])
+                self.assertIn("DTE-BLOCK-007", expected["backendGap"]["ids"])
+                self.assertEqual(expected_joint["distance_type"], distance_type)
+                self.assertEqual(expected_joint["solver_joint_class"], solver_class)
+                self.assertAlmostEqual(expected_joint[scalar_field], scalar_value)
+                self.assertEqual(expected_joint["distance_type_mapping_status"], "mapped_s4_extended")
+                self.assertEqual(expected_joint["distance_type_boundary"], "extended_mapping_pending_s5_oracle")
+
+                self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_assembly_solver"])
+                self.assertEqual(actual_joint["distance_type"], distance_type)
+                self.assertEqual(actual_joint["solver_joint_class"], solver_class)
+                self.assertAlmostEqual(actual_joint[scalar_field], scalar_value)
+                self.assertEqual(
+                    result["objects"]["Assembly"]["solver_adapter"]["unsupported_joints"][0]["reason"],
+                    "missing_marker_placement",
+                )
+
+        for fixture, distance_type in default_cases.items():
+            with self.subTest(fixture=fixture):
+                expected = self.expected_freecad("c3m6", fixture)
+                expected_joint = expected["solver_adapter"]["solver_joints"][0]
+                result = self.run_recompute(fixture, "c3m6")
+                actual_joint = result["objects"]["Assembly"]["solver_adapter"]["solver_joints"][0]
+
+                self.assertIn("known_gap", expected)
+                self.assertIn("delete_condition", expected["nonGoal"])
+                self.assertNotIn("backendGap", expected)
+                self.assertEqual(expected["nonGoal"]["ids"], ["DTE-NG-003"])
+                self.assertEqual(expected_joint["distance_type"], distance_type)
+                self.assertEqual(expected_joint["distance_type_mapping_status"], "default_boundary_not_mapped")
+                self.assertEqual(expected_joint["distance_type_boundary"], "default_or_todo_boundary")
+                self.assertNotIn("solver_joint_class", expected_joint)
+                self.assertEqual(actual_joint["distance_type"], distance_type)
+                self.assertEqual(actual_joint["distance_type_mapping_status"], "default_boundary_not_mapped")
+                self.assertEqual(
+                    result["objects"]["Assembly"]["solver_adapter"]["unsupported_joints"][0]["reason"],
+                    "default_boundary_not_mapped",
+                )
+
     def test_c3m6_assembly_distance_type_reference_classification_exposes_solver_dto(self) -> None:
         point_a = {
             "object": "PointA",
