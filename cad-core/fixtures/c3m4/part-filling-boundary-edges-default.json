@@ -1,0 +1,33 @@
+{
+  "Objects": [
+    {
+      "Name": "Profile",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 2
+      }
+    },
+    {
+      "Name": "FilledFace",
+      "ID": 2,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Profile",
+              "SubList": ["Edge1", "Edge2", "Edge3", "Edge4"],
+              "StableSubList": ["Edge1", "Edge2", "Edge3", "Edge4"]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["FilledFace"]
+  }
+}

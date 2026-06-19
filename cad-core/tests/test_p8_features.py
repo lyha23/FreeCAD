@@ -684,6 +684,89 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["InvalidSectionLink"]["status"], "error")
         self.assert_object_matches_expected(result, "c3m4", "part-sweep-invalid-inputs")
 
+    def assert_part_filling_history(self, result: dict, boundary_mode: str) -> None:
+        filled = result["objects"]["FilledFace"]
+        named_shape = result["named_shapes"]["FilledFace"]
+        mapper_history = named_shape["mapper_history"]
+
+        self.assertEqual(filled["status"], "ok")
+        self.assertEqual(filled["feature"], "part_filled_face")
+        self.assertEqual(filled["helper"], "Part.makeFilledFace")
+        self.assertTrue(filled["source_backed_helper"])
+        self.assertFalse(filled["freecad_native_document_object"])
+        self.assertEqual(filled["shape"], "occt_face")
+        self.assertEqual(filled["boundary_mode"], boundary_mode)
+        self.assertEqual(filled["boundary_edge_count"], 4)
+        self.assertEqual(filled["topo_naming_history"], "maker_history:filling")
+        self.assertEqual(filled["default_params"]["degree"], 3)
+        self.assertEqual(filled["default_params"]["points_on_curve"], 15)
+        self.assertEqual(filled["default_params"]["iterations"], 2)
+        self.assertEqual(filled["default_params"]["max_degree"], 8)
+        self.assertEqual(filled["default_params"]["max_segments"], 9)
+
+        evidence = filled["boundary_source_evidence"]
+        self.assertEqual({item["object"] for item in evidence}, {"Profile"})
+        self.assertEqual({item["stable_subname"] for item in evidence}, {"Edge1", "Edge2", "Edge3", "Edge4"})
+        self.assertEqual({item["shape_kind"] for item in evidence}, {"edge"})
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertIn("part_filling:filling_history", named_shape["element_history_status"])
+        self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
+        for edge in ("Edge1", "Edge2", "Edge3", "Edge4"):
+            self.assertEqual(named_shape["element_map"][f"Profile.{edge}"], edge)
+            self.assertTrue(
+                any(
+                    event["maker_stage"] == "maker_history:filling_boundary"
+                    and event["diagnostic_status"] == "filling_boundary_source"
+                    and event["source"] == {"object": "Profile", "subname": edge}
+                    and event["target"] == {"object": "FilledFace", "subname": "Face1"}
+                    for event in mapper_history
+                ),
+                edge,
+            )
+
+    def test_c3m4_part_filling_closed_wire_default_is_helper_expected_backed(self) -> None:
+        result = self.run_recompute("part-filling-closed-wire-default", "c3m4")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assert_part_filling_history(result, "closed_wire")
+        self.assert_object_matches_expected(result, "c3m4", "part-filling-closed-wire-default")
+
+    def test_c3m4_part_filling_boundary_edges_default_builds_edge_wire(self) -> None:
+        result = self.run_recompute("part-filling-boundary-edges-default", "c3m4")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assert_part_filling_history(result, "edge_wire_closed")
+        self.assert_object_matches_expected(result, "c3m4", "part-filling-boundary-edges-default")
+
+    def test_c3m4_part_filling_invalid_inputs_have_stable_diagnostics(self) -> None:
+        result = self.run_recompute("part-filling-invalid-inputs", "c3m4")
+        codes = [item["code"] for item in result["diagnostics"]]
+        expected = self.expected_freecad("c3m4", "part-filling-invalid-inputs")
+
+        self.assertEqual(
+            codes,
+            [
+                "missing_link_target",
+                "missing_property",
+                "execution_failed",
+                "execution_failed",
+                "unsupported_property",
+                "unsupported_property",
+            ],
+        )
+        self.assertCountEqual(codes, expected["diagnostic_codes"])
+        for object_name in (
+            "EmptyBoundary",
+            "FaceOnlyBoundary",
+            "DisconnectedBoundary",
+            "UnsupportedKwargs",
+        ):
+            self.assertEqual(result["objects"][object_name]["status"], "error")
+            self.assertEqual(result["objects"][object_name]["feature"], "part_filled_face")
+            self.assertEqual(result["objects"][object_name]["helper"], "Part.makeFilledFace")
+        self.assertEqual(result["objects"]["MissingTarget"]["status"], "error")
+        self.assert_object_matches_expected(result, "c3m4", "part-filling-invalid-inputs")
+
     def test_p8_app_link_proxies_linked_shape_with_link_placement(self) -> None:
         result = self.run_recompute("app-link-box", "p8")
         link = result["objects"]["BoxLink"]

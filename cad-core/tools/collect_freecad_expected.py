@@ -97,6 +97,9 @@ TRANSFORMED_TYPES = {
 }
 
 BODY_RESULT_TARGET_TYPES = DRESS_UP_TYPES | TRANSFORMED_TYPES
+PART_HELPER_TYPES = {
+    "Part::FilledFace",
+}
 EXTERNAL_GEOMETRY_FLAG_NAMES = ("Defining", "Frozen", "Detached", "Missing", "Sync")
 
 
@@ -1105,6 +1108,192 @@ def shape_summary(shape: Any) -> dict:
         },
     }
     return summary
+
+
+def has_part_filled_face_helper(fixture: dict) -> bool:
+    return any(
+        isinstance(spec, dict) and spec.get("TypeId") == "Part::FilledFace"
+        for spec in fixture.get("Objects", [])
+    )
+
+
+def fixture_without_part_helpers(fixture: dict) -> dict:
+    filtered = dict(fixture)
+    filtered["Objects"] = [
+        spec
+        for spec in fixture.get("Objects", [])
+        if not (isinstance(spec, dict) and spec.get("TypeId") in PART_HELPER_TYPES)
+    ]
+    return filtered
+
+
+def part_filled_face_targets(fixture: dict, requested_targets: Sequence[str] | None = None) -> list[str]:
+    helpers = [
+        str(spec["Name"])
+        for spec in fixture.get("Objects", [])
+        if isinstance(spec, dict) and spec.get("TypeId") == "Part::FilledFace"
+    ]
+    targets = list(requested_targets) if requested_targets is not None else fixture.get("recompute", {}).get("objs", helpers)
+    return [str(name) for name in targets if str(name) in helpers]
+
+
+def part_filled_face_helper_specs(fixture: dict) -> dict[str, dict]:
+    return {
+        str(spec["Name"]): spec
+        for spec in fixture.get("Objects", [])
+        if isinstance(spec, dict) and spec.get("TypeId") == "Part::FilledFace"
+    }
+
+
+def part_filled_face_link_items(value: dict) -> list[dict]:
+    if not isinstance(value, dict) or value.get("PropertyType") != "App::PropertyLinkSubList":
+        return []
+    items = value.get("SubSet", [])
+    return [item for item in items if isinstance(item, dict)]
+
+
+def part_filled_face_default_object_fields(boundary_mode: str | None = None, boundary_edge_count: int | None = None) -> dict:
+    fields: dict[str, Any] = {
+        "status": "ok",
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "source_backed_helper": True,
+        "freecad_native_document_object": False,
+        "topo_naming_history": "maker_history:filling",
+    }
+    if boundary_mode is not None:
+        fields["boundary_mode"] = boundary_mode
+    if boundary_edge_count is not None:
+        fields["boundary_edge_count"] = boundary_edge_count
+    return fields
+
+
+def part_filled_face_error_payload(code: str, message: str, include_helper_fields: bool = True) -> dict:
+    object_fields: dict[str, Any] = {"status": "error"}
+    if include_helper_fields:
+        object_fields.update({
+            "feature": "part_filled_face",
+            "helper": "Part.makeFilledFace",
+        })
+    return {
+        "object_fields": object_fields,
+        "native_error": message,
+        "native_error_code": code,
+    }
+
+
+def part_filled_face_boundary_shapes(created: dict[str, Any], spec: dict) -> tuple[list[Any], str, int]:
+    boundary = spec.get("Properties", {}).get("Boundary")
+    items = part_filled_face_link_items(boundary)
+    if not items:
+        return [], "empty", 0
+
+    shapes = []
+    selected_edges = 0
+    whole_shapes = 0
+    for item in items:
+        target_name = item.get("value")
+        if not isinstance(target_name, str) or target_name not in created:
+            raise UnsupportedFixture(f"Boundary target {target_name} was not created")
+        target = created[target_name]
+        target_shape = getattr(target, "Shape", None)
+        if target_shape is None or target_shape.isNull():
+            raise UnsupportedFixture(f"Boundary target {target_name} has no shape")
+        sub_list = list_field(item, "StableSubList", "SubList")
+        if not sub_list:
+            whole_shapes += 1
+            shapes.append(target_shape)
+            continue
+        for subname in sub_list:
+            native_subname = native_link_subname(target, str(subname))
+            selected = target_shape.getElement(native_subname)
+            shapes.append(selected)
+            if native_subname.startswith("Edge"):
+                selected_edges += 1
+
+    if selected_edges and selected_edges == len(shapes):
+        return shapes, "edge_wire_closed", selected_edges
+    if whole_shapes == 1 and len(shapes) == 1:
+        return shapes, "closed_wire", len(getattr(shapes[0], "Edges", []))
+    return shapes, "mixed_boundary", selected_edges
+
+
+def collect_part_filled_face_expected(
+    fixture_path: Path,
+    fixture: dict,
+    requested_targets: Sequence[str] | None = None,
+) -> dict:
+    import FreeCAD  # type: ignore
+    import Part  # type: ignore
+
+    helper_specs = part_filled_face_helper_specs(fixture)
+    targets = part_filled_face_targets(fixture, requested_targets)
+    source_fixture = fixture_without_part_helpers(fixture)
+    doc = FreeCAD.newDocument("CadCoreExpected")
+    try:
+        created = create_objects(FreeCAD, doc, source_fixture)
+        doc.recompute()
+
+        object_payloads: dict[str, dict] = {}
+        diagnostic_codes: list[str] = []
+        for name in targets:
+            spec = helper_specs[name]
+            properties = spec.get("Properties", {})
+            unsupported = sorted(set(properties) & {"Surface", "Supports", "Orders"})
+            if unsupported:
+                diagnostic_codes.extend(["unsupported_property"] * len(unsupported))
+                object_payloads[name] = part_filled_face_error_payload(
+                    "unsupported_property",
+                    "Unsupported Part.makeFilledFace kwargs: " + ", ".join(unsupported),
+                )
+                continue
+
+            try:
+                shapes, boundary_mode, boundary_edge_count = part_filled_face_boundary_shapes(created, spec)
+                # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/AppPartPy.cpp
+                # ::makeFilledFace(), returns TopoShape(...).makeElementFilledFace(...) as a helper
+                # result; cad-core Part::FilledFace fixtures are translated into that helper call.
+                result_shape = Part.makeFilledFace(shapes)
+                payload = shape_summary(result_shape)
+                payload["object_fields"] = part_filled_face_default_object_fields(
+                    boundary_mode,
+                    boundary_edge_count,
+                )
+                object_payloads[name] = payload
+            except UnsupportedFixture as exc:
+                diagnostic_codes.append("missing_link_target")
+                object_payloads[name] = part_filled_face_error_payload(
+                    "missing_link_target",
+                    str(exc),
+                    include_helper_fields=False,
+                )
+            except Exception as exc:
+                message = str(exc)
+                code = "missing_property" if "No input shape" in message else "execution_failed"
+                diagnostic_codes.append(code)
+                object_payloads[name] = part_filled_face_error_payload(code, message)
+
+        reference_types = ", ".join(spec["TypeId"] for spec in fixture.get("Objects", []))
+        payload: dict[str, Any] = {
+            "schema_version": SCHEMA_VERSION,
+            "reference": (
+                f"FreeCADCmd oracle from {fixture_path.name}; Part::FilledFace is a cad-core "
+                "helper translated to Part.makeFilledFace(...); objects: "
+                f"{reference_types}"
+            ),
+            "freecad_version": freecad_version(FreeCAD),
+        }
+        if len(object_payloads) == 1:
+            object_name, summary = next(iter(object_payloads.items()))
+            payload["object"] = object_name
+            payload.update(summary)
+        else:
+            payload["objects"] = object_payloads
+        if diagnostic_codes:
+            payload["diagnostic_codes"] = diagnostic_codes
+        return payload
+    finally:
+        FreeCAD.closeDocument(doc.Name)
 
 
 def part_geometry_curve_items(fixture: dict) -> list[dict[str, Any]]:
@@ -3276,6 +3465,8 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
     import FreeCAD  # type: ignore
 
     fixture = load_fixture(fixture_path)
+    if has_part_filled_face_helper(fixture):
+        return collect_part_filled_face_expected(fixture_path, fixture, requested_targets)
     if "partGeometryCurve" in fixture:
         return collect_part_geometry_curve_expected(fixture_path, fixture)
     require_native_hole_profile_support(fixture)

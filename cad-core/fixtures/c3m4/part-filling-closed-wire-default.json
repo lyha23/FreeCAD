@@ -1,0 +1,31 @@
+{
+  "Objects": [
+    {
+      "Name": "Profile",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 2
+      }
+    },
+    {
+      "Name": "FilledFace",
+      "ID": 2,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Profile"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["FilledFace"]
+  }
+}

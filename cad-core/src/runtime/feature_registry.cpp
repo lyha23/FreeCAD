@@ -90,6 +90,7 @@ FeatureRegistry buildDefaultRegistry()
     registry.registerExecutor("Part::RuledSurface", part::executePartRuledSurface);
     registry.registerExecutor("Part::Loft", part::executePartLoft);
     registry.registerExecutor("Part::Sweep", part::executePartSweep);
+    registry.registerExecutor("Part::FilledFace", part::executePartFilledFace);
     registry.registerExecutor("Part::Offset", part::executePartOffset);
     registry.registerExecutor("Part::Offset2D", part::executePartOffset2D);
     registry.registerExecutor("Part::Thickness", part::executePartThickness);

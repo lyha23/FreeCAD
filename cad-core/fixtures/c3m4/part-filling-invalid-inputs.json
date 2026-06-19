@@ -1,0 +1,141 @@
+{
+  "Objects": [
+    {
+      "Name": "Profile",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 2
+      }
+    },
+    {
+      "Name": "Plane",
+      "ID": 2,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 2,
+        "Width": 2
+      }
+    },
+    {
+      "Name": "EdgeA",
+      "ID": 3,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 1,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "EdgeB",
+      "ID": 4,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 10,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 11,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "EmptyBoundary",
+      "ID": 5,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": []
+        }
+      }
+    },
+    {
+      "Name": "MissingTarget",
+      "ID": 6,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "DoesNotExist"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "Name": "FaceOnlyBoundary",
+      "ID": 7,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Plane",
+              "SubList": ["Face1"],
+              "StableSubList": ["Face1"]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "Name": "DisconnectedBoundary",
+      "ID": 8,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "EdgeA"
+            },
+            {
+              "value": "EdgeB"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "Name": "UnsupportedKwargs",
+      "ID": 9,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Profile"
+            }
+          ]
+        },
+        "Supports": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["Plane"]
+        },
+        "Orders": {
+          "PropertyType": "App::PropertyInteger",
+          "value": 1
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "EmptyBoundary",
+      "MissingTarget",
+      "FaceOnlyBoundary",
+      "DisconnectedBoundary",
+      "UnsupportedKwargs"
+    ]
+  }
+}

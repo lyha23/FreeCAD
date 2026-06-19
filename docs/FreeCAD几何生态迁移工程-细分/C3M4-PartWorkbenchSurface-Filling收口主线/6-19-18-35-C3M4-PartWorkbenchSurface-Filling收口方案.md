@@ -11,6 +11,14 @@
 - 首批 required oracle 只发布默认参数的 boundary filling 和 diagnostic group：closed wire、connected boundary edges、空/缺失/非 boundary 输入。它们足够约束 `makeElementFilledFace()` 的 boundary 发现、wire 构造和 `BRepOffsetAPI_MakeFilling` 主路径。
 - `surface`、`supports`、`orders` 和非默认 filling 参数先不标成 supported。源码中 `TopoShape::BRepFillingParams` 与 `makeElementFilledFace()` 已有这些分支，但 `AppPartPy.cpp` 的 helper parser 实参列表和 keyword 列表存在错位风险，必须先用 FreeCADCmd oracle probe 或修正 collector 路径证明可采集。
 
+## S1 结论
+
+- 已新增 `Part::FilledFace` cad-core helper executor；它只表示 `Part.makeFilledFace()` source-backed 请求对象，不是 FreeCAD 原生 DocumentObject。
+- 已实现 `part/topo_shape_expansion` filling helper：默认参数、closed wire、connected boundary edge loop、OCCT-safe wire normalization、`BRepOffsetAPI_MakeFilling`、`maker_history:filling` 和 boundary source evidence。
+- 已新增并采集 FreeCADCmd expected：`part-filling-closed-wire-default`、`part-filling-boundary-edges-default`、`part-filling-invalid-inputs`。expected reference 明确写明 helper 被翻译为 `Part.makeFilledFace(...)`。
+- 已补 focused tests，断言成功 shape、默认参数 metadata、非原生 helper metadata、boundary source evidence、invalid diagnostics 和 checked-in expected 对齐。
+- S1 不发布 C API capability，也不支持 `surface`、`supports`、`orders`、constraint 输入或非默认参数；这些仍由 S2+ 或 blocker rows 管理。
+
 ## FreeCAD 调用链
 
 - `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/AppPartPy.cpp:122` 的 `getPyShapes()` 接受单个 `TopoShapePy`、`GeometryPy` 或 shape sequence；sequence 中非 shape 会报 `expect shape in sequence`。

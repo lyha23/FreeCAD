@@ -27,6 +27,7 @@ void executePartExtrusion(const app::DocumentObject& object, runtime::ComputeCon
 void executePartRuledSurface(const app::DocumentObject& object, runtime::ComputeContext& context);
 void executePartLoft(const app::DocumentObject& object, runtime::ComputeContext& context);
 void executePartSweep(const app::DocumentObject& object, runtime::ComputeContext& context);
+void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeContext& context);
 void executePartOffset(const app::DocumentObject& object, runtime::ComputeContext& context);
 void executePartOffset2D(const app::DocumentObject& object, runtime::ComputeContext& context);
 void executePartThickness(const app::DocumentObject& object, runtime::ComputeContext& context);

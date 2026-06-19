@@ -11,17 +11,22 @@
 #include <BRepFill.hxx>
 #include <BRepGProp.hxx>
 #include <BRepLib.hxx>
+#include <BRepOffsetAPI_MakeFilling.hxx>
 #include <BRepOffsetAPI_MakePipeShell.hxx>
 #include <BRepOffsetAPI_ThruSections.hxx>
 #include <BRep_Tool.hxx>
+#include <BRepTools_WireExplorer.hxx>
 #include <Bnd_Box.hxx>
+#include <GeomAbs_Shape.hxx>
 #include <GProp_GProps.hxx>
 #include <Precision.hxx>
+#include <ShapeFix_Wire.hxx>
 #include <Standard_Failure.hxx>
 #include <TopExp.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopTools_IndexedMapOfShape.hxx>
 #include <TopoDS.hxx>
+#include <TopoDS_Iterator.hxx>
 #include <TopoDS_Vertex.hxx>
 #include <TopoDS_Wire.hxx>
 #include <gp_Pnt.hxx>
@@ -168,6 +173,42 @@ void addDistinct(std::vector<std::string>& values, const std::string& value)
     }
 }
 
+void addDistinctEvidence(
+    std::vector<FilledFaceBoundaryEvidence>& values,
+    const FilledFaceBoundaryEvidence& value
+)
+{
+    const auto duplicate = std::find_if(
+        values.begin(),
+        values.end(),
+        [&](const FilledFaceBoundaryEvidence& current) {
+            return current.objectName == value.objectName && current.subname == value.subname
+                && current.stableSubname == value.stableSubname && current.shapeKind == value.shapeKind;
+        }
+    );
+    if (duplicate == values.end()) {
+        values.push_back(value);
+    }
+}
+
+std::string evidenceKindName(TopAbs_ShapeEnum kind)
+{
+    switch (kind) {
+        case TopAbs_FACE:
+            return "face";
+        case TopAbs_WIRE:
+            return "wire";
+        case TopAbs_EDGE:
+            return "edge";
+        case TopAbs_VERTEX:
+            return "vertex";
+        case TopAbs_COMPOUND:
+            return "compound";
+        default:
+            return "shape";
+    }
+}
+
 int subshapeCount(const TopoDS_Shape& shape, TopAbs_ShapeEnum kind)
 {
     TopTools_IndexedMapOfShape subshapes;
@@ -206,6 +247,52 @@ std::optional<TopoDS_Wire> wireFromEdges(const TopoDS_Shape& shape)
     return wire;
 }
 
+std::vector<TopoDS_Edge> orderedEdges(const TopoDS_Wire& wire)
+{
+    std::vector<TopoDS_Edge> edges;
+    for (BRepTools_WireExplorer explorer(wire); explorer.More(); explorer.Next()) {
+        edges.push_back(explorer.Current());
+    }
+    if (!edges.empty()) {
+        return edges;
+    }
+    for (TopExp_Explorer explorer(wire, TopAbs_EDGE); explorer.More(); explorer.Next()) {
+        edges.push_back(TopoDS::Edge(explorer.Current()));
+    }
+    return edges;
+}
+
+bool wireHasEdges(const TopoDS_Wire& wire)
+{
+    TopExp_Explorer explorer(wire, TopAbs_EDGE);
+    return explorer.More();
+}
+
+TopoDS_Wire fixedFillingBoundaryWire(const TopoDS_Wire& wire)
+{
+    TopoDS_Wire fixed = wire;
+    BRepLib::BuildCurves3d(fixed);
+    BRepLib::SameParameter(fixed, Precision::Confusion(), Standard_True);
+
+    ShapeFix_Wire fixer;
+    fixer.Load(fixed);
+    fixer.SetPrecision(Precision::Confusion());
+    fixer.ClosedWireMode() = BRep_Tool::IsClosed(fixed);
+    fixer.FixReorder();
+    fixer.FixConnected(Precision::Confusion());
+    if (BRep_Tool::IsClosed(fixed)) {
+        fixer.FixClosed(Precision::Confusion());
+    }
+    fixer.FixEdgeCurves();
+    TopoDS_Wire apiWire = fixer.WireAPIMake();
+    if (!apiWire.IsNull()) {
+        fixed = apiWire;
+    }
+    BRepLib::BuildCurves3d(fixed);
+    BRepLib::SameParameter(fixed, Precision::Confusion(), Standard_True);
+    return fixed;
+}
+
 std::optional<TopoDS_Wire> singleWireFromShape(const TopoDS_Shape& shape, std::string& error)
 {
     if (shape.IsNull()) {
@@ -228,6 +315,282 @@ std::optional<TopoDS_Wire> singleWireFromShape(const TopoDS_Shape& shape, std::s
 
     error = "Spine shape cannot form a single wire";
     return std::nullopt;
+}
+
+struct FilledFaceWorkingShape
+{
+    TopoDS_Shape shape;
+    const FilledFaceSource* source = nullptr;
+};
+
+struct FilledFaceBoundaryCandidate
+{
+    TopoDS_Wire wire;
+    std::string mode;
+    std::vector<FilledFaceBoundaryEvidence> evidence;
+};
+
+bool isCompoundShape(const TopoDS_Shape& shape)
+{
+    return !shape.IsNull()
+        && (shape.ShapeType() == TopAbs_COMPOUND || shape.ShapeType() == TopAbs_COMPSOLID);
+}
+
+void expandFilledFaceSource(
+    const FilledFaceSource& source,
+    const TopoDS_Shape& shape,
+    std::vector<FilledFaceWorkingShape>& output
+)
+{
+    if (shape.IsNull()) {
+        return;
+    }
+    if (!isCompoundShape(shape)) {
+        output.push_back(FilledFaceWorkingShape {shape, &source});
+        return;
+    }
+    for (TopoDS_Iterator it(shape); it.More(); it.Next()) {
+        expandFilledFaceSource(source, it.Value(), output);
+    }
+}
+
+std::vector<FilledFaceWorkingShape> expandedFilledFaceSources(
+    const std::vector<FilledFaceSource>& sources
+)
+{
+    std::vector<FilledFaceWorkingShape> output;
+    for (const FilledFaceSource& source : sources) {
+        expandFilledFaceSource(source, source.shape, output);
+    }
+    return output;
+}
+
+std::optional<std::string> sourceEdgeElementName(
+    const FilledFaceSource& source,
+    const TopoDS_Edge& edge
+)
+{
+    if (!source.subname.empty() && source.shape.ShapeType() == TopAbs_EDGE) {
+        return source.objectName + "." + (source.stableSubname.empty() ? source.subname : source.stableSubname);
+    }
+    if (source.namedShape == nullptr) {
+        return std::nullopt;
+    }
+
+    for (const auto& [elementName, element] : source.namedShape->elements) {
+        if (element.subshape.kind != TopAbs_EDGE) {
+            continue;
+        }
+        const auto shape = subshapeByName(source.namedShape->shape, element.subshape);
+        if (!shape || shape->IsNull() || shape->ShapeType() != TopAbs_EDGE) {
+            continue;
+        }
+        if (shape->IsSame(edge)) {
+            return source.objectName + "." + elementName;
+        }
+    }
+    return std::nullopt;
+}
+
+FilledFaceBoundaryEvidence evidenceFromFullName(
+    const std::string& fullName,
+    const FilledFaceSource& fallback,
+    const std::string& kind
+)
+{
+    const std::size_t dot = fullName.rfind('.');
+    if (dot == std::string::npos) {
+        return FilledFaceBoundaryEvidence {
+            fallback.objectName,
+            fullName,
+            fullName,
+            kind,
+        };
+    }
+    return FilledFaceBoundaryEvidence {
+        fullName.substr(0, dot),
+        fullName.substr(dot + 1),
+        fullName.substr(dot + 1),
+        kind,
+    };
+}
+
+FilledFaceBoundaryEvidence fallbackEvidence(
+    const FilledFaceSource& source,
+    TopAbs_ShapeEnum kind
+)
+{
+    return FilledFaceBoundaryEvidence {
+        source.objectName,
+        source.subname,
+        source.stableSubname.empty() ? source.subname : source.stableSubname,
+        evidenceKindName(kind),
+    };
+}
+
+std::vector<FilledFaceBoundaryEvidence> evidenceForBoundaryEdge(
+    const FilledFaceSource& source,
+    const TopoDS_Edge& edge
+)
+{
+    std::vector<FilledFaceBoundaryEvidence> evidence;
+    if (const auto elementName = sourceEdgeElementName(source, edge)) {
+        evidence.push_back(evidenceFromFullName(*elementName, source, "edge"));
+        if (source.namedShape != nullptr) {
+            const std::size_t dot = elementName->rfind('.');
+            const std::string currentName = dot == std::string::npos ? *elementName
+                                                                     : elementName->substr(dot + 1);
+            for (const auto& [stableName, mappedName] : source.namedShape->elementMap) {
+                if (mappedName != currentName || stableName == currentName) {
+                    continue;
+                }
+                evidence.push_back(evidenceFromFullName(stableName, source, "edge"));
+            }
+        }
+        return evidence;
+    }
+
+    evidence.push_back(fallbackEvidence(source, source.shape.ShapeType()));
+    return evidence;
+}
+
+std::vector<FilledFaceBoundaryEvidence> evidenceForBoundaryWire(
+    const FilledFaceSource& source,
+    const TopoDS_Wire& wire
+)
+{
+    std::vector<FilledFaceBoundaryEvidence> evidence;
+    for (const TopoDS_Edge& edge : orderedEdges(wire)) {
+        for (const auto& item : evidenceForBoundaryEdge(source, edge)) {
+            addDistinctEvidence(evidence, item);
+        }
+    }
+    if (evidence.empty()) {
+        evidence.push_back(fallbackEvidence(source, TopAbs_WIRE));
+    }
+    return evidence;
+}
+
+std::optional<FilledFaceBoundaryCandidate> findFilledFaceBoundaryWire(
+    std::vector<FilledFaceWorkingShape>& shapes
+)
+{
+    int index = -1;
+    int boundaryIndex = -1;
+    bool closed = false;
+    for (const FilledFaceWorkingShape& item : shapes) {
+        ++index;
+        if (item.shape.IsNull() || item.shape.ShapeType() != TopAbs_WIRE) {
+            continue;
+        }
+        TopoDS_Wire wire = TopoDS::Wire(item.shape);
+        if (!wireHasEdges(wire)) {
+            continue;
+        }
+        if (BRep_Tool::IsClosed(wire)) {
+            boundaryIndex = index;
+            closed = true;
+            break;
+        }
+        if (boundaryIndex < 0) {
+            boundaryIndex = index;
+        }
+    }
+    if (boundaryIndex < 0) {
+        return std::nullopt;
+    }
+
+    const FilledFaceWorkingShape selected = shapes.at(static_cast<std::size_t>(boundaryIndex));
+    shapes.erase(shapes.begin() + boundaryIndex);
+    FilledFaceBoundaryCandidate candidate;
+    candidate.wire = TopoDS::Wire(selected.shape);
+    candidate.mode = closed ? "closed_wire" : "wire";
+    if (selected.source != nullptr) {
+        candidate.evidence = evidenceForBoundaryWire(*selected.source, candidate.wire);
+    }
+    return candidate;
+}
+
+std::optional<FilledFaceBoundaryCandidate> buildFilledFaceBoundaryWireFromEdges(
+    std::vector<FilledFaceWorkingShape>& shapes
+)
+{
+    BRepBuilderAPI_MakeWire wireBuilder;
+    std::vector<FilledFaceBoundaryEvidence> evidence;
+    bool hasEdge = false;
+    for (auto it = shapes.begin(); it != shapes.end();) {
+        if (!it->shape.IsNull() && it->shape.ShapeType() == TopAbs_EDGE) {
+            const TopoDS_Edge edge = TopoDS::Edge(it->shape);
+            wireBuilder.Add(edge);
+            hasEdge = true;
+            if (it->source != nullptr) {
+                for (const auto& item : evidenceForBoundaryEdge(*it->source, edge)) {
+                    addDistinctEvidence(evidence, item);
+                }
+            }
+            it = shapes.erase(it);
+            continue;
+        }
+        ++it;
+    }
+    if (!hasEdge) {
+        return std::nullopt;
+    }
+
+    wireBuilder.Build();
+    if (!wireBuilder.IsDone() || wireBuilder.Wire().IsNull()) {
+        return std::nullopt;
+    }
+
+    FilledFaceBoundaryCandidate candidate;
+    candidate.wire = wireBuilder.Wire();
+    candidate.mode = BRep_Tool::IsClosed(candidate.wire) ? "edge_wire_closed" : "edge_wire";
+    candidate.evidence = std::move(evidence);
+    return candidate;
+}
+
+std::optional<std::string> firstFaceName(const NamedShape& namedShape)
+{
+    for (const auto& [name, element] : namedShape.elements) {
+        if (element.subshape.kind == TopAbs_FACE) {
+            return name;
+        }
+    }
+    return std::nullopt;
+}
+
+void addFilledFaceBoundaryHistory(
+    NamedShape& namedShape,
+    const std::string& owner,
+    const std::vector<FilledFaceBoundaryEvidence>& boundarySources,
+    int boundaryEdgeCount
+)
+{
+    const auto targetFace = firstFaceName(namedShape);
+    if (!targetFace) {
+        return;
+    }
+
+    for (const FilledFaceBoundaryEvidence& source : boundarySources) {
+        MapperHistoryEvent event;
+        event.source = MapperHistoryEndpoint {source.objectName, source.stableSubname.empty() ? source.subname : source.stableSubname};
+        event.target = MapperHistoryEndpoint {owner, *targetFace};
+        event.shapeKind = "face";
+        event.relation = MapperHistoryRelation::Generated;
+        event.makerStage = "maker_history:filling_boundary";
+        event.evidence = {
+            {"freecad_operation", "TopoShape::makeElementFilledFace"},
+            {"helper", "Part.makeFilledFace"},
+            {"source_kind", source.shapeKind},
+            {"source_subname", source.subname},
+            {"stable_subname", source.stableSubname},
+            {"boundary_edge_count", boundaryEdgeCount},
+            {"is_bound", true},
+        };
+        event.recoverability = MapperHistoryRecoverability::Resolved;
+        event.diagnosticStatus = "filling_boundary_source";
+        addMapperHistoryEvent(namedShape.mapperHistory, std::move(event));
+    }
 }
 
 std::optional<std::vector<TopoDS_Shape>> prepareLoftProfiles(
@@ -598,6 +961,109 @@ NamedShapeBuild makeElementPipeShellFromSources(
             TopoDS_Shape {},
             std::nullopt,
             failure.GetMessageString() != nullptr ? failure.GetMessageString() : "Part::Sweep failed"
+        };
+    }
+}
+
+FilledFaceBuild makeElementFilledFaceFromSources(
+    const std::string& owner,
+    const std::vector<FilledFaceSource>& boundarySources,
+    const std::vector<NamedShapeSource>& historySources,
+    const FilledFaceDefaultParams& params
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementFilledFace(), calls "BRepOffsetAPI_MakeFilling", then
+    // "findBoundary(shapes)" or "makeElementWires(..., ConnectionPolicy::requireSharedVertex)",
+    // fixes the boundary wire, adds ordered boundary edges with "IsBound Standard_True", and
+    // returns makeElementShape(maker, _shapes, Part::OpCodes::FilledFace).
+    if (boundarySources.empty()) {
+        return FilledFaceBuild {TopoDS_Shape {}, std::nullopt, "No input shape"};
+    }
+
+    try {
+        std::vector<FilledFaceWorkingShape> shapes = expandedFilledFaceSources(boundarySources);
+        auto boundary = findFilledFaceBoundaryWire(shapes);
+        if (!boundary) {
+            boundary = buildFilledFaceBoundaryWireFromEdges(shapes);
+        }
+        if (!boundary) {
+            return FilledFaceBuild {TopoDS_Shape {}, std::nullopt, "No boundary wire"};
+        }
+
+        BRepOffsetAPI_MakeFilling maker(
+            params.degree,
+            params.pointsOnCurve,
+            params.iterations,
+            params.anisotropy,
+            params.tolerance2d,
+            params.tolerance3d,
+            params.toleranceG1,
+            params.toleranceG2,
+            params.maxDegree,
+            params.maxSegments
+        );
+
+        TopoDS_Wire fixedBoundary = fixedFillingBoundaryWire(boundary->wire);
+        const std::vector<TopoDS_Edge> boundaryEdges = orderedEdges(fixedBoundary);
+        if (boundaryEdges.empty()) {
+            return FilledFaceBuild {TopoDS_Shape {}, std::nullopt, "No boundary wire"};
+        }
+
+        for (const TopoDS_Edge& edge : boundaryEdges) {
+            maker.Add(edge, GeomAbs_C0, Standard_True);
+        }
+
+        maker.Build();
+        if (!maker.IsDone() || maker.Shape().IsNull()) {
+            return FilledFaceBuild {
+                TopoDS_Shape {},
+                std::nullopt,
+                "Failed to created face by filling edges"
+            };
+        }
+
+        std::vector<NamedShapeSource> sourcesForHistory = historySources;
+        if (sourcesForHistory.empty()) {
+            sourcesForHistory.reserve(boundarySources.size());
+            for (const FilledFaceSource& source : boundarySources) {
+                sourcesForHistory.push_back(NamedShapeSource {
+                    source.objectName,
+                    source.shape,
+                    source.namedShape,
+                });
+            }
+        }
+
+        NamedShape namedShape = namedShapeForMakerHistory(
+            owner,
+            maker.Shape(),
+            sourcesForHistory,
+            maker
+        );
+        addDistinct(namedShape.elementHistoryStatus, "part_filling:filling_history");
+        addFilledFaceBoundaryHistory(
+            namedShape,
+            owner,
+            boundary->evidence,
+            static_cast<int>(boundaryEdges.size())
+        );
+
+        return FilledFaceBuild {
+            maker.Shape(),
+            std::move(namedShape),
+            {},
+            boundary->mode,
+            boundary->evidence,
+            static_cast<int>(boundaryEdges.size()),
+        };
+    }
+    catch (const Standard_Failure& failure) {
+        return FilledFaceBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            failure.GetMessageString() != nullptr ? failure.GetMessageString()
+                                                  : "Failed to created face by filling edges"
         };
     }
 }
