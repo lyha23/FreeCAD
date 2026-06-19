@@ -1,6 +1,9 @@
-id	scope	current_signal	target	status
-FILLING-SCOPE-001	source	AppPartPy::makeFilledFace parses BRepFillingParams	Define request/schema and oracle path	planned
-FILLING-SCOPE-002	geometry	makeElementFilledFace uses BRepFill_Filling	Implement boundary to filled face	planned
-FILLING-SCOPE-003	diagnostics	Invalid boundaries can fail inside OCCT	Emit stable diagnostics before generic failure	planned
-FILLING-SCOPE-004	topo	Filling must preserve boundary source relation where possible	Publish subshape/history evidence	planned
-FILLING-SCOPE-005	publish	No filling capability yet	Publish exact backend filled-face scope	planned
+id	scope	current_signal	target	status	notes
+FILLING-SCOPE-001	source	FreeCAD exposes Part.makeFilledFace/makeFilledSurface helper, not native Part::FilledFace DocumentObject	Define cad-core source-backed helper operation and collector translation path	s0-ready	S1 schema must say non-native helper parity and keep source links explicit
+FILLING-SCOPE-002	boundary-geometry	makeElementFilledFace expands compounds, selects closed/preferred wire, or builds wire from edges with requireSharedVertex	Implement default closed wire and connected edge-loop filling	required-S1	Use BRepOffsetAPI_MakeFilling; do not substitute FaceMaker
+FILLING-SCOPE-003	params	BRepFillingParams has default degree/tolerance/iteration values, but helper kwargs mapping needs oracle proof	Parse defaults now; defer non-default param support until probe	expected-deferred	First expected fixtures stay on default params
+FILLING-SCOPE-004	diagnostics	FreeCAD has No input shape, No boundary wire, and maker failure boundaries	Emit stable diagnostics before or around OCCT failure	required-S1	Diagnostic fixture group must not fabricate shape expected
+FILLING-SCOPE-005	topo	makeElementShape(maker, _shapes, op) consumes MapperMaker history with FilledFace op	Publish maker-history and boundary source evidence	required-S1	BBox parity alone is insufficient
+FILLING-SCOPE-006	constraints	Non-boundary wire/edge/face/vertex are accepted as filling constraints after boundary selection	Design oracle rows but keep outside simple boundary publication	deferred-S2	Needs separate expected to distinguish constraints from boundary-only output
+FILLING-SCOPE-007	support-order	params.supports/orders are consumed by getSupport/getOrder, but AppPartPy parser has keyword/vararg anomaly	Block support/order publication until FreeCADCmd probe or collector route proves parity	blocked-S0	Do not mark support/order supported in S1 capability
+FILLING-SCOPE-008	publish	No filling capability yet	Publish exact backend filled-face scope only after S1 fixtures and diagnostics pass	planned-S2	Capability must separate simple boundary, deferred support/order, and diagnostic-only rows
