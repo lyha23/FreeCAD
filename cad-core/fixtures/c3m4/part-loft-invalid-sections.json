@@ -1,0 +1,112 @@
+{
+  "Objects": [
+    {
+      "Name": "ProfileA",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 2
+      }
+    },
+    {
+      "Name": "ProfileB",
+      "ID": 2,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 1,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 3],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "BoxSection",
+      "ID": 3,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 2,
+        "Height": 2
+      }
+    },
+    {
+      "Name": "MissingSections",
+      "ID": 4,
+      "TypeId": "Part::Loft",
+      "Properties": {}
+    },
+    {
+      "Name": "EmptySections",
+      "ID": 5,
+      "TypeId": "Part::Loft",
+      "Properties": {
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": []
+        }
+      }
+    },
+    {
+      "Name": "OneSection",
+      "ID": 6,
+      "TypeId": "Part::Loft",
+      "Properties": {
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["ProfileA"]
+        },
+        "Solid": false
+      }
+    },
+    {
+      "Name": "MissingTarget",
+      "ID": 7,
+      "TypeId": "Part::Loft",
+      "Properties": {
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["ProfileA", "NoSuchProfile"]
+        },
+        "Solid": false
+      }
+    },
+    {
+      "Name": "RepeatedSections",
+      "ID": 8,
+      "TypeId": "Part::Loft",
+      "Properties": {
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["ProfileA", "ProfileA"]
+        },
+        "Solid": false
+      }
+    },
+    {
+      "Name": "NonProfileSection",
+      "ID": 9,
+      "TypeId": "Part::Loft",
+      "Properties": {
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["BoxSection", "ProfileB"]
+        },
+        "Solid": false
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "MissingSections",
+      "EmptySections",
+      "OneSection",
+      "MissingTarget",
+      "RepeatedSections",
+      "NonProfileSection"
+    ]
+  }
+}

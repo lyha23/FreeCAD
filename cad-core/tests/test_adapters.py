@@ -869,6 +869,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "Part::Offset",
             "Part::Offset2D",
             "Part::Thickness",
+            "Part::Loft",
             "Part::BooleanFragments",
             "App::Link",
             "Assembly::AssemblyObject",
@@ -1895,6 +1896,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("shapefix_root_modified_history", capabilities["topo_history"]["maker_history"])
         self.assertIn("import_shape_element_map", capabilities["topo_history"]["maker_history"])
         self.assertIn("part_offset", capabilities["topo_history"]["maker_history"])
+        self.assertIn("loft_thru_sections", capabilities["topo_history"]["maker_history"])
         self.assertIn("transformed_pattern_addsub_ownership", capabilities["topo_history"]["maker_history"])
         self.assertIn("transformed_pattern_full_history", capabilities["topo_history"]["maker_history"])
         self.assertIn("hole_find_holes_profile_source_history", capabilities["topo_history"]["maker_history"])
@@ -1967,6 +1969,15 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("failure_diagnostics", producer_matrix["dressup"]["remaining"])
         self.assertNotIn("chain_dressup_pattern_history", producer_matrix["dressup"]["remaining"])
         self.assertEqual(producer_matrix["dressup"]["remaining"], [])
+        self.assertEqual(producer_matrix["loft_thru_sections"]["status"], "done_expected_backed_first_batch")
+        self.assertIn("generated_faces", producer_matrix["loft_thru_sections"]["covered"])
+        self.assertIn("first_shape_last_shape_history", producer_matrix["loft_thru_sections"]["covered"])
+        self.assertIn("source_profile_sections", producer_matrix["loft_thru_sections"]["covered"])
+        self.assertIn(
+            "solid_ruled_closed_max_degree_fixtures",
+            producer_matrix["loft_thru_sections"]["covered"],
+        )
+        self.assertEqual(producer_matrix["loft_thru_sections"]["remaining"], [])
         self.assertEqual(producer_matrix["transformed"]["status"], "covered")
         self.assertIn("link_retag_composition", producer_matrix["transformed"]["covered"])
         self.assertIn("terminal_split_deleted", producer_matrix["transformed"]["covered"])
@@ -2168,6 +2179,46 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertIn("full_part_surface_family", ruled_surface["remaining_gaps"])
         self.assertNotIn("full_surface_family", ruled_surface["covered"])
+        loft = capabilities["part_workbench"]["loft"]
+        self.assertEqual(loft["status"], "supported_expected_backed_first_batch")
+        self.assertIn("Part::Loft", loft["type_ids"])
+        self.assertIn("Sections", loft["properties"])
+        self.assertIn("Solid", loft["properties"])
+        self.assertIn("Ruled", loft["properties"])
+        self.assertIn("Closed", loft["properties"])
+        self.assertIn("Linearize", loft["properties"])
+        self.assertIn("MaxDegree", loft["properties"])
+        self.assertIn("App::PropertyLinkList", loft["property_types"])
+        self.assertIn("source_backed_document_object_executor", loft["covered"])
+        self.assertIn("sections_property_link_list", loft["covered"])
+        self.assertIn("solid_ruled_closed_max_degree", loft["covered"])
+        self.assertIn("loft_thru_sections_maker_history", loft["covered"])
+        for fixture in (
+            "c3m4/part-loft-two-section-surface",
+            "c3m4/part-loft-solid",
+            "c3m4/part-loft-ruled",
+            "c3m4/part-loft-closed",
+            "c3m4/part-loft-invalid-sections",
+        ):
+            self.assertIn(fixture, loft["fixtures"])
+        for diagnostic in (
+            "missing_property",
+            "missing_link_target",
+            "invalid_property",
+            "unsupported_property",
+            "execution_failed",
+        ):
+            self.assertIn(diagnostic, loft["diagnostics"])
+        self.assertIn("source_shape_recomputed_from_document_graph", loft["request_local_boundaries"])
+        self.assertIn("source_backed_part_loft_document_object_only", loft["request_local_boundaries"])
+        self.assertIn("linearize_true_deferred", loft["request_local_boundaries"])
+        self.assertIn("face_vertex_profile_expected_deferred", loft["request_local_boundaries"])
+        self.assertIn("complex_profile_family_deferred", loft["request_local_boundaries"])
+        self.assertIn("linearize_post_processing", loft["remaining_gaps"])
+        self.assertIn("face_vertex_profile_expected", loft["remaining_gaps"])
+        self.assertIn("complex_profile_family", loft["remaining_gaps"])
+        self.assertIn("full_part_surface_family", loft["remaining_gaps"])
+        self.assertNotIn("full_part_surface_family", loft["covered"])
         self.assertNotIn("complete_mapper_history", capabilities["topo_history"]["remaining_gaps"])
         self.assertNotIn(
             "element_map_child_map_preserve_propagate_lifecycle",

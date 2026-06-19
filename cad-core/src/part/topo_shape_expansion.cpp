@@ -4,18 +4,28 @@
 #include "cad_core/part/property_topo_shape.h"
 
 #include <BRepAdaptor_Curve.hxx>
+#include <BRepBndLib.hxx>
 #include <BRepBuilderAPI_Copy.hxx>
+#include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRepFill.hxx>
+#include <BRepGProp.hxx>
+#include <BRepOffsetAPI_ThruSections.hxx>
 #include <BRep_Tool.hxx>
+#include <Bnd_Box.hxx>
+#include <GProp_GProps.hxx>
 #include <Precision.hxx>
 #include <Standard_Failure.hxx>
 #include <TopExp.hxx>
+#include <TopExp_Explorer.hxx>
+#include <TopTools_IndexedMapOfShape.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Vertex.hxx>
+#include <TopoDS_Wire.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Vec.hxx>
 
 #include <algorithm>
+#include <cmath>
 #include <optional>
 #include <utility>
 
@@ -155,6 +165,148 @@ void addDistinct(std::vector<std::string>& values, const std::string& value)
     }
 }
 
+int subshapeCount(const TopoDS_Shape& shape, TopAbs_ShapeEnum kind)
+{
+    TopTools_IndexedMapOfShape subshapes;
+    TopExp::MapShapes(shape, kind, subshapes);
+    return subshapes.Extent();
+}
+
+std::optional<TopoDS_Shape> singleSubshape(const TopoDS_Shape& shape, TopAbs_ShapeEnum kind)
+{
+    TopTools_IndexedMapOfShape subshapes;
+    TopExp::MapShapes(shape, kind, subshapes);
+    if (subshapes.Extent() != 1) {
+        return std::nullopt;
+    }
+    return subshapes(1);
+}
+
+std::optional<TopoDS_Wire> wireFromEdges(const TopoDS_Shape& shape)
+{
+    BRepBuilderAPI_MakeWire wireBuilder;
+    bool hasEdge = false;
+    for (TopExp_Explorer explorer(shape, TopAbs_EDGE); explorer.More(); explorer.Next()) {
+        wireBuilder.Add(TopoDS::Edge(explorer.Current()));
+        hasEdge = true;
+    }
+    if (!hasEdge) {
+        return std::nullopt;
+    }
+    wireBuilder.Build();
+    if (!wireBuilder.IsDone() || wireBuilder.Wire().IsNull()) {
+        return std::nullopt;
+    }
+    return wireBuilder.Wire();
+}
+
+std::optional<std::vector<TopoDS_Shape>> prepareLoftProfiles(
+    const std::vector<NamedShapeSource>& sources,
+    std::string& error
+)
+{
+    std::vector<TopoDS_Shape> profiles;
+    profiles.reserve(sources.size());
+    for (const auto& source : sources) {
+        TopoDS_Shape shape = source.shape;
+        if (shape.IsNull()) {
+            error = "Null input shape";
+            return std::nullopt;
+        }
+
+        if (subshapeCount(shape, TopAbs_FACE) == 1) {
+            if (const auto face = singleSubshape(shape, TopAbs_FACE)) {
+                shape = *face;
+            }
+        }
+        else if (subshapeCount(shape, TopAbs_WIRE) == 0 && subshapeCount(shape, TopAbs_EDGE) > 0) {
+            const auto wire = wireFromEdges(shape);
+            if (!wire) {
+                error = "Profile shape is not a single vertex, edge, wire nor face.";
+                return std::nullopt;
+            }
+            shape = *wire;
+        }
+
+        if (subshapeCount(shape, TopAbs_WIRE) == 1) {
+            profiles.push_back(*singleSubshape(shape, TopAbs_WIRE));
+            continue;
+        }
+        if (subshapeCount(shape, TopAbs_VERTEX) == 1) {
+            profiles.push_back(*singleSubshape(shape, TopAbs_VERTEX));
+            continue;
+        }
+
+        error = "Profile shape is not a single vertex, edge, wire nor face.";
+        return std::nullopt;
+    }
+    if (profiles.empty()) {
+        error = "No profile";
+        return std::nullopt;
+    }
+    return profiles;
+}
+
+bool loftProfilesHaveSufficientSeparation(const TopoDS_Shape& left, const TopoDS_Shape& right)
+{
+    try {
+        Bnd_Box leftBounds;
+        Bnd_Box rightBounds;
+        BRepBndLib::Add(left, leftBounds);
+        BRepBndLib::Add(right, rightBounds);
+        if (leftBounds.IsVoid() || rightBounds.IsVoid()) {
+            return false;
+        }
+        if (!leftBounds.CornerMin().IsEqual(rightBounds.CornerMin(), Precision::Confusion())) {
+            return true;
+        }
+        if (!leftBounds.CornerMax().IsEqual(rightBounds.CornerMax(), Precision::Confusion())) {
+            return true;
+        }
+    }
+    catch (const Standard_Failure&) {
+        return false;
+    }
+
+    auto centerOfGravity = [](const TopoDS_Shape& shape) -> std::optional<gp_Pnt> {
+        try {
+            if (shape.ShapeType() == TopAbs_VERTEX) {
+                return BRep_Tool::Pnt(TopoDS::Vertex(shape));
+            }
+
+            GProp_GProps properties;
+            if (subshapeCount(shape, TopAbs_SOLID) > 0 || shape.ShapeType() == TopAbs_SOLID
+                || shape.ShapeType() == TopAbs_COMPSOLID) {
+                BRepGProp::VolumeProperties(shape, properties);
+            }
+            else if (subshapeCount(shape, TopAbs_FACE) > 0 || shape.ShapeType() == TopAbs_FACE
+                     || shape.ShapeType() == TopAbs_SHELL) {
+                BRepGProp::SurfaceProperties(shape, properties);
+            }
+            else {
+                BRepGProp::LinearProperties(shape, properties);
+            }
+            if (std::abs(properties.Mass()) <= Precision::Confusion()) {
+                return std::nullopt;
+            }
+            return properties.CentreOfMass();
+        }
+        catch (const Standard_Failure&) {
+            return std::nullopt;
+        }
+    };
+
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementLoft() checkProfiles(), after bbox equality calls
+    // "getCenterOfGravity(center)" and accepts profiles when centers differ.
+    const auto leftCenter = centerOfGravity(left);
+    const auto rightCenter = centerOfGravity(right);
+    if (!leftCenter || !rightCenter) {
+        return true;
+    }
+    return !leftCenter->IsEqual(*rightCenter, Precision::Confusion());
+}
+
 void addRuledSurfaceSourceRelation(
     NamedShape& namedShape,
     const std::string& owner,
@@ -203,6 +355,96 @@ void addRuledSurfaceSourceRelation(
 }
 
 }  // namespace
+
+NamedShapeBuild makeElementLoftFromSources(
+    const std::string& owner,
+    const std::vector<NamedShapeSource>& sources,
+    bool solid,
+    bool ruled,
+    bool closed,
+    int maxDegree
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementLoft(), uses BRepOffsetAPI_ThruSections(isSolid, isRuled),
+    // "SetMaxDegree(maxDegree)", profile AddVertex/AddWire, Closed first-profile duplication,
+    // CheckCompatibility(Standard_True), Build(), and MapperThruSections history.
+    std::string error;
+    const auto profiles = prepareLoftProfiles(sources, error);
+    if (!profiles) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, error};
+    }
+    if (sources.size() < 2U) {
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            "Need at least two vertices, edges or wires to create loft face"
+        };
+    }
+
+    try {
+        BRepOffsetAPI_ThruSections generator(
+            solid ? Standard_True : Standard_False,
+            ruled ? Standard_True : Standard_False
+        );
+        generator.SetMaxDegree(maxDegree);
+
+        for (std::size_t index = 0; index < profiles->size(); ++index) {
+            if (index > 0U
+                && !loftProfilesHaveSufficientSeparation(
+                    profiles->at(index),
+                    profiles->at(index - 1U)
+                )) {
+                return NamedShapeBuild {
+                    TopoDS_Shape {},
+                    std::nullopt,
+                    "Segments of a loft do not have sufficient separation"
+                };
+            }
+            const TopoDS_Shape& profile = profiles->at(index);
+            if (profile.ShapeType() == TopAbs_VERTEX) {
+                generator.AddVertex(TopoDS::Vertex(profile));
+            }
+            else {
+                generator.AddWire(TopoDS::Wire(profile));
+            }
+        }
+
+        if (closed && profiles->back().ShapeType() != TopAbs_VERTEX) {
+            const TopoDS_Shape& firstProfile = profiles->front();
+            if (firstProfile.ShapeType() == TopAbs_VERTEX) {
+                generator.AddVertex(TopoDS::Vertex(firstProfile));
+            }
+            else {
+                generator.AddWire(TopoDS::Wire(firstProfile));
+            }
+        }
+
+        generator.CheckCompatibility(Standard_True);
+        generator.Build();
+        if (!generator.IsDone() || generator.Shape().IsNull()) {
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "ThruSections failed"};
+        }
+
+        NamedShape namedShape = namedShapeForThruSectionsHistory(
+            owner,
+            generator.Shape(),
+            sources,
+            generator,
+            profiles->front(),
+            profiles->back()
+        );
+        addDistinct(namedShape.elementHistoryStatus, "part_loft:thru_sections_history");
+        return NamedShapeBuild {generator.Shape(), std::move(namedShape), {}};
+    }
+    catch (const Standard_Failure& failure) {
+        return NamedShapeBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            failure.GetMessageString() != nullptr ? failure.GetMessageString() : "Part::Loft failed"
+        };
+    }
+}
 
 NamedShapeBuild makeElementRuledSurfaceFromEdges(
     const std::string& owner,

@@ -1,0 +1,41 @@
+{
+  "bbox_delta": 0.35,
+  "bbox": {
+    "max": [
+      2.8881636839554425,
+      1.7337003106008595,
+      4.124140595522868
+    ],
+    "min": [
+      -2.046588557029925,
+      -1.801367434245144,
+      -1e-07
+    ]
+  },
+  "freecad_version": "1.2.0 revision 20260519",
+  "object": "Loft",
+  "object_fields": {
+    "closed": true,
+    "feature": "part_loft",
+    "linearize": false,
+    "max_degree": 5,
+    "ruled": false,
+    "sections": [
+      "ProfileA",
+      "ProfileB",
+      "ProfileC"
+    ],
+    "shape": "occt_shell",
+    "solid": false,
+    "status": "ok",
+    "topo_naming_history": "maker_history:loft_thru_sections"
+  },
+  "reference": "FreeCADCmd oracle from part-loft-closed.json; objects: Part::RegularPolygon, Part::RegularPolygon, Part::RegularPolygon, Part::Loft",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "topology_counts": {
+    "edges": 12,
+    "faces": 6,
+    "vertices": 6
+  },
+  "volume": 24.184237808223678
+}

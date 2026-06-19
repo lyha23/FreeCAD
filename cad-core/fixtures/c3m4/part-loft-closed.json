@@ -1,0 +1,60 @@
+{
+  "Objects": [
+    {
+      "Name": "ProfileA",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 6,
+        "Circumradius": 1.4
+      }
+    },
+    {
+      "Name": "ProfileB",
+      "ID": 2,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 6,
+        "Circumradius": 2,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0.8, 0, 2],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "ProfileC",
+      "ID": 3,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 6,
+        "Circumradius": 1.2,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [-0.6, 0.4, 4],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "Loft",
+      "ID": 4,
+      "TypeId": "Part::Loft",
+      "Properties": {
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["ProfileA", "ProfileB", "ProfileC"]
+        },
+        "Solid": false,
+        "Ruled": false,
+        "Closed": true,
+        "Linearize": false,
+        "MaxDegree": 5
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Loft"]
+  }
+}

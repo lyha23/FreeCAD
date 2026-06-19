@@ -461,6 +461,103 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assert_object_matches_expected(result, "c3m4", "part-section-stable-history")
 
+    def assert_part_loft_history(self, result: dict, sections: list[str]) -> None:
+        loft = result["objects"]["Loft"]
+        named_shape = result["named_shapes"]["Loft"]
+        mapper_history = named_shape["mapper_history"]
+
+        self.assertEqual(loft["status"], "ok")
+        self.assertEqual(loft["feature"], "part_loft")
+        self.assertEqual(loft["sections"], sections)
+        self.assertEqual(loft["linearize"], False)
+        self.assertEqual(loft["topo_naming_history"], "maker_history:loft_thru_sections")
+        self.assertEqual(named_shape["element_map_status"], "history_partial")
+        self.assertIn("part_loft:thru_sections_history", named_shape["element_history_status"])
+        self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
+        for section in sections:
+            self.assertTrue(
+                any(
+                    event["maker_stage"] == "maker_history"
+                    and event["relation"] == "generated"
+                    and event["source"]["object"] == section
+                    for event in mapper_history
+                ),
+                section,
+            )
+
+    def test_c3m4_part_loft_two_section_surface_uses_thru_sections_history(self) -> None:
+        result = self.run_recompute("part-loft-two-section-surface", "c3m4")
+        loft = result["objects"]["Loft"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(loft["shape"], "occt_shell")
+        self.assertEqual(loft["solid"], False)
+        self.assertEqual(loft["ruled"], False)
+        self.assertEqual(loft["closed"], False)
+        self.assertEqual(loft["max_degree"], 5)
+        self.assert_part_loft_history(result, ["LowerProfile", "UpperProfile"])
+        self.assert_object_matches_expected(result, "c3m4", "part-loft-two-section-surface")
+
+    def test_c3m4_part_loft_solid_builds_solid_not_surface_only(self) -> None:
+        result = self.run_recompute("part-loft-solid", "c3m4")
+        loft = result["objects"]["Loft"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(loft["shape"], "occt_solid")
+        self.assertEqual(loft["solid"], True)
+        self.assertGreater(loft["volume"], 0.0)
+        self.assert_part_loft_history(result, ["LowerProfile", "UpperProfile"])
+        self.assert_object_matches_expected(result, "c3m4", "part-loft-solid")
+
+    def test_c3m4_part_loft_ruled_accepts_edge_sections(self) -> None:
+        result = self.run_recompute("part-loft-ruled", "c3m4")
+        loft = result["objects"]["Loft"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(loft["shape"], "occt_shell")
+        self.assertEqual(loft["solid"], False)
+        self.assertEqual(loft["ruled"], True)
+        self.assertEqual(loft["max_degree"], 2)
+        self.assert_part_loft_history(result, ["LowerEdge", "UpperEdge"])
+        self.assert_object_matches_expected(result, "c3m4", "part-loft-ruled")
+
+    def test_c3m4_part_loft_closed_duplicates_first_profile(self) -> None:
+        result = self.run_recompute("part-loft-closed", "c3m4")
+        loft = result["objects"]["Loft"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(loft["shape"], "occt_shell")
+        self.assertEqual(loft["closed"], True)
+        self.assert_part_loft_history(result, ["ProfileA", "ProfileB", "ProfileC"])
+        self.assert_object_matches_expected(result, "c3m4", "part-loft-closed")
+
+    def test_c3m4_part_loft_invalid_sections_have_stable_diagnostics(self) -> None:
+        result = self.run_recompute("part-loft-invalid-sections", "c3m4")
+        codes = [item["code"] for item in result["diagnostics"]]
+
+        self.assertEqual(
+            codes,
+            [
+                "missing_link_target",
+                "missing_property",
+                "missing_property",
+                "execution_failed",
+                "execution_failed",
+                "execution_failed",
+            ],
+        )
+        for object_name in (
+            "MissingSections",
+            "EmptySections",
+            "OneSection",
+            "RepeatedSections",
+            "NonProfileSection",
+        ):
+            self.assertEqual(result["objects"][object_name]["status"], "error")
+            self.assertEqual(result["objects"][object_name]["feature"], "part_loft")
+        self.assertEqual(result["objects"]["MissingTarget"]["status"], "error")
+        self.assert_object_matches_expected(result, "c3m4", "part-loft-invalid-sections")
+
     def test_p8_app_link_proxies_linked_shape_with_link_placement(self) -> None:
         result = self.run_recompute("app-link-box", "p8")
         link = result["objects"]["BoxLink"]

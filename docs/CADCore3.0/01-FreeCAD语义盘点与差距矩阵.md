@@ -61,13 +61,13 @@ cad-core 落点：
 - `TopoShape.cpp`、`TopoShapeExpansion.cpp`、`TopoShapeMapper.cpp`。
 - `PropertyTopoShape.cpp`、`BodyBase.cpp`。
 - `FaceMaker*.cpp`、`WireJoiner.cpp`。
-- `modelRefine.cpp`、ShapeFix、Part Boolean、Part primitives、import/export。
+- `modelRefine.cpp`、ShapeFix、Part Boolean、Part primitives、PartFeatures.cpp 中的 `Part::Loft`、import/export。
 
 cad-core 落点：
 
 - `part/topo_shape.*`、`part/shape_exporter.*`、`part/part_import.*`：OCCT maker、shape construction、mesh、bbox、volume、file import/export。
 - `part/topo_shape.*`、`part/property_topo_shape.*`：MapperHistory、ElementMap、ShapeFix history、import shape history。
-- `part/part_feature.*`、`part_design/feature_*.*`、`mesh/feature_mesh_import.*`：Part::Feature、Part Boolean、Part primitive executor。
+- `part/part_feature.*`、`part/part_loft.*`、`part_design/feature_*.*`、`mesh/feature_mesh_import.*`：Part::Feature、Part Boolean、Part primitive executor 和 expected-backed `Part::Loft` 第一批。
 
 ### `src/Mod/PartDesign/App`
 

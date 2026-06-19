@@ -735,6 +735,55 @@ nlohmann::json capabilitiesJson()
                     "projection_on_surface_source_audited_planned",
                     "full_part_surface_family"}},
               }},
+             {"loft",
+              {
+                  // FreeCAD:
+                  // /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PartFeatures.cpp
+                  // ::Loft::execute(), reads "Sections", "Solid", "Ruled", "Closed",
+                  // "Linearize" and "MaxDegree" before calling
+                  // "result.makeElementLoft(shapes, isSolid, isRuled, isClosed, degMax)".
+                  // /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+                  // ::TopoShape::makeElementLoft(), uses BRepOffsetAPI_ThruSections,
+                  // "SetMaxDegree()", "CheckCompatibility(Standard_True)" and
+                  // MapperThruSections history.
+                  {"status", "supported_expected_backed_first_batch"},
+                  {"type_ids", {"Part::Loft"}},
+                  {"properties", {"Sections", "Solid", "Ruled", "Closed", "Linearize", "MaxDegree"}},
+                  {"property_types", {"App::PropertyLinkList", "App::PropertyBool", "App::PropertyInteger"}},
+                  {"covered",
+                   {"source_backed_document_object_executor",
+                    "sections_property_link_list",
+                    "solid_ruled_closed_max_degree",
+                    "prepare_profiles_edge_wire_expected_batch",
+                    "thru_sections_brepoffsetapi",
+                    "loft_thru_sections_maker_history",
+                    "expected_backed_fixtures",
+                    "invalid_sections_diagnostics"}},
+                  {"fixtures",
+                   {"c3m4/part-loft-two-section-surface",
+                    "c3m4/part-loft-solid",
+                    "c3m4/part-loft-ruled",
+                    "c3m4/part-loft-closed",
+                    "c3m4/part-loft-invalid-sections"}},
+                  {"diagnostics",
+                   {"missing_property",
+                    "missing_link_target",
+                    "invalid_property",
+                    "unsupported_property",
+                    "execution_failed"}},
+                  {"request_local_boundaries",
+                   {"source_shape_recomputed_from_document_graph",
+                    "source_backed_part_loft_document_object_only",
+                    "linearize_true_deferred",
+                    "face_vertex_profile_expected_deferred",
+                    "complex_profile_family_deferred"}},
+                  {"remaining_gaps",
+                   {"linearize_post_processing",
+                    "face_vertex_profile_expected",
+                    "complex_profile_family",
+                    "sweep_filling_geomplate_pipeshell",
+                    "full_part_surface_family"}},
+              }},
          }},
         {"part_design",
          {
@@ -1211,6 +1260,11 @@ nlohmann::json capabilitiesJson()
                // ::TopoShape::read(), dispatches importStep/importIges/importBrep and stores the
                // recomputed TopoShape; cad-core exposes request-local import ElementMap aliases.
                "import_shape_element_map",
+               // FreeCAD:
+               // /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+               // ::MapperThruSections maps "GeneratedFace(s)", "FirstShape()" and "LastShape()"
+               // for BRepOffsetAPI_ThruSections results created by Part::Loft.
+               "loft_thru_sections",
                "refine_modified_deleted_generated"}},
              // FreeCAD:
              // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
@@ -1279,6 +1333,14 @@ nlohmann::json capabilitiesJson()
                      }},
                     {"remaining", nlohmann::json::array()}}},
                   {"taper_thru_sections", {{"status", "covered"}, {"covered", {"generated_history"}}}},
+                  {"loft_thru_sections",
+                   {{"status", "done_expected_backed_first_batch"},
+                    {"covered",
+                     {"generated_faces",
+                      "first_shape_last_shape_history",
+                      "source_profile_sections",
+                      "solid_ruled_closed_max_degree_fixtures"}},
+                    {"remaining", nlohmann::json::array()}}},
                   {"dressup",
                    {{"status", "done_first_slice"},
                     {"covered",

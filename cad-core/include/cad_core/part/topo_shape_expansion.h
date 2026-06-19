@@ -35,6 +35,19 @@ NamedShapeBuild makeElementRuledSurfaceFromEdges(
     short orientation
 );
 
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+// ::TopoShape::makeElementLoft(), prepares profiles, calls "BRepOffsetAPI_ThruSections",
+// "SetMaxDegree()", "CheckCompatibility(Standard_True)" and records MapperThruSections
+// "GeneratedFace(s)", "FirstShape()" and "LastShape()" history through makeShapeWithElementMap().
+NamedShapeBuild makeElementLoftFromSources(
+    const std::string& owner,
+    const std::vector<NamedShapeSource>& sources,
+    bool solid,
+    bool ruled,
+    bool closed,
+    int maxDegree
+);
+
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.cpp::TopoShape::read(),
 // dispatches to "importStep", "importIges" and "importBrep"; ImportStep::execute() then stores

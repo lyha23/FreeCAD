@@ -54,6 +54,7 @@ SUPPORTED_NATIVE_TYPES = {
     "Part::ImportBrep",
     "Part::ImportStep",
     "Part::Line",
+    "Part::Loft",
     "Part::MultiCommon",
     "Part::MultiFuse",
     "Part::Plane",
@@ -1526,6 +1527,8 @@ def assembly_object_display_shape(obj: Any, seen: set[str]) -> Any | None:
 def link_name(value: Any) -> str:
     if value is None:
         return ""
+    if isinstance(value, str):
+        return value
     return str(getattr(value, "Name", ""))
 
 
@@ -2745,6 +2748,15 @@ def link_property_object_name(properties: dict[str, Any], name: str) -> str:
     return ""
 
 
+def link_property_object_names(properties: dict[str, Any], name: str) -> list[str]:
+    value = properties.get(name, {})
+    if isinstance(value, dict):
+        return link_names(value.get("values", value.get("value", [])))
+    if isinstance(value, list):
+        return link_names(value)
+    return []
+
+
 def ruled_surface_orientation_from_properties(properties: dict[str, Any]) -> str:
     labels = ["Automatic", "Forward", "Reversed"]
     value = consumer_property(properties, "Orientation", "Automatic")
@@ -2775,6 +2787,46 @@ def ruled_surface_payload(obj: Any, fixture: dict | None = None) -> dict:
     return payload
 
 
+def bool_from_properties(properties: dict[str, Any], name: str, fallback: bool) -> bool:
+    value = consumer_property(properties, name, fallback)
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return bool(value)
+    if isinstance(value, str):
+        return value.lower() in {"true", "1", "yes"}
+    return fallback
+
+
+def int_from_properties(properties: dict[str, Any], name: str, fallback: int) -> int:
+    value = consumer_property(properties, name, fallback)
+    if isinstance(value, (int, float)):
+        return int(value)
+    return fallback
+
+
+def loft_payload(obj: Any, fixture: dict | None = None) -> dict:
+    shape = getattr(obj, "Shape", None)
+    if shape is None or shape.isNull():
+        raise UnsupportedFixture(f"target object {obj.Name} has no shape")
+    spec = fixture_spec_for_object(fixture, str(obj.Name))
+    properties = spec.get("Properties", {}) if isinstance(spec.get("Properties", {}), dict) else {}
+    payload = shape_summary(shape)
+    payload["object_fields"] = {
+        "status": "ok",
+        "shape": shape_kind(shape),
+        "feature": "part_loft",
+        "sections": link_property_object_names(properties, "Sections"),
+        "solid": bool_from_properties(properties, "Solid", True),
+        "ruled": bool_from_properties(properties, "Ruled", False),
+        "closed": bool_from_properties(properties, "Closed", False),
+        "linearize": bool_from_properties(properties, "Linearize", False),
+        "max_degree": int_from_properties(properties, "MaxDegree", 5),
+        "topo_naming_history": "maker_history:loft_thru_sections",
+    }
+    return payload
+
+
 def object_expected_payload(obj: Any, fixture: dict | None = None, created: dict[str, Any] | None = None) -> dict:
     type_id = getattr(obj, "TypeId", "")
     if type_id == "Assembly::AssemblyLink":
@@ -2791,6 +2843,8 @@ def object_expected_payload(obj: Any, fixture: dict | None = None, created: dict
         return app_link_payload(obj, "app_link_element")
     if type_id == "Part::RuledSurface":
         return ruled_surface_payload(obj, fixture)
+    if type_id == "Part::Loft":
+        return loft_payload(obj, fixture)
 
     shape = getattr(obj, "Shape", None)
     if type_id == "Mesh::Import":
