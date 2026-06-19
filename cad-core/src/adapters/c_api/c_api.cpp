@@ -647,6 +647,51 @@ nlohmann::json capabilitiesJson()
                   {"request_local_boundaries", {"source_shape_recomputed_from_document_graph"}},
                   {"remaining_gaps", nlohmann::json::array()},
               }},
+             {"conic_curves",
+              {
+                  // FreeCAD:
+                  // /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp
+                  // ::GeomHyperbola::Save/Restore() persists "MajorRadius", "MinorRadius"
+                  // and "AngleXU"; ::GeomParabola::Save/Restore() persists "Focal" and
+                  // "AngleXU"; ::GeomArcOf*::Save/Restore() adds "StartAngle"/"EndAngle".
+                  // /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PrimitiveFeature.cpp
+                  // has no Part::Hyperbola or Part::Parabola DocumentObject source.
+                  {"status", "done_part_geometry_curve_edge_consumer"},
+                  {"dto", "PartConicCurveDTO"},
+                  {"payload_keys", {"partGeometryCurve", "partGeometryCurveConsumers"}},
+                  {"part_geometry_types", {"Part.Hyperbola", "Part.Parabola"}},
+                  {"curve_types", {"GeomAbs_Hyperbola", "GeomAbs_Parabola"}},
+                  {"covered",
+                   {"hyperbola_finite_edge",
+                    "parabola_finite_edge",
+                    "typed_conic_curve_metadata",
+                    "invalid_param_diagnostics",
+                    "part_extrusion_edge_to_face_consumer"}},
+                  {"fixtures",
+                   {"p8/part-hyperbola-edge",
+                    "p8/part-parabola-edge",
+                    "p8/part-conic-edge-invalid-params",
+                    "p8/part-conic-edge-extrusion"}},
+                  {"diagnostics",
+                   {"invalid_part_conic_axis",
+                    "invalid_part_conic_curve_kind",
+                    "invalid_part_conic_focal",
+                    "invalid_part_conic_number",
+                    "invalid_part_conic_radius",
+                    "invalid_part_conic_trim"}},
+                  {"consumer_type_ids", {"Part::Extrusion"}},
+                  {"request_local_boundaries",
+                   {"no_part_hyperbola_document_object_executor",
+                    "no_part_parabola_document_object_executor",
+                    "source_shape_recomputed_from_document_graph"}},
+                  {"remaining_gaps",
+                   {"full_part_surface_family",
+                    "ruled_surface",
+                    "projection_on_surface",
+                    "gui_conic_edit",
+                    "full_sketcher_solver_conic_constraints",
+                    "distance_type_default_todo"}},
+              }},
          }},
         {"part_design",
          {

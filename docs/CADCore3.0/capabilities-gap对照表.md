@@ -12,6 +12,7 @@
 | `topo_history` | mapper history core、producer matrix、ElementMap policy、child-map source range、ShapeFix / import / Part Offset / Offset2D / Section / DressUp / transformed / Hole history 均已拆成具体 producer 或 diagnostic；WireJoiner full ledger 已接入 `MapperHistory(aHistory) -> ElementMap` | `topo_history.remaining_gaps` 为空 |
 | `sketcher.solver` | conflict / redundancy / malformed / partial redundancy diagnostics、request-local DoF、dependent group metadata、常用几何关系 request-local 写回已覆盖 | remaining gaps 为空 |
 | `part_workbench.offset` | `Part::Compound`、`Part::Offset`、`Part::Offset2D`、`Part::Thickness`、`Part::Section` 第一批 maker history 和 diagnostics 已覆盖 | remaining gaps 为空 |
+| `part_workbench.conic_curves` | `Part.Hyperbola` / `Part.Parabola` geometry wrapper 对应请求级 `PartConicCurveDTO`，已覆盖有限 edge typed shape conversion、稳定 conic diagnostics、Hyperbola / Parabola edge -> `Part::Extrusion` -> `occt_face` consumer | remaining gaps 明确保留 full Part surface family、RuledSurface、ProjectionOnSurface、GUI conic edit、完整 Sketcher solver conic constraints、DistanceType default/TODO；不声明 `Part::Hyperbola` / `Part::Parabola` DocumentObject executor |
 | `part_design.body_chain` | BaseFeature / Group / Tip reroute、Origin / Datum relink、Add/Sub replay first slice 已覆盖 | remaining gaps 为空 |
 | `part_design.pad_pocket` | `UpToShape` single target solid / face 与多面 LinkSubList 主路径覆盖；Pad / Pocket 成功 fixture 已覆盖，offset 多面和非 face selection 保留结构化失败诊断 | remaining gaps 为空；失败边界 diagnostics 为 `unsupported_property`、`unsupported_subshape_kind`、`invalid_subshape`、`missing_link_target` |
 | `part_design.hole` | thread table、head cut resource、ModelThread、profile source mapper history、compound tool shape、subtractive cut history first slice 已覆盖 | remaining gaps 为空 |
@@ -24,7 +25,14 @@
 
 - P5CONIC 已发布 `ArcOfHyperbola` / `Part::GeomArcOfHyperbola` 与 `ArcOfParabola` / `Part::GeomArcOfParabola` 的 Sketcher profile / raw edge、construction 过滤、native `ExternalGeo` 和 projected `ExternalGeometry` TopoDS Edge 支持；证据落在 `cad-core/fixtures/p5`、`cad-core/fixtures/p5/expected`、`cad-core/tests/test_p5_sketch.py` 和 `cad-core/tests/test_diagnostics.py`。
 - 当前 `cad_core_capabilities_json()` 的 `sketcher.solver` 仍只表达 solver-facing diagnostics / request-local geometry update；conic arcs 是 `SketchObject` geometry / external geometry 能力发布，不把完整 Sketcher solver 内部辅助几何 / conic 约束写成 supported。
-- 保持非目标边界：GUI conic edit、完整 Sketcher solver 内部辅助几何 / 约束、未进入本轮的 Part workbench conic surface 均不属于本次 capability。
+- 保持非目标边界：GUI conic edit、完整 Sketcher solver 内部辅助几何 / 约束、未验证的完整 Part workbench conic surface family 均不属于本次 capability。
+
+## Part Workbench conic geometry 发布口径
+
+- PARTCONIC 已发布 `Part.Hyperbola` / `Part.Parabola` geometry wrapper 的 typed DTO / shape conversion：`cad-core/src/part/part_geometry_curve.cpp` 解析 `PartConicCurveDTO`，按 `Geometry.cpp::GeomHyperbola/GeomParabola/GeomArcOf*::Save/Restore()` 字段构造有限 `GeomAbs_Hyperbola` / `GeomAbs_Parabola` edge，并保留 `Part.Hyperbola` / `Part.Parabola` metadata。
+- 验收证据为 `cad-core/fixtures/p8/part-hyperbola-edge.json`、`part-parabola-edge.json`、`part-conic-edge-invalid-params.json`、`part-conic-edge-extrusion.json` 及对应 FreeCAD expected；`tests.test_diagnostics`、`tests.test_p8_features`、`tests.test_expected_fixtures` 保护 diagnostics、metadata、subshape / expected parity。
+- consumer 只发布已验证的 edge-to-face 路径：`part-conic-edge-extrusion` 使用 Hyperbola / Parabola DTO edge 进入现有 `Part::Extrusion`，FreeCAD oracle 对应 `FeatureExtrusion.cpp::Extrusion::extrudeShape()` 的 `result.makeElementPrism(myShape, vec)` regular path。
+- 不支持声明：`Part::Hyperbola` / `Part::Parabola` `DocumentObject` executor、完整 Part surface family、RuledSurface、ProjectionOnSurface、GUI conic edit、完整 Sketcher solver conic constraints、DistanceType default/TODO、BREP / polyline / BSpline 替代 typed conic。
 
 ## WireJoiner capability 边界
 

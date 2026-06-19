@@ -1,4 +1,4 @@
-# PARTCONIC-S5 能力发布与提交闸门
+# 【已实现】PARTCONIC-S5 能力发布与提交闸门
 
 ## 目标
 
@@ -21,6 +21,17 @@
 3. 关闭或保留 blocker，所有保留 blocker 必须有明确后续主线，不得假闭环。
 4. 运行 queue，确认本目录只剩 S5 或清空；完成后重命名 S5。
 5. 按仓库规则检查变更边界并中文提交。
+
+## S5 live 结论
+
+- `pwd`：`/Users/li/Chili3DProject/FreeCAD`。
+- HEAD：`bd2c634282`。
+- 最新提交：`bd2c634282 feat: 实现PARTCONIC S4 Part消费者裁决`。
+- 工作区边界：本轮开始时只有既有未暂存 `src/Mod/Sketcher/App/SketchObject.h`、`src/Mod/Sketcher/App/SketchObjectPyImp.cpp`；S5 保留这些改动，不暂存、不回退。
+- CADCore3.0 发布：`03-【已实现】Sketcher-Part-PartDesign几何能力复刻.md`、`capabilities-gap对照表.md`、`oracle-fixture队列.md` 已加入 PARTCONIC 已收口条目。
+- Capability metadata：`cad_core_capabilities_json()` 新增 `part_workbench.conic_curves`，只发布 `Part.Hyperbola` / `Part.Parabola` geometry wrapper -> `PartConicCurveDTO` finite edge、stable diagnostics、Hyperbola / Parabola edge -> `Part::Extrusion` -> `occt_face` consumer，不改 core 几何行为。
+- 矩阵结论：`PARTCONIC-SCOPE-010/011` 与 `PARTCONIC-BLOCK-007` 关闭；所有 non-goal registry 项保持 active 或 active-locked。
+- 队列结论：本文件重命名为 `6-19-17-07-【已实现】PARTCONIC-S5-能力发布与提交闸门.md` 后，PARTCONIC step queue 应为空。
 
 ## 非目标
 

@@ -2084,6 +2084,39 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "offset2d_makeoffsetfix_intersection_compound_collective",
             capabilities["part_workbench"]["offset"]["remaining_gaps"],
         )
+        conic_curves = capabilities["part_workbench"]["conic_curves"]
+        self.assertEqual(conic_curves["status"], "done_part_geometry_curve_edge_consumer")
+        self.assertEqual(conic_curves["dto"], "PartConicCurveDTO")
+        self.assertIn("partGeometryCurve", conic_curves["payload_keys"])
+        self.assertIn("partGeometryCurveConsumers", conic_curves["payload_keys"])
+        self.assertIn("Part.Hyperbola", conic_curves["part_geometry_types"])
+        self.assertIn("Part.Parabola", conic_curves["part_geometry_types"])
+        self.assertIn("GeomAbs_Hyperbola", conic_curves["curve_types"])
+        self.assertIn("GeomAbs_Parabola", conic_curves["curve_types"])
+        self.assertIn("hyperbola_finite_edge", conic_curves["covered"])
+        self.assertIn("parabola_finite_edge", conic_curves["covered"])
+        self.assertIn("part_extrusion_edge_to_face_consumer", conic_curves["covered"])
+        self.assertIn("p8/part-hyperbola-edge", conic_curves["fixtures"])
+        self.assertIn("p8/part-parabola-edge", conic_curves["fixtures"])
+        self.assertIn("p8/part-conic-edge-invalid-params", conic_curves["fixtures"])
+        self.assertIn("p8/part-conic-edge-extrusion", conic_curves["fixtures"])
+        self.assertIn("invalid_part_conic_curve_kind", conic_curves["diagnostics"])
+        self.assertIn("Part::Extrusion", conic_curves["consumer_type_ids"])
+        self.assertIn(
+            "no_part_hyperbola_document_object_executor",
+            conic_curves["request_local_boundaries"],
+        )
+        self.assertIn(
+            "no_part_parabola_document_object_executor",
+            conic_curves["request_local_boundaries"],
+        )
+        self.assertIn("full_part_surface_family", conic_curves["remaining_gaps"])
+        self.assertIn("ruled_surface", conic_curves["remaining_gaps"])
+        self.assertIn("projection_on_surface", conic_curves["remaining_gaps"])
+        self.assertIn(
+            "full_sketcher_solver_conic_constraints",
+            conic_curves["remaining_gaps"],
+        )
         self.assertNotIn("complete_mapper_history", capabilities["topo_history"]["remaining_gaps"])
         self.assertNotIn(
             "element_map_child_map_preserve_propagate_lifecycle",

@@ -11,6 +11,8 @@
 - S2 脏工作区边界：仍只有既有未暂存 `src/Mod/Sketcher/App/SketchObject.h`、`src/Mod/Sketcher/App/SketchObjectPyImp.cpp`；S2 只改本 C3M4 主线 docs/矩阵，不暂存或回退 Sketcher 改动。
 - S4 live 基线：`pwd` 为 `/Users/li/Chili3DProject/FreeCAD`；HEAD 为 `b37a091aba`（`b37a091aba feat: 实现PARTCONIC S3圆锥曲线edge构造`）。
 - S4 脏工作区边界：开始时仍只有既有未暂存 `src/Mod/Sketcher/App/SketchObject.h`、`src/Mod/Sketcher/App/SketchObjectPyImp.cpp`；S4 保留这些改动，不暂存或回退。
+- S5 live 基线：`pwd` 为 `/Users/li/Chili3DProject/FreeCAD`；HEAD 为 `bd2c634282`（`bd2c634282 feat: 实现PARTCONIC S4 Part消费者裁决`）。
+- S5 脏工作区边界：开始时仍只有既有未暂存 `src/Mod/Sketcher/App/SketchObject.h`、`src/Mod/Sketcher/App/SketchObjectPyImp.cpp`；S5 只暂存本主线文档、CADCore3.0 文档、capability metadata 和 adapter 测试，不暂存或回退 Sketcher 改动。
 - S0 queue 结论：P5CONIC `step_goal_queue.py` 返回空队列；PARTCONIC queue 在 S0 收口前从 `6-19-17-02-PARTCONIC-S0-live基线与范围冻结.md` 开始，S0 完成后下一项应为 S1。
 - 上一轮已收口：P5CONIC 已发布 `ArcOfHyperbola` / `ArcOfParabola` 的 Sketcher profile、construction 过滤、native `ExternalGeo` 与 projected `ExternalGeometry` 支持。
 - 新主线定位：从 Sketcher conic arcs 向 Part workbench / Part geometry API 侧推进，补齐 `Part.Hyperbola` / `Part.Parabola` 作为 Part 几何对象进入 cad-core 计算和消费链路的能力。
@@ -91,6 +93,14 @@ S4 已证明 S3 的 PartConicCurveDTO edge 能进入 Part workbench consumer。�
 
 S4 关闭 `PARTCONIC-BLOCK-006`：consumer fixture 的 diagnostics 为空，bbox/topology/subshape 与 expected parity 通过，base curve metadata 既保留在 DTO object，也通过 `source_*` 字段追溯到 consumer object。surface 发布口径只允许描述“已验证的 conic edge-to-face Part::Extrusion consumer”；完整 Part surface family、RuledSurface、ProjectionOnSurface 仍是 non-goal，留给后续 source-backed surface 主线。
 
+## S5 能力发布与提交闸门结论
+
+S5 已把 PARTCONIC 发布到 CADCore3.0 文档与 runtime capability metadata。supported 口径固定为：`Part.Hyperbola` / `Part.Parabola` geometry wrapper 对应请求级 `PartConicCurveDTO`，支持有限 edge typed shape conversion，保留 `GeomAbs_Hyperbola` / `GeomAbs_Parabola` 与 `Part.Hyperbola` / `Part.Parabola` metadata；`part-hyperbola-edge`、`part-parabola-edge`、`part-conic-edge-invalid-params` 和 `part-conic-edge-extrusion` 均由 FreeCAD expected 或 stable diagnostics 保护；Hyperbola / Parabola edge 已验证可进入 `Part::Extrusion` consumer 输出 `occt_face`。
+
+`cad_core_capabilities_json()` 只新增 `part_workbench.conic_curves` metadata，不改 core 几何行为。该 metadata 明确 `PartConicCurveDTO`、payload key、fixture、diagnostics、已验证 consumer 和 remaining gaps；不声明 `Part::Hyperbola` / `Part::Parabola` `DocumentObject` executor，也不把完整 Part surface family 写成 supported。
+
+S5 关闭 `PARTCONIC-SCOPE-010/011` 和 `PARTCONIC-BLOCK-007`：CADCore3.0 文档已写清 full Part surface family、RuledSurface、ProjectionOnSurface、GUI conic edit、完整 Sketcher solver conic constraints、DistanceType default/TODO、BREP / polyline / BSpline 替代 typed conic 均保持 non-goal。所有 non-goal registry 项保持 active 或 active-locked，不做假闭环。
+
 ## 最小完整语义批次
 
 本轮不拆成“先 Hyperbola、后 Parabola”。两者在 FreeCAD Part geometry 层同属 conic curve wrapper，字段恢复、finite arc、edge extraction、invalid 参数和 Part consumer 的风险边界一致，应作为一个 Part conic geometry 批次推进。
@@ -118,12 +128,12 @@ S4 关闭 `PARTCONIC-BLOCK-006`：consumer fixture 的 diagnostics 为空，bbox
 - `矩阵/part_conic_geometry_blocker_queue.tsv`
 - `矩阵/part_conic_geometry_non_goal_registry.tsv`
 - `矩阵/part_conic_geometry_fixture_oracle_matrix.tsv`
-- `工作步骤细分/6-19-17-02-PARTCONIC-S0-live基线与范围冻结.md`
-- `工作步骤细分/6-19-17-03-PARTCONIC-S1-FreeCAD源码与DTO边界审计.md`
+- `工作步骤细分/6-19-17-02-【已实现】PARTCONIC-S0-live基线与范围冻结.md`
+- `工作步骤细分/6-19-17-03-【已实现】PARTCONIC-S1-FreeCAD源码与DTO边界审计.md`
 - `工作步骤细分/6-19-17-04-【已实现】PARTCONIC-S2-fixture与oracle矩阵设计.md`
-- `工作步骤细分/6-19-17-05-PARTCONIC-S3-conic曲线edge构造实现.md`
-- `工作步骤细分/6-19-17-06-PARTCONIC-S4-Part消费者与surface裁决.md`
-- `工作步骤细分/6-19-17-07-PARTCONIC-S5-能力发布与提交闸门.md`
+- `工作步骤细分/6-19-17-05-【已实现】PARTCONIC-S3-conic曲线edge构造实现.md`
+- `工作步骤细分/6-19-17-06-【已实现】PARTCONIC-S4-Part消费者与surface裁决.md`
+- `工作步骤细分/6-19-17-07-【已实现】PARTCONIC-S5-能力发布与提交闸门.md`
 
 ## 验收分层
 
@@ -141,6 +151,7 @@ git diff --check -- docs/FreeCAD几何生态迁移工程-细分/C3M4-PartWorkben
 cd /Users/li/Chili3DProject/FreeCAD/cad-core
 cmake --build build
 python3 -m unittest tests.test_p8_features tests.test_expected_fixtures
+python3 -m unittest tests.test_adapters
 ```
 
 重型收口：
