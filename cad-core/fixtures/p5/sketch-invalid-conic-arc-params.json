@@ -7,11 +7,10 @@
       "Properties": {
         "Geometry": [
           {
-            "kind": "ArcOfHyperbola",
+            "kind": "ArcOfParabola",
             "center": [0, 0],
-            "majorRadius": 4,
-            "minorRadius": 2,
-            "startAngle": 0,
+            "focal": 0,
+            "startAngle": -1,
             "endAngle": 1
           }
         ],

@@ -33,6 +33,12 @@
 - External geometry：两类 conic arc 经外部几何合并后，profile edge 计数和 subshape 输出稳定。
 - 诊断口径：旧 `unsupported_geometry` case 改为支持能力或改名为真正 unsupported case，避免测试继续表达过期能力状态。
 
+## S4 能力发布口径
+
+- supported：`ArcOfHyperbola` / `Part::GeomArcOfHyperbola` 与 `ArcOfParabola` / `Part::GeomArcOfParabola` 支持 Sketcher profile / raw edge、construction 过滤、native `ExternalGeo` 旧几何复用，以及 projected `ExternalGeometry` TopoDS Edge 投影为 construction external curves。
+- 证据：`cad-core/fixtures/p5/sketch-hyperbola-arc-profile.json`、`sketch-parabola-arc-profile.json`、`sketch-conic-arcs-construction-filter.json`、`sketch-conic-arcs-external-geometry-native.json`、`sketch-conic-arcs-external-geometry-projected.json`、`sketch-invalid-conic-arc-params.json`，以及 `cad-core/fixtures/p5/expected/*.freecad.json` 中的 FreeCAD 1.2.0devR20260519 expected。
+- known gap / non-goal：完整 Sketcher solver 内部辅助几何 / conic 约束、GUI conic edit、未进入本轮的 Part workbench conic surface 不在本轮支持声明内。
+
 ## 工作包结构
 
 - `工作步骤细分/6-19-13-44-P5CONIC-S0-live基线与边界复核.md`

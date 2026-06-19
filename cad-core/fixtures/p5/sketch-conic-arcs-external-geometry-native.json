@@ -1,0 +1,55 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [],
+        "ExternalGeo": {
+          "PropertyType": "Part::PropertyGeometryList",
+          "Geometry": [
+            {
+              "kind": "ArcOfHyperbola",
+              "center": [0, 0],
+              "majorRadius": 4,
+              "minorRadius": 2,
+              "startAngle": -0.75,
+              "endAngle": 0.75,
+              "construction": true,
+              "Ref": "MissingSource.Edge1",
+              "ExternalFlags": ["Missing"]
+            },
+            {
+              "kind": "ArcOfParabola",
+              "center": [6, 0],
+              "focal": 1.5,
+              "startAngle": -1,
+              "endAngle": 1,
+              "construction": true,
+              "Ref": "MissingSource.Edge2",
+              "ExternalFlags": ["Missing"]
+            }
+          ]
+        },
+        "ExternalGeometry": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "MissingSource",
+              "SubList": ["Edge1"],
+              "ExternalFlags": ["Missing"]
+            },
+            {
+              "value": "MissingSource",
+              "SubList": ["Edge2"],
+              "ExternalFlags": ["Missing"]
+            }
+          ]
+        },
+        "Constraints": []
+      }
+    }
+  ],
+  "recompute": {"objs": ["Sketch"]}
+}

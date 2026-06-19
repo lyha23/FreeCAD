@@ -1,0 +1,36 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
+          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
+          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
+          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]},
+          {
+            "kind": "ArcOfHyperbola",
+            "center": [5, 2.5],
+            "majorRadius": 4,
+            "minorRadius": 2,
+            "startAngle": -0.5,
+            "endAngle": 0.5,
+            "construction": true
+          },
+          {
+            "kind": "ArcOfParabola",
+            "center": [5, 2.5],
+            "focal": 1,
+            "startAngle": -1,
+            "endAngle": 1,
+            "construction": true
+          }
+        ],
+        "Constraints": []
+      }
+    }
+  ],
+  "recompute": {"objs": ["Sketch"]}
+}

@@ -2860,6 +2860,19 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["edge_count"], 2)
         self.assert_object_matches_expected(result, "p5", "sketch-arc-ellipse-profile")
 
+    def test_p5_conic_arc_profiles_are_supported_open_edges(self) -> None:
+        for fixture in ["sketch-hyperbola-arc-profile", "sketch-parabola-arc-profile"]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p5")
+                sketch = result["objects"]["Sketch"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(sketch["status"], "ok")
+                self.assertEqual(sketch["edge_count"], 1)
+                self.assertEqual(sketch["raw_edge_count"], 1)
+                self.assertFalse(sketch["profile_ready"])
+                self.assert_object_matches_expected(result, "p5", fixture)
+
     def test_p5_ellipse_profile_outputs_pad(self) -> None:
         result = self.run_recompute("sketch-ellipse-profile", "p5")
         sketch = result["objects"]["Sketch"]
@@ -2892,6 +2905,17 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["edge_count"], 4)
         self.assertEqual(sketch["coincident_constraints_applied"], 1)
         self.assert_object_matches_expected(result, "p5", "sketch-construction-ignored")
+
+    def test_p5_conic_construction_arcs_are_ignored_for_profile(self) -> None:
+        result = self.run_recompute("sketch-conic-arcs-construction-filter", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertTrue(sketch["profile_ready"])
+        self.assertEqual(sketch["edge_count"], 4)
+        self.assertEqual(sketch["raw_edge_count"], 4)
+        self.assert_object_matches_expected(result, "p5", "sketch-conic-arcs-construction-filter")
 
     def test_p5_external_edge_projects_as_construction_geometry(self) -> None:
         result = self.run_recompute("sketch-external-edge", "p5")
@@ -2929,6 +2953,20 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(sketch["external_geometry_count"], 1)
                 self.assertEqual(sketch["external_curve_count"], 1)
                 self.assert_object_matches_expected(result, "p5", fixture)
+
+    def test_p5_conic_external_geometry_projects_as_construction_curves(self) -> None:
+        result = self.run_recompute("sketch-conic-arcs-external-geometry-projected", "p5")
+        source = result["objects"]["SourceSketch"]
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(source["status"], "ok")
+        self.assertEqual(source["edge_count"], 2)
+        self.assertEqual(sketch["status"], "ok")
+        self.assertEqual(sketch["edge_count"], 4)
+        self.assertEqual(sketch["external_geometry_count"], 2)
+        self.assertEqual(sketch["external_curve_count"], 2)
+        self.assert_object_matches_expected(result, "p5", "sketch-conic-arcs-external-geometry-projected")
 
     def test_p5_external_face_projects_boundary_as_construction_geometry(self) -> None:
         for fixture, expected_count in [
@@ -3191,6 +3229,19 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["external_geometry_state_counts"]["missing"], 1)
         self.assertEqual(sketch["external_geometry_state_counts"]["recovered_missing"], 0)
 
+    def test_p5_conic_native_external_geo_reuses_old_geometry(self) -> None:
+        result = self.run_recompute("sketch-conic-arcs-external-geometry-native", "p5")
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual(sketch["status"], "ok")
+        self.assertFalse(sketch["profile_ready"])
+        self.assertEqual(sketch["edge_count"], 0)
+        self.assertEqual(sketch["external_geometry_count"], 2)
+        self.assertEqual(sketch["external_curve_count"], 2)
+        self.assertEqual(sketch["external_geometry_state_counts"]["missing"], 2)
+
     def test_c3m2_external_geometry_detached_native_external_geo_clears_ref_update(self) -> None:
         result = self.run_payload(self.native_external_geo_state_payload(["Detached", "Missing"]))
         sketch = result["objects"]["Sketch"]
@@ -3230,6 +3281,62 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(sketch["external_curve_count"], expected_curve_count)
                 self.assertEqual(sketch["external_point_count"], 0)
                 self.assert_object_matches_expected(result, "p5", fixture)
+
+    def test_p5_invalid_conic_arc_params_report_unsupported_geometry(self) -> None:
+        cases = [
+            (
+                "hyperbola-major-radius",
+                {
+                    "kind": "ArcOfHyperbola",
+                    "center": [0, 0],
+                    "majorRadius": 0,
+                    "minorRadius": 2,
+                    "startAngle": -0.5,
+                    "endAngle": 0.5,
+                },
+            ),
+            (
+                "parabola-focal",
+                {
+                    "kind": "ArcOfParabola",
+                    "center": [0, 0],
+                    "focal": 0,
+                    "startAngle": -1,
+                    "endAngle": 1,
+                },
+            ),
+            (
+                "equal-trim",
+                {
+                    "kind": "ArcOfHyperbola",
+                    "center": [0, 0],
+                    "majorRadius": 4,
+                    "minorRadius": 2,
+                    "startAngle": 0.5,
+                    "endAngle": 0.5,
+                },
+            ),
+        ]
+        for case_id, geometry in cases:
+            with self.subTest(case_id=case_id):
+                result = self.run_payload(
+                    {
+                        "Objects": [
+                            {
+                                "Name": "Sketch",
+                                "ID": 1,
+                                "TypeId": "Sketcher::SketchObject",
+                                "Properties": {"Geometry": [geometry], "Constraints": []},
+                            }
+                        ],
+                        "recompute": {"objs": ["Sketch"]},
+                    }
+                )
+                diagnostic = result["diagnostics"][0]
+
+                self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_geometry"])
+                self.assertEqual(diagnostic["object"], "Sketch")
+                self.assertEqual(diagnostic["property"], "Geometry")
 
     def test_p5_closed_sketch_exports_internal_subshapes(self) -> None:
         result = self.run_recompute("sketch-internal-face", "p5")

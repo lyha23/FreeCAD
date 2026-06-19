@@ -20,6 +20,12 @@
 | `object_metadata` | Pad / Pocket / Part::Extrusion taper history metadata 已为 `covered_full` | `NamedShape.element_map_status=history_partial` 只表达当前 maker history metadata，不恢复旧 local-history gap |
 | `known_gaps` | 空 | 后续新增缺口必须拆成 producer、lifecycle、feature-family、JointType 或 adapter contract 项 |
 
+## Sketcher conic arcs 发布口径
+
+- P5CONIC 已发布 `ArcOfHyperbola` / `Part::GeomArcOfHyperbola` 与 `ArcOfParabola` / `Part::GeomArcOfParabola` 的 Sketcher profile / raw edge、construction 过滤、native `ExternalGeo` 和 projected `ExternalGeometry` TopoDS Edge 支持；证据落在 `cad-core/fixtures/p5`、`cad-core/fixtures/p5/expected`、`cad-core/tests/test_p5_sketch.py` 和 `cad-core/tests/test_diagnostics.py`。
+- 当前 `cad_core_capabilities_json()` 的 `sketcher.solver` 仍只表达 solver-facing diagnostics / request-local geometry update；conic arcs 是 `SketchObject` geometry / external geometry 能力发布，不把完整 Sketcher solver 内部辅助几何 / conic 约束写成 supported。
+- 保持非目标边界：GUI conic edit、完整 Sketcher solver 内部辅助几何 / 约束、未进入本轮的 Part workbench conic surface 均不属于本次 capability。
+
 ## WireJoiner capability 边界
 
 | 项 | 当前 capability 状态 | 当前代码事实 | 后续目标 |

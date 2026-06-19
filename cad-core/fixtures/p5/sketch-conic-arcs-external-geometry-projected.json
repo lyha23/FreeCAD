@@ -1,0 +1,53 @@
+{
+  "Objects": [
+    {
+      "Name": "SourceSketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "ArcOfHyperbola",
+            "center": [0, 0],
+            "majorRadius": 4,
+            "minorRadius": 2,
+            "angle": 0.2,
+            "startAngle": -0.75,
+            "endAngle": 0.75
+          },
+          {
+            "kind": "ArcOfParabola",
+            "center": [8, 0],
+            "focal": 1.5,
+            "angle": 0.1,
+            "startAngle": -1,
+            "endAngle": 1
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Sketch",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, -3], "end": [12, -3]},
+          {"kind": "LineSegment", "start": [12, -3], "end": [12, 3]},
+          {"kind": "LineSegment", "start": [12, 3], "end": [0, 3]},
+          {"kind": "LineSegment", "start": [0, 3], "end": [0, -3]}
+        ],
+        "ExternalGeometry": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {"value": "SourceSketch", "SubList": ["Edge1"]},
+            {"value": "SourceSketch", "SubList": ["Edge2"]}
+          ]
+        },
+        "Constraints": []
+      }
+    }
+  ],
+  "recompute": {"objs": ["SourceSketch", "Sketch"]}
+}

@@ -7,18 +7,17 @@
       "Properties": {
         "Geometry": [
           {
-            "kind": "OffsetCurve",
-            "source": "Edge1",
-            "offset": 1
+            "kind": "ArcOfParabola",
+            "center": [0, 0],
+            "focal": 1.5,
+            "angle": 0.3,
+            "startAngle": -1.2,
+            "endAngle": 1.1
           }
         ],
         "Constraints": []
       }
     }
   ],
-  "recompute": {
-    "objs": [
-      "Sketch"
-    ]
-  }
+  "recompute": {"objs": ["Sketch"]}
 }

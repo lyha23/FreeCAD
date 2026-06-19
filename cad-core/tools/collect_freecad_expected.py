@@ -380,6 +380,43 @@ def sketch_geometry_value(FreeCAD: Any, item: dict) -> tuple[Any, bool]:
         )
         ellipse.AngleXU = float(item.get("angle", 0.0))
         return Part.ArcOfEllipse(ellipse, number_field(item, "startAngle"), number_field(item, "endAngle")), construction
+    if kind in {"ArcOfHyperbola", "Part::GeomArcOfHyperbola"}:
+        hyperbola = Part.Hyperbola(
+            vector_value(FreeCAD, item.get("center"), "ArcOfHyperbola.center"),
+            number_field(item, "majorRadius"),
+            number_field(item, "minorRadius"),
+        )
+        hyperbola.AngleXU = float(item.get("angle", 0.0))
+        # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp
+        # ::GeomArcOfHyperbola::Restore() reads "MajorRadius", "MinorRadius", "AngleXU",
+        # "StartAngle" and "EndAngle", then calls GC_MakeArcOfHyperbola(..., Standard_True).
+        return (
+            Part.ArcOfHyperbola(
+                hyperbola,
+                number_field(item, "startAngle"),
+                number_field(item, "endAngle"),
+                True,
+            ),
+            construction,
+        )
+    if kind in {"ArcOfParabola", "Part::GeomArcOfParabola"}:
+        center = vector_value(FreeCAD, item.get("center"), "ArcOfParabola.center")
+        focal = number_field(item, "focal")
+        angle = float(item.get("angle", 0.0))
+        focus = FreeCAD.Vector(center.x + focal * math.cos(angle), center.y + focal * math.sin(angle), center.z)
+        parabola = Part.Parabola(focus, center, normal)
+        # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp
+        # ::GeomArcOfParabola::Restore() reads "Focal", "AngleXU", "StartAngle" and
+        # "EndAngle", then calls GC_MakeArcOfParabola(..., Standard_True).
+        return (
+            Part.ArcOfParabola(
+                parabola,
+                number_field(item, "startAngle"),
+                number_field(item, "endAngle"),
+                True,
+            ),
+            construction,
+        )
     if kind in {"BSpline", "BSplineCurve", "GeomBSplineCurve"}:
         degree = int_field(item, "degree")
         raw_poles = item.get("poles")

@@ -23,6 +23,8 @@
 #include <gp_Circ.hxx>
 #include <gp_Dir.hxx>
 #include <gp_Elips.hxx>
+#include <gp_Hypr.hxx>
+#include <gp_Parab.hxx>
 #include <gp_Pln.hxx>
 #include <gp_Vec.hxx>
 
@@ -1076,6 +1078,73 @@ bool projectExternalCurveEdge(
                 center,
                 ellipse.MajorRadius(),
                 ellipse.MinorRadius(),
+                angle,
+                curve.FirstParameter(),
+                curve.LastParameter(),
+                !defining
+            }
+        );
+        return true;
+    }
+
+    if (curve.GetType() == GeomAbs_Hyperbola) {
+        const gp_Hypr hyperbola = curve.Hyperbola();
+        const gp_Dir localNormal
+            = directionInSketchLocalPlane(hyperbola.Axis().Direction(), sketchPlacement);
+        if (!localNormal.IsParallel(gp_Dir(0, 0, 1), Precision::Angular())) {
+            return false;
+        }
+
+        const gp_Pnt center = pointInSketchLocalPlane(hyperbola.Location(), sketchPlacement);
+        const double angle = angleXUInSketchPlane(
+            hyperbola.XAxis().Direction(),
+            hyperbola.Axis().Direction(),
+            sketchPlacement
+        );
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp
+        // ::GeomArcOfHyperbola::Restore(), reads "MajorRadius", "MinorRadius",
+        // "AngleXU", "StartAngle" and "EndAngle"; /Users/li/Chili3DProject/FreeCAD
+        // /src/Mod/Sketcher/App/SketchObjectExternal.cpp::processEdge2() maps
+        // GeomAbs_Hyperbola to construction Part::GeomArcOfHyperbola from the trimmed params.
+        result.hyperbolaArcs.push_back(
+            SketchHyperbolaArc {
+                0U,
+                center,
+                hyperbola.MajorRadius(),
+                hyperbola.MinorRadius(),
+                angle,
+                curve.FirstParameter(),
+                curve.LastParameter(),
+                !defining
+            }
+        );
+        return true;
+    }
+
+    if (curve.GetType() == GeomAbs_Parabola) {
+        const gp_Parab parabola = curve.Parabola();
+        const gp_Dir localNormal
+            = directionInSketchLocalPlane(parabola.Axis().Direction(), sketchPlacement);
+        if (!localNormal.IsParallel(gp_Dir(0, 0, 1), Precision::Angular())) {
+            return false;
+        }
+
+        const gp_Pnt center = pointInSketchLocalPlane(parabola.Location(), sketchPlacement);
+        const double angle = angleXUInSketchPlane(
+            parabola.XAxis().Direction(),
+            parabola.Axis().Direction(),
+            sketchPlacement
+        );
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp
+        // ::GeomArcOfParabola::Restore(), reads "Focal", "AngleXU", "StartAngle"
+        // and "EndAngle"; /Users/li/Chili3DProject/FreeCAD
+        // /src/Mod/Sketcher/App/SketchObjectExternal.cpp::processEdge2() maps
+        // GeomAbs_Parabola to construction Part::GeomArcOfParabola from the trimmed params.
+        result.parabolaArcs.push_back(
+            SketchParabolaArc {
+                0U,
+                center,
+                parabola.Focal(),
                 angle,
                 curve.FirstParameter(),
                 curve.LastParameter(),

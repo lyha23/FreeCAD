@@ -142,6 +142,9 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "sketch-bspline-profile": [],
             "sketch-circle-profile": [],
             "sketch-coincident-profile": [],
+            "sketch-conic-arcs-construction-filter": [],
+            "sketch-conic-arcs-external-geometry-native": [],
+            "sketch-conic-arcs-external-geometry-projected": [],
             "sketch-construction-ignored": [],
             "sketch-coordinate-constraints-profile": [],
             "sketch-diameter-constraints-profile": [],
@@ -163,11 +166,14 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "sketch-external-tilted-ellipse-edge": [],
             "sketch-external-tilted-circle-edge": [],
             "sketch-external-vertex": [],
+            "sketch-hyperbola-arc-profile": [],
             "sketch-horizontal-vertical-profile": [],
+            "sketch-invalid-conic-arc-params": ["unsupported_geometry"],
             "sketch-internal-face": [],
             "sketch-line-relation-constraints-profile": [],
             "sketch-missing-external": ["missing_link_target"],
             "sketch-open-wire-internal-empty": [],
+            "sketch-parabola-arc-profile": [],
             "sketch-perpendicular-curve-constraints-profile": [],
             "sketch-perpendicular-pointwise-constraints-profile": [],
             "sketch-point-on-object-constraints-profile": [],
@@ -177,7 +183,6 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "sketch-symmetric-constraints-profile": [],
             "sketch-tangent-constraints-profile": [],
             "sketch-unsupported-constraint": ["unsupported_property"],
-            "sketch-unsupported-hyperbola": ["unsupported_geometry"],
         }
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):
