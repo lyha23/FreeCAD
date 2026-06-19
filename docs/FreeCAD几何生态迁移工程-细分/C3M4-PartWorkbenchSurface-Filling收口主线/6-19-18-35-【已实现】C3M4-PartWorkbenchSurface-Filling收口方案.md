@@ -19,6 +19,12 @@
 - 已补 focused tests，断言成功 shape、默认参数 metadata、非原生 helper metadata、boundary source evidence、invalid diagnostics 和 checked-in expected 对齐。
 - S1 不发布 C API capability，也不支持 `surface`、`supports`、`orders`、constraint 输入或非默认参数；这些仍由 S2+ 或 blocker rows 管理。
 
+## S2 结论
+
+- 已在 `cad_core_capabilities_json()` 发布 `part_workbench.filling`，status 为 expected-backed first batch，列出 `Part::FilledFace` cad-core helper type、`Boundary` / `App::PropertyLinkSubList`、closed wire default、connected boundary edges default、`BRepOffsetAPI_MakeFilling`、`maker_history:filling`、source-backed helper metadata、invalid diagnostics 和三条 `c3m4/part-filling-*` fixtures。
+- capability 已明确 `Part::FilledFace` 不是原生 FreeCAD DocumentObject，只是 FreeCAD `Part.makeFilledFace()` source-backed helper parity。
+- CADCore3.0 / P8 文档已把 Filling first batch 与 Loft / Sweep 并列，并保留 `surface`、`supports`、`orders`、non-default params、constraints、compound optional case 和 full Part surface family 的 blocked / deferred 状态。
+
 ## FreeCAD 调用链
 
 - `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/AppPartPy.cpp:122` 的 `getPyShapes()` 接受单个 `TopoShapePy`、`GeometryPy` 或 shape sequence；sequence 中非 shape 会报 `expect shape in sequence`。
@@ -39,7 +45,7 @@
 - `part/topo_shape_expansion`：新增 `makeElementFilledFaceFromSources(...)` helper，直接封装 `BRepOffsetAPI_MakeFilling`、boundary wire 选择、wire fix 和 maker history；不要在 adapter 层用 `FaceMaker` 或输出修正替代。
 - `topo` / `NamedShape`：输出 `maker_history:filling` 或等价状态，并至少保留 boundary source edge 到生成 face/edge 的 source relation 证据；S1 测试不能只看 bbox。
 - `tools/collect_freecad_expected.py`：为非原生 helper operation 增加 collector 分支：创建 source objects 后调用 `Part.makeFilledFace(...)`，再采集 shape summary、subshape、element map / history marker 和 diagnostics。
-- `adapters/c_api`：S2 才发布 capability；文案区分 simple boundary filling、deferred support/order filling 和 diagnostic-only 分支。
+- `adapters/c_api`：S2 已发布 `part_workbench.filling` capability；文案区分 simple boundary filling、deferred support/order filling 和 diagnostic-only 分支。
 
 ## 首批 oracle / fixture 组合
 

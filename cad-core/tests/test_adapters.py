@@ -871,6 +871,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "Part::Thickness",
             "Part::Loft",
             "Part::Sweep",
+            "Part::FilledFace",
             "Part::BooleanFragments",
             "App::Link",
             "Assembly::AssemblyObject",
@@ -886,8 +887,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "missing_external_geometry_snapshot",
             "missing_target",
             "missing_link_target",
+            "missing_property",
             "cycle_dependency",
+            "execution_failed",
             "unsupported_type",
+            "unsupported_property",
             "invalid_subshape",
             "unsupported_subshape_kind",
             "unsupported_stable_subname",
@@ -1899,6 +1903,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("part_offset", capabilities["topo_history"]["maker_history"])
         self.assertIn("loft_thru_sections", capabilities["topo_history"]["maker_history"])
         self.assertIn("pipeshell", capabilities["topo_history"]["maker_history"])
+        self.assertIn("filling", capabilities["topo_history"]["maker_history"])
         self.assertIn("transformed_pattern_addsub_ownership", capabilities["topo_history"]["maker_history"])
         self.assertIn("transformed_pattern_full_history", capabilities["topo_history"]["maker_history"])
         self.assertIn("hole_find_holes_profile_source_history", capabilities["topo_history"]["maker_history"])
@@ -1986,6 +1991,16 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("spine_sublist_compound", producer_matrix["pipeshell"]["covered"])
         self.assertIn("solid_frenet_transition_fixtures", producer_matrix["pipeshell"]["covered"])
         self.assertEqual(producer_matrix["pipeshell"]["remaining"], [])
+        self.assertEqual(producer_matrix["part_filling"]["status"], "done_expected_backed_first_batch")
+        self.assertIn("maker_history:filling", producer_matrix["part_filling"]["covered"])
+        self.assertIn("boundary_source_evidence", producer_matrix["part_filling"]["covered"])
+        self.assertIn("closed_wire_default", producer_matrix["part_filling"]["covered"])
+        self.assertIn("connected_boundary_edges_default", producer_matrix["part_filling"]["covered"])
+        self.assertIn("invalid_diagnostics", producer_matrix["part_filling"]["covered"])
+        self.assertIn(
+            "supports_orders_blocked_until_freecadcmd_probe",
+            producer_matrix["part_filling"]["remaining"],
+        )
         self.assertEqual(producer_matrix["transformed"]["status"], "covered")
         self.assertIn("link_retag_composition", producer_matrix["transformed"]["covered"])
         self.assertIn("terminal_split_deleted", producer_matrix["transformed"]["covered"])
@@ -2284,6 +2299,72 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("full_part_surface_family", sweep["remaining_gaps"])
         self.assertNotIn("advanced_pipeshell_wrapper", sweep["remaining_gaps"])
         self.assertNotIn("hole_model_thread_internal_pipeshell", sweep["remaining_gaps"])
+        filling = capabilities["part_workbench"]["filling"]
+        self.assertEqual(filling["status"], "supported_expected_backed_first_batch")
+        self.assertIn("Part::FilledFace", filling["type_ids"])
+        self.assertEqual(filling["helper"], "Part.makeFilledFace")
+        self.assertFalse(filling["freecad_native_document_object"])
+        self.assertEqual(filling["operation_model"], "source_backed_helper")
+        self.assertIn("Boundary", filling["properties"])
+        self.assertIn("App::PropertyLinkSubList", filling["property_types"])
+        for covered in (
+            "part_filled_face_source_backed_helper",
+            "boundary_property_link_sub_list",
+            "closed_wire_default",
+            "connected_boundary_edges_default",
+            "brepoffsetapi_makefilling",
+            "maker_history:filling",
+            "default_params_metadata",
+            "boundary_source_evidence",
+            "expected_backed_fixtures",
+            "invalid_diagnostics",
+        ):
+            self.assertIn(covered, filling["covered"])
+        for fixture in (
+            "c3m4/part-filling-closed-wire-default",
+            "c3m4/part-filling-boundary-edges-default",
+            "c3m4/part-filling-invalid-inputs",
+        ):
+            self.assertIn(fixture, filling["fixtures"])
+        for diagnostic in (
+            "missing_property",
+            "missing_link_target",
+            "invalid_subshape",
+            "unsupported_property",
+            "execution_failed",
+        ):
+            self.assertIn(diagnostic, filling["diagnostics"])
+        for boundary in (
+            "source_backed_helper_not_freecad_document_object",
+            "boundary_property_link_sub_list_only",
+            "default_params_only",
+            "surface_kwargs_blocked_deferred",
+            "support_order_blocked_deferred",
+            "non_boundary_constraints_deferred",
+            "compound_boundary_optional_not_published",
+            "full_part_surface_family_not_claimed",
+        ):
+            self.assertIn(boundary, filling["request_local_boundaries"])
+        for gap in (
+            "surface_kwarg_blocked_until_freecadcmd_probe",
+            "supports_orders_blocked_until_freecadcmd_probe",
+            "non_default_params_deferred",
+            "non_boundary_constraints_expected_deferred",
+            "compound_boundary_optional_expected",
+            "full_part_surface_family",
+        ):
+            self.assertIn(gap, filling["remaining_gaps"])
+        for unsupported in (
+            "initial_surface_face",
+            "supports_orders",
+            "non_default_params",
+            "non_boundary_constraints",
+            "full_part_surface_family",
+        ):
+            self.assertNotIn(unsupported, filling["covered"])
+        self.assertIn("native_freecad_part_filledface_document_object", filling["non_goals"])
+        self.assertIn("advanced_brepoffsetapi_makefilling_wrapper", filling["non_goals"])
+        self.assertIn("surface_workbench_filling_feature", filling["non_goals"])
         self.assertNotIn("complete_mapper_history", capabilities["topo_history"]["remaining_gaps"])
         self.assertNotIn(
             "element_map_child_map_preserve_propagate_lifecycle",
