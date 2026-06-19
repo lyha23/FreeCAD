@@ -781,8 +781,61 @@ nlohmann::json capabilitiesJson()
                    {"linearize_post_processing",
                     "face_vertex_profile_expected",
                     "complex_profile_family",
-                    "sweep_filling_geomplate_pipeshell",
                     "full_part_surface_family"}},
+              }},
+             {"sweep",
+              {
+                  // FreeCAD:
+                  // /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PartFeatures.cpp
+                  // ::Sweep::execute(), reads "Sections", "Spine", "Solid", "Frenet",
+                  // "Linearize" and "Transition" before calling makeElementPipeShell().
+                  // /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+                  // ::TopoShape::makeElementPipeShell(), returns
+                  // "makeElementShape(mkPipeShell, shapes, op)" so BRepOffsetAPI_MakePipeShell
+                  // Modified/Generated history is part of the published boundary.
+                  {"status", "supported_expected_backed_first_batch"},
+                  {"type_ids", {"Part::Sweep"}},
+                  {"properties", {"Sections", "Spine", "Solid", "Frenet", "Transition", "Linearize"}},
+                  {"property_types",
+                   {"App::PropertyLinkList",
+                    "App::PropertyLinkSub",
+                    "App::PropertyBool",
+                    "App::PropertyEnumeration"}},
+                  {"covered",
+                   {"source_backed_document_object_executor",
+                    "spine_property_link_sub_sublist_compound",
+                    "one_profile_sections_property_link_list",
+                    "solid_frenet_transition_modes",
+                    "pipeshell_maker_history",
+                    "expected_backed_fixtures",
+                    "invalid_input_diagnostics"}},
+                  {"fixtures",
+                   {"c3m4/part-sweep-right-corner-surface",
+                    "c3m4/part-sweep-solid",
+                    "c3m4/part-sweep-frenet-off",
+                    "c3m4/part-sweep-transition-transformed",
+                    "c3m4/part-sweep-transition-round-corner",
+                    "c3m4/part-sweep-spine-subedges",
+                    "c3m4/part-sweep-open-profile-surface",
+                    "c3m4/part-sweep-invalid-inputs"}},
+                  {"diagnostics",
+                   {"missing_property", "missing_link_target", "invalid_subshape", "execution_failed"}},
+                  {"request_local_boundaries",
+                   {"source_shape_recomputed_from_document_graph",
+                    "source_backed_part_sweep_document_object_only",
+                    "one_profile_first_batch",
+                    "linearize_true_deferred",
+                    "advanced_pipeshell_wrapper_non_goal",
+                    "hole_model_thread_internal_pipeshell_not_part_sweep"}},
+                  {"non_goals",
+                   {"advanced_pipeshell_wrapper",
+                    "auxiliary_spine",
+                    "located_profile",
+                    "support_mode",
+                    "trihedron_binormal_modes",
+                    "hole_model_thread_internal_pipeshell"}},
+                  {"remaining_gaps",
+                   {"linearize_post_processing", "multi_profile_sections_expected", "full_part_surface_family"}},
               }},
          }},
         {"part_design",
@@ -1265,6 +1318,11 @@ nlohmann::json capabilitiesJson()
                // ::MapperThruSections maps "GeneratedFace(s)", "FirstShape()" and "LastShape()"
                // for BRepOffsetAPI_ThruSections results created by Part::Loft.
                "loft_thru_sections",
+               // FreeCAD:
+               // /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+               // ::TopoShape::makeElementPipeShell(), returns
+               // "makeElementShape(mkPipeShell, shapes, op)" for Part::Sweep PipeShell history.
+               "pipeshell",
                "refine_modified_deleted_generated"}},
              // FreeCAD:
              // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
@@ -1340,6 +1398,14 @@ nlohmann::json capabilitiesJson()
                       "first_shape_last_shape_history",
                       "source_profile_sections",
                       "solid_ruled_closed_max_degree_fixtures"}},
+                    {"remaining", nlohmann::json::array()}}},
+                  {"pipeshell",
+                   {{"status", "done_expected_backed_first_batch"},
+                    {"covered",
+                     {"generated_modified_history",
+                      "spine_profile_sources",
+                      "spine_sublist_compound",
+                      "solid_frenet_transition_fixtures"}},
                     {"remaining", nlohmann::json::array()}}},
                   {"dressup",
                    {{"status", "done_first_slice"},
@@ -1434,6 +1500,7 @@ nlohmann::json capabilitiesJson()
                "hole_find_holes:profile_source",
                "hole_cut_history:element_map_freeze",
                "hole_model_thread:pipe_shell_tool_history",
+               "part_sweep:pipeshell_history",
                "boolean_compound_tool:expand_children",
                "part_compound:make_element_compound",
                "part_offset_fill:sewing_history",

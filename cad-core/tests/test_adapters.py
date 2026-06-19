@@ -870,6 +870,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "Part::Offset2D",
             "Part::Thickness",
             "Part::Loft",
+            "Part::Sweep",
             "Part::BooleanFragments",
             "App::Link",
             "Assembly::AssemblyObject",
@@ -1897,6 +1898,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("import_shape_element_map", capabilities["topo_history"]["maker_history"])
         self.assertIn("part_offset", capabilities["topo_history"]["maker_history"])
         self.assertIn("loft_thru_sections", capabilities["topo_history"]["maker_history"])
+        self.assertIn("pipeshell", capabilities["topo_history"]["maker_history"])
         self.assertIn("transformed_pattern_addsub_ownership", capabilities["topo_history"]["maker_history"])
         self.assertIn("transformed_pattern_full_history", capabilities["topo_history"]["maker_history"])
         self.assertIn("hole_find_holes_profile_source_history", capabilities["topo_history"]["maker_history"])
@@ -1978,6 +1980,12 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             producer_matrix["loft_thru_sections"]["covered"],
         )
         self.assertEqual(producer_matrix["loft_thru_sections"]["remaining"], [])
+        self.assertEqual(producer_matrix["pipeshell"]["status"], "done_expected_backed_first_batch")
+        self.assertIn("generated_modified_history", producer_matrix["pipeshell"]["covered"])
+        self.assertIn("spine_profile_sources", producer_matrix["pipeshell"]["covered"])
+        self.assertIn("spine_sublist_compound", producer_matrix["pipeshell"]["covered"])
+        self.assertIn("solid_frenet_transition_fixtures", producer_matrix["pipeshell"]["covered"])
+        self.assertEqual(producer_matrix["pipeshell"]["remaining"], [])
         self.assertEqual(producer_matrix["transformed"]["status"], "covered")
         self.assertIn("link_retag_composition", producer_matrix["transformed"]["covered"])
         self.assertIn("terminal_split_deleted", producer_matrix["transformed"]["covered"])
@@ -2022,6 +2030,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "hole_find_holes:profile_source",
                 "hole_cut_history:element_map_freeze",
                 "hole_model_thread:pipe_shell_tool_history",
+                "part_sweep:pipeshell_history",
                 "boolean_compound_tool:expand_children",
                 "part_compound:make_element_compound",
                 "part_offset_fill:sewing_history",
@@ -2218,7 +2227,63 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("face_vertex_profile_expected", loft["remaining_gaps"])
         self.assertIn("complex_profile_family", loft["remaining_gaps"])
         self.assertIn("full_part_surface_family", loft["remaining_gaps"])
+        self.assertNotIn("sweep_filling_geomplate_pipeshell", loft["remaining_gaps"])
         self.assertNotIn("full_part_surface_family", loft["covered"])
+        sweep = capabilities["part_workbench"]["sweep"]
+        self.assertEqual(sweep["status"], "supported_expected_backed_first_batch")
+        self.assertIn("Part::Sweep", sweep["type_ids"])
+        for prop in ("Sections", "Spine", "Solid", "Frenet", "Transition", "Linearize"):
+            self.assertIn(prop, sweep["properties"])
+        for property_type in (
+            "App::PropertyLinkList",
+            "App::PropertyLinkSub",
+            "App::PropertyBool",
+            "App::PropertyEnumeration",
+        ):
+            self.assertIn(property_type, sweep["property_types"])
+        for covered in (
+            "source_backed_document_object_executor",
+            "spine_property_link_sub_sublist_compound",
+            "one_profile_sections_property_link_list",
+            "solid_frenet_transition_modes",
+            "pipeshell_maker_history",
+            "expected_backed_fixtures",
+            "invalid_input_diagnostics",
+        ):
+            self.assertIn(covered, sweep["covered"])
+        for fixture in (
+            "c3m4/part-sweep-right-corner-surface",
+            "c3m4/part-sweep-solid",
+            "c3m4/part-sweep-frenet-off",
+            "c3m4/part-sweep-transition-transformed",
+            "c3m4/part-sweep-transition-round-corner",
+            "c3m4/part-sweep-spine-subedges",
+            "c3m4/part-sweep-open-profile-surface",
+            "c3m4/part-sweep-invalid-inputs",
+        ):
+            self.assertIn(fixture, sweep["fixtures"])
+        for diagnostic in ("missing_property", "missing_link_target", "invalid_subshape", "execution_failed"):
+            self.assertIn(diagnostic, sweep["diagnostics"])
+        self.assertIn("source_shape_recomputed_from_document_graph", sweep["request_local_boundaries"])
+        self.assertIn("source_backed_part_sweep_document_object_only", sweep["request_local_boundaries"])
+        self.assertIn("one_profile_first_batch", sweep["request_local_boundaries"])
+        self.assertIn("linearize_true_deferred", sweep["request_local_boundaries"])
+        self.assertIn("advanced_pipeshell_wrapper_non_goal", sweep["request_local_boundaries"])
+        self.assertIn("hole_model_thread_internal_pipeshell_not_part_sweep", sweep["request_local_boundaries"])
+        for non_goal in (
+            "advanced_pipeshell_wrapper",
+            "auxiliary_spine",
+            "located_profile",
+            "support_mode",
+            "trihedron_binormal_modes",
+            "hole_model_thread_internal_pipeshell",
+        ):
+            self.assertIn(non_goal, sweep["non_goals"])
+        self.assertIn("linearize_post_processing", sweep["remaining_gaps"])
+        self.assertIn("multi_profile_sections_expected", sweep["remaining_gaps"])
+        self.assertIn("full_part_surface_family", sweep["remaining_gaps"])
+        self.assertNotIn("advanced_pipeshell_wrapper", sweep["remaining_gaps"])
+        self.assertNotIn("hole_model_thread_internal_pipeshell", sweep["remaining_gaps"])
         self.assertNotIn("complete_mapper_history", capabilities["topo_history"]["remaining_gaps"])
         self.assertNotIn(
             "element_map_child_map_preserve_propagate_lifecycle",
