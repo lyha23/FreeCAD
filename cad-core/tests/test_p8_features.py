@@ -767,6 +767,66 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["MissingTarget"]["status"], "error")
         self.assert_object_matches_expected(result, "c3m4", "part-filling-invalid-inputs")
 
+    def test_c3m4_part_geomplate_curve_point_default_is_helper_expected_backed(self) -> None:
+        result = self.run_recompute("part-geomplate-curve-point-default", "c3m4")
+        geomplate = result["objects"]["GeomPlate"]
+        source_evidence = geomplate["source_evidence"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(geomplate["status"], "ok")
+        self.assertEqual(geomplate["feature"], "part_geomplate_surface")
+        self.assertEqual(geomplate["helper"], "Part.GeomPlate.BuildPlateSurface")
+        self.assertEqual(geomplate["dto"], "PartGeomPlateSurfaceDTO")
+        self.assertTrue(geomplate["source_backed_helper"])
+        self.assertFalse(geomplate["freecad_native_document_object"])
+        self.assertTrue(geomplate["is_done"])
+        self.assertEqual(geomplate["surface_kind"], "GeomPlate_Surface")
+        self.assertEqual(geomplate["shape"], "occt_face")
+        self.assertEqual(geomplate["curve_constraint_count"], 4)
+        self.assertEqual(geomplate["point_constraint_count"], 1)
+        self.assertEqual(geomplate["build_params"]["degree"], 3)
+        self.assertEqual(geomplate["build_params"]["nb_pts_on_cur"], 10)
+        self.assertEqual(geomplate["approximation"]["status"], "ok")
+        self.assertEqual(geomplate["approximation"]["surface_kind"], "Geom_BSplineSurface")
+        self.assertEqual(sum(item["kind"] == "curve3d" for item in source_evidence), 4)
+        self.assertEqual(sum(item["kind"] == "point3d" for item in source_evidence), 1)
+        self.assertEqual(
+            {item["object"] for item in source_evidence if item["kind"] == "curve3d"},
+            {"BoundaryA", "BoundaryB", "BoundaryC", "BoundaryD"},
+        )
+        self.assertEqual(sum(name.startswith("Face") for name in result["subshapes"]["GeomPlate"]), 1)
+        self.assert_object_matches_expected(result, "c3m4", "part-geomplate-curve-point-default")
+
+    def test_c3m4_part_geomplate_invalid_inputs_have_stable_diagnostics(self) -> None:
+        result = self.run_recompute("part-geomplate-invalid-inputs", "c3m4")
+        codes = [item["code"] for item in result["diagnostics"]]
+        expected = self.expected_freecad("c3m4", "part-geomplate-invalid-inputs")
+
+        self.assertEqual(
+            codes,
+            [
+                "missing_constraints",
+                "invalid_curve_source",
+                "invalid_point_constraint",
+                "invalid_parameter",
+                "unsupported_property",
+            ],
+        )
+        self.assertCountEqual(codes, expected["diagnostic_codes"])
+        for object_name in (
+            "EmptyConstraints",
+            "InvalidCurveSource",
+            "InvalidPoint",
+            "InvalidParameter",
+            "UnsupportedPlateSurfaceCurves",
+        ):
+            self.assertEqual(result["objects"][object_name]["status"], "error")
+            self.assertEqual(result["objects"][object_name]["feature"], "part_geomplate_surface")
+            self.assertEqual(result["objects"][object_name]["helper"], "Part.GeomPlate.BuildPlateSurface")
+            self.assertTrue(result["objects"][object_name]["source_backed_helper"])
+            self.assertFalse(result["objects"][object_name]["freecad_native_document_object"])
+        self.assert_object_matches_expected(result, "c3m4", "part-geomplate-invalid-inputs")
+
     def test_p8_app_link_proxies_linked_shape_with_link_placement(self) -> None:
         result = self.run_recompute("app-link-box", "p8")
         link = result["objects"]["BoxLink"]

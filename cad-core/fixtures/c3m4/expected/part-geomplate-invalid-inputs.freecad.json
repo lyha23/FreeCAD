@@ -1,0 +1,69 @@
+{
+  "diagnostic_codes": [
+    "missing_constraints",
+    "invalid_curve_source",
+    "invalid_point_constraint",
+    "invalid_parameter",
+    "unsupported_property"
+  ],
+  "freecad_version": "1.2.0 revision 20260519",
+  "objects": {
+    "EmptyConstraints": {
+      "native_error": "Part.GeomPlate.BuildPlateSurface requires curve or point constraints",
+      "native_error_code": "missing_constraints",
+      "object_fields": {
+        "feature": "part_geomplate_surface",
+        "freecad_native_document_object": false,
+        "helper": "Part.GeomPlate.BuildPlateSurface",
+        "source_backed_helper": true,
+        "status": "error"
+      }
+    },
+    "InvalidCurveSource": {
+      "native_error": "Curve constraint source PointSource is not a supported Part::Line",
+      "native_error_code": "invalid_curve_source",
+      "object_fields": {
+        "feature": "part_geomplate_surface",
+        "freecad_native_document_object": false,
+        "helper": "Part.GeomPlate.BuildPlateSurface",
+        "source_backed_helper": true,
+        "status": "error"
+      }
+    },
+    "InvalidParameter": {
+      "native_error": "Part.GeomPlate.BuildPlateSurface Degree must be a positive integer",
+      "native_error_code": "invalid_parameter",
+      "object_fields": {
+        "feature": "part_geomplate_surface",
+        "freecad_native_document_object": false,
+        "helper": "Part.GeomPlate.BuildPlateSurface",
+        "source_backed_helper": true,
+        "status": "error"
+      }
+    },
+    "InvalidPoint": {
+      "native_error": "PointConstraints[0] must be a three-number vector",
+      "native_error_code": "invalid_point_constraint",
+      "object_fields": {
+        "feature": "part_geomplate_surface",
+        "freecad_native_document_object": false,
+        "helper": "Part.GeomPlate.BuildPlateSurface",
+        "source_backed_helper": true,
+        "status": "error"
+      }
+    },
+    "UnsupportedPlateSurfaceCurves": {
+      "native_error": "Unsupported Part.GeomPlate.BuildPlateSurface properties: PlateSurfaceCurves",
+      "native_error_code": "unsupported_property",
+      "object_fields": {
+        "feature": "part_geomplate_surface",
+        "freecad_native_document_object": false,
+        "helper": "Part.GeomPlate.BuildPlateSurface",
+        "source_backed_helper": true,
+        "status": "error"
+      }
+    }
+  },
+  "reference": "FreeCADCmd oracle from part-geomplate-invalid-inputs.json; Part::GeomPlateSurface is a cad-core helper translated to Part.GeomPlate.BuildPlateSurface(...); objects: Part::Line, Part::Vertex, Part::GeomPlateSurface, Part::GeomPlateSurface, Part::GeomPlateSurface, Part::GeomPlateSurface, Part::GeomPlateSurface",
+  "schema_version": "cad-core.freecad-expected.v1"
+}

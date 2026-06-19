@@ -1,0 +1,58 @@
+{
+  "Objects": [
+    {"Name": "LineSource", "ID": 1, "TypeId": "Part::Line", "Properties": {"X1": 0, "Y1": 0, "Z1": 0, "X2": 1, "Y2": 0, "Z2": 0}},
+    {"Name": "PointSource", "ID": 2, "TypeId": "Part::Vertex", "Properties": {"X": 0, "Y": 0, "Z": 0}},
+    {
+      "Name": "EmptyConstraints",
+      "ID": 3,
+      "TypeId": "Part::GeomPlateSurface",
+      "Properties": {}
+    },
+    {
+      "Name": "InvalidCurveSource",
+      "ID": 4,
+      "TypeId": "Part::GeomPlateSurface",
+      "Properties": {
+        "CurveConstraints": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [{"value": "PointSource"}]
+        }
+      }
+    },
+    {
+      "Name": "InvalidPoint",
+      "ID": 5,
+      "TypeId": "Part::GeomPlateSurface",
+      "Properties": {
+        "PointConstraints": [{"Point": [0, "bad", 0]}]
+      }
+    },
+    {
+      "Name": "InvalidParameter",
+      "ID": 6,
+      "TypeId": "Part::GeomPlateSurface",
+      "Properties": {
+        "Degree": 0,
+        "PointConstraints": [{"Point": [0, 0, 0]}]
+      }
+    },
+    {
+      "Name": "UnsupportedPlateSurfaceCurves",
+      "ID": 7,
+      "TypeId": "Part::GeomPlateSurface",
+      "Properties": {
+        "PlateSurfaceCurves": true,
+        "PointConstraints": [{"Point": [0, 0, 0]}]
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "EmptyConstraints",
+      "InvalidCurveSource",
+      "InvalidPoint",
+      "InvalidParameter",
+      "UnsupportedPlateSurfaceCurves"
+    ]
+  }
+}

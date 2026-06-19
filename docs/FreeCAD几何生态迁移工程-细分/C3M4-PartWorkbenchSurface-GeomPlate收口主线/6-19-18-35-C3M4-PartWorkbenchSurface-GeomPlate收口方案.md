@@ -42,3 +42,10 @@
 - 新增 cad-core geometry helper / DTO parser / collector route / focused tests，不改 FreeCAD upstream 源码。
 - helper 语义落在 geometry/part surface helper 层，adapter 只做协议转换；不能靠输出修正替代 `GeomPlate_BuildPlateSurface` 主路径。
 - S1 可实现默认参数、G0 curve、point、perform success/failure、approx surface metadata 和 required fixtures；G1 curve-on-surface、initial surface、projected 2D curve、PlateSurface curves wrapper 和 capability 发布留给后续矩阵行。
+
+## S1 完成状态
+
+- 已新增 cad-core `Part::GeomPlateSurface` helper、`PartGeomPlateSurfaceDTO` metadata、`GeomPlate_BuildPlateSurface` / `GeomPlate_MakeApprox` 主路径、collector route、两条 `c3m4/part-geomplate-*` fixtures 和 focused tests。
+- `part-geomplate-curve-point-default` 固定四条 G0 curve constraints + 一个 3D point constraint；checked-in expected 对 topology、volume 和 metadata 走 FreeCADCmd oracle，bbox 用 `bbox_delta=0.1` 记录 native `GeometryCurvePy` 与 cad-core edge bridge 的 approximation envelope。
+- `part-geomplate-invalid-inputs` 固定 `missing_constraints`、`invalid_curve_source`、`invalid_point_constraint`、`invalid_parameter`、`unsupported_property` diagnostics。
+- S1 不发布 C API capability；`part_workbench.geomplate`、CADCore3.0 文档和 adapter capability tests 留给 S2。
