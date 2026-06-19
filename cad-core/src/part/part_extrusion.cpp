@@ -777,6 +777,23 @@ void executePartExtrusion(const app::DocumentObject& object, runtime::ComputeCon
         {"reversed", app::readBool(object, "Reversed").value_or(false)},
         {"symmetric", app::readBool(object, "Symmetric").value_or(false)}
     };
+    const auto sourceMetadataIt = context.objects.find(baseLink->object);
+    if (sourceMetadataIt != context.objects.end()) {
+        const auto& sourceMetadata = sourceMetadataIt->second;
+        constexpr std::array<std::pair<const char*, const char*>, 5> sourceMetadataKeys {{
+            {"feature", "source_feature"},
+            {"dto", "source_dto"},
+            {"curve_kind", "source_curve_kind"},
+            {"curve_type", "source_curve_type"},
+            {"part_geometry_type", "source_part_geometry_type"},
+        }};
+        for (const auto& [sourceKey, targetKey] : sourceMetadataKeys) {
+            const auto item = sourceMetadata.find(sourceKey);
+            if (item != sourceMetadata.end()) {
+                metadata[targetKey] = *item;
+            }
+        }
+    }
     if (shape->taperHistory) {
         metadata["topo_naming_history"] = "maker_history:taper_thru_sections";
     }

@@ -1114,6 +1114,17 @@ def part_geometry_curve_items(fixture: dict) -> list[dict[str, Any]]:
     raise UnsupportedFixture("partGeometryCurve must be an object or a list of objects")
 
 
+def part_geometry_curve_consumer_items(fixture: dict) -> list[dict[str, Any]]:
+    payload = fixture.get("partGeometryCurveConsumers")
+    if payload is None:
+        return []
+    if isinstance(payload, list):
+        return [item for item in payload if isinstance(item, dict)]
+    if isinstance(payload, dict):
+        return [payload]
+    raise UnsupportedFixture("partGeometryCurveConsumers must be an object or a list of objects")
+
+
 def set_part_conic_curve_common(FreeCAD: Any, curve: Any, dto: dict[str, Any]) -> None:
     curve.Center = FreeCAD.Vector(*(float(item) for item in dto["center"]))
     curve.Axis = FreeCAD.Vector(*(float(item) for item in dto["normal"]))
@@ -1144,45 +1155,186 @@ def build_part_geometry_curve_shape(FreeCAD: Any, Part: Any, dto: dict[str, Any]
     raise UnsupportedFixture(f"unsupported partGeometryCurve curveKind {dto.get('curveKind')}")
 
 
-def collect_part_geometry_curve_expected(fixture_path: Path, fixture: dict) -> dict:
-    import FreeCAD  # type: ignore
-    import Part  # type: ignore
-
-    items = part_geometry_curve_items(fixture)
-    if len(items) != 1:
-        raise UnsupportedFixture("partGeometryCurve expected collection supports one valid DTO per fixture")
-    dto = items[0]
-    object_name = str(dto.get("name") or "PartConicCurve")
+def part_geometry_curve_metadata(dto: dict[str, Any]) -> dict[str, str]:
     curve_kind = str(dto.get("curveKind", "")).lower()
-    shape = build_part_geometry_curve_shape(FreeCAD, Part, dto)
-    summary = shape_summary(shape)
-    edge = shape.Edges[0]
     curve_type = "GeomAbs_Hyperbola" if curve_kind == "hyperbola" else "GeomAbs_Parabola"
     part_geometry_type = "Part.Hyperbola" if curve_kind == "hyperbola" else "Part.Parabola"
+    return {
+        "curve_kind": curve_kind,
+        "curve_type": curve_type,
+        "part_geometry_type": part_geometry_type,
+    }
+
+
+def part_geometry_curve_object_expected(shape: Any, dto: dict[str, Any]) -> dict:
+    summary = shape_summary(shape)
+    edge = shape.Edges[0]
+    metadata = part_geometry_curve_metadata(dto)
     summary["length"] = float(edge.Length)
+    summary["length_delta"] = 1e-5
     summary["object_fields"] = {
         "status": "ok",
         "shape": "occt_edge",
         "feature": "part_geometry_curve",
         "dto": "PartConicCurveDTO",
-        "curve_kind": curve_kind,
-        "curve_type": curve_type,
-        "part_geometry_type": part_geometry_type,
+        **metadata,
     }
-    return {
+    return summary
+
+
+def property_payload_value(value: Any) -> Any:
+    if isinstance(value, dict) and "PropertyType" in value and "value" in value:
+        return value.get("value")
+    return value
+
+
+def consumer_property(properties: dict[str, Any], name: str, fallback: Any = None) -> Any:
+    if name not in properties:
+        return fallback
+    return property_payload_value(properties[name])
+
+
+def consumer_number_property(properties: dict[str, Any], name: str, fallback: float = 0.0) -> float:
+    value = consumer_property(properties, name, fallback)
+    if not isinstance(value, (int, float)):
+        raise UnsupportedFixture(f"partGeometryCurve consumer {name} must be numeric")
+    return float(value)
+
+
+def consumer_bool_property(properties: dict[str, Any], name: str, fallback: bool = False) -> bool:
+    value = consumer_property(properties, name, fallback)
+    if not isinstance(value, bool):
+        raise UnsupportedFixture(f"partGeometryCurve consumer {name} must be boolean")
+    return value
+
+
+def consumer_vector_property(properties: dict[str, Any], name: str, fallback: list[float]) -> list[float]:
+    value = consumer_property(properties, name, fallback)
+    if not isinstance(value, list) or len(value) != 3 or not all(isinstance(item, (int, float)) for item in value):
+        raise UnsupportedFixture(f"partGeometryCurve consumer {name} must be a three-number vector")
+    return [float(item) for item in value]
+
+
+def consumer_link_property(properties: dict[str, Any], name: str) -> str:
+    value = consumer_property(properties, name)
+    if not isinstance(value, str) or not value:
+        raise UnsupportedFixture(f"partGeometryCurve consumer {name} must be an object link")
+    return value
+
+
+def collect_part_geometry_curve_extrusion_expected(
+    FreeCAD: Any,
+    consumer: dict[str, Any],
+    source_shapes: dict[str, Any],
+    source_metadata: dict[str, dict[str, str]],
+) -> dict:
+    if consumer.get("TypeId") != "Part::Extrusion":
+        raise UnsupportedFixture("partGeometryCurveConsumers expected collection supports Part::Extrusion")
+    properties = consumer.get("Properties", {})
+    if not isinstance(properties, dict):
+        raise UnsupportedFixture("partGeometryCurve consumer Properties must be an object")
+
+    dir_mode = consumer_property(properties, "DirMode", "Custom")
+    if dir_mode not in {"Custom", 0}:
+        raise UnsupportedFixture("partGeometryCurve consumer oracle only supports Part::Extrusion DirMode=Custom")
+    if consumer_bool_property(properties, "Solid", False):
+        raise UnsupportedFixture("partGeometryCurve consumer oracle only supports Part::Extrusion Solid=false")
+    if abs(consumer_number_property(properties, "TaperAngle", 0.0)) > FREECAD_PRECISION_CONFUSION:
+        raise UnsupportedFixture("partGeometryCurve consumer oracle does not publish tapered extrusion")
+    if abs(consumer_number_property(properties, "TaperAngleRev", 0.0)) > FREECAD_PRECISION_CONFUSION:
+        raise UnsupportedFixture("partGeometryCurve consumer oracle does not publish tapered reverse extrusion")
+
+    base_name = consumer_link_property(properties, "Base")
+    if base_name not in source_shapes:
+        raise UnsupportedFixture(f"partGeometryCurve consumer Base {base_name} was not created")
+
+    direction = consumer_vector_property(properties, "Dir", [0.0, 0.0, 1.0])
+    magnitude = math.sqrt(sum(component * component for component in direction))
+    if magnitude <= FREECAD_PRECISION_CONFUSION:
+        raise UnsupportedFixture("partGeometryCurve consumer Dir must not be zero-length")
+    unit = [component / magnitude for component in direction]
+    if consumer_bool_property(properties, "Reversed", False):
+        unit = [-component for component in unit]
+
+    length_fwd = consumer_number_property(properties, "LengthFwd", 0.0)
+    length_rev = consumer_number_property(properties, "LengthRev", 0.0)
+    if abs(length_fwd) <= FREECAD_PRECISION_CONFUSION and abs(length_rev) <= FREECAD_PRECISION_CONFUSION:
+        length_fwd = magnitude
+    if consumer_bool_property(properties, "Symmetric", False):
+        length_rev = length_fwd * 0.5
+        length_fwd = length_fwd * 0.5
+    if abs(length_fwd + length_rev) <= FREECAD_PRECISION_CONFUSION:
+        raise UnsupportedFixture("partGeometryCurve consumer total extrusion length must not be zero")
+
+    source_shape = source_shapes[base_name].copy()
+    if abs(length_rev) > FREECAD_PRECISION_CONFUSION:
+        source_shape.translate(FreeCAD.Vector(*(component * -length_rev for component in unit)))
+    result_shape = source_shape.extrude(FreeCAD.Vector(*(component * (length_fwd + length_rev) for component in unit)))
+    summary = shape_summary(result_shape)
+    source_info = source_metadata[base_name]
+    summary["object_fields"] = {
+        "status": "ok",
+        "shape": shape_kind(result_shape),
+        "feature": "part_extrusion",
+        "source_base": base_name,
+        "solid": False,
+        "length_fwd": length_fwd,
+        "length_rev": length_rev,
+        "reversed": consumer_bool_property(properties, "Reversed", False),
+        "symmetric": consumer_bool_property(properties, "Symmetric", False),
+        "source_feature": "part_geometry_curve",
+        "source_dto": "PartConicCurveDTO",
+        "source_curve_kind": source_info["curve_kind"],
+        "source_curve_type": source_info["curve_type"],
+        "source_part_geometry_type": source_info["part_geometry_type"],
+    }
+    return summary
+
+
+def collect_part_geometry_curve_expected(fixture_path: Path, fixture: dict) -> dict:
+    import FreeCAD  # type: ignore
+    import Part  # type: ignore
+
+    items = part_geometry_curve_items(fixture)
+    consumers = part_geometry_curve_consumer_items(fixture)
+    if not items:
+        raise UnsupportedFixture("partGeometryCurve expected collection requires at least one DTO")
+    if not consumers and len(items) != 1:
+        raise UnsupportedFixture("partGeometryCurve edge expected collection supports one valid DTO per fixture")
+
+    source_shapes: dict[str, Any] = {}
+    source_metadata: dict[str, dict[str, str]] = {}
+    object_payloads: dict[str, dict] = {}
+    for dto in items:
+        object_name = str(dto.get("name") or "PartConicCurve")
+        shape = build_part_geometry_curve_shape(FreeCAD, Part, dto)
+        source_shapes[object_name] = shape
+        source_metadata[object_name] = part_geometry_curve_metadata(dto)
+        object_payloads[object_name] = part_geometry_curve_object_expected(shape, dto)
+
+    for consumer in consumers:
+        object_name = str(consumer.get("Name") or "PartConicCurveConsumer")
+        object_payloads[object_name] = collect_part_geometry_curve_extrusion_expected(
+            FreeCAD,
+            consumer,
+            source_shapes,
+            source_metadata,
+        )
+
+    payload: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
-        "object": object_name,
         "reference": f"FreeCADCmd PartConicCurveDTO oracle from {fixture_path.name}",
         "freecad_version": freecad_version(FreeCAD),
         "bbox_delta": 0.2,
-        "length_delta": 1e-5,
-        **summary,
-        "named_shapes": {
-            object_name: {
-                "owner": object_name,
-            }
-        },
+        "named_shapes": {name: {"owner": name} for name in object_payloads},
     }
+    if len(object_payloads) == 1:
+        object_name, summary = next(iter(object_payloads.items()))
+        payload["object"] = object_name
+        payload.update(summary)
+    else:
+        payload["objects"] = object_payloads
+    return payload
 
 
 def shape_with_placement(shape: Any, placement: Any) -> Any:

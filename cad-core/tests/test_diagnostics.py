@@ -340,6 +340,7 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "part-box": [],
             "part-common": [],
             "part-cone": [],
+            "part-conic-edge-extrusion": [],
             "part-conic-edge-invalid-params": [
                 "invalid_part_conic_curve_kind",
                 "invalid_part_conic_radius",

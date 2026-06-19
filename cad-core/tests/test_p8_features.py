@@ -3264,6 +3264,37 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(sum(name.startswith("Edge") for name in subshapes), 1)
                 self.assert_object_matches_expected(result, "p8", fixture)
 
+    def test_p8_part_conic_geometry_curves_feed_part_extrusion(self) -> None:
+        result = self.run_recompute("part-conic-edge-extrusion", "p8")
+        cases = {
+            "HyperbolaExtrusion": ("HyperbolaEdge", "hyperbola", "GeomAbs_Hyperbola", "Part.Hyperbola"),
+            "ParabolaExtrusion": ("ParabolaEdge", "parabola", "GeomAbs_Parabola", "Part.Parabola"),
+        }
+
+        self.assertEqual(result["diagnostics"], [])
+        for extrusion_name, (base_name, curve_kind, curve_type, part_geometry_type) in cases.items():
+            with self.subTest(extrusion=extrusion_name):
+                base = result["objects"][base_name]
+                extrusion = result["objects"][extrusion_name]
+                subshapes = result["subshapes"][extrusion_name]
+
+                self.assertEqual(base["feature"], "part_geometry_curve")
+                self.assertEqual(base["curve_kind"], curve_kind)
+                self.assertEqual(base["curve_type"], curve_type)
+                self.assertEqual(base["part_geometry_type"], part_geometry_type)
+                self.assertEqual(extrusion["status"], "ok")
+                self.assertEqual(extrusion["feature"], "part_extrusion")
+                self.assertEqual(extrusion["source_base"], base_name)
+                self.assertIn(extrusion["shape"], {"occt_face", "occt_shell", "occt_compound"})
+                self.assertEqual(extrusion["source_feature"], "part_geometry_curve")
+                self.assertEqual(extrusion["source_dto"], "PartConicCurveDTO")
+                self.assertEqual(extrusion["source_curve_kind"], curve_kind)
+                self.assertEqual(extrusion["source_curve_type"], curve_type)
+                self.assertEqual(extrusion["source_part_geometry_type"], part_geometry_type)
+                self.assertGreaterEqual(sum(name.startswith("Face") for name in subshapes), 1)
+
+        self.assert_object_matches_expected(result, "p8", "part-conic-edge-extrusion")
+
     def test_p8_part_helix_builds_spiral_helix_wire(self) -> None:
         result = self.run_recompute("part-helix", "p8")
         helix = result["objects"]["Helix"]

@@ -1,6 +1,8 @@
 #include "cad_core/part/part_geometry_curve.h"
 
+#include "cad_core/app/document.h"
 #include "cad_core/app/document_object.h"
+#include "cad_core/part/part_feature.h"
 #include "cad_core/part/shape_exporter.h"
 #include "cad_core/part/topo_shape.h"
 #include "cad_core/runtime/diagnostics.h"
@@ -38,6 +40,7 @@ namespace
 {
 
 constexpr const char* kPayloadKey = "partGeometryCurve";
+constexpr const char* kConsumerPayloadKey = "partGeometryCurveConsumers";
 constexpr const char* kDefaultObjectName = "PartConicCurve";
 
 enum class CurveKind
@@ -491,6 +494,67 @@ std::vector<nlohmann::json> requestItems(const nlohmann::json& raw)
     return {*it};
 }
 
+std::vector<nlohmann::json> requestConsumerItems(
+    const nlohmann::json& raw,
+    runtime::ComputeContext& context
+)
+{
+    const auto it = raw.find(kConsumerPayloadKey);
+    if (it == raw.end()) {
+        return {};
+    }
+    if (it->is_array()) {
+        return it->get<std::vector<nlohmann::json>>();
+    }
+    if (it->is_object()) {
+        return {*it};
+    }
+    runtime::addDiagnostic(
+        context.diagnostics,
+        "error",
+        "parse_error",
+        "partGeometryCurveConsumers must be an object or a list of objects",
+        {},
+        kConsumerPayloadKey,
+        "parse"
+    );
+    return {};
+}
+
+void executePartGeometryCurveConsumers(const nlohmann::json& raw, runtime::ComputeContext& context)
+{
+    const auto consumerItems = requestConsumerItems(raw, context);
+    if (consumerItems.empty()) {
+        return;
+    }
+
+    const nlohmann::json consumerDocument = {{"Objects", consumerItems}};
+    auto [document, diagnostics] = app::parseDocument(consumerDocument);
+    context.diagnostics.insert(context.diagnostics.end(), diagnostics.begin(), diagnostics.end());
+
+    for (const auto& object : document.objects) {
+        if (object.typeId != "Part::Extrusion") {
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "unsupported_type",
+                "partGeometryCurveConsumers currently supports Part::Extrusion",
+                object.name,
+                "TypeId",
+                "parse"
+            );
+            context.objects[object.name] = {{"status", "error"}};
+            continue;
+        }
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureExtrusion.cpp
+        // ::Extrusion::extrudeShape(), the regular consumer path calls
+        // "result.makeElementPrism(myShape, vec)". This request-local bridge seeds typed conic
+        // edges first, then invokes the existing Part::Extrusion executor instead of registering
+        // fake Part::Hyperbola or Part::Parabola DocumentObjects.
+        executePartExtrusion(object, context);
+    }
+}
+
 nlohmann::json meshForObject(const runtime::ComputeContext& context, const std::string& objectName)
 {
     const auto it = context.mesh.find(objectName);
@@ -542,6 +606,7 @@ runtime::ComputeContext computePartGeometryCurveRequest(const nlohmann::json& ra
     for (const auto& item : items) {
         executePartConicCurveDTO(item, context);
     }
+    executePartGeometryCurveConsumers(raw, context);
     return context;
 }
 

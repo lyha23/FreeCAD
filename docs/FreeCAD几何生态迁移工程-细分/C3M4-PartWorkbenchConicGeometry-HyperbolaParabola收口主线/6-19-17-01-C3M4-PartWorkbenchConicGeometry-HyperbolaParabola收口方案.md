@@ -9,6 +9,8 @@
 - S1 脏工作区边界：当前仍有既有未暂存 `src/Mod/Sketcher/App/SketchObject.h`、`src/Mod/Sketcher/App/SketchObjectPyImp.cpp` 改动；本主线保护这些现有改动，不执行 reset / checkout / 回退。
 - S2 live 基线：`pwd` 为 `/Users/li/Chili3DProject/FreeCAD`；HEAD 为 `8f5f2afe43`（`8f5f2afe43 docs: 完成PARTCONIC S1边界审计`）。
 - S2 脏工作区边界：仍只有既有未暂存 `src/Mod/Sketcher/App/SketchObject.h`、`src/Mod/Sketcher/App/SketchObjectPyImp.cpp`；S2 只改本 C3M4 主线 docs/矩阵，不暂存或回退 Sketcher 改动。
+- S4 live 基线：`pwd` 为 `/Users/li/Chili3DProject/FreeCAD`；HEAD 为 `b37a091aba`（`b37a091aba feat: 实现PARTCONIC S3圆锥曲线edge构造`）。
+- S4 脏工作区边界：开始时仍只有既有未暂存 `src/Mod/Sketcher/App/SketchObject.h`、`src/Mod/Sketcher/App/SketchObjectPyImp.cpp`；S4 保留这些改动，不暂存或回退。
 - S0 queue 结论：P5CONIC `step_goal_queue.py` 返回空队列；PARTCONIC queue 在 S0 收口前从 `6-19-17-02-PARTCONIC-S0-live基线与范围冻结.md` 开始，S0 完成后下一项应为 S1。
 - 上一轮已收口：P5CONIC 已发布 `ArcOfHyperbola` / `ArcOfParabola` 的 Sketcher profile、construction 过滤、native `ExternalGeo` 与 projected `ExternalGeometry` 支持。
 - 新主线定位：从 Sketcher conic arcs 向 Part workbench / Part geometry API 侧推进，补齐 `Part.Hyperbola` / `Part.Parabola` 作为 Part 几何对象进入 cad-core 计算和消费链路的能力。
@@ -80,6 +82,14 @@ S3 已完成 Part geometry Hyperbola / Parabola finite edge 的请求级 DTO 实
 - `cad-core/fixtures/p8/part-conic-edge-invalid-params.json`：diagnostic-only fixture，不写成功 expected；稳定诊断码覆盖 unknown `curveKind`、非法 radius、非法 focal、非法 trim 与非数值字段。
 
 S3 关闭 `PARTCONIC-BLOCK-003/004/005`：collector 已支持 PartConicCurveDTO 路径；Part-owned helper 不依赖 Sketcher conic structs；invalid 参数不会坠落为笼统 `execution_failed`。S4 仍保留 `part-conic-edge-extrusion` consumer 裁决，S5 仍负责能力发布和最终队列关闭。
+
+## S4 Part consumer 与 surface 裁决
+
+S4 已证明 S3 的 PartConicCurveDTO edge 能进入 Part workbench consumer。实现方式是扩展 top-level `partGeometryCurve` request helper，新增 `partGeometryCurveConsumers`，先用 typed DTO 生成 request-local conic edge，再调用现有 `Part::Extrusion` executor 消费 `Base` 链接；没有注册 fake `Part::Hyperbola` / `Part::Parabola` `DocumentObject`。
+
+新增 `cad-core/fixtures/p8/part-conic-edge-extrusion.json` 同时覆盖 Hyperbola 与 Parabola：`HyperbolaEdge` / `ParabolaEdge` 由 DTO 构造，`HyperbolaExtrusion` / `ParabolaExtrusion` 以 `Dir=[0,0,3]`、`Solid=false` 进入 `Part::Extrusion`，输出均为 `occt_face`。expected 由 FreeCADCmd `1.2.0 revision 20260519` 采集，oracle 使用 `Part.ArcOf*().toShape().extrude(vector)`，对应 `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureExtrusion.cpp::Extrusion::extrudeShape()` 的 regular path：`result.makeElementPrism(myShape, vec)`。
+
+S4 关闭 `PARTCONIC-BLOCK-006`：consumer fixture 的 diagnostics 为空，bbox/topology/subshape 与 expected parity 通过，base curve metadata 既保留在 DTO object，也通过 `source_*` 字段追溯到 consumer object。surface 发布口径只允许描述“已验证的 conic edge-to-face Part::Extrusion consumer”；完整 Part surface family、RuledSurface、ProjectionOnSurface 仍是 non-goal，留给后续 source-backed surface 主线。
 
 ## 最小完整语义批次
 

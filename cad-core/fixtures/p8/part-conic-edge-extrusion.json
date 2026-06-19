@@ -1,0 +1,53 @@
+{
+  "partGeometryCurve": [
+    {
+      "name": "HyperbolaEdge",
+      "curveKind": "hyperbola",
+      "center": [0, 0, 0],
+      "normal": [0, 0, 1],
+      "angleXU": 0,
+      "majorRadius": 4,
+      "minorRadius": 1.5,
+      "startAngle": -0.75,
+      "endAngle": 0.85
+    },
+    {
+      "name": "ParabolaEdge",
+      "curveKind": "parabola",
+      "center": [0, 0, 0],
+      "normal": [0, 0, 1],
+      "angleXU": 0.25,
+      "focal": 1.25,
+      "startAngle": -1.2,
+      "endAngle": 1.4
+    }
+  ],
+  "partGeometryCurveConsumers": [
+    {
+      "Name": "HyperbolaExtrusion",
+      "ID": 101,
+      "TypeId": "Part::Extrusion",
+      "Properties": {
+        "Base": {"PropertyType": "App::PropertyLink", "value": "HyperbolaEdge"},
+        "Dir": {"PropertyType": "App::PropertyVector", "value": [0, 0, 3]},
+        "DirMode": {"PropertyType": "App::PropertyEnumeration", "value": "Custom"},
+        "LengthFwd": {"PropertyType": "App::PropertyLength", "value": 0},
+        "LengthRev": {"PropertyType": "App::PropertyLength", "value": 0},
+        "Solid": {"PropertyType": "App::PropertyBool", "value": false}
+      }
+    },
+    {
+      "Name": "ParabolaExtrusion",
+      "ID": 102,
+      "TypeId": "Part::Extrusion",
+      "Properties": {
+        "Base": {"PropertyType": "App::PropertyLink", "value": "ParabolaEdge"},
+        "Dir": {"PropertyType": "App::PropertyVector", "value": [0, 0, 3]},
+        "DirMode": {"PropertyType": "App::PropertyEnumeration", "value": "Custom"},
+        "LengthFwd": {"PropertyType": "App::PropertyLength", "value": 0},
+        "LengthRev": {"PropertyType": "App::PropertyLength", "value": 0},
+        "Solid": {"PropertyType": "App::PropertyBool", "value": false}
+      }
+    }
+  ]
+}

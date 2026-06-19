@@ -23,6 +23,14 @@
    - 通过 consumer 只发布 edge-to-face/shell 这类已验证能力。
    - 未证明的 surface family 保持 non-goal。
 
+## S4 live 结论
+
+- 新增 `cad-core/fixtures/p8/part-conic-edge-extrusion.json` 与 `expected/part-conic-edge-extrusion.freecad.json`，同一 fixture 覆盖 Hyperbola 与 Parabola conic edge 进入 `Part::Extrusion` 的 consumer 路径。
+- cad-core 仍不注册 fake `Part::Hyperbola` / `Part::Parabola`。`partGeometryCurveConsumers` 使用普通 `Part::Extrusion` object properties，先由 PartConicCurveDTO 生成 request-local edge，再用现有 executor 消费 `Base`。
+- FreeCAD expected 使用 source-backed oracle：`Part.ArcOfHyperbola/Part.ArcOfParabola(...).toShape().extrude(vector)`；对应 `FeatureExtrusion.cpp::Extrusion::extrudeShape()` regular path `result.makeElementPrism(myShape, vec)`。
+- `HyperbolaExtrusion` 与 `ParabolaExtrusion` 均为 `occt_face`，diagnostics 为空；consumer metadata 通过 `source_curve_kind` / `source_curve_type` / `source_part_geometry_type` 追溯 base curve。
+- `PARTCONIC-BLOCK-006` 关闭。surface 发布口径只限已验证 edge-to-face `Part::Extrusion` consumer；RuledSurface、ProjectionOnSurface 与完整 surface family 仍保持 non-goal。
+
 ## 非目标
 
 - 不实现 RuledSurface / ProjectionOnSurface。
