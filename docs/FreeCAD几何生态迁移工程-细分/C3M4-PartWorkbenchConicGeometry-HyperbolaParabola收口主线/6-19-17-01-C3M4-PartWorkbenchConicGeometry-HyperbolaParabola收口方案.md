@@ -7,6 +7,8 @@
 - S0 live 基线：`pwd` 为 `/Users/li/Chili3DProject/FreeCAD`；HEAD 为 `6f70a6ad6a`（`6f70a6ad6a feat: 收口P5圆锥弧草图支持`）。
 - S1 live 基线：`pwd` 为 `/Users/li/Chili3DProject/FreeCAD`；HEAD 为 `81df0a836a`（`81df0a836a docs: 冻结PARTCONIC S0基线`）。
 - S1 脏工作区边界：当前仍有既有未暂存 `src/Mod/Sketcher/App/SketchObject.h`、`src/Mod/Sketcher/App/SketchObjectPyImp.cpp` 改动；本主线保护这些现有改动，不执行 reset / checkout / 回退。
+- S2 live 基线：`pwd` 为 `/Users/li/Chili3DProject/FreeCAD`；HEAD 为 `8f5f2afe43`（`8f5f2afe43 docs: 完成PARTCONIC S1边界审计`）。
+- S2 脏工作区边界：仍只有既有未暂存 `src/Mod/Sketcher/App/SketchObject.h`、`src/Mod/Sketcher/App/SketchObjectPyImp.cpp`；S2 只改本 C3M4 主线 docs/矩阵，不暂存或回退 Sketcher 改动。
 - S0 queue 结论：P5CONIC `step_goal_queue.py` 返回空队列；PARTCONIC queue 在 S0 收口前从 `6-19-17-02-PARTCONIC-S0-live基线与范围冻结.md` 开始，S0 完成后下一项应为 S1。
 - 上一轮已收口：P5CONIC 已发布 `ArcOfHyperbola` / `ArcOfParabola` 的 Sketcher profile、construction 过滤、native `ExternalGeo` 与 projected `ExternalGeometry` 支持。
 - 新主线定位：从 Sketcher conic arcs 向 Part workbench / Part geometry API 侧推进，补齐 `Part.Hyperbola` / `Part.Parabola` 作为 Part 几何对象进入 cad-core 计算和消费链路的能力。
@@ -54,6 +56,19 @@ cad-core 发布口径：本主线 DTO 命名为 `PartConicCurveDTO`，作为 ada
 - `cad-core/src/part/part_extrusion.cpp`：作为第一批 consumer 裁决点，验证 conic edge 能否被 Part Extrusion 稳定消费并形成 face/shell；不把 RuledSurface / ProjectionOnSurface 拉进第一轮。
 - `docs/CADCore3.0/03-【已实现】Sketcher-Part-PartDesign几何能力复刻.md` 与 `docs/CADCore3.0/capabilities-gap对照表.md`：只在 S5 验证通过后发布能力，不能提前把完整 conic surface family 写成 supported。
 
+## S2 fixture / oracle 矩阵裁决
+
+S2 只完成 fixture 与 oracle 设计，不采集 expected，也不写 cad-core 实现。新增矩阵为 `矩阵/part_conic_geometry_fixture_oracle_matrix.tsv`。
+
+本批次固定四个 fixture 入口：
+
+- `part-hyperbola-edge`：`partGeometryCurve.curveKind=hyperbola`，字段为 `center`、`normal`、`angleXU`、`majorRadius`、`minorRadius`、`startAngle`、`endAngle`。FreeCAD oracle 路径为 `Part.Hyperbola(...)` 设置 `AngleXU` 后，经 `Part.ArcOfHyperbola(..., True).toShape()` 采集 edge、bbox、length、subshape map 和 `GeomAbs_Hyperbola` / `Part.Hyperbola` metadata。
+- `part-parabola-edge`：`partGeometryCurve.curveKind=parabola`，字段为 `center`、`normal`、`angleXU`、`focal`、`startAngle`、`endAngle`。FreeCAD oracle 路径为根据 `center/focal/angleXU` 计算 focus，构造 `Part.Parabola(focus, center, normal)`，再经 `Part.ArcOfParabola(..., True).toShape()` 采集 edge、bbox、length、subshape map 和 `GeomAbs_Parabola` / `Part.Parabola` metadata。
+- `part-conic-edge-invalid-params`：覆盖 unknown `curveKind`、Hyperbola 非法半径、Parabola 非法 `focal`、非法 trim 和 non-finite 字段。该项不产生成功 FreeCAD shape expected；S3 只可用同一 native 构造路径记录异常证据，并输出稳定 diagnostics。
+- `part-conic-edge-extrusion`：consumer 入口暂归 S4。设计路径是先用 Part geometry wrapper 生成 transient conic edge，再由 S4 选择 `Part::Feature.Shape=edge` 作为 `Part::Extrusion.Base` 或 source-backed `shape.extrude(vector)` oracle。当前 blocked 原因是 `PartConicCurveDTO` 不是 FreeCAD `DocumentObject`，FreeCAD 也没有 `Part::Hyperbola` / `Part::Parabola` Base 对象，现有 collector 不能直接 materialize consumer fixture。
+
+`PARTCONIC-BLOCK-003` 的路径设计部分在 S2 已完成；collector 代码、fixture JSON、expected JSON 仍是 S3 open work。未采集的 expected 不得写成已通过，采集目标基线沿用 FreeCADCmd `1.2.0 revision 20260519`。
+
 ## 最小完整语义批次
 
 本轮不拆成“先 Hyperbola、后 Parabola”。两者在 FreeCAD Part geometry 层同属 conic curve wrapper，字段恢复、finite arc、edge extraction、invalid 参数和 Part consumer 的风险边界一致，应作为一个 Part conic geometry 批次推进。
@@ -80,9 +95,10 @@ cad-core 发布口径：本主线 DTO 命名为 `PartConicCurveDTO`，作为 ada
 - `矩阵/part_conic_geometry_scope_review_matrix.tsv`
 - `矩阵/part_conic_geometry_blocker_queue.tsv`
 - `矩阵/part_conic_geometry_non_goal_registry.tsv`
+- `矩阵/part_conic_geometry_fixture_oracle_matrix.tsv`
 - `工作步骤细分/6-19-17-02-PARTCONIC-S0-live基线与范围冻结.md`
 - `工作步骤细分/6-19-17-03-PARTCONIC-S1-FreeCAD源码与DTO边界审计.md`
-- `工作步骤细分/6-19-17-04-PARTCONIC-S2-fixture与oracle矩阵设计.md`
+- `工作步骤细分/6-19-17-04-【已实现】PARTCONIC-S2-fixture与oracle矩阵设计.md`
 - `工作步骤细分/6-19-17-05-PARTCONIC-S3-conic曲线edge构造实现.md`
 - `工作步骤细分/6-19-17-06-PARTCONIC-S4-Part消费者与surface裁决.md`
 - `工作步骤细分/6-19-17-07-PARTCONIC-S5-能力发布与提交闸门.md`
