@@ -1,7 +1,7 @@
 {
   "diagnostic_codes": [
-    "missing_property",
     "missing_link_target",
+    "missing_property",
     "execution_failed",
     "execution_failed",
     "unsupported_property",
