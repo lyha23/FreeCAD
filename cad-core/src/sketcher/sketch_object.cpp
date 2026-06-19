@@ -535,6 +535,18 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         externalGeometry->ellipseArcs.begin(),
         externalGeometry->ellipseArcs.end()
     );
+    std::vector<SketchHyperbolaArc> resolvedHyperbolaArcs = parsed.hyperbolaArcs;
+    resolvedHyperbolaArcs.insert(
+        resolvedHyperbolaArcs.end(),
+        externalGeometry->hyperbolaArcs.begin(),
+        externalGeometry->hyperbolaArcs.end()
+    );
+    std::vector<SketchParabolaArc> resolvedParabolaArcs = parsed.parabolaArcs;
+    resolvedParabolaArcs.insert(
+        resolvedParabolaArcs.end(),
+        externalGeometry->parabolaArcs.begin(),
+        externalGeometry->parabolaArcs.end()
+    );
     std::vector<SketchBSpline> resolvedBSplines = parsed.bsplines;
     resolvedBSplines.insert(
         resolvedBSplines.end(),
@@ -552,10 +564,12 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
     const std::vector<SketchPoint> points = profilePoints(resolvedPoints);
     const std::vector<SketchArc> arcs = profileArcs(resolvedArcs);
     const std::vector<SketchEllipseArc> ellipseArcs = profileEllipseArcs(resolvedEllipseArcs);
+    const std::vector<SketchHyperbolaArc> hyperbolaArcs = profileHyperbolaArcs(resolvedHyperbolaArcs);
+    const std::vector<SketchParabolaArc> parabolaArcs = profileParabolaArcs(resolvedParabolaArcs);
     const std::vector<SketchBSpline> bsplines = profileBSplines(resolvedBSplines);
     const std::vector<SketchBezier> beziers = profileBeziers(resolvedBeziers);
     const std::vector<SketchProfileEdge> edges
-        = profileEdges(profile, arcs, ellipseArcs, bsplines, beziers);
+        = profileEdges(profile, arcs, ellipseArcs, hyperbolaArcs, parabolaArcs, bsplines, beziers);
     const std::vector<SketchCircle> circles = profileCircles(resolvedCircles);
     const std::vector<SketchEllipse> ellipses = profileEllipses(resolvedEllipses);
     auto rawShape = buildRawSketchShape(object, context, edges, points, circles, ellipses);
@@ -1003,14 +1017,16 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         {"relation_constraints_applied", appliedConstraints->relation},
         {"block_constraints_applied", appliedConstraints->block},
         {"external_geometry_count",
-         externalGeometry->segments.size() + externalGeometry->points.size()
-             + externalGeometry->circles.size() + externalGeometry->arcs.size()
-             + externalGeometry->ellipses.size() + externalGeometry->ellipseArcs.size()
-             + externalGeometry->bsplines.size() + externalGeometry->beziers.size()},
+             externalGeometry->segments.size() + externalGeometry->points.size()
+                 + externalGeometry->circles.size() + externalGeometry->arcs.size()
+                 + externalGeometry->ellipses.size() + externalGeometry->ellipseArcs.size()
+                 + externalGeometry->hyperbolaArcs.size() + externalGeometry->parabolaArcs.size()
+                 + externalGeometry->bsplines.size() + externalGeometry->beziers.size()},
         {"external_point_count", externalGeometry->points.size()},
         {"external_curve_count",
          externalGeometry->circles.size() + externalGeometry->arcs.size()
              + externalGeometry->ellipses.size() + externalGeometry->ellipseArcs.size()
+             + externalGeometry->hyperbolaArcs.size() + externalGeometry->parabolaArcs.size()
              + externalGeometry->bsplines.size() + externalGeometry->beziers.size()},
         {"external_geometry_state_counts",
          {

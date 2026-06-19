@@ -59,6 +59,8 @@ struct ExternalGeometryResult
     std::vector<SketchArc> arcs;
     std::vector<SketchEllipse> ellipses;
     std::vector<SketchEllipseArc> ellipseArcs;
+    std::vector<SketchHyperbolaArc> hyperbolaArcs;
+    std::vector<SketchParabolaArc> parabolaArcs;
     std::vector<SketchBSpline> bsplines;
     std::vector<SketchBezier> beziers;
     std::size_t definingLinkCount = 0;

@@ -1115,6 +1115,16 @@ void appendExternalGeometry(ExternalGeometryResult& result, const ExternalGeomet
     result.ellipses.insert(result.ellipses.end(), source.ellipses.begin(), source.ellipses.end());
     result.ellipseArcs
         .insert(result.ellipseArcs.end(), source.ellipseArcs.begin(), source.ellipseArcs.end());
+    result.hyperbolaArcs.insert(
+        result.hyperbolaArcs.end(),
+        source.hyperbolaArcs.begin(),
+        source.hyperbolaArcs.end()
+    );
+    result.parabolaArcs.insert(
+        result.parabolaArcs.end(),
+        source.parabolaArcs.begin(),
+        source.parabolaArcs.end()
+    );
     result.bsplines.insert(result.bsplines.end(), source.bsplines.begin(), source.bsplines.end());
     result.beziers.insert(result.beziers.end(), source.beziers.begin(), source.beziers.end());
 }
@@ -1127,6 +1137,7 @@ bool appendUnifiedNormalFaceLine(
 {
     if (!boundary.points.empty() || !boundary.circles.empty() || !boundary.arcs.empty()
         || !boundary.ellipses.empty() || !boundary.ellipseArcs.empty()
+        || !boundary.hyperbolaArcs.empty() || !boundary.parabolaArcs.empty()
         || !boundary.bsplines.empty() || !boundary.beziers.empty() || boundary.segments.empty()) {
         return false;
     }
@@ -1186,6 +1197,7 @@ bool projectExternalFaceBoundary(
     }
     if (boundary.segments.empty() && boundary.points.empty() && boundary.circles.empty()
         && boundary.arcs.empty() && boundary.ellipses.empty() && boundary.ellipseArcs.empty()
+        && boundary.hyperbolaArcs.empty() && boundary.parabolaArcs.empty()
         && boundary.bsplines.empty() && boundary.beziers.empty()) {
         return false;
     }
@@ -1392,6 +1404,16 @@ bool appendNativeExternalGeometry(
     for (auto arc : native.geometry.ellipseArcs) {
         arc.construction = !defining;
         result.ellipseArcs.push_back(arc);
+        appended = true;
+    }
+    for (auto arc : native.geometry.hyperbolaArcs) {
+        arc.construction = !defining;
+        result.hyperbolaArcs.push_back(arc);
+        appended = true;
+    }
+    for (auto arc : native.geometry.parabolaArcs) {
+        arc.construction = !defining;
+        result.parabolaArcs.push_back(arc);
         appended = true;
     }
     for (auto bspline : native.geometry.bsplines) {

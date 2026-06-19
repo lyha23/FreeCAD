@@ -7,7 +7,7 @@
 ## 主线目标
 
 - 按 FreeCAD `AssemblyUtils.cpp::getDistanceType()`、`getEdgeRadius()`、`getFaceRadius()` 和 `AssemblyObject.cpp::makeMbdJointDistance()` 的同一调用链，完整复核剩余 DistanceType。
-- 本轮最小完整语义批次覆盖显式 `makeMbdJointDistance()` switch 可表达的 extended cases：`LineCircle`、`CircleCircle`、`PlaneCylinder`、`PlaneSphere`、`PlaneTorus`、`CylinderCylinder`、`CylinderSphere`、`CylinderTorus`、`TorusTorus`、`TorusSphere`、`SphereSphere`、`PointCylinder`、`PointSphere`、`PointCurve`。
+- 本轮最小完整语义批次覆盖显式 `makeMbdJointDistance()` switch 可表达的 extended cases：`LineCircle`、`CircleCircle`、`PlaneCylinder`、`PlaneSphere`、`PlaneTorus`、`CylinderCylinder`、`CylinderSphere`、`CylinderTorus`、`TorusTorus`、`TorusSphere`、`SphereSphere`、`PointCylinder`、`PointSphere`、`PointCurve`；其中 `PointCurve` 只进入审计和 diagnostic 结论，不发布为 supported。
 - 同源但语义仍依赖 FreeCAD TODO / default branch 的 cases 必须纳入矩阵审计，不得沉默遗漏：`PlaneCone`、`CylinderCone`、`ConeCone`、`ConeTorus`、`ConeSphere`、`PointCone`、`PointTorus`、`LineCylinder`、`LineSphere`、`LineCone`、`LineTorus`、`CurvePlane`、`CurveCylinder`、`CurveSphere`、`CurveCone`、`CurveTorus`、`Other`。
 - 为 supported 子集批量采集 FreeCADCmd expected，补 cad-core DTO / radius evidence / solver class / scalar field，实现 fixtures、focused tests、C ABI capability 和文档矩阵闭环。
 - 不把 GUI/session、跨请求 solver state、完整 marker offsetPlc 泛化或 FreeCAD TODO/default branch 误发布为 supported。
@@ -18,8 +18,9 @@
 - `P8-Assembly-Reference-JCS-MarkerPlacement收口主线` 的 representative subshape marker placement subset 已被本包消费到 request-local `Assembly::AssemblyLink` identity-offset 场景；非 identity bundled `offsetPlc`、GUI/session 和 persistent solver state 仍不在 support claim 内。
 - S6 已发布 `distance_type_extended_geometry` capability。当前 supported extended cases 为 13 个：`LineCircle`、`CircleCircle`、`PlaneCylinder`、`PlaneSphere`、`CylinderCylinder`、`CylinderSphere`、`PointCylinder`、`PointSphere`、`PlaneTorus`、`CylinderTorus`、`TorusTorus`、`TorusSphere`、`SphereSphere`。
 - 13 个 supported expected 已删除 `known_gap` / `backendGap` 并通过 `CadCoreExpectedFixtureTest`；这些 expected 的 `solver_adapter` 精确对齐 FreeCAD native oracle，`bbox_delta=0.2` 只用于 cad-core display primitive bbox 与 FreeCAD exact bbox 的局部容差。
-- `PointCurve` 保留 diagnostic / nonGoal：native expected 已采集，但 FreeCAD 源码仍是 TODO-like plane-of-curve 语义，未进入 supported capability。
-- cone、line-surface、curve-face、`Other` default/TODO 代表 case 继续为 diagnostic / nonGoal，不发布为 supported。
+- `PointCurve` 保留 diagnostic / nonGoal：native expected 已采集，但 FreeCAD 源码仍是 TODO-like plane-of-curve 语义；当前产品裁决为不接受该行为作为 supported。
+- cone、line-surface、curve-face、`Other` default/TODO 代表 case 继续为 diagnostic / nonGoal，不发布为 supported；当前产品裁决为不接受 FreeCAD default/TODO branch 作为 CAD Core 公开能力。
+- 裁决原因：这些 case 不是清晰的“点到曲线最近距离”或明确几何约束语义，而是 FreeCAD 当前实现中的 TODO-like / default fallback；对前端用户发布 supported 会形成错误能力承诺，也会把以后真正实现曲线/圆锥/默认分支距离语义的设计空间锁死。
 
 ## 最小完整语义批次
 
@@ -28,10 +29,10 @@
 1. Edge circle radius cases：`LineCircle`、`CircleCircle`，通过 `getEdgeRadius()` 对 `distanceIJ` 做 FreeCAD 等价修正，已进入 supported。
 2. Face radius / direct surface cases：`PlaneCylinder`、`PlaneSphere`、`CylinderCylinder`、`CylinderSphere`、`PointCylinder`、`PointSphere`，通过 `getFaceRadius()` 对 `offset` 或 `distanceIJ` 做 FreeCAD 等价修正，已进入 supported。
 3. Explicit torus / sphere switch cases：`PlaneTorus`、`CylinderTorus`、`TorusTorus`、`TorusSphere`、`SphereSphere`，按 FreeCAD 当前 switch 的 ASMT class 和 scalar 字段进入 supported；torus radius 仍按 FreeCAD helper 行为贡献 0。
-4. Explicit point-curve fallback：`PointCurve` 已采 native expected，但保留 diagnostic / nonGoal，不发布。
-5. Default / TODO cases：cone、line-surface、curve-face 和 `Other` 已形成 checked-in diagnostic / nonGoal 结论，不从 capability 中消失，也不被标为 supported。
+4. Explicit point-curve fallback：`PointCurve` 已采 native expected，但产品裁决不接受 FreeCAD 当前 TODO-like plane-of-curve 行为；保留 diagnostic / nonGoal，不发布。
+5. Default / TODO cases：cone、line-surface、curve-face 和 `Other` 已形成 checked-in diagnostic / nonGoal 结论；产品裁决不接受 FreeCAD default fallback 作为 supported，不从 capability 中消失，也不被标为 supported。
 
-如 native oracle 无法稳定采集或 FreeCAD TODO / default 行为与产品语义冲突，允许把 default / curve cases 拆成后续专包；但必须在 S2/S5 文档说明拆分原因、下一批次范围和防止长期单 fixture 推进的措施。
+当前产品裁决已确认 FreeCAD TODO / default 行为与 CAD Core 公开语义冲突，因此不再开后续实现包消费这些 diagnostic expected。只有未来产品裁决明确改变，并重新定义可接受的曲线 / default DistanceType 行为时，才允许另开专包重审。
 
 ## FreeCAD 调用依据
 
@@ -77,7 +78,7 @@
 
 ## 当前执行结论
 
-`goal-step-runner` 队列已清空。后续只在产品明确接受 `PointCurve` 或 default/TODO branch 的具体行为时，另开专包重审并补 expected / capability；不得把这些 diagnostic expected 直接升级为 supported。
+`goal-step-runner` 队列已清空。当前产品裁决明确不接受 `PointCurve` 或 default/TODO branch 的 FreeCAD 当前行为作为 supported；后续保持 diagnostic / nonGoal。只有未来产品裁决变化，并重新定义具体可接受语义、oracle 和 capability 边界时，才允许另开专包重审；不得把这些 diagnostic expected 直接升级为 supported。
 
 ## 非目标
 

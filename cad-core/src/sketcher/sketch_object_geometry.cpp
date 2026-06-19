@@ -320,6 +320,87 @@ bool parseSketchGeometry(
             continue;
         }
 
+        if (kind == "ArcOfHyperbola" || kind == "Part::GeomArcOfHyperbola") {
+            bool ok = true;
+            const double cx = readNumber2(item.at("center"), 0, ok);
+            const double cy = readNumber2(item.at("center"), 1, ok);
+            const auto majorRadius = readNumberField(item, "majorRadius");
+            const auto minorRadius = readNumberField(item, "minorRadius");
+            const auto angle = readNumberField(item, "angle").value_or(0.0);
+            const auto startAngle = readNumberField(item, "startAngle");
+            const auto endAngle = readNumberField(item, "endAngle");
+            if (!ok || !majorRadius || !minorRadius || !startAngle || !endAngle
+                || *majorRadius <= 0.0 || *minorRadius <= 0.0 || *startAngle == *endAngle
+                || !std::isfinite(angle)) {
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_geometry",
+                    "ArcOfHyperbola center, radii, startAngle and endAngle are required",
+                    object.name,
+                    propertyName
+                );
+                return false;
+            }
+
+            // FreeCAD:
+            // /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp
+            // ::GeomArcOfHyperbola::Restore(), reads
+            // "MajorRadius", "MinorRadius", "AngleXU", "StartAngle" and "EndAngle".
+            parsed.hyperbolaArcs.push_back(
+                SketchHyperbolaArc {
+                    index,
+                    gp_Pnt(cx, cy, 0.0),
+                    *majorRadius,
+                    *minorRadius,
+                    angle,
+                    *startAngle,
+                    *endAngle,
+                    readBoolField(item, "construction", false)
+                }
+            );
+            continue;
+        }
+
+        if (kind == "ArcOfParabola" || kind == "Part::GeomArcOfParabola") {
+            bool ok = true;
+            const double cx = readNumber2(item.at("center"), 0, ok);
+            const double cy = readNumber2(item.at("center"), 1, ok);
+            const auto focal = readNumberField(item, "focal");
+            const auto angle = readNumberField(item, "angle").value_or(0.0);
+            const auto startAngle = readNumberField(item, "startAngle");
+            const auto endAngle = readNumberField(item, "endAngle");
+            if (!ok || !focal || !startAngle || !endAngle || *focal <= 0.0
+                || *startAngle == *endAngle || !std::isfinite(angle)) {
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_geometry",
+                    "ArcOfParabola center, focal, startAngle and endAngle are required",
+                    object.name,
+                    propertyName
+                );
+                return false;
+            }
+
+            // FreeCAD:
+            // /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp
+            // ::GeomArcOfParabola::Restore(), reads
+            // "Focal", "AngleXU", "StartAngle" and "EndAngle".
+            parsed.parabolaArcs.push_back(
+                SketchParabolaArc {
+                    index,
+                    gp_Pnt(cx, cy, 0.0),
+                    *focal,
+                    angle,
+                    *startAngle,
+                    *endAngle,
+                    readBoolField(item, "construction", false)
+                }
+            );
+            continue;
+        }
+
         if (kind == "BSpline" || kind == "BSplineCurve" || kind == "GeomBSplineCurve") {
             const auto degree = readIntField(item, "degree");
             const auto polesIt = item.find("poles");
@@ -507,6 +588,28 @@ std::vector<SketchArc> profileArcs(const std::vector<SketchArc>& arcs)
 std::vector<SketchEllipseArc> profileEllipseArcs(const std::vector<SketchEllipseArc>& arcs)
 {
     std::vector<SketchEllipseArc> profile;
+    for (const auto& arc : arcs) {
+        if (!arc.construction) {
+            profile.push_back(arc);
+        }
+    }
+    return profile;
+}
+
+std::vector<SketchHyperbolaArc> profileHyperbolaArcs(const std::vector<SketchHyperbolaArc>& arcs)
+{
+    std::vector<SketchHyperbolaArc> profile;
+    for (const auto& arc : arcs) {
+        if (!arc.construction) {
+            profile.push_back(arc);
+        }
+    }
+    return profile;
+}
+
+std::vector<SketchParabolaArc> profileParabolaArcs(const std::vector<SketchParabolaArc>& arcs)
+{
+    std::vector<SketchParabolaArc> profile;
     for (const auto& arc : arcs) {
         if (!arc.construction) {
             profile.push_back(arc);

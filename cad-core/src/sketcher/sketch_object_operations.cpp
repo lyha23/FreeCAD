@@ -7,8 +7,13 @@
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_MakeVertex.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
+#include <ElCLib.hxx>
+#include <GC_MakeArcOfHyperbola.hxx>
+#include <GC_MakeArcOfParabola.hxx>
+#include <GC_MakeHyperbola.hxx>
 #include <Geom_BezierCurve.hxx>
 #include <Geom_BSplineCurve.hxx>
+#include <Geom_TrimmedCurve.hxx>
 #include <Standard_Failure.hxx>
 #include <TColStd_Array1OfInteger.hxx>
 #include <TColStd_Array1OfReal.hxx>
@@ -22,6 +27,9 @@
 #include <gp_Circ.hxx>
 #include <gp_Dir.hxx>
 #include <gp_Elips.hxx>
+#include <gp_Hypr.hxx>
+#include <gp_Parab.hxx>
+#include <gce_MakeParab.hxx>
 
 #include <algorithm>
 #include <cmath>
@@ -85,6 +93,8 @@ std::vector<SketchProfileEdge> profileEdges(
     const std::vector<SketchSegment>& segments,
     const std::vector<SketchArc>& arcs,
     const std::vector<SketchEllipseArc>& ellipseArcs,
+    const std::vector<SketchHyperbolaArc>& hyperbolaArcs,
+    const std::vector<SketchParabolaArc>& parabolaArcs,
     const std::vector<SketchBSpline>& bsplines,
     const std::vector<SketchBezier>& beziers
 )
@@ -107,6 +117,7 @@ std::vector<SketchProfileEdge> profileEdges(
                 0.0,
                 0.0,
                 0.0,
+                0.0,
                 arc.startAngle,
                 arc.endAngle
             }
@@ -125,6 +136,49 @@ std::vector<SketchProfileEdge> profileEdges(
                 0.0,
                 arc.majorRadius,
                 arc.minorRadius,
+                0.0,
+                arc.angle,
+                arc.startAngle,
+                arc.endAngle
+            }
+        );
+    }
+    for (const auto& arc : hyperbolaArcs) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App
+        // /SketchObjectExternal.cpp::processEdge2(), for GeomAbs_Hyperbola builds a
+        // Part::GeomArcOfHyperbola from the trimmed curve parameters.
+        const gp_Hypr hyperbola(ellipseAxis(arc.center, arc.angle), arc.majorRadius, arc.minorRadius);
+        edges.push_back(
+            SketchProfileEdge {
+                SketchProfileEdgeKind::ArcOfHyperbola,
+                ElCLib::Value(arc.startAngle, hyperbola),
+                ElCLib::Value(arc.endAngle, hyperbola),
+                arc.center,
+                0.0,
+                arc.majorRadius,
+                arc.minorRadius,
+                0.0,
+                arc.angle,
+                arc.startAngle,
+                arc.endAngle
+            }
+        );
+    }
+    for (const auto& arc : parabolaArcs) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App
+        // /SketchObjectExternal.cpp::processEdge2(), for GeomAbs_Parabola builds a
+        // Part::GeomArcOfParabola from the trimmed curve parameters.
+        const gp_Parab parabola(ellipseAxis(arc.center, arc.angle), arc.focal);
+        edges.push_back(
+            SketchProfileEdge {
+                SketchProfileEdgeKind::ArcOfParabola,
+                ElCLib::Value(arc.startAngle, parabola),
+                ElCLib::Value(arc.endAngle, parabola),
+                arc.center,
+                0.0,
+                0.0,
+                0.0,
+                arc.focal,
                 arc.angle,
                 arc.startAngle,
                 arc.endAngle
@@ -150,6 +204,7 @@ std::vector<SketchProfileEdge> profileEdges(
                 0.0,
                 0.0,
                 0.0,
+                0.0,
                 bspline.degree,
                 bspline.poles
             }
@@ -168,6 +223,7 @@ std::vector<SketchProfileEdge> profileEdges(
                 bezier.poles.front(),
                 bezier.poles.back(),
                 gp_Pnt {},
+                0.0,
                 0.0,
                 0.0,
                 0.0,
@@ -280,6 +336,60 @@ std::optional<TopoDS_Edge> makeProfileEdge(const SketchProfileEdge& edge, bool r
             edge.startAngle,
             edge.endAngle
         );
+    }
+    else if (edge.kind == SketchProfileEdgeKind::ArcOfHyperbola) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp
+        // ::GeomArcOfHyperbola::Restore() creates "GC_MakeHyperbola" and
+        // "GC_MakeArcOfHyperbola(..., StartAngle, EndAngle, Standard_True)".
+        try {
+            GC_MakeHyperbola hyperbolaMaker(
+                ellipseAxis(edge.center, edge.angle),
+                edge.majorRadius,
+                edge.minorRadius
+            );
+            if (!hyperbolaMaker.IsDone()) {
+                return std::nullopt;
+            }
+            GC_MakeArcOfHyperbola arcMaker(
+                hyperbolaMaker.Value()->Hypr(),
+                edge.startAngle,
+                edge.endAngle,
+                Standard_True
+            );
+            if (!arcMaker.IsDone()) {
+                return std::nullopt;
+            }
+            Handle(Geom_TrimmedCurve) curve = arcMaker.Value();
+            edgeBuilder = BRepBuilderAPI_MakeEdge(curve);
+        }
+        catch (const Standard_Failure&) {
+            return std::nullopt;
+        }
+    }
+    else if (edge.kind == SketchProfileEdgeKind::ArcOfParabola) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp
+        // ::GeomArcOfParabola::Restore() creates "gce_MakeParab" and
+        // "GC_MakeArcOfParabola(..., StartAngle, EndAngle, Standard_True)".
+        try {
+            gce_MakeParab parabolaMaker(ellipseAxis(edge.center, edge.angle), edge.focal);
+            if (!parabolaMaker.IsDone()) {
+                return std::nullopt;
+            }
+            GC_MakeArcOfParabola arcMaker(
+                parabolaMaker.Value(),
+                edge.startAngle,
+                edge.endAngle,
+                Standard_True
+            );
+            if (!arcMaker.IsDone()) {
+                return std::nullopt;
+            }
+            Handle(Geom_TrimmedCurve) curve = arcMaker.Value();
+            edgeBuilder = BRepBuilderAPI_MakeEdge(curve);
+        }
+        catch (const Standard_Failure&) {
+            return std::nullopt;
+        }
     }
     else if (edge.kind == SketchProfileEdgeKind::BSpline) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/Geometry.cpp

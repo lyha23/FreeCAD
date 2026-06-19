@@ -1,6 +1,7 @@
 # Repository Guidelines（仓库指南）
 
 ## 仓库目标
+
 - 本仓库是本地 FreeCAD 源码树，也是抽取 CAD Core 的语义来源；当前目标是基于 `~/Chili3DProject/FreeCAD` 中的 FreeCAD 实现，把几何建模核心逻辑抽到 `~/Chili3DProject/FreeCAD/cad-core`。
 - 抽取范围重点包括文档对象图、属性与链接、依赖分析、recompute、草图、PartDesign 特征链、几何建立、拓扑命名、拓扑元素追踪、几何结果映射与前端 CAD 运行时需要的几何内核能力。
 - 草图约束求解器不属于当前 `cad-core` 迁移实现目标；只保留 Sketcher solver-facing 输入、约束状态、diagnostics、几何更新入口和与几何 / 拓扑命名相关的必要语义，不要把完整约束求解当作待实现缺口。
@@ -8,6 +9,7 @@
 - 需要确认行为语义时，优先读取本仓库 `src/` 中对应 FreeCAD 实现，再决定 `cad-core` 中的 C++ API、拓扑命名模型、重建流程和 fixture 期望。
 
 ## 几何库前后端架构
+
 - 当前几何库按前后端架构设计：前端负责保存和编辑完整的 FreeCAD 风格 `DocumentObject graph`，并在建模操作、参数修改或重算时把该 graph 作为请求数据发送给后端或 `cad-core` adapter。
 - 后端 / CAD Core 是无状态几何计算服务：每次收到请求后，只根据请求里的 `DocumentObject graph`、`recompute` 目标和运行时参数重新计算目标 shape，不依赖上一次请求留下的文档、会话或几何缓存。
 - `DocumentObject graph` 是唯一真实数据；shape、`NamedShape`、`ElementMap`、topomap、subshape map 和 mesh 都是单次请求中的计算产物，请求结束后不得作为前端或后端长期状态保存。已批准的唯一 BREP 例外是 `ReferenceShadow.brep`：它只能保存被引用单个 subshape 的旧几何快照，用作引用恢复证据，不能作为建模输入或完整对象 BREP。
@@ -15,6 +17,7 @@
 - 前后端接口、拓扑命名、重算流程和阶段边界以 `docs/CADCore方案/00-CAD-Core抽取方案.md` 及其细化方案为准；实现中不得绕过这些文档定义的无状态 CAD Core 边界。
 
 ## 项目结构与模块组织
+
 - `src/`：FreeCAD 上游源码，是行为语义、调用链和字段含义的主要依据。
 - `src/App`：承接 `Document`、`DocumentObject*`、`PropertyLinks.cpp`、`PropertyGeo.cpp`、`GeoFeature.cpp` 等文档对象、属性、链接、引用更新和 placement 语义。
 - `src/Mod/Part/App`：承接 `PartFeature.cpp`、`BodyBase.cpp`、`PropertyTopoShape.cpp`、`TopoShape.cpp`、`TopoShapeExpansion.cpp`、`TopoShapeMapper.cpp`、`FaceMaker*.cpp`、`WireJoiner.cpp` 和 Attachment 相关语义。
@@ -34,6 +37,7 @@
 - `docs/建模过程说明`：面向实现理解的 FreeCAD 建模链路说明。
 
 ## CAD Core 模块框架
+
 - `cad-core` 的长期结构按本地 FreeCAD module 语义对齐，而不是按一般后端分层随意重新命名；框架依据见 `docs/CADCore方案/00-CAD-Core抽取方案.md`。
 - `document/` 对齐 `src/App` 的文档对象和属性系统，只做中立输入模型、对象索引、链接解析和诊断，不塞入 PartDesign 或 Sketcher 业务规则。
 - `graph/` 只处理对象依赖、目标选择、循环诊断和 recompute 顺序；不要把特征几何逻辑写到 graph 层。
@@ -44,6 +48,7 @@
 - 每次结构迁移优先做文件边界调整和清晰调用关系，行为变更另按具体 FreeCAD 源文件做实现任务；不要为了“小文件化”拆散 `WireJoiner`、FaceMaker、ElementMap / MapperHistory 这类依赖内部账本的状态机。
 
 ## 构建与运行
+
 - 上游 FreeCAD 的完整构建遵循仓库原有 `CMakeLists.txt`、`CMakePresets.json`、`pixi.toml` 与 `.github/workflows`；不要为了 `cad-core` 任务随意改动上游构建系统。
 - `cad-core` 使用 CMake、C++17、OpenCASCADE CONFIG package 和 `nlohmann/json.hpp`：
   ```bash
@@ -75,6 +80,7 @@
 - 需要验证 FreeCAD parity、刷新 expected 或关闭 known gap 时，优先让 `cad-core` 与 oracle collector 使用同一套 FreeCAD / LibPack / OCCT；若只能在另一套 OCCT 上 smoke test，结论必须标明为兼容性探测，不能替代正式 parity 验收。
 
 ## OpenCascade / OCCT 使用规则
+
 - `cad-core` 直接使用 OCCT C++ API；新增几何能力时先确认 FreeCAD 在 `src/Mod/Part/App`、`src/Mod/PartDesign/App` 或相关模块中的调用路径，再决定是否封装到 `geometry/`、`features/` 或 `topo/`。
 - 新增 OCCT 模块依赖时，同步维护 `cad-core/CMakeLists.txt` 的 source list、include、link library 和必要的 Apple RPATH 设置。
 - 低层 OCCT helper 放在 `geometry/` 或 `topo/`，不要让 adapter、JSON parser 或高层 feature 文件散落重复的 OCCT 细节。
@@ -82,6 +88,7 @@
 - 修改 C++ 代码后遵循仓库 `.clang-format` 风格；不要为局部修复重排大段无关代码。
 
 ## 编码风格与命名约定
+
 - 上游 `src/` 保持 FreeCAD 既有 C++/Python/CMake 风格和模块边界，不做无关重构。
 - `cad-core` 使用 C++17；公共头文件放 `include/cad_core/...`，实现放 `src/...`，命名空间保持 `cad_core::<module>`。
 - 文件和类型命名优先跟 FreeCAD 语义对齐：`FeatureExtrude` 相关通用逻辑放 `feature_extrude.*`，Pad/Pocket 只保留各自特化语义。
@@ -93,6 +100,7 @@
 - 审计 FreeCAD 依据路径时，`/Users/li/...` 与 `/Users/admin/...` 只代表不同机器上的本地用户目录；只要后续仓库相对路径、源码文件、类/函数和关键短句一致，不得仅因 `li` / `admin` 用户目录不同判定依据路径不可追溯。若需要在当前机器复核，可把这两个前缀视为同一 FreeCAD 源码树根的等价用户目录前缀。
 
 ## FreeCAD 迁移实现纪律
+
 - 涉及 FreeCAD parity、草图内部面、拓扑命名、WireJoiner、FaceMaker、ShapeFix、特征重建或历史映射的实现，必须先给出 FreeCAD 调用链和 `cad-core` 分层映射，再写代码。最少要明确：FreeCAD 源文件绝对路径、类/函数、关键字段/短句、调用顺序、对应的 `document` / `graph` / `runtime` / `features` / `geometry` / `topo` / `adapters` 落点。
 - 禁止从 fixture 输出倒推业务逻辑。不得在 `cad-core/src/features/sketch_object.cpp`、`cad-core/src/runtime`、`cad-core/src/graph` 或 adapter 层中新增 `ellipse && bspline`、几何类型排序、source edge 猜测、split edge compound 注入、degenerate face 注入、按 fixture 名称分支等补丁式逻辑。
 - 出现 `InternalEdgeN`、`InternalVertexN`、open wire 或 split fragment 映射差异时，优先按四层矩阵定位：1）`FaceMakerBuildFace` 的 face / edge / vertex 几何结果是否与 FreeCAD 一致；2）`WireJoiner::getOpenWires()` 的 open wire 几何结果是否与 FreeCAD 一致；3）raw compound / child shape identity 是否在组合时被重建或复制；4）`NamedShape` / `ElementMap` 是否完整消费 `MapperHistory(aHistory)`。如果前 1-3 层一致，只在第 4 层出现 stable subname、internal element 或 source trace 差异，应归类为 history 到 `ElementMap` 的传播缺口，不得在 sketch executor 中按几何类型、fixture 名、split 顺序或 source index 继续补猜测逻辑。
@@ -106,16 +114,18 @@
 - fixture 评估中，`InternalFaceN`、`InternalEdgeN`、`InternalVertexN` 等命名顺序与 FreeCAD 不一致时，只要几何等价且本仓库输出顺序稳定，不得算作硬失败；应单独归类为“命名顺序差异”或类似非失败项。face/edge/vertex 数量不同、几何内容不同、稳定 subname 丢失或引用语义不稳定仍然算失败。
 
 ## 仓库工作偏好与排查入口
+
 - 处理 FreeCAD parity、fixture 或 oracle 问题时，先明确当前问题属于 oracle 采集、`cad-core` 实现、命名顺序差异、pending/known-mismatch 分组还是文档状态；结论必须直接回答 expected 与当前 `cad-core` 表现是否一致，并列出剩余不一致项。
 - 用户指定文档落点时，结果要写入对应仓库目录，而不是只在聊天里总结：CAD Core 抽取方案、fixture 偏差和排查方案优先放 `docs/CADCore方案`；建模链路和已经接受的业务语义优先放 `docs/建模过程说明`；后续计划或暂不实现方案放到对应主题目录或新增清晰命名的方案文件。
 - 写方案、排查记录、实现状态或回归文档时，不要记录流水账，只记录值得关注的内容：当前基线、关键结论、FreeCAD / OpenCascade 依据、已完成的语义性调整、剩余风险、验收命令和下一步。不要逐条追加“修改某处后执行构建、结果通过、格式化 warning”这类过程日志；若验证结果重要，只保留最终验证结论或对判断有影响的失败输出。
 - 写方案、实施步骤或 goal prompt 时，必须让结果可以快速验证：验收命令按“本轮短跑 / 阶段回归 / 重型收口”分层列出，普通 goal 默认只要求本轮相关的粗 filter、`git diff --check`；不得把历史已锁 case、阶段回归、ignored fixture、全量 build/check 直接塞进普通 goal 的必跑项。只有阶段收口、oracle/runner 改动或用户明确要求时，才把阶段回归和重型收口列为必须执行。
-- 用户要求“实现”时，不要默认只挑一个最小 oracle case 或单个 fixture 落代码；应优先选择一个“最小完整语义批次”推进：同一 FreeCAD 调用链、同一 DTO / API 边界、同一类 expected 能覆盖的多个代表性场景，应在同一轮内批量采集 oracle、补 cad-core 实现、fixtures、focused tests、capability/docs 和验收记录。只有出现 FreeCAD 调用链分叉、oracle 无法采集、语义边界不清、风险会跨模块扩散，或用户明确要求小步验证时，才拆成单个 case。拆分时必须在方案或 goal prompt 中说明为什么不能批量实现、下一批次范围是什么，以及如何避免长期停留在单 fixture 推进。
+- 规划实现内容、写方案、实施步骤、goal prompt 或响应“实现”请求时，必须先命中“最小完整语义批次”规则，不要等到落代码时才扩大范围，也不要默认只挑一个最小 oracle case 或单个 fixture。应优先把同一 FreeCAD 调用链、同一 DTO / API 边界、同一类 expected 能覆盖的多个代表性场景纳入同一轮，并在方案阶段就写清批量采集 oracle、补 cad-core / Rust 实现、fixtures、focused tests、capability/docs 和验收记录的闭环。只有出现 FreeCAD 调用链分叉、oracle 无法采集、语义边界不清、风险会跨模块扩散，或用户明确要求小步验证时，才拆成单个 case。拆分时必须在方案或 goal prompt 中说明为什么不能批量实现、下一批次范围是什么，以及如何避免长期停留在单 fixture 推进。
 - 用户说“不需要太详细，只需要把框架说清楚”时，文档保持框架级和短结论；用户说“大白话解释一下”时，先解释具体流程和对象关系，再进入源码、实现或文档更新。
 - 解释草图内部面时必须区分 sketch 的原始 `Shape` 和辅助结果 `InternalShape`：`FaceMakerBuildFace` 失败后得到空 `InternalShape` 是 FreeCAD parity，不代表原始 sketch 边丢失；open profile/open wire 语义应单独表达，不要强行混回 FreeCAD 风格 `InternalShape`。
 - 扩展 Pad/Pocket fixture 或 executor 前，先盘点 `cad-core/fixtures/{mvp,p2}`、`cad-core/src/features/feature_extrude.cpp`、`cad-core/src/features/pad.cpp`、`cad-core/src/features/pocket.cpp` 和对应 FreeCAD 源码的当前覆盖和缺口；优先新增或补齐 oracle case，只有证明 collector 或 expected 本身错误时才先改采集脚本/期望数据。
 
 ## 文档规则
+
 - 用户指定文档落点时，必须写入对应仓库路径，不要只在聊天里总结。
 - 接口契约写入 `docs/接口规定/`；CAD Core 阶段边界和抽取方案写入 `docs/CADCore方案/`；具体补齐或临时方案写入 `docs/补齐/`。
 - 写方案、排查记录或验收文档时，保留当前基线、关键结论、FreeCAD / OCCT 依据、代码落点、剩余风险、验收命令和下一步；不要写流水账。
@@ -125,6 +135,7 @@
 - 文档里的能力状态要从当前代码、fixtures 和 docs 复核后再写；不要直接复制旧 memory 或旧方案里的数量和状态。
 
 ## 测试指南
+
 - 代码检查默认只覆盖本次修改涉及的文件、target 或 fixture 范围；仅在用户明确要求时执行全量 FreeCAD 构建或全量 CI 等重操作。
 - 文档类修改通常不构建、不跑测试。
 - 代码修改后，只有在必要且用户未禁止时，最多执行一次相关范围的构建或测试；不要默认跑完整 FreeCAD CI。
@@ -144,6 +155,7 @@
 - 涉及 OCCT、FreeCAD 原生 runtime、oracle 采集或 GUI/Qt 的验证可能依赖本机环境；运行前先确认是否确实需要，sandbox 中的 FreeCADCmd/Qt 错误不能直接当作实现失败。
 
 ## Git 与工作区
+
 - 当前工作区可能有用户或其它任务留下的未提交改动；开始编辑前看 `git status --short`，只改本次任务相关文件。
 - 不要回退、覆盖或清理自己没有改的文件。特别是 `cad-core/` 下已有源码、fixture、docs 改动，除非用户明确要求，否则只作为上下文读取。
 - 不使用 `git reset --hard`、`git checkout --` 等破坏性命令，除非用户明确要求。
@@ -151,6 +163,7 @@
 - 如果需要提交，先展示当前变更边界，确认只包含本次任务相关内容；不要把本地生成物、build 目录或 `__pycache__` 混进提交。
 
 ## Web 内容获取策略
+
 - 获取具体网页正文时，优先使用 `smart-web-fetch` skill，不直接抓取原始 HTML。
 - `smart-web-fetch` skill 通过 Jina Reader、`markdown.new`、`defuddle.md` 获取更清晰的 Markdown 输出，并带多级降级策略。
 - 对于“读取某个 URL 的正文并总结/抽取信息”这类任务，优先触发 `smart-web-fetch`，不要默认走内置网页抓取流程。

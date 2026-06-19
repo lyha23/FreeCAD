@@ -33,6 +33,8 @@ enum class SketchProfileEdgeKind
     Line,
     ArcOfCircle,
     ArcOfEllipse,
+    ArcOfHyperbola,
+    ArcOfParabola,
     BSpline,
     Bezier
 };
@@ -46,6 +48,7 @@ struct SketchProfileEdge
     double radius = 0.0;
     double majorRadius = 0.0;
     double minorRadius = 0.0;
+    double focal = 0.0;
     double angle = 0.0;
     double startAngle = 0.0;
     double endAngle = 0.0;
@@ -80,6 +83,8 @@ std::string faceMakerRuntimeSourceName(part::FaceMakerBuildFaceRuntimeSource sou
 std::vector<SketchProfileEdge> profileEdges(const std::vector<SketchSegment>& segments,
                                             const std::vector<SketchArc>& arcs,
                                             const std::vector<SketchEllipseArc>& ellipseArcs,
+                                            const std::vector<SketchHyperbolaArc>& hyperbolaArcs,
+                                            const std::vector<SketchParabolaArc>& parabolaArcs,
                                             const std::vector<SketchBSpline>& bsplines,
                                             const std::vector<SketchBezier>& beziers);
 

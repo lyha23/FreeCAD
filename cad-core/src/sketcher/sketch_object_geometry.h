@@ -91,6 +91,33 @@ struct SketchEllipseArc
     bool construction = false;
 };
 
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp
+// ::GeomArcOfHyperbola::Restore(), reads "MajorRadius/MinorRadius/AngleXU/StartAngle/EndAngle".
+struct SketchHyperbolaArc
+{
+    std::size_t geometryIndex = 0;
+    gp_Pnt center;
+    double majorRadius = 0.0;
+    double minorRadius = 0.0;
+    double angle = 0.0;
+    double startAngle = 0.0;
+    double endAngle = 0.0;
+    bool construction = false;
+};
+
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp
+// ::GeomArcOfParabola::Restore(), reads "Focal/AngleXU/StartAngle/EndAngle".
+struct SketchParabolaArc
+{
+    std::size_t geometryIndex = 0;
+    gp_Pnt center;
+    double focal = 0.0;
+    double angle = 0.0;
+    double startAngle = 0.0;
+    double endAngle = 0.0;
+    bool construction = false;
+};
+
 struct SketchGeometrySet
 {
     std::vector<SketchSegment> segments;
@@ -99,6 +126,8 @@ struct SketchGeometrySet
     std::vector<SketchEllipse> ellipses;
     std::vector<SketchArc> arcs;
     std::vector<SketchEllipseArc> ellipseArcs;
+    std::vector<SketchHyperbolaArc> hyperbolaArcs;
+    std::vector<SketchParabolaArc> parabolaArcs;
     std::vector<SketchBSpline> bsplines;
     std::vector<SketchBezier> beziers;
 };
@@ -117,6 +146,8 @@ std::vector<SketchCircle> profileCircles(const std::vector<SketchCircle>& circle
 std::vector<SketchEllipse> profileEllipses(const std::vector<SketchEllipse>& ellipses);
 std::vector<SketchArc> profileArcs(const std::vector<SketchArc>& arcs);
 std::vector<SketchEllipseArc> profileEllipseArcs(const std::vector<SketchEllipseArc>& arcs);
+std::vector<SketchHyperbolaArc> profileHyperbolaArcs(const std::vector<SketchHyperbolaArc>& arcs);
+std::vector<SketchParabolaArc> profileParabolaArcs(const std::vector<SketchParabolaArc>& arcs);
 std::vector<SketchBSpline> profileBSplines(const std::vector<SketchBSpline>& bsplines);
 std::vector<SketchBezier> profileBeziers(const std::vector<SketchBezier>& beziers);
 
