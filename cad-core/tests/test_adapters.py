@@ -2100,8 +2100,12 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("p8/part-parabola-edge", conic_curves["fixtures"])
         self.assertIn("p8/part-conic-edge-invalid-params", conic_curves["fixtures"])
         self.assertIn("p8/part-conic-edge-extrusion", conic_curves["fixtures"])
+        self.assertIn("p8/part-ruled-surface-conic-line", conic_curves["fixtures"])
         self.assertIn("invalid_part_conic_curve_kind", conic_curves["diagnostics"])
         self.assertIn("Part::Extrusion", conic_curves["consumer_type_ids"])
+        self.assertIn("Part::RuledSurface", conic_curves["consumer_type_ids"])
+        self.assertNotIn("Part::Hyperbola", conic_curves["consumer_type_ids"])
+        self.assertNotIn("Part::Parabola", conic_curves["consumer_type_ids"])
         self.assertIn(
             "no_part_hyperbola_document_object_executor",
             conic_curves["request_local_boundaries"],
@@ -2110,13 +2114,60 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "no_part_parabola_document_object_executor",
             conic_curves["request_local_boundaries"],
         )
+        self.assertIn(
+            "conic_edge_is_request_local_producer_not_document_object",
+            conic_curves["request_local_boundaries"],
+        )
         self.assertIn("full_part_surface_family", conic_curves["remaining_gaps"])
-        self.assertIn("ruled_surface", conic_curves["remaining_gaps"])
+        self.assertNotIn("ruled_surface", conic_curves["remaining_gaps"])
         self.assertIn("projection_on_surface", conic_curves["remaining_gaps"])
         self.assertIn(
             "full_sketcher_solver_conic_constraints",
             conic_curves["remaining_gaps"],
         )
+        ruled_surface = capabilities["part_workbench"]["ruled_surface"]
+        self.assertEqual(ruled_surface["status"], "supported_edge_edge_first_batch")
+        self.assertIn("Part::RuledSurface", ruled_surface["type_ids"])
+        self.assertIn("Curve1", ruled_surface["properties"])
+        self.assertIn("Curve2", ruled_surface["properties"])
+        self.assertIn("Orientation", ruled_surface["properties"])
+        self.assertIn("App::PropertyLinkSub", ruled_surface["property_types"])
+        self.assertIn("Automatic", ruled_surface["orientation_values"])
+        self.assertIn("Forward", ruled_surface["orientation_values"])
+        self.assertIn("Reversed", ruled_surface["orientation_values"])
+        self.assertIn("source_backed_document_object_executor", ruled_surface["covered"])
+        self.assertIn("curve1_curve2_property_link_sub", ruled_surface["covered"])
+        self.assertIn("orientation_automatic_forward_reversed", ruled_surface["covered"])
+        self.assertIn("edge_edge_brepfill_face", ruled_surface["covered"])
+        self.assertIn("source_edge_provenance", ruled_surface["covered"])
+        self.assertIn("conic_edge_consumer", ruled_surface["covered"])
+        for fixture in (
+            "p8/part-ruled-surface-line-line",
+            "p8/part-ruled-surface-conic-line",
+            "p8/part-ruled-surface-orientation-reversed",
+            "p8/part-ruled-surface-invalid-input",
+        ):
+            self.assertIn(fixture, ruled_surface["fixtures"])
+        for diagnostic in (
+            "missing_property",
+            "missing_link_target",
+            "invalid_subshape",
+            "unsupported_subshape_kind",
+            "no_edge",
+        ):
+            self.assertIn(diagnostic, ruled_surface["diagnostics"])
+        self.assertIn("edge_edge_only_first_batch", ruled_surface["request_local_boundaries"])
+        self.assertIn(
+            "conic_line_expected_uses_make_ruled_surface_after_link_resolve",
+            ruled_surface["request_local_boundaries"],
+        )
+        self.assertIn("wire_wire_brepfill_shell", ruled_surface["remaining_gaps"])
+        self.assertIn(
+            "projection_on_surface_source_audited_planned",
+            ruled_surface["remaining_gaps"],
+        )
+        self.assertIn("full_part_surface_family", ruled_surface["remaining_gaps"])
+        self.assertNotIn("full_surface_family", ruled_surface["covered"])
         self.assertNotIn("complete_mapper_history", capabilities["topo_history"]["remaining_gaps"])
         self.assertNotIn(
             "element_map_child_map_preserve_propagate_lifecycle",

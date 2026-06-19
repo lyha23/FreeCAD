@@ -11,6 +11,7 @@
 - S2 fixture/oracle 结论：S3 required fixtures 固定为 `part-ruled-surface-line-line`、`part-ruled-surface-conic-line`、`part-ruled-surface-orientation-reversed`、`part-ruled-surface-invalid-input`。fixture JSON 必须表达 `DocumentObject Type=Part::RuledSurface`，通过 `Properties.Curve1` / `Properties.Curve2` / `Properties.Orientation` 和 link/subname 输入，不允许 adapter 特例直接输出 face。FreeCAD expected collector 优先创建 source-backed `Part::RuledSurface` object；若 conic-line 只能用 `Part.makeRuledSurface()`，等价边界只覆盖 `RuledSurface::execute()` link resolve 后进入 `makeElementRuledSurface` 的 edge/edge geometry，不覆盖 link/subname diagnostics 或 topo provenance。wire/wire 因缺少 collector/input/provenance 验收而 defer；`Part::ProjectOnSurface` 仅保留 S4 candidate。
 - S3 实现结论：`cad-core` 已实现 source-backed `Part::RuledSurface` edge/edge 第一批，覆盖 `Curve1` / `Curve2` App::PropertyLinkSub、`Orientation=Automatic/Forward/Reversed`、`BRepFill::Face`、源 edge 到输出 edge provenance、四个 p8 fixtures/expected/tests 和 collector native/fallback 路径。`wire/wire` 仍 deferred；`ProjectOnSurface` 当时 routed-S4，S4 已进一步拆入独立主线。
 - S4 裁决结论：选择 split-later 出口 B，不在本主线实现 `Part::ProjectOnSurface`。原因是当前 collector 未启用 `Part::ProjectOnSurface` native type、`set_property()` 未支持普通 `App::PropertyLinkSubList`，cad-core 未有 `part_project_on_surface` executor / CMake / registry / projection named-shape 策略；即使第一批仅做 `Mode=Edges Height=0 Offset=0`，也需要先在独立主线闭合 collector、input schema、diagnostics 和 topo provenance 裁决。本主线 S5 发布口径固定为 `Part::RuledSurface` supported，`Part::ProjectOnSurface` source-audited / planned。
+- S5 发布结论：`cad-core/src/adapters/c_api/c_api.cpp` 已新增 `part_workbench.ruled_surface` 精确 capability；CADCore3.0 文档和 oracle 队列只发布已验证的 `Part::RuledSurface` edge/edge 第一批。PARTCONIC 的 `conic_curves` 不再把 `ruled_surface` 作为 gap；它只声明 conic edge 可进入 `Part::RuledSurface` consumer，不声明 fake `Part::Hyperbola` / `Part::Parabola` DocumentObject。`wire/wire`、`ProjectOnSurface` 和 full Part surface family 仍为 remaining gaps / planned。
 - 上一轮 PARTCONIC 已收口：`Part.Hyperbola` / `Part.Parabola` geometry wrapper 已通过 `PartConicCurveDTO` 输出有限 edge，并已验证 Hyperbola / Parabola edge 可进入 `Part::Extrusion` consumer 输出 `occt_face`。
 - 新主线定位：把 PARTCONIC 明确保留的 full Part surface family / RuledSurface / ProjectionOnSurface gap 拆成 source-backed Part Workbench surface 主线；第一实现批次优先 `Part::RuledSurface`，`Part::ProjectOnSurface` 先做源码裁决和 fixture 分批，不和 RuledSurface 直接混成一个实现任务。
 
@@ -41,6 +42,7 @@
 - `cad-core/src/part/part_geometry_curve.cpp` 已能创建 request-local Hyperbola / Parabola edge，并允许 `partGeometryCurveConsumers` 中的 `Part::Line` / `Part::RuledSurface` 通过同一 executor 消费 conic edge；没有注册假的 `Part::Hyperbola` / `Part::Parabola` DocumentObject。
 - S3 落点：`cad-core/src/part/topo_shape_expansion.*` 暴露 `makeElementRuledSurfaceFromEdges()` 承接 edge/edge `BRepFill::Face`、orientation 和 shared-vertex source edge relation；`cad-core/src/part/part_ruled_surface.cpp` 负责 property/link/diagnostic/metadata；`cad-core/src/topo` 通过 named shape element_map/history 输出 provenance。
 - S3 collector 落点：`cad-core/tools/collect_freecad_expected.py` 已加入 `Part::RuledSurface` native type 支持；line-line 和 orientation-reversed 走 native expected；conic-line 走 `Part.makeRuledSurface()` fallback，expected reference 标明只覆盖 link resolve 后 edge/edge geometry。
+- S5 发布落点：`cad-core/src/adapters/c_api/c_api.cpp` 暴露 `part_workbench.ruled_surface`，`cad-core/tests/test_adapters.py` 断言四个 fixture、edge/edge 边界、wire/wire / ProjectOnSurface / full family gap，以及 conic consumer 不代表 fake conic DocumentObject。
 - S4 collector/input 缺口：`cad-core/tools/collect_freecad_expected.py` 尚未把 `Part::ProjectOnSurface` 加入 `SUPPORTED_NATIVE_TYPES`，且 `set_property()` 只支持 `App::PropertyLinkSubListHidden`，未支持 `ProjectOnSurface::Projection` 需要的普通 `App::PropertyLinkSubList`；因此本主线不采集 projection expected、不新增 projection fixture。
 
 ## 最小完整语义批次
@@ -93,7 +95,7 @@ Wire / wire 的 `BRepFill::Shell` 分支和非 edge/wire 输入自动提取 wire
 - `工作步骤细分/6-19-18-24-【已实现】PARTSURF-S2-fixture与oracle矩阵设计.md`
 - `工作步骤细分/6-19-18-25-【已实现】PARTSURF-S3-RuledSurface首批实现.md`
 - `工作步骤细分/6-19-18-26-【已实现】PARTSURF-S4-ProjectionOnSurface裁决与分批.md`
-- `工作步骤细分/6-19-18-27-PARTSURF-S5-能力发布与提交闸门.md`
+- `工作步骤细分/6-19-18-27-【已实现】PARTSURF-S5-能力发布与提交闸门.md`
 
 后续独立主线草案：
 
@@ -107,7 +109,7 @@ Wire / wire 的 `BRepFill::Shell` 分支和非 edge/wire 输入自动提取 wire
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/FreeCAD几何生态迁移工程-细分/C3M4-PartWorkbenchSurface-RuledProjection收口主线/工作步骤细分 --format markdown
-git diff --check -- docs/FreeCAD几何生态迁移工程-细分/C3M4-PartWorkbenchSurface-RuledProjection收口主线
+git diff --check -- docs/FreeCAD几何生态迁移工程-细分/C3M4-PartWorkbenchSurface-RuledProjection收口主线 docs/CADCore3.0 cad-core
 ```
 
 阶段回归：
