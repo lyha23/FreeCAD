@@ -5,7 +5,8 @@
 - 方案时间：2026-06-19。
 - 当前仓库：`/Users/li/Chili3DProject/FreeCAD`。
 - S0 live 基线：`pwd` 为 `/Users/li/Chili3DProject/FreeCAD`；HEAD 为 `6f70a6ad6a`（`6f70a6ad6a feat: 收口P5圆锥弧草图支持`）。
-- S0 脏工作区边界：当前已有 `src/Mod/Sketcher/App/SketchObject.h`、`src/Mod/Sketcher/App/SketchObjectPyImp.cpp` 改动，以及本 C3M4 主线文档 / 矩阵未跟踪文件；本主线保护这些现有改动，不执行 reset / checkout / 回退。
+- S1 live 基线：`pwd` 为 `/Users/li/Chili3DProject/FreeCAD`；HEAD 为 `81df0a836a`（`81df0a836a docs: 冻结PARTCONIC S0基线`）。
+- S1 脏工作区边界：当前仍有既有未暂存 `src/Mod/Sketcher/App/SketchObject.h`、`src/Mod/Sketcher/App/SketchObjectPyImp.cpp` 改动；本主线保护这些现有改动，不执行 reset / checkout / 回退。
 - S0 queue 结论：P5CONIC `step_goal_queue.py` 返回空队列；PARTCONIC queue 在 S0 收口前从 `6-19-17-02-PARTCONIC-S0-live基线与范围冻结.md` 开始，S0 完成后下一项应为 S1。
 - 上一轮已收口：P5CONIC 已发布 `ArcOfHyperbola` / `ArcOfParabola` 的 Sketcher profile、construction 过滤、native `ExternalGeo` 与 projected `ExternalGeometry` 支持。
 - 新主线定位：从 Sketcher conic arcs 向 Part workbench / Part geometry API 侧推进，补齐 `Part.Hyperbola` / `Part.Parabola` 作为 Part 几何对象进入 cad-core 计算和消费链路的能力。
@@ -26,9 +27,27 @@
 - `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeEdgePyImp.cpp::getCurve()`：`GeomAbs_Hyperbola` / `GeomAbs_Parabola` edge 会被还原成 `HyperbolaPy` / `ParabolaPy`。
 - `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PrimitiveFeature.cpp`：存在 `Part::Line`、`Part::Ellipse`、`Part::Cone` 等 primitive `DocumentObject`，但没有 Hyperbola / Parabola primitive；这是本轮 DTO 边界的依据。
 
+## S1 源码与 DTO 边界裁决
+
+S1 裁决：本主线对应 FreeCAD Part Python geometry wrapper 的 cad-core Part geometry DTO，不是 source-backed `DocumentObject` executor。`Part.Hyperbola` / `Part.Parabola` 是 `Part::HyperbolaPy` / `Part::ParabolaPy` 暴露的几何包装；`Part.ArcOfHyperbola` / `Part.ArcOfParabola` 是有限 trim 包装；FreeCAD 没有 `Part::Hyperbola` / `Part::Parabola` primitive `DocumentObject`。
+
+源码证据：
+
+- `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp`：`GeomHyperbola::Save/Restore()` 持久化 `CenterX/Y/Z`、`NormalX/Y/Z`、`MajorRadius`、`MinorRadius`、`AngleXU`，并用 `GC_MakeHyperbola` 恢复；`GeomArcOfHyperbola::Save/Restore()` 增加 `StartAngle` / `EndAngle`，并用 `GC_MakeArcOfHyperbola(..., Standard_True)` 恢复。
+- `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp`：`GeomParabola::Save/Restore()` 持久化 `CenterX/Y/Z`、`NormalX/Y/Z`、`Focal`、`AngleXU`，并用 `gce_MakeParab` 恢复；`GeomArcOfParabola::Save/Restore()` 增加 `StartAngle` / `EndAngle`，并用 `GC_MakeArcOfParabola(..., Standard_True)` 恢复。
+- `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/AppPart.cpp`：Part Python module 注册 `Hyperbola`、`Parabola`、`ArcOfParabola`、`ArcOfHyperbola` 类型，并初始化 `GeomArcOfParabola`、`GeomArcOfHyperbola`、`GeomHyperbola`、`GeomParabola`；这是 Python geometry API 证据，不是 primitive object 注册。
+- `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/HyperbolaPyImp.cpp`、`ParabolaPyImp.cpp`、`ArcPyImp.cpp`：Python 构造器支持空构造、copy 构造、点/半径或点/点/点构造，arc 构造器接受 `HyperbolaPy` / `ParabolaPy` 加 `u1` / `u2` / 可选 `sense` 后调用 OCCT `GC_MakeArcOf*`。
+- `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeEdgePyImp.cpp::TopoShapeEdgePy::getCurve()`：`GeomAbs_Hyperbola` 回传 `HyperbolaPy`，`GeomAbs_Parabola` 回传 `ParabolaPy`，说明 edge extraction 侧保留原生 conic curve 类型。
+- `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PrimitiveFeature.cpp`：`PROPERTY_SOURCE` 只列出 Vertex / Line / Plane / Sphere / Ellipsoid / Cylinder / Prism / RegularPolygon / Cone / Torus / Helix / Spiral / Wedge / Ellipse；没有 `Part::Hyperbola` / `Part::Parabola`。
+- `/Users/li/Chili3DProject/FreeCAD/cad-core/src/runtime/feature_registry.cpp` 与 `/Users/li/Chili3DProject/FreeCAD/cad-core/include/cad_core/part/part_feature.h`：当前 registry / executor declaration 也没有 Hyperbola / Parabola 注册，后续不得为绕过 DTO 边界注册假的 `Part::Hyperbola` / `Part::Parabola`。
+
+cad-core 发布口径：本主线 DTO 命名为 `PartConicCurveDTO`，作为 adapter / oracle / Part geometry helper 的请求级 payload，不作为 `DocumentObject.TypeId`。建议 payload key 为 `partGeometryCurve`，公共字段为 `curveKind`（`hyperbola` / `parabola`）、`center`、`normal`、`angleXU`、`startAngle`、`endAngle`；Hyperbola 专有字段为 `majorRadius`、`minorRadius`；Parabola 专有字段为 `focal`。`sense` 只作为 Python oracle 构造轴保留给 S2 裁决；如果使用 FreeCAD `GeomArcOf*::Save/Restore()` 作为 canonical DTO，则恢复方向按 `Standard_True`。
+
+对外能力措辞：支持“FreeCAD Part geometry Hyperbola / Parabola wrapper 到有限 conic edge 的 typed DTO / shape conversion”，不支持“`Part::Hyperbola` / `Part::Parabola` DocumentObject executor”。能力文档和 registry 不得出现未被 FreeCAD primitive source 支撑的 `Part::Hyperbola` / `Part::Parabola`。
+
 ## cad-core 落点
 
-- `cad-core/src/part/primitive_feature.cpp` 与 `cad-core/include/cad_core/part/part_feature.h`：只在 S1 确认存在 FreeCAD primitive 依据时才新增 executor；若确认仍是 Python geometry API，则不要注册假的 `Part::Hyperbola` / `Part::Parabola`。
+- `cad-core/src/part/primitive_feature.cpp`、`cad-core/src/runtime/feature_registry.cpp` 与 `cad-core/include/cad_core/part/part_feature.h`：S1 已确认没有 FreeCAD primitive 依据；本主线不得新增 `Part::Hyperbola` / `Part::Parabola` executor 或 registry。
 - `cad-core/src/part/part_feature_support.*` 或新增 `cad-core/src/part/part_geometry_curve.*`：承接 Hyperbola / Parabola 到有限 `TopoDS_Edge` 的通用构造 helper。
 - `cad-core/tools/collect_freecad_expected.py`：新增 FreeCAD oracle 构造路径，使用 `Part.Hyperbola` / `Part.Parabola` + `Part.ArcOf*` / `toShape()` 采集 edge、bbox、subshape 和 curve metadata。
 - `cad-core/fixtures/p8` 与 `cad-core/tests/test_p8_features.py`：沿用现有 Part primitive fixture/test 线，新增 Part geometry conic fixtures；如果 S1 决定拆成 C3M4 专用 fixture 目录，必须同时更新 runner 与 expected fixture 发现规则。

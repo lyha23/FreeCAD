@@ -1,4 +1,4 @@
-# PARTCONIC-S1 FreeCAD 源码与 DTO 边界审计
+# 【已实现】PARTCONIC-S1 FreeCAD 源码与 DTO 边界审计
 
 ## 目标
 
@@ -27,6 +27,17 @@
    - 如果没有，写清 cad-core adapter DTO 名称、字段和“不是 FreeCAD DocumentObject”的发布口径。
 3. 更新 scope/blocker：关闭或保留 `PARTCONIC-BLOCK-001` / `BLOCK-002`。
 4. 在方案文档里补一段 S1 裁决结论。
+
+## S1 live 结论
+
+- `pwd`：`/Users/li/Chili3DProject/FreeCAD`。
+- HEAD：`81df0a836a`。
+- 最新提交：`81df0a836a docs: 冻结PARTCONIC S0基线`。
+- 工作区边界：本轮开始时只有既有未暂存 `src/Mod/Sketcher/App/SketchObject.h`、`src/Mod/Sketcher/App/SketchObjectPyImp.cpp`；S1 只修改本 C3M4 主线 docs/矩阵文件，不回退或暂存这些 Sketcher 改动。
+- 源码裁决：FreeCAD 的 Hyperbola / Parabola 入口是 `Part.Hyperbola`、`Part.Parabola`、`Part.ArcOfHyperbola`、`Part.ArcOfParabola` Python geometry wrapper 与 `Part::Geom*` geometry 类型；不是 `Part::Hyperbola` / `Part::Parabola` source-backed `DocumentObject`。
+- DTO 口径：后续 cad-core 请求级 DTO 命名为 `PartConicCurveDTO`，payload key 为 `partGeometryCurve`；公共字段为 `curveKind`、`center`、`normal`、`angleXU`、`startAngle`、`endAngle`，Hyperbola 专有字段为 `majorRadius` / `minorRadius`，Parabola 专有字段为 `focal`。该 DTO 不写入 `DocumentObject.TypeId`，不进入 `feature_registry`。
+- Blocker 状态：`PARTCONIC-BLOCK-001` 和 `PARTCONIC-BLOCK-002` 均在边界层关闭；实现、fixture schema 和 oracle 采集留给 S2/S3。
+- 非目标确认：不注册假的 `Part::Hyperbola` / `Part::Parabola`，不把 Sketcher conic structs 暴露成 Part public API。
 
 ## 非目标
 
