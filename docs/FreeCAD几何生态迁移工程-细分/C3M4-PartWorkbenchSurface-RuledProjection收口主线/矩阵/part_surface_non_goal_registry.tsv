@@ -7,5 +7,5 @@ PARTSURF-NG-005	输出端修剪或 fixture 名特判	会掩盖 BRepFill / Elemen
 PARTSURF-NG-006	把 PartConicCurveDTO 伪装成 FreeCAD DocumentObject	PARTCONIC 已裁决 conic wrapper 是请求级 producer，不是 Part::Hyperbola/Part::Parabola TypeId	FreeCAD 源码新增真实 Part::Hyperbola/Part::Parabola DocumentObject	active-locked
 PARTSURF-NG-007	没有 oracle 的 wire/wire RuledSurface support	Wire shell 分支可能依赖额外 wire construction 与 shell topo mapping	S2 后补齐 source-backed collector、cad-core input schema、shell/topo provenance 三项验收	active-locked
 PARTSURF-NG-008	DistanceType / Assembly conic default TODO	这是 P8 DistanceTypeExtended 的产品边界，不属于 Part surface executor	产品决策改变并打开 Assembly distance 主线	active
-PARTSURF-NG-009	S2 阶段新增实际 fixture 或 FreeCAD expected	S2 是矩阵和 oracle 路径设计，不采集 expected、不写 fixture 文件	S3 实现 goal 明确要求新增 fixture/expected	active-S2
+PARTSURF-NG-009	S2 阶段新增实际 fixture 或 FreeCAD expected	S2 是矩阵和 oracle 路径设计，不采集 expected、不写 fixture 文件；S3 已按实现 goal 新增 required fixtures/expected	S3 实现 goal 明确要求新增 fixture/expected	closed-S3
 PARTSURF-NG-010	adapter 特例直接输出 RuledSurface face	绕过 DocumentObject Type=Part::RuledSurface、Curve1/Curve2 link-sub 和 Orientation 语义	S3 通过 Part executor、TopoShapeExpansion 等价 helper 和 topo provenance 验证	active-locked

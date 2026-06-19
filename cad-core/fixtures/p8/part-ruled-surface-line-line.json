@@ -1,0 +1,54 @@
+{
+  "Objects": [
+    {
+      "Name": "Line1",
+      "ID": 1,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 4,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "Line2",
+      "ID": 2,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 2,
+        "Z1": 1,
+        "X2": 4,
+        "Y2": 2,
+        "Z2": 2
+      }
+    },
+    {
+      "Name": "RuledSurface",
+      "ID": 3,
+      "TypeId": "Part::RuledSurface",
+      "Properties": {
+        "Curve1": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Line1",
+          "SubList": ["Edge1"]
+        },
+        "Curve2": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Line2",
+          "SubList": ["Edge1"]
+        },
+        "Orientation": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Automatic"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["RuledSurface"]
+  }
+}

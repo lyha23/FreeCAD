@@ -1,0 +1,136 @@
+{
+  "Objects": [
+    {
+      "Name": "Line1",
+      "ID": 1,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 1,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "Line2",
+      "ID": 2,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 1,
+        "Z1": 0,
+        "X2": 1,
+        "Y2": 1,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "PointSource",
+      "ID": 3,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 0,
+        "Y": 0,
+        "Z": 1
+      }
+    },
+    {
+      "Name": "BoxSource",
+      "ID": 4,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 1,
+        "Width": 1,
+        "Height": 1
+      }
+    },
+    {
+      "Name": "MissingCurve",
+      "ID": 10,
+      "TypeId": "Part::RuledSurface",
+      "Properties": {
+        "Curve1": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Line1",
+          "SubList": ["Edge1"]
+        },
+        "Orientation": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Automatic"
+        }
+      }
+    },
+    {
+      "Name": "EmptyLink",
+      "ID": 11,
+      "TypeId": "Part::RuledSurface",
+      "Properties": {
+        "Curve1": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Line1",
+          "SubList": ["Edge1"]
+        },
+        "Curve2": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": null
+        }
+      }
+    },
+    {
+      "Name": "MultiSubname",
+      "ID": 12,
+      "TypeId": "Part::RuledSurface",
+      "Properties": {
+        "Curve1": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Line1",
+          "SubList": ["Edge1", "Edge2"]
+        },
+        "Curve2": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Line2",
+          "SubList": ["Edge1"]
+        }
+      }
+    },
+    {
+      "Name": "NonEdge",
+      "ID": 13,
+      "TypeId": "Part::RuledSurface",
+      "Properties": {
+        "Curve1": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "BoxSource",
+          "SubList": ["Face1"]
+        },
+        "Curve2": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Line2",
+          "SubList": ["Edge1"]
+        }
+      }
+    },
+    {
+      "Name": "NoEdge",
+      "ID": 14,
+      "TypeId": "Part::RuledSurface",
+      "Properties": {
+        "Curve1": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PointSource",
+          "SubList": ["Vertex1"]
+        },
+        "Curve2": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Line2",
+          "SubList": ["Edge1"]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["MissingCurve", "EmptyLink", "MultiSubname", "NonEdge", "NoEdge"]
+  }
+}

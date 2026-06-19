@@ -59,6 +59,7 @@ SUPPORTED_NATIVE_TYPES = {
     "Part::Plane",
     "Part::Prism",
     "Part::RegularPolygon",
+    "Part::RuledSurface",
     "Part::Section",
     "Part::Sphere",
     "Part::Spiral",
@@ -1160,6 +1161,8 @@ def part_geometry_curve_metadata(dto: dict[str, Any]) -> dict[str, str]:
     curve_type = "GeomAbs_Hyperbola" if curve_kind == "hyperbola" else "GeomAbs_Parabola"
     part_geometry_type = "Part.Hyperbola" if curve_kind == "hyperbola" else "Part.Parabola"
     return {
+        "feature": "part_geometry_curve",
+        "dto": "PartConicCurveDTO",
         "curve_kind": curve_kind,
         "curve_type": curve_type,
         "part_geometry_type": part_geometry_type,
@@ -1291,6 +1294,104 @@ def collect_part_geometry_curve_extrusion_expected(
     return summary
 
 
+def collect_part_geometry_curve_line_expected(
+    FreeCAD: Any,
+    Part: Any,
+    consumer: dict[str, Any],
+    source_shapes: dict[str, Any],
+    source_metadata: dict[str, dict[str, str]],
+) -> dict:
+    if consumer.get("TypeId") != "Part::Line":
+        raise UnsupportedFixture("partGeometryCurveConsumers line source must be Part::Line")
+    properties = consumer.get("Properties", {})
+    if not isinstance(properties, dict):
+        raise UnsupportedFixture("partGeometryCurve line consumer Properties must be an object")
+    start = FreeCAD.Vector(
+        consumer_number_property(properties, "X1", 0.0),
+        consumer_number_property(properties, "Y1", 0.0),
+        consumer_number_property(properties, "Z1", 0.0),
+    )
+    end = FreeCAD.Vector(
+        consumer_number_property(properties, "X2", 0.0),
+        consumer_number_property(properties, "Y2", 0.0),
+        consumer_number_property(properties, "Z2", 0.0),
+    )
+    shape = Part.makeLine(start, end)
+    name = str(consumer.get("Name") or "Line")
+    source_shapes[name] = shape
+    source_metadata[name] = {"feature": "part_line"}
+    summary = shape_summary(shape)
+    summary["object_fields"] = {
+        "status": "ok",
+        "shape": shape_kind(shape),
+        "primitive": "line",
+    }
+    return summary
+
+
+def consumer_enum_property(properties: dict[str, Any], name: str, labels: list[str], fallback: str) -> str:
+    value = consumer_property(properties, name, fallback)
+    if isinstance(value, str) and value in labels:
+        return value
+    if isinstance(value, (int, float)):
+        index = int(value)
+        if 0 <= index < len(labels):
+            return labels[index]
+    raise UnsupportedFixture(f"partGeometryCurve consumer {name} must be one of {', '.join(labels)}")
+
+
+def prefixed_source_metadata(prefix: str, metadata: dict[str, str]) -> dict[str, str]:
+    return {f"{prefix}_{key}": value for key, value in metadata.items()}
+
+
+def collect_part_geometry_curve_ruled_surface_expected(
+    Part: Any,
+    consumer: dict[str, Any],
+    source_shapes: dict[str, Any],
+    source_metadata: dict[str, dict[str, str]],
+) -> dict:
+    if consumer.get("TypeId") != "Part::RuledSurface":
+        raise UnsupportedFixture("partGeometryCurveConsumers ruled surface source must be Part::RuledSurface")
+    properties = consumer.get("Properties", {})
+    if not isinstance(properties, dict):
+        raise UnsupportedFixture("partGeometryCurve ruled surface consumer Properties must be an object")
+
+    curve1 = consumer_link_property(properties, "Curve1")
+    curve2 = consumer_link_property(properties, "Curve2")
+    for curve in (curve1, curve2):
+        if curve not in source_shapes:
+            raise UnsupportedFixture(f"partGeometryCurve consumer Curve source {curve} was not created")
+
+    orientation = consumer_enum_property(
+        properties,
+        "Orientation",
+        ["Automatic", "Forward", "Reversed"],
+        "Automatic",
+    )
+    if orientation == "Reversed":
+        second = source_shapes[curve2].copy()
+        second.reverse()
+    else:
+        second = source_shapes[curve2]
+
+    # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PartFeatures.cpp
+    # ::RuledSurface::execute() resolves Curve1/Curve2 to two edges before calling
+    # makeElementRuledSurface(); this fallback only freezes that post-resolution edge/edge geometry.
+    result_shape = Part.makeRuledSurface(source_shapes[curve1], second)
+    summary = shape_summary(result_shape)
+    summary["object_fields"] = {
+        "status": "ok",
+        "shape": shape_kind(result_shape),
+        "feature": "part_ruled_surface",
+        "source_curve1": curve1,
+        "source_curve2": curve2,
+        "orientation": orientation,
+        **prefixed_source_metadata("source_curve1", source_metadata.get(curve1, {})),
+        **prefixed_source_metadata("source_curve2", source_metadata.get(curve2, {})),
+    }
+    return summary
+
+
 def collect_part_geometry_curve_expected(fixture_path: Path, fixture: dict) -> dict:
     import FreeCAD  # type: ignore
     import Part  # type: ignore
@@ -1314,16 +1415,41 @@ def collect_part_geometry_curve_expected(fixture_path: Path, fixture: dict) -> d
 
     for consumer in consumers:
         object_name = str(consumer.get("Name") or "PartConicCurveConsumer")
-        object_payloads[object_name] = collect_part_geometry_curve_extrusion_expected(
-            FreeCAD,
-            consumer,
-            source_shapes,
-            source_metadata,
-        )
+        type_id = consumer.get("TypeId")
+        if type_id == "Part::Line":
+            object_payloads[object_name] = collect_part_geometry_curve_line_expected(
+                FreeCAD,
+                Part,
+                consumer,
+                source_shapes,
+                source_metadata,
+            )
+        elif type_id == "Part::Extrusion":
+            object_payloads[object_name] = collect_part_geometry_curve_extrusion_expected(
+                FreeCAD,
+                consumer,
+                source_shapes,
+                source_metadata,
+            )
+        elif type_id == "Part::RuledSurface":
+            object_payloads[object_name] = collect_part_geometry_curve_ruled_surface_expected(
+                Part,
+                consumer,
+                source_shapes,
+                source_metadata,
+            )
+        else:
+            raise UnsupportedFixture(
+                "partGeometryCurveConsumers expected collection supports Part::Line, "
+                "Part::Extrusion and Part::RuledSurface"
+            )
 
     payload: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
-        "reference": f"FreeCADCmd PartConicCurveDTO oracle from {fixture_path.name}",
+        "reference": (
+            f"FreeCADCmd PartConicCurveDTO oracle from {fixture_path.name}; "
+            "Part::RuledSurface consumers use Part.makeRuledSurface after link-resolved edge inputs"
+        ),
         "freecad_version": freecad_version(FreeCAD),
         "bbox_delta": 0.2,
         "named_shapes": {name: {"owner": name} for name in object_payloads},
@@ -2602,6 +2728,53 @@ def assembly_link_payload(obj: Any) -> dict:
     return payload
 
 
+def fixture_spec_for_object(fixture: dict | None, name: str) -> dict[str, Any]:
+    if fixture is None:
+        return {}
+    for spec in fixture.get("Objects", []):
+        if isinstance(spec, dict) and spec.get("Name") == name:
+            return spec
+    return {}
+
+
+def link_property_object_name(properties: dict[str, Any], name: str) -> str:
+    value = properties.get(name, {})
+    if isinstance(value, dict):
+        item = value.get("value")
+        return str(item) if item is not None else ""
+    return ""
+
+
+def ruled_surface_orientation_from_properties(properties: dict[str, Any]) -> str:
+    labels = ["Automatic", "Forward", "Reversed"]
+    value = consumer_property(properties, "Orientation", "Automatic")
+    if isinstance(value, str) and value in labels:
+        return value
+    if isinstance(value, (int, float)):
+        index = int(value)
+        if 0 <= index < len(labels):
+            return labels[index]
+    return "Automatic"
+
+
+def ruled_surface_payload(obj: Any, fixture: dict | None = None) -> dict:
+    shape = getattr(obj, "Shape", None)
+    if shape is None or shape.isNull():
+        raise UnsupportedFixture(f"target object {obj.Name} has no shape")
+    spec = fixture_spec_for_object(fixture, str(obj.Name))
+    properties = spec.get("Properties", {}) if isinstance(spec.get("Properties", {}), dict) else {}
+    payload = shape_summary(shape)
+    payload["object_fields"] = {
+        "status": "ok",
+        "shape": shape_kind(shape),
+        "feature": "part_ruled_surface",
+        "source_curve1": link_property_object_name(properties, "Curve1"),
+        "source_curve2": link_property_object_name(properties, "Curve2"),
+        "orientation": ruled_surface_orientation_from_properties(properties),
+    }
+    return payload
+
+
 def object_expected_payload(obj: Any, fixture: dict | None = None, created: dict[str, Any] | None = None) -> dict:
     type_id = getattr(obj, "TypeId", "")
     if type_id == "Assembly::AssemblyLink":
@@ -2616,6 +2789,8 @@ def object_expected_payload(obj: Any, fixture: dict | None = None, created: dict
         return app_link_payload(obj, "app_link")
     if type_id == "App::LinkElement":
         return app_link_payload(obj, "app_link_element")
+    if type_id == "Part::RuledSurface":
+        return ruled_surface_payload(obj, fixture)
 
     shape = getattr(obj, "Shape", None)
     if type_id == "Mesh::Import":

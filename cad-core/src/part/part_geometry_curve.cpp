@@ -533,17 +533,35 @@ void executePartGeometryCurveConsumers(const nlohmann::json& raw, runtime::Compu
     context.diagnostics.insert(context.diagnostics.end(), diagnostics.begin(), diagnostics.end());
 
     for (const auto& object : document.objects) {
-        if (object.typeId != "Part::Extrusion") {
+        if (object.typeId != "Part::Extrusion" && object.typeId != "Part::Line"
+            && object.typeId != "Part::RuledSurface") {
             runtime::addDiagnostic(
                 context.diagnostics,
                 "error",
                 "unsupported_type",
-                "partGeometryCurveConsumers currently supports Part::Extrusion",
+                "partGeometryCurveConsumers currently supports Part::Extrusion, Part::Line and Part::RuledSurface",
                 object.name,
                 "TypeId",
                 "parse"
             );
             context.objects[object.name] = {{"status", "error"}};
+            continue;
+        }
+        if (object.typeId == "Part::Line") {
+            executePartLine(object, context);
+            if (auto item = context.objects.find(object.name); item != context.objects.end()) {
+                item->second["feature"] = "part_line";
+            }
+            continue;
+        }
+        if (object.typeId == "Part::RuledSurface") {
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PartFeatures.cpp
+            // ::RuledSurface::execute(), after Curve1/Curve2 link resolution, calls
+            // "res.makeElementRuledSurface(shapes, Orientation.getValue())". This
+            // request-local bridge seeds typed conic edges first and still invokes the normal
+            // Part::RuledSurface executor instead of registering fake Part::Hyperbola or
+            // Part::Parabola DocumentObjects.
+            executePartRuledSurface(object, context);
             continue;
         }
         // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureExtrusion.cpp

@@ -3295,6 +3295,102 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assert_object_matches_expected(result, "p8", "part-conic-edge-extrusion")
 
+    def assert_ruled_surface_source_edge(
+        self,
+        result: dict,
+        ruled_surface: str,
+        source_edge: str,
+    ) -> None:
+        named_shape = result["named_shapes"][ruled_surface]
+        element_map = named_shape["element_map"]
+        elements = named_shape["elements"]
+
+        self.assertIn(source_edge, element_map)
+        target = element_map[source_edge]
+        self.assertIn(target, elements)
+        self.assertEqual(elements[target]["kind"], "edge")
+        self.assertIn(source_edge, elements[target]["sources"])
+
+    def test_p8_part_ruled_surface_edge_edge_builds_face_with_provenance(self) -> None:
+        result = self.run_recompute("part-ruled-surface-line-line", "p8")
+        ruled = result["objects"]["RuledSurface"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(ruled["status"], "ok")
+        self.assertEqual(ruled["feature"], "part_ruled_surface")
+        self.assertEqual(ruled["shape"], "occt_face")
+        self.assertEqual(ruled["source_curve1"], "Line1")
+        self.assertEqual(ruled["source_curve2"], "Line2")
+        self.assertEqual(ruled["orientation"], "Automatic")
+        self.assertEqual(sum(name.startswith("Face") for name in result["subshapes"]["RuledSurface"]), 1)
+        self.assert_ruled_surface_source_edge(result, "RuledSurface", "Line1.Edge1")
+        self.assert_ruled_surface_source_edge(result, "RuledSurface", "Line2.Edge1")
+        self.assertIn(
+            "part_ruled_surface:shared_vertex_edge_relation",
+            result["named_shapes"]["RuledSurface"]["element_history_status"],
+        )
+        self.assertTrue(
+            any(
+                item["maker_stage"] == "ruled_surface_shared_vertex_relation"
+                and item["relation"] == "modified"
+                for item in result["named_shapes"]["RuledSurface"]["mapper_history"]
+            )
+        )
+        self.assert_object_matches_expected(result, "p8", "part-ruled-surface-line-line")
+
+    def test_p8_part_ruled_surface_conic_edge_feeds_surface_executor(self) -> None:
+        result = self.run_recompute("part-ruled-surface-conic-line", "p8")
+        conic = result["objects"]["HyperbolaEdge"]
+        ruled = result["objects"]["ConicRuledSurface"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(conic["feature"], "part_geometry_curve")
+        self.assertEqual(conic["curve_kind"], "hyperbola")
+        self.assertEqual(ruled["status"], "ok")
+        self.assertEqual(ruled["feature"], "part_ruled_surface")
+        self.assertEqual(ruled["shape"], "occt_face")
+        self.assertEqual(ruled["source_curve1"], "HyperbolaEdge")
+        self.assertEqual(ruled["source_curve2"], "BridgeLine")
+        self.assertEqual(ruled["orientation"], "Automatic")
+        self.assertEqual(ruled["source_curve1_feature"], "part_geometry_curve")
+        self.assertEqual(ruled["source_curve1_dto"], "PartConicCurveDTO")
+        self.assertEqual(ruled["source_curve1_curve_kind"], "hyperbola")
+        self.assert_ruled_surface_source_edge(result, "ConicRuledSurface", "HyperbolaEdge.Edge1")
+        self.assert_ruled_surface_source_edge(result, "ConicRuledSurface", "BridgeLine.Edge1")
+        self.assert_object_matches_expected(result, "p8", "part-ruled-surface-conic-line")
+
+    def test_p8_part_ruled_surface_orientation_reversed_is_not_ignored(self) -> None:
+        result = self.run_recompute("part-ruled-surface-orientation-reversed", "p8")
+        ruled = result["objects"]["ReversedRuledSurface"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(ruled["status"], "ok")
+        self.assertEqual(ruled["feature"], "part_ruled_surface")
+        self.assertEqual(ruled["shape"], "occt_face")
+        self.assertEqual(ruled["orientation"], "Reversed")
+        self.assert_ruled_surface_source_edge(result, "ReversedRuledSurface", "SkewLine1.Edge1")
+        self.assert_ruled_surface_source_edge(result, "ReversedRuledSurface", "SkewLine2.Edge1")
+        self.assert_object_matches_expected(result, "p8", "part-ruled-surface-orientation-reversed")
+
+    def test_p8_part_ruled_surface_invalid_inputs_have_stable_diagnostics(self) -> None:
+        result = self.run_recompute("part-ruled-surface-invalid-input", "p8")
+        codes = [item["code"] for item in result["diagnostics"]]
+
+        self.assertEqual(
+            codes,
+            [
+                "missing_property",
+                "missing_link_target",
+                "invalid_subshape",
+                "unsupported_subshape_kind",
+                "no_edge",
+            ],
+        )
+        for object_name in ("MissingCurve", "EmptyLink", "MultiSubname", "NonEdge", "NoEdge"):
+            self.assertEqual(result["objects"][object_name]["status"], "error")
+            self.assertEqual(result["objects"][object_name]["feature"], "part_ruled_surface")
+        self.assert_object_matches_expected(result, "p8", "part-ruled-surface-invalid-input")
+
     def test_p8_part_helix_builds_spiral_helix_wire(self) -> None:
         result = self.run_recompute("part-helix", "p8")
         helix = result["objects"]["Helix"]

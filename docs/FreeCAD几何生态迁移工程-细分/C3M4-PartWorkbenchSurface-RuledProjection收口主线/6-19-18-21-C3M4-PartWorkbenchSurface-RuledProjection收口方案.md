@@ -9,6 +9,7 @@
 - S0 已冻结边界：PARTCONIC `工作步骤细分` 队列为空；PARTSURF 队列在 S0 重命名后推进到 S1；full Part surface family 和 `Part::ProjectOnSurface` 仍不得发布为 supported。
 - S1 裁决边界：`Part::RuledSurface` 是 source-backed `DocumentObject`；cad-core 落点是 Part executor + `TopoShapeExpansion` 等价 helper + topo provenance，不是 adapter 特例。S3 第一批默认只纳入 edge/edge；wire/wire 只有在 S2 oracle/input 证明可控时才扩入；`Part::ProjectOnSurface` 只做 S4 裁决，禁止混入 S3。
 - S2 fixture/oracle 结论：S3 required fixtures 固定为 `part-ruled-surface-line-line`、`part-ruled-surface-conic-line`、`part-ruled-surface-orientation-reversed`、`part-ruled-surface-invalid-input`。fixture JSON 必须表达 `DocumentObject Type=Part::RuledSurface`，通过 `Properties.Curve1` / `Properties.Curve2` / `Properties.Orientation` 和 link/subname 输入，不允许 adapter 特例直接输出 face。FreeCAD expected collector 优先创建 source-backed `Part::RuledSurface` object；若 conic-line 只能用 `Part.makeRuledSurface()`，等价边界只覆盖 `RuledSurface::execute()` link resolve 后进入 `makeElementRuledSurface` 的 edge/edge geometry，不覆盖 link/subname diagnostics 或 topo provenance。wire/wire 因缺少 collector/input/provenance 验收而 defer；`Part::ProjectOnSurface` 仅保留 S4 candidate。
+- S3 实现结论：`cad-core` 已实现 source-backed `Part::RuledSurface` edge/edge 第一批，覆盖 `Curve1` / `Curve2` App::PropertyLinkSub、`Orientation=Automatic/Forward/Reversed`、`BRepFill::Face`、源 edge 到输出 edge provenance、四个 p8 fixtures/expected/tests 和 collector native/fallback 路径。`wire/wire` 仍 deferred；`ProjectOnSurface` 仍 routed-S4。
 - 上一轮 PARTCONIC 已收口：`Part.Hyperbola` / `Part.Parabola` geometry wrapper 已通过 `PartConicCurveDTO` 输出有限 edge，并已验证 Hyperbola / Parabola edge 可进入 `Part::Extrusion` consumer 输出 `occt_face`。
 - 新主线定位：把 PARTCONIC 明确保留的 full Part surface family / RuledSurface / ProjectionOnSurface gap 拆成 source-backed Part Workbench surface 主线；第一实现批次优先 `Part::RuledSurface`，`Part::ProjectOnSurface` 先做源码裁决和 fixture 分批，不和 RuledSurface 直接混成一个实现任务。
 
@@ -33,21 +34,21 @@
 
 ## cad-core 当前落点
 
-- `cad-core/src/runtime/feature_registry.cpp` 当前注册了 `Part::Extrusion`、`Part::Offset`、`Part::Thickness`、`Part::Section`、`Part::BooleanFragments` 等 Part executor，但没有 `Part::RuledSurface` 或 `Part::ProjectOnSurface`。
-- `cad-core/include/cad_core/part/part_feature.h` 当前没有 `executePartRuledSurface()` / `executePartProjectOnSurface()` 声明；S3 第一批需要新增 source-backed `Part::RuledSurface` executor，而不是通过 adapter 特例直接输出 shape。
-- `cad-core/src/part/part_geometry_curve.cpp` 已能创建 request-local Hyperbola / Parabola edge，并有 `partGeometryCurveConsumers` 喂给 `Part::Extrusion` 的先例。RuledSurface 第一批可以复用这条 producer 证据，但不应把 surface 逻辑塞回 `part_geometry_curve.cpp`。
-- S1 裁决的 cad-core 落点：新增或扩展 `cad-core/src/part/part_ruled_surface.cpp` / `cad-core/include/cad_core/part/part_ruled_surface.h`，补 `cad-core/src/part/topo_shape_expansion.*` 或同等 Part 层 helper 承接 `makeElementRuledSurface`，并由 `cad-core/src/topo` 记录源 edge 到输出 edge/subshape 的 provenance；adapter 只做协议转换。`ProjectOnSurface` 若后续进入实现，应另起 `part_project_on_surface.*`，不和 RuledSurface 混在一个 executor。
-- S2 复核的 collector 落点：`cad-core/tools/collect_freecad_expected.py` 当前 `SUPPORTED_NATIVE_TYPES` 还没有 `Part::RuledSurface`，但通用 `set_property()` 已支持 `App::PropertyLinkSub` 与 `App::PropertyEnumeration`；S3 必须先扩展 source-backed native object 创建/采集路径，再写入 expected。若 conic DTO 无法作为 native `DocumentObject` link 进入 `RuledSurface`，只能在 collector 的 conic-consumer 分支用 `Part.ArcOf*().toShape()` / `Part.makeLine()` / `Part.makeRuledSurface()` 采几何 expected，并在 expected 或测试注释中标明该路径不替代 source-backed link/provenance 验收。
+- `cad-core/src/runtime/feature_registry.cpp` 当前已注册 `Part::RuledSurface`；`Part::ProjectOnSurface` 仍未注册，保留 S4 裁决。
+- `cad-core/include/cad_core/part/part_feature.h` 当前已有 `executePartRuledSurface()` 声明；实现位于 `cad-core/src/part/part_ruled_surface.cpp`，adapter 未做 face 特例。
+- `cad-core/src/part/part_geometry_curve.cpp` 已能创建 request-local Hyperbola / Parabola edge，并允许 `partGeometryCurveConsumers` 中的 `Part::Line` / `Part::RuledSurface` 通过同一 executor 消费 conic edge；没有注册假的 `Part::Hyperbola` / `Part::Parabola` DocumentObject。
+- S3 落点：`cad-core/src/part/topo_shape_expansion.*` 暴露 `makeElementRuledSurfaceFromEdges()` 承接 edge/edge `BRepFill::Face`、orientation 和 shared-vertex source edge relation；`cad-core/src/part/part_ruled_surface.cpp` 负责 property/link/diagnostic/metadata；`cad-core/src/topo` 通过 named shape element_map/history 输出 provenance。
+- S3 collector 落点：`cad-core/tools/collect_freecad_expected.py` 已加入 `Part::RuledSurface` native type 支持；line-line 和 orientation-reversed 走 native expected；conic-line 走 `Part.makeRuledSurface()` fallback，expected reference 标明只覆盖 link resolve 后 edge/edge geometry。
 
 ## 最小完整语义批次
 
 第一批不追求 full Part surface family，默认只实现 source-backed `Part::RuledSurface` 的 edge/edge 分支闭环：
 
-- `Part::RuledSurface` `DocumentObject` executor 注册、属性解析、`Curve1` / `Curve2` link-sub shape acquisition、`Orientation` enum 解析。
-- Edge / edge 输入输出 `TopoDS_Face`，覆盖 `Automatic`、`Forward`、`Reversed` 三种 orientation 的可验证行为。
-- 至少一个 fixture 使用上一轮 PARTCONIC 的 conic edge producer，证明 conic edge 不是只能进入 `Part::Extrusion`，也能进入 `Part::RuledSurface`。
+- `Part::RuledSurface` `DocumentObject` executor 注册、属性解析、`Curve1` / `Curve2` link-sub shape acquisition、`Orientation` enum 解析已完成。
+- Edge / edge 输入输出 `TopoDS_Face`，覆盖 `Automatic`、`Forward`、`Reversed` 三种 orientation 的可验证行为已完成。
+- `part-ruled-surface-conic-line` 使用上一轮 PARTCONIC 的 conic edge producer，证明 conic edge 不是只能进入 `Part::Extrusion`，也能进入 `Part::RuledSurface`。
 - Invalid link / wrong input shape / missing edge 输出稳定 diagnostics，不坠落为笼统 `execution_failed`。
-- 输出 subshape / element map 至少保护源 edge 到输出边的可追溯关系；不得靠 fixture 名、bbox、face 数量或输出端修剪猜测所有权。
+- 输出 subshape / element map 至少保护源 edge 到输出边的可追溯关系；focused tests 和 expected 断言 element_map/history，不靠 fixture 名、bbox、face 数量或输出端修剪猜测所有权。
 
 Wire / wire 的 `BRepFill::Shell` 分支和非 edge/wire 输入自动提取 wire 的分支在 S2 已裁决为 deferred。当前没有 source-backed collector、fixture input schema 和 shell/topo provenance 验收闭环；S3 不得把 wire/wire 扩入 required，也不得发布 full RuledSurface support。
 
@@ -86,7 +87,7 @@ Wire / wire 的 `BRepFill::Shell` 分支和非 edge/wire 输入自动提取 wire
 - `工作步骤细分/6-19-18-22-PARTSURF-S0-live基线与范围冻结.md`
 - `工作步骤细分/6-19-18-23-PARTSURF-S1-FreeCAD源码与批次裁决.md`
 - `工作步骤细分/6-19-18-24-【已实现】PARTSURF-S2-fixture与oracle矩阵设计.md`
-- `工作步骤细分/6-19-18-25-PARTSURF-S3-RuledSurface首批实现.md`
+- `工作步骤细分/6-19-18-25-【已实现】PARTSURF-S3-RuledSurface首批实现.md`
 - `工作步骤细分/6-19-18-26-PARTSURF-S4-ProjectionOnSurface裁决与分批.md`
 - `工作步骤细分/6-19-18-27-PARTSURF-S5-能力发布与提交闸门.md`
 

@@ -1,0 +1,12 @@
+{
+  "diagnostic_codes": [
+    "missing_property",
+    "missing_link_target",
+    "invalid_subshape",
+    "unsupported_subshape_kind",
+    "no_edge"
+  ],
+  "freecad_version": "1.2.0 revision 20260519",
+  "reference": "CAD Core Part::RuledSurface invalid-input diagnostics fixture; native FreeCAD produces no stable Shape payload for these error objects",
+  "schema_version": "cad-core.freecad-expected.v1"
+}

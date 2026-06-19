@@ -24,6 +24,7 @@ void executePartHelix(const app::DocumentObject& object, runtime::ComputeContext
 void executePartSpiral(const app::DocumentObject& object, runtime::ComputeContext& context);
 void executePartCompound(const app::DocumentObject& object, runtime::ComputeContext& context);
 void executePartExtrusion(const app::DocumentObject& object, runtime::ComputeContext& context);
+void executePartRuledSurface(const app::DocumentObject& object, runtime::ComputeContext& context);
 void executePartOffset(const app::DocumentObject& object, runtime::ComputeContext& context);
 void executePartOffset2D(const app::DocumentObject& object, runtime::ComputeContext& context);
 void executePartThickness(const app::DocumentObject& object, runtime::ComputeContext& context);

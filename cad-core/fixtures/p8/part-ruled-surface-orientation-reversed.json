@@ -1,0 +1,54 @@
+{
+  "Objects": [
+    {
+      "Name": "SkewLine1",
+      "ID": 1,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": -1,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 3,
+        "Y2": 0.5,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "SkewLine2",
+      "ID": 2,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 3,
+        "Z1": 2,
+        "X2": 4,
+        "Y2": 2,
+        "Z2": 1
+      }
+    },
+    {
+      "Name": "ReversedRuledSurface",
+      "ID": 3,
+      "TypeId": "Part::RuledSurface",
+      "Properties": {
+        "Curve1": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SkewLine1",
+          "SubList": ["Edge1"]
+        },
+        "Curve2": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SkewLine2",
+          "SubList": ["Edge1"]
+        },
+        "Orientation": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Reversed"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["ReversedRuledSurface"]
+  }
+}
