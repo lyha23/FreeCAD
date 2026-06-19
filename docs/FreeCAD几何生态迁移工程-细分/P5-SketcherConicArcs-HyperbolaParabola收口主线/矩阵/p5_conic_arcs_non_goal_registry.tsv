@@ -1,0 +1,7 @@
+id	non_goal	reason	enforcement
+P5CONIC-NONGOAL-001	Full Sketcher solver and GCS conic constraints	Repo scope keeps full solver migration outside cad-core target	Do not add solver-facing conic constraint implementation in this batch
+P5CONIC-NONGOAL-002	Sketcher GUI and TaskPanel conic editing	GUI is outside cad-core extraction boundary	Do not edit src/Mod/Sketcher/Gui or GUI docs
+P5CONIC-NONGOAL-003	Internal helper geometry for conic axes/focus as full Sketcher feature	FreeCAD has internal geometry exposure, but this batch closes profile/external edge support	Record as future gap unless tests require it for geometry output
+P5CONIC-NONGOAL-004	Part workbench conic surfaces or generic conic conversion	This batch targets Sketcher ArcOfHyperbola and ArcOfParabola edges only	Do not expand into surface/conversion APIs
+P5CONIC-NONGOAL-005	Fixture-name or output-pruning hacks	FreeCAD parity must follow geometry type semantics	Reject code branches keyed by fixture name, geometry order, or output cleanup
+P5CONIC-NONGOAL-006	Full native FreeCAD parity campaign	Conic arc support can be closed with focused tests unless shape oracle is required	Keep heavy expected collection optional and documented

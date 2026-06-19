@@ -1,0 +1,7 @@
+id	blocker	impact	owner_area	status	exit_condition
+P5CONIC-BLOCK-001	Live state may drift from the observed clean HEAD	Wrong plan if new dirty code appears	before every step	open	S0 records HEAD/status and protects unrelated files
+P5CONIC-BLOCK-002	Current implementation hooks may be incomplete despite being present	False support claim if parser/build/external paths differ from FreeCAD	cad-core/src/sketcher	open	S1 audits every hook against FreeCAD Restore and Sketcher supported semantics
+P5CONIC-BLOCK-003	Unsupported hyperbola tests express stale capability	Regression suite blocks support publication	cad-core/tests	open	S2/S3 replace stale unsupported case with supported or true unsupported case
+P5CONIC-BLOCK-004	Fixture coverage may only prove one conic type	Parabola or external geometry can regress unnoticed	cad-core/fixtures and tests	open	S2 defines hyperbola, parabola, construction, external, invalid params batch
+P5CONIC-BLOCK-005	FreeCADCmd oracle collection may be environment-sensitive	Native expected collection may fail in sandbox	oracle tooling	conditional	If needed, record FreeCADCmd/OCCT baseline or use focused cad-core tests
+P5CONIC-BLOCK-006	Capability docs can drift from tests	Frontend/backend users see unsupported status after implementation	docs and matrices	open	S4 syncs docs/matrices and validates queue

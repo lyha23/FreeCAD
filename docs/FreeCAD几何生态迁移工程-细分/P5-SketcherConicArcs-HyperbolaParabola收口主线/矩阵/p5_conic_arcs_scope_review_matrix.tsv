@@ -1,0 +1,8 @@
+id	scope	item	current_signal	target_state	status	validation
+P5CONIC-SCOPE-001	baseline	Live HEAD and dirty boundary	2026-06-19 scan shows git status clean and conic hooks present	Record live state before implementation or validation	needsS0	git status and rg output recorded in docs/matrix
+P5CONIC-SCOPE-002	hyperbola	ArcOfHyperbola profile edge support	cad-core code contains parser/build hooks	Hyperbola arc accepted as Sketcher supported geometry	needsAudit	Focused test or fixture passes without unsupported_geometry
+P5CONIC-SCOPE-003	parabola	ArcOfParabola profile edge support	cad-core code contains parser/build hooks	Parabola arc accepted as Sketcher supported geometry	needsAudit	Focused test or fixture passes without unsupported_geometry
+P5CONIC-SCOPE-004	external	External geometry conic arc propagation	cad-core external files contain conic vectors	External geometry merge/count handles both conic arcs	needsAudit	External conic fixture or unit test checks count/subshape stability
+P5CONIC-SCOPE-005	diagnostics	Unsupported hyperbola stale test	test_diagnostics still maps sketch-unsupported-hyperbola to unsupported_geometry	Hyperbola removed from unsupported set; invalid params get explicit diagnostics	mismatch	tests.test_diagnostics passes with updated expectations
+P5CONIC-SCOPE-006	fixtures	Supported and invalid conic fixture batch	Only unsupported hyperbola fixtures are visible in quick scan	Add valid hyperbola, valid parabola, construction/external, invalid params coverage	planned	tests.test_mvp or focused tests cover all rows
+P5CONIC-SCOPE-007	docs	Capability publication	No dedicated conic arcs package existed before this plan	Docs and matrices state supported/nonGoal boundaries	planned	step queue and diff check pass
