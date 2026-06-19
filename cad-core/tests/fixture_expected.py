@@ -138,6 +138,8 @@ class ExpectedFixtureAssertions:
                 self.assertAlmostEqual(obj["volume"], expected["volume"])
             else:
                 self.assertAlmostEqual(obj["volume"], expected["volume"], delta=volume_delta)
+        if "length" in expected:
+            self.assertAlmostEqual(obj["length"], expected["length"], delta=expected.get("length_delta", 1e-6))
         if "topology_counts" in expected:
             self.assert_topology_counts(result["subshapes"][object_name], expected)
         if "mesh_summary" in expected:

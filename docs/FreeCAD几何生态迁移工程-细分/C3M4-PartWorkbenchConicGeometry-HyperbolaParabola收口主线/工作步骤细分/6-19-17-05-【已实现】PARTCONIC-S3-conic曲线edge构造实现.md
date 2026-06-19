@@ -24,6 +24,14 @@
 4. 添加 invalid 参数 diagnostics，禁止靠 OCCT failure 文本作为唯一口径。
 5. 确保 result 仍保留 `GeomAbs_Hyperbola` / `GeomAbs_Parabola`，不转换成 BSpline/polyline。
 
+## S3 live 结论
+
+- `cad-core/src/part/part_geometry_curve.cpp` / `.h` 新增请求级 `PartConicCurveDTO` helper，支持 top-level `partGeometryCurve` 单对象或数组 payload；adapter 仅在该 payload 出现时分流，不改 `feature_registry`，不注册 fake `Part::Hyperbola` / `Part::Parabola`。
+- Hyperbola / Parabola 均按 `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp` 的 `GeomHyperbola` / `GeomArcOfHyperbola` / `GeomParabola` / `GeomArcOfParabola` Save/Restore 字段构造有限 edge，并使用 `GC_MakeArcOf* (..., Standard_True)` 语义。
+- 新增 `part-hyperbola-edge`、`part-parabola-edge`、`part-conic-edge-invalid-params` fixtures；valid expected 由 FreeCADCmd `1.2.0 revision 20260519` 采集，invalid fixture 只断 stable diagnostics，不写成功 expected。
+- `tests.test_p8_features` 断言 valid edge 的 `curve_kind`、`curve_type`、`part_geometry_type`、`Edge1` 与 expected parity；`tests.test_diagnostics` 断言 invalid 参数稳定诊断码。
+- S3 关闭 `PARTCONIC-BLOCK-003/004/005`；S4 consumer 与 S5 capability publication 仍保持 open。
+
 ## 非目标
 
 - 不做 Part consumer 扩展，S4 单独处理。

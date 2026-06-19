@@ -236,6 +236,7 @@ add_library(cad-core-lib STATIC
   src/part/part_extrusion.cpp
   src/part/part_feature.cpp
   src/part/part_feature_support.cpp
+  src/part/part_geometry_curve.cpp
   src/part/part_import.cpp
   src/part/part_offset.cpp
   src/part/part_thickness.cpp

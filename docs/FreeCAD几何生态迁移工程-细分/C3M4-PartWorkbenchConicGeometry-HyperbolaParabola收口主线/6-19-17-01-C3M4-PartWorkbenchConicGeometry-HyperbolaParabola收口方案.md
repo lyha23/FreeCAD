@@ -69,6 +69,18 @@ S2 只完成 fixture 与 oracle 设计，不采集 expected，也不写 cad-core
 
 `PARTCONIC-BLOCK-003` 的路径设计部分在 S2 已完成；collector 代码、fixture JSON、expected JSON 仍是 S3 open work。未采集的 expected 不得写成已通过，采集目标基线沿用 FreeCADCmd `1.2.0 revision 20260519`。
 
+## S3 conic edge 实现结论
+
+S3 已完成 Part geometry Hyperbola / Parabola finite edge 的请求级 DTO 实现，仍不注册 FreeCAD 不存在的 `Part::Hyperbola` / `Part::Parabola` `DocumentObject`，也不触碰 Sketcher solver。代码落点为 `cad-core/src/part/part_geometry_curve.cpp` 与 `cad-core/include/cad_core/part/part_geometry_curve.h`，adapter 只在 top-level `partGeometryCurve` 请求出现时分流到该 helper；`runtime::feature_registry` 保持不变。
+
+已新增三组 p8 fixture：
+
+- `cad-core/fixtures/p8/part-hyperbola-edge.json` 与 `expected/part-hyperbola-edge.freecad.json`：基于 `GeomHyperbola` / `GeomArcOfHyperbola` Save/Restore 字段构造 `GeomAbs_Hyperbola` finite edge，expected 由 FreeCADCmd `1.2.0 revision 20260519` 采集。
+- `cad-core/fixtures/p8/part-parabola-edge.json` 与 `expected/part-parabola-edge.freecad.json`：基于 `GeomParabola` / `GeomArcOfParabola` Save/Restore 字段构造 `GeomAbs_Parabola` finite edge，expected 同样由 FreeCADCmd `1.2.0 revision 20260519` 采集。
+- `cad-core/fixtures/p8/part-conic-edge-invalid-params.json`：diagnostic-only fixture，不写成功 expected；稳定诊断码覆盖 unknown `curveKind`、非法 radius、非法 focal、非法 trim 与非数值字段。
+
+S3 关闭 `PARTCONIC-BLOCK-003/004/005`：collector 已支持 PartConicCurveDTO 路径；Part-owned helper 不依赖 Sketcher conic structs；invalid 参数不会坠落为笼统 `execution_failed`。S4 仍保留 `part-conic-edge-extrusion` consumer 裁决，S5 仍负责能力发布和最终队列关闭。
+
 ## 最小完整语义批次
 
 本轮不拆成“先 Hyperbola、后 Parabola”。两者在 FreeCAD Part geometry 层同属 conic curve wrapper，字段恢复、finite arc、edge extraction、invalid 参数和 Part consumer 的风险边界一致，应作为一个 Part conic geometry 批次推进。

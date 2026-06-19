@@ -1,6 +1,7 @@
 #include "cad_core/adapters/c_api.h"
 
 #include "cad_core/app/document.h"
+#include "cad_core/part/part_geometry_curve.h"
 #include "cad_core/part/shape_exporter.h"
 #include "cad_core/runtime/diagnostics.h"
 #include "cad_core/runtime/feature_registry.h"
@@ -108,6 +109,12 @@ nlohmann::json diagnosticCodeList()
         "invalid_length",
         "invalid_link_value",
         "invalid_assembly_solver_result",
+        "invalid_part_conic_axis",
+        "invalid_part_conic_curve_kind",
+        "invalid_part_conic_focal",
+        "invalid_part_conic_number",
+        "invalid_part_conic_radius",
+        "invalid_part_conic_trim",
         "invalid_placement",
         "invalid_property_type",
         "invalid_subshape",
@@ -1481,6 +1488,16 @@ CadCoreResult recomputeJsonEntrypoint(const char* request_json,
     try {
         const std::string payload(request_json, request_json_len);
         const nlohmann::json raw = nlohmann::json::parse(payload);
+        if (cad_core::part::isPartGeometryCurveRequest(raw)) {
+            cad_core::runtime::ComputeContext context
+                = cad_core::part::computePartGeometryCurveRequest(raw);
+            nlohmann::json result = cad_core::part::partGeometryCurveResultJson(context);
+            if (!adapterName.empty()) {
+                result["adapter"] = adapterName;
+            }
+            applyStreamingMeshLimits(result, raw);
+            return makeJsonResult(result);
+        }
         auto [document, diagnostics] = cad_core::app::parseDocument(raw);
         nlohmann::json result = cad_core::runtime::recompute(document, std::move(diagnostics));
         if (!adapterName.empty()) {

@@ -1,0 +1,12 @@
+{
+  "partGeometryCurve": {
+    "name": "ParabolaEdge",
+    "curveKind": "parabola",
+    "center": [0, 0, 0],
+    "normal": [0, 0, 1],
+    "angleXU": 0.25,
+    "focal": 1.25,
+    "startAngle": -1.2,
+    "endAngle": 1.4
+  }
+}

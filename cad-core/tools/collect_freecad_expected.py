@@ -1103,6 +1103,88 @@ def shape_summary(shape: Any) -> dict:
     return summary
 
 
+def part_geometry_curve_items(fixture: dict) -> list[dict[str, Any]]:
+    payload = fixture.get("partGeometryCurve")
+    if payload is None:
+        return []
+    if isinstance(payload, list):
+        return [item for item in payload if isinstance(item, dict)]
+    if isinstance(payload, dict):
+        return [payload]
+    raise UnsupportedFixture("partGeometryCurve must be an object or a list of objects")
+
+
+def set_part_conic_curve_common(FreeCAD: Any, curve: Any, dto: dict[str, Any]) -> None:
+    curve.Center = FreeCAD.Vector(*(float(item) for item in dto["center"]))
+    curve.Axis = FreeCAD.Vector(*(float(item) for item in dto["normal"]))
+    curve.AngleXU = float(dto["angleXU"])
+
+
+def build_part_geometry_curve_shape(FreeCAD: Any, Part: Any, dto: dict[str, Any]) -> Any:
+    curve_kind = str(dto.get("curveKind", "")).lower()
+    if curve_kind == "hyperbola":
+        # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp
+        # ::GeomHyperbola::Save/Restore() persists Center/Normal/MajorRadius/MinorRadius/AngleXU;
+        # ::GeomArcOfHyperbola::Restore() adds StartAngle/EndAngle and calls
+        # GC_MakeArcOfHyperbola(..., Standard_True). The collector mirrors that wrapper path.
+        curve = Part.Hyperbola()
+        set_part_conic_curve_common(FreeCAD, curve, dto)
+        curve.MajorRadius = float(dto["majorRadius"])
+        curve.MinorRadius = float(dto["minorRadius"])
+        return Part.ArcOfHyperbola(curve, float(dto["startAngle"]), float(dto["endAngle"]), True).toShape()
+    if curve_kind == "parabola":
+        # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp
+        # ::GeomParabola::Save/Restore() persists Center/Normal/Focal/AngleXU;
+        # ::GeomArcOfParabola::Restore() adds StartAngle/EndAngle and calls
+        # GC_MakeArcOfParabola(..., Standard_True). The collector mirrors that wrapper path.
+        curve = Part.Parabola()
+        set_part_conic_curve_common(FreeCAD, curve, dto)
+        curve.Focal = float(dto["focal"])
+        return Part.ArcOfParabola(curve, float(dto["startAngle"]), float(dto["endAngle"]), True).toShape()
+    raise UnsupportedFixture(f"unsupported partGeometryCurve curveKind {dto.get('curveKind')}")
+
+
+def collect_part_geometry_curve_expected(fixture_path: Path, fixture: dict) -> dict:
+    import FreeCAD  # type: ignore
+    import Part  # type: ignore
+
+    items = part_geometry_curve_items(fixture)
+    if len(items) != 1:
+        raise UnsupportedFixture("partGeometryCurve expected collection supports one valid DTO per fixture")
+    dto = items[0]
+    object_name = str(dto.get("name") or "PartConicCurve")
+    curve_kind = str(dto.get("curveKind", "")).lower()
+    shape = build_part_geometry_curve_shape(FreeCAD, Part, dto)
+    summary = shape_summary(shape)
+    edge = shape.Edges[0]
+    curve_type = "GeomAbs_Hyperbola" if curve_kind == "hyperbola" else "GeomAbs_Parabola"
+    part_geometry_type = "Part.Hyperbola" if curve_kind == "hyperbola" else "Part.Parabola"
+    summary["length"] = float(edge.Length)
+    summary["object_fields"] = {
+        "status": "ok",
+        "shape": "occt_edge",
+        "feature": "part_geometry_curve",
+        "dto": "PartConicCurveDTO",
+        "curve_kind": curve_kind,
+        "curve_type": curve_type,
+        "part_geometry_type": part_geometry_type,
+    }
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "object": object_name,
+        "reference": f"FreeCADCmd PartConicCurveDTO oracle from {fixture_path.name}",
+        "freecad_version": freecad_version(FreeCAD),
+        "bbox_delta": 0.2,
+        "length_delta": 1e-5,
+        **summary,
+        "named_shapes": {
+            object_name: {
+                "owner": object_name,
+            }
+        },
+    }
+
+
 def shape_with_placement(shape: Any, placement: Any) -> Any:
     copied = shape.copy()
     copied.Placement = placement.multiply(copied.Placement)
@@ -2775,6 +2857,8 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
     import FreeCAD  # type: ignore
 
     fixture = load_fixture(fixture_path)
+    if "partGeometryCurve" in fixture:
+        return collect_part_geometry_curve_expected(fixture_path, fixture)
     require_native_hole_profile_support(fixture)
     require_native_dressup_body_membership(fixture)
     require_native_polar_pattern_whole_shape_support(fixture)
@@ -2866,6 +2950,8 @@ def compare_object_expected(existing: dict, generated: dict) -> list[str]:
         errors.append("bbox")
     if "volume" in existing and not close_enough(existing["volume"], generated["volume"], existing.get("volume_delta", 1e-6)):
         errors.append("volume")
+    if "length" in existing and not close_enough(existing["length"], generated["length"], existing.get("length_delta", 1e-6)):
+        errors.append("length")
     if "topology_counts" in existing and existing["topology_counts"] != generated["topology_counts"]:
         errors.append("topology_counts")
     if "sketch_external" in existing:

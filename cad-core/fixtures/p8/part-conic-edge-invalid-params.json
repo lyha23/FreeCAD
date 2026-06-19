@@ -1,0 +1,50 @@
+{
+  "partGeometryCurve": [
+    {
+      "name": "InvalidCurveKind",
+      "curveKind": "ellipse"
+    },
+    {
+      "name": "InvalidHyperbolaRadius",
+      "curveKind": "hyperbola",
+      "center": [0, 0, 0],
+      "normal": [0, 0, 1],
+      "angleXU": 0,
+      "majorRadius": 0,
+      "minorRadius": 1,
+      "startAngle": -0.2,
+      "endAngle": 0.2
+    },
+    {
+      "name": "InvalidParabolaFocal",
+      "curveKind": "parabola",
+      "center": [0, 0, 0],
+      "normal": [0, 0, 1],
+      "angleXU": 0,
+      "focal": 0,
+      "startAngle": -0.2,
+      "endAngle": 0.2
+    },
+    {
+      "name": "InvalidTrim",
+      "curveKind": "hyperbola",
+      "center": [0, 0, 0],
+      "normal": [0, 0, 1],
+      "angleXU": 0,
+      "majorRadius": 4,
+      "minorRadius": 1.5,
+      "startAngle": 0.5,
+      "endAngle": 0.5
+    },
+    {
+      "name": "InvalidNonFiniteCenter",
+      "curveKind": "parabola",
+      "center": [0, "nan", 0],
+      "normal": [0, 0, 1],
+      "angleXU": 0,
+      "focal": 1.25,
+      "startAngle": -0.2,
+      "endAngle": 0.2
+    }
+  ]
+}

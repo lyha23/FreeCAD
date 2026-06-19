@@ -1,0 +1,13 @@
+{
+  "partGeometryCurve": {
+    "name": "HyperbolaEdge",
+    "curveKind": "hyperbola",
+    "center": [0, 0, 0],
+    "normal": [0, 0, 1],
+    "angleXU": 0,
+    "majorRadius": 4,
+    "minorRadius": 1.5,
+    "startAngle": -0.75,
+    "endAngle": 0.85
+  }
+}

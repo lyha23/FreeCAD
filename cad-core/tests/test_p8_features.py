@@ -3240,6 +3240,30 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(ellipse["minor_radius"], 2.0)
         self.assert_object_matches_expected(result, "p8", "part-ellipse")
 
+    def test_p8_part_conic_geometry_curves_build_native_edges(self) -> None:
+        cases = {
+            "part-hyperbola-edge": ("HyperbolaEdge", "hyperbola", "GeomAbs_Hyperbola", "Part.Hyperbola"),
+            "part-parabola-edge": ("ParabolaEdge", "parabola", "GeomAbs_Parabola", "Part.Parabola"),
+        }
+        for fixture, (object_name, curve_kind, curve_type, part_geometry_type) in cases.items():
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p8")
+                curve = result["objects"][object_name]
+                subshapes = result["subshapes"][object_name]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(curve["status"], "ok")
+                self.assertEqual(curve["feature"], "part_geometry_curve")
+                self.assertEqual(curve["dto"], "PartConicCurveDTO")
+                self.assertEqual(curve["shape"], "occt_edge")
+                self.assertEqual(curve["curve_kind"], curve_kind)
+                self.assertEqual(curve["curve_type"], curve_type)
+                self.assertEqual(curve["part_geometry_type"], part_geometry_type)
+                self.assertGreater(curve["length"], 0.0)
+                self.assertIn("Edge1", subshapes)
+                self.assertEqual(sum(name.startswith("Edge") for name in subshapes), 1)
+                self.assert_object_matches_expected(result, "p8", fixture)
+
     def test_p8_part_helix_builds_spiral_helix_wire(self) -> None:
         result = self.run_recompute("part-helix", "p8")
         helix = result["objects"]["Helix"]

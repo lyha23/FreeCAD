@@ -1,6 +1,7 @@
 #include "cad_core/adapters/cli.h"
 
 #include "cad_core/app/document.h"
+#include "cad_core/part/part_geometry_curve.h"
 #include "cad_core/part/shape_exporter.h"
 #include "cad_core/runtime/diagnostics.h"
 #include "cad_core/runtime/io.h"
@@ -171,6 +172,15 @@ int runRecompute(const RecomputeOptions& options)
                   {"diagnostics", diagnostics},
               };
         runtime::writeJsonFile(options.outputPath, payload);
+        return 0;
+    }
+
+    if (part::isPartGeometryCurveRequest(raw)) {
+        const runtime::ComputeContext context = part::computePartGeometryCurveRequest(raw);
+        nlohmann::json result = useLegacyTestOutput()
+            ? part::partGeometryCurveLegacyResultJson(context)
+            : part::partGeometryCurveResultJson(context);
+        runtime::writeJsonFile(options.outputPath, result);
         return 0;
     }
 
