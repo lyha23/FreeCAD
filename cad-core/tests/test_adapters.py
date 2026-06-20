@@ -2665,7 +2665,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             conic_curves["remaining_gaps"],
         )
         project_on_surface = capabilities["part_workbench"]["project_on_surface"]
-        self.assertEqual(project_on_surface["status"], "supported_expected_backed_first_slice")
+        self.assertEqual(project_on_surface["status"], "supported_expected_backed_height_slice")
         self.assertIn("Part::ProjectOnSurface", project_on_surface["type_ids"])
         self.assertEqual(
             project_on_surface["payload_keys"],
@@ -2692,14 +2692,20 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "App::PropertyLinkSubList",
         ):
             self.assertIn(property_type, project_on_surface["property_types"])
-        self.assertEqual(project_on_surface["mode_values"], ["Edges"])
+        self.assertEqual(project_on_surface["mode_values"], ["All", "Faces", "Edges"])
         for covered in (
             "source_backed_document_object_executor",
             "support_face_property_link_sub",
-            "projection_property_link_sub_list_single_edge_or_wire",
+            "projection_property_link_sub_list_single_edge_wire_or_face",
             "mode_edges_project_wire",
-            "height_zero_offset_zero",
+            "mode_faces_project_face_rebuild",
+            "mode_all_project_face_rebuild",
+            "mode_all_height_prism",
+            "mode_faces_height_keeps_face",
+            "height_below_precision_keeps_face",
+            "offset_zero",
             "brepproj_projection_nearest_wire",
+            "projected_face_parametric_wire_rebuild",
             "ordinary_indexed_named_shape",
             "expected_backed_fixture",
             "deferred_branch_diagnostics",
@@ -2709,6 +2715,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             project_on_surface["fixtures"],
             [
                 "c4m1/part-project-on-surface-edge-plane",
+                "c4m1/part-project-on-surface-face-plane",
+                "c4m1/part-project-on-surface-face-hole-plane",
+                "c4m1/part-project-on-surface-face-edges-mode",
+                "c4m1/part-project-on-surface-face-all-plane",
+                "c4m1/part-project-on-surface-height-boundaries",
                 "c4m1/part-project-on-surface-deferred-boundaries",
             ],
         )
@@ -2724,19 +2735,17 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertIn(diagnostic, project_on_surface["diagnostics"])
         for boundary in (
             "source_shape_recomputed_from_document_graph",
-            "mode_edges_only_first_slice",
             "single_support_face",
-            "single_edge_or_wire_projection",
+            "single_edge_wire_or_face_projection",
             "ordinary_indexed_named_shape_without_freecad_mapper_history",
         ):
             self.assertIn(boundary, project_on_surface["request_local_boundaries"])
         self.assertEqual(
             project_on_surface["remaining_gaps"],
             [
-                "mode_faces_all_expected",
-                "height_offset_solid_expected",
-                "face_rebuild_expected",
+                "offset_expected",
                 "multi_projection_expected",
+                "projected_edge_provenance_mapper_history",
                 "advanced_branch_expected",
             ],
         )

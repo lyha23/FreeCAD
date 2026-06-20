@@ -48,35 +48,6 @@
       }
     },
     {
-      "Name": "HeightDeferred",
-      "ID": 4,
-      "TypeId": "Part::ProjectOnSurface",
-      "Properties": {
-        "Mode": {
-          "PropertyType": "App::PropertyEnumeration",
-          "value": "Edges"
-        },
-        "Height": {
-          "PropertyType": "App::PropertyLength",
-          "value": 1
-        },
-        "SupportFace": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "SupportPlane",
-          "SubList": ["Face1"]
-        },
-        "Projection": {
-          "PropertyType": "App::PropertyLinkSubList",
-          "SubSet": [
-            {
-              "value": "ProjectionLine",
-              "SubList": ["Edge1"]
-            }
-          ]
-        }
-      }
-    },
-    {
       "Name": "OffsetDeferred",
       "ID": 5,
       "TypeId": "Part::ProjectOnSurface",
@@ -158,7 +129,6 @@
   "recompute": {
     "objs": [
       "ModeFacesDeferred",
-      "HeightDeferred",
       "OffsetDeferred",
       "MultiProjectionDeferred",
       "MissingSupport"

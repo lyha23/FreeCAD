@@ -9,6 +9,7 @@
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepCheck_Analyzer.hxx>
 #include <BRepExtrema_DistShapeShape.hxx>
+#include <BRepPrimAPI_MakePrism.hxx>
 #include <BRepProj_Projection.hxx>
 #include <BRep_Builder.hxx>
 #include <BRep_Tool.hxx>
@@ -30,6 +31,7 @@
 #include <TopoDS_Shape.hxx>
 #include <TopoDS_Wire.hxx>
 #include <gp_Dir.hxx>
+#include <gp_Vec.hxx>
 
 #include <algorithm>
 #include <array>
@@ -646,6 +648,45 @@ std::vector<TopoDS_Shape> filterProjectedShapes(
     return filtered;
 }
 
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp
+// ::ProjectOnSurface::createSolidIfHeight(), returns the face unless
+// "height < Precision::Confusion() || Mode.getValue() != 0L"; otherwise reverses Direction,
+// multiplies it by Height, and calls BRepPrimAPI_MakePrism.
+TopoDS_Shape createSolidIfHeight(
+    const TopoDS_Shape& shape,
+    const std::string& mode,
+    const gp_Dir& direction,
+    double height
+)
+{
+    if (shape.IsNull() || shape.ShapeType() != TopAbs_FACE || mode != "All"
+        || height < Precision::Confusion()) {
+        return shape;
+    }
+
+    gp_Vec directionToExtrude(direction);
+    directionToExtrude.Reverse();
+    directionToExtrude.Multiply(height);
+
+    BRepPrimAPI_MakePrism extrude(TopoDS::Face(shape), directionToExtrude);
+    return extrude.Shape();
+}
+
+std::vector<TopoDS_Shape> createSolidsIfHeight(
+    const std::vector<TopoDS_Shape>& shapes,
+    const std::string& mode,
+    const gp_Dir& direction,
+    double height
+)
+{
+    std::vector<TopoDS_Shape> results;
+    results.reserve(shapes.size());
+    for (const TopoDS_Shape& shape : shapes) {
+        results.push_back(createSolidIfHeight(shape, mode, direction, height));
+    }
+    return results;
+}
+
 int countSubshapes(const TopoDS_Shape& shape, TopAbs_ShapeEnum kind)
 {
     int count = 0;
@@ -695,10 +736,10 @@ void executePartProjectOnSurface(const app::DocumentObject& object, runtime::Com
     }
 
     const auto mode = readProjectionMode(object, context);
-    if (!mode || rejectNonZeroProperty(object, context, "Height")
-        || rejectNonZeroProperty(object, context, "Offset")) {
+    if (!mode || rejectNonZeroProperty(object, context, "Offset")) {
         return;
     }
+    const double height = app::readNumber(object, "Height").value_or(0.0);
 
     const auto direction = readProjectionDirection(object, context);
     if (!direction) {
@@ -722,7 +763,9 @@ void executePartProjectOnSurface(const app::DocumentObject& object, runtime::Com
     try {
         const std::vector<TopoDS_Shape> projectedShapes =
             createProjectedShapes(projection->shape, TopoDS::Face(support->shape), *direction);
-        const std::vector<TopoDS_Shape> filteredShapes = filterProjectedShapes(projectedShapes, *mode);
+        const std::vector<TopoDS_Shape> solidsIfHeight =
+            createSolidsIfHeight(projectedShapes, *mode, *direction, height);
+        const std::vector<TopoDS_Shape> filteredShapes = filterProjectedShapes(solidsIfHeight, *mode);
         if (filteredShapes.empty()) {
             addProjectOnSurfaceDiagnostic(
                 object,
@@ -747,9 +790,10 @@ void executePartProjectOnSurface(const app::DocumentObject& object, runtime::Com
                 {"source_projection", projection->objectName},
                 {"projection_subshape", projection->stableSubname},
                 {"mode", *mode},
-                {"height", 0.0},
+                {"height", height},
                 {"offset", 0.0},
                 {"topo_naming_history", "indexed_projected_edges_no_mapper_history"},
+                {"projected_solid_count", countSubshapes(projectedCompound, TopAbs_SOLID)},
                 {"projected_face_count", countSubshapes(projectedCompound, TopAbs_FACE)},
                 {"projected_wire_count", countSubshapes(projectedCompound, TopAbs_WIRE)},
                 {"projected_inner_wire_count", countInnerWires(projectedCompound)},

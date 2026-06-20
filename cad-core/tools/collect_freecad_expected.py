@@ -3394,6 +3394,7 @@ def project_on_surface_payload(obj: Any, fixture: dict | None = None) -> dict:
         "height": float_from_properties(properties, "Height", 0.0),
         "offset": float_from_properties(properties, "Offset", 0.0),
         "topo_naming_history": "indexed_projected_edges_no_mapper_history",
+        "projected_solid_count": len(getattr(shape, "Solids", [])),
         "projected_face_count": len(getattr(shape, "Faces", [])),
         "projected_wire_count": len(getattr(shape, "Wires", [])),
         "projected_inner_wire_count": sum(max(0, count - 1) for count in face_wire_counts),

@@ -11,7 +11,10 @@
 - S1 live 基线（2026-06-20）：`pwd=/Users/li/Chili3DProject/FreeCAD`；`HEAD=8a1a905f6c`；`git log -1 --oneline=8a1a905f6c docs: 冻结PROJSURF S0基线与第二批范围`；开始编辑前 `git -c core.quotepath=false status --short -uall` 为空。
 - S1 已完成：`Mode=Faces` / `Mode=All` 在 `Height=0`、`Offset=0`、单 face projection 到单 support face 的范围内已 expected-backed；face with hole 通过 projected wires 的 parametric-space rebuild 保留 inner wire；`Mode=Edges` 遇到 face input 会按 FreeCAD `filterShapes()` 拆成 wire 输出。
 - S1 fixtures：`part-project-on-surface-face-plane`、`part-project-on-surface-face-hole-plane`、`part-project-on-surface-face-edges-mode`、`part-project-on-surface-face-all-plane`。
-- 当前缺口：`Height` solid、`Offset` placement、多 `Projection` compound 顺序和 projected edge provenance mapper/history 仍未发布；full `ProjectOnSurface` 仍不能写成 supported。
+- S2 live 基线（2026-06-20）：`pwd=/Users/li/Chili3DProject/FreeCAD`；`HEAD=a47261c764`；`git log -1 --oneline=a47261c764 feat: 实现PROJSURF S1 face投影重建`；开始编辑前 `git -c core.quotepath=false status --short -uall` 为空。
+- S2 已完成：`Mode=All` 且 `Height >= Precision::Confusion()` 时，rebuilt face 会沿反向 `Direction * Height` 经 `BRepPrimAPI_MakePrism` 生成 solid；`Mode=Faces` 即使 `Height>0` 仍保持 face 输出，`Height < Precision::Confusion()` 仍走 face 路径。
+- S2 fixture：`part-project-on-surface-height-boundaries` 同时覆盖 `Mode=All, Height=1.5` solid 和 `Mode=Faces, Height=1.5` face 边界。
+- 当前缺口：`Offset` placement、多 `Projection` compound 顺序和 projected edge provenance mapper/history 仍未发布；full `ProjectOnSurface` 仍不能写成 supported。
 
 ## FreeCAD 依据
 
@@ -30,13 +33,14 @@
 - `part-project-on-surface-face-hole-plane`：`Mode=Faces` 的 face-with-hole projection，输出 1 face / 2 wires / 1 inner wire。
 - `part-project-on-surface-face-edges-mode`：face input 在 `Mode=Edges` 下经 `filterShapes()` 拆成 wire，输出 0 face / 1 wire。
 - `part-project-on-surface-face-all-plane`：`Mode=All`、`Height=0`、`Offset=0` 的 face projection，仍只输出 face，不触发 solid。
-- `part-project-on-surface-deferred-boundaries`：继续拒绝 `Height != 0`、`Offset != 0`、多个 `Projection` item、缺失 support；`Mode=Faces` + edge input 目前记录为无 face 结果的第一批边界诊断。
-- capability 发布仍留到 S5；在发布前不得把 `Height`、`Offset`、多 `Projection` 或 full `ProjectOnSurface` 写成 supported，也不得宣称 projected edge provenance mapper/history。
+- `part-project-on-surface-height-boundaries`：`Mode=All`、`Height=1.5` 输出 1 solid / 6 faces / volume 9.0；同 fixture 内 `Mode=Faces`、`Height=1.5` 仍输出 1 face / volume 0.0。
+- `part-project-on-surface-deferred-boundaries`：继续拒绝 `Offset != 0`、多个 `Projection` item、缺失 support；`Mode=Faces` + edge input 目前记录为无 face 结果的边界诊断。
+- capability 发布仍留到 S5；在发布前不得把 `Offset`、多 `Projection` 或 full `ProjectOnSurface` 写成 supported，也不得宣称 projected edge provenance mapper/history。
 
 ## 第二批冻结范围
 
 - `PROJSURF-S1`：已完成 `Mode=Faces` / `Mode=All` 在 `Height=0`、`Offset=0`、单 face projection 到单 support face 的 first slice，并覆盖 hole inner wire 与 `Mode=Edges` face input 拆 wire 边界。
-- `PROJSURF-S2`：`Mode=All` + `Height` solid。FreeCAD 依据是 `createSolidIfHeight()` 只在 `Height >= Precision::Confusion()` 且 `Mode == All` 时沿反向 `Direction` prism；不能把非 All 的 height 分支混成 supported。
+- `PROJSURF-S2`：已完成 `Mode=All` + `Height` solid。FreeCAD 依据是 `createSolidIfHeight()` 只在 `Height >= Precision::Confusion()` 且 `Mode == All` 时沿反向 `Direction` prism；非 All 的 height 分支保持 FreeCAD face / wire 过滤语义，不生成 solid。
 - `PROJSURF-S3`：`Offset` placement。FreeCAD 依据是 `getOffsetPlacement()` normalize `Direction` 后 scale `Offset`，再由 `createCompound()` 对每个 child `Moved(loc)`；需要覆盖 edge/face 输出及 Height/Offset 交互。
 - `PROJSURF-S4`：多 `Projection` ordering。FreeCAD 依据是 `getProjectionShapes()` 保留 `PropertyLinkSubList` 对象 / sub-name 顺序，`tryExecute()` 按 projection item 追加结果，`createCompound()` 按结果顺序 Add。
 - `PROJSURF-S5`：capability 发布。只发布 S1-S4 已有 native expected、focused tests 和 adapter tests 证明的分支；若没有 ProjectOnSurface projected ownership mapper/history 账本，继续保留普通 indexed NamedShape 边界。
@@ -49,7 +53,7 @@
 
 1. `PROJSURF-S0`：刷新 live 基线、第二批 scope 和矩阵，不写 C++。
 2. `PROJSURF-S1`：已实现 `Mode=Faces` / `Mode=All` 的 Height=0 face input rebuild / hole wires 第一批。
-3. `PROJSURF-S2`：实现 `Mode=All` + `Height` solid 路径。
+3. `PROJSURF-S2`：已实现 `Mode=All` + `Height` solid 路径。
 4. `PROJSURF-S3`：实现 `Offset` / `getOffsetPlacement()` 位移语义。
 5. `PROJSURF-S4`：实现多 `Projection` item 和 compound 顺序。
 6. `PROJSURF-S5`：发布 capability、文档和队列收口，不 overclaim full ProjectOnSurface。
@@ -88,5 +92,5 @@ python3 -m unittest tests.test_p8_features tests.test_expected_fixtures tests.te
 
 ## 晋升 / 删除条件
 
-- 第二批晋升条件：face rebuild、height solid、offset 和 multi-projection 各自都有 native expected、cad-core focused tests、capability tests 和文档矩阵。
+- 第二批晋升条件：offset 和 multi-projection 各自都有 native expected、cad-core focused tests、capability tests 和文档矩阵；S5 只发布已验证分支。
 - 删除条件：若某一高级分支在当前 FreeCAD / OCCT expected 基线不可稳定采集，则该分支保持 deferred / blocked；不得在 executor 中按 fixture 名、输出顺序或几何形态补猜。

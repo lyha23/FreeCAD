@@ -996,6 +996,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(projected["height"], 0.0)
         self.assertEqual(projected["offset"], 0.0)
         self.assertEqual(projected["topo_naming_history"], "indexed_projected_edges_no_mapper_history")
+        self.assertEqual(projected["projected_solid_count"], 0)
         self.assertEqual(projected["projected_face_count"], 0)
         self.assertEqual(projected["projected_wire_count"], 0)
         self.assertEqual(projected["projected_inner_wire_count"], 0)
@@ -1022,6 +1023,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(projected["mode"], "Faces")
         self.assertEqual(projected["height"], 0.0)
         self.assertEqual(projected["offset"], 0.0)
+        self.assertEqual(projected["projected_solid_count"], 0)
         self.assertEqual(projected["projected_face_count"], 1)
         self.assertEqual(projected["projected_wire_count"], 1)
         self.assertEqual(projected["projected_inner_wire_count"], 0)
@@ -1042,6 +1044,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(projected["source_projection"], "ProjectionFaceWithHole")
         self.assertEqual(projected["projection_subshape"], "Face1")
         self.assertEqual(projected["mode"], "Faces")
+        self.assertEqual(projected["projected_solid_count"], 0)
         self.assertEqual(projected["projected_face_count"], 1)
         self.assertEqual(projected["projected_wire_count"], 2)
         self.assertEqual(projected["projected_inner_wire_count"], 1)
@@ -1060,6 +1063,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(projected["source_projection"], "ProjectionFace")
         self.assertEqual(projected["projection_subshape"], "Face1")
         self.assertEqual(projected["mode"], "Edges")
+        self.assertEqual(projected["projected_solid_count"], 0)
         self.assertEqual(projected["projected_face_count"], 0)
         self.assertEqual(projected["projected_wire_count"], 1)
         self.assertEqual(projected["projected_inner_wire_count"], 0)
@@ -1080,12 +1084,53 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(projected["mode"], "All")
         self.assertEqual(projected["height"], 0.0)
         self.assertEqual(projected["offset"], 0.0)
+        self.assertEqual(projected["projected_solid_count"], 0)
         self.assertEqual(projected["projected_face_count"], 1)
         self.assertEqual(projected["projected_wire_count"], 1)
         self.assertEqual(projected["projected_inner_wire_count"], 0)
         self.assertEqual(sum(name.startswith("Face") for name in subshapes), 1)
         self.assertEqual(sum(name.startswith("Edge") for name in subshapes), 4)
         self.assert_object_matches_expected(result, "c4m1", "part-project-on-surface-face-all-plane")
+
+    def test_c4m1_part_project_on_surface_all_height_extrudes_face_to_solid(self) -> None:
+        result = self.run_recompute("part-project-on-surface-height-boundaries", "c4m1")
+        projected_all = result["objects"]["ProjectedAllHeight"]
+        projected_faces = result["objects"]["ProjectedFacesHeight"]
+        all_subshapes = result["subshapes"]["ProjectedAllHeight"]
+        faces_subshapes = result["subshapes"]["ProjectedFacesHeight"]
+        all_named_shape = result["named_shapes"]["ProjectedAllHeight"]
+        faces_named_shape = result["named_shapes"]["ProjectedFacesHeight"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(projected_all["status"], "ok")
+        self.assertEqual(projected_all["feature"], "part_project_on_surface")
+        self.assertEqual(projected_all["shape"], "occt_compound")
+        self.assertEqual(projected_all["mode"], "All")
+        self.assertEqual(projected_all["height"], 1.5)
+        self.assertEqual(projected_all["offset"], 0.0)
+        self.assertEqual(projected_all["projected_solid_count"], 1)
+        self.assertEqual(projected_all["projected_face_count"], 6)
+        self.assertEqual(projected_all["projected_wire_count"], 6)
+        self.assertAlmostEqual(projected_all["volume"], 9.0)
+        self.assertEqual(sum(name.startswith("Face") for name in all_subshapes), 6)
+        self.assertEqual(sum(name.startswith("Edge") for name in all_subshapes), 12)
+        self.assertEqual(sum(name.startswith("Vertex") for name in all_subshapes), 8)
+        self.assertEqual(all_named_shape["element_map_status"], "indexed_only")
+        self.assertNotIn("ProjectionFace.Face1", all_named_shape["element_map"])
+
+        self.assertEqual(projected_faces["status"], "ok")
+        self.assertEqual(projected_faces["feature"], "part_project_on_surface")
+        self.assertEqual(projected_faces["mode"], "Faces")
+        self.assertEqual(projected_faces["height"], 1.5)
+        self.assertEqual(projected_faces["projected_solid_count"], 0)
+        self.assertEqual(projected_faces["projected_face_count"], 1)
+        self.assertAlmostEqual(projected_faces["volume"], 0.0)
+        self.assertEqual(sum(name.startswith("Face") for name in faces_subshapes), 1)
+        self.assertEqual(sum(name.startswith("Edge") for name in faces_subshapes), 4)
+        self.assertEqual(sum(name.startswith("Vertex") for name in faces_subshapes), 4)
+        self.assertEqual(faces_named_shape["element_map_status"], "indexed_only")
+        self.assertNotIn("ProjectionFace.Face1", faces_named_shape["element_map"])
+        self.assert_object_matches_expected(result, "c4m1", "part-project-on-surface-height-boundaries")
 
     def test_c4m1_part_project_on_surface_deferred_boundaries_have_stable_diagnostics(self) -> None:
         result = self.run_recompute("part-project-on-surface-deferred-boundaries", "c4m1")
@@ -1097,13 +1142,11 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "execution_failed",
                 "unsupported_property",
                 "unsupported_property",
-                "unsupported_property",
                 "missing_property",
             ],
         )
         for object_name in (
             "ModeFacesDeferred",
-            "HeightDeferred",
             "OffsetDeferred",
             "MultiProjectionDeferred",
             "MissingSupport",
