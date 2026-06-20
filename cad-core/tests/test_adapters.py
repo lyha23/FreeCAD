@@ -2665,7 +2665,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             conic_curves["remaining_gaps"],
         )
         project_on_surface = capabilities["part_workbench"]["project_on_surface"]
-        self.assertEqual(project_on_surface["status"], "supported_expected_backed_offset_slice")
+        self.assertEqual(project_on_surface["status"], "supported_expected_backed_multi_projection_slice")
         self.assertIn("Part::ProjectOnSurface", project_on_surface["type_ids"])
         self.assertEqual(
             project_on_surface["payload_keys"],
@@ -2696,7 +2696,9 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         for covered in (
             "source_backed_document_object_executor",
             "support_face_property_link_sub",
-            "projection_property_link_sub_list_single_edge_wire_or_face",
+            "projection_property_link_sub_list_ordered_edge_wire_or_face_items",
+            "multi_projection_result_append_order",
+            "multi_projection_metadata_order",
             "mode_edges_project_wire",
             "mode_faces_project_face_rebuild",
             "mode_all_project_face_rebuild",
@@ -2725,6 +2727,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "c4m1/part-project-on-surface-edge-offset",
                 "c4m1/part-project-on-surface-face-offset",
                 "c4m1/part-project-on-surface-height-offset-boundary",
+                "c4m1/part-project-on-surface-multi-edge-order",
+                "c4m1/part-project-on-surface-mixed-face-edge-order",
                 "c4m1/part-project-on-surface-deferred-boundaries",
             ],
         )
@@ -2741,14 +2745,13 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         for boundary in (
             "source_shape_recomputed_from_document_graph",
             "single_support_face",
-            "single_edge_wire_or_face_projection",
+            "ordinary_link_sub_list_projection_order",
             "ordinary_indexed_named_shape_without_freecad_mapper_history",
         ):
             self.assertIn(boundary, project_on_surface["request_local_boundaries"])
         self.assertEqual(
             project_on_surface["remaining_gaps"],
             [
-                "multi_projection_expected",
                 "projected_edge_provenance_mapper_history",
                 "advanced_branch_expected",
             ],

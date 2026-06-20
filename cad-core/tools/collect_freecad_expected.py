@@ -3306,6 +3306,23 @@ def link_sublist_object_names(properties: dict[str, Any], name: str) -> list[str
     return names
 
 
+def link_sublist_items(properties: dict[str, Any], name: str) -> list[dict[str, str]]:
+    value = properties.get(name, {})
+    if not isinstance(value, dict):
+        return []
+    items: list[dict[str, str]] = []
+    for item in value.get("SubSet", []):
+        if not isinstance(item, dict) or not item.get("value"):
+            continue
+        sub_names = list_field(item, "StableSubList", "SubList")
+        if not sub_names:
+            items.append({"object": str(item["value"]), "subshape": ""})
+            continue
+        for subname in sub_names:
+            items.append({"object": str(item["value"]), "subshape": str(subname)})
+    return items
+
+
 def first_link_subname(properties: dict[str, Any], name: str) -> str:
     value = properties.get(name, {})
     if not isinstance(value, dict):
@@ -3396,6 +3413,7 @@ def project_on_surface_payload(obj: Any, fixture: dict | None = None) -> dict:
     spec = fixture_spec_for_object(fixture, str(obj.Name))
     properties = spec.get("Properties", {}) if isinstance(spec.get("Properties", {}), dict) else {}
     projection_sources = link_sublist_object_names(properties, "Projection")
+    projection_items = link_sublist_items(properties, "Projection")
     face_wire_counts = [len(getattr(face, "Wires", [])) for face in getattr(shape, "Faces", [])]
     payload = shape_summary(shape)
     payload["bbox_delta"] = 0.11
@@ -3416,6 +3434,8 @@ def project_on_surface_payload(obj: Any, fixture: dict | None = None) -> dict:
         "projected_wire_count": len(getattr(shape, "Wires", [])),
         "projected_inner_wire_count": sum(max(0, count - 1) for count in face_wire_counts),
     }
+    if projection_items:
+        object_fields["projection_items"] = projection_items
     offset_vector = project_on_surface_offset_vector(properties)
     if offset_vector is not None:
         object_fields["offset_application"] = "compound_child_moved_after_filter"

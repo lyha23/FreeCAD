@@ -204,7 +204,7 @@ std::optional<ProjectSubshape> resolveSingleSubshapeLink(
     return ProjectSubshape {link.object, stableSubnameForLink(link), *selected};
 }
 
-std::optional<ProjectSubshape> resolveProjectionShape(
+std::optional<std::vector<ProjectSubshape>> resolveProjectionShapes(
     const app::DocumentObject& object,
     runtime::ComputeContext& context
 )
@@ -232,63 +232,88 @@ std::optional<ProjectSubshape> resolveProjectionShape(
         );
         return std::nullopt;
     }
-    if (links.size() != 1U || links.front().subnames.size() != 1U
-        || links.front().subnames.front().empty()) {
+
+    std::size_t subnameCount = 0;
+    for (const app::Link& link : links) {
+        subnameCount += link.subnames.size();
+    }
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp
+    // ::ProjectOnSurface::getProjectionShapes(), reads "Projection.getValues()" and
+    // "Projection.getSubValues()"; if object/sub-name counts differ it throws
+    // "Number of objects and sub-names differ", otherwise it resolves each pair by index.
+    if (links.size() != subnameCount) {
         addProjectOnSurfaceDiagnostic(
             object,
             context,
-            "unsupported_property",
-            "Part::ProjectOnSurface first slice supports exactly one projected edge or wire",
+            "invalid_subshape",
+            "Part::ProjectOnSurface Projection object/subname counts differ",
             "Projection",
             links.front().object
         );
         return std::nullopt;
     }
 
-    const app::Link& link = links.front();
-    const auto shapeIt = context.shapes.find(link.object);
-    if (shapeIt == context.shapes.end() || shapeIt->second.shape.IsNull()) {
-        addProjectOnSurfaceDiagnostic(
-            object,
-            context,
-            "missing_link_target",
-            "Part::ProjectOnSurface Projection target did not produce a shape",
-            "Projection",
-            link.object
-        );
-        return std::nullopt;
+    std::vector<ProjectSubshape> projections;
+    projections.reserve(links.size());
+    for (const app::Link& link : links) {
+        if (link.subnames.empty() || link.subnames.front().empty()) {
+            addProjectOnSurfaceDiagnostic(
+                object,
+                context,
+                "invalid_subshape",
+                "Part::ProjectOnSurface Projection must reference a non-empty subshape",
+                "Projection",
+                link.object
+            );
+            return std::nullopt;
+        }
+
+        const auto shapeIt = context.shapes.find(link.object);
+        if (shapeIt == context.shapes.end() || shapeIt->second.shape.IsNull()) {
+            addProjectOnSurfaceDiagnostic(
+                object,
+                context,
+                "missing_link_target",
+                "Part::ProjectOnSurface Projection target did not produce a shape",
+                "Projection",
+                link.object
+            );
+            return std::nullopt;
+        }
+
+        const auto namedShapeIt = context.namedShapes.find(link.object);
+        const part::NamedShape* namedShape = namedShapeIt != context.namedShapes.end()
+            ? &namedShapeIt->second
+            : nullptr;
+        const auto selected = linkedSubshape(shapeIt->second.shape, namedShape, link);
+        if (!selected || selected->IsNull()) {
+            addProjectOnSurfaceDiagnostic(
+                object,
+                context,
+                "invalid_subshape",
+                "Part::ProjectOnSurface Projection subshape cannot be resolved",
+                "Projection",
+                link.object
+            );
+            return std::nullopt;
+        }
+        if (selected->ShapeType() != TopAbs_EDGE && selected->ShapeType() != TopAbs_WIRE
+            && selected->ShapeType() != TopAbs_FACE) {
+            addProjectOnSurfaceDiagnostic(
+                object,
+                context,
+                "unsupported_subshape_kind",
+                "Part::ProjectOnSurface projects only edges, wires and faces",
+                "Projection",
+                link.object
+            );
+            return std::nullopt;
+        }
+
+        projections.push_back(ProjectSubshape {link.object, stableSubnameForLink(link), *selected});
     }
 
-    const auto namedShapeIt = context.namedShapes.find(link.object);
-    const part::NamedShape* namedShape = namedShapeIt != context.namedShapes.end()
-        ? &namedShapeIt->second
-        : nullptr;
-    const auto selected = linkedSubshape(shapeIt->second.shape, namedShape, link);
-    if (!selected || selected->IsNull()) {
-        addProjectOnSurfaceDiagnostic(
-            object,
-            context,
-            "invalid_subshape",
-            "Part::ProjectOnSurface Projection subshape cannot be resolved",
-            "Projection",
-            link.object
-        );
-        return std::nullopt;
-    }
-    if (selected->ShapeType() != TopAbs_EDGE && selected->ShapeType() != TopAbs_WIRE
-        && selected->ShapeType() != TopAbs_FACE) {
-        addProjectOnSurfaceDiagnostic(
-            object,
-            context,
-            "unsupported_subshape_kind",
-            "Part::ProjectOnSurface first face slice projects only edges, wires and faces",
-            "Projection",
-            link.object
-        );
-        return std::nullopt;
-    }
-
-    return ProjectSubshape {link.object, stableSubnameForLink(link), *selected};
+    return projections;
 }
 
 std::optional<std::string> readProjectionMode(
@@ -723,6 +748,15 @@ TopoDS_Shape compoundOf(const std::vector<TopoDS_Shape>& shapes, const TopLoc_Lo
     return compound;
 }
 
+nlohmann::json projectionItemsJson(const std::vector<ProjectSubshape>& projections)
+{
+    nlohmann::json items = nlohmann::json::array();
+    for (const ProjectSubshape& projection : projections) {
+        items.push_back({{"object", projection.objectName}, {"subshape", projection.stableSubname}});
+    }
+    return items;
+}
+
 }  // namespace
 
 void executePartProjectOnSurface(const app::DocumentObject& object, runtime::ComputeContext& context)
@@ -760,14 +794,22 @@ void executePartProjectOnSurface(const app::DocumentObject& object, runtime::Com
     if (!support) {
         return;
     }
-    const auto projection = resolveProjectionShape(object, context);
-    if (!projection) {
+    const auto projections = resolveProjectionShapes(object, context);
+    if (!projections) {
         return;
     }
 
     try {
-        const std::vector<TopoDS_Shape> projectedShapes =
-            createProjectedShapes(projection->shape, TopoDS::Face(support->shape), *direction);
+        std::vector<TopoDS_Shape> projectedShapes;
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp
+        // ::ProjectOnSurface::tryExecute(), iterates getProjectionShapes() in order, calls
+        // createProjectedWire(shape, supportFace, dir), and appends each result before the
+        // later filterShapes() and createCompound() passes.
+        for (const ProjectSubshape& projection : *projections) {
+            const std::vector<TopoDS_Shape> current =
+                createProjectedShapes(projection.shape, TopoDS::Face(support->shape), *direction);
+            projectedShapes.insert(projectedShapes.end(), current.begin(), current.end());
+        }
         const std::vector<TopoDS_Shape> solidsIfHeight =
             createSolidsIfHeight(projectedShapes, *mode, *direction, height);
         const std::vector<TopoDS_Shape> filteredShapes = filterProjectedShapes(solidsIfHeight, *mode);
@@ -778,7 +820,7 @@ void executePartProjectOnSurface(const app::DocumentObject& object, runtime::Com
                 "execution_failed",
                 "Part::ProjectOnSurface did not produce projected shapes for the requested Mode",
                 "Projection",
-                projection->objectName
+                projections->front().objectName
             );
             return;
         }
@@ -790,8 +832,9 @@ void executePartProjectOnSurface(const app::DocumentObject& object, runtime::Com
             {"feature", "part_project_on_surface"},
             {"source_support", support->objectName},
             {"support_face", support->stableSubname},
-            {"source_projection", projection->objectName},
-            {"projection_subshape", projection->stableSubname},
+            {"source_projection", projections->front().objectName},
+            {"projection_subshape", projections->front().stableSubname},
+            {"projection_items", projectionItemsJson(*projections)},
             {"mode", *mode},
             {"height", height},
             {"offset", offset},
@@ -819,7 +862,7 @@ void executePartProjectOnSurface(const app::DocumentObject& object, runtime::Com
             "execution_failed",
             failure.GetMessageString(),
             "Projection",
-            projection->objectName
+            projections->front().objectName
         );
     }
 }

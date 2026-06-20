@@ -1,0 +1,52 @@
+{
+  "bbox": {
+    "max": [
+      7.0,
+      4.0,
+      1.73972497002728e-15
+    ],
+    "min": [
+      1.0,
+      1.0,
+      0.0
+    ]
+  },
+  "bbox_delta": 0.11,
+  "freecad_version": "1.2.0 revision 20260519",
+  "object": "ProjectedMixed",
+  "object_fields": {
+    "feature": "part_project_on_surface",
+    "height": 0.0,
+    "mode": "All",
+    "offset": 0.0,
+    "projected_face_count": 1,
+    "projected_inner_wire_count": 0,
+    "projected_solid_count": 0,
+    "projected_wire_count": 1,
+    "projection_items": [
+      {
+        "object": "ProjectionFace",
+        "subshape": "Face1"
+      },
+      {
+        "object": "ProjectionLine",
+        "subshape": "Edge1"
+      }
+    ],
+    "projection_subshape": "Face1",
+    "shape": "occt_compound",
+    "source_projection": "ProjectionFace",
+    "source_support": "SupportPlane",
+    "status": "ok",
+    "support_face": "Face1",
+    "topo_naming_history": "indexed_projected_edges_no_mapper_history"
+  },
+  "reference": "FreeCADCmd oracle from part-project-on-surface-mixed-face-edge-order.json; objects: Part::Plane, Part::Plane, Part::Line, Part::ProjectOnSurface",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "topology_counts": {
+    "edges": 5,
+    "faces": 1,
+    "vertices": 6
+  },
+  "volume": 0.0
+}
