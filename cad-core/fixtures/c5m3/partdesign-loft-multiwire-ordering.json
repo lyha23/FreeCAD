@@ -1,0 +1,88 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchLoftProfile",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [-3, -2], "end": [3, -2] },
+          { "kind": "LineSegment", "start": [3, -2], "end": [3, 2] },
+          { "kind": "LineSegment", "start": [3, 2], "end": [-3, 2] },
+          { "kind": "LineSegment", "start": [-3, 2], "end": [-3, -2] },
+          { "kind": "LineSegment", "start": [-1, -0.5], "end": [1, -0.5] },
+          { "kind": "LineSegment", "start": [1, -0.5], "end": [1, 0.5] },
+          { "kind": "LineSegment", "start": [1, 0.5], "end": [-1, 0.5] },
+          { "kind": "LineSegment", "start": [-1, 0.5], "end": [-1, -0.5] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "SketchLoftSection",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 4],
+          "Rotation": [0, 0, 0, 1]
+        },
+        "Geometry": [
+          { "kind": "LineSegment", "start": [-2, -1.5], "end": [2, -1.5] },
+          { "kind": "LineSegment", "start": [2, -1.5], "end": [2, 1.5] },
+          { "kind": "LineSegment", "start": [2, 1.5], "end": [-2, 1.5] },
+          { "kind": "LineSegment", "start": [-2, 1.5], "end": [-2, -1.5] },
+          { "kind": "LineSegment", "start": [-0.6, -0.4], "end": [0.6, -0.4] },
+          { "kind": "LineSegment", "start": [0.6, -0.4], "end": [0.6, 0.4] },
+          { "kind": "LineSegment", "start": [0.6, 0.4], "end": [-0.6, 0.4] },
+          { "kind": "LineSegment", "start": [-0.6, 0.4], "end": [-0.6, -0.4] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "AdditiveLoftMultiWire",
+      "ID": 3,
+      "TypeId": "PartDesign::AdditiveLoft",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchLoftProfile",
+          "SubList": []
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyXLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchLoftSection",
+              "SubList": []
+            }
+          ]
+        },
+        "Ruled": false,
+        "Closed": false,
+        "Refine": false,
+        "FuzzyTolerance": 0.0
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 4,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["SketchLoftProfile", "SketchLoftSection", "AdditiveLoftMultiWire"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "AdditiveLoftMultiWire"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}

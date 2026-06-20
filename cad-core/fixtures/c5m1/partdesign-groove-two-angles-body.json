@@ -1,0 +1,92 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPad",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [6, 0] },
+          { "kind": "LineSegment", "start": [6, 0], "end": [6, 4] },
+          { "kind": "LineSegment", "start": [6, 4], "end": [0, 4] },
+          { "kind": "LineSegment", "start": [0, 4], "end": [0, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPad",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 4,
+        "Reversed": false,
+        "SideType": "One side",
+        "Refine": false,
+        "FuzzyTolerance": 0.0
+      }
+    },
+    {
+      "Name": "SketchGroove",
+      "ID": 3,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [1, 0.5], "end": [2, 0.5] },
+          { "kind": "LineSegment", "start": [2, 0.5], "end": [2, 3.5] },
+          { "kind": "LineSegment", "start": [2, 3.5], "end": [1, 3.5] },
+          { "kind": "LineSegment", "start": [1, 3.5], "end": [1, 0.5] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Groove",
+      "ID": 4,
+      "TypeId": "PartDesign::Groove",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchGroove",
+          "SubList": []
+        },
+        "Type": "TwoAngles",
+        "Angle": 90,
+        "Angle2": 90,
+        "ReferenceAxis": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchGroove",
+          "SubList": ["V_Axis"]
+        },
+        "Reversed": false,
+        "Midplane": false,
+        "Refine": false,
+        "FuzzyTolerance": 0.0
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 5,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["SketchPad", "Pad", "SketchGroove", "Groove"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Groove"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}

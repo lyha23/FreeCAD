@@ -1,0 +1,138 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPipeProfile",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [-0.5, -0.5], "end": [0.5, -0.5] },
+          { "kind": "LineSegment", "start": [0.5, -0.5], "end": [0.5, 0.5] },
+          { "kind": "LineSegment", "start": [0.5, 0.5], "end": [-0.5, 0.5] },
+          { "kind": "LineSegment", "start": [-0.5, 0.5], "end": [-0.5, -0.5] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "PipeSpine",
+      "ID": 2,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 0,
+        "Y2": 0,
+        "Z2": 4
+      }
+    },
+    {
+      "Name": "AuxiliarySpine",
+      "ID": 3,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 1,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 1,
+        "Y2": 0,
+        "Z2": 4
+      }
+    },
+    {
+      "Name": "AdditivePipeAuxiliary",
+      "ID": 4,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "AuxiliarySpine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "AuxiliarySpine",
+          "SubList": []
+        },
+        "AuxiliaryCurvilinear": false,
+        "Mode": "Auxiliary",
+        "Transition": "Transformed",
+        "Transformation": "Constant"
+      }
+    },
+    {
+      "Name": "AdditivePipeBinormal",
+      "ID": 5,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "Mode": "Binormal",
+        "Binormal": {
+          "PropertyType": "App::PropertyVector",
+          "value": [0, 0, 1]
+        },
+        "Transition": "Transformed",
+        "Transformation": "Constant"
+      }
+    },
+    {
+      "Name": "AdditivePipeScaling",
+      "ID": 6,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Linear"
+      }
+    },
+    {
+      "Name": "AdditivePipeTangent",
+      "ID": 7,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "SpineTangent": true,
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Constant"
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["AdditivePipeAuxiliary", "AdditivePipeBinormal", "AdditivePipeScaling", "AdditivePipeTangent"]
+  }
+}

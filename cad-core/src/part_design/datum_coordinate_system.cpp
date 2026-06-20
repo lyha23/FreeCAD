@@ -36,7 +36,19 @@ void executeDatumCoordinateSystem(const app::DocumentObject& object, runtime::Co
     // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Origin.cpp::Origin::Origin()
     // documents "App::Origin is a LCS for which placement is fixed to identity".
     if (!runtime::rejectUnsupportedProperties(
-            object, context, {"ResizeMode", "Length", "Width", "AttachmentSupport", "MapMode", "OriginFeatures"})) {
+            object,
+            context,
+            {"ResizeMode",
+             "Length",
+             "Width",
+             "AttachmentSupport",
+             "MapMode",
+             "MapReversed",
+             "Reverse",
+             "MapPathParameter",
+             "Parameter",
+             "AttachmentOffset",
+             "OriginFeatures"})) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }

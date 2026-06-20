@@ -35,7 +35,18 @@ void executeDatumLine(const app::DocumentObject& object, runtime::ComputeContext
     // returns Placement rotation applied to "Base::Vector3d(0, 0, 1)".
     // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Datums.cpp::DatumElement::DatumElement()
     // adds "Role" for lookup by LocalCoordinateSystem::getDatumElement().
-    if (!runtime::rejectUnsupportedProperties(object, context, {"ResizeMode", "Length", "AttachmentSupport", "MapMode", "Role"})) {
+    if (!runtime::rejectUnsupportedProperties(object,
+                                              context,
+                                              {"ResizeMode",
+                                               "Length",
+                                               "AttachmentSupport",
+                                               "MapMode",
+                                               "MapReversed",
+                                               "Reverse",
+                                               "MapPathParameter",
+                                               "Parameter",
+                                               "AttachmentOffset",
+                                               "Role"})) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }

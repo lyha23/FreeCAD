@@ -8,6 +8,7 @@
 
 #include <TopoDS_Shape.hxx>
 #include <gp_TrsfForm.hxx>
+#include <TopAbs_ShapeEnum.hxx>
 
 #include <algorithm>
 #include <map>
@@ -126,6 +127,31 @@ nlohmann::json groupPropertyJson(const app::DocumentObject& body,
         {"PropertyType", propertyType.empty() ? "App::PropertyLinkList" : propertyType},
         {"values", std::move(values)},
     };
+}
+
+std::string shapeKind(const TopoDS_Shape& shape)
+{
+    switch (shape.ShapeType()) {
+        case TopAbs_COMPOUND:
+            return "occt_compound";
+        case TopAbs_COMPSOLID:
+            return "occt_compsolid";
+        case TopAbs_SOLID:
+            return "occt_solid";
+        case TopAbs_SHELL:
+            return "occt_shell";
+        case TopAbs_FACE:
+            return "occt_face";
+        case TopAbs_WIRE:
+            return "occt_wire";
+        case TopAbs_EDGE:
+            return "occt_edge";
+        case TopAbs_VERTEX:
+            return "occt_vertex";
+        case TopAbs_SHAPE:
+            break;
+    }
+    return "occt_shape";
 }
 
 std::string uniqueFeatureBaseName(const runtime::ComputeContext& context, const std::string& bodyName)
@@ -743,7 +769,7 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
     // FreeCAD semantic sources:
     // src/Mod/PartDesign/App/Body.cpp Body::execute()
     // src/Mod/PartDesign/App/FeatureAddSub.cpp FeatureAddSub::getAddSubShape()
-    if (!runtime::rejectUnsupportedProperties(object, context, {"Group", "Tip", "BaseFeature", "Origin"})) {
+    if (!runtime::rejectUnsupportedProperties(object, context, {"Group", "Tip", "BaseFeature", "Origin", "AllowCompound"})) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -967,7 +993,8 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
         {"status", "ok"},
         {"tip", resolvedTip},
         {"group", groupNames},
-        {"shape", "occt_solid"},
+        {"shape", shapeKind(resultShape)},
+        {"allow_compound", app::readBool(object, "AllowCompound").value_or(true)},
         {"bbox", cad_core::part::bboxForShape(resultShape)},
         {"volume", cad_core::part::volumeForShape(resultShape)},
         {"kernel", cad_core::part::kernelVersion()},

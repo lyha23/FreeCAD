@@ -68,6 +68,34 @@ std::optional<part::BooleanOperation> operationFromType(const app::DocumentObjec
     return std::nullopt;
 }
 
+const app::DocumentObject* owningBody(const app::DocumentObject& object,
+                                      const runtime::ComputeContext& context)
+{
+    const auto parentIt = context.parentGroupByObject.find(object.name);
+    if (parentIt == context.parentGroupByObject.end()) {
+        return nullptr;
+    }
+    const auto bodyIt = context.documentObjects.find(parentIt->second);
+    if (bodyIt == context.documentObjects.end() || bodyIt->second == nullptr
+        || bodyIt->second->typeId != "PartDesign::Body") {
+        return nullptr;
+    }
+    return bodyIt->second;
+}
+
+bool owningBodyAllowsCompound(const app::DocumentObject& object,
+                              const runtime::ComputeContext& context)
+{
+    const app::DocumentObject* body = owningBody(object, context);
+    if (body == nullptr) {
+        return false;
+    }
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Feature.cpp
+    // ::Feature::singleSolidRuleMode(), "When the feature is not part of an body" it
+    // enforces the single-solid rule; otherwise it reads body->AllowCompound.
+    return app::readBool(*body, "AllowCompound").value_or(true);
+}
+
 std::optional<part::NamedShapeSource> sourceForObject(const app::DocumentObject& object,
                                                       runtime::ComputeContext& context,
                                                       const std::string& target,
@@ -103,6 +131,14 @@ int solidCount(const TopoDS_Shape& shape)
     return count;
 }
 
+TopoDS_Shape firstSolid(const TopoDS_Shape& shape)
+{
+    for (TopExp_Explorer explorer(shape, TopAbs_SOLID); explorer.More(); explorer.Next()) {
+        return explorer.Current();
+    }
+    return shape;
+}
+
 std::string shapeKind(const TopoDS_Shape& shape)
 {
     switch (shape.ShapeType()) {
@@ -126,6 +162,35 @@ std::string shapeKind(const TopoDS_Shape& shape)
             break;
     }
     return "occt_shape";
+}
+
+bool appendToolSource(const app::DocumentObject& object,
+                      runtime::ComputeContext& context,
+                      const app::Link& tool,
+                      std::vector<part::NamedShapeSource>& sources,
+                      std::vector<std::string>& toolNames,
+                      bool isBaseFallback)
+{
+    if (tool.object.empty()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_link_value",
+                               isBaseFallback ? "PartDesign Boolean Group base link is null"
+                                              : "PartDesign Boolean Group contains a null tool link",
+                               object.name,
+                               "Group",
+                               "runtime");
+        return false;
+    }
+    auto source = sourceForObject(object, context, tool.object, "Group");
+    if (!source) {
+        return false;
+    }
+    if (!isBaseFallback) {
+        toolNames.push_back(tool.object);
+    }
+    sources.push_back(*source);
+    return true;
 }
 
 }  // namespace
@@ -161,6 +226,7 @@ void executeBoolean(const app::DocumentObject& object, runtime::ComputeContext& 
 
     std::vector<app::Link> tools = app::readLinks(object, "Group");
     std::vector<part::NamedShapeSource> sources;
+    std::vector<std::string> toolNames;
     if (const auto baseFeature = app::readLink(object, "BaseFeature")) {
         if (!baseFeature->object.empty()) {
             auto source = sourceForObject(object, context, baseFeature->object, "BaseFeature");
@@ -196,12 +262,10 @@ void executeBoolean(const app::DocumentObject& object, runtime::ComputeContext& 
 
         const app::Link baseTool = tools.back();
         tools.pop_back();
-        auto source = sourceForObject(object, context, baseTool.object, "Group");
-        if (!source) {
+        if (!appendToolSource(object, context, baseTool, sources, toolNames, true)) {
             context.objects[object.name] = {{"status", "error"}};
             return;
         }
-        sources.push_back(*source);
     }
 
     if (tools.empty()) {
@@ -215,15 +279,11 @@ void executeBoolean(const app::DocumentObject& object, runtime::ComputeContext& 
         return;
     }
 
-    std::vector<std::string> toolNames;
     for (const auto& tool : tools) {
-        auto source = sourceForObject(object, context, tool.object, "Group");
-        if (!source) {
+        if (!appendToolSource(object, context, tool, sources, toolNames, false)) {
             context.objects[object.name] = {{"status", "error"}};
             return;
         }
-        toolNames.push_back(tool.object);
-        sources.push_back(*source);
     }
 
     const auto build = part::makeElementBooleanFromSources(object.name, sources, *operation);
@@ -244,30 +304,49 @@ void executeBoolean(const app::DocumentObject& object, runtime::ComputeContext& 
     }
 
     const int solids = solidCount(refined->shape);
-    if (solids != 1) {
+    const bool allowCompound = owningBodyAllowsCompound(object, context);
+    if (!allowCompound && solids != 1) {
+        const app::DocumentObject* body = owningBody(object, context);
         runtime::addDiagnostic(context.diagnostics,
                                "error",
-                               "execution_failed",
-                               "PartDesign Boolean result must be a single solid",
-                               object.name);
+                               "multiple_solids_disallowed",
+                               "Result has multiple solids: enable 'Allow Compound' in the active body.",
+                               object.name,
+                               "AllowCompound",
+                               "part_design.single_solid_rule",
+                               body == nullptr ? std::string {} : body->name);
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
 
-    context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, refined->shape};
-    context.namedShapes[object.name] = refined->namedShape
-        ? *refined->namedShape
-        : part::indexedNamedShapeForObject(object.name, refined->shape);
-    context.mesh[object.name] = cad_core::part::meshForShape(refined->shape);
-    context.subshapes[object.name] = part::subshapeMapForShape(refined->shape);
+    TopoDS_Shape resultShape = refined->shape;
+    std::optional<part::NamedShape> resultNamedShape = refined->namedShape;
+    if (!allowCompound && solids == 1) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Feature.cpp
+        // ::Feature::getSolid(), when the single-solid rule is enforced and one solid exists,
+        // returns "shape.getSubTopoShape(TopAbs_SOLID, 1)" instead of the boolean compound.
+        resultShape = firstSolid(refined->shape);
+        if (resultNamedShape) {
+            resultNamedShape->shape = resultShape;
+        }
+    }
+
+    context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, resultShape};
+    context.namedShapes[object.name] = resultNamedShape
+        ? *resultNamedShape
+        : part::indexedNamedShapeForObject(object.name, resultShape);
+    context.mesh[object.name] = cad_core::part::meshForShape(resultShape);
+    context.subshapes[object.name] = part::subshapeMapForShape(resultShape);
     context.objects[object.name] = {
         {"status", "ok"},
-        {"shape", shapeKind(refined->shape)},
+        {"shape", shapeKind(resultShape)},
         {"body_mode", "replace"},
         {"boolean_type", type},
         {"tools", toolNames},
-        {"bbox", cad_core::part::bboxForShape(refined->shape)},
-        {"volume", cad_core::part::volumeForShape(refined->shape)},
+        {"allow_compound", allowCompound},
+        {"solid_count", solids},
+        {"bbox", cad_core::part::bboxForShape(resultShape)},
+        {"volume", cad_core::part::volumeForShape(resultShape)},
         {"topo_naming_history", "maker_history:boolean"},
         {"kernel", cad_core::part::kernelVersion()},
     };

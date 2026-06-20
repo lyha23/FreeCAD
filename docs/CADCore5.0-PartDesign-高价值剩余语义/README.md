@@ -11,6 +11,7 @@
 - fixture / oracle 矩阵：`矩阵/cadcore5_fixture_oracle_matrix.tsv`
 - non-goal registry：`矩阵/cadcore5_non_goal_registry.tsv`
 - 验收矩阵：`矩阵/cadcore5_validation_matrix.tsv`
+- C5-M5 freeze summary：`C5-M5-Freeze收口主线/6-20-12-45-C5-M5-freeze收口总结.md`
 
 ## 专题包
 

@@ -1,0 +1,112 @@
+{
+  "Objects": [
+    {
+      "Name": "LimitBox",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 6,
+        "Width": 4,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "SketchRevolution",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [2, 0], "end": [3, 0] },
+          { "kind": "LineSegment", "start": [3, 0], "end": [3, 1] },
+          { "kind": "LineSegment", "start": [3, 1], "end": [2, 1] },
+          { "kind": "LineSegment", "start": [2, 1], "end": [2, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "RevolutionThroughAll",
+      "ID": 3,
+      "TypeId": "PartDesign::Revolution",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchRevolution",
+          "SubList": []
+        },
+        "Type": "ThroughAll",
+        "Angle": 360,
+        "ReferenceAxis": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchRevolution",
+          "SubList": ["V_Axis"]
+        }
+      }
+    },
+    {
+      "Name": "RevolutionUpToLast",
+      "ID": 4,
+      "TypeId": "PartDesign::Revolution",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchRevolution",
+          "SubList": []
+        },
+        "Type": "UpToLast",
+        "Angle": 180,
+        "ReferenceAxis": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchRevolution",
+          "SubList": ["V_Axis"]
+        }
+      }
+    },
+    {
+      "Name": "RevolutionUpToFace",
+      "ID": 5,
+      "TypeId": "PartDesign::Revolution",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchRevolution",
+          "SubList": []
+        },
+        "Type": "UpToFace",
+        "Angle": 180,
+        "ReferenceAxis": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchRevolution",
+          "SubList": ["V_Axis"]
+        },
+        "UpToFace": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "LimitBox",
+          "SubList": ["Face1"]
+        }
+      }
+    },
+    {
+      "Name": "GrooveUpToFirst",
+      "ID": 6,
+      "TypeId": "PartDesign::Groove",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchRevolution",
+          "SubList": []
+        },
+        "Type": "UpToFirst",
+        "Angle": 180,
+        "ReferenceAxis": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchRevolution",
+          "SubList": ["V_Axis"]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["RevolutionThroughAll", "RevolutionUpToLast", "RevolutionUpToFace", "GrooveUpToFirst"]
+  }
+}

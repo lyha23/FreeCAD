@@ -20,6 +20,7 @@
 #include <gp_Pnt.hxx>
 #include <gp_Trsf.hxx>
 
+#include <algorithm>
 #include <cmath>
 #include <optional>
 #include <string>
@@ -105,23 +106,126 @@ bool readBool(const app::DocumentObject& object, const std::string& property, bo
     return value.value_or(fallback);
 }
 
-bool rejectUnsupportedRevolvedBoundary(const app::DocumentObject& object,
-                                       runtime::ComputeContext& context,
-                                       const std::string& featureName,
-                                       const std::string& method)
+bool containsMethod(const std::vector<std::string>& methods, const std::string& method)
 {
-    if (method == "Angle") {
+    return std::find(methods.begin(), methods.end(), method) != methods.end();
+}
+
+bool rejectUpToFaceBoundary(const app::DocumentObject& object,
+                            runtime::ComputeContext& context,
+                            const std::string& featureName)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureRevolved.cpp
+    // ::Revolved::tryExecuteRevolved(), for "method == RevolMethod::ToFace" calls
+    // "getUpToFaceFromLinkSub(upToFace, UpToFace)" and then BRepFeat-backed
+    // "tryToRevolveToFace(...)" through TopoShape::makeElementRevolution().
+    const auto upToFace = app::readLink(object, "UpToFace");
+    if (!upToFace || upToFace->object.empty()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "missing_property",
+                               featureName + " Type=UpToFace requires UpToFace LinkSub",
+                               object.name,
+                               "UpToFace");
+        return false;
+    }
+    const std::string subname = upToFace->subnames.empty() ? std::string {} : upToFace->subnames.front();
+    if (subname.empty()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "missing_property",
+                               featureName + " UpToFace must select an explicit FaceN subshape",
+                               object.name,
+                               "UpToFace",
+                               "runtime",
+                               upToFace->object);
+        return false;
+    }
+
+    const auto shapeIt = context.shapes.find(upToFace->object);
+    if (shapeIt == context.shapes.end()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "missing_link_target",
+                               "UpToFace target " + upToFace->object + " did not produce a shape",
+                               object.name,
+                               "UpToFace",
+                               "runtime",
+                               upToFace->object,
+                               subname);
+        return false;
+    }
+
+    const auto subshape = part::subshapeByName(shapeIt->second.shape, subname);
+    if (!subshape) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_subshape",
+                               "UpToFace target " + upToFace->object + " has no subshape " + subname,
+                               object.name,
+                               "UpToFace",
+                               "runtime",
+                               upToFace->object,
+                               subname);
+        return false;
+    }
+    if (subshape->ShapeType() != TopAbs_FACE) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "unsupported_subshape_kind",
+                               "UpToFace must resolve to a FaceN subshape",
+                               object.name,
+                               "UpToFace",
+                               "runtime",
+                               upToFace->object,
+                               subname);
+        return false;
+    }
+
+    runtime::addDiagnostic(context.diagnostics,
+                           "error",
+                           "unsupported_property",
+                           featureName + " Type=UpToFace requires FreeCAD BRepFeat_MakeRevol support",
+                           object.name,
+                           "UpToFace",
+                           "runtime",
+                           upToFace->object,
+                           subname);
+    return false;
+}
+
+bool validateRevolvedMethodBoundary(const app::DocumentObject& object,
+                                    runtime::ComputeContext& context,
+                                    const std::string& featureName,
+                                    const std::string& method,
+                                    const std::vector<std::string>& validMethods)
+{
+    if (!containsMethod(validMethods, method)) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_property_value",
+                               featureName + " Type=" + method + " is not in the FreeCAD Type enum",
+                               object.name,
+                               "Type");
+        return false;
+    }
+
+    if (method == "Angle" || method == "TwoAngles" || method == "ThroughAll") {
         return true;
     }
 
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureRevolved.cpp
     // ::Revolved::tryExecuteRevolved(), "ToFirst/ToFace/ToLast" delegate to BRepFeat_MakeRevol
-    // through TopoShape::makeElementRevolution(); this first C4-M2 batch only claims Angle.
+    // through TopoShape::makeElementRevolution(); cad-core does not guess the target face from
+    // bbox/output order while that topo path is missing.
+    if (method == "UpToFace") {
+        return rejectUpToFaceBoundary(object, context, featureName);
+    }
+
     runtime::addDiagnostic(context.diagnostics,
                            "error",
                            "unsupported_property",
-                           featureName + " Type=" + method
-                               + " requires the deferred BRepFeat_MakeRevol UpTo/TwoAngles path",
+                           featureName + " Type=" + method + " requires the deferred BRepFeat_MakeRevol UpTo path",
                            object.name,
                            "Type");
     return false;
@@ -403,8 +507,9 @@ std::optional<part::NamedShapeBuild> buildRevolvedTool(const app::DocumentObject
                                                        const ProfileSelection& profile,
                                                        const AxisSelection& axisSelection,
                                                        double angleRadians,
+                                                       double angleOffsetRadians,
                                                        bool reversed,
-                                                       bool midplane)
+                                                       bool profileWasMoved)
 {
     gp_Ax1 axis(axisSelection.base, axisSelection.direction);
     if (reversed) {
@@ -412,13 +517,13 @@ std::optional<part::NamedShapeBuild> buildRevolvedTool(const app::DocumentObject
     }
 
     TopoDS_Shape sourceShape = profile.shape;
-    if (midplane) {
-        sourceShape = rotatedShape(sourceShape, axis, -angleRadians / 2.0);
+    if (std::abs(angleOffsetRadians) > Precision::Angular()) {
+        sourceShape = rotatedShape(sourceShape, axis, angleOffsetRadians);
     }
 
     part::NamedShapeSource source{profile.link.object, sourceShape};
     const auto namedShapeIt = context.namedShapes.find(profile.link.object);
-    if (namedShapeIt != context.namedShapes.end() && !midplane) {
+    if (namedShapeIt != context.namedShapes.end() && !profileWasMoved) {
         source.namedShape = &namedShapeIt->second;
     }
     return part::makeElementRevolveFromSource(object.name, source, axis, angleRadians);
@@ -457,13 +562,14 @@ void executeRevolvedFeature(const app::DocumentObject& object,
 
     const std::vector<std::string> revolutionTypes {"Angle", "UpToLast", "UpToFirst", "UpToFace", "TwoAngles"};
     const std::vector<std::string> grooveTypes {"Angle", "ThroughAll", "UpToFirst", "UpToFace", "TwoAngles"};
+    const auto& validTypes = featureName == "Groove" ? grooveTypes : revolutionTypes;
     const std::string method = readEnumeration(
         object,
         "Type",
-        featureName == "Groove" ? grooveTypes : revolutionTypes,
+        validTypes,
         "Angle"
     );
-    if (!rejectUnsupportedRevolvedBoundary(object, context, featureName, method)) {
+    if (!validateRevolvedMethodBoundary(object, context, featureName, method, validTypes)) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -496,7 +602,7 @@ void executeRevolvedFeature(const app::DocumentObject& object,
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    if (std::abs(*angleDegrees) <= Precision::Angular()) {
+    if (method == "Angle" && std::abs(*angleDegrees) <= Precision::Angular()) {
         runtime::addDiagnostic(context.diagnostics,
                                "error",
                                "invalid_angle",
@@ -505,6 +611,26 @@ void executeRevolvedFeature(const app::DocumentObject& object,
                                "Angle");
         context.objects[object.name] = {{"status", "error"}};
         return;
+    }
+    double angle2Degrees = 0.0;
+    if (method == "TwoAngles") {
+        const auto angle2 = readAngleDegrees(object, context, "Angle2", featureName, 0.0);
+        if (!angle2) {
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
+        angle2Degrees = *angle2;
+        const double angleTotalRadians = (*angleDegrees + angle2Degrees) * kPi / 180.0;
+        if (std::abs(angleTotalRadians) < Precision::Angular()) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "invalid_angle",
+                                   "Angles of revolution nullify each other",
+                                   object.name,
+                                   "Angle2");
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
     }
 
     const auto profile = resolveProfile(object, context, featureName);
@@ -520,8 +646,27 @@ void executeRevolvedFeature(const app::DocumentObject& object,
 
     const bool reversed = readBool(object, "Reversed", false);
     const bool midplane = readBool(object, "Midplane", false);
-    const double angleRadians = *angleDegrees * kPi / 180.0;
-    const auto build = buildRevolvedTool(object, context, *profile, *axis, angleRadians, reversed, midplane);
+    double angleRadians = *angleDegrees * kPi / 180.0;
+    double angleOffsetRadians = midplane ? -angleRadians / 2.0 : 0.0;
+    if (method == "TwoAngles") {
+        const double angle2Radians = angle2Degrees * kPi / 180.0;
+        angleRadians += angle2Radians;
+        angleOffsetRadians = -angle2Radians;
+    }
+    else if (method == "ThroughAll") {
+        angleRadians = 2.0 * kPi;
+    }
+    const bool profileWasMoved = std::abs(angleOffsetRadians) > Precision::Angular();
+    const auto build = buildRevolvedTool(
+        object,
+        context,
+        *profile,
+        *axis,
+        angleRadians,
+        angleOffsetRadians,
+        reversed,
+        profileWasMoved
+    );
     if (!build || !build->error.empty() || build->shape.IsNull()) {
         runtime::addDiagnostic(context.diagnostics,
                                "error",
@@ -566,6 +711,7 @@ void executeRevolvedFeature(const app::DocumentObject& object,
         {"method", method},
         {"source_profile", profile->link.object},
         {"angle", *angleDegrees},
+        {"angle_total", angleRadians * 180.0 / kPi},
         {"axis_base", pointToJson(axis->base)},
         {"axis_direction", directionToJson(axis->direction)},
         {"bbox", cad_core::part::bboxForShape(tool)},
@@ -578,6 +724,10 @@ void executeRevolvedFeature(const app::DocumentObject& object,
     }
     if (midplane) {
         result["midplane"] = true;
+    }
+    if (method == "TwoAngles") {
+        result["angle2"] = angle2Degrees;
+        result["angle_offset"] = angleOffsetRadians * 180.0 / kPi;
     }
     if (shapeResult.applied) {
         result["refine"] = "applied";

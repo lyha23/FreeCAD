@@ -1,0 +1,58 @@
+{
+  "freecad_version": "1.2.0 revision 20260519",
+  "objects": {
+    "BooleanFuse": {
+      "bbox": {
+        "max": [
+          6.0,
+          2.0,
+          2.0
+        ],
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "object_fields": {
+        "body_mode": "replace",
+        "boolean_type": "Fuse",
+        "shape": "occt_solid",
+        "status": "ok",
+        "tools": [
+          "ToolBodyB",
+          "ToolBodyA"
+        ],
+        "topo_naming_history": "maker_history:boolean"
+      },
+      "topology_counts": {
+        "edges": 28,
+        "faces": 14,
+        "vertices": 16
+      },
+      "volume": 23.99999999999999
+    },
+    "MainBody": {
+      "bbox": {
+        "max": [
+          6.0,
+          2.0,
+          2.0
+        ],
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "topology_counts": {
+        "edges": 28,
+        "faces": 14,
+        "vertices": 16
+      },
+      "volume": 23.99999999999999
+    }
+  },
+  "reference": "FreeCADCmd oracle from partdesign-boolean-multi-tool-ownership.json; objects: Sketcher::SketchObject, PartDesign::Pad, Sketcher::SketchObject, PartDesign::Pad, PartDesign::Body, Sketcher::SketchObject, PartDesign::Pad, PartDesign::Body, PartDesign::Boolean, PartDesign::Body",
+  "schema_version": "cad-core.freecad-expected.v1"
+}

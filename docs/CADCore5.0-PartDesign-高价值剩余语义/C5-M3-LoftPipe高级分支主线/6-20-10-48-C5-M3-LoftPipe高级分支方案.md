@@ -28,12 +28,24 @@
 | S2 | Pipe native oracle / fixture / diagnostics |
 | S3 | cad-core implementation、topo history、capability metadata 和 focused tests |
 
+## FreeCAD 调用链
+
+- Loft：`FeatureLoft.cpp::Loft::execute()` 先通过 `getSectionShape("Profile")` 和 `Sections.getSubListValues()` 取 Profile / Sections；Sketch 非 `Vertex*` 子选择会回退整草图；每个 profile wire 调 `TopoShape::makeElementLoft(... IsSolid::notSolid, Ruled, Closed)`；`Closed` 只有 3 个及以上 profile/section 才生效；随后用 `BRepBuilderAPI_Sewing` 缝合 front/back face 和 shells，`MapperSewing(sewer)` 写入 element map，再 `makeElementSolid()`、`AddSubShape`、Body fuse/cut。
+- Pipe：`FeaturePipe.cpp::Pipe::execute()` 取 `Profile`、`Spine`，`buildPipePath()` 接受选中 edges、Edge/Wire 或 edge/wire compound；`Transformation==Multisection` 时消费 `Sections`；`setupAlgorithm()` 映射 `Transition=Transformed/Right/Round`、`Mode=Fixed/Frenet/Auxiliary/Binormal`，Auxiliary 还读 `AuxiliarySpine` / `AuxiliaryCurvilinear`；shell 通过 `BRepBuilderAPI_Sewing` 补 front/back face 后 solidification，再写 `AddSubShape`。
+- topo：`TopoShapeExpansion.cpp::makeElementLoft()` 使用 `BRepOffsetAPI_ThruSections`、`CheckCompatibility(Standard_True)` 和 `MapperThruSections`；`makeElementPipeShell()` 使用 `BRepOffsetAPI_MakePipeShell`；full front/back sewing 依赖 `MapperSewing::modified()`，不能用 adapter 输出修剪替代。
+
 ## 非目标
 
 - 不把 Part Workbench `Part::Loft` / `Part::Sweep` capability 算作 PartDesign support。
 - 不把 Hole internal PipeShell 混入 Pipe feature support。
 - 不迁移 GUI task panel。
 - 不用输出修剪替代 sewing MapperHistory。
+
+## 实施结果
+
+- Loft：C4 full-profile + one section first slice 保持 supported；本轮新增 Closed multi-section 和 multi-wire native oracle fixture，但 cad-core 在 closed / multi-wire bbox 上与 native FreeCAD 不等价，因此 expected 标记 known gap，运行时改为稳定 diagnostics。`Closed=true` 报 `unsupported_property` / `Closed`；multi-wire ordering 报 `unsupported_property` / `Sections`；`AllowCompound=false` multi-wire pressure 报 `multiple_solids_disallowed` / `AllowCompound`。
+- Pipe：`Transformation=Multisection` + `Sections`、`Mode=Frenet` + `Transition=Right corner` 已 native expected-backed；`Mode=Auxiliary`、`AuxiliarySpine`、`AuxiliaryCurvilinear`、`Mode=Binormal`、`Binormal`、`Transformation=Linear/S-shape/Interpolation`、`SpineTangent` 保持稳定 `unsupported_property` diagnostics。`Transition=Round corner`、`Mode=Fixed` 和 full front/back `MapperSewing` 仍是后续 owner。
+- capability：`cad_core_capabilities_json` 只发布 PartDesign Loft/Pipe 的上述边界，不把 Part Workbench `Part::Loft` / `Part::Sweep` 或 Hole internal PipeShell 计入支持范围。
 
 ## 验收
 

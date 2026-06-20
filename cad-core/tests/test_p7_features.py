@@ -312,6 +312,53 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(diagnostics["DatumCSOnFace"]["target"], "SupportBox")
         self.assertEqual(diagnostics["DatumCSOnFace"]["subname"], "Face1")
 
+    def test_c5m4_datum_attachment_mapmode_fields_are_locatable_diagnostics(self) -> None:
+        result = self.run_recompute("partdesign-datum-attachment-mapmode-diagnostics", "c5m4")
+        diagnostics_by_object: dict[str, list[dict]] = {}
+        for diagnostic in result["diagnostics"]:
+            diagnostics_by_object.setdefault(diagnostic["object"], []).append(diagnostic)
+
+        self.assertEqual(result["objects"]["DatumPointSupportOnly"]["status"], "error")
+        self.assertEqual(result["objects"]["DatumPlaneFlatFaceOffsetReverse"]["status"], "error")
+        self.assertEqual(result["objects"]["DatumLineNormalToEdgeParameter"]["status"], "error")
+        self.assertEqual(result["objects"]["PadUsingAttachedDatumLine"]["status"], "skipped")
+        self.assertEqual(
+            result["objects"]["PadUsingAttachedDatumLine"]["reason"],
+            "dependency DatumLineNormalToEdgeParameter failed",
+        )
+        self.assertEqual(result["elementReferenceUpdates"], [])
+        self.assertEqual(result["documentObjectUpdates"], [])
+
+        point = diagnostics_by_object["DatumPointSupportOnly"]
+        self.assertEqual([diagnostic["property"] for diagnostic in point], ["AttachmentSupport"])
+        self.assertEqual(point[0]["target"], "SupportBox")
+        self.assertEqual(point[0]["subname"], "Vertex1")
+
+        plane = diagnostics_by_object["DatumPlaneFlatFaceOffsetReverse"]
+        self.assertEqual(
+            [diagnostic["property"] for diagnostic in plane],
+            ["MapMode", "AttachmentOffset", "MapReversed"],
+        )
+        for diagnostic in plane:
+            self.assertEqual(diagnostic["code"], "unsupported_property")
+            self.assertEqual(diagnostic["target"], "SupportBox")
+            self.assertEqual(diagnostic["subname"], "Face1")
+        self.assertIn("MapMode=FlatFace", plane[0]["message"])
+
+        line = diagnostics_by_object["DatumLineNormalToEdgeParameter"]
+        self.assertEqual(
+            [diagnostic["property"] for diagnostic in line],
+            ["MapMode", "MapPathParameter", "AttachmentSupport"],
+        )
+        for diagnostic in line:
+            self.assertEqual(diagnostic["code"], "unsupported_property")
+            self.assertEqual(diagnostic["target"], "SupportBox")
+            self.assertEqual(diagnostic["subname"], "Edge1")
+        self.assertIn("MapMode=NormalToEdge", line[0]["message"])
+        self.assertIn("downstream reference writeback", line[2]["message"])
+
+        self.assertNotIn("PadUsingAttachedDatumLine", diagnostics_by_object)
+
     def test_c3m5_body_addsub_replay_stops_at_tip(self) -> None:
         result = self.run_recompute("body-addsub-replay-stops-at-tip", "c3m5")
         body = result["objects"]["Body"]
@@ -363,15 +410,123 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(body["replayed_subtractive_features"], ["Groove"])
         self.assert_object_matches_expected(result, "c4m2", "partdesign-groove-axis-angle-body")
 
-    def test_c4m2_revolution_groove_deferred_boundaries_are_diagnostic(self) -> None:
+    def test_c4m2_revolution_groove_deferred_boundaries_track_c5_transition(self) -> None:
         result = self.run_recompute("partdesign-revolution-groove-deferred", "c4m2")
         codes = [diagnostic["code"] for diagnostic in result["diagnostics"]]
 
-        self.assertEqual(codes, ["unsupported_property", "unsupported_property"])
-        self.assertEqual(result["objects"]["RevolutionTwoAngles"]["status"], "error")
+        self.assertEqual(codes, ["missing_property"])
+        self.assertEqual(result["objects"]["RevolutionTwoAngles"]["status"], "ok")
+        self.assertEqual(result["objects"]["RevolutionTwoAngles"]["method"], "TwoAngles")
+        self.assertAlmostEqual(result["objects"]["RevolutionTwoAngles"]["angle_total"], 90.0)
         self.assertEqual(result["objects"]["GrooveUpToFace"]["status"], "error")
-        self.assertEqual(result["diagnostics"][0]["property"], "Type")
-        self.assertEqual(result["diagnostics"][1]["property"], "Type")
+        self.assertEqual(result["diagnostics"][0]["property"], "UpToFace")
+
+    def test_c5m1_revolution_two_angles_body_matches_native_oracle(self) -> None:
+        result = self.run_recompute("partdesign-revolution-two-angles-body", "c5m1")
+        revolution = result["objects"]["Revolution"]
+        body = result["objects"]["Body"]
+        revolution_named_shape = result["named_shapes"]["Revolution"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(revolution["status"], "ok")
+        self.assertEqual(revolution["method"], "TwoAngles")
+        self.assertEqual(revolution["add_sub"], "add")
+        self.assertEqual(revolution["angle"], 60.0)
+        self.assertEqual(revolution["angle2"], 120.0)
+        self.assertAlmostEqual(revolution["angle_total"], 180.0)
+        self.assertAlmostEqual(revolution["angle_offset"], -120.0)
+        self.assertTrue(revolution["reversed"])
+        self.assertEqual(revolution["source_profile"], "SketchRevolution")
+        self.assertEqual(revolution["axis_direction"], [0.0, 1.0, 0.0])
+        self.assertIn("part_design_revolve:make_revol_history", revolution_named_shape["element_history_status"])
+        self.assertEqual(body["replayed_additive_features"], ["Revolution"])
+        self.assert_object_matches_expected(result, "c5m1", "partdesign-revolution-two-angles-body")
+
+    def test_c5m1_groove_two_angles_body_matches_native_oracle(self) -> None:
+        result = self.run_recompute("partdesign-groove-two-angles-body", "c5m1")
+        groove = result["objects"]["Groove"]
+        body = result["objects"]["Body"]
+        groove_named_shape = result["named_shapes"]["Groove"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(groove["status"], "ok")
+        self.assertEqual(groove["method"], "TwoAngles")
+        self.assertEqual(groove["add_sub"], "sub")
+        self.assertEqual(groove["angle"], 90.0)
+        self.assertEqual(groove["angle2"], 90.0)
+        self.assertAlmostEqual(groove["angle_total"], 180.0)
+        self.assertAlmostEqual(groove["angle_offset"], -90.0)
+        self.assertEqual(groove["source_profile"], "SketchGroove")
+        self.assertIn("part_design_revolve:make_revol_history", groove_named_shape["element_history_status"])
+        self.assertEqual(body["replayed_additive_features"], ["Pad"])
+        self.assertEqual(body["replayed_subtractive_features"], ["Groove"])
+        self.assert_object_matches_expected(result, "c5m1", "partdesign-groove-two-angles-body")
+
+    def test_c5m1_groove_through_all_body_matches_native_oracle(self) -> None:
+        result = self.run_recompute("partdesign-groove-through-all-body", "c5m1")
+        groove = result["objects"]["Groove"]
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(groove["status"], "ok")
+        self.assertEqual(groove["method"], "ThroughAll")
+        self.assertEqual(groove["add_sub"], "sub")
+        self.assertEqual(groove["angle"], 45.0)
+        self.assertAlmostEqual(groove["angle_total"], 360.0)
+        self.assertTrue(groove["reversed"])
+        self.assertEqual(groove["source_profile"], "SketchGroove")
+        self.assertEqual(body["replayed_subtractive_features"], ["Groove"])
+        self.assert_object_matches_expected(result, "c5m1", "partdesign-groove-through-all-body")
+
+    def test_c5m1_revolution_part_edge_axis_matches_native_oracle(self) -> None:
+        result = self.run_recompute("partdesign-revolution-part-edge-axis", "c5m1")
+        revolution = result["objects"]["Revolution"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(revolution["status"], "ok")
+        self.assertEqual(revolution["method"], "Angle")
+        self.assertEqual(revolution["axis_direction"], [0.0, 1.0, 0.0])
+        self.assertEqual(revolution["source_profile"], "SketchRevolution")
+        self.assert_object_matches_expected(result, "c5m1", "partdesign-revolution-part-edge-axis")
+
+    def test_c5m1_revolved_zero_sum_angles_are_diagnostic(self) -> None:
+        result = self.run_recompute("partdesign-revolved-zero-sum-diagnostic", "c5m1")
+
+        self.assertEqual([diagnostic["code"] for diagnostic in result["diagnostics"]], ["invalid_angle"])
+        self.assertEqual(result["diagnostics"][0]["object"], "RevolutionZeroSum")
+        self.assertEqual(result["diagnostics"][0]["property"], "Angle2")
+        self.assertEqual(result["objects"]["RevolutionZeroSum"]["status"], "error")
+
+    def test_c5m1_revolved_upto_boundaries_are_locatable_diagnostics(self) -> None:
+        result = self.run_recompute("partdesign-revolved-upto-diagnostics", "c5m1")
+        diagnostics = {diagnostic["object"]: diagnostic for diagnostic in result["diagnostics"]}
+
+        self.assertEqual(
+            [diagnostic["code"] for diagnostic in result["diagnostics"]],
+            ["invalid_property_value", "unsupported_property", "unsupported_property", "unsupported_property"],
+        )
+        self.assertEqual(diagnostics["RevolutionThroughAll"]["property"], "Type")
+        self.assertEqual(diagnostics["RevolutionUpToLast"]["property"], "Type")
+        self.assertEqual(diagnostics["RevolutionUpToFace"]["property"], "UpToFace")
+        self.assertEqual(diagnostics["RevolutionUpToFace"]["target"], "LimitBox")
+        self.assertEqual(diagnostics["RevolutionUpToFace"]["subname"], "Face1")
+        self.assertEqual(diagnostics["GrooveUpToFirst"]["property"], "Type")
+        self.assertEqual(result["objects"]["RevolutionThroughAll"]["status"], "error")
+        self.assertEqual(result["objects"]["RevolutionUpToLast"]["status"], "error")
+        self.assertEqual(result["objects"]["RevolutionUpToFace"]["status"], "error")
+        self.assertEqual(result["objects"]["GrooveUpToFirst"]["status"], "error")
+
+    def test_c5m1_profile_subshape_and_fuse_order_are_diagnostic(self) -> None:
+        result = self.run_recompute("partdesign-revolved-profile-fuse-diagnostics", "c5m1")
+        diagnostics = {diagnostic["object"]: diagnostic for diagnostic in result["diagnostics"]}
+
+        self.assertEqual([diagnostic["code"] for diagnostic in result["diagnostics"]], ["unsupported_profile_region", "unsupported_property"])
+        self.assertEqual(diagnostics["RevolutionProfileSubshape"]["property"], "Profile")
+        self.assertEqual(diagnostics["RevolutionProfileSubshape"]["target"], "SketchRevolution")
+        self.assertEqual(diagnostics["RevolutionProfileSubshape"]["subname"], "InternalFace1")
+        self.assertEqual(diagnostics["RevolutionFuseOrderFeatureFirst"]["property"], "FuseOrder")
+        self.assertEqual(result["objects"]["RevolutionProfileSubshape"]["status"], "error")
+        self.assertEqual(result["objects"]["RevolutionFuseOrderFeatureFirst"]["status"], "error")
 
     def test_c4m2_revolution_invalid_angle_is_diagnostic(self) -> None:
         result = self.run_recompute("partdesign-revolution-invalid-angle", "c4m2")
@@ -409,6 +564,73 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["BooleanUnsupportedType"]["status"], "error")
         self.assertEqual(result["diagnostics"][0]["property"], "BaseFeature")
         self.assertEqual(result["diagnostics"][1]["property"], "Type")
+
+    def test_c5m2_boolean_allow_compound_preserves_multisolid_body_tip(self) -> None:
+        result = self.run_recompute("partdesign-boolean-allow-compound-multisolid", "c5m2")
+        boolean = result["objects"]["BooleanFuse"]
+        body = result["objects"]["MainBody"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(boolean["status"], "ok")
+        self.assertEqual(boolean["shape"], "occt_compound")
+        self.assertEqual(boolean["allow_compound"], True)
+        self.assertEqual(boolean["solid_count"], 2)
+        self.assertEqual(boolean["tools"], ["ToolBody"])
+        self.assertEqual(boolean["topo_naming_history"], "maker_history:boolean")
+        self.assertEqual(body["tip"], "BooleanFuse")
+        self.assertEqual(body["shape"], "occt_compound")
+        self.assertEqual(body["allow_compound"], True)
+        self.assertEqual(body["replayed_replacement_features"], ["BooleanFuse"])
+        self.assertIn("BooleanFuse", result["subshapes"])
+        self.assert_object_matches_expected(result, "c5m2", "partdesign-boolean-allow-compound-multisolid")
+
+    def test_c5m2_boolean_disallow_compound_reports_structured_multisolid_failure(self) -> None:
+        result = self.run_recompute("partdesign-boolean-multisolid-rejected", "c5m2")
+
+        self.assertEqual([diagnostic["code"] for diagnostic in result["diagnostics"]], ["multiple_solids_disallowed"])
+        diagnostic = result["diagnostics"][0]
+        self.assertEqual(diagnostic["object"], "BooleanRejected")
+        self.assertEqual(diagnostic["property"], "AllowCompound")
+        self.assertEqual(diagnostic["stage"], "part_design.single_solid_rule")
+        self.assertEqual(diagnostic["target"], "MainBody")
+        self.assertEqual(result["objects"]["BooleanRejected"]["status"], "error")
+        self.assertNotIn("BooleanRejected", result.get("mesh", {}))
+        self.assertNotIn("BooleanRejected", result.get("subshapes", {}))
+
+    def test_c5m2_boolean_multi_tool_group_order_and_expected_body_replacement(self) -> None:
+        result = self.run_recompute("partdesign-boolean-multi-tool-ownership", "c5m2")
+        boolean = result["objects"]["BooleanFuse"]
+        body = result["objects"]["MainBody"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(boolean["status"], "ok")
+        self.assertEqual(boolean["shape"], "occt_solid")
+        self.assertEqual(boolean["tools"], ["ToolBodyB", "ToolBodyA"])
+        self.assertEqual(boolean["solid_count"], 1)
+        self.assertEqual(boolean["topo_naming_history"], "maker_history:boolean")
+        self.assertEqual(body["tip"], "BooleanFuse")
+        self.assertEqual(body["shape"], "occt_solid")
+        self.assertEqual(body["replayed_replacement_features"], ["BooleanFuse"])
+        self.assert_object_matches_expected(result, "c5m2", "partdesign-boolean-multi-tool-ownership")
+
+    def test_c5m2_boolean_missing_tool_null_shape_and_unsupported_type_are_diagnostic(self) -> None:
+        result = self.run_recompute("partdesign-boolean-tool-missing-shape-diagnostic", "c5m2")
+        diagnostics = {diagnostic["object"]: diagnostic for diagnostic in result["diagnostics"]}
+
+        self.assertEqual(
+            [diagnostic["code"] for diagnostic in result["diagnostics"]],
+            ["missing_link_target", "missing_link_target", "unsupported_property"],
+        )
+        self.assertEqual(diagnostics["BooleanMissingTool"]["property"], "Group")
+        self.assertEqual(diagnostics["BooleanMissingTool"]["stage"], "graph")
+        self.assertEqual(diagnostics["BooleanMissingTool"]["target"], "NoSuchTool")
+        self.assertEqual(diagnostics["BooleanNullShapeTool"]["property"], "Group")
+        self.assertEqual(diagnostics["BooleanNullShapeTool"]["stage"], "runtime")
+        self.assertEqual(diagnostics["BooleanNullShapeTool"]["target"], "SketchNullTool")
+        self.assertEqual(diagnostics["BooleanUnsupportedType"]["property"], "Type")
+        self.assertEqual(result["objects"]["BooleanMissingTool"]["status"], "error")
+        self.assertEqual(result["objects"]["BooleanNullShapeTool"]["status"], "error")
+        self.assertEqual(result["objects"]["BooleanUnsupportedType"]["status"], "error")
 
     def test_c4m2_partdesign_loft_additive_body_matches_native_oracle(self) -> None:
         result = self.run_recompute("partdesign-loft-additive-body", "c4m2")
@@ -502,18 +724,87 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "unsupported_property",
                 "unsupported_property",
                 "unsupported_property",
-                "unsupported_property",
-                "unsupported_property",
             ],
         )
         self.assertEqual(
             [diagnostic["property"] for diagnostic in result["diagnostics"]],
-            ["Transformation", "Transition", "Sections", "Mode", "AuxiliarySpine"],
+            ["Transition", "Mode", "AuxiliarySpine"],
         )
-        self.assertEqual(result["diagnostics"][2]["target"], "SketchPipeSection")
-        self.assertEqual(result["diagnostics"][4]["target"], "AuxiliarySpine")
+        self.assertEqual(result["diagnostics"][2]["target"], "AuxiliarySpine")
         self.assertEqual(result["objects"]["AdditivePipeMultisection"]["status"], "error")
         self.assertEqual(result["objects"]["AdditivePipeAuxiliary"]["status"], "error")
+
+    def test_c5m3_partdesign_loft_advanced_boundaries_are_diagnostic(self) -> None:
+        closed = self.run_recompute("partdesign-loft-closed-multisection", "c5m3")
+        multiwire = self.run_recompute("partdesign-loft-multiwire-ordering", "c5m3")
+        allow_compound = self.run_recompute("partdesign-loft-allow-compound-diagnostic", "c5m3")
+
+        self.assertEqual([diagnostic["code"] for diagnostic in closed["diagnostics"]], ["unsupported_property"])
+        self.assertEqual(closed["diagnostics"][0]["property"], "Closed")
+        self.assertEqual(closed["objects"]["AdditiveLoftClosed"]["status"], "error")
+        self.assertEqual([diagnostic["code"] for diagnostic in multiwire["diagnostics"]], ["unsupported_property"])
+        self.assertEqual(multiwire["diagnostics"][0]["property"], "Sections")
+        self.assertEqual(multiwire["diagnostics"][0]["target"], "SketchLoftProfile")
+        self.assertEqual(multiwire["objects"]["AdditiveLoftMultiWire"]["status"], "error")
+        self.assertEqual(
+            [diagnostic["code"] for diagnostic in allow_compound["diagnostics"]],
+            ["multiple_solids_disallowed"],
+        )
+        self.assertEqual(allow_compound["diagnostics"][0]["property"], "AllowCompound")
+        self.assertEqual(allow_compound["diagnostics"][0]["stage"], "part_design.single_solid_rule")
+        self.assertEqual(allow_compound["objects"]["AdditiveLoftRejected"]["status"], "error")
+
+    def test_c5m3_partdesign_pipe_multisection_matches_native_oracle(self) -> None:
+        result = self.run_recompute("partdesign-pipe-sections-transformation", "c5m3")
+        pipe = result["objects"]["AdditivePipeMultisection"]
+        pipe_named_shape = result["named_shapes"]["AdditivePipeMultisection"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pipe["status"], "ok")
+        self.assertEqual(pipe["feature"], "partdesign_pipe")
+        self.assertEqual(pipe["mode"], "Standard")
+        self.assertEqual(pipe["transformation"], "Multisection")
+        self.assertEqual(pipe["transition"], "Transformed")
+        self.assertEqual(pipe["sections"], ["SketchPipeSection"])
+        self.assertIn("part_sweep:pipeshell_history", pipe_named_shape["element_history_status"])
+        self.assertIn("part_design_pipe:pipeshell_history", pipe_named_shape["element_history_status"])
+        self.assert_object_matches_expected(result, "c5m3", "partdesign-pipe-sections-transformation")
+
+    def test_c5m3_partdesign_pipe_transition_and_frenet_match_native_oracle(self) -> None:
+        result = self.run_recompute("partdesign-pipe-transition-variants", "c5m3")
+        pipe = result["objects"]["AdditivePipeRightFrenet"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pipe["status"], "ok")
+        self.assertEqual(pipe["mode"], "Frenet")
+        self.assertEqual(pipe["transformation"], "Constant")
+        self.assertEqual(pipe["transition"], "Right corner")
+        self.assert_object_matches_expected(result, "c5m3", "partdesign-pipe-transition-variants")
+
+    def test_c5m3_partdesign_pipe_deferred_orientation_scaling_are_diagnostic(self) -> None:
+        result = self.run_recompute("partdesign-pipe-auxiliary-binormal-diagnostics", "c5m3")
+
+        self.assertEqual(
+            [diagnostic["code"] for diagnostic in result["diagnostics"]],
+            ["unsupported_property"] * 7,
+        )
+        self.assertEqual(
+            [diagnostic["property"] for diagnostic in result["diagnostics"]],
+            [
+                "Mode",
+                "AuxiliarySpine",
+                "AuxiliaryCurvilinear",
+                "Mode",
+                "Binormal",
+                "Transformation",
+                "SpineTangent",
+            ],
+        )
+        self.assertEqual(result["diagnostics"][1]["target"], "AuxiliarySpine")
+        self.assertEqual(result["objects"]["AdditivePipeAuxiliary"]["status"], "error")
+        self.assertEqual(result["objects"]["AdditivePipeBinormal"]["status"], "error")
+        self.assertEqual(result["objects"]["AdditivePipeScaling"]["status"], "error")
+        self.assertEqual(result["objects"]["AdditivePipeTangent"]["status"], "error")
 
     def test_p7_hole_blind_depth_cuts_body(self) -> None:
         result = self.run_recompute("hole-blind-depth", "p7")

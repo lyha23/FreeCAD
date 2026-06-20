@@ -1,0 +1,120 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchBase",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [2, 0] },
+          { "kind": "LineSegment", "start": [2, 0], "end": [2, 2] },
+          { "kind": "LineSegment", "start": [2, 2], "end": [0, 2] },
+          { "kind": "LineSegment", "start": [0, 2], "end": [0, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "BasePad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchBase",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 2,
+        "Reversed": false,
+        "SideType": "One side",
+        "Refine": false,
+        "FuzzyTolerance": 0.0
+      }
+    },
+    {
+      "Name": "SketchTool",
+      "ID": 3,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [4, 0], "end": [6, 0] },
+          { "kind": "LineSegment", "start": [6, 0], "end": [6, 2] },
+          { "kind": "LineSegment", "start": [6, 2], "end": [4, 2] },
+          { "kind": "LineSegment", "start": [4, 2], "end": [4, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "ToolPad",
+      "ID": 4,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchTool",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 2,
+        "Reversed": false,
+        "SideType": "One side",
+        "Refine": false,
+        "FuzzyTolerance": 0.0
+      }
+    },
+    {
+      "Name": "ToolBody",
+      "ID": 5,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["SketchTool", "ToolPad"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "ToolPad"
+        }
+      }
+    },
+    {
+      "Name": "BooleanRejected",
+      "ID": 6,
+      "TypeId": "PartDesign::Boolean",
+      "Properties": {
+        "Type": "Fuse",
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["ToolBody"]
+        },
+        "BaseFeature": {
+          "PropertyType": "App::PropertyLink",
+          "value": "BasePad"
+        },
+        "Refine": false,
+        "FuzzyTolerance": 0.0
+      }
+    },
+    {
+      "Name": "MainBody",
+      "ID": 7,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "AllowCompound": false,
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["SketchBase", "BasePad", "BooleanRejected"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "BooleanRejected"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["BooleanRejected"]
+  }
+}

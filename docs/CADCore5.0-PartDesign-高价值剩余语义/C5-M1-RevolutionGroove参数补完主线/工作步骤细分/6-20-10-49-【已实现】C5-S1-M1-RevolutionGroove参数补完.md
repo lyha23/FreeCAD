@@ -1,4 +1,4 @@
-# C5-S1 M1 Revolution / Groove 参数补完
+# 【已实现】C5-S1 M1 Revolution / Groove 参数补完
 
 ## 目标
 
@@ -35,3 +35,11 @@ python3 -m unittest tests.test_p7_features tests.test_expected_fixtures tests.te
 
 - TwoAngles / ThroughAll / UpTo / Profile subshape / FuseOrder 行均 supported 或 diagnostic-backed。
 - capability metadata 不声明完整 Revolution / Groove 参数全覆盖，remaining boundary 必须具体。
+
+## 实施结果
+
+- FreeCAD 调用链已记录到 `../6-20-10-48-C5-M1-RevolutionGroove参数补完方案.md`：Revolution 与 Groove 的 `TypeEnums` 不同，`TwoAngles` / Groove `ThroughAll` 走 `BRepPrimAPI_MakeRevol`，UpTo 走 `BRepFeat_MakeRevol`。
+- supported：Revolution/Groove `TwoAngles`、Groove `ThroughAll`、Part EdgeN `ReferenceAxis`、Body additive/subtractive replay、`maker_history:revolve`。
+- diagnostic-backed：Revolution `ThroughAll` invalid enum、UpToFirst/UpToLast/UpToFace、zero-sum `Angle + Angle2`、Profile subshape、`FuseOrder=FeatureFirst`。
+- deferred：Datum/App line axis native oracle、custom Sketch `AxisN`、完整 `TopoShape::makeElementRevolution()` / BRepFeat history path。
+- 新增 `cad-core/fixtures/c5m1/` support 与 diagnostic fixtures，capability metadata 和全局/M1 矩阵已同步；`C5-BLK-101` 与 `C5M1-REV-BLK-*` 已关闭为 supported/diagnostic split。

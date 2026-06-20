@@ -1,4 +1,4 @@
-# C5-S4 M4 Datum Attachment 引用稳定
+# 【已实现】C5-S4 M4 Datum Attachment 引用稳定
 
 ## 目标
 
@@ -34,3 +34,11 @@ python3 -m unittest tests.test_p7_features tests.test_adapters
 
 - selected map modes supported 或所有 active map modes 都有 locatable diagnostics。
 - capability metadata 不 overclaim full AttachEngine solver。
+
+## 实施结果
+
+- FreeCAD 调用链已记录到 `../6-20-10-48-C5-M4-DatumAttachment引用稳定方案.md`：DatumPoint/Line/Plane/CS 分别安装 `AttachEnginePoint/Line/Plane/3D`；`AttachExtension::positionBySupport()` 通过 `MapMode`、`MapReversed`、`MapPathParameter`、`AttachmentOffset` 调用 `calculateAttachedPlacement()`，并可能写回 `AttachmentSupport` subnames；`PropertyLinks.cpp` 用 `ShadowSub` / element reference map 维护 downstream 引用。
+- product gate：本轮不发布 selected map mode support。`FlatFace`、`ObjectXY/ObjectX/ObjectOrigin`、`NormalToEdge` 等候选都继续 diagnostic-backed，因为 cad-core 尚无 request-local AttachEngine placement solver 和 subname writeback 闭环。
+- supported existing：无 active attachment 的 Datum placement、DatumLine/DatumCS 下游 ReferenceAxis、Body Origin datum role relink。
+- diagnostic-backed：active `AttachmentSupport`、`MapMode`、`AttachmentOffset`、`MapReversed` / Reverse、`MapPathParameter` / Parameter、`ShadowSub` evidence；下游引用 attached Datum 时稳定跳过且不产生引用写回。
+- 新增 `cad-core/fixtures/c5m4/partdesign-datum-attachment-mapmode-diagnostics.json`、focused tests 和 capability metadata；M4/global scope/oracle/blocker/validation 矩阵已同步，`C5-BLK-401` 与 `C5M4-DAT-BLK-*` 已关闭为 diagnostic gate。

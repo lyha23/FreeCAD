@@ -86,6 +86,51 @@ bool targetIsSketch(const runtime::ComputeContext& context, const std::string& o
         && objectIt->second->typeId == "Sketcher::SketchObject";
 }
 
+const app::DocumentObject* owningBody(const app::DocumentObject& object,
+                                      const runtime::ComputeContext& context)
+{
+    const auto parentIt = context.parentGroupByObject.find(object.name);
+    if (parentIt == context.parentGroupByObject.end()) {
+        return nullptr;
+    }
+    const auto bodyIt = context.documentObjects.find(parentIt->second);
+    if (bodyIt == context.documentObjects.end() || bodyIt->second == nullptr
+        || bodyIt->second->typeId != "PartDesign::Body") {
+        return nullptr;
+    }
+    return bodyIt->second;
+}
+
+bool owningBodyAllowsCompound(const app::DocumentObject& object,
+                              const runtime::ComputeContext& context)
+{
+    const app::DocumentObject* body = owningBody(object, context);
+    if (body == nullptr) {
+        return false;
+    }
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Feature.cpp
+    // ::Feature::singleSolidRuleMode(), "When the feature is not part of an body" enforces
+    // single solid; otherwise it reads Body::AllowCompound before Feature::getSolid().
+    return app::readBool(*body, "AllowCompound").value_or(true);
+}
+
+int solidCount(const TopoDS_Shape& shape)
+{
+    int count = 0;
+    for (TopExp_Explorer explorer(shape, TopAbs_SOLID); explorer.More(); explorer.Next()) {
+        ++count;
+    }
+    return count;
+}
+
+TopoDS_Shape firstSolid(const TopoDS_Shape& shape)
+{
+    for (TopExp_Explorer explorer(shape, TopAbs_SOLID); explorer.More(); explorer.Next()) {
+        return explorer.Current();
+    }
+    return shape;
+}
+
 const part::NamedShape* namedShapeForTarget(const runtime::ComputeContext& context,
                                             const std::string& objectName)
 {
@@ -426,10 +471,49 @@ void executeLoftFeature(const app::DocumentObject& object,
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
+    const bool allowCompound = owningBodyAllowsCompound(object, context);
+    if (!allowCompound && profileSections->size() > 1U) {
+        const app::DocumentObject* body = owningBody(object, context);
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "multiple_solids_disallowed",
+                               "Result has multiple solids: enable 'Allow Compound' in the active body.",
+                               object.name,
+                               "AllowCompound",
+                               "part_design.single_solid_rule",
+                               body == nullptr ? std::string {} : body->name);
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+    if (profileSections->size() > 1U) {
+        addLoftDiagnostic(
+            object,
+            context,
+            "unsupported_property",
+            "PartDesign Loft multi-wire ordering is deferred until MapperThruSections/Sewing parity is source-backed",
+            "Sections",
+            profileLink->object
+        );
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
 
     const std::vector<app::Link> sectionLinks = app::readLinks(object, "Sections");
     if (sectionLinks.empty()) {
         addLoftDiagnostic(object, context, "missing_property", "Loft: At least one section is needed", "Sections");
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+    const bool requestedClosed = app::readBool(object, "Closed").value_or(false);
+    if (requestedClosed && sectionLinks.size() >= 2U) {
+        addLoftDiagnostic(
+            object,
+            context,
+            "unsupported_property",
+            "PartDesign Loft Closed=true multi-section native oracle is deferred until closed MapperThruSections parity is source-backed",
+            "Closed",
+            object.name
+        );
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -451,7 +535,7 @@ void executeLoftFeature(const app::DocumentObject& object,
         }
     }
 
-    bool closed = app::readBool(object, "Closed").value_or(false);
+    bool closed = requestedClosed;
     if (sectionLinks.size() < 2U) {
         closed = false;
     }
@@ -473,8 +557,29 @@ void executeLoftFeature(const app::DocumentObject& object,
         shapeResult = *refined;
     }
 
-    const TopoDS_Shape solid = shapeResult.shape;
+    const int solids = solidCount(shapeResult.shape);
+    if (!allowCompound && solids != 1) {
+        const app::DocumentObject* body = owningBody(object, context);
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "multiple_solids_disallowed",
+                               "Result has multiple solids: enable 'Allow Compound' in the active body.",
+                               object.name,
+                               "AllowCompound",
+                               "part_design.single_solid_rule",
+                               body == nullptr ? std::string {} : body->name);
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+
+    TopoDS_Shape solid = shapeResult.shape;
     namedShape = shapeResult.namedShape;
+    if (!allowCompound && solids == 1) {
+        solid = firstSolid(shapeResult.shape);
+        if (namedShape) {
+            namedShape->shape = solid;
+        }
+    }
     if (namedShape) {
         context.namedShapes[object.name] = *namedShape;
     }
@@ -504,6 +609,7 @@ void executeLoftFeature(const app::DocumentObject& object,
         {"ruled", ruled},
         {"closed", closed},
         {"shell_count", tool->shellCount},
+        {"solid_count", solids},
         {"bbox", cad_core::part::bboxForShape(solid)},
         {"volume", cad_core::part::volumeForShape(solid)},
         {"topo_naming_history", "maker_history:partdesign_loft"},

@@ -8,6 +8,8 @@
 #include "cad_core/runtime/feature_executor.h"
 
 #include <BRep_Builder.hxx>
+#include <TopAbs.hxx>
+#include <TopExp_Explorer.hxx>
 #include <TopoDS_Compound.hxx>
 #include <TopoDS_Shape.hxx>
 
@@ -161,6 +163,83 @@ std::string transitionLabel(int transition)
     }
 }
 
+std::string modeLabel(int mode)
+{
+    switch (mode) {
+        case 1:
+            return "Fixed";
+        case 2:
+            return "Frenet";
+        case 3:
+            return "Auxiliary";
+        case 4:
+            return "Binormal";
+        default:
+            return "Standard";
+    }
+}
+
+std::string transformationLabel(int transformation)
+{
+    switch (transformation) {
+        case 1:
+            return "Multisection";
+        case 2:
+            return "Linear";
+        case 3:
+            return "S-shape";
+        case 4:
+            return "Interpolation";
+        default:
+            return "Constant";
+    }
+}
+
+const app::DocumentObject* owningBody(const app::DocumentObject& object,
+                                      const runtime::ComputeContext& context)
+{
+    const auto parentIt = context.parentGroupByObject.find(object.name);
+    if (parentIt == context.parentGroupByObject.end()) {
+        return nullptr;
+    }
+    const auto bodyIt = context.documentObjects.find(parentIt->second);
+    if (bodyIt == context.documentObjects.end() || bodyIt->second == nullptr
+        || bodyIt->second->typeId != "PartDesign::Body") {
+        return nullptr;
+    }
+    return bodyIt->second;
+}
+
+bool owningBodyAllowsCompound(const app::DocumentObject& object,
+                              const runtime::ComputeContext& context)
+{
+    const app::DocumentObject* body = owningBody(object, context);
+    if (body == nullptr) {
+        return false;
+    }
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Feature.cpp
+    // ::Feature::singleSolidRuleMode(), "When the feature is not part of an body" enforces
+    // single solid; otherwise it reads Body::AllowCompound before Feature::getSolid().
+    return app::readBool(*body, "AllowCompound").value_or(true);
+}
+
+int solidCount(const TopoDS_Shape& shape)
+{
+    int count = 0;
+    for (TopExp_Explorer explorer(shape, TopAbs_SOLID); explorer.More(); explorer.Next()) {
+        ++count;
+    }
+    return count;
+}
+
+TopoDS_Shape firstSolid(const TopoDS_Shape& shape)
+{
+    for (TopExp_Explorer explorer(shape, TopAbs_SOLID); explorer.More(); explorer.Next()) {
+        return explorer.Current();
+    }
+    return shape;
+}
+
 std::string firstLinkTarget(const app::DocumentObject& object, const std::string& property)
 {
     if (const auto link = app::readLink(object, property)) {
@@ -218,37 +297,47 @@ bool rejectDeferredPipeBranches(const app::DocumentObject& object,
                                 int transformation,
                                 int transition)
 {
+    (void)transition;
     bool ok = true;
-    if (mode != 0) {
+    if (mode != 0 && mode != 2) {
         ok = rejectDeferredPipeBranch(object,
                                       context,
                                       "Mode",
-                                      "PartDesign Pipe first slice supports Mode=Standard only") && ok;
+                                      "PartDesign Pipe supports Mode=Standard/Frenet; Fixed/Auxiliary/Binormal require setupAlgorithm owner work") && ok;
     }
-    if (transformation != 0) {
+    if (transformation != 0 && transformation != 1) {
         ok = rejectDeferredPipeBranch(
                  object,
                  context,
                  "Transformation",
-                 "PartDesign Pipe first slice supports Transformation=Constant only"
+                 "PartDesign Pipe supports Transformation=Constant/Multisection; scaling law transformations are deferred"
             )
             && ok;
     }
-    if (transition != 0) {
+    if (transition == 2) {
         ok = rejectDeferredPipeBranch(
                  object,
                  context,
                  "Transition",
-                 "PartDesign Pipe first slice supports Transition=Transformed only"
+                 "PartDesign Pipe Transition=Round corner is deferred until native orientation parity is isolated"
              )
             && ok;
     }
-    if (!app::readLinks(object, "Sections").empty()) {
+    if (transformation == 1 && app::readLinks(object, "Sections").empty()) {
         ok = rejectDeferredPipeBranch(
                  object,
                  context,
                  "Sections",
-                 "PartDesign Pipe multisection profiles are deferred until Transformation=Multisection is modeled"
+                 "PartDesign Pipe Transformation=Multisection requires Sections"
+             )
+            && ok;
+    }
+    if (transformation != 1 && !app::readLinks(object, "Sections").empty()) {
+        ok = rejectDeferredPipeBranch(
+                 object,
+                 context,
+                 "Sections",
+                 "PartDesign Pipe Sections are only consumed with Transformation=Multisection"
              )
             && ok;
     }
@@ -274,6 +363,72 @@ bool rejectDeferredPipeBranches(const app::DocumentObject& object,
             && ok;
     }
     return ok;
+}
+
+std::optional<PipeInput> resolveSectionLink(const app::DocumentObject& object,
+                                            runtime::ComputeContext& context,
+                                            const app::Link& link,
+                                            const std::string& property)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp
+    // Pipe::execute() local getSectionShape(), for Part2DObject and non-Vertex sub-selection,
+    // takes the whole sketch Shape; otherwise Part::Feature requires a concrete sub-element.
+    if (link.object.empty()) {
+        addPipeDiagnostic(object, context, "missing_link_target", "Pipe: Could not obtain section shape", property);
+        return std::nullopt;
+    }
+    const auto shapeIt = context.shapes.find(link.object);
+    if (shapeIt == context.shapes.end() || shapeIt->second.shape.IsNull()) {
+        addPipeDiagnostic(object,
+                          context,
+                          "missing_link_target",
+                          "Pipe: Could not obtain section shape",
+                          property,
+                          link.object);
+        return std::nullopt;
+    }
+    const part::NamedShape* namedShape = namedShapeForTarget(context, link.object);
+    const bool useEntireSketch = targetIsSketch(context, link.object)
+        && (link.subnames.empty() || link.subnames.front().rfind("Vertex", 0U) != 0U);
+    if (link.subnames.empty() || useEntireSketch) {
+        return PipeInput{link.object, {}, shapeIt->second.shape, namedShape};
+    }
+    if (link.subnames.size() > 1U) {
+        addPipeDiagnostic(object,
+                          context,
+                          "unsupported_property",
+                          "PartDesign Pipe explicit multi-subelement section selection is deferred",
+                          property,
+                          link.object,
+                          link.subnames.front());
+        return std::nullopt;
+    }
+    const auto subshape = linkedSubshape(shapeIt->second.shape, namedShape, link, 0U);
+    if (!subshape || subshape->IsNull()) {
+        addPipeDiagnostic(object,
+                          context,
+                          "invalid_subshape",
+                          "Pipe: Could not obtain section shape",
+                          property,
+                          link.object,
+                          link.subnames.front());
+        return std::nullopt;
+    }
+    return PipeInput{link.object, link.subnames.front(), *subshape, namedShape};
+}
+
+std::optional<std::vector<PipeInput>> resolveSections(const app::DocumentObject& object,
+                                                      runtime::ComputeContext& context)
+{
+    std::vector<PipeInput> sections;
+    for (const app::Link& sectionLink : app::readLinks(object, "Sections")) {
+        const auto section = resolveSectionLink(object, context, sectionLink, "Sections");
+        if (!section) {
+            return std::nullopt;
+        }
+        sections.push_back(*section);
+    }
+    return sections;
 }
 
 std::optional<PipeInput> resolveProfile(const app::DocumentObject& object,
@@ -396,9 +551,10 @@ std::optional<PipeInput> resolveSpine(const app::DocumentObject& object,
 }
 
 std::vector<part::NamedShapeSource> pipeSources(const PipeInput& spine,
-                                                const PipeInput& profile)
+                                                const PipeInput& profile,
+                                                const std::vector<PipeInput>& sections)
 {
-    return {
+    std::vector<part::NamedShapeSource> sources {
         part::NamedShapeSource{
             spine.namedShape != nullptr ? spine.namedShape->owner : spine.objectName,
             spine.shape,
@@ -410,6 +566,14 @@ std::vector<part::NamedShapeSource> pipeSources(const PipeInput& spine,
             profile.namedShape,
         },
     };
+    for (const PipeInput& section : sections) {
+        sources.push_back(part::NamedShapeSource{
+            section.namedShape != nullptr ? section.namedShape->owner : section.objectName,
+            section.shape,
+            section.namedShape,
+        });
+    }
+    return sources;
 }
 
 void executePipeFeature(const app::DocumentObject& object,
@@ -485,12 +649,17 @@ void executePipeFeature(const app::DocumentObject& object,
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
+    const auto sections = resolveSections(object, context);
+    if (!sections) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
 
     const auto build = part::makeElementPipeShellFromSources(
         object.name,
-        pipeSources(*spine, *profile),
+        pipeSources(*spine, *profile, *sections),
         true,
-        false,
+        *mode == 2,
         *transition,
         false
     );
@@ -523,8 +692,30 @@ void executePipeFeature(const app::DocumentObject& object,
         shapeResult = *refined;
     }
 
-    const TopoDS_Shape solid = shapeResult.shape;
+    const bool allowCompound = owningBodyAllowsCompound(object, context);
+    const int solids = solidCount(shapeResult.shape);
+    if (!allowCompound && solids != 1) {
+        const app::DocumentObject* body = owningBody(object, context);
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "multiple_solids_disallowed",
+                               "Result has multiple solids: enable 'Allow Compound' in the active body.",
+                               object.name,
+                               "AllowCompound",
+                               "part_design.single_solid_rule",
+                               body == nullptr ? std::string {} : body->name);
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+
+    TopoDS_Shape solid = shapeResult.shape;
     namedShape = shapeResult.namedShape;
+    if (!allowCompound && solids == 1) {
+        solid = firstSolid(shapeResult.shape);
+        if (namedShape) {
+            namedShape->shape = solid;
+        }
+    }
     if (namedShape) {
         context.namedShapes[object.name] = *namedShape;
     }
@@ -547,14 +738,19 @@ void executePipeFeature(const app::DocumentObject& object,
         {"add_sub", additive ? "add" : "sub"},
         {"source_profile", profile->objectName},
         {"spine", spine->objectName},
-        {"mode", "Standard"},
-        {"transformation", "Constant"},
+        {"mode", modeLabel(*mode)},
+        {"transformation", transformationLabel(*transformation)},
         {"transition", transitionLabel(*transition)},
+        {"sections", nlohmann::json::array()},
+        {"solid_count", solids},
         {"bbox", cad_core::part::bboxForShape(solid)},
         {"volume", cad_core::part::volumeForShape(solid)},
         {"topo_naming_history", "maker_history:partdesign_pipe"},
         {"kernel", cad_core::part::kernelVersion()},
     };
+    for (const PipeInput& section : *sections) {
+        result["sections"].push_back(section.objectName);
+    }
     if (shapeResult.applied) {
         result["refine"] = "applied";
     }

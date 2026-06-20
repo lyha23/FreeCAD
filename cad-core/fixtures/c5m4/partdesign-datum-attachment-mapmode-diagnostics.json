@@ -1,0 +1,126 @@
+{
+  "Objects": [
+    {
+      "Name": "SupportBox",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 10,
+        "Width": 8,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "DatumPointSupportOnly",
+      "ID": 2,
+      "TypeId": "PartDesign::Point",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportBox",
+          "SubList": ["Vertex1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Deactivated"
+        }
+      }
+    },
+    {
+      "Name": "DatumPlaneFlatFaceOffsetReverse",
+      "ID": 3,
+      "TypeId": "PartDesign::Plane",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportBox",
+          "SubList": ["Face1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "FlatFace"
+        },
+        "MapReversed": {
+          "PropertyType": "App::PropertyBool",
+          "value": true
+        },
+        "AttachmentOffset": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [1, 2, 3],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "DatumLineNormalToEdgeParameter",
+      "ID": 4,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportBox",
+          "SubList": ["Edge1"],
+          "StableSubList": ["g100:1"],
+          "ShadowSub": [
+            {
+              "oldName": "Edge1",
+              "newName": "g100:1"
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "NormalToEdge"
+        },
+        "MapPathParameter": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 0.5
+        }
+      }
+    },
+    {
+      "Name": "SketchPad",
+      "ID": 5,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [3, 0]},
+          {"kind": "LineSegment", "start": [3, 0], "end": [3, 2]},
+          {"kind": "LineSegment", "start": [3, 2], "end": [0, 2]},
+          {"kind": "LineSegment", "start": [0, 2], "end": [0, 0]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "PadUsingAttachedDatumLine",
+      "ID": 6,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPad",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 2,
+        "Reversed": false,
+        "SideType": "One side",
+        "ReferenceAxis": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "DatumLineNormalToEdgeParameter",
+          "SubList": []
+        },
+        "AlongSketchNormal": true
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "DatumPointSupportOnly",
+      "DatumPlaneFlatFaceOffsetReverse",
+      "DatumLineNormalToEdgeParameter",
+      "PadUsingAttachedDatumLine"
+    ]
+  }
+}

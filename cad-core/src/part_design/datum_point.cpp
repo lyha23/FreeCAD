@@ -27,7 +27,16 @@ void executeDatumPoint(const app::DocumentObject& object, runtime::ComputeContex
     // from the object's Placement.
     // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Datums.cpp::DatumElement::DatumElement()
     // adds "Role" for lookup by LocalCoordinateSystem::getDatumElement().
-    if (!runtime::rejectUnsupportedProperties(object, context, {"AttachmentSupport", "MapMode", "Role"})) {
+    if (!runtime::rejectUnsupportedProperties(object,
+                                              context,
+                                              {"AttachmentSupport",
+                                               "MapMode",
+                                               "MapReversed",
+                                               "Reverse",
+                                               "MapPathParameter",
+                                               "Parameter",
+                                               "AttachmentOffset",
+                                               "Role"})) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }

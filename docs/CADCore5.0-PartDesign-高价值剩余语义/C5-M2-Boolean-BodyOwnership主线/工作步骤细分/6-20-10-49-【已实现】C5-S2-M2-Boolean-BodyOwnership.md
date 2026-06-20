@@ -1,4 +1,4 @@
-# C5-S2 M2 Boolean / Body ownership
+# 【已实现】C5-S2 M2 Boolean / Body ownership
 
 ## 目标
 
@@ -33,3 +33,10 @@ python3 -m unittest tests.test_p7_features tests.test_expected_fixtures tests.te
 
 - AllowCompound true/false、multi-tool ownership 和 failure diagnostic 均有 fixture 或 capability 证据。
 - Boolean capability 不 overclaim Compound / Section 或完整 LinkStage3-only 行为。
+
+## 实施结果
+
+- FreeCAD 调用链已记录到 `../6-20-10-48-C5-M2-Boolean-BodyOwnership方案.md`：`Boolean::execute()` 只支持 `Fuse/Cut/Common`，`Group` 顺序进入 `makeElementBoolean()`；`Feature::singleSolidRuleMode()` 从所属 Body 的 `AllowCompound` 决定是否提取唯一 solid；`Body::execute()` 用 Tip shape 替换 Body shape。
+- supported：C4 `Fuse/Cut/Common` first slice 继续通过；`AllowCompound=true` 多 solid Boolean / Body 输出 `occt_compound` 并有 native expected；multi-tool `Group` 顺序 fixture 有 native expected；Body Tip replacement、subshape map 和 `maker_history:boolean` 保持。
+- diagnostic-backed：`AllowCompound=false` 多 solid 输出 `multiple_solids_disallowed`，带 `object=BooleanRejected`、`property=AllowCompound`、`stage=part_design.single_solid_rule`、`target=MainBody`；缺失 tool、非 solid tool 和 `Section` unsupported Type 均有 focused diagnostics。
+- deferred / non-goal：LinkStage3-only `Compound` / `Section` 仍按 `C5-NG-005` 保持 non-goal / unsupported Type diagnostic，未进入 supported。

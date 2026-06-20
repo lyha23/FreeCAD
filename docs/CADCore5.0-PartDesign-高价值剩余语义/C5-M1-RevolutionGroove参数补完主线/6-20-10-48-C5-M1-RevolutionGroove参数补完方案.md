@@ -52,3 +52,30 @@ cd /Users/li/Chili3DProject/FreeCAD/cad-core
 cmake --build build
 python3 -m unittest tests.test_p7_features tests.test_expected_fixtures tests.test_adapters
 ```
+
+## C5-S1 实施记录
+
+### FreeCAD 调用链
+
+- `/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureRevolution.cpp::Revolution::TypeEnums` 只枚举 `Angle / UpToLast / UpToFirst / UpToFace / TwoAngles`；`Revolution::execute()` 调 `executeRevolved(Part::RevolMode::FuseWithBase)`；`makeShape()` 按 `FuseOrder` 在 `base.makeElementFuse(revolve)` 与 `revolve.makeElementFuse(base)` 间切换。
+- `/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureGroove.cpp::Groove::TypeEnums` 枚举 `Angle / ThroughAll / UpToFirst / UpToFace / TwoAngles`；`Groove::execute()` 调 `executeRevolved(Part::RevolMode::CutFromBase)`；Groove 没有 `UpToLast` source enum。
+- `/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureRevolved.cpp::tryExecuteRevolved()` 先验证 `Angle`、`Angle2` zero-sum、`Profile`、`ReferenceAxis`，再分支：`ToFirst/ToLast/ToFace` 走 `getUpToFace*()` 与 `tryToRevolveToFace()`；普通角度分支走 `generateRevolution()`。
+- `/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureRevolved.cpp::generateRevolution()` 对 `TwoAngles` 使用 `angleTotal = Angle + Angle2` 且 `angleOffset = -Angle2`，对 `ThroughAll` 使用 `2 * pi`，然后调 `TopoShape::makeElementRevolve()`。
+- `/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.cpp::getAxis()` 支持同 sketch 的 `V_Axis/H_Axis/N_Axis/AxisN`、`PartDesign::Line`、`App::Line` 与 `Part::Feature` 的线/圆边；本轮只把已可 native oracle 的 Part EdgeN 轴列为 expected-backed。
+- `/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.cpp::getUpToFace()` 用 `Part::findAllFacesCutBy(..., gp_Ax1)` 查最近/最远旋转切面；`getUpToFaceFromLinkSub()` 必须解析显式 face LinkSub。
+- `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementRevolution()` 使用 `BRepFeat_MakeRevol` 执行 UpTo face 路径；在 cad-core 补齐该 topo path 前不得用 bbox、输出顺序或 fixture 名称猜目标 face。
+- `/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::Body::execute()` 只把 `Tip` shape 写回 Body；cad-core 的 Body replay 继续按 Group 到 Tip 重放 additive/subtractive AddSubShape。
+
+### cad-core 落点
+
+- `cad-core/src/part_design/feature_revolved.cpp`：支持 `Type=TwoAngles` 与 Groove `Type=ThroughAll`，记录 `angle2`、`angle_total`、`angle_offset`，保留 `maker_history:revolve`。
+- `cad-core/src/part_design/feature_revolved.cpp`：`UpToFirst/UpToLast/UpToFace` 保持稳定 diagnostic；`UpToFace` 解析显式 `UpToFace` LinkSub 并回传 `target/subname`，不做 bbox 或 topo alias 猜测。
+- `cad-core/src/part_design/feature_revolved.cpp`：`Profile.SubList` 继续 `unsupported_profile_region`，`FuseOrder=FeatureFirst` 继续 `unsupported_property`，均不静默回退。
+- `cad-core/fixtures/c5m1/`：新增 TwoAngles、Groove ThroughAll、Part edge axis native expected fixtures，以及 zero-sum、UpTo、Profile/FuseOrder diagnostic fixtures。
+- `cad-core/src/adapters/c_api/c_api.cpp`：capability metadata 更新为 C5-M1 support/diagnostic split，不声明完整 Revolution/Groove 参数覆盖。
+
+### 当前边界
+
+- supported：Revolution/Groove `TwoAngles`；Groove `ThroughAll`；Sketch `H_Axis/V_Axis` 与 Part EdgeN `ReferenceAxis`；Body additive/subtractive replay。
+- diagnostic-backed：Revolution `ThroughAll` invalid enum；UpToFirst/UpToLast/UpToFace BRepFeat path；Profile subshape；`FuseOrder=FeatureFirst`；zero-sum `Angle + Angle2`。
+- deferred：Datum/App line axis native oracle、custom Sketch `AxisN` 和 full `TopoShape::makeElementRevolution()` / BRepFeat history path。
