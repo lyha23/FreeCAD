@@ -996,11 +996,96 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(projected["height"], 0.0)
         self.assertEqual(projected["offset"], 0.0)
         self.assertEqual(projected["topo_naming_history"], "indexed_projected_edges_no_mapper_history")
+        self.assertEqual(projected["projected_face_count"], 0)
+        self.assertEqual(projected["projected_wire_count"], 0)
+        self.assertEqual(projected["projected_inner_wire_count"], 0)
         self.assertEqual(sum(name.startswith("Edge") for name in result["subshapes"]["ProjectedEdges"]), 1)
         self.assertEqual(sum(name.startswith("Face") for name in result["subshapes"]["ProjectedEdges"]), 0)
         self.assertEqual(named_shape["element_map_status"], "indexed_only")
         self.assertNotIn("ProjectionLine.Edge1", named_shape["element_map"])
         self.assert_object_matches_expected(result, "c4m1", "part-project-on-surface-edge-plane")
+
+    def test_c4m1_part_project_on_surface_face_plane_rebuilds_face(self) -> None:
+        result = self.run_recompute("part-project-on-surface-face-plane", "c4m1")
+        projected = result["objects"]["ProjectedFace"]
+        named_shape = result["named_shapes"]["ProjectedFace"]
+        subshapes = result["subshapes"]["ProjectedFace"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(projected["status"], "ok")
+        self.assertEqual(projected["feature"], "part_project_on_surface")
+        self.assertEqual(projected["shape"], "occt_compound")
+        self.assertEqual(projected["source_support"], "SupportPlane")
+        self.assertEqual(projected["support_face"], "Face1")
+        self.assertEqual(projected["source_projection"], "ProjectionFace")
+        self.assertEqual(projected["projection_subshape"], "Face1")
+        self.assertEqual(projected["mode"], "Faces")
+        self.assertEqual(projected["height"], 0.0)
+        self.assertEqual(projected["offset"], 0.0)
+        self.assertEqual(projected["projected_face_count"], 1)
+        self.assertEqual(projected["projected_wire_count"], 1)
+        self.assertEqual(projected["projected_inner_wire_count"], 0)
+        self.assertEqual(sum(name.startswith("Face") for name in subshapes), 1)
+        self.assertEqual(sum(name.startswith("Edge") for name in subshapes), 4)
+        self.assertEqual(named_shape["element_map_status"], "indexed_only")
+        self.assertNotIn("ProjectionFace.Face1", named_shape["element_map"])
+        self.assert_object_matches_expected(result, "c4m1", "part-project-on-surface-face-plane")
+
+    def test_c4m1_part_project_on_surface_face_with_hole_preserves_inner_wire(self) -> None:
+        result = self.run_recompute("part-project-on-surface-face-hole-plane", "c4m1")
+        projected = result["objects"]["ProjectedFaceWithHole"]
+        subshapes = result["subshapes"]["ProjectedFaceWithHole"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(projected["status"], "ok")
+        self.assertEqual(projected["feature"], "part_project_on_surface")
+        self.assertEqual(projected["source_projection"], "ProjectionFaceWithHole")
+        self.assertEqual(projected["projection_subshape"], "Face1")
+        self.assertEqual(projected["mode"], "Faces")
+        self.assertEqual(projected["projected_face_count"], 1)
+        self.assertEqual(projected["projected_wire_count"], 2)
+        self.assertEqual(projected["projected_inner_wire_count"], 1)
+        self.assertEqual(sum(name.startswith("Face") for name in subshapes), 1)
+        self.assertEqual(sum(name.startswith("Edge") for name in subshapes), 8)
+        self.assert_object_matches_expected(result, "c4m1", "part-project-on-surface-face-hole-plane")
+
+    def test_c4m1_part_project_on_surface_face_input_edges_mode_filters_to_wire(self) -> None:
+        result = self.run_recompute("part-project-on-surface-face-edges-mode", "c4m1")
+        projected = result["objects"]["ProjectedFaceEdges"]
+        subshapes = result["subshapes"]["ProjectedFaceEdges"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(projected["status"], "ok")
+        self.assertEqual(projected["feature"], "part_project_on_surface")
+        self.assertEqual(projected["source_projection"], "ProjectionFace")
+        self.assertEqual(projected["projection_subshape"], "Face1")
+        self.assertEqual(projected["mode"], "Edges")
+        self.assertEqual(projected["projected_face_count"], 0)
+        self.assertEqual(projected["projected_wire_count"], 1)
+        self.assertEqual(projected["projected_inner_wire_count"], 0)
+        self.assertEqual(sum(name.startswith("Face") for name in subshapes), 0)
+        self.assertEqual(sum(name.startswith("Edge") for name in subshapes), 4)
+        self.assert_object_matches_expected(result, "c4m1", "part-project-on-surface-face-edges-mode")
+
+    def test_c4m1_part_project_on_surface_all_mode_accepts_zero_height_face(self) -> None:
+        result = self.run_recompute("part-project-on-surface-face-all-plane", "c4m1")
+        projected = result["objects"]["ProjectedAll"]
+        subshapes = result["subshapes"]["ProjectedAll"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(projected["status"], "ok")
+        self.assertEqual(projected["feature"], "part_project_on_surface")
+        self.assertEqual(projected["source_projection"], "ProjectionFace")
+        self.assertEqual(projected["projection_subshape"], "Face1")
+        self.assertEqual(projected["mode"], "All")
+        self.assertEqual(projected["height"], 0.0)
+        self.assertEqual(projected["offset"], 0.0)
+        self.assertEqual(projected["projected_face_count"], 1)
+        self.assertEqual(projected["projected_wire_count"], 1)
+        self.assertEqual(projected["projected_inner_wire_count"], 0)
+        self.assertEqual(sum(name.startswith("Face") for name in subshapes), 1)
+        self.assertEqual(sum(name.startswith("Edge") for name in subshapes), 4)
+        self.assert_object_matches_expected(result, "c4m1", "part-project-on-surface-face-all-plane")
 
     def test_c4m1_part_project_on_surface_deferred_boundaries_have_stable_diagnostics(self) -> None:
         result = self.run_recompute("part-project-on-surface-deferred-boundaries", "c4m1")
@@ -1009,7 +1094,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(
             codes,
             [
-                "unsupported_property",
+                "execution_failed",
                 "unsupported_property",
                 "unsupported_property",
                 "unsupported_property",

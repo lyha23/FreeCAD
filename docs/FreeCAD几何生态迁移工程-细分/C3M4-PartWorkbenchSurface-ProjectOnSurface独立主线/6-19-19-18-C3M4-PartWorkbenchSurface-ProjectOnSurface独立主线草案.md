@@ -8,27 +8,34 @@
 - 已完成第一批：`cad-core` 已注册 `Part::ProjectOnSurface` executor，native expected collector 已能覆盖 `Part::ProjectOnSurface`、`App::PropertyLinkSubList` 和 `App::PropertyDirection`；当前发布口径为 `supported_expected_backed_first_slice`。
 - 第一批 fixtures：`cad-core/fixtures/c4m1/part-project-on-surface-edge-plane.json` 与 `cad-core/fixtures/c4m1/part-project-on-surface-deferred-boundaries.json`。
 - 第一批边界：只支持 `Mode=Edges`、`Height=0`、`Offset=0`、单 `Projection` edge/wire 到单 `SupportFace`，并发布普通 indexed `NamedShape`，不宣称 projected edge provenance mapper。
-- 当前缺口：`Mode=Faces` / `Mode=All`、face input rebuild、hole wires、`Height` solid、`Offset` placement、多 `Projection` compound 顺序仍在 capability `remaining_gaps` 内。
+- S1 live 基线（2026-06-20）：`pwd=/Users/li/Chili3DProject/FreeCAD`；`HEAD=8a1a905f6c`；`git log -1 --oneline=8a1a905f6c docs: 冻结PROJSURF S0基线与第二批范围`；开始编辑前 `git -c core.quotepath=false status --short -uall` 为空。
+- S1 已完成：`Mode=Faces` / `Mode=All` 在 `Height=0`、`Offset=0`、单 face projection 到单 support face 的范围内已 expected-backed；face with hole 通过 projected wires 的 parametric-space rebuild 保留 inner wire；`Mode=Edges` 遇到 face input 会按 FreeCAD `filterShapes()` 拆成 wire 输出。
+- S1 fixtures：`part-project-on-surface-face-plane`、`part-project-on-surface-face-hole-plane`、`part-project-on-surface-face-edges-mode`、`part-project-on-surface-face-all-plane`。
+- 当前缺口：`Height` solid、`Offset` placement、多 `Projection` compound 顺序和 projected edge provenance mapper/history 仍未发布；full `ProjectOnSurface` 仍不能写成 supported。
 
 ## FreeCAD 依据
 
 - `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.h::Part::ProjectOnSurface`：声明 `Mode`、`Height`、`Offset`、`Direction`、`SupportFace`、`Projection`。
 - `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp::ProjectOnSurface::tryExecute()`：`getSupportFace()` -> `getProjectionShapes()` -> `createProjectedWire()` -> `filterShapes()` -> `createCompound()` -> restore `Placement`。
 - `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp::ProjectOnSurface::projectWire()`：`BRepProj_Projection(wire, supportFace, dir)`，取最近 projected wire，再拆成 edges。
-- `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp::ProjectOnSurface::projectFace()`、`createFaceFromParametricWire()`、`fixWire()`、`createSolidIfHeight()`、`getOffsetPlacement()`：分别覆盖 face rebuild / holes、wire repair、solid height 和 offset placement，不能混入第一批。
+- `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp::ProjectOnSurface::projectFace()`、`createFaceFromParametricWire()`、`fixWire()`：S1 已迁移为 `cad-core/src/part/part_project_on_surface.cpp` 中的 projected face wires、parametric-space edge/wire rebuild 和 face fix/reverse retry helper。
+- `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp::ProjectOnSurface::createSolidIfHeight()`、`getOffsetPlacement()`：仍分别归属后续 Height solid 与 Offset placement 步骤，不能随 S1 宣称完成。
 
-## 第一批已实现边界
+## 已实现边界
 
-第一批只允许 `Mode=Edges`、`Height=0`、`Offset=0`、单 projection item、单 support face：
+当前只允许 `Height=0`、`Offset=0`、单 projection item、单 support face：
 
 - `part-project-on-surface-edge-plane`：`Part::Line.Edge1` 沿 `Direction=(0,0,1)` 投影到 `Part::Plane.Face1`。
-- `part-project-on-surface-deferred-boundaries`：拒绝 `Mode=Faces`、`Height != 0`、`Offset != 0`、多个 `Projection` item、缺失 support 等 deferred 分支。
-- `wire-plane` 可作为 S1 face/wire 回归补充，但不能替代 face rebuild / holes 的第二批验收。
-- capability `part_workbench.project_on_surface` 只发布 `mode_values=["Edges"]`、`height_zero_offset_zero`、`single_edge_or_wire_projection` 与 `ordinary_indexed_named_shape_without_freecad_mapper_history`；`remaining_gaps` 保留 `mode_faces_all_expected`、`height_offset_solid_expected`、`face_rebuild_expected`、`multi_projection_expected` 和 `advanced_branch_expected`。
+- `part-project-on-surface-face-plane`：`Mode=Faces` 的普通 face projection，输出 1 face / 1 wire / 0 inner wire。
+- `part-project-on-surface-face-hole-plane`：`Mode=Faces` 的 face-with-hole projection，输出 1 face / 2 wires / 1 inner wire。
+- `part-project-on-surface-face-edges-mode`：face input 在 `Mode=Edges` 下经 `filterShapes()` 拆成 wire，输出 0 face / 1 wire。
+- `part-project-on-surface-face-all-plane`：`Mode=All`、`Height=0`、`Offset=0` 的 face projection，仍只输出 face，不触发 solid。
+- `part-project-on-surface-deferred-boundaries`：继续拒绝 `Height != 0`、`Offset != 0`、多个 `Projection` item、缺失 support；`Mode=Faces` + edge input 目前记录为无 face 结果的第一批边界诊断。
+- capability 发布仍留到 S5；在发布前不得把 `Height`、`Offset`、多 `Projection` 或 full `ProjectOnSurface` 写成 supported，也不得宣称 projected edge provenance mapper/history。
 
 ## 第二批冻结范围
 
-- `PROJSURF-S1`：`Mode=Faces` / face input rebuild / hole wires。FreeCAD 依据是 `projectFace()` 逐 wire 投影、`createFaceFromParametricWire()` 重建 support surface face、`fixWire()` 修复参数空间 wire；验收必须有 face 与 face-with-hole native expected。
+- `PROJSURF-S1`：已完成 `Mode=Faces` / `Mode=All` 在 `Height=0`、`Offset=0`、单 face projection 到单 support face 的 first slice，并覆盖 hole inner wire 与 `Mode=Edges` face input 拆 wire 边界。
 - `PROJSURF-S2`：`Mode=All` + `Height` solid。FreeCAD 依据是 `createSolidIfHeight()` 只在 `Height >= Precision::Confusion()` 且 `Mode == All` 时沿反向 `Direction` prism；不能把非 All 的 height 分支混成 supported。
 - `PROJSURF-S3`：`Offset` placement。FreeCAD 依据是 `getOffsetPlacement()` normalize `Direction` 后 scale `Offset`，再由 `createCompound()` 对每个 child `Moved(loc)`；需要覆盖 edge/face 输出及 Height/Offset 交互。
 - `PROJSURF-S4`：多 `Projection` ordering。FreeCAD 依据是 `getProjectionShapes()` 保留 `PropertyLinkSubList` 对象 / sub-name 顺序，`tryExecute()` 按 projection item 追加结果，`createCompound()` 按结果顺序 Add。
@@ -41,7 +48,7 @@
 执行顺序：
 
 1. `PROJSURF-S0`：刷新 live 基线、第二批 scope 和矩阵，不写 C++。
-2. `PROJSURF-S1`：实现 `Mode=Faces` / face input rebuild / hole wires 第一批。
+2. `PROJSURF-S1`：已实现 `Mode=Faces` / `Mode=All` 的 Height=0 face input rebuild / hole wires 第一批。
 3. `PROJSURF-S2`：实现 `Mode=All` + `Height` solid 路径。
 4. `PROJSURF-S3`：实现 `Offset` / `getOffsetPlacement()` 位移语义。
 5. `PROJSURF-S4`：实现多 `Projection` item 和 compound 顺序。

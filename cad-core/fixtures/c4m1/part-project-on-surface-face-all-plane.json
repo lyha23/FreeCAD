@@ -1,0 +1,67 @@
+{
+  "Objects": [
+    {
+      "Name": "SupportPlane",
+      "ID": 1,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 6,
+        "Width": 4
+      }
+    },
+    {
+      "Name": "ProjectionFace",
+      "ID": 2,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 3,
+        "Width": 2,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [1, 1, -2],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "ProjectedAll",
+      "ID": 3,
+      "TypeId": "Part::ProjectOnSurface",
+      "Properties": {
+        "Mode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "All"
+        },
+        "Height": {
+          "PropertyType": "App::PropertyLength",
+          "value": 0
+        },
+        "Offset": {
+          "PropertyType": "App::PropertyDistance",
+          "value": 0
+        },
+        "Direction": {
+          "PropertyType": "App::PropertyDirection",
+          "value": [0, 0, 1]
+        },
+        "SupportFace": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportPlane",
+          "SubList": ["Face1"]
+        },
+        "Projection": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "ProjectionFace",
+              "SubList": ["Face1"]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["ProjectedAll"]
+  }
+}

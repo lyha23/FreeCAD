@@ -1,8 +1,8 @@
 {
   "bbox": {
     "max": [
-      5.0,
-      2.0,
+      4.0,
+      3.0,
       0.0
     ],
     "min": [
@@ -13,7 +13,7 @@
   },
   "bbox_delta": 0.11,
   "freecad_version": "1.2.0 revision 20260519",
-  "object": "ProjectedEdges",
+  "object": "ProjectedFaceEdges",
   "object_fields": {
     "feature": "part_project_on_surface",
     "height": 0.0,
@@ -21,21 +21,21 @@
     "offset": 0.0,
     "projected_face_count": 0,
     "projected_inner_wire_count": 0,
-    "projected_wire_count": 0,
-    "projection_subshape": "Edge1",
+    "projected_wire_count": 1,
+    "projection_subshape": "Face1",
     "shape": "occt_compound",
-    "source_projection": "ProjectionLine",
+    "source_projection": "ProjectionFace",
     "source_support": "SupportPlane",
     "status": "ok",
     "support_face": "Face1",
     "topo_naming_history": "indexed_projected_edges_no_mapper_history"
   },
-  "reference": "FreeCADCmd oracle from part-project-on-surface-edge-plane.json; objects: Part::Plane, Part::Line, Part::ProjectOnSurface",
+  "reference": "FreeCADCmd oracle from part-project-on-surface-face-edges-mode.json; objects: Part::Plane, Part::Plane, Part::ProjectOnSurface",
   "schema_version": "cad-core.freecad-expected.v1",
   "topology_counts": {
-    "edges": 1,
+    "edges": 4,
     "faces": 0,
-    "vertices": 2
+    "vertices": 4
   },
   "volume": 0.0
 }

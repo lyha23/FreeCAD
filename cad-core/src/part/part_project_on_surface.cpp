@@ -5,20 +5,33 @@
 #include "cad_core/part/topo_shape.h"
 #include "cad_core/runtime/feature_executor.h"
 
+#include <BRepBuilderAPI_MakeEdge.hxx>
+#include <BRepBuilderAPI_MakeFace.hxx>
+#include <BRepCheck_Analyzer.hxx>
 #include <BRepExtrema_DistShapeShape.hxx>
 #include <BRepProj_Projection.hxx>
 #include <BRep_Builder.hxx>
+#include <BRep_Tool.hxx>
+#include <ShapeAnalysis.hxx>
+#include <ShapeAnalysis_FreeBounds.hxx>
+#include <ShapeFix_Face.hxx>
+#include <ShapeFix_Wire.hxx>
+#include <ShapeFix_Wireframe.hxx>
 #include <Precision.hxx>
 #include <Standard_Failure.hxx>
+#include <TopAbs_Orientation.hxx>
 #include <TopAbs_ShapeEnum.hxx>
 #include <TopExp_Explorer.hxx>
+#include <TopTools_HSequenceOfShape.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Compound.hxx>
+#include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Shape.hxx>
 #include <TopoDS_Wire.hxx>
 #include <gp_Dir.hxx>
 
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <limits>
@@ -258,12 +271,13 @@ std::optional<ProjectSubshape> resolveProjectionShape(
         );
         return std::nullopt;
     }
-    if (selected->ShapeType() != TopAbs_EDGE && selected->ShapeType() != TopAbs_WIRE) {
+    if (selected->ShapeType() != TopAbs_EDGE && selected->ShapeType() != TopAbs_WIRE
+        && selected->ShapeType() != TopAbs_FACE) {
         addProjectOnSurfaceDiagnostic(
             object,
             context,
             "unsupported_subshape_kind",
-            "Part::ProjectOnSurface first slice projects only edges and wires",
+            "Part::ProjectOnSurface first face slice projects only edges, wires and faces",
             "Projection",
             link.object
         );
@@ -292,12 +306,12 @@ std::optional<std::string> readProjectionMode(
         }
     }
 
-    if (mode != "Edges") {
+    if (mode != "All" && mode != "Faces" && mode != "Edges") {
         addProjectOnSurfaceDiagnostic(
             object,
             context,
             "unsupported_property",
-            "Part::ProjectOnSurface first slice supports Mode=Edges only",
+            "Part::ProjectOnSurface mode must be All, Faces or Edges",
             "Mode"
         );
         return std::nullopt;
@@ -364,6 +378,201 @@ TopoDS_Wire closestProjectedWire(BRepProj_Projection& projection, const TopoDS_S
     return wireToTake;
 }
 
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp
+// ::ProjectOnSurface::getWires(), calls "ShapeAnalysis::OuterWire(face)" first and appends
+// the remaining non-outer wires afterward so createFaceFromParametricWire() can treat the first
+// wire as the outer boundary and later wires as inside wires.
+std::vector<TopoDS_Wire> faceWires(const TopoDS_Face& face)
+{
+    std::vector<TopoDS_Wire> wires;
+    const TopoDS_Wire outerWire = ShapeAnalysis::OuterWire(face);
+    if (!outerWire.IsNull()) {
+        wires.push_back(outerWire);
+    }
+    for (TopExp_Explorer explorer(face, TopAbs_WIRE); explorer.More(); explorer.Next()) {
+        const TopoDS_Wire currentWire = TopoDS::Wire(explorer.Current());
+        if (outerWire.IsNull() || !currentWire.IsSame(outerWire)) {
+            wires.push_back(currentWire);
+        }
+    }
+    return wires;
+}
+
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp
+// ::ProjectOnSurface::fixWire(), runs "ConnectEdgesToWires", "ConnectWiresToWires",
+// ShapeFix_Wire with FixAddCurve3d/FixAddPCurve and ShapeFix_Wireframe gap/small-edge repair.
+TopoDS_Wire fixWireOnSupport(
+    const std::vector<TopoDS_Edge>& edges,
+    const TopoDS_Face& supportFace
+)
+{
+    Handle(TopTools_HSequenceOfShape) shapeList = new TopTools_HSequenceOfShape;
+    Handle(TopTools_HSequenceOfShape) wireHandle;
+    Handle(TopTools_HSequenceOfShape) connectedWireHandle;
+
+    for (const TopoDS_Edge& edge : edges) {
+        if (!edge.IsNull()) {
+            shapeList->Append(edge);
+        }
+    }
+
+    constexpr double tolerance = 0.0001;
+    ShapeAnalysis_FreeBounds::ConnectEdgesToWires(shapeList, tolerance, false, wireHandle);
+    ShapeAnalysis_FreeBounds::ConnectWiresToWires(wireHandle, tolerance, false, connectedWireHandle);
+    if (!connectedWireHandle) {
+        return {};
+    }
+    for (int index = 1; index <= connectedWireHandle->Length(); ++index) {
+        const TopoDS_Wire wire = TopoDS::Wire(connectedWireHandle->Value(index));
+        ShapeFix_Wire wireRepair(wire, supportFace, tolerance);
+        wireRepair.FixAddCurve3dMode() = 1;
+        wireRepair.FixAddPCurveMode() = 1;
+        wireRepair.Perform();
+
+        ShapeFix_Wireframe wireframeFix(wireRepair.Wire());
+        wireframeFix.FixWireGaps();
+        wireframeFix.FixSmallEdges();
+        return TopoDS::Wire(wireframeFix.Shape());
+    }
+    return {};
+}
+
+TopoDS_Wire fixWireOnSupport(const TopoDS_Shape& shape, const TopoDS_Face& supportFace)
+{
+    std::vector<TopoDS_Edge> edges;
+    for (TopExp_Explorer explorer(shape, TopAbs_EDGE); explorer.More(); explorer.Next()) {
+        edges.push_back(TopoDS::Edge(explorer.Current()));
+    }
+    return fixWireOnSupport(edges, supportFace);
+}
+
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp
+// ::ProjectOnSurface::projectFace(), projects each face wire with BRepProj_Projection and fixes
+// the selected projected wire before face rebuild.
+std::vector<TopoDS_Wire> projectFaceWires(
+    const TopoDS_Face& face,
+    const TopoDS_Face& supportFace,
+    const gp_Dir& direction
+)
+{
+    std::vector<TopoDS_Wire> wires;
+    for (const TopoDS_Wire& wire : faceWires(face)) {
+        BRepProj_Projection projection(wire, supportFace, direction);
+        const TopoDS_Wire projectedWire = closestProjectedWire(projection, face);
+        const TopoDS_Wire fixedWire = fixWireOnSupport(projectedWire, supportFace);
+        if (!fixedWire.IsNull()) {
+            wires.push_back(fixedWire);
+        }
+    }
+    return wires;
+}
+
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp
+// ::ProjectOnSurface::createWiresFromWires(), rebuilds every projected edge from its
+// CurveOnSurface on the support face before making the final face.
+std::vector<TopoDS_Wire> rebuildWiresInParametricSpace(
+    const std::vector<TopoDS_Wire>& projectedWires,
+    const TopoDS_Face& supportFace
+)
+{
+    std::vector<TopoDS_Wire> rebuiltWires;
+    const auto surface = BRep_Tool::Surface(supportFace);
+    for (const TopoDS_Wire& wire : projectedWires) {
+        std::vector<TopoDS_Edge> rebuiltEdges;
+        for (TopExp_Explorer explorer(wire, TopAbs_EDGE); explorer.More(); explorer.Next()) {
+            Standard_Real first {};
+            Standard_Real last {};
+            const TopoDS_Edge edge = TopoDS::Edge(explorer.Current());
+            const auto currentCurve = BRep_Tool::CurveOnSurface(edge, supportFace, first, last);
+            if (currentCurve.IsNull()) {
+                continue;
+            }
+            BRepBuilderAPI_MakeEdge edgeMaker(currentCurve, surface, first, last);
+            if (edgeMaker.IsDone()) {
+                rebuiltEdges.push_back(edgeMaker.Edge());
+            }
+        }
+        const TopoDS_Wire rebuiltWire = fixWireOnSupport(rebuiltEdges, supportFace);
+        if (!rebuiltWire.IsNull()) {
+            rebuiltWires.push_back(rebuiltWire);
+        }
+    }
+    return rebuiltWires;
+}
+
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp
+// ::ProjectOnSurface::createFaceFromParametricWire(), uses the first wire as the outer wire,
+// later wires as inside wires, and retries with reversed orientation after ShapeFix_Face /
+// BRepCheck_Analyzer validation failures.
+TopoDS_Face createFaceFromParametricWires(
+    const std::vector<TopoDS_Wire>& wires,
+    const TopoDS_Face& supportFace
+)
+{
+    const auto surface = BRep_Tool::Surface(supportFace);
+    BRepBuilderAPI_MakeFace faceMaker;
+    bool first = true;
+    for (const TopoDS_Wire& wire : wires) {
+        if (wire.IsNull()) {
+            continue;
+        }
+        if (first) {
+            first = false;
+            TopoDS_Wire currentWire = TopoDS::Wire(wire.Reversed());
+            if (supportFace.Orientation() == TopAbs_REVERSED) {
+                currentWire = wire;
+            }
+            faceMaker = BRepBuilderAPI_MakeFace(surface, currentWire);
+            if (!faceMaker.IsDone()) {
+                return {};
+            }
+            ShapeFix_Face fix(faceMaker.Face());
+            fix.Perform();
+            const TopoDS_Face fixedFace = fix.Face();
+            BRepCheck_Analyzer checker(fixedFace);
+            if (!checker.IsValid()) {
+                faceMaker = BRepBuilderAPI_MakeFace(surface, TopoDS::Wire(currentWire.Reversed()));
+                if (!faceMaker.IsDone()) {
+                    return {};
+                }
+            }
+        }
+        else {
+            if (!faceMaker.IsDone()) {
+                return {};
+            }
+            const TopoDS_Face tempCopy = BRepBuilderAPI_MakeFace(faceMaker.Face()).Face();
+            faceMaker.Add(TopoDS::Wire(wire.Reversed()));
+            ShapeFix_Face fix(faceMaker.Face());
+            fix.Perform();
+            const TopoDS_Face fixedFace = fix.Face();
+            BRepCheck_Analyzer checker(fixedFace);
+            if (!checker.IsValid()) {
+                faceMaker = BRepBuilderAPI_MakeFace(tempCopy);
+                faceMaker.Add(TopoDS::Wire(wire));
+            }
+        }
+    }
+    if (first || !faceMaker.IsDone()) {
+        return {};
+    }
+    return faceMaker.Face();
+}
+
+TopoDS_Face createFaceFromProjectedWires(
+    const std::vector<TopoDS_Wire>& projectedWires,
+    const TopoDS_Face& supportFace
+)
+{
+    if (projectedWires.empty()) {
+        return {};
+    }
+    return createFaceFromParametricWires(
+        rebuildWiresInParametricSpace(projectedWires, supportFace),
+        supportFace
+    );
+}
+
 std::vector<TopoDS_Shape> projectWireEdges(
     const TopoDS_Shape& wireOrEdge,
     const TopoDS_Face& supportFace,
@@ -377,6 +586,83 @@ std::vector<TopoDS_Shape> projectWireEdges(
         edges.push_back(TopoDS::Edge(explorer.Current()));
     }
     return edges;
+}
+
+std::vector<TopoDS_Shape> createProjectedShapes(
+    const TopoDS_Shape& projectionShape,
+    const TopoDS_Face& supportFace,
+    const gp_Dir& direction
+)
+{
+    if (projectionShape.IsNull()) {
+        return {};
+    }
+    if (projectionShape.ShapeType() == TopAbs_FACE) {
+        const std::vector<TopoDS_Wire> projectedWires =
+            projectFaceWires(TopoDS::Face(projectionShape), supportFace, direction);
+        const TopoDS_Face face = createFaceFromProjectedWires(projectedWires, supportFace);
+        if (!face.IsNull()) {
+            return {face};
+        }
+        return std::vector<TopoDS_Shape>(projectedWires.begin(), projectedWires.end());
+    }
+    if (projectionShape.ShapeType() == TopAbs_WIRE || projectionShape.ShapeType() == TopAbs_EDGE) {
+        return projectWireEdges(projectionShape, supportFace, direction);
+    }
+    return {};
+}
+
+std::vector<TopoDS_Shape> filterProjectedShapes(
+    const std::vector<TopoDS_Shape>& shapes,
+    const std::string& mode
+)
+{
+    std::vector<TopoDS_Shape> filtered;
+    for (const TopoDS_Shape& shape : shapes) {
+        if (shape.IsNull()) {
+            continue;
+        }
+        if (mode == "All") {
+            filtered.push_back(shape);
+        }
+        else if (mode == "Faces") {
+            if (shape.ShapeType() == TopAbs_FACE) {
+                filtered.push_back(shape);
+            }
+        }
+        else if (mode == "Edges") {
+            if (shape.ShapeType() == TopAbs_EDGE || shape.ShapeType() == TopAbs_WIRE) {
+                filtered.push_back(shape);
+            }
+            else if (shape.ShapeType() == TopAbs_FACE) {
+                for (const TopoDS_Wire& wire : faceWires(TopoDS::Face(shape))) {
+                    if (!wire.IsNull()) {
+                        filtered.push_back(wire);
+                    }
+                }
+            }
+        }
+    }
+    return filtered;
+}
+
+int countSubshapes(const TopoDS_Shape& shape, TopAbs_ShapeEnum kind)
+{
+    int count = 0;
+    for (TopExp_Explorer explorer(shape, kind); explorer.More(); explorer.Next()) {
+        ++count;
+    }
+    return count;
+}
+
+int countInnerWires(const TopoDS_Shape& shape)
+{
+    int count = 0;
+    for (TopExp_Explorer explorer(shape, TopAbs_FACE); explorer.More(); explorer.Next()) {
+        const int wireCount = static_cast<int>(faceWires(TopoDS::Face(explorer.Current())).size());
+        count += std::max(0, wireCount - 1);
+    }
+    return count;
 }
 
 TopoDS_Shape compoundOf(const std::vector<TopoDS_Shape>& shapes)
@@ -434,24 +720,26 @@ void executePartProjectOnSurface(const app::DocumentObject& object, runtime::Com
     }
 
     try {
-        const std::vector<TopoDS_Shape> edges =
-            projectWireEdges(projection->shape, TopoDS::Face(support->shape), *direction);
-        if (edges.empty()) {
+        const std::vector<TopoDS_Shape> projectedShapes =
+            createProjectedShapes(projection->shape, TopoDS::Face(support->shape), *direction);
+        const std::vector<TopoDS_Shape> filteredShapes = filterProjectedShapes(projectedShapes, *mode);
+        if (filteredShapes.empty()) {
             addProjectOnSurfaceDiagnostic(
                 object,
                 context,
                 "execution_failed",
-                "Part::ProjectOnSurface did not produce projected edges",
+                "Part::ProjectOnSurface did not produce projected shapes for the requested Mode",
                 "Projection",
                 projection->objectName
             );
             return;
         }
 
+        const TopoDS_Shape projectedCompound = compoundOf(filteredShapes);
         part_feature_detail::publishPartShape(
             object,
             context,
-            compoundOf(edges),
+            projectedCompound,
             {
                 {"feature", "part_project_on_surface"},
                 {"source_support", support->objectName},
@@ -462,6 +750,9 @@ void executePartProjectOnSurface(const app::DocumentObject& object, runtime::Com
                 {"height", 0.0},
                 {"offset", 0.0},
                 {"topo_naming_history", "indexed_projected_edges_no_mapper_history"},
+                {"projected_face_count", countSubshapes(projectedCompound, TopAbs_FACE)},
+                {"projected_wire_count", countSubshapes(projectedCompound, TopAbs_WIRE)},
+                {"projected_inner_wire_count", countInnerWires(projectedCompound)},
             }
         );
     }

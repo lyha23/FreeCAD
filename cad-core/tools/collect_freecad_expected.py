@@ -3379,6 +3379,7 @@ def project_on_surface_payload(obj: Any, fixture: dict | None = None) -> dict:
     spec = fixture_spec_for_object(fixture, str(obj.Name))
     properties = spec.get("Properties", {}) if isinstance(spec.get("Properties", {}), dict) else {}
     projection_sources = link_sublist_object_names(properties, "Projection")
+    face_wire_counts = [len(getattr(face, "Wires", [])) for face in getattr(shape, "Faces", [])]
     payload = shape_summary(shape)
     payload["bbox_delta"] = 0.11
     payload["object_fields"] = {
@@ -3393,6 +3394,9 @@ def project_on_surface_payload(obj: Any, fixture: dict | None = None) -> dict:
         "height": float_from_properties(properties, "Height", 0.0),
         "offset": float_from_properties(properties, "Offset", 0.0),
         "topo_naming_history": "indexed_projected_edges_no_mapper_history",
+        "projected_face_count": len(getattr(shape, "Faces", [])),
+        "projected_wire_count": len(getattr(shape, "Wires", [])),
+        "projected_inner_wire_count": sum(max(0, count - 1) for count in face_wire_counts),
     }
     return payload
 
