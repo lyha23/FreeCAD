@@ -33,7 +33,7 @@ git log -1 --oneline
 - `cad-core/include/cad_core/part/part_geomplate.h` 当前 `PartGeomPlateSurfaceDTO` 只表达 `GeomPlateBuildParams`、`GeomPlateApproximationParams`、3D edge `GeomPlateCurveConstraintSource`、3D point `GeomPlatePointConstraintSource` 和 `sourceEvidence`。
 - `cad-core/src/part/part_geomplate.cpp` 当前主路径只把 3D curve G0 constraints、3D point constraints、build params、advanced approximation params 交给 `GeomPlate_BuildPlateSurface` / `GeomPlate_MakeApprox`。
 - `rejectDeferredGeomPlateAdvancedProperties()` 仍把 `InitialSurface`、`Surface`、`Curve2dOnSurface`、`ProjectedCurve2d`、`Point2dOnSurface`、`PlateSurfaceCurves` 作为 `unsupported_property` deferred diagnostic。
-- `cad-core/src/adapters/c_api/c_api.cpp` 的 `part_workbench.geomplate` capability 仍发布 `supported_expected_backed_advanced_constraints_with_deferred_wrappers`，fixtures 只列 `c3m4/part-geomplate-curve-point-default`、`c3m4/part-geomplate-invalid-inputs`、`c4m1/part-geomplate-advanced-constraints`、`c4m1/part-geomplate-advanced-deferred`。
+- S0 baseline 时，`cad-core/src/adapters/c_api/c_api.cpp` 的 `part_workbench.geomplate` capability 仍发布 `supported_expected_backed_advanced_constraints_with_deferred_wrappers`，fixtures 只列 `c3m4/part-geomplate-curve-point-default`、`c3m4/part-geomplate-invalid-inputs`、`c4m1/part-geomplate-advanced-constraints`、`c4m1/part-geomplate-advanced-deferred`；S1 后 status 已收窄为 explicit approximation params guard。
 - `cad-core/tests/test_p8_features.py` 确认 `c3m4/part-geomplate-curve-point-default` 和 `c4m1/part-geomplate-advanced-constraints` 为 expected-backed；`c4m1/part-geomplate-advanced-deferred` 仍只验证 concrete deferred diagnostics，不是 supported。
 
 ## 冻结边界

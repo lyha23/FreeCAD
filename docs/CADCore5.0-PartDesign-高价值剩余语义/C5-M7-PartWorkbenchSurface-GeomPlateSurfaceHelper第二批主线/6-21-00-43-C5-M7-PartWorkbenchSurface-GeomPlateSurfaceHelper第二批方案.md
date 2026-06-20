@@ -41,9 +41,11 @@
 
 核准当前第一批和 c4m1 advanced fixture 的真实覆盖：3D G0 curve、3D point、advanced approximation params 已有 expected-backed 证据；initial surface / 2D wrapper 状态仍是 deferred diagnostic。
 
-### S1 现有 advanced constraints 收口
+### S1 现有 advanced constraints 收口（已实现）
 
 把 `c4m1/part-geomplate-advanced-constraints` 作为本包 guard，而不是新需求；确认它只覆盖 explicit approximation params 和 source evidence，不误宣称 G1 / 2D / initial surface 已支持。
+
+S1 已收口：`cad-core/tests/test_p8_features.py` 明确断言该 fixture 只有 4 条 G0 `curve3d` source evidence 和 1 条 `point3d` source evidence，并验证 `ApproxTol3d`、`ApproxMaxSegments`、`ApproxMaxDegree`、`ApproxContinuity` 等 explicit approximation metadata；`cad-core/src/adapters/c_api/c_api.cpp` 的 `part_workbench.geomplate` status 已改为 `supported_expected_backed_explicit_approximation_params_with_deferred_wrappers`，并保留 `initial_surface_reference_contract`、`g1_curve_on_surface`、`projected_2d_curve`、`point_2d_on_surface`、`custom_constraint_criteria`、`part_platesurface_curves_wrapper` 作为 remaining gaps。
 
 ### S2 InitialSurface 与 G1 curve-on-surface
 
@@ -86,7 +88,7 @@
 | fixture | 类型 | 目标 |
 | --- | --- | --- |
 | `c3m4/part-geomplate-curve-point-default` | existing guard | 第一批 3D G0 + 3D point 不回退 |
-| `c4m1/part-geomplate-advanced-constraints` | existing guard | advanced approximation params 不误宣称 2D/G1 |
+| `c4m1/part-geomplate-advanced-constraints` | existing guard | explicit approximation params + 3D source evidence expected-backed；不误宣称 InitialSurface/G1/2D/wrapper |
 | `c5m7/part-geomplate-initial-surface-g0` | new expected | initial surface reference + G0 curve |
 | `c5m7/part-geomplate-g1-curve-on-surface` | new expected | curve-on-surface G1 |
 | `c5m7/part-geomplate-curve2d-on-surface` | new expected | explicit 2D curve on surface |

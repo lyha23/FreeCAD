@@ -3191,7 +3191,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         geomplate = capabilities["part_workbench"]["geomplate"]
         self.assertEqual(
             geomplate["status"],
-            "supported_expected_backed_advanced_constraints_with_deferred_wrappers",
+            "supported_expected_backed_explicit_approximation_params_with_deferred_wrappers",
         )
         self.assertIn("Part::GeomPlateSurface", geomplate["type_ids"])
         self.assertEqual(geomplate["helper"], "Part.GeomPlate.BuildPlateSurface")
@@ -3224,7 +3224,9 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "ApproxMaxSegments",
             "ApproxContinuity",
             "InitialSurface",
+            "Surface",
             "Curve2dOnSurface",
+            "ProjectedCurve2d",
             "Point2dOnSurface",
             "PlateSurfaceCurves",
         ):
@@ -3298,8 +3300,12 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "curve_constraints_are_3d_edge_sources",
             "point_constraints_are_3d_vectors",
             "g0_curve_constraints_first_batch",
+            "default_and_explicit_build_params",
+            "explicit_approximation_params",
             "filling_capability_not_expanded",
             "advanced_approximation_params_expected_backed",
+            "advanced_approximation_params_are_not_full_advanced_support",
+            "initial_surface_g1_2d_wrapper_not_supported",
             "initial_surface_2d_constraints_deferred_diagnostic",
         ):
             self.assertIn(boundary, geomplate["request_local_boundaries"])
@@ -3345,6 +3351,17 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertNotIn("Part::GeomPlate", geomplate["type_ids"])
         self.assertNotIn("part_platesurface_curves_wrapper", geomplate["covered"])
+        for unsupported in (
+            "initial_surface_reference_contract",
+            "g1_curve_on_surface",
+            "projected_2d_curve",
+            "point_2d_on_surface",
+            "custom_constraint_criteria",
+            "part_platesurface_curves_wrapper",
+            "full_advanced_geomplate_support",
+            "full_part_surface_family",
+        ):
+            self.assertNotIn(unsupported, geomplate["covered"])
         self.assertNotIn("complete_mapper_history", capabilities["topo_history"]["remaining_gaps"])
         self.assertNotIn(
             "element_map_child_map_preserve_propagate_lifecycle",

@@ -26,7 +26,7 @@ C5-M7 的最小完整批次不是“一个高级约束”，而是同一 FreeCAD
 
 | 批次 | 代表场景 | 产物 |
 | --- | --- | --- |
-| live guard | 现有 3D G0 curve + 3D point + advanced approximation params | 保持 `c3m4` / `c4m1` expected-backed fixtures 和 adapter capability 不回退 |
+| live guard | 现有 3D G0 curve + 3D point + explicit approximation params | S1 已把 `c4m1/part-geomplate-advanced-constraints` 固化为 expected-backed guard；只证明 `Approx*` 参数和 3D source evidence，不代表 InitialSurface / G1 / 2D / wrapper support |
 | initial surface / G1 | `Surface` / `InitialSurface`、curve-on-surface G1 | 新 c5m7 expected-backed fixtures 或明确 blocker |
 | 2D constraints | curve2d-on-surface、projected 2D curve、point2d-on-surface | 新 c5m7 expected-backed fixtures，source evidence 可定位 surface / subname |
 | criteria / wrapper | G0/G1/G2 criterion setters、`Part.PlateSurface.Curves` wrapper | support 或 concrete deferred diagnostic，不能留 broad gap |

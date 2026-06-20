@@ -1254,7 +1254,7 @@ nlohmann::json capabilitiesJson()
                   // "GeomPlateSurface". cad-core Part::GeomPlateSurface is a source-backed
                   // geometry helper request type, not a GUI feature or native FreeCAD
                   // DocumentObject TypeId.
-                  {"status", "supported_expected_backed_advanced_constraints_with_deferred_wrappers"},
+                  {"status", "supported_expected_backed_explicit_approximation_params_with_deferred_wrappers"},
                   {"type_ids", {"Part::GeomPlateSurface"}},
                   {"helper", "Part.GeomPlate.BuildPlateSurface"},
                   {"dto", "PartGeomPlateSurfaceDTO"},
@@ -1338,6 +1338,8 @@ nlohmann::json capabilitiesJson()
                     "default_and_explicit_build_params",
                     "explicit_approximation_params",
                     "advanced_approximation_params_expected_backed",
+                    "advanced_approximation_params_are_not_full_advanced_support",
+                    "initial_surface_g1_2d_wrapper_not_supported",
                     "initial_surface_2d_constraints_deferred_diagnostic",
                     "filling_capability_not_expanded"}},
                   {"remaining_gaps",

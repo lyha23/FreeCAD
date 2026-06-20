@@ -941,15 +941,35 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(geomplate["status"], "ok")
         self.assertEqual(geomplate["feature"], "part_geomplate_surface")
         self.assertEqual(geomplate["helper"], "Part.GeomPlate.BuildPlateSurface")
+        self.assertEqual(geomplate["dto"], "PartGeomPlateSurfaceDTO")
+        self.assertTrue(geomplate["source_backed_helper"])
+        self.assertFalse(geomplate["freecad_native_document_object"])
         self.assertEqual(geomplate["curve_constraint_count"], 4)
         self.assertEqual(geomplate["point_constraint_count"], 1)
         self.assertEqual(geomplate["build_params"]["degree"], 3)
         self.assertEqual(geomplate["build_params"]["nb_pts_on_cur"], 10)
+        self.assertEqual(geomplate["approximation"]["status"], "ok")
+        self.assertEqual(geomplate["approximation"]["surface_kind"], "Geom_BSplineSurface")
+        self.assertEqual(geomplate["approximation"]["tol_3d"], 0.02)
         self.assertEqual(geomplate["approximation"]["continuity"], "C1")
         self.assertEqual(geomplate["approximation"]["max_segments"], 12)
         self.assertEqual(geomplate["approximation"]["max_degree"], 4)
-        self.assertTrue(any(item["kind"] == "curve3d" and item["nb_pts"] == 10 for item in source_evidence))
-        self.assertTrue(any(item["kind"] == "point3d" and item["order"] == 0 for item in source_evidence))
+        self.assertEqual(geomplate["approximation"]["max_distance"], 0.0001)
+        self.assertEqual(geomplate["approximation"]["crit_order"], 0)
+        curve_sources = [item for item in source_evidence if item["kind"] == "curve3d"]
+        point_sources = [item for item in source_evidence if item["kind"] == "point3d"]
+        self.assertEqual(len(curve_sources), 4)
+        self.assertEqual(len(point_sources), 1)
+        self.assertEqual(
+            {item["object"] for item in curve_sources},
+            {"BoundaryA", "BoundaryB", "BoundaryC", "BoundaryD"},
+        )
+        self.assertEqual({item["nb_pts"] for item in curve_sources}, {10})
+        self.assertEqual({item["order"] for item in curve_sources}, {0})
+        self.assertEqual(point_sources[0]["order"], 0)
+        self.assertNotIn("curve2d", {item["kind"] for item in source_evidence})
+        self.assertNotIn("projected_curve2d", {item["kind"] for item in source_evidence})
+        self.assertNotIn("point2d", {item["kind"] for item in source_evidence})
         self.assert_object_matches_expected(result, "c4m1", "part-geomplate-advanced-constraints")
 
     def test_c4m1_part_geomplate_advanced_wrappers_are_concrete_deferred(self) -> None:
