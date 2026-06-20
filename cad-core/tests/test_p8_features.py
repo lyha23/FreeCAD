@@ -982,11 +982,9 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "unsupported_property",
                 "unsupported_property",
                 "unsupported_property",
-                "unsupported_property",
             ],
         )
         for object_name in (
-            "InitialSurfaceDeferred",
             "Curve2dDeferred",
             "Point2dDeferred",
             "PlateSurfaceCurvesDeferred",
@@ -994,10 +992,62 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertEqual(result["objects"][object_name]["status"], "error")
             self.assertEqual(result["objects"][object_name]["feature"], "part_geomplate_surface")
             self.assertEqual(result["objects"][object_name]["helper"], "Part.GeomPlate.BuildPlateSurface")
+        initial_surface = result["objects"]["InitialSurfaceDeferred"]
+        self.assertEqual(initial_surface["status"], "ok")
+        self.assertEqual(initial_surface["feature"], "part_geomplate_surface")
+        self.assertEqual(initial_surface["helper"], "Part.GeomPlate.BuildPlateSurface")
+        self.assertIn("initial_surface", {item["kind"] for item in initial_surface["source_evidence"]})
         for diagnostic in diagnostics:
             self.assertIn("property", diagnostic)
             self.assertIn("target", diagnostic)
             self.assertIn("subname", diagnostic)
+
+    def test_c5m7_part_geomplate_initial_surface_g0_is_expected_backed(self) -> None:
+        result = self.run_recompute("part-geomplate-initial-surface-g0", "c5m7")
+        geomplate = result["objects"]["GeomPlate"]
+        source_evidence = geomplate["source_evidence"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(geomplate["status"], "ok")
+        self.assertEqual(geomplate["feature"], "part_geomplate_surface")
+        self.assertEqual(geomplate["helper"], "Part.GeomPlate.BuildPlateSurface")
+        self.assertEqual(geomplate["dto"], "PartGeomPlateSurfaceDTO")
+        self.assertEqual(geomplate["curve_constraint_count"], 4)
+        self.assertEqual(geomplate["point_constraint_count"], 1)
+        self.assertEqual(sum(item["kind"] == "initial_surface" for item in source_evidence), 1)
+        initial_surface = next(item for item in source_evidence if item["kind"] == "initial_surface")
+        self.assertEqual(initial_surface["object"], "SupportPlane")
+        self.assertEqual(initial_surface["subname"], "Face1")
+        self.assertEqual(initial_surface["stable_subname"], "Face1")
+        self.assertNotIn("curve_on_surface", {item["kind"] for item in source_evidence})
+        self.assert_object_matches_expected(result, "c5m7", "part-geomplate-initial-surface-g0")
+
+    def test_c5m7_part_geomplate_g1_curve_on_surface_is_source_backed_with_native_oracle_blocker(self) -> None:
+        result = self.run_recompute("part-geomplate-g1-curve-on-surface", "c5m7")
+        geomplate = result["objects"]["GeomPlate"]
+        source_evidence = geomplate["source_evidence"]
+        expected = self.expected_freecad("c5m7", "part-geomplate-g1-curve-on-surface")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(geomplate["status"], "ok")
+        self.assertEqual(geomplate["feature"], "part_geomplate_surface")
+        self.assertEqual(geomplate["helper"], "Part.GeomPlate.BuildPlateSurface")
+        self.assertEqual(geomplate["dto"], "PartGeomPlateSurfaceDTO")
+        self.assertEqual(geomplate["curve_constraint_count"], 4)
+        self.assertEqual(geomplate["point_constraint_count"], 1)
+        curve_on_surface = [item for item in source_evidence if item["kind"] == "curve_on_surface"]
+        self.assertEqual(len(curve_on_surface), 1)
+        self.assertEqual(curve_on_surface[0]["object"], "SupportPlane")
+        self.assertEqual(curve_on_surface[0]["subname"], "Edge1")
+        self.assertEqual(curve_on_surface[0]["order"], 1)
+        self.assertEqual(curve_on_surface[0]["surface_object"], "SupportPlane")
+        self.assertEqual(curve_on_surface[0]["surface_subname"], "Face1")
+        self.assertEqual(sum(item["kind"] == "curve3d" for item in source_evidence), 3)
+        self.assertEqual(sum(item["kind"] == "point3d" for item in source_evidence), 1)
+        self.assertEqual(
+            expected["known_gap"]["kind"],
+            "geomplate_g1_curve_on_surface_native_oracle_blocked",
+        )
 
     def test_c4m1_part_project_on_surface_edge_plane_is_expected_backed(self) -> None:
         result = self.run_recompute("part-project-on-surface-edge-plane", "c4m1")

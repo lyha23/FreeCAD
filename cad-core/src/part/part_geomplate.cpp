@@ -1,6 +1,7 @@
 #include "cad_core/part/part_geomplate.h"
 
 #include "cad_core/app/document.h"
+#include "cad_core/app/property_links.h"
 #include "cad_core/part/part_feature.h"
 #include "cad_core/part/topo_shape.h"
 #include "cad_core/runtime/compute_context.h"
@@ -8,12 +9,20 @@
 
 #include "part_feature_support.h"
 
+#include <Adaptor2d_Curve2d.hxx>
+#include <Adaptor3d_CurveOnSurface.hxx>
 #include <Adaptor3d_Curve.hxx>
+#include <Adaptor3d_Surface.hxx>
+#include <BRepAdaptor_Surface.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepLib.hxx>
+#include <BRepTools.hxx>
 #include <BRep_Tool.hxx>
+#include <Geom2d_Curve.hxx>
+#include <Geom2dAdaptor_Curve.hxx>
 #include <GeomAbs_Shape.hxx>
 #include <GeomAdaptor_Curve.hxx>
+#include <GeomAdaptor_Surface.hxx>
 #include <GeomPlate_BuildPlateSurface.hxx>
 #include <GeomPlate_CurveConstraint.hxx>
 #include <GeomPlate_MakeApprox.hxx>
@@ -21,11 +30,14 @@
 #include <GeomPlate_Surface.hxx>
 #include <Geom_BSplineSurface.hxx>
 #include <Geom_Curve.hxx>
+#include <Geom_Surface.hxx>
 #include <Precision.hxx>
 #include <Standard_Failure.hxx>
 #include <TopAbs_ShapeEnum.hxx>
+#include <TopLoc_Location.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Edge.hxx>
+#include <TopoDS_Face.hxx>
 
 #include <algorithm>
 #include <cmath>
@@ -142,13 +154,11 @@ bool rejectDeferredGeomPlateAdvancedProperties(
 )
 {
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate
-    // /BuildPlateSurfacePyImp.cpp::BuildPlateSurfacePy::LoadInitSurface(),
-    // CurveConstraintPyImp.cpp::setCurve2dOnSurf()/setProjectedCurve(), and
-    // PointConstraintPyImp.cpp::setPnt2dOnSurf() expose advanced wrapper state that is not yet
+    // /BuildPlateSurfacePyImp.cpp::BuildPlateSurfacePy::LoadInitSurface() is represented by
+    // the S2 initial-surface DTO; CurveConstraintPyImp.cpp::setCurve2dOnSurf()/setProjectedCurve(),
+    // and PointConstraintPyImp.cpp::setPnt2dOnSurf() expose advanced wrapper state that is not yet
     // represented in cad-core's request DTO.
     static const std::vector<std::string> deferred {
-        "InitialSurface",
-        "Surface",
         "Curve2dOnSurface",
         "ProjectedCurve2d",
         "Point2dOnSurface",
@@ -351,7 +361,8 @@ std::string stableSubnameForLink(const app::Link& link, std::size_t index)
 {
     return index < link.stableSubnames.size() && !link.stableSubnames[index].empty()
         ? link.stableSubnames[index]
-        : index < link.subnames.size() ? link.subnames[index] : std::string {};
+        : index < link.subnames.size() ? link.subnames[index]
+                                       : std::string {};
 }
 
 std::optional<TopoDS_Shape> resolveGeomPlateCurveShape(
@@ -368,7 +379,8 @@ std::optional<TopoDS_Shape> resolveGeomPlateCurveShape(
         return shapeIt->second.shape;
     }
     const auto namedShapeIt = context.namedShapes.find(link.object);
-    const NamedShape* namedShape = namedShapeIt != context.namedShapes.end() ? &namedShapeIt->second : nullptr;
+    const NamedShape* namedShape = namedShapeIt != context.namedShapes.end() ? &namedShapeIt->second
+                                                                             : nullptr;
     const std::string subname = link.subnames[index];
     const std::string stable = stableSubnameForLink(link, index);
     if (namedShape != nullptr) {
@@ -383,6 +395,128 @@ std::optional<TopoDS_Shape> resolveGeomPlateCurveShape(
         return part::subshapeByName(shapeIt->second.shape, stable);
     }
     return std::nullopt;
+}
+
+Handle(Geom_Surface) geomPlateSurfaceHandleForFace(const TopoDS_Face& face)
+{
+    TopLoc_Location location;
+    Handle(Geom_Surface) surface = BRep_Tool::Surface(face, location);
+    if (surface.IsNull()) {
+        return {};
+    }
+    if (!location.IsIdentity()) {
+        surface = Handle(Geom_Surface)::DownCast(surface->Transformed(location.Transformation()));
+    }
+    return surface;
+}
+
+std::optional<GeomPlateSurfaceSource> readSurfaceSourceFromLink(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const std::string& property,
+    const app::Link& link,
+    std::size_t index = 0
+)
+{
+    if (link.object.empty()) {
+        addGeomPlateDiagnostic(
+            object,
+            context,
+            "missing_surface_source",
+            "Part.GeomPlate.BuildPlateSurface " + property + " target is missing",
+            property
+        );
+        return std::nullopt;
+    }
+
+    const auto shape = resolveGeomPlateCurveShape(context, link, index);
+    if (!shape || shape->IsNull()) {
+        addGeomPlateDiagnostic(
+            object,
+            context,
+            "missing_surface_source",
+            "Part.GeomPlate.BuildPlateSurface " + property
+                + " target did not produce a resolvable face",
+            property,
+            link.object,
+            stableSubnameForLink(link, index)
+        );
+        return std::nullopt;
+    }
+    if (shape->ShapeType() != TopAbs_FACE) {
+        addGeomPlateDiagnostic(
+            object,
+            context,
+            "invalid_surface_source",
+            "Part.GeomPlate.BuildPlateSurface " + property + " must reference one face",
+            property,
+            link.object,
+            stableSubnameForLink(link, index)
+        );
+        return std::nullopt;
+    }
+
+    GeomPlateSurfaceSource source;
+    source.objectName = link.object;
+    source.shape = *shape;
+    if (index < link.subnames.size()) {
+        source.subname = link.subnames[index];
+    }
+    source.stableSubname = stableSubnameForLink(link, index);
+    return source;
+}
+
+std::optional<app::Link> readCurveConstraintSurfaceLink(const nlohmann::json& raw)
+{
+    if (!raw.is_object()) {
+        return std::nullopt;
+    }
+    for (const std::string& key : {"CurveOnSurface", "OnSurface", "Surface"}) {
+        const auto it = raw.find(key);
+        if (it == raw.end()) {
+            continue;
+        }
+        if (auto link = app::readLink(*it)) {
+            return link;
+        }
+    }
+    return std::nullopt;
+}
+
+std::optional<GeomPlateSurfaceSource> readInitialSurfaceSource(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context
+)
+{
+    const bool hasInitialSurface = app::propertyValue(object, "InitialSurface") != nullptr;
+    const bool hasSurface = app::propertyValue(object, "Surface") != nullptr;
+    if (hasInitialSurface && hasSurface) {
+        addGeomPlateDiagnostic(
+            object,
+            context,
+            "conflicting_property",
+            "Part.GeomPlate.BuildPlateSurface accepts only one initial surface reference",
+            "InitialSurface"
+        );
+        return std::nullopt;
+    }
+    if (!hasInitialSurface && !hasSurface) {
+        return std::nullopt;
+    }
+
+    const std::string property = hasInitialSurface ? "InitialSurface" : "Surface";
+    const auto link = app::readLink(object, property);
+    if (!link) {
+        addGeomPlateDiagnostic(
+            object,
+            context,
+            "missing_surface_source",
+            "Part.GeomPlate.BuildPlateSurface " + property + " must reference one face",
+            property
+        );
+        return std::nullopt;
+    }
+    return readSurfaceSourceFromLink(object, context, property, *link);
 }
 
 std::optional<double> numberField(const nlohmann::json& value, const std::string& field)
@@ -439,6 +573,14 @@ std::optional<std::vector<GeomPlateCurveConstraintSource>> readCurveConstraints(
         const nlohmann::json raw = linkIndex < rawItems.size() && rawItems[linkIndex].is_object()
             ? rawItems[linkIndex]
             : nlohmann::json::object();
+        std::optional<GeomPlateSurfaceSource> curveSurface;
+        if (const auto surfaceLink = readCurveConstraintSurfaceLink(raw)) {
+            curveSurface
+                = readSurfaceSourceFromLink(object, context, "CurveConstraints.Surface", *surfaceLink);
+            if (!curveSurface) {
+                return std::nullopt;
+            }
+        }
         const std::size_t count = link.subnames.empty() ? 1U : link.subnames.size();
         for (std::size_t subIndex = 0; subIndex < count; ++subIndex) {
             const auto shape = resolveGeomPlateCurveShape(context, link, subIndex);
@@ -460,7 +602,8 @@ std::optional<std::vector<GeomPlateCurveConstraintSource>> readCurveConstraints(
                 source.subname = link.subnames[subIndex];
                 source.stableSubname = stableSubnameForLink(link, subIndex);
             }
-            source.order = intField(raw, "Order", source.order);
+            source.surface = curveSurface;
+            source.order = intField(raw, "Order", source.surface ? 1 : source.order);
             source.nbPts = intField(raw, "NbPts", source.nbPts);
             source.tolDist = positiveField(raw, "TolDist", source.tolDist);
             source.tolAng = positiveField(raw, "TolAng", source.tolAng);
@@ -569,7 +712,10 @@ nlohmann::json buildParamsJson(const GeomPlateBuildParams& params)
     };
 }
 
-nlohmann::json approximationParamsJson(const GeomPlateApproximationParams& params, const GeomPlateBuildResult& result)
+nlohmann::json approximationParamsJson(
+    const GeomPlateApproximationParams& params,
+    const GeomPlateBuildResult& result
+)
 {
     nlohmann::json payload = {
         {"status", result.approximationDone ? "ok" : "not_done"},
@@ -605,16 +751,26 @@ nlohmann::json sourceEvidenceJson(const std::vector<GeomPlateSourceEvidence>& ev
             {"order", item.order},
             {"tol_dist", item.tolDist},
         };
-        if (item.kind == "curve3d") {
+        if (item.kind == "curve3d" || item.kind == "curve_on_surface") {
             payload["object"] = item.objectName;
             payload["subname"] = item.subname;
             payload["stable_subname"] = item.stableSubname;
             payload["nb_pts"] = item.nbPts;
             payload["tol_ang"] = item.tolAng;
             payload["tol_curv"] = item.tolCurv;
+            if (item.kind == "curve_on_surface") {
+                payload["surface_object"] = item.surfaceObjectName;
+                payload["surface_subname"] = item.surfaceSubname;
+                payload["surface_stable_subname"] = item.surfaceStableSubname;
+            }
         }
-        else {
+        else if (item.kind == "point3d") {
             payload["point"] = item.point;
+        }
+        else if (item.kind == "initial_surface") {
+            payload["object"] = item.objectName;
+            payload["subname"] = item.subname;
+            payload["stable_subname"] = item.stableSubname;
         }
         result.push_back(std::move(payload));
     }
@@ -624,7 +780,8 @@ nlohmann::json sourceEvidenceJson(const std::vector<GeomPlateSourceEvidence>& ev
 std::string failureMessage(const Standard_Failure& failure)
 {
     const char* message = failure.GetMessageString();
-    return message == nullptr || std::string(message).empty() ? "GeomPlate operation failed" : message;
+    return message == nullptr || std::string(message).empty() ? "GeomPlate operation failed"
+                                                              : message;
 }
 
 std::optional<double> readErrorValue(const std::function<double()>& reader)
@@ -657,12 +814,114 @@ GeomPlateBuildResult errorResult(
     return result;
 }
 
+std::optional<GeomPlateSourceEvidence> loadInitialSurface(
+    GeomPlate_BuildPlateSurface& builder,
+    const GeomPlateSurfaceSource& source,
+    std::string& error
+)
+{
+    if (source.shape.IsNull() || source.shape.ShapeType() != TopAbs_FACE) {
+        error = "Initial surface source must resolve to one face";
+        return std::nullopt;
+    }
+
+    Handle(Geom_Surface) surface = geomPlateSurfaceHandleForFace(TopoDS::Face(source.shape));
+    if (surface.IsNull()) {
+        error = "Initial surface source has no surface handle";
+        return std::nullopt;
+    }
+
+    builder.LoadInitSurface(surface);
+
+    GeomPlateSourceEvidence evidence;
+    evidence.kind = "initial_surface";
+    evidence.objectName = source.objectName;
+    evidence.subname = source.subname;
+    evidence.stableSubname = source.stableSubname;
+    return evidence;
+}
+
+std::optional<GeomPlateSourceEvidence> addCurveOnSurfaceConstraint(
+    GeomPlate_BuildPlateSurface& builder,
+    const GeomPlateCurveConstraintSource& source,
+    std::string& error
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Tools.cpp
+    // ::Part::Tools::makeSurface(), in the Adaptor3d_CurveOnSurface branch, creates
+    // "GeomPlate_CurveConstraint(aHCOS, 1 /*GeomAbs_G1*/, aNbPnts, aTol3d, anAngTol, aCurvTol)".
+    if (!source.surface) {
+        error = "Curve-on-surface constraint requires a surface source";
+        return std::nullopt;
+    }
+    if (source.shape.IsNull() || source.shape.ShapeType() != TopAbs_EDGE) {
+        error = "Curve-on-surface source must resolve to one edge";
+        return std::nullopt;
+    }
+    if (source.surface->shape.IsNull() || source.surface->shape.ShapeType() != TopAbs_FACE) {
+        error = "Curve-on-surface surface source must resolve to one face";
+        return std::nullopt;
+    }
+
+    const TopoDS_Edge edge = TopoDS::Edge(source.shape);
+    const TopoDS_Face face = TopoDS::Face(source.surface->shape);
+    Standard_Real first = 0.0;
+    Standard_Real last = 0.0;
+    Handle(Geom2d_Curve) curve2d = BRep_Tool::CurveOnSurface(edge, face, first, last);
+    if (curve2d.IsNull()) {
+        error = "Curve-on-surface source has no pcurve on the referenced surface";
+        return std::nullopt;
+    }
+
+    Handle(Geom_Surface) surface = geomPlateSurfaceHandleForFace(face);
+    if (surface.IsNull()) {
+        error = "Curve-on-surface surface source has no surface handle";
+        return std::nullopt;
+    }
+    Standard_Real u1 = 0.0;
+    Standard_Real u2 = 0.0;
+    Standard_Real v1 = 0.0;
+    Standard_Real v2 = 0.0;
+    BRepTools::UVBounds(face, u1, u2, v1, v2);
+    Handle(Adaptor2d_Curve2d) curve2dAdaptor = new Geom2dAdaptor_Curve(curve2d, first, last);
+    Handle(Adaptor3d_Surface) surfaceAdaptor = new GeomAdaptor_Surface(surface, u1, u2, v1, v2);
+    Handle(Adaptor3d_CurveOnSurface)
+        curveOnSurface = new Adaptor3d_CurveOnSurface(curve2dAdaptor, surfaceAdaptor);
+    Handle(GeomPlate_CurveConstraint) constraint = new GeomPlate_CurveConstraint(
+        curveOnSurface,
+        1,
+        source.nbPts,
+        source.tolDist,
+        source.tolAng,
+        source.tolCurv
+    );
+    builder.Add(constraint);
+
+    GeomPlateSourceEvidence evidence;
+    evidence.kind = "curve_on_surface";
+    evidence.objectName = source.objectName;
+    evidence.subname = source.subname;
+    evidence.stableSubname = source.stableSubname;
+    evidence.order = 1;
+    evidence.nbPts = source.nbPts;
+    evidence.tolDist = source.tolDist;
+    evidence.tolAng = source.tolAng;
+    evidence.tolCurv = source.tolCurv;
+    evidence.surfaceObjectName = source.surface->objectName;
+    evidence.surfaceSubname = source.surface->subname;
+    evidence.surfaceStableSubname = source.surface->stableSubname;
+    return evidence;
+}
+
 std::optional<GeomPlateSourceEvidence> addCurveConstraint(
     GeomPlate_BuildPlateSurface& builder,
     const GeomPlateCurveConstraintSource& source,
     std::string& error
 )
 {
+    if (source.surface) {
+        return addCurveOnSurfaceConstraint(builder, source, error);
+    }
     if (source.shape.IsNull() || source.shape.ShapeType() != TopAbs_EDGE) {
         error = "Curve constraint source must resolve to one 3D edge";
         return std::nullopt;
@@ -728,6 +987,7 @@ GeomPlateSourceEvidence addPointConstraint(
 GeomPlateBuildResult makePartGeomPlateSurface(
     const std::vector<GeomPlateCurveConstraintSource>& curveConstraints,
     const std::vector<GeomPlatePointConstraintSource>& pointConstraints,
+    const std::optional<GeomPlateSurfaceSource>& initialSurface,
     const GeomPlateBuildParams& buildParams,
     const GeomPlateApproximationParams& approximationParams
 )
@@ -752,6 +1012,20 @@ GeomPlateBuildResult makePartGeomPlateSurface(
             buildParams.anisotropy
         );
 
+        if (initialSurface) {
+            std::string error;
+            auto evidence = loadInitialSurface(builder, *initialSurface, error);
+            if (!evidence) {
+                return errorResult(
+                    "invalid_surface_source",
+                    error,
+                    result.curveConstraintCount,
+                    result.pointConstraintCount,
+                    result.sourceEvidence
+                );
+            }
+            result.sourceEvidence.push_back(std::move(*evidence));
+        }
         for (const GeomPlateCurveConstraintSource& source : curveConstraints) {
             std::string error;
             auto evidence = addCurveConstraint(builder, source, error);
@@ -840,7 +1114,8 @@ GeomPlateBuildResult makePartGeomPlateSurface(
             Standard_Real v1 = 0.0;
             Standard_Real v2 = 0.0;
             approximateSurface->Bounds(u1, u2, v1, v2);
-            BRepBuilderAPI_MakeFace faceBuilder(approximateSurface, u1, u2, v1, v2, Precision::Confusion());
+            BRepBuilderAPI_MakeFace
+                faceBuilder(approximateSurface, u1, u2, v1, v2, Precision::Confusion());
             if (!faceBuilder.IsDone() || faceBuilder.Face().IsNull()) {
                 return errorResult(
                     "approximation_failed",
@@ -929,6 +1204,13 @@ void executePartGeomPlateSurface(const app::DocumentObject& object, runtime::Com
         return;
     }
 
+    const bool initialSurfaceRequested = app::propertyValue(object, "InitialSurface") != nullptr
+        || app::propertyValue(object, "Surface") != nullptr;
+    const auto initialSurface = readInitialSurfaceSource(object, context);
+    if (initialSurfaceRequested && !initialSurface) {
+        return;
+    }
+
     const auto curveConstraints = readCurveConstraints(object, context);
     if (!curveConstraints) {
         return;
@@ -951,16 +1233,25 @@ void executePartGeomPlateSurface(const app::DocumentObject& object, runtime::Com
     const GeomPlateBuildResult build = makePartGeomPlateSurface(
         *curveConstraints,
         *pointConstraints,
+        initialSurface,
         buildParams,
         approximationParams
     );
     if (!build.errorCode.empty() || build.shape.IsNull()) {
+        std::string failedProperty = "PointConstraints";
+        if (build.errorCode == "invalid_curve_source") {
+            failedProperty = "CurveConstraints";
+        }
+        else if (build.errorCode == "invalid_surface_source") {
+            failedProperty = initialSurfaceRequested ? "InitialSurface" : "CurveConstraints";
+        }
         addGeomPlateDiagnostic(
             object,
             context,
             build.errorCode.empty() ? "approximation_failed" : build.errorCode,
-            build.errorMessage.empty() ? "Part.GeomPlate.BuildPlateSurface failed" : build.errorMessage,
-            build.errorCode == "invalid_curve_source" ? "CurveConstraints" : "PointConstraints"
+            build.errorMessage.empty() ? "Part.GeomPlate.BuildPlateSurface failed"
+                                       : build.errorMessage,
+            failedProperty
         );
         return;
     }

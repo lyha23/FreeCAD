@@ -41,15 +41,29 @@ struct GeomPlateApproximationParams
     double enlargeCoeff = 1.1;
 };
 
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate/BuildPlateSurfacePyImp.cpp
+// ::BuildPlateSurfacePy::PyInit(), parses "Surface" and calls "ptr->LoadInitSurface(handle)";
+// ::BuildPlateSurfacePy::loadInitSurface() is the explicit "LoadInitSurface(handle)" entry.
+struct GeomPlateSurfaceSource
+{
+    std::string objectName;
+    std::string subname;
+    std::string stableSubname;
+    TopoDS_Shape shape;
+};
+
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate/CurveConstraintPyImp.cpp
 // ::CurveConstraintPy::PyInit(), wraps a 3D GeometryCurvePy "Boundary" in GeomAdaptor_Curve
 // and constructs GeomPlate_CurveConstraint(Boundary, Order, NbPts, TolDist, TolAng, TolCurv).
+// Tools.cpp::Part::Tools::makeSurface() additionally routes Adaptor3d_CurveOnSurface through
+// GeomPlate_CurveConstraint(..., 1 /*GeomAbs_G1*/, ...).
 struct GeomPlateCurveConstraintSource
 {
     std::string objectName;
     std::string subname;
     std::string stableSubname;
     TopoDS_Shape shape;
+    std::optional<GeomPlateSurfaceSource> surface;
     int order = 0;
     int nbPts = 10;
     double tolDist = 0.0001;
@@ -79,6 +93,9 @@ struct GeomPlateSourceEvidence
     double tolAng = 0.0;
     double tolCurv = 0.0;
     std::array<double, 3> point {{0.0, 0.0, 0.0}};
+    std::string surfaceObjectName;
+    std::string surfaceSubname;
+    std::string surfaceStableSubname;
 };
 
 struct GeomPlateBuildResult
@@ -103,6 +120,7 @@ struct GeomPlateBuildResult
 GeomPlateBuildResult makePartGeomPlateSurface(
     const std::vector<GeomPlateCurveConstraintSource>& curveConstraints,
     const std::vector<GeomPlatePointConstraintSource>& pointConstraints,
+    const std::optional<GeomPlateSurfaceSource>& initialSurface,
     const GeomPlateBuildParams& buildParams,
     const GeomPlateApproximationParams& approximationParams
 );

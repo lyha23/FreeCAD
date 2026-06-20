@@ -121,6 +121,7 @@ nlohmann::json diagnosticCodeList()
         "invalid_placement",
         "invalid_point_constraint",
         "invalid_property_type",
+        "invalid_surface_source",
         "invalid_subshape",
         "invalid_taper",
         "label_reference_ambiguous",
@@ -131,6 +132,7 @@ nlohmann::json diagnosticCodeList()
         "missing_curve_source",
         "missing_object",
         "missing_property",
+        "missing_surface_source",
         "missing_target",
         "missing_grounded_part",
         "mesh_limit_exceeded",
@@ -166,11 +168,13 @@ nlohmann::json diagnosticCodeList()
     });
 }
 
-nlohmann::json adapterResourceLimitDiagnostic(const std::string& message,
-                                              const std::string& object,
-                                              const std::string& property,
-                                              const std::string& target,
-                                              const nlohmann::json& details)
+nlohmann::json adapterResourceLimitDiagnostic(
+    const std::string& message,
+    const std::string& object,
+    const std::string& property,
+    const std::string& target,
+    const nlohmann::json& details
+)
 {
     nlohmann::json diagnostic = {
         {"severity", "error"},
@@ -187,12 +191,14 @@ nlohmann::json adapterResourceLimitDiagnostic(const std::string& message,
     return diagnostic;
 }
 
-void appendAdapterResourceLimitDiagnostic(nlohmann::json& payload,
-                                          const std::string& message,
-                                          const std::string& object,
-                                          const std::string& property,
-                                          const std::string& target,
-                                          const nlohmann::json& details)
+void appendAdapterResourceLimitDiagnostic(
+    nlohmann::json& payload,
+    const std::string& message,
+    const std::string& object,
+    const std::string& property,
+    const std::string& target,
+    const nlohmann::json& details
+)
 {
     if (!payload.contains("diagnostics") || !payload["diagnostics"].is_array()) {
         payload["diagnostics"] = nlohmann::json::array();
@@ -413,7 +419,8 @@ nlohmann::json assemblyValidationCapabilityJson()
         {"source_boundaries",
          {"AssemblyObject.cpp::solve() real runPreDrag path",
           "AssemblyObject.cpp::setNewPlacements() request-local Placement writeback",
-          "AssemblyObject.cpp::validateNewPlacements() is a drag validation boundary, not a backend session"}},
+          "AssemblyObject.cpp::validateNewPlacements() is a drag validation boundary, not a "
+          "backend session"}},
         {"request_local_boundaries",
          {"documentObjectUpdates_only",
           "frontend_graph_is_source_of_truth",
@@ -637,8 +644,7 @@ nlohmann::json capabilitiesJson()
                     "C4M4-TR-PRESS-009",
                     "C4M4-TR-PRESS-012"}},
                   {"unchanged", {"C4M4-TR-PRESS-006"}},
-                  {"needs_reselect",
-                   {"C4M4-TR-PRESS-007", "C4M4-TR-PRESS-010", "C4M4-TR-PRESS-011"}},
+                  {"needs_reselect", {"C4M4-TR-PRESS-007", "C4M4-TR-PRESS-010", "C4M4-TR-PRESS-011"}},
                   {"diagnostic_only", {"C4M4-TR-PRESS-003", "C4M4-TR-PRESS-008"}},
               }},
              {"update_fields",
@@ -1254,14 +1260,17 @@ nlohmann::json capabilitiesJson()
                   // "GeomPlateSurface". cad-core Part::GeomPlateSurface is a source-backed
                   // geometry helper request type, not a GUI feature or native FreeCAD
                   // DocumentObject TypeId.
-                  {"status", "supported_expected_backed_explicit_approximation_params_with_deferred_wrappers"},
+                  {"status", "supported_expected_backed_initial_surface_with_g1_native_oracle_blocked"},
                   {"type_ids", {"Part::GeomPlateSurface"}},
                   {"helper", "Part.GeomPlate.BuildPlateSurface"},
                   {"dto", "PartGeomPlateSurfaceDTO"},
                   {"payload_keys",
                    {"Objects[].TypeId",
                     "Objects[].Properties.CurveConstraints.SubSet",
+                    "Objects[].Properties.CurveConstraints.SubSet[].Surface",
                     "Objects[].Properties.PointConstraints",
+                    "Objects[].Properties.InitialSurface",
+                    "Objects[].Properties.Surface",
                     "Objects[].Properties.Degree",
                     "Objects[].Properties.NbPtsOnCur",
                     "Objects[].Properties.NbIter",
@@ -1299,12 +1308,17 @@ nlohmann::json capabilitiesJson()
                     "Point2dOnSurface",
                     "PlateSurfaceCurves"}},
                   {"property_types",
-                   {"App::PropertyLinkSubList", "JSON::PointConstraintList", "JSON::NumericParams"}},
+                   {"App::PropertyLinkSubList",
+                    "App::PropertyLinkSub",
+                    "JSON::PointConstraintList",
+                    "JSON::NumericParams"}},
                   {"covered",
                    {"part_geomplate_surface_source_backed_helper",
                     "buildplate_surface_helper",
                     "source_backed_3d_curve_g0_constraints",
                     "point_3d_constraints",
+                    "initial_surface_reference_expected_backed",
+                    "g1_curve_on_surface_source_backed",
                     "default_build_params_metadata",
                     "approximation_metadata",
                     "advanced_approximation_params_expected_backed",
@@ -1312,16 +1326,21 @@ nlohmann::json capabilitiesJson()
                     "source_evidence",
                     "expected_backed_fixtures",
                     "invalid_diagnostics",
-                    "initial_surface_2d_wrapper_deferred_diagnostics"}},
+                    "g1_curve_on_surface_native_oracle_blocker",
+                    "2d_wrapper_deferred_diagnostics"}},
                   {"fixtures",
                    {"c3m4/part-geomplate-curve-point-default",
                     "c3m4/part-geomplate-invalid-inputs",
                     "c4m1/part-geomplate-advanced-constraints",
-                    "c4m1/part-geomplate-advanced-deferred"}},
+                    "c4m1/part-geomplate-advanced-deferred",
+                    "c5m7/part-geomplate-initial-surface-g0",
+                    "c5m7/part-geomplate-g1-curve-on-surface"}},
                   {"diagnostics",
                    {"missing_constraints",
                     "missing_curve_source",
+                    "missing_surface_source",
                     "invalid_curve_source",
+                    "invalid_surface_source",
                     "invalid_point_constraint",
                     "invalid_parameter",
                     "perform_failed",
@@ -1335,16 +1354,17 @@ nlohmann::json capabilitiesJson()
                     "curve_constraints_are_3d_edge_sources",
                     "point_constraints_are_3d_vectors",
                     "g0_curve_constraints_first_batch",
+                    "initial_surface_load_init_surface",
+                    "g1_curve_on_surface_source_backed_not_native_expected_backed",
                     "default_and_explicit_build_params",
                     "explicit_approximation_params",
                     "advanced_approximation_params_expected_backed",
                     "advanced_approximation_params_are_not_full_advanced_support",
-                    "initial_surface_g1_2d_wrapper_not_supported",
-                    "initial_surface_2d_constraints_deferred_diagnostic",
+                    "2d_constraints_deferred_diagnostic",
+                    "g1_native_oracle_blocked_by_python_wrapper",
                     "filling_capability_not_expanded"}},
                   {"remaining_gaps",
-                   {"initial_surface_reference_contract",
-                    "g1_curve_on_surface",
+                   {"g1_curve_on_surface_native_oracle",
                     "projected_2d_curve",
                     "point_2d_on_surface",
                     "custom_constraint_criteria",
@@ -1354,8 +1374,6 @@ nlohmann::json capabilitiesJson()
                     "native_freecad_part_geomplate_document_object",
                     "fake_part_geomplate_document_object",
                     "part_platesurface_curves_wrapper",
-                    "initial_surface_first_batch",
-                    "g1_curve_on_surface_first_batch",
                     "projected_2d_curve_first_batch",
                     "filling_brepoffsetapi_makefilling_extension"}},
               }},
@@ -1386,8 +1404,8 @@ nlohmann::json capabilitiesJson()
                    }},
                   {"remaining_gaps", nlohmann::json::array()},
               }},
-                 {"body_chain",
-                  {
+             {"body_chain",
+              {
                   // FreeCAD:
                   // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/Body.cpp
                   // ::Body::onChanged(),
@@ -1496,12 +1514,12 @@ nlohmann::json capabilitiesJson()
                     {"fixtures",
                      {"c51m1/partdesign-groove-uptofirst-body",
                       "c51m1/partdesign-groove-uptoface-body"}}}},
-                  {"remaining_gaps",
-                   {"partdesign_groove_upto_brepfeat_cut_native_failure"}},
+                  {"remaining_gaps", {"partdesign_groove_upto_brepfeat_cut_native_failure"}},
               }},
              {"boolean",
               {
-                  // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureBoolean.cpp
+                  // FreeCAD:
+                  // /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureBoolean.cpp
                   // ::Boolean::execute(), exposes Type "Fuse", "Cut" and "Common"; the
                   // LinkStage3 "Compound" / "Section" branches are commented out. C5.1
                   // productizes those two request Types through
@@ -1554,8 +1572,11 @@ nlohmann::json capabilitiesJson()
                   {"product_contract",
                    {{"source_difference",
                      "PartDesign FeatureBoolean.cpp keeps Compound/Section disabled in TypeEnums; "
-                     "CAD Core C5.1 supports request-local product Types from Part TopoShape maker paths"},
-                    {"section_body_policy", "standalone section edge/wire output is supported; Body Tip replacement is rejected with exact diagnostic"}}},
+                     "CAD Core C5.1 supports request-local product Types from Part TopoShape maker "
+                     "paths"},
+                    {"section_body_policy",
+                     "standalone section edge/wire output is supported; Body Tip replacement is "
+                     "rejected with exact diagnostic"}}},
                   {"remaining_gaps", nlohmann::json::array()},
               }},
              {"loft",
@@ -1653,19 +1674,16 @@ nlohmann::json capabilitiesJson()
                   {"deferred", nlohmann::json::array()},
                   {"exact_blockers",
                    {{"partdesign_pipe_transformation_laws_source_commented",
-                     {{"properties", {"Transformation=Linear", "Transformation=S-shape", "Transformation=Interpolation"}},
-                      {"source",
-                       "/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp::Pipe::execute"},
-                      {"evidence",
-                       "Linear/S-shape ScalingData law branches are present only in a commented block"}}},
+                     {{"properties",
+                       {"Transformation=Linear", "Transformation=S-shape", "Transformation=Interpolation"}},
+                      {"source", "/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp::Pipe::execute"},
+                      {"evidence", "Linear/S-shape ScalingData law branches are present only in a commented block"}}},
                     {"partdesign_pipe_spine_tangent_source_commented",
                      {{"properties", {"SpineTangent", "AuxiliarySpineTangent"}},
-                      {"source",
-                       "/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp::Pipe::buildPipePath"},
-                      {"evidence",
-                       "getContinuousEdges(shape, subedge) call is commented out"}}}}},
+                      {"source", "/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp::Pipe::buildPipePath"},
+                      {"evidence", "getContinuousEdges(shape, subedge) call is commented out"}}}}},
                   {"remaining_gaps", nlohmann::json::array()},
-             }},
+              }},
              {"datum_attachment",
               {
                   // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/DatumPoint.cpp,
@@ -1756,10 +1774,13 @@ nlohmann::json capabilitiesJson()
                         "ProximityPoint1",
                         "ProximityPoint2"}},
                       {"source",
-                       "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Attacher.cpp::AttachEngine3D/Line/Point::_calculateAttachedPlacement"},
+                       "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/"
+                       "Attacher.cpp::AttachEngine3D/Line/Point::_calculateAttachedPlacement"},
                       {"evidence",
-                       "C51-S5 first batch supports FlatFace, ObjectXY/ObjectXZ/ObjectYZ, ObjectOrigin/ObjectX/ObjectY/ObjectZ and NormalToEdge; "
-                       "C51X supports AttachEnginePoint Vertex/OnEdge/CenterOfMass with FreeCADCmd expected"}}}}},
+                       "C51-S5 first batch supports FlatFace, ObjectXY/ObjectXZ/ObjectYZ, "
+                       "ObjectOrigin/ObjectX/ObjectY/ObjectZ and NormalToEdge; "
+                       "C51X supports AttachEnginePoint Vertex/OnEdge/CenterOfMass with FreeCADCmd "
+                       "expected"}}}}},
                   {"remaining_gaps", nlohmann::json::array()},
               }},
              {"hole",
@@ -1849,7 +1870,8 @@ nlohmann::json capabilitiesJson()
                   {"core_result_producers",
                    {"cad_core::runtime::recomputeResultJson",
                     "cad_core::part::partGeometryCurveResultJson"}},
-                  {"entrypoints", {"cli_recompute", "cad_core_recompute_json", "worker_recompute", "wasm_recompute"}},
+                  {"entrypoints",
+                   {"cli_recompute", "cad_core_recompute_json", "worker_recompute", "wasm_recompute"}},
                   {"contract", "same_request_local_core_result"},
               }},
              {"stateless_result_channels",
@@ -1878,7 +1900,8 @@ nlohmann::json capabilitiesJson()
               {
                   {"streaming_limits",
                    {"max_vertices", "max_triangles", "chunk_triangles", "mesh_limit_exceeded"}},
-                  {"binary_payload_limits", {"max_bytes", "adapter_resource_limit", "metadata_diagnostics"}},
+                  {"binary_payload_limits",
+                   {"max_bytes", "adapter_resource_limit", "metadata_diagnostics"}},
                   {"binary_payloads",
                    {"cad_core_mesh_binary_json",
                     "cad-core-binary-mesh-v1",
