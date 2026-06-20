@@ -48,35 +48,6 @@
       }
     },
     {
-      "Name": "OffsetDeferred",
-      "ID": 5,
-      "TypeId": "Part::ProjectOnSurface",
-      "Properties": {
-        "Mode": {
-          "PropertyType": "App::PropertyEnumeration",
-          "value": "Edges"
-        },
-        "Offset": {
-          "PropertyType": "App::PropertyDistance",
-          "value": 0.5
-        },
-        "SupportFace": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "SupportPlane",
-          "SubList": ["Face1"]
-        },
-        "Projection": {
-          "PropertyType": "App::PropertyLinkSubList",
-          "SubSet": [
-            {
-              "value": "ProjectionLine",
-              "SubList": ["Edge1"]
-            }
-          ]
-        }
-      }
-    },
-    {
       "Name": "MultiProjectionDeferred",
       "ID": 6,
       "TypeId": "Part::ProjectOnSurface",
@@ -129,7 +100,6 @@
   "recompute": {
     "objs": [
       "ModeFacesDeferred",
-      "OffsetDeferred",
       "MultiProjectionDeferred",
       "MissingSupport"
     ]

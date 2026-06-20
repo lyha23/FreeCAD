@@ -1132,6 +1132,78 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("ProjectionFace.Face1", faces_named_shape["element_map"])
         self.assert_object_matches_expected(result, "c4m1", "part-project-on-surface-height-boundaries")
 
+    def test_c4m1_part_project_on_surface_edge_offset_moves_after_projection(self) -> None:
+        result = self.run_recompute("part-project-on-surface-edge-offset", "c4m1")
+        projected = result["objects"]["ProjectedEdgesOffset"]
+        subshapes = result["subshapes"]["ProjectedEdgesOffset"]
+        named_shape = result["named_shapes"]["ProjectedEdgesOffset"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(projected["status"], "ok")
+        self.assertEqual(projected["mode"], "Edges")
+        self.assertEqual(projected["height"], 0.0)
+        self.assertEqual(projected["offset"], 0.75)
+        self.assertEqual(projected["offset_application"], "compound_child_moved_after_filter")
+        self.assertEqual(projected["offset_vector"], [0.0, 0.0, 0.75])
+        self.assert_bbox_close_delta(projected["bbox"], [1.0, 1.0, 0.75], [5.0, 2.0, 0.75], 0.11)
+        self.assertEqual(projected["projected_solid_count"], 0)
+        self.assertEqual(projected["projected_face_count"], 0)
+        self.assertEqual(sum(name.startswith("Edge") for name in subshapes), 1)
+        self.assertEqual(sum(name.startswith("Vertex") for name in subshapes), 2)
+        self.assertEqual(named_shape["element_map_status"], "indexed_only")
+        self.assertIn("Edge1", subshapes)
+        self.assertNotIn("ProjectionLine.Edge1", named_shape["element_map"])
+        self.assert_object_matches_expected(result, "c4m1", "part-project-on-surface-edge-offset")
+
+    def test_c4m1_part_project_on_surface_face_offset_preserves_indexed_subshapes(self) -> None:
+        result = self.run_recompute("part-project-on-surface-face-offset", "c4m1")
+        projected = result["objects"]["ProjectedFaceOffset"]
+        subshapes = result["subshapes"]["ProjectedFaceOffset"]
+        named_shape = result["named_shapes"]["ProjectedFaceOffset"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(projected["status"], "ok")
+        self.assertEqual(projected["mode"], "Faces")
+        self.assertEqual(projected["offset"], 0.5)
+        self.assertEqual(projected["offset_application"], "compound_child_moved_after_filter")
+        self.assertEqual(projected["offset_vector"], [0.0, 0.0, 0.5])
+        self.assert_bbox_close_delta(projected["bbox"], [1.0, 1.0, 0.5], [4.0, 3.0, 0.5], 0.11)
+        self.assertEqual(projected["projected_solid_count"], 0)
+        self.assertEqual(projected["projected_face_count"], 1)
+        self.assertEqual(projected["projected_wire_count"], 1)
+        self.assertEqual(sum(name.startswith("Face") for name in subshapes), 1)
+        self.assertEqual(sum(name.startswith("Edge") for name in subshapes), 4)
+        self.assertEqual(sum(name.startswith("Vertex") for name in subshapes), 4)
+        self.assertEqual(named_shape["element_map_status"], "indexed_only")
+        self.assertIn("Face1", subshapes)
+        self.assertNotIn("ProjectionFace.Face1", named_shape["element_map"])
+        self.assert_object_matches_expected(result, "c4m1", "part-project-on-surface-face-offset")
+
+    def test_c4m1_part_project_on_surface_height_offset_moves_solid_after_prism(self) -> None:
+        result = self.run_recompute("part-project-on-surface-height-offset-boundary", "c4m1")
+        projected = result["objects"]["ProjectedAllHeightOffset"]
+        subshapes = result["subshapes"]["ProjectedAllHeightOffset"]
+        named_shape = result["named_shapes"]["ProjectedAllHeightOffset"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(projected["status"], "ok")
+        self.assertEqual(projected["mode"], "All")
+        self.assertEqual(projected["height"], 1.5)
+        self.assertEqual(projected["offset"], 0.25)
+        self.assertEqual(projected["offset_application"], "compound_child_moved_after_filter")
+        self.assertEqual(projected["offset_vector"], [0.0, 0.0, 0.25])
+        self.assert_bbox_close_delta(projected["bbox"], [1.0, 1.0, -1.25], [4.0, 3.0, 0.25], 0.11)
+        self.assertEqual(projected["projected_solid_count"], 1)
+        self.assertEqual(projected["projected_face_count"], 6)
+        self.assertEqual(projected["projected_wire_count"], 6)
+        self.assertAlmostEqual(projected["volume"], 9.0)
+        self.assertEqual(sum(name.startswith("Face") for name in subshapes), 6)
+        self.assertEqual(sum(name.startswith("Edge") for name in subshapes), 12)
+        self.assertEqual(sum(name.startswith("Vertex") for name in subshapes), 8)
+        self.assertEqual(named_shape["element_map_status"], "indexed_only")
+        self.assertNotIn("ProjectionFace.Face1", named_shape["element_map"])
+        self.assert_object_matches_expected(result, "c4m1", "part-project-on-surface-height-offset-boundary")
+
     def test_c4m1_part_project_on_surface_deferred_boundaries_have_stable_diagnostics(self) -> None:
         result = self.run_recompute("part-project-on-surface-deferred-boundaries", "c4m1")
         codes = [item["code"] for item in result["diagnostics"]]
@@ -1141,13 +1213,11 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             [
                 "execution_failed",
                 "unsupported_property",
-                "unsupported_property",
                 "missing_property",
             ],
         )
         for object_name in (
             "ModeFacesDeferred",
-            "OffsetDeferred",
             "MultiProjectionDeferred",
             "MissingSupport",
         ):

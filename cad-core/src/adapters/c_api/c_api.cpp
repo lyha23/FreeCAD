@@ -877,8 +877,8 @@ nlohmann::json capabilitiesJson()
                   // getProjectionShapes(), createProjectedWire(), filterShapes() and
                   // createCompound(). The C4-M1 ProjectOnSurface slice covers Edges, Faces and
                   // All for a single projection/support pair, including createSolidIfHeight()
-                  // for Mode=All plus Height.
-                  {"status", "supported_expected_backed_height_slice"},
+                  // for Mode=All plus Height and getOffsetPlacement() child movement.
+                  {"status", "supported_expected_backed_offset_slice"},
                   {"type_ids", {"Part::ProjectOnSurface"}},
                   {"payload_keys",
                    {"Objects[].TypeId",
@@ -910,6 +910,8 @@ nlohmann::json capabilitiesJson()
                     "mode_faces_height_keeps_face",
                     "height_below_precision_keeps_face",
                     "offset_zero",
+                    "offset_after_filter_compound_child_move",
+                    "offset_direction_normalized",
                     "brepproj_projection_nearest_wire",
                     "projected_face_parametric_wire_rebuild",
                     "ordinary_indexed_named_shape",
@@ -922,6 +924,9 @@ nlohmann::json capabilitiesJson()
                     "c4m1/part-project-on-surface-face-edges-mode",
                     "c4m1/part-project-on-surface-face-all-plane",
                     "c4m1/part-project-on-surface-height-boundaries",
+                    "c4m1/part-project-on-surface-edge-offset",
+                    "c4m1/part-project-on-surface-face-offset",
+                    "c4m1/part-project-on-surface-height-offset-boundary",
                     "c4m1/part-project-on-surface-deferred-boundaries"}},
                   {"diagnostics",
                    {"missing_property",
@@ -937,13 +942,11 @@ nlohmann::json capabilitiesJson()
                     "single_edge_wire_or_face_projection",
                     "ordinary_indexed_named_shape_without_freecad_mapper_history"}},
                   {"remaining_gaps",
-                   {"offset_expected",
-                    "multi_projection_expected",
+                   {"multi_projection_expected",
                     "projected_edge_provenance_mapper_history",
                     "advanced_branch_expected"}},
                   {"non_goals",
                    {"gui_projection_task_panel",
-                    "offset_first_slice",
                     "multi_projection_first_slice",
                     "projected_edge_provenance_mapper_history"}},
               }},

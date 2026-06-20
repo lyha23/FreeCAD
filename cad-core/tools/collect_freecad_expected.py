@@ -3372,6 +3372,23 @@ def float_from_properties(properties: dict[str, Any], name: str, fallback: float
     return fallback
 
 
+def project_on_surface_offset_vector(properties: dict[str, Any]) -> list[float] | None:
+    offset = float_from_properties(properties, "Offset", 0.0)
+    if offset == 0.0:
+        return None
+    value = consumer_property(properties, "Direction", [0.0, 0.0, 1.0])
+    if (
+        not isinstance(value, list)
+        or len(value) != 3
+        or not all(isinstance(item, (int, float)) for item in value)
+    ):
+        return None
+    magnitude = math.sqrt(sum(float(component) * float(component) for component in value))
+    if magnitude <= FREECAD_PRECISION_CONFUSION:
+        return None
+    return [float(component) / magnitude * offset for component in value]
+
+
 def project_on_surface_payload(obj: Any, fixture: dict | None = None) -> dict:
     shape = getattr(obj, "Shape", None)
     if shape is None or shape.isNull():
@@ -3382,7 +3399,7 @@ def project_on_surface_payload(obj: Any, fixture: dict | None = None) -> dict:
     face_wire_counts = [len(getattr(face, "Wires", [])) for face in getattr(shape, "Faces", [])]
     payload = shape_summary(shape)
     payload["bbox_delta"] = 0.11
-    payload["object_fields"] = {
+    object_fields = {
         "status": "ok",
         "shape": shape_kind(shape),
         "feature": "part_project_on_surface",
@@ -3399,6 +3416,11 @@ def project_on_surface_payload(obj: Any, fixture: dict | None = None) -> dict:
         "projected_wire_count": len(getattr(shape, "Wires", [])),
         "projected_inner_wire_count": sum(max(0, count - 1) for count in face_wire_counts),
     }
+    offset_vector = project_on_surface_offset_vector(properties)
+    if offset_vector is not None:
+        object_fields["offset_application"] = "compound_child_moved_after_filter"
+        object_fields["offset_vector"] = offset_vector
+    payload["object_fields"] = object_fields
     return payload
 
 

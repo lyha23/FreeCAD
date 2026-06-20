@@ -1,0 +1,48 @@
+{
+  "bbox": {
+    "max": [
+      4.0,
+      3.0,
+      0.5
+    ],
+    "min": [
+      1.0,
+      1.0,
+      0.5
+    ]
+  },
+  "bbox_delta": 0.11,
+  "freecad_version": "1.2.0 revision 20260519",
+  "object": "ProjectedFaceOffset",
+  "object_fields": {
+    "feature": "part_project_on_surface",
+    "height": 0.0,
+    "mode": "Faces",
+    "offset": 0.5,
+    "offset_application": "compound_child_moved_after_filter",
+    "offset_vector": [
+      0.0,
+      0.0,
+      0.5
+    ],
+    "projected_face_count": 1,
+    "projected_inner_wire_count": 0,
+    "projected_solid_count": 0,
+    "projected_wire_count": 1,
+    "projection_subshape": "Face1",
+    "shape": "occt_compound",
+    "source_projection": "ProjectionFace",
+    "source_support": "SupportPlane",
+    "status": "ok",
+    "support_face": "Face1",
+    "topo_naming_history": "indexed_projected_edges_no_mapper_history"
+  },
+  "reference": "FreeCADCmd oracle from part-project-on-surface-face-offset.json; objects: Part::Plane, Part::Plane, Part::ProjectOnSurface",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "topology_counts": {
+    "edges": 4,
+    "faces": 1,
+    "vertices": 4
+  },
+  "volume": 0.0
+}

@@ -23,6 +23,7 @@
 #include <TopAbs_Orientation.hxx>
 #include <TopAbs_ShapeEnum.hxx>
 #include <TopExp_Explorer.hxx>
+#include <TopLoc_Location.hxx>
 #include <TopTools_HSequenceOfShape.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Compound.hxx>
@@ -31,6 +32,7 @@
 #include <TopoDS_Shape.hxx>
 #include <TopoDS_Wire.hxx>
 #include <gp_Dir.hxx>
+#include <gp_Trsf.hxx>
 #include <gp_Vec.hxx>
 
 #include <algorithm>
@@ -319,26 +321,6 @@ std::optional<std::string> readProjectionMode(
         return std::nullopt;
     }
     return mode;
-}
-
-bool rejectNonZeroProperty(
-    const app::DocumentObject& object,
-    runtime::ComputeContext& context,
-    const std::string& property
-)
-{
-    const double value = app::readNumber(object, property).value_or(0.0);
-    if (std::abs(value) <= Precision::Confusion()) {
-        return false;
-    }
-    addProjectOnSurfaceDiagnostic(
-        object,
-        context,
-        "unsupported_property",
-        "Part::ProjectOnSurface first slice requires " + property + "=0",
-        property
-    );
-    return true;
 }
 
 std::optional<gp_Dir> readProjectionDirection(
@@ -706,14 +688,36 @@ int countInnerWires(const TopoDS_Shape& shape)
     return count;
 }
 
-TopoDS_Shape compoundOf(const std::vector<TopoDS_Shape>& shapes)
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp
+// ::ProjectOnSurface::getOffsetPlacement(), reads "Offset"; for non-zero offset it normalizes
+// "Direction", scales it by Offset, builds a translation TopLoc_Location, and
+// ::createCompound() adds each child shape as "it.Moved(loc)" after filtering/solid creation.
+gp_Vec offsetVectorForDirection(const gp_Dir& direction, double offset)
+{
+    gp_Vec vector(direction);
+    vector.Multiply(offset);
+    return vector;
+}
+
+TopLoc_Location offsetPlacementForVector(const gp_Vec& offsetVector, double offset)
+{
+    if (offset == 0.0) {
+        return {};
+    }
+    gp_Trsf transform;
+    transform.SetTranslation(offsetVector);
+    return TopLoc_Location(transform);
+}
+
+TopoDS_Shape compoundOf(const std::vector<TopoDS_Shape>& shapes, const TopLoc_Location& offsetPlacement)
 {
     BRep_Builder builder;
     TopoDS_Compound compound;
     builder.MakeCompound(compound);
+    const bool isIdentity = offsetPlacement.IsIdentity();
     for (const TopoDS_Shape& shape : shapes) {
         if (!shape.IsNull()) {
-            builder.Add(compound, shape);
+            builder.Add(compound, isIdentity ? shape : shape.Moved(offsetPlacement));
         }
     }
     return compound;
@@ -736,10 +740,11 @@ void executePartProjectOnSurface(const app::DocumentObject& object, runtime::Com
     }
 
     const auto mode = readProjectionMode(object, context);
-    if (!mode || rejectNonZeroProperty(object, context, "Offset")) {
+    if (!mode) {
         return;
     }
     const double height = app::readNumber(object, "Height").value_or(0.0);
+    const double offset = app::readNumber(object, "Offset").value_or(0.0);
 
     const auto direction = readProjectionDirection(object, context);
     if (!direction) {
@@ -778,26 +783,33 @@ void executePartProjectOnSurface(const app::DocumentObject& object, runtime::Com
             return;
         }
 
-        const TopoDS_Shape projectedCompound = compoundOf(filteredShapes);
+        const gp_Vec offsetVector = offsetVectorForDirection(*direction, offset);
+        const TopoDS_Shape projectedCompound =
+            compoundOf(filteredShapes, offsetPlacementForVector(offsetVector, offset));
+        nlohmann::json metadata = {
+            {"feature", "part_project_on_surface"},
+            {"source_support", support->objectName},
+            {"support_face", support->stableSubname},
+            {"source_projection", projection->objectName},
+            {"projection_subshape", projection->stableSubname},
+            {"mode", *mode},
+            {"height", height},
+            {"offset", offset},
+            {"topo_naming_history", "indexed_projected_edges_no_mapper_history"},
+            {"projected_solid_count", countSubshapes(projectedCompound, TopAbs_SOLID)},
+            {"projected_face_count", countSubshapes(projectedCompound, TopAbs_FACE)},
+            {"projected_wire_count", countSubshapes(projectedCompound, TopAbs_WIRE)},
+            {"projected_inner_wire_count", countInnerWires(projectedCompound)},
+        };
+        if (offset != 0.0) {
+            metadata["offset_application"] = "compound_child_moved_after_filter";
+            metadata["offset_vector"] = {offsetVector.X(), offsetVector.Y(), offsetVector.Z()};
+        }
         part_feature_detail::publishPartShape(
             object,
             context,
             projectedCompound,
-            {
-                {"feature", "part_project_on_surface"},
-                {"source_support", support->objectName},
-                {"support_face", support->stableSubname},
-                {"source_projection", projection->objectName},
-                {"projection_subshape", projection->stableSubname},
-                {"mode", *mode},
-                {"height", height},
-                {"offset", 0.0},
-                {"topo_naming_history", "indexed_projected_edges_no_mapper_history"},
-                {"projected_solid_count", countSubshapes(projectedCompound, TopAbs_SOLID)},
-                {"projected_face_count", countSubshapes(projectedCompound, TopAbs_FACE)},
-                {"projected_wire_count", countSubshapes(projectedCompound, TopAbs_WIRE)},
-                {"projected_inner_wire_count", countInnerWires(projectedCompound)},
-            }
+            metadata
         );
     }
     catch (const Standard_Failure& failure) {
