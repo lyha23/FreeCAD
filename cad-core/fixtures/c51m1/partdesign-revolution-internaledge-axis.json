@@ -1,0 +1,45 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchRevolution",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [2, 0], "end": [4, 0] },
+          { "kind": "LineSegment", "start": [0, 0], "end": [0, 2] },
+          { "kind": "LineSegment", "start": [4, 0], "end": [4, 2] },
+          { "kind": "LineSegment", "start": [4, 2], "end": [2, 2] },
+          { "kind": "LineSegment", "start": [2, 2], "end": [2, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Revolution",
+      "ID": 2,
+      "TypeId": "PartDesign::Revolution",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchRevolution",
+          "SubList": ["InternalFace1"]
+        },
+        "Type": "Angle",
+        "Angle": 180,
+        "ReferenceAxis": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchRevolution",
+          "SubList": ["InternalEdge2"]
+        },
+        "Reversed": false,
+        "Midplane": false,
+        "Refine": false,
+        "FuzzyTolerance": 0.0
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Revolution"]
+  }
+}

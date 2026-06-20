@@ -571,6 +571,16 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 for actual, expected in zip(direction, expected_direction):
                     self.assertAlmostEqual(actual, expected, delta=1e-9)
 
+    def test_c51m1_revolution_same_sketch_internaledge_axis_is_resolved(self) -> None:
+        result = self.run_recompute("partdesign-revolution-internaledge-axis", "c51m1")
+        revolution = result["objects"]["Revolution"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(revolution["status"], "ok")
+        self.assertEqual(revolution["source_profile"], "SketchRevolution")
+        self.assertEqual([abs(component) for component in revolution["axis_direction"]], [1.0, 0.0, 0.0])
+        self.assertGreater(revolution["volume"], 0.0)
+
     def test_c51m1_revolution_upto_body_paths_use_brepfeat_history(self) -> None:
         for fixture, method in [
             ("partdesign-revolution-uptoface-body", "UpToFace"),

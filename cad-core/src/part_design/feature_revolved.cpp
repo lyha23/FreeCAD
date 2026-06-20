@@ -624,6 +624,48 @@ std::optional<AxisSelection> axisFromEdge(const TopoDS_Edge& edge,
     }
 }
 
+std::optional<TopoDS_Shape> resolveSameSketchInternalEdgeAxis(const runtime::ShapeValue& shapeValue,
+                                                              const app::DocumentObject& object,
+                                                              runtime::ComputeContext& context,
+                                                              const std::string& target,
+                                                              const std::string& subname)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.cpp
+    // ::ProfileBased::getAxis(), after "AxisN" sketch-axis handling, reads selected Part::Feature
+    // subelements through "refShape.getSubShape(subReferenceAxis[0].c_str())"; SketchObject.cpp
+    // publishes request-local "InternalShape" ids such as "InternalEdgeN".
+    const auto parsed = part::parseInternalSubshapeName(subname);
+    if (!parsed || parsed->kind != TopAbs_EDGE) {
+        return std::nullopt;
+    }
+    if (!shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_axis",
+                               "ReferenceAxis subshape " + subname + " is not available on " + target,
+                               object.name,
+                               "ReferenceAxis",
+                               "runtime",
+                               target,
+                               subname);
+        return std::nullopt;
+    }
+    const auto subshape = part::subshapeByName(*shapeValue.internalShape, *parsed);
+    if (!subshape || subshape->IsNull()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_axis",
+                               "ReferenceAxis subshape " + subname + " is not available on " + target,
+                               object.name,
+                               "ReferenceAxis",
+                               "runtime",
+                               target,
+                               subname);
+        return std::nullopt;
+    }
+    return *subshape;
+}
+
 std::optional<AxisSelection> resolveReferenceAxis(const app::DocumentObject& object,
                                                   runtime::ComputeContext& context,
                                                   const ProfileSelection& profile,
@@ -699,6 +741,17 @@ std::optional<AxisSelection> resolveReferenceAxis(const app::DocumentObject& obj
     TopoDS_Shape axisShape;
     if (subname.empty()) {
         axisShape = shapeIt->second.shape;
+    }
+    else if (const auto parsed = part::parseInternalSubshapeName(subname);
+             referenceAxis->object == profile.link.object
+             && shapeIt->second.kind == runtime::ShapeValue::Kind::Sketch
+             && parsed
+             && parsed->kind == TopAbs_EDGE) {
+        const auto subshape = resolveSameSketchInternalEdgeAxis(shapeIt->second, object, context, referenceAxis->object, subname);
+        if (!subshape) {
+            return std::nullopt;
+        }
+        axisShape = *subshape;
     }
     else if (const auto subshape = part::subshapeByName(shapeIt->second.shape, subname)) {
         axisShape = *subshape;
