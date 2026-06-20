@@ -1,0 +1,5 @@
+id	kind	scope	status	source_authority	cad_core_landing	oracle_or_diagnostic	validation	next_owner	acceptance_boundary
+C5M5-FR-001	capability	PartDesign capability metadata sync	pending	cad-core/src/adapters/c_api/c_api.cpp;docs/CADCore5.0-PartDesign-高价值剩余语义	cad-core/src/adapters	capability support/deferred/non-goal states match matrices	C5-VAL-501	C5-S5	no broad full PartDesign gap
+C5M5-FR-002	fixture	oracle fixture and expected sync	pending	cad-core/fixtures;cad-core/tools/collect_freecad_expected.py	cad-core/fixtures/c5m*	native oracle or explicit diagnostic/deferred rows	C5-VAL-501	C5-S5	no cad-core-output-derived expected
+C5M5-FR-003	diagnostic	stable deferred diagnostics sync	pending	cad-core/src/runtime;cad-core/src/part_design;docs matrices	cad-core/tests	object/property/target/stage diagnostics	C5-VAL-501	C5-S5	unsupported branches are locatable and documented
+C5M5-FR-004	validation	focused and heavy regression	pending	cad-core/tests	cad-core/tests	C5 focused and heavy commands	C5-VAL-501	C5-S5	freeze summary records final pass/fail

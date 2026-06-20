@@ -1,0 +1,4 @@
+id	kind	scope	status	source_authority	cad_core_landing	oracle_or_diagnostic	validation	next_owner	acceptance_boundary
+C5M0-SCOPE-001	source	C4 freeze PartDesign remaining boundary	pending	docs/CADCore4.0/C4-M6-Freeze收口主线/6-20-05-24-【已实现】C4-M6-freeze收口总结.md	docs/CADCore5.0-PartDesign-高价值剩余语义/矩阵	C5 source/scope/non-goal matrices	C5-VAL-001	C5-S0	C4 remaining rows mapped to C5 owner packages
+C5M0-SCOPE-002	process	package-local matrices and step queues	pending	docs/CADCore4.0 package structure	docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M*/矩阵;工作步骤细分	queue script output	C5-VAL-002	C5-S0	each package has root entry, scheme, scope, blocker and pending step doc
+C5M0-SCOPE-003	boundary	non-goal and deferred policy	pending	AGENTS.md;docs/CADCore4.0/矩阵/cadcore4_non_goal_registry.tsv	docs/CADCore5.0-PartDesign-高价值剩余语义/矩阵/cadcore5_non_goal_registry.tsv	stable diagnostic or docs-only non-goal	C5-VAL-001	C5-S0	no broad full PartDesign gap

@@ -1,0 +1,5 @@
+id	kind	scope	status	source_authority	cad_core_landing	oracle_or_diagnostic	validation	next_owner	acceptance_boundary
+C5M2-BOOL-001	source	Boolean Type / Group / BaseFeature matrix	pending	src/Mod/PartDesign/App/FeatureBoolean.cpp::Boolean::execute	cad-core/src/part_design/feature_boolean.*	C5-ORC-201;C5-ORC-202	C5-VAL-201	C5-S2	Fuse/Cut/Common remain supported;unsupported Type rows are explicit
+C5M2-BOOL-002	source	Body AllowCompound and Tip replacement	pending	src/Mod/PartDesign/App/Body.cpp::AllowCompound;Body.cpp Group/BaseFeature	cad-core/src/part_design/body.*	C5-ORC-201	C5-VAL-201	C5-S2	AllowCompound true/false behavior is fixture-backed
+C5M2-BOOL-003	oracle	multi-tool ownership pressure	pending	FreeCADCmd native collector	cad-core/fixtures/c5m2/partdesign-boolean-multi-tool-ownership.json	C5-ORC-202	C5-VAL-201	C5-S2	source ownership survives Group order and missing tool diagnostics
+C5M2-BOOL-004	capability	Boolean capability publication	pending	cad_core_capabilities_json	cad-core/src/adapters/c_api/c_api.cpp;tests.test_adapters	C5-ORC-201;C5-ORC-202	C5-VAL-201	C5-S2	capability metadata matches support/deferred/non-goal rows

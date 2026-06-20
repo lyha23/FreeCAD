@@ -1,0 +1,2 @@
+id	step	status	priority	blocker	source_authority	cad_core_landing	oracle_or_diagnostic	validation	next_owner	exit_condition
+C5M5-FR-BLK-001	C5-S5	pending	C5-P0	C5 PartDesign freeze docs/capabilities/fixtures/tests not synchronized	docs/CADCore5.0-PartDesign-高价值剩余语义;cad-core/src/adapters/c_api/c_api.cpp;cad-core/tests;cad-core/fixtures	cad-core/src/adapters/c_api/c_api.cpp;cad-core/tests;docs	C5 freeze summary	C5-VAL-501	C5-S5	all C5 blockers closed or explicitly deferred with stable diagnostics
