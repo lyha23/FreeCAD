@@ -4,7 +4,10 @@
 
 - 来源主线：`docs/FreeCAD几何生态迁移工程-细分/C3M4-PartWorkbenchSurface-RuledProjection收口主线/`。
 - S4 裁决：RuledProjection 主线不实现 `Part::ProjectOnSurface`，只把它发布为 source-audited / planned；`Part::RuledSurface` edge/edge 第一批保持 supported。
-- 当前缺口：`cad-core` 未注册 `Part::ProjectOnSurface` executor；`cad-core/tools/collect_freecad_expected.py` 未启用 `Part::ProjectOnSurface` native type，且 `set_property()` 还不支持普通 `App::PropertyLinkSubList`，不能稳定设置 FreeCAD `Projection` 属性。
+- 已完成第一批：`cad-core` 已注册 `Part::ProjectOnSurface` executor，native expected collector 已能覆盖 `Part::ProjectOnSurface`、`App::PropertyLinkSubList` 和 `App::PropertyDirection`；当前发布口径为 `supported_expected_backed_first_slice`。
+- 第一批 fixtures：`cad-core/fixtures/c4m1/part-project-on-surface-edge-plane.json` 与 `cad-core/fixtures/c4m1/part-project-on-surface-deferred-boundaries.json`。
+- 第一批边界：只支持 `Mode=Edges`、`Height=0`、`Offset=0`、单 `Projection` edge/wire 到单 `SupportFace`，并发布普通 indexed `NamedShape`，不宣称 projected edge provenance mapper。
+- 当前缺口：`Mode=Faces` / `Mode=All`、face input rebuild、hole wires、`Height` solid、`Offset` placement、多 `Projection` compound 顺序仍在 capability `remaining_gaps` 内。
 
 ## FreeCAD 依据
 
@@ -13,27 +16,33 @@
 - `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp::ProjectOnSurface::projectWire()`：`BRepProj_Projection(wire, supportFace, dir)`，取最近 projected wire，再拆成 edges。
 - `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp::ProjectOnSurface::projectFace()`、`createFaceFromParametricWire()`、`fixWire()`、`createSolidIfHeight()`、`getOffsetPlacement()`：分别覆盖 face rebuild / holes、wire repair、solid height 和 offset placement，不能混入第一批。
 
-## 第一批候选
+## 第一批已实现边界
 
 第一批只允许 `Mode=Edges`、`Height=0`、`Offset=0`、单 projection item、单 support face：
 
 - `part-project-on-surface-edge-plane`：`Part::Line.Edge1` 沿 `Direction=(0,0,1)` 投影到 `Part::Plane.Face1`。
-- `part-project-on-surface-wire-plane`：单 wire 投影到 `Part::Plane.Face1`，只在 edge fixture 通过后加入。
-- `part-project-on-surface-invalid-boundaries`：拒绝 `Mode=Faces`、`Height != 0`、`Offset != 0`、多个 `Projection` item、非 face support、非 edge/wire projection。
+- `part-project-on-surface-deferred-boundaries`：拒绝 `Mode=Faces`、`Height != 0`、`Offset != 0`、多个 `Projection` item、缺失 support 等 deferred 分支。
+- `wire-plane` 可作为 S1 face/wire 回归补充，但不能替代 face rebuild / holes 的第二批验收。
 
-## 实施顺序
+## 第二批工作步骤细分
 
-1. collector/input：在 `collect_freecad_expected.py` 启用 native `Part::ProjectOnSurface`，并让 `set_property()` 支持普通 `App::PropertyLinkSubList`；用 FreeCAD native object 采集 checked-in expected。
-2. executor：新增 `cad-core/src/part/part_project_on_surface.cpp`、`part_feature.h` 声明、`feature_registry.cpp` 注册、`CMakeLists.txt` source；只接受第一批边界。
-3. geometry：用 OCCT `BRepProj_Projection` 对齐 FreeCAD `projectWire()`；输出 compound/edge 结果时明确 `Offset=0`、`Height=0`、`Mode=Edges`。
-4. topo policy：先裁决 projected edge 是否只保留普通 `NamedShape` 枚举，还是记录 source edge/support face provenance event；不得按输出顺序或 fixture 名补猜。
-5. tests/docs：新增 fixture、expected、`tests.test_p8_features` focused tests、`tests.test_expected_fixtures` expected parity，再更新 capability 发布文档。
+队列目录：`docs/FreeCAD几何生态迁移工程-细分/C3M4-PartWorkbenchSurface-ProjectOnSurface独立主线/工作步骤细分/`。
+
+执行顺序：
+
+1. `PROJSURF-S0`：刷新 live 基线、第二批 scope 和矩阵，不写 C++。
+2. `PROJSURF-S1`：实现 `Mode=Faces` / face input rebuild / hole wires 第一批。
+3. `PROJSURF-S2`：实现 `Mode=All` + `Height` solid 路径。
+4. `PROJSURF-S3`：实现 `Offset` / `getOffsetPlacement()` 位移语义。
+5. `PROJSURF-S4`：实现多 `Projection` item 和 compound 顺序。
+6. `PROJSURF-S5`：发布 capability、文档和队列收口，不 overclaim full ProjectOnSurface。
 
 ## 非目标
 
-- 不覆盖 `projectFace()`、holes、face rebuild、`ShapeFix_Wire` / `ShapeFix_Wireframe` history。
-- 不覆盖 `Mode=Faces` / `Mode=All`、`createSolidIfHeight()`、`getOffsetPlacement()`、多个 projection shape 的 compound 顺序。
 - 不把 full Part surface family 或 full ProjectOnSurface 写成 supported。
+- 不实现 GUI `TaskProjectOnSurface`、ViewProvider 或交互式 projection task panel。
+- 不引入跨请求几何缓存；所有结果仍由请求内 DocumentObject graph 计算。
+- 不把 projected edge provenance / mapper history 当作已完成，除非后续步骤补出可验证账本和 tests。
 
 ## 验收命令
 
@@ -61,5 +70,5 @@ python3 -m unittest tests.test_p8_features tests.test_expected_fixtures tests.te
 
 ## 晋升 / 删除条件
 
-- 晋升条件：第一批 native expected、cad-core executor、focused tests、expected parity 和 capability 文档全部通过后，才能把 `part-project-on-surface-edge-plane` 从 planned 提升为 supported。
-- 删除条件：若 FreeCAD native collector 无法稳定创建 `Part::ProjectOnSurface` expected，或 `BRepProj_Projection` 在当前 OCCT 基线无法稳定复现，保持 planned / blocked，不在 RuledSurface 主线中补窄路径。
+- 第二批晋升条件：face rebuild、height solid、offset 和 multi-projection 各自都有 native expected、cad-core focused tests、capability tests 和文档矩阵。
+- 删除条件：若某一高级分支在当前 FreeCAD / OCCT expected 基线不可稳定采集，则该分支保持 deferred / blocked；不得在 executor 中按 fixture 名、输出顺序或几何形态补猜。
