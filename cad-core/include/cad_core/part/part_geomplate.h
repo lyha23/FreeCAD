@@ -113,6 +113,13 @@ struct GeomPlatePointConstraintSource
     std::optional<GeomPlateSurfaceSource> surface;
     int order = 0;
     double tolDist = 0.0001;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate
+    // /PointConstraintPyImp.cpp::setG0Criterion()/setG1Criterion()/setG2Criterion(),
+    // call "SetG0Criterion(tolDist)", "SetG1Criterion(tolAng)" and
+    // "SetG2Criterion(tolCurv)" on the transient GeomPlate_PointConstraint.
+    std::optional<double> g0Criterion;
+    std::optional<double> g1Criterion;
+    std::optional<double> g2Criterion;
 };
 
 struct GeomPlateSourceEvidence
@@ -132,6 +139,9 @@ struct GeomPlateSourceEvidence
     std::array<double, 2> curve2dEnd {{0.0, 0.0}};
     double projectedTolU = 0.0;
     double projectedTolV = 0.0;
+    std::optional<double> g0Criterion;
+    std::optional<double> g1Criterion;
+    std::optional<double> g2Criterion;
     std::string surfaceObjectName;
     std::string surfaceSubname;
     std::string surfaceStableSubname;

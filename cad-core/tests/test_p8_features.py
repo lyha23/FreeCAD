@@ -914,7 +914,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "invalid_curve_source",
                 "invalid_point_constraint",
                 "invalid_parameter",
-                "unsupported_property",
+                "unsupported_wrapper_lifecycle",
             ],
         )
         self.assertCountEqual(codes, expected["diagnostic_codes"])
@@ -981,7 +981,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             [
                 "invalid_curve2d_source",
                 "invalid_point2d_source",
-                "unsupported_property",
+                "unsupported_wrapper_lifecycle",
             ],
         )
         for object_name in (
@@ -1121,6 +1121,50 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(kinds.count("point2d_on_surface"), 1)
         self.assertEqual(kinds.count("curve3d"), 3)
         self.assert_object_matches_expected(result, "c5m7", "part-geomplate-mixed-surface-constraints")
+
+    def test_c5m7_part_geomplate_point_custom_criteria_are_expected_backed(self) -> None:
+        result = self.run_recompute("part-geomplate-point-custom-criteria", "c5m7")
+        geomplate = result["objects"]["GeomPlate"]
+        source_evidence = geomplate["source_evidence"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(geomplate["status"], "ok")
+        self.assertEqual(geomplate["curve_constraint_count"], 4)
+        self.assertEqual(geomplate["point_constraint_count"], 1)
+        point = next(item for item in source_evidence if item["kind"] == "point3d")
+        self.assertEqual(point["order"], 0)
+        self.assertEqual(point["g0_criterion"], 0.05)
+        self.assertEqual(point["g1_criterion"], 0.02)
+        self.assertEqual(point["g2_criterion"], 0.3)
+        self.assert_object_matches_expected(result, "c5m7", "part-geomplate-point-custom-criteria")
+
+    def test_c5m7_part_geomplate_curve_criteria_are_locatable_diagnostics(self) -> None:
+        result = self.run_recompute("part-geomplate-curve-criteria-diagnostic", "c5m7")
+        diagnostic = result["diagnostics"][0]
+        geomplate = result["objects"]["CurveCriteriaDiagnostic"]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_curve_criteria"])
+        self.assertEqual(diagnostic["property"], "CurveConstraints.G0Criterion")
+        self.assertEqual(diagnostic["target"], "BoundaryA")
+        self.assertEqual(diagnostic["subname"], "Edge1")
+        self.assertEqual(geomplate["status"], "error")
+        self.assertEqual(geomplate["feature"], "part_geomplate_surface")
+        self.assertEqual(geomplate["helper"], "Part.GeomPlate.BuildPlateSurface")
+        self.assert_object_matches_expected(result, "c5m7", "part-geomplate-curve-criteria-diagnostic")
+
+    def test_c5m7_part_geomplate_wrapper_boundary_is_lifecycle_diagnostic(self) -> None:
+        result = self.run_recompute("part-geomplate-wrapper-boundary", "c5m7")
+        diagnostic = result["diagnostics"][0]
+        geomplate = result["objects"]["PlateSurfaceCurvesBoundary"]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_wrapper_lifecycle"])
+        self.assertEqual(diagnostic["property"], "PlateSurfaceCurves")
+        self.assertEqual(diagnostic["target"], "SupportPlane")
+        self.assertEqual(diagnostic["subname"], "Face1")
+        self.assertEqual(geomplate["status"], "error")
+        self.assertEqual(geomplate["feature"], "part_geomplate_surface")
+        self.assertEqual(geomplate["helper"], "Part.GeomPlate.BuildPlateSurface")
+        self.assert_object_matches_expected(result, "c5m7", "part-geomplate-wrapper-boundary")
 
     def test_c4m1_part_project_on_surface_edge_plane_is_expected_backed(self) -> None:
         result = self.run_recompute("part-project-on-surface-edge-plane", "c4m1")

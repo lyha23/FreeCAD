@@ -1,0 +1,30 @@
+{
+  "Objects": [
+    {
+      "Name": "SupportPlane",
+      "ID": 1,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 4,
+        "Width": 4
+      }
+    },
+    {
+      "Name": "PlateSurfaceCurvesBoundary",
+      "ID": 2,
+      "TypeId": "Part::GeomPlateSurface",
+      "Properties": {
+        "PointConstraints": [{"Point": [0, 0, 0]}],
+        "PlateSurfaceCurves": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportPlane",
+          "SubList": ["Face1"],
+          "StableSubList": ["Face1"]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["PlateSurfaceCurvesBoundary"]
+  }
+}

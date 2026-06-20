@@ -157,9 +157,10 @@ bool rejectDeferredGeomPlateAdvancedProperties(
 )
 {
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate
-    // /CurveConstraintPyImp.cpp::setG0Criterion()/setG1Criterion()/setG2Criterion() and
-    // /PlateSurfacePyImp.cpp::PlateSurfacePy expose the remaining S4 wrapper boundary. S2/S3
-    // represent InitialSurface, Curve2dOnSurface, ProjectedCurve2d and Point2dOnSurface in DTO.
+    // /PlateSurfacePyImp.cpp::PlateSurfacePy::PyInit() parses "Curves" but the branch is
+    // still "TODO"; Geometry.cpp::GeomPlateSurface::Save()/Restore() both throw
+    // "NotImplementedError". cad-core keeps this as an explicit wrapper lifecycle diagnostic
+    // instead of fabricating a persistent PlateSurface object.
     static const std::vector<std::string> deferred {
         "PlateSurfaceCurves",
     };
@@ -171,9 +172,10 @@ bool rejectDeferredGeomPlateAdvancedProperties(
         addGeomPlateDiagnostic(
             object,
             context,
-            "unsupported_property",
-            "Part.GeomPlate.BuildPlateSurface " + property
-                + " is deferred until criteria/wrapper DTO support is expected-backed",
+            "unsupported_wrapper_lifecycle",
+            "Part.PlateSurface.Curves requires PlateSurfacePy wrapper lifecycle; FreeCAD "
+            "PlateSurfacePyImp.cpp still leaves Curves as TODO and GeomPlateSurface persistence "
+            "is NotImplementedError",
             property,
             firstGeomPlateDeferredTarget(object, property),
             firstGeomPlateDeferredSubname(object, property)
@@ -527,6 +529,70 @@ std::optional<double> numberField(const nlohmann::json& value, const std::string
     return it->get<double>();
 }
 
+std::vector<std::string> presentCriterionFields(const nlohmann::json& value)
+{
+    std::vector<std::string> result;
+    if (!value.is_object()) {
+        return result;
+    }
+    for (const std::string& field : {"G0Criterion", "G1Criterion", "G2Criterion"}) {
+        if (value.find(field) != value.end()) {
+            result.push_back(field);
+        }
+    }
+    return result;
+}
+
+bool readOptionalFiniteField(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const nlohmann::json& value,
+    const std::string& field,
+    const std::string& property,
+    std::optional<double>& output,
+    const std::string& target = {},
+    const std::string& subname = {}
+)
+{
+    const auto it = value.find(field);
+    if (it == value.end()) {
+        return true;
+    }
+    if (!it->is_number() || !std::isfinite(it->get<double>())) {
+        addGeomPlateDiagnostic(
+            object,
+            context,
+            "invalid_parameter",
+            "Part.GeomPlate.BuildPlateSurface " + property + "." + field
+                + " must be a finite number",
+            property + "." + field,
+            target,
+            subname
+        );
+        return false;
+    }
+    output = it->get<double>();
+    return true;
+}
+
+bool readPointCriteriaFields(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const nlohmann::json& item,
+    const std::string& property,
+    GeomPlatePointConstraintSource& source,
+    const std::string& target = {},
+    const std::string& subname = {}
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate
+    // /PointConstraintPyImp.cpp::setG0Criterion()/setG1Criterion()/setG2Criterion() parse a
+    // Python "d" and forward it to GeomPlate_PointConstraint::SetG*Criterion().
+    return readOptionalFiniteField(object, context, item, "G0Criterion", property, source.g0Criterion, target, subname)
+        && readOptionalFiniteField(object, context, item, "G1Criterion", property, source.g1Criterion, target, subname)
+        && readOptionalFiniteField(object, context, item, "G2Criterion", property, source.g2Criterion, target, subname);
+}
+
 int intField(const nlohmann::json& value, const std::string& field, int fallback)
 {
     const auto number = numberField(value, field);
@@ -582,6 +648,24 @@ std::optional<std::vector<GeomPlateCurveConstraintSource>> readCurveConstraints(
         }
         const std::size_t count = link.subnames.empty() ? 1U : link.subnames.size();
         for (std::size_t subIndex = 0; subIndex < count; ++subIndex) {
+            const std::vector<std::string> curveCriteria = presentCriterionFields(raw);
+            if (!curveCriteria.empty()) {
+                // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate
+                // /CurveConstraintPyImp.cpp::setG0Criterion()/setG1Criterion()/setG2Criterion()
+                // all raise PyExc_NotImplementedError("Not yet implemented"). Curve criteria are
+                // therefore diagnostic-backed until the FreeCAD wrapper exposes a real setter.
+                addGeomPlateDiagnostic(
+                    object,
+                    context,
+                    "unsupported_curve_criteria",
+                    "Part.GeomPlate.CurveConstraint " + curveCriteria.front()
+                        + " setter is NotImplementedError in FreeCAD",
+                    "CurveConstraints." + curveCriteria.front(),
+                    link.object,
+                    stableSubnameForLink(link, subIndex)
+                );
+                return std::nullopt;
+            }
             const auto shape = resolveGeomPlateCurveShape(context, link, subIndex);
             if (!shape || shape->IsNull()) {
                 addGeomPlateDiagnostic(
@@ -968,9 +1052,9 @@ std::optional<std::vector<GeomPlatePointConstraintSource>> readPointConstraints(
         const nlohmann::json& item = payload->at(index);
         const nlohmann::json* point = &item;
         GeomPlatePointConstraintSource source;
-        if (item.is_object()) {
-            const auto pointIt = item.find("Point");
-            if (pointIt == item.end()) {
+            if (item.is_object()) {
+                const auto pointIt = item.find("Point");
+                if (pointIt == item.end()) {
                 addGeomPlateDiagnostic(
                     object,
                     context,
@@ -983,15 +1067,25 @@ std::optional<std::vector<GeomPlatePointConstraintSource>> readPointConstraints(
             point = &*pointIt;
             source.order = intField(item, "Order", source.order);
             source.tolDist = positiveField(item, "TolDist", source.tolDist);
+            }
+            auto parsedPoint = pointFromJson(*point, object, context, index);
+            if (!parsedPoint) {
+                return std::nullopt;
+            }
+            source.point = *parsedPoint;
+            if (item.is_object()
+                && !readPointCriteriaFields(
+                    object,
+                    context,
+                    item,
+                    "PointConstraints",
+                    source
+                )) {
+                return std::nullopt;
+            }
+            result.push_back(source);
         }
-        auto parsedPoint = pointFromJson(*point, object, context, index);
-        if (!parsedPoint) {
-            return std::nullopt;
-        }
-        source.point = *parsedPoint;
-        result.push_back(source);
-    }
-    return result;
+        return result;
 }
 
 std::optional<std::vector<GeomPlatePointConstraintSource>> readPoint2dConstraints(
@@ -1061,6 +1155,15 @@ std::optional<std::vector<GeomPlatePointConstraintSource>> readPoint2dConstraint
         source.surface = surface;
         source.order = intField(item, "Order", source.order);
         source.tolDist = positiveField(item, "TolDist", source.tolDist);
+        if (!readPointCriteriaFields(object,
+                                     context,
+                                     item,
+                                     "Point2dOnSurface",
+                                     source,
+                                     surfaceLink->object,
+                                     stableSubnameForLink(*surfaceLink, 0))) {
+            return std::nullopt;
+        }
         result.push_back(std::move(source));
     }
     return result;
@@ -1119,6 +1222,15 @@ nlohmann::json sourceEvidenceJson(const std::vector<GeomPlateSourceEvidence>& ev
             {"order", item.order},
             {"tol_dist", item.tolDist},
         };
+        if (item.g0Criterion) {
+            payload["g0_criterion"] = *item.g0Criterion;
+        }
+        if (item.g1Criterion) {
+            payload["g1_criterion"] = *item.g1Criterion;
+        }
+        if (item.g2Criterion) {
+            payload["g2_criterion"] = *item.g2Criterion;
+        }
         if (item.kind == "curve3d" || item.kind == "curve_on_surface"
             || item.kind == "curve2d_on_surface" || item.kind == "projected_curve2d") {
             payload["object"] = item.objectName;
@@ -1473,6 +1585,15 @@ GeomPlateSourceEvidence addPointConstraint(
         source.order,
         source.tolDist
     );
+    if (source.g0Criterion) {
+        constraint->SetG0Criterion(*source.g0Criterion);
+    }
+    if (source.g1Criterion) {
+        constraint->SetG1Criterion(*source.g1Criterion);
+    }
+    if (source.g2Criterion) {
+        constraint->SetG2Criterion(*source.g2Criterion);
+    }
     if (source.point2d) {
         constraint->SetPnt2dOnSurf(gp_Pnt2d((*source.point2d)[0], (*source.point2d)[1]));
     }
@@ -1491,6 +1612,9 @@ GeomPlateSourceEvidence addPointConstraint(
     }
     evidence.order = source.order;
     evidence.tolDist = source.tolDist;
+    evidence.g0Criterion = source.g0Criterion;
+    evidence.g1Criterion = source.g1Criterion;
+    evidence.g2Criterion = source.g2Criterion;
     return evidence;
 }
 

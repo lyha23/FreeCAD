@@ -28,7 +28,7 @@
 
 C5-M6 已完成最终发布收口：`part_workbench.loft` 只发布 profile / `Linearize=true` expected-backed slice，剩余 `complex_profile_family` 路由到 `future_loft_complex_profile_family`；`part_workbench.sweep` 只发布 multi-profile / `Linearize=true` expected-backed slice，advanced contract 路由到 `future_sweep_advanced_contract`。
 
-C5-M7 打开 `Part.GeomPlate.BuildPlateSurface` / `PartGeomPlateSurfaceDTO` 第二批：在现有 3D G0 / 3D point / advanced approximation expected-backed guard 上，批量推进 initial surface、G1 curve-on-surface、2D curve / projected curve、2D point、criteria 与 `Part.PlateSurface.Curves` wrapper 边界。
+C5-M7 打开 `Part.GeomPlate.BuildPlateSurface` / `PartGeomPlateSurfaceDTO` 第二批：在现有 3D G0 / 3D point / advanced approximation expected-backed guard 上，已推进 initial surface、G1 curve-on-surface、2D curve / projected curve、2D point、point criteria 与 `Part.PlateSurface.Curves` wrapper 边界；S5 负责最终 capability/docs 收口。
 
 ## 队列检查
 

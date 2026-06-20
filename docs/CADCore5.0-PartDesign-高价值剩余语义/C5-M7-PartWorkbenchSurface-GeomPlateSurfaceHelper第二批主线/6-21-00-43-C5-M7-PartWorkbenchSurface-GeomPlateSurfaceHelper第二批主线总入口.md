@@ -7,8 +7,8 @@
 把 GeomPlate helper 的第二批完整语义做成同一轮，而不是单 fixture 推进：
 
 - 复核现有 `c4m1/part-geomplate-advanced-constraints` 与 `part-geomplate-advanced-deferred` 的 live 支持边界。
-- 扩展同一 DTO 下的 initial surface reference、G1 curve-on-surface、2D curve-on-surface / projected 2D curve、2D point-on-surface 和 custom criteria。
-- 对 `Part.PlateSurface.Curves` wrapper 做 owner 判定：若仍不能由同一 DTO 安全承接，本轮产出 concrete deferred diagnostic；不得默默写成 supported。
+- 扩展同一 DTO 下的 initial surface reference、G1 curve-on-surface、2D curve-on-surface / projected 2D curve、2D point-on-surface 和 point custom criteria。
+- 对 curve criteria setter 与 `Part.PlateSurface.Curves` wrapper 做 owner 判定：FreeCAD 未实现的 setter / wrapper lifecycle 只能产出 concrete diagnostic，不默默写成 supported。
 
 ## 入口文件
 
@@ -29,7 +29,7 @@ C5-M7 的最小完整批次不是“一个高级约束”，而是同一 FreeCAD
 | live guard | 现有 3D G0 curve + 3D point + explicit approximation params | S1 已把 `c4m1/part-geomplate-advanced-constraints` 固化为 expected-backed guard；只证明 `Approx*` 参数和 3D source evidence，不代表 InitialSurface / G1 / 2D / wrapper support |
 | initial surface / G1 | `Surface` / `InitialSurface`、curve-on-surface G1 | S2 已产出 c5m7 fixtures：InitialSurface expected-backed；G1 source-backed 且 FreeCAD native oracle blocker 以 known_gap 固化 |
 | 2D constraints | curve2d-on-surface、projected 2D curve、point2d-on-surface | S3 已产出 c5m7 fixtures：curve2d-on-surface、point2d-on-surface、G0+2D mixed expected-backed；projected 2D curve cad-core source-backed，FreeCAD native oracle 以 known_gap 固化 |
-| criteria / wrapper | G0/G1/G2 criterion setters、`Part.PlateSurface.Curves` wrapper | support 或 concrete deferred diagnostic，不能留 broad gap |
+| criteria / wrapper | G0/G1/G2 criterion setters、`Part.PlateSurface.Curves` wrapper | S4 已支持 point criteria expected-backed；curve criteria setter 因 FreeCAD `NotImplementedError` 保留 `unsupported_curve_criteria`；`Part.PlateSurface.Curves` 因 wrapper lifecycle 保留 `unsupported_wrapper_lifecycle`，不留 broad gap |
 
 ## 队列检查
 

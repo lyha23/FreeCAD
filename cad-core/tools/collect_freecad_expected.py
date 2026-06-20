@@ -1433,6 +1433,29 @@ def geomplate_curve_link_items(value: Any) -> list[dict]:
     return [item for item in items if isinstance(item, dict)]
 
 
+def geomplate_criterion_fields(item: dict) -> list[str]:
+    return [field for field in ("G0Criterion", "G1Criterion", "G2Criterion") if field in item]
+
+
+def geomplate_apply_point_criteria(constraint: Any, item: dict, property_name: str) -> None:
+    # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate
+    # /PointConstraintPyImp.cpp::setG0Criterion()/setG1Criterion()/setG2Criterion(), each
+    # parses one double and calls the matching GeomPlate_PointConstraint::SetG*Criterion().
+    for field, setter in (
+        ("G0Criterion", constraint.setG0Criterion),
+        ("G1Criterion", constraint.setG1Criterion),
+        ("G2Criterion", constraint.setG2Criterion),
+    ):
+        if field not in item:
+            continue
+        value = item[field]
+        if isinstance(value, dict) and "value" in value:
+            value = value["value"]
+        if not isinstance(value, (int, float)) or not math.isfinite(float(value)):
+            raise UnsupportedFixture(f"Part.GeomPlate.BuildPlateSurface {property_name}.{field} must be numeric")
+        setter(float(value))
+
+
 def geomplate_object_items(value: Any, property_name: str) -> list[dict]:
     if value is None:
         return []
@@ -1571,6 +1594,12 @@ def geomplate_curve_constraints(
     properties = spec.get("Properties", {})
     constraints = []
     for item in geomplate_curve_link_items(properties.get("CurveConstraints")):
+        criteria = geomplate_criterion_fields(item)
+        if criteria:
+            raise UnsupportedFixture(
+                "Part.GeomPlate.BuildPlateSurface curve criteria setter is unsupported: "
+                f"{criteria[0]} maps to CurveConstraintPyImp.cpp NotImplementedError"
+            )
         if any(key in item for key in ("CurveOnSurface", "OnSurface", "Surface")):
             raise UnsupportedFixture(
                 "Part.GeomPlate.BuildPlateSurface G1 curve-on-surface native oracle is blocked: "
@@ -1626,13 +1655,14 @@ def geomplate_point_constraints(FreeCAD: Any, Part: Any, created: dict[str, Any]
             raise UnsupportedFixture(f"PointConstraints[{index}] must be a three-number vector")
         order = int(item.get("Order", 0)) if isinstance(item, dict) else 0
         tol_dist = float(item.get("TolDist", 0.0001)) if isinstance(item, dict) else 0.0001
-        constraints.append(
-            Part.GeomPlate.PointConstraint(
-                FreeCAD.Vector(float(point_value[0]), float(point_value[1]), float(point_value[2])),
-                order,
-                tol_dist,
-            )
+        constraint = Part.GeomPlate.PointConstraint(
+            FreeCAD.Vector(float(point_value[0]), float(point_value[1]), float(point_value[2])),
+            order,
+            tol_dist,
         )
+        if isinstance(item, dict):
+            geomplate_apply_point_criteria(constraint, item, "PointConstraints")
+        constraints.append(constraint)
     for item in geomplate_object_items(properties.get("Point2dOnSurface"), "Point2dOnSurface"):
         surface = geomplate_link_sub(item.get("Surface"))
         if not surface:
@@ -1657,6 +1687,7 @@ def geomplate_point_constraints(FreeCAD: Any, Part: Any, created: dict[str, Any]
             int(item.get("Order", 0)),
             float(item.get("TolDist", 0.0001)),
         )
+        geomplate_apply_point_criteria(constraint, item, "Point2dOnSurface")
         constraint.setPnt2dOnSurf(float(point2d[0]), float(point2d[1]))
         constraints.append(constraint)
     return constraints
@@ -1737,12 +1768,22 @@ def collect_part_geomplate_surface_expected(
                 "Curve2dOnSurface",
                 "ProjectedCurve2d",
                 "Point2dOnSurface",
+                "PlateSurfaceCurves",
             })
             if unsupported:
                 diagnostic_codes.extend(["unsupported_property"] * len(unsupported))
                 object_payloads[name] = part_geomplate_error_payload(
                     "unsupported_property",
                     "Unsupported Part.GeomPlate.BuildPlateSurface properties: " + ", ".join(unsupported),
+                )
+                continue
+            if properties.get("PlateSurfaceCurves") is not None:
+                diagnostic_codes.append("unsupported_wrapper_lifecycle")
+                object_payloads[name] = part_geomplate_error_payload(
+                    "unsupported_wrapper_lifecycle",
+                    "Part.PlateSurface.Curves requires PlateSurfacePy wrapper lifecycle; "
+                    "PlateSurfacePyImp.cpp leaves Curves as TODO and GeomPlateSurface Save/Restore "
+                    "throw NotImplementedError",
                 )
                 continue
             if properties.get("ProjectedCurve2d") is not None:
@@ -1821,6 +1862,10 @@ def collect_part_geomplate_surface_expected(
                     code = "invalid_curve2d_source"
                 if "Point2dOnSurface" in str(exc):
                     code = "invalid_point2d_source"
+                if "curve criteria setter" in str(exc):
+                    code = "unsupported_curve_criteria"
+                if "PlateSurface.Curves" in str(exc):
+                    code = "unsupported_wrapper_lifecycle"
                 if "PointConstraints" in str(exc):
                     code = "invalid_point_constraint"
                 if (

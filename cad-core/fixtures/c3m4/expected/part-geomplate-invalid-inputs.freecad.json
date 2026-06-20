@@ -4,7 +4,7 @@
     "invalid_curve_source",
     "invalid_point_constraint",
     "invalid_parameter",
-    "unsupported_property"
+    "unsupported_wrapper_lifecycle"
   ],
   "freecad_version": "1.2.0 revision 20260519",
   "objects": {
@@ -53,8 +53,8 @@
       }
     },
     "UnsupportedPlateSurfaceCurves": {
-      "native_error": "Unsupported Part.GeomPlate.BuildPlateSurface properties: PlateSurfaceCurves",
-      "native_error_code": "unsupported_property",
+      "native_error": "Part.PlateSurface.Curves requires PlateSurfacePy wrapper lifecycle; PlateSurfacePyImp.cpp leaves Curves as TODO and GeomPlateSurface Save/Restore throw NotImplementedError",
+      "native_error_code": "unsupported_wrapper_lifecycle",
       "object_fields": {
         "feature": "part_geomplate_surface",
         "freecad_native_document_object": false,
