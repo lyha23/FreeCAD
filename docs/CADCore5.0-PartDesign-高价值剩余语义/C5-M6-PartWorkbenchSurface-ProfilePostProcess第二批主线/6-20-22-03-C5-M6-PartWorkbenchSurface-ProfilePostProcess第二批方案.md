@@ -54,6 +54,13 @@
 - 发布边界：multi-profile `Sections` 与 Linearize 后处理已可发布；AuxiliarySpine、SupportMode、Binormal、LocationMode、Tolerance 等 advanced wrapper contract 继续作为后续 owner，不混入本包。
 - S2 复核结论：`part-sweep-multi-profile-linearize` 已有 FreeCAD expected 和 focused expected matcher；adapter capability 为 `supported_multi_profile_linearize_expected_backed`，且不再把 `linearize_post_processing` 或 `multi_profile_sections_expected` 写入 remaining gaps；`part-sweep-advanced-deferred` 仅证明 advanced wrapper 属性输出 locatable diagnostics。
 
+### S3 剩余分流
+
+- Loft 剩余项不再使用旧 broad gap 表述，只保留 `complex_profile_family`；它仍是 `part_workbench.loft.remaining_gaps` 和 `non_goals` 的唯一条目，后续 owner 是 `future_loft_complex_profile_family`。
+- Sweep advanced PipeShell contract 不写成 supported，也不落回 `advanced_pipeshell_wrapper` 旧 broad gap；adapter capability 的 remaining gaps 精确拆成 `part_sweep_auxiliary_spine_contract`、`part_sweep_support_mode_contract`、`part_sweep_binormal_contract`、`part_sweep_location_mode_contract`、`part_sweep_tolerance_contract`，后续 owner 是 `future_sweep_advanced_contract`。
+- `part-sweep-advanced-deferred` 是 deferred diagnostic fixture，不是 expected-backed support；Hole internal PipeShell、Filling / GeomPlate advanced constraints 和完整 Part surface family 继续留在非目标或各自 future package。
+- `C5M6-BLK-004` 由本分流关闭；S4 只负责 capability / CADCore3.0 / 根矩阵口径最终一致性。
+
 ## 最小完整语义批次
 
 本包的最小完整批次不是一个 fixture，而是以下闭环：
