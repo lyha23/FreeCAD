@@ -9,6 +9,7 @@
 #include <gp_Dir.hxx>
 #include <gp_Pln.hxx>
 #include <gp_Pnt.hxx>
+#include <gp_Trsf.hxx>
 
 namespace cad_core::part_design {
 
@@ -36,7 +37,8 @@ void executeDatumPlane(const app::DocumentObject& object, runtime::ComputeContex
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    if (!detail::rejectUnsupportedDatumAttachment(object, context)) {
+    const auto attachment = detail::datumAttachmentPlacement(object, context, detail::DatumAttachmentEngine::Plane);
+    if (!attachment) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -53,15 +55,15 @@ void executeDatumPlane(const app::DocumentObject& object, runtime::ComputeContex
     }
 
     TopoDS_Shape shape = builder.Shape();
-    const auto placementIt = context.globalPlacements.find(object.name);
-    if (placementIt != context.globalPlacements.end()) {
-        shape = base::transformShape(shape, placementIt->second);
-    }
+    const gp_Trsf placement = attachment->placement;
+    shape = base::transformShape(shape, placement);
+    context.globalPlacements[object.name] = placement;
 
     context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::DatumPlane, shape};
     context.objects[object.name] = {
         {"status", "ok"},
         {"datum", "plane"},
+        {"attached", attachment->attached},
     };
 }
 

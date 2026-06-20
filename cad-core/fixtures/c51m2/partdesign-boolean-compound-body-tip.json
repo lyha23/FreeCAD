@@ -1,0 +1,70 @@
+{
+  "Objects": [
+    {
+      "Name": "BaseBox",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 2,
+        "Height": 2
+      }
+    },
+    {
+      "Name": "ToolBox",
+      "ID": 2,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 2,
+        "Height": 2,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [4, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "BooleanCompound",
+      "ID": 3,
+      "TypeId": "PartDesign::Boolean",
+      "Properties": {
+        "Type": "Compound",
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["ToolBox"]
+        },
+        "BaseFeature": {
+          "PropertyType": "App::PropertyLink",
+          "value": "BaseBox"
+        },
+        "Refine": false,
+        "FuzzyTolerance": 0.0
+      }
+    },
+    {
+      "Name": "MainBody",
+      "ID": 4,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "AllowCompound": true,
+        "BaseFeature": {
+          "PropertyType": "App::PropertyLink",
+          "value": "BaseBox"
+        },
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["BooleanCompound"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "BooleanCompound"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["MainBody"]
+  }
+}

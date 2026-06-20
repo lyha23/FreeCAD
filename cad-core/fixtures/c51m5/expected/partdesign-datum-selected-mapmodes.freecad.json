@@ -1,0 +1,90 @@
+{
+  "objects": {
+    "DatumPlaneFlatFace": {
+      "object_fields": {
+        "attached": true,
+        "datum": "plane",
+        "status": "ok"
+      }
+    },
+    "DatumCSObjectXY": {
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "origin": [0.0, 0.0, 0.0],
+        "status": "ok",
+        "x_axis": [1.0, 0.0, 0.0],
+        "y_axis": [0.0, 1.0, 0.0],
+        "z_axis": [0.0, 0.0, 1.0]
+      }
+    },
+    "DatumCSObjectXZ": {
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "origin": [0.0, 0.0, 0.0],
+        "status": "ok",
+        "x_axis": [1.0, 0.0, 0.0],
+        "y_axis": [0.0, 0.0, 1.0],
+        "z_axis": [0.0, -1.0, 0.0]
+      }
+    },
+    "DatumCSObjectYZ": {
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "origin": [0.0, 0.0, 0.0],
+        "status": "ok",
+        "x_axis": [0.0, 1.0, 0.0],
+        "y_axis": [0.0, 0.0, 1.0],
+        "z_axis": [1.0, 0.0, 0.0]
+      }
+    },
+    "DatumPointOrigin": {
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "point": [0.0, 0.0, 0.0],
+        "status": "ok"
+      }
+    },
+    "DatumLineObjectX": {
+      "object_fields": {
+        "attached": true,
+        "base": [0.0, 0.0, 0.0],
+        "datum": "line",
+        "direction": [1.0, 0.0, 0.0],
+        "status": "ok"
+      }
+    },
+    "DatumLineObjectY": {
+      "object_fields": {
+        "attached": true,
+        "base": [0.0, 0.0, 0.0],
+        "datum": "line",
+        "direction": [0.0, -1.0, 0.0],
+        "status": "ok"
+      }
+    },
+    "DatumLineObjectZ": {
+      "object_fields": {
+        "attached": true,
+        "base": [0.0, 0.0, 0.0],
+        "datum": "line",
+        "direction": [0.0, 0.0, 1.0],
+        "status": "ok"
+      }
+    },
+    "DatumLineNormalToEdge": {
+      "object_fields": {
+        "attached": true,
+        "base": [0.0, 0.0, 2.0],
+        "datum": "line",
+        "direction": [0.0, 0.0, 1.0],
+        "status": "ok"
+      }
+    }
+  },
+  "reference": "C51-S5 FreeCAD AttachEngine source-backed selected-mode oracle for partdesign-datum-selected-mapmodes.json; selected modes: FlatFace, ObjectXY, ObjectXZ, ObjectYZ, ObjectOrigin, ObjectX, ObjectY, ObjectZ, NormalToEdge",
+  "schema_version": "cad-core.freecad-expected.v1"
+}

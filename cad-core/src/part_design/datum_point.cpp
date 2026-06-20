@@ -8,6 +8,7 @@
 #include <BRepBuilderAPI_MakeVertex.hxx>
 #include <TopoDS_Shape.hxx>
 #include <gp_Pnt.hxx>
+#include <gp_Trsf.hxx>
 
 namespace cad_core::part_design {
 
@@ -40,7 +41,8 @@ void executeDatumPoint(const app::DocumentObject& object, runtime::ComputeContex
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    if (!detail::rejectUnsupportedDatumAttachment(object, context)) {
+    const auto attachment = detail::datumAttachmentPlacement(object, context, detail::DatumAttachmentEngine::Point);
+    if (!attachment) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -58,16 +60,16 @@ void executeDatumPoint(const app::DocumentObject& object, runtime::ComputeContex
 
     TopoDS_Shape shape = builder.Shape();
     gp_Pnt point(0, 0, 0);
-    const auto placementIt = context.globalPlacements.find(object.name);
-    if (placementIt != context.globalPlacements.end()) {
-        shape = base::transformShape(shape, placementIt->second);
-        point.Transform(placementIt->second);
-    }
+    const gp_Trsf placement = attachment->placement;
+    shape = base::transformShape(shape, placement);
+    point.Transform(placement);
+    context.globalPlacements[object.name] = placement;
 
     context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::DatumPoint, shape};
     context.objects[object.name] = {
         {"status", "ok"},
         {"datum", "point"},
+        {"attached", attachment->attached},
         {"point", pointToJson(point)},
     };
 }

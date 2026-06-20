@@ -115,6 +115,7 @@ FeatureRegistry buildDefaultRegistry()
     registry.registerExecutor("Part::BooleanFragments", part::executePartBooleanFragments);
     registry.registerExecutor("Part::FeatureBooleanFragments", part::executePartBooleanFragments);
     registry.registerExecutor("App::Origin", part_design::executeDatumCoordinateSystem);
+    registry.registerExecutor("App::Line", part_design::executeAppLine);
     registry.registerExecutor("PartDesign::Body", part_design::executeBody);
     registry.registerExecutor("PartDesign::CoordinateSystem", part_design::executeDatumCoordinateSystem);
     registry.registerExecutor("PartDesign::Line", part_design::executeDatumLine);

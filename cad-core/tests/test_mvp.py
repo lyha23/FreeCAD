@@ -35,6 +35,17 @@ class CadCoreOcctMvpTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertIn(segment["id"], subshape_map)
             self.assertEqual(subshape_map[segment["id"]]["kind"], "edge")
             self.assertGreaterEqual(len(segment["points"]), 2)
+        vertex_points = mesh["vertexPoints"]
+        expected_vertices = {
+            f"Vertex{index}"
+            for index in range(1, expected["topology_counts"]["vertices"] + 1)
+        }
+        self.assertEqual({point["id"] for point in vertex_points}, expected_vertices)
+        self.assertEqual({point["indexed"] for point in vertex_points}, expected_vertices)
+        for point in vertex_points:
+            self.assertIn(point["id"], subshape_map)
+            self.assertEqual(subshape_map[point["id"]]["kind"], "vertex")
+            self.assertEqual(len(point["point"]), 3)
 
 
 if __name__ == "__main__":

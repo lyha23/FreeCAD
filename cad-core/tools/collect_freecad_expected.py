@@ -20,6 +20,7 @@ ENV_ARG_NAME = "CAD_CORE_EXPECTED_ARGS_JSON"
 FREECAD_PRECISION_CONFUSION = 1e-7
 SUPPORTED_NATIVE_TYPES = {
     "App::FeaturePython",
+    "App::Line",
     "App::Link",
     "App::LinkElement",
     "App::LinkGroup",
@@ -32,6 +33,7 @@ SUPPORTED_NATIVE_TYPES = {
     "PartDesign::AdditivePipe",
     "PartDesign::Boolean",
     "PartDesign::Chamfer",
+    "PartDesign::CoordinateSystem",
     "PartDesign::Fillet",
     "PartDesign::Hole",
     "PartDesign::Line",
@@ -40,6 +42,7 @@ SUPPORTED_NATIVE_TYPES = {
     "PartDesign::MultiTransform",
     "PartDesign::Pad",
     "PartDesign::Plane",
+    "PartDesign::Point",
     "PartDesign::PolarPattern",
     "PartDesign::Pocket",
     "PartDesign::Revolution",
@@ -835,6 +838,24 @@ def set_polar_pattern_property(created: dict[str, Any], obj: Any, name: str, val
     return False
 
 
+def set_revolved_property(created: dict[str, Any], obj: Any, name: str, value: Any) -> bool:
+    if name == "ReferenceAxis" and isinstance(value, dict):
+        property_type = value.get("PropertyType")
+        if property_type in {"App::PropertyLinkSub", "App::PropertyXLinkSub"}:
+            # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.cpp
+            # ::ProfileBased::getAxis(), accepts "PartDesign::Line" and "App::Line" before
+            # reading the linked datum direction. CAD Core fixtures model these object-level
+            # datum axes with an empty SubList, so native collection supplies one empty subname
+            # while preserving the request graph shape used by cad-core.
+            safe_setattr(
+                obj,
+                name,
+                link_sub_value_with_empty_datum_subname(created, value, {"App::Line", "PartDesign::Line"}),
+            )
+            return True
+    return False
+
+
 def create_native_object(FreeCAD: Any, doc: Any, type_id: str, name: str) -> Any:
     if type_id == "Part::BooleanFragments":
         # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/BOPTools
@@ -1018,6 +1039,13 @@ def create_objects(FreeCAD: Any, doc: Any, fixture: dict) -> dict[str, Any]:
             if type_id == "PartDesign::LinearPattern" and set_linear_pattern_property(created, obj, prop_name, prop_value):
                 continue
             if type_id == "PartDesign::PolarPattern" and set_polar_pattern_property(created, obj, prop_name, prop_value):
+                continue
+            if type_id in {"PartDesign::Revolution", "PartDesign::Groove"} and set_revolved_property(
+                created,
+                obj,
+                prop_name,
+                prop_value,
+            ):
                 continue
             if type_id == "PartDesign::Hole" and prop_name not in HOLE_PRE_BODY_PROPERTIES:
                 deferred_after_body.append((type_id, obj, prop_name, prop_value))
@@ -3477,6 +3505,52 @@ def pipe_payload(obj: Any, fixture: dict | None = None) -> dict:
     return payload
 
 
+def vector_payload(value: Any) -> list[float]:
+    return [float(value.x), float(value.y), float(value.z)]
+
+
+def datum_map_mode_active(obj: Any) -> bool:
+    try:
+        return str(obj.MapMode) not in {"", "Deactivated"}
+    except Exception:
+        return False
+
+
+def datum_payload(obj: Any) -> dict:
+    type_id = getattr(obj, "TypeId", "")
+    fields: dict[str, Any] = {
+        "attached": datum_map_mode_active(obj),
+        "status": "ok",
+    }
+    if type_id == "PartDesign::Point":
+        # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/DatumPoint.cpp
+        # ::Point::getPoint(), returns "Placement.getValue().getPosition()".
+        fields["datum"] = "point"
+        fields["point"] = vector_payload(obj.getPoint())
+    elif type_id == "PartDesign::Line":
+        # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/DatumLine.cpp
+        # ::Line::getDirection(), rotates "Base::Vector3d(0, 0, 1)" by Placement.
+        fields["datum"] = "line"
+        fields["base"] = vector_payload(obj.Placement.Base)
+        fields["direction"] = vector_payload(obj.getDirection())
+    elif type_id == "PartDesign::Plane":
+        # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/DatumPlane.cpp
+        # ::Plane::getNormal(), rotates "Base::Vector3d(0, 0, 1)" by Placement; cad-core's
+        # response for planes only exposes the datum kind and attachment state.
+        fields["datum"] = "plane"
+    elif type_id == "PartDesign::CoordinateSystem":
+        # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/DatumCS.cpp
+        # ::getXAxis()/getYAxis()/getZAxis() apply Placement rotation to unit axes.
+        fields["datum"] = "coordinate_system"
+        fields["origin"] = vector_payload(obj.Placement.Base)
+        fields["x_axis"] = vector_payload(obj.getXAxis())
+        fields["y_axis"] = vector_payload(obj.getYAxis())
+        fields["z_axis"] = vector_payload(obj.getZAxis())
+    else:
+        raise UnsupportedFixture(f"target object {obj.Name} is not a supported Datum payload")
+    return {"object_fields": fields}
+
+
 def boolean_payload(obj: Any, fixture: dict | None = None) -> dict:
     shape = getattr(obj, "Shape", None)
     if shape is None or shape.isNull():
@@ -3521,6 +3595,13 @@ def object_expected_payload(obj: Any, fixture: dict | None = None, created: dict
         return boolean_payload(obj, fixture)
     if type_id in {"PartDesign::AdditivePipe", "PartDesign::SubtractivePipe"}:
         return pipe_payload(obj, fixture)
+    if type_id in {
+        "PartDesign::CoordinateSystem",
+        "PartDesign::Line",
+        "PartDesign::Plane",
+        "PartDesign::Point",
+    }:
+        return datum_payload(obj)
 
     shape = getattr(obj, "Shape", None)
     if type_id == "Mesh::Import":

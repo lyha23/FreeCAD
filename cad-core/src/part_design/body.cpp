@@ -679,15 +679,23 @@ std::optional<BooleanBuild> fuseShapes(const TopoDS_Shape& base,
                                        runtime::ComputeContext& context,
                                        const std::string& feature,
                                        const std::optional<part::NamedShape>* toolNamedShape,
-                                       const std::optional<part::NamedShape>& baseNamedShape)
+                                       const std::optional<part::NamedShape>& baseNamedShape,
+                                       runtime::AddSubShape::AdditiveFuseOrder fuseOrder)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::makeElementBoolean(),
     // selects BRepAlgoAPI_Fuse and calls makeElementShape(*mk, inputs, ...), where MapperMaker
     // consumes "BRepBuilderAPI_MakeShape::Modified/Generated()" for every boolean input.
-    const auto build = part::makeElementBooleanFromSources(object.name,
-                                                           {sourceForCurrentBody(object.name, base, baseNamedShape),
-                                                            sourceForFeature(feature, tool, context, toolNamedShape)},
-                                                           part::BooleanOperation::Fuse);
+    std::vector<part::NamedShapeSource> sources {
+        sourceForCurrentBody(object.name, base, baseNamedShape),
+        sourceForFeature(feature, tool, context, toolNamedShape),
+    };
+    if (fuseOrder == runtime::AddSubShape::AdditiveFuseOrder::FeatureFirst) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureRevolution.cpp
+        // ::Revolution::makeShape(), "if (FuseOrder.getValue() == FeatureFirst) { return
+        // revolve.makeElementFuse(base); }" so the feature tool becomes the first boolean source.
+        std::swap(sources[0], sources[1]);
+    }
+    const auto build = part::makeElementBooleanFromSources(object.name, sources, part::BooleanOperation::Fuse);
     if (!build.error.empty()) {
         runtime::addDiagnostic(context.diagnostics,
                                "error",
@@ -833,6 +841,7 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
 
     std::optional<TopoDS_Shape> bodyShape;
     std::optional<part::NamedShape> bodyNamedShape;
+    bool bodyUsesPreciseBoundingBox = false;
     std::vector<std::string> refinedFeatures;
     std::vector<std::string> replayedAdditiveFeatures;
     std::vector<std::string> replayedSubtractiveFeatures;
@@ -858,6 +867,7 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
             return;
         }
         bodyShape = baseIt->second.shape;
+        bodyUsesPreciseBoundingBox = baseIt->second.usePreciseBoundingBox;
         bodyNamedShape = namedShapeForFeatureOrIndexed(baseLink->object, *bodyShape, context);
         appendBodyBaseFeatureChainUpdates(context, object, groupNames, baseLink->object);
     }
@@ -874,6 +884,7 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
             // features publish full replacement solids even when they also expose AddSubShape
             // caches for later pattern features.
             bodyShape = shapeIt->second.shape;
+            bodyUsesPreciseBoundingBox = shapeIt->second.usePreciseBoundingBox;
             bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
             replayedReplacementFeatures.push_back(feature);
             if (feature == resolvedTip) {
@@ -889,11 +900,28 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
                 // derives from FeatureAddSub but execute() writes a full dressed "Shape"; Body Tip
                 // must be able to become that replacement solid instead of reusing the previous Pad/Pocket.
                 bodyShape = shapeIt->second.shape;
+                bodyUsesPreciseBoundingBox = shapeIt->second.usePreciseBoundingBox;
                 bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
                 replayedReplacementFeatures.push_back(feature);
                 if (feature == resolvedTip) {
                     break;
                 }
+            }
+            else if (shapeIt != context.shapes.end() && feature == resolvedTip) {
+                // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::Body::execute(),
+                // reads the Tip feature "Shape" as the Body result. C5.1 productizes
+                // PartDesign Boolean Section through TopoShape::makeElementBoolean(Section), but
+                // that maker produces edge/wire output, so it cannot replace a Body solid Tip.
+                runtime::addDiagnostic(context.diagnostics,
+                                       "error",
+                                       "partdesign_body_tip_non_solid",
+                                       "Body Tip target " + feature + " produced a non-solid shape",
+                                       object.name,
+                                       "Tip",
+                                       "part_design.body_tip",
+                                       feature);
+                context.objects[object.name] = {{"status", "error"}};
+                return;
             }
             continue;
         }
@@ -903,6 +931,7 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
             replayedAdditiveFeatures.push_back(feature);
             if (!bodyShape) {
                 bodyShape = *addSubShape.addShape;
+                bodyUsesPreciseBoundingBox = addSubShape.addUsesPreciseBoundingBox;
                 bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
             }
             else {
@@ -912,9 +941,11 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
                                               context,
                                               feature,
                                               &addSubShape.addNamedShape,
-                                              bodyNamedShape);
+                                              bodyNamedShape,
+                                              addSubShape.additiveFuseOrder);
                 if (build) {
                     bodyShape = build->shape;
+                    bodyUsesPreciseBoundingBox = false;
                     bodyNamedShape = build->namedShape;
                 }
                 else {
@@ -943,6 +974,7 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
                                          bodyNamedShape);
             if (build) {
                 bodyShape = build->shape;
+                bodyUsesPreciseBoundingBox = false;
                 bodyNamedShape = build->namedShape;
             }
             else {
@@ -954,9 +986,13 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
             context.objects[object.name] = {{"status", "error"}};
             return;
         }
+        const std::size_t refinedFeatureCount = refinedFeatures.size();
         if (!applyFinalResultRefineForFeature(object, feature, context, bodyShape, bodyNamedShape, refinedFeatures)) {
             context.objects[object.name] = {{"status", "error"}};
             return;
+        }
+        if (refinedFeatures.size() != refinedFeatureCount) {
+            bodyUsesPreciseBoundingBox = false;
         }
         if (feature == resolvedTip) {
             break;
@@ -986,7 +1022,9 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
     else {
         context.namedShapes[object.name] = part::indexedNamedShapeForObject(object.name, resultShape);
     }
-    context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, resultShape};
+    runtime::ShapeValue bodyValue{runtime::ShapeValue::Kind::Solid, resultShape};
+    bodyValue.usePreciseBoundingBox = bodyUsesPreciseBoundingBox;
+    context.shapes[object.name] = bodyValue;
     context.mesh[object.name] = cad_core::part::meshForShape(resultShape);
     context.subshapes[object.name] = part::subshapeMapForShape(resultShape);
     nlohmann::json result = {
@@ -995,7 +1033,9 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
         {"group", groupNames},
         {"shape", shapeKind(resultShape)},
         {"allow_compound", app::readBool(object, "AllowCompound").value_or(true)},
-        {"bbox", cad_core::part::bboxForShape(resultShape)},
+        {"bbox",
+         bodyUsesPreciseBoundingBox ? cad_core::part::preciseBBoxForShape(resultShape)
+                                    : cad_core::part::bboxForShape(resultShape)},
         {"volume", cad_core::part::volumeForShape(resultShape)},
         {"kernel", cad_core::part::kernelVersion()},
     };

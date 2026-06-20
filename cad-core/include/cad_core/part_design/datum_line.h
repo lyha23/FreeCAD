@@ -6,5 +6,6 @@
 namespace cad_core::part_design {
 
 void executeDatumLine(const app::DocumentObject& object, runtime::ComputeContext& context);
+void executeAppLine(const app::DocumentObject& object, runtime::ComputeContext& context);
 
 }  // namespace cad_core::part_design

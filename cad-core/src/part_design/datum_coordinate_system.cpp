@@ -52,7 +52,12 @@ void executeDatumCoordinateSystem(const app::DocumentObject& object, runtime::Co
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    if (!detail::rejectUnsupportedDatumAttachment(object, context)) {
+    const auto attachment = detail::datumAttachmentPlacement(
+        object,
+        context,
+        detail::DatumAttachmentEngine::CoordinateSystem
+    );
+    if (!attachment) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -73,20 +78,19 @@ void executeDatumCoordinateSystem(const app::DocumentObject& object, runtime::Co
     gp_Dir xAxis(1, 0, 0);
     gp_Dir yAxis(0, 1, 0);
     gp_Dir zAxis(0, 0, 1);
-    const auto placementIt = context.globalPlacements.find(object.name);
-    if (placementIt != context.globalPlacements.end()) {
-        const gp_Trsf& placement = placementIt->second;
-        shape = base::transformShape(shape, placement);
-        origin.Transform(placement);
-        xAxis.Transform(placement);
-        yAxis.Transform(placement);
-        zAxis.Transform(placement);
-    }
+    const gp_Trsf placement = attachment->placement;
+    shape = base::transformShape(shape, placement);
+    origin.Transform(placement);
+    xAxis.Transform(placement);
+    yAxis.Transform(placement);
+    zAxis.Transform(placement);
+    context.globalPlacements[object.name] = placement;
 
     context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::DatumCoordinateSystem, shape};
     context.objects[object.name] = {
         {"status", "ok"},
         {"datum", object.typeId == "App::Origin" ? "origin" : "coordinate_system"},
+        {"attached", attachment->attached},
         {"origin", pointToJson(origin)},
         {"x_axis", directionToJson(xAxis)},
         {"y_axis", directionToJson(yAxis)},

@@ -28,6 +28,7 @@
 #include <TopoDS.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
+#include <TopoDS_Vertex.hxx>
 #include <gp_Pnt.hxx>
 
 #if __has_include(<TopTools_FormatVersion.hxx>)
@@ -148,16 +149,14 @@ struct ScopedTempPath {
     std::filesystem::path path;
 };
 
-}  // namespace
-
-nlohmann::json bboxForShape(const TopoDS_Shape& shape)
+nlohmann::json bboxForShapeWithTriangulationMode(const TopoDS_Shape& shape, Standard_Boolean useTriangulation)
 {
     Bnd_Box box;
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App
     // /TopoShapePyImp.cpp::TopoShapePy::optimalBoundingBox(), calls
     // "BRepBndLib::AddOptimal(shape, bounds, ...)" and then "bounds.SetGap(0.0)" before
     // exposing the bounds through Python.
-    BRepBndLib::AddOptimal(shape, box, Standard_True, Standard_False);
+    BRepBndLib::AddOptimal(shape, box, useTriangulation, Standard_False);
     box.SetGap(0.0);
     double xmin = 0.0;
     double ymin = 0.0;
@@ -180,6 +179,18 @@ nlohmann::json bboxForShape(const TopoDS_Shape& shape)
         {"min", {clean(xmin), clean(ymin), clean(zmin)}},
         {"max", {clean(xmax), clean(ymax), clean(zmax)}},
     };
+}
+
+}  // namespace
+
+nlohmann::json bboxForShape(const TopoDS_Shape& shape)
+{
+    return bboxForShapeWithTriangulationMode(shape, Standard_True);
+}
+
+nlohmann::json preciseBBoxForShape(const TopoDS_Shape& shape)
+{
+    return bboxForShapeWithTriangulationMode(shape, Standard_False);
 }
 
 double volumeForShape(const TopoDS_Shape& shape)
@@ -323,11 +334,34 @@ nlohmann::json edgeSegmentsForShape(const TopoDS_Shape& shape, const std::string
     return segments;
 }
 
+nlohmann::json vertexPointsForShape(const TopoDS_Shape& shape, const std::string& vertexIdPrefix)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShape.cpp
+    // ::getElementTypeAndIndex() accepts "VertexN", while ::countSubShapes()
+    // and _getSubShapes() use "TopExp::MapShapes(..., TopAbs_VERTEX, ...)".
+    nlohmann::json points = nlohmann::json::array();
+    TopTools_IndexedMapOfShape vertices;
+    TopExp::MapShapes(shape, TopAbs_VERTEX, vertices);
+
+    for (int index = 1; index <= vertices.Extent(); ++index) {
+        const TopoDS_Vertex vertex = TopoDS::Vertex(vertices(index));
+        const std::string indexed = vertexIdPrefix + std::to_string(index);
+        points.push_back({
+            {"id", indexed},
+            {"indexed", indexed},
+            {"point", pointToJson(BRep_Tool::Pnt(vertex))},
+        });
+    }
+
+    return points;
+}
+
 }  // namespace
 
 nlohmann::json meshForShape(const TopoDS_Shape& shape,
                             const std::string& faceIdPrefix,
-                            const std::string& edgeIdPrefix)
+                            const std::string& edgeIdPrefix,
+                            const std::string& vertexIdPrefix)
 {
     BRepMesh_IncrementalMesh mesher(shape, 0.1);
     mesher.Perform();
@@ -336,6 +370,7 @@ nlohmann::json meshForShape(const TopoDS_Shape& shape,
     nlohmann::json triangles = nlohmann::json::array();
     nlohmann::json faceIds = nlohmann::json::array();
     nlohmann::json edgeSegments = edgeSegmentsForShape(shape, edgeIdPrefix);
+    nlohmann::json vertexPoints = vertexPointsForShape(shape, vertexIdPrefix);
     std::map<std::string, int> vertexIndexByPoint;
 
     auto addVertex = [&](const gp_Pnt& point) {
@@ -378,6 +413,7 @@ nlohmann::json meshForShape(const TopoDS_Shape& shape,
         {"triangles", triangles},
         {"faceIds", faceIds},
         {"edgeSegments", edgeSegments},
+        {"vertexPoints", vertexPoints},
         {"summary",
          {
              {"vertex_count", vertices.size()},

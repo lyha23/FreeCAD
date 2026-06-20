@@ -1,0 +1,126 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPipeProfile",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [-0.25, -0.25], "end": [0.25, -0.25] },
+          { "kind": "LineSegment", "start": [0.25, -0.25], "end": [0.25, 0.25] },
+          { "kind": "LineSegment", "start": [0.25, 0.25], "end": [-0.25, 0.25] },
+          { "kind": "LineSegment", "start": [-0.25, 0.25], "end": [-0.25, -0.25] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "SketchPipeSectionMid",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 2],
+          "Rotation": [0, 0, 0, 1]
+        },
+        "Geometry": [
+          { "kind": "LineSegment", "start": [-0.4, -0.4], "end": [0.4, -0.4] },
+          { "kind": "LineSegment", "start": [0.4, -0.4], "end": [0.4, 0.4] },
+          { "kind": "LineSegment", "start": [0.4, 0.4], "end": [-0.4, 0.4] },
+          { "kind": "LineSegment", "start": [-0.4, 0.4], "end": [-0.4, -0.4] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "SketchPipeSectionEnd",
+      "ID": 3,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 4],
+          "Rotation": [0, 0, 0, 1]
+        },
+        "Geometry": [
+          { "kind": "LineSegment", "start": [-0.6, -0.6], "end": [0.6, -0.6] },
+          { "kind": "LineSegment", "start": [0.6, -0.6], "end": [0.6, 0.6] },
+          { "kind": "LineSegment", "start": [0.6, 0.6], "end": [-0.6, 0.6] },
+          { "kind": "LineSegment", "start": [-0.6, 0.6], "end": [-0.6, -0.6] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "SketchPipeSpine",
+      "ID": 4,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 0],
+          "Rotation": [0.7071067811865475, 0, 0, 0.7071067811865476]
+        },
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [0, 4] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "AdditivePipeSelectedSpine",
+      "ID": 5,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeSpine",
+          "SubList": ["Edge1"]
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyXLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchPipeSectionEnd",
+              "SubList": []
+            }
+          ]
+        },
+        "Mode": "Standard",
+        "Transition": "Right corner",
+        "Transformation": "Multisection",
+        "Refine": false,
+        "FuzzyTolerance": 0.0
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 6,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "SketchPipeProfile",
+            "SketchPipeSectionEnd",
+            "SketchPipeSpine",
+            "AdditivePipeSelectedSpine"
+          ]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "AdditivePipeSelectedSpine"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}

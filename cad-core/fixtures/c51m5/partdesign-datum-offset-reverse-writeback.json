@@ -1,0 +1,72 @@
+{
+  "Objects": [
+    {
+      "Name": "SupportBox",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 10,
+        "Width": 8,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "DatumPlaneRecoveredOffsetReverse",
+      "ID": 2,
+      "TypeId": "PartDesign::Plane",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportBox",
+          "SubList": ["MissingFace1"],
+          "StableSubList": ["Face1"],
+          "ShadowSub": [
+            {
+              "oldName": "MissingFace1",
+              "newName": "Face1"
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "FlatFace"
+        },
+        "MapReversed": {
+          "PropertyType": "App::PropertyBool",
+          "value": true
+        },
+        "AttachmentOffset": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [1, 2, 3],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "DatumLineParameterAlias",
+      "ID": 3,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportBox",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "NormalToEdge"
+        },
+        "Parameter": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 0.25
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "DatumPlaneRecoveredOffsetReverse",
+      "DatumLineParameterAlias"
+    ]
+  }
+}

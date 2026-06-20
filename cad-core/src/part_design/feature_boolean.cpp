@@ -20,6 +20,15 @@ namespace cad_core::part_design {
 
 namespace {
 
+enum class ProductBooleanOperation
+{
+    Fuse,
+    Cut,
+    Common,
+    Compound,
+    Section,
+};
+
 std::string enumNameFromIndex(double value, const std::vector<std::string>& names)
 {
     const auto index = static_cast<std::size_t>(value);
@@ -31,7 +40,7 @@ std::string enumNameFromIndex(double value, const std::vector<std::string>& name
 
 std::string readBooleanType(const app::DocumentObject& object)
 {
-    const std::vector<std::string> types {"Fuse", "Cut", "Common"};
+    const std::vector<std::string> types {"Fuse", "Cut", "Common", "Compound", "Section"};
     if (const auto value = app::readString(object, "Type")) {
         return *value;
     }
@@ -42,29 +51,52 @@ std::string readBooleanType(const app::DocumentObject& object)
     return "Fuse";
 }
 
-std::optional<part::BooleanOperation> operationFromType(const app::DocumentObject& object,
-                                                        runtime::ComputeContext& context,
-                                                        const std::string& type)
+std::optional<ProductBooleanOperation> operationFromType(const app::DocumentObject& object,
+                                                         runtime::ComputeContext& context,
+                                                         const std::string& type)
 {
     if (type == "Fuse") {
-        return part::BooleanOperation::Fuse;
+        return ProductBooleanOperation::Fuse;
     }
     if (type == "Cut") {
-        return part::BooleanOperation::Cut;
+        return ProductBooleanOperation::Cut;
     }
     if (type == "Common") {
-        return part::BooleanOperation::Common;
+        return ProductBooleanOperation::Common;
+    }
+    if (type == "Compound") {
+        return ProductBooleanOperation::Compound;
+    }
+    if (type == "Section") {
+        return ProductBooleanOperation::Section;
     }
 
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureBoolean.cpp
-    // ::Boolean::execute(), only accepts "Fuse", "Cut" and "Common"; LinkStage3-only
-    // Compound/Section branches are commented as pending a product decision.
+    // ::Boolean::execute(), only exposes "TypeEnums[] = {\"Fuse\", \"Cut\", \"Common\"}";
+    // C5.1 productizes only the commented LinkStage3 "Compound" / "Section" paths through
+    // src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementBoolean().
     runtime::addDiagnostic(context.diagnostics,
                            "error",
                            "unsupported_property",
                            "Unsupported PartDesign Boolean Type=" + type,
                            object.name,
                            "Type");
+    return std::nullopt;
+}
+
+std::optional<part::BooleanOperation> partBooleanOperation(ProductBooleanOperation operation)
+{
+    switch (operation) {
+        case ProductBooleanOperation::Fuse:
+            return part::BooleanOperation::Fuse;
+        case ProductBooleanOperation::Cut:
+            return part::BooleanOperation::Cut;
+        case ProductBooleanOperation::Common:
+            return part::BooleanOperation::Common;
+        case ProductBooleanOperation::Compound:
+        case ProductBooleanOperation::Section:
+            return std::nullopt;
+    }
     return std::nullopt;
 }
 
@@ -131,6 +163,14 @@ int solidCount(const TopoDS_Shape& shape)
     return count;
 }
 
+bool containsSubshape(const TopoDS_Shape& shape, TopAbs_ShapeEnum kind)
+{
+    for (TopExp_Explorer explorer(shape, kind); explorer.More(); explorer.Next()) {
+        return true;
+    }
+    return false;
+}
+
 TopoDS_Shape firstSolid(const TopoDS_Shape& shape)
 {
     for (TopExp_Explorer explorer(shape, TopAbs_SOLID); explorer.More(); explorer.Next()) {
@@ -193,6 +233,19 @@ bool appendToolSource(const app::DocumentObject& object,
     return true;
 }
 
+part::NamedShapeBuild buildProductBoolean(const std::string& owner,
+                                          const std::vector<part::NamedShapeSource>& sources,
+                                          ProductBooleanOperation operation)
+{
+    if (const auto partOperation = partBooleanOperation(operation)) {
+        return part::makeElementBooleanFromSources(owner, sources, *partOperation);
+    }
+    if (operation == ProductBooleanOperation::Compound) {
+        return part::makeElementCompoundFromSources(owner, sources);
+    }
+    return part::makeElementSectionFromSources(owner, sources, false);
+}
+
 }  // namespace
 
 void executeBoolean(const app::DocumentObject& object, runtime::ComputeContext& context)
@@ -239,7 +292,7 @@ void executeBoolean(const app::DocumentObject& object, runtime::ComputeContext& 
     }
 
     if (sources.empty()) {
-        if (*operation == part::BooleanOperation::Cut) {
+        if (*operation == ProductBooleanOperation::Cut) {
             runtime::addDiagnostic(context.diagnostics,
                                    "error",
                                    "missing_target",
@@ -286,13 +339,24 @@ void executeBoolean(const app::DocumentObject& object, runtime::ComputeContext& 
         }
     }
 
-    const auto build = part::makeElementBooleanFromSources(object.name, sources, *operation);
+    const auto build = buildProductBoolean(object.name, sources, *operation);
     if (!build.error.empty() || build.shape.IsNull()) {
         runtime::addDiagnostic(context.diagnostics,
                                "error",
                                "execution_failed",
                                build.error.empty() ? "Boolean operation failed" : build.error,
                                object.name);
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+    if (*operation == ProductBooleanOperation::Section && !containsSubshape(build.shape, TopAbs_EDGE)) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "no_intersection",
+                               "PartDesign Boolean Section produced no section edges",
+                               object.name,
+                               "Group",
+                               "part_design.boolean_section");
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -305,7 +369,7 @@ void executeBoolean(const app::DocumentObject& object, runtime::ComputeContext& 
 
     const int solids = solidCount(refined->shape);
     const bool allowCompound = owningBodyAllowsCompound(object, context);
-    if (!allowCompound && solids != 1) {
+    if (*operation != ProductBooleanOperation::Section && !allowCompound && solids != 1) {
         const app::DocumentObject* body = owningBody(object, context);
         runtime::addDiagnostic(context.diagnostics,
                                "error",
@@ -321,7 +385,7 @@ void executeBoolean(const app::DocumentObject& object, runtime::ComputeContext& 
 
     TopoDS_Shape resultShape = refined->shape;
     std::optional<part::NamedShape> resultNamedShape = refined->namedShape;
-    if (!allowCompound && solids == 1) {
+    if (*operation != ProductBooleanOperation::Section && !allowCompound && solids == 1) {
         // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Feature.cpp
         // ::Feature::getSolid(), when the single-solid rule is enforced and one solid exists,
         // returns "shape.getSubTopoShape(TopAbs_SOLID, 1)" instead of the boolean compound.
@@ -331,7 +395,10 @@ void executeBoolean(const app::DocumentObject& object, runtime::ComputeContext& 
         }
     }
 
-    context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, resultShape};
+    const auto resultKind = *operation == ProductBooleanOperation::Section
+        ? runtime::ShapeValue::Kind::PartPrimitive
+        : runtime::ShapeValue::Kind::Solid;
+    context.shapes[object.name] = runtime::ShapeValue{resultKind, resultShape};
     context.namedShapes[object.name] = resultNamedShape
         ? *resultNamedShape
         : part::indexedNamedShapeForObject(object.name, resultShape);
@@ -340,7 +407,7 @@ void executeBoolean(const app::DocumentObject& object, runtime::ComputeContext& 
     context.objects[object.name] = {
         {"status", "ok"},
         {"shape", shapeKind(resultShape)},
-        {"body_mode", "replace"},
+        {"body_mode", *operation == ProductBooleanOperation::Section ? "section_non_solid" : "replace"},
         {"boolean_type", type},
         {"tools", toolNames},
         {"allow_compound", allowCompound},

@@ -1628,6 +1628,46 @@ bool applyThruSectionsGeneratedHistory(
     return applied;
 }
 
+bool applySewingModifiedHistory(
+    NamedShape& namedShape,
+    const std::string& sourceName,
+    const TopoDS_Shape& sourceElement,
+    BRepBuilderAPI_Sewing& maker,
+    std::map<std::string, SourceTargets>& sourceTargets
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::MapperSewing::modified(), "const auto& shape = maker.Modified(s)" and, if unchanged,
+    // "const auto& sshape = maker.ModifiedSubShape(s)" become the modified history consumed by
+    // TopoShape::makeShapeWithElementMap().
+    try {
+        TopoDS_Shape modified = maker.Modified(sourceElement);
+        if (!modified.IsNull() && !modified.IsSame(sourceElement)) {
+            return applyHistoryShape(
+                namedShape,
+                sourceName,
+                modified,
+                ElementHistoryKind::Modified,
+                sourceTargets
+            );
+        }
+        modified = maker.ModifiedSubShape(sourceElement);
+        if (!modified.IsNull() && !modified.IsSame(sourceElement)) {
+            return applyHistoryShape(
+                namedShape,
+                sourceName,
+                modified,
+                ElementHistoryKind::Modified,
+                sourceTargets
+            );
+        }
+    }
+    catch (const Standard_Failure&) {
+        return false;
+    }
+    return false;
+}
+
 std::vector<std::string> sourceElementNames(
     const NamedShapeSource& source,
     const std::string& localElementName
@@ -3946,6 +3986,54 @@ NamedShape namedShapeForThruSectionsHistory(
     return namedShape;
 }
 
+NamedShape namedShapeForSewingHistory(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const std::vector<NamedShapeSource>& sources,
+    BRepBuilderAPI_Sewing& maker
+)
+{
+    NamedShape namedShape = indexedNamedShapeForObject(owner, resultShape);
+    std::map<std::string, SourceTargets> sourceTargets;
+    bool sawModified = false;
+
+    for (const auto& source : sources) {
+        for (const TopAbs_ShapeEnum kind : mappableKinds()) {
+            const std::string prefix = prefixForKind(kind);
+            if (prefix.empty()) {
+                continue;
+            }
+            TopTools_IndexedMapOfShape sourceElements;
+            TopExp::MapShapes(source.shape, kind, sourceElements);
+            for (int index = 1; index <= sourceElements.Extent(); ++index) {
+                const TopoDS_Shape& sourceElement = sourceElements(index);
+                const std::string localElementName = prefix + std::to_string(index);
+                for (const std::string& sourceName : sourceElementNames(source, localElementName)) {
+                    sourceTargets[sourceName];
+                    collectSourceElementMap(namedShape, sourceName, sourceElement, kind, sourceTargets);
+                    sawModified = applySewingModifiedHistory(
+                                      namedShape,
+                                      sourceName,
+                                      sourceElement,
+                                      maker,
+                                      sourceTargets
+                                  )
+                        || sawModified;
+                }
+            }
+        }
+    }
+
+    applyHistoryElementMap(namedShape, sourceTargets);
+    propagateNestedSourceHistory(namedShape, sources);
+    addMergeHistory(namedShape);
+    if (sawModified) {
+        addDistinctString(namedShape.elementHistoryStatus, "part_sewing:mapper_modified");
+    }
+
+    return namedShape;
+}
+
 std::optional<NamedShape> namedShapeForTaperedExtrusionHistory(
     const std::string& owner,
     const part::TaperedExtrusionResult& tapered,
@@ -4566,6 +4654,42 @@ NamedShape namedShapeForTransformedCopy(
     return namedShape;
 }
 
+NamedShapeBuild makeElementCompoundFromSources(
+    const std::string& owner,
+    const std::vector<NamedShapeSource>& sources,
+    bool returnSingleShape
+)
+{
+    if (sources.empty()) {
+        return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Null shape"};
+    }
+    for (const auto& source : sources) {
+        if (source.shape.IsNull()) {
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Null input shape for compound operation"};
+        }
+    }
+
+    if (returnSingleShape && sources.size() == 1U) {
+        NamedShape namedShape = sources.front().namedShape != nullptr
+            ? *sources.front().namedShape
+            : indexedNamedShapeForObject(owner, sources.front().shape);
+        namedShape.owner = owner;
+        namedShape.shape = sources.front().shape;
+        return NamedShapeBuild {sources.front().shape, std::move(namedShape), {}};
+    }
+
+    BRep_Builder builder;
+    TopoDS_Compound compound;
+    builder.MakeCompound(compound);
+    for (const auto& source : sources) {
+        builder.Add(compound, source.shape);
+    }
+
+    NamedShape namedShape = namedShapeForPreservedSources(owner, compound, sources);
+    namedShape.elementHistoryStatus.push_back("part_compound:make_element_compound");
+    return NamedShapeBuild {compound, std::move(namedShape), {}};
+}
+
 NamedShapeBuild makeElementBooleanFromSources(
     const std::string& owner,
     const std::vector<NamedShapeSource>& sources,
@@ -4758,11 +4882,11 @@ NamedShapeBuild makeElementSectionFromSources(
     bool approximate
 )
 {
-    if (sources.size() != 2U) {
+    if (sources.size() < 2U) {
         return NamedShapeBuild {
             TopoDS_Shape {},
             std::nullopt,
-            "Section requires exactly two input shapes"
+            "Section requires at least two input shapes"
         };
     }
     for (const auto& source : sources) {
@@ -4777,11 +4901,17 @@ NamedShapeBuild makeElementSectionFromSources(
 
     try {
         BRepAlgoAPI_Section maker;
-        maker.Init1(sources.front().shape);
-        maker.Init2(sources.back().shape);
+        TopTools_ListOfShape arguments;
+        TopTools_ListOfShape tools;
+        arguments.Append(sources.front().shape);
+        for (std::size_t index = 1; index < sources.size(); ++index) {
+            tools.Append(sources.at(index).shape);
+        }
         maker.Approximation(approximate);
         maker.SetRunParallel(Standard_True);
         maker.SetNonDestructive(Standard_True);
+        maker.SetArguments(arguments);
+        maker.SetTools(tools);
         maker.SetFuzzyValue(autoFuzzyValueForSources(sources));
         maker.Build();
         if (!maker.IsDone()) {

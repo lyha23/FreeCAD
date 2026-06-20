@@ -1,0 +1,175 @@
+{
+  "Objects": [
+    {
+      "Name": "SupportBox",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 10,
+        "Width": 8,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "DatumPlaneFlatFace",
+      "ID": 2,
+      "TypeId": "PartDesign::Plane",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportBox",
+          "SubList": ["Face1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "FlatFace"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSObjectXY",
+      "ID": 3,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportBox",
+          "SubList": []
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ObjectXY"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSObjectXZ",
+      "ID": 4,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportBox",
+          "SubList": []
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ObjectXZ"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSObjectYZ",
+      "ID": 5,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportBox",
+          "SubList": []
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ObjectYZ"
+        }
+      }
+    },
+    {
+      "Name": "DatumPointOrigin",
+      "ID": 6,
+      "TypeId": "PartDesign::Point",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportBox",
+          "SubList": []
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ObjectOrigin"
+        }
+      }
+    },
+    {
+      "Name": "DatumLineObjectX",
+      "ID": 7,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportBox",
+          "SubList": []
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ObjectX"
+        }
+      }
+    },
+    {
+      "Name": "DatumLineObjectY",
+      "ID": 8,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportBox",
+          "SubList": []
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ObjectY"
+        }
+      }
+    },
+    {
+      "Name": "DatumLineObjectZ",
+      "ID": 9,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportBox",
+          "SubList": []
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ObjectZ"
+        }
+      }
+    },
+    {
+      "Name": "DatumLineNormalToEdge",
+      "ID": 10,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportBox",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "NormalToEdge"
+        },
+        "MapPathParameter": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 0.5
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "DatumPlaneFlatFace",
+      "DatumCSObjectXY",
+      "DatumCSObjectXZ",
+      "DatumCSObjectYZ",
+      "DatumPointOrigin",
+      "DatumLineObjectX",
+      "DatumLineObjectY",
+      "DatumLineObjectZ",
+      "DatumLineNormalToEdge"
+    ]
+  }
+}

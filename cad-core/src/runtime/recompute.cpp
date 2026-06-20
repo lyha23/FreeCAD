@@ -1300,12 +1300,34 @@ nlohmann::json responseMesh(const std::string& objectName, const nlohmann::json&
         }
     }
 
+    nlohmann::json vertexPoints = nlohmann::json::array();
+    const auto vertexPointsIt = mesh.find("vertexPoints");
+    if (vertexPointsIt != mesh.end() && vertexPointsIt->is_array()) {
+        for (const auto& point : *vertexPointsIt) {
+            if (!point.is_object()) {
+                continue;
+            }
+            const std::string id = point.value("id", "");
+            const std::string indexed = point.value("indexed", id);
+            const auto pointIt = point.find("point");
+            if (id.empty() || indexed.empty() || pointIt == point.end() || !pointIt->is_array()) {
+                continue;
+            }
+            vertexPoints.push_back({
+                {"id", objectName + ":" + id},
+                {"indexed", indexed},
+                {"point", *pointIt},
+            });
+        }
+    }
+
     return {
         {"vertices", mesh.value("vertices", nlohmann::json::array())},
         {"normals", mesh.value("normals", nlohmann::json::array())},
         {"indices", indices},
         {"faceIds", faceIds},
         {"edgeSegments", edgeSegments},
+        {"vertexPoints", vertexPoints},
     };
 }
 

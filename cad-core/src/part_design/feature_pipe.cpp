@@ -14,6 +14,7 @@
 #include <TopoDS_Shape.hxx>
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <optional>
 #include <string>
@@ -276,10 +277,10 @@ std::string firstLinkSubname(const app::DocumentObject& object, const std::strin
     return {};
 }
 
-bool rejectDeferredPipeBranch(const app::DocumentObject& object,
-                              runtime::ComputeContext& context,
-                              const std::string& property,
-                              const std::string& message)
+bool rejectExactPipeBlocker(const app::DocumentObject& object,
+                            runtime::ComputeContext& context,
+                            const std::string& property,
+                            const std::string& message)
 {
     addPipeDiagnostic(object,
                       context,
@@ -291,40 +292,22 @@ bool rejectDeferredPipeBranch(const app::DocumentObject& object,
     return false;
 }
 
-bool rejectDeferredPipeBranches(const app::DocumentObject& object,
-                                runtime::ComputeContext& context,
-                                int mode,
-                                int transformation,
-                                int transition)
+bool rejectSourceBlockedPipeBranches(const app::DocumentObject& object,
+                                     runtime::ComputeContext& context,
+                                     int transformation)
 {
-    (void)transition;
     bool ok = true;
-    if (mode != 0 && mode != 2) {
-        ok = rejectDeferredPipeBranch(object,
-                                      context,
-                                      "Mode",
-                                      "PartDesign Pipe supports Mode=Standard/Frenet; Fixed/Auxiliary/Binormal require setupAlgorithm owner work") && ok;
-    }
-    if (transformation != 0 && transformation != 1) {
-        ok = rejectDeferredPipeBranch(
+    if (transformation >= 2) {
+        ok = rejectExactPipeBlocker(
                  object,
                  context,
                  "Transformation",
-                 "PartDesign Pipe supports Transformation=Constant/Multisection; scaling law transformations are deferred"
+                 "PartDesign Pipe scaling-law Transformation is source-blocked: FeaturePipe.cpp keeps Linear/S-shape ScalingData law branches commented out"
             )
             && ok;
     }
-    if (transition == 2) {
-        ok = rejectDeferredPipeBranch(
-                 object,
-                 context,
-                 "Transition",
-                 "PartDesign Pipe Transition=Round corner is deferred until native orientation parity is isolated"
-             )
-            && ok;
-    }
     if (transformation == 1 && app::readLinks(object, "Sections").empty()) {
-        ok = rejectDeferredPipeBranch(
+        ok = rejectExactPipeBlocker(
                  object,
                  context,
                  "Sections",
@@ -332,37 +315,41 @@ bool rejectDeferredPipeBranches(const app::DocumentObject& object,
              )
             && ok;
     }
-    if (transformation != 1 && !app::readLinks(object, "Sections").empty()) {
-        ok = rejectDeferredPipeBranch(
-                 object,
-                 context,
-                 "Sections",
-                 "PartDesign Pipe Sections are only consumed with Transformation=Multisection"
-             )
-            && ok;
-    }
-    for (const std::string& property :
-         {"AuxiliarySpine", "AuxiliarySpineTangent", "AuxiliaryCurvilinear", "Binormal"}) {
-        if (app::propertyValue(object, property) != nullptr) {
-            ok = rejectDeferredPipeBranch(
-                     object,
-                     context,
-                     property,
-                     "PartDesign Pipe Auxiliary/Binormal orientation branch is deferred"
-                 )
-                && ok;
-        }
-    }
     if (app::readBool(object, "SpineTangent").value_or(false)) {
-        ok = rejectDeferredPipeBranch(
+        ok = rejectExactPipeBlocker(
                  object,
                  context,
                  "SpineTangent",
-                 "PartDesign Pipe tangent spine expansion is deferred"
+                 "PartDesign Pipe SpineTangent is source-blocked: FeaturePipe.cpp::buildPipePath() comments out getContinuousEdges(shape, subedge)"
+             )
+            && ok;
+    }
+    if (app::readBool(object, "AuxiliarySpineTangent").value_or(false)) {
+        ok = rejectExactPipeBlocker(
+                 object,
+                 context,
+                 "AuxiliarySpineTangent",
+                 "PartDesign Pipe AuxiliarySpineTangent is source-blocked with the same commented tangent expansion path as SpineTangent"
              )
             && ok;
     }
     return ok;
+}
+
+part::PipeShellMode pipeShellMode(int mode)
+{
+    switch (mode) {
+        case 1:
+            return part::PipeShellMode::Fixed;
+        case 2:
+            return part::PipeShellMode::Frenet;
+        case 3:
+            return part::PipeShellMode::Auxiliary;
+        case 4:
+            return part::PipeShellMode::Binormal;
+        default:
+            return part::PipeShellMode::Standard;
+    }
 }
 
 std::optional<PipeInput> resolveSectionLink(const app::DocumentObject& object,
@@ -392,16 +379,6 @@ std::optional<PipeInput> resolveSectionLink(const app::DocumentObject& object,
         && (link.subnames.empty() || link.subnames.front().rfind("Vertex", 0U) != 0U);
     if (link.subnames.empty() || useEntireSketch) {
         return PipeInput{link.object, {}, shapeIt->second.shape, namedShape};
-    }
-    if (link.subnames.size() > 1U) {
-        addPipeDiagnostic(object,
-                          context,
-                          "unsupported_property",
-                          "PartDesign Pipe explicit multi-subelement section selection is deferred",
-                          property,
-                          link.object,
-                          link.subnames.front());
-        return std::nullopt;
     }
     const auto subshape = linkedSubshape(shapeIt->second.shape, namedShape, link, 0U);
     if (!subshape || subshape->IsNull()) {
@@ -473,16 +450,6 @@ std::optional<PipeInput> resolveProfile(const app::DocumentObject& object,
         return PipeInput{link->object, {}, shapeIt->second.shape, namedShape};
     }
 
-    if (link->subnames.size() > 1U) {
-        addPipeDiagnostic(object,
-                          context,
-                          "unsupported_property",
-                          "PartDesign Pipe explicit multi-subelement Profile selection is deferred",
-                          "Profile",
-                          link->object,
-                          link->subnames.front());
-        return std::nullopt;
-    }
     const auto subshape = linkedSubshape(shapeIt->second.shape, namedShape, *link, 0U);
     if (!subshape || subshape->IsNull()) {
         addPipeDiagnostic(object,
@@ -548,6 +515,72 @@ std::optional<PipeInput> resolveSpine(const app::DocumentObject& object,
     }
 
     return PipeInput{link->object, {}, spine, namedShape};
+}
+
+std::optional<PipeInput> resolveAuxiliarySpine(const app::DocumentObject& object,
+                                               runtime::ComputeContext& context)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp
+    // ::Pipe::execute(), when "Mode.getValue() == 3", reads AuxiliarySpine.getSubValues(),
+    // calls buildPipePath(auxshape, auxsubedge, auxpath), then setupAlgorithm() passes auxpath to
+    // "SetMode(TopoDS::Wire(auxshape), AuxiliaryCurvilinear.getValue())".
+    if (app::propertyValue(object, "AuxiliarySpine") == nullptr) {
+        addPipeDiagnostic(
+            object,
+            context,
+            "missing_property",
+            "No auxiliary spine linked.",
+            "AuxiliarySpine"
+        );
+        return std::nullopt;
+    }
+    const auto link = app::readLink(object, "AuxiliarySpine");
+    if (!link || link->object.empty()) {
+        addPipeDiagnostic(
+            object,
+            context,
+            "missing_property",
+            "No auxiliary spine linked.",
+            "AuxiliarySpine"
+        );
+        return std::nullopt;
+    }
+
+    const auto shapeIt = context.shapes.find(link->object);
+    if (shapeIt == context.shapes.end() || shapeIt->second.shape.IsNull()) {
+        addPipeDiagnostic(object,
+                          context,
+                          "missing_link_target",
+                          "Invalid auxiliary spine",
+                          "AuxiliarySpine",
+                          link->object);
+        return std::nullopt;
+    }
+    const part::NamedShape* namedShape = namedShapeForTarget(context, link->object);
+
+    TopoDS_Shape auxiliary = shapeIt->second.shape;
+    if (!link->subnames.empty()) {
+        std::vector<TopoDS_Shape> selected;
+        selected.reserve(link->subnames.size());
+        for (std::size_t index = 0; index < link->subnames.size(); ++index) {
+            const auto subshape = linkedSubshape(shapeIt->second.shape, namedShape, *link, index);
+            if (!subshape || subshape->IsNull()) {
+                const std::string subname = index < link->subnames.size() ? link->subnames.at(index) : std::string {};
+                addPipeDiagnostic(object,
+                                  context,
+                                  "invalid_subshape",
+                                  "Invalid auxiliary spine",
+                                  "AuxiliarySpine",
+                                  link->object,
+                                  subname);
+                return std::nullopt;
+            }
+            selected.push_back(*subshape);
+        }
+        auxiliary = compoundOf(selected);
+    }
+
+    return PipeInput{link->object, {}, auxiliary, namedShape};
 }
 
 std::vector<part::NamedShapeSource> pipeSources(const PipeInput& spine,
@@ -634,7 +667,7 @@ void executePipeFeature(const app::DocumentObject& object,
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    if (!rejectDeferredPipeBranches(object, context, *mode, *transformation, *transition)) {
+    if (!rejectSourceBlockedPipeBranches(object, context, *transformation)) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -649,19 +682,61 @@ void executePipeFeature(const app::DocumentObject& object,
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    const auto sections = resolveSections(object, context);
-    if (!sections) {
-        context.objects[object.name] = {{"status", "error"}};
-        return;
+    std::vector<PipeInput> sections;
+    if (*transformation == 1) {
+        const auto resolvedSections = resolveSections(object, context);
+        if (!resolvedSections) {
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
+        sections = *resolvedSections;
+    }
+
+    part::PipeShellOptions pipeOptions;
+    pipeOptions.solid = true;
+    pipeOptions.mode = pipeShellMode(*mode);
+    pipeOptions.transition = *transition;
+    pipeOptions.sewCaps = true;
+
+    std::optional<PipeInput> auxiliarySpine;
+    if (*mode == 3) {
+        auxiliarySpine = resolveAuxiliarySpine(object, context);
+        if (!auxiliarySpine) {
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
+        pipeOptions.auxiliarySpine = auxiliarySpine->shape;
+        pipeOptions.auxiliaryCurvilinear = app::readBool(object, "AuxiliaryCurvilinear").value_or(true);
+    }
+    if (*mode == 4) {
+        const auto binormal = app::readVector3(object, "Binormal");
+        if (!binormal) {
+            addPipeDiagnostic(object,
+                              context,
+                              "missing_property",
+                              "PartDesign Pipe Mode=Binormal requires Binormal vector",
+                              "Binormal");
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
+        const double magnitudeSquared = (*binormal)[0] * (*binormal)[0] + (*binormal)[1] * (*binormal)[1]
+            + (*binormal)[2] * (*binormal)[2];
+        if (magnitudeSquared <= 1.0e-24) {
+            addPipeDiagnostic(object,
+                              context,
+                              "invalid_property",
+                              "PartDesign Pipe Mode=Binormal requires non-zero Binormal vector",
+                              "Binormal");
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
+        pipeOptions.binormal = *binormal;
     }
 
     const auto build = part::makeElementPipeShellFromSources(
         object.name,
-        pipeSources(*spine, *profile, *sections),
-        true,
-        *mode == 2,
-        *transition,
-        false
+        pipeSources(*spine, *profile, sections),
+        pipeOptions
     );
     if (!build.error.empty() || build.shape.IsNull()) {
         addPipeDiagnostic(object,
@@ -680,6 +755,7 @@ void executePipeFeature(const app::DocumentObject& object,
         namedShape->shape = build.shape;
         addHistoryStatus(*namedShape, "part_design_pipe:pipeshell_history");
         addHistoryStatus(*namedShape, "part_design_pipe:solidification");
+        addHistoryStatus(*namedShape, "part_design_pipe:sewing");
     }
 
     runtime::RefineShapeResult shapeResult{build.shape, namedShape, false};
@@ -742,13 +818,21 @@ void executePipeFeature(const app::DocumentObject& object,
         {"transformation", transformationLabel(*transformation)},
         {"transition", transitionLabel(*transition)},
         {"sections", nlohmann::json::array()},
+        {"cap_sewing", "mapper_history:part_design_pipe"},
         {"solid_count", solids},
         {"bbox", cad_core::part::bboxForShape(solid)},
         {"volume", cad_core::part::volumeForShape(solid)},
         {"topo_naming_history", "maker_history:partdesign_pipe"},
         {"kernel", cad_core::part::kernelVersion()},
     };
-    for (const PipeInput& section : *sections) {
+    if (auxiliarySpine) {
+        result["auxiliary_spine"] = auxiliarySpine->objectName;
+        result["auxiliary_curvilinear"] = pipeOptions.auxiliaryCurvilinear;
+    }
+    if (*mode == 4) {
+        result["binormal"] = pipeOptions.binormal;
+    }
+    for (const PipeInput& section : sections) {
         result["sections"].push_back(section.objectName);
     }
     if (shapeResult.applied) {

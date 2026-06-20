@@ -1,0 +1,25 @@
+{
+  "bbox": {
+    "max": [
+      4.0,
+      2.0,
+      0.0
+    ],
+    "min": [
+      -4.0,
+      0.0,
+      -4.0
+    ]
+  },
+  "bbox_delta": 0.04,
+  "freecad_version": "1.2.0 revision 20260519",
+  "object": "Revolution",
+  "reference": "FreeCADCmd oracle from partdesign-revolution-sketch-axisn.json; objects: Sketcher::SketchObject, PartDesign::Revolution",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "topology_counts": {
+    "edges": 12,
+    "faces": 6,
+    "vertices": 8
+  },
+  "volume": 37.699111843077524
+}

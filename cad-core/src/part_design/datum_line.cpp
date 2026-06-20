@@ -26,15 +26,12 @@ nlohmann::json directionToJson(const gp_Dir& direction)
     return nlohmann::json::array({direction.X(), direction.Y(), direction.Z()});
 }
 
-}  // namespace
-
-void executeDatumLine(const app::DocumentObject& object, runtime::ComputeContext& context)
+void executeLineDatum(const app::DocumentObject& object,
+                      runtime::ComputeContext& context,
+                      const gp_Dir& baseDirection,
+                      const std::string& datumKind,
+                      detail::DatumAttachmentEngine attachmentEngine)
 {
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/DatumLine.cpp::Line::Line(),
-    // creates "BRepBuilderAPI_MakeEdge(gp_Lin(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)))"; getDirection()
-    // returns Placement rotation applied to "Base::Vector3d(0, 0, 1)".
-    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Datums.cpp::DatumElement::DatumElement()
-    // adds "Role" for lookup by LocalCoordinateSystem::getDatumElement().
     if (!runtime::rejectUnsupportedProperties(object,
                                               context,
                                               {"ResizeMode",
@@ -50,12 +47,13 @@ void executeDatumLine(const app::DocumentObject& object, runtime::ComputeContext
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    if (!detail::rejectUnsupportedDatumAttachment(object, context)) {
+    const auto attachment = detail::datumAttachmentPlacement(object, context, attachmentEngine);
+    if (!attachment) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
 
-    BRepBuilderAPI_MakeEdge builder(gp_Lin(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)));
+    BRepBuilderAPI_MakeEdge builder(gp_Lin(gp_Pnt(0, 0, 0), baseDirection));
     if (!builder.IsDone()) {
         runtime::addDiagnostic(context.diagnostics,
                                "error",
@@ -68,22 +66,41 @@ void executeDatumLine(const app::DocumentObject& object, runtime::ComputeContext
 
     TopoDS_Shape shape = builder.Shape();
     gp_Pnt base(0, 0, 0);
-    gp_Dir direction(0, 0, 1);
-    const auto placementIt = context.globalPlacements.find(object.name);
-    if (placementIt != context.globalPlacements.end()) {
-        const gp_Trsf& placement = placementIt->second;
-        shape = base::transformShape(shape, placement);
-        base.Transform(placement);
-        direction.Transform(placement);
-    }
+    gp_Dir direction = baseDirection;
+    const gp_Trsf placement = attachment->placement;
+    shape = base::transformShape(shape, placement);
+    base.Transform(placement);
+    direction.Transform(placement);
+    context.globalPlacements[object.name] = placement;
 
     context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::DatumLine, shape};
     context.objects[object.name] = {
         {"status", "ok"},
-        {"datum", "line"},
+        {"datum", datumKind},
+        {"attached", attachment->attached},
         {"base", pointToJson(base)},
         {"direction", directionToJson(direction)},
     };
+}
+
+}  // namespace
+
+void executeDatumLine(const app::DocumentObject& object, runtime::ComputeContext& context)
+{
+    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/DatumLine.cpp::Line::Line(),
+    // creates "BRepBuilderAPI_MakeEdge(gp_Lin(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)))"; getDirection()
+    // returns Placement rotation applied to "Base::Vector3d(0, 0, 1)".
+    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Datums.cpp::DatumElement::DatumElement()
+    // adds "Role" for lookup by LocalCoordinateSystem::getDatumElement().
+    executeLineDatum(object, context, gp_Dir(0, 0, 1), "line", detail::DatumAttachmentEngine::Line);
+}
+
+void executeAppLine(const app::DocumentObject& object, runtime::ComputeContext& context)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/Datums.cpp::Line::Line(),
+    // calls "setBaseDirection(Base::Vector3d(1, 0, 0))"; DatumElement::getDirection()
+    // then rotates that base direction by the object's Placement.
+    executeLineDatum(object, context, gp_Dir(1, 0, 0), "app_line", detail::DatumAttachmentEngine::Line);
 }
 
 }  // namespace cad_core::part_design

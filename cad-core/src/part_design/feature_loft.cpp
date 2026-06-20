@@ -213,6 +213,9 @@ std::optional<std::vector<SectionShape>> getSectionShape(const app::DocumentObje
             if (!subshape) {
                 subshape = part::subshapeByName(shapeIt->second.shape, subname);
             }
+            if (!subshape && !stableSubname.empty() && stableSubname != subname) {
+                subshape = part::subshapeByName(shapeIt->second.shape, stableSubname);
+            }
             if (!subshape) {
                 addLoftDiagnostic(object,
                                   context,
@@ -319,9 +322,11 @@ std::optional<SolidifiedLoft> buildSolidifiedLoftTool(const app::DocumentObject&
     shells.reserve(wireSections.size());
     shellNamedShapes.reserve(wireSections.size());
 
+    std::size_t shellIndex = 0;
     for (const std::vector<SectionShape>& section : wireSections) {
+        const std::string shellOwner = object.name + ".Shell" + std::to_string(++shellIndex);
         const auto build = part::makeElementLoftFromSources(
-            object.name,
+            shellOwner,
             sourcesForSectionShapes(section),
             false,
             ruled,
@@ -360,6 +365,7 @@ std::optional<SolidifiedLoft> buildSolidifiedLoftTool(const app::DocumentObject&
     }
 
     TopoDS_Shape back;
+    std::optional<part::NamedShape> backNamedShape;
     if (!wireSections.empty() && !wireSections.front().empty()
         && wireSections.front().back().shape.ShapeType() != TopAbs_VERTEX) {
         const auto face = backFaceForSectionWires(wireSections);
@@ -372,6 +378,15 @@ std::optional<SolidifiedLoft> buildSolidifiedLoftTool(const app::DocumentObject&
             return std::nullopt;
         }
         back = *face;
+        std::vector<part::NamedShapeSource> backSources;
+        backSources.reserve(wireSections.size());
+        for (const auto& section : wireSections) {
+            if (!section.empty()) {
+                auto sources = sourcesForSectionShapes({section.back()});
+                backSources.insert(backSources.end(), sources.begin(), sources.end());
+            }
+        }
+        backNamedShape = part::namedShapeForPreservedSources(object.name + ".SectionFace", back, backSources);
     }
 
     BRepBuilderAPI_Sewing sewing;
@@ -400,12 +415,17 @@ std::optional<SolidifiedLoft> buildSolidifiedLoftTool(const app::DocumentObject&
     }
     for (std::size_t index = 0; index < shells.size(); ++index) {
         const part::NamedShape* shellNamedShape = index < shellNamedShapes.size() ? &shellNamedShapes.at(index) : nullptr;
-        sewingSources.push_back(part::NamedShapeSource{object.name, shells.at(index), shellNamedShape});
+        const std::string shellOwner = object.name + ".Shell" + std::to_string(index + 1U);
+        sewingSources.push_back(part::NamedShapeSource{shellOwner, shells.at(index), shellNamedShape});
     }
     if (!back.IsNull()) {
-        sewingSources.push_back(part::NamedShapeSource{object.name + ".SectionFace", back, nullptr});
+        sewingSources.push_back(part::NamedShapeSource{
+            object.name + ".SectionFace",
+            back,
+            backNamedShape ? &*backNamedShape : nullptr
+        });
     }
-    auto sewedNamedShape = part::namedShapeForPreservedSources(object.name, sewed, sewingSources);
+    auto sewedNamedShape = part::namedShapeForSewingHistory(object.name, sewed, sewingSources, sewing);
     addHistoryStatus(sewedNamedShape, "part_design_loft:sewing");
 
     part::NamedShapeSource solidSource{object.name, sewed, &sewedNamedShape};
@@ -429,6 +449,7 @@ std::optional<SolidifiedLoft> buildSolidifiedLoftTool(const app::DocumentObject&
     if (namedShape) {
         namedShape->owner = object.name;
         namedShape->shape = solid;
+        addHistoryStatus(*namedShape, "part_design_loft:sewing");
         addHistoryStatus(*namedShape, "part_design_loft:solidification");
         addHistoryStatus(*namedShape, "part_loft:thru_sections_history");
     }
@@ -485,19 +506,6 @@ void executeLoftFeature(const app::DocumentObject& object,
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    if (profileSections->size() > 1U) {
-        addLoftDiagnostic(
-            object,
-            context,
-            "unsupported_property",
-            "PartDesign Loft multi-wire ordering is deferred until MapperThruSections/Sewing parity is source-backed",
-            "Sections",
-            profileLink->object
-        );
-        context.objects[object.name] = {{"status", "error"}};
-        return;
-    }
-
     const std::vector<app::Link> sectionLinks = app::readLinks(object, "Sections");
     if (sectionLinks.empty()) {
         addLoftDiagnostic(object, context, "missing_property", "Loft: At least one section is needed", "Sections");
@@ -505,18 +513,6 @@ void executeLoftFeature(const app::DocumentObject& object,
         return;
     }
     const bool requestedClosed = app::readBool(object, "Closed").value_or(false);
-    if (requestedClosed && sectionLinks.size() >= 2U) {
-        addLoftDiagnostic(
-            object,
-            context,
-            "unsupported_property",
-            "PartDesign Loft Closed=true multi-section native oracle is deferred until closed MapperThruSections parity is source-backed",
-            "Closed",
-            object.name
-        );
-        context.objects[object.name] = {{"status", "error"}};
-        return;
-    }
 
     std::vector<std::vector<SectionShape>> wireSections;
     wireSections.reserve(profileSections->size());
@@ -588,11 +584,17 @@ void executeLoftFeature(const app::DocumentObject& object,
 
     const bool additive = mode == LoftAddSubMode::Additive;
     if (additive) {
-        context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, solid};
-        context.addSubShapes[object.name] = runtime::AddSubShape{solid, std::nullopt, namedShape, std::nullopt};
+        runtime::ShapeValue shapeValue{runtime::ShapeValue::Kind::Solid, solid};
+        shapeValue.usePreciseBoundingBox = true;
+        context.shapes[object.name] = shapeValue;
+        runtime::AddSubShape addSubShape{solid, std::nullopt, namedShape, std::nullopt};
+        addSubShape.addUsesPreciseBoundingBox = true;
+        context.addSubShapes[object.name] = addSubShape;
     }
     else {
-        context.addSubShapes[object.name] = runtime::AddSubShape{std::nullopt, solid, std::nullopt, namedShape};
+        runtime::AddSubShape addSubShape{std::nullopt, solid, std::nullopt, namedShape};
+        addSubShape.subUsesPreciseBoundingBox = true;
+        context.addSubShapes[object.name] = addSubShape;
     }
 
     nlohmann::json sectionNames = nlohmann::json::array();
@@ -610,7 +612,7 @@ void executeLoftFeature(const app::DocumentObject& object,
         {"closed", closed},
         {"shell_count", tool->shellCount},
         {"solid_count", solids},
-        {"bbox", cad_core::part::bboxForShape(solid)},
+        {"bbox", cad_core::part::preciseBBoxForShape(solid)},
         {"volume", cad_core::part::volumeForShape(solid)},
         {"topo_naming_history", "maker_history:partdesign_loft"},
         {"kernel", cad_core::part::kernelVersion()},

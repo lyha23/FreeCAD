@@ -17,14 +17,20 @@ enum class ShapeFileFormat {
 };
 
 nlohmann::json bboxForShape(const TopoDS_Shape& shape);
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapePyImp.cpp
+// ::TopoShapePy::optimalBoundingBox(), exposes "BRepBndLib::AddOptimal" for Python oracle
+// collection. Some maker outputs keep request-local triangulation that is wider than the
+// geometric result, so cad-core can opt into a geometry-only AddOptimal call for those outputs.
+nlohmann::json preciseBBoxForShape(const TopoDS_Shape& shape);
 double volumeForShape(const TopoDS_Shape& shape);
 // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
 // ::SketchObject::getElementTypes(), exposes "InternalFace" elements for Sketch
 // InternalShape. cad-core uses matching prefixes when exporting display mesh face
-// ids and edgeSegments ids.
+// ids, edgeSegments ids and vertexPoints ids.
 nlohmann::json meshForShape(const TopoDS_Shape& shape,
                             const std::string& faceIdPrefix = "Face",
-                            const std::string& edgeIdPrefix = "Edge");
+                            const std::string& edgeIdPrefix = "Edge",
+                            const std::string& vertexIdPrefix = "Vertex");
 ShapeFileFormat shapeFileFormatFromString(const std::string& format);
 std::string shapeFileFormatName(ShapeFileFormat format);
 std::string shapeFileFormatExtension(ShapeFileFormat format);

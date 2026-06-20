@@ -84,7 +84,7 @@
       "ID": 6,
       "TypeId": "PartDesign::Boolean",
       "Properties": {
-        "Type": "Section",
+        "Type": "Fragments",
         "Group": {
           "PropertyType": "App::PropertyLinkList",
           "values": ["SketchNullTool"]

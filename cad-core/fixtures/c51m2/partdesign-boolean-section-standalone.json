@@ -1,0 +1,50 @@
+{
+  "Objects": [
+    {
+      "Name": "BaseBox",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 4,
+        "Width": 4,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "ToolBox",
+      "ID": 2,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 4,
+        "Width": 4,
+        "Height": 4,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [2, 1, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "BooleanSection",
+      "ID": 3,
+      "TypeId": "PartDesign::Boolean",
+      "Properties": {
+        "Type": "Section",
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["ToolBox"]
+        },
+        "BaseFeature": {
+          "PropertyType": "App::PropertyLink",
+          "value": "BaseBox"
+        },
+        "Refine": false,
+        "FuzzyTolerance": 0.0
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["BooleanSection"]
+  }
+}

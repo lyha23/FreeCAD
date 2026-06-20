@@ -4,6 +4,7 @@
 #include "cad_core/part/topo_shape.h"
 
 #include <TopoDS_Edge.hxx>
+#include <TopoDS_Face.hxx>
 #include <TopoDS_Shape.hxx>
 #include <gp_Ax1.hxx>
 
@@ -75,6 +76,32 @@ struct FilledFaceBuild
     int boundaryEdgeCount = 0;
 };
 
+enum class PipeShellMode
+{
+    Standard,
+    Fixed,
+    Frenet,
+    Auxiliary,
+    Binormal,
+};
+
+struct PipeShellOptions
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp
+    // ::Pipe::setupAlgorithm(), maps Transition to "SetTransitionMode", Mode=Fixed to
+    // "SetMode(gp_Ax2(...))", Mode=Frenet to "SetMode(true)", Mode=Auxiliary to
+    // "SetMode(TopoDS::Wire(auxshape), AuxiliaryCurvilinear.getValue())", and Mode=Binormal to
+    // "SetMode(gp_Dir(bVec.x, bVec.y, bVec.z))".
+    bool solid = true;
+    PipeShellMode mode = PipeShellMode::Standard;
+    int transition = 0;
+    TopoDS_Shape auxiliarySpine;
+    bool auxiliaryCurvilinear = true;
+    std::array<double, 3> binormal {{0.0, 0.0, 1.0}};
+    bool linearizeFaces = false;
+    bool sewCaps = false;
+};
+
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
 // ::TopoShape::makeElementRuledSurface(), for two edges calls "BRepFill::Face(Edge, Edge)"
 // and for two wires calls "BRepFill::Shell(Wire, Wire)" after applying "Automatic" / "Reversed"
@@ -107,6 +134,12 @@ NamedShapeBuild makeElementLoftFromSources(
 NamedShapeBuild makeElementPipeShellFromSources(
     const std::string& owner,
     const std::vector<NamedShapeSource>& sources,
+    const PipeShellOptions& options
+);
+
+NamedShapeBuild makeElementPipeShellFromSources(
+    const std::string& owner,
+    const std::vector<NamedShapeSource>& sources,
     bool solid,
     bool frenet,
     int transition,
@@ -121,6 +154,21 @@ NamedShapeBuild makeElementRevolveFromSource(
     const NamedShapeSource& source,
     const gp_Ax1& axis,
     double angleRadians
+);
+
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+// ::TopoShape::makeElementRevolution(), creates "BRepFeat_MakeRevol", calls
+// "mkRevol.Init(base.getShape(), xp.Current(), supportface, axis, static_cast<int>(Mode), Modify)"
+// and then "mkRevol.Perform(uptoface)" for UpToFirst/UpToLast/UpToFace PartDesign Revolved.
+NamedShapeBuild makeElementRevolutionUntilFromSources(
+    const std::string& owner,
+    const NamedShapeSource& baseSource,
+    const NamedShapeSource& profileSource,
+    const gp_Ax1& axis,
+    const TopoDS_Face& supportFace,
+    const TopoDS_Face& upToFace,
+    int revolMode,
+    bool modify
 );
 
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp

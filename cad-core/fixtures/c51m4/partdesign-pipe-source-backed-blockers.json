@@ -1,0 +1,160 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPipeProfile",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [-0.5, -0.5], "end": [0.5, -0.5] },
+          { "kind": "LineSegment", "start": [0.5, -0.5], "end": [0.5, 0.5] },
+          { "kind": "LineSegment", "start": [0.5, 0.5], "end": [-0.5, 0.5] },
+          { "kind": "LineSegment", "start": [-0.5, 0.5], "end": [-0.5, -0.5] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "PipeSpine",
+      "ID": 2,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 0,
+        "Y2": 0,
+        "Z2": 4
+      }
+    },
+    {
+      "Name": "AuxiliarySpine",
+      "ID": 3,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 1,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 1,
+        "Y2": 0,
+        "Z2": 4
+      }
+    },
+    {
+      "Name": "AdditivePipeLinearScaling",
+      "ID": 4,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Linear"
+      }
+    },
+    {
+      "Name": "AdditivePipeSShapeScaling",
+      "ID": 5,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "S-shape"
+      }
+    },
+    {
+      "Name": "AdditivePipeInterpolation",
+      "ID": 6,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Interpolation"
+      }
+    },
+    {
+      "Name": "AdditivePipeSpineTangent",
+      "ID": 7,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "SpineTangent": true,
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Constant"
+      }
+    },
+    {
+      "Name": "AdditivePipeAuxiliaryTangent",
+      "ID": 8,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "AuxiliarySpine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "AuxiliarySpine",
+          "SubList": []
+        },
+        "AuxiliarySpineTangent": true,
+        "Mode": "Auxiliary",
+        "Transition": "Transformed",
+        "Transformation": "Constant"
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "AdditivePipeLinearScaling",
+      "AdditivePipeSShapeScaling",
+      "AdditivePipeInterpolation",
+      "AdditivePipeSpineTangent",
+      "AdditivePipeAuxiliaryTangent"
+    ]
+  }
+}

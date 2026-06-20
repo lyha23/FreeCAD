@@ -64,10 +64,21 @@ struct ShapeValue
     // Split-derived InternalFace regions are individually selectable profile domains; closed
     // wire compounds such as face-with-island can still be consumed as a whole profile.
     bool profileRequiresSubshapeSelection = false;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapePyImp.cpp
+    // ::TopoShapePy::optimalBoundingBox(), exposes "BRepBndLib::AddOptimal" for object oracle
+    // collection. Request-local OCCT makers such as Loft/Sewing can carry stale triangulation, so
+    // shape producers may opt into geometry-only bbox export without changing global Part bboxes.
+    bool usePreciseBoundingBox = false;
 };
 
 struct AddSubShape
 {
+    enum class AdditiveFuseOrder
+    {
+        BaseFirst,
+        FeatureFirst,
+    };
+
     std::optional<TopoDS_Shape> addShape;
     std::optional<TopoDS_Shape> subShape;
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureAddSub.cpp
@@ -76,6 +87,13 @@ struct AddSubShape
     // is not the same as the replacement solid, so cad-core keeps slot-level NamedShape history.
     std::optional<part::NamedShape> addNamedShape;
     std::optional<part::NamedShape> subNamedShape;
+    AdditiveFuseOrder additiveFuseOrder = AdditiveFuseOrder::BaseFirst;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::Body::execute(),
+    // reads FeatureAddSub deltas through getAddSubShape(); Body should preserve a producer's
+    // bbox policy when it directly adopts that additive/subtractive delta, but boolean replay
+    // clears it because a new maker result has been built.
+    bool addUsesPreciseBoundingBox = false;
+    bool subUsesPreciseBoundingBox = false;
 };
 
 struct ComputeContext

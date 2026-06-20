@@ -20,6 +20,7 @@
 #include <vector>
 
 class BRepOffsetAPI_ThruSections;
+class BRepBuilderAPI_Sewing;
 class ShapeFix_Root;
 
 namespace cad_core::part
@@ -411,6 +412,16 @@ NamedShape namedShapeForThruSectionsHistory(
     const TopoDS_Shape& lastProfile
 );
 // FreeCAD:
+// /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::MapperSewing,
+// "modified()" first asks "maker.Modified(s)" and then "maker.ModifiedSubShape(s)" before
+// makeShapeWithElementMap() consumes the sewing history for front/back faces and shells.
+NamedShape namedShapeForSewingHistory(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const std::vector<NamedShapeSource>& sources,
+    BRepBuilderAPI_Sewing& maker
+);
+// FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FeatureExtrusion.cpp::Extrusion::extrudeShape(),
 // calls "ExtrusionHelper::makeElementDraft(params, myShape, drafts, result.Hasher)" for taper;
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::MapperThruSections,
@@ -429,6 +440,14 @@ NamedShape namedShapeForPreservedSources(
     const std::string& owner,
     const TopoDS_Shape& resultShape,
     const std::vector<NamedShapeSource>& sources
+);
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+// ::TopoShape::makeElementBoolean(), routes OpCodes::Compound to
+// "return makeElementCompound(shapes, op, SingleShapeCompoundCreationPolicy::returnShape)".
+NamedShapeBuild makeElementCompoundFromSources(
+    const std::string& owner,
+    const std::vector<NamedShapeSource>& sources,
+    bool returnSingleShape = true
 );
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
@@ -505,10 +524,10 @@ NamedShapeBuild makeElementXorFromSources(
     const std::string& owner,
     const std::vector<NamedShapeSource>& sources
 );
-// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FeaturePartSection.cpp
-// ::Section::makeOperation(), configures FCBRepAlgoAPI_Section with Base, Tool and
-// Approximation, then Part::Boolean::execute() routes it through makeElementShape(*mkBool,
-// shapes, opCode()).
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+// ::TopoShape::makeElementBoolean(), selects FCBRepAlgoAPI_Section for OpCodes::Section,
+// appends the first source to Arguments and the remaining sources to Tools, and keeps
+// "buildShell = false" so section edge/wire output stays non-solid.
 NamedShapeBuild makeElementSectionFromSources(
     const std::string& owner,
     const std::vector<NamedShapeSource>& sources,
