@@ -1278,11 +1278,34 @@ nlohmann::json responseMesh(const std::string& objectName, const nlohmann::json&
         }
     }
 
+    nlohmann::json edgeSegments = nlohmann::json::array();
+    const auto edgeSegmentsIt = mesh.find("edgeSegments");
+    if (edgeSegmentsIt != mesh.end() && edgeSegmentsIt->is_array()) {
+        for (const auto& segment : *edgeSegmentsIt) {
+            if (!segment.is_object()) {
+                continue;
+            }
+            const std::string id = segment.value("id", "");
+            const std::string indexed = segment.value("indexed", id);
+            const auto pointsIt = segment.find("points");
+            if (id.empty() || indexed.empty() || pointsIt == segment.end()
+                || !pointsIt->is_array()) {
+                continue;
+            }
+            edgeSegments.push_back({
+                {"id", objectName + ":" + id},
+                {"indexed", indexed},
+                {"points", *pointsIt},
+            });
+        }
+    }
+
     return {
         {"vertices", mesh.value("vertices", nlohmann::json::array())},
         {"normals", mesh.value("normals", nlohmann::json::array())},
         {"indices", indices},
         {"faceIds", faceIds},
+        {"edgeSegments", edgeSegments},
     };
 }
 

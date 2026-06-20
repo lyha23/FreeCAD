@@ -69,6 +69,22 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(len(vertices), summary["vertex_count"])
         self.assertEqual(len(mesh["indices"]) // 3, summary["triangle_count"])
 
+    def assert_mesh_edge_segments_reference_subshapes(self, result_item: dict) -> None:
+        mesh = result_item["mesh"]
+        edge_segments = mesh["edgeSegments"]
+        subshape_by_id = {item["id"]: item for item in result_item["subshapes"]}
+        edge_subshape_ids = {
+            item["id"] for item in result_item["subshapes"] if item["kind"] == "Edge"
+        }
+
+        self.assertTrue(edge_segments)
+        self.assertEqual({segment["id"] for segment in edge_segments}, edge_subshape_ids)
+        for segment in edge_segments:
+            self.assertIn(segment["id"], subshape_by_id)
+            self.assertEqual(subshape_by_id[segment["id"]]["kind"], "Edge")
+            self.assertEqual(segment["indexed"], subshape_by_id[segment["id"]]["indexed"])
+            self.assertGreaterEqual(len(segment["points"]), 2)
+
     def test_c_api_returns_sketch_internal_profile_mesh(self) -> None:
         result = self.run_recompute_ffi("sketch-internal-face", "p5")
         sketch = result["results"][0]
@@ -79,7 +95,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(len(sketch["mesh"]["vertices"]), 0)
         self.assertGreater(len(sketch["mesh"]["indices"]), 0)
         self.assertIn("Sketch:InternalFace1", sketch["mesh"]["faceIds"])
+        internal_edge_ids = {segment["id"] for segment in sketch["mesh"]["edgeSegments"]}
+        self.assertIn("Sketch:InternalEdge1", internal_edge_ids)
         self.assertTrue(any(item["id"] == "Sketch:InternalFace1" for item in sketch["subshapes"]))
+        self.assertTrue(any(item["id"] == "Sketch:InternalEdge1" for item in sketch["subshapes"]))
 
     def test_c_api_keeps_open_sketch_internal_profile_mesh_null(self) -> None:
         result = self.run_recompute_ffi("sketch-open-wire-internal-empty", "p5")
@@ -150,6 +169,14 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertTrue(
             any(item["indexed"] == "Face1" for item in ffi_result["results"][0]["subshapes"])
         )
+
+    def test_c_api_mesh_edge_segments_reference_result_subshapes(self) -> None:
+        result = self.run_recompute_ffi("rect-pad", "mvp")
+        body = result["results"][0]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(body["object"], "Body")
+        self.assert_mesh_edge_segments_reference_subshapes(body)
 
     def test_c4s11_cli_c_api_worker_wasm_share_core_result_contract(self) -> None:
         payload = (ROOT / "fixtures" / "mvp" / "rect-pad.json").read_bytes()

@@ -932,7 +932,8 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
         // ::SketchObject::buildInternals(), writes auxiliary "InternalShape"; the web
         // response renders that request-local shape with InternalFace ids matching subshapes.
-        context.mesh[object.name] = cad_core::part::meshForShape(*internalShape, "InternalFace");
+        context.mesh[object.name] =
+            cad_core::part::meshForShape(*internalShape, "InternalFace", "InternalEdge");
     }
     const nlohmann::json internalSubshapes = hasNonEmptyInternalShape
         ? part::subshapeMapForShape(*internalShape, "Internal")

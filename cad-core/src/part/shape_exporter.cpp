@@ -1,6 +1,7 @@
 #include "cad_core/part/shape_exporter.h"
 
 #include <APIHeaderSection_MakeHeader.hxx>
+#include <BRepAdaptor_Curve.hxx>
 #include <BRepBndLib.hxx>
 #include <BRepGProp.hxx>
 #include <BRepMesh_IncrementalMesh.hxx>
@@ -8,17 +9,24 @@
 #include <BRep_Tool.hxx>
 #include <Bnd_Box.hxx>
 #include <GProp_GProps.hxx>
+#include <GeomAbs_CurveType.hxx>
 #include <IFSelect_ReturnStatus.hxx>
 #include <Interface_Static.hxx>
+#include <Poly_Polygon3D.hxx>
+#include <Poly_PolygonOnTriangulation.hxx>
 #include <Poly_Triangle.hxx>
 #include <Poly_Triangulation.hxx>
 #include <STEPControl_Writer.hxx>
+#include <Standard_Failure.hxx>
 #include <Standard_Version.hxx>
 #include <StlAPI_Writer.hxx>
 #include <TCollection_HAsciiString.hxx>
+#include <TopExp.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopLoc_Location.hxx>
+#include <TopTools_IndexedMapOfShape.hxx>
 #include <TopoDS.hxx>
+#include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
 #include <gp_Pnt.hxx>
 
@@ -39,6 +47,7 @@
 #include <stdexcept>
 #include <system_error>
 #include <utility>
+#include <vector>
 
 namespace cad_core::part {
 
@@ -191,9 +200,134 @@ std::string pointKey(const gp_Pnt& point)
     return out.str();
 }
 
+nlohmann::json pointToJson(const gp_Pnt& point)
+{
+    return {point.X(), point.Y(), point.Z()};
+}
+
+void appendDistinctPoint(std::vector<gp_Pnt>& points, const gp_Pnt& point)
+{
+    constexpr double tolerance = 1e-9;
+    if (!points.empty() && points.back().Distance(point) <= tolerance) {
+        return;
+    }
+    points.push_back(point);
+}
+
+std::vector<gp_Pnt> polygon3dPoints(const TopoDS_Edge& edge)
+{
+    TopLoc_Location location;
+    const Handle(Poly_Polygon3D)& polygon = BRep_Tool::Polygon3D(edge, location);
+    std::vector<gp_Pnt> points;
+    if (polygon.IsNull()) {
+        return points;
+    }
+
+    const auto& nodes = polygon->Nodes();
+    for (int index = nodes.Lower(); index <= nodes.Upper(); ++index) {
+        appendDistinctPoint(points, nodes.Value(index).Transformed(location.Transformation()));
+    }
+    return points;
+}
+
+std::vector<gp_Pnt> polygonOnTriangulationPoints(const TopoDS_Edge& edge)
+{
+    Handle(Poly_PolygonOnTriangulation) polygon;
+    Handle(Poly_Triangulation) triangulation;
+    TopLoc_Location location;
+    BRep_Tool::PolygonOnTriangulation(edge, polygon, triangulation, location);
+
+    std::vector<gp_Pnt> points;
+    if (polygon.IsNull() || triangulation.IsNull()) {
+        return points;
+    }
+
+    for (int index = 1; index <= polygon->NbNodes(); ++index) {
+        const int nodeIndex = polygon->Node(index);
+        if (nodeIndex < 1 || nodeIndex > triangulation->NbNodes()) {
+            continue;
+        }
+        appendDistinctPoint(points,
+                            triangulation->Node(nodeIndex).Transformed(location.Transformation()));
+    }
+    return points;
+}
+
+std::vector<gp_Pnt> sampledCurvePoints(const TopoDS_Edge& edge)
+{
+    std::vector<gp_Pnt> points;
+    try {
+        BRepAdaptor_Curve curve(edge);
+        const double first = curve.FirstParameter();
+        const double last = curve.LastParameter();
+        if (!std::isfinite(first) || !std::isfinite(last)
+            || std::abs(last - first) <= 1e-12) {
+            return points;
+        }
+
+        const int segments = curve.GetType() == GeomAbs_Line ? 1 : 24;
+        for (int index = 0; index <= segments; ++index) {
+            const double t = first + (last - first) * static_cast<double>(index)
+                / static_cast<double>(segments);
+            appendDistinctPoint(points, curve.Value(t));
+        }
+    }
+    catch (const Standard_Failure&) {
+        points.clear();
+    }
+    return points;
+}
+
+std::vector<gp_Pnt> edgeDisplayPoints(const TopoDS_Edge& edge)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShape.cpp
+    // ::TopoShape::exportFaceSet(), uses "TopExp::MapShapes(this->_Shape, TopAbs_EDGE, M)"
+    // and exports edge points with "Tools::getPolygon3D(aEdge, points)" or
+    // "Tools::getPolygonOnTriangulation(aEdge, aFace, points)".
+    std::vector<gp_Pnt> points = sampledCurvePoints(edge);
+    if (points.size() < 2) {
+        points = polygon3dPoints(edge);
+    }
+    if (points.size() < 2) {
+        points = polygonOnTriangulationPoints(edge);
+    }
+    return points.size() < 2 ? std::vector<gp_Pnt> {} : points;
+}
+
+nlohmann::json edgeSegmentsForShape(const TopoDS_Shape& shape, const std::string& edgeIdPrefix)
+{
+    nlohmann::json segments = nlohmann::json::array();
+    TopTools_IndexedMapOfShape edges;
+    TopExp::MapShapes(shape, TopAbs_EDGE, edges);
+
+    for (int index = 1; index <= edges.Extent(); ++index) {
+        const TopoDS_Edge edge = TopoDS::Edge(edges(index));
+        const std::vector<gp_Pnt> points = edgeDisplayPoints(edge);
+        if (points.empty()) {
+            continue;
+        }
+
+        nlohmann::json pointItems = nlohmann::json::array();
+        for (const gp_Pnt& point : points) {
+            pointItems.push_back(pointToJson(point));
+        }
+
+        const std::string indexed = edgeIdPrefix + std::to_string(index);
+        segments.push_back({
+            {"id", indexed},
+            {"indexed", indexed},
+            {"points", pointItems},
+        });
+    }
+
+    return segments;
+}
+
 }  // namespace
 
-nlohmann::json meshForShape(const TopoDS_Shape& shape, const std::string& faceIdPrefix)
+nlohmann::json meshForShape(const TopoDS_Shape& shape,
+                            const std::string& faceIdPrefix,
+                            const std::string& edgeIdPrefix)
 {
     BRepMesh_IncrementalMesh mesher(shape, 0.1);
     mesher.Perform();
@@ -201,6 +335,7 @@ nlohmann::json meshForShape(const TopoDS_Shape& shape, const std::string& faceId
     nlohmann::json vertices = nlohmann::json::array();
     nlohmann::json triangles = nlohmann::json::array();
     nlohmann::json faceIds = nlohmann::json::array();
+    nlohmann::json edgeSegments = edgeSegmentsForShape(shape, edgeIdPrefix);
     std::map<std::string, int> vertexIndexByPoint;
 
     auto addVertex = [&](const gp_Pnt& point) {
@@ -242,6 +377,7 @@ nlohmann::json meshForShape(const TopoDS_Shape& shape, const std::string& faceId
         {"vertices", vertices},
         {"triangles", triangles},
         {"faceIds", faceIds},
+        {"edgeSegments", edgeSegments},
         {"summary",
          {
              {"vertex_count", vertices.size()},
