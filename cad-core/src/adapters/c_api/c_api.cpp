@@ -875,10 +875,11 @@ nlohmann::json capabilitiesJson()
                   // declares Mode/Height/Offset/Direction/SupportFace/Projection; the matching
                   // FeatureProjectOnSurface.cpp::tryExecute() calls getSupportFace(),
                   // getProjectionShapes(), createProjectedWire(), filterShapes() and
-                  // createCompound(). The C4-M1 ProjectOnSurface slice covers Edges, Faces and
-                  // All for ordered Projection LinkSubList items, including createSolidIfHeight()
-                  // for Mode=All plus Height and getOffsetPlacement() child movement.
-                  {"status", "supported_expected_backed_multi_projection_slice"},
+                  // createCompound(). The published C4-M1 ProjectOnSurface slice covers Edges,
+                  // Faces and All for ordered Projection LinkSubList items, including
+                  // createSolidIfHeight() for Mode=All plus Height and getOffsetPlacement()
+                  // child movement.
+                  {"status", "supported_expected_backed_published_slice"},
                   {"type_ids", {"Part::ProjectOnSurface"}},
                   {"payload_keys",
                    {"Objects[].TypeId",
@@ -902,11 +903,14 @@ nlohmann::json capabilitiesJson()
                   {"covered",
                    {"source_backed_document_object_executor",
                     "support_face_property_link_sub",
+                    "mode_edges_faces_all_values",
                     "projection_property_link_sub_list_ordered_edge_wire_or_face_items",
+                    "multiple_projection_ordered_link_sub_list",
                     "multi_projection_result_append_order",
                     "multi_projection_metadata_order",
                     "mode_edges_project_wire",
                     "mode_faces_project_face_rebuild",
+                    "face_rebuild_hole_wires",
                     "mode_all_project_face_rebuild",
                     "mode_all_height_prism",
                     "mode_faces_height_keeps_face",
@@ -947,10 +951,12 @@ nlohmann::json capabilitiesJson()
                     "ordinary_indexed_named_shape_without_freecad_mapper_history"}},
                   {"remaining_gaps",
                    {"projected_edge_provenance_mapper_history",
-                    "advanced_branch_expected"}},
+                    "gui_projection_task_panel",
+                    "unverified_advanced_branches"}},
                   {"non_goals",
                    {"gui_projection_task_panel",
-                    "projected_edge_provenance_mapper_history"}},
+                    "projected_edge_provenance_mapper_history",
+                    "unverified_advanced_branches"}},
               }},
              {"ruled_surface",
               {

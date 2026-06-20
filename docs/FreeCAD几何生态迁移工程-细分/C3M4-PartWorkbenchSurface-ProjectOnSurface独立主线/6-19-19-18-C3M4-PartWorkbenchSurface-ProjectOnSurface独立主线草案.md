@@ -3,7 +3,7 @@
 ## 当前基线
 
 - 来源主线：`docs/FreeCAD几何生态迁移工程-细分/C3M4-PartWorkbenchSurface-RuledProjection收口主线/`。
-- S4 裁决：RuledProjection 主线不实现 `Part::ProjectOnSurface`，只把它发布为 source-audited / planned；`Part::RuledSurface` edge/edge 第一批保持 supported。
+- 来源裁决：RuledProjection 主线当时不实现 `Part::ProjectOnSurface`，因此拆出本独立主线；本主线 S5 已发布当前 expected-backed slice，`Part::RuledSurface` 由其独立 capability 维护。
 - S0 live 基线（2026-06-20）：`pwd=/Users/li/Chili3DProject/FreeCAD`；`HEAD=34fae62fc8`；`git log -1 --oneline=34fae62fc8 docs: 添加 ProjectOnSurface 第二批工作队列`；开始编辑前 `git -c core.quotepath=false status --short -uall` 为空。
 - 已完成第一批：`cad-core` 已注册 `Part::ProjectOnSurface` executor，native expected collector 已能覆盖 `Part::ProjectOnSurface`、`App::PropertyLinkSubList` 和 `App::PropertyDirection`；当前发布口径为 `supported_expected_backed_first_slice`。
 - 第一批 fixtures：`cad-core/fixtures/c4m1/part-project-on-surface-edge-plane.json` 与 `cad-core/fixtures/c4m1/part-project-on-surface-deferred-boundaries.json`。
@@ -20,7 +20,9 @@
 - S4 live 基线（2026-06-20）：`pwd=/Users/li/Chili3DProject/FreeCAD`；`HEAD=3176693350`；`git log -1 --oneline=3176693350 feat: 实现PROJSURF S3 Offset位移语义`；开始编辑前 `git -c core.quotepath=false status --short -uall` 为空。
 - S4 已完成：`Projection` 解析改为 ordered LinkSubList 列表语义；多 edge 与 face+edge 混合投影均先用 native FreeCAD 采集 expected，再由 cad-core 按 LinkSubList 顺序追加结果并进入统一 `filterShapes()` / `createCompound()`。
 - S4 fixtures：`part-project-on-surface-multi-edge-order` 覆盖右侧 edge 先于左侧 edge 的 compound 顺序；`part-project-on-surface-mixed-face-edge-order` 覆盖 face+edge 混合 item 的 metadata 顺序与 expected parity。
-- 当前缺口：projected edge provenance mapper/history 与未验证高级分支仍未发布；full `ProjectOnSurface` 仍不能写成 supported。
+- S5 live 基线（2026-06-20）：`pwd=/Users/li/Chili3DProject/FreeCAD`；`HEAD=07f604ed6f`；`git log -1 --oneline=07f604ed6f feat: 实现PROJSURF S4多Projection顺序`；开始编辑前 `git -c core.quotepath=false status --short -uall` 为空。
+- S5 发布口径：`part_workbench.project_on_surface.status=supported_expected_backed_published_slice`，只发布 S1-S4 已通过 native expected、focused tests 和 adapter tests 的 Edges/Faces/All、face rebuild / hole wires、`Mode=All` Height solid、Offset placement、多 Projection ordered LinkSubList 与普通 indexed `NamedShape`。
+- 当前缺口：projected edge provenance mapper/history、GUI projection task panel 与未验证高级分支仍未发布；full `ProjectOnSurface` 仍不能写成 supported。
 
 ## FreeCAD 依据
 
@@ -47,7 +49,7 @@
 - `part-project-on-surface-multi-edge-order`：`ProjectionRightLine.Edge1` 先于 `ProjectionLeftLine.Edge1`，输出 edge compound 顺序跟 LinkSubList 一致，不按 bbox 或 subname 排序。
 - `part-project-on-surface-mixed-face-edge-order`：`ProjectionFace.Face1` 先于 `ProjectionLine.Edge1`，metadata `projection_items` 保留列表顺序，同时旧字段 `source_projection/projection_subshape` 仍指向第一项。
 - `part-project-on-surface-deferred-boundaries`：继续覆盖 `Mode=Faces` + edge input 无 face 结果、Projection 对象/subname 数量不一致、空 subname、missing target、unsupported vertex kind 和缺失 support 的稳定 diagnostics。
-- capability 的 full 发布仍留到 S5；当前 adapter capability 只宣称 `supported_expected_backed_multi_projection_slice`，不得把 full `ProjectOnSurface` 或 projected edge provenance mapper/history 写成 supported。
+- capability 已在 S5 发布为 `supported_expected_backed_published_slice`；仍不得把 full `ProjectOnSurface` 或 projected edge provenance mapper/history 写成 supported。
 
 ## 第二批冻结范围
 
@@ -55,7 +57,7 @@
 - `PROJSURF-S2`：已完成 `Mode=All` + `Height` solid。FreeCAD 依据是 `createSolidIfHeight()` 只在 `Height >= Precision::Confusion()` 且 `Mode == All` 时沿反向 `Direction` prism；非 All 的 height 分支保持 FreeCAD face / wire 过滤语义，不生成 solid。
 - `PROJSURF-S3`：已完成 `Offset` placement。FreeCAD 依据是 `getOffsetPlacement()` normalize `Direction` 后 scale `Offset`，再由 `createCompound()` 对每个 child `Moved(loc)`；已覆盖 edge/face 输出及 Height/Offset 交互。
 - `PROJSURF-S4`：已完成多 `Projection` ordering。FreeCAD 依据是 `getProjectionShapes()` 保留 `PropertyLinkSubList` 对象 / sub-name 顺序，`tryExecute()` 按 projection item 追加结果，`createCompound()` 按结果顺序 Add。
-- `PROJSURF-S5`：capability 发布。只发布 S1-S4 已有 native expected、focused tests 和 adapter tests 证明的分支；若没有 ProjectOnSurface projected ownership mapper/history 账本，继续保留普通 indexed NamedShape 边界。
+- `PROJSURF-S5`：已完成 capability 发布和队列收口。只发布 S1-S4 已有 native expected、focused tests 和 adapter tests 证明的分支；ProjectOnSurface projected ownership mapper/history 账本、GUI task panel 和未验证高级分支继续保留为 gap / non-goal，普通 indexed `NamedShape` 仍是当前边界。
 
 ## 第二批工作步骤细分
 
@@ -68,7 +70,7 @@
 3. `PROJSURF-S2`：已实现 `Mode=All` + `Height` solid 路径。
 4. `PROJSURF-S3`：已实现 `Offset` / `getOffsetPlacement()` 位移语义。
 5. `PROJSURF-S4`：已实现多 `Projection` item 和 compound 顺序。
-6. `PROJSURF-S5`：发布 capability、文档和队列收口，不 overclaim full ProjectOnSurface。
+6. `PROJSURF-S5`：已发布 capability、文档和队列收口，不 overclaim full ProjectOnSurface。
 
 ## 非目标
 
@@ -104,5 +106,5 @@ python3 -m unittest tests.test_p8_features tests.test_expected_fixtures tests.te
 
 ## 晋升 / 删除条件
 
-- 第二批晋升条件：multi-projection 已有 native expected、cad-core focused tests、capability tests 和文档矩阵；S5 只做已验证分支的发布收口。full ProjectOnSurface 仍等待 mapper/history 与高级分支另行验证。
+- 第二批晋升条件：已满足。multi-projection 已有 native expected、cad-core focused tests、capability tests 和文档矩阵；S5 只做已验证分支的发布收口。full ProjectOnSurface 仍等待 mapper/history 与高级分支另行验证。
 - 删除条件：若某一高级分支在当前 FreeCAD / OCCT expected 基线不可稳定采集，则该分支保持 deferred / blocked；不得在 executor 中按 fixture 名、输出顺序或几何形态补猜。

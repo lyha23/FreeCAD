@@ -2665,7 +2665,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             conic_curves["remaining_gaps"],
         )
         project_on_surface = capabilities["part_workbench"]["project_on_surface"]
-        self.assertEqual(project_on_surface["status"], "supported_expected_backed_multi_projection_slice")
+        self.assertEqual(project_on_surface["status"], "supported_expected_backed_published_slice")
         self.assertIn("Part::ProjectOnSurface", project_on_surface["type_ids"])
         self.assertEqual(
             project_on_surface["payload_keys"],
@@ -2696,11 +2696,14 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         for covered in (
             "source_backed_document_object_executor",
             "support_face_property_link_sub",
+            "mode_edges_faces_all_values",
             "projection_property_link_sub_list_ordered_edge_wire_or_face_items",
+            "multiple_projection_ordered_link_sub_list",
             "multi_projection_result_append_order",
             "multi_projection_metadata_order",
             "mode_edges_project_wire",
             "mode_faces_project_face_rebuild",
+            "face_rebuild_hole_wires",
             "mode_all_project_face_rebuild",
             "mode_all_height_prism",
             "mode_faces_height_keeps_face",
@@ -2753,10 +2756,13 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             project_on_surface["remaining_gaps"],
             [
                 "projected_edge_provenance_mapper_history",
-                "advanced_branch_expected",
+                "gui_projection_task_panel",
+                "unverified_advanced_branches",
             ],
         )
         self.assertIn("gui_projection_task_panel", project_on_surface["non_goals"])
+        self.assertIn("projected_edge_provenance_mapper_history", project_on_surface["non_goals"])
+        self.assertIn("unverified_advanced_branches", project_on_surface["non_goals"])
         self.assertNotIn("full_part_surface_family", project_on_surface["covered"])
         self.assertNotIn("full_part_surface_family", project_on_surface["remaining_gaps"])
         ruled_surface = capabilities["part_workbench"]["ruled_surface"]

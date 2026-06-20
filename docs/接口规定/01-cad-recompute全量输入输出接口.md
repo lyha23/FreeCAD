@@ -110,6 +110,22 @@ Link 属性字段名遵循 `docs/接口规定/05-30-12-36-Link属性迁移到val
 | `App::PropertyLinkSub` | `value` + `SubList`，可选 `StableSubList`、`ShadowSub`、`ReferenceShadow` |
 | `App::PropertyLinkSubList` | `SubSet`，每项为 `value` + `SubList`，可选 `StableSubList`、`ShadowSub`、`ReferenceShadow` |
 
+### `Part::ProjectOnSurface` 当前发布 DTO
+
+`Part::ProjectOnSurface` 使用普通 `DocumentObject graph` 表达，不新增接口包装层。当前发布切片的请求字段为：
+
+| 字段 | 规则 |
+| --- | --- |
+| `Objects[].TypeId` | 固定为 `Part::ProjectOnSurface`。 |
+| `Properties.Mode.value` | 支持 `Edges`、`Faces`、`All`。 |
+| `Properties.Height.value` | `Mode=All` 且 Height 达到 FreeCAD precision 阈值时生成 solid；`Mode=Faces` 仍输出 face。 |
+| `Properties.Offset.value` | 投影、filter / solid 之后，对本次 compound child shape 做 request-local 位移。 |
+| `Properties.Direction.value` | 非零方向；Height 使用反向 Direction，Offset 先 normalize 再 scale。 |
+| `Properties.SupportFace` | `App::PropertyLinkSub`，当前发布切片要求单个 support face。 |
+| `Properties.Projection` | `App::PropertyLinkSubList`，按 `SubSet[]` / `SubList[]` 的请求顺序投影 edge / wire / face，不按 bbox、subname 或几何类型重排。 |
+
+当前响应只发布普通 indexed `NamedShape` / subshape，projected edge provenance mapper/history、GUI projection task panel 和未验证高级分支仍是 gap / non-goal；不能把本切片解释为完整 `ProjectOnSurface` 或完整 Part surface family。
+
 ### `ReferenceShadow` 与 BREP snapshot
 
 `ReferenceShadow` 是和 `SubList` 对齐的引用恢复证据。它不是 FreeCAD 原生字段，而是把 FreeCAD 的运行期旧 subshape cache 转换成无状态接口可携带的恢复数据。
