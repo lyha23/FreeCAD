@@ -2,8 +2,8 @@
 
 ## 当前基线
 
-- 当前 live 代码已经不是空白起点：`part_workbench.geomplate` capability 已列出 `c3m4/part-geomplate-curve-point-default`、`c3m4/part-geomplate-invalid-inputs`、`c4m1/part-geomplate-advanced-constraints`、`c4m1/part-geomplate-advanced-deferred`。
-- `cad-core/src/part/part_geomplate.cpp` 当前支持 3D curve G0 constraints、3D point constraints、`InitialSurface` / `Surface` reference、G1 curve-on-surface source evidence、build params、advanced approximation params 和 makeApprox face；`Curve2dOnSurface`、`ProjectedCurve2d`、`Point2dOnSurface`、`PlateSurfaceCurves` 仍由 `rejectDeferredGeomPlateAdvancedProperties()` 输出 deferred diagnostic。
+- 当前 live 代码已经不是空白起点：`part_workbench.geomplate` capability 已列出 c3m4/c4m1 guard、c5m7 initial/G1 fixtures 和 S3 2D fixtures。
+- `cad-core/src/part/part_geomplate.cpp` 当前支持 3D curve G0 constraints、3D point constraints、`InitialSurface` / `Surface` reference、G1 curve-on-surface source evidence、`Curve2dOnSurface`、`ProjectedCurve2d`、`Point2dOnSurface`、build params、advanced approximation params 和 makeApprox face；`PlateSurfaceCurves` 仍由 `rejectDeferredGeomPlateAdvancedProperties()` 输出 deferred diagnostic。
 - `cad-core/tests/test_p8_features.py` 已有：
   - `test_c3m4_part_geomplate_curve_point_default_is_helper_expected_backed`
   - `test_c3m4_part_geomplate_invalid_inputs_have_stable_diagnostics`
@@ -45,7 +45,7 @@
 
 把 `c4m1/part-geomplate-advanced-constraints` 作为本包 guard，而不是新需求；确认它只覆盖 explicit approximation params 和 source evidence，不误宣称 G1 / 2D / initial surface 已支持。
 
-S1 已收口：`cad-core/tests/test_p8_features.py` 明确断言该 fixture 只有 4 条 G0 `curve3d` source evidence 和 1 条 `point3d` source evidence，并验证 `ApproxTol3d`、`ApproxMaxSegments`、`ApproxMaxDegree`、`ApproxContinuity` 等 explicit approximation metadata；S1 时 `part_workbench.geomplate` status 收窄为 `supported_expected_backed_explicit_approximation_params_with_deferred_wrappers`。S2 已进一步把 InitialSurface 移入 expected-backed supported slice，并把 G1 curve-on-surface 记录为 source-backed with native oracle blocker；projected 2D curve、2D point、custom criteria、`Part.PlateSurface.Curves` 仍是后续 remaining gaps。
+S1 已收口：`cad-core/tests/test_p8_features.py` 明确断言该 fixture 只有 4 条 G0 `curve3d` source evidence 和 1 条 `point3d` source evidence，并验证 `ApproxTol3d`、`ApproxMaxSegments`、`ApproxMaxDegree`、`ApproxContinuity` 等 explicit approximation metadata；S1 时 `part_workbench.geomplate` status 收窄为 `supported_expected_backed_explicit_approximation_params_with_deferred_wrappers`。S2 已进一步把 InitialSurface 移入 expected-backed supported slice，并把 G1 curve-on-surface 记录为 source-backed with native oracle blocker；S3 已把 Curve2dOnSurface、Point2dOnSurface 和 G0+2D mixed 移入 expected-backed slice，并把 ProjectedCurve2d 记录为 source-backed with native oracle blocker。custom criteria、`Part.PlateSurface.Curves` 仍是后续 remaining gaps。
 
 ### S2 InitialSurface 与 G1 curve-on-surface（已实现，G1 native oracle blocked）
 
@@ -57,7 +57,7 @@ S1 已收口：`cad-core/tests/test_p8_features.py` 明确断言该 fixture 只�
 
 S2 已产出两个 c5m7 fixture：`part-geomplate-initial-surface-g0` 与 `part-geomplate-g1-curve-on-surface`。其中 InitialSurface 代表场景已由 FreeCADCmd collector 采集 expected；G1 curve-on-surface 已在 cad-core 中按 `Tools.cpp::makeSurface()` 的 `Adaptor3d_CurveOnSurface -> GeomPlate_CurveConstraint(..., 1 /*GeomAbs_G1*/, ...)` 路径实现并有 source evidence，但 FreeCADCmd Python wrapper 只能暴露 `Part.GeomPlate.CurveConstraint` / `setCurve2dOnSurf`，probe 会终止原生进程，因此 expected 文件保留 `known_gap` blocker，不从 cad-core 输出倒推 bbox / topology。
 
-### S3 projected 2D curve 与 2D point-on-surface
+### S3 projected 2D curve 与 2D point-on-surface（已实现，Projected native oracle blocked）
 
 沿同一 DTO/API 继续扩展：
 
@@ -65,7 +65,9 @@ S2 已产出两个 c5m7 fixture：`part-geomplate-initial-surface-g0` 与 `part-
 - `ProjectedCurve2d`，含 `tolU / tolV`；
 - `Point2dOnSurface`。
 
-本步至少产出三个 expected-backed fixture：`part-geomplate-curve2d-on-surface`、`part-geomplate-projected-curve2d`、`part-geomplate-point2d-on-surface`；另加一个 mixed fixture 约束 G0 + G1 + 2D point/curve 的组合语义。
+S3 已产出四个 c5m7 fixture：`part-geomplate-curve2d-on-surface`、`part-geomplate-projected-curve2d`、`part-geomplate-point2d-on-surface`、`part-geomplate-mixed-surface-constraints`。其中 Curve2dOnSurface、Point2dOnSurface 和 G0+2D mixed 已采集 FreeCAD expected；ProjectedCurve2d 已在 cad-core 中按 `CurveConstraintPyImp.cpp::setProjectedCurve()` 的 `SetProjectedCurve(hCurve, tolU, tolV)` 语义实现并输出 source evidence，但 FreeCADCmd Python wrapper probe 会终止原生进程，因此 expected 文件保留 `geomplate_projected_curve2d_native_oracle_blocked` known_gap。
+
+S3 的 mixed fixture 约束 G0 curve + curve2d + point2d 的组合语义。包含 G1 curve-on-surface 的 mixed expected 仍受 S2 `setCurve2dOnSurf` / `Adaptor3d_CurveOnSurface` native oracle blocker 约束，不能写成 expected-backed。
 
 ### S4 custom criteria 与 PlateSurface.Curves wrapper
 
@@ -91,10 +93,10 @@ S2 已产出两个 c5m7 fixture：`part-geomplate-initial-surface-g0` 与 `part-
 | `c4m1/part-geomplate-advanced-constraints` | existing guard | explicit approximation params + 3D source evidence expected-backed；不误宣称 InitialSurface/G1/2D/wrapper |
 | `c5m7/part-geomplate-initial-surface-g0` | expected-backed | initial surface reference + G0 curve |
 | `c5m7/part-geomplate-g1-curve-on-surface` | source-backed + native oracle blocker | curve-on-surface G1；FreeCAD expected 暂以 `known_gap` 记录 Adaptor3d_CurveOnSurface oracle blocker |
-| `c5m7/part-geomplate-curve2d-on-surface` | new expected | explicit 2D curve on surface |
-| `c5m7/part-geomplate-projected-curve2d` | new expected | projected 2D curve + tolerance |
-| `c5m7/part-geomplate-point2d-on-surface` | new expected | 2D point on surface |
-| `c5m7/part-geomplate-mixed-surface-constraints` | new expected | G0 + G1 + 2D constraints mixed |
+| `c5m7/part-geomplate-curve2d-on-surface` | expected-backed | explicit 2D curve on surface |
+| `c5m7/part-geomplate-projected-curve2d` | source-backed + native oracle blocker | projected 2D curve + tolerance；FreeCAD expected 暂以 `known_gap` 记录 `setProjectedCurve` oracle blocker |
+| `c5m7/part-geomplate-point2d-on-surface` | expected-backed | 2D point on surface |
+| `c5m7/part-geomplate-mixed-surface-constraints` | expected-backed | G0 curve + curve2d + point2d constraints mixed；G1 curve-on-surface mixed expected 仍受 S2 blocker 限制 |
 | `c5m7/part-geomplate-custom-criteria` | new expected / diagnostic | criteria setters |
 | `c5m7/part-geomplate-wrapper-boundary` | diagnostic or expected | `PlateSurface.Curves` owner 判定 |
 

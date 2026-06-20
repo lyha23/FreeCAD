@@ -52,6 +52,34 @@ struct GeomPlateSurfaceSource
     TopoDS_Shape shape;
 };
 
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate
+// /CurveConstraintPyImp.cpp::CurveConstraintPy::setCurve2dOnSurf(), passes
+// "SetCurve2dOnSurf(curve2)"; ::setProjectedCurve() passes
+// "SetProjectedCurve(hCurve, tolU, tolV)". cad-core keeps the 2D curve payload explicit
+// on the request DTO and separately requires a source surface link for traceability.
+struct GeomPlateCurve2dSegment
+{
+    std::array<double, 2> start {{0.0, 0.0}};
+    std::array<double, 2> end {{1.0, 0.0}};
+};
+
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate
+// /CurveConstraintPyImp.cpp::CurveConstraintPy::setProjectedCurve(), parses "tolU, tolV"
+// and calls "SetProjectedCurve(hCurve, tolU, tolV)" on the curve constraint.
+struct GeomPlateProjectedCurve2dTolerance
+{
+    double tolU = 0.0001;
+    double tolV = 0.0001;
+};
+
+enum class GeomPlateCurveConstraintKind
+{
+    Curve3d,
+    CurveOnSurface,
+    Curve2dOnSurface,
+    ProjectedCurve2d,
+};
+
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate/CurveConstraintPyImp.cpp
 // ::CurveConstraintPy::PyInit(), wraps a 3D GeometryCurvePy "Boundary" in GeomAdaptor_Curve
 // and constructs GeomPlate_CurveConstraint(Boundary, Order, NbPts, TolDist, TolAng, TolCurv).
@@ -59,11 +87,14 @@ struct GeomPlateSurfaceSource
 // GeomPlate_CurveConstraint(..., 1 /*GeomAbs_G1*/, ...).
 struct GeomPlateCurveConstraintSource
 {
+    GeomPlateCurveConstraintKind kind = GeomPlateCurveConstraintKind::Curve3d;
     std::string objectName;
     std::string subname;
     std::string stableSubname;
     TopoDS_Shape shape;
     std::optional<GeomPlateSurfaceSource> surface;
+    std::optional<GeomPlateCurve2dSegment> curve2d;
+    std::optional<GeomPlateProjectedCurve2dTolerance> projectedTolerance;
     int order = 0;
     int nbPts = 10;
     double tolDist = 0.0001;
@@ -73,10 +104,13 @@ struct GeomPlateCurveConstraintSource
 
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate/PointConstraintPyImp.cpp
 // ::PointConstraintPy::PyInit(), parses a Base::VectorPy "Point", "Order" and "TolDist" and
-// constructs GeomPlate_PointConstraint(gp_Pnt(...), Order, TolDist).
+// constructs GeomPlate_PointConstraint(gp_Pnt(...), Order, TolDist); ::setPnt2dOnSurf()
+// calls "SetPnt2dOnSurf(gp_Pnt2d(x, y))".
 struct GeomPlatePointConstraintSource
 {
     std::array<double, 3> point {{0.0, 0.0, 0.0}};
+    std::optional<std::array<double, 2>> point2d;
+    std::optional<GeomPlateSurfaceSource> surface;
     int order = 0;
     double tolDist = 0.0001;
 };
@@ -93,6 +127,11 @@ struct GeomPlateSourceEvidence
     double tolAng = 0.0;
     double tolCurv = 0.0;
     std::array<double, 3> point {{0.0, 0.0, 0.0}};
+    std::array<double, 2> point2d {{0.0, 0.0}};
+    std::array<double, 2> curve2dStart {{0.0, 0.0}};
+    std::array<double, 2> curve2dEnd {{0.0, 0.0}};
+    double projectedTolU = 0.0;
+    double projectedTolV = 0.0;
     std::string surfaceObjectName;
     std::string surfaceSubname;
     std::string surfaceStableSubname;

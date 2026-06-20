@@ -18,6 +18,7 @@
 #include <BRepLib.hxx>
 #include <BRepTools.hxx>
 #include <BRep_Tool.hxx>
+#include <GCE2d_MakeSegment.hxx>
 #include <Geom2d_Curve.hxx>
 #include <Geom2dAdaptor_Curve.hxx>
 #include <GeomAbs_Shape.hxx>
@@ -38,10 +39,12 @@
 #include <TopoDS.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
+#include <gp_Pnt2d.hxx>
 
 #include <algorithm>
 #include <cmath>
 #include <functional>
+#include <iterator>
 #include <optional>
 #include <set>
 #include <string>
@@ -154,14 +157,10 @@ bool rejectDeferredGeomPlateAdvancedProperties(
 )
 {
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate
-    // /BuildPlateSurfacePyImp.cpp::BuildPlateSurfacePy::LoadInitSurface() is represented by
-    // the S2 initial-surface DTO; CurveConstraintPyImp.cpp::setCurve2dOnSurf()/setProjectedCurve(),
-    // and PointConstraintPyImp.cpp::setPnt2dOnSurf() expose advanced wrapper state that is not yet
-    // represented in cad-core's request DTO.
+    // /CurveConstraintPyImp.cpp::setG0Criterion()/setG1Criterion()/setG2Criterion() and
+    // /PlateSurfacePyImp.cpp::PlateSurfacePy expose the remaining S4 wrapper boundary. S2/S3
+    // represent InitialSurface, Curve2dOnSurface, ProjectedCurve2d and Point2dOnSurface in DTO.
     static const std::vector<std::string> deferred {
-        "Curve2dOnSurface",
-        "ProjectedCurve2d",
-        "Point2dOnSurface",
         "PlateSurfaceCurves",
     };
     bool ok = true;
@@ -174,7 +173,7 @@ bool rejectDeferredGeomPlateAdvancedProperties(
             context,
             "unsupported_property",
             "Part.GeomPlate.BuildPlateSurface " + property
-                + " is deferred until initial-surface/2D constraint DTO support is expected-backed",
+                + " is deferred until criteria/wrapper DTO support is expected-backed",
             property,
             firstGeomPlateDeferredTarget(object, property),
             firstGeomPlateDeferredSubname(object, property)
@@ -603,6 +602,8 @@ std::optional<std::vector<GeomPlateCurveConstraintSource>> readCurveConstraints(
                 source.stableSubname = stableSubnameForLink(link, subIndex);
             }
             source.surface = curveSurface;
+            source.kind = source.surface ? GeomPlateCurveConstraintKind::CurveOnSurface
+                                         : GeomPlateCurveConstraintKind::Curve3d;
             source.order = intField(raw, "Order", source.surface ? 1 : source.order);
             source.nbPts = intField(raw, "NbPts", source.nbPts);
             source.tolDist = positiveField(raw, "TolDist", source.tolDist);
@@ -614,20 +615,315 @@ std::optional<std::vector<GeomPlateCurveConstraintSource>> readCurveConstraints(
     return result;
 }
 
+std::optional<std::vector<nlohmann::json>> rawObjectItemsProperty(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const std::string& property,
+    const std::string& code,
+    const std::string& message
+)
+{
+    const nlohmann::json* payload = rawPropertyPayload(object, property);
+    if (payload == nullptr) {
+        return std::vector<nlohmann::json> {};
+    }
+    if (payload->is_object()) {
+        return std::vector<nlohmann::json> {*payload};
+    }
+    if (payload->is_array()) {
+        std::vector<nlohmann::json> result;
+        for (const auto& item : *payload) {
+            if (!item.is_object()) {
+                addGeomPlateDiagnostic(object,
+                                       context,
+                                       code,
+                                       message,
+                                       property,
+                                       firstGeomPlateDeferredTarget(object, property),
+                                       firstGeomPlateDeferredSubname(object, property));
+                return std::nullopt;
+            }
+            result.push_back(item);
+        }
+        return result;
+    }
+    addGeomPlateDiagnostic(object,
+                           context,
+                           code,
+                           message,
+                           property,
+                           firstGeomPlateDeferredTarget(object, property),
+                           firstGeomPlateDeferredSubname(object, property));
+    return std::nullopt;
+}
+
+std::optional<app::Link> readRequiredGeomPlateLinkField(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const nlohmann::json& item,
+    const std::string& property,
+    const std::string& field,
+    const std::string& code
+)
+{
+    const auto it = item.find(field);
+    if (it == item.end()) {
+        addGeomPlateDiagnostic(
+            object,
+            context,
+            code,
+            "Part.GeomPlate.BuildPlateSurface " + property + " requires " + field + " link",
+            property
+        );
+        return std::nullopt;
+    }
+    auto link = app::readLink(*it);
+    if (!link) {
+        addGeomPlateDiagnostic(
+            object,
+            context,
+            code,
+            "Part.GeomPlate.BuildPlateSurface " + property + "." + field
+                + " must be an App::PropertyLinkSub payload",
+            property
+        );
+        return std::nullopt;
+    }
+    return link;
+}
+
+std::optional<std::array<double, 2>> point2dFromJson(
+    const nlohmann::json& value,
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const std::string& property
+)
+{
+    if (!value.is_array() || value.size() != 2U) {
+        addGeomPlateDiagnostic(
+            object,
+            context,
+            "invalid_point2d_source",
+            "Part.GeomPlate.BuildPlateSurface " + property + " must be a two-number UV point",
+            property
+        );
+        return std::nullopt;
+    }
+    std::array<double, 2> result {};
+    for (std::size_t i = 0; i < 2U; ++i) {
+        if (!value[i].is_number() || !std::isfinite(value[i].get<double>())) {
+            addGeomPlateDiagnostic(
+                object,
+                context,
+                "invalid_point2d_source",
+                "Part.GeomPlate.BuildPlateSurface " + property + " must contain finite UV numbers",
+                property
+            );
+            return std::nullopt;
+        }
+        result[i] = value[i].get<double>();
+    }
+    return result;
+}
+
+std::optional<GeomPlateCurve2dSegment> curve2dSegmentFromJson(
+    const nlohmann::json& value,
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const std::string& property
+)
+{
+    if (!value.is_object()) {
+        addGeomPlateDiagnostic(
+            object,
+            context,
+            "invalid_curve2d_source",
+            "Part.GeomPlate.BuildPlateSurface " + property + ".Curve2d must be an object",
+            property
+        );
+        return std::nullopt;
+    }
+    const auto kindIt = value.find("Kind");
+    if (kindIt != value.end() && (!kindIt->is_string() || kindIt->get<std::string>() != "LineSegment")) {
+        addGeomPlateDiagnostic(
+            object,
+            context,
+            "invalid_curve2d_source",
+            "Part.GeomPlate.BuildPlateSurface " + property
+                + ".Curve2d currently supports Kind=LineSegment",
+            property
+        );
+        return std::nullopt;
+    }
+    const auto startIt = value.find("Start");
+    const auto endIt = value.find("End");
+    if (startIt == value.end() || endIt == value.end()) {
+        addGeomPlateDiagnostic(
+            object,
+            context,
+            "invalid_curve2d_source",
+            "Part.GeomPlate.BuildPlateSurface " + property + ".Curve2d requires Start and End",
+            property
+        );
+        return std::nullopt;
+    }
+    auto start = point2dFromJson(*startIt, object, context, property + ".Curve2d.Start");
+    auto end = point2dFromJson(*endIt, object, context, property + ".Curve2d.End");
+    if (!start || !end) {
+        return std::nullopt;
+    }
+    if (std::abs((*start)[0] - (*end)[0]) < Precision::Confusion()
+        && std::abs((*start)[1] - (*end)[1]) < Precision::Confusion()) {
+        addGeomPlateDiagnostic(
+            object,
+            context,
+            "invalid_curve2d_source",
+            "Part.GeomPlate.BuildPlateSurface " + property + ".Curve2d must not be zero length",
+            property
+        );
+        return std::nullopt;
+    }
+    GeomPlateCurve2dSegment segment;
+    segment.start = *start;
+    segment.end = *end;
+    return segment;
+}
+
+std::optional<GeomPlateCurveConstraintSource> readCurve2dConstraintItem(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const nlohmann::json& item,
+    const std::string& property,
+    GeomPlateCurveConstraintKind kind
+)
+{
+    const auto boundaryLink
+        = readRequiredGeomPlateLinkField(object, context, item, property, "Boundary", "invalid_curve2d_source");
+    if (!boundaryLink) {
+        return std::nullopt;
+    }
+    const auto surfaceLink
+        = readRequiredGeomPlateLinkField(object, context, item, property, "Surface", "invalid_curve2d_source");
+    if (!surfaceLink) {
+        return std::nullopt;
+    }
+    const auto surface = readSurfaceSourceFromLink(object, context, property + ".Surface", *surfaceLink);
+    if (!surface) {
+        return std::nullopt;
+    }
+    const auto curveIt = item.find("Curve2d");
+    if (curveIt == item.end()) {
+        addGeomPlateDiagnostic(
+            object,
+            context,
+            "invalid_curve2d_source",
+            "Part.GeomPlate.BuildPlateSurface " + property + " requires Curve2d payload",
+            property,
+            boundaryLink->object,
+            stableSubnameForLink(*boundaryLink, 0)
+        );
+        return std::nullopt;
+    }
+    auto curve2d = curve2dSegmentFromJson(*curveIt, object, context, property);
+    if (!curve2d) {
+        return std::nullopt;
+    }
+
+    const auto shape = resolveGeomPlateCurveShape(context, *boundaryLink, 0);
+    if (!shape || shape->IsNull()) {
+        addGeomPlateDiagnostic(
+            object,
+            context,
+            "missing_curve_source",
+            "Part.GeomPlate.BuildPlateSurface " + property
+                + " Boundary did not produce a resolvable edge",
+            property,
+            boundaryLink->object,
+            stableSubnameForLink(*boundaryLink, 0)
+        );
+        return std::nullopt;
+    }
+    if (shape->ShapeType() != TopAbs_EDGE) {
+        addGeomPlateDiagnostic(
+            object,
+            context,
+            "invalid_curve_source",
+            "Part.GeomPlate.BuildPlateSurface " + property + " Boundary must reference one edge",
+            property,
+            boundaryLink->object,
+            stableSubnameForLink(*boundaryLink, 0)
+        );
+        return std::nullopt;
+    }
+
+    GeomPlateCurveConstraintSource source;
+    source.kind = kind;
+    source.objectName = boundaryLink->object;
+    source.shape = *shape;
+    if (!boundaryLink->subnames.empty()) {
+        source.subname = boundaryLink->subnames.front();
+        source.stableSubname = stableSubnameForLink(*boundaryLink, 0);
+    }
+    source.surface = surface;
+    source.curve2d = curve2d;
+    source.order = intField(item, "Order", source.order);
+    source.nbPts = intField(item, "NbPts", source.nbPts);
+    source.tolDist = positiveField(item, "TolDist", source.tolDist);
+    source.tolAng = positiveField(item, "TolAng", source.tolAng);
+    source.tolCurv = positiveField(item, "TolCurv", source.tolCurv);
+    if (kind == GeomPlateCurveConstraintKind::ProjectedCurve2d) {
+        GeomPlateProjectedCurve2dTolerance tolerance;
+        tolerance.tolU = positiveField(item, "TolU", tolerance.tolU);
+        tolerance.tolV = positiveField(item, "TolV", tolerance.tolV);
+        source.projectedTolerance = tolerance;
+    }
+    return source;
+}
+
+std::optional<std::vector<GeomPlateCurveConstraintSource>> readCurve2dConstraints(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const std::string& property,
+    GeomPlateCurveConstraintKind kind
+)
+{
+    const auto items = rawObjectItemsProperty(
+        object,
+        context,
+        property,
+        "invalid_curve2d_source",
+        "Part.GeomPlate.BuildPlateSurface " + property + " must be an object or object list"
+    );
+    if (!items) {
+        return std::nullopt;
+    }
+    std::vector<GeomPlateCurveConstraintSource> result;
+    for (const auto& item : *items) {
+        auto source = readCurve2dConstraintItem(object, context, item, property, kind);
+        if (!source) {
+            return std::nullopt;
+        }
+        result.push_back(std::move(*source));
+    }
+    return result;
+}
+
 std::optional<std::array<double, 3>> pointFromJson(
     const nlohmann::json& value,
     const app::DocumentObject& object,
     runtime::ComputeContext& context,
-    std::size_t index
+    std::size_t index,
+    const std::string& property = "PointConstraints",
+    const std::string& code = "invalid_point_constraint"
 )
 {
     if (!value.is_array() || value.size() != 3U) {
         addGeomPlateDiagnostic(
             object,
             context,
-            "invalid_point_constraint",
-            "PointConstraints[" + std::to_string(index) + "] must be a three-number vector",
-            "PointConstraints"
+            code,
+            property + "[" + std::to_string(index) + "] must be a three-number vector",
+            property
         );
         return std::nullopt;
     }
@@ -637,9 +933,9 @@ std::optional<std::array<double, 3>> pointFromJson(
             addGeomPlateDiagnostic(
                 object,
                 context,
-                "invalid_point_constraint",
-                "PointConstraints[" + std::to_string(index) + "] must contain finite numbers",
-                "PointConstraints"
+                code,
+                property + "[" + std::to_string(index) + "] must contain finite numbers",
+                property
             );
             return std::nullopt;
         }
@@ -698,6 +994,78 @@ std::optional<std::vector<GeomPlatePointConstraintSource>> readPointConstraints(
     return result;
 }
 
+std::optional<std::vector<GeomPlatePointConstraintSource>> readPoint2dConstraints(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context
+)
+{
+    const auto items = rawObjectItemsProperty(
+        object,
+        context,
+        "Point2dOnSurface",
+        "invalid_point2d_source",
+        "Part.GeomPlate.BuildPlateSurface Point2dOnSurface must be an object or object list"
+    );
+    if (!items) {
+        return std::nullopt;
+    }
+    std::vector<GeomPlatePointConstraintSource> result;
+    for (std::size_t index = 0; index < items->size(); ++index) {
+        const nlohmann::json& item = items->at(index);
+        const auto surfaceLink = readRequiredGeomPlateLinkField(
+            object,
+            context,
+            item,
+            "Point2dOnSurface",
+            "Surface",
+            "invalid_point2d_source"
+        );
+        if (!surfaceLink) {
+            return std::nullopt;
+        }
+        const auto surface
+            = readSurfaceSourceFromLink(object, context, "Point2dOnSurface.Surface", *surfaceLink);
+        if (!surface) {
+            return std::nullopt;
+        }
+        const auto pointIt = item.find("Point");
+        const auto point2dIt = item.find("Point2d");
+        if (pointIt == item.end() || point2dIt == item.end()) {
+            addGeomPlateDiagnostic(
+                object,
+                context,
+                "invalid_point2d_source",
+                "Part.GeomPlate.BuildPlateSurface Point2dOnSurface requires Point and Point2d",
+                "Point2dOnSurface",
+                surfaceLink->object,
+                stableSubnameForLink(*surfaceLink, 0)
+            );
+            return std::nullopt;
+        }
+        auto point = pointFromJson(
+            *pointIt,
+            object,
+            context,
+            index,
+            "Point2dOnSurface.Point",
+            "invalid_point2d_source"
+        );
+        auto point2d = point2dFromJson(*point2dIt, object, context, "Point2dOnSurface.Point2d");
+        if (!point || !point2d) {
+            return std::nullopt;
+        }
+
+        GeomPlatePointConstraintSource source;
+        source.point = *point;
+        source.point2d = *point2d;
+        source.surface = surface;
+        source.order = intField(item, "Order", source.order);
+        source.tolDist = positiveField(item, "TolDist", source.tolDist);
+        result.push_back(std::move(source));
+    }
+    return result;
+}
+
 nlohmann::json buildParamsJson(const GeomPlateBuildParams& params)
 {
     return {
@@ -751,21 +1119,37 @@ nlohmann::json sourceEvidenceJson(const std::vector<GeomPlateSourceEvidence>& ev
             {"order", item.order},
             {"tol_dist", item.tolDist},
         };
-        if (item.kind == "curve3d" || item.kind == "curve_on_surface") {
+        if (item.kind == "curve3d" || item.kind == "curve_on_surface"
+            || item.kind == "curve2d_on_surface" || item.kind == "projected_curve2d") {
             payload["object"] = item.objectName;
             payload["subname"] = item.subname;
             payload["stable_subname"] = item.stableSubname;
             payload["nb_pts"] = item.nbPts;
             payload["tol_ang"] = item.tolAng;
             payload["tol_curv"] = item.tolCurv;
-            if (item.kind == "curve_on_surface") {
+            if (item.kind == "curve_on_surface" || item.kind == "curve2d_on_surface"
+                || item.kind == "projected_curve2d") {
                 payload["surface_object"] = item.surfaceObjectName;
                 payload["surface_subname"] = item.surfaceSubname;
                 payload["surface_stable_subname"] = item.surfaceStableSubname;
             }
+            if (item.kind == "curve2d_on_surface" || item.kind == "projected_curve2d") {
+                payload["curve2d_start"] = item.curve2dStart;
+                payload["curve2d_end"] = item.curve2dEnd;
+            }
+            if (item.kind == "projected_curve2d") {
+                payload["tol_u"] = item.projectedTolU;
+                payload["tol_v"] = item.projectedTolV;
+            }
         }
-        else if (item.kind == "point3d") {
+        else if (item.kind == "point3d" || item.kind == "point2d_on_surface") {
             payload["point"] = item.point;
+            if (item.kind == "point2d_on_surface") {
+                payload["point2d"] = item.point2d;
+                payload["surface_object"] = item.surfaceObjectName;
+                payload["surface_subname"] = item.surfaceSubname;
+                payload["surface_stable_subname"] = item.surfaceStableSubname;
+            }
         }
         else if (item.kind == "initial_surface") {
             payload["object"] = item.objectName;
@@ -913,14 +1297,127 @@ std::optional<GeomPlateSourceEvidence> addCurveOnSurfaceConstraint(
     return evidence;
 }
 
+Handle(Geom2d_Curve) makeCurve2dSegment(const GeomPlateCurve2dSegment& segment, std::string& error)
+{
+    try {
+        const gp_Pnt2d start(segment.start[0], segment.start[1]);
+        const gp_Pnt2d end(segment.end[0], segment.end[1]);
+        Handle(Geom2d_Curve) curve = GCE2d_MakeSegment(start, end).Value();
+        if (curve.IsNull()) {
+            error = "2D curve segment construction returned a null curve";
+            return {};
+        }
+        return curve;
+    }
+    catch (const Standard_Failure& failure) {
+        error = failureMessage(failure);
+        return {};
+    }
+}
+
+std::optional<GeomPlateSourceEvidence> addCurve2dConstraint(
+    GeomPlate_BuildPlateSurface& builder,
+    const GeomPlateCurveConstraintSource& source,
+    std::string& error
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate
+    // /CurveConstraintPyImp.cpp::CurveConstraintPy::PyInit(), constructs
+    // "GeomPlate_CurveConstraint(Boundary, Order, NbPts, TolDist, TolAng, TolCurv)";
+    // ::setCurve2dOnSurf() then calls "SetCurve2dOnSurf(curve2)" and
+    // ::setProjectedCurve() calls "SetProjectedCurve(hCurve, tolU, tolV)".
+    if (!source.curve2d) {
+        error = "2D curve constraint requires a Curve2d payload";
+        return std::nullopt;
+    }
+    if (!source.surface) {
+        error = "2D curve constraint requires a surface source";
+        return std::nullopt;
+    }
+    if (source.shape.IsNull() || source.shape.ShapeType() != TopAbs_EDGE) {
+        error = "2D curve constraint Boundary must resolve to one edge";
+        return std::nullopt;
+    }
+    if (source.surface->shape.IsNull() || source.surface->shape.ShapeType() != TopAbs_FACE) {
+        error = "2D curve constraint Surface must resolve to one face";
+        return std::nullopt;
+    }
+
+    TopoDS_Edge edge = TopoDS::Edge(source.shape);
+    BRepLib::BuildCurves3d(edge);
+
+    Standard_Real first = 0.0;
+    Standard_Real last = 0.0;
+    Handle(Geom_Curve) curve = BRep_Tool::Curve(edge, first, last);
+    if (curve.IsNull()) {
+        error = "2D curve constraint Boundary has no 3D curve";
+        return std::nullopt;
+    }
+
+    Handle(Geom2d_Curve) curve2d = makeCurve2dSegment(*source.curve2d, error);
+    if (curve2d.IsNull()) {
+        return std::nullopt;
+    }
+
+    Handle(Adaptor3d_Curve) adaptor = new GeomAdaptor_Curve(curve, first, last);
+    Handle(GeomPlate_CurveConstraint) constraint = new GeomPlate_CurveConstraint(
+        adaptor,
+        source.order,
+        source.nbPts,
+        source.tolDist,
+        source.tolAng,
+        source.tolCurv
+    );
+    if (source.kind == GeomPlateCurveConstraintKind::ProjectedCurve2d) {
+        const GeomPlateProjectedCurve2dTolerance tolerance
+            = source.projectedTolerance.value_or(GeomPlateProjectedCurve2dTolerance {});
+        Handle(Adaptor2d_Curve2d) curve2dAdaptor = new Geom2dAdaptor_Curve(curve2d);
+        constraint->SetProjectedCurve(curve2dAdaptor, tolerance.tolU, tolerance.tolV);
+    }
+    else {
+        constraint->SetCurve2dOnSurf(curve2d);
+    }
+    builder.Add(constraint);
+
+    GeomPlateSourceEvidence evidence;
+    evidence.kind = source.kind == GeomPlateCurveConstraintKind::ProjectedCurve2d
+        ? "projected_curve2d"
+        : "curve2d_on_surface";
+    evidence.objectName = source.objectName;
+    evidence.subname = source.subname;
+    evidence.stableSubname = source.stableSubname;
+    evidence.order = source.order;
+    evidence.nbPts = source.nbPts;
+    evidence.tolDist = source.tolDist;
+    evidence.tolAng = source.tolAng;
+    evidence.tolCurv = source.tolCurv;
+    evidence.curve2dStart = source.curve2d->start;
+    evidence.curve2dEnd = source.curve2d->end;
+    evidence.surfaceObjectName = source.surface->objectName;
+    evidence.surfaceSubname = source.surface->subname;
+    evidence.surfaceStableSubname = source.surface->stableSubname;
+    if (source.kind == GeomPlateCurveConstraintKind::ProjectedCurve2d) {
+        const GeomPlateProjectedCurve2dTolerance tolerance
+            = source.projectedTolerance.value_or(GeomPlateProjectedCurve2dTolerance {});
+        evidence.projectedTolU = tolerance.tolU;
+        evidence.projectedTolV = tolerance.tolV;
+    }
+    return evidence;
+}
+
 std::optional<GeomPlateSourceEvidence> addCurveConstraint(
     GeomPlate_BuildPlateSurface& builder,
     const GeomPlateCurveConstraintSource& source,
     std::string& error
 )
 {
-    if (source.surface) {
+    if (source.kind == GeomPlateCurveConstraintKind::CurveOnSurface
+        || (source.kind == GeomPlateCurveConstraintKind::Curve3d && source.surface)) {
         return addCurveOnSurfaceConstraint(builder, source, error);
+    }
+    if (source.kind == GeomPlateCurveConstraintKind::Curve2dOnSurface
+        || source.kind == GeomPlateCurveConstraintKind::ProjectedCurve2d) {
+        return addCurve2dConstraint(builder, source, error);
     }
     if (source.shape.IsNull() || source.shape.ShapeType() != TopAbs_EDGE) {
         error = "Curve constraint source must resolve to one 3D edge";
@@ -967,16 +1464,31 @@ GeomPlateSourceEvidence addPointConstraint(
     const GeomPlatePointConstraintSource& source
 )
 {
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate
+    // /PointConstraintPyImp.cpp::PointConstraintPy::PyInit(), constructs
+    // "GeomPlate_PointConstraint(gp_Pnt(...), Order, TolDist)"; ::setPnt2dOnSurf()
+    // then calls "SetPnt2dOnSurf(gp_Pnt2d(x, y))".
     Handle(GeomPlate_PointConstraint) constraint = new GeomPlate_PointConstraint(
         gp_Pnt(source.point[0], source.point[1], source.point[2]),
         source.order,
         source.tolDist
     );
+    if (source.point2d) {
+        constraint->SetPnt2dOnSurf(gp_Pnt2d((*source.point2d)[0], (*source.point2d)[1]));
+    }
     builder.Add(constraint);
 
     GeomPlateSourceEvidence evidence;
-    evidence.kind = "point3d";
+    evidence.kind = source.point2d ? "point2d_on_surface" : "point3d";
     evidence.point = source.point;
+    if (source.point2d) {
+        evidence.point2d = *source.point2d;
+    }
+    if (source.surface) {
+        evidence.surfaceObjectName = source.surface->objectName;
+        evidence.surfaceSubname = source.surface->subname;
+        evidence.surfaceStableSubname = source.surface->stableSubname;
+    }
     evidence.order = source.order;
     evidence.tolDist = source.tolDist;
     return evidence;
@@ -1211,15 +1723,57 @@ void executePartGeomPlateSurface(const app::DocumentObject& object, runtime::Com
         return;
     }
 
-    const auto curveConstraints = readCurveConstraints(object, context);
-    if (!curveConstraints) {
+    const auto parsedCurveConstraints = readCurveConstraints(object, context);
+    if (!parsedCurveConstraints) {
         return;
     }
-    const auto pointConstraints = readPointConstraints(object, context);
-    if (!pointConstraints) {
+    std::vector<GeomPlateCurveConstraintSource> curveConstraints = *parsedCurveConstraints;
+
+    const auto curve2dOnSurface = readCurve2dConstraints(
+        object,
+        context,
+        "Curve2dOnSurface",
+        GeomPlateCurveConstraintKind::Curve2dOnSurface
+    );
+    if (!curve2dOnSurface) {
         return;
     }
-    if (curveConstraints->empty() && pointConstraints->empty()) {
+    curveConstraints.insert(
+        curveConstraints.end(),
+        std::make_move_iterator(curve2dOnSurface->begin()),
+        std::make_move_iterator(curve2dOnSurface->end())
+    );
+
+    const auto projectedCurve2d = readCurve2dConstraints(
+        object,
+        context,
+        "ProjectedCurve2d",
+        GeomPlateCurveConstraintKind::ProjectedCurve2d
+    );
+    if (!projectedCurve2d) {
+        return;
+    }
+    curveConstraints.insert(
+        curveConstraints.end(),
+        std::make_move_iterator(projectedCurve2d->begin()),
+        std::make_move_iterator(projectedCurve2d->end())
+    );
+
+    const auto parsedPointConstraints = readPointConstraints(object, context);
+    if (!parsedPointConstraints) {
+        return;
+    }
+    std::vector<GeomPlatePointConstraintSource> pointConstraints = *parsedPointConstraints;
+    const auto point2dConstraints = readPoint2dConstraints(object, context);
+    if (!point2dConstraints) {
+        return;
+    }
+    pointConstraints.insert(
+        pointConstraints.end(),
+        std::make_move_iterator(point2dConstraints->begin()),
+        std::make_move_iterator(point2dConstraints->end())
+    );
+    if (curveConstraints.empty() && pointConstraints.empty()) {
         addGeomPlateDiagnostic(
             object,
             context,
@@ -1231,8 +1785,8 @@ void executePartGeomPlateSurface(const app::DocumentObject& object, runtime::Com
     }
 
     const GeomPlateBuildResult build = makePartGeomPlateSurface(
-        *curveConstraints,
-        *pointConstraints,
+        curveConstraints,
+        pointConstraints,
         initialSurface,
         buildParams,
         approximationParams

@@ -1,0 +1,38 @@
+{
+  "bbox": {
+    "max": [
+      4.400000100000002,
+      4.4000001000000015,
+      0.9946903764658963
+    ],
+    "min": [
+      -1.000000002220446e-07,
+      -1.0000000089883151e-07,
+      -0.17955900086390458
+    ]
+  },
+  "bbox_delta": 0.2,
+  "freecad_version": "1.2.0 revision 20260519",
+  "object": "GeomPlate",
+  "object_fields": {
+    "curve_constraint_count": 4,
+    "dto": "PartGeomPlateSurfaceDTO",
+    "feature": "part_geomplate_surface",
+    "freecad_native_document_object": false,
+    "helper": "Part.GeomPlate.BuildPlateSurface",
+    "is_done": true,
+    "point_constraint_count": 1,
+    "shape": "occt_face",
+    "source_backed_helper": true,
+    "status": "ok",
+    "surface_kind": "GeomPlate_Surface"
+  },
+  "reference": "FreeCADCmd oracle from part-geomplate-curve2d-on-surface.json; Part::GeomPlateSurface is a cad-core helper translated to Part.GeomPlate.BuildPlateSurface(...); objects: Part::Line, Part::Line, Part::Line, Part::Line, Part::Plane, Part::GeomPlateSurface",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "topology_counts": {
+    "edges": 4,
+    "faces": 1,
+    "vertices": 4
+  },
+  "volume": 5.966720600637519
+}

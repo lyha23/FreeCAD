@@ -1433,6 +1433,18 @@ def geomplate_curve_link_items(value: Any) -> list[dict]:
     return [item for item in items if isinstance(item, dict)]
 
 
+def geomplate_object_items(value: Any, property_name: str) -> list[dict]:
+    if value is None:
+        return []
+    if isinstance(value, dict) and "value" in value and "PropertyType" not in value:
+        value = value["value"]
+    if isinstance(value, dict):
+        return [value]
+    if isinstance(value, list) and all(isinstance(item, dict) for item in value):
+        return list(value)
+    raise UnsupportedFixture(f"Part.GeomPlate.BuildPlateSurface {property_name} must be an object or object list")
+
+
 def geomplate_link_sub(value: Any) -> dict | None:
     if isinstance(value, dict) and value.get("PropertyType") == "App::PropertyLinkSub":
         return value
@@ -1474,10 +1486,81 @@ def geomplate_initial_surface(created: dict[str, Any], properties: dict[str, Any
     return faces[0].Surface
 
 
+def geomplate_validate_surface_link(created: dict[str, Any], value: dict, property_name: str) -> Any:
+    surface_shape = geomplate_shape_from_link(created, value, property_name)
+    faces = list(getattr(surface_shape, "Faces", []))
+    if len(faces) != 1:
+        raise UnsupportedFixture(f"Part.GeomPlate.BuildPlateSurface {property_name} must resolve to one face")
+    return faces[0].Surface
+
+
+def geomplate_curve2d_segment(Part: Any, value: Any, property_name: str) -> Any:
+    if not isinstance(value, dict):
+        raise UnsupportedFixture(f"Part.GeomPlate.BuildPlateSurface {property_name}.Curve2d must be an object")
+    if str(value.get("Kind", "LineSegment")) != "LineSegment":
+        raise UnsupportedFixture(
+            f"Part.GeomPlate.BuildPlateSurface {property_name}.Curve2d currently supports Kind=LineSegment"
+        )
+    start = value.get("Start")
+    end = value.get("End")
+    if (
+        not isinstance(start, list)
+        or not isinstance(end, list)
+        or len(start) != 2
+        or len(end) != 2
+        or not all(isinstance(component, (int, float)) for component in start + end)
+    ):
+        raise UnsupportedFixture(f"Part.GeomPlate.BuildPlateSurface {property_name}.Curve2d requires 2D Start/End")
+    if abs(float(start[1])) > FREECAD_PRECISION_CONFUSION or abs(float(end[1])) > FREECAD_PRECISION_CONFUSION:
+        raise UnsupportedFixture(
+            f"Part.GeomPlate.BuildPlateSurface {property_name}.Curve2d native collector currently "
+            "supports horizontal Line2dSegment payloads"
+        )
+    if abs(float(start[0]) - float(end[0])) <= FREECAD_PRECISION_CONFUSION:
+        raise UnsupportedFixture(f"Part.GeomPlate.BuildPlateSurface {property_name}.Curve2d must not be zero length")
+    return Part.Geom2d.Line2dSegment(Part.Geom2d.Line2d(), float(start[0]), float(end[0]))
+
+
+def geomplate_curve_constraint_from_boundary(
+    FreeCAD: Any,
+    Part: Any,
+    fixture: dict,
+    item: dict,
+    property_name: str,
+) -> Any:
+    specs = {
+        str(candidate.get("Name")): candidate
+        for candidate in fixture.get("Objects", [])
+        if isinstance(candidate, dict) and isinstance(candidate.get("Name"), str)
+    }
+    boundary = geomplate_link_sub(item.get("Boundary"))
+    if not boundary:
+        raise UnsupportedFixture(f"Part.GeomPlate.BuildPlateSurface {property_name} requires Boundary link")
+    target_name = boundary.get("value")
+    if not isinstance(target_name, str) or target_name not in specs:
+        raise UnsupportedFixture(f"{property_name} Boundary source {target_name} was not created")
+    source_spec = specs[target_name]
+    if source_spec.get("TypeId") != "Part::Line":
+        raise UnsupportedFixture(f"{property_name} Boundary source {target_name} is not a supported Part::Line")
+    subnames = list_field(boundary, "StableSubList", "SubList")
+    if subnames and set(str(subname) for subname in subnames) != {"Edge1"}:
+        raise UnsupportedFixture(f"{property_name} Boundary source {target_name} only supports Edge1")
+    curve = part_line_segment_curve(FreeCAD, Part, source_spec)
+    return Part.GeomPlate.CurveConstraint(
+        curve,
+        int(item.get("Order", 0)),
+        int(item.get("NbPts", 10)),
+        float(item.get("TolDist", 0.0001)),
+        float(item.get("TolAng", 0.01)),
+        float(item.get("TolCurv", 0.1)),
+    )
+
+
 def geomplate_curve_constraints(
     FreeCAD: Any,
     Part: Any,
     fixture: dict,
+    created: dict[str, Any],
     spec: dict,
 ) -> list[Any]:
     specs = {
@@ -1514,10 +1597,18 @@ def geomplate_curve_constraints(
                 float(item.get("TolCurv", 0.1)),
             )
         )
+    for item in geomplate_object_items(properties.get("Curve2dOnSurface"), "Curve2dOnSurface"):
+        surface = geomplate_link_sub(item.get("Surface"))
+        if not surface:
+            raise UnsupportedFixture("Part.GeomPlate.BuildPlateSurface Curve2dOnSurface requires Surface link")
+        geomplate_validate_surface_link(created, surface, "Curve2dOnSurface.Surface")
+        constraint = geomplate_curve_constraint_from_boundary(FreeCAD, Part, fixture, item, "Curve2dOnSurface")
+        constraint.setCurve2dOnSurf(geomplate_curve2d_segment(Part, item.get("Curve2d"), "Curve2dOnSurface"))
+        constraints.append(constraint)
     return constraints
 
 
-def geomplate_point_constraints(FreeCAD: Any, Part: Any, spec: dict) -> list[Any]:
+def geomplate_point_constraints(FreeCAD: Any, Part: Any, created: dict[str, Any], spec: dict) -> list[Any]:
     properties = spec.get("Properties", {})
     value = properties.get("PointConstraints", [])
     if isinstance(value, dict) and "value" in value:
@@ -1542,7 +1633,64 @@ def geomplate_point_constraints(FreeCAD: Any, Part: Any, spec: dict) -> list[Any
                 tol_dist,
             )
         )
+    for item in geomplate_object_items(properties.get("Point2dOnSurface"), "Point2dOnSurface"):
+        surface = geomplate_link_sub(item.get("Surface"))
+        if not surface:
+            raise UnsupportedFixture("Part.GeomPlate.BuildPlateSurface Point2dOnSurface requires Surface link")
+        geomplate_validate_surface_link(created, surface, "Point2dOnSurface.Surface")
+        point_value = item.get("Point")
+        point2d = item.get("Point2d")
+        if (
+            not isinstance(point_value, list)
+            or len(point_value) != 3
+            or not all(isinstance(component, (int, float)) for component in point_value)
+        ):
+            raise UnsupportedFixture("Point2dOnSurface.Point must be a three-number vector")
+        if (
+            not isinstance(point2d, list)
+            or len(point2d) != 2
+            or not all(isinstance(component, (int, float)) for component in point2d)
+        ):
+            raise UnsupportedFixture("Point2dOnSurface.Point2d must be a two-number vector")
+        constraint = Part.GeomPlate.PointConstraint(
+            FreeCAD.Vector(float(point_value[0]), float(point_value[1]), float(point_value[2])),
+            int(item.get("Order", 0)),
+            float(item.get("TolDist", 0.0001)),
+        )
+        constraint.setPnt2dOnSurf(float(point2d[0]), float(point2d[1]))
+        constraints.append(constraint)
     return constraints
+
+
+def geomplate_projected_curve2d_known_gap(fixture_path: Path) -> dict[str, Any]:
+    import FreeCAD  # type: ignore
+
+    return {
+        "freecad_version": freecad_version(FreeCAD),
+        "known_gap": {
+            "kind": "geomplate_projected_curve2d_native_oracle_blocked",
+            "reason": (
+                "Do not freeze ProjectedCurve2d geometry from cad-core output. FreeCAD "
+                "CurveConstraintPyImp.cpp::setProjectedCurve() calls SetProjectedCurve(hCurve, "
+                "tolU, tolV), but the FreeCADCmd Python wrapper probe terminates the native "
+                "process for this representative."
+            ),
+            "source_authority": [
+                "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate/CurveConstraintPyImp.cpp::CurveConstraintPy::setProjectedCurve()",
+            ],
+            "cad_core_fixture": f"cad-core/fixtures/c5m7/{fixture_path.name}",
+            "delete_condition": (
+                "Replace this blocker with a FreeCAD expected geometry payload only after a stable "
+                "native oracle can call Part.GeomPlate.CurveConstraint.setProjectedCurve(...) "
+                "without process termination."
+            ),
+        },
+        "reference": (
+            "Native FreeCAD ProjectedCurve2d oracle is blocked for this fixture; cad-core "
+            "source-backed implementation is covered by focused source-evidence tests, not by "
+            "this expected file."
+        ),
+    }
 
 
 def collect_part_geomplate_surface_expected(
@@ -1586,6 +1734,9 @@ def collect_part_geomplate_surface_expected(
                 "ApproxEnlargeCoeff",
                 "InitialSurface",
                 "Surface",
+                "Curve2dOnSurface",
+                "ProjectedCurve2d",
+                "Point2dOnSurface",
             })
             if unsupported:
                 diagnostic_codes.extend(["unsupported_property"] * len(unsupported))
@@ -1594,10 +1745,12 @@ def collect_part_geomplate_surface_expected(
                     "Unsupported Part.GeomPlate.BuildPlateSurface properties: " + ", ".join(unsupported),
                 )
                 continue
+            if properties.get("ProjectedCurve2d") is not None:
+                return geomplate_projected_curve2d_known_gap(fixture_path)
 
             try:
-                curve_constraints = geomplate_curve_constraints(FreeCAD, Part, fixture, spec)
-                point_constraints = geomplate_point_constraints(FreeCAD, Part, spec)
+                curve_constraints = geomplate_curve_constraints(FreeCAD, Part, fixture, created, spec)
+                point_constraints = geomplate_point_constraints(FreeCAD, Part, created, spec)
                 if not curve_constraints and not point_constraints:
                     raise UnsupportedFixture("Part.GeomPlate.BuildPlateSurface requires curve or point constraints")
 
@@ -1664,9 +1817,17 @@ def collect_part_geomplate_surface_expected(
                 code = "missing_constraints" if "requires curve or point constraints" in str(exc) else "missing_curve_source"
                 if "not a supported Part::Line" in str(exc):
                     code = "invalid_curve_source"
+                if "Curve2dOnSurface" in str(exc) or "ProjectedCurve2d" in str(exc):
+                    code = "invalid_curve2d_source"
+                if "Point2dOnSurface" in str(exc):
+                    code = "invalid_point2d_source"
                 if "PointConstraints" in str(exc):
                     code = "invalid_point_constraint"
-                if "must be" in str(exc) and "PointConstraints" not in str(exc):
+                if (
+                    "must be" in str(exc)
+                    and "PointConstraints" not in str(exc)
+                    and code == "missing_curve_source"
+                ):
                     code = "invalid_parameter"
                 diagnostic_codes.append(code)
                 object_payloads[name] = part_geomplate_error_payload(code, str(exc))
