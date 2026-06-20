@@ -1,4 +1,4 @@
-# P8-LinkAssemblyRuntime S0 live 基线与旧队列裁决
+# 【已实现】P8-LinkAssemblyRuntime S0 live 基线与旧队列裁决
 
 ## 目标
 
@@ -33,3 +33,7 @@ cd /Users/li/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/FreeCAD几何生态迁移工程-细分/P8-LinkAssembly-运行时产品化主线/工作步骤细分 --format markdown
 git diff --check -- docs/FreeCAD几何生态迁移工程-细分/P8-LinkAssembly-运行时产品化主线
 ```
+
+## 完成结论
+
+S0 已完成：旧 P8 / C4-M5 队列已裁决为 regression baseline 或 staleQueue，不直接续跑；当前真实未关闭 blocker 已收敛到 Link ledger、ShowElement 持久事务、cross-document hash / postfix / mapped alias、多层 LinkSub + imported ElementMap 和最终 Web runtime 合同冻结。Assembly JointType、MarkerPlacement、DistanceType extended geometry、placement writeback、Worker / WASM / resource diagnostics 均作为 live regression baseline 消费。

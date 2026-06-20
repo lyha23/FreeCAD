@@ -1,0 +1,39 @@
+{
+  "Objects": [
+    {
+      "Name": "Box",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 3,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "ExternalFaceLink",
+      "ID": 2,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "value": "Box",
+          "SubList": ["Face1"],
+          "StableSubList": ["Face1"],
+          "FullSubList": ["ExternalDoc#Box.Face1"],
+          "Document": {
+            "file": "external.FCStd",
+            "name": "ExternalDoc",
+            "label": "External Assembly",
+            "currentName": "ExternalDocRestored",
+            "currentLabel": "External Assembly Restored"
+          }
+        },
+        "LinkTransform": false
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["ExternalFaceLink"]
+  }
+}

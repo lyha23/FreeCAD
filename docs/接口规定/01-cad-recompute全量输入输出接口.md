@@ -211,6 +211,8 @@ Link 属性字段名遵循 `docs/接口规定/05-30-12-36-Link属性迁移到val
     }
   ],
   "elementReferenceUpdates": [],
+  "documentObjectUpdates": [],
+  "binaryPayloads": [],
   "diagnostics": []
 }
 ```
@@ -221,6 +223,8 @@ Link 属性字段名遵循 `docs/接口规定/05-30-12-36-Link属性迁移到val
 | --- | --- |
 | `results[]` | 本次目标对象结果数组。 |
 | `elementReferenceUpdates[]` | 本次建议前端写回 `Objects[]` 的引用修正。不是后端保存状态。 |
+| `documentObjectUpdates[]` | 本次建议前端写回 `Objects[]` 的对象级 graph 变更，例如 Link child、ShowElement 或 Assembly placement。不是后端保存状态。 |
+| `binaryPayloads[]` | 与本次结果关联的二进制载荷元数据。普通 recompute 当前固定为空数组；二进制 mesh / export 走 C ABI buffer 入口并返回 metadata。 |
 | `diagnostics[]` | 全局诊断，例如重复对象名、缺失对象、循环依赖、业务错误等。 |
 
 `results[]` 必须满足：
@@ -302,6 +306,17 @@ Link 属性字段名遵循 `docs/接口规定/05-30-12-36-Link属性迁移到val
 3. 只有被写回 `Objects[]` 的内容，才会成为下一次 recompute 的持久输入；其中 `ReferenceShadow.brep` 也只作为引用恢复证据，而不是建模几何源。
 4. 后端不得在 recompute 中隐式修改并持久化前端 graph。
 
+## `documentObjectUpdates`
+
+`documentObjectUpdates` 是后端在本次 recompute 后给出的对象级 graph 写回建议。它覆盖 Link / LinkElement / LinkGroup 子对象生命周期、CopyOnChange 持久字段、Assembly placement writeback 等不适合塞进 `elementReferenceUpdates` 的变更。
+
+规则：
+
+1. `documentObjectUpdates` 不表示后端保存了 graph 或 solver session。
+2. 前端只有把建议应用到本地 `Objects[]` 后，下一次 recompute 才会把这些变更当作持久输入。
+3. Worker / WASM / Web adapter 不得在该字段中自行合成 Link、Assembly、subname、placement 或 ownership 业务逻辑；它们只能透传 CAD Core 结果。
+4. 对于 `assembly_set_placement`，当前发布合同只允许写回目标对象 `Placement`，不代表跨请求 Assembly solver session。
+
 ## diagnostics 与 HTTP 状态
 
 CAD 业务问题通过 `diagnostics[]` 表达。只要 FFI 调用成功且返回合法 result JSON，HTTP 状态仍为 `200`。
@@ -328,6 +343,41 @@ CAD 业务问题通过 `diagnostics[]` 表达。只要 FFI 调用成功且返回
 }
 ```
 
+## CLI / C ABI / Worker / WASM / Web adapter 合同
+
+当前 adapter 发布合同为 `cad-core-result-v1`。CLI、C ABI、Worker、WASM 和 Web 兼容层必须共享同一套 request-local core result，不在 adapter 中实现 Link、Assembly、topo naming、subname、placement 或 ownership 业务语义。
+
+recompute 响应通道固定为：
+
+```json
+{
+  "results": [],
+  "elementReferenceUpdates": [],
+  "documentObjectUpdates": [],
+  "diagnostics": [],
+  "binaryPayloads": []
+}
+```
+
+Worker / WASM 入口只允许在结果上增加 adapter 标记，业务结果必须和 CLI / C ABI 归一化后等价。`binaryPayloads` 在普通 recompute 中保持空数组；二进制 mesh 和 shape export 使用 C ABI buffer 入口返回 data buffer + metadata。
+
+资源限制和二进制 metadata：
+
+| 方向 | 当前合同 |
+| --- | --- |
+| JSON mesh streaming | 请求可提供 `mesh_limits.max_vertices`、`mesh_limits.max_triangles`、`mesh_limits.chunk_triangles`；命中限制返回 `mesh_limit_exceeded`，并在 `results[].mesh.streaming` 标明 `cad-core-json-mesh-stream-v1`。 |
+| 无效 adapter limit | 字段类型或取值非法时返回 `adapter_resource_limit`，仍保持 `cad-core-result-v1` 顶层 schema。 |
+| 二进制 mesh buffer | `cad_core_mesh_binary_json` 返回 `protocol=cad-core-binary-mesh-v1`、`content_type=application/vnd.cad-core.mesh+bin`、layout、bytes、vertex / triangle count 和 metadata diagnostics。 |
+| 二进制 mesh byte limit | `binary_payload_limits.max_bytes` 超限时不返回 data，metadata 标记 `limited=true`，diagnostics 使用 `adapter_resource_limit` 和 `target=binary_payload_limits.max_bytes`。 |
+| C ABI shape export | `cad_core_export_json` 只返回 buffer + metadata，metadata 包含 object、format、content_type、filename、bytes、diagnostics；它拒绝 `export_file` / `path` / `file` 这类服务端路径字段。 |
+| CLI shape export | CLI 仍使用显式 `--export-object`、`--export-format`、`--export-file` 文件协议。 |
+
+未实现的边界必须按 future / non-goal 发布，不得伪装成支持：
+
+1. 当前没有 adapter 级 timeout diagnostic 或 deadline contract。
+2. 当前没有 adapter 级 memory diagnostic 或 memory quota contract。
+3. 当前没有通用 import/export payload byte quota 或 streaming export；已实现的是 shape export buffer metadata、CLI file export，以及二进制 mesh 的 `max_bytes` 限制。
+
 ## 与现有文档的关系
 
 ### 与草图外 Feature 调用说明的关系
@@ -344,6 +394,8 @@ CAD 业务问题通过 `diagnostics[]` 表达。只要 FFI 调用成功且返回
     }
   ],
   "elementReferenceUpdates": [],
+  "documentObjectUpdates": [],
+  "binaryPayloads": [],
   "diagnostics": []
 }
 ```
@@ -368,6 +420,8 @@ TopoNaming 文档定义的是持久输入 graph。本文定义的是 `/cad/recom
 | 本次拾取 | `results[].subshapes` | 否 |
 | 本次稳定引用候选 | `results[].subshapes[].stableSubname` | 否，除非前端写回 `Objects[]` |
 | 写回建议 | `elementReferenceUpdates[]` | 否，除非前端应用到 `Objects[]` |
+| 对象级写回建议 | `documentObjectUpdates[]` | 否，除非前端应用到 `Objects[]` |
+| 二进制载荷元数据 | `binaryPayloads[]` 或 C ABI export metadata | 否 |
 | 引用恢复证据 | `PropertyLinkSub.ReferenceShadow[]` / `SubSet[].ReferenceShadow[]` | 是，可随 Link 属性保存；其中 `brep` 只允许保存被引用旧 subshape |
 
 ### 与旧 cad-web envelope 的关系
@@ -417,6 +471,7 @@ Web 层职责：
 3. 调用 CAD Core recompute。
 4. 将 CAD Core 结果转换为本文定义的响应结构。
 5. 不复制 CAD Core 的 feature 级业务校验。
+6. 不在 Web / Worker / WASM 层保存跨请求 geometry、solver 或 graph 状态。
 
 CAD Core 职责：
 

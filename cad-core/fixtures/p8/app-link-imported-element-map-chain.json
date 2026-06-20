@@ -1,0 +1,124 @@
+{
+  "Objects": [
+    {
+      "Name": "ImportedCylinder",
+      "ID": 1,
+      "TypeId": "Part::ImportBrep",
+      "Properties": {
+        "FileName": "fixtures/p8/assets/cylinder1.brep"
+      }
+    },
+    {
+      "Name": "ImportedStep",
+      "ID": 2,
+      "TypeId": "Part::ImportStep",
+      "Properties": {
+        "FileName": "fixtures/p8/assets/as1-ac-214_small.stp"
+      }
+    },
+    {
+      "Name": "ImportedIges",
+      "ID": 3,
+      "TypeId": "Part::ImportIges",
+      "Properties": {
+        "FileName": "fixtures/p8/assets/rlf_12545.igs"
+      }
+    },
+    {
+      "Name": "BrepLink",
+      "ID": 4,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "ImportedCylinder"
+        },
+        "LinkTransform": false
+      }
+    },
+    {
+      "Name": "StepLink",
+      "ID": 5,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "ImportedStep"
+        },
+        "LinkTransform": false
+      }
+    },
+    {
+      "Name": "IgesLink",
+      "ID": 6,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "ImportedIges"
+        },
+        "LinkTransform": false
+      }
+    },
+    {
+      "Name": "BrepEdgeLink",
+      "ID": 7,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "value": "BrepLink",
+          "SubList": ["BrepLink.ImportedCylinder.Edge1"],
+          "StableSubList": ["ImportedCylinder.Edge1"]
+        },
+        "LinkTransform": false
+      }
+    },
+    {
+      "Name": "StepFaceLink",
+      "ID": 8,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "value": "StepLink",
+          "SubList": ["StepLink.ImportedStep.Face1"],
+          "StableSubList": ["ImportedStep.Face1"]
+        },
+        "LinkTransform": false
+      }
+    },
+    {
+      "Name": "IgesFaceLink",
+      "ID": 9,
+      "TypeId": "App::Link",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "value": "IgesLink",
+          "SubList": ["IgesLink.ImportedIges.Face1"],
+          "StableSubList": ["ImportedIges.Face1"]
+        },
+        "LinkTransform": false
+      }
+    },
+    {
+      "Name": "ImportedLinkGroup",
+      "ID": 10,
+      "TypeId": "App::LinkGroup",
+      "Properties": {
+        "ElementList": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["BrepEdgeLink", "StepFaceLink", "IgesFaceLink"]
+        },
+        "VisibilityList": {
+          "PropertyType": "App::PropertyBoolList",
+          "values": [true, true, true]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["ImportedLinkGroup"]
+  }
+}

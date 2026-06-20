@@ -6,13 +6,13 @@
 
 ## 队列顺序
 
-1. `6-20-18-06-P8-LinkAssemblyRuntime-S0-live基线与旧队列裁决.md`
-2. `6-20-18-07-P8-LinkAssemblyRuntime-S1-FreeCAD源码候选矩阵.md`
-3. `6-20-18-08-P8-LinkAssemblyRuntime-S2-Link账本与ShowElement事务.md`
-4. `6-20-18-09-P8-LinkAssemblyRuntime-S3-跨文档Hash与Postfix生命周期.md`
-5. `6-20-18-10-P8-LinkAssemblyRuntime-S4-多层LinkSub与ImportedElementMap.md`
-6. `6-20-18-11-P8-LinkAssemblyRuntime-S5-AssemblySolver扩展.md`
-7. `6-20-18-12-P8-LinkAssemblyRuntime-S6-WebRuntime合同冻结.md`
+1. `6-20-18-06-【已实现】P8-LinkAssemblyRuntime-S0-live基线与旧队列裁决.md`
+2. `6-20-18-07-【已实现】P8-LinkAssemblyRuntime-S1-FreeCAD源码候选矩阵.md`
+3. `6-20-18-08-【已实现】P8-LinkAssemblyRuntime-S2-Link账本与ShowElement事务.md`
+4. `6-20-18-09-【已实现】P8-LinkAssemblyRuntime-S3-跨文档Hash与Postfix生命周期.md`
+5. `6-20-18-10-【已实现】P8-LinkAssemblyRuntime-S4-多层LinkSub与ImportedElementMap.md`
+6. `6-20-18-11-【已实现】P8-LinkAssemblyRuntime-S5-AssemblySolver扩展.md`
+7. `6-20-18-12-【已实现】P8-LinkAssemblyRuntime-S6-WebRuntime合同冻结.md`
 
 ## 必读
 

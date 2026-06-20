@@ -1,4 +1,4 @@
-# P8-LinkAssemblyRuntime S2 Link 账本与 ShowElement 事务
+# 【已实现】P8-LinkAssemblyRuntime S2 Link 账本与 ShowElement 事务
 
 ## 目标
 
@@ -36,3 +36,11 @@ python3 -m unittest tests.test_p8_features
 cd /Users/li/Chili3DProject/FreeCAD
 git diff --check -- docs/FreeCAD几何生态迁移工程-细分/P8-LinkAssembly-运行时产品化主线 cad-core
 ```
+
+## 完成结论
+
+S2 已完成。当前 `cad-core/src/app/link.cpp` 已按 P8LAR-SRC-001/002/004/007 覆盖 Link ledger 和 ShowElement 持久事务：materialized child、synthetic child、stale child delete、toggle-off reclaim、ElementList owner sync、child sync、PlacementList / ScaleList / VisibilityList 优先级均通过 focused fixtures。`documentObjectUpdates` 只表达前端可应用的 graph mutation，CAD Core 仍不保存跨请求 graph。
+
+本轮补强 `cad-core/tests/test_p8_features.py` 的 update-applier 和断言：`delete` mutation 会从下一次请求 graph 删除对象；S2 相关 owner / child / claim / create / delete / CopyOnChange touched updates 应用后再次 recompute 均无二次 `documentObjectUpdates`。CopyOnChange 发布边界仅限 S1 source authority 和现有 fixtures 约束的 deep copy、subtree relink/history preserve 与 touched tracking；cross-document hash / postfix 仍归 S3，imported ElementMap 与多层 LinkSub 仍归 S4。
+
+验证结果：`cmake --build build` 通过；`python3 -m unittest tests.test_p8_features` 通过 148 个测试；`git diff --check -- docs/FreeCAD几何生态迁移工程-细分/P8-LinkAssembly-运行时产品化主线 cad-core` 通过；队列工具确认下一项为 S3。

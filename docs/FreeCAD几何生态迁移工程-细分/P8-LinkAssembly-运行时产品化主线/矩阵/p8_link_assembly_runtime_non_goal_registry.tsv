@@ -9,3 +9,5 @@ P8LAR-NG-007	从 cad-core 输出倒推 FreeCAD expected	fixture golden 必须来
 P8LAR-NG-008	靠 bbox / shape order / 字符串修剪猜测 subname	必须用 Link ledger、PropertyLinkSub 和 ElementMap / history	S4
 P8LAR-NG-009	用完整外部文档 BREP 表达 cross-document reference	只允许 graph / diagnostics / update suggestion，BREP 例外仍限 ReferenceShadow subshape snapshot	S3
 P8LAR-NG-010	把旧 P8 队列残留入口直接当下一步实现	S0 必须先 live 裁决，防止 stale queue 重复执行	S0
+P8LAR-NG-011	把 timeout / memory diagnostics 发布为当前 adapter 支持	当前 C API / Worker / WASM capability 和 tests 未实现 deadline 或 memory quota contract；后续若需要必须新增 runtime/adapter schema 与测试	S6
+P8LAR-NG-012	把通用 import/export payload quota 或 streaming export 发布为当前支持	当前支持 shape export buffer metadata、CLI file export 和二进制 mesh max_bytes；通用 import/export byte quota 仍是 future 边界	S6

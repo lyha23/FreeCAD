@@ -1,4 +1,4 @@
-# P8-LinkAssemblyRuntime S1 FreeCAD 源码候选矩阵
+# 【已实现】P8-LinkAssemblyRuntime S1 FreeCAD 源码候选矩阵
 
 ## 目标
 
@@ -38,3 +38,7 @@
 cd /Users/li/Chili3DProject/FreeCAD
 git diff --check -- docs/FreeCAD几何生态迁移工程-细分/P8-LinkAssembly-运行时产品化主线
 ```
+
+## 完成结论
+
+S1 已完成：Link ledger、ShowElement、CopyOnChange、PropertyLink/PropertyXLink、plain group、mapped postfix / stable subname 和 imported ElementMap 均已精确到 FreeCAD 文件、类、函数、字段与 cad-core 落点，可作为 S2-S4 的 implementation-comment source authority。ElementCount collapsed lists、AssemblyLink / AssemblyObject / MarkerPlacement / DistanceType / JointGroup、C API 与 Worker / WASM rows 已裁定为 `baselineOnly`，只作为回归和 S6 发布闸门材料，不在 S1 重新开实现。`P8LAR-BLOCK-002` 已关闭；后续实现 blocker 仍从 S2 的 ShowElement 持久事务和 S4 的 LinkSub / imported ElementMap 链继续。

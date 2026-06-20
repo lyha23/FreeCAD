@@ -1,11 +1,7 @@
 id	status	area	blocker	owner_step	close_criteria
-P8LAR-BLOCK-001	pending	baseline	旧 P8 / C4-M5 队列与当前 live capability 未统一裁决	S0	scope matrix 标出 supportedBaseline / staleQueue / backendGap
-P8LAR-BLOCK-002	pending	source	Link ledger 还未精确到 FreeCAD 函数和字段	S1	source_candidates 从 source_to_verify 升级为 sourceReady
-P8LAR-BLOCK-003	pending	link	ShowElement 持久写回事务缺少完整 owner / child / reclaim 证明	S2	fixtures 覆盖 synthetic / materialized / stale / toggle-off / apply-next-request
-P8LAR-BLOCK-004	pending	link	CopyOnChange / touched / deep copy 发布边界未裁决	S2	scope matrix 明确 supported / backendGap / nonGoal
-P8LAR-BLOCK-005	pending	xlink	cross-document hash / postfix / mapped alias 生命周期缺少稳定 schema	S3	diagnostics 与 update suggestion 覆盖 missing / hash mismatch / rename
-P8LAR-BLOCK-006	pending	linksub	多层 LinkSub 与 imported ElementMap 未统一到正式 ElementMap / retag history	S4	nested fixtures 和 topo tests 通过，禁止 output 修剪
-P8LAR-BLOCK-007	pending	import	导入 shape subshape map 不能被 Link chain 完整消费	S4	imported shape fixture 有 stable subname / ElementMap 证明
-P8LAR-BLOCK-008	pending	assembly	remaining JointType 缺少产品裁决和 native oracle	S5	只发布 source+oracle+fixture+capability 闭环的 JointType
-P8LAR-BLOCK-009	pending	assembly	underconstrained / contradictory / partial writeback diagnostic 不稳定	S5	diagnostic fixtures 锁定 code / object / recovery suggestion
-P8LAR-BLOCK-010	pending	adapter	Worker / WASM / Web schema 和 capability 未冻结	S6	adapter tests 与 docs 同步，remaining gaps 不为空口号
+P8LAR-BLOCK-002	closed	source	Link ledger source authority 已精确到 LinkBaseExtension 字段和函数	S1	P8LAR-SRC-001/002/004/007/008/009 已 sourceReady；S2 已关闭 Link ledger / ShowElement 事务，后续只剩 P8LAR-BLOCK-005/006/007/010 等 blocker
+P8LAR-BLOCK-003	closed	link	ShowElement 持久写回事务缺少完整 owner / child / reclaim 证明	S2	S2 已用 focused tests 覆盖 synthetic / materialized / stale / toggle-off / owner sync / child sync / CopyOnChange touched，并验证 documentObjectUpdates apply-next-request 后稳定
+P8LAR-BLOCK-005	closed	xlink	cross-document hash / postfix / mapped alias 生命周期缺少稳定 schema	S3	S3 已用 focused tests 覆盖 missing / unloaded / pending / restored / hash mismatch / object rename / label rename / DocMap rename / mapped postfix mismatch，输出稳定 diagnostics 与 elementReferenceUpdates
+P8LAR-BLOCK-006	closed	linksub	多层 LinkSub / LinkGroup / plain group 与 imported ElementMap 已统一到正式 ElementMap / retag history	S4	S4 focused tests 覆盖 multilevel LinkSub、LinkGroup、plain group、source alias、target prefix、FullSubList external tag、stable history 和 imported ElementMap Link chain；无 output 修剪
+P8LAR-BLOCK-007	closed	import	导入 shape subshape map 已能被 Link chain 完整消费	S4	app-link-imported-element-map-chain 证明 BREP/STEP/IGES imported ElementMap 经中间 App::Link / LinkSub 后仍进入 downstream LinkGroup child map
+P8LAR-BLOCK-010	closed	adapter	本主线最终 Worker / WASM / Web schema 和 capability 已冻结	S6	已复用 C4-M5 baseline 并同步 LinkAssembly 发布 docs：cad-core-result-v1、stateless result channels、adapter diagnostics、mesh/binary/export metadata 已发布；timeout/memory 与通用 import/export quota 作为 future/nonGoal 边界

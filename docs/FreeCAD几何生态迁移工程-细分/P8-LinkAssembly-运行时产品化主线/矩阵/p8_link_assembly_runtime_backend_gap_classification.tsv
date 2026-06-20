@@ -1,13 +1,13 @@
 id	gap_type	status	related_scope	resolution_route	notes
-P8LAR-BG-001	backendGap	pending	P8LAR-SCOPE-002	S2	完整 Link ledger 缺口，不用单 fixture patch 关闭
-P8LAR-BG-002	backendGap	pending	P8LAR-SCOPE-003	S2	ShowElement 持久事务缺口，必须证明前端应用后下一次 recompute 稳定
-P8LAR-BG-003	sourceFirst	pending	P8LAR-SCOPE-005	S1 -> S2	CopyOnChange 子集需先裁决 source authority
-P8LAR-BG-004	backendGap	pending	P8LAR-SCOPE-006	S3	cross-document lifecycle 不是 adapter 层问题
-P8LAR-BG-005	backendGap	pending	P8LAR-SCOPE-007	S3	document hash / postfix / mapped alias 需要稳定 diagnostic 和 update suggestion
-P8LAR-BG-006	backendGap	pending	P8LAR-SCOPE-008	S4	多层 LinkSub 需要统一 ledger + PropertyLinkSub + topo history
-P8LAR-BG-007	backendGap	pending	P8LAR-SCOPE-009	S4	imported shape ElementMap 需要正式 topo/part 能力
-P8LAR-BG-008	oracleFirst	pending	P8LAR-SCOPE-012	S5	remaining JointType 必须先有 native oracle 和产品裁决
-P8LAR-BG-009	backendGap	pending	P8LAR-SCOPE-013	S5	underconstrained / contradictory diagnostic 不得 fallback success
-P8LAR-BG-010	releaseGate	pending	P8LAR-SCOPE-015	S6	Worker / WASM / Web 合同冻结后才发布能力
-P8LAR-BG-011	releaseGate	pending	P8LAR-SCOPE-016	S6	resource limits 和 binary payload metadata 属于 adapter contract
-P8LAR-BG-012	staleQueueRisk	pending	P8LAR-SCOPE-001	S0	旧队列可能已被后续实现覆盖，S0 负责裁决
+P8LAR-BG-001	supportedBaseline_sourceVerified	closed	P8LAR-SCOPE-002	S2	完整 Link ledger 已由 S2 关闭：owner / child / sync / delete / reclaim / touched 均有 FreeCAD source authority、cad-core 落点和 focused tests
+P8LAR-BG-002	supportedBaseline_applyNextRequest	closed	P8LAR-SCOPE-003	S2	ShowElement 持久事务已验证 synthetic / materialized / stale / toggle-off / owner sync / child sync；documentObjectUpdates 应用到下一次 request graph 后稳定且 CAD Core 不保存 graph
+P8LAR-BG-003	supportedBaseline_sourceVerified	closed	P8LAR-SCOPE-005	S2	CopyOnChange deep copy / touched / relink 已复核 live fixtures 与 apply-next-request；未由 S1 source authority 和 fixtures 约束的跨文档 hash/postfix/deep imported ElementMap 不外推
+P8LAR-BG-004	supportedBaseline_sourceVerified	closed	P8LAR-SCOPE-006	S3	c3m2/xlink focused tests 覆盖 missing / unloaded / pending / restored / hash mismatch 与 DocMap rename；完整 cross-document lifecycle 已归入 app/graph/runtime schema，不是 adapter 层问题
+P8LAR-BG-005	supportedBaseline_sourceVerified	closed	P8LAR-SCOPE-007	S3	FullSubList / label rename / source rename / document hash / mapped postfix rename 已有 fixtures 与 tests；更深 LinkSub retag history 和 imported ElementMap 仍归 S4
+P8LAR-BG-006	supportedBaseline_sourceVerified	closed	P8LAR-SCOPE-008	S4	多层 LinkSub / LinkGroup / plain group 链已由现有 focused tests 与 S4 新增 imported chain fixture 关闭；统一消费 Link ledger、PropertyLinkSub/XLink、ElementMap 与 retag history
+P8LAR-BG-007	supportedBaseline_sourceVerified	closed	P8LAR-SCOPE-009	S4	imported shape ElementMap 已有正式 part/topo 能力，S4 新增 app-link-imported-element-map-chain 证明 BREP/STEP/IGES subshape map 可通过 Link chain 消费
+P8LAR-BG-008	staleQueue_currentSupportedBaseline	closed_by_S5_audit	P8LAR-SCOPE-012	S5	旧 AssemblySolver / MarkerPlacement / DistanceType 队列不直接续跑；S5 复核 supported_joint_matrix=13 个 FreeCAD JointType、unsupported_joint_matrix=[]、representative fallback=fallback_metadata_only；未来 JointType/default/PointCurve 产品扩张另走 oracleFirst
+P8LAR-BG-009	supportedBaseline_releaseGate	closed_by_S5_audit	P8LAR-SCOPE-013	S5	C4-M5 missing grounded、PointCurve unsupported、partial writeback 和 c3m6 apply-next-request no-op 是回归基线；S5 不声明新的 underconstrained / contradictory 语义，若未来扩大 constraint 诊断再重新开 releaseGate
+P8LAR-BG-010	supportedBaseline_finalContract	closed_by_S6_contract	P8LAR-SCOPE-015	S6	Worker / WASM / Web `cad-core-result-v1` 已冻结为本主线最终合同；adapter 只透传 core schema / capability / diagnostics，worker/wasm 只加 adapter tag
+P8LAR-BG-011	supportedBaseline_finalContract	closed_by_S6_contract	P8LAR-SCOPE-016	S6	resource limits 和 binary payload metadata 已发布：mesh_limit_exceeded、adapter_resource_limit、binary mesh metadata、shape export buffer metadata；timeout/memory 与通用 import/export quota 不发布为 supported
+P8LAR-BG-012	staleQueue	decided	P8LAR-SCOPE-001;P8LAR-SCOPE-011	S0	C4-M5 队列为空；MarkerPlacement 和 DistanceType 队列为空；旧 AssemblySolver 仅因总入口未改名显示 pending，不作为当前执行入口
