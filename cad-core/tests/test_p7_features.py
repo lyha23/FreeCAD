@@ -324,6 +324,14 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["elementReferenceUpdates"], [])
         self.assert_object_matches_expected(result, "c51m5", "partdesign-datum-selected-mapmodes")
 
+    def test_c51x_datum_point_single_input_modes_match_expected(self) -> None:
+        result = self.run_recompute("partdesign-datum-point-single-input-modes", "c51m5")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual(result["elementReferenceUpdates"], [])
+        self.assert_object_matches_expected(result, "c51m5", "partdesign-datum-point-single-input-modes")
+
     def test_c51m5_datum_offset_reverse_and_shadow_sub_writeback(self) -> None:
         result = self.run_recompute("partdesign-datum-offset-reverse-writeback", "c51m5")
 

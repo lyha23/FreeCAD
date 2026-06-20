@@ -8,6 +8,7 @@
 
 #include <BRepAdaptor_Curve.hxx>
 #include <BRepAdaptor_Surface.hxx>
+#include <BRepGProp.hxx>
 #include <BRep_Tool.hxx>
 #include <GeomAbs_CurveType.hxx>
 #include <GeomAbs_SurfaceType.hxx>
@@ -21,7 +22,9 @@
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Shape.hxx>
+#include <TopoDS_Vertex.hxx>
 #include <TopLoc_Location.hxx>
+#include <GProp_GProps.hxx>
 #include <gp_Ax1.hxx>
 #include <gp_Ax3.hxx>
 #include <gp_Dir.hxx>
@@ -320,6 +323,13 @@ inline gp_Trsf placementFromObjectMode(const std::string& mode,
     return gp_Trsf();
 }
 
+inline gp_Trsf pointDatumPlacement(const gp_Pnt& point)
+{
+    gp_Trsf placement;
+    placement.SetTranslation(gp_Vec(gp_Pnt(0.0, 0.0, 0.0), point));
+    return placement;
+}
+
 inline std::optional<std::string> currentSubnameFromStable(const app::Link& link,
                                                            std::size_t index,
                                                            const part::NamedShape* namedShape)
@@ -613,6 +623,123 @@ inline std::optional<gp_Trsf> normalToEdgePlacement(const SupportResolution& sup
     return placementFromAxes(point, gp_Dir(tangent), gp_Vec(), mapReverse, true);
 }
 
+inline std::optional<gp_Trsf> pointAtVertexOrEdgeStartPlacement(const SupportResolution& support,
+                                                                runtime::ComputeContext& context,
+                                                                const app::DocumentObject& object)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Attacher.cpp
+    // ::AttachEnginePoint::_calculateAttachedPlacement(), case "mm0Vertex", consumes a Vertex
+    // point or the first parameter point of an Edge.
+    try {
+        const TopoDS_Vertex vertex = TopoDS::Vertex(support.shape);
+        if (!vertex.IsNull()) {
+            return pointDatumPlacement(BRep_Tool::Pnt(vertex));
+        }
+    }
+    catch (const Standard_Failure&) {
+    }
+
+    try {
+        const TopoDS_Edge edge = TopoDS::Edge(support.shape);
+        if (!edge.IsNull()) {
+            BRepAdaptor_Curve curve(edge);
+            double first = curve.FirstParameter();
+            if (Precision::IsInfinite(first)) {
+                addDatumAttachmentDiagnostic(context,
+                                             object,
+                                             support.link,
+                                             "MapMode",
+                                             "Vertex MapMode cannot use an infinite edge parameter",
+                                             "attachment_parameter_invalid");
+                return std::nullopt;
+            }
+            return pointDatumPlacement(curve.Value(first));
+        }
+    }
+    catch (const Standard_Failure&) {
+    }
+
+    addDatumAttachmentDiagnostic(context,
+                                 object,
+                                 support.link,
+                                 "MapMode",
+                                 "Vertex MapMode requires a Vertex support or finite Edge support",
+                                 "attachment_support_invalid_shape");
+    return std::nullopt;
+}
+
+inline std::optional<gp_Trsf> pointOnEdgePlacement(const SupportResolution& support,
+                                                   double parameter,
+                                                   runtime::ComputeContext& context,
+                                                   const app::DocumentObject& object)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Attacher.cpp
+    // ::AttachEnginePoint::_calculateAttachedPlacement(), case "mm0OnEdge", remaps to
+    // "mmNormalToPath" and uses attachParameter to place the point on the curve.
+    try {
+        const TopoDS_Edge edge = TopoDS::Edge(support.shape);
+        if (!edge.IsNull()) {
+            BRepAdaptor_Curve curve(edge);
+            double first = curve.FirstParameter();
+            double last = curve.LastParameter();
+            if (Precision::IsInfinite(first) || Precision::IsInfinite(last)) {
+                first = 0.0;
+                last = 1.0;
+            }
+            return pointDatumPlacement(curve.Value(first + parameter * (last - first)));
+        }
+    }
+    catch (const Standard_Failure&) {
+    }
+
+    addDatumAttachmentDiagnostic(context,
+                                 object,
+                                 support.link,
+                                 "MapMode",
+                                 "OnEdge MapMode requires an Edge support",
+                                 "attachment_support_invalid_shape");
+    return std::nullopt;
+}
+
+inline std::optional<gp_Trsf> centerOfMassPlacement(const SupportResolution& support,
+                                                    runtime::ComputeContext& context,
+                                                    const app::DocumentObject& object)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Attacher.cpp
+    // ::AttachEnginePoint::_calculateAttachedPlacement(), case "mm0CenterOfMass", calls
+    // "AttachEngine::getInertialPropsOfShape(shapes)" and uses "gpr.CentreOfMass()".
+    if (support.shape.IsNull()) {
+        addDatumAttachmentDiagnostic(context,
+                                     object,
+                                     support.link,
+                                     "MapMode",
+                                     "CenterOfMass MapMode requires non-null support shape",
+                                     "attachment_support_invalid_shape");
+        return std::nullopt;
+    }
+
+    GProp_GProps properties;
+    BRepGProp::VolumeProperties(support.shape, properties);
+    if (properties.Mass() <= Precision::Confusion()) {
+        properties = GProp_GProps();
+        BRepGProp::SurfaceProperties(support.shape, properties);
+    }
+    if (properties.Mass() <= Precision::Confusion()) {
+        properties = GProp_GProps();
+        BRepGProp::LinearProperties(support.shape, properties);
+    }
+    if (properties.Mass() <= Precision::Confusion()) {
+        addDatumAttachmentDiagnostic(context,
+                                     object,
+                                     support.link,
+                                     "MapMode",
+                                     "CenterOfMass MapMode could not derive inertial properties from support shape",
+                                     "attachment_support_invalid_shape");
+        return std::nullopt;
+    }
+    return pointDatumPlacement(properties.CentreOfMass());
+}
+
 inline std::optional<gp_Trsf> selectedDatumPlacement(const app::DocumentObject& object,
                                                     runtime::ComputeContext& context,
                                                     DatumAttachmentEngine engine,
@@ -675,6 +802,39 @@ inline std::optional<gp_Trsf> selectedDatumPlacement(const app::DocumentObject& 
             return std::nullopt;
         }
         return normalToEdgePlacement(support, mapReverse, parameter, context, object);
+    }
+    if (mode == "Vertex") {
+        if (engine != DatumAttachmentEngine::Point) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         support.link,
+                                         "MapMode",
+                                         "Vertex is supported for DatumPoint in this C51X batch");
+            return std::nullopt;
+        }
+        return pointAtVertexOrEdgeStartPlacement(support, context, object);
+    }
+    if (mode == "OnEdge") {
+        if (engine != DatumAttachmentEngine::Point) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         support.link,
+                                         "MapMode",
+                                         "OnEdge is supported for DatumPoint in this C51X batch");
+            return std::nullopt;
+        }
+        return pointOnEdgePlacement(support, parameter, context, object);
+    }
+    if (mode == "CenterOfMass") {
+        if (engine != DatumAttachmentEngine::Point) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         support.link,
+                                         "MapMode",
+                                         "CenterOfMass is supported for DatumPoint in this C51X batch");
+            return std::nullopt;
+        }
+        return centerOfMassPlacement(support, context, object);
     }
 
     addDatumAttachmentDiagnostic(context,
@@ -742,7 +902,8 @@ inline std::optional<DatumAttachmentPlacement> datumAttachmentPlacement(const ap
     // ::AttachEnginePoint::_calculateAttachedPlacement() remaps ObjectOrigin to ObjectXY.
     // This request-local subset implements those selected modes without GUI editor/session state.
     const std::string mode = datumMapModeLabel(object);
-    const bool requiresSubshape = mode == "FlatFace" || mode == "NormalToEdge" || mode == "Tangent";
+    const bool requiresSubshape = mode == "FlatFace" || mode == "NormalToEdge" || mode == "Tangent"
+        || mode == "Vertex" || mode == "OnEdge";
     auto resolvedSupport = resolveAttachmentSupport(object, context, support, requiresSubshape);
     if (!resolvedSupport) {
         return std::nullopt;

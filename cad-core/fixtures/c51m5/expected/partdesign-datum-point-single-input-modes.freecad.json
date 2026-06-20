@@ -1,0 +1,43 @@
+{
+  "freecad_version": "1.2.0 revision 20260519",
+  "objects": {
+    "DatumPointCenterOfMass": {
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "point": [
+          4.999999999999999,
+          4.0,
+          2.0
+        ],
+        "status": "ok"
+      }
+    },
+    "DatumPointOnEdge": {
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "point": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "status": "ok"
+      }
+    },
+    "DatumPointVertex": {
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "point": [
+          0.0,
+          0.0,
+          4.0
+        ],
+        "status": "ok"
+      }
+    }
+  },
+  "reference": "FreeCADCmd oracle from partdesign-datum-point-single-input-modes.json; objects: Part::Box, PartDesign::Point, PartDesign::Point, PartDesign::Point",
+  "schema_version": "cad-core.freecad-expected.v1"
+}

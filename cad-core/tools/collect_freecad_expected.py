@@ -3516,6 +3516,34 @@ def datum_map_mode_active(obj: Any) -> bool:
         return False
 
 
+def datum_point_vector(obj: Any) -> Any:
+    # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/DatumPoint.cpp
+    # ::Point::getPoint() returns "Placement.getValue().getPosition()". Some current
+    # FreeCADCmd builds expose datum targets as generic Part.Feature wrappers in scripts,
+    # so Placement.Base is the equivalent fallback for expected collection.
+    if hasattr(obj, "getPoint"):
+        return obj.getPoint()
+    return obj.Placement.Base
+
+
+def datum_line_direction(obj: Any) -> Any:
+    # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/DatumLine.cpp
+    # ::Line::getDirection() rotates "Base::Vector3d(0, 0, 1)" by Placement.
+    if hasattr(obj, "getDirection"):
+        return obj.getDirection()
+    import FreeCAD  # type: ignore
+
+    return obj.Placement.Rotation.multVec(FreeCAD.Vector(0, 0, 1))
+
+
+def datum_axis_vector(obj: Any, getter: str, axis: tuple[float, float, float]) -> Any:
+    if hasattr(obj, getter):
+        return getattr(obj, getter)()
+    import FreeCAD  # type: ignore
+
+    return obj.Placement.Rotation.multVec(FreeCAD.Vector(*axis))
+
+
 def datum_payload(obj: Any) -> dict:
     type_id = getattr(obj, "TypeId", "")
     fields: dict[str, Any] = {
@@ -3526,13 +3554,13 @@ def datum_payload(obj: Any) -> dict:
         # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/DatumPoint.cpp
         # ::Point::getPoint(), returns "Placement.getValue().getPosition()".
         fields["datum"] = "point"
-        fields["point"] = vector_payload(obj.getPoint())
+        fields["point"] = vector_payload(datum_point_vector(obj))
     elif type_id == "PartDesign::Line":
         # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/DatumLine.cpp
         # ::Line::getDirection(), rotates "Base::Vector3d(0, 0, 1)" by Placement.
         fields["datum"] = "line"
         fields["base"] = vector_payload(obj.Placement.Base)
-        fields["direction"] = vector_payload(obj.getDirection())
+        fields["direction"] = vector_payload(datum_line_direction(obj))
     elif type_id == "PartDesign::Plane":
         # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/DatumPlane.cpp
         # ::Plane::getNormal(), rotates "Base::Vector3d(0, 0, 1)" by Placement; cad-core's
@@ -3543,9 +3571,9 @@ def datum_payload(obj: Any) -> dict:
         # ::getXAxis()/getYAxis()/getZAxis() apply Placement rotation to unit axes.
         fields["datum"] = "coordinate_system"
         fields["origin"] = vector_payload(obj.Placement.Base)
-        fields["x_axis"] = vector_payload(obj.getXAxis())
-        fields["y_axis"] = vector_payload(obj.getYAxis())
-        fields["z_axis"] = vector_payload(obj.getZAxis())
+        fields["x_axis"] = vector_payload(datum_axis_vector(obj, "getXAxis", (1, 0, 0)))
+        fields["y_axis"] = vector_payload(datum_axis_vector(obj, "getYAxis", (0, 1, 0)))
+        fields["z_axis"] = vector_payload(datum_axis_vector(obj, "getZAxis", (0, 0, 1)))
     else:
         raise UnsupportedFixture(f"target object {obj.Name} is not a supported Datum payload")
     return {"object_fields": fields}

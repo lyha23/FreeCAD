@@ -1073,19 +1073,23 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         datum_attachment = capabilities["part_design"]["datum_attachment"]
         self.assertEqual(
             datum_attachment["status"],
-            "supported_c51s5_selected_attach_engine_with_request_local_writeback",
+            "supported_c51x_selected_attach_engine_with_datum_point_single_input",
         )
         self.assertIn("PartDesign::CoordinateSystem", datum_attachment["type_ids"])
         self.assertIn("DatumLine Placement direction", datum_attachment["supported"])
         self.assertIn("Body Origin datum role relink", datum_attachment["supported"])
         self.assertIn("FlatFace selected MapMode", datum_attachment["supported"])
         self.assertIn("NormalToEdge selected MapMode", datum_attachment["supported"])
+        self.assertIn("DatumPoint Vertex selected MapMode", datum_attachment["supported"])
+        self.assertIn("DatumPoint OnEdge selected MapMode", datum_attachment["supported"])
+        self.assertIn("DatumPoint CenterOfMass selected MapMode", datum_attachment["supported"])
         self.assertIn("AttachmentSupport StableSubList/ShadowSub request-local writeback", datum_attachment["supported"])
         self.assertIn("p7/datum-coordinate-system-reference-axis", datum_attachment["fixtures"])
         self.assertIn("c4m2/partdesign-datum-attachment-deferred-diagnostics", datum_attachment["fixtures"])
         self.assertIn("c5m4/partdesign-datum-attachment-mapmode-diagnostics", datum_attachment["fixtures"])
         self.assertIn("c51m5/partdesign-datum-selected-mapmodes", datum_attachment["fixtures"])
         self.assertIn("c51m5/partdesign-datum-offset-reverse-writeback", datum_attachment["fixtures"])
+        self.assertIn("c51m5/partdesign-datum-point-single-input-modes", datum_attachment["fixtures"])
         self.assertIn("unsupported_property", datum_attachment["diagnostics"])
         self.assertIn("attachment_support_invalid_shape", datum_attachment["diagnostics"])
         self.assertEqual(
@@ -1104,6 +1108,9 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ],
         )
         self.assertIn("datum_attach_engine_remaining_modes", datum_attachment["exact_blockers"])
+        self.assertNotIn("Vertex", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
+        self.assertNotIn("OnEdge", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
+        self.assertNotIn("CenterOfMass", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
         self.assertEqual(datum_attachment["remaining_gaps"], [])
         self.assertEqual(
             capabilities["part_design"]["hole"]["thread_tables"],
