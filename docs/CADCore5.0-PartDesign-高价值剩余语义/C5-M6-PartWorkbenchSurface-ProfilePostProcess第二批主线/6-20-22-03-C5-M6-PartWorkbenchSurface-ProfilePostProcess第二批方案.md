@@ -36,10 +36,11 @@
 
 - 源码依据：`src/Mod/Part/App/PartFeatures.cpp::Loft::execute()`、`src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementLoft()`、`TopoShape::linearize()`。
 - cad-core 落点：`cad-core/src/part/part_loft.cpp`、`cad-core/src/part/topo_shape_expansion.cpp`、`cad-core/src/adapters/c_api/c_api.cpp`。
+- S1 复核基线：`HEAD=07a0b3903d`，起始工作区干净；未发现需要修改 C++ 或 fixture 的证据缺口。
 - 当前 expected-backed 证据：
   - `c4m1/part-loft-linearize-profile-face`
   - `c4m1/part-loft-linearize-profile-vertex`
-- 发布边界：face / vertex profile 与 Linearize 后处理已可发布；`complex_profile_family` 仍保留 gap / non-goal。
+- 发布边界：只发布 face / vertex profile 与 `Linearize=true` 对应的 `linearize_faces_no_edges_post_processing`；`complex_profile_family` 仍保留 gap / non-goal。
 
 ### Sweep
 

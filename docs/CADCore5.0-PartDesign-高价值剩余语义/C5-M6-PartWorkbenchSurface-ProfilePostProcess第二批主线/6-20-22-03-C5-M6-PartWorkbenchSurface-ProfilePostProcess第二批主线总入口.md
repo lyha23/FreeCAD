@@ -23,10 +23,17 @@
 - `part_workbench.loft` 只冻结 face / vertex profile 与 `Linearize=true` expected-backed slice；`complex_profile_family` 保持 future owner。
 - `part_workbench.sweep` 只冻结 multi-profile `Sections` 与 `Linearize=true` expected-backed slice；advanced PipeShell wrapper 仅有 deferred diagnostics，不计入 supported。
 
+## S1 Loft 复核收口
+
+- live 基线：`HEAD=07a0b3903d`，`git log -1 --oneline=07a0b3903d docs: 冻结 C5-M6 S0 live 基线`，起始工作区干净。
+- FreeCAD 依据仍是 `PartFeatures.cpp::Loft::execute()` 的 `makeElementLoft(...)` 后置 `result.linearize(LinearizeFace::linearizeFaces, LinearizeEdge::noEdges)`，以及 `TopoShapeExpansion.cpp::TopoShape::makeElementLoft()` 的 `AddVertex` / `AddWire` profile 处理。
+- cad-core 证据已闭环：`part-loft-linearize-profile-face` 和 `part-loft-linearize-profile-vertex` fixture、FreeCAD expected、`tests.test_p8_features` expected matcher 与 `tests.test_adapters` capability 断言均存在。
+- S1 只发布 `Part::Loft` face / vertex profile 与 `linearize_faces_no_edges_post_processing`；`complex_profile_family` 继续是 remaining gap / non-goal，不进入本包实现。
+
 ## 执行顺序
 
-1. `C5-M6-S0`：live 基线、scope 和当前 supported 事实冻结。
-2. `C5-M6-S1`：Loft face / vertex profile 与 `Linearize=true` 复核收口。
+1. `C5-M6-S0`（已实现）：live 基线、scope 和当前 supported 事实冻结。
+2. `C5-M6-S1`（已实现）：Loft face / vertex profile 与 `Linearize=true` 复核收口。
 3. `C5-M6-S2`：Sweep multi-profile 与 `Linearize=true` 复核收口。
 4. `C5-M6-S3`：剩余 complex profile / advanced PipeShell contract 分流。
 5. `C5-M6-S4`：capability、CADCore3.0 文档和队列收口。
