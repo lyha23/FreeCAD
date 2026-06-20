@@ -42,7 +42,7 @@
 - live 基线：`HEAD=f5b7a12af3`，`git log -1 --oneline=f5b7a12af3 docs: 收口 C5-M6 S2 Sweep 复核`，起始工作区干净。
 - Loft 剩余边界只保留 `complex_profile_family`，继续作为 explicit remaining gap / non-goal，路由到 `future_loft_complex_profile_family`。
 - Sweep advanced PipeShell contracts 拆成 auxiliary spine、support mode、binormal、location mode、tolerance 五类 capability remaining gap，路由到 `future_sweep_advanced_contract`。
-- 本包不把 advanced wrapper、Hole internal PipeShell、Filling / GeomPlate advanced constraints 或完整 Part surface family 写成 supported；`C5M6-BLK-004` 关闭，`C5M6-BLK-005` 留给 S4。
+- 本包不把 advanced wrapper、Hole internal PipeShell、Filling helper expansion、GeomPlate BuildPlateSurface helper batch 或完整 Part surface family 写成 supported；`C5M6-BLK-004` 关闭，`C5M6-BLK-005` 留给 S4。
 
 ## S4 capability 与文档收口
 
@@ -69,5 +69,5 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 ## 边界
 
 - 本包不是 PartDesign `FeatureLoft` / `FeaturePipe` 的继续实现，不消费 C5-M3 的 PartDesign known-gap oracle。
-- 不把 Filling / GeomPlate advanced constraints 混入本轮；它们的 DTO / API 边界不同。
+- 不把 Filling helper expansion 或 GeomPlate BuildPlateSurface helper batch 混入本轮；它们的 DTO / API 边界不同，GeomPlate 第二批已由 C5-M7 收口。
 - 不把 advanced `BRepOffsetAPI_MakePipeShell` wrapper、Hole internal PipeShell 或 GUI task panel 算作 `Part::Sweep` 支持。

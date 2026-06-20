@@ -58,7 +58,7 @@
 
 - Loft 剩余项不再使用旧 broad gap 表述，只保留 `complex_profile_family`；它仍是 `part_workbench.loft.remaining_gaps` 和 `non_goals` 的唯一条目，后续 owner 是 `future_loft_complex_profile_family`。
 - Sweep advanced PipeShell contract 不写成 supported，也不落回 `advanced_pipeshell_wrapper` 旧 broad gap；adapter capability 的 remaining gaps 精确拆成 `part_sweep_auxiliary_spine_contract`、`part_sweep_support_mode_contract`、`part_sweep_binormal_contract`、`part_sweep_location_mode_contract`、`part_sweep_tolerance_contract`，后续 owner 是 `future_sweep_advanced_contract`。
-- `part-sweep-advanced-deferred` 是 deferred diagnostic fixture，不是 expected-backed support；Hole internal PipeShell、Filling / GeomPlate advanced constraints 和完整 Part surface family 继续留在非目标或各自 future package。
+- `part-sweep-advanced-deferred` 是 deferred diagnostic fixture，不是 expected-backed support；Hole internal PipeShell、Filling helper expansion、GeomPlate BuildPlateSurface helper batch 和完整 Part surface family 继续留在非目标或各自 package，GeomPlate 第二批已由 C5-M7 收口。
 - `C5M6-BLK-004` 由本分流关闭；S4 只负责 capability / CADCore3.0 / 根矩阵口径最终一致性。
 
 ### S4 发布收口
@@ -81,7 +81,7 @@
 ## 非目标
 
 - 不处理 PartDesign `FeatureLoft` / `FeaturePipe` 的 C5-M3 known-gap rows。
-- 不处理 Filling / GeomPlate advanced constraints。
+- 不处理 Filling helper expansion 或 GeomPlate BuildPlateSurface helper batch。
 - 不实现 advanced `BRepOffsetAPI_MakePipeShell` wrapper 的辅助脊、support mode、trihedron / binormal、located profile 或 Hole internal PipeShell。
 - 不用 bbox、输出顺序或 fixture 名称修正 topo naming。
 - 不把 `complex_profile_family` 或 advanced PipeShell contract 写成 supported。

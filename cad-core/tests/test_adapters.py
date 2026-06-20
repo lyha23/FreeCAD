@@ -3267,6 +3267,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         for covered in (
             "part_geomplate_surface_source_backed_helper",
             "buildplate_surface_helper",
+            "default_3d_curve_point_expected_backed",
             "source_backed_3d_curve_g0_constraints",
             "point_3d_constraints",
             "initial_surface_reference_expected_backed",
@@ -3279,6 +3280,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "projected_curve2d_native_oracle_blocker",
             "default_build_params_metadata",
             "approximation_metadata",
+            "explicit_approximation_params_expected_backed",
             "advanced_approximation_params_expected_backed",
             "geomplate_makeapprox_face",
             "source_evidence",

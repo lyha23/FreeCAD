@@ -77,13 +77,13 @@ S4 已补齐 criteria 和 wrapper 边界：
 - curve constraint 的 criteria setter 仍是 FreeCAD wrapper `NotImplementedError`，cad-core 输出 `unsupported_curve_criteria` locatable diagnostic，fixture 为 `part-geomplate-curve-criteria-diagnostic`。
 - `Part.PlateSurface.Curves` 仍不是 same-DTO 生命周期：`PlateSurfacePyImp.cpp` 的 `Curves` 分支是 `TODO`，`GeomPlateSurface::Save/Restore` 仍 `NotImplementedError`，cad-core 输出 `unsupported_wrapper_lifecycle` locatable diagnostic，fixture 为 `part-geomplate-wrapper-boundary`。
 
-### S5 capability 与文档收口
+### S5 capability 与文档收口（已实现）
 
-同步 `part_workbench.geomplate` capability、CADCore3.0 gaps、C5 根矩阵和本包矩阵：
+S5 已同步 `part_workbench.geomplate` capability、CADCore3.0 gaps、C5 根矩阵和本包矩阵：
 
-- supported 只写入 expected-backed 的场景；
-- remaining gaps 不再保留 broad `advanced constraints`；
-- wrapper 若仍未支持，必须有明确 future owner / diagnostic fixture。
+- supported 只写入 expected-backed 的场景，G1 / ProjectedCurve2d 只写成 source-backed native-oracle blocker；
+- remaining gaps 不再保留 broad `advanced constraints`，只保留 G1 native oracle、ProjectedCurve2d native oracle、curve criteria setter `NotImplementedError` 和 `Part.PlateSurface.Curves` wrapper lifecycle；
+- GUI/native DocumentObject/Filling/full surface family 保持 non-goal，wrapper 以 `unsupported_wrapper_lifecycle` diagnostic fixture 固化。
 
 ## fixture / expected 批次
 
