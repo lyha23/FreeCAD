@@ -10,7 +10,7 @@ C5-S1 已实现为 mixed support/diagnostic：`TwoAngles` 与 Groove `ThroughAll
 
 ## 必读文件
 
-- `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M1-RevolutionGroove参数补完主线/6-20-10-48-C5-M1-RevolutionGroove参数补完方案.md`
+- `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M1-RevolutionGroove参数补完主线/6-20-10-48-【已实现】C5-M1-RevolutionGroove参数补完方案.md`
 - `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M1-RevolutionGroove参数补完主线/矩阵/revolved_scope.tsv`
 - `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M1-RevolutionGroove参数补完主线/矩阵/revolved_blocker_queue.tsv`
 - `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M1-RevolutionGroove参数补完主线/工作步骤细分/6-20-10-49-C5-S1-M1-RevolutionGroove参数补完.md`

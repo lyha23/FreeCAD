@@ -1,4 +1,4 @@
-# C5-M1 Revolution / Groove 参数补完方案
+# 【已实现】C5-M1 Revolution / Groove 参数补完方案
 
 ## 目标
 

@@ -6,7 +6,7 @@
 
 ## 必读文件
 
-- `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M3-LoftPipe高级分支主线/6-20-10-48-C5-M3-LoftPipe高级分支方案.md`
+- `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M3-LoftPipe高级分支主线/6-20-10-48-【已实现】C5-M3-LoftPipe高级分支方案.md`
 - `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M3-LoftPipe高级分支主线/矩阵/loft_pipe_advanced_scope.tsv`
 - `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M3-LoftPipe高级分支主线/矩阵/loft_pipe_advanced_blocker_queue.tsv`
 - `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M3-LoftPipe高级分支主线/工作步骤细分/6-20-10-49-C5-S3-M3-LoftPipe高级分支.md`

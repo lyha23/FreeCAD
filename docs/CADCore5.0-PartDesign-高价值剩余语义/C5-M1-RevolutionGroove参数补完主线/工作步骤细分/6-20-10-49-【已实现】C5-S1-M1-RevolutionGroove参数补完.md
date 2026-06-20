@@ -6,7 +6,7 @@
 
 ## 必读
 
-- `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M1-RevolutionGroove参数补完主线/6-20-10-48-C5-M1-RevolutionGroove参数补完方案.md`
+- `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M1-RevolutionGroove参数补完主线/6-20-10-48-【已实现】C5-M1-RevolutionGroove参数补完方案.md`
 - `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M1-RevolutionGroove参数补完主线/矩阵/revolved_scope.tsv`
 - `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M1-RevolutionGroove参数补完主线/矩阵/revolved_blocker_queue.tsv`
 - `src/Mod/PartDesign/App/FeatureRevolved.cpp`
@@ -38,7 +38,7 @@ python3 -m unittest tests.test_p7_features tests.test_expected_fixtures tests.te
 
 ## 实施结果
 
-- FreeCAD 调用链已记录到 `../6-20-10-48-C5-M1-RevolutionGroove参数补完方案.md`：Revolution 与 Groove 的 `TypeEnums` 不同，`TwoAngles` / Groove `ThroughAll` 走 `BRepPrimAPI_MakeRevol`，UpTo 走 `BRepFeat_MakeRevol`。
+- FreeCAD 调用链已记录到 `../6-20-10-48-【已实现】C5-M1-RevolutionGroove参数补完方案.md`：Revolution 与 Groove 的 `TypeEnums` 不同，`TwoAngles` / Groove `ThroughAll` 走 `BRepPrimAPI_MakeRevol`，UpTo 走 `BRepFeat_MakeRevol`。
 - supported：Revolution/Groove `TwoAngles`、Groove `ThroughAll`、Part EdgeN `ReferenceAxis`、Body additive/subtractive replay、`maker_history:revolve`。
 - diagnostic-backed：Revolution `ThroughAll` invalid enum、UpToFirst/UpToLast/UpToFace、zero-sum `Angle + Angle2`、Profile subshape、`FuseOrder=FeatureFirst`。
 - deferred：Datum/App line axis native oracle、custom Sketch `AxisN`、完整 `TopoShape::makeElementRevolution()` / BRepFeat history path。

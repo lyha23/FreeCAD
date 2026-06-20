@@ -4,7 +4,7 @@
 
 ## 入口
 
-- 总览方案：`6-20-10-47-CADCore5.0-PartDesign高价值剩余语义总览方案.md`
+- 总览方案：`6-20-10-47-【已实现】CADCore5.0-PartDesign高价值剩余语义总览方案.md`
 - 全局 source 候选：`矩阵/cadcore5_source_candidates.tsv`
 - 全局 scope 矩阵：`矩阵/cadcore5_scope_review_matrix.tsv`
 - 全局 blocker 队列：`矩阵/cadcore5_blocker_queue.tsv`

@@ -6,7 +6,7 @@
 
 ## 必读
 
-- `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M4-DatumAttachment-引用稳定主线/6-20-10-48-C5-M4-DatumAttachment引用稳定方案.md`
+- `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M4-DatumAttachment-引用稳定主线/6-20-10-48-【已实现】C5-M4-DatumAttachment引用稳定方案.md`
 - `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M4-DatumAttachment-引用稳定主线/矩阵/datum_attachment_scope.tsv`
 - `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M4-DatumAttachment-引用稳定主线/矩阵/datum_attachment_blocker_queue.tsv`
 - `src/Mod/Part/App/AttachExtension.cpp`
@@ -37,7 +37,7 @@ python3 -m unittest tests.test_p7_features tests.test_adapters
 
 ## 实施结果
 
-- FreeCAD 调用链已记录到 `../6-20-10-48-C5-M4-DatumAttachment引用稳定方案.md`：DatumPoint/Line/Plane/CS 分别安装 `AttachEnginePoint/Line/Plane/3D`；`AttachExtension::positionBySupport()` 通过 `MapMode`、`MapReversed`、`MapPathParameter`、`AttachmentOffset` 调用 `calculateAttachedPlacement()`，并可能写回 `AttachmentSupport` subnames；`PropertyLinks.cpp` 用 `ShadowSub` / element reference map 维护 downstream 引用。
+- FreeCAD 调用链已记录到 `../6-20-10-48-【已实现】C5-M4-DatumAttachment引用稳定方案.md`：DatumPoint/Line/Plane/CS 分别安装 `AttachEnginePoint/Line/Plane/3D`；`AttachExtension::positionBySupport()` 通过 `MapMode`、`MapReversed`、`MapPathParameter`、`AttachmentOffset` 调用 `calculateAttachedPlacement()`，并可能写回 `AttachmentSupport` subnames；`PropertyLinks.cpp` 用 `ShadowSub` / element reference map 维护 downstream 引用。
 - product gate：本轮不发布 selected map mode support。`FlatFace`、`ObjectXY/ObjectX/ObjectOrigin`、`NormalToEdge` 等候选都继续 diagnostic-backed，因为 cad-core 尚无 request-local AttachEngine placement solver 和 subname writeback 闭环。
 - supported existing：无 active attachment 的 Datum placement、DatumLine/DatumCS 下游 ReferenceAxis、Body Origin datum role relink。
 - diagnostic-backed：active `AttachmentSupport`、`MapMode`、`AttachmentOffset`、`MapReversed` / Reverse、`MapPathParameter` / Parameter、`ShadowSub` evidence；下游引用 attached Datum 时稳定跳过且不产生引用写回。

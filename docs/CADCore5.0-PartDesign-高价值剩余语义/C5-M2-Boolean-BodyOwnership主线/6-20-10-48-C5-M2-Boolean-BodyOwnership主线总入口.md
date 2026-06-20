@@ -6,7 +6,7 @@
 
 ## 必读文件
 
-- `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M2-Boolean-BodyOwnership主线/6-20-10-48-C5-M2-Boolean-BodyOwnership方案.md`
+- `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M2-Boolean-BodyOwnership主线/6-20-10-48-【已实现】C5-M2-Boolean-BodyOwnership方案.md`
 - `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M2-Boolean-BodyOwnership主线/矩阵/boolean_body_scope.tsv`
 - `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M2-Boolean-BodyOwnership主线/矩阵/boolean_body_blocker_queue.tsv`
 - `docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M2-Boolean-BodyOwnership主线/工作步骤细分/6-20-10-49-C5-S2-M2-Boolean-BodyOwnership.md`
