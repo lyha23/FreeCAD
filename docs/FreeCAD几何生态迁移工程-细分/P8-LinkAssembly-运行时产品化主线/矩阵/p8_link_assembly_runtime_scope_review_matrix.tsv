@@ -1,0 +1,17 @@
+id	scope	current_status	owner_step	acceptance_route	notes
+P8LAR-SCOPE-001	基础 Link display / LinkSub / LinkGroup / LinkElement	supportedBaseline	S0	regression_only	已有 p8 fixtures，S0 复核后作为回归基线
+P8LAR-SCOPE-002	完整 FreeCAD Link ledger	backendGap	S2	source + fixtures + focused tests	owner / child / sync / delete / reclaim / touched 生命周期
+P8LAR-SCOPE-003	ShowElement 持久写回事务	backendGap	S2	fixture + documentObjectUpdates apply-next-request	覆盖 synthetic / materialized / stale / toggle-off / child sync
+P8LAR-SCOPE-004	ElementCount 与 placement/scale/visibility list 优先级	supportedBaseline_to_reverify	S2	regression + priority matrix	当前已有子集，S2 复核并锁定优先级
+P8LAR-SCOPE-005	CopyOnChange deep copy / touched / relink	sourceFirst	S2	source authority + fixture	只发布 FreeCAD 路径明确的子集
+P8LAR-SCOPE-006	PropertyXLink cross-document lifecycle	backendGap	S3	c3m2/xlink fixtures + diagnostics	missing / unloaded / pending / restored / hash mismatch
+P8LAR-SCOPE-007	Document hash / postfix / mapped alias lifecycle	backendGap	S3	source + fixtures + elementReferenceUpdates	rename / label / mapped postfix 不靠字符串猜测
+P8LAR-SCOPE-008	多层 LinkSub / plain group / LinkGroup chain	backendGap	S4	nested fixtures + stable subname	复杂链统一走 Link ledger 和 PropertyLinkSub
+P8LAR-SCOPE-009	Imported shape 完整 ElementMap	backendGap	S4	import fixtures + topo tests	导入 shape subshape map 能被 Link chain 消费
+P8LAR-SCOPE-010	Link retag 与 topo history 传播	backendGap	S4	p6 topology + p8 fixture	不能在 output 层修剪 subname
+P8LAR-SCOPE-011	Assembly request-local real solver baseline	supportedBaseline	S0	regression_only	旧 P8 / C4-M5 的已覆盖能力作为基线
+P8LAR-SCOPE-012	剩余 JointType 产品化	oracleFirst	S5	source + native expected + capability	只接收产品需要且 Ondsel 路径明确的 JointType
+P8LAR-SCOPE-013	underconstrained / contradictory diagnostics	backendGap	S5	diagnostic fixture + tests	不能把 fallback 误报 solver success
+P8LAR-SCOPE-014	placement writeback stress	backendGap	S5	apply-next-request no-op parity	多 component / partial failure / unchanged no-op
+P8LAR-SCOPE-015	Worker / WASM / Web schema parity	releaseGate	S6	test_adapters + docs	adapter 不承载业务语义
+P8LAR-SCOPE-016	resource limits / binary payload metadata	releaseGate	S6	fixture + adapter tests	mesh / binary / import export payload limits

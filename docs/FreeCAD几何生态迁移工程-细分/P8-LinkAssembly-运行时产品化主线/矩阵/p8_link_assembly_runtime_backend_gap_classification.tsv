@@ -1,0 +1,13 @@
+id	gap_type	status	related_scope	resolution_route	notes
+P8LAR-BG-001	backendGap	pending	P8LAR-SCOPE-002	S2	完整 Link ledger 缺口，不用单 fixture patch 关闭
+P8LAR-BG-002	backendGap	pending	P8LAR-SCOPE-003	S2	ShowElement 持久事务缺口，必须证明前端应用后下一次 recompute 稳定
+P8LAR-BG-003	sourceFirst	pending	P8LAR-SCOPE-005	S1 -> S2	CopyOnChange 子集需先裁决 source authority
+P8LAR-BG-004	backendGap	pending	P8LAR-SCOPE-006	S3	cross-document lifecycle 不是 adapter 层问题
+P8LAR-BG-005	backendGap	pending	P8LAR-SCOPE-007	S3	document hash / postfix / mapped alias 需要稳定 diagnostic 和 update suggestion
+P8LAR-BG-006	backendGap	pending	P8LAR-SCOPE-008	S4	多层 LinkSub 需要统一 ledger + PropertyLinkSub + topo history
+P8LAR-BG-007	backendGap	pending	P8LAR-SCOPE-009	S4	imported shape ElementMap 需要正式 topo/part 能力
+P8LAR-BG-008	oracleFirst	pending	P8LAR-SCOPE-012	S5	remaining JointType 必须先有 native oracle 和产品裁决
+P8LAR-BG-009	backendGap	pending	P8LAR-SCOPE-013	S5	underconstrained / contradictory diagnostic 不得 fallback success
+P8LAR-BG-010	releaseGate	pending	P8LAR-SCOPE-015	S6	Worker / WASM / Web 合同冻结后才发布能力
+P8LAR-BG-011	releaseGate	pending	P8LAR-SCOPE-016	S6	resource limits 和 binary payload metadata 属于 adapter contract
+P8LAR-BG-012	staleQueueRisk	pending	P8LAR-SCOPE-001	S0	旧队列可能已被后续实现覆盖，S0 负责裁决

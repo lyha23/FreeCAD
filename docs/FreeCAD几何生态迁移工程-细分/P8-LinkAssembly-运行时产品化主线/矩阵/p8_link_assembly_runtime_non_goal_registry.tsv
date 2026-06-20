@@ -1,0 +1,11 @@
+id	non_goal	reason	owner_step
+P8LAR-NG-001	FreeCAD GUI / Workbench / TaskPanel / ViewProvider	本主线只迁移 CAD Core runtime 语义，不迁移 UI	S0
+P8LAR-NG-002	跨请求 Assembly solver session	CAD Core 是无状态服务，不能保存 solver session	S5
+P8LAR-NG-003	后端长期保存 BREP / mesh / NamedShape / ElementMap	违反 DocumentObject graph 唯一真实数据边界	S0
+P8LAR-NG-004	Worker / WASM adapter 内部实现 Link 或 topo naming 业务语义	adapter 只能协议转换和透传 diagnostics	S6
+P8LAR-NG-005	把 representative fallback 发布为 full solver	会混淆 fallback 与 real Ondsel supported	S5
+P8LAR-NG-006	把 FreeCAD TODO/default branch 发布为 supported	产品语义不清，不能作为公开能力承诺	S5
+P8LAR-NG-007	从 cad-core 输出倒推 FreeCAD expected	fixture golden 必须来自 FreeCAD / oracle，不来自当前实现	S0
+P8LAR-NG-008	靠 bbox / shape order / 字符串修剪猜测 subname	必须用 Link ledger、PropertyLinkSub 和 ElementMap / history	S4
+P8LAR-NG-009	用完整外部文档 BREP 表达 cross-document reference	只允许 graph / diagnostics / update suggestion，BREP 例外仍限 ReferenceShadow subshape snapshot	S3
+P8LAR-NG-010	把旧 P8 队列残留入口直接当下一步实现	S0 必须先 live 裁决，防止 stale queue 重复执行	S0
