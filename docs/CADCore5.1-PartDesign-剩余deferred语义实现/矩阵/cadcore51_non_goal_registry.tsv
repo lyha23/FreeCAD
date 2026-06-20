@@ -1,0 +1,6 @@
+id	scope	non_goal	reason	source_authority	diagnostic_or_doc_policy	validation	next_owner
+C51-NG-001	global	FreeCAD GUI / ViewProvider / TaskPanel / command UI	CAD Core is backend geometry kernel extraction only	AGENTS.md;src/Mod/PartDesign/Gui	record in docs; do not create implementation rows	C51-VAL-601	C51-S6
+C51-NG-002	part_design	GUI Attachment editor and visual resize behavior	User explicitly excludes GUI Attachment editor; backend only needs request graph attachment semantics	src/Mod/PartDesign/Gui;src/Mod/Part/App/AttachExtension.cpp	docs/capability non-goal; selected non-GUI map modes still implemented	C51-VAL-501	C51-S5
+C51-NG-003	runtime	cross-request backend attachment session	Frontend graph is the only persistent truth; writeback must come from input evidence	AGENTS.md architecture boundary	documentObjectUpdates only suggest next graph changes	C51-VAL-501	C51-S5
+C51-NG-004	topo	output-order/bbox/fixture-name topo correction	Violates MapperHistory/ElementMap ownership discipline	src/Mod/Part/App/TopoShape*.cpp;TopoShapeMapper*.cpp	stable diagnostics or MapperHistory path only	C51-VAL-601	C51-S6
+C51-NG-005	adapter	PartDesign geometry/topo business logic in CLI/C ABI/Worker/WASM	Adapter must stay protocol bridge	cad-core/src/adapters/c_api/c_api.cpp	adapter may expose schema/capability/diagnostics only	C51-VAL-601	C51-S6
