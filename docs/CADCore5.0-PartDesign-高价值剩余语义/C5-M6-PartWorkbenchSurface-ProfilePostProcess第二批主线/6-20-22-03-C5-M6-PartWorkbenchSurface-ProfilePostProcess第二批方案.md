@@ -61,6 +61,13 @@
 - `part-sweep-advanced-deferred` 是 deferred diagnostic fixture，不是 expected-backed support；Hole internal PipeShell、Filling / GeomPlate advanced constraints 和完整 Part surface family 继续留在非目标或各自 future package。
 - `C5M6-BLK-004` 由本分流关闭；S4 只负责 capability / CADCore3.0 / 根矩阵口径最终一致性。
 
+### S4 发布收口
+
+- `cad_core_capabilities_json()` 最终保持 `part_workbench.loft.status=supported_profile_linearize_expected_backed`，Loft remaining gaps / non-goals 只保留 `complex_profile_family`，并由 `future_loft_complex_profile_family` 接管。
+- `cad_core_capabilities_json()` 最终保持 `part_workbench.sweep.status=supported_multi_profile_linearize_expected_backed`，Sweep remaining gaps 只保留 auxiliary spine、support mode、binormal、location mode、tolerance contract，后续 owner 是 `future_sweep_advanced_contract`。
+- 本包矩阵、CADCore5 根 blocker / scope / validation / README 与 CADCore3.0 capability 文档已对齐上述发布口径；`C5M6-BLK-005` 关闭，本包队列为空。
+- 本步只补文档和 adapter capability 断言；未改 C++ 或 fixture，不需要 `cmake --build build`。
+
 ## 最小完整语义批次
 
 本包的最小完整批次不是一个 fixture，而是以下闭环：
@@ -87,7 +94,7 @@
 | S1 | Loft profile / Linearize 复核收口 | Loft fixture / expected / tests / docs 同步 |
 | S2 | Sweep multi-profile / Linearize 复核收口 | Sweep fixture / expected / tests / docs 同步 |
 | S3 | 剩余复杂分支分流 | complex_profile_family 与 advanced PipeShell contract owner |
-| S4 | 发布与队列收口 | capability / CADCore3.0 / README / 队列空 |
+| S4 | 发布与队列收口 | capability / CADCore3.0 / README / 队列空（已收口） |
 
 ## 验收分层
 

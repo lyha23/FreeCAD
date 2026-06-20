@@ -2931,6 +2931,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("sweep_filling_geomplate_pipeshell", loft["remaining_gaps"])
         self.assertNotIn("geomplate", loft["remaining_gaps"])
         self.assertNotIn("full_part_surface_family", loft["covered"])
+        self.assertNotIn("full_part_surface_family", loft["remaining_gaps"])
         sweep = capabilities["part_workbench"]["sweep"]
         self.assertEqual(sweep["status"], "supported_multi_profile_linearize_expected_backed")
         self.assertIn("Part::Sweep", sweep["type_ids"])
@@ -2958,6 +2959,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "AuxiliarySpine",
             "Tolerance",
         ):
+            self.assertIn(prop, sweep["properties"])
+        for prop in ("SupportMode", "BiNormal", "LocationMode"):
             self.assertIn(prop, sweep["properties"])
         for property_type in (
             "App::PropertyLinkList",
@@ -3065,6 +3068,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("multi_profile_sections_expected", sweep["remaining_gaps"])
         self.assertNotIn("advanced_pipeshell_wrapper", sweep["remaining_gaps"])
         self.assertNotIn("hole_model_thread_internal_pipeshell", sweep["remaining_gaps"])
+        self.assertNotIn("full_part_surface_family", sweep["covered"])
+        self.assertNotIn("full_part_surface_family", sweep["remaining_gaps"])
         filling = capabilities["part_workbench"]["filling"]
         self.assertEqual(filling["status"], "supported_expected_backed_first_batch_with_deferred_advanced_kwargs")
         self.assertIn("Part::FilledFace", filling["type_ids"])

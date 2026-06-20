@@ -44,13 +44,20 @@
 - Sweep advanced PipeShell contracts 拆成 auxiliary spine、support mode、binormal、location mode、tolerance 五类 capability remaining gap，路由到 `future_sweep_advanced_contract`。
 - 本包不把 advanced wrapper、Hole internal PipeShell、Filling / GeomPlate advanced constraints 或完整 Part surface family 写成 supported；`C5M6-BLK-004` 关闭，`C5M6-BLK-005` 留给 S4。
 
+## S4 capability 与文档收口
+
+- live 基线：`HEAD=623c79d6d2`，`git log -1 --oneline=623c79d6d2 docs: 收口 C5-M6 S3 剩余分流`，起始工作区干净。
+- `cad_core_capabilities_json()` 与 `tests.test_adapters` 最终发布 `part_workbench.loft.status=supported_profile_linearize_expected_backed`，Loft remaining gaps / non-goals 只保留 `complex_profile_family`。
+- `cad_core_capabilities_json()` 与 `tests.test_adapters` 最终发布 `part_workbench.sweep.status=supported_multi_profile_linearize_expected_backed`，Sweep remaining gaps 只保留 auxiliary spine、support mode、binormal、location mode、tolerance 五类 contract；不再保留 `linearize_post_processing`、`multi_profile_sections_expected`、`advanced_pipeshell_wrapper` 或 `hole_model_thread_internal_pipeshell` 旧 gap。
+- CADCore3.0 docs、CADCore5 根矩阵和本包矩阵已同步为 final done；`C5M6-BLK-005` 关闭，本包队列最终为空。
+
 ## 执行顺序
 
 1. `C5-M6-S0`（已实现）：live 基线、scope 和当前 supported 事实冻结。
 2. `C5-M6-S1`（已实现）：Loft face / vertex profile 与 `Linearize=true` 复核收口。
 3. `C5-M6-S2`（已实现）：Sweep multi-profile 与 `Linearize=true` 复核收口。
 4. `C5-M6-S3`（已实现）：剩余 complex profile / advanced PipeShell contract 分流。
-5. `C5-M6-S4`：capability、CADCore3.0 文档和队列收口。
+5. `C5-M6-S4`（已实现）：capability、CADCore3.0 文档和队列收口。
 
 ## 队列检查
 
