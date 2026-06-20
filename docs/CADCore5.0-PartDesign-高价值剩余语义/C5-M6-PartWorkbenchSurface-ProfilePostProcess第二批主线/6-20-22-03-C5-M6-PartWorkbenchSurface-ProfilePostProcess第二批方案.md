@@ -46,11 +46,13 @@
 
 - 源码依据：`src/Mod/Part/App/PartFeatures.cpp::Sweep::execute()`、`src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementPipeShell()`、`TopoShape::linearize()`。
 - cad-core 落点：`cad-core/src/part/part_sweep.cpp`、`cad-core/src/part/topo_shape_expansion.cpp`、`cad-core/src/adapters/c_api/c_api.cpp`。
+- S2 复核基线：`HEAD=52add5fe8d`，起始工作区干净；未发现需要修改 C++ 或 fixture 的证据缺口。
 - 当前 expected-backed 证据：
   - `c4m1/part-sweep-multi-profile-linearize`
 - 当前 diagnostic 证据：
   - `c4m1/part-sweep-advanced-deferred`
 - 发布边界：multi-profile `Sections` 与 Linearize 后处理已可发布；AuxiliarySpine、SupportMode、Binormal、LocationMode、Tolerance 等 advanced wrapper contract 继续作为后续 owner，不混入本包。
+- S2 复核结论：`part-sweep-multi-profile-linearize` 已有 FreeCAD expected 和 focused expected matcher；adapter capability 为 `supported_multi_profile_linearize_expected_backed`，且不再把 `linearize_post_processing` 或 `multi_profile_sections_expected` 写入 remaining gaps；`part-sweep-advanced-deferred` 仅证明 advanced wrapper 属性输出 locatable diagnostics。
 
 ## 最小完整语义批次
 

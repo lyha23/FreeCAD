@@ -30,11 +30,18 @@
 - cad-core 证据已闭环：`part-loft-linearize-profile-face` 和 `part-loft-linearize-profile-vertex` fixture、FreeCAD expected、`tests.test_p8_features` expected matcher 与 `tests.test_adapters` capability 断言均存在。
 - S1 只发布 `Part::Loft` face / vertex profile 与 `linearize_faces_no_edges_post_processing`；`complex_profile_family` 继续是 remaining gap / non-goal，不进入本包实现。
 
+## S2 Sweep 复核收口
+
+- live 基线：`HEAD=52add5fe8d`，`git log -1 --oneline=52add5fe8d docs: 收口 C5-M6 S1 Loft 复核`，起始工作区干净。
+- FreeCAD 依据是 `PartFeatures.cpp::Sweep::execute()` 先收集 spine 和全部 `Sections`，调用 `result.makeElementPipeShell(...)` 后在 `Linearize=true` 时执行 `result.linearize(LinearizeFace::linearizeFaces, LinearizeEdge::noEdges)`。
+- cad-core 证据已闭环：`part-sweep-multi-profile-linearize` fixture、FreeCAD expected、`tests.test_p8_features` expected matcher 与 `tests.test_adapters` capability 断言均存在；`part-sweep-advanced-deferred` 只保护 `AuxiliarySpine` / `Tolerance` 的 locatable `unsupported_property` diagnostics。
+- S2 只发布 `Part::Sweep` multi-profile `Sections` 与 `linearize_faces_no_edges_post_processing`；advanced PipeShell wrapper、Hole internal PipeShell 和完整 Part surface family 继续是 future owner / non-goal。
+
 ## 执行顺序
 
 1. `C5-M6-S0`（已实现）：live 基线、scope 和当前 supported 事实冻结。
 2. `C5-M6-S1`（已实现）：Loft face / vertex profile 与 `Linearize=true` 复核收口。
-3. `C5-M6-S2`：Sweep multi-profile 与 `Linearize=true` 复核收口。
+3. `C5-M6-S2`（已实现）：Sweep multi-profile 与 `Linearize=true` 复核收口。
 4. `C5-M6-S3`：剩余 complex profile / advanced PipeShell contract 分流。
 5. `C5-M6-S4`：capability、CADCore3.0 文档和队列收口。
 
