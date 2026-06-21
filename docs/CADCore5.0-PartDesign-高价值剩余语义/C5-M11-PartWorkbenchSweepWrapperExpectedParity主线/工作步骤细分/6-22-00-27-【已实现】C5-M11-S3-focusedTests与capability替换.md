@@ -1,6 +1,14 @@
-# C5-M11-S3 focused tests 与 capability 替换
+# 【已实现】C5-M11-S3 focused tests 与 capability 替换
 
-状态：`pending_C5M11-S3_tests_capability`
+状态：`done_C5M11-S3_tests_capability`
+
+## S3 结论
+
+- `part_workbench.sweep` capability 已删除 broad `part_sweep_wrapper_expected_collector`。
+- `AuxiliarySpine` / `AuxiliaryCurvilinear`、`Binormal` / `BiNormal`、`Tolerance.tol3d` / `boundTol` / `tolAngular` 晋级为 wrapper expected-backed。
+- `SpineSupport` / `SupportMode` 保留为 diagnostic-only narrowed blocker：当前 support fixture 没有 valid support representative。
+- `SectionOptions[].Location` / `WithContact` / `WithCorrection` 与 `advanced_combination` 保留为 FreeCADCmd `OCCError: NCollection_Array1::Value` narrowed blockers。
+- `tests.test_expected_fixtures`、`tests.test_p8_features`、`tests.test_adapters` 覆盖 expected-backed 三项、narrowed blocker 三项、non-goal 保留和 `remaining_gaps` broad collector 删除。
 
 ## 目标
 

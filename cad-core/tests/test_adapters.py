@@ -2999,7 +2999,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         sweep = capabilities["part_workbench"]["sweep"]
         self.assertEqual(
             sweep["status"],
-            "supported_multi_profile_linearize_c5m10_advanced_source_diagnostic_backed_closeout",
+            "supported_multi_profile_linearize_c5m11_wrapper_expected_backed_with_narrowed_blockers",
         )
         self.assertIn("Part::Sweep", sweep["type_ids"])
         self.assertEqual(
@@ -3069,16 +3069,16 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "pipeshell_maker_history",
             "expected_backed_fixtures",
             "invalid_input_diagnostics",
-            "auxiliary_spine_source_backed",
-            "auxiliary_curvilinear_bool_contract",
-            "support_mode_diagnostic_backed",
-            "binormal_source_backed",
+            "auxiliary_spine_wrapper_expected_backed",
+            "auxiliary_curvilinear_wrapper_expected_backed",
+            "support_mode_diagnostic_only_narrowed_blocker",
+            "binormal_wrapper_expected_backed",
             "advanced_mode_locatable_diagnostics",
-            "section_location_source_backed",
-            "section_contact_correction_bool_contract",
-            "tolerance_triple_source_backed",
-            "advanced_combined_source_backed",
+            "section_location_contact_correction_freecadcmd_blocker",
+            "tolerance_triple_wrapper_expected_backed",
+            "advanced_combined_freecadcmd_blocker",
             "s3_location_tolerance_locatable_diagnostics",
+            "c5m11_wrapper_expected_capability_promotion",
             "c5m10_capability_docs_closeout",
         ):
             self.assertIn(covered, sweep["covered"])
@@ -3147,52 +3147,78 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("multi_profile_sections_expected_backed", sweep["request_local_boundaries"])
         self.assertIn("linearize_faces_no_edges_post_processing", sweep["request_local_boundaries"])
         self.assertIn(
-            "s2_auxiliary_support_binormal_source_backed_wrapper_contract",
+            "c5m11_auxiliary_binormal_tolerance_wrapper_expected_backed",
             sweep["request_local_boundaries"],
         )
         self.assertIn(
-            "s3_location_tolerance_combo_source_backed_wrapper_contract",
+            "support_fixture_diagnostic_only_narrowed_blocker",
             sweep["request_local_boundaries"],
         )
         self.assertIn(
-            "field_level_wrapper_expected_collector_remaining_gap",
+            "section_options_location_contact_correction_freecadcmd_blocker",
+            sweep["request_local_boundaries"],
+        )
+        self.assertIn(
+            "advanced_combination_freecadcmd_blocker",
             sweep["request_local_boundaries"],
         )
         self.assertIn("hole_model_thread_internal_pipeshell_not_part_sweep", sweep["request_local_boundaries"])
         self.assertEqual(
             sweep["field_boundaries"]["expected_backed"],
-            ["Sections", "Spine", "Solid", "Frenet", "Transition", "Linearize"],
-        )
-        self.assertEqual(
-            sweep["field_boundaries"]["source_backed_known_gap"],
             [
+                "Sections",
+                "Spine",
+                "Solid",
+                "Frenet",
+                "Transition",
+                "Linearize",
                 "AuxiliarySpine",
                 "AuxiliaryCurvilinear",
-                "SpineSupport",
-                "SupportMode",
                 "Binormal",
                 "BiNormal",
-                "SectionOptions[].Location",
-                "SectionOptions[].WithContact",
-                "SectionOptions[].WithCorrection",
                 "Tolerance.tol3d",
                 "Tolerance.boundTol",
                 "Tolerance.tolAngular",
+            ],
+        )
+        self.assertEqual(
+            sweep["field_boundaries"]["narrowed_gap"],
+            [
+                "SpineSupport",
+                "SupportMode",
+                "SectionOptions[].Location",
+                "SectionOptions[].WithContact",
+                "SectionOptions[].WithCorrection",
                 "advanced_combination",
             ],
         )
+        self.assertEqual(sweep["field_boundaries"]["source_backed_known_gap"], [])
         self.assertIn("invalid SupportMode", sweep["field_boundaries"]["diagnostic_backed"])
         self.assertIn(
             "persistent Python BRepOffsetAPI_MakePipeShell lifecycle",
             sweep["field_boundaries"]["non_goal"],
         )
-        wrapper_gap = sweep["source_backed_known_gaps"]["part_sweep_wrapper_expected_collector"]
-        self.assertEqual(wrapper_gap["status"], "source_backed_known_gap")
-        self.assertIn("AuxiliarySpine", wrapper_gap["fields"])
-        self.assertIn("SectionOptions[].Location", wrapper_gap["fields"])
-        self.assertIn("Tolerance.tolAngular", wrapper_gap["fields"])
-        self.assertIn("c5m10/part-sweep-advanced-combined-contract", wrapper_gap["fixtures"])
-        self.assertIn("shape_summary", wrapper_gap["delete_condition"])
+        self.assertEqual(sweep["source_backed_known_gaps"], {})
+        self.assertNotIn("part_sweep_wrapper_expected_collector", sweep["source_backed_known_gaps"])
+        narrowed_gaps = sweep["narrowed_gaps"]
+        self.assertEqual(
+            set(narrowed_gaps),
+            {
+                "part_sweep_support_mode_fixture_diagnostic_only",
+                "part_sweep_located_profile_freecadcmd_wrapper_build_blocker",
+                "part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker",
+            },
+        )
+        support_gap = narrowed_gaps["part_sweep_support_mode_fixture_diagnostic_only"]
+        self.assertEqual(support_gap["status"], "narrowed_diagnostic_only_blocker")
+        self.assertEqual(support_gap["fields"], ["SpineSupport", "SupportMode"])
+        self.assertIn("valid SpineSupport representative", support_gap["delete_condition"])
+        located_gap = narrowed_gaps["part_sweep_located_profile_freecadcmd_wrapper_build_blocker"]
+        self.assertEqual(located_gap["freecadcmd_evidence"]["error"], "OCCError: NCollection_Array1::Value")
+        self.assertIn("SectionOptions[].Location", located_gap["fields"])
+        combined_gap = narrowed_gaps["part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker"]
+        self.assertEqual(combined_gap["freecadcmd_evidence"]["error"], "OCCError: NCollection_Array1::Value")
+        self.assertEqual(combined_gap["fields"], ["advanced_combination"])
         for non_goal in (
             "upstream_native_part_sweep_advanced_direct_properties",
             "gui_sweep_pipe_task_panels",
@@ -3215,8 +3241,13 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(
             sweep["remaining_gaps"],
-            ["part_sweep_wrapper_expected_collector"],
+            [
+                "part_sweep_support_mode_fixture_diagnostic_only",
+                "part_sweep_located_profile_freecadcmd_wrapper_build_blocker",
+                "part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker",
+            ],
         )
+        self.assertNotIn("part_sweep_wrapper_expected_collector", sweep["remaining_gaps"])
         self.assertNotIn("part_sweep_location_mode_contract", sweep["remaining_gaps"])
         self.assertNotIn("part_sweep_tolerance_contract", sweep["remaining_gaps"])
         self.assertNotIn("part_sweep_auxiliary_spine_contract", sweep["remaining_gaps"])
