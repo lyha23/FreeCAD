@@ -4279,25 +4279,57 @@ def collect_part_sweep_wrapper_object_expected(
         raise UnsupportedFixture("Part.BRepOffsetAPI_MakePipeShell returned an empty shape")
 
     payload = shape_summary(result_shape)
+    comparable_advanced = {
+        key: value
+        for key, value in advanced.items()
+        if key != "sections"
+    }
+    summary_fields = {
+        "shape": shape_kind(result_shape),
+        "bbox": payload["bbox"],
+        "volume": payload["volume"],
+        "topology_counts": payload["topology_counts"],
+    }
     payload["object_fields"] = {
         "status": "ok",
         "shape": shape_kind(result_shape),
         "feature": "part_sweep",
-        "helper": "Part.BRepOffsetAPI_MakePipeShell",
-        "runtime_helper": runtime_helper,
-        "dto": "PartSweepAdvancedPipeShellDTO",
-        "freecad_native_document_object": False,
         "spine": spine_metadata.get("target", ""),
-        "spine_subname": spine_metadata.get("subname", ""),
         "sections": section_names,
         "solid": bool_from_properties(properties, "Solid", True),
         "frenet": bool_from_properties(properties, "Frenet", True),
         "transition": transition_label,
-        "advanced": advanced,
-        "builder_status": builder_status,
+        "advanced": comparable_advanced,
         "topo_naming_history": "maker_history:pipeshell",
     }
+    payload["shape_summary"] = summary_fields
+    payload["wrapper_oracle"] = {
+        "helper": "Part.BRepOffsetAPI_MakePipeShell",
+        "runtime_helper": runtime_helper,
+        "dto": "PartSweepAdvancedPipeShellDTO",
+        "freecad_native_document_object": False,
+        "spine_subname": spine_metadata.get("subname", ""),
+        "advanced": advanced,
+        "builder_status": builder_status,
+    }
     return payload
+
+
+def wrapper_diagnostic_code(reason: str) -> str:
+    if "was not created" in reason:
+        return "missing_link_target"
+    if "cannot resolve" in reason or "resolved empty" in reason:
+        return "invalid_subshape"
+    if "Tolerance must be an object" in reason:
+        return "unsupported_property"
+    if (
+        "must be boolean" in reason
+        or "must be a finite number" in reason
+        or "must be non-zero" in reason
+        or "SupportMode must be" in reason
+    ):
+        return "invalid_parameter"
+    return "unsupported_property"
 
 
 def collect_part_sweep_wrapper_expected(
@@ -4366,6 +4398,11 @@ def collect_part_sweep_wrapper_expected(
             }
         if diagnostic_split:
             payload["diagnostic_split"] = diagnostic_split
+            payload["diagnostic_codes"] = [
+                wrapper_diagnostic_code(item["reason"])
+                for item in diagnostic_split
+                if item["policy"].startswith("cad-core focused diagnostics")
+            ]
         return payload
     finally:
         FreeCAD.closeDocument(doc.Name)
@@ -5024,6 +5061,23 @@ def compare_bbox(existing: dict, generated: dict, delta: float) -> bool:
 def compare_object_expected(existing: dict, generated: dict) -> list[str]:
     errors: list[str] = []
     bbox_delta = existing.get("bbox_delta", 1e-6)
+    if "shape_summary" in existing:
+        generated_summary = generated.get("shape_summary", {})
+        expected_summary = existing["shape_summary"]
+        if expected_summary.get("shape") != generated_summary.get("shape"):
+            errors.append("shape_summary.shape")
+        if "bbox" in expected_summary and not compare_bbox(expected_summary["bbox"], generated_summary.get("bbox", {}), bbox_delta):
+            errors.append("shape_summary.bbox")
+        if "volume" in expected_summary and not close_enough(
+            expected_summary["volume"],
+            generated_summary.get("volume", 0.0),
+            existing.get("volume_delta", 1e-6),
+        ):
+            errors.append("shape_summary.volume")
+        if "topology_counts" in expected_summary and expected_summary["topology_counts"] != generated_summary.get("topology_counts"):
+            errors.append("shape_summary.topology_counts")
+    if "wrapper_oracle" in existing and existing["wrapper_oracle"] != generated.get("wrapper_oracle"):
+        errors.append("wrapper_oracle")
     for key, expected_value in existing.get("object_fields", {}).items():
         if generated.get("object_fields", {}).get(key) != expected_value:
             errors.append(f"object_fields.{key}")

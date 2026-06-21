@@ -1,13 +1,27 @@
 {
   "freecad_version": "1.2.0 revision 20260519",
   "known_gap": {
-    "kind": "part_sweep_located_profile_wrapper_oracle_missing",
-    "reason": "The current collector supports native Part::Sweep DocumentObject expected payloads only. This fixture exercises the request-local BRepOffsetAPI_MakePipeShell add(Profile, Location, WithContact, WithCorrection) wrapper contract and must not freeze expected geometry from cad-core output.",
+    "kind": "part_sweep_located_profile_freecadcmd_wrapper_build_blocker",
+    "reason": "C5-M11 S2 collector resolves Spine, Sections and SectionOptions[0].Location, then calls add(Profile, Location, WithContact, WithCorrection). The local FreeCADCmd wrapper build still fails before shape() with OCCError: NCollection_Array1::Value, so this valid located-profile representative cannot produce shape_summary yet.",
+    "freecadcmd_evidence": {
+      "helper": "Part.BRepOffsetAPI_MakePipeShell",
+      "runtime_helper": "Part.BRepOffsetAPI.MakePipeShell",
+      "object": "Sweep",
+      "error": "OCCError: NCollection_Array1::Value",
+      "collector_policy": "S2 must keep or document an explicit FreeCADCmd wrapper collector blocker"
+    },
+    "uncollected_fields": [
+      "object_fields.advanced.sections[].location",
+      "object_fields.advanced.sections[].with_contact",
+      "object_fields.advanced.sections[].with_correction",
+      "shape_summary"
+    ],
+    "next_batch": "Reopen the located-profile wrapper build path with a FreeCAD/OCCT-level probe or adjusted source-backed representative; replace this blocker only after FreeCADCmd returns stable shape_summary for add(Profile, Location, WithContact, WithCorrection).",
+    "isolation": "The blocker is limited to the Location overload of add(); it does not affect auxiliary, binormal or tolerance collectors, which use different wrapper methods and already build successfully.",
     "source_authority": [
       "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/BRepOffsetAPI_MakePipeShellPyImp.cpp::add()"
     ],
-    "cad_core_fixture": "cad-core/fixtures/c5m10/part-sweep-located-profile-contract.json",
-    "delete_condition": "Replace this source-backed known_gap with a FreeCADCmd Part.BRepOffsetAPI_MakePipeShell wrapper expected payload after the collector records stable shape_summary and object_fields.advanced.sections metadata."
+    "cad_core_fixture": "cad-core/fixtures/c5m10/part-sweep-located-profile-contract.json"
   },
-  "reference": "Source-backed C5-M10 S3 located-profile contract; focused cad-core tests verify Location, WithContact and WithCorrection parsing plus builder option routing."
+  "reference": "C5-M11 S2 narrowed FreeCADCmd blocker for located-profile wrapper expected."
 }

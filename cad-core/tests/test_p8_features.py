@@ -763,7 +763,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertIn("target", diagnostic)
             self.assertIn("subname", diagnostic)
 
-    def test_c5m10_part_sweep_auxiliary_spine_contract_is_source_backed(self) -> None:
+    def test_c5m10_part_sweep_auxiliary_spine_contract_is_expected_backed(self) -> None:
         result = self.run_recompute("part-sweep-auxiliary-spine-contract", "c5m10")
         sweep = result["objects"]["Sweep"]
         expected = self.expected_freecad("c5m10", "part-sweep-auxiliary-spine-contract")
@@ -786,9 +786,14 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             transition="Transformed",
             solid=False,
         )
-        self.assertEqual(expected["known_gap"]["kind"], "part_sweep_auxiliary_spine_wrapper_oracle_missing")
+        self.assertNotIn("known_gap", expected)
+        self.assertEqual(expected["object_fields"]["advanced"], sweep["advanced"])
+        self.assertEqual(expected["wrapper_oracle"]["helper"], "Part.BRepOffsetAPI_MakePipeShell")
+        self.assertEqual(expected["wrapper_oracle"]["runtime_helper"], "Part.BRepOffsetAPI.MakePipeShell")
+        self.assertEqual(expected["wrapper_oracle"]["dto"], "PartSweepAdvancedPipeShellDTO")
+        self.assertTrue(expected["wrapper_oracle"]["builder_status"]["build_ok"])
 
-    def test_c5m10_part_sweep_binormal_contract_is_source_backed(self) -> None:
+    def test_c5m10_part_sweep_binormal_contract_is_expected_backed(self) -> None:
         result = self.run_recompute("part-sweep-binormal-contract", "c5m10")
         sweep = result["objects"]["Sweep"]
         expected = self.expected_freecad("c5m10", "part-sweep-binormal-contract")
@@ -804,7 +809,12 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             transition="Transformed",
             solid=False,
         )
-        self.assertEqual(expected["known_gap"]["kind"], "part_sweep_binormal_wrapper_oracle_missing")
+        self.assertNotIn("known_gap", expected)
+        self.assertEqual(expected["object_fields"]["advanced"], sweep["advanced"])
+        self.assertEqual(expected["wrapper_oracle"]["helper"], "Part.BRepOffsetAPI_MakePipeShell")
+        self.assertEqual(expected["wrapper_oracle"]["runtime_helper"], "Part.BRepOffsetAPI.MakePipeShell")
+        self.assertEqual(expected["wrapper_oracle"]["dto"], "PartSweepAdvancedPipeShellDTO")
+        self.assertTrue(expected["wrapper_oracle"]["builder_status"]["build_ok"])
 
     def test_c5m10_part_sweep_support_mode_and_mode_payloads_have_locatable_diagnostics(self) -> None:
         result = self.run_recompute("part-sweep-support-mode-diagnostics", "c5m10")
@@ -871,9 +881,10 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         for object_name in by_object:
             self.assertEqual(result["objects"][object_name]["status"], "error")
-        self.assertEqual(expected["known_gap"]["kind"], "part_sweep_support_mode_wrapper_oracle_missing")
+        self.assertEqual(expected["known_gap"]["kind"], "part_sweep_support_mode_fixture_diagnostic_only")
+        self.assertIn("shape_summary", expected["known_gap"]["uncollected_fields"])
 
-    def test_c5m10_part_sweep_located_profile_contract_is_source_backed(self) -> None:
+    def test_c5m10_part_sweep_located_profile_contract_keeps_freecadcmd_blocker(self) -> None:
         result = self.run_recompute("part-sweep-located-profile-contract", "c5m10")
         sweep = result["objects"]["Sweep"]
         expected = self.expected_freecad("c5m10", "part-sweep-located-profile-contract")
@@ -897,7 +908,11 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             transition="Transformed",
             solid=False,
         )
-        self.assertEqual(expected["known_gap"]["kind"], "part_sweep_located_profile_wrapper_oracle_missing")
+        self.assertEqual(
+            expected["known_gap"]["kind"],
+            "part_sweep_located_profile_freecadcmd_wrapper_build_blocker",
+        )
+        self.assertEqual(expected["known_gap"]["freecadcmd_evidence"]["error"], "OCCError: NCollection_Array1::Value")
 
     def test_c5m10_part_sweep_tolerance_contract_and_compat_diagnostics(self) -> None:
         result = self.run_recompute("part-sweep-tolerance-contract", "c5m10")
@@ -929,7 +944,13 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 ),
             },
         )
-        self.assertEqual(expected["known_gap"]["kind"], "part_sweep_tolerance_wrapper_oracle_missing")
+        self.assertNotIn("known_gap", expected)
+        self.assertEqual(expected["diagnostic_codes"], ["invalid_parameter", "unsupported_property"])
+        self.assertEqual(expected["object_fields"]["advanced"], tolerance_sweep["advanced"])
+        self.assertEqual(expected["wrapper_oracle"]["helper"], "Part.BRepOffsetAPI_MakePipeShell")
+        self.assertEqual(expected["wrapper_oracle"]["runtime_helper"], "Part.BRepOffsetAPI.MakePipeShell")
+        self.assertEqual(expected["wrapper_oracle"]["dto"], "PartSweepAdvancedPipeShellDTO")
+        self.assertTrue(expected["wrapper_oracle"]["builder_status"]["build_ok"])
 
     def test_c5m10_part_sweep_combined_advanced_contract_and_diagnostic_priority(self) -> None:
         result = self.run_recompute("part-sweep-advanced-combined-contract", "c5m10")
@@ -1005,8 +1026,9 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(
             expected["known_gap"]["kind"],
-            "part_sweep_advanced_combined_wrapper_oracle_missing",
+            "part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker",
         )
+        self.assertEqual(expected["known_gap"]["freecadcmd_evidence"]["error"], "OCCError: NCollection_Array1::Value")
 
     def assert_part_filling_history(
         self,
