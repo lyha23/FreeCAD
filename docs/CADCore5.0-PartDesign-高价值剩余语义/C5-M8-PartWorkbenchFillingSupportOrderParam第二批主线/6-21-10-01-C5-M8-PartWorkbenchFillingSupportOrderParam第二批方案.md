@@ -6,6 +6,8 @@
 
 当前缺口不是一个孤立 case。FreeCAD 把 `surface`、`supports`、`orders`、非默认构造参数和非边界约束全部放在同一个 helper 参数结构和同一个 `TopoShape::makeElementFilledFace()` builder 路径内。若只做其中一个 fixture，会继续留下 DTO、source map、history 和 diagnostics 的不完整边界。
 
+2026-06-21 范围纠偏：C5-M8 只交付 `cad-core`，FreeCAD `src/` 只作为语义依据读取。若安装版 `FreeCADCmd` 的 `Part.makeFilledFace(...)` helper kwargs oracle 不能稳定返回，只能把对应 fixture 记录为 source-backed known_gap 或 diagnostic-backed，不能修改 FreeCAD 上游源码来恢复 oracle，也不能伪造 expected。
+
 ## FreeCAD 调用链
 
 - `/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/AppPartPy.cpp::makeFilledFace()` 解析 `shapes`、`surface`、`supports`、`orders`、`degree`、`ptsOnCurve`、`numIter`、`anisotropy`、`tol2d`、`tol3d`、`tolG1`、`tolG2`、`maxDegree`、`maxSegments`、`op`，再调用 `TopoShape(...).makeElementFilledFace(shapes, params, op)`。
@@ -35,7 +37,7 @@
 ## 实施顺序
 
 1. S0：冻结 live baseline，确认 C5-M8 root / local matrices 和当前 first-batch fixture 状态。
-2. S1：把 `Surface` / `Supports` / `Orders` 作为同一 DTO 批次实现，先 expected-backed，再删除对应 broad deferred。
+2. S1：把 `Surface` / `Supports` / `Orders` 作为同一 DTO 批次处理；优先 expected-backed，若现有 helper oracle 仍不可采集，则在 `cad-core` 中实现或收敛为 source-backed known_gap / locatable diagnostics，不修改 FreeCAD `src/`。
 3. S2：补非默认 Filling 参数，一次覆盖 OCCT constructor 同组字段，保留无效值 diagnostic。
 4. S3：补非边界约束分支，保证 boundary wire 选择后剩余 shapes 不被丢弃。
 5. S4：补 compound optional case；对直接 wrapper 做 owner 判定，不能证明 request-local 生命周期就保持 diagnostic。

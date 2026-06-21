@@ -1135,7 +1135,6 @@ private:
                 }
                 const TopoDS_Shape& sh
                     = static_cast<TopoShapePy*>((*iter).ptr())->getTopoShapePtr()->getShape();
-                ++iter;
                 f(sh, (*iter).ptr(), err);
             }
         }
@@ -1175,9 +1174,7 @@ private:
                 "O|O!OOIIIOddddIIs",
                 kwd_list,
                 &obj,
-                &(Part::TopoShapePy::Type),
                 &pySurface,
-                &supports,
                 &orders,
                 &params.degree,
                 &params.ptsoncurve,
@@ -1194,8 +1191,9 @@ private:
             throw Py::Exception();
         }
         params.anisotropy = PyObject_IsTrue(anisotropy);
+        TopoShape surface;
         if (pySurface != Py_None) {
-            params.surface = *static_cast<TopoShapePy*>(pySurface)->getTopoShapePtr();
+            surface = *static_cast<TopoShapePy*>(pySurface)->getTopoShapePtr();
         }
         parseSequence(
             supports,
@@ -1261,9 +1259,7 @@ private:
                 "O|O!OOIIIOddddIIs",
                 kwd_list,
                 &obj,
-                &(Part::TopoShapePy::Type),
                 &pySurface,
-                &supports,
                 &orders,
                 &params.degree,
                 &params.ptsoncurve,
@@ -1280,8 +1276,9 @@ private:
             throw Py::Exception();
         }
         params.anisotropy = PyObject_IsTrue(anisotropy);
+        TopoShape surface;
         if (pySurface != Py_None) {
-            params.surface = *static_cast<TopoShapePy*>(pySurface)->getTopoShapePtr();
+            surface = *static_cast<TopoShapePy*>(pySurface)->getTopoShapePtr();
         }
         parseSequence(
             supports,

@@ -2,6 +2,8 @@
 
 本包承接 C5-M7 后的 Part Workbench Surface family 剩余项，但只打开 `Part.makeFilledFace(...)` / source-backed `Part::FilledFace` helper 这一条 API 边界。
 
+范围边界：本包交付物只落在 `cad-core`、fixtures、tests、capabilities 和文档矩阵；FreeCAD `src/` 只作为语义依据读取，不在本包内修改上游源码来修复 helper oracle。若当前 `FreeCADCmd` 无法稳定采集 `surface` / `supports` / `orders` expected，后续 step 必须记录 source-backed known_gap 或 diagnostic-backed 边界。
+
 ## 目标
 
 C5-M8 不做“单个 support/order case”，而是把同一 FreeCAD 调用链、同一 cad-core request DTO/API 边界、同一类 expected 能覆盖的代表场景放进同一轮：
@@ -27,7 +29,7 @@ C5-M8 不做“单个 support/order case”，而是把同一 FreeCAD 调用链�
 | 批次 | 代表场景 | 产物 |
 | --- | --- | --- |
 | live guard | `c3m4/part-filling-closed-wire-default`、`part-filling-boundary-edges-default`、`part-filling-invalid-inputs`、`c4m1/part-filling-advanced-deferred` | S0 固定当前第一批 expected-backed / diagnostic-backed 基线，防止第二批扩大时破坏默认路径 |
-| surface / support / order | `surface` 初始面、boundary edge + support face、boundary edge order C0/G1/G2、invalid target/order diagnostics | S1 扩展 `FilledFaceSource` / request DTO / `makeElementFilledFaceFromSources()`，调用 `LoadInitSurface` 和 `Add(edge, face, order, IsBound=true)` |
+| surface / support / order | `surface` 初始面、boundary edge + support face、boundary edge order C0/G1/G2、invalid target/order diagnostics | S1 扩展或收敛 `FilledFaceSource` / request DTO / `makeElementFilledFaceFromSources()`；expected 只来自可稳定返回的现有 `FreeCADCmd`，否则记录 known_gap / diagnostics |
 | non-default params | constructor 参数、`SetConstrParam` / `SetResolParam` / `SetApproxParam` 等价字段、invalid range diagnostics | S2 移除当前非默认参数 diagnostic，改为 expected-backed params evidence 和 focused tests |
 | non-boundary constraints | 选定 boundary wire 后剩余 edge / wire、face、vertex 作为 non-boundary constraints；edge+support/order；point constraint | S3 对齐 FreeCAD `IsBound=false` / face / vertex 分支，避免只支持 boundary edges |
 | compound / wrapper boundary | compound optional source expansion；直接 `Part.BRepOffsetAPI.MakeFilling` wrapper 的 add/build/shape lifecycle 和 UV point-on-support 分支 | S4 关闭 compound optional；wrapper 若不是同一 request DTO，保留 `unsupported_wrapper_lifecycle` 或同级 diagnostic |
