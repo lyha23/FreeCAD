@@ -1,4 +1,6 @@
-# C5-M8-S5 capability 与文档收口
+# 【已实现】C5-M8-S5 capability 与文档收口
+
+状态：`done_c5m8_capability_docs_closed`
 
 ## 目标
 

@@ -2489,7 +2489,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(producer_matrix["pipeshell"]["remaining"], [])
         self.assertEqual(
             producer_matrix["part_filling"]["status"],
-            "done_expected_backed_first_batch_plus_c5m8_s4_compound_wrapper_boundary",
+            "done_expected_backed_first_batch_plus_c5m8_s5_capability_closeout",
         )
         self.assertIn("maker_history:filling", producer_matrix["part_filling"]["covered"])
         self.assertIn("boundary_source_evidence", producer_matrix["part_filling"]["covered"])
@@ -2507,6 +2507,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("compound_source_expansion", producer_matrix["part_filling"]["covered"])
         self.assertIn(
             "direct_makefilling_wrapper_lifecycle_diagnostic",
+            producer_matrix["part_filling"]["covered"],
+        )
+        self.assertIn(
+            "wrapper_uv_point_on_support_lifecycle_diagnostic",
             producer_matrix["part_filling"]["covered"],
         )
         self.assertIn(
@@ -3101,7 +3105,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         filling = capabilities["part_workbench"]["filling"]
         self.assertEqual(
             filling["status"],
-            "supported_expected_backed_with_c5m8_s4_compound_and_wrapper_diagnostics",
+            "supported_expected_backed_with_c5m8_s5_capability_closeout",
         )
         self.assertIn("Part::FilledFace", filling["type_ids"])
         self.assertEqual(filling["helper"], "Part.makeFilledFace")
@@ -3252,9 +3256,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "non_boundary_edge_wire_face_vertex_source_backed",
             "non_boundary_edge_support_order_native_helper_oracle_known_gap",
             "compound_boundary_optional_expected_backed",
+            "no_cross_request_mutable_makefilling_wrapper_state",
             "direct_makefilling_wrapper_diagnostic",
             "wrapper_uv_point_on_support_not_helper_dto",
             "native_surface_workbench_filling_feature_not_claimed",
+            "full_part_surface_family_not_claimed",
         ):
             self.assertIn(boundary, filling["request_local_boundaries"])
         for gap in (
@@ -3276,14 +3282,18 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         for unsupported in ("non_boundary_constraints_deferred_diagnostic",):
             self.assertNotIn(unsupported, filling["request_local_boundaries"])
         self.assertIn("native_freecad_part_filledface_document_object", filling["non_goals"])
-        self.assertIn("advanced_brepoffsetapi_makefilling_wrapper", filling["non_goals"])
         self.assertIn("surface_workbench_filling_feature", filling["non_goals"])
+        self.assertIn("surface_workbench_gui_taskpanel_viewprovider", filling["non_goals"])
+        self.assertIn("cross_request_mutable_brepoffsetapi_makefilling_wrapper", filling["non_goals"])
+        self.assertIn("full_part_surface_family", filling["non_goals"])
         self.assertEqual(
             filling["non_goals"],
             [
                 "native_freecad_part_filledface_document_object",
-                "advanced_brepoffsetapi_makefilling_wrapper",
                 "surface_workbench_filling_feature",
+                "surface_workbench_gui_taskpanel_viewprovider",
+                "cross_request_mutable_brepoffsetapi_makefilling_wrapper",
+                "full_part_surface_family",
             ],
         )
         self.assertNotIn("geomplate", filling["non_goals"])
@@ -3598,7 +3608,6 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("show_element_missing_child_lifecycle", capabilities["known_gaps"])
         self.assertEqual(capabilities["known_gaps"], [])
         serialized_capabilities = json.dumps(capabilities, sort_keys=True)
-        self.assertNotIn("full_part_surface_family", serialized_capabilities)
         self.assertNotIn("full_surface_family", serialized_capabilities)
 
     def test_c_api_recompute_reports_show_element_lifecycle_updates(self) -> None:

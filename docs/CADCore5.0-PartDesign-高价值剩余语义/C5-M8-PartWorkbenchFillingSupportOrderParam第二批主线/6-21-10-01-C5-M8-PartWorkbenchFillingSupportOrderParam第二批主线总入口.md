@@ -4,6 +4,8 @@
 
 范围边界：本包交付物只落在 `cad-core`、fixtures、tests、capabilities 和文档矩阵；FreeCAD `src/` 只作为语义依据读取，不在本包内修改上游源码来修复 helper oracle。若当前 `FreeCADCmd` 无法稳定采集 `surface` / `supports` / `orders` expected，后续 step 必须记录 source-backed known_gap 或 diagnostic-backed 边界。
 
+收口状态：C5-M8 已完成 S0-S5。支持声明只覆盖 `Part.makeFilledFace(...)` request-local helper；native `Part::FilledFace` DocumentObject、Surface Workbench GUI/native feature、cross-request mutable `Part.BRepOffsetAPI.MakeFilling` wrapper 和完整 Part surface family 均保持 non-goal。
+
 ## 目标
 
 C5-M8 不做“单个 support/order case”，而是把同一 FreeCAD 调用链、同一 cad-core request DTO/API 边界、同一类 expected 能覆盖的代表场景放进同一轮：
@@ -33,7 +35,7 @@ C5-M8 不做“单个 support/order case”，而是把同一 FreeCAD 调用链�
 | non-default params | constructor 参数、`SetConstrParam` / `SetResolParam` / `SetApproxParam` 等价字段、invalid range diagnostics | S2 已移除逐字段 deferred，改为 source-backed constructor params metadata；native helper geometry expected 因 FreeCADCmd explicit kwargs 退出 245 保持 known_gap，invalid params 为 diagnostic-backed |
 | non-boundary constraints | 选定 boundary wire 后剩余 edge / wire、face、vertex 作为 non-boundary constraints；edge+support/order；point constraint | S3 已对齐 FreeCAD `IsBound=false` / face / vertex 分支；wire 与 face/point expected-backed，edge support/order 保持 native helper known_gap，diagnostics locatable |
 | compound / wrapper boundary | compound optional source expansion；直接 `Part.BRepOffsetAPI.MakeFilling` wrapper 的 add/build/shape lifecycle 和 UV point-on-support 分支 | S4 已关闭：compound optional 为 expected-backed；direct wrapper / UV point-on-support 为 `unsupported_wrapper_lifecycle` diagnostic-backed，并保留 request-local DTO 删除条件 |
-| capability closeout | docs、capability metadata、root matrices、remaining gaps | S5 发布精确 support / known_gap / diagnostic / non-goal 边界，并清空本包队列 |
+| capability closeout | docs、capability metadata、root matrices、remaining gaps | S5 已发布精确 support / known_gap / diagnostic / non-goal 边界，并清空本包队列 |
 
 ## 队列检查
 
