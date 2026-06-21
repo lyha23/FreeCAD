@@ -7,6 +7,7 @@
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Shape.hxx>
+#include <TopoDS_Vertex.hxx>
 #include <gp_Ax1.hxx>
 
 #include <array>
@@ -145,6 +146,28 @@ enum class PipeShellMode
     Binormal,
 };
 
+struct PipeShellSectionOption
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // BRepOffsetAPI_MakePipeShellPyImp.cpp::add(), overloads
+    // "Add(s, withContact, withCorrection)" and
+    // "Add(s, v, withContact, withCorrection)" for per-profile placement/contact options.
+    TopoDS_Vertex location;
+    bool hasLocation = false;
+    bool withContact = false;
+    bool withCorrection = false;
+};
+
+struct PipeShellTolerance
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // BRepOffsetAPI_MakePipeShellPyImp.cpp::setTolerance(), parses "tol3d, boundTol,
+    // tolAngular" and calls "SetTolerance(tol3d, boundTol, tolAngular)".
+    double tol3d = 0.0;
+    double boundTol = 0.0;
+    double tolAngular = 0.0;
+};
+
 struct PipeShellOptions
 {
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp
@@ -163,6 +186,8 @@ struct PipeShellOptions
     TopoDS_Shape spineSupport;
     bool useSpineSupport = false;
     std::array<double, 3> binormal {{0.0, 0.0, 1.0}};
+    std::vector<PipeShellSectionOption> sectionOptions;
+    std::optional<PipeShellTolerance> tolerance;
     bool linearizeFaces = false;
     bool sewCaps = false;
 };

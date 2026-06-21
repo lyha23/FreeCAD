@@ -1483,14 +1483,41 @@ NamedShapeBuild makeElementPipeShellFromSources(
         }
 
         BRepOffsetAPI_MakePipeShell pipeShell(*spine);
-        pipeShell.SetTolerance(Precision::Confusion());
+        if (effectiveOptions.tolerance) {
+            const PipeShellTolerance& tolerance = *effectiveOptions.tolerance;
+            pipeShell.SetTolerance(tolerance.tol3d, tolerance.boundTol, tolerance.tolAngular);
+        }
+        else {
+            pipeShell.SetTolerance(Precision::Confusion());
+        }
         const std::string modeError = configurePipeShellMode(pipeShell, effectiveOptions);
         if (!modeError.empty()) {
             return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, modeError};
         }
         pipeShell.SetTransitionMode(pipeShellTransitionMode(effectiveOptions.transition));
         for (std::size_t index = 0; index < profiles->size(); ++index) {
-            pipeShell.Add(profiles->at(index));
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+            // BRepOffsetAPI_MakePipeShellPyImp.cpp::add(), accepts either
+            // "add(Profile, WithContact=False, WithCorrection=False)" or
+            // "add(Profile, Location, WithContact=False, WithCorrection=False)".
+            const PipeShellSectionOption* option
+                = index < effectiveOptions.sectionOptions.size()
+                ? &effectiveOptions.sectionOptions.at(index)
+                : nullptr;
+            if (option != nullptr && option->hasLocation) {
+                pipeShell.Add(
+                    profiles->at(index),
+                    option->location,
+                    option->withContact,
+                    option->withCorrection
+                );
+            }
+            else if (option != nullptr) {
+                pipeShell.Add(profiles->at(index), option->withContact, option->withCorrection);
+            }
+            else {
+                pipeShell.Add(profiles->at(index));
+            }
         }
 
         if (!pipeShell.IsReady()) {

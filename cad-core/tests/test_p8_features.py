@@ -613,9 +613,10 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         solid: bool = False,
         frenet: bool = True,
         linearize: bool = False,
+        object_name: str = "Sweep",
     ) -> None:
-        sweep = result["objects"]["Sweep"]
-        named_shape = result["named_shapes"]["Sweep"]
+        sweep = result["objects"][object_name]
+        named_shape = result["named_shapes"][object_name]
         mapper_history = named_shape["mapper_history"]
 
         self.assertEqual(sweep["status"], "ok")
@@ -871,6 +872,141 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         for object_name in by_object:
             self.assertEqual(result["objects"][object_name]["status"], "error")
         self.assertEqual(expected["known_gap"]["kind"], "part_sweep_support_mode_wrapper_oracle_missing")
+
+    def test_c5m10_part_sweep_located_profile_contract_is_source_backed(self) -> None:
+        result = self.run_recompute("part-sweep-located-profile-contract", "c5m10")
+        sweep = result["objects"]["Sweep"]
+        expected = self.expected_freecad("c5m10", "part-sweep-located-profile-contract")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(
+            sweep["advanced"]["sections"],
+            [
+                {
+                    "profile": "SketchPipeProfile",
+                    "with_contact": True,
+                    "with_correction": True,
+                    "location": {"target": "ProfileLocation", "subname": "Vertex1"},
+                }
+            ],
+        )
+        self.assert_part_sweep_history(
+            result,
+            "PipeSpine",
+            ["SketchPipeProfile"],
+            transition="Transformed",
+            solid=False,
+        )
+        self.assertEqual(expected["known_gap"]["kind"], "part_sweep_located_profile_wrapper_oracle_missing")
+
+    def test_c5m10_part_sweep_tolerance_contract_and_compat_diagnostics(self) -> None:
+        result = self.run_recompute("part-sweep-tolerance-contract", "c5m10")
+        tolerance_sweep = result["objects"]["ToleranceSweep"]
+        expected = self.expected_freecad("c5m10", "part-sweep-tolerance-contract")
+
+        self.assertEqual(
+            tolerance_sweep["advanced"]["tolerance"],
+            {"tol3d": 0.0001, "boundTol": 0.0002, "tolAngular": 0.01},
+        )
+        by_object = {diagnostic["object"]: diagnostic for diagnostic in result["diagnostics"]}
+        self.assertEqual(
+            {
+                name: (item["code"], item["property"], item.get("target"), item.get("subname"))
+                for name, item in by_object.items()
+            },
+            {
+                "InvalidToleranceTol3d": (
+                    "invalid_parameter",
+                    "Tolerance.tol3d",
+                    "InvalidToleranceTol3d",
+                    "tol3d",
+                ),
+                "LegacyScalarTolerance": (
+                    "unsupported_property",
+                    "Tolerance",
+                    "LegacyScalarTolerance",
+                    "Tolerance",
+                ),
+            },
+        )
+        self.assertEqual(expected["known_gap"]["kind"], "part_sweep_tolerance_wrapper_oracle_missing")
+
+    def test_c5m10_part_sweep_combined_advanced_contract_and_diagnostic_priority(self) -> None:
+        result = self.run_recompute("part-sweep-advanced-combined-contract", "c5m10")
+        combined = result["objects"]["CombinedSweep"]
+        expected = self.expected_freecad("c5m10", "part-sweep-advanced-combined-contract")
+
+        self.assertEqual(combined["advanced"]["mode"], "Auxiliary")
+        self.assertEqual(
+            combined["advanced"]["auxiliary_spine"],
+            {
+                "target": "AuxiliarySpine",
+                "subname": "Edge1",
+                "curvilinear": False,
+                "contact": "NoContact",
+            },
+        )
+        self.assertEqual(
+            combined["advanced"]["sections"],
+            [
+                {
+                    "profile": "SketchPipeProfile",
+                    "with_contact": False,
+                    "with_correction": True,
+                    "location": {"target": "ProfileLocation", "subname": "Vertex1"},
+                }
+            ],
+        )
+        self.assertEqual(
+            combined["advanced"]["tolerance"],
+            {"tol3d": 0.0001, "boundTol": 0.0002, "tolAngular": 0.01},
+        )
+        self.assert_part_sweep_history(
+            result,
+            "PipeSpine",
+            ["SketchPipeProfile"],
+            transition="Round corner",
+            solid=False,
+            object_name="CombinedSweep",
+        )
+
+        by_object = {diagnostic["object"]: diagnostic for diagnostic in result["diagnostics"]}
+        self.assertEqual(
+            {
+                name: (item["code"], item["property"], item.get("target"), item.get("subname"))
+                for name, item in by_object.items()
+            },
+            {
+                "InvalidCombinedContact": (
+                    "invalid_parameter",
+                    "SectionOptions[0].WithContact",
+                    "InvalidCombinedContact",
+                    "WithContact",
+                ),
+                "InvalidCombinedLocation": (
+                    "invalid_subshape",
+                    "SectionOptions[0].Location",
+                    "ProfileLocation",
+                    "Vertex99",
+                ),
+                "InvalidCombinedCorrection": (
+                    "invalid_parameter",
+                    "SectionOptions[0].WithCorrection",
+                    "InvalidCombinedCorrection",
+                    "WithCorrection",
+                ),
+                "PrioritySupportMode": (
+                    "invalid_parameter",
+                    "SupportMode",
+                    "PrioritySupportMode",
+                    "SupportMode",
+                ),
+            },
+        )
+        self.assertEqual(
+            expected["known_gap"]["kind"],
+            "part_sweep_advanced_combined_wrapper_oracle_missing",
+        )
 
     def assert_part_filling_history(
         self,

@@ -1,0 +1,79 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPipeProfile",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [-0.5, -0.5], "end": [0.5, -0.5]},
+          {"kind": "LineSegment", "start": [0.5, -0.5], "end": [0.5, 0.5]},
+          {"kind": "LineSegment", "start": [0.5, 0.5], "end": [-0.5, 0.5]},
+          {"kind": "LineSegment", "start": [-0.5, 0.5], "end": [-0.5, -0.5]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "PipeSpine",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 0],
+          "Rotation": [0.7071067811865475, 0, 0, 0.7071067811865476]
+        },
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [0, 4]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "ProfileLocation",
+      "ID": 3,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    {
+      "Name": "Sweep",
+      "ID": 4,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": ["Edge1"],
+          "StableSubList": ["Edge1"]
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["SketchPipeProfile"]
+        },
+        "Solid": false,
+        "Frenet": true,
+        "Transition": "Transformed",
+        "SectionOptions": [
+          {
+            "Location": {
+              "PropertyType": "App::PropertyLinkSub",
+              "value": "ProfileLocation",
+              "SubList": ["Vertex1"],
+              "StableSubList": ["Vertex1"]
+            },
+            "WithContact": true,
+            "WithCorrection": true
+          }
+        ]
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Sweep"]
+  }
+}

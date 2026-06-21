@@ -7,7 +7,10 @@
 #include "cad_core/runtime/feature_executor.h"
 
 #include <BRep_Builder.hxx>
+#include <TopAbs_ShapeEnum.hxx>
 #include <TopoDS_Compound.hxx>
+#include <TopoDS.hxx>
+#include <TopoDS_Vertex.hxx>
 
 #include <array>
 #include <cmath>
@@ -33,6 +36,13 @@ struct AdvancedLinkShape
     std::string objectName;
     std::string subname;
     TopoDS_Shape shape;
+};
+
+struct AdvancedVertexLink
+{
+    std::string objectName;
+    std::string subname;
+    TopoDS_Vertex vertex;
 };
 
 struct AdvancedSweepOptions
@@ -79,6 +89,37 @@ TopoDS_Shape compoundOf(const std::vector<TopoDS_Shape>& shapes)
         }
     }
     return compound;
+}
+
+const nlohmann::json& propertyPayload(const nlohmann::json& value)
+{
+    if (value.is_object() && value.contains("PropertyType") && value.contains("value")) {
+        return value.at("value");
+    }
+    return value;
+}
+
+bool isFiniteJsonNumber(const nlohmann::json& value)
+{
+    return value.is_number() && std::isfinite(value.get<double>());
+}
+
+std::optional<bool> readJsonBool(const nlohmann::json& value)
+{
+    const nlohmann::json& payload = propertyPayload(value);
+    if (!payload.is_boolean()) {
+        return std::nullopt;
+    }
+    return payload.get<bool>();
+}
+
+std::string sectionOptionProperty(std::size_t index, const std::string& field = {})
+{
+    std::string property = "SectionOptions[" + std::to_string(index) + "]";
+    if (!field.empty()) {
+        property += "." + field;
+    }
+    return property;
 }
 
 std::optional<TopoDS_Shape> linkSubShape(
@@ -366,6 +407,96 @@ std::optional<AdvancedLinkShape> resolveAdvancedLinkShape(
     return AdvancedLinkShape {link->object, firstSubname, resolved};
 }
 
+std::optional<AdvancedVertexLink> resolveSectionLocation(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const nlohmann::json& rawLocation,
+    const std::string& property
+)
+{
+    const auto link = app::readLink(rawLocation);
+    if (!link || link->object.empty()) {
+        addSweepDiagnostic(
+            object,
+            context,
+            "invalid_parameter",
+            "Part::Sweep SectionOptions Location must be an App::PropertyLinkSub vertex",
+            property,
+            object.name,
+            "Location"
+        );
+        return std::nullopt;
+    }
+
+    const std::string requestedSubname = !link->stableSubnames.empty() && !link->stableSubnames.front().empty()
+        ? link->stableSubnames.front()
+        : (!link->subnames.empty() ? link->subnames.front() : std::string {"Location"});
+
+    const auto shapeIt = context.shapes.find(link->object);
+    if (shapeIt == context.shapes.end() || shapeIt->second.shape.IsNull()) {
+        addSweepDiagnostic(
+            object,
+            context,
+            "missing_link_target",
+            "Part::Sweep SectionOptions Location target is missing",
+            property,
+            link->object,
+            requestedSubname
+        );
+        return std::nullopt;
+    }
+    if (link->subnames.size() > 1U) {
+        addSweepDiagnostic(
+            object,
+            context,
+            "invalid_parameter",
+            "Part::Sweep SectionOptions Location must reference exactly one vertex",
+            property,
+            link->object,
+            requestedSubname
+        );
+        return std::nullopt;
+    }
+
+    const auto namedShapeIt = context.namedShapes.find(link->object);
+    const part::NamedShape* namedShape = namedShapeIt != context.namedShapes.end()
+        ? &namedShapeIt->second
+        : nullptr;
+
+    TopoDS_Shape resolved = shapeIt->second.shape;
+    if (!link->subnames.empty()) {
+        const auto subshape = linkSubShape(shapeIt->second.shape, namedShape, *link, 0U);
+        if (!subshape || subshape->IsNull()) {
+            addSweepDiagnostic(
+                object,
+                context,
+                "invalid_subshape",
+                "Invalid SectionOptions Location",
+                property,
+                link->object,
+                requestedSubname
+            );
+            return std::nullopt;
+        }
+        resolved = *subshape;
+    }
+
+    if (resolved.IsNull() || resolved.ShapeType() != TopAbs_VERTEX) {
+        addSweepDiagnostic(
+            object,
+            context,
+            "invalid_subshape",
+            "Part::Sweep SectionOptions Location must resolve to a vertex",
+            property,
+            link->object,
+            requestedSubname
+        );
+        return std::nullopt;
+    }
+
+    return AdvancedVertexLink {link->object, requestedSubname, TopoDS::Vertex(resolved)};
+}
+
 bool rejectDeferredSweepAdvancedProperties(
     const app::DocumentObject& object,
     runtime::ComputeContext& context
@@ -376,7 +507,6 @@ bool rejectDeferredSweepAdvancedProperties(
     // ::Sweep::execute() only publishes Sections/Spine/Solid/Frenet/Transition/Linearize.
     static const std::vector<std::string> deferred {
         "LocationMode",
-        "Tolerance",
     };
     bool ok = true;
     for (const std::string& property : deferred) {
@@ -521,9 +651,221 @@ std::optional<std::array<double, 3>> readBinormalVector(
     return *vector;
 }
 
+bool readSectionOptions(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const std::vector<SweepInput>& sections,
+    AdvancedSweepOptions& advanced
+)
+{
+    const auto* value = app::propertyValue(object, "SectionOptions");
+    if (value == nullptr) {
+        return true;
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // BRepOffsetAPI_MakePipeShellPyImp.cpp::add(), profile options are applied per Add()
+    // call, so cad-core matches SectionOptions entries to Sections by index.
+    const nlohmann::json& options = propertyPayload(value->raw);
+    if (!options.is_array()) {
+        addSweepDiagnostic(
+            object,
+            context,
+            "invalid_parameter",
+            "Part::Sweep SectionOptions must be an array matched to Sections order",
+            "SectionOptions",
+            object.name,
+            "SectionOptions"
+        );
+        return false;
+    }
+    if (options.size() > sections.size()) {
+        addSweepDiagnostic(
+            object,
+            context,
+            "invalid_parameter",
+            "Part::Sweep SectionOptions cannot have more entries than Sections",
+            "SectionOptions",
+            object.name,
+            "SectionOptions"
+        );
+        return false;
+    }
+
+    advanced.pipeOptions.sectionOptions.assign(sections.size(), PipeShellSectionOption {});
+    nlohmann::json sectionMetadata = nlohmann::json::array();
+    for (std::size_t index = 0; index < sections.size(); ++index) {
+        nlohmann::json itemMetadata = {
+            {"profile", sections.at(index).objectName},
+            {"with_contact", false},
+            {"with_correction", false},
+        };
+
+        if (index >= options.size() || options.at(index).is_null()) {
+            sectionMetadata.push_back(std::move(itemMetadata));
+            continue;
+        }
+
+        const nlohmann::json& item = options.at(index);
+        if (!item.is_object()) {
+            addSweepDiagnostic(
+                object,
+                context,
+                "invalid_parameter",
+                "Part::Sweep SectionOptions entries must be objects",
+                sectionOptionProperty(index),
+                object.name,
+                "SectionOptions"
+            );
+            return false;
+        }
+
+        PipeShellSectionOption& sectionOption = advanced.pipeOptions.sectionOptions.at(index);
+        if (const auto locationIt = item.find("Location"); locationIt != item.end()) {
+            const std::string property = sectionOptionProperty(index, "Location");
+            const auto location = resolveSectionLocation(object, context, *locationIt, property);
+            if (!location) {
+                return false;
+            }
+            sectionOption.location = location->vertex;
+            sectionOption.hasLocation = true;
+            itemMetadata["location"] = {
+                {"target", location->objectName},
+                {"subname", location->subname},
+            };
+        }
+
+        if (const auto contactIt = item.find("WithContact"); contactIt != item.end()) {
+            const auto withContact = readJsonBool(*contactIt);
+            if (!withContact) {
+                addSweepDiagnostic(
+                    object,
+                    context,
+                    "invalid_parameter",
+                    "Part::Sweep SectionOptions WithContact must be a boolean",
+                    sectionOptionProperty(index, "WithContact"),
+                    object.name,
+                    "WithContact"
+                );
+                return false;
+            }
+            sectionOption.withContact = *withContact;
+            itemMetadata["with_contact"] = *withContact;
+        }
+
+        if (const auto correctionIt = item.find("WithCorrection"); correctionIt != item.end()) {
+            const auto withCorrection = readJsonBool(*correctionIt);
+            if (!withCorrection) {
+                addSweepDiagnostic(
+                    object,
+                    context,
+                    "invalid_parameter",
+                    "Part::Sweep SectionOptions WithCorrection must be a boolean",
+                    sectionOptionProperty(index, "WithCorrection"),
+                    object.name,
+                    "WithCorrection"
+                );
+                return false;
+            }
+            sectionOption.withCorrection = *withCorrection;
+            itemMetadata["with_correction"] = *withCorrection;
+        }
+
+        sectionMetadata.push_back(std::move(itemMetadata));
+    }
+
+    advanced.metadata["sections"] = std::move(sectionMetadata);
+    return true;
+}
+
+bool readTolerance(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    AdvancedSweepOptions& advanced
+)
+{
+    const auto* value = app::propertyValue(object, "Tolerance");
+    if (value == nullptr) {
+        return true;
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // BRepOffsetAPI_MakePipeShellPyImp.cpp::setTolerance(), parses exactly three doubles:
+    // "tol3d, boundTol, tolAngular". The old scalar CAD Core placeholder remains a deferred
+    // compatibility diagnostic and is not promoted to the wrapper contract.
+    const nlohmann::json& tolerance = propertyPayload(value->raw);
+    if (tolerance.is_number()) {
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "unsupported_property",
+            "Part::Sweep scalar Tolerance is a deferred compatibility placeholder; use "
+            "Tolerance.tol3d/boundTol/tolAngular",
+            object.name,
+            "Tolerance",
+            "runtime",
+            object.name,
+            "Tolerance"
+        );
+        context.objects[object.name] = {{"status", "error"}, {"feature", "part_sweep"}};
+        return false;
+    }
+    if (!tolerance.is_object()) {
+        addSweepDiagnostic(
+            object,
+            context,
+            "invalid_parameter",
+            "Part::Sweep Tolerance must be an object with tol3d, boundTol and tolAngular",
+            "Tolerance",
+            object.name,
+            "Tolerance"
+        );
+        return false;
+    }
+
+    const auto readField = [&](const std::string& field) -> std::optional<double> {
+        const auto it = tolerance.find(field);
+        if (it == tolerance.end() || !isFiniteJsonNumber(*it)) {
+            addSweepDiagnostic(
+                object,
+                context,
+                "invalid_parameter",
+                "Part::Sweep Tolerance." + field + " must be a finite number",
+                "Tolerance." + field,
+                object.name,
+                field
+            );
+            return std::nullopt;
+        }
+        return it->get<double>();
+    };
+
+    const auto tol3d = readField("tol3d");
+    if (!tol3d) {
+        return false;
+    }
+    const auto boundTol = readField("boundTol");
+    if (!boundTol) {
+        return false;
+    }
+    const auto tolAngular = readField("tolAngular");
+    if (!tolAngular) {
+        return false;
+    }
+
+    advanced.pipeOptions.tolerance = PipeShellTolerance {*tol3d, *boundTol, *tolAngular};
+    advanced.metadata["tolerance"] = {
+        {"tol3d", *tol3d},
+        {"boundTol", *boundTol},
+        {"tolAngular", *tolAngular},
+    };
+    return true;
+}
+
 std::optional<AdvancedSweepOptions> readAdvancedSweepOptions(
     const app::DocumentObject& object,
     runtime::ComputeContext& context,
+    const std::vector<SweepInput>& sections,
     bool solid,
     bool frenet,
     int transition,
@@ -659,6 +1001,13 @@ std::optional<AdvancedSweepOptions> readAdvancedSweepOptions(
         advanced.metadata["binormal_property"] = binormalProperty;
     }
 
+    if (!readSectionOptions(object, context, sections, advanced)) {
+        return std::nullopt;
+    }
+    if (!readTolerance(object, context, advanced)) {
+        return std::nullopt;
+    }
+
     return advanced;
 }
 
@@ -720,6 +1069,7 @@ void executePartSweep(const app::DocumentObject& object, runtime::ComputeContext
              "Binormal",
              "BiNormal",
              "LocationMode",
+             "SectionOptions",
              "Tolerance"}
         )) {
         context.objects[object.name] = {{"status", "error"}, {"feature", "part_sweep"}};
@@ -746,7 +1096,8 @@ void executePartSweep(const app::DocumentObject& object, runtime::ComputeContext
 
     const bool solid = app::readBool(object, "Solid").value_or(true);
     const bool frenet = app::readBool(object, "Frenet").value_or(true);
-    const auto advanced = readAdvancedSweepOptions(object, context, solid, frenet, *transition, linearize);
+    const auto advanced
+        = readAdvancedSweepOptions(object, context, *sections, solid, frenet, *transition, linearize);
     if (!advanced) {
         return;
     }

@@ -2983,7 +2983,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         sweep = capabilities["part_workbench"]["sweep"]
         self.assertEqual(
             sweep["status"],
-            "supported_multi_profile_linearize_s2_auxiliary_support_binormal_source_backed",
+            "supported_multi_profile_linearize_s3_advanced_pipeshell_source_backed",
         )
         self.assertIn("Part::Sweep", sweep["type_ids"])
         self.assertEqual(
@@ -3005,6 +3005,13 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "Objects[].Properties.SupportMode",
                 "Objects[].Properties.Binormal",
                 "Objects[].Properties.BiNormal",
+                "Objects[].Properties.SectionOptions[].Location.value",
+                "Objects[].Properties.SectionOptions[].Location.SubList",
+                "Objects[].Properties.SectionOptions[].WithContact",
+                "Objects[].Properties.SectionOptions[].WithCorrection",
+                "Objects[].Properties.Tolerance.tol3d",
+                "Objects[].Properties.Tolerance.boundTol",
+                "Objects[].Properties.Tolerance.tolAngular",
                 "recompute.objs",
             ],
         )
@@ -3021,6 +3028,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "SupportMode",
             "Binormal",
             "BiNormal",
+            "SectionOptions",
             "Tolerance",
         ):
             self.assertIn(prop, sweep["properties"])
@@ -3031,6 +3039,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "App::PropertyLinkSub",
             "App::PropertyBool",
             "App::PropertyEnumeration",
+            "App::PropertyFloat",
             "App::PropertyVector",
         ):
             self.assertIn(property_type, sweep["property_types"])
@@ -3049,7 +3058,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "support_mode_diagnostic_backed",
             "binormal_source_backed",
             "advanced_mode_locatable_diagnostics",
-            "s3_location_tolerance_deferred_diagnostics",
+            "section_location_source_backed",
+            "section_contact_correction_bool_contract",
+            "tolerance_triple_source_backed",
+            "advanced_combined_source_backed",
+            "s3_location_tolerance_locatable_diagnostics",
         ):
             self.assertIn(covered, sweep["covered"])
         for fixture in (
@@ -3066,6 +3079,9 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "c5m10/part-sweep-auxiliary-spine-contract",
             "c5m10/part-sweep-binormal-contract",
             "c5m10/part-sweep-support-mode-diagnostics",
+            "c5m10/part-sweep-located-profile-contract",
+            "c5m10/part-sweep-tolerance-contract",
+            "c5m10/part-sweep-advanced-combined-contract",
         ):
             self.assertIn(fixture, sweep["fixtures"])
         self.assertEqual(
@@ -3084,6 +3100,9 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "c5m10/part-sweep-auxiliary-spine-contract",
                 "c5m10/part-sweep-binormal-contract",
                 "c5m10/part-sweep-support-mode-diagnostics",
+                "c5m10/part-sweep-located-profile-contract",
+                "c5m10/part-sweep-tolerance-contract",
+                "c5m10/part-sweep-advanced-combined-contract",
             ],
         )
         for diagnostic in (
@@ -3114,7 +3133,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "s2_auxiliary_support_binormal_source_backed_wrapper_contract",
             sweep["request_local_boundaries"],
         )
-        self.assertIn("location_tolerance_s3_deferred_diagnostic", sweep["request_local_boundaries"])
+        self.assertIn(
+            "s3_location_tolerance_combo_source_backed_wrapper_contract",
+            sweep["request_local_boundaries"],
+        )
         self.assertIn("hole_model_thread_internal_pipeshell_not_part_sweep", sweep["request_local_boundaries"])
         for non_goal in (
             "upstream_native_part_sweep_advanced_direct_properties",
@@ -3130,11 +3152,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(
             sweep["remaining_gaps"],
-            [
-                "part_sweep_location_mode_contract",
-                "part_sweep_tolerance_contract",
-            ],
+            ["part_sweep_wrapper_expected_collector"],
         )
+        self.assertNotIn("part_sweep_location_mode_contract", sweep["remaining_gaps"])
+        self.assertNotIn("part_sweep_tolerance_contract", sweep["remaining_gaps"])
         self.assertNotIn("part_sweep_auxiliary_spine_contract", sweep["remaining_gaps"])
         self.assertNotIn("part_sweep_support_mode_contract", sweep["remaining_gaps"])
         self.assertNotIn("part_sweep_binormal_contract", sweep["remaining_gaps"])

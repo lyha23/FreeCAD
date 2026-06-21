@@ -1,0 +1,81 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPipeProfile",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [-0.5, -0.5], "end": [0.5, -0.5]},
+          {"kind": "LineSegment", "start": [0.5, -0.5], "end": [0.5, 0.5]},
+          {"kind": "LineSegment", "start": [0.5, 0.5], "end": [-0.5, 0.5]},
+          {"kind": "LineSegment", "start": [-0.5, 0.5], "end": [-0.5, -0.5]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "PipeSpine",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 0],
+          "Rotation": [0.7071067811865475, 0, 0, 0.7071067811865476]
+        },
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [0, 4]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "ToleranceSweep",
+      "ID": 3,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
+        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
+        "Solid": false,
+        "Tolerance": {
+          "tol3d": 0.0001,
+          "boundTol": 0.0002,
+          "tolAngular": 0.01
+        }
+      }
+    },
+    {
+      "Name": "InvalidToleranceTol3d",
+      "ID": 4,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
+        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
+        "Solid": false,
+        "Tolerance": {
+          "tol3d": "bad",
+          "boundTol": 0.0002,
+          "tolAngular": 0.01
+        }
+      }
+    },
+    {
+      "Name": "LegacyScalarTolerance",
+      "ID": 5,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
+        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
+        "Solid": false,
+        "Tolerance": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 0.005
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["ToleranceSweep", "InvalidToleranceTol3d", "LegacyScalarTolerance"]
+  }
+}

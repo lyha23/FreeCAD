@@ -1,6 +1,14 @@
-# C5-M10-S3 Location / Tolerance / Combo 实现
+# 【已实现】C5-M10-S3 Location / Tolerance / Combo 实现
 
-状态：`pending`
+状态：`done_C5M10-S3_location_tolerance_combo`
+
+## S3 核查结论
+
+- `cad-core/src/part/part_sweep.cpp` 已按 S1 DTO 解析 `SectionOptions[]`，按 `Sections` 顺序匹配 `Location`、`WithContact`、`WithCorrection`，并解析 object-form `Tolerance.tol3d/boundTol/tolAngular`；旧 scalar `Tolerance` 只保留 deferred compatibility diagnostic。
+- `cad-core/include/cad_core/part/topo_shape_expansion.h` 与 `cad-core/src/part/topo_shape_expansion.cpp` 已把 per-section option 和 tolerance triple 落到正式 `PipeShellOptions`，调用 `BRepOffsetAPI_MakePipeShell::Add(profile, vertex, withContact, withCorrection)` / `Add(profile, withContact, withCorrection)` 与 `SetTolerance(tol3d,boundTol,tolAngular)`。
+- 新增 `cad-core/fixtures/c5m10/part-sweep-located-profile-contract.json`、`part-sweep-tolerance-contract.json`、`part-sweep-advanced-combined-contract.json`，对应 expected 以 source-backed known_gap 记录 wrapper collector 缺口和删除条件。
+- Focused tests 覆盖 valid Location/contact/correction/tolerance reps、invalid Location/WithContact/WithCorrection/Tolerance diagnostics、legacy scalar compatibility diagnostic、S2+S3 组合压力和 `part_workbench.sweep` capability metadata。
+- 本包 `C5M10-BLK-301`、`C5M10-SCOPE-301`、`C5M10-ORC-301` 与 root `C5-BLK-1001`、`C5-SCOPE-1001`、`C5-ORC-1004` 已更新为 S3 source/diagnostic-backed 状态；S4 capability/docs 最终收口仍 pending。
 
 ## 目标
 
