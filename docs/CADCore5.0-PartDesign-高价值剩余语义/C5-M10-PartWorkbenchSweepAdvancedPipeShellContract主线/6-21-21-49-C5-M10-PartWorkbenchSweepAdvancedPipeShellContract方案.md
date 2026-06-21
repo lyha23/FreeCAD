@@ -30,10 +30,17 @@ C5-M10 的目标不是重做基础 Sweep，而是把这个 deferred broad contra
 | --- | --- | --- | --- |
 | auxiliary | `AuxiliarySpine`、`AuxiliaryCurvilinear` | wrapper `setAuxiliarySpine`；PartDesign Pipe `Auxiliary` mode | S2 批量实现或 source-backed known_gap，invalid target/subname diagnostic |
 | support | `SupportMode` 或 `SpineSupport` | wrapper `setSpineSupport` | S2 先定义 DTO 与 diagnostics；可 oracle 时 expected-backed |
-| binormal | `BiNormal` / `Binormal` | PartDesign Pipe `Mode=Binormal` -> `SetMode(gp_Dir(...))` | S2 批量覆盖 valid vector、zero vector diagnostic、combo pressure |
-| location | section item `Location`、`WithContact`、`WithCorrection` | wrapper `add(Profile, Location, WithContact, WithCorrection)` | S3 覆盖 located profile 与 invalid location payload |
-| tolerance | `Tolerance` -> `tol3d/boundTol/tolAngular` | wrapper `setTolerance` | S3 覆盖 valid tolerance metadata 与 invalid ranges diagnostics |
+| binormal | `Binormal`（canonical），`BiNormal` 仅保留 legacy deferred alias | PartDesign Pipe `Mode=Binormal` -> `SetMode(gp_Dir(...))` | S2 批量覆盖 valid vector、zero/nonfinite vector diagnostic、combo pressure |
+| location | `SectionOptions[].Location`、`SectionOptions[].WithContact`、`SectionOptions[].WithCorrection`，按 `Sections` 顺序匹配 | wrapper `add(Profile, Location, WithContact, WithCorrection)` | S3 覆盖 located profile、contact/correction 与 invalid location payload |
+| tolerance | `Tolerance` object -> `tol3d/boundTol/tolAngular`；旧 scalar `Tolerance` 只保留 S0 deferred compatibility | wrapper `setTolerance` | S3 覆盖 valid tolerance metadata 与 malformed/nonfinite diagnostics |
 | combination | auxiliary/support/binormal/location/tolerance mixed | same `BRepOffsetAPI_MakePipeShell` builder | S3/S4 验证字段组合不会互相吞 diagnostics 或回退基础 support |
+
+S1 字段级合同以 `矩阵/c5m10_sweep_advanced_pipeshell_source_dto_oracle_contract.tsv` 为准。该矩阵冻结：
+
+- native `Part::Sweep` 直接属性只包括 `Sections`、`Spine`、`Solid`、`Frenet`、`Linearize`、`Transition`；advanced 字段不能写成 upstream native `Part::Sweep` 属性。
+- `AuxiliarySpine`、`AuxiliaryCurvilinear`、`SpineSupport`、`SupportMode`、`Binormal`、`SectionOptions[].Location`、`SectionOptions[].WithContact`、`SectionOptions[].WithCorrection`、`Tolerance.tol3d`、`Tolerance.boundTol`、`Tolerance.tolAngular` 都必须有 FreeCAD source 依据、cad-core 落点、expected schema、diagnostic property/target/subname 规则和 known_gap 删除条件。
+- 当前 `cad-core/tools/collect_freecad_expected.py` 只对原生 `Part::Sweep` DocumentObject 走 `sweep_payload()`；尚未有 `Part.BRepOffsetAPI_MakePipeShell` wrapper helper 分支。S2/S3 可以批量新增 FreeCADCmd wrapper expected 采集；在该 collector 分支落地前，只能把对应 expected 标成 source-backed known_gap，删除条件是 wrapper helper 返回稳定 shape summary 与字段 metadata。
+- FreeCADCmd wrapper expected 的批量采集目标是同一 request-local helper：创建 spine/profile/support/location/auxiliary shape，调用 `setAuxiliarySpine`、`setSpineSupport`、`setBiNormalMode`、`add(Profile, Location, WithContact, WithCorrection)`、`setTolerance(tol3d,boundTol,tolAngular)`、`setTransitionMode`，再 `Build()` / `Shape()` 汇总；不能用 cad-core 输出倒推 expected。
 
 ## 代表 fixtures
 

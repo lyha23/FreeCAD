@@ -37,7 +37,7 @@ C5-M8 已完成 `Part.makeFilledFace(...)` / source-backed Filling helper 第二
 
 C5-M9 打开 `Part::ProjectOnSurface` 第二批：第一批 `Mode=Edges/Faces/All`、face rebuild、height/offset、多 Projection ordered metadata 和普通 indexed `NamedShape` 继续作为 live guard；本包只推进 projected edge / wire / face / compound provenance、MapperHistory / ElementMap 账本和引用恢复证据，不重做 GUI task panel、完整 `ProjectOnSurface` 或完整 Part surface family。
 
-C5-M10 打开 `part_workbench.sweep` 的 advanced PipeShell contract：S0 已冻结 C5-M6/C4M1 multi-profile / `Linearize=true` expected-backed 基础 slice 和 `part-sweep-advanced-deferred` locatable `unsupported_property` diagnostic baseline；本包把 `BRepOffsetAPI_MakePipeShell` wrapper 与 PartDesign Pipe 同一 builder 调用链下的 AuxiliarySpine、spine support、Binormal、profile location、tolerance 和组合场景作为同一 request-local DTO / API 批次推进。native `Part::Sweep` 直接属性仍只声明基础六项，GUI、PartDesign Pipe 产品支持和 persistent Python wrapper lifecycle 不进入本包；`future_sweep_advanced_contract` 在 S0 仍保持 pending。
+C5-M10 打开 `part_workbench.sweep` 的 advanced PipeShell contract：S0 已冻结 C5-M6/C4M1 multi-profile / `Linearize=true` expected-backed 基础 slice 和 `part-sweep-advanced-deferred` locatable `unsupported_property` diagnostic baseline；S1 已冻结字段级 source / DTO / oracle 矩阵，明确 `AuxiliarySpine`、`AuxiliaryCurvilinear`、`SpineSupport` / `SupportMode`、canonical `Binormal`、profile `Location` / `WithContact` / `WithCorrection`、`Tolerance.tol3d/boundTol/tolAngular` 的 FreeCAD 依据、cad-core 落点、wrapper expected 采集条件和 source-backed known_gap 删除条件。本包把 `BRepOffsetAPI_MakePipeShell` wrapper 与 PartDesign Pipe 同一 builder 调用链下的这些场景作为同一 request-local DTO / API 批次推进。native `Part::Sweep` 直接属性仍只声明基础六项，GUI、PartDesign Pipe 产品支持和 persistent Python wrapper lifecycle 不进入本包；`future_sweep_advanced_contract` 在 S1 后仍保持 pending。
 
 ## 队列检查
 

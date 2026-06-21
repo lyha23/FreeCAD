@@ -1,6 +1,14 @@
-# C5-M10-S1 source / DTO / oracle 矩阵
+# 【已实现】C5-M10-S1 source / DTO / oracle 矩阵
 
-状态：`pending`
+状态：`done_C5M10-S1_source_dto_oracle_frozen`
+
+## S1 核查结论
+
+- native `Part::Sweep::execute()` 只直接暴露 `Sections`、`Spine`、`Solid`、`Frenet`、`Linearize`、`Transition`；advanced PipeShell 字段不能声明为 upstream native `Part::Sweep` 属性。
+- advanced 字段的 FreeCAD 依据来自 `BRepOffsetAPI_MakePipeShell` wrapper 和 PartDesign Pipe 对同一 OCCT builder 的 `SetMode` / `Add` / `SetTolerance` / `SetTransitionMode` 调用。
+- 字段级合同已落到 `矩阵/c5m10_sweep_advanced_pipeshell_source_dto_oracle_contract.tsv`：覆盖 `AuxiliarySpine`、`AuxiliaryCurvilinear`、`SpineSupport`、`SupportMode`、canonical `Binormal`、`SectionOptions[].Location`、`SectionOptions[].WithContact`、`SectionOptions[].WithCorrection`、`Tolerance.tol3d`、`Tolerance.boundTol`、`Tolerance.tolAngular`。
+- 当前 `cad-core/tools/collect_freecad_expected.py` 只有 native `Part::Sweep` expected payload；S2/S3 若要 expected-backed，必须新增 request-local `Part.BRepOffsetAPI_MakePipeShell` wrapper helper 采集。采集前不得从 cad-core 输出倒推 expected，只能按字段记录 source-backed known_gap 与 delete_condition。
+- 本包 `C5M10-BLK-101`、`C5M10-SCOPE-101`、`C5M10-ORC-101` 和 root C5-M10 source/oracle 行已更新；C5-M10 主线仍 pending，下一步进入 S2 Auxiliary / Support / Binormal 实现。
 
 ## 目标
 

@@ -16,6 +16,7 @@
 
 - 方案：`6-21-21-49-C5-M10-PartWorkbenchSweepAdvancedPipeShellContract方案.md`
 - scope 矩阵：`矩阵/c5m10_sweep_advanced_pipeshell_scope.tsv`
+- source / DTO / oracle 字段矩阵：`矩阵/c5m10_sweep_advanced_pipeshell_source_dto_oracle_contract.tsv`
 - fixture / oracle 矩阵：`矩阵/c5m10_sweep_advanced_pipeshell_fixture_oracle_matrix.tsv`
 - blocker 队列：`矩阵/c5m10_sweep_advanced_pipeshell_blocker_queue.tsv`
 - non-goal registry：`矩阵/c5m10_sweep_advanced_pipeshell_non_goal_registry.tsv`
