@@ -28,6 +28,7 @@
 | C5-M8 Part Workbench Filling Support / Order / Param 第二批（已收口） | `C5-M8-PartWorkbenchFillingSupportOrderParam第二批主线/6-21-10-01-C5-M8-PartWorkbenchFillingSupportOrderParam第二批主线总入口.md` | `C5-M8-PartWorkbenchFillingSupportOrderParam第二批主线/工作步骤细分/` |
 | C5-M9 Part Workbench ProjectOnSurface Provenance 第二批 | `C5-M9-PartWorkbenchProjectOnSurfaceProvenance第二批主线/6-21-19-25-C5-M9-PartWorkbenchProjectOnSurfaceProvenance第二批主线总入口.md` | `C5-M9-PartWorkbenchProjectOnSurfaceProvenance第二批主线/工作步骤细分/` |
 | C5-M10 Part Workbench Sweep Advanced PipeShell Contract（已收口） | `C5-M10-PartWorkbenchSweepAdvancedPipeShellContract主线/6-21-21-49-C5-M10-PartWorkbenchSweepAdvancedPipeShellContract主线总入口.md` | `C5-M10-PartWorkbenchSweepAdvancedPipeShellContract主线/工作步骤细分/` |
+| C5-M11 Part Workbench Sweep Wrapper Expected Parity | `C5-M11-PartWorkbenchSweepWrapperExpectedParity主线/6-22-00-23-C5-M11-PartWorkbenchSweepWrapperExpectedParity主线总入口.md` | `C5-M11-PartWorkbenchSweepWrapperExpectedParity主线/工作步骤细分/` |
 
 C5-M6 已完成最终发布收口：`part_workbench.loft` 只发布 profile / `Linearize=true` expected-backed slice，剩余 `complex_profile_family` 路由到 `future_loft_complex_profile_family`；`part_workbench.sweep` 的 C5-M6 发布口径只包含 multi-profile / `Linearize=true` expected-backed 基础 slice，advanced PipeShell 字段级合同由 C5-M10 收口。
 
@@ -38,6 +39,8 @@ C5-M8 已完成 `Part.makeFilledFace(...)` / source-backed Filling helper 第二
 C5-M9 打开 `Part::ProjectOnSurface` 第二批：第一批 `Mode=Edges/Faces/All`、face rebuild、height/offset、多 Projection ordered metadata 和普通 indexed `NamedShape` 继续作为 live guard；本包只推进 projected edge / wire / face / compound provenance、MapperHistory / ElementMap 账本和引用恢复证据，不重做 GUI task panel、完整 `ProjectOnSurface` 或完整 Part surface family。
 
 C5-M10 已完成 `part_workbench.sweep` advanced PipeShell contract 收口：S0 冻结 C5-M6/C4M1 multi-profile / `Linearize=true` expected-backed 基础 slice 和 `part-sweep-advanced-deferred` locatable diagnostic baseline；S1 冻结字段级 source / DTO / oracle 矩阵；S2 发布 AuxiliarySpine / SupportMode / Binormal source-diagnostic-backed 合同；S3 发布 `SectionOptions[].Location`、`WithContact`、`WithCorrection`、`Tolerance.tol3d/boundTol/tolAngular` 和组合压力；S4 同步 capability/docs/root matrix，把原 broad advanced bucket 收口为字段级 `part_sweep_wrapper_expected_collector` source-backed known_gap。native `Part::Sweep` 直接属性仍只声明基础六项，GUI、PartDesign Pipe/Hole 产品支持、persistent Python wrapper lifecycle 和输出端 fixup 均为 non-goal。
+
+C5-M11 打开 `Part.BRepOffsetAPI_MakePipeShell` wrapper expected-backed 批量闭环：它不新增 C5-M10 字段，只为同一 wrapper API 增加 FreeCADCmd request-local collector，并一次替换 auxiliary spine、binormal、support metadata、located profile、tolerance 和 combined 六个 C5-M10 source-backed known_gap expected。收口标准是 `shape_summary` + `object_fields.advanced` expected、focused tests、capability metadata 和 root/package matrices 同步删除或精确缩窄 `part_sweep_wrapper_expected_collector`。
 
 ## 队列检查
 
