@@ -1,12 +1,12 @@
-# C5-M10 Part Workbench Sweep Advanced PipeShell Contract 方案
+# 【已实现】C5-M10 Part Workbench Sweep Advanced PipeShell Contract 方案
 
-## 当前基线
+## 收口基线
 
 `part_workbench.sweep` 当前已经有 C5-M6 live support：multi-profile、`Linearize=true`、基础 `Solid/Frenet/Transition` 由 `cad-core/fixtures/c4m1/part-sweep-multi-profile-linearize.json` 和 expected 覆盖；`cad-core/fixtures/c4m1/part-sweep-advanced-deferred.json` 目前只断言 `AuxiliarySpine`、`Tolerance` 等 advanced 字段会给出 locatable `unsupported_property` diagnostics。
 
-S0 live guard 已在 `cd4a092d9a` 基线冻结：当前 `part_workbench.sweep` capability 仍是 `supported_multi_profile_linearize_expected_backed`，advanced wrapper 字段只作为 diagnostic-backed deferred baseline 记录，不发布新 support，也不关闭 `future_sweep_advanced_contract`。
+S0 live guard 已在 `cd4a092d9a` 基线冻结；S2/S3 已按同一 request-local `PartSweepAdvancedPipeShellDTO` 发布 AuxiliarySpine、spine support、Binormal、profile location、tolerance 和组合压力的 source/diagnostic-backed 合同；S4 已把 capability/docs/root matrix 收口为字段级边界。当前 `part_workbench.sweep` capability 状态为 `supported_multi_profile_linearize_c5m10_advanced_source_diagnostic_backed_closeout`，剩余 gap 只保留 `part_sweep_wrapper_expected_collector`。
 
-C5-M10 的目标不是重做基础 Sweep，而是把这个 deferred broad contract 拆成同一 request-local `PartSweepAdvancedPipeShellDTO` 下的一组可实现 / 可诊断场景：AuxiliarySpine、spine support、Binormal、profile location、tolerance 和组合压力。这样一轮能覆盖同一调用链与同一 expected schema，避免长期单 fixture 推进。
+C5-M10 的目标不是重做基础 Sweep，而是把原 deferred broad contract 拆成同一 request-local `PartSweepAdvancedPipeShellDTO` 下的一组可实现 / 可诊断场景：AuxiliarySpine、spine support、Binormal、profile location、tolerance 和组合压力。这样一轮覆盖同一调用链与同一 expected schema，避免长期单 fixture 推进。
 
 ## FreeCAD 调用链
 
@@ -57,7 +57,7 @@ S1 字段级合同以 `矩阵/c5m10_sweep_advanced_pipeshell_source_dto_oracle_c
 2. S1：读 FreeCAD source 与 cad-core 当前实现，写清 DTO / API 字段、oracle 可采路径、expected schema、source-backed known_gap 删除条件和不声明 upstream `Part::Sweep` advanced 属性的边界。
 3. S2：实现 AuxiliarySpine / spine support / Binormal 一组 builder mode；补 fixtures、expected 或 source-backed known_gap、diagnostics 和 focused tests。
 4. S3：实现 profile location / tolerance / combination 一组字段；补 DTO parser、builder option、diagnostic matrix、fixtures、expected 或 source-backed known_gap。
-5. S4：同步 capability/docs/root matrices，关闭 broad `future_sweep_advanced_contract`，保留精确 remaining gaps 与 non-goals。
+5. S4：已同步 capability/docs/root matrices，关闭 broad advanced bucket，保留字段级 `part_sweep_wrapper_expected_collector` source-backed known_gap 与 non-goals。
 
 ## 验收分层
 
@@ -89,5 +89,5 @@ python3 -m unittest tests.test_p8_features tests.test_expected_fixtures tests.te
 - 基础 `part_workbench.sweep` C5-M6 live guard 保持 expected-backed。
 - AuxiliarySpine、spine support、Binormal、profile location、tolerance 和组合场景至少都有 expected-backed、source-backed known_gap 或 diagnostic-backed 证据，不能只保留 broad unsupported。
 - DTO / API 字段与 FreeCAD wrapper / PartDesign Pipe builder 依据清楚；native `Part::Sweep` 属性边界没有过度声明。
-- capability metadata 中 `future_sweep_advanced_contract` 不再是一个宽泛 future bucket；剩余项必须有字段级 owner、delete_condition 和 non-goal 说明。
+- capability metadata 中 broad advanced bucket 不再存在；剩余 `part_sweep_wrapper_expected_collector` 有字段级 owner、delete_condition 和 non-goal 说明。
 - 本包 `工作步骤细分` 队列为空后才能把 root `C5-BLK-1001` 标记为 done。

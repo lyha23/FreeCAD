@@ -198,6 +198,22 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assert_mesh_edge_segments_reference_subshapes(body)
         self.assert_mesh_vertex_points_reference_subshapes(body)
 
+    def test_c_api_body_direct_tip_subshapes_publish_tip_qualified_stable_names(self) -> None:
+        result = self.run_recompute_ffi("rect-pad", "mvp")
+        body = result["results"][0]
+        subshapes = {item["indexed"]: item for item in body["subshapes"]}
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(body["object"], "Body")
+        self.assertEqual(subshapes["Edge7"]["id"], "Body:Edge7")
+        self.assertEqual(subshapes["Edge7"]["indexed"], "Edge7")
+        self.assertEqual(subshapes["Edge7"]["stableSubname"], "Pad.Edge7")
+        self.assertEqual(subshapes["Edge7"]["subname"], "Pad.Edge7")
+        self.assertEqual(subshapes["Face1"]["stableSubname"], "Pad.Face1")
+        self.assertEqual(subshapes["Vertex2"]["stableSubname"], "Pad.Vertex2")
+        self.assertEqual(subshapes["Face5"]["stableSubname"], "Sketch.Face1")
+        self.assertEqual(subshapes["Edge3"]["stableSubname"], "Sketch.Edge1")
+
     def test_c4s11_cli_c_api_worker_wasm_share_core_result_contract(self) -> None:
         payload = (ROOT / "fixtures" / "mvp" / "rect-pad.json").read_bytes()
 
@@ -2983,7 +2999,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         sweep = capabilities["part_workbench"]["sweep"]
         self.assertEqual(
             sweep["status"],
-            "supported_multi_profile_linearize_s3_advanced_pipeshell_source_backed",
+            "supported_multi_profile_linearize_c5m10_advanced_source_diagnostic_backed_closeout",
         )
         self.assertIn("Part::Sweep", sweep["type_ids"])
         self.assertEqual(
@@ -3063,6 +3079,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "tolerance_triple_source_backed",
             "advanced_combined_source_backed",
             "s3_location_tolerance_locatable_diagnostics",
+            "c5m10_capability_docs_closeout",
         ):
             self.assertIn(covered, sweep["covered"])
         for fixture in (
@@ -3137,9 +3154,51 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "s3_location_tolerance_combo_source_backed_wrapper_contract",
             sweep["request_local_boundaries"],
         )
+        self.assertIn(
+            "field_level_wrapper_expected_collector_remaining_gap",
+            sweep["request_local_boundaries"],
+        )
         self.assertIn("hole_model_thread_internal_pipeshell_not_part_sweep", sweep["request_local_boundaries"])
+        self.assertEqual(
+            sweep["field_boundaries"]["expected_backed"],
+            ["Sections", "Spine", "Solid", "Frenet", "Transition", "Linearize"],
+        )
+        self.assertEqual(
+            sweep["field_boundaries"]["source_backed_known_gap"],
+            [
+                "AuxiliarySpine",
+                "AuxiliaryCurvilinear",
+                "SpineSupport",
+                "SupportMode",
+                "Binormal",
+                "BiNormal",
+                "SectionOptions[].Location",
+                "SectionOptions[].WithContact",
+                "SectionOptions[].WithCorrection",
+                "Tolerance.tol3d",
+                "Tolerance.boundTol",
+                "Tolerance.tolAngular",
+                "advanced_combination",
+            ],
+        )
+        self.assertIn("invalid SupportMode", sweep["field_boundaries"]["diagnostic_backed"])
+        self.assertIn(
+            "persistent Python BRepOffsetAPI_MakePipeShell lifecycle",
+            sweep["field_boundaries"]["non_goal"],
+        )
+        wrapper_gap = sweep["source_backed_known_gaps"]["part_sweep_wrapper_expected_collector"]
+        self.assertEqual(wrapper_gap["status"], "source_backed_known_gap")
+        self.assertIn("AuxiliarySpine", wrapper_gap["fields"])
+        self.assertIn("SectionOptions[].Location", wrapper_gap["fields"])
+        self.assertIn("Tolerance.tolAngular", wrapper_gap["fields"])
+        self.assertIn("c5m10/part-sweep-advanced-combined-contract", wrapper_gap["fixtures"])
+        self.assertIn("shape_summary", wrapper_gap["delete_condition"])
         for non_goal in (
             "upstream_native_part_sweep_advanced_direct_properties",
+            "gui_sweep_pipe_task_panels",
+            "part_design_pipe_hole_product_support",
+            "persistent_python_pipeshell_wrapper_lifecycle",
+            "output_order_bbox_fixture_name_pipeshell_fixups",
             "hole_model_thread_internal_pipeshell",
         ):
             self.assertIn(non_goal, sweep["non_goals"])
@@ -3147,6 +3206,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             sweep["non_goals"],
             [
                 "upstream_native_part_sweep_advanced_direct_properties",
+                "gui_sweep_pipe_task_panels",
+                "part_design_pipe_hole_product_support",
+                "persistent_python_pipeshell_wrapper_lifecycle",
+                "output_order_bbox_fixture_name_pipeshell_fixups",
                 "hole_model_thread_internal_pipeshell",
             ],
         )

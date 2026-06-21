@@ -43,8 +43,8 @@ S0 起点已有 root C5 矩阵/README 修改和未跟踪 C5-M10 包文件；它�
 - `cad-core/fixtures/c4m1/part-sweep-multi-profile-linearize.json` 当前固定 `Part::Sweep` 的 `Spine=Path`、两个 `Sections`、`Frenet=true`、`Transition=1` 和 `Linearize=true`；这是 C5-M6/C4M1 已发布的 expected-backed multi-profile / linearize guard，不回退。
 - `cad-core/fixtures/c4m1/part-sweep-advanced-deferred.json` 当前只给 `AdvancedSweep` 传入 `AuxiliarySpine` 和 `Tolerance`，用于保护 advanced 字段的 locatable `unsupported_property` diagnostics，不产生 supported shape。
 - `cad-core/src/part/part_sweep.cpp` 当前执行器只按 `Sweep::execute()` 消费 `Sections`、`Spine`、`Solid`、`Frenet`、`Transition`、`Linearize`；`rejectDeferredSweepAdvancedProperties()` 对 `AuxiliarySpine`、`SupportMode`、`BiNormal`、`LocationMode`、`Tolerance` 保持 deferred diagnostic baseline。
-- `cad-core/src/adapters/c_api/c_api.cpp` capability 当前仍是 `supported_multi_profile_linearize_expected_backed`，covered slice 包含 multi-profile、linearize post-processing、PipeShell maker history 和 advanced deferred diagnostics；S0 不发布 AuxiliarySpine、SupportMode、Binormal、Location 或 Tolerance 支持。
-- `docs/CADCore3.0/capabilities-gap对照表.md` 当前把 `part_workbench.sweep` 的 supported slice 写为 C5-M6/C4M1 基础能力，并把 advanced PipeShell wrapper、located profile、support、trihedron / binormal、location mode、tolerance contract 继续路由到 `future_sweep_advanced_contract`。
+- S0 起点时 `cad-core/src/adapters/c_api/c_api.cpp` capability 仍是 `supported_multi_profile_linearize_expected_backed`，covered slice 包含 multi-profile、linearize post-processing、PipeShell maker history 和 advanced deferred diagnostics；S0 不发布 AuxiliarySpine、SupportMode、Binormal、Location 或 Tolerance 支持。
+- S0 起点时 `docs/CADCore3.0/capabilities-gap对照表.md` 把 `part_workbench.sweep` 的 supported slice 写为 C5-M6/C4M1 基础能力，并把 advanced PipeShell wrapper、located profile、support、trihedron / binormal、location mode、tolerance contract 继续路由到后续 broad owner；该 broad owner 已在 S4 收口为字段级 `part_sweep_wrapper_expected_collector` known_gap。
 
 ## 目标
 
@@ -65,7 +65,7 @@ S0 起点已有 root C5 矩阵/README 修改和未跟踪 C5-M10 包文件；它�
 
 - 本包局部矩阵中 `C5M10-BLK-000`、`C5M10-SCOPE-000`、`C5M10-ORC-001` 状态从 pending 更新为 S0 完成态。
 - Root `C5-BLK-1001`、`C5-SCOPE-1001`、`C5-ORC-1001` 保持 C5-M10 pending 但补充 S0 live guard 结论。
-- 记录当前 capability 里 `part_workbench.sweep` supported slice 和 `future_sweep_advanced_contract` broad gap，不提前改支持声明。
+- 记录 S0 起点 capability 里 `part_workbench.sweep` supported slice 和 advanced broad gap，不提前改支持声明。
 - 如发现 root README 或矩阵与当前代码不一致，只修 C5-M10 相关边界，不重开 C5-M6/C5-M9 closed rows。
 
 ## 非目标
