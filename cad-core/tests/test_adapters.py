@@ -2540,7 +2540,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(producer_matrix["pipeshell"]["remaining"], [])
         self.assertEqual(
             producer_matrix["part_filling"]["status"],
-            "done_expected_backed_first_batch_plus_c5m12_native_oracle_closeout",
+            "done_expected_backed_first_batch_plus_c5m13_param_subset_closeout",
         )
         self.assertIn("maker_history:filling", producer_matrix["part_filling"]["covered"])
         self.assertIn("boundary_source_evidence", producer_matrix["part_filling"]["covered"])
@@ -2552,6 +2552,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("order_source_map", producer_matrix["part_filling"]["covered"])
         self.assertIn("locatable_support_order_diagnostics", producer_matrix["part_filling"]["covered"])
         self.assertIn("constructor_params_metadata", producer_matrix["part_filling"]["covered"])
+        self.assertIn(
+            "param_degree_numiter_tol2d_tol3d_maxdegree_expected_backed",
+            producer_matrix["part_filling"]["covered"],
+        )
         self.assertIn("locatable_param_diagnostics", producer_matrix["part_filling"]["covered"])
         self.assertIn("non_boundary_constraint_source_evidence", producer_matrix["part_filling"]["covered"])
         self.assertIn(
@@ -2569,15 +2573,15 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             producer_matrix["part_filling"]["covered"],
         )
         self.assertIn(
-            "surface_support_order_native_helper_expected",
+            "filling_surface_native_helper_blocker",
             producer_matrix["part_filling"]["remaining"],
         )
         self.assertIn(
-            "non_default_params_native_helper_expected",
+            "filling_params_pts_anisotropy_tol_g1_g2_max_segments_blocker",
             producer_matrix["part_filling"]["remaining"],
         )
         self.assertIn(
-            "non_boundary_edge_support_order_native_helper_expected",
+            "filling_non_boundary_support_order_native_helper_blocker",
             producer_matrix["part_filling"]["remaining"],
         )
         self.assertNotIn(
@@ -3052,7 +3056,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         sweep = capabilities["part_workbench"]["sweep"]
         self.assertEqual(
             sweep["status"],
-            "supported_multi_profile_linearize_c5m12_wrapper_expected_backed_with_narrowed_blockers",
+            "supported_multi_profile_linearize_c5m13_wrapper_expected_backed_with_location_overload_blockers",
         )
         self.assertIn("Part::Sweep", sweep["type_ids"])
         self.assertEqual(
@@ -3211,11 +3215,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             sweep["request_local_boundaries"],
         )
         self.assertIn(
-            "section_options_location_contact_correction_freecadcmd_blocker",
+            "section_options_location_contact_correction_location_overload_build_stage_blocker",
             sweep["request_local_boundaries"],
         )
         self.assertIn(
-            "advanced_combination_freecadcmd_blocker",
+            "advanced_combination_depends_on_location_overload_blocker",
             sweep["request_local_boundaries"],
         )
         self.assertIn("hole_model_thread_internal_pipeshell_not_part_sweep", sweep["request_local_boundaries"])
@@ -3266,9 +3270,24 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         located_gap = narrowed_gaps["part_sweep_located_profile_freecadcmd_wrapper_build_blocker"]
         self.assertEqual(located_gap["freecadcmd_evidence"]["error"], "OCCError: NCollection_Array1::Value")
+        self.assertEqual(located_gap["freecadcmd_evidence"]["failed_stage"], "build")
+        self.assertEqual(
+            located_gap["freecadcmd_evidence"]["call"],
+            "add(Profile, Location, WithContact, WithCorrection)",
+        )
+        self.assertEqual(located_gap["freecadcmd_evidence"]["control"], "wire profile without Location builds")
         self.assertIn("SectionOptions[].Location", located_gap["fields"])
         combined_gap = narrowed_gaps["part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker"]
         self.assertEqual(combined_gap["freecadcmd_evidence"]["error"], "OCCError: NCollection_Array1::Value")
+        self.assertEqual(combined_gap["freecadcmd_evidence"]["failed_stage"], "build")
+        self.assertEqual(
+            combined_gap["depends_on"],
+            "part_sweep_located_profile_freecadcmd_wrapper_build_blocker",
+        )
+        self.assertEqual(
+            combined_gap["freecadcmd_evidence"]["control"],
+            "combined auxiliary+tolerance without Location builds",
+        )
         self.assertEqual(combined_gap["fields"], ["advanced_combination"])
         for non_goal in (
             "upstream_native_part_sweep_advanced_direct_properties",
@@ -3312,7 +3331,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         filling = capabilities["part_workbench"]["filling"]
         self.assertEqual(
             filling["status"],
-            "supported_expected_backed_with_c5m12_native_oracle_closeout",
+            "supported_expected_backed_with_c5m13_param_subset_closeout",
         )
         self.assertIn("Part::FilledFace", filling["type_ids"])
         self.assertEqual(filling["helper"], "Part.makeFilledFace")
@@ -3361,7 +3380,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "support_order_source_evidence",
             "source_backed_surface_support_order_known_gap",
             "constructor_params_metadata",
-            "non_default_params_source_backed_known_gap",
+            "param_degree_numiter_tol2d_tol3d_maxdegree_expected_backed",
+            "param_pts_anisotropy_tol_g1_g2_max_segments_native_blockers",
             "non_boundary_edge_isbound_false",
             "non_boundary_wire_constraints",
             "non_boundary_face_constraint",
@@ -3394,6 +3414,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "c5m8/part-filling-wrapper-boundary",
             "c5m8/part-filling-wrapper-uv-point-boundary",
             "c5m12/part-filling-non-boundary-edge-no-support-order",
+            "c5m13/part-filling-param-degree-only",
+            "c5m13/part-filling-param-num-iter-only",
+            "c5m13/part-filling-param-tol2d-tol3d-only",
+            "c5m13/part-filling-param-max-degree-only",
         ):
             self.assertIn(fixture, filling["fixtures"])
         self.assertEqual(
@@ -3416,6 +3440,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "c5m8/part-filling-wrapper-boundary",
                 "c5m8/part-filling-wrapper-uv-point-boundary",
                 "c5m12/part-filling-non-boundary-edge-no-support-order",
+                "c5m13/part-filling-param-degree-only",
+                "c5m13/part-filling-param-num-iter-only",
+                "c5m13/part-filling-param-tol2d-tol3d-only",
+                "c5m13/part-filling-param-max-degree-only",
             ],
         )
         for diagnostic in (
@@ -3462,7 +3490,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "order_map_source_backed_c0_g1_g2_parser",
             "surface_support_order_native_helper_oracle_known_gap",
             "support_order_g1_fixture_source_backed",
-            "non_default_params_native_helper_oracle_known_gap",
+            "single_field_params_degree_numiter_tol2d_tol3d_maxdegree_expected_backed",
+            "pts_anisotropy_tol_g1_g2_max_segments_all_params_native_blockers",
             "non_boundary_edge_wire_face_vertex_source_backed",
             "non_boundary_edge_no_support_order_expected_backed",
             "non_boundary_edge_support_order_native_helper_oracle_known_gap",
@@ -3475,21 +3504,60 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         ):
             self.assertIn(boundary, filling["request_local_boundaries"])
         for gap in (
-            "surface_support_order_native_helper_expected",
-            "filling_support_order_g2_expected",
-            "non_default_params_native_helper_expected",
-            "non_boundary_edge_support_order_native_helper_expected",
+            "filling_surface_native_helper_blocker",
+            "filling_support_order_g1_native_helper_blocker",
+            "filling_support_order_g2_native_helper_blocker",
+            "filling_params_pts_anisotropy_tol_g1_g2_max_segments_blocker",
+            "filling_params_all_native_helper_blocker",
+            "filling_non_boundary_support_order_native_helper_blocker",
         ):
             self.assertIn(gap, filling["remaining_gaps"])
+            self.assertIn(gap, filling["narrowed_gaps"])
+        self.assertEqual(
+            filling["field_boundaries"]["expected_backed"],
+            [
+                "Boundary",
+                "default params",
+                "non-boundary edge without support/order",
+                "Degree",
+                "NumIter",
+                "Tol2d+Tol3d",
+                "MaxDegree",
+            ],
+        )
+        self.assertIn("Surface", filling["field_boundaries"]["narrowed_gap"])
+        self.assertIn("Supports+Orders G1", filling["field_boundaries"]["narrowed_gap"])
+        self.assertIn("Supports+Orders G2", filling["field_boundaries"]["narrowed_gap"])
+        self.assertIn("PtsOnCurve", filling["field_boundaries"]["narrowed_gap"])
+        self.assertEqual(
+            filling["narrowed_gaps"]["filling_params_pts_anisotropy_tol_g1_g2_max_segments_blocker"][
+                "freecadcmd_evidence"
+            ]["returncode"],
+            -11,
+        )
+        self.assertEqual(
+            filling["narrowed_gaps"]["filling_params_pts_anisotropy_tol_g1_g2_max_segments_blocker"][
+                "expected_backed_subsets"
+            ],
+            [
+                "c5m13/part-filling-param-degree-only",
+                "c5m13/part-filling-param-num-iter-only",
+                "c5m13/part-filling-param-tol2d-tol3d-only",
+                "c5m13/part-filling-param-max-degree-only",
+            ],
+        )
         self.assertEqual(
             filling["remaining_gaps"],
             [
-                "surface_support_order_native_helper_expected",
-                "filling_support_order_g2_expected",
-                "non_default_params_native_helper_expected",
-                "non_boundary_edge_support_order_native_helper_expected",
+                "filling_surface_native_helper_blocker",
+                "filling_support_order_g1_native_helper_blocker",
+                "filling_support_order_g2_native_helper_blocker",
+                "filling_params_pts_anisotropy_tol_g1_g2_max_segments_blocker",
+                "filling_params_all_native_helper_blocker",
+                "filling_non_boundary_support_order_native_helper_blocker",
             ],
         )
+        self.assertNotIn("non_default_params_native_helper_expected", filling["remaining_gaps"])
         for unsupported in ("non_boundary_constraints_deferred_diagnostic",):
             self.assertNotIn(unsupported, filling["request_local_boundaries"])
         self.assertIn("native_freecad_part_filledface_document_object", filling["non_goals"])
@@ -3511,7 +3579,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         geomplate = capabilities["part_workbench"]["geomplate"]
         self.assertEqual(
             geomplate["status"],
-            "supported_expected_backed_point_criteria_with_curve_wrapper_diagnostics",
+            "supported_expected_backed_projected_initial_surface_with_curve_wrapper_diagnostics",
         )
         self.assertIn("Part::GeomPlateSurface", geomplate["type_ids"])
         self.assertEqual(geomplate["helper"], "Part.GeomPlate.BuildPlateSurface")
@@ -3597,7 +3665,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "mixed_g0_2d_surface_constraints_expected_backed",
             "point_constraint_criteria_expected_backed",
             "projected_curve2d_source_backed",
-            "projected_curve2d_runtimeerror_blocker",
+            "projected_curve2d_initial_surface_expected_backed",
+            "projected_curve2d_no_initial_surface_v1_v2_blocker",
             "default_build_params_metadata",
             "approximation_metadata",
             "explicit_approximation_params_expected_backed",
@@ -3623,6 +3692,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "c5m7/part-geomplate-point-custom-criteria",
             "c5m7/part-geomplate-curve-criteria-diagnostic",
             "c5m7/part-geomplate-wrapper-boundary",
+            "c5m13/part-geomplate-projected-curve2d-initial-surface",
         ):
             self.assertIn(fixture, geomplate["fixtures"])
         self.assertEqual(
@@ -3641,6 +3711,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "c5m7/part-geomplate-point-custom-criteria",
                 "c5m7/part-geomplate-curve-criteria-diagnostic",
                 "c5m7/part-geomplate-wrapper-boundary",
+                "c5m13/part-geomplate-projected-curve2d-initial-surface",
             ],
         )
         for diagnostic in (
@@ -3691,7 +3762,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "g1_curve_on_surface_source_backed_not_native_expected_backed",
             "curve2d_on_surface_source_backed_expected_backed",
             "point2d_on_surface_source_backed_expected_backed",
-            "projected_curve2d_source_backed_not_native_expected_backed",
+            "projected_curve2d_initial_surface_expected_backed",
+            "projected_curve2d_no_initial_surface_v1_v2_blocker",
             "point_constraint_criteria_expected_backed",
             "curve_constraint_criteria_setters_not_implemented_in_freecad",
             "platesurface_curves_requires_wrapper_lifecycle",
@@ -3702,7 +3774,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "advanced_approximation_params_are_not_full_advanced_support",
             "2d_constraints_require_explicit_boundary_surface_and_uv_payload",
             "g1_native_hidden_diagnostic_only",
-            "projected_curve2d_runtimeerror_blocker",
+            "g1_curve_on_surface_not_implemented_diagnostic_only",
         ):
             self.assertIn(boundary, geomplate["request_local_boundaries"])
         for gap in (
@@ -3712,16 +3784,41 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertNotIn(gap, geomplate["remaining_gaps"])
         for gap in (
             "g1_curve_on_surface_native_hidden_diagnostic_only",
-            "projected_curve2d_runtimeerror_native_oracle_blocker",
+            "projected_curve2d_no_initial_surface_v1_v2_native_oracle_blocker",
             "curve_constraint_criteria_setters_not_implemented",
             "platesurface_curves_wrapper_lifecycle",
         ):
             self.assertIn(gap, geomplate["remaining_gaps"])
+            self.assertIn(gap, geomplate["narrowed_gaps"])
+        self.assertEqual(
+            geomplate["narrowed_gaps"]["projected_curve2d_no_initial_surface_v1_v2_native_oracle_blocker"][
+                "expected_backed_subsets"
+            ],
+            ["c5m13/part-geomplate-projected-curve2d-initial-surface"],
+        )
+        self.assertEqual(
+            geomplate["narrowed_gaps"]["projected_curve2d_no_initial_surface_v1_v2_native_oracle_blocker"][
+                "freecadcmd_evidence"
+            ]["error"],
+            "RuntimeError: Geom_RectangularTrimmedSurface::V1==V2",
+        )
+        self.assertEqual(
+            geomplate["narrowed_gaps"]["curve_constraint_criteria_setters_not_implemented"][
+                "freecadcmd_evidence"
+            ]["error"],
+            "NotImplementedError: Not yet implemented",
+        )
+        self.assertEqual(
+            geomplate["narrowed_gaps"]["platesurface_curves_wrapper_lifecycle"]["freecadcmd_evidence"][
+                "returncode"
+            ],
+            139,
+        )
         self.assertEqual(
             geomplate["remaining_gaps"],
             [
                 "g1_curve_on_surface_native_hidden_diagnostic_only",
-                "projected_curve2d_runtimeerror_native_oracle_blocker",
+                "projected_curve2d_no_initial_surface_v1_v2_native_oracle_blocker",
                 "curve_constraint_criteria_setters_not_implemented",
                 "platesurface_curves_wrapper_lifecycle",
             ],

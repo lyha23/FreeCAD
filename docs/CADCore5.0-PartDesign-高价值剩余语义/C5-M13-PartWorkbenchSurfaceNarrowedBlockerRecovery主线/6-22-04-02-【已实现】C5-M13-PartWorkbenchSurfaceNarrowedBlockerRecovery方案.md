@@ -1,4 +1,6 @@
-# C5-M13 Part Workbench Surface Narrowed Blocker Recovery 方案
+# 【已实现】C5-M13 Part Workbench Surface Narrowed Blocker Recovery 方案
+
+状态：`done_C5-M13`
 
 ## 当前基线
 
@@ -10,6 +12,13 @@ C5-M12 已完成 surface native oracle recovery 收口，当前 `docs/CADCore3.0
 - `part_workbench.loft`：C5-M12 已关闭 broad `complex_profile_family`；C5-M13 不再重做 Loft。
 
 C5-M13 的目标不是把所有 surface 相关内容混成大包，而是处理同一类“已有 helper / wrapper 能力因 FreeCADCmd/native oracle blocker 无法晋级 expected-backed”的剩余问题。每个子项必须保留 source authority、DTO/API、collector path、expected schema、focused tests 和 capability/docs 收口。
+
+## 最终收口
+
+- Sweep located/combined：保留 `add(Profile, Location, WithContact, WithCorrection)` Location overload build-stage `NCollection_Array1::Value` blocker；combined 依赖 Location overload，no-location controls 已可 build。
+- Filling：`Degree`、`NumIter`、`Tol2d+Tol3d`、`MaxDegree` 单字段 representatives 已 expected-backed；`Surface`、support/order G1/G2、`PtsOnCurve`、`Anisotropy`、`TolG1+TolG2`、`MaxSegments`、all-params、non-boundary support/order 保留 precise blocker。
+- GeomPlate：`ProjectedCurve2d + InitialSurface` 已 expected-backed；无 `InitialSurface` ProjectedCurve2d 保留 `Geom_RectangularTrimmedSurface::V1==V2` blocker；G1、curve criteria setters、`Part.PlateSurface.Curves` 保留 native-hidden/NotImplemented/SIGSEGV 边界。
+- Loft broad `complex_profile_family`、完整 Part surface family、GUI/native DocumentObject、persistent wrapper lifecycle 和 cad-core-output-derived expected 均未重开。
 
 ## FreeCAD 调用链
 

@@ -1,6 +1,6 @@
-# C5-M13-S5 capability 与文档收口
+# 【已实现】C5-M13-S5 capability 与文档收口
 
-状态：`pending_C5M13-S5_docs_closeout`
+状态：`done_C5M13-S5_docs_closeout`
 
 ## 目标
 
@@ -22,6 +22,12 @@
 - Root `C5-SRC-013`、`C5-SCOPE-1301`、`C5-BLK-1301`、`C5-ORC-1301..1306`、`C5-VAL-1301..1306` 更新为最终状态。
 - 本包局部矩阵关闭 S5 之前的 pending rows。
 - 本方案和 S5 步骤实现完成后改名或标题加 `【已实现】`，队列返回空。
+
+## 完成结果
+
+- capability metadata 和 adapter assertions 已同步到 S2-S4 当前事实。
+- C3 gap 文档、C5 README、root 矩阵和 C5-M13 包内矩阵均已关闭为 done。
+- C5-M13 队列为空；总入口、方案和 S5 step 标题 / 文件名按 `【已实现】` 收口。
 
 ## 非目标
 

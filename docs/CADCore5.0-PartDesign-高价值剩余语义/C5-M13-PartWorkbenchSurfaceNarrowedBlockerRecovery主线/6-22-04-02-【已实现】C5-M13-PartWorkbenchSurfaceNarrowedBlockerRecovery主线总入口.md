@@ -1,4 +1,6 @@
-# C5-M13 Part Workbench Surface Narrowed Blocker Recovery 主线
+# 【已实现】C5-M13 Part Workbench Surface Narrowed Blocker Recovery 主线
+
+状态：`done_C5-M13`
 
 C5-M13 承接 C5-M12 已收口后的剩余 Part Workbench surface narrowed blockers。C5-M12 已关闭 broad `part_sweep_wrapper_expected_collector`、Loft `complex_profile_family` broad gap，并为 Sweep support、Loft complex representatives、Filling non-boundary edge no-support/order 建立 expected-backed 证据；本包只处理 C5-M12 留下的精确 blocker，不重开完整 Part surface family。
 
@@ -14,7 +16,7 @@ C5-M13 承接 C5-M12 已收口后的剩余 Part Workbench surface narrowed block
 
 ## 入口文件
 
-- 方案：`6-22-04-02-C5-M13-PartWorkbenchSurfaceNarrowedBlockerRecovery方案.md`
+- 方案：`6-22-04-02-【已实现】C5-M13-PartWorkbenchSurfaceNarrowedBlockerRecovery方案.md`
 - scope 矩阵：`矩阵/c5m13_surface_narrowed_blocker_recovery_scope.tsv`
 - source / DTO / oracle 合同：`矩阵/c5m13_surface_narrowed_blocker_recovery_source_dto_oracle_contract.tsv`
 - fixture / oracle 矩阵：`矩阵/c5m13_surface_narrowed_blocker_recovery_fixture_oracle_matrix.tsv`
@@ -34,12 +36,12 @@ C5-M13 承接 C5-M12 已收口后的剩余 Part Workbench surface narrowed block
 | GeomPlate native oracle | G1 curve-on-surface、ProjectedCurve2d、criteria / PlateSurface wrapper边界 | S4 修复可采 G1/projected helper；不可采路径只保留 native-hidden / NotImplemented / RuntimeError blocker |
 | capability docs closeout | expected、tests、capability、C3/C5 docs | S5 同步 root/package matrices，队列为空后关闭 C5-M13 |
 
-## 当前 blocker 起点
+## 最终收口状态
 
-- Sweep：`part_sweep_located_profile_freecadcmd_wrapper_build_blocker`、`part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker`，当前错误为 `OCCError: NCollection_Array1::Value`。
-- Filling：`surface_support_order_native_helper_expected`、`filling_support_order_g2_expected`、`non_default_params_native_helper_expected`、`non_boundary_edge_support_order_native_helper_expected`。
-- GeomPlate：G1 curve-on-surface native-hidden diagnostic-only、ProjectedCurve2d `RuntimeError: Geom_RectangularTrimmedSurface::V1==V2` blocker；curve criteria setter 和 `Part.PlateSurface.Curves` wrapper lifecycle 当前仍是 non-goal / diagnostic boundary。
-- Loft：C5-M12 已关闭 broad `complex_profile_family`，只剩 sketch subelement native-hidden diagnostic；C5-M13 不重开 Loft，除非 S0 发现 capability 文档与代码不一致。
+- Sweep：`part_sweep_located_profile_freecadcmd_wrapper_build_blocker`、`part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker` 保留为 `add(Profile, Location, WithContact, WithCorrection)` Location overload build-stage `OCCError: NCollection_Array1::Value` blocker；combined 依赖 Location overload，no-location controls 已可 build。
+- Filling：`Degree`、`NumIter`、`Tol2d+Tol3d`、`MaxDegree` 单字段 representatives 已 expected-backed；`Surface`、support/order G1/G2、`PtsOnCurve`、`Anisotropy`、`TolG1+TolG2`、`MaxSegments`、all-params、non-boundary support/order 保留 precise blocker。
+- GeomPlate：`ProjectedCurve2d + InitialSurface` 已 expected-backed；无 `InitialSurface` ProjectedCurve2d 保留 `Geom_RectangularTrimmedSurface::V1==V2` blocker；G1 curve-on-surface native-hidden/NotImplemented、curve criteria setters NotImplemented、`Part.PlateSurface.Curves` wrapper lifecycle SIGSEGV/non-goal 边界保留。
+- Loft：C5-M12 已关闭 broad `complex_profile_family`，C5-M13 未重开 Loft；完整 Part surface family、GUI/native DocumentObject、persistent wrapper lifecycle 和 cad-core-output-derived expected 仍为非目标。
 
 ## 队列检查
 
