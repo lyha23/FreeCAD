@@ -771,6 +771,30 @@ bool applyFinalResultRefineForFeature(const app::DocumentObject& bodyObject,
     return true;
 }
 
+std::optional<std::string> directTipSubshapeOwnerForBody(
+    const app::DocumentObject& body,
+    const std::string& stopFeature,
+    const std::vector<std::string>& appliedAdditiveFeatures,
+    const std::vector<std::string>& appliedSubtractiveFeatures,
+    const std::vector<std::string>& appliedReplacementFeatures,
+    const std::vector<std::string>& refinedFeatures,
+    bool hasNonIdentityPlacement)
+{
+    if (hasNonIdentityPlacement || body.properties.contains("BaseFeature")
+        || !appliedSubtractiveFeatures.empty() || !appliedReplacementFeatures.empty()
+        || !refinedFeatures.empty()) {
+        return std::nullopt;
+    }
+    if (appliedAdditiveFeatures.size() != 1U || appliedAdditiveFeatures.front() != stopFeature) {
+        return std::nullopt;
+    }
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::Body::execute(),
+    // reads "tipShape = static_cast<Part::Feature*>(tip)->Shape.getShape()" and writes
+    // "Shape.setValue(tipShape)". When the first additive Tip is adopted directly, Body display
+    // FaceN/EdgeN/VertexN entries still refer to that Tip's subshape namespace.
+    return stopFeature;
+}
+
 }  // namespace
 
 std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::DocumentObject& body,
@@ -1005,6 +1029,13 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
         bodyNamedShape->owner = body.name;
         bodyNamedShape->shape = resultShape;
     }
+    const auto directTipSubshapeOwner = directTipSubshapeOwnerForBody(body,
+                                                                      resolvedStopFeature,
+                                                                      appliedAdditiveFeatures,
+                                                                      appliedSubtractiveFeatures,
+                                                                      appliedReplacementFeatures,
+                                                                      refinedFeatures,
+                                                                      hasNonIdentityPlacement);
 
     return BodyTopoShapeResult {
         resultShape,
@@ -1017,6 +1048,7 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
         appliedSubtractiveFeatures,
         appliedReplacementFeatures,
         refinedFeatures,
+        directTipSubshapeOwner,
     };
 }
 
@@ -1094,6 +1126,9 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
     result["replay_stopped_at_tip"] = bodyTopoShape->stopFeature;
     if (!bodyTopoShape->refinedFeatures.empty()) {
         result["refined_features"] = bodyTopoShape->refinedFeatures;
+    }
+    if (bodyTopoShape->directTipSubshapeOwner) {
+        result["direct_tip_subshape_owner"] = *bodyTopoShape->directTipSubshapeOwner;
     }
     context.objects[object.name] = result;
 }

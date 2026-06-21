@@ -10,6 +10,7 @@
 #include "cad_core/part/property_topo_shape.h"
 
 #include <algorithm>
+#include <cctype>
 #include <map>
 #include <optional>
 #include <set>
@@ -1247,6 +1248,48 @@ std::string currentSubnameForStable(const std::string& indexed,
     return stableSubname.substr(0, dot + 1) + indexed;
 }
 
+bool isPlainTopologicalElementName(const std::string& name)
+{
+    const auto hasPrefixAndDigits = [&name](const std::string& prefix) {
+        if (name.rfind(prefix, 0) != 0 || name.size() == prefix.size()) {
+            return false;
+        }
+        return std::all_of(name.begin() + static_cast<std::ptrdiff_t>(prefix.size()),
+                           name.end(),
+                           [](unsigned char value) { return std::isdigit(value) != 0; });
+    };
+    return hasPrefixAndDigits("Face") || hasPrefixAndDigits("Edge") || hasPrefixAndDigits("Vertex");
+}
+
+std::string bodyTipQualifiedStableSubname(const std::string& objectName,
+                                          const std::string& indexed,
+                                          const std::string& stableSubname,
+                                          const ComputeContext& context)
+{
+    if (stableSubname != indexed || !isPlainTopologicalElementName(stableSubname)) {
+        return stableSubname;
+    }
+
+    const auto documentIt = context.documentObjects.find(objectName);
+    if (documentIt == context.documentObjects.end() || documentIt->second == nullptr
+        || documentIt->second->typeId != "PartDesign::Body") {
+        return stableSubname;
+    }
+    const auto objectIt = context.objects.find(objectName);
+    if (objectIt == context.objects.end() || !objectIt->second.is_object()) {
+        return stableSubname;
+    }
+    const auto ownerIt = objectIt->second.find("direct_tip_subshape_owner");
+    if (ownerIt == objectIt->second.end() || !ownerIt->is_string() || ownerIt->get<std::string>().empty()) {
+        return stableSubname;
+    }
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::Body::execute(),
+    // "Shape.setValue(tipShape)" publishes the Tip feature shape as the Body display shape.
+    // Existing NamedShape ElementMap paths win; this only qualifies unresolved bare
+    // FaceN/EdgeN/VertexN entries when Body proved a direct Tip owner.
+    return ownerIt->get<std::string>() + "." + stableSubname;
+}
+
 nlohmann::json responseMesh(const std::string& objectName, const nlohmann::json& mesh)
 {
     if (!mesh.is_object()) {
@@ -1366,6 +1409,7 @@ nlohmann::json responseSubshapes(const std::string& objectName,
         if (stableSubname.empty()) {
             stableSubname = internalElementStableSubnameFor(objectName, indexed, context);
         }
+        stableSubname = bodyTipQualifiedStableSubname(objectName, indexed, stableSubname, context);
         const std::string subname = currentSubnameForStable(indexed, stableSubname);
         subshapes.push_back({
             {"id", objectName + ":" + indexed},
