@@ -4,7 +4,7 @@
 
 `part_workbench.project_on_surface` 已发布 C4M1 live guard：`Mode=Edges/Faces/All`、face rebuild / hole wires、`Mode=All` Height solid、Offset placement、多 `Projection` ordered `App::PropertyLinkSubList`、普通 indexed `NamedShape` 由 11 个 expected-backed geometry fixtures 覆盖；`part-project-on-surface-deferred-boundaries` 是 diagnostic-backed deferred guard。
 
-当前缺口不是投影几何，而是投影结果的 provenance：输出 edge / wire / face / compound 能否说明来自哪个 `Projection` object/subname、LinkSubList item、Mode 分支、wire fragment 或 face wire，并能进入 MapperHistory / ElementMap / reference recovery 账本。
+当前已发布的第二批能力不是新增投影几何，而是投影结果的 provenance：输出 edge / wire / face / compound 能说明来自哪个 `Projection` object/subname、LinkSubList item、Mode 分支、wire fragment 或 face wire，并能进入 MapperHistory / ElementMap / reference recovery 账本。S4 收口后，capability JSON 的 `remaining_gaps` 只保留 `gui_projection_task_panel` 与 `unverified_advanced_branches`；native mapper/history hidden-until-probe 是 request-local/source-backed 边界，不再作为 broad provenance gap。
 
 ## FreeCAD 调用链
 
@@ -33,7 +33,7 @@ provenance evidence 字段冻结在 `矩阵/c5m9_project_on_surface_provenance_e
 
 当前 `cad-core/tools/collect_freecad_expected.py::project_on_surface_payload()` 能从 fixture/native shape 采集：`source_support`、`support_face`、`source_projection`、`projection_subshape`、`projection_items`、`mode`、`height`、`offset`、`offset_vector`、projected solid/face/wire/inner-wire counts、bbox、volume 和 topology counts。它不能采集 native ProjectOnSurface 的 per-edge fragment owner、face wire owner、compound child -> source child map、MapperHistory id、ElementMap map/history 或 reference recovery 结果。
 
-临时 expected 策略：native 可见字段继续写入 `.freecad.json`；native 不可见的 provenance 字段不得从 cad-core 输出倒推 expected，只能在本包矩阵中记录 source-backed known_gap、delete_condition 和 S2/S3 的 semantic test owner。删除条件是：FreeCADCmd collector 或专用 probe 能导出对应 native ElementMap/MapperHistory，或者 S2/S3 根据 FreeCAD source ledger 实现 `NamedShape.mapper_history` 并有 fixture/focused test 证明字段来自 projection item ledger，而非 bbox、输出顺序、fixture 名或几何相似性。
+临时 expected 策略：native 可见字段继续写入 `.freecad.json`；native 不可见的 provenance 字段不得从 cad-core 输出倒推 expected，只能在本包矩阵中记录 source-backed known_gap、delete_condition 和 S2/S3 的 semantic test owner。S2/S3 已根据 FreeCAD source ledger 实现 `NamedShape.mapper_history`，并有 fixture/focused test 证明字段来自 projection item ledger，而非 bbox、输出顺序、fixture 名或几何相似性；删除 native-hidden 边界的条件仍是 FreeCADCmd collector 或专用 probe 能导出对应 native ElementMap/MapperHistory。
 
 ## cad-core 落点
 
@@ -57,7 +57,7 @@ provenance evidence 字段冻结在 `矩阵/c5m9_project_on_surface_provenance_e
 2. S1：读 FreeCAD source 与 cad-core 当前实现，写清 projected provenance 字段、oracle 可采路径、known_gap 删除条件和 fixture matrix。
 3. S2：实现 edge / wire projected provenance 与 mapper/history 传播；补 fixtures、expected 或 known_gap、focused tests。
 4. S3：实现 face rebuild、hole wire、Mode=All compound/solid provenance；补 ElementMap / reference recovery evidence 和 tests。
-5. S4：同步 capability/docs/root matrices，关闭 `projected_edge_provenance_mapper_history` broad gap 或改成精确 remaining gap，队列清空后收口。
+5. S4：已同步 capability/docs/root matrices，关闭 `projected_edge_provenance_mapper_history` broad gap；native-hidden mapper/history 保留为 source-backed request-local boundary，队列清空后收口。
 
 ## 验收分层
 
@@ -89,5 +89,5 @@ python3 -m unittest tests.test_p8_features tests.test_expected_fixtures tests.te
 - first-batch `ProjectOnSurface` 11 个 expected-backed geometry fixtures 和 1 个 diagnostic-backed deferred guard 保持通过。
 - projected edge / wire / face / compound provenance 有 native expected、source-backed known_gap 或 diagnostic-backed 证据。
 - MapperHistory / ElementMap / reference recovery 边界明确；没有 bbox、输出顺序、fixture 名或 adapter 修剪特判。
-- capability metadata 中 `projected_edge_provenance_mapper_history` 不再是 broad gap；剩余项有具体 owner / delete_condition。
-- 本包 `工作步骤细分` 队列为空，全局 `C5-BLK-901` 才能关闭。
+- capability metadata 中 `projected_edge_provenance_mapper_history` 不再是 broad gap；剩余 `gui_projection_task_panel` / `unverified_advanced_branches` 有具体 non-goal / future-owner 边界，`native_project_on_surface_mapper_history_hidden_until_probe` 有 delete_condition。
+- 本包 `工作步骤细分` 队列为空，全局 `C5-BLK-901` 已关闭。

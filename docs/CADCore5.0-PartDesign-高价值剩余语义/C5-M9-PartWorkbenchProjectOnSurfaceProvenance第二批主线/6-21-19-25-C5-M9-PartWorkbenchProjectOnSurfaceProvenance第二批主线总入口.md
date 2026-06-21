@@ -1,8 +1,8 @@
 # C5-M9 Part Workbench ProjectOnSurface Provenance 第二批主线
 
-本包承接 C4M1 / C5 root 中已经发布的 `Part::ProjectOnSurface` geometry / diagnostics live guard，只打开 projected subshape provenance / mapper history 第二批。第一批的 `Mode=Edges/Faces/All`、face rebuild / hole wires、Height solid、Offset placement、多 `Projection` ordered metadata、普通 indexed `NamedShape` 已由 11 个 expected-backed geometry fixtures 覆盖；`deferred-boundaries` 是 1 个 diagnostic-backed live guard。本包不重做这些投影几何。
+本包承接 C4M1 / C5 root 中已经发布的 `Part::ProjectOnSurface` geometry / diagnostics live guard，只打开 projected subshape provenance / mapper history 第二批。第一批的 `Mode=Edges/Faces/All`、face rebuild / hole wires、Height solid、Offset placement、多 `Projection` ordered metadata、普通 indexed `NamedShape` 已由 11 个 expected-backed geometry fixtures 覆盖；`deferred-boundaries` 是 1 个 diagnostic-backed live guard。本包不重做这些投影几何。S4 收口后，C5-M9 额外发布 edge / wire / face / all provenance、Projection item ledger、MapperHistory / ElementMap / reference recovery hook；旧 `projected_edge_provenance_mapper_history` broad gap 已关闭。
 
-范围边界：C5-M9 的交付物只落在 `cad-core`、fixtures、tests、capabilities 和文档矩阵。FreeCAD `src/Mod/Part/App/FeatureProjectOnSurface.cpp/.h`、`TopoShapeMapper*`、`PropertyTopoShape*` 只作为语义依据读取。若 native oracle 无法直接暴露 mapper/history，需要记录 source-backed known_gap 与删除条件，不能用 bbox、输出顺序、fixture 名或 adapter 后处理伪造 provenance。
+范围边界：C5-M9 的交付物只落在 `cad-core`、fixtures、tests、capabilities 和文档矩阵。FreeCAD `src/Mod/Part/App/FeatureProjectOnSurface.cpp/.h`、`TopoShapeMapper*`、`PropertyTopoShape*` 只作为语义依据读取。native oracle 当前仍无法直接暴露 mapper/history，因此 `native_project_on_surface_mapper_history_hidden_until_probe` 保留为 request-local/source-backed native-hidden 边界与删除条件，不能用 bbox、输出顺序、fixture 名或 adapter 后处理伪造 provenance。
 
 ## 目标
 
@@ -10,7 +10,7 @@
 - 复核 FreeCAD 调用链：`getSupportFace()` -> `getProjectionShapes()` -> `createProjectedWire()` -> `projectWire()` / `projectFace()` -> `filterShapes()` -> `createCompound()`，明确哪些输出 shape 需要保留源 object/subname、Projection LinkSubList item index、Mode 分支和 fragment ownership。
 - 为 edge / wire 投影补 projected edge provenance 与 mapper/history 证据，覆盖一对一 edge、wire 拆分或重建 edge、invalid provenance diagnostics。
 - 为 face rebuild / hole wire / Mode=All compound 或 height solid 结果补 source evidence、ElementMap / reference recovery hook 和 capability metadata。
-- 收口 `projected_edge_provenance_mapper_history` remaining gap，只发布 expected-backed、source-backed known_gap 或 diagnostic-backed 的精确边界。
+- 收口 `projected_edge_provenance_mapper_history` remaining gap，只发布 expected-backed、source-backed known_gap 或 diagnostic-backed 的精确边界。当前 `remaining_gaps` 只保留 `gui_projection_task_panel` 与 `unverified_advanced_branches`。
 
 ## 入口文件
 
@@ -31,7 +31,7 @@
 | source / oracle matrix | FreeCAD `FeatureProjectOnSurface` + `TopoShapeMapper` / `PropertyTopoShape` 审计 | S1 写清 projected result ownership、oracle 可采字段、source-backed known_gap 删除条件，关闭 `C5M9-BLK-101` |
 | edge / wire provenance | `c5m9/part-project-on-surface-edge-provenance`、`wire-split-provenance`、invalid provenance diagnostics | S2 补 projected edge/wire source evidence、MapperHistory / ElementMap 传播和 focused tests |
 | face / all provenance | `c5m9/part-project-on-surface-face-rebuild-provenance`、`all-compound-provenance` | S3 补 face rebuild、hole wire、Mode=All compound/solid ownership与 reference recovery evidence |
-| capability closeout | docs、capability metadata、root matrices、remaining gaps | S4 发布精确 support / known_gap / diagnostic / non-goal 边界，并清空本包队列 |
+| capability closeout | docs、capability metadata、root matrices、remaining gaps | S4 已发布精确 support / source-backed native-hidden boundary / diagnostic / non-goal 边界，并清空本包队列 |
 
 ## 队列检查
 
