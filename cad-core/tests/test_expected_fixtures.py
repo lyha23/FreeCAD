@@ -32,6 +32,58 @@ class CadCoreExpectedFixtureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCa
         self.assertEqual(known_gap["freecadcmd_evidence"]["property"], "Sections")
         self.assertIn("object_fields.sections[].subname", known_gap["uncollected_fields"])
 
+    def test_c5m12_filling_geomplate_expected_metadata_matches_s4_boundaries(self) -> None:
+        expected = self.expected_freecad("c5m12", "part-filling-non-boundary-edge-no-support-order")
+        self.assertNotIn("known_gap", expected)
+        self.assertEqual(expected["object_fields"]["feature"], "part_filled_face")
+        self.assertEqual(expected["object_fields"]["topo_naming_history"], "maker_history:filling")
+        self.assertEqual(expected["object_fields"]["non_boundary_constraint_count"], 1)
+        self.assertEqual(
+            expected["object_fields"]["non_boundary_constraints_status"],
+            "freecad_expected_backed",
+        )
+        self.assertIn("bbox", expected)
+        self.assertIn("topology_counts", expected)
+
+        blockers = {
+            ("c5m8", "part-filling-initial-surface-boundary"): (
+                "part_filling_initial_surface_native_helper_oracle_blocked",
+                "filling_surface_only",
+                "shape_summary for Part.makeFilledFace(surface=face)",
+            ),
+            ("c5m8", "part-filling-support-order-edge-face"): (
+                "part_filling_support_order_native_helper_oracle_blocked",
+                "filling_support_order",
+                "shape_summary for Part.makeFilledFace(supports=..., orders=...)",
+            ),
+            ("c5m8", "part-filling-non-default-params"): (
+                "part_filling_non_default_params_native_helper_oracle_blocked",
+                "filling_params",
+                "shape_summary for explicit BRepOffsetAPI_MakeFilling constructor params",
+            ),
+            ("c5m8", "part-filling-non-boundary-edge-support"): (
+                "part_filling_non_boundary_edge_support_native_helper_oracle_blocked",
+                "filling_nonboundary_support_order",
+                "shape_summary for non-boundary edge with support/order",
+            ),
+            ("c5m7", "part-geomplate-g1-curve-on-surface"): (
+                "geomplate_g1_curve_on_surface_native_oracle_blocked",
+                "geomplate_g1_curve_on_surface",
+                "shape_summary for Adaptor3d_CurveOnSurface G1 helper result",
+            ),
+            ("c5m7", "part-geomplate-projected-curve2d"): (
+                "geomplate_projected_curve2d_native_oracle_blocked",
+                "geomplate_projected_curve2d",
+                "shape_summary for ProjectedCurve2d helper result",
+            ),
+        }
+        for (group, fixture), (kind, probe_case, uncollected_field) in blockers.items():
+            with self.subTest(group=group, fixture=fixture):
+                known_gap = self.expected_freecad(group, fixture)["known_gap"]
+                self.assertEqual(known_gap["kind"], kind)
+                self.assertEqual(known_gap["freecadcmd_evidence"]["probe_case"], probe_case)
+                self.assertIn(uncollected_field, known_gap["uncollected_fields"])
+
     def test_c5m10_sweep_wrapper_expected_metadata_matches_s2_boundaries(self) -> None:
         expected_backed = {
             "part-sweep-auxiliary-spine-contract": {"auxiliary_spine", "mode"},

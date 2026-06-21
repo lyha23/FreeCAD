@@ -2,11 +2,20 @@
   "freecad_version": "1.2.0 revision 20260519",
   "known_gap": {
     "cad_core_fixture": "cad-core/fixtures/c5m7/part-geomplate-projected-curve2d.json",
-    "delete_condition": "Replace this blocker with a FreeCAD expected geometry payload only after a stable native oracle can call Part.GeomPlate.CurveConstraint.setProjectedCurve(...) without process termination.",
+    "delete_condition": "Replace this blocker with a FreeCAD expected geometry payload only after a stable native oracle can call Part.GeomPlate.CurveConstraint.setProjectedCurve(...) and return helper geometry instead of RuntimeError.",
+    "freecadcmd_evidence": {
+      "error": "RuntimeError: Geom_RectangularTrimmedSurface::V1==V2",
+      "helper": "Part.GeomPlate.CurveConstraint.setProjectedCurve",
+      "probe_case": "geomplate_projected_curve2d"
+    },
     "kind": "geomplate_projected_curve2d_native_oracle_blocked",
-    "reason": "Do not freeze ProjectedCurve2d geometry from cad-core output. FreeCAD CurveConstraintPyImp.cpp::setProjectedCurve() calls SetProjectedCurve(hCurve, tolU, tolV), but the FreeCADCmd Python wrapper probe terminates the native process for this representative.",
+    "reason": "Do not freeze ProjectedCurve2d geometry from cad-core output. FreeCAD CurveConstraintPyImp.cpp::setProjectedCurve() calls SetProjectedCurve(hCurve, tolU, tolV), but the S1 FreeCADCmd Python wrapper probe returns a stable RuntimeError before helper expected geometry is available.",
     "source_authority": [
       "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate/CurveConstraintPyImp.cpp::CurveConstraintPy::setProjectedCurve()"
+    ],
+    "uncollected_fields": [
+      "shape_summary for ProjectedCurve2d helper result",
+      "object_fields.constraints[].projected_curve2d native helper geometry"
     ]
   },
   "reference": "Native FreeCAD ProjectedCurve2d oracle is blocked for this fixture; cad-core source-backed implementation is covered by focused source-evidence tests, not by this expected file."

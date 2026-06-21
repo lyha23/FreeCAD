@@ -2,13 +2,23 @@
   "freecad_version": "1.2.0 revision 20260519",
   "known_gap": {
     "kind": "part_filling_non_boundary_edge_support_native_helper_oracle_blocked",
-    "reason": "Do not freeze Part.makeFilledFace non-boundary edge support/order geometry from cad-core output. The C5-M8 support/order native helper oracle remains blocked, and the collector probe records Supports/Orders as unsupported instead of returning geometry.",
+    "reason": "Do not freeze Part.makeFilledFace non-boundary edge support/order geometry from cad-core output. C5-M12 recovered only the non-boundary edge without support/order representative; this support/order path remains blocked by the S1 FreeCADCmd non-boundary support/order probe.",
     "source_authority": [
       "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/AppPartPy.cpp::makeFilledFace()",
       "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementFilledFace()",
       "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/BRepOffsetAPI_MakeFillingPyImp.cpp::add()"
     ],
     "cad_core_fixture": "cad-core/fixtures/c5m8/part-filling-non-boundary-edge-support.json",
+    "c5m12_recovered_fixture": "cad-core/fixtures/c5m12/part-filling-non-boundary-edge-no-support-order.json",
+    "freecadcmd_evidence": {
+      "helper": "Part.makeFilledFace",
+      "probe_case": "filling_nonboundary_support_order",
+      "error": "process_exit_139"
+    },
+    "uncollected_fields": [
+      "shape_summary for non-boundary edge with support/order",
+      "object_fields.support_order_source_evidence native helper geometry"
+    ],
     "delete_condition": "Replace this known_gap with a FreeCAD expected geometry payload after Part.makeFilledFace non-boundary edge Supports/Orders returns stably from FreeCADCmd without timeout, process termination, or collector unsupported guard."
   },
   "reference": "Source-backed Part.makeFilledFace non-boundary edge support/order fixture; cad-core coverage is enforced by focused source-evidence tests."

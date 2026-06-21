@@ -1018,7 +1018,10 @@ void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeCo
             {"support_face_count", build.supportFaceCount},
             {"order_count", build.orderCount},
             {"surface_support_order_status", "source_backed_native_helper_oracle_known_gap"},
-            {"non_boundary_constraints_status", "source_backed_native_helper_oracle_known_gap"},
+            {"non_boundary_constraints_status",
+             build.nonBoundaryConstraintCount > 0 && build.supportFaceCount == 0 && build.orderCount == 0
+                 ? "freecad_expected_backed"
+                 : "source_backed_native_helper_oracle_known_gap"},
             {"default_params", fillingParamsJson(FilledFaceParams {})},
             {"params", fillingParamsJson(*params)},
             {"params_source", "Part.makeFilledFace constructor kwargs"},

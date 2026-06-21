@@ -1214,6 +1214,7 @@ def part_filled_face_default_object_fields(
     boundary_mode: str | None = None,
     boundary_edge_count: int | None = None,
     params: dict[str, Any] | None = None,
+    non_boundary_constraint_count: int = 0,
 ) -> dict:
     fields: dict[str, Any] = {
         "status": "ok",
@@ -1230,6 +1231,9 @@ def part_filled_face_default_object_fields(
     if params is not None:
         fields["params"] = params
         fields["params_source"] = "Part.makeFilledFace constructor kwargs"
+    if non_boundary_constraint_count > 0:
+        fields["non_boundary_constraint_count"] = non_boundary_constraint_count
+        fields["non_boundary_constraints_status"] = "freecad_expected_backed"
     return fields
 
 
@@ -1308,6 +1312,21 @@ def part_filled_face_boundary_shapes(created: dict[str, Any], spec: dict) -> tup
     if whole_shapes == 1 and len(shapes) == 1:
         return shapes, "closed_wire", len(getattr(shapes[0], "Edges", []))
     return shapes, "mixed_boundary", selected_edges
+
+
+def part_filled_face_non_boundary_constraint_count(shapes: list[Any]) -> int:
+    boundary_consumed = False
+    count = 0
+    for shape in shapes:
+        shape_type = getattr(shape, "ShapeType", "")
+        if not boundary_consumed and shape_type == "Wire":
+            boundary_consumed = True
+            continue
+        if shape_type == "Wire":
+            count += len(getattr(shape, "Edges", []))
+        elif shape_type in {"Edge", "Face", "Vertex"}:
+            count += 1
+    return count
 
 
 def part_filled_face_params(properties: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any], bool]:
@@ -1410,6 +1429,7 @@ def collect_part_filled_face_expected(
                     boundary_mode,
                     boundary_edge_count,
                     params_evidence if has_explicit_params else None,
+                    part_filled_face_non_boundary_constraint_count(shapes),
                 )
                 object_payloads[name] = payload
             except UnsupportedFixture as exc:
@@ -1807,17 +1827,26 @@ def geomplate_projected_curve2d_known_gap(fixture_path: Path) -> dict[str, Any]:
             "reason": (
                 "Do not freeze ProjectedCurve2d geometry from cad-core output. FreeCAD "
                 "CurveConstraintPyImp.cpp::setProjectedCurve() calls SetProjectedCurve(hCurve, "
-                "tolU, tolV), but the FreeCADCmd Python wrapper probe terminates the native "
-                "process for this representative."
+                "tolU, tolV), but the S1 FreeCADCmd Python wrapper probe returns a stable "
+                "RuntimeError before helper expected geometry is available."
             ),
             "source_authority": [
                 "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate/CurveConstraintPyImp.cpp::CurveConstraintPy::setProjectedCurve()",
             ],
             "cad_core_fixture": f"cad-core/fixtures/c5m7/{fixture_path.name}",
+            "freecadcmd_evidence": {
+                "helper": "Part.GeomPlate.CurveConstraint.setProjectedCurve",
+                "probe_case": "geomplate_projected_curve2d",
+                "error": "RuntimeError: Geom_RectangularTrimmedSurface::V1==V2",
+            },
+            "uncollected_fields": [
+                "shape_summary for ProjectedCurve2d helper result",
+                "object_fields.constraints[].projected_curve2d native helper geometry",
+            ],
             "delete_condition": (
                 "Replace this blocker with a FreeCAD expected geometry payload only after a stable "
                 "native oracle can call Part.GeomPlate.CurveConstraint.setProjectedCurve(...) "
-                "without process termination."
+                "and return helper geometry instead of RuntimeError."
             ),
         },
         "reference": (

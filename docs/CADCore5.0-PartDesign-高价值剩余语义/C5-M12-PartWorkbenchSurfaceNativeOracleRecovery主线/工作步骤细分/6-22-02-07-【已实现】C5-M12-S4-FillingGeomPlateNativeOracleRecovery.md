@@ -1,6 +1,6 @@
 # C5-M12-S4 Filling / GeomPlate native oracle recovery
 
-状态：`pending_C5M12-S4_filling_geomplate_oracle`
+状态：`done_C5M12-S4_filling_geomplate_oracle_recovery`
 
 ## 目标
 
@@ -18,9 +18,10 @@
 
 ## 产物
 
-- collectable Filling / GeomPlate blockers 替换为 FreeCADCmd expected。
-- uncollectable helper paths 保留精确 blocker，记录 FreeCADCmd / wrapper evidence。
-- 更新 `C5M12-BLK-401`、`C5M12-SCOPE-401`、`C5M12-ORC-401`。
+- 新增 `cad-core/fixtures/c5m12/part-filling-non-boundary-edge-no-support-order.json` 与 FreeCADCmd expected，覆盖 S1 确认可采的 non-boundary edge without support/order representative。
+- Filling `surface`、support/order、non-default params、non-boundary support/order 仍保留 FreeCADCmd blocker，并在 expected metadata 中记录 probe case、error 与未采字段。
+- GeomPlate G1 curve-on-surface 保留 native-hidden / diagnostic-only blocker；ProjectedCurve2d 保留 FreeCADCmd RuntimeError blocker。
+- 已更新 `C5M12-BLK-401`、`C5M12-SCOPE-401`、`C5M12-ORC-401` 与 root C5/C3 相关矩阵。
 
 ## 非目标
 

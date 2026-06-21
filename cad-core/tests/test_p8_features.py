@@ -1391,6 +1391,36 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             )
         )
 
+    def test_c5m12_part_filling_non_boundary_edge_without_support_order_is_expected_backed(self) -> None:
+        result = self.run_recompute("part-filling-non-boundary-edge-no-support-order", "c5m12")
+        filled = result["objects"]["FilledFace"]
+        named_shape = result["named_shapes"]["FilledFace"]
+        expected = self.expected_freecad("c5m12", "part-filling-non-boundary-edge-no-support-order")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertNotIn("known_gap", expected)
+        self.assert_part_filling_history(result, "closed_wire")
+        self.assertEqual(filled["non_boundary_constraint_count"], 1)
+        self.assertEqual(filled["non_boundary_constraints_status"], "freecad_expected_backed")
+        self.assertEqual(filled["support_face_count"], 0)
+        self.assertEqual(filled["order_count"], 0)
+        self.assertEqual(filled["support_order_source_evidence"], [])
+        self.assertEqual(
+            filled["non_boundary_constraint_source_evidence"],
+            [
+                {
+                    "object": "ConstraintEdge",
+                    "subname": "Edge1",
+                    "stable_subname": "Edge1",
+                    "shape_kind": "edge",
+                    "builder_call": "Add(edge, support, order, IsBound=false)",
+                    "is_boundary": False,
+                }
+            ],
+        )
+        self.assertIn("part_filling:non_boundary_constraints", named_shape["element_history_status"])
+        self.assert_object_matches_expected(result, "c5m12", "part-filling-non-boundary-edge-no-support-order")
+
     def test_c5m8_part_filling_non_boundary_face_point_is_expected_backed(self) -> None:
         result = self.run_recompute("part-filling-non-boundary-face-point", "c5m8")
         filled = result["objects"]["FilledFace"]

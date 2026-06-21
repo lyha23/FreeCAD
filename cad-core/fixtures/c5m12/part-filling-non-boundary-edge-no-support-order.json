@@ -1,0 +1,49 @@
+{
+  "Objects": [
+    {
+      "Name": "Profile",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 2
+      }
+    },
+    {
+      "Name": "ConstraintEdge",
+      "ID": 2,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": -1,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 1,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "FilledFace",
+      "ID": 3,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Profile"
+            },
+            {
+              "value": "ConstraintEdge",
+              "SubList": ["Edge1"],
+              "StableSubList": ["Edge1"]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["FilledFace"]
+  }
+}
