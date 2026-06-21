@@ -2,26 +2,42 @@
   "freecad_version": "1.2.0 revision 20260519",
   "known_gap": {
     "kind": "part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker",
-    "reason": "C5-M11 S2 collector resolves the combined auxiliary spine, located profile and tolerance payload, but the valid CombinedSweep wrapper build fails before shape() with OCCError: NCollection_Array1::Value. Invalid sibling payloads remain diagnostic-backed and are not promoted to expected geometry.",
+    "reason": "C5-M13 S2 re-probed combined auxiliary/location/tolerance wrapper call order. All combined variants that include add(Profile, Location, WithCorrection) reach isReady=true/status_before_build=0 and fail at builder.build() with OCCError: NCollection_Array1::Value, regardless of whether auxiliary/tolerance are applied before or after add(). The combined no-location control with the same auxiliary spine and tolerance builds successfully, so the combined blocker is narrowed to its dependency on the Location overload build-stage failure.",
     "freecadcmd_evidence": {
       "helper": "Part.BRepOffsetAPI_MakePipeShell",
       "runtime_helper": "Part.BRepOffsetAPI.MakePipeShell",
       "object": "CombinedSweep",
       "error": "OCCError: NCollection_Array1::Value",
+      "failed_stage": "build",
+      "is_ready_before_build": true,
+      "status_before_build": 0,
+      "probe_script": "docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M13-PartWorkbenchSurfaceNarrowedBlockerRecovery主线/docs/temp/6-22-04-46-c5m13-s2-sweep-location-combined-probe.py",
+      "probe_command": "FreeCADCmd -c \"exec(compile(open('docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M13-PartWorkbenchSurfaceNarrowedBlockerRecovery主线/docs/temp/6-22-04-46-c5m13-s2-sweep-location-combined-probe.py', encoding='utf-8').read(), 'c5m13_s2_sweep_probe.py', 'exec'))\"",
+      "failing_combined_call_orders": [
+        "combined_aux_tolerance_add",
+        "combined_tolerance_aux_add",
+        "combined_add_aux_tolerance",
+        "combined_aux_add_tolerance"
+      ],
+      "successful_controls": [
+        "combined_no_location_control",
+        "plain_control"
+      ],
+      "depends_on": "BRepOffsetAPI_MakePipeShell add(Profile, Location, WithContact, WithCorrection) overload",
       "invalid_siblings": [
         "InvalidCombinedContact",
         "InvalidCombinedLocation",
         "InvalidCombinedCorrection",
         "PrioritySupportMode"
       ],
-      "collector_policy": "S2 must keep or document an explicit FreeCADCmd wrapper collector blocker"
+      "collector_policy": "Keep the explicit FreeCADCmd wrapper collector blocker until the Location overload is collectable; do not fabricate combined expected from cad-core output."
     },
     "uncollected_fields": [
       "object_fields.advanced.auxiliary_spine + sections.location + tolerance combined payload",
       "shape_summary"
     ],
-    "next_batch": "Handle the combined located-profile wrapper build blocker after the Location overload is isolated; then collect combined expected to prove auxiliary, sections and tolerance metadata survive the same request-local helper.",
-    "isolation": "This is a combined-call FreeCADCmd blocker. It does not block the single-mode auxiliary, binormal or tolerance expected files already collected in S2.",
+    "next_batch": "Delete only after the Location overload returns stable shape_summary and the combined auxiliary + located section + tolerance payload can be collected from the same request-local FreeCADCmd wrapper helper.",
+    "isolation": "The combined blocker depends on Location overload collectability. The same auxiliary + tolerance helper path without Location builds successfully, and single-mode auxiliary, binormal and tolerance expected files remain unaffected.",
     "source_authority": [
       "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/BRepOffsetAPI_MakePipeShellPyImp.cpp::setAuxiliarySpine()",
       "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/BRepOffsetAPI_MakePipeShellPyImp.cpp::add()",

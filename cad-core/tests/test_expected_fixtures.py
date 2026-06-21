@@ -155,6 +155,27 @@ class CadCoreExpectedFixtureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCa
                     "Part.BRepOffsetAPI_MakePipeShell",
                 )
                 self.assertIn(uncollected_field, known_gap["uncollected_fields"])
+                evidence = known_gap["freecadcmd_evidence"]
+                if fixture == "part-sweep-located-profile-contract":
+                    self.assertEqual(evidence["failed_stage"], "build")
+                    self.assertTrue(evidence["is_ready_before_build"])
+                    self.assertEqual(evidence["status_before_build"], 0)
+                    self.assertIn("6-22-04-46-c5m13-s2-sweep-location-combined-probe.py", evidence["probe_script"])
+                    self.assertIn("located_profile_owned_vertex", evidence["failing_location_representatives"])
+                    self.assertIn("located_free_vertex", evidence["failing_location_representatives"])
+                    self.assertIn("located_add_before_transition", evidence["failing_call_order_variants"])
+                    self.assertIn("plain_control", evidence["successful_controls"])
+                if fixture == "part-sweep-advanced-combined-contract":
+                    self.assertEqual(evidence["failed_stage"], "build")
+                    self.assertTrue(evidence["is_ready_before_build"])
+                    self.assertEqual(evidence["status_before_build"], 0)
+                    self.assertIn("6-22-04-46-c5m13-s2-sweep-location-combined-probe.py", evidence["probe_script"])
+                    self.assertEqual(
+                        evidence["depends_on"],
+                        "BRepOffsetAPI_MakePipeShell add(Profile, Location, WithContact, WithCorrection) overload",
+                    )
+                    self.assertIn("combined_tolerance_aux_add", evidence["failing_combined_call_orders"])
+                    self.assertIn("combined_no_location_control", evidence["successful_controls"])
 
     def test_expected_fixtures_match_recompute_results(self) -> None:
         for group, fixture, expected_path in discover_expected_cases():

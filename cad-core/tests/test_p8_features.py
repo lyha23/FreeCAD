@@ -980,7 +980,13 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             expected["known_gap"]["kind"],
             "part_sweep_located_profile_freecadcmd_wrapper_build_blocker",
         )
-        self.assertEqual(expected["known_gap"]["freecadcmd_evidence"]["error"], "OCCError: NCollection_Array1::Value")
+        evidence = expected["known_gap"]["freecadcmd_evidence"]
+        self.assertEqual(evidence["error"], "OCCError: NCollection_Array1::Value")
+        self.assertEqual(evidence["failed_stage"], "build")
+        self.assertIn("located_free_vertex", evidence["failing_location_representatives"])
+        self.assertIn("located_profile_owned_vertex", evidence["failing_location_representatives"])
+        self.assertIn("located_add_before_transition", evidence["failing_call_order_variants"])
+        self.assertIn("plain_control", evidence["successful_controls"])
 
     def test_c5m10_part_sweep_tolerance_contract_and_compat_diagnostics(self) -> None:
         result = self.run_recompute("part-sweep-tolerance-contract", "c5m10")
@@ -1096,7 +1102,15 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             expected["known_gap"]["kind"],
             "part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker",
         )
-        self.assertEqual(expected["known_gap"]["freecadcmd_evidence"]["error"], "OCCError: NCollection_Array1::Value")
+        evidence = expected["known_gap"]["freecadcmd_evidence"]
+        self.assertEqual(evidence["error"], "OCCError: NCollection_Array1::Value")
+        self.assertEqual(evidence["failed_stage"], "build")
+        self.assertEqual(
+            evidence["depends_on"],
+            "BRepOffsetAPI_MakePipeShell add(Profile, Location, WithContact, WithCorrection) overload",
+        )
+        self.assertIn("combined_aux_tolerance_add", evidence["failing_combined_call_orders"])
+        self.assertIn("combined_no_location_control", evidence["successful_controls"])
 
     def assert_part_filling_history(
         self,
