@@ -1485,6 +1485,97 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(geomplate["helper"], "Part.GeomPlate.BuildPlateSurface")
         self.assert_object_matches_expected(result, "c5m7", "part-geomplate-wrapper-boundary")
 
+    def project_on_surface_provenance_events(self, result: dict, object_name: str) -> list[dict]:
+        return [
+            event
+            for event in result["named_shapes"][object_name]["mapper_history"]
+            if event.get("diagnostic_status") == "project_on_surface_edge_wire_provenance"
+        ]
+
+    def test_c5m9_part_project_on_surface_edge_provenance_has_mapper_history(self) -> None:
+        result = self.run_recompute("part-project-on-surface-edge-provenance", "c5m9")
+        projected = result["objects"]["ProjectedEdgeProvenance"]
+        events = self.project_on_surface_provenance_events(result, "ProjectedEdgeProvenance")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(projected["projection_item_ledger"], [
+            {
+                "source_object": "ProjectionLine",
+                "source_subname": "Edge1",
+                "stable_subname": "Edge1",
+                "projection_item_index": 0,
+                "source_shape_kind": "edge",
+            }
+        ])
+        self.assertEqual(len(projected["projected_edge_wire_history"]), 1)
+        self.assertEqual(len(events), 1)
+        event = events[0]
+        self.assertEqual(event["source"], {"object": "ProjectionLine", "subname": "Edge1"})
+        self.assertEqual(event["target"], {"object": "ProjectedEdgeProvenance", "subname": "Edge1"})
+        self.assertEqual(event["relation"], "generated")
+        self.assertEqual(event["maker_stage"], "project_wire")
+        self.assertEqual(event["recoverability"], "resolved")
+        evidence = event["evidence"]
+        self.assertEqual(evidence["projection_item_index"], 0)
+        self.assertEqual(evidence["source_shape_kind"], "edge")
+        self.assertEqual(evidence["edge_fragment_index"], 0)
+        self.assertEqual(evidence["element_map_target"], "Edge1")
+        self.assertEqual(evidence["reference_recovery_hook"], "mapper_history_event_target_subname")
+        self.assertEqual(evidence["wire_fragment_ownership"]["source_object"], "ProjectionLine")
+
+    def test_c5m9_part_project_on_surface_wire_split_records_fragment_ownership(self) -> None:
+        result = self.run_recompute("part-project-on-surface-wire-split-provenance", "c5m9")
+        projected = result["objects"]["ProjectedWireSplitProvenance"]
+        events = self.project_on_surface_provenance_events(result, "ProjectedWireSplitProvenance")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(projected["projection_item_ledger"][0]["source_object"], "ProjectionWireFace")
+        self.assertEqual(projected["projection_item_ledger"][0]["source_subname"], "Wire1")
+        self.assertEqual(projected["projection_item_ledger"][0]["projection_item_index"], 0)
+        self.assertEqual(projected["projection_item_ledger"][0]["source_shape_kind"], "wire")
+        self.assertEqual(len(events), 4)
+        self.assertEqual({event["relation"] for event in events}, {"split"})
+        self.assertEqual(
+            sorted(event["evidence"]["edge_fragment_index"] for event in events),
+            [0, 1, 2, 3],
+        )
+        self.assertEqual(
+            sorted(event["target"]["subname"] for event in events),
+            ["Edge1", "Edge2", "Edge3", "Edge4"],
+        )
+        for event in events:
+            evidence = event["evidence"]
+            self.assertEqual(event["source"], {"object": "ProjectionWireFace", "subname": "Wire1"})
+            self.assertEqual(event["shape_kind"], "edge")
+            self.assertEqual(evidence["source_shape_kind"], "wire")
+            self.assertEqual(evidence["wire_fragment_ownership"]["projection_item_index"], 0)
+            self.assertEqual(
+                evidence["wire_fragment_ownership"]["edge_fragment_index"],
+                evidence["edge_fragment_index"],
+            )
+            self.assertEqual(evidence["reference_recovery_hook"], "mapper_history_event_target_subname")
+
+    def test_c5m9_part_project_on_surface_invalid_provenance_diagnostics_are_locatable(self) -> None:
+        result = self.run_recompute("part-project-on-surface-invalid-provenance-diagnostics", "c5m9")
+        diagnostics = {
+            item["object"]: item
+            for item in result["diagnostics"]
+        }
+
+        self.assertEqual(
+            [item["code"] for item in result["diagnostics"]],
+            ["missing_link_target", "unsupported_subshape_kind", "invalid_subshape"],
+        )
+        self.assertEqual(diagnostics["ProjectionMissingTarget"]["property"], "Projection")
+        self.assertEqual(diagnostics["ProjectionMissingTarget"]["target"], "MissingProjectionLine")
+        self.assertEqual(diagnostics["ProjectionMissingTarget"]["subname"], "Edge1")
+        self.assertEqual(diagnostics["ProjectionUnsupportedVertex"]["property"], "Projection")
+        self.assertEqual(diagnostics["ProjectionUnsupportedVertex"]["target"], "ProjectionVertex")
+        self.assertEqual(diagnostics["ProjectionUnsupportedVertex"]["subname"], "Vertex1")
+        self.assertEqual(diagnostics["ProjectionCountMismatch"]["property"], "Projection")
+        self.assertEqual(diagnostics["ProjectionCountMismatch"]["target"], "ProjectionLine")
+        self.assertEqual(diagnostics["ProjectionCountMismatch"]["subname"], "Edge1")
+
     def test_c4m1_part_project_on_surface_edge_plane_is_expected_backed(self) -> None:
         result = self.run_recompute("part-project-on-surface-edge-plane", "c4m1")
         projected = result["objects"]["ProjectedEdges"]

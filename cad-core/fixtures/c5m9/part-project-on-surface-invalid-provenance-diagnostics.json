@@ -1,0 +1,118 @@
+{
+  "Objects": [
+    {
+      "Name": "SupportPlane",
+      "ID": 1,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 6,
+        "Width": 4
+      }
+    },
+    {
+      "Name": "ProjectionLine",
+      "ID": 2,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 1,
+        "Y1": 1,
+        "Z1": -2,
+        "X2": 5,
+        "Y2": 2,
+        "Z2": -2
+      }
+    },
+    {
+      "Name": "ProjectionVertex",
+      "ID": 3,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 2,
+        "Y": 2,
+        "Z": -2
+      }
+    },
+    {
+      "Name": "ProjectionMissingTarget",
+      "ID": 4,
+      "TypeId": "Part::ProjectOnSurface",
+      "Properties": {
+        "Mode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Edges"
+        },
+        "SupportFace": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportPlane",
+          "SubList": ["Face1"]
+        },
+        "Projection": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "MissingProjectionLine",
+              "SubList": ["Edge1"]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "Name": "ProjectionUnsupportedVertex",
+      "ID": 5,
+      "TypeId": "Part::ProjectOnSurface",
+      "Properties": {
+        "Mode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Edges"
+        },
+        "SupportFace": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportPlane",
+          "SubList": ["Face1"]
+        },
+        "Projection": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "ProjectionVertex",
+              "SubList": ["Vertex1"]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "Name": "ProjectionCountMismatch",
+      "ID": 6,
+      "TypeId": "Part::ProjectOnSurface",
+      "Properties": {
+        "Mode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Edges"
+        },
+        "SupportFace": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportPlane",
+          "SubList": ["Face1"]
+        },
+        "Projection": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "ProjectionLine",
+              "SubList": ["Edge1", "Edge1"]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "ProjectionMissingTarget",
+      "ProjectionUnsupportedVertex",
+      "ProjectionCountMismatch"
+    ]
+  }
+}

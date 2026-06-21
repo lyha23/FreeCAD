@@ -37,10 +37,12 @@
 
 #include <algorithm>
 #include <array>
+#include <cctype>
 #include <cmath>
 #include <limits>
 #include <optional>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace cad_core::part
@@ -49,11 +51,47 @@ namespace cad_core::part
 namespace
 {
 
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp
+// ::ProjectOnSurface::getProjectionShapes(), pairs "Projection.getValues()" with
+// "Projection.getSubValues()" by index before createProjectedWire() receives only a shape.
+// cad-core keeps that LinkSubList item ledger request-local so later MapperHistory events do not
+// infer source ownership from projected output order or geometry similarity.
 struct ProjectSubshape
 {
     std::string objectName;
+    std::string sourceSubname;
     std::string stableSubname;
+    std::size_t projectionItemIndex = 0;
+    std::string sourceShapeKind;
     TopoDS_Shape shape;
+};
+
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp
+// ::ProjectOnSurface::tryExecute(), appends createProjectedWire() results before filterShapes()
+// and createCompound(); ::projectWire() iterates projected edges. These fields carry that source
+// item, maker stage, filter stage, and edge fragment evidence into topo MapperHistory.
+struct ProjectedShapeEvidence
+{
+    std::string sourceObject;
+    std::string sourceSubname;
+    std::string stableSubname;
+    std::size_t projectionItemIndex = 0;
+    std::string sourceShapeKind;
+    std::string mode;
+    std::string makerStage;
+    std::string projectedResultId;
+    std::size_t projectedWireIndex = 0;
+    std::size_t edgeFragmentIndex = 0;
+    std::size_t filterOutputIndex = 0;
+    std::string filterMode;
+    std::string preFilterResultId;
+    std::string filterStage;
+};
+
+struct ProjectedShape
+{
+    TopoDS_Shape shape;
+    ProjectedShapeEvidence evidence;
 };
 
 void addProjectOnSurfaceDiagnostic(
@@ -62,7 +100,8 @@ void addProjectOnSurfaceDiagnostic(
     const std::string& code,
     const std::string& message,
     const std::string& property = {},
-    const std::string& target = {}
+    const std::string& target = {},
+    const std::string& subname = {}
 )
 {
     runtime::addDiagnostic(
@@ -73,7 +112,8 @@ void addProjectOnSurfaceDiagnostic(
         object.name,
         property,
         "runtime",
-        target
+        target,
+        subname
     );
     context.objects[object.name] = {{"status", "error"}, {"feature", "part_project_on_surface"}};
 }
@@ -87,6 +127,67 @@ std::string stableSubnameForLink(const app::Link& link)
         return link.subnames.front();
     }
     return {};
+}
+
+std::string sourceSubnameForLink(const app::Link& link)
+{
+    if (!link.subnames.empty()) {
+        return link.subnames.front();
+    }
+    return {};
+}
+
+std::string shapeKindForProjectionShape(const TopoDS_Shape& shape)
+{
+    if (shape.IsNull()) {
+        return "shape";
+    }
+    switch (shape.ShapeType()) {
+        case TopAbs_EDGE:
+            return "edge";
+        case TopAbs_WIRE:
+            return "wire";
+        case TopAbs_FACE:
+            return "face";
+        case TopAbs_SOLID:
+            return "solid";
+        default:
+            return "shape";
+    }
+}
+
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp
+// ::ProjectOnSurface::createProjectedWire(), routes "TopAbs_WIRE || TopAbs_EDGE" to
+// projectWire(); Feature::getTopoShape(... NeedSubElement ...) can resolve a wire subelement
+// even though cad-core's general public subshape map still exposes only Face/Edge/Vertex.
+std::optional<TopoDS_Shape> wireByName(const TopoDS_Shape& shape, const std::string& name)
+{
+    constexpr const char* wirePrefix = "Wire";
+    if (name.rfind(wirePrefix, 0) != 0U) {
+        return std::nullopt;
+    }
+    const std::string indexText = name.substr(std::string(wirePrefix).size());
+    if (indexText.empty()) {
+        return std::nullopt;
+    }
+    int index = 0;
+    for (const char item : indexText) {
+        if (!std::isdigit(static_cast<unsigned char>(item))) {
+            return std::nullopt;
+        }
+        index = index * 10 + (item - '0');
+    }
+    if (index <= 0) {
+        return std::nullopt;
+    }
+    int currentIndex = 0;
+    for (TopExp_Explorer explorer(shape, TopAbs_WIRE); explorer.More(); explorer.Next()) {
+        ++currentIndex;
+        if (currentIndex == index) {
+            return TopoDS::Wire(explorer.Current());
+        }
+    }
+    return std::nullopt;
 }
 
 std::optional<TopoDS_Shape> linkedSubshape(
@@ -109,8 +210,14 @@ std::optional<TopoDS_Shape> linkedSubshape(
     if (auto shape = part::subshapeByName(sourceShape, current)) {
         return shape;
     }
+    if (auto shape = wireByName(sourceShape, current)) {
+        return shape;
+    }
     if (stable != current) {
-        return part::subshapeByName(sourceShape, stable);
+        if (auto shape = part::subshapeByName(sourceShape, stable)) {
+            return shape;
+        }
+        return wireByName(sourceShape, stable);
     }
     return std::nullopt;
 }
@@ -154,7 +261,8 @@ std::optional<ProjectSubshape> resolveSingleSubshapeLink(
             "invalid_subshape",
             "Part::ProjectOnSurface " + property + " must reference exactly one subshape",
             property,
-            links.front().object
+            links.front().object,
+            sourceSubnameForLink(links.front())
         );
         return std::nullopt;
     }
@@ -168,7 +276,8 @@ std::optional<ProjectSubshape> resolveSingleSubshapeLink(
             "missing_link_target",
             "Part::ProjectOnSurface " + property + " target did not produce a shape",
             property,
-            link.object
+            link.object,
+            sourceSubnameForLink(link)
         );
         return std::nullopt;
     }
@@ -185,7 +294,8 @@ std::optional<ProjectSubshape> resolveSingleSubshapeLink(
             "invalid_subshape",
             "Part::ProjectOnSurface " + property + " subshape cannot be resolved",
             property,
-            link.object
+            link.object,
+            sourceSubnameForLink(link)
         );
         return std::nullopt;
     }
@@ -196,12 +306,20 @@ std::optional<ProjectSubshape> resolveSingleSubshapeLink(
             "unsupported_subshape_kind",
             "Part::ProjectOnSurface " + property + " first slice requires a " + expectedLabel,
             property,
-            link.object
+            link.object,
+            sourceSubnameForLink(link)
         );
         return std::nullopt;
     }
 
-    return ProjectSubshape {link.object, stableSubnameForLink(link), *selected};
+    return ProjectSubshape {
+        link.object,
+        sourceSubnameForLink(link),
+        stableSubnameForLink(link),
+        0,
+        shapeKindForProjectionShape(*selected),
+        *selected
+    };
 }
 
 std::optional<std::vector<ProjectSubshape>> resolveProjectionShapes(
@@ -234,7 +352,8 @@ std::optional<std::vector<ProjectSubshape>> resolveProjectionShapes(
     }
 
     std::size_t subnameCount = 0;
-    for (const app::Link& link : links) {
+    for (std::size_t itemIndex = 0; itemIndex < links.size(); ++itemIndex) {
+        const app::Link& link = links.at(itemIndex);
         subnameCount += link.subnames.size();
     }
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp
@@ -248,14 +367,16 @@ std::optional<std::vector<ProjectSubshape>> resolveProjectionShapes(
             "invalid_subshape",
             "Part::ProjectOnSurface Projection object/subname counts differ",
             "Projection",
-            links.front().object
+            links.front().object,
+            sourceSubnameForLink(links.front())
         );
         return std::nullopt;
     }
 
     std::vector<ProjectSubshape> projections;
     projections.reserve(links.size());
-    for (const app::Link& link : links) {
+    for (std::size_t itemIndex = 0; itemIndex < links.size(); ++itemIndex) {
+        const app::Link& link = links.at(itemIndex);
         if (link.subnames.empty() || link.subnames.front().empty()) {
             addProjectOnSurfaceDiagnostic(
                 object,
@@ -263,7 +384,8 @@ std::optional<std::vector<ProjectSubshape>> resolveProjectionShapes(
                 "invalid_subshape",
                 "Part::ProjectOnSurface Projection must reference a non-empty subshape",
                 "Projection",
-                link.object
+                link.object,
+                sourceSubnameForLink(link)
             );
             return std::nullopt;
         }
@@ -276,7 +398,8 @@ std::optional<std::vector<ProjectSubshape>> resolveProjectionShapes(
                 "missing_link_target",
                 "Part::ProjectOnSurface Projection target did not produce a shape",
                 "Projection",
-                link.object
+                link.object,
+                sourceSubnameForLink(link)
             );
             return std::nullopt;
         }
@@ -293,7 +416,8 @@ std::optional<std::vector<ProjectSubshape>> resolveProjectionShapes(
                 "invalid_subshape",
                 "Part::ProjectOnSurface Projection subshape cannot be resolved",
                 "Projection",
-                link.object
+                link.object,
+                sourceSubnameForLink(link)
             );
             return std::nullopt;
         }
@@ -305,12 +429,20 @@ std::optional<std::vector<ProjectSubshape>> resolveProjectionShapes(
                 "unsupported_subshape_kind",
                 "Part::ProjectOnSurface projects only edges, wires and faces",
                 "Projection",
-                link.object
+                link.object,
+                sourceSubnameForLink(link)
             );
             return std::nullopt;
         }
 
-        projections.push_back(ProjectSubshape {link.object, stableSubnameForLink(link), *selected});
+        projections.push_back(ProjectSubshape {
+            link.object,
+            sourceSubnameForLink(link),
+            stableSubnameForLink(link),
+            itemIndex,
+            shapeKindForProjectionShape(*selected),
+            *selected
+        });
     }
 
     return projections;
@@ -582,27 +714,62 @@ TopoDS_Face createFaceFromProjectedWires(
     );
 }
 
-std::vector<TopoDS_Shape> projectWireEdges(
-    const TopoDS_Shape& wireOrEdge,
-    const TopoDS_Face& supportFace,
-    const gp_Dir& direction
+ProjectedShapeEvidence evidenceForProjection(
+    const ProjectSubshape& projection,
+    const std::string& mode,
+    const std::string& makerStage,
+    std::size_t projectedResultIndex
 )
 {
-    BRepProj_Projection projection(wireOrEdge, supportFace, direction);
-    const TopoDS_Wire projectedWire = closestProjectedWire(projection, wireOrEdge);
-    std::vector<TopoDS_Shape> edges;
+    ProjectedShapeEvidence evidence;
+    evidence.sourceObject = projection.objectName;
+    evidence.sourceSubname = projection.sourceSubname;
+    evidence.stableSubname = projection.stableSubname;
+    evidence.projectionItemIndex = projection.projectionItemIndex;
+    evidence.sourceShapeKind = projection.sourceShapeKind;
+    evidence.mode = mode;
+    evidence.makerStage = makerStage;
+    evidence.projectedResultId = "projection_item_" + std::to_string(projection.projectionItemIndex)
+        + ":" + makerStage + ":" + std::to_string(projectedResultIndex);
+    evidence.projectedWireIndex = 0;
+    evidence.edgeFragmentIndex = 0;
+    evidence.preFilterResultId = evidence.projectedResultId;
+    return evidence;
+}
+
+std::vector<ProjectedShape> projectWireEdges(
+    const ProjectSubshape& projectionItem,
+    const TopoDS_Face& supportFace,
+    const gp_Dir& direction,
+    const std::string& mode
+)
+{
+    BRepProj_Projection projection(projectionItem.shape, supportFace, direction);
+    const TopoDS_Wire projectedWire = closestProjectedWire(projection, projectionItem.shape);
+    std::vector<ProjectedShape> edges;
+    std::size_t edgeFragmentIndex = 0;
     for (TopExp_Explorer explorer(projectedWire, TopAbs_EDGE); explorer.More(); explorer.Next()) {
-        edges.push_back(TopoDS::Edge(explorer.Current()));
+        ProjectedShapeEvidence evidence = evidenceForProjection(
+            projectionItem,
+            mode,
+            "project_wire",
+            edgeFragmentIndex
+        );
+        evidence.edgeFragmentIndex = edgeFragmentIndex;
+        edges.push_back(ProjectedShape {TopoDS::Edge(explorer.Current()), std::move(evidence)});
+        ++edgeFragmentIndex;
     }
     return edges;
 }
 
-std::vector<TopoDS_Shape> createProjectedShapes(
-    const TopoDS_Shape& projectionShape,
+std::vector<ProjectedShape> createProjectedShapes(
+    const ProjectSubshape& projectionItem,
     const TopoDS_Face& supportFace,
-    const gp_Dir& direction
+    const gp_Dir& direction,
+    const std::string& mode
 )
 {
+    const TopoDS_Shape& projectionShape = projectionItem.shape;
     if (projectionShape.IsNull()) {
         return {};
     }
@@ -611,43 +778,77 @@ std::vector<TopoDS_Shape> createProjectedShapes(
             projectFaceWires(TopoDS::Face(projectionShape), supportFace, direction);
         const TopoDS_Face face = createFaceFromProjectedWires(projectedWires, supportFace);
         if (!face.IsNull()) {
-            return {face};
+            return {
+                ProjectedShape {
+                    face,
+                    evidenceForProjection(projectionItem, mode, "face_rebuild", 0)
+                }
+            };
         }
-        return std::vector<TopoDS_Shape>(projectedWires.begin(), projectedWires.end());
+        std::vector<ProjectedShape> wireResults;
+        wireResults.reserve(projectedWires.size());
+        for (std::size_t index = 0; index < projectedWires.size(); ++index) {
+            ProjectedShapeEvidence evidence =
+                evidenceForProjection(projectionItem, mode, "project_face_wire", index);
+            evidence.projectedWireIndex = index;
+            wireResults.push_back(ProjectedShape {projectedWires.at(index), std::move(evidence)});
+        }
+        return wireResults;
     }
     if (projectionShape.ShapeType() == TopAbs_WIRE || projectionShape.ShapeType() == TopAbs_EDGE) {
-        return projectWireEdges(projectionShape, supportFace, direction);
+        return projectWireEdges(projectionItem, supportFace, direction, mode);
     }
     return {};
 }
 
-std::vector<TopoDS_Shape> filterProjectedShapes(
-    const std::vector<TopoDS_Shape>& shapes,
+std::vector<ProjectedShape> filterProjectedShapes(
+    const std::vector<ProjectedShape>& shapes,
     const std::string& mode
 )
 {
-    std::vector<TopoDS_Shape> filtered;
-    for (const TopoDS_Shape& shape : shapes) {
+    std::vector<ProjectedShape> filtered;
+    for (const ProjectedShape& projected : shapes) {
+        const TopoDS_Shape& shape = projected.shape;
         if (shape.IsNull()) {
             continue;
         }
         if (mode == "All") {
-            filtered.push_back(shape);
+            ProjectedShape current = projected;
+            current.evidence.filterOutputIndex = filtered.size();
+            current.evidence.filterMode = mode;
+            current.evidence.filterStage = "pass";
+            filtered.push_back(std::move(current));
         }
         else if (mode == "Faces") {
             if (shape.ShapeType() == TopAbs_FACE) {
-                filtered.push_back(shape);
+                ProjectedShape current = projected;
+                current.evidence.filterOutputIndex = filtered.size();
+                current.evidence.filterMode = mode;
+                current.evidence.filterStage = "pass";
+                filtered.push_back(std::move(current));
             }
         }
         else if (mode == "Edges") {
             if (shape.ShapeType() == TopAbs_EDGE || shape.ShapeType() == TopAbs_WIRE) {
-                filtered.push_back(shape);
+                ProjectedShape current = projected;
+                current.evidence.filterOutputIndex = filtered.size();
+                current.evidence.filterMode = mode;
+                current.evidence.filterStage = "pass";
+                filtered.push_back(std::move(current));
             }
             else if (shape.ShapeType() == TopAbs_FACE) {
+                std::size_t faceWireIndex = 0;
                 for (const TopoDS_Wire& wire : faceWires(TopoDS::Face(shape))) {
                     if (!wire.IsNull()) {
-                        filtered.push_back(wire);
+                        ProjectedShape current = projected;
+                        current.shape = wire;
+                        current.evidence.filterOutputIndex = filtered.size();
+                        current.evidence.filterMode = mode;
+                        current.evidence.filterStage = "face_to_wire";
+                        current.evidence.projectedWireIndex = faceWireIndex;
+                        filtered.push_back(std::move(current));
                     }
+                    ++faceWireIndex;
                 }
             }
         }
@@ -679,17 +880,19 @@ TopoDS_Shape createSolidIfHeight(
     return extrude.Shape();
 }
 
-std::vector<TopoDS_Shape> createSolidsIfHeight(
-    const std::vector<TopoDS_Shape>& shapes,
+std::vector<ProjectedShape> createSolidsIfHeight(
+    const std::vector<ProjectedShape>& shapes,
     const std::string& mode,
     const gp_Dir& direction,
     double height
 )
 {
-    std::vector<TopoDS_Shape> results;
+    std::vector<ProjectedShape> results;
     results.reserve(shapes.size());
-    for (const TopoDS_Shape& shape : shapes) {
-        results.push_back(createSolidIfHeight(shape, mode, direction, height));
+    for (const ProjectedShape& shape : shapes) {
+        ProjectedShape current = shape;
+        current.shape = createSolidIfHeight(shape.shape, mode, direction, height);
+        results.push_back(std::move(current));
     }
     return results;
 }
@@ -734,15 +937,15 @@ TopLoc_Location offsetPlacementForVector(const gp_Vec& offsetVector, double offs
     return TopLoc_Location(transform);
 }
 
-TopoDS_Shape compoundOf(const std::vector<TopoDS_Shape>& shapes, const TopLoc_Location& offsetPlacement)
+TopoDS_Shape compoundOf(const std::vector<ProjectedShape>& shapes, const TopLoc_Location& offsetPlacement)
 {
     BRep_Builder builder;
     TopoDS_Compound compound;
     builder.MakeCompound(compound);
     const bool isIdentity = offsetPlacement.IsIdentity();
-    for (const TopoDS_Shape& shape : shapes) {
-        if (!shape.IsNull()) {
-            builder.Add(compound, isIdentity ? shape : shape.Moved(offsetPlacement));
+    for (const ProjectedShape& shape : shapes) {
+        if (!shape.shape.IsNull()) {
+            builder.Add(compound, isIdentity ? shape.shape : shape.shape.Moved(offsetPlacement));
         }
     }
     return compound;
@@ -755,6 +958,143 @@ nlohmann::json projectionItemsJson(const std::vector<ProjectSubshape>& projectio
         items.push_back({{"object", projection.objectName}, {"subshape", projection.stableSubname}});
     }
     return items;
+}
+
+nlohmann::json projectionItemLedgerJson(const std::vector<ProjectSubshape>& projections)
+{
+    nlohmann::json items = nlohmann::json::array();
+    for (const ProjectSubshape& projection : projections) {
+        items.push_back(
+            {
+                {"source_object", projection.objectName},
+                {"source_subname", projection.sourceSubname},
+                {"stable_subname", projection.stableSubname},
+                {"projection_item_index", projection.projectionItemIndex},
+                {"source_shape_kind", projection.sourceShapeKind},
+            }
+        );
+    }
+    return items;
+}
+
+std::optional<std::string> targetElementForShape(
+    const NamedShape& namedShape,
+    const TopoDS_Shape& shape,
+    TopAbs_ShapeEnum kind
+)
+{
+    for (const auto& [elementName, element] : namedShape.elements) {
+        if (element.subshape.kind != kind) {
+            continue;
+        }
+        const auto targetShape = subshapeByName(namedShape, elementName);
+        if (targetShape && targetShape->IsSame(shape)) {
+            return elementName;
+        }
+    }
+    return std::nullopt;
+}
+
+nlohmann::json projectOnSurfaceMapperEvidenceJson(
+    const ProjectedShapeEvidence& evidence,
+    const std::string& mapperHistoryId,
+    const std::string& targetElement
+)
+{
+    return {
+        {"source_object", evidence.sourceObject},
+        {"source_subname", evidence.sourceSubname},
+        {"stable_subname", evidence.stableSubname},
+        {"projection_item_index", evidence.projectionItemIndex},
+        {"source_shape_kind", evidence.sourceShapeKind},
+        {"mode", evidence.mode},
+        {"maker_stage", evidence.makerStage},
+        {"projected_result_id", evidence.projectedResultId},
+        {"projected_wire_index", evidence.projectedWireIndex},
+        {"edge_fragment_index", evidence.edgeFragmentIndex},
+        {"filter_output_index", evidence.filterOutputIndex},
+        {"filter_mode", evidence.filterMode},
+        {"filter_stage", evidence.filterStage},
+        {"pre_filter_result_id", evidence.preFilterResultId},
+        {"mapper_history_id", mapperHistoryId},
+        {"element_map_target", targetElement},
+        {"reference_recovery_hook", "mapper_history_event_target_subname"},
+        {"wire_fragment_ownership", {
+            {"source_object", evidence.sourceObject},
+            {"source_subname", evidence.sourceSubname},
+            {"projection_item_index", evidence.projectionItemIndex},
+            {"projected_wire_index", evidence.projectedWireIndex},
+            {"edge_fragment_index", evidence.edgeFragmentIndex},
+        }},
+    };
+}
+
+nlohmann::json projectedEdgeWireHistoryJson(const std::vector<MapperHistoryEvent>& events)
+{
+    return mapperHistoryToJson(events);
+}
+
+void addDistinctStatus(std::vector<std::string>& values, const std::string& value)
+{
+    if (std::find(values.begin(), values.end(), value) == values.end()) {
+        values.push_back(value);
+    }
+}
+
+NamedShape namedShapeForProjectOnSurfaceEdgeWireHistory(
+    const std::string& owner,
+    const TopoDS_Shape& resultShape,
+    const std::vector<ProjectedShape>& filteredShapes,
+    const TopLoc_Location& offsetPlacement
+)
+{
+    NamedShape namedShape = indexedNamedShapeForObject(owner, resultShape);
+    const bool hasOffset = !offsetPlacement.IsIdentity();
+    for (const ProjectedShape& projected : filteredShapes) {
+        const ProjectedShapeEvidence& evidence = projected.evidence;
+        if (evidence.makerStage != "project_wire") {
+            continue;
+        }
+        if (evidence.sourceShapeKind != "edge" && evidence.sourceShapeKind != "wire") {
+            continue;
+        }
+        const TopAbs_ShapeEnum targetKind = projected.shape.ShapeType() == TopAbs_WIRE
+            ? TopAbs_WIRE
+            : TopAbs_EDGE;
+        const TopoDS_Shape targetShape = hasOffset ? projected.shape.Moved(offsetPlacement)
+                                                   : projected.shape;
+        const auto targetElement = targetElementForShape(namedShape, targetShape, targetKind);
+        if (!targetElement) {
+            continue;
+        }
+
+        const std::string mapperHistoryId = owner + ":projection_item_"
+            + std::to_string(evidence.projectionItemIndex) + ":edge_fragment_"
+            + std::to_string(evidence.edgeFragmentIndex);
+        const MapperHistoryRelation relation = evidence.sourceShapeKind == "wire"
+            ? MapperHistoryRelation::Split
+            : MapperHistoryRelation::Generated;
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp
+        // ::ProjectOnSurface::projectWire(), uses "BRepProj_Projection aProjection(wire,
+        // supportFace, dir)" then pushes each "TopoDS::Edge(xp.Current())"; the source endpoint
+        // is the Projection LinkSubList item already resolved by getProjectionShapes().
+        MapperHistoryEvent event = projectOnSurfaceMapperHistoryEvent(
+            MapperHistoryEndpoint {evidence.sourceObject, evidence.stableSubname},
+            MapperHistoryEndpoint {owner, *targetElement},
+            targetKind == TopAbs_WIRE ? "wire" : "edge",
+            relation,
+            evidence.makerStage,
+            projectOnSurfaceMapperEvidenceJson(evidence, mapperHistoryId, *targetElement),
+            MapperHistoryRecoverability::Resolved,
+            "project_on_surface_edge_wire_provenance"
+        );
+        addMapperHistoryEvent(namedShape.mapperHistory, std::move(event));
+    }
+    if (!namedShape.mapperHistory.empty()) {
+        addDistinctStatus(namedShape.elementHistoryStatus, "part_project_on_surface:edge_wire_mapper_history");
+        addDistinctStatus(namedShape.elementHistoryStatus, "reference_recovery_hook:mapper_history_event");
+    }
+    return namedShape;
 }
 
 }  // namespace
@@ -800,19 +1140,19 @@ void executePartProjectOnSurface(const app::DocumentObject& object, runtime::Com
     }
 
     try {
-        std::vector<TopoDS_Shape> projectedShapes;
+        std::vector<ProjectedShape> projectedShapes;
         // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp
         // ::ProjectOnSurface::tryExecute(), iterates getProjectionShapes() in order, calls
         // createProjectedWire(shape, supportFace, dir), and appends each result before the
         // later filterShapes() and createCompound() passes.
         for (const ProjectSubshape& projection : *projections) {
-            const std::vector<TopoDS_Shape> current =
-                createProjectedShapes(projection.shape, TopoDS::Face(support->shape), *direction);
+            const std::vector<ProjectedShape> current =
+                createProjectedShapes(projection, TopoDS::Face(support->shape), *direction, *mode);
             projectedShapes.insert(projectedShapes.end(), current.begin(), current.end());
         }
-        const std::vector<TopoDS_Shape> solidsIfHeight =
+        const std::vector<ProjectedShape> solidsIfHeight =
             createSolidsIfHeight(projectedShapes, *mode, *direction, height);
-        const std::vector<TopoDS_Shape> filteredShapes = filterProjectedShapes(solidsIfHeight, *mode);
+        const std::vector<ProjectedShape> filteredShapes = filterProjectedShapes(solidsIfHeight, *mode);
         if (filteredShapes.empty()) {
             addProjectOnSurfaceDiagnostic(
                 object,
@@ -826,8 +1166,15 @@ void executePartProjectOnSurface(const app::DocumentObject& object, runtime::Com
         }
 
         const gp_Vec offsetVector = offsetVectorForDirection(*direction, offset);
+        const TopLoc_Location offsetPlacement = offsetPlacementForVector(offsetVector, offset);
         const TopoDS_Shape projectedCompound =
-            compoundOf(filteredShapes, offsetPlacementForVector(offsetVector, offset));
+            compoundOf(filteredShapes, offsetPlacement);
+        NamedShape namedShape = namedShapeForProjectOnSurfaceEdgeWireHistory(
+            object.name,
+            projectedCompound,
+            filteredShapes,
+            offsetPlacement
+        );
         nlohmann::json metadata = {
             {"feature", "part_project_on_surface"},
             {"source_support", support->objectName},
@@ -835,10 +1182,12 @@ void executePartProjectOnSurface(const app::DocumentObject& object, runtime::Com
             {"source_projection", projections->front().objectName},
             {"projection_subshape", projections->front().stableSubname},
             {"projection_items", projectionItemsJson(*projections)},
+            {"projection_item_ledger", projectionItemLedgerJson(*projections)},
             {"mode", *mode},
             {"height", height},
             {"offset", offset},
             {"topo_naming_history", "indexed_projected_edges_no_mapper_history"},
+            {"projected_edge_wire_history", projectedEdgeWireHistoryJson(namedShape.mapperHistory)},
             {"projected_solid_count", countSubshapes(projectedCompound, TopAbs_SOLID)},
             {"projected_face_count", countSubshapes(projectedCompound, TopAbs_FACE)},
             {"projected_wire_count", countSubshapes(projectedCompound, TopAbs_WIRE)},
@@ -852,7 +1201,8 @@ void executePartProjectOnSurface(const app::DocumentObject& object, runtime::Com
             object,
             context,
             projectedCompound,
-            metadata
+            metadata,
+            namedShape
         );
     }
     catch (const Standard_Failure& failure) {

@@ -3762,6 +3762,32 @@ def project_on_surface_offset_vector(properties: dict[str, Any]) -> list[float] 
     return [float(component) / magnitude * offset for component in value]
 
 
+def project_on_surface_source_shape_kind(subname: str) -> str:
+    if subname.startswith("Edge"):
+        return "edge"
+    if subname.startswith("Wire"):
+        return "wire"
+    if subname.startswith("Face"):
+        return "face"
+    return "shape"
+
+
+def project_on_surface_projection_item_ledger(projection_items: list[dict[str, str]]) -> list[dict[str, Any]]:
+    ledger: list[dict[str, Any]] = []
+    for index, item in enumerate(projection_items):
+        subshape = item.get("subshape", "")
+        ledger.append(
+            {
+                "source_object": item.get("object", ""),
+                "source_subname": subshape,
+                "stable_subname": subshape,
+                "projection_item_index": index,
+                "source_shape_kind": project_on_surface_source_shape_kind(subshape),
+            }
+        )
+    return ledger
+
+
 def project_on_surface_payload(obj: Any, fixture: dict | None = None) -> dict:
     shape = getattr(obj, "Shape", None)
     if shape is None or shape.isNull():
@@ -3792,6 +3818,7 @@ def project_on_surface_payload(obj: Any, fixture: dict | None = None) -> dict:
     }
     if projection_items:
         object_fields["projection_items"] = projection_items
+        object_fields["projection_item_ledger"] = project_on_surface_projection_item_ledger(projection_items)
     offset_vector = project_on_surface_offset_vector(properties)
     if offset_vector is not None:
         object_fields["offset_application"] = "compound_child_moved_after_filter"

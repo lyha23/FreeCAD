@@ -60,5 +60,21 @@ std::string mapperHistoryRecoverabilityName(MapperHistoryRecoverability recovera
 nlohmann::json mapperHistoryEventToJson(const MapperHistoryEvent& event);
 nlohmann::json mapperHistoryToJson(const std::vector<MapperHistoryEvent>& events);
 void addMapperHistoryEvent(std::vector<MapperHistoryEvent>& events, MapperHistoryEvent event);
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp
+// ::ProjectOnSurface::projectWire(), iterates "TopExp_Explorer xp(wireToTake, TopAbs_EDGE)";
+// /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeMapper.cpp::ShapeMapper::insert()
+// prevents one target from being both Generated and Modified. This helper keeps the
+// ProjectOnSurface source endpoint, target endpoint, and projection-item evidence in topo
+// MapperHistory instead of letting adapters infer provenance from output geometry.
+MapperHistoryEvent projectOnSurfaceMapperHistoryEvent(
+    MapperHistoryEndpoint source,
+    MapperHistoryEndpoint target,
+    std::string shapeKind,
+    MapperHistoryRelation relation,
+    std::string makerStage,
+    nlohmann::json evidence,
+    MapperHistoryRecoverability recoverability,
+    std::string diagnosticStatus
+);
 
 }  // namespace cad_core::part

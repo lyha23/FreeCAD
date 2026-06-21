@@ -1,6 +1,7 @@
 #include "cad_core/part/topo_shape_mapper.h"
 
 #include <algorithm>
+#include <utility>
 
 namespace cad_core::part
 {
@@ -103,6 +104,29 @@ void addMapperHistoryEvent(std::vector<MapperHistoryEvent>& events, MapperHistor
     if (duplicate == events.end()) {
         events.push_back(std::move(event));
     }
+}
+
+MapperHistoryEvent projectOnSurfaceMapperHistoryEvent(
+    MapperHistoryEndpoint source,
+    MapperHistoryEndpoint target,
+    std::string shapeKind,
+    MapperHistoryRelation relation,
+    std::string makerStage,
+    nlohmann::json evidence,
+    MapperHistoryRecoverability recoverability,
+    std::string diagnosticStatus
+)
+{
+    MapperHistoryEvent event;
+    event.source = std::move(source);
+    event.target = std::move(target);
+    event.shapeKind = std::move(shapeKind);
+    event.relation = relation;
+    event.makerStage = std::move(makerStage);
+    event.evidence = evidence.is_null() ? nlohmann::json::object() : std::move(evidence);
+    event.recoverability = recoverability;
+    event.diagnosticStatus = std::move(diagnosticStatus);
+    return event;
 }
 
 }  // namespace cad_core::part
