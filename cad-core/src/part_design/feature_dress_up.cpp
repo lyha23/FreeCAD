@@ -5,6 +5,7 @@
 
 #include "feature_dress_up_support.h"
 
+#include "cad_core/part_design/body_topo_shape.h"
 #include "cad_core/runtime/feature_executor.h"
 #include "cad_core/part/shape_exporter.h"
 #include "cad_core/part/topo_shape.h"
@@ -44,6 +45,7 @@
 #include <gp_Pln.hxx>
 #include <gp_Pnt.hxx>
 
+#include <algorithm>
 #include <cmath>
 #include <map>
 #include <optional>
@@ -56,6 +58,13 @@ namespace cad_core::part_design
 
 namespace detail
 {
+
+struct BodyLocalFeatureContext
+{
+    const app::DocumentObject* body = nullptr;
+    std::vector<std::string> groupNames;
+    std::size_t featureIndex = 0U;
+};
 
 const nlohmann::json* propertyPayload(const app::DocumentObject& object, const std::string& property)
 {
@@ -134,6 +143,131 @@ std::vector<TopoDS_Shape> solidSubshapes(const TopoDS_Shape& shape)
         solids.push_back(explorer.Current());
     }
     return solids;
+}
+
+std::vector<std::string> readBodyGroupNames(const app::DocumentObject& body)
+{
+    std::vector<std::string> result;
+    for (const auto& link : app::readLinks(body, "Group")) {
+        result.push_back(link.object);
+    }
+    return result;
+}
+
+std::optional<std::size_t> indexOf(const std::vector<std::string>& values, const std::string& value)
+{
+    const auto it = std::find(values.begin(), values.end(), value);
+    if (it == values.end()) {
+        return std::nullopt;
+    }
+    return static_cast<std::size_t>(std::distance(values.begin(), it));
+}
+
+std::optional<BodyLocalFeatureContext> bodyLocalFeatureContext(
+    const std::string& featureName,
+    const runtime::ComputeContext& context
+)
+{
+    const auto parentIt = context.parentGroupByObject.find(featureName);
+    if (parentIt == context.parentGroupByObject.end()) {
+        return std::nullopt;
+    }
+    const auto bodyIt = context.documentObjects.find(parentIt->second);
+    if (bodyIt == context.documentObjects.end() || bodyIt->second == nullptr
+        || bodyIt->second->typeId != "PartDesign::Body") {
+        return std::nullopt;
+    }
+
+    std::vector<std::string> groupNames = readBodyGroupNames(*bodyIt->second);
+    const auto featureIndex = indexOf(groupNames, featureName);
+    if (!featureIndex) {
+        return std::nullopt;
+    }
+    return BodyLocalFeatureContext {bodyIt->second, std::move(groupNames), *featureIndex};
+}
+
+std::optional<BodyLocalFeatureContext> sameBodyEarlierFeatureContext(
+    const app::DocumentObject& object,
+    const std::string& targetFeature,
+    const runtime::ComputeContext& context
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureDressUp.h
+    // ::DressUp::Base, "for consistency if BaseFeature is nonzero this links to the same body
+    // as it"; same-Body dress-up links therefore need the Body.Group feature order.
+    const auto current = bodyLocalFeatureContext(object.name, context);
+    const auto target = bodyLocalFeatureContext(targetFeature, context);
+    if (!current || !target || current->body != target->body) {
+        return std::nullopt;
+    }
+    if (target->featureIndex >= current->featureIndex) {
+        return std::nullopt;
+    }
+    return target;
+}
+
+std::string stripObjectPrefix(const std::string& value, const std::string& objectName)
+{
+    const std::string prefix = objectName + ".";
+    if (value.rfind(prefix, 0U) == 0U) {
+        return value.substr(prefix.size());
+    }
+    return value;
+}
+
+app::Link bodyTopoShapeLink(const app::Link& link)
+{
+    app::Link result = link;
+    for (auto& subname : result.subnames) {
+        subname = stripObjectPrefix(subname, link.object);
+    }
+    for (auto& stableSubname : result.stableSubnames) {
+        stableSubname = stripObjectPrefix(stableSubname, link.object);
+    }
+    return result;
+}
+
+std::optional<BodyTopoShapeResult> bodyTopoShapeAtFeature(
+    const BodyLocalFeatureContext& target,
+    runtime::ComputeContext& context
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+    // ::Body::execute(), "Shape.setValue(tipShape)" publishes the cumulative Body shape at the
+    // current Tip; cad-core reconstructs that same Body-at-feature state for earlier features.
+    const BodyTopoShapeOptions options {
+        false,
+        false,
+    };
+    const std::size_t diagnosticCount = context.diagnostics.size();
+    const auto result =
+        getBodyTopoShapeAtFeature(*target.body, context, target.groupNames.at(target.featureIndex), options);
+    if (context.diagnostics.size() > diagnosticCount) {
+        context.diagnostics.erase(context.diagnostics.begin() + static_cast<std::ptrdiff_t>(diagnosticCount),
+                                  context.diagnostics.end());
+    }
+    return result;
+}
+
+std::optional<BodyTopoShapeResult> previousBodyTopoShape(
+    const std::string& featureName,
+    runtime::ComputeContext& context
+)
+{
+    const auto current = bodyLocalFeatureContext(featureName, context);
+    if (!current || current->featureIndex == 0U) {
+        return std::nullopt;
+    }
+
+    for (std::size_t index = current->featureIndex; index > 0U; --index) {
+        BodyLocalFeatureContext target = *current;
+        target.featureIndex = index - 1U;
+        const auto bodyTopoShape = bodyTopoShapeAtFeature(target, context);
+        if (bodyTopoShape && hasSolid(bodyTopoShape->shape)) {
+            return bodyTopoShape;
+        }
+    }
+    return std::nullopt;
 }
 
 std::optional<part::NamedShape> namedShapeForObject(
@@ -227,6 +361,25 @@ std::optional<TopoDS_Shape> baseTopoShapeForFeature(
         return shapeIt->second.shape;
     }
     return solidShapeForObject(*baseFeatureName, context, object, "BaseFeature");
+}
+
+std::optional<TopoDS_Shape> priorBodyOrBaseTopoShapeForFeature(
+    const std::string& featureName,
+    runtime::ComputeContext& context,
+    const app::DocumentObject& object,
+    bool diagnoseMissingTarget
+)
+{
+    const auto baseFeatureShape =
+        baseTopoShapeForFeature(featureName, context, object, diagnoseMissingTarget);
+    if (baseFeatureShape) {
+        return baseFeatureShape;
+    }
+    const auto priorBodyShape = previousBodyTopoShape(featureName, context);
+    if (priorBodyShape) {
+        return priorBodyShape->shape;
+    }
+    return std::nullopt;
 }
 
 std::optional<std::string> baseLinkObjectName(const app::DocumentObject& object)
@@ -427,6 +580,22 @@ std::optional<DressUpBase> resolveDressUpBase(
     const auto namedShapeIt = context.namedShapes.find(link->object);
     if (namedShapeIt != context.namedShapes.end()) {
         namedShape = namedShapeIt->second;
+    }
+
+    if (const auto bodyContext = sameBodyEarlierFeatureContext(object, link->object, context)) {
+        if (const auto bodyTopoShape = bodyTopoShapeAtFeature(*bodyContext, context)) {
+            if (!bodyTopoShape->shape.IsSame(shapeIt->second.shape)) {
+                return DressUpBase {
+                    bodyTopoShapeLink(*link),
+                    bodyTopoShape->shape,
+                    bodyTopoShape->namedShape
+                        ? bodyTopoShape->namedShape
+                        : std::optional<part::NamedShape> {
+                              part::indexedNamedShapeForObject(bodyContext->body->name, bodyTopoShape->shape)
+                          }
+                };
+            }
+        }
     }
 
     return DressUpBase {*link, shapeIt->second.shape, namedShape};
@@ -913,7 +1082,8 @@ bool cacheDressUpAddSubShape(
         result.supportTransformSource = *supportFeature;
 
         const auto supportKind = addSubKindForFeature(*supportFeature, context);
-        const auto priorBaseShape = baseTopoShapeForFeature(*supportFeature, context, object, true);
+        const auto priorBaseShape =
+            priorBodyOrBaseTopoShapeForFeature(*supportFeature, context, object, true);
         if (supportKind == AddSubKind::Additive) {
             if (priorBaseShape && hasSolid(*priorBaseShape)) {
                 const auto priorBaseNamedShape
@@ -993,7 +1163,7 @@ bool cacheDressUpAddSubShape(
     // ::DressUp::getAddSubShape(), without SupportTransform builds two slots:
     // "shape.makeElementCut(baseShape)" and "baseShape.makeElementCut(shape)" so transformed
     // features can fuse added dressing material and cut removed dressing material independently.
-    const auto baseFeatureShape = baseTopoShapeForFeature(object.name, context, object, false);
+    const auto baseFeatureShape = priorBodyOrBaseTopoShapeForFeature(object.name, context, object, false);
     const TopoDS_Shape baseShape = baseFeatureShape && hasSolid(*baseFeatureShape)
         ? *baseFeatureShape
         : result.base.shape;

@@ -212,7 +212,25 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(subshapes["Face1"]["stableSubname"], "Pad.Face1")
         self.assertEqual(subshapes["Vertex2"]["stableSubname"], "Pad.Vertex2")
         self.assertEqual(subshapes["Face5"]["stableSubname"], "Sketch.Face1")
+        self.assertEqual(subshapes["Face5"]["subname"], "Pad.Face5")
         self.assertEqual(subshapes["Edge3"]["stableSubname"], "Sketch.Edge1")
+
+    def test_c_api_body_replacement_tip_subshapes_publish_tip_qualified_stable_names(self) -> None:
+        result = self.run_recompute_ffi("fillet-face-selection-history", "c3m5")
+        body = next(item for item in result["results"] if item["object"] == "Body")
+        face_subshapes = [item for item in body["subshapes"] if item["kind"] == "Face"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertTrue(face_subshapes)
+        self.assertTrue(
+            any(item["stableSubname"].startswith("Fillet.Pad.Face") for item in face_subshapes)
+        )
+        for item in face_subshapes:
+            self.assertEqual(item["id"], f"Body:{item['indexed']}")
+            self.assertRegex(item["indexed"], r"^Face\d+$")
+            self.assertRegex(item["subname"], r"^Fillet\.Face\d+$")
+            self.assertRegex(item["stableSubname"], r"^Fillet\..*Face\d+$")
+            self.assertNotRegex(item["stableSubname"], r"\.(Edge|Vertex)\d+$")
 
     def test_c4s11_cli_c_api_worker_wasm_share_core_result_contract(self) -> None:
         payload = (ROOT / "fixtures" / "mvp" / "rect-pad.json").read_bytes()

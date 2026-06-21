@@ -1822,6 +1822,24 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(body["tip"], "Chamfer")
         self.assert_object_matches_expected(result, "p7", "chamfer-pad-edge")
 
+    def test_c3m5_dressup_base_uses_body_cumulative_shape(self) -> None:
+        result = self.run_recompute("body-dressup-cumulative-base", "c3m5")
+        body = result["objects"]["Pad5Body"]
+        fillet2 = result["objects"]["Fillet2"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(fillet2["status"], "ok")
+        self.assertEqual(fillet2["body_mode"], "replace")
+        self.assertEqual(fillet2["support_transform"], True)
+        self.assertEqual(fillet2["support_transform_source"], "Pad5")
+        self.assertEqual(body["tip"], "Fillet2")
+        self.assertEqual(body["replayed_replacement_features"], ["Fillet", "Fillet2"])
+        self.assertLess(body["bbox"]["min"][0], -1074.0)
+        self.assertGreater(body["bbox"]["max"][0], -153.0)
+        self.assertGreater(body["bbox"]["max"][1], 98.0)
+        self.assertGreater(body["bbox"]["max"][2], 1049.0)
+        self.assertAlmostEqual(body["volume"], fillet2["volume"])
+
     def test_c3m5_chamfer_parameter_variants_build(self) -> None:
         for fixture, parameters in [
             (

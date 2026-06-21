@@ -29,6 +29,7 @@ struct BodyTopoShapeResult {
     std::vector<std::string> appliedReplacementFeatures;
     std::vector<std::string> refinedFeatures;
     std::optional<std::string> directTipSubshapeOwner;
+    bool directTipSubshapeStablePrefix = false;
 };
 
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::Body::execute(),

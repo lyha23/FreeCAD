@@ -1175,6 +1175,49 @@ std::string displayKind(const nlohmann::json& subshape)
     return kind.empty() ? "Unknown" : kind;
 }
 
+std::string localElementName(const std::string& name)
+{
+    const std::size_t dot = name.rfind('.');
+    return dot == std::string::npos ? name : name.substr(dot + 1);
+}
+
+std::optional<std::string> topologicalElementKind(const std::string& name)
+{
+    std::string local = localElementName(name);
+    constexpr const char* internalPrefix = "Internal";
+    if (local.rfind(internalPrefix, 0) == 0) {
+        local = local.substr(std::string(internalPrefix).size());
+    }
+    const auto hasPrefixAndDigits = [&local](const std::string& prefix) {
+        if (local.rfind(prefix, 0) != 0 || local.size() == prefix.size()) {
+            return false;
+        }
+        return std::all_of(local.begin() + static_cast<std::ptrdiff_t>(prefix.size()),
+                           local.end(),
+                           [](unsigned char value) { return std::isdigit(value) != 0; });
+    };
+    if (hasPrefixAndDigits("Face")) {
+        return "Face";
+    }
+    if (hasPrefixAndDigits("Edge")) {
+        return "Edge";
+    }
+    if (hasPrefixAndDigits("Vertex")) {
+        return "Vertex";
+    }
+    return std::nullopt;
+}
+
+bool stableSubnameKindMatchesIndexed(const std::string& indexed, const std::string& stableSubname)
+{
+    const auto indexedKind = topologicalElementKind(indexed);
+    const auto stableKind = topologicalElementKind(stableSubname);
+    if (!indexedKind || !stableKind) {
+        return true;
+    }
+    return *indexedKind == *stableKind;
+}
+
 std::string stableSubnameFor(const std::string& indexed,
                              const part::NamedShape* namedShape)
 {
@@ -1188,6 +1231,9 @@ std::string stableSubnameFor(const std::string& indexed,
     std::string fallback;
     for (const auto& [stableSubname, currentSubname] : namedShape->elementMap) {
         if (currentSubname != indexed) {
+            continue;
+        }
+        if (!stableSubnameKindMatchesIndexed(indexed, stableSubname)) {
             continue;
         }
         if (stableSubname != indexed) {
@@ -1250,44 +1296,66 @@ std::string currentSubnameForStable(const std::string& indexed,
 
 bool isPlainTopologicalElementName(const std::string& name)
 {
-    const auto hasPrefixAndDigits = [&name](const std::string& prefix) {
-        if (name.rfind(prefix, 0) != 0 || name.size() == prefix.size()) {
-            return false;
-        }
-        return std::all_of(name.begin() + static_cast<std::ptrdiff_t>(prefix.size()),
-                           name.end(),
-                           [](unsigned char value) { return std::isdigit(value) != 0; });
-    };
-    return hasPrefixAndDigits("Face") || hasPrefixAndDigits("Edge") || hasPrefixAndDigits("Vertex");
+    return localElementName(name) == name && topologicalElementKind(name).has_value();
 }
 
-std::string bodyTipQualifiedStableSubname(const std::string& objectName,
-                                          const std::string& indexed,
-                                          const std::string& stableSubname,
-                                          const ComputeContext& context)
-{
-    if (stableSubname != indexed || !isPlainTopologicalElementName(stableSubname)) {
-        return stableSubname;
-    }
+struct BodyTipSubshapeResponseContext {
+    std::string owner;
+    bool stablePrefix = false;
+};
 
+std::optional<BodyTipSubshapeResponseContext> bodyTipSubshapeResponseContext(
+    const std::string& objectName,
+    const ComputeContext& context)
+{
     const auto documentIt = context.documentObjects.find(objectName);
     if (documentIt == context.documentObjects.end() || documentIt->second == nullptr
         || documentIt->second->typeId != "PartDesign::Body") {
-        return stableSubname;
+        return std::nullopt;
     }
     const auto objectIt = context.objects.find(objectName);
     if (objectIt == context.objects.end() || !objectIt->second.is_object()) {
-        return stableSubname;
+        return std::nullopt;
     }
     const auto ownerIt = objectIt->second.find("direct_tip_subshape_owner");
     if (ownerIt == objectIt->second.end() || !ownerIt->is_string() || ownerIt->get<std::string>().empty()) {
+        return std::nullopt;
+    }
+    return BodyTipSubshapeResponseContext {
+        ownerIt->get<std::string>(),
+        objectIt->second.value("direct_tip_subshape_stable_prefix", false),
+    };
+}
+
+std::string bodyTipQualifiedStableSubname(const std::string& indexed,
+                                          const std::string& stableSubname,
+                                          const std::optional<BodyTipSubshapeResponseContext>& tipContext)
+{
+    if (!tipContext || stableSubname.empty()) {
         return stableSubname;
     }
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::Body::execute(),
     // "Shape.setValue(tipShape)" publishes the Tip feature shape as the Body display shape.
-    // Existing NamedShape ElementMap paths win; this only qualifies unresolved bare
-    // FaceN/EdgeN/VertexN entries when Body proved a direct Tip owner.
-    return ownerIt->get<std::string>() + "." + stableSubname;
+    // The response subname is always the current Tip child path. Stable names from replacement
+    // Tips also need that Tip path so downstream PropertyLinkSub can safely peel it off.
+    const std::string ownerPrefix = tipContext->owner + ".";
+    if (stableSubname == indexed && isPlainTopologicalElementName(stableSubname)) {
+        return ownerPrefix + stableSubname;
+    }
+    if (tipContext->stablePrefix && stableSubname.rfind(ownerPrefix, 0) != 0) {
+        return ownerPrefix + stableSubname;
+    }
+    return stableSubname;
+}
+
+std::string responseSubnameFor(const std::string& indexed,
+                               const std::string& stableSubname,
+                               const std::optional<BodyTipSubshapeResponseContext>& tipContext)
+{
+    if (tipContext) {
+        return tipContext->owner + "." + indexed;
+    }
+    return currentSubnameForStable(indexed, stableSubname);
 }
 
 nlohmann::json responseMesh(const std::string& objectName, const nlohmann::json& mesh)
@@ -1393,6 +1461,7 @@ nlohmann::json responseSubshapes(const std::string& objectName,
     if (shapeIt != context.shapes.end()) {
         shapeValue = &shapeIt->second;
     }
+    const auto tipContext = bodyTipSubshapeResponseContext(objectName, context);
 
     for (const auto& [indexed, subshape] : subshapeIt->second.items()) {
         const bool internalIndexed = indexed.rfind("InternalFace", 0) == 0
@@ -1409,8 +1478,8 @@ nlohmann::json responseSubshapes(const std::string& objectName,
         if (stableSubname.empty()) {
             stableSubname = internalElementStableSubnameFor(objectName, indexed, context);
         }
-        stableSubname = bodyTipQualifiedStableSubname(objectName, indexed, stableSubname, context);
-        const std::string subname = currentSubnameForStable(indexed, stableSubname);
+        stableSubname = bodyTipQualifiedStableSubname(indexed, stableSubname, tipContext);
+        const std::string subname = responseSubnameFor(indexed, stableSubname, tipContext);
         subshapes.push_back({
             {"id", objectName + ":" + indexed},
             {"kind", displayKind(subshape)},

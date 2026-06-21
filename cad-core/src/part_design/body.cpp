@@ -780,9 +780,16 @@ std::optional<std::string> directTipSubshapeOwnerForBody(
     const std::vector<std::string>& refinedFeatures,
     bool hasNonIdentityPlacement)
 {
-    if (hasNonIdentityPlacement || body.properties.contains("BaseFeature")
-        || !appliedSubtractiveFeatures.empty() || !appliedReplacementFeatures.empty()
-        || !refinedFeatures.empty()) {
+    if (hasNonIdentityPlacement || body.properties.contains("BaseFeature") || !refinedFeatures.empty()) {
+        return std::nullopt;
+    }
+    if (!appliedReplacementFeatures.empty() && appliedReplacementFeatures.back() == stopFeature) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::Body::execute(),
+        // "Shape.setValue(tipShape)" exposes DressUp/Transformed replacement Tip shapes through
+        // the Body. Their response subshape paths must stay in the current Tip namespace.
+        return stopFeature;
+    }
+    if (!appliedSubtractiveFeatures.empty() || !appliedReplacementFeatures.empty()) {
         return std::nullopt;
     }
     if (appliedAdditiveFeatures.size() != 1U || appliedAdditiveFeatures.front() != stopFeature) {
@@ -1036,6 +1043,8 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
                                                                       appliedReplacementFeatures,
                                                                       refinedFeatures,
                                                                       hasNonIdentityPlacement);
+    const bool directTipSubshapeStablePrefix = directTipSubshapeOwner
+        && !appliedReplacementFeatures.empty() && appliedReplacementFeatures.back() == resolvedStopFeature;
 
     return BodyTopoShapeResult {
         resultShape,
@@ -1049,6 +1058,7 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
         appliedReplacementFeatures,
         refinedFeatures,
         directTipSubshapeOwner,
+        directTipSubshapeStablePrefix,
     };
 }
 
@@ -1129,6 +1139,9 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
     }
     if (bodyTopoShape->directTipSubshapeOwner) {
         result["direct_tip_subshape_owner"] = *bodyTopoShape->directTipSubshapeOwner;
+    }
+    if (bodyTopoShape->directTipSubshapeStablePrefix) {
+        result["direct_tip_subshape_stable_prefix"] = true;
     }
     context.objects[object.name] = result;
 }
