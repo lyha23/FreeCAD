@@ -11,7 +11,14 @@
     "freecadcmd_evidence": {
       "helper": "Part.GeomPlate.CurveConstraint",
       "probe_case": "geomplate_g1_curve_on_surface",
-      "error": "NotImplementedError: setG1Criterion; BuildPlateSurface.perform: Curve must be on a Surface"
+      "error": "NotImplementedError: setG1Criterion; BuildPlateSurface.perform: Curve must be on a Surface",
+      "c5m13_s4_probe_script": "docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M13-PartWorkbenchSurfaceNarrowedBlockerRecovery主线/docs/temp/6-22-05-28-c5m13-s4-geomplate-native-oracle-probe.py",
+      "c5m13_s4_variants": [
+        "line_z0_surface_range_0_4 -> RuntimeError: Curve must be on a Surface",
+        "line_z1_surface_range_0_4 -> RuntimeError: Curve must be on a Surface",
+        "line_z0_surface_range_0_1 -> RuntimeError: Curve must be on a Surface",
+        "line_z0_no_initial_range_0_4 -> RuntimeError: Geom_RectangularTrimmedSurface::V1==V2"
+      ]
     },
     "uncollected_fields": [
       "shape_summary for Adaptor3d_CurveOnSurface G1 helper result",

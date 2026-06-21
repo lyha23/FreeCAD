@@ -1779,6 +1779,18 @@ def geomplate_curve_constraints(
         constraint = geomplate_curve_constraint_from_boundary(FreeCAD, Part, fixture, item, "Curve2dOnSurface")
         constraint.setCurve2dOnSurf(geomplate_curve2d_segment(Part, item.get("Curve2d"), "Curve2dOnSurface"))
         constraints.append(constraint)
+    for item in geomplate_object_items(properties.get("ProjectedCurve2d"), "ProjectedCurve2d"):
+        surface = geomplate_link_sub(item.get("Surface"))
+        if not surface:
+            raise UnsupportedFixture("Part.GeomPlate.BuildPlateSurface ProjectedCurve2d requires Surface link")
+        geomplate_validate_surface_link(created, surface, "ProjectedCurve2d.Surface")
+        constraint = geomplate_curve_constraint_from_boundary(FreeCAD, Part, fixture, item, "ProjectedCurve2d")
+        constraint.setProjectedCurve(
+            geomplate_curve2d_segment(Part, item.get("Curve2d"), "ProjectedCurve2d"),
+            float(item.get("TolU", 0.001)),
+            float(item.get("TolV", 0.001)),
+        )
+        constraints.append(constraint)
     return constraints
 
 
@@ -1940,9 +1952,6 @@ def collect_part_geomplate_surface_expected(
                     "throw NotImplementedError",
                 )
                 continue
-            if properties.get("ProjectedCurve2d") is not None:
-                return geomplate_projected_curve2d_known_gap(fixture_path)
-
             try:
                 curve_constraints = geomplate_curve_constraints(FreeCAD, Part, fixture, created, spec)
                 point_constraints = geomplate_point_constraints(FreeCAD, Part, created, spec)
@@ -2007,6 +2016,21 @@ def collect_part_geomplate_surface_expected(
                     "curve_constraint_count": len(curve_constraints),
                     "point_constraint_count": len(point_constraints),
                 }
+                if properties.get("ProjectedCurve2d") is not None:
+                    payload["oracle_evidence"] = {
+                        "helper": "Part.GeomPlate.CurveConstraint.setProjectedCurve",
+                        "collectability": "expected_backed_with_initial_surface",
+                        "probe_script": (
+                            "docs/CADCore5.0-PartDesign-高价值剩余语义/"
+                            "C5-M13-PartWorkbenchSurfaceNarrowedBlockerRecovery主线/docs/temp/"
+                            "6-22-05-28-c5m13-s4-geomplate-native-oracle-probe.py"
+                        ),
+                        "successful_probe_case": (
+                            "geomplate_projected_curve2d_variants:"
+                            "range_0_4_tol_0p01_initial_surface"
+                        ),
+                        "blocked_without_initial_surface": "RuntimeError: Geom_RectangularTrimmedSurface::V1==V2",
+                    }
                 object_payloads[name] = payload
             except UnsupportedFixture as exc:
                 code = "missing_constraints" if "requires curve or point constraints" in str(exc) else "missing_curve_source"

@@ -34,7 +34,7 @@
     "probe_script": "docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M13-PartWorkbenchSurfaceNarrowedBlockerRecovery主线/docs/temp/6-22-05-28-c5m13-s4-geomplate-native-oracle-probe.py",
     "successful_probe_case": "geomplate_projected_curve2d_variants:range_0_4_tol_0p01_initial_surface"
   },
-  "reference": "FreeCADCmd oracle from part-geomplate-projected-curve2d.json; Part::GeomPlateSurface is a cad-core helper translated to Part.GeomPlate.BuildPlateSurface(...); objects: Part::Line, Part::Line, Part::Line, Part::Line, Part::Plane, Part::GeomPlateSurface",
+  "reference": "FreeCADCmd oracle from part-geomplate-projected-curve2d-initial-surface.json; Part::GeomPlateSurface is a cad-core helper translated to Part.GeomPlate.BuildPlateSurface(...); objects: Part::Line, Part::Line, Part::Line, Part::Line, Part::Plane, Part::GeomPlateSurface",
   "schema_version": "cad-core.freecad-expected.v1",
   "topology_counts": {
     "edges": 4,

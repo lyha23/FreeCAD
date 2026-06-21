@@ -6,6 +6,11 @@
   "native_error": "Part.PlateSurface.Curves requires PlateSurfacePy wrapper lifecycle; PlateSurfacePyImp.cpp leaves Curves as TODO and GeomPlateSurface Save/Restore throw NotImplementedError",
   "native_error_code": "unsupported_wrapper_lifecycle",
   "object": "PlateSurfaceCurvesBoundary",
+  "c5m13_s4_evidence": {
+    "probe_script": "docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M13-PartWorkbenchSurfaceNarrowedBlockerRecovery主线/docs/temp/6-22-05-28-c5m13-s4-geomplate-native-oracle-probe.py",
+    "runtime_result": "Part.PlateSurface(Curves=[line_curve()]) exits FreeCADCmd with 139/SIGSEGV",
+    "source_authority": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PlateSurfacePyImp.cpp::PlateSurfacePy::PyInit() leaves Curves loop as TODO"
+  },
   "object_fields": {
     "feature": "part_geomplate_surface",
     "freecad_native_document_object": false,

@@ -71,11 +71,6 @@ class CadCoreExpectedFixtureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCa
                 "geomplate_g1_curve_on_surface",
                 "shape_summary for Adaptor3d_CurveOnSurface G1 helper result",
             ),
-            ("c5m7", "part-geomplate-projected-curve2d"): (
-                "geomplate_projected_curve2d_native_oracle_blocked",
-                "geomplate_projected_curve2d",
-                "shape_summary for ProjectedCurve2d helper result",
-            ),
         }
         for (group, fixture), (kind, probe_case, uncollected_field) in blockers.items():
             with self.subTest(group=group, fixture=fixture):
@@ -83,6 +78,12 @@ class CadCoreExpectedFixtureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCa
                 self.assertEqual(known_gap["kind"], kind)
                 self.assertEqual(known_gap["freecadcmd_evidence"]["probe_case"], probe_case)
                 self.assertIn(uncollected_field, known_gap["uncollected_fields"])
+                if fixture == "part-geomplate-g1-curve-on-surface":
+                    self.assertIn(
+                        "6-22-05-28-c5m13-s4-geomplate-native-oracle-probe.py",
+                        known_gap["freecadcmd_evidence"]["c5m13_s4_probe_script"],
+                    )
+                    self.assertTrue(known_gap["freecadcmd_evidence"]["c5m13_s4_variants"])
 
         params_gap = self.expected_freecad("c5m8", "part-filling-non-default-params")["known_gap"]
         self.assertEqual(
@@ -100,6 +101,45 @@ class CadCoreExpectedFixtureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCa
             },
         )
         self.assertEqual({item["shell_exit"] for item in params_gap["blocked_param_subsets"]}, {139})
+
+    def test_c5m13_geomplate_projected_curve2d_expected_metadata_matches_s4_boundaries(self) -> None:
+        for group, fixture in (
+            ("c5m7", "part-geomplate-projected-curve2d"),
+            ("c5m13", "part-geomplate-projected-curve2d-initial-surface"),
+        ):
+            with self.subTest(group=group, fixture=fixture):
+                expected = self.expected_freecad(group, fixture)
+                self.assertNotIn("known_gap", expected)
+                self.assertEqual(expected["object"], "GeomPlate")
+                self.assertEqual(expected["object_fields"]["feature"], "part_geomplate_surface")
+                self.assertEqual(expected["object_fields"]["helper"], "Part.GeomPlate.BuildPlateSurface")
+                self.assertEqual(expected["object_fields"]["dto"], "PartGeomPlateSurfaceDTO")
+                self.assertFalse(expected["object_fields"]["freecad_native_document_object"])
+                self.assertEqual(expected["object_fields"]["curve_constraint_count"], 4)
+                self.assertEqual(expected["object_fields"]["point_constraint_count"], 1)
+                self.assertIn("bbox", expected)
+                self.assertEqual(expected["topology_counts"]["faces"], 1)
+                self.assertEqual(
+                    expected["oracle_evidence"]["helper"],
+                    "Part.GeomPlate.CurveConstraint.setProjectedCurve",
+                )
+                self.assertEqual(
+                    expected["oracle_evidence"]["collectability"],
+                    "expected_backed_with_initial_surface",
+                )
+                self.assertIn(
+                    "range_0_4_tol_0p01_initial_surface",
+                    expected["oracle_evidence"]["successful_probe_case"],
+                )
+                self.assertEqual(
+                    expected["oracle_evidence"]["blocked_without_initial_surface"],
+                    "RuntimeError: Geom_RectangularTrimmedSurface::V1==V2",
+                )
+
+        criteria = self.expected_freecad("c5m7", "part-geomplate-curve-criteria-diagnostic")
+        self.assertIn("NotImplementedError", criteria["c5m13_s4_evidence"]["runtime_result"])
+        wrapper = self.expected_freecad("c5m7", "part-geomplate-wrapper-boundary")
+        self.assertIn("139/SIGSEGV", wrapper["c5m13_s4_evidence"]["runtime_result"])
 
     def test_c5m13_filling_param_expected_metadata_matches_s3_boundaries(self) -> None:
         expected_params = {

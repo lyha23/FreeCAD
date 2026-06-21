@@ -6,6 +6,11 @@
   "native_error": "Part.GeomPlate.BuildPlateSurface curve criteria setter is unsupported: G0Criterion maps to CurveConstraintPyImp.cpp NotImplementedError",
   "native_error_code": "unsupported_curve_criteria",
   "object": "CurveCriteriaDiagnostic",
+  "c5m13_s4_evidence": {
+    "probe_script": "docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M13-PartWorkbenchSurfaceNarrowedBlockerRecovery主线/docs/temp/6-22-05-28-c5m13-s4-geomplate-native-oracle-probe.py",
+    "runtime_result": "setG0Criterion/setG1Criterion/setG2Criterion all raise NotImplementedError: Not yet implemented",
+    "source_authority": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate/CurveConstraintPyImp.cpp::setG0Criterion/setG1Criterion/setG2Criterion"
+  },
   "object_fields": {
     "feature": "part_geomplate_surface",
     "freecad_native_document_object": false,

@@ -1796,11 +1796,10 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(curve2d[0]["curve2d_end"], [4.0, 0.0])
         self.assert_object_matches_expected(result, "c5m7", "part-geomplate-curve2d-on-surface")
 
-    def test_c5m7_part_geomplate_projected_curve2d_is_source_backed_with_native_oracle_blocker(self) -> None:
+    def test_c5m7_part_geomplate_projected_curve2d_is_expected_backed(self) -> None:
         result = self.run_recompute("part-geomplate-projected-curve2d", "c5m7")
         geomplate = result["objects"]["GeomPlate"]
         source_evidence = geomplate["source_evidence"]
-        expected = self.expected_freecad("c5m7", "part-geomplate-projected-curve2d")
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(geomplate["status"], "ok")
@@ -1813,10 +1812,25 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(projected[0]["curve2d_end"], [4.0, 0.0])
         self.assertEqual(projected[0]["tol_u"], 0.01)
         self.assertEqual(projected[0]["tol_v"], 0.01)
-        self.assertEqual(
-            expected["known_gap"]["kind"],
-            "geomplate_projected_curve2d_native_oracle_blocked",
-        )
+        self.assert_object_matches_expected(result, "c5m7", "part-geomplate-projected-curve2d")
+
+    def test_c5m13_part_geomplate_projected_curve2d_initial_surface_is_expected_backed(self) -> None:
+        result = self.run_recompute("part-geomplate-projected-curve2d-initial-surface", "c5m13")
+        geomplate = result["objects"]["GeomPlate"]
+        source_evidence = geomplate["source_evidence"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(geomplate["status"], "ok")
+        projected = [item for item in source_evidence if item["kind"] == "projected_curve2d"]
+        self.assertEqual(len(projected), 1)
+        self.assertEqual(projected[0]["object"], "BoundaryA")
+        self.assertEqual(projected[0]["surface_object"], "SupportPlane")
+        self.assertEqual(projected[0]["surface_subname"], "Face1")
+        self.assertEqual(projected[0]["curve2d_start"], [0.0, 0.0])
+        self.assertEqual(projected[0]["curve2d_end"], [4.0, 0.0])
+        self.assertEqual(projected[0]["tol_u"], 0.01)
+        self.assertEqual(projected[0]["tol_v"], 0.01)
+        self.assert_object_matches_expected(result, "c5m13", "part-geomplate-projected-curve2d-initial-surface")
 
     def test_c5m7_part_geomplate_point2d_on_surface_is_expected_backed(self) -> None:
         result = self.run_recompute("part-geomplate-point2d-on-surface", "c5m7")
