@@ -165,6 +165,21 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("topo_naming", pad)
         self.assert_object_matches_expected(result, "p7", "pad-refine-false")
 
+    def test_p7_pad_profile_accepts_linked_face(self) -> None:
+        result = self.run_recompute("pad-profile-linked-face", "p7")
+        pad = result["objects"]["PadFromFace"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pad["status"], "ok")
+        self.assertEqual(pad["source_profile"], "BasePad")
+        self.assertEqual(pad["shape"], "occt_solid")
+        self.assertAlmostEqual(pad["volume"], 100.0, delta=1e-6)
+        self.assert_bbox_close(pad["bbox"], [0.0, 0.0, 10.0], [10.0, 5.0, 12.0])
+        self.assert_topology_counts(
+            result["subshapes"]["PadFromFace"],
+            {"topology_counts": {"faces": 6, "edges": 12, "vertices": 8}},
+        )
+
     def test_p7_refine_true_uses_refinemodel_path(self) -> None:
         result = self.run_recompute("pad-refine-true", "p7")
         pad = result["objects"]["Pad"]
@@ -487,6 +502,22 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(revolution["axis_direction"], [0.0, 1.0, 0.0])
         self.assertEqual(revolution["source_profile"], "SketchRevolution")
         self.assert_object_matches_expected(result, "c5m1", "partdesign-revolution-part-edge-axis")
+
+    def test_c5m1_revolution_profile_accepts_linked_face(self) -> None:
+        result = self.run_recompute("partdesign-revolution-profile-linked-face", "c5m1")
+        revolution = result["objects"]["RevolutionFromFace"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(revolution["status"], "ok")
+        self.assertEqual(revolution["add_sub"], "add")
+        self.assertEqual(revolution["method"], "Angle")
+        self.assertEqual(revolution["source_profile"], "BasePad")
+        self.assertEqual(revolution["axis_direction"], [0.0, 1.0, 0.0])
+        self.assertGreater(revolution["volume"], 0.0)
+        self.assert_topology_counts(
+            result["subshapes"]["RevolutionFromFace"],
+            {"topology_counts": {"faces": 6, "edges": 12, "vertices": 8}},
+        )
 
     def test_c5m1_revolved_zero_sum_angles_are_diagnostic(self) -> None:
         result = self.run_recompute("partdesign-revolved-zero-sum-diagnostic", "c5m1")

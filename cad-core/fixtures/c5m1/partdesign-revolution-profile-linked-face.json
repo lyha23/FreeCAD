@@ -1,0 +1,72 @@
+{
+  "Objects": [
+    {
+      "Name": "PartAxis",
+      "ID": 1,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 15,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 15,
+        "Y2": 1,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "SketchBase",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [10, 0] },
+          { "kind": "LineSegment", "start": [10, 0], "end": [10, 5] },
+          { "kind": "LineSegment", "start": [10, 5], "end": [0, 5] },
+          { "kind": "LineSegment", "start": [0, 5], "end": [0, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "BasePad",
+      "ID": 3,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchBase",
+          "SubList": []
+        },
+        "Length": 10,
+        "Reversed": false,
+        "SideType": "One side",
+        "Refine": false
+      }
+    },
+    {
+      "Name": "RevolutionFromFace",
+      "ID": 4,
+      "TypeId": "PartDesign::Revolution",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "BasePad",
+          "SubList": ["Face6"]
+        },
+        "Type": "Angle",
+        "Angle": 90,
+        "ReferenceAxis": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PartAxis",
+          "SubList": ["Edge1"]
+        },
+        "Reversed": false,
+        "Midplane": false,
+        "Refine": false
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["RevolutionFromFace"]
+  }
+}
