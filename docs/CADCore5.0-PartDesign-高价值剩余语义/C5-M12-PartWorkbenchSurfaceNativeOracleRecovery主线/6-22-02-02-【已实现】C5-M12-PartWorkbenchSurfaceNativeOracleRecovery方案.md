@@ -1,4 +1,4 @@
-# C5-M12 Part Workbench Surface Native Oracle Recovery 方案
+# 【已实现】C5-M12 Part Workbench Surface Native Oracle Recovery 方案
 
 ## 当前基线
 
@@ -8,7 +8,7 @@ C5-M6 到 C5-M11 已把 Part Workbench surface family 拆成多个可发布 slic
 
 - `part_workbench.sweep`：C5-M11 后 `SpineSupport` / `SupportMode` 是 diagnostic-only narrowed blocker；`SectionOptions[].Location` / `WithContact` / `WithCorrection` 与 `advanced_combination` 卡在 FreeCADCmd `OCCError: NCollection_Array1::Value`。
 - `part_workbench.loft`：S3 已为 FreeCAD `Part::Loft` sections/profile 语义中的 wire / face / vertex / whole sketch object representatives 建立 expected-backed 覆盖；sketch subelement assignment 因 `Sections=App::PropertyLinkList` 保持 native-hidden diagnostic-only。
-- `part_workbench.filling`：C5-M8 后仍有 `surface_support_order_native_helper_expected`、`filling_support_order_g2_expected`、`non_default_params_native_helper_expected`、`non_boundary_edge_support_native_helper_expected`。
+- `part_workbench.filling`：C5-M8 后仍有 `surface_support_order_native_helper_expected`、`filling_support_order_g2_expected`、`non_default_params_native_helper_expected`、`non_boundary_edge_support_order_native_helper_expected`；C5-M12-S4 已额外关闭 no-support/order non-boundary edge representative。
 - `part_workbench.geomplate`：C5-M7 后仍有 G1 curve-on-surface native expected oracle 与 ProjectedCurve2d native expected oracle；curve criteria setter 和 PlateSurface.Curves 当前仍是 FreeCAD wrapper diagnostic/lifecycle boundary。
 
 ## FreeCAD 调用链
@@ -69,9 +69,9 @@ python3 tools/collect_freecad_expected.py --phase c5m12 --check --skip-unsupport
 python3 -m unittest tests.test_p8_features tests.test_expected_fixtures tests.test_adapters
 ```
 
-## 收口标准
+## 收口结论
 
 - C5-M12 package queue 为空。
-- collectable native helper / wrapper blockers 已替换为 expected-backed JSON。
-- uncollectable 场景只剩明确 narrowed blocker，带 FreeCADCmd 错误、source authority、未采字段和下一批条件。
+- collectable native helper / wrapper blockers 已替换为 expected-backed JSON：Sweep valid `SpineSupport` / `SupportMode`、Loft wire/face 与 whole-sketch-object/vertex representatives、Filling non-boundary edge no-support/order。
+- uncollectable 场景只剩明确 narrowed blocker 或 diagnostic-only boundary：Sweep located/combined `NCollection_Array1::Value`，Loft sketch subelement native-hidden，Filling support/surface/params/non-boundary support-order，GeomPlate G1 native-hidden 与 ProjectedCurve2d RuntimeError。
 - `docs/CADCore3.0/capabilities-gap对照表.md`、C5 root matrices、本包矩阵、adapter capability metadata 与 focused tests 一致。

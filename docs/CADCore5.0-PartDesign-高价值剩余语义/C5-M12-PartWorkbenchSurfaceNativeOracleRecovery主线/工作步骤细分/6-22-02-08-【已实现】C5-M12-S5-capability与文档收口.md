@@ -1,6 +1,10 @@
-# C5-M12-S5 capability 与文档收口
+# 【已实现】C5-M12-S5 capability 与文档收口
 
-状态：`pending_C5M12-S5_capability_docs_closeout`
+状态：`【已实现】`
+
+## 完成结论
+
+S5 已关闭 C5-M12 package 与 root C5 matrix。C3/C5 docs、root/package matrices、`cad_core_capabilities_json()` metadata 与 focused tests 均按 S2-S4 当前事实同步：Sweep valid support expected-backed、located/combined 保留 `NCollection_Array1::Value` blocker；Loft broad complex profile family 关闭，只剩 sketch subelement native-hidden diagnostic；Filling no-support/order non-boundary edge expected-backed，其余 support/surface/params/non-boundary support-order 保留 blocker；GeomPlate G1 diagnostic-only、ProjectedCurve2d RuntimeError blocker。
 
 ## 目标
 

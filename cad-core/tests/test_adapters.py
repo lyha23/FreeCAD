@@ -232,6 +232,23 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertRegex(item["stableSubname"], r"^Fillet\..*Face\d+$")
             self.assertNotRegex(item["stableSubname"], r"\.(Edge|Vertex)\d+$")
 
+    def test_c_api_body_additive_chain_tip_subshapes_publish_tip_qualified_stable_names(self) -> None:
+        result = self.run_recompute_ffi("partdesign-revolution-featurefirst-body", "c51m1")
+        body = next(item for item in result["results"] if item["object"] == "Body")
+        face_subshapes = [item for item in body["subshapes"] if item["kind"] == "Face"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertTrue(face_subshapes)
+        self.assertTrue(
+            any(item["stableSubname"].startswith("Revolution.Pad.Face") for item in face_subshapes)
+        )
+        for item in face_subshapes:
+            self.assertEqual(item["id"], f"Body:{item['indexed']}")
+            self.assertRegex(item["indexed"], r"^Face\d+$")
+            self.assertRegex(item["subname"], r"^Revolution\.Face\d+$")
+            self.assertRegex(item["stableSubname"], r"^Revolution\..*Face\d+$")
+            self.assertNotRegex(item["stableSubname"], r"\.(Edge|Vertex)\d+$")
+
     def test_c4s11_cli_c_api_worker_wasm_share_core_result_contract(self) -> None:
         payload = (ROOT / "fixtures" / "mvp" / "rect-pad.json").read_bytes()
 
@@ -2523,7 +2540,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(producer_matrix["pipeshell"]["remaining"], [])
         self.assertEqual(
             producer_matrix["part_filling"]["status"],
-            "done_expected_backed_first_batch_plus_c5m8_s5_capability_closeout",
+            "done_expected_backed_first_batch_plus_c5m12_native_oracle_closeout",
         )
         self.assertIn("maker_history:filling", producer_matrix["part_filling"]["covered"])
         self.assertIn("boundary_source_evidence", producer_matrix["part_filling"]["covered"])
@@ -2537,6 +2554,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("constructor_params_metadata", producer_matrix["part_filling"]["covered"])
         self.assertIn("locatable_param_diagnostics", producer_matrix["part_filling"]["covered"])
         self.assertIn("non_boundary_constraint_source_evidence", producer_matrix["part_filling"]["covered"])
+        self.assertIn(
+            "non_boundary_edge_no_support_order_expected_backed",
+            producer_matrix["part_filling"]["covered"],
+        )
         self.assertIn("locatable_non_boundary_diagnostics", producer_matrix["part_filling"]["covered"])
         self.assertIn("compound_source_expansion", producer_matrix["part_filling"]["covered"])
         self.assertIn(
@@ -2556,7 +2577,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             producer_matrix["part_filling"]["remaining"],
         )
         self.assertIn(
-            "non_boundary_edge_support_native_helper_expected",
+            "non_boundary_edge_support_order_native_helper_expected",
             producer_matrix["part_filling"]["remaining"],
         )
         self.assertNotIn(
@@ -2924,7 +2945,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(ruled_surface["non_goals"], [])
         self.assertNotIn("full_surface_family", ruled_surface["covered"])
         loft = capabilities["part_workbench"]["loft"]
-        self.assertEqual(loft["status"], "supported_profile_linearize_expected_backed")
+        self.assertEqual(loft["status"], "supported_profile_linearize_complex_expected_backed")
         self.assertIn("Part::Loft", loft["type_ids"])
         self.assertEqual(
             loft["payload_keys"],
@@ -2950,7 +2971,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("sections_property_link_list", loft["covered"])
         self.assertIn("solid_ruled_closed_max_degree", loft["covered"])
         self.assertIn("loft_thru_sections_maker_history", loft["covered"])
+        self.assertIn("prepare_profiles_edge_wire_expected_batch", loft["covered"])
         self.assertIn("prepare_profiles_face_vertex_expected_batch", loft["covered"])
+        self.assertIn("complex_profile_family_expected_backed", loft["covered"])
+        self.assertIn("sketch_subelement_assignment_native_hidden_diagnostic", loft["covered"])
         self.assertIn("linearize_planar_faces_post_processing", loft["covered"])
         for fixture in (
             "c3m4/part-loft-two-section-surface",
@@ -2960,6 +2984,9 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "c3m4/part-loft-invalid-sections",
             "c4m1/part-loft-linearize-profile-face",
             "c4m1/part-loft-linearize-profile-vertex",
+            "c5m12/part-loft-complex-wire-face",
+            "c5m12/part-loft-complex-vertex-sketch-object",
+            "c5m12/part-loft-subelement-assignment-diagnostic",
         ):
             self.assertIn(fixture, loft["fixtures"])
         self.assertEqual(
@@ -2972,6 +2999,9 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "c3m4/part-loft-invalid-sections",
                 "c4m1/part-loft-linearize-profile-face",
                 "c4m1/part-loft-linearize-profile-vertex",
+                "c5m12/part-loft-complex-wire-face",
+                "c5m12/part-loft-complex-vertex-sketch-object",
+                "c5m12/part-loft-subelement-assignment-diagnostic",
             ],
         )
         for diagnostic in (
@@ -2996,20 +3026,25 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("source_backed_part_loft_document_object_only", loft["request_local_boundaries"])
         self.assertIn("linearize_faces_no_edges_post_processing", loft["request_local_boundaries"])
         self.assertIn("face_vertex_profile_expected_backed", loft["request_local_boundaries"])
-        self.assertIn("complex_profile_family_deferred", loft["request_local_boundaries"])
-        self.assertIn("complex_profile_family", loft["remaining_gaps"])
+        self.assertIn("complex_profile_family_expected_backed", loft["request_local_boundaries"])
+        self.assertIn("sketch_subelement_assignment_native_hidden", loft["request_local_boundaries"])
+        self.assertIn("part_loft_subelement_assignment_native_hidden", loft["remaining_gaps"])
         self.assertEqual(
             loft["remaining_gaps"],
             [
-                "complex_profile_family",
+                "part_loft_subelement_assignment_native_hidden",
             ],
         )
         self.assertEqual(
             loft["non_goals"],
             [
-                "complex_profile_family",
+                "sketch_subelement_assignment_native_expected",
+                "part_design_feature_loft",
+                "full_part_surface_family",
             ],
         )
+        self.assertNotIn("complex_profile_family", loft["remaining_gaps"])
+        self.assertNotIn("complex_profile_family", loft["non_goals"])
         self.assertNotIn("sweep_filling_geomplate_pipeshell", loft["remaining_gaps"])
         self.assertNotIn("geomplate", loft["remaining_gaps"])
         self.assertNotIn("full_part_surface_family", loft["covered"])
@@ -3277,7 +3312,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         filling = capabilities["part_workbench"]["filling"]
         self.assertEqual(
             filling["status"],
-            "supported_expected_backed_with_c5m8_s5_capability_closeout",
+            "supported_expected_backed_with_c5m12_native_oracle_closeout",
         )
         self.assertIn("Part::FilledFace", filling["type_ids"])
         self.assertEqual(filling["helper"], "Part.makeFilledFace")
@@ -3332,6 +3367,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "non_boundary_face_constraint",
             "non_boundary_vertex_point_constraint",
             "non_boundary_constraint_source_evidence",
+            "c5m12_non_boundary_edge_no_support_order_expected_backed",
             "compound_source_expansion",
             "compound_optional_expected_backed",
             "direct_makefilling_wrapper_lifecycle_diagnostic",
@@ -3357,6 +3393,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "c5m8/part-filling-compound-optional-boundary",
             "c5m8/part-filling-wrapper-boundary",
             "c5m8/part-filling-wrapper-uv-point-boundary",
+            "c5m12/part-filling-non-boundary-edge-no-support-order",
         ):
             self.assertIn(fixture, filling["fixtures"])
         self.assertEqual(
@@ -3378,6 +3415,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "c5m8/part-filling-compound-optional-boundary",
                 "c5m8/part-filling-wrapper-boundary",
                 "c5m8/part-filling-wrapper-uv-point-boundary",
+                "c5m12/part-filling-non-boundary-edge-no-support-order",
             ],
         )
         for diagnostic in (
@@ -3426,6 +3464,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "support_order_g1_fixture_source_backed",
             "non_default_params_native_helper_oracle_known_gap",
             "non_boundary_edge_wire_face_vertex_source_backed",
+            "non_boundary_edge_no_support_order_expected_backed",
             "non_boundary_edge_support_order_native_helper_oracle_known_gap",
             "compound_boundary_optional_expected_backed",
             "no_cross_request_mutable_makefilling_wrapper_state",
@@ -3439,7 +3478,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "surface_support_order_native_helper_expected",
             "filling_support_order_g2_expected",
             "non_default_params_native_helper_expected",
-            "non_boundary_edge_support_native_helper_expected",
+            "non_boundary_edge_support_order_native_helper_expected",
         ):
             self.assertIn(gap, filling["remaining_gaps"])
         self.assertEqual(
@@ -3448,7 +3487,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "surface_support_order_native_helper_expected",
                 "filling_support_order_g2_expected",
                 "non_default_params_native_helper_expected",
-                "non_boundary_edge_support_native_helper_expected",
+                "non_boundary_edge_support_order_native_helper_expected",
             ],
         )
         for unsupported in ("non_boundary_constraints_deferred_diagnostic",):
@@ -3558,7 +3597,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "mixed_g0_2d_surface_constraints_expected_backed",
             "point_constraint_criteria_expected_backed",
             "projected_curve2d_source_backed",
-            "projected_curve2d_native_oracle_blocker",
+            "projected_curve2d_runtimeerror_blocker",
             "default_build_params_metadata",
             "approximation_metadata",
             "explicit_approximation_params_expected_backed",
@@ -3567,7 +3606,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "source_evidence",
             "expected_backed_fixtures",
             "invalid_diagnostics",
-            "g1_curve_on_surface_native_oracle_blocker",
+            "g1_curve_on_surface_native_hidden_diagnostic_only",
         ):
             self.assertIn(covered, geomplate["covered"])
         for fixture in (
@@ -3662,13 +3701,18 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "advanced_approximation_params_expected_backed",
             "advanced_approximation_params_are_not_full_advanced_support",
             "2d_constraints_require_explicit_boundary_surface_and_uv_payload",
-            "g1_native_oracle_blocked_by_python_wrapper",
-            "projected_curve2d_native_oracle_blocked_by_python_wrapper",
+            "g1_native_hidden_diagnostic_only",
+            "projected_curve2d_runtimeerror_blocker",
         ):
             self.assertIn(boundary, geomplate["request_local_boundaries"])
         for gap in (
             "g1_curve_on_surface_native_oracle",
             "projected_2d_curve_native_oracle",
+        ):
+            self.assertNotIn(gap, geomplate["remaining_gaps"])
+        for gap in (
+            "g1_curve_on_surface_native_hidden_diagnostic_only",
+            "projected_curve2d_runtimeerror_native_oracle_blocker",
             "curve_constraint_criteria_setters_not_implemented",
             "platesurface_curves_wrapper_lifecycle",
         ):
@@ -3676,8 +3720,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(
             geomplate["remaining_gaps"],
             [
-                "g1_curve_on_surface_native_oracle",
-                "projected_2d_curve_native_oracle",
+                "g1_curve_on_surface_native_hidden_diagnostic_only",
+                "projected_curve2d_runtimeerror_native_oracle_blocker",
                 "curve_constraint_criteria_setters_not_implemented",
                 "platesurface_curves_wrapper_lifecycle",
             ],
@@ -3688,6 +3732,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "fake_part_geomplate_document_object",
             "fake_persistent_platesurface_object",
             "filling_brepoffsetapi_makefilling_extension",
+            "full_part_surface_family",
         ):
             self.assertIn(non_goal, geomplate["non_goals"])
         self.assertEqual(
@@ -3698,6 +3743,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "fake_part_geomplate_document_object",
                 "fake_persistent_platesurface_object",
                 "filling_brepoffsetapi_makefilling_extension",
+                "full_part_surface_family",
             ],
         )
         self.assertNotIn("Part::GeomPlate", geomplate["type_ids"])

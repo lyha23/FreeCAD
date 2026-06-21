@@ -1,4 +1,4 @@
-# C5-M12 Part Workbench Surface Native Oracle Recovery 主线
+# 【已实现】C5-M12 Part Workbench Surface Native Oracle Recovery 主线
 
 C5-M12 承接 C5-M6 到 C5-M11 关闭后仍留在 Part Workbench surface family 里的精确 oracle / expected blockers。它不是新增产品面，也不是重开 C5 broad deferred；本包只处理已有 cad-core source-backed 或 diagnostic-backed surface helper / wrapper 能力中，因 FreeCADCmd native helper / wrapper oracle 尚未稳定而无法晋级 expected-backed 的代表场景。
 
@@ -11,7 +11,7 @@ C5-M12 承接 C5-M6 到 C5-M11 关闭后仍留在 Part Workbench surface family 
 
 ## 入口文件
 
-- 方案：`6-22-02-02-C5-M12-PartWorkbenchSurfaceNativeOracleRecovery方案.md`
+- 方案：`6-22-02-02-【已实现】C5-M12-PartWorkbenchSurfaceNativeOracleRecovery方案.md`
 - scope 矩阵：`矩阵/c5m12_surface_native_oracle_recovery_scope.tsv`
 - source / DTO / oracle 合同：`矩阵/c5m12_surface_native_oracle_recovery_source_dto_oracle_contract.tsv`
 - fixture / oracle 矩阵：`矩阵/c5m12_surface_native_oracle_recovery_fixture_oracle_matrix.tsv`
@@ -30,6 +30,10 @@ C5-M12 承接 C5-M6 到 C5-M11 关闭后仍留在 Part Workbench surface family 
 | Loft complex profile | wire / face / vertex / whole sketch object profile family；sketch subelement native-hidden boundary | S3 已为 `part_workbench.loft.complex_profile_family` 代表 profile 建 expected / diagnostics |
 | Filling + GeomPlate native oracle | Filling support/order/G2/params/non-boundary edge, GeomPlate G1/projected native oracle | S4 native helper expected 或 source-backed blocker 更新 |
 | capability docs closeout | expected, tests, capability, C3/C5 docs | S5 收口 root/package matrices 和 capability wording |
+
+## 收口结论
+
+C5-M12 已完成 S5 capability/docs closeout：`part_workbench.sweep` valid `SpineSupport` / `SupportMode`、`part_workbench.loft` complex profile representatives、`part_workbench.filling` non-boundary edge no-support/order representative 均为 expected-backed；Sweep located/combined、Loft sketch subelement、Filling support/surface/params/non-boundary support-order、GeomPlate G1/ProjectedCurve2d 均保留精确 narrowed blocker 或 diagnostic-only boundary。工作步骤队列应为空。
 
 ## 队列检查
 
