@@ -112,6 +112,16 @@ PART_HELPER_TYPES = {
     "Part::FilledFace",
     "Part::GeomPlateSurface",
 }
+PART_SWEEP_WRAPPER_ADVANCED_FIELDS = {
+    "AuxiliarySpine",
+    "AuxiliaryCurvilinear",
+    "SpineSupport",
+    "SupportMode",
+    "Binormal",
+    "BiNormal",
+    "SectionOptions",
+    "Tolerance",
+}
 EXTERNAL_GEOMETRY_FLAG_NAMES = ("Defining", "Frozen", "Detached", "Missing", "Sync")
 
 
@@ -3879,6 +3889,488 @@ def sweep_transition_from_properties(properties: dict[str, Any]) -> str:
     return "Right corner"
 
 
+def sweep_transition_mode_index(properties: dict[str, Any]) -> int:
+    labels = ["Transformed", "Right corner", "Round corner"]
+    value = consumer_property(properties, "Transition", "Right corner")
+    if isinstance(value, str) and value in labels:
+        return labels.index(value)
+    if isinstance(value, (int, float)):
+        index = int(value)
+        if 0 <= index < len(labels):
+            return index
+    raise UnsupportedFixture("Part.BRepOffsetAPI_MakePipeShell Transition must be 0..2 or a known label")
+
+
+def is_part_sweep_wrapper_helper_spec(spec: dict[str, Any]) -> bool:
+    properties = spec.get("Properties", {})
+    return (
+        spec.get("TypeId") == "Part::Sweep"
+        and isinstance(properties, dict)
+        and any(field in properties for field in PART_SWEEP_WRAPPER_ADVANCED_FIELDS)
+    )
+
+
+def has_part_sweep_wrapper_helper(fixture: dict) -> bool:
+    return any(
+        isinstance(spec, dict) and is_part_sweep_wrapper_helper_spec(spec)
+        for spec in fixture.get("Objects", [])
+    )
+
+
+def part_sweep_wrapper_specs(fixture: dict) -> dict[str, dict[str, Any]]:
+    return {
+        str(spec["Name"]): spec
+        for spec in fixture.get("Objects", [])
+        if isinstance(spec, dict) and is_part_sweep_wrapper_helper_spec(spec)
+    }
+
+
+def fixture_without_part_sweep_wrapper_helpers(fixture: dict) -> dict:
+    filtered = dict(fixture)
+    filtered["Objects"] = [
+        spec
+        for spec in fixture.get("Objects", [])
+        if not (isinstance(spec, dict) and is_part_sweep_wrapper_helper_spec(spec))
+    ]
+    filtered["recompute"] = {"objs": []}
+    return filtered
+
+
+def part_sweep_wrapper_target_names(
+    fixture: dict,
+    requested_targets: Sequence[str] | None = None,
+) -> list[str]:
+    helper_specs = part_sweep_wrapper_specs(fixture)
+    candidates = (
+        list(requested_targets)
+        if requested_targets is not None
+        else list(fixture.get("recompute", {}).get("objs", helper_specs.keys()))
+    )
+    return [str(name) for name in candidates if str(name) in helper_specs]
+
+
+def strict_bool_property(value: Any, field: str, fallback: bool = False) -> bool:
+    if value is None:
+        return fallback
+    if isinstance(value, bool):
+        return value
+    raise UnsupportedFixture(f"Part.BRepOffsetAPI_MakePipeShell {field} must be boolean")
+
+
+def strict_number(value: Any, field: str) -> float:
+    if isinstance(value, (int, float)) and math.isfinite(float(value)):
+        return float(value)
+    raise UnsupportedFixture(f"Part.BRepOffsetAPI_MakePipeShell {field} must be a finite number")
+
+
+def strict_vector3(value: Any, field: str) -> list[float]:
+    if not isinstance(value, list) or len(value) != 3:
+        raise UnsupportedFixture(f"Part.BRepOffsetAPI_MakePipeShell {field} must be a [x, y, z] vector")
+    vector = [strict_number(item, field) for item in value]
+    if math.isclose(vector[0], 0.0) and math.isclose(vector[1], 0.0) and math.isclose(vector[2], 0.0):
+        raise UnsupportedFixture(f"Part.BRepOffsetAPI_MakePipeShell {field} must be non-zero")
+    return vector
+
+
+def first_link_subshape(value: dict[str, Any]) -> str:
+    subnames = list_field(value, "StableSubList", "SubList")
+    return str(subnames[0]) if subnames else ""
+
+
+def wrapper_indexed_subshape(shape: Any, subname: str) -> Any:
+    shape_type = str(getattr(shape, "ShapeType", ""))
+    for prefix, attribute in (
+        ("Vertex", "Vertexes"),
+        ("Edge", "Edges"),
+        ("Wire", "Wires"),
+        ("Face", "Faces"),
+        ("Shell", "Shells"),
+        ("Solid", "Solids"),
+    ):
+        if not subname.startswith(prefix):
+            continue
+        try:
+            index = int(subname[len(prefix) :]) - 1
+        except ValueError as exc:
+            raise UnsupportedFixture(f"invalid subshape token {subname}") from exc
+        if shape_type == prefix and index == 0:
+            return shape
+        items = list(getattr(shape, attribute, []))
+        if 0 <= index < len(items):
+            return items[index]
+        raise UnsupportedFixture(f"subshape token {subname} is out of range")
+    raise UnsupportedFixture(f"unsupported subshape token {subname}")
+
+
+def resolve_wrapper_link_shape(
+    created: dict[str, Any],
+    value: Any,
+    property_name: str,
+) -> tuple[Any, dict[str, str]]:
+    if not isinstance(value, dict):
+        raise UnsupportedFixture(f"Part.BRepOffsetAPI_MakePipeShell {property_name} must be a link")
+    target_name = str(value.get("value", ""))
+    if target_name not in created:
+        raise UnsupportedFixture(f"Part.BRepOffsetAPI_MakePipeShell {property_name} target {target_name} was not created")
+    target = created[target_name]
+    shape = getattr(target, "Shape", None)
+    if shape is None or shape.isNull():
+        raise UnsupportedFixture(f"Part.BRepOffsetAPI_MakePipeShell {property_name} target {target_name} has no shape")
+    metadata = {"target": target_name}
+    subname = first_link_subshape(value)
+    if subname:
+        metadata["subname"] = subname
+        try:
+            native_subname = native_link_subname(target, subname)
+            if hasattr(shape, "getSubShape"):
+                shape = shape.getSubShape(native_subname)
+            else:
+                shape = wrapper_indexed_subshape(shape, native_subname)
+        except Exception as exc:
+            raise UnsupportedFixture(
+                f"Part.BRepOffsetAPI_MakePipeShell {property_name} cannot resolve {target_name}.{subname}: {exc}"
+            ) from exc
+        if shape is None or shape.isNull():
+            raise UnsupportedFixture(
+                f"Part.BRepOffsetAPI_MakePipeShell {property_name} resolved empty {target_name}.{subname}"
+            )
+    return shape, metadata
+
+
+def wrapper_wire_from_shape(Part: Any, shape: Any, property_name: str) -> Any:
+    shape_type = str(getattr(shape, "ShapeType", ""))
+    if shape_type == "Wire":
+        return shape
+    if shape_type == "Edge":
+        return Part.Wire([shape])
+    wires = list(getattr(shape, "Wires", []))
+    if wires:
+        return wires[0]
+    edges = list(getattr(shape, "Edges", []))
+    if edges:
+        return Part.Wire(edges)
+    raise UnsupportedFixture(f"Part.BRepOffsetAPI_MakePipeShell {property_name} cannot form a wire")
+
+
+def wrapper_profile_shape(Part: Any, shape: Any, property_name: str) -> Any:
+    if str(getattr(shape, "ShapeType", "")) == "Vertex":
+        return shape
+    return wrapper_wire_from_shape(Part, shape, property_name)
+
+
+def wrapper_linked_object_shape(created: dict[str, Any], name: str, property_name: str) -> Any:
+    if name not in created:
+        raise UnsupportedFixture(f"Part.BRepOffsetAPI_MakePipeShell {property_name} target {name} was not created")
+    shape = getattr(created[name], "Shape", None)
+    if shape is None or shape.isNull():
+        raise UnsupportedFixture(f"Part.BRepOffsetAPI_MakePipeShell {property_name} target {name} has no shape")
+    return shape
+
+
+def make_pipeshell_builder(Part: Any, spine_wire: Any) -> tuple[Any, str]:
+    direct = getattr(Part, "BRepOffsetAPI_MakePipeShell", None)
+    if direct is not None:
+        return direct(spine_wire), "Part.BRepOffsetAPI_MakePipeShell"
+    namespace = getattr(Part, "BRepOffsetAPI", None)
+    nested = getattr(namespace, "MakePipeShell", None) if namespace is not None else None
+    if nested is not None:
+        return nested(spine_wire), "Part.BRepOffsetAPI.MakePipeShell"
+    raise UnsupportedFixture("FreeCAD Part module does not expose BRepOffsetAPI MakePipeShell wrapper")
+
+
+def wrapper_sections(
+    Part: Any,
+    created: dict[str, Any],
+    properties: dict[str, Any],
+) -> tuple[list[Any], list[str]]:
+    section_names = link_property_object_names(properties, "Sections")
+    if not section_names:
+        raise UnsupportedFixture("Part.BRepOffsetAPI_MakePipeShell requires at least one Sections item")
+    profiles = [
+        wrapper_profile_shape(Part, wrapper_linked_object_shape(created, name, "Sections"), "Sections")
+        for name in section_names
+    ]
+    return profiles, section_names
+
+
+def wrapper_tolerance(properties: dict[str, Any]) -> dict[str, float] | None:
+    tolerance = properties.get("Tolerance")
+    if tolerance is None:
+        return None
+    if not isinstance(tolerance, dict) or "PropertyType" in tolerance:
+        raise UnsupportedFixture("Part.BRepOffsetAPI_MakePipeShell Tolerance must be an object with tol3d/boundTol/tolAngular")
+    return {
+        "tol3d": strict_number(tolerance.get("tol3d"), "Tolerance.tol3d"),
+        "boundTol": strict_number(tolerance.get("boundTol"), "Tolerance.boundTol"),
+        "tolAngular": strict_number(tolerance.get("tolAngular"), "Tolerance.tolAngular"),
+    }
+
+
+def wrapper_binormal(properties: dict[str, Any]) -> tuple[str, list[float]] | None:
+    has_canonical = "Binormal" in properties
+    has_legacy = "BiNormal" in properties
+    if has_canonical and has_legacy:
+        raise UnsupportedFixture("Part.BRepOffsetAPI_MakePipeShell accepts either Binormal or BiNormal, not both")
+    if not has_canonical and not has_legacy:
+        return None
+    property_name = "Binormal" if has_canonical else "BiNormal"
+    return property_name, strict_vector3(property_payload_value(properties[property_name]), property_name)
+
+
+def wrapper_section_options(
+    Part: Any,
+    created: dict[str, Any],
+    properties: dict[str, Any],
+    section_names: list[str],
+) -> list[dict[str, Any]]:
+    raw_options = properties.get("SectionOptions", [])
+    if raw_options is None:
+        return []
+    if not isinstance(raw_options, list):
+        raise UnsupportedFixture("Part.BRepOffsetAPI_MakePipeShell SectionOptions must be a list")
+    options: list[dict[str, Any]] = []
+    for index, section_name in enumerate(section_names):
+        raw_option = raw_options[index] if index < len(raw_options) else {}
+        if raw_option is None:
+            raw_option = {}
+        if not isinstance(raw_option, dict):
+            raise UnsupportedFixture(f"Part.BRepOffsetAPI_MakePipeShell SectionOptions[{index}] must be an object")
+        option: dict[str, Any] = {
+            "profile": section_name,
+            "with_contact": strict_bool_property(raw_option.get("WithContact"), f"SectionOptions[{index}].WithContact"),
+            "with_correction": strict_bool_property(raw_option.get("WithCorrection"), f"SectionOptions[{index}].WithCorrection"),
+        }
+        if "Location" in raw_option:
+            location_shape, metadata = resolve_wrapper_link_shape(created, raw_option["Location"], f"SectionOptions[{index}].Location")
+            if str(getattr(location_shape, "ShapeType", "")) != "Vertex":
+                raise UnsupportedFixture(f"Part.BRepOffsetAPI_MakePipeShell SectionOptions[{index}].Location must resolve to a vertex")
+            option["location_shape"] = location_shape
+            option["location"] = metadata
+        options.append(option)
+    if len(raw_options) > len(section_names):
+        raise UnsupportedFixture("Part.BRepOffsetAPI_MakePipeShell SectionOptions has more items than Sections")
+    return options
+
+
+def collect_part_sweep_wrapper_object_expected(
+    FreeCAD: Any,
+    Part: Any,
+    created: dict[str, Any],
+    spec: dict[str, Any],
+) -> dict:
+    properties = spec.get("Properties", {})
+    if not isinstance(properties, dict):
+        raise UnsupportedFixture("Part.BRepOffsetAPI_MakePipeShell properties must be an object")
+
+    spine_shape, spine_metadata = resolve_wrapper_link_shape(created, properties.get("Spine"), "Spine")
+    spine_wire = wrapper_wire_from_shape(Part, spine_shape, "Spine")
+    profiles, section_names = wrapper_sections(Part, created, properties)
+    section_options = wrapper_section_options(Part, created, properties, section_names)
+    transition_index = sweep_transition_mode_index(properties)
+    transition_label = sweep_transition_from_properties(properties)
+    tolerance = wrapper_tolerance(properties)
+    binormal = wrapper_binormal(properties)
+
+    builder, runtime_helper = make_pipeshell_builder(Part, spine_wire)
+    builder.setTransitionMode(transition_index)
+    builder_status: dict[str, Any] = {
+        "transition_mode": transition_index,
+    }
+    advanced: dict[str, Any] = {}
+    if tolerance is not None:
+        builder.setTolerance(tolerance["tol3d"], tolerance["boundTol"], tolerance["tolAngular"])
+        advanced["tolerance"] = tolerance
+        builder_status["set_tolerance"] = True
+
+    selected_modes = 0
+    if "AuxiliarySpine" in properties or "AuxiliaryCurvilinear" in properties:
+        selected_modes += 1
+        auxiliary_shape, metadata = resolve_wrapper_link_shape(created, properties.get("AuxiliarySpine"), "AuxiliarySpine")
+        auxiliary_wire = wrapper_wire_from_shape(Part, auxiliary_shape, "AuxiliarySpine")
+        curvilinear = strict_bool_property(properties.get("AuxiliaryCurvilinear"), "AuxiliaryCurvilinear", True)
+        builder.setAuxiliarySpine(auxiliary_wire, curvilinear, 0)
+        advanced["mode"] = "Auxiliary"
+        advanced["auxiliary_spine"] = {
+            **metadata,
+            "curvilinear": curvilinear,
+            "contact": "NoContact",
+        }
+        builder_status["set_auxiliary_spine"] = True
+
+    support_mode = consumer_property(properties, "SupportMode")
+    if support_mode is not None:
+        if support_mode not in {"None", "SurfaceNormal"}:
+            raise UnsupportedFixture("Part.BRepOffsetAPI_MakePipeShell SupportMode must be None or SurfaceNormal")
+        if support_mode == "SurfaceNormal":
+            selected_modes += 1
+            support_shape, metadata = resolve_wrapper_link_shape(created, properties.get("SpineSupport"), "SpineSupport")
+            set_mode_ok = bool(builder.setSpineSupport(support_shape))
+            if not set_mode_ok:
+                raise UnsupportedFixture("Part.BRepOffsetAPI_MakePipeShell setSpineSupport returned false")
+            advanced["mode"] = "SurfaceNormal"
+            advanced["support_mode"] = "SurfaceNormal"
+            advanced["spine_support"] = {
+                **metadata,
+                "set_mode_ok": set_mode_ok,
+            }
+            builder_status["set_spine_support"] = set_mode_ok
+    elif "SpineSupport" in properties:
+        raise UnsupportedFixture("Part.BRepOffsetAPI_MakePipeShell SpineSupport requires SupportMode=SurfaceNormal")
+
+    if binormal is not None:
+        selected_modes += 1
+        binormal_property, vector = binormal
+        builder.setBiNormalMode(FreeCAD.Vector(vector[0], vector[1], vector[2]))
+        advanced["mode"] = "Binormal"
+        advanced["binormal"] = vector
+        advanced["binormal_property"] = binormal_property
+        builder_status["set_binormal_mode"] = True
+
+    if selected_modes > 1:
+        raise UnsupportedFixture("Part.BRepOffsetAPI_MakePipeShell accepts one advanced builder mode per request")
+
+    if selected_modes == 0:
+        builder.setFrenetMode(bool_from_properties(properties, "Frenet", True))
+        builder_status["set_frenet_mode"] = True
+
+    advanced_sections: list[dict[str, Any]] = []
+    for index, profile in enumerate(profiles):
+        option = section_options[index] if index < len(section_options) else {
+            "profile": section_names[index],
+            "with_contact": False,
+            "with_correction": False,
+        }
+        if "location_shape" in option:
+            builder.add(
+                Profile=profile,
+                Location=option["location_shape"],
+                WithContact=option["with_contact"],
+                WithCorrection=option["with_correction"],
+            )
+        else:
+            builder.add(
+                Profile=profile,
+                WithContact=option["with_contact"],
+                WithCorrection=option["with_correction"],
+            )
+        section_payload = {
+            "profile": option["profile"],
+            "with_contact": option["with_contact"],
+            "with_correction": option["with_correction"],
+        }
+        if "location" in option:
+            section_payload["location"] = option["location"]
+        advanced_sections.append(section_payload)
+    if advanced_sections:
+        advanced["sections"] = advanced_sections
+
+    builder_status["is_ready"] = bool(builder.isReady())
+    builder_status["status_before_build"] = int(builder.getStatus())
+    if not builder_status["is_ready"]:
+        raise UnsupportedFixture("Part.BRepOffsetAPI_MakePipeShell helper is not ready after adding profiles")
+    builder.build()
+    builder_status["build_ok"] = True
+    if bool_from_properties(properties, "Solid", True):
+        builder_status["make_solid_ok"] = bool(builder.makeSolid())
+    result_shape = builder.shape()
+    builder_status["status_after_build"] = int(builder.getStatus())
+    builder_status["shape_access_ok"] = result_shape is not None and not result_shape.isNull()
+    if not builder_status["shape_access_ok"]:
+        raise UnsupportedFixture("Part.BRepOffsetAPI_MakePipeShell returned an empty shape")
+
+    payload = shape_summary(result_shape)
+    payload["object_fields"] = {
+        "status": "ok",
+        "shape": shape_kind(result_shape),
+        "feature": "part_sweep",
+        "helper": "Part.BRepOffsetAPI_MakePipeShell",
+        "runtime_helper": runtime_helper,
+        "dto": "PartSweepAdvancedPipeShellDTO",
+        "freecad_native_document_object": False,
+        "spine": spine_metadata.get("target", ""),
+        "spine_subname": spine_metadata.get("subname", ""),
+        "sections": section_names,
+        "solid": bool_from_properties(properties, "Solid", True),
+        "frenet": bool_from_properties(properties, "Frenet", True),
+        "transition": transition_label,
+        "advanced": advanced,
+        "builder_status": builder_status,
+        "topo_naming_history": "maker_history:pipeshell",
+    }
+    return payload
+
+
+def collect_part_sweep_wrapper_expected(
+    fixture_path: Path,
+    fixture: dict,
+    requested_targets: Sequence[str] | None = None,
+) -> dict:
+    import FreeCAD  # type: ignore
+    import Part  # type: ignore
+
+    targets = part_sweep_wrapper_target_names(fixture, requested_targets)
+    if not targets:
+        raise UnsupportedFixture("no Part.BRepOffsetAPI_MakePipeShell wrapper targets were requested")
+
+    doc = FreeCAD.newDocument("CadCoreSweepWrapperExpected")
+    try:
+        created = create_objects(FreeCAD, doc, fixture_without_part_sweep_wrapper_helpers(fixture))
+        doc.recompute()
+        helper_specs = part_sweep_wrapper_specs(fixture)
+        object_payloads: dict[str, dict] = {}
+        diagnostic_split: list[dict[str, str]] = []
+        for name in targets:
+            try:
+                object_payloads[name] = collect_part_sweep_wrapper_object_expected(
+                    FreeCAD,
+                    Part,
+                    created,
+                    helper_specs[name],
+                )
+            except UnsupportedFixture as exc:
+                diagnostic_split.append({
+                    "object": name,
+                    "reason": str(exc),
+                    "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+                })
+            except Exception as exc:
+                diagnostic_split.append({
+                    "object": name,
+                    "reason": f"{type(exc).__name__}: {exc}",
+                    "policy": "S2 must keep or document an explicit FreeCADCmd wrapper collector blocker",
+                })
+
+        reference_types = ", ".join(spec["TypeId"] for spec in fixture.get("Objects", []))
+        payload: dict[str, Any] = {
+            "schema_version": SCHEMA_VERSION,
+            "reference": (
+                f"FreeCADCmd wrapper oracle from {fixture_path.name}; Part::Sweep advanced DTO "
+                "translated to request-local Part.BRepOffsetAPI_MakePipeShell helper; objects: "
+                f"{reference_types}"
+            ),
+            "freecad_version": freecad_version(FreeCAD),
+        }
+        if len(object_payloads) == 1:
+            object_name, summary = next(iter(object_payloads.items()))
+            payload["object"] = object_name
+            payload.update(summary)
+        elif object_payloads:
+            payload["objects"] = object_payloads
+        else:
+            payload["object_fields"] = {
+                "status": "diagnostic_only",
+                "helper": "Part.BRepOffsetAPI_MakePipeShell",
+                "dto": "PartSweepAdvancedPipeShellDTO",
+                "advanced": {},
+                "builder_status": {"build_ok": False, "shape_access_ok": False},
+            }
+        if diagnostic_split:
+            payload["diagnostic_split"] = diagnostic_split
+        return payload
+    finally:
+        FreeCAD.closeDocument(doc.Name)
+
+
 def sweep_payload(obj: Any, fixture: dict | None = None) -> dict:
     shape = getattr(obj, "Shape", None)
     if shape is None or shape.isNull():
@@ -4453,6 +4945,8 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
     import FreeCAD  # type: ignore
 
     fixture = load_fixture(fixture_path)
+    if has_part_sweep_wrapper_helper(fixture):
+        return collect_part_sweep_wrapper_expected(fixture_path, fixture, requested_targets)
     if has_part_geomplate_surface_helper(fixture):
         return collect_part_geomplate_surface_expected(fixture_path, fixture, requested_targets)
     if has_part_filled_face_helper(fixture):
