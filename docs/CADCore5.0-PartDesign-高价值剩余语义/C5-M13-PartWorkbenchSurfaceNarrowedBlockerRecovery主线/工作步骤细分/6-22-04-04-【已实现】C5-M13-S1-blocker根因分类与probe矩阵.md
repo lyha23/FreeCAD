@@ -1,6 +1,6 @@
-# C5-M13-S1 blocker 根因分类与 probe 矩阵
+# 【已实现】C5-M13-S1 blocker 根因分类与 probe 矩阵
 
-状态：`pending_C5M13-S1_blocker_probe_matrix`
+状态：`done_C5M13-S1_blocker_probe_matrix`
 
 ## 目标
 
@@ -19,6 +19,8 @@
 - 如果新增临时 probe 脚本，放在本包 `docs/temp/`，不要混入 cad-core 源码。
 - 更新 `C5M13-BLK-101`、`C5M13-SCOPE-101`、`C5M13-ORC-101` 和 root `C5-ORC-1302`。
 - 为 S2-S4 指定可 expected-backed 场景和必须保留 blocker 的场景。
+
+完成记录：`../docs/temp/6-22-04-34-C5-M13-S1-blocker根因分类与probe矩阵记录.md`
 
 ## 非目标
 
