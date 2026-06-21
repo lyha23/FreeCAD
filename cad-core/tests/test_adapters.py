@@ -2981,7 +2981,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("full_part_surface_family", loft["covered"])
         self.assertNotIn("full_part_surface_family", loft["remaining_gaps"])
         sweep = capabilities["part_workbench"]["sweep"]
-        self.assertEqual(sweep["status"], "supported_multi_profile_linearize_expected_backed")
+        self.assertEqual(
+            sweep["status"],
+            "supported_multi_profile_linearize_s2_auxiliary_support_binormal_source_backed",
+        )
         self.assertIn("Part::Sweep", sweep["type_ids"])
         self.assertEqual(
             sweep["payload_keys"],
@@ -2994,6 +2997,14 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "Objects[].Properties.Frenet",
                 "Objects[].Properties.Transition",
                 "Objects[].Properties.Linearize",
+                "Objects[].Properties.AuxiliarySpine.value",
+                "Objects[].Properties.AuxiliarySpine.SubList",
+                "Objects[].Properties.AuxiliaryCurvilinear",
+                "Objects[].Properties.SpineSupport.value",
+                "Objects[].Properties.SpineSupport.SubList",
+                "Objects[].Properties.SupportMode",
+                "Objects[].Properties.Binormal",
+                "Objects[].Properties.BiNormal",
                 "recompute.objs",
             ],
         )
@@ -3005,16 +3016,22 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "Transition",
             "Linearize",
             "AuxiliarySpine",
+            "AuxiliaryCurvilinear",
+            "SpineSupport",
+            "SupportMode",
+            "Binormal",
+            "BiNormal",
             "Tolerance",
         ):
             self.assertIn(prop, sweep["properties"])
-        for prop in ("SupportMode", "BiNormal", "LocationMode"):
+        for prop in ("LocationMode",):
             self.assertIn(prop, sweep["properties"])
         for property_type in (
             "App::PropertyLinkList",
             "App::PropertyLinkSub",
             "App::PropertyBool",
             "App::PropertyEnumeration",
+            "App::PropertyVector",
         ):
             self.assertIn(property_type, sweep["property_types"])
         for covered in (
@@ -3027,7 +3044,12 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "pipeshell_maker_history",
             "expected_backed_fixtures",
             "invalid_input_diagnostics",
-            "advanced_pipeshell_wrapper_deferred_diagnostics",
+            "auxiliary_spine_source_backed",
+            "auxiliary_curvilinear_bool_contract",
+            "support_mode_diagnostic_backed",
+            "binormal_source_backed",
+            "advanced_mode_locatable_diagnostics",
+            "s3_location_tolerance_deferred_diagnostics",
         ):
             self.assertIn(covered, sweep["covered"])
         for fixture in (
@@ -3041,6 +3063,9 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "c3m4/part-sweep-invalid-inputs",
             "c4m1/part-sweep-multi-profile-linearize",
             "c4m1/part-sweep-advanced-deferred",
+            "c5m10/part-sweep-auxiliary-spine-contract",
+            "c5m10/part-sweep-binormal-contract",
+            "c5m10/part-sweep-support-mode-diagnostics",
         ):
             self.assertIn(fixture, sweep["fixtures"])
         self.assertEqual(
@@ -3056,12 +3081,16 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "c3m4/part-sweep-invalid-inputs",
                 "c4m1/part-sweep-multi-profile-linearize",
                 "c4m1/part-sweep-advanced-deferred",
+                "c5m10/part-sweep-auxiliary-spine-contract",
+                "c5m10/part-sweep-binormal-contract",
+                "c5m10/part-sweep-support-mode-diagnostics",
             ],
         )
         for diagnostic in (
             "missing_property",
             "missing_link_target",
             "invalid_subshape",
+            "invalid_parameter",
             "unsupported_property",
             "execution_failed",
         ):
@@ -3072,6 +3101,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "missing_property",
                 "missing_link_target",
                 "invalid_subshape",
+                "invalid_parameter",
                 "unsupported_property",
                 "execution_failed",
             ],
@@ -3080,38 +3110,34 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("source_backed_part_sweep_document_object_only", sweep["request_local_boundaries"])
         self.assertIn("multi_profile_sections_expected_backed", sweep["request_local_boundaries"])
         self.assertIn("linearize_faces_no_edges_post_processing", sweep["request_local_boundaries"])
-        self.assertIn("advanced_pipeshell_wrapper_deferred_diagnostic", sweep["request_local_boundaries"])
+        self.assertIn(
+            "s2_auxiliary_support_binormal_source_backed_wrapper_contract",
+            sweep["request_local_boundaries"],
+        )
+        self.assertIn("location_tolerance_s3_deferred_diagnostic", sweep["request_local_boundaries"])
         self.assertIn("hole_model_thread_internal_pipeshell_not_part_sweep", sweep["request_local_boundaries"])
         for non_goal in (
-            "advanced_pipeshell_wrapper",
-            "auxiliary_spine",
-            "located_profile",
-            "support_mode",
-            "trihedron_binormal_modes",
+            "upstream_native_part_sweep_advanced_direct_properties",
             "hole_model_thread_internal_pipeshell",
         ):
             self.assertIn(non_goal, sweep["non_goals"])
         self.assertEqual(
             sweep["non_goals"],
             [
-                "advanced_pipeshell_wrapper",
-                "auxiliary_spine",
-                "located_profile",
-                "support_mode",
-                "trihedron_binormal_modes",
+                "upstream_native_part_sweep_advanced_direct_properties",
                 "hole_model_thread_internal_pipeshell",
             ],
         )
         self.assertEqual(
             sweep["remaining_gaps"],
             [
-                "part_sweep_auxiliary_spine_contract",
-                "part_sweep_support_mode_contract",
-                "part_sweep_binormal_contract",
                 "part_sweep_location_mode_contract",
                 "part_sweep_tolerance_contract",
             ],
         )
+        self.assertNotIn("part_sweep_auxiliary_spine_contract", sweep["remaining_gaps"])
+        self.assertNotIn("part_sweep_support_mode_contract", sweep["remaining_gaps"])
+        self.assertNotIn("part_sweep_binormal_contract", sweep["remaining_gaps"])
         self.assertNotIn("linearize_post_processing", sweep["remaining_gaps"])
         self.assertNotIn("multi_profile_sections_expected", sweep["remaining_gaps"])
         self.assertNotIn("advanced_pipeshell_wrapper", sweep["remaining_gaps"])

@@ -1022,7 +1022,8 @@ bool shapeIsClosed(const TopoDS_Shape& shape)
     }
 }
 
-void configurePipeShellMode(BRepOffsetAPI_MakePipeShell& pipeShell, const PipeShellOptions& options)
+std::string configurePipeShellMode(BRepOffsetAPI_MakePipeShell& pipeShell,
+                                   const PipeShellOptions& options)
 {
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp
     // ::Pipe::setupAlgorithm(), switch Mode "Fixed/Frenet/Auxiliary/Binormal" into
@@ -1045,6 +1046,19 @@ void configurePipeShellMode(BRepOffsetAPI_MakePipeShell& pipeShell, const PipeSh
         case PipeShellMode::Standard:
             break;
     }
+
+    if (options.useSpineSupport) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+        // BRepOffsetAPI_MakePipeShellPyImp.cpp::setSpineSupport(), "Standard_Boolean ok =
+        // ...SetMode(s)" and returns that boolean to the caller.
+        if (options.spineSupport.IsNull()) {
+            return "SpineSupport shape is null";
+        }
+        if (pipeShell.SetMode(options.spineSupport) != Standard_True) {
+            return "SpineSupport SetMode returned false";
+        }
+    }
+    return {};
 }
 
 std::optional<TopoDS_Wire> simulatedPipeEndWire(
@@ -1462,8 +1476,7 @@ NamedShapeBuild makeElementPipeShellFromSources(
                 return NamedShapeBuild {
                     TopoDS_Shape {},
                     std::nullopt,
-                    auxiliaryError.empty() ? "Auxiliary spine shape cannot form a single wire"
-                                           : auxiliaryError
+                    "Auxiliary spine shape cannot form a single wire"
                 };
             }
             effectiveOptions.auxiliarySpine = *auxiliaryWire;
@@ -1471,7 +1484,10 @@ NamedShapeBuild makeElementPipeShellFromSources(
 
         BRepOffsetAPI_MakePipeShell pipeShell(*spine);
         pipeShell.SetTolerance(Precision::Confusion());
-        configurePipeShellMode(pipeShell, effectiveOptions);
+        const std::string modeError = configurePipeShellMode(pipeShell, effectiveOptions);
+        if (!modeError.empty()) {
+            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, modeError};
+        }
         pipeShell.SetTransitionMode(pipeShellTransitionMode(effectiveOptions.transition));
         for (std::size_t index = 0; index < profiles->size(); ++index) {
             pipeShell.Add(profiles->at(index));

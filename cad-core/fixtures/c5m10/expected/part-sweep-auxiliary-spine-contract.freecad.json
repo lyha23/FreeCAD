@@ -1,0 +1,14 @@
+{
+  "freecad_version": "1.2.0 revision 20260519",
+  "known_gap": {
+    "kind": "part_sweep_auxiliary_spine_wrapper_oracle_missing",
+    "reason": "The current collector supports native Part::Sweep DocumentObject expected payloads only. This fixture exercises the request-local BRepOffsetAPI_MakePipeShell auxiliary spine wrapper contract and must not freeze expected geometry from cad-core output.",
+    "source_authority": [
+      "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/BRepOffsetAPI_MakePipeShellPyImp.cpp::setAuxiliarySpine()",
+      "/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp::Pipe::setupAlgorithm()"
+    ],
+    "cad_core_fixture": "cad-core/fixtures/c5m10/part-sweep-auxiliary-spine-contract.json",
+    "delete_condition": "Replace this source-backed known_gap with a FreeCADCmd Part.BRepOffsetAPI_MakePipeShell wrapper expected payload after the collector records stable shape_summary and object_fields.advanced.auxiliary_spine metadata."
+  },
+  "reference": "Source-backed C5-M10 S2 auxiliary spine contract; focused cad-core tests verify builder options and locatable diagnostics."
+}

@@ -753,14 +753,124 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         result = self.run_recompute("part-sweep-advanced-deferred", "c4m1")
         diagnostics = result["diagnostics"]
 
-        self.assertEqual([item["code"] for item in diagnostics], ["unsupported_property", "unsupported_property"])
+        self.assertEqual([item["code"] for item in diagnostics], ["unsupported_property"])
         self.assertEqual(result["objects"]["AdvancedSweep"]["status"], "error")
         self.assertEqual(result["objects"]["AdvancedSweep"]["feature"], "part_sweep")
         for diagnostic in diagnostics:
             self.assertEqual(diagnostic["object"], "AdvancedSweep")
-            self.assertIn(diagnostic["property"], {"AuxiliarySpine", "Tolerance"})
+            self.assertEqual(diagnostic["property"], "Tolerance")
             self.assertIn("target", diagnostic)
             self.assertIn("subname", diagnostic)
+
+    def test_c5m10_part_sweep_auxiliary_spine_contract_is_source_backed(self) -> None:
+        result = self.run_recompute("part-sweep-auxiliary-spine-contract", "c5m10")
+        sweep = result["objects"]["Sweep"]
+        expected = self.expected_freecad("c5m10", "part-sweep-auxiliary-spine-contract")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sweep["advanced"]["mode"], "Auxiliary")
+        self.assertEqual(
+            sweep["advanced"]["auxiliary_spine"],
+            {
+                "target": "AuxiliarySpine",
+                "subname": "Edge1",
+                "curvilinear": False,
+                "contact": "NoContact",
+            },
+        )
+        self.assert_part_sweep_history(
+            result,
+            "PipeSpine",
+            ["SketchPipeProfile"],
+            transition="Transformed",
+            solid=False,
+        )
+        self.assertEqual(expected["known_gap"]["kind"], "part_sweep_auxiliary_spine_wrapper_oracle_missing")
+
+    def test_c5m10_part_sweep_binormal_contract_is_source_backed(self) -> None:
+        result = self.run_recompute("part-sweep-binormal-contract", "c5m10")
+        sweep = result["objects"]["Sweep"]
+        expected = self.expected_freecad("c5m10", "part-sweep-binormal-contract")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sweep["advanced"]["mode"], "Binormal")
+        self.assertEqual(sweep["advanced"]["binormal"], [0.0, 0.0, 1.0])
+        self.assertEqual(sweep["advanced"]["binormal_property"], "Binormal")
+        self.assert_part_sweep_history(
+            result,
+            "PipeSpine",
+            ["SketchPipeProfile"],
+            transition="Transformed",
+            solid=False,
+        )
+        self.assertEqual(expected["known_gap"]["kind"], "part_sweep_binormal_wrapper_oracle_missing")
+
+    def test_c5m10_part_sweep_support_mode_and_mode_payloads_have_locatable_diagnostics(self) -> None:
+        result = self.run_recompute("part-sweep-support-mode-diagnostics", "c5m10")
+        diagnostics = result["diagnostics"]
+        expected = self.expected_freecad("c5m10", "part-sweep-support-mode-diagnostics")
+
+        self.assertEqual(len(diagnostics), 8)
+        by_object = {diagnostic["object"]: diagnostic for diagnostic in diagnostics}
+        self.assertEqual(
+            {
+                name: (item["code"], item["property"], item.get("target"), item.get("subname"))
+                for name, item in by_object.items()
+            },
+            {
+                "MissingAuxiliaryTarget": (
+                    "missing_link_target",
+                    "AuxiliarySpine",
+                    "MissingAuxiliary",
+                    "Edge1",
+                ),
+                "MissingSupport": (
+                    "missing_link_target",
+                    "SpineSupport",
+                    "MissingSupport",
+                    "SpineSupport",
+                ),
+                "InvalidSupportMode": (
+                    "invalid_parameter",
+                    "SupportMode",
+                    "InvalidSupportMode",
+                    "SupportMode",
+                ),
+                "InvalidSupportSubshape": (
+                    "invalid_subshape",
+                    "SpineSupport",
+                    "SupportPlane",
+                    "Face99",
+                ),
+                "InvalidAuxiliarySubshape": (
+                    "invalid_subshape",
+                    "AuxiliarySpine",
+                    "SupportPlane",
+                    "Face99",
+                ),
+                "InvalidAuxiliaryCurvilinear": (
+                    "invalid_parameter",
+                    "AuxiliaryCurvilinear",
+                    "InvalidAuxiliaryCurvilinear",
+                    "AuxiliaryCurvilinear",
+                ),
+                "ZeroBinormal": (
+                    "invalid_parameter",
+                    "Binormal",
+                    "ZeroBinormal",
+                    "Binormal",
+                ),
+                "MalformedBiNormal": (
+                    "invalid_parameter",
+                    "BiNormal",
+                    "MalformedBiNormal",
+                    "BiNormal",
+                ),
+            },
+        )
+        for object_name in by_object:
+            self.assertEqual(result["objects"][object_name]["status"], "error")
+        self.assertEqual(expected["known_gap"]["kind"], "part_sweep_support_mode_wrapper_oracle_missing")
 
     def assert_part_filling_history(
         self,

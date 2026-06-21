@@ -1,0 +1,175 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPipeProfile",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [-0.5, -0.5], "end": [0.5, -0.5]},
+          {"kind": "LineSegment", "start": [0.5, -0.5], "end": [0.5, 0.5]},
+          {"kind": "LineSegment", "start": [0.5, 0.5], "end": [-0.5, 0.5]},
+          {"kind": "LineSegment", "start": [-0.5, 0.5], "end": [-0.5, -0.5]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "PipeSpine",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 0],
+          "Rotation": [0.7071067811865475, 0, 0, 0.7071067811865476]
+        },
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [0, 4]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "AuxiliarySpine",
+      "ID": 3,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [1, 0, 0],
+          "Rotation": [0.7071067811865475, 0, 0, 0.7071067811865476]
+        },
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [0, 4]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "SupportPlane",
+      "ID": 4,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 6,
+        "Width": 6
+      }
+    },
+    {
+      "Name": "MissingSupport",
+      "ID": 5,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
+        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
+        "SupportMode": "SurfaceNormal",
+        "Solid": false
+      }
+    },
+    {
+      "Name": "InvalidSupportMode",
+      "ID": 6,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
+        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
+        "SupportMode": "Sideways",
+        "Solid": false
+      }
+    },
+    {
+      "Name": "InvalidSupportSubshape",
+      "ID": 7,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
+        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
+        "SupportMode": "SurfaceNormal",
+        "SpineSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportPlane",
+          "SubList": ["Face99"],
+          "StableSubList": ["Face99"]
+        },
+        "Solid": false
+      }
+    },
+    {
+      "Name": "MissingAuxiliaryTarget",
+      "ID": 8,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
+        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
+        "AuxiliarySpine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "MissingAuxiliary",
+          "SubList": ["Edge1"]
+        },
+        "Solid": false
+      }
+    },
+    {
+      "Name": "InvalidAuxiliarySubshape",
+      "ID": 9,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
+        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
+        "AuxiliarySpine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportPlane",
+          "SubList": ["Face99"],
+          "StableSubList": ["Face99"]
+        },
+        "Solid": false
+      }
+    },
+    {
+      "Name": "InvalidAuxiliaryCurvilinear",
+      "ID": 10,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
+        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
+        "AuxiliarySpine": {"PropertyType": "App::PropertyLinkSub", "value": "AuxiliarySpine", "SubList": ["Edge1"]},
+        "AuxiliaryCurvilinear": "yes",
+        "Solid": false
+      }
+    },
+    {
+      "Name": "ZeroBinormal",
+      "ID": 11,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
+        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
+        "Binormal": [0, 0, 0],
+        "Solid": false
+      }
+    },
+    {
+      "Name": "MalformedBiNormal",
+      "ID": 12,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
+        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
+        "BiNormal": [1, "bad", 0],
+        "Solid": false
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "MissingSupport",
+      "InvalidSupportMode",
+      "InvalidSupportSubshape",
+      "MissingAuxiliaryTarget",
+      "InvalidAuxiliarySubshape",
+      "InvalidAuxiliaryCurvilinear",
+      "ZeroBinormal",
+      "MalformedBiNormal"
+    ]
+  }
+}

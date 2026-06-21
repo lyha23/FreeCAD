@@ -9,6 +9,7 @@
 #include <BRep_Builder.hxx>
 #include <TopoDS_Compound.hxx>
 
+#include <array>
 #include <cmath>
 #include <optional>
 #include <string>
@@ -27,13 +28,30 @@ struct SweepInput
     const part::NamedShape* namedShape = nullptr;
 };
 
+struct AdvancedLinkShape
+{
+    std::string objectName;
+    std::string subname;
+    TopoDS_Shape shape;
+};
+
+struct AdvancedSweepOptions
+{
+    PipeShellOptions pipeOptions;
+    nlohmann::json metadata = nlohmann::json::object();
+    std::optional<AdvancedLinkShape> auxiliarySpine;
+    std::optional<AdvancedLinkShape> spineSupport;
+    std::string binormalProperty = "Binormal";
+};
+
 void addSweepDiagnostic(
     const app::DocumentObject& object,
     runtime::ComputeContext& context,
     const std::string& code,
     const std::string& message,
     const std::string& property = {},
-    const std::string& target = {}
+    const std::string& target = {},
+    const std::string& subname = {}
 )
 {
     runtime::addDiagnostic(
@@ -44,7 +62,8 @@ void addSweepDiagnostic(
         object.name,
         property,
         "runtime",
-        target
+        target,
+        subname
     );
     context.objects[object.name] = {{"status", "error"}, {"feature", "part_sweep"}};
 }
@@ -273,6 +292,80 @@ std::string firstAdvancedSubname(const app::DocumentObject& object, const std::s
     return property;
 }
 
+std::optional<AdvancedLinkShape> resolveAdvancedLinkShape(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const std::string& property,
+    const std::string& missingMessage,
+    const std::string& invalidMessage
+)
+{
+    const auto link = app::readLink(object, property);
+    if (!link || link->object.empty()) {
+        addSweepDiagnostic(
+            object,
+            context,
+            "missing_link_target",
+            missingMessage,
+            property,
+            object.name,
+            property
+        );
+        return std::nullopt;
+    }
+
+    const auto shapeIt = context.shapes.find(link->object);
+    if (shapeIt == context.shapes.end() || shapeIt->second.shape.IsNull()) {
+        addSweepDiagnostic(
+            object,
+            context,
+            "missing_link_target",
+            missingMessage,
+            property,
+            link->object,
+            firstAdvancedSubname(object, property)
+        );
+        return std::nullopt;
+    }
+    const auto namedShapeIt = context.namedShapes.find(link->object);
+    const part::NamedShape* namedShape = namedShapeIt != context.namedShapes.end()
+        ? &namedShapeIt->second
+        : nullptr;
+
+    TopoDS_Shape resolved = shapeIt->second.shape;
+    std::string firstSubname;
+    if (!link->subnames.empty()) {
+        std::vector<TopoDS_Shape> selected;
+        selected.reserve(link->subnames.size());
+        for (std::size_t index = 0; index < link->subnames.size(); ++index) {
+            const auto subshape = linkSubShape(shapeIt->second.shape, namedShape, *link, index);
+            const std::string subname = index < link->subnames.size() ? link->subnames.at(index)
+                                                                      : std::string {};
+            if (!subshape || subshape->IsNull()) {
+                addSweepDiagnostic(
+                    object,
+                    context,
+                    "invalid_subshape",
+                    invalidMessage,
+                    property,
+                    link->object,
+                    subname
+                );
+                return std::nullopt;
+            }
+            if (firstSubname.empty()) {
+                firstSubname = index < link->stableSubnames.size() && !link->stableSubnames.at(index).empty()
+                    ? link->stableSubnames.at(index)
+                    : subname;
+            }
+            selected.push_back(*subshape);
+        }
+        resolved = compoundOf(selected);
+    }
+
+    return AdvancedLinkShape {link->object, firstSubname, resolved};
+}
+
 bool rejectDeferredSweepAdvancedProperties(
     const app::DocumentObject& object,
     runtime::ComputeContext& context
@@ -282,9 +375,6 @@ bool rejectDeferredSweepAdvancedProperties(
     // ::makeSweepSurface(), exposes a helper tolerance/fillMode wrapper; PartFeatures.cpp
     // ::Sweep::execute() only publishes Sections/Spine/Solid/Frenet/Transition/Linearize.
     static const std::vector<std::string> deferred {
-        "AuxiliarySpine",
-        "SupportMode",
-        "BiNormal",
         "LocationMode",
         "Tolerance",
     };
@@ -311,6 +401,265 @@ bool rejectDeferredSweepAdvancedProperties(
         context.objects[object.name] = {{"status", "error"}, {"feature", "part_sweep"}};
     }
     return ok;
+}
+
+std::optional<bool> readStrictBool(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const std::string& property
+)
+{
+    if (app::propertyValue(object, property) == nullptr) {
+        return std::nullopt;
+    }
+    const auto value = app::readBool(object, property);
+    if (!value) {
+        addSweepDiagnostic(
+            object,
+            context,
+            "invalid_parameter",
+            "Part::Sweep advanced PipeShell property " + property + " must be a boolean",
+            property,
+            object.name,
+            property
+        );
+        return std::nullopt;
+    }
+    return *value;
+}
+
+std::optional<bool> readSurfaceNormalSupportMode(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context
+)
+{
+    if (app::propertyValue(object, "SupportMode") == nullptr) {
+        return false;
+    }
+    if (const auto label = app::readString(object, "SupportMode")) {
+        if (*label == "None") {
+            return false;
+        }
+        if (*label == "SurfaceNormal") {
+            return true;
+        }
+    }
+    if (const auto number = app::readNumber(object, "SupportMode")) {
+        const int value = static_cast<int>(std::llround(*number));
+        if (value == 0) {
+            return false;
+        }
+        if (value == 1) {
+            return true;
+        }
+    }
+    addSweepDiagnostic(
+        object,
+        context,
+        "invalid_parameter",
+        "Part::Sweep SupportMode must be None or SurfaceNormal",
+        "SupportMode",
+        object.name,
+        "SupportMode"
+    );
+    return std::nullopt;
+}
+
+std::optional<std::array<double, 3>> readBinormalVector(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    std::string& property
+)
+{
+    const bool hasCanonical = app::propertyValue(object, "Binormal") != nullptr;
+    const bool hasLegacy = app::propertyValue(object, "BiNormal") != nullptr;
+    if (!hasCanonical && !hasLegacy) {
+        return std::nullopt;
+    }
+    if (hasCanonical && hasLegacy) {
+        addSweepDiagnostic(
+            object,
+            context,
+            "invalid_parameter",
+            "Part::Sweep advanced PipeShell accepts either Binormal or BiNormal, not both",
+            "Binormal",
+            object.name,
+            "Binormal"
+        );
+        return std::nullopt;
+    }
+
+    property = hasCanonical ? "Binormal" : "BiNormal";
+    const auto vector = app::readVector3(object, property);
+    if (!vector) {
+        addSweepDiagnostic(
+            object,
+            context,
+            "invalid_parameter",
+            "Part::Sweep Binormal must be a finite [x, y, z] vector",
+            property,
+            object.name,
+            property
+        );
+        return std::nullopt;
+    }
+
+    const double magnitudeSquared = (*vector)[0] * (*vector)[0] + (*vector)[1] * (*vector)[1]
+        + (*vector)[2] * (*vector)[2];
+    if (magnitudeSquared <= 1.0e-24) {
+        addSweepDiagnostic(
+            object,
+            context,
+            "invalid_parameter",
+            "Part::Sweep Binormal must be non-zero",
+            property,
+            object.name,
+            property
+        );
+        return std::nullopt;
+    }
+    return *vector;
+}
+
+std::optional<AdvancedSweepOptions> readAdvancedSweepOptions(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    bool solid,
+    bool frenet,
+    int transition,
+    bool linearize
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // BRepOffsetAPI_MakePipeShellPyImp.cpp::setAuxiliarySpine/setSpineSupport/
+    // setBiNormalMode call BRepOffsetAPI_MakePipeShell::SetMode(...); PartDesign source
+    // /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp
+    // ::Pipe::setupAlgorithm() maps Mode=Auxiliary/Binormal through the same SetMode overloads.
+    AdvancedSweepOptions advanced;
+    advanced.pipeOptions.solid = solid;
+    advanced.pipeOptions.mode = frenet ? PipeShellMode::Frenet : PipeShellMode::Standard;
+    advanced.pipeOptions.transition = transition;
+    advanced.pipeOptions.linearizeFaces = linearize;
+
+    const bool hasAuxiliarySpine = app::propertyValue(object, "AuxiliarySpine") != nullptr;
+    const bool hasAuxiliaryCurvilinear = app::propertyValue(object, "AuxiliaryCurvilinear") != nullptr;
+    std::optional<bool> auxiliaryCurvilinear = true;
+    if (hasAuxiliaryCurvilinear) {
+        auxiliaryCurvilinear = readStrictBool(object, context, "AuxiliaryCurvilinear");
+        if (!auxiliaryCurvilinear) {
+            return std::nullopt;
+        }
+    }
+
+    const auto surfaceNormalSupport = readSurfaceNormalSupportMode(object, context);
+    if (!surfaceNormalSupport) {
+        return std::nullopt;
+    }
+
+    std::string binormalProperty = "Binormal";
+    const auto binormal = readBinormalVector(object, context, binormalProperty);
+    const bool requestedBinormal = app::propertyValue(object, "Binormal") != nullptr
+        || app::propertyValue(object, "BiNormal") != nullptr;
+    if (requestedBinormal && !binormal) {
+        return std::nullopt;
+    }
+
+    int selectedModes = 0;
+    if (hasAuxiliarySpine || hasAuxiliaryCurvilinear) {
+        ++selectedModes;
+    }
+    if (*surfaceNormalSupport) {
+        ++selectedModes;
+    }
+    if (binormal) {
+        ++selectedModes;
+    }
+    if (selectedModes > 1) {
+        addSweepDiagnostic(
+            object,
+            context,
+            "invalid_parameter",
+            "Part::Sweep advanced PipeShell accepts one builder mode per request",
+            "SupportMode",
+            object.name,
+            "SupportMode"
+        );
+        return std::nullopt;
+    }
+
+    if (hasAuxiliarySpine || hasAuxiliaryCurvilinear) {
+        auto auxiliary = resolveAdvancedLinkShape(
+            object,
+            context,
+            "AuxiliarySpine",
+            "Part::Sweep Auxiliary mode requires AuxiliarySpine",
+            "Invalid AuxiliarySpine"
+        );
+        if (!auxiliary) {
+            return std::nullopt;
+        }
+        advanced.auxiliarySpine = auxiliary;
+        advanced.pipeOptions.mode = PipeShellMode::Auxiliary;
+        advanced.pipeOptions.auxiliarySpine = auxiliary->shape;
+        advanced.pipeOptions.auxiliaryCurvilinear = auxiliaryCurvilinear.value_or(true);
+        advanced.metadata["mode"] = "Auxiliary";
+        advanced.metadata["auxiliary_spine"] = {
+            {"target", auxiliary->objectName},
+            {"curvilinear", advanced.pipeOptions.auxiliaryCurvilinear},
+            {"contact", "NoContact"},
+        };
+        if (!auxiliary->subname.empty()) {
+            advanced.metadata["auxiliary_spine"]["subname"] = auxiliary->subname;
+        }
+    }
+
+    if (*surfaceNormalSupport) {
+        auto support = resolveAdvancedLinkShape(
+            object,
+            context,
+            "SpineSupport",
+            "Part::Sweep SupportMode=SurfaceNormal requires SpineSupport",
+            "Invalid SpineSupport"
+        );
+        if (!support) {
+            return std::nullopt;
+        }
+        advanced.spineSupport = support;
+        advanced.pipeOptions.useSpineSupport = true;
+        advanced.pipeOptions.spineSupport = support->shape;
+        advanced.metadata["mode"] = "SurfaceNormal";
+        advanced.metadata["support_mode"] = "SurfaceNormal";
+        advanced.metadata["spine_support"] = {
+            {"target", support->objectName},
+            {"set_mode_ok", true},
+        };
+        if (!support->subname.empty()) {
+            advanced.metadata["spine_support"]["subname"] = support->subname;
+        }
+    }
+    else if (app::propertyValue(object, "SpineSupport") != nullptr) {
+        addSweepDiagnostic(
+            object,
+            context,
+            "invalid_parameter",
+            "Part::Sweep SpineSupport requires SupportMode=SurfaceNormal",
+            "SupportMode",
+            object.name,
+            "SupportMode"
+        );
+        return std::nullopt;
+    }
+
+    if (binormal) {
+        advanced.binormalProperty = binormalProperty;
+        advanced.pipeOptions.mode = PipeShellMode::Binormal;
+        advanced.pipeOptions.binormal = *binormal;
+        advanced.metadata["mode"] = "Binormal";
+        advanced.metadata["binormal"] = {(*binormal)[0], (*binormal)[1], (*binormal)[2]};
+        advanced.metadata["binormal_property"] = binormalProperty;
+    }
+
+    return advanced;
 }
 
 nlohmann::json sectionNamesJson(const std::vector<SweepInput>& sections)
@@ -365,7 +714,10 @@ void executePartSweep(const app::DocumentObject& object, runtime::ComputeContext
              "Linearize",
              "Transition",
              "AuxiliarySpine",
+             "AuxiliaryCurvilinear",
+             "SpineSupport",
              "SupportMode",
+             "Binormal",
              "BiNormal",
              "LocationMode",
              "Tolerance"}
@@ -394,15 +746,44 @@ void executePartSweep(const app::DocumentObject& object, runtime::ComputeContext
 
     const bool solid = app::readBool(object, "Solid").value_or(true);
     const bool frenet = app::readBool(object, "Frenet").value_or(true);
+    const auto advanced = readAdvancedSweepOptions(object, context, solid, frenet, *transition, linearize);
+    if (!advanced) {
+        return;
+    }
     const auto build = makeElementPipeShellFromSources(
         object.name,
         sweepSources(*spine, *sections),
-        solid,
-        frenet,
-        *transition,
-        linearize
+        advanced->pipeOptions
     );
     if (!build.error.empty() || build.shape.IsNull()) {
+        if (advanced->pipeOptions.mode == PipeShellMode::Auxiliary && advanced->auxiliarySpine
+            && build.error.rfind("Auxiliary spine", 0U) == 0U) {
+            addSweepDiagnostic(
+                object,
+                context,
+                "invalid_subshape",
+                build.error,
+                "AuxiliarySpine",
+                advanced->auxiliarySpine->objectName,
+                advanced->auxiliarySpine->subname.empty() ? "AuxiliarySpine"
+                                                          : advanced->auxiliarySpine->subname
+            );
+            return;
+        }
+        if (advanced->pipeOptions.useSpineSupport && advanced->spineSupport
+            && build.error.rfind("SpineSupport", 0U) == 0U) {
+            addSweepDiagnostic(
+                object,
+                context,
+                "execution_failed",
+                build.error,
+                "SpineSupport",
+                advanced->spineSupport->objectName,
+                advanced->spineSupport->subname.empty() ? "SpineSupport"
+                                                        : advanced->spineSupport->subname
+            );
+            return;
+        }
         addSweepDiagnostic(
             object,
             context,
@@ -413,20 +794,24 @@ void executePartSweep(const app::DocumentObject& object, runtime::ComputeContext
         return;
     }
 
+    nlohmann::json metadata = {
+        {"feature", "part_sweep"},
+        {"spine", spine->objectName},
+        {"sections", sectionNamesJson(*sections)},
+        {"solid", solid},
+        {"frenet", frenet},
+        {"transition", transitionLabel(*transition)},
+        {"linearize", linearize},
+        {"topo_naming_history", "maker_history:pipeshell"},
+    };
+    if (!advanced->metadata.empty()) {
+        metadata["advanced"] = advanced->metadata;
+    }
     part_feature_detail::publishPartShape(
         object,
         context,
         build.shape,
-        {
-            {"feature", "part_sweep"},
-            {"spine", spine->objectName},
-            {"sections", sectionNamesJson(*sections)},
-            {"solid", solid},
-            {"frenet", frenet},
-            {"transition", transitionLabel(*transition)},
-            {"linearize", linearize},
-            {"topo_naming_history", "maker_history:pipeshell"},
-        },
+        metadata,
         build.namedShape
     );
 }

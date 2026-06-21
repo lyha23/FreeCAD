@@ -1,6 +1,14 @@
-# C5-M10-S2 Auxiliary / Support / Binormal 实现
+# 【已实现】C5-M10-S2 Auxiliary / Support / Binormal 实现
 
-状态：`pending`
+状态：`done_C5M10-S2_aux_support_binormal`
+
+## S2 核查结论
+
+- `cad-core/src/part/part_sweep.cpp` 已按 S1 DTO 解析 `AuxiliarySpine`、`AuxiliaryCurvilinear`、`SpineSupport`、`SupportMode`、canonical `Binormal` 与 legacy `BiNormal`，并保留 object/property/target/subname diagnostics。
+- `cad-core/include/cad_core/part/topo_shape_expansion.h` 与 `cad-core/src/part/topo_shape_expansion.cpp` 已把 `SpineSupport` 落到正式 `PipeShellOptions`，通过 `BRepOffsetAPI_MakePipeShell::SetMode(s)` 执行 support mode；Auxiliary 与 Binormal 继续使用正式 `SetMode(...)` 分支。
+- 新增 `cad-core/fixtures/c5m10/part-sweep-auxiliary-spine-contract.json`、`part-sweep-binormal-contract.json`、`part-sweep-support-mode-diagnostics.json`，对应 expected 先以 source-backed known_gap 记录 wrapper collector 缺口和删除条件。
+- Focused tests 覆盖 valid Auxiliary/Binormal representatives、Support/Auxiliary/Binormal invalid diagnostics，以及 `part_workbench.sweep` capability metadata。`Location` / `Tolerance` / profile contact-correction 仍留给 S3。
+- 本包 `C5M10-BLK-201`、`C5M10-SCOPE-201`、`C5M10-ORC-201` 与 root `C5-BLK-1001`、`C5-SCOPE-1001`、`C5-ORC-1003` 已更新为 S2 source/diagnostic-backed 状态。
 
 ## 目标
 

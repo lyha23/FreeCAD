@@ -157,6 +157,11 @@ struct PipeShellOptions
     int transition = 0;
     TopoDS_Shape auxiliarySpine;
     bool auxiliaryCurvilinear = true;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // BRepOffsetAPI_MakePipeShellPyImp.cpp::setSpineSupport(), calls "SetMode(s)" and
+    // returns the boolean result for the support surface/shape mode.
+    TopoDS_Shape spineSupport;
+    bool useSpineSupport = false;
     std::array<double, 3> binormal {{0.0, 0.0, 1.0}};
     bool linearizeFaces = false;
     bool sewCaps = false;
