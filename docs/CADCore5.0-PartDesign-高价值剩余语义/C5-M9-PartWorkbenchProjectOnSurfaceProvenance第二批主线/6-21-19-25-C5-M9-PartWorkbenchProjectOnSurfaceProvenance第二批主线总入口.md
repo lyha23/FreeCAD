@@ -1,6 +1,6 @@
 # C5-M9 Part Workbench ProjectOnSurface Provenance 第二批主线
 
-本包承接 C4M1 / C5 root 中已经发布的 `Part::ProjectOnSurface` expected-backed geometry slice，只打开 projected subshape provenance / mapper history 第二批。第一批的 `Mode=Edges/Faces/All`、face rebuild / hole wires、Height solid、Offset placement、多 `Projection` ordered metadata、普通 indexed `NamedShape` 和 deferred diagnostics 是 live guard，不在本包重新证明。
+本包承接 C4M1 / C5 root 中已经发布的 `Part::ProjectOnSurface` geometry / diagnostics live guard，只打开 projected subshape provenance / mapper history 第二批。第一批的 `Mode=Edges/Faces/All`、face rebuild / hole wires、Height solid、Offset placement、多 `Projection` ordered metadata、普通 indexed `NamedShape` 已由 11 个 expected-backed geometry fixtures 覆盖；`deferred-boundaries` 是 1 个 diagnostic-backed live guard。本包不重做这些投影几何。
 
 范围边界：C5-M9 的交付物只落在 `cad-core`、fixtures、tests、capabilities 和文档矩阵。FreeCAD `src/Mod/Part/App/FeatureProjectOnSurface.cpp/.h`、`TopoShapeMapper*`、`PropertyTopoShape*` 只作为语义依据读取。若 native oracle 无法直接暴露 mapper/history，需要记录 source-backed known_gap 与删除条件，不能用 bbox、输出顺序、fixture 名或 adapter 后处理伪造 provenance。
 
@@ -26,7 +26,7 @@
 
 | 批次 | 代表场景 | 产物 |
 | --- | --- | --- |
-| live guard | `c4m1/part-project-on-surface-edge-plane`、face / hole / all / height / offset / multi projection / deferred boundaries | S0 冻结现有 expected-backed slice 和 root capability 状态 |
+| live guard | `c4m1/part-project-on-surface-edge-plane`、face / hole / all / height / offset / multi projection / deferred boundaries | S0 冻结现有 11 个 expected-backed geometry fixtures、1 个 diagnostic-backed deferred fixture 和 root capability 状态 |
 | source / oracle matrix | FreeCAD `FeatureProjectOnSurface` + `TopoShapeMapper` / `PropertyTopoShape` 审计 | S1 写清 projected result ownership、oracle 可采字段、known_gap 删除条件 |
 | edge / wire provenance | `c5m9/part-project-on-surface-edge-provenance`、`wire-split-provenance`、invalid provenance diagnostics | S2 补 projected edge/wire source evidence、MapperHistory / ElementMap 传播和 focused tests |
 | face / all provenance | `c5m9/part-project-on-surface-face-rebuild-provenance`、`all-compound-provenance` | S3 补 face rebuild、hole wire、Mode=All compound/solid ownership与 reference recovery evidence |

@@ -2,7 +2,7 @@
 
 ## 当前基线
 
-`part_workbench.project_on_surface` 已发布 expected-backed slice：`Mode=Edges/Faces/All`、face rebuild / hole wires、`Mode=All` Height solid、Offset placement、多 `Projection` ordered `App::PropertyLinkSubList`、普通 indexed `NamedShape` 和 12 个 `c4m1/part-project-on-surface-*` fixtures。
+`part_workbench.project_on_surface` 已发布 C4M1 live guard：`Mode=Edges/Faces/All`、face rebuild / hole wires、`Mode=All` Height solid、Offset placement、多 `Projection` ordered `App::PropertyLinkSubList`、普通 indexed `NamedShape` 由 11 个 expected-backed geometry fixtures 覆盖；`part-project-on-surface-deferred-boundaries` 是 diagnostic-backed deferred guard。
 
 当前缺口不是投影几何，而是投影结果的 provenance：输出 edge / wire / face / compound 能否说明来自哪个 `Projection` object/subname、LinkSubList item、Mode 分支、wire fragment 或 face wire，并能进入 MapperHistory / ElementMap / reference recovery 账本。
 
@@ -26,7 +26,7 @@
 
 | 分组 | 目标 fixture | 验收重点 |
 | --- | --- | --- |
-| live guard | `c4m1/part-project-on-surface-*` 12 个现有 fixtures | C4M1 geometry / metadata / diagnostics 不回退 |
+| live guard | `c4m1/part-project-on-surface-*` 12 个现有 fixtures | C4M1 11 个 expected-backed geometry fixtures、metadata 和 1 个 diagnostic-backed deferred fixture 不回退 |
 | edge / wire provenance | `c5m9/part-project-on-surface-edge-provenance`、`c5m9/part-project-on-surface-wire-split-provenance`、`c5m9/part-project-on-surface-invalid-provenance-diagnostics` | source object/subname、Projection item index、wire fragment ownership、MapperHistory/ElementMap evidence、locatable diagnostics |
 | face / all provenance | `c5m9/part-project-on-surface-face-rebuild-provenance`、`c5m9/part-project-on-surface-all-compound-provenance` | outer/inner wire source evidence、face rebuild ownership、Mode=All compound/solid provenance、reference recovery hook |
 
@@ -65,7 +65,7 @@ python3 -m unittest tests.test_p8_features tests.test_expected_fixtures tests.te
 
 ## 收口标准
 
-- first-batch `ProjectOnSurface` expected-backed geometry slice 保持通过。
+- first-batch `ProjectOnSurface` 11 个 expected-backed geometry fixtures 和 1 个 diagnostic-backed deferred guard 保持通过。
 - projected edge / wire / face / compound provenance 有 native expected、source-backed known_gap 或 diagnostic-backed 证据。
 - MapperHistory / ElementMap / reference recovery 边界明确；没有 bbox、输出顺序、fixture 名或 adapter 修剪特判。
 - capability metadata 中 `projected_edge_provenance_mapper_history` 不再是 broad gap；剩余项有具体 owner / delete_condition。
