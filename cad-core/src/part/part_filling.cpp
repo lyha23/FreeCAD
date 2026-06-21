@@ -59,11 +59,6 @@ void addFillingDiagnostic(
     };
 }
 
-bool sameDefault(double actual, double expected)
-{
-    return std::abs(actual - expected) <= 1e-12;
-}
-
 const nlohmann::json* rawPropertyPayload(
     const app::DocumentObject& object,
     const std::string& property
@@ -146,74 +141,105 @@ std::string stableSubnameForLink(const app::Link& link, std::size_t index)
     return {};
 }
 
-bool rejectNonDefaultNumber(
+bool addInvalidFillingParameterDiagnostic(
     const app::DocumentObject& object,
     runtime::ComputeContext& context,
     const std::string& property,
-    double expected
+    const std::string& expected
 )
 {
+    addFillingDiagnostic(
+        object,
+        context,
+        "invalid_parameter",
+        "Part.makeFilledFace " + property + " must be " + expected,
+        property,
+        object.name,
+        property
+    );
+    return false;
+}
+
+bool readPositiveIntParam(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const std::string& property,
+    unsigned int& output
+)
+{
+    if (app::propertyValue(object, property) == nullptr) {
+        return true;
+    }
     const auto value = app::readNumber(object, property);
-    if (!value || sameDefault(*value, expected)) {
-        return false;
+    if (!value || !std::isfinite(*value) || *value <= 0.0
+        || std::abs(*value - std::round(*value)) > 1e-9) {
+        return addInvalidFillingParameterDiagnostic(object, context, property, "a positive integer");
     }
-    addFillingDiagnostic(
-        object,
-        context,
-        "unsupported_property",
-        "Part.makeFilledFace non-default " + property + " is deferred until helper kwargs are expected-backed",
-        property,
-        object.name,
-        property
-    );
+    output = static_cast<unsigned int>(std::llround(*value));
     return true;
 }
 
-bool rejectNonDefaultBool(
+bool readPositiveNumberParam(
     const app::DocumentObject& object,
     runtime::ComputeContext& context,
     const std::string& property,
-    bool expected
+    double& output
 )
 {
-    const auto value = app::readBool(object, property);
-    if (!value || *value == expected) {
-        return false;
+    if (app::propertyValue(object, property) == nullptr) {
+        return true;
     }
-    addFillingDiagnostic(
-        object,
-        context,
-        "unsupported_property",
-        "Part.makeFilledFace non-default " + property + " is deferred until helper kwargs are expected-backed",
-        property,
-        object.name,
-        property
-    );
+    const auto value = app::readNumber(object, property);
+    if (!value || !std::isfinite(*value) || *value <= 0.0) {
+        return addInvalidFillingParameterDiagnostic(object, context, property, "a positive number");
+    }
+    output = *value;
     return true;
 }
 
-std::optional<FilledFaceDefaultParams> readDefaultFillingParams(
+bool readBoolParam(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const std::string& property,
+    bool& output
+)
+{
+    if (app::propertyValue(object, property) == nullptr) {
+        return true;
+    }
+    const auto value = app::readBool(object, property);
+    if (!value) {
+        return addInvalidFillingParameterDiagnostic(object, context, property, "a boolean");
+    }
+    output = *value;
+    return true;
+}
+
+std::optional<FilledFaceParams> readFillingParams(
     const app::DocumentObject& object,
     runtime::ComputeContext& context
 )
 {
-    FilledFaceDefaultParams params;
-    if (rejectNonDefaultNumber(object, context, "Degree", params.degree)
-        || rejectNonDefaultNumber(object, context, "PtsOnCurve", params.pointsOnCurve)
-        || rejectNonDefaultNumber(object, context, "NumIter", params.iterations)
-        || rejectNonDefaultBool(object, context, "Anisotropy", params.anisotropy)
-        || rejectNonDefaultNumber(object, context, "Tol2d", params.tolerance2d)
-        || rejectNonDefaultNumber(object, context, "Tol3d", params.tolerance3d)
-        || rejectNonDefaultNumber(object, context, "TolG1", params.toleranceG1)
-        || rejectNonDefaultNumber(object, context, "TolG2", params.toleranceG2)
-        || rejectNonDefaultNumber(object, context, "MaxDegree", params.maxDegree)
-        || rejectNonDefaultNumber(object, context, "MaxSegments", params.maxSegments)) {
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/AppPartPy.cpp
+    // ::makeFilledFace() forwards these fields as one BRepFillingParams batch; cad-core keeps
+    // the same batch boundary before calling makeElementFilledFaceFromSources().
+    FilledFaceParams params;
+    if (!readPositiveIntParam(object, context, "Degree", params.degree)
+        || !readPositiveIntParam(object, context, "PtsOnCurve", params.pointsOnCurve)
+        || !readPositiveIntParam(object, context, "NumIter", params.iterations)
+        || !readBoolParam(object, context, "Anisotropy", params.anisotropy)
+        || !readPositiveNumberParam(object, context, "Tol2d", params.tolerance2d)
+        || !readPositiveNumberParam(object, context, "Tol3d", params.tolerance3d)
+        || !readPositiveNumberParam(object, context, "TolG1", params.toleranceG1)
+        || !readPositiveNumberParam(object, context, "TolG2", params.toleranceG2)
+        || !readPositiveIntParam(object, context, "MaxDegree", params.maxDegree)
+        || !readPositiveIntParam(object, context, "MaxSegments", params.maxSegments)) {
         return std::nullopt;
     }
     return params;
 }
 
-nlohmann::json fillingParamsJson(const FilledFaceDefaultParams& params)
+nlohmann::json fillingParamsJson(const FilledFaceParams& params)
 {
     return {
         {"degree", params.degree},
@@ -850,7 +876,7 @@ void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeCo
         return;
     }
 
-    const auto params = readDefaultFillingParams(object, context);
+    const auto params = readFillingParams(object, context);
     if (!params) {
         return;
     }
@@ -900,7 +926,9 @@ void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeCo
             {"support_face_count", build.supportFaceCount},
             {"order_count", build.orderCount},
             {"surface_support_order_status", "source_backed_native_helper_oracle_known_gap"},
-            {"default_params", fillingParamsJson(*params)},
+            {"default_params", fillingParamsJson(FilledFaceParams {})},
+            {"params", fillingParamsJson(*params)},
+            {"params_source", "Part.makeFilledFace constructor kwargs"},
             {"topo_naming_history", "maker_history:filling"},
         },
         build.namedShape

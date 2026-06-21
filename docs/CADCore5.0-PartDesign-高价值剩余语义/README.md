@@ -25,13 +25,13 @@
 | C5-M5 Freeze 收口 | `C5-M5-Freeze收口主线/6-20-10-48-C5-M5-Freeze收口主线总入口.md` | `C5-M5-Freeze收口主线/工作步骤细分/` |
 | C5-M6 Part Workbench Surface Profile / PostProcess 第二批（已收口） | `C5-M6-PartWorkbenchSurface-ProfilePostProcess第二批主线/6-20-22-03-C5-M6-PartWorkbenchSurface-ProfilePostProcess第二批主线总入口.md` | `C5-M6-PartWorkbenchSurface-ProfilePostProcess第二批主线/工作步骤细分/` |
 | C5-M7 Part Workbench GeomPlateSurface Helper 第二批（已收口） | `C5-M7-PartWorkbenchSurface-GeomPlateSurfaceHelper第二批主线/6-21-00-43-C5-M7-PartWorkbenchSurface-GeomPlateSurfaceHelper第二批主线总入口.md` | `C5-M7-PartWorkbenchSurface-GeomPlateSurfaceHelper第二批主线/工作步骤细分/` |
-| C5-M8 Part Workbench Filling Support / Order / Param 第二批（规划） | `C5-M8-PartWorkbenchFillingSupportOrderParam第二批主线/6-21-10-01-C5-M8-PartWorkbenchFillingSupportOrderParam第二批主线总入口.md` | `C5-M8-PartWorkbenchFillingSupportOrderParam第二批主线/工作步骤细分/` |
+| C5-M8 Part Workbench Filling Support / Order / Param 第二批（进行中） | `C5-M8-PartWorkbenchFillingSupportOrderParam第二批主线/6-21-10-01-C5-M8-PartWorkbenchFillingSupportOrderParam第二批主线总入口.md` | `C5-M8-PartWorkbenchFillingSupportOrderParam第二批主线/工作步骤细分/` |
 
 C5-M6 已完成最终发布收口：`part_workbench.loft` 只发布 profile / `Linearize=true` expected-backed slice，剩余 `complex_profile_family` 路由到 `future_loft_complex_profile_family`；`part_workbench.sweep` 只发布 multi-profile / `Linearize=true` expected-backed slice，advanced contract 路由到 `future_sweep_advanced_contract`。
 
 C5-M7 已完成 `Part.GeomPlate.BuildPlateSurface` / `PartGeomPlateSurfaceDTO` 第二批发布：3D default / explicit approximation / InitialSurface / Curve2dOnSurface / Point2dOnSurface / mixed G0+2D / point criteria 为 expected-backed；G1 curve-on-surface 与 ProjectedCurve2d 为 source-backed known_gap；curve criteria setter 和 `Part.PlateSurface.Curves` wrapper lifecycle 为 diagnostic-backed；GUI/native DocumentObject/Filling/full surface family 不进入支持声明。
 
-C5-M8 已开包规划 `Part.makeFilledFace(...)` / source-backed Filling helper 第二批：不拆成单个 support/order case，而是把同一 `TopoShape::makeElementFilledFace()` 调用链下的 `surface`、`supports`、`orders`、non-default params、non-boundary constraints、compound optional 和 direct wrapper boundary 放进同一最小完整语义批次。S0 live guard 已冻结；S1-S5 仍 pending，尚未发布新增 support 声明。
+C5-M8 正在执行 `Part.makeFilledFace(...)` / source-backed Filling helper 第二批：S0/S1/S2 已关闭 live guard、Surface/Supports/Orders source-backed known_gap、non-default constructor params metadata 和 locatable invalid params diagnostics；native helper geometry expected 只在 FreeCADCmd explicit kwargs oracle 稳定后替换 known_gap。当前队列从 S3 non-boundary constraints 继续。
 
 ## 队列检查
 

@@ -1200,7 +1200,11 @@ def part_filled_face_link_items(value: dict) -> list[dict]:
     return [item for item in items if isinstance(item, dict)]
 
 
-def part_filled_face_default_object_fields(boundary_mode: str | None = None, boundary_edge_count: int | None = None) -> dict:
+def part_filled_face_default_object_fields(
+    boundary_mode: str | None = None,
+    boundary_edge_count: int | None = None,
+    params: dict[str, Any] | None = None,
+) -> dict:
     fields: dict[str, Any] = {
         "status": "ok",
         "feature": "part_filled_face",
@@ -1213,6 +1217,9 @@ def part_filled_face_default_object_fields(boundary_mode: str | None = None, bou
         fields["boundary_mode"] = boundary_mode
     if boundary_edge_count is not None:
         fields["boundary_edge_count"] = boundary_edge_count
+    if params is not None:
+        fields["params"] = params
+        fields["params_source"] = "Part.makeFilledFace constructor kwargs"
     return fields
 
 
@@ -1266,6 +1273,50 @@ def part_filled_face_boundary_shapes(created: dict[str, Any], spec: dict) -> tup
     return shapes, "mixed_boundary", selected_edges
 
 
+def part_filled_face_params(properties: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any], bool]:
+    mapping = [
+        ("Degree", "degree", "degree", 3, int),
+        ("PtsOnCurve", "ptsOnCurve", "points_on_curve", 15, int),
+        ("NumIter", "numIter", "iterations", 2, int),
+        ("Anisotropy", "anisotropy", "anisotropy", False, bool),
+        ("Tol2d", "tol2d", "tolerance_2d", 0.00001, float),
+        ("Tol3d", "tol3d", "tolerance_3d", 0.0001, float),
+        ("TolG1", "tolG1", "tolerance_g1", 0.01, float),
+        ("TolG2", "tolG2", "tolerance_g2", 0.1, float),
+        ("MaxDegree", "maxDegree", "max_degree", 8, int),
+        ("MaxSegments", "maxSegments", "max_segments", 9, int),
+    ]
+    kwargs: dict[str, Any] = {}
+    evidence: dict[str, Any] = {}
+    has_explicit_params = False
+    for property_name, keyword, evidence_name, default, value_type in mapping:
+        is_explicit = property_name in properties
+        has_explicit_params = has_explicit_params or is_explicit
+        value = consumer_property(properties, property_name, default)
+        if value_type is bool:
+            if not isinstance(value, bool):
+                raise UnsupportedFixture(f"Part.makeFilledFace {property_name} must be boolean")
+            if is_explicit:
+                kwargs[keyword] = value
+            evidence[evidence_name] = value
+            continue
+        if not isinstance(value, (int, float)):
+            raise UnsupportedFixture(f"Part.makeFilledFace {property_name} must be numeric")
+        if value_type is int:
+            if float(value) <= 0.0 or int(value) != float(value):
+                raise UnsupportedFixture(f"Part.makeFilledFace {property_name} must be a positive integer")
+            if is_explicit:
+                kwargs[keyword] = int(value)
+            evidence[evidence_name] = int(value)
+        else:
+            if float(value) <= 0.0:
+                raise UnsupportedFixture(f"Part.makeFilledFace {property_name} must be a positive number")
+            if is_explicit:
+                kwargs[keyword] = float(value)
+            evidence[evidence_name] = float(value)
+    return kwargs, evidence, has_explicit_params
+
+
 def collect_part_filled_face_expected(
     fixture_path: Path,
     fixture: dict,
@@ -1298,14 +1349,16 @@ def collect_part_filled_face_expected(
 
             try:
                 shapes, boundary_mode, boundary_edge_count = part_filled_face_boundary_shapes(created, spec)
+                params_kwargs, params_evidence, has_explicit_params = part_filled_face_params(properties)
                 # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/AppPartPy.cpp
                 # ::makeFilledFace(), returns TopoShape(...).makeElementFilledFace(...) as a helper
                 # result; cad-core Part::FilledFace fixtures are translated into that helper call.
-                result_shape = Part.makeFilledFace(shapes)
+                result_shape = Part.makeFilledFace(shapes, **params_kwargs)
                 payload = shape_summary(result_shape)
                 payload["object_fields"] = part_filled_face_default_object_fields(
                     boundary_mode,
                     boundary_edge_count,
+                    params_evidence if has_explicit_params else None,
                 )
                 object_payloads[name] = payload
             except UnsupportedFixture as exc:

@@ -36,7 +36,12 @@ struct RuledSurfaceCurveSource
     std::vector<RuledSurfaceEdgeEvidence> edges;
 };
 
-struct FilledFaceDefaultParams
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/AppPartPy.cpp
+// ::makeFilledFace() parses "degree", "ptsOnCurve", "numIter", "anisotropy",
+// "tol2d", "tol3d", "tolG1", "tolG2", "maxDegree" and "maxSegments";
+// /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/BRepOffsetAPI_MakeFillingPyImp.cpp
+// ::PyInit() passes the same group to "BRepOffsetAPI_MakeFilling".
+struct FilledFaceParams
 {
     unsigned int degree = 3;
     unsigned int pointsOnCurve = 15;
@@ -211,7 +216,7 @@ FilledFaceBuild makeElementFilledFaceFromSources(
     const std::string& owner,
     const std::vector<FilledFaceSource>& boundarySources,
     const std::vector<NamedShapeSource>& historySources,
-    const FilledFaceDefaultParams& params = FilledFaceDefaultParams {},
+    const FilledFaceParams& params = FilledFaceParams {},
     const std::optional<FilledFaceSource>& initialSurface = std::nullopt,
     const std::vector<FilledFaceSupportSource>& supportSources = {},
     const std::vector<FilledFaceOrderSource>& orderSources = {}

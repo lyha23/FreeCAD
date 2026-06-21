@@ -1702,7 +1702,7 @@ FilledFaceBuild makeElementFilledFaceFromSources(
     const std::string& owner,
     const std::vector<FilledFaceSource>& boundarySources,
     const std::vector<NamedShapeSource>& historySources,
-    const FilledFaceDefaultParams& params,
+    const FilledFaceParams& params,
     const std::optional<FilledFaceSource>& initialSurface,
     const std::vector<FilledFaceSupportSource>& supportSources,
     const std::vector<FilledFaceOrderSource>& orderSources

@@ -762,7 +762,12 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertIn("target", diagnostic)
             self.assertIn("subname", diagnostic)
 
-    def assert_part_filling_history(self, result: dict, boundary_mode: str) -> None:
+    def assert_part_filling_history(
+        self,
+        result: dict,
+        boundary_mode: str,
+        expect_default_params: bool = True,
+    ) -> None:
         filled = result["objects"]["FilledFace"]
         named_shape = result["named_shapes"]["FilledFace"]
         mapper_history = named_shape["mapper_history"]
@@ -781,6 +786,9 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(filled["default_params"]["iterations"], 2)
         self.assertEqual(filled["default_params"]["max_degree"], 8)
         self.assertEqual(filled["default_params"]["max_segments"], 9)
+        if expect_default_params:
+            self.assertEqual(filled["params"], filled["default_params"])
+        self.assertEqual(filled["params_source"], "Part.makeFilledFace constructor kwargs")
 
         evidence = filled["boundary_source_evidence"]
         self.assertEqual({item["object"] for item in evidence}, {"Profile"})
@@ -853,7 +861,6 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             [
                 "invalid_support_target",
                 "invalid_order_source",
-                "unsupported_property",
             ],
         )
         surface = result["objects"]["SurfaceDeferred"]
@@ -866,11 +873,18 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         for object_name in (
             "SupportsDeferred",
             "OrdersDeferred",
-            "NonDefaultParamsDeferred",
         ):
             self.assertEqual(result["objects"][object_name]["status"], "error")
             self.assertEqual(result["objects"][object_name]["feature"], "part_filled_face")
             self.assertEqual(result["objects"][object_name]["helper"], "Part.makeFilledFace")
+        non_default = result["objects"]["NonDefaultParamsDeferred"]
+        self.assertEqual(non_default["status"], "ok")
+        self.assertEqual(non_default["feature"], "part_filled_face")
+        self.assertEqual(non_default["helper"], "Part.makeFilledFace")
+        self.assertEqual(non_default["params"]["degree"], 4)
+        self.assertEqual(non_default["params"]["points_on_curve"], 15)
+        self.assertEqual(non_default["default_params"]["degree"], 3)
+        self.assertEqual(non_default["params_source"], "Part.makeFilledFace constructor kwargs")
         for diagnostic in diagnostics:
             self.assertIn("property", diagnostic)
             self.assertIn("target", diagnostic)
@@ -943,6 +957,57 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["InvalidSupport"]["status"], "error")
         self.assertEqual(result["objects"]["InvalidOrder"]["status"], "error")
         self.assert_object_matches_expected(result, "c5m8", "part-filling-invalid-support-order")
+
+    def test_c5m8_part_filling_non_default_params_are_constructor_batch(self) -> None:
+        result = self.run_recompute("part-filling-non-default-params", "c5m8")
+        filled = result["objects"]["FilledFace"]
+        expected = self.expected_freecad("c5m8", "part-filling-non-default-params")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assert_part_filling_history(result, "edge_wire_closed", expect_default_params=False)
+        self.assertEqual(
+            filled["params"],
+            {
+                "degree": 4,
+                "points_on_curve": 20,
+                "iterations": 3,
+                "anisotropy": True,
+                "tolerance_2d": 0.00002,
+                "tolerance_3d": 0.0002,
+                "tolerance_g1": 0.02,
+                "tolerance_g2": 0.2,
+                "max_degree": 9,
+                "max_segments": 12,
+            },
+        )
+        self.assertEqual(filled["default_params"]["degree"], 3)
+        self.assertEqual(filled["default_params"]["points_on_curve"], 15)
+        self.assertEqual(filled["default_params"]["anisotropy"], False)
+        self.assertEqual(filled["default_params"]["max_segments"], 9)
+        self.assertEqual(filled["params_source"], "Part.makeFilledFace constructor kwargs")
+        self.assertEqual(
+            expected["known_gap"]["kind"],
+            "part_filling_non_default_params_native_helper_oracle_blocked",
+        )
+
+    def test_c5m8_part_filling_param_diagnostics_are_locatable(self) -> None:
+        result = self.run_recompute("part-filling-param-diagnostics", "c5m8")
+        diagnostics = result["diagnostics"]
+
+        self.assertEqual([item["code"] for item in diagnostics], ["invalid_parameter"] * 3)
+        self.assertEqual(
+            [(item["object"], item["property"], item["target"], item["subname"]) for item in diagnostics],
+            [
+                ("InvalidDegree", "Degree", "InvalidDegree", "Degree"),
+                ("InvalidTolerance", "Tol3d", "InvalidTolerance", "Tol3d"),
+                ("InvalidAnisotropy", "Anisotropy", "InvalidAnisotropy", "Anisotropy"),
+            ],
+        )
+        for object_name in ("InvalidDegree", "InvalidTolerance", "InvalidAnisotropy"):
+            self.assertEqual(result["objects"][object_name]["status"], "error")
+            self.assertEqual(result["objects"][object_name]["feature"], "part_filled_face")
+            self.assertEqual(result["objects"][object_name]["helper"], "Part.makeFilledFace")
+        self.assert_object_matches_expected(result, "c5m8", "part-filling-param-diagnostics")
 
     def test_c3m4_part_geomplate_curve_point_default_is_helper_expected_backed(self) -> None:
         result = self.run_recompute("part-geomplate-curve-point-default", "c3m4")

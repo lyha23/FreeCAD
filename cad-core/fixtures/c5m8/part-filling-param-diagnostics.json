@@ -1,0 +1,70 @@
+{
+  "Objects": [
+    {
+      "Name": "Profile",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 2
+      }
+    },
+    {
+      "Name": "InvalidDegree",
+      "ID": 2,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Profile",
+              "SubList": ["Edge1", "Edge2", "Edge3", "Edge4"],
+              "StableSubList": ["Edge1", "Edge2", "Edge3", "Edge4"]
+            }
+          ]
+        },
+        "Degree": 0
+      }
+    },
+    {
+      "Name": "InvalidTolerance",
+      "ID": 3,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Profile",
+              "SubList": ["Edge1", "Edge2", "Edge3", "Edge4"],
+              "StableSubList": ["Edge1", "Edge2", "Edge3", "Edge4"]
+            }
+          ]
+        },
+        "Tol3d": -0.1
+      }
+    },
+    {
+      "Name": "InvalidAnisotropy",
+      "ID": 4,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Profile",
+              "SubList": ["Edge1", "Edge2", "Edge3", "Edge4"],
+              "StableSubList": ["Edge1", "Edge2", "Edge3", "Edge4"]
+            }
+          ]
+        },
+        "Anisotropy": "true"
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["InvalidDegree", "InvalidTolerance", "InvalidAnisotropy"]
+  }
+}

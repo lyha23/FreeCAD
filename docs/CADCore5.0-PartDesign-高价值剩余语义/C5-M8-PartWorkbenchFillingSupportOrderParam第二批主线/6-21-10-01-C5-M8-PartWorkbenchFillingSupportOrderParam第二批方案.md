@@ -18,7 +18,7 @@
 ## cad-core 落点
 
 - `cad-core/src/part/part_filling.cpp`：从当前默认-only executor 扩展为第二批 DTO 解析 owner；删除或收敛 `Surface` / `Supports` / `Orders` / non-default params 的 broad diagnostic；保留 locatable invalid diagnostics。
-- `cad-core/include/cad_core/part/topo_shape_expansion.h`：把 `FilledFaceDefaultParams` 扩展为能表达 initial surface、support/order map、boundary/non-boundary source、point/face constraints 的稳定 core API。
+- `cad-core/include/cad_core/part/topo_shape_expansion.h`：以 `FilledFaceParams` 表达 constructor params，并继续承载 initial surface、support/order map、boundary/non-boundary source、point/face constraints 的稳定 core API。
 - `cad-core/src/part/topo_shape_expansion.cpp`：在 `makeElementFilledFaceFromSources()` 中补 `LoadInitSurface`、`Add(edge, support, order, IsBound=true/false)`、`Add(face, order)`、`Add(point)`，并继续用 maker history 生成 `NamedShape` / boundary evidence。
 - `cad-core/tools/collect_freecad_expected.py` 与 `cad-core/fixtures/c5m8`：批量采集 expected，不能用 cad-core 输出倒推 fixture。
 - `cad-core/tests/test_p8_features.py`、`tests/test_expected_fixtures.py`、`tests/test_adapters.py`：覆盖 helper metadata、diagnostic target/subname、capability metadata 和 expected parity。
@@ -30,7 +30,7 @@
 | --- | --- | --- |
 | live guard | `c3m4/part-filling-closed-wire-default`、`c3m4/part-filling-boundary-edges-default`、`c3m4/part-filling-invalid-inputs`、`c4m1/part-filling-advanced-deferred` | 默认路径和 deferred guard 不回退 |
 | surface / support / order | `c5m8/part-filling-initial-surface-boundary`、`c5m8/part-filling-support-order-edge-face`、`c5m8/part-filling-invalid-support-order` | `LoadInitSurface`、support face、G1 order source-backed fixture、C0/G1/G2 parser、target/subname diagnostics；native helper expected 与 G2 stable geometry 保持 known_gap |
-| non-default params | `c5m8/part-filling-non-default-params`、`c5m8/part-filling-param-diagnostics` | params evidence、constructor field parity、invalid ranges |
+| non-default params | `c5m8/part-filling-non-default-params`、`c5m8/part-filling-param-diagnostics` | params evidence、constructor field parity、invalid ranges；explicit params native helper geometry expected 目前为 known_gap |
 | non-boundary constraints | `c5m8/part-filling-non-boundary-edge-support`、`c5m8/part-filling-non-boundary-face-point`、`c5m8/part-filling-non-boundary-wire` | `IsBound=false`、face support、vertex point constraint、source evidence |
 | compound / wrapper | `c5m8/part-filling-compound-optional-boundary`、`c5m8/part-filling-wrapper-boundary`、`c5m8/part-filling-wrapper-uv-point-boundary` | compound expansion with source mapping；direct wrapper lifecycle diagnostic or proven request DTO |
 
@@ -38,7 +38,7 @@
 
 1. S0：冻结 live baseline，确认 C5-M8 root / local matrices 和当前 first-batch fixture 状态。
 2. S1：把 `Surface` / `Supports` / `Orders` 作为同一 DTO 批次处理；已在 `cad-core` 中实现 source-backed DTO / builder path / locatable diagnostics，并以 known_gap 记录 native helper expected 与 G2 geometry 删除条件，不修改 FreeCAD `src/`。
-3. S2：补非默认 Filling 参数，一次覆盖 OCCT constructor 同组字段，保留无效值 diagnostic。
+3. S2：已补非默认 Filling 参数，一次覆盖 OCCT constructor 同组字段，保留无效值 diagnostic；当前 explicit params native helper oracle 退出 245，valid fixture 以 source-backed known_gap 记录删除条件。
 4. S3：补非边界约束分支，保证 boundary wire 选择后剩余 shapes 不被丢弃。
 5. S4：补 compound optional case；对直接 wrapper 做 owner 判定，不能证明 request-local 生命周期就保持 diagnostic。
 6. S5：同步 capabilities、root matrices、docs、fixtures/test 列表和 remaining gaps；队列清空后再宣告收口。
