@@ -1,0 +1,32 @@
+{
+  "Objects": [
+    {
+      "Name": "SupportPlane",
+      "ID": 1,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 4,
+        "Width": 4
+      }
+    },
+    {
+      "Name": "WrapperUvPointOnSupport",
+      "ID": 2,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "BRepOffsetAPIMakeFillingUvPointOnSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportPlane",
+          "SubList": ["Face1"],
+          "StableSubList": ["Face1"],
+          "U": 0.5,
+          "V": 0.5,
+          "Order": "G1"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["WrapperUvPointOnSupport"]
+  }
+}

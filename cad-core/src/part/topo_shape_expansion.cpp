@@ -395,6 +395,15 @@ std::vector<FilledFaceWorkingShape> expandedFilledFaceSources(
     return output;
 }
 
+int compoundFilledFaceSourceCount(const std::vector<FilledFaceSource>& sources)
+{
+    return static_cast<int>(std::count_if(
+        sources.begin(),
+        sources.end(),
+        [](const FilledFaceSource& source) { return isCompoundShape(source.shape); }
+    ));
+}
+
 std::optional<std::string> sourceEdgeElementName(const FilledFaceSource& source, const TopoDS_Edge& edge)
 {
     if (!source.subname.empty() && source.shape.ShapeType() == TopAbs_EDGE) {
@@ -1804,6 +1813,8 @@ FilledFaceBuild makeElementFilledFaceFromSources(
 
     try {
         std::vector<FilledFaceWorkingShape> shapes = expandedFilledFaceSources(boundarySources);
+        const int compoundSourceCount = compoundFilledFaceSourceCount(boundarySources);
+        const int expandedSourceCount = static_cast<int>(shapes.size());
         auto boundary = findFilledFaceBoundaryWire(shapes);
         if (!boundary) {
             boundary = buildFilledFaceBoundaryWireFromEdges(shapes);
@@ -2004,6 +2015,9 @@ FilledFaceBuild makeElementFilledFaceFromSources(
             addDistinct(namedShape.elementHistoryStatus, "part_filling:non_boundary_constraints");
             addFilledFaceNonBoundaryHistory(namedShape, owner, nonBoundaryEvidence);
         }
+        if (compoundSourceCount > 0) {
+            addDistinct(namedShape.elementHistoryStatus, "part_filling:compound_source_expansion");
+        }
 
         return FilledFaceBuild {
             maker.Shape(),
@@ -2015,6 +2029,8 @@ FilledFaceBuild makeElementFilledFaceFromSources(
             supportOrderSourcesEvidence,
             nonBoundaryEvidence,
             static_cast<int>(boundaryEdges.size()),
+            compoundSourceCount,
+            expandedSourceCount,
             nonBoundaryConstraintCount,
             static_cast<int>(supportSources.size()),
             static_cast<int>(orderSources.size()),

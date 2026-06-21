@@ -1,0 +1,19 @@
+{
+  "diagnostic_codes": [
+    "unsupported_wrapper_lifecycle"
+  ],
+  "freecad_version": "1.2.0 revision 20260519",
+  "native_error": "Part.BRepOffsetAPI.MakeFilling Add(U, V, Support, Order) is a direct wrapper UV point-on-support branch, not a Part.makeFilledFace helper input.",
+  "native_error_code": "unsupported_wrapper_lifecycle",
+  "object": "WrapperUvPointOnSupport",
+  "object_fields": {
+    "feature": "part_brepoffsetapi_makefilling_wrapper",
+    "freecad_native_document_object": false,
+    "helper": "Part.BRepOffsetAPI.MakeFilling",
+    "source_backed_helper": false,
+    "status": "error",
+    "wrapper_lifecycle": "python_mutable_builder_unsupported"
+  },
+  "reference": "Diagnostic-backed boundary record for direct Part.BRepOffsetAPI.MakeFilling UV point-on-support lifecycle; delete only after a request-local DTO replaces mutable wrapper state.",
+  "schema_version": "cad-core.freecad-expected.v1"
+}

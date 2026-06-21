@@ -1130,6 +1130,67 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["MissingNonBoundaryTarget"]["status"], "error")
         self.assert_object_matches_expected(result, "c5m8", "part-filling-non-boundary-diagnostics")
 
+    def test_c5m8_part_filling_compound_optional_boundary_is_expected_backed(self) -> None:
+        result = self.run_recompute("part-filling-compound-optional-boundary", "c5m8")
+        filled = result["objects"]["FilledFace"]
+        compound = result["objects"]["Compound"]
+        named_shape = result["named_shapes"]["FilledFace"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(compound["status"], "ok")
+        self.assertEqual(compound["feature"], "part_compound")
+        self.assertEqual(compound["shape"], "occt_compound")
+        self.assertEqual(compound["links"], ["Profile"])
+        self.assertEqual(filled["status"], "ok")
+        self.assertEqual(filled["feature"], "part_filled_face")
+        self.assertEqual(filled["helper"], "Part.makeFilledFace")
+        self.assertEqual(filled["boundary_mode"], "closed_wire")
+        self.assertEqual(filled["boundary_edge_count"], 4)
+        self.assertEqual(filled["compound_source_count"], 1)
+        self.assertEqual(filled["compound_expanded_source_count"], 1)
+        self.assertEqual(filled["compound_source_expansion_status"], "source_backed")
+        self.assertEqual({item["object"] for item in filled["boundary_source_evidence"]}, {"Compound", "Profile"})
+        self.assertEqual(
+            {item["stable_subname"] for item in filled["boundary_source_evidence"]},
+            {"Edge1", "Edge2", "Edge3", "Edge4"},
+        )
+        self.assertIn("part_filling:compound_source_expansion", named_shape["element_history_status"])
+        self.assert_object_matches_expected(result, "c5m8", "part-filling-compound-optional-boundary")
+
+    def test_c5m8_part_filling_wrapper_boundary_is_lifecycle_diagnostic(self) -> None:
+        result = self.run_recompute("part-filling-wrapper-boundary", "c5m8")
+        diagnostic = result["diagnostics"][0]
+        wrapper = result["objects"]["WrapperBoundary"]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_wrapper_lifecycle"])
+        self.assertEqual(diagnostic["property"], "BRepOffsetAPIMakeFillingWrapper")
+        self.assertEqual(diagnostic["target"], "Profile")
+        self.assertEqual(diagnostic["subname"], "Edge1")
+        self.assertEqual(wrapper["status"], "error")
+        self.assertEqual(wrapper["feature"], "part_brepoffsetapi_makefilling_wrapper")
+        self.assertEqual(wrapper["helper"], "Part.BRepOffsetAPI.MakeFilling")
+        self.assertFalse(wrapper["source_backed_helper"])
+        self.assertEqual(wrapper["wrapper_lifecycle"], "python_mutable_builder_unsupported")
+        self.assertIn("request-local Filling DTO", wrapper["delete_condition"])
+        self.assert_object_matches_expected(result, "c5m8", "part-filling-wrapper-boundary")
+
+    def test_c5m8_part_filling_wrapper_uv_point_is_lifecycle_diagnostic(self) -> None:
+        result = self.run_recompute("part-filling-wrapper-uv-point-boundary", "c5m8")
+        diagnostic = result["diagnostics"][0]
+        wrapper = result["objects"]["WrapperUvPointOnSupport"]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_wrapper_lifecycle"])
+        self.assertEqual(diagnostic["property"], "BRepOffsetAPIMakeFillingUvPointOnSupport")
+        self.assertEqual(diagnostic["target"], "SupportPlane")
+        self.assertEqual(diagnostic["subname"], "Face1")
+        self.assertEqual(wrapper["status"], "error")
+        self.assertEqual(wrapper["feature"], "part_brepoffsetapi_makefilling_wrapper")
+        self.assertEqual(wrapper["helper"], "Part.BRepOffsetAPI.MakeFilling")
+        self.assertFalse(wrapper["source_backed_helper"])
+        self.assertEqual(wrapper["wrapper_lifecycle"], "python_mutable_builder_unsupported")
+        self.assertIn("request-local Filling DTO", wrapper["delete_condition"])
+        self.assert_object_matches_expected(result, "c5m8", "part-filling-wrapper-uv-point-boundary")
+
     def test_c3m4_part_geomplate_curve_point_default_is_helper_expected_backed(self) -> None:
         result = self.run_recompute("part-geomplate-curve-point-default", "c3m4")
         geomplate = result["objects"]["GeomPlate"]

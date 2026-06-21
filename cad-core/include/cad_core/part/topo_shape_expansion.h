@@ -125,6 +125,8 @@ struct FilledFaceBuild
     std::vector<FilledFaceSupportOrderEvidence> supportOrderSources;
     std::vector<FilledFaceConstraintEvidence> nonBoundarySources;
     int boundaryEdgeCount = 0;
+    int compoundSourceCount = 0;
+    int expandedSourceCount = 0;
     int nonBoundaryConstraintCount = 0;
     int supportFaceCount = 0;
     int orderCount = 0;

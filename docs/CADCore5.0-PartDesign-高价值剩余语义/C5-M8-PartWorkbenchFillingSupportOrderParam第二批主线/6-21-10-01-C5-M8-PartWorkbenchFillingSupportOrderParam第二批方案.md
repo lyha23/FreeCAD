@@ -32,7 +32,7 @@
 | surface / support / order | `c5m8/part-filling-initial-surface-boundary`、`c5m8/part-filling-support-order-edge-face`、`c5m8/part-filling-invalid-support-order` | `LoadInitSurface`、support face、G1 order source-backed fixture、C0/G1/G2 parser、target/subname diagnostics；native helper expected 与 G2 stable geometry 保持 known_gap |
 | non-default params | `c5m8/part-filling-non-default-params`、`c5m8/part-filling-param-diagnostics` | params evidence、constructor field parity、invalid ranges；explicit params native helper geometry expected 目前为 known_gap |
 | non-boundary constraints | `c5m8/part-filling-non-boundary-edge-support`、`c5m8/part-filling-non-boundary-face-point`、`c5m8/part-filling-non-boundary-wire`、`c5m8/part-filling-non-boundary-diagnostics` | `IsBound=false`、face support、vertex point constraint、source evidence、locatable diagnostics |
-| compound / wrapper | `c5m8/part-filling-compound-optional-boundary`、`c5m8/part-filling-wrapper-boundary`、`c5m8/part-filling-wrapper-uv-point-boundary` | compound expansion with source mapping；direct wrapper lifecycle diagnostic or proven request DTO |
+| compound / wrapper | `c5m8/part-filling-compound-optional-boundary`、`c5m8/part-filling-wrapper-boundary`、`c5m8/part-filling-wrapper-uv-point-boundary` | compound expansion expected-backed with source mapping；direct wrapper lifecycle and UV point-on-support diagnostic-backed unless a request-local DTO is later proven |
 
 ## 实施顺序
 
@@ -40,7 +40,7 @@
 2. S1：把 `Surface` / `Supports` / `Orders` 作为同一 DTO 批次处理；已在 `cad-core` 中实现 source-backed DTO / builder path / locatable diagnostics，并以 known_gap 记录 native helper expected 与 G2 geometry 删除条件，不修改 FreeCAD `src/`。
 3. S2：已补非默认 Filling 参数，一次覆盖 OCCT constructor 同组字段，保留无效值 diagnostic；当前 explicit params native helper oracle 退出 245，valid fixture 以 source-backed known_gap 记录删除条件。
 4. S3：已补非边界约束分支，boundary wire 选择后剩余 edge / wire / face / vertex 不再被丢弃；wire 与 face/point 有 FreeCAD expected，edge support/order 保持 source-backed known_gap。
-5. S4：补 compound optional case；对直接 wrapper 做 owner 判定，不能证明 request-local 生命周期就保持 diagnostic。
+5. S4：已补 compound optional case；`part-filling-compound-optional-boundary` 为 expected-backed，直接 wrapper add/build/shape 与 UV point-on-support 保持 `unsupported_wrapper_lifecycle` diagnostic-backed，删除条件是证明同等 request-local DTO 且不保存 mutable builder。
 6. S5：同步 capabilities、root matrices、docs、fixtures/test 列表和 remaining gaps；队列清空后再宣告收口。
 
 ## 验收分层

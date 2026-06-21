@@ -215,6 +215,66 @@ bool readBoolParam(
     return true;
 }
 
+void addFillingWrapperLifecycleDiagnostic(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const std::string& property,
+    const std::string& message
+)
+{
+    runtime::addDiagnostic(
+        context.diagnostics,
+        "error",
+        "unsupported_wrapper_lifecycle",
+        message,
+        object.name,
+        property,
+        "runtime",
+        firstDeferredTarget(object, property),
+        firstDeferredSubname(object, property)
+    );
+    context.objects[object.name] = {
+        {"status", "error"},
+        {"feature", "part_brepoffsetapi_makefilling_wrapper"},
+        {"helper", "Part.BRepOffsetAPI.MakeFilling"},
+        {"source_backed_helper", false},
+        {"freecad_native_document_object", false},
+        {"wrapper_lifecycle", "python_mutable_builder_unsupported"},
+        {"delete_condition", "replace with a request-local Filling DTO only if add/build/shape lifecycle can be expressed without cross-request mutable builder state"},
+    };
+}
+
+bool rejectUnsupportedFillingWrapperLifecycle(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // BRepOffsetAPI_MakeFillingPyImp.cpp::PyInit(), ::loadInitSurface(), ::add(), ::build()
+    // and ::shape() expose a mutable Python "BRepOffsetAPI_MakeFilling" builder. cad-core
+    // only supports request-local Part.makeFilledFace DTOs here; it must not persist a wrapper.
+    bool ok = true;
+    if (app::propertyValue(object, "BRepOffsetAPIMakeFillingWrapper") != nullptr) {
+        addFillingWrapperLifecycleDiagnostic(
+            object,
+            context,
+            "BRepOffsetAPIMakeFillingWrapper",
+            "Part.BRepOffsetAPI.MakeFilling add/build/shape requires a Python mutable builder lifecycle; cad-core keeps Filling request-local"
+        );
+        ok = false;
+    }
+    if (app::propertyValue(object, "BRepOffsetAPIMakeFillingUvPointOnSupport") != nullptr) {
+        addFillingWrapperLifecycleDiagnostic(
+            object,
+            context,
+            "BRepOffsetAPIMakeFillingUvPointOnSupport",
+            "Part.BRepOffsetAPI.MakeFilling Add(U, V, Support, Order) is a direct wrapper UV point-on-support branch, not a Part.makeFilledFace helper input"
+        );
+        ok = false;
+    }
+    return ok;
+}
+
 std::optional<FilledFaceParams> readFillingParams(
     const app::DocumentObject& object,
     runtime::ComputeContext& context
@@ -886,13 +946,18 @@ void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeCo
              "MaxSegments",
              "Surface",
              "Supports",
-             "Orders"}
+             "Orders",
+             "BRepOffsetAPIMakeFillingWrapper",
+             "BRepOffsetAPIMakeFillingUvPointOnSupport"}
         )) {
         context.objects[object.name] = {
             {"status", "error"},
             {"feature", "part_filled_face"},
             {"helper", "Part.makeFilledFace"},
         };
+        return;
+    }
+    if (!rejectUnsupportedFillingWrapperLifecycle(object, context)) {
         return;
     }
 
@@ -943,6 +1008,9 @@ void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeCo
             {"boundary_mode", build.boundaryMode},
             {"boundary_edge_count", build.boundaryEdgeCount},
             {"boundary_source_evidence", boundaryEvidenceJson(build.boundarySources)},
+            {"compound_source_count", build.compoundSourceCount},
+            {"compound_expanded_source_count", build.expandedSourceCount},
+            {"compound_source_expansion_status", build.compoundSourceCount > 0 ? "source_backed" : "not_used"},
             {"initial_surface_source_evidence", boundaryEvidenceJson(build.initialSurfaceSource)},
             {"support_order_source_evidence", supportOrderEvidenceJson(build.supportOrderSources)},
             {"non_boundary_constraint_count", build.nonBoundaryConstraintCount},

@@ -1,0 +1,42 @@
+{
+  "Objects": [
+    {
+      "Name": "Profile",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 2
+      }
+    },
+    {
+      "Name": "Compound",
+      "ID": 2,
+      "TypeId": "Part::Compound",
+      "Properties": {
+        "Links": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["Profile"]
+        }
+      }
+    },
+    {
+      "Name": "FilledFace",
+      "ID": 3,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Compound"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["FilledFace"]
+  }
+}

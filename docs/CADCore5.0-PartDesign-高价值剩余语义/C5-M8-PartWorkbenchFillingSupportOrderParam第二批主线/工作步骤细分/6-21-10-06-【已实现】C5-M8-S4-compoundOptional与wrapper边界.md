@@ -1,4 +1,14 @@
-# C5-M8-S4 compound optional 与 wrapper 边界
+# 【已实现】C5-M8-S4 compound optional 与 wrapper 边界
+
+状态：`done_expected_and_diagnostic_backed`
+
+## 实现结果（2026-06-21）
+
+- `cad-core/fixtures/c5m8/part-filling-compound-optional-boundary.json` 已新增并采集 `expected/part-filling-compound-optional-boundary.freecad.json`，证明 `TopoShapeExpansion.cpp::expandCompound()` 对 `Part.makeFilledFace(...)` helper 的 compound source 可以 expected-backed 进入 `BRepOffsetAPI_MakeFilling`。
+- `cad-core/src/part/topo_shape_expansion.cpp` / `include/cad_core/part/topo_shape_expansion.h` 已把 compound source expansion 暴露为 `compound_source_count`、`compound_expanded_source_count`、`compound_source_expansion_status` 和 `part_filling:compound_source_expansion` history status；focused test 固定 source evidence，避免以后只靠几何结果碰巧通过。
+- `cad-core/fixtures/c5m8/part-filling-wrapper-boundary.json` 与 `part-filling-wrapper-uv-point-boundary.json` 已新增为 diagnostic-backed fixture。直接 `Part.BRepOffsetAPI.MakeFilling` add/build/shape lifecycle 与 `Add(U,V,Support,Order)` UV point-on-support 分支均输出稳定 `unsupported_wrapper_lifecycle`，并保留 target/subname。
+- wrapper 删除条件：只有证明 direct wrapper 能表达成同一 request-local Filling DTO，且不创建跨请求 mutable `BRepOffsetAPI_MakeFilling` builder，才能把这两个 diagnostic-backed fixture 改为 supported；当前不把 wrapper UV point-on-support 当作 `Part.makeFilledFace` helper 支持。
+- C5M8-BLK-401 / ORC-401 / SCOPE-401 已关闭为 expected-backed compound + diagnostic-backed wrapper；S5 仍负责最终 capability/docs 队列收口。
 
 ## 目标
 

@@ -32,7 +32,7 @@ C5-M8 不做“单个 support/order case”，而是把同一 FreeCAD 调用链�
 | surface / support / order | `surface` 初始面、boundary edge + support face、boundary edge order C0/G1/G2、invalid target/order diagnostics | S1 已扩展 `FilledFaceSource` / request DTO / `makeElementFilledFaceFromSources()`；当前为 source-backed known_gap + diagnostic-backed，native helper expected 和 G2 stable geometry 后续关闭 |
 | non-default params | constructor 参数、`SetConstrParam` / `SetResolParam` / `SetApproxParam` 等价字段、invalid range diagnostics | S2 已移除逐字段 deferred，改为 source-backed constructor params metadata；native helper geometry expected 因 FreeCADCmd explicit kwargs 退出 245 保持 known_gap，invalid params 为 diagnostic-backed |
 | non-boundary constraints | 选定 boundary wire 后剩余 edge / wire、face、vertex 作为 non-boundary constraints；edge+support/order；point constraint | S3 已对齐 FreeCAD `IsBound=false` / face / vertex 分支；wire 与 face/point expected-backed，edge support/order 保持 native helper known_gap，diagnostics locatable |
-| compound / wrapper boundary | compound optional source expansion；直接 `Part.BRepOffsetAPI.MakeFilling` wrapper 的 add/build/shape lifecycle 和 UV point-on-support 分支 | S4 关闭 compound optional；wrapper 若不是同一 request DTO，保留 `unsupported_wrapper_lifecycle` 或同级 diagnostic |
+| compound / wrapper boundary | compound optional source expansion；直接 `Part.BRepOffsetAPI.MakeFilling` wrapper 的 add/build/shape lifecycle 和 UV point-on-support 分支 | S4 已关闭：compound optional 为 expected-backed；direct wrapper / UV point-on-support 为 `unsupported_wrapper_lifecycle` diagnostic-backed，并保留 request-local DTO 删除条件 |
 | capability closeout | docs、capability metadata、root matrices、remaining gaps | S5 发布精确 support / known_gap / diagnostic / non-goal 边界，并清空本包队列 |
 
 ## 队列检查

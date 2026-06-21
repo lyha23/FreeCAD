@@ -1,0 +1,33 @@
+{
+  "Objects": [
+    {
+      "Name": "Profile",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 2
+      }
+    },
+    {
+      "Name": "WrapperBoundary",
+      "ID": 2,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "BRepOffsetAPIMakeFillingWrapper": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Profile",
+              "SubList": ["Edge1"],
+              "StableSubList": ["Edge1"]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["WrapperBoundary"]
+  }
+}

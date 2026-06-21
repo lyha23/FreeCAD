@@ -1237,6 +1237,21 @@ def part_filled_face_error_payload(code: str, message: str, include_helper_field
     }
 
 
+def part_filling_wrapper_lifecycle_error_payload(message: str) -> dict:
+    return {
+        "object_fields": {
+            "status": "error",
+            "feature": "part_brepoffsetapi_makefilling_wrapper",
+            "helper": "Part.BRepOffsetAPI.MakeFilling",
+            "source_backed_helper": False,
+            "freecad_native_document_object": False,
+            "wrapper_lifecycle": "python_mutable_builder_unsupported",
+        },
+        "native_error": message,
+        "native_error_code": "unsupported_wrapper_lifecycle",
+    }
+
+
 def part_filled_face_boundary_shapes(created: dict[str, Any], spec: dict) -> tuple[list[Any], str, int]:
     boundary = spec.get("Properties", {}).get("Boundary")
     items = part_filled_face_link_items(boundary)
@@ -1350,6 +1365,20 @@ def collect_part_filled_face_expected(
         for name in targets:
             spec = helper_specs[name]
             properties = spec.get("Properties", {})
+            wrapper_properties = {
+                "BRepOffsetAPIMakeFillingWrapper",
+                "BRepOffsetAPIMakeFillingUvPointOnSupport",
+            }
+            unsupported_wrapper = sorted(set(properties) & wrapper_properties)
+            if unsupported_wrapper:
+                diagnostic_codes.extend(["unsupported_wrapper_lifecycle"] * len(unsupported_wrapper))
+                object_payloads[name] = part_filling_wrapper_lifecycle_error_payload(
+                    "Part.BRepOffsetAPI.MakeFilling direct wrapper requires a mutable Python "
+                    "add/build/shape lifecycle; cad-core only supports request-local "
+                    "Part.makeFilledFace DTO inputs here."
+                )
+                continue
+
             unsupported = sorted(set(properties) & {"Surface", "Supports", "Orders"})
             if unsupported:
                 diagnostic_codes.extend(["unsupported_property"] * len(unsupported))
