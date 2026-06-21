@@ -3017,7 +3017,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         sweep = capabilities["part_workbench"]["sweep"]
         self.assertEqual(
             sweep["status"],
-            "supported_multi_profile_linearize_c5m11_wrapper_expected_backed_with_narrowed_blockers",
+            "supported_multi_profile_linearize_c5m12_wrapper_expected_backed_with_narrowed_blockers",
         )
         self.assertIn("Part::Sweep", sweep["type_ids"])
         self.assertEqual(
@@ -3089,7 +3089,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "invalid_input_diagnostics",
             "auxiliary_spine_wrapper_expected_backed",
             "auxiliary_curvilinear_wrapper_expected_backed",
-            "support_mode_diagnostic_only_narrowed_blocker",
+            "support_mode_wrapper_expected_backed",
             "binormal_wrapper_expected_backed",
             "advanced_mode_locatable_diagnostics",
             "section_location_contact_correction_freecadcmd_blocker",
@@ -3097,6 +3097,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "advanced_combined_freecadcmd_blocker",
             "s3_location_tolerance_locatable_diagnostics",
             "c5m11_wrapper_expected_capability_promotion",
+            "c5m12_support_wrapper_expected_recovery",
             "c5m10_capability_docs_closeout",
         ):
             self.assertIn(covered, sweep["covered"])
@@ -3117,6 +3118,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "c5m10/part-sweep-located-profile-contract",
             "c5m10/part-sweep-tolerance-contract",
             "c5m10/part-sweep-advanced-combined-contract",
+            "c5m12/part-sweep-spine-support-surface-normal",
         ):
             self.assertIn(fixture, sweep["fixtures"])
         self.assertEqual(
@@ -3138,6 +3140,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "c5m10/part-sweep-located-profile-contract",
                 "c5m10/part-sweep-tolerance-contract",
                 "c5m10/part-sweep-advanced-combined-contract",
+                "c5m12/part-sweep-spine-support-surface-normal",
             ],
         )
         for diagnostic in (
@@ -3169,7 +3172,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             sweep["request_local_boundaries"],
         )
         self.assertIn(
-            "support_fixture_diagnostic_only_narrowed_blocker",
+            "c5m12_support_mode_wrapper_expected_backed",
             sweep["request_local_boundaries"],
         )
         self.assertIn(
@@ -3192,6 +3195,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "Linearize",
                 "AuxiliarySpine",
                 "AuxiliaryCurvilinear",
+                "SpineSupport",
+                "SupportMode",
                 "Binormal",
                 "BiNormal",
                 "Tolerance.tol3d",
@@ -3202,8 +3207,6 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(
             sweep["field_boundaries"]["narrowed_gap"],
             [
-                "SpineSupport",
-                "SupportMode",
                 "SectionOptions[].Location",
                 "SectionOptions[].WithContact",
                 "SectionOptions[].WithCorrection",
@@ -3222,15 +3225,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(
             set(narrowed_gaps),
             {
-                "part_sweep_support_mode_fixture_diagnostic_only",
                 "part_sweep_located_profile_freecadcmd_wrapper_build_blocker",
                 "part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker",
             },
         )
-        support_gap = narrowed_gaps["part_sweep_support_mode_fixture_diagnostic_only"]
-        self.assertEqual(support_gap["status"], "narrowed_diagnostic_only_blocker")
-        self.assertEqual(support_gap["fields"], ["SpineSupport", "SupportMode"])
-        self.assertIn("valid SpineSupport representative", support_gap["delete_condition"])
         located_gap = narrowed_gaps["part_sweep_located_profile_freecadcmd_wrapper_build_blocker"]
         self.assertEqual(located_gap["freecadcmd_evidence"]["error"], "OCCError: NCollection_Array1::Value")
         self.assertIn("SectionOptions[].Location", located_gap["fields"])
@@ -3260,7 +3258,6 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(
             sweep["remaining_gaps"],
             [
-                "part_sweep_support_mode_fixture_diagnostic_only",
                 "part_sweep_located_profile_freecadcmd_wrapper_build_blocker",
                 "part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker",
             ],

@@ -1,6 +1,6 @@
 # C5-M12-S2 Sweep wrapper support/location expected recovery
 
-状态：`pending_C5M12-S2_sweep_wrapper_recovery`
+状态：`done_C5M12-S2_sweep_wrapper_recovery`
 
 ## 目标
 
@@ -17,9 +17,9 @@
 
 ## 产物
 
-- collectable Sweep wrapper 场景替换为 FreeCADCmd wrapper expected。
-- 不可采集项改成更窄 blocker，记录 FreeCADCmd 错误、未采字段、下一批范围。
-- 更新 `C5M12-BLK-201`、`C5M12-SCOPE-201`、`C5M12-ORC-201`。
+- valid `SpineSupport` / `SupportMode` 已新增 `cad-core/fixtures/c5m12/part-sweep-spine-support-surface-normal.json`，并由 FreeCADCmd wrapper 采集 `expected/part-sweep-spine-support-surface-normal.freecad.json`。
+- `SectionOptions[].Location` / `WithContact` / `WithCorrection` 与 `advanced_combination` 继续保留 FreeCADCmd `OCCError: NCollection_Array1::Value` blocker，未声明为 expected-backed。
+- 已更新 `C5M12-BLK-201`、`C5M12-SCOPE-201`、`C5M12-ORC-201` 与 root C5-M12 S2 row。
 
 ## 非目标
 

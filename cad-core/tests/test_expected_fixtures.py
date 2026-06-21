@@ -34,6 +34,29 @@ class CadCoreExpectedFixtureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCa
                 self.assertFalse(wrapper_oracle["freecad_native_document_object"])
                 self.assertTrue(wrapper_oracle["builder_status"]["build_ok"])
 
+        expected = self.expected_freecad("c5m12", "part-sweep-spine-support-surface-normal")
+        self.assertNotIn("known_gap", expected)
+        self.assertEqual(expected["object_fields"]["feature"], "part_sweep")
+        self.assertEqual(expected["object_fields"]["topo_naming_history"], "maker_history:pipeshell")
+        self.assertIn("shape_summary", expected)
+        self.assertEqual(
+            expected["object_fields"]["advanced"],
+            {
+                "mode": "SurfaceNormal",
+                "spine_support": {
+                    "set_mode_ok": True,
+                    "subname": "Face1",
+                    "target": "SupportPlane",
+                },
+                "support_mode": "SurfaceNormal",
+            },
+        )
+        wrapper_oracle = expected["wrapper_oracle"]
+        self.assertEqual(wrapper_oracle["dto"], "PartSweepAdvancedPipeShellDTO")
+        self.assertFalse(wrapper_oracle["freecad_native_document_object"])
+        self.assertTrue(wrapper_oracle["builder_status"]["set_spine_support"])
+        self.assertTrue(wrapper_oracle["builder_status"]["build_ok"])
+
         narrowed_blockers = {
             "part-sweep-support-mode-diagnostics": (
                 "part_sweep_support_mode_fixture_diagnostic_only",

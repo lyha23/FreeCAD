@@ -884,6 +884,34 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(expected["known_gap"]["kind"], "part_sweep_support_mode_fixture_diagnostic_only")
         self.assertIn("shape_summary", expected["known_gap"]["uncollected_fields"])
 
+    def test_c5m12_part_sweep_spine_support_surface_normal_is_expected_backed(self) -> None:
+        result = self.run_recompute("part-sweep-spine-support-surface-normal", "c5m12")
+        sweep = result["objects"]["Sweep"]
+        expected = self.expected_freecad("c5m12", "part-sweep-spine-support-surface-normal")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sweep["advanced"]["mode"], "SurfaceNormal")
+        self.assertEqual(sweep["advanced"]["support_mode"], "SurfaceNormal")
+        self.assertEqual(
+            sweep["advanced"]["spine_support"],
+            {
+                "target": "SupportPlane",
+                "subname": "Face1",
+                "set_mode_ok": True,
+            },
+        )
+        self.assert_part_sweep_history(result, "Path", ["Profile"], transition="Right corner", solid=True)
+        self.assertNotIn("known_gap", expected)
+        self.assertEqual(expected["object_fields"]["advanced"], sweep["advanced"])
+        self.assertEqual(expected["wrapper_oracle"]["helper"], "Part.BRepOffsetAPI_MakePipeShell")
+        self.assertEqual(expected["wrapper_oracle"]["runtime_helper"], "Part.BRepOffsetAPI.MakePipeShell")
+        self.assertEqual(expected["wrapper_oracle"]["dto"], "PartSweepAdvancedPipeShellDTO")
+        self.assertFalse(expected["wrapper_oracle"]["freecad_native_document_object"])
+        self.assertTrue(expected["wrapper_oracle"]["builder_status"]["set_spine_support"])
+        self.assertTrue(expected["wrapper_oracle"]["builder_status"]["build_ok"])
+        self.assertTrue(expected["wrapper_oracle"]["builder_status"]["make_solid_ok"])
+        self.assert_object_matches_expected(result, "c5m12", "part-sweep-spine-support-surface-normal")
+
     def test_c5m10_part_sweep_located_profile_contract_keeps_freecadcmd_blocker(self) -> None:
         result = self.run_recompute("part-sweep-located-profile-contract", "c5m10")
         sweep = result["objects"]["Sweep"]
