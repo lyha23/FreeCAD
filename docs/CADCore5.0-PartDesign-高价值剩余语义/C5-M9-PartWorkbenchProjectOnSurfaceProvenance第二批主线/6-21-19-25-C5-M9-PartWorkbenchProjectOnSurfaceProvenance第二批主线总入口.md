@@ -17,6 +17,7 @@
 - 方案：`6-21-19-25-C5-M9-PartWorkbenchProjectOnSurfaceProvenance第二批方案.md`
 - scope 矩阵：`矩阵/c5m9_project_on_surface_provenance_scope.tsv`
 - fixture / oracle 矩阵：`矩阵/c5m9_project_on_surface_provenance_fixture_oracle_matrix.tsv`
+- provenance evidence 矩阵：`矩阵/c5m9_project_on_surface_provenance_evidence_matrix.tsv`
 - blocker 队列：`矩阵/c5m9_project_on_surface_provenance_blocker_queue.tsv`
 - non-goal registry：`矩阵/c5m9_project_on_surface_provenance_non_goal_registry.tsv`
 - validation 矩阵：`矩阵/c5m9_project_on_surface_provenance_validation_matrix.tsv`
@@ -27,7 +28,7 @@
 | 批次 | 代表场景 | 产物 |
 | --- | --- | --- |
 | live guard | `c4m1/part-project-on-surface-edge-plane`、face / hole / all / height / offset / multi projection / deferred boundaries | S0 冻结现有 11 个 expected-backed geometry fixtures、1 个 diagnostic-backed deferred fixture 和 root capability 状态 |
-| source / oracle matrix | FreeCAD `FeatureProjectOnSurface` + `TopoShapeMapper` / `PropertyTopoShape` 审计 | S1 写清 projected result ownership、oracle 可采字段、known_gap 删除条件 |
+| source / oracle matrix | FreeCAD `FeatureProjectOnSurface` + `TopoShapeMapper` / `PropertyTopoShape` 审计 | S1 写清 projected result ownership、oracle 可采字段、source-backed known_gap 删除条件，关闭 `C5M9-BLK-101` |
 | edge / wire provenance | `c5m9/part-project-on-surface-edge-provenance`、`wire-split-provenance`、invalid provenance diagnostics | S2 补 projected edge/wire source evidence、MapperHistory / ElementMap 传播和 focused tests |
 | face / all provenance | `c5m9/part-project-on-surface-face-rebuild-provenance`、`all-compound-provenance` | S3 补 face rebuild、hole wire、Mode=All compound/solid ownership与 reference recovery evidence |
 | capability closeout | docs、capability metadata、root matrices、remaining gaps | S4 发布精确 support / known_gap / diagnostic / non-goal 边界，并清空本包队列 |

@@ -13,7 +13,8 @@
 - `src/Mod/Part/App/PropertyTopoShape.cpp`
 - `cad-core/src/part/part_project_on_surface.cpp`
 - `cad-core/src/part/topo_shape.cpp`
-- `cad-core/src/topo/`
+- `cad-core/src/part/topo_shape_mapper.cpp`
+- `cad-core/include/cad_core/part/topo_shape_mapper.h`
 - `cad-core/tests/test_p8_features.py`
 
 ## 产物

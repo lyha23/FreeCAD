@@ -14,10 +14,31 @@
 - `filterShapes()` 按 `Mode=All/Faces/Edges` 过滤输出；`createCompound()` 决定多结果组合边界。C5-M9 需要让过滤前后的 ownership 仍可追溯。
 - `TopoShapeMapper*` / `PropertyTopoShape*` 是后续 mapper/history 与 ElementMap 证据入口；如果 FreeCAD native collector 暂不能暴露完整历史，必须留下 source-backed known_gap 和删除条件。
 
+## S1 source / oracle / provenance 合同
+
+`getProjectionShapes()` 在 FreeCAD 中只返回 `std::vector<TopoDS_Shape>`，但它是在 `Projection.getValues()` 与 `Projection.getSubValues()` 的同一 index 上解析对象和 subname；C5-M9 后续实现必须在 cad-core 中把这层信息保留成 request-local projection item ledger。最小字段为：`source_object`、`source_subname`、`stable_subname`、`projection_item_index`、`source_shape_kind`、`mode`、`maker_stage`。`projection_item_index` 采用 0-based LinkSubList 顺序，和 collector 当前 `projection_items` 数组位置一致。
+
+调用链传递规则：
+
+- `resolveProjectionShapes()` / `getProjectionShapes()`：生成 projection item ledger，不允许只保存 shape；item 必须带 source object/subname、stable subname、item index 和 source shape kind。
+- `createProjectedShapes()` / `createProjectedWire()`：每个输出 shape 必须继承 projection item id，并记录 `project_wire`、`project_face_wire`、`face_rebuild` 或 `height_solid` 分支。
+- `projectWire()` / `projectWireEdges()`：每个 projected edge 输出记录 `projected_wire_index`、`edge_fragment_index`、source edge/wire subname、projection item index；若一条 source wire 产生多个 edge fragment，S2 必须用 fragment ledger 或 source-backed known_gap 表达，不得按 bbox 或输出顺序猜 owner。
+- `projectFace()` / `projectFaceWires()`：外 wire 与 inner wire 记录 `face_wire_index`、`face_wire_role=outer|inner`、projection item index；face rebuild 结果继续持有 wire list evidence。
+- `filterShapes()` / `filterProjectedShapes()`：`Mode=All/Faces/Edges` 过滤后保留 pre-filter result id；`Mode=Edges` 把 face 拆成 wires 时要记录 `filter_stage=face_to_wire` 和 face wire index。
+- `createCompound()` / `compoundOf()`：compound child 记录 `compound_child_index`、pre-offset child id、offset-applied 状态；这是 ElementMap child-map/reference recovery 的入口，不能只在 metadata 里保留 aggregate counts。
+
+provenance evidence 字段冻结在 `矩阵/c5m9_project_on_surface_provenance_evidence_matrix.tsv`。S2/S3 输出的 `NamedShape.mapper_history` event 必须用 `mapper_history_id` 或等价稳定 event key 连接 source endpoint 与 target endpoint；`ElementMap/reference recovery hook` 必须落在 `cad-core/src/part/topo_shape.cpp`、`cad-core/src/part/topo_shape_mapper.cpp`、`cad-core/include/cad_core/part/topo_shape_mapper.h` 的现有 NamedShape / MapperHistory 出口，不得作为 adapter 后处理。
+
+## Native oracle 与 known_gap
+
+当前 `cad-core/tools/collect_freecad_expected.py::project_on_surface_payload()` 能从 fixture/native shape 采集：`source_support`、`support_face`、`source_projection`、`projection_subshape`、`projection_items`、`mode`、`height`、`offset`、`offset_vector`、projected solid/face/wire/inner-wire counts、bbox、volume 和 topology counts。它不能采集 native ProjectOnSurface 的 per-edge fragment owner、face wire owner、compound child -> source child map、MapperHistory id、ElementMap map/history 或 reference recovery 结果。
+
+临时 expected 策略：native 可见字段继续写入 `.freecad.json`；native 不可见的 provenance 字段不得从 cad-core 输出倒推 expected，只能在本包矩阵中记录 source-backed known_gap、delete_condition 和 S2/S3 的 semantic test owner。删除条件是：FreeCADCmd collector 或专用 probe 能导出对应 native ElementMap/MapperHistory，或者 S2/S3 根据 FreeCAD source ledger 实现 `NamedShape.mapper_history` 并有 fixture/focused test 证明字段来自 projection item ledger，而非 bbox、输出顺序、fixture 名或几何相似性。
+
 ## cad-core 落点
 
 - `cad-core/src/part/part_project_on_surface.cpp`：补 projected result provenance DTO、source item map、edge/wire/face/all evidence，删除 broad `projected_edge_provenance_mapper_history` gap 的无证据部分。
-- `cad-core/src/part/topo_shape.cpp` 与 `cad-core/src/topo`：承接 MapperHistory / ElementMap / reference recovery hook；不得把命名传播写成 executor 输出修剪。
+- `cad-core/src/part/topo_shape.cpp`、`cad-core/src/part/topo_shape_mapper.cpp` 与 `cad-core/include/cad_core/part/topo_shape_mapper.h`：承接 MapperHistory / ElementMap / reference recovery hook；不得把命名传播写成 executor 输出修剪。
 - `cad-core/tools/collect_freecad_expected.py` 与 `cad-core/fixtures/c5m9`：批量采集或记录 native oracle known_gap，expected 不得从 cad-core 输出倒推。
 - `cad-core/tests/test_p8_features.py`、`tests/test_expected_fixtures.py`、`tests/test_adapters.py`：覆盖 provenance evidence、diagnostic target/subname、capability metadata 和 first-batch guard。
 - `cad-core/src/adapters/c_api/c_api.cpp`：只同步 capability/schema/diagnostics，不承接 ProjectOnSurface 业务逻辑。
