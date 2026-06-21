@@ -1,10 +1,17 @@
-# C5-M11-S4 capability 与文档收口
+# 【已实现】C5-M11-S4 capability 与文档收口
 
-状态：`pending_C5M11-S4_docs_closeout`
+状态：`done_C5M11-S4_docs_closeout`
 
 ## 目标
 
 在 S2/S3 expected、tests、capability 都同步后，关闭 C5-M11 文档和 root matrix。S4 只能在 `part_sweep_wrapper_expected_collector` 已从 capability remaining gaps 删除或被精确缩窄后完成。
+
+## S4 结论
+
+- `docs/CADCore3.0/capabilities-gap对照表.md` 已删除 broad `part_sweep_wrapper_expected_collector` 口径，改为 expected-backed / narrowed blocker 分组。
+- Root C5 矩阵中 `C5-BLK-1101`、`C5-SCOPE-1101`、`C5-ORC-1101..1105` 和 `C5-VAL-1101..1105` 已同步最终状态。
+- 本包局部矩阵中 S4 pending rows 已关闭，队列脚本返回空。
+- 未新增 collector case，未采集 expected，未修改 cad-core 源码或测试。
 
 ## 必读
 

@@ -1,8 +1,8 @@
-# C5-M11 Part Workbench Sweep Wrapper Expected Parity 方案
+# 【已实现】C5-M11 Part Workbench Sweep Wrapper Expected Parity 方案
 
 ## 当前基线
 
-C5-M10 已把 `part_workbench.sweep` advanced PipeShell broad bucket 收口成字段级合同。当前 capability 中基础 `Part::Sweep` 字段仍是 expected-backed，advanced wrapper 字段是 source / diagnostic-backed，剩余 gap 只有 `part_sweep_wrapper_expected_collector`。C5-M11 只负责删除这个 collector gap：为同一 `Part.BRepOffsetAPI_MakePipeShell` wrapper API 建 expected 采集路径，并把 C5-M10 六个代表 fixture 一次替换成 FreeCAD expected-backed。
+C5-M10 已把 `part_workbench.sweep` advanced PipeShell broad bucket 收口成字段级合同。C5-M11 已删除 broad `part_sweep_wrapper_expected_collector`：为同一 `Part.BRepOffsetAPI_MakePipeShell` wrapper API 建 expected 采集路径，并把 collectable 的 auxiliary、binormal、tolerance 代表场景替换成 FreeCAD expected-backed；support、located profile、combined 保留为明确窄化 blocker。
 
 当前需要替换的 expected 文件：
 
@@ -73,10 +73,10 @@ C5-M10 已把 `part_workbench.sweep` advanced PipeShell broad bucket 收口成�
 | --- | --- |
 | `part-sweep-auxiliary-spine-contract` | 用 wrapper `setAuxiliarySpine` expected 替换 source-backed known_gap，记录 auxiliary metadata 与 shape summary |
 | `part-sweep-binormal-contract` | 用 wrapper `setBiNormalMode` expected 替换 known_gap，记录 canonical `Binormal` 和 legacy alias 边界 |
-| `part-sweep-support-mode-diagnostics` | 对 valid support metadata 做 wrapper expected；invalid support / mode payload 继续保留 locatable diagnostics |
-| `part-sweep-located-profile-contract` | 用 wrapper `add(Profile, Location, WithContact, WithCorrection)` expected 替换 known_gap |
+| `part-sweep-support-mode-diagnostics` | 当前 fixture 是 diagnostic-only，没有 valid `SpineSupport` representative；保留 locatable diagnostics 和窄化 blocker |
+| `part-sweep-located-profile-contract` | wrapper 已解析 `add(Profile, Location, WithContact, WithCorrection)` 输入，但 FreeCADCmd `build()` 报 `OCCError: NCollection_Array1::Value`；保留窄化 blocker |
 | `part-sweep-tolerance-contract` | 用 wrapper `setTolerance(tol3d,boundTol,tolAngular)` expected 替换 known_gap，记录 tolerance metadata |
-| `part-sweep-advanced-combined-contract` | 用同一 helper 组合 auxiliary + located profile + tolerance，证明字段组合不会互相吞 metadata 或 diagnostics |
+| `part-sweep-advanced-combined-contract` | 同一 helper 组合 auxiliary + located profile + tolerance 时触发 FreeCADCmd `OCCError: NCollection_Array1::Value`；保留窄化 blocker |
 
 ## 实施顺序
 
@@ -121,7 +121,7 @@ python3 tools/collect_freecad_expected.py --phase c5m10 --check --skip-unsupport
 
 ## 收口标准
 
-- 六个 C5-M10 advanced wrapper fixtures 不再以 `known_gap.kind=part_sweep_*_wrapper_oracle_missing` 作为 expected 主体。
+- C5-M10 advanced wrapper fixtures 不再以 broad `part_sweep_wrapper_expected_collector` 作为 capability remaining gap。
 - capability metadata 中 advanced wrapper 字段进入 expected-backed 或 expected-backed-with-diagnostics；`remaining_gaps` 不再包含 `part_sweep_wrapper_expected_collector`。
 - source-backed known_gap 若仍保留，必须只针对明确无法采集的子场景，并写清 FreeCADCmd 失败证据、下一批范围和不批量关闭的原因。
 - native `Part::Sweep` direct property 边界不变，non-goals 不被误删。
