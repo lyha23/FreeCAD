@@ -278,6 +278,7 @@ add_library(cad-core-lib STATIC
   src/part_design/feature_pipe.cpp
   src/part_design/feature_pocket.cpp
   src/part_design/feature_polar_pattern.cpp
+  src/part_design/profile_resolver.cpp
   src/part_design/feature_revolved.cpp
   src/part_design/feature_revolution.cpp
   src/part_design/feature_scaled.cpp

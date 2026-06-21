@@ -1,5 +1,6 @@
 #include "cad_core/part_design/feature_extrude.h"
 
+#include "cad_core/part_design/profile_resolver.h"
 #include "cad_core/runtime/feature_executor.h"
 #include "cad_core/part/extrusion_helper.h"
 #include "cad_core/part/shape_exporter.h"
@@ -1056,115 +1057,6 @@ std::optional<TopoDS_Face> resolveFaceLink(const app::Link& link,
     }
 
     return TopoDS::Face(*subshape);
-}
-
-// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.cpp
-// ::ProfileBased::getTopoShapeVerifiedFace(), uses Profile subvalues with "NeedSubElement";
-// getVerifiedFace() also accepts Part::Feature Profile subshapes when "sub.ShapeType() == TopAbs_FACE".
-std::optional<TopoDS_Shape> resolveLinkedFaceProfile(const app::DocumentObject& object,
-                                                     runtime::ComputeContext& context,
-                                                     const app::Link& profileLink,
-                                                     const runtime::ShapeValue& shapeValue,
-                                                     const std::string& featureName)
-{
-    if (profileLink.subnames.size() != 1U || profileLink.subnames.front().empty()) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "invalid_subshape",
-                               featureName + " Profile must reference exactly one FaceN subshape",
-                               object.name,
-                               "Profile",
-                               "runtime",
-                               profileLink.object);
-        return std::nullopt;
-    }
-
-    const std::string& subname = profileLink.subnames.front();
-    const std::string stableSubname =
-        profileLink.stableSubnames.size() == 1U ? profileLink.stableSubnames.front() : std::string{};
-    std::string currentSubname = subname;
-    const auto namedShapeIt = context.namedShapes.find(profileLink.object);
-    if (namedShapeIt != context.namedShapes.end()) {
-        const auto resolved = part::resolveElementReference(namedShapeIt->second, subname, stableSubname);
-        if (resolved.status == part::ElementResolveStatus::Resolved && resolved.element) {
-            currentSubname = *resolved.element;
-        }
-        else if (!stableSubname.empty() && stableSubname != subname) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   stableSubnameDiagnosticCode(resolved.status),
-                                   stableSubnameDiagnosticMessage("Profile", profileLink.object, stableSubname, resolved.status),
-                                   object.name,
-                                   "Profile",
-                                   "runtime",
-                                   profileLink.object,
-                                   stableSubname);
-            return std::nullopt;
-        }
-    }
-
-    const auto parsed = part::parseSubshapeName(currentSubname);
-    if (!parsed) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "invalid_subshape",
-                               "Invalid Profile subshape name " + currentSubname,
-                               object.name,
-                               "Profile",
-                               "runtime",
-                               profileLink.object,
-                               currentSubname);
-        return std::nullopt;
-    }
-    if (parsed->kind != TopAbs_FACE) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "unsupported_subshape_kind",
-                               featureName + " Profile requires a face subshape, not "
-                                   + part::subshapeKindName(parsed->kind),
-                               object.name,
-                               "Profile",
-                               "runtime",
-                               profileLink.object,
-                               currentSubname);
-        return std::nullopt;
-    }
-
-    std::optional<TopoDS_Shape> subshape;
-    if (namedShapeIt != context.namedShapes.end()) {
-        subshape = part::subshapeByName(namedShapeIt->second, currentSubname);
-    }
-    else {
-        subshape = part::subshapeByName(shapeValue.shape, currentSubname);
-    }
-    if (!subshape || subshape->IsNull()) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "invalid_subshape",
-                               featureName + " Profile target " + profileLink.object + " has no subshape "
-                                   + currentSubname,
-                               object.name,
-                               "Profile",
-                               "runtime",
-                               profileLink.object,
-                               currentSubname);
-        return std::nullopt;
-    }
-    if (subshape->ShapeType() != TopAbs_FACE) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "unsupported_subshape_kind",
-                               featureName + " Profile resolved to "
-                                   + part::subshapeKindName(subshape->ShapeType()) + ", not a face",
-                               object.name,
-                               "Profile",
-                               "runtime",
-                               profileLink.object,
-                               currentSubname);
-        return std::nullopt;
-    }
-
-    return *subshape;
 }
 
 std::optional<PlanarLimit> resolveUpToFaceLimit(const app::DocumentObject& object,

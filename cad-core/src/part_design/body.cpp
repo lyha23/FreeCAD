@@ -1,5 +1,6 @@
 #include "cad_core/part_design/body.h"
 
+#include "cad_core/part_design/body_topo_shape.h"
 #include "cad_core/runtime/feature_executor.h"
 #include "cad_core/base/placement.h"
 #include "cad_core/part/shape_exporter.h"
@@ -772,6 +773,253 @@ bool applyFinalResultRefineForFeature(const app::DocumentObject& bodyObject,
 
 }  // namespace
 
+std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::DocumentObject& body,
+                                                             runtime::ComputeContext& context,
+                                                             const std::string& featureName,
+                                                             BodyTopoShapeOptions options)
+{
+    auto group = readGroupNames(body);
+    if (!group) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "missing_link_target",
+                               "Body Group item must be an object link",
+                               body.name,
+                               "Group");
+        return std::nullopt;
+    }
+    const std::vector<std::string>& groupNames = *group;
+
+    const auto bodyOriginName = readBodyOriginName(body, context);
+    if (body.properties.contains("Origin") && !bodyOriginName) {
+        return std::nullopt;
+    }
+    if (bodyOriginName && options.emitDocumentUpdates) {
+        appendBodyOriginDatumRelinkUpdates(context, body, groupNames, *bodyOriginName);
+    }
+
+    std::string resolvedStopFeature = featureName;
+    if (!groupContains(groupNames, resolvedStopFeature) && options.emitDocumentUpdates) {
+        const auto reroutedTip = appendBodyRemovedTipRerouteUpdates(context, body, groupNames, resolvedStopFeature);
+        if (reroutedTip) {
+            resolvedStopFeature = *reroutedTip;
+        }
+    }
+
+    if (!groupContains(groupNames, resolvedStopFeature)) {
+        const bool finalBodyShape = options.emitDocumentUpdates && options.applyBodyPlacement;
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "missing_link_target",
+                               finalBodyShape ? "Body Tip is not present in Group"
+                                              : "Body topo shape feature is not present in Group",
+                               body.name,
+                               finalBodyShape ? "Tip" : "Group",
+                               "runtime",
+                               finalBodyShape ? featureName : resolvedStopFeature);
+        return std::nullopt;
+    }
+
+    std::optional<TopoDS_Shape> bodyShape;
+    std::optional<part::NamedShape> bodyNamedShape;
+    bool bodyUsesPreciseBoundingBox = false;
+    std::vector<std::string> refinedFeatures;
+    std::vector<std::string> appliedAdditiveFeatures;
+    std::vector<std::string> appliedSubtractiveFeatures;
+    std::vector<std::string> appliedReplacementFeatures;
+    if (body.properties.contains("BaseFeature")) {
+        const auto baseLink = app::readLink(body, "BaseFeature");
+        if (!baseLink) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "missing_property",
+                                   "Body BaseFeature must link to a solid feature",
+                                   body.name,
+                                   "BaseFeature");
+            return std::nullopt;
+        }
+        const auto baseIt = context.shapes.find(baseLink->object);
+        if (baseIt == context.shapes.end() || baseIt->second.kind != runtime::ShapeValue::Kind::Solid) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "missing_link_target",
+                                   "Body BaseFeature target " + baseLink->object + " did not produce a solid",
+                                   body.name,
+                                   "BaseFeature",
+                                   "runtime",
+                                   baseLink->object);
+            return std::nullopt;
+        }
+        bodyShape = baseIt->second.shape;
+        bodyUsesPreciseBoundingBox = baseIt->second.usePreciseBoundingBox;
+        bodyNamedShape = namedShapeForFeatureOrIndexed(baseLink->object, *bodyShape, context);
+        if (options.emitDocumentUpdates) {
+            appendBodyBaseFeatureChainUpdates(context, body, groupNames, baseLink->object);
+        }
+    }
+
+    for (const auto& feature : groupNames) {
+        const auto shapeIt = context.shapes.find(feature);
+        const auto objectIt = context.objects.find(feature);
+        const bool replacesBodyShape = shapeIt != context.shapes.end()
+            && shapeIt->second.kind == runtime::ShapeValue::Kind::Solid
+            && objectIt != context.objects.end() && objectIt->second.value("body_mode", "") == "replace";
+        if (replacesBodyShape) {
+            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+            // ::Body::execute(), reads only the Tip feature's "Shape". DressUp and Transformed
+            // features publish full replacement solids even when they also expose AddSubShape
+            // caches for later pattern features.
+            bodyShape = shapeIt->second.shape;
+            bodyUsesPreciseBoundingBox = shapeIt->second.usePreciseBoundingBox;
+            bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
+            appliedReplacementFeatures.push_back(feature);
+            if (feature == resolvedStopFeature) {
+                break;
+            }
+            continue;
+        }
+
+        const auto addSubIt = context.addSubShapes.find(feature);
+        if (addSubIt == context.addSubShapes.end()) {
+            if (shapeIt != context.shapes.end() && shapeIt->second.kind == runtime::ShapeValue::Kind::Solid) {
+                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureDressUp.cpp::DressUp,
+                // derives from FeatureAddSub but execute() writes a full dressed "Shape"; Body Tip
+                // must be able to become that replacement solid instead of reusing the previous Pad/Pocket.
+                bodyShape = shapeIt->second.shape;
+                bodyUsesPreciseBoundingBox = shapeIt->second.usePreciseBoundingBox;
+                bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
+                appliedReplacementFeatures.push_back(feature);
+                if (feature == resolvedStopFeature) {
+                    break;
+                }
+            }
+            else if (shapeIt != context.shapes.end() && feature == resolvedStopFeature) {
+                // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::Body::execute(),
+                // reads the Tip feature "Shape" as the Body result. C5.1 productizes
+                // PartDesign Boolean Section through TopoShape::makeElementBoolean(Section), but
+                // that maker produces edge/wire output, so it cannot replace a Body solid Tip.
+                runtime::addDiagnostic(context.diagnostics,
+                                       "error",
+                                       "partdesign_body_tip_non_solid",
+                                       "Body Tip target " + feature + " produced a non-solid shape",
+                                       body.name,
+                                       "Tip",
+                                       "part_design.body_tip",
+                                       feature);
+                return std::nullopt;
+            }
+            continue;
+        }
+
+        const runtime::AddSubShape& addSubShape = addSubIt->second;
+        if (addSubShape.addShape) {
+            appliedAdditiveFeatures.push_back(feature);
+            if (!bodyShape) {
+                bodyShape = *addSubShape.addShape;
+                bodyUsesPreciseBoundingBox = addSubShape.addUsesPreciseBoundingBox;
+                bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
+            }
+            else {
+                const auto build = fuseShapes(*bodyShape,
+                                              *addSubShape.addShape,
+                                              body,
+                                              context,
+                                              feature,
+                                              &addSubShape.addNamedShape,
+                                              bodyNamedShape,
+                                              addSubShape.additiveFuseOrder);
+                if (build) {
+                    bodyShape = build->shape;
+                    bodyUsesPreciseBoundingBox = false;
+                    bodyNamedShape = build->namedShape;
+                }
+                else {
+                    bodyShape = std::nullopt;
+                }
+            }
+        }
+        else if (addSubShape.subShape) {
+            appliedSubtractiveFeatures.push_back(feature);
+            if (!bodyShape) {
+                runtime::addDiagnostic(context.diagnostics,
+                                       "error",
+                                       "execution_failed",
+                                       "Body cannot apply subtractive feature " + feature + " without a base solid",
+                                       body.name,
+                                       "Group");
+                return std::nullopt;
+            }
+            const auto build = cutShapes(*bodyShape,
+                                         *addSubShape.subShape,
+                                         body,
+                                         context,
+                                         feature,
+                                         &addSubShape.subNamedShape,
+                                         bodyNamedShape);
+            if (build) {
+                bodyShape = build->shape;
+                bodyUsesPreciseBoundingBox = false;
+                bodyNamedShape = build->namedShape;
+            }
+            else {
+                bodyShape = std::nullopt;
+            }
+        }
+
+        if (!bodyShape) {
+            return std::nullopt;
+        }
+        const std::size_t refinedFeatureCount = refinedFeatures.size();
+        if (!applyFinalResultRefineForFeature(body, feature, context, bodyShape, bodyNamedShape, refinedFeatures)) {
+            return std::nullopt;
+        }
+        if (refinedFeatures.size() != refinedFeatureCount) {
+            bodyUsesPreciseBoundingBox = false;
+        }
+        if (feature == resolvedStopFeature) {
+            break;
+        }
+    }
+
+    if (!bodyShape) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               "Body Tip did not produce a shape",
+                               body.name,
+                               "Tip");
+        return std::nullopt;
+    }
+
+    TopoDS_Shape resultShape = *bodyShape;
+    const auto placementIt = context.globalPlacements.find(body.name);
+    const bool hasNonIdentityPlacement = options.applyBodyPlacement
+        && placementIt != context.globalPlacements.end() && !isIdentityPlacement(placementIt->second);
+    if (hasNonIdentityPlacement) {
+        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/GeoFeature.cpp
+        // ::GeoFeature::getGlobalPlacement(), "return ext->globalGroupPlacement() * placementProperty->getValue()".
+        resultShape = base::transformShape(resultShape, placementIt->second);
+        bodyNamedShape = std::nullopt;
+    }
+    else if (bodyNamedShape) {
+        bodyNamedShape->owner = body.name;
+        bodyNamedShape->shape = resultShape;
+    }
+
+    return BodyTopoShapeResult {
+        resultShape,
+        bodyNamedShape,
+        bodyUsesPreciseBoundingBox,
+        resolvedStopFeature,
+        bodyOriginName,
+        groupNames,
+        appliedAdditiveFeatures,
+        appliedSubtractiveFeatures,
+        appliedReplacementFeatures,
+        refinedFeatures,
+    };
+}
+
 void executeBody(const app::DocumentObject& object, runtime::ComputeContext& context)
 {
     // FreeCAD semantic sources:
@@ -801,259 +1049,51 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
         return;
     }
 
-    auto group = readGroupNames(object);
-    if (!group) {
-        runtime::addDiagnostic(context.diagnostics, "error", "missing_link_target", "Body Group item must be an object link", object.name, "Group");
-        context.objects[object.name] = {{"status", "error"}};
-        return;
-    }
-    const std::vector<std::string>& groupNames = *group;
-
-    const auto bodyOriginName = readBodyOriginName(object, context);
-    if (object.properties.contains("Origin") && !bodyOriginName) {
-        context.objects[object.name] = {{"status", "error"}};
-        return;
-    }
-    if (bodyOriginName) {
-        appendBodyOriginDatumRelinkUpdates(context, object, groupNames, *bodyOriginName);
-    }
-
-    std::string resolvedTip = tip->object;
-    if (!groupContains(groupNames, resolvedTip)) {
-        const auto reroutedTip = appendBodyRemovedTipRerouteUpdates(context, object, groupNames, resolvedTip);
-        if (reroutedTip) {
-            resolvedTip = *reroutedTip;
-        }
-    }
-
-    if (!groupContains(groupNames, resolvedTip)) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "missing_link_target",
-                               "Body Tip is not present in Group",
-                               object.name,
-                               "Tip",
-                               "runtime",
-                               tip->object);
+    const auto bodyTopoShape = getBodyTopoShapeAtFeature(object, context, tip->object);
+    if (!bodyTopoShape) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
 
-    std::optional<TopoDS_Shape> bodyShape;
-    std::optional<part::NamedShape> bodyNamedShape;
-    bool bodyUsesPreciseBoundingBox = false;
-    std::vector<std::string> refinedFeatures;
-    std::vector<std::string> replayedAdditiveFeatures;
-    std::vector<std::string> replayedSubtractiveFeatures;
-    std::vector<std::string> replayedReplacementFeatures;
-    if (object.properties.contains("BaseFeature")) {
-        const auto baseLink = app::readLink(object, "BaseFeature");
-        if (!baseLink) {
-            runtime::addDiagnostic(context.diagnostics, "error", "missing_property", "Body BaseFeature must link to a solid feature", object.name, "BaseFeature");
-            context.objects[object.name] = {{"status", "error"}};
-            return;
-        }
-        const auto baseIt = context.shapes.find(baseLink->object);
-        if (baseIt == context.shapes.end() || baseIt->second.kind != runtime::ShapeValue::Kind::Solid) {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "missing_link_target",
-                                   "Body BaseFeature target " + baseLink->object + " did not produce a solid",
-                                   object.name,
-                                   "BaseFeature",
-                                   "runtime",
-                                   baseLink->object);
-            context.objects[object.name] = {{"status", "error"}};
-            return;
-        }
-        bodyShape = baseIt->second.shape;
-        bodyUsesPreciseBoundingBox = baseIt->second.usePreciseBoundingBox;
-        bodyNamedShape = namedShapeForFeatureOrIndexed(baseLink->object, *bodyShape, context);
-        appendBodyBaseFeatureChainUpdates(context, object, groupNames, baseLink->object);
-    }
-
-    for (const auto& feature : groupNames) {
-        const auto shapeIt = context.shapes.find(feature);
-        const auto objectIt = context.objects.find(feature);
-        const bool replacesBodyShape = shapeIt != context.shapes.end()
-            && shapeIt->second.kind == runtime::ShapeValue::Kind::Solid
-            && objectIt != context.objects.end() && objectIt->second.value("body_mode", "") == "replace";
-        if (replacesBodyShape) {
-            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/Body.cpp
-            // ::Body::execute(), reads only the Tip feature's "Shape". DressUp and Transformed
-            // features publish full replacement solids even when they also expose AddSubShape
-            // caches for later pattern features.
-            bodyShape = shapeIt->second.shape;
-            bodyUsesPreciseBoundingBox = shapeIt->second.usePreciseBoundingBox;
-            bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
-            replayedReplacementFeatures.push_back(feature);
-            if (feature == resolvedTip) {
-                break;
-            }
-            continue;
-        }
-
-        const auto addSubIt = context.addSubShapes.find(feature);
-        if (addSubIt == context.addSubShapes.end()) {
-            if (shapeIt != context.shapes.end() && shapeIt->second.kind == runtime::ShapeValue::Kind::Solid) {
-                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureDressUp.cpp::DressUp,
-                // derives from FeatureAddSub but execute() writes a full dressed "Shape"; Body Tip
-                // must be able to become that replacement solid instead of reusing the previous Pad/Pocket.
-                bodyShape = shapeIt->second.shape;
-                bodyUsesPreciseBoundingBox = shapeIt->second.usePreciseBoundingBox;
-                bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
-                replayedReplacementFeatures.push_back(feature);
-                if (feature == resolvedTip) {
-                    break;
-                }
-            }
-            else if (shapeIt != context.shapes.end() && feature == resolvedTip) {
-                // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::Body::execute(),
-                // reads the Tip feature "Shape" as the Body result. C5.1 productizes
-                // PartDesign Boolean Section through TopoShape::makeElementBoolean(Section), but
-                // that maker produces edge/wire output, so it cannot replace a Body solid Tip.
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "partdesign_body_tip_non_solid",
-                                       "Body Tip target " + feature + " produced a non-solid shape",
-                                       object.name,
-                                       "Tip",
-                                       "part_design.body_tip",
-                                       feature);
-                context.objects[object.name] = {{"status", "error"}};
-                return;
-            }
-            continue;
-        }
-
-        const runtime::AddSubShape& addSubShape = addSubIt->second;
-        if (addSubShape.addShape) {
-            replayedAdditiveFeatures.push_back(feature);
-            if (!bodyShape) {
-                bodyShape = *addSubShape.addShape;
-                bodyUsesPreciseBoundingBox = addSubShape.addUsesPreciseBoundingBox;
-                bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
-            }
-            else {
-                const auto build = fuseShapes(*bodyShape,
-                                              *addSubShape.addShape,
-                                              object,
-                                              context,
-                                              feature,
-                                              &addSubShape.addNamedShape,
-                                              bodyNamedShape,
-                                              addSubShape.additiveFuseOrder);
-                if (build) {
-                    bodyShape = build->shape;
-                    bodyUsesPreciseBoundingBox = false;
-                    bodyNamedShape = build->namedShape;
-                }
-                else {
-                    bodyShape = std::nullopt;
-                }
-            }
-        }
-        else if (addSubShape.subShape) {
-            replayedSubtractiveFeatures.push_back(feature);
-            if (!bodyShape) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "execution_failed",
-                                       "Body cannot apply subtractive feature " + feature + " without a base solid",
-                                       object.name,
-                                       "Group");
-                context.objects[object.name] = {{"status", "error"}};
-                return;
-            }
-            const auto build = cutShapes(*bodyShape,
-                                         *addSubShape.subShape,
-                                         object,
-                                         context,
-                                         feature,
-                                         &addSubShape.subNamedShape,
-                                         bodyNamedShape);
-            if (build) {
-                bodyShape = build->shape;
-                bodyUsesPreciseBoundingBox = false;
-                bodyNamedShape = build->namedShape;
-            }
-            else {
-                bodyShape = std::nullopt;
-            }
-        }
-
-        if (!bodyShape) {
-            context.objects[object.name] = {{"status", "error"}};
-            return;
-        }
-        const std::size_t refinedFeatureCount = refinedFeatures.size();
-        if (!applyFinalResultRefineForFeature(object, feature, context, bodyShape, bodyNamedShape, refinedFeatures)) {
-            context.objects[object.name] = {{"status", "error"}};
-            return;
-        }
-        if (refinedFeatures.size() != refinedFeatureCount) {
-            bodyUsesPreciseBoundingBox = false;
-        }
-        if (feature == resolvedTip) {
-            break;
-        }
-    }
-
-    if (!bodyShape) {
-        runtime::addDiagnostic(context.diagnostics, "error", "execution_failed", "Body Tip did not produce a shape", object.name, "Tip");
-        context.objects[object.name] = {{"status", "error"}};
-        return;
-    }
-
-    TopoDS_Shape resultShape = *bodyShape;
-    const auto placementIt = context.globalPlacements.find(object.name);
-    const bool hasNonIdentityPlacement = placementIt != context.globalPlacements.end() && !isIdentityPlacement(placementIt->second);
-    if (hasNonIdentityPlacement) {
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/GeoFeature.cpp
-        // ::GeoFeature::getGlobalPlacement(), "return ext->globalGroupPlacement() * placementProperty->getValue()".
-        resultShape = base::transformShape(resultShape, placementIt->second);
-    }
-
-    if (bodyNamedShape && !hasNonIdentityPlacement) {
-        bodyNamedShape->owner = object.name;
-        bodyNamedShape->shape = resultShape;
-        context.namedShapes[object.name] = *bodyNamedShape;
+    const TopoDS_Shape& resultShape = bodyTopoShape->shape;
+    if (bodyTopoShape->namedShape) {
+        context.namedShapes[object.name] = *bodyTopoShape->namedShape;
     }
     else {
         context.namedShapes[object.name] = part::indexedNamedShapeForObject(object.name, resultShape);
     }
     runtime::ShapeValue bodyValue{runtime::ShapeValue::Kind::Solid, resultShape};
-    bodyValue.usePreciseBoundingBox = bodyUsesPreciseBoundingBox;
+    bodyValue.usePreciseBoundingBox = bodyTopoShape->usesPreciseBoundingBox;
     context.shapes[object.name] = bodyValue;
     context.mesh[object.name] = cad_core::part::meshForShape(resultShape);
     context.subshapes[object.name] = part::subshapeMapForShape(resultShape);
     nlohmann::json result = {
         {"status", "ok"},
-        {"tip", resolvedTip},
-        {"group", groupNames},
+        {"tip", bodyTopoShape->stopFeature},
+        {"group", bodyTopoShape->groupNames},
         {"shape", shapeKind(resultShape)},
         {"allow_compound", app::readBool(object, "AllowCompound").value_or(true)},
         {"bbox",
-         bodyUsesPreciseBoundingBox ? cad_core::part::preciseBBoxForShape(resultShape)
-                                    : cad_core::part::bboxForShape(resultShape)},
+         bodyTopoShape->usesPreciseBoundingBox ? cad_core::part::preciseBBoxForShape(resultShape)
+                                               : cad_core::part::bboxForShape(resultShape)},
         {"volume", cad_core::part::volumeForShape(resultShape)},
         {"kernel", cad_core::part::kernelVersion()},
     };
-    if (bodyOriginName) {
-        result["origin"] = *bodyOriginName;
+    if (bodyTopoShape->origin) {
+        result["origin"] = *bodyTopoShape->origin;
     }
-    if (!replayedAdditiveFeatures.empty()) {
-        result["replayed_additive_features"] = replayedAdditiveFeatures;
+    if (!bodyTopoShape->appliedAdditiveFeatures.empty()) {
+        result["replayed_additive_features"] = bodyTopoShape->appliedAdditiveFeatures;
     }
-    if (!replayedSubtractiveFeatures.empty()) {
-        result["replayed_subtractive_features"] = replayedSubtractiveFeatures;
+    if (!bodyTopoShape->appliedSubtractiveFeatures.empty()) {
+        result["replayed_subtractive_features"] = bodyTopoShape->appliedSubtractiveFeatures;
     }
-    if (!replayedReplacementFeatures.empty()) {
-        result["replayed_replacement_features"] = replayedReplacementFeatures;
+    if (!bodyTopoShape->appliedReplacementFeatures.empty()) {
+        result["replayed_replacement_features"] = bodyTopoShape->appliedReplacementFeatures;
     }
-    result["replay_stopped_at_tip"] = resolvedTip;
-    if (!refinedFeatures.empty()) {
-        result["refined_features"] = refinedFeatures;
+    result["replay_stopped_at_tip"] = bodyTopoShape->stopFeature;
+    if (!bodyTopoShape->refinedFeatures.empty()) {
+        result["refined_features"] = bodyTopoShape->refinedFeatures;
     }
     context.objects[object.name] = result;
 }

@@ -7,10 +7,10 @@ from pathlib import Path
 
 try:
     from .fixture_expected import ExpectedFixtureAssertions
-    from .fixture_runner import CadCoreFixtureTestCase, ROOT
+    from .fixture_runner import BIN, CadCoreFixtureTestCase, ROOT
 except ImportError:  # pragma: no cover - supports `unittest discover tests`.
     from fixture_expected import ExpectedFixtureAssertions
-    from fixture_runner import CadCoreFixtureTestCase, ROOT
+    from fixture_runner import BIN, CadCoreFixtureTestCase, ROOT
 
 
 class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
@@ -36,6 +36,28 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertEqual(len(update["SubSet"]), 1)
             return update["SubSet"][0]
         return update
+
+    def p6_payload(self, fixture: str) -> dict:
+        path = ROOT / "fixtures" / "p6" / f"{fixture}.json"
+        return json.loads(path.read_text(encoding="utf-8"))
+
+    def run_payload(self, payload: dict) -> dict:
+        with tempfile.TemporaryDirectory() as tmp:
+            input_path = Path(tmp) / "payload.json"
+            input_path.write_text(json.dumps(payload), encoding="utf-8")
+            return self.run_recompute_file(input_path)
+
+    def run_response_payload(self, payload: dict) -> dict:
+        with tempfile.TemporaryDirectory() as tmp:
+            input_path = Path(tmp) / "payload.json"
+            output_path = Path(tmp) / "payload.result.json"
+            input_path.write_text(json.dumps(payload), encoding="utf-8")
+            subprocess.run(
+                [str(BIN), "recompute", str(input_path), "--output", str(output_path)],
+                cwd=ROOT,
+                check=True,
+            )
+            return json.loads(output_path.read_text(encoding="utf-8"))
 
     def assert_c4m4_update(
         self,
@@ -81,6 +103,94 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(diagnostic["target"], target)
         self.assertEqual(diagnostic["subname"], subname)
         return result
+
+    def test_p6_body_tip_face_profile_replays_body_until_target_feature(self) -> None:
+        result = self.run_recompute("body-tip-face-profile-pad-after-revolution", "p6")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(result["objects"]["PadPreview"]["status"], "ok")
+        self.assertEqual(result["objects"]["PadPreviewBody"]["status"], "ok")
+        self.assertEqual(result["objects"]["PadPreviewBody"]["replay_stopped_at_tip"], "PadPreview")
+        self.assertGreater(len(result["mesh"]["PadPreviewBody"]["triangles"]), 0)
+        self.assertGreater(len(result["subshapes"]["PadPreviewBody"]), 0)
+
+    def test_p6_body_result_does_not_publish_unresolvable_tip_face4_name(self) -> None:
+        payload = self.p6_payload("body-tip-face-profile-pad-after-revolution")
+        payload["Objects"] = payload["Objects"][:3] + [
+            {
+                "Name": "RevolutionBody",
+                "ID": 6,
+                "TypeId": "PartDesign::Body",
+                "Properties": {
+                    "Group": {
+                        "PropertyType": "App::PropertyLinkList",
+                        "values": ["SketchSource", "Pad", "Revolution"],
+                    },
+                    "Tip": {
+                        "PropertyType": "App::PropertyLink",
+                        "value": "Revolution",
+                    },
+                },
+            }
+        ]
+        payload["recompute"] = {"objs": ["RevolutionBody"]}
+
+        result = self.run_response_payload(payload)
+
+        self.assertEqual(result["diagnostics"], [])
+        face4 = next(item for item in result["results"][0]["subshapes"] if item["indexed"] == "Face4")
+        self.assertEqual(face4["id"], "RevolutionBody:Face4")
+        self.assertEqual(face4["subname"], "Face4")
+        self.assertEqual(face4["stableSubname"], "Face4")
+        self.assertNotEqual(face4["subname"], "Revolution.Face4")
+        self.assertNotEqual(face4["stableSubname"], "Revolution.Face4")
+
+    def test_p6_body_face_profile_does_not_replay_across_bodies(self) -> None:
+        payload = self.p6_payload("body-tip-face-profile-pad-after-revolution")
+        payload["Objects"].append(
+            {
+                "Name": "RevolutionBody",
+                "ID": 6,
+                "TypeId": "PartDesign::Body",
+                "Properties": {
+                    "Group": {
+                        "PropertyType": "App::PropertyLinkList",
+                        "values": ["SketchSource", "Pad", "Revolution"],
+                    },
+                    "Tip": {
+                        "PropertyType": "App::PropertyLink",
+                        "value": "Revolution",
+                    },
+                },
+            }
+        )
+        payload["Objects"][4]["Properties"]["Group"]["values"] = ["PadPreview"]
+
+        result = self.run_payload(payload)
+
+        diagnostic = result["diagnostics"][0]
+        self.assertEqual(diagnostic["code"], "invalid_subshape")
+        self.assertEqual(diagnostic["object"], "PadPreview")
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], "Revolution")
+        self.assertEqual(diagnostic["subname"], "Face4")
+
+    def test_p6_body_face_profile_rejects_forward_group_reference(self) -> None:
+        payload = self.p6_payload("body-tip-face-profile-pad-after-revolution")
+        payload["Objects"][4]["Properties"]["Group"]["values"] = [
+            "SketchSource",
+            "Pad",
+            "PadPreview",
+            "Revolution",
+        ]
+
+        result = self.run_payload(payload)
+
+        diagnostic = result["diagnostics"][0]
+        self.assertEqual(diagnostic["code"], "invalid_body_profile_reference")
+        self.assertEqual(diagnostic["object"], "PadPreview")
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], "Revolution")
 
     def test_c4m4_topo_reference_pressure_updated_rows_publish_reference_updates(self) -> None:
         result = self.assert_c4m4_update(
