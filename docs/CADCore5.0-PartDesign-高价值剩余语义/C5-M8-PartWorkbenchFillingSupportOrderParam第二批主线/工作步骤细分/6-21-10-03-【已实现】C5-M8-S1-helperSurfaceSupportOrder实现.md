@@ -1,4 +1,6 @@
-# C5-M8-S1 helper Surface / Support / Order 实现
+# 【已实现】C5-M8-S1 helper Surface / Support / Order 实现
+
+状态：`done_cad_core_source_backed_known_gap`
 
 ## 目标
 
@@ -23,9 +25,19 @@
 - 删除或收敛 `Surface` / `Supports` / `Orders` 的 broad `unsupported_property`，保留 target/subname 可定位诊断。
 - 更新 capabilities、C5-M8 局部矩阵和本 step 状态。
 
+## 实现结果（2026-06-21）
+
+- `cad-core` 已在同一 source-backed `Part::FilledFace` request DTO 内解析 `Surface`、`Supports`、`Orders`：`Surface` 解析为单 face source；`Supports` 使用 target edge + nested `Support` face link；`Orders` 使用 target edge + `Order` / `Continuity` 字段，支持 `C0/G1/C1/G2/C2/C3/CN` 名称或同 FreeCAD / OCCT 枚举编号。
+- `cad-core/include/cad_core/part/topo_shape_expansion.h`、`cad-core/src/part/topo_shape_expansion.cpp` 已把 initial surface、support face map、order map 传入 `BRepOffsetAPI_MakeFilling`，并按 FreeCAD 调用顺序执行 `LoadInitSurface` 与 boundary `Add(edge, support, order, IsBound=true)`。
+- `cad-core/src/app/document_object.cpp` 与 `cad-core/src/app/property_links.cpp` 已让 nested `Support` link 参与 recompute dependency，不改变 feature parser 读取的顶层 `Supports` target link。
+- `cad-core/fixtures/c5m8/part-filling-initial-surface-boundary.json` 与 `part-filling-support-order-edge-face.json` 是 source-backed fixtures；对应 `expected/*.freecad.json` 只记录 native helper oracle known_gap / 删除条件，不伪造 FreeCAD geometry expected。
+- `cad-core/fixtures/c5m8/part-filling-invalid-support-order.json` 是 diagnostic-backed fixture，固定 `invalid_support_target`、`invalid_order_source` 的 target/subname。
+- `c4m1/part-filling-advanced-deferred` 不再把 `Surface` 记为 broad unsupported；`SurfaceDeferred` source-backed 成功，旧 schema 的 `SupportsDeferred` / `OrdersDeferred` 收敛为具体 invalid diagnostics，非默认参数仍留给 S2。
+- 当前 source-backed support/order fixture 使用 G1 order 稳定通过；G2 order parser 已进入 DTO，但本机 OCCT 组合下 G2 support/order geometry 仍失败，需等稳定 native helper expected 或后续专门 fixture 再关闭 `filling_support_order_g2_expected`。
+
 ## 范围纠偏（2026-06-21）
 
-状态：`pending_cad_core_only_after_S1a`
+状态：`done_cad_core_source_backed_known_gap`
 
 S1 仍未实现，但不再要求先修改 FreeCAD 上游源码来恢复 helper oracle。C5-M8 只交付 `cad-core`；`src/Mod/Part/App/AppPartPy.cpp` 和 `TopoShapeExpansion.cpp` 只作为语义依据读取。
 
@@ -40,10 +52,9 @@ S1 仍未实现，但不再要求先修改 FreeCAD 上游源码来恢复 helper 
 
 当前边界：
 
-- 不生成 `cad-core/fixtures/c5m8/*support-order*` expected。
-- 不把 `Surface` / `Supports` / `Orders` 从 broad diagnostic 改成 expected-backed support，除非 existing FreeCADCmd helper oracle 可稳定返回。
-- 可以在 `cad-core` 中推进 source-backed DTO / parser / core API 和 locatable diagnostics；若缺少 native expected，必须把 parity 状态写成 known_gap / diagnostic-backed，并保留删除条件。
-- `C5M8-BLK-101` 转为 cad-core-only pending：后续需要找到可返回的 FreeCAD support/order oracle case，或按本 step 明确降级为 diagnostic-backed / known_gap 后继续。
+- 不生成 `cad-core/fixtures/c5m8/*surface*` / `*support-order*` geometry expected；checked-in `expected/*.freecad.json` 只允许写 known_gap / diagnostic-backed 记录。
+- `Surface` / `Supports` / `Orders` 已从 broad `unsupported_property` 收敛为 source-backed DTO / builder path、known_gap expected 与 locatable diagnostics；不冒充 expected-backed parity。
+- `C5M8-BLK-101` 已关闭为 cad-core-only source-backed known_gap；后续 native helper expected、G2 geometry、non-default params、non-boundary constraints 和 compound/wrapper 边界继续由 S2-S5 接管。
 
 ## 非目标
 

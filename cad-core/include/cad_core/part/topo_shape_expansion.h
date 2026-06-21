@@ -3,6 +3,7 @@
 // Part-layer TopoShapeExpansion import element-map facade.
 #include "cad_core/part/topo_shape.h"
 
+#include <GeomAbs_Shape.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Shape.hxx>
@@ -66,6 +67,33 @@ struct FilledFaceBoundaryEvidence
     std::string shapeKind;
 };
 
+struct FilledFaceSupportSource
+{
+    FilledFaceSource target;
+    FilledFaceSource support;
+};
+
+struct FilledFaceOrderSource
+{
+    FilledFaceSource target;
+    GeomAbs_Shape order = GeomAbs_C0;
+    std::string orderName = "C0";
+};
+
+struct FilledFaceSupportOrderEvidence
+{
+    std::string targetObject;
+    std::string targetSubname;
+    std::string targetStableSubname;
+    std::string targetShapeKind;
+    bool hasSupport = false;
+    std::string supportObject;
+    std::string supportSubname;
+    std::string supportStableSubname;
+    bool hasOrder = false;
+    std::string order;
+};
+
 struct FilledFaceBuild
 {
     TopoDS_Shape shape;
@@ -73,7 +101,11 @@ struct FilledFaceBuild
     std::string error;
     std::string boundaryMode;
     std::vector<FilledFaceBoundaryEvidence> boundarySources;
+    std::optional<FilledFaceBoundaryEvidence> initialSurfaceSource;
+    std::vector<FilledFaceSupportOrderEvidence> supportOrderSources;
     int boundaryEdgeCount = 0;
+    int supportFaceCount = 0;
+    int orderCount = 0;
 };
 
 enum class PipeShellMode
@@ -179,7 +211,10 @@ FilledFaceBuild makeElementFilledFaceFromSources(
     const std::string& owner,
     const std::vector<FilledFaceSource>& boundarySources,
     const std::vector<NamedShapeSource>& historySources,
-    const FilledFaceDefaultParams& params = FilledFaceDefaultParams {}
+    const FilledFaceDefaultParams& params = FilledFaceDefaultParams {},
+    const std::optional<FilledFaceSource>& initialSurface = std::nullopt,
+    const std::vector<FilledFaceSupportSource>& supportSources = {},
+    const std::vector<FilledFaceOrderSource>& orderSources = {}
 );
 
 // FreeCAD:

@@ -9,7 +9,7 @@
 C5-M8 不做“单个 support/order case”，而是把同一 FreeCAD 调用链、同一 cad-core request DTO/API 边界、同一类 expected 能覆盖的代表场景放进同一轮：
 
 - 复核第一批 Filling support：`Boundary=LinkSubList`、closed wire default、connected boundary edges default、invalid input diagnostics 和 `maker_history:filling` 必须继续成立。
-- 补齐 `surface` / `supports` / `orders` 在 `Part.makeFilledFace(...)` helper 内的 request DTO、source resolution、OCCT builder 调用和 expected-backed fixtures。
+- 补齐 `surface` / `supports` / `orders` 在 `Part.makeFilledFace(...)` helper 内的 request DTO、source resolution、OCCT builder 调用；若 native helper oracle 不稳定，只发布 source-backed known_gap / diagnostic-backed fixtures，不伪造 expected。
 - 补齐 `degree`、`ptsOnCurve`、`numIter`、`anisotropy`、`tol2d`、`tol3d`、`tolG1`、`tolG2`、`maxDegree`、`maxSegments` 这一组非默认构造参数。
 - 补齐同一 `TopoShape::makeElementFilledFace()` 中的非边界约束：额外 edge / wire、face support、vertex point constraint，并保持 source evidence 与 diagnostics 可定位。
 - 对 compound optional case 与直接 `Part.BRepOffsetAPI.MakeFilling` wrapper 做 owner 判定：能证明同一 request-local DTO 的进入支持；不能证明则收敛为 stable diagnostic，不伪造持久 wrapper。
@@ -29,7 +29,7 @@ C5-M8 不做“单个 support/order case”，而是把同一 FreeCAD 调用链�
 | 批次 | 代表场景 | 产物 |
 | --- | --- | --- |
 | live guard | `c3m4/part-filling-closed-wire-default`、`part-filling-boundary-edges-default`、`part-filling-invalid-inputs`、`c4m1/part-filling-advanced-deferred` | S0 固定当前第一批 expected-backed / diagnostic-backed 基线，防止第二批扩大时破坏默认路径 |
-| surface / support / order | `surface` 初始面、boundary edge + support face、boundary edge order C0/G1/G2、invalid target/order diagnostics | S1 扩展或收敛 `FilledFaceSource` / request DTO / `makeElementFilledFaceFromSources()`；expected 只来自可稳定返回的现有 `FreeCADCmd`，否则记录 known_gap / diagnostics |
+| surface / support / order | `surface` 初始面、boundary edge + support face、boundary edge order C0/G1/G2、invalid target/order diagnostics | S1 已扩展 `FilledFaceSource` / request DTO / `makeElementFilledFaceFromSources()`；当前为 source-backed known_gap + diagnostic-backed，native helper expected 和 G2 stable geometry 后续关闭 |
 | non-default params | constructor 参数、`SetConstrParam` / `SetResolParam` / `SetApproxParam` 等价字段、invalid range diagnostics | S2 移除当前非默认参数 diagnostic，改为 expected-backed params evidence 和 focused tests |
 | non-boundary constraints | 选定 boundary wire 后剩余 edge / wire、face、vertex 作为 non-boundary constraints；edge+support/order；point constraint | S3 对齐 FreeCAD `IsBound=false` / face / vertex 分支，避免只支持 boundary edges |
 | compound / wrapper boundary | compound optional source expansion；直接 `Part.BRepOffsetAPI.MakeFilling` wrapper 的 add/build/shape lifecycle 和 UV point-on-support 分支 | S4 关闭 compound optional；wrapper 若不是同一 request DTO，保留 `unsupported_wrapper_lifecycle` 或同级 diagnostic |

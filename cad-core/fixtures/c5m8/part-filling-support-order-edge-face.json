@@ -1,0 +1,91 @@
+{
+  "Objects": [
+    {
+      "Name": "Profile",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 2
+      }
+    },
+    {
+      "Name": "SupportPlane",
+      "ID": 2,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 4,
+        "Width": 4,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [-2, -2, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "FilledFace",
+      "ID": 3,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Profile",
+              "SubList": ["Edge1", "Edge2", "Edge3", "Edge4"],
+              "StableSubList": ["Edge1", "Edge2", "Edge3", "Edge4"]
+            }
+          ]
+        },
+        "Supports": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Profile",
+              "SubList": ["Edge1"],
+              "StableSubList": ["Edge1"],
+              "Support": {
+                "PropertyType": "App::PropertyLinkSub",
+                "value": "SupportPlane",
+                "SubList": ["Face1"],
+                "StableSubList": ["Face1"]
+              }
+            },
+            {
+              "value": "Profile",
+              "SubList": ["Edge2"],
+              "StableSubList": ["Edge2"],
+              "Support": {
+                "PropertyType": "App::PropertyLinkSub",
+                "value": "SupportPlane",
+                "SubList": ["Face1"],
+                "StableSubList": ["Face1"]
+              }
+            }
+          ]
+        },
+        "Orders": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Profile",
+              "SubList": ["Edge1"],
+              "StableSubList": ["Edge1"],
+              "Order": "G1"
+            },
+            {
+              "value": "Profile",
+              "SubList": ["Edge2"],
+              "StableSubList": ["Edge2"],
+              "Order": "G1"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["FilledFace"]
+  }
+}

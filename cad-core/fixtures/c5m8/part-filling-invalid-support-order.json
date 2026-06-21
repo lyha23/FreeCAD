@@ -1,0 +1,80 @@
+{
+  "Objects": [
+    {
+      "Name": "Profile",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 2
+      }
+    },
+    {
+      "Name": "SupportPlane",
+      "ID": 2,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 4,
+        "Width": 4
+      }
+    },
+    {
+      "Name": "InvalidSupport",
+      "ID": 3,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Profile",
+              "SubList": ["Edge1", "Edge2", "Edge3", "Edge4"],
+              "StableSubList": ["Edge1", "Edge2", "Edge3", "Edge4"]
+            }
+          ]
+        },
+        "Supports": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SupportPlane",
+              "SubList": ["Face1"],
+              "StableSubList": ["Face1"]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "Name": "InvalidOrder",
+      "ID": 4,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Profile",
+              "SubList": ["Edge1", "Edge2", "Edge3", "Edge4"],
+              "StableSubList": ["Edge1", "Edge2", "Edge3", "Edge4"]
+            }
+          ]
+        },
+        "Orders": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Profile",
+              "SubList": ["Edge1"],
+              "StableSubList": ["Edge1"],
+              "Order": "BadContinuity"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["InvalidSupport", "InvalidOrder"]
+  }
+}

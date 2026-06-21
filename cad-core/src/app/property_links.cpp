@@ -1322,7 +1322,6 @@ void collectLinks(const nlohmann::json& value, std::vector<Link>& links)
     auto normalized = readLinks(value);
     if (!normalized.empty()) {
         links.insert(links.end(), std::make_move_iterator(normalized.begin()), std::make_move_iterator(normalized.end()));
-        return;
     }
     if (value.is_array()) {
         for (const auto& item : value) {

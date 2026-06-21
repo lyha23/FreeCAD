@@ -828,8 +828,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "missing_property",
                 "execution_failed",
                 "execution_failed",
-                "unsupported_property",
-                "unsupported_property",
+                "invalid_support_target",
             ],
         )
         self.assertCountEqual(codes, expected["diagnostic_codes"])
@@ -852,14 +851,19 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(
             [item["code"] for item in diagnostics],
             [
-                "unsupported_property",
-                "unsupported_property",
-                "unsupported_property",
+                "invalid_support_target",
+                "invalid_order_source",
                 "unsupported_property",
             ],
         )
+        surface = result["objects"]["SurfaceDeferred"]
+        self.assertEqual(surface["status"], "ok")
+        self.assertEqual(surface["feature"], "part_filled_face")
+        self.assertEqual(surface["helper"], "Part.makeFilledFace")
+        self.assertEqual(surface["initial_surface_source_evidence"]["object"], "SupportPlane")
+        self.assertEqual(surface["initial_surface_source_evidence"]["stable_subname"], "Face1")
+        self.assertEqual(surface["surface_support_order_status"], "source_backed_native_helper_oracle_known_gap")
         for object_name in (
-            "SurfaceDeferred",
             "SupportsDeferred",
             "OrdersDeferred",
             "NonDefaultParamsDeferred",
@@ -871,6 +875,74 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertIn("property", diagnostic)
             self.assertIn("target", diagnostic)
             self.assertIn("subname", diagnostic)
+
+    def test_c5m8_part_filling_initial_surface_is_source_backed_known_gap(self) -> None:
+        result = self.run_recompute("part-filling-initial-surface-boundary", "c5m8")
+        filled = result["objects"]["FilledFace"]
+        named_shape = result["named_shapes"]["FilledFace"]
+        expected = self.expected_freecad("c5m8", "part-filling-initial-surface-boundary")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertIn("known_gap", expected)
+        self.assert_part_filling_history(result, "closed_wire")
+        self.assertEqual(filled["initial_surface_source_evidence"]["object"], "SupportPlane")
+        self.assertEqual(filled["initial_surface_source_evidence"]["stable_subname"], "Face1")
+        self.assertEqual(filled["support_order_source_evidence"], [])
+        self.assertEqual(filled["surface_support_order_status"], "source_backed_native_helper_oracle_known_gap")
+        self.assertIn("part_filling:initial_surface", named_shape["element_history_status"])
+        self.assertTrue(
+            any(
+                event["maker_stage"] == "maker_history:filling_initial_surface"
+                and event["diagnostic_status"] == "filling_initial_surface_source"
+                and event["source"] == {"object": "SupportPlane", "subname": "Face1"}
+                for event in named_shape["mapper_history"]
+            )
+        )
+
+    def test_c5m8_part_filling_support_order_sources_are_source_backed_known_gap(self) -> None:
+        result = self.run_recompute("part-filling-support-order-edge-face", "c5m8")
+        filled = result["objects"]["FilledFace"]
+        named_shape = result["named_shapes"]["FilledFace"]
+        expected = self.expected_freecad("c5m8", "part-filling-support-order-edge-face")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertIn("known_gap", expected)
+        self.assert_part_filling_history(result, "edge_wire_closed")
+        self.assertIsNone(filled["initial_surface_source_evidence"])
+        self.assertEqual(filled["support_face_count"], 2)
+        self.assertEqual(filled["order_count"], 2)
+        evidence = filled["support_order_source_evidence"]
+        self.assertEqual({item["target_stable_subname"] for item in evidence}, {"Edge1", "Edge2"})
+        self.assertEqual({item["support_object"] for item in evidence}, {"SupportPlane"})
+        self.assertEqual({item["support_stable_subname"] for item in evidence}, {"Face1"})
+        self.assertEqual({item["order"] for item in evidence}, {"G1"})
+        self.assertIn("part_filling:support_order_sources", named_shape["element_history_status"])
+        for edge in ("Edge1", "Edge2"):
+            self.assertTrue(
+                any(
+                    event["maker_stage"] == "maker_history:filling_support_order"
+                    and event["diagnostic_status"] == "filling_support_order_source"
+                    and event["source"] == {"object": "Profile", "subname": edge}
+                    and event["evidence"]["support_object"] == "SupportPlane"
+                    and event["evidence"]["support_stable_subname"] == "Face1"
+                    and event["evidence"]["order"] == "G1"
+                    for event in named_shape["mapper_history"]
+                ),
+                edge,
+            )
+
+    def test_c5m8_part_filling_invalid_support_order_have_locatable_diagnostics(self) -> None:
+        result = self.run_recompute("part-filling-invalid-support-order", "c5m8")
+        diagnostics = result["diagnostics"]
+
+        self.assertEqual([item["code"] for item in diagnostics], ["invalid_support_target", "invalid_order_source"])
+        self.assertEqual(diagnostics[0]["target"], "SupportPlane")
+        self.assertEqual(diagnostics[0]["subname"], "Face1")
+        self.assertEqual(diagnostics[1]["target"], "Profile")
+        self.assertEqual(diagnostics[1]["subname"], "Edge1")
+        self.assertEqual(result["objects"]["InvalidSupport"]["status"], "error")
+        self.assertEqual(result["objects"]["InvalidOrder"]["status"], "error")
+        self.assert_object_matches_expected(result, "c5m8", "part-filling-invalid-support-order")
 
     def test_c3m4_part_geomplate_curve_point_default_is_helper_expected_backed(self) -> None:
         result = self.run_recompute("part-geomplate-curve-point-default", "c3m4")

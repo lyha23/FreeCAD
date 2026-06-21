@@ -3,11 +3,48 @@
 #include "property_internal.h"
 #include "property_links_internal.h"
 
+#include <algorithm>
 #include <utility>
 
 namespace cad_core::app {
 
 using runtime::addDiagnostic;
+
+namespace
+{
+
+bool sameDependencyLink(const Link& left, const Link& right)
+{
+    return left.object == right.object && left.subnames == right.subnames
+        && left.stableSubnames == right.stableSubnames && left.property == right.property;
+}
+
+void addDependencyLinks(DocumentObject& object, const PropertyValue& property)
+{
+    std::vector<Link> dependencies = property.links;
+    std::vector<Link> nested;
+    collectLinks(property.raw, nested);
+    for (Link& link : nested) {
+        if (link.property.empty()) {
+            link.property = property.name;
+        }
+        const bool duplicate = std::any_of(
+            dependencies.begin(),
+            dependencies.end(),
+            [&](const Link& current) { return sameDependencyLink(current, link); }
+        );
+        if (!duplicate) {
+            dependencies.push_back(std::move(link));
+        }
+    }
+    object.dependencyLinks.insert(
+        object.dependencyLinks.end(),
+        dependencies.begin(),
+        dependencies.end()
+    );
+}
+
+}  // namespace
 
 std::optional<DocumentObject> parseDocumentObject(const nlohmann::json& item,
                                                   std::size_t index,
@@ -96,7 +133,7 @@ std::optional<DocumentObject> parseDocumentObject(const nlohmann::json& item,
     for (const auto& property : object.properties.items()) {
         auto parsed = parsePropertyValue(object.name, property.key(), property.value(), diagnostics);
         if (!isHiddenLinkPropertyType(parsed.propertyType)) {
-            object.dependencyLinks.insert(object.dependencyLinks.end(), parsed.links.begin(), parsed.links.end());
+            addDependencyLinks(object, parsed);
         }
         if (!parsed.valid) {
             object.invalidProperties.insert(property.key());

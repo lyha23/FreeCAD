@@ -6,6 +6,7 @@
 #include "cad_core/part/topo_shape_expansion.h"
 #include "cad_core/runtime/feature_executor.h"
 
+#include <TopAbs_ShapeEnum.hxx>
 #include <TopoDS_Shape.hxx>
 
 #include <algorithm>
@@ -25,6 +26,9 @@ struct ResolvedFillingSources
 {
     std::vector<FilledFaceSource> boundarySources;
     std::vector<NamedShapeSource> historySources;
+    std::optional<FilledFaceSource> initialSurface;
+    std::vector<FilledFaceSupportSource> supports;
+    std::vector<FilledFaceOrderSource> orders;
 };
 
 void addFillingDiagnostic(
@@ -58,6 +62,41 @@ void addFillingDiagnostic(
 bool sameDefault(double actual, double expected)
 {
     return std::abs(actual - expected) <= 1e-12;
+}
+
+const nlohmann::json* rawPropertyPayload(
+    const app::DocumentObject& object,
+    const std::string& property
+)
+{
+    const auto* value = app::propertyValue(object, property);
+    if (value == nullptr) {
+        return nullptr;
+    }
+    if (value->raw.is_object() && value->raw.contains("value")) {
+        return &value->raw.at("value");
+    }
+    return &value->raw;
+}
+
+std::vector<nlohmann::json> rawLinkSubListItems(
+    const app::DocumentObject& object,
+    const std::string& property
+)
+{
+    const nlohmann::json* payload = rawPropertyPayload(object, property);
+    if (payload == nullptr || !payload->is_object()) {
+        return {};
+    }
+    const auto it = payload->find("SubSet");
+    if (it == payload->end() || !it->is_array()) {
+        return {};
+    }
+    std::vector<nlohmann::json> result;
+    for (const auto& item : *it) {
+        result.push_back(item);
+    }
+    return result;
 }
 
 std::string firstDeferredTarget(const app::DocumentObject& object, const std::string& property)
@@ -94,6 +133,17 @@ std::string firstDeferredSubname(const app::DocumentObject& object, const std::s
         }
     }
     return property;
+}
+
+std::string stableSubnameForLink(const app::Link& link, std::size_t index)
+{
+    if (index < link.stableSubnames.size() && !link.stableSubnames[index].empty()) {
+        return link.stableSubnames[index];
+    }
+    if (index < link.subnames.size()) {
+        return link.subnames[index];
+    }
+    return {};
 }
 
 bool rejectNonDefaultNumber(
@@ -140,36 +190,6 @@ bool rejectNonDefaultBool(
         property
     );
     return true;
-}
-
-bool rejectDeferredAdvancedFillingProperties(
-    const app::DocumentObject& object,
-    runtime::ComputeContext& context
-)
-{
-    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
-    // ::TopoShape::makeElementFilledFace(), maps "params.surface", "params.supports" and
-    // "params.orders" into BRepOffsetAPI_MakeFilling::LoadInitSurface/Add(...). cad-core must
-    // first model those source-shape maps before publishing them as supported helper kwargs.
-    static const std::vector<std::string> deferred {"Surface", "Supports", "Orders"};
-    bool ok = true;
-    for (const std::string& property : deferred) {
-        if (app::propertyValue(object, property) == nullptr) {
-            continue;
-        }
-        addFillingDiagnostic(
-            object,
-            context,
-            "unsupported_property",
-            "Part.makeFilledFace " + property
-                + " is deferred until support/order/source-shape maps are expected-backed",
-            property,
-            firstDeferredTarget(object, property),
-            firstDeferredSubname(object, property)
-        );
-        ok = false;
-    }
-    return ok;
 }
 
 std::optional<FilledFaceDefaultParams> readDefaultFillingParams(
@@ -223,6 +243,46 @@ nlohmann::json boundaryEvidenceJson(const std::vector<FilledFaceBoundaryEvidence
     return result;
 }
 
+nlohmann::json boundaryEvidenceJson(const std::optional<FilledFaceBoundaryEvidence>& evidence)
+{
+    if (!evidence) {
+        return nullptr;
+    }
+    return {
+        {"object", evidence->objectName},
+        {"subname", evidence->subname},
+        {"stable_subname", evidence->stableSubname},
+        {"shape_kind", evidence->shapeKind},
+    };
+}
+
+nlohmann::json supportOrderEvidenceJson(
+    const std::vector<FilledFaceSupportOrderEvidence>& evidence
+)
+{
+    nlohmann::json result = nlohmann::json::array();
+    for (const FilledFaceSupportOrderEvidence& item : evidence) {
+        nlohmann::json payload = {
+            {"target_object", item.targetObject},
+            {"target_subname", item.targetSubname},
+            {"target_stable_subname", item.targetStableSubname},
+            {"target_shape_kind", item.targetShapeKind},
+            {"has_support", item.hasSupport},
+            {"has_order", item.hasOrder},
+        };
+        if (item.hasSupport) {
+            payload["support_object"] = item.supportObject;
+            payload["support_subname"] = item.supportSubname;
+            payload["support_stable_subname"] = item.supportStableSubname;
+        }
+        if (item.hasOrder) {
+            payload["order"] = item.order;
+        }
+        result.push_back(std::move(payload));
+    }
+    return result;
+}
+
 void addHistorySource(
     std::vector<NamedShapeSource>& sources,
     const std::string& objectName,
@@ -237,6 +297,22 @@ void addHistorySource(
     );
     if (duplicate == sources.end()) {
         sources.push_back(NamedShapeSource {objectName, shape, namedShape});
+    }
+}
+
+std::string shapeKindLabel(TopAbs_ShapeEnum kind)
+{
+    switch (kind) {
+        case TopAbs_FACE:
+            return "face";
+        case TopAbs_EDGE:
+            return "edge";
+        case TopAbs_WIRE:
+            return "wire";
+        case TopAbs_VERTEX:
+            return "vertex";
+        default:
+            return "shape";
     }
 }
 
@@ -266,6 +342,247 @@ std::optional<TopoDS_Shape> resolveFillingSubshape(
         return part::subshapeByName(sourceShape, stable);
     }
     return std::nullopt;
+}
+
+std::optional<FilledFaceSource> resolveFillingLinkedSource(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const std::string& property,
+    const app::Link& link,
+    std::size_t index,
+    TopAbs_ShapeEnum expectedKind,
+    const std::string& diagnosticCode,
+    const std::string& role
+)
+{
+    const auto shapeIt = context.shapes.find(link.object);
+    if (shapeIt == context.shapes.end() || shapeIt->second.shape.IsNull()) {
+        addFillingDiagnostic(
+            object,
+            context,
+            "missing_link_target",
+            property + " target " + link.object + " did not produce a shape",
+            property,
+            link.object,
+            stableSubnameForLink(link, index)
+        );
+        return std::nullopt;
+    }
+
+    const auto namedShapeIt = context.namedShapes.find(link.object);
+    const NamedShape* namedShape = namedShapeIt != context.namedShapes.end() ? &namedShapeIt->second
+                                                                             : nullptr;
+    const auto selected = resolveFillingSubshape(shapeIt->second.shape, namedShape, link, index);
+    if (!selected || selected->IsNull()) {
+        addFillingDiagnostic(
+            object,
+            context,
+            diagnosticCode,
+            "Part.makeFilledFace " + role + " " + stableSubnameForLink(link, index)
+                + " did not resolve",
+            property,
+            link.object,
+            stableSubnameForLink(link, index)
+        );
+        return std::nullopt;
+    }
+    if (selected->ShapeType() != expectedKind) {
+        addFillingDiagnostic(
+            object,
+            context,
+            diagnosticCode,
+            "Part.makeFilledFace " + role + " must resolve to a "
+                + shapeKindLabel(expectedKind),
+            property,
+            link.object,
+            stableSubnameForLink(link, index)
+        );
+        return std::nullopt;
+    }
+
+    const std::string stable = stableSubnameForLink(link, index);
+    const std::string current = index < link.subnames.size() ? link.subnames[index] : stable;
+    return FilledFaceSource {
+        link.object,
+        *selected,
+        namedShape,
+        current,
+        stable,
+    };
+}
+
+std::optional<app::Link> readNestedFillingLink(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const nlohmann::json& item,
+    const std::string& property,
+    const std::string& field,
+    const app::Link& target,
+    std::size_t index
+)
+{
+    const auto it = item.find(field);
+    if (it == item.end()) {
+        addFillingDiagnostic(
+            object,
+            context,
+            "invalid_support_source",
+            "Part.makeFilledFace " + property + " item requires " + field + " face link",
+            property,
+            target.object,
+            stableSubnameForLink(target, index)
+        );
+        return std::nullopt;
+    }
+    auto link = app::readLink(*it);
+    if (!link) {
+        addFillingDiagnostic(
+            object,
+            context,
+            "invalid_support_source",
+            "Part.makeFilledFace " + property + "." + field
+                + " must be an App::PropertyLinkSub payload",
+            property,
+            target.object,
+            stableSubnameForLink(target, index)
+        );
+        return std::nullopt;
+    }
+    return link;
+}
+
+std::string continuityName(GeomAbs_Shape order)
+{
+    switch (order) {
+        case GeomAbs_C0:
+            return "C0";
+        case GeomAbs_G1:
+            return "G1";
+        case GeomAbs_C1:
+            return "C1";
+        case GeomAbs_G2:
+            return "G2";
+        case GeomAbs_C2:
+            return "C2";
+        case GeomAbs_C3:
+            return "C3";
+        case GeomAbs_CN:
+            return "CN";
+        default:
+            return "C0";
+    }
+}
+
+std::optional<GeomAbs_Shape> continuityFromString(const std::string& value)
+{
+    if (value == "C0") {
+        return GeomAbs_C0;
+    }
+    if (value == "G1") {
+        return GeomAbs_G1;
+    }
+    if (value == "C1") {
+        return GeomAbs_C1;
+    }
+    if (value == "G2") {
+        return GeomAbs_G2;
+    }
+    if (value == "C2") {
+        return GeomAbs_C2;
+    }
+    if (value == "C3") {
+        return GeomAbs_C3;
+    }
+    if (value == "CN") {
+        return GeomAbs_CN;
+    }
+    return std::nullopt;
+}
+
+std::optional<GeomAbs_Shape> continuityFromInteger(long value)
+{
+    switch (value) {
+        case 0:
+            return GeomAbs_C0;
+        case 1:
+            return GeomAbs_G1;
+        case 2:
+            return GeomAbs_C1;
+        case 3:
+            return GeomAbs_G2;
+        case 4:
+            return GeomAbs_C2;
+        case 5:
+            return GeomAbs_C3;
+        case 6:
+            return GeomAbs_CN;
+        default:
+            return std::nullopt;
+    }
+}
+
+std::optional<FilledFaceOrderSource> readFillingOrderSource(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const nlohmann::json& raw,
+    const app::Link& link,
+    std::size_t index
+)
+{
+    const auto orderIt = raw.find("Order") != raw.end() ? raw.find("Order") : raw.find("Continuity");
+    if (orderIt == raw.end()) {
+        addFillingDiagnostic(
+            object,
+            context,
+            "invalid_order_source",
+            "Part.makeFilledFace Orders item requires Order or Continuity",
+            "Orders",
+            link.object,
+            stableSubnameForLink(link, index)
+        );
+        return std::nullopt;
+    }
+
+    std::optional<GeomAbs_Shape> order;
+    if (orderIt->is_string()) {
+        order = continuityFromString(orderIt->get<std::string>());
+    }
+    else if (orderIt->is_number_integer()) {
+        order = continuityFromInteger(orderIt->get<long>());
+    }
+    else if (orderIt->is_number_float()) {
+        const double rawNumber = orderIt->get<double>();
+        if (std::isfinite(rawNumber) && std::abs(rawNumber - std::round(rawNumber)) <= 1e-9) {
+            order = continuityFromInteger(static_cast<long>(std::llround(rawNumber)));
+        }
+    }
+    if (!order) {
+        addFillingDiagnostic(
+            object,
+            context,
+            "invalid_order_source",
+            "Part.makeFilledFace Orders order must be C0/G1/C1/G2/C2/C3/CN or matching enum index",
+            "Orders",
+            link.object,
+            stableSubnameForLink(link, index)
+        );
+        return std::nullopt;
+    }
+
+    const auto target = resolveFillingLinkedSource(
+        object,
+        context,
+        "Orders",
+        link,
+        index,
+        TopAbs_EDGE,
+        "invalid_order_target",
+        "order target"
+    );
+    if (!target) {
+        return std::nullopt;
+    }
+    return FilledFaceOrderSource {*target, *order, continuityName(*order)};
 }
 
 std::optional<ResolvedFillingSources> resolveFillingBoundarySources(
@@ -346,6 +663,157 @@ std::optional<ResolvedFillingSources> resolveFillingBoundarySources(
     return resolved;
 }
 
+bool resolveFillingSurfaceSupportOrderSources(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    ResolvedFillingSources& resolved
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/AppPartPy.cpp
+    // ::makeFilledFace(), parses "surface", "supports" and "orders" into
+    // TopoShape::BRepFillingParams; /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // TopoShapeExpansion.cpp::TopoShape::makeElementFilledFace() then consumes them through
+    // "LoadInitSurface", "getSupport()", "getOrder()" and
+    // "maker.Add(edge, support, order, IsBound=true)" for boundary edges.
+    if (app::propertyValue(object, "Surface") != nullptr) {
+        const auto link = app::readLink(object, "Surface");
+        if (!link) {
+            addFillingDiagnostic(
+                object,
+                context,
+                "invalid_surface_source",
+                "Part.makeFilledFace Surface must reference one face",
+                "Surface",
+                firstDeferredTarget(object, "Surface"),
+                firstDeferredSubname(object, "Surface")
+            );
+            return false;
+        }
+        if (link->subnames.size() > 1U) {
+            addFillingDiagnostic(
+                object,
+                context,
+                "invalid_surface_source",
+                "Part.makeFilledFace Surface must reference exactly one face",
+                "Surface",
+                link->object,
+                stableSubnameForLink(*link, 0U)
+            );
+            return false;
+        }
+        const auto surface = resolveFillingLinkedSource(
+            object,
+            context,
+            "Surface",
+            *link,
+            0U,
+            TopAbs_FACE,
+            "invalid_surface_source",
+            "initial surface"
+        );
+        if (!surface) {
+            return false;
+        }
+        resolved.initialSurface = *surface;
+        addHistorySource(resolved.historySources, surface->objectName, surface->shape, surface->namedShape);
+    }
+
+    const std::vector<app::Link> supportTargets = app::readLinks(object, "Supports");
+    const std::vector<nlohmann::json> supportItems = rawLinkSubListItems(object, "Supports");
+    for (std::size_t linkIndex = 0; linkIndex < supportTargets.size(); ++linkIndex) {
+        const app::Link& targetLink = supportTargets[linkIndex];
+        const nlohmann::json raw = linkIndex < supportItems.size() && supportItems[linkIndex].is_object()
+            ? supportItems[linkIndex]
+            : nlohmann::json::object();
+        const std::size_t count = targetLink.subnames.empty() ? 1U : targetLink.subnames.size();
+        for (std::size_t subIndex = 0; subIndex < count; ++subIndex) {
+            const auto target = resolveFillingLinkedSource(
+                object,
+                context,
+                "Supports",
+                targetLink,
+                subIndex,
+                TopAbs_EDGE,
+                "invalid_support_target",
+                "support target"
+            );
+            if (!target) {
+                return false;
+            }
+            const auto supportLink = readNestedFillingLink(
+                object,
+                context,
+                raw,
+                "Supports",
+                "Support",
+                targetLink,
+                subIndex
+            );
+            if (!supportLink) {
+                return false;
+            }
+            if (supportLink->subnames.size() > 1U) {
+                addFillingDiagnostic(
+                    object,
+                    context,
+                    "invalid_support_source",
+                    "Part.makeFilledFace Supports.Support must reference exactly one face",
+                    "Supports",
+                    supportLink->object,
+                    stableSubnameForLink(*supportLink, 0U)
+                );
+                return false;
+            }
+            const auto supportFace = resolveFillingLinkedSource(
+                object,
+                context,
+                "Supports",
+                *supportLink,
+                0U,
+                TopAbs_FACE,
+                "invalid_support_source",
+                "support face"
+            );
+            if (!supportFace) {
+                return false;
+            }
+            resolved.supports.push_back(FilledFaceSupportSource {*target, *supportFace});
+            addHistorySource(resolved.historySources, target->objectName, target->shape, target->namedShape);
+            addHistorySource(
+                resolved.historySources,
+                supportFace->objectName,
+                supportFace->shape,
+                supportFace->namedShape
+            );
+        }
+    }
+
+    const std::vector<app::Link> orderTargets = app::readLinks(object, "Orders");
+    const std::vector<nlohmann::json> orderItems = rawLinkSubListItems(object, "Orders");
+    for (std::size_t linkIndex = 0; linkIndex < orderTargets.size(); ++linkIndex) {
+        const app::Link& targetLink = orderTargets[linkIndex];
+        const nlohmann::json raw = linkIndex < orderItems.size() && orderItems[linkIndex].is_object()
+            ? orderItems[linkIndex]
+            : nlohmann::json::object();
+        const std::size_t count = targetLink.subnames.empty() ? 1U : targetLink.subnames.size();
+        for (std::size_t subIndex = 0; subIndex < count; ++subIndex) {
+            const auto order = readFillingOrderSource(object, context, raw, targetLink, subIndex);
+            if (!order) {
+                return false;
+            }
+            resolved.orders.push_back(*order);
+            addHistorySource(
+                resolved.historySources,
+                order->target.objectName,
+                order->target.shape,
+                order->target.namedShape
+            );
+        }
+    }
+
+    return true;
+}
+
 }  // namespace
 
 void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeContext& context)
@@ -382,10 +850,6 @@ void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeCo
         return;
     }
 
-    if (!rejectDeferredAdvancedFillingProperties(object, context)) {
-        return;
-    }
-
     const auto params = readDefaultFillingParams(object, context);
     if (!params) {
         return;
@@ -394,12 +858,19 @@ void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeCo
     if (!sources) {
         return;
     }
+    ResolvedFillingSources resolved = *sources;
+    if (!resolveFillingSurfaceSupportOrderSources(object, context, resolved)) {
+        return;
+    }
 
     const FilledFaceBuild build = makeElementFilledFaceFromSources(
         object.name,
-        sources->boundarySources,
-        sources->historySources,
-        *params
+        resolved.boundarySources,
+        resolved.historySources,
+        *params,
+        resolved.initialSurface,
+        resolved.supports,
+        resolved.orders
     );
     if (!build.error.empty() || build.shape.IsNull()) {
         addFillingDiagnostic(
@@ -424,6 +895,11 @@ void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeCo
             {"boundary_mode", build.boundaryMode},
             {"boundary_edge_count", build.boundaryEdgeCount},
             {"boundary_source_evidence", boundaryEvidenceJson(build.boundarySources)},
+            {"initial_surface_source_evidence", boundaryEvidenceJson(build.initialSurfaceSource)},
+            {"support_order_source_evidence", supportOrderEvidenceJson(build.supportOrderSources)},
+            {"support_face_count", build.supportFaceCount},
+            {"order_count", build.orderCount},
+            {"surface_support_order_status", "source_backed_native_helper_oracle_known_gap"},
             {"default_params", fillingParamsJson(*params)},
             {"topo_naming_history", "maker_history:filling"},
         },

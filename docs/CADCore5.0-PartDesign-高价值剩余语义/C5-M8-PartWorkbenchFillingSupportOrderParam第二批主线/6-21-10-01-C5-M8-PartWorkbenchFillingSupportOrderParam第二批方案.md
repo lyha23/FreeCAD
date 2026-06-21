@@ -29,7 +29,7 @@
 | 分组 | 目标 fixture | 验收重点 |
 | --- | --- | --- |
 | live guard | `c3m4/part-filling-closed-wire-default`、`c3m4/part-filling-boundary-edges-default`、`c3m4/part-filling-invalid-inputs`、`c4m1/part-filling-advanced-deferred` | 默认路径和 deferred guard 不回退 |
-| surface / support / order | `c5m8/part-filling-initial-surface-boundary`、`c5m8/part-filling-support-order-edge-face`、`c5m8/part-filling-invalid-support-order` | `LoadInitSurface`、support face、G1/G2 order、target/subname diagnostics |
+| surface / support / order | `c5m8/part-filling-initial-surface-boundary`、`c5m8/part-filling-support-order-edge-face`、`c5m8/part-filling-invalid-support-order` | `LoadInitSurface`、support face、G1 order source-backed fixture、C0/G1/G2 parser、target/subname diagnostics；native helper expected 与 G2 stable geometry 保持 known_gap |
 | non-default params | `c5m8/part-filling-non-default-params`、`c5m8/part-filling-param-diagnostics` | params evidence、constructor field parity、invalid ranges |
 | non-boundary constraints | `c5m8/part-filling-non-boundary-edge-support`、`c5m8/part-filling-non-boundary-face-point`、`c5m8/part-filling-non-boundary-wire` | `IsBound=false`、face support、vertex point constraint、source evidence |
 | compound / wrapper | `c5m8/part-filling-compound-optional-boundary`、`c5m8/part-filling-wrapper-boundary`、`c5m8/part-filling-wrapper-uv-point-boundary` | compound expansion with source mapping；direct wrapper lifecycle diagnostic or proven request DTO |
@@ -37,7 +37,7 @@
 ## 实施顺序
 
 1. S0：冻结 live baseline，确认 C5-M8 root / local matrices 和当前 first-batch fixture 状态。
-2. S1：把 `Surface` / `Supports` / `Orders` 作为同一 DTO 批次处理；优先 expected-backed，若现有 helper oracle 仍不可采集，则在 `cad-core` 中实现或收敛为 source-backed known_gap / locatable diagnostics，不修改 FreeCAD `src/`。
+2. S1：把 `Surface` / `Supports` / `Orders` 作为同一 DTO 批次处理；已在 `cad-core` 中实现 source-backed DTO / builder path / locatable diagnostics，并以 known_gap 记录 native helper expected 与 G2 geometry 删除条件，不修改 FreeCAD `src/`。
 3. S2：补非默认 Filling 参数，一次覆盖 OCCT constructor 同组字段，保留无效值 diagnostic。
 4. S3：补非边界约束分支，保证 boundary wire 选择后剩余 shapes 不被丢弃。
 5. S4：补 compound optional case；对直接 wrapper 做 owner 判定，不能证明 request-local 生命周期就保持 diagnostic。

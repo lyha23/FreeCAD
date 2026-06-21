@@ -453,6 +453,24 @@ FilledFaceBoundaryEvidence fallbackEvidence(const FilledFaceSource& source, TopA
     };
 }
 
+bool filledFaceSourceMatchesEdge(const FilledFaceSource& source, const TopoDS_Edge& edge)
+{
+    if (source.shape.IsNull()) {
+        return false;
+    }
+    if (source.shape.ShapeType() == TopAbs_EDGE) {
+        const TopoDS_Edge sourceEdge = TopoDS::Edge(source.shape);
+        return sourceEdge.IsSame(edge) || sameEndpointPair(sourceEdge, edge);
+    }
+    for (TopExp_Explorer explorer(source.shape, TopAbs_EDGE); explorer.More(); explorer.Next()) {
+        const TopoDS_Edge sourceEdge = TopoDS::Edge(explorer.Current());
+        if (sourceEdge.IsSame(edge) || sameEndpointPair(sourceEdge, edge)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 std::vector<FilledFaceBoundaryEvidence> evidenceForBoundaryEdge(
     const FilledFaceSource& source,
     const TopoDS_Edge& edge
@@ -477,6 +495,118 @@ std::vector<FilledFaceBoundaryEvidence> evidenceForBoundaryEdge(
 
     evidence.push_back(fallbackEvidence(source, source.shape.ShapeType()));
     return evidence;
+}
+
+TopoDS_Face supportFaceForBoundaryEdge(
+    const TopoDS_Edge& edge,
+    const std::vector<FilledFaceSupportSource>& supportSources
+)
+{
+    for (const FilledFaceSupportSource& support : supportSources) {
+        if (!filledFaceSourceMatchesEdge(support.target, edge) || support.support.shape.IsNull()
+            || support.support.shape.ShapeType() != TopAbs_FACE) {
+            continue;
+        }
+        return TopoDS::Face(support.support.shape);
+    }
+    return TopoDS_Face {};
+}
+
+GeomAbs_Shape orderForBoundaryEdge(
+    const TopoDS_Edge& edge,
+    const std::vector<FilledFaceOrderSource>& orderSources
+)
+{
+    for (const FilledFaceOrderSource& order : orderSources) {
+        if (filledFaceSourceMatchesEdge(order.target, edge)) {
+            return order.order;
+        }
+    }
+    return GeomAbs_C0;
+}
+
+FilledFaceSupportOrderEvidence evidenceForSupportSource(const FilledFaceSupportSource& support)
+{
+    const FilledFaceBoundaryEvidence target
+        = fallbackEvidence(support.target, support.target.shape.ShapeType());
+    const FilledFaceBoundaryEvidence supportFace = fallbackEvidence(support.support, TopAbs_FACE);
+    return FilledFaceSupportOrderEvidence {
+        target.objectName,
+        target.subname,
+        target.stableSubname,
+        target.shapeKind,
+        true,
+        supportFace.objectName,
+        supportFace.subname,
+        supportFace.stableSubname,
+        false,
+        {},
+    };
+}
+
+FilledFaceSupportOrderEvidence evidenceForOrderSource(const FilledFaceOrderSource& order)
+{
+    const FilledFaceBoundaryEvidence target = fallbackEvidence(order.target, order.target.shape.ShapeType());
+    return FilledFaceSupportOrderEvidence {
+        target.objectName,
+        target.subname,
+        target.stableSubname,
+        target.shapeKind,
+        false,
+        {},
+        {},
+        {},
+        true,
+        order.orderName,
+    };
+}
+
+bool sameSupportOrderTarget(
+    const FilledFaceSupportOrderEvidence& left,
+    const FilledFaceSupportOrderEvidence& right
+)
+{
+    return left.targetObject == right.targetObject && left.targetSubname == right.targetSubname
+        && left.targetStableSubname == right.targetStableSubname;
+}
+
+std::vector<FilledFaceSupportOrderEvidence> supportOrderEvidence(
+    const std::vector<FilledFaceSupportSource>& supportSources,
+    const std::vector<FilledFaceOrderSource>& orderSources
+)
+{
+    std::vector<FilledFaceSupportOrderEvidence> result;
+    auto merge = [&](const FilledFaceSupportOrderEvidence& item) {
+        auto existing = std::find_if(
+            result.begin(),
+            result.end(),
+            [&](const FilledFaceSupportOrderEvidence& current) {
+                return sameSupportOrderTarget(current, item);
+            }
+        );
+        if (existing == result.end()) {
+            result.push_back(item);
+            return;
+        }
+        if (item.hasSupport) {
+            existing->hasSupport = true;
+            existing->supportObject = item.supportObject;
+            existing->supportSubname = item.supportSubname;
+            existing->supportStableSubname = item.supportStableSubname;
+        }
+        if (item.hasOrder) {
+            existing->hasOrder = true;
+            existing->order = item.order;
+        }
+    };
+
+    for (const FilledFaceSupportSource& support : supportSources) {
+        merge(evidenceForSupportSource(support));
+    }
+    for (const FilledFaceOrderSource& order : orderSources) {
+        merge(evidenceForOrderSource(order));
+    }
+    return result;
 }
 
 std::vector<FilledFaceBoundaryEvidence> evidenceForBoundaryWire(
@@ -617,6 +747,80 @@ void addFilledFaceBoundaryHistory(
         };
         event.recoverability = MapperHistoryRecoverability::Resolved;
         event.diagnosticStatus = "filling_boundary_source";
+        addMapperHistoryEvent(namedShape.mapperHistory, std::move(event));
+    }
+}
+
+void addFilledFaceInitialSurfaceHistory(
+    NamedShape& namedShape,
+    const std::string& owner,
+    const FilledFaceBoundaryEvidence& source
+)
+{
+    const auto targetFace = firstFaceName(namedShape);
+    if (!targetFace) {
+        return;
+    }
+
+    MapperHistoryEvent event;
+    event.source = MapperHistoryEndpoint {
+        source.objectName,
+        source.stableSubname.empty() ? source.subname : source.stableSubname
+    };
+    event.target = MapperHistoryEndpoint {owner, *targetFace};
+    event.shapeKind = "face";
+    event.relation = MapperHistoryRelation::Generated;
+    event.makerStage = "maker_history:filling_initial_surface";
+    event.evidence = {
+        {"freecad_operation", "TopoShape::makeElementFilledFace"},
+        {"helper", "Part.makeFilledFace"},
+        {"source_kind", source.shapeKind},
+        {"source_subname", source.subname},
+        {"stable_subname", source.stableSubname},
+        {"builder_call", "LoadInitSurface"},
+    };
+    event.recoverability = MapperHistoryRecoverability::Resolved;
+    event.diagnosticStatus = "filling_initial_surface_source";
+    addMapperHistoryEvent(namedShape.mapperHistory, std::move(event));
+}
+
+void addFilledFaceSupportOrderHistory(
+    NamedShape& namedShape,
+    const std::string& owner,
+    const std::vector<FilledFaceSupportOrderEvidence>& sources
+)
+{
+    const auto targetFace = firstFaceName(namedShape);
+    if (!targetFace) {
+        return;
+    }
+
+    for (const FilledFaceSupportOrderEvidence& source : sources) {
+        MapperHistoryEvent event;
+        event.source = MapperHistoryEndpoint {
+            source.targetObject,
+            source.targetStableSubname.empty() ? source.targetSubname : source.targetStableSubname
+        };
+        event.target = MapperHistoryEndpoint {owner, *targetFace};
+        event.shapeKind = "face";
+        event.relation = MapperHistoryRelation::Generated;
+        event.makerStage = "maker_history:filling_support_order";
+        event.evidence = {
+            {"freecad_operation", "TopoShape::makeElementFilledFace"},
+            {"helper", "Part.makeFilledFace"},
+            {"source_kind", source.targetShapeKind},
+            {"source_subname", source.targetSubname},
+            {"stable_subname", source.targetStableSubname},
+            {"has_support", source.hasSupport},
+            {"support_object", source.supportObject},
+            {"support_subname", source.supportSubname},
+            {"support_stable_subname", source.supportStableSubname},
+            {"has_order", source.hasOrder},
+            {"order", source.order},
+            {"builder_call", "Add(edge, support, order, IsBound=true)"},
+        };
+        event.recoverability = MapperHistoryRecoverability::Resolved;
+        event.diagnosticStatus = "filling_support_order_source";
         addMapperHistoryEvent(namedShape.mapperHistory, std::move(event));
     }
 }
@@ -1498,14 +1702,17 @@ FilledFaceBuild makeElementFilledFaceFromSources(
     const std::string& owner,
     const std::vector<FilledFaceSource>& boundarySources,
     const std::vector<NamedShapeSource>& historySources,
-    const FilledFaceDefaultParams& params
+    const FilledFaceDefaultParams& params,
+    const std::optional<FilledFaceSource>& initialSurface,
+    const std::vector<FilledFaceSupportSource>& supportSources,
+    const std::vector<FilledFaceOrderSource>& orderSources
 )
 {
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
-    // ::TopoShape::makeElementFilledFace(), calls "BRepOffsetAPI_MakeFilling", then
-    // "findBoundary(shapes)" or "makeElementWires(..., ConnectionPolicy::requireSharedVertex)",
-    // fixes the boundary wire, adds ordered boundary edges with "IsBound Standard_True", and
-    // returns makeElementShape(maker, _shapes, Part::OpCodes::FilledFace).
+    // ::TopoShape::makeElementFilledFace(), calls "BRepOffsetAPI_MakeFilling", optional
+    // "LoadInitSurface", then "findBoundary(shapes)" or "makeElementWires(...)", fixes the
+    // boundary wire, adds ordered boundary edges with "Add(edge, support, order, IsBound true)",
+    // and returns makeElementShape(maker, _shapes, Part::OpCodes::FilledFace).
     if (boundarySources.empty()) {
         return FilledFaceBuild {TopoDS_Shape {}, std::nullopt, "No input shape"};
     }
@@ -1532,6 +1739,10 @@ FilledFaceBuild makeElementFilledFaceFromSources(
             params.maxDegree,
             params.maxSegments
         );
+        if (initialSurface && !initialSurface->shape.IsNull()
+            && initialSurface->shape.ShapeType() == TopAbs_FACE) {
+            maker.LoadInitSurface(TopoDS::Face(initialSurface->shape));
+        }
 
         TopoDS_Wire fixedBoundary = fixedFillingBoundaryWire(boundary->wire);
         const std::vector<TopoDS_Edge> boundaryEdges = orderedEdges(fixedBoundary);
@@ -1540,7 +1751,12 @@ FilledFaceBuild makeElementFilledFaceFromSources(
         }
 
         for (const TopoDS_Edge& edge : boundaryEdges) {
-            maker.Add(edge, GeomAbs_C0, Standard_True);
+            maker.Add(
+                edge,
+                supportFaceForBoundaryEdge(edge, supportSources),
+                orderForBoundaryEdge(edge, orderSources),
+                Standard_True
+            );
         }
 
         maker.Build();
@@ -1565,6 +1781,32 @@ FilledFaceBuild makeElementFilledFaceFromSources(
                 );
             }
         }
+        auto addHistorySourceIfMissing = [&](const FilledFaceSource& source) {
+            const auto duplicate = std::find_if(
+                sourcesForHistory.begin(),
+                sourcesForHistory.end(),
+                [&](const NamedShapeSource& current) { return current.owner == source.objectName; }
+            );
+            if (duplicate == sourcesForHistory.end()) {
+                sourcesForHistory.push_back(
+                    NamedShapeSource {
+                        source.objectName,
+                        source.shape,
+                        source.namedShape,
+                    }
+                );
+            }
+        };
+        if (initialSurface) {
+            addHistorySourceIfMissing(*initialSurface);
+        }
+        for (const FilledFaceSupportSource& support : supportSources) {
+            addHistorySourceIfMissing(support.target);
+            addHistorySourceIfMissing(support.support);
+        }
+        for (const FilledFaceOrderSource& order : orderSources) {
+            addHistorySourceIfMissing(order.target);
+        }
 
         NamedShape namedShape
             = namedShapeForMakerHistory(owner, maker.Shape(), sourcesForHistory, maker);
@@ -1575,6 +1817,18 @@ FilledFaceBuild makeElementFilledFaceFromSources(
             boundary->evidence,
             static_cast<int>(boundaryEdges.size())
         );
+        std::optional<FilledFaceBoundaryEvidence> surfaceEvidence;
+        if (initialSurface) {
+            surfaceEvidence = fallbackEvidence(*initialSurface, TopAbs_FACE);
+            addDistinct(namedShape.elementHistoryStatus, "part_filling:initial_surface");
+            addFilledFaceInitialSurfaceHistory(namedShape, owner, *surfaceEvidence);
+        }
+        const std::vector<FilledFaceSupportOrderEvidence> supportOrderSourcesEvidence
+            = supportOrderEvidence(supportSources, orderSources);
+        if (!supportOrderSourcesEvidence.empty()) {
+            addDistinct(namedShape.elementHistoryStatus, "part_filling:support_order_sources");
+            addFilledFaceSupportOrderHistory(namedShape, owner, supportOrderSourcesEvidence);
+        }
 
         return FilledFaceBuild {
             maker.Shape(),
@@ -1582,7 +1836,11 @@ FilledFaceBuild makeElementFilledFaceFromSources(
             {},
             boundary->mode,
             boundary->evidence,
+            surfaceEvidence,
+            supportOrderSourcesEvidence,
             static_cast<int>(boundaryEdges.size()),
+            static_cast<int>(supportSources.size()),
+            static_cast<int>(orderSources.size()),
         };
     }
     catch (const Standard_Failure& failure) {
