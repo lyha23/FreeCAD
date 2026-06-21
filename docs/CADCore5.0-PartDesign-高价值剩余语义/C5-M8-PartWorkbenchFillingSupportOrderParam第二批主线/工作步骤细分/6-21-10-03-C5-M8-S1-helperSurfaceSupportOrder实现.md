@@ -23,6 +23,28 @@
 - 删除或收敛 `Surface` / `Supports` / `Orders` 的 broad `unsupported_property`，保留 target/subname 可定位诊断。
 - 更新 capabilities、C5-M8 局部矩阵和本 step 状态。
 
+## 阻塞记录（2026-06-21）
+
+状态：`blocked_native_support_order_oracle`
+
+S1 未实现，原因是 support/order 的 native FreeCAD oracle 在当前本机 FreeCADCmd 上无法收敛到可写入 expected 的短跑基线；不能伪造 `part-filling-support-order-edge-face` expected。
+
+已验证事实：
+
+- `FreeCADCmd` 可用，版本为 `FreeCAD 1.2.0devR20260519`；现有 `c3m4/part-filling-closed-wire-default` collector smoke 可以完成。
+- `part-filling-initial-surface-boundary` 单独采集可完成，但 S1 的最小完整语义批次还包含 support face map 与 order map，不能只提交 initial surface。
+- support/order 最小 probe 使用 `Part::Plane` 的 `Face1` 和同一 face 的 `Edge1..Edge4` 作为 boundary，调用 `Part.makeFilledFace(edges, supports=[(Edge1, Face1)], orders=[(Edge1, 0)])`。脚本输出到 `probe:before support c0` 后 30 秒未返回，需中断。
+- 另两次 collector probe 分别使用 regular polygon boundary + coplanar support face、单 edge support + `G1` / `C0` order，也在 support face 进入 native helper 后超过 30 秒未返回。
+- 主线程复核发现当前 `AppPartPy.cpp::parseSequence()` 传给 callback 的是 tuple 第一个元素而非第二个 value；同机 `FreeCADCmd` probe 调用 `Part.makeFilledFace(edges, surface=Part.makePlane(...))` 在 `before surface` 后以 `139` 退出，说明 S1 native helper oracle 在 `surface` / `supports` / `orders` kwargs 入口仍不稳定，不能据此生成 checked-in expected。
+- 复现脚本保留在 `cad-core/tools/probe_filling_s1_contract.py`；运行方式示例：`/opt/homebrew/bin/timeout 30 FreeCADCmd cad-core/tools/probe_filling_s1_contract.py surface`。
+
+当前边界：
+
+- 不生成 `cad-core/fixtures/c5m8/*support-order*` expected。
+- 不把 `Surface` / `Supports` / `Orders` 从 broad diagnostic 改成 supported。
+- 不落半成品 DTO/parser/core API。
+- `C5M8-BLK-101` 保持阻塞，后续需要先找到可返回的 FreeCAD support/order oracle case，或由 scope 明确允许将 support face map 降级为 diagnostic-backed 后再继续。
+
 ## 非目标
 
 - 不处理非默认 params。
