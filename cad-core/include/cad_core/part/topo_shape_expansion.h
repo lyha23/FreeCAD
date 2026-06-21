@@ -91,12 +91,27 @@ struct FilledFaceSupportOrderEvidence
     std::string targetSubname;
     std::string targetStableSubname;
     std::string targetShapeKind;
+    bool isBoundary = true;
+    std::string builderCall;
     bool hasSupport = false;
     std::string supportObject;
     std::string supportSubname;
     std::string supportStableSubname;
     bool hasOrder = false;
     std::string order;
+};
+
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+// ::TopoShape::makeElementFilledFace(), after one boundary wire is selected, "other edges in
+// shapes" are added with "IsBound" false; remaining face and vertex shapes call "maker.Add".
+struct FilledFaceConstraintEvidence
+{
+    std::string objectName;
+    std::string subname;
+    std::string stableSubname;
+    std::string shapeKind;
+    std::string builderCall;
+    bool isBoundary = false;
 };
 
 struct FilledFaceBuild
@@ -108,9 +123,15 @@ struct FilledFaceBuild
     std::vector<FilledFaceBoundaryEvidence> boundarySources;
     std::optional<FilledFaceBoundaryEvidence> initialSurfaceSource;
     std::vector<FilledFaceSupportOrderEvidence> supportOrderSources;
+    std::vector<FilledFaceConstraintEvidence> nonBoundarySources;
     int boundaryEdgeCount = 0;
+    int nonBoundaryConstraintCount = 0;
     int supportFaceCount = 0;
     int orderCount = 0;
+    std::string diagnosticCode;
+    std::string diagnosticProperty;
+    std::string diagnosticTarget;
+    std::string diagnosticSubname;
 };
 
 enum class PipeShellMode
@@ -211,7 +232,8 @@ NamedShapeBuild makeElementRevolutionUntilFromSources(
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
 // ::TopoShape::makeElementFilledFace(), creates "BRepOffsetAPI_MakeFilling", expands compounds,
 // finds a closed/preferred boundary wire or builds one from edges, fixes the boundary wire before
-// Add(edge, ..., IsBound=true), then calls makeElementShape(maker, _shapes, FilledFace).
+// Add(edge, ..., IsBound=true), adds remaining wire/edge constraints with IsBound=false and
+// face/vertex constraints with "maker.Add", then calls makeElementShape(maker, _shapes, FilledFace).
 FilledFaceBuild makeElementFilledFaceFromSources(
     const std::string& owner,
     const std::vector<FilledFaceSource>& boundarySources,

@@ -2489,7 +2489,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(producer_matrix["pipeshell"]["remaining"], [])
         self.assertEqual(
             producer_matrix["part_filling"]["status"],
-            "done_expected_backed_first_batch_plus_c5m8_s2_params_source_backed_known_gap",
+            "done_expected_backed_first_batch_plus_c5m8_s3_non_boundary_source_backed_known_gap",
         )
         self.assertIn("maker_history:filling", producer_matrix["part_filling"]["covered"])
         self.assertIn("boundary_source_evidence", producer_matrix["part_filling"]["covered"])
@@ -2502,12 +2502,18 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("locatable_support_order_diagnostics", producer_matrix["part_filling"]["covered"])
         self.assertIn("constructor_params_metadata", producer_matrix["part_filling"]["covered"])
         self.assertIn("locatable_param_diagnostics", producer_matrix["part_filling"]["covered"])
+        self.assertIn("non_boundary_constraint_source_evidence", producer_matrix["part_filling"]["covered"])
+        self.assertIn("locatable_non_boundary_diagnostics", producer_matrix["part_filling"]["covered"])
         self.assertIn(
             "surface_support_order_native_helper_expected",
             producer_matrix["part_filling"]["remaining"],
         )
         self.assertIn(
             "non_default_params_native_helper_expected",
+            producer_matrix["part_filling"]["remaining"],
+        )
+        self.assertIn(
+            "non_boundary_edge_support_native_helper_expected",
             producer_matrix["part_filling"]["remaining"],
         )
         self.assertEqual(producer_matrix["transformed"]["status"], "covered")
@@ -3086,7 +3092,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         filling = capabilities["part_workbench"]["filling"]
         self.assertEqual(
             filling["status"],
-            "supported_expected_backed_first_batch_with_c5m8_s2_params_source_backed_known_gap",
+            "supported_expected_backed_first_batch_with_c5m8_s3_non_boundary_source_backed_known_gap",
         )
         self.assertIn("Part::FilledFace", filling["type_ids"])
         self.assertEqual(filling["helper"], "Part.makeFilledFace")
@@ -3134,6 +3140,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "source_backed_surface_support_order_known_gap",
             "constructor_params_metadata",
             "non_default_params_source_backed_known_gap",
+            "non_boundary_edge_isbound_false",
+            "non_boundary_wire_constraints",
+            "non_boundary_face_constraint",
+            "non_boundary_vertex_point_constraint",
+            "non_boundary_constraint_source_evidence",
             "expected_backed_fixtures",
             "invalid_diagnostics",
         ):
@@ -3148,6 +3159,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "c5m8/part-filling-invalid-support-order",
             "c5m8/part-filling-non-default-params",
             "c5m8/part-filling-param-diagnostics",
+            "c5m8/part-filling-non-boundary-edge-support",
+            "c5m8/part-filling-non-boundary-face-point",
+            "c5m8/part-filling-non-boundary-wire",
+            "c5m8/part-filling-non-boundary-diagnostics",
         ):
             self.assertIn(fixture, filling["fixtures"])
         self.assertEqual(
@@ -3162,6 +3177,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "c5m8/part-filling-invalid-support-order",
                 "c5m8/part-filling-non-default-params",
                 "c5m8/part-filling-param-diagnostics",
+                "c5m8/part-filling-non-boundary-edge-support",
+                "c5m8/part-filling-non-boundary-face-point",
+                "c5m8/part-filling-non-boundary-wire",
+                "c5m8/part-filling-non-boundary-diagnostics",
             ],
         )
         for diagnostic in (
@@ -3174,6 +3193,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "invalid_order_target",
             "invalid_order_source",
             "invalid_parameter",
+            "invalid_non_boundary_source",
             "unsupported_property",
             "execution_failed",
         ):
@@ -3190,6 +3210,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "invalid_order_target",
                 "invalid_order_source",
                 "invalid_parameter",
+                "invalid_non_boundary_source",
                 "unsupported_property",
                 "execution_failed",
             ],
@@ -3205,7 +3226,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "surface_support_order_native_helper_oracle_known_gap",
             "support_order_g1_fixture_source_backed",
             "non_default_params_native_helper_oracle_known_gap",
-            "non_boundary_constraints_deferred_diagnostic",
+            "non_boundary_edge_wire_face_vertex_source_backed",
+            "non_boundary_edge_support_order_native_helper_oracle_known_gap",
             "compound_boundary_optional_not_published",
             "native_surface_workbench_filling_feature_not_claimed",
         ):
@@ -3214,7 +3236,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "surface_support_order_native_helper_expected",
             "filling_support_order_g2_expected",
             "non_default_params_native_helper_expected",
-            "non_boundary_constraints_expected_deferred",
+            "non_boundary_edge_support_native_helper_expected",
             "compound_boundary_optional_expected",
         ):
             self.assertIn(gap, filling["remaining_gaps"])
@@ -3224,12 +3246,12 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "surface_support_order_native_helper_expected",
                 "filling_support_order_g2_expected",
                 "non_default_params_native_helper_expected",
-                "non_boundary_constraints_expected_deferred",
+                "non_boundary_edge_support_native_helper_expected",
                 "compound_boundary_optional_expected",
             ],
         )
-        for unsupported in ("non_boundary_constraints",):
-            self.assertNotIn(unsupported, filling["covered"])
+        for unsupported in ("non_boundary_constraints_deferred_diagnostic",):
+            self.assertNotIn(unsupported, filling["request_local_boundaries"])
         self.assertIn("native_freecad_part_filledface_document_object", filling["non_goals"])
         self.assertIn("advanced_brepoffsetapi_makefilling_wrapper", filling["non_goals"])
         self.assertIn("surface_workbench_filling_feature", filling["non_goals"])

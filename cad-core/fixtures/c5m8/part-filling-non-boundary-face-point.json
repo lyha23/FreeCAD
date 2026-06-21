@@ -1,0 +1,65 @@
+{
+  "Objects": [
+    {
+      "Name": "Profile",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 2
+      }
+    },
+    {
+      "Name": "SupportFace",
+      "ID": 2,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 4,
+        "Width": 4,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [-2, -2, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "CenterPoint",
+      "ID": 3,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    {
+      "Name": "FilledFace",
+      "ID": 4,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Profile"
+            },
+            {
+              "value": "SupportFace",
+              "SubList": ["Face1"],
+              "StableSubList": ["Face1"]
+            },
+            {
+              "value": "CenterPoint",
+              "SubList": ["Vertex1"],
+              "StableSubList": ["Vertex1"]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["FilledFace"]
+  }
+}

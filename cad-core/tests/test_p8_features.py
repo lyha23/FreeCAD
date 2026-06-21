@@ -1009,6 +1009,127 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertEqual(result["objects"][object_name]["helper"], "Part.makeFilledFace")
         self.assert_object_matches_expected(result, "c5m8", "part-filling-param-diagnostics")
 
+    def test_c5m8_part_filling_non_boundary_edge_support_is_source_backed_known_gap(self) -> None:
+        result = self.run_recompute("part-filling-non-boundary-edge-support", "c5m8")
+        filled = result["objects"]["FilledFace"]
+        named_shape = result["named_shapes"]["FilledFace"]
+        expected = self.expected_freecad("c5m8", "part-filling-non-boundary-edge-support")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertIn("known_gap", expected)
+        self.assert_part_filling_history(result, "closed_wire")
+        self.assertEqual(filled["non_boundary_constraint_count"], 1)
+        self.assertEqual(filled["non_boundary_constraints_status"], "source_backed_native_helper_oracle_known_gap")
+        self.assertEqual(filled["support_face_count"], 1)
+        self.assertEqual(filled["order_count"], 1)
+        self.assertEqual(
+            filled["non_boundary_constraint_source_evidence"],
+            [
+                {
+                    "object": "ConstraintEdge",
+                    "subname": "Edge1",
+                    "stable_subname": "Edge1",
+                    "shape_kind": "edge",
+                    "builder_call": "Add(edge, support, order, IsBound=false)",
+                    "is_boundary": False,
+                }
+            ],
+        )
+        self.assertEqual(len(filled["support_order_source_evidence"]), 1)
+        support = filled["support_order_source_evidence"][0]
+        self.assertEqual(support["target_object"], "ConstraintEdge")
+        self.assertEqual(support["target_stable_subname"], "Edge1")
+        self.assertEqual(support["support_object"], "SupportPlane")
+        self.assertEqual(support["support_stable_subname"], "Face1")
+        self.assertEqual(support["order"], "G1")
+        self.assertFalse(support["is_boundary"])
+        self.assertEqual(support["builder_call"], "Add(edge, support, order, IsBound=false)")
+        self.assertIn("part_filling:non_boundary_constraints", named_shape["element_history_status"])
+        self.assertTrue(
+            any(
+                event["maker_stage"] == "maker_history:filling_non_boundary_constraint"
+                and event["diagnostic_status"] == "filling_non_boundary_constraint_source"
+                and event["source"] == {"object": "ConstraintEdge", "subname": "Edge1"}
+                and event["evidence"]["is_bound"] is False
+                for event in named_shape["mapper_history"]
+            )
+        )
+
+    def test_c5m8_part_filling_non_boundary_face_point_is_expected_backed(self) -> None:
+        result = self.run_recompute("part-filling-non-boundary-face-point", "c5m8")
+        filled = result["objects"]["FilledFace"]
+        named_shape = result["named_shapes"]["FilledFace"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assert_part_filling_history(result, "closed_wire")
+        self.assertEqual(filled["non_boundary_constraint_count"], 2)
+        self.assertEqual(
+            {
+                (item["object"], item["stable_subname"], item["shape_kind"], item["builder_call"])
+                for item in filled["non_boundary_constraint_source_evidence"]
+            },
+            {
+                ("SupportFace", "Face1", "face", "Add(face, order)"),
+                ("CenterPoint", "Vertex1", "vertex", "Add(point)"),
+            },
+        )
+        self.assertIn("part_filling:non_boundary_constraints", named_shape["element_history_status"])
+        self.assert_object_matches_expected(result, "c5m8", "part-filling-non-boundary-face-point")
+
+    def test_c5m8_part_filling_non_boundary_wire_is_expected_backed(self) -> None:
+        result = self.run_recompute("part-filling-non-boundary-wire", "c5m8")
+        filled = result["objects"]["FilledFace"]
+        named_shape = result["named_shapes"]["FilledFace"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assert_part_filling_history(result, "closed_wire")
+        self.assertEqual(filled["non_boundary_constraint_count"], 3)
+        self.assertEqual(
+            {item["stable_subname"] for item in filled["non_boundary_constraint_source_evidence"]},
+            {"Edge1", "Edge2", "Edge3"},
+        )
+        self.assertEqual(
+            {item["object"] for item in filled["non_boundary_constraint_source_evidence"]},
+            {"ConstraintWire"},
+        )
+        self.assertEqual(
+            {item["builder_call"] for item in filled["non_boundary_constraint_source_evidence"]},
+            {"Add(edge, support, order, IsBound=false)"},
+        )
+        self.assertIn("part_filling:non_boundary_constraints", named_shape["element_history_status"])
+        self.assert_object_matches_expected(result, "c5m8", "part-filling-non-boundary-wire")
+
+    def test_c5m8_part_filling_non_boundary_diagnostics_are_locatable(self) -> None:
+        result = self.run_recompute("part-filling-non-boundary-diagnostics", "c5m8")
+        diagnostics = result["diagnostics"]
+
+        self.assertEqual(
+            [item["code"] for item in diagnostics],
+            ["missing_link_target", "invalid_non_boundary_source", "invalid_subshape"],
+        )
+        self.assertEqual(
+            [
+                (
+                    item["object"],
+                    item["property"],
+                    item.get("target"),
+                    item.get("subname"),
+                )
+                for item in diagnostics
+            ],
+            [
+                ("MissingNonBoundaryTarget", "Boundary", "MissingConstraint", "Edge1"),
+                ("InvalidNonBoundarySolid", "Boundary", "SolidConstraint", None),
+                ("InvalidNonBoundarySubshape", "Boundary", "ConstraintEdge", "Edge99"),
+            ],
+        )
+        for object_name in ("InvalidNonBoundarySolid", "InvalidNonBoundarySubshape"):
+            self.assertEqual(result["objects"][object_name]["status"], "error")
+            self.assertEqual(result["objects"][object_name]["feature"], "part_filled_face")
+            self.assertEqual(result["objects"][object_name]["helper"], "Part.makeFilledFace")
+        self.assertEqual(result["objects"]["MissingNonBoundaryTarget"]["status"], "error")
+        self.assert_object_matches_expected(result, "c5m8", "part-filling-non-boundary-diagnostics")
+
     def test_c3m4_part_geomplate_curve_point_default_is_helper_expected_backed(self) -> None:
         result = self.run_recompute("part-geomplate-curve-point-default", "c3m4")
         geomplate = result["objects"]["GeomPlate"]

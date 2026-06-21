@@ -293,6 +293,8 @@ nlohmann::json supportOrderEvidenceJson(
             {"target_subname", item.targetSubname},
             {"target_stable_subname", item.targetStableSubname},
             {"target_shape_kind", item.targetShapeKind},
+            {"is_boundary", item.isBoundary},
+            {"builder_call", item.builderCall},
             {"has_support", item.hasSupport},
             {"has_order", item.hasOrder},
         };
@@ -305,6 +307,22 @@ nlohmann::json supportOrderEvidenceJson(
             payload["order"] = item.order;
         }
         result.push_back(std::move(payload));
+    }
+    return result;
+}
+
+nlohmann::json constraintEvidenceJson(const std::vector<FilledFaceConstraintEvidence>& evidence)
+{
+    nlohmann::json result = nlohmann::json::array();
+    for (const FilledFaceConstraintEvidence& item : evidence) {
+        result.push_back({
+            {"object", item.objectName},
+            {"subname", item.subname},
+            {"stable_subname", item.stableSubname},
+            {"shape_kind", item.shapeKind},
+            {"builder_call", item.builderCall},
+            {"is_boundary", item.isBoundary},
+        });
     }
     return result;
 }
@@ -639,7 +657,8 @@ std::optional<ResolvedFillingSources> resolveFillingBoundarySources(
                 "missing_link_target",
                 "Boundary target " + link.object + " did not produce a shape",
                 "Boundary",
-                link.object
+                link.object,
+                stableSubnameForLink(link, 0U)
             );
             return std::nullopt;
         }
@@ -661,6 +680,10 @@ std::optional<ResolvedFillingSources> resolveFillingBoundarySources(
         }
 
         for (std::size_t index = 0; index < link.subnames.size(); ++index) {
+            const std::string stable = index < link.stableSubnames.size()
+                    && !link.stableSubnames[index].empty()
+                ? link.stableSubnames[index]
+                : link.subnames[index];
             const auto selected = resolveFillingSubshape(shapeIt->second.shape, namedShape, link, index);
             if (!selected || selected->IsNull()) {
                 addFillingDiagnostic(
@@ -669,14 +692,11 @@ std::optional<ResolvedFillingSources> resolveFillingBoundarySources(
                     "invalid_subshape",
                     "Boundary subshape " + link.subnames[index] + " did not resolve",
                     "Boundary",
-                    link.object
+                    link.object,
+                    stable
                 );
                 return std::nullopt;
             }
-            const std::string stable = index < link.stableSubnames.size()
-                    && !link.stableSubnames[index].empty()
-                ? link.stableSubnames[index]
-                : link.subnames[index];
             resolved.boundarySources.push_back(FilledFaceSource {
                 link.object,
                 *selected,
@@ -902,9 +922,11 @@ void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeCo
         addFillingDiagnostic(
             object,
             context,
-            "execution_failed",
+            build.diagnosticCode.empty() ? "execution_failed" : build.diagnosticCode,
             build.error.empty() ? "Part.makeFilledFace failed" : build.error,
-            "Boundary"
+            build.diagnosticProperty.empty() ? "Boundary" : build.diagnosticProperty,
+            build.diagnosticTarget,
+            build.diagnosticSubname
         );
         return;
     }
@@ -923,9 +945,12 @@ void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeCo
             {"boundary_source_evidence", boundaryEvidenceJson(build.boundarySources)},
             {"initial_surface_source_evidence", boundaryEvidenceJson(build.initialSurfaceSource)},
             {"support_order_source_evidence", supportOrderEvidenceJson(build.supportOrderSources)},
+            {"non_boundary_constraint_count", build.nonBoundaryConstraintCount},
+            {"non_boundary_constraint_source_evidence", constraintEvidenceJson(build.nonBoundarySources)},
             {"support_face_count", build.supportFaceCount},
             {"order_count", build.orderCount},
             {"surface_support_order_status", "source_backed_native_helper_oracle_known_gap"},
+            {"non_boundary_constraints_status", "source_backed_native_helper_oracle_known_gap"},
             {"default_params", fillingParamsJson(FilledFaceParams {})},
             {"params", fillingParamsJson(*params)},
             {"params_source", "Part.makeFilledFace constructor kwargs"},

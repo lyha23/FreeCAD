@@ -1,0 +1,34 @@
+{
+  "bbox": {
+    "max": [
+      2.0,
+      2.0,
+      1e-07
+    ],
+    "min": [
+      -2.0,
+      -2.0000000000000004,
+      -1e-07
+    ]
+  },
+  "freecad_version": "1.2.0 revision 20260519",
+  "object": "FilledFace",
+  "object_fields": {
+    "boundary_edge_count": 4,
+    "boundary_mode": "closed_wire",
+    "feature": "part_filled_face",
+    "freecad_native_document_object": false,
+    "helper": "Part.makeFilledFace",
+    "source_backed_helper": true,
+    "status": "ok",
+    "topo_naming_history": "maker_history:filling"
+  },
+  "reference": "FreeCADCmd oracle from part-filling-non-boundary-face-point.json; Part::FilledFace is a cad-core helper translated to Part.makeFilledFace(...); objects: Part::RegularPolygon, Part::Plane, Part::Vertex, Part::FilledFace",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "topology_counts": {
+    "edges": 4,
+    "faces": 1,
+    "vertices": 4
+  },
+  "volume": 0.0
+}

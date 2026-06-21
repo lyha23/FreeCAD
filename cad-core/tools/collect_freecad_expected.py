@@ -1266,6 +1266,18 @@ def part_filled_face_boundary_shapes(created: dict[str, Any], spec: dict) -> tup
             if native_subname.startswith("Edge"):
                 selected_edges += 1
 
+    for shape in shapes:
+        if getattr(shape, "ShapeType", "") != "Wire":
+            continue
+        edges = list(getattr(shape, "Edges", []))
+        if not edges:
+            continue
+        try:
+            closed = bool(shape.isClosed())
+        except Exception:
+            closed = False
+        return shapes, "closed_wire" if closed else "wire", len(edges)
+
     if selected_edges and selected_edges == len(shapes):
         return shapes, "edge_wire_closed", selected_edges
     if whole_shapes == 1 and len(shapes) == 1:

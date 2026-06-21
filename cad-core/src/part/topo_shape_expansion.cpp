@@ -453,6 +453,21 @@ FilledFaceBoundaryEvidence fallbackEvidence(const FilledFaceSource& source, TopA
     };
 }
 
+FilledFaceConstraintEvidence nonBoundaryEvidenceFromBoundaryEvidence(
+    const FilledFaceBoundaryEvidence& source,
+    const std::string& builderCall
+)
+{
+    return FilledFaceConstraintEvidence {
+        source.objectName,
+        source.subname,
+        source.stableSubname,
+        source.shapeKind,
+        builderCall,
+        false,
+    };
+}
+
 bool filledFaceSourceMatchesEdge(const FilledFaceSource& source, const TopoDS_Edge& edge)
 {
     if (source.shape.IsNull()) {
@@ -469,6 +484,16 @@ bool filledFaceSourceMatchesEdge(const FilledFaceSource& source, const TopoDS_Ed
         }
     }
     return false;
+}
+
+bool filledFaceSourceMatchesAnyEdge(
+    const FilledFaceSource& source,
+    const std::vector<TopoDS_Edge>& edges
+)
+{
+    return std::any_of(edges.begin(), edges.end(), [&](const TopoDS_Edge& edge) {
+        return filledFaceSourceMatchesEdge(source, edge);
+    });
 }
 
 std::vector<FilledFaceBoundaryEvidence> evidenceForBoundaryEdge(
@@ -525,7 +550,10 @@ GeomAbs_Shape orderForBoundaryEdge(
     return GeomAbs_C0;
 }
 
-FilledFaceSupportOrderEvidence evidenceForSupportSource(const FilledFaceSupportSource& support)
+FilledFaceSupportOrderEvidence evidenceForSupportSource(
+    const FilledFaceSupportSource& support,
+    bool isBoundary
+)
 {
     const FilledFaceBoundaryEvidence target
         = fallbackEvidence(support.target, support.target.shape.ShapeType());
@@ -535,6 +563,9 @@ FilledFaceSupportOrderEvidence evidenceForSupportSource(const FilledFaceSupportS
         target.subname,
         target.stableSubname,
         target.shapeKind,
+        isBoundary,
+        isBoundary ? "Add(edge, support, order, IsBound=true)"
+                   : "Add(edge, support, order, IsBound=false)",
         true,
         supportFace.objectName,
         supportFace.subname,
@@ -544,7 +575,10 @@ FilledFaceSupportOrderEvidence evidenceForSupportSource(const FilledFaceSupportS
     };
 }
 
-FilledFaceSupportOrderEvidence evidenceForOrderSource(const FilledFaceOrderSource& order)
+FilledFaceSupportOrderEvidence evidenceForOrderSource(
+    const FilledFaceOrderSource& order,
+    bool isBoundary
+)
 {
     const FilledFaceBoundaryEvidence target = fallbackEvidence(order.target, order.target.shape.ShapeType());
     return FilledFaceSupportOrderEvidence {
@@ -552,6 +586,9 @@ FilledFaceSupportOrderEvidence evidenceForOrderSource(const FilledFaceOrderSourc
         target.subname,
         target.stableSubname,
         target.shapeKind,
+        isBoundary,
+        isBoundary ? "Add(edge, support, order, IsBound=true)"
+                   : "Add(edge, support, order, IsBound=false)",
         false,
         {},
         {},
@@ -572,7 +609,9 @@ bool sameSupportOrderTarget(
 
 std::vector<FilledFaceSupportOrderEvidence> supportOrderEvidence(
     const std::vector<FilledFaceSupportSource>& supportSources,
-    const std::vector<FilledFaceOrderSource>& orderSources
+    const std::vector<FilledFaceOrderSource>& orderSources,
+    const std::vector<TopoDS_Edge>& boundaryEdges,
+    const std::vector<TopoDS_Edge>& nonBoundaryEdges
 )
 {
     std::vector<FilledFaceSupportOrderEvidence> result;
@@ -593,18 +632,26 @@ std::vector<FilledFaceSupportOrderEvidence> supportOrderEvidence(
             existing->supportObject = item.supportObject;
             existing->supportSubname = item.supportSubname;
             existing->supportStableSubname = item.supportStableSubname;
+            existing->isBoundary = item.isBoundary;
+            existing->builderCall = item.builderCall;
         }
         if (item.hasOrder) {
             existing->hasOrder = true;
             existing->order = item.order;
+            existing->isBoundary = item.isBoundary;
+            existing->builderCall = item.builderCall;
         }
     };
 
     for (const FilledFaceSupportSource& support : supportSources) {
-        merge(evidenceForSupportSource(support));
+        const bool isBoundary = filledFaceSourceMatchesAnyEdge(support.target, boundaryEdges)
+            || !filledFaceSourceMatchesAnyEdge(support.target, nonBoundaryEdges);
+        merge(evidenceForSupportSource(support, isBoundary));
     }
     for (const FilledFaceOrderSource& order : orderSources) {
-        merge(evidenceForOrderSource(order));
+        const bool isBoundary = filledFaceSourceMatchesAnyEdge(order.target, boundaryEdges)
+            || !filledFaceSourceMatchesAnyEdge(order.target, nonBoundaryEdges);
+        merge(evidenceForOrderSource(order, isBoundary));
     }
     return result;
 }
@@ -817,10 +864,47 @@ void addFilledFaceSupportOrderHistory(
             {"support_stable_subname", source.supportStableSubname},
             {"has_order", source.hasOrder},
             {"order", source.order},
-            {"builder_call", "Add(edge, support, order, IsBound=true)"},
+            {"builder_call", source.builderCall},
+            {"is_bound", source.isBoundary},
         };
         event.recoverability = MapperHistoryRecoverability::Resolved;
         event.diagnosticStatus = "filling_support_order_source";
+        addMapperHistoryEvent(namedShape.mapperHistory, std::move(event));
+    }
+}
+
+void addFilledFaceNonBoundaryHistory(
+    NamedShape& namedShape,
+    const std::string& owner,
+    const std::vector<FilledFaceConstraintEvidence>& sources
+)
+{
+    const auto targetFace = firstFaceName(namedShape);
+    if (!targetFace) {
+        return;
+    }
+
+    for (const FilledFaceConstraintEvidence& source : sources) {
+        MapperHistoryEvent event;
+        event.source = MapperHistoryEndpoint {
+            source.objectName,
+            source.stableSubname.empty() ? source.subname : source.stableSubname
+        };
+        event.target = MapperHistoryEndpoint {owner, *targetFace};
+        event.shapeKind = "face";
+        event.relation = MapperHistoryRelation::Generated;
+        event.makerStage = "maker_history:filling_non_boundary_constraint";
+        event.evidence = {
+            {"freecad_operation", "TopoShape::makeElementFilledFace"},
+            {"helper", "Part.makeFilledFace"},
+            {"source_kind", source.shapeKind},
+            {"source_subname", source.subname},
+            {"stable_subname", source.stableSubname},
+            {"builder_call", source.builderCall},
+            {"is_bound", source.isBoundary},
+        };
+        event.recoverability = MapperHistoryRecoverability::Resolved;
+        event.diagnosticStatus = "filling_non_boundary_constraint_source";
         addMapperHistoryEvent(namedShape.mapperHistory, std::move(event));
     }
 }
@@ -1712,7 +1796,8 @@ FilledFaceBuild makeElementFilledFaceFromSources(
     // ::TopoShape::makeElementFilledFace(), calls "BRepOffsetAPI_MakeFilling", optional
     // "LoadInitSurface", then "findBoundary(shapes)" or "makeElementWires(...)", fixes the
     // boundary wire, adds ordered boundary edges with "Add(edge, support, order, IsBound true)",
-    // and returns makeElementShape(maker, _shapes, Part::OpCodes::FilledFace).
+    // adds remaining wire/edge constraints with "IsBound false", adds face/vertex constraints
+    // with the matching "maker.Add" overload, and returns makeElementShape(..., FilledFace).
     if (boundarySources.empty()) {
         return FilledFaceBuild {TopoDS_Shape {}, std::nullopt, "No input shape"};
     }
@@ -1757,6 +1842,92 @@ FilledFaceBuild makeElementFilledFaceFromSources(
                 orderForBoundaryEdge(edge, orderSources),
                 Standard_True
             );
+        }
+
+        std::vector<FilledFaceConstraintEvidence> nonBoundaryEvidence;
+        std::vector<TopoDS_Edge> nonBoundaryEdges;
+        int nonBoundaryConstraintCount = 0;
+        auto appendNonBoundaryEdgeEvidence = [&](const FilledFaceWorkingShape& item,
+                                                 const TopoDS_Edge& edge) {
+            if (item.source == nullptr) {
+                return;
+            }
+            for (const FilledFaceBoundaryEvidence& evidence :
+                 evidenceForBoundaryEdge(*item.source, edge)) {
+                nonBoundaryEvidence.push_back(nonBoundaryEvidenceFromBoundaryEvidence(
+                    evidence,
+                    "Add(edge, support, order, IsBound=false)"
+                ));
+            }
+        };
+        auto appendNonBoundaryShapeEvidence = [&](const FilledFaceWorkingShape& item,
+                                                  TopAbs_ShapeEnum kind,
+                                                  const std::string& builderCall) {
+            if (item.source == nullptr) {
+                return;
+            }
+            nonBoundaryEvidence.push_back(nonBoundaryEvidenceFromBoundaryEvidence(
+                fallbackEvidence(*item.source, kind),
+                builderCall
+            ));
+        };
+        auto invalidNonBoundaryBuild = [&](const FilledFaceWorkingShape& item) {
+            FilledFaceBuild build;
+            build.error = "Part.makeFilledFace non-boundary source must resolve to a wire, edge, face, or vertex";
+            build.diagnosticCode = "invalid_non_boundary_source";
+            build.diagnosticProperty = "Boundary";
+            if (item.source != nullptr) {
+                build.diagnosticTarget = item.source->objectName;
+                build.diagnosticSubname = item.source->stableSubname.empty() ? item.source->subname
+                                                                             : item.source->stableSubname;
+            }
+            return build;
+        };
+
+        for (const FilledFaceWorkingShape& item : shapes) {
+            if (item.shape.IsNull()) {
+                continue;
+            }
+            if (item.shape.ShapeType() == TopAbs_WIRE) {
+                for (const TopoDS_Edge& edge : orderedEdges(TopoDS::Wire(item.shape))) {
+                    maker.Add(
+                        edge,
+                        supportFaceForBoundaryEdge(edge, supportSources),
+                        orderForBoundaryEdge(edge, orderSources),
+                        Standard_False
+                    );
+                    nonBoundaryEdges.push_back(edge);
+                    ++nonBoundaryConstraintCount;
+                    appendNonBoundaryEdgeEvidence(item, edge);
+                }
+                continue;
+            }
+            if (item.shape.ShapeType() == TopAbs_EDGE) {
+                const TopoDS_Edge edge = TopoDS::Edge(item.shape);
+                maker.Add(
+                    edge,
+                    supportFaceForBoundaryEdge(edge, supportSources),
+                    orderForBoundaryEdge(edge, orderSources),
+                    Standard_False
+                );
+                nonBoundaryEdges.push_back(edge);
+                ++nonBoundaryConstraintCount;
+                appendNonBoundaryEdgeEvidence(item, edge);
+                continue;
+            }
+            if (item.shape.ShapeType() == TopAbs_FACE) {
+                maker.Add(TopoDS::Face(item.shape), GeomAbs_C0);
+                ++nonBoundaryConstraintCount;
+                appendNonBoundaryShapeEvidence(item, TopAbs_FACE, "Add(face, order)");
+                continue;
+            }
+            if (item.shape.ShapeType() == TopAbs_VERTEX) {
+                maker.Add(BRep_Tool::Pnt(TopoDS::Vertex(item.shape)));
+                ++nonBoundaryConstraintCount;
+                appendNonBoundaryShapeEvidence(item, TopAbs_VERTEX, "Add(point)");
+                continue;
+            }
+            return invalidNonBoundaryBuild(item);
         }
 
         maker.Build();
@@ -1824,10 +1995,14 @@ FilledFaceBuild makeElementFilledFaceFromSources(
             addFilledFaceInitialSurfaceHistory(namedShape, owner, *surfaceEvidence);
         }
         const std::vector<FilledFaceSupportOrderEvidence> supportOrderSourcesEvidence
-            = supportOrderEvidence(supportSources, orderSources);
+            = supportOrderEvidence(supportSources, orderSources, boundaryEdges, nonBoundaryEdges);
         if (!supportOrderSourcesEvidence.empty()) {
             addDistinct(namedShape.elementHistoryStatus, "part_filling:support_order_sources");
             addFilledFaceSupportOrderHistory(namedShape, owner, supportOrderSourcesEvidence);
+        }
+        if (!nonBoundaryEvidence.empty()) {
+            addDistinct(namedShape.elementHistoryStatus, "part_filling:non_boundary_constraints");
+            addFilledFaceNonBoundaryHistory(namedShape, owner, nonBoundaryEvidence);
         }
 
         return FilledFaceBuild {
@@ -1838,7 +2013,9 @@ FilledFaceBuild makeElementFilledFaceFromSources(
             boundary->evidence,
             surfaceEvidence,
             supportOrderSourcesEvidence,
+            nonBoundaryEvidence,
             static_cast<int>(boundaryEdges.size()),
+            nonBoundaryConstraintCount,
             static_cast<int>(supportSources.size()),
             static_cast<int>(orderSources.size()),
         };

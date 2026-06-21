@@ -31,7 +31,7 @@ C5-M6 已完成最终发布收口：`part_workbench.loft` 只发布 profile / `L
 
 C5-M7 已完成 `Part.GeomPlate.BuildPlateSurface` / `PartGeomPlateSurfaceDTO` 第二批发布：3D default / explicit approximation / InitialSurface / Curve2dOnSurface / Point2dOnSurface / mixed G0+2D / point criteria 为 expected-backed；G1 curve-on-surface 与 ProjectedCurve2d 为 source-backed known_gap；curve criteria setter 和 `Part.PlateSurface.Curves` wrapper lifecycle 为 diagnostic-backed；GUI/native DocumentObject/Filling/full surface family 不进入支持声明。
 
-C5-M8 正在执行 `Part.makeFilledFace(...)` / source-backed Filling helper 第二批：S0/S1/S2 已关闭 live guard、Surface/Supports/Orders source-backed known_gap、non-default constructor params metadata 和 locatable invalid params diagnostics；native helper geometry expected 只在 FreeCADCmd explicit kwargs oracle 稳定后替换 known_gap。当前队列从 S3 non-boundary constraints 继续。
+C5-M8 正在执行 `Part.makeFilledFace(...)` / source-backed Filling helper 第二批：S0-S3 已关闭 live guard、Surface/Supports/Orders source-backed known_gap、non-default constructor params metadata、non-boundary wire/edge/face/vertex constraints 和 locatable diagnostics；native helper geometry expected 只在 FreeCADCmd explicit kwargs / support-order oracle 稳定后替换 known_gap。当前队列从 S4 compound optional / wrapper boundary 继续。
 
 ## 队列检查
 

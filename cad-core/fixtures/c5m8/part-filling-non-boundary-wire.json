@@ -1,0 +1,43 @@
+{
+  "Objects": [
+    {
+      "Name": "Profile",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 2
+      }
+    },
+    {
+      "Name": "ConstraintWire",
+      "ID": 2,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 3,
+        "Circumradius": 0.8
+      }
+    },
+    {
+      "Name": "FilledFace",
+      "ID": 3,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Profile"
+            },
+            {
+              "value": "ConstraintWire"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["FilledFace"]
+  }
+}
