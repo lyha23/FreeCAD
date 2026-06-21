@@ -1492,6 +1492,13 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             if event.get("diagnostic_status") == "project_on_surface_edge_wire_provenance"
         ]
 
+    def project_on_surface_face_all_events(self, result: dict, object_name: str) -> list[dict]:
+        return [
+            event
+            for event in result["named_shapes"][object_name]["mapper_history"]
+            if event.get("diagnostic_status") == "project_on_surface_face_all_compound_provenance"
+        ]
+
     def test_c5m9_part_project_on_surface_edge_provenance_has_mapper_history(self) -> None:
         result = self.run_recompute("part-project-on-surface-edge-provenance", "c5m9")
         projected = result["objects"]["ProjectedEdgeProvenance"]
@@ -1575,6 +1582,90 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(diagnostics["ProjectionCountMismatch"]["property"], "Projection")
         self.assertEqual(diagnostics["ProjectionCountMismatch"]["target"], "ProjectionLine")
         self.assertEqual(diagnostics["ProjectionCountMismatch"]["subname"], "Edge1")
+
+    def test_c5m9_part_project_on_surface_face_rebuild_records_wire_ownership(self) -> None:
+        result = self.run_recompute("part-project-on-surface-face-rebuild-provenance", "c5m9")
+        projected = result["objects"]["ProjectedFaceRebuildProvenance"]
+        named_shape = result["named_shapes"]["ProjectedFaceRebuildProvenance"]
+        events = self.project_on_surface_face_all_events(result, "ProjectedFaceRebuildProvenance")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(projected["mode"], "Faces")
+        self.assertEqual(projected["projected_face_count"], 1)
+        self.assertEqual(projected["projected_inner_wire_count"], 1)
+        self.assertEqual(len(projected["projected_face_all_history"]), 1)
+        self.assertEqual(len(events), 1)
+        self.assertIn(
+            "part_project_on_surface:face_all_compound_mapper_history",
+            named_shape["element_history_status"],
+        )
+        event = events[0]
+        self.assertEqual(event["source"], {"object": "ProjectionFaceWithHole", "subname": "Face1"})
+        self.assertEqual(event["target"], {"object": "ProjectedFaceRebuildProvenance", "subname": "Face1"})
+        self.assertEqual(event["relation"], "generated")
+        self.assertEqual(event["maker_stage"], "face_rebuild")
+        self.assertEqual(event["recoverability"], "resolved")
+        evidence = event["evidence"]
+        self.assertEqual(evidence["face_rebuild_id"], "projection_item_0:face_rebuild:0")
+        self.assertEqual(evidence["compound_child_index"], 0)
+        self.assertFalse(evidence["offset_applied"])
+        self.assertEqual(evidence["pre_offset_child_id"], "projection_item_0:face_rebuild:0")
+        self.assertEqual(evidence["reference_recovery_hook"], "mapper_history_event_target_subname")
+        self.assertEqual(
+            [source["face_wire_role"] for source in evidence["face_wire_sources"]],
+            ["outer", "inner"],
+        )
+        self.assertEqual(
+            evidence["face_rebuild_ownership"]["outer_wire_source"]["face_wire_index"],
+            0,
+        )
+        self.assertEqual(len(evidence["face_rebuild_ownership"]["inner_wire_sources"]), 1)
+        self.assertEqual(evidence["face_rebuild_ownership"]["source_object"], "ProjectionFaceWithHole")
+
+    def test_c5m9_part_project_on_surface_all_compound_records_solid_and_child_provenance(self) -> None:
+        result = self.run_recompute("part-project-on-surface-all-compound-provenance", "c5m9")
+        projected = result["objects"]["ProjectedAllCompoundProvenance"]
+        named_shape = result["named_shapes"]["ProjectedAllCompoundProvenance"]
+        face_all_events = self.project_on_surface_face_all_events(result, "ProjectedAllCompoundProvenance")
+        edge_events = self.project_on_surface_provenance_events(result, "ProjectedAllCompoundProvenance")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(projected["mode"], "All")
+        self.assertEqual(projected["height"], 1.25)
+        self.assertEqual(projected["offset"], 0.25)
+        self.assertEqual(projected["offset_application"], "compound_child_moved_after_filter")
+        self.assertEqual(projected["offset_vector"], [0.0, 0.0, 0.25])
+        self.assertEqual(projected["projection_item_ledger"][0]["source_object"], "ProjectionFace")
+        self.assertEqual(projected["projection_item_ledger"][1]["source_object"], "ProjectionLine")
+        self.assertEqual(projected["projected_solid_count"], 1)
+        self.assertGreaterEqual(projected["projected_face_count"], 6)
+        self.assertEqual(len(face_all_events), 1)
+        self.assertEqual(len(edge_events), 1)
+        self.assertIn(
+            "part_project_on_surface:compound_child_reference_recovery",
+            named_shape["element_history_status"],
+        )
+
+        solid_event = face_all_events[0]
+        solid_evidence = solid_event["evidence"]
+        self.assertEqual(solid_event["source"], {"object": "ProjectionFace", "subname": "Face1"})
+        self.assertEqual(solid_event["maker_stage"], "height_solid")
+        self.assertEqual(solid_event["relation"], "generated")
+        self.assertEqual(solid_evidence["height_solid_id"], "projection_item_0:height_solid:0")
+        self.assertEqual(solid_evidence["source_face_target"], "projection_item_0:face_rebuild:0")
+        self.assertEqual(solid_evidence["height_solid_ownership"]["extrude_direction"], [0.0, 0.0, -1.25])
+        self.assertEqual(solid_evidence["compound_child_index"], 0)
+        self.assertTrue(solid_evidence["offset_applied"])
+        self.assertEqual(solid_evidence["pre_offset_child_id"], "projection_item_0:height_solid:0")
+        self.assertIn("compound_child_0", solid_evidence["child_element_map_key"])
+        self.assertEqual(solid_evidence["reference_recovery_hook"], "mapper_history_event_target_subname")
+
+        edge_evidence = edge_events[0]["evidence"]
+        self.assertEqual(edge_events[0]["source"], {"object": "ProjectionLine", "subname": "Edge1"})
+        self.assertEqual(edge_evidence["compound_child_index"], 1)
+        self.assertTrue(edge_evidence["offset_applied"])
+        self.assertEqual(edge_evidence["pre_offset_child_id"], "projection_item_1:project_wire:0")
+        self.assertIn("compound_child_1", edge_evidence["child_element_map_key"])
 
     def test_c4m1_part_project_on_surface_edge_plane_is_expected_backed(self) -> None:
         result = self.run_recompute("part-project-on-surface-edge-plane", "c4m1")

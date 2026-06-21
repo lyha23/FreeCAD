@@ -68,8 +68,11 @@ struct ProjectSubshape
 
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp
 // ::ProjectOnSurface::tryExecute(), appends createProjectedWire() results before filterShapes()
-// and createCompound(); ::projectWire() iterates projected edges. These fields carry that source
-// item, maker stage, filter stage, and edge fragment evidence into topo MapperHistory.
+// and createCompound(); ::projectWire() iterates projected edges. ::projectFace() obtains
+// outer/inner wires via getWires(), createFaceFromParametricWire() treats the first wire as the
+// outer boundary, createSolidIfHeight() only runs for Mode=All + Height, and createCompound()
+// may move each child by Offset. These fields carry that source item, maker/filter/compound
+// stage, edge fragment, face-wire, height-solid, and child provenance into topo MapperHistory.
 struct ProjectedShapeEvidence
 {
     std::string sourceObject;
@@ -86,12 +89,43 @@ struct ProjectedShapeEvidence
     std::string filterMode;
     std::string preFilterResultId;
     std::string filterStage;
+    std::size_t faceWireIndex = 0;
+    std::string faceWireRole;
+    std::string faceRebuildId;
+    std::string heightSolidId;
+    std::string sourceFaceTarget;
+    std::array<double, 3> extrudeDirection {{0.0, 0.0, 0.0}};
+    bool hasExtrudeDirection = false;
+    std::size_t compoundChildIndex = 0;
+    bool hasCompoundChildIndex = false;
+    std::string preOffsetChildId;
+    bool offsetApplied = false;
+    std::string childElementMapKey;
+    struct FaceWireSource
+    {
+        std::string sourceObject;
+        std::string sourceSubname;
+        std::string stableSubname;
+        std::size_t projectionItemIndex = 0;
+        std::size_t faceWireIndex = 0;
+        std::string faceWireRole;
+        std::string projectedWireId;
+    };
+    std::vector<FaceWireSource> faceWireSources;
 };
 
 struct ProjectedShape
 {
     TopoDS_Shape shape;
     ProjectedShapeEvidence evidence;
+};
+
+struct ProjectedFaceWire
+{
+    TopoDS_Wire wire;
+    std::size_t faceWireIndex = 0;
+    std::string faceWireRole;
+    std::string projectedWireId;
 };
 
 void addProjectOnSurfaceDiagnostic(
@@ -590,20 +624,49 @@ TopoDS_Wire fixWireOnSupport(const TopoDS_Shape& shape, const TopoDS_Face& suppo
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp
 // ::ProjectOnSurface::projectFace(), projects each face wire with BRepProj_Projection and fixes
 // the selected projected wire before face rebuild.
-std::vector<TopoDS_Wire> projectFaceWires(
+std::string faceWireRoleForIndex(std::size_t index)
+{
+    return index == 0U ? "outer" : "inner";
+}
+
+std::string projectedFaceWireId(const ProjectSubshape& projection, std::size_t faceWireIndex)
+{
+    return "projection_item_" + std::to_string(projection.projectionItemIndex)
+        + ":project_face_wire:" + std::to_string(faceWireIndex);
+}
+
+std::vector<ProjectedFaceWire> projectFaceWires(
+    const ProjectSubshape& projectionItem,
     const TopoDS_Face& face,
     const TopoDS_Face& supportFace,
     const gp_Dir& direction
 )
 {
-    std::vector<TopoDS_Wire> wires;
+    std::vector<ProjectedFaceWire> wires;
+    std::size_t faceWireIndex = 0;
     for (const TopoDS_Wire& wire : faceWires(face)) {
         BRepProj_Projection projection(wire, supportFace, direction);
         const TopoDS_Wire projectedWire = closestProjectedWire(projection, face);
         const TopoDS_Wire fixedWire = fixWireOnSupport(projectedWire, supportFace);
         if (!fixedWire.IsNull()) {
-            wires.push_back(fixedWire);
+            wires.push_back(ProjectedFaceWire {
+                fixedWire,
+                faceWireIndex,
+                faceWireRoleForIndex(faceWireIndex),
+                projectedFaceWireId(projectionItem, faceWireIndex)
+            });
         }
+        ++faceWireIndex;
+    }
+    return wires;
+}
+
+std::vector<TopoDS_Wire> projectedFaceWireShapes(const std::vector<ProjectedFaceWire>& projectedWires)
+{
+    std::vector<TopoDS_Wire> wires;
+    wires.reserve(projectedWires.size());
+    for (const ProjectedFaceWire& projectedWire : projectedWires) {
+        wires.push_back(projectedWire.wire);
     }
     return wires;
 }
@@ -737,6 +800,39 @@ ProjectedShapeEvidence evidenceForProjection(
     return evidence;
 }
 
+std::vector<ProjectedShapeEvidence::FaceWireSource> faceWireSourcesForProjection(
+    const ProjectSubshape& projection,
+    const std::vector<ProjectedFaceWire>& projectedWires
+)
+{
+    std::vector<ProjectedShapeEvidence::FaceWireSource> sources;
+    sources.reserve(projectedWires.size());
+    for (const ProjectedFaceWire& projectedWire : projectedWires) {
+        sources.push_back(
+            ProjectedShapeEvidence::FaceWireSource {
+                projection.objectName,
+                projection.sourceSubname,
+                projection.stableSubname,
+                projection.projectionItemIndex,
+                projectedWire.faceWireIndex,
+                projectedWire.faceWireRole,
+                projectedWire.projectedWireId,
+            }
+        );
+    }
+    return sources;
+}
+
+void applyFaceWireEvidence(
+    ProjectedShapeEvidence& evidence,
+    const ProjectedFaceWire& projectedWire
+)
+{
+    evidence.faceWireIndex = projectedWire.faceWireIndex;
+    evidence.faceWireRole = projectedWire.faceWireRole;
+    evidence.projectedWireIndex = projectedWire.faceWireIndex;
+}
+
 std::vector<ProjectedShape> projectWireEdges(
     const ProjectSubshape& projectionItem,
     const TopoDS_Face& supportFace,
@@ -774,24 +870,41 @@ std::vector<ProjectedShape> createProjectedShapes(
         return {};
     }
     if (projectionShape.ShapeType() == TopAbs_FACE) {
-        const std::vector<TopoDS_Wire> projectedWires =
-            projectFaceWires(TopoDS::Face(projectionShape), supportFace, direction);
-        const TopoDS_Face face = createFaceFromProjectedWires(projectedWires, supportFace);
+        const std::vector<ProjectedFaceWire> projectedWires =
+            projectFaceWires(projectionItem, TopoDS::Face(projectionShape), supportFace, direction);
+        const TopoDS_Face face =
+            createFaceFromProjectedWires(projectedFaceWireShapes(projectedWires), supportFace);
         if (!face.IsNull()) {
+            ProjectedShapeEvidence evidence =
+                evidenceForProjection(projectionItem, mode, "face_rebuild", 0);
+            evidence.faceRebuildId = evidence.projectedResultId;
+            evidence.faceWireSources = faceWireSourcesForProjection(projectionItem, projectedWires);
             return {
                 ProjectedShape {
                     face,
-                    evidenceForProjection(projectionItem, mode, "face_rebuild", 0)
+                    std::move(evidence)
                 }
             };
         }
         std::vector<ProjectedShape> wireResults;
         wireResults.reserve(projectedWires.size());
         for (std::size_t index = 0; index < projectedWires.size(); ++index) {
+            const ProjectedFaceWire& projectedWire = projectedWires.at(index);
             ProjectedShapeEvidence evidence =
                 evidenceForProjection(projectionItem, mode, "project_face_wire", index);
-            evidence.projectedWireIndex = index;
-            wireResults.push_back(ProjectedShape {projectedWires.at(index), std::move(evidence)});
+            applyFaceWireEvidence(evidence, projectedWire);
+            evidence.faceWireSources.push_back(
+                ProjectedShapeEvidence::FaceWireSource {
+                    projectionItem.objectName,
+                    projectionItem.sourceSubname,
+                    projectionItem.stableSubname,
+                    projectionItem.projectionItemIndex,
+                    projectedWire.faceWireIndex,
+                    projectedWire.faceWireRole,
+                    projectedWire.projectedWireId,
+                }
+            );
+            wireResults.push_back(ProjectedShape {projectedWire.wire, std::move(evidence)});
         }
         return wireResults;
     }
@@ -846,6 +959,12 @@ std::vector<ProjectedShape> filterProjectedShapes(
                         current.evidence.filterMode = mode;
                         current.evidence.filterStage = "face_to_wire";
                         current.evidence.projectedWireIndex = faceWireIndex;
+                        current.evidence.faceWireIndex = faceWireIndex;
+                        current.evidence.faceWireRole = faceWireRoleForIndex(faceWireIndex);
+                        if (faceWireIndex < current.evidence.faceWireSources.size()) {
+                            current.evidence.faceWireRole =
+                                current.evidence.faceWireSources.at(faceWireIndex).faceWireRole;
+                        }
                         filtered.push_back(std::move(current));
                     }
                     ++faceWireIndex;
@@ -880,6 +999,20 @@ TopoDS_Shape createSolidIfHeight(
     return extrude.Shape();
 }
 
+bool shouldCreateHeightSolid(const TopoDS_Shape& shape, const std::string& mode, double height)
+{
+    return !shape.IsNull() && shape.ShapeType() == TopAbs_FACE && mode == "All"
+        && height >= Precision::Confusion();
+}
+
+std::array<double, 3> heightSolidExtrudeDirection(const gp_Dir& direction, double height)
+{
+    gp_Vec directionToExtrude(direction);
+    directionToExtrude.Reverse();
+    directionToExtrude.Multiply(height);
+    return {directionToExtrude.X(), directionToExtrude.Y(), directionToExtrude.Z()};
+}
+
 std::vector<ProjectedShape> createSolidsIfHeight(
     const std::vector<ProjectedShape>& shapes,
     const std::string& mode,
@@ -891,6 +1024,19 @@ std::vector<ProjectedShape> createSolidsIfHeight(
     results.reserve(shapes.size());
     for (const ProjectedShape& shape : shapes) {
         ProjectedShape current = shape;
+        if (shouldCreateHeightSolid(shape.shape, mode, height)) {
+            current.evidence.sourceFaceTarget = current.evidence.faceRebuildId.empty()
+                ? current.evidence.projectedResultId
+                : current.evidence.faceRebuildId;
+            current.evidence.heightSolidId = "projection_item_"
+                + std::to_string(current.evidence.projectionItemIndex) + ":height_solid:"
+                + std::to_string(results.size());
+            current.evidence.makerStage = "height_solid";
+            current.evidence.projectedResultId = current.evidence.heightSolidId;
+            current.evidence.preFilterResultId = current.evidence.heightSolidId;
+            current.evidence.extrudeDirection = heightSolidExtrudeDirection(direction, height);
+            current.evidence.hasExtrudeDirection = true;
+        }
         current.shape = createSolidIfHeight(shape.shape, mode, direction, height);
         results.push_back(std::move(current));
     }
@@ -935,6 +1081,30 @@ TopLoc_Location offsetPlacementForVector(const gp_Vec& offsetVector, double offs
     gp_Trsf transform;
     transform.SetTranslation(offsetVector);
     return TopLoc_Location(transform);
+}
+
+std::vector<ProjectedShape> annotateCompoundChildEvidence(
+    const std::vector<ProjectedShape>& shapes,
+    const TopLoc_Location& offsetPlacement
+)
+{
+    std::vector<ProjectedShape> annotated;
+    annotated.reserve(shapes.size());
+    const bool hasOffset = !offsetPlacement.IsIdentity();
+    std::size_t compoundChildIndex = 0;
+    for (const ProjectedShape& shape : shapes) {
+        if (shape.shape.IsNull()) {
+            continue;
+        }
+        ProjectedShape current = shape;
+        current.evidence.compoundChildIndex = compoundChildIndex;
+        current.evidence.hasCompoundChildIndex = true;
+        current.evidence.preOffsetChildId = current.evidence.projectedResultId;
+        current.evidence.offsetApplied = hasOffset;
+        annotated.push_back(std::move(current));
+        ++compoundChildIndex;
+    }
+    return annotated;
 }
 
 TopoDS_Shape compoundOf(const std::vector<ProjectedShape>& shapes, const TopLoc_Location& offsetPlacement)
@@ -995,6 +1165,101 @@ std::optional<std::string> targetElementForShape(
     return std::nullopt;
 }
 
+std::string shapeKindNameForTarget(TopAbs_ShapeEnum kind)
+{
+    switch (kind) {
+        case TopAbs_FACE:
+            return "face";
+        case TopAbs_EDGE:
+            return "edge";
+        case TopAbs_VERTEX:
+            return "vertex";
+        default:
+            return "shape";
+    }
+}
+
+struct TargetElementEvidence
+{
+    std::string element;
+    TopAbs_ShapeEnum kind = TopAbs_SHAPE;
+};
+
+std::optional<TargetElementEvidence> targetElementForProjectedShape(
+    const NamedShape& namedShape,
+    const TopoDS_Shape& shape
+)
+{
+    if (shape.IsNull()) {
+        return std::nullopt;
+    }
+    if (shape.ShapeType() == TopAbs_FACE || shape.ShapeType() == TopAbs_EDGE
+        || shape.ShapeType() == TopAbs_VERTEX) {
+        if (const auto element = targetElementForShape(namedShape, shape, shape.ShapeType())) {
+            return TargetElementEvidence {*element, shape.ShapeType()};
+        }
+    }
+    for (const TopAbs_ShapeEnum kind : {TopAbs_FACE, TopAbs_EDGE, TopAbs_VERTEX}) {
+        for (TopExp_Explorer explorer(shape, kind); explorer.More(); explorer.Next()) {
+            if (const auto element = targetElementForShape(namedShape, explorer.Current(), kind)) {
+                return TargetElementEvidence {*element, kind};
+            }
+        }
+    }
+    return std::nullopt;
+}
+
+nlohmann::json faceWireSourceToJson(const ProjectedShapeEvidence::FaceWireSource& source)
+{
+    return {
+        {"source_object", source.sourceObject},
+        {"source_subname", source.sourceSubname},
+        {"stable_subname", source.stableSubname},
+        {"projection_item_index", source.projectionItemIndex},
+        {"face_wire_index", source.faceWireIndex},
+        {"face_wire_role", source.faceWireRole},
+        {"projected_wire_id", source.projectedWireId},
+    };
+}
+
+nlohmann::json faceWireSourcesToJson(
+    const std::vector<ProjectedShapeEvidence::FaceWireSource>& sources
+)
+{
+    nlohmann::json result = nlohmann::json::array();
+    for (const ProjectedShapeEvidence::FaceWireSource& source : sources) {
+        result.push_back(faceWireSourceToJson(source));
+    }
+    return result;
+}
+
+nlohmann::json innerWireSourcesToJson(
+    const std::vector<ProjectedShapeEvidence::FaceWireSource>& sources
+)
+{
+    nlohmann::json result = nlohmann::json::array();
+    for (const ProjectedShapeEvidence::FaceWireSource& source : sources) {
+        if (source.faceWireRole == "inner") {
+            result.push_back(faceWireSourceToJson(source));
+        }
+    }
+    return result;
+}
+
+nlohmann::json outerWireSourceToJson(
+    const std::vector<ProjectedShapeEvidence::FaceWireSource>& sources
+)
+{
+    const auto outer = std::find_if(
+        sources.begin(),
+        sources.end(),
+        [](const ProjectedShapeEvidence::FaceWireSource& source) {
+            return source.faceWireRole == "outer";
+        }
+    );
+    return outer == sources.end() ? nlohmann::json::object() : faceWireSourceToJson(*outer);
+}
+
 nlohmann::json projectOnSurfaceMapperEvidenceJson(
     const ProjectedShapeEvidence& evidence,
     const std::string& mapperHistoryId,
@@ -1016,9 +1281,53 @@ nlohmann::json projectOnSurfaceMapperEvidenceJson(
         {"filter_mode", evidence.filterMode},
         {"filter_stage", evidence.filterStage},
         {"pre_filter_result_id", evidence.preFilterResultId},
+        {"face_wire_index", evidence.faceWireIndex},
+        {"face_wire_role", evidence.faceWireRole},
+        {"face_rebuild_id", evidence.faceRebuildId},
+        {"height_solid_id", evidence.heightSolidId},
+        {"source_face_target", evidence.sourceFaceTarget},
+        {"extrude_direction", evidence.hasExtrudeDirection
+            ? nlohmann::json {
+                evidence.extrudeDirection.at(0),
+                evidence.extrudeDirection.at(1),
+                evidence.extrudeDirection.at(2)}
+            : nlohmann::json::array()},
+        {"compound_child_index", evidence.hasCompoundChildIndex
+            ? nlohmann::json(evidence.compoundChildIndex)
+            : nlohmann::json()},
+        {"pre_offset_child_id", evidence.preOffsetChildId},
+        {"offset_applied", evidence.offsetApplied},
+        {"child_element_map_key", evidence.childElementMapKey},
         {"mapper_history_id", mapperHistoryId},
         {"element_map_target", targetElement},
         {"reference_recovery_hook", "mapper_history_event_target_subname"},
+        {"face_wire_sources", faceWireSourcesToJson(evidence.faceWireSources)},
+        {"face_rebuild_ownership", {
+            {"face_rebuild_id", evidence.faceRebuildId},
+            {"outer_wire_source", outerWireSourceToJson(evidence.faceWireSources)},
+            {"inner_wire_sources", innerWireSourcesToJson(evidence.faceWireSources)},
+            {"source_object", evidence.sourceObject},
+            {"source_subname", evidence.sourceSubname},
+            {"projection_item_index", evidence.projectionItemIndex},
+        }},
+        {"height_solid_ownership", {
+            {"height_solid_id", evidence.heightSolidId},
+            {"source_face_target", evidence.sourceFaceTarget},
+            {"extrude_direction", evidence.hasExtrudeDirection
+                ? nlohmann::json {
+                    evidence.extrudeDirection.at(0),
+                    evidence.extrudeDirection.at(1),
+                    evidence.extrudeDirection.at(2)}
+                : nlohmann::json::array()},
+        }},
+        {"compound_child_ownership", {
+            {"compound_child_index", evidence.hasCompoundChildIndex
+                ? nlohmann::json(evidence.compoundChildIndex)
+                : nlohmann::json()},
+            {"pre_offset_child_id", evidence.preOffsetChildId},
+            {"offset_applied", evidence.offsetApplied},
+            {"child_element_map_key", evidence.childElementMapKey},
+        }},
         {"wire_fragment_ownership", {
             {"source_object", evidence.sourceObject},
             {"source_subname", evidence.sourceSubname},
@@ -1034,6 +1343,20 @@ nlohmann::json projectedEdgeWireHistoryJson(const std::vector<MapperHistoryEvent
     return mapperHistoryToJson(events);
 }
 
+std::vector<MapperHistoryEvent> eventsWithDiagnosticStatus(
+    const std::vector<MapperHistoryEvent>& events,
+    const std::string& diagnosticStatus
+)
+{
+    std::vector<MapperHistoryEvent> filtered;
+    for (const MapperHistoryEvent& event : events) {
+        if (event.diagnosticStatus == diagnosticStatus) {
+            filtered.push_back(event);
+        }
+    }
+    return filtered;
+}
+
 void addDistinctStatus(std::vector<std::string>& values, const std::string& value)
 {
     if (std::find(values.begin(), values.end(), value) == values.end()) {
@@ -1041,7 +1364,47 @@ void addDistinctStatus(std::vector<std::string>& values, const std::string& valu
     }
 }
 
-NamedShape namedShapeForProjectOnSurfaceEdgeWireHistory(
+MapperHistoryRelation relationForProjectOnSurfaceEvidence(const ProjectedShapeEvidence& evidence)
+{
+    if (evidence.makerStage == "project_wire" && evidence.sourceShapeKind == "wire") {
+        return MapperHistoryRelation::Split;
+    }
+    if (evidence.makerStage == "project_face_wire" || evidence.filterStage == "face_to_wire") {
+        return MapperHistoryRelation::Split;
+    }
+    return MapperHistoryRelation::Generated;
+}
+
+std::string diagnosticStatusForProjectOnSurfaceEvidence(const ProjectedShapeEvidence& evidence)
+{
+    if (evidence.makerStage == "project_wire"
+        && (evidence.sourceShapeKind == "edge" || evidence.sourceShapeKind == "wire")) {
+        return "project_on_surface_edge_wire_provenance";
+    }
+    return "project_on_surface_face_all_compound_provenance";
+}
+
+std::string mapperHistoryIdForProjectOnSurfaceEvidence(
+    const std::string& owner,
+    const ProjectedShapeEvidence& evidence,
+    const std::string& targetElement
+)
+{
+    if (evidence.makerStage == "project_wire") {
+        return owner + ":projection_item_" + std::to_string(evidence.projectionItemIndex)
+            + ":edge_fragment_" + std::to_string(evidence.edgeFragmentIndex);
+    }
+    std::string id = owner + ":" + evidence.projectedResultId;
+    if (evidence.hasCompoundChildIndex) {
+        id += ":compound_child_" + std::to_string(evidence.compoundChildIndex);
+    }
+    if (!targetElement.empty()) {
+        id += ":" + targetElement;
+    }
+    return id;
+}
+
+NamedShape namedShapeForProjectOnSurfaceProvenance(
     const std::string& owner,
     const TopoDS_Shape& resultShape,
     const std::vector<ProjectedShape>& filteredShapes,
@@ -1050,48 +1413,60 @@ NamedShape namedShapeForProjectOnSurfaceEdgeWireHistory(
 {
     NamedShape namedShape = indexedNamedShapeForObject(owner, resultShape);
     const bool hasOffset = !offsetPlacement.IsIdentity();
+    bool sawEdgeWireEvent = false;
+    bool sawFaceAllEvent = false;
     for (const ProjectedShape& projected : filteredShapes) {
-        const ProjectedShapeEvidence& evidence = projected.evidence;
-        if (evidence.makerStage != "project_wire") {
-            continue;
-        }
-        if (evidence.sourceShapeKind != "edge" && evidence.sourceShapeKind != "wire") {
-            continue;
-        }
-        const TopAbs_ShapeEnum targetKind = projected.shape.ShapeType() == TopAbs_WIRE
-            ? TopAbs_WIRE
-            : TopAbs_EDGE;
+        ProjectedShapeEvidence evidence = projected.evidence;
         const TopoDS_Shape targetShape = hasOffset ? projected.shape.Moved(offsetPlacement)
                                                    : projected.shape;
-        const auto targetElement = targetElementForShape(namedShape, targetShape, targetKind);
+        const auto targetElement = targetElementForProjectedShape(namedShape, targetShape);
         if (!targetElement) {
             continue;
         }
 
-        const std::string mapperHistoryId = owner + ":projection_item_"
-            + std::to_string(evidence.projectionItemIndex) + ":edge_fragment_"
-            + std::to_string(evidence.edgeFragmentIndex);
-        const MapperHistoryRelation relation = evidence.sourceShapeKind == "wire"
-            ? MapperHistoryRelation::Split
-            : MapperHistoryRelation::Generated;
+        evidence.childElementMapKey = owner + ":compound_child_"
+            + std::to_string(evidence.compoundChildIndex) + ":" + targetElement->element;
+        const std::string mapperHistoryId =
+            mapperHistoryIdForProjectOnSurfaceEvidence(owner, evidence, targetElement->element);
+        const std::string diagnosticStatus = diagnosticStatusForProjectOnSurfaceEvidence(evidence);
+        const MapperHistoryRelation relation = relationForProjectOnSurfaceEvidence(evidence);
         // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp
-        // ::ProjectOnSurface::projectWire(), uses "BRepProj_Projection aProjection(wire,
-        // supportFace, dir)" then pushes each "TopoDS::Edge(xp.Current())"; the source endpoint
-        // is the Projection LinkSubList item already resolved by getProjectionShapes().
+        // ::ProjectOnSurface::projectWire(), ::projectFace(), ::createSolidIfHeight(), and
+        // ::createCompound() all consume the Projection LinkSubList item already resolved by
+        // getProjectionShapes(); mapper evidence records that source ledger and the target
+        // subname rather than deriving ownership from child order, bbox, or geometry similarity.
         MapperHistoryEvent event = projectOnSurfaceMapperHistoryEvent(
             MapperHistoryEndpoint {evidence.sourceObject, evidence.stableSubname},
-            MapperHistoryEndpoint {owner, *targetElement},
-            targetKind == TopAbs_WIRE ? "wire" : "edge",
+            MapperHistoryEndpoint {owner, targetElement->element},
+            shapeKindNameForTarget(targetElement->kind),
             relation,
             evidence.makerStage,
-            projectOnSurfaceMapperEvidenceJson(evidence, mapperHistoryId, *targetElement),
+            projectOnSurfaceMapperEvidenceJson(evidence, mapperHistoryId, targetElement->element),
             MapperHistoryRecoverability::Resolved,
-            "project_on_surface_edge_wire_provenance"
+            diagnosticStatus
         );
         addMapperHistoryEvent(namedShape.mapperHistory, std::move(event));
+        if (diagnosticStatus == "project_on_surface_edge_wire_provenance") {
+            sawEdgeWireEvent = true;
+        }
+        if (diagnosticStatus == "project_on_surface_face_all_compound_provenance") {
+            sawFaceAllEvent = true;
+        }
+    }
+    if (sawEdgeWireEvent) {
+        addDistinctStatus(namedShape.elementHistoryStatus, "part_project_on_surface:edge_wire_mapper_history");
+    }
+    if (sawFaceAllEvent) {
+        addDistinctStatus(
+            namedShape.elementHistoryStatus,
+            "part_project_on_surface:face_all_compound_mapper_history"
+        );
+        addDistinctStatus(
+            namedShape.elementHistoryStatus,
+            "part_project_on_surface:compound_child_reference_recovery"
+        );
     }
     if (!namedShape.mapperHistory.empty()) {
-        addDistinctStatus(namedShape.elementHistoryStatus, "part_project_on_surface:edge_wire_mapper_history");
         addDistinctStatus(namedShape.elementHistoryStatus, "reference_recovery_hook:mapper_history_event");
     }
     return namedShape;
@@ -1167,13 +1542,23 @@ void executePartProjectOnSurface(const app::DocumentObject& object, runtime::Com
 
         const gp_Vec offsetVector = offsetVectorForDirection(*direction, offset);
         const TopLoc_Location offsetPlacement = offsetPlacementForVector(offsetVector, offset);
+        const std::vector<ProjectedShape> compoundChildren =
+            annotateCompoundChildEvidence(filteredShapes, offsetPlacement);
         const TopoDS_Shape projectedCompound =
-            compoundOf(filteredShapes, offsetPlacement);
-        NamedShape namedShape = namedShapeForProjectOnSurfaceEdgeWireHistory(
+            compoundOf(compoundChildren, offsetPlacement);
+        NamedShape namedShape = namedShapeForProjectOnSurfaceProvenance(
             object.name,
             projectedCompound,
-            filteredShapes,
+            compoundChildren,
             offsetPlacement
+        );
+        const std::vector<MapperHistoryEvent> edgeWireEvents = eventsWithDiagnosticStatus(
+            namedShape.mapperHistory,
+            "project_on_surface_edge_wire_provenance"
+        );
+        const std::vector<MapperHistoryEvent> faceAllEvents = eventsWithDiagnosticStatus(
+            namedShape.mapperHistory,
+            "project_on_surface_face_all_compound_provenance"
         );
         nlohmann::json metadata = {
             {"feature", "part_project_on_surface"},
@@ -1187,7 +1572,9 @@ void executePartProjectOnSurface(const app::DocumentObject& object, runtime::Com
             {"height", height},
             {"offset", offset},
             {"topo_naming_history", "indexed_projected_edges_no_mapper_history"},
-            {"projected_edge_wire_history", projectedEdgeWireHistoryJson(namedShape.mapperHistory)},
+            {"projected_edge_wire_history", projectedEdgeWireHistoryJson(edgeWireEvents)},
+            {"projected_face_all_history", mapperHistoryToJson(faceAllEvents)},
+            {"projected_provenance_history", mapperHistoryToJson(namedShape.mapperHistory)},
             {"projected_solid_count", countSubshapes(projectedCompound, TopAbs_SOLID)},
             {"projected_face_count", countSubshapes(projectedCompound, TopAbs_FACE)},
             {"projected_wire_count", countSubshapes(projectedCompound, TopAbs_WIRE)},

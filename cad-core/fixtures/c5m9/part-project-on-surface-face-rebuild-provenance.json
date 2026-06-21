@@ -1,0 +1,98 @@
+{
+  "Objects": [
+    {
+      "Name": "SupportPlane",
+      "ID": 1,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 6,
+        "Width": 4
+      }
+    },
+    {
+      "Name": "OuterProjectionFace",
+      "ID": 2,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 4,
+        "Width": 3,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [1, 0.5, -2],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "HoleTool",
+      "ID": 3,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 1,
+        "Width": 1,
+        "Height": 4,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [2.25, 1.5, -4],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "ProjectionFaceWithHole",
+      "ID": 4,
+      "TypeId": "Part::Cut",
+      "Properties": {
+        "Base": {
+          "PropertyType": "App::PropertyLink",
+          "value": "OuterProjectionFace"
+        },
+        "Tool": {
+          "PropertyType": "App::PropertyLink",
+          "value": "HoleTool"
+        },
+        "Refine": false
+      }
+    },
+    {
+      "Name": "ProjectedFaceRebuildProvenance",
+      "ID": 5,
+      "TypeId": "Part::ProjectOnSurface",
+      "Properties": {
+        "Mode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Faces"
+        },
+        "Height": {
+          "PropertyType": "App::PropertyLength",
+          "value": 0
+        },
+        "Offset": {
+          "PropertyType": "App::PropertyDistance",
+          "value": 0
+        },
+        "Direction": {
+          "PropertyType": "App::PropertyDirection",
+          "value": [0, 0, 1]
+        },
+        "SupportFace": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportPlane",
+          "SubList": ["Face1"]
+        },
+        "Projection": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "ProjectionFaceWithHole",
+              "SubList": ["Face1"]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["ProjectedFaceRebuildProvenance"]
+  }
+}

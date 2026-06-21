@@ -2750,6 +2750,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "c5m9_projected_edge_wire_mapper_history_source_backed",
             "c5m9_projected_wire_fragment_ownership",
             "c5m9_invalid_provenance_diagnostics",
+            "c5m9_projected_face_wire_source_evidence",
+            "c5m9_projected_face_rebuild_mapper_history_source_backed",
+            "c5m9_projected_all_compound_child_provenance",
+            "c5m9_projected_height_solid_provenance",
+            "c5m9_projected_reference_recovery_hook",
             "expected_backed_fixture",
             "deferred_branch_diagnostics",
         ):
@@ -2772,6 +2777,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "c5m9/part-project-on-surface-edge-provenance",
                 "c5m9/part-project-on-surface-wire-split-provenance",
                 "c5m9/part-project-on-surface-invalid-provenance-diagnostics",
+                "c5m9/part-project-on-surface-face-rebuild-provenance",
+                "c5m9/part-project-on-surface-all-compound-provenance",
             ],
         )
         for diagnostic in (
@@ -2791,19 +2798,18 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "ordinary_link_sub_list_projection_order",
             "ordinary_indexed_named_shape_without_freecad_mapper_history",
             "projected_edge_wire_mapper_history_from_projection_item_ledger",
+            "projected_face_all_mapper_history_from_projection_item_ledger",
             "native_project_on_surface_mapper_history_hidden_until_probe",
         ):
             self.assertIn(boundary, project_on_surface["request_local_boundaries"])
         self.assertEqual(
             project_on_surface["remaining_gaps"],
             [
-                "projected_face_all_compound_provenance_mapper_history",
                 "gui_projection_task_panel",
                 "unverified_advanced_branches",
             ],
         )
         self.assertIn("gui_projection_task_panel", project_on_surface["non_goals"])
-        self.assertIn("projected_face_all_compound_provenance_mapper_history", project_on_surface["non_goals"])
         self.assertIn("unverified_advanced_branches", project_on_surface["non_goals"])
         self.assertNotIn("full_part_surface_family", project_on_surface["covered"])
         self.assertNotIn("full_part_surface_family", project_on_surface["remaining_gaps"])
