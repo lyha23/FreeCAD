@@ -53,17 +53,17 @@ class CadCoreExpectedFixtureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCa
             ),
             ("c5m8", "part-filling-support-order-edge-face"): (
                 "part_filling_support_order_native_helper_oracle_blocked",
-                "filling_support_order",
+                "filling_support_order_g1",
                 "shape_summary for Part.makeFilledFace(supports=..., orders=...)",
             ),
             ("c5m8", "part-filling-non-default-params"): (
                 "part_filling_non_default_params_native_helper_oracle_blocked",
-                "filling_params",
+                "filling_params_all",
                 "shape_summary for explicit BRepOffsetAPI_MakeFilling constructor params",
             ),
             ("c5m8", "part-filling-non-boundary-edge-support"): (
                 "part_filling_non_boundary_edge_support_native_helper_oracle_blocked",
-                "filling_nonboundary_support_order",
+                "filling_nonboundary_support_order_g1",
                 "shape_summary for non-boundary edge with support/order",
             ),
             ("c5m7", "part-geomplate-g1-curve-on-surface"): (
@@ -83,6 +83,50 @@ class CadCoreExpectedFixtureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCa
                 self.assertEqual(known_gap["kind"], kind)
                 self.assertEqual(known_gap["freecadcmd_evidence"]["probe_case"], probe_case)
                 self.assertIn(uncollected_field, known_gap["uncollected_fields"])
+
+        params_gap = self.expected_freecad("c5m8", "part-filling-non-default-params")["known_gap"]
+        self.assertEqual(
+            set(params_gap["c5m13_expected_backed_subsets"]),
+            {"Degree", "NumIter", "Tol2d+Tol3d", "MaxDegree"},
+        )
+        self.assertEqual(
+            {item["field"] for item in params_gap["blocked_param_subsets"]},
+            {
+                "PtsOnCurve",
+                "Anisotropy",
+                "TolG1+TolG2",
+                "MaxSegments",
+                "all explicit constructor params",
+            },
+        )
+        self.assertEqual({item["shell_exit"] for item in params_gap["blocked_param_subsets"]}, {139})
+
+    def test_c5m13_filling_param_expected_metadata_matches_s3_boundaries(self) -> None:
+        expected_params = {
+            "part-filling-param-degree-only": {"degree": 4},
+            "part-filling-param-num-iter-only": {"iterations": 4},
+            "part-filling-param-tol2d-tol3d-only": {
+                "tolerance_2d": 0.00001,
+                "tolerance_3d": 0.0001,
+            },
+            "part-filling-param-max-degree-only": {"max_degree": 9},
+        }
+        for fixture, param_subset in expected_params.items():
+            with self.subTest(fixture=fixture):
+                expected = self.expected_freecad("c5m13", fixture)
+                self.assertNotIn("known_gap", expected)
+                self.assertEqual(expected["object_fields"]["feature"], "part_filled_face")
+                self.assertEqual(expected["object_fields"]["helper"], "Part.makeFilledFace")
+                self.assertEqual(expected["object_fields"]["topo_naming_history"], "maker_history:filling")
+                self.assertEqual(
+                    expected["object_fields"]["params_source"],
+                    "Part.makeFilledFace constructor kwargs",
+                )
+                self.assertIn("shape_summary", expected)
+                self.assertIn("topology_counts", expected["shape_summary"])
+                self.assertIn("params", expected["object_fields"])
+                for key, value in param_subset.items():
+                    self.assertEqual(expected["object_fields"]["params"][key], value)
 
     def test_c5m10_sweep_wrapper_expected_metadata_matches_s2_boundaries(self) -> None:
         expected_backed = {

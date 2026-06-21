@@ -1340,6 +1340,32 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "part_filling_non_default_params_native_helper_oracle_blocked",
         )
 
+    def test_c5m13_part_filling_param_subsets_are_expected_backed(self) -> None:
+        cases = {
+            "part-filling-param-degree-only": {"degree": 4},
+            "part-filling-param-num-iter-only": {"iterations": 4},
+            "part-filling-param-tol2d-tol3d-only": {
+                "tolerance_2d": 0.00001,
+                "tolerance_3d": 0.0001,
+            },
+            "part-filling-param-max-degree-only": {"max_degree": 9},
+        }
+        for fixture, param_subset in cases.items():
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "c5m13")
+                filled = result["objects"]["FilledFace"]
+                expected = self.expected_freecad("c5m13", fixture)
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertNotIn("known_gap", expected)
+                self.assertIn("shape_summary", expected)
+                self.assert_part_filling_history(result, "edge_wire_closed", expect_default_params=False)
+                self.assertEqual(filled["params_source"], "Part.makeFilledFace constructor kwargs")
+                for key, value in param_subset.items():
+                    self.assertEqual(filled["params"][key], value)
+                    self.assertEqual(expected["object_fields"]["params"][key], value)
+                self.assert_object_matches_expected(result, "c5m13", fixture)
+
     def test_c5m8_part_filling_param_diagnostics_are_locatable(self) -> None:
         result = self.run_recompute("part-filling-param-diagnostics", "c5m8")
         diagnostics = result["diagnostics"]

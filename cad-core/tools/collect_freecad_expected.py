@@ -1314,13 +1314,28 @@ def part_filled_face_boundary_shapes(created: dict[str, Any], spec: dict) -> tup
     return shapes, "mixed_boundary", selected_edges
 
 
-def part_filled_face_non_boundary_constraint_count(shapes: list[Any]) -> int:
+def part_filled_face_non_boundary_constraint_count(
+    shapes: list[Any],
+    boundary_mode: str,
+    boundary_edge_count: int,
+) -> int:
     boundary_consumed = False
+    boundary_edges_consumed = 0
     count = 0
     for shape in shapes:
         shape_type = getattr(shape, "ShapeType", "")
         if not boundary_consumed and shape_type == "Wire":
             boundary_consumed = True
+            continue
+        if (
+            boundary_mode == "edge_wire_closed"
+            and not boundary_consumed
+            and shape_type == "Edge"
+            and boundary_edges_consumed < boundary_edge_count
+        ):
+            boundary_edges_consumed += 1
+            if boundary_edges_consumed == boundary_edge_count:
+                boundary_consumed = True
             continue
         if shape_type == "Wire":
             count += len(getattr(shape, "Edges", []))
@@ -1424,12 +1439,18 @@ def collect_part_filled_face_expected(
                 # ::makeFilledFace(), returns TopoShape(...).makeElementFilledFace(...) as a helper
                 # result; cad-core Part::FilledFace fixtures are translated into that helper call.
                 result_shape = Part.makeFilledFace(shapes, **params_kwargs)
-                payload = shape_summary(result_shape)
+                summary = shape_summary(result_shape)
+                payload = dict(summary)
+                payload["shape_summary"] = summary
                 payload["object_fields"] = part_filled_face_default_object_fields(
                     boundary_mode,
                     boundary_edge_count,
                     params_evidence if has_explicit_params else None,
-                    part_filled_face_non_boundary_constraint_count(shapes),
+                    part_filled_face_non_boundary_constraint_count(
+                        shapes,
+                        boundary_mode,
+                        boundary_edge_count,
+                    ),
                 )
                 object_payloads[name] = payload
             except UnsupportedFixture as exc:
