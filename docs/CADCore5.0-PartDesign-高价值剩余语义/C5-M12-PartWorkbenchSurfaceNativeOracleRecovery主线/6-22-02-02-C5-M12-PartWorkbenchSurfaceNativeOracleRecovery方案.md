@@ -7,7 +7,7 @@ C5-M6 到 C5-M11 已把 Part Workbench surface family 拆成多个可发布 slic
 本包纳入四组代表场景：
 
 - `part_workbench.sweep`：C5-M11 后 `SpineSupport` / `SupportMode` 是 diagnostic-only narrowed blocker；`SectionOptions[].Location` / `WithContact` / `WithCorrection` 与 `advanced_combination` 卡在 FreeCADCmd `OCCError: NCollection_Array1::Value`。
-- `part_workbench.loft`：`complex_profile_family` 是 C5-M6 后唯一 loft remaining gap，需要按 FreeCAD `Part::Loft` sections/profile 语义拆分 face / vertex / wire / sketch subelement 场景。
+- `part_workbench.loft`：S3 已为 FreeCAD `Part::Loft` sections/profile 语义中的 wire / face / vertex / whole sketch object representatives 建立 expected-backed 覆盖；sketch subelement assignment 因 `Sections=App::PropertyLinkList` 保持 native-hidden diagnostic-only。
 - `part_workbench.filling`：C5-M8 后仍有 `surface_support_order_native_helper_expected`、`filling_support_order_g2_expected`、`non_default_params_native_helper_expected`、`non_boundary_edge_support_native_helper_expected`。
 - `part_workbench.geomplate`：C5-M7 后仍有 G1 curve-on-surface native expected oracle 与 ProjectedCurve2d native expected oracle；curve criteria setter 和 PlateSurface.Curves 当前仍是 FreeCAD wrapper diagnostic/lifecycle boundary。
 
@@ -38,7 +38,7 @@ C5-M6 到 C5-M11 已把 Part Workbench surface family 拆成多个可发布 slic
 1. S0：冻结 current live blockers、fixture / expected 状态、source authority 和非目标。
 2. S1：批量 probe FreeCADCmd native helper / wrapper，生成 collectable / blocker 分流矩阵。
 3. S2：恢复 Sweep wrapper support/location/combined expected 或保留更窄 blocker。
-4. S3：实现 Loft complex profile family expected / diagnostics。
+4. S3：已实现 Loft complex profile family expected / diagnostics。
 5. S4：恢复 Filling + GeomPlate native helper expected 或收窄 blockers。
 6. S5：同步 tests、capability、C3 gap、C5 root、本包矩阵和 README。
 

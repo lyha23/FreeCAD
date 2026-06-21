@@ -11,6 +11,27 @@ except ImportError:  # pragma: no cover - supports `unittest discover tests`.
 
 
 class CadCoreExpectedFixtureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
+    def test_c5m12_loft_complex_profile_expected_metadata_matches_s3_boundaries(self) -> None:
+        expected_backed = {
+            "part-loft-complex-wire-face": ["LowerWire", "MiddleFace", "UpperWire"],
+            "part-loft-complex-vertex-sketch-object": ["BaseSketch", "TipVertex"],
+        }
+        for fixture, sections in expected_backed.items():
+            with self.subTest(fixture=fixture):
+                expected = self.expected_freecad("c5m12", fixture)
+                self.assertNotIn("known_gap", expected)
+                self.assertEqual(expected["object_fields"]["feature"], "part_loft")
+                self.assertEqual(expected["object_fields"]["topo_naming_history"], "maker_history:loft_thru_sections")
+                self.assertEqual(expected["object_fields"]["sections"], sections)
+                self.assertIn("bbox", expected)
+                self.assertIn("topology_counts", expected)
+
+        diagnostic = self.expected_freecad("c5m12", "part-loft-subelement-assignment-diagnostic")
+        known_gap = diagnostic["known_gap"]
+        self.assertEqual(known_gap["kind"], "part_loft_subelement_assignment_native_hidden")
+        self.assertEqual(known_gap["freecadcmd_evidence"]["property"], "Sections")
+        self.assertIn("object_fields.sections[].subname", known_gap["uncollected_fields"])
+
     def test_c5m10_sweep_wrapper_expected_metadata_matches_s2_boundaries(self) -> None:
         expected_backed = {
             "part-sweep-auxiliary-spine-contract": {"auxiliary_spine", "mode"},

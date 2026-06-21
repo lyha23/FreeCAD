@@ -1,0 +1,54 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchProfile",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [3, 0]},
+          {"kind": "LineSegment", "start": [3, 0], "end": [3, 2]},
+          {"kind": "LineSegment", "start": [3, 2], "end": [0, 2]},
+          {"kind": "LineSegment", "start": [0, 2], "end": [0, 0]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "UpperWire",
+      "ID": 2,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 1.0,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0.25, 0.25, 3.0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "Loft",
+      "ID": 3,
+      "TypeId": "Part::Loft",
+      "Properties": {
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            {"object": "SketchProfile", "subname": "Edge1"},
+            "UpperWire"
+          ]
+        },
+        "Solid": false,
+        "Ruled": false,
+        "Closed": false,
+        "Linearize": false,
+        "MaxDegree": 5
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Loft"]
+  }
+}

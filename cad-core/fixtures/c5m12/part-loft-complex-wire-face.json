@@ -1,0 +1,60 @@
+{
+  "Objects": [
+    {
+      "Name": "LowerWire",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 2.0
+      }
+    },
+    {
+      "Name": "MiddleFace",
+      "ID": 2,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 3.0,
+        "Width": 2.0,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0.5, -0.5, 2.0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "UpperWire",
+      "ID": 3,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 1.2,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0.25, 0.25, 4.0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "Loft",
+      "ID": 4,
+      "TypeId": "Part::Loft",
+      "Properties": {
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["LowerWire", "MiddleFace", "UpperWire"]
+        },
+        "Solid": false,
+        "Ruled": false,
+        "Closed": false,
+        "Linearize": false,
+        "MaxDegree": 5
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Loft"]
+  }
+}

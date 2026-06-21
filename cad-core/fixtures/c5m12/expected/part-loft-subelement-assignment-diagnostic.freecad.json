@@ -1,0 +1,25 @@
+{
+  "known_gap": {
+    "delete_condition": "Only delete when upstream Part::Loft.Sections exposes a native subelement storage path for App::PropertyLinkList, or when C5 scope approves a request-local DTO that is not treated as FreeCAD native expected.",
+    "freecadcmd_evidence": {
+      "error": "TypeError: Type must be App.DocumentObject or None, not tuple",
+      "property": "Sections",
+      "source": "C5-M12-S1 loft_profiles probe"
+    },
+    "kind": "part_loft_subelement_assignment_native_hidden",
+    "source_authority": [
+      "src/Mod/Part/App/PartFeatures.cpp::Loft::execute",
+      "src/App/PropertyLinks.cpp::PropertyLinkList"
+    ],
+    "uncollected_fields": [
+      "object_fields.sections[].subname",
+      "shape_summary for selected Sketch subelement"
+    ]
+  },
+  "nonGoal": {
+    "ids": ["C5M12-NG-005"],
+    "reason": "Part::Loft.Sections is App::PropertyLinkList, so S3 must not forge subname expected from cad-core output."
+  },
+  "reference": "C5-M12-S1 FreeCADCmd probe classified Sketch subelement assignment as native-hidden diagnostic-only.",
+  "schema_version": "cad-core.freecad-expected.v1"
+}

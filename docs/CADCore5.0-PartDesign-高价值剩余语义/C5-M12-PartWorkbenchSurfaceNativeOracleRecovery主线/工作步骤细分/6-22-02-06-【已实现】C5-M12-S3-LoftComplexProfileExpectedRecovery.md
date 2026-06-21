@@ -1,6 +1,6 @@
 # C5-M12-S3 Loft complex profile expected recovery
 
-状态：`pending_C5M12-S3_loft_complex_profile`
+状态：`done_C5M12-S3_loft_complex_profile_expected_recovery`
 
 ## 目标
 
@@ -17,9 +17,10 @@
 
 ## 产物
 
-- 新增或更新 `cad-core/fixtures/c5m12` Loft complex profile fixtures / expected。
-- 必要时补 cad-core Loft source-backed semantics。
-- 更新 `C5M12-BLK-301`、`C5M12-SCOPE-301`、`C5M12-ORC-301`。
+- 新增 `cad-core/fixtures/c5m12/part-loft-complex-wire-face.json` 与 FreeCAD expected，覆盖 wire / face mixed profile representative。
+- 新增 `cad-core/fixtures/c5m12/part-loft-complex-vertex-sketch-object.json` 与 FreeCAD expected，覆盖 whole sketch object / vertex representative。
+- 新增 `cad-core/fixtures/c5m12/part-loft-subelement-assignment-diagnostic.json` 与 diagnostic-only expected，保留 `PropertyLinkList` native-hidden subelement blocker。
+- 已更新 `C5M12-BLK-301`、`C5M12-SCOPE-301`、`C5M12-ORC-301` 与 root C5/C3 Loft capability 口径。
 
 ## 非目标
 

@@ -603,6 +603,46 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assert_part_loft_history(result, ["BaseProfile", "TipVertex"], linearize=True)
         self.assert_object_matches_expected(result, "c4m1", "part-loft-linearize-profile-vertex")
 
+    def test_c5m12_part_loft_complex_wire_face_profiles_are_expected_backed(self) -> None:
+        result = self.run_recompute("part-loft-complex-wire-face", "c5m12")
+        loft = result["objects"]["Loft"]
+        expected = self.expected_freecad("c5m12", "part-loft-complex-wire-face")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertNotIn("known_gap", expected)
+        self.assertEqual(loft["shape"], "occt_shell")
+        self.assertEqual(loft["solid"], False)
+        self.assertEqual(loft["ruled"], False)
+        self.assertEqual(loft["max_degree"], 5)
+        self.assert_part_loft_history(result, ["LowerWire", "MiddleFace", "UpperWire"])
+        self.assert_object_matches_expected(result, "c5m12", "part-loft-complex-wire-face")
+
+    def test_c5m12_part_loft_sketch_object_and_vertex_profiles_are_expected_backed(self) -> None:
+        result = self.run_recompute("part-loft-complex-vertex-sketch-object", "c5m12")
+        loft = result["objects"]["Loft"]
+        expected = self.expected_freecad("c5m12", "part-loft-complex-vertex-sketch-object")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertNotIn("known_gap", expected)
+        self.assertEqual(loft["shape"], "occt_shell")
+        self.assertEqual(loft["solid"], False)
+        self.assertEqual(loft["ruled"], True)
+        self.assertEqual(loft["max_degree"], 2)
+        self.assert_part_loft_history(result, ["BaseSketch", "TipVertex"])
+        self.assert_object_matches_expected(result, "c5m12", "part-loft-complex-vertex-sketch-object")
+
+    def test_c5m12_part_loft_subelement_assignment_stays_native_hidden_diagnostic(self) -> None:
+        expected = self.expected_freecad("c5m12", "part-loft-subelement-assignment-diagnostic")
+        known_gap = expected["known_gap"]
+
+        self.assertEqual(known_gap["kind"], "part_loft_subelement_assignment_native_hidden")
+        self.assertEqual(
+            known_gap["freecadcmd_evidence"]["error"],
+            "TypeError: Type must be App.DocumentObject or None, not tuple",
+        )
+        self.assertIn("object_fields.sections[].subname", known_gap["uncollected_fields"])
+        self.assertIn("shape_summary for selected Sketch subelement", known_gap["uncollected_fields"])
+
     def assert_part_sweep_history(
         self,
         result: dict,

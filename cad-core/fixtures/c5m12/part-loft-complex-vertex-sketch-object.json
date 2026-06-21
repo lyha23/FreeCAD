@@ -1,0 +1,47 @@
+{
+  "Objects": [
+    {
+      "Name": "BaseSketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [-1.5, -1.0], "end": [1.5, -1.0]},
+          {"kind": "LineSegment", "start": [1.5, -1.0], "end": [1.5, 1.0]},
+          {"kind": "LineSegment", "start": [1.5, 1.0], "end": [-1.5, 1.0]},
+          {"kind": "LineSegment", "start": [-1.5, 1.0], "end": [-1.5, -1.0]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "TipVertex",
+      "ID": 2,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 0.25,
+        "Y": 0.1,
+        "Z": 3.5
+      }
+    },
+    {
+      "Name": "Loft",
+      "ID": 3,
+      "TypeId": "Part::Loft",
+      "Properties": {
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["BaseSketch", "TipVertex"]
+        },
+        "Solid": false,
+        "Ruled": true,
+        "Closed": false,
+        "Linearize": false,
+        "MaxDegree": 2
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Loft"]
+  }
+}

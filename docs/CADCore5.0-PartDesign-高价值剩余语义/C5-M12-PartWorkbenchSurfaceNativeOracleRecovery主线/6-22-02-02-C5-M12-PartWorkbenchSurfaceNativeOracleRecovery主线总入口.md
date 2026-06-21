@@ -27,7 +27,7 @@ C5-M12 承接 C5-M6 到 C5-M11 关闭后仍留在 Part Workbench surface family 
 | live gap guard | C5-M6/M7/M8/M11 当前 capability gap 与 checked-in expected | S0 冻结真实 remaining blockers、非目标和批量边界 |
 | oracle probe matrix | FreeCADCmd wrapper/helper probes for Sweep, Loft, Filling, GeomPlate | S1 批量采集 probe 证据，确定 collectable / blocker 分流 |
 | Sweep wrapper recovery | support valid representative, located profile, advanced combined | S2 收窄或替换 C5-M11 Sweep wrapper blockers |
-| Loft complex profile | face / vertex / wire / sketch subelement complex profile family | S3 为 `part_workbench.loft.complex_profile_family` 建 expected / diagnostics |
+| Loft complex profile | wire / face / vertex / whole sketch object profile family；sketch subelement native-hidden boundary | S3 已为 `part_workbench.loft.complex_profile_family` 代表 profile 建 expected / diagnostics |
 | Filling + GeomPlate native oracle | Filling support/order/G2/params/non-boundary edge, GeomPlate G1/projected native oracle | S4 native helper expected 或 source-backed blocker 更新 |
 | capability docs closeout | expected, tests, capability, C3/C5 docs | S5 收口 root/package matrices 和 capability wording |
 
