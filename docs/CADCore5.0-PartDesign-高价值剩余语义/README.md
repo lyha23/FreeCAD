@@ -33,7 +33,7 @@
 | C5-M13 Part Workbench Surface Narrowed Blocker Recovery（已收口） | `C5-M13-PartWorkbenchSurfaceNarrowedBlockerRecovery主线/6-22-04-02-【已实现】C5-M13-PartWorkbenchSurfaceNarrowedBlockerRecovery主线总入口.md` | `C5-M13-PartWorkbenchSurfaceNarrowedBlockerRecovery主线/工作步骤细分/` |
 | C5-M14 DatumPoint ProximityPoint AttachEngine（已收口） | `C5-M14-DatumPointProximityPointAttachEngine主线/6-22-12-25-C5-M14-DatumPointProximityPointAttachEngine主线总入口.md` | `C5-M14-DatumPointProximityPointAttachEngine主线/工作步骤细分/` |
 | C5-M15 Datum3DPlane AttachEngine（S5 已复审，待 S6 实现） | `C5-M15-Datum3DPlaneAttachEngine主线/6-22-15-17-C5-M15-Datum3DPlaneAttachEngine主线总入口.md` | `C5-M15-Datum3DPlaneAttachEngine主线/工作步骤细分/` |
-| C5-M16 Datum CurveFrame / Curvature AttachEngine（S0 已冻结，待 S1-S6） | `C5-M16-DatumCurveFrameCurvatureAttachEngine主线/6-22-21-39-C5-M16-DatumCurveFrameCurvatureAttachEngine主线总入口.md` | `C5-M16-DatumCurveFrameCurvatureAttachEngine主线/工作步骤细分/` |
+| C5-M16 Datum CurveFrame / Curvature AttachEngine（S1 已冻结，待 S2-S6） | `C5-M16-DatumCurveFrameCurvatureAttachEngine主线/6-22-21-39-C5-M16-DatumCurveFrameCurvatureAttachEngine主线总入口.md` | `C5-M16-DatumCurveFrameCurvatureAttachEngine主线/工作步骤细分/` |
 
 C5-M6 已完成最终发布收口：`part_workbench.loft` 的 profile / `Linearize=true` expected-backed slice 保持为基础发布面，原 `complex_profile_family` broad gap 已由 C5-M12 代表 profile expected-backed 关闭；`part_workbench.sweep` 的 C5-M6 发布口径只包含 multi-profile / `Linearize=true` expected-backed 基础 slice，advanced PipeShell 字段级合同由 C5-M10/C5-M11/C5-M12 收口。
 
@@ -55,7 +55,7 @@ C5-M14 已完成 DatumPoint `ProximityPoint1/2` AttachEngine 主线：它承接 
 
 C5-M15 打开 Datum3DPlane AttachEngine 主线：它不再做单 case thin plan，而是把同一 `AttachEngine3D::_calculateAttachedPlacement()` 调用链、同一 `datum_attachment.h` selected placement 边界、同一 `c51m5` expected 家族下的 `Translate`、`TangentPlane`、`ThreePointsPlane`、`ThreePointsNormal` 纳入一轮。S0-S5 已完成 live guard、source/scope、Translate/ThreePoints、TangentPlane 和 request-local capability 边界复审；S6 仍需批量采集 oracle、补 cad-core C++、fixtures、focused tests、capability/docs 与验收记录闭环。`Folding`、curve frame/curvature、conic landmarks、`IntersectionPoint` 和 GUI/session 仍为后续分包。
 
-C5-M16 打开 Datum curve frame / curvature AttachEngine 主线：S0 已冻结 live blocker，当前 C5-M15 S6 仍 pending，因此 M16 S6 不得发布 capability 或移除同一 `datum_attach_engine_remaining_modes` exact blocker。范围只处理共享 `AttachEngine3D::_calculateAttachedPlacement()` 曲线帧调用链下的 `FrenetNB/TN/TB`、`Concentric`、`SectionOfRevolution`，以及复用该 3D branch 的 `AxisOfCurvature`、`Normal`、`Binormal`、`CenterOfCurvature` aliases；核心语义是 edge/curve support、optional vertex projection、`attachParameter`、D1/D2、Frenet T/N/B、curvature center、diagnostics 和 request-local placement response。`Folding`、conic landmarks、`IntersectionPoint`、`TangentU/V`、GUI/session 与跨请求状态仍为后续分包或 non-goal。下一步是 S1 FreeCAD CurveFrame 源码候选矩阵。
+C5-M16 打开 Datum curve frame / curvature AttachEngine 主线：S1 已冻结 live blocker 与 FreeCAD source candidates，当前 C5-M15 S6 仍 pending，因此 M16 S6 不得发布 capability 或移除同一 `datum_attach_engine_remaining_modes` exact blocker。范围只处理共享 `AttachEngine3D::_calculateAttachedPlacement()` 曲线帧调用链下的 `FrenetNB/TN/TB`、`Concentric`、`SectionOfRevolution`，以及复用该 3D branch 的 `AxisOfCurvature`、`Normal`、`Binormal`、`CenterOfCurvature` aliases；核心语义是 edge/curve support、optional vertex projection、`attachParameter`、D1/D2、Frenet T/N/B、curvature center、diagnostics 和 request-local placement response。`Folding`、conic landmarks、`IntersectionPoint`、`TangentU/V`、GUI/session 与跨请求状态仍为后续分包或 non-goal。下一步是 S2 scope 准入与待实现矩阵。
 
 ## 队列检查
 

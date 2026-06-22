@@ -1,4 +1,4 @@
-# C5-M16-S1 FreeCAD CurveFrame 源码候选矩阵
+# 【已实现】C5-M16-S1 FreeCAD CurveFrame 源码候选矩阵
 
 ## 目标
 
@@ -24,6 +24,15 @@
 
 - `矩阵/c5m16_datum_curve_frame_source_candidates.tsv`
 - `矩阵/c5m16_datum_curve_frame_scope_review_matrix.tsv`
+
+## S1 冻结结论
+
+- `AttachEngine3D::AttachEngine3D()` 的 edge-driven ref table 已复核：本包目标共享 `rtEdge` / `rtCurve` / `rtCircle`，并支持 optional `rtVertex` 与 vertex-first swap；`NormalToPath` 只进入 curve projection 合同，不作为本包新增 release mode。
+- `_calculateAttachedPlacement()` 的 `mmNormalToPath`、`mmFrenetNB/TN/TB`、`mmRevolutionSection`、`mmConcentric` 共用 path edge、`attachParameter` / vertex projection、D1 zero derivative、D2、T/N/B 与 curvature center 分支。
+- `AttachEngineLine` 的 `AxisOfCurvature -> mmRevolutionSection`、`Binormal -> mmFrenetTN`、`Normal -> mmFrenetTB` 和 `AttachEnginePoint` 的 `CenterOfCurvature -> mmRevolutionSection` 已作为 aliases 写入 source candidates。
+- `AttachExtension::updateSinglePropertyStatus()` 的 `modeIsPointOnCurve` / `MapPathParameter` 可见性与 `PropertyLinks.cpp` 的 request-local subname/shadow link 证据已冻结为 release 边界证据；它们不代表 backend session 或 long-lived BREP。
+- `Folding`、conic landmarks、`IntersectionPoint`、`TangentU/V` 只保留为 out-of-scope / non-goal source candidates；S1 不采 oracle、不改 code、不声明 supported。
+- 下一步进入 S2：把已冻结 source candidates 路由到 scope、backendGap、fixture/oracle、non-goal 和 release gate。
 
 ## 完成条件
 

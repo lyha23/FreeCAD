@@ -1,6 +1,6 @@
 # C5-M16 DatumCurveFrameCurvature AttachEngine 主线
 
-状态：`S0_done__S1_pending__release_blocked_by_c5m15_s6`
+状态：`S1_done__S2_pending__release_blocked_by_c5m15_s6`
 
 本包承接 C5-M15 Datum3DPlane AttachEngine 收口后的下一批 `datum_attach_engine_remaining_modes`。范围按同一 FreeCAD 曲线帧调用链、同一 `cad-core/src/part_design/datum_attachment.h` placement helper 边界、同一 `c51m5` Datum expected 家族拆分，不再按单个 UI mode 名称薄切。
 
@@ -66,7 +66,7 @@ S0 live blocker / M15 dependency freeze
 | 方案 | `6-22-21-39-C5-M16-DatumCurveFrameCurvatureAttachEngine方案.md` | 主线范围、实现顺序、验收分层 |
 | 工作步骤总入口 | `工作步骤细分/6-22-21-40-【已实现】C5-M16工作步骤总入口.md` | S0-S6 队列索引 |
 | S0 | `工作步骤细分/6-22-21-41-【已实现】C5-M16-S0-liveCurveFrameBlocker冻结.md` | live blocker、M15 dependency、禁止声明 |
-| S1 | `工作步骤细分/6-22-21-42-C5-M16-S1-FreeCADCurveFrame源码候选矩阵.md` | FreeCAD source audit |
+| S1 | `工作步骤细分/6-22-21-42-【已实现】C5-M16-S1-FreeCADCurveFrame源码候选矩阵.md` | FreeCAD source audit |
 | S2 | `工作步骤细分/6-22-21-43-C5-M16-S2-scope准入与待实现矩阵.md` | scope / backendGap / nonGoal routing |
 | S3 | `工作步骤细分/6-22-21-44-C5-M16-S3-CurveProjectionFrenetFrame专项复审.md` | projection、D1/D2、Frenet T/N/B |
 | S4 | `工作步骤细分/6-22-21-45-C5-M16-S4-CurvatureCenterAlias专项复审.md` | curvature center 与 line/point alias |
@@ -89,7 +89,7 @@ S0 live blocker / M15 dependency freeze
 - S0 已完成 live blocker 冻结，不改 code、不采集 oracle、不移除 exact blocker。
 - M16 scope 仅限 `FrenetNB/TN/TB`、`Concentric`、`SectionOfRevolution`、`AxisOfCurvature`、`Normal`、`Binormal`、`CenterOfCurvature`。
 - `Folding`、conic landmarks、`IntersectionPoint`、`TangentU/V`、GUI/session 继续由 non-goal / later-package guard 保护。
-- 下一步是 S1 FreeCAD CurveFrame 源码候选矩阵；C5-M15 S6 未关闭前，M16 S6 不得发布 capability。
+- S1 已完成 FreeCAD source candidates 冻结；下一步是 S2 scope 准入与待实现矩阵。C5-M15 S6 未关闭前，M16 S6 不得发布 capability。
 
 ## 队列检查
 

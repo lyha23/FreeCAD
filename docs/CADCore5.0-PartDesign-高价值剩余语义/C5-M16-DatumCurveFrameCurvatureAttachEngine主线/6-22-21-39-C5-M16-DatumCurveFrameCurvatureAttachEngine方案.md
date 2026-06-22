@@ -1,6 +1,6 @@
 # C5-M16 DatumCurveFrameCurvature AttachEngine 方案
 
-状态：`S0_done__S1_pending__release_blocked_by_c5m15_s6`
+状态：`S1_done__S2_pending__release_blocked_by_c5m15_s6`
 
 ## 当前基线
 
@@ -58,8 +58,8 @@ S0 live freeze 已确认 C5-M15 队列仍有 `C5-M15-S6 Oracle 实现与发布�
 ## 实施顺序
 
 1. S0：已冻结 M15 依赖、live exact blocker、禁止声明和状态字典。
-2. S1：审计 FreeCAD source candidates，确认哪些 mode 共享 3D curve-frame route，哪些必须排除。
-3. S2：把 source candidates 路由到 scope、blocker、backendGap、fixture/oracle、nonGoal。
+2. S1：已审计 FreeCAD source candidates，确认哪些 mode 共享 3D curve-frame route，哪些必须排除。
+3. S2：下一步把 source candidates 路由到 scope、blocker、backendGap、fixture/oracle、nonGoal。
 4. S3：专项复审 projection / D1 / D2 / Frenet frame，写清 `NormalToPath` 与 `FrenetNB/TN/TB` 实现合同。
 5. S4：专项复审 curvature center 与 aliases，写清 `Concentric`、`SectionOfRevolution`、`AxisOfCurvature`、`Normal/Binormal`、`CenterOfCurvature` 的成功/失败边界。
 6. S5：复审 request-local response、writeback suggestions、capability exact blocker closeout，确保不把 excluded family 顺带 supported。
