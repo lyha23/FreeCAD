@@ -1,6 +1,6 @@
 category_id	category_name	classification	priority	scope_ids	blocker_ids	product_decision_needed	recommended_next_step
-C5M17-CAT-001	DatumLine conic landmarks	pending_backendGap	C5-P0	C5M17-SCOPE-101	C5M17-BLK-101	no	S2 admits only Directrix1/2 and Asymptote1/2 as conic line backend gap; S3 freezes DTO/diagnostics; S6 may implement only FreeCADCmd expected-backed conic line landmarks
-C5M17-CAT-002	DatumPoint conic focus landmarks	pending_backendGap	C5-P0	C5M17-SCOPE-102	C5M17-BLK-102	no	S2 admits only Focus1/2 as conic point backend gap; S3 freezes DTO/diagnostics; S6 may implement only FreeCADCmd expected-backed conic point landmarks
+C5M17-CAT-001	DatumLine conic landmarks	pending_backendGap	C5-P0	C5M17-SCOPE-101	C5M17-BLK-101	no	S3 freezes Directrix/Asymptote DTO, placement, expected fields and diagnostics; S6 may implement only FreeCADCmd expected-backed conic line landmarks
+C5M17-CAT-002	DatumPoint conic focus landmarks	pending_backendGap	C5-P0	C5M17-SCOPE-102	C5M17-BLK-102	no	S3 freezes Focus DTO, point/base expected fields and diagnostics; S6 may implement only FreeCADCmd expected-backed conic point landmarks
 C5M17-CAT-003	Folding	laterPackage	C5-P1	C5M17-SCOPE-201	C5M17-BLK-201	yes	S2 routes Folding to a later fold-angle package; S4 records reopen conditions and keeps it out of conic S6
 C5M17-CAT-004	IntersectionPoint	sourceAuditRequired	C5-P1	C5M17-SCOPE-301	C5M17-BLK-301	yes	S2 routes IntersectionPoint to source audit because face/face DTO and native expected are not proven; S4 keeps it in exact blocker
 C5M17-CAT-005	TangentU / TangentV	laterSurfacePackage	C5-P1	C5M17-SCOPE-401	C5M17-BLK-401	yes	S2 routes TangentU/V to a later surface tangent package; S4 records reopen conditions and keeps them out of conic S6
