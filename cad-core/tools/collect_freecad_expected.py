@@ -5217,6 +5217,11 @@ def expected_has_native_geometry_payload(path: Path) -> bool:
     return "object" in expected or "objects" in expected
 
 
+def expected_has_diagnostic_only_payload(path: Path) -> bool:
+    expected = json.loads(path.read_text(encoding="utf-8"))
+    return "diagnostic_codes" in expected and "object" not in expected and "objects" not in expected
+
+
 def run_inside_freecad(args: argparse.Namespace) -> int:
     fixtures_root = Path(args.fixtures_root)
     failures = 0
@@ -5230,6 +5235,9 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
                 print(f"skip missing expected {fixture_path}", file=sys.stderr)
                 continue
             if out_path.exists() and not expected_has_native_geometry_payload(out_path):
+                if expected_has_diagnostic_only_payload(out_path):
+                    print(f"diagnostic-only expected has no native geometry check: {out_path}", file=sys.stderr)
+                    continue
                 if args.phase and args.skip_unsupported:
                     skipped += 1
                     print(f"skip non-geometry expected {fixture_path}", file=sys.stderr)

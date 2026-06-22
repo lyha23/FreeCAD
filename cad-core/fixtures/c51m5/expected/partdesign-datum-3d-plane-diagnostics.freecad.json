@@ -1,0 +1,12 @@
+{
+  "diagnostic_codes": [
+    "attachment_support_invalid_shape",
+    "attachment_support_invalid_shape",
+    "attachment_parameter_invalid",
+    "attachment_parameter_invalid",
+    "attachment_support_invalid_shape",
+    "attachment_support_invalid_shape"
+  ],
+  "reference": "C5-M15 DatumPlane/DatumCS 3D AttachEngine invalid diagnostics source-backed by FreeCAD AttachEngine3D Translate/TangentPlane/ThreePoints branches; diagnostic-only fixture has no native geometry payload",
+  "schema_version": "cad-core.freecad-expected.v1"
+}

@@ -6,12 +6,15 @@
 #include "cad_core/part/topo_shape.h"
 #include "cad_core/runtime/feature_executor.h"
 
+#include <BRepLProp_SLProps.hxx>
 #include <BRepAdaptor_Curve.hxx>
 #include <BRepAdaptor_Surface.hxx>
 #include <BRepExtrema_DistShapeShape.hxx>
 #include <BRepGProp.hxx>
 #include <BRepIntCurveSurface_Inter.hxx>
 #include <BRep_Tool.hxx>
+#include <CSLib.hxx>
+#include <CSLib_NormalStatus.hxx>
 #include <GeomAdaptor.hxx>
 #include <GeomAbs_CurveType.hxx>
 #include <GeomAbs_SurfaceType.hxx>
@@ -338,6 +341,15 @@ inline gp_Trsf pointDatumPlacement(const gp_Pnt& point)
     return placement;
 }
 
+inline bool simpleSelectedSubshapeWholeShape(const TopoDS_Shape& shape)
+{
+    if (shape.IsNull()) {
+        return false;
+    }
+    return shape.ShapeType() == TopAbs_VERTEX || shape.ShapeType() == TopAbs_EDGE
+        || shape.ShapeType() == TopAbs_FACE;
+}
+
 inline std::optional<std::string> currentSubnameFromStable(const app::Link& link,
                                                            std::size_t index,
                                                            const part::NamedShape* namedShape)
@@ -419,6 +431,11 @@ inline std::optional<SupportResolution> resolveAttachmentSupport(const app::Docu
     candidates.erase(std::unique(candidates.begin(), candidates.end()), candidates.end());
 
     if (!requireSubshape && candidates.empty()) {
+        resolution.shape = shapeIt->second.shape;
+        return resolution;
+    }
+
+    if (requireSubshape && candidates.empty() && simpleSelectedSubshapeWholeShape(shapeIt->second.shape)) {
         resolution.shape = shapeIt->second.shape;
         return resolution;
     }
@@ -1174,6 +1191,321 @@ inline std::optional<gp_Trsf> centerOfMassPlacement(const SupportResolution& sup
     return pointDatumPlacement(properties.CentreOfMass());
 }
 
+inline std::optional<gp_Trsf> translatePlacement(const SupportResolution& support,
+                                                runtime::ComputeContext& context,
+                                                const app::DocumentObject& object)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/Attacher.cpp
+    // ::AttachEngine3D::_calculateAttachedPlacement(), case "mmTranslate", requires
+    // "need one vertex", then calls "plm.setPosition(plm.getPosition() +
+    // this->attachmentOffset.getPosition())" and keeps "origPlacement.getRotation()".
+    TopoDS_Vertex vertex;
+    try {
+        vertex = TopoDS::Vertex(support.shape);
+    }
+    catch (const Standard_Failure&) {
+    }
+    if (vertex.IsNull()) {
+        addDatumAttachmentDiagnostic(context,
+                                     object,
+                                     support.link,
+                                     "MapMode",
+                                     "Translate requires one Vertex support",
+                                     "attachment_support_invalid_shape");
+        return std::nullopt;
+    }
+
+    gp_Pnt point = BRep_Tool::Pnt(vertex);
+    const gp_Pnt offset = transformOrigin(attachmentOffsetPlacement(object));
+    point.Translate(gp_Vec(offset.XYZ()));
+    gp_Trsf placement = placementForObject(object.name, context);
+    placement.SetTranslationPart(gp_Vec(point.XYZ()));
+    return placement;
+}
+
+inline bool appendThreePointSupportPoints(const SupportResolution& support,
+                                          std::vector<gp_Pnt>& points,
+                                          runtime::ComputeContext& context,
+                                          const app::DocumentObject& object)
+{
+    if (support.shape.IsNull()) {
+        addDatumAttachmentDiagnostic(context,
+                                     object,
+                                     support.link,
+                                     "MapMode",
+                                     "ThreePointsPlane/ThreePointsNormal require non-null Vertex or Edge supports",
+                                     "attachment_support_invalid_shape");
+        return false;
+    }
+    if (support.shape.ShapeType() == TopAbs_VERTEX) {
+        points.push_back(BRep_Tool::Pnt(TopoDS::Vertex(support.shape)));
+        return true;
+    }
+    if (support.shape.ShapeType() == TopAbs_EDGE) {
+        const TopoDS_Edge edge = TopoDS::Edge(support.shape);
+        BRepAdaptor_Curve curve(edge);
+        double first = curve.FirstParameter();
+        double last = curve.LastParameter();
+        if (Precision::IsInfinite(first) || Precision::IsInfinite(last)) {
+            first = 0.0;
+            last = 1.0;
+        }
+        points.push_back(curve.Value(first));
+        points.push_back(curve.Value(last));
+        return true;
+    }
+
+    addDatumAttachmentDiagnostic(context,
+                                 object,
+                                 support.link,
+                                 "MapMode",
+                                 "ThreePointsPlane/ThreePointsNormal require Vertex supports or Edge endpoints",
+                                 "attachment_support_invalid_shape");
+    return false;
+}
+
+inline std::optional<gp_Trsf> threePointsPlanePlacement(const std::string& mode,
+                                                       const std::vector<SupportResolution>& supports,
+                                                       bool mapReverse,
+                                                       runtime::ComputeContext& context,
+                                                       const app::DocumentObject& object)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/Attacher.cpp
+    // ::AttachEngine3D::_calculateAttachedPlacement(), cases "mmThreePointsPlane" and
+    // "mmThreePointsNormal", collect Vertex points or Edge first/last parameter points until
+    // "points.size() >= 3"; ThreePointsPlane uses "vec01.Crossed(vec02)" and centroid,
+    // ThreePointsNormal projects p2 to "new Geom_Plane(p0, gp_Dir(norm))".
+    std::vector<gp_Pnt> points;
+    for (const auto& support : supports) {
+        if (!appendThreePointSupportPoints(support, points, context, object)) {
+            return std::nullopt;
+        }
+        if (points.size() >= 3U) {
+            break;
+        }
+    }
+    if (points.size() < 3U) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "ThreePointsPlane/ThreePointsNormal require at least three points from Vertex or Edge supports",
+                                "attachment_support_invalid_shape");
+        return std::nullopt;
+    }
+
+    const gp_Pnt p0 = points[0];
+    const gp_Pnt p1 = points[1];
+    const gp_Pnt p2 = points[2];
+    gp_Vec vec01(p0, p1);
+    gp_Vec vec02(p0, p2);
+    if (vec01.Magnitude() < Precision::Confusion() || vec02.Magnitude() < Precision::Confusion()) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "ThreePointsPlane/ThreePointsNormal cannot derive a plane from coincident points",
+                                "attachment_parameter_invalid");
+        return std::nullopt;
+    }
+    vec01.Normalize();
+    vec02.Normalize();
+
+    gp_Vec normal;
+    gp_Pnt basePoint;
+    if (mode == "ThreePointsPlane") {
+        normal = vec01.Crossed(vec02);
+        if (normal.Magnitude() < Precision::Confusion()) {
+            addLineFamilyDiagnostic(context,
+                                    object,
+                                    supports,
+                                    "ThreePointsPlane cannot derive a plane from collinear points",
+                                    "attachment_parameter_invalid");
+            return std::nullopt;
+        }
+        basePoint = gp_Pnt(
+            gp_Vec(p0.XYZ()).Added(p1.XYZ()).Added(p2.XYZ()).Multiplied(1.0 / 3.0).XYZ()
+        );
+    }
+    else {
+        normal = vec02.Subtracted(vec01.Multiplied(vec02.Dot(vec01))).Reversed();
+        if (normal.Magnitude() < Precision::Confusion()) {
+            addLineFamilyDiagnostic(context,
+                                    object,
+                                    supports,
+                                    "ThreePointsNormal cannot derive a plane from collinear points",
+                                    "attachment_parameter_invalid");
+            return std::nullopt;
+        }
+        Handle(Geom_Plane) plane = new Geom_Plane(p0, gp_Dir(normal));
+        GeomAPI_ProjectPointOnSurf projector(p2, plane);
+        if (projector.NbPoints() == 0) {
+            addLineFamilyDiagnostic(context,
+                                    object,
+                                    supports,
+                                    "ThreePointsNormal could not project the third point onto the derived plane",
+                                    "execution_failed");
+            return std::nullopt;
+        }
+        basePoint = projector.NearestPoint();
+    }
+
+    return placementFromAxes(basePoint, gp_Dir(normal), gp_Vec(), mapReverse);
+}
+
+inline std::optional<gp_Dir> freecadFaceNormalAt(const TopoDS_Face& face, double u, double v)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/Tools.cpp
+    // ::Tools::getNormal(const TopoDS_Face&, ...), builds "BRepLProp_SLProps", calls
+    // "getNormalBySLProp(...)" with CSLib fallback, then reverses when
+    // "face.Orientation() == TopAbs_REVERSED".
+    BRepAdaptor_Surface adapt(face);
+    BRepLProp_SLProps prop(adapt, u, v, 1, Precision::Confusion());
+    gp_Dir direction;
+    Standard_Boolean done = Standard_False;
+    if (prop.D1U().Magnitude() > Precision::Confusion()
+        && prop.D1V().Magnitude() > Precision::Confusion() && prop.IsNormalDefined()) {
+        direction = prop.Normal();
+        done = Standard_True;
+    }
+    else {
+        CSLib_NormalStatus status;
+        CSLib::Normal(prop.D1U(),
+                      prop.D1V(),
+                      prop.D2U(),
+                      prop.D2V(),
+                      prop.DUV(),
+                      Precision::Confusion(),
+                      done,
+                      status,
+                      direction);
+        if (status == CSLib_D1NuIsNull) {
+            if (std::abs(adapt.LastVParameter() - v) < Precision::Confusion()) {
+                direction.Reverse();
+            }
+        }
+        else if (status == CSLib_D1NvIsNull || status == CSLib_D1NuIsParallelD1Nv) {
+            if (std::abs(adapt.LastUParameter() - u) < Precision::Confusion()) {
+                direction.Reverse();
+            }
+        }
+    }
+    if (!done) {
+        return std::nullopt;
+    }
+    if (face.Orientation() == TopAbs_REVERSED) {
+        direction.Reverse();
+    }
+    return direction;
+}
+
+inline std::optional<gp_Trsf> tangentPlanePlacement(const std::vector<SupportResolution>& supports,
+                                                   bool mapReverse,
+                                                   runtime::ComputeContext& context,
+                                                   const app::DocumentObject& object)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/Attacher.cpp
+    // ::AttachEngine3D::_calculateAttachedPlacement(), case "mmTangentPlane", accepts
+    // "rtFace, rtVertex" and "rtVertex, rtFace"; vertex-first uses the vertex as base point,
+    // otherwise it uses the projected point, and sets "SketchXAxis = gp_Vec(dirX).Reversed()".
+    if (supports.size() < 2U) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "TangentPlane requires one Face and one Vertex support",
+                                "attachment_support_invalid_shape");
+        return std::nullopt;
+    }
+
+    const SupportResolution* faceSupport = &supports[0];
+    const SupportResolution* vertexSupport = &supports[1];
+    bool throughVertex = false;
+    if (supports[0].shape.ShapeType() == TopAbs_VERTEX) {
+        faceSupport = &supports[1];
+        vertexSupport = &supports[0];
+        throughVertex = true;
+    }
+
+    TopoDS_Face face;
+    TopoDS_Vertex vertex;
+    try {
+        face = TopoDS::Face(faceSupport->shape);
+        vertex = TopoDS::Vertex(vertexSupport->shape);
+    }
+    catch (const Standard_Failure&) {
+    }
+    if (face.IsNull() || vertex.IsNull()) {
+        addDatumAttachmentDiagnostic(context,
+                                     object,
+                                     supports.front().link,
+                                     "MapMode",
+                                     "TangentPlane requires one Face and one Vertex support",
+                                     "attachment_support_invalid_shape");
+        return std::nullopt;
+    }
+
+    Handle(Geom_Surface) surface = BRep_Tool::Surface(face);
+    if (surface.IsNull()) {
+        addDatumAttachmentDiagnostic(context,
+                                     object,
+                                     faceSupport->link,
+                                     "MapMode",
+                                     "TangentPlane Face support has no surface",
+                                     "attachment_support_invalid_shape");
+        return std::nullopt;
+    }
+    const gp_Pnt vertexPoint = BRep_Tool::Pnt(vertex);
+    GeomAPI_ProjectPointOnSurf projector(vertexPoint, surface);
+    if (projector.NbPoints() == 0) {
+        addDatumAttachmentDiagnostic(context,
+                                     object,
+                                     vertexSupport->link,
+                                     "MapMode",
+                                     "TangentPlane could not project the Vertex support onto the Face surface",
+                                     "execution_failed");
+        return std::nullopt;
+    }
+
+    double u = 0.0;
+    double v = 0.0;
+    projector.LowerDistanceParameters(u, v);
+    const auto normal = freecadFaceNormalAt(face, u, v);
+    if (!normal) {
+        addDatumAttachmentDiagnostic(context,
+                                     object,
+                                     faceSupport->link,
+                                     "MapMode",
+                                     "TangentPlane could not derive the surface normal at the projected point",
+                                     "execution_failed");
+        return std::nullopt;
+    }
+
+    BRepAdaptor_Surface adaptedSurface(face);
+    BRepLProp_SLProps props(adaptedSurface, u, v, 1, Precision::Confusion());
+    gp_Dir xDirection;
+    if (props.IsTangentUDefined()) {
+        props.TangentU(xDirection);
+        if (face.Orientation() == TopAbs_REVERSED) {
+            xDirection.Reverse();
+        }
+    }
+    else if (props.IsTangentVDefined()) {
+        gp_Dir yDirection;
+        props.TangentV(yDirection);
+        xDirection = yDirection.Crossed(*normal);
+    }
+    else {
+        addDatumAttachmentDiagnostic(context,
+                                     object,
+                                     faceSupport->link,
+                                     "MapMode",
+                                     "TangentPlane could not derive a tangent axis at the projected point",
+                                     "execution_failed");
+        return std::nullopt;
+    }
+
+    const gp_Pnt basePoint = throughVertex ? vertexPoint : projector.NearestPoint();
+    return placementFromAxes(basePoint, *normal, gp_Vec(xDirection).Reversed(), mapReverse);
+}
+
 inline std::optional<gp_Trsf> selectedDatumPlacement(const app::DocumentObject& object,
                                                     runtime::ComputeContext& context,
                                                     DatumAttachmentEngine engine,
@@ -1191,6 +1523,17 @@ inline std::optional<gp_Trsf> selectedDatumPlacement(const app::DocumentObject& 
         return std::nullopt;
     }
     const SupportResolution& support = supports.front();
+    if (mode == "Translate") {
+        if (engine != DatumAttachmentEngine::Plane && engine != DatumAttachmentEngine::CoordinateSystem) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         support.link,
+                                         "MapMode",
+                                         "Translate is supported for DatumPlane and CoordinateSystem in this C5-M15 batch");
+            return std::nullopt;
+        }
+        return translatePlacement(support, context, object);
+    }
     if (mode == "FlatFace") {
         if (engine != DatumAttachmentEngine::Plane && engine != DatumAttachmentEngine::CoordinateSystem) {
             addDatumAttachmentDiagnostic(context,
@@ -1201,6 +1544,28 @@ inline std::optional<gp_Trsf> selectedDatumPlacement(const app::DocumentObject& 
             return std::nullopt;
         }
         return flatFacePlacement(support, mapReverse, context, object);
+    }
+    if (mode == "TangentPlane") {
+        if (engine != DatumAttachmentEngine::Plane && engine != DatumAttachmentEngine::CoordinateSystem) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         support.link,
+                                         "MapMode",
+                                         "TangentPlane is supported for DatumPlane and CoordinateSystem in this C5-M15 batch");
+            return std::nullopt;
+        }
+        return tangentPlanePlacement(supports, mapReverse, context, object);
+    }
+    if (mode == "ThreePointsPlane" || mode == "ThreePointsNormal") {
+        if (engine != DatumAttachmentEngine::Plane && engine != DatumAttachmentEngine::CoordinateSystem) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         support.link,
+                                         "MapMode",
+                                         mode + " is supported for DatumPlane and CoordinateSystem in this C5-M15 batch");
+            return std::nullopt;
+        }
+        return threePointsPlanePlacement(mode, supports, mapReverse, context, object);
     }
     if (mode == "ObjectXY" || mode == "ObjectXZ" || mode == "ObjectYZ") {
         if (engine == DatumAttachmentEngine::Point) {
@@ -1393,11 +1758,18 @@ inline std::optional<DatumAttachmentPlacement> datumAttachmentPlacement(const ap
         || mode == "ProximityLine";
     const bool usesPointProximitySupports = engine == DatumAttachmentEngine::Point
         && (mode == "ProximityPoint1" || mode == "ProximityPoint2");
+    const bool usesTangentPlaneSupports = mode == "TangentPlane";
+    const bool usesThreePointPlaneSupports = mode == "ThreePointsPlane" || mode == "ThreePointsNormal";
+    const bool usesDatum3DPlaneMultiSupports = usesTangentPlaneSupports || usesThreePointPlaneSupports;
     const bool requiresSubshape = mode == "FlatFace" || mode == "NormalToEdge" || mode == "Tangent"
-        || mode == "Vertex" || mode == "OnEdge";
+        || mode == "Vertex" || mode == "OnEdge" || mode == "Translate" || mode == "TangentPlane"
+        || mode == "ThreePointsPlane" || mode == "ThreePointsNormal";
     std::vector<SupportResolution> resolvedSupports;
     const std::size_t supportCount = usesLineFamilySupports ? supportLinks.size()
-        : (usesPointProximitySupports ? 2U : 1U);
+        : (usesPointProximitySupports ? 2U
+                                      : (usesTangentPlaneSupports ? 2U
+                                                                  : (usesThreePointPlaneSupports ? supportLinks.size()
+                                                                                                  : 1U)));
     for (std::size_t index = 0; index < supportLinks.size() && resolvedSupports.size() < supportCount; ++index) {
         const auto& link = supportLinks.at(index);
         if (link.object.empty()) {
@@ -1428,10 +1800,10 @@ inline std::optional<DatumAttachmentPlacement> datumAttachmentPlacement(const ap
     if (!placement) {
         return std::nullopt;
     }
-    if (hasActiveAttachmentOffset) {
+    if (hasActiveAttachmentOffset && mode != "Translate") {
         *placement = *placement * attachmentOffsetPlacement(object);
     }
-    if (usesPointProximitySupports) {
+    if (usesPointProximitySupports || usesDatum3DPlaneMultiSupports) {
         appendAttachmentSupportsWriteback(object, resolvedSupports, context);
     }
     else if (!usesLineFamilySupports && hasReferenceStabilityEvidence(support)) {

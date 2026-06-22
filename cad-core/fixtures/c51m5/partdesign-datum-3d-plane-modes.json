@@ -1,0 +1,235 @@
+{
+  "Objects": [
+    {
+      "Name": "VertexTranslate",
+      "ID": 1,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 2,
+        "Y": 3,
+        "Z": 4
+      }
+    },
+    {
+      "Name": "PointA",
+      "ID": 2,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    {
+      "Name": "PointB",
+      "ID": 3,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 4,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    {
+      "Name": "PointC",
+      "ID": 4,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 0,
+        "Y": 3,
+        "Z": 2
+      }
+    },
+    {
+      "Name": "EdgeSource",
+      "ID": 5,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 4,
+        "Z1": 0,
+        "X2": 0,
+        "Y2": 4,
+        "Z2": 4
+      }
+    },
+    {
+      "Name": "TangentFace",
+      "ID": 6,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 6,
+        "Width": 5
+      }
+    },
+    {
+      "Name": "TangentVertex",
+      "ID": 7,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 2,
+        "Y": 1,
+        "Z": 3
+      }
+    },
+    {
+      "Name": "DatumCSTranslateVertexOffset",
+      "ID": 8,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "VertexTranslate",
+          "SubList": []
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Translate"
+        },
+        "AttachmentOffset": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [1, 2, 3],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "DatumCSThreePointsVertices",
+      "ID": 9,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "PointA",
+              "SubList": []
+            },
+            {
+              "value": "PointB",
+              "SubList": []
+            },
+            {
+              "value": "PointC",
+              "SubList": []
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ThreePointsPlane"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSThreePointsEdgeVertex",
+      "ID": 10,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "EdgeSource",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "PointB",
+              "SubList": []
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ThreePointsPlane"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSThreePointsNormal",
+      "ID": 11,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "PointA",
+              "SubList": []
+            },
+            {
+              "value": "PointB",
+              "SubList": []
+            },
+            {
+              "value": "PointC",
+              "SubList": []
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ThreePointsNormal"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSTangentFaceVertex",
+      "ID": 12,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "TangentFace",
+              "SubList": ["Face1"]
+            },
+            {
+              "value": "TangentVertex",
+              "SubList": []
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "TangentPlane"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSTangentVertexFace",
+      "ID": 13,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "TangentVertex",
+              "SubList": []
+            },
+            {
+              "value": "TangentFace",
+              "SubList": ["Face1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "TangentPlane"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "DatumCSTranslateVertexOffset",
+      "DatumCSThreePointsVertices",
+      "DatumCSThreePointsEdgeVertex",
+      "DatumCSThreePointsNormal",
+      "DatumCSTangentFaceVertex",
+      "DatumCSTangentVertexFace"
+    ]
+  }
+}

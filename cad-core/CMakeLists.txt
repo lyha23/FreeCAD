@@ -169,12 +169,33 @@ if(NOT CAD_CORE_OCCT_VERSION IN_LIST CAD_CORE_OCCT_SUPPORTED_VERSIONS)
   message(FATAL_ERROR "CAD Core expected OpenCASCADE ${CAD_CORE_OCCT_SUPPORTED_VERSIONS_TEXT}, found ${CAD_CORE_OCCT_VERSION} at ${CAD_CORE_OCCT_VERSION_HEADER}")
 endif()
 
+set(CAD_CORE_NLOHMANN_JSON_SEARCH_PATHS)
+if(CAD_CORE_OCCT_ROOT)
+  list(APPEND CAD_CORE_NLOHMANN_JSON_SEARCH_PATHS "${CAD_CORE_OCCT_ROOT}/include")
+endif()
+foreach(CAD_CORE_OCCT_INCLUDE_DIR IN LISTS CAD_CORE_OCCT_INCLUDE_DIRS)
+  if(CAD_CORE_OCCT_INCLUDE_DIR MATCHES "/include/opencascade$")
+    get_filename_component(CAD_CORE_OCCT_PREFIX_INCLUDE_DIR "${CAD_CORE_OCCT_INCLUDE_DIR}" DIRECTORY)
+    list(APPEND CAD_CORE_NLOHMANN_JSON_SEARCH_PATHS "${CAD_CORE_OCCT_PREFIX_INCLUDE_DIR}")
+  endif()
+endforeach()
+list(APPEND CAD_CORE_NLOHMANN_JSON_SEARCH_PATHS
+  ${CMAKE_CURRENT_SOURCE_DIR}/../src/3rdParty/json/single_include
+  /opt/homebrew/include
+  /usr/local/include
+)
+list(REMOVE_DUPLICATES CAD_CORE_NLOHMANN_JSON_SEARCH_PATHS)
+
+foreach(CAD_CORE_NLOHMANN_JSON_CANDIDATE IN LISTS CAD_CORE_NLOHMANN_JSON_SEARCH_PATHS)
+  if(EXISTS "${CAD_CORE_NLOHMANN_JSON_CANDIDATE}/nlohmann/json.hpp")
+    set(NLOHMANN_JSON_INCLUDE_DIR "${CAD_CORE_NLOHMANN_JSON_CANDIDATE}" CACHE PATH "nlohmann/json.hpp include directory" FORCE)
+    break()
+  endif()
+endforeach()
+
 find_path(NLOHMANN_JSON_INCLUDE_DIR
   NAMES nlohmann/json.hpp
-  PATHS
-    ${CMAKE_CURRENT_SOURCE_DIR}/../src/3rdParty/json/single_include
-    /opt/homebrew/include
-    /usr/local/include
+  PATHS ${CAD_CORE_NLOHMANN_JSON_SEARCH_PATHS}
 )
 
 if(NOT NLOHMANN_JSON_INCLUDE_DIR)
@@ -302,8 +323,8 @@ set_target_properties(cad-core-lib PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 target_include_directories(cad-core-lib PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${CAD_CORE_OCCT_INCLUDE_DIRS}
   ${NLOHMANN_JSON_INCLUDE_DIR}
+  ${CAD_CORE_OCCT_INCLUDE_DIRS}
 )
 
 target_include_directories(cad-core-lib PRIVATE
@@ -333,7 +354,10 @@ add_library(cad_core_ffi SHARED
 )
 
 target_link_libraries(cad_core_ffi PRIVATE cad-core-lib)
-target_include_directories(cad_core_ffi PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(cad_core_ffi
+  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
+  PRIVATE ${NLOHMANN_JSON_INCLUDE_DIR}
+)
 
 add_executable(cad-core
   src/adapters/cli/cli.cpp

@@ -1,0 +1,203 @@
+{
+  "Objects": [
+    {
+      "Name": "SinglePoint",
+      "ID": 1,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    {
+      "Name": "SecondPoint",
+      "ID": 2,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 1,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    {
+      "Name": "CoincidentPoint",
+      "ID": 3,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    {
+      "Name": "CollinearPoint",
+      "ID": 4,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 2,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    {
+      "Name": "PlaneXY",
+      "ID": 5,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 4,
+        "Width": 4
+      }
+    },
+    {
+      "Name": "DatumCSTranslateWrongShape",
+      "ID": 6,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PlaneXY",
+          "SubList": ["Face1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Translate"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSThreePointsMissingThird",
+      "ID": 7,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SinglePoint",
+              "SubList": []
+            },
+            {
+              "value": "SecondPoint",
+              "SubList": []
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ThreePointsPlane"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSThreePointsCoincident",
+      "ID": 8,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SinglePoint",
+              "SubList": []
+            },
+            {
+              "value": "CoincidentPoint",
+              "SubList": []
+            },
+            {
+              "value": "SecondPoint",
+              "SubList": []
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ThreePointsPlane"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSThreePointsCollinear",
+      "ID": 9,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SinglePoint",
+              "SubList": []
+            },
+            {
+              "value": "SecondPoint",
+              "SubList": []
+            },
+            {
+              "value": "CollinearPoint",
+              "SubList": []
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ThreePointsNormal"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSTangentMissingVertex",
+      "ID": 10,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "PlaneXY",
+              "SubList": ["Face1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "TangentPlane"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSTangentWrongShapes",
+      "ID": 11,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SinglePoint",
+              "SubList": []
+            },
+            {
+              "value": "SecondPoint",
+              "SubList": []
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "TangentPlane"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "DatumCSTranslateWrongShape",
+      "DatumCSThreePointsMissingThird",
+      "DatumCSThreePointsCoincident",
+      "DatumCSThreePointsCollinear",
+      "DatumCSTangentMissingVertex",
+      "DatumCSTangentWrongShapes"
+    ]
+  }
+}

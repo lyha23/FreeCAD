@@ -1124,13 +1124,17 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         datum_attachment = capabilities["part_design"]["datum_attachment"]
         self.assertEqual(
             datum_attachment["status"],
-            "supported_c51x_selected_attach_engine_with_datum_line_family",
+            "supported_c51x_selected_attach_engine_with_datum_3d_plane_family",
         )
         self.assertIn("PartDesign::CoordinateSystem", datum_attachment["type_ids"])
         self.assertIn("DatumLine Placement direction", datum_attachment["supported"])
         self.assertIn("Body Origin datum role relink", datum_attachment["supported"])
         self.assertIn("FlatFace selected MapMode", datum_attachment["supported"])
         self.assertIn("NormalToEdge selected MapMode", datum_attachment["supported"])
+        self.assertIn("Translate selected MapMode", datum_attachment["supported"])
+        self.assertIn("TangentPlane selected MapMode", datum_attachment["supported"])
+        self.assertIn("ThreePointsPlane selected MapMode", datum_attachment["supported"])
+        self.assertIn("ThreePointsNormal selected MapMode", datum_attachment["supported"])
         self.assertIn("DatumLine TwoPointLine selected MapMode", datum_attachment["supported"])
         self.assertIn("DatumLine IntersectionLine selected MapMode", datum_attachment["supported"])
         self.assertIn("DatumLine ProximityLine selected MapMode", datum_attachment["supported"])
@@ -1150,6 +1154,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("c51m5/partdesign-datum-point-proximity-diagnostics", datum_attachment["fixtures"])
         self.assertIn("c51m5/partdesign-datum-line-family-modes", datum_attachment["fixtures"])
         self.assertIn("c51m5/partdesign-datum-line-family-diagnostics", datum_attachment["fixtures"])
+        self.assertIn("c51m5/partdesign-datum-3d-plane-modes", datum_attachment["fixtures"])
+        self.assertIn("c51m5/partdesign-datum-3d-plane-diagnostics", datum_attachment["fixtures"])
         self.assertIn("unsupported_property", datum_attachment["diagnostics"])
         self.assertIn("attachment_support_invalid_shape", datum_attachment["diagnostics"])
         self.assertIn("execution_failed", datum_attachment["diagnostics"])
@@ -1178,6 +1184,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("ProximityLine", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
         self.assertNotIn("ProximityPoint1", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
         self.assertNotIn("ProximityPoint2", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
+        self.assertNotIn("Translate", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
+        self.assertNotIn("TangentPlane", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
+        self.assertNotIn("ThreePointsPlane", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
+        self.assertNotIn("ThreePointsNormal", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
         self.assertIn("IntersectionPoint", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
         self.assertIn("Focus1", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
         self.assertEqual(datum_attachment["remaining_gaps"], [])

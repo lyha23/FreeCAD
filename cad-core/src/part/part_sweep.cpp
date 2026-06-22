@@ -778,6 +778,57 @@ bool readSectionOptions(
     return true;
 }
 
+bool hasSectionLocation(const PipeShellOptions& options)
+{
+    for (const PipeShellSectionOption& sectionOption : options.sectionOptions) {
+        if (sectionOption.hasLocation) {
+            return true;
+        }
+    }
+    return false;
+}
+
+std::string locationOverloadKnownGapKind(const PipeShellOptions& options)
+{
+    if (options.mode == PipeShellMode::Auxiliary && options.tolerance.has_value()) {
+        return "part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker";
+    }
+    return "part_sweep_located_profile_freecadcmd_wrapper_build_blocker";
+}
+
+void publishLocationOverloadKnownGap(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    nlohmann::json metadata,
+    const PipeShellOptions& options,
+    const std::string& error
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // BRepOffsetAPI_MakePipeShellPyImp.cpp::add(), exposes
+    // "add(Profile, Location, WithContact, WithCorrection)". C5-M13 S2 FreeCADCmd probes
+    // show this overload reaches "is_ready_before_build=true" and then fails at
+    // "builder.build()" with "OCCError: NCollection_Array1::Value"; keep request metadata
+    // stable without fabricating a FreeCAD shape_summary from cad-core output.
+    metadata["status"] = "known_gap";
+    metadata["known_gap"] = {
+        {"kind", locationOverloadKnownGapKind(options)},
+        {"freecadcmd_evidence",
+         {
+             {"helper", "Part.BRepOffsetAPI_MakePipeShell"},
+             {"runtime_helper", "Part.BRepOffsetAPI.MakePipeShell"},
+             {"call", "add(Profile, Location, WithContact, WithCorrection)"},
+             {"error", "OCCError: NCollection_Array1::Value"},
+             {"failed_stage", "build"},
+         }},
+        {"cad_core_status", "request_metadata_only"},
+        {"cad_core_error", error.empty() ? "NCollection_Array1::Value" : error},
+        {"delete_condition",
+         "Delete only after the FreeCADCmd Location overload returns stable shape_summary."},
+    };
+    context.objects[object.name] = std::move(metadata);
+}
+
 bool readTolerance(
     const app::DocumentObject& object,
     runtime::ComputeContext& context,
@@ -1101,6 +1152,19 @@ void executePartSweep(const app::DocumentObject& object, runtime::ComputeContext
     if (!advanced) {
         return;
     }
+    nlohmann::json metadata = {
+        {"feature", "part_sweep"},
+        {"spine", spine->objectName},
+        {"sections", sectionNamesJson(*sections)},
+        {"solid", solid},
+        {"frenet", frenet},
+        {"transition", transitionLabel(*transition)},
+        {"linearize", linearize},
+        {"topo_naming_history", "maker_history:pipeshell"},
+    };
+    if (!advanced->metadata.empty()) {
+        metadata["advanced"] = advanced->metadata;
+    }
     const auto build = makeElementPipeShellFromSources(
         object.name,
         sweepSources(*spine, *sections),
@@ -1135,6 +1199,17 @@ void executePartSweep(const app::DocumentObject& object, runtime::ComputeContext
             );
             return;
         }
+        if (hasSectionLocation(advanced->pipeOptions)
+            && (build.error.find("NCollection_Array1::Value") != std::string::npos)) {
+            publishLocationOverloadKnownGap(
+                object,
+                context,
+                std::move(metadata),
+                advanced->pipeOptions,
+                build.error
+            );
+            return;
+        }
         addSweepDiagnostic(
             object,
             context,
@@ -1145,19 +1220,6 @@ void executePartSweep(const app::DocumentObject& object, runtime::ComputeContext
         return;
     }
 
-    nlohmann::json metadata = {
-        {"feature", "part_sweep"},
-        {"spine", spine->objectName},
-        {"sections", sectionNamesJson(*sections)},
-        {"solid", solid},
-        {"frenet", frenet},
-        {"transition", transitionLabel(*transition)},
-        {"linearize", linearize},
-        {"topo_naming_history", "maker_history:pipeshell"},
-    };
-    if (!advanced->metadata.empty()) {
-        metadata["advanced"] = advanced->metadata;
-    }
     part_feature_detail::publishPartShape(
         object,
         context,

@@ -958,6 +958,15 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         expected = self.expected_freecad("c5m10", "part-sweep-located-profile-contract")
 
         self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sweep["status"], "known_gap")
+        self.assertEqual(sweep["feature"], "part_sweep")
+        self.assertEqual(sweep["spine"], "PipeSpine")
+        self.assertEqual(sweep["sections"], ["SketchPipeProfile"])
+        self.assertEqual(sweep["solid"], False)
+        self.assertEqual(sweep["frenet"], True)
+        self.assertEqual(sweep["transition"], "Transformed")
+        self.assertEqual(sweep["linearize"], False)
+        self.assertEqual(sweep["topo_naming_history"], "maker_history:pipeshell")
         self.assertEqual(
             sweep["advanced"]["sections"],
             [
@@ -969,17 +978,18 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 }
             ],
         )
-        self.assert_part_sweep_history(
-            result,
-            "PipeSpine",
-            ["SketchPipeProfile"],
-            transition="Transformed",
-            solid=False,
-        )
         self.assertEqual(
             expected["known_gap"]["kind"],
             "part_sweep_located_profile_freecadcmd_wrapper_build_blocker",
         )
+        self.assertEqual(sweep["known_gap"]["kind"], expected["known_gap"]["kind"])
+        self.assertEqual(
+            sweep["known_gap"]["freecadcmd_evidence"]["error"],
+            "OCCError: NCollection_Array1::Value",
+        )
+        self.assertEqual(sweep["known_gap"]["freecadcmd_evidence"]["failed_stage"], "build")
+        self.assertEqual(sweep["known_gap"]["cad_core_status"], "request_metadata_only")
+        self.assertNotIn("Sweep", result["named_shapes"])
         evidence = expected["known_gap"]["freecadcmd_evidence"]
         self.assertEqual(evidence["error"], "OCCError: NCollection_Array1::Value")
         self.assertEqual(evidence["failed_stage"], "build")
@@ -1031,6 +1041,15 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         combined = result["objects"]["CombinedSweep"]
         expected = self.expected_freecad("c5m10", "part-sweep-advanced-combined-contract")
 
+        self.assertEqual(combined["status"], "known_gap")
+        self.assertEqual(combined["feature"], "part_sweep")
+        self.assertEqual(combined["spine"], "PipeSpine")
+        self.assertEqual(combined["sections"], ["SketchPipeProfile"])
+        self.assertEqual(combined["solid"], False)
+        self.assertEqual(combined["frenet"], True)
+        self.assertEqual(combined["transition"], "Round corner")
+        self.assertEqual(combined["linearize"], False)
+        self.assertEqual(combined["topo_naming_history"], "maker_history:pipeshell")
         self.assertEqual(combined["advanced"]["mode"], "Auxiliary")
         self.assertEqual(
             combined["advanced"]["auxiliary_spine"],
@@ -1056,14 +1075,14 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             combined["advanced"]["tolerance"],
             {"tol3d": 0.0001, "boundTol": 0.0002, "tolAngular": 0.01},
         )
-        self.assert_part_sweep_history(
-            result,
-            "PipeSpine",
-            ["SketchPipeProfile"],
-            transition="Round corner",
-            solid=False,
-            object_name="CombinedSweep",
+        self.assertEqual(combined["known_gap"]["kind"], expected["known_gap"]["kind"])
+        self.assertEqual(
+            combined["known_gap"]["freecadcmd_evidence"]["error"],
+            "OCCError: NCollection_Array1::Value",
         )
+        self.assertEqual(combined["known_gap"]["freecadcmd_evidence"]["failed_stage"], "build")
+        self.assertEqual(combined["known_gap"]["cad_core_status"], "request_metadata_only")
+        self.assertNotIn("CombinedSweep", result["named_shapes"])
 
         by_object = {diagnostic["object"]: diagnostic for diagnostic in result["diagnostics"]}
         self.assertEqual(

@@ -368,6 +368,37 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["documentObjectUpdates"], [])
         self.assertEqual(result["elementReferenceUpdates"], [])
 
+    def test_c51x_datum_3d_plane_modes_match_expected(self) -> None:
+        result = self.run_recompute("partdesign-datum-3d-plane-modes", "c51m5")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual(result["elementReferenceUpdates"], [])
+        self.assert_object_matches_expected(result, "c51m5", "partdesign-datum-3d-plane-modes")
+
+    def test_c51x_datum_3d_plane_invalid_diagnostics(self) -> None:
+        result = self.run_recompute("partdesign-datum-3d-plane-diagnostics", "c51m5")
+
+        self.assertEqual(
+            [item["code"] for item in result["diagnostics"]],
+            [
+                "attachment_support_invalid_shape",
+                "attachment_support_invalid_shape",
+                "attachment_parameter_invalid",
+                "attachment_parameter_invalid",
+                "attachment_support_invalid_shape",
+                "attachment_support_invalid_shape",
+            ],
+        )
+        self.assertEqual(result["objects"]["DatumCSTranslateWrongShape"]["status"], "error")
+        self.assertEqual(result["objects"]["DatumCSThreePointsMissingThird"]["status"], "error")
+        self.assertEqual(result["objects"]["DatumCSThreePointsCoincident"]["status"], "error")
+        self.assertEqual(result["objects"]["DatumCSThreePointsCollinear"]["status"], "error")
+        self.assertEqual(result["objects"]["DatumCSTangentMissingVertex"]["status"], "error")
+        self.assertEqual(result["objects"]["DatumCSTangentWrongShapes"]["status"], "error")
+        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual(result["elementReferenceUpdates"], [])
+
     def test_c51x_datum_point_proximity_modes_match_expected(self) -> None:
         result = self.run_recompute("partdesign-datum-point-proximity-modes", "c51m5")
 
