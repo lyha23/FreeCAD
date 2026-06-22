@@ -1,6 +1,6 @@
 # C5-M16 DatumCurveFrameCurvature AttachEngine 方案
 
-状态：`S3_done__S4_pending__release_blocked_by_c5m15_s6`
+状态：`S4_done__S5_pending__release_blocked_by_c5m15_s6`
 
 ## 当前基线
 
@@ -34,8 +34,8 @@ S0 live freeze 已确认 C5-M15 队列仍有 `C5-M15-S6 Oracle 实现与发布�
 3. 若给 vertex，则投影到 curve；否则用 `attachParameter` 在 first/last parameter 之间插值。
 4. D1 得到 `p` 与 tangent `d`，零导数直接失败；Frenet / curvature modes 继续 D2 得 `dd`。
 5. `T = d.Normalized()`，`N = dd - T * (dd dot T)`，`B = T x N`。N 不存在时 `FrenetTN/TB/Concentric/RevolutionSection` 必须报错或保持精确 blocker。
-6. `Concentric` / `SectionOfRevolution` 计算曲率半径并把 base point 移到 osculating circle center。
-7. DatumLine / DatumPoint aliases 先把 mode 映射回 3D branch，再用自身 executor shape 消费 placement。
+6. `SectionOfRevolution` 先设置 normal = `T.Reversed()`、X = `N.Reversed()`；`Concentric` 先设置 normal = `B`、X = `T`；随后二者都用 `curvature = dd.Dot(N) / pow(d.Magnitude(), 2)` 把 base point 移到 `p + N * (1 / curvature)`。`N == 0` 必须报 infinite radius / undefined curvature diagnostic，不能用 bbox、circle center 或 world axes 猜。
+7. DatumLine / DatumPoint aliases 先把 mode 映射回 3D branch，再用自身 executor shape 消费 placement；`AxisOfCurvature` 还要应用 Z-to-Y presuper rotation。
 8. 非 GUI 路径最后由 `placementFactory()`、`AttachmentOffset`、`MapReversed` 等 request-local 组合完成；cad-core 不保存 session。
 
 ## cad-core 实现边界
@@ -61,8 +61,8 @@ S0 live freeze 已确认 C5-M15 队列仍有 `C5-M15-S6 Oracle 实现与发布�
 2. S1：已审计 FreeCAD source candidates，确认哪些 mode 共享 3D curve-frame route，哪些必须排除。
 3. S2：已把 source candidates 路由到 scope、blocker、backendGap、fixture/oracle、nonGoal；`NormalToPath` 是 shared helper 合同，不是本包 release mode。
 4. S3：已专项复审 projection / D1 / D2 / Frenet frame，冻结 `NormalToPath` shared helper 与 `FrenetNB/TN/TB` 实现合同。
-5. S4：下一步专项复审 curvature center 与 aliases，写清 `Concentric`、`SectionOfRevolution`、`AxisOfCurvature`、`Normal/Binormal`、`CenterOfCurvature` 的成功/失败边界。
-6. S5：复审 request-local response、writeback suggestions、capability exact blocker closeout，确保不把 excluded family 顺带 supported。
+5. S4：已专项复审 curvature center 与 aliases，冻结 `Concentric`、`SectionOfRevolution`、`AxisOfCurvature`、`Normal/Binormal`、`CenterOfCurvature` 的成功/失败边界。
+6. S5：下一步复审 request-local response、writeback suggestions、capability exact blocker closeout，确保不把 excluded family 顺带 supported。
 7. S6：仅在 C5-M15 S6 已关闭后，批量采集 FreeCADCmd expected，落 C++、fixtures、focused tests、capability/docs 和验收记录。
 
 ## 验收分层
@@ -100,8 +100,8 @@ python3 -m unittest tests.test_p7_features tests.test_expected_fixtures tests.te
 | --- | --- | --- | --- | --- |
 | `C5M16-BLK-101` | `cad-core/src/part_design/datum_attachment.h` | `Attacher.cpp:1242-1282,1674-1755` | `test_c51x_datum_curve_frame_modes_match_expected` | edge/curve only、edge+vertex、vertex+edge、vertex-first swap、`attachParameter` / vertex projection、projection failure 和 D1 zero derivative 行为一致；`NormalToPath` 只作为 helper 合同 |
 | `C5M16-BLK-201` | `datum_attachment.h` | `Attacher.cpp:1766-1831` | modes + diagnostics | D2 warning/`dd=0` 边界、T/N/B math、FrenetNB/TN/TB orientation、TN/TB undefined normal diagnostics 与 expected 一致；不生成 straight-line default frame |
-| `C5M16-BLK-301` | `datum_attachment.h` | `Attacher.cpp:1832-1847` | modes + diagnostics | Concentric / SectionOfRevolution 曲率中心和 infinite radius diagnostic 一致 |
-| `C5M16-BLK-401` | `datum_attachment.h`、`datum_line.cpp`、`datum_point.cpp` | `Attacher.cpp:2400-2483,2833-2889` | modes parity | AxisOfCurvature / Normal / Binormal / CenterOfCurvature aliases 走 3D helper，不在 executor 重写业务逻辑 |
+| `C5M16-BLK-301` | `datum_attachment.h` | `Attacher.cpp:1832-1847` | modes + diagnostics | Concentric / SectionOfRevolution 先复用 S3 Frenet frame，再按 `curvature = dd.Dot(N) / pow(d.Magnitude(), 2)` 把 base 移到 `p + N * (1 / curvature)`；`N == 0` 是 infinite radius / undefined curvature diagnostic，不从 bbox 或 circle center 猜 |
+| `C5M16-BLK-401` | `datum_attachment.h`、`datum_line.cpp`、`datum_point.cpp` | `Attacher.cpp:2400-2483,2833-2889` | modes parity | AxisOfCurvature / Normal / Binormal / CenterOfCurvature aliases 走 3D helper；AxisOfCurvature 额外做 Z-to-Y presuper rotation；line/point executor 只处理 shape convention，不重写 T/N/B/curvature 逻辑 |
 | `C5M16-BLK-501` | `c_api.cpp`、C5/C51 docs、matrices | capability exact blocker source | adapter capability test | exact blocker 只移除本包 proven modes；excluded family 保留 |
 
 禁止捷径：
