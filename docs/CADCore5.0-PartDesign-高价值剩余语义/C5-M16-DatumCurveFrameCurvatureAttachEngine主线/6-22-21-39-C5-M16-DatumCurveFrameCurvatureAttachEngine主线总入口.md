@@ -1,6 +1,6 @@
 # C5-M16 DatumCurveFrameCurvature AttachEngine 主线
 
-状态：`S2_done__S3_pending__release_blocked_by_c5m15_s6`
+状态：`S3_done__S4_pending__release_blocked_by_c5m15_s6`
 
 本包承接 C5-M15 Datum3DPlane AttachEngine 收口后的下一批 `datum_attach_engine_remaining_modes`。范围按同一 FreeCAD 曲线帧调用链、同一 `cad-core/src/part_design/datum_attachment.h` placement helper 边界、同一 `c51m5` Datum expected 家族拆分，不再按单个 UI mode 名称薄切。
 
@@ -30,7 +30,7 @@
 S0 live blocker / M15 dependency freeze
   -> S1 FreeCAD curve-frame source candidates
   -> S2 scope / blocker / backendGap / nonGoal routing frozen
-  -> S3 edge projection + Frenet T/N/B review
+  -> S3 edge projection + Frenet T/N/B contract frozen
   -> S4 curvature center + alias placement review
   -> S5 request-local placement / capability contract review
   -> S6 oracle collection, cad-core implementation, focused tests, docs/capability closeout
@@ -68,7 +68,7 @@ S0 live blocker / M15 dependency freeze
 | S0 | `工作步骤细分/6-22-21-41-【已实现】C5-M16-S0-liveCurveFrameBlocker冻结.md` | live blocker、M15 dependency、禁止声明 |
 | S1 | `工作步骤细分/6-22-21-42-【已实现】C5-M16-S1-FreeCADCurveFrame源码候选矩阵.md` | FreeCAD source audit |
 | S2 | `工作步骤细分/6-22-21-43-【已实现】C5-M16-S2-scope准入与待实现矩阵.md` | scope / backendGap / nonGoal routing |
-| S3 | `工作步骤细分/6-22-21-44-C5-M16-S3-CurveProjectionFrenetFrame专项复审.md` | projection、D1/D2、Frenet T/N/B |
+| S3 | `工作步骤细分/6-22-21-44-【已实现】C5-M16-S3-CurveProjectionFrenetFrame专项复审.md` | projection、D1/D2、Frenet T/N/B |
 | S4 | `工作步骤细分/6-22-21-45-C5-M16-S4-CurvatureCenterAlias专项复审.md` | curvature center 与 line/point alias |
 | S5 | `工作步骤细分/6-22-21-46-C5-M16-S5-requestLocalPlacementAndCapability专项复审.md` | writeback、capability、release boundary |
 | S6 | `工作步骤细分/6-22-21-47-C5-M16-S6-Oracle实现与发布闸门.md` | oracle、C++、fixtures、tests、docs closeout |
@@ -91,6 +91,7 @@ S0 live blocker / M15 dependency freeze
 - `Folding`、conic landmarks、`IntersectionPoint`、`TangentU/V`、GUI/session 继续由 non-goal / later-package guard 保护。
 - S1 已完成 FreeCAD source candidates 冻结。
 - S2 已完成 scope 准入与待实现矩阵冻结：`NormalToPath`/projection 与 `FrenetNB/TN/TB` 进入 S3，curvature center 与 aliases 进入 S4，invalid diagnostics 进入 S6，excluded family 留在 non-goal / later package。C5-M15 S6 未关闭前，M16 S6 不得发布 capability。
+- S3 已完成 CurveProjection / FrenetFrame 合同冻结：support order 必须覆盖 edge/curve only、edge+vertex、vertex+edge 和 vertex-first swap；无 vertex 使用 `attachParameter` / `MapPathParameter`，有 vertex 使用 `GeomAPI_ProjectPointOnCurve::LowerDistanceParameter()`；projection failure、D1 zero derivative、TN/TB undefined normal 必须 diagnostic 或 precise blocker，不能走 default placement；D2 failure 按 FreeCAD warning 后 `dd=0` 边界进入 S6 expected/diagnostics；`NormalToPath` 仍只是 shared helper 合同，不是 release mode。
 
 ## 队列检查
 

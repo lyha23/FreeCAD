@@ -1,6 +1,6 @@
 # C5-M16 DatumCurveFrameCurvature AttachEngine 方案
 
-状态：`S2_done__S3_pending__release_blocked_by_c5m15_s6`
+状态：`S3_done__S4_pending__release_blocked_by_c5m15_s6`
 
 ## 当前基线
 
@@ -60,8 +60,8 @@ S0 live freeze 已确认 C5-M15 队列仍有 `C5-M15-S6 Oracle 实现与发布�
 1. S0：已冻结 M15 依赖、live exact blocker、禁止声明和状态字典。
 2. S1：已审计 FreeCAD source candidates，确认哪些 mode 共享 3D curve-frame route，哪些必须排除。
 3. S2：已把 source candidates 路由到 scope、blocker、backendGap、fixture/oracle、nonGoal；`NormalToPath` 是 shared helper 合同，不是本包 release mode。
-4. S3：下一步专项复审 projection / D1 / D2 / Frenet frame，写清 `NormalToPath` 与 `FrenetNB/TN/TB` 实现合同。
-5. S4：专项复审 curvature center 与 aliases，写清 `Concentric`、`SectionOfRevolution`、`AxisOfCurvature`、`Normal/Binormal`、`CenterOfCurvature` 的成功/失败边界。
+4. S3：已专项复审 projection / D1 / D2 / Frenet frame，冻结 `NormalToPath` shared helper 与 `FrenetNB/TN/TB` 实现合同。
+5. S4：下一步专项复审 curvature center 与 aliases，写清 `Concentric`、`SectionOfRevolution`、`AxisOfCurvature`、`Normal/Binormal`、`CenterOfCurvature` 的成功/失败边界。
 6. S5：复审 request-local response、writeback suggestions、capability exact blocker closeout，确保不把 excluded family 顺带 supported。
 7. S6：仅在 C5-M15 S6 已关闭后，批量采集 FreeCADCmd expected，落 C++、fixtures、focused tests、capability/docs 和验收记录。
 
@@ -98,8 +98,8 @@ python3 -m unittest tests.test_p7_features tests.test_expected_fixtures tests.te
 
 | blocker | C++ 落点 | FreeCAD 依据 | tests | 成功标准 |
 | --- | --- | --- | --- | --- |
-| `C5M16-BLK-101` | `cad-core/src/part_design/datum_attachment.h` | `Attacher.cpp:1674-1755` | `test_c51x_datum_curve_frame_modes_match_expected` | edge parameter / vertex projection / D1 zero derivative 行为一致 |
-| `C5M16-BLK-201` | `datum_attachment.h` | `Attacher.cpp:1766-1831` | modes + diagnostics | FrenetNB/TN/TB frame、undefined normal diagnostics 与 expected 一致 |
+| `C5M16-BLK-101` | `cad-core/src/part_design/datum_attachment.h` | `Attacher.cpp:1242-1282,1674-1755` | `test_c51x_datum_curve_frame_modes_match_expected` | edge/curve only、edge+vertex、vertex+edge、vertex-first swap、`attachParameter` / vertex projection、projection failure 和 D1 zero derivative 行为一致；`NormalToPath` 只作为 helper 合同 |
+| `C5M16-BLK-201` | `datum_attachment.h` | `Attacher.cpp:1766-1831` | modes + diagnostics | D2 warning/`dd=0` 边界、T/N/B math、FrenetNB/TN/TB orientation、TN/TB undefined normal diagnostics 与 expected 一致；不生成 straight-line default frame |
 | `C5M16-BLK-301` | `datum_attachment.h` | `Attacher.cpp:1832-1847` | modes + diagnostics | Concentric / SectionOfRevolution 曲率中心和 infinite radius diagnostic 一致 |
 | `C5M16-BLK-401` | `datum_attachment.h`、`datum_line.cpp`、`datum_point.cpp` | `Attacher.cpp:2400-2483,2833-2889` | modes parity | AxisOfCurvature / Normal / Binormal / CenterOfCurvature aliases 走 3D helper，不在 executor 重写业务逻辑 |
 | `C5M16-BLK-501` | `c_api.cpp`、C5/C51 docs、matrices | capability exact blocker source | adapter capability test | exact blocker 只移除本包 proven modes；excluded family 保留 |
