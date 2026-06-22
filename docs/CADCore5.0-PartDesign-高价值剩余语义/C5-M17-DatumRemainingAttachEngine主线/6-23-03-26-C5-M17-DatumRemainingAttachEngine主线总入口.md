@@ -51,7 +51,7 @@
 | 工作步骤总入口 | `工作步骤细分/6-23-03-27-【已实现】C5-M17工作步骤总入口.md` | S0-S6 队列索引 |
 | S0 | `工作步骤细分/6-23-03-28-C5-M17-S0-liveRemainingAttachEngineBlocker冻结.md` | live blocker 与禁止声明 |
 | S1 | `工作步骤细分/6-23-03-29-【已实现】C5-M17-S1-FreeCADRemainingAttachEngine源码候选矩阵.md` | FreeCAD source audit |
-| S2 | `工作步骤细分/6-23-03-30-C5-M17-S2-scope准入与待实现矩阵.md` | scope / backendGap / nonGoal routing |
+| S2 | `工作步骤细分/6-23-03-30-【已实现】C5-M17-S2-scope准入与待实现矩阵.md` | scope / backendGap / nonGoal routing 已实现 |
 | S3 | `工作步骤细分/6-23-03-31-C5-M17-S3-ConicLandmark合同复审.md` | conic landmark DTO / placement 合同 |
 | S4 | `工作步骤细分/6-23-03-32-C5-M17-S4-ExcludedFamilies拆包复审.md` | Folding / IntersectionPoint / TangentU/V 拆包证据 |
 | S5 | `工作步骤细分/6-23-03-33-C5-M17-S5-requestLocalPlacementAndCapability专项复审.md` | request-local response 与 capability release gate |
