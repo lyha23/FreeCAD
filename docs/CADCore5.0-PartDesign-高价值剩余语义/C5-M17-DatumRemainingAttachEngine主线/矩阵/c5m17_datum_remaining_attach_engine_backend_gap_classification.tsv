@@ -1,0 +1,8 @@
+category_id	category_name	classification	priority	scope_ids	blocker_ids	product_decision_needed	recommended_next_step
+C5M17-CAT-001	DatumLine conic landmarks	pending_backendGap	C5-P0	C5M17-SCOPE-101	C5M17-BLK-101	no	S1/S3 freeze Directrix and Asymptote source/DTO/diagnostics before S6 expected-backed implementation
+C5M17-CAT-002	DatumPoint conic focus landmarks	pending_backendGap	C5-P0	C5M17-SCOPE-102	C5M17-BLK-102	no	S1/S3 freeze Focus source/DTO/diagnostics before S6 expected-backed implementation
+C5M17-CAT-003	Folding	laterPackage	C5-P1	C5M17-SCOPE-201	C5M17-BLK-201	yes	S4 keeps Folding out of conic S6 and opens a later fold-angle package when prioritized
+C5M17-CAT-004	IntersectionPoint	sourceAuditRequired	C5-P1	C5M17-SCOPE-301	C5M17-BLK-301	yes	S4 keeps IntersectionPoint in exact blocker until face/face route, DTO and native expected are proven
+C5M17-CAT-005	TangentU / TangentV	laterSurfacePackage	C5-P1	C5M17-SCOPE-401	C5M17-BLK-401	yes	S4 keeps TangentU/V in exact blocker until a surface tangent package proves the route
+C5M17-CAT-501	capability docs release gate	releaseGate_pending	C5-P0	C5M17-SCOPE-501	C5M17-BLK-501	no	S5/S6 may publish only FreeCADCmd expected-backed conic modes
+C5M17-CAT-900	GUI/session/cross-request state	nonGoal	C5-P2	C5M17-SCOPE-900	n/a	yes	Keep out of CAD Core stateless support
