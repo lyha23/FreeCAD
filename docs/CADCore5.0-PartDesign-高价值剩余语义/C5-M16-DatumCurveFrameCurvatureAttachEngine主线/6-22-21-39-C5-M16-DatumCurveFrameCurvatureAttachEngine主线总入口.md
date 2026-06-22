@@ -1,6 +1,6 @@
 # C5-M16 DatumCurveFrameCurvature AttachEngine 主线
 
-状态：`S4_done__S5_pending__release_blocked_by_c5m15_s6`
+状态：`S5_done__S6_pending__release_blocked_by_c5m15_s6`
 
 本包承接 C5-M15 Datum3DPlane AttachEngine 收口后的下一批 `datum_attach_engine_remaining_modes`。范围按同一 FreeCAD 曲线帧调用链、同一 `cad-core/src/part_design/datum_attachment.h` placement helper 边界、同一 `c51m5` Datum expected 家族拆分，不再按单个 UI mode 名称薄切。
 
@@ -70,7 +70,7 @@ S0 live blocker / M15 dependency freeze
 | S2 | `工作步骤细分/6-22-21-43-【已实现】C5-M16-S2-scope准入与待实现矩阵.md` | scope / backendGap / nonGoal routing |
 | S3 | `工作步骤细分/6-22-21-44-【已实现】C5-M16-S3-CurveProjectionFrenetFrame专项复审.md` | projection、D1/D2、Frenet T/N/B |
 | S4 | `工作步骤细分/6-22-21-45-【已实现】C5-M16-S4-CurvatureCenterAlias专项复审.md` | curvature center 与 line/point alias |
-| S5 | `工作步骤细分/6-22-21-46-C5-M16-S5-requestLocalPlacementAndCapability专项复审.md` | writeback、capability、release boundary |
+| S5 | `工作步骤细分/6-22-21-46-【已实现】C5-M16-S5-requestLocalPlacementAndCapability专项复审.md` | writeback、capability、release boundary |
 | S6 | `工作步骤细分/6-22-21-47-C5-M16-S6-Oracle实现与发布闸门.md` | oracle、C++、fixtures、tests、docs closeout |
 
 ## 最小完整语义批次
@@ -92,7 +92,8 @@ S0 live blocker / M15 dependency freeze
 - S1 已完成 FreeCAD source candidates 冻结。
 - S2 已完成 scope 准入与待实现矩阵冻结：`NormalToPath`/projection 与 `FrenetNB/TN/TB` 进入 S3，curvature center 与 aliases 进入 S4，invalid diagnostics 进入 S6，excluded family 留在 non-goal / later package。C5-M15 S6 未关闭前，M16 S6 不得发布 capability。
 - S3 已完成 CurveProjection / FrenetFrame 合同冻结：support order 必须覆盖 edge/curve only、edge+vertex、vertex+edge 和 vertex-first swap；无 vertex 使用 `attachParameter` / `MapPathParameter`，有 vertex 使用 `GeomAPI_ProjectPointOnCurve::LowerDistanceParameter()`；projection failure、D1 zero derivative、TN/TB undefined normal 必须 diagnostic 或 precise blocker，不能走 default placement；D2 failure 按 FreeCAD warning 后 `dd=0` 边界进入 S6 expected/diagnostics；`NormalToPath` 仍只是 shared helper 合同，不是 release mode。
-- S4 已完成 CurvatureCenter / Alias 合同冻结：`SectionOfRevolution` 先用 `T.Reversed` / `N.Reversed`，`Concentric` 先用 `B` / `T`，再用 `curvature = dd.Dot(N) / pow(d.Magnitude(), 2)` 把 base 移到 `p + N * (1 / curvature)`；`N == 0` 必须报 infinite radius / undefined curvature diagnostic。`AxisOfCurvature`、`Normal`、`Binormal`、`CenterOfCurvature` 只复用 shared 3D curve-frame / curvature helper，`AxisOfCurvature` 额外应用 Z-to-Y presuper rotation，line/point executors 不复制曲线帧业务规则。下一步进入 S5 request-local placement / capability 专项复审。
+- S4 已完成 CurvatureCenter / Alias 合同冻结：`SectionOfRevolution` 先用 `T.Reversed` / `N.Reversed`，`Concentric` 先用 `B` / `T`，再用 `curvature = dd.Dot(N) / pow(d.Magnitude(), 2)` 把 base 移到 `p + N * (1 / curvature)`；`N == 0` 必须报 infinite radius / undefined curvature diagnostic。`AxisOfCurvature`、`Normal`、`Binormal`、`CenterOfCurvature` 只复用 shared 3D curve-frame / curvature helper，`AxisOfCurvature` 额外应用 Z-to-Y presuper rotation，line/point executors 不复制曲线帧业务规则。
+- S5 已完成 request-local placement / capability 合同冻结：curve-frame helpers 只消费本次 request graph 的 support shape、subname、`MapPathParameter`、`AttachmentOffset`、`MapReversed`；response 只返回 placement、diagnostics 和 `documentObjectUpdates` / `elementReferenceUpdates` suggestions；`ReferenceShadow.brep` 只保留为单个被引用 subshape 的旧几何快照例外，不得扩展成完整 BREP、建模输入或跨请求缓存。C5-M15 S6 未关闭前，S6 不得发布 capability 或移除 `datum_attach_engine_remaining_modes`；后续只允许删除 expected-backed proven modes，`Folding`、conic landmarks、`IntersectionPoint`、`TangentU/V`、GUI/session 必须保留在 exact blocker 或 non-goal。
 
 ## 队列检查
 

@@ -1,6 +1,6 @@
 # C5-M16 DatumCurveFrameCurvature AttachEngine 方案
 
-状态：`S4_done__S5_pending__release_blocked_by_c5m15_s6`
+状态：`S5_done__S6_pending__release_blocked_by_c5m15_s6`
 
 ## 当前基线
 
@@ -62,7 +62,7 @@ S0 live freeze 已确认 C5-M15 队列仍有 `C5-M15-S6 Oracle 实现与发布�
 3. S2：已把 source candidates 路由到 scope、blocker、backendGap、fixture/oracle、nonGoal；`NormalToPath` 是 shared helper 合同，不是本包 release mode。
 4. S3：已专项复审 projection / D1 / D2 / Frenet frame，冻结 `NormalToPath` shared helper 与 `FrenetNB/TN/TB` 实现合同。
 5. S4：已专项复审 curvature center 与 aliases，冻结 `Concentric`、`SectionOfRevolution`、`AxisOfCurvature`、`Normal/Binormal`、`CenterOfCurvature` 的成功/失败边界。
-6. S5：下一步复审 request-local response、writeback suggestions、capability exact blocker closeout，确保不把 excluded family 顺带 supported。
+6. S5：已复审 request-local response、writeback suggestions、capability exact blocker closeout，冻结不扩大 `ReferenceShadow.brep`、不引入 backend session、C5-M15 S6 未关闭前不改 exact blocker、excluded family 必须保留的发布闸门。
 7. S6：仅在 C5-M15 S6 已关闭后，批量采集 FreeCADCmd expected，落 C++、fixtures、focused tests、capability/docs 和验收记录。
 
 ## 验收分层
@@ -102,7 +102,7 @@ python3 -m unittest tests.test_p7_features tests.test_expected_fixtures tests.te
 | `C5M16-BLK-201` | `datum_attachment.h` | `Attacher.cpp:1766-1831` | modes + diagnostics | D2 warning/`dd=0` 边界、T/N/B math、FrenetNB/TN/TB orientation、TN/TB undefined normal diagnostics 与 expected 一致；不生成 straight-line default frame |
 | `C5M16-BLK-301` | `datum_attachment.h` | `Attacher.cpp:1832-1847` | modes + diagnostics | Concentric / SectionOfRevolution 先复用 S3 Frenet frame，再按 `curvature = dd.Dot(N) / pow(d.Magnitude(), 2)` 把 base 移到 `p + N * (1 / curvature)`；`N == 0` 是 infinite radius / undefined curvature diagnostic，不从 bbox 或 circle center 猜 |
 | `C5M16-BLK-401` | `datum_attachment.h`、`datum_line.cpp`、`datum_point.cpp` | `Attacher.cpp:2400-2483,2833-2889` | modes parity | AxisOfCurvature / Normal / Binormal / CenterOfCurvature aliases 走 3D helper；AxisOfCurvature 额外做 Z-to-Y presuper rotation；line/point executor 只处理 shape convention，不重写 T/N/B/curvature 逻辑 |
-| `C5M16-BLK-501` | `c_api.cpp`、C5/C51 docs、matrices | capability exact blocker source | adapter capability test | exact blocker 只移除本包 proven modes；excluded family 保留 |
+| `C5M16-BLK-501` | `c_api.cpp`、C5/C51 docs、matrices | capability exact blocker source | adapter capability test | C5-M15 S6 关闭且 native expected/focused tests 通过后，exact blocker 只移除 expected-backed proven modes；excluded family 保留 |
 
 禁止捷径：
 
