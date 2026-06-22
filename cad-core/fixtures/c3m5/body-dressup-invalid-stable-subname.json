@@ -1,0 +1,314 @@
+{
+    "Objects": [
+        {
+            "Name": "草图 1:51:25 AM",
+            "ID": 1,
+            "TypeId": "Sketcher::SketchObject",
+            "Properties": {
+                "Geometry": [
+                    {
+                        "kind": "LineSegment",
+                        "start": [
+                            -735.4669999548399,
+                            60.84551608142692
+                        ],
+                        "end": [
+                            -300.72761374727463,
+                            60.84551608142692
+                        ]
+                    },
+                    {
+                        "kind": "LineSegment",
+                        "start": [
+                            -300.72761374727463,
+                            60.84551608142692
+                        ],
+                        "end": [
+                            -300.72761374727463,
+                            -432.63249075619956
+                        ]
+                    },
+                    {
+                        "kind": "LineSegment",
+                        "start": [
+                            -300.72761374727463,
+                            -432.63249075619956
+                        ],
+                        "end": [
+                            -735.4669999548399,
+                            -432.63249075619956
+                        ]
+                    },
+                    {
+                        "kind": "LineSegment",
+                        "start": [
+                            -735.4669999548399,
+                            -432.63249075619956
+                        ],
+                        "end": [
+                            -735.4669999548399,
+                            60.84551608142692
+                        ]
+                    }
+                ],
+                "Constraints": [],
+                "Placement": {
+                    "PropertyType": "App::PropertyPlacement",
+                    "Base": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "Rotation": [
+                        0,
+                        0,
+                        0,
+                        1
+                    ]
+                }
+            }
+        },
+        {
+            "Name": "Pad",
+            "ID": 2,
+            "TypeId": "PartDesign::Pad",
+            "Properties": {
+                "Profile": {
+                    "PropertyType": "App::PropertyLinkSub",
+                    "value": "草图 1:51:25 AM",
+                    "SubList": [
+                        "InternalFace1"
+                    ]
+                },
+                "Type": "Length",
+                "Length": 415,
+                "Reversed": false,
+                "SideType": "One side"
+            }
+        },
+        {
+            "Name": "Fillet",
+            "ID": 3,
+            "TypeId": "PartDesign::Fillet",
+            "Properties": {
+                "Base": {
+                    "PropertyType": "App::PropertyLinkSub",
+                    "value": "Pad",
+                    "SubList": [
+                        "Edge7"
+                    ],
+                    "StableSubList": [
+                        "Edge7"
+                    ]
+                },
+                "Radius": 95,
+                "UseAllEdges": false,
+                "SupportTransform": true
+            }
+        },
+        {
+            "Name": "Pad2",
+            "ID": 4,
+            "TypeId": "PartDesign::Pad",
+            "Properties": {
+                "Profile": {
+                    "PropertyType": "App::PropertyLinkSub",
+                    "value": "Fillet",
+                    "SubList": [
+                        "Face5"
+                    ],
+                    "StableSubList": [
+                        "Pad.Face6"
+                    ]
+                },
+                "Type": "Length",
+                "Length": 206,
+                "Reversed": false,
+                "SideType": "One side",
+                "UseCustomVector": true,
+                "Direction": [
+                    0,
+                    0,
+                    1
+                ],
+                "AlongSketchNormal": true
+            }
+        },
+        {
+            "Name": "Pad3",
+            "ID": 5,
+            "TypeId": "PartDesign::Pad",
+            "Properties": {
+                "Profile": {
+                    "PropertyType": "App::PropertyLinkSub",
+                    "value": "Fillet",
+                    "SubList": [
+                        "Face7"
+                    ],
+                    "StableSubList": [
+                        "Face3"
+                    ]
+                },
+                "Type": "Length",
+                "Length": 201,
+                "Reversed": false,
+                "SideType": "One side",
+                "UseCustomVector": true,
+                "Direction": [
+                    0.7071067811865468,
+                    0,
+                    0.7071067811865481
+                ],
+                "AlongSketchNormal": true
+            }
+        },
+        {
+            "Name": "Fillet2",
+            "ID": 6,
+            "TypeId": "PartDesign::Fillet",
+            "Properties": {
+                "Base": {
+                    "PropertyType": "App::PropertyLinkSub",
+                    "value": "Pad3",
+                    "SubList": [
+                        "Edge7"
+                    ],
+                    "StableSubList": [
+                        "Edge7"
+                    ]
+                },
+                "Radius": 74.9,
+                "UseAllEdges": false,
+                "SupportTransform": true
+            }
+        },
+        {
+            "Name": "Pad4",
+            "ID": 7,
+            "TypeId": "PartDesign::Pad",
+            "Properties": {
+                "Profile": {
+                    "PropertyType": "App::PropertyLinkSub",
+                    "value": "Fillet2",
+                    "SubList": [
+                        "Face7"
+                    ],
+                    "StableSubList": [
+                        "Fillet.Face2"
+                    ]
+                },
+                "Type": "Length",
+                "Length": 163,
+                "Reversed": false,
+                "SideType": "One side",
+                "UseCustomVector": true,
+                "Direction": [
+                    1,
+                    0,
+                    0
+                ],
+                "AlongSketchNormal": true
+            }
+        },
+        {
+            "Name": "Pad5",
+            "ID": 8,
+            "TypeId": "PartDesign::Pad",
+            "Properties": {
+                "Profile": {
+                    "PropertyType": "App::PropertyLinkSub",
+                    "value": "Fillet2",
+                    "SubList": [
+                        "Face13"
+                    ],
+                    "StableSubList": [
+                        "Face3"
+                    ]
+                },
+                "Type": "Length",
+                "Length": 141,
+                "Reversed": false,
+                "SideType": "One side",
+                "UseCustomVector": true,
+                "Direction": [
+                    0.980611914031596,
+                    0,
+                    0.19595987869788456
+                ],
+                "AlongSketchNormal": true
+            }
+        },
+        {
+            "Name": "Fillet3",
+            "ID": 9,
+            "TypeId": "PartDesign::Fillet",
+            "Properties": {
+                "Base": {
+                    "PropertyType": "App::PropertyLinkSub",
+                    "value": "Pad5",
+                    "SubList": [
+                        "Fillet2.Edge42"
+                    ],
+                    "StableSubList": [
+                        "Fillet2.Edge30"
+                    ]
+                },
+                "Radius": 58.3,
+                "UseAllEdges": false,
+                "SupportTransform": true
+            }
+        },
+        {
+            "Name": "FilletPreview",
+            "ID": 10,
+            "TypeId": "PartDesign::Fillet",
+            "Properties": {
+                "Base": {
+                    "PropertyType": "App::PropertyLinkSub",
+                    "value": "Fillet3",
+                    "SubList": [
+                        "Edge50"
+                    ],
+                    "StableSubList": [
+                        "Pad5.Edge8"
+                    ]
+                },
+                "Radius": 1,
+                "UseAllEdges": false,
+                "SupportTransform": true
+            }
+        },
+        {
+            "Name": "Pad5Body",
+            "ID": 11,
+            "TypeId": "PartDesign::Body",
+            "Properties": {
+                "Group": {
+                    "PropertyType": "App::PropertyLinkList",
+                    "values": [
+                        "草图 1:51:25 AM",
+                        "Pad",
+                        "Fillet",
+                        "Pad2",
+                        "Pad3",
+                        "Fillet2",
+                        "Pad4",
+                        "Pad5",
+                        "Fillet3",
+                        "FilletPreview"
+                    ]
+                },
+                "Tip": {
+                    "PropertyType": "App::PropertyLink",
+                    "value": "FilletPreview"
+                }
+            }
+        }
+    ],
+    "recompute": {
+        "objs": [
+            "Pad5Body"
+        ],
+        "force": true
+    }
+}

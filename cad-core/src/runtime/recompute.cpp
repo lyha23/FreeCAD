@@ -1327,7 +1327,8 @@ std::optional<BodyTipSubshapeResponseContext> bodyTipSubshapeResponseContext(
     };
 }
 
-std::string bodyTipQualifiedStableSubname(const std::string& indexed,
+std::string bodyTipQualifiedStableSubname(const std::string& objectName,
+                                          const std::string& indexed,
                                           const std::string& stableSubname,
                                           const std::optional<BodyTipSubshapeResponseContext>& tipContext)
 {
@@ -1339,10 +1340,17 @@ std::string bodyTipQualifiedStableSubname(const std::string& indexed,
     // The response subname is always the current Tip child path. Stable names from replacement
     // Tips also need that Tip path so downstream PropertyLinkSub can safely peel it off.
     const std::string ownerPrefix = tipContext->owner + ".";
+    const std::string bodyPrefix = objectName + ".";
+    if (stableSubname.rfind(ownerPrefix, 0) == 0) {
+        return stableSubname;
+    }
+    if (stableSubname.rfind(bodyPrefix, 0) == 0) {
+        return ownerPrefix + indexed;
+    }
     if (stableSubname == indexed && isPlainTopologicalElementName(stableSubname)) {
         return ownerPrefix + stableSubname;
     }
-    if (tipContext->stablePrefix && stableSubname.rfind(ownerPrefix, 0) != 0) {
+    if (tipContext->stablePrefix) {
         return ownerPrefix + stableSubname;
     }
     return stableSubname;
@@ -1478,7 +1486,7 @@ nlohmann::json responseSubshapes(const std::string& objectName,
         if (stableSubname.empty()) {
             stableSubname = internalElementStableSubnameFor(objectName, indexed, context);
         }
-        stableSubname = bodyTipQualifiedStableSubname(indexed, stableSubname, tipContext);
+        stableSubname = bodyTipQualifiedStableSubname(objectName, indexed, stableSubname, tipContext);
         const std::string subname = responseSubnameFor(indexed, stableSubname, tipContext);
         subshapes.push_back({
             {"id", objectName + ":" + indexed},

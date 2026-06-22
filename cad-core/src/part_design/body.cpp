@@ -783,22 +783,20 @@ std::optional<std::string> directTipSubshapeOwnerForBody(
     if (hasNonIdentityPlacement || body.properties.contains("BaseFeature") || !refinedFeatures.empty()) {
         return std::nullopt;
     }
-    if (!appliedReplacementFeatures.empty() && appliedReplacementFeatures.back() == stopFeature) {
-        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::Body::execute(),
-        // "Shape.setValue(tipShape)" exposes DressUp/Transformed replacement Tip shapes through
-        // the Body. Their response subshape paths must stay in the current Tip namespace.
-        return stopFeature;
-    }
-    if (!appliedSubtractiveFeatures.empty() || !appliedReplacementFeatures.empty()) {
-        return std::nullopt;
-    }
-    if (appliedAdditiveFeatures.size() != 1U || appliedAdditiveFeatures.front() != stopFeature) {
-        return std::nullopt;
-    }
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::Body::execute(),
     // reads "tipShape = static_cast<Part::Feature*>(tip)->Shape.getShape()" and writes
-    // "Shape.setValue(tipShape)". When the first additive Tip is adopted directly, Body display
-    // FaceN/EdgeN/VertexN entries still refer to that Tip's subshape namespace.
+    // "Shape.setValue(tipShape)". cad-core reconstructs that cumulative Tip shape while replaying
+    // Body.Group, so the final additive/subtractive/replacement stop feature owns the Body display
+    // FaceN/EdgeN/VertexN namespace when no placement/refine/BaseFeature rewrite was applied.
+    const bool stopIsReplacement = !appliedReplacementFeatures.empty()
+        && appliedReplacementFeatures.back() == stopFeature;
+    const bool stopIsAdditive = !appliedAdditiveFeatures.empty()
+        && appliedAdditiveFeatures.back() == stopFeature;
+    const bool stopIsSubtractive = !appliedSubtractiveFeatures.empty()
+        && appliedSubtractiveFeatures.back() == stopFeature;
+    if (!stopIsReplacement && !stopIsAdditive && !stopIsSubtractive) {
+        return std::nullopt;
+    }
     return stopFeature;
 }
 
@@ -1043,8 +1041,11 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
                                                                       appliedReplacementFeatures,
                                                                       refinedFeatures,
                                                                       hasNonIdentityPlacement);
+    const std::size_t appliedFeatureCount = appliedAdditiveFeatures.size()
+        + appliedSubtractiveFeatures.size() + appliedReplacementFeatures.size();
     const bool directTipSubshapeStablePrefix = directTipSubshapeOwner
-        && !appliedReplacementFeatures.empty() && appliedReplacementFeatures.back() == resolvedStopFeature;
+        && (appliedFeatureCount > 1U
+            || (!appliedReplacementFeatures.empty() && appliedReplacementFeatures.back() == resolvedStopFeature));
 
     return BodyTopoShapeResult {
         resultShape,

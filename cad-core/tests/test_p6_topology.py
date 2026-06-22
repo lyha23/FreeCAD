@@ -114,7 +114,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(len(result["mesh"]["PadPreviewBody"]["triangles"]), 0)
         self.assertGreater(len(result["subshapes"]["PadPreviewBody"]), 0)
 
-    def test_p6_body_result_does_not_publish_unresolvable_tip_face4_name(self) -> None:
+    def test_p6_body_result_publishes_revolution_tip_face_path(self) -> None:
         payload = self.p6_payload("body-tip-face-profile-pad-after-revolution")
         payload["Objects"] = payload["Objects"][:3] + [
             {
@@ -140,10 +140,8 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         face4 = next(item for item in result["results"][0]["subshapes"] if item["indexed"] == "Face4")
         self.assertEqual(face4["id"], "RevolutionBody:Face4")
-        self.assertEqual(face4["subname"], "Face4")
-        self.assertEqual(face4["stableSubname"], "Face4")
-        self.assertNotEqual(face4["subname"], "Revolution.Face4")
-        self.assertNotEqual(face4["stableSubname"], "Revolution.Face4")
+        self.assertEqual(face4["subname"], "Revolution.Face4")
+        self.assertTrue(face4["stableSubname"].startswith("Revolution."))
 
     def test_p6_body_face_profile_does_not_replay_across_bodies(self) -> None:
         payload = self.p6_payload("body-tip-face-profile-pad-after-revolution")

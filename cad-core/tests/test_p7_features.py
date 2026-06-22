@@ -1840,6 +1840,19 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(body["bbox"]["max"][2], 1049.0)
         self.assertAlmostEqual(body["volume"], fillet2["volume"])
 
+    def test_c3m5_body_dressup_rejects_invalid_target_stable_subname(self) -> None:
+        result = self.run_recompute("body-dressup-invalid-stable-subname", "c3m5")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual(diagnostic["code"], "unsupported_stable_subname")
+        self.assertEqual(diagnostic["object"], "Fillet3")
+        self.assertEqual(diagnostic["property"], "Base")
+        self.assertEqual(diagnostic["target"], "Pad5")
+        self.assertEqual(diagnostic["subname"], "Fillet2.Edge30")
+        self.assertIn("Fillet2.Edge30", diagnostic["message"])
+        self.assertEqual(result["objects"]["Fillet3"]["status"], "error")
+        self.assertNotIn("FilletPreview", {item["object"] for item in result["diagnostics"]})
+
     def test_c3m5_chamfer_parameter_variants_build(self) -> None:
         for fixture, parameters in [
             (

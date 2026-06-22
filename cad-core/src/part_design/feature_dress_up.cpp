@@ -528,6 +528,46 @@ std::string stableSubnameDiagnosticMessage(
         + ", but it is not in the current ElementMap";
 }
 
+bool validateTargetStableSubnames(
+    const app::Link& link,
+    const std::optional<part::NamedShape>& namedShape,
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context
+)
+{
+    if (!namedShape) {
+        return true;
+    }
+
+    for (std::size_t index = 0; index < link.subnames.size(); ++index) {
+        const std::string stableSubname =
+            index < link.stableSubnames.size() ? link.stableSubnames.at(index) : std::string {};
+        if (stableSubname.empty() || stableSubname == link.subnames.at(index)) {
+            continue;
+        }
+
+        const auto resolved =
+            part::resolveElementReference(*namedShape, link.subnames.at(index), stableSubname);
+        if (resolved.status == part::ElementResolveStatus::Resolved && resolved.element) {
+            continue;
+        }
+
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            stableSubnameDiagnosticCode(resolved.status),
+            stableSubnameDiagnosticMessage(link.object, stableSubname, resolved.status),
+            object.name,
+            "Base",
+            "runtime",
+            link.object,
+            stableSubname
+        );
+        return false;
+    }
+    return true;
+}
+
 std::optional<DressUpBase> resolveDressUpBase(
     const app::DocumentObject& object,
     runtime::ComputeContext& context
@@ -583,6 +623,9 @@ std::optional<DressUpBase> resolveDressUpBase(
     }
 
     if (const auto bodyContext = sameBodyEarlierFeatureContext(object, link->object, context)) {
+        if (!validateTargetStableSubnames(*link, namedShape, object, context)) {
+            return std::nullopt;
+        }
         if (const auto bodyTopoShape = bodyTopoShapeAtFeature(*bodyContext, context)) {
             if (!bodyTopoShape->shape.IsSame(shapeIt->second.shape)) {
                 return DressUpBase {
