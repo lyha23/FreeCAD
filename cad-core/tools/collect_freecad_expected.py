@@ -4549,6 +4549,26 @@ def datum_map_mode_active(obj: Any) -> bool:
         return False
 
 
+def datum_map_mode_label(obj: Any) -> str:
+    try:
+        return str(obj.MapMode)
+    except Exception:
+        return "Deactivated"
+
+
+def datum_alias_source_mode(type_id: str, mode: str) -> str:
+    if type_id == "PartDesign::Line":
+        if mode == "AxisOfCurvature":
+            return "SectionOfRevolution"
+        if mode == "Normal":
+            return "FrenetTB"
+        if mode == "Binormal":
+            return "FrenetTN"
+    if type_id == "PartDesign::Point" and mode == "CenterOfCurvature":
+        return "SectionOfRevolution"
+    return mode
+
+
 def datum_point_vector(obj: Any) -> Any:
     # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/DatumPoint.cpp
     # ::Point::getPoint() returns "Placement.getValue().getPosition()". Some current
@@ -4583,6 +4603,12 @@ def datum_payload(obj: Any) -> dict:
         "attached": datum_map_mode_active(obj),
         "status": "ok",
     }
+    if fields["attached"]:
+        map_mode = datum_map_mode_label(obj)
+        fields["map_mode"] = map_mode
+        alias_source_mode = datum_alias_source_mode(type_id, map_mode)
+        if alias_source_mode != map_mode:
+            fields["alias_source_mode"] = alias_source_mode
     if type_id == "PartDesign::Point":
         # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/DatumPoint.cpp
         # ::Point::getPoint(), returns "Placement.getValue().getPosition()".

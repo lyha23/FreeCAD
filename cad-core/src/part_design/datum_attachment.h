@@ -19,6 +19,7 @@
 #include <GeomAbs_CurveType.hxx>
 #include <GeomAbs_SurfaceType.hxx>
 #include <GeomAdaptor_Curve.hxx>
+#include <GeomAPI_ProjectPointOnCurve.hxx>
 #include <GeomAPI_IntSS.hxx>
 #include <GeomAPI_ProjectPointOnSurf.hxx>
 #include <Geom_Curve.hxx>
@@ -67,6 +68,8 @@ struct DatumAttachmentPlacement
 {
     bool attached = false;
     gp_Trsf placement;
+    std::string mapMode;
+    std::string aliasSourceMode;
 };
 
 struct SupportResolution
@@ -1506,6 +1509,240 @@ inline std::optional<gp_Trsf> tangentPlanePlacement(const std::vector<SupportRes
     return placementFromAxes(basePoint, *normal, gp_Vec(xDirection).Reversed(), mapReverse);
 }
 
+inline bool isCurveFrameMode(const std::string& mode)
+{
+    return mode == "FrenetNB" || mode == "FrenetTN" || mode == "FrenetTB" || mode == "Concentric"
+        || mode == "SectionOfRevolution";
+}
+
+inline bool isCurveFrameAliasMode(const std::string& mode)
+{
+    return mode == "AxisOfCurvature" || mode == "Normal" || mode == "Binormal"
+        || mode == "CenterOfCurvature";
+}
+
+inline std::string curveFrameSourceMode(DatumAttachmentEngine engine, const std::string& mode)
+{
+    if (engine == DatumAttachmentEngine::Line) {
+        if (mode == "AxisOfCurvature") {
+            return "SectionOfRevolution";
+        }
+        if (mode == "Normal") {
+            return "FrenetTB";
+        }
+        if (mode == "Binormal") {
+            return "FrenetTN";
+        }
+    }
+    if (engine == DatumAttachmentEngine::Point && mode == "CenterOfCurvature") {
+        return "SectionOfRevolution";
+    }
+    return mode;
+}
+
+inline gp_Trsf axisOfCurvaturePresuperPlacement()
+{
+    return placementFromAxes(gp_Pnt(0.0, 0.0, 0.0), gp_Dir(0.0, 1.0, 0.0), gp_Vec(1.0, 0.0, 0.0), false);
+}
+
+inline std::optional<gp_Trsf> curveFramePlacement(const std::string& mode,
+                                                 const std::vector<SupportResolution>& supports,
+                                                 bool mapReverse,
+                                                 double parameter,
+                                                 runtime::ComputeContext& context,
+                                                 const app::DocumentObject& object)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Attacher.cpp
+    // ::AttachEngine3D::_calculateAttachedPlacement(), cases "mmFrenetNB", "mmFrenetTN",
+    // "mmFrenetTB", "mmRevolutionSection" and "mmConcentric", consume "need one edge,
+    // and an optional vertex", project the vertex with "GeomAPI_ProjectPointOnCurve", then
+    // derive "T = d.Normalized()", "N = dd - T * (dd dot T)" and "B = T x N".
+    if (supports.empty()) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "Datum curve-frame MapMode requires one Edge support and an optional Vertex",
+                                "missing_link_target");
+        return std::nullopt;
+    }
+
+    const SupportResolution* pathSupport = &supports.front();
+    const SupportResolution* vertexSupport = supports.size() >= 2U ? &supports[1] : nullptr;
+    bool throughVertex = false;
+    if (supports.front().shape.ShapeType() == TopAbs_VERTEX && supports.size() >= 2U) {
+        pathSupport = &supports[1];
+        vertexSupport = &supports.front();
+        throughVertex = true;
+    }
+
+    TopoDS_Edge path;
+    try {
+        path = TopoDS::Edge(pathSupport->shape);
+    }
+    catch (const Standard_Failure&) {
+    }
+    if (path.IsNull()) {
+        addDatumAttachmentDiagnostic(context,
+                                     object,
+                                     pathSupport->link,
+                                     "MapMode",
+                                     "Datum curve-frame MapMode requires an Edge path support",
+                                     "attachment_support_invalid_shape");
+        return std::nullopt;
+    }
+
+    BRepAdaptor_Curve curve(path);
+    double first = curve.FirstParameter();
+    double last = curve.LastParameter();
+    if (Precision::IsInfinite(first) || Precision::IsInfinite(last)) {
+        first = 0.0;
+        last = 1.0;
+    }
+
+    double u = first + parameter * (last - first);
+    gp_Pnt inputPoint;
+    if (vertexSupport != nullptr) {
+        TopoDS_Vertex vertex;
+        try {
+            vertex = TopoDS::Vertex(vertexSupport->shape);
+        }
+        catch (const Standard_Failure&) {
+        }
+        if (vertex.IsNull()) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         vertexSupport->link,
+                                         "MapMode",
+                                         "Datum curve-frame optional point support must be a Vertex",
+                                         "attachment_support_invalid_shape");
+            return std::nullopt;
+        }
+        inputPoint = BRep_Tool::Pnt(vertex);
+
+        TopLoc_Location location;
+        Handle(Geom_Curve) projectedCurve = BRep_Tool::Curve(path, location, first, last);
+        if (projectedCurve.IsNull()) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         pathSupport->link,
+                                         "MapMode",
+                                         "Datum curve-frame Edge support has no curve for vertex projection",
+                                         "attachment_support_invalid_shape");
+            return std::nullopt;
+        }
+        if (!location.IsIdentity()) {
+            projectedCurve = Handle(Geom_Curve)::DownCast(projectedCurve->Copy());
+            projectedCurve->Transform(location.Transformation());
+        }
+
+        GeomAPI_ProjectPointOnCurve projector(inputPoint, projectedCurve, first, last);
+        if (projector.NbPoints() < 1) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         vertexSupport->link,
+                                         "MapMode",
+                                         "Datum curve-frame could not project the Vertex support onto the path curve",
+                                         "projection_failed");
+            return std::nullopt;
+        }
+        u = projector.LowerDistanceParameter();
+    }
+
+    gp_Pnt point;
+    gp_Vec tangent;
+    try {
+        curve.D1(u, point, tangent);
+    }
+    catch (const Standard_Failure&) {
+        addDatumAttachmentDiagnostic(context,
+                                     object,
+                                     pathSupport->link,
+                                     "MapPathParameter",
+                                     "Datum curve-frame could not evaluate the path derivative at the selected parameter",
+                                     "attachment_parameter_invalid");
+        return std::nullopt;
+    }
+    if (tangent.Magnitude() < Precision::Confusion()) {
+        addDatumAttachmentDiagnostic(context,
+                                     object,
+                                     pathSupport->link,
+                                     "MapPathParameter",
+                                     "Datum curve-frame path derivative is too small at the selected parameter",
+                                     "attachment_parameter_invalid");
+        return std::nullopt;
+    }
+
+    gp_Pnt basePoint = throughVertex ? inputPoint : point;
+    gp_Vec secondDerivative;
+    try {
+        curve.D2(u, point, tangent, secondDerivative);
+    }
+    catch (const Standard_Failure&) {
+        secondDerivative = gp_Vec(0.0, 0.0, 0.0);
+    }
+
+    gp_Vec tangentAxis = tangent.Normalized();
+    gp_Vec normalAxis = secondDerivative.Subtracted(tangentAxis.Multiplied(secondDerivative.Dot(tangentAxis)));
+    gp_Vec binormalAxis;
+    if (normalAxis.Magnitude() > Precision::SquareConfusion()) {
+        normalAxis.Normalize();
+        binormalAxis = tangentAxis.Crossed(normalAxis);
+    }
+    else {
+        normalAxis = gp_Vec(0.0, 0.0, 0.0);
+        binormalAxis = gp_Vec(0.0, 0.0, 0.0);
+    }
+
+    const bool requiresDefinedNormal = mode == "FrenetNB" || mode == "FrenetTN" || mode == "FrenetTB"
+        || mode == "Concentric" || mode == "SectionOfRevolution";
+    if (requiresDefinedNormal && normalAxis.Magnitude() == 0.0) {
+        addDatumAttachmentDiagnostic(context,
+                                     object,
+                                     pathSupport->link,
+                                     "MapMode",
+                                     mode == "Concentric" || mode == "SectionOfRevolution"
+                                         ? "Datum curve-frame path has infinite radius of curvature at the selected point"
+                                         : "Datum curve-frame Frenet normal is undefined at the selected point",
+                                     mode == "Concentric" || mode == "SectionOfRevolution"
+                                         ? "infinite_curvature_radius"
+                                         : "undefined_frenet_normal");
+        return std::nullopt;
+    }
+
+    gp_Dir sketchNormal(0.0, 0.0, 1.0);
+    gp_Vec sketchXAxis(1.0, 0.0, 0.0);
+    if (mode == "FrenetNB" || mode == "SectionOfRevolution") {
+        sketchNormal = gp_Dir(tangentAxis.Reversed());
+        sketchXAxis = normalAxis.Reversed();
+    }
+    else if (mode == "FrenetTN" || mode == "Concentric") {
+        sketchNormal = gp_Dir(binormalAxis);
+        sketchXAxis = tangentAxis;
+    }
+    else if (mode == "FrenetTB") {
+        sketchNormal = gp_Dir(normalAxis.Reversed());
+        sketchXAxis = tangentAxis;
+    }
+
+    if (mode == "Concentric" || mode == "SectionOfRevolution") {
+        const double curvature = secondDerivative.Dot(normalAxis) / std::pow(tangent.Magnitude(), 2.0);
+        if (std::abs(curvature) < Precision::Confusion()) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         pathSupport->link,
+                                         "MapMode",
+                                         "Datum curve-frame path has infinite radius of curvature at the selected point",
+                                         "infinite_curvature_radius");
+            return std::nullopt;
+        }
+        gp_Vec baseVector(point.XYZ());
+        baseVector.Add(normalAxis.Multiplied(1.0 / curvature));
+        basePoint = gp_Pnt(baseVector.XYZ());
+    }
+
+    return placementFromAxes(basePoint, sketchNormal, sketchXAxis, mapReverse);
+}
+
 inline std::optional<gp_Trsf> selectedDatumPlacement(const app::DocumentObject& object,
                                                     runtime::ComputeContext& context,
                                                     DatumAttachmentEngine engine,
@@ -1688,6 +1925,47 @@ inline std::optional<gp_Trsf> selectedDatumPlacement(const app::DocumentObject& 
         }
         return proximityPointPlacement(mode, supports, context, object);
     }
+    if (isCurveFrameMode(mode)) {
+        if (engine != DatumAttachmentEngine::Plane && engine != DatumAttachmentEngine::CoordinateSystem) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         support.link,
+                                         "MapMode",
+                                         mode + " is supported for DatumPlane and CoordinateSystem in this C5-M16 batch");
+            return std::nullopt;
+        }
+        return curveFramePlacement(mode, supports, mapReverse, parameter, context, object);
+    }
+    if (isCurveFrameAliasMode(mode)) {
+        const std::string sourceMode = curveFrameSourceMode(engine, mode);
+        if (mode == "CenterOfCurvature") {
+            if (engine != DatumAttachmentEngine::Point) {
+                addDatumAttachmentDiagnostic(context,
+                                             object,
+                                             support.link,
+                                             "MapMode",
+                                             "CenterOfCurvature is supported for DatumPoint in this C5-M16 batch");
+                return std::nullopt;
+            }
+            return curveFramePlacement(sourceMode, supports, mapReverse, parameter, context, object);
+        }
+        if (engine != DatumAttachmentEngine::Line) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         support.link,
+                                         "MapMode",
+                                         mode + " is supported for DatumLine in this C5-M16 batch");
+            return std::nullopt;
+        }
+        auto placement = curveFramePlacement(sourceMode, supports, mapReverse, parameter, context, object);
+        if (!placement) {
+            return std::nullopt;
+        }
+        if (mode == "AxisOfCurvature") {
+            *placement = *placement * axisOfCurvaturePresuperPlacement();
+        }
+        return placement;
+    }
 
     addDatumAttachmentDiagnostic(context,
                                  object,
@@ -1723,7 +2001,7 @@ inline std::optional<DatumAttachmentPlacement> datumAttachmentPlacement(const ap
 
     if (!hasAttachmentSupport && !hasActiveMapMode && !hasActiveAttachmentOffset && !hasActiveMapReversed
         && !hasActiveMapPathParameter) {
-        return DatumAttachmentPlacement{false, placementForObject(object.name, context)};
+        return DatumAttachmentPlacement{false, placementForObject(object.name, context), "Deactivated", "Deactivated"};
     }
     if (!hasActiveMapMode) {
         if (hasActiveAttachmentOffset || hasActiveMapReversed || hasActiveMapPathParameter) {
@@ -1734,7 +2012,7 @@ inline std::optional<DatumAttachmentPlacement> datumAttachmentPlacement(const ap
                                          "Datum AttachmentOffset/MapReversed/MapPathParameter require an active selected MapMode");
             return std::nullopt;
         }
-        return DatumAttachmentPlacement{false, placementForObject(object.name, context)};
+        return DatumAttachmentPlacement{false, placementForObject(object.name, context), "Deactivated", "Deactivated"};
     }
     if (!hasAttachmentSupport) {
         addDatumAttachmentDiagnostic(context,
@@ -1761,15 +2039,16 @@ inline std::optional<DatumAttachmentPlacement> datumAttachmentPlacement(const ap
     const bool usesTangentPlaneSupports = mode == "TangentPlane";
     const bool usesThreePointPlaneSupports = mode == "ThreePointsPlane" || mode == "ThreePointsNormal";
     const bool usesDatum3DPlaneMultiSupports = usesTangentPlaneSupports || usesThreePointPlaneSupports;
+    const bool usesCurveFrameSupports = isCurveFrameMode(mode) || isCurveFrameAliasMode(mode);
     const bool requiresSubshape = mode == "FlatFace" || mode == "NormalToEdge" || mode == "Tangent"
         || mode == "Vertex" || mode == "OnEdge" || mode == "Translate" || mode == "TangentPlane"
-        || mode == "ThreePointsPlane" || mode == "ThreePointsNormal";
+        || mode == "ThreePointsPlane" || mode == "ThreePointsNormal" || usesCurveFrameSupports;
     std::vector<SupportResolution> resolvedSupports;
     const std::size_t supportCount = usesLineFamilySupports ? supportLinks.size()
         : (usesPointProximitySupports ? 2U
                                       : (usesTangentPlaneSupports ? 2U
                                                                   : (usesThreePointPlaneSupports ? supportLinks.size()
-                                                                                                  : 1U)));
+                                                                      : (usesCurveFrameSupports ? 2U : 1U))));
     for (std::size_t index = 0; index < supportLinks.size() && resolvedSupports.size() < supportCount; ++index) {
         const auto& link = supportLinks.at(index);
         if (link.object.empty()) {
@@ -1803,13 +2082,13 @@ inline std::optional<DatumAttachmentPlacement> datumAttachmentPlacement(const ap
     if (hasActiveAttachmentOffset && mode != "Translate") {
         *placement = *placement * attachmentOffsetPlacement(object);
     }
-    if (usesPointProximitySupports || usesDatum3DPlaneMultiSupports) {
+    if (usesPointProximitySupports || usesDatum3DPlaneMultiSupports || usesCurveFrameSupports) {
         appendAttachmentSupportsWriteback(object, resolvedSupports, context);
     }
     else if (!usesLineFamilySupports && hasReferenceStabilityEvidence(support)) {
         appendAttachmentSupportWriteback(object, resolvedSupports.front(), context);
     }
-    return DatumAttachmentPlacement{true, *placement};
+    return DatumAttachmentPlacement{true, *placement, mode, curveFrameSourceMode(engine, mode)};
 }
 
 } // namespace cad_core::part_design::detail

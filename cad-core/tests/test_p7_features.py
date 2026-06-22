@@ -399,6 +399,27 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["documentObjectUpdates"], [])
         self.assertEqual(result["elementReferenceUpdates"], [])
 
+    def test_c51x_datum_curve_frame_modes_match_expected(self) -> None:
+        result = self.run_recompute("partdesign-datum-curve-frame-modes", "c51m5")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual(result["elementReferenceUpdates"], [])
+        self.assert_object_matches_expected(result, "c51m5", "partdesign-datum-curve-frame-modes")
+
+    def test_c51x_datum_curve_frame_invalid_diagnostics(self) -> None:
+        result = self.run_recompute("partdesign-datum-curve-frame-diagnostics", "c51m5")
+        expected = self.expected_freecad("c51m5", "partdesign-datum-curve-frame-diagnostics")
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], expected["diagnostic_codes"])
+        self.assertEqual(result["objects"]["DatumCSMissingSupport"]["status"], "error")
+        self.assertEqual(result["objects"]["DatumCSWrongShape"]["status"], "error")
+        self.assertEqual(result["objects"]["DatumCSWrongProjectionSupport"]["status"], "error")
+        self.assertEqual(result["objects"]["DatumCSUndefinedNormal"]["status"], "error")
+        self.assertEqual(result["objects"]["DatumCSInfiniteCurvature"]["status"], "error")
+        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual(result["elementReferenceUpdates"], [])
+
     def test_c51x_datum_point_proximity_modes_match_expected(self) -> None:
         result = self.run_recompute("partdesign-datum-point-proximity-modes", "c51m5")
 

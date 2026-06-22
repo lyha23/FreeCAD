@@ -12,6 +12,8 @@
 #include <gp_Pnt.hxx>
 #include <gp_Trsf.hxx>
 
+#include <utility>
+
 namespace cad_core::part_design {
 
 namespace {
@@ -74,13 +76,20 @@ void executeLineDatum(const app::DocumentObject& object,
     context.globalPlacements[object.name] = placement;
 
     context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::DatumLine, shape};
-    context.objects[object.name] = {
+    nlohmann::json result = {
         {"status", "ok"},
         {"datum", datumKind},
         {"attached", attachment->attached},
         {"base", pointToJson(base)},
         {"direction", directionToJson(direction)},
     };
+    if (attachment->attached) {
+        result["map_mode"] = attachment->mapMode;
+        if (attachment->aliasSourceMode != attachment->mapMode) {
+            result["alias_source_mode"] = attachment->aliasSourceMode;
+        }
+    }
+    context.objects[object.name] = std::move(result);
 }
 
 }  // namespace

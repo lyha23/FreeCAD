@@ -1,0 +1,218 @@
+{
+  "freecad_version": "1.2.0 revision 20260519",
+  "objects": {
+    "DatumCSConcentricCircle": {
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "Concentric",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    "DatumCSFrenetNBParameter": {
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "FrenetNB",
+        "origin": [
+          2.8284271247461903,
+          1.414213562373095,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          0.44721359549995826,
+          0.894427190999916,
+          -9.291932616785731e-17
+        ],
+        "y_axis": [
+          -9.291932616785731e-17,
+          1.1102230246251565e-16,
+          1.0000000000000002
+        ],
+        "z_axis": [
+          0.894427190999916,
+          -0.4472135954999583,
+          1.1102230246251565e-16
+        ]
+      }
+    },
+    "DatumCSFrenetTBVertexFirst": {
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "FrenetTB",
+        "origin": [
+          -2.0000000000000004,
+          3.0000000000000004,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          -0.9729268372225408,
+          -0.23111332590775402,
+          1.1688938249933805e-18
+        ],
+        "y_axis": [
+          1.1688938249933805e-18,
+          0.0,
+          1.0
+        ],
+        "z_axis": [
+          -0.23111332590775402,
+          0.9729268372225408,
+          0.0
+        ]
+      }
+    },
+    "DatumCSFrenetTNVertexProjection": {
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "FrenetTN",
+        "origin": [
+          1.5477068476291544,
+          1.8442209407905703,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          -0.9786918708739049,
+          0.20533441476122788,
+          0.0
+        ],
+        "y_axis": [
+          -0.20533441476122788,
+          -0.9786918708739049,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    "DatumCSSectionArc": {
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "SectionOfRevolution",
+        "origin": [
+          0.0,
+          -5.333333333333334,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "z_axis": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "DatumLineAxisOfCurvature": {
+      "object_fields": {
+        "alias_source_mode": "SectionOfRevolution",
+        "attached": true,
+        "base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          9.781121115222566e-17,
+          -1.1253325218913783e-16,
+          1.0000000000000002
+        ],
+        "map_mode": "AxisOfCurvature",
+        "status": "ok"
+      }
+    },
+    "DatumLineBinormal": {
+      "object_fields": {
+        "alias_source_mode": "FrenetTN",
+        "attached": true,
+        "base": [
+          -1.2360679774997891,
+          1.9021130325903073,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "map_mode": "Binormal",
+        "status": "ok"
+      }
+    },
+    "DatumLineNormal": {
+      "object_fields": {
+        "alias_source_mode": "FrenetTB",
+        "attached": true,
+        "base": [
+          1.23606797749979,
+          1.9021130325903075,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.16035745659092823,
+          0.9870590084263903,
+          0.0
+        ],
+        "map_mode": "Normal",
+        "status": "ok"
+      }
+    },
+    "DatumPointCenterOfCurvature": {
+      "object_fields": {
+        "alias_source_mode": "SectionOfRevolution",
+        "attached": true,
+        "datum": "point",
+        "map_mode": "CenterOfCurvature",
+        "point": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok"
+      }
+    }
+  },
+  "reference": "FreeCADCmd oracle from partdesign-datum-curve-frame-modes.json; objects: Part::Ellipse, Part::Ellipse, Part::Cylinder, Part::Vertex, Part::Vertex, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem, PartDesign::Line, PartDesign::Line, PartDesign::Line, PartDesign::Point",
+  "schema_version": "cad-core.freecad-expected.v1"
+}

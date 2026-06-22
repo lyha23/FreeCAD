@@ -12,6 +12,8 @@
 #include <gp_Pnt.hxx>
 #include <gp_Trsf.hxx>
 
+#include <utility>
+
 namespace cad_core::part_design {
 
 namespace {
@@ -87,7 +89,7 @@ void executeDatumCoordinateSystem(const app::DocumentObject& object, runtime::Co
     context.globalPlacements[object.name] = placement;
 
     context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::DatumCoordinateSystem, shape};
-    context.objects[object.name] = {
+    nlohmann::json result = {
         {"status", "ok"},
         {"datum", object.typeId == "App::Origin" ? "origin" : "coordinate_system"},
         {"attached", attachment->attached},
@@ -96,6 +98,13 @@ void executeDatumCoordinateSystem(const app::DocumentObject& object, runtime::Co
         {"y_axis", directionToJson(yAxis)},
         {"z_axis", directionToJson(zAxis)},
     };
+    if (attachment->attached) {
+        result["map_mode"] = attachment->mapMode;
+        if (attachment->aliasSourceMode != attachment->mapMode) {
+            result["alias_source_mode"] = attachment->aliasSourceMode;
+        }
+    }
+    context.objects[object.name] = std::move(result);
 }
 
 }  // namespace cad_core::part_design

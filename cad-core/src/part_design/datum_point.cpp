@@ -10,6 +10,8 @@
 #include <gp_Pnt.hxx>
 #include <gp_Trsf.hxx>
 
+#include <utility>
+
 namespace cad_core::part_design {
 
 namespace {
@@ -66,12 +68,19 @@ void executeDatumPoint(const app::DocumentObject& object, runtime::ComputeContex
     context.globalPlacements[object.name] = placement;
 
     context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::DatumPoint, shape};
-    context.objects[object.name] = {
+    nlohmann::json result = {
         {"status", "ok"},
         {"datum", "point"},
         {"attached", attachment->attached},
         {"point", pointToJson(point)},
     };
+    if (attachment->attached) {
+        result["map_mode"] = attachment->mapMode;
+        if (attachment->aliasSourceMode != attachment->mapMode) {
+            result["alias_source_mode"] = attachment->aliasSourceMode;
+        }
+    }
+    context.objects[object.name] = std::move(result);
 }
 
 }  // namespace cad_core::part_design

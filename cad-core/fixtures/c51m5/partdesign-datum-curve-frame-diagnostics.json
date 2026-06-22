@@ -1,0 +1,168 @@
+{
+  "Objects": [
+    {
+      "Name": "StraightPath",
+      "ID": 1,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 0,
+        "Y2": 0,
+        "Z2": 5
+      }
+    },
+    {
+      "Name": "WrongPoint",
+      "ID": 2,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      }
+    },
+    {
+      "Name": "ZeroDerivativeSketch",
+      "ID": 3,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "BSpline",
+            "degree": 3,
+            "poles": [
+              [0, 0],
+              [0, 0],
+              [2, 2],
+              [4, 0]
+            ]
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "DatumCSMissingSupport",
+      "ID": 4,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "FrenetTN"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSWrongShape",
+      "ID": 5,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "WrongPoint",
+          "SubList": []
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "FrenetTN"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSWrongProjectionSupport",
+      "ID": 6,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "StraightPath",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "StraightPath",
+              "SubList": ["Edge1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "FrenetTB"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSZeroDerivative",
+      "ID": 7,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "ZeroDerivativeSketch",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "FrenetTN"
+        },
+        "MapPathParameter": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 0
+        }
+      }
+    },
+    {
+      "Name": "DatumCSUndefinedNormal",
+      "ID": 8,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "StraightPath",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "FrenetTN"
+        },
+        "MapPathParameter": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 0.5
+        }
+      }
+    },
+    {
+      "Name": "DatumCSInfiniteCurvature",
+      "ID": 9,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "StraightPath",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Concentric"
+        },
+        "MapPathParameter": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 0.5
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "DatumCSMissingSupport",
+      "DatumCSWrongShape",
+      "DatumCSWrongProjectionSupport",
+      "DatumCSZeroDerivative",
+      "DatumCSUndefinedNormal",
+      "DatumCSInfiniteCurvature"
+    ]
+  }
+}

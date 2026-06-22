@@ -1,0 +1,256 @@
+{
+  "Objects": [
+    {
+      "Name": "EllipsePath",
+      "ID": 1,
+      "TypeId": "Part::Ellipse",
+      "Properties": {
+        "MajorRadius": 4,
+        "MinorRadius": 2,
+        "Angle1": 0,
+        "Angle2": 360
+      }
+    },
+    {
+      "Name": "ArcPath",
+      "ID": 2,
+      "TypeId": "Part::Ellipse",
+      "Properties": {
+        "MajorRadius": 5,
+        "MinorRadius": 3,
+        "Angle1": 0,
+        "Angle2": 180
+      }
+    },
+    {
+      "Name": "CirclePath",
+      "ID": 3,
+      "TypeId": "Part::Cylinder",
+      "Properties": {
+        "Radius": 3,
+        "Height": 2
+      }
+    },
+    {
+      "Name": "ProjectionVertex",
+      "ID": 4,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 2,
+        "Y": 4,
+        "Z": 0
+      }
+    },
+    {
+      "Name": "VertexFirstProjection",
+      "ID": 5,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": -2,
+        "Y": 3,
+        "Z": 0
+      }
+    },
+    {
+      "Name": "DatumCSFrenetNBParameter",
+      "ID": 6,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "EllipsePath",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "FrenetNB"
+        },
+        "MapPathParameter": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 0.125
+        }
+      }
+    },
+    {
+      "Name": "DatumCSFrenetTNVertexProjection",
+      "ID": 7,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "EllipsePath",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "ProjectionVertex",
+              "SubList": []
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "FrenetTN"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSFrenetTBVertexFirst",
+      "ID": 8,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "VertexFirstProjection",
+              "SubList": []
+            },
+            {
+              "value": "EllipsePath",
+              "SubList": ["Edge1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "FrenetTB"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSConcentricCircle",
+      "ID": 9,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "CirclePath",
+          "SubList": ["Edge2"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Concentric"
+        },
+        "MapPathParameter": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 0.25
+        }
+      }
+    },
+    {
+      "Name": "DatumCSSectionArc",
+      "ID": 10,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "ArcPath",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "SectionOfRevolution"
+        },
+        "MapPathParameter": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 0.5
+        }
+      }
+    },
+    {
+      "Name": "DatumLineAxisOfCurvature",
+      "ID": 11,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "CirclePath",
+          "SubList": ["Edge2"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "AxisOfCurvature"
+        },
+        "MapPathParameter": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 0.125
+        }
+      }
+    },
+    {
+      "Name": "DatumLineNormal",
+      "ID": 12,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "EllipsePath",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Normal"
+        },
+        "MapPathParameter": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 0.2
+        }
+      }
+    },
+    {
+      "Name": "DatumLineBinormal",
+      "ID": 13,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "EllipsePath",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Binormal"
+        },
+        "MapPathParameter": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 0.3
+        }
+      }
+    },
+    {
+      "Name": "DatumPointCenterOfCurvature",
+      "ID": 14,
+      "TypeId": "PartDesign::Point",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "CirclePath",
+          "SubList": ["Edge2"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "CenterOfCurvature"
+        },
+        "MapPathParameter": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 0.5
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "DatumCSFrenetNBParameter",
+      "DatumCSFrenetTNVertexProjection",
+      "DatumCSFrenetTBVertexFirst",
+      "DatumCSConcentricCircle",
+      "DatumCSSectionArc",
+      "DatumLineAxisOfCurvature",
+      "DatumLineNormal",
+      "DatumLineBinormal",
+      "DatumPointCenterOfCurvature"
+    ]
+  }
+}

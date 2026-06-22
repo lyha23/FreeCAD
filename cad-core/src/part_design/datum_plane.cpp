@@ -11,6 +11,8 @@
 #include <gp_Pnt.hxx>
 #include <gp_Trsf.hxx>
 
+#include <utility>
+
 namespace cad_core::part_design {
 
 void executeDatumPlane(const app::DocumentObject& object, runtime::ComputeContext& context)
@@ -60,11 +62,18 @@ void executeDatumPlane(const app::DocumentObject& object, runtime::ComputeContex
     context.globalPlacements[object.name] = placement;
 
     context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::DatumPlane, shape};
-    context.objects[object.name] = {
+    nlohmann::json result = {
         {"status", "ok"},
         {"datum", "plane"},
         {"attached", attachment->attached},
     };
+    if (attachment->attached) {
+        result["map_mode"] = attachment->mapMode;
+        if (attachment->aliasSourceMode != attachment->mapMode) {
+            result["alias_source_mode"] = attachment->aliasSourceMode;
+        }
+    }
+    context.objects[object.name] = std::move(result);
 }
 
 }  // namespace cad_core::part_design
