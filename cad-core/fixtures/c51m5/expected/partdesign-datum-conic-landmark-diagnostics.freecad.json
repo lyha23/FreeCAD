@@ -1,0 +1,23 @@
+{
+  "diagnostic_codes": [
+    "missing_link_target",
+    "attachment_support_invalid_shape",
+    "attachment_support_invalid_shape",
+    "attachment_support_invalid_shape",
+    "attachment_support_invalid_shape",
+    "attachment_support_invalid_shape"
+  ],
+  "freecad_version": "1.2.0 revision 20260519",
+  "freecadcmd_evidence": {
+    "messages": [
+      "Null edge in AttachEngineLine::calculateAttachedPlacement()!",
+      "AttachEngineLine::calculateAttachedPlacement: referenced edge is not a conic section with a directrix",
+      "AttachEngineLine::calculateAttachedPlacement: Parabola has no second directrix",
+      "AttachEngineLine::calculateAttachedPlacement: Asymptotes are available only for hyperbola-shaped edges, the one supplied is not.",
+      "AttachEnginePoint::calculateAttachedPlacement: Parabola has no second focus"
+    ],
+    "version": "1.2.0 revision 20260519"
+  },
+  "reference": "C5-M17 Datum conic landmark invalid diagnostics source-backed by FreeCAD AttachEngineLine/AttachEnginePoint conic branches; diagnostic-only fixture has no native geometry payload",
+  "schema_version": "cad-core.freecad-expected.v1"
+}

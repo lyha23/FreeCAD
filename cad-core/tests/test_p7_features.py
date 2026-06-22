@@ -420,6 +420,28 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["documentObjectUpdates"], [])
         self.assertEqual(result["elementReferenceUpdates"], [])
 
+    def test_c51x_datum_conic_landmark_modes_match_expected(self) -> None:
+        result = self.run_recompute("partdesign-datum-conic-landmark-modes", "c51m5")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual(result["elementReferenceUpdates"], [])
+        self.assert_object_matches_expected(result, "c51m5", "partdesign-datum-conic-landmark-modes")
+
+    def test_c51x_datum_conic_landmark_invalid_diagnostics(self) -> None:
+        result = self.run_recompute("partdesign-datum-conic-landmark-diagnostics", "c51m5")
+        expected = self.expected_freecad("c51m5", "partdesign-datum-conic-landmark-diagnostics")
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], expected["diagnostic_codes"])
+        self.assertEqual(result["objects"]["DatumLineDirectrixMissingSupport"]["status"], "error")
+        self.assertEqual(result["objects"]["DatumLineDirectrixWrongShape"]["status"], "error")
+        self.assertEqual(result["objects"]["DatumLineDirectrixNonConic"]["status"], "error")
+        self.assertEqual(result["objects"]["DatumLineParabolaDirectrix2"]["status"], "error")
+        self.assertEqual(result["objects"]["DatumLineEllipseAsymptote1"]["status"], "error")
+        self.assertEqual(result["objects"]["DatumPointParabolaFocus2"]["status"], "error")
+        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual(result["elementReferenceUpdates"], [])
+
     def test_c51x_datum_point_proximity_modes_match_expected(self) -> None:
         result = self.run_recompute("partdesign-datum-point-proximity-modes", "c51m5")
 

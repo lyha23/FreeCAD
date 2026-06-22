@@ -1,14 +1,13 @@
-# C5-M17 DatumRemainingAttachEngine 方案
+# 【已实现】C5-M17 DatumRemainingAttachEngine 方案
 
-状态：`s5_release_gate_frozen_pending_s6`
+状态：`done_expected_backed_s6_closed`
 
 ## 当前基线
 
-C5-M14、C5-M15、C5-M16 已连续收口 Datum AttachEngine 的 proximity point、3D plane、curve-frame / curvature family。当前 capability exact blocker 只剩：
+C5-M14、C5-M15、C5-M16 已连续收口 Datum AttachEngine 的 proximity point、3D plane、curve-frame / curvature family。C5-M17 S6 又收口 conic landmarks。当前 capability exact blocker 只剩：
 
 ```text
-Folding, Directrix1, Directrix2, Asymptote1, Asymptote2,
-TangentU, TangentV, Focus1, Focus2, IntersectionPoint
+Folding, TangentU, TangentV, IntersectionPoint
 ```
 
 这些 mode 并不属于同一 FreeCAD 调用链。C5-M17 先开 remaining owner 包，第一批只推进 conic landmarks；其它项必须保留拆包边界。
@@ -17,10 +16,10 @@ TangentU, TangentV, Focus1, Focus2, IntersectionPoint
 
 | 项 | 本包处理 | 说明 |
 | --- | --- | --- |
-| `Directrix1` / `Directrix2` | 是 | DatumLine conic directrix family；ellipse/hyperbola/parabola 分支不同 |
-| `Asymptote1` / `Asymptote2` | 是 | DatumLine hyperbola-only asymptote family |
-| `Focus1` / `Focus2` | 是 | DatumPoint conic focus family；parabola 只有 Focus1 |
-| invalid diagnostics | 是 | missing support、wrong shape、non-conic edge、parabola second focus/directrix、unsupported conic type |
+| `Directrix1` / `Directrix2` | 已实现 | DatumLine conic directrix family；ellipse/hyperbola/parabola 分支不同 |
+| `Asymptote1` / `Asymptote2` | 已实现 | DatumLine hyperbola-only asymptote family |
+| `Focus1` / `Focus2` | 已实现 | DatumPoint conic focus family；parabola 只有 Focus1 |
+| invalid diagnostics | 已实现 | missing support、wrong shape、non-conic edge、parabola second focus/directrix、unsupported conic type |
 | `Folding` | 否 | 四 line fold-angle 状态机，后续独立包 |
 | `IntersectionPoint` | 否 | 需要单独确认 face/face route、support DTO 和 expected |
 | `TangentU/V` | 否 | surface tangent branch，归属 TangentPlane / surface tangent package |
@@ -58,14 +57,14 @@ TangentU, TangentV, Focus1, Focus2, IntersectionPoint
 4. S3：专项复审 conic landmark DTO / placement / diagnostics 合同。
 5. S4：专项复审 `Folding`、`IntersectionPoint`、`TangentU/V` 拆包证据。
 6. S5：已复审 request-local placement、writeback suggestions 和 capability release gate。
-7. S6：批量采集 FreeCADCmd expected，落 C++、fixtures、focused tests、capability/docs 和验收记录。
+7. S6：已批量采集 FreeCADCmd expected，落 C++、fixtures、focused tests、capability/docs 和验收记录。
 
-## S5 release gate
+## S6 release gate
 
 - CAD Core 无状态边界不变：后端只消费本次 request graph 的 support shape/subname、`MapMode`、`AttachmentOffset`、`MapReversed` / `Reverse`。
 - response 只返回 placement、diagnostics、`documentObjectUpdates` / `elementReferenceUpdates` suggestions；这些 suggestions 供前端下一次 graph 写回，不是 backend attachment session。
 - 不保存 complete BREP；`ReferenceShadow.brep` 只允许作为单个 referenced subshape snapshot 例外，不能作为完整对象 BREP 或建模输入。
-- S6 删除 exact blocker 的前置条件是 FreeCADCmd expected、focused conic tests 和 adapter capability test 全部通过；可删除范围仅限 proven conic modes：`Directrix1/2`、`Asymptote1/2`、`Focus1/2`。
+- S6 已在 FreeCADCmd expected、focused conic tests 和 adapter capability test 全部通过后删除 proven conic modes：`Directrix1/2`、`Asymptote1/2`、`Focus1/2`。
 - `Folding`、`IntersectionPoint`、`TangentU/V` 继续保留 exact blocker 或后续包路由，不在 conic S6 发布 supported。
 
 ## 验收分层

@@ -1,0 +1,260 @@
+{
+  "Objects": [
+    {
+      "Name": "EllipseEdge",
+      "ID": 1,
+      "TypeId": "Part::Ellipse",
+      "Properties": {
+        "MajorRadius": 5,
+        "MinorRadius": 3,
+        "Angle1": 0,
+        "Angle2": 360
+      }
+    },
+    {
+      "Name": "HyperbolaSketch",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "ArcOfHyperbola",
+            "center": [0, 0],
+            "majorRadius": 4,
+            "minorRadius": 2,
+            "angle": 0.35,
+            "startAngle": -0.8,
+            "endAngle": 0.8
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "ParabolaSketch",
+      "ID": 3,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "ArcOfParabola",
+            "center": [0, 0],
+            "focal": 2,
+            "angle": 0.25,
+            "startAngle": -0.8,
+            "endAngle": 0.8
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "DatumLineEllipseDirectrix1",
+      "ID": 4,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "EllipseEdge",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Directrix1"
+        }
+      }
+    },
+    {
+      "Name": "DatumLineEllipseDirectrix2",
+      "ID": 5,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "EllipseEdge",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Directrix2"
+        }
+      }
+    },
+    {
+      "Name": "DatumPointEllipseFocus1",
+      "ID": 6,
+      "TypeId": "PartDesign::Point",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "EllipseEdge",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Focus1"
+        }
+      }
+    },
+    {
+      "Name": "DatumPointEllipseFocus2",
+      "ID": 7,
+      "TypeId": "PartDesign::Point",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "EllipseEdge",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Focus2"
+        }
+      }
+    },
+    {
+      "Name": "DatumLineHyperbolaDirectrix1",
+      "ID": 8,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "HyperbolaSketch",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Directrix1"
+        }
+      }
+    },
+    {
+      "Name": "DatumLineHyperbolaDirectrix2",
+      "ID": 9,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "HyperbolaSketch",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Directrix2"
+        }
+      }
+    },
+    {
+      "Name": "DatumLineHyperbolaAsymptote1",
+      "ID": 10,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "HyperbolaSketch",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Asymptote1"
+        }
+      }
+    },
+    {
+      "Name": "DatumLineHyperbolaAsymptote2",
+      "ID": 11,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "HyperbolaSketch",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Asymptote2"
+        }
+      }
+    },
+    {
+      "Name": "DatumPointHyperbolaFocus1",
+      "ID": 12,
+      "TypeId": "PartDesign::Point",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "HyperbolaSketch",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Focus1"
+        }
+      }
+    },
+    {
+      "Name": "DatumPointHyperbolaFocus2",
+      "ID": 13,
+      "TypeId": "PartDesign::Point",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "HyperbolaSketch",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Focus2"
+        }
+      }
+    },
+    {
+      "Name": "DatumLineParabolaDirectrix1",
+      "ID": 14,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "ParabolaSketch",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Directrix1"
+        }
+      }
+    },
+    {
+      "Name": "DatumPointParabolaFocus1",
+      "ID": 15,
+      "TypeId": "PartDesign::Point",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "ParabolaSketch",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Focus1"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "DatumLineEllipseDirectrix1",
+      "DatumLineEllipseDirectrix2",
+      "DatumPointEllipseFocus1",
+      "DatumPointEllipseFocus2",
+      "DatumLineHyperbolaDirectrix1",
+      "DatumLineHyperbolaDirectrix2",
+      "DatumLineHyperbolaAsymptote1",
+      "DatumLineHyperbolaAsymptote2",
+      "DatumPointHyperbolaFocus1",
+      "DatumPointHyperbolaFocus2",
+      "DatumLineParabolaDirectrix1",
+      "DatumPointParabolaFocus1"
+    ]
+  }
+}

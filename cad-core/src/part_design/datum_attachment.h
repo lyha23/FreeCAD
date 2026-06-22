@@ -40,8 +40,11 @@
 #include <gp_Ax1.hxx>
 #include <gp_Ax3.hxx>
 #include <gp_Dir.hxx>
+#include <gp_Elips.hxx>
+#include <gp_Hypr.hxx>
 #include <gp_Pln.hxx>
 #include <gp_Pnt.hxx>
+#include <gp_Parab.hxx>
 #include <gp_Quaternion.hxx>
 #include <gp_Trsf.hxx>
 #include <gp_Vec.hxx>
@@ -968,6 +971,115 @@ inline std::optional<gp_Trsf> proximityLinePlacement(const std::vector<SupportRe
     return linePlacementFromFreeCADFactory(supports, point1, gp_Dir(direction), mapReverse);
 }
 
+inline bool isConicLineLandmarkMode(const std::string& mode)
+{
+    return mode == "Directrix1" || mode == "Directrix2" || mode == "Asymptote1"
+        || mode == "Asymptote2";
+}
+
+inline bool isConicPointLandmarkMode(const std::string& mode)
+{
+    return mode == "Focus1" || mode == "Focus2";
+}
+
+inline std::optional<TopoDS_Edge> conicLandmarkEdge(const SupportResolution& support,
+                                                    runtime::ComputeContext& context,
+                                                    const app::DocumentObject& object,
+                                                    const std::string& mode)
+{
+    TopoDS_Edge edge;
+    try {
+        edge = TopoDS::Edge(support.shape);
+    }
+    catch (const Standard_Failure&) {
+    }
+    if (edge.IsNull()) {
+        addDatumAttachmentDiagnostic(context,
+                                     object,
+                                     support.link,
+                                     "MapMode",
+                                     mode + " requires a non-null Edge support",
+                                     "attachment_support_invalid_shape");
+        return std::nullopt;
+    }
+    return edge;
+}
+
+inline std::optional<gp_Trsf> conicLineLandmarkPlacement(const std::string& mode,
+                                                        const std::vector<SupportResolution>& supports,
+                                                        bool mapReverse,
+                                                        runtime::ComputeContext& context,
+                                                        const app::DocumentObject& object)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Attacher.cpp
+    // ::AttachEngineLine::AttachEngineLine(), lines 2413-2419, registers "mm1Asymptote1/2"
+    // as rtHyperbola, "mm1Directrix1" as rtConic, and "mm1Directrix2" as rtEllipse/rtHyperbola.
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Attacher.cpp
+    // ::AttachEngineLine::_calculateAttachedPlacement(), lines 2613-2702, reads
+    // "BRepAdaptor_Curve adapt(e)", then "hyp.Asymptote1/2().Direction()" or
+    // ellipse/hyperbola/parabola "Directrix1/2()"; parabola "has no second directrix".
+    const SupportResolution& support = supports.front();
+    const auto edge = conicLandmarkEdge(support, context, object, mode);
+    if (!edge) {
+        return std::nullopt;
+    }
+
+    BRepAdaptor_Curve adapt(*edge);
+    if (mode == "Asymptote1" || mode == "Asymptote2") {
+        if (adapt.GetType() != GeomAbs_Hyperbola) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         support.link,
+                                         "MapMode",
+                                         mode + " requires a hyperbola-shaped Edge support",
+                                         "attachment_support_invalid_shape");
+            return std::nullopt;
+        }
+        const gp_Hypr hyperbola = adapt.Hyperbola();
+        const gp_Ax1 asymptote = mode == "Asymptote1" ? hyperbola.Asymptote1() : hyperbola.Asymptote2();
+        return linePlacementFromFreeCADFactory(supports,
+                                               hyperbola.Location(),
+                                               asymptote.Direction(),
+                                               mapReverse);
+    }
+
+    gp_Ax1 directrix;
+    switch (adapt.GetType()) {
+        case GeomAbs_Ellipse: {
+            const gp_Elips ellipse = adapt.Ellipse();
+            directrix = mode == "Directrix1" ? ellipse.Directrix1() : ellipse.Directrix2();
+        } break;
+        case GeomAbs_Hyperbola: {
+            const gp_Hypr hyperbola = adapt.Hyperbola();
+            directrix = mode == "Directrix1" ? hyperbola.Directrix1() : hyperbola.Directrix2();
+        } break;
+        case GeomAbs_Parabola: {
+            if (mode == "Directrix2") {
+                addDatumAttachmentDiagnostic(context,
+                                             object,
+                                             support.link,
+                                             "MapMode",
+                                             "Directrix2 is not available for a parabola Edge support",
+                                             "attachment_support_invalid_shape");
+                return std::nullopt;
+            }
+            directrix = adapt.Parabola().Directrix();
+        } break;
+        default:
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         support.link,
+                                         "MapMode",
+                                         mode + " requires an ellipse, hyperbola, or parabola Edge support",
+                                         "attachment_support_invalid_shape");
+            return std::nullopt;
+    }
+    return linePlacementFromFreeCADFactory(supports,
+                                           directrix.Location(),
+                                           directrix.Direction(),
+                                           mapReverse);
+}
+
 inline std::optional<gp_Pnt> proximityPointEdgeFaceIntersection(const SupportResolution& support1,
                                                                const SupportResolution& support2)
 {
@@ -1018,6 +1130,58 @@ inline std::optional<gp_Pnt> proximityPointEdgeFaceIntersection(const SupportRes
         return std::nullopt;
     }
     return std::nullopt;
+}
+
+inline std::optional<gp_Trsf> conicPointLandmarkPlacement(const std::string& mode,
+                                                         const std::vector<SupportResolution>& supports,
+                                                         runtime::ComputeContext& context,
+                                                         const app::DocumentObject& object)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Attacher.cpp
+    // ::AttachEnginePoint::AttachEnginePoint(), lines 2842-2845, registers "mm0Focus1" as
+    // rtConic and "mm0Focus2" as rtEllipse/rtHyperbola. In
+    // ::AttachEnginePoint::_calculateAttachedPlacement(), lines 2937-2990, the point branch
+    // reads ellipse/hyperbola "Focus1/2()" or parabola "Focus()", and reports
+    // "Parabola has no second focus" for Focus2.
+    const SupportResolution& support = supports.front();
+    const auto edge = conicLandmarkEdge(support, context, object, mode);
+    if (!edge) {
+        return std::nullopt;
+    }
+
+    BRepAdaptor_Curve adapt(*edge);
+    gp_Pnt focus;
+    switch (adapt.GetType()) {
+        case GeomAbs_Ellipse: {
+            const gp_Elips ellipse = adapt.Ellipse();
+            focus = mode == "Focus1" ? ellipse.Focus1() : ellipse.Focus2();
+        } break;
+        case GeomAbs_Hyperbola: {
+            const gp_Hypr hyperbola = adapt.Hyperbola();
+            focus = mode == "Focus1" ? hyperbola.Focus1() : hyperbola.Focus2();
+        } break;
+        case GeomAbs_Parabola: {
+            if (mode == "Focus2") {
+                addDatumAttachmentDiagnostic(context,
+                                             object,
+                                             support.link,
+                                             "MapMode",
+                                             "Focus2 is not available for a parabola Edge support",
+                                             "attachment_support_invalid_shape");
+                return std::nullopt;
+            }
+            focus = adapt.Parabola().Focus();
+        } break;
+        default:
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         support.link,
+                                         "MapMode",
+                                         mode + " requires an ellipse, hyperbola, or parabola Edge support",
+                                         "attachment_support_invalid_shape");
+            return std::nullopt;
+    }
+    return pointDatumPlacement(focus);
 }
 
 inline std::optional<gp_Trsf> proximityPointPlacement(const std::string& mode,
@@ -1881,6 +2045,17 @@ inline std::optional<gp_Trsf> selectedDatumPlacement(const app::DocumentObject& 
         }
         return proximityLinePlacement(supports, mapReverse, context, object);
     }
+    if (isConicLineLandmarkMode(mode)) {
+        if (engine != DatumAttachmentEngine::Line) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         support.link,
+                                         "MapMode",
+                                         mode + " is supported for DatumLine in this C5-M17 batch");
+            return std::nullopt;
+        }
+        return conicLineLandmarkPlacement(mode, supports, mapReverse, context, object);
+    }
     if (mode == "Vertex") {
         if (engine != DatumAttachmentEngine::Point) {
             addDatumAttachmentDiagnostic(context,
@@ -1924,6 +2099,17 @@ inline std::optional<gp_Trsf> selectedDatumPlacement(const app::DocumentObject& 
             return std::nullopt;
         }
         return proximityPointPlacement(mode, supports, context, object);
+    }
+    if (isConicPointLandmarkMode(mode)) {
+        if (engine != DatumAttachmentEngine::Point) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         support.link,
+                                         "MapMode",
+                                         mode + " is supported for DatumPoint in this C5-M17 batch");
+            return std::nullopt;
+        }
+        return conicPointLandmarkPlacement(mode, supports, context, object);
     }
     if (isCurveFrameMode(mode)) {
         if (engine != DatumAttachmentEngine::Plane && engine != DatumAttachmentEngine::CoordinateSystem) {
@@ -2042,7 +2228,8 @@ inline std::optional<DatumAttachmentPlacement> datumAttachmentPlacement(const ap
     const bool usesCurveFrameSupports = isCurveFrameMode(mode) || isCurveFrameAliasMode(mode);
     const bool requiresSubshape = mode == "FlatFace" || mode == "NormalToEdge" || mode == "Tangent"
         || mode == "Vertex" || mode == "OnEdge" || mode == "Translate" || mode == "TangentPlane"
-        || mode == "ThreePointsPlane" || mode == "ThreePointsNormal" || usesCurveFrameSupports;
+        || mode == "ThreePointsPlane" || mode == "ThreePointsNormal" || usesCurveFrameSupports
+        || isConicLineLandmarkMode(mode) || isConicPointLandmarkMode(mode);
     std::vector<SupportResolution> resolvedSupports;
     const std::size_t supportCount = usesLineFamilySupports ? supportLinks.size()
         : (usesPointProximitySupports ? 2U

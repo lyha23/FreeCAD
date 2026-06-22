@@ -2083,7 +2083,7 @@ nlohmann::json capabilitiesJson()
                   // and can write back AttachmentSupport subnames. cad-core supports the C51X
                   // selected non-GUI AttachEngine modes and returns request-local update
                   // suggestions instead of mutating a backend session.
-                  {"status", "supported_c51x_selected_attach_engine_with_curve_frame_curvature_family"},
+                  {"status", "supported_c51x_selected_attach_engine_with_curve_frame_curvature_conic_family"},
                   {"type_ids",
                    {"PartDesign::Point",
                     "PartDesign::Line",
@@ -2117,12 +2117,18 @@ nlohmann::json capabilitiesJson()
                     "DatumLine AxisOfCurvature selected MapMode",
                     "DatumLine Normal selected MapMode",
                     "DatumLine Binormal selected MapMode",
+                    "DatumLine Directrix1 selected MapMode",
+                    "DatumLine Directrix2 selected MapMode",
+                    "DatumLine Asymptote1 selected MapMode",
+                    "DatumLine Asymptote2 selected MapMode",
                     "DatumPoint Vertex selected MapMode",
                     "DatumPoint OnEdge selected MapMode",
                     "DatumPoint CenterOfMass selected MapMode",
                     "DatumPoint CenterOfCurvature selected MapMode",
                     "DatumPoint ProximityPoint1 selected MapMode",
                     "DatumPoint ProximityPoint2 selected MapMode",
+                    "DatumPoint Focus1 selected MapMode",
+                    "DatumPoint Focus2 selected MapMode",
                     "AttachmentOffset composition",
                     "MapReversed/Reverse composition",
                     "MapPathParameter/Parameter normalized edge parameter",
@@ -2143,7 +2149,9 @@ nlohmann::json capabilitiesJson()
                     "c51m5/partdesign-datum-3d-plane-modes",
                     "c51m5/partdesign-datum-3d-plane-diagnostics",
                     "c51m5/partdesign-datum-curve-frame-modes",
-                    "c51m5/partdesign-datum-curve-frame-diagnostics"}},
+                    "c51m5/partdesign-datum-curve-frame-diagnostics",
+                    "c51m5/partdesign-datum-conic-landmark-modes",
+                    "c51m5/partdesign-datum-conic-landmark-diagnostics"}},
                   {"diagnostics",
                    {"invalid_placement",
                     "missing_link_target",
@@ -2167,14 +2175,8 @@ nlohmann::json capabilitiesJson()
                    {{"datum_attach_engine_remaining_modes",
                      {{"modes",
                        {"Folding",
-                        "Directrix1",
-                        "Directrix2",
-                        "Asymptote1",
-                        "Asymptote2",
                         "TangentU",
                         "TangentV",
-                        "Focus1",
-                        "Focus2",
                         "IntersectionPoint"}},
                       {"source",
                        "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/"
@@ -2187,7 +2189,10 @@ nlohmann::json capabilitiesJson()
                        "ProximityPoint1/ProximityPoint2 with FreeCADCmd expected; C5-M15 supports "
                        "Translate/TangentPlane/ThreePointsPlane/ThreePointsNormal; C5-M16 supports "
                        "FrenetNB/FrenetTN/FrenetTB, Concentric, SectionOfRevolution and "
-                       "AxisOfCurvature/Normal/Binormal/CenterOfCurvature aliases with FreeCADCmd expected"}}}}},
+                       "AxisOfCurvature/Normal/Binormal/CenterOfCurvature aliases with FreeCADCmd expected; "
+                       "C5-M17 supports Directrix1/2, Asymptote1/2 and Focus1/2 conic landmarks "
+                       "with FreeCADCmd expected, while Folding, TangentU/V and IntersectionPoint "
+                       "remain separate exact blockers"}}}}},
                   {"remaining_gaps", nlohmann::json::array()},
               }},
              {"hole",

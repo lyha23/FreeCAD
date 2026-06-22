@@ -1,0 +1,198 @@
+{
+  "freecad_version": "1.2.0 revision 20260519",
+  "objects": {
+    "DatumLineEllipseDirectrix1": {
+      "object_fields": {
+        "attached": true,
+        "base": [
+          6.25,
+          0.0,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.0,
+          1.0,
+          -2.220446049250313e-16
+        ],
+        "map_mode": "Directrix1",
+        "status": "ok"
+      }
+    },
+    "DatumLineEllipseDirectrix2": {
+      "object_fields": {
+        "attached": true,
+        "base": [
+          -6.25,
+          0.0,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.0,
+          1.0,
+          -2.220446049250313e-16
+        ],
+        "map_mode": "Directrix2",
+        "status": "ok"
+      }
+    },
+    "DatumLineHyperbolaAsymptote1": {
+      "object_fields": {
+        "attached": true,
+        "base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.6868519354928473,
+          0.7267973711494354,
+          -1.6653345369377348e-16
+        ],
+        "map_mode": "Asymptote1",
+        "status": "ok"
+      }
+    },
+    "DatumLineHyperbolaAsymptote2": {
+      "object_fields": {
+        "attached": true,
+        "base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.9935490582152566,
+          -0.11340312570461665,
+          0.0
+        ],
+        "map_mode": "Asymptote2",
+        "status": "ok"
+      }
+    },
+    "DatumLineHyperbolaDirectrix1": {
+      "object_fields": {
+        "attached": true,
+        "base": [
+          3.3608019874162074,
+          1.2267884908896378,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          -0.34289780745545134,
+          0.939372712847379,
+          3.3306690738754696e-16
+        ],
+        "map_mode": "Directrix1",
+        "status": "ok"
+      }
+    },
+    "DatumLineHyperbolaDirectrix2": {
+      "object_fields": {
+        "attached": true,
+        "base": [
+          -3.3608019874162074,
+          -1.2267884908896378,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          -0.34289780745545134,
+          0.939372712847379,
+          3.3306690738754696e-16
+        ],
+        "map_mode": "Directrix2",
+        "status": "ok"
+      }
+    },
+    "DatumLineParabolaDirectrix1": {
+      "object_fields": {
+        "attached": true,
+        "base": [
+          -1.9378248434212897,
+          -0.49480791850904593,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          -0.24740395925452302,
+          0.9689124217106448,
+          1.6653345369377348e-16
+        ],
+        "map_mode": "Directrix1",
+        "status": "ok"
+      }
+    },
+    "DatumPointEllipseFocus1": {
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "map_mode": "Focus1",
+        "point": [
+          4.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok"
+      }
+    },
+    "DatumPointEllipseFocus2": {
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "map_mode": "Focus2",
+        "point": [
+          -4.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok"
+      }
+    },
+    "DatumPointHyperbolaFocus1": {
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "map_mode": "Focus1",
+        "point": [
+          4.201002484270259,
+          1.5334856136120472,
+          0.0
+        ],
+        "status": "ok"
+      }
+    },
+    "DatumPointHyperbolaFocus2": {
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "map_mode": "Focus2",
+        "point": [
+          -4.201002484270259,
+          -1.5334856136120472,
+          0.0
+        ],
+        "status": "ok"
+      }
+    },
+    "DatumPointParabolaFocus1": {
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "map_mode": "Focus1",
+        "point": [
+          1.9378248434212895,
+          0.4948079185090459,
+          0.0
+        ],
+        "status": "ok"
+      }
+    }
+  },
+  "reference": "FreeCADCmd oracle from partdesign-datum-conic-landmark-modes.json; objects: Part::Ellipse, Sketcher::SketchObject, Sketcher::SketchObject, PartDesign::Line, PartDesign::Line, PartDesign::Point, PartDesign::Point, PartDesign::Line, PartDesign::Line, PartDesign::Line, PartDesign::Line, PartDesign::Point, PartDesign::Point, PartDesign::Line, PartDesign::Point",
+  "schema_version": "cad-core.freecad-expected.v1"
+}

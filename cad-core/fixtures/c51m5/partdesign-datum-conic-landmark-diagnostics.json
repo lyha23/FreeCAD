@@ -1,0 +1,157 @@
+{
+  "Objects": [
+    {
+      "Name": "EllipseEdge",
+      "ID": 1,
+      "TypeId": "Part::Ellipse",
+      "Properties": {
+        "MajorRadius": 5,
+        "MinorRadius": 3,
+        "Angle1": 0,
+        "Angle2": 360
+      }
+    },
+    {
+      "Name": "StraightPath",
+      "ID": 2,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 4,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "WrongPoint",
+      "ID": 3,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    {
+      "Name": "ParabolaSketch",
+      "ID": 4,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "ArcOfParabola",
+            "center": [0, 0],
+            "focal": 2,
+            "angle": 0.25,
+            "startAngle": -0.8,
+            "endAngle": 0.8
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "DatumLineDirectrixMissingSupport",
+      "ID": 5,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Directrix1"
+        }
+      }
+    },
+    {
+      "Name": "DatumLineDirectrixWrongShape",
+      "ID": 6,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "WrongPoint",
+          "SubList": []
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Directrix1"
+        }
+      }
+    },
+    {
+      "Name": "DatumLineDirectrixNonConic",
+      "ID": 7,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "StraightPath",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Directrix1"
+        }
+      }
+    },
+    {
+      "Name": "DatumLineParabolaDirectrix2",
+      "ID": 8,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "ParabolaSketch",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Directrix2"
+        }
+      }
+    },
+    {
+      "Name": "DatumLineEllipseAsymptote1",
+      "ID": 9,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "EllipseEdge",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Asymptote1"
+        }
+      }
+    },
+    {
+      "Name": "DatumPointParabolaFocus2",
+      "ID": 10,
+      "TypeId": "PartDesign::Point",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "ParabolaSketch",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Focus2"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "DatumLineDirectrixMissingSupport",
+      "DatumLineDirectrixWrongShape",
+      "DatumLineDirectrixNonConic",
+      "DatumLineParabolaDirectrix2",
+      "DatumLineEllipseAsymptote1",
+      "DatumPointParabolaFocus2"
+    ]
+  }
+}

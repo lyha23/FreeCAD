@@ -1,23 +1,23 @@
-# C5-M17 DatumRemainingAttachEngine 主线
+# 【已实现】C5-M17 DatumRemainingAttachEngine 主线
 
-状态：`s5_release_gate_frozen_pending_s6`
+状态：`done_expected_backed_s6_closed`
 
 本包承接 C5-M16 之后 `part_design.datum_attachment.exact_blockers.datum_attach_engine_remaining_modes` 的剩余项。它不是把所有 mode 硬塞进同一轮实现，而是先冻结 live blocker 和 FreeCAD source route，再把同一调用链、同一 DTO/API 边界和同一 expected family 的内容纳入最小完整语义批次。
 
 ## 目标
 
 - 冻结当前 remaining modes：`Folding`、`Directrix1/2`、`Asymptote1/2`、`TangentU/V`、`Focus1/2`、`IntersectionPoint`。
-- 把 conic landmark family 作为第一批可执行实现候选：DatumLine `Directrix1/2`、`Asymptote1/2` 和 DatumPoint `Focus1/2`。
+- 已把 conic landmark family 作为第一批可执行实现候选完成：DatumLine `Directrix1/2`、`Asymptote1/2` 和 DatumPoint `Focus1/2`。
 - 把 `Folding`、`IntersectionPoint`、`TangentU/V` 明确拆成后续独立 source / oracle route，不在 conic S6 中顺带发布。
 - 保持 CAD Core 无状态边界：每次只消费 request graph 的 support shape/subname/MapMode/AttachmentOffset/MapReversed，不保存 backend attachment session 或完整 BREP。
-- 发布时只从 exact blocker 删除 FreeCADCmd expected-backed proven modes；不能因为同属 remaining list 就批量删除未证明项。
+- 发布时只从 exact blocker 删除 FreeCADCmd expected-backed proven modes；本包只删除 `Directrix1/2`、`Asymptote1/2`、`Focus1/2`。
 
 ## 当前基线
 
 - C5-M14 已关闭 DatumPoint `ProximityPoint1/2`。
 - C5-M15 已关闭 3D plane family：`Translate`、`TangentPlane`、`ThreePointsPlane`、`ThreePointsNormal`。
 - C5-M16 已关闭 curve-frame / curvature family：`FrenetNB/TN/TB`、`Concentric`、`SectionOfRevolution`、`AxisOfCurvature`、`Normal`、`Binormal`、`CenterOfCurvature`。
-- 当前 exact blocker 仍保留：`Folding`、`Directrix1`、`Directrix2`、`Asymptote1`、`Asymptote2`、`TangentU`、`TangentV`、`Focus1`、`Focus2`、`IntersectionPoint`。
+- 当前 exact blocker 仍保留：`Folding`、`TangentU`、`TangentV`、`IntersectionPoint`。`Directrix1/2`、`Asymptote1/2`、`Focus1/2` 已由 S6 expected-backed 发布关闭。
 
 ## FreeCAD 调用依据
 
@@ -47,7 +47,7 @@
 
 | 类型 | 路径 | 用途 |
 | --- | --- | --- |
-| 方案 | `6-23-03-26-C5-M17-DatumRemainingAttachEngine方案.md` | 主线范围、拆包策略、验收分层 |
+| 方案 | `6-23-03-26-【已实现】C5-M17-DatumRemainingAttachEngine方案.md` | 主线范围、拆包策略、验收分层 |
 | 工作步骤总入口 | `工作步骤细分/6-23-03-27-【已实现】C5-M17工作步骤总入口.md` | S0-S6 队列索引 |
 | S0 | `工作步骤细分/6-23-03-28-C5-M17-S0-liveRemainingAttachEngineBlocker冻结.md` | live blocker 与禁止声明 |
 | S1 | `工作步骤细分/6-23-03-29-【已实现】C5-M17-S1-FreeCADRemainingAttachEngine源码候选矩阵.md` | FreeCAD source audit |
@@ -55,14 +55,14 @@
 | S3 | `工作步骤细分/6-23-03-31-【已实现】C5-M17-S3-ConicLandmark合同复审.md` | conic landmark DTO / placement / diagnostics / expected 合同已冻结 |
 | S4 | `工作步骤细分/6-23-03-32-【已实现】C5-M17-S4-ExcludedFamilies拆包复审.md` | Folding / IntersectionPoint / TangentU/V 拆包证据已冻结 |
 | S5 | `工作步骤细分/6-23-03-33-【已实现】C5-M17-S5-requestLocalPlacementAndCapability专项复审.md` | request-local response 与 capability release gate 已冻结 |
-| S6 | `工作步骤细分/6-23-03-34-C5-M17-S6-Oracle实现与发布闸门.md` | conic oracle、C++、fixtures、tests、docs closeout |
+| S6 | `工作步骤细分/6-23-03-34-【已实现】C5-M17-S6-Oracle实现与发布闸门.md` | conic oracle、C++、fixtures、tests、docs closeout 已实现 |
 
-## S5 release gate
+## S6 closeout
 
 - 后端只消费本次 request graph 里的 support shape/subname、`MapMode`、`AttachmentOffset` 和 `MapReversed` / `Reverse`。
 - response 只返回 placement、diagnostics、`documentObjectUpdates` / `elementReferenceUpdates` suggestions；这些 suggestions 不是 backend 持久状态。
 - 不保存 backend attachment session，不保存 complete BREP；`ReferenceShadow.brep` 仅是单个 referenced subshape snapshot 例外。
-- S6 只有在 FreeCADCmd expected、focused tests 和 capability test 全部通过后，才允许删除 proven conic modes：`Directrix1/2`、`Asymptote1/2`、`Focus1/2`。
+- FreeCADCmd expected、focused tests 和 capability test 已覆盖 proven conic modes：`Directrix1/2`、`Asymptote1/2`、`Focus1/2`。
 - `Folding`、`IntersectionPoint`、`TangentU/V` 继续保留 exact blocker 或后续包路由。
 
 ## 队列检查

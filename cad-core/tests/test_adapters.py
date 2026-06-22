@@ -1124,7 +1124,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         datum_attachment = capabilities["part_design"]["datum_attachment"]
         self.assertEqual(
             datum_attachment["status"],
-            "supported_c51x_selected_attach_engine_with_curve_frame_curvature_family",
+            "supported_c51x_selected_attach_engine_with_curve_frame_curvature_conic_family",
         )
         self.assertIn("PartDesign::CoordinateSystem", datum_attachment["type_ids"])
         self.assertIn("DatumLine Placement direction", datum_attachment["supported"])
@@ -1146,12 +1146,18 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("DatumLine AxisOfCurvature selected MapMode", datum_attachment["supported"])
         self.assertIn("DatumLine Normal selected MapMode", datum_attachment["supported"])
         self.assertIn("DatumLine Binormal selected MapMode", datum_attachment["supported"])
+        self.assertIn("DatumLine Directrix1 selected MapMode", datum_attachment["supported"])
+        self.assertIn("DatumLine Directrix2 selected MapMode", datum_attachment["supported"])
+        self.assertIn("DatumLine Asymptote1 selected MapMode", datum_attachment["supported"])
+        self.assertIn("DatumLine Asymptote2 selected MapMode", datum_attachment["supported"])
         self.assertIn("DatumPoint Vertex selected MapMode", datum_attachment["supported"])
         self.assertIn("DatumPoint OnEdge selected MapMode", datum_attachment["supported"])
         self.assertIn("DatumPoint CenterOfMass selected MapMode", datum_attachment["supported"])
         self.assertIn("DatumPoint CenterOfCurvature selected MapMode", datum_attachment["supported"])
         self.assertIn("DatumPoint ProximityPoint1 selected MapMode", datum_attachment["supported"])
         self.assertIn("DatumPoint ProximityPoint2 selected MapMode", datum_attachment["supported"])
+        self.assertIn("DatumPoint Focus1 selected MapMode", datum_attachment["supported"])
+        self.assertIn("DatumPoint Focus2 selected MapMode", datum_attachment["supported"])
         self.assertIn("AttachmentSupport StableSubList/ShadowSub request-local writeback", datum_attachment["supported"])
         self.assertIn("p7/datum-coordinate-system-reference-axis", datum_attachment["fixtures"])
         self.assertIn("c4m2/partdesign-datum-attachment-deferred-diagnostics", datum_attachment["fixtures"])
@@ -1167,6 +1173,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("c51m5/partdesign-datum-3d-plane-diagnostics", datum_attachment["fixtures"])
         self.assertIn("c51m5/partdesign-datum-curve-frame-modes", datum_attachment["fixtures"])
         self.assertIn("c51m5/partdesign-datum-curve-frame-diagnostics", datum_attachment["fixtures"])
+        self.assertIn("c51m5/partdesign-datum-conic-landmark-modes", datum_attachment["fixtures"])
+        self.assertIn("c51m5/partdesign-datum-conic-landmark-diagnostics", datum_attachment["fixtures"])
         self.assertIn("unsupported_property", datum_attachment["diagnostics"])
         self.assertIn("attachment_support_invalid_shape", datum_attachment["diagnostics"])
         self.assertIn("projection_failed", datum_attachment["diagnostics"])
@@ -1211,9 +1219,16 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("Normal", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
         self.assertNotIn("Binormal", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
         self.assertNotIn("CenterOfCurvature", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
+        self.assertNotIn("Directrix1", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
+        self.assertNotIn("Directrix2", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
+        self.assertNotIn("Asymptote1", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
+        self.assertNotIn("Asymptote2", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
+        self.assertNotIn("Focus1", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
+        self.assertNotIn("Focus2", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
         self.assertIn("Folding", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
         self.assertIn("IntersectionPoint", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertIn("Focus1", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
+        self.assertIn("TangentU", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
+        self.assertIn("TangentV", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
         self.assertEqual(datum_attachment["remaining_gaps"], [])
         self.assertEqual(
             capabilities["part_design"]["hole"]["thread_tables"],
