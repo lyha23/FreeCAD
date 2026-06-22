@@ -2108,6 +2108,8 @@ nlohmann::json capabilitiesJson()
                     "DatumPoint Vertex selected MapMode",
                     "DatumPoint OnEdge selected MapMode",
                     "DatumPoint CenterOfMass selected MapMode",
+                    "DatumPoint ProximityPoint1 selected MapMode",
+                    "DatumPoint ProximityPoint2 selected MapMode",
                     "AttachmentOffset composition",
                     "MapReversed/Reverse composition",
                     "MapPathParameter/Parameter normalized edge parameter",
@@ -2121,6 +2123,8 @@ nlohmann::json capabilitiesJson()
                     "c51m5/partdesign-datum-selected-mapmodes",
                     "c51m5/partdesign-datum-offset-reverse-writeback",
                     "c51m5/partdesign-datum-point-single-input-modes",
+                    "c51m5/partdesign-datum-point-proximity-modes",
+                    "c51m5/partdesign-datum-point-proximity-diagnostics",
                     "c51m5/partdesign-datum-line-family-modes",
                     "c51m5/partdesign-datum-line-family-diagnostics"}},
                   {"diagnostics",
@@ -2129,6 +2133,7 @@ nlohmann::json capabilitiesJson()
                     "unsupported_property",
                     "attachment_support_invalid_shape",
                     "attachment_parameter_invalid",
+                    "execution_failed",
                     "no_intersection",
                     "subname_resolve_failed"}},
                   {"deferred",
@@ -2163,9 +2168,7 @@ nlohmann::json capabilitiesJson()
                         "Focus1",
                         "Focus2",
                         "CenterOfCurvature",
-                        "IntersectionPoint",
-                        "ProximityPoint1",
-                        "ProximityPoint2"}},
+                        "IntersectionPoint"}},
                       {"source",
                        "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/"
                        "Attacher.cpp::AttachEngine3D/Line/Point::_calculateAttachedPlacement"},
@@ -2173,7 +2176,8 @@ nlohmann::json capabilitiesJson()
                        "C51-S5 first batch supports FlatFace, ObjectXY/ObjectXZ/ObjectYZ, "
                        "ObjectOrigin/ObjectX/ObjectY/ObjectZ and NormalToEdge; C51X supports "
                        "AttachEnginePoint Vertex/OnEdge/CenterOfMass and AttachEngineLine "
-                       "TwoPointLine/IntersectionLine/ProximityLine with FreeCADCmd expected"}}}}},
+                       "TwoPointLine/IntersectionLine/ProximityLine; C5-M14 supports AttachEnginePoint "
+                       "ProximityPoint1/ProximityPoint2 with FreeCADCmd expected"}}}}},
                   {"remaining_gaps", nlohmann::json::array()},
               }},
              {"hole",

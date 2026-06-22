@@ -368,6 +368,52 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["documentObjectUpdates"], [])
         self.assertEqual(result["elementReferenceUpdates"], [])
 
+    def test_c51x_datum_point_proximity_modes_match_expected(self) -> None:
+        result = self.run_recompute("partdesign-datum-point-proximity-modes", "c51m5")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assert_object_matches_expected(result, "c51m5", "partdesign-datum-point-proximity-modes")
+        self.assertEqual(
+            result["documentObjectUpdates"],
+            [
+                {
+                    "action": "update",
+                    "object": "DatumPointProximityRecoveredSupport",
+                    "properties": {
+                        "AttachmentSupport": {
+                            "PropertyType": "App::PropertyLinkSubList",
+                            "SubSet": [
+                                {
+                                    "ShadowSub": [{"newName": "Vertex1", "oldName": "MissingVertex1"}],
+                                    "StableSubList": ["Vertex1"],
+                                    "SubList": ["Vertex1"],
+                                    "value": "RecoveryBox",
+                                },
+                                {
+                                    "SubList": [],
+                                    "value": "PointB",
+                                },
+                            ],
+                        }
+                    },
+                    "reason": "attachment_support_subname_recovered",
+                }
+            ],
+        )
+        self.assertEqual(result["elementReferenceUpdates"], [])
+
+    def test_c51x_datum_point_proximity_invalid_diagnostics(self) -> None:
+        result = self.run_recompute("partdesign-datum-point-proximity-diagnostics", "c51m5")
+
+        self.assertEqual(
+            [item["code"] for item in result["diagnostics"]],
+            ["attachment_support_invalid_shape", "subname_resolve_failed"],
+        )
+        self.assertEqual(result["objects"]["DatumPointProximityMissingSecond"]["status"], "error")
+        self.assertEqual(result["objects"]["DatumPointProximityBadSubname"]["status"], "error")
+        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual(result["elementReferenceUpdates"], [])
+
     def test_c51m5_datum_offset_reverse_and_shadow_sub_writeback(self) -> None:
         result = self.run_recompute("partdesign-datum-offset-reverse-writeback", "c51m5")
 

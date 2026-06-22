@@ -1,0 +1,73 @@
+{
+  "Objects": [
+    {
+      "Name": "SinglePoint",
+      "ID": 1,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    {
+      "Name": "BadSubnamePlane",
+      "ID": 2,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 2,
+        "Width": 2
+      }
+    },
+    {
+      "Name": "DatumPointProximityMissingSecond",
+      "ID": 3,
+      "TypeId": "PartDesign::Point",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SinglePoint",
+              "SubList": []
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ProximityPoint1"
+        }
+      }
+    },
+    {
+      "Name": "DatumPointProximityBadSubname",
+      "ID": 4,
+      "TypeId": "PartDesign::Point",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SinglePoint",
+              "SubList": []
+            },
+            {
+              "value": "BadSubnamePlane",
+              "SubList": ["MissingFace1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ProximityPoint2"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "DatumPointProximityMissingSecond",
+      "DatumPointProximityBadSubname"
+    ]
+  }
+}

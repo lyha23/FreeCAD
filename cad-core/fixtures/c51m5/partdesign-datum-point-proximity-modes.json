@@ -1,0 +1,331 @@
+{
+  "Objects": [
+    {
+      "Name": "PointA",
+      "ID": 1,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    {
+      "Name": "PointB",
+      "ID": 2,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 4,
+        "Y": 0,
+        "Z": 3
+      }
+    },
+    {
+      "Name": "EdgeA",
+      "ID": 3,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 3,
+        "Z1": 1,
+        "X2": 0,
+        "Y2": 5,
+        "Z2": 5
+      }
+    },
+    {
+      "Name": "EdgeB",
+      "ID": 4,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 3,
+        "Y1": 3,
+        "Z1": 0,
+        "X2": 3,
+        "Y2": 3,
+        "Z2": 5
+      }
+    },
+    {
+      "Name": "PlaneXY",
+      "ID": 5,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 6,
+        "Width": 4
+      }
+    },
+    {
+      "Name": "HitEdge",
+      "ID": 6,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 2,
+        "Y1": 1,
+        "Z1": -1,
+        "X2": 2,
+        "Y2": 1,
+        "Z2": 2
+      }
+    },
+    {
+      "Name": "NoHitEdge",
+      "ID": 7,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 1,
+        "Y1": 1,
+        "Z1": 2,
+        "X2": 3,
+        "Y2": 1,
+        "Z2": 2
+      }
+    },
+    {
+      "Name": "RecoveryBox",
+      "ID": 8,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 4,
+        "Width": 4,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "DatumPointProximityVertexVertex1",
+      "ID": 9,
+      "TypeId": "PartDesign::Point",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "PointA",
+              "SubList": []
+            },
+            {
+              "value": "PointB",
+              "SubList": []
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ProximityPoint1"
+        }
+      }
+    },
+    {
+      "Name": "DatumPointProximityVertexVertex2",
+      "ID": 10,
+      "TypeId": "PartDesign::Point",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "PointA",
+              "SubList": []
+            },
+            {
+              "value": "PointB",
+              "SubList": []
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ProximityPoint2"
+        }
+      }
+    },
+    {
+      "Name": "DatumPointProximityEdgeEdge1",
+      "ID": 11,
+      "TypeId": "PartDesign::Point",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "EdgeA",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "EdgeB",
+              "SubList": ["Edge1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ProximityPoint1"
+        }
+      }
+    },
+    {
+      "Name": "DatumPointProximityEdgeEdge2",
+      "ID": 12,
+      "TypeId": "PartDesign::Point",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "EdgeA",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "EdgeB",
+              "SubList": ["Edge1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ProximityPoint2"
+        }
+      }
+    },
+    {
+      "Name": "DatumPointProximityEdgeFaceHit1",
+      "ID": 13,
+      "TypeId": "PartDesign::Point",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "HitEdge",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "PlaneXY",
+              "SubList": ["Face1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ProximityPoint1"
+        }
+      }
+    },
+    {
+      "Name": "DatumPointProximityEdgeFaceHit2",
+      "ID": 14,
+      "TypeId": "PartDesign::Point",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "PlaneXY",
+              "SubList": ["Face1"]
+            },
+            {
+              "value": "HitEdge",
+              "SubList": ["Edge1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ProximityPoint2"
+        }
+      }
+    },
+    {
+      "Name": "DatumPointProximityEdgeFaceNoHit1",
+      "ID": 15,
+      "TypeId": "PartDesign::Point",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "NoHitEdge",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "PlaneXY",
+              "SubList": ["Face1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ProximityPoint1"
+        }
+      }
+    },
+    {
+      "Name": "DatumPointProximityEdgeFaceNoHit2",
+      "ID": 16,
+      "TypeId": "PartDesign::Point",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "NoHitEdge",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "PlaneXY",
+              "SubList": ["Face1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ProximityPoint2"
+        }
+      }
+    },
+    {
+      "Name": "DatumPointProximityRecoveredSupport",
+      "ID": 17,
+      "TypeId": "PartDesign::Point",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "RecoveryBox",
+              "SubList": ["MissingVertex1"],
+              "StableSubList": ["Vertex1"],
+              "ShadowSub": [
+                {
+                  "oldName": "MissingVertex1",
+                  "newName": "Vertex1"
+                }
+              ]
+            },
+            {
+              "value": "PointB",
+              "SubList": []
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ProximityPoint1"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "DatumPointProximityVertexVertex1",
+      "DatumPointProximityVertexVertex2",
+      "DatumPointProximityEdgeEdge1",
+      "DatumPointProximityEdgeEdge2",
+      "DatumPointProximityEdgeFaceHit1",
+      "DatumPointProximityEdgeFaceHit2",
+      "DatumPointProximityEdgeFaceNoHit1",
+      "DatumPointProximityEdgeFaceNoHit2",
+      "DatumPointProximityRecoveredSupport"
+    ]
+  }
+}

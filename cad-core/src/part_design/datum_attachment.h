@@ -10,15 +10,19 @@
 #include <BRepAdaptor_Surface.hxx>
 #include <BRepExtrema_DistShapeShape.hxx>
 #include <BRepGProp.hxx>
+#include <BRepIntCurveSurface_Inter.hxx>
 #include <BRep_Tool.hxx>
+#include <GeomAdaptor.hxx>
 #include <GeomAbs_CurveType.hxx>
 #include <GeomAbs_SurfaceType.hxx>
 #include <GeomAdaptor_Curve.hxx>
 #include <GeomAPI_IntSS.hxx>
 #include <GeomAPI_ProjectPointOnSurf.hxx>
+#include <Geom_Curve.hxx>
 #include <GeomLib_IsPlanarSurface.hxx>
 #include <Geom_Plane.hxx>
 #include <Precision.hxx>
+#include <Standard_DomainError.hxx>
 #include <Standard_Failure.hxx>
 #include <TopAbs_Orientation.hxx>
 #include <TopAbs_ShapeEnum.hxx>
@@ -510,6 +514,104 @@ inline void appendAttachmentSupportWriteback(const app::DocumentObject& object,
     });
 }
 
+inline bool needsAttachmentSupportWriteback(const SupportResolution& support)
+{
+    return !support.subname.empty() && !support.link.subnames.empty()
+        && support.link.subnames.front() != support.subname && hasReferenceStabilityEvidence(support.link);
+}
+
+inline nlohmann::json referenceShadowsJson(const app::Link& link, const std::string& subname)
+{
+    nlohmann::json referenceShadows = nlohmann::json::array();
+    for (const auto& shadow : link.referenceShadows) {
+        nlohmann::json item = {
+            {"target", link.object},
+            {"targetId", shadow.targetId},
+            {"property", shadow.property},
+            {"shapeType", shadow.shapeType},
+            {"indexed", subname.empty() ? shadow.indexed : subname},
+            {"subname", subname.empty() ? shadow.subname : subname},
+            {"stableSubname", subname.empty() ? shadow.stableSubname : subname},
+            {"fingerprint", shadow.fingerprint},
+        };
+        if (shadow.brep) {
+            item["brep"] = {
+                {"format", shadow.brep->format},
+                {"byteLength", shadow.brep->byteLength},
+                {"sha256", shadow.brep->sha256},
+                {"data", shadow.brep->data},
+            };
+        }
+        referenceShadows.push_back(std::move(item));
+    }
+    return referenceShadows;
+}
+
+inline nlohmann::json attachmentSupportListItemJson(const SupportResolution& support, bool recovered)
+{
+    nlohmann::json item = {
+        {"value", support.link.object},
+        {"SubList", recovered ? std::vector<std::string>{support.subname} : support.link.subnames},
+    };
+    if (recovered) {
+        item["StableSubList"] = {support.subname};
+        if (!support.shadowOldName.empty() && support.shadowOldName != support.subname) {
+            item["ShadowSub"] = {{{"oldName", support.shadowOldName}, {"newName", support.subname}}};
+        }
+    }
+    else {
+        if (support.link.stableSubnamesExplicit || !support.link.stableSubnames.empty()) {
+            item["StableSubList"] = support.link.stableSubnames;
+        }
+        if (!support.link.fullSubnames.empty() || support.link.fullSubnamesExplicit) {
+            item["FullSubList"] = support.link.fullSubnames;
+        }
+        if (!support.link.shadowSubs.empty()) {
+            item["ShadowSub"] = nlohmann::json::array();
+            for (const auto& shadowSub : support.link.shadowSubs) {
+                item["ShadowSub"].push_back({{"oldName", shadowSub.oldName}, {"newName", shadowSub.newName}});
+            }
+        }
+    }
+    if (!support.link.referenceShadows.empty()) {
+        item["ReferenceShadow"] = referenceShadowsJson(support.link, recovered ? support.subname : std::string{});
+    }
+    return item;
+}
+
+inline void appendAttachmentSupportsWriteback(const app::DocumentObject& object,
+                                              const std::vector<SupportResolution>& supports,
+                                              runtime::ComputeContext& context)
+{
+    bool hasRecoveredSupport = false;
+    nlohmann::json subSet = nlohmann::json::array();
+    for (const auto& support : supports) {
+        const bool recovered = needsAttachmentSupportWriteback(support);
+        hasRecoveredSupport = hasRecoveredSupport || recovered;
+        subSet.push_back(attachmentSupportListItemJson(support, recovered));
+    }
+    if (!hasRecoveredSupport) {
+        return;
+    }
+
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/AttachExtension.cpp
+    // ::AttachExtension::positionBySupport(), after "calculateAttachedPlacement(..., &subChanged)",
+    // writes AttachmentSupport sub values back into the document. cad-core has no backend
+    // attachment session, so multi-support modes publish one request-local PropertyLinkSubList
+    // documentObjectUpdates suggestion instead.
+    context.documentObjectUpdates.push_back({
+        {"action", "update"},
+        {"reason", "attachment_support_subname_recovered"},
+        {"object", object.name},
+        {"properties",
+         {{"AttachmentSupport",
+           {
+               {"PropertyType", "App::PropertyLinkSubList"},
+               {"SubSet", std::move(subSet)},
+           }}}},
+    });
+}
+
 inline std::optional<gp_Trsf> flatFacePlacement(const SupportResolution& support,
                                                 bool mapReverse,
                                                 runtime::ComputeContext& context,
@@ -846,6 +948,115 @@ inline std::optional<gp_Trsf> proximityLinePlacement(const std::vector<SupportRe
     return linePlacementFromFreeCADFactory(supports, point1, gp_Dir(direction), mapReverse);
 }
 
+inline std::optional<gp_Pnt> proximityPointEdgeFaceIntersection(const SupportResolution& support1,
+                                                               const SupportResolution& support2)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/Attacher.cpp
+    // ::AttachEnginePoint::getProximityPoint(), bug note "#0003921", normalizes EDGE/FACE
+    // input order, loads "GeomAdaptor::MakeCurve(crv)" to preserve Location/orientation, then
+    // calls "BRepIntCurveSurface_Inter::Init(face, typedcrv, Precision::Confusion())" and
+    // returns the first hit before the distance fallback.
+    try {
+        TopoDS_Face face;
+        TopoDS_Edge edge;
+        if (support1.shape.ShapeType() == TopAbs_FACE && support2.shape.ShapeType() == TopAbs_EDGE) {
+            face = TopoDS::Face(support1.shape);
+            edge = TopoDS::Edge(support2.shape);
+        }
+        else if (support1.shape.ShapeType() == TopAbs_EDGE && support2.shape.ShapeType() == TopAbs_FACE) {
+            edge = TopoDS::Edge(support1.shape);
+            face = TopoDS::Face(support2.shape);
+        }
+        if (edge.IsNull() || face.IsNull()) {
+            return std::nullopt;
+        }
+
+        BRepAdaptor_Curve curve(edge);
+        GeomAdaptor_Curve typedCurve;
+        try {
+            typedCurve.Load(GeomAdaptor::MakeCurve(curve));
+        }
+        catch (const Standard_DomainError&) {
+            Handle(Geom_Curve) copiedCurve = curve.Curve().Curve();
+            if (copiedCurve.IsNull()) {
+                typedCurve = curve.Curve();
+            }
+            else {
+                copiedCurve = Handle(Geom_Curve)::DownCast(copiedCurve->Copy());
+                copiedCurve->Transform(curve.Trsf());
+                typedCurve.Load(copiedCurve);
+            }
+        }
+
+        BRepIntCurveSurface_Inter intersector;
+        intersector.Init(face, typedCurve, Precision::Confusion());
+        if (intersector.More()) {
+            return intersector.Pnt();
+        }
+    }
+    catch (const Standard_Failure&) {
+        return std::nullopt;
+    }
+    return std::nullopt;
+}
+
+inline std::optional<gp_Trsf> proximityPointPlacement(const std::string& mode,
+                                                      const std::vector<SupportResolution>& supports,
+                                                      runtime::ComputeContext& context,
+                                                      const app::DocumentObject& object)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/Attacher.cpp
+    // ::AttachEnginePoint::_calculateAttachedPlacement(), cases "mm0ProximityPoint1" and
+    // "mm0ProximityPoint2", require two shapes, call "getProximityPoint(...)", then use
+    // "placementFactory(... BasePoint ...)". ::getProximityPoint() falls back to
+    // "BRepExtrema_DistShapeShape" and returns "PointOnShape1(1)" for ProximityPoint1 or
+    // "PointOnShape2(1)" for ProximityPoint2.
+    if (supports.size() < 2U) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "DatumPoint ProximityPoint requires two support shapes",
+                                "attachment_support_invalid_shape");
+        return std::nullopt;
+    }
+    if (supports[0].shape.IsNull() || supports[1].shape.IsNull()) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "DatumPoint ProximityPoint requires non-null support shapes",
+                                "attachment_support_invalid_shape");
+        return std::nullopt;
+    }
+
+    if (const auto intersection = proximityPointEdgeFaceIntersection(supports[0], supports[1])) {
+        return pointDatumPlacement(*intersection);
+    }
+
+    try {
+        BRepExtrema_DistShapeShape distancer(supports[0].shape, supports[1].shape);
+        if (!distancer.IsDone() || distancer.NbSolution() < 1) {
+            addLineFamilyDiagnostic(context,
+                                    object,
+                                    supports,
+                                    "DatumPoint ProximityPoint distance calculation failed",
+                                    "execution_failed");
+            return std::nullopt;
+        }
+
+        const gp_Pnt point = mode == "ProximityPoint1" ? distancer.PointOnShape1(1)
+                                                       : distancer.PointOnShape2(1);
+        return pointDatumPlacement(point);
+    }
+    catch (const Standard_Failure&) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "DatumPoint ProximityPoint distance calculation failed",
+                                "execution_failed");
+        return std::nullopt;
+    }
+}
+
 inline std::optional<gp_Trsf> pointAtVertexOrEdgeStartPlacement(const SupportResolution& support,
                                                                 runtime::ComputeContext& context,
                                                                 const app::DocumentObject& object)
@@ -1101,6 +1312,17 @@ inline std::optional<gp_Trsf> selectedDatumPlacement(const app::DocumentObject& 
         }
         return centerOfMassPlacement(support, context, object);
     }
+    if (mode == "ProximityPoint1" || mode == "ProximityPoint2") {
+        if (engine != DatumAttachmentEngine::Point) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         support.link,
+                                         "MapMode",
+                                         "ProximityPoint1/2 is supported for DatumPoint in this C5-M14 batch");
+            return std::nullopt;
+        }
+        return proximityPointPlacement(mode, supports, context, object);
+    }
 
     addDatumAttachmentDiagnostic(context,
                                  object,
@@ -1169,11 +1391,14 @@ inline std::optional<DatumAttachmentPlacement> datumAttachmentPlacement(const ap
     const std::string mode = datumMapModeLabel(object);
     const bool usesLineFamilySupports = mode == "TwoPointLine" || mode == "IntersectionLine"
         || mode == "ProximityLine";
+    const bool usesPointProximitySupports = engine == DatumAttachmentEngine::Point
+        && (mode == "ProximityPoint1" || mode == "ProximityPoint2");
     const bool requiresSubshape = mode == "FlatFace" || mode == "NormalToEdge" || mode == "Tangent"
         || mode == "Vertex" || mode == "OnEdge";
     std::vector<SupportResolution> resolvedSupports;
-    const std::size_t supportCount = usesLineFamilySupports ? supportLinks.size() : 1U;
-    for (std::size_t index = 0; index < supportLinks.size() && index < supportCount; ++index) {
+    const std::size_t supportCount = usesLineFamilySupports ? supportLinks.size()
+        : (usesPointProximitySupports ? 2U : 1U);
+    for (std::size_t index = 0; index < supportLinks.size() && resolvedSupports.size() < supportCount; ++index) {
         const auto& link = supportLinks.at(index);
         if (link.object.empty()) {
             continue;
@@ -1206,7 +1431,10 @@ inline std::optional<DatumAttachmentPlacement> datumAttachmentPlacement(const ap
     if (hasActiveAttachmentOffset) {
         *placement = *placement * attachmentOffsetPlacement(object);
     }
-    if (!usesLineFamilySupports && hasReferenceStabilityEvidence(support)) {
+    if (usesPointProximitySupports) {
+        appendAttachmentSupportsWriteback(object, resolvedSupports, context);
+    }
+    else if (!usesLineFamilySupports && hasReferenceStabilityEvidence(support)) {
         appendAttachmentSupportWriteback(object, resolvedSupports.front(), context);
     }
     return DatumAttachmentPlacement{true, *placement};

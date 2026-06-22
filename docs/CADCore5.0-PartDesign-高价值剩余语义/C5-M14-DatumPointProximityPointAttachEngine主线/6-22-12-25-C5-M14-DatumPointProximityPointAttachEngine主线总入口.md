@@ -1,6 +1,6 @@
 # C5-M14 DatumPoint ProximityPoint AttachEngine 主线
 
-状态：`pending_C5-M14_S5_request_local_writeback_reviewed`
+状态：`done_C5-M14_S6_release_gate`
 
 本包承接 C5.1 Datum AttachEngine exact blocker 的下一批可实现子线，但按 C5.0 高价值剩余语义的主线形态落档。当前已支持 DatumPoint `Vertex` / `OnEdge` / `CenterOfMass` 和 DatumLine `TwoPointLine` / `IntersectionLine` / `ProximityLine`；本包只处理 DatumPoint `ProximityPoint1` / `ProximityPoint2`，不重开其它 AttachEngine mode。
 
@@ -16,7 +16,7 @@
 
 - capability：`part_design.datum_attachment.status=supported_c51x_selected_attach_engine_with_datum_line_family`。
 - 已 supported：`FlatFace`、`ObjectXY/ObjectXZ/ObjectYZ`、`ObjectOrigin`、`ObjectX/ObjectY/ObjectZ`、`NormalToEdge`、`Vertex`、`OnEdge`、`CenterOfMass`、DatumLine line-family。
-- 待收口 exact blocker：`ProximityPoint1` / `ProximityPoint2` 仍在 `datum_attach_engine_remaining_modes`。
+- 已收口 exact blocker：`ProximityPoint1` / `ProximityPoint2` 已从 `datum_attach_engine_remaining_modes` 移除；`IntersectionPoint`、Focus、曲线 frame、三点/折叠等剩余 mode 仍保持后续分包。
 - cad-core 当前落点：`cad-core/src/part_design/datum_attachment.h` 对 selected Datum mode 已有单 support 与 line-family 多 support 路径，但 DatumPoint proximity 尚未消费双 support。
 - 现有 fixture 口径：继续使用 `cad-core/fixtures/c51m5` 作为 Datum AttachEngine 后续 expected-backed fixture 家族。
 
@@ -29,7 +29,7 @@ S0 live blocker freeze (已冻结：capability exact blocker 仍列出 Proximity
   -> S3 edge-face intersection special path (已完成：MakeCurve + BRepIntCurveSurface_Inter first-hit 边界已复审，S6 才落代码)
   -> S4 distance fallback and diagnostics (已完成：BRepExtrema_DistShapeShape p1/p2 分流、no-hit fallback、diagnostics 边界已复审，S6 才落代码)
   -> S5 request-local writeback and capability contract (已完成：双 support request-local 解析、documentObjectUpdates/elementReferenceUpdates、ReferenceShadow.brep、AttachmentOffset/MapReversed 和 adapter 非职责边界已复审，S6 才落代码)
-  -> S6 oracle, code landing and release gate
+  -> S6 oracle, code landing and release gate (已完成：native expected、C++ helper、focused tests、capability/docs 已同步)
 ```
 
 ## FreeCAD 调用依据
@@ -82,9 +82,9 @@ S0 live blocker freeze (已冻结：capability exact blocker 仍列出 Proximity
 | live blocker guard | current capability blocker 列表含 `ProximityPoint1/2` | S0 冻结 exact blocker 和 non-goal |
 | source audit | `AttachEnginePoint` proximity constructor / placement / helper | S1 source candidates 与 FreeCAD 短句证据 |
 | input contract | 两个 `AttachmentSupport` shape / subshape | S2 scope / backendGap / fixture target |
-| edge-face intersection | edge 与 face 相交时优先返回第一个交点 | S3 已明确 input order normalize、`GeomAdaptor::MakeCurve`、`BRepIntCurveSurface_Inter`、多交点 warning first-hit、`Standard_Failure` fallback；S6 才实现 helper 和 oracle |
-| distance fallback | vertex-vertex、edge-edge、edge-face no-hit 最近点 | S4 已明确 `BRepExtrema_DistShapeShape`、`PointOnShape1(1)` / `PointOnShape2(1)`、`!IsDone()` 失败、multi-solution warning 和 diagnostics；S6 才采 oracle、落 fixtures 与 focused tests |
-| request-local publication | `documentObjectUpdates` / `elementReferenceUpdates` 不跨请求保存 | S5 已明确：S6 让 `ProximityPoint1/2` 消费前两个有效 support、每个 support 独立解析 stable/shadow evidence，`ReferenceShadow.brep` 只作单 subshape 旧快照，adapter 不做业务修正；S6 再以代码、tests、capability 收口 |
+| edge-face intersection | edge 与 face 相交时优先返回第一个交点 | S6 已实现 `proximityPointEdgeFaceIntersection()`，`partdesign-datum-point-proximity-modes` native expected 覆盖 edge-face hit 与 face-edge order normalize |
+| distance fallback | vertex-vertex、edge-edge、edge-face no-hit 最近点 | S6 已实现 `BRepExtrema_DistShapeShape` fallback 与 `ProximityPoint1/2` p1/p2 分流，native expected 覆盖 vertex、edge 和 no-hit edge-face |
+| request-local publication | `documentObjectUpdates` / `elementReferenceUpdates` 不跨请求保存 | S6 已让 `ProximityPoint1/2` 消费前两个有效 support，并用 `PropertyLinkSubList` response update 覆盖 multi-support recovery；无 session/cache/完整 BREP |
 
 ## 队列检查
 

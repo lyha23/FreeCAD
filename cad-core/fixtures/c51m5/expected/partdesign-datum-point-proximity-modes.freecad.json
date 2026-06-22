@@ -1,0 +1,115 @@
+{
+  "freecad_version": "1.2.0 revision 20260519",
+  "objects": {
+    "DatumPointProximityEdgeEdge1": {
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "point": [
+          0.0,
+          3.0,
+          1.0
+        ],
+        "status": "ok"
+      }
+    },
+    "DatumPointProximityEdgeEdge2": {
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "point": [
+          3.0,
+          3.0,
+          1.0
+        ],
+        "status": "ok"
+      }
+    },
+    "DatumPointProximityEdgeFaceHit1": {
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "point": [
+          2.0,
+          1.0,
+          0.0
+        ],
+        "status": "ok"
+      }
+    },
+    "DatumPointProximityEdgeFaceHit2": {
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "point": [
+          2.0,
+          1.0,
+          0.0
+        ],
+        "status": "ok"
+      }
+    },
+    "DatumPointProximityEdgeFaceNoHit1": {
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "point": [
+          1.0,
+          1.0,
+          2.0
+        ],
+        "status": "ok"
+      }
+    },
+    "DatumPointProximityEdgeFaceNoHit2": {
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "point": [
+          1.0,
+          1.0,
+          0.0
+        ],
+        "status": "ok"
+      }
+    },
+    "DatumPointProximityRecoveredSupport": {
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "point": [
+          0.0,
+          0.0,
+          4.0
+        ],
+        "status": "ok"
+      }
+    },
+    "DatumPointProximityVertexVertex1": {
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "point": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok"
+      }
+    },
+    "DatumPointProximityVertexVertex2": {
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "point": [
+          4.0,
+          0.0,
+          3.0
+        ],
+        "status": "ok"
+      }
+    }
+  },
+  "reference": "FreeCADCmd oracle from partdesign-datum-point-proximity-modes.json; objects: Part::Vertex, Part::Vertex, Part::Line, Part::Line, Part::Plane, Part::Line, Part::Line, Part::Box, PartDesign::Point, PartDesign::Point, PartDesign::Point, PartDesign::Point, PartDesign::Point, PartDesign::Point, PartDesign::Point, PartDesign::Point, PartDesign::Point",
+  "schema_version": "cad-core.freecad-expected.v1"
+}
