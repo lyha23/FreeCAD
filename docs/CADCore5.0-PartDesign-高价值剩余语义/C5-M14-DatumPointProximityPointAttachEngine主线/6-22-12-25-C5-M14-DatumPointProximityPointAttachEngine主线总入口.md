@@ -1,6 +1,6 @@
 # C5-M14 DatumPoint ProximityPoint AttachEngine 主线
 
-状态：`pending_C5-M14_S1_source_audit_done`
+状态：`pending_C5-M14_S2_scope_routed`
 
 本包承接 C5.1 Datum AttachEngine exact blocker 的下一批可实现子线，但按 C5.0 高价值剩余语义的主线形态落档。当前已支持 DatumPoint `Vertex` / `OnEdge` / `CenterOfMass` 和 DatumLine `TwoPointLine` / `IntersectionLine` / `ProximityLine`；本包只处理 DatumPoint `ProximityPoint1` / `ProximityPoint2`，不重开其它 AttachEngine mode。
 
@@ -25,7 +25,7 @@
 ```text
 S0 live blocker freeze (已冻结：capability exact blocker 仍列出 ProximityPoint1/2)
   -> S1 FreeCAD proximity source audit (已完成：source authority 已回写，未实现代码)
-  -> S2 scope / backendGap / nonGoal routing
+  -> S2 scope / backendGap / nonGoal routing (已完成：BLK-201/202/203/501 和 CAT-001..005 已路由，oracle 仍 pending)
   -> S3 edge-face intersection special path
   -> S4 distance fallback and diagnostics
   -> S5 request-local writeback and capability contract
@@ -62,7 +62,7 @@ S0 live blocker freeze (已冻结：capability exact blocker 仍列出 Proximity
 | 工作步骤总入口 | `工作步骤细分/6-22-12-26-【已实现】C5-M14工作步骤总入口.md` | S0-S6 队列索引 |
 | S0 | `工作步骤细分/6-22-12-27-【已实现】C5-M14-S0-liveAttachEngineBlocker冻结.md` | 已冻结 live blocker、禁止声明和状态字典 |
 | S1 | `工作步骤细分/6-22-12-28-【已实现】C5-M14-S1-FreeCADProximityPoint源码候选矩阵.md` | FreeCAD source audit 与 source candidates |
-| S2 | `工作步骤细分/6-22-12-29-C5-M14-S2-scope准入与待实现矩阵.md` | scope / blocker / nonGoal / backendGap routing |
+| S2 | `工作步骤细分/6-22-12-29-【已实现】C5-M14-S2-scope准入与待实现矩阵.md` | scope / blocker / nonGoal / backendGap routing |
 | S3 | `工作步骤细分/6-22-12-30-C5-M14-S3-edgeFaceIntersection专项复审.md` | edge-face intersection 优先路径 |
 | S4 | `工作步骤细分/6-22-12-31-C5-M14-S4-distanceFallbackAndDiagnostics专项复审.md` | distance fallback 与 diagnostics |
 | S5 | `工作步骤细分/6-22-12-32-C5-M14-S5-requestLocalWriteback专项复审.md` | request-local support/writeback/capability 边界 |
