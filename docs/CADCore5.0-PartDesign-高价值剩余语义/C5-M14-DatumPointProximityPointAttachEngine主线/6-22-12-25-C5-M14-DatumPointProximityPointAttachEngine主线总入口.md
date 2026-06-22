@@ -1,6 +1,6 @@
 # C5-M14 DatumPoint ProximityPoint AttachEngine 主线
 
-状态：`pending_C5-M14_S3_edge_face_reviewed`
+状态：`pending_C5-M14_S4_distance_fallback_reviewed`
 
 本包承接 C5.1 Datum AttachEngine exact blocker 的下一批可实现子线，但按 C5.0 高价值剩余语义的主线形态落档。当前已支持 DatumPoint `Vertex` / `OnEdge` / `CenterOfMass` 和 DatumLine `TwoPointLine` / `IntersectionLine` / `ProximityLine`；本包只处理 DatumPoint `ProximityPoint1` / `ProximityPoint2`，不重开其它 AttachEngine mode。
 
@@ -27,7 +27,7 @@ S0 live blocker freeze (已冻结：capability exact blocker 仍列出 Proximity
   -> S1 FreeCAD proximity source audit (已完成：source authority 已回写，未实现代码)
   -> S2 scope / backendGap / nonGoal routing (已完成：BLK-201/202/203/501 和 CAT-001..005 已路由，oracle 仍 pending)
   -> S3 edge-face intersection special path (已完成：MakeCurve + BRepIntCurveSurface_Inter first-hit 边界已复审，S6 才落代码)
-  -> S4 distance fallback and diagnostics
+  -> S4 distance fallback and diagnostics (已完成：BRepExtrema_DistShapeShape p1/p2 分流、no-hit fallback、diagnostics 边界已复审，S6 才落代码)
   -> S5 request-local writeback and capability contract
   -> S6 oracle, code landing and release gate
 ```
@@ -64,7 +64,7 @@ S0 live blocker freeze (已冻结：capability exact blocker 仍列出 Proximity
 | S1 | `工作步骤细分/6-22-12-28-【已实现】C5-M14-S1-FreeCADProximityPoint源码候选矩阵.md` | FreeCAD source audit 与 source candidates |
 | S2 | `工作步骤细分/6-22-12-29-【已实现】C5-M14-S2-scope准入与待实现矩阵.md` | scope / blocker / nonGoal / backendGap routing |
 | S3 | `工作步骤细分/6-22-12-30-【已实现】C5-M14-S3-edgeFaceIntersection专项复审.md` | edge-face intersection 优先路径已复审，仍待 S6 实现 |
-| S4 | `工作步骤细分/6-22-12-31-C5-M14-S4-distanceFallbackAndDiagnostics专项复审.md` | distance fallback 与 diagnostics |
+| S4 | `工作步骤细分/6-22-12-31-【已实现】C5-M14-S4-distanceFallbackAndDiagnostics专项复审.md` | distance fallback 与 diagnostics 已复审，仍待 S6 实现 |
 | S5 | `工作步骤细分/6-22-12-32-C5-M14-S5-requestLocalWriteback专项复审.md` | request-local support/writeback/capability 边界 |
 | S6 | `工作步骤细分/6-22-12-33-C5-M14-S6-Oracle实现与发布闸门.md` | 代码落点、oracle、focused tests、发布闸门 |
 | source candidates | `矩阵/c5m14_datum_point_proximity_source_candidates.tsv` | FreeCAD 源码候选 |
@@ -83,7 +83,7 @@ S0 live blocker freeze (已冻结：capability exact blocker 仍列出 Proximity
 | source audit | `AttachEnginePoint` proximity constructor / placement / helper | S1 source candidates 与 FreeCAD 短句证据 |
 | input contract | 两个 `AttachmentSupport` shape / subshape | S2 scope / backendGap / fixture target |
 | edge-face intersection | edge 与 face 相交时优先返回第一个交点 | S3 已明确 input order normalize、`GeomAdaptor::MakeCurve`、`BRepIntCurveSurface_Inter`、多交点 warning first-hit、`Standard_Failure` fallback；S6 才实现 helper 和 oracle |
-| distance fallback | vertex-vertex、edge-edge、edge-face no-hit 最近点 | S4 expected-backed success + diagnostics |
+| distance fallback | vertex-vertex、edge-edge、edge-face no-hit 最近点 | S4 已明确 `BRepExtrema_DistShapeShape`、`PointOnShape1(1)` / `PointOnShape2(1)`、`!IsDone()` 失败、multi-solution warning 和 diagnostics；S6 才采 oracle、落 fixtures 与 focused tests |
 | request-local publication | `documentObjectUpdates` 不跨请求保存 | S5/S6 capability、tests、docs 收口 |
 
 ## 队列检查
