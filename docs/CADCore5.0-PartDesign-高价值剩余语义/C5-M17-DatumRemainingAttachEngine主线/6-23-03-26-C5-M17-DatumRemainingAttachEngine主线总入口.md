@@ -53,7 +53,7 @@
 | S1 | `工作步骤细分/6-23-03-29-【已实现】C5-M17-S1-FreeCADRemainingAttachEngine源码候选矩阵.md` | FreeCAD source audit |
 | S2 | `工作步骤细分/6-23-03-30-【已实现】C5-M17-S2-scope准入与待实现矩阵.md` | scope / backendGap / nonGoal routing 已实现 |
 | S3 | `工作步骤细分/6-23-03-31-【已实现】C5-M17-S3-ConicLandmark合同复审.md` | conic landmark DTO / placement / diagnostics / expected 合同已冻结 |
-| S4 | `工作步骤细分/6-23-03-32-C5-M17-S4-ExcludedFamilies拆包复审.md` | Folding / IntersectionPoint / TangentU/V 拆包证据 |
+| S4 | `工作步骤细分/6-23-03-32-【已实现】C5-M17-S4-ExcludedFamilies拆包复审.md` | Folding / IntersectionPoint / TangentU/V 拆包证据已冻结 |
 | S5 | `工作步骤细分/6-23-03-33-C5-M17-S5-requestLocalPlacementAndCapability专项复审.md` | request-local response 与 capability release gate |
 | S6 | `工作步骤细分/6-23-03-34-C5-M17-S6-Oracle实现与发布闸门.md` | conic oracle、C++、fixtures、tests、docs closeout |
 
