@@ -1,6 +1,6 @@
 # C5-M17 DatumRemainingAttachEngine 方案
 
-状态：`opened_after_c5m16_remaining_modes`
+状态：`s5_release_gate_frozen_pending_s6`
 
 ## 当前基线
 
@@ -57,8 +57,16 @@ TangentU, TangentV, Focus1, Focus2, IntersectionPoint
 3. S2：把 source candidates 路由到 backendGap、later package、source unknown 或 non-goal。
 4. S3：专项复审 conic landmark DTO / placement / diagnostics 合同。
 5. S4：专项复审 `Folding`、`IntersectionPoint`、`TangentU/V` 拆包证据。
-6. S5：复审 request-local placement、writeback suggestions 和 capability release gate。
+6. S5：已复审 request-local placement、writeback suggestions 和 capability release gate。
 7. S6：批量采集 FreeCADCmd expected，落 C++、fixtures、focused tests、capability/docs 和验收记录。
+
+## S5 release gate
+
+- CAD Core 无状态边界不变：后端只消费本次 request graph 的 support shape/subname、`MapMode`、`AttachmentOffset`、`MapReversed` / `Reverse`。
+- response 只返回 placement、diagnostics、`documentObjectUpdates` / `elementReferenceUpdates` suggestions；这些 suggestions 供前端下一次 graph 写回，不是 backend attachment session。
+- 不保存 complete BREP；`ReferenceShadow.brep` 只允许作为单个 referenced subshape snapshot 例外，不能作为完整对象 BREP 或建模输入。
+- S6 删除 exact blocker 的前置条件是 FreeCADCmd expected、focused conic tests 和 adapter capability test 全部通过；可删除范围仅限 proven conic modes：`Directrix1/2`、`Asymptote1/2`、`Focus1/2`。
+- `Folding`、`IntersectionPoint`、`TangentU/V` 继续保留 exact blocker 或后续包路由，不在 conic S6 发布 supported。
 
 ## 验收分层
 

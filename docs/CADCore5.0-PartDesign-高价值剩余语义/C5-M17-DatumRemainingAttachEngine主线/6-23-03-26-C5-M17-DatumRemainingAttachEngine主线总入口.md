@@ -1,6 +1,6 @@
 # C5-M17 DatumRemainingAttachEngine 主线
 
-状态：`opened_after_c5m16_remaining_modes`
+状态：`s5_release_gate_frozen_pending_s6`
 
 本包承接 C5-M16 之后 `part_design.datum_attachment.exact_blockers.datum_attach_engine_remaining_modes` 的剩余项。它不是把所有 mode 硬塞进同一轮实现，而是先冻结 live blocker 和 FreeCAD source route，再把同一调用链、同一 DTO/API 边界和同一 expected family 的内容纳入最小完整语义批次。
 
@@ -54,8 +54,16 @@
 | S2 | `工作步骤细分/6-23-03-30-【已实现】C5-M17-S2-scope准入与待实现矩阵.md` | scope / backendGap / nonGoal routing 已实现 |
 | S3 | `工作步骤细分/6-23-03-31-【已实现】C5-M17-S3-ConicLandmark合同复审.md` | conic landmark DTO / placement / diagnostics / expected 合同已冻结 |
 | S4 | `工作步骤细分/6-23-03-32-【已实现】C5-M17-S4-ExcludedFamilies拆包复审.md` | Folding / IntersectionPoint / TangentU/V 拆包证据已冻结 |
-| S5 | `工作步骤细分/6-23-03-33-C5-M17-S5-requestLocalPlacementAndCapability专项复审.md` | request-local response 与 capability release gate |
+| S5 | `工作步骤细分/6-23-03-33-【已实现】C5-M17-S5-requestLocalPlacementAndCapability专项复审.md` | request-local response 与 capability release gate 已冻结 |
 | S6 | `工作步骤细分/6-23-03-34-C5-M17-S6-Oracle实现与发布闸门.md` | conic oracle、C++、fixtures、tests、docs closeout |
+
+## S5 release gate
+
+- 后端只消费本次 request graph 里的 support shape/subname、`MapMode`、`AttachmentOffset` 和 `MapReversed` / `Reverse`。
+- response 只返回 placement、diagnostics、`documentObjectUpdates` / `elementReferenceUpdates` suggestions；这些 suggestions 不是 backend 持久状态。
+- 不保存 backend attachment session，不保存 complete BREP；`ReferenceShadow.brep` 仅是单个 referenced subshape snapshot 例外。
+- S6 只有在 FreeCADCmd expected、focused tests 和 capability test 全部通过后，才允许删除 proven conic modes：`Directrix1/2`、`Asymptote1/2`、`Focus1/2`。
+- `Folding`、`IntersectionPoint`、`TangentU/V` 继续保留 exact blocker 或后续包路由。
 
 ## 队列检查
 
