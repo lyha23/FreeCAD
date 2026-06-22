@@ -5132,6 +5132,28 @@ def compare_bbox(existing: dict, generated: dict, delta: float) -> bool:
     return True
 
 
+def compare_expected_value(existing: Any, generated: Any, delta: float) -> bool:
+    if isinstance(existing, bool) or isinstance(generated, bool):
+        return existing == generated
+    if isinstance(existing, (int, float)) and isinstance(generated, (int, float)):
+        return close_enough(existing, generated, delta)
+    if isinstance(existing, list):
+        if not isinstance(generated, list) or len(existing) != len(generated):
+            return False
+        return all(
+            compare_expected_value(expected_item, generated_item, delta)
+            for expected_item, generated_item in zip(existing, generated)
+        )
+    if isinstance(existing, dict):
+        if not isinstance(generated, dict) or set(existing) != set(generated):
+            return False
+        return all(
+            compare_expected_value(expected_value, generated[key], delta)
+            for key, expected_value in existing.items()
+        )
+    return existing == generated
+
+
 def compare_object_expected(existing: dict, generated: dict) -> list[str]:
     errors: list[str] = []
     bbox_delta = existing.get("bbox_delta", 1e-6)
@@ -5153,7 +5175,11 @@ def compare_object_expected(existing: dict, generated: dict) -> list[str]:
     if "wrapper_oracle" in existing and existing["wrapper_oracle"] != generated.get("wrapper_oracle"):
         errors.append("wrapper_oracle")
     for key, expected_value in existing.get("object_fields", {}).items():
-        if generated.get("object_fields", {}).get(key) != expected_value:
+        if not compare_expected_value(
+            expected_value,
+            generated.get("object_fields", {}).get(key),
+            existing.get("object_fields_delta", bbox_delta),
+        ):
             errors.append(f"object_fields.{key}")
     if "sketch_internal" in existing:
         expected_internal = existing["sketch_internal"]

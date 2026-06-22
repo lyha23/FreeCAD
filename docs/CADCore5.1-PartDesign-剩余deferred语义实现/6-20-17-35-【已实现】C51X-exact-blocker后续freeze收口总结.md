@@ -2,7 +2,7 @@
 
 ## 结论
 
-C51X 后续包已关闭：C51 freeze 后的 exact blockers 已逐项归类，未恢复旧 C5 broad deferred。Groove UpTo 与 Pipe law / tangent 继续保持 exact blocker；Datum AttachEngine 已支持 expected-backed selected DatumPoint、DatumLine line-family 和 C5-M14 DatumPoint ProximityPoint 子批次。
+C51X 后续包已关闭：C51 freeze 后的 exact blockers 已逐项归类，未恢复旧 C5 broad deferred。Groove UpTo 与 Pipe law / tangent 继续保持 exact blocker；Datum AttachEngine 已支持 expected-backed selected DatumPoint、DatumLine line-family、C5-M14 DatumPoint ProximityPoint 和 C5-M15 Datum3DPlane 子批次。
 
 ## Supported
 
@@ -17,7 +17,7 @@ C51X 后续包已关闭：C51 freeze 后的 exact blockers 已逐项归类，未
 - `partdesign_groove_upto_brepfeat_cut_native_failure`：当前 FreeCADCmd 1.2.0 revision 20260519 对 Groove UpToFirst / UpToFace 仍报 `Groove: Revolution: Up to face: Could not revolve the sketch!`。
 - `partdesign_pipe_transformation_laws_source_commented`：`FeaturePipe.cpp::Pipe::execute()` 中 Linear / S-shape / Interpolation law branch 仍为 source-commented blocker。
 - `partdesign_pipe_spine_tangent_source_commented`：`FeaturePipe.cpp::Pipe::buildPipePath()` 中 continuous edge expansion 仍缺 ledger，保持 source-backed blocker。
-- `datum_attach_engine_remaining_modes`：已移除 `Vertex`、`OnEdge`、`CenterOfMass`、`ProximityPoint1`、`ProximityPoint2`、`TwoPointLine`、`IntersectionLine`、`ProximityLine`；剩余 `IntersectionPoint`、Focus、curve frame、three-point/folding 等 mode family 后续按独立 oracle/input contract 分包。
+- `datum_attach_engine_remaining_modes`：已移除 `Vertex`、`OnEdge`、`CenterOfMass`、`ProximityPoint1`、`ProximityPoint2`、`TwoPointLine`、`IntersectionLine`、`ProximityLine`、`Translate`、`TangentPlane`、`ThreePointsPlane`、`ThreePointsNormal`；剩余 `IntersectionPoint`、Focus、curve frame/curvature、Folding、conic landmarks 等 mode family 后续按独立 oracle/input contract 分包。
 
 ## Synced Artifacts
 
