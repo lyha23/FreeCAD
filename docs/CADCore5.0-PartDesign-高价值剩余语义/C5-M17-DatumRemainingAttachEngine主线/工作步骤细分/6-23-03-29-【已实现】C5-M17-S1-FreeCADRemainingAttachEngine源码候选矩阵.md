@@ -1,8 +1,18 @@
-# C5-M17-S1 FreeCAD Remaining AttachEngine 源码候选矩阵
+# 【已实现】C5-M17-S1 FreeCAD Remaining AttachEngine 源码候选矩阵
+
+状态：`done_source_authority_frozen`
 
 ## 目标
 
 把 C5-M17 的 remaining modes source authority 固化到 source candidates，确认 conic landmarks、Folding、IntersectionPoint、TangentU/V 是否共享实现 owner。
+
+## S1 结论
+
+- `AttachEngineLine` 的 `Directrix1/2` 与 `Asymptote1/2` 属 conic edge landmark：`Asymptote1/2` 只接受 hyperbola，`Directrix1` 接受 conic，`Directrix2` 接受 ellipse/hyperbola；placement 通过 `BRepAdaptor_Curve` 读取 `gp_Hypr::Asymptote1/2()` 或 conic directrix。
+- `AttachEnginePoint` 的 `Focus1/2` 属 conic point landmark：`Focus1` 接受 conic，`Focus2` 接受 ellipse/hyperbola；placement 读取 ellipse/hyperbola `Focus1/2()`，parabola 只允许 `Focus1`。
+- `Folding` 是 `mmFolding` four-line fold-angle 状态机，输入为四条 line 并调用 `calculateFoldAngle()`，不归 conic landmark。
+- `IntersectionPoint` 是 `mm1Intersection` face/face route：`modeRefTypes` 注册 `rtFace,rtFace`，branch 使用 `GeomAPI_IntSS` 并要求单条 straight intersection curve，需要单独 DTO/oracle。
+- `TangentU/V` 属 TangentPlane surface tangent branch：代码从 `GeomLProp_SLProps::TangentU/TangentV` 取局部切向，不归 conic landmark。
 
 ## 必读源码
 
