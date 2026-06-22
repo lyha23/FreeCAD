@@ -42,12 +42,12 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 - C51X 只处理 C51 freeze 后的 exact blockers，不恢复旧 C5 broad deferred。
 - Groove UpTo 默认保持 native BRepFeat exact blocker；只有 FreeCAD native oracle 证明同语义批次可成功，才进入 parity 实现。
 - Pipe `Transformation=Linear/S-shape/Interpolation` 与 `SpineTangent/AuxiliarySpineTangent` 当前是 FreeCAD source-commented exact blockers；若实现，必须标为 CAD Core product extension，并补 DTO、fixtures、tests 和 capability product-contract。
-- Datum AttachEngine remaining modes 需要按 mode family 分包，不允许一轮覆盖所有 mode；C51X 已支持 DatumPoint `Vertex`、`OnEdge`、`CenterOfMass` 单输入子批次，其余 Focus / Intersection / Proximity / TwoPoint、curve frame、three-point/folding 等仍为分包 exact blockers。
+- Datum AttachEngine remaining modes 需要按 mode family 分包，不允许一轮覆盖所有 mode；C51X 已支持 DatumPoint `Vertex`、`OnEdge`、`CenterOfMass` 单输入子批次和 DatumLine `TwoPointLine` / `IntersectionLine` / `ProximityLine` line-family 子批次，其余 Focus、curve frame、three-point/folding 等仍为分包 exact blockers。
 - `Part::Loft complex_profile_family` 与 `Part::Sweep` advanced wrapper 属于 Part Workbench surface family，不在本 C51 PartDesign 包内实现。
 
 ## C51X 后续实施状态
 
 - Groove UpTo：当前 FreeCADCmd 1.2.0 revision 20260519 仍复现 native `Groove: Revolution: Up to face: Could not revolve the sketch!`，保持 `partdesign_groove_upto_brepfeat_cut_native_failure` exact blocker。
 - Pipe law / tangent：保持 `partdesign_pipe_transformation_laws_source_commented` 与 `partdesign_pipe_spine_tangent_source_commented` exact blockers；未定义产品 DTO / continuous-edge ledger 前不实现 CAD Core extension。
-- Datum Attachment：`cad-core/fixtures/c51m5/partdesign-datum-point-single-input-modes.json` 和 expected 已覆盖 DatumPoint `Vertex`、`OnEdge`、`CenterOfMass`；capability 已从 remaining modes 中移除这三项。
+- Datum Attachment：`cad-core/fixtures/c51m5/partdesign-datum-point-single-input-modes.json` 和 expected 已覆盖 DatumPoint `Vertex`、`OnEdge`、`CenterOfMass`；`cad-core/fixtures/c51m5/partdesign-datum-line-family-modes.json` 和 expected 已覆盖 DatumLine `TwoPointLine` / `IntersectionLine` / `ProximityLine`，diagnostic fixture 覆盖单点、平行面和接触 proximity；capability 已从 remaining modes 中移除这些已支持 mode。
 - C51X 队列已关闭，后续只剩明确 exact blocker 或 Part Workbench surface route，不恢复 broad deferred。

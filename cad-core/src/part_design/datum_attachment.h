@@ -8,16 +8,20 @@
 
 #include <BRepAdaptor_Curve.hxx>
 #include <BRepAdaptor_Surface.hxx>
+#include <BRepExtrema_DistShapeShape.hxx>
 #include <BRepGProp.hxx>
 #include <BRep_Tool.hxx>
 #include <GeomAbs_CurveType.hxx>
 #include <GeomAbs_SurfaceType.hxx>
+#include <GeomAdaptor_Curve.hxx>
+#include <GeomAPI_IntSS.hxx>
 #include <GeomAPI_ProjectPointOnSurf.hxx>
 #include <GeomLib_IsPlanarSurface.hxx>
 #include <Geom_Plane.hxx>
 #include <Precision.hxx>
 #include <Standard_Failure.hxx>
 #include <TopAbs_Orientation.hxx>
+#include <TopAbs_ShapeEnum.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
@@ -623,6 +627,225 @@ inline std::optional<gp_Trsf> normalToEdgePlacement(const SupportResolution& sup
     return placementFromAxes(point, gp_Dir(tangent), gp_Vec(), mapReverse, true);
 }
 
+inline gp_Pnt projectReferenceOriginToLine(const gp_Pnt& lineBasePoint,
+                                           const gp_Dir& lineDirection,
+                                           const gp_Pnt& referenceOrigin)
+{
+    const gp_Vec originVector(lineBasePoint.XYZ());
+    const gp_Vec referenceVector(referenceOrigin.XYZ());
+    const gp_Vec directionVector(lineDirection);
+    return gp_Pnt((originVector + directionVector * directionVector.Dot(referenceVector - originVector)).XYZ());
+}
+
+inline std::optional<gp_Trsf> linePlacementFromFreeCADFactory(const std::vector<SupportResolution>& supports,
+                                                             const gp_Pnt& lineBasePoint,
+                                                             const gp_Dir& lineDirection,
+                                                             bool mapReverse)
+{
+    const gp_Pnt referenceOrigin = supports.empty() ? gp_Pnt(0.0, 0.0, 0.0)
+                                                    : transformOrigin(supports.front().placement);
+    const gp_Pnt projectedOrigin = projectReferenceOriginToLine(lineBasePoint, lineDirection, referenceOrigin);
+    return placementFromAxes(projectedOrigin, lineDirection, gp_Vec(), mapReverse, true);
+}
+
+inline void addLineFamilyDiagnostic(runtime::ComputeContext& context,
+                                    const app::DocumentObject& object,
+                                    const std::vector<SupportResolution>& supports,
+                                    const std::string& message,
+                                    const std::string& code)
+{
+    static const app::Link emptyLink;
+    const app::Link& link = supports.empty() ? emptyLink : supports.front().link;
+    addDatumAttachmentDiagnostic(context, object, link, "MapMode", message, code);
+}
+
+inline std::optional<gp_Trsf> twoPointLinePlacement(const std::vector<SupportResolution>& supports,
+                                                   bool mapReverse,
+                                                   runtime::ComputeContext& context,
+                                                   const app::DocumentObject& object)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/Attacher.cpp
+    // ::AttachEngineLine::_calculateAttachedPlacement(), case "mm1TwoPoints", collects Vertex
+    // points or Edge first/last parameter points until "points.size() >= 2", then uses
+    // "LineDir = gp_Dir(gp_Vec(p0, p1)); LineBasePoint = p0".
+    std::vector<gp_Pnt> points;
+    for (const auto& support : supports) {
+        const TopoDS_Shape& shape = support.shape;
+        if (shape.IsNull()) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         support.link,
+                                         "MapMode",
+                                         "TwoPointLine requires non-null Vertex or Edge support shapes",
+                                         "attachment_support_invalid_shape");
+            return std::nullopt;
+        }
+        if (shape.ShapeType() == TopAbs_VERTEX) {
+            points.push_back(BRep_Tool::Pnt(TopoDS::Vertex(shape)));
+        }
+        else if (shape.ShapeType() == TopAbs_EDGE) {
+            const TopoDS_Edge edge = TopoDS::Edge(shape);
+            BRepAdaptor_Curve curve(edge);
+            double first = curve.FirstParameter();
+            double last = curve.LastParameter();
+            if (Precision::IsInfinite(first) || Precision::IsInfinite(last)) {
+                first = 0.0;
+                last = 1.0;
+            }
+            points.push_back(curve.Value(first));
+            points.push_back(curve.Value(last));
+        }
+        if (points.size() >= 2U) {
+            break;
+        }
+    }
+
+    if (points.size() < 2U) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "TwoPointLine requires two vertex points or one edge support",
+                                "attachment_support_invalid_shape");
+        return std::nullopt;
+    }
+    const gp_Vec direction(points[0], points[1]);
+    if (direction.Magnitude() < Precision::Confusion()) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "TwoPointLine cannot derive a line from coincident points",
+                                "attachment_parameter_invalid");
+        return std::nullopt;
+    }
+    return linePlacementFromFreeCADFactory(supports, points[0], gp_Dir(direction), mapReverse);
+}
+
+inline std::optional<gp_Trsf> intersectionLinePlacement(const std::vector<SupportResolution>& supports,
+                                                       bool mapReverse,
+                                                       runtime::ComputeContext& context,
+                                                       const app::DocumentObject& object)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/Attacher.cpp
+    // ::AttachEngineLine::_calculateAttachedPlacement(), case "mm1Intersection", requires two
+    // Face supports, runs "GeomAPI_IntSS(hSurf1, hSurf2, Precision::Confusion())", then accepts
+    // exactly one intersection curve and only when "adapt.GetType() == GeomAbs_Line".
+    if (supports.size() < 2U) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "IntersectionLine requires two Face support shapes",
+                                "attachment_support_invalid_shape");
+        return std::nullopt;
+    }
+
+    TopoDS_Face face1;
+    TopoDS_Face face2;
+    try {
+        face1 = TopoDS::Face(supports[0].shape);
+        face2 = TopoDS::Face(supports[1].shape);
+    }
+    catch (const Standard_Failure&) {
+    }
+    if (face1.IsNull() || face2.IsNull()) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "IntersectionLine requires two Face support shapes",
+                                "attachment_support_invalid_shape");
+        return std::nullopt;
+    }
+
+    GeomAPI_IntSS intersector(BRep_Tool::Surface(face1), BRep_Tool::Surface(face2), Precision::Confusion());
+    if (!intersector.IsDone()) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "IntersectionLine surface intersection failed",
+                                "execution_failed");
+        return std::nullopt;
+    }
+    if (intersector.NbLines() == 0) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "IntersectionLine support faces do not intersect",
+                                "no_intersection");
+        return std::nullopt;
+    }
+    if (intersector.NbLines() != 1) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "IntersectionLine support faces do not produce a single curve",
+                                "attachment_support_invalid_shape");
+        return std::nullopt;
+    }
+
+    GeomAdaptor_Curve curve(intersector.Line(1));
+    if (curve.GetType() != GeomAbs_Line) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "IntersectionLine support faces do not produce a straight line",
+                                "attachment_support_invalid_shape");
+        return std::nullopt;
+    }
+    return linePlacementFromFreeCADFactory(supports,
+                                           curve.Line().Location(),
+                                           curve.Line().Direction(),
+                                           mapReverse);
+}
+
+inline std::optional<gp_Trsf> proximityLinePlacement(const std::vector<SupportResolution>& supports,
+                                                     bool mapReverse,
+                                                     runtime::ComputeContext& context,
+                                                     const app::DocumentObject& object)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/Attacher.cpp
+    // ::AttachEngineLine::_calculateAttachedPlacement(), case "mm1Proximity", runs
+    // "BRepExtrema_DistShapeShape" on the first two shapes and derives "LineDir" from
+    // "PointOnShape1(1)" to "PointOnShape2(1)" unless the distance is below Precision::Confusion().
+    if (supports.size() < 2U) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "ProximityLine requires two support shapes",
+                                "attachment_support_invalid_shape");
+        return std::nullopt;
+    }
+    if (supports[0].shape.IsNull() || supports[1].shape.IsNull()) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "ProximityLine requires non-null support shapes",
+                                "attachment_support_invalid_shape");
+        return std::nullopt;
+    }
+
+    BRepExtrema_DistShapeShape distancer(supports[0].shape, supports[1].shape);
+    if (!distancer.IsDone()) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "ProximityLine distance calculation failed",
+                                "execution_failed");
+        return std::nullopt;
+    }
+
+    const gp_Pnt point1 = distancer.PointOnShape1(1);
+    const gp_Pnt point2 = distancer.PointOnShape2(1);
+    const gp_Vec direction(point1, point2);
+    if (direction.Magnitude() < Precision::Confusion()) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "ProximityLine cannot derive a line because support shapes touch or intersect",
+                                "no_intersection");
+        return std::nullopt;
+    }
+    return linePlacementFromFreeCADFactory(supports, point1, gp_Dir(direction), mapReverse);
+}
+
 inline std::optional<gp_Trsf> pointAtVertexOrEdgeStartPlacement(const SupportResolution& support,
                                                                 runtime::ComputeContext& context,
                                                                 const app::DocumentObject& object)
@@ -744,10 +967,19 @@ inline std::optional<gp_Trsf> selectedDatumPlacement(const app::DocumentObject& 
                                                     runtime::ComputeContext& context,
                                                     DatumAttachmentEngine engine,
                                                     const std::string& mode,
-                                                    const SupportResolution& support,
+                                                    const std::vector<SupportResolution>& supports,
                                                     bool mapReverse,
                                                     double parameter)
 {
+    if (supports.empty()) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "Datum selected MapMode requires AttachmentSupport request evidence",
+                                "missing_link_target");
+        return std::nullopt;
+    }
+    const SupportResolution& support = supports.front();
     if (mode == "FlatFace") {
         if (engine != DatumAttachmentEngine::Plane && engine != DatumAttachmentEngine::CoordinateSystem) {
             addDatumAttachmentDiagnostic(context,
@@ -803,6 +1035,39 @@ inline std::optional<gp_Trsf> selectedDatumPlacement(const app::DocumentObject& 
         }
         return normalToEdgePlacement(support, mapReverse, parameter, context, object);
     }
+    if (mode == "TwoPointLine") {
+        if (engine != DatumAttachmentEngine::Line) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         support.link,
+                                         "MapMode",
+                                         "TwoPointLine is supported for DatumLine in this C51X batch");
+            return std::nullopt;
+        }
+        return twoPointLinePlacement(supports, mapReverse, context, object);
+    }
+    if (mode == "IntersectionLine") {
+        if (engine != DatumAttachmentEngine::Line) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         support.link,
+                                         "MapMode",
+                                         "IntersectionLine is supported for DatumLine in this C51X batch");
+            return std::nullopt;
+        }
+        return intersectionLinePlacement(supports, mapReverse, context, object);
+    }
+    if (mode == "ProximityLine") {
+        if (engine != DatumAttachmentEngine::Line) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         support.link,
+                                         "MapMode",
+                                         "ProximityLine is supported for DatumLine in this C51X batch");
+            return std::nullopt;
+        }
+        return proximityLinePlacement(supports, mapReverse, context, object);
+    }
     if (mode == "Vertex") {
         if (engine != DatumAttachmentEngine::Point) {
             addDatumAttachmentDiagnostic(context,
@@ -842,7 +1107,7 @@ inline std::optional<gp_Trsf> selectedDatumPlacement(const app::DocumentObject& 
                                  support.link,
                                  "MapMode",
                                  "Datum MapMode=" + mode
-                                     + " is not in the C51-S5 selected non-GUI AttachEngine batch");
+                                     + " is not in the C51X selected non-GUI AttachEngine batch");
     return std::nullopt;
 }
 
@@ -902,17 +1167,37 @@ inline std::optional<DatumAttachmentPlacement> datumAttachmentPlacement(const ap
     // ::AttachEnginePoint::_calculateAttachedPlacement() remaps ObjectOrigin to ObjectXY.
     // This request-local subset implements those selected modes without GUI editor/session state.
     const std::string mode = datumMapModeLabel(object);
+    const bool usesLineFamilySupports = mode == "TwoPointLine" || mode == "IntersectionLine"
+        || mode == "ProximityLine";
     const bool requiresSubshape = mode == "FlatFace" || mode == "NormalToEdge" || mode == "Tangent"
         || mode == "Vertex" || mode == "OnEdge";
-    auto resolvedSupport = resolveAttachmentSupport(object, context, support, requiresSubshape);
-    if (!resolvedSupport) {
+    std::vector<SupportResolution> resolvedSupports;
+    const std::size_t supportCount = usesLineFamilySupports ? supportLinks.size() : 1U;
+    for (std::size_t index = 0; index < supportLinks.size() && index < supportCount; ++index) {
+        const auto& link = supportLinks.at(index);
+        if (link.object.empty()) {
+            continue;
+        }
+        auto resolvedSupport = resolveAttachmentSupport(object, context, link, requiresSubshape);
+        if (!resolvedSupport) {
+            return std::nullopt;
+        }
+        resolvedSupports.push_back(std::move(*resolvedSupport));
+    }
+    if (resolvedSupports.empty()) {
+        addDatumAttachmentDiagnostic(context,
+                                     object,
+                                     support,
+                                     "AttachmentSupport",
+                                     "Datum selected MapMode requires AttachmentSupport request evidence",
+                                     "missing_link_target");
         return std::nullopt;
     }
     auto placement = selectedDatumPlacement(object,
                                            context,
                                            engine,
                                            mode,
-                                           *resolvedSupport,
+                                           resolvedSupports,
                                            hasActiveMapReversed,
                                            pathParameter.value_or(0.0));
     if (!placement) {
@@ -921,8 +1206,8 @@ inline std::optional<DatumAttachmentPlacement> datumAttachmentPlacement(const ap
     if (hasActiveAttachmentOffset) {
         *placement = *placement * attachmentOffsetPlacement(object);
     }
-    if (hasReferenceStabilityEvidence(support)) {
-        appendAttachmentSupportWriteback(object, *resolvedSupport, context);
+    if (!usesLineFamilySupports && hasReferenceStabilityEvidence(support)) {
+        appendAttachmentSupportWriteback(object, resolvedSupports.front(), context);
     }
     return DatumAttachmentPlacement{true, *placement};
 }

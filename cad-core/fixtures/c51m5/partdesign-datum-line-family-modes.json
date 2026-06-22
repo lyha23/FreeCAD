@@ -1,0 +1,176 @@
+{
+  "Objects": [
+    {
+      "Name": "PointA",
+      "ID": 1,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    {
+      "Name": "PointB",
+      "ID": 2,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 4,
+        "Y": 2,
+        "Z": 0
+      }
+    },
+    {
+      "Name": "EdgeSource",
+      "ID": 3,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 3,
+        "Z1": 1,
+        "X2": 0,
+        "Y2": 5,
+        "Z2": 5
+      }
+    },
+    {
+      "Name": "PlaneXY",
+      "ID": 4,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 6,
+        "Width": 4
+      }
+    },
+    {
+      "Name": "PlaneYZAtX2",
+      "ID": 5,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 6,
+        "Width": 4,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [2, 0, 0],
+          "Rotation": [0, 0.7071067811865475, 0, 0.7071067811865476]
+        }
+      }
+    },
+    {
+      "Name": "NearPointA",
+      "ID": 6,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 1,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    {
+      "Name": "NearPointB",
+      "ID": 7,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 1,
+        "Y": 0,
+        "Z": 3
+      }
+    },
+    {
+      "Name": "DatumLineTwoPointVertices",
+      "ID": 8,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "PointA",
+              "SubList": []
+            },
+            {
+              "value": "PointB",
+              "SubList": []
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "TwoPointLine"
+        }
+      }
+    },
+    {
+      "Name": "DatumLineTwoPointEdge",
+      "ID": 9,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "EdgeSource",
+          "SubList": ["Edge1"]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "TwoPointLine"
+        }
+      }
+    },
+    {
+      "Name": "DatumLineIntersection",
+      "ID": 10,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "PlaneXY",
+              "SubList": ["Face1"]
+            },
+            {
+              "value": "PlaneYZAtX2",
+              "SubList": ["Face1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "IntersectionLine"
+        }
+      }
+    },
+    {
+      "Name": "DatumLineProximity",
+      "ID": 11,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "NearPointA",
+              "SubList": []
+            },
+            {
+              "value": "NearPointB",
+              "SubList": []
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ProximityLine"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "DatumLineTwoPointVertices",
+      "DatumLineTwoPointEdge",
+      "DatumLineIntersection",
+      "DatumLineProximity"
+    ]
+  }
+}

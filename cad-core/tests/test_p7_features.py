@@ -347,6 +347,27 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["elementReferenceUpdates"], [])
         self.assert_object_matches_expected(result, "c51m5", "partdesign-datum-point-single-input-modes")
 
+    def test_c51x_datum_line_family_modes_match_expected(self) -> None:
+        result = self.run_recompute("partdesign-datum-line-family-modes", "c51m5")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual(result["elementReferenceUpdates"], [])
+        self.assert_object_matches_expected(result, "c51m5", "partdesign-datum-line-family-modes")
+
+    def test_c51x_datum_line_family_invalid_diagnostics(self) -> None:
+        result = self.run_recompute("partdesign-datum-line-family-diagnostics", "c51m5")
+
+        self.assertEqual(
+            [item["code"] for item in result["diagnostics"]],
+            ["attachment_support_invalid_shape", "no_intersection", "no_intersection"],
+        )
+        self.assertEqual(result["objects"]["DatumLineTwoPointSingle"]["status"], "error")
+        self.assertEqual(result["objects"]["DatumLineIntersectionParallel"]["status"], "error")
+        self.assertEqual(result["objects"]["DatumLineProximityTouching"]["status"], "error")
+        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual(result["elementReferenceUpdates"], [])
+
     def test_c51m5_datum_offset_reverse_and_shadow_sub_writeback(self) -> None:
         result = self.run_recompute("partdesign-datum-offset-reverse-writeback", "c51m5")
 

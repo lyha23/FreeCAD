@@ -129,7 +129,7 @@ class ExpectedFixtureAssertions:
 
         for key, value in expected.get("object_fields", {}).items():
             self.assertIn(key, obj)
-            self.assertEqual(obj[key], value)
+            self.assert_nested_matches_expected(obj[key], value, f"object_fields.{key}")
         if "bbox" in expected:
             self.assert_bbox_close_delta(obj["bbox"], expected["bbox"]["min"], expected["bbox"]["max"], bbox_delta)
         if "volume" in expected:

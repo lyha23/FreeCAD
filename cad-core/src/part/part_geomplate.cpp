@@ -20,6 +20,7 @@
 #include <BRep_Tool.hxx>
 #include <GCE2d_MakeSegment.hxx>
 #include <Geom2d_Curve.hxx>
+#include <Geom2d_TrimmedCurve.hxx>
 #include <Geom2dAdaptor_Curve.hxx>
 #include <GeomAbs_Shape.hxx>
 #include <GeomAdaptor_Curve.hxx>
@@ -1414,7 +1415,7 @@ Handle(Geom2d_Curve) makeCurve2dSegment(const GeomPlateCurve2dSegment& segment, 
     try {
         const gp_Pnt2d start(segment.start[0], segment.start[1]);
         const gp_Pnt2d end(segment.end[0], segment.end[1]);
-        Handle(Geom2d_Curve) curve = GCE2d_MakeSegment(start, end).Value();
+        Handle(Geom2d_TrimmedCurve) curve = GCE2d_MakeSegment(start, end).Value();
         if (curve.IsNull()) {
             error = "2D curve segment construction returned a null curve";
             return {};

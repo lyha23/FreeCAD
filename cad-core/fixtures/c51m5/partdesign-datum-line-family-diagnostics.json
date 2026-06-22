@@ -1,0 +1,132 @@
+{
+  "Objects": [
+    {
+      "Name": "SinglePoint",
+      "ID": 1,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    {
+      "Name": "ParallelPlaneA",
+      "ID": 2,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 4,
+        "Width": 4
+      }
+    },
+    {
+      "Name": "ParallelPlaneB",
+      "ID": 3,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 4,
+        "Width": 4,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 2],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "TouchPointA",
+      "ID": 4,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      }
+    },
+    {
+      "Name": "TouchPointB",
+      "ID": 5,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      }
+    },
+    {
+      "Name": "DatumLineTwoPointSingle",
+      "ID": 6,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SinglePoint",
+              "SubList": []
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "TwoPointLine"
+        }
+      }
+    },
+    {
+      "Name": "DatumLineIntersectionParallel",
+      "ID": 7,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "ParallelPlaneA",
+              "SubList": ["Face1"]
+            },
+            {
+              "value": "ParallelPlaneB",
+              "SubList": ["Face1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "IntersectionLine"
+        }
+      }
+    },
+    {
+      "Name": "DatumLineProximityTouching",
+      "ID": 8,
+      "TypeId": "PartDesign::Line",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "TouchPointA",
+              "SubList": []
+            },
+            {
+              "value": "TouchPointB",
+              "SubList": []
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ProximityLine"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "DatumLineTwoPointSingle",
+      "DatumLineIntersectionParallel",
+      "DatumLineProximityTouching"
+    ]
+  }
+}

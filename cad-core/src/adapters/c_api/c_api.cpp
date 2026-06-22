@@ -2080,10 +2080,10 @@ nlohmann::json capabilitiesJson()
                   // DatumLine.cpp, DatumPlane.cpp and DatumCS.cpp create point/line/plane/LCS
                   // shapes from Placement; Body.cpp relinks datum roles through Origin.
                   // AttachExtension.cpp::positionBySupport() calls "calculateAttachedPlacement"
-                  // and can write back AttachmentSupport subnames. cad-core supports the C51-S5
+                  // and can write back AttachmentSupport subnames. cad-core supports the C51X
                   // selected non-GUI AttachEngine modes and returns request-local update
                   // suggestions instead of mutating a backend session.
-                  {"status", "supported_c51x_selected_attach_engine_with_datum_point_single_input"},
+                  {"status", "supported_c51x_selected_attach_engine_with_datum_line_family"},
                   {"type_ids",
                    {"PartDesign::Point",
                     "PartDesign::Line",
@@ -2102,6 +2102,9 @@ nlohmann::json capabilitiesJson()
                     "ObjectOrigin selected MapMode",
                     "ObjectX/ObjectY/ObjectZ selected MapModes",
                     "NormalToEdge selected MapMode",
+                    "DatumLine TwoPointLine selected MapMode",
+                    "DatumLine IntersectionLine selected MapMode",
+                    "DatumLine ProximityLine selected MapMode",
                     "DatumPoint Vertex selected MapMode",
                     "DatumPoint OnEdge selected MapMode",
                     "DatumPoint CenterOfMass selected MapMode",
@@ -2117,13 +2120,16 @@ nlohmann::json capabilitiesJson()
                     "c5m4/partdesign-datum-attachment-mapmode-diagnostics",
                     "c51m5/partdesign-datum-selected-mapmodes",
                     "c51m5/partdesign-datum-offset-reverse-writeback",
-                    "c51m5/partdesign-datum-point-single-input-modes"}},
+                    "c51m5/partdesign-datum-point-single-input-modes",
+                    "c51m5/partdesign-datum-line-family-modes",
+                    "c51m5/partdesign-datum-line-family-diagnostics"}},
                   {"diagnostics",
                    {"invalid_placement",
                     "missing_link_target",
                     "unsupported_property",
                     "attachment_support_invalid_shape",
                     "attachment_parameter_invalid",
+                    "no_intersection",
                     "subname_resolve_failed"}},
                   {"deferred",
                    {"GUI Attachment editor / ViewProvider / TaskPanel",
@@ -2154,9 +2160,6 @@ nlohmann::json capabilitiesJson()
                         "Binormal",
                         "TangentU",
                         "TangentV",
-                        "TwoPointLine",
-                        "IntersectionLine",
-                        "ProximityLine",
                         "Focus1",
                         "Focus2",
                         "CenterOfCurvature",
@@ -2168,9 +2171,9 @@ nlohmann::json capabilitiesJson()
                        "Attacher.cpp::AttachEngine3D/Line/Point::_calculateAttachedPlacement"},
                       {"evidence",
                        "C51-S5 first batch supports FlatFace, ObjectXY/ObjectXZ/ObjectYZ, "
-                       "ObjectOrigin/ObjectX/ObjectY/ObjectZ and NormalToEdge; "
-                       "C51X supports AttachEnginePoint Vertex/OnEdge/CenterOfMass with FreeCADCmd "
-                       "expected"}}}}},
+                       "ObjectOrigin/ObjectX/ObjectY/ObjectZ and NormalToEdge; C51X supports "
+                       "AttachEnginePoint Vertex/OnEdge/CenterOfMass and AttachEngineLine "
+                       "TwoPointLine/IntersectionLine/ProximityLine with FreeCADCmd expected"}}}}},
                   {"remaining_gaps", nlohmann::json::array()},
               }},
              {"hole",
@@ -2968,13 +2971,13 @@ std::optional<std::size_t> readSizeLimit(
 std::optional<nlohmann::json> adapterMeshLimits(const nlohmann::json& request)
 {
     if (request.contains("mesh_limits") && request["mesh_limits"].is_object()) {
-        return request["mesh_limits"];
+        return std::make_optional<nlohmann::json>(request["mesh_limits"]);
     }
     const auto adapter = request.find("adapter");
     if (adapter != request.end() && adapter->is_object()) {
         const auto meshLimits = adapter->find("meshLimits");
         if (meshLimits != adapter->end() && meshLimits->is_object()) {
-            return *meshLimits;
+            return std::make_optional<nlohmann::json>(*meshLimits);
         }
     }
     return std::nullopt;
@@ -2983,13 +2986,13 @@ std::optional<nlohmann::json> adapterMeshLimits(const nlohmann::json& request)
 std::optional<nlohmann::json> adapterBinaryPayloadLimits(const nlohmann::json& request)
 {
     if (request.contains("binary_payload_limits") && request["binary_payload_limits"].is_object()) {
-        return request["binary_payload_limits"];
+        return std::make_optional<nlohmann::json>(request["binary_payload_limits"]);
     }
     const auto adapter = request.find("adapter");
     if (adapter != request.end() && adapter->is_object()) {
         const auto payloadLimits = adapter->find("binaryPayloadLimits");
         if (payloadLimits != adapter->end() && payloadLimits->is_object()) {
-            return *payloadLimits;
+            return std::make_optional<nlohmann::json>(*payloadLimits);
         }
     }
     return std::nullopt;

@@ -1,0 +1,9 @@
+{
+  "diagnostic_codes": [
+    "attachment_support_invalid_shape",
+    "no_intersection",
+    "no_intersection"
+  ],
+  "reference": "C51X DatumLine line-family invalid diagnostics source-backed by FreeCAD AttachEngineLine TwoPointLine/IntersectionLine/ProximityLine branches; diagnostic-only fixture has no native geometry payload",
+  "schema_version": "cad-core.freecad-expected.v1"
+}

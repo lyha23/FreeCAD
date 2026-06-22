@@ -7,17 +7,17 @@ C51X 后续包已关闭：C51 freeze 后的 exact blockers 已逐项归类，未
 ## Supported
 
 - DatumPoint `Vertex`、`OnEdge`、`CenterOfMass` selected MapMode。
-- FreeCAD 依据：`src/Mod/Part/App/Attacher.cpp::AttachEnginePoint::_calculateAttachedPlacement()` 中 `mm0Vertex`、`mm0OnEdge`、`mm0CenterOfMass`。
+- FreeCAD 依据：`src/Mod/Part/App/Attacher.cpp::AttachEnginePoint::_calculateAttachedPlacement()` 中 `mm0Vertex`、`mm0OnEdge`、`mm0CenterOfMass`；`src/Mod/Part/App/Attacher.cpp::AttachEngineLine::_calculateAttachedPlacement()` 中 `mm1TwoPoints`、`mm1Intersection`、`mm1Proximity`。
 - cad-core 落点：`cad-core/src/part_design/datum_attachment.h`。
-- fixture / expected：`cad-core/fixtures/c51m5/partdesign-datum-point-single-input-modes.json` 与 `cad-core/fixtures/c51m5/expected/partdesign-datum-point-single-input-modes.freecad.json`。
-- capability：`part_design.datum_attachment.status=supported_c51x_selected_attach_engine_with_datum_point_single_input`。
+- fixture / expected：`cad-core/fixtures/c51m5/partdesign-datum-point-single-input-modes.json` 与 `cad-core/fixtures/c51m5/expected/partdesign-datum-point-single-input-modes.freecad.json`；`cad-core/fixtures/c51m5/partdesign-datum-line-family-modes.json`、diagnostic fixture 与对应 expected。
+- capability：`part_design.datum_attachment.status=supported_c51x_selected_attach_engine_with_datum_line_family`。
 
 ## Still Exact Blockers
 
 - `partdesign_groove_upto_brepfeat_cut_native_failure`：当前 FreeCADCmd 1.2.0 revision 20260519 对 Groove UpToFirst / UpToFace 仍报 `Groove: Revolution: Up to face: Could not revolve the sketch!`。
 - `partdesign_pipe_transformation_laws_source_commented`：`FeaturePipe.cpp::Pipe::execute()` 中 Linear / S-shape / Interpolation law branch 仍为 source-commented blocker。
 - `partdesign_pipe_spine_tangent_source_commented`：`FeaturePipe.cpp::Pipe::buildPipePath()` 中 continuous edge expansion 仍缺 ledger，保持 source-backed blocker。
-- `datum_attach_engine_remaining_modes`：已移除 `Vertex`、`OnEdge`、`CenterOfMass`；剩余 Focus / Intersection / Proximity / TwoPoint、curve frame、three-point/folding 等 mode family 后续按独立 oracle/input contract 分包。
+- `datum_attach_engine_remaining_modes`：已移除 `Vertex`、`OnEdge`、`CenterOfMass`、`TwoPointLine`、`IntersectionLine`、`ProximityLine`；剩余 Focus、curve frame、three-point/folding 等 mode family 后续按独立 oracle/input contract 分包。
 
 ## Synced Artifacts
 
