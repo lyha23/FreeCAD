@@ -2320,7 +2320,7 @@ nlohmann::json capabilityContractJson()
                   {"covered",
                    {"openWireCompound_child_wire_ownership",
                     "openWireCompound_child_wire_source_lineage",
-                    "ResultWireProducerIdentity",
+                    "wire_joiner_module_local_result_wire_producer_diagnostics",
                     "history_materialization_entry_open_wire_compound_export_source_removed",
                     "producer_readiness_promoted_after_openWireCompound_child_materialization",
                     "edge_level_producer_ledger_ready_gate_removed",

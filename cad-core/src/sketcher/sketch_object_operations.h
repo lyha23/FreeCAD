@@ -74,8 +74,7 @@ struct ProfileFaceBuild
     bool faceMakerFailed = false;
     bool requiresSubshapeSelection = false;
     std::optional<part::FaceMakerHistorySummary> faceMakerHistory;
-    std::optional<part::WireJoinerLedgerSummary> wireJoinerLedger;
-    std::optional<part::WireJoinerHistorySummary> wireJoinerHistory;
+    std::optional<part::WireJoinerBuildResult> wireJoinerResult;
 };
 
 std::string faceMakerRuntimeSourceName(part::FaceMakerBuildFaceRuntimeSource source);

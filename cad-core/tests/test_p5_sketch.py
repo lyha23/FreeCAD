@@ -3456,8 +3456,14 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("Edge1", subshapes)
         self.assertIn("InternalEdge1", subshapes)
         self.assertIn("InternalFace1", mesh["faceIds"])
+        self.assertIn("wire_joiner_diagnostics", sketch)
         self.assertIn("wire_joiner_ledger", sketch)
         self.assertIn("wire_joiner_history_detail", sketch)
+        self.assertEqual(sketch["wire_joiner_diagnostics"]["status"], "ok")
+        self.assertIn("has_open_wires", sketch["wire_joiner_diagnostics"]["summary"])
+        self.assertFalse(
+            sketch["wire_joiner_diagnostics"]["summary"]["missing_child_wire_invariant"]
+        )
         self.assertEqual(sketch["facemaker_history_status"], "history_evidence:facemaker_buildface")
 
     def test_p5_sketch_exports_internal_edge_vertex_stable_subnames(self) -> None:

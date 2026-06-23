@@ -603,8 +603,7 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         internalShape = *profileFace.internalShape;
     }
     const auto faceMakerHistory = profileFace.faceMakerHistory;
-    const auto wireJoinerLedger = profileFace.wireJoinerLedger;
-    const auto wireJoinerHistory = profileFace.wireJoinerHistory;
+    const auto wireJoinerResult = profileFace.wireJoinerResult;
 
     if (hasPlacement) {
         if (!rawShape->IsNull()) {
@@ -626,8 +625,7 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         internalShape,
         profileFace.requiresSubshapeSelection,
         faceMakerHistory,
-        wireJoinerLedger,
-        wireJoinerHistory,
+        wireJoinerResult,
     });
     context.shapes[object.name] = internalResult.shapeValue;
     if (internalResult.shapeValue.internalNamedShape) {

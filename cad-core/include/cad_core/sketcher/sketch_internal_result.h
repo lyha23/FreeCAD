@@ -23,8 +23,7 @@ struct SketchInternalResultInput
     std::optional<TopoDS_Shape> internalShape;
     bool profileRequiresSubshapeSelection = false;
     std::optional<part::FaceMakerHistorySummary> faceMakerHistory;
-    std::optional<part::WireJoinerLedgerSummary> wireJoinerLedger;
-    std::optional<part::WireJoinerHistorySummary> wireJoinerHistory;
+    std::optional<part::WireJoinerBuildResult> wireJoinerResult;
 };
 
 struct SketchInternalResult

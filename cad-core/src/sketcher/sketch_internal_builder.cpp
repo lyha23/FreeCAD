@@ -90,11 +90,12 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
                                        &input.faceWires,
                                        &input.openEdges,
                                        result.splitProducedBoundedFaces);
-        result.wireJoinerLedger = joiner.ledgerSummary();
-        result.wireJoinerHistory = joiner.historySummary();
-        const auto openShape = joiner.getOpenWires("SKF", true);
-        if (openShape && !openShape->IsNull()) {
-            result.internalShape = compoundShape(*result.internalShape, *openShape);
+        result.wireJoinerResult = joiner.buildResult("SKF", true);
+        if (result.wireJoinerResult->openWires && !result.wireJoinerResult->openWires->IsNull()) {
+            result.internalShape = compoundShape(
+                *result.internalShape,
+                *result.wireJoinerResult->openWires
+            );
         }
     }
 

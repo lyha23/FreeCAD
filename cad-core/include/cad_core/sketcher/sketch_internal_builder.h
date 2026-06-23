@@ -40,8 +40,7 @@ struct SketchInternalBuildResult
     bool splitProducedBoundedFaces = false;
     bool requiresSubshapeSelection = false;
     std::optional<part::FaceMakerHistorySummary> faceMakerHistory;
-    std::optional<part::WireJoinerLedgerSummary> wireJoinerLedger;
-    std::optional<part::WireJoinerHistorySummary> wireJoinerHistory;
+    std::optional<part::WireJoinerBuildResult> wireJoinerResult;
 };
 
 // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
