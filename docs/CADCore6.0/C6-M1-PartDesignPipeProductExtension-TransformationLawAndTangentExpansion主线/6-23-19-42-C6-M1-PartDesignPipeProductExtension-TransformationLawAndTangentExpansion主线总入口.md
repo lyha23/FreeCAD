@@ -1,6 +1,6 @@
 # C6-M1 PartDesign Pipe Product Extension TransformationLawAndTangentExpansion 主线总入口
 
-本文是 `docs/CADCore6.0` 下的 C6-M1 实施主线。当前 S0 已完成 live 基线复核；S1-S6 仍待执行。矩阵中的 product extension 口径已经冻结，但不是发布闸门结论。
+本文是 `docs/CADCore6.0` 下的 C6-M1 实施主线。当前 S0 已完成 live 基线复核，S1 已完成 FreeCAD 源码候选矩阵复核；S2-S6 仍待执行。矩阵中的 product extension 口径已经冻结，但不是发布闸门结论。
 
 ## 主线目标
 
@@ -54,13 +54,13 @@
 | --- | --- | --- |
 | 工作步骤总入口 | `工作步骤细分/6-23-19-43-【已实现】C6-M1工作步骤总入口.md` | S0-S6 执行索引。 |
 | S0 | `工作步骤细分/6-23-19-44-【已实现】C6-M1-S0-声明口径与live基线复核.md` | 已冻结产品扩展口径与 live blocker。 |
-| S1 | `工作步骤细分/6-23-19-45-C6-M1-S1-FreeCAD源码候选矩阵.md` | 建 FreeCAD source authority 和候选矩阵。 |
+| S1 | `工作步骤细分/6-23-19-45-【已实现】C6-M1-S1-FreeCAD源码候选矩阵.md` | 建 FreeCAD source authority 和候选矩阵。 |
 | S2 | `工作步骤细分/6-23-19-46-C6-M1-S2-范围准入与blocker矩阵.md` | 路由 scope、blocker、non-goal 与 backend gap。 |
 | S3 | `工作步骤细分/6-23-19-47-C6-M1-S3-TransformationLawDTO专项复审.md` | 定义 Linear / S-shape / Interpolation law DTO 与实施边界。 |
 | S4 | `工作步骤细分/6-23-19-48-C6-M1-S4-ContinuousEdgeLedger专项复审.md` | 定义 SpineTangent / AuxiliarySpineTangent 连续边账本。 |
 | S5 | `工作步骤细分/6-23-19-49-C6-M1-S5-PipeShellHistoryCapability专项复审.md` | 保护 PipeShell history、front/back sewing 和 capability 文案。 |
 | S6 | `工作步骤细分/6-23-19-50-C6-M1-S6-Oracle实现与发布闸门.md` | 代码落点、fixture、focused tests 和发布闸门。 |
-| source candidates | `矩阵/c6m1_pipe_product_extension_source_candidates.tsv` | FreeCAD / cad-core 源码候选。 |
+| source candidates | `矩阵/c6m1_pipe_product_extension_source_candidates.tsv` | FreeCAD / cad-core 源码候选；S1 已复核 `C6M1-SRC-001` 到 `C6M1-SRC-008`。 |
 | scope review | `矩阵/c6m1_pipe_product_extension_scope_review_matrix.tsv` | 语义范围与当前状态。 |
 | blocker queue | `矩阵/c6m1_pipe_product_extension_blocker_queue.tsv` | 待执行 blocker 和关闭条件。 |
 | non-goal registry | `矩阵/c6m1_pipe_product_extension_non_goal_registry.tsv` | 禁止声明与 reopen 条件。 |
@@ -71,4 +71,4 @@
 
 ## 当前状态
 
-S0 已完成并改名为 `【已实现】`；S1-S6 仍待执行。S0 只冻结产品扩展口径和 live exact blocker 证据，不表示 law / tangent 已支持。任何后续步骤文件都不得在验收通过前改名为 `【已实现】`。
+S0 和 S1 已完成并改名为 `【已实现】`；S2-S6 仍待执行。S0 只冻结产品扩展口径和 live exact blocker 证据，S1 只完成源码候选矩阵复核；二者都不表示 law / tangent 已支持。任何后续步骤文件都不得在验收通过前改名为 `【已实现】`。
