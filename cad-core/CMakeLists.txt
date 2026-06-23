@@ -306,6 +306,7 @@ add_library(cad-core-lib STATIC
   src/part_design/feature_thickness.cpp
   src/part_design/feature_transformed.cpp
   src/runtime/compute_context.cpp
+  src/runtime/capability_contract.cpp
   src/runtime/diagnostics.cpp
   src/runtime/element_reference_update.cpp
   src/runtime/feature_executor.cpp

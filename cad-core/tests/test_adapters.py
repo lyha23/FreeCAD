@@ -50,6 +50,14 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIsInstance(payload["diagnostics"], list)
         self.assertIsInstance(payload["binaryPayloads"], list)
 
+    def assert_capability_publication_smoke(self, capabilities: dict) -> None:
+        self.assertEqual(capabilities["status"], "ok")
+        self.assertEqual(capabilities["schema_version"], "cad-web-v1")
+        self.assertEqual(capabilities["cad_core"]["api"], "cad_core_ffi")
+        self.assertIn("OCCT", capabilities["cad_core"]["kernel"])
+        self.assertEqual(capabilities["adapters"]["contract_version"], "cad-core-result-v1")
+        self.assertIn("cad_core_capabilities_json", capabilities["adapters"]["core_entrypoints"])
+
     def assert_ffi_mesh_matches_expected_summary(self, result: dict, group: str, fixture: str) -> None:
         expected = self.expected_freecad(group, fixture)
         summary = expected["mesh_summary"]
@@ -410,13 +418,15 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(item["SubList"], ["Face5"])
         self.assertEqual(item["FullSubList"], ["ExternalDoc#Box.Face5"])
 
+    def test_c_api_capabilities_publication_smoke(self) -> None:
+        capabilities = self.run_capabilities_ffi()
+
+        self.assert_capability_publication_smoke(capabilities)
+
     def test_c_api_capabilities_exposes_web_contract_facts(self) -> None:
         capabilities = self.run_capabilities_ffi()
 
-        self.assertEqual(capabilities["status"], "ok")
-        self.assertEqual(capabilities["schema_version"], "cad-web-v1")
-        self.assertEqual(capabilities["cad_core"]["api"], "cad_core_ffi")
-        self.assertIn("OCCT", capabilities["cad_core"]["kernel"])
+        self.assert_capability_publication_smoke(capabilities)
         self.assertEqual(capabilities["document"]["source"], "DocumentObject graph")
         self.assertEqual(capabilities["export_formats"], ["brep", "step", "stl"])
         self.assertIn("value", capabilities["document"]["link_property_fields"])
