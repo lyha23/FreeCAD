@@ -7,13 +7,16 @@ C6-M2 的目标是恢复 CADCore6.0 阶段回归闸门可信度：从 C6-M1 S6 �
 ## 当前基线
 
 - live repo：`/Users/li/Chili3DProject/FreeCAD`
-- live HEAD：`87b62d7b7b`
-- last commit：`87b62d7b7b 实现 C6-M1 Pipe 产品扩展闸门`
+- S6 开始 HEAD：`76acc921aa`
+- S6 开始 last commit：`76acc921aa 完成 C6-M2 S5 Pocket 无 base 修复`
 - C6-M1 队列：空队列，S0-S6 均已 `【已实现】`。
 - C6-M1 focused：`python3 -m unittest tests.test_p7_features.CadCoreP7FeatureTest tests.test_adapters.CadCoreAdapterTest.test_c_api_capabilities_exposes_web_contract_facts`，144 tests OK。
 - C6-M1 阶段回归：`python3 -m unittest tests.test_p7_features tests.test_expected_fixtures tests.test_adapters`，178 tests，15 failures，28 skipped。
-- 失败集中点：`tests.test_expected_fixtures.CadCoreExpectedFixtureTest.test_expected_fixtures_match_recompute_results`。
-- 已知 mismatch 类别：bbox、diagnostic_codes、external_geometry_count、link 类型、assembly solver_adapter 字段漂移。
+- C6-M2 关闭状态：S0 冻结的 15 条 mismatch 已全部收口，expected fixture gate 和阶段回归恢复通过。
+- C6-M2 focused：`python3 -m unittest tests.test_expected_fixtures.CadCoreExpectedFixtureTest.test_expected_fixtures_match_recompute_results`，`Ran 1 test in 49.586s`，`OK (skipped=29)`。
+- C6-M2 阶段回归：`python3 -m unittest tests.test_p7_features tests.test_expected_fixtures tests.test_adapters`，`Ran 180 tests in 80.086s`，`OK (skipped=29)`。
+- C6-M2 重型收口：`python3 -m unittest tests.test_p6_topology tests.test_p7_features tests.test_expected_fixtures tests.test_adapters`，`Ran 216 tests in 88.451s`，`OK (skipped=29)`。
+- 剩余 known gap：`ORC-013` 是本地 OCCT 7.9.3 imported LinkGroup bbox 环境差异，通过 fixture-local `bbox_delta=0.028` 容纳；不声明 full FreeCAD parity。
 
 ## 证明链条
 
@@ -38,7 +41,7 @@ live failure freeze
 | S3 | `工作步骤细分/6-23-22-39-【已实现】C6-M2-S3-SchemaDrift收口.md` | 已收口 schema 类差异：8 条 expected refresh，2 条 implementation fix，ORC-007 转 S5。 |
 | S4 | `工作步骤细分/6-23-22-40-【已实现】C6-M2-S4-GeometryTolerance与OCCT差异收口.md` | 已收口 bbox rows：ORC-001/003/006 为 object bbox implementation fix，ORC-013 为局部 OCCT known environment gap。 |
 | S5 | `工作步骤细分/6-23-22-41-【已实现】C6-M2-S5-ApprovedExpectedOrCodeFix实施.md` | 已收口 ORC-007 Body/Pocket first subtractive without base implementation fix；expected fixture gate 通过。 |
-| S6 | `工作步骤细分/6-23-22-42-C6-M2-S6-阶段回归发布闸门.md` | 阶段回归、capability / docs 状态和剩余 blocker 发布。 |
+| S6 | `工作步骤细分/6-23-22-42-【已实现】C6-M2-S6-阶段回归发布闸门.md` | 阶段回归、heavy 收口、docs / matrix 状态发布；C6-M2 关闭。 |
 | source candidates | `矩阵/c6m2_expected_fixture_regression_source_candidates.tsv` | 失败来源和代码 / fixture authority 候选。 |
 | scope review | `矩阵/c6m2_expected_fixture_regression_scope_review_matrix.tsv` | mismatch 范围、owner、状态词典。 |
 | blocker queue | `矩阵/c6m2_expected_fixture_regression_blocker_queue.tsv` | C6-M2 待关闭 blocker。 |
@@ -59,6 +62,7 @@ live failure freeze
 | `approvedRefresh` | expected 更新已通过 authority 复核，允许最小批次刷新。 |
 | `implementationFix` | 行为错误，应修 C++ / parser / adapter / test，而不是刷新 expected。 |
 | `knownGap` | 本包无法关闭但 owner、删除条件和验证命令已明确。 |
+| `released` | S6 阶段回归发布闸门通过，包线可关闭。 |
 
 ## 非目标
 
