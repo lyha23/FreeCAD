@@ -330,6 +330,17 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(shadow["stableSubname"], "g305:split1")
         self.assertAlmostEqual(shadow["fingerprint"]["area"], 25.0)
 
+    def test_c_api_recompute_reports_reference_shadow_recovery_metadata(self) -> None:
+        ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-recover-sublist", "p5")
+        update = ffi_result["elementReferenceUpdates"][0]
+        shadow = update["ReferenceShadow"][0]
+
+        self.assertEqual(ffi_result["diagnostics"], [])
+        self.assertEqual(update["StableSubList"], ["g305:split1"])
+        self.assertEqual(update["ShadowSub"], [{"newName": "g305:split1", "oldName": "InternalFace1"}])
+        self.assertEqual(shadow["reference_recovery"], "reference_shadow_single_subshape")
+        self.assertEqual(shadow["reference_recovery_reason"], "element_map_missing_or_split")
+
     def test_c_api_recompute_preserves_full_sublist_on_reference_shadow_update(self) -> None:
         payload = json.loads((ROOT / "fixtures" / "p5" / "pad-internal-face-reference-shadow.json").read_text())
         profile = payload["Objects"][1]["Properties"]["Profile"]
@@ -367,6 +378,22 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(shadow["fingerprint"]["shapeType"], "Face")
         self.assertEqual(shadow["fingerprint"]["edgeCount"], 4)
         self.assertEqual(shadow["fingerprint"]["vertexCount"], 4)
+
+    def test_c_api_recompute_link_sub_list_update_preserves_unupdated_items(self) -> None:
+        payload = json.loads((ROOT / "fixtures" / "p5" / "sketch-external-face-reference-shadow.json").read_text())
+        payload["Objects"][1]["Properties"]["ExternalGeometry"]["SubSet"].append(
+            {"value": "Box", "SubList": ["Face1"]}
+        )
+
+        ffi_result = self.run_recompute_ffi_payload(payload)
+        updates = ffi_result["elementReferenceUpdates"]
+
+        self.assertEqual(ffi_result["diagnostics"], [])
+        self.assertEqual(len(updates), 1)
+        sub_set = updates[0]["SubSet"]
+        self.assertEqual(len(sub_set), 2)
+        self.assertEqual(sub_set[0]["ReferenceShadow"][0]["subname"], "Face5")
+        self.assertEqual(sub_set[1], {"value": "Box", "SubList": ["Face1"]})
 
     def test_c_api_recompute_preserves_full_sublist_on_link_sub_list_update(self) -> None:
         payload = json.loads((ROOT / "fixtures" / "p5" / "sketch-external-face-reference-shadow.json").read_text())
