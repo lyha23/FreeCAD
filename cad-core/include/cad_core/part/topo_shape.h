@@ -97,7 +97,7 @@ struct NamedShape
     // from the currently resolvable ElementMap. cad-core exposes this request-local summary so
     // diagnostics can distinguish an indexed-only map from a partially consumed history ledger.
     std::vector<std::string> elementHistoryStatus;
-    std::optional<InternalShapeHistoryLedger> sketchInternalHistory;
+    std::optional<nlohmann::json> sketchInternalHistoryDiagnostics;
 };
 
 struct NamedShapeSource
@@ -170,12 +170,9 @@ NamedShape namedShapeForSketchInternalShape(
     const TopoDS_Shape& internalShape,
     std::optional<InternalShapeHistoryLedger> historyLedger = std::nullopt
 );
-void consumeInternalShapeHistoryLedger(
+void applyInternalShapeHistoryPublication(
     NamedShape& namedShape,
-    const TopoDS_Shape& rawShape,
-    const TopoDS_Shape& internalShape,
-    const nlohmann::json& internalElementMap,
-    const InternalShapeHistoryLedger& ledger
+    const InternalShapeHistoryPublication& publication
 );
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::makeElementPrism(),

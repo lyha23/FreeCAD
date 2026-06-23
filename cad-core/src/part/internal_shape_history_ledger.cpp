@@ -515,14 +515,8 @@ bool InternalShapeHistoryLedger::empty() const
         && data_->events.empty();
 }
 
-const std::vector<InternalShapeHistoryEvent>& InternalShapeHistoryLedger::historyEvents() const
+nlohmann::json InternalShapeHistoryLedger::diagnosticsJson() const
 {
-    return data_->events;
-}
-
-nlohmann::json InternalShapeHistoryLedger::internalShapeHistoryJson() const
-{
-    nlohmann::json events = nlohmann::json::array();
     nlohmann::json relationSummary = nlohmann::json::object();
     nlohmann::json producerTags = nlohmann::json::array();
     nlohmann::json diagnosticCodes = nlohmann::json::array();
@@ -540,7 +534,6 @@ nlohmann::json InternalShapeHistoryLedger::internalShapeHistoryJson() const
         if (!event.diagnosticCode.empty()) {
             diagnosticCodes.push_back(event.diagnosticCode);
         }
-        events.push_back(eventToJson(event));
     }
     if (hasFaceMaker) {
         producerTags.push_back("FaceMakerBuildFace");
@@ -548,44 +541,37 @@ nlohmann::json InternalShapeHistoryLedger::internalShapeHistoryJson() const
     if (hasWireJoiner) {
         producerTags.push_back("WireJoinerOpenWires");
     }
-    return {
+    const SketchInternalHistoryContext& history = data_->compatibilityHistory;
+    nlohmann::json diagnostics = {
         {"event_count", data_->events.size()},
         {"producer_tags", std::move(producerTags)},
         {"relation_summary", std::move(relationSummary)},
         {"diagnostic_codes", std::move(diagnosticCodes)},
-        {"events", std::move(events)},
+        {"facemaker",
+         {
+             {"source_edge_count", history.sourceEdgeCount},
+             {"pre_split_edge_count", history.preSplitEdgeCount},
+             {"splitter_edge_count", history.splitterEdgeCount},
+             {"bounded_face_count", history.boundedFaceCount},
+             {"pre_split_history", history.preSplitHistory},
+             {"splitter_history", history.splitterHistory},
+         }},
+        {"wire_joiner",
+         {
+             {"source_edge_count", history.wireJoinerSourceEdgeCount},
+             {"split_result_edge_count", history.wireJoinerSplitResultEdgeCount},
+             {"history_event_count", history.wireJoinerHistoryEvents.size()},
+             {"open_export_count", history.wireJoinerOpenExportHistoryEntries.size()},
+             {"modified_history_count", history.wireJoinerModifiedHistoryCount},
+             {"generated_history_count", history.wireJoinerGeneratedHistoryCount},
+             {"deleted_history_count", history.wireJoinerDeletedHistoryCount},
+             {"splitter_history", history.wireJoinerSplitterHistory},
+         }},
     };
-}
-
-nlohmann::json InternalShapeHistoryLedger::compatibilityObjectFields() const
-{
-    nlohmann::json fields = {
-        {"internal_shape_history", internalShapeHistoryJson()},
-    };
-    if (data_->hasWireJoinerEvidence) {
-        fields["wire_joiner_diagnostics"] = data_->wireJoinerDiagnostics;
-        fields["wire_joiner_ledger"] = data_->wireJoinerCompatibilityLedger;
-        fields["wire_joiner_history"] = "history_partial:edge_info_wire_info_split_done_exhaust";
-        fields["wire_joiner_history_detail"] = data_->wireJoinerCompatibilityHistoryDetail;
+    if (data_->hasWireJoinerEvidence && data_->wireJoinerDiagnostics.is_object()) {
+        diagnostics["wire_joiner"]["diagnostics"] = data_->wireJoinerDiagnostics;
     }
-    if (data_->hasFaceMakerEvidence) {
-        fields["facemaker_history"] = data_->faceMakerCompatibility;
-        fields["facemaker_history_status"] = "history_evidence:facemaker_buildface";
-    }
-    return fields;
-}
-
-nlohmann::json InternalShapeHistoryLedger::sketchInternalHistoryCompatibilityJson() const
-{
-    return sketchInternalHistoryContextToJson(data_->compatibilityHistory);
-}
-
-std::optional<std::string> InternalShapeHistoryLedger::sketchInternalHistoryStatus() const
-{
-    if (empty()) {
-        return std::nullopt;
-    }
-    return "history_evidence:facemaker_wirejoiner";
+    return diagnostics;
 }
 
 const char* internalShapeHistoryRelationName(InternalShapeHistoryRelation relation)

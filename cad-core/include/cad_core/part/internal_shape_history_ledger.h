@@ -5,9 +5,11 @@
 // ::SketchObject::buildInternals(), which publishes a request-local "InternalShape" from
 // FaceMakerBuildFace and WireJoiner open-wire results.
 #include <TopoDS_Shape.hxx>
+#include "cad_core/part/topo_shape_mapper.h"
 #include <nlohmann/json.hpp>
 
 #include <cstddef>
+#include <map>
 #include <memory>
 #include <optional>
 #include <string>
@@ -52,6 +54,30 @@ struct InternalShapeHistoryEvent
     TopoDS_Shape targetShape;
 };
 
+struct InternalShapePublishedElementHistory
+{
+    InternalShapeHistoryRelation relation = InternalShapeHistoryRelation::DiagnosticOnly;
+    std::string element;
+    std::vector<std::string> sources;
+};
+
+struct InternalShapeHistoryPublishInput
+{
+    std::string owner;
+    TopoDS_Shape rawShape;
+    TopoDS_Shape internalShape;
+    nlohmann::json internalElementMap = nlohmann::json::object();
+};
+
+struct InternalShapeHistoryPublication
+{
+    std::map<std::string, std::string> elementMapAliases;
+    std::vector<InternalShapePublishedElementHistory> elementHistory;
+    std::vector<MapperHistoryEvent> mapperHistory;
+    std::vector<std::string> elementHistoryStatus;
+    nlohmann::json diagnostics = nlohmann::json::object();
+};
+
 struct InternalShapeHistoryLedgerData;
 
 class InternalShapeHistoryLedger
@@ -67,12 +93,11 @@ public:
     void merge(const InternalShapeHistoryLedger& other);
 
     bool empty() const;
-    const std::vector<InternalShapeHistoryEvent>& historyEvents() const;
 
-    nlohmann::json internalShapeHistoryJson() const;
-    nlohmann::json compatibilityObjectFields() const;
-    nlohmann::json sketchInternalHistoryCompatibilityJson() const;
-    std::optional<std::string> sketchInternalHistoryStatus() const;
+    InternalShapeHistoryPublication publishForInternalShape(
+        const InternalShapeHistoryPublishInput& input
+    ) const;
+    nlohmann::json diagnosticsJson() const;
 
 private:
     std::unique_ptr<InternalShapeHistoryLedgerData> data_;

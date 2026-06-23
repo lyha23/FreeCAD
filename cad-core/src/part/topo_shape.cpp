@@ -6,8 +6,6 @@
 #include "cad_core/part/shape_fix.h"
 #include "cad_core/app/element_map.h"
 
-#include "internal_shape_history_ledger_detail.h"
-
 #include <BRepBndLib.hxx>
 #include <BRepAlgoAPI_BooleanOperation.hxx>
 #include <BRepAlgoAPI_BuilderAlgo.hxx>
@@ -2422,152 +2420,12 @@ nlohmann::json childElementMapToJson(const NamedShapeChildMap& childMap)
     };
 }
 
-std::string sketchSourceOwnerForInternalShape(const NamedShape& namedShape)
-{
-    const std::string suffix = ".InternalShape";
-    if (namedShape.owner.size() > suffix.size()
-        && namedShape.owner.compare(namedShape.owner.size() - suffix.size(), suffix.size(), suffix)
-            == 0) {
-        return namedShape.owner.substr(0, namedShape.owner.size() - suffix.size());
-    }
-    return namedShape.owner;
-}
-
-std::string sourceEdgeName(std::size_t sourceEdgeIndex)
-{
-    return sourceEdgeIndex == 0U ? std::string() : "Edge" + std::to_string(sourceEdgeIndex);
-}
-
-MapperHistoryRelation mapperRelationForProducerRelation(const std::string& relation)
-{
-    if (relation == "preserved") {
-        return MapperHistoryRelation::Preserved;
-    }
-    if (relation == "generated") {
-        return MapperHistoryRelation::Generated;
-    }
-    if (relation == "split") {
-        return MapperHistoryRelation::Split;
-    }
-    if (relation == "deleted") {
-        return MapperHistoryRelation::Deleted;
-    }
-    return MapperHistoryRelation::Modified;
-}
-
-MapperHistoryRecoverability mapperRecoverabilityForProducerRelation(const std::string& relation)
-{
-    if (relation == "deleted") {
-        return MapperHistoryRecoverability::Deleted;
-    }
-    if (relation == "split") {
-        return MapperHistoryRecoverability::NeedsReselect;
-    }
-    return MapperHistoryRecoverability::Resolved;
-}
-
-std::string diagnosticStatusForProducerRelation(const std::string& relation)
-{
-    if (relation == "deleted") {
-        return "deleted_stable_subname";
-    }
-    if (relation == "split") {
-        return "split_stable_subname";
-    }
-    return {};
-}
-
-void appendSketchInternalProducerMapperEvent(
-    NamedShape& namedShape,
-    const std::string& sourceOwner,
-    const std::string& sourceSubname,
-    const std::string& targetSubname,
-    const std::string& shapeKind,
-    const std::string& relation,
-    const std::string& makerStage,
-    nlohmann::json evidence,
-    const std::string& diagnosticStatus = {}
-)
-{
-    MapperHistoryEvent event;
-    event.source = MapperHistoryEndpoint {sourceOwner, sourceSubname};
-    event.target = MapperHistoryEndpoint {namedShape.owner, targetSubname};
-    event.shapeKind = shapeKind;
-    event.relation = mapperRelationForProducerRelation(relation);
-    event.makerStage = makerStage;
-    event.evidence = std::move(evidence);
-    event.recoverability = diagnosticStatus.empty()
-        ? mapperRecoverabilityForProducerRelation(relation)
-        : MapperHistoryRecoverability::Diagnostic;
-    event.diagnosticStatus = diagnosticStatus.empty() ? diagnosticStatusForProducerRelation(relation)
-                                                      : diagnosticStatus;
-    addMapperHistoryEvent(namedShape.mapperHistory, std::move(event));
-}
-
-void consumeSketchInternalGeneratedFaceHistory(
+void consumeSketchInternalGeneratedFacesFromElementMap(
     NamedShape& namedShape,
     const TopoDS_Shape& internalShape,
-    const nlohmann::json& internalMap,
-    const SketchInternalHistoryContext* historyContext
+    const nlohmann::json& internalMap
 )
 {
-    if (historyContext != nullptr && !historyContext->faceMakerBoundedFaceEvidence.empty()) {
-        // FreeCAD:
-        // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMaker.cpp
-        // ::FaceMaker::postBuild(), after "MapperHistory(myPreSplitHistory)" and
-        // "MapperMaker(mySplitter)", names the generated face from "the edges of its outer wire".
-        // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
-        // ::TopoShape::makeShapeWithElementMap(), first calls "mapSubElement(shapes)" and then
-        // consumes mapper history. C2-M2 follows that producer evidence instead of deriving
-        // InternalFace ownership from summary counts or geometry matching.
-        TopTools_IndexedMapOfShape internalFaces;
-        TopExp::MapShapes(internalShape, TopAbs_FACE, internalFaces);
-        const std::string sourceOwner = sketchSourceOwnerForInternalShape(namedShape);
-        for (const SketchInternalFaceMakerBoundedFaceEvidence& faceEvidence :
-             historyContext->faceMakerBoundedFaceEvidence) {
-            int internalFaceIndex = 0;
-            if (!faceEvidence.face.IsNull()) {
-                internalFaceIndex = findSameShapeIndex(internalFaces, faceEvidence.face);
-            }
-            if (internalFaceIndex <= 0
-                && faceEvidence.boundedFaceIndex <= static_cast<std::size_t>(internalFaces.Extent())) {
-                internalFaceIndex = static_cast<int>(faceEvidence.boundedFaceIndex);
-            }
-            if (internalFaceIndex <= 0) {
-                continue;
-            }
-
-            std::vector<std::string> sources;
-            for (const std::size_t sourceIndex : faceEvidence.sourceEdgeIndices) {
-                addDistinctString(sources, sourceEdgeName(sourceIndex));
-            }
-            const std::string targetName = "InternalFace" + std::to_string(internalFaceIndex);
-            addGeneratedHistory(namedShape, targetName, sources);
-            for (const std::size_t sourceIndex : faceEvidence.sourceEdgeIndices) {
-                appendSketchInternalProducerMapperEvent(
-                    namedShape,
-                    sourceOwner,
-                    sourceEdgeName(sourceIndex),
-                    targetName,
-                    "face",
-                    "generated",
-                    "facemaker:outer_boundary",
-                    {
-                        {"producer", "FaceMakerBuildFace"},
-                        {"bounded_face_index", faceEvidence.boundedFaceIndex},
-                        {"source_edge_index", sourceIndex},
-                        {"source_edge", sourceEdgeName(sourceIndex)},
-                        {"target_internal_element", targetName},
-                        {"outer_boundary_target_edge_indices",
-                         faceEvidence.outerBoundaryTargetEdgeIndices},
-                        {"stage", "outer_boundary"},
-                    }
-                );
-            }
-        }
-        return;
-    }
-
     if (!internalMap.is_object()) {
         return;
     }
@@ -2601,624 +2459,59 @@ void consumeSketchInternalGeneratedFaceHistory(
                 addDistinctString(sources, rawName);
             }
         }
-        if (sources.empty() && historyContext != nullptr && historyContext->sourceEdgeCount == 1U
-            && (historyContext->preSplitHistory || historyContext->splitterHistory)) {
-            // FreeCAD:
-            // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
-            // ::splitSelfIntersecting() records the single original edge in myPreSplitHistory;
-            // all bounded regions returned by BuilderFace are generated from that source even when
-            // no exact InternalEdge alias survives getInternalElementMap().
-            sources.push_back("Edge1");
-        }
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMaker.cpp
-        // ::FaceMaker::postBuild(), consumes FaceMaker history before
-        // SketchObject::getInternalElementMap() publishes InternalEdge aliases. cad-core does not
-        // invent terminal split/deleted history here; it only retags each generated InternalFace
-        // with exact source edges already present in the request-local InternalEdge map.
+        // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+        // ::SketchObject::getInternalElementMap(), records only exact InternalEdge/InternalVertex
+        // aliases. Without a producer ledger, generated InternalFace history stays limited to those
+        // exact aliases and does not synthesize split/deleted ownership from geometry.
         addGeneratedHistory(namedShape, "InternalFace" + std::to_string(faceIndex), sources);
     }
 }
 
-void consumeSketchInternalTerminalHistory(
-    NamedShape& namedShape,
-    const TopoDS_Shape& rawShape,
-    const TopoDS_Shape& internalShape,
-    const nlohmann::json& internalMap,
-    const SketchInternalHistoryContext& history
+ElementHistoryKind elementHistoryKindForPublicationRelation(
+    InternalShapeHistoryRelation relation
 )
 {
-    if (!history.faceMakerEdgeEvidence.empty()) {
-        // FreeCAD:
-        // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
-        // ::splitSelfIntersecting(), records "myPreSplitHistory->AddModified(edge, fi.Value())";
-        // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMaker.cpp
-        // ::FaceMaker::postBuild(), chains that pre-split history with "MapperMaker(mySplitter)".
-        // Consume those source->target edge records directly; internal_element_map remains only a
-        // simple unique alias map and does not decide split/deleted ownership.
-        TopTools_IndexedMapOfShape internalEdges;
-        TopExp::MapShapes(internalShape, TopAbs_EDGE, internalEdges);
-        const std::string sourceOwner = sketchSourceOwnerForInternalShape(namedShape);
-        std::set<std::size_t> deletedSourceEdges;
-        for (const SketchInternalFaceMakerEdgeEvidence& evidence : history.faceMakerEdgeEvidence) {
-            const std::string sourceName = sourceEdgeName(evidence.sourceEdgeIndex);
-            if (sourceName.empty()) {
-                continue;
-            }
-            if (evidence.relation == "deleted") {
-                deletedSourceEdges.insert(evidence.sourceEdgeIndex);
-                addTerminalHistory(
-                    namedShape,
-                    ElementHistory {ElementHistoryKind::Deleted, sourceName, {sourceName}}
-                );
-                appendSketchInternalProducerMapperEvent(
-                    namedShape,
-                    sourceOwner,
-                    sourceName,
-                    {},
-                    "edge",
-                    "deleted",
-                    evidence.makerStage,
-                    {
-                        {"producer", "FaceMakerBuildFace"},
-                        {"source_edge_index", evidence.sourceEdgeIndex},
-                        {"source_edge", sourceName},
-                        {"target_edge_index", evidence.targetEdgeIndex},
-                        {"pre_split_history", evidence.preSplitHistory},
-                        {"splitter_history", evidence.splitterHistory},
-                    }
-                );
-                continue;
-            }
-            if (evidence.relation != "split" || evidence.targetEdge.IsNull()) {
-                continue;
-            }
-            const int internalEdgeIndex = findSameShapeIndex(internalEdges, evidence.targetEdge);
-            if (internalEdgeIndex <= 0) {
-                appendSketchInternalProducerMapperEvent(
-                    namedShape,
-                    sourceOwner,
-                    sourceName,
-                    {},
-                    "edge",
-                    "split",
-                    evidence.makerStage,
-                    {
-                        {"producer", "FaceMakerBuildFace"},
-                        {"source_edge_index", evidence.sourceEdgeIndex},
-                        {"source_edge", sourceName},
-                        {"target_edge_index", evidence.targetEdgeIndex},
-                        {"pre_split_history", evidence.preSplitHistory},
-                        {"splitter_history", evidence.splitterHistory},
-                    },
-                    "missing_producer_identity"
-                );
-                continue;
-            }
-            const std::string targetName = "InternalEdge" + std::to_string(internalEdgeIndex);
-            addSplitHistory(namedShape, sourceName, targetName);
-            appendSketchInternalProducerMapperEvent(
-                namedShape,
-                sourceOwner,
-                sourceName,
-                targetName,
-                "edge",
-                "split",
-                evidence.makerStage,
-                {
-                    {"producer", "FaceMakerBuildFace"},
-                    {"source_edge_index", evidence.sourceEdgeIndex},
-                    {"source_edge", sourceName},
-                    {"target_edge_index", evidence.targetEdgeIndex},
-                    {"target_internal_element", targetName},
-                    {"pre_split_history", evidence.preSplitHistory},
-                    {"splitter_history", evidence.splitterHistory},
-                }
-            );
-        }
+    switch (relation) {
+        case InternalShapeHistoryRelation::Generated:
+            return ElementHistoryKind::Generated;
+        case InternalShapeHistoryRelation::Modified:
+            return ElementHistoryKind::Modified;
+        case InternalShapeHistoryRelation::Deleted:
+            return ElementHistoryKind::Deleted;
+        case InternalShapeHistoryRelation::Split:
+            return ElementHistoryKind::Split;
+        case InternalShapeHistoryRelation::Preserved:
+        case InternalShapeHistoryRelation::DiagnosticOnly:
+            break;
+    }
+    return ElementHistoryKind::Indexed;
+}
 
-        if (!deletedSourceEdges.empty() && internalMap.is_object()) {
-            TopTools_IndexedMapOfShape rawEdges;
-            TopTools_IndexedMapOfShape rawVertices;
-            TopExp::MapShapes(rawShape, TopAbs_EDGE, rawEdges);
-            TopExp::MapShapes(rawShape, TopAbs_VERTEX, rawVertices);
-            std::set<int> deletedVertexIndices;
-            for (const std::size_t sourceEdgeIndex : deletedSourceEdges) {
-                if (sourceEdgeIndex == 0U
-                    || sourceEdgeIndex > static_cast<std::size_t>(rawEdges.Extent())) {
-                    continue;
-                }
-                for (TopExp_Explorer explorer(rawEdges(static_cast<int>(sourceEdgeIndex)), TopAbs_VERTEX);
-                     explorer.More();
-                     explorer.Next()) {
-                    const int vertexIndex = findSameShapeIndex(rawVertices, explorer.Current());
-                    if (vertexIndex > 0) {
-                        deletedVertexIndices.insert(vertexIndex);
-                    }
-                }
-            }
-            for (const int index : deletedVertexIndices) {
-                const std::string sourceVertex = "Vertex" + std::to_string(index);
-                if (internalMap.contains(sourceVertex)) {
-                    continue;
-                }
-                addTerminalHistory(
-                    namedShape,
-                    ElementHistory {ElementHistoryKind::Deleted, sourceVertex, {sourceVertex}}
-                );
-                appendSketchInternalProducerMapperEvent(
-                    namedShape,
-                    sourceOwner,
-                    sourceVertex,
-                    {},
-                    "vertex",
-                    "deleted",
-                    "facemaker:vertex",
-                    {
-                        {"producer", "FaceMakerBuildFace"},
-                        {"deleted_source_edge_indices", deletedSourceEdges},
-                        {"blocker", "vertex_lineage_not_separate_from_edge_history"},
-                    },
-                    "deleted_stable_subname"
-                );
-            }
-        }
+void addMappedHistory(
+    NamedShape& namedShape,
+    ElementHistoryKind kind,
+    const std::string& targetElement,
+    const std::vector<std::string>& sources
+)
+{
+    auto elementIt = namedShape.elements.find(targetElement);
+    if (targetElement.empty() || sources.empty() || elementIt == namedShape.elements.end()) {
         return;
     }
-
-    const bool hasSummaryOnlyHistory = history.preSplitHistory || history.splitterHistory
-        || history.preSplitEdgeCount > history.sourceEdgeCount
-        || history.splitterEdgeCount > history.sourceEdgeCount;
-    if (hasSummaryOnlyHistory) {
-        // FreeCAD:
-        // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMaker.cpp
-        // ::FaceMaker::postBuild(), consumes "MapperHistory(myPreSplitHistory)" and
-        // "MapperMaker(mySplitter)" records before TopoShape::makeShapeWithElementMap() names
-        // split/deleted elements. A stage/count summary without concrete source->target producer
-        // evidence is diagnostic only; it must not synthesize terminal history from
-        // getInternalElementMap() absence or raw/internal geometry sampling.
-        addDistinctString(namedShape.elementHistoryStatus, "facemaker_history:summary_only");
+    elementIt->second.status = kind;
+    for (const std::string& source : sources) {
+        addDistinctString(elementIt->second.sources, source);
     }
-}
-
-const std::vector<std::size_t>& wireJoinerOpenCompoundSourceEdgeIndices(
-    const SketchInternalWireJoinerOpenExportHistoryEntry& entry,
-    const SketchInternalWireJoinerHistoryEvent* event
-)
-{
-    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-    // ::WireJoinerP::build() exports "openWireCompound" children first, then
-    // ::getOpenWires() consumes "MapperHistory(aHistory)" with sourceEdges. Prefer the
-    // request-local WireJoiner history event over entry-side lineage so ElementMap evidence follows
-    // the same event ledger used for relation.
-    if (event && !event->sourceEdgeIndices.empty()) {
-        return event->sourceEdgeIndices;
-    }
-    if (!entry.openWireCompoundSourceEdgeIndices.empty()) {
-        return entry.openWireCompoundSourceEdgeIndices;
-    }
-    return entry.sourceEdgeIndices;
-}
-
-bool wireJoinerOpenExportEntryConsumesChildWireOwnership(
-    const SketchInternalWireJoinerOpenExportHistoryEntry& entry,
-    const SketchInternalWireJoinerHistoryEvent* event
-)
-{
-    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-    // ::WireJoinerP::build() first publishes concrete child wires through
-    // "builder.Add(openWireCompound, info.wire())"; ::getOpenWires() then consumes that compound with
-    // "MapperHistory(aHistory)". Topo may only treat WireJoiner history as child-wire ownership when
-    // the part-layer event and exported entry point at the same openWireCompound child slot.
-    return event != nullptr && entry.wireJoinerHistoryEventFromChildWireLedger
-        && entry.openWireCompoundChildShapeIdentityRecorded
-        && entry.openWireCompoundChildWireEdgeCount > 0U
-        && entry.openWireCompoundChildWireVertexCount > 0U
-        && event->openWireCompoundChildWireInfoIndex == entry.openWireCompoundChildWireInfoIndex;
-}
-
-bool wireJoinerOpenCompoundNoOriginalPurged(
-    const SketchInternalWireJoinerOpenExportHistoryEntry& entry
-)
-{
-    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-    // ::WireJoinerP::getOpenWires(noOriginal=true) erases a child wire only after every edge in
-    // that materialized openWireCompound child matches source.findSubShapesWithSharedVertex(...).
-    // A purge candidate alone is not terminal ElementMap history.
-    return entry.openWireCompoundNoOriginalPurgedByLedger;
-}
-
-std::string wireJoinerRelationForOpenExportEntry(
-    const SketchInternalWireJoinerOpenExportHistoryEntry& entry,
-    const SketchInternalWireJoinerHistoryEvent* event
-)
-{
-    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-    // ::WireJoinerP::getOpenWires() consumes MapperHistory(aHistory). The relation must come from
-    // the part-layer WireJoiner child-wire ledger; topo must not reconstruct split/generated/deleted
-    // ownership from source arrays, split flags, producer kind, or exported geometry.
-    if (event && event->relationFromChildWireLedger) {
-        return event->relation;
-    }
-    return entry.wireJoinerHistoryRelation;
-}
-
-const SketchInternalWireJoinerHistoryEvent* wireJoinerHistoryEventForOpenExportEntry(
-    const SketchInternalHistoryContext& history,
-    const SketchInternalWireJoinerOpenExportHistoryEntry& entry
-)
-{
-    if (!entry.wireJoinerHistoryEventFromChildWireLedger) {
-        return nullptr;
-    }
-    const auto eventIt = std::find_if(
-        history.wireJoinerHistoryEvents.begin(),
-        history.wireJoinerHistoryEvents.end(),
-        [&](const SketchInternalWireJoinerHistoryEvent& event) {
-            return event.eventIndex == entry.wireJoinerHistoryEventIndex
-                && event.openExportIndex == entry.openExportIndex;
+    const auto duplicate = std::find_if(
+        namedShape.history.begin(),
+        namedShape.history.end(),
+        [&](const ElementHistory& entry) {
+            return entry.kind == kind && entry.element == targetElement
+                && entry.sources == sources;
         }
     );
-    if (eventIt == history.wireJoinerHistoryEvents.end()) {
-        return nullptr;
-    }
-    return &(*eventIt);
-}
-
-std::string wireJoinerDiagnosticStatusForOpenExportEntry(
-    const SketchInternalWireJoinerOpenExportHistoryEntry& entry,
-    bool targetFound
-)
-{
-    if (wireJoinerOpenCompoundNoOriginalPurged(entry)) {
-        return "no_original_purge";
-    }
-    if (entry.missingOpenWireCompoundChildWire) {
-        return "missing_open_wire_compound_child_wire";
-    }
-    if (entry.openWireCompoundCurrentMemberSplitLedgerVertexMultiplicityBlocked) {
-        // FreeCAD:
-        // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-        // ::WireJoinerP::findSuperEdgesUpdateFirst() records current-member shapes in wireData and
-        // ::splitEdges() records "aHistory->AddModified(split.intersectShape, newInfo.edge)".
-        // Until cad-core's ElementMap preserves the same vertex multiplicity, the candidate is a
-        // terminal diagnostic and must not rewrite the exported openWireCompound child topology.
-        return "wire_joiner_current_member_vertex_multiplicity_blocked";
-    }
-    if (!targetFound) {
-        return "open_wire_compound_target_not_found";
-    }
-    return {};
-}
-
-nlohmann::json wireJoinerOpenExportEvidenceJson(
-    const SketchInternalWireJoinerOpenExportHistoryEntry& entry,
-    const SketchInternalWireJoinerHistoryEvent* event,
-    std::size_t sourceEdgeIndex,
-    const std::string& targetName
-)
-{
-    const std::string relation = wireJoinerRelationForOpenExportEntry(entry, event);
-    nlohmann::json currentMemberSplitOutputVertexDebt = nlohmann::json::array();
-    for (const SketchInternalWireJoinerEndpointIdentityDebt& debt :
-         entry.openWireCompoundCurrentMemberSplitLedgerOutputVertexDebt) {
-        currentMemberSplitOutputVertexDebt.push_back({
-            {"output_vertex_index", debt.outputVertexIndex},
-            {"matched_member_split_ledger", debt.matchedMemberSplitLedger},
-            {"matched_candidate_ledger", debt.matchedCandidateLedger},
-            {"current_child_wire_output_vertex_matches_other_output",
-             debt.currentChildWireOutputVertexMatchesOtherOutput},
-            {"candidate_wire_vertex_matches_other_output",
-             debt.candidateWireVertexMatchesOtherOutput},
-            {"explanation", debt.explanation},
-            {"current_child_wire_output_vertex_identity",
-             debt.currentChildWireOutputVertexIdentity},
-            {"member_split_ledger_vertex_identity",
-             debt.memberSplitLedgerVertexIdentity},
-            {"candidate_wire_vertex_identity", debt.candidateWireVertexIdentity},
-            {"mismatch_reason", debt.mismatchReason},
-        });
-    }
-    nlohmann::json vmapReplacementEvents = nlohmann::json::array();
-    for (const SketchInternalWireJoinerVmapReplacementEvent& replacementEvent :
-         entry.openWireCompoundVmapReplacementEvents) {
-        vmapReplacementEvents.push_back({
-            {"event_index", replacementEvent.eventIndex},
-            {"affected_source_edge_index", replacementEvent.affectedSourceEdgeIndex},
-            {"affected_child_wire_edge_info_index",
-             replacementEvent.affectedChildWireEdgeInfoIndex},
-            {"affected_endpoint", replacementEvent.affectedEndpoint},
-            {"affected_source_endpoint", replacementEvent.affectedSourceEndpoint},
-            {"affected_child_wire_endpoint", replacementEvent.affectedChildWireEndpoint},
-            {"replacement_source_edge_index", replacementEvent.replacementSourceEdgeIndex},
-            {"replacement_source_endpoint", replacementEvent.replacementSourceEndpoint},
-            {"replacement_from_mutable_source_edge_ledger",
-             replacementEvent.replacementFromMutableSourceEdgeLedger},
-            {"replacement_from_split_fragment_ledger",
-             replacementEvent.replacementFromSplitFragmentLedger},
-        });
-    }
-    return {
-        {"producer", "WireJoiner"},
-        {"source_edge_index", sourceEdgeIndex},
-        {"source_edge", sourceEdgeName(sourceEdgeIndex)},
-        {"target_internal_element", targetName},
-        {"open_export_index", entry.openExportIndex},
-        {"edge_info_index", entry.edgeInfoIndex},
-        {"wire_joiner_history_relation", relation},
-        {"wire_joiner_history_relation_from_child_wire_ledger",
-         entry.wireJoinerHistoryRelationFromChildWireLedger},
-        {"wire_joiner_history_event_index", entry.wireJoinerHistoryEventIndex},
-        {"wire_joiner_history_event_from_child_wire_ledger",
-         entry.wireJoinerHistoryEventFromChildWireLedger},
-        {"wire_joiner_history_event_consumed_by_topo", event != nullptr},
-        {"open_wire_compound_child_wire_ownership_consumed_by_topo",
-         wireJoinerOpenExportEntryConsumesChildWireOwnership(entry, event)},
-        {"wire_joiner_history_event_relation", event ? event->relation : std::string()},
-        {"wire_joiner_history_event_source_edge_indices",
-         event ? event->sourceEdgeIndices : std::vector<std::size_t>()},
-        {"wire_joiner_history_event_source_lineage_from_splitter_history",
-         event ? event->sourceLineageFromSplitterHistory : false},
-        {"wire_joiner_history_event_no_original_purged_by_ledger",
-         event ? event->noOriginalPurgedByLedger : false},
-        {"wire_joiner_history_event_split_fragment_from_modified_history",
-         event ? event->splitFragmentFromModifiedHistory : false},
-        {"wire_joiner_history_event_split_fragment_from_generated_history",
-         event ? event->splitFragmentFromGeneratedHistory : false},
-        {"open_wire_compound_child_wire_info_index", entry.openWireCompoundChildWireInfoIndex},
-        {"open_wire_compound_export_source", entry.openWireCompoundExportSource},
-        {"open_wire_compound_edge_info_iteration", entry.openWireCompoundEdgeInfoIteration},
-        {"open_wire_compound_edge_info_iteration2", entry.openWireCompoundEdgeInfoIteration2},
-        {"open_wire_compound_owner_wire_info", entry.openWireCompoundOwnerWireInfo},
-        {"open_wire_compound_owner_wire_info2", entry.openWireCompoundOwnerWireInfo2},
-        {"open_wire_compound_open_leaf_export", entry.openWireCompoundOpenLeafExport},
-        {"open_wire_compound_unowned_open_edge_export",
-         entry.openWireCompoundUnownedOpenEdgeExport},
-        {"open_wire_compound_root_current_member_child_producer",
-         entry.openWireCompoundRootCurrentMemberChildProducer},
-        {"open_wire_compound_child_shape_identity_recorded",
-         entry.openWireCompoundChildShapeIdentityRecorded},
-        {"open_wire_compound_child_wire_edge_count",
-         entry.openWireCompoundChildWireEdgeCount},
-        {"open_wire_compound_child_wire_vertex_count",
-         entry.openWireCompoundChildWireVertexCount},
-        {"open_wire_compound_source_edge_indices", entry.openWireCompoundSourceEdgeIndices},
-        {"open_wire_compound_source_lineage_from_splitter_history",
-         entry.openWireCompoundSourceLineageFromSplitterHistory},
-        {"open_wire_compound_no_original_purge_match", entry.openWireCompoundNoOriginalPurgeMatch},
-        {"open_wire_compound_no_original_purged_by_ledger",
-         entry.openWireCompoundNoOriginalPurgedByLedger},
-        {"open_wire_compound_no_original_shared_source_ledger_recorded",
-         entry.openWireCompoundNoOriginalSharedSourceLedgerRecorded},
-        {"open_wire_compound_no_original_shared_source_edge_count",
-         entry.openWireCompoundNoOriginalSharedSourceEdgeCount},
-        {"open_wire_compound_no_original_shared_source_matched_edge_count",
-         entry.openWireCompoundNoOriginalSharedSourceMatchedEdgeCount},
-        {"open_wire_compound_no_original_shared_source_unmatched_edge_count",
-         entry.openWireCompoundNoOriginalSharedSourceUnmatchedEdgeCount},
-        {"open_wire_compound_producer_ledger_wire_built",
-         entry.openWireCompoundProducerLedgerWireBuilt},
-        {"open_wire_compound_producer_ledger_wire_from_source_vmap",
-         entry.openWireCompoundProducerLedgerWireFromSourceVmap},
-        {"open_wire_compound_source_vmap_endpoint_ledger_recorded",
-         entry.openWireCompoundSourceVmapEndpointLedgerRecorded},
-        {"open_wire_compound_source_vmap_endpoint_ledger_output_vertex_count",
-         entry.openWireCompoundSourceVmapEndpointLedgerOutputVertexCount},
-        {"open_wire_compound_source_vmap_endpoint_ledger_matched_vertex_count",
-         entry.openWireCompoundSourceVmapEndpointLedgerMatchedVertexCount},
-        {"open_wire_compound_endpoint_provenance_recorded",
-         entry.openWireCompoundEndpointProvenanceRecorded},
-        {"open_wire_compound_endpoint_provenance_output_vertex_count",
-         entry.openWireCompoundEndpointProvenanceOutputVertexCount},
-        {"open_wire_compound_endpoint_provenance_source_vmap_matched_vertex_count",
-         entry.openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount},
-        {"open_wire_compound_endpoint_provenance_vmap_replacement_matched_vertex_count",
-         entry.openWireCompoundEndpointProvenanceVmapReplacementMatchedVertexCount},
-        {"open_wire_compound_endpoint_provenance_candidate_matched_vertex_count",
-         entry.openWireCompoundEndpointProvenanceCandidateMatchedVertexCount},
-        {"open_wire_compound_endpoint_provenance_unmatched_vertex_count",
-         entry.openWireCompoundEndpointProvenanceUnmatchedVertexCount},
-        {"open_wire_compound_vmap_replacement_event_count",
-         entry.openWireCompoundVmapReplacementEventCount},
-        {"open_wire_compound_vmap_replacement_events", vmapReplacementEvents},
-        {"open_wire_compound_current_member_producer_output",
-         entry.openWireCompoundCurrentMemberProducerOutput},
-        {"open_wire_compound_current_member_split_ledger_vertex_candidate",
-         entry.openWireCompoundCurrentMemberSplitLedgerVertexCandidate},
-        {"open_wire_compound_current_member_split_ledger_vertex_debt_recorded",
-         entry.openWireCompoundCurrentMemberSplitLedgerVertexDebtRecorded},
-        {"open_wire_compound_current_member_split_ledger_member_vertex_count",
-         entry.openWireCompoundCurrentMemberSplitLedgerMemberVertexCount},
-        {"open_wire_compound_current_member_split_ledger_candidate_vertex_count",
-         entry.openWireCompoundCurrentMemberSplitLedgerCandidateVertexCount},
-        {"open_wire_compound_current_member_split_ledger_output_vertex_count",
-         entry.openWireCompoundCurrentMemberSplitLedgerOutputVertexCount},
-        {"open_wire_compound_current_member_split_ledger_output_vertex_ledger_count",
-         entry.openWireCompoundCurrentMemberSplitLedgerOutputVertexLedgerCount},
-        {"open_wire_compound_current_member_split_ledger_output_matched_vertex_count",
-         entry.openWireCompoundCurrentMemberSplitLedgerOutputMatchedVertexCount},
-        {"open_wire_compound_current_member_split_ledger_output_candidate_matched_vertex_count",
-         entry.openWireCompoundCurrentMemberSplitLedgerOutputCandidateMatchedVertexCount},
-        {"open_wire_compound_current_member_split_ledger_output_unmatched_vertex_count",
-         entry.openWireCompoundCurrentMemberSplitLedgerOutputUnmatchedVertexCount},
-        {"open_wire_compound_current_member_split_ledger_output_vertex_debt",
-         currentMemberSplitOutputVertexDebt},
-        {"open_wire_compound_current_member_split_ledger_vertex_multiplicity_blocked",
-         entry.openWireCompoundCurrentMemberSplitLedgerVertexMultiplicityBlocked},
-        {"missing_open_wire_compound_child_wire", entry.missingOpenWireCompoundChildWire},
-        {"source_edge_indices", entry.sourceEdgeIndices},
-        {"source_lineage_from_splitter_history", entry.sourceLineageFromSplitterHistory},
-        {"split_fragment_source_edge_indices", entry.splitFragmentSourceEdgeIndices},
-        {"split_fragment_modified_source_edge_indices", entry.splitFragmentModifiedSourceEdgeIndices},
-        {"split_fragment_generated_source_edge_indices", entry.splitFragmentGeneratedSourceEdgeIndices},
-        {"split_fragment_from_modified_history", entry.splitFragmentFromModifiedHistory},
-        {"split_fragment_from_generated_history", entry.splitFragmentFromGeneratedHistory},
-        {"split_fragment_source_lineage_from_identity_fallback",
-         entry.splitFragmentSourceLineageFromIdentityFallback},
-        {"split_fragment_source_lineage_from_source_identity_fallback",
-         entry.splitFragmentSourceLineageFromSourceIdentityFallback},
-        {"split_fragment_history_shape_geometry_bridge", entry.splitFragmentHistoryShapeGeometryBridge},
-        {"source_vertex_identity", entry.sourceVertexIdentity},
-        {"source_vertex_identity_any", entry.sourceVertexIdentity[0] || entry.sourceVertexIdentity[1]},
-        {"source_vertex_identity_all", entry.sourceVertexIdentity[0] && entry.sourceVertexIdentity[1]},
-        {"source_vertex_replacement_source_edge_indices",
-         entry.sourceVertexReplacementSourceEdgeIndices},
-        {"source_vertex_replacement_endpoints", entry.sourceVertexReplacementEndpoints},
-        {"source_vertex_replacement_identity", entry.sourceVertexReplacementIdentity},
-    };
-}
-
-void consumeSketchInternalWireJoinerProducerEvidence(
-    NamedShape& namedShape,
-    const TopoDS_Shape& rawShape,
-    const TopoDS_Shape& internalShape,
-    const nlohmann::json& internalMap,
-    const SketchInternalHistoryContext& history
-)
-{
-    if (history.wireJoinerOpenExportHistoryEntries.empty()) {
-        return;
-    }
-
-    // FreeCAD:
-    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-    // ::WireJoinerP::build(), exports final "info.wire()" children into "openWireCompound";
-    // ::WireJoinerP::buildClosedWire() records removed producers through
-    // "aHistory->Remove(info.edge)";
-    // ::WireJoinerP::getOpenWires(), passes "MapperHistory(aHistory)" to
-    // TopoShape::makeShapeWithElementMap() and applies the noOriginal purge. C2-M2 consumes the
-    // open-export child identity plus blocker state here, not helper output geometry.
-    TopTools_IndexedMapOfShape internalEdges;
-    TopTools_IndexedMapOfShape rawEdges;
-    TopTools_IndexedMapOfShape rawVertices;
-    TopExp::MapShapes(internalShape, TopAbs_EDGE, internalEdges);
-    TopExp::MapShapes(rawShape, TopAbs_EDGE, rawEdges);
-    TopExp::MapShapes(rawShape, TopAbs_VERTEX, rawVertices);
-    const std::string sourceOwner = sketchSourceOwnerForInternalShape(namedShape);
-    std::map<std::string, std::set<std::string>> childWireElementMapTargets;
-    for (const SketchInternalWireJoinerOpenExportHistoryEntry& entry :
-         history.wireJoinerOpenExportHistoryEntries) {
-        const SketchInternalWireJoinerHistoryEvent* historyEvent =
-            wireJoinerHistoryEventForOpenExportEntry(history, entry);
-        const std::string relation = wireJoinerRelationForOpenExportEntry(entry, historyEvent);
-        int internalEdgeIndex = 0;
-        if (!entry.openExportEdge.IsNull()) {
-            internalEdgeIndex = findSameShapeIndex(internalEdges, entry.openExportEdge);
-        }
-        const bool targetFound = internalEdgeIndex > 0;
-        const std::string targetName = targetFound
-            ? "InternalEdge" + std::to_string(internalEdgeIndex)
-            : std::string();
-        const std::string diagnosticStatus
-            = wireJoinerDiagnosticStatusForOpenExportEntry(entry, targetFound);
-
-        const std::vector<std::size_t>& sourceEdgeIndices =
-            wireJoinerOpenCompoundSourceEdgeIndices(entry, historyEvent);
-        if (sourceEdgeIndices.empty()) {
-            appendSketchInternalProducerMapperEvent(
-                namedShape,
-                sourceOwner,
-                {},
-                targetName,
-                "edge",
-                relation,
-                "wire_joiner:open_export",
-                wireJoinerOpenExportEvidenceJson(entry, historyEvent, 0U, targetName),
-                diagnosticStatus.empty() ? "missing_open_wire_compound_source_lineage"
-                                         : diagnosticStatus
-            );
-            continue;
-        }
-
-        for (const std::size_t zeroBasedSourceIndex : sourceEdgeIndices) {
-            const std::size_t sourceEdgeIndex = zeroBasedSourceIndex + 1U;
-            const std::string sourceName = sourceEdgeName(sourceEdgeIndex);
-            if (targetFound && relation != "deleted"
-                && wireJoinerOpenExportEntryConsumesChildWireOwnership(entry, historyEvent)) {
-                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-                // ::WireJoinerP::getOpenWires(), key
-                // "shape.makeShapeWithElementMap(comp, MapperHistory(aHistory), {sourceEdges.begin(),
-                // sourceEdges.end()}, op)". Only unique child-wire-consumed source -> InternalEdge
-                // history can become an ElementMap alias here; one-to-many split stays terminal history.
-                childWireElementMapTargets[sourceName].insert(targetName);
-            }
-            if (relation == "deleted") {
-                addTerminalHistory(
-                    namedShape,
-                    ElementHistory {ElementHistoryKind::Deleted, sourceName, {sourceName}}
-                );
-                if (internalMap.is_object()
-                    && sourceEdgeIndex <= static_cast<std::size_t>(rawEdges.Extent())) {
-                    for (TopExp_Explorer explorer(
-                             rawEdges(static_cast<int>(sourceEdgeIndex)),
-                             TopAbs_VERTEX
-                         );
-                         explorer.More();
-                         explorer.Next()) {
-                        const int vertexIndex = findSameShapeIndex(rawVertices, explorer.Current());
-                        if (vertexIndex <= 0) {
-                            continue;
-                        }
-                        const std::string sourceVertex = "Vertex" + std::to_string(vertexIndex);
-                        if (internalMap.contains(sourceVertex)) {
-                            continue;
-                        }
-                        addTerminalHistory(
-                            namedShape,
-                            ElementHistory {ElementHistoryKind::Deleted, sourceVertex, {sourceVertex}}
-                        );
-                        appendSketchInternalProducerMapperEvent(
-                            namedShape,
-                            sourceOwner,
-                            sourceVertex,
-                            {},
-                            "vertex",
-                            "deleted",
-                            "wire_joiner:no_original",
-                            {
-                                {"producer", "WireJoiner"},
-                                {"source_edge_index", sourceEdgeIndex},
-                                {"source_edge", sourceName},
-                                {"open_export_index", entry.openExportIndex},
-                                {"blocker", "no_original_purge"},
-                            },
-                            "no_original_purge"
-                        );
-                    }
-                }
-            }
-            else if (relation == "split" && targetFound) {
-                addSplitHistory(namedShape, sourceName, targetName);
-            }
-            else if (relation == "generated" && targetFound) {
-                addGeneratedHistory(namedShape, targetName, {sourceName});
-            }
-            appendSketchInternalProducerMapperEvent(
-                namedShape,
-                sourceOwner,
-                sourceName,
-                targetName,
-                "edge",
-                relation,
-                "wire_joiner:open_export",
-                wireJoinerOpenExportEvidenceJson(entry, historyEvent, sourceEdgeIndex, targetName),
-                diagnosticStatus
-            );
-        }
-    }
-    for (const auto& [sourceName, targets] : childWireElementMapTargets) {
-        if (targets.size() != 1U || namedShape.elementMap.count(sourceName) != 0U) {
-            continue;
-        }
-        const std::string& targetName = *targets.begin();
-        if (namedShape.elements.find(targetName) == namedShape.elements.end()) {
-            continue;
-        }
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/ElementMap.cpp
-        // ::ElementMap::getElementHistory(), key "history"; unique MapperHistory(aHistory)
-        // source -> target edges are recoverable ElementMap aliases, while ambiguous split remains
-        // represented by terminal split history above.
-        namedShape.elementMap[sourceName] = targetName;
-        addDistinctString(namedShape.elementHistoryStatus, "wire_joiner_history:element_map");
+    if (duplicate == namedShape.history.end()) {
+        namedShape.history.push_back(ElementHistory {kind, targetElement, sources});
     }
 }
 
@@ -3301,139 +2594,6 @@ void appendElementMapMapperHistoryEvents(
     }
 }
 
-void appendSketchInternalMapperSummaryEvent(
-    std::vector<MapperHistoryEvent>& events,
-    const NamedShape& namedShape,
-    MapperHistoryRelation relation,
-    const std::string& makerStage,
-    const std::string& diagnosticStatus,
-    const nlohmann::json& evidence
-)
-{
-    MapperHistoryEvent event;
-    event.source = MapperHistoryEndpoint {namedShape.owner, {}};
-    event.target = MapperHistoryEndpoint {namedShape.owner, {}};
-    event.shapeKind = "shape";
-    event.relation = relation;
-    event.makerStage = makerStage;
-    event.evidence = evidence;
-    event.recoverability = MapperHistoryRecoverability::Diagnostic;
-    event.diagnosticStatus = "summary_only:" + diagnosticStatus;
-    addMapperHistoryEvent(events, std::move(event));
-}
-
-bool hasConcreteWireJoinerOpenExportMapperEvent(const NamedShape& namedShape)
-{
-    return std::any_of(
-        namedShape.mapperHistory.begin(),
-        namedShape.mapperHistory.end(),
-        [](const MapperHistoryEvent& event) {
-            return event.makerStage == "wire_joiner:open_export"
-                && event.evidence.is_object()
-                && event.evidence.value("producer", std::string()) == "WireJoiner"
-                && event.evidence.value("wire_joiner_history_event_consumed_by_topo", false)
-                && event.evidence.value(
-                    "open_wire_compound_child_wire_ownership_consumed_by_topo",
-                    false
-                );
-        }
-    );
-}
-
-void appendSketchInternalMapperHistoryEvents(
-    std::vector<MapperHistoryEvent>& events,
-    const NamedShape& namedShape
-)
-{
-    if (!namedShape.sketchInternalHistory) {
-        return;
-    }
-
-    const InternalShapeHistoryLedger& ledger = *namedShape.sketchInternalHistory;
-    const SketchInternalHistoryContext& history =
-        internalShapeHistoryLedgerData(ledger).compatibilityHistory;
-    const nlohmann::json evidence = ledger.sketchInternalHistoryCompatibilityJson();
-    if (history.preSplitHistory) {
-        appendSketchInternalMapperSummaryEvent(
-            events,
-            namedShape,
-            MapperHistoryRelation::Split,
-            "facemaker:pre_split",
-            "facemaker_history:pre_split",
-            evidence
-        );
-    }
-    if (history.splitterHistory) {
-        appendSketchInternalMapperSummaryEvent(
-            events,
-            namedShape,
-            MapperHistoryRelation::Split,
-            "facemaker:splitter",
-            "facemaker_history:splitter",
-            evidence
-        );
-    }
-    if (history.wireJoinerSplitterHistory) {
-        appendSketchInternalMapperSummaryEvent(
-            events,
-            namedShape,
-            MapperHistoryRelation::Split,
-            "wire_joiner:splitter",
-            "wire_joiner_history:splitter",
-            evidence
-        );
-    }
-    if (history.wireJoinerModifiedHistoryCount > 0U) {
-        appendSketchInternalMapperSummaryEvent(
-            events,
-            namedShape,
-            MapperHistoryRelation::Modified,
-            "wire_joiner:modified",
-            "wire_joiner_history:modified",
-            evidence
-        );
-    }
-    if (history.wireJoinerGeneratedHistoryCount > 0U) {
-        appendSketchInternalMapperSummaryEvent(
-            events,
-            namedShape,
-            MapperHistoryRelation::Generated,
-            "wire_joiner:generated",
-            "wire_joiner_history:generated",
-            evidence
-        );
-    }
-    if (history.wireJoinerDeletedHistoryCount > 0U) {
-        appendSketchInternalMapperSummaryEvent(
-            events,
-            namedShape,
-            MapperHistoryRelation::Deleted,
-            "wire_joiner:deleted",
-            "wire_joiner_history:deleted",
-            evidence
-        );
-    }
-    if (!history.wireJoinerOpenExportHistoryEntries.empty()) {
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-        // ::WireJoinerP::getOpenWires(), calls
-        // "shape.makeShapeWithElementMap(comp, MapperHistory(aHistory), {sourceEdges.begin(),
-        // sourceEdges.end()}, op)". Once concrete child-wire open-export mapper events have
-        // consumed the request-local WireJoiner history event, keep the old summary event out of
-        // mapper_history so full-ledger progress is measured by source->target events, not by a
-        // summary-only diagnostic bridge.
-        if (!hasConcreteWireJoinerOpenExportMapperEvent(namedShape)) {
-            appendSketchInternalMapperSummaryEvent(
-                events,
-                namedShape,
-                MapperHistoryRelation::Preserved,
-                "wire_joiner:open_export",
-                "wire_joiner_history:open_export",
-                evidence
-            );
-        }
-    }
-}
-
 std::vector<MapperHistoryEvent> mapperHistoryForNamedShape(const NamedShape& namedShape)
 {
     std::vector<MapperHistoryEvent> events = namedShape.mapperHistory;
@@ -3441,7 +2601,6 @@ std::vector<MapperHistoryEvent> mapperHistoryForNamedShape(const NamedShape& nam
         appendLegacyMapperHistoryEvent(events, namedShape.owner, history);
     }
     appendElementMapMapperHistoryEvents(events, namedShape);
-    appendSketchInternalMapperHistoryEvents(events, namedShape);
     return events;
 }
 
@@ -3502,61 +2661,53 @@ NamedShape indexedNamedShapeForObject(const std::string& owner, const TopoDS_Sha
     return namedShape;
 }
 
-void consumeInternalShapeHistoryLedger(
+void applyInternalShapeHistoryPublication(
     NamedShape& namedShape,
-    const TopoDS_Shape& rawShape,
-    const TopoDS_Shape& internalShape,
-    const nlohmann::json& internalElementMap,
-    const InternalShapeHistoryLedger& ledger
+    const InternalShapeHistoryPublication& publication
 )
 {
-    const SketchInternalHistoryContext& history =
-        internalShapeHistoryLedgerData(ledger).compatibilityHistory;
-    consumeSketchInternalGeneratedFaceHistory(
-        namedShape,
-        internalShape,
-        internalElementMap,
-        &history
-    );
-    consumeSketchInternalTerminalHistory(
-        namedShape,
-        rawShape,
-        internalShape,
-        internalElementMap,
-        history
-    );
-    consumeSketchInternalWireJoinerProducerEvidence(
-        namedShape,
-        rawShape,
-        internalShape,
-        internalElementMap,
-        history
-    );
+    for (const auto& [stableName, targetName] : publication.elementMapAliases) {
+        if (stableName.empty() || targetName.empty()) {
+            continue;
+        }
+        if (namedShape.elements.find(targetName) == namedShape.elements.end()) {
+            continue;
+        }
+        namedShape.elementMap[stableName] = targetName;
+    }
 
-    // FreeCAD's real path is FaceMaker::postBuild() -> MapperHistory(myPreSplitHistory) /
-    // MapperMaker(mySplitter) -> TopoShape::makeShapeWithElementMap(); topo consumes the
-    // request-local ledger event summary here and does not invent terminal history from
-    // raw/internal shape sampling.
-    if (history.preSplitHistory) {
-        addDistinctString(namedShape.elementHistoryStatus, "facemaker_history:pre_split");
+    for (const InternalShapePublishedElementHistory& history : publication.elementHistory) {
+        const ElementHistoryKind kind = elementHistoryKindForPublicationRelation(history.relation);
+        switch (kind) {
+            case ElementHistoryKind::Generated:
+            case ElementHistoryKind::Modified:
+                addMappedHistory(namedShape, kind, history.element, history.sources);
+                break;
+            case ElementHistoryKind::Deleted:
+                addTerminalHistory(
+                    namedShape,
+                    ElementHistory {ElementHistoryKind::Deleted, history.element, history.sources}
+                );
+                break;
+            case ElementHistoryKind::Split:
+                for (const std::string& source : history.sources) {
+                    addSplitHistory(namedShape, source, history.element);
+                }
+                break;
+            case ElementHistoryKind::Indexed:
+            case ElementHistoryKind::Merge:
+                break;
+        }
     }
-    if (history.splitterHistory) {
-        addDistinctString(namedShape.elementHistoryStatus, "facemaker_history:splitter");
+
+    for (const MapperHistoryEvent& event : publication.mapperHistory) {
+        addMapperHistoryEvent(namedShape.mapperHistory, event);
     }
-    if (history.wireJoinerSplitterHistory) {
-        addDistinctString(namedShape.elementHistoryStatus, "wire_joiner_history:splitter");
+    for (const std::string& status : publication.elementHistoryStatus) {
+        addDistinctString(namedShape.elementHistoryStatus, status);
     }
-    if (history.wireJoinerModifiedHistoryCount > 0U) {
-        addDistinctString(namedShape.elementHistoryStatus, "wire_joiner_history:modified");
-    }
-    if (history.wireJoinerGeneratedHistoryCount > 0U) {
-        addDistinctString(namedShape.elementHistoryStatus, "wire_joiner_history:generated");
-    }
-    if (history.wireJoinerDeletedHistoryCount > 0U) {
-        addDistinctString(namedShape.elementHistoryStatus, "wire_joiner_history:deleted");
-    }
-    if (!history.wireJoinerOpenExportHistoryEntries.empty()) {
-        addDistinctString(namedShape.elementHistoryStatus, "wire_joiner_history:open_export");
+    if (publication.diagnostics.is_object() && !publication.diagnostics.empty()) {
+        namedShape.sketchInternalHistoryDiagnostics = publication.diagnostics;
     }
 }
 
@@ -3570,7 +2721,6 @@ NamedShape namedShapeForSketchInternalShape(
     NamedShape namedShape;
     namedShape.owner = owner + ".InternalShape";
     namedShape.shape = internalShape;
-    namedShape.sketchInternalHistory = historyLedger;
 
     TopTools_IndexedMapOfShape faces;
     TopTools_IndexedMapOfShape edges;
@@ -3603,16 +2753,17 @@ NamedShape namedShapeForSketchInternalShape(
         }
     }
     if (historyLedger) {
-        consumeInternalShapeHistoryLedger(
-            namedShape,
-            rawShape,
-            internalShape,
-            internalMap,
-            *historyLedger
-        );
+        const InternalShapeHistoryPublication publication =
+            historyLedger->publishForInternalShape(InternalShapeHistoryPublishInput {
+                namedShape.owner,
+                rawShape,
+                internalShape,
+                internalMap,
+            });
+        applyInternalShapeHistoryPublication(namedShape, publication);
     }
     else {
-        consumeSketchInternalGeneratedFaceHistory(namedShape, internalShape, internalMap, nullptr);
+        consumeSketchInternalGeneratedFacesFromElementMap(namedShape, internalShape, internalMap);
     }
     return namedShape;
 }
@@ -5384,14 +4535,11 @@ nlohmann::json namedShapeToJson(const NamedShape& namedShape)
         {"history", history},
         {"mapper_history", mapperHistoryToJson(mapperHistory)},
     };
-    if (namedShape.sketchInternalHistory) {
-        result["sketch_internal_history"] =
-            namedShape.sketchInternalHistory->sketchInternalHistoryCompatibilityJson();
-        const std::optional<std::string> status =
-            namedShape.sketchInternalHistory->sketchInternalHistoryStatus();
-        if (status) {
-            result["sketch_internal_history_status"] = *status;
-        }
+    if (namedShape.sketchInternalHistoryDiagnostics
+        && namedShape.sketchInternalHistoryDiagnostics->is_object()
+        && !namedShape.sketchInternalHistoryDiagnostics->empty()) {
+        result["sketch_internal_history_diagnostics"] =
+            *namedShape.sketchInternalHistoryDiagnostics;
     }
     return result;
 }

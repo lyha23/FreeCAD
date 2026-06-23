@@ -5,6 +5,7 @@
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Shape.hxx>
 #include <TopoDS_Wire.hxx>
+#include <nlohmann/json.hpp>
 
 #include "cad_core/part/internal_shape_history_ledger.h"
 
@@ -28,9 +29,7 @@ struct WireJoinerBuildResult
     // boundary so Sketcher no longer consumes producer/blocker ledger anatomy.
     std::optional<TopoDS_Shape> openWires;
     bool hasOpenWires = false;
-    bool missingChildWireInvariant = false;
-    bool noOriginalPurged = false;
-    bool hasMapperHistoryEvidence = false;
+    nlohmann::json diagnostics = nlohmann::json::object();
     InternalShapeHistoryLedger historyLedger;
 };
 

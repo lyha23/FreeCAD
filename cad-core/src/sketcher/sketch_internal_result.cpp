@@ -63,10 +63,8 @@ SketchInternalResult buildSketchInternalResult(const SketchInternalResultInput& 
         {"internal_element_map", internalElementMap},
     };
     if (input.historyLedger) {
-        const nlohmann::json compatibilityFields = input.historyLedger->compatibilityObjectFields();
-        for (const auto& item : compatibilityFields.items()) {
-            result.objectFields[item.key()] = item.value();
-        }
+        result.objectFields["internal_shape_history_diagnostics"] =
+            input.historyLedger->diagnosticsJson();
     }
 
     return result;

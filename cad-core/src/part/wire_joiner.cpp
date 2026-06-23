@@ -10410,7 +10410,7 @@ WireJoinerBuildResult WireJoiner::Impl::buildResult(
     WireJoinerBuildResult result;
     result.openWires = getOpenWires(historyPrefix, noOriginal);
     result.hasOpenWires = result.openWires && !result.openWires->IsNull();
-    result.missingChildWireInvariant =
+    const bool missingChildWireInvariant =
         ledger.openWireCompoundMissingChildWireHistoryEdgeInfoCount > 0U
         || std::any_of(
             history.openExportEntries.begin(),
@@ -10419,14 +10419,14 @@ WireJoinerBuildResult WireJoiner::Impl::buildResult(
                 return entry.missingOpenWireCompoundChildWire;
             }
         );
-    result.noOriginalPurged = std::any_of(
+    const bool noOriginalPurged = std::any_of(
         history.openExportEntries.begin(),
         history.openExportEntries.end(),
         [](const WireJoinerOpenExportHistoryEntry& entry) {
             return entry.openWireCompoundNoOriginalPurgedByLedger;
         }
     );
-    result.hasMapperHistoryEvidence =
+    const bool hasMapperHistoryEvidence =
         history.splitterHistory
         || history.modifiedHistoryCount > 0U
         || history.generatedHistoryCount > 0U
@@ -10438,10 +10438,10 @@ WireJoinerBuildResult WireJoiner::Impl::buildResult(
     const nlohmann::json compatibilityHistoryDetail = wireJoinerHistoryDetailToJson(history);
 
     nlohmann::json codes = nlohmann::json::array();
-    if (result.missingChildWireInvariant) {
+    if (missingChildWireInvariant) {
         codes.push_back("missing_child_wire_invariant");
     }
-    if (result.noOriginalPurged) {
+    if (noOriginalPurged) {
         codes.push_back("no_original_purged");
     }
     if (!result.hasOpenWires && !history.openExportEntries.empty()) {
@@ -10449,7 +10449,7 @@ WireJoinerBuildResult WireJoiner::Impl::buildResult(
     }
 
     const nlohmann::json diagnostics = {
-        {"status", result.missingChildWireInvariant ? "invariant_failed" : "ok"},
+        {"status", missingChildWireInvariant ? "invariant_failed" : "ok"},
         {"codes", std::move(codes)},
         {"summary",
          {
@@ -10458,11 +10458,12 @@ WireJoinerBuildResult WireJoiner::Impl::buildResult(
              {"history_event_count", history.historyEvents.size()},
              {"source_edge_count", history.sourceEdgeCount},
              {"split_result_edge_count", history.splitResultEdgeCount},
-             {"missing_child_wire_invariant", result.missingChildWireInvariant},
-             {"no_original_purged", result.noOriginalPurged},
-             {"has_mapper_history_evidence", result.hasMapperHistoryEvidence},
+             {"missing_child_wire_invariant", missingChildWireInvariant},
+             {"no_original_purged", noOriginalPurged},
+             {"has_mapper_history_evidence", hasMapperHistoryEvidence},
          }},
     };
+    result.diagnostics = diagnostics;
     InternalShapeHistoryLedgerData& historyLedgerData =
         mutableInternalShapeHistoryLedgerData(result.historyLedger);
     historyLedgerData.wireJoinerDiagnostics = diagnostics;
