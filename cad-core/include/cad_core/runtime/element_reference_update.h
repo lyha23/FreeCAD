@@ -1,6 +1,8 @@
 #pragma once
 
 #include "cad_core/app/document.h"
+#include "cad_core/runtime/diagnostics.h"
+#include "cad_core/runtime/reference_lifecycle.h"
 
 #include <TopoDS_Shape.hxx>
 #include <nlohmann/json.hpp>
@@ -42,5 +44,13 @@ void appendElementReferenceSubListUpdate(const app::DocumentObject& object,
                                          const std::map<std::size_t, nlohmann::json>& referenceShadowUpdates,
                                          const std::map<std::size_t, std::vector<std::string>>& subnameUpdates,
                                          nlohmann::json& updates);
+
+void appendReferenceMetadataUpdates(const app::DocumentObject& object,
+                                    const ReferenceLifecycleView& lifecycleView,
+                                    nlohmann::json& updates);
+
+void appendDocumentReferenceDiagnostics(const app::DocumentObject& object,
+                                        const ReferenceLifecycleView& lifecycleView,
+                                        std::vector<Diagnostic>& diagnostics);
 
 }  // namespace cad_core::runtime

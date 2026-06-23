@@ -5,6 +5,7 @@
 #include "cad_core/runtime/element_reference_update.h"
 #include "cad_core/runtime/compute_context.h"
 #include "cad_core/runtime/feature_registry.h"
+#include "cad_core/runtime/reference_lifecycle.h"
 #include "cad_core/runtime/reference_resolution.h"
 #include "cad_core/part/topo_shape.h"
 
@@ -92,150 +93,6 @@ std::set<std::string> findTransformationTemplateObjects(const app::Document& doc
         }
     }
     return templates;
-}
-
-void setIfNotEmpty(nlohmann::json& value, const std::string& field, const std::string& item)
-{
-    if (!item.empty()) {
-        value[field] = item;
-    }
-}
-
-nlohmann::json documentReferenceToJson(const app::LinkDocumentRef& ref)
-{
-    nlohmann::json value = {
-        {"method", "PropertyXLinkContainer.DocMap"},
-    };
-    setIfNotEmpty(value, "file", ref.file);
-    setIfNotEmpty(value, "oldName", ref.name);
-    setIfNotEmpty(value, "newName", ref.currentName);
-    setIfNotEmpty(value, "oldLabel", ref.label);
-    setIfNotEmpty(value, "newLabel", ref.currentLabel);
-    setIfNotEmpty(value, "oldStamp", ref.stamp);
-    setIfNotEmpty(value, "currentStamp", ref.currentStamp);
-    setIfNotEmpty(value, "status", ref.status);
-    setIfNotEmpty(value, "currentStatus", ref.currentStatus);
-    if (ref.allowPartialExplicit) {
-        value["allowPartial"] = ref.allowPartial;
-    }
-    return value;
-}
-
-bool documentReferenceRenameChanged(const app::LinkDocumentRef& ref)
-{
-    return (!ref.name.empty() && !ref.currentName.empty() && ref.name != ref.currentName)
-        || (!ref.label.empty() && !ref.currentLabel.empty() && ref.label != ref.currentLabel);
-}
-
-bool documentReferenceStampChanged(const app::LinkDocumentRef& ref)
-{
-    return !ref.stamp.empty() && !ref.currentStamp.empty() && ref.stamp != ref.currentStamp;
-}
-
-bool hasStandaloneLabelReferenceRename(const app::Link& link)
-{
-    return !link.labelReferenceRenames.empty() && link.referenceShadows.empty();
-}
-
-bool hasStandaloneDocumentReferenceRename(const app::Link& link)
-{
-    return link.referenceShadows.empty() && link.documentRef
-        && documentReferenceRenameChanged(*link.documentRef);
-}
-
-bool hasStandaloneReferenceMetadataUpdate(const app::Link& link)
-{
-    return hasStandaloneLabelReferenceRename(link) || hasStandaloneDocumentReferenceRename(link);
-}
-
-nlohmann::json referenceMetadataLinkUpdateJson(const app::Link& link)
-{
-    nlohmann::json item = {
-        {"value", link.object},
-        {"SubList", link.subnames},
-    };
-    if (!link.labelReferenceRenames.empty()) {
-        item["labelReferenceRename"] = labelReferenceRenamesToJson(link.labelReferenceRenames);
-    }
-    if (link.documentRef && documentReferenceRenameChanged(*link.documentRef)) {
-        item["documentReference"] = documentReferenceToJson(*link.documentRef);
-    }
-    if (link.stableSubnamesExplicit) {
-        item["StableSubList"] = link.stableSubnames;
-    }
-    if (link.fullSubnamesExplicit) {
-        item["FullSubList"] = link.fullSubnames;
-    }
-    if (!link.externalGeometryFlags.empty()) {
-        item["ExternalFlags"] = externalGeometryFlagsToJson(link.externalGeometryFlags);
-    }
-    if (!link.shadowSubs.empty()) {
-        item["ShadowSub"] = shadowSubsToJson(link.shadowSubs);
-    }
-    return item;
-}
-
-void appendReferenceMetadataUpdates(const app::DocumentObject& object,
-                                    ComputeContext& context)
-{
-    for (const auto& [propertyName, propertyValue] : object.propertyValues) {
-        if (propertyValue.kind == app::PropertyKind::LinkSub) {
-            for (const auto& link : propertyValue.links) {
-                if (!hasStandaloneReferenceMetadataUpdate(link)) {
-                    continue;
-                }
-                nlohmann::json update = referenceMetadataLinkUpdateJson(link);
-                update["object"] = object.name;
-                update["property"] = propertyName;
-                update["PropertyType"] = propertyValue.propertyType;
-                context.elementReferenceUpdates.push_back(std::move(update));
-            }
-            continue;
-        }
-        if (propertyValue.kind != app::PropertyKind::LinkSubList) {
-            continue;
-        }
-
-        bool changed = false;
-        nlohmann::json subSet = nlohmann::json::array();
-        for (const auto& link : propertyValue.links) {
-            if (hasStandaloneReferenceMetadataUpdate(link)) {
-                changed = true;
-            }
-            subSet.push_back(referenceMetadataLinkUpdateJson(link));
-        }
-        if (changed) {
-            context.elementReferenceUpdates.push_back({
-                {"object", object.name},
-                {"property", propertyName},
-                {"PropertyType", propertyValue.propertyType},
-                {"SubSet", std::move(subSet)},
-            });
-        }
-    }
-}
-
-void appendDocumentReferenceDiagnostics(const app::DocumentObject& object,
-                                        ComputeContext& context)
-{
-    for (const auto& [propertyName, propertyValue] : object.propertyValues) {
-        for (const auto& link : propertyValue.links) {
-            if (!link.documentRef) {
-                continue;
-            }
-            if (documentReferenceStampChanged(*link.documentRef)) {
-                addDiagnostic(context.diagnostics,
-                              "warning",
-                              "document_hash_mismatch",
-                              propertyName + " target " + link.object
-                                  + " linked document stamp changed",
-                              object.name,
-                              propertyName,
-                              "runtime",
-                              link.object);
-            }
-        }
-    }
 }
 
 void registerIndexedNamedShape(const std::string& name, ComputeContext& context)
@@ -651,7 +508,8 @@ ComputeContext recomputeContext(const app::Document& document,
             context.documentObjects,
             context.namedShapes,
         };
-        auto referenceValidation = validateObjectReferences(object, referenceView);
+        const ReferenceLifecycleView lifecycleView {context.documentObjects, &document};
+        auto referenceValidation = validateObjectReferences(object, referenceView, lifecycleView);
         context.diagnostics.insert(context.diagnostics.end(),
                                    referenceValidation.diagnostics.begin(),
                                    referenceValidation.diagnostics.end());
@@ -662,8 +520,8 @@ ComputeContext recomputeContext(const app::Document& document,
         for (auto& update : referenceValidation.elementReferenceUpdates) {
             context.elementReferenceUpdates.push_back(std::move(update));
         }
-        appendReferenceMetadataUpdates(object, context);
-        appendDocumentReferenceDiagnostics(object, context);
+        appendReferenceMetadataUpdates(object, lifecycleView, context.elementReferenceUpdates);
+        appendDocumentReferenceDiagnostics(object, lifecycleView, context.diagnostics);
 
         auto executor = registry.executorFor(object.typeId);
         if (executor == nullptr) {

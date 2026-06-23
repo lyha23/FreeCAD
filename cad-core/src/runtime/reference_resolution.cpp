@@ -1,6 +1,7 @@
 #include "cad_core/runtime/reference_resolution.h"
 
 #include "cad_core/runtime/element_reference_update.h"
+#include "cad_core/runtime/reference_lifecycle.h"
 
 #include <algorithm>
 
@@ -166,28 +167,6 @@ ReferenceResolutionStatus statusForRecovery(part::ReferenceMatchStatus status)
 bool isSuccess(ReferenceResolutionStatus status)
 {
     return status == ReferenceResolutionStatus::Resolved || status == ReferenceResolutionStatus::Recovered;
-}
-
-bool isFrozenExternalGeometryReference(const std::string& propertyName, const app::Link& link)
-{
-    return propertyName == "ExternalGeometry" && link.externalGeometryFlags.count("Frozen") != 0U
-        && link.externalGeometryFlags.count("Sync") == 0U;
-}
-
-bool isMissingOldExternalGeometrySnapshotReference(const std::string& propertyName,
-                                                   const app::Link& link,
-                                                   const ReferenceResolutionView& view)
-{
-    if (propertyName != "ExternalGeometry" || link.externalGeometryFlags.count("Missing") == 0U
-        || link.externalGeometryFlags.count("Sync") != 0U) {
-        return false;
-    }
-    if (view.documentObjects.count(link.object) != 0U) {
-        return false;
-    }
-    return std::any_of(link.referenceShadows.begin(), link.referenceShadows.end(), [](const auto& shadow) {
-        return shadow.brep.has_value();
-    });
 }
 
 ReferenceResolutionResult makeRecoveryFailureResult(const app::Link& link,
@@ -509,7 +488,8 @@ void recordReferenceRecoveryMapperDiagnostic(ReferenceResolutionView& view,
 }
 
 ReferenceValidationResult validateObjectReferences(const app::DocumentObject& object,
-                                                   ReferenceResolutionView& view)
+                                                   ReferenceResolutionView& view,
+                                                   const ReferenceLifecycleView& lifecycleView)
 {
     ReferenceValidationResult validation;
     nlohmann::json pendingReferenceUpdates = nlohmann::json::array();
@@ -521,14 +501,9 @@ ReferenceValidationResult validateObjectReferences(const app::DocumentObject& ob
             if (link.referenceShadows.empty()) {
                 continue;
             }
-            if (isFrozenExternalGeometryReference(propertyName, link)
-                || isMissingOldExternalGeometrySnapshotReference(propertyName, link, view)) {
-                // FreeCAD:
-                // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
-                // ::SketchObject::rebuildExternalGeometry(), for frozen refs, inserts "key" into
-                // "refSet" before source object validation; for missing refs, the old ExternalGeo
-                // remains when the source object cannot be found. cad-core therefore must not
-                // validate request-local old snapshots against a current source subshape.
+            const auto lifecycle =
+                classifyReferenceLifecycle(object, propertyValue, link, lifecycleView);
+            if (!lifecycle.shouldValidateReferenceShadow) {
                 continue;
             }
 

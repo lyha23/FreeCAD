@@ -41,6 +41,49 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             with self.subTest(fixture=fixture):
                 self.assertEqual(self.diagnostic_codes(fixture, "p2"), codes)
 
+    def test_reference_lifecycle_matrix(self) -> None:
+        diagnostic_cases = {
+            ("mvp", "rect-pad"): [],
+            ("mvp", "missing-link"): ["missing_link_target"],
+            ("c3m2", "sketch-external-frozen-brep-reuse"): [],
+            ("c3m2", "sketch-external-frozen-missing-snapshot"): ["missing_external_geometry_snapshot"],
+            ("c3m2", "sketch-external-missing-brep-reuse"): [],
+            ("c3m2", "sketch-external-missing-missing-snapshot"): ["missing_external_geometry_snapshot"],
+            ("c3m2", "xlink-missing-external-document"): ["missing_external_document"],
+            ("c3m2", "xlink-pending-external-document"): ["external_document_pending_reload"],
+            ("c3m2", "xlink-unloaded-external-document"): ["external_document_unloaded"],
+        }
+        for (group, fixture), codes in diagnostic_cases.items():
+            with self.subTest(fixture=fixture):
+                self.assertEqual(self.diagnostic_codes(fixture, group), codes)
+
+        frozen_native = self.run_recompute("sketch-external-frozen-source-changed", "p5")
+        self.assertEqual(frozen_native["diagnostics"], [])
+        self.assertEqual(frozen_native["documentObjectUpdates"], [])
+        self.assertEqual(
+            frozen_native["objects"]["Sketch"]["external_geometry_state_counts"]["frozen"],
+            1,
+        )
+
+        detached = self.run_recompute("sketch-external-detached-source-changed", "p5")
+        self.assertEqual(detached["diagnostics"], [])
+        self.assertEqual([item["reason"] for item in detached["documentObjectUpdates"]], ["external_geometry_detach"])
+
+        missing_recovered = self.run_recompute("sketch-external-missing-fix", "c3m2")
+        self.assertEqual(missing_recovered["diagnostics"], [])
+        self.assertEqual(
+            [item["reason"] for item in missing_recovered["documentObjectUpdates"]],
+            ["external_geometry_flags_sync"],
+        )
+
+        label_rename = self.run_recompute("label-rename-recovery", "c3m2")
+        self.assertEqual(label_rename["diagnostics"], [])
+        self.assertIn("labelReferenceRename", label_rename["elementReferenceUpdates"][0])
+
+        document_rename = self.run_recompute("xlink-document-hash-mismatch", "c3m2")
+        self.assertEqual([item["code"] for item in document_rename["diagnostics"]], ["document_hash_mismatch"])
+        self.assertIn("documentReference", document_rename["elementReferenceUpdates"][0])
+
     def test_p3a_fixture_diagnostics(self) -> None:
         expected = {
             "pocket-through-all": [],

@@ -5,6 +5,7 @@
 #include "cad_core/part/topo_shape_reference.h"
 #include "cad_core/runtime/compute_context.h"
 #include "cad_core/runtime/diagnostics.h"
+#include "cad_core/runtime/reference_lifecycle.h"
 
 #include <TopoDS_Shape.hxx>
 #include <nlohmann/json.hpp>
@@ -112,6 +113,7 @@ void recordReferenceRecoveryMapperDiagnostic(ReferenceResolutionView& view,
                                              const ReferenceResolutionResult& result);
 
 ReferenceValidationResult validateObjectReferences(const app::DocumentObject& object,
-                                                   ReferenceResolutionView& view);
+                                                   ReferenceResolutionView& view,
+                                                   const ReferenceLifecycleView& lifecycleView);
 
 }  // namespace cad_core::runtime

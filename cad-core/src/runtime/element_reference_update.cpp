@@ -168,6 +168,61 @@ nlohmann::json linkSubListItemUpdateJson(const app::Link& link,
     return item;
 }
 
+void setIfNotEmpty(nlohmann::json& value, const std::string& field, const std::string& item)
+{
+    if (!item.empty()) {
+        value[field] = item;
+    }
+}
+
+nlohmann::json documentReferenceToJson(const app::LinkDocumentRef& ref)
+{
+    nlohmann::json value = {
+        {"method", "PropertyXLinkContainer.DocMap"},
+    };
+    setIfNotEmpty(value, "file", ref.file);
+    setIfNotEmpty(value, "oldName", ref.name);
+    setIfNotEmpty(value, "newName", ref.currentName);
+    setIfNotEmpty(value, "oldLabel", ref.label);
+    setIfNotEmpty(value, "newLabel", ref.currentLabel);
+    setIfNotEmpty(value, "oldStamp", ref.stamp);
+    setIfNotEmpty(value, "currentStamp", ref.currentStamp);
+    setIfNotEmpty(value, "status", ref.status);
+    setIfNotEmpty(value, "currentStatus", ref.currentStatus);
+    if (ref.allowPartialExplicit) {
+        value["allowPartial"] = ref.allowPartial;
+    }
+    return value;
+}
+
+nlohmann::json referenceMetadataLinkUpdateJson(const app::Link& link,
+                                               const ReferenceLifecycleDecision& lifecycle)
+{
+    nlohmann::json item = {
+        {"value", link.object},
+        {"SubList", link.subnames},
+    };
+    if (lifecycle.hasLabelReferenceRename) {
+        item["labelReferenceRename"] = labelReferenceRenamesToJson(link.labelReferenceRenames);
+    }
+    if (link.documentRef && lifecycle.hasDocumentReferenceRename) {
+        item["documentReference"] = documentReferenceToJson(*link.documentRef);
+    }
+    if (link.stableSubnamesExplicit) {
+        item["StableSubList"] = link.stableSubnames;
+    }
+    if (link.fullSubnamesExplicit) {
+        item["FullSubList"] = link.fullSubnames;
+    }
+    if (!link.externalGeometryFlags.empty()) {
+        item["ExternalFlags"] = externalGeometryFlagsToJson(link.externalGeometryFlags);
+    }
+    if (!link.shadowSubs.empty()) {
+        item["ShadowSub"] = shadowSubsToJson(link.shadowSubs);
+    }
+    return item;
+}
+
 }  // namespace
 
 nlohmann::json shadowSubsToJson(const std::vector<app::ShadowSub>& shadowSubs)
@@ -324,6 +379,64 @@ void appendElementReferenceSubListUpdate(const app::DocumentObject& object,
         {"PropertyType", propertyValue.propertyType},
         {"SubSet", std::move(subSet)},
     });
+}
+
+void appendReferenceMetadataUpdates(const app::DocumentObject& object,
+                                    const ReferenceLifecycleView& lifecycleView,
+                                    nlohmann::json& updates)
+{
+    for (const auto& [propertyName, propertyValue] : object.propertyValues) {
+        if (propertyValue.kind == app::PropertyKind::LinkSub) {
+            for (const auto& link : propertyValue.links) {
+                const auto lifecycle =
+                    classifyReferenceLifecycle(object, propertyValue, link, lifecycleView);
+                if (!lifecycle.shouldPublishElementReferenceUpdate) {
+                    continue;
+                }
+                nlohmann::json update = referenceMetadataLinkUpdateJson(link, lifecycle);
+                update["object"] = object.name;
+                update["property"] = propertyName;
+                update["PropertyType"] = propertyValue.propertyType;
+                updates.push_back(std::move(update));
+            }
+            continue;
+        }
+        if (propertyValue.kind != app::PropertyKind::LinkSubList) {
+            continue;
+        }
+
+        bool changed = false;
+        nlohmann::json subSet = nlohmann::json::array();
+        for (const auto& link : propertyValue.links) {
+            const auto lifecycle =
+                classifyReferenceLifecycle(object, propertyValue, link, lifecycleView);
+            changed = changed || lifecycle.shouldPublishElementReferenceUpdate;
+            subSet.push_back(referenceMetadataLinkUpdateJson(link, lifecycle));
+        }
+        if (changed) {
+            updates.push_back({
+                {"object", object.name},
+                {"property", propertyName},
+                {"PropertyType", propertyValue.propertyType},
+                {"SubSet", std::move(subSet)},
+            });
+        }
+    }
+}
+
+void appendDocumentReferenceDiagnostics(const app::DocumentObject& object,
+                                        const ReferenceLifecycleView& lifecycleView,
+                                        std::vector<Diagnostic>& diagnostics)
+{
+    for (const auto& [propertyName, propertyValue] : object.propertyValues) {
+        for (const auto& link : propertyValue.links) {
+            const auto lifecycle =
+                classifyReferenceLifecycle(object, propertyValue, link, lifecycleView);
+            if (lifecycle.runtimeWarning) {
+                diagnostics.push_back(*lifecycle.runtimeWarning);
+            }
+        }
+    }
 }
 
 }  // namespace cad_core::runtime

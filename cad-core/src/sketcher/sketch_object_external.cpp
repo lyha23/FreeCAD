@@ -4,6 +4,7 @@
 #include "cad_core/part/topo_shape.h"
 #include "cad_core/part/topo_shape_reference.h"
 #include "cad_core/runtime/compute_context.h"
+#include "cad_core/runtime/reference_lifecycle.h"
 
 #include <BRepAlgoAPI_Section.hxx>
 #include <BRepAdaptor_Curve.hxx>
@@ -42,34 +43,25 @@ std::set<std::string> normalizedExternalGeometryFlagSet(ExternalGeometryFlags fl
     // ::SketchObject::rebuildExternalGeometry() clears "Sync" after a rebuild and clears
     // "Missing" once "refSet" contains the reference again. cad-core returns the same mutation
     // as a documentObjectUpdates suggestion and keeps the request graph immutable.
-    std::set<std::string> result;
-    if (flags.defining) {
-        result.insert("Defining");
-    }
-    if (flags.frozen) {
-        result.insert("Frozen");
-    }
-    if (flags.detached) {
-        result.insert("Detached");
-    }
-    if (flags.missing) {
-        result.insert("Missing");
-    }
-    if (flags.sync) {
-        result.insert("Sync");
-    }
-    return result;
+    return runtime::normalizedExternalGeometryFlagSet(runtime::ExternalGeometryLifecycleFlags {
+        flags.defining,
+        flags.frozen,
+        flags.detached,
+        flags.missing,
+        flags.sync,
+    });
 }
 
 ExternalGeometryFlags externalGeometryFlags(const app::Link& link)
 {
-    ExternalGeometryFlags flags;
-    flags.defining = link.externalGeometryFlags.count("Defining") != 0U;
-    flags.frozen = link.externalGeometryFlags.count("Frozen") != 0U;
-    flags.detached = link.externalGeometryFlags.count("Detached") != 0U;
-    flags.missing = link.externalGeometryFlags.count("Missing") != 0U;
-    flags.sync = link.externalGeometryFlags.count("Sync") != 0U;
-    return flags;
+    const auto lifecycleFlags = runtime::externalGeometryLifecycleFlags(link);
+    return ExternalGeometryFlags {
+        lifecycleFlags.defining,
+        lifecycleFlags.frozen,
+        lifecycleFlags.detached,
+        lifecycleFlags.missing,
+        lifecycleFlags.sync,
+    };
 }
 
 ExternalGeometryFlags externalGeometryFlags(const nlohmann::json& value)
@@ -205,10 +197,7 @@ nlohmann::json externalGeometryLinkItemJson(const app::Link& link,
 
 std::string externalGeometryReferenceKey(const app::Link& link)
 {
-    if (link.subnames.empty() || link.subnames.front().empty()) {
-        return link.object;
-    }
-    return link.object + "." + link.subnames.front();
+    return runtime::externalGeometryReferenceKey(link);
 }
 
 std::string stableSubnameDiagnosticCode(part::ElementResolveStatus status)
@@ -1732,12 +1721,15 @@ std::optional<ExternalGeometryResult> rebuildExternalGeometry(
     if (!nativeExternalGeometry) {
         return std::nullopt;
     }
+    const runtime::ReferenceLifecycleView lifecycleView {context.documentObjects};
     std::map<std::size_t, ExternalGeometryFlags> stateUpdates;
     std::set<std::size_t> detachedLinks;
     for (std::size_t index = 0; index < links.size(); ++index) {
         const auto& link = links.at(index);
         const std::string refKey = externalGeometryReferenceKey(link);
         ExternalGeometryFlags flags = externalGeometryFlags(link);
+        const auto lifecycle =
+            runtime::classifyReferenceLifecycle(object, *externalProperty, link, lifecycleView);
         if (flags.defining) {
             ++result.definingLinkCount;
         }
@@ -1753,7 +1745,7 @@ std::optional<ExternalGeometryResult> rebuildExternalGeometry(
         if (flags.sync) {
             ++result.syncLinkCount;
         }
-        if (flags.detached) {
+        if (lifecycle.state == runtime::ReferenceLifecycleState::DetachedExternalGeometry) {
             detachedLinks.insert(index);
             appendNativeExternalGeometryForRef(
                 result,
@@ -1763,9 +1755,10 @@ std::optional<ExternalGeometryResult> rebuildExternalGeometry(
             );
             continue;
         }
-        const bool unresolvedMissingOldExternal = flags.missing && !flags.sync
-            && context.shapes.find(link.object) == context.shapes.end();
-        if ((flags.frozen && !flags.sync) || unresolvedMissingOldExternal) {
+        const bool useOldExternalGeometry =
+            lifecycle.state == runtime::ReferenceLifecycleState::FrozenOldExternalGeometry
+            || lifecycle.action == runtime::ReferenceLifecycleAction::IgnoreDependencyUseOldEvidence;
+        if (useOldExternalGeometry) {
             // FreeCAD:
             // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
             // ::SketchObject::rebuildExternalGeometry(), for frozen refs, inserts the key into

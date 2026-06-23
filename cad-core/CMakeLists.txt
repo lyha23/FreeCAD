@@ -313,6 +313,7 @@ add_library(cad-core-lib STATIC
   src/runtime/feature_executor.cpp
   src/runtime/feature_registry.cpp
   src/runtime/io.cpp
+  src/runtime/reference_lifecycle.cpp
   src/runtime/reference_resolution.cpp
   src/runtime/recompute.cpp
   src/sketcher/sketch_object_constraints.cpp
