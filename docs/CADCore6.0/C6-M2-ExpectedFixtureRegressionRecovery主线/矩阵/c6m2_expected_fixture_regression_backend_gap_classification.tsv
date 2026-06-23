@@ -1,7 +1,11 @@
 category_id	category_name	priority	scope_ids	routing_status	product_decision_needed	classification_reason	recommended_next_step
-C6M2-CAT-000	live_regression_baseline	C6-P0	C6M2-SCOPE-000	pending	no	Need exact current failure list because S6 prior result may drift after commits	S0 rerun and freeze
-C6M2-CAT-101	per_fixture_owner_matrix	C6-P0	C6M2-SCOPE-101	pending	no	Category counts are insufficient; each fixture mismatch needs row owner and path	S1 classify rows
-C6M2-CAT-201	schema_drift	C6-P0	C6M2-SCOPE-201	authorityRequired	no	diagnostic_codes external_geometry_count link type and solver_adapter are contract/schema class drift	S2 authority then S3 close
-C6M2-CAT-301	geometry_or_occt_drift	C6-P0	C6M2-SCOPE-301	authorityRequired	no	bbox differences may be stale expected environment OCCT or implementation regression	S2 authority then S4 close
-C6M2-CAT-401	approved_expected_or_code_fix	C6-P0	C6M2-SCOPE-401	pending	no	Only rows approved by S2-S4 may be refreshed or fixed	S5 implement minimal batch
-C6M2-CAT-501	stage_release_gate	C6-P0	C6M2-SCOPE-501	pending	no	Stage regression must be trustworthy before further C6 product work	S6 publish status
+C6M2-CAT-000	live_regression_baseline	C6-P0	C6M2-SCOPE-000	baselineFrozen	no	S0 recorded exact current failure list; S1 consumes it without rerunning stage regression	closed by S0
+C6M2-CAT-101	per_fixture_owner_matrix	C6-P0	C6M2-SCOPE-101	ownerClassified	no	Every S0 mismatch now has an independent C6M2-ORC row with fixture field path owner_class and pending authority_decision	S2 authority review
+C6M2-CAT-211	diagnostic_codes_contract_drift	C6-P0	C6M2-SCOPE-201	ownerClassified	no	8 rows report diagnostic_codes expected [] but current emits document_hash_mismatch deleted_stable_subname execution_failed or subname_semantic_drift	S2 authority then S3 diagnostic contract closure
+C6M2-CAT-212	external_geometry_count_contract_drift	C6-P0	C6M2-SCOPE-201	ownerClassified	no	1 row reports ProbeSketch external_geometry_count expected 1 current 4	S2 authority then S3 external geometry count closure
+C6M2-CAT-213	link_schema_or_type_drift	C6-P0	C6M2-SCOPE-201	ownerClassified	no	1 row reports object_fields.link expected app_link current app_link_group	S2 authority then S3 link schema closure
+C6M2-CAT-214	assembly_solver_adapter_schema_drift	C6-P0	C6M2-SCOPE-201	ownerClassified	no	1 row reports solver_adapter.placement_updates expected [] but current field is missing	S2 authority then S3 assembly adapter schema closure
+C6M2-CAT-301	bbox_geometry_or_occt_drift	C6-P0	C6M2-SCOPE-301	ownerClassified	no	4 rows report bbox min/max differences that may be stale expected, environment/OCCT drift, or implementation regression	S2 authority then S4 geometry/OCCT closure
+C6M2-CAT-411	expected_stale_after_intended_behavior	C6-P0	C6M2-SCOPE-401	noRowsInS1	no	S1 is not an authority step; no row is approved as stale expected until S2-S4 provide evidence	S2-S4 may promote rows here before S5 refresh
+C6M2-CAT-412	implementation_regression	C6-P0	C6M2-SCOPE-401	noRowsInS1	no	S1 is not an authority step; no row is marked code fix until S2-S4 prove current behavior violates contract	S2-S4 may promote rows here before S5 fix
+C6M2-CAT-501	stage_release_gate	C6-P0	C6M2-SCOPE-501	pending	no	Stage regression remains blocked until authority and approved fixes/refreshes close the 15 classified rows	S6 publish status
