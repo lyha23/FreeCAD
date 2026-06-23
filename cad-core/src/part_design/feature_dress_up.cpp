@@ -1310,7 +1310,7 @@ void publishDressUpResult(
              : (context.addSubShapes.count(object.name) != 0U ? "delta" : "empty")},
         {"source_base", result.sourceBase},
         {"base_selection", selectionEvidenceJson(result.selection)},
-        {"bbox", cad_core::part::bboxForShape(result.shape)},
+        {"bbox", cad_core::part::objectBBoxForShape(result.shape)},
         {"volume", cad_core::part::volumeForShape(result.shape)},
         {"kernel", cad_core::part::kernelVersion()},
     };

@@ -57,7 +57,7 @@ void executeFeatureBase(const app::DocumentObject& object, runtime::ComputeConte
         {"status", "ok"},
         {"shape", "occt_solid"},
         {"base_feature", baseLink->object},
-        {"bbox", cad_core::part::bboxForShape(solid)},
+        {"bbox", cad_core::part::objectBBoxForShape(solid)},
         {"volume", cad_core::part::volumeForShape(solid)},
         {"kernel", cad_core::part::kernelVersion()},
     };

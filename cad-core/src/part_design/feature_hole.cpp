@@ -3451,7 +3451,7 @@ void executeHole(const app::DocumentObject& object, runtime::ComputeContext& con
         {"model_thread", hole->modelThread},
         {"model_thread_geometry", hole->threaded && hole->modelThread ? "pipe_shell" : "none"},
         {"history", hole->historyFreeze},
-        {"bbox", cad_core::part::bboxForShape(hole->toolShape)},
+        {"bbox", cad_core::part::objectBBoxForShape(hole->toolShape)},
         {"volume", cad_core::part::volumeForShape(hole->toolShape)},
         {"kernel", cad_core::part::kernelVersion()},
     };

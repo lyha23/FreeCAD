@@ -132,7 +132,7 @@ void publishImportedStl(
         {"primitive", "import_stl"},
         {"shape", shapeLabel(shape)},
         {"file_name", fileName},
-        {"bbox", cad_core::part::bboxForShape(shape)},
+        {"bbox", cad_core::part::objectBBoxForShape(shape)},
         {"volume", cad_core::part::volumeForShape(shape)},
         {"kernel", cad_core::part::kernelVersion()},
     };

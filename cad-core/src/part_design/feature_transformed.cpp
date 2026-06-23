@@ -1459,7 +1459,7 @@ void publishTransformedResult(
         {"transformed", transformedKind},
         {"transform_mode", result.mode},
         {"originals", result.originals},
-        {"bbox", cad_core::part::bboxForShape(result.shape)},
+        {"bbox", cad_core::part::objectBBoxForShape(result.shape)},
         {"volume", cad_core::part::volumeForShape(result.shape)},
         {"kernel", cad_core::part::kernelVersion()},
     };

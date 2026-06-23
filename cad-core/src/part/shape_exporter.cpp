@@ -193,6 +193,11 @@ nlohmann::json preciseBBoxForShape(const TopoDS_Shape& shape)
     return bboxForShapeWithTriangulationMode(shape, Standard_False);
 }
 
+nlohmann::json objectBBoxForShape(const TopoDS_Shape& shape)
+{
+    return preciseBBoxForShape(shape);
+}
+
 double volumeForShape(const TopoDS_Shape& shape)
 {
     GProp_GProps props;

@@ -329,7 +329,7 @@ void publishPrimitive(
     nlohmann::json result = metadata;
     result["status"] = "ok";
     result["shape"] = label;
-    result["bbox"] = cad_core::part::bboxForShape(shape);
+    result["bbox"] = cad_core::part::objectBBoxForShape(shape);
     result["volume"] = cad_core::part::volumeForShape(shape);
     result["kernel"] = cad_core::part::kernelVersion();
     context.objects[object.name] = result;

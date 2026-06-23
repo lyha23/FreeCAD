@@ -66,7 +66,7 @@ void executePart(const app::DocumentObject& object, runtime::ComputeContext& con
         {"display_object", displayObject},
         {"group", group},
         {"shape", "occt_solid"},
-        {"bbox", cad_core::part::bboxForShape(displayShape->shape)},
+        {"bbox", cad_core::part::objectBBoxForShape(displayShape->shape)},
         {"volume", cad_core::part::volumeForShape(displayShape->shape)},
         {"kernel", cad_core::part::kernelVersion()},
     };

@@ -1733,7 +1733,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
         reportedLength,
         reversed,
         toolShape->shape,
-        cad_core::part::bboxForShape(toolShape->shape),
+        cad_core::part::objectBBoxForShape(toolShape->shape),
         cad_core::part::volumeForShape(toolShape->shape),
         topoNamingKnownGap,
         taperHistory,

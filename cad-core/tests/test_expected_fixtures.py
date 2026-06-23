@@ -11,6 +11,23 @@ except ImportError:  # pragma: no cover - supports `unittest discover tests`.
 
 
 class CadCoreExpectedFixtureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
+    def test_c6m2_s4_geometry_bbox_rows_match_object_oracle(self) -> None:
+        for group, fixture in (
+            ("c3m1", "element-map-child-map-recursive-compound"),
+            ("c4m4", "topo-reference-pressure-import-unchanged"),
+            ("c5m1", "partdesign-revolution-profile-linked-face"),
+            ("p8", "app-link-imported-element-map-chain"),
+        ):
+            with self.subTest(group=group, fixture=fixture):
+                result = self.run_recompute(fixture, group)
+                expected = self.expected_freecad(group, fixture)
+
+                self.assert_expected_object(
+                    result,
+                    expected["object"],
+                    expected,
+                )
+
     def test_c5m12_loft_complex_profile_expected_metadata_matches_s3_boundaries(self) -> None:
         expected_backed = {
             "part-loft-complex-wire-face": ["LowerWire", "MiddleFace", "UpperWire"],

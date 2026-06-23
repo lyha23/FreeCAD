@@ -1118,7 +1118,7 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
         {"allow_compound", app::readBool(object, "AllowCompound").value_or(true)},
         {"bbox",
          bodyTopoShape->usesPreciseBoundingBox ? cad_core::part::preciseBBoxForShape(resultShape)
-                                               : cad_core::part::bboxForShape(resultShape)},
+                                               : cad_core::part::objectBBoxForShape(resultShape)},
         {"volume", cad_core::part::volumeForShape(resultShape)},
         {"kernel", cad_core::part::kernelVersion()},
     };
