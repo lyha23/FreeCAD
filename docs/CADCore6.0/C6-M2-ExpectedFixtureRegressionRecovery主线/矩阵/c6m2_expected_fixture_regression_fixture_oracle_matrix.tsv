@@ -1,5 +1,5 @@
 oracle_id	scope_id	fixture_or_failure	current_state	owner_class	authority_decision	expected_artifact	assertion_route	next_step
-C6M2-ORC-000	C6M2-SCOPE-000	stage regression aggregate	pendingBaselineFreeze	unclassified	pending	docs evidence	C6-M1 S6 prior result then S0 rerun	S0 freeze exact failure list
+C6M2-ORC-000	C6M2-SCOPE-000	stage regression aggregate	baselineFrozen	stage_regression_baseline	recorded_only	docs evidence	37fc024364 stage regression: 178 tests 15 failures 28 skipped; all failures in CadCoreExpectedFixtureTest	S1 create per-fixture owner rows from frozen list
 C6M2-ORC-SCHEMA-001	C6M2-SCOPE-201	diagnostic_codes mismatch	pendingOwnerRows	diagnostic_codes_contract_drift	pending	fixture expected JSON	tests.test_expected_fixtures	S1 create per-fixture rows then S2 authority
 C6M2-ORC-SCHEMA-002	C6M2-SCOPE-201	external_geometry_count mismatch	pendingOwnerRows	external_geometry_count_contract_drift	pending	fixture expected JSON	tests.test_expected_fixtures	S1 create per-fixture rows then S2 authority
 C6M2-ORC-SCHEMA-003	C6M2-SCOPE-201	link type mismatch	pendingOwnerRows	link_schema_or_type_drift	pending	fixture expected JSON	tests.test_expected_fixtures	S1 create per-fixture rows then S2 authority

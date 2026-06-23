@@ -32,7 +32,7 @@ live failure freeze
 | 类型 | 路径 | 用途 |
 | --- | --- | --- |
 | 工作步骤总入口 | `工作步骤细分/6-23-22-35-【已实现】C6-M2工作步骤总入口.md` | S0-S6 执行索引。 |
-| S0 | `工作步骤细分/6-23-22-36-C6-M2-S0-live回归基线冻结.md` | 复跑并冻结当前失败清单，不改代码。 |
+| S0 | `工作步骤细分/6-23-22-36-【已实现】C6-M2-S0-live回归基线冻结.md` | 已在 `37fc024364` 复跑并冻结当前 15 条 expected fixture failure，不改代码。 |
 | S1 | `工作步骤细分/6-23-22-37-C6-M2-S1-失败清单与owner分类矩阵.md` | 为每个 fixture mismatch 绑定 owner、落点和处理动作。 |
 | S2 | `工作步骤细分/6-23-22-38-C6-M2-S2-ExpectedAuthority复核.md` | 判断 expected 是否 stale、采集基线是否不足或实现是否回归。 |
 | S3 | `工作步骤细分/6-23-22-39-C6-M2-S3-SchemaDrift收口.md` | 收口 diagnostic_codes、external_geometry_count、link type、solver_adapter 等 schema 类差异。 |

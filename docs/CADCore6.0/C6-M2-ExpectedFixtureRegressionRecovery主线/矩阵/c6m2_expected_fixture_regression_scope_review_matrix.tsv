@@ -1,5 +1,5 @@
 scope_id	source_candidate	semantic_item	current_status	scope_reason	cad_core_landing	fixture_or_test_route	next_step
-C6M2-SCOPE-000	C6M2-SRC-001;C6M2-SRC-006	live regression baseline	pending	S0 must rerun and freeze exact current failure list before any fix	docs;matrices	stage regression command	S0
+C6M2-SCOPE-000	C6M2-SRC-001;C6M2-SRC-006	live regression baseline	baselineFrozen	S0 reran stage regression at 37fc024364 and froze 15 expected fixture failures before any fix	docs;matrices	stage regression command	S1
 C6M2-SCOPE-101	C6M2-SRC-002	per-fixture owner classification	pending	Every mismatch needs its own row and owner so later steps do not blanket refresh	fixtures;docs	fixture_oracle_matrix	S1
 C6M2-SCOPE-201	C6M2-SRC-003;C6M2-SRC-005	schema drift closure	pending	diagnostic_codes external_geometry_count link type and solver_adapter are protocol/schema class failures	cad-core/src/document;cad-core/src/adapters;tests	focused expected fixture test	S3 after S2 authority
 C6M2-SCOPE-301	C6M2-SRC-004	geometry bbox OCCT closure	pending	bbox/geometry differences require environment vs implementation vs stale expected classification	cad-core/src/features;cad-core/src/geometry;cad-core/src/topo	focused expected fixture test	S4 after S2 authority
