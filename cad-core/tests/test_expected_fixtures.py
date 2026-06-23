@@ -11,6 +11,15 @@ except ImportError:  # pragma: no cover - supports `unittest discover tests`.
 
 
 class CadCoreExpectedFixtureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
+    def test_c6m2_s5_pocket_without_base_matches_body_oracle(self) -> None:
+        result = self.run_recompute("pocket-without-base", "p2")
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(body["status"], "ok")
+        self.assertEqual(body["replayed_subtractive_features"], ["Pocket"])
+        self.assert_object_matches_expected(result, "p2", "pocket-without-base")
+
     def test_c6m2_s4_geometry_bbox_rows_match_object_oracle(self) -> None:
         for group, fixture in (
             ("c3m1", "element-map-child-map-recursive-compound"),

@@ -970,28 +970,30 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
         else if (addSubShape.subShape) {
             appliedSubtractiveFeatures.push_back(feature);
             if (!bodyShape) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "execution_failed",
-                                       "Body cannot apply subtractive feature " + feature + " without a base solid",
-                                       body.name,
-                                       "Group");
-                return std::nullopt;
-            }
-            const auto build = cutShapes(*bodyShape,
-                                         *addSubShape.subShape,
-                                         body,
-                                         context,
-                                         feature,
-                                         &addSubShape.subNamedShape,
-                                         bodyNamedShape);
-            if (build) {
-                bodyShape = build->shape;
-                bodyUsesPreciseBoundingBox = false;
-                bodyNamedShape = build->namedShape;
+                // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+                // ::Body::setBaseProperty(), "NULL is ok here, it just means we made the
+                // current one ... the base solid"; FeatureExtrude.cpp::buildExtrusion() then
+                // writes the no-base Pocket prism through "this->Shape.setValue(prism)".
+                bodyShape = *addSubShape.subShape;
+                bodyUsesPreciseBoundingBox = addSubShape.subUsesPreciseBoundingBox;
+                bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
             }
             else {
-                bodyShape = std::nullopt;
+                const auto build = cutShapes(*bodyShape,
+                                             *addSubShape.subShape,
+                                             body,
+                                             context,
+                                             feature,
+                                             &addSubShape.subNamedShape,
+                                             bodyNamedShape);
+                if (build) {
+                    bodyShape = build->shape;
+                    bodyUsesPreciseBoundingBox = false;
+                    bodyNamedShape = build->namedShape;
+                }
+                else {
+                    bodyShape = std::nullopt;
+                }
             }
         }
 

@@ -33,7 +33,7 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "body-basefeature-pad": [],
             "rect-pad-pocket": [],
             "missing-basefeature": ["missing_link_target"],
-            "pocket-without-base": ["execution_failed"],
+            "pocket-without-base": [],
             "pocket-open-sketch": ["open_profile"],
             "unsupported-pocket-type": ["unsupported_property"],
         }
