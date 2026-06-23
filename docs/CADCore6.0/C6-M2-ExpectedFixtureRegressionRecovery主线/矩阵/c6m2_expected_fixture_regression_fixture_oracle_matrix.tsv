@@ -1,0 +1,7 @@
+oracle_id	scope_id	fixture_or_failure	current_state	owner_class	authority_decision	expected_artifact	assertion_route	next_step
+C6M2-ORC-000	C6M2-SCOPE-000	stage regression aggregate	pendingBaselineFreeze	unclassified	pending	docs evidence	C6-M1 S6 prior result then S0 rerun	S0 freeze exact failure list
+C6M2-ORC-SCHEMA-001	C6M2-SCOPE-201	diagnostic_codes mismatch	pendingOwnerRows	diagnostic_codes_contract_drift	pending	fixture expected JSON	tests.test_expected_fixtures	S1 create per-fixture rows then S2 authority
+C6M2-ORC-SCHEMA-002	C6M2-SCOPE-201	external_geometry_count mismatch	pendingOwnerRows	external_geometry_count_contract_drift	pending	fixture expected JSON	tests.test_expected_fixtures	S1 create per-fixture rows then S2 authority
+C6M2-ORC-SCHEMA-003	C6M2-SCOPE-201	link type mismatch	pendingOwnerRows	link_schema_or_type_drift	pending	fixture expected JSON	tests.test_expected_fixtures	S1 create per-fixture rows then S2 authority
+C6M2-ORC-SCHEMA-004	C6M2-SCOPE-201	assembly solver_adapter field mismatch	pendingOwnerRows	assembly_solver_adapter_schema_drift	pending	fixture expected JSON	tests.test_expected_fixtures	S1 create per-fixture rows then S2 authority
+C6M2-ORC-GEOM-001	C6M2-SCOPE-301	bbox mismatch	pendingOwnerRows	bbox_geometry_or_occt_drift	pending	fixture expected JSON	tests.test_expected_fixtures	S1 create per-fixture rows then S2/S4 authority

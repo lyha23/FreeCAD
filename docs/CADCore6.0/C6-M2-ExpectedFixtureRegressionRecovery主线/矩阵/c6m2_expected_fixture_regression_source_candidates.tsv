@@ -1,0 +1,7 @@
+candidate_id	source_file	symbol_or_artifact	semantic_axis	current_evidence	cad_core_landing	scope_hint	next_step
+C6M2-SRC-001	cad-core/tests/test_expected_fixtures.py	CadCoreExpectedFixtureTest.test_expected_fixtures_match_recompute_results	expected fixture gate	C6-M1 S6阶段回归15 failures均集中于该测试	fixtures;tests	expectedGate	S0 freeze exact failures
+C6M2-SRC-002	cad-core/fixtures	expected fixture JSON	checked-in expected authority	失败涉及既有expected的bbox diagnostic_codes external_geometry_count link type solver_adapter字段漂移	fixtures	expectedAuthority	S1/S2 classify per fixture
+C6M2-SRC-003	cad-core/src	document parser and link schema	link schema authority	link类型或PropertyLinkSub字段漂移不能直接refresh expected	cad-core/src/document;cad-core/src/adapters	linkSchemaDrift	S3 decide code fix or expected refresh
+C6M2-SRC-004	cad-core/src	feature and geometry executors	bbox and geometry authority	bbox差异可能来自实现回归 expected stale 或OCCT环境差异	cad-core/src/features;cad-core/src/geometry;cad-core/src/topo	geometryOrOcctDrift	S4 classify and close
+C6M2-SRC-005	cad-core/src/adapters	assembly solver adapter schema	adapter field authority	assembly solver_adapter字段漂移应优先按adapter contract复核	cad-core/src/adapters;cad-core/tests	adapterSchemaDrift	S3 close schema drift
+C6M2-SRC-006	docs/CADCore6.0/C6-M1-PartDesignPipeProductExtension-TransformationLawAndTangentExpansion主线/工作步骤细分/6-23-19-50-【已实现】C6-M1-S6-Oracle实现与发布闸门.md	C6-M1 S6 validation result	regression baseline	S6记录focused通过但阶段回归178 tests 15 failures 28 skipped	docs	baselineEvidence	S0 consume as prior evidence only

@@ -1,0 +1,7 @@
+category_id	category_name	priority	scope_ids	routing_status	product_decision_needed	classification_reason	recommended_next_step
+C6M2-CAT-000	live_regression_baseline	C6-P0	C6M2-SCOPE-000	pending	no	Need exact current failure list because S6 prior result may drift after commits	S0 rerun and freeze
+C6M2-CAT-101	per_fixture_owner_matrix	C6-P0	C6M2-SCOPE-101	pending	no	Category counts are insufficient; each fixture mismatch needs row owner and path	S1 classify rows
+C6M2-CAT-201	schema_drift	C6-P0	C6M2-SCOPE-201	authorityRequired	no	diagnostic_codes external_geometry_count link type and solver_adapter are contract/schema class drift	S2 authority then S3 close
+C6M2-CAT-301	geometry_or_occt_drift	C6-P0	C6M2-SCOPE-301	authorityRequired	no	bbox differences may be stale expected environment OCCT or implementation regression	S2 authority then S4 close
+C6M2-CAT-401	approved_expected_or_code_fix	C6-P0	C6M2-SCOPE-401	pending	no	Only rows approved by S2-S4 may be refreshed or fixed	S5 implement minimal batch
+C6M2-CAT-501	stage_release_gate	C6-P0	C6M2-SCOPE-501	pending	no	Stage regression must be trustworthy before further C6 product work	S6 publish status

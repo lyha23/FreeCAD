@@ -1,0 +1,7 @@
+non_goal_id	exclusion_axis	scope_reason	user_or_protocol_behavior	reopen_condition
+C6M2-NG-001	Pipe Interpolation LawSamples	C6-M2 is regression recovery not a new product geometry contract	Keep partdesign_pipe_interpolation_law_product_contract_required as later product gap	Reopen only with approved LawSamples DTO and fixtures
+C6M2-NG-002	blanket expected refresh	Expected fixture recovery requires per-fixture authority	Do not overwrite all expected files from current output	Only individual rows with refresh_expected may update expected
+C6M2-NG-003	assertion weakening	Stage gate must remain meaningful	Do not remove diagnostic link bbox or adapter assertions to pass	Reopen only if test contract itself is proven wrong and documented
+C6M2-NG-004	native FreeCAD recollection by default	C6-M2 starts from checked-in expected and current recompute mismatch	Do not run FreeCADCmd collection unless S2 proves checked-in expected insufficient	Reopen with recorded FreeCAD/LibPack/OCCT environment
+C6M2-NG-005	C5 broad deferred reopen	Older C5/C51 deferred lanes are not the direct follow-up to C6-M1 S6	Do not mix unrelated backlog into this regression package	Reopen through separate package after C6-M2 gate is trustworthy
+C6M2-NG-006	upstream FreeCAD edits	This repo source is authority for semantics but C6-M2 edits cad-core/docs/fixtures only	Do not modify src/ FreeCAD upstream files	Only separate upstream patch task may change src/
