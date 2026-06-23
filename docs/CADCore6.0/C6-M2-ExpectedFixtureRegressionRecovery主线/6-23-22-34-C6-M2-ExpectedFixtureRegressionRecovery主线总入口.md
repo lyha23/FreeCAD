@@ -35,7 +35,7 @@ live failure freeze
 | S0 | `工作步骤细分/6-23-22-36-【已实现】C6-M2-S0-live回归基线冻结.md` | 已在 `37fc024364` 复跑并冻结当前 15 条 expected fixture failure，不改代码。 |
 | S1 | `工作步骤细分/6-23-22-37-【已实现】C6-M2-S1-失败清单与owner分类矩阵.md` | 已为 15 条 fixture mismatch 绑定 owner、落点和处理动作。 |
 | S2 | `工作步骤细分/6-23-22-38-【已实现】C6-M2-S2-ExpectedAuthority复核.md` | 已完成 ExpectedAuthority 复核：8 条 expected refresh、3 条 implementation fix、4 条 bbox leave_blocked 进入 S4。 |
-| S3 | `工作步骤细分/6-23-22-39-C6-M2-S3-SchemaDrift收口.md` | 收口 diagnostic_codes、external_geometry_count、link type、solver_adapter 等 schema 类差异。 |
+| S3 | `工作步骤细分/6-23-22-39-【已实现】C6-M2-S3-SchemaDrift收口.md` | 已收口 schema 类差异：8 条 expected refresh，2 条 implementation fix，ORC-007 转 S5。 |
 | S4 | `工作步骤细分/6-23-22-40-C6-M2-S4-GeometryTolerance与OCCT差异收口.md` | 收口 bbox / 几何 / OCCT 兼容性差异。 |
 | S5 | `工作步骤细分/6-23-22-41-C6-M2-S5-ApprovedExpectedOrCodeFix实施.md` | 执行已批准的 expected refresh 或代码修复。 |
 | S6 | `工作步骤细分/6-23-22-42-C6-M2-S6-阶段回归发布闸门.md` | 阶段回归、capability / docs 状态和剩余 blocker 发布。 |

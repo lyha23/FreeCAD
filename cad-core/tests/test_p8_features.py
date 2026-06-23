@@ -3603,6 +3603,8 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(assembly["solver_adapter"]["status"], "solved")
         self.assertEqual(assembly["solver_adapter"]["mode"], "grounded_only_noop")
         self.assertEqual(assembly["solver_adapter"]["grounded_joints"], ["GroundedJoint"])
+        self.assertEqual(assembly["solver_adapter"]["solver_joints"], [])
+        self.assertEqual(assembly["solver_adapter"]["placement_updates"], [])
 
     def test_p8_assembly_joint_group_reports_solver_inputs_and_placement_writeback(self) -> None:
         result = self.run_recompute("assembly-joint-group-diagnostics", "p8")

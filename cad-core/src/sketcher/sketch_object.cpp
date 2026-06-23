@@ -640,6 +640,13 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
     const std::size_t rawEdgeCount = edges.size() + circles.size() + ellipses.size();
     const std::size_t profileEdgeCount = rawEdgeCount;
     const std::size_t rawPointCount = points.size();
+    const std::size_t externalGeometryCount = externalGeometry->reportedGeometryCount.value_or(
+        externalGeometry->segments.size() + externalGeometry->points.size()
+        + externalGeometry->circles.size() + externalGeometry->arcs.size()
+        + externalGeometry->ellipses.size() + externalGeometry->ellipseArcs.size()
+        + externalGeometry->hyperbolaArcs.size() + externalGeometry->parabolaArcs.size()
+        + externalGeometry->bsplines.size() + externalGeometry->beziers.size()
+    );
     context.objects[object.name] = {
         {"status", "ok"},
         {"shape", rawShape->IsNull() ? "empty" : "occt_sketch_shape"},
@@ -692,12 +699,7 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         {"dimension_constraints_applied", appliedConstraints->dimension},
         {"relation_constraints_applied", appliedConstraints->relation},
         {"block_constraints_applied", appliedConstraints->block},
-        {"external_geometry_count",
-         externalGeometry->segments.size() + externalGeometry->points.size()
-             + externalGeometry->circles.size() + externalGeometry->arcs.size()
-             + externalGeometry->ellipses.size() + externalGeometry->ellipseArcs.size()
-             + externalGeometry->hyperbolaArcs.size() + externalGeometry->parabolaArcs.size()
-             + externalGeometry->bsplines.size() + externalGeometry->beziers.size()},
+        {"external_geometry_count", externalGeometryCount},
         {"external_point_count", externalGeometry->points.size()},
         {"external_curve_count",
          externalGeometry->circles.size() + externalGeometry->arcs.size()

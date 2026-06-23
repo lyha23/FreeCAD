@@ -63,6 +63,7 @@ struct ExternalGeometryResult
     std::vector<SketchParabolaArc> parabolaArcs;
     std::vector<SketchBSpline> bsplines;
     std::vector<SketchBezier> beziers;
+    std::optional<std::size_t> reportedGeometryCount;
     std::size_t definingLinkCount = 0;
     std::size_t frozenLinkCount = 0;
     std::size_t detachedLinkCount = 0;

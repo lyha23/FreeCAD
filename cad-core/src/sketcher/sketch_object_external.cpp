@@ -1503,6 +1503,47 @@ bool appendNativeExternalGeometryForRef(
     return appended;
 }
 
+std::size_t externalGeometryItemCount(const ExternalGeometryResult& result)
+{
+    return result.segments.size() + result.points.size() + result.circles.size()
+        + result.arcs.size() + result.ellipses.size() + result.ellipseArcs.size()
+        + result.hyperbolaArcs.size() + result.parabolaArcs.size() + result.bsplines.size()
+        + result.beziers.size();
+}
+
+bool reportsStableReferenceShadowAsSingleExternalGeo(const app::Link& link)
+{
+    if (link.referenceShadows.empty() || link.subnames.size() != 1U
+        || link.stableSubnames.size() != 1U) {
+        return false;
+    }
+    const std::string& subname = link.subnames.front();
+    const std::string& stableSubname = link.stableSubnames.front();
+    return !subname.empty() && !stableSubname.empty() && subname != stableSubname;
+}
+
+void recordReportedExternalGeometryCountForLink(
+    const app::Link& link,
+    std::size_t countBeforeLink,
+    const ExternalGeometryResult& result,
+    bool& usesReportedCount,
+    std::size_t& reportedCount
+)
+{
+    const std::size_t countAfterLink = externalGeometryItemCount(result);
+    if (reportsStableReferenceShadowAsSingleExternalGeo(link) && countAfterLink > countBeforeLink) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.h
+        // ::SketchObject::getExternalGeometryCount(), returns "ExternalGeo.getSize()". When
+        // a ReferenceShadow-backed StableSubList retargets one external entry, cad-core may
+        // project the resolved face into several construction edges, but the public count still
+        // follows the single ExternalGeo entry contract.
+        reportedCount += 1U;
+        usesReportedCount = true;
+        return;
+    }
+    reportedCount += countAfterLink - countBeforeLink;
+}
+
 nlohmann::json nativeExternalGeometryItemJson(const NativeExternalGeometry& native, bool detach)
 {
     nlohmann::json item = native.raw;
@@ -1724,8 +1765,11 @@ std::optional<ExternalGeometryResult> rebuildExternalGeometry(
     const runtime::ReferenceLifecycleView lifecycleView {context.documentObjects};
     std::map<std::size_t, ExternalGeometryFlags> stateUpdates;
     std::set<std::size_t> detachedLinks;
+    bool usesReportedGeometryCount = false;
+    std::size_t reportedGeometryCount = 0U;
     for (std::size_t index = 0; index < links.size(); ++index) {
         const auto& link = links.at(index);
+        const std::size_t countBeforeLink = externalGeometryItemCount(result);
         const std::string refKey = externalGeometryReferenceKey(link);
         ExternalGeometryFlags flags = externalGeometryFlags(link);
         const auto lifecycle =
@@ -1753,6 +1797,13 @@ std::optional<ExternalGeometryResult> rebuildExternalGeometry(
                 refKey,
                 flags.defining
             );
+            recordReportedExternalGeometryCountForLink(
+                link,
+                countBeforeLink,
+                result,
+                usesReportedGeometryCount,
+                reportedGeometryCount
+            );
             continue;
         }
         const bool useOldExternalGeometry =
@@ -1772,6 +1823,13 @@ std::optional<ExternalGeometryResult> rebuildExternalGeometry(
                     refKey,
                     flags.defining
                 )) {
+                recordReportedExternalGeometryCountForLink(
+                    link,
+                    countBeforeLink,
+                    result,
+                    usesReportedGeometryCount,
+                    reportedGeometryCount
+                );
                 continue;
             }
             if (auto oldExternal = oldExternalSubshapeFromBrepSnapshot(link, object, context)) {
@@ -1854,6 +1912,13 @@ std::optional<ExternalGeometryResult> rebuildExternalGeometry(
                     return std::nullopt;
                 }
             }
+            recordReportedExternalGeometryCountForLink(
+                link,
+                countBeforeLink,
+                result,
+                usesReportedGeometryCount,
+                reportedGeometryCount
+            );
             continue;
         }
         const ExternalGeometryType externalType = externalTypes.at(index);
@@ -1955,6 +2020,16 @@ std::optional<ExternalGeometryResult> rebuildExternalGeometry(
                 return std::nullopt;
             }
         }
+        recordReportedExternalGeometryCountForLink(
+            link,
+            countBeforeLink,
+            result,
+            usesReportedGeometryCount,
+            reportedGeometryCount
+        );
+    }
+    if (usesReportedGeometryCount) {
+        result.reportedGeometryCount = reportedGeometryCount;
     }
     appendExternalGeometryFlagsUpdate(
         context,

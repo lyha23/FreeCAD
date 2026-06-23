@@ -236,6 +236,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             object_name="ProbeSketch",
             property_name="ExternalGeometry",
         )
+        self.assertEqual(result["objects"]["ProbeSketch"]["external_geometry_count"], 1)
         self.assertIn("history_consumed:merge", result["named_shapes"]["Pad"]["element_history_status"])
 
         result = self.assert_c4m4_update(
