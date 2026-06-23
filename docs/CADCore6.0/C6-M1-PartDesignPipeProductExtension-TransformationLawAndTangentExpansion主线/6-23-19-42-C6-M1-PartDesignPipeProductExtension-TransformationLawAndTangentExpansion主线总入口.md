@@ -1,6 +1,6 @@
 # C6-M1 PartDesign Pipe Product Extension TransformationLawAndTangentExpansion 主线总入口
 
-本文是 `docs/CADCore6.0` 下的 C6-M1 实施主线。当前 S0-S6 均为待执行；矩阵是 seed，不是发布闸门结论。
+本文是 `docs/CADCore6.0` 下的 C6-M1 实施主线。当前 S0 已完成 live 基线复核；S1-S6 仍待执行。矩阵中的 product extension 口径已经冻结，但不是发布闸门结论。
 
 ## 主线目标
 
@@ -10,9 +10,11 @@
 
 ## 当前基线
 
+- S0 live 基线（2026-06-23）：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=b5768acf40`，`git log -1 --oneline` 为 `b5768acf40 docs: 补充 C6-M1 Pipe 扩展方案包`，S0 开始前工作区干净。
 - C51-S4 已支持 `Mode=Fixed/Auxiliary/Binormal`、`Transition=Round corner`、selected spine / multisection path、front/back MapperSewing。
 - C51X 已确认 `Transformation=Linear/S-shape/Interpolation` 与 `SpineTangent/AuxiliarySpineTangent` 是 FreeCAD source-commented exact blocker，而不是可声明的 FreeCAD parity。
 - `cad-core/src/part_design/feature_pipe.cpp` 当前在 `rejectSourceBlockedPipeBranches()` 中对这些字段返回 source-backed `unsupported_property`。
+- `cad-core/src/runtime/capability_contract.cpp` 当前 `part_design.pipe` 仍是 `supported_c51s4_pipe_advanced_with_exact_source_blockers`，exact blockers 仍列出 `partdesign_pipe_transformation_laws_source_commented` 与 `partdesign_pipe_spine_tangent_source_commented`。
 - 本主线如果实施，必须改成产品扩展口径，并让 capability 显示 product extension，不得删除 FreeCAD blocker 证据后伪装成 upstream parity。
 
 ## 证明链条
@@ -51,7 +53,7 @@
 | 类型 | 路径 | 用途 |
 | --- | --- | --- |
 | 工作步骤总入口 | `工作步骤细分/6-23-19-43-【已实现】C6-M1工作步骤总入口.md` | S0-S6 执行索引。 |
-| S0 | `工作步骤细分/6-23-19-44-C6-M1-S0-声明口径与live基线复核.md` | 冻结产品扩展口径与 live blocker。 |
+| S0 | `工作步骤细分/6-23-19-44-【已实现】C6-M1-S0-声明口径与live基线复核.md` | 已冻结产品扩展口径与 live blocker。 |
 | S1 | `工作步骤细分/6-23-19-45-C6-M1-S1-FreeCAD源码候选矩阵.md` | 建 FreeCAD source authority 和候选矩阵。 |
 | S2 | `工作步骤细分/6-23-19-46-C6-M1-S2-范围准入与blocker矩阵.md` | 路由 scope、blocker、non-goal 与 backend gap。 |
 | S3 | `工作步骤细分/6-23-19-47-C6-M1-S3-TransformationLawDTO专项复审.md` | 定义 Linear / S-shape / Interpolation law DTO 与实施边界。 |
@@ -69,4 +71,4 @@
 
 ## 当前状态
 
-S0-S6 均待执行。除工作步骤总入口作为索引外，任何步骤文件都不得在验收通过前改名为 `【已实现】`。
+S0 已完成并改名为 `【已实现】`；S1-S6 仍待执行。S0 只冻结产品扩展口径和 live exact blocker 证据，不表示 law / tangent 已支持。任何后续步骤文件都不得在验收通过前改名为 `【已实现】`。
