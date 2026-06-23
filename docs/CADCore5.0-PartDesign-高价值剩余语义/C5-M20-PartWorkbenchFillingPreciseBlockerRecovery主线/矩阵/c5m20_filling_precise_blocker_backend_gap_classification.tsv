@@ -1,0 +1,5 @@
+category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
+C5M20-GAP-001	no_helper_expected_for_surface	C5-P0	C5M20-SCOPE-001	no	Keep precise blocker; rerun only after FreeCAD helper no longer SIGSEGV
+C5M20-GAP-002	no_helper_expected_for_support_order	C5-P0	C5M20-SCOPE-002;C5M20-SCOPE-004	no	Keep precise blocker; do not land C++ fallback until helper expected is stable
+C5M20-GAP-003	no_helper_expected_for_remaining_params	C5-P0	C5M20-SCOPE-003	no	Keep c5m13 supported subset and c5m8 known_gap for remaining params
+C5M20-GAP-004	direct_wrapper_control_not_product_api	C5-P1	C5M20-SCOPE-005	yes_if_product_wants_wrapper_api	Do not implement persistent wrapper lifecycle; keep direct controls as source-audited evidence only

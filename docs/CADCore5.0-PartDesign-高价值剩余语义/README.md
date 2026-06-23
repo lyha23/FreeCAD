@@ -37,6 +37,7 @@
 | C5-M17 Datum Remaining AttachEngine（已收口） | `C5-M17-DatumRemainingAttachEngine主线/6-23-03-26-【已实现】C5-M17-DatumRemainingAttachEngine主线总入口.md` | `C5-M17-DatumRemainingAttachEngine主线/工作步骤细分/` |
 | C5-M18 Datum Folding AttachEngine（已收口） | `C5-M18-DatumFoldingAttachEngine主线/6-23-18-16-【已实现】C5-M18-DatumFoldingAttachEngine主线总入口.md` | `C5-M18-DatumFoldingAttachEngine主线/工作步骤细分/` |
 | C5-M19 Datum AttachEngine Source Audit Closeout（已收口） | `C5-M19-DatumAttachEngineSourceAuditCloseout主线/6-23-18-58-【已实现】C5-M19-DatumAttachEngineSourceAuditCloseout主线总入口.md` | `C5-M19-DatumAttachEngineSourceAuditCloseout主线/工作步骤细分/` |
+| C5-M20 Part Workbench Filling Precise Blocker Recovery（已收口） | `C5-M20-PartWorkbenchFillingPreciseBlockerRecovery主线/6-23-19-17-【已实现】C5-M20-PartWorkbenchFillingPreciseBlockerRecovery主线总入口.md` | `C5-M20-PartWorkbenchFillingPreciseBlockerRecovery主线/工作步骤细分/` |
 
 C5-M6 已完成最终发布收口：`part_workbench.loft` 的 profile / `Linearize=true` expected-backed slice 保持为基础发布面，原 `complex_profile_family` broad gap 已由 C5-M12 代表 profile expected-backed 关闭；`part_workbench.sweep` 的 C5-M6 发布口径只包含 multi-profile / `Linearize=true` expected-backed 基础 slice，advanced PipeShell 字段级合同由 C5-M10/C5-M11/C5-M12 收口。
 
@@ -65,6 +66,8 @@ C5-M17 已完成 Datum remaining AttachEngine conic landmark 首批发布：Datu
 C5-M18 已完成 Datum Folding AttachEngine 主线：DatumPlane / Datum CoordinateSystem 的 `Folding` selected MapMode 已按 FreeCAD `mmFolding` branch 迁移到 `cad-core`，覆盖四条有序 straight line supports、shared vertex、direction sign normalization、`calculateFoldAngle`、DatumPlane normal/axis evidence、FreeCADCmd success expected、invalid diagnostics、focused tests 和 adapter capability closeout。C5-M18 发布后仅剩 `TangentU`、`TangentV`、`IntersectionPoint` 进入后续审计；GUI/session/full BREP 仍不进入 stateless CAD Core。
 
 C5-M19 已完成 Datum AttachEngine 剩余模式源码审计与 blocker 收口：FreeCAD `Attacher.h` / `Attacher.cpp` 证明 `TangentU`、`TangentV`、`IntersectionPoint` 只有 enum/name 暴露，没有非空 `modeRefTypes` 和 `_calculateAttachedPlacement()` 执行分支；`TangentU/V` 只是 `mmTangentPlane` 内部 surface tangent 方向，`IntersectionPoint` 也不能从已支持的 DatumLine `IntersectionLine` 推导。capability exact blocker 已删除 `datum_attach_engine_remaining_modes`，三项转为 source-audited non-goal；Datum AttachEngine 线正式收口，后续优先转向 Filling / GeomPlate / Sweep 等 Part surface precise blockers。
+
+C5-M20 已完成 Filling precise blocker 复核收口：它只承接 C5-M13 后保留的 `Part.makeFilledFace(...)` / `BRepOffsetAPI_MakeFilling` 同一 helper owner 下的 Surface、support/order G1/G2、`PtsOnCurve`、`Anisotropy`、`TolG1+TolG2`、`MaxSegments`、all-params 和 non-boundary support/order。FreeCADCmd 逐 case probe 证明当前 `Part.makeFilledFace(...)` 代表场景仍不能稳定采集 expected：Surface 为 SIGSEGV，support/order 为 CADKernelError / OCCError / timeout，剩余 params 为 SIGSEGV / timeout / OCCT build crash，non-boundary support/order 为 OCCError / timeout。Direct `Part.BRepOffsetAPI.MakeFilling` wrapper controls 可 build，但只作为低层 owner evidence，不替代 request-local helper expected，也不引入 persistent wrapper lifecycle。C5-M20 不新增 fixture、expected、collector supported path 或 C++ fallback，只更新 precise blocker evidence 和 delete condition。
 
 ## 队列检查
 
