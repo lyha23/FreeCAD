@@ -1,0 +1,47 @@
+{
+  "freecad_version": "1.2.0 revision 20260519",
+  "objects": {
+    "Body": {
+      "bbox": {
+        "max": [
+          10.0,
+          5.0,
+          10.0
+        ],
+        "min": [
+          -2.7755575615628914e-16,
+          -2.220446049250313e-16,
+          0.0
+        ]
+      },
+      "topology_counts": {
+        "edges": 15,
+        "faces": 7,
+        "vertices": 10
+      },
+      "volume": 498.8
+    },
+    "Chamfer": {
+      "bbox": {
+        "max": [
+          10.0,
+          5.0,
+          10.0
+        ],
+        "min": [
+          -2.7755575615628914e-16,
+          -2.220446049250313e-16,
+          0.0
+        ]
+      },
+      "topology_counts": {
+        "edges": 15,
+        "faces": 7,
+        "vertices": 10
+      },
+      "volume": 498.8
+    }
+  },
+  "reference": "FreeCADCmd oracle from chamfer-two-distances-edge.json; objects: Sketcher::SketchObject, PartDesign::Pad, PartDesign::Chamfer, PartDesign::Body",
+  "schema_version": "cad-core.freecad-expected.v1"
+}
