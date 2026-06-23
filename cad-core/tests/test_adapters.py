@@ -1120,7 +1120,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(loft["remaining_gaps"], [])
         self.assertEqual(loft["deferred"], [])
         pipe = capabilities["part_design"]["pipe"]
-        self.assertEqual(pipe["status"], "supported_c51s4_pipe_advanced_with_exact_source_blockers")
+        self.assertEqual(pipe["status"], "supported_c6m1_pipe_cad_core_product_extension_with_contract_boundaries")
         self.assertEqual(pipe["type_ids"], ["PartDesign::AdditivePipe", "PartDesign::SubtractivePipe"])
         self.assertIn("Profile full sketch", pipe["supported"])
         self.assertIn("Spine selected Edge/Wire path", pipe["supported"])
@@ -1129,6 +1129,16 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("Mode=Auxiliary", pipe["supported"])
         self.assertIn("Mode=Binormal", pipe["supported"])
         self.assertIn("Transformation=Multisection", pipe["supported"])
+        self.assertIn("CAD Core product extension: Transformation=Linear PipeLaw", pipe["supported"])
+        self.assertIn("CAD Core product extension: Transformation=S-shape PipeLaw", pipe["supported"])
+        self.assertIn(
+            "CAD Core product extension: SpineTangent selected EdgeN continuous ledger",
+            pipe["supported"],
+        )
+        self.assertIn(
+            "CAD Core product extension: AuxiliarySpineTangent selected EdgeN continuous ledger",
+            pipe["supported"],
+        )
         self.assertIn("Body additive fuse replay", pipe["supported"])
         self.assertIn("Body subtractive cut replay", pipe["supported"])
         self.assertIn("maker_history:partdesign_pipe", pipe["supported"])
@@ -1149,15 +1159,26 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "c51m4/partdesign-pipe-auxiliary-binormal-modes",
                 "c51m4/partdesign-pipe-selected-spine-multisection",
                 "c51m4/partdesign-pipe-source-backed-blockers",
+                "c6m1/partdesign-pipe-linear-law-product",
+                "c6m1/partdesign-pipe-s-shape-law-product",
+                "c6m1/partdesign-pipe-interpolation-law-boundary",
+                "c6m1/partdesign-pipe-spine-tangent-ledger-product",
+                "c6m1/partdesign-pipe-auxiliary-tangent-ledger-product",
+                "c6m1/partdesign-pipe-law-tangent-diagnostics",
             ],
         )
         self.assertIn("unsupported_property", pipe["diagnostics"])
+        self.assertIn("product_contract_required", pipe["diagnostics"])
+        self.assertIn("invalid_pipe_law_data", pipe["diagnostics"])
+        self.assertIn("ambiguous_branch_junction", pipe["diagnostics"])
+        self.assertIn("closed_loop_ambiguity", pipe["diagnostics"])
         self.assertEqual(pipe["deferred"], [])
-        self.assertIn("partdesign_pipe_transformation_laws_source_commented", pipe["exact_blockers"])
-        self.assertIn("partdesign_pipe_spine_tangent_source_commented", pipe["exact_blockers"])
+        self.assertNotIn("partdesign_pipe_transformation_laws_source_commented", pipe["exact_blockers"])
+        self.assertNotIn("partdesign_pipe_spine_tangent_source_commented", pipe["exact_blockers"])
+        self.assertIn("partdesign_pipe_interpolation_law_product_contract_required", pipe["exact_blockers"])
         self.assertNotIn("partdesign_pipe_multisection", pipe["remaining_gaps"])
         self.assertNotIn("partdesign_pipe_round_corner", pipe["remaining_gaps"])
-        self.assertEqual(pipe["remaining_gaps"], [])
+        self.assertEqual(pipe["remaining_gaps"], ["partdesign_pipe_interpolation_law_product_contract_required"])
         datum_attachment = capabilities["part_design"]["datum_attachment"]
         self.assertEqual(
             datum_attachment["status"],

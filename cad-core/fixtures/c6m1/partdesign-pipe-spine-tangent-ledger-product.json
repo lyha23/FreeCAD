@@ -1,0 +1,62 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPipeProfile",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [-0.25, -0.25], "end": [0.25, -0.25] },
+          { "kind": "LineSegment", "start": [0.25, -0.25], "end": [0.25, 0.25] },
+          { "kind": "LineSegment", "start": [0.25, 0.25], "end": [-0.25, 0.25] },
+          { "kind": "LineSegment", "start": [-0.25, 0.25], "end": [-0.25, -0.25] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "SketchPipeSpine",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 0],
+          "Rotation": [0.7071067811865475, 0, 0, 0.7071067811865476]
+        },
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [0, 1] },
+          { "kind": "LineSegment", "start": [0, 1], "end": [0, 2] },
+          { "kind": "LineSegment", "start": [0, 2], "end": [0, 3] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "AdditivePipeSpineTangentProduct",
+      "ID": 3,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeSpine",
+          "SubList": ["Edge2"]
+        },
+        "SpineTangent": true,
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Constant",
+        "Refine": false,
+        "FuzzyTolerance": 0.0
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["AdditivePipeSpineTangentProduct"]
+  }
+}

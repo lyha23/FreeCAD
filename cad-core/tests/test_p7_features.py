@@ -773,7 +773,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(revolution["status"], "ok")
         self.assertEqual(revolution["source_profile"], "SketchRevolution")
-        self.assertEqual(sketch["facemaker_history"]["bounded_face_count"], 1)
+        facemaker_history = sketch.get("facemaker_history")
+        if facemaker_history is None:
+            facemaker_history = sketch["internal_shape_history_diagnostics"]["facemaker"]
+        self.assertEqual(facemaker_history["bounded_face_count"], 1)
 
     def test_c51m1_revolution_reference_axis_variants_keep_freecad_direction(self) -> None:
         expected_directions = {
@@ -1186,21 +1189,20 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         self.assertEqual(
             [diagnostic["code"] for diagnostic in result["diagnostics"]],
-            ["unsupported_property"] * 2,
+            ["unsupported_property"],
         )
         self.assertEqual(
             [diagnostic["property"] for diagnostic in result["diagnostics"]],
-            ["Transformation", "SpineTangent"],
+            ["Transformation"],
         )
-        self.assertIn("ScalingData law branches commented out", result["diagnostics"][0]["message"])
-        self.assertIn("getContinuousEdges", result["diagnostics"][1]["message"])
+        self.assertIn("C6 PipeLaw ScalingData DTO", result["diagnostics"][0]["message"])
         self.assertEqual(result["objects"]["AdditivePipeAuxiliary"]["status"], "ok")
         self.assertEqual(result["objects"]["AdditivePipeAuxiliary"]["mode"], "Auxiliary")
         self.assertEqual(result["objects"]["AdditivePipeAuxiliary"]["auxiliary_curvilinear"], False)
         self.assertEqual(result["objects"]["AdditivePipeBinormal"]["status"], "ok")
         self.assertEqual(result["objects"]["AdditivePipeBinormal"]["mode"], "Binormal")
         self.assertEqual(result["objects"]["AdditivePipeScaling"]["status"], "error")
-        self.assertEqual(result["objects"]["AdditivePipeTangent"]["status"], "error")
+        self.assertEqual(result["objects"]["AdditivePipeTangent"]["status"], "ok")
 
     def test_c51m4_partdesign_pipe_fixed_round_selected_spine_matches_native_oracle(self) -> None:
         result = self.run_recompute("partdesign-pipe-fixed-round-body", "c51m4")
@@ -1251,34 +1253,127 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("part_design_pipe:sewing", named_shape["element_history_status"])
         self.assert_object_matches_expected(result, "c51m4", "partdesign-pipe-selected-spine-multisection")
 
-    def test_c51m4_partdesign_pipe_source_backed_blockers_are_exact(self) -> None:
+    def test_c51m4_partdesign_pipe_source_backed_blockers_follow_c6m1_boundaries(self) -> None:
         result = self.run_recompute("partdesign-pipe-source-backed-blockers", "c51m4")
 
         self.assertEqual(
             [diagnostic["code"] for diagnostic in result["diagnostics"]],
-            ["unsupported_property"] * 5,
+            ["unsupported_property", "unsupported_property", "product_contract_required"],
         )
         self.assertEqual(
             [diagnostic["property"] for diagnostic in result["diagnostics"]],
+            ["Transformation", "Transformation", "Transformation"],
+        )
+        self.assertEqual(result["objects"]["AdditivePipeLinearScaling"]["status"], "error")
+        self.assertEqual(result["objects"]["AdditivePipeSShapeScaling"]["status"], "error")
+        self.assertEqual(result["objects"]["AdditivePipeInterpolation"]["status"], "error")
+        self.assertEqual(result["objects"]["AdditivePipeSpineTangent"]["status"], "ok")
+        self.assertEqual(result["objects"]["AdditivePipeAuxiliaryTangent"]["status"], "ok")
+        self.assertIn("C6 PipeLaw ScalingData DTO", result["diagnostics"][0]["message"])
+        self.assertIn("LawSamples product contract", result["diagnostics"][2]["message"])
+
+    def test_c6m1_partdesign_pipe_law_products_publish_contract_metadata(self) -> None:
+        for fixture, object_name, kind, parameters in [
+            (
+                "partdesign-pipe-linear-law-product",
+                "AdditivePipeLinearProduct",
+                "Linear",
+                {"start_scale": 1.0, "end_scale": 1.6},
+            ),
+            (
+                "partdesign-pipe-s-shape-law-product",
+                "AdditivePipeSShapeProduct",
+                "S-shape",
+                {"x": 1.5, "y": 0.35, "z": 0.85},
+            ),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "c6m1")
+                pipe = result["objects"][object_name]
+                named_shape = result["named_shapes"][object_name]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(pipe["status"], "ok")
+                self.assertEqual(pipe["transformation"], kind)
+                self.assertEqual(pipe["pipe_law"]["kind"], kind)
+                self.assertEqual(pipe["pipe_law"]["source"], "freecad_source_commented")
+                self.assertEqual(pipe["pipe_law"]["contract"], "cad_core_product_contract")
+                for key, value in parameters.items():
+                    self.assertEqual(pipe["pipe_law"]["parameters"][key], value)
+                self.assertIn("part_sweep:pipeshell_history", named_shape["element_history_status"])
+                self.assertIn("part_design_pipe:sewing", named_shape["element_history_status"])
+
+    def test_c6m1_partdesign_pipe_interpolation_keeps_product_contract_boundary(self) -> None:
+        result = self.run_recompute("partdesign-pipe-interpolation-law-boundary", "c6m1")
+        diagnostic = result["diagnostics"][0]
+        pipe = result["objects"]["AdditivePipeInterpolationBoundary"]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["product_contract_required"])
+        self.assertEqual(diagnostic["property"], "Transformation")
+        self.assertEqual(pipe["status"], "error")
+        self.assertEqual(pipe["pipe_law"]["kind"], "Interpolation")
+        self.assertEqual(pipe["pipe_law"]["status"], "product_contract_required")
+        self.assertNotIn("shape", pipe)
+
+    def test_c6m1_partdesign_pipe_tangent_ledgers_are_request_local(self) -> None:
+        cases = [
+            (
+                "partdesign-pipe-spine-tangent-ledger-product",
+                "AdditivePipeSpineTangentProduct",
+                "continuous_edge_ledger",
+                "SketchPipeSpine",
+            ),
+            (
+                "partdesign-pipe-auxiliary-tangent-ledger-product",
+                "AdditivePipeAuxiliaryTangentProduct",
+                "auxiliary_continuous_edge_ledger",
+                "AuxiliarySpine",
+            ),
+        ]
+        for fixture, object_name, ledger_field, source_object in cases:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "c6m1")
+                pipe = result["objects"][object_name]
+                ledger = pipe[ledger_field]
+                named_shape = result["named_shapes"][object_name]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(pipe["status"], "ok")
+                self.assertEqual(ledger["source_object"], source_object)
+                self.assertEqual(ledger["requested_subnames"], ["Edge2"])
+                self.assertEqual(ledger["expanded_subnames"], ["Edge1", "Edge2", "Edge3"])
+                self.assertEqual(ledger["continuity_rule"], "G1Include_C0BoundaryStops")
+                self.assertEqual(ledger["rejection_reason"], "")
+                self.assertTrue(ledger["adjacency_evidence"])
+                self.assertTrue(all(item["decision"] == "accepted" for item in ledger["adjacency_evidence"]))
+                self.assertIn("part_sweep:pipeshell_history", named_shape["element_history_status"])
+
+    def test_c6m1_partdesign_pipe_law_and_tangent_diagnostics_are_locatable(self) -> None:
+        result = self.run_recompute("partdesign-pipe-law-tangent-diagnostics", "c6m1")
+
+        self.assertEqual(
+            [diagnostic["code"] for diagnostic in result["diagnostics"]],
             [
-                "Transformation",
-                "Transformation",
-                "Transformation",
-                "SpineTangent",
-                "AuxiliarySpineTangent",
+                "invalid_pipe_law_data",
+                "product_contract_required",
+                "non_edge_subname",
+                "disconnected_path",
+                "ambiguous_branch_junction",
+                "closed_loop_ambiguity",
             ],
         )
-        self.assertTrue(
-            all(result["objects"][name]["status"] == "error" for name in [
-                "AdditivePipeLinearScaling",
-                "AdditivePipeSShapeScaling",
-                "AdditivePipeInterpolation",
-                "AdditivePipeSpineTangent",
-                "AdditivePipeAuxiliaryTangent",
-            ])
-        )
-        self.assertIn("ScalingData law branches commented out", result["diagnostics"][0]["message"])
-        self.assertIn("getContinuousEdges", result["diagnostics"][3]["message"])
+        diagnostics = {diagnostic["object"]: diagnostic for diagnostic in result["diagnostics"]}
+        self.assertEqual(diagnostics["AdditivePipeInvalidScalingData"]["property"], "ScalingData")
+        self.assertEqual(diagnostics["AdditivePipeInterpolationBoundary"]["property"], "Transformation")
+        for object_name in [
+            "AdditivePipeNonEdgeTangent",
+            "AdditivePipeDisconnectedTangent",
+            "AdditivePipeBranchTangent",
+            "AdditivePipeClosedLoopTangent",
+        ]:
+            self.assertEqual(diagnostics[object_name]["property"], "SpineTangent")
+            self.assertIn("target", diagnostics[object_name])
+            self.assertIn("subname", diagnostics[object_name])
 
     def test_p7_hole_blind_depth_cuts_body(self) -> None:
         result = self.run_recompute("hole-blind-depth", "p7")

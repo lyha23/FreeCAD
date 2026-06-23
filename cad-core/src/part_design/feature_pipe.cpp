@@ -33,7 +33,16 @@ struct PipeInput {
     std::string objectName;
     std::string subname;
     TopoDS_Shape shape;
+    TopoDS_Shape sourceShape;
     const part::NamedShape* namedShape = nullptr;
+    std::vector<std::string> requestedSubnames;
+    std::optional<part::ContinuousEdgeLedger> continuousEdgeLedger;
+};
+
+struct PipeLawResolution {
+    bool ok = true;
+    std::optional<part::PipeScalingLaw> law;
+    nlohmann::json metadata;
 };
 
 void addPipeDiagnostic(const app::DocumentObject& object,
@@ -277,6 +286,56 @@ std::string firstLinkSubname(const app::DocumentObject& object, const std::strin
     return {};
 }
 
+const nlohmann::json* propertyPayload(const app::DocumentObject& object, const std::string& property)
+{
+    const auto* value = app::propertyValue(object, property);
+    if (value == nullptr) {
+        return nullptr;
+    }
+    if (value->raw.is_object() && value->raw.contains("value")) {
+        return &value->raw.at("value");
+    }
+    return &value->raw;
+}
+
+std::optional<std::array<double, 3>> firstScalingDataVector(const app::DocumentObject& object)
+{
+    const nlohmann::json* payload = propertyPayload(object, "ScalingData");
+    if (payload == nullptr || !payload->is_array() || payload->empty()) {
+        return std::nullopt;
+    }
+    const nlohmann::json& first = payload->at(0);
+    const auto readComponent = [&](const nlohmann::json& value,
+                                   const std::string& key,
+                                   std::size_t index) -> std::optional<double> {
+        const nlohmann::json* component = nullptr;
+        if (value.is_object()) {
+            const auto it = value.find(key);
+            if (it != value.end()) {
+                component = &*it;
+            }
+        }
+        else if (value.is_array() && index < value.size()) {
+            component = &value.at(index);
+        }
+        if (component == nullptr || !component->is_number()) {
+            return std::nullopt;
+        }
+        const double number = component->get<double>();
+        if (!std::isfinite(number)) {
+            return std::nullopt;
+        }
+        return number;
+    };
+    const auto x = readComponent(first, "x", 0U);
+    const auto y = readComponent(first, "y", 1U);
+    const auto z = readComponent(first, "z", 2U);
+    if (!x || !y || !z) {
+        return std::nullopt;
+    }
+    return std::array<double, 3>{*x, *y, *z};
+}
+
 bool rejectExactPipeBlocker(const app::DocumentObject& object,
                             runtime::ComputeContext& context,
                             const std::string& property,
@@ -292,44 +351,99 @@ bool rejectExactPipeBlocker(const app::DocumentObject& object,
     return false;
 }
 
+PipeLawResolution resolvePipeLaw(const app::DocumentObject& object,
+                                 runtime::ComputeContext& context,
+                                 int transformation)
+{
+    PipeLawResolution resolution;
+    if (transformation < 2) {
+        return resolution;
+    }
+    if (transformation == 4) {
+        addPipeDiagnostic(
+            object,
+            context,
+            "product_contract_required",
+            "PartDesign Pipe Transformation=Interpolation requires a reopened LawSamples product contract; C6-M1 does not map it to Linear or S-shape",
+            "Transformation"
+        );
+        resolution.ok = false;
+        resolution.metadata = {
+            {"kind", "Interpolation"},
+            {"status", "product_contract_required"},
+            {"source", "freecad_enum_only"},
+            {"contract", "product_contract_required"},
+        };
+        return resolution;
+    }
+
+    const auto scalingData = firstScalingDataVector(object);
+    if (!scalingData) {
+        if (app::propertyValue(object, "ScalingData") == nullptr) {
+            rejectExactPipeBlocker(
+                object,
+                context,
+                "Transformation",
+                "PartDesign Pipe scaling-law Transformation is source-blocked until a C6 PipeLaw ScalingData DTO is provided"
+            );
+        }
+        else {
+            addPipeDiagnostic(
+                object,
+                context,
+                "invalid_pipe_law_data",
+                "PartDesign Pipe ScalingData must provide a finite first vector for the C6 PipeLaw product contract",
+                "ScalingData"
+            );
+        }
+        resolution.ok = false;
+        return resolution;
+    }
+
+    if (transformation == 2) {
+        resolution.law = part::PipeScalingLaw {
+            part::PipeScalingLawKind::Linear,
+            (*scalingData)[0],
+            1.0,
+            1.0,
+        };
+        resolution.metadata = {
+            {"kind", "Linear"},
+            {"source", "freecad_source_commented"},
+            {"contract", "cad_core_product_contract"},
+            {"domain", {0.0, 1.0}},
+            {"parameters", {{"start_scale", 1.0}, {"end_scale", (*scalingData)[0]}}},
+        };
+        return resolution;
+    }
+
+    resolution.law = part::PipeScalingLaw {
+        part::PipeScalingLawKind::SShape,
+        (*scalingData)[0],
+        (*scalingData)[1],
+        (*scalingData)[2],
+    };
+    resolution.metadata = {
+        {"kind", "S-shape"},
+        {"source", "freecad_source_commented"},
+        {"contract", "cad_core_product_contract"},
+        {"domain", {0.0, 1.0}},
+        {"parameters", {{"x", (*scalingData)[0]}, {"y", (*scalingData)[1]}, {"z", (*scalingData)[2]}}},
+    };
+    return resolution;
+}
+
 bool rejectSourceBlockedPipeBranches(const app::DocumentObject& object,
                                      runtime::ComputeContext& context,
                                      int transformation)
 {
     bool ok = true;
-    if (transformation >= 2) {
-        ok = rejectExactPipeBlocker(
-                 object,
-                 context,
-                 "Transformation",
-                 "PartDesign Pipe scaling-law Transformation is source-blocked: FeaturePipe.cpp keeps Linear/S-shape ScalingData law branches commented out"
-            )
-            && ok;
-    }
     if (transformation == 1 && app::readLinks(object, "Sections").empty()) {
         ok = rejectExactPipeBlocker(
                  object,
                  context,
                  "Sections",
                  "PartDesign Pipe Transformation=Multisection requires Sections"
-             )
-            && ok;
-    }
-    if (app::readBool(object, "SpineTangent").value_or(false)) {
-        ok = rejectExactPipeBlocker(
-                 object,
-                 context,
-                 "SpineTangent",
-                 "PartDesign Pipe SpineTangent is source-blocked: FeaturePipe.cpp::buildPipePath() comments out getContinuousEdges(shape, subedge)"
-             )
-            && ok;
-    }
-    if (app::readBool(object, "AuxiliarySpineTangent").value_or(false)) {
-        ok = rejectExactPipeBlocker(
-                 object,
-                 context,
-                 "AuxiliarySpineTangent",
-                 "PartDesign Pipe AuxiliarySpineTangent is source-blocked with the same commented tangent expansion path as SpineTangent"
              )
             && ok;
     }
@@ -350,6 +464,28 @@ part::PipeShellMode pipeShellMode(int mode)
         default:
             return part::PipeShellMode::Standard;
     }
+}
+
+nlohmann::json continuousEdgeLedgerJson(const part::ContinuousEdgeLedger& ledger)
+{
+    nlohmann::json evidence = nlohmann::json::array();
+    for (const part::ContinuousEdgeAdjacencyEvidence& item : ledger.adjacencyEvidence) {
+        evidence.push_back({
+            {"source_subname", item.sourceSubname},
+            {"candidate_subname", item.candidateSubname},
+            {"shared_vertex", item.sharedVertex},
+            {"continuity", item.continuity},
+            {"decision", item.decision},
+        });
+    }
+    return {
+        {"source_object", ledger.sourceObject},
+        {"requested_subnames", ledger.requestedSubnames},
+        {"expanded_subnames", ledger.expandedSubnames},
+        {"continuity_rule", ledger.continuityRule},
+        {"adjacency_evidence", evidence},
+        {"rejection_reason", ledger.rejectionReason},
+    };
 }
 
 std::optional<PipeInput> resolveSectionLink(const app::DocumentObject& object,
@@ -378,7 +514,7 @@ std::optional<PipeInput> resolveSectionLink(const app::DocumentObject& object,
     const bool useEntireSketch = targetIsSketch(context, link.object)
         && (link.subnames.empty() || link.subnames.front().rfind("Vertex", 0U) != 0U);
     if (link.subnames.empty() || useEntireSketch) {
-        return PipeInput{link.object, {}, shapeIt->second.shape, namedShape};
+        return PipeInput{link.object, {}, shapeIt->second.shape, shapeIt->second.shape, namedShape};
     }
     const auto subshape = linkedSubshape(shapeIt->second.shape, namedShape, link, 0U);
     if (!subshape || subshape->IsNull()) {
@@ -391,7 +527,7 @@ std::optional<PipeInput> resolveSectionLink(const app::DocumentObject& object,
                           link.subnames.front());
         return std::nullopt;
     }
-    return PipeInput{link.object, link.subnames.front(), *subshape, namedShape};
+    return PipeInput{link.object, link.subnames.front(), *subshape, shapeIt->second.shape, namedShape};
 }
 
 std::optional<std::vector<PipeInput>> resolveSections(const app::DocumentObject& object,
@@ -447,7 +583,7 @@ std::optional<PipeInput> resolveProfile(const app::DocumentObject& object,
     const bool useEntireSketch = targetIsSketch(context, link->object)
         && (link->subnames.empty() || link->subnames.front().rfind("Vertex", 0U) != 0U);
     if (link->subnames.empty() || useEntireSketch) {
-        return PipeInput{link->object, {}, shapeIt->second.shape, namedShape};
+        return PipeInput{link->object, {}, shapeIt->second.shape, shapeIt->second.shape, namedShape};
     }
 
     const auto subshape = linkedSubshape(shapeIt->second.shape, namedShape, *link, 0U);
@@ -461,11 +597,12 @@ std::optional<PipeInput> resolveProfile(const app::DocumentObject& object,
                           link->subnames.front());
         return std::nullopt;
     }
-    return PipeInput{link->object, link->subnames.front(), *subshape, namedShape};
+    return PipeInput{link->object, link->subnames.front(), *subshape, shapeIt->second.shape, namedShape};
 }
 
 std::optional<PipeInput> resolveSpine(const app::DocumentObject& object,
-                                      runtime::ComputeContext& context)
+                                      runtime::ComputeContext& context,
+                                      bool tangentExpansion)
 {
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp
     // Pipe::execute() reads "Spine", passes Spine.getSubValues() to buildPipePath(), and
@@ -493,32 +630,59 @@ std::optional<PipeInput> resolveSpine(const app::DocumentObject& object,
     const part::NamedShape* namedShape = namedShapeForTarget(context, link->object);
 
     TopoDS_Shape spine = shapeIt->second.shape;
+    std::optional<part::ContinuousEdgeLedger> ledger;
     if (!link->subnames.empty()) {
-        std::vector<TopoDS_Shape> selected;
-        selected.reserve(link->subnames.size());
-        for (std::size_t index = 0; index < link->subnames.size(); ++index) {
-            const auto subshape = linkedSubshape(shapeIt->second.shape, namedShape, *link, index);
-            if (!subshape || subshape->IsNull()) {
-                const std::string subname = index < link->subnames.size() ? link->subnames.at(index) : std::string {};
+        if (tangentExpansion) {
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/
+            // FeaturePipe.cpp::buildPipePath(), commented call "getContinuousEdges(shape,
+            // subedge)" only applies to selected spine edges, so CAD Core keeps this
+            // request-local and does not expand whole-wire/compound inputs.
+            ledger = part::expandContinuousEdgesForPipePath(link->object, shapeIt->second.shape, link->subnames);
+            if (!ledger->rejectionReason.empty()) {
                 addPipeDiagnostic(object,
                                   context,
-                                  "invalid_subshape",
-                                  "Invalid spine",
-                                  "Spine",
+                                  ledger->rejectionReason,
+                                  "PartDesign Pipe SpineTangent continuous-edge expansion rejected the selected spine path",
+                                  "SpineTangent",
                                   link->object,
-                                  subname);
+                                  link->subnames.empty() ? std::string {} : link->subnames.front());
                 return std::nullopt;
             }
-            selected.push_back(*subshape);
+            if (!ledger->expandedShape.IsNull()) {
+                spine = ledger->expandedShape;
+            }
         }
-        spine = compoundOf(selected);
+        else {
+            std::vector<TopoDS_Shape> selected;
+            selected.reserve(link->subnames.size());
+            for (std::size_t index = 0; index < link->subnames.size(); ++index) {
+                const auto subshape = linkedSubshape(shapeIt->second.shape, namedShape, *link, index);
+                if (!subshape || subshape->IsNull()) {
+                    const std::string subname = index < link->subnames.size() ? link->subnames.at(index) : std::string {};
+                    addPipeDiagnostic(object,
+                                      context,
+                                      "invalid_subshape",
+                                      "Invalid spine",
+                                      "Spine",
+                                      link->object,
+                                      subname);
+                    return std::nullopt;
+                }
+                selected.push_back(*subshape);
+            }
+            spine = compoundOf(selected);
+        }
     }
 
-    return PipeInput{link->object, {}, spine, namedShape};
+    PipeInput input{link->object, {}, spine, shapeIt->second.shape, namedShape};
+    input.requestedSubnames = link->subnames;
+    input.continuousEdgeLedger = ledger;
+    return input;
 }
 
 std::optional<PipeInput> resolveAuxiliarySpine(const app::DocumentObject& object,
-                                               runtime::ComputeContext& context)
+                                               runtime::ComputeContext& context,
+                                               bool tangentExpansion)
 {
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp
     // ::Pipe::execute(), when "Mode.getValue() == 3", reads AuxiliarySpine.getSubValues(),
@@ -559,28 +723,50 @@ std::optional<PipeInput> resolveAuxiliarySpine(const app::DocumentObject& object
     const part::NamedShape* namedShape = namedShapeForTarget(context, link->object);
 
     TopoDS_Shape auxiliary = shapeIt->second.shape;
+    std::optional<part::ContinuousEdgeLedger> ledger;
     if (!link->subnames.empty()) {
-        std::vector<TopoDS_Shape> selected;
-        selected.reserve(link->subnames.size());
-        for (std::size_t index = 0; index < link->subnames.size(); ++index) {
-            const auto subshape = linkedSubshape(shapeIt->second.shape, namedShape, *link, index);
-            if (!subshape || subshape->IsNull()) {
-                const std::string subname = index < link->subnames.size() ? link->subnames.at(index) : std::string {};
+        if (tangentExpansion) {
+            ledger = part::expandContinuousEdgesForPipePath(link->object, shapeIt->second.shape, link->subnames);
+            if (!ledger->rejectionReason.empty()) {
                 addPipeDiagnostic(object,
                                   context,
-                                  "invalid_subshape",
-                                  "Invalid auxiliary spine",
-                                  "AuxiliarySpine",
+                                  ledger->rejectionReason,
+                                  "PartDesign Pipe AuxiliarySpineTangent continuous-edge expansion rejected the selected auxiliary spine path",
+                                  "AuxiliarySpineTangent",
                                   link->object,
-                                  subname);
+                                  link->subnames.empty() ? std::string {} : link->subnames.front());
                 return std::nullopt;
             }
-            selected.push_back(*subshape);
+            if (!ledger->expandedShape.IsNull()) {
+                auxiliary = ledger->expandedShape;
+            }
         }
-        auxiliary = compoundOf(selected);
+        else {
+            std::vector<TopoDS_Shape> selected;
+            selected.reserve(link->subnames.size());
+            for (std::size_t index = 0; index < link->subnames.size(); ++index) {
+                const auto subshape = linkedSubshape(shapeIt->second.shape, namedShape, *link, index);
+                if (!subshape || subshape->IsNull()) {
+                    const std::string subname = index < link->subnames.size() ? link->subnames.at(index) : std::string {};
+                    addPipeDiagnostic(object,
+                                      context,
+                                      "invalid_subshape",
+                                      "Invalid auxiliary spine",
+                                      "AuxiliarySpine",
+                                      link->object,
+                                      subname);
+                    return std::nullopt;
+                }
+                selected.push_back(*subshape);
+            }
+            auxiliary = compoundOf(selected);
+        }
     }
 
-    return PipeInput{link->object, {}, auxiliary, namedShape};
+    PipeInput input{link->object, {}, auxiliary, shapeIt->second.shape, namedShape};
+    input.requestedSubnames = link->subnames;
+    input.continuousEdgeLedger = ledger;
+    return input;
 }
 
 std::vector<part::NamedShapeSource> pipeSources(const PipeInput& spine,
@@ -631,6 +817,8 @@ void executePipeFeature(const app::DocumentObject& object,
              "AuxiliarySpineTangent",
              "AuxiliaryCurvilinear",
              "Binormal",
+             "ScalingData",
+             "LawSamples",
              "BaseFeature",
              "Refine",
              "FuzzyTolerance"}
@@ -671,13 +859,26 @@ void executePipeFeature(const app::DocumentObject& object,
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
+    const PipeLawResolution pipeLaw = resolvePipeLaw(object, context, *transformation);
+    if (!pipeLaw.ok) {
+        context.objects[object.name] = {
+            {"status", "error"},
+            {"feature", "partdesign_pipe"},
+            {"transformation", transformationLabel(*transformation)},
+        };
+        if (!pipeLaw.metadata.is_null()) {
+            context.objects[object.name]["pipe_law"] = pipeLaw.metadata;
+        }
+        return;
+    }
 
     const auto profile = resolveProfile(object, context);
     if (!profile) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    const auto spine = resolveSpine(object, context);
+    const bool spineTangent = app::readBool(object, "SpineTangent").value_or(false);
+    const auto spine = resolveSpine(object, context, spineTangent);
     if (!spine) {
         context.objects[object.name] = {{"status", "error"}};
         return;
@@ -697,10 +898,12 @@ void executePipeFeature(const app::DocumentObject& object,
     pipeOptions.mode = pipeShellMode(*mode);
     pipeOptions.transition = *transition;
     pipeOptions.sewCaps = true;
+    pipeOptions.scalingLaw = pipeLaw.law;
 
     std::optional<PipeInput> auxiliarySpine;
     if (*mode == 3) {
-        auxiliarySpine = resolveAuxiliarySpine(object, context);
+        const bool auxiliaryTangent = app::readBool(object, "AuxiliarySpineTangent").value_or(false);
+        auxiliarySpine = resolveAuxiliarySpine(object, context, auxiliaryTangent);
         if (!auxiliarySpine) {
             context.objects[object.name] = {{"status", "error"}};
             return;
@@ -828,6 +1031,16 @@ void executePipeFeature(const app::DocumentObject& object,
     if (auxiliarySpine) {
         result["auxiliary_spine"] = auxiliarySpine->objectName;
         result["auxiliary_curvilinear"] = pipeOptions.auxiliaryCurvilinear;
+    }
+    if (!pipeLaw.metadata.is_null()) {
+        result["pipe_law"] = pipeLaw.metadata;
+    }
+    if (spine->continuousEdgeLedger) {
+        result["continuous_edge_ledger"] = continuousEdgeLedgerJson(*spine->continuousEdgeLedger);
+    }
+    if (auxiliarySpine && auxiliarySpine->continuousEdgeLedger) {
+        result["auxiliary_continuous_edge_ledger"]
+            = continuousEdgeLedgerJson(*auxiliarySpine->continuousEdgeLedger);
     }
     if (*mode == 4) {
         result["binormal"] = pipeOptions.binormal;

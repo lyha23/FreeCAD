@@ -1,0 +1,55 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPipeProfile",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [-0.3, -0.3], "end": [0.3, -0.3] },
+          { "kind": "LineSegment", "start": [0.3, -0.3], "end": [0.3, 0.3] },
+          { "kind": "LineSegment", "start": [0.3, 0.3], "end": [-0.3, 0.3] },
+          { "kind": "LineSegment", "start": [-0.3, 0.3], "end": [-0.3, -0.3] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "PipeSpine",
+      "ID": 2,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 0,
+        "Y2": 0,
+        "Z2": 4
+      }
+    },
+    {
+      "Name": "AdditivePipeInterpolationBoundary",
+      "ID": 3,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Interpolation",
+        "LawSamples": [[0.0, 1.0], [1.0, 1.4]]
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["AdditivePipeInterpolationBoundary"]
+  }
+}

@@ -146,6 +146,48 @@ enum class PipeShellMode
     Binormal,
 };
 
+enum class PipeScalingLawKind
+{
+    Linear,
+    SShape,
+};
+
+struct PipeScalingLaw
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp
+    // ::Pipe::execute(), commented branches call "Law_Linear::Set(0, 1, 1,
+    // ScalingData[0].x)" and "Law_S::Set(0, 1, ScalingData[0].y, 1, ScalingData[0].x,
+    // ScalingData[0].z)" before the active "mkPS.SetLaw(..., scalinglaw)" hook.
+    PipeScalingLawKind kind = PipeScalingLawKind::Linear;
+    double x = 1.0;
+    double y = 1.0;
+    double z = 1.0;
+};
+
+struct ContinuousEdgeAdjacencyEvidence
+{
+    std::string sourceSubname;
+    std::string candidateSubname;
+    std::string sharedVertex;
+    std::string continuity;
+    std::string decision;
+};
+
+struct ContinuousEdgeLedger
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.h
+    // ::getContinuousEdges(), comment says "get the given edges and all their tangent ones";
+    // FeaturePipe.cpp::buildPipePath() keeps the call "getContinuousEdges(shape, subedge)"
+    // commented out, so CAD Core stores this as a request-local product-extension ledger.
+    std::string sourceObject;
+    std::vector<std::string> requestedSubnames;
+    std::vector<std::string> expandedSubnames;
+    std::string continuityRule = "G1Include_C0BoundaryStops";
+    std::vector<ContinuousEdgeAdjacencyEvidence> adjacencyEvidence;
+    std::string rejectionReason;
+    TopoDS_Shape expandedShape;
+};
+
 struct PipeShellSectionOption
 {
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
@@ -188,9 +230,16 @@ struct PipeShellOptions
     std::array<double, 3> binormal {{0.0, 0.0, 1.0}};
     std::vector<PipeShellSectionOption> sectionOptions;
     std::optional<PipeShellTolerance> tolerance;
+    std::optional<PipeScalingLaw> scalingLaw;
     bool linearizeFaces = false;
     bool sewCaps = false;
 };
+
+ContinuousEdgeLedger expandContinuousEdgesForPipePath(
+    const std::string& sourceObject,
+    const TopoDS_Shape& sourceShape,
+    const std::vector<std::string>& requestedSubnames
+);
 
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
 // ::TopoShape::makeElementRuledSurface(), for two edges calls "BRepFill::Face(Edge, Edge)"

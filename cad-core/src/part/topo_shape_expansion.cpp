@@ -28,6 +28,9 @@
 #include <GeomAdaptor_Surface.hxx>
 #include <GeomAbs_Shape.hxx>
 #include <GProp_GProps.hxx>
+#include <Law_Function.hxx>
+#include <Law_Linear.hxx>
+#include <Law_S.hxx>
 #include <Precision.hxx>
 #include <ShapeFix_Wire.hxx>
 #include <Standard_Failure.hxx>
@@ -137,6 +140,104 @@ bool sameEndpointPair(const TopoDS_Edge& left, const TopoDS_Edge& right)
             && samePoint(leftEndpoints[1], rightEndpoints[1]))
         || (samePoint(leftEndpoints[0], rightEndpoints[1])
             && samePoint(leftEndpoints[1], rightEndpoints[0]));
+}
+
+std::optional<gp_Vec> edgeTangentAt(const TopoDS_Edge& edge, bool first)
+{
+    try {
+        BRepAdaptor_Curve curve(edge);
+        gp_Pnt point;
+        gp_Vec tangent;
+        curve.D1(first ? curve.FirstParameter() : curve.LastParameter(), point, tangent);
+        if (tangent.SquareMagnitude() <= Precision::SquareConfusion()) {
+            return std::nullopt;
+        }
+        tangent.Normalize();
+        return tangent;
+    }
+    catch (const Standard_Failure&) {
+        return std::nullopt;
+    }
+}
+
+struct ContinuousEdgeRecord
+{
+    std::string name;
+    TopoDS_Edge edge;
+    std::array<gp_Pnt, 2> endpoints;
+};
+
+std::vector<ContinuousEdgeRecord> edgeRecordsForShape(const TopoDS_Shape& shape)
+{
+    std::vector<ContinuousEdgeRecord> records;
+    TopTools_IndexedMapOfShape edges;
+    TopExp::MapShapes(shape, TopAbs_EDGE, edges);
+    records.reserve(static_cast<std::size_t>(std::max(0, edges.Extent())));
+    for (int index = 1; index <= edges.Extent(); ++index) {
+        TopoDS_Edge edge = TopoDS::Edge(edges(index));
+        records.push_back(ContinuousEdgeRecord {
+            "Edge" + std::to_string(index),
+            edge,
+            edgeEndpoints(edge),
+        });
+    }
+    return records;
+}
+
+std::optional<std::size_t> indexForEdgeName(const std::vector<ContinuousEdgeRecord>& records,
+                                            const std::string& name)
+{
+    for (std::size_t index = 0; index < records.size(); ++index) {
+        if (records.at(index).name == name) {
+            return index;
+        }
+    }
+    return std::nullopt;
+}
+
+std::optional<std::string> sharedEndpointLabel(const ContinuousEdgeRecord& left,
+                                               const ContinuousEdgeRecord& right)
+{
+    for (std::size_t leftIndex = 0; leftIndex < left.endpoints.size(); ++leftIndex) {
+        for (std::size_t rightIndex = 0; rightIndex < right.endpoints.size(); ++rightIndex) {
+            if (samePoint(left.endpoints.at(leftIndex), right.endpoints.at(rightIndex))) {
+                return (leftIndex == 0U ? "start" : "end") + std::string("~")
+                    + (rightIndex == 0U ? "start" : "end");
+            }
+        }
+    }
+    return std::nullopt;
+}
+
+bool tangentContinuousAtSharedEndpoint(const ContinuousEdgeRecord& left,
+                                       const ContinuousEdgeRecord& right,
+                                       const std::string& sharedEndpoint)
+{
+    const bool leftFirst = sharedEndpoint.rfind("start", 0U) == 0U;
+    const bool rightFirst = sharedEndpoint.find("~start") != std::string::npos;
+    const auto leftTangent = edgeTangentAt(left.edge, leftFirst);
+    const auto rightTangent = edgeTangentAt(right.edge, rightFirst);
+    if (!leftTangent || !rightTangent) {
+        return false;
+    }
+    return std::abs(leftTangent->Dot(*rightTangent)) >= 1.0 - 1.0e-7;
+}
+
+TopoDS_Shape wireShapeFromOrderedRecords(const std::vector<ContinuousEdgeRecord>& records,
+                                         const std::vector<std::size_t>& order)
+{
+    BRepBuilderAPI_MakeWire wireBuilder;
+    for (std::size_t index : order) {
+        wireBuilder.Add(records.at(index).edge);
+    }
+    wireBuilder.Build();
+    if (!wireBuilder.IsDone() || wireBuilder.Wire().IsNull()) {
+        return {};
+    }
+    TopoDS_Wire wire = wireBuilder.Wire();
+    BRepLib::BuildCurves3d(wire);
+    BRepLib::SameParameter(wire, Precision::Confusion(), Standard_True);
+    return wire;
 }
 
 std::array<gp_Pnt, 2> curveSamplePoints(const TopoDS_Shape& curveShape)
@@ -1061,6 +1162,21 @@ std::string configurePipeShellMode(BRepOffsetAPI_MakePipeShell& pipeShell,
     return {};
 }
 
+Handle(Law_Function) makePipeScalingLaw(const PipeScalingLaw& law)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp
+    // ::Pipe::execute(), commented product source hints use Law_Linear::Set(0, 1, 1, x)
+    // and Law_S::Set(0, 1, y, 1, x, z), then the active PipeShell loop calls SetLaw().
+    if (law.kind == PipeScalingLawKind::SShape) {
+        Handle(Law_S) sShape = new Law_S();
+        sShape->Set(0.0, 1.0, law.y, 1.0, law.x, law.z);
+        return sShape;
+    }
+    Handle(Law_Linear) linear = new Law_Linear();
+    linear->Set(0.0, 1.0, 1.0, law.x);
+    return linear;
+}
+
 std::optional<TopoDS_Wire> simulatedPipeEndWire(
     const TopTools_ListOfShape& simulated,
     bool front,
@@ -1260,6 +1376,156 @@ std::optional<TopoDS_Wire> curveAsWire(const TopoDS_Shape& curve)
 }
 
 }  // namespace
+
+ContinuousEdgeLedger expandContinuousEdgesForPipePath(
+    const std::string& sourceObject,
+    const TopoDS_Shape& sourceShape,
+    const std::vector<std::string>& requestedSubnames
+)
+{
+    ContinuousEdgeLedger ledger;
+    ledger.sourceObject = sourceObject;
+    ledger.requestedSubnames = requestedSubnames;
+
+    const std::vector<ContinuousEdgeRecord> records = edgeRecordsForShape(sourceShape);
+    if (sourceShape.IsNull() || records.empty()) {
+        ledger.rejectionReason = "insufficient_adjacency_evidence";
+        return ledger;
+    }
+
+    std::vector<std::size_t> requestedIndices;
+    requestedIndices.reserve(requestedSubnames.size());
+    for (const std::string& subname : requestedSubnames) {
+        if (subname.rfind("Edge", 0U) != 0U) {
+            ledger.rejectionReason = "non_edge_subname";
+            return ledger;
+        }
+        const auto index = indexForEdgeName(records, subname);
+        if (!index) {
+            ledger.rejectionReason = "non_edge_subname";
+            return ledger;
+        }
+        if (BRep_Tool::IsClosed(records.at(*index).edge) == Standard_True) {
+            ledger.rejectionReason = "closed_loop_ambiguity";
+            return ledger;
+        }
+        requestedIndices.push_back(*index);
+    }
+    if (requestedIndices.empty()) {
+        return ledger;
+    }
+
+    std::vector<std::vector<std::size_t>> graph(records.size());
+    for (std::size_t left = 0; left < records.size(); ++left) {
+        for (std::size_t right = left + 1U; right < records.size(); ++right) {
+            const auto shared = sharedEndpointLabel(records.at(left), records.at(right));
+            if (!shared) {
+                continue;
+            }
+            const bool continuous = tangentContinuousAtSharedEndpoint(records.at(left), records.at(right), *shared);
+            ledger.adjacencyEvidence.push_back(ContinuousEdgeAdjacencyEvidence {
+                records.at(left).name,
+                records.at(right).name,
+                *shared,
+                continuous ? "G1" : "C0",
+                continuous ? "accepted" : "rejected_c0_boundary",
+            });
+            if (continuous) {
+                graph.at(left).push_back(right);
+                graph.at(right).push_back(left);
+            }
+        }
+    }
+
+    std::vector<bool> reachable(records.size(), false);
+    std::vector<std::size_t> queue {requestedIndices.front()};
+    reachable.at(requestedIndices.front()) = true;
+    for (std::size_t cursor = 0; cursor < queue.size(); ++cursor) {
+        for (std::size_t next : graph.at(queue.at(cursor))) {
+            if (!reachable.at(next)) {
+                reachable.at(next) = true;
+                queue.push_back(next);
+            }
+        }
+    }
+    for (std::size_t requested : requestedIndices) {
+        if (!reachable.at(requested)) {
+            ledger.rejectionReason = "disconnected_path";
+            return ledger;
+        }
+    }
+
+    std::vector<std::size_t> component;
+    for (std::size_t index = 0; index < reachable.size(); ++index) {
+        if (reachable.at(index)) {
+            component.push_back(index);
+            if (graph.at(index).size() > 2U) {
+                ledger.rejectionReason = "ambiguous_branch_junction";
+                return ledger;
+            }
+        }
+    }
+    if (component.size() > 1U
+        && std::all_of(component.begin(), component.end(), [&](std::size_t index) {
+               return graph.at(index).size() == 2U;
+           })) {
+        ledger.rejectionReason = "closed_loop_ambiguity";
+        return ledger;
+    }
+
+    std::vector<std::size_t> starts;
+    for (std::size_t index : component) {
+        if (graph.at(index).size() <= 1U) {
+            starts.push_back(index);
+        }
+    }
+    if (starts.empty()) {
+        ledger.rejectionReason = "closed_loop_ambiguity";
+        return ledger;
+    }
+
+    const std::size_t start = *std::min_element(starts.begin(), starts.end());
+    std::vector<std::size_t> ordered;
+    std::optional<std::size_t> previous;
+    std::size_t current = start;
+    while (true) {
+        ordered.push_back(current);
+        std::vector<std::size_t> nextCandidates;
+        for (std::size_t next : graph.at(current)) {
+            if (reachable.at(next) && (!previous || next != *previous)) {
+                nextCandidates.push_back(next);
+            }
+        }
+        if (nextCandidates.empty()) {
+            break;
+        }
+        if (nextCandidates.size() > 1U) {
+            ledger.rejectionReason = "ambiguous_branch_junction";
+            return ledger;
+        }
+        previous = current;
+        current = nextCandidates.front();
+        if (std::find(ordered.begin(), ordered.end(), current) != ordered.end()) {
+            ledger.rejectionReason = "closed_loop_ambiguity";
+            return ledger;
+        }
+    }
+    if (ordered.size() != component.size()) {
+        ledger.rejectionReason = "disconnected_path";
+        return ledger;
+    }
+
+    ledger.expandedShape = wireShapeFromOrderedRecords(records, ordered);
+    if (ledger.expandedShape.IsNull()) {
+        ledger.rejectionReason = "insufficient_adjacency_evidence";
+        return ledger;
+    }
+    ledger.expandedSubnames.reserve(ordered.size());
+    for (std::size_t index : ordered) {
+        ledger.expandedSubnames.push_back(records.at(index).name);
+    }
+    return ledger;
+}
 
 NamedShapeBuild makeElementLoftFromSources(
     const std::string& owner,
@@ -1495,6 +1761,9 @@ NamedShapeBuild makeElementPipeShellFromSources(
             return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, modeError};
         }
         pipeShell.SetTransitionMode(pipeShellTransitionMode(effectiveOptions.transition));
+        const Handle(Law_Function) scalingLaw = effectiveOptions.scalingLaw
+            ? makePipeScalingLaw(*effectiveOptions.scalingLaw)
+            : Handle(Law_Function) {};
         for (std::size_t index = 0; index < profiles->size(); ++index) {
             // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
             // BRepOffsetAPI_MakePipeShellPyImp.cpp::add(), accepts either
@@ -1504,7 +1773,14 @@ NamedShapeBuild makeElementPipeShellFromSources(
                 = index < effectiveOptions.sectionOptions.size()
                 ? &effectiveOptions.sectionOptions.at(index)
                 : nullptr;
-            if (option != nullptr && option->hasLocation) {
+            if (!scalingLaw.IsNull()) {
+                // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/
+                // FeaturePipe.cpp::Pipe::execute(), if "scalinglaw" exists, calls
+                // "mkPS.SetLaw(copyProfilePoint.getShape(), scalinglaw)" and
+                // "mkPS.SetLaw(wire.getShape(), scalinglaw)" instead of Add().
+                pipeShell.SetLaw(profiles->at(index), scalingLaw);
+            }
+            else if (option != nullptr && option->hasLocation) {
                 pipeShell.Add(
                     profiles->at(index),
                     option->location,

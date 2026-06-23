@@ -1,6 +1,6 @@
-# C6-M1 PartDesign Pipe Product Extension TransformationLawAndTangentExpansion 主线总入口
+# 【已实现】C6-M1 PartDesign Pipe Product Extension TransformationLawAndTangentExpansion 主线总入口
 
-本文是 `docs/CADCore6.0` 下的 C6-M1 实施主线。当前 S0 已完成 live 基线复核，S1 已完成 FreeCAD 源码候选矩阵复核，S2 已完成范围准入与 blocker 矩阵路由，S3 已完成 TransformationLawDTO 专项复审，S4 已完成 ContinuousEdgeLedger 专项复审，S5 已完成 PipeShellHistoryCapability 专项复审；S6 仍待执行。矩阵中的 product extension 口径、S3/S4 合同和 S5 release gate 已冻结，但不是实现完成结论。
+本文是 `docs/CADCore6.0` 下的 C6-M1 实施主线。当前 S0 已完成 live 基线复核，S1 已完成 FreeCAD 源码候选矩阵复核，S2 已完成范围准入与 blocker 矩阵路由，S3 已完成 TransformationLawDTO 专项复审，S4 已完成 ContinuousEdgeLedger 专项复审，S5 已完成 PipeShellHistoryCapability 专项复审，S6 已完成 Oracle 实现与发布闸门。矩阵中的 product extension 口径、S3/S4 合同和 S5 release gate 已由 C++、fixture、focused tests 与 capability 发布闭环验证。
 
 ## 主线目标
 
@@ -13,9 +13,10 @@
 - S0 live 基线（2026-06-23）：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=b5768acf40`，`git log -1 --oneline` 为 `b5768acf40 docs: 补充 C6-M1 Pipe 扩展方案包`，S0 开始前工作区干净。
 - C51-S4 已支持 `Mode=Fixed/Auxiliary/Binormal`、`Transition=Round corner`、selected spine / multisection path、front/back MapperSewing。
 - C51X 已确认 `Transformation=Linear/S-shape/Interpolation` 与 `SpineTangent/AuxiliarySpineTangent` 是 FreeCAD source-commented exact blocker，而不是可声明的 FreeCAD parity。
-- `cad-core/src/part_design/feature_pipe.cpp` 当前在 `rejectSourceBlockedPipeBranches()` 中对这些字段返回 source-backed `unsupported_property`。
-- `cad-core/src/runtime/capability_contract.cpp` 当前 `part_design.pipe` 仍是 `supported_c51s4_pipe_advanced_with_exact_source_blockers`，exact blockers 仍列出 `partdesign_pipe_transformation_laws_source_commented` 与 `partdesign_pipe_spine_tangent_source_commented`。
-- 本主线如果实施，必须改成产品扩展口径，并让 capability 显示 product extension，不得删除 FreeCAD blocker 证据后伪装成 upstream parity。
+- S6 已将 `Linear` / `S-shape` 实现为 request-local PipeLaw DTO + PipeShell `SetLaw` CAD Core product extension；缺少 `ScalingData` 时仍保留 exact `unsupported_property` 边界，非法 `ScalingData` 返回 `invalid_pipe_law_data`。
+- `Interpolation` 已固定为 `product_contract_required` 诊断边界；`LawSamples` 不作为 C6-M1 几何合同，不回退到 Linear / S-shape。
+- `SpineTangent` / `AuxiliarySpineTangent` 已实现 selected `EdgeN` request-local `continuous_edge_ledger`，空 SubList / whole wire 继续走 baseline path build，不触发 tangent expansion。
+- `cad-core/src/runtime/capability_contract.cpp` 当前 `part_design.pipe` 发布为 `supported_c6m1_pipe_cad_core_product_extension_with_contract_boundaries`，并保留 Interpolation precise remaining gap；不得把本包写成 FreeCAD parity 或 full PartDesign Pipe coverage。
 
 ## 证明链条
 
@@ -59,7 +60,7 @@
 | S3 | `工作步骤细分/6-23-19-47-【已实现】C6-M1-S3-TransformationLawDTO专项复审.md` | 已定义 Linear / S-shape / Interpolation law DTO 与实施边界。 |
 | S4 | `工作步骤细分/6-23-19-48-【已实现】C6-M1-S4-ContinuousEdgeLedger专项复审.md` | 已定义 SpineTangent / AuxiliarySpineTangent 连续边账本。 |
 | S5 | `工作步骤细分/6-23-19-49-【已实现】C6-M1-S5-PipeShellHistoryCapability专项复审.md` | 保护 PipeShell history、front/back sewing 和 capability 文案。 |
-| S6 | `工作步骤细分/6-23-19-50-C6-M1-S6-Oracle实现与发布闸门.md` | 代码落点、fixture、focused tests 和发布闸门。 |
+| S6 | `工作步骤细分/6-23-19-50-【已实现】C6-M1-S6-Oracle实现与发布闸门.md` | 代码落点、fixture、focused tests 和发布闸门。 |
 | source candidates | `矩阵/c6m1_pipe_product_extension_source_candidates.tsv` | FreeCAD / cad-core 源码候选；S1 已复核 `C6M1-SRC-001` 到 `C6M1-SRC-008`。 |
 | scope review | `矩阵/c6m1_pipe_product_extension_scope_review_matrix.tsv` | 语义范围与当前状态。 |
 | blocker queue | `矩阵/c6m1_pipe_product_extension_blocker_queue.tsv` | 待执行 blocker 和关闭条件。 |
@@ -71,4 +72,4 @@
 
 ## 当前状态
 
-S0、S1、S2、S3、S4、S5 已完成并改名为 `【已实现】`；S6 仍待执行。S0 只冻结产品扩展口径和 live exact blocker 证据，S1 只完成源码候选矩阵复核，S2 只完成范围准入和 blocker 路由，S3 只完成 law DTO 与诊断边界裁决，S4 只完成 continuous-edge ledger 合同与诊断边界裁决，S5 只完成 PipeShell history / capability release gate；这些步骤都不表示 law / tangent 已发布支持。任何后续步骤文件都不得在验收通过前改名为 `【已实现】`。
+S0、S1、S2、S3、S4、S5、S6 均已完成并改名为 `【已实现】`。S6 关闭 `C6M1-BLK-201/202/301/401/501`；`C6M1-BLK-203` 以稳定 `product_contract_required` 诊断边界关闭，几何实现仍作为 `partdesign_pipe_interpolation_law_product_contract_required` precise remaining gap 保留，等待后续 LawSamples 产品合同重开。
