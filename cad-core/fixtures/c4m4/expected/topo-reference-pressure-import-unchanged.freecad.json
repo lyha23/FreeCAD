@@ -1,0 +1,24 @@
+{
+  "bbox": {
+    "max": [
+      175.00000010040003,
+      125.00000010000001,
+      80.00000010000001
+    ],
+    "min": [
+      122.4999999,
+      24.999999899999985,
+      -7.000000000000001
+    ]
+  },
+  "freecad_version": "1.2.0 revision 20260519",
+  "object": "ImportedStep",
+  "reference": "FreeCADCmd oracle from topo-reference-pressure-import-unchanged.json; objects: Part::ImportStep",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "topology_counts": {
+    "edges": 134,
+    "faces": 62,
+    "vertices": 84
+  },
+  "volume": 104939.95611579117
+}

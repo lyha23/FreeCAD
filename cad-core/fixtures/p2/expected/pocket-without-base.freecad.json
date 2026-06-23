@@ -1,0 +1,24 @@
+{
+  "bbox": {
+    "max": [
+      8.0,
+      4.0,
+      10.0
+    ],
+    "min": [
+      2.0,
+      1.0,
+      0.0
+    ]
+  },
+  "freecad_version": "1.2.0 revision 20260519",
+  "object": "Body",
+  "reference": "FreeCADCmd oracle from pocket-without-base.json; objects: Sketcher::SketchObject, PartDesign::Pocket, PartDesign::Body",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "topology_counts": {
+    "edges": 12,
+    "faces": 6,
+    "vertices": 8
+  },
+  "volume": 180.0
+}

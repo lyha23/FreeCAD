@@ -1,0 +1,24 @@
+{
+  "bbox": {
+    "max": [
+      25.0,
+      5.0,
+      18.027756377319946
+    ],
+    "min": [
+      0.0,
+      0.0,
+      5.000000000000002
+    ]
+  },
+  "freecad_version": "1.2.0 revision 20260519",
+  "object": "RevolutionFromFace",
+  "reference": "FreeCADCmd oracle from partdesign-revolution-profile-linked-face.json; objects: Part::Line, Sketcher::SketchObject, PartDesign::Pad, PartDesign::Revolution",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "topology_counts": {
+    "edges": 12,
+    "faces": 6,
+    "vertices": 8
+  },
+  "volume": 785.3981633974482
+}
