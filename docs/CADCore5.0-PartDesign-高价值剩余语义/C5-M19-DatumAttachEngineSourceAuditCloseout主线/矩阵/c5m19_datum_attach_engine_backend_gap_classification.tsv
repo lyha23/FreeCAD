@@ -1,0 +1,6 @@
+category_id	category_name	classification	priority	scope_ids	blocker_ids	product_decision_needed	recommended_next_step
+C5M19-CAT-001	TangentU/TangentV source audit	source_audited_nonGoal	C5-P0	C5M19-SCOPE-101;C5M19-SCOPE-102	C5M19-BLK-101;C5M19-BLK-102	no	No C++ implementation; keep source-audited non-goal until upstream adds executable registration and branch
+C5M19-CAT-002	IntersectionPoint source audit	source_audited_nonGoal	C5-P0	C5M19-SCOPE-201	C5M19-BLK-201	no	No C++ implementation; do not infer point route from IntersectionLine
+C5M19-CAT-003	IntersectionLine guard	done_supported_guard	C5-P1	C5M19-SCOPE-301	C5M19-BLK-301	no	Keep existing supported DatumLine IntersectionLine implementation and capability assertion
+C5M19-CAT-501	Capability docs release gate	done_release_gate	C5-P0	C5M19-SCOPE-501	C5M19-BLK-501	no	Remove datum_attach_engine_remaining_modes exact blocker and publish source-audited non-goal text
+C5M19-CAT-900	GUI/session/full BREP and Part surface next line	nonGoal	C5-P2	C5M19-SCOPE-900	n/a	yes	Keep GUI/session/full BREP outside cad-core; move next work to Part surface precise blockers

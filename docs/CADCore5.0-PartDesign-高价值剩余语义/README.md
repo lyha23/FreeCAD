@@ -36,6 +36,7 @@
 | C5-M16 Datum CurveFrame / Curvature AttachEngine（已收口） | `C5-M16-DatumCurveFrameCurvatureAttachEngine主线/6-22-21-39-【已实现】C5-M16-DatumCurveFrameCurvatureAttachEngine主线总入口.md` | `C5-M16-DatumCurveFrameCurvatureAttachEngine主线/工作步骤细分/` |
 | C5-M17 Datum Remaining AttachEngine（已收口） | `C5-M17-DatumRemainingAttachEngine主线/6-23-03-26-【已实现】C5-M17-DatumRemainingAttachEngine主线总入口.md` | `C5-M17-DatumRemainingAttachEngine主线/工作步骤细分/` |
 | C5-M18 Datum Folding AttachEngine（已收口） | `C5-M18-DatumFoldingAttachEngine主线/6-23-18-16-【已实现】C5-M18-DatumFoldingAttachEngine主线总入口.md` | `C5-M18-DatumFoldingAttachEngine主线/工作步骤细分/` |
+| C5-M19 Datum AttachEngine Source Audit Closeout（已收口） | `C5-M19-DatumAttachEngineSourceAuditCloseout主线/6-23-18-58-【已实现】C5-M19-DatumAttachEngineSourceAuditCloseout主线总入口.md` | `C5-M19-DatumAttachEngineSourceAuditCloseout主线/工作步骤细分/` |
 
 C5-M6 已完成最终发布收口：`part_workbench.loft` 的 profile / `Linearize=true` expected-backed slice 保持为基础发布面，原 `complex_profile_family` broad gap 已由 C5-M12 代表 profile expected-backed 关闭；`part_workbench.sweep` 的 C5-M6 发布口径只包含 multi-profile / `Linearize=true` expected-backed 基础 slice，advanced PipeShell 字段级合同由 C5-M10/C5-M11/C5-M12 收口。
 
@@ -61,7 +62,9 @@ C5-M16 已完成 Datum curve frame / curvature AttachEngine 主线：S6 落地 F
 
 C5-M17 已完成 Datum remaining AttachEngine conic landmark 首批发布：DatumLine `Directrix1/2`、`Asymptote1/2` 和 DatumPoint `Focus1/2` 已用 FreeCADCmd expected、`BRepAdaptor_Curve` + `gp_Elips/gp_Hypr/gp_Parab` C++ helper、`c51m5` fixtures、focused tests 和 adapter capability test 闭环，并从 exact blocker 删除本批 proven modes。`Folding` 仍是四线 fold-angle 状态机，`IntersectionPoint` 仍需要 face/face DTO 与 oracle，`TangentU/V` 仍属 surface tangent adjacent family，继续留在 exact blocker 或 later-package guard。
 
-C5-M18 已完成 Datum Folding AttachEngine 主线：DatumPlane / Datum CoordinateSystem 的 `Folding` selected MapMode 已按 FreeCAD `mmFolding` branch 迁移到 `cad-core`，覆盖四条有序 straight line supports、shared vertex、direction sign normalization、`calculateFoldAngle`、DatumPlane normal/axis evidence、FreeCADCmd success expected、invalid diagnostics、focused tests 和 adapter capability closeout。exact blocker 已删除 `Folding`，当前只保留 `TangentU`、`TangentV`、`IntersectionPoint`；GUI/session/full BREP 仍不进入 stateless CAD Core。
+C5-M18 已完成 Datum Folding AttachEngine 主线：DatumPlane / Datum CoordinateSystem 的 `Folding` selected MapMode 已按 FreeCAD `mmFolding` branch 迁移到 `cad-core`，覆盖四条有序 straight line supports、shared vertex、direction sign normalization、`calculateFoldAngle`、DatumPlane normal/axis evidence、FreeCADCmd success expected、invalid diagnostics、focused tests 和 adapter capability closeout。C5-M18 发布后仅剩 `TangentU`、`TangentV`、`IntersectionPoint` 进入后续审计；GUI/session/full BREP 仍不进入 stateless CAD Core。
+
+C5-M19 已完成 Datum AttachEngine 剩余模式源码审计与 blocker 收口：FreeCAD `Attacher.h` / `Attacher.cpp` 证明 `TangentU`、`TangentV`、`IntersectionPoint` 只有 enum/name 暴露，没有非空 `modeRefTypes` 和 `_calculateAttachedPlacement()` 执行分支；`TangentU/V` 只是 `mmTangentPlane` 内部 surface tangent 方向，`IntersectionPoint` 也不能从已支持的 DatumLine `IntersectionLine` 推导。capability exact blocker 已删除 `datum_attach_engine_remaining_modes`，三项转为 source-audited non-goal；Datum AttachEngine 线正式收口，后续优先转向 Filling / GeomPlate / Sweep 等 Part surface precise blockers。
 
 ## 队列检查
 

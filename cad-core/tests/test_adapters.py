@@ -1235,40 +1235,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "GUI Attachment editor / ViewProvider / TaskPanel",
                 "GUI interactive datum resize visual behavior",
                 "cross-request backend attachment session",
+                "source-audited non-executable AttachEngine enum-only modes: TangentU, "
+                "TangentV and IntersectionPoint",
             ],
         )
-        self.assertIn("datum_attach_engine_remaining_modes", datum_attachment["exact_blockers"])
-        self.assertNotIn("Vertex", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("OnEdge", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("CenterOfMass", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("TwoPointLine", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("IntersectionLine", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("ProximityLine", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("ProximityPoint1", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("ProximityPoint2", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("Translate", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("TangentPlane", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("ThreePointsPlane", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("ThreePointsNormal", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("FrenetNB", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("FrenetTN", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("FrenetTB", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("Concentric", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("SectionOfRevolution", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("AxisOfCurvature", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("Normal", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("Binormal", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("CenterOfCurvature", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("Directrix1", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("Directrix2", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("Asymptote1", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("Asymptote2", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("Focus1", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("Focus2", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertNotIn("Folding", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertIn("IntersectionPoint", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertIn("TangentU", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertIn("TangentV", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
+        self.assertNotIn("datum_attach_engine_remaining_modes", datum_attachment["exact_blockers"])
         self.assertEqual(datum_attachment["remaining_gaps"], [])
         self.assertEqual(
             capabilities["part_design"]["hole"]["thread_tables"],

@@ -2064,29 +2064,10 @@ nlohmann::json capabilityContractJson()
                   {"non_goals",
                    {"GUI Attachment editor / ViewProvider / TaskPanel",
                     "GUI interactive datum resize visual behavior",
-                    "cross-request backend attachment session"}},
-                  {"exact_blockers",
-                   {{"datum_attach_engine_remaining_modes",
-                     {{"modes",
-                       {"TangentU",
-                        "TangentV",
-                        "IntersectionPoint"}},
-                      {"source",
-                       "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/"
-                       "Attacher.cpp::AttachEngine3D/Line/Point::_calculateAttachedPlacement"},
-                      {"evidence",
-                       "C51-S5 first batch supports FlatFace, ObjectXY/ObjectXZ/ObjectYZ, "
-                       "ObjectOrigin/ObjectX/ObjectY/ObjectZ and NormalToEdge; C51X supports "
-                       "AttachEnginePoint Vertex/OnEdge/CenterOfMass and AttachEngineLine "
-                       "TwoPointLine/IntersectionLine/ProximityLine; C5-M14 supports AttachEnginePoint "
-                       "ProximityPoint1/ProximityPoint2 with FreeCADCmd expected; C5-M15 supports "
-                       "Translate/TangentPlane/ThreePointsPlane/ThreePointsNormal; C5-M16 supports "
-                       "FrenetNB/FrenetTN/FrenetTB, Concentric, SectionOfRevolution and "
-                       "AxisOfCurvature/Normal/Binormal/CenterOfCurvature aliases with FreeCADCmd expected; "
-                       "C5-M17 supports Directrix1/2, Asymptote1/2 and Focus1/2 conic landmarks "
-                       "with FreeCADCmd expected; C5-M18 supports Folding for DatumPlane and "
-                       "CoordinateSystem with FreeCADCmd expected, while TangentU/V and IntersectionPoint "
-                       "remain separate exact blockers"}}}}},
+                    "cross-request backend attachment session",
+                    "source-audited non-executable AttachEngine enum-only modes: TangentU, "
+                    "TangentV and IntersectionPoint"}},
+                  {"exact_blockers", nlohmann::json::object()},
                   {"remaining_gaps", nlohmann::json::array()},
               }},
              {"hole",
