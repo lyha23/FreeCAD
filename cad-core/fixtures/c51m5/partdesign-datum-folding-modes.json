@@ -1,0 +1,211 @@
+{
+  "Objects": [
+    {
+      "Name": "FoldEdgeA",
+      "ID": 1,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 1,
+        "Y2": 5,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "FoldAxisA",
+      "ID": 2,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 3,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "FoldAxisB",
+      "ID": 3,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 0,
+        "Y2": 3,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "FoldEdgeB",
+      "ID": 4,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 1.7320508075688772,
+        "Y2": 1,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "FoldEdgeAReversed",
+      "ID": 5,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 1,
+        "Y1": 5,
+        "Z1": 0,
+        "X2": 0,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "FoldAxisAReversed",
+      "ID": 6,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 3,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 0,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "FoldAxisBReversed",
+      "ID": 7,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 3,
+        "Z1": 0,
+        "X2": 0,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "FoldEdgeBReversed",
+      "ID": 8,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 1.7320508075688772,
+        "Y1": 1,
+        "Z1": 0,
+        "X2": 0,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "DatumCSFolding",
+      "ID": 9,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "FoldEdgeA",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldAxisA",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldAxisB",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldEdgeB",
+              "SubList": ["Edge1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Folding"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSFoldingReversedSupports",
+      "ID": 10,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "FoldEdgeAReversed",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldAxisAReversed",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldAxisBReversed",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldEdgeBReversed",
+              "SubList": ["Edge1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Folding"
+        }
+      }
+    },
+    {
+      "Name": "DatumPlaneFolding",
+      "ID": 11,
+      "TypeId": "PartDesign::Plane",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "FoldEdgeA",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldAxisA",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldAxisB",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldEdgeB",
+              "SubList": ["Edge1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Folding"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "DatumCSFolding",
+      "DatumCSFoldingReversedSupports",
+      "DatumPlaneFolding"
+    ]
+  }
+}

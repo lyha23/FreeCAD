@@ -42,6 +42,7 @@
 #include <gp_Dir.hxx>
 #include <gp_Elips.hxx>
 #include <gp_Hypr.hxx>
+#include <gp_Lin.hxx>
 #include <gp_Pln.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Parab.hxx>
@@ -1907,6 +1908,186 @@ inline std::optional<gp_Trsf> curveFramePlacement(const std::string& mode,
     return placementFromAxes(basePoint, sketchNormal, sketchXAxis, mapReverse);
 }
 
+inline std::optional<double> calculateFoldAngle(const std::array<gp_Vec, 4>& dirs,
+                                                runtime::ComputeContext& context,
+                                                const app::DocumentObject& object,
+                                                const std::vector<SupportResolution>& supports)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/Attacher.cpp
+    // ::AttachEngine3D::calculateFoldAngle(), normalizes "axA, axB, edA, edB", rejects
+    // "Folding axes are parallel", rejects "axisA and edgeA are parallel", then returns
+    // "acos(cos_unfold)" for the sheet-fold placement math.
+    gp_Vec axA = dirs[1];
+    gp_Vec axB = dirs[2];
+    gp_Vec edA = dirs[0];
+    gp_Vec edB = dirs[3];
+    axA.Normalize();
+    axB.Normalize();
+    edA.Normalize();
+    edB.Normalize();
+
+    gp_Vec norm = axA.Crossed(axB);
+    if (norm.Magnitude() < Precision::Confusion()) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "Folding axes are parallel, folding angle cannot be computed",
+                                "attachment_parameter_invalid");
+        return std::nullopt;
+    }
+    norm.Normalize();
+
+    const double a = edA.Dot(axA);
+    const double ra = edA.Crossed(axA).Magnitude();
+    if (std::abs(ra) < Precision::Confusion()) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "Folding axisA and edgeA are parallel, folding angle cannot be computed",
+                                "attachment_parameter_invalid");
+        return std::nullopt;
+    }
+
+    const double b = edB.Dot(axB);
+    const double costheta = axB.Dot(axA);
+    const double sintheta = axA.Crossed(axB).Dot(norm);
+    const double singama = -costheta;
+    const double cosgama = sintheta;
+    const double k = b * cosgama;
+    const double l = a + b * singama;
+    const double xa = k + l * singama / cosgama;
+    const double cosUnfold = -xa / ra;
+    if (std::abs(cosUnfold) > 0.999) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "Folding cosine is too close to or above 1, folding angle cannot be computed",
+                                "attachment_parameter_invalid");
+        return std::nullopt;
+    }
+    return std::acos(cosUnfold);
+}
+
+inline std::optional<gp_Trsf> foldingPlacement(const std::vector<SupportResolution>& supports,
+                                               bool mapReverse,
+                                               runtime::ComputeContext& context,
+                                               const app::DocumentObject& object)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/Attacher.cpp
+    // ::AttachEngine3D::_calculateAttachedPlacement(), case "mmFolding", expects four ordered
+    // "edgeA, fold axis A, fold axis B, edgeB" rtLine supports, finds one common vertex,
+    // flips each line direction to point away from that vertex, calls "calculateFoldAngle",
+    // then sets "SketchNormal", "SketchXAxis" and "SketchBasePoint".
+    if (supports.size() < 4U) {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "Folding requires four ordered line supports: edgeA, axisA, axisB, edgeB",
+                                "attachment_support_invalid_shape");
+        return std::nullopt;
+    }
+
+    std::array<BRepAdaptor_Curve, 4> curves;
+    std::array<gp_Lin, 4> lines;
+    for (std::size_t index = 0; index < 4U; ++index) {
+        TopoDS_Edge edge;
+        try {
+            edge = TopoDS::Edge(supports[index].shape);
+        }
+        catch (const Standard_Failure&) {
+        }
+        if (edge.IsNull()) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         supports[index].link,
+                                         "MapMode",
+                                         "Folding requires each ordered support to resolve to a non-null Edge",
+                                         "attachment_support_invalid_shape");
+            return std::nullopt;
+        }
+        curves[index] = BRepAdaptor_Curve(edge);
+        if (curves[index].GetType() != GeomAbs_Line) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         supports[index].link,
+                                         "MapMode",
+                                         "Folding requires straight Edge supports",
+                                         "attachment_support_invalid_shape");
+            return std::nullopt;
+        }
+        lines[index] = curves[index].Line();
+    }
+
+    gp_Pnt sharedPoint;
+    std::array<double, 4> signs = {0.0, 0.0, 0.0, 0.0};
+    const gp_Pnt p1 = curves[0].Value(curves[0].FirstParameter());
+    const gp_Pnt p2 = curves[0].Value(curves[0].LastParameter());
+    const gp_Pnt p3 = curves[1].Value(curves[1].FirstParameter());
+    const gp_Pnt p4 = curves[1].Value(curves[1].LastParameter());
+    if (p1.Distance(p3) < Precision::Confusion()) {
+        sharedPoint = p3;
+        signs[0] = +1.0;
+        signs[1] = +1.0;
+    }
+    else if (p1.Distance(p4) < Precision::Confusion()) {
+        sharedPoint = p4;
+        signs[0] = +1.0;
+        signs[1] = -1.0;
+    }
+    else if (p2.Distance(p3) < Precision::Confusion()) {
+        sharedPoint = p3;
+        signs[0] = -1.0;
+        signs[1] = +1.0;
+    }
+    else if (p2.Distance(p4) < Precision::Confusion()) {
+        sharedPoint = p4;
+        signs[0] = -1.0;
+        signs[1] = -1.0;
+    }
+    else {
+        addLineFamilyDiagnostic(context,
+                                object,
+                                supports,
+                                "Folding edgeA and axisA supports do not share a vertex",
+                                "no_intersection");
+        return std::nullopt;
+    }
+
+    for (std::size_t index = 2U; index < 4U; ++index) {
+        const gp_Pnt first = curves[index].Value(curves[index].FirstParameter());
+        const gp_Pnt last = curves[index].Value(curves[index].LastParameter());
+        if (sharedPoint.Distance(first) < Precision::Confusion()) {
+            signs[index] = +1.0;
+        }
+        else if (sharedPoint.Distance(last) < Precision::Confusion()) {
+            signs[index] = -1.0;
+        }
+        else {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         supports[index].link,
+                                         "MapMode",
+                                         "Folding supports must all share the same vertex",
+                                         "no_intersection");
+            return std::nullopt;
+        }
+    }
+
+    std::array<gp_Vec, 4> dirs;
+    for (std::size_t index = 0; index < 4U; ++index) {
+        dirs[index] = gp_Vec(lines[index].Direction()).Multiplied(signs[index]);
+    }
+
+    const auto angle = calculateFoldAngle(dirs, context, object, supports);
+    if (!angle) {
+        return std::nullopt;
+    }
+
+    gp_Vec normal = dirs[1].Crossed(dirs[2]);
+    normal.Rotate(gp_Ax1(gp_Pnt(), gp_Dir(dirs[1])), -*angle);
+    return placementFromAxes(sharedPoint, gp_Dir(normal.Reversed()), dirs[1], mapReverse);
+}
+
 inline std::optional<gp_Trsf> selectedDatumPlacement(const app::DocumentObject& object,
                                                     runtime::ComputeContext& context,
                                                     DatumAttachmentEngine engine,
@@ -1967,6 +2148,17 @@ inline std::optional<gp_Trsf> selectedDatumPlacement(const app::DocumentObject& 
             return std::nullopt;
         }
         return threePointsPlanePlacement(mode, supports, mapReverse, context, object);
+    }
+    if (mode == "Folding") {
+        if (engine != DatumAttachmentEngine::Plane && engine != DatumAttachmentEngine::CoordinateSystem) {
+            addDatumAttachmentDiagnostic(context,
+                                         object,
+                                         support.link,
+                                         "MapMode",
+                                         "Folding is supported for DatumPlane and CoordinateSystem in this C5-M18 batch");
+            return std::nullopt;
+        }
+        return foldingPlacement(supports, mapReverse, context, object);
     }
     if (mode == "ObjectXY" || mode == "ObjectXZ" || mode == "ObjectYZ") {
         if (engine == DatumAttachmentEngine::Point) {
@@ -2226,16 +2418,18 @@ inline std::optional<DatumAttachmentPlacement> datumAttachmentPlacement(const ap
     const bool usesThreePointPlaneSupports = mode == "ThreePointsPlane" || mode == "ThreePointsNormal";
     const bool usesDatum3DPlaneMultiSupports = usesTangentPlaneSupports || usesThreePointPlaneSupports;
     const bool usesCurveFrameSupports = isCurveFrameMode(mode) || isCurveFrameAliasMode(mode);
+    const bool usesFoldingSupports = mode == "Folding";
     const bool requiresSubshape = mode == "FlatFace" || mode == "NormalToEdge" || mode == "Tangent"
         || mode == "Vertex" || mode == "OnEdge" || mode == "Translate" || mode == "TangentPlane"
         || mode == "ThreePointsPlane" || mode == "ThreePointsNormal" || usesCurveFrameSupports
-        || isConicLineLandmarkMode(mode) || isConicPointLandmarkMode(mode);
+        || usesFoldingSupports || isConicLineLandmarkMode(mode) || isConicPointLandmarkMode(mode);
     std::vector<SupportResolution> resolvedSupports;
     const std::size_t supportCount = usesLineFamilySupports ? supportLinks.size()
         : (usesPointProximitySupports ? 2U
                                       : (usesTangentPlaneSupports ? 2U
                                                                   : (usesThreePointPlaneSupports ? supportLinks.size()
-                                                                      : (usesCurveFrameSupports ? 2U : 1U))));
+                                                                      : (usesCurveFrameSupports ? 2U
+                                                                         : (usesFoldingSupports ? 4U : 1U)))));
     for (std::size_t index = 0; index < supportLinks.size() && resolvedSupports.size() < supportCount; ++index) {
         const auto& link = supportLinks.at(index);
         if (link.object.empty()) {
@@ -2269,7 +2463,8 @@ inline std::optional<DatumAttachmentPlacement> datumAttachmentPlacement(const ap
     if (hasActiveAttachmentOffset && mode != "Translate") {
         *placement = *placement * attachmentOffsetPlacement(object);
     }
-    if (usesPointProximitySupports || usesDatum3DPlaneMultiSupports || usesCurveFrameSupports) {
+    if (usesPointProximitySupports || usesDatum3DPlaneMultiSupports || usesCurveFrameSupports
+        || usesFoldingSupports) {
         appendAttachmentSupportsWriteback(object, resolvedSupports, context);
     }
     else if (!usesLineFamilySupports && hasReferenceStabilityEvidence(support)) {

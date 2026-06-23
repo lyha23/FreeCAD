@@ -1,0 +1,5 @@
+category_id	category_name	classification	priority	scope_ids	blocker_ids	product_decision_needed	recommended_next_step
+C5M18-CAT-001	Folding placement	done_expected_backed_s6	C5-P0	C5M18-SCOPE-101	C5M18-BLK-101	no	S6 implemented DatumPlane and CoordinateSystem Folding placement with four ordered straight lines, shared vertex sign normalization, fold-angle helper and FreeCADCmd expected
+C5M18-CAT-002	Folding diagnostics	done_diagnostic_backed_s6	C5-P0	C5M18-SCOPE-102	C5M18-BLK-102	no	S6 implemented invalid diagnostics for missing support, non-straight support, disconnected supports, parallel axes, axisA/edgeA parallel and invalid cosine
+C5M18-CAT-501	capability docs release gate	done_release_gate_s6	C5-P0	C5M18-SCOPE-501	C5M18-BLK-501	no	S6 removed Folding from exact blocker after focused tests and adapter capability test; TangentU/V and IntersectionPoint remain exact blockers
+C5M18-CAT-900	GUI/session/full BREP	nonGoal	C5-P2	C5M18-SCOPE-900	n/a	yes	Keep GUI Attachment editor, cross-request backend state and complete BREP outside stateless CAD Core

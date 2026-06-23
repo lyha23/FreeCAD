@@ -4622,9 +4622,11 @@ def datum_payload(obj: Any) -> dict:
         fields["direction"] = vector_payload(datum_line_direction(obj))
     elif type_id == "PartDesign::Plane":
         # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/DatumPlane.cpp
-        # ::Plane::getNormal(), rotates "Base::Vector3d(0, 0, 1)" by Placement; cad-core's
-        # response for planes only exposes the datum kind and attachment state.
+        # ::Plane::getNormal(), rotates "Base::Vector3d(0, 0, 1)" by Placement.
         fields["datum"] = "plane"
+        fields["origin"] = vector_payload(obj.Placement.Base)
+        fields["x_axis"] = vector_payload(datum_axis_vector(obj, "getXAxis", (1, 0, 0)))
+        fields["normal"] = vector_payload(datum_axis_vector(obj, "getNormal", (0, 0, 1)))
     elif type_id == "PartDesign::CoordinateSystem":
         # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/DatumCS.cpp
         # ::getXAxis()/getYAxis()/getZAxis() apply Placement rotation to unit axes.

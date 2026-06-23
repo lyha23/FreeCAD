@@ -1,0 +1,317 @@
+{
+  "Objects": [
+    {
+      "Name": "FoldEdgeA",
+      "ID": 1,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 1,
+        "Y2": 5,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "FoldAxisA",
+      "ID": 2,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 3,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "FoldAxisB",
+      "ID": 3,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 0,
+        "Y2": 3,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "FoldEdgeB",
+      "ID": 4,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 1.7320508075688772,
+        "Y2": 1,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "FoldCircle",
+      "ID": 5,
+      "TypeId": "Part::Ellipse",
+      "Properties": {
+        "MajorRadius": 2,
+        "MinorRadius": 1,
+        "Angle1": 0,
+        "Angle2": 360
+      }
+    },
+    {
+      "Name": "DisconnectedEdgeB",
+      "ID": 6,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 10,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 11,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "FoldAxisBParallel",
+      "ID": 7,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 6,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "FoldEdgeAParallel",
+      "ID": 8,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 4,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "FoldEdgeBCosineInvalid",
+      "ID": 9,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 0,
+        "Y2": 4,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "DatumCSFoldingMissingFourth",
+      "ID": 10,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "FoldEdgeA",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldAxisA",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldAxisB",
+              "SubList": ["Edge1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Folding"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSFoldingNonStraight",
+      "ID": 11,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "FoldEdgeA",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldAxisA",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldCircle",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldEdgeB",
+              "SubList": ["Edge1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Folding"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSFoldingDisconnected",
+      "ID": 12,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "FoldEdgeA",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldAxisA",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldAxisB",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "DisconnectedEdgeB",
+              "SubList": ["Edge1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Folding"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSFoldingParallelAxes",
+      "ID": 13,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "FoldEdgeA",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldAxisA",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldAxisBParallel",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldEdgeB",
+              "SubList": ["Edge1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Folding"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSFoldingEdgeAxisParallel",
+      "ID": 14,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "FoldEdgeAParallel",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldAxisA",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldAxisB",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldEdgeB",
+              "SubList": ["Edge1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Folding"
+        }
+      }
+    },
+    {
+      "Name": "DatumCSFoldingCosineInvalid",
+      "ID": 15,
+      "TypeId": "PartDesign::CoordinateSystem",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "FoldEdgeA",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldAxisA",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldAxisB",
+              "SubList": ["Edge1"]
+            },
+            {
+              "value": "FoldEdgeBCosineInvalid",
+              "SubList": ["Edge1"]
+            }
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Folding"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "DatumCSFoldingMissingFourth",
+      "DatumCSFoldingNonStraight",
+      "DatumCSFoldingDisconnected",
+      "DatumCSFoldingParallelAxes",
+      "DatumCSFoldingEdgeAxisParallel",
+      "DatumCSFoldingCosineInvalid"
+    ]
+  }
+}

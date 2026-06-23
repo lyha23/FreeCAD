@@ -1974,7 +1974,7 @@ nlohmann::json capabilityContractJson()
                   // and can write back AttachmentSupport subnames. cad-core supports the C51X
                   // selected non-GUI AttachEngine modes and returns request-local update
                   // suggestions instead of mutating a backend session.
-                  {"status", "supported_c51x_selected_attach_engine_with_curve_frame_curvature_conic_family"},
+                  {"status", "supported_c51x_selected_attach_engine_with_curve_frame_curvature_conic_folding_family"},
                   {"type_ids",
                    {"PartDesign::Point",
                     "PartDesign::Line",
@@ -2001,6 +2001,7 @@ nlohmann::json capabilityContractJson()
                     "FrenetTB selected MapMode",
                     "Concentric selected MapMode",
                     "SectionOfRevolution selected MapMode",
+                    "Folding selected MapMode",
                     "NormalToEdge selected MapMode",
                     "DatumLine TwoPointLine selected MapMode",
                     "DatumLine IntersectionLine selected MapMode",
@@ -2042,7 +2043,9 @@ nlohmann::json capabilityContractJson()
                     "c51m5/partdesign-datum-curve-frame-modes",
                     "c51m5/partdesign-datum-curve-frame-diagnostics",
                     "c51m5/partdesign-datum-conic-landmark-modes",
-                    "c51m5/partdesign-datum-conic-landmark-diagnostics"}},
+                    "c51m5/partdesign-datum-conic-landmark-diagnostics",
+                    "c51m5/partdesign-datum-folding-modes",
+                    "c51m5/partdesign-datum-folding-diagnostics"}},
                   {"diagnostics",
                    {"invalid_placement",
                     "missing_link_target",
@@ -2065,8 +2068,7 @@ nlohmann::json capabilityContractJson()
                   {"exact_blockers",
                    {{"datum_attach_engine_remaining_modes",
                      {{"modes",
-                       {"Folding",
-                        "TangentU",
+                       {"TangentU",
                         "TangentV",
                         "IntersectionPoint"}},
                       {"source",
@@ -2082,7 +2084,8 @@ nlohmann::json capabilityContractJson()
                        "FrenetNB/FrenetTN/FrenetTB, Concentric, SectionOfRevolution and "
                        "AxisOfCurvature/Normal/Binormal/CenterOfCurvature aliases with FreeCADCmd expected; "
                        "C5-M17 supports Directrix1/2, Asymptote1/2 and Focus1/2 conic landmarks "
-                       "with FreeCADCmd expected, while Folding, TangentU/V and IntersectionPoint "
+                       "with FreeCADCmd expected; C5-M18 supports Folding for DatumPlane and "
+                       "CoordinateSystem with FreeCADCmd expected, while TangentU/V and IntersectionPoint "
                        "remain separate exact blockers"}}}}},
                   {"remaining_gaps", nlohmann::json::array()},
               }},

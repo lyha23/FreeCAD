@@ -1161,7 +1161,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         datum_attachment = capabilities["part_design"]["datum_attachment"]
         self.assertEqual(
             datum_attachment["status"],
-            "supported_c51x_selected_attach_engine_with_curve_frame_curvature_conic_family",
+            "supported_c51x_selected_attach_engine_with_curve_frame_curvature_conic_folding_family",
         )
         self.assertIn("PartDesign::CoordinateSystem", datum_attachment["type_ids"])
         self.assertIn("DatumLine Placement direction", datum_attachment["supported"])
@@ -1177,6 +1177,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("FrenetTB selected MapMode", datum_attachment["supported"])
         self.assertIn("Concentric selected MapMode", datum_attachment["supported"])
         self.assertIn("SectionOfRevolution selected MapMode", datum_attachment["supported"])
+        self.assertIn("Folding selected MapMode", datum_attachment["supported"])
         self.assertIn("DatumLine TwoPointLine selected MapMode", datum_attachment["supported"])
         self.assertIn("DatumLine IntersectionLine selected MapMode", datum_attachment["supported"])
         self.assertIn("DatumLine ProximityLine selected MapMode", datum_attachment["supported"])
@@ -1212,6 +1213,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("c51m5/partdesign-datum-curve-frame-diagnostics", datum_attachment["fixtures"])
         self.assertIn("c51m5/partdesign-datum-conic-landmark-modes", datum_attachment["fixtures"])
         self.assertIn("c51m5/partdesign-datum-conic-landmark-diagnostics", datum_attachment["fixtures"])
+        self.assertIn("c51m5/partdesign-datum-folding-modes", datum_attachment["fixtures"])
+        self.assertIn("c51m5/partdesign-datum-folding-diagnostics", datum_attachment["fixtures"])
         self.assertIn("unsupported_property", datum_attachment["diagnostics"])
         self.assertIn("attachment_support_invalid_shape", datum_attachment["diagnostics"])
         self.assertIn("projection_failed", datum_attachment["diagnostics"])
@@ -1262,7 +1265,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("Asymptote2", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
         self.assertNotIn("Focus1", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
         self.assertNotIn("Focus2", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
-        self.assertIn("Folding", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
+        self.assertNotIn("Folding", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
         self.assertIn("IntersectionPoint", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
         self.assertIn("TangentU", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
         self.assertIn("TangentV", datum_attachment["exact_blockers"]["datum_attach_engine_remaining_modes"]["modes"])
