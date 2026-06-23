@@ -1,7 +1,6 @@
 #pragma once
 
-#include "cad_core/part/face_maker.h"
-#include "cad_core/part/wire_joiner.h"
+#include "cad_core/part/internal_shape_history_ledger.h"
 
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Shape.hxx>
@@ -39,8 +38,7 @@ struct SketchInternalBuildResult
     bool faceMakerFailed = false;
     bool splitProducedBoundedFaces = false;
     bool requiresSubshapeSelection = false;
-    std::optional<part::FaceMakerHistorySummary> faceMakerHistory;
-    std::optional<part::WireJoinerBuildResult> wireJoinerResult;
+    std::optional<part::InternalShapeHistoryLedger> historyLedger;
 };
 
 // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp

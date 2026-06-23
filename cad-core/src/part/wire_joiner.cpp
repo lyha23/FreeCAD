@@ -1,5 +1,7 @@
 #include "cad_core/part/wire_joiner.h"
 
+#include "internal_shape_history_ledger_detail.h"
+
 #include <BRepAlgoAPI_Splitter.hxx>
 #include <BRepAdaptor_Curve.hxx>
 #include <BRepClass_FaceClassifier.hxx>
@@ -3303,9 +3305,39 @@ std::vector<TopoDS_Edge> openEdgesWithInteriorEndpoint(
 }
 
 
-SketchInternalHistoryContext wireJoinerHistoryEvidenceContext(const WireJoinerHistorySummary& history)
+InternalShapeHistoryRelation internalShapeHistoryRelationForWireJoiner(
+    WireJoinerHistoryRelation relation
+)
 {
-    SketchInternalHistoryContext context;
+    switch (relation) {
+        case WireJoinerHistoryRelation::Preserved:
+            return InternalShapeHistoryRelation::Preserved;
+        case WireJoinerHistoryRelation::Split:
+            return InternalShapeHistoryRelation::Split;
+        case WireJoinerHistoryRelation::Generated:
+            return InternalShapeHistoryRelation::Generated;
+        case WireJoinerHistoryRelation::Deleted:
+            return InternalShapeHistoryRelation::Deleted;
+    }
+    return InternalShapeHistoryRelation::DiagnosticOnly;
+}
+
+std::vector<std::size_t> oneBasedSourceEdgeIndices(const std::vector<std::size_t>& zeroBased)
+{
+    std::vector<std::size_t> result;
+    result.reserve(zeroBased.size());
+    for (const std::size_t index : zeroBased) {
+        result.push_back(index + 1U);
+    }
+    return result;
+}
+
+InternalShapeHistoryLedger wireJoinerHistoryEvidenceLedger(const WireJoinerHistorySummary& history)
+{
+    InternalShapeHistoryLedger ledger;
+    InternalShapeHistoryLedgerData& data = mutableInternalShapeHistoryLedgerData(ledger);
+    data.hasWireJoinerEvidence = true;
+    SketchInternalHistoryContext& context = data.compatibilityHistory;
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::getOpenWires(), calls makeShapeWithElementMap(...,
     // MapperHistory(aHistory), {sourceEdges.begin(), sourceEdges.end()}, op). This passes
@@ -3490,6 +3522,32 @@ SketchInternalHistoryContext wireJoinerHistoryEvidenceContext(const WireJoinerHi
             = entry.sourceVertexReplacementSourceEdgeIndices;
         topoEntry.sourceVertexReplacementEndpoints = entry.sourceVertexReplacementEndpoints;
         topoEntry.sourceVertexReplacementIdentity = entry.sourceVertexReplacementIdentity;
+        const std::vector<std::size_t> stableSourceEdgeIndices = oneBasedSourceEdgeIndices(
+            !entry.openWireCompoundSourceEdgeIndices.empty()
+                ? entry.openWireCompoundSourceEdgeIndices
+                : entry.sourceEdgeIndices
+        );
+        std::string diagnosticCode;
+        if (entry.openWireCompoundNoOriginalPurgedByLedger) {
+            diagnosticCode = "no_original_purged";
+        }
+        else if (entry.missingOpenWireCompoundChildWire) {
+            diagnosticCode = "missing_child_wire_invariant";
+        }
+        else if (entry.openWireCompoundCurrentMemberSplitLedgerVertexMultiplicityBlocked) {
+            diagnosticCode = "vertex_multiplicity_blocked";
+        }
+        data.events.push_back(InternalShapeHistoryEvent {
+            entry.historyRelationFromChildWireLedger
+                ? internalShapeHistoryRelationForWireJoiner(entry.historyRelation)
+                : InternalShapeHistoryRelation::DiagnosticOnly,
+            InternalShapeHistoryProducer::WireJoinerOpenWires,
+            InternalShapeHistoryTargetKind::Edge,
+            "wire_joiner:open_export",
+            std::move(diagnosticCode),
+            stableSourceEdgeIndices,
+            entry.openExportEdge,
+        });
         context.wireJoinerOpenExportHistoryEntries.push_back(std::move(topoEntry));
     }
     context.wireJoinerModifiedSourceEdgeCount = history.modifiedSourceEdgeCount;
@@ -3497,7 +3555,7 @@ SketchInternalHistoryContext wireJoinerHistoryEvidenceContext(const WireJoinerHi
     context.wireJoinerGeneratedHistoryCount = history.generatedHistoryCount;
     context.wireJoinerDeletedHistoryCount = history.deletedHistoryCount;
     context.wireJoinerSplitterHistory = history.splitterHistory;
-    return context;
+    return ledger;
 }
 
 nlohmann::json resultWireProducerLedgerEntriesJson(
@@ -10375,9 +10433,9 @@ WireJoinerBuildResult WireJoiner::Impl::buildResult(
         || history.deletedHistoryCount > 0U
         || !history.historyEvents.empty()
         || !history.openExportEntries.empty();
-    result.historyEvidence = wireJoinerHistoryEvidenceContext(history);
-    result.compatibilityLedger = wireJoinerLedgerToJson(ledger);
-    result.compatibilityHistoryDetail = wireJoinerHistoryDetailToJson(history);
+    result.historyLedger = wireJoinerHistoryEvidenceLedger(history);
+    const nlohmann::json compatibilityLedger = wireJoinerLedgerToJson(ledger);
+    const nlohmann::json compatibilityHistoryDetail = wireJoinerHistoryDetailToJson(history);
 
     nlohmann::json codes = nlohmann::json::array();
     if (result.missingChildWireInvariant) {
@@ -10390,7 +10448,7 @@ WireJoinerBuildResult WireJoiner::Impl::buildResult(
         codes.push_back("open_wire_result_empty_after_filter");
     }
 
-    result.diagnostics = {
+    const nlohmann::json diagnostics = {
         {"status", result.missingChildWireInvariant ? "invariant_failed" : "ok"},
         {"codes", std::move(codes)},
         {"summary",
@@ -10405,6 +10463,11 @@ WireJoinerBuildResult WireJoiner::Impl::buildResult(
              {"has_mapper_history_evidence", result.hasMapperHistoryEvidence},
          }},
     };
+    InternalShapeHistoryLedgerData& historyLedgerData =
+        mutableInternalShapeHistoryLedgerData(result.historyLedger);
+    historyLedgerData.wireJoinerDiagnostics = diagnostics;
+    historyLedgerData.wireJoinerCompatibilityLedger = compatibilityLedger;
+    historyLedgerData.wireJoinerCompatibilityHistoryDetail = compatibilityHistoryDetail;
     return result;
 }
 

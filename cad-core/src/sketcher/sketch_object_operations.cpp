@@ -780,8 +780,7 @@ ProfileFaceBuild buildOptionalProfileFace(
         result.internalShape,
         result.faceMakerFailed,
         result.requiresSubshapeSelection,
-        result.faceMakerHistory,
-        result.wireJoinerResult,
+        result.historyLedger,
     };
 }
 

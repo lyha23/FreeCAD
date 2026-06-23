@@ -2,6 +2,7 @@
 
 // Part-layer TopoShape / NamedShape facade aligned with FreeCAD
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape*.cpp.
+#include "cad_core/part/internal_shape_history_ledger.h"
 #include "cad_core/part/topo_shape_mapper.h"
 #include "cad_core/part/property_topo_shape.h"
 
@@ -12,7 +13,7 @@
 #include <TopoDS_Wire.hxx>
 #include <nlohmann/json.hpp>
 
-#include <array>
+#include <cstddef>
 #include <map>
 #include <optional>
 #include <utility>
@@ -47,215 +48,6 @@ struct ElementHistory
     ElementHistoryKind kind = ElementHistoryKind::Indexed;
     std::string element;
     std::vector<std::string> sources;
-};
-
-struct SketchInternalWireJoinerEndpointIdentityDebt
-{
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-    // ::WireJoinerP::getOpenWires(), key "MapperHistory(aHistory)". Topo only forwards the
-    // part-layer endpoint identity resolver; it does not infer replacement from output geometry.
-    std::size_t outputVertexIndex = 0;
-    bool matchedMemberSplitLedger = false;
-    bool matchedCandidateLedger = false;
-    bool currentChildWireOutputVertexMatchesOtherOutput = false;
-    bool candidateWireVertexMatchesOtherOutput = false;
-    std::string explanation;
-    std::string currentChildWireOutputVertexIdentity;
-    std::string memberSplitLedgerVertexIdentity;
-    std::string candidateWireVertexIdentity;
-    std::string mismatchReason;
-};
-
-struct SketchInternalWireJoinerVmapReplacementEvent
-{
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-    // ::WireJoinerP::add() replaces coincident endpoints through vmap/sourceEdges before
-    // ::getOpenWires() calls MapperHistory(aHistory). Topo forwards this typed ledger event instead
-    // of deriving vertex ownership from exported geometry.
-    std::size_t eventIndex = 0;
-    std::size_t affectedSourceEdgeIndex = 0;
-    std::size_t affectedChildWireEdgeInfoIndex = 0;
-    int affectedEndpoint = -1;
-    int affectedSourceEndpoint = -1;
-    int affectedChildWireEndpoint = -1;
-    std::size_t replacementSourceEdgeIndex = 0;
-    int replacementSourceEndpoint = -1;
-    bool replacementFromMutableSourceEdgeLedger = false;
-    bool replacementFromSplitFragmentLedger = false;
-};
-
-struct SketchInternalWireJoinerOpenExportHistoryEntry
-{
-    std::size_t openExportIndex = 0;
-    std::size_t edgeInfoIndex = 0;
-    TopoDS_Wire openExportWire;
-    TopoDS_Edge openExportEdge;
-    std::string openWireCompoundExportSource;
-    int openWireCompoundEdgeInfoIteration = 0;
-    int openWireCompoundEdgeInfoIteration2 = 0;
-    std::size_t openWireCompoundOwnerWireInfo = 0;
-    std::size_t openWireCompoundOwnerWireInfo2 = 0;
-    bool openWireCompoundOpenLeafExport = false;
-    bool openWireCompoundUnownedOpenEdgeExport = false;
-    bool openWireCompoundRootCurrentMemberChildProducer = false;
-    bool openWireCompoundChildShapeIdentityRecorded = false;
-    std::size_t openWireCompoundChildWireEdgeCount = 0;
-    std::size_t openWireCompoundChildWireVertexCount = 0;
-    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-    // ::WireJoinerP::getOpenWires(), key "MapperHistory(aHistory)". This relation is assigned by
-    // the part-layer WireJoiner history ledger and consumed by topo evidence instead of being
-    // reconstructed from exported edge geometry.
-    std::string wireJoinerHistoryRelation;
-    bool wireJoinerHistoryRelationFromChildWireLedger = false;
-    std::string resultWireProducerKind;
-    std::string resultWireProducerState;
-    std::string resultWireProducerBlocker;
-    std::size_t resultWireProducerSourceEdgeInfoIndex = 0;
-    std::size_t resultWireProducerRootEdgeInfoIndex = 0;
-    std::size_t resultWireProducerCurrentMemberEdgeInfoIndex = 0;
-    std::size_t resultWireProducerChildWireInfoIndex = 0;
-    std::size_t openWireCompoundChildWireInfoIndex = 0;
-    std::vector<std::size_t> openWireCompoundSourceEdgeIndices;
-    bool openWireCompoundSourceLineageFromSplitterHistory = false;
-    bool openWireCompoundNoOriginalPurgeMatch = false;
-    bool openWireCompoundNoOriginalPurgedByLedger = false;
-    bool openWireCompoundNoOriginalSharedSourceLedgerRecorded = false;
-    std::size_t openWireCompoundNoOriginalSharedSourceEdgeCount = 0;
-    std::size_t openWireCompoundNoOriginalSharedSourceMatchedEdgeCount = 0;
-    std::size_t openWireCompoundNoOriginalSharedSourceUnmatchedEdgeCount = 0;
-    bool openWireCompoundProducerLedgerWireBuilt = false;
-    bool openWireCompoundProducerLedgerWireFromSourceVmap = false;
-    bool openWireCompoundSourceVmapEndpointLedgerRecorded = false;
-    std::size_t openWireCompoundSourceVmapEndpointLedgerOutputVertexCount = 0;
-    std::size_t openWireCompoundSourceVmapEndpointLedgerMatchedVertexCount = 0;
-    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-    // ::WireJoinerP::build() exports openWireCompound children after ::add() vmap replacement;
-    // topo evidence only forwards the part-layer endpoint provenance ledger.
-    bool openWireCompoundEndpointProvenanceRecorded = false;
-    std::size_t openWireCompoundEndpointProvenanceOutputVertexCount = 0;
-    std::size_t openWireCompoundEndpointProvenanceSourceVmapMatchedVertexCount = 0;
-    std::size_t openWireCompoundEndpointProvenanceVmapReplacementMatchedVertexCount = 0;
-    std::size_t openWireCompoundEndpointProvenanceCandidateMatchedVertexCount = 0;
-    std::size_t openWireCompoundEndpointProvenanceUnmatchedVertexCount = 0;
-    std::vector<SketchInternalWireJoinerVmapReplacementEvent>
-        openWireCompoundVmapReplacementEvents;
-    std::size_t openWireCompoundVmapReplacementEventCount = 0;
-    bool openWireCompoundCurrentMemberProducerOutput = false;
-    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-    // ::WireJoinerP::findSuperEdgesUpdateFirst() uses "wireData->Add(current->shape(...))"; the
-    // split ledger comes from ::splitEdges() "aHistory->AddModified(split.intersectShape,
-    // newInfo.edge)". Topo keeps this as a diagnostic until ElementMap can preserve FreeCAD's
-    // vertex multiplicity without changing the openWireCompound output topology.
-    bool openWireCompoundCurrentMemberSplitLedgerVertexCandidate = false;
-    bool openWireCompoundCurrentMemberSplitLedgerVertexDebtRecorded = false;
-    std::size_t openWireCompoundCurrentMemberSplitLedgerMemberVertexCount = 0;
-    std::size_t openWireCompoundCurrentMemberSplitLedgerCandidateVertexCount = 0;
-    std::size_t openWireCompoundCurrentMemberSplitLedgerOutputVertexCount = 0;
-    std::size_t openWireCompoundCurrentMemberSplitLedgerOutputVertexLedgerCount = 0;
-    std::size_t openWireCompoundCurrentMemberSplitLedgerOutputMatchedVertexCount = 0;
-    std::size_t openWireCompoundCurrentMemberSplitLedgerOutputCandidateMatchedVertexCount = 0;
-    std::size_t openWireCompoundCurrentMemberSplitLedgerOutputUnmatchedVertexCount = 0;
-    std::vector<SketchInternalWireJoinerEndpointIdentityDebt>
-        openWireCompoundCurrentMemberSplitLedgerOutputVertexDebt;
-    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-    // ::WireJoinerP::build() adds "info.wire()" to openWireCompound before MapperHistory(aHistory).
-    // This keeps result-slot-only vertex identity debt visible to ElementMap diagnostics.
-    bool openWireCompoundCurrentMemberSplitLedgerVertexMultiplicityBlocked = false;
-    bool missingOpenWireCompoundChildWire = false;
-    std::vector<std::size_t> sourceEdgeIndices;
-    bool sourceLineageFromSplitterHistory = false;
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-    // ::WireJoinerP::splitEdges() writes "aHistory->AddModified(split.intersectShape,
-    // newInfo.edge)" before ::getOpenWires() consumes MapperHistory(aHistory). Preserve that
-    // fragment-to-source ledger in Sketch.InternalShape history instead of deriving split relation
-    // from output geometry.
-    std::size_t wireJoinerHistoryEventIndex = 0;
-    bool wireJoinerHistoryEventFromChildWireLedger = false;
-    std::vector<std::size_t> splitFragmentSourceEdgeIndices;
-    std::vector<std::size_t> splitFragmentModifiedSourceEdgeIndices;
-    std::vector<std::size_t> splitFragmentGeneratedSourceEdgeIndices;
-    bool splitFragmentFromModifiedHistory = false;
-    bool splitFragmentFromGeneratedHistory = false;
-    bool splitFragmentSourceLineageFromIdentityFallback = false;
-    bool splitFragmentSourceLineageFromSourceIdentityFallback = false;
-    bool splitFragmentHistoryShapeGeometryBridge = false;
-    std::array<bool, 2> sourceVertexIdentity {{false, false}};
-    std::array<int, 2> sourceVertexReplacementSourceEdgeIndices {{-1, -1}};
-    std::array<int, 2> sourceVertexReplacementEndpoints {{-1, -1}};
-    std::array<bool, 2> sourceVertexReplacementIdentity {{false, false}};
-};
-
-struct SketchInternalWireJoinerHistoryEvent
-{
-    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
-    // ::WireJoinerP::getOpenWires() consumes openWireCompound with "MapperHistory(aHistory)".
-    // Keep the request-local WireJoiner history event in the topo context so mapper evidence reads
-    // relation/source lineage from the part-layer event ledger instead of entry-side fallback data.
-    std::size_t eventIndex = 0;
-    std::size_t openExportIndex = 0;
-    std::size_t edgeInfoIndex = 0;
-    std::size_t openWireCompoundChildWireInfoIndex = 0;
-    std::string relation;
-    bool relationFromChildWireLedger = false;
-    std::vector<std::size_t> sourceEdgeIndices;
-    bool sourceLineageFromSplitterHistory = false;
-    bool noOriginalPurgedByLedger = false;
-    bool splitFragmentFromModifiedHistory = false;
-    bool splitFragmentFromGeneratedHistory = false;
-};
-
-struct SketchInternalFaceMakerEdgeEvidence
-{
-    std::string makerStage;
-    std::string relation;
-    std::size_t sourceEdgeIndex = 0;
-    std::size_t targetEdgeIndex = 0;
-    TopoDS_Edge targetEdge;
-    bool preSplitHistory = false;
-    bool splitterHistory = false;
-};
-
-struct SketchInternalFaceMakerBoundedFaceBoundaryEvidence
-{
-    std::size_t sourceEdgeIndex = 0;
-    std::size_t targetEdgeIndex = 0;
-    std::string makerStage;
-    std::string relation;
-    TopoDS_Edge targetEdge;
-};
-
-struct SketchInternalFaceMakerBoundedFaceEvidence
-{
-    std::size_t boundedFaceIndex = 0;
-    TopoDS_Face face;
-    std::vector<std::size_t> sourceEdgeIndices;
-    std::vector<std::size_t> outerBoundaryTargetEdgeIndices;
-    std::vector<SketchInternalFaceMakerBoundedFaceBoundaryEvidence> outerBoundary;
-};
-
-struct SketchInternalHistoryContext
-{
-    std::size_t sourceEdgeCount = 0;
-    std::size_t preSplitEdgeCount = 0;
-    std::size_t splitterEdgeCount = 0;
-    std::size_t boundedFaceCount = 0;
-    bool preSplitHistory = false;
-    bool splitterHistory = false;
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMaker.cpp
-    // ::FaceMaker::postBuild(), maps pre-split and splitter history before generated face naming.
-    // These entries are producer evidence; InternalShape topo consumers must not rebuild them from
-    // bbox, area, geometry type, or output order.
-    std::vector<SketchInternalFaceMakerEdgeEvidence> faceMakerEdgeEvidence;
-    std::vector<SketchInternalFaceMakerBoundedFaceEvidence> faceMakerBoundedFaceEvidence;
-    std::size_t wireJoinerSourceEdgeCount = 0;
-    std::size_t wireJoinerSplitResultEdgeCount = 0;
-    std::vector<SketchInternalWireJoinerHistoryEvent> wireJoinerHistoryEvents;
-    std::vector<SketchInternalWireJoinerOpenExportHistoryEntry> wireJoinerOpenExportHistoryEntries;
-    std::size_t wireJoinerModifiedSourceEdgeCount = 0;
-    std::size_t wireJoinerModifiedHistoryCount = 0;
-    std::size_t wireJoinerGeneratedHistoryCount = 0;
-    std::size_t wireJoinerDeletedHistoryCount = 0;
-    bool wireJoinerSplitterHistory = false;
 };
 
 struct NamedElement
@@ -305,7 +97,7 @@ struct NamedShape
     // from the currently resolvable ElementMap. cad-core exposes this request-local summary so
     // diagnostics can distinguish an indexed-only map from a partially consumed history ledger.
     std::vector<std::string> elementHistoryStatus;
-    std::optional<SketchInternalHistoryContext> sketchInternalHistory;
+    std::optional<InternalShapeHistoryLedger> sketchInternalHistory;
 };
 
 struct NamedShapeSource
@@ -376,7 +168,14 @@ NamedShape namedShapeForSketchInternalShape(
     const std::string& owner,
     const TopoDS_Shape& rawShape,
     const TopoDS_Shape& internalShape,
-    std::optional<SketchInternalHistoryContext> historyContext = std::nullopt
+    std::optional<InternalShapeHistoryLedger> historyLedger = std::nullopt
+);
+void consumeInternalShapeHistoryLedger(
+    NamedShape& namedShape,
+    const TopoDS_Shape& rawShape,
+    const TopoDS_Shape& internalShape,
+    const nlohmann::json& internalElementMap,
+    const InternalShapeHistoryLedger& ledger
 );
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::makeElementPrism(),

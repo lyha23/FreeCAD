@@ -602,8 +602,7 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         // open-wire carry-through. Full WireJoiner ownership/history remains separate topology work.
         internalShape = *profileFace.internalShape;
     }
-    const auto faceMakerHistory = profileFace.faceMakerHistory;
-    const auto wireJoinerResult = profileFace.wireJoinerResult;
+    const auto historyLedger = profileFace.historyLedger;
 
     if (hasPlacement) {
         if (!rawShape->IsNull()) {
@@ -624,8 +623,7 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         sketchProfileNormalFromPlacement(hasPlacement ? placement : gp_Trsf {}),
         internalShape,
         profileFace.requiresSubshapeSelection,
-        faceMakerHistory,
-        wireJoinerResult,
+        historyLedger,
     });
     context.shapes[object.name] = internalResult.shapeValue;
     if (internalResult.shapeValue.internalNamedShape) {

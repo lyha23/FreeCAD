@@ -73,8 +73,7 @@ struct ProfileFaceBuild
     std::optional<TopoDS_Shape> internalShape;
     bool faceMakerFailed = false;
     bool requiresSubshapeSelection = false;
-    std::optional<part::FaceMakerHistorySummary> faceMakerHistory;
-    std::optional<part::WireJoinerBuildResult> wireJoinerResult;
+    std::optional<part::InternalShapeHistoryLedger> historyLedger;
 };
 
 std::string faceMakerRuntimeSourceName(part::FaceMakerBuildFaceRuntimeSource source);

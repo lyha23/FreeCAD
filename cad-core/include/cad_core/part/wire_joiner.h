@@ -5,9 +5,8 @@
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Shape.hxx>
 #include <TopoDS_Wire.hxx>
-#include <nlohmann/json.hpp>
 
-#include "cad_core/part/topo_shape.h"
+#include "cad_core/part/internal_shape_history_ledger.h"
 
 #include <cstddef>
 #include <memory>
@@ -32,10 +31,7 @@ struct WireJoinerBuildResult
     bool missingChildWireInvariant = false;
     bool noOriginalPurged = false;
     bool hasMapperHistoryEvidence = false;
-    SketchInternalHistoryContext historyEvidence;
-    nlohmann::json diagnostics = nlohmann::json::object();
-    nlohmann::json compatibilityLedger = nlohmann::json::object();
-    nlohmann::json compatibilityHistoryDetail = nlohmann::json::object();
+    InternalShapeHistoryLedger historyLedger;
 };
 
 class WireJoiner

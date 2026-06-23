@@ -1,6 +1,7 @@
 #include "cad_core/sketcher/sketch_internal_builder.h"
 
 #include "cad_core/part/face_maker.h"
+#include "cad_core/part/wire_joiner.h"
 
 #include <BRep_Builder.hxx>
 #include <TopoDS_Compound.hxx>
@@ -56,7 +57,10 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
     // ::buildInternals() publishes split InternalFace regions, but PartDesign can still use the
     // profile face directly when no open splitter creates multiple selectable bounded regions.
     result.requiresSubshapeSelection = !input.openEdges.empty() && faceResult.faceCount > 1U;
-    result.faceMakerHistory = faceResult.historySummary;
+    part::InternalShapeHistoryLedger historyLedger;
+    if (faceResult.historySummary) {
+        historyLedger.addFaceMakerEvidence(*faceResult.historySummary);
+    }
 
     if (!input.faceWires.empty() || !input.openWires.empty()) {
         // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
@@ -90,13 +94,17 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
                                        &input.faceWires,
                                        &input.openEdges,
                                        result.splitProducedBoundedFaces);
-        result.wireJoinerResult = joiner.buildResult("SKF", true);
-        if (result.wireJoinerResult->openWires && !result.wireJoinerResult->openWires->IsNull()) {
+        const part::WireJoinerBuildResult wireJoinerResult = joiner.buildResult("SKF", true);
+        historyLedger.merge(wireJoinerResult.historyLedger);
+        if (wireJoinerResult.openWires && !wireJoinerResult.openWires->IsNull()) {
             result.internalShape = compoundShape(
                 *result.internalShape,
-                *result.wireJoinerResult->openWires
+                *wireJoinerResult.openWires
             );
         }
+    }
+    if (!historyLedger.empty()) {
+        result.historyLedger = std::move(historyLedger);
     }
 
     return result;

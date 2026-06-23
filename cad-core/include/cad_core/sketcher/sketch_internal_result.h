@@ -1,7 +1,6 @@
 #pragma once
 
-#include "cad_core/part/face_maker.h"
-#include "cad_core/part/wire_joiner.h"
+#include "cad_core/part/internal_shape_history_ledger.h"
 #include "cad_core/runtime/compute_context.h"
 
 #include <TopoDS_Shape.hxx>
@@ -22,8 +21,7 @@ struct SketchInternalResultInput
     gp_Dir profileNormal;
     std::optional<TopoDS_Shape> internalShape;
     bool profileRequiresSubshapeSelection = false;
-    std::optional<part::FaceMakerHistorySummary> faceMakerHistory;
-    std::optional<part::WireJoinerBuildResult> wireJoinerResult;
+    std::optional<part::InternalShapeHistoryLedger> historyLedger;
 };
 
 struct SketchInternalResult

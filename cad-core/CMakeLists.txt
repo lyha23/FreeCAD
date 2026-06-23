@@ -252,6 +252,7 @@ add_library(cad-core-lib STATIC
   src/part/brep_snapshot.cpp
   src/part/extrusion_helper.cpp
   src/part/face_maker.cpp
+  src/part/internal_shape_history_ledger.cpp
   src/part/part_boolean.cpp
   src/part/part_compound.cpp
   src/part/part_extrusion.cpp

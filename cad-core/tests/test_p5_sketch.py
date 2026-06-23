@@ -593,6 +593,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         runtime_history = sketch["wire_joiner_history_detail"]
         named_shape = result["named_shapes"]["Sketch.InternalShape"]
         internal_history = named_shape["sketch_internal_history"]
+        stable_history = sketch["internal_shape_history"]
         runtime_entries = runtime_history["open_export_history_entries"]
         runtime_events = runtime_history["wire_joiner_history_events"]
         internal_entries = internal_history["wire_joiner_open_export_history_entries"]
@@ -602,6 +603,16 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         internal_entry_counts = self.open_export_entry_counts(internal_entries)
 
         self.assertEqual(named_shape["sketch_internal_history_status"], "history_evidence:facemaker_wirejoiner")
+        self.assertIn("WireJoinerOpenWires", stable_history["producer_tags"])
+        self.assertGreaterEqual(stable_history["event_count"], len(runtime_entries))
+        self.assertTrue(
+            any(
+                event["producer"] == "WireJoinerOpenWires"
+                and event["stage"] == "wire_joiner:open_export"
+                and event["target_kind"] == "edge"
+                for event in stable_history["events"]
+            )
+        )
         self.assertIn("wire_joiner_history:open_export", named_shape["element_history_status"])
         self.assertEqual(len(internal_entries), len(runtime_entries))
         self.assertEqual(len(internal_events), len(runtime_events))
@@ -3459,6 +3470,13 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("wire_joiner_diagnostics", sketch)
         self.assertIn("wire_joiner_ledger", sketch)
         self.assertIn("wire_joiner_history_detail", sketch)
+        self.assertIn("internal_shape_history", sketch)
+        self.assertIn("FaceMakerBuildFace", sketch["internal_shape_history"]["producer_tags"])
+        self.assertGreaterEqual(sketch["internal_shape_history"]["event_count"], 1)
+        self.assertGreaterEqual(
+            sketch["internal_shape_history"]["relation_summary"].get("generated", 0),
+            1,
+        )
         self.assertEqual(sketch["wire_joiner_diagnostics"]["status"], "ok")
         self.assertIn("has_open_wires", sketch["wire_joiner_diagnostics"]["summary"])
         self.assertFalse(
