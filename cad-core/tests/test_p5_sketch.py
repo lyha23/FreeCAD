@@ -3439,6 +3439,27 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["status"], "ok")
         self.assert_object_matches_expected(result, "p5", "sketch-internal-face")
 
+    def test_p5_sketch_internal_result_package_keeps_publication_fields(self) -> None:
+        result = self.run_recompute("sketch-internal-face", "p5")
+        sketch = result["objects"]["Sketch"]
+        subshapes = result["subshapes"]["Sketch"]
+        mesh = result["mesh"]["Sketch"]
+
+        self.assertEqual(sketch["profile"], "occt_face")
+        self.assertTrue(sketch["profile_ready"])
+        self.assertEqual(sketch["internal_shape"], "occt_internal_shape")
+        self.assertEqual(sketch["internal_face_count"], 1)
+        self.assertEqual(sketch["internal_edge_count"], 4)
+        self.assertEqual(sketch["internal_vertex_count"], 4)
+        self.assertEqual(sketch["internal_element_map"]["Edge1"], "InternalEdge1")
+        self.assertEqual(sketch["internal_element_map"]["InternalEdge1"], "Edge1")
+        self.assertIn("Edge1", subshapes)
+        self.assertIn("InternalEdge1", subshapes)
+        self.assertIn("InternalFace1", mesh["faceIds"])
+        self.assertIn("wire_joiner_ledger", sketch)
+        self.assertIn("wire_joiner_history_detail", sketch)
+        self.assertEqual(sketch["facemaker_history_status"], "history_evidence:facemaker_buildface")
+
     def test_p5_sketch_exports_internal_edge_vertex_stable_subnames(self) -> None:
         result = self.run_recompute_ffi("sketch-internal-face", "p5")
         subshapes = {
