@@ -2,72 +2,18 @@
 
 // Part-layer FaceMaker implementation aligned with FreeCAD
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMaker*.cpp.
+#include "cad_core/part/internal_shape_history_ledger.h"
+
 #include <TopoDS_Edge.hxx>
-#include <TopoDS_Face.hxx>
 #include <TopoDS_Shape.hxx>
 #include <TopoDS_Wire.hxx>
 
 #include <cstddef>
 #include <optional>
-#include <string>
 #include <vector>
 
 namespace cad_core::part
 {
-
-enum class FaceMakerBuildFaceRuntimeSource
-{
-    None,
-    BuilderFace,
-    FaceWithHolesProfile,
-};
-
-struct FaceMakerEdgeHistoryEvidence
-{
-    std::string makerStage;
-    std::string relation;
-    std::size_t sourceEdgeIndex = 0;
-    std::size_t targetEdgeIndex = 0;
-    TopoDS_Edge targetEdge;
-    bool preSplitHistory = false;
-    bool splitterHistory = false;
-};
-
-struct FaceMakerBoundedFaceBoundaryEvidence
-{
-    std::size_t sourceEdgeIndex = 0;
-    std::size_t targetEdgeIndex = 0;
-    std::string makerStage;
-    std::string relation;
-    TopoDS_Edge targetEdge;
-};
-
-struct FaceMakerBoundedFaceHistoryEvidence
-{
-    std::size_t boundedFaceIndex = 0;
-    TopoDS_Face face;
-    std::vector<std::size_t> sourceEdgeIndices;
-    std::vector<std::size_t> outerBoundaryTargetEdgeIndices;
-    std::vector<FaceMakerBoundedFaceBoundaryEvidence> outerBoundary;
-};
-
-struct FaceMakerHistorySummary
-{
-    std::size_t sourceEdgeCount = 0;
-    std::size_t preSplitEdgeCount = 0;
-    std::size_t splitterEdgeCount = 0;
-    std::size_t boundedFaceCount = 0;
-    bool preSplitHistory = false;
-    bool splitterHistory = false;
-    FaceMakerBuildFaceRuntimeSource profileResultSource = FaceMakerBuildFaceRuntimeSource::None;
-    FaceMakerBuildFaceRuntimeSource internalResultSource = FaceMakerBuildFaceRuntimeSource::None;
-    bool topologySwitchUsed = false;
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMaker.cpp
-    // ::FaceMaker::postBuild(), chains "MapperHistory(myPreSplitHistory)" and
-    // "MapperMaker(mySplitter)" before naming the generated face from its outer wire edges.
-    std::vector<FaceMakerEdgeHistoryEvidence> edgeEvidence;
-    std::vector<FaceMakerBoundedFaceHistoryEvidence> boundedFaceEvidence;
-};
 
 struct FaceMakerBuildFaceResult
 {
@@ -80,7 +26,7 @@ struct FaceMakerBuildFaceResult
     std::optional<TopoDS_Shape> internalShape;
     std::size_t faceCount = 0;
     bool splitProducedBoundedFaces = false;
-    std::optional<FaceMakerHistorySummary> historySummary;
+    std::optional<InternalShapeHistoryLedger> historyLedger;
 };
 
 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBullseye.cpp

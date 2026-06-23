@@ -15,6 +15,57 @@
 namespace cad_core::part
 {
 
+enum class FaceMakerBuildFaceRuntimeSource
+{
+    None,
+    BuilderFace,
+    FaceWithHolesProfile,
+};
+
+struct FaceMakerEdgeHistoryEvidence
+{
+    std::string makerStage;
+    std::string relation;
+    std::size_t sourceEdgeIndex = 0;
+    std::size_t targetEdgeIndex = 0;
+    TopoDS_Edge targetEdge;
+    bool preSplitHistory = false;
+    bool splitterHistory = false;
+};
+
+struct FaceMakerBoundedFaceBoundaryEvidence
+{
+    std::size_t sourceEdgeIndex = 0;
+    std::size_t targetEdgeIndex = 0;
+    std::string makerStage;
+    std::string relation;
+    TopoDS_Edge targetEdge;
+};
+
+struct FaceMakerBoundedFaceHistoryEvidence
+{
+    std::size_t boundedFaceIndex = 0;
+    TopoDS_Face face;
+    std::vector<std::size_t> sourceEdgeIndices;
+    std::vector<std::size_t> outerBoundaryTargetEdgeIndices;
+    std::vector<FaceMakerBoundedFaceBoundaryEvidence> outerBoundary;
+};
+
+struct FaceMakerHistorySummary
+{
+    std::size_t sourceEdgeCount = 0;
+    std::size_t preSplitEdgeCount = 0;
+    std::size_t splitterEdgeCount = 0;
+    std::size_t boundedFaceCount = 0;
+    bool preSplitHistory = false;
+    bool splitterHistory = false;
+    FaceMakerBuildFaceRuntimeSource profileResultSource = FaceMakerBuildFaceRuntimeSource::None;
+    FaceMakerBuildFaceRuntimeSource internalResultSource = FaceMakerBuildFaceRuntimeSource::None;
+    bool topologySwitchUsed = false;
+    std::vector<FaceMakerEdgeHistoryEvidence> edgeEvidence;
+    std::vector<FaceMakerBoundedFaceHistoryEvidence> boundedFaceEvidence;
+};
+
 struct SketchInternalWireJoinerEndpointIdentityDebt
 {
     std::size_t outputVertexIndex = 0;
@@ -207,6 +258,10 @@ InternalShapeHistoryLedgerData& mutableInternalShapeHistoryLedgerData(
 );
 const InternalShapeHistoryLedgerData& internalShapeHistoryLedgerData(
     const InternalShapeHistoryLedger& ledger
+);
+void addFaceMakerEvidenceToLedger(
+    InternalShapeHistoryLedger& ledger,
+    const FaceMakerHistorySummary& history
 );
 
 }  // namespace cad_core::part

@@ -58,8 +58,8 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
     // profile face directly when no open splitter creates multiple selectable bounded regions.
     result.requiresSubshapeSelection = !input.openEdges.empty() && faceResult.faceCount > 1U;
     part::InternalShapeHistoryLedger historyLedger;
-    if (faceResult.historySummary) {
-        historyLedger.addFaceMakerEvidence(*faceResult.historySummary);
+    if (faceResult.historyLedger) {
+        historyLedger.merge(*faceResult.historyLedger);
     }
 
     if (!input.faceWires.empty() || !input.openWires.empty()) {

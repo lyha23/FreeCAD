@@ -1,5 +1,7 @@
 #include "cad_core/part/face_maker.h"
 
+#include "internal_shape_history_ledger_detail.h"
+
 #include <BRepAlgoAPI_Common.hxx>
 #include <BRepAlgoAPI_Splitter.hxx>
 #include <BOPAlgo_BuilderFace.hxx>
@@ -1510,12 +1512,14 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(
             || normalizeNestedHoleIsland
         ? profileFace
         : boundedFaces;
+    InternalShapeHistoryLedger historyLedger;
+    addFaceMakerEvidenceToLedger(historyLedger, historySummary);
     return FaceMakerBuildFaceResult {
         profileFace && !profileFace->IsNull() ? profileFace : boundedFaces,
         internalShape,
         boundedFaceCount,
         splitProducedBoundedFaces,
-        historySummary,
+        historyLedger,
     };
 }
 

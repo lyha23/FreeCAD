@@ -386,12 +386,16 @@ InternalShapeHistoryLedger& InternalShapeHistoryLedger::operator=(
     InternalShapeHistoryLedger&&
 ) noexcept = default;
 
-void InternalShapeHistoryLedger::addFaceMakerEvidence(const FaceMakerHistorySummary& history)
+void addFaceMakerEvidenceToLedger(
+    InternalShapeHistoryLedger& ledger,
+    const FaceMakerHistorySummary& history
+)
 {
-    data_->hasFaceMakerEvidence = true;
-    data_->faceMakerCompatibility = faceMakerHistoryToJson(history);
+    InternalShapeHistoryLedgerData& data = mutableInternalShapeHistoryLedgerData(ledger);
+    data.hasFaceMakerEvidence = true;
+    data.faceMakerCompatibility = faceMakerHistoryToJson(history);
 
-    SketchInternalHistoryContext& context = data_->compatibilityHistory;
+    SketchInternalHistoryContext& context = data.compatibilityHistory;
     context.sourceEdgeCount = history.sourceEdgeCount;
     context.preSplitEdgeCount = history.preSplitEdgeCount;
     context.splitterEdgeCount = history.splitterEdgeCount;
@@ -412,7 +416,7 @@ void InternalShapeHistoryLedger::addFaceMakerEvidence(const FaceMakerHistorySumm
         topoEntry.splitterHistory = entry.splitterHistory;
         context.faceMakerEdgeEvidence.push_back(std::move(topoEntry));
 
-        data_->events.push_back(InternalShapeHistoryEvent {
+        data.events.push_back(InternalShapeHistoryEvent {
             relationFromName(entry.relation),
             InternalShapeHistoryProducer::FaceMakerBuildFace,
             InternalShapeHistoryTargetKind::Edge,
@@ -439,7 +443,7 @@ void InternalShapeHistoryLedger::addFaceMakerEvidence(const FaceMakerHistorySumm
         }
         context.faceMakerBoundedFaceEvidence.push_back(std::move(topoEntry));
 
-        data_->events.push_back(InternalShapeHistoryEvent {
+        data.events.push_back(InternalShapeHistoryEvent {
             InternalShapeHistoryRelation::Generated,
             InternalShapeHistoryProducer::FaceMakerBuildFace,
             InternalShapeHistoryTargetKind::Face,
@@ -582,21 +586,6 @@ std::optional<std::string> InternalShapeHistoryLedger::sketchInternalHistoryStat
         return std::nullopt;
     }
     return "history_evidence:facemaker_wirejoiner";
-}
-
-InternalShapeHistoryLedger mergeInternalShapeHistory(
-    const std::optional<FaceMakerHistorySummary>& faceMaker,
-    const std::optional<InternalShapeHistoryLedger>& wireJoiner
-)
-{
-    InternalShapeHistoryLedger ledger;
-    if (faceMaker) {
-        ledger.addFaceMakerEvidence(*faceMaker);
-    }
-    if (wireJoiner) {
-        ledger.merge(*wireJoiner);
-    }
-    return ledger;
 }
 
 const char* internalShapeHistoryRelationName(InternalShapeHistoryRelation relation)

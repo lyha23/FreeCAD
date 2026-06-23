@@ -76,8 +76,6 @@ struct ProfileFaceBuild
     std::optional<part::InternalShapeHistoryLedger> historyLedger;
 };
 
-std::string faceMakerRuntimeSourceName(part::FaceMakerBuildFaceRuntimeSource source);
-
 std::vector<SketchProfileEdge> profileEdges(const std::vector<SketchSegment>& segments,
                                             const std::vector<SketchArc>& arcs,
                                             const std::vector<SketchEllipseArc>& ellipseArcs,

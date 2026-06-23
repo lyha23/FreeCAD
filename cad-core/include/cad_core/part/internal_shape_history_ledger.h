@@ -4,8 +4,6 @@
 // /home/user/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
 // ::SketchObject::buildInternals(), which publishes a request-local "InternalShape" from
 // FaceMakerBuildFace and WireJoiner open-wire results.
-#include "cad_core/part/face_maker.h"
-
 #include <TopoDS_Shape.hxx>
 #include <nlohmann/json.hpp>
 
@@ -66,10 +64,6 @@ public:
     InternalShapeHistoryLedger(InternalShapeHistoryLedger&&) noexcept;
     InternalShapeHistoryLedger& operator=(InternalShapeHistoryLedger&&) noexcept;
 
-    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/FaceMaker.cpp
-    // ::FaceMaker::postBuild(), consumes "MapperHistory(myPreSplitHistory)" and
-    // "MapperMaker(mySplitter)" before generated InternalShape naming.
-    void addFaceMakerEvidence(const FaceMakerHistorySummary& history);
     void merge(const InternalShapeHistoryLedger& other);
 
     bool empty() const;
@@ -90,11 +84,6 @@ private:
         const InternalShapeHistoryLedger& ledger
     );
 };
-
-InternalShapeHistoryLedger mergeInternalShapeHistory(
-    const std::optional<FaceMakerHistorySummary>& faceMaker,
-    const std::optional<InternalShapeHistoryLedger>& wireJoiner
-);
 
 const char* internalShapeHistoryRelationName(InternalShapeHistoryRelation relation);
 const char* internalShapeHistoryProducerName(InternalShapeHistoryProducer producer);

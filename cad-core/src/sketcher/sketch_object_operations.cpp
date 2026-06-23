@@ -37,19 +37,6 @@
 namespace cad_core::sketcher
 {
 
-std::string faceMakerRuntimeSourceName(part::FaceMakerBuildFaceRuntimeSource source)
-{
-    switch (source) {
-        case part::FaceMakerBuildFaceRuntimeSource::BuilderFace:
-            return "builder_face";
-        case part::FaceMakerBuildFaceRuntimeSource::FaceWithHolesProfile:
-            return "face_with_holes_profile";
-        case part::FaceMakerBuildFaceRuntimeSource::None:
-            break;
-    }
-    return "none";
-}
-
 bool samePoint(const gp_Pnt& left, const gp_Pnt& right)
 {
     constexpr double eps = 1e-9;
