@@ -5,7 +5,6 @@
 #include "cad_core/part/extrusion_helper.h"
 #include "cad_core/part/shape_exporter.h"
 #include "cad_core/part/topo_shape.h"
-#include "cad_core/part/topo_shape_reference.h"
 #include "cad_core/part/property_topo_shape.h"
 
 #include <BRepAdaptor_Curve.hxx>
@@ -142,455 +141,6 @@ std::optional<TopoDS_Shape> previousSolidShape(const runtime::ComputeContext& co
     }
 
     return std::nullopt;
-}
-
-bool requestLocalInternalSubname(const std::string& subname)
-{
-    return part::parseInternalSubshapeName(subname).has_value();
-}
-
-bool requestLocalInternalFaceSubname(const std::string& subname)
-{
-    const auto parsed = part::parseInternalSubshapeName(subname);
-    return parsed && parsed->kind == TopAbs_FACE;
-}
-
-void addUnsupportedInternalStableSubnameDiagnostic(runtime::ComputeContext& context,
-                                                   const app::DocumentObject& object,
-                                                   const app::Link& profileLink,
-                                                   const std::string& featureName,
-                                                   const std::string& stableSubname,
-                                                   const std::string& reason)
-{
-    runtime::addDiagnostic(context.diagnostics,
-                           "error",
-                           "unsupported_stable_subname",
-                           featureName + " Profile.StableSubList cannot reference request-local "
-                               + stableSubname + " without " + reason,
-                           object.name,
-                           "Profile",
-                           "runtime",
-                           profileLink.object,
-                           stableSubname);
-}
-
-const part::NamedShape* sketchInternalNamedShapeEvidence(const app::Link& profileLink,
-                                                         const runtime::ComputeContext& context,
-                                                         const runtime::ShapeValue& shapeValue)
-{
-    const auto namedShapeIt = context.namedShapes.find(profileLink.object + ".InternalShape");
-    if (namedShapeIt != context.namedShapes.end()) {
-        return &namedShapeIt->second;
-    }
-    if (shapeValue.internalNamedShape) {
-        return &*shapeValue.internalNamedShape;
-    }
-    return nullptr;
-}
-
-std::optional<std::string> resolveInternalFaceStableSubname(const app::DocumentObject& object,
-                                                            runtime::ComputeContext& context,
-                                                            const app::Link& profileLink,
-                                                            const runtime::ShapeValue& shapeValue,
-                                                            const std::string& requestedSubname,
-                                                            const std::string& stableSubname,
-                                                            const std::string& featureName)
-{
-    const part::NamedShape* internalNamedShape =
-        sketchInternalNamedShapeEvidence(profileLink, context, shapeValue);
-    if (internalNamedShape == nullptr
-        || internalNamedShape->elements.empty()
-        || internalNamedShape->elementMap.empty()
-        || !shapeValue.internalShape
-        || shapeValue.internalShape->IsNull()) {
-        addUnsupportedInternalStableSubnameDiagnostic(
-            context,
-            object,
-            profileLink,
-            featureName,
-            stableSubname,
-            "Sketch.InternalShape NamedShape/ElementMap evidence");
-        return std::nullopt;
-    }
-
-    const std::string subname = requestedSubname.empty() ? stableSubname : requestedSubname;
-    const auto resolved = part::resolveElementReference(*internalNamedShape, subname, stableSubname);
-    if (resolved.status != part::ElementResolveStatus::Resolved || !resolved.element) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               stableSubnameDiagnosticCode(resolved.status),
-                               stableSubnameDiagnosticMessage("Profile", profileLink.object, stableSubname, resolved.status),
-                               object.name,
-                               "Profile",
-                               "runtime",
-                               profileLink.object,
-                               stableSubname);
-        return std::nullopt;
-    }
-
-    if (!requestLocalInternalFaceSubname(*resolved.element)) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "unsupported_subshape_kind",
-                               featureName + " Profile.StableSubList resolved to non-face " + *resolved.element,
-                               object.name,
-                               "Profile",
-                               "runtime",
-                               profileLink.object,
-                               *resolved.element);
-        return std::nullopt;
-    }
-    if (!part::subshapeByName(*internalNamedShape, *resolved.element)) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "invalid_subshape",
-                               featureName + " Profile target " + profileLink.object + " has no subshape "
-                                   + *resolved.element,
-                               object.name,
-                               "Profile",
-                               "runtime",
-                               profileLink.object,
-                               *resolved.element);
-        return std::nullopt;
-    }
-    return *resolved.element;
-}
-
-std::vector<std::string> stableNameCandidatesForProfile(const app::Link& profileLink,
-                                                        const app::ReferenceShadow& shadow)
-{
-    std::vector<std::string> candidates;
-    const auto addCandidate = [&](const std::string& stableSubname) {
-        if (stableSubname.empty() || requestLocalInternalSubname(stableSubname)) {
-            return;
-        }
-        if (std::find(candidates.begin(), candidates.end(), stableSubname) == candidates.end()) {
-            candidates.push_back(stableSubname);
-        }
-    };
-
-    addCandidate(shadow.stableSubname);
-    if (!profileLink.stableSubnames.empty()) {
-        addCandidate(profileLink.stableSubnames.front());
-    }
-    return candidates;
-}
-
-bool internalSubshapeMatchesReferenceShadow(const runtime::ShapeValue& shapeValue,
-                                            const std::string& subname,
-                                            const TopoDS_Shape& subshape,
-                                            const app::ReferenceShadow& shadow)
-{
-    if (!shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
-        return false;
-    }
-    return part::referenceShadowMatchesCurrentSubshape(*shapeValue.internalShape,
-                                                       "Internal",
-                                                       subname,
-                                                       subshape,
-                                                       shadow);
-}
-
-std::optional<TopoDS_Shape> internalFaceFromShadowSub(const app::Link& profileLink,
-                                                      const app::ReferenceShadow& shadow,
-                                                      const runtime::ShapeValue& shapeValue)
-{
-    if (profileLink.shadowSubs.empty() || !shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
-        return std::nullopt;
-    }
-
-    for (const std::string& stableName : stableNameCandidatesForProfile(profileLink, shadow)) {
-        for (const auto& shadowSub : profileLink.shadowSubs) {
-            if (shadowSub.newName != stableName) {
-                continue;
-            }
-            const auto parsed = part::parseInternalSubshapeName(shadowSub.oldName);
-            if (!parsed || parsed->kind != TopAbs_FACE) {
-                continue;
-            }
-            const auto subshape = part::subshapeByName(*shapeValue.internalShape, *parsed);
-            if (!subshape || subshape->IsNull()) {
-                continue;
-            }
-            // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/PropertyLinks.cpp
-            // ::PropertyLinkBase::_updateElementReference() tries ShadowSub before
-            // GeoFeature::searchElementCache(). cad-core accepts that paired InternalFace only
-            // after ReferenceShadow proves it still matches the old referenced geometry.
-            if (internalSubshapeMatchesReferenceShadow(shapeValue, shadowSub.oldName, *subshape, shadow)) {
-                return *subshape;
-            }
-        }
-    }
-    return std::nullopt;
-}
-
-// FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
-// ::SketchObject::getElementTypes() exposes "InternalFace"; PartDesign Profile is a LinkSub
-// to the sketch, so cad-core resolves Profile.SubList InternalFaceN against InternalShape.
-std::optional<TopoDS_Shape> resolveSketchInternalFaceProfile(const app::DocumentObject& object,
-                                                             runtime::ComputeContext& context,
-                                                             const app::Link& profileLink,
-                                                             const runtime::ShapeValue& shapeValue,
-                                                             const std::string& featureName)
-{
-    if (profileLink.subnames.empty()) {
-        if (profileLink.stableSubnamesExplicit) {
-            std::vector<std::string> internalFaceStableSubnames;
-            for (const auto& stableSubname : profileLink.stableSubnames) {
-                if (requestLocalInternalFaceSubname(stableSubname)) {
-                    internalFaceStableSubnames.push_back(stableSubname);
-                }
-                else if (requestLocalInternalSubname(stableSubname)) {
-                    runtime::addDiagnostic(context.diagnostics,
-                                           "error",
-                                           "unsupported_subshape_kind",
-                                           featureName + " Profile.StableSubList requires an InternalFaceN subshape",
-                                           object.name,
-                                           "Profile",
-                                           "runtime",
-                                           profileLink.object,
-                                           stableSubname);
-                    return std::nullopt;
-                }
-            }
-            if (internalFaceStableSubnames.size() > 1U) {
-                runtime::addDiagnostic(context.diagnostics,
-                                       "error",
-                                       "invalid_subshape",
-                                       featureName + " Profile.StableSubList must select exactly one InternalFaceN",
-                                       object.name,
-                                       "Profile",
-                                       "runtime",
-                                       profileLink.object);
-                return std::nullopt;
-            }
-            if (internalFaceStableSubnames.size() == 1U) {
-                // FreeCAD: ~/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
-                // ::getInternalElementMap(), key "InternalFace"; PartDesign ProfileBased
-                // consumes selected sketch faces through Profile LinkSub. cad-core accepts a
-                // request-local StableSubList=InternalFaceN only when this recompute already has
-                // the same Sketch.InternalShape NamedShape/ElementMap evidence.
-                const auto currentSubname = resolveInternalFaceStableSubname(object,
-                                                                             context,
-                                                                             profileLink,
-                                                                             shapeValue,
-                                                                             {},
-                                                                             internalFaceStableSubnames.front(),
-                                                                             featureName);
-                if (!currentSubname) {
-                    return std::nullopt;
-                }
-                const auto parsed = part::parseInternalSubshapeName(*currentSubname);
-                if (!parsed || parsed->kind != TopAbs_FACE) {
-                    return std::nullopt;
-                }
-                return part::subshapeByName(*shapeValue.internalShape, *parsed);
-            }
-        }
-        if (shapeValue.profileRequiresSubshapeSelection) {
-            for (const auto& shadow : profileLink.referenceShadows) {
-                if (!shadow.target.empty() && shadow.target != profileLink.object) {
-                    continue;
-                }
-                const auto targetObjectIt = context.documentObjects.find(profileLink.object);
-                if (targetObjectIt != context.documentObjects.end() && shadow.targetId != targetObjectIt->second->id) {
-                    continue;
-                }
-                if (const auto shadowSubShape = internalFaceFromShadowSub(profileLink, shadow, shapeValue)) {
-                    return *shadowSubShape;
-                }
-            }
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "invalid_subshape",
-                                   featureName + " Profile target " + profileLink.object
-                                       + " has split InternalFace regions; Profile.SubList must select one InternalFaceN",
-                                   object.name,
-                                   "Profile",
-                                   "runtime",
-                                   profileLink.object);
-            return std::nullopt;
-        }
-        if (shapeValue.profileShape && !shapeValue.profileShape->IsNull()) {
-            return *shapeValue.profileShape;
-        }
-        return std::nullopt;
-    }
-
-    if (profileLink.subnames.size() != 1U || profileLink.subnames.front().empty()) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "invalid_subshape",
-                               featureName + " Profile.SubList must select exactly one InternalFaceN",
-                               object.name,
-                               "Profile",
-                               "runtime",
-                               profileLink.object);
-        return std::nullopt;
-    }
-
-    const std::string& subname = profileLink.subnames.front();
-    const auto parsed = part::parseInternalSubshapeName(subname);
-    if (!parsed || parsed->kind != TopAbs_FACE) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "unsupported_subshape_kind",
-                               featureName + " Profile.SubList requires an InternalFaceN subshape",
-                               object.name,
-                               "Profile",
-                               "runtime",
-                               profileLink.object,
-                               subname);
-        return std::nullopt;
-    }
-
-    std::string currentSubname = subname;
-    std::string nonInternalStableSubname;
-    if (profileLink.stableSubnamesExplicit) {
-        const std::string stableSubname =
-            profileLink.stableSubnames.size() == 1U ? profileLink.stableSubnames.front() : std::string{};
-        if (!stableSubname.empty()) {
-            const bool requestLocalStableSubname = part::parseInternalSubshapeName(stableSubname).has_value();
-            if (requestLocalStableSubname) {
-                if (!requestLocalInternalFaceSubname(stableSubname)) {
-                    runtime::addDiagnostic(context.diagnostics,
-                                           "error",
-                                           "unsupported_subshape_kind",
-                                           featureName + " Profile.StableSubList requires an InternalFaceN subshape",
-                                           object.name,
-                                           "Profile",
-                                           "runtime",
-                                           profileLink.object,
-                                           stableSubname);
-                    return std::nullopt;
-                }
-                // FreeCAD: ~/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
-                // ::getInternalElementMap(), key "InternalFace"; PartDesign ProfileBased
-                // consumes selected sketch faces through Profile LinkSub. cad-core accepts a
-                // request-local StableSubList=InternalFaceN only when this recompute already has
-                // the same Sketch.InternalShape NamedShape/ElementMap evidence.
-                const auto resolvedSubname = resolveInternalFaceStableSubname(object,
-                                                                              context,
-                                                                              profileLink,
-                                                                              shapeValue,
-                                                                              subname,
-                                                                              stableSubname,
-                                                                              featureName);
-                if (!resolvedSubname) {
-                    return std::nullopt;
-                }
-                currentSubname = *resolvedSubname;
-            }
-            else {
-                nonInternalStableSubname = stableSubname;
-            }
-        }
-    }
-
-    if (!shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.cpp
-        // ::getTopoShapeVerifiedFace(), throws "Cannot make face from profile" when the linked sketch
-        // cannot provide a closed face. An explicit InternalFaceN selection against an empty
-        // Sketch InternalShape is a profile error, not a missing object/link target.
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "open_profile",
-                               featureName + " Profile target " + profileLink.object
-                                   + " has no closed InternalFace profile for " + profileLink.subnames.front(),
-                               object.name,
-                               "Profile",
-                               "runtime",
-                               profileLink.object,
-                               profileLink.subnames.front());
-        return std::nullopt;
-    }
-
-    if (!nonInternalStableSubname.empty() && profileLink.referenceShadows.empty()) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "unsupported_stable_subname",
-                               featureName + " Profile.StableSubList cannot reference stable subname "
-                                   + nonInternalStableSubname + " without ReferenceShadow evidence",
-                               object.name,
-                               "Profile",
-                               "runtime",
-                               profileLink.object,
-                               nonInternalStableSubname);
-        return std::nullopt;
-    }
-
-    const auto currentParsed = part::parseInternalSubshapeName(currentSubname);
-    if (!currentParsed || currentParsed->kind != TopAbs_FACE) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "unsupported_subshape_kind",
-                               featureName + " Profile.SubList requires an InternalFaceN subshape",
-                               object.name,
-                               "Profile",
-                               "runtime",
-                               profileLink.object,
-                               currentSubname);
-        return std::nullopt;
-    }
-
-    const auto subshape = part::subshapeByName(*shapeValue.internalShape, *currentParsed);
-    if (!subshape || subshape->IsNull()) {
-        for (const auto& shadow : profileLink.referenceShadows) {
-            if (!shadow.target.empty() && shadow.target != profileLink.object) {
-                continue;
-            }
-            const auto targetObjectIt = context.documentObjects.find(profileLink.object);
-            if (targetObjectIt != context.documentObjects.end() && shadow.targetId != targetObjectIt->second->id) {
-                continue;
-            }
-            if (const auto shadowSubShape = internalFaceFromShadowSub(profileLink, shadow, shapeValue)) {
-                return *shadowSubShape;
-            }
-            const auto recovery = part::recoverReferenceShadowSubshape(*shapeValue.internalShape, "Internal", shadow);
-            if (recovery.status == part::ReferenceMatchStatus::Unique
-                && recovery.shape
-                && !recovery.shape->IsNull()) {
-                return *recovery.shape;
-            }
-        }
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "invalid_subshape",
-                               featureName + " Profile target " + profileLink.object + " has no subshape " + currentSubname,
-                               object.name,
-                               "Profile",
-                               "runtime",
-                               profileLink.object,
-                               currentSubname);
-        return std::nullopt;
-    }
-    for (const auto& shadow : profileLink.referenceShadows) {
-        if (!shadow.target.empty() && shadow.target != profileLink.object) {
-            continue;
-        }
-        const auto targetObjectIt = context.documentObjects.find(profileLink.object);
-        if (targetObjectIt != context.documentObjects.end() && shadow.targetId != targetObjectIt->second->id) {
-            continue;
-        }
-        if (!part::referenceFingerprintDriftReason(*subshape, shadow.fingerprint, shadow.shapeType)) {
-            continue;
-        }
-
-        if (const auto shadowSubShape = internalFaceFromShadowSub(profileLink, shadow, shapeValue)) {
-            return *shadowSubShape;
-        }
-        if (!shadow.brep) {
-            continue;
-        }
-        const auto recovery = part::recoverReferenceShadowSubshape(*shapeValue.internalShape, "Internal", shadow);
-        if (recovery.status == part::ReferenceMatchStatus::Unique
-            && recovery.shape
-            && !recovery.shape->IsNull()
-            && !part::referenceFingerprintDriftReason(*recovery.shape, shadow.fingerprint, shadow.shapeType)) {
-            return *recovery.shape;
-        }
-    }
-    return *subshape;
 }
 
 double throughAllLength(const TopoDS_Shape& base, const TopoDS_Shape& profile)
@@ -1910,75 +1460,13 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
 {
     // FreeCAD semantic source:
     // src/Mod/PartDesign/App/FeatureExtrude.cpp FeatureExtrude::buildExtrusion().
-    if (app::propertyValue(object, "Profile") == nullptr) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "missing_property",
-                               featureName + " Profile must link to a Sketch object",
-                               object.name,
-                               "Profile");
-        return std::nullopt;
-    }
-
-    const auto profileLink = app::readLink(object, "Profile");
-    if (!profileLink) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "missing_property",
-                               featureName + " Profile must link to a Sketch object",
-                               object.name,
-                               "Profile");
-        return std::nullopt;
-    }
-
     const std::string sideType = readStringProperty(object, "SideType", "One side");
-    const auto shapeIt = context.shapes.find(profileLink->object);
-    if (shapeIt == context.shapes.end()
-        || (shapeIt->second.kind != runtime::ShapeValue::Kind::Sketch
-            && shapeIt->second.kind != runtime::ShapeValue::Kind::Profile
-            && shapeIt->second.kind != runtime::ShapeValue::Kind::Solid)) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "missing_link_target",
-                               "Profile target " + profileLink->object + " did not produce a profile",
-                               object.name,
-                               "Profile",
-                               "runtime",
-                               profileLink->object);
-        return std::nullopt;
-    }
-    std::optional<TopoDS_Shape> selectedProfileShape;
-    const TopoDS_Shape* profileShape = nullptr;
-    if (shapeIt->second.kind == runtime::ShapeValue::Kind::Sketch) {
-        selectedProfileShape = resolveSketchInternalFaceProfile(object, context, *profileLink, shapeIt->second, featureName);
-        profileShape = selectedProfileShape ? &*selectedProfileShape : nullptr;
-        const bool explicitSubshape = !profileLink->subnames.empty();
-        const bool ambiguousMultiFace = shapeIt->second.profileRequiresSubshapeSelection;
-        if (profileShape == nullptr && (explicitSubshape || ambiguousMultiFace)) {
-            return std::nullopt;
-        }
-    }
-    else if (!profileLink->subnames.empty() || shapeIt->second.kind == runtime::ShapeValue::Kind::Solid) {
-        selectedProfileShape = resolveLinkedFaceProfile(object, context, *profileLink, shapeIt->second, featureName);
-        profileShape = selectedProfileShape ? &*selectedProfileShape : nullptr;
-        if (profileShape == nullptr) {
-            return std::nullopt;
-        }
-    }
-    else {
-        profileShape = &shapeIt->second.shape;
-    }
-    if (profileShape == nullptr || profileShape->IsNull()) {
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.cpp::getTopoShapeVerifiedFace(),
-        // throws "Cannot make face from profile" when linked sketch wires cannot become a face.
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "open_profile",
-                               "Profile target " + profileLink->object + " did not produce a closed profile face",
-                               object.name,
-                               "Profile",
-                               "runtime",
-                               profileLink->object);
+    const auto profile = resolveProfileBasedProfile(
+        object,
+        context,
+        featureName,
+        featureName + " Profile must link to a Sketch object");
+    if (!profile) {
         return std::nullopt;
     }
 
@@ -1986,12 +1474,10 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
     auto direction = computeDirection(
         object,
         context,
-        *profileLink,
-        *profileShape,
+        profile->link,
+        profile->shape,
         mode,
-        shapeIt->second.kind == runtime::ShapeValue::Kind::Sketch
-            ? shapeIt->second.profileNormal
-            : std::optional<gp_Dir> {}
+        profile->normal
     );
     if (!direction) {
         return std::nullopt;
@@ -2030,7 +1516,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
 
     if (sideType == "One side") {
         auto side = buildSingleSide(
-            object, context, *profileShape, *profileLink, side1, mode, featureName, direction->lengthScale, object.name);
+            object, context, profile->shape, profile->link, side1, mode, featureName, direction->lengthScale, object.name);
         if (!side) {
             return std::nullopt;
         }
@@ -2074,7 +1560,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
                                        "Length2");
                 return std::nullopt;
             }
-            const TopoDS_Shape movedProfile = translatedShape(*profileShape,
+            const TopoDS_Shape movedProfile = translatedShape(profile->shape,
                                                               -scaledLength2 * gp_Vec(direction->direction));
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp
             // ::FeatureExtrude::buildExtrusion(), Two sides no-taper fast path copies and moves
@@ -2085,7 +1571,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
                                              totalLength,
                                              object,
                                              context,
-                                             *profileLink,
+                                             profile->link,
                                              "Two sides",
                                              featureName,
                                              object.name);
@@ -2100,8 +1586,8 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
         else {
             auto first = buildSingleSide(object,
                                          context,
-                                         *profileShape,
-                                         *profileLink,
+                                         profile->shape,
+                                         profile->link,
                                          side1,
                                          mode,
                                          featureName,
@@ -2112,8 +1598,8 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
             }
             auto second = buildSingleSide(object,
                                           context,
-                                          *profileShape,
-                                          *profileLink,
+                                          profile->shape,
+                                          profile->link,
                                           side2,
                                           mode,
                                           featureName,
@@ -2167,28 +1653,28 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
             const double halfLength = scaledLength / 2.0;
             auto first = makeExtrusionShape(object,
                                             context,
-                                            *profileShape,
+                                            profile->shape,
                                             direction->direction,
                                             halfLength,
                                             taper1,
                                             "Symmetric",
                                             "TaperAngle",
                                             featureName,
-                                            *profileLink,
+                                            profile->link,
                                             object.name + ".Prism1");
             if (!first) {
                 return std::nullopt;
             }
             auto second = makeExtrusionShape(object,
                                              context,
-                                             *profileShape,
+                                             profile->shape,
                                              secondDirection,
                                              halfLength,
                                              taper1,
                                              "Symmetric",
                                              "TaperAngle",
                                              featureName,
-                                             *profileLink,
+                                             profile->link,
                                              object.name + ".Prism2");
             if (!second) {
                 return std::nullopt;
@@ -2199,7 +1685,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
             taperHistory = first->taperHistory || second->taperHistory;
         }
         else {
-            const TopoDS_Shape movedProfile = translatedShape(*profileShape,
+            const TopoDS_Shape movedProfile = translatedShape(profile->shape,
                                                               -0.5 * scaledLength * gp_Vec(direction->direction));
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp
             // ::FeatureExtrude::buildExtrusion(), Symmetric no-taper fast path creates one prism
@@ -2209,7 +1695,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
                                              scaledLength,
                                              object,
                                              context,
-                                             *profileLink,
+                                             profile->link,
                                              "Symmetric",
                                              featureName,
                                              object.name);
@@ -2242,7 +1728,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
     }
 
     return ExtrudeResult{
-        *profileLink,
+        profile->link,
         method,
         reportedLength,
         reversed,

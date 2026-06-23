@@ -727,6 +727,30 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assert_object_matches_expected(result, "c51m1", fixture)
                 self.assertIn(expected_object, result["objects"])
 
+    def test_c51m1_revolution_accepts_internal_face_stable_sublist(self) -> None:
+        fixture_path = ROOT / "fixtures" / "c51m1" / "partdesign-revolution-internalface-profile.json"
+        payload = json.loads(fixture_path.read_text(encoding="utf-8"))
+        profile = payload["Objects"][1]["Properties"]["Profile"]
+        profile["StableSubList"] = ["InternalFace1"]
+
+        temp_path: Path | None = None
+        try:
+            with tempfile.NamedTemporaryFile("w", suffix=".json", encoding="utf-8", delete=False) as temp:
+                json.dump(payload, temp)
+                temp_path = Path(temp.name)
+            result = self.run_recompute_file(temp_path)
+        finally:
+            if temp_path is not None:
+                temp_path.unlink(missing_ok=True)
+
+        revolution = result["objects"]["Revolution"]
+        sketch = result["objects"]["SketchRevolution"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(revolution["status"], "ok")
+        self.assertEqual(revolution["source_profile"], "SketchRevolution")
+        self.assertEqual(sketch["facemaker_history"]["bounded_face_count"], 1)
+
     def test_c51m1_revolution_reference_axis_variants_keep_freecad_direction(self) -> None:
         expected_directions = {
             "partdesign-revolution-datumline-axis": [0.0, 1.0, 0.0],
