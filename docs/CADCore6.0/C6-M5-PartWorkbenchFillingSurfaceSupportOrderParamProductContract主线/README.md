@@ -11,8 +11,8 @@
 
 ## 当前状态
 
-- 方案包已创建；S0 已完成 live 基线与边界复核，S1 已完成 source / helper-oracle 候选矩阵复核，S2-S6 待执行。
-- 当前矩阵已写入 S0/S1 证据，但不能作为 oracle、实现完成或发布通过证据。
+- 方案包已创建；S0 已完成 live 基线与边界复核，S1 已完成 source / helper-oracle 候选矩阵复核，S2 已完成 implementation-ready 合同与 fixture 路由，S3-S6 待执行。
+- 当前矩阵已写入 S0/S1/S2 证据；S2 只是合同准入，不代表 C++ 实现完成、oracle 几何完成或发布通过证据。
 - 本主线不声明 FreeCAD parity，不扩大 full Part surface family。
 
 ## 队列检查
