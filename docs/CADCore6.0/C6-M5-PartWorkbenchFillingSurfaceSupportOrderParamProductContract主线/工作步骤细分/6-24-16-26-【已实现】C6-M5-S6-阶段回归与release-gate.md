@@ -1,4 +1,4 @@
-# C6-M5-S6 阶段回归与 release-gate
+# 【已实现】C6-M5-S6 阶段回归与 release-gate
 
 ## 目标
 
@@ -15,10 +15,10 @@
 ## 发布闸门
 
 - `cmake --build build` 通过。
-- P8 focused tests 通过。
-- expected fixture / adapter focused tests 通过。
-- heavy 收口只记录最终结论。
+- 阶段回归通过：`python3 -m unittest tests.test_p8_features tests.test_expected_fixtures tests.test_adapters`，`Ran 248 tests in 64.311s`，`OK (skipped=29)`。
+- heavy 收口通过：`python3 -m unittest tests.test_p6_topology tests.test_p8_features tests.test_expected_fixtures tests.test_adapters`，`Ran 284 tests in 72.526s`，`OK (skipped=29)`。
 - `step_goal_queue.py` 对 C6-M5 工作步骤目录不再返回待执行实现步骤。
+- `part_workbench.filling.status=supported_expected_backed_plus_c6m5_product_contract_non_parity`，`remaining_gaps=[]`；六个 S0 native helper crash / timeout / notCollected 证据只保留在 `narrowed_gaps` / historical native helper evidence 中。
 
 ## 禁止捷径
 
@@ -40,6 +40,10 @@ git diff --check -- cad-core docs/CADCore6.0/C6-M5-PartWorkbenchFillingSurfaceSu
 ```
 
 验收通过后，将本文重命名为 `6-24-16-26-【已实现】C6-M5-S6-阶段回归与release-gate.md`，并把本主线 README / 根 README 状态更新为已发布。若重型收口因环境问题失败，必须在矩阵中写清是否为环境 / OCCT gap，不能直接标发布通过。
+
+## 最终结论
+
+C6-M5 Filling Surface / SupportOrder / Param product contract 已通过阶段回归与 heavy release gate，可作为 CAD Core request-local product contract 发布。本结论不声明 FreeCAD parity，不声明 native `Part::FilledFace` DocumentObject，也不扩大到 Surface Workbench GUI / native feature、cross-request wrapper lifecycle 或 full Part surface family。
 
 ## 非目标
 

@@ -54,7 +54,7 @@ live capability baseline
 | S3 | `工作步骤细分/6-24-16-23-【已实现】C6-M5-S3-SurfaceAndSupportOrder产品合同实现.md` | 实现 Surface 与 Support/Order 产品合同。 |
 | S4 | `工作步骤细分/6-24-16-24-【已实现】C6-M5-S4-ExplicitParams与nonBoundarySupportOrder实现.md` | 实现显式参数与 non-boundary support/order 产品合同。 |
 | S5 | `工作步骤细分/6-24-16-25-【已实现】C6-M5-S5-fixtures-tests-capability-docs发布.md` | 发布 fixture、focused tests、capability 和文档状态。 |
-| S6 | `工作步骤细分/6-24-16-26-C6-M5-S6-阶段回归与release-gate.md` | 阶段回归、heavy 收口和 release gate。 |
+| S6 | `工作步骤细分/6-24-16-26-【已实现】C6-M5-S6-阶段回归与release-gate.md` | 阶段回归、heavy 收口和 release gate。 |
 | source candidates | `矩阵/c6m5_filling_surface_support_order_param_source_candidates.tsv` | FreeCAD / cad-core 依据候选。 |
 | scope review | `矩阵/c6m5_filling_surface_support_order_param_scope_review_matrix.tsv` | 范围准入与状态字典。 |
 | input contract | `矩阵/c6m5_filling_surface_support_order_param_input_contract_matrix.tsv` | DTO 字段、诊断和输出合同。 |
@@ -64,7 +64,7 @@ live capability baseline
 | non-goals | `矩阵/c6m5_filling_surface_support_order_param_non_goal_registry.tsv` | 明确不做内容。 |
 | validation | `矩阵/c6m5_filling_surface_support_order_param_validation_matrix.tsv` | 本轮、阶段、重型验收命令。 |
 
-当前 S0 已完成 live 基线与 Filling 剩余 gap 边界复核，S1 已完成 FreeCAD source / wrapper / helper oracle 候选矩阵复核，S2 已把 Surface、Supports/Orders、显式参数和 non-boundary support/order 锁定为 implementation-ready 合同与 fixture 路由；S3 已实现 Surface initial surface face link 与 Supports/Orders C0/G1/G2 的 request-local product contract；S4 已实现 PtsOnCurve、Anisotropy、TolG1/TolG2、MaxSegments、all params 与 non-boundary support/order 的 request-local product contract；S5 已发布 fixtures / focused tests / capability / docs。矩阵已经写入 S0/S1/S2/S3/S4/S5 证据；S6 仍是待执行状态，`remaining_gaps=[]`，native helper blocker 证据保留在 narrowed/historical evidence 中。
+当前 S0 已完成 live 基线与 Filling 剩余 gap 边界复核，S1 已完成 FreeCAD source / wrapper / helper oracle 候选矩阵复核，S2 已把 Surface、Supports/Orders、显式参数和 non-boundary support/order 锁定为 implementation-ready 合同与 fixture 路由；S3 已实现 Surface initial surface face link 与 Supports/Orders C0/G1/G2 的 request-local product contract；S4 已实现 PtsOnCurve、Anisotropy、TolG1/TolG2、MaxSegments、all params 与 non-boundary support/order 的 request-local product contract；S5 已发布 fixtures / focused tests / capability / docs；S6 已通过阶段回归与 heavy release gate。矩阵已经写入 S0/S1/S2/S3/S4/S5/S6 证据；`remaining_gaps=[]`，native helper blocker 证据保留在 narrowed/historical evidence 中。
 
 ## 非目标
 

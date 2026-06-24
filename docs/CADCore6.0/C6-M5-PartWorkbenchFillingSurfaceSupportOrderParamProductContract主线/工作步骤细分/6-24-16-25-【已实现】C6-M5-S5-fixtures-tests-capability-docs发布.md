@@ -49,7 +49,7 @@ git diff --check -- cad-core docs/CADCore6.0/C6-M5-PartWorkbenchFillingSurfaceSu
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore6.0/C6-M5-PartWorkbenchFillingSurfaceSupportOrderParamProductContract主线/矩阵/*.tsv
 ```
 
-当前队列下一项应为 `6-24-16-26-C6-M5-S6-阶段回归与release-gate.md`；不要把 S6 标为已实现。
+S6 已在后续 release gate 中通过并改名为 `6-24-16-26-【已实现】C6-M5-S6-阶段回归与release-gate.md`；当前队列应为空。
 
 ## 非目标
 
