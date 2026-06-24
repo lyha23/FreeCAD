@@ -23,6 +23,12 @@
 - 更新 capability draft，但 S3 不删除 `remaining_gaps`，删除等待 S5/S6。
 - 更新 `矩阵/c6m6_geomplate_remaining_gap_oracle_fixture_matrix.tsv` 和 blocker queue。
 
+## S3 收口结论
+
+- `G1 curve-on-surface`：cad-core 已有正式 `CurveOnSurface` DTO 与 `addCurveOnSurfaceConstraint()` 路径，S3 新增 `cad-core/fixtures/c6m6/part-geomplate-g1-curve-on-surface-contract.json` 和 known-gap expected，focused test 验证 `curve_on_surface` source evidence、G1 order、surface link 和 native-hidden delete condition；不伪造 native expected。
+- `ProjectedCurve2d without InitialSurface`：cad-core no-InitialSurface request-local DTO 可重算并输出 `projected_curve2d` source evidence，S3 新增 `cad-core/fixtures/c6m6/part-geomplate-projected-curve2d-no-initial-surface.json` 和 known-gap expected；FreeCAD native helper 仍按 `RuntimeError: Geom_RectangularTrimmedSurface::V1==V2` 保留 blocker，不把 cad-core output 写成 FreeCAD expected。
+- capability draft / adapter test 已加入 C6-M6 fixture evidence、`cad_core_contract` 和更精确的 narrowed-gap status；`remaining_gaps` 仍保留，删除留给 S5/S6。
+
 ## 验收
 
 ```bash

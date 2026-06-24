@@ -1,0 +1,37 @@
+{
+  "freecad_version": "1.2.0 revision 20260519",
+  "known_gap": {
+    "kind": "geomplate_g1_curve_on_surface_native_oracle_blocked",
+    "reason": "C6-M6 keeps the cad-core G1 curve-on-surface path as a request-local source-backed product contract, but does not freeze a native FreeCAD expected shape. FreeCAD Tools.cpp::makeSurface consumes Adaptor3d_CurveOnSurface through GeomPlate_CurveConstraint(..., 1 /*GeomAbs_G1*/, ...), while the Python helper path remains native-hidden for oracle collection.",
+    "source_authority": [
+      "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Tools.cpp::Part::Tools::makeSurface()",
+      "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate/BuildPlateSurfacePyImp.cpp::BuildPlateSurfacePy::add()",
+      "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate/CurveConstraintPyImp.cpp::CurveConstraintPy::PyInit()"
+    ],
+    "cad_core_fixture": "cad-core/fixtures/c6m6/part-geomplate-g1-curve-on-surface-contract.json",
+    "cad_core_contract": {
+      "status": "request_local_source_backed",
+      "dto": "PartGeomPlateSurfaceDTO",
+      "source_evidence_kind": "curve_on_surface",
+      "expected_native_shape": false
+    },
+    "freecadcmd_evidence": {
+      "helper": "Part.GeomPlate.CurveConstraint",
+      "probe_case": "geomplate_g1_curve_on_surface",
+      "error": "NotImplementedError: setG1Criterion; BuildPlateSurface.perform: Curve must be on a Surface",
+      "c5m13_s4_probe_script": "docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M13-PartWorkbenchSurfaceNarrowedBlockerRecovery主线/docs/temp/6-22-05-28-c5m13-s4-geomplate-native-oracle-probe.py",
+      "c5m13_s4_variants": [
+        "line_z0_surface_range_0_4 -> RuntimeError: Curve must be on a Surface",
+        "line_z1_surface_range_0_4 -> RuntimeError: Curve must be on a Surface",
+        "line_z0_surface_range_0_1 -> RuntimeError: Curve must be on a Surface",
+        "line_z0_no_initial_range_0_4 -> RuntimeError: Geom_RectangularTrimmedSurface::V1==V2"
+      ]
+    },
+    "uncollected_fields": [
+      "shape_summary for Adaptor3d_CurveOnSurface G1 helper result",
+      "object_fields.constraints[].curve_on_surface native helper geometry"
+    ],
+    "delete_condition": "Delete this remaining gap only after a stable native oracle can construct the Adaptor3d_CurveOnSurface G1 constraint and provide expected geometry for the C6-M6 request-local representative."
+  },
+  "reference": "C6-M6 G1 curve-on-surface representative: cad-core output is validated by focused source-evidence tests; native expected geometry remains blocked."
+}

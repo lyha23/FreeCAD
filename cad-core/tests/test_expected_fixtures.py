@@ -167,6 +167,42 @@ class CadCoreExpectedFixtureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCa
         wrapper = self.expected_freecad("c5m7", "part-geomplate-wrapper-boundary")
         self.assertIn("139/SIGSEGV", wrapper["c5m13_s4_evidence"]["runtime_result"])
 
+    def test_c6m6_geomplate_s3_contract_expected_metadata_matches_blockers(self) -> None:
+        g1 = self.expected_freecad("c6m6", "part-geomplate-g1-curve-on-surface-contract")
+        g1_gap = g1["known_gap"]
+        self.assertEqual(g1_gap["kind"], "geomplate_g1_curve_on_surface_native_oracle_blocked")
+        self.assertEqual(g1_gap["cad_core_contract"]["status"], "request_local_source_backed")
+        self.assertEqual(g1_gap["cad_core_contract"]["source_evidence_kind"], "curve_on_surface")
+        self.assertFalse(g1_gap["cad_core_contract"]["expected_native_shape"])
+        self.assertIn(
+            "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Tools.cpp::Part::Tools::makeSurface()",
+            g1_gap["source_authority"],
+        )
+        self.assertIn("Adaptor3d_CurveOnSurface G1", g1_gap["delete_condition"])
+        self.assertIn("shape_summary for Adaptor3d_CurveOnSurface", g1_gap["uncollected_fields"][0])
+
+        projected = self.expected_freecad("c6m6", "part-geomplate-projected-curve2d-no-initial-surface")
+        projected_gap = projected["known_gap"]
+        self.assertEqual(
+            projected_gap["kind"],
+            "geomplate_projected_curve2d_no_initial_surface_native_oracle_blocked",
+        )
+        self.assertEqual(
+            projected_gap["cad_core_contract"]["status"],
+            "request_local_source_backed_not_freecad_expected",
+        )
+        self.assertTrue(projected_gap["cad_core_contract"]["requires_initial_surface_for_native_expected"])
+        self.assertFalse(projected_gap["cad_core_contract"]["expected_native_shape"])
+        self.assertEqual(
+            projected_gap["freecadcmd_evidence"]["error"],
+            "RuntimeError: Geom_RectangularTrimmedSurface::V1==V2",
+        )
+        self.assertIn(
+            "cad-core/fixtures/c5m13/part-geomplate-projected-curve2d-initial-surface.json",
+            projected_gap["expected_backed_subsets"],
+        )
+        self.assertIn("no-InitialSurface ProjectedCurve2d", projected_gap["delete_condition"])
+
     def test_c5m13_filling_param_expected_metadata_matches_s3_boundaries(self) -> None:
         expected_params = {
             "part-filling-param-degree-only": {"degree": 4},
