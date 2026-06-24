@@ -15,11 +15,12 @@
 - S0 冻结时间的 live baseline：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=5caad308a9`，`git log -1=5caad308a9 发布 C6-M6 GeomPlate release gate`。
 - S0 开始前工作区仅包含 C6-M7 文档包与 `docs/CADCore6.0/README.md` 的未提交文档改动；本步不改 C++、capability、fixture 或 build 产物。
 - C6-M1 到 C6-M6 `step_goal_queue.py` 均返回空表；S2 完成后 C6-M7 队列从 S3 继续。
-- 当前 active blocker 已冻结为唯一项：`part_workbench.loft.remaining_gaps=["part_loft_subelement_assignment_native_hidden"]`。代码证据见 `cad-core/src/runtime/capability_contract.cpp` 的 `part_workbench.loft` capability 和 `cad-core/tests/test_adapters.py` 对 `loft["remaining_gaps"]` 的等值断言。
+- S0 active blocker 已冻结为唯一项：`part_workbench.loft.remaining_gaps=["part_loft_subelement_assignment_native_hidden"]`。S4 已将该项从 active `remaining_gaps` 移入 `narrowed_gaps` / historical native-hidden evidence；当前发布状态见 `cad-core/src/runtime/capability_contract.cpp` 和 `cad-core/tests/test_adapters.py`。
 - C5-M12 已关闭 Loft broad `complex_profile_family`，不重开完整 Loft surface family；`cad-core/fixtures/c5m12/expected/part-loft-subelement-assignment-diagnostic.freecad.json` 记录 native-hidden diagnostic evidence：`TypeError: Type must be App.DocumentObject or None, not tuple`，未采集 `object_fields.sections[].subname` 和 selected Sketch subelement `shape_summary`。
 - S1 起点 live baseline：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=1c197bf648`，`git log -1=1c197bf648 冻结 C6-M7 S0 live 基线`，工作区干净。
 - S2 起点 live baseline：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=5587487eaa`，`git log -1=5587487eaa 完成 C6-M7 S1 Loft Sections 源码复核`，工作区干净；S2 完成后队列从 S3 继续。
 - S3 起点 live baseline：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=1b0c3ce588`，`git log -1=1b0c3ce588 完成 C6-M7 S2 路由判定`，工作区干净；S3 完成后队列从 S4 继续。
+- S4 起点 live baseline：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=b831431c8f`，`git log -1=b831431c8f feat: 实现 C6-M7 Loft 子元素合同`，工作区干净；S4 完成后队列从 S5 继续。
 
 ## FreeCAD source authority
 
@@ -51,6 +52,12 @@
 - 新增 `cad-core/fixtures/c6m7/part-loft-subelement-product.json` / `part-loft-subelement-product-invalid.json` 及 expected/product metadata；valid case 构建 selected `LowerProfile.Edge1` Loft，invalid case 给 `invalid_subshape`。
 - C5-M12 FreeCAD expected 继续作为 native-hidden diagnostic-only evidence，S3 未修改该文件、未生成 FreeCAD native expected、未删除 `remaining_gaps`。
 
+## S4 capability publication
+
+- S4 已将 S3 product contract 发布到 `cad-core/src/runtime/capability_contract.cpp` 的 `part_workbench.loft`：status 更新为 expected-backed + C6-M7 product contract non-parity，fixtures 包含 `c6m7/part-loft-subelement-product` 和 invalid diagnostic case。
+- `part_workbench.loft.remaining_gaps=[]`；原 `part_loft_subelement_assignment_native_hidden` 不再是 active implementation gap，而是保留在 `narrowed_gaps` / field boundary 中，指向 C5-M12 native-hidden diagnostic expected 与 C6-M7 request-local product contract。
+- `cad-core/tests/test_adapters.py::test_c_api_capabilities_exposes_web_contract_facts` 已同步断言 covered、fixtures、request_local_boundaries、field_boundaries、narrowed_gaps、remaining_gaps 和 non_goals。
+
 ## cad-core 落点
 
 | owner | file |
@@ -70,7 +77,7 @@
 | S1 | `工作步骤细分/6-25-00-55-【已实现】C6-M7-S1-FreeCAD源码与PropertyLinkList边界复核.md` | 已复核 FreeCAD Loft executor、PropertyLinkList 和 ThruSections history。 |
 | S2 | `工作步骤细分/6-25-00-56-【已实现】C6-M7-S2-准入路由与产品合同判定.md` | 已批准 request-local `cad_core_product_contract_non_parity`，同时保留 FreeCAD native-hidden diagnostic boundary。 |
 | S3 | `工作步骤细分/6-25-00-57-【已实现】C6-M7-S3-LoftSubelement合同或诊断实现.md` | 已实现 request-local product contract，并与 FreeCAD expected 分开。 |
-| S4 | `工作步骤细分/6-25-00-58-C6-M7-S4-fixtures-tests-capability-docs发布.md` | 同步 capability、adapter assertion、发布口径和矩阵。 |
+| S4 | `工作步骤细分/6-25-00-58-【已实现】C6-M7-S4-fixtures-tests-capability-docs发布.md` | 已同步 capability、adapter assertion、发布口径和矩阵。 |
 | S5 | `工作步骤细分/6-25-00-59-C6-M7-S5-阶段回归与release-gate.md` | 阶段回归、queue empty 和发布闸门。 |
 
 ## 矩阵
@@ -96,4 +103,4 @@
 
 ## 当前结论
 
-C6-M7 应先处理 Loft 唯一 active remaining gap，再考虑 Surface Family freeze。S1 已证明 FreeCAD 原生 `Sections` 边界仍是 object-level `PropertyLinkList` native-hidden evidence；S2 已批准引入 CAD Core request-local non-parity DTO，route decision 为 `cad_core_product_contract_non_parity`。S3 已实现 product contract 并保持 FreeCAD expected 分离；S4 下一步是 capability / adapter 发布口径，若 S5 后 `part_workbench.loft.remaining_gaps=[]`，下一步才适合开 CADCore6 surface family freeze / publication audit 包。
+C6-M7 已处理 Loft 唯一 active remaining gap。S1 已证明 FreeCAD 原生 `Sections` 边界仍是 object-level `PropertyLinkList` native-hidden evidence；S2 已批准引入 CAD Core request-local non-parity DTO；S3 已实现 product contract 并保持 FreeCAD expected 分离；S4 已发布 capability / adapter 口径并把 `part_workbench.loft.remaining_gaps` 清空。S5 下一步是阶段回归与 release gate；S5 关闭后才适合另开 CADCore6 surface family freeze / publication audit 包。

@@ -3060,7 +3060,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(ruled_surface["non_goals"], [])
         self.assertNotIn("full_surface_family", ruled_surface["covered"])
         loft = capabilities["part_workbench"]["loft"]
-        self.assertEqual(loft["status"], "supported_profile_linearize_complex_expected_backed")
+        self.assertEqual(
+            loft["status"],
+            "supported_profile_linearize_complex_expected_backed_plus_c6m7_product_contract_non_parity",
+        )
         self.assertIn("Part::Loft", loft["type_ids"])
         self.assertEqual(
             loft["payload_keys"],
@@ -3090,6 +3093,9 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("prepare_profiles_face_vertex_expected_batch", loft["covered"])
         self.assertIn("complex_profile_family_expected_backed", loft["covered"])
         self.assertIn("sketch_subelement_assignment_native_hidden_diagnostic", loft["covered"])
+        self.assertIn("selected_subelement_request_local_product_contract", loft["covered"])
+        self.assertIn("cad_core_product_contract_non_parity", loft["covered"])
+        self.assertIn("c5m12_native_hidden_diagnostic_historical_evidence", loft["covered"])
         self.assertIn("linearize_planar_faces_post_processing", loft["covered"])
         for fixture in (
             "c3m4/part-loft-two-section-surface",
@@ -3102,6 +3108,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "c5m12/part-loft-complex-wire-face",
             "c5m12/part-loft-complex-vertex-sketch-object",
             "c5m12/part-loft-subelement-assignment-diagnostic",
+            "c6m7/part-loft-subelement-product",
+            "c6m7/part-loft-subelement-product-invalid",
         ):
             self.assertIn(fixture, loft["fixtures"])
         self.assertEqual(
@@ -3117,11 +3125,14 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "c5m12/part-loft-complex-wire-face",
                 "c5m12/part-loft-complex-vertex-sketch-object",
                 "c5m12/part-loft-subelement-assignment-diagnostic",
+                "c6m7/part-loft-subelement-product",
+                "c6m7/part-loft-subelement-product-invalid",
             ],
         )
         for diagnostic in (
             "missing_property",
             "missing_link_target",
+            "invalid_subshape",
             "invalid_property",
             "unsupported_property",
             "execution_failed",
@@ -3132,6 +3143,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             [
                 "missing_property",
                 "missing_link_target",
+                "invalid_subshape",
                 "invalid_property",
                 "unsupported_property",
                 "execution_failed",
@@ -3143,17 +3155,49 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("face_vertex_profile_expected_backed", loft["request_local_boundaries"])
         self.assertIn("complex_profile_family_expected_backed", loft["request_local_boundaries"])
         self.assertIn("sketch_subelement_assignment_native_hidden", loft["request_local_boundaries"])
-        self.assertIn("part_loft_subelement_assignment_native_hidden", loft["remaining_gaps"])
+        self.assertIn("sections_values_sublist_request_local_product_contract", loft["request_local_boundaries"])
+        self.assertIn("selected_sections_not_freecad_native_expected", loft["request_local_boundaries"])
+        self.assertIn(
+            "c5m12_native_hidden_diagnostic_retained_as_historical_evidence",
+            loft["request_local_boundaries"],
+        )
+        self.assertIn(
+            "Sections.values[].value/SubList/StableSubList",
+            loft["field_boundaries"]["product_contract"],
+        )
+        self.assertIn(
+            "C5-M12 tuple assignment TypeError",
+            loft["field_boundaries"]["historical_native_evidence"],
+        )
+        self.assertEqual(loft["field_boundaries"]["narrowed_gap"], ["part_loft_subelement_assignment_native_hidden"])
+        narrowed_gaps = loft["narrowed_gaps"]
+        self.assertIn("part_loft_subelement_assignment_native_hidden", narrowed_gaps)
+        self.assertEqual(
+            narrowed_gaps["part_loft_subelement_assignment_native_hidden"]["status"],
+            "released_c6m7_product_contract_non_parity_native_hidden_expected_boundary",
+        )
+        self.assertEqual(
+            narrowed_gaps["part_loft_subelement_assignment_native_hidden"]["product_contract"]["provenance"],
+            "cad_core_product_contract_non_parity",
+        )
+        self.assertIn(
+            "c6m7/part-loft-subelement-product",
+            narrowed_gaps["part_loft_subelement_assignment_native_hidden"]["fixtures"],
+        )
+        self.assertEqual(
+            narrowed_gaps["part_loft_subelement_assignment_native_hidden"]["freecadcmd_evidence"]["error"],
+            "TypeError: Type must be App.DocumentObject or None, not tuple",
+        )
         self.assertEqual(
             loft["remaining_gaps"],
-            [
-                "part_loft_subelement_assignment_native_hidden",
-            ],
+            [],
         )
+        self.assertNotIn("part_loft_subelement_assignment_native_hidden", loft["remaining_gaps"])
         self.assertEqual(
             loft["non_goals"],
             [
                 "sketch_subelement_assignment_native_expected",
+                "freecad_native_selected_subelement_expected",
                 "part_design_feature_loft",
                 "full_part_surface_family",
             ],
