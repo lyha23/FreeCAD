@@ -1,0 +1,7 @@
+category_id	category_name	priority	scope_ids	routing_status	product_decision_needed	classification_reason	recommended_next_step
+C6M3-CAT-000	live_baseline	C6-P0	C6M3-SCOPE-000	pending	no	Need current C6-M1/C6-M2 closed state and exact Interpolation boundary before reopening	S0 freeze
+C6M3-CAT-101	law_samples_contract	C6-P0	C6M3-SCOPE-101	pending	yes	LawSamples is a CAD Core product contract because FreeCAD has no executable Interpolation branch	S1 freeze contract
+C6M3-CAT-201	law_kernel_backend	C6-P0	C6M3-SCOPE-201	pending	no	Sampled law must be a low-level PipeShell capability before executor publication	S3 implement or block
+C6M3-CAT-301	executor_diagnostics	C6-P0	C6M3-SCOPE-301	pending	no	feature_pipe must parse valid samples and produce stable diagnostics for invalid samples	S4 integrate
+C6M3-CAT-401	capability_publication	C6-P0	C6M3-SCOPE-401	pending	no	Capability must remove only the implemented Interpolation gap and keep non-parity wording	S5 publish
+C6M3-CAT-501	release_gate	C6-P0	C6M3-SCOPE-501	pending	no	Stage regression must remain trustworthy after C6-M2	S6 release

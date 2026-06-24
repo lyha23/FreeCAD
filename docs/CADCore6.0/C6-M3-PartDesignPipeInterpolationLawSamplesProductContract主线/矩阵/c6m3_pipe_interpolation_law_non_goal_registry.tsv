@@ -1,0 +1,7 @@
+non_goal_id	item	reason	prohibited_action	reopen_condition
+C6M3-NG-001	FreeCAD parity claim	FreeCAD has enum only and no executable Interpolation law branch	Do not write freecad_parity or native expected for Interpolation geometry	Only reopen if upstream FreeCAD implements and oracle is collected
+C6M3-NG-002	Linear or S-shape fallback	Interpolation product contract must be distinct	Fallback to Linear/S-shape for missing or invalid LawSamples	Never for C6-M3
+C6M3-NG-003	cross-request law cache	CAD Core is stateless and request-local	Store law samples or generated law across requests	Never for CAD Core backend
+C6M3-NG-004	GUI LawSamples editor	This package is backend product contract	TaskPanel, ViewProvider, web UI editor	Separate frontend/product package
+C6M3-NG-005	blanket capability promotion	Capability must match implemented fixtures	Remove all pipe remaining gaps or claim full PartDesign Pipe coverage	Only after separate package covers every remaining Pipe boundary
+C6M3-NG-006	C6-M2 regression reopen	C6-M2 gate is closed and only ORC-013 known environment gap remains	Mix expected fixture recovery work into C6-M3	Separate regression package if a new failure appears

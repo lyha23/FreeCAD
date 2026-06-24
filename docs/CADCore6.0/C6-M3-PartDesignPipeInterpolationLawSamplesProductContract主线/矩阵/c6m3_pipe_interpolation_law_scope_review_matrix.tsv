@@ -1,0 +1,7 @@
+scope_id	source_candidate	semantic_item	current_status	scope_reason	cad_core_landing	fixture_or_test_route	next_step
+C6M3-SCOPE-000	C6M3-SRC-001;C6M3-SRC-003	live baseline and authority	pending	C6-M3 must begin by proving C6-M1/C6-M2 are closed and Interpolation remains a precise product_contract_required gap	docs;matrices	rg source and queue checks	S0
+C6M3-SCOPE-101	C6M3-SRC-001;C6M3-SRC-006	LawSamples input contract	pending	FreeCAD has no executable Interpolation branch, so CAD Core must freeze its own DTO before implementation	docs;matrices	input_contract_matrix	S1
+C6M3-SCOPE-201	C6M3-SRC-003;C6M3-SRC-004	Interpolation law kernel	pending	Low-level law must exist before feature_pipe can publish geometry	cad-core/src/part;cad-core/include/cad_core/part	focused P7 tests	S3
+C6M3-SCOPE-301	C6M3-SRC-003	feature_pipe integration and diagnostics	pending	Executor must parse LawSamples, reject invalid data, and stop returning product_contract_required for valid samples	cad-core/src/part_design	focused P7 tests	S4
+C6M3-SCOPE-401	C6M3-SRC-005;C6M3-SRC-006	fixtures tests capability	pending	Product contract must be visible in fixtures, tests, capability, and adapter assertions	cad-core/fixtures;cad-core/tests;cad-core/src/runtime	focused adapter and expected tests	S5
+C6M3-SCOPE-501	C6M3-SRC-005	release gate	pending	Stage regression must pass or leave only explicit known gaps	docs;tests	stage regression	S6

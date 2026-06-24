@@ -1,0 +1,8 @@
+oracle_id	scope_id	fixture_or_test	current_state	owner_class	expected_artifact	assertion_route	next_step
+C6M3-ORC-000	C6M3-SCOPE-000	stage baseline	pendingBaseline	baseline	docs evidence	queue and rg checks	S0 record current gap
+C6M3-ORC-101	C6M3-SCOPE-101	partdesign-pipe-interpolation-law-product	plannedProductFixture	cad_core_product_contract	cad-core/fixtures/c6m3/partdesign-pipe-interpolation-law-product.json	tests.test_p7_features	S1/S2 define then S5 assert
+C6M3-ORC-102	C6M3-SCOPE-101	partdesign-pipe-interpolation-law-diagnostics	plannedDiagnosticsFixture	diagnostics_contract	cad-core/fixtures/c6m3/partdesign-pipe-interpolation-law-diagnostics.json	tests.test_p7_features	S1/S2 define then S5 assert
+C6M3-ORC-103	C6M3-SCOPE-201	Interpolation law kernel focused test	pendingImplementation	geometry_kernel	cad-core tests	test_p7_features or dedicated focused test	S3 prove law kernel
+C6M3-ORC-301	C6M3-SCOPE-301	feature_pipe valid and invalid executor tests	pendingImplementation	executor_contract	cad-core tests	tests.test_p7_features	S4 integrate executor
+C6M3-ORC-401	C6M3-SCOPE-401	capability publication	pendingPublication	capability_contract	cad-core/src/runtime/capability_contract.cpp	tests.test_adapters	S5 publish
+C6M3-ORC-501	C6M3-SCOPE-501	stage regression	pendingRelease	release_gate	docs evidence	tests.test_p7_features tests.test_expected_fixtures tests.test_adapters	S6 release
