@@ -29,11 +29,13 @@
 #include <GeomAbs_Shape.hxx>
 #include <GProp_GProps.hxx>
 #include <Law_Function.hxx>
+#include <Law_Interpol.hxx>
 #include <Law_Linear.hxx>
 #include <Law_S.hxx>
 #include <Precision.hxx>
 #include <ShapeFix_Wire.hxx>
 #include <Standard_Failure.hxx>
+#include <TColgp_Array1OfPnt2d.hxx>
 #include <TopExp.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopTools_IndexedMapOfShape.hxx>
@@ -49,6 +51,7 @@
 #include <gp_Ax2.hxx>
 #include <gp_Dir.hxx>
 #include <gp_Pnt.hxx>
+#include <gp_Pnt2d.hxx>
 #include <gp_Vec.hxx>
 
 #include <algorithm>
@@ -1162,7 +1165,48 @@ std::string configurePipeShellMode(BRepOffsetAPI_MakePipeShell& pipeShell,
     return {};
 }
 
-Handle(Law_Function) makePipeScalingLaw(const PipeScalingLaw& law)
+struct PipeScalingLawBuild
+{
+    Handle(Law_Function) function;
+    std::string error;
+};
+
+std::string validatePipeInterpolationSamples(const std::vector<PipeScalingLawSample>& samples)
+{
+    // CAD Core product contract from C6-M3 S1/S2: Interpolation samples are request-local
+    // [parameter, scale] pairs over [0, 1]. This low-level kernel rejects invalid samples instead
+    // of sorting, clamping, injecting endpoints, or falling back to Linear/S-shape.
+    if (samples.size() < 2U) {
+        return "Pipe Interpolation law requires at least two samples";
+    }
+
+    constexpr double endpointTolerance = 1.0e-12;
+    double previousParameter = -1.0;
+    for (std::size_t index = 0; index < samples.size(); ++index) {
+        const PipeScalingLawSample& sample = samples.at(index);
+        if (!std::isfinite(sample.parameter)) {
+            return "Pipe Interpolation law sample parameter must be finite";
+        }
+        if (!std::isfinite(sample.scale) || sample.scale <= 0.0) {
+            return "Pipe Interpolation law sample scale must be finite and positive";
+        }
+        if (sample.parameter < 0.0 || sample.parameter > 1.0) {
+            return "Pipe Interpolation law sample parameter must be in [0, 1]";
+        }
+        if (index > 0U && sample.parameter <= previousParameter) {
+            return "Pipe Interpolation law sample parameters must be strictly increasing";
+        }
+        previousParameter = sample.parameter;
+    }
+
+    if (std::abs(samples.front().parameter) > endpointTolerance
+        || std::abs(samples.back().parameter - 1.0) > endpointTolerance) {
+        return "Pipe Interpolation law samples must explicitly cover domain endpoints 0 and 1";
+    }
+    return {};
+}
+
+PipeScalingLawBuild makePipeScalingLaw(const PipeScalingLaw& law)
 {
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp
     // ::Pipe::execute(), commented product source hints use Law_Linear::Set(0, 1, 1, x)
@@ -1170,11 +1214,30 @@ Handle(Law_Function) makePipeScalingLaw(const PipeScalingLaw& law)
     if (law.kind == PipeScalingLawKind::SShape) {
         Handle(Law_S) sShape = new Law_S();
         sShape->Set(0.0, 1.0, law.y, 1.0, law.x, law.z);
-        return sShape;
+        return {sShape, {}};
+    }
+    if (law.kind == PipeScalingLawKind::Interpolation) {
+        const std::string sampleError = validatePipeInterpolationSamples(law.samples);
+        if (!sampleError.empty()) {
+            return {Handle(Law_Function) {}, sampleError};
+        }
+
+        TColgp_Array1OfPnt2d points(1, static_cast<Standard_Integer>(law.samples.size()));
+        for (std::size_t index = 0; index < law.samples.size(); ++index) {
+            const PipeScalingLawSample& sample = law.samples.at(index);
+            points.SetValue(
+                static_cast<Standard_Integer>(index + 1U),
+                gp_Pnt2d(sample.parameter, sample.scale)
+            );
+        }
+
+        Handle(Law_Interpol) interpolation = new Law_Interpol();
+        interpolation->Set(points, Standard_False);
+        return {interpolation, {}};
     }
     Handle(Law_Linear) linear = new Law_Linear();
     linear->Set(0.0, 1.0, 1.0, law.x);
-    return linear;
+    return {linear, {}};
 }
 
 std::optional<TopoDS_Wire> simulatedPipeEndWire(
@@ -1761,9 +1824,21 @@ NamedShapeBuild makeElementPipeShellFromSources(
             return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, modeError};
         }
         pipeShell.SetTransitionMode(pipeShellTransitionMode(effectiveOptions.transition));
-        const Handle(Law_Function) scalingLaw = effectiveOptions.scalingLaw
-            ? makePipeScalingLaw(*effectiveOptions.scalingLaw)
-            : Handle(Law_Function) {};
+        Handle(Law_Function) scalingLaw;
+        if (effectiveOptions.scalingLaw) {
+            const PipeScalingLawBuild scalingLawBuild
+                = makePipeScalingLaw(*effectiveOptions.scalingLaw);
+            if (!scalingLawBuild.error.empty() || scalingLawBuild.function.IsNull()) {
+                return NamedShapeBuild {
+                    TopoDS_Shape {},
+                    std::nullopt,
+                    scalingLawBuild.error.empty()
+                        ? "Pipe scaling law did not produce an executable OCCT law"
+                        : scalingLawBuild.error
+                };
+            }
+            scalingLaw = scalingLawBuild.function;
+        }
         for (std::size_t index = 0; index < profiles->size(); ++index) {
             // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
             // BRepOffsetAPI_MakePipeShellPyImp.cpp::add(), accepts either

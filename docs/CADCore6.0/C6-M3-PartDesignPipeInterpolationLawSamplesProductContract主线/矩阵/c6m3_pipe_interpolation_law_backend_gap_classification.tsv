@@ -1,7 +1,7 @@
 category_id	category_name	priority	scope_ids	routing_status	product_decision_needed	classification_reason	recommended_next_step
 C6M3-CAT-000	live_baseline	C6-P0	C6M3-SCOPE-000	closed_by_S0	no	S0 recorded current C6-M1/C6-M2 closed state and exact Interpolation boundary before reopening	Closed; keep as authority evidence
 C6M3-CAT-101	law_samples_contract	C6-P0	C6M3-SCOPE-101	contract_frozen_by_S1	no	LawSamples is a CAD Core product contract because FreeCAD has no executable Interpolation branch; S1 froze request-local DTO, metadata, diagnostics, no-fallback policy, and legacy fixture migration	S2 consume contract in scope/blocker/fixture matrix
-C6M3-CAT-201	law_kernel_backend	C6-P0	C6M3-SCOPE-201	pending	no	Sampled law must be a low-level PipeShell capability before executor publication	S3 implement or block
+C6M3-CAT-201	law_kernel_backend	C6-P0	C6M3-SCOPE-201	implemented_by_S3	no	Sampled law is now a low-level PipeShell capability via OCCT Law_Interpol; executor publication remains separate	S4 consume the kernel from feature_pipe after LawSamples diagnostics parsing
 C6M3-CAT-301	executor_diagnostics	C6-P0	C6M3-SCOPE-301	pending	no	feature_pipe must parse valid samples and produce stable diagnostics for invalid samples	S4 integrate
 C6M3-CAT-401	fixtures_and_focused_tests	C6-P0	C6M3-SCOPE-401	pending	no	S2 splits valid additive fixture/test and invalid LawSamples diagnostics rows so S5 can land the minimum product contract batch	S5 create fixtures and focused tests
 C6M3-CAT-402	subtractive_pipeshell_body_replay_risk	C6-P0	C6M3-SCOPE-402	pendingRisk	no	Subtractive Interpolation must prove PipeShell history and Body replay before capability wording can imply subtractive support	S5 prove or keep S6 blocker with deletion condition

@@ -150,6 +150,16 @@ enum class PipeScalingLawKind
 {
     Linear,
     SShape,
+    Interpolation,
+};
+
+struct PipeScalingLawSample
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp
+    // ::TransformEnums exposes "Interpolation" as an enum label only. CAD Core defines the
+    // Interpolation sample contract as request-local [parameter, scale] pairs on domain [0, 1].
+    double parameter = 0.0;
+    double scale = 1.0;
 };
 
 struct PipeScalingLaw
@@ -158,10 +168,14 @@ struct PipeScalingLaw
     // ::Pipe::execute(), commented branches call "Law_Linear::Set(0, 1, 1,
     // ScalingData[0].x)" and "Law_S::Set(0, 1, ScalingData[0].y, 1, ScalingData[0].x,
     // ScalingData[0].z)" before the active "mkPS.SetLaw(..., scalinglaw)" hook.
+    // OCCT: Law_Interpol.hxx::Set(TColgp_Array1OfPnt2d) defines sampled "parameter and value
+    // pairs" with X as the parameter and Y as the function value; CAD Core uses that as the
+    // product-contract basis for Interpolation without FreeCAD parity claims.
     PipeScalingLawKind kind = PipeScalingLawKind::Linear;
     double x = 1.0;
     double y = 1.0;
     double z = 1.0;
+    std::vector<PipeScalingLawSample> samples;
 };
 
 struct ContinuousEdgeAdjacencyEvidence

@@ -122,6 +122,31 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             message,
         )
 
+    def run_c6m3_pipe_law_probe(self) -> dict:
+        probe = BIN.parent / "cad-core-c6m3-pipe-interpolation-law-probe"
+        completed = subprocess.run(
+            [str(probe)],
+            cwd=ROOT,
+            check=True,
+            text=True,
+            capture_output=True,
+        )
+        return json.loads(completed.stdout)
+
+    def test_c6m3_pipe_interpolation_law_kernel_probe(self) -> None:
+        result = self.run_c6m3_pipe_law_probe()
+
+        self.assertEqual(result["status"], "ok")
+        self.assertEqual(result["pipe_law"]["kind"], "Interpolation")
+        self.assertEqual(result["pipe_law"]["contract"], "cad_core_product_contract")
+        self.assertEqual(result["pipe_law"]["domain"], [0.0, 1.0])
+        self.assertEqual(result["pipe_law"]["no_fallback"], True)
+        self.assertEqual(len(result["pipe_law"]["samples"]), 3)
+        self.assertIn("part_sweep:pipeshell_history", result["baseline"]["history_status"])
+        self.assertIn("part_sweep:pipeshell_history", result["interpolation"]["history_status"])
+        self.assertGreater(result["interpolation"]["width_y"], result["baseline"]["width_y"] * 1.25)
+        self.assertGreater(result["interpolation"]["width_z"], result["baseline"]["width_z"] * 1.25)
+
     def assert_transformed_pattern_ownership(
         self,
         named_shape: dict,
