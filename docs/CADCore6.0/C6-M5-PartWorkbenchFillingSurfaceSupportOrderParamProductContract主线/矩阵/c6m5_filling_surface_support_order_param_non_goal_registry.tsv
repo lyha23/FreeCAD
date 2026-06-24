@@ -1,0 +1,9 @@
+non_goal_id	exclusion_axis	scope_reason	user_or_protocol_behavior	reopen_condition
+NON-001	native_freecad_part_filledface_document_object	FreeCAD source exposes Part.makeFilledFace helper not native DocumentObject	CAD Core may expose source-backed helper DTO only	reopen only if upstream native TypeId is added and requested
+NON-002	surface_workbench_filling_feature	Surface Workbench GUI or native feature is outside Part helper product contract	leave GUI task panel and ViewProvider out	reopen under separate Surface Workbench package
+NON-003	cross_request_mutable_brepoffsetapi_makefilling_wrapper	stateless CAD Core boundary forbids persistent wrapper state	diagnose wrapper lifecycle instead of storing builder	reopen only if architecture changes request boundary
+NON-004	full_part_surface_family	C6-M5 is Filling only not GeomPlate Loft Sweep or full surface suite	defer other families to later C6 packages	reopen as C6-M6 or later package
+NON-005	freecad_parity_claim	native helper oracle currently crashes times out or construction fails	state product contract not FreeCAD parity	reopen after stable FreeCADCmd expected exists
+NON-006	output_fixups	fixture-name branches geometry guessing and output sorting violate migration discipline	implement source-backed builder and diagnostics instead	never reopen as shortcut
+NON-007	persistent_brep_state	BREP may not be protocol state except approved ReferenceShadow snapshot	keep request-local shape computation only	reopen only with explicit architecture decision
+NON-008	unrelated_c6m4_sweep_followup	C6-M4 queue is closed and should not absorb Filling work	keep C6-M5 separate package	reopen only if C6-M4 regression is found
