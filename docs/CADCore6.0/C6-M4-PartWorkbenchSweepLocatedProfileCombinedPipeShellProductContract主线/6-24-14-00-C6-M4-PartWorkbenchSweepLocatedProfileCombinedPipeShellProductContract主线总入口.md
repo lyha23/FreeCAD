@@ -23,6 +23,7 @@ C6-M4 的目标是把 `Part::Sweep` / `BRepOffsetAPI_MakePipeShell` 的 located 
 - S3 live HEAD：`6ede975075`
 - S3 live last commit：`6ede975075 docs: 完成 C6-M4 S2 located profile 合同冻结`
 - S3 implementation：`C6M4-SCOPE-102` 已 `closed_S3`。`cad-core` 新增显式 `SectionOptions[].ProfilePlacement=AnchorLocationToSpineStart` product-contract selector；valid located profile 输出 `contract=cad_core_product_contract`、`freecadcmd_location_overload_status=notCollected`、shape、metadata 与 NamedShape PipeShell history；invalid Location 与 bool fixtures 均先报 diagnostics。c5m10 known_gap 与 capability remaining gaps 保持不变。
+- S4 implementation：`C6M4-SCOPE-201` / `C6M4-BLK-201` 已 `closed_S4`。`cad-core/fixtures/c6m4/part-sweep-advanced-combined-product.json` 同时覆盖 `AuxiliarySpine`、`AuxiliaryCurvilinear=false`、`Transition=Round corner`、三元 `Tolerance` 与 located `ProfilePlacement=AnchorLocationToSpineStart`，expected 固化为 `contract_provenance=cad_core_product_contract_non_parity`，focused P8 test 覆盖 metadata、shape 与 NamedShape history。capability remaining gaps 仍留给 S5/S6。
 
 ## blocker 边界结论
 
@@ -54,7 +55,7 @@ C6-M4 的目标是把 `Part::Sweep` / `BRepOffsetAPI_MakePipeShell` 的 located 
 | S1 | `工作步骤细分/6-24-14-03-【已实现】C6-M4-S1-FreeCAD源码与wrapper-oracle候选矩阵.md` | 已实现 | 已冻结 FreeCAD wrapper source authority、cad-core DTO/builder 落点与 oracle/input/non-goal 候选。 |
 | S2 | `工作步骤细分/6-24-14-04-【已实现】C6-M4-S2-LocatedProfile合同与oracle复采集.md` | 已实现 | 已复跑 FreeCADCmd wrapper probe，冻结 located profile input/output/diagnostic/product contract 与 retained known_gap。 |
 | S3 | `工作步骤细分/6-24-14-05-【已实现】C6-M4-S3-ProfilePlacement与LocationOverload实现.md` | 已实现 | 已实现 located profile profile-placement / Location overload product path，新增 c6m4 product 与 diagnostics fixtures/tests。 |
-| S4 | `工作步骤细分/6-24-14-06-C6-M4-S4-AdvancedCombinedAuxiliaryTransitionTolerance实现.md` | 待执行 | 实现 combined auxiliary + transition + tolerance + located section。 |
+| S4 | `工作步骤细分/6-24-14-06-【已实现】C6-M4-S4-AdvancedCombinedAuxiliaryTransitionTolerance实现.md` | 已实现 | 已实现 combined auxiliary + transition + tolerance + located section product path。 |
 | S5 | `工作步骤细分/6-24-14-07-C6-M4-S5-fixtures-tests-capability-docs发布.md` | 待执行 | fixtures、expected、focused tests、capability/docs 发布。 |
 | S6 | `工作步骤细分/6-24-14-08-C6-M4-S6-阶段回归与release-gate.md` | 待执行 | 阶段回归、heavy 条件与 release gate。 |
 

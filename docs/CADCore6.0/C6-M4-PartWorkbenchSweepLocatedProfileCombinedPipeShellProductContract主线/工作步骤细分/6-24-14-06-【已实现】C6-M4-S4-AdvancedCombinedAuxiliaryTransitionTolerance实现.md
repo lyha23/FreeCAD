@@ -1,8 +1,15 @@
-# C6-M4-S4 AdvancedCombined Auxiliary Transition Tolerance 实现
+# 【已实现】C6-M4-S4 AdvancedCombined Auxiliary Transition Tolerance 实现
 
 ## 目标
 
 在 S3 located profile 结果上实现 combined auxiliary + located section + transition + tolerance case。S4 不重新定义 auxiliary/tolerance 单独能力；它只处理 combined case 对 Location path 的依赖。
+
+## 完成结果
+
+- `C6M4-BLK-201` 已关闭为 `closed_S4`：`cad-core/fixtures/c6m4/part-sweep-advanced-combined-product.json` 同时消费 `AuxiliarySpine`、`AuxiliaryCurvilinear=false`、`Transition=Round corner`、`Tolerance.tol3d/boundTol/tolAngular` 与 `SectionOptions[].ProfilePlacement=AnchorLocationToSpineStart`。
+- `cad-core/fixtures/c6m4/expected/part-sweep-advanced-combined-product.freecad.json` 固化为 CAD Core product-contract expected，`freecad_native_parity=false`，`contract_provenance=cad_core_product_contract_non_parity`。
+- `CadCoreP8FeatureTest.test_c6m4_part_sweep_advanced_combined_product_contract_builds_shape` 断言 status、metadata、shape、NamedShape maker history、location product-contract history 与 expected；c5m10 combined known_gap guard 未改。
+- 低层实现继续走已有 request-local `PipeShellOptions`：`SetTolerance`、`SetMode(Auxiliary)`、`SetTransitionMode` 后，located product placement 将 profile anchor 平移到 spine start 并调用普通 `Add(profile, withContact, withCorrection)`，没有新增 bbox/order/fixture-name 输出修正。
 
 ## 输入边界
 
@@ -31,7 +38,7 @@
 
 通过条件：
 
-- `C6M4-BLK-201` 关闭或明确重路由；若关闭，必须有 combined fixture、expected、focused assertions 和 metadata。
+- `C6M4-BLK-201` 已关闭；combined fixture、expected、focused assertions 和 metadata 已落地。
 - combined no-location control 仍作为 evidence，不能被误标为 blocker。
 - invalid combined siblings 的 diagnostics priority 与当前 c5m10 guard 一致或有 documented product-contract 变更。
 - capability remaining gap 删除仍只在 S5/S6 发生。

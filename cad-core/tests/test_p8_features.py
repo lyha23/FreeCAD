@@ -1040,6 +1040,64 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assert_object_matches_expected(result, "c6m4", "part-sweep-located-profile-product")
 
+    def test_c6m4_part_sweep_advanced_combined_product_contract_builds_shape(self) -> None:
+        result = self.run_recompute("part-sweep-advanced-combined-product", "c6m4")
+        sweep = result["objects"]["CombinedSweep"]
+        expected = self.expected_freecad("c6m4", "part-sweep-advanced-combined-product")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertNotIn("known_gap", sweep)
+        self.assertNotIn("known_gap", expected)
+        self.assertEqual(sweep["contract"], "cad_core_product_contract")
+        self.assertEqual(sweep["contract_provenance"], "cad_core_product_contract_non_parity")
+        self.assertEqual(sweep["freecadcmd_location_overload_status"], "notCollected")
+        self.assertFalse(sweep["location_overload"]["native_parity"])
+        self.assertEqual(sweep["transition"], "Round corner")
+        self.assertEqual(sweep["advanced"]["mode"], "Auxiliary")
+        self.assertEqual(
+            sweep["advanced"]["auxiliary_spine"],
+            {
+                "target": "AuxiliarySpine",
+                "subname": "Edge1",
+                "curvilinear": False,
+                "contact": "NoContact",
+            },
+        )
+        self.assertEqual(
+            sweep["advanced"]["tolerance"],
+            {"tol3d": 0.0001, "boundTol": 0.0002, "tolAngular": 0.01},
+        )
+        self.assertEqual(
+            sweep["advanced"]["sections"],
+            [
+                {
+                    "profile": "SketchPipeProfile",
+                    "with_contact": False,
+                    "with_correction": True,
+                    "location": {"target": "ProfileLocation", "subname": "Vertex1"},
+                    "profile_placement": {
+                        "contract": "cad_core_product_contract",
+                        "source": "cad_core_product_contract",
+                        "strategy": "anchor_location_vertex_to_spine_start",
+                        "location_overload": "cad_core_product_contract_non_parity",
+                        "freecadcmd_location_overload_status": "notCollected",
+                    },
+                }
+            ],
+        )
+        self.assert_part_sweep_history(
+            result,
+            "PipeSpine",
+            ["SketchPipeProfile"],
+            transition="Round corner",
+            object_name="CombinedSweep",
+        )
+        self.assertIn(
+            "part_sweep:location_product_contract_profile_placement",
+            result["named_shapes"]["CombinedSweep"]["element_history_status"],
+        )
+        self.assert_object_matches_expected(result, "c6m4", "part-sweep-advanced-combined-product")
+
     def test_c6m4_part_sweep_located_profile_location_diagnostics_are_locatable(self) -> None:
         result = self.run_recompute("part-sweep-located-profile-diagnostics", "c6m4")
         expected = self.expected_freecad("c6m4", "part-sweep-located-profile-diagnostics")
