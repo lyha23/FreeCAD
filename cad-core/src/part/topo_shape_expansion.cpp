@@ -698,6 +698,19 @@ GeomAbs_Shape orderForShape(
     return GeomAbs_C0;
 }
 
+GeomAbs_Shape brepFillBuilderOrder(GeomAbs_Shape order)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementFilledFace(), casts TopoShape::Continuity to "GeomAbs_Shape"
+    // and passes it to BRepOffsetAPI_MakeFilling::Add(..., order, ...). OCCT 7.9.3's
+    // BRepFill_Filling Add path accepts its documented G0/G1/G2 builder domain as 0/1/2,
+    // so keep the public support-order evidence as G2 and normalize only the builder input.
+    if (order == GeomAbs_G2) {
+        return static_cast<GeomAbs_Shape>(2);
+    }
+    return order;
+}
+
 FilledFaceSupportOrderEvidence evidenceForSupportSource(
     const FilledFaceSupportSource& support,
     bool isBoundary
@@ -2402,7 +2415,7 @@ FilledFaceBuild makeElementFilledFaceFromSources(
             maker.Add(
                 edge,
                 supportFaceForBoundaryEdge(edge, supportSources),
-                orderForBoundaryEdge(edge, orderSources),
+                brepFillBuilderOrder(orderForBoundaryEdge(edge, orderSources)),
                 Standard_True
             );
         }
@@ -2456,7 +2469,7 @@ FilledFaceBuild makeElementFilledFaceFromSources(
                     maker.Add(
                         edge,
                         supportFaceForBoundaryEdge(edge, supportSources),
-                        orderForBoundaryEdge(edge, orderSources),
+                        brepFillBuilderOrder(orderForBoundaryEdge(edge, orderSources)),
                         Standard_False
                     );
                     nonBoundaryEdges.push_back(edge);
@@ -2470,7 +2483,7 @@ FilledFaceBuild makeElementFilledFaceFromSources(
                 maker.Add(
                     edge,
                     supportFaceForBoundaryEdge(edge, supportSources),
-                    orderForBoundaryEdge(edge, orderSources),
+                    brepFillBuilderOrder(orderForBoundaryEdge(edge, orderSources)),
                     Standard_False
                 );
                 nonBoundaryEdges.push_back(edge);
@@ -2479,7 +2492,10 @@ FilledFaceBuild makeElementFilledFaceFromSources(
                 continue;
             }
             if (item.shape.ShapeType() == TopAbs_FACE) {
-                maker.Add(TopoDS::Face(item.shape), orderForShape(item.shape, orderSources));
+                maker.Add(
+                    TopoDS::Face(item.shape),
+                    brepFillBuilderOrder(orderForShape(item.shape, orderSources))
+                );
                 ++nonBoundaryConstraintCount;
                 appendNonBoundaryShapeEvidence(item, TopAbs_FACE, "Add(face, order)");
                 continue;

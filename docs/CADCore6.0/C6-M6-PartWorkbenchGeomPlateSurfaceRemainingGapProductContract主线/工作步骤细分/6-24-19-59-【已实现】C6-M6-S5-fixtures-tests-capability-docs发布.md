@@ -1,4 +1,4 @@
-# C6-M6-S5 fixtures tests capability docs 发布
+# 【已实现】C6-M6-S5 fixtures tests capability docs 发布
 
 ## 目标
 
@@ -25,7 +25,7 @@ awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " f
 git diff --check -- cad-core docs/CADCore6.0/C6-M6-PartWorkbenchGeomPlateSurfaceRemainingGapProductContract主线 docs/CADCore6.0/README.md
 ```
 
-验收通过后，将本文重命名为 `6-24-19-59-【已实现】C6-M6-S5-fixtures-tests-capability-docs发布.md`。
+验收已通过，本文已重命名为 `6-24-19-59-【已实现】C6-M6-S5-fixtures-tests-capability-docs发布.md`。
 
 ## 非目标
 

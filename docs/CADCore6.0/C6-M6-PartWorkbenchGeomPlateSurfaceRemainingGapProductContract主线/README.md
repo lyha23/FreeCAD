@@ -11,13 +11,14 @@
 
 ## 当前状态
 
-- C6-M6 已完成方案、队列创建、S0 live 基线冻结、S1 source / wrapper / oracle 候选矩阵、S2 remainingGap 准入路由、S3 G1 / ProjectedCurve2d 合同实现或收窄和 S4 criteria / wrapper boundary 冻结；S5 到 S6 仍 pending。
+- C6-M6 已完成方案、队列创建、S0 live 基线冻结、S1 source / wrapper / oracle 候选矩阵、S2 remainingGap 准入路由、S3 G1 / ProjectedCurve2d 合同实现或收窄、S4 criteria / wrapper boundary 冻结、S5 fixtures / tests / capability / docs 发布同步和 S6 阶段回归 release gate。
 - S2 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`；`HEAD=05dbaf0c53 docs: 完成 C6-M6 S1 GeomPlate 源码候选矩阵`；开始时工作区干净，C6-M6 queue 从 S2 开始。
 - 当前 `part_workbench.geomplate` 仍发布为 source-backed geometry helper，不是 GUI feature，也不是原生 FreeCAD `DocumentObject`。
-- 当前 active `remaining_gaps` 为 4 项：`g1_curve_on_surface_native_hidden_diagnostic_only`、`projected_curve2d_no_initial_surface_v1_v2_native_oracle_blocker`、`curve_constraint_criteria_setters_not_implemented`、`platesurface_curves_wrapper_lifecycle`。
+- S5 发布后 `remaining_gaps=[]`；上述 4 项不再是 active gap，分别保留为 `narrowed_gaps`、`non_goals` 和 historical evidence，不写成 FreeCAD parity 或 full GeomPlate support。
+- S6 release gate 已通过：阶段回归 `Ran 251 tests in 136.165s`，`OK (skipped=31)`；heavy 收口 `Ran 287 tests in 126.397s`，`OK (skipped=31)`；C6-M6 queue 返回空表。
 - S2 准入路由只使用 5 个状态：`implementationReady`、`nativeOracleBlocked`、`diagnosticOnly`、`nonGoal`、`releaseGate`。
-- S3 批次已完成：`G1 curve-on-surface` 发布为 request-local source-backed product contract，并保留 native-hidden expected 删除条件；`ProjectedCurve2d without InitialSurface` 保留 `V1==V2` nativeOracleBlocked，同时新增 C6-M6 no-InitialSurface contract guard，不把 cad-core output 写成 FreeCAD expected。
-- S4 批次已冻结：`curve criteria setter` 保留 `unsupported_curve_criteria` locatable diagnostic 和 delete condition，`PlateSurface.Curves wrapper lifecycle` 保留 `unsupported_wrapper_lifecycle` / `nonGoal` 和 reopen condition；未新增 C6-M6 wrapper fixture，因为 FreeCAD 仍无 request-local safe contract，仍不得引入 persistent wrapper state、fake native `DocumentObject` 或 cross-request geometry cache。
+- S3 批次已完成并由 S5 发布：`G1 curve-on-surface` 发布为 request-local source-backed product contract，并保留 native-hidden expected 删除条件；`ProjectedCurve2d without InitialSurface` 保留 `V1==V2` nativeOracleBlocked，同时新增 C6-M6 no-InitialSurface contract guard，不把 cad-core output 写成 FreeCAD expected。
+- S4 批次已冻结并由 S5 发布：`curve criteria setter` 保留 `unsupported_curve_criteria` locatable diagnostic 和 delete condition，`PlateSurface.Curves wrapper lifecycle` 保留 `unsupported_wrapper_lifecycle` / `nonGoal` 和 reopen condition；未新增 C6-M6 wrapper fixture，因为 FreeCAD 仍无 request-local safe contract，仍不得引入 persistent wrapper state、fake native `DocumentObject` 或 cross-request geometry cache。
 
 ## 队列检查
 

@@ -11,6 +11,11 @@
     "runtime_result": "setG0Criterion/setG1Criterion/setG2Criterion all raise NotImplementedError: Not yet implemented",
     "source_authority": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate/CurveConstraintPyImp.cpp::setG0Criterion/setG1Criterion/setG2Criterion"
   },
+  "c6m6_s5_publication": {
+    "status": "published_c6m6_diagnostic_boundary",
+    "capability_remaining_gap": "removed_to_narrowed_gaps",
+    "active_remaining_gap": false
+  },
   "object_fields": {
     "feature": "part_geomplate_surface",
     "freecad_native_document_object": false,

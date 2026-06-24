@@ -165,6 +165,11 @@ class CadCoreExpectedFixtureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCa
         criteria = self.expected_freecad("c5m7", "part-geomplate-curve-criteria-diagnostic")
         self.assertIn("NotImplementedError", criteria["c5m13_s4_evidence"]["runtime_result"])
         self.assertEqual(criteria["native_error_code"], "unsupported_curve_criteria")
+        self.assertEqual(
+            criteria["c6m6_s5_publication"]["status"],
+            "published_c6m6_diagnostic_boundary",
+        )
+        self.assertFalse(criteria["c6m6_s5_publication"]["active_remaining_gap"])
         self.assertIn(
             "CurveConstraintPyImp.cpp::setG0Criterion/setG1Criterion/setG2Criterion",
             criteria["c5m13_s4_evidence"]["source_authority"],
@@ -172,6 +177,11 @@ class CadCoreExpectedFixtureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCa
         wrapper = self.expected_freecad("c5m7", "part-geomplate-wrapper-boundary")
         self.assertIn("139/SIGSEGV", wrapper["c5m13_s4_evidence"]["runtime_result"])
         self.assertEqual(wrapper["native_error_code"], "unsupported_wrapper_lifecycle")
+        self.assertEqual(
+            wrapper["c6m6_s5_publication"]["status"],
+            "published_c6m6_non_goal_boundary",
+        )
+        self.assertFalse(wrapper["c6m6_s5_publication"]["active_remaining_gap"])
         self.assertIn(
             "PlateSurfacePyImp.cpp::PlateSurfacePy::PyInit()",
             wrapper["c5m13_s4_evidence"]["source_authority"],
@@ -184,6 +194,11 @@ class CadCoreExpectedFixtureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCa
         self.assertEqual(g1_gap["cad_core_contract"]["status"], "request_local_source_backed")
         self.assertEqual(g1_gap["cad_core_contract"]["source_evidence_kind"], "curve_on_surface")
         self.assertFalse(g1_gap["cad_core_contract"]["expected_native_shape"])
+        self.assertEqual(
+            g1_gap["s5_publication"]["status"],
+            "published_c6m6_product_contract_non_parity",
+        )
+        self.assertFalse(g1_gap["s5_publication"]["active_remaining_gap"])
         self.assertIn(
             "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Tools.cpp::Part::Tools::makeSurface()",
             g1_gap["source_authority"],
@@ -203,6 +218,11 @@ class CadCoreExpectedFixtureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCa
         )
         self.assertTrue(projected_gap["cad_core_contract"]["requires_initial_surface_for_native_expected"])
         self.assertFalse(projected_gap["cad_core_contract"]["expected_native_shape"])
+        self.assertEqual(
+            projected_gap["s5_publication"]["status"],
+            "published_c6m6_product_contract_non_parity",
+        )
+        self.assertFalse(projected_gap["s5_publication"]["active_remaining_gap"])
         self.assertEqual(
             projected_gap["freecadcmd_evidence"]["error"],
             "RuntimeError: Geom_RectangularTrimmedSurface::V1==V2",

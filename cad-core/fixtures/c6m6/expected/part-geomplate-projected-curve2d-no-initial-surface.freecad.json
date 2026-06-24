@@ -15,6 +15,11 @@
       "requires_initial_surface_for_native_expected": true,
       "expected_native_shape": false
     },
+    "s5_publication": {
+      "status": "published_c6m6_product_contract_non_parity",
+      "capability_remaining_gap": "removed_to_narrowed_gaps",
+      "active_remaining_gap": false
+    },
     "expected_backed_subsets": [
       "cad-core/fixtures/c5m13/part-geomplate-projected-curve2d-initial-surface.json"
     ],

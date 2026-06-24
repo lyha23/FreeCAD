@@ -952,21 +952,19 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertTrue(expected["wrapper_oracle"]["builder_status"]["make_solid_ok"])
         self.assert_object_matches_expected(result, "c5m12", "part-sweep-spine-support-surface-normal")
 
-    def test_c5m10_part_sweep_located_profile_contract_keeps_freecadcmd_blocker(self) -> None:
+    def test_c5m10_part_sweep_located_profile_contract_keeps_wrapper_blocker_evidence(self) -> None:
         result = self.run_recompute("part-sweep-located-profile-contract", "c5m10")
         sweep = result["objects"]["Sweep"]
         expected = self.expected_freecad("c5m10", "part-sweep-located-profile-contract")
 
         self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(sweep["status"], "known_gap")
-        self.assertEqual(sweep["feature"], "part_sweep")
-        self.assertEqual(sweep["spine"], "PipeSpine")
-        self.assertEqual(sweep["sections"], ["SketchPipeProfile"])
-        self.assertEqual(sweep["solid"], False)
-        self.assertEqual(sweep["frenet"], True)
-        self.assertEqual(sweep["transition"], "Transformed")
-        self.assertEqual(sweep["linearize"], False)
-        self.assertEqual(sweep["topo_naming_history"], "maker_history:pipeshell")
+        self.assertNotIn("known_gap", sweep)
+        self.assert_part_sweep_history(
+            result,
+            "PipeSpine",
+            ["SketchPipeProfile"],
+            transition="Transformed",
+        )
         self.assertEqual(
             sweep["advanced"]["sections"],
             [
@@ -978,18 +976,14 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 }
             ],
         )
+        self.assertIn(
+            "terminal_history:split_deleted",
+            result["named_shapes"]["Sweep"]["element_history_status"],
+        )
         self.assertEqual(
             expected["known_gap"]["kind"],
             "part_sweep_located_profile_freecadcmd_wrapper_build_blocker",
         )
-        self.assertEqual(sweep["known_gap"]["kind"], expected["known_gap"]["kind"])
-        self.assertEqual(
-            sweep["known_gap"]["freecadcmd_evidence"]["error"],
-            "OCCError: NCollection_Array1::Value",
-        )
-        self.assertEqual(sweep["known_gap"]["freecadcmd_evidence"]["failed_stage"], "build")
-        self.assertEqual(sweep["known_gap"]["cad_core_status"], "request_metadata_only")
-        self.assertNotIn("Sweep", result["named_shapes"])
         evidence = expected["known_gap"]["freecadcmd_evidence"]
         self.assertEqual(evidence["error"], "OCCError: NCollection_Array1::Value")
         self.assertEqual(evidence["failed_stage"], "build")
@@ -1216,15 +1210,14 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         combined = result["objects"]["CombinedSweep"]
         expected = self.expected_freecad("c5m10", "part-sweep-advanced-combined-contract")
 
-        self.assertEqual(combined["status"], "known_gap")
-        self.assertEqual(combined["feature"], "part_sweep")
-        self.assertEqual(combined["spine"], "PipeSpine")
-        self.assertEqual(combined["sections"], ["SketchPipeProfile"])
-        self.assertEqual(combined["solid"], False)
-        self.assertEqual(combined["frenet"], True)
-        self.assertEqual(combined["transition"], "Round corner")
-        self.assertEqual(combined["linearize"], False)
-        self.assertEqual(combined["topo_naming_history"], "maker_history:pipeshell")
+        self.assertNotIn("known_gap", combined)
+        self.assert_part_sweep_history(
+            result,
+            "PipeSpine",
+            ["SketchPipeProfile"],
+            transition="Round corner",
+            object_name="CombinedSweep",
+        )
         self.assertEqual(combined["advanced"]["mode"], "Auxiliary")
         self.assertEqual(
             combined["advanced"]["auxiliary_spine"],
@@ -1250,14 +1243,10 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             combined["advanced"]["tolerance"],
             {"tol3d": 0.0001, "boundTol": 0.0002, "tolAngular": 0.01},
         )
-        self.assertEqual(combined["known_gap"]["kind"], expected["known_gap"]["kind"])
-        self.assertEqual(
-            combined["known_gap"]["freecadcmd_evidence"]["error"],
-            "OCCError: NCollection_Array1::Value",
+        self.assertIn(
+            "terminal_history:split_deleted",
+            result["named_shapes"]["CombinedSweep"]["element_history_status"],
         )
-        self.assertEqual(combined["known_gap"]["freecadcmd_evidence"]["failed_stage"], "build")
-        self.assertEqual(combined["known_gap"]["cad_core_status"], "request_metadata_only")
-        self.assertNotIn("CombinedSweep", result["named_shapes"])
 
         by_object = {diagnostic["object"]: diagnostic for diagnostic in result["diagnostics"]}
         self.assertEqual(
@@ -2240,6 +2229,11 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(known_gap["kind"], "geomplate_g1_curve_on_surface_native_oracle_blocked")
         self.assertEqual(known_gap["cad_core_contract"]["status"], "request_local_source_backed")
         self.assertFalse(known_gap["cad_core_contract"]["expected_native_shape"])
+        self.assertEqual(
+            known_gap["s5_publication"]["status"],
+            "published_c6m6_product_contract_non_parity",
+        )
+        self.assertFalse(known_gap["s5_publication"]["active_remaining_gap"])
         self.assertIn("Adaptor3d_CurveOnSurface G1", known_gap["delete_condition"])
 
     def test_c6m6_part_geomplate_projected_curve2d_no_initial_surface_is_source_backed_blocker(self) -> None:
@@ -2281,6 +2275,11 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             known_gap["freecadcmd_evidence"]["error"],
             "RuntimeError: Geom_RectangularTrimmedSurface::V1==V2",
         )
+        self.assertEqual(
+            known_gap["s5_publication"]["status"],
+            "published_c6m6_product_contract_non_parity",
+        )
+        self.assertFalse(known_gap["s5_publication"]["active_remaining_gap"])
         self.assertIn("no-InitialSurface ProjectedCurve2d", known_gap["delete_condition"])
 
     def test_c5m7_part_geomplate_point2d_on_surface_is_expected_backed(self) -> None:

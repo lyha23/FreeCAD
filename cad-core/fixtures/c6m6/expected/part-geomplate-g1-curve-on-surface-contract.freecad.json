@@ -15,6 +15,11 @@
       "source_evidence_kind": "curve_on_surface",
       "expected_native_shape": false
     },
+    "s5_publication": {
+      "status": "published_c6m6_product_contract_non_parity",
+      "capability_remaining_gap": "removed_to_narrowed_gaps",
+      "active_remaining_gap": false
+    },
     "freecadcmd_evidence": {
       "helper": "Part.GeomPlate.CurveConstraint",
       "probe_case": "geomplate_g1_curve_on_surface",
