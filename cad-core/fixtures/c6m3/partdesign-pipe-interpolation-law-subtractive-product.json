@@ -1,0 +1,227 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchBase",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              4,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              4,
+              0
+            ],
+            "end": [
+              4,
+              4
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              4,
+              4
+            ],
+            "end": [
+              0,
+              4
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              4
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "BasePad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchBase",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 5,
+        "Reversed": false,
+        "SideType": "One side",
+        "Refine": false,
+        "FuzzyTolerance": 0.0
+      }
+    },
+    {
+      "Name": "SketchPipeProfile",
+      "ID": 3,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "start": [
+              1.5,
+              1.5
+            ],
+            "end": [
+              2.5,
+              1.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              2.5,
+              1.5
+            ],
+            "end": [
+              2.5,
+              2.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              2.5,
+              2.5
+            ],
+            "end": [
+              1.5,
+              2.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              1.5,
+              2.5
+            ],
+            "end": [
+              1.5,
+              1.5
+            ]
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "SketchPipeSpine",
+      "ID": 4,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [
+            2,
+            2,
+            0
+          ],
+          "Rotation": [
+            0.7071067811865475,
+            0,
+            0,
+            0.7071067811865476
+          ]
+        },
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              0,
+              5
+            ]
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "SubtractivePipeInterpolationProduct",
+      "ID": 5,
+      "TypeId": "PartDesign::SubtractivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeSpine",
+          "SubList": []
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Interpolation",
+        "LawSamples": [
+          [
+            0.0,
+            1.0
+          ],
+          [
+            0.5,
+            1.35
+          ],
+          [
+            1.0,
+            1.0
+          ]
+        ],
+        "Refine": false,
+        "FuzzyTolerance": 0.0
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 6,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "SketchBase",
+            "BasePad",
+            "SketchPipeProfile",
+            "SketchPipeSpine",
+            "SubtractivePipeInterpolationProduct"
+          ]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "SubtractivePipeInterpolationProduct"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Body"
+    ]
+  }
+}

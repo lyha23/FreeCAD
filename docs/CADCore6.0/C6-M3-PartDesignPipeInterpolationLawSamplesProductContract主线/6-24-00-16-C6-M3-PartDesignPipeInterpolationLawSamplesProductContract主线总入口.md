@@ -13,8 +13,8 @@ C6-M3 的目标是把 C6-M1/C6-M2 保留的 Pipe `Transformation=Interpolation` 
 - 建包 last commit：`a930114e89 完成 C6-M2 S6 发布闸门`
 - C6-M1 队列：空队列，Linear / S-shape law 和 tangent ledger 已发布；Interpolation 仍是 precise remaining gap。
 - C6-M2 队列：空队列，expected fixture gate、阶段回归和 heavy 收口均通过。
-- 当前 executor：`cad-core/src/part_design/feature_pipe.cpp::resolvePipeLaw()` 对 `Transformation=Interpolation` 返回 `product_contract_required`，message 明确要求重开 `LawSamples` product contract。
-- 当前 capability：`cad-core/src/runtime/capability_contract.cpp` 把 `partdesign_pipe_interpolation_law_product_contract_required` 放在 exact blocker / remaining gap。
+- 当前 executor：S4/S5 后 `cad-core/src/part_design/feature_pipe.cpp::resolvePipeLaw()` 对合法 `Transformation=Interpolation` + `LawSamples` 执行 CAD Core product contract；missing / invalid `LawSamples` 返回稳定 diagnostics，不 fallback。
+- 当前 capability：S5 后 `cad-core/src/runtime/capability_contract.cpp` 发布 `Transformation=Interpolation LawSamples product contract`、c6m3 fixtures 和 missing / invalid diagnostics；`partdesign_pipe_interpolation_law_product_contract_required` 已从 exact blocker / remaining gap 移除。
 
 ## FreeCAD / CAD Core 依据
 
@@ -22,9 +22,9 @@ C6-M3 的目标是把 C6-M1/C6-M2 保留的 Pipe `Transformation=Interpolation` 
 | --- | --- | --- |
 | Interpolation enum | `src/Mod/PartDesign/App/FeaturePipe.cpp::TransformEnums` | enum 包含 `Interpolation`，但不是可执行语义。 |
 | Linear / S-shape 注释 law | `src/Mod/PartDesign/App/FeaturePipe.cpp::Pipe::execute()` | 只有 `Law_Linear` / `Law_S` 注释块，没有 Interpolation 分支。 |
-| cad-core diagnostic boundary | `cad-core/src/part_design/feature_pipe.cpp::resolvePipeLaw()` | Interpolation 当前停在 `product_contract_required`。 |
+| cad-core diagnostic boundary | `cad-core/src/part_design/feature_pipe.cpp::resolvePipeLaw()` | 合法 `LawSamples` 已执行；missing / invalid `LawSamples` 保持 locatable diagnostics。 |
 | PipeShell law hook | `cad-core/src/part/topo_shape_expansion.cpp` 与 `topo_shape_expansion.h` | 已有 Linear / S-shape `PipeScalingLaw` 与 PipeShell law 接入点。 |
-| capability publication | `cad-core/src/runtime/capability_contract.cpp` | 当前 remaining gap 必须由 C6-M3 关闭或继续精确保留。 |
+| capability publication | `cad-core/src/runtime/capability_contract.cpp` | S5 已关闭 Interpolation LawSamples exact gap；capability 只发布 CAD Core product contract。 |
 
 ## 证明链条
 
@@ -48,7 +48,7 @@ live baseline and source authority
 | S2 | `工作步骤细分/6-24-00-20-【已实现】C6-M3-S2-scope-blocker-fixture矩阵.md` | 已把 S1 合同拆成 scope、blocker、oracle、non-goal 和 validation 执行矩阵。 |
 | S3 | `工作步骤细分/6-24-00-21-【已实现】C6-M3-S3-InterpolationLawKernel实现.md` | 已实现 OCCT `Law_Interpol` 低层 kernel、focused probe 和 P7 wiring。 |
 | S4 | `工作步骤细分/6-24-00-22-【已实现】C6-M3-S4-feature_pipe接入与diagnostics.md` | 已接入 `feature_pipe.cpp`，合法 `LawSamples` 执行，非法输入返回 S1 diagnostics。 |
-| S5 | `工作步骤细分/6-24-00-23-C6-M3-S5-fixtures-tests-capability发布.md` | 增加 fixtures、focused tests、capability 和 adapter assertions。 |
+| S5 | `工作步骤细分/6-24-00-23-【已实现】C6-M3-S5-fixtures-tests-capability发布.md` | 已增加 c6m3 fixtures、expected gate、focused tests、capability 和 adapter assertions。 |
 | S6 | `工作步骤细分/6-24-00-24-C6-M3-S6-阶段回归发布闸门.md` | 阶段回归、heavy 条件判断和发布状态。 |
 | source candidates | `矩阵/c6m3_pipe_interpolation_law_source_candidates.tsv` | FreeCAD / cad-core source authority。 |
 | scope review | `矩阵/c6m3_pipe_interpolation_law_scope_review_matrix.tsv` | 语义范围和状态。 |

@@ -1,0 +1,520 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPipeProfile",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "start": [
+              -0.3,
+              -0.3
+            ],
+            "end": [
+              0.3,
+              -0.3
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0.3,
+              -0.3
+            ],
+            "end": [
+              0.3,
+              0.3
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0.3,
+              0.3
+            ],
+            "end": [
+              -0.3,
+              0.3
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              -0.3,
+              0.3
+            ],
+            "end": [
+              -0.3,
+              -0.3
+            ]
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "PipeSpine",
+      "ID": 2,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 0,
+        "Y2": 0,
+        "Z2": 4
+      }
+    },
+    {
+      "Name": "AdditivePipeInterpolationMissingLawSamples",
+      "ID": 3,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Interpolation"
+      }
+    },
+    {
+      "Name": "AdditivePipeInterpolationMalformedObjectSample",
+      "ID": 4,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Interpolation",
+        "LawSamples": [
+          {
+            "parameter": 0.0,
+            "scale": 1.0
+          },
+          [
+            1.0,
+            1.4
+          ]
+        ]
+      }
+    },
+    {
+      "Name": "AdditivePipeInterpolationMalformedScalarList",
+      "ID": 5,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Interpolation",
+        "LawSamples": [
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "Name": "AdditivePipeInterpolationMalformedMissingEntry",
+      "ID": 6,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Interpolation",
+        "LawSamples": [
+          [
+            0.0
+          ],
+          [
+            1.0,
+            1.4
+          ]
+        ]
+      }
+    },
+    {
+      "Name": "AdditivePipeInterpolationMalformedExtraEntry",
+      "ID": 7,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Interpolation",
+        "LawSamples": [
+          [
+            0.0,
+            1.0,
+            1.2
+          ],
+          [
+            1.0,
+            1.4
+          ]
+        ]
+      }
+    },
+    {
+      "Name": "AdditivePipeInterpolationMalformedNull",
+      "ID": 8,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Interpolation",
+        "LawSamples": [
+          [
+            0.0,
+            1.0
+          ],
+          null
+        ]
+      }
+    },
+    {
+      "Name": "AdditivePipeInterpolationMalformedString",
+      "ID": 9,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Interpolation",
+        "LawSamples": "not-array"
+      }
+    },
+    {
+      "Name": "AdditivePipeInterpolationMalformedTooFewSamples",
+      "ID": 10,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Interpolation",
+        "LawSamples": [
+          [
+            0.0,
+            1.0
+          ]
+        ]
+      }
+    },
+    {
+      "Name": "AdditivePipeInterpolationDomainParameterString",
+      "ID": 11,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Interpolation",
+        "LawSamples": [
+          [
+            0.0,
+            1.0
+          ],
+          [
+            "middle",
+            1.2
+          ],
+          [
+            1.0,
+            1.4
+          ]
+        ]
+      }
+    },
+    {
+      "Name": "AdditivePipeInterpolationDomainOutOfRange",
+      "ID": 12,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Interpolation",
+        "LawSamples": [
+          [
+            0.0,
+            1.0
+          ],
+          [
+            1.2,
+            1.4
+          ]
+        ]
+      }
+    },
+    {
+      "Name": "AdditivePipeInterpolationDomainNonmonotonic",
+      "ID": 13,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Interpolation",
+        "LawSamples": [
+          [
+            0.0,
+            1.0
+          ],
+          [
+            0.5,
+            1.2
+          ],
+          [
+            0.5,
+            1.4
+          ],
+          [
+            1.0,
+            1.3
+          ]
+        ]
+      }
+    },
+    {
+      "Name": "AdditivePipeInterpolationDomainMissingEndpoint",
+      "ID": 14,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Interpolation",
+        "LawSamples": [
+          [
+            0.1,
+            1.0
+          ],
+          [
+            1.0,
+            1.4
+          ]
+        ]
+      }
+    },
+    {
+      "Name": "AdditivePipeInterpolationScaleZero",
+      "ID": 15,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Interpolation",
+        "LawSamples": [
+          [
+            0.0,
+            1.0
+          ],
+          [
+            1.0,
+            0.0
+          ]
+        ]
+      }
+    },
+    {
+      "Name": "AdditivePipeInterpolationScaleNegative",
+      "ID": 16,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Interpolation",
+        "LawSamples": [
+          [
+            0.0,
+            1.0
+          ],
+          [
+            1.0,
+            -0.5
+          ]
+        ]
+      }
+    },
+    {
+      "Name": "AdditivePipeInterpolationScaleString",
+      "ID": 17,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": []
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Interpolation",
+        "LawSamples": [
+          [
+            0.0,
+            1.0
+          ],
+          [
+            1.0,
+            "wide"
+          ]
+        ]
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "AdditivePipeInterpolationMissingLawSamples",
+      "AdditivePipeInterpolationMalformedObjectSample",
+      "AdditivePipeInterpolationMalformedScalarList",
+      "AdditivePipeInterpolationMalformedMissingEntry",
+      "AdditivePipeInterpolationMalformedExtraEntry",
+      "AdditivePipeInterpolationMalformedNull",
+      "AdditivePipeInterpolationMalformedString",
+      "AdditivePipeInterpolationMalformedTooFewSamples",
+      "AdditivePipeInterpolationDomainParameterString",
+      "AdditivePipeInterpolationDomainOutOfRange",
+      "AdditivePipeInterpolationDomainNonmonotonic",
+      "AdditivePipeInterpolationDomainMissingEndpoint",
+      "AdditivePipeInterpolationScaleZero",
+      "AdditivePipeInterpolationScaleNegative",
+      "AdditivePipeInterpolationScaleString"
+    ]
+  }
+}

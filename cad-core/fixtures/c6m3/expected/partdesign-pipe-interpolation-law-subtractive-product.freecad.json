@@ -1,0 +1,131 @@
+{
+  "schema_version": "cad-core.freecad-expected.v1",
+  "reference": "CAD Core C6-M3 SubtractivePipe Interpolation LawSamples product-contract oracle; not FreeCAD native parity.",
+  "oracle_evidence": {
+    "contract": "LawSamples request-local CAD Core product extension",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_product_contract",
+    "body_replay": "SubtractivePipe Interpolation preserves Body cut replay"
+  },
+  "objects": {
+    "SubtractivePipeInterpolationProduct": {
+      "object_fields": {
+        "status": "ok",
+        "feature": "partdesign_pipe",
+        "add_sub": "sub",
+        "shape": "occt_solid",
+        "transformation": "Interpolation",
+        "topo_naming_history": "maker_history:partdesign_pipe",
+        "pipe_law": {
+          "kind": "Interpolation",
+          "source": "cad_core_product_contract",
+          "contract": "cad_core_product_contract",
+          "domain": [
+            0.0,
+            1.0
+          ],
+          "samples": [
+            {
+              "parameter": 0.0,
+              "scale": 1.0
+            },
+            {
+              "parameter": 0.5,
+              "scale": 1.35
+            },
+            {
+              "parameter": 1.0,
+              "scale": 1.0
+            }
+          ],
+          "no_fallback": true
+        }
+      },
+      "bbox": {
+        "min": [
+          1.3249999,
+          1.3249999000000001,
+          0.0
+        ],
+        "max": [
+          2.6750000999999997,
+          2.6750001,
+          5.0
+        ]
+      },
+      "topology_counts": {
+        "faces": 6,
+        "edges": 12,
+        "vertices": 8
+      },
+      "volume": 7.66
+    },
+    "Body": {
+      "object_fields": {
+        "status": "ok",
+        "shape": "occt_compound",
+        "tip": "SubtractivePipeInterpolationProduct",
+        "replayed_subtractive_features": [
+          "SubtractivePipeInterpolationProduct"
+        ]
+      },
+      "bbox": {
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max": [
+          4.0,
+          4.0,
+          5.0
+        ]
+      },
+      "topology_counts": {
+        "faces": 10,
+        "edges": 24,
+        "vertices": 16
+      },
+      "volume": 72.33999999999999
+    }
+  },
+  "named_shapes": {
+    "SubtractivePipeInterpolationProduct": {
+      "element_map_status": "history_partial",
+      "element_history_status_contains": [
+        "part_design_pipe:sewing",
+        "part_sweep:pipeshell_history",
+        "part_design_pipe:pipeshell_history",
+        "history_consumed:generated_modified"
+      ],
+      "history_kinds_include": [
+        "generated",
+        "modified",
+        "merge",
+        "split"
+      ],
+      "element_map_prefixes": [
+        "SketchPipeProfile.Edge",
+        "SubtractivePipeInterpolationProduct.Sewing.Face"
+      ],
+      "elements_equal_subshapes": true
+    },
+    "Body": {
+      "element_map_status": "history_partial",
+      "element_history_status_contains": [
+        "history_consumed:generated_modified",
+        "history_consumed:merge"
+      ],
+      "history_kinds_include": [
+        "deleted",
+        "generated",
+        "modified",
+        "merge",
+        "split"
+      ],
+      "history_source_prefixes": [
+        "SubtractivePipeInterpolationProduct"
+      ]
+    }
+  }
+}
