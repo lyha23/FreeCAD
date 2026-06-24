@@ -1,0 +1,9 @@
+non_goal_id	item	reason	prohibited_action	reopen_condition
+C6M4-NG-001	FreeCAD parity claim	Location overload currently has no stable FreeCADCmd shape_summary	Do not write freecad_parity or native expected-backed wording	Only reopen if FreeCADCmd/OCCT produces stable native expected
+C6M4-NG-002	native Part::Sweep advanced direct properties	PartFeatures.cpp::Sweep::execute does not expose SectionOptions, AuxiliarySpine or Tolerance as native properties	Do not claim upstream DocumentObject advanced property parity	Only reopen if upstream FreeCAD native Sweep gains these properties
+C6M4-NG-003	persistent Python wrapper lifecycle	CAD Core backend is stateless and request-local	Do not store BRepOffsetAPI_MakePipeShell wrapper/session across requests	Never for CAD Core backend
+C6M4-NG-004	Filling	Separate Part surface family and existing C5 blockers	Do not add Filling fixtures, capability changes or blockers in C6-M4	Separate C6 mainline package
+C6M4-NG-005	Loft	Separate Part surface family and different source path	Do not modify Loft capability or fixtures in this package	Separate C6 mainline package
+C6M4-NG-006	Groove	PartDesign revolution/groove lane is unrelated to Part Workbench Sweep wrapper	Do not add Groove tests, capability or docs here	Separate PartDesign package
+C6M4-NG-007	GUI TaskPanel Web editor	This package is backend product contract only	Do not implement UI controls or session behavior	Separate frontend/product package
+C6M4-NG-008	output fixups	PipeShell maker history must be preserved by core semantics	Do not fix by bbox/order/fixture-name branches	Only after formal topo/history package defines a general rule
