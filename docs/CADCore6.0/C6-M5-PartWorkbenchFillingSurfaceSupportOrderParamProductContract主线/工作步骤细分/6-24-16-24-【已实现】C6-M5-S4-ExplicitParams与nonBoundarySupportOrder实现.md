@@ -1,4 +1,4 @@
-# C6-M5-S4 ExplicitParams 与 nonBoundarySupportOrder 实现
+# 【已实现】C6-M5-S4 ExplicitParams 与 nonBoundarySupportOrder 实现
 
 ## 目标
 
@@ -16,6 +16,14 @@
 - 保留现有 Degree、NumIter、Tol2d+Tol3d、MaxDegree expected-backed 子集。
 - 新增 PtsOnCurve、Anisotropy、TolG1、TolG2、MaxSegments 与 all params 的产品状态。
 - 参数错误必须带 property path 或对象名，不能只返回 `execution_failed`。
+
+## S4 实现结果
+
+- `cad-core/src/part/part_filling.cpp` 新增 `params_source_status`、`explicit_param_fields` 与 `non_boundary_support_order_status` 产品状态字段；参数错误继续走 locatable `invalid_parameter`，字段包含对象名、property、target 和 subname。
+- `cad-core/src/part/topo_shape_expansion.cpp` 补齐 non-boundary support/order evidence：非边界 edge / wire edge 记录 `Add(edge, support, order, IsBound=false)`，non-boundary face order 记录 `Add(face, order)`；detached face order、vertex order 和 face support target 走结构化诊断，不静默丢弃。
+- 新增 C6-M5 fixtures / expected：`part-filling-explicit-params-product`、`part-filling-explicit-params-invalid-product`、`part-filling-non-boundary-support-order-product`、`part-filling-non-boundary-support-order-invalid-product`。
+- `cad-core/src/runtime/capability_contract.cpp` 已写入 S4 draft evidence，但 `remaining_gaps` 仍保留，等待 S5/S6 capability / release gate。
+- 矩阵已回写 `SCOPE-201/202`、`IN-201/202`、`BLK-201/202`、`ORC-201/202`、`VAL-203/204`；S5/S6 未标为已实现。
 
 ## 禁止捷径
 
@@ -43,6 +51,12 @@ git diff --check -- cad-core/src/part/part_filling.cpp cad-core/src/part/topo_sh
 ```
 
 验收通过后，将本文重命名为 `6-24-16-24-【已实现】C6-M5-S4-ExplicitParams与nonBoundarySupportOrder实现.md`。
+
+## 验收结果
+
+- `cmake --build build` 通过。
+- `python3 -m unittest tests.test_p8_features.CadCoreP8FeatureTest` 通过：`Ran 211 tests in 22.477s`，`OK`。
+- S4 前置 focused smoke 曾单跑 `python3 -m unittest tests.test_p8_features.CadCoreP8FeatureTest -k filling`，通过：`Ran 25 tests in 1.661s`，`OK`。
 
 ## 非目标
 

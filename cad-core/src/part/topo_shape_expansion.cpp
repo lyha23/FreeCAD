@@ -666,6 +666,38 @@ GeomAbs_Shape orderForBoundaryEdge(
     return GeomAbs_C0;
 }
 
+bool filledFaceSourceMatchesShape(const FilledFaceSource& source, const TopoDS_Shape& shape)
+{
+    if (source.shape.IsNull() || shape.IsNull()) {
+        return false;
+    }
+    if (source.shape.IsSame(shape)) {
+        return true;
+    }
+    if (source.shape.ShapeType() == TopAbs_EDGE && shape.ShapeType() == TopAbs_EDGE) {
+        return filledFaceSourceMatchesEdge(source, TopoDS::Edge(shape));
+    }
+    for (TopExp_Explorer explorer(source.shape, shape.ShapeType()); explorer.More(); explorer.Next()) {
+        if (explorer.Current().IsSame(shape)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+GeomAbs_Shape orderForShape(
+    const TopoDS_Shape& shape,
+    const std::vector<FilledFaceOrderSource>& orderSources
+)
+{
+    for (const FilledFaceOrderSource& order : orderSources) {
+        if (filledFaceSourceMatchesShape(order.target, shape)) {
+            return order.order;
+        }
+    }
+    return GeomAbs_C0;
+}
+
 FilledFaceSupportOrderEvidence evidenceForSupportSource(
     const FilledFaceSupportSource& support,
     bool isBoundary
@@ -697,14 +729,17 @@ FilledFaceSupportOrderEvidence evidenceForOrderSource(
 )
 {
     const FilledFaceBoundaryEvidence target = fallbackEvidence(order.target, order.target.shape.ShapeType());
+    const std::string builderCall = order.target.shape.ShapeType() == TopAbs_FACE
+        ? "Add(face, order)"
+        : (isBoundary ? "Add(edge, support, order, IsBound=true)"
+                      : "Add(edge, support, order, IsBound=false)");
     return FilledFaceSupportOrderEvidence {
         target.objectName,
         target.subname,
         target.stableSubname,
         target.shapeKind,
         isBoundary,
-        isBoundary ? "Add(edge, support, order, IsBound=true)"
-                   : "Add(edge, support, order, IsBound=false)",
+        builderCall,
         false,
         {},
         {},
@@ -712,6 +747,19 @@ FilledFaceSupportOrderEvidence evidenceForOrderSource(
         true,
         order.orderName,
     };
+}
+
+bool isBoundarySupportOrderTarget(
+    const FilledFaceSource& target,
+    const std::vector<TopoDS_Edge>& boundaryEdges,
+    const std::vector<TopoDS_Edge>& nonBoundaryEdges
+)
+{
+    if (target.shape.IsNull() || target.shape.ShapeType() != TopAbs_EDGE) {
+        return false;
+    }
+    return filledFaceSourceMatchesAnyEdge(target, boundaryEdges)
+        || !filledFaceSourceMatchesAnyEdge(target, nonBoundaryEdges);
 }
 
 bool sameSupportOrderTarget(
@@ -760,13 +808,13 @@ std::vector<FilledFaceSupportOrderEvidence> supportOrderEvidence(
     };
 
     for (const FilledFaceSupportSource& support : supportSources) {
-        const bool isBoundary = filledFaceSourceMatchesAnyEdge(support.target, boundaryEdges)
-            || !filledFaceSourceMatchesAnyEdge(support.target, nonBoundaryEdges);
+        const bool isBoundary
+            = isBoundarySupportOrderTarget(support.target, boundaryEdges, nonBoundaryEdges);
         merge(evidenceForSupportSource(support, isBoundary));
     }
     for (const FilledFaceOrderSource& order : orderSources) {
-        const bool isBoundary = filledFaceSourceMatchesAnyEdge(order.target, boundaryEdges)
-            || !filledFaceSourceMatchesAnyEdge(order.target, nonBoundaryEdges);
+        const bool isBoundary
+            = isBoundarySupportOrderTarget(order.target, boundaryEdges, nonBoundaryEdges);
         merge(evidenceForOrderSource(order, isBoundary));
     }
     return result;
@@ -2431,7 +2479,7 @@ FilledFaceBuild makeElementFilledFaceFromSources(
                 continue;
             }
             if (item.shape.ShapeType() == TopAbs_FACE) {
-                maker.Add(TopoDS::Face(item.shape), GeomAbs_C0);
+                maker.Add(TopoDS::Face(item.shape), orderForShape(item.shape, orderSources));
                 ++nonBoundaryConstraintCount;
                 appendNonBoundaryShapeEvidence(item, TopAbs_FACE, "Add(face, order)");
                 continue;

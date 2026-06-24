@@ -1,0 +1,33 @@
+{
+  "diagnostic_codes": [
+    "invalid_order_target",
+    "invalid_order_target",
+    "invalid_support_target"
+  ],
+  "objects": {
+    "DetachedFaceOrder": {
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    },
+    "VertexOrder": {
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    },
+    "FaceSupportTarget": {
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    }
+  },
+  "oracle_kind": "cad_core_product_contract_diagnostics",
+  "reference": "CAD Core C6-M5 non-boundary support/order diagnostic fixture; support/order targets must be locatable and must not be silently dropped when detached from Boundary or unsupported for vertex/face support.",
+  "schema_version": "cad-core.freecad-expected.v1"
+}

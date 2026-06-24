@@ -10,7 +10,7 @@
 
 | blocker / scope | C++ 落点 | FreeCAD source authority | focused tests | 成功标准 |
 | --- | --- | --- | --- | --- |
-| 未关闭的 `BLK-101` 到 `BLK-202` | `cad-core/src/part/part_filling.cpp`、`cad-core/src/part/topo_shape_expansion.cpp`、`cad-core/src/runtime/capability_contract.cpp` | `AppPartPy.cpp::makeFilledFace()`、`TopoShapeExpansion.cpp::makeElementFilledFace()`、`BRepOffsetAPI_MakeFillingPyImp.cpp` | `cad-core/tests/test_p8_features.py` Filling tests | 对应 `remaining_gaps` 只在 fixture、test、capability 同步通过后删除。 |
+| 已实现但待 release gate 的 `BLK-101` 到 `BLK-202` | `cad-core/src/part/part_filling.cpp`、`cad-core/src/part/topo_shape_expansion.cpp`、`cad-core/src/runtime/capability_contract.cpp` | `AppPartPy.cpp::makeFilledFace()`、`TopoShapeExpansion.cpp::makeElementFilledFace()`、`BRepOffsetAPI_MakeFillingPyImp.cpp` | `cad-core/tests/test_p8_features.py` Filling tests | 对应 `remaining_gaps` 只在 fixture、test、capability 和阶段闸门同步通过后删除。 |
 
 ## 发布闸门
 

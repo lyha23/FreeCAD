@@ -1,0 +1,120 @@
+{
+  "object": "FilledFace",
+  "object_fields": {
+    "boundary_edge_count": 4,
+    "boundary_mode": "closed_wire",
+    "feature": "part_filled_face",
+    "freecad_native_document_object": false,
+    "helper": "Part.makeFilledFace",
+    "non_boundary_constraint_count": 5,
+    "non_boundary_constraint_source_evidence": [
+      {
+        "builder_call": "Add(edge, support, order, IsBound=false)",
+        "is_boundary": false,
+        "object": "ConstraintEdge",
+        "shape_kind": "edge",
+        "stable_subname": "Edge1",
+        "subname": "Edge1"
+      },
+      {
+        "builder_call": "Add(edge, support, order, IsBound=false)",
+        "is_boundary": false,
+        "object": "ConstraintWire",
+        "shape_kind": "edge",
+        "stable_subname": "Edge1",
+        "subname": "Edge1"
+      },
+      {
+        "builder_call": "Add(edge, support, order, IsBound=false)",
+        "is_boundary": false,
+        "object": "ConstraintWire",
+        "shape_kind": "edge",
+        "stable_subname": "Edge2",
+        "subname": "Edge2"
+      },
+      {
+        "builder_call": "Add(edge, support, order, IsBound=false)",
+        "is_boundary": false,
+        "object": "ConstraintWire",
+        "shape_kind": "edge",
+        "stable_subname": "Edge3",
+        "subname": "Edge3"
+      },
+      {
+        "builder_call": "Add(face, order)",
+        "is_boundary": false,
+        "object": "SupportFace",
+        "shape_kind": "face",
+        "stable_subname": "Face1",
+        "subname": "Face1"
+      }
+    ],
+    "non_boundary_constraints_status": "cad_core_product_contract_covered",
+    "non_boundary_support_order_status": "cad_core_product_contract_covered",
+    "order_count": 3,
+    "shape": "occt_face",
+    "source_backed_helper": true,
+    "status": "ok",
+    "support_face_count": 2,
+    "support_order_source_evidence": [
+      {
+        "builder_call": "Add(edge, support, order, IsBound=false)",
+        "has_order": true,
+        "has_support": true,
+        "is_boundary": false,
+        "order": "G1",
+        "support_object": "SupportPlane",
+        "support_stable_subname": "Face1",
+        "support_subname": "Face1",
+        "target_object": "ConstraintEdge",
+        "target_shape_kind": "edge",
+        "target_stable_subname": "Edge1",
+        "target_subname": "Edge1"
+      },
+      {
+        "builder_call": "Add(edge, support, order, IsBound=false)",
+        "has_order": true,
+        "has_support": true,
+        "is_boundary": false,
+        "order": "G2",
+        "support_object": "SupportPlane",
+        "support_stable_subname": "Face1",
+        "support_subname": "Face1",
+        "target_object": "ConstraintWire",
+        "target_shape_kind": "edge",
+        "target_stable_subname": "Edge1",
+        "target_subname": "Edge1"
+      },
+      {
+        "builder_call": "Add(face, order)",
+        "has_order": true,
+        "has_support": false,
+        "is_boundary": false,
+        "order": "C0",
+        "target_object": "SupportFace",
+        "target_shape_kind": "face",
+        "target_stable_subname": "Face1",
+        "target_subname": "Face1"
+      }
+    ],
+    "support_order_source_status": "cad_core_product_contract_covered",
+    "topo_naming_history": "maker_history:filling"
+  },
+  "oracle_kind": "cad_core_product_contract",
+  "reference": "CAD Core C6-M5 non-boundary support/order product-contract fixture; FreeCAD source authority is TopoShapeExpansion.cpp::makeElementFilledFace() remaining wire/edge constraints with IsBound=false and face constraints through maker.Add(face, order). Native helper expected remains notCollected until S5/S6 gate.",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "shape_summary": {
+    "topology_counts": {
+      "edges": 4,
+      "faces": 1,
+      "vertices": 4
+    },
+    "volume": 0.0
+  },
+  "topology_counts": {
+    "edges": 4,
+    "faces": 1,
+    "vertices": 4
+  },
+  "volume": 0.0
+}

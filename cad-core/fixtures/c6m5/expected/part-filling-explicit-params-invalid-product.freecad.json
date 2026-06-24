@@ -1,0 +1,41 @@
+{
+  "diagnostic_codes": [
+    "invalid_parameter",
+    "invalid_parameter",
+    "invalid_parameter",
+    "invalid_parameter"
+  ],
+  "objects": {
+    "InvalidPtsOnCurve": {
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    },
+    "InvalidTolG1": {
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    },
+    "InvalidTolG2": {
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    },
+    "InvalidMaxSegments": {
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    }
+  },
+  "oracle_kind": "cad_core_product_contract_diagnostics",
+  "reference": "CAD Core C6-M5 explicit params diagnostic fixture; invalid constructor kwargs must return locatable invalid_parameter diagnostics instead of execution_failed or silent parameter drops.",
+  "schema_version": "cad-core.freecad-expected.v1"
+}

@@ -1,0 +1,132 @@
+{
+  "Objects": [
+    {
+      "Name": "Profile",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 2
+      }
+    },
+    {
+      "Name": "SupportPlane",
+      "ID": 2,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 4,
+        "Width": 4
+      }
+    },
+    {
+      "Name": "CenterPoint",
+      "ID": 3,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    {
+      "Name": "DetachedFaceOrder",
+      "ID": 4,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Profile"
+            }
+          ]
+        },
+        "Orders": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SupportPlane",
+              "SubList": ["Face1"],
+              "StableSubList": ["Face1"],
+              "Order": "C0"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "Name": "VertexOrder",
+      "ID": 5,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Profile"
+            },
+            {
+              "value": "CenterPoint",
+              "SubList": ["Vertex1"],
+              "StableSubList": ["Vertex1"]
+            }
+          ]
+        },
+        "Orders": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "CenterPoint",
+              "SubList": ["Vertex1"],
+              "StableSubList": ["Vertex1"],
+              "Order": "G1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "Name": "FaceSupportTarget",
+      "ID": 6,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Profile"
+            },
+            {
+              "value": "SupportPlane",
+              "SubList": ["Face1"],
+              "StableSubList": ["Face1"]
+            }
+          ]
+        },
+        "Supports": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SupportPlane",
+              "SubList": ["Face1"],
+              "StableSubList": ["Face1"],
+              "Support": {
+                "PropertyType": "App::PropertyLinkSub",
+                "value": "SupportPlane",
+                "SubList": ["Face1"],
+                "StableSubList": ["Face1"]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "DetachedFaceOrder",
+      "VertexOrder",
+      "FaceSupportTarget"
+    ]
+  }
+}

@@ -7,6 +7,7 @@
 #include "cad_core/runtime/feature_executor.h"
 
 #include <TopAbs_ShapeEnum.hxx>
+#include <TopExp_Explorer.hxx>
 #include <TopoDS_Shape.hxx>
 
 #include <algorithm>
@@ -139,6 +140,27 @@ std::string stableSubnameForLink(const app::Link& link, std::size_t index)
         return link.subnames[index];
     }
     return {};
+}
+
+std::vector<std::string> explicitFillingParamFields(const app::DocumentObject& object)
+{
+    std::vector<std::string> fields;
+    for (const std::string& property :
+         {"Degree",
+          "PtsOnCurve",
+          "NumIter",
+          "Anisotropy",
+          "Tol2d",
+          "Tol3d",
+          "TolG1",
+          "TolG2",
+          "MaxDegree",
+          "MaxSegments"}) {
+        if (app::propertyValue(object, property) != nullptr) {
+            fields.push_back(property);
+        }
+    }
+    return fields;
 }
 
 bool addInvalidFillingParameterDiagnostic(
@@ -420,6 +442,24 @@ std::string shapeKindLabel(TopAbs_ShapeEnum kind)
     }
 }
 
+std::string shapeKindLabelWithArticle(TopAbs_ShapeEnum kind)
+{
+    const std::string label = shapeKindLabel(kind);
+    return label == "edge" ? "an " + label : "a " + label;
+}
+
+std::string shapeKindListLabel(const std::vector<TopAbs_ShapeEnum>& kinds)
+{
+    std::string result;
+    for (std::size_t index = 0; index < kinds.size(); ++index) {
+        if (index > 0) {
+            result += index + 1 == kinds.size() ? " or " : ", ";
+        }
+        result += shapeKindLabelWithArticle(kinds[index]);
+    }
+    return result;
+}
+
 std::optional<TopoDS_Shape> resolveFillingSubshape(
     const TopoDS_Shape& sourceShape,
     const NamedShape* namedShape,
@@ -448,13 +488,13 @@ std::optional<TopoDS_Shape> resolveFillingSubshape(
     return std::nullopt;
 }
 
-std::optional<FilledFaceSource> resolveFillingLinkedSource(
+std::optional<FilledFaceSource> resolveFillingLinkedSourceOfKinds(
     const app::DocumentObject& object,
     runtime::ComputeContext& context,
     const std::string& property,
     const app::Link& link,
     std::size_t index,
-    TopAbs_ShapeEnum expectedKind,
+    const std::vector<TopAbs_ShapeEnum>& expectedKinds,
     const std::string& diagnosticCode,
     const std::string& role
 )
@@ -490,13 +530,18 @@ std::optional<FilledFaceSource> resolveFillingLinkedSource(
         );
         return std::nullopt;
     }
-    if (selected->ShapeType() != expectedKind) {
+    const bool matchesKind = std::any_of(
+        expectedKinds.begin(),
+        expectedKinds.end(),
+        [&](TopAbs_ShapeEnum expectedKind) { return selected->ShapeType() == expectedKind; }
+    );
+    if (!matchesKind) {
         addFillingDiagnostic(
             object,
             context,
             diagnosticCode,
-            "Part.makeFilledFace " + role + " must resolve to a "
-                + shapeKindLabel(expectedKind),
+            "Part.makeFilledFace " + role + " must resolve to "
+                + shapeKindListLabel(expectedKinds),
             property,
             link.object,
             stableSubnameForLink(link, index)
@@ -513,6 +558,59 @@ std::optional<FilledFaceSource> resolveFillingLinkedSource(
         current,
         stable,
     };
+}
+
+std::optional<FilledFaceSource> resolveFillingLinkedSource(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const std::string& property,
+    const app::Link& link,
+    std::size_t index,
+    TopAbs_ShapeEnum expectedKind,
+    const std::string& diagnosticCode,
+    const std::string& role
+)
+{
+    return resolveFillingLinkedSourceOfKinds(
+        object,
+        context,
+        property,
+        link,
+        index,
+        std::vector<TopAbs_ShapeEnum> {expectedKind},
+        diagnosticCode,
+        role
+    );
+}
+
+bool shapeContainsTarget(const TopoDS_Shape& source, const TopoDS_Shape& target)
+{
+    if (source.IsNull() || target.IsNull()) {
+        return false;
+    }
+    if (source.IsSame(target)) {
+        return true;
+    }
+    for (TopExp_Explorer explorer(source, target.ShapeType()); explorer.More(); explorer.Next()) {
+        if (explorer.Current().IsSame(target)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool sourceIsInBoundaryInputs(
+    const FilledFaceSource& target,
+    const std::vector<FilledFaceSource>& boundarySources
+)
+{
+    return std::any_of(
+        boundarySources.begin(),
+        boundarySources.end(),
+        [&](const FilledFaceSource& boundary) {
+            return shapeContainsTarget(boundary.shape, target.shape);
+        }
+    );
 }
 
 std::optional<app::Link> readNestedFillingLink(
@@ -673,13 +771,13 @@ std::optional<FilledFaceOrderSource> readFillingOrderSource(
         return std::nullopt;
     }
 
-    const auto target = resolveFillingLinkedSource(
+    const auto target = resolveFillingLinkedSourceOfKinds(
         object,
         context,
         "Orders",
         link,
         index,
-        TopAbs_EDGE,
+        std::vector<TopAbs_ShapeEnum> {TopAbs_EDGE, TopAbs_FACE},
         "invalid_order_target",
         "order target"
     );
@@ -846,6 +944,18 @@ bool resolveFillingSurfaceSupportOrderSources(
             if (!target) {
                 return false;
             }
+            if (!sourceIsInBoundaryInputs(*target, resolved.boundarySources)) {
+                addFillingDiagnostic(
+                    object,
+                    context,
+                    "invalid_support_target",
+                    "Part.makeFilledFace Supports target must reference a Boundary source",
+                    "Supports",
+                    target->objectName,
+                    target->stableSubname.empty() ? target->subname : target->stableSubname
+                );
+                return false;
+            }
             const auto supportLink = readNestedFillingLink(
                 object,
                 context,
@@ -905,6 +1015,19 @@ bool resolveFillingSurfaceSupportOrderSources(
         for (std::size_t subIndex = 0; subIndex < count; ++subIndex) {
             const auto order = readFillingOrderSource(object, context, raw, targetLink, subIndex);
             if (!order) {
+                return false;
+            }
+            if (!sourceIsInBoundaryInputs(order->target, resolved.boundarySources)) {
+                addFillingDiagnostic(
+                    object,
+                    context,
+                    "invalid_order_target",
+                    "Part.makeFilledFace Orders target must reference a Boundary source",
+                    "Orders",
+                    order->target.objectName,
+                    order->target.stableSubname.empty() ? order->target.subname
+                                                        : order->target.stableSubname
+                );
                 return false;
             }
             resolved.orders.push_back(*order);
@@ -974,6 +1097,7 @@ void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeCo
         return;
     }
 
+    const std::vector<std::string> explicitParamFields = explicitFillingParamFields(object);
     const FilledFaceBuild build = makeElementFilledFaceFromSources(
         object.name,
         resolved.boundarySources,
@@ -995,6 +1119,26 @@ void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeCo
         );
         return;
     }
+
+    const bool hasNonBoundarySupportOrder = std::any_of(
+        build.supportOrderSources.begin(),
+        build.supportOrderSources.end(),
+        [](const FilledFaceSupportOrderEvidence& evidence) {
+            return !evidence.isBoundary && (evidence.hasSupport || evidence.hasOrder);
+        }
+    );
+    const std::string nonBoundaryConstraintsStatus = [&]() {
+        if (build.nonBoundaryConstraintCount == 0) {
+            return std::string("not_used");
+        }
+        if (hasNonBoundarySupportOrder) {
+            return std::string("cad_core_product_contract_covered");
+        }
+        if (build.supportFaceCount == 0 && build.orderCount == 0) {
+            return std::string("freecad_expected_backed");
+        }
+        return std::string("source_backed_native_helper_oracle_known_gap");
+    }();
 
     part_feature_detail::publishPartShape(
         object,
@@ -1028,13 +1172,15 @@ void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeCo
             {"support_face_count", build.supportFaceCount},
             {"order_count", build.orderCount},
             {"surface_support_order_status", "source_backed_native_helper_oracle_known_gap"},
-            {"non_boundary_constraints_status",
-             build.nonBoundaryConstraintCount > 0 && build.supportFaceCount == 0 && build.orderCount == 0
-                 ? "freecad_expected_backed"
-                 : "source_backed_native_helper_oracle_known_gap"},
+            {"non_boundary_constraints_status", nonBoundaryConstraintsStatus},
+            {"non_boundary_support_order_status",
+             hasNonBoundarySupportOrder ? "cad_core_product_contract_covered" : "not_used"},
             {"default_params", fillingParamsJson(FilledFaceParams {})},
             {"params", fillingParamsJson(*params)},
             {"params_source", "Part.makeFilledFace constructor kwargs"},
+            {"params_source_status",
+             explicitParamFields.empty() ? "default_params" : "cad_core_product_contract_covered"},
+            {"explicit_param_fields", explicitParamFields},
             {"topo_naming_history", "maker_history:filling"},
         },
         build.namedShape

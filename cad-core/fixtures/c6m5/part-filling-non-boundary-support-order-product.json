@@ -1,0 +1,144 @@
+{
+  "Objects": [
+    {
+      "Name": "Profile",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 2
+      }
+    },
+    {
+      "Name": "ConstraintEdge",
+      "ID": 2,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": -1,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 1,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "ConstraintWire",
+      "ID": 3,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 3,
+        "Circumradius": 0.8
+      }
+    },
+    {
+      "Name": "SupportPlane",
+      "ID": 4,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 4,
+        "Width": 4,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [-2, -2, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "SupportFace",
+      "ID": 5,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 1,
+        "Width": 1,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [-0.5, -0.5, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "FilledFace",
+      "ID": 6,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Profile"
+            },
+            {
+              "value": "ConstraintEdge",
+              "SubList": ["Edge1"],
+              "StableSubList": ["Edge1"]
+            },
+            {
+              "value": "ConstraintWire"
+            },
+            {
+              "value": "SupportFace",
+              "SubList": ["Face1"],
+              "StableSubList": ["Face1"]
+            }
+          ]
+        },
+        "Supports": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "ConstraintEdge",
+              "SubList": ["Edge1"],
+              "StableSubList": ["Edge1"],
+              "Support": {
+                "PropertyType": "App::PropertyLinkSub",
+                "value": "SupportPlane",
+                "SubList": ["Face1"],
+                "StableSubList": ["Face1"]
+              }
+            },
+            {
+              "value": "ConstraintWire",
+              "SubList": ["Edge1"],
+              "StableSubList": ["Edge1"],
+              "Support": {
+                "PropertyType": "App::PropertyLinkSub",
+                "value": "SupportPlane",
+                "SubList": ["Face1"],
+                "StableSubList": ["Face1"]
+              }
+            }
+          ]
+        },
+        "Orders": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "ConstraintEdge",
+              "SubList": ["Edge1"],
+              "StableSubList": ["Edge1"],
+              "Order": "G1"
+            },
+            {
+              "value": "ConstraintWire",
+              "SubList": ["Edge1"],
+              "StableSubList": ["Edge1"],
+              "Order": "G2"
+            },
+            {
+              "value": "SupportFace",
+              "SubList": ["Face1"],
+              "StableSubList": ["Face1"],
+              "Order": "C0"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["FilledFace"]
+  }
+}

@@ -1584,6 +1584,109 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertEqual(result["objects"][object_name]["helper"], "Part.makeFilledFace")
         self.assert_object_matches_expected(result, "c6m5", "part-filling-surface-support-order-invalid-product")
 
+    def test_c6m5_part_filling_explicit_params_product_contract(self) -> None:
+        result = self.run_recompute("part-filling-explicit-params-product", "c6m5")
+        expected = self.expected_freecad("c6m5", "part-filling-explicit-params-product")
+
+        self.assertEqual(result["diagnostics"], [])
+        for object_name, object_expected in expected["objects"].items():
+            self.assert_expected_object(result, object_name, object_expected)
+            filled = result["objects"][object_name]
+            self.assertEqual(filled["params_source_status"], "cad_core_product_contract_covered")
+            self.assertEqual(filled["non_boundary_constraints_status"], "not_used")
+            self.assertEqual(filled["non_boundary_support_order_status"], "not_used")
+            self.assertEqual(filled["default_params"]["degree"], 3)
+            self.assertEqual(filled["default_params"]["points_on_curve"], 15)
+            self.assertEqual(filled["default_params"]["anisotropy"], False)
+            self.assertEqual(filled["default_params"]["max_segments"], 9)
+        self.assertEqual(
+            result["objects"]["AllParams"]["params"],
+            expected["objects"]["AllParams"]["object_fields"]["params"],
+        )
+
+    def test_c6m5_part_filling_explicit_param_invalids_are_locatable(self) -> None:
+        result = self.run_recompute("part-filling-explicit-params-invalid-product", "c6m5")
+        diagnostics = result["diagnostics"]
+        expected = self.expected_freecad("c6m5", "part-filling-explicit-params-invalid-product")
+
+        self.assertEqual([item["code"] for item in diagnostics], expected["diagnostic_codes"])
+        self.assertEqual(
+            [(item["object"], item["property"], item["target"], item["subname"]) for item in diagnostics],
+            [
+                ("InvalidPtsOnCurve", "PtsOnCurve", "InvalidPtsOnCurve", "PtsOnCurve"),
+                ("InvalidTolG1", "TolG1", "InvalidTolG1", "TolG1"),
+                ("InvalidTolG2", "TolG2", "InvalidTolG2", "TolG2"),
+                ("InvalidMaxSegments", "MaxSegments", "InvalidMaxSegments", "MaxSegments"),
+            ],
+        )
+        for object_name, object_expected in expected["objects"].items():
+            self.assert_expected_object(result, object_name, object_expected)
+
+    def test_c6m5_part_filling_non_boundary_support_order_product_contract(self) -> None:
+        result = self.run_recompute("part-filling-non-boundary-support-order-product", "c6m5")
+        filled = result["objects"]["FilledFace"]
+        named_shape = result["named_shapes"]["FilledFace"]
+        expected = self.expected_freecad("c6m5", "part-filling-non-boundary-support-order-product")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assert_part_filling_history(result, "closed_wire")
+        self.assertEqual(filled["non_boundary_constraints_status"], "cad_core_product_contract_covered")
+        self.assertEqual(filled["non_boundary_support_order_status"], "cad_core_product_contract_covered")
+        self.assertEqual(filled["support_order_source_status"], "cad_core_product_contract_covered")
+        self.assertEqual(filled["non_boundary_constraint_count"], 5)
+        self.assertEqual(filled["support_face_count"], 2)
+        self.assertEqual(filled["order_count"], 3)
+        evidence = filled["support_order_source_evidence"]
+        self.assertEqual(
+            {(item["target_object"], item["target_stable_subname"], item["order"]) for item in evidence},
+            {
+                ("ConstraintEdge", "Edge1", "G1"),
+                ("ConstraintWire", "Edge1", "G2"),
+                ("SupportFace", "Face1", "C0"),
+            },
+        )
+        self.assertEqual({item["is_boundary"] for item in evidence}, {False})
+        self.assertIn("Add(edge, support, order, IsBound=false)", {item["builder_call"] for item in evidence})
+        self.assertIn("Add(face, order)", {item["builder_call"] for item in evidence})
+        self.assertIn("part_filling:support_order_sources", named_shape["element_history_status"])
+        self.assertIn("part_filling:non_boundary_constraints", named_shape["element_history_status"])
+        self.assertTrue(
+            any(
+                event["maker_stage"] == "maker_history:filling_support_order"
+                and event["source"] == {"object": "ConstraintEdge", "subname": "Edge1"}
+                and event["evidence"]["builder_call"] == "Add(edge, support, order, IsBound=false)"
+                and event["evidence"]["is_bound"] is False
+                for event in named_shape["mapper_history"]
+            )
+        )
+        self.assertTrue(
+            any(
+                event["maker_stage"] == "maker_history:filling_support_order"
+                and event["source"] == {"object": "SupportFace", "subname": "Face1"}
+                and event["evidence"]["builder_call"] == "Add(face, order)"
+                and event["evidence"]["is_bound"] is False
+                for event in named_shape["mapper_history"]
+            )
+        )
+        self.assert_object_matches_expected(result, "c6m5", "part-filling-non-boundary-support-order-product")
+
+    def test_c6m5_part_filling_non_boundary_support_order_invalids_are_locatable(self) -> None:
+        result = self.run_recompute("part-filling-non-boundary-support-order-invalid-product", "c6m5")
+        diagnostics = result["diagnostics"]
+        expected = self.expected_freecad("c6m5", "part-filling-non-boundary-support-order-invalid-product")
+
+        self.assertEqual([item["code"] for item in diagnostics], expected["diagnostic_codes"])
+        self.assertEqual(
+            [(item["object"], item["property"], item["target"], item["subname"]) for item in diagnostics],
+            [
+                ("DetachedFaceOrder", "Orders", "SupportPlane", "Face1"),
+                ("VertexOrder", "Orders", "CenterPoint", "Vertex1"),
+                ("FaceSupportTarget", "Supports", "SupportPlane", "Face1"),
+            ],
+        )
+        for object_name, object_expected in expected["objects"].items():
+            self.assert_expected_object(result, object_name, object_expected)
+
     def test_c5m8_part_filling_non_default_params_are_constructor_batch(self) -> None:
         result = self.run_recompute("part-filling-non-default-params", "c5m8")
         filled = result["objects"]["FilledFace"]
@@ -1661,7 +1764,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertEqual(result["objects"][object_name]["helper"], "Part.makeFilledFace")
         self.assert_object_matches_expected(result, "c5m8", "part-filling-param-diagnostics")
 
-    def test_c5m8_part_filling_non_boundary_edge_support_is_source_backed_known_gap(self) -> None:
+    def test_c5m8_part_filling_non_boundary_edge_support_keeps_native_known_gap_expected(self) -> None:
         result = self.run_recompute("part-filling-non-boundary-edge-support", "c5m8")
         filled = result["objects"]["FilledFace"]
         named_shape = result["named_shapes"]["FilledFace"]
@@ -1671,7 +1774,8 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("known_gap", expected)
         self.assert_part_filling_history(result, "closed_wire")
         self.assertEqual(filled["non_boundary_constraint_count"], 1)
-        self.assertEqual(filled["non_boundary_constraints_status"], "source_backed_native_helper_oracle_known_gap")
+        self.assertEqual(filled["non_boundary_constraints_status"], "cad_core_product_contract_covered")
+        self.assertEqual(filled["non_boundary_support_order_status"], "cad_core_product_contract_covered")
         self.assertEqual(filled["support_face_count"], 1)
         self.assertEqual(filled["order_count"], 1)
         self.assertEqual(
