@@ -1,0 +1,49 @@
+{
+  "diagnostic_codes": [
+    "invalid_surface_source",
+    "invalid_support_target",
+    "invalid_support_source",
+    "invalid_order_target",
+    "invalid_order_source"
+  ],
+  "objects": {
+    "InvalidSurface": {
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    },
+    "InvalidSupportTarget": {
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    },
+    "InvalidSupportSource": {
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    },
+    "InvalidOrderTarget": {
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    },
+    "InvalidOrderSource": {
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    }
+  },
+  "oracle_kind": "cad_core_product_contract_diagnostics",
+  "reference": "CAD Core C6-M5 Surface/Supports/Orders diagnostic fixture; native helper oracle remains notCollected, so this file freezes request-local validation diagnostics only.",
+  "schema_version": "cad-core.freecad-expected.v1"
+}

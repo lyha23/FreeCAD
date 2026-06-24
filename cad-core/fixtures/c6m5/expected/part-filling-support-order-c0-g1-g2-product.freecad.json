@@ -1,0 +1,81 @@
+{
+  "object": "FilledFace",
+  "object_fields": {
+    "boundary_edge_count": 4,
+    "boundary_mode": "edge_wire_closed",
+    "feature": "part_filled_face",
+    "freecad_native_document_object": false,
+    "helper": "Part.makeFilledFace",
+    "initial_surface_source_evidence": null,
+    "order_count": 3,
+    "shape": "occt_face",
+    "source_backed_helper": true,
+    "status": "ok",
+    "support_face_count": 3,
+    "support_order_source_evidence": [
+      {
+        "builder_call": "Add(edge, support, order, IsBound=true)",
+        "has_order": true,
+        "has_support": true,
+        "is_boundary": true,
+        "order": "C0",
+        "support_object": "SupportPlane",
+        "support_stable_subname": "Face1",
+        "support_subname": "Face1",
+        "target_object": "Profile",
+        "target_shape_kind": "edge",
+        "target_stable_subname": "Edge1",
+        "target_subname": "Edge1"
+      },
+      {
+        "builder_call": "Add(edge, support, order, IsBound=true)",
+        "has_order": true,
+        "has_support": true,
+        "is_boundary": true,
+        "order": "G1",
+        "support_object": "SupportPlane",
+        "support_stable_subname": "Face1",
+        "support_subname": "Face1",
+        "target_object": "Profile",
+        "target_shape_kind": "edge",
+        "target_stable_subname": "Edge2",
+        "target_subname": "Edge2"
+      },
+      {
+        "builder_call": "Add(edge, support, order, IsBound=true)",
+        "has_order": true,
+        "has_support": true,
+        "is_boundary": true,
+        "order": "G2",
+        "support_object": "SupportPlane",
+        "support_stable_subname": "Face1",
+        "support_subname": "Face1",
+        "target_object": "Profile",
+        "target_shape_kind": "edge",
+        "target_stable_subname": "Edge3",
+        "target_subname": "Edge3"
+      }
+    ],
+    "support_order_source_status": "cad_core_product_contract_covered",
+    "surface_source_status": "not_used",
+    "surface_support_order_status": "source_backed_native_helper_oracle_known_gap",
+    "topo_naming_history": "maker_history:filling"
+  },
+  "oracle_kind": "cad_core_product_contract",
+  "reference": "CAD Core C6-M5 Supports/Orders product-contract fixture; FreeCAD source authority is BRepOffsetAPI_MakeFillingPyImp.cpp::add() edge/support/order branch and TopoShapeExpansion.cpp::makeElementFilledFace() maker.Add(edge, support, order, IsBound=true). Native G1/G2 helper oracle remains notCollected.",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "shape_summary": {
+    "topology_counts": {
+      "edges": 4,
+      "faces": 1,
+      "vertices": 4
+    },
+    "volume": 0.0
+  },
+  "topology_counts": {
+    "edges": 4,
+    "faces": 1,
+    "vertices": 4
+  },
+  "volume": 0.0
+}

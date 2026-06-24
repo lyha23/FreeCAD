@@ -1011,7 +1011,17 @@ void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeCo
             {"compound_source_count", build.compoundSourceCount},
             {"compound_expanded_source_count", build.expandedSourceCount},
             {"compound_source_expansion_status", build.compoundSourceCount > 0 ? "source_backed" : "not_used"},
+            // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/AppPartPy.cpp
+            // ::makeFilledFace(), exposes "surface", "supports" and "orders";
+            // /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+            // ::TopoShape::makeElementFilledFace() consumes them through "LoadInitSurface" and
+            // "maker.Add(edge, support, order, IsBound=true)". These request-local product
+            // statuses are evidence fields; capability remaining_gaps stay gated by S5/S6.
+            {"surface_source_status",
+             build.initialSurfaceSource ? "cad_core_product_contract_covered" : "not_used"},
             {"initial_surface_source_evidence", boundaryEvidenceJson(build.initialSurfaceSource)},
+            {"support_order_source_status",
+             build.supportOrderSources.empty() ? "not_used" : "cad_core_product_contract_covered"},
             {"support_order_source_evidence", supportOrderEvidenceJson(build.supportOrderSources)},
             {"non_boundary_constraint_count", build.nonBoundaryConstraintCount},
             {"non_boundary_constraint_source_evidence", constraintEvidenceJson(build.nonBoundarySources)},

@@ -51,7 +51,7 @@ live capability baseline
 | S0 | `工作步骤细分/6-24-16-20-【已实现】C6-M5-S0-live基线与Filling剩余gap边界复核.md` | 冻结 live baseline、声明边界和剩余 gap 字典。 |
 | S1 | `工作步骤细分/6-24-16-21-【已实现】C6-M5-S1-FreeCAD源码与helper-oracle候选矩阵.md` | 复核 FreeCAD source / wrapper / helper oracle 候选。 |
 | S2 | `工作步骤细分/6-24-16-22-【已实现】C6-M5-S2-Filling合同与oracle复采集.md` | 把原生 helper blocker 转成 product contract 准入矩阵。 |
-| S3 | `工作步骤细分/6-24-16-23-C6-M5-S3-SurfaceAndSupportOrder产品合同实现.md` | 实现 Surface 与 Support/Order 产品合同。 |
+| S3 | `工作步骤细分/6-24-16-23-【已实现】C6-M5-S3-SurfaceAndSupportOrder产品合同实现.md` | 实现 Surface 与 Support/Order 产品合同。 |
 | S4 | `工作步骤细分/6-24-16-24-C6-M5-S4-ExplicitParams与nonBoundarySupportOrder实现.md` | 实现显式参数与 non-boundary support/order 产品合同。 |
 | S5 | `工作步骤细分/6-24-16-25-C6-M5-S5-fixtures-tests-capability-docs发布.md` | 补 fixture、focused tests、capability 和文档状态。 |
 | S6 | `工作步骤细分/6-24-16-26-C6-M5-S6-阶段回归与release-gate.md` | 阶段回归、heavy 收口和 release gate。 |
@@ -64,7 +64,7 @@ live capability baseline
 | non-goals | `矩阵/c6m5_filling_surface_support_order_param_non_goal_registry.tsv` | 明确不做内容。 |
 | validation | `矩阵/c6m5_filling_surface_support_order_param_validation_matrix.tsv` | 本轮、阶段、重型验收命令。 |
 
-当前 S0 已完成 live 基线与 Filling 剩余 gap 边界复核，S1 已完成 FreeCAD source / wrapper / helper oracle 候选矩阵复核，S2 已把 Surface、Supports/Orders、显式参数和 non-boundary support/order 锁定为 implementation-ready 合同与 fixture 路由；S3-S6 仍是待执行状态。矩阵已经写入 S0/S1/S2 证据，但不是业务 C++、oracle 几何或发布闸门结论。
+当前 S0 已完成 live 基线与 Filling 剩余 gap 边界复核，S1 已完成 FreeCAD source / wrapper / helper oracle 候选矩阵复核，S2 已把 Surface、Supports/Orders、显式参数和 non-boundary support/order 锁定为 implementation-ready 合同与 fixture 路由；S3 已实现 Surface initial surface face link 与 Supports/Orders C0/G1/G2 的 request-local product contract。矩阵已经写入 S0/S1/S2/S3 证据；S4-S6 仍是待执行状态，`remaining_gaps` 的删除等待 S5/S6 capability / release gate。
 
 ## 非目标
 

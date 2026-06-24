@@ -1502,6 +1502,88 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["InvalidOrder"]["status"], "error")
         self.assert_object_matches_expected(result, "c5m8", "part-filling-invalid-support-order")
 
+    def test_c6m5_part_filling_surface_initial_face_product_contract(self) -> None:
+        result = self.run_recompute("part-filling-surface-initial-face-product", "c6m5")
+        filled = result["objects"]["FilledFace"]
+        named_shape = result["named_shapes"]["FilledFace"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assert_part_filling_history(result, "closed_wire")
+        self.assertEqual(filled["surface_source_status"], "cad_core_product_contract_covered")
+        self.assertEqual(filled["support_order_source_status"], "not_used")
+        self.assertEqual(filled["initial_surface_source_evidence"]["object"], "SupportPlane")
+        self.assertEqual(filled["initial_surface_source_evidence"]["stable_subname"], "Face1")
+        self.assertEqual(filled["initial_surface_source_evidence"]["shape_kind"], "face")
+        self.assertIn("part_filling:initial_surface", named_shape["element_history_status"])
+        self.assertTrue(
+            any(
+                event["maker_stage"] == "maker_history:filling_initial_surface"
+                and event["evidence"]["builder_call"] == "LoadInitSurface"
+                and event["source"] == {"object": "SupportPlane", "subname": "Face1"}
+                for event in named_shape["mapper_history"]
+            )
+        )
+        self.assert_object_matches_expected(result, "c6m5", "part-filling-surface-initial-face-product")
+
+    def test_c6m5_part_filling_support_order_c0_g1_g2_product_contract(self) -> None:
+        result = self.run_recompute("part-filling-support-order-c0-g1-g2-product", "c6m5")
+        filled = result["objects"]["FilledFace"]
+        named_shape = result["named_shapes"]["FilledFace"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assert_part_filling_history(result, "edge_wire_closed")
+        self.assertEqual(filled["surface_source_status"], "not_used")
+        self.assertEqual(filled["support_order_source_status"], "cad_core_product_contract_covered")
+        self.assertEqual(filled["support_face_count"], 3)
+        self.assertEqual(filled["order_count"], 3)
+        evidence = filled["support_order_source_evidence"]
+        self.assertEqual({item["target_stable_subname"] for item in evidence}, {"Edge1", "Edge2", "Edge3"})
+        self.assertEqual({item["support_object"] for item in evidence}, {"SupportPlane"})
+        self.assertEqual({item["support_stable_subname"] for item in evidence}, {"Face1"})
+        self.assertEqual(
+            {(item["target_stable_subname"], item["order"]) for item in evidence},
+            {("Edge1", "C0"), ("Edge2", "G1"), ("Edge3", "G2")},
+        )
+        self.assertEqual({item["builder_call"] for item in evidence}, {"Add(edge, support, order, IsBound=true)"})
+        self.assertTrue(all(item["is_boundary"] for item in evidence))
+        self.assertIn("part_filling:support_order_sources", named_shape["element_history_status"])
+        for edge, order in (("Edge1", "C0"), ("Edge2", "G1"), ("Edge3", "G2")):
+            self.assertTrue(
+                any(
+                    event["maker_stage"] == "maker_history:filling_support_order"
+                    and event["source"] == {"object": "Profile", "subname": edge}
+                    and event["evidence"]["support_object"] == "SupportPlane"
+                    and event["evidence"]["support_stable_subname"] == "Face1"
+                    and event["evidence"]["order"] == order
+                    and event["evidence"]["builder_call"] == "Add(edge, support, order, IsBound=true)"
+                    for event in named_shape["mapper_history"]
+                ),
+                f"{edge}:{order}",
+            )
+        self.assert_object_matches_expected(result, "c6m5", "part-filling-support-order-c0-g1-g2-product")
+
+    def test_c6m5_part_filling_surface_support_order_invalids_are_locatable(self) -> None:
+        result = self.run_recompute("part-filling-surface-support-order-invalid-product", "c6m5")
+        diagnostics = result["diagnostics"]
+        expected = self.expected_freecad("c6m5", "part-filling-surface-support-order-invalid-product")
+
+        self.assertEqual([item["code"] for item in diagnostics], expected["diagnostic_codes"])
+        self.assertEqual(
+            [(item["object"], item["property"], item["target"], item["subname"]) for item in diagnostics],
+            [
+                ("InvalidSurface", "Surface", "Profile", "Edge1"),
+                ("InvalidSupportTarget", "Supports", "SupportPlane", "Face1"),
+                ("InvalidSupportSource", "Supports", "Profile", "Edge1"),
+                ("InvalidOrderTarget", "Orders", "SupportPlane", "Face1"),
+                ("InvalidOrderSource", "Orders", "Profile", "Edge1"),
+            ],
+        )
+        for object_name in expected["objects"]:
+            self.assertEqual(result["objects"][object_name]["status"], "error")
+            self.assertEqual(result["objects"][object_name]["feature"], "part_filled_face")
+            self.assertEqual(result["objects"][object_name]["helper"], "Part.makeFilledFace")
+        self.assert_object_matches_expected(result, "c6m5", "part-filling-surface-support-order-invalid-product")
+
     def test_c5m8_part_filling_non_default_params_are_constructor_batch(self) -> None:
         result = self.run_recompute("part-filling-non-default-params", "c5m8")
         filled = result["objects"]["FilledFace"]

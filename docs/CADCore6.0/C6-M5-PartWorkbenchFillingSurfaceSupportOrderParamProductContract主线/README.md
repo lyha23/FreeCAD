@@ -11,8 +11,8 @@
 
 ## 当前状态
 
-- 方案包已创建；S0 已完成 live 基线与边界复核，S1 已完成 source / helper-oracle 候选矩阵复核，S2 已完成 implementation-ready 合同与 fixture 路由，S3-S6 待执行。
-- 当前矩阵已写入 S0/S1/S2 证据；S2 只是合同准入，不代表 C++ 实现完成、oracle 几何完成或发布通过证据。
+- 方案包已创建；S0 已完成 live 基线与边界复核，S1 已完成 source / helper-oracle 候选矩阵复核，S2 已完成 implementation-ready 合同与 fixture 路由，S3 已完成 Surface / SupportOrder 产品合同实现，S4-S6 待执行。
+- 当前矩阵已写入 S0/S1/S2/S3 证据；S3 关闭 Surface / Supports/Orders implementation blocker，但 `remaining_gaps` 的删除仍等待 S5/S6 capability / release gate。
 - 本主线不声明 FreeCAD parity，不扩大 full Part surface family。
 
 ## 队列检查

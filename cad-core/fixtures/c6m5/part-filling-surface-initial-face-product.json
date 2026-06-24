@@ -1,0 +1,51 @@
+{
+  "Objects": [
+    {
+      "Name": "Profile",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 2
+      }
+    },
+    {
+      "Name": "SupportPlane",
+      "ID": 2,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 4,
+        "Width": 4,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [-2, -2, 0],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "FilledFace",
+      "ID": 3,
+      "TypeId": "Part::FilledFace",
+      "Properties": {
+        "Boundary": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Profile"
+            }
+          ]
+        },
+        "Surface": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SupportPlane",
+          "SubList": ["Face1"],
+          "StableSubList": ["Face1"]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["FilledFace"]
+  }
+}

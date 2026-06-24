@@ -1,7 +1,7 @@
 category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
 GAP-000	baseline_gate	P0	SCOPE-000	no	S0 freeze live baseline and queue state
-GAP-101	surface_helper_blocker_to_implementation_ready_contract	P1	SCOPE-101	S2_decided	S3 implement Surface face link request-local product fixture and focused test; keep c5m8 native helper expected notCollected until stable FreeCADCmd exists
-GAP-102	support_order_helper_blocker_to_implementation_ready_contract	P1	SCOPE-102	S2_decided	S3 implement Supports/Orders C0/G1/G2 parser builder route fixtures and invalid diagnostics; do not require helper crash expected
+GAP-101	surface_helper_blocker_to_implementation_ready_contract	P1	SCOPE-101	S3_covered	Surface face link request-local product fixture and focused test are covered; keep c5m8 native helper expected and remaining_gap until S5/S6 gate
+GAP-102	support_order_helper_blocker_to_implementation_ready_contract	P1	SCOPE-102	S3_covered	Supports/Orders C0/G1/G2 parser builder route fixtures and invalid diagnostics are covered; do not require helper crash expected and keep remaining_gaps until S5/S6 gate
 GAP-201	explicit_params_signal_blocker_to_implementation_ready_contract	P1	SCOPE-201	S2_decided	S4 implement PtsOnCurve Anisotropy TolG1+TolG2 MaxSegments all params product fixtures while retaining c5m13 expected-backed subset tests
 GAP-202	nonboundary_support_order_helper_blocker_to_implementation_ready_contract	P1	SCOPE-202	S2_decided	S4 implement non-boundary support/order IsBound=false source mapping and diagnostics; keep c5m12 no support/order expected-backed as separate covered subset
 GAP-301	capability_release_gate	P0	SCOPE-301	no	S5 publish and S6 gate
