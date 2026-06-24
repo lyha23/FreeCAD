@@ -11,8 +11,8 @@
 
 ## 当前状态
 
-- C6-M6 已完成方案、队列创建和 S0 live 基线冻结；S1 到 S6 仍 pending。
-- live 基线：`pwd=/Users/li/Chili3DProject/FreeCAD`；`HEAD=fa5e3ebe33 docs: 完成 C6-M5 S6 发布闸门收口`；C6-M1 到 C6-M5 队列均已关闭。
+- C6-M6 已完成方案、队列创建、S0 live 基线冻结和 S1 source / wrapper / oracle 候选矩阵；S2 到 S6 仍 pending。
+- S1 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`；`HEAD=4cfb1b3d93 docs: 冻结 C6-M6 S0 GeomPlate gap 基线`；C6-M1 到 C6-M5 队列均已关闭。
 - 当前 `part_workbench.geomplate` 仍发布为 source-backed geometry helper，不是 GUI feature，也不是原生 FreeCAD `DocumentObject`。
 - 当前 active `remaining_gaps` 为 4 项：`g1_curve_on_surface_native_hidden_diagnostic_only`、`projected_curve2d_no_initial_surface_v1_v2_native_oracle_blocker`、`curve_constraint_criteria_setters_not_implemented`、`platesurface_curves_wrapper_lifecycle`。
 
