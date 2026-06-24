@@ -8,8 +8,8 @@ C6-M6 关闭后，`docs/CADCore6.0` 下现有 C6-M1 到 C6-M6 工作步骤队列
 
 - S0：复核 live baseline、C6-M1 到 C6-M6 queue、`part_workbench.loft` capability 和 C5-M12 Loft expected evidence，冻结唯一 active gap。
 - S1：复核 FreeCAD authority：`PartFeatures.cpp::Loft::execute()`、`PropertyLinkList`、`TopoShapeExpansion.cpp::makeElementLoft()`、`MapperThruSections` 和 cad-core `part_loft.cpp` / `topo_shape_expansion.cpp` 落点。
-- S2：判定 `part_loft_subelement_assignment_native_hidden` 的准入路径：继续 nativeHidden / diagnosticOnly，或建立 request-local product contract。不得用 cad-core output 伪造 FreeCAD expected。
-- S3：若 S2 批准 request-local contract，补 C6-M7 fixtures、focused tests、object_fields 和 mapper/history 证据；若不批准，则强化 diagnostics / narrowed gap metadata 和 delete condition。
+- S2：已判定 `part_loft_subelement_assignment_native_hidden` 的准入路径：批准 request-local CAD Core selected subelement product contract，route decision 为 `cad_core_product_contract_non_parity`。FreeCAD `Sections` 仍是 object-level `PropertyLinkList`，不得用 cad-core output 伪造 FreeCAD expected。
+- S3：按 S2 路线补 C6-M7 product contract fixtures、focused tests、object_fields 和 mapper/history 证据；C5-M12 diagnostic expected 保持 `nativeHidden` / `diagnosticOnly`，不混入 product contract。
 - S4：同步 capability、adapter assertions、expected metadata 和 C6-M7 矩阵；只删除或移动有证据闭环的 gap。
 - S5：运行阶段回归并发布 C6-M7 状态；若 Loft active gap 清空，才允许进入后续 surface-family freeze 候选。
 
@@ -50,4 +50,4 @@ C6-M6 关闭后，`docs/CADCore6.0` 下现有 C6-M1 到 C6-M6 工作步骤队列
 
 ## 结论
 
-推荐立即进入 C6-M7。这个包的最小完整语义批次是 Loft subelement assignment native-hidden 收口：先判断是否能形成 request-local CAD Core product contract；若不能，则把 current native-hidden evidence 升级为精确 narrowed gap，并为后续 surface-family freeze 留出明确条件。
+推荐立即进入 C6-M7。这个包的最小完整语义批次是 Loft subelement assignment native-hidden 收口：S2 已批准 request-local CAD Core product contract non-parity；S3 应实现 product contract，并把 FreeCAD native-hidden diagnostic expected 作为独立 evidence 保留，为后续 surface-family freeze 留出明确条件。

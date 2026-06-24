@@ -12,12 +12,14 @@
 ## 当前状态
 
 - S0 已冻结 live baseline：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=5caad308a9`，`git log -1=5caad308a9 发布 C6-M6 GeomPlate release gate`。
-- C6-M1 到 C6-M6 队列均返回空表；S1 完成后 C6-M7 队列从 S2 继续；C6-M6 已发布 `part_workbench.geomplate.remaining_gaps=[]`。
+- C6-M1 到 C6-M6 队列均返回空表；S2 完成后 C6-M7 队列从 S3 继续；C6-M6 已发布 `part_workbench.geomplate.remaining_gaps=[]`。
 - 当前 CAD Core capability 中，Part Workbench surface family 的 Sweep / Filling / GeomPlate active remaining gaps 已清空；ProjectOnSurface 剩余项为 GUI / unverified advanced branch 边界，已经同时列入 non-goals。
 - `cad-core/src/runtime/capability_contract.cpp` 与 `cad-core/tests/test_adapters.py` 均确认 `part_workbench.loft.remaining_gaps` 只有 `part_loft_subelement_assignment_native_hidden`。
 - C5-M12 已关闭 Loft broad `complex_profile_family`，并保留 `c5m12/part-loft-subelement-assignment-diagnostic` 作为 native-hidden diagnostic-only 证据：`TypeError: Type must be App.DocumentObject or None, not tuple`，未采集 `object_fields.sections[].subname` 和 selected Sketch subelement `shape_summary`。
 - S1 已复核 FreeCAD Loft 调用链：`Loft::execute()` 读取 `Sections.getValues()`，逐个对象调用 `getTopoShape(... ResolveLink | Transform)`，再调用 `result.makeElementLoft(...)`；`Sections` 是 `App::PropertyLinkList` object-level link，不是 native `PropertyLinkSubList`。
-- S1 结论：当前 gap 的 FreeCAD 侧证据仍是 `PropertyLinkList` native-hidden subelement storage；cad-core 当前只读取 object-level `app::readLinks(object, "Sections")`。若后续支持 selected subelement，只能作为 S2 待判定的 request-local product contract non-parity DTO 候选，不能写成 FreeCAD expected parity。
+- S1 结论：当前 gap 的 FreeCAD 侧证据仍是 `PropertyLinkList` native-hidden subelement storage；cad-core 当前只读取 object-level `app::readLinks(object, "Sections")`。S2 已把 selected subelement 支持批准为 request-local product contract non-parity DTO，不能写成 FreeCAD expected parity。
+- S2 已批准 C6-M7 走 request-local CAD Core selected subelement product contract 路线：route decision 为 `cad_core_product_contract_non_parity`。FreeCAD `Part::Loft.Sections` 仍是 object-level `App::PropertyLinkList`，C5-M12 diagnostic expected 继续作为 `nativeHidden` / `diagnosticOnly` evidence 保留，S3 不得生成 FreeCAD native expected 或声明 parity。
+- S3 下一步固定为实现 product contract：新增独立 C6-M7 request-local DTO / fixture / focused tests / capability docs 证据，并与 C5-M12 FreeCAD expected 分开。
 - C6-M7 只处理 `Part::Loft.Sections` 的 subelement assignment 证据闭环，不声明 FreeCAD parity、PartDesign Loft、GUI Loft 或 full Part surface family。
 
 ## 队列检查
