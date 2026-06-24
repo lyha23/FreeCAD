@@ -1,0 +1,6 @@
+classification_id	blocker_name	phase	scope_id	classification	current_reason	required_evidence	next_step
+C6M7-CAT-000	live_baseline	C6-P0	C6M7-SCOPE-000	releaseGate	S0 frozen at pwd /Users/li/Chili3DProject/FreeCAD HEAD 5caad308a9; C6-M1..C6-M6 queues empty; C6-M7 queue advances to S1; Loft capability has one active remaining gap	pwd head status queue capability grep and C5-M12 diagnostic expected recorded	S1
+C6M7-CAT-101	part_loft_subelement_assignment_native_hidden	C6-P1	C6M7-SCOPE-101	nativeHidden	C5-M12 FreeCADCmd probe cannot assign Sketch subelement through PropertyLinkList tuple path	FreeCAD source and expected known_gap evidence	S1
+C6M7-CAT-201	request_local_subelement_contract	C6-P1	C6M7-SCOPE-201	implementationCandidate	CAD Core may expose request-local non-parity subelement contract if S2 approves DTO boundary	S2 route decision and focused fixture design	S3
+C6M7-CAT-301	capability_release_gate	C6-P0	C6M7-SCOPE-301	releaseGate	Capability publication waits for S3/S4 fixtures tests and docs	adapter capability focused test and queue state	S4
+C6M7-CAT-900	complex_profile_partdesign_gui_surface_family	C6-P0	C6M7-SCOPE-900	nonGoal	Already closed or outside C6-M7 semantic owner	non-goal registry	S5
