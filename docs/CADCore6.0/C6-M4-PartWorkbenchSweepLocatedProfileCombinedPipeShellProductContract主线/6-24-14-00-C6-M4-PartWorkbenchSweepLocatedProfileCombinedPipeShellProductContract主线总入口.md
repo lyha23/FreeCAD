@@ -11,9 +11,12 @@ C6-M4 的目标是把 `Part::Sweep` / `BRepOffsetAPI_MakePipeShell` 的 located 
 - live repo：`/home/user/Chili3DProject/FreeCAD`
 - S0 live HEAD：`fab981dc85`
 - S0 live last commit：`fab981dc85 docs: 新建 C6-M4 Sweep LocatedProfile 主线方案包`
+- S1 live HEAD：`571f1061d1`
+- S1 live last commit：`571f1061d1 docs: 完成 C6-M4 S0 live 基线复核`
 - capability：`cad-core/src/runtime/capability_contract.cpp` 中 `part_workbench.sweep.status` 为 `supported_multi_profile_linearize_c5m13_wrapper_expected_backed_with_location_overload_blockers`。
 - remaining gaps：`part_sweep_located_profile_freecadcmd_wrapper_build_blocker` 与 `part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker` 仍在 `part_workbench.sweep.remaining_gaps`。
 - S0 live 验证：blocker grep 仍命中 capability、expected 与 focused guard；`python3 -m unittest cad-core.tests.test_p8_features.CadCoreP8FeatureTest.test_c5m10_part_sweep_located_profile_contract_keeps_freecadcmd_blocker cad-core.tests.test_p8_features.CadCoreP8FeatureTest.test_c5m10_part_sweep_combined_advanced_contract_and_diagnostic_priority` 通过，`Ran 2 tests`，`OK`。
+- S1 source/oracle 冻结：`source_candidates.tsv` 已冻结 `C6M4-SRC-001..012`；oracle/input/non-goal 矩阵保持 non-parity product contract、notCollected/backendGap 和 remaining gap 边界。
 
 ## blocker 边界结论
 
@@ -42,7 +45,7 @@ C6-M4 的目标是把 `Part::Sweep` / `BRepOffsetAPI_MakePipeShell` 的 located 
 | README | `README.md` | 已创建 | 人工入口和队列命令。 |
 | 工作步骤总入口 | `工作步骤细分/6-24-14-01-【已实现】C6-M4工作步骤总入口.md` | 已实现 | S0-S6 队列索引，脚本应跳过。 |
 | S0 | `工作步骤细分/6-24-14-02-【已实现】C6-M4-S0-live基线与blocker边界复核.md` | 已实现 | 已复核 live baseline、capability、known_gap 与 focused tests。 |
-| S1 | `工作步骤细分/6-24-14-03-C6-M4-S1-FreeCAD源码与wrapper-oracle候选矩阵.md` | 待执行 | 冻结 FreeCAD wrapper source authority 与 oracle 候选。 |
+| S1 | `工作步骤细分/6-24-14-03-【已实现】C6-M4-S1-FreeCAD源码与wrapper-oracle候选矩阵.md` | 已实现 | 已冻结 FreeCAD wrapper source authority、cad-core DTO/builder 落点与 oracle/input/non-goal 候选。 |
 | S2 | `工作步骤细分/6-24-14-04-C6-M4-S2-LocatedProfile合同与oracle复采集.md` | 待执行 | 冻结 located profile input/output/diagnostic/product contract。 |
 | S3 | `工作步骤细分/6-24-14-05-C6-M4-S3-ProfilePlacement与LocationOverload实现.md` | 待执行 | 实现 located profile profile-placement / Location overload product path。 |
 | S4 | `工作步骤细分/6-24-14-06-C6-M4-S4-AdvancedCombinedAuxiliaryTransitionTolerance实现.md` | 待执行 | 实现 combined auxiliary + transition + tolerance + located section。 |
