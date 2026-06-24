@@ -4,9 +4,9 @@
 
 ## 当前状态
 
-- S0-S6 均为 `待执行`；工作步骤总入口只是已创建索引。
+- S0 已实现；S1-S6 仍为 `待执行`。工作步骤总入口只是已创建索引。
 - 当前 live 代码仍把 `part-sweep-located-profile-contract` 和 `part-sweep-advanced-combined-contract` 固定为 known_gap/request_metadata_only。
-- 两个 focused guard 已在建包时通过：located profile known_gap guard 与 combined known_gap/diagnostics priority guard。
+- 两个 focused guard 已在 S0 live 复核通过：located profile known_gap guard 与 combined known_gap/diagnostics priority guard。
 
 ## 主线边界
 

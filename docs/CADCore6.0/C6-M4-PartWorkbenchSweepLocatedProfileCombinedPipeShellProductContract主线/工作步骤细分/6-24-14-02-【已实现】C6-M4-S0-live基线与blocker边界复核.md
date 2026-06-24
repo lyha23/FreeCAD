@@ -1,8 +1,19 @@
-# C6-M4-S0 live 基线与 blocker 边界复核
+# 【已实现】C6-M4-S0 live 基线与 blocker 边界复核
 
 ## 目标
 
 复核当前 live 代码、capability contract、c5m10 expected known_gap 与 focused tests，冻结 C6-M4 的起点。S0 不做代码实现，不改 expected，不删除 capability gap。
+
+## S0 live 结论
+
+- live repo：`/home/user/Chili3DProject/FreeCAD`
+- S0 live HEAD：`fab981dc85`
+- S0 live last commit：`fab981dc85 docs: 新建 C6-M4 Sweep LocatedProfile 主线方案包`
+- 起始工作区：`git -c core.quotepath=false status --short -uall` 无输出。
+- capability：`part_workbench.sweep.status` 仍为 `supported_multi_profile_linearize_c5m13_wrapper_expected_backed_with_location_overload_blockers`。
+- remaining gaps：`part_sweep_located_profile_freecadcmd_wrapper_build_blocker` 与 `part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker` 仍在 `cad-core/src/runtime/capability_contract.cpp` 和 c5m10 expected 中。
+- focused 结果：`python3 -m unittest cad-core.tests.test_p8_features.CadCoreP8FeatureTest.test_c5m10_part_sweep_located_profile_contract_keeps_freecadcmd_blocker cad-core.tests.test_p8_features.CadCoreP8FeatureTest.test_c5m10_part_sweep_combined_advanced_contract_and_diagnostic_priority` 通过，`Ran 2 tests`，`OK`。
+- 关闭范围：只关闭 `C6M4-SCOPE-000`、`C6M4-CAT-000`、`C6M4-BLK-000`。`C6M4-CAT-101` 保持 `notCollected`；`C6M4-CAT-102` / `C6M4-CAT-201` 保持 `backendGap`；`C6M4-BLK-101/102/201` 继续指向 S2/S3/S4。
 
 ## 必读文件
 

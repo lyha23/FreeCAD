@@ -9,11 +9,11 @@ C6-M4 的目标是把 `Part::Sweep` / `BRepOffsetAPI_MakePipeShell` 的 located 
 ## 当前 live 基线
 
 - live repo：`/home/user/Chili3DProject/FreeCAD`
-- 建包 HEAD：`9ee99f4ba3`
-- 建包 last commit：`9ee99f4ba3 完成 C6-M3 S6 发布闸门`
+- S0 live HEAD：`fab981dc85`
+- S0 live last commit：`fab981dc85 docs: 新建 C6-M4 Sweep LocatedProfile 主线方案包`
 - capability：`cad-core/src/runtime/capability_contract.cpp` 中 `part_workbench.sweep.status` 为 `supported_multi_profile_linearize_c5m13_wrapper_expected_backed_with_location_overload_blockers`。
 - remaining gaps：`part_sweep_located_profile_freecadcmd_wrapper_build_blocker` 与 `part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker` 仍在 `part_workbench.sweep.remaining_gaps`。
-- focused live 验证：`python3 -m unittest cad-core.tests.test_p8_features.CadCoreP8FeatureTest.test_c5m10_part_sweep_located_profile_contract_keeps_freecadcmd_blocker cad-core.tests.test_p8_features.CadCoreP8FeatureTest.test_c5m10_part_sweep_combined_advanced_contract_and_diagnostic_priority` 通过，`Ran 2 tests`，`OK`。
+- S0 live 验证：blocker grep 仍命中 capability、expected 与 focused guard；`python3 -m unittest cad-core.tests.test_p8_features.CadCoreP8FeatureTest.test_c5m10_part_sweep_located_profile_contract_keeps_freecadcmd_blocker cad-core.tests.test_p8_features.CadCoreP8FeatureTest.test_c5m10_part_sweep_combined_advanced_contract_and_diagnostic_priority` 通过，`Ran 2 tests`，`OK`。
 
 ## blocker 边界结论
 
@@ -41,7 +41,7 @@ C6-M4 的目标是把 `Part::Sweep` / `BRepOffsetAPI_MakePipeShell` 的 located 
 | 方案 | `6-24-14-00-C6-M4-PartWorkbenchSweepLocatedProfileCombinedPipeShellProductContract方案.md` | 已创建 | 框架级主线方案。 |
 | README | `README.md` | 已创建 | 人工入口和队列命令。 |
 | 工作步骤总入口 | `工作步骤细分/6-24-14-01-【已实现】C6-M4工作步骤总入口.md` | 已实现 | S0-S6 队列索引，脚本应跳过。 |
-| S0 | `工作步骤细分/6-24-14-02-C6-M4-S0-live基线与blocker边界复核.md` | 待执行 | 复核 live baseline、capability、known_gap 与 focused tests。 |
+| S0 | `工作步骤细分/6-24-14-02-【已实现】C6-M4-S0-live基线与blocker边界复核.md` | 已实现 | 已复核 live baseline、capability、known_gap 与 focused tests。 |
 | S1 | `工作步骤细分/6-24-14-03-C6-M4-S1-FreeCAD源码与wrapper-oracle候选矩阵.md` | 待执行 | 冻结 FreeCAD wrapper source authority 与 oracle 候选。 |
 | S2 | `工作步骤细分/6-24-14-04-C6-M4-S2-LocatedProfile合同与oracle复采集.md` | 待执行 | 冻结 located profile input/output/diagnostic/product contract。 |
 | S3 | `工作步骤细分/6-24-14-05-C6-M4-S3-ProfilePlacement与LocationOverload实现.md` | 待执行 | 实现 located profile profile-placement / Location overload product path。 |
