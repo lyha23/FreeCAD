@@ -16,6 +16,11 @@
 - 非法 `LawSamples` 必须返回稳定、locatable diagnostics，不能 fallback 到 Linear / S-shape。
 - 本包不做 FreeCAD parity，不新增 GUI/TaskPanel 行为，不引入跨请求 law cache。
 
+## 发布状态
+
+- S6 已关闭 C6-M3 release gate：`cmake --build build` 通过；阶段回归 `tests.test_p7_features tests.test_expected_fixtures tests.test_adapters` 为 `Ran 182 tests in 65.996s`，`OK (skipped=29)`；heavy `tests.test_p6_topology tests.test_p7_features tests.test_expected_fixtures tests.test_adapters` 为 `Ran 218 tests in 74.459s`，`OK (skipped=29)`。
+- heavy 必跑原因：S5 触达 PipeShell law/history、Body replay fixtures、expected gate 和 capability schema。验证无残留失败，因此 `C6M3-BLK-501/CAT-501/SCOPE-501/ORC-501` 关闭。
+
 ## 队列
 
 ```bash

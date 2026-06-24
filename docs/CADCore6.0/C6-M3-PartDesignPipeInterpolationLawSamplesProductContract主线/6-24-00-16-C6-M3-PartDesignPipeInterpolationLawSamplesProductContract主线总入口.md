@@ -15,6 +15,7 @@ C6-M3 的目标是把 C6-M1/C6-M2 保留的 Pipe `Transformation=Interpolation` 
 - C6-M2 队列：空队列，expected fixture gate、阶段回归和 heavy 收口均通过。
 - 当前 executor：S4/S5 后 `cad-core/src/part_design/feature_pipe.cpp::resolvePipeLaw()` 对合法 `Transformation=Interpolation` + `LawSamples` 执行 CAD Core product contract；missing / invalid `LawSamples` 返回稳定 diagnostics，不 fallback。
 - 当前 capability：S5 后 `cad-core/src/runtime/capability_contract.cpp` 发布 `Transformation=Interpolation LawSamples product contract`、c6m3 fixtures 和 missing / invalid diagnostics；`partdesign_pipe_interpolation_law_product_contract_required` 已从 exact blocker / remaining gap 移除。
+- S6 发布闸门：2026-06-24 已通过 build、阶段回归和 heavy 收口；无残留失败或新 known gap，C6-M3 队列关闭。
 
 ## FreeCAD / CAD Core 依据
 
@@ -49,7 +50,7 @@ live baseline and source authority
 | S3 | `工作步骤细分/6-24-00-21-【已实现】C6-M3-S3-InterpolationLawKernel实现.md` | 已实现 OCCT `Law_Interpol` 低层 kernel、focused probe 和 P7 wiring。 |
 | S4 | `工作步骤细分/6-24-00-22-【已实现】C6-M3-S4-feature_pipe接入与diagnostics.md` | 已接入 `feature_pipe.cpp`，合法 `LawSamples` 执行，非法输入返回 S1 diagnostics。 |
 | S5 | `工作步骤细分/6-24-00-23-【已实现】C6-M3-S5-fixtures-tests-capability发布.md` | 已增加 c6m3 fixtures、expected gate、focused tests、capability 和 adapter assertions。 |
-| S6 | `工作步骤细分/6-24-00-24-C6-M3-S6-阶段回归发布闸门.md` | 阶段回归、heavy 条件判断和发布状态。 |
+| S6 | `工作步骤细分/6-24-00-24-【已实现】C6-M3-S6-阶段回归发布闸门.md` | 已通过阶段回归、heavy 收口和发布状态关闭。 |
 | source candidates | `矩阵/c6m3_pipe_interpolation_law_source_candidates.tsv` | FreeCAD / cad-core source authority。 |
 | scope review | `矩阵/c6m3_pipe_interpolation_law_scope_review_matrix.tsv` | 语义范围和状态。 |
 | input contract | `矩阵/c6m3_pipe_interpolation_law_input_contract_matrix.tsv` | `LawSamples` request / response / diagnostics 合同。 |
@@ -93,3 +94,17 @@ python3 -m unittest tests.test_adapters.CadCoreAdapterTest.test_c_api_capabiliti
 cd /Users/li/Chili3DProject/FreeCAD/cad-core
 python3 -m unittest tests.test_p7_features tests.test_expected_fixtures tests.test_adapters
 ```
+
+Heavy 收口：
+
+```bash
+cd /Users/li/Chili3DProject/FreeCAD/cad-core
+python3 -m unittest tests.test_p6_topology tests.test_p7_features tests.test_expected_fixtures tests.test_adapters
+```
+
+## S6 发布证据
+
+- `cmake --build build`：通过。
+- 阶段回归：`Ran 182 tests in 65.996s`，`OK (skipped=29)`。
+- Heavy：因 PipeShell law/history、Body replay fixtures、expected gate 和 capability schema 风险必跑，结果 `Ran 218 tests in 74.459s`，`OK (skipped=29)`。
+- 结论：`C6M3-BLK-501/CAT-501/SCOPE-501/ORC-501` 已关闭；没有 residual failure、blocker 或 known gap 需要保留。
