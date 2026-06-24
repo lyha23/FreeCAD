@@ -1,0 +1,7 @@
+non_goal_id	scope_id	non_goal_reason	user_visible_behavior	reopen_condition
+C6M6-NG-001	C6M6-SCOPE-900	GUI_GeomPlate_feature	C6-M6 does not implement TaskPanel ViewProvider command UI or Workbench GUI	Reopen only in a GUI-specific package
+C6M6-NG-002	C6M6-SCOPE-900	native_Part_GeomPlate_DocumentObject	FreeCAD source-backed helper is not a native DocumentObject TypeId in CAD Core contract	Reopen only after source audit identifies a real native DocumentObject path
+C6M6-NG-003	C6M6-SCOPE-202	fake_persistent_PlateSurface_object	Do not create persistent PlateSurface wrapper state or cross-request geometry cache	Reopen only with approved request-local DTO and stable FreeCAD/runtime evidence
+C6M6-NG-004	C6M6-SCOPE-900	Filling_or_full_surface_family	C6-M6 only handles GeomPlateSurface remaining gaps; Filling Sweep Loft ProjectOnSurface and full Part surface family are outside scope	Reopen as separate C6 package
+C6M6-NG-005	C6M6-SCOPE-900	FreeCAD_parity_claim	Wrapper blockers and source-backed helper boundary prevent a FreeCAD parity claim; state product contract or diagnostic boundary only	Reopen after stable native expected exists and release gate passes
+C6M6-NG-006	C6M6-SCOPE-202	upstream_FreeCAD_source_fixing	Do not edit upstream FreeCAD just to make probe pass; preserve source authority and route cad-core product contract separately	Reopen only if user explicitly asks for upstream FreeCAD changes

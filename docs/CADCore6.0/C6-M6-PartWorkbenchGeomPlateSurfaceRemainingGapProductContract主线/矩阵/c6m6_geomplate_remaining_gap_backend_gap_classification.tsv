@@ -1,0 +1,7 @@
+category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
+C6M6-CAT-000	live_baseline	C6-P0	C6M6-SCOPE-000	no	Freeze current geomplate status and 4 remaining_gaps; do not edit C++ in S0
+C6M6-CAT-101	g1_curve_on_surface_contract_or_native_blocker	C6-P1	C6M6-SCOPE-101	yes	S2 decides if source-backed G1 can become C6 product contract; S3 implements or narrows
+C6M6-CAT-102	projected_curve2d_without_initial_surface_contract_or_native_blocker	C6-P1	C6M6-SCOPE-102	yes	S2 decides if no-InitialSurface projected curve can be productized; S3 implements or keeps V1==V2 blocker
+C6M6-CAT-201	curve_criteria_setter_diagnostic_boundary	C6-P2	C6M6-SCOPE-201	no_if_NotImplemented_persists	S4 keeps unsupported_curve_criteria diagnostic unless FreeCAD/runtime proof changes
+C6M6-CAT-202	platesurface_curves_wrapper_lifecycle_boundary	C6-P2	C6M6-SCOPE-202	yes	S4 freezes non-goal if wrapper lifecycle and SIGSEGV evidence still holds; no fake persistent object
+C6M6-CAT-301	capability_release_gate	C6-P0	C6M6-SCOPE-301	no	S5/S6 publish only proven implementation or narrowed boundary

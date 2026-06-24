@@ -1,6 +1,6 @@
 # CADCore6.0
 
-CADCore6.0 承接 C5.1 / C51X freeze 后仍有产品价值、但不能再写成 FreeCAD parity 的扩展项。当前已完成 PartDesign Pipe `Transformation=Linear/S-shape` 与 selected tangent expansion 的 C6-M1 product extension，已通过 C6-M2 恢复 expected fixture 阶段回归闸门可信度，并已把 Pipe `Transformation=Interpolation` / `LawSamples` 作为 C6-M3 CAD Core product contract 发布；C6-M4 已通过 Part Workbench Sweep located profile / combined PipeShell product contract 的 S6 发布闸门。C6-M5 已实现并发布 Part Workbench Filling Surface / SupportOrder / Param product contract：S0/S1/S2 完成 live 基线、源码依据和 implementation-ready 合同路由，S3/S4 完成 Surface / SupportOrder、ExplicitParams 与 non-boundary support/order 产品合同实现，S5 完成 fixtures / tests / capability / docs 发布，S6 完成阶段回归与 heavy release gate。上述主线仍不声明 FreeCAD parity。
+CADCore6.0 承接 C5.1 / C51X freeze 后仍有产品价值、但不能再写成 FreeCAD parity 的扩展项。当前已完成 PartDesign Pipe `Transformation=Linear/S-shape` 与 selected tangent expansion 的 C6-M1 product extension，已通过 C6-M2 恢复 expected fixture 阶段回归闸门可信度，并已把 Pipe `Transformation=Interpolation` / `LawSamples` 作为 C6-M3 CAD Core product contract 发布；C6-M4 已通过 Part Workbench Sweep located profile / combined PipeShell product contract 的 S6 发布闸门。C6-M5 已实现并发布 Part Workbench Filling Surface / SupportOrder / Param product contract。C6-M6 已创建 Part Workbench GeomPlateSurface remaining gap product contract 方案和队列，并已完成 S0 live 基线冻结，目标是处理 `part_workbench.geomplate` 的 4 个 active `remaining_gaps`。上述主线仍不声明 FreeCAD parity。
 
 ## 入口
 
@@ -19,6 +19,9 @@ CADCore6.0 承接 C5.1 / C51X freeze 后仍有产品价值、但不能再写成 
 - C6-M5 总入口：`C6-M5-PartWorkbenchFillingSurfaceSupportOrderParamProductContract主线/6-24-16-18-C6-M5-PartWorkbenchFillingSurfaceSupportOrderParamProductContract主线总入口.md`
 - C6-M5 工作步骤：`C6-M5-PartWorkbenchFillingSurfaceSupportOrderParamProductContract主线/工作步骤细分/`
 - C6-M5 矩阵：`C6-M5-PartWorkbenchFillingSurfaceSupportOrderParamProductContract主线/矩阵/`
+- C6-M6 总入口：`C6-M6-PartWorkbenchGeomPlateSurfaceRemainingGapProductContract主线/6-24-19-52-C6-M6-PartWorkbenchGeomPlateSurfaceRemainingGapProductContract主线总入口.md`
+- C6-M6 工作步骤：`C6-M6-PartWorkbenchGeomPlateSurfaceRemainingGapProductContract主线/工作步骤细分/`
+- C6-M6 矩阵：`C6-M6-PartWorkbenchGeomPlateSurfaceRemainingGapProductContract主线/矩阵/`
 
 ## 当前状态
 
@@ -29,6 +32,7 @@ CADCore6.0 承接 C5.1 / C51X freeze 后仍有产品价值、但不能再写成 
 - C6-M3 已实现并发布为 CAD Core product contract：`cmake --build build` 通过；阶段回归 `Ran 182 tests in 65.996s`，`OK (skipped=29)`；heavy 收口 `Ran 218 tests in 74.459s`，`OK (skipped=29)`。该发布只覆盖 request-local `LawSamples` 产品合同，不声明 FreeCAD parity 或 full PartDesign Pipe coverage。
 - C6-M4 已实现并发布为 CAD Core product contract：`cmake --build build` 通过；阶段回归 `Ran 241 tests in 65.269s`，`OK (skipped=29)`；heavy 收口 `Ran 277 tests in 71.034s`，`OK (skipped=29)`。`part_workbench.sweep` 不声明 FreeCAD parity，不扩大 full Part surface family；两个 FreeCADCmd Location overload blocker 已从 `remaining_gaps` 移除并保留在 `narrowed_gaps` 作为 historical wrapper evidence。
 - C6-M5 已实现并发布为 CAD Core product contract：`cmake --build build` 通过；阶段回归 `Ran 248 tests in 64.311s`，`OK (skipped=29)`；heavy 收口 `Ran 284 tests in 72.526s`，`OK (skipped=29)`。`part_workbench.filling.status=supported_expected_backed_plus_c6m5_product_contract_non_parity`，`remaining_gaps=[]`；native helper crash/timeout/notCollected 证据保留在 `narrowed_gaps` / historical evidence 中，不声明 FreeCAD parity，不扩大 full Part surface family。
+- C6-M6 已完成 S0 live 基线冻结，S1 到 S6 仍 pending；当前目标是复核并收口 `part_workbench.geomplate` 的 `g1_curve_on_surface_native_hidden_diagnostic_only`、`projected_curve2d_no_initial_surface_v1_v2_native_oracle_blocker`、`curve_constraint_criteria_setters_not_implemented`、`platesurface_curves_wrapper_lifecycle`。本包仍保持 source-backed helper 口径，不声明 GUI GeomPlate、native `Part::GeomPlate` DocumentObject、persistent `PlateSurface` wrapper 或 full Part surface family。
 
 ## 队列检查
 
@@ -39,4 +43,5 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore6.0/C6-M3-PartDesignPipeInterpolationLawSamplesProductContract主线/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore6.0/C6-M4-PartWorkbenchSweepLocatedProfileCombinedPipeShellProductContract主线/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore6.0/C6-M5-PartWorkbenchFillingSurfaceSupportOrderParamProductContract主线/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore6.0/C6-M6-PartWorkbenchGeomPlateSurfaceRemainingGapProductContract主线/工作步骤细分 --format markdown
 ```
