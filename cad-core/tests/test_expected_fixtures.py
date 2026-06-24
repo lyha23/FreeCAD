@@ -164,8 +164,18 @@ class CadCoreExpectedFixtureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCa
 
         criteria = self.expected_freecad("c5m7", "part-geomplate-curve-criteria-diagnostic")
         self.assertIn("NotImplementedError", criteria["c5m13_s4_evidence"]["runtime_result"])
+        self.assertEqual(criteria["native_error_code"], "unsupported_curve_criteria")
+        self.assertIn(
+            "CurveConstraintPyImp.cpp::setG0Criterion/setG1Criterion/setG2Criterion",
+            criteria["c5m13_s4_evidence"]["source_authority"],
+        )
         wrapper = self.expected_freecad("c5m7", "part-geomplate-wrapper-boundary")
         self.assertIn("139/SIGSEGV", wrapper["c5m13_s4_evidence"]["runtime_result"])
+        self.assertEqual(wrapper["native_error_code"], "unsupported_wrapper_lifecycle")
+        self.assertIn(
+            "PlateSurfacePyImp.cpp::PlateSurfacePy::PyInit()",
+            wrapper["c5m13_s4_evidence"]["source_authority"],
+        )
 
     def test_c6m6_geomplate_s3_contract_expected_metadata_matches_blockers(self) -> None:
         g1 = self.expected_freecad("c6m6", "part-geomplate-g1-curve-on-surface-contract")

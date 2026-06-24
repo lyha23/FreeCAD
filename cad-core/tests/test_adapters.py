@@ -3991,7 +3991,9 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "projected_curve2d_no_initial_surface_v1_v2_blocker",
             "point_constraint_criteria_expected_backed",
             "curve_constraint_criteria_setters_not_implemented_in_freecad",
+            "curve_constraint_criteria_c6m6_diagnostic_freeze",
             "platesurface_curves_requires_wrapper_lifecycle",
+            "platesurface_curves_c6m6_non_goal_freeze",
             "default_and_explicit_build_params",
             "explicit_approximation_params",
             "filling_capability_not_expanded",
@@ -4056,10 +4058,34 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "NotImplementedError: Not yet implemented",
         )
         self.assertEqual(
+            geomplate["narrowed_gaps"]["curve_constraint_criteria_setters_not_implemented"]["diagnostic"],
+            "unsupported_curve_criteria",
+        )
+        self.assertIn(
+            "CurveConstraintPyImp.cpp::setG0Criterion/setG1Criterion/setG2Criterion",
+            geomplate["narrowed_gaps"]["curve_constraint_criteria_setters_not_implemented"]["source_authority"],
+        )
+        self.assertIn(
+            "request-local CurveConstraint criteria fixtures",
+            geomplate["narrowed_gaps"]["curve_constraint_criteria_setters_not_implemented"]["delete_condition"],
+        )
+        self.assertEqual(
             geomplate["narrowed_gaps"]["platesurface_curves_wrapper_lifecycle"]["freecadcmd_evidence"][
                 "returncode"
             ],
             139,
+        )
+        self.assertEqual(
+            geomplate["narrowed_gaps"]["platesurface_curves_wrapper_lifecycle"]["diagnostic"],
+            "unsupported_wrapper_lifecycle",
+        )
+        self.assertIn(
+            "PlateSurfacePyImp.cpp::PlateSurfacePy::PyInit()",
+            geomplate["narrowed_gaps"]["platesurface_curves_wrapper_lifecycle"]["source_authority"],
+        )
+        self.assertIn(
+            "request-local DTO",
+            geomplate["narrowed_gaps"]["platesurface_curves_wrapper_lifecycle"]["reopen_condition"],
         )
         self.assertEqual(
             geomplate["remaining_gaps"],

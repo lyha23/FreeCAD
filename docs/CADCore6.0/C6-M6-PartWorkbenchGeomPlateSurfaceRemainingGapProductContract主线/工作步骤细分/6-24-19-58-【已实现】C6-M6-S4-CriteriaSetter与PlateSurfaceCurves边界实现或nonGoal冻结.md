@@ -1,4 +1,4 @@
-# C6-M6-S4 CriteriaSetter 与 PlateSurfaceCurves 边界实现或 nonGoal 冻结
+# 【已实现】C6-M6-S4 CriteriaSetter 与 PlateSurfaceCurves 边界实现或 nonGoal 冻结
 
 ## 目标
 
@@ -20,6 +20,12 @@
 - 如 `Part.PlateSurface.Curves` 仍需要 persistent wrapper 或仍会崩溃：写入 non-goal registry 和 diagnostic boundary。
 - 只有当 S2/S4 证明有 request-local safe contract 时，才允许新增 C6-M6 fixtures 和 tests。
 - 更新 `矩阵/c6m6_geomplate_remaining_gap_non_goal_registry.tsv`、input contract、blocker queue 和 validation matrix。
+
+## S4 收口结论
+
+- FreeCAD `CurveConstraintPyImp.cpp::setG0Criterion/setG1Criterion/setG2Criterion` 仍全部抛 `NotImplementedError: Not yet implemented`；cad-core 继续使用 `c5m7/part-geomplate-curve-criteria-diagnostic` 和 `unsupported_curve_criteria` locatable diagnostic，不把 `PointConstraint` criteria setter 支持推广为 `CurveConstraint` 支持。
+- FreeCAD `PlateSurfacePyImp.cpp::PlateSurfacePy::PyInit()` 仍保留 `Curves` TODO；`Geometry.cpp::GeomPlateSurface::getMemSize/Save/Restore` 仍抛 `NotImplementedError`，且既有 `Part.PlateSurface(Curves=[...])` probe 仍以 returncode 139 / SIGSEGV 作为 blocker 证据。cad-core 继续输出 `unsupported_wrapper_lifecycle`，并在 non-goal registry / capability 中记录 reopen condition。
+- S4 未新增 C6-M6 wrapper fixture：两个边界都没有 request-local safe contract。S4 只补强 capability narrowed-gap evidence、adapter / expected metadata 断言和 C6-M6 矩阵；不删除 `remaining_gaps`，删除留给 S5/S6。
 
 ## 验收
 

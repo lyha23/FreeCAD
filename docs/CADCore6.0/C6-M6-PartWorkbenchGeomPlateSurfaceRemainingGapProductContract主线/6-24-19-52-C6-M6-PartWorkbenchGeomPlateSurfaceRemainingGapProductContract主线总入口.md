@@ -1,6 +1,6 @@
 # C6-M6 Part Workbench GeomPlateSurface Remaining Gap Product Contract 主线总入口
 
-本文是 `docs/CADCore6.0` 下的 C6-M6 实施主线。当前已完成 S0 live 基线冻结、S1 source / wrapper / oracle 候选矩阵、S2 remainingGap 准入路由和 S3 G1 / ProjectedCurve2d 合同实现或收窄，S4 到 S6 仍 pending。执行时必须从 `工作步骤细分/` 的 live queue 逐步推进，不能跳过实现、fixture、capability 和 release gate 直接删除 `remaining_gaps`。
+本文是 `docs/CADCore6.0` 下的 C6-M6 实施主线。当前已完成 S0 live 基线冻结、S1 source / wrapper / oracle 候选矩阵、S2 remainingGap 准入路由、S3 G1 / ProjectedCurve2d 合同实现或收窄和 S4 criteria / wrapper boundary 冻结，S5 到 S6 仍 pending。执行时必须从 `工作步骤细分/` 的 live queue 逐步推进，不能跳过实现、fixture、capability 和 release gate 直接删除 `remaining_gaps`。
 
 ## 目标
 
@@ -51,7 +51,7 @@
 | S1 | `工作步骤细分/6-24-19-55-【已实现】C6-M6-S1-FreeCAD源码与wrapper-oracle候选矩阵.md` | 已建立 source / wrapper / oracle 候选矩阵。 |
 | S2 | `工作步骤细分/6-24-19-56-【已实现】C6-M6-S2-remainingGap准入与产品合同路由.md` | 已把 gap 路由到 implementationReady / nativeOracleBlocked / diagnosticOnly / nonGoal / releaseGate。 |
 | S3 | `工作步骤细分/6-24-19-57-【已实现】C6-M6-S3-G1CurveOnSurface与ProjectedCurve2d合同实现或收窄.md` | 已批量处理 G1 curve-on-surface 与无 InitialSurface ProjectedCurve2d。 |
-| S4 | `工作步骤细分/6-24-19-58-C6-M6-S4-CriteriaSetter与PlateSurfaceCurves边界实现或nonGoal冻结.md` | 批量处理 curve criteria setter 与 PlateSurface.Curves。 |
+| S4 | `工作步骤细分/6-24-19-58-【已实现】C6-M6-S4-CriteriaSetter与PlateSurfaceCurves边界实现或nonGoal冻结.md` | 已冻结 curve criteria setter 与 PlateSurface.Curves 边界。 |
 | S5 | `工作步骤细分/6-24-19-59-C6-M6-S5-fixtures-tests-capability-docs发布.md` | 发布 fixtures、tests、capability 和 docs。 |
 | S6 | `工作步骤细分/6-24-20-00-C6-M6-S6-阶段回归与release-gate.md` | 阶段回归和 heavy release gate。 |
 
@@ -81,6 +81,6 @@
 C6-M6 是 C6-M5 之后的下一条可执行主线。S2 已把 4 个 active remaining gap 路由成两个后续批次：
 
 - S3：`G1 curve-on-surface` 已发布 request-local source-backed product contract 和 C6-M6 representative；`ProjectedCurve2d without InitialSurface` 已保留 `V1==V2` nativeOracleBlocked，并新增 no-InitialSurface representative guard，明确 cad-core output 不能作为 FreeCAD expected。
-- S4：`curve criteria setter` 为 `diagnosticOnly`，`PlateSurface.Curves wrapper lifecycle` 为 `nonGoal`。两者一起作为 criteria / wrapper boundary 批次冻结 diagnostic 与 non-goal。
+- S4：`curve criteria setter` 已保留 `unsupported_curve_criteria` locatable diagnostic、source authority 和 delete condition；`PlateSurface.Curves wrapper lifecycle` 已保留 `unsupported_wrapper_lifecycle` / `nonGoal`、SIGSEGV evidence 和 reopen condition。未新增 C6-M6 wrapper fixture，因为 FreeCAD 仍无 request-local safe contract。
 
 最终能否删除某个 gap，必须由 S3/S4 的代码、fixture、focused tests 和 S5/S6 的 capability / release gate 同步证明。
