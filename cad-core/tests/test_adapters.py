@@ -3163,7 +3163,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         sweep = capabilities["part_workbench"]["sweep"]
         self.assertEqual(
             sweep["status"],
-            "supported_multi_profile_linearize_c5m13_wrapper_expected_backed_with_location_overload_blockers",
+            "supported_multi_profile_linearize_c6m4_product_contract_non_parity",
         )
         self.assertIn("Part::Sweep", sweep["type_ids"])
         self.assertEqual(
@@ -3187,6 +3187,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "Objects[].Properties.BiNormal",
                 "Objects[].Properties.SectionOptions[].Location.value",
                 "Objects[].Properties.SectionOptions[].Location.SubList",
+                "Objects[].Properties.SectionOptions[].ProfilePlacement",
                 "Objects[].Properties.SectionOptions[].WithContact",
                 "Objects[].Properties.SectionOptions[].WithCorrection",
                 "Objects[].Properties.Tolerance.tol3d",
@@ -3238,13 +3239,17 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "support_mode_wrapper_expected_backed",
             "binormal_wrapper_expected_backed",
             "advanced_mode_locatable_diagnostics",
-            "section_location_contact_correction_freecadcmd_blocker",
+            "section_location_contact_correction_c6m4_product_contract_non_parity",
             "tolerance_triple_wrapper_expected_backed",
-            "advanced_combined_freecadcmd_blocker",
+            "advanced_combined_c6m4_product_contract_non_parity",
             "s3_location_tolerance_locatable_diagnostics",
+            "c6m4_located_profile_product_contract",
+            "c6m4_located_profile_diagnostics_contract",
+            "c6m4_advanced_combined_product_contract",
             "c5m11_wrapper_expected_capability_promotion",
             "c5m12_support_wrapper_expected_recovery",
             "c5m10_capability_docs_closeout",
+            "c6m4_capability_docs_publication",
         ):
             self.assertIn(covered, sweep["covered"])
         for fixture in (
@@ -3265,6 +3270,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "c5m10/part-sweep-tolerance-contract",
             "c5m10/part-sweep-advanced-combined-contract",
             "c5m12/part-sweep-spine-support-surface-normal",
+            "c6m4/part-sweep-located-profile-product",
+            "c6m4/part-sweep-located-profile-diagnostics",
+            "c6m4/part-sweep-located-profile-bool-diagnostics",
+            "c6m4/part-sweep-advanced-combined-product",
         ):
             self.assertIn(fixture, sweep["fixtures"])
         self.assertEqual(
@@ -3287,12 +3296,17 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "c5m10/part-sweep-tolerance-contract",
                 "c5m10/part-sweep-advanced-combined-contract",
                 "c5m12/part-sweep-spine-support-surface-normal",
+                "c6m4/part-sweep-located-profile-product",
+                "c6m4/part-sweep-located-profile-diagnostics",
+                "c6m4/part-sweep-located-profile-bool-diagnostics",
+                "c6m4/part-sweep-advanced-combined-product",
             ],
         )
         for diagnostic in (
             "missing_property",
             "missing_link_target",
             "invalid_subshape",
+            "invalid_location_subname_count",
             "invalid_parameter",
             "unsupported_property",
             "execution_failed",
@@ -3304,6 +3318,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "missing_property",
                 "missing_link_target",
                 "invalid_subshape",
+                "invalid_location_subname_count",
                 "invalid_parameter",
                 "unsupported_property",
                 "execution_failed",
@@ -3322,11 +3337,16 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             sweep["request_local_boundaries"],
         )
         self.assertIn(
-            "section_options_location_contact_correction_location_overload_build_stage_blocker",
+            "section_options_location_contact_correction_c6m4_product_contract_non_parity",
             sweep["request_local_boundaries"],
         )
         self.assertIn(
-            "advanced_combination_depends_on_location_overload_blocker",
+            "advanced_combination_c6m4_product_contract_non_parity",
+            sweep["request_local_boundaries"],
+        )
+        self.assertIn("freecadcmd_location_overload_status_not_collected", sweep["request_local_boundaries"])
+        self.assertIn(
+            "c5m10_known_gap_fixtures_retained_as_wrapper_evidence",
             sweep["request_local_boundaries"],
         )
         self.assertIn("hole_model_thread_internal_pipeshell_not_part_sweep", sweep["request_local_boundaries"])
@@ -3351,14 +3371,16 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ],
         )
         self.assertEqual(
-            sweep["field_boundaries"]["narrowed_gap"],
+            sweep["field_boundaries"]["cad_core_product_contract_non_parity"],
             [
                 "SectionOptions[].Location",
+                "SectionOptions[].ProfilePlacement=AnchorLocationToSpineStart",
                 "SectionOptions[].WithContact",
                 "SectionOptions[].WithCorrection",
-                "advanced_combination",
+                "AuxiliarySpine + Tolerance + Transition + located section combined",
             ],
         )
+        self.assertEqual(sweep["field_boundaries"]["narrowed_gap"], [])
         self.assertEqual(sweep["field_boundaries"]["source_backed_known_gap"], [])
         self.assertIn("invalid SupportMode", sweep["field_boundaries"]["diagnostic_backed"])
         self.assertIn(
@@ -3376,6 +3398,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             },
         )
         located_gap = narrowed_gaps["part_sweep_located_profile_freecadcmd_wrapper_build_blocker"]
+        self.assertEqual(located_gap["status"], "released_c6m4_product_contract_non_parity")
         self.assertEqual(located_gap["freecadcmd_evidence"]["error"], "OCCError: NCollection_Array1::Value")
         self.assertEqual(located_gap["freecadcmd_evidence"]["failed_stage"], "build")
         self.assertEqual(
@@ -3384,7 +3407,23 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(located_gap["freecadcmd_evidence"]["control"], "wire profile without Location builds")
         self.assertIn("SectionOptions[].Location", located_gap["fields"])
+        self.assertIn("SectionOptions[].ProfilePlacement=AnchorLocationToSpineStart", located_gap["fields"])
+        self.assertIn("c5m10/part-sweep-located-profile-contract", located_gap["fixtures"])
+        self.assertIn("c6m4/part-sweep-located-profile-product", located_gap["fixtures"])
+        self.assertIn("c6m4/part-sweep-located-profile-diagnostics", located_gap["fixtures"])
+        self.assertIn("c6m4/part-sweep-located-profile-bool-diagnostics", located_gap["fixtures"])
+        self.assertEqual(
+            located_gap["product_contract"]["provenance"],
+            "cad_core_product_contract_non_parity",
+        )
+        self.assertEqual(located_gap["product_contract"]["freecadcmd_location_overload_status"], "notCollected")
+        self.assertEqual(
+            located_gap["product_contract"]["profile_placement"],
+            "SectionOptions[].ProfilePlacement=AnchorLocationToSpineStart",
+        )
+        self.assertEqual(located_gap["product_contract"]["product_path"], "c6m4/part-sweep-located-profile-product")
         combined_gap = narrowed_gaps["part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker"]
+        self.assertEqual(combined_gap["status"], "released_c6m4_product_contract_non_parity")
         self.assertEqual(combined_gap["freecadcmd_evidence"]["error"], "OCCError: NCollection_Array1::Value")
         self.assertEqual(combined_gap["freecadcmd_evidence"]["failed_stage"], "build")
         self.assertEqual(
@@ -3395,7 +3434,24 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             combined_gap["freecadcmd_evidence"]["control"],
             "combined auxiliary+tolerance without Location builds",
         )
-        self.assertEqual(combined_gap["fields"], ["advanced_combination"])
+        self.assertEqual(
+            combined_gap["fields"],
+            [
+                "advanced_combination",
+                "SectionOptions[].ProfilePlacement=AnchorLocationToSpineStart",
+            ],
+        )
+        self.assertIn("c5m10/part-sweep-advanced-combined-contract", combined_gap["fixtures"])
+        self.assertIn("c6m4/part-sweep-advanced-combined-product", combined_gap["fixtures"])
+        self.assertEqual(
+            combined_gap["product_contract"]["provenance"],
+            "cad_core_product_contract_non_parity",
+        )
+        self.assertEqual(combined_gap["product_contract"]["freecadcmd_location_overload_status"], "notCollected")
+        self.assertEqual(
+            combined_gap["product_contract"]["product_path"],
+            "c6m4/part-sweep-advanced-combined-product",
+        )
         for non_goal in (
             "upstream_native_part_sweep_advanced_direct_properties",
             "gui_sweep_pipe_task_panels",
@@ -3416,12 +3472,14 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "hole_model_thread_internal_pipeshell",
             ],
         )
-        self.assertEqual(
+        self.assertEqual(sweep["remaining_gaps"], [])
+        self.assertNotIn(
+            "part_sweep_located_profile_freecadcmd_wrapper_build_blocker",
             sweep["remaining_gaps"],
-            [
-                "part_sweep_located_profile_freecadcmd_wrapper_build_blocker",
-                "part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker",
-            ],
+        )
+        self.assertNotIn(
+            "part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker",
+            sweep["remaining_gaps"],
         )
         self.assertNotIn("part_sweep_wrapper_expected_collector", sweep["remaining_gaps"])
         self.assertNotIn("part_sweep_location_mode_contract", sweep["remaining_gaps"])

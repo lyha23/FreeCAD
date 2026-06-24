@@ -15,15 +15,18 @@ C6-M4 的目标是把 `Part::Sweep` / `BRepOffsetAPI_MakePipeShell` 的 located 
 - S1 live last commit：`571f1061d1 docs: 完成 C6-M4 S0 live 基线复核`
 - S2 live HEAD：`6596fe5ed8`
 - S2 live last commit：`6596fe5ed8 docs: 完成 C6-M4 S1 source oracle 矩阵冻结`
-- capability：`cad-core/src/runtime/capability_contract.cpp` 中 `part_workbench.sweep.status` 为 `supported_multi_profile_linearize_c5m13_wrapper_expected_backed_with_location_overload_blockers`。
-- remaining gaps：`part_sweep_located_profile_freecadcmd_wrapper_build_blocker` 与 `part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker` 仍在 `part_workbench.sweep.remaining_gaps`。
+- capability：`cad-core/src/runtime/capability_contract.cpp` 中 `part_workbench.sweep.status` 为 `supported_multi_profile_linearize_c6m4_product_contract_non_parity`。
+- remaining gaps：`part_sweep_located_profile_freecadcmd_wrapper_build_blocker` 与 `part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker` 已从 `part_workbench.sweep.remaining_gaps` 移除；二者仍保留在 `narrowed_gaps` 作为 c5m10 historical wrapper evidence 和 C6-M4 non-parity product contract 发布证据。
 - S0 live 验证：blocker grep 仍命中 capability、expected 与 focused guard；`python3 -m unittest cad-core.tests.test_p8_features.CadCoreP8FeatureTest.test_c5m10_part_sweep_located_profile_contract_keeps_freecadcmd_blocker cad-core.tests.test_p8_features.CadCoreP8FeatureTest.test_c5m10_part_sweep_combined_advanced_contract_and_diagnostic_priority` 通过，`Ran 2 tests`，`OK`。
 - S1 source/oracle 冻结：`source_candidates.tsv` 已冻结 `C6M4-SRC-001..012`；oracle/input/non-goal 矩阵保持 non-parity product contract、notCollected/backendGap 和 remaining gap 边界。
 - S2 oracle 复采集：本机 `FreeCADCmd --version` 为 `FreeCAD 1.2.0 Revision: 20260519 (Git shallow)`；复跑 checked-in C5-M13 probe 后 located 与 combined Location overload 仍在 `build` 阶段报 `OCCError: NCollection_Array1::Value`，plain/no-location controls 仍可 build，因此 `C6M4-SCOPE-101` 保留 `notCollected_retained_S2`，`C6M4-SCOPE-102` 进入 S3 的 non-parity product-contract backendGap 路线。
 - S3 live HEAD：`6ede975075`
 - S3 live last commit：`6ede975075 docs: 完成 C6-M4 S2 located profile 合同冻结`
-- S3 implementation：`C6M4-SCOPE-102` 已 `closed_S3`。`cad-core` 新增显式 `SectionOptions[].ProfilePlacement=AnchorLocationToSpineStart` product-contract selector；valid located profile 输出 `contract=cad_core_product_contract`、`freecadcmd_location_overload_status=notCollected`、shape、metadata 与 NamedShape PipeShell history；invalid Location 与 bool fixtures 均先报 diagnostics。c5m10 known_gap 与 capability remaining gaps 保持不变。
-- S4 implementation：`C6M4-SCOPE-201` / `C6M4-BLK-201` 已 `closed_S4`。`cad-core/fixtures/c6m4/part-sweep-advanced-combined-product.json` 同时覆盖 `AuxiliarySpine`、`AuxiliaryCurvilinear=false`、`Transition=Round corner`、三元 `Tolerance` 与 located `ProfilePlacement=AnchorLocationToSpineStart`，expected 固化为 `contract_provenance=cad_core_product_contract_non_parity`，focused P8 test 覆盖 metadata、shape 与 NamedShape history。capability remaining gaps 仍留给 S5/S6。
+- S3 implementation：`C6M4-SCOPE-102` 已 `closed_S3`。`cad-core` 新增显式 `SectionOptions[].ProfilePlacement=AnchorLocationToSpineStart` product-contract selector；valid located profile 输出 `contract=cad_core_product_contract`、`freecadcmd_location_overload_status=notCollected`、shape、metadata 与 NamedShape PipeShell history；invalid Location 与 bool fixtures 均先报 diagnostics。c5m10 known_gap 保持不变；capability 发布由 S5 完成。
+- S4 implementation：`C6M4-SCOPE-201` / `C6M4-BLK-201` 已 `closed_S4`。`cad-core/fixtures/c6m4/part-sweep-advanced-combined-product.json` 同时覆盖 `AuxiliarySpine`、`AuxiliaryCurvilinear=false`、`Transition=Round corner`、三元 `Tolerance` 与 located `ProfilePlacement=AnchorLocationToSpineStart`，expected 固化为 `contract_provenance=cad_core_product_contract_non_parity`，focused P8 test 覆盖 metadata、shape 与 NamedShape history；capability 发布由 S5 完成。
+- S5 live start HEAD：`6174d1d9ac`
+- S5 live start last commit：`6174d1d9ac 实现 C6-M4 S4 advanced combined 产品路径`
+- S5 publication：`C6M4-SCOPE-301` / `C6M4-BLK-301` 已 `closed_S5`。`part_workbench.sweep` capability 已发布 c6m4 located product、located diagnostics、bool diagnostics、advanced combined product fixtures，并保留 `freecadcmd_location_overload_status=notCollected` / `contract_provenance=cad_core_product_contract_non_parity` 口径；c5m10 known_gap fixtures/tests 保持 historical guard，不改 FreeCAD oracle expected，不声明 FreeCAD parity。
 
 ## blocker 边界结论
 
@@ -42,7 +45,7 @@ C6-M4 的目标是把 `Part::Sweep` / `BRepOffsetAPI_MakePipeShell` 的 located 
 | auxiliary / tolerance wrapper | `src/Mod/Part/App/BRepOffsetAPI_MakePipeShellPyImp.cpp::setAuxiliarySpine()`、`setTolerance()` | combined case 只是在同一个 request-local builder 上叠加 auxiliary/tolerance 后再进入 located add。 |
 | cad-core executor | `cad-core/src/part/part_sweep.cpp` | 解析 `SectionOptions[].Location/WithContact/WithCorrection/ProfilePlacement`、`AuxiliarySpine`、`Tolerance` 并写 advanced metadata；旧 c5m10 Location overload build failure 仍转 `known_gap`，显式 C6-M4 product selector 输出非 parity product metadata。 |
 | low-level cad-core PipeShell | `cad-core/src/part/topo_shape_expansion.cpp::makeElementPipeShellFromSources()` | `PipeShellSectionOption` 增加 product profile placement 模式；S3 通过 request-local anchor Location vertex 到 spine start 后调用常规 `Add(profile, contact, correction)`，并保留 `part_sweep:pipeshell_history`。默认仍使用 OCCT `Add(profile, vertex, ...)`。 |
-| capability contract | `cad-core/src/runtime/capability_contract.cpp` | `part_workbench.sweep` 已发布 auxiliary/binormal/support/tolerance first batch，并保留两个 Location overload blocker。 |
+| capability contract | `cad-core/src/runtime/capability_contract.cpp` | `part_workbench.sweep` 已发布 auxiliary/binormal/support/tolerance expected-backed first batch，以及 C6-M4 located profile / advanced combined non-parity product contract；两个 Location overload blocker 不再是 remaining gaps，但保留为 narrowed historical wrapper evidence。 |
 
 ## 产物索引
 
@@ -56,7 +59,7 @@ C6-M4 的目标是把 `Part::Sweep` / `BRepOffsetAPI_MakePipeShell` 的 located 
 | S2 | `工作步骤细分/6-24-14-04-【已实现】C6-M4-S2-LocatedProfile合同与oracle复采集.md` | 已实现 | 已复跑 FreeCADCmd wrapper probe，冻结 located profile input/output/diagnostic/product contract 与 retained known_gap。 |
 | S3 | `工作步骤细分/6-24-14-05-【已实现】C6-M4-S3-ProfilePlacement与LocationOverload实现.md` | 已实现 | 已实现 located profile profile-placement / Location overload product path，新增 c6m4 product 与 diagnostics fixtures/tests。 |
 | S4 | `工作步骤细分/6-24-14-06-【已实现】C6-M4-S4-AdvancedCombinedAuxiliaryTransitionTolerance实现.md` | 已实现 | 已实现 combined auxiliary + transition + tolerance + located section product path。 |
-| S5 | `工作步骤细分/6-24-14-07-C6-M4-S5-fixtures-tests-capability-docs发布.md` | 待执行 | fixtures、expected、focused tests、capability/docs 发布。 |
+| S5 | `工作步骤细分/6-24-14-07-【已实现】C6-M4-S5-fixtures-tests-capability-docs发布.md` | 已实现 | fixtures、expected、focused tests、capability/docs 发布。 |
 | S6 | `工作步骤细分/6-24-14-08-C6-M4-S6-阶段回归与release-gate.md` | 待执行 | 阶段回归、heavy 条件与 release gate。 |
 
 ## 矩阵索引

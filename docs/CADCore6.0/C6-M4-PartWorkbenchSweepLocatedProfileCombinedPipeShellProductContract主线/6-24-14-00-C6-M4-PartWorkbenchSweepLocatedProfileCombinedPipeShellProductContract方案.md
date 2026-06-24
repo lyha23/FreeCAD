@@ -22,8 +22,8 @@ C6-M4 只处理 `Part::Sweep` / request-local `Part.BRepOffsetAPI_MakePipeShell`
 3. S2：冻结 located profile input/output/diagnostics/product contract；复采集或复核 FreeCADCmd blocker delete condition。
 4. S3：已实现 profile placement / Location overload 产品路径；通过显式 `ProfilePlacement=AnchorLocationToSpineStart` 进入非 parity CAD Core product contract，旧 c5m10 known_gap 保留。
 5. S4：在 S3 的 located profile 结果上接入 auxiliary + transition + tolerance combined case。
-6. S5：落 fixtures、expected、focused tests、capability contract 和 docs。
-7. S6：跑阶段回归，按证据删除或保留 remaining gaps，关闭 release gate。
+6. S5：已落 fixtures、expected、focused tests、capability contract 和 docs；两个 exact FreeCADCmd wrapper blocker 已从 `part_workbench.sweep.remaining_gaps` 移除，但 c5m10 expected/tests 作为 historical guard 保留。
+7. S6：跑阶段回归，复核 release gate 和状态一致性。
 
 ## 验收纪律
 
