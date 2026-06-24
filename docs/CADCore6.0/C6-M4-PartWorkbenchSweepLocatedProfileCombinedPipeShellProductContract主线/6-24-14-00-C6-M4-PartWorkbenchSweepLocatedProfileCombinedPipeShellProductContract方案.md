@@ -13,7 +13,7 @@ C6-M4 只处理 `Part::Sweep` / request-local `Part.BRepOffsetAPI_MakePipeShell`
 - fixtures/tests：保留 c5m10 known_gap guard，新建 c6m4 product fixtures 与 expected；capability 删除 blocker 只能发生在 S5/S6。
 - docs/capability：明确 `not FreeCAD parity`、request-local、无 persistent wrapper lifecycle、无 BREP 长期状态。
 
-拆成单个 fixture 会导致 Location blocker 与 combined 依赖长期分离，因此 C6-M4 采用一个主线批次；如果 S2 复采集证明 Location overload 在本机仍完全不可定义产品语义，S3 必须把相关行保留为 `notCollected/backendGap`，不能做窄路径输出修正。
+拆成单个 fixture 会导致 Location blocker 与 combined 依赖长期分离，因此 C6-M4 采用一个主线批次；S2 已复采集并保留 native wrapper `notCollected`，同时冻结 C6-M4 non-parity product contract 路线，S3 必须消费 `C6M4-SCOPE-102`，不能把 c5m10 known_gap 改成 supported 或做窄路径输出修正。
 
 ## 步骤框架
 
@@ -28,6 +28,6 @@ C6-M4 只处理 `Part::Sweep` / request-local `Part.BRepOffsetAPI_MakePipeShell`
 ## 验收纪律
 
 - S0-S5 只跑本轮短跑与 focused 命令；阶段回归和 heavy 只在 S6 或能力发布时成为必须项。
-- `part_sweep_located_profile_freecadcmd_wrapper_build_blocker` 的删除条件：Location overload 已可采到稳定 FreeCADCmd `shape_summary`，或 C6-M4 明确把该能力转为 CAD Core product contract 并有 c6m4 fixtures/tests/capability 证明不再依赖 native expected。
+- `part_sweep_located_profile_freecadcmd_wrapper_build_blocker` 的删除条件：Location overload 已可采到稳定 FreeCADCmd `shape_summary`，或 C6-M4 product contract 已完整发布并有 c6m4 fixtures/tests/capability/docs 证明，同时保留 non-parity provenance。
 - `part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker` 的删除条件：S3 Location path 已发布，且 combined auxiliary + located section + tolerance 的 product fixture 和 diagnostics 均通过。
 - Filling、Loft、Groove 只记录在 non-goal，不参与本主线实现。
