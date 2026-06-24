@@ -45,7 +45,7 @@ live baseline and source authority
 | 工作步骤总入口 | `工作步骤细分/6-24-00-17-【已实现】C6-M3工作步骤总入口.md` | S0-S6 执行索引。 |
 | S0 | `工作步骤细分/6-24-00-18-【已实现】C6-M3-S0-live基线与源码authority复核.md` | 已复核 Interpolation 边界、capability remaining gap 和源码依据。 |
 | S1 | `工作步骤细分/6-24-00-19-【已实现】C6-M3-S1-LawSamplesDTO合同冻结.md` | 已冻结 request / response / diagnostics 合同。 |
-| S2 | `工作步骤细分/6-24-00-20-C6-M3-S2-scope-blocker-fixture矩阵.md` | 建 scope、blocker、oracle、non-goal 和 validation 矩阵。 |
+| S2 | `工作步骤细分/6-24-00-20-【已实现】C6-M3-S2-scope-blocker-fixture矩阵.md` | 已把 S1 合同拆成 scope、blocker、oracle、non-goal 和 validation 执行矩阵。 |
 | S3 | `工作步骤细分/6-24-00-21-C6-M3-S3-InterpolationLawKernel实现.md` | 实现 OCCT law kernel 或明确低层 blocker。 |
 | S4 | `工作步骤细分/6-24-00-22-C6-M3-S4-feature_pipe接入与diagnostics.md` | 接入 `feature_pipe.cpp`，替换 Interpolation 诊断边界。 |
 | S5 | `工作步骤细分/6-24-00-23-C6-M3-S5-fixtures-tests-capability发布.md` | 增加 fixtures、focused tests、capability 和 adapter assertions。 |

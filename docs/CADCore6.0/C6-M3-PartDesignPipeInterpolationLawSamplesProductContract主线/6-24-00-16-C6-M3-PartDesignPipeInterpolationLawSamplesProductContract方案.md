@@ -18,10 +18,10 @@ FreeCAD `FeaturePipe.cpp` 只提供 Interpolation enum，不提供执行分支�
 | 字段 | 合同 |
 | --- | --- |
 | `Transformation` | 必须为 `Interpolation`。 |
-| `LawSamples` | 数组，至少 2 个 sample；每个 sample 可先支持 `[parameter, scale]`，S1 决定是否同时接受 object form。 |
+| `LawSamples` | 数组，至少 2 个 sample；每个 sample 的唯一合同形态是 `[parameter, scale]`，不接受 object form。 |
 | `parameter` | 有限数，范围 `[0,1]`，严格递增。 |
 | `scale` | 有限正数；不能为 0、负数、NaN 或 Inf。 |
-| domain coverage | 首个 sample 应覆盖 `0.0`，末个 sample 应覆盖 `1.0`；如 S1 允许自动端点补齐，必须写明 metadata。 |
+| domain coverage | 首个 sample 必须覆盖 `0.0`，末个 sample 必须覆盖 `1.0`；不排序、不 clamp、不自动补端点。 |
 | response metadata | `pipe_law.kind=Interpolation`、`contract=cad_core_product_contract`、`samples`、`domain`、`source=cad_core_product_contract`。 |
 | diagnostics | 缺失、sample 数不足、参数无序、参数越界、scale 非法、schema 非法都必须有 locatable code。 |
 
@@ -31,7 +31,7 @@ FreeCAD `FeaturePipe.cpp` 只提供 Interpolation enum，不提供执行分支�
 
 1. 成功 additive pipe Interpolation law。
 2. 成功 subtractive pipe Interpolation law 或明确推迟并登记 blocker。
-3. 非法 `LawSamples` diagnostics：缺失、少于 2 点、参数非递增、scale 非正。
+3. 非法 `LawSamples` diagnostics：缺失、malformed、domain / 单调 / 端点错误、scale 非正或非有限。
 4. capability 从 remaining gap 迁移到 supported product extension。
 5. C6-M1 Interpolation boundary fixture 的迁移或替代：旧 `product_contract_required` 不能和新成功合同互相矛盾。
 
