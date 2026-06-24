@@ -27,6 +27,9 @@ C6-M4 的目标是把 `Part::Sweep` / `BRepOffsetAPI_MakePipeShell` 的 located 
 - S5 live start HEAD：`6174d1d9ac`
 - S5 live start last commit：`6174d1d9ac 实现 C6-M4 S4 advanced combined 产品路径`
 - S5 publication：`C6M4-SCOPE-301` / `C6M4-BLK-301` 已 `closed_S5`。`part_workbench.sweep` capability 已发布 c6m4 located product、located diagnostics、bool diagnostics、advanced combined product fixtures，并保留 `freecadcmd_location_overload_status=notCollected` / `contract_provenance=cad_core_product_contract_non_parity` 口径；c5m10 known_gap fixtures/tests 保持 historical guard，不改 FreeCAD oracle expected，不声明 FreeCAD parity。
+- S6 live start HEAD：`af3273fa03`
+- S6 live start last commit：`af3273fa03 发布 C6-M4 Sweep product contract capability`
+- S6 release gate：`C6M4-BLK-501` 已 `closed_S6`。`cmake --build build` 通过；阶段回归 `Ran 241 tests in 65.269s`，`OK (skipped=29)`；heavy 收口 `Ran 277 tests in 71.034s`，`OK (skipped=29)`；`git diff --check`、TSV 字段一致性和队列检查通过。C6-M4 以 CAD Core product contract non-parity 发布。
 
 ## blocker 边界结论
 
@@ -60,7 +63,7 @@ C6-M4 的目标是把 `Part::Sweep` / `BRepOffsetAPI_MakePipeShell` 的 located 
 | S3 | `工作步骤细分/6-24-14-05-【已实现】C6-M4-S3-ProfilePlacement与LocationOverload实现.md` | 已实现 | 已实现 located profile profile-placement / Location overload product path，新增 c6m4 product 与 diagnostics fixtures/tests。 |
 | S4 | `工作步骤细分/6-24-14-06-【已实现】C6-M4-S4-AdvancedCombinedAuxiliaryTransitionTolerance实现.md` | 已实现 | 已实现 combined auxiliary + transition + tolerance + located section product path。 |
 | S5 | `工作步骤细分/6-24-14-07-【已实现】C6-M4-S5-fixtures-tests-capability-docs发布.md` | 已实现 | fixtures、expected、focused tests、capability/docs 发布。 |
-| S6 | `工作步骤细分/6-24-14-08-C6-M4-S6-阶段回归与release-gate.md` | 待执行 | 阶段回归、heavy 条件与 release gate。 |
+| S6 | `工作步骤细分/6-24-14-08-【已实现】C6-M4-S6-阶段回归与release-gate.md` | 已实现 | 阶段回归、heavy 条件与 release gate 已通过。 |
 
 ## 矩阵索引
 

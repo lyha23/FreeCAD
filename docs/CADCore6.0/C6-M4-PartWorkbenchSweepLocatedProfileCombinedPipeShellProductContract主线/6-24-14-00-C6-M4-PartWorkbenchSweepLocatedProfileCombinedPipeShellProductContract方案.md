@@ -23,7 +23,7 @@ C6-M4 只处理 `Part::Sweep` / request-local `Part.BRepOffsetAPI_MakePipeShell`
 4. S3：已实现 profile placement / Location overload 产品路径；通过显式 `ProfilePlacement=AnchorLocationToSpineStart` 进入非 parity CAD Core product contract，旧 c5m10 known_gap 保留。
 5. S4：在 S3 的 located profile 结果上接入 auxiliary + transition + tolerance combined case。
 6. S5：已落 fixtures、expected、focused tests、capability contract 和 docs；两个 exact FreeCADCmd wrapper blocker 已从 `part_workbench.sweep.remaining_gaps` 移除，但 c5m10 expected/tests 作为 historical guard 保留。
-7. S6：跑阶段回归，复核 release gate 和状态一致性。
+7. S6：已跑阶段回归和 heavy 收口，复核 release gate 与状态一致性并关闭 C6-M4 发布状态。
 
 ## 验收纪律
 
@@ -31,3 +31,10 @@ C6-M4 只处理 `Part::Sweep` / request-local `Part.BRepOffsetAPI_MakePipeShell`
 - `part_sweep_located_profile_freecadcmd_wrapper_build_blocker` 的删除条件：Location overload 已可采到稳定 FreeCADCmd `shape_summary`，或 C6-M4 product contract 已完整发布并有 c6m4 fixtures/tests/capability/docs 证明，同时保留 non-parity provenance。
 - `part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker` 的删除条件：S3 Location path 已发布，且 combined auxiliary + located section + tolerance 的 product fixture 和 diagnostics 均通过。
 - Filling、Loft、Groove 只记录在 non-goal，不参与本主线实现。
+
+## S6 发布结论
+
+- `cmake --build build` 通过。
+- 阶段回归 `python3 -m unittest tests.test_p8_features tests.test_expected_fixtures tests.test_adapters` 通过：`Ran 241 tests in 65.269s`，`OK (skipped=29)`。
+- Heavy 收口 `python3 -m unittest tests.test_p6_topology tests.test_p8_features tests.test_expected_fixtures tests.test_adapters` 通过：`Ran 277 tests in 71.034s`，`OK (skipped=29)`。
+- C6-M4 发布为 CAD Core product contract non-parity；不声明 FreeCAD parity，不扩大 full Part surface family。

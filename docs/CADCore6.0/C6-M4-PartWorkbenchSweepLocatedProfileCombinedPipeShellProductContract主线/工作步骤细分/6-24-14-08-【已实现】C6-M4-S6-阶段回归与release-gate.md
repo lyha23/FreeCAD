@@ -1,4 +1,4 @@
-# C6-M4-S6 阶段回归与 release gate
+# 【已实现】C6-M4-S6 阶段回归与 release gate
 
 ## 目标
 
@@ -14,6 +14,20 @@
 | capability | `part_workbench.sweep` 不声明 FreeCAD parity，不扩大 full Part surface family。 |
 | fixtures/tests | c5m10 guard 与 c6m4 product fixtures 同时通过或明确保留 gap。 |
 | docs | README、主入口、工作步骤、矩阵、CADCore6.0 README 同步。 |
+
+## S6 最终结论
+
+- live repo：`/home/user/Chili3DProject/FreeCAD`
+- S6 live start HEAD：`af3273fa03`
+- S6 live start last commit：`af3273fa03 发布 C6-M4 Sweep product contract capability`
+- 起始工作区：`git -c core.quotepath=false status --short -uall` 无输出。
+- `cmake --build build`：通过。
+- 阶段回归：`python3 -m unittest tests.test_p8_features tests.test_expected_fixtures tests.test_adapters` 通过，`Ran 241 tests in 65.269s`，`OK (skipped=29)`。
+- Heavy 收口：`python3 -m unittest tests.test_p6_topology tests.test_p8_features tests.test_expected_fixtures tests.test_adapters` 通过，`Ran 277 tests in 71.034s`，`OK (skipped=29)`。
+- Release audit：`C6M4-BLK-000/102/201/301/501` 均 closed，`C6M4-BLK-101` retained as non-release FreeCADCmd notCollected evidence；scope/backend/oracle/validation 矩阵无悬空 pending。
+- Capability audit：`part_workbench.sweep.status=supported_multi_profile_linearize_c6m4_product_contract_non_parity`，`remaining_gaps=[]`，两个 Location overload blocker 保留在 `narrowed_gaps`；不声明 FreeCAD parity，不扩大 full Part surface family。
+- Fixture audit：c5m10 known_gap guard 与 c6m4 located/combined product fixtures 均由阶段和 heavy 回归覆盖。
+- 发布结论：C6-M4 以 CAD Core product contract non-parity 通过 S6 release gate；无本轮 residual risk。
 
 ## 验收分层
 
