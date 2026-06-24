@@ -47,7 +47,7 @@ live baseline and source authority
 | S1 | `工作步骤细分/6-24-00-19-【已实现】C6-M3-S1-LawSamplesDTO合同冻结.md` | 已冻结 request / response / diagnostics 合同。 |
 | S2 | `工作步骤细分/6-24-00-20-【已实现】C6-M3-S2-scope-blocker-fixture矩阵.md` | 已把 S1 合同拆成 scope、blocker、oracle、non-goal 和 validation 执行矩阵。 |
 | S3 | `工作步骤细分/6-24-00-21-【已实现】C6-M3-S3-InterpolationLawKernel实现.md` | 已实现 OCCT `Law_Interpol` 低层 kernel、focused probe 和 P7 wiring。 |
-| S4 | `工作步骤细分/6-24-00-22-C6-M3-S4-feature_pipe接入与diagnostics.md` | 接入 `feature_pipe.cpp`，替换 Interpolation 诊断边界。 |
+| S4 | `工作步骤细分/6-24-00-22-【已实现】C6-M3-S4-feature_pipe接入与diagnostics.md` | 已接入 `feature_pipe.cpp`，合法 `LawSamples` 执行，非法输入返回 S1 diagnostics。 |
 | S5 | `工作步骤细分/6-24-00-23-C6-M3-S5-fixtures-tests-capability发布.md` | 增加 fixtures、focused tests、capability 和 adapter assertions。 |
 | S6 | `工作步骤细分/6-24-00-24-C6-M3-S6-阶段回归发布闸门.md` | 阶段回归、heavy 条件判断和发布状态。 |
 | source candidates | `矩阵/c6m3_pipe_interpolation_law_source_candidates.tsv` | FreeCAD / cad-core source authority。 |

@@ -15,6 +15,27 @@ except ImportError:  # pragma: no cover - supports `unittest discover tests`.
 
 
 class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
+    def object_payload(self, payload: dict, object_name: str) -> dict:
+        return next(item for item in payload["Objects"] if item["Name"] == object_name)
+
+    def run_recompute_payload(self, payload: dict) -> dict:
+        temp_path: Path | None = None
+        try:
+            with tempfile.NamedTemporaryFile("w", suffix=".json", encoding="utf-8", delete=False) as temp:
+                json.dump(payload, temp)
+                temp_path = Path(temp.name)
+            return self.run_recompute_file(temp_path)
+        finally:
+            if temp_path is not None:
+                temp_path.unlink(missing_ok=True)
+
+    def c6m1_pipe_interpolation_seed(self) -> dict:
+        return json.loads(
+            (ROOT / "fixtures" / "c6m1" / "partdesign-pipe-interpolation-law-boundary.json").read_text(
+                encoding="utf-8"
+            )
+        )
+
     def assert_dressup_slot_history(
         self,
         named_shape: dict,
@@ -1278,16 +1299,16 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("part_design_pipe:sewing", named_shape["element_history_status"])
         self.assert_object_matches_expected(result, "c51m4", "partdesign-pipe-selected-spine-multisection")
 
-    def test_c51m4_partdesign_pipe_source_backed_blockers_follow_c6m1_boundaries(self) -> None:
+    def test_c51m4_partdesign_pipe_source_backed_blockers_preserve_law_diagnostics(self) -> None:
         result = self.run_recompute("partdesign-pipe-source-backed-blockers", "c51m4")
 
         self.assertEqual(
             [diagnostic["code"] for diagnostic in result["diagnostics"]],
-            ["unsupported_property", "unsupported_property", "product_contract_required"],
+            ["unsupported_property", "unsupported_property", "missing_pipe_law_samples"],
         )
         self.assertEqual(
             [diagnostic["property"] for diagnostic in result["diagnostics"]],
-            ["Transformation", "Transformation", "Transformation"],
+            ["Transformation", "Transformation", "LawSamples"],
         )
         self.assertEqual(result["objects"]["AdditivePipeLinearScaling"]["status"], "error")
         self.assertEqual(result["objects"]["AdditivePipeSShapeScaling"]["status"], "error")
@@ -1295,7 +1316,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["AdditivePipeSpineTangent"]["status"], "ok")
         self.assertEqual(result["objects"]["AdditivePipeAuxiliaryTangent"]["status"], "ok")
         self.assertIn("C6 PipeLaw ScalingData DTO", result["diagnostics"][0]["message"])
-        self.assertIn("LawSamples product contract", result["diagnostics"][2]["message"])
+        self.assertIn("requires LawSamples", result["diagnostics"][2]["message"])
 
     def test_c6m1_partdesign_pipe_law_products_publish_contract_metadata(self) -> None:
         for fixture, object_name, kind, parameters in [
@@ -1328,17 +1349,104 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertIn("part_sweep:pipeshell_history", named_shape["element_history_status"])
                 self.assertIn("part_design_pipe:sewing", named_shape["element_history_status"])
 
-    def test_c6m1_partdesign_pipe_interpolation_keeps_product_contract_boundary(self) -> None:
+    def test_c6m1_partdesign_pipe_interpolation_executes_law_samples_product_contract(self) -> None:
         result = self.run_recompute("partdesign-pipe-interpolation-law-boundary", "c6m1")
+        pipe = result["objects"]["AdditivePipeInterpolationBoundary"]
+        named_shape = result["named_shapes"]["AdditivePipeInterpolationBoundary"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pipe["status"], "ok")
+        self.assertEqual(pipe["transformation"], "Interpolation")
+        self.assertEqual(pipe["pipe_law"]["kind"], "Interpolation")
+        self.assertEqual(pipe["pipe_law"]["source"], "cad_core_product_contract")
+        self.assertEqual(pipe["pipe_law"]["contract"], "cad_core_product_contract")
+        self.assertEqual(pipe["pipe_law"]["domain"], [0.0, 1.0])
+        self.assertEqual(pipe["pipe_law"]["no_fallback"], True)
+        self.assertEqual(
+            pipe["pipe_law"]["samples"],
+            [{"parameter": 0.0, "scale": 1.0}, {"parameter": 1.0, "scale": 1.4}],
+        )
+        self.assertEqual(pipe["shape"], "occt_solid")
+        self.assertIn("part_sweep:pipeshell_history", named_shape["element_history_status"])
+        self.assertIn("part_design_pipe:sewing", named_shape["element_history_status"])
+
+    def test_c6m3_partdesign_pipe_interpolation_missing_law_samples_is_locatable(self) -> None:
+        payload = self.c6m1_pipe_interpolation_seed()
+        pipe_payload = self.object_payload(payload, "AdditivePipeInterpolationBoundary")
+        pipe_payload["Properties"].pop("LawSamples")
+
+        result = self.run_recompute_payload(payload)
         diagnostic = result["diagnostics"][0]
         pipe = result["objects"]["AdditivePipeInterpolationBoundary"]
 
-        self.assertEqual([item["code"] for item in result["diagnostics"]], ["product_contract_required"])
-        self.assertEqual(diagnostic["property"], "Transformation")
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["missing_pipe_law_samples"])
+        self.assertEqual(diagnostic["property"], "LawSamples")
+        self.assertIn("requires LawSamples", diagnostic["message"])
         self.assertEqual(pipe["status"], "error")
         self.assertEqual(pipe["pipe_law"]["kind"], "Interpolation")
-        self.assertEqual(pipe["pipe_law"]["status"], "product_contract_required")
+        self.assertEqual(pipe["pipe_law"]["status"], "invalid")
+        self.assertEqual(pipe["pipe_law"]["source"], "cad_core_product_contract")
+        self.assertEqual(pipe["pipe_law"]["contract"], "cad_core_product_contract")
+        self.assertEqual(pipe["pipe_law"]["domain"], [0.0, 1.0])
+        self.assertEqual(pipe["pipe_law"]["no_fallback"], True)
+        self.assertEqual(pipe["pipe_law"]["reason"], "missing_law_samples")
         self.assertNotIn("shape", pipe)
+
+    def test_c6m3_partdesign_pipe_interpolation_invalid_law_samples_are_locatable(self) -> None:
+        cases = [
+            (
+                "malformed",
+                [[0.0, 1.0, 1.2], [1.0, 1.4]],
+                "malformed_sample",
+                "exactly [parameter, scale]",
+            ),
+            (
+                "domain_out_of_range",
+                [[0.0, 1.0], [1.2, 1.4]],
+                "invalid_parameter",
+                "inside [0, 1]",
+            ),
+            (
+                "domain_nonmonotonic",
+                [[0.0, 1.0], [0.5, 1.2], [0.5, 1.4], [1.0, 1.3]],
+                "nonmonotonic_or_missing_endpoint",
+                "strictly increasing",
+            ),
+            (
+                "domain_missing_endpoint",
+                [[0.1, 1.0], [1.0, 1.4]],
+                "nonmonotonic_or_missing_endpoint",
+                "domain endpoints",
+            ),
+            (
+                "scale",
+                [[0.0, 1.0], [1.0, 0.0]],
+                "invalid_scale",
+                "finite and positive",
+            ),
+        ]
+        for name, law_samples, reason, message in cases:
+            with self.subTest(name=name):
+                payload = self.c6m1_pipe_interpolation_seed()
+                pipe_payload = self.object_payload(payload, "AdditivePipeInterpolationBoundary")
+                pipe_payload["Properties"]["LawSamples"] = law_samples
+
+                result = self.run_recompute_payload(payload)
+                diagnostic = result["diagnostics"][0]
+                pipe = result["objects"]["AdditivePipeInterpolationBoundary"]
+
+                self.assertEqual([item["code"] for item in result["diagnostics"]], ["invalid_pipe_law_samples"])
+                self.assertEqual(diagnostic["property"], "LawSamples")
+                self.assertIn(message, diagnostic["message"])
+                self.assertEqual(pipe["status"], "error")
+                self.assertEqual(pipe["pipe_law"]["kind"], "Interpolation")
+                self.assertEqual(pipe["pipe_law"]["status"], "invalid")
+                self.assertEqual(pipe["pipe_law"]["source"], "cad_core_product_contract")
+                self.assertEqual(pipe["pipe_law"]["contract"], "cad_core_product_contract")
+                self.assertEqual(pipe["pipe_law"]["domain"], [0.0, 1.0])
+                self.assertEqual(pipe["pipe_law"]["no_fallback"], True)
+                self.assertEqual(pipe["pipe_law"]["reason"], reason)
+                self.assertNotIn("shape", pipe)
 
     def test_c6m1_partdesign_pipe_tangent_ledgers_are_request_local(self) -> None:
         cases = [
@@ -1380,7 +1488,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             [diagnostic["code"] for diagnostic in result["diagnostics"]],
             [
                 "invalid_pipe_law_data",
-                "product_contract_required",
+                "missing_pipe_law_samples",
                 "non_edge_subname",
                 "disconnected_path",
                 "ambiguous_branch_junction",
@@ -1389,7 +1497,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         diagnostics = {diagnostic["object"]: diagnostic for diagnostic in result["diagnostics"]}
         self.assertEqual(diagnostics["AdditivePipeInvalidScalingData"]["property"], "ScalingData")
-        self.assertEqual(diagnostics["AdditivePipeInterpolationBoundary"]["property"], "Transformation")
+        self.assertEqual(diagnostics["AdditivePipeInterpolationBoundary"]["property"], "LawSamples")
         for object_name in [
             "AdditivePipeNonEdgeTangent",
             "AdditivePipeDisconnectedTangent",

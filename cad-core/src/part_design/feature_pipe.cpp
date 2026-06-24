@@ -45,6 +45,14 @@ struct PipeLawResolution {
     nlohmann::json metadata;
 };
 
+struct PipeInterpolationSamplesResolution {
+    bool ok = true;
+    bool missing = false;
+    std::vector<part::PipeScalingLawSample> samples;
+    std::string reason;
+    std::string message;
+};
+
 void addPipeDiagnostic(const app::DocumentObject& object,
                        runtime::ComputeContext& context,
                        const std::string& code,
@@ -336,6 +344,120 @@ std::optional<std::array<double, 3>> firstScalingDataVector(const app::DocumentO
     return std::array<double, 3>{*x, *y, *z};
 }
 
+PipeInterpolationSamplesResolution rejectPipeInterpolationSamples(const std::string& reason,
+                                                                  const std::string& message)
+{
+    PipeInterpolationSamplesResolution resolution;
+    resolution.ok = false;
+    resolution.reason = reason;
+    resolution.message = message;
+    return resolution;
+}
+
+PipeInterpolationSamplesResolution resolvePipeInterpolationSamples(const app::DocumentObject& object)
+{
+    // CAD Core C6-M3 product contract: FreeCAD only exposes an Interpolation enum in
+    // /home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp::TransformEnums.
+    // The executable law DTO is request-local LawSamples with exact [parameter, scale] pairs.
+    const nlohmann::json* payload = propertyPayload(object, "LawSamples");
+    if (payload == nullptr) {
+        PipeInterpolationSamplesResolution resolution = rejectPipeInterpolationSamples(
+            "missing_law_samples",
+            "PartDesign Pipe Transformation=Interpolation requires LawSamples array pairs [parameter, scale]"
+        );
+        resolution.missing = true;
+        return resolution;
+    }
+    if (!payload->is_array() || payload->size() < 2U) {
+        return rejectPipeInterpolationSamples(
+            "malformed_sample",
+            "PartDesign Pipe LawSamples must contain at least two array pairs [parameter, scale]"
+        );
+    }
+
+    PipeInterpolationSamplesResolution resolution;
+    double previousParameter = -1.0;
+    for (std::size_t index = 0; index < payload->size(); ++index) {
+        const nlohmann::json& sample = payload->at(index);
+        if (!sample.is_array() || sample.size() != 2U) {
+            return rejectPipeInterpolationSamples(
+                "malformed_sample",
+                "PartDesign Pipe LawSamples sample must be exactly [parameter, scale]"
+            );
+        }
+        if (!sample.at(0).is_number()) {
+            return rejectPipeInterpolationSamples(
+                "invalid_parameter",
+                "PartDesign Pipe LawSamples parameter must be a finite number in [0, 1]"
+            );
+        }
+        if (!sample.at(1).is_number()) {
+            return rejectPipeInterpolationSamples(
+                "invalid_scale",
+                "PartDesign Pipe LawSamples scale must be a finite positive number"
+            );
+        }
+        const double parameter = sample.at(0).get<double>();
+        const double scale = sample.at(1).get<double>();
+        if (!std::isfinite(parameter) || parameter < 0.0 || parameter > 1.0) {
+            return rejectPipeInterpolationSamples(
+                "invalid_parameter",
+                "PartDesign Pipe LawSamples parameter must be finite and inside [0, 1]"
+            );
+        }
+        if (!std::isfinite(scale) || scale <= 0.0) {
+            return rejectPipeInterpolationSamples(
+                "invalid_scale",
+                "PartDesign Pipe LawSamples scale must be finite and positive"
+            );
+        }
+        if (index > 0U && parameter <= previousParameter) {
+            return rejectPipeInterpolationSamples(
+                "nonmonotonic_or_missing_endpoint",
+                "PartDesign Pipe LawSamples parameters must be strictly increasing"
+            );
+        }
+        previousParameter = parameter;
+        resolution.samples.push_back(part::PipeScalingLawSample{parameter, scale});
+    }
+
+    constexpr double endpointTolerance = 1.0e-12;
+    if (std::abs(resolution.samples.front().parameter) > endpointTolerance
+        || std::abs(resolution.samples.back().parameter - 1.0) > endpointTolerance) {
+        return rejectPipeInterpolationSamples(
+            "nonmonotonic_or_missing_endpoint",
+            "PartDesign Pipe LawSamples must explicitly cover domain endpoints 0.0 and 1.0"
+        );
+    }
+    return resolution;
+}
+
+nlohmann::json pipeInterpolationMetadata(const std::vector<part::PipeScalingLawSample>* samples = nullptr,
+                                         const std::string& status = {},
+                                         const std::string& reason = {})
+{
+    nlohmann::json metadata = {
+        {"kind", "Interpolation"},
+        {"source", "cad_core_product_contract"},
+        {"contract", "cad_core_product_contract"},
+        {"domain", {0.0, 1.0}},
+        {"no_fallback", true},
+    };
+    if (!status.empty()) {
+        metadata["status"] = status;
+    }
+    if (!reason.empty()) {
+        metadata["reason"] = reason;
+    }
+    if (samples != nullptr) {
+        metadata["samples"] = nlohmann::json::array();
+        for (const part::PipeScalingLawSample& sample : *samples) {
+            metadata["samples"].push_back({{"parameter", sample.parameter}, {"scale", sample.scale}});
+        }
+    }
+    return metadata;
+}
+
 bool rejectExactPipeBlocker(const app::DocumentObject& object,
                             runtime::ComputeContext& context,
                             const std::string& property,
@@ -360,20 +482,24 @@ PipeLawResolution resolvePipeLaw(const app::DocumentObject& object,
         return resolution;
     }
     if (transformation == 4) {
-        addPipeDiagnostic(
-            object,
-            context,
-            "product_contract_required",
-            "PartDesign Pipe Transformation=Interpolation requires a reopened LawSamples product contract; C6-M1 does not map it to Linear or S-shape",
-            "Transformation"
-        );
-        resolution.ok = false;
-        resolution.metadata = {
-            {"kind", "Interpolation"},
-            {"status", "product_contract_required"},
-            {"source", "freecad_enum_only"},
-            {"contract", "product_contract_required"},
-        };
+        const PipeInterpolationSamplesResolution samples = resolvePipeInterpolationSamples(object);
+        if (!samples.ok) {
+            addPipeDiagnostic(
+                object,
+                context,
+                samples.missing ? "missing_pipe_law_samples" : "invalid_pipe_law_samples",
+                samples.message,
+                "LawSamples"
+            );
+            resolution.ok = false;
+            resolution.metadata = pipeInterpolationMetadata(nullptr, "invalid", samples.reason);
+            return resolution;
+        }
+        part::PipeScalingLaw law;
+        law.kind = part::PipeScalingLawKind::Interpolation;
+        law.samples = samples.samples;
+        resolution.law = law;
+        resolution.metadata = pipeInterpolationMetadata(&samples.samples);
         return resolution;
     }
 
