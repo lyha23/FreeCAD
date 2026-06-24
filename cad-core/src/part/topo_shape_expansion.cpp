@@ -11,6 +11,7 @@
 #include <BRepBuilderAPI_Copy.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRepBuilderAPI_Sewing.hxx>
+#include <BRepBuilderAPI_Transform.hxx>
 #include <BRepBuilderAPI_TransitionMode.hxx>
 #include <BRep_Builder.hxx>
 #include <BRepFeat_MakeRevol.hxx>
@@ -38,6 +39,7 @@
 #include <TColgp_Array1OfPnt2d.hxx>
 #include <TopExp.hxx>
 #include <TopExp_Explorer.hxx>
+#include <TopLoc_Location.hxx>
 #include <TopTools_IndexedMapOfShape.hxx>
 #include <TopTools_ListOfShape.hxx>
 #include <TopoDS.hxx>
@@ -52,6 +54,7 @@
 #include <gp_Dir.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Pnt2d.hxx>
+#include <gp_Trsf.hxx>
 #include <gp_Vec.hxx>
 
 #include <algorithm>
@@ -1085,6 +1088,69 @@ BRepBuilderAPI_TransitionMode pipeShellTransitionMode(int transition)
     }
 }
 
+bool usesProductProfilePlacement(const PipeShellSectionOption& option)
+{
+    return option.hasLocation
+        && option.profilePlacement
+            == PipeShellProfilePlacement::AnchorLocationToSpineStartProductContract;
+}
+
+std::optional<gp_Pnt> firstVertexPoint(const TopoDS_Shape& shape)
+{
+    for (TopExp_Explorer explorer(shape, TopAbs_VERTEX); explorer.More(); explorer.Next()) {
+        return BRep_Tool::Pnt(TopoDS::Vertex(explorer.Current()));
+    }
+    return std::nullopt;
+}
+
+std::optional<TopoDS_Shape> profilePlacedAtLocationForPipeShell(
+    const TopoDS_Shape& profile,
+    const TopoDS_Vertex& location,
+    const TopoDS_Wire& spine,
+    std::string& error
+)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // BRepOffsetAPI_MakePipeShellPyImp.cpp::add(), wrapper overload parses
+    // "add(Profile, Location, WithContact, WithCorrection)" and calls Add(s, v, ...).
+    // C6-M4 product contract keeps the same request-local Location evidence but uses an
+    // explicit profile-placement strategy when the native Location overload is not collectable.
+    const auto target = firstVertexPoint(spine);
+    if (!target) {
+        error = "PipeShell product profile placement requires a spine start vertex";
+        return std::nullopt;
+    }
+
+    const gp_Pnt anchor = BRep_Tool::Pnt(location);
+    if (samePoint(anchor, *target)) {
+        return profile;
+    }
+
+    gp_Trsf placement;
+    placement.SetTranslation(gp_Vec(anchor, *target));
+    BRepBuilderAPI_Transform transform(profile, placement, Standard_True);
+    if (transform.IsDone() && !transform.Shape().IsNull()) {
+        return transform.Shape();
+    }
+
+    const TopoDS_Shape moved = profile.Moved(TopLoc_Location(placement));
+    if (moved.IsNull()) {
+        error = "PipeShell product profile placement failed";
+        return std::nullopt;
+    }
+    return moved;
+}
+
+void addLocationProductContractStatus(NamedShape& namedShape, bool usedLocationProductContract)
+{
+    if (usedLocationProductContract) {
+        addDistinct(
+            namedShape.elementHistoryStatus,
+            "part_sweep:location_product_contract_profile_placement"
+        );
+    }
+}
+
 bool shapeIsClosed(const TopoDS_Shape& shape)
 {
     if (shape.IsNull()) {
@@ -1795,6 +1861,8 @@ NamedShapeBuild makeElementPipeShellFromSources(
     if (!profiles) {
         return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, error};
     }
+    std::vector<NamedShapeSource> makerSources = sources;
+    bool usedLocationProductContract = false;
 
     try {
         PipeShellOptions effectiveOptions = options;
@@ -1848,26 +1916,56 @@ NamedShapeBuild makeElementPipeShellFromSources(
                 = index < effectiveOptions.sectionOptions.size()
                 ? &effectiveOptions.sectionOptions.at(index)
                 : nullptr;
+            TopoDS_Shape profileForAdd = profiles->at(index);
+            if (option != nullptr && usesProductProfilePlacement(*option)) {
+                std::string placementError;
+                const auto placedProfile = profilePlacedAtLocationForPipeShell(
+                    profileForAdd,
+                    option->location,
+                    *spine,
+                    placementError
+                );
+                if (!placedProfile || placedProfile->IsNull()) {
+                    return NamedShapeBuild {
+                        TopoDS_Shape {},
+                        std::nullopt,
+                        placementError.empty()
+                            ? "PipeShell product profile placement failed"
+                            : placementError
+                    };
+                }
+                profileForAdd = *placedProfile;
+                if (index + 1U < makerSources.size()) {
+                    makerSources.at(index + 1U).shape = profileForAdd;
+                }
+                usedLocationProductContract = true;
+            }
+
             if (!scalingLaw.IsNull()) {
                 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/
                 // FeaturePipe.cpp::Pipe::execute(), if "scalinglaw" exists, calls
                 // "mkPS.SetLaw(copyProfilePoint.getShape(), scalinglaw)" and
                 // "mkPS.SetLaw(wire.getShape(), scalinglaw)" instead of Add().
-                pipeShell.SetLaw(profiles->at(index), scalingLaw);
+                pipeShell.SetLaw(profileForAdd, scalingLaw);
             }
             else if (option != nullptr && option->hasLocation) {
-                pipeShell.Add(
-                    profiles->at(index),
-                    option->location,
-                    option->withContact,
-                    option->withCorrection
-                );
+                if (usesProductProfilePlacement(*option)) {
+                    pipeShell.Add(profileForAdd, option->withContact, option->withCorrection);
+                }
+                else {
+                    pipeShell.Add(
+                        profileForAdd,
+                        option->location,
+                        option->withContact,
+                        option->withCorrection
+                    );
+                }
             }
             else if (option != nullptr) {
-                pipeShell.Add(profiles->at(index), option->withContact, option->withCorrection);
+                pipeShell.Add(profileForAdd, option->withContact, option->withCorrection);
             }
             else {
-                pipeShell.Add(profiles->at(index));
+                pipeShell.Add(profileForAdd);
             }
         }
 
@@ -1885,8 +1983,9 @@ NamedShapeBuild makeElementPipeShellFromSources(
         TopoDS_Shape resultShape = pipeShell.Shape();
         const bool linearized = options.linearizeFaces && linearizePlanarFaces(resultShape);
 
-        NamedShape namedShape = namedShapeForMakerHistory(owner, resultShape, sources, pipeShell);
+        NamedShape namedShape = namedShapeForMakerHistory(owner, resultShape, makerSources, pipeShell);
         addDistinct(namedShape.elementHistoryStatus, "part_sweep:pipeshell_history");
+        addLocationProductContractStatus(namedShape, usedLocationProductContract);
         if (options.linearizeFaces) {
             addDistinct(
                 namedShape.elementHistoryStatus,
@@ -1957,10 +2056,14 @@ NamedShapeBuild makeElementPipeShellFromSources(
                     ownedSources.push_back(namedShapeForMakerHistory(
                         owner + ".Shell" + std::to_string(index + 1U),
                         shellShapes.at(index),
-                        sources,
+                        makerSources,
                         pipeShell
                     ));
                     addDistinct(ownedSources.back().elementHistoryStatus, "part_sweep:pipeshell_history");
+                    addLocationProductContractStatus(
+                        ownedSources.back(),
+                        usedLocationProductContract
+                    );
                     sewingSources.push_back(NamedShapeSource {
                         ownedSources.back().owner,
                         shellShapes.at(index),
@@ -2011,12 +2114,17 @@ NamedShapeBuild makeElementPipeShellFromSources(
                     addDistinct(solidBuild.namedShape->elementHistoryStatus, "part_design_pipe:sewing");
                     addDistinct(solidBuild.namedShape->elementHistoryStatus, "part_design_pipe:solidification");
                     addDistinct(solidBuild.namedShape->elementHistoryStatus, "part_sweep:pipeshell_history");
+                    addLocationProductContractStatus(
+                        *solidBuild.namedShape,
+                        usedLocationProductContract
+                    );
                     return solidBuild;
                 }
 
                 sewedNamedShape.owner = owner;
                 sewedNamedShape.shape = sewed;
                 addDistinct(sewedNamedShape.elementHistoryStatus, "part_sweep:pipeshell_history");
+                addLocationProductContractStatus(sewedNamedShape, usedLocationProductContract);
                 return NamedShapeBuild {sewed, std::move(sewedNamedShape), {}};
             }
 
@@ -2027,10 +2135,11 @@ NamedShapeBuild makeElementPipeShellFromSources(
                 NamedShape shellNamedShape = namedShapeForMakerHistory(
                     owner + ".Shell",
                     shellCompound,
-                    sources,
+                    makerSources,
                     pipeShell
                 );
                 addDistinct(shellNamedShape.elementHistoryStatus, "part_sweep:pipeshell_history");
+                addLocationProductContractStatus(shellNamedShape, usedLocationProductContract);
                 const NamedShapeSource solidSource {owner + ".Shell", shellCompound, &shellNamedShape};
                 NamedShapeBuild solidBuild = makeElementSolidFromSource(owner, solidSource);
                 if (!solidBuild.error.empty() || solidBuild.shape.IsNull() || !solidBuild.namedShape) {
@@ -2044,6 +2153,7 @@ NamedShapeBuild makeElementPipeShellFromSources(
                 solidBuild.namedShape->shape = solidBuild.shape;
                 addDistinct(solidBuild.namedShape->elementHistoryStatus, "part_design_pipe:solidification");
                 addDistinct(solidBuild.namedShape->elementHistoryStatus, "part_sweep:pipeshell_history");
+                addLocationProductContractStatus(*solidBuild.namedShape, usedLocationProductContract);
                 return solidBuild;
             }
         }

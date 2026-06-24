@@ -20,7 +20,7 @@ C6-M4 只处理 `Part::Sweep` / request-local `Part.BRepOffsetAPI_MakePipeShell`
 1. S0：冻结 live baseline、capability remaining gaps、c5m10 known_gap 与 focused tests。
 2. S1：复核 FreeCAD source authority、wrapper overload、probe 脚本和 cad-core 现有落点。
 3. S2：冻结 located profile input/output/diagnostics/product contract；复采集或复核 FreeCADCmd blocker delete condition。
-4. S3：实现 profile placement / Location overload 产品路径，或保留不可实现 backendGap。
+4. S3：已实现 profile placement / Location overload 产品路径；通过显式 `ProfilePlacement=AnchorLocationToSpineStart` 进入非 parity CAD Core product contract，旧 c5m10 known_gap 保留。
 5. S4：在 S3 的 located profile 结果上接入 auxiliary + transition + tolerance combined case。
 6. S5：落 fixtures、expected、focused tests、capability contract 和 docs。
 7. S6：跑阶段回归，按证据删除或保留 remaining gaps，关闭 release gate。

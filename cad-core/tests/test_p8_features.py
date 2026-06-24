@@ -998,6 +998,123 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("located_add_before_transition", evidence["failing_call_order_variants"])
         self.assertIn("plain_control", evidence["successful_controls"])
 
+    def test_c6m4_part_sweep_located_profile_product_contract_builds_shape(self) -> None:
+        result = self.run_recompute("part-sweep-located-profile-product", "c6m4")
+        sweep = result["objects"]["Sweep"]
+        expected = self.expected_freecad("c6m4", "part-sweep-located-profile-product")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertNotIn("known_gap", sweep)
+        self.assertNotIn("known_gap", expected)
+        self.assertEqual(sweep["contract"], "cad_core_product_contract")
+        self.assertEqual(sweep["contract_provenance"], "cad_core_product_contract_non_parity")
+        self.assertEqual(sweep["freecadcmd_location_overload_status"], "notCollected")
+        self.assertFalse(sweep["location_overload"]["native_parity"])
+        self.assertEqual(
+            sweep["advanced"]["sections"],
+            [
+                {
+                    "profile": "SketchPipeProfile",
+                    "with_contact": True,
+                    "with_correction": True,
+                    "location": {"target": "ProfileLocation", "subname": "Vertex1"},
+                    "profile_placement": {
+                        "contract": "cad_core_product_contract",
+                        "source": "cad_core_product_contract",
+                        "strategy": "anchor_location_vertex_to_spine_start",
+                        "location_overload": "cad_core_product_contract_non_parity",
+                        "freecadcmd_location_overload_status": "notCollected",
+                    },
+                }
+            ],
+        )
+        self.assert_part_sweep_history(
+            result,
+            "PipeSpine",
+            ["SketchPipeProfile"],
+            transition="Transformed",
+        )
+        self.assertIn(
+            "part_sweep:location_product_contract_profile_placement",
+            result["named_shapes"]["Sweep"]["element_history_status"],
+        )
+        self.assert_object_matches_expected(result, "c6m4", "part-sweep-located-profile-product")
+
+    def test_c6m4_part_sweep_located_profile_location_diagnostics_are_locatable(self) -> None:
+        result = self.run_recompute("part-sweep-located-profile-diagnostics", "c6m4")
+        expected = self.expected_freecad("c6m4", "part-sweep-located-profile-diagnostics")
+        diagnostics = result["diagnostics"]
+
+        self.assertEqual([item["code"] for item in diagnostics], expected["diagnostic_codes"])
+        by_object = {diagnostic["object"]: diagnostic for diagnostic in diagnostics}
+        self.assertEqual(
+            {
+                name: (item["code"], item.get("property"), item.get("target"), item.get("subname"))
+                for name, item in by_object.items()
+            },
+            {
+                "MissingLocationTarget": (
+                    "missing_link_target",
+                    "SectionOptions",
+                    "MissingVertex",
+                    "Vertex1",
+                ),
+                "InvalidLocationSubname": (
+                    "invalid_subshape",
+                    "SectionOptions[0].Location",
+                    "ProfileLocation",
+                    "Vertex99",
+                ),
+                "NonVertexLocation": (
+                    "invalid_subshape",
+                    "SectionOptions[0].Location",
+                    "PipeSpine",
+                    "Edge1",
+                ),
+                "MultiSubnameLocation": (
+                    "invalid_location_subname_count",
+                    "SectionOptions[0].Location",
+                    "ProfileLocation",
+                    "Vertex1",
+                ),
+            },
+        )
+        for object_name in expected["objects"]:
+            self.assertNotIn(object_name, result["named_shapes"])
+        self.assert_object_matches_expected(result, "c6m4", "part-sweep-located-profile-diagnostics")
+
+    def test_c6m4_part_sweep_located_profile_bool_diagnostics_are_locatable(self) -> None:
+        result = self.run_recompute("part-sweep-located-profile-bool-diagnostics", "c6m4")
+        expected = self.expected_freecad("c6m4", "part-sweep-located-profile-bool-diagnostics")
+        diagnostics = result["diagnostics"]
+
+        self.assertEqual([item["code"] for item in diagnostics], expected["diagnostic_codes"])
+        by_object = {diagnostic["object"]: diagnostic for diagnostic in diagnostics}
+        self.assertEqual(
+            {
+                name: (item["code"], item["property"], item.get("target"), item.get("subname"))
+                for name, item in by_object.items()
+            },
+            {
+                "InvalidWithContact": (
+                    "invalid_parameter",
+                    "SectionOptions[0].WithContact",
+                    "InvalidWithContact",
+                    "WithContact",
+                ),
+                "InvalidWithCorrection": (
+                    "invalid_parameter",
+                    "SectionOptions[0].WithCorrection",
+                    "InvalidWithCorrection",
+                    "WithCorrection",
+                ),
+            },
+        )
+        for object_name in expected["objects"]:
+            self.assertEqual(result["objects"][object_name]["status"], "error")
+            self.assertNotIn(object_name, result["named_shapes"])
+        self.assert_object_matches_expected(result, "c6m4", "part-sweep-located-profile-bool-diagnostics")
+
     def test_c5m10_part_sweep_tolerance_contract_and_compat_diagnostics(self) -> None:
         result = self.run_recompute("part-sweep-tolerance-contract", "c5m10")
         tolerance_sweep = result["objects"]["ToleranceSweep"]

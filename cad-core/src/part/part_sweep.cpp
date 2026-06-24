@@ -113,6 +113,42 @@ std::optional<bool> readJsonBool(const nlohmann::json& value)
     return payload.get<bool>();
 }
 
+std::optional<PipeShellProfilePlacement> readProfilePlacementMode(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const nlohmann::json& value,
+    const std::string& property
+)
+{
+    const nlohmann::json& payload = propertyPayload(value);
+    if (payload.is_boolean()) {
+        return payload.get<bool>()
+            ? PipeShellProfilePlacement::AnchorLocationToSpineStartProductContract
+            : PipeShellProfilePlacement::OcctLocationOverload;
+    }
+    if (payload.is_string()) {
+        const std::string mode = payload.get<std::string>();
+        if (mode == "AnchorLocationToSpineStart" || mode == "AnchorToSpineStart"
+            || mode == "cad_core_product_contract") {
+            return PipeShellProfilePlacement::AnchorLocationToSpineStartProductContract;
+        }
+        if (mode == "OcctLocationOverload") {
+            return PipeShellProfilePlacement::OcctLocationOverload;
+        }
+    }
+
+    addSweepDiagnostic(
+        object,
+        context,
+        "invalid_parameter",
+        "Part::Sweep SectionOptions ProfilePlacement must be AnchorLocationToSpineStart or false",
+        property,
+        object.name,
+        "ProfilePlacement"
+    );
+    return std::nullopt;
+}
+
 std::string sectionOptionProperty(std::size_t index, const std::string& field = {})
 {
     std::string property = "SectionOptions[" + std::to_string(index) + "]";
@@ -449,7 +485,7 @@ std::optional<AdvancedVertexLink> resolveSectionLocation(
         addSweepDiagnostic(
             object,
             context,
-            "invalid_parameter",
+            "invalid_location_subname_count",
             "Part::Sweep SectionOptions Location must reference exactly one vertex",
             property,
             link->object,
@@ -735,6 +771,48 @@ bool readSectionOptions(
             };
         }
 
+        if (const auto profilePlacementIt = item.find("ProfilePlacement");
+            profilePlacementIt != item.end()) {
+            // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/
+            // BRepOffsetAPI_MakePipeShellPyImp.cpp::add(), exposes the Location overload as
+            // "add(Profile, Location, WithContact, WithCorrection)". C6-M4 requires an
+            // explicit CAD Core product-contract selector so existing c5m10 known_gap
+            // fixtures keep the native overload blocker.
+            const std::string property = sectionOptionProperty(index, "ProfilePlacement");
+            const auto profilePlacement = readProfilePlacementMode(
+                object,
+                context,
+                *profilePlacementIt,
+                property
+            );
+            if (!profilePlacement) {
+                return false;
+            }
+            if (*profilePlacement
+                == PipeShellProfilePlacement::AnchorLocationToSpineStartProductContract) {
+                if (!sectionOption.hasLocation) {
+                    addSweepDiagnostic(
+                        object,
+                        context,
+                        "invalid_parameter",
+                        "Part::Sweep SectionOptions ProfilePlacement requires Location",
+                        property,
+                        object.name,
+                        "ProfilePlacement"
+                    );
+                    return false;
+                }
+                sectionOption.profilePlacement = *profilePlacement;
+                itemMetadata["profile_placement"] = {
+                    {"contract", "cad_core_product_contract"},
+                    {"source", "cad_core_product_contract"},
+                    {"strategy", "anchor_location_vertex_to_spine_start"},
+                    {"location_overload", "cad_core_product_contract_non_parity"},
+                    {"freecadcmd_location_overload_status", "notCollected"},
+                };
+            }
+        }
+
         if (const auto contactIt = item.find("WithContact"); contactIt != item.end()) {
             const auto withContact = readJsonBool(*contactIt);
             if (!withContact) {
@@ -782,6 +860,18 @@ bool hasSectionLocation(const PipeShellOptions& options)
 {
     for (const PipeShellSectionOption& sectionOption : options.sectionOptions) {
         if (sectionOption.hasLocation) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool hasProductContractSectionLocation(const PipeShellOptions& options)
+{
+    for (const PipeShellSectionOption& sectionOption : options.sectionOptions) {
+        if (sectionOption.hasLocation
+            && sectionOption.profilePlacement
+                == PipeShellProfilePlacement::AnchorLocationToSpineStartProductContract) {
             return true;
         }
     }
@@ -1165,6 +1255,19 @@ void executePartSweep(const app::DocumentObject& object, runtime::ComputeContext
     if (!advanced->metadata.empty()) {
         metadata["advanced"] = advanced->metadata;
     }
+    const bool productContractLocation = hasProductContractSectionLocation(advanced->pipeOptions);
+    if (productContractLocation) {
+        metadata["contract"] = "cad_core_product_contract";
+        metadata["contract_provenance"] = "cad_core_product_contract_non_parity";
+        metadata["freecadcmd_location_overload_status"] = "notCollected";
+        metadata["location_overload"] = {
+            {"source_authority",
+             "BRepOffsetAPI_MakePipeShellPyImp.cpp::add(Profile, Location, WithContact, WithCorrection)"},
+            {"product_strategy", "anchor_location_vertex_to_spine_start"},
+            {"freecadcmd_error", "OCCError: NCollection_Array1::Value"},
+            {"native_parity", false},
+        };
+    }
     const auto build = makeElementPipeShellFromSources(
         object.name,
         sweepSources(*spine, *sections),
@@ -1199,7 +1302,7 @@ void executePartSweep(const app::DocumentObject& object, runtime::ComputeContext
             );
             return;
         }
-        if (hasSectionLocation(advanced->pipeOptions)
+        if (hasSectionLocation(advanced->pipeOptions) && !productContractLocation
             && (build.error.find("NCollection_Array1::Value") != std::string::npos)) {
             publishLocationOverloadKnownGap(
                 object,

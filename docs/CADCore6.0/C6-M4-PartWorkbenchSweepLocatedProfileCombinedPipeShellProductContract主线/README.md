@@ -4,11 +4,12 @@
 
 ## 当前状态
 
-- S0-S2 已实现；S3-S6 仍为 `待执行`。工作步骤总入口只是已创建索引，当前执行入口从 S3 开始。
-- 当前 live 代码仍把 `part-sweep-located-profile-contract` 和 `part-sweep-advanced-combined-contract` 固定为 known_gap/request_metadata_only。
+- S0-S3 已实现；S4-S6 仍为 `待执行`。工作步骤总入口只是已创建索引，当前执行入口从 S4 开始。
+- 当前 live 代码仍把 c5m10 `part-sweep-located-profile-contract` 和 `part-sweep-advanced-combined-contract` 固定为 known_gap/request_metadata_only；S3 另以 c6m4 fixtures 发布非 FreeCAD parity 的 located profile CAD Core product path。
 - 两个 focused guard 已在 S0 live 复核通过：located profile known_gap guard 与 combined known_gap/diagnostics priority guard。
 - S1 已冻结 FreeCAD wrapper source authority、cad-core DTO/builder 落点、oracle/input/non-goal 矩阵；不声明 FreeCAD parity，不提升 capability，不删除 remaining gaps。
 - S2 复跑本机 `FreeCADCmd 1.2.0 Revision 20260519` checked-in probe 后仍得到 `OCCError: NCollection_Array1::Value` build-stage blocker；c5m10 expected 保持 current known_gap，C6-M4 fixtures 路线保持 planned non-parity product/diagnostic contract。
+- S3 已落地 `SectionOptions[].ProfilePlacement=AnchorLocationToSpineStart` 显式 product-contract selector，valid located profile 输出 shape/metadata/NamedShape history；missing/invalid/non-vertex/multi-subname Location 和 malformed bool 先返回 diagnostics，不进入 no-location fallback。capability remaining gaps 暂不删除，留给 S5/S6。
 
 ## 主线边界
 

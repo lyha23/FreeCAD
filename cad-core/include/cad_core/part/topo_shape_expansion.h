@@ -146,6 +146,12 @@ enum class PipeShellMode
     Binormal,
 };
 
+enum class PipeShellProfilePlacement
+{
+    OcctLocationOverload,
+    AnchorLocationToSpineStartProductContract,
+};
+
 enum class PipeScalingLawKind
 {
     Linear,
@@ -208,8 +214,16 @@ struct PipeShellSectionOption
     // BRepOffsetAPI_MakePipeShellPyImp.cpp::add(), overloads
     // "Add(s, withContact, withCorrection)" and
     // "Add(s, v, withContact, withCorrection)" for per-profile placement/contact options.
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // BRepOffsetAPI_MakePipeShellPyImp.cpp::add(), parses
+    // "add(Profile, Location, WithContact, WithCorrection)"; C6-M4 keeps this as
+    // request-local product-contract metadata when the OCCT location overload is not used.
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // TopoShapeExpansion.cpp::TopoShape::makeElementPipeShell(), maker history is consumed by
+    // "makeElementShape(mkPipeShell, shapes, op)" after Add()/Build().
     TopoDS_Vertex location;
     bool hasLocation = false;
+    PipeShellProfilePlacement profilePlacement = PipeShellProfilePlacement::OcctLocationOverload;
     bool withContact = false;
     bool withCorrection = false;
 };

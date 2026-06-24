@@ -1,0 +1,27 @@
+{
+  "schema_version": "cad-core.freecad-expected.v1",
+  "reference": "CAD Core C6-M4 Part::Sweep located profile bool diagnostics contract oracle; not FreeCAD native parity.",
+  "oracle_evidence": {
+    "contract": "SectionOptions[].WithContact and WithCorrection diagnostics product contract",
+    "freecad_native_parity": false,
+    "owner_class": "diagnostics_contract"
+  },
+  "diagnostic_codes": [
+    "invalid_parameter",
+    "invalid_parameter"
+  ],
+  "objects": {
+    "InvalidWithContact": {
+      "object_fields": {
+        "status": "error",
+        "feature": "part_sweep"
+      }
+    },
+    "InvalidWithCorrection": {
+      "object_fields": {
+        "status": "error",
+        "feature": "part_sweep"
+      }
+    }
+  }
+}

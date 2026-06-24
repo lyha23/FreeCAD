@@ -1,0 +1,40 @@
+{
+  "schema_version": "cad-core.freecad-expected.v1",
+  "reference": "CAD Core C6-M4 Part::Sweep located profile diagnostics contract oracle; not FreeCAD native parity.",
+  "oracle_evidence": {
+    "contract": "SectionOptions[].Location diagnostics product contract",
+    "freecad_native_parity": false,
+    "owner_class": "diagnostics_contract"
+  },
+  "diagnostic_codes": [
+    "missing_link_target",
+    "invalid_subshape",
+    "invalid_subshape",
+    "invalid_location_subname_count"
+  ],
+  "objects": {
+    "MissingLocationTarget": {
+      "object_fields": {
+        "status": "error"
+      }
+    },
+    "InvalidLocationSubname": {
+      "object_fields": {
+        "status": "error",
+        "feature": "part_sweep"
+      }
+    },
+    "NonVertexLocation": {
+      "object_fields": {
+        "status": "error",
+        "feature": "part_sweep"
+      }
+    },
+    "MultiSubnameLocation": {
+      "object_fields": {
+        "status": "error",
+        "feature": "part_sweep"
+      }
+    }
+  }
+}
