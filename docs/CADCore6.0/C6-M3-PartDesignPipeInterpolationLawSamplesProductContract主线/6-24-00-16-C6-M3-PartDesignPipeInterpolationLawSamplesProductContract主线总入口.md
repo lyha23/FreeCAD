@@ -43,7 +43,7 @@ live baseline and source authority
 | 类型 | 路径 | 用途 |
 | --- | --- | --- |
 | 工作步骤总入口 | `工作步骤细分/6-24-00-17-【已实现】C6-M3工作步骤总入口.md` | S0-S6 执行索引。 |
-| S0 | `工作步骤细分/6-24-00-18-C6-M3-S0-live基线与源码authority复核.md` | 复核 Interpolation 边界、capability remaining gap 和源码依据。 |
+| S0 | `工作步骤细分/6-24-00-18-【已实现】C6-M3-S0-live基线与源码authority复核.md` | 已复核 Interpolation 边界、capability remaining gap 和源码依据。 |
 | S1 | `工作步骤细分/6-24-00-19-C6-M3-S1-LawSamplesDTO合同冻结.md` | 定义 request / response / diagnostics 合同。 |
 | S2 | `工作步骤细分/6-24-00-20-C6-M3-S2-scope-blocker-fixture矩阵.md` | 建 scope、blocker、oracle、non-goal 和 validation 矩阵。 |
 | S3 | `工作步骤细分/6-24-00-21-C6-M3-S3-InterpolationLawKernel实现.md` | 实现 OCCT law kernel 或明确低层 blocker。 |
