@@ -643,6 +643,59 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("object_fields.sections[].subname", known_gap["uncollected_fields"])
         self.assertIn("shape_summary for selected Sketch subelement", known_gap["uncollected_fields"])
 
+    def test_c6m7_part_loft_subelement_product_contract_builds_selected_section(self) -> None:
+        result = self.run_recompute("part-loft-subelement-product", "c6m7")
+        loft = result["objects"]["Loft"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(loft["status"], "ok")
+        self.assertEqual(loft["feature"], "part_loft")
+        self.assertEqual(loft["shape"], "occt_shell")
+        self.assertEqual(loft["sections"], ["LowerProfile", "UpperEdge"])
+        self.assertEqual(loft["contract"], "cad_core_product_contract")
+        self.assertEqual(loft["contract_provenance"], "cad_core_product_contract_non_parity")
+        self.assertFalse(loft["freecad_native_expected"])
+        self.assertEqual(
+            loft["sections_contract"],
+            {
+                "property": "Sections",
+                "source": "request_local_values_sublist",
+                "freecad_native_property": "App::PropertyLinkList",
+                "native_parity": False,
+            },
+        )
+        self.assertEqual(
+            loft["selected_sections"],
+            [
+                {
+                    "object": "LowerProfile",
+                    "shape": "occt_edge",
+                    "selected": True,
+                    "subnames": ["Edge1"],
+                    "stable_subnames": ["Edge1"],
+                    "contract": "cad_core_product_contract",
+                    "contract_provenance": "cad_core_product_contract_non_parity",
+                    "subname": "Edge1",
+                    "stable_subname": "Edge1",
+                }
+            ],
+        )
+        self.assertEqual(loft["section_entries"][0]["subname"], "Edge1")
+        self.assertFalse(loft["section_entries"][1]["selected"])
+        self.assert_part_loft_history(result, ["LowerProfile", "UpperEdge"])
+        self.assert_object_matches_expected(result, "c6m7", "part-loft-subelement-product")
+
+    def test_c6m7_part_loft_subelement_product_contract_invalid_subshape_diagnostic(self) -> None:
+        result = self.run_recompute("part-loft-subelement-product-invalid", "c6m7")
+        diagnostics = result["diagnostics"]
+
+        self.assertEqual([item["code"] for item in diagnostics], ["invalid_subshape"])
+        self.assertEqual(diagnostics[0]["target"], "LowerProfile")
+        self.assertEqual(diagnostics[0]["subname"], "Edge99")
+        self.assertEqual(result["objects"]["Loft"]["status"], "error")
+        self.assertEqual(result["objects"]["Loft"]["feature"], "part_loft")
+        self.assert_object_matches_expected(result, "c6m7", "part-loft-subelement-product-invalid")
+
     def assert_part_sweep_history(
         self,
         result: dict,

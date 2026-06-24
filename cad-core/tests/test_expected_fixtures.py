@@ -58,6 +58,28 @@ class CadCoreExpectedFixtureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCa
         self.assertEqual(known_gap["freecadcmd_evidence"]["property"], "Sections")
         self.assertIn("object_fields.sections[].subname", known_gap["uncollected_fields"])
 
+    def test_c6m7_loft_subelement_product_contract_metadata_matches_s3_boundaries(self) -> None:
+        product = self.expected_freecad("c6m7", "part-loft-subelement-product")
+        fields = product["object_fields"]
+
+        self.assertEqual(product["oracle_evidence"]["owner_class"], "cad_core_product_contract")
+        self.assertFalse(product["oracle_evidence"]["freecad_native_parity"])
+        self.assertNotIn("known_gap", product)
+        self.assertEqual(fields["feature"], "part_loft")
+        self.assertEqual(fields["sections"], ["LowerProfile", "UpperEdge"])
+        self.assertEqual(fields["contract"], "cad_core_product_contract")
+        self.assertEqual(fields["contract_provenance"], "cad_core_product_contract_non_parity")
+        self.assertFalse(fields["freecad_native_expected"])
+        self.assertEqual(fields["sections_contract"]["freecad_native_property"], "App::PropertyLinkList")
+        self.assertFalse(fields["sections_contract"]["native_parity"])
+        self.assertEqual(fields["selected_sections"][0]["subname"], "Edge1")
+        self.assertEqual(fields["selected_sections"][0]["stable_subname"], "Edge1")
+
+        invalid = self.expected_freecad("c6m7", "part-loft-subelement-product-invalid")
+        self.assertEqual(invalid["diagnostic_codes"], ["invalid_subshape"])
+        self.assertEqual(invalid["oracle_evidence"]["owner_class"], "cad_core_product_contract_diagnostics")
+        self.assertFalse(invalid["oracle_evidence"]["freecad_native_parity"])
+
     def test_c5m12_filling_geomplate_expected_metadata_matches_s4_boundaries(self) -> None:
         expected = self.expected_freecad("c5m12", "part-filling-non-boundary-edge-no-support-order")
         self.assertNotIn("known_gap", expected)

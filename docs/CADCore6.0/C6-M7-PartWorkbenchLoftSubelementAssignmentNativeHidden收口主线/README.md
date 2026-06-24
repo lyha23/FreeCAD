@@ -19,7 +19,9 @@
 - S1 已复核 FreeCAD Loft 调用链：`Loft::execute()` 读取 `Sections.getValues()`，逐个对象调用 `getTopoShape(... ResolveLink | Transform)`，再调用 `result.makeElementLoft(...)`；`Sections` 是 `App::PropertyLinkList` object-level link，不是 native `PropertyLinkSubList`。
 - S1 结论：当前 gap 的 FreeCAD 侧证据仍是 `PropertyLinkList` native-hidden subelement storage；cad-core 当前只读取 object-level `app::readLinks(object, "Sections")`。S2 已把 selected subelement 支持批准为 request-local product contract non-parity DTO，不能写成 FreeCAD expected parity。
 - S2 已批准 C6-M7 走 request-local CAD Core selected subelement product contract 路线：route decision 为 `cad_core_product_contract_non_parity`。FreeCAD `Part::Loft.Sections` 仍是 object-level `App::PropertyLinkList`，C5-M12 diagnostic expected 继续作为 `nativeHidden` / `diagnosticOnly` evidence 保留，S3 不得生成 FreeCAD native expected 或声明 parity。
-- S3 下一步固定为实现 product contract：新增独立 C6-M7 request-local DTO / fixture / focused tests / capability docs 证据，并与 C5-M12 FreeCAD expected 分开。
+- S3 已实现 request-local CAD Core Loft selected subelement product contract：`PropertyLinkList.values[]` 可携带 `value/SubList/StableSubList` rich item，Loft 解析 selected section subshape 并发布 `contract_provenance=cad_core_product_contract_non_parity`、`section_entries`、`selected_sections`；invalid subshape 给 `invalid_subshape`。
+- S3 新增 `cad-core/fixtures/c6m7/part-loft-subelement-product*.json` 和 expected/product metadata，均声明不是 FreeCAD native parity；C5-M12 diagnostic expected 保持不变。
+- S3 验证已通过：`cmake --build build`、`python3 -m unittest tests.test_p8_features -k loft`、`python3 -m unittest tests.test_expected_fixtures -k loft`。S4 下一步为 capability/docs 发布，不在 S3 删除 `remaining_gaps`。
 - C6-M7 只处理 `Part::Loft.Sections` 的 subelement assignment 证据闭环，不声明 FreeCAD parity、PartDesign Loft、GUI Loft 或 full Part surface family。
 
 ## 队列检查

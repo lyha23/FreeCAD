@@ -1,0 +1,52 @@
+{
+  "Objects": [
+    {
+      "Name": "LowerProfile",
+      "ID": 1,
+      "TypeId": "Part::RegularPolygon",
+      "Properties": {
+        "Polygon": 4,
+        "Circumradius": 2.0
+      }
+    },
+    {
+      "Name": "UpperEdge",
+      "ID": 2,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": -1.0,
+        "Y1": 0.0,
+        "Z1": 3.0,
+        "X2": 1.0,
+        "Y2": 0.0,
+        "Z2": 3.0
+      }
+    },
+    {
+      "Name": "Loft",
+      "ID": 3,
+      "TypeId": "Part::Loft",
+      "Properties": {
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            {
+              "value": "LowerProfile",
+              "SubList": ["Edge1"],
+              "StableSubList": ["Edge1"]
+            },
+            "UpperEdge"
+          ]
+        },
+        "Solid": false,
+        "Ruled": true,
+        "Closed": false,
+        "Linearize": false,
+        "MaxDegree": 2
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Loft"]
+  }
+}

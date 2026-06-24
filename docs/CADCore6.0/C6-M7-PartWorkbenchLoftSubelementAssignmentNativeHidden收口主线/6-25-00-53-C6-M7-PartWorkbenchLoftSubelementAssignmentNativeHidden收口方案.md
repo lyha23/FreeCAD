@@ -9,8 +9,8 @@ C6-M6 关闭后，`docs/CADCore6.0` 下现有 C6-M1 到 C6-M6 工作步骤队列
 - S0：复核 live baseline、C6-M1 到 C6-M6 queue、`part_workbench.loft` capability 和 C5-M12 Loft expected evidence，冻结唯一 active gap。
 - S1：复核 FreeCAD authority：`PartFeatures.cpp::Loft::execute()`、`PropertyLinkList`、`TopoShapeExpansion.cpp::makeElementLoft()`、`MapperThruSections` 和 cad-core `part_loft.cpp` / `topo_shape_expansion.cpp` 落点。
 - S2：已判定 `part_loft_subelement_assignment_native_hidden` 的准入路径：批准 request-local CAD Core selected subelement product contract，route decision 为 `cad_core_product_contract_non_parity`。FreeCAD `Sections` 仍是 object-level `PropertyLinkList`，不得用 cad-core output 伪造 FreeCAD expected。
-- S3：按 S2 路线补 C6-M7 product contract fixtures、focused tests、object_fields 和 mapper/history 证据；C5-M12 diagnostic expected 保持 `nativeHidden` / `diagnosticOnly`，不混入 product contract。
-- S4：同步 capability、adapter assertions、expected metadata 和 C6-M7 矩阵；只删除或移动有证据闭环的 gap。
+- S3：已按 S2 路线补 C6-M7 product contract fixtures、focused tests、object_fields 和 mapper/history 证据；C5-M12 diagnostic expected 保持 `nativeHidden` / `diagnosticOnly`，未混入 product contract。
+- S4：同步 capability、adapter assertions、发布口径和 C6-M7 矩阵；只删除或移动有证据闭环的 gap。
 - S5：运行阶段回归并发布 C6-M7 状态；若 Loft active gap 清空，才允许进入后续 surface-family freeze 候选。
 
 ## 关键边界
@@ -27,6 +27,7 @@ C6-M6 关闭后，`docs/CADCore6.0` 下现有 C6-M1 到 C6-M6 工作步骤队列
 | 方向 | 文件 |
 | --- | --- |
 | Loft executor / DTO | `cad-core/src/part/part_loft.cpp`、`cad-core/include/cad_core/part/part_feature.h` |
+| Link DTO parsing | `cad-core/src/app/property_links.cpp` |
 | Loft shape build / history | `cad-core/src/part/topo_shape_expansion.cpp`、`cad-core/src/part/topo_shape.cpp` |
 | expected collector | `cad-core/tools/collect_freecad_expected.py` |
 | capability | `cad-core/src/runtime/capability_contract.cpp` |
@@ -48,6 +49,13 @@ C6-M6 关闭后，`docs/CADCore6.0` 下现有 C6-M1 到 C6-M6 工作步骤队列
 - 阶段回归：`cmake --build build` 加 Loft / expected / adapter focused suites。
 - release gate：S5 跑 P8 / expected / adapter 相关 suites；只有修改 `topo` / history 主路径时再加入 topology suite。
 
+## S3 实现结论
+
+- `App::PropertyLinkList` 的 FreeCAD native object-level 边界不变；S3 只允许 CAD Core request-local `Sections.values[]` rich item 表达 selected subelement product contract。
+- Loft 输出保留 `sections` object list，并新增 `contract_provenance=cad_core_product_contract_non_parity`、`section_entries`、`selected_sections` 和 `freecad_native_expected=false`。
+- `cad-core/fixtures/c6m7/part-loft-subelement-product.json` 覆盖 valid selected Edge profile；`part-loft-subelement-product-invalid.json` 覆盖 `invalid_subshape`。
+- S3 已通过 `cmake --build build`、`tests.test_p8_features -k loft`、`tests.test_expected_fixtures -k loft`。
+
 ## 结论
 
-推荐立即进入 C6-M7。这个包的最小完整语义批次是 Loft subelement assignment native-hidden 收口：S2 已批准 request-local CAD Core product contract non-parity；S3 应实现 product contract，并把 FreeCAD native-hidden diagnostic expected 作为独立 evidence 保留，为后续 surface-family freeze 留出明确条件。
+推荐继续 C6-M7。这个包的最小完整语义批次是 Loft subelement assignment native-hidden 收口：S2 已批准 request-local CAD Core product contract non-parity；S3 已实现 product contract，并把 FreeCAD native-hidden diagnostic expected 作为独立 evidence 保留。S4 应发布 capability / adapter 口径，为后续 surface-family freeze 留出明确条件。

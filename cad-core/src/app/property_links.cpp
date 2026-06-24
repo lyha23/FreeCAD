@@ -430,6 +430,11 @@ std::vector<Link> readLinkList(const nlohmann::json& value)
     for (const auto& item : *rawLinksIt) {
         if (item.is_string() && !item.get<std::string>().empty()) {
             links.push_back({item.get<std::string>(), {}});
+            continue;
+        }
+        auto link = readLinkSubListItem(item);
+        if (link) {
+            links.push_back(std::move(*link));
         }
     }
     return links;
@@ -1244,10 +1249,28 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
             return true;
         }
         const auto rawLinksIt = value.find("values");
-        if (rawLinksIt == value.end()) {
+        if (rawLinksIt == value.end() || !rawLinksIt->is_array()) {
             return true;
         }
-        return !readStringList(*rawLinksIt).has_value();
+        for (const auto& item : *rawLinksIt) {
+            if (item.is_string() && !item.get<std::string>().empty()) {
+                continue;
+            }
+            // FreeCAD native App::PropertyLinkList is object-level only. cad-core accepts
+            // request-local rich values[] items so product contracts can carry subelement
+            // evidence without changing FreeCAD expected collection or persistent semantics.
+            if (!item.is_object() || item.contains("PropertyType")) {
+                return true;
+            }
+            const auto objectIt = item.find("value");
+            if (objectIt == item.end() || !objectIt->is_string() || objectIt->get<std::string>().empty()) {
+                return true;
+            }
+            if (item.contains("values") || item.contains("SubSet") || !hasValidSubnameFields(item)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     if (isLinkSubListType(propertyType)) {
