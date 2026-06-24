@@ -2647,7 +2647,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(producer_matrix["pipeshell"]["remaining"], [])
         self.assertEqual(
             producer_matrix["part_filling"]["status"],
-            "done_expected_backed_first_batch_plus_c5m13_param_subset_closeout",
+            "done_expected_backed_first_batch_plus_c6m5_product_contract_published",
         )
         self.assertIn("maker_history:filling", producer_matrix["part_filling"]["covered"])
         self.assertIn("boundary_source_evidence", producer_matrix["part_filling"]["covered"])
@@ -2655,8 +2655,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("connected_boundary_edges_default", producer_matrix["part_filling"]["covered"])
         self.assertIn("invalid_diagnostics", producer_matrix["part_filling"]["covered"])
         self.assertIn("initial_surface_load_init_surface", producer_matrix["part_filling"]["covered"])
+        self.assertIn("surface_initial_face_product_contract_c6m5", producer_matrix["part_filling"]["covered"])
         self.assertIn("support_face_source_map", producer_matrix["part_filling"]["covered"])
         self.assertIn("order_source_map", producer_matrix["part_filling"]["covered"])
+        self.assertIn("support_order_c0_g1_g2_product_contract_c6m5", producer_matrix["part_filling"]["covered"])
+        self.assertIn("surface_support_order_locatable_diagnostics_c6m5", producer_matrix["part_filling"]["covered"])
         self.assertIn("locatable_support_order_diagnostics", producer_matrix["part_filling"]["covered"])
         self.assertIn("constructor_params_metadata", producer_matrix["part_filling"]["covered"])
         self.assertIn(
@@ -2679,15 +2682,15 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "wrapper_uv_point_on_support_lifecycle_diagnostic",
             producer_matrix["part_filling"]["covered"],
         )
-        self.assertIn(
+        self.assertNotIn(
             "filling_surface_native_helper_blocker",
             producer_matrix["part_filling"]["remaining"],
         )
-        self.assertIn(
+        self.assertNotIn(
             "filling_params_pts_anisotropy_tol_g1_g2_max_segments_blocker",
             producer_matrix["part_filling"]["remaining"],
         )
-        self.assertIn(
+        self.assertNotIn(
             "filling_non_boundary_support_order_native_helper_blocker",
             producer_matrix["part_filling"]["remaining"],
         )
@@ -2695,6 +2698,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "compound_boundary_optional_expected",
             producer_matrix["part_filling"]["remaining"],
         )
+        self.assertEqual(producer_matrix["part_filling"]["remaining"], [])
         self.assertEqual(producer_matrix["transformed"]["status"], "covered")
         self.assertIn("link_retag_composition", producer_matrix["transformed"]["covered"])
         self.assertIn("terminal_split_deleted", producer_matrix["transformed"]["covered"])
@@ -3496,7 +3500,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         filling = capabilities["part_workbench"]["filling"]
         self.assertEqual(
             filling["status"],
-            "supported_expected_backed_with_c5m13_param_subset_closeout",
+            "supported_expected_backed_plus_c6m5_product_contract_non_parity",
         )
         self.assertIn("Part::FilledFace", filling["type_ids"])
         self.assertEqual(filling["helper"], "Part.makeFilledFace")
@@ -3540,18 +3544,30 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "default_params_metadata",
             "boundary_source_evidence",
             "initial_surface_load_init_surface",
+            "c6m5_surface_initial_face_product_contract",
+            "surface_source_status_product_evidence",
             "support_face_source_map",
             "order_source_map",
             "support_order_source_evidence",
+            "support_order_source_status_product_evidence",
+            "c6m5_support_order_c0_g1_g2_product_contract",
+            "c6m5_surface_support_order_locatable_diagnostics",
             "source_backed_surface_support_order_known_gap",
             "constructor_params_metadata",
             "param_degree_numiter_tol2d_tol3d_maxdegree_expected_backed",
+            "params_source_status_product_evidence",
+            "explicit_param_fields_product_evidence",
+            "c6m5_explicit_params_product_contract",
+            "c6m5_explicit_params_locatable_diagnostics",
             "param_pts_anisotropy_tol_g1_g2_max_segments_native_blockers",
             "non_boundary_edge_isbound_false",
             "non_boundary_wire_constraints",
             "non_boundary_face_constraint",
             "non_boundary_vertex_point_constraint",
             "non_boundary_constraint_source_evidence",
+            "non_boundary_support_order_status_product_evidence",
+            "c6m5_non_boundary_support_order_product_contract",
+            "c6m5_non_boundary_support_order_locatable_diagnostics",
             "c5m12_non_boundary_edge_no_support_order_expected_backed",
             "compound_source_expansion",
             "compound_optional_expected_backed",
@@ -3583,6 +3599,13 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "c5m13/part-filling-param-num-iter-only",
             "c5m13/part-filling-param-tol2d-tol3d-only",
             "c5m13/part-filling-param-max-degree-only",
+            "c6m5/part-filling-surface-initial-face-product",
+            "c6m5/part-filling-support-order-c0-g1-g2-product",
+            "c6m5/part-filling-surface-support-order-invalid-product",
+            "c6m5/part-filling-explicit-params-product",
+            "c6m5/part-filling-explicit-params-invalid-product",
+            "c6m5/part-filling-non-boundary-support-order-product",
+            "c6m5/part-filling-non-boundary-support-order-invalid-product",
         ):
             self.assertIn(fixture, filling["fixtures"])
         self.assertEqual(
@@ -3609,6 +3632,13 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "c5m13/part-filling-param-num-iter-only",
                 "c5m13/part-filling-param-tol2d-tol3d-only",
                 "c5m13/part-filling-param-max-degree-only",
+                "c6m5/part-filling-surface-initial-face-product",
+                "c6m5/part-filling-support-order-c0-g1-g2-product",
+                "c6m5/part-filling-surface-support-order-invalid-product",
+                "c6m5/part-filling-explicit-params-product",
+                "c6m5/part-filling-explicit-params-invalid-product",
+                "c6m5/part-filling-non-boundary-support-order-product",
+                "c6m5/part-filling-non-boundary-support-order-invalid-product",
             ],
         )
         for diagnostic in (
@@ -3651,14 +3681,18 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "default_params_baseline",
             "constructor_params_source_backed",
             "initial_surface_face_source_backed",
+            "initial_surface_face_product_contract_c6m5",
             "support_face_map_source_backed",
             "order_map_source_backed_c0_g1_g2_parser",
+            "support_order_c0_g1_g2_product_contract_c6m5",
             "surface_support_order_native_helper_oracle_known_gap",
             "support_order_g1_fixture_source_backed",
             "single_field_params_degree_numiter_tol2d_tol3d_maxdegree_expected_backed",
+            "explicit_params_product_contract_c6m5",
             "pts_anisotropy_tol_g1_g2_max_segments_all_params_native_blockers",
             "non_boundary_edge_wire_face_vertex_source_backed",
             "non_boundary_edge_no_support_order_expected_backed",
+            "non_boundary_support_order_product_contract_c6m5",
             "non_boundary_edge_support_order_native_helper_oracle_known_gap",
             "compound_boundary_optional_expected_backed",
             "no_cross_request_mutable_makefilling_wrapper_state",
@@ -3668,6 +3702,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "full_part_surface_family_not_claimed",
         ):
             self.assertIn(boundary, filling["request_local_boundaries"])
+        narrowed_gaps = filling["narrowed_gaps"]
         for gap in (
             "filling_surface_native_helper_blocker",
             "filling_support_order_g1_native_helper_blocker",
@@ -3676,8 +3711,9 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "filling_params_all_native_helper_blocker",
             "filling_non_boundary_support_order_native_helper_blocker",
         ):
-            self.assertIn(gap, filling["remaining_gaps"])
-            self.assertIn(gap, filling["narrowed_gaps"])
+            self.assertNotIn(gap, filling["remaining_gaps"])
+            self.assertIn(gap, narrowed_gaps)
+            self.assertEqual(narrowed_gaps[gap]["status"], "released_c6m5_product_contract_non_parity")
         self.assertEqual(
             filling["field_boundaries"]["expected_backed"],
             [
@@ -3690,20 +3726,35 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "MaxDegree",
             ],
         )
-        self.assertIn("Surface", filling["field_boundaries"]["narrowed_gap"])
-        self.assertIn("Supports+Orders G1", filling["field_boundaries"]["narrowed_gap"])
-        self.assertIn("Supports+Orders G2", filling["field_boundaries"]["narrowed_gap"])
-        self.assertIn("PtsOnCurve", filling["field_boundaries"]["narrowed_gap"])
+        self.assertEqual(filling["field_boundaries"]["narrowed_gap"], [])
+        self.assertIn(
+            "Surface initial face link request-local evidence",
+            filling["field_boundaries"]["product_contract"],
+        )
+        self.assertIn(
+            "Supports+Orders C0/G1/G2 request-local evidence",
+            filling["field_boundaries"]["product_contract"],
+        )
+        self.assertIn(
+            "Explicit params PtsOnCurve/Anisotropy/TolG1/TolG2/MaxSegments/all request-local evidence",
+            filling["field_boundaries"]["product_contract"],
+        )
+        self.assertIn(
+            "Non-boundary support/order IsBound=false and face-order request-local evidence",
+            filling["field_boundaries"]["product_contract"],
+        )
+        self.assertIn("Surface", filling["field_boundaries"]["historical_native_helper_evidence"])
+        self.assertIn("Supports+Orders G1", filling["field_boundaries"]["historical_native_helper_evidence"])
+        self.assertIn("Supports+Orders G2", filling["field_boundaries"]["historical_native_helper_evidence"])
+        self.assertIn("PtsOnCurve", filling["field_boundaries"]["historical_native_helper_evidence"])
         self.assertEqual(
-            filling["narrowed_gaps"]["filling_params_pts_anisotropy_tol_g1_g2_max_segments_blocker"][
-                "freecadcmd_evidence"
-            ]["returncode"],
+            narrowed_gaps["filling_params_pts_anisotropy_tol_g1_g2_max_segments_blocker"]["freecadcmd_evidence"][
+                "returncode"
+            ],
             -11,
         )
         self.assertEqual(
-            filling["narrowed_gaps"]["filling_params_pts_anisotropy_tol_g1_g2_max_segments_blocker"][
-                "expected_backed_subsets"
-            ],
+            narrowed_gaps["filling_params_pts_anisotropy_tol_g1_g2_max_segments_blocker"]["expected_backed_subsets"],
             [
                 "c5m13/part-filling-param-degree-only",
                 "c5m13/part-filling-param-num-iter-only",
@@ -3712,15 +3763,16 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ],
         )
         self.assertEqual(
+            narrowed_gaps["filling_surface_native_helper_blocker"]["s3_product_contract_evidence"]["status"],
+            "published_c6m5_product_contract_non_parity",
+        )
+        self.assertEqual(
+            narrowed_gaps["filling_params_all_native_helper_blocker"]["s4_product_contract_evidence"]["status"],
+            "published_c6m5_product_contract_non_parity",
+        )
+        self.assertEqual(
             filling["remaining_gaps"],
-            [
-                "filling_surface_native_helper_blocker",
-                "filling_support_order_g1_native_helper_blocker",
-                "filling_support_order_g2_native_helper_blocker",
-                "filling_params_pts_anisotropy_tol_g1_g2_max_segments_blocker",
-                "filling_params_all_native_helper_blocker",
-                "filling_non_boundary_support_order_native_helper_blocker",
-            ],
+            [],
         )
         self.assertNotIn("non_default_params_native_helper_expected", filling["remaining_gaps"])
         for unsupported in ("non_boundary_constraints_deferred_diagnostic",):

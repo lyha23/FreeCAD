@@ -11,8 +11,8 @@ C6-M4 已把 Part Workbench Sweep located profile / combined PipeShell product c
 - S2：判断哪些行仍只能保留为 `notCollected` / `native_helper_blocker`，哪些行必须转成 CAD Core request-local product contract。
 - S3：实现 Surface / Supports / Orders 的产品合同，补 fixtures 和 focused tests。
 - S4：实现显式参数与 non-boundary support/order 的产品合同，补 diagnostics 和 focused tests。
-- S5：更新 capability contract、docs、fixture registry 和矩阵状态。
-- S6：执行阶段回归和 heavy 收口，只有证据通过后才允许移除对应 `remaining_gaps`。
+- S5：更新 capability contract、docs、fixture registry 和矩阵状态；只删除已有 fixture / focused test 覆盖的 exact `remaining_gaps`，并保留 native helper blocker evidence。
+- S6：执行阶段回归和 heavy 收口；不再引入新语义，只审计 S5 发布状态和 release gate。
 
 ## 关键边界
 
@@ -29,7 +29,7 @@ C6-M4 已把 Part Workbench Sweep located profile / combined PipeShell product c
 | Filling builder | `cad-core/src/part/topo_shape_expansion.cpp` |
 | capability | `cad-core/src/runtime/capability_contract.cpp` |
 | tests | `cad-core/tests/test_p8_features.py` |
-| fixture / expected | `cad-core/fixtures/p8` 或后续 C6 fixture 分组 |
+| fixture / expected | `cad-core/fixtures/c6m5` |
 
 ## 验收分层
 

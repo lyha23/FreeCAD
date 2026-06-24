@@ -11,8 +11,8 @@
 
 ## 当前状态
 
-- 方案包已创建；S0 已完成 live 基线与边界复核，S1 已完成 source / helper-oracle 候选矩阵复核，S2 已完成 implementation-ready 合同与 fixture 路由，S3 已完成 Surface / SupportOrder 产品合同实现，S4 已完成 ExplicitParams 与 non-boundary support/order 产品合同实现，S5-S6 待执行。
-- 当前矩阵已写入 S0/S1/S2/S3/S4 证据；S3/S4 已关闭 Surface / Supports/Orders / ExplicitParams / non-boundary support/order implementation blocker，但 `remaining_gaps` 的删除仍等待 S5/S6 capability / release gate。
+- 方案包已创建；S0 已完成 live 基线与边界复核，S1 已完成 source / helper-oracle 候选矩阵复核，S2 已完成 implementation-ready 合同与 fixture 路由，S3 已完成 Surface / SupportOrder 产品合同实现，S4 已完成 ExplicitParams 与 non-boundary support/order 产品合同实现，S5 已完成 fixtures / tests / capability / docs 发布，S6 待执行。
+- 当前矩阵已写入 S0/S1/S2/S3/S4/S5 证据；S5 已把 `part_workbench.filling.status` 发布为 `supported_expected_backed_plus_c6m5_product_contract_non_parity`，`remaining_gaps=[]`，六个 S0 native helper blocker 仍保留在 `narrowed_gaps` / historical native helper evidence 中。
 - 本主线不声明 FreeCAD parity，不扩大 full Part surface family。
 
 ## 队列检查
