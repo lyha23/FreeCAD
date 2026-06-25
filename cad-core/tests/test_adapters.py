@@ -985,7 +985,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(capabilities["part_design"]["pad_pocket"]["remaining_gaps"], [])
         revolution_groove = capabilities["part_design"]["revolution_groove"]
-        self.assertEqual(revolution_groove["status"], "supported_c51s1_advanced_with_exact_groove_upto_blocker")
+        self.assertEqual(
+            revolution_groove["status"],
+            "supported_c51s1_advanced_with_historical_groove_upto_native_failure",
+        )
         self.assertEqual(revolution_groove["type_ids"], ["PartDesign::Revolution", "PartDesign::Groove"])
         self.assertIn("Type=Angle", revolution_groove["supported"])
         self.assertIn("Type=TwoAngles", revolution_groove["supported"])
@@ -1033,18 +1036,43 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ],
         )
         self.assertEqual(revolution_groove["deferred"], [])
-        self.assertEqual(
-            revolution_groove["exact_blockers"]["id"],
+        self.assertEqual(revolution_groove["exact_blockers"], {})
+        self.assertEqual(revolution_groove["remaining_gaps"], [])
+        self.assertNotIn("partdesign_groove_upto_brepfeat_cut_native_failure", revolution_groove["remaining_gaps"])
+        self.assertIn(
             "partdesign_groove_upto_brepfeat_cut_native_failure",
+            revolution_groove["field_boundaries"]["narrowed_gap"],
         )
+        self.assertIn(
+            "Groove Type=UpToFirst native BRepFeat_MakeRevol failure",
+            revolution_groove["field_boundaries"]["historical_native_evidence"],
+        )
+        narrowed_gaps = revolution_groove["narrowed_gaps"]
+        self.assertIn("partdesign_groove_upto_brepfeat_cut_native_failure", narrowed_gaps)
+        groove_upto_gap = narrowed_gaps["partdesign_groove_upto_brepfeat_cut_native_failure"]
+        self.assertEqual(groove_upto_gap["status"], "published_c6m9_historical_native_failure")
+        self.assertEqual(groove_upto_gap["route"], "historical_native_failure")
         self.assertEqual(
-            revolution_groove["exact_blockers"]["freecad_message"],
+            groove_upto_gap["freecad_message"],
             "Revolution: Up to face: Could not revolve the sketch!",
         )
         self.assertEqual(
-            revolution_groove["remaining_gaps"],
-            ["partdesign_groove_upto_brepfeat_cut_native_failure"],
+            groove_upto_gap["cad_core_diagnostic"],
+            "BRepFeat_MakeRevol could not revolve profile up to face",
         )
+        self.assertEqual(
+            groove_upto_gap["fixtures"],
+            [
+                "c51m1/partdesign-groove-uptofirst-body",
+                "c51m1/partdesign-groove-uptoface-body",
+            ],
+        )
+        self.assertIn(
+            "TopoShapeExpansion.cpp::TopoShape::makeElementRevolution",
+            " ".join(groove_upto_gap["freecad_source_authority"]),
+        )
+        self.assertIn("same FreeCAD/LibPack oracle baseline", groove_upto_gap["delete_condition"])
+        self.assertIn("one Groove UpToFirst plus UpToFace batch", groove_upto_gap["reopen_condition"])
         boolean = capabilities["part_design"]["boolean"]
         self.assertEqual(boolean["status"], "supported_c51s2_boolean_compound_section_with_exact_body_policy")
         self.assertEqual(boolean["type_ids"], ["PartDesign::Boolean"])

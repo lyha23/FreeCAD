@@ -2023,7 +2023,7 @@ nlohmann::json capabilityContractJson()
                   // ::generateRevolution() uses "BRepPrimAPI_MakeRevol" for Type=Angle,
                   // "TwoAngles" and "ThroughAll", while UpTo* branches call
                   // TopoShape::makeElementRevolution() / BRepFeat_MakeRevol.
-                  {"status", "supported_c51s1_advanced_with_exact_groove_upto_blocker"},
+                  {"status", "supported_c51s1_advanced_with_historical_groove_upto_native_failure"},
                   {"type_ids", {"PartDesign::Revolution", "PartDesign::Groove"}},
                   {"supported",
                    {"Type=Angle",
@@ -2080,16 +2080,45 @@ nlohmann::json capabilityContractJson()
                     "unsupported_profile_region",
                     "unsupported_property"}},
                   {"deferred", nlohmann::json::array()},
-                  {"exact_blockers",
-                   {{"id", "partdesign_groove_upto_brepfeat_cut_native_failure"},
-                    {"source",
-                     "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::"
-                     "TopoShape::makeElementRevolution"},
-                    {"freecad_message", "Revolution: Up to face: Could not revolve the sketch!"},
-                    {"fixtures",
-                     {"c51m1/partdesign-groove-uptofirst-body",
-                      "c51m1/partdesign-groove-uptoface-body"}}}},
-                  {"remaining_gaps", {"partdesign_groove_upto_brepfeat_cut_native_failure"}},
+                  {"field_boundaries",
+                   {{"expected_backed",
+                     {"Type=Angle",
+                      "Type=TwoAngles",
+                      "Revolution Type=UpToFirst",
+                      "Revolution Type=UpToLast",
+                      "Revolution Type=UpToFace",
+                      "Groove Type=ThroughAll"}},
+                    {"historical_native_evidence",
+                     {"Groove Type=UpToFirst native BRepFeat_MakeRevol failure",
+                      "Groove Type=UpToFace native BRepFeat_MakeRevol failure"}},
+                    {"narrowed_gap", {"partdesign_groove_upto_brepfeat_cut_native_failure"}}}},
+                  {"narrowed_gaps",
+                   {{"partdesign_groove_upto_brepfeat_cut_native_failure",
+                     {{"status", "published_c6m9_historical_native_failure"},
+                      {"route", "historical_native_failure"},
+                      {"freecad_source_authority",
+                       {"/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/"
+                        "FeatureGroove.cpp::Groove::execute",
+                        "/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/"
+                        "FeatureRevolved.cpp::Revolved::tryToRevolveToFace",
+                        "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/"
+                        "TopoShapeExpansion.cpp::TopoShape::makeElementRevolution"}},
+                      {"freecad_message", "Revolution: Up to face: Could not revolve the sketch!"},
+                      {"cad_core_diagnostic",
+                       "BRepFeat_MakeRevol could not revolve profile up to face"},
+                      {"fixtures",
+                       {"c51m1/partdesign-groove-uptofirst-body",
+                        "c51m1/partdesign-groove-uptoface-body"}},
+                      {"delete_condition",
+                       "Delete only after the same FreeCAD/LibPack oracle baseline proves "
+                       "native Groove UpToFirst and UpToFace success, or after a future package "
+                       "approves a CAD Core non-parity product contract with metadata, fixtures, "
+                       "focused tests, capability and docs."},
+                      {"reopen_condition",
+                       "Reopen only as one Groove UpToFirst plus UpToFace batch; do not promote "
+                       "one fixture or rewrite native failure as expected-backed success."}}}}},
+                  {"exact_blockers", nlohmann::json::object()},
+                  {"remaining_gaps", nlohmann::json::array()},
               }},
              {"boolean",
               {

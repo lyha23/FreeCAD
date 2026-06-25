@@ -1,4 +1,4 @@
-# C6-M9 S3 BRepFeat 实现或 native-failure 发布收口
+# 【已实现】C6-M9 S3 BRepFeat 实现或 native-failure 发布收口
 
 ## 目标
 
@@ -20,6 +20,19 @@
 | `cad_core_product_contract_non_parity` | product fixtures、metadata、capability product_contract evidence、adapter assertion |
 | `historical_native_failure` | `narrowed_gaps` 或 exact blocker evidence、delete condition、adapter assertion |
 | `retained_exact_blocker` | `exact_blockers`、`remaining_gaps`、focused failure tests、docs |
+
+## S3 发布记录
+
+- live cwd：`/Users/li/Chili3DProject/FreeCAD`。
+- live HEAD：`5dd70f0ad5`（`5dd70f0ad5 文档：完成 C6-M9 S2 路由裁决`）。
+- S3 执行起点 `git -c core.quotepath=false status --short -uall`：空输出，工作区干净。
+- S3 执行起点队列：S3/S4/S5 pending；S3 完成后队列应推进到 S4。
+- route 消费：S2 已将 `Groove Type=UpToFirst` 与 `Groove Type=UpToFace` 同批裁决为 `historical_native_failure`；S3 未进入 `backend_gap_requires_implementation` 或 `cad_core_product_contract_non_parity`。
+- capability 发布：`part_design.revolution_groove.status=supported_c51s1_advanced_with_historical_groove_upto_native_failure`，`remaining_gaps=[]`，`exact_blockers={}`；`partdesign_groove_upto_brepfeat_cut_native_failure` 保留在 `narrowed_gaps` / `field_boundaries.historical_native_evidence`，包含 FreeCAD source、native message、cad-core diagnostic、两个 c51m1 fixtures、delete condition 和 reopen condition。
+- adapter assertion：`cad-core/tests/test_adapters.py` 断言该 id 不再位于 active `remaining_gaps` 或 `exact_blockers`，但仍可在 narrowed/historical evidence 中查到。
+- fixture guard：`cad-core/tests/test_p7_features.py::test_c51m1_groove_upto_native_brepfeat_failures_are_exact_blockers` 的失败语义保持不变；两个 c51m1 fixtures 仍作为 historical native failure guard。
+- 未改动范围：未修改 `cad-core/src/part_design/feature_revolved.cpp`、`cad-core/src/part/topo_shape_expansion.cpp`、fixtures、expected、collector 或 P7 failure fixture 语义；未新增 `c6m9` product fixture；未把 native failure 写成 expected-backed success。
+- 文档/矩阵：C6-M9 README、主线总入口、步骤索引、S3 文件和矩阵已同步 S3 publication assertion；root `docs/CADCore6.0/README.md` 记录 S3 已完成、S4/S5 仍 pending。
 
 ## 验收
 
