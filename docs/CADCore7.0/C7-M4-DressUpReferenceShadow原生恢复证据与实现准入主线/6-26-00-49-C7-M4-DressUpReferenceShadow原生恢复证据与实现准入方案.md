@@ -42,6 +42,8 @@ C7-M3 已关闭 Fillet / Chamfer oracle rows，但 stale `ReferenceShadow` / Bas
 - `cad-core/fixtures/c3m5/dressup-reference-shadow-base-recovery.json` 与 expected known_gap 摘要。
 - 当前相关 tests：`test_c7m3_reference_shadow_recovery_oracle_remains_blocked`、P6/C51 reference update tests。
 
+S0 完成结论：live 起点为 `HEAD=9bb2cd22af`（`9bb2cd22af docs: 收口 C7-M4 工作步骤总入口索引`），开始状态干净；C7-M1/C7-M2/C7-M3 队列为空，C7-M4 队列推进到 S1；`C7M3-SCOPE-103` / `C7M3-GATE-103` / `C7M3-ORACLE-301` 与 `known_gap.kind=dressup_reference_shadow_base_recovery_native_oracle_blocked` 已冻结为本包唯一 blocker 起点。S0 未采 oracle、未运行 FreeCADCmd、未改 C++、fixtures、expected 或 tests。
+
 ### S1 FreeCAD native probe 设计
 
 复核 FreeCAD 和 collector 调用链，输出可执行 probe 方案。S1 的关键问题是：怎样让 FreeCAD 从 stale persisted link state 自己恢复，而不是让 collector 直接设置恢复后的 subname。

@@ -13,6 +13,13 @@ C7-M4 是 C7-M3 后续的单一 blocker 处理包。C7-M3 已证明 Fillet / Cha
 - C7-M3 blocker expected：`cad-core/fixtures/c3m5/expected/dressup-reference-shadow-base-recovery.freecad.json`，`known_gap.kind=dressup_reference_shadow_base_recovery_native_oracle_blocked`。
 - C7-M3 geometry-only probe 不能作为证据，因为当前 collector 会优先使用 `StableSubList`，绕过了 FreeCAD `ShadowSub` / `ReferenceShadow` 原生恢复。
 
+## S0 基线
+
+- live 起点：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=9bb2cd22af`（`9bb2cd22af docs: 收口 C7-M4 工作步骤总入口索引`），开始状态 `git status --short -uall` 无输出。
+- 队列：C7-M1/C7-M2/C7-M3 均为空；C7-M4 从 S0 开始，S0 完成后推进到 S1。
+- 继承 blocker：`C7M3-SCOPE-103` / `C7M3-GATE-103` / `C7M3-ORACLE-301` / `known_gap.kind=dressup_reference_shadow_base_recovery_native_oracle_blocked` 是 C7-M4 的唯一 active blocker 起点。
+- S0 未采 oracle、未运行 FreeCADCmd、未改 C++、fixtures、expected 或 tests。
+
 ## FreeCAD 调用链
 
 - `src/App/PropertyLinks.h::PropertyLinkBase::ShadowSub`：持久化 old/new element name 对。
@@ -34,7 +41,7 @@ C7-M4 是 C7-M3 后续的单一 blocker 处理包。C7-M3 已证明 Fillet / Cha
 
 ## 步骤队列
 
-1. S0：冻结 live baseline、C7-M3 blocker 和当前 fixture / expected / test 状态。
+1. S0：已冻结 live baseline、C7-M3 blocker 和当前 fixture / expected / test 状态。
 2. S1：复核 FreeCAD native restore / update 调用链，设计不绕过 `ShadowSub` / `ReferenceShadow` 的 probe。
 3. S2：执行 native oracle probe / collector 证据补齐；不能证明则写 native oracle blocker。
 4. S3：用当前 `cad-core` 做 parity / diagnostics 分类，裁决 implementation gate。

@@ -1,5 +1,6 @@
 blocker_id	state	owner_step	blocker	source_evidence	decision_rule	next_step
-C7M4-BLOCKER-000	open	S0	Live baseline not frozen	Package was just created after C7-M3 release gate	S0 must record clean baseline and前置队列状态 before any probe	S0
+C7M4-BLOCKER-000	closed	S0	Live baseline frozen	S0 recorded pwd=/Users/li/Chili3DProject/FreeCAD, HEAD=9bb2cd22af, clean git status, empty C7-M1/C7-M2/C7-M3 queues, and C7-M4 queue starting at S0	S1 may design native probe; no oracle collection or implementation was done in S0	S1
+C7M4-BLOCKER-001	closed	S0	C7-M3 ReferenceShadow blocker inherited	C7M3-SCOPE-103, C7M3-GATE-103 and C7M3-ORACLE-301 remain oracle_blocked with known_gap.kind=dressup_reference_shadow_base_recovery_native_oracle_blocked	C7-M4 must treat this as native oracle evidence work; geometry-only StableSubList-fed output cannot open implementation gate	S1
 C7M4-BLOCKER-101	open	S1	Native restore probe route not designed	C7-M3 geometry-only probe used StableSubList-fed collector path	S1 must design a probe that exercises FreeCAD restore/update lifecycle or records why it is impossible	S1
 C7M4-BLOCKER-201	open	S2	Native oracle missing	C7-M3 known_gap.kind=dressup_reference_shadow_base_recovery_native_oracle_blocked	S2 must produce native oracle, native blocker or native not-supported expected	S2
 C7M4-BLOCKER-301	open	S3	Implementation gate undecided	No C7-M4 parity route yet	S3 must classify already_closed_expected_backed, backend_gap_requires_implementation, oracle_blocked or diagnostic_non_goal	S3

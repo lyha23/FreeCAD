@@ -1,4 +1,4 @@
-# C7-M4 S0 live 基线与 C7-M3 blocked row 冻结
+# 【已实现】C7-M4 S0 live 基线与 C7-M3 blocked row 冻结
 
 ## 目标
 
@@ -23,6 +23,14 @@
 4. 复核 blocker expected 中的 `known_gap.kind`、`reason` 和 `delete_condition`。
 5. 更新 C7-M4 README/总入口/方案/矩阵中的 S0 状态，只记录值得后续执行依赖的基线结论。
 6. 标记本文件标题和文件名为 `【已实现】`，队列推进到 S1。
+
+## S0 完成结论
+
+- live 起点：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=9bb2cd22af`（`9bb2cd22af docs: 收口 C7-M4 工作步骤总入口索引`），开始状态 `git status --short -uall` 无输出。
+- 队列状态：C7-M1/C7-M2/C7-M3 `工作步骤细分` 队列为空；C7-M4 从 S0 起步，S0 完成后推进到 S1。
+- 继承 blocker：`C7M3-SCOPE-103` / `C7M3-GATE-103` / `C7M3-ORACLE-301` / `c3m5/dressup-reference-shadow-base-recovery` 继续是 `oracle_blocked`，expected 仍记录 `known_gap.kind=dressup_reference_shadow_base_recovery_native_oracle_blocked`。
+- fixture / expected / test 状态：`dressup-reference-shadow-base-recovery.json` 仍包含 stale `SubList`、`StableSubList`、`ShadowSub`、`ReferenceShadow`；expected 的删除条件仍要求证明不靠 StableSubList-fed geometry 的 native recovery；P7 blocked test 和 P6 reference update tests 仅作为现状证据，S0 未修改。
+- S0 未采 oracle、未运行 FreeCADCmd、未新增或修改 fixtures/expected/tests、未改 C++、collector、runtime、topo 或 adapter。
 
 ## 验收
 

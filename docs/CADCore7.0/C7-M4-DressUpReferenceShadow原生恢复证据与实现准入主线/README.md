@@ -14,9 +14,10 @@ C7-M4 的目标不是直接给 `cad-core` 增加宽松 fallback，而是先证�
 ## 当前状态
 
 - 创建基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=edae0ef938`（`edae0ef938 文档：完成 C7-M3 S5 发布闸门`），创建前 `git status --short -uall` 无输出。
-- C7-M1 / C7-M2 / C7-M3 `工作步骤细分` 队列均为空。
-- C7-M3 最终 blocker：`C7M3-SCOPE-103` / `c3m5/dressup-reference-shadow-base-recovery` 保持 `oracle_blocked`；`known_gap.kind=dressup_reference_shadow_base_recovery_native_oracle_blocked`。
-- C7-M4 初始队列为 S0-S5 pending。S0/S1 只允许文档和矩阵；S2 才允许做 native oracle probe / collector 证据；S3 才能裁决 implementation gate；S4 只有在 S3 打开 gate 后才改 C++。
+- S0 live 基线已冻结：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=9bb2cd22af`（`9bb2cd22af docs: 收口 C7-M4 工作步骤总入口索引`），开始状态 `git status --short -uall` 无输出。
+- C7-M1 / C7-M2 / C7-M3 `工作步骤细分` 队列均为空；C7-M4 从 S0 起步，S0 完成后队列推进到 S1。
+- C7-M3 最终 blocker 已复制为 C7-M4 S0 基线：`C7M3-SCOPE-103` / `C7M3-GATE-103` / `C7M3-ORACLE-301` / `c3m5/dressup-reference-shadow-base-recovery` 保持 `oracle_blocked`；expected 仍是 `known_gap.kind=dressup_reference_shadow_base_recovery_native_oracle_blocked`。
+- S0 只同步文档和矩阵；未采 FreeCAD oracle、未运行 FreeCADCmd、未新增或修改 fixtures/expected/tests、未改 C++。S1 才能设计 native probe，S2 才能补 native oracle 证据，S3 才能裁决 implementation gate。
 
 ## 收口边界
 
