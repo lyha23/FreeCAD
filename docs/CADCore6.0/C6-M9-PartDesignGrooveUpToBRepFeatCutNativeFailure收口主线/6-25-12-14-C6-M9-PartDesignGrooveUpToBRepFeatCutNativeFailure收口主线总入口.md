@@ -19,6 +19,7 @@
 - live capability 中 `part_design.revolution_groove.status=supported_c51s1_advanced_with_exact_groove_upto_blocker`，`remaining_gaps=["partdesign_groove_upto_brepfeat_cut_native_failure"]`，同一 blocker 位于 `exact_blockers`，fixtures 为 `c51m1/partdesign-groove-uptofirst-body` 和 `c51m1/partdesign-groove-uptoface-body`。
 - adapter assertion 当前保持同一 exact blocker；focused P7 fixture 当前断言 `BRepFeat_MakeRevol could not revolve profile up to face` / `Could not revolve the sketch`，`Groove` 为 `error`，`Body` 为 `skipped`。
 - S1 已在 `HEAD=bb03433646` 上复核 source authority、cad-core 落点、current diagnostics 和 adapter assertions；`Groove Type=UpToFirst` 与 `Groove Type=UpToFace` 必须作为同一 subtractive UpTo / `BRepFeat_MakeRevol` 语义批次进入 S2 裁决。
+- S2 已在 `HEAD=b850d03f46` 上裁决唯一 route：`Groove Type=UpToFirst` 与 `Groove Type=UpToFace` 均为 `historical_native_failure`。S3/S4 只做 capability/test/docs publication assertion，不改 C++、fixtures 或 expected。
 
 ## Source authority
 
@@ -49,8 +50,8 @@
 | --- | --- | --- |
 | S0 | `工作步骤细分/6-25-12-15-【已实现】C6-M9-S0-live基线与exact-blocker冻结.md` | 【已实现】冻结 live baseline、C6-M1..C6-M8 queue、capability exact blocker 和当前 focused test 失败语义。 |
 | S1 | `工作步骤细分/6-25-12-16-【已实现】C6-M9-S1-FreeCAD源码与native失败证据复核.md` | 【已实现】复核 FreeCAD source、native failure evidence、cad-core helper 和 current fixture/test expectation。 |
-| S2 | `工作步骤细分/6-25-12-17-C6-M9-S2-准入路由与产品合同裁决.md` | 裁决 exact blocker 路由：implementation、product contract non-parity、historical native failure 或 retained blocker。 |
-| S3 | `工作步骤细分/6-25-12-18-C6-M9-S3-BRepFeat实现或native-failure发布收口.md` | 按 S2 route 实现 code+fixtures+tests+capability，或发布 historical/native failure evidence。 |
+| S2 | `工作步骤细分/6-25-12-17-【已实现】C6-M9-S2-准入路由与产品合同裁决.md` | 【已实现】裁决 exact blocker route 为 `historical_native_failure`，同批覆盖 Groove UpToFirst 与 UpToFace。 |
+| S3 | `工作步骤细分/6-25-12-18-C6-M9-S3-BRepFeat实现或native-failure发布收口.md` | 按 S2 route 发布 historical/native failure evidence，同步 capability/test/docs，不改 C++、fixtures 或 expected。 |
 | S4 | `工作步骤细分/6-25-12-19-C6-M9-S4-fixtures-tests-capability-docs发布.md` | 发布 fixtures/tests/capability/docs，保证 adapter assertion 与矩阵一致。 |
 | S5 | `工作步骤细分/6-25-12-20-C6-M9-S5-阶段回归与release-gate.md` | 运行 build、focused regression、queue empty、TSV 和 diff checks，关闭 C6-M9。 |
 
@@ -77,4 +78,4 @@
 
 ## 当前结论
 
-C6-M9 已完成 S0/S1。当前队列应推进到 S2；S2 必须裁决 `partdesign_groove_upto_brepfeat_cut_native_failure` 是实现型 backend gap、CAD Core product contract non-parity、historical native failure，还是 retained exact blocker。S3 才允许 code 或 publication 收口；S5 用 build、focused tests、queue empty、TSV 和 diff check 作为 release gate。
+C6-M9 已完成 S0/S1/S2。当前队列应推进到 S3；`partdesign_groove_upto_brepfeat_cut_native_failure` 的公开 route 已裁决为 `historical_native_failure`。S3/S4 的收口方式是把 active `remaining_gaps` 迁出到 historical/narrowed evidence，同步 `capability_contract.cpp`、`test_adapters.py`、矩阵和 docs；本 route 不执行 C++、fixtures 或 expected 语义实现。S5 用 build、focused tests、queue empty、TSV 和 diff check 作为 release gate。

@@ -20,8 +20,9 @@ C6-M9 的目标是围绕 `PartDesign::Groove` 的 `Type=UpToFirst` / `Type=UpToF
 - `part_design.revolution_groove.remaining_gaps=["partdesign_groove_upto_brepfeat_cut_native_failure"]`，同一 blocker 也存在于 `exact_blockers`，并绑定 `c51m1/partdesign-groove-uptofirst-body` 与 `c51m1/partdesign-groove-uptoface-body`。
 - `cad-core/tests/test_p7_features.py::test_c51m1_groove_upto_native_brepfeat_failures_are_exact_blockers` 当前断言两个 Groove UpTo fixture 失败，diagnostic 为 `BRepFeat_MakeRevol could not revolve profile up to face` / `Could not revolve the sketch`。
 - S1 已确认 `Groove Type=UpToFirst` 与 `Groove Type=UpToFace` 是同一 subtractive UpTo / `BRepFeat_MakeRevol` 语义批次：前者当前首个 diagnostic 的 property=`Type`、subname=`UpToFirst`，后者 property=`UpToFace`、target=`Pad`、subname=`Face4`；二者都不能在 S2 之前写成 expected-backed success。
+- S2 已裁决二者的唯一 route 均为 `historical_native_failure`：它们是 FreeCAD native `BRepFeat_MakeRevol` 稳定失败证据，不进入 `backend_gap_requires_implementation` 或 `cad_core_product_contract_non_parity`。
 - `Revolution Type=UpToFirst/UpToLast/UpToFace` 已由 C51 fixtures 支持，C6-M9 不重开 `PartDesign::Revolution` 已支持路径；只处理 `PartDesign::Groove` subtractive UpTo exact blocker。
-- S2 必须裁决 `partdesign_groove_upto_brepfeat_cut_native_failure` 的公开路线：实现型 backend gap、CAD Core product contract non-parity、historical native failure 或 retained exact blocker。
+- S3/S4 的公开路线是 publication/assertion：不改 C++、fixtures 或 expected；把 `partdesign_groove_upto_brepfeat_cut_native_failure` 从 active `remaining_gaps` 迁出，保留为 `narrowed_gaps` / historical native failure evidence，并同步 adapter assertion。
 
 ## 队列检查
 
