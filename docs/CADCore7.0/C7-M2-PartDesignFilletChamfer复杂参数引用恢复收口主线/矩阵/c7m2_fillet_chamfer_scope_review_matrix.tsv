@@ -1,0 +1,8 @@
+scope_id	source_ids	representative	current_route	why_same_batch	cad_core_boundary	next_step
+C7M2-SCOPE-000	C7M2-SRC-000;C7M2-SRC-105	live P7 Fillet/Chamfer baseline	pending_live_freeze	先冻结已支持能力，避免重开基础 Fillet/Chamfer	docs;fixtures;tests;capability	S0
+C7M2-SCOPE-101	C7M2-SRC-101;C7M2-SRC-103	Fillet Radius、UseAllEdges、multi-edge、continuous edges	needs_source_oracle_matrix	同一 Fillet::execute 调用链和 DressUp edge expansion	cad-core/src/part_design/feature_dress_up.cpp	S1
+C7M2-SCOPE-102	C7M2-SRC-102;C7M2-SRC-103	Chamfer Equal/Two distances/Distance and Angle/FlipDirection	needs_source_oracle_matrix	同一 Chamfer::execute 参数 DTO 和 makeElementChamfer 路径	cad-core/src/part_design/feature_dress_up.cpp	S1
+C7M2-SCOPE-103	C7M2-SRC-103;C7M2-SRC-104	Body/DressUp chain Base 引用恢复和 stable subname 输入	needs_route_decision	复杂引用恢复是 P7 known gap 的第二半，不能和参数支持割裂	cad-core/src/part_design/feature_dress_up.cpp;cad-core/src/topo	S2
+C7M2-SCOPE-104	C7M2-SRC-104;C7M2-SRC-105	SupportTransform 与 transformed family 回归	reverify_expected_backed	已有 SupportTransform fixtures，但需要确认 complex rows 不破坏 slot history	cad-core/src/part_design/feature_transformed.cpp;cad-core/tests/test_p7_features.py	S2
+C7M2-SCOPE-105	C7M2-SRC-105	fixtures/tests/capability/docs 发布口径	publication_closure_candidate	如果 S2 无 backend gap，C7-M2 仍需要把 known gap route 写清	cad-core/fixtures/p7;cad-core/tests;docs	S4
+C7M2-SCOPE-900	C7M2-SRC-000	GUI、full DressUp universe、full MapperHistory	diagnostic_non_goal	这些不是当前无状态 CAD Core Fillet/Chamfer 最小批次	docs only	S2

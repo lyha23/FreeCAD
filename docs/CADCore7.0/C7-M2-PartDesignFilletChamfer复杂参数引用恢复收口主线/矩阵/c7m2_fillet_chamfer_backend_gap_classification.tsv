@@ -1,0 +1,8 @@
+gap_id	scope_id	status	classification	current_evidence	required_decision	next_step
+C7M2-GAP-000	C7M2-SCOPE-000	pending	live_baseline_audit	P7 docs and existing fixtures show basic Fillet/Chamfer support but S0 must refresh live state	confirm already_closed rows and current HEAD	S0
+C7M2-GAP-101	C7M2-SCOPE-101	pending	complex_parameter_or_selection_unknown	Fillet Radius/UseAllEdges path exists in FreeCAD and likely partial cad-core support	decide already_closed vs oracle_pending_collect vs backend_gap	S1_S2
+C7M2-GAP-201	C7M2-SCOPE-102	pending	complex_chamfer_parameter_unknown	FreeCAD ChamferType supports Equal distance, Two distances, Distance and Angle, FlipDirection	decide whether cad-core supports all parameter routes	S1_S2
+C7M2-GAP-301	C7M2-SCOPE-103	pending	reference_recovery_unknown	P7 known gap explicitly names complex reference changes and stable recovery	decide if missing formal topo/history recovery exists	S2
+C7M2-GAP-401	C7M2-SCOPE-104	pending	support_transform_regression_risk	Existing tests cover SupportTransform and chained DressUp transformed consumption	confirm expected-backed and keep regression filters	S2
+C7M2-GAP-501	C7M2-SCOPE-105	pending	publication_drift_unknown	Capability/docs may still list old known gap after rows are裁决	decide publication closure scope	S4
+C7M2-GAP-900	C7M2-SCOPE-900	closed	diagnostic_non_goal	GUI and full DressUp/full MapperHistory are outside this backend batch	record in non-goal registry	S2

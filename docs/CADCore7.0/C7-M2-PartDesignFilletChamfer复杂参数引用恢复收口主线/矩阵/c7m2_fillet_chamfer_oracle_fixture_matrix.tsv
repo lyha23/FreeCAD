@@ -1,0 +1,11 @@
+oracle_id	scope_id	representative	fixture_or_expected	current_evidence	required_action	next_step
+C7M2-ORACLE-001	C7M2-SCOPE-000	Fillet basic Body member	cad-core/fixtures/p7/fillet-pad-edge.json;expected/fillet-pad-edge.freecad.json	existing expected-backed baseline	reverify topology/volume/source evidence only	S0
+C7M2-ORACLE-002	C7M2-SCOPE-000	Chamfer basic Body member	cad-core/fixtures/p7/chamfer-pad-edge.json;expected/chamfer-pad-edge.freecad.json	existing expected-backed baseline	reverify topology/volume/source evidence only	S0
+C7M2-ORACLE-003	C7M2-SCOPE-000	Refine true replacement	cad-core/fixtures/p7/fillet-refine-true.json;chamfer-refine-true.json	existing refine expected-backed baseline	reverify refine publication only	S0
+C7M2-ORACLE-004	C7M2-SCOPE-104	SupportTransform mirrored	cad-core/fixtures/p7/mirrored-fillet-support-transform.json;mirrored-dressup-chain-support-transform.json	existing SupportTransform native oracle baseline	reverify slot history and source_base only	S0
+C7M2-ORACLE-101	C7M2-SCOPE-101	Fillet multi-edge / UseAllEdges	candidate p7 fixture not yet frozen	unknown until S1 inventory	decide oracle collection vs already-covered route	S1
+C7M2-ORACLE-201	C7M2-SCOPE-102	Chamfer Two distances	candidate p7 fixture not yet frozen	known gap candidate	decide oracle collection and input DTO expectations	S1
+C7M2-ORACLE-202	C7M2-SCOPE-102	Chamfer Distance and Angle	candidate p7 fixture not yet frozen	known gap candidate	decide oracle collection and angle unit/flip route	S1
+C7M2-ORACLE-203	C7M2-SCOPE-102	Chamfer FlipDirection	candidate p7 fixture not yet frozen	known gap candidate	decide oracle collection and FreeCAD migration note	S1
+C7M2-ORACLE-301	C7M2-SCOPE-103	Base reference recovery after previous DressUp	candidate p7 fixture not yet frozen	known gap candidate	require S2 route before implementation	S2
+C7M2-ORACLE-900	C7M2-SCOPE-900	GUI or full DressUp variants	no fixture	no backend target	classify as non-goal	S2
