@@ -1,0 +1,7 @@
+classification_id	blocker_name	phase	scope_id	classification	current_reason	required_evidence	next_step
+C6M8-CAT-000	live_baseline	C6-P0	C6M8-SCOPE-000	pending	S0 has not yet recorded live HEAD queue and capability baseline	pwd head status queue capability grep	S0
+C6M8-CAT-101	project_on_surface_gui_task_panel	C6-P1	C6M8-SCOPE-101	pendingRoute	GUI task panel is currently active remaining gap and non_goal; likely non_goal_frozen but must be explicitly裁决	Source review plus capability adapter assertion deciding single route	S2
+C6M8-CAT-102	project_on_surface_unverified_advanced_branches	C6-P1	C6M8-SCOPE-101	pendingRoute	Unverified advanced branches may be broad wording or a stateless product candidate; S2 must decompose before closure	Representative API boundary analysis and route decision	S2
+C6M8-CAT-201	ruled_loft_sweep_filling_geomplate_publication_consistency	C6-P1	C6M8-SCOPE-201	pendingAudit	Published families have empty active remaining_gaps but different expected-backed product-contract narrowed-gap shapes	Batch capability docs and adapter assertions prove consistent wording	S4
+C6M8-CAT-301	oracle_fixture_batch	C6-P1	C6M8-SCOPE-301	pendingAudit	Existing fixtures may be sufficient; only collect or add fixtures if S1/S2 finds missing representative evidence	Fixture matrix and focused tests	S3
+C6M8-CAT-401	capability_release_gate	C6-P0	C6M8-SCOPE-401	pendingPublication	C6-M8 not yet published in capability docs adapter root README	Adapter capability focused test and stage regression	S5
