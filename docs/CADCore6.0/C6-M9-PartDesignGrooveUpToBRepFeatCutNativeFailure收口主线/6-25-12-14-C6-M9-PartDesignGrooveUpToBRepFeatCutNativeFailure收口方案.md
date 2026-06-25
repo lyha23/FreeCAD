@@ -9,7 +9,7 @@ C6-M8 关闭后，Part Workbench surface family 的 active `remaining_gaps` 已�
 ## 本轮做什么
 
 - S0：已冻结 live HEAD `17116567e4`、C6-M1..C6-M8 queue empty、C6-M9 起点队列、`part_design.revolution_groove` capability、adapter assertion 和 focused P7 fixture 当前状态；本步未改 C++、fixtures、expected 或测试语义。
-- S1：批量复核 FreeCAD / cad-core source authority、native failure message、fixtures 和 current tests。
+- S1：已批量复核 FreeCAD / cad-core source authority、native failure message、fixtures、current diagnostics 和 adapter assertions；确认 `Groove Type=UpToFirst` 与 `Groove Type=UpToFace` 是同一 subtractive UpTo / `BRepFeat_MakeRevol` 语义批次。
 - S2：做准入路由。对 Groove UpToFirst / UpToFace 判断为 `backend_gap_requires_implementation`、`cad_core_product_contract_non_parity`、`historical_native_failure` 或 `retained_exact_blocker`。
 - S3：若 S2 选择实现，补 `feature_revolved.cpp` / `topo_shape_expansion.cpp`、fixtures/product metadata、focused tests 和 capability；若 S2 选择 native failure route，则把 active gap 发布为 narrowed/historical evidence 或 retained exact blocker，并同步 adapter assertion。
 - S4：发布 capability/docs：确保 `capability_contract.cpp`、`test_adapters.py`、C6-M9 矩阵和 root README 一致。
@@ -32,6 +32,7 @@ C6-M9 的最小批次不是单个 fixture，而是同一 subtractive UpTo 边界
 - 如果 S2 认定 FreeCAD native failure 是正式行为，则 S3/S4 只做 publication/assertion 收口，不把失败伪装成 CAD Core support。
 - 如果 S2 认定 CAD Core 应提供 request-local product contract non-parity，则新增 `c6m9` product fixtures，必须明确 `freecad_native_expected=false` 或等价 product metadata，并保留 `c51m1` native failure evidence。
 - 如果 S1/S2 证明当前 expected / collector 有误，必须先修 oracle 或 collector；不能从 cad-core 输出倒推 expected。
+- S2 裁决前，`c51m1/partdesign-groove-uptofirst-body` 与 `c51m1/partdesign-groove-uptoface-body` 只能作为 native failure / exact blocker evidence；不得把当前 BRepFeat failure 记录成 expected-backed success。
 
 ## 代码和文档落点
 
@@ -72,4 +73,4 @@ C6-M9 的最小批次不是单个 fixture，而是同一 subtractive UpTo 边界
 
 ## 结论
 
-推荐执行 C6-M9。它是 C6-M8 之后最明确的 live exact blocker 主线：范围小但不是单 fixture，必须同时处理 Groove UpToFirst 和 UpToFace，并通过 S2 明确是否实现 CAD Core product contract non-parity，还是发布为 historical/native exact blocker。
+推荐继续执行 C6-M9。S1 已复核 exact blocker source 与 current diagnostics；S2 是当前关键裁决点，必须同时处理 Groove UpToFirst 和 UpToFace，并明确是实现 CAD Core product contract non-parity，还是发布为 historical/native exact blocker / retained exact blocker。
