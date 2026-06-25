@@ -1,5 +1,5 @@
 blocker_id	state	owner_step	blocker	source_evidence	decision_rule	next_step
-C7M2-BLOCKER-000	open	S0	Live baseline not frozen	C7-M2 package just created; S0-S5 pending	Do not implement until S0 records current HEAD/status/fixtures/tests/docs	S0
+C7M2-BLOCKER-000	closed	S0	Live baseline frozen	S0 recorded HEAD=b5767e2391, clean initial status, C7-M1 empty queue, P7 supported baseline, known gap, fixtures, expected and focused tests	S1 may start source/oracle matrix; still do not implement before S2 opens code gate	none
 C7M2-BLOCKER-101	open	S1	Complex Fillet selection oracle candidates not classified	FreeCAD Fillet uses Radius/UseAllEdges/getContinuousEdges	Rows need oracle and current cad-core support evidence	S1
 C7M2-BLOCKER-201	open	S1	Complex Chamfer parameter routes not classified	FreeCAD Chamfer has Two distances, Distance and Angle, FlipDirection	Rows need input DTO and maker route evidence	S1
 C7M2-BLOCKER-301	open	S2	Reference recovery boundary not裁决	P7 known gap names complex reference change stable recovery	S2 must decide topo/history implementation vs diagnostic route	S2

@@ -36,7 +36,11 @@ C7-M2 因此必须按“最小完整语义批次”推进：同一 FreeCAD 调�
 
 ### S0 live baseline
 
-记录 `pwd`、`HEAD`、`git status`、C7-M1 队列为空、P7 文档 known gap、现有 fixture/test/capability 覆盖。S0 只改 docs/matrices，不改 C++、fixtures、expected 或 tests。
+已完成。live 起点为 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=b5767e2391`（`b5767e2391 docs: 新增 C7-M2 Fillet Chamfer 收口方案`），开始时 `git status --short -uall` 无输出；C7-M1 队列为空，C7-M2 初始队列为 S0-S5 pending。本步只改 docs/matrices，不改 C++、fixtures、expected 或 tests。
+
+S0 冻结的 supported baseline：P7 文档记录基础 Edge / Face Base、连续边过滤、OCCT fillet/chamfer maker、replacement solid、RefineModel、DressUp AddSubShape cache、slot 级 `NamedShape`、`SupportTransform=true` 和链式 DressUp transformed consumption 已覆盖；`capability_contract.cpp` 的 `producer_matrix.dressup` 为 `done_first_slice`，covered 包含 `addsubshape_slot`、`multi_selection_history`、`chamfer_parameter_variants`、`failure_diagnostics`、`chain_dressup_pattern_history`，remaining 为空。
+
+S0 冻结的 known gap 仍是 `Fillet / Chamfer 复杂参数组合、复杂引用变更后的完整稳定恢复`。代表 fixture / expected 为 `p7/fillet-pad-edge`、`p7/chamfer-pad-edge`、`p7/fillet-refine-true`、`p7/chamfer-refine-true`、`p7/mirrored-fillet-support-transform`、`p7/mirrored-dressup-chain-support-transform`；诊断 fixture 为 `p7/fillet-missing-edge`、`p7/chamfer-invalid-size`；相邻 C3-M5 证据为 `chamfer-two-distances-edge`、`chamfer-distance-angle-edge`、`fillet-face-selection-history`、`chained-dressup-pattern-history`。focused test names 以当前 `cad-core/tests/test_p7_features.py` 为准：`test_p7_fillet_replaces_body_tip_shape`、`test_p7_chamfer_replaces_body_tip_shape`、`test_c3m5_chamfer_parameter_variants_build`、`test_p7_dressup_refine_true_uses_refinemodel_path`、`test_p7_dressup_base_diagnostics_are_structured`、`test_c3m5_dressup_face_selection_records_expanded_edge_history`、`test_p7_mirrored_features_mode_consumes_dressup_support_transform_cache`、`test_p7_mirrored_features_mode_consumes_chained_dressup_support_transform_cache`、`test_c3m5_chained_dressup_pattern_history_keeps_support_transform_slot`。
 
 ### S1 FreeCAD 源码与 oracle 候选
 

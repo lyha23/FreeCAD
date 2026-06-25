@@ -17,11 +17,20 @@ C7-M2 的下一步不是直接扩大 `feature_dress_up.cpp`，而是先把 Fille
 - `cad-core/src/topo/` 与 `cad-core/src/part/topo_shape.cpp`：如果 S2 裁决为稳定恢复 backend gap，必须优先补正式 naming/history 能力，不允许输出端猜测。
 - `cad-core/tests/test_p7_features.py` 与 `cad-core/fixtures/p7`：作为现有 basic / diagnostic / SupportTransform expected-backed 基线。
 
+## S0 live 基线
+
+- S0 起点：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=b5767e2391`（`b5767e2391 docs: 新增 C7-M2 Fillet Chamfer 收口方案`），开始时 `git status --short -uall` 无输出。
+- C7-M1 live 队列为空；C7-M2 live 队列从 S0-S5 pending 起步，本次只关闭 S0，下一步为 S1。
+- P7 supported baseline：基础 Edge / Face Base、连续边过滤、OCCT fillet/chamfer maker、replacement solid、RefineModel、DressUp AddSubShape cache、slot 级 `NamedShape`、`SupportTransform=true` 和链式 DressUp consumed by transformed family 已有文档、fixtures、expected 与 focused tests。
+- P7 remaining gap 保持为 `Fillet / Chamfer 复杂参数组合、复杂引用变更后的完整稳定恢复`；S0 不裁决 complex parameter、UseAllEdges、FlipDirection 或复杂引用恢复是否 closed。
+- S0 代表 fixture / expected：`p7/fillet-pad-edge`、`p7/chamfer-pad-edge`、`p7/fillet-refine-true`、`p7/chamfer-refine-true`、`p7/mirrored-fillet-support-transform`、`p7/mirrored-dressup-chain-support-transform`；诊断 fixture：`p7/fillet-missing-edge`、`p7/chamfer-invalid-size`；相邻 C3-M5 证据：`chamfer-two-distances-edge`、`chamfer-distance-angle-edge`、`fillet-face-selection-history`、`chained-dressup-pattern-history`。
+- S0 focused tests：`test_p7_fillet_replaces_body_tip_shape`、`test_p7_chamfer_replaces_body_tip_shape`、`test_c3m5_chamfer_parameter_variants_build`、`test_p7_dressup_refine_true_uses_refinemodel_path`、`test_p7_dressup_base_diagnostics_are_structured`、`test_c3m5_dressup_face_selection_records_expanded_edge_history`、`test_p7_mirrored_features_mode_consumes_dressup_support_transform_cache`、`test_p7_mirrored_features_mode_consumes_chained_dressup_support_transform_cache`、`test_c3m5_chained_dressup_pattern_history_keeps_support_transform_slot`。
+
 ## 最小完整语义批次
 
 | 批次 | 代表项 | 初始判断 |
 | --- | --- | --- |
-| live baseline | `fillet-pad-edge`、`chamfer-pad-edge`、`fillet-refine-true`、`chamfer-refine-true`、SupportTransform fixtures | S0/S1 复核，不重开 |
+| live baseline | `fillet-pad-edge`、`chamfer-pad-edge`、`fillet-refine-true`、`chamfer-refine-true`、SupportTransform fixtures | S0 已冻结，expected-backed，不重开 |
 | Fillet 选择 | `Radius`、`UseAllEdges`、multi-edge、continuous edge expansion | S1 建 oracle 候选，S2 裁决 |
 | Chamfer 参数 | `Two distances`、`Distance and Angle`、`FlipDirection` | S1 建 oracle 候选，S2 裁决 |
 | 引用恢复 | Body/DressUp chain Base、`StableSubList` / `FullSubList`、ReferenceShadow 证据 | S2 决定是否需要 topo/history 实现 |
@@ -36,7 +45,7 @@ C7-M2 的下一步不是直接扩大 `feature_dress_up.cpp`，而是先把 Fille
 
 ## 步骤队列
 
-1. S0：冻结 live baseline、P7 remaining gap、现有 fixtures/tests/capability。
+1. S0：已冻结 live baseline、P7 remaining gap、现有 fixtures/tests/capability。
 2. S1：阅读 FreeCAD 源码，补完 source / oracle / input contract 矩阵。
 3. S2：按 route 裁决 complex params 与引用恢复是否需要实现。
 4. S3：如果 S2 授权，实现或 no-code diagnostic boundary 收口。

@@ -14,8 +14,12 @@
 ## 当前状态
 
 - 方案创建基线：`HEAD=6ba500ea32`（`6ba500ea32 文档：完成 C7-M1 S5 发布闸门`）。
-- 创建前 `git status --short -uall` 无输出；C7-M1 队列为空。
-- S0-S5 尚未执行。下一步应先运行 S0，冻结当前 P7 capability、fixtures、tests 和 docs，而不是直接改 C++。
+- S0 live 基线已冻结：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=b5767e2391`（`b5767e2391 docs: 新增 C7-M2 Fillet Chamfer 收口方案`），开始时 `git status --short -uall` 无输出；C7-M1 队列为空，C7-M2 队列从 S0-S5 pending 起步。
+- S0 冻结的 P7 supported baseline：`docs/CADCore方案/细化方案/10-P7-PartDesign常用生态.md` 已记录基础 Edge / Face Base、连续边过滤、OCCT fillet/chamfer maker、replacement solid、RefineModel、DressUp AddSubShape cache、slot 级 `NamedShape`、`SupportTransform=true` 和链式 DressUp 被 transformed family 消费；`cad-core/src/runtime/capability_contract.cpp` 中 `producer_matrix.dressup.status=done_first_slice`，covered 包含 `addsubshape_slot`、`multi_selection_history`、`chamfer_parameter_variants`、`failure_diagnostics`、`chain_dressup_pattern_history`，remaining 为空。
+- S0 冻结的 P7 known gap 仍是：`Fillet / Chamfer 复杂参数组合、复杂引用变更后的完整稳定恢复`；本步不裁决 complex parameter、UseAllEdges、FlipDirection 或引用恢复是否已支持，保留到 S1/S2。
+- S0 冻结的 fixture / expected baseline：`cad-core/fixtures/p7/{fillet-pad-edge,chamfer-pad-edge,fillet-refine-true,chamfer-refine-true,mirrored-fillet-support-transform,mirrored-dressup-chain-support-transform}.json` 与同名 `expected/*.freecad.json` 已存在；诊断 fixture 包含 `fillet-missing-edge.json`、`chamfer-invalid-size.json`。相邻历史证据还包括 `cad-core/fixtures/c3m5/{chamfer-two-distances-edge,chamfer-distance-angle-edge,fillet-face-selection-history,chained-dressup-pattern-history}.json` 与同名 expected。
+- S0 冻结的 focused tests：`test_p7_fillet_replaces_body_tip_shape`、`test_p7_chamfer_replaces_body_tip_shape`、`test_c3m5_chamfer_parameter_variants_build`、`test_p7_dressup_refine_true_uses_refinemodel_path`、`test_p7_dressup_base_diagnostics_are_structured`、`test_c3m5_dressup_face_selection_records_expanded_edge_history`、`test_p7_mirrored_features_mode_consumes_dressup_support_transform_cache`、`test_p7_mirrored_features_mode_consumes_chained_dressup_support_transform_cache`、`test_c3m5_chained_dressup_pattern_history_keeps_support_transform_slot`。
+- S0 已完成，S1 是下一步：补 FreeCAD 源码与 oracle 候选矩阵；S1 前不得直接改 C++、fixtures、expected 或 tests。
 - 当前源码候选包括 `src/Mod/PartDesign/App/FeatureFillet.cpp`、`src/Mod/PartDesign/App/FeatureChamfer.cpp`、`src/Mod/PartDesign/App/FeatureDressUp.cpp`、`cad-core/src/part_design/feature_dress_up.cpp`、`cad-core/tests/test_p7_features.py` 和 `cad-core/fixtures/p7`。
 
 ## 收口边界
