@@ -1,0 +1,8 @@
+scope_id	source_ids	representative	current_route	why_same_batch	cad_core_boundary	next_step
+C7M1-SCOPE-000	C7M1-SRC-201	live_part_design_hole_capability	publication_closure_candidate	Same API publication boundary for all Hole rows; must freeze before deciding whether active gaps remain	capability_contract.cpp and test_adapters.py	S0
+C7M1-SCOPE-101	C7M1-SRC-101;C7M1-SRC-102	standard_head_cut_tables	oracle_pending_or_already_closed	Same updateHoleCutParams table path and same head-cut DTO fields	HoleCutType HoleCutDiameter HoleCutDepth HoleCutCountersinkAngle HoleCutCustomValues	S1
+C7M1-SCOPE-201	C7M1-SRC-103;C7M1-SRC-106	model_thread_metric_pipe_shell	already_closed_reverify	Same determineDiameter makeThread path and same ModelThread properties	ModelThread ThreadClass ThreadDirection UseCustomThreadClearance CustomThreadClearance thread metadata	S1
+C7M1-SCOPE-202	C7M1-SRC-102;C7M1-SRC-104;C7M1-SRC-106	model_thread_with_counterbore	backend_gap_unknown_until_oracle_compare	Combines standard head cut and ModelThread compound tool; must not split before comparing oracle	Hole tool shape plus protoThread compound history	S1
+C7M1-SCOPE-301	C7M1-SRC-105	profile_source_points_circles_arcs	history_publication_reverify	Same findHoles source ledger and local transform boundary	BaseProfileType circles arcs points source subshape history	S1
+C7M1-SCOPE-401	C7M1-SRC-202	focused_tests_and_expected_family	publication_closure_candidate	Same fixture family and same expected runner should close or reroute all Hole rows	tests.test_p7_features and fixtures/p7/hole-*	S2
+C7M1-SCOPE-901	C7M1-SRC-000	conic_gui_solver_distance_type	non_goal	Not the same FreeCAD call chain or DTO boundary; kept out of C7-M1	none	closed_non_goal

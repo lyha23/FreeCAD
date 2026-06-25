@@ -1,0 +1,7 @@
+blocker_id	state	owner_step	blocker	source_evidence	decision_rule	next_step
+C7M1-BLK-000	pending	S0	Live baseline not frozen yet	git status HEAD capability JSON and current tests not recorded	S0 must write evidence before S1	S0
+C7M1-BLK-101	pending	S1	Legacy standard expected rows still marked oracle pending	cad-core/fixtures/p7/expected/hole-threaded-standard-counterbore.freecad.json and related rows	S2 must classify as collect migrate legacy or non-active	S1
+C7M1-BLK-201	pending	S1	ModelThread with head cut may hide local-frame or topology mismatch	Hole::execute combines protoHole and protoThread then findHoles transforms per center; cad-core returns compound tool and history freeze	S2 requires oracle diff before code route	S1
+C7M1-BLK-301	pending	S2	Code-edit gate	S0/S1 evidence may show no active backend gap	Do not edit C++ fixtures expected tests until S2 marks row backend_gap_requires_implementation	S2
+C7M1-BLK-401	pending	S4	Capability/docs drift risk	Roadmap still has stale Hole wording while capability says remaining_gaps empty	S4 must align capability tests docs matrices and README	S4
+C7M1-BLK-901	closed_non_goal	S0	Conic GUI solver DistanceType items are not C7-M1	Not same FreeCAD call chain DTO or expected family	No action in this package	closed
