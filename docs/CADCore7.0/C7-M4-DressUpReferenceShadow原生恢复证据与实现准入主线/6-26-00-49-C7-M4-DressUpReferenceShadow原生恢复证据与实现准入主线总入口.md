@@ -4,7 +4,7 @@
 
 C7-M4 是 C7-M3 后续的单一 blocker 处理包。C7-M3 已证明 Fillet / Chamfer 参数能力 expected-backed；本包只处理 stale `ReferenceShadow` / Base recovery 是否有 FreeCAD native 恢复证据，以及该证据是否足以打开 `cad-core` implementation gate。
 
-当前结论仍是 gate closed：S2 已执行 native FCStd/XML restore probe，但 `Base.getShadowSubs()` / `getSubValues(false/true)` 在 FreeCADCmd Python 层不可观察，route=`native_oracle_blocked`。S3 没有新增能删除该 blocker 的 native oracle 证据，已裁决 route=`oracle_blocked`。S4 已按该裁决完成 no-code blocked publication closure：没有 native oracle 前，不实现 C++，不发布 supported，不做 output-side guessing，StableSubList-fed geometry 负控不能删除 blocker。
+当前结论仍是 gate closed：S2 已执行 native FCStd/XML restore probe，但 `Base.getShadowSubs()` / `getSubValues(false/true)` 在 FreeCADCmd Python 层不可观察，route=`native_oracle_blocked`。S3 没有新增能删除该 blocker 的 native oracle 证据，已裁决 route=`oracle_blocked`。S4 已按该裁决完成 no-code blocked publication closure；S5 release gate 已关闭 `C7M4-BLOCKER-501` / `C7M4-GATE-501` 并清空 C7-M4 队列。没有 native oracle 前，不实现 C++，不发布 supported，不做 output-side guessing，StableSubList-fed geometry 负控不能删除 blocker。
 
 ## 上游状态
 
@@ -48,7 +48,7 @@ C7-M4 是 C7-M3 后续的单一 blocker 处理包。C7-M3 已证明 Fillet / Cha
 3. S2：已执行 native oracle probe / collector 证据补齐，route=`native_oracle_blocked`。
 4. S3：已基于 S2 blocker 裁决 route=`oracle_blocked`，implementation gate closed。
 5. S4：已完成 no-code blocked 发布收口；未实现 ReferenceRecovery，未修改 C++ 主路径。
-6. S5：只做 release gate，复核 README / 矩阵 / P7 口径并清空队列。
+6. S5：已完成 release gate，复核 README / 矩阵 / P7 口径并清空队列。
 
 ## S1 完成状态
 
@@ -77,6 +77,13 @@ C7-M4 是 C7-M3 后续的单一 blocker 处理包。C7-M3 已证明 Fillet / Cha
 - route=`oracle_blocked` 继续保留：S2 native probe `returncode=0` 只证明 FCStd/XML restore 可运行且 shape summary 成功；由于 FreeCAD Python API 不能观察 `Base.getShadowSubs()` / `getSubValues(false/true)`，它仍不能证明 `ShadowSub` / `ReferenceShadow` 原生恢复生命周期。
 - no-code publication closure 已应用：`C7M4-BLOCKER-401` / `C7M4-GATE-401` 关闭，`dressup-reference-shadow-base-recovery` 继续发布为 `oracle_blocked`；未改 C++、collector/probe、fixtures/expected/tests，现有 focused blocker test 保留，不新增测试。
 - 后续重开 gate 的条件只有两个：新增 native introspection 能观察上述 Base property 生命周期，或上游 scope 明确接受当前 FreeCAD Python API 限制；StableSubList-fed geometry 负控不能作为删除 blocker 的依据。
+
+## S5 完成状态
+
+- live 起点：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=d7337b49f1`（`d7337b49f1 文档：完成 C7-M4 S4 no-code 发布收口`），开始状态 `git status --short -uall` 无输出。
+- release gate 已完成：focused blocker unittest 1 test OK，C7-M4 queue 为空，TSV 列数检查、trailing whitespace 检查和 `git diff --check` 通过。
+- final route=`oracle_blocked`：S2 native probe `returncode=0` 仍不能观察 `Base.getShadowSubs()` / `getSubValues(false/true)`，StableSubList-fed geometry 负控不能删除 blocker。
+- `C7M4-BLOCKER-501` / `C7M4-GATE-501` 已关闭；未改 C++、collector/probe、fixtures/expected/tests，未运行 FreeCADCmd、cmake build 或全量 FreeCAD build。
 
 ## 验收入口
 

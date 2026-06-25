@@ -1,5 +1,5 @@
 validation_id	phase	command	required	when_to_run	notes
-C7M4-VAL-001	queue	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线/工作步骤细分 --format markdown	yes	every step	After S4 this must skip implemented S0-S4 files and expose S5 as the first pending step
+C7M4-VAL-001	queue	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线/工作步骤细分 --format markdown	yes	every step	After S5 this must return an empty queue
 C7M4-VAL-002	tsv	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线/矩阵/*.tsv	yes	every matrix edit	Guards column drift
 C7M4-VAL-003	whitespace	rg -n '[ \t]$' docs/CADCore7.0/C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线 docs/CADCore7.0/README.md docs/CADCore方案/细化方案/10-P7-PartDesign常用生态.md	yes	every docs step	No trailing whitespace
 C7M4-VAL-004	diff	git diff --check	yes	every step	No whitespace errors in patch
@@ -9,4 +9,5 @@ C7M4-VAL-202	negative control	cd cad-core && FREECADCMD=/Users/li/.cargo/bin/fre
 C7M4-VAL-301	focused p7	cd cad-core && python3 -m unittest tests.test_p7_features.CadCoreP7FeatureTest.test_c7m3_reference_shadow_recovery_oracle_remains_blocked	yes	S2_S4	Locks expected known_gap, S2 evidence route, patched XML and negative-control separation; S4 retains this existing blocker test and adds no new tests
 C7M4-VAL-303	p7 feature class	cd cad-core && python3 -m unittest tests.test_p7_features.CadCoreP7FeatureTest	yes	S3	S3 gate validation; if too slow or environment-failed, run C7M4-VAL-301 and document the reason
 C7M4-VAL-302	focused p6 topology	(cd cad-core && python3 -m unittest tests.test_p6_topology.CadCoreP6TopologyTest)	conditional	S4	Run only when link/topology/reference recovery behavior changes; S4 no-code closure did not run this
-C7M4-VAL-401	build	(cd cad-core && cmake --build build)	conditional	S4_S5	Required only if C++ changes; S4 no-code closure skips build
+C7M4-VAL-401	build	(cd cad-core && cmake --build build)	conditional	S4_S5	Required only if C++ changes; S4/S5 no-code closure skips build
+C7M4-VAL-501	release gate	cd cad-core && python3 -m unittest tests.test_p7_features.CadCoreP7FeatureTest.test_c7m3_reference_shadow_recovery_oracle_remains_blocked	yes	S5	Focused release validation; no FreeCADCmd or cmake build because S4 was no-code publication closure and S5 did not edit code fixtures expected evidence or tests

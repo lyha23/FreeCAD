@@ -8,7 +8,7 @@ C7-M2 接在 C7-M1 之后，转向 `PartDesign::Fillet` / `PartDesign::Chamfer` 
 
 C7-M3 承接 C7-M2 的 3 个 `oracle_pending_collect` rows，不直接实现 C++。本包先为 Fillet multi-edge / `UseAllEdges`、Chamfer `FlipDirection=true`、DressUp chain stale `ReferenceShadow` / Base recovery 设计并采集 FreeCAD oracle，再通过 cad-core parity 打开或关闭 implementation gate。S4 已按 S3 gate 走 no-code 发布收口：5 个 Fillet / Chamfer oracle rows 发布为 expected-backed，DressUp stale `ReferenceShadow` / Base recovery 保持 `oracle_blocked`，未打开 C++ implementation gate。S5 release gate 已复跑 focused tests 与文档/矩阵检查，队列为空。
 
-C7-M4 承接 C7-M3 唯一未关闭为 supported 的 blocker：DressUp stale `ReferenceShadow` / Base recovery。C7-M4 不直接实现宽松 fallback，而是先证明 FreeCAD native `PropertyLinkSub` / `ShadowSub` / `ReferenceShadow` restore / update 行为。S4 已完成 no-code blocked publication closure：S2 native probe `returncode=0`，但 FreeCAD Python API 不能观察 `Base.getShadowSubs()` / `getSubValues(false/true)`，所以 `dressup-reference-shadow-base-recovery` 继续 `oracle_blocked`，implementation gate closed，StableSubList-fed geometry 负控不能删除 blocker。
+C7-M4 承接 C7-M3 唯一未关闭为 supported 的 blocker：DressUp stale `ReferenceShadow` / Base recovery。C7-M4 不直接实现宽松 fallback，而是先证明 FreeCAD native `PropertyLinkSub` / `ShadowSub` / `ReferenceShadow` restore / update 行为。S5 release gate 已完成：S2 native probe `returncode=0`，但 FreeCAD Python API 不能观察 `Base.getShadowSubs()` / `getSubValues(false/true)`，所以 `dressup-reference-shadow-base-recovery` 最终 route=`oracle_blocked`，implementation gate closed，StableSubList-fed geometry 负控不能删除 blocker；C7-M4 队列为空。
 
 ## 入口
 
@@ -55,6 +55,7 @@ C7-M4 承接 C7-M3 唯一未关闭为 supported 的 blocker：DressUp stale `Ref
 - C7-M4 S2 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=dc041901a7`（`dc041901a7 文档：完成 C7-M4 S1 native probe 设计`），开始状态干净。S2 新增 native FCStd/XML restore probe 并运行到 `returncode=0`，patched `Chamfer.Base` 为 `LinkSub/Sub value=OldFilletEdge1 shadow=Edge1`，reopen/recompute shape 成功；但 FreeCAD Python property API 无法观察 `Base.getShadowSubs()` / `getSubValues(false/true)`，route=`native_oracle_blocked`。StableSubList-fed 负控 `returncode=0` 仍只作为 geometry bypass guard，队列推进到 S3。
 - C7-M4 S3 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=01aeef0217`（`01aeef0217 证据：补齐 C7-M4 S2 native probe`），开始状态干净。S3 没有发现能删除 S2 blocker 的 native introspection 证据，裁决 route=`oracle_blocked`；`dressup-reference-shadow-base-recovery` expected 继续 `known_gap.kind=dressup_reference_shadow_base_recovery_native_oracle_blocked`，implementation gate closed，S4 只允许 no-code publication closure。
 - C7-M4 S4 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=381d56ef9e`（`381d56ef9e 文档：完成 C7-M4 S3 准入裁决`），开始状态干净。S4 只同步 README、总入口、方案、矩阵和 P7 发布口径；`C7M4-BLOCKER-401` / `C7M4-GATE-401` 已关闭。未改 C++、collector/probe、fixtures/expected/tests，未运行 FreeCADCmd 或 cmake build；现有 focused blocker test 保留且不新增测试，S5 只做 release gate。
+- C7-M4 S5 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=d7337b49f1`（`d7337b49f1 文档：完成 C7-M4 S4 no-code 发布收口`），开始状态干净。release gate focused blocker unittest 1 test OK，C7-M4 队列清空，矩阵 TSV 列数检查、trailing whitespace 检查和 `git diff --check` 通过；`C7M4-BLOCKER-501` / `C7M4-GATE-501` 已关闭。S5 只更新发布文档和矩阵，没有新增或修改 C++、collector/probe、fixtures/expected/tests，因此未运行 FreeCADCmd、cmake build 或全量 FreeCAD build。
 
 ## 队列检查
 

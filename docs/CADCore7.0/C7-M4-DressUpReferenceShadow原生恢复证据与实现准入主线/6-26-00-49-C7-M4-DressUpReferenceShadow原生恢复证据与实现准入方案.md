@@ -111,6 +111,8 @@ S4 完成结论：live 起点为 `HEAD=381d56ef9e`（`381d56ef9e 文档：完成
 - 更新 root README、本包 README/总入口/方案、矩阵和必要的 P7 细化口径。
 - 标记完成文件为 `【已实现】`，队列为空后提交。
 
+S5 完成结论：live 起点为 `HEAD=d7337b49f1`（`d7337b49f1 文档：完成 C7-M4 S4 no-code 发布收口`），开始状态干净。focused blocker unittest `test_c7m3_reference_shadow_recovery_oracle_remains_blocked` 1 test OK，C7-M4 队列为空，矩阵 TSV 列数检查、trailing whitespace 检查和 `git diff --check` 通过；`C7M4-BLOCKER-501` / `C7M4-GATE-501` 已关闭。最终 route=`oracle_blocked`，implementation gate 继续 closed；S5 未改 C++、collector/probe、fixtures/expected/tests，未运行 FreeCADCmd、cmake build 或全量 FreeCAD build。
+
 ## 验收分层
 
 ### 本轮短跑
@@ -150,3 +152,4 @@ python3 -m unittest tests.test_p6_topology.CadCoreP6TopologyTest
 - 没有 native oracle 时不发布 supported，不打开 implementation gate。
 - 有 native oracle 且存在 backend gap 时，代码实现不依赖 output-side guessing。
 - 文档、矩阵、focused tests 和 capability / publication 口径一致。
+- S5 release gate 后 C7-M4 queue 为空，`C7M4-BLOCKER-501` / `C7M4-GATE-501` 关闭，final route=`oracle_blocked`。

@@ -1,4 +1,4 @@
-# C7-M4 S5 release gate
+# 【已实现】C7-M4 S5 release gate
 
 ## 目标
 
@@ -46,3 +46,10 @@ python3 -m unittest tests.test_p6_topology.CadCoreP6TopologyTest
 - release 结论明确：expected-backed、implemented、oracle_blocked 或 diagnostic_non_goal。
 - root README、本包 README/方案/总入口和矩阵口径一致。
 - 最终工作区状态符合仓库提交规则。
+
+## S5 完成结论
+
+- live 起点：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=d7337b49f1`（`d7337b49f1 文档：完成 C7-M4 S4 no-code 发布收口`），开始状态 `git status --short -uall` 无输出。
+- final route=`oracle_blocked`：S2 native probe `returncode=0`，但 FreeCAD Python API 不能观察 `Base.getShadowSubs()` / `getSubValues(false/true)`；StableSubList-fed geometry 负控不能删除 blocker，不发布 supported，不打开 `backend_gap_requires_implementation`。
+- release validation：focused blocker unittest 1 test OK；C7-M4 queue 为空；TSV 列数检查、trailing whitespace 检查和 `git diff --check` 通过。
+- `C7M4-BLOCKER-501` / `C7M4-GATE-501` 已关闭；本轮只更新文档/矩阵，未改 C++、collector/probe、fixtures/expected/tests，未运行 FreeCADCmd、cmake build 或全量 FreeCAD build。
