@@ -71,7 +71,7 @@ S2 应执行的 native probe 已冻结：从现有 `dressup-reference-shadow-bas
 
 S2 不允许把 `/tmp` geometry-only 输出或 StableSubList-fed expected 当成 native oracle。
 
-S2 完成结论：live 起点为 `HEAD=dc041901a7`（`dc041901a7 文档：完成 C7-M4 S1 native probe 设计`），开始状态干净。新增 `cad-core/tools/c7m4_reference_shadow_native_probe.py`，按 S1 冻结路线构造 baseline FCStd、patch `Chamfer.Base` 的 `LinkSub/Sub value=OldFilletEdge1 shadow=Edge1`，再通过 FreeCADCmd reopen/recompute。native probe `returncode=0`，FreeCAD version=`1.2.0 revision 20260519`，XML/property tag、ReferenceShadow sidecar、Python-visible `Chamfer.Base`、`dumpPropertyContent()` 和 `Chamfer` / `Body` shape summary 已写入 `cad-core/fixtures/c3m5/dressup-reference-shadow-base-recovery.native-probe.evidence.json`。probe 观察到 reopen/recompute 后 shape 成功，且 Python-visible Base 为 `Edge1`；但 FreeCAD Python property API 不能观察 `Base.getShadowSubs()`、`getSubValues(false)`、`getSubValues(true)`，因此 route=`native_oracle_blocked`。负控 `collect_freecad_expected.py` StableSubList-fed 命令 `returncode=0`，输出 `/tmp/c7m4-dressup-reference-shadow-stablesublist-fed.freecad.json`，仍只能证明 Edge1-fed geometry，不删除 native blocker。expected known_gap 和 focused P7 test 已同步，S3 默认不得打开 C++ implementation gate。
+S2 完成结论：live 起点为 `HEAD=dc041901a7`（`dc041901a7 文档：完成 C7-M4 S1 native probe 设计`），开始状态干净。新增 `cad-core/tools/c7m4_reference_shadow_native_probe.py`，按 S1 冻结路线构造 baseline FCStd、patch `Chamfer.Base` 的 `LinkSub/Sub value=OldFilletEdge1 shadow=Edge1`，再通过 FreeCADCmd reopen/recompute。native probe `returncode=0`，FreeCAD version=`1.2.0 revision 20260519`，XML/property tag、ReferenceShadow sidecar、Python-visible `Chamfer.Base`、`dumpPropertyContent()` 和 `Chamfer` / `Body` shape summary 已写入 `cad-core/fixtures/c3m5/dressup-reference-shadow-base-recovery.native-probe.evidence.json`。probe 观察到 reopen/recompute 后 shape 成功，且 Python-visible Base 为 `Edge1`；但 FreeCAD Python property API 不能观察 `Base.getShadowSubs()`、`getSubValues(false)`、`getSubValues(true)`，因此 route=`native_oracle_blocked`。负控 `collect_freecad_expected.py` StableSubList-fed 命令 `returncode=0`，输出 `/tmp/c7m4-dressup-reference-shadow-stablesublist-fed.freecad.json`，仍只能证明 Edge1-fed geometry，不删除 native blocker。expected known_gap 和 focused P7 test 已同步，S3 已据此裁为 route=`oracle_blocked`，未打开 C++ implementation gate。
 
 ### S3 cad-core parity 与 implementation gate
 
@@ -84,6 +84,8 @@ S2 完成结论：live 起点为 `HEAD=dc041901a7`（`dc041901a7 文档：完成
 
 S3 必须把实现落点限定到 `cad-core/src/app`、`cad-core/src/part`、`cad-core/src/part_design` 和 focused tests，不得把 full MapperHistory 或 full DressUp universe 带进本包。
 
+S3 完成结论：live 起点为 `HEAD=01aeef0217`（`01aeef0217 证据：补齐 C7-M4 S2 native probe`），开始状态干净。S3 复核 S2 fixture / expected / evidence、P7/P6 focused tests、`cad-core/src/app`、`cad-core/src/part` 和 `cad-core/src/part_design/feature_dress_up.cpp` 后，没有发现能删除 S2 blocker 的新 native oracle 证据；`Base.getShadowSubs()` / `getSubValues(false/true)` 仍不可观察，StableSubList-fed geometry output 仍只是负控。因此 route=`oracle_blocked`，implementation gate closed。S3 未改 C++、collector/probe、fixture 或 expected；S4 只允许 no-code blocked publication closure。
+
 ### S4 实现或 no-code 发布
 
 若 S3 打开 code gate，S4 实现顺序固定：
@@ -95,6 +97,8 @@ S3 必须把实现落点限定到 `cad-core/src/app`、`cad-core/src/part`、`ca
 5. 删除或保留 blocker expected 时必须同步矩阵和 README。
 
 若 S3 没打开 code gate，S4 只做 publication closure，不改 C++。
+
+当前 S3 route=`oracle_blocked`，所以 S4 边界固定为 no-code blocked 发布收口：只同步 README、总入口、方案、矩阵和发布口径；不得实现 `ReferenceRecovery`，不得修改 `cad-core/src/app`、`cad-core/src/part`、`cad-core/src/part_design`、collector/probe、fixtures/expected，不得发布 supported。
 
 ### S5 release gate
 

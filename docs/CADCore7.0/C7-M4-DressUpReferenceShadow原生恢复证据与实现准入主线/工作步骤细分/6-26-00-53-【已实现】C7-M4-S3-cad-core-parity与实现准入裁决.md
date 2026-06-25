@@ -1,4 +1,4 @@
-# C7-M4 S3 cad-core parity 与实现准入裁决
+# 【已实现】C7-M4 S3 cad-core parity 与实现准入裁决
 
 ## 目标
 
@@ -47,3 +47,10 @@ git diff --check
 - S4 code gate 状态明确。
 - 若打开 code gate，S4 范围足够窄且有 FreeCAD source authority。
 - 队列推进到 S4。
+
+## S3 完成结论
+
+- live 起点：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=01aeef0217`（`01aeef0217 证据：补齐 C7-M4 S2 native probe`），开始状态 `git status --short -uall` 无输出。
+- route=`oracle_blocked`。S2 的 native FCStd/XML restore probe 和 StableSubList-fed 负控均 `returncode=0`，但没有新增能观察 `Base.getShadowSubs()` / `getSubValues(false/true)` 的 native oracle 证据；`cad-core/fixtures/c3m5/expected/dressup-reference-shadow-base-recovery.freecad.json` 仍是 `known_gap.kind=dressup_reference_shadow_base_recovery_native_oracle_blocked`。
+- implementation gate 保持 closed。S3 未改 C++、collector/probe、fixture 或 expected；StableSubList-fed geometry 输出仍只能作为 bypass guard，不能删除 blocker，不能发布 supported。
+- S4 边界：只允许 no-code publication closure，更新 README、总入口、方案、矩阵和发布口径；不允许实现 `ReferenceRecovery`、不允许修改 `cad-core/src/app`、`cad-core/src/part`、`cad-core/src/part_design`，不扩大到 full DressUp / MapperHistory。

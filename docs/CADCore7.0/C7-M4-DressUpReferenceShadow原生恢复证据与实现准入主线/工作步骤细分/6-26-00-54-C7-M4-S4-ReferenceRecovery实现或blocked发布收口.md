@@ -4,6 +4,8 @@
 
 按 S3 route 执行：如果 S3 打开 `backend_gap_requires_implementation`，实现正式 ReferenceShadow recovery；否则做 no-code blocked / diagnostic 发布收口。S4 不允许扩大到 full MapperHistory、full DressUp universe 或 output-side guessing。
 
+S3 已裁决 route=`oracle_blocked`，implementation gate closed。当前 S4 只允许 no-code blocked 发布收口，不允许修改 C++、collector/probe、fixtures/expected，不允许实现 `ReferenceRecovery` 或发布 supported。
+
 ## 必读文件
 
 - S3 完成后的本包 README、方案和矩阵。
@@ -19,13 +21,15 @@
 ## 执行要点
 
 1. 记录 live baseline 和 C7-M4 queue。
-2. 若 S3 route 不是 `backend_gap_requires_implementation`，只更新 README、方案、矩阵和 P7 发布口径。
-3. 若 S3 打开 code gate，先补 link/reference evidence validation，再接入 DressUp Base 消费点。
+2. 由于 S3 route=`oracle_blocked`，只更新 README、方案、矩阵和 P7 发布口径。
+3. 不执行 C++ implementation 分支；若未来有新 native oracle 证据，必须另起步骤重新打开 gate。
 4. 写 focused tests，至少约束 diagnostics、shape summary、`documentObjectUpdates` / `elementReferenceUpdates`。
 5. 不允许在 adapter、JSON 输出、fixture 名称、EdgeN 排序或 source shape 猜测上修正结果。
 6. 标记本文件标题和文件名为 `【已实现】`，队列推进到 S5。
 
 ## 实现落点
+
+当前 S4 不允许改下列实现落点；它们仅作为未来 route=`backend_gap_requires_implementation` 时的边界记录。
 
 - `cad-core/src/app`：PropertyLinkSub / SubList / StableSubList / ShadowSub / ReferenceShadow 输入与更新建议。
 - `cad-core/src/part`：`ReferenceShadow.brep` snapshot 校验和旧 subshape 证据读取。
