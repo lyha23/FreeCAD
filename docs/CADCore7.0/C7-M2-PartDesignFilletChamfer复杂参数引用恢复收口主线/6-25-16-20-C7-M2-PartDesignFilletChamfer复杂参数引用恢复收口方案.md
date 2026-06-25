@@ -88,11 +88,19 @@ S4 未改 C++、fixtures、expected、tests 或 `cad-core/src/runtime/capability
 - Chamfer Two distances、Chamfer Distance and Angle、SupportTransform mirrored / chained DressUp regression 是 inherited `already_closed_expected_backed`。
 - Fillet multi-edge / `UseAllEdges`、Chamfer `FlipDirection=true`、DressUp chain stale `ReferenceShadow` / Base recovery 是 `oracle_pending_collect`，必须先有后续 FreeCAD oracle package，不能发布为 supported capability。
 - GUI、full DressUp universe、full MapperHistory 和 output-side stable reference guessing 是 `diagnostic_non_goal`。
-- `publication_closure_only` 已关闭，下一步进入 S5 release gate；因为 S4 只改 docs/矩阵，不运行 C++ build/unittest。
+- `publication_closure_only` 已关闭，S5 release gate 已完成；因为 S4/S5 只改 docs/矩阵，不运行 C++ build/unittest 或 P7 stage regression。
 
 ### S5 release gate
 
-清空队列，按代码变更实际范围运行 focused build/tests。仅当 C++、fixtures、expected、adapter schema 或 topo/history 广泛变动时才提升到重型阶段回归。
+已完成。live baseline：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=5446576356`（`5446576356 文档：完成 C7-M2 S4 发布口径同步`），开始时 `git status --short -uall` 无输出。
+
+S5 release gate 结论：
+
+- C7-M2 队列已清空。
+- TSV 列数检查、trailing whitespace 检查、`git diff --check` 和 route / 发布口径检查通过。
+- C7-M2 无 `backend_gap_requires_implementation`。
+- 已发布三类口径：inherited `already_closed_expected_backed`、`oracle_pending_collect`、`diagnostic_non_goal`。
+- S4/S5 未改 C++、fixtures、expected、tests、topo/history 或 adapter schema，所以未触发 `cad-core` build、focused unittest 或 P7 stage regression。
 
 ## 验收分层
 

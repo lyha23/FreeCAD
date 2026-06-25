@@ -25,7 +25,8 @@
 - S2 未产生任何 `backend_gap_requires_implementation`。Code edit gate 保持关闭；S3 只能做 no-code diagnostic/publication boundary，不改 C++、fixtures、expected 或 tests。
 - S3 已完成：live baseline 为 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=5adeee22a3`（`5adeee22a3 文档：完成 C7-M2 S2 准入裁决`），开始时 `git status --short -uall` 无输出。S3 没有改 C++、fixtures、expected 或 tests，没有新增测试；只关闭 no-code diagnostic/publication boundary。
 - S3 boundary 结论：Fillet multi-edge/`UseAllEdges`、Chamfer `FlipDirection=true`、DressUp chain stale `ReferenceShadow` / Base recovery 保持 `oracle_pending_collect`；Chamfer Two distances、Chamfer Distance and Angle、SupportTransform mirrored / chained DressUp regression 保持 `already_closed_expected_backed`；GUI、full DressUp universe、full MapperHistory 和输出端引用恢复猜测保持 `diagnostic_non_goal`。publication drift 保持 `publication_closure_only` 并进入 S4。
-- S4 已完成：live baseline 为 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=934ffa6ff8`（`934ffa6ff8 文档：完成 C7-M2 S3 no-code 边界收口`），开始时 `git status --short -uall` 无输出。S4 未改 C++、fixtures、expected、tests 或 `capability_contract.cpp`；只同步 root README、本包 README、总入口、方案、P7 文档和矩阵发布口径，队列推进到 S5。
+- S4 已完成：live baseline 为 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=934ffa6ff8`（`934ffa6ff8 文档：完成 C7-M2 S3 no-code 边界收口`），开始时 `git status --short -uall` 无输出。S4 未改 C++、fixtures、expected、tests 或 `capability_contract.cpp`；只同步 root README、本包 README、总入口、方案、P7 文档和矩阵发布口径，并由 S5 完成 release gate。
+- S5 已完成：live baseline 为 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=5446576356`（`5446576356 文档：完成 C7-M2 S4 发布口径同步`），开始时 `git status --short -uall` 无输出。release gate 确认 C7-M2 队列清空，矩阵 TSV 列数、trailing whitespace、`git diff --check` 和 route / 发布口径检查通过。本包没有代码、fixtures、expected、tests、topo/history 或 adapter schema 改动，因此未触发 `cad-core` build、focused unittest 或 P7 stage regression。
 - 当前源码候选包括 `src/Mod/PartDesign/App/FeatureFillet.cpp`、`src/Mod/PartDesign/App/FeatureChamfer.cpp`、`src/Mod/PartDesign/App/FeatureDressUp.cpp`、`cad-core/src/part_design/feature_fillet.cpp`、`cad-core/src/part_design/feature_chamfer.cpp`、`cad-core/src/part_design/feature_dress_up.cpp`、`cad-core/src/part_design/feature_transformed.cpp`、`cad-core/tests/test_p7_features.py` 和 `cad-core/fixtures/p7`。
 
 ## 收口边界
@@ -37,6 +38,7 @@
 - inherited expected-backed：Chamfer Two distances、Chamfer Distance and Angle、SupportTransform mirrored / chained DressUp regression。
 - oracle pending：Fillet multi-edge / `UseAllEdges`、Chamfer `FlipDirection=true`、DressUp chain stale `ReferenceShadow` / Base recovery。
 - diagnostic non-goal：GUI、full DressUp universe、full MapperHistory 和 output-side stable reference guessing。
+- release gate：队列为空；没有 `backend_gap_requires_implementation`；oracle pending 不发布为 supported。
 
 ## 非目标
 

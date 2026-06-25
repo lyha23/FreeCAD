@@ -50,4 +50,4 @@ git diff --check
 - S4 live baseline：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=934ffa6ff8`（`934ffa6ff8 文档：完成 C7-M2 S3 no-code 边界收口`），开始时 `git status --short -uall` 无输出。
 - S4 是 no-code publication closure：未改 C++、fixtures、expected、tests 或 `cad-core/src/runtime/capability_contract.cpp`，也没有新增 fixture/test。
 - 发布口径已同步为三类：Chamfer Two distances、Chamfer Distance and Angle、SupportTransform mirrored / chained DressUp regression 是 inherited `already_closed_expected_backed`；Fillet multi-edge / `UseAllEdges`、Chamfer `FlipDirection=true`、DressUp chain stale `ReferenceShadow` / Base recovery 是 `oracle_pending_collect`；GUI、full DressUp universe、full MapperHistory 和 output-side guessing 是 `diagnostic_non_goal`。
-- publication drift 已关闭为 `publication_closure_only`；队列应跳过本文件，下一步为 S5 release gate。
+- publication drift 已关闭为 `publication_closure_only`；S5 已完成 release gate 并清空队列。

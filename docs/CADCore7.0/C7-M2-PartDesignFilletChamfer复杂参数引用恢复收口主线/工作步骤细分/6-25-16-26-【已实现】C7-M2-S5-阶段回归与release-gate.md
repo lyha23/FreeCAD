@@ -1,4 +1,4 @@
-# C7-M2 S5 阶段回归与 release gate
+# 【已实现】C7-M2 S5 阶段回归与 release gate
 
 ## 目标
 
@@ -51,3 +51,10 @@ python3 -m unittest tests.test_p7_features.CadCoreP7FeatureTest
 - S2 route、S4 publication 和 S5 release gate 记录一致。
 - 必要验证通过。
 - Root README 明确 C7-M2 最终状态和非目标边界。
+
+## 完成记录
+
+- S5 live baseline：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=5446576356`（`5446576356 文档：完成 C7-M2 S4 发布口径同步`），开始时 `git status --short -uall` 无输出。
+- Release gate 已通过：C7-M2 队列清空，TSV 列数检查、trailing whitespace 检查、`git diff --check` 和 route / 发布口径检查通过。
+- C7-M2 没有 `backend_gap_requires_implementation`；最终发布口径保持 inherited `already_closed_expected_backed`、`oracle_pending_collect`、`diagnostic_non_goal` 三类，oracle pending 不写成 supported。
+- 本轮未改 C++、fixtures、expected、tests、topo/history 或 adapter schema；因此未触发 `cad-core` build、focused unittest 或 P7 stage regression。
