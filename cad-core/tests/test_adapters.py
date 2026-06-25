@@ -2972,15 +2972,33 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "native_project_on_surface_mapper_history_hidden_until_probe",
         ):
             self.assertIn(boundary, project_on_surface["request_local_boundaries"])
-        self.assertEqual(
-            project_on_surface["remaining_gaps"],
-            [
-                "gui_projection_task_panel",
-                "unverified_advanced_branches",
-            ],
-        )
+        self.assertEqual(project_on_surface["remaining_gaps"], [])
+        self.assertNotIn("gui_projection_task_panel", project_on_surface["remaining_gaps"])
+        self.assertNotIn("unverified_advanced_branches", project_on_surface["remaining_gaps"])
         self.assertIn("gui_projection_task_panel", project_on_surface["non_goals"])
-        self.assertIn("unverified_advanced_branches", project_on_surface["non_goals"])
+        self.assertIn("gui_selection_camera_session", project_on_surface["non_goals"])
+        self.assertNotIn("unverified_advanced_branches", project_on_surface["non_goals"])
+        narrowed_gaps = project_on_surface["narrowed_gaps"]
+        self.assertIn("native_project_on_surface_mapper_history_hidden_until_probe", narrowed_gaps)
+        native_mapper_gap = narrowed_gaps["native_project_on_surface_mapper_history_hidden_until_probe"]
+        self.assertEqual(native_mapper_gap["status"], "historical_boundary_until_native_mapper_probe")
+        self.assertEqual(native_mapper_gap["route"], "historical_narrowed_gap")
+        self.assertEqual(
+            native_mapper_gap["product_contract"]["provenance"],
+            "cad_core_projection_item_ledger",
+        )
+        self.assertEqual(native_mapper_gap["product_contract"]["freecad_expected_status"], "not_expected_backed")
+        self.assertIn("c5m9/part-project-on-surface-edge-provenance", native_mapper_gap["fixtures"])
+        self.assertIn("ProjectOnSurface mapper/history ownership", native_mapper_gap["delete_condition"])
+        self.assertIn("Mode", project_on_surface["field_boundaries"]["expected_backed"])
+        self.assertIn(
+            "native ProjectOnSurface mapper/history ownership hidden until stable native probe",
+            project_on_surface["field_boundaries"]["historical_native_evidence"],
+        )
+        self.assertIn(
+            "GUI TaskPanel/ViewProvider selection/camera session",
+            project_on_surface["field_boundaries"]["non_goal"],
+        )
         self.assertNotIn("full_part_surface_family", project_on_surface["covered"])
         self.assertNotIn("full_part_surface_family", project_on_surface["remaining_gaps"])
         ruled_surface = capabilities["part_workbench"]["ruled_surface"]
