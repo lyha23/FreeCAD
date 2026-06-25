@@ -1,0 +1,7 @@
+gate_id	scope_id	state	route	current_evidence	decision_rule	next_step
+C7M4-GATE-000	C7M4-SCOPE-000	pending	baseline_pending	C7-M4 created from C7-M3 release gate at HEAD=edae0ef938; worktree clean before package creation	S0 must freeze live state and mark baseline closed before S1	S0
+C7M4-GATE-101	C7M4-SCOPE-101	pending	source_probe_pending	FreeCAD source and collector gap identified, but native probe design not yet frozen	S1 must prove how to exercise native ShadowSub/ReferenceShadow restore without StableSubList-fed geometry	S1
+C7M4-GATE-201	C7M4-SCOPE-201	pending	native_oracle_pending	C7-M3 expected is known_gap because native oracle is blocked	S2 must collect native oracle, record native blocker, or prove native not-supported	S2
+C7M4-GATE-301	C7M4-SCOPE-301	pending	implementation_gate_closed	No C7-M4 native oracle/parity result yet	S3 is the only step allowed to set backend_gap_requires_implementation	S3
+C7M4-GATE-401	C7M4-SCOPE-401	pending	publication_pending	S4 route depends on S3; default is no C++ change	S4 implements only if S3 opened code gate; otherwise no-code publication closure	S4
+C7M4-GATE-501	C7M4-SCOPE-000	pending	release_pending	Queue and validation not yet closed	S5 runs release gate and empties queue	S5

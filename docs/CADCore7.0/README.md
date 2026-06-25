@@ -8,6 +8,8 @@ C7-M2 接在 C7-M1 之后，转向 `PartDesign::Fillet` / `PartDesign::Chamfer` 
 
 C7-M3 承接 C7-M2 的 3 个 `oracle_pending_collect` rows，不直接实现 C++。本包先为 Fillet multi-edge / `UseAllEdges`、Chamfer `FlipDirection=true`、DressUp chain stale `ReferenceShadow` / Base recovery 设计并采集 FreeCAD oracle，再通过 cad-core parity 打开或关闭 implementation gate。S4 已按 S3 gate 走 no-code 发布收口：5 个 Fillet / Chamfer oracle rows 发布为 expected-backed，DressUp stale `ReferenceShadow` / Base recovery 保持 `oracle_blocked`，未打开 C++ implementation gate。S5 release gate 已复跑 focused tests 与文档/矩阵检查，队列为空。
 
+C7-M4 承接 C7-M3 唯一未关闭为 supported 的 blocker：DressUp stale `ReferenceShadow` / Base recovery。C7-M4 不直接实现宽松 fallback，而是先证明 FreeCAD native `PropertyLinkSub` / `ShadowSub` / `ReferenceShadow` restore / update 行为；只有 native oracle 证明可恢复且当前 `cad-core` parity 失败时，才打开 C++ implementation gate。没有 native oracle 时继续保持 `oracle_blocked` 或裁为 diagnostic non-goal。
+
 ## 入口
 
 - C7-M1 总入口：`C7-M1-PartDesignHoleModelThread标准孔表边界收口主线/6-25-14-03-C7-M1-PartDesignHoleModelThread标准孔表边界收口主线总入口.md`
@@ -22,6 +24,10 @@ C7-M3 承接 C7-M2 的 3 个 `oracle_pending_collect` rows，不直接实现 C++
 - C7-M3 方案：`C7-M3-PartDesignFilletChamferOracle补采与实现准入主线/6-25-22-57-C7-M3-PartDesignFilletChamferOracle补采与实现准入方案.md`
 - C7-M3 工作步骤：`C7-M3-PartDesignFilletChamferOracle补采与实现准入主线/工作步骤细分/`
 - C7-M3 矩阵：`C7-M3-PartDesignFilletChamferOracle补采与实现准入主线/矩阵/`
+- C7-M4 总入口：`C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线/6-26-00-49-C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线总入口.md`
+- C7-M4 方案：`C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线/6-26-00-49-C7-M4-DressUpReferenceShadow原生恢复证据与实现准入方案.md`
+- C7-M4 工作步骤：`C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线/工作步骤细分/`
+- C7-M4 矩阵：`C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线/矩阵/`
 
 ## 当前状态
 
@@ -43,6 +49,7 @@ C7-M3 承接 C7-M2 的 3 个 `oracle_pending_collect` rows，不直接实现 C++
 - C7-M3 S3 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=ac831f3ba7`（`ac831f3ba7 文档：完成 C7-M3 S2 oracle expected 固化`），开始状态干净。当前 cad-core 对 5 个 Fillet / Chamfer expected-backed fixtures 的 bbox、volume、topology_counts 全部匹配 S2 FreeCADCmd expected；`dressup-reference-shadow-base-recovery` 保持 `oracle_blocked`，没有 `backend_gap_requires_implementation`。
 - C7-M3 S4 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=364ae7a093`（`364ae7a093 测试：完成 C7-M3 S3 parity gate`），开始状态干净。S4 只同步 root README、本包 README/总入口/方案、P7 细化文档和 C7-M3 矩阵；未改 C++ executor/runtime/topo/adapter/capability_contract、fixtures/expected/tests。Fillet multi-edge、Fillet `UseAllEdges`、Chamfer Equal distance / Two distances / Distance and Angle `FlipDirection=true` 发布为 expected-backed，`dressup-reference-shadow-base-recovery` 保持 `oracle_blocked`；队列推进到 S5。
 - C7-M3 S5 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=5e7b76261c`（`5e7b76261c 文档：完成 C7-M3 S4 no-code 发布收口`），开始状态干净。release gate focused unittest 3 tests OK，C7-M3 矩阵 TSV 列数检查、trailing whitespace 检查和 `git diff --check` 通过；队列为空。S5 只更新发布文档和矩阵，没有新增或修改 C++ executor/runtime/topo/adapter/capability_contract、fixtures/expected/tests，因此未触发 `cad-core` build 或全量 FreeCAD build。
+- C7-M4 方案已创建：创建前 live 起点 `HEAD=edae0ef938`（`edae0ef938 文档：完成 C7-M3 S5 发布闸门`），`git status --short -uall` 无输出。C7-M4 初始队列为 S0-S5 pending；S0/S1 只允许文档和矩阵，S2 才能补 native oracle probe / collector 证据，S3 才能裁决 implementation gate，S4 只有在 S3 打开 `backend_gap_requires_implementation` 时才改 C++。
 
 ## 队列检查
 
@@ -51,6 +58,7 @@ cd /Users/li/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M1-PartDesignHoleModelThread标准孔表边界收口主线/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M2-PartDesignFilletChamfer复杂参数引用恢复收口主线/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M3-PartDesignFilletChamferOracle补采与实现准入主线/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -60,5 +68,6 @@ cd /Users/li/Chili3DProject/FreeCAD
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M1-PartDesignHoleModelThread标准孔表边界收口主线/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M2-PartDesignFilletChamfer复杂参数引用恢复收口主线/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M3-PartDesignFilletChamferOracle补采与实现准入主线/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore7.0
 ```

@@ -1,0 +1,7 @@
+non_goal_id	item	reason	evidence	allowed_follow_up
+C7M4-NONGOAL-001	GUI, TaskPanel, preview UI	CAD Core backend package excludes GUI/ViewProvider/TaskPanel	Repository guidelines exclude GUI for cad-core	Separate frontend or FreeCAD GUI task
+C7M4-NONGOAL-002	Full DressUp universe	C7-M4 handles one stale Base recovery blocker, not all DressUp features	C7-M3 non-goal registry excluded full DressUp universe	New package after native evidence proves broader scope is needed
+C7M4-NONGOAL-003	Full topo naming / full MapperHistory	ReferenceShadow recovery may need narrow evidence matching, but full mapper completion is broader	C7-M3 kept full MapperHistory as diagnostic_non_goal	Separate topo/history package
+C7M4-NONGOAL-004	Output-side stable reference guessing	Would violate FreeCAD migration discipline and hide real link/topo gaps	AGENTS.md forbids output修剪, source-edge guessing and fixture-name branching	Only formal app/part/part_design implementation after oracle-backed backend gap
+C7M4-NONGOAL-005	Using ReferenceShadow.brep as modeling input	BREP exception is only a single old subshape snapshot for recovery evidence	Repository architecture says DocumentObject graph is truth and BREP is not long-term state	Use brep snapshot only for matching evidence
+C7M4-NONGOAL-006	Reopening Fillet/Chamfer parameter support	C7-M3 already published multi-edge, UseAllEdges and FlipDirection rows as expected-backed	C7-M3 S5 release gate closed those rows	Reopen only with new failing oracle evidence
