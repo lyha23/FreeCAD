@@ -1,4 +1,4 @@
-# C7-M2 S1 FreeCAD 源码与 oracle 候选矩阵
+# 【已实现】C7-M2 S1 FreeCAD 源码与 oracle 候选矩阵
 
 ## 目标
 
@@ -9,6 +9,8 @@
 - `src/Mod/PartDesign/App/FeatureFillet.cpp`
 - `src/Mod/PartDesign/App/FeatureChamfer.cpp`
 - `src/Mod/PartDesign/App/FeatureDressUp.cpp`
+- `cad-core/src/part_design/feature_fillet.cpp`
+- `cad-core/src/part_design/feature_chamfer.cpp`
 - `cad-core/src/part_design/feature_dress_up.cpp`
 - `cad-core/src/part_design/feature_transformed.cpp`
 - `cad-core/tests/test_p7_features.py`
@@ -36,7 +38,7 @@
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M2-PartDesignFilletChamfer复杂参数引用恢复收口主线/工作步骤细分 --format markdown
-rg -n 'Radius|UseAllEdges|ChamferType|Size2|Angle|FlipDirection|getContinuousEdges|getAddSubShape|SupportTransform|makeElementFillet|makeElementChamfer' src/Mod/PartDesign/App/FeatureFillet.cpp src/Mod/PartDesign/App/FeatureChamfer.cpp src/Mod/PartDesign/App/FeatureDressUp.cpp cad-core/src/part_design/feature_dress_up.cpp
+rg -n 'Radius|UseAllEdges|ChamferType|Size2|Angle|FlipDirection|getContinuousEdges|getAddSubShape|SupportTransform|makeElementFillet|makeElementChamfer|buildFillet|buildChamfer' src/Mod/PartDesign/App/FeatureFillet.cpp src/Mod/PartDesign/App/FeatureChamfer.cpp src/Mod/PartDesign/App/FeatureDressUp.cpp cad-core/src/part_design/feature_dress_up.cpp cad-core/src/part_design/feature_fillet.cpp cad-core/src/part_design/feature_chamfer.cpp
 rg -n 'def test_.*(fillet|chamfer|dressup|support_transform)|fillet|chamfer|SupportTransform' cad-core/tests/test_p7_features.py
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M2-PartDesignFilletChamfer复杂参数引用恢复收口主线/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore7.0/C7-M2-PartDesignFilletChamfer复杂参数引用恢复收口主线
@@ -48,3 +50,11 @@ git diff --check
 - 每个候选 row 都有 FreeCAD 源文件、类/函数和 cad-core 落点。
 - oracle candidates 明确区分 already covered、candidate、diagnostic 和 non-goal。
 - 本文件标记后，队列推进到 S2。
+
+## 完成记录
+
+- S1 live baseline：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=b3ec3b277f`（`b3ec3b277f 文档：冻结 C7-M2 S0 P7 基线`），开始时 `git status --short -uall` 无输出。
+- FreeCAD 源码证据已落入 `source_candidates` / `input_contract`：`FeatureFillet.cpp::Fillet::execute`、`FeatureChamfer.cpp::Chamfer::execute/updateProperties/migrateFlippedProperties`、`FeatureDressUp.cpp::getContinuousEdges/getFaces/getAddSubShape`。
+- cad-core 落点已拆分为 `feature_fillet.cpp`、`feature_chamfer.cpp`、`feature_dress_up.cpp`、`feature_transformed.cpp`：Fillet/Chamfer executor 与 DressUp Base/selection/SupportTransform/transformed slot consumer 分开记录。
+- oracle 行已区分：Chamfer Two distances 与 Distance and Angle 是现有 c3m5 expected-backed；Fillet multi-edge/UseAllEdges、Chamfer FlipDirection=true、DressUp chain stale reference recovery 仍是 `oracle_candidate` / `needs_S2_decision`，没有写成 backend gap。
+- S1 blocker 已关闭，S2 继续裁决 oracle collection、publication route 或实现 gate。

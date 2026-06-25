@@ -46,6 +46,8 @@ S0 冻结的 known gap 仍是 `Fillet / Chamfer 复杂参数组合、复杂引�
 
 阅读 FreeCAD 源码并更新 `source_candidates`、`input_contract`、`oracle_fixture` 矩阵。必须引用具体文件、类/函数和关键字段名，不能只写“参考 FreeCAD”。
 
+S1 已完成。矩阵已记录 FreeCAD `Fillet::execute`、`Chamfer::execute/updateProperties/migrateFlippedProperties`、`DressUp::getContinuousEdges/getFaces/getAddSubShape`，并把 cad-core 落点拆为 `feature_fillet.cpp`、`feature_chamfer.cpp`、`feature_dress_up.cpp` 与 `feature_transformed.cpp`。当前只有 Chamfer Two distances 与 Distance and Angle 被归为既有 c3m5 expected-backed；Fillet multi-edge/UseAllEdges、Chamfer FlipDirection=true、DressUp chain stale reference recovery 仍是 `oracle_candidate` / `needs_S2_decision`，不能直接进入 backend gap。
+
 ### S2 准入裁决
 
 把 rows 路由为：
