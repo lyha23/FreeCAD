@@ -22,7 +22,9 @@
 - S1 已完成：FreeCAD 源码证据已拆到 `FeatureFillet.cpp::Fillet::execute`、`FeatureChamfer.cpp::Chamfer::execute/updateProperties/migrateFlippedProperties`、`FeatureDressUp.cpp::getContinuousEdges/getFaces/getAddSubShape`；cad-core 落点已拆到 `feature_fillet.cpp`、`feature_chamfer.cpp`、`feature_dress_up.cpp`、`feature_transformed.cpp`。
 - S2 已完成：live baseline 为 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=00c035d224`（`00c035d224 docs: 补齐 C7-M2 S1 源码与 oracle 矩阵`），开始时 `git status --short -uall` 无输出。
 - S2 route 结论：Chamfer Two distances 与 Distance and Angle 为 `already_closed_expected_backed`，继承 c3m5 fixture/expected/focused test；Fillet multi-edge/UseAllEdges、Chamfer FlipDirection=true、DressUp chain stale ReferenceShadow/Base recovery 为 `oracle_pending_collect`，不能声明 supported，也没有 oracle 证据证明 active backend gap；SupportTransform mirrored / chain baseline 为 `already_closed_expected_backed`；publication drift 为 `publication_closure_only`；GUI、full DressUp universe、full MapperHistory 和输出端猜测为 `diagnostic_non_goal`。
-- S2 未产生任何 `backend_gap_requires_implementation`。Code edit gate 保持关闭；下一步 S3 只能做 no-code diagnostic/publication boundary，不改 C++、fixtures、expected 或 tests。
+- S2 未产生任何 `backend_gap_requires_implementation`。Code edit gate 保持关闭；S3 只能做 no-code diagnostic/publication boundary，不改 C++、fixtures、expected 或 tests。
+- S3 已完成：live baseline 为 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=5adeee22a3`（`5adeee22a3 文档：完成 C7-M2 S2 准入裁决`），开始时 `git status --short -uall` 无输出。S3 没有改 C++、fixtures、expected 或 tests，没有新增测试；只关闭 no-code diagnostic/publication boundary。
+- S3 boundary 结论：Fillet multi-edge/`UseAllEdges`、Chamfer `FlipDirection=true`、DressUp chain stale `ReferenceShadow` / Base recovery 保持 `oracle_pending_collect`；Chamfer Two distances、Chamfer Distance and Angle、SupportTransform mirrored / chained DressUp regression 保持 `already_closed_expected_backed`；GUI、full DressUp universe、full MapperHistory 和输出端引用恢复猜测保持 `diagnostic_non_goal`。publication drift 保持 `publication_closure_only` 并进入 S4。
 - 当前源码候选包括 `src/Mod/PartDesign/App/FeatureFillet.cpp`、`src/Mod/PartDesign/App/FeatureChamfer.cpp`、`src/Mod/PartDesign/App/FeatureDressUp.cpp`、`cad-core/src/part_design/feature_fillet.cpp`、`cad-core/src/part_design/feature_chamfer.cpp`、`cad-core/src/part_design/feature_dress_up.cpp`、`cad-core/src/part_design/feature_transformed.cpp`、`cad-core/tests/test_p7_features.py` 和 `cad-core/fixtures/p7`。
 
 ## 收口边界
@@ -30,7 +32,7 @@
 - Fillet：`Radius`、`UseAllEdges`、Base LinkSub、连续边扩展、multi-edge 选择和 replacement refine。
 - Chamfer：`ChamferType` 的 `Equal distance`、`Two distances`、`Distance and Angle`，以及 `Size`、`Size2`、`Angle`、`FlipDirection`、`UseAllEdges`。
 - DressUp 引用恢复：Body member Base、前序 Fillet/Chamfer Base、`StableSubList` / `FullSubList` 输入、`SupportTransform` AddSubShape cache、链式 DressUp source base。
-- 发布口径：fixtures、expected、focused tests、capability/docs 必须一致。S2 已裁决为 no backend gap；S3/S4 只能发布 inherited expected-backed、oracle pending 与 non-goal 边界，不能把 oracle pending 写成 supported capability。
+- 发布口径：fixtures、expected、focused tests、capability/docs 必须一致。S2/S3 已裁决为 no backend gap；S4 只能发布 inherited expected-backed、oracle pending 与 non-goal 边界，不能把 oracle pending 写成 supported capability。
 
 ## 非目标
 

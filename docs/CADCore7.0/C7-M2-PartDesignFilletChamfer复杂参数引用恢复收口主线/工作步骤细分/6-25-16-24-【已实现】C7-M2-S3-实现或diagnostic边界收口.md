@@ -1,4 +1,4 @@
-# C7-M2 S3 实现或 diagnostic 边界收口
+# 【已实现】C7-M2 S3 实现或 diagnostic 边界收口
 
 ## 目标
 
@@ -44,3 +44,12 @@ git diff --check
 - S2 route 被落实，没有扩大 scope。
 - 如有代码改动，FreeCAD 依据注释和 focused tests 同步完成。
 - 本文件标记后，队列推进到 S4。
+
+## 完成记录
+
+- S3 live baseline：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=5adeee22a3`（`5adeee22a3 文档：完成 C7-M2 S2 准入裁决`），开始时 `git status --short -uall` 无输出。
+- S2 没有产生 `backend_gap_requires_implementation`，Code edit gate 保持关闭；S3 走 no-code diagnostic/publication boundary，未改 C++、fixtures、expected 或 tests，也没有新增测试。
+- `oracle_pending_collect` 保持不变：Fillet multi-edge / `UseAllEdges`、Chamfer `FlipDirection=true`、DressUp chain stale `ReferenceShadow` / Base recovery 只进入后续 oracle / publication 路线，不能声明 supported capability。
+- `already_closed_expected_backed` 保持不变：Chamfer Two distances、Chamfer Distance and Angle、SupportTransform mirrored / chained DressUp regression 继续引用现有 fixture/expected/focused test 证据。
+- `diagnostic_non_goal` 保持不变：GUI、full DressUp universe、full MapperHistory 和输出端引用恢复猜测不进入本包实现。
+- publication drift 保持 `publication_closure_only` 并进入 S4；队列应跳过本文件，下一步为 S4。

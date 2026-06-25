@@ -73,7 +73,11 @@ S2 没有 `backend_gap_requires_implementation`。Code edit gate 保持关闭，
 
 ### S3 实现或 diagnostic 边界收口
 
-只有 S2 授权时才改 C++。S2 本轮没有授权实现，因此 S3 只能落实 no-code diagnostic/publication boundary。若后续 oracle 证明 active backend gap，涉及 FreeCAD 语义的 public API、executor 主路径、mapper/history 字段必须在相邻注释写明 FreeCAD 源文件、类/函数和关键短句；引用恢复必须优先补 `topo` / history / naming 正式能力，不允许在 adapter 或 executor 输出端修剪。
+已完成。live baseline：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=5adeee22a3`（`5adeee22a3 文档：完成 C7-M2 S2 准入裁决`），开始时 `git status --short -uall` 无输出。
+
+S3 未获得实现授权，因此没有修改 C++、fixtures、expected 或 tests，也没有新增测试。S3 只落实 no-code diagnostic/publication boundary：Fillet multi-edge / `UseAllEdges`、Chamfer `FlipDirection=true`、DressUp chain stale `ReferenceShadow` / Base recovery 保持 `oracle_pending_collect`；Chamfer Two distances、Chamfer Distance and Angle、SupportTransform regression 保持 `already_closed_expected_backed`；GUI、full DressUp universe、full MapperHistory 和输出端引用恢复猜测保持 `diagnostic_non_goal`；publication drift 保持 `publication_closure_only` 并进入 S4。
+
+若后续 oracle 证明 active backend gap，涉及 FreeCAD 语义的 public API、executor 主路径、mapper/history 字段必须在相邻注释写明 FreeCAD 源文件、类/函数和关键短句；引用恢复必须优先补 `topo` / history / naming 正式能力，不允许在 adapter 或 executor 输出端修剪。
 
 ### S4 fixtures/tests/capability 发布
 
@@ -97,7 +101,7 @@ git diff --check
 
 ### 实现短跑
 
-S3 若改 C++，先由 worker 从当前 `cad-core/tests/test_p7_features.py` 读取真实 test names，再选择 Fillet / Chamfer / DressUp / SupportTransform focused filters。不要在方案里手写过期 test name 当硬性命令。
+S3 未改 C++、fixtures、expected 或 tests，所以不运行 focused unittest。S4/S5 只有在后续实际改动代码或 fixture 发布口径时，才从当前 `cad-core/tests/test_p7_features.py` 读取真实 test names 后选择 focused filters。
 
 ### 阶段回归
 

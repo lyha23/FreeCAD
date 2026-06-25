@@ -2,7 +2,7 @@
 
 ## 结论
 
-C7-M2 的下一步不是扩大 `feature_dress_up.cpp`，而是先把 Fillet / Chamfer 的复杂参数和引用恢复 gap 做成可裁决的批量收口。S2 已完成准入裁决：本包没有 `backend_gap_requires_implementation`，Code edit gate 关闭；S3 只能做 no-code diagnostic/publication boundary。
+C7-M2 的下一步不是扩大 `feature_dress_up.cpp`，而是把 Fillet / Chamfer 的复杂参数和引用恢复 gap 做成可裁决、可发布的批量收口。S2 已完成准入裁决，S3 已完成 no-code diagnostic/publication boundary：本包没有 `backend_gap_requires_implementation`，Code edit gate 关闭；下一步进入 S4 发布口径同步。
 
 ## FreeCAD 调用链
 
@@ -20,7 +20,7 @@ C7-M2 的下一步不是扩大 `feature_dress_up.cpp`，而是先把 Fillet / Ch
 ## S0 live 基线
 
 - S0 起点：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=b5767e2391`（`b5767e2391 docs: 新增 C7-M2 Fillet Chamfer 收口方案`），开始时 `git status --short -uall` 无输出。
-- C7-M1 live 队列为空；C7-M2 live 队列从 S0-S5 pending 起步，S0/S1/S2 已关闭，下一步为 S3。
+- C7-M1 live 队列为空；C7-M2 live 队列从 S0-S5 pending 起步，S0/S1/S2/S3 已关闭，下一步为 S4。
 - P7 supported baseline：基础 Edge / Face Base、连续边过滤、OCCT fillet/chamfer maker、replacement solid、RefineModel、DressUp AddSubShape cache、slot 级 `NamedShape`、`SupportTransform=true` 和链式 DressUp consumed by transformed family 已有文档、fixtures、expected 与 focused tests。
 - P7 remaining gap 保持为 `Fillet / Chamfer 复杂参数组合、复杂引用变更后的完整稳定恢复`；S0 不裁决 complex parameter、UseAllEdges、FlipDirection 或复杂引用恢复是否 closed。
 - S0 代表 fixture / expected：`p7/fillet-pad-edge`、`p7/chamfer-pad-edge`、`p7/fillet-refine-true`、`p7/chamfer-refine-true`、`p7/mirrored-fillet-support-transform`、`p7/mirrored-dressup-chain-support-transform`；诊断 fixture：`p7/fillet-missing-edge`、`p7/chamfer-invalid-size`；相邻 C3-M5 证据：`chamfer-two-distances-edge`、`chamfer-distance-angle-edge`、`fillet-face-selection-history`、`chained-dressup-pattern-history`。
@@ -34,7 +34,7 @@ C7-M2 的下一步不是扩大 `feature_dress_up.cpp`，而是先把 Fillet / Ch
 | Fillet 选择 | `Radius`、`UseAllEdges`、multi-edge、continuous edge expansion | S2 裁决 `oracle_pending_collect`：有源码/cad-core 路径，缺 dedicated FreeCAD expected |
 | Chamfer 参数 | `Two distances`、`Distance and Angle`、`FlipDirection` | Two distances / Distance and Angle 为 `already_closed_expected_backed`；FlipDirection=true 为 `oracle_pending_collect` |
 | 引用恢复 | Body/DressUp chain Base、`StableSubList` / `FullSubList`、ReferenceShadow 证据 | Body cumulative Base、invalid stable diagnostic、SupportTransform chain 已有 expected/regression evidence；stale ReferenceShadow recovery 为 `oracle_pending_collect` |
-| 发布闭环 | fixtures、expected、focused tests、capability/docs | `publication_closure_only`，不得把 oracle pending 写成 supported |
+| 发布闭环 | fixtures、expected、focused tests、capability/docs | S3 已确认 no-code；`publication_closure_only` 进入 S4，且不得把 oracle pending 写成 supported |
 
 ## 非目标
 
@@ -48,8 +48,8 @@ C7-M2 的下一步不是扩大 `feature_dress_up.cpp`，而是先把 Fillet / Ch
 1. S0：已冻结 live baseline、P7 remaining gap、现有 fixtures/tests/capability。
 2. S1：已阅读 FreeCAD 源码和 cad-core fixtures/tests，补完 source / oracle / input contract 矩阵。
 3. S2：已按 route 裁决 complex params 与引用恢复；无 backend gap，Code edit gate 关闭。
-4. S3：no-code diagnostic/publication boundary 收口。
-5. S4：同步 fixtures、tests、capability 和发布文档。
+4. S3：已完成 no-code diagnostic/publication boundary 收口，未改 C++、fixtures、expected 或 tests。
+5. S4：同步 fixtures、tests、capability 和发布文档，publication drift 由 S4 收口。
 6. S5：阶段回归与 release gate，队列清空后才能声明完成。
 
 ## 验收入口
