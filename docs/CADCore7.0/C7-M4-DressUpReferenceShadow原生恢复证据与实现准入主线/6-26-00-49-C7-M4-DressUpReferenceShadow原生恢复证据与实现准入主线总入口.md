@@ -4,7 +4,7 @@
 
 C7-M4 是 C7-M3 后续的单一 blocker 处理包。C7-M3 已证明 Fillet / Chamfer 参数能力 expected-backed；本包只处理 stale `ReferenceShadow` / Base recovery 是否有 FreeCAD native 恢复证据，以及该证据是否足以打开 `cad-core` implementation gate。
 
-当前默认结论是 gate closed：没有 native oracle 前，不实现 C++，不发布 supported，不做 output-side guessing。S3 才能把本包裁为 `already_closed_expected_backed`、`backend_gap_requires_implementation`、`oracle_blocked` 或 `diagnostic_non_goal`。
+当前结论仍是 gate closed：S2 已执行 native FCStd/XML restore probe，但 `Base.getShadowSubs()` / `getSubValues(false/true)` 在 FreeCADCmd Python 层不可观察，route=`native_oracle_blocked`。没有 native oracle 前，不实现 C++，不发布 supported，不做 output-side guessing。S3 只能基于这个 S2 route 裁为 `oracle_blocked`，除非新增证据先删除 blocker。
 
 ## 上游状态
 
@@ -45,8 +45,8 @@ C7-M4 是 C7-M3 后续的单一 blocker 处理包。C7-M3 已证明 Fillet / Cha
 
 1. S0：已冻结 live baseline、C7-M3 blocker 和当前 fixture / expected / test 状态。
 2. S1：已复核 FreeCAD native restore / update 调用链，设计不绕过 `ShadowSub` / `ReferenceShadow` 的 FCStd/XML restore probe。
-3. S2：执行 native oracle probe / collector 证据补齐；不能证明则写 native oracle blocker。
-4. S3：用当前 `cad-core` 做 parity / diagnostics 分类，裁决 implementation gate。
+3. S2：已执行 native oracle probe / collector 证据补齐，route=`native_oracle_blocked`。
+4. S3：用 S2 route 做 parity / diagnostics 分类，裁决 implementation gate；当前默认不打开 C++ gate。
 5. S4：按 S3 route 实现正式 recovery 或 no-code blocked 发布收口。
 6. S5：release gate，更新 README / 矩阵 / P7 口径并清空队列。
 
@@ -56,6 +56,13 @@ C7-M4 是 C7-M3 后续的单一 blocker 处理包。C7-M3 已证明 Fillet / Cha
 - 已确认 `PropertyXLink::Restore()` 和 `PropertyLinkSub::Restore()` 都支持从 XML `sub` / `Sub value`、`shadowed`、`shadow` 恢复 shadow pair，并通过 `afterRestore()` / `onContainerRestored()` / `updateElementReference()` 进入 element reference 生命周期。
 - 已确认 `DressUp::getContinuousEdges()` 使用 `Base.getShadowSubs()` 且优先 `newName`；`DressUp::onChanged()` 保留 `Base.getSubValues(false)` 和 shadow subs；`DressUp::getAddSubShape()` 的 `SupportTransform` traversal 跳过连续 DressUp。
 - S2 probe 应 patch FCStd `Chamfer.Base` 的实际 `LinkSub` tag 为 `Sub value="OldFilletEdge1" shadow="Edge1"`，或等价 `XLink sub="OldFilletEdge1" shadow="Edge1"`，reopen 后记录 Base state、`ReferenceShadow` sidecar 和 shape summary。现有 `collect_freecad_expected.py::link_sub_value()` StableSubList-fed 输出只能作为负控。
+
+## S2 完成状态
+
+- live 起点：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=dc041901a7`（`dc041901a7 文档：完成 C7-M4 S1 native probe 设计`），开始状态 `git status --short -uall` 无输出。
+- 已新增并运行 `cad-core/tools/c7m4_reference_shadow_native_probe.py`：baseline FCStd 由现有 fixture 构造，`Document.xml` 中 `Chamfer.Base` patch 为 `LinkSub/Sub value=OldFilletEdge1 shadow=Edge1`，reopen/recompute `returncode=0`。
+- 证据写入 `cad-core/fixtures/c3m5/dressup-reference-shadow-base-recovery.native-probe.evidence.json`：XML patch、FreeCAD version、ReferenceShadow sidecar、Python-visible `Chamfer.Base`、`dumpPropertyContent()`、`Chamfer` / `Body` shape summary 和命令 returncode 已记录。
+- route=`native_oracle_blocked`：阻塞层不是 FreeCADCmd 或 geometry，而是 FreeCAD Python property API 只能观察 tuple / property dump，不能观察 `Base.getShadowSubs()`、`getSubValues(false)`、`getSubValues(true)`；StableSubList-fed 负控命令 `returncode=0`，但只能证明 Edge1-fed geometry。
 
 ## 验收入口
 

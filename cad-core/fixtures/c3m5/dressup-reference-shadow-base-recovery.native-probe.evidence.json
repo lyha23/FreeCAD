@@ -1,0 +1,548 @@
+{
+  "baseline": {
+    "Base": [
+      {
+        "Name": "Fillet",
+        "TypeId": "PartDesign::Fillet"
+      },
+      [
+        "Edge1"
+      ]
+    ],
+    "Body_shape": {
+      "status": "ok",
+      "summary": {
+        "bbox": {
+          "max": [
+            2.0,
+            2.0,
+            2.0
+          ],
+          "min": [
+            -5.551115123125783e-17,
+            -5.551115123125783e-17,
+            -1.4787126774855188e-17
+          ]
+        },
+        "topology_counts": {
+          "edges": 22,
+          "faces": 10,
+          "vertices": 14
+        },
+        "volume": 7.977971878913572
+      }
+    },
+    "Chamfer_shape": {
+      "status": "ok",
+      "summary": {
+        "bbox": {
+          "max": [
+            2.0,
+            2.0,
+            2.0
+          ],
+          "min": [
+            -5.551115123125783e-17,
+            -5.551115123125783e-17,
+            -1.4787126774855188e-17
+          ]
+        },
+        "topology_counts": {
+          "edges": 22,
+          "faces": 10,
+          "vertices": 14
+        },
+        "volume": 7.977971878913572
+      }
+    },
+    "base_property_api": {
+      "candidates": [
+        {
+          "getShadowSubs": {
+            "status": "unavailable"
+          },
+          "getSubValues": {
+            "status": "unavailable"
+          },
+          "getSubValues_false": {
+            "status": "unavailable"
+          },
+          "getSubValues_true": {
+            "status": "unavailable"
+          },
+          "repr": "(<PartDesign::Fillet>, ['Edge1'])",
+          "source": "attribute_Base",
+          "type": "tuple",
+          "value": [
+            {
+              "Name": "Fillet",
+              "TypeId": "PartDesign::Fillet"
+            },
+            [
+              "Edge1"
+            ]
+          ]
+        },
+        {
+          "getShadowSubs": {
+            "status": "unavailable"
+          },
+          "getSubValues": {
+            "status": "unavailable"
+          },
+          "getSubValues_false": {
+            "status": "unavailable"
+          },
+          "getSubValues_true": {
+            "status": "unavailable"
+          },
+          "repr": "(<PartDesign::Fillet>, ['Edge1'])",
+          "source": "getPropertyByName_Base",
+          "type": "tuple",
+          "value": [
+            {
+              "Name": "Fillet",
+              "TypeId": "PartDesign::Fillet"
+            },
+            [
+              "Edge1"
+            ]
+          ]
+        }
+      ],
+      "shadow_subs": {
+        "reason": "FreeCAD Python property value does not expose getShadowSubs",
+        "status": "unavailable"
+      },
+      "subvalues_default": {
+        "reason": "FreeCAD Python property value does not expose getSubValues",
+        "status": "unavailable"
+      },
+      "subvalues_false": {
+        "reason": "FreeCAD Python property value does not expose getSubValues_false",
+        "status": "unavailable"
+      },
+      "subvalues_true": {
+        "reason": "FreeCAD Python property value does not expose getSubValues_true",
+        "status": "unavailable"
+      }
+    },
+    "base_property_container": {
+      "dumpPropertyContent": {
+        "byte_count": 261,
+        "compression": 0,
+        "decoded": {
+          "entries": [
+            "Persistence.xml"
+          ],
+          "link_attrs": {
+            "count": "1",
+            "value": "Fillet"
+          },
+          "persistence_xml": "<Content>\n<LinkSub value=\"Fillet\" count=\"1\">\n    <Sub value=\"Edge1\" shadow=\";#d:1;:M;FLT;:Hec:7,E.Edge1\"/>\n</LinkSub>\n</Content>",
+          "property_tag": "LinkSub",
+          "sub_attrs": {
+            "shadow": ";#d:1;:M;FLT;:Hec:7,E.Edge1",
+            "value": "Edge1"
+          }
+        },
+        "hex_prefix": "504b0304140000000800180cda5c68ec863985000000800000000f00000050657273697374656e63652e786d6c0180007fff3c436f6e74656e743e0a3c4c696e6b5375622076616c75653d2246696c6c65742220636f756e743d2231223e0a20",
+        "status": "ok"
+      },
+      "type_id": "App::PropertyLinkSub"
+    }
+  },
+  "blocker_layer": "python_property_api",
+  "command": {
+    "argv": [
+      "/Users/li/.cargo/bin/freecadcmd",
+      "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/c7m4_reference_shadow_native_probe.py",
+      "--pass",
+      "__cad_core_c7m4_reference_shadow_probe_args_env__"
+    ],
+    "returncode": 0
+  },
+  "delete_condition": "Use this evidence in S3; do not replace it with StableSubList-fed collector output.",
+  "fixture": "fixtures/c3m5/dressup-reference-shadow-base-recovery.json",
+  "freecad_version": "1.2.0 revision 20260519",
+  "input_contract": {
+    "new_subname": "Edge1",
+    "old_subname": "OldFilletEdge1",
+    "reference_shadow": [
+      {
+        "fingerprint": {},
+        "indexed": "OldFilletEdge1",
+        "property": "Shape",
+        "shapeType": "Edge",
+        "stableSubname": "Edge1",
+        "subname": "OldFilletEdge1",
+        "target": "Fillet",
+        "targetId": 3
+      }
+    ],
+    "shadow_sub": [
+      {
+        "newName": "Edge1",
+        "oldName": "OldFilletEdge1"
+      }
+    ],
+    "stable_sublist": [
+      "Edge1"
+    ],
+    "stale_sublist": [
+      "OldFilletEdge1"
+    ],
+    "target_object": "Fillet"
+  },
+  "negative_control": {
+    "command": "cd cad-core && FREECADCMD=/Users/li/.cargo/bin/freecadcmd python3 tools/collect_freecad_expected.py fixtures/c3m5/dressup-reference-shadow-base-recovery.json --out /tmp/c7m4-dressup-reference-shadow-stablesublist-fed.freecad.json",
+    "role": "StableSubList-fed bypass guard only; not native oracle evidence"
+  },
+  "reason": "FreeCADCmd reopened the patched FCStd, but the Python-visible Base property did not expose getShadowSubs(), so S2 cannot prove the native ShadowSub lifecycle.",
+  "restore": {
+    "after_recompute": {
+      "Base": [
+        {
+          "Name": "Fillet",
+          "TypeId": "PartDesign::Fillet"
+        },
+        [
+          "Edge1"
+        ]
+      ],
+      "Body_shape": {
+        "status": "ok",
+        "summary": {
+          "bbox": {
+            "max": [
+              2.0,
+              2.0,
+              2.0
+            ],
+            "min": [
+              -5.551115123125783e-17,
+              -5.551115123125783e-17,
+              -1.4787126774855188e-17
+            ]
+          },
+          "topology_counts": {
+            "edges": 22,
+            "faces": 10,
+            "vertices": 14
+          },
+          "volume": 7.977971878913572
+        }
+      },
+      "Chamfer_shape": {
+        "status": "ok",
+        "summary": {
+          "bbox": {
+            "max": [
+              2.0,
+              2.0,
+              2.0
+            ],
+            "min": [
+              -5.551115123125783e-17,
+              -5.551115123125783e-17,
+              -1.4787126774855188e-17
+            ]
+          },
+          "topology_counts": {
+            "edges": 22,
+            "faces": 10,
+            "vertices": 14
+          },
+          "volume": 7.977971878913572
+        }
+      },
+      "base_property_api": {
+        "candidates": [
+          {
+            "getShadowSubs": {
+              "status": "unavailable"
+            },
+            "getSubValues": {
+              "status": "unavailable"
+            },
+            "getSubValues_false": {
+              "status": "unavailable"
+            },
+            "getSubValues_true": {
+              "status": "unavailable"
+            },
+            "repr": "(<PartDesign::Fillet>, ['Edge1'])",
+            "source": "attribute_Base",
+            "type": "tuple",
+            "value": [
+              {
+                "Name": "Fillet",
+                "TypeId": "PartDesign::Fillet"
+              },
+              [
+                "Edge1"
+              ]
+            ]
+          },
+          {
+            "getShadowSubs": {
+              "status": "unavailable"
+            },
+            "getSubValues": {
+              "status": "unavailable"
+            },
+            "getSubValues_false": {
+              "status": "unavailable"
+            },
+            "getSubValues_true": {
+              "status": "unavailable"
+            },
+            "repr": "(<PartDesign::Fillet>, ['Edge1'])",
+            "source": "getPropertyByName_Base",
+            "type": "tuple",
+            "value": [
+              {
+                "Name": "Fillet",
+                "TypeId": "PartDesign::Fillet"
+              },
+              [
+                "Edge1"
+              ]
+            ]
+          }
+        ],
+        "shadow_subs": {
+          "reason": "FreeCAD Python property value does not expose getShadowSubs",
+          "status": "unavailable"
+        },
+        "subvalues_default": {
+          "reason": "FreeCAD Python property value does not expose getSubValues",
+          "status": "unavailable"
+        },
+        "subvalues_false": {
+          "reason": "FreeCAD Python property value does not expose getSubValues_false",
+          "status": "unavailable"
+        },
+        "subvalues_true": {
+          "reason": "FreeCAD Python property value does not expose getSubValues_true",
+          "status": "unavailable"
+        }
+      },
+      "base_property_container": {
+        "dumpPropertyContent": {
+          "byte_count": 261,
+          "compression": 0,
+          "decoded": {
+            "entries": [
+              "Persistence.xml"
+            ],
+            "link_attrs": {
+              "count": "1",
+              "value": "Fillet"
+            },
+            "persistence_xml": "<Content>\n<LinkSub value=\"Fillet\" count=\"1\">\n    <Sub value=\"Edge1\" shadow=\";#d:1;:M;FLT;:Hec:7,E.Edge1\"/>\n</LinkSub>\n</Content>",
+            "property_tag": "LinkSub",
+            "sub_attrs": {
+              "shadow": ";#d:1;:M;FLT;:Hec:7,E.Edge1",
+              "value": "Edge1"
+            }
+          },
+          "hex_prefix": "504b0304140000000800180cda5c68ec863985000000800000000f00000050657273697374656e63652e786d6c0180007fff3c436f6e74656e743e0a3c4c696e6b5375622076616c75653d2246696c6c65742220636f756e743d2231223e0a20",
+          "status": "ok"
+        },
+        "type_id": "App::PropertyLinkSub"
+      }
+    },
+    "before_recompute": {
+      "Base": [
+        {
+          "Name": "Fillet",
+          "TypeId": "PartDesign::Fillet"
+        },
+        [
+          "Edge1"
+        ]
+      ],
+      "Body_shape": {
+        "status": "ok",
+        "summary": {
+          "bbox": {
+            "max": [
+              2.0,
+              2.0,
+              2.0
+            ],
+            "min": [
+              -7.704814843991313e-17,
+              -6e-17,
+              -1.767704215513143e-16
+            ]
+          },
+          "topology_counts": {
+            "edges": 22,
+            "faces": 10,
+            "vertices": 14
+          },
+          "volume": 7.977971878913571
+        }
+      },
+      "Chamfer_shape": {
+        "status": "ok",
+        "summary": {
+          "bbox": {
+            "max": [
+              2.0,
+              2.0,
+              2.0
+            ],
+            "min": [
+              -7.704814843991313e-17,
+              -6e-17,
+              -1.767704215513143e-16
+            ]
+          },
+          "topology_counts": {
+            "edges": 22,
+            "faces": 10,
+            "vertices": 14
+          },
+          "volume": 7.977971878913571
+        }
+      },
+      "base_property_api": {
+        "candidates": [
+          {
+            "getShadowSubs": {
+              "status": "unavailable"
+            },
+            "getSubValues": {
+              "status": "unavailable"
+            },
+            "getSubValues_false": {
+              "status": "unavailable"
+            },
+            "getSubValues_true": {
+              "status": "unavailable"
+            },
+            "repr": "(<PartDesign::Fillet>, ['Edge1'])",
+            "source": "attribute_Base",
+            "type": "tuple",
+            "value": [
+              {
+                "Name": "Fillet",
+                "TypeId": "PartDesign::Fillet"
+              },
+              [
+                "Edge1"
+              ]
+            ]
+          },
+          {
+            "getShadowSubs": {
+              "status": "unavailable"
+            },
+            "getSubValues": {
+              "status": "unavailable"
+            },
+            "getSubValues_false": {
+              "status": "unavailable"
+            },
+            "getSubValues_true": {
+              "status": "unavailable"
+            },
+            "repr": "(<PartDesign::Fillet>, ['Edge1'])",
+            "source": "getPropertyByName_Base",
+            "type": "tuple",
+            "value": [
+              {
+                "Name": "Fillet",
+                "TypeId": "PartDesign::Fillet"
+              },
+              [
+                "Edge1"
+              ]
+            ]
+          }
+        ],
+        "shadow_subs": {
+          "reason": "FreeCAD Python property value does not expose getShadowSubs",
+          "status": "unavailable"
+        },
+        "subvalues_default": {
+          "reason": "FreeCAD Python property value does not expose getSubValues",
+          "status": "unavailable"
+        },
+        "subvalues_false": {
+          "reason": "FreeCAD Python property value does not expose getSubValues_false",
+          "status": "unavailable"
+        },
+        "subvalues_true": {
+          "reason": "FreeCAD Python property value does not expose getSubValues_true",
+          "status": "unavailable"
+        }
+      },
+      "base_property_container": {
+        "dumpPropertyContent": {
+          "byte_count": 261,
+          "compression": 0,
+          "decoded": {
+            "entries": [
+              "Persistence.xml"
+            ],
+            "link_attrs": {
+              "count": "1",
+              "value": "Fillet"
+            },
+            "persistence_xml": "<Content>\n<LinkSub value=\"Fillet\" count=\"1\">\n    <Sub value=\"Edge1\" shadow=\";#d:1;:M;FLT;:Hec:7,E.Edge1\"/>\n</LinkSub>\n</Content>",
+            "property_tag": "LinkSub",
+            "sub_attrs": {
+              "shadow": ";#d:1;:M;FLT;:Hec:7,E.Edge1",
+              "value": "Edge1"
+            }
+          },
+          "hex_prefix": "504b0304140000000800180cda5c68ec863985000000800000000f00000050657273697374656e63652e786d6c0180007fff3c436f6e74656e743e0a3c4c696e6b5375622076616c75653d2246696c6c65742220636f756e743d2231223e0a20",
+          "status": "ok"
+        },
+        "type_id": "App::PropertyLinkSub"
+      }
+    },
+    "recompute": {
+      "status": "ok"
+    }
+  },
+  "route": "native_oracle_blocked",
+  "schema_version": "cad-core.c7m4-reference-shadow-native-probe.v1",
+  "xml_patch": {
+    "after": {
+      "link_attrs": {
+        "count": "1",
+        "value": "Fillet"
+      },
+      "property_attrs": {
+        "name": "Base",
+        "type": "App::PropertyLinkSub"
+      },
+      "sub_attrs": {
+        "shadow": "Edge1",
+        "value": "OldFilletEdge1"
+      },
+      "tag": "LinkSub"
+    },
+    "before": {
+      "link_attrs": {
+        "count": "1",
+        "value": "Fillet"
+      },
+      "property_attrs": {
+        "name": "Base",
+        "type": "App::PropertyLinkSub"
+      },
+      "sub_attrs": {
+        "shadow": ";#d:1;:M;FLT;:Hec:7,E.Edge1",
+        "value": "Edge1"
+      },
+      "tag": "LinkSub"
+    },
+    "property_tag": "LinkSub"
+  }
+}
