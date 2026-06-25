@@ -1,0 +1,28 @@
+{
+  "freecad_version": "1.2.0 revision 20260519",
+  "known_gap": {
+    "kind": "dressup_reference_shadow_base_recovery_native_oracle_blocked",
+    "reason": "C7-M3 S2 keeps this fixture as a native_oracle_blocker because collect_freecad_expected.py can collect geometry by feeding StableSubList to FreeCAD PropertyLinkSub, but it cannot prove that stale SubList was recovered through ShadowSub and ReferenceShadow evidence. Geometry-only success must not be treated as ReferenceShadow recovery support.",
+    "source_authority": [
+      "/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureDressUp.cpp::DressUp::getBaseObject()",
+      "/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureDressUp.cpp::DressUp::getContinuousEdges()",
+      "/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureDressUp.cpp::DressUp::getAddSubShape()"
+    ],
+    "cad_core_fixture": "cad-core/fixtures/c3m5/dressup-reference-shadow-base-recovery.json",
+    "freecadcmd_evidence": {
+      "probe_case": "dressup_reference_shadow_base_recovery_geometry_only",
+      "command": "cd cad-core && FREECADCMD=/Users/li/.cargo/bin/freecadcmd python3 tools/collect_freecad_expected.py fixtures/c3m5/dressup-reference-shadow-base-recovery.json --out /tmp/c7m3-dressup-reference-shadow-base-recovery.geometry-only.freecad.json",
+      "returncode": 0,
+      "geometry_only_output": "/tmp/c7m3-dressup-reference-shadow-base-recovery.geometry-only.freecad.json",
+      "collector_gap": "link_sub_value uses StableSubList/SubList and ignores ShadowSub/ReferenceShadow, so FreeCADCmd did not validate stale old-name recovery"
+    },
+    "uncollected_fields": [
+      "recovered Base SubList from OldFilletEdge1 to Edge1",
+      "ShadowSub newName/oldName native recovery evidence",
+      "ReferenceShadow old subshape evidence consumed by FreeCAD",
+      "post-recovery Base evidence that is not produced by feeding StableSubList directly"
+    ],
+    "delete_condition": "Replace this blocker with a FreeCADCmd oracle expected only after the collector or a native probe can prove stale SubList + StableSubList + ShadowSub + ReferenceShadow recovery without feeding the stable name as the selected subelement."
+  },
+  "reference": "C7-M3 S2 native oracle blocker for DressUp stale ReferenceShadow/Base recovery; no cad-core recompute output was used as expected."
+}

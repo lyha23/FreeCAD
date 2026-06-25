@@ -2,7 +2,7 @@
 
 ## 结论
 
-C7-M3 的下一步是 S2 补采 oracle，不是直接实现。C7-M2 release gate 已把旧 P7 残余口径拆清：3 个 rows 缺 FreeCAD expected，因此不能发布 supported，也不能证明 active backend gap。S1 已把这些 rows 设计成可采集 fixture / collector route；C7-M3 必须先采 FreeCAD oracle，再用当前 `cad-core` 跑同族 parity，最后才决定是否进入 C++ 实现。
+C7-M3 的下一步是 S3 parity gate，不是直接实现。C7-M2 release gate 已把旧 P7 残余口径拆清：3 个 rows 缺 FreeCAD expected，因此不能发布 supported，也不能证明 active backend gap。S1 已把这些 rows 设计成可采集 fixture / collector route；S2 已采集 Fillet / Chamfer FreeCAD oracle，并把 DressUp stale `ReferenceShadow` / Base recovery 记录为 native oracle blocker。C7-M3 现在必须用当前 `cad-core` 对 S2 expected 跑同族 parity，最后才决定是否进入 C++ 实现。
 
 ## 上游状态
 
@@ -10,7 +10,8 @@ C7-M3 的下一步是 S2 补采 oracle，不是直接实现。C7-M2 release gate
 - C7-M2 没有 `backend_gap_requires_implementation`，未改 C++、fixtures、expected、tests、topo/history 或 adapter schema。
 - S0 已冻结当前 live 基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=d678462e20`；开始状态只有目标文档改动（root README modified、C7-M3 包 untracked），没有无关源码、fixture、expected 或 test 改动。
 - S1 已完成：live 起点 `HEAD=a0a9799608`（`a0a9799608 文档：完成 C7-M3 S0 基线冻结`），开始状态干净；只改文档和矩阵，未新增 fixture/expected/tests，未运行 FreeCAD oracle 或 cad-core parity。
-- C7-M1/C7-M2 队列为空，C7-M3 队列在 S1 后推进到 S2。
+- S2 已完成：live 起点 `HEAD=ad03c44cfe`（`ad03c44cfe 文档：完成 C7-M3 S1 oracle fixture 设计`），开始状态干净；新增 6 个 fixture JSON、5 个 FreeCADCmd expected JSON 和 1 个 ReferenceShadow native oracle blocker JSON，未改 C++、tests、adapter、runtime、topo 或 capability。
+- C7-M1/C7-M2 队列为空，C7-M3 队列在 S2 后推进到 S3。
 - C7-M2 留下的 3 个 oracle pending rows：
   - `C7M2-GAP-101 -> C7M3-SCOPE-101`：Fillet multi-edge / `UseAllEdges`。
   - `C7M2-GAP-203 -> C7M3-SCOPE-102`：Chamfer `FlipDirection=true`。
@@ -35,7 +36,7 @@ C7-M3 的下一步是 S2 补采 oracle，不是直接实现。C7-M2 release gate
 
 1. S0【已实现】：冻结 C7-M3 live baseline 与 C7-M2 oracle pending rows。
 2. S1【已实现】：设计 oracle fixtures 与 FreeCAD collector route。
-3. S2：采集 FreeCAD oracle 或记录 native oracle blocker。
+3. S2【已实现】：采集 FreeCAD oracle 或记录 native oracle blocker。
 4. S3：运行 cad-core parity 并裁决 implementation gate。
 5. S4：按 S3 gate 实现或 no-code publication closure。
 6. S5：release gate，清空队列并同步 README / 矩阵。
@@ -45,6 +46,11 @@ C7-M3 的下一步是 S2 补采 oracle，不是直接实现。C7-M2 release gate
 - Fillet：`p7/fillet-pad-multi-edge` 使用 `Base=Pad`、`SubList=[Edge1,Edge2]`、`Radius=0.35`、`UseAllEdges=false`；`p7/fillet-pad-use-all-edges` 使用 `Base=Pad`、`SubList=[Edge1]`、`Radius=0.2`、`UseAllEdges=true`，证明 Base selection 被 all-edge path 覆盖。
 - Chamfer：`p7/chamfer-pad-edge-flip-true` 是 Equal distance true-side smoke；S1 判定 `c3m5/chamfer-two-distances-edge-flip-true` 与 `c3m5/chamfer-distance-angle-edge-flip-true` 也需要采集，才能发布非等距 `FlipDirection=true` 支持。
 - DressUp recovery：`c3m5/dressup-reference-shadow-base-recovery` 以 `SketchPad -> Pad -> Fillet -> Chamfer -> Body` 为 current graph；`Chamfer.Base` 保留 stale `SubList`、`StableSubList`、`ShadowSub` 和 `ReferenceShadow`。当前 collector 的 geometry-only 成功不足以证明恢复，S2 无完整证据时必须写 blocker，不能 fallback。
+
+## S2 oracle 结果
+
+- `p7/fillet-pad-multi-edge`、`p7/fillet-pad-use-all-edges`、`p7/chamfer-pad-edge-flip-true`、`c3m5/chamfer-two-distances-edge-flip-true`、`c3m5/chamfer-distance-angle-edge-flip-true` 均已有 FreeCADCmd oracle expected，`freecad_version=1.2.0 revision 20260519`。
+- `c3m5/dressup-reference-shadow-base-recovery` 有 fixture 和 blocker expected；`known_gap.kind=dressup_reference_shadow_base_recovery_native_oracle_blocked`。S3 必须把它裁为 `oracle_blocked`，不能把 `/tmp/c7m3-dressup-reference-shadow-base-recovery.geometry-only.freecad.json` 的 StableSubList 几何输出当成恢复支持。
 
 ## 验收入口
 

@@ -1,0 +1,47 @@
+{
+  "freecad_version": "1.2.0 revision 20260519",
+  "objects": {
+    "Body": {
+      "bbox": {
+        "max": [
+          10.0,
+          5.0,
+          10.0
+        ],
+        "min": [
+          -2.7755575615628914e-17,
+          -2.7755575615628914e-17,
+          -2.7755575615628914e-17
+        ]
+      },
+      "topology_counts": {
+        "edges": 56,
+        "faces": 26,
+        "vertices": 24
+      },
+      "volume": 499.15230652785596
+    },
+    "Fillet": {
+      "bbox": {
+        "max": [
+          10.0,
+          5.0,
+          10.0
+        ],
+        "min": [
+          -2.7755575615628914e-17,
+          -2.7755575615628914e-17,
+          -2.7755575615628914e-17
+        ]
+      },
+      "topology_counts": {
+        "edges": 56,
+        "faces": 26,
+        "vertices": 24
+      },
+      "volume": 499.15230652785596
+    }
+  },
+  "reference": "FreeCADCmd oracle from fillet-pad-use-all-edges.json; objects: Sketcher::SketchObject, PartDesign::Pad, PartDesign::Fillet, PartDesign::Body",
+  "schema_version": "cad-core.freecad-expected.v1"
+}

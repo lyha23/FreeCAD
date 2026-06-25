@@ -1,0 +1,99 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPad",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {"kind": "LineSegment", "start": [0, 0], "end": [2, 0]},
+          {"kind": "LineSegment", "start": [2, 0], "end": [2, 2]},
+          {"kind": "LineSegment", "start": [2, 2], "end": [0, 2]},
+          {"kind": "LineSegment", "start": [0, 2], "end": [0, 0]}
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPad",
+          "SubList": []
+        },
+        "Type": "Length",
+        "Length": 2,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Fillet",
+      "ID": 3,
+      "TypeId": "PartDesign::Fillet",
+      "Properties": {
+        "Base": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Pad",
+          "SubList": ["Edge1"]
+        },
+        "Radius": 0.2,
+        "UseAllEdges": false,
+        "SupportTransform": true
+      }
+    },
+    {
+      "Name": "Chamfer",
+      "ID": 4,
+      "TypeId": "PartDesign::Chamfer",
+      "Properties": {
+        "Base": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Fillet",
+          "SubList": ["OldFilletEdge1"],
+          "StableSubList": ["Edge1"],
+          "ShadowSub": [
+            {"newName": "Edge1", "oldName": "OldFilletEdge1"}
+          ],
+          "ReferenceShadow": [
+            {
+              "target": "Fillet",
+              "targetId": 3,
+              "property": "Shape",
+              "shapeType": "Edge",
+              "indexed": "OldFilletEdge1",
+              "subname": "OldFilletEdge1",
+              "stableSubname": "Edge1",
+              "fingerprint": {}
+            }
+          ]
+        },
+        "ChamferType": "Equal distance",
+        "Size": 0.05,
+        "UseAllEdges": false,
+        "SupportTransform": true
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 5,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["SketchPad", "Pad", "Fillet", "Chamfer"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Chamfer"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}

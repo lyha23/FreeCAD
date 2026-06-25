@@ -65,11 +65,25 @@ Expected 字段按当前 collector 复核为 `schema_version`、`reference`、`f
 
 ### S2 oracle 采集
 
-按 S1 设计新增 fixtures 并采集 FreeCAD expected。若 collector 缺能力，先修 collector 或记录 native oracle blocker；不得把 `cad-core` 当前输出写入 expected。S2 尤其要区分 DressUp recovery 的 geometry expected 与 `ReferenceShadow` / `ShadowSub` 恢复证据，不能用前者替代后者。
+已完成。S2 的 live 起点为 `pwd=/Users/li/Chili3DProject/FreeCAD`、`HEAD=ad03c44cfe`（`ad03c44cfe 文档：完成 C7-M3 S1 oracle fixture 设计`），开始状态干净。S2 新增 fixtures 和 expected/blocker，不改 C++、tests、runtime、topo、adapter 或 capability。
+
+S2 采集到 5 个 FreeCADCmd expected：
+
+| row | fixture | expected |
+| --- | --- | --- |
+| `C7M3-SCOPE-101` | `p7/fillet-pad-multi-edge` | `cad-core/fixtures/p7/expected/fillet-pad-multi-edge.freecad.json` |
+| `C7M3-SCOPE-101` | `p7/fillet-pad-use-all-edges` | `cad-core/fixtures/p7/expected/fillet-pad-use-all-edges.freecad.json` |
+| `C7M3-SCOPE-102` | `p7/chamfer-pad-edge-flip-true` | `cad-core/fixtures/p7/expected/chamfer-pad-edge-flip-true.freecad.json` |
+| `C7M3-SCOPE-102` | `c3m5/chamfer-two-distances-edge-flip-true` | `cad-core/fixtures/c3m5/expected/chamfer-two-distances-edge-flip-true.freecad.json` |
+| `C7M3-SCOPE-102` | `c3m5/chamfer-distance-angle-edge-flip-true` | `cad-core/fixtures/c3m5/expected/chamfer-distance-angle-edge-flip-true.freecad.json` |
+
+这些 expected 均由 `FREECADCMD=/Users/li/.cargo/bin/freecadcmd python3 tools/collect_freecad_expected.py <fixture> --out <expected>` 生成，`freecad_version=1.2.0 revision 20260519`。
+
+`C7M3-SCOPE-103` 已新增 `cad-core/fixtures/c3m5/dressup-reference-shadow-base-recovery.json`，但只记录 native oracle blocker：`cad-core/fixtures/c3m5/expected/dressup-reference-shadow-base-recovery.freecad.json` 的 `known_gap.kind=dressup_reference_shadow_base_recovery_native_oracle_blocked`。本轮 geometry-only 探测写到 `/tmp/c7m3-dressup-reference-shadow-base-recovery.geometry-only.freecad.json` 且 returncode=0，但当前 collector 是把 `StableSubList` 直接喂给 FreeCAD `PropertyLinkSub`，不能证明 stale `SubList` 经 `ShadowSub` / `ReferenceShadow` 原生恢复。因此 S3 不能从该 row 打开 implementation gate，也不能发布 supported。
 
 ### S3 parity gate
 
-运行当前 `cad-core` 对 S2 expected 的 focused parity。每行裁为 `already_closed_expected_backed`、`backend_gap_requires_implementation`、`oracle_blocked` 或 `diagnostic_non_goal`。S3 是唯一 code edit gate。
+运行当前 `cad-core` 对 S2 expected 的 focused parity。Fillet / Chamfer rows 裁为 `already_closed_expected_backed` 或 `backend_gap_requires_implementation`；DressUp stale `ReferenceShadow` / Base recovery 已有 S2 blocker，S3 应裁为 `oracle_blocked`。S3 是唯一 code edit gate。
 
 ### S4 实现或 no-code 发布
 
