@@ -18,7 +18,7 @@ P7 在 P3-P6 底座上扩展常用 Body feature。原则是所有 feature 都继
 ## 发布口径与剩余路线
 
 - Fillet / Chamfer expected-backed：基础 Body-member Fillet / Chamfer、RefineModel、Face selection history、SupportTransform mirrored / chained DressUp regression、Fillet multi-edge / `UseAllEdges`、Chamfer Equal distance `FlipDirection=true`、Chamfer Two distances `FlipDirection=true` 和 Chamfer Distance and Angle `FlipDirection=true` 已有 FreeCAD expected / focused test 证据，继续作为已关闭基线。
-- DressUp recovery oracle blocked：stale `ReferenceShadow` / Base recovery 的 C7-M3 fixture 仍是 `known_gap.kind=dressup_reference_shadow_base_recovery_native_oracle_blocked`，geometry-only 成功不能证明 `ShadowSub` / `ReferenceShadow` 原生恢复；不得发布为 supported，也不得声明 active backend gap。
+- DressUp recovery oracle blocked：stale `ReferenceShadow` / Base recovery 的 C7-M3/C7-M4 fixture 仍是 `known_gap.kind=dressup_reference_shadow_base_recovery_native_oracle_blocked`。C7-M4 S2 native FCStd/XML restore probe `returncode=0` 且 shape summary 成功，但 FreeCAD Python API 无法观察 `Base.getShadowSubs()` / `getSubValues(false/true)`；StableSubList-fed geometry 负控不能证明 `ShadowSub` / `ReferenceShadow` 原生恢复，不能删除 blocker。C7-M4 S4 已做 no-code blocked publication closure；不得发布为 supported，也不得声明 active backend gap。
 - Non-goal / publication-only：GUI、full DressUp universe、full MapperHistory 和 output-side stable reference guessing 不属于当前无状态 CAD Core 后端批次；transformed family 超出当前 P7 fixture 矩阵的复杂参数组合仍按 unsupported diagnostic 或后续专项处理。
 
 ## cad-core 落点

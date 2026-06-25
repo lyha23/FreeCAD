@@ -21,6 +21,7 @@ C7-M4 的目标不是直接给 `cad-core` 增加宽松 fallback，而是先证�
 - S1 已完成：live 起点 `HEAD=d2f530072c`（`d2f530072c 文档：完成 C7-M4 S0 基线冻结`），开始状态干净。S1 只更新文档和矩阵，没有采 oracle、没有新增 fixtures/expected/tests、没有改 C++/collector/runtime/topo/adapter。FreeCAD source authority 与 collector bypass 已复核，S2 native probe 设计已冻结为 FCStd/XML restore 入口：保留 `OldFilletEdge1`、`ShadowSub(newName=Edge1,oldName=OldFilletEdge1)` 和 `ReferenceShadow` sidecar，记录 restore 前后 Base state 与 shape summary；现有 StableSubList-fed collector 只能作为负控。队列推进到 S2。
 - S2 已完成：live 起点 `HEAD=dc041901a7`（`dc041901a7 文档：完成 C7-M4 S1 native probe 设计`），开始状态干净。新增 `cad-core/tools/c7m4_reference_shadow_native_probe.py` 并运行 FCStd/XML restore probe：patched `Chamfer.Base` 为 `LinkSub/Sub value=OldFilletEdge1 shadow=Edge1`，FreeCADCmd reopen/recompute `returncode=0`，`Chamfer` / `Body` shape summary 成功，Python-visible `Chamfer.Base` 为 `Edge1`；但 FreeCAD Python property value 只暴露 tuple 和 `dumpPropertyContent()`，无法观察 `Base.getShadowSubs()`、`getSubValues(false)`、`getSubValues(true)`。因此 S2 route=`native_oracle_blocked`，evidence 写入 `cad-core/fixtures/c3m5/dressup-reference-shadow-base-recovery.native-probe.evidence.json`，expected known_gap 已更新，StableSubList-fed collector 负控 `/tmp/c7m4-dressup-reference-shadow-stablesublist-fed.freecad.json` 仍不能替代 native oracle。队列推进到 S3。
 - S3 已完成：live 起点 `HEAD=01aeef0217`（`01aeef0217 证据：补齐 C7-M4 S2 native probe`），开始状态干净。S3 未发现能删除 S2 blocker 的新 native oracle 证据，裁决 route=`oracle_blocked`，implementation gate 保持 closed；S4 只允许 no-code publication closure，不改 C++、collector/probe、fixtures/expected，不发布 supported。
+- S4 已完成：live 起点 `HEAD=381d56ef9e`（`381d56ef9e 文档：完成 C7-M4 S3 准入裁决`），开始状态干净。S4 按 route=`oracle_blocked` 做 no-code blocked 发布收口：`dressup-reference-shadow-base-recovery` 继续 `oracle_blocked`，`C7M4-BLOCKER-401` / `C7M4-GATE-401` 关闭；未改 C++、collector/probe、fixtures/expected/tests，未实现 `ReferenceRecovery`，未发布 supported。现有 focused blocker test `test_c7m3_reference_shadow_recovery_oracle_remains_blocked` 保持为唯一 S4 测试约束，不新增测试；S5 只做 release gate。
 
 ## 收口边界
 
@@ -41,6 +42,6 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线/矩阵/*.tsv
-rg -n '[ \t]$' docs/CADCore7.0/C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线 docs/CADCore7.0/README.md
+rg -n '[ \t]$' docs/CADCore7.0/C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线 docs/CADCore7.0/README.md docs/CADCore方案/细化方案/10-P7-PartDesign常用生态.md
 git diff --check
 ```

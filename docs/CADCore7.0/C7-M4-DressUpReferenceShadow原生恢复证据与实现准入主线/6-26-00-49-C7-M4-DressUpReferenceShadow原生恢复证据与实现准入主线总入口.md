@@ -4,7 +4,7 @@
 
 C7-M4 是 C7-M3 后续的单一 blocker 处理包。C7-M3 已证明 Fillet / Chamfer 参数能力 expected-backed；本包只处理 stale `ReferenceShadow` / Base recovery 是否有 FreeCAD native 恢复证据，以及该证据是否足以打开 `cad-core` implementation gate。
 
-当前结论仍是 gate closed：S2 已执行 native FCStd/XML restore probe，但 `Base.getShadowSubs()` / `getSubValues(false/true)` 在 FreeCADCmd Python 层不可观察，route=`native_oracle_blocked`。S3 没有新增能删除该 blocker 的 native oracle 证据，已裁决 route=`oracle_blocked`。没有 native oracle 前，不实现 C++，不发布 supported，不做 output-side guessing；S4 只允许 no-code publication closure。
+当前结论仍是 gate closed：S2 已执行 native FCStd/XML restore probe，但 `Base.getShadowSubs()` / `getSubValues(false/true)` 在 FreeCADCmd Python 层不可观察，route=`native_oracle_blocked`。S3 没有新增能删除该 blocker 的 native oracle 证据，已裁决 route=`oracle_blocked`。S4 已按该裁决完成 no-code blocked publication closure：没有 native oracle 前，不实现 C++，不发布 supported，不做 output-side guessing，StableSubList-fed geometry 负控不能删除 blocker。
 
 ## 上游状态
 
@@ -47,8 +47,8 @@ C7-M4 是 C7-M3 后续的单一 blocker 处理包。C7-M3 已证明 Fillet / Cha
 2. S1：已复核 FreeCAD native restore / update 调用链，设计不绕过 `ShadowSub` / `ReferenceShadow` 的 FCStd/XML restore probe。
 3. S2：已执行 native oracle probe / collector 证据补齐，route=`native_oracle_blocked`。
 4. S3：已基于 S2 blocker 裁决 route=`oracle_blocked`，implementation gate closed。
-5. S4：只做 no-code blocked 发布收口；不得实现 ReferenceRecovery 或修改 C++ 主路径。
-6. S5：release gate，更新 README / 矩阵 / P7 口径并清空队列。
+5. S4：已完成 no-code blocked 发布收口；未实现 ReferenceRecovery，未修改 C++ 主路径。
+6. S5：只做 release gate，复核 README / 矩阵 / P7 口径并清空队列。
 
 ## S1 完成状态
 
@@ -71,12 +71,19 @@ C7-M4 是 C7-M3 后续的单一 blocker 处理包。C7-M3 已证明 Fillet / Cha
 - implementation gate closed：`dressup-reference-shadow-base-recovery` expected 继续保持 `known_gap.kind=dressup_reference_shadow_base_recovery_native_oracle_blocked`；StableSubList-fed geometry 输出不能替代 native restore evidence。
 - S4 边界：只允许更新 no-code blocked / diagnostic 发布口径和矩阵；不改 C++、collector/probe、fixtures/expected，不实现 `ReferenceRecovery`，不扩大到 full DressUp / MapperHistory。
 
+## S4 完成状态
+
+- live 起点：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=381d56ef9e`（`381d56ef9e 文档：完成 C7-M4 S3 准入裁决`），开始状态 `git status --short -uall` 无输出。
+- route=`oracle_blocked` 继续保留：S2 native probe `returncode=0` 只证明 FCStd/XML restore 可运行且 shape summary 成功；由于 FreeCAD Python API 不能观察 `Base.getShadowSubs()` / `getSubValues(false/true)`，它仍不能证明 `ShadowSub` / `ReferenceShadow` 原生恢复生命周期。
+- no-code publication closure 已应用：`C7M4-BLOCKER-401` / `C7M4-GATE-401` 关闭，`dressup-reference-shadow-base-recovery` 继续发布为 `oracle_blocked`；未改 C++、collector/probe、fixtures/expected/tests，现有 focused blocker test 保留，不新增测试。
+- 后续重开 gate 的条件只有两个：新增 native introspection 能观察上述 Base property 生命周期，或上游 scope 明确接受当前 FreeCAD Python API 限制；StableSubList-fed geometry 负控不能作为删除 blocker 的依据。
+
 ## 验收入口
 
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线/工作步骤细分 --format markdown
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线/矩阵/*.tsv
-rg -n '[ \t]$' docs/CADCore7.0/C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线 docs/CADCore7.0/README.md
+rg -n '[ \t]$' docs/CADCore7.0/C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线 docs/CADCore7.0/README.md docs/CADCore方案/细化方案/10-P7-PartDesign常用生态.md
 git diff --check
 ```

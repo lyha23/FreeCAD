@@ -27,7 +27,7 @@ C7-M3 已关闭 Fillet / Chamfer oracle rows，但 stale `ReferenceShadow` / Bas
 
 - S0/S1 不改 C++、fixtures、expected 或 tests；只冻结状态和设计 probe。
 - S2 可以新增或修改 oracle probe / collector 工具，但不能修改 runtime C++ 主路径。
-- S3 只做 parity 和准入裁决；只有 route=`backend_gap_requires_implementation` 才打开 S4 code edit gate。
+- S3 只做 parity 和准入裁决；只有 native oracle 证明可恢复且当前 `cad-core` 不匹配时，才打开 S4 code edit gate。
 - `ReferenceShadow.brep` 只能保存被引用单个 subshape 的旧几何快照，用于恢复证据；不得作为建模输入或完整对象 BREP。
 - 不允许 adapter 输出端修正、fixture 名称分支、按 EdgeN 猜测、只看 geometry 成功就发布 supported。
 
@@ -78,7 +78,7 @@ S2 完成结论：live 起点为 `HEAD=dc041901a7`（`dc041901a7 文档：完成
 如果 S2 得到 native oracle，则用当前 `cad-core` 对同一 fixture 做 parity：
 
 - 若 current `cad-core` 已匹配 FreeCAD oracle，route=`already_closed_expected_backed`。
-- 若 FreeCAD 可恢复但 current `cad-core` 失败，route=`backend_gap_requires_implementation`，S4 打开 code edit gate。
+- 若 FreeCAD 可恢复但 current `cad-core` 失败，S4 打开 code edit gate。
 - 若 S2 是 blocker，route=`oracle_blocked`，S4 只做 no-code 发布。
 - 若 FreeCAD native 明确不支持，route=`diagnostic_non_goal` 或 `native_not_supported`。
 
@@ -93,19 +93,21 @@ S3 完成结论：live 起点为 `HEAD=01aeef0217`（`01aeef0217 证据：补齐
 1. 补 `PropertyLinkSub` / link DTO 解析和 shadow/reference evidence validation。
 2. 补 `ReferenceShadow` / `brep` 证据读取与目标 subshape 匹配，失败给 diagnostics。
 3. 在 `feature_dress_up.cpp` 只消费正式恢复后的 Base / shadow subs，不猜 EdgeN。
-4. 写 focused tests，断言 geometry、diagnostics、`documentObjectUpdates` / `elementReferenceUpdates`。
+4. 若未来重开 code gate，补对应 focused test coverage，约束 geometry、diagnostics、`documentObjectUpdates` / `elementReferenceUpdates`。
 5. 删除或保留 blocker expected 时必须同步矩阵和 README。
 
 若 S3 没打开 code gate，S4 只做 publication closure，不改 C++。
 
 当前 S3 route=`oracle_blocked`，所以 S4 边界固定为 no-code blocked 发布收口：只同步 README、总入口、方案、矩阵和发布口径；不得实现 `ReferenceRecovery`，不得修改 `cad-core/src/app`、`cad-core/src/part`、`cad-core/src/part_design`、collector/probe、fixtures/expected，不得发布 supported。
 
+S4 完成结论：live 起点为 `HEAD=381d56ef9e`（`381d56ef9e 文档：完成 C7-M4 S3 准入裁决`），开始状态干净。S4 只做 no-code blocked publication closure：`dressup-reference-shadow-base-recovery` 继续 `oracle_blocked`，`C7M4-BLOCKER-401` / `C7M4-GATE-401` 关闭；未改 C++、collector/probe、fixtures/expected/tests，未实现 `ReferenceRecovery`，未发布 supported。现有 focused blocker test `test_c7m3_reference_shadow_recovery_oracle_remains_blocked` 继续约束 known_gap、native evidence、patched XML 和 StableSubList-fed negative control；S4 不新增测试。
+
 ### S5 release gate
 
 收口队列和发布口径：
 
 - 运行本包 queue、TSV、trailing whitespace 和 `git diff --check`。
-- 若 S4 改了 C++ / collector / tests，运行对应 focused unittest；若改 C++，再运行 `cmake --build build`。
+- 若 S4 改了 C++ / collector / tests，运行对应 focused unittest；若改 C++，再运行 `cmake --build build`。当前 S4 是 no-code closure，因此 S5 只做 release gate，不补实现、不新增测试。
 - 更新 root README、本包 README/总入口/方案、矩阵和必要的 P7 细化口径。
 - 标记完成文件为 `【已实现】`，队列为空后提交。
 
@@ -117,7 +119,7 @@ S3 完成结论：live 起点为 `HEAD=01aeef0217`（`01aeef0217 证据：补齐
 cd /Users/li/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线/工作步骤细分 --format markdown
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线/矩阵/*.tsv
-rg -n '[ \t]$' docs/CADCore7.0/C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线 docs/CADCore7.0/README.md
+rg -n '[ \t]$' docs/CADCore7.0/C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线 docs/CADCore7.0/README.md docs/CADCore方案/细化方案/10-P7-PartDesign常用生态.md
 git diff --check
 ```
 
