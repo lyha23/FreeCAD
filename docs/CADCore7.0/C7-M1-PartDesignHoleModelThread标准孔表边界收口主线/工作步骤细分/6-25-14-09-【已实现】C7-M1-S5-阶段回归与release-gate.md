@@ -1,4 +1,4 @@
-# C7-M1 S5 阶段回归与 release gate
+# 【已实现】C7-M1 S5 阶段回归与 release gate
 
 ## 目标
 
@@ -21,6 +21,19 @@
 3. 若触发 expected/topo/history/adapter schema 改动，运行阶段回归或重型收口。
 4. 更新 C7.0 README、主线 README、总入口、方案和矩阵为最终发布状态。
 5. 把 S5 文件名和标题标记为 `【已实现】`，确认队列为空。
+
+## S5 执行基线
+
+- live 起点：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=dd2b919e46`（`dd2b919e46 文档：完成 C7-M1 S4 发布同步`），`git status --short -uall` 无输出。
+- S4 结论：focused unittest 5 tests OK；没有代码、fixtures、expected 或 tests 改动。
+- 本步仍是 no-code release closure：只更新 C7.0 README、主线 README、总入口、方案、矩阵和本步骤文件，不采集 oracle，不改 C++、fixtures、expected 或 tests，不提交 build 生成物。
+
+## Release Gate 结果
+
+- Build：`cd cad-core && cmake --build build` 通过。
+- Focused unittest：Hole 4 个 + adapter 1 个，共 5 tests OK。
+- Heavy regression：未运行。S5 没有 expected/topo/history/adapter schema 广泛变化，也没有代码、fixtures、expected 或 test 改动。
+- 最终发布状态：C7-M1 队列为空；`part_design.hole.remaining_gaps=[]`、`history.remaining=[]`、`native_oracle_known_gap_fixtures=[]` 保持发布口径；legacy pending rows 保持 historical/non-active diagnostic，不作为 active backend gap 重开。
 
 ## 验收
 

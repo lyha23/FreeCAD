@@ -74,7 +74,7 @@ S2 是代码闸门；没有 S2 裁决，不得改 C++、fixtures、expected 或 
 
 ### S5 release gate
 
-运行本轮短跑和必要的阶段回归；更新步骤文件名为 `【已实现】`；确认队列为空，记录 `cmake --build build` 和 focused unittest 结果。只有修改 collector、expected 批量文件、topo/history 主路径或跨模块 capability 时，才触发重型收口。
+已运行 release gate 并完成发布收口：S5 起点 `HEAD=dd2b919e46`、工作区干净；`cmake --build build` 通过，S4/S5 focused unittest 5 tests OK；步骤文件名已标记为 `【已实现】`，队列为空。S5 没有修改 collector、expected 批量文件、topo/history 主路径或 adapter C ABI schema，因此未触发重型收口。
 
 ## 验收命令分层
 

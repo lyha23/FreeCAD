@@ -17,9 +17,10 @@ CADCore7.0 承接 C6-M9 之后的下一轮 CAD Core 收口工作。C6-M9 已把 
 - S0 live 基线已冻结：`HEAD=1624050685`（`1624050685 文档：新增 CADCore7.0 Hole 边界收口方案`），`git status --short -uall` 无输出；C6-M1 到 C6-M9 的 `工作步骤细分` 队列均为空。
 - S1-S3 已完成：FreeCAD Hole 源码链、cad-core capability/tests/fixtures 和 oracle rows 已被矩阵化；S2 确认没有 `backend_gap_requires_implementation`，S3 完成 no-code publication closure。
 - S4 已完成：没有修改 C++、fixtures、expected 或 tests；focused unittest 验证 `part_design.hole` capability、ModelThread pipe-shell、standard/dynamic head cut、native oracle fixtures、history covered/remaining 和 adapter assertions 全部一致。
+- S5 已完成：live 起点 `HEAD=dd2b919e46`（`dd2b919e46 文档：完成 C7-M1 S4 发布同步`），`git status --short -uall` 无输出；release gate `cmake --build build` 通过，S4/S5 focused unittest 5 tests OK。本包没有代码、fixtures、expected、test、topo/history 或 adapter schema 改动，未触发重型阶段回归。
 - 当前 capability/test 发布口径：`part_design.hole.model_thread.status=done_first_slice`、`geometry=pipe_shell`，`history.status=element_map_freeze_first_slice`，`history.remaining=[]`，`native_oracle_known_gap_fixtures=[]`，`remaining_gaps=[]`；adapter tests 断言这些字段和 supported native oracle fixtures。
 - expected-backed rows 的 expected 文件记录 `FreeCADCmd oracle from ...`、`freecad_version=1.2.0 revision 20260519`、topology/volume，不是从当前 `cad-core` 输出倒推；legacy `hole-threaded-standard-*`、`hole-threaded-dynamic-*`、`hole-model-thread-metric`、thread clearance/depth pending stubs 只保留为 historical/non-active diagnostic。
-- C7-M1 不声明 full FreeCAD Hole parity，不声明 GUI Hole dialog，不声明 full topo naming / full MapperHistory；当前队列推进到 S5 release gate。
+- C7-M1 不声明 full FreeCAD Hole parity，不声明 GUI Hole dialog，不声明 full topo naming / full MapperHistory；当前队列为空。
 
 ## 队列检查
 

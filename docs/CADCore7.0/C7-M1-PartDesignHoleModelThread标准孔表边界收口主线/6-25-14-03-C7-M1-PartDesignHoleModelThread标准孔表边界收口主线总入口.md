@@ -4,7 +4,7 @@
 
 C7-M1 选择 `PartDesign::Hole` 的 ModelThread + 标准孔表边界闭环作为 CADCore7.0 第一包，但不是“重新实现 Hole”。当前 `cad-core` 已有 Hole 常用孔、thread tables、标准头部尺寸、ModelThread pipe-shell tool、history freeze 和 capability 发布；本包要把同一批代表场景重新按 oracle、DTO/API、fixtures、focused tests、capability/docs 和 release gate 串起来。
 
-S2 已证明全部代表场景已经 expected-backed 或 publication-backed：supported native rows 走 `already_closed_expected_backed`，capability/docs 漂移走 `publication_closure_only`，legacy pending expected rows 保留为 `historical_or_native_blocked` 的 diagnostic historical / non-active legacy。S3 已完成 no-code publication closure，没有改 `cad-core/src/part_design/feature_hole.cpp`、fixtures、expected 或 tests；S4 已同步 fixtures/tests/capability/docs 发布口径并关闭 capability/docs drift blocker。
+S2 已证明全部代表场景已经 expected-backed 或 publication-backed：supported native rows 走 `already_closed_expected_backed`，capability/docs 漂移走 `publication_closure_only`，legacy pending expected rows 保留为 `historical_or_native_blocked` 的 diagnostic historical / non-active legacy。S3 已完成 no-code publication closure，没有改 `cad-core/src/part_design/feature_hole.cpp`、fixtures、expected 或 tests；S4 已同步 fixtures/tests/capability/docs 发布口径并关闭 capability/docs drift blocker；S5 release gate 已通过并清空队列。
 
 ## S0 live 基线冻结
 
@@ -65,6 +65,13 @@ Conic 方向剩余项主要是 GUI conic edit、full sketch solver conic constra
 - expected-backed rows 的 expected JSON 写有 `FreeCADCmd oracle from ...`、`freecad_version=1.2.0 revision 20260519`、topology/volume，不是从当前 `cad-core` 输出倒推；legacy pending rows 的 expected JSON 仍写 `hole_thread_geometry_oracle_pending` 和不要从 cad-core 输出冻结几何，S4 保持其 historical/non-active 结论。
 - S4 focused unittest 通过：5 tests OK；capability/docs drift blocker 已关闭，队列推进到 S5。
 
+## S5 阶段回归与 release gate
+
+- live 起点：`HEAD=dd2b919e46`（`dd2b919e46 文档：完成 C7-M1 S4 发布同步`），`git status --short -uall` 无输出。
+- release gate 通过：`cmake --build build` 成功；S4/S5 focused unittest 5 tests OK，覆盖 Hole threaded heads、ModelThread pipe-shell、thread table native oracle、ModelThread head-cut oracle matrix 和 C API capability publication。
+- S5 没有修改 C++、fixtures、expected、tests、topo/history 主路径或 adapter schema；本包 no-code release closure 不触发重型阶段回归。
+- 最终发布状态：`part_design.hole.remaining_gaps=[]`、`history.remaining=[]`、`native_oracle_known_gap_fixtures=[]`，legacy pending rows 保持 historical/non-active diagnostic，不作为 active backend gap 重开；C7-M1 队列为空。
+
 ## 本轮代表批次
 
 | batch | representatives | decision |
@@ -89,7 +96,7 @@ Conic 方向剩余项主要是 GUI conic edit、full sketch solver conic constra
 3. S2：【已实现】按矩阵裁决每个 row；无 active backend gap，legacy pending 只保留 historical diagnostic。
 4. S3：【已实现】no-code publication closure；不改 C++、fixtures、expected 或 tests。
 5. S4：【已实现】同步 fixtures/tests/capability/docs 和验收记录；不改 C++、fixtures、expected 或 tests。
-6. S5：运行 release gate，更新队列和状态。
+6. S5：【已实现】运行 release gate，更新队列和状态；`cmake --build build` 通过，focused unittest 5 tests OK，队列为空。
 
 ## 验收入口
 
