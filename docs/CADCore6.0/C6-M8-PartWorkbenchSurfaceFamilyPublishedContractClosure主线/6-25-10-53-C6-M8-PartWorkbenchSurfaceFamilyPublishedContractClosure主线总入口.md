@@ -19,7 +19,8 @@
 - S2 开始时 `HEAD=f981730d1c`；`git log -1 --oneline` 为 `f981730d1c 文档：完成 C6-M8 S1 源码与矩阵复核`；`git -c core.quotepath=false status --short -uall` 为空。
 - S3 开始时 `HEAD=72f173f682`；`git log -1 --oneline` 为 `72f173f682 文档：完成 C6-M8 S2 ProjectOnSurface 路由裁决`；`git -c core.quotepath=false status --short -uall` 为空。
 - S4 开始时 `HEAD=d4a96dea91`；`git log -1 --oneline` 为 `d4a96dea91 docs: 完成 C6-M8 S3 发布口径收口`；`git -c core.quotepath=false status --short -uall` 为空。
-- C6-M1 到 C6-M7 的 `工作步骤细分` 队列均返回空表；C6-M8 初始队列从 S0 开始，S0/S1 完成后推进到 S2，S2 完成后推进到 S3，S3 完成后推进到 S4，S4 完成后推进到 S5。
+- S5 开始时 `HEAD=25dc0ad331`；`git log -1 --oneline` 为 `25dc0ad331 文档：完成 C6-M8 S4 发布一致性收口`；`git -c core.quotepath=false status --short -uall` 为空。
+- C6-M1 到 C6-M7 的 `工作步骤细分` 队列均返回空表；C6-M8 初始队列从 S0 开始，S0/S1 完成后推进到 S2，S2 完成后推进到 S3，S3 完成后推进到 S4，S4 完成后推进到 S5，S5 完成后队列为空。
 - S1 已完成 FreeCAD source authority、cad-core landing、fixtures/product fixtures/diagnostic evidence 和 adapter assertions 批量矩阵；S1 标记后队列推进到 S2。
 - C6-M7 已发布 `part_workbench.loft.remaining_gaps=[]`；C6-M4/M5/M6 已分别发布 Sweep、Filling、GeomPlate product contract / narrowed gap / non-goal 状态。
 - S2 已裁决 `project_on_surface` overlap：`gui_projection_task_panel` 是 `non_goal_frozen`；`unverified_advanced_branches` 拆为 expected-backed stateless DTO/API、GUI/session non-goal、native mapper hidden historical narrowed boundary、broad placeholder non-goal。
@@ -61,7 +62,7 @@
 | S2 | `工作步骤细分/6-25-10-56-【已实现】C6-M8-S2-准入路由与ProjectOnSurface裁决.md` | 已裁决 active/non-goal overlap：ProjectOnSurface GUI 为 non-goal，advanced placeholder 拆为 expected-backed / non-goal / historical narrowed boundary，未发现实现型 backend gap。 |
 | S3 | `工作步骤细分/6-25-10-57-【已实现】C6-M8-S3-批量实现或发布口径收口.md` | 已按 S2 route 收口 capability、adapter assertion、docs/matrices；未改 executor、fixtures 或 expected。 |
 | S4 | `工作步骤细分/6-25-10-58-【已实现】C6-M8-S4-fixtures-tests-capability-docs发布.md` | 已完成 capability、adapter assertion、C6-M8 docs、矩阵和 root README 发布一致性收口；未改 executor、fixtures 或 expected。 |
-| S5 | `工作步骤细分/6-25-10-59-C6-M8-S5-阶段回归与release-gate.md` | 运行 build、focused regression、queue empty、TSV 和 diff checks，完成 release gate。 |
+| S5 | `工作步骤细分/6-25-10-59-【已实现】C6-M8-S5-阶段回归与release-gate.md` | 已运行 build、focused regression、queue empty、TSV 和 diff checks，完成 release gate。 |
 
 ## 矩阵
 
@@ -86,4 +87,4 @@
 
 ## 当前结论
 
-C6-M8 已完成 S0/S1/S2/S3/S4，当前队列从 S5 开始。S2 未发现 `backend_gap_requires_implementation`；S3 已完成 capability/test/docs publication assertion：移除 ProjectOnSurface active/non-goal overlap、保留 GUI non-goal、把 native mapper hidden 写为 historical narrowed boundary，并继续保护其它 surface family 的 `remaining_gaps=[]`。S4 已确认 capability、adapter assertion、fixtures/object_fields/diagnostics 发布引用、C6-M8 docs、矩阵和 root README 口径一致，且未新增 fixtures 或 expected。S5 作为 release gate；只有当 ProjectOnSurface 和其它 surface family 项的 `remaining_gaps`、`narrowed_gaps`、`non_goals`、fixtures 和 adapter assertions 都一致时，才能关闭本包。
+C6-M8 已完成 S0/S1/S2/S3/S4/S5，当前队列为空。S2 未发现 `backend_gap_requires_implementation`；S3 已完成 capability/test/docs publication assertion：移除 ProjectOnSurface active/non-goal overlap、保留 GUI non-goal、把 native mapper hidden 写为 historical narrowed boundary，并继续保护其它 surface family 的 `remaining_gaps=[]`。S4 已确认 capability、adapter assertion、fixtures/object_fields/diagnostics 发布引用、C6-M8 docs、矩阵和 root README 口径一致，且未新增 fixtures 或 expected。S5 release gate 通过：`cmake --build build` 通过；`python3 -m unittest tests.test_p8_features tests.test_expected_fixtures tests.test_adapters` 为 `Ran 254 tests in 87.456s`，`OK (skipped=31)`；queue、TSV 和 diff check 通过。S3/S4 未修改 `topo_shape_expansion`、ElementMap/history 主路径、collector expected 语义或批量 expected 文件，因此未触发 topology / broader expected 重型收口。C6-M8 关闭为 Part Workbench surface family published contract closure，不声明 FreeCAD parity 或 full surface family parity。
