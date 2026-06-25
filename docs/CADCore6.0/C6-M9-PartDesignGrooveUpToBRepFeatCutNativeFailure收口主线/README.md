@@ -23,7 +23,9 @@ C6-M9 的目标是围绕 `PartDesign::Groove` 的 `Type=UpToFirst` / `Type=UpToF
 - S2 已裁决二者的唯一 route 均为 `historical_native_failure`：它们是 FreeCAD native `BRepFeat_MakeRevol` 稳定失败证据，不进入 `backend_gap_requires_implementation` 或 `cad_core_product_contract_non_parity`。
 - `Revolution Type=UpToFirst/UpToLast/UpToFace` 已由 C51 fixtures 支持，C6-M9 不重开 `PartDesign::Revolution` 已支持路径；只处理 `PartDesign::Groove` subtractive UpTo exact blocker。
 - S3 已完成 publication/assertion 第一段：不改 C++、fixtures 或 expected；把 `partdesign_groove_upto_brepfeat_cut_native_failure` 从 active `remaining_gaps` 迁出，保留为 `narrowed_gaps` / historical native failure evidence，并同步 adapter assertion。
-- S4 已完成发布一致性复核：capability、adapter assertion、C6-M9 矩阵和 root README 一致保留 `remaining_gaps=[]`、`exact_blockers={}`、historical/narrowed evidence；未改几何实现、fixtures、expected、collector 或 P7 failure fixture 语义。当前队列推进到 S5 release gate。
+- S4 已完成发布一致性复核：capability、adapter assertion、C6-M9 矩阵和 root README 一致保留 `remaining_gaps=[]`、`exact_blockers={}`、historical/narrowed evidence；未改几何实现、fixtures、expected、collector 或 P7 failure fixture 语义。
+- S5 已完成 release gate：S5 起点 `HEAD=e10ee2b966`（`e10ee2b966 文档：完成 C6-M9 S4 发布一致性收口`），`cmake --build build` 通过，阶段回归 `Ran 184 tests in 92.318s`、`OK (skipped=31)`，C6-M9 队列为空，TSV 字段数检查和 diff check 通过。
+- 重型收口未触发：S3/S4 未修改 maker history、ElementMap/history 主路径、collector expected 语义或批量 expected 文件。
 
 ## 队列检查
 
