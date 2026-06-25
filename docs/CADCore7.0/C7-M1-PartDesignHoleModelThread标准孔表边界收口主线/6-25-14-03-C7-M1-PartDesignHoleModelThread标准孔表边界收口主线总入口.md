@@ -4,7 +4,7 @@
 
 C7-M1 选择 `PartDesign::Hole` 的 ModelThread + 标准孔表边界闭环作为 CADCore7.0 第一包，但不是“重新实现 Hole”。当前 `cad-core` 已有 Hole 常用孔、thread tables、标准头部尺寸、ModelThread pipe-shell tool、history freeze 和 capability 发布；本包要把同一批代表场景重新按 oracle、DTO/API、fixtures、focused tests、capability/docs 和 release gate 串起来。
 
-如果 S1/S2 证明全部代表场景已经 expected-backed 或 publication-backed，S3/S4 只做发布一致性收口；如果 S2 发现 active backend gap，S3 才允许改 `cad-core/src/part_design/feature_hole.cpp`、必要的 `part/topo` / `topo` history 落点、fixtures 和 tests。
+S2 已证明全部代表场景已经 expected-backed 或 publication-backed：supported native rows 走 `already_closed_expected_backed`，capability/docs 漂移走 `publication_closure_only`，legacy pending expected rows 保留为 `historical_or_native_blocked` 的 diagnostic historical / non-active legacy。S3/S4 只做 no-code publication closure；不得改 `cad-core/src/part_design/feature_hole.cpp`、fixtures、expected 或 tests。
 
 ## S0 live 基线冻结
 
@@ -42,15 +42,23 @@ Conic 方向剩余项主要是 GUI conic edit、full sketch solver conic constra
 - cad-core 对照已覆盖 thread table、standard head cut lookup、ModelThread pipe-shell tool、compound tool、history freeze 和 metadata 输出。
 - 矩阵已列出 supported native oracle fixtures、legacy pending expected rows、ModelThread + head cut rows、point/circle/arc profile source rows；S1 只写证据和候选，S2 才裁决 route。
 
+## S2 准入裁决
+
+- live 起点：`HEAD=41c62e7070`（`41c62e7070 docs: 完成 C7-M1 S1 源码与 oracle 矩阵`），`git status --short -uall` 无输出。
+- supported standard/dynamic head cut、ModelThread metric、ModelThread counterbore、point/circle/arc profile source rows 均有 native expected 和 focused tests，裁决为 `already_closed_expected_backed`。
+- legacy `hole-threaded-standard-*`、`hole-threaded-dynamic-*`、`hole-model-thread-metric`、thread clearance 和 thread depth pending stubs 不再代表 active backend failure；它们保留为 historical diagnostic / non-active legacy，不在 C7-M1 补 oracle。
+- ModelThread + head cut 没有 geometry/topology/history active gap；`hole-supported-model-thread-counterbore` expected 和 tests 已覆盖 compound tool、pipe-shell history、topology counts、volume 与 `threaded_model_thread_head_cut_native_oracle`。
+- S3 不允许改代码；S3/S4 只允许发布一致性收口、状态文字清理和 release-gate 记录。
+
 ## 本轮代表批次
 
 | batch | representatives | decision |
 | --- | --- | --- |
 | live capability | `part_design.hole` capability + adapter assertions | S0 冻结，S4/S5 发布一致性 |
-| standard head cut | supported dynamic ISO2009/DIN7984 + standard counterbore/countersink rows | S1 批量 oracle；S2 裁决 pending/freezed expected |
-| ModelThread | metric + counterbore ModelThread pipe-shell | S1 复核 FreeCAD `makeThread()`；S3 只在 active gap 时实现 |
-| profile source | circle/arc/point profile center discovery | 约束 `findHoles()` local transform 和 source history |
-| legacy pending | 旧 `hole-threaded-standard-*` pending expected | S2 裁决为补 oracle、迁移 supported、或移出 active path |
+| standard head cut | supported dynamic ISO2009/DIN7984 + standard counterbore/countersink rows | S2：supported rows `already_closed_expected_backed`；legacy pending 保留 historical diagnostic |
+| ModelThread | metric + counterbore ModelThread pipe-shell | S2：expected-backed，无 active backend gap |
+| profile source | circle/arc/point profile center discovery | S2：expected-backed，命名顺序差异不算硬失败 |
+| legacy pending | 旧 `hole-threaded-standard-*` pending expected | S2：`historical_or_native_blocked`，不补 oracle，不进 S3 实现 |
 
 ## 非目标
 
@@ -63,8 +71,8 @@ Conic 方向剩余项主要是 GUI conic edit、full sketch solver conic constra
 
 1. S0：【已实现】冻结 live baseline、C6 closure、Hole capability 和当前 fixture/test 状态。
 2. S1：【已实现】复核 FreeCAD 源码调用链，批量列出 oracle/fixture rows。
-3. S2：按矩阵裁决每个 row 是否已经关闭、需要 oracle、需要实现、native blocked 或 non-goal。
-4. S3：只实现 S2 接受的 backend gap；否则做 no-code publication closure。
+3. S2：【已实现】按矩阵裁决每个 row；无 active backend gap，legacy pending 只保留 historical diagnostic。
+4. S3：no-code publication closure；不改 C++、fixtures、expected 或 tests。
 5. S4：同步 fixtures/tests/capability/docs 和验收记录。
 6. S5：运行 release gate，更新队列和状态。
 
