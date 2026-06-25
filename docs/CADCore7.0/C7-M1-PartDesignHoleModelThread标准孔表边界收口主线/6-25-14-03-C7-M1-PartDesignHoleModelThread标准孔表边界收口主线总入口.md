@@ -4,7 +4,7 @@
 
 C7-M1 选择 `PartDesign::Hole` 的 ModelThread + 标准孔表边界闭环作为 CADCore7.0 第一包，但不是“重新实现 Hole”。当前 `cad-core` 已有 Hole 常用孔、thread tables、标准头部尺寸、ModelThread pipe-shell tool、history freeze 和 capability 发布；本包要把同一批代表场景重新按 oracle、DTO/API、fixtures、focused tests、capability/docs 和 release gate 串起来。
 
-S2 已证明全部代表场景已经 expected-backed 或 publication-backed：supported native rows 走 `already_closed_expected_backed`，capability/docs 漂移走 `publication_closure_only`，legacy pending expected rows 保留为 `historical_or_native_blocked` 的 diagnostic historical / non-active legacy。S3 已完成 no-code publication closure，没有改 `cad-core/src/part_design/feature_hole.cpp`、fixtures、expected 或 tests；剩余 capability drift 交给 S4 发布同步。
+S2 已证明全部代表场景已经 expected-backed 或 publication-backed：supported native rows 走 `already_closed_expected_backed`，capability/docs 漂移走 `publication_closure_only`，legacy pending expected rows 保留为 `historical_or_native_blocked` 的 diagnostic historical / non-active legacy。S3 已完成 no-code publication closure，没有改 `cad-core/src/part_design/feature_hole.cpp`、fixtures、expected 或 tests；S4 已同步 fixtures/tests/capability/docs 发布口径并关闭 capability/docs drift blocker。
 
 ## S0 live 基线冻结
 
@@ -57,6 +57,14 @@ Conic 方向剩余项主要是 GUI conic edit、full sketch solver conic constra
 - S3 未授权也未修改 C++、fixtures、expected 或 tests；未采集 oracle，未运行 `cmake --build` 或 focused unittest。
 - 本步骤只同步 README、总入口、步骤索引、S3 步骤文件和 C7-M1 矩阵状态，队列推进到 S4。
 
+## S4 fixtures tests capability 发布
+
+- live 起点：`HEAD=d4574e4b92`（`d4574e4b92 文档：完成 C7-M1 S3 发布收口`），`git status --short -uall` 无输出。
+- S4 复核 `cad-core/src/runtime/capability_contract.cpp`、`cad-core/tests/test_p7_features.py`、`cad-core/tests/test_adapters.py`、`cad-core/fixtures/p7/hole-*.json` 和 `cad-core/fixtures/p7/expected/hole-*.freecad.json`，只同步文档/矩阵，不改 C++、fixtures、expected 或 tests。
+- `part_design.hole` 发布口径保持：`model_thread.status=done_first_slice`、`model_thread.geometry=pipe_shell`、`history.status=element_map_freeze_first_slice`、`history.remaining=[]`、`native_oracle_known_gap_fixtures=[]`、`remaining_gaps=[]`；adapter assertions 覆盖这些字段、native oracle fixtures 和 topo producer matrix。
+- expected-backed rows 的 expected JSON 写有 `FreeCADCmd oracle from ...`、`freecad_version=1.2.0 revision 20260519`、topology/volume，不是从当前 `cad-core` 输出倒推；legacy pending rows 的 expected JSON 仍写 `hole_thread_geometry_oracle_pending` 和不要从 cad-core 输出冻结几何，S4 保持其 historical/non-active 结论。
+- S4 focused unittest 通过：5 tests OK；capability/docs drift blocker 已关闭，队列推进到 S5。
+
 ## 本轮代表批次
 
 | batch | representatives | decision |
@@ -80,7 +88,7 @@ Conic 方向剩余项主要是 GUI conic edit、full sketch solver conic constra
 2. S1：【已实现】复核 FreeCAD 源码调用链，批量列出 oracle/fixture rows。
 3. S2：【已实现】按矩阵裁决每个 row；无 active backend gap，legacy pending 只保留 historical diagnostic。
 4. S3：【已实现】no-code publication closure；不改 C++、fixtures、expected 或 tests。
-5. S4：同步 fixtures/tests/capability/docs 和验收记录。
+5. S4：【已实现】同步 fixtures/tests/capability/docs 和验收记录；不改 C++、fixtures、expected 或 tests。
 6. S5：运行 release gate，更新队列和状态。
 
 ## 验收入口

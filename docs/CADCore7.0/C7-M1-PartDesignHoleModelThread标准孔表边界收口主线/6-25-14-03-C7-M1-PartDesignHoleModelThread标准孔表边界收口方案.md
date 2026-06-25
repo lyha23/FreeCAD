@@ -4,7 +4,7 @@
 
 C6-M9 已关闭 Groove UpTo native failure 包，当前不应继续在 C6 里开薄的 Conic 包。Conic 剩余项主要是 GUI conic edit、full sketch solver conic constraints、DistanceType default/todo，不是当前后端 code-bearing 批次。
 
-Hole 看起来在旧总览里仍写着 “ModelThread、标准件表驱动头部尺寸”，但 live 代码已经推进过一轮：`cad-core/src/runtime/capability_contract.cpp` 里 `part_design.hole.remaining_gaps=[]`，`model_thread.status=done_first_slice`；`cad-core/src/part_design/feature_hole.cpp` 已有 thread table、standard head cut、ModelThread pipe-shell tool 和 history freeze。C7-M1 因此不能写成泛 Hole 实现，而要写成边界收口：用批量 oracle 和 fixture family 复核发布状态，找到真正剩余的 active backend gap，或者把旧 pending/known rows 从 active 语义里清干净。
+Hole 看起来在旧总览里仍写着 “ModelThread、标准件表驱动头部尺寸”，但 live 代码已经推进过一轮：`cad-core/src/runtime/capability_contract.cpp` 里 `part_design.hole.remaining_gaps=[]`，`model_thread.status=done_first_slice`；`cad-core/src/part_design/feature_hole.cpp` 已有 thread table、standard head cut、ModelThread pipe-shell tool 和 history freeze。C7-M1 因此不能写成泛 Hole 实现，而要写成边界收口：用批量 oracle 和 fixture family 复核发布状态，把 active expected-backed rows、legacy historical/non-active rows、capability/tests/docs 口径清干净。
 
 ## 最小完整语义批次
 
@@ -70,7 +70,7 @@ S2 是代码闸门；没有 S2 裁决，不得改 C++、fixtures、expected 或 
 
 ### S4 fixtures / tests / capability / docs
 
-同步 fixture expected、focused tests、adapter capability、矩阵和 README。旧 pending rows 必须要么补 FreeCAD expected，要么迁到 historical/non-goal/legacy，不得继续挂在 active gap。
+已完成 docs-only 发布同步：没有修改 fixture expected、focused tests、adapter capability C++ 或 test assertions，只把既有 FreeCADCmd expected、focused unittest 和 capability assertions 同步到矩阵、README、总入口和步骤状态。旧 pending rows 保留为 `historical_or_native_blocked` / historical non-active legacy，不再挂在 active gap；expected-backed rows 明确依赖 `FreeCADCmd oracle from ...` expected，而不是从当前 `cad-core` 输出倒推。
 
 ### S5 release gate
 

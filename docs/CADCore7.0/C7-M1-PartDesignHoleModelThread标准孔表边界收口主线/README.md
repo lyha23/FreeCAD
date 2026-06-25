@@ -2,7 +2,7 @@
 
 本目录是 CADCore7.0 的第一条主线。它不重开泛 Hole 能力，而是围绕同一 FreeCAD 调用链、同一 PartDesign Hole DTO/API 边界、同一 `cad-core/fixtures/p7/hole-*` expected 家族做批量收口。
 
-当前 live capability 已显示 `part_design.hole.remaining_gaps=[]`，`model_thread.status=done_first_slice`，并列出 `p7/hole-supported-threaded-dynamic-iso2009`、`p7/hole-supported-threaded-dynamic-din7984`、`p7/hole-supported-model-thread-metric`、`p7/hole-point-profile`、`p7/hole-supported-point-counterbore`、`p7/hole-supported-model-thread-counterbore` 等 native oracle fixtures。C7-M1 的价值不是从零实现 Hole，而是确认这些发布项和旧 pending standard rows、ModelThread pipe-shell history、profile source 映射、capability/test/docs 是否已经形成可审计闭环；S2 已证明没有 active backend gap，S3 已按 no-code publication closure 收口。
+当前 live capability 已显示 `part_design.hole.remaining_gaps=[]`，`model_thread.status=done_first_slice`，并列出 `p7/hole-supported-threaded-dynamic-iso2009`、`p7/hole-supported-threaded-dynamic-din7984`、`p7/hole-supported-model-thread-metric`、`p7/hole-point-profile`、`p7/hole-supported-point-counterbore`、`p7/hole-supported-model-thread-counterbore` 等 native oracle fixtures。C7-M1 的价值不是从零实现 Hole，而是确认这些发布项和旧 pending standard rows、ModelThread pipe-shell history、profile source 映射、capability/test/docs 是否已经形成可审计闭环；S2 已证明没有 active backend gap，S3 已按 no-code publication closure 收口，S4 已完成 fixtures/tests/capability 发布同步。
 
 ## 入口
 
@@ -22,6 +22,10 @@
 - S2 结论：没有 `backend_gap_requires_implementation`，ModelThread + head cut 不存在 geometry/topology/history active gap；命名顺序差异不得算硬失败。S3/S4 只允许 no-code publication closure，不改 C++、fixtures、expected 或 tests。
 - S3 已完成：live baseline 为 `HEAD=24b36ee45f`（`24b36ee45f 文档：完成 C7-M1 S2 准入裁决`），`git status --short -uall` 无输出；S3 只更新本包 README、总入口、步骤索引、S3 文件和矩阵，把 S2 route 落成 publication closure，没有改 C++、fixtures、expected 或 tests，也未运行 build/focused tests。
 - S3 结论：supported native rows 继续作为 active expected-backed closure；legacy pending rows 只保留为 `historical_or_native_blocked` / non-active diagnostic；capability drift 留给 S4 做发布同步。
+- S4 已完成：live baseline 为 `HEAD=d4574e4b92`（`d4574e4b92 文档：完成 C7-M1 S3 发布收口`），`git status --short -uall` 无输出；S4 只更新 root README、主线 README、总入口、方案、步骤索引、S4 文件和矩阵，不改 C++、fixtures、expected 或 tests。
+- S4 发布结论：`part_design.hole` capability、adapter assertions、focused tests、fixtures/docs 口径一致；`model_thread.status=done_first_slice`、`geometry=pipe_shell`、`history.remaining=[]`、`native_oracle_known_gap_fixtures=[]`、`remaining_gaps=[]`。expected-backed rows 的 expected 文件来自 FreeCADCmd oracle，不是从 `cad-core` 输出倒推；legacy pending rows 保留为 historical/non-active diagnostic。
+- S4 focused unittest 已通过：`test_p7_hole_supported_threaded_heads_match_native_oracle`、`test_p7_hole_model_thread_builds_freecad_pipe_shell_tool`、`test_c3m5_hole_thread_table_model_thread_contract_uses_native_oracles`、`test_c3m5_hole_threaded_model_thread_head_cut_oracle_matrix_matches_native`、`test_c_api_capabilities_exposes_web_contract_facts`，5 tests OK。
+- C7-M1 队列当前推进到 S5 release gate。
 - 本主线明确排除 GUI conic edit、full sketch solver conic constraints、DistanceType default/todo、GUI Hole dialog 和 full topo naming。
 
 ## 队列检查
@@ -35,6 +39,15 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M1-PartDesignHoleModelThread标准孔表边界收口主线/工作步骤细分 --format markdown
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M1-PartDesignHoleModelThread标准孔表边界收口主线/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore7.0/C7-M1-PartDesignHoleModelThread标准孔表边界收口主线
+git diff --check
+```
+
+## S4 focused unittest
+
+```bash
+cd /Users/li/Chili3DProject/FreeCAD/cad-core
+python3 -m unittest tests.test_p7_features.CadCoreP7FeatureTest.test_p7_hole_supported_threaded_heads_match_native_oracle tests.test_p7_features.CadCoreP7FeatureTest.test_p7_hole_model_thread_builds_freecad_pipe_shell_tool tests.test_p7_features.CadCoreP7FeatureTest.test_c3m5_hole_thread_table_model_thread_contract_uses_native_oracles tests.test_p7_features.CadCoreP7FeatureTest.test_c3m5_hole_threaded_model_thread_head_cut_oracle_matrix_matches_native tests.test_adapters.CadCoreAdapterTest.test_c_api_capabilities_exposes_web_contract_facts
 ```
