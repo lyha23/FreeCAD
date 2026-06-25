@@ -56,5 +56,5 @@ git diff --check
 - S1 live baseline：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=b3ec3b277f`（`b3ec3b277f 文档：冻结 C7-M2 S0 P7 基线`），开始时 `git status --short -uall` 无输出。
 - FreeCAD 源码证据已落入 `source_candidates` / `input_contract`：`FeatureFillet.cpp::Fillet::execute`、`FeatureChamfer.cpp::Chamfer::execute/updateProperties/migrateFlippedProperties`、`FeatureDressUp.cpp::getContinuousEdges/getFaces/getAddSubShape`。
 - cad-core 落点已拆分为 `feature_fillet.cpp`、`feature_chamfer.cpp`、`feature_dress_up.cpp`、`feature_transformed.cpp`：Fillet/Chamfer executor 与 DressUp Base/selection/SupportTransform/transformed slot consumer 分开记录。
-- oracle 行已区分：Chamfer Two distances 与 Distance and Angle 是现有 c3m5 expected-backed；Fillet multi-edge/UseAllEdges、Chamfer FlipDirection=true、DressUp chain stale reference recovery 仍是 `oracle_candidate` / `needs_S2_decision`，没有写成 backend gap。
-- S1 blocker 已关闭，S2 继续裁决 oracle collection、publication route 或实现 gate。
+- oracle 行已区分：Chamfer Two distances 与 Distance and Angle 是现有 c3m5 expected-backed；Fillet multi-edge/UseAllEdges、Chamfer FlipDirection=true、DressUp chain stale reference recovery 在 S1 未写成 backend gap，并已由 S2 后续裁决为 `oracle_pending_collect`。
+- S1 blocker 已关闭；S2 后续裁决未打开 code edit gate。

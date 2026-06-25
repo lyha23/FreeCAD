@@ -46,27 +46,38 @@ S0 冻结的 known gap 仍是 `Fillet / Chamfer 复杂参数组合、复杂引�
 
 阅读 FreeCAD 源码并更新 `source_candidates`、`input_contract`、`oracle_fixture` 矩阵。必须引用具体文件、类/函数和关键字段名，不能只写“参考 FreeCAD”。
 
-S1 已完成。矩阵已记录 FreeCAD `Fillet::execute`、`Chamfer::execute/updateProperties/migrateFlippedProperties`、`DressUp::getContinuousEdges/getFaces/getAddSubShape`，并把 cad-core 落点拆为 `feature_fillet.cpp`、`feature_chamfer.cpp`、`feature_dress_up.cpp` 与 `feature_transformed.cpp`。当前只有 Chamfer Two distances 与 Distance and Angle 被归为既有 c3m5 expected-backed；Fillet multi-edge/UseAllEdges、Chamfer FlipDirection=true、DressUp chain stale reference recovery 仍是 `oracle_candidate` / `needs_S2_decision`，不能直接进入 backend gap。
+S1 已完成。矩阵已记录 FreeCAD `Fillet::execute`、`Chamfer::execute/updateProperties/migrateFlippedProperties`、`DressUp::getContinuousEdges/getFaces/getAddSubShape`，并把 cad-core 落点拆为 `feature_fillet.cpp`、`feature_chamfer.cpp`、`feature_dress_up.cpp` 与 `feature_transformed.cpp`。
 
 ### S2 准入裁决
 
-把 rows 路由为：
+已完成。live baseline：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=00c035d224`（`00c035d224 docs: 补齐 C7-M2 S1 源码与 oracle 矩阵`），开始时 `git status --short -uall` 无输出。
+
+S2 route：
 
 - `already_closed_expected_backed`
+  - Chamfer Two distances：继承 `c3m5/chamfer-two-distances-edge` fixture/expected 与 `test_c3m5_chamfer_parameter_variants_build`。
+  - Chamfer Distance and Angle：继承 `c3m5/chamfer-distance-angle-edge` fixture/expected 与 `test_c3m5_chamfer_parameter_variants_build`。
+  - SupportTransform mirrored / chained DressUp regression：继承 p7 expected 与 `test_p7_mirrored_features_mode_consumes_*support_transform_cache`。
 - `oracle_pending_collect`
+  - Fillet multi-edge / `UseAllEdges`：FreeCAD/cad-core 均有执行路径，但缺 dedicated FreeCAD expected。
+  - Chamfer `FlipDirection=true`：FreeCAD/cad-core 均有 true-side路径，但现有 expected 只覆盖 false。
+  - DressUp chain stale `ReferenceShadow` / Base recovery：现有 evidence 只覆盖 Body cumulative Base、invalid stable diagnostic、SupportTransform chain source_base 和 transformed slot history，缺成功 stale recovery oracle。
 - `backend_gap_requires_implementation`
+  - 无。
 - `publication_closure_only`
+  - S2/S3/S4 只同步 known gap route、oracle pending、non-goal 和 inherited expected-backed 发布口径。
 - `diagnostic_non_goal`
+  - GUI、full DressUp universe、full MapperHistory、输出端引用恢复猜测。
 
-如果没有 `backend_gap_requires_implementation`，S3/S4 只能做 no-code publication closure。
+S2 没有 `backend_gap_requires_implementation`。Code edit gate 保持关闭，S3/S4 只能做 no-code diagnostic/publication closure，不改 C++、fixtures、expected 或 tests。
 
 ### S3 实现或 diagnostic 边界收口
 
-只有 S2 授权时才改 C++。涉及 FreeCAD 语义的 public API、executor 主路径、mapper/history 字段必须在相邻注释写明 FreeCAD 源文件、类/函数和关键短句。若需要引用恢复，优先补 `topo` / history / naming 正式能力，不允许在 adapter 或 executor 输出端修剪。
+只有 S2 授权时才改 C++。S2 本轮没有授权实现，因此 S3 只能落实 no-code diagnostic/publication boundary。若后续 oracle 证明 active backend gap，涉及 FreeCAD 语义的 public API、executor 主路径、mapper/history 字段必须在相邻注释写明 FreeCAD 源文件、类/函数和关键短句；引用恢复必须优先补 `topo` / history / naming 正式能力，不允许在 adapter 或 executor 输出端修剪。
 
 ### S4 fixtures/tests/capability 发布
 
-把 S2/S3 route 同步到 fixtures、expected、focused tests、capability docs 和本包 README。expected 必须来自 FreeCAD oracle 或明确 diagnostic，不得从当前 `cad-core` 输出倒推。
+把 S2/S3 route 同步到 fixtures、expected、focused tests、capability docs 和本包 README。expected 必须来自 FreeCAD oracle 或明确 diagnostic，不得从当前 `cad-core` 输出倒推；`oracle_pending_collect` 行不能发布为 supported capability。
 
 ### S5 release gate
 
