@@ -23,6 +23,8 @@ C7-M4 是 C7-M3 后续的单一 blocker 处理包。C7-M3 已证明 Fillet / Cha
 ## FreeCAD 调用链
 
 - `src/App/PropertyLinks.h::PropertyLinkBase::ShadowSub`：持久化 old/new element name 对。
+- `src/App/ElementNamingUtils.h::ElementNamePair`：字段顺序是 `newName` / `oldName`。
+- `src/App/PropertyLinks.cpp::PropertyLinkSub::Restore()`：`DressUp.Base` 的实际 property restore 入口，从 `LinkSub/Sub value`、`shadowed`、`shadow` 重建 sub 和 shadow，并 `setValue()`。
 - `src/App/PropertyLinks.cpp::PropertyXLink::Restore()`：从 `sub` / `shadowed` / `shadow` XML 属性恢复 `_SubList` 与 `_ShadowSubList`。
 - `src/App/PropertyLinks.cpp::PropertyXLink::afterRestore()` 与 `onContainerRestored()`：恢复 label reference 并注册 element reference。
 - `src/App/PropertyLinks.cpp::PropertyXLink::updateElementReference()`：通过 `updateLinkReference()` 更新 `_SubList` / `_ShadowSubList`。
@@ -42,11 +44,18 @@ C7-M4 是 C7-M3 后续的单一 blocker 处理包。C7-M3 已证明 Fillet / Cha
 ## 步骤队列
 
 1. S0：已冻结 live baseline、C7-M3 blocker 和当前 fixture / expected / test 状态。
-2. S1：复核 FreeCAD native restore / update 调用链，设计不绕过 `ShadowSub` / `ReferenceShadow` 的 probe。
+2. S1：已复核 FreeCAD native restore / update 调用链，设计不绕过 `ShadowSub` / `ReferenceShadow` 的 FCStd/XML restore probe。
 3. S2：执行 native oracle probe / collector 证据补齐；不能证明则写 native oracle blocker。
 4. S3：用当前 `cad-core` 做 parity / diagnostics 分类，裁决 implementation gate。
 5. S4：按 S3 route 实现正式 recovery 或 no-code blocked 发布收口。
 6. S5：release gate，更新 README / 矩阵 / P7 口径并清空队列。
+
+## S1 完成状态
+
+- live 起点：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=d2f530072c`（`d2f530072c 文档：完成 C7-M4 S0 基线冻结`），开始状态 `git status --short -uall` 无输出。
+- 已确认 `PropertyXLink::Restore()` 和 `PropertyLinkSub::Restore()` 都支持从 XML `sub` / `Sub value`、`shadowed`、`shadow` 恢复 shadow pair，并通过 `afterRestore()` / `onContainerRestored()` / `updateElementReference()` 进入 element reference 生命周期。
+- 已确认 `DressUp::getContinuousEdges()` 使用 `Base.getShadowSubs()` 且优先 `newName`；`DressUp::onChanged()` 保留 `Base.getSubValues(false)` 和 shadow subs；`DressUp::getAddSubShape()` 的 `SupportTransform` traversal 跳过连续 DressUp。
+- S2 probe 应 patch FCStd `Chamfer.Base` 的实际 `LinkSub` tag 为 `Sub value="OldFilletEdge1" shadow="Edge1"`，或等价 `XLink sub="OldFilletEdge1" shadow="Edge1"`，reopen 后记录 Base state、`ReferenceShadow` sidecar 和 shape summary。现有 `collect_freecad_expected.py::link_sub_value()` StableSubList-fed 输出只能作为负控。
 
 ## 验收入口
 

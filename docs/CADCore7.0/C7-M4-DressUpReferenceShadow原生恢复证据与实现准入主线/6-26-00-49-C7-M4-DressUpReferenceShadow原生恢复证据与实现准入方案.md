@@ -55,6 +55,10 @@ S0 完成结论：live 起点为 `HEAD=9bb2cd22af`（`9bb2cd22af docs: 收口 C7
 - 触发 recompute 后记录 `Chamfer.Base.getSubValues(false)`、`Chamfer.Base.getShadowSubs()`、`Chamfer.Shape` / `Body.Shape` summary。
 - 如需 `ReferenceShadow.brep`，只记录旧 edge snapshot 与 hash，不把它作为生成 shape 的输入。
 
+S1 完成结论：live 起点为 `HEAD=d2f530072c`（`d2f530072c 文档：完成 C7-M4 S0 基线冻结`），开始状态干净。源码复核确认 `ShadowSub` 是 `ElementNamePair{newName,oldName}`；`PropertyXLink::Restore()` 和实际 `DressUp.Base` 使用的 `PropertyLinkSub::Restore()` 都从 `sub` / `Sub value`、`shadowed`、`shadow` 重建 `_SubList` / `_ShadowSubList` 并调用 `setValue()`；`afterRestore()`、`onContainerRestored()`、`updateElementReference()` 负责 label restore、element reference 注册和更新；`DressUp::getContinuousEdges()` 遍历 `Base.getShadowSubs()` 并优先 `newName`；`DressUp::onChanged()` 保留 `Base.getSubValues(false)` 与 shadow subs；`DressUp::getAddSubShape()` 的 `SupportTransform` support traversal 会跳过连续 DressUp。collector gap 仍成立：`collect_freecad_expected.py::link_sub_value()` 优先 `StableSubList`，因此 C7-M3 geometry-only expected 是 StableSubList-fed bypass。
+
+S2 应执行的 native probe 已冻结：从现有 `dressup-reference-shadow-base-recovery` 语义构造 baseline FCStd，patch `Chamfer.Base` 的实际 `LinkSub` XML 为 `Sub value="OldFilletEdge1" shadow="Edge1"`（若实际是 `XLink`，patch `sub="OldFilletEdge1" shadow="Edge1"`），通过 FreeCAD document restore 入口 reopen，而不是 patch 后再用 Python 赋值 `Base=(Fillet, ["Edge1"])`。probe 输出必须包含 FreeCAD version / revision、property tag、XML attrs、recompute 前后 `SubList`、`Base.getSubValues()`、`Base.getSubValues(false)`、`Base.getSubValues(true)`、`ShadowSub` / `Base.getShadowSubs()`、fixture `ReferenceShadow` sidecar、`Chamfer.Shape` / `Body.Shape` summary。现有 collector 命令只作为 StableSubList-fed 负控。若 FCStd/XML restore 入口不可用、无法 reopen、无法读取 `Base.getShadowSubs()` 或无法定位 Base property tag，S2 route=`native_oracle_blocked`；若 restore 可执行但 shadow 为空或不能恢复，route=`native_not_supported`。
+
 ### S2 native oracle probe 与 expected / blocker
 
 按 S1 设计执行 native probe。S2 有三种合法结果：
