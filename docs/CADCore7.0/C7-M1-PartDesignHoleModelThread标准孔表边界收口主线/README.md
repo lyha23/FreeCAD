@@ -17,6 +17,8 @@
 - S0 已完成：live baseline 为 `HEAD=1624050685`（`1624050685 文档：新增 CADCore7.0 Hole 边界收口方案`），`git status --short -uall` 无输出；C6-M1 到 C6-M9 队列为空，C7-M1 队列推进到 S1。
 - S0 冻结结论：`part_design.hole.remaining_gaps=[]`、`model_thread.status=done_first_slice`、`model_thread.geometry=pipe_shell`、`history.remaining=[]`；`test_adapters.py` 断言 capability fields 和 native oracle fixtures，`test_p7_features.py` 覆盖 supported standard head cut、ModelThread metric/counterbore 和 head-cut oracle matrix。
 - legacy `cad-core/fixtures/p7/expected/hole-threaded-standard-counterbore.freecad.json` 与 `hole-threaded-standard-countersink.freecad.json` 仍是 `hole_thread_geometry_oracle_pending`；S0 只冻结该事实，S1/S2 再裁决收集、迁移或 legacy/non-active 路由。
+- S1 已完成：live baseline 为 `HEAD=669974037a`（`669974037a 文档：冻结 C7-M1 S0 Hole live 基线`），`git status --short -uall` 无输出；S1 复核 `FeatureHole.cpp` 调用链和 `feature_hole.cpp` / capability / focused tests，已把 supported native oracle、legacy pending expected、ModelThread + head cut、point/circle/arc profile source rows 写入矩阵。
+- S1 不裁决 route：所有 collect/migrate/legacy non-active/active backend gap 决策交给 S2。
 - S2 前不得改 C++、fixtures、expected 或 tests。
 - 本主线明确排除 GUI conic edit、full sketch solver conic constraints、DistanceType default/todo、GUI Hole dialog 和 full topo naming。
 

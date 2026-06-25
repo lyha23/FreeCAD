@@ -35,6 +35,13 @@ Conic 方向剩余项主要是 GUI conic edit、full sketch solver conic constra
 - `cad-core/tests/test_adapters.py`：capability publication assertions。
 - `cad-core/fixtures/p7/hole-*.json` 与 `cad-core/fixtures/p7/expected/hole-*.freecad.json`：本轮唯一 fixture family。
 
+## S1 源码与 oracle 候选矩阵
+
+- live 起点：`HEAD=669974037a`（`669974037a 文档：冻结 C7-M1 S0 Hole live 基线`），`git status --short -uall` 无输出。
+- FreeCAD 证据已覆盖 `Hole::Hole()`、`readCutDefinitions()`、`updateHoleCutParams()`、`determineDiameter()`、`getThreadPitch()`、`getThreadClassClearance()`、`execute()`、`makeThread()`、`findHoles()`。
+- cad-core 对照已覆盖 thread table、standard head cut lookup、ModelThread pipe-shell tool、compound tool、history freeze 和 metadata 输出。
+- 矩阵已列出 supported native oracle fixtures、legacy pending expected rows、ModelThread + head cut rows、point/circle/arc profile source rows；S1 只写证据和候选，S2 才裁决 route。
+
 ## 本轮代表批次
 
 | batch | representatives | decision |
@@ -55,7 +62,7 @@ Conic 方向剩余项主要是 GUI conic edit、full sketch solver conic constra
 ## 工作步骤
 
 1. S0：【已实现】冻结 live baseline、C6 closure、Hole capability 和当前 fixture/test 状态。
-2. S1：复核 FreeCAD 源码调用链，批量列出 oracle/fixture rows。
+2. S1：【已实现】复核 FreeCAD 源码调用链，批量列出 oracle/fixture rows。
 3. S2：按矩阵裁决每个 row 是否已经关闭、需要 oracle、需要实现、native blocked 或 non-goal。
 4. S3：只实现 S2 接受的 backend gap；否则做 no-code publication closure。
 5. S4：同步 fixtures/tests/capability/docs 和验收记录。
