@@ -99,11 +99,24 @@ S3 新增最小 focused tests：`test_c7m3_fillet_oracle_rows_match_expected`、
 
 已完成。S4 的 live 起点为 `pwd=/Users/li/Chili3DProject/FreeCAD`、`HEAD=364ae7a093`（`364ae7a093 测试：完成 C7-M3 S3 parity gate`），开始状态干净。S3 没有打开 implementation gate，因此 S4 只做 no-code publication closure：同步 root README、本包 README/总入口/方案、P7 细化文档和 C7-M3 矩阵；发布 `C7M3-SCOPE-101` / `C7M3-SCOPE-102` 为 expected-backed，保留 `C7M3-SCOPE-103` 的 `oracle_blocked` 发布边界；不改 C++ executor/runtime/topo/adapter/capability_contract，也不新增 fixtures/expected/tests。
 
-S4 完成后队列推进到 S5 release gate。
+S4 完成后队列推进到 S5 release gate；S5 已完成后队列为空。
 
 ### S5 release gate
 
-清空队列，运行与实际变更匹配的验证。若改 C++、fixtures、expected 或 tests，至少运行相关 focused unittest；若只改 docs/矩阵，则记录不触发 build 的原因。
+已完成。S5 的 live 起点为 `pwd=/Users/li/Chili3DProject/FreeCAD`、`HEAD=5e7b76261c`（`5e7b76261c 文档：完成 C7-M3 S4 no-code 发布收口`），开始状态干净。
+
+S5 release gate 结论：
+
+| 项 | 结论 |
+| --- | --- |
+| `C7M3-SCOPE-101` | Fillet multi-edge / `UseAllEdges` 保持 expected-backed |
+| `C7M3-SCOPE-102` | Chamfer `FlipDirection=true` Equal / Two distances / Distance and Angle 保持 expected-backed |
+| `C7M3-SCOPE-103` | `dressup-reference-shadow-base-recovery` 保持 `oracle_blocked` |
+| implementation gate | 没有 `backend_gap_requires_implementation` |
+| build gate | S5 只改文档和矩阵，无 C++/fixture/expected/test/adapter/capability schema 改动，因此不运行 `cmake --build build` |
+| queue | S5 文件已标记 `【已实现】`，C7-M3 队列为空 |
+
+S5 运行 focused unittest 3 tests OK，并通过 C7-M3 队列、TSV 列数、trailing whitespace 和 `git diff --check` 验收。
 
 ## 验收分层
 
@@ -133,7 +146,7 @@ python3 -m unittest tests.test_p7_features.CadCoreP7FeatureTest
 
 ## 收口标准
 
-- 3 个 oracle pending rows 都有 FreeCAD oracle、native oracle blocker 或明确 non-goal 结论。
-- 没有 oracle 的 row 不发布为 supported。
-- 若打开 implementation gate，代码修改只覆盖 S3 指定文件和 fixtures/tests。
-- C7-M3 队列为空，root README 和本包 README 记录最终发布状态。
+- 3 个 oracle pending rows 都有 FreeCAD oracle、native oracle blocker 或明确 non-goal 结论：已满足。
+- 没有 oracle 的 row 不发布为 supported：已满足，`C7M3-SCOPE-103` 保持 `oracle_blocked`。
+- 若打开 implementation gate，代码修改只覆盖 S3 指定文件和 fixtures/tests：未打开 implementation gate，因此无 C++ 实现改动。
+- C7-M3 队列为空，root README 和本包 README 记录最终发布状态：已满足。

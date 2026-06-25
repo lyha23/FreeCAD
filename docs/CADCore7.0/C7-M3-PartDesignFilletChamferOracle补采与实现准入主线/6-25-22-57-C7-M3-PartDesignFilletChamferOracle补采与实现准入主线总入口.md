@@ -2,7 +2,7 @@
 
 ## 结论
 
-C7-M3 的 S4 no-code publication closure 已完成，没有打开 C++ implementation gate。C7-M2 release gate 留下的 Fillet multi-edge / `UseAllEdges` 与 Chamfer `FlipDirection=true` rows 已用 S2 FreeCADCmd expected 证明当前 `cad-core` parity 一致，并在 S4 发布为 `already_closed_expected_backed`；DressUp stale `ReferenceShadow` / Base recovery 仍缺 native FreeCAD recovery oracle，保持 `oracle_blocked`。本包没有改 executor、runtime、topo、adapter 或 capability supported 口径。
+C7-M3 release gate 已完成，没有打开 C++ implementation gate。C7-M2 release gate 留下的 Fillet multi-edge / `UseAllEdges` 与 Chamfer `FlipDirection=true` rows 已用 S2 FreeCADCmd expected 证明当前 `cad-core` parity 一致，并在 S4/S5 发布为 `already_closed_expected_backed`；DressUp stale `ReferenceShadow` / Base recovery 仍缺 native FreeCAD recovery oracle，保持 `oracle_blocked`。本包没有改 executor、runtime、topo、adapter 或 capability supported 口径，C7-M3 队列为空。
 
 ## 上游状态
 
@@ -12,7 +12,7 @@ C7-M3 的 S4 no-code publication closure 已完成，没有打开 C++ implementa
 - S1 已完成：live 起点 `HEAD=a0a9799608`（`a0a9799608 文档：完成 C7-M3 S0 基线冻结`），开始状态干净；只改文档和矩阵，未新增 fixture/expected/tests，未运行 FreeCAD oracle 或 cad-core parity。
 - S2 已完成：live 起点 `HEAD=ad03c44cfe`（`ad03c44cfe 文档：完成 C7-M3 S1 oracle fixture 设计`），开始状态干净；新增 6 个 fixture JSON、5 个 FreeCADCmd expected JSON 和 1 个 ReferenceShadow native oracle blocker JSON，未改 C++、tests、adapter、runtime、topo 或 capability。
 - S3 已完成：live 起点 `HEAD=ac831f3ba7`（`ac831f3ba7 文档：完成 C7-M3 S2 oracle expected 固化`），开始状态干净；新增 focused parity tests，未改 C++、adapter、runtime、topo 或 capability。
-- C7-M1/C7-M2 队列为空，C7-M3 队列在 S4 后推进到 S5。
+- C7-M1/C7-M2 队列为空，C7-M3 队列在 S5 后为空。
 - C7-M2 留下的 3 个 oracle pending rows：
   - `C7M2-GAP-101 -> C7M3-SCOPE-101`：Fillet multi-edge / `UseAllEdges`。
   - `C7M2-GAP-203 -> C7M3-SCOPE-102`：Chamfer `FlipDirection=true`。
@@ -40,7 +40,7 @@ C7-M3 的 S4 no-code publication closure 已完成，没有打开 C++ implementa
 3. S2【已实现】：采集 FreeCAD oracle 或记录 native oracle blocker。
 4. S3【已实现】：运行 cad-core parity 并裁决 implementation gate，未打开 C++ gate。
 5. S4【已实现】：no-code publication closure。
-6. S5：release gate，清空队列并同步 README / 矩阵。
+6. S5【已实现】：release gate，清空队列并同步 README / 矩阵。
 
 ## S1 fixture 设计摘要
 
@@ -66,6 +66,14 @@ C7-M3 的 S4 no-code publication closure 已完成，没有打开 C++ implementa
 - `p7/fillet-pad-multi-edge`、`p7/fillet-pad-use-all-edges`、`p7/chamfer-pad-edge-flip-true`、`c3m5/chamfer-two-distances-edge-flip-true`、`c3m5/chamfer-distance-angle-edge-flip-true` 已发布为 expected-backed。
 - `c3m5/dressup-reference-shadow-base-recovery` 保持 `oracle_blocked` / not supported；geometry-only StableSubList 成功不作为 `ShadowSub` / `ReferenceShadow` 原生恢复证据。
 - S4 只同步 docs/矩阵/P7 细化口径，没有修改 C++ executor/runtime/topo/adapter/capability_contract、fixtures/expected/tests；队列推进到 S5。
+
+## S5 release gate 结果
+
+- S5 live 起点为 `HEAD=5e7b76261c`（`5e7b76261c 文档：完成 C7-M3 S4 no-code 发布收口`），开始状态干净。
+- focused unittest 3 tests OK：`test_c7m3_fillet_oracle_rows_match_expected`、`test_c7m3_chamfer_flip_direction_oracle_rows_match_expected`、`test_c7m3_reference_shadow_recovery_oracle_remains_blocked`。
+- C7-M3 矩阵 TSV 列数检查、trailing whitespace 检查、`git diff --check` 和队列检查通过。
+- S5 只更新 root README、本包 README/总入口/方案、步骤文件和矩阵；没有 C++、fixture、expected、test、topo/history、adapter 或 capability schema 改动，因此不触发 `cad-core` build 或全量 FreeCAD build。
+- 最终 route：`C7M3-SCOPE-101` / `C7M3-SCOPE-102` expected-backed，`C7M3-SCOPE-103` oracle_blocked，`backend_gap_requires_implementation` 为 0；C7-M3 队列为空。
 
 ## 验收入口
 
