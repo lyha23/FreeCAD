@@ -83,11 +83,21 @@ S2 采集到 5 个 FreeCADCmd expected：
 
 ### S3 parity gate
 
-运行当前 `cad-core` 对 S2 expected 的 focused parity。Fillet / Chamfer rows 裁为 `already_closed_expected_backed` 或 `backend_gap_requires_implementation`；DressUp stale `ReferenceShadow` / Base recovery 已有 S2 blocker，S3 应裁为 `oracle_blocked`。S3 是唯一 code edit gate。
+已完成。S3 的 live 起点为 `pwd=/Users/li/Chili3DProject/FreeCAD`、`HEAD=ac831f3ba7`（`ac831f3ba7 文档：完成 C7-M3 S2 oracle expected 固化`），开始状态干净。
+
+当前 `cad-core` 对 S2 expected 的 focused parity 结果：
+
+| row | fixtures | route |
+| --- | --- | --- |
+| `C7M3-SCOPE-101` | `p7/fillet-pad-multi-edge`、`p7/fillet-pad-use-all-edges` | `already_closed_expected_backed` |
+| `C7M3-SCOPE-102` | `p7/chamfer-pad-edge-flip-true`、`c3m5/chamfer-two-distances-edge-flip-true`、`c3m5/chamfer-distance-angle-edge-flip-true` | `already_closed_expected_backed` |
+| `C7M3-SCOPE-103` | `c3m5/dressup-reference-shadow-base-recovery` | `oracle_blocked` |
+
+S3 新增最小 focused tests：`test_c7m3_fillet_oracle_rows_match_expected`、`test_c7m3_chamfer_flip_direction_oracle_rows_match_expected`、`test_c7m3_reference_shadow_recovery_oracle_remains_blocked`。没有产生 `backend_gap_requires_implementation`，因此 S4 不打开 C++ implementation gate。
 
 ### S4 实现或 no-code 发布
 
-若 S3 打开 gate，按 FreeCAD 调用链和 cad-core 分层实现；否则只同步 docs/capability/矩阵。任何新增 public API 或 executor 主路径都要在相邻注释写明 FreeCAD 源文件、类/函数和关键短句。
+S3 没有打开 implementation gate。S4 只能做 no-code publication closure：同步 docs/capability/矩阵，保留 `C7M3-SCOPE-103` 的 `oracle_blocked` 发布边界，不改 C++ executor/runtime/topo/adapter。
 
 ### S5 release gate
 

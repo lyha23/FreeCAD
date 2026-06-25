@@ -2285,6 +2285,83 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(body["tip"], "Chamfer")
         self.assert_object_matches_expected(result, "p7", "chamfer-pad-edge")
 
+    def test_c7m3_fillet_oracle_rows_match_expected(self) -> None:
+        for fixture, selection in [
+            (
+                "fillet-pad-multi-edge",
+                {
+                    "requested_subnames": ["Edge1", "Edge2"],
+                    "requested_edge_count": 2,
+                    "selected_edge_count": 2,
+                    "use_all_edges": False,
+                },
+            ),
+            (
+                "fillet-pad-use-all-edges",
+                {
+                    "requested_subnames": [],
+                    "requested_edge_count": 0,
+                    "selected_edge_count": 24,
+                    "use_all_edges": True,
+                },
+            ),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p7")
+                fillet = result["objects"]["Fillet"]
+                body = result["objects"]["Body"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(fillet["status"], "ok")
+                self.assertEqual(fillet["dress_up"], "fillet")
+                self.assertEqual(fillet["body_mode"], "replace")
+                self.assertEqual(body["tip"], "Fillet")
+                for key, value in selection.items():
+                    self.assertEqual(fillet["base_selection"][key], value)
+                self.assert_object_matches_expected(result, "p7", fixture)
+
+    def test_c7m3_chamfer_flip_direction_oracle_rows_match_expected(self) -> None:
+        for group, fixture, parameters in [
+            (
+                "p7",
+                "chamfer-pad-edge-flip-true",
+                {"chamfer_type": "Equal distance", "size": 0.5, "flip_direction": True},
+            ),
+            (
+                "c3m5",
+                "chamfer-two-distances-edge-flip-true",
+                {"chamfer_type": "Two distances", "size": 0.3, "size2": 0.8, "flip_direction": True},
+            ),
+            (
+                "c3m5",
+                "chamfer-distance-angle-edge-flip-true",
+                {"chamfer_type": "Distance and Angle", "size": 0.5, "angle": 45.0, "flip_direction": True},
+            ),
+        ]:
+            with self.subTest(fixture=f"{group}/{fixture}"):
+                result = self.run_recompute(fixture, group)
+                chamfer = result["objects"]["Chamfer"]
+                body = result["objects"]["Body"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(chamfer["status"], "ok")
+                self.assertEqual(chamfer["dress_up"], "chamfer")
+                self.assertEqual(chamfer["body_mode"], "replace")
+                self.assertEqual(chamfer["parameters"], parameters)
+                self.assertEqual(body["tip"], "Chamfer")
+                self.assert_object_matches_expected(result, group, fixture)
+
+    def test_c7m3_reference_shadow_recovery_oracle_remains_blocked(self) -> None:
+        expected = self.expected_freecad("c3m5", "dressup-reference-shadow-base-recovery")
+
+        self.assertNotIn("objects", expected)
+        self.assertEqual(
+            expected["known_gap"]["kind"],
+            "dressup_reference_shadow_base_recovery_native_oracle_blocked",
+        )
+        self.assertIn("StableSubList", expected["known_gap"]["reason"])
+        self.assertIn("ReferenceShadow", expected["known_gap"]["delete_condition"])
+
     def test_c3m5_dressup_base_uses_body_cumulative_shape(self) -> None:
         result = self.run_recompute("body-dressup-cumulative-base", "c3m5")
         body = result["objects"]["Pad5Body"]

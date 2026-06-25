@@ -22,7 +22,9 @@ C7-M3 的目标不是直接实现 C++，而是先补 FreeCAD oracle，随后把�
 - S2 已完成：live 起点 `HEAD=ad03c44cfe`（`ad03c44cfe 文档：完成 C7-M3 S1 oracle fixture 设计`），开始状态干净。S2 新增 6 个 fixture JSON、5 个 FreeCADCmd-derived expected JSON 和 1 个 ReferenceShadow native oracle blocker JSON；没有改 feature executor、runtime、topo、adapter、capability 或 tests。
 - S2 expected-backed oracle：`p7/fillet-pad-multi-edge`、`p7/fillet-pad-use-all-edges`、`p7/chamfer-pad-edge-flip-true`、`c3m5/chamfer-two-distances-edge-flip-true`、`c3m5/chamfer-distance-angle-edge-flip-true`。这些 expected 均由 `FREECADCMD=/Users/li/.cargo/bin/freecadcmd python3 tools/collect_freecad_expected.py <fixture> --out <expected>` 生成，`freecad_version=1.2.0 revision 20260519`。
 - S2 blocker：`c3m5/dressup-reference-shadow-base-recovery` fixture 已新增，但 expected 记录为 `known_gap.kind=dressup_reference_shadow_base_recovery_native_oracle_blocked`。当前 collector geometry-only 探测返回成功，但原因是 `link_sub_value()` 直接喂 `StableSubList`，不能证明旧 `SubList` 通过 `ShadowSub` / `ReferenceShadow` 原生恢复；该 row 必须在 S3 走 `oracle_blocked`，不能打开 implementation gate。
-- C7-M3 只处理这 3 个 oracle pending rows，不重开基础 Fillet / Chamfer、RefineModel、SupportTransform mirrored regression 或 C7-M2 已关闭的 non-goal。S2 后的下一步是 S3 parity gate，不是提前实现 S4。
+- S3 已完成：live 起点 `HEAD=ac831f3ba7`（`ac831f3ba7 文档：完成 C7-M3 S2 oracle expected 固化`），开始状态干净。当前 cad-core 对 5 个 Fillet/Chamfer expected-backed fixtures 的 bbox、volume、topology_counts 全部匹配 S2 FreeCADCmd expected；新增 focused tests 为 `test_c7m3_fillet_oracle_rows_match_expected`、`test_c7m3_chamfer_flip_direction_oracle_rows_match_expected`、`test_c7m3_reference_shadow_recovery_oracle_remains_blocked`。
+- S3 gate route：`C7M3-SCOPE-101` Fillet multi-edge / `UseAllEdges` 为 `already_closed_expected_backed`；`C7M3-SCOPE-102` Chamfer `FlipDirection=true` 为 `already_closed_expected_backed`；`C7M3-SCOPE-103` stale `ReferenceShadow` / Base recovery 继续为 `oracle_blocked`。没有 `backend_gap_requires_implementation`，S4 只能做 no-code publication/docs sync，不改 C++。
+- C7-M3 只处理这 3 个 oracle pending rows，不重开基础 Fillet / Chamfer、RefineModel、SupportTransform mirrored regression 或 C7-M2 已关闭的 non-goal。S3 后的下一步是 S4 no-code publication closure，不是实现 S4。
 
 ## 收口边界
 
