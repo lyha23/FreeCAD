@@ -2,7 +2,7 @@
 
 本目录是 CADCore7.0 的第一条主线。它不重开泛 Hole 能力，而是围绕同一 FreeCAD 调用链、同一 PartDesign Hole DTO/API 边界、同一 `cad-core/fixtures/p7/hole-*` expected 家族做批量收口。
 
-当前 live capability 已显示 `part_design.hole.remaining_gaps=[]`，`model_thread.status=done_first_slice`，并列出 `p7/hole-supported-threaded-dynamic-iso2009`、`p7/hole-supported-threaded-dynamic-din7984`、`p7/hole-supported-model-thread-metric`、`p7/hole-point-profile`、`p7/hole-supported-point-counterbore`、`p7/hole-supported-model-thread-counterbore` 等 native oracle fixtures。C7-M1 的价值不是从零实现 Hole，而是确认这些发布项和旧 pending standard rows、ModelThread pipe-shell history、profile source 映射、capability/test/docs 是否已经形成可审计闭环；若 S2 证明还有 active backend gap，S3 再做源码级实现。
+当前 live capability 已显示 `part_design.hole.remaining_gaps=[]`，`model_thread.status=done_first_slice`，并列出 `p7/hole-supported-threaded-dynamic-iso2009`、`p7/hole-supported-threaded-dynamic-din7984`、`p7/hole-supported-model-thread-metric`、`p7/hole-point-profile`、`p7/hole-supported-point-counterbore`、`p7/hole-supported-model-thread-counterbore` 等 native oracle fixtures。C7-M1 的价值不是从零实现 Hole，而是确认这些发布项和旧 pending standard rows、ModelThread pipe-shell history、profile source 映射、capability/test/docs 是否已经形成可审计闭环；S2 已证明没有 active backend gap，S3 已按 no-code publication closure 收口。
 
 ## 入口
 
@@ -20,6 +20,8 @@
 - S1 已完成：live baseline 为 `HEAD=669974037a`（`669974037a 文档：冻结 C7-M1 S0 Hole live 基线`），`git status --short -uall` 无输出；S1 复核 `FeatureHole.cpp` 调用链和 `feature_hole.cpp` / capability / focused tests，已把 supported native oracle、legacy pending expected、ModelThread + head cut、point/circle/arc profile source rows 写入矩阵。
 - S2 已完成：live baseline 为 `HEAD=41c62e7070`（`41c62e7070 docs: 完成 C7-M1 S1 源码与 oracle 矩阵`），`git status --short -uall` 无输出；supported native oracle rows 均裁决为 `already_closed_expected_backed`，capability/docs 漂移裁决为 `publication_closure_only`，legacy pending expected rows 裁决为 `historical_or_native_blocked` 的 diagnostic historical / non-active legacy。
 - S2 结论：没有 `backend_gap_requires_implementation`，ModelThread + head cut 不存在 geometry/topology/history active gap；命名顺序差异不得算硬失败。S3/S4 只允许 no-code publication closure，不改 C++、fixtures、expected 或 tests。
+- S3 已完成：live baseline 为 `HEAD=24b36ee45f`（`24b36ee45f 文档：完成 C7-M1 S2 准入裁决`），`git status --short -uall` 无输出；S3 只更新本包 README、总入口、步骤索引、S3 文件和矩阵，把 S2 route 落成 publication closure，没有改 C++、fixtures、expected 或 tests，也未运行 build/focused tests。
+- S3 结论：supported native rows 继续作为 active expected-backed closure；legacy pending rows 只保留为 `historical_or_native_blocked` / non-active diagnostic；capability drift 留给 S4 做发布同步。
 - 本主线明确排除 GUI conic edit、full sketch solver conic constraints、DistanceType default/todo、GUI Hole dialog 和 full topo naming。
 
 ## 队列检查
