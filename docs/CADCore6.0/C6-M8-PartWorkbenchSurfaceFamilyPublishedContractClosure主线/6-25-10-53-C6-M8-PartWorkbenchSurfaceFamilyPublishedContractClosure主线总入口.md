@@ -16,11 +16,12 @@
 - `HEAD=02798d9ca9`；`git log -1 --oneline` 为 `02798d9ca9 docs: 新增 C6-M8 表面族合同收口方案`。
 - S0 开始时 `git -c core.quotepath=false status --short -uall` 为空。
 - S1 开始时 `HEAD=f1f32b19c8`；`git log -1 --oneline` 为 `f1f32b19c8 文档：完成 C6-M8 S0 live 基线冻结`；`git -c core.quotepath=false status --short -uall` 为空。
-- C6-M1 到 C6-M7 的 `工作步骤细分` 队列均返回空表；C6-M8 初始队列从 S0 开始，S0 完成后推进到 S1。
+- S2 开始时 `HEAD=f981730d1c`；`git log -1 --oneline` 为 `f981730d1c 文档：完成 C6-M8 S1 源码与矩阵复核`；`git -c core.quotepath=false status --short -uall` 为空。
+- C6-M1 到 C6-M7 的 `工作步骤细分` 队列均返回空表；C6-M8 初始队列从 S0 开始，S0/S1 完成后推进到 S2，S2 完成后推进到 S3。
 - S1 已完成 FreeCAD source authority、cad-core landing、fixtures/product fixtures/diagnostic evidence 和 adapter assertions 批量矩阵；S1 标记后队列推进到 S2。
 - C6-M7 已发布 `part_workbench.loft.remaining_gaps=[]`；C6-M4/M5/M6 已分别发布 Sweep、Filling、GeomPlate product contract / narrowed gap / non-goal 状态。
-- `project_on_surface` 仍需 S2 裁决：`gui_projection_task_panel` 与 `unverified_advanced_branches` 同时列在 `remaining_gaps` 和 `non_goals`，不能在 release 口径中长期保留双重状态。
-- adapter assertion 已冻结当前口径：`project_on_surface.remaining_gaps=[gui_projection_task_panel, unverified_advanced_branches]` 且这两项也在 `non_goals`；`ruled_surface`、`loft`、`sweep`、`filling`、`geomplate` active `remaining_gaps=[]`。
+- S2 已裁决 `project_on_surface` overlap：`gui_projection_task_panel` 是 `non_goal_frozen`；`unverified_advanced_branches` 拆为 expected-backed stateless DTO/API、GUI/session non-goal、native mapper hidden historical narrowed boundary、broad placeholder non-goal。
+- adapter assertion 当前仍按 S1 口径冻结在 `project_on_surface.remaining_gaps=[gui_projection_task_panel, unverified_advanced_branches]` 且两项也在 `non_goals`；S2 不改 C++/test，S3/S4 负责 publication assertion 收口。`ruled_surface`、`loft`、`sweep`、`filling`、`geomplate` active `remaining_gaps=[]` 且 S2 复核与 fixtures、`narrowed_gaps`、`non_goals` 一致。
 
 ## Source authority
 
@@ -55,7 +56,7 @@
 | --- | --- | --- |
 | S0 | `工作步骤细分/6-25-10-54-【已实现】C6-M8-S0-live基线与surface-family状态冻结.md` | 已冻结 live baseline、queue、surface capability 当前状态和 root README 入口。 |
 | S1 | `工作步骤细分/6-25-10-55-【已实现】C6-M8-S1-FreeCAD源码与capability批量矩阵.md` | 已批量复核 FreeCAD authority、cad-core 落点、fixtures/product fixtures/diagnostic evidence 和 adapter assertions。 |
-| S2 | `工作步骤细分/6-25-10-56-C6-M8-S2-准入路由与ProjectOnSurface裁决.md` | 裁决 active/non-goal overlap，并将每个 candidate 路由到 expected-backed、product contract、narrowed gap、non-goal 或 backend gap。 |
+| S2 | `工作步骤细分/6-25-10-56-【已实现】C6-M8-S2-准入路由与ProjectOnSurface裁决.md` | 已裁决 active/non-goal overlap：ProjectOnSurface GUI 为 non-goal，advanced placeholder 拆为 expected-backed / non-goal / historical narrowed boundary，未发现实现型 backend gap。 |
 | S3 | `工作步骤细分/6-25-10-57-C6-M8-S3-批量实现或发布口径收口.md` | 按 S2 路由补实现或发布口径，必须同步 fixtures/tests/capability，不做单点字符串删除。 |
 | S4 | `工作步骤细分/6-25-10-58-C6-M8-S4-fixtures-tests-capability-docs发布.md` | 发布 capability、adapter assertion、C6-M8 docs 和 root README。 |
 | S5 | `工作步骤细分/6-25-10-59-C6-M8-S5-阶段回归与release-gate.md` | 运行 build、focused regression、queue empty、TSV 和 diff checks，完成 release gate。 |
@@ -83,4 +84,4 @@
 
 ## 当前结论
 
-C6-M8 已完成 S0/S1，当前队列从 S2 开始。S2 是关键裁决点；S3/S4 才允许改 C++ / fixtures / capability；S5 作为 release gate。只有当 ProjectOnSurface 和其他 surface family 项的 `remaining_gaps`、`narrowed_gaps`、`non_goals`、fixtures 和 adapter assertions 都一致时，才能关闭本包。
+C6-M8 已完成 S0/S1/S2，当前队列从 S3 开始。S2 未发现 `backend_gap_requires_implementation`，因此 S3/S4 的实际范围是 capability/test/docs publication assertion：移除 ProjectOnSurface active/non-goal overlap、保留 GUI non-goal、把 native mapper hidden 写为 historical narrowed boundary，并继续保护其它 surface family 的 `remaining_gaps=[]`。S5 作为 release gate；只有当 ProjectOnSurface 和其它 surface family 项的 `remaining_gaps`、`narrowed_gaps`、`non_goals`、fixtures 和 adapter assertions 都一致时，才能关闭本包。
