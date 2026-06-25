@@ -14,7 +14,9 @@
 ## 当前状态
 
 - 方案创建基线：`HEAD=8fdf9b71c5`（`8fdf9b71c5 docs: 完成 C6-M9 S5 发布闸门`）。
-- S0-S5 尚未执行；`工作步骤细分/6-25-14-03-【已实现】C7-M1工作步骤总入口.md` 只是索引，具体 pending step 从 S0 开始。
+- S0 已完成：live baseline 为 `HEAD=1624050685`（`1624050685 文档：新增 CADCore7.0 Hole 边界收口方案`），`git status --short -uall` 无输出；C6-M1 到 C6-M9 队列为空，C7-M1 队列推进到 S1。
+- S0 冻结结论：`part_design.hole.remaining_gaps=[]`、`model_thread.status=done_first_slice`、`model_thread.geometry=pipe_shell`、`history.remaining=[]`；`test_adapters.py` 断言 capability fields 和 native oracle fixtures，`test_p7_features.py` 覆盖 supported standard head cut、ModelThread metric/counterbore 和 head-cut oracle matrix。
+- legacy `cad-core/fixtures/p7/expected/hole-threaded-standard-counterbore.freecad.json` 与 `hole-threaded-standard-countersink.freecad.json` 仍是 `hole_thread_geometry_oracle_pending`；S0 只冻结该事实，S1/S2 再裁决收集、迁移或 legacy/non-active 路由。
 - S2 前不得改 C++、fixtures、expected 或 tests。
 - 本主线明确排除 GUI conic edit、full sketch solver conic constraints、DistanceType default/todo、GUI Hole dialog 和 full topo naming。
 

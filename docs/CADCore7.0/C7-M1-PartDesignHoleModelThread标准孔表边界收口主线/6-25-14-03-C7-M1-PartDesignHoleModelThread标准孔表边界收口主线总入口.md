@@ -6,6 +6,14 @@ C7-M1 选择 `PartDesign::Hole` 的 ModelThread + 标准孔表边界闭环作为
 
 如果 S1/S2 证明全部代表场景已经 expected-backed 或 publication-backed，S3/S4 只做发布一致性收口；如果 S2 发现 active backend gap，S3 才允许改 `cad-core/src/part_design/feature_hole.cpp`、必要的 `part/topo` / `topo` history 落点、fixtures 和 tests。
 
+## S0 live 基线冻结
+
+- live 起点：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=1624050685`（`1624050685 文档：新增 CADCore7.0 Hole 边界收口方案`），`git status --short -uall` 无输出。
+- 队列状态：C6-M1 到 C6-M9 的 `工作步骤细分` 队列均为空；C7-M1 初始队列为 S0-S5 pending，S0 完成后应推进到 S1。
+- capability/test 基线：`part_design.hole.model_thread.status=done_first_slice`、`geometry=pipe_shell`，`history.status=element_map_freeze_first_slice`，`history.covered` 包含 profile source、point profile head cut、ModelThread compound tool 和 threaded ModelThread head-cut native oracle，`history.remaining=[]`、`remaining_gaps=[]`。
+- adapter/focused test 基线：`cad-core/tests/test_adapters.py` 断言 Hole capability、producer matrix、topo history 和 known gaps；`cad-core/tests/test_p7_features.py` 覆盖 supported threaded heads、ModelThread pipe-shell tool、native oracle matrix 和 `hole-supported-model-thread-counterbore` expected。
+- legacy pending expected：`cad-core/fixtures/p7/expected/hole-threaded-standard-counterbore.freecad.json` 与 `hole-threaded-standard-countersink.freecad.json` 仍写 `FreeCAD Hole threaded-standard oracle pending` / `hole_thread_geometry_oracle_pending`，S0 不裁决，交给 S1/S2。
+
 ## 为什么不是 C6-M10 Conic
 
 Conic 方向剩余项主要是 GUI conic edit、full sketch solver conic constraints、DistanceType default/todo。它们要么是 GUI/session，要么是完整 Sketcher solver，不属于当前无状态 CAD Core 后端批量实现边界。C7-M1 选 Hole，是因为它同时命中 FreeCAD 调用链、DTO/API、expected fixture family 和 capability 发布边界，能形成较厚的一轮闭环。
@@ -46,7 +54,7 @@ Conic 方向剩余项主要是 GUI conic edit、full sketch solver conic constra
 
 ## 工作步骤
 
-1. S0：冻结 live baseline、C6 closure、Hole capability 和当前 fixture/test 状态。
+1. S0：【已实现】冻结 live baseline、C6 closure、Hole capability 和当前 fixture/test 状态。
 2. S1：复核 FreeCAD 源码调用链，批量列出 oracle/fixture rows。
 3. S2：按矩阵裁决每个 row 是否已经关闭、需要 oracle、需要实现、native blocked 或 non-goal。
 4. S3：只实现 S2 接受的 backend gap；否则做 no-code publication closure。

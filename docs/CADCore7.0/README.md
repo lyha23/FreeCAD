@@ -14,7 +14,9 @@ CADCore7.0 承接 C6-M9 之后的下一轮 CAD Core 收口工作。C6-M9 已把 
 ## 当前状态
 
 - 方案创建基线：`HEAD=8fdf9b71c5`（`8fdf9b71c5 docs: 完成 C6-M9 S5 发布闸门`）。
-- C7-M1 创建时只新增 `docs/CADCore7.0` 文档包，尚未执行 S0-S5。
+- S0 live 基线已冻结：`HEAD=1624050685`（`1624050685 文档：新增 CADCore7.0 Hole 边界收口方案`），`git status --short -uall` 无输出；C6-M1 到 C6-M9 的 `工作步骤细分` 队列均为空。
+- C7-M1 当前队列已推进到 S1；S0 只确认 capability/test/legacy pending expected 现状，不裁决 S1/S2 rows。
+- 当前 capability/test 基线：`part_design.hole.model_thread.status=done_first_slice`、`geometry=pipe_shell`，`history.status=element_map_freeze_first_slice`，`history.remaining=[]`，`remaining_gaps=[]`；adapter tests 断言这些字段和 supported native oracle fixtures，legacy `hole-threaded-standard-counterbore/countersink` expected 仍写 `oracle pending`。
 - C7-M1 不声明 full FreeCAD Hole parity，不声明 GUI Hole dialog，不声明 full topo naming / full MapperHistory。
 - C7-M1 必须在 S2 之后才允许修改 C++、fixtures 或 expected；S2 必须先把代表场景裁决为 `already_closed`、`oracle_pending`、`backend_gap_requires_implementation`、`historical_or_native_blocked` 或 `non_goal`。
 
