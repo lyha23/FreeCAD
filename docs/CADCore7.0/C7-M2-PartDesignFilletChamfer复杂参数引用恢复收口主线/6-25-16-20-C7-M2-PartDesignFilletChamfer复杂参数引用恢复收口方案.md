@@ -2,7 +2,7 @@
 
 ## 背景
 
-C7-M1 已把 Hole ModelThread 与标准孔表边界收口到 release gate，队列为空。P7 PartDesign 常用生态文档仍保留一条与当前 CAD Core 后端相关的 known gap：`Fillet / Chamfer 复杂参数组合、复杂引用变更后的完整稳定恢复`。基础 Fillet / Chamfer 并非空白能力：现有 fixtures/tests 已覆盖 Body-member native oracle、RefineModel、诊断型错误、SupportTransform 和链式 DressUp 被 transformed family 消费。
+C7-M1 已把 Hole ModelThread 与标准孔表边界收口到 release gate，队列为空。P7 PartDesign 常用生态文档曾保留一条 `Fillet / Chamfer 复杂参数组合、复杂引用变更后的完整稳定恢复` 口径。基础 Fillet / Chamfer 并非空白能力：现有 fixtures/tests 已覆盖 Body-member native oracle、RefineModel、诊断型错误、SupportTransform 和链式 DressUp 被 transformed family 消费；C7-M2 S4 已把剩余口径拆成 inherited expected-backed、oracle pending 和 non-goal / publication-only。
 
 C7-M2 因此必须按“最小完整语义批次”推进：同一 FreeCAD 调用链、同一 DressUp Base / AddSubShape / SupportTransform 边界、同一 P7 expected 家族一起裁决。只有 S2 证明存在 active backend gap，S3 才能改 C++ 或 fixtures。
 
@@ -40,7 +40,7 @@ C7-M2 因此必须按“最小完整语义批次”推进：同一 FreeCAD 调�
 
 S0 冻结的 supported baseline：P7 文档记录基础 Edge / Face Base、连续边过滤、OCCT fillet/chamfer maker、replacement solid、RefineModel、DressUp AddSubShape cache、slot 级 `NamedShape`、`SupportTransform=true` 和链式 DressUp transformed consumption 已覆盖；`capability_contract.cpp` 的 `producer_matrix.dressup` 为 `done_first_slice`，covered 包含 `addsubshape_slot`、`multi_selection_history`、`chamfer_parameter_variants`、`failure_diagnostics`、`chain_dressup_pattern_history`，remaining 为空。
 
-S0 冻结的 known gap 仍是 `Fillet / Chamfer 复杂参数组合、复杂引用变更后的完整稳定恢复`。代表 fixture / expected 为 `p7/fillet-pad-edge`、`p7/chamfer-pad-edge`、`p7/fillet-refine-true`、`p7/chamfer-refine-true`、`p7/mirrored-fillet-support-transform`、`p7/mirrored-dressup-chain-support-transform`；诊断 fixture 为 `p7/fillet-missing-edge`、`p7/chamfer-invalid-size`；相邻 C3-M5 证据为 `chamfer-two-distances-edge`、`chamfer-distance-angle-edge`、`fillet-face-selection-history`、`chained-dressup-pattern-history`。focused test names 以当前 `cad-core/tests/test_p7_features.py` 为准：`test_p7_fillet_replaces_body_tip_shape`、`test_p7_chamfer_replaces_body_tip_shape`、`test_c3m5_chamfer_parameter_variants_build`、`test_p7_dressup_refine_true_uses_refinemodel_path`、`test_p7_dressup_base_diagnostics_are_structured`、`test_c3m5_dressup_face_selection_records_expanded_edge_history`、`test_p7_mirrored_features_mode_consumes_dressup_support_transform_cache`、`test_p7_mirrored_features_mode_consumes_chained_dressup_support_transform_cache`、`test_c3m5_chained_dressup_pattern_history_keeps_support_transform_slot`。
+S0 冻结的 P7 残余口径仍是 `Fillet / Chamfer 复杂参数组合、复杂引用变更后的完整稳定恢复`。代表 fixture / expected 为 `p7/fillet-pad-edge`、`p7/chamfer-pad-edge`、`p7/fillet-refine-true`、`p7/chamfer-refine-true`、`p7/mirrored-fillet-support-transform`、`p7/mirrored-dressup-chain-support-transform`；诊断 fixture 为 `p7/fillet-missing-edge`、`p7/chamfer-invalid-size`；相邻 C3-M5 证据为 `chamfer-two-distances-edge`、`chamfer-distance-angle-edge`、`fillet-face-selection-history`、`chained-dressup-pattern-history`。focused test names 以当前 `cad-core/tests/test_p7_features.py` 为准：`test_p7_fillet_replaces_body_tip_shape`、`test_p7_chamfer_replaces_body_tip_shape`、`test_c3m5_chamfer_parameter_variants_build`、`test_p7_dressup_refine_true_uses_refinemodel_path`、`test_p7_dressup_base_diagnostics_are_structured`、`test_c3m5_dressup_face_selection_records_expanded_edge_history`、`test_p7_mirrored_features_mode_consumes_dressup_support_transform_cache`、`test_p7_mirrored_features_mode_consumes_chained_dressup_support_transform_cache`、`test_c3m5_chained_dressup_pattern_history_keeps_support_transform_slot`。
 
 ### S1 FreeCAD 源码与 oracle 候选
 
@@ -65,7 +65,7 @@ S2 route：
 - `backend_gap_requires_implementation`
   - 无。
 - `publication_closure_only`
-  - S2/S3/S4 只同步 known gap route、oracle pending、non-goal 和 inherited expected-backed 发布口径。
+  - S2/S3/S4 只同步 route、oracle pending、non-goal 和 inherited expected-backed 发布口径。
 - `diagnostic_non_goal`
   - GUI、full DressUp universe、full MapperHistory、输出端引用恢复猜测。
 
@@ -81,7 +81,14 @@ S3 未获得实现授权，因此没有修改 C++、fixtures、expected 或 test
 
 ### S4 fixtures/tests/capability 发布
 
-把 S2/S3 route 同步到 fixtures、expected、focused tests、capability docs 和本包 README。expected 必须来自 FreeCAD oracle 或明确 diagnostic，不得从当前 `cad-core` 输出倒推；`oracle_pending_collect` 行不能发布为 supported capability。
+已完成。live baseline：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=934ffa6ff8`（`934ffa6ff8 文档：完成 C7-M2 S3 no-code 边界收口`），开始时 `git status --short -uall` 无输出。
+
+S4 未改 C++、fixtures、expected、tests 或 `cad-core/src/runtime/capability_contract.cpp`。本轮只同步 root README、本包 README、总入口、方案、P7 文档和矩阵发布口径：
+
+- Chamfer Two distances、Chamfer Distance and Angle、SupportTransform mirrored / chained DressUp regression 是 inherited `already_closed_expected_backed`。
+- Fillet multi-edge / `UseAllEdges`、Chamfer `FlipDirection=true`、DressUp chain stale `ReferenceShadow` / Base recovery 是 `oracle_pending_collect`，必须先有后续 FreeCAD oracle package，不能发布为 supported capability。
+- GUI、full DressUp universe、full MapperHistory 和 output-side stable reference guessing 是 `diagnostic_non_goal`。
+- `publication_closure_only` 已关闭，下一步进入 S5 release gate；因为 S4 只改 docs/矩阵，不运行 C++ build/unittest。
 
 ### S5 release gate
 
@@ -101,7 +108,7 @@ git diff --check
 
 ### 实现短跑
 
-S3 未改 C++、fixtures、expected 或 tests，所以不运行 focused unittest。S4/S5 只有在后续实际改动代码或 fixture 发布口径时，才从当前 `cad-core/tests/test_p7_features.py` 读取真实 test names 后选择 focused filters。
+S3/S4 未改 C++、fixtures、expected 或 tests，所以不运行 focused unittest。S5 只有在后续实际改动代码、fixture 或 expected 发布口径时，才从当前 `cad-core/tests/test_p7_features.py` 读取真实 test names 后选择 focused filters。
 
 ### 阶段回归
 

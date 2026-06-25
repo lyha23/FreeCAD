@@ -15,10 +15,11 @@ P7 在 P3-P6 底座上扩展常用 Body feature。原则是所有 feature 都继
 - Scaled：支持 `TransformMode=Features` 和 `Whole shape`；Features 模式以第一个 original AddSubShape 体积质心为缩放中心，Whole shape 按 FreeCAD 空 originals 行为使用原点作为缩放中心。FreeCAD expected collector 已接入 `PartDesign::Scaled` 的基础 native oracle；Features 模式和 Whole shape 的 bbox / volume / topology_counts 均已对齐。
 - MultiTransform：支持 Features 和 Whole shape 模式下 Mirrored / LinearPattern / PolarPattern / Scaled 子特征模板，非 Scaled 乘法组合，Scaled diagonal 组合；transformed copy source alias、原 feature stable alias 和 split / deleted terminal history 已由 `topo::namedShapeForTransformedCopy()` 承接，并有 P7 回归约束 copy 后的 `Mirrored.TransformN.*` / source-prefix ElementMap，以及 transformed / DressUp 链路的 `element_history_status` generated / terminal / merge 状态。FreeCAD expected collector 已接入 `PartDesign::MultiTransform` 的基础 native oracle，并按 FreeCAD 模板语义跳过 `Transformations` 子对象的 Shape 采集；LinearPattern+Mirrored、LinearPattern+Scaled diagonal、Whole shape + LinearPattern 已以 native bbox / volume / topology_counts 收口。
 
-## 已知缺口
+## 发布口径与剩余路线
 
-- Fillet / Chamfer 复杂参数组合、复杂引用变更后的完整稳定恢复。
-- transformed family 超出当前 P7 fixture 矩阵的复杂参数组合仍按 unsupported diagnostic 或后续专项处理。
+- Fillet / Chamfer inherited expected-backed：基础 Body-member Fillet / Chamfer、RefineModel、Chamfer Two distances、Chamfer Distance and Angle、Face selection history、SupportTransform mirrored / chained DressUp regression 已有 fixture/expected/focused test 证据，继续作为已关闭基线。
+- Fillet / Chamfer oracle pending：Fillet multi-edge / `UseAllEdges`、Chamfer `FlipDirection=true`、stale `ReferenceShadow` / Base recovery 缺 dedicated FreeCAD oracle，只能进入后续 oracle package；在采集成功前不得发布为 supported capability，也不得声明 active backend gap。
+- Non-goal / publication-only：GUI、full DressUp universe、full MapperHistory 和 output-side stable reference guessing 不属于当前无状态 CAD Core 后端批次；transformed family 超出当前 P7 fixture 矩阵的复杂参数组合仍按 unsupported diagnostic 或后续专项处理。
 
 ## cad-core 落点
 

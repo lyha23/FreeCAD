@@ -4,7 +4,7 @@ CADCore7.0 承接 C6-M9 之后的下一轮 CAD Core 收口工作。C6-M9 已把 
 
 本轮不打开 C6-M10 Conic 小包：当前 conic 方向剩余项主要是 GUI conic edit、full sketch solver conic constraints、DistanceType default/todo，这些不是当前无状态 CAD Core 后端实现批次。C7.0 的第一包转向 PartDesign Hole，但不重开泛 Hole 支持；C7-M1 已确认 Hole ModelThread、标准孔表驱动头部尺寸、点/圆/弧 profile source 和 history/capability 发布边界形成 expected-backed 闭环，队列为空。
 
-C7-M2 接在 C7-M1 之后，转向 `PartDesign::Fillet` / `PartDesign::Chamfer` 的复杂参数组合与复杂引用变更后的稳定恢复。P7 live 文档已说明基础 Edge / Face Base、连续边过滤、OCCT maker、replacement solid、DressUp AddSubShape cache、`SupportTransform=true` 和链式 DressUp 已有覆盖；本包不重开泛 Fillet / Chamfer，而是把旧 P7 known gap 按 FreeCAD 源码、oracle 候选、cad-core route 和发布口径做成可执行裁决队列。
+C7-M2 接在 C7-M1 之后，转向 `PartDesign::Fillet` / `PartDesign::Chamfer` 的复杂参数组合与复杂引用变更后的稳定恢复。P7 live 文档已说明基础 Edge / Face Base、连续边过滤、OCCT maker、replacement solid、DressUp AddSubShape cache、`SupportTransform=true` 和链式 DressUp 已有覆盖；本包不重开泛 Fillet / Chamfer。S4 已把旧 P7 残余口径拆成 inherited expected-backed、oracle pending 和 non-goal / publication-only 三类发布口径，避免把缺 oracle 的候选能力写成 supported。
 
 ## 入口
 
@@ -27,7 +27,8 @@ C7-M2 接在 C7-M1 之后，转向 `PartDesign::Fillet` / `PartDesign::Chamfer` 
 - 当前 capability/test 发布口径：`part_design.hole.model_thread.status=done_first_slice`、`geometry=pipe_shell`，`history.status=element_map_freeze_first_slice`，`history.remaining=[]`，`native_oracle_known_gap_fixtures=[]`，`remaining_gaps=[]`；adapter tests 断言这些字段和 supported native oracle fixtures。
 - expected-backed rows 的 expected 文件记录 `FreeCADCmd oracle from ...`、`freecad_version=1.2.0 revision 20260519`、topology/volume，不是从当前 `cad-core` 输出倒推；legacy `hole-threaded-standard-*`、`hole-threaded-dynamic-*`、`hole-model-thread-metric`、thread clearance/depth pending stubs 只保留为 historical/non-active diagnostic。
 - C7-M1 不声明 full FreeCAD Hole parity，不声明 GUI Hole dialog，不声明 full topo naming / full MapperHistory；当前队列为空。
-- C7-M2 方案已创建：创建前 live 起点 `HEAD=6ba500ea32`（`6ba500ea32 文档：完成 C7-M1 S5 发布闸门`），`git status --short -uall` 无输出；S0-S5 尚未执行。C7-M2 的第一裁决对象是 P7 known gap `Fillet / Chamfer 复杂参数组合、复杂引用变更后的完整稳定恢复`，不是 GUI、full DressUp universe 或 full MapperHistory。
+- C7-M2 S0-S4 已完成：创建前 live 起点 `HEAD=6ba500ea32`（`6ba500ea32 文档：完成 C7-M1 S5 发布闸门`），S2/S3 没有产生 `backend_gap_requires_implementation`，S4 没有新增或修改 C++、fixtures、expected、tests 或 capability contract；当前队列下一步是 S5 release gate。
+- C7-M2 当前发布口径：Chamfer Two distances、Chamfer Distance and Angle、SupportTransform mirrored / chained DressUp regression 是 inherited `already_closed_expected_backed`；Fillet multi-edge / `UseAllEdges`、Chamfer `FlipDirection=true`、stale `ReferenceShadow` / Base recovery 是 `oracle_pending_collect`，不能写成 supported；GUI、full DressUp universe、full MapperHistory 和 output-side guessing 是 `diagnostic_non_goal`。
 
 ## 队列检查
 
