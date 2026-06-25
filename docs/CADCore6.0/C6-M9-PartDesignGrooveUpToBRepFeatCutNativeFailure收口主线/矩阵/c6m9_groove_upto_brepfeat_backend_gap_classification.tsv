@@ -1,0 +1,7 @@
+classification_id	blocker_name	phase	scope_id	classification	current_reason	required_evidence	next_step
+C6M9-CAT-000	live_baseline	C6-P0	C6M9-SCOPE-000	frozen	S0 recorded live HEAD 17116567e4 C6-M1..C6-M8 empty queues C6-M9 S0 start queue and current revolution_groove exact blocker	pwd head status queue capability grep recorded in S0 docs	S1
+C6M9-CAT-101	groove_uptofirst_brepfeat_native_failure	C6-P1	C6M9-SCOPE-201	pendingRoute	Groove UpToFirst currently fails through BRepFeat_MakeRevol and is published as exact blocker	FreeCAD source review plus c51m1 fixture and route decision	S2
+C6M9-CAT-102	groove_uptoface_brepfeat_native_failure	C6-P1	C6M9-SCOPE-201	pendingRoute	Groove UpToFace currently fails through BRepFeat_MakeRevol and is published as exact blocker	FreeCAD source review plus c51m1 fixture and route decision	S2
+C6M9-CAT-201	revolution_upto_regression_guard	C6-P1	C6M9-SCOPE-201	expected_backed_closed	Revolution UpToFirst UpToLast UpToFace are already supported and must remain regression guards	Existing c51m1 revolution fixtures stay passing	S3/S5
+C6M9-CAT-301	oracle_fixture_batch	C6-P1	C6M9-SCOPE-301	pendingRoute	Existing c51m1 fixtures may remain native failure evidence or be supplemented by c6m9 product fixtures after S2	Fixture matrix and focused tests	S3
+C6M9-CAT-401	capability_release_gate	C6-P0	C6M9-SCOPE-401	pendingPublication	C6-M9 not yet published in capability docs adapter root README	Adapter capability focused test and stage regression	S5
