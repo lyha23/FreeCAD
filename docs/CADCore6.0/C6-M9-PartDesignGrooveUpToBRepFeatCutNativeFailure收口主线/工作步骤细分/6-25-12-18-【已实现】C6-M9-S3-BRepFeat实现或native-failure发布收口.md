@@ -32,7 +32,7 @@
 - adapter assertion：`cad-core/tests/test_adapters.py` 断言该 id 不再位于 active `remaining_gaps` 或 `exact_blockers`，但仍可在 narrowed/historical evidence 中查到。
 - fixture guard：`cad-core/tests/test_p7_features.py::test_c51m1_groove_upto_native_brepfeat_failures_are_exact_blockers` 的失败语义保持不变；两个 c51m1 fixtures 仍作为 historical native failure guard。
 - 未改动范围：未修改 `cad-core/src/part_design/feature_revolved.cpp`、`cad-core/src/part/topo_shape_expansion.cpp`、fixtures、expected、collector 或 P7 failure fixture 语义；未新增 `c6m9` product fixture；未把 native failure 写成 expected-backed success。
-- 文档/矩阵：C6-M9 README、主线总入口、步骤索引、S3 文件和矩阵已同步 S3 publication assertion；root `docs/CADCore6.0/README.md` 记录 S3 已完成、S4/S5 仍 pending。
+- 文档/矩阵：C6-M9 README、主线总入口、步骤索引、S3 文件和矩阵已同步 S3 publication assertion；root `docs/CADCore6.0/README.md` 在 S3 时记录后续发布一致性和 release gate 仍待处理，后续 S4 发布一致性复核由 `6-25-12-19-【已实现】C6-M9-S4-fixtures-tests-capability-docs发布.md` 收口。
 
 ## 验收
 

@@ -12,7 +12,7 @@ C6-M8 关闭后，Part Workbench surface family 的 active `remaining_gaps` 已�
 - S1：已批量复核 FreeCAD / cad-core source authority、native failure message、fixtures、current diagnostics 和 adapter assertions；确认 `Groove Type=UpToFirst` 与 `Groove Type=UpToFace` 是同一 subtractive UpTo / `BRepFeat_MakeRevol` 语义批次。
 - S2：已做准入路由。Groove UpToFirst / UpToFace 同批裁决为 `historical_native_failure`；不进入 `backend_gap_requires_implementation` 或 `cad_core_product_contract_non_parity`。
 - S3：已按 S2 route 发布 historical native failure evidence，同步 `capability_contract.cpp`、`test_adapters.py`、C6-M9 矩阵和 docs；`part_design.revolution_groove.remaining_gaps=[]`、`exact_blockers={}`，同一 id 保留在 `narrowed_gaps` / historical native evidence；不改 `feature_revolved.cpp` / `topo_shape_expansion.cpp`，不新增 fixtures/product metadata，不改 expected。
-- S4：发布 capability/docs：确保 `remaining_gaps=[]`、historical/narrowed evidence、adapter assertion、C6-M9 矩阵和 root README 一致。
+- S4：已发布 capability/docs 一致性：`remaining_gaps=[]`、historical/narrowed evidence、adapter assertion、C6-M9 矩阵和 root README 一致；未改几何实现、fixtures、expected 或 P7 failure fixture 语义。
 - S5：release gate：运行 build、focused suites、TSV 字段检查、queue empty 和 diff check。
 
 ## 最小完整语义批次
@@ -73,4 +73,4 @@ C6-M9 的最小批次不是单个 fixture，而是同一 subtractive UpTo 边界
 
 ## 结论
 
-推荐继续执行 C6-M9。S2 已同时处理 Groove UpToFirst 和 UpToFace，并明确二者 route 为 `historical_native_failure`。S3 已完成 publication/assertion 第一段：把 `partdesign_groove_upto_brepfeat_cut_native_failure` 从 active `remaining_gaps` 迁出到 historical/narrowed evidence，保留 delete/reopen condition 和 c51m1 failure guard，不声明 FreeCAD parity，也不发布 CAD Core product success。下一步 S4 做发布一致性复核，S5 做 release gate。
+推荐继续执行 C6-M9。S2 已同时处理 Groove UpToFirst 和 UpToFace，并明确二者 route 为 `historical_native_failure`。S3/S4 已完成 publication/assertion 收口：把 `partdesign_groove_upto_brepfeat_cut_native_failure` 从 active `remaining_gaps` 迁出到 historical/narrowed evidence，保留 delete/reopen condition 和 c51m1 failure guard，不声明 FreeCAD parity，也不发布 CAD Core product success。下一步 S5 做 release gate。
