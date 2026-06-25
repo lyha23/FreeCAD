@@ -19,7 +19,7 @@ C7-M3 的方案是 oracle-first：先设计和采集 representative fixtures，�
 | 批次 | 代表项 | 判定方式 |
 | --- | --- | --- |
 | Fillet 选择 | selected multi-edge、`UseAllEdges=true` | FreeCAD oracle + cad-core parity |
-| Chamfer 方向 | `FlipDirection=true`，优先 Equal distance，按 S1 决定是否补 Two distances / Distance and Angle true-side | FreeCAD oracle + cad-core parity |
+| Chamfer 方向 | `FlipDirection=true`，Equal distance true-side + Two distances true-side + Distance and Angle true-side | FreeCAD oracle + cad-core parity |
 | DressUp recovery | stale `StableSubList` + `ShadowSub` + `ReferenceShadow` + current graph | 先证明 FreeCAD 可成功恢复；不能采集则 blocker，不实现 |
 
 ## 实施纪律
@@ -46,11 +46,26 @@ S0 冻结的 C7-M2 到 C7-M3 route 映射：
 
 ### S1 oracle fixture 设计
 
-为 3 个 rows 写清 fixture payload、FreeCAD source authority、collector path、expected output fields、focused test plan 和失败时的 blocker 分类。S1 可以新增计划文档和矩阵行，但不新增 fixture/expected。
+已完成。S1 的 live 起点为 `pwd=/Users/li/Chili3DProject/FreeCAD`、`HEAD=a0a9799608`（`a0a9799608 文档：完成 C7-M3 S0 基线冻结`），开始状态干净。S1 只更新文档和矩阵，没有新增 fixture/expected/tests，没有运行 FreeCAD oracle、cad-core parity 或 C++ build。
+
+S1 确定的 fixture / collector 计划：
+
+| row | fixture | payload 要点 | collector |
+| --- | --- | --- | --- |
+| `C7M3-SCOPE-101` | `p7/fillet-pad-multi-edge` | `Base=Pad`，`SubList=[Edge1,Edge2]`，`Radius=0.35`，`UseAllEdges=false` | `cd cad-core && FREECADCMD=/path/to/FreeCADCmd python3 tools/collect_freecad_expected.py fixtures/p7/fillet-pad-multi-edge.json --out fixtures/p7/expected/fillet-pad-multi-edge.freecad.json` |
+| `C7M3-SCOPE-101` | `p7/fillet-pad-use-all-edges` | `Base=Pad`，`SubList=[Edge1]`，`Radius=0.2`，`UseAllEdges=true` | `cd cad-core && FREECADCMD=/path/to/FreeCADCmd python3 tools/collect_freecad_expected.py fixtures/p7/fillet-pad-use-all-edges.json --out fixtures/p7/expected/fillet-pad-use-all-edges.freecad.json` |
+| `C7M3-SCOPE-102` | `p7/chamfer-pad-edge-flip-true` | `ChamferType=Equal distance`，`Size=0.5`，`FlipDirection=true` | `cd cad-core && FREECADCMD=/path/to/FreeCADCmd python3 tools/collect_freecad_expected.py fixtures/p7/chamfer-pad-edge-flip-true.json --out fixtures/p7/expected/chamfer-pad-edge-flip-true.freecad.json` |
+| `C7M3-SCOPE-102` | `c3m5/chamfer-two-distances-edge-flip-true` | `ChamferType=Two distances`，`Size=0.3`，`Size2=0.8`，`FlipDirection=true` | `cd cad-core && FREECADCMD=/path/to/FreeCADCmd python3 tools/collect_freecad_expected.py fixtures/c3m5/chamfer-two-distances-edge-flip-true.json --out fixtures/c3m5/expected/chamfer-two-distances-edge-flip-true.freecad.json` |
+| `C7M3-SCOPE-102` | `c3m5/chamfer-distance-angle-edge-flip-true` | `ChamferType=Distance and Angle`，`Size=0.5`，`Angle=45`，`FlipDirection=true` | `cd cad-core && FREECADCMD=/path/to/FreeCADCmd python3 tools/collect_freecad_expected.py fixtures/c3m5/chamfer-distance-angle-edge-flip-true.json --out fixtures/c3m5/expected/chamfer-distance-angle-edge-flip-true.freecad.json` |
+| `C7M3-SCOPE-103` | `c3m5/dressup-reference-shadow-base-recovery` | `Chamfer.Base.value=Fillet`，stale `SubList=[OldFilletEdge1]`，`StableSubList=[Edge1]`，`ShadowSub=[{newName=Edge1,oldName=OldFilletEdge1}]`，`ReferenceShadow` 指向 `Fillet.Shape` old edge evidence | geometry-only command is `cd cad-core && FREECADCMD=/path/to/FreeCADCmd python3 tools/collect_freecad_expected.py fixtures/c3m5/dressup-reference-shadow-base-recovery.json --out fixtures/c3m5/expected/dressup-reference-shadow-base-recovery.freecad.json`; S2 must add reference evidence or record blocker |
+
+Expected 字段按当前 collector 复核为 `schema_version`、`reference`、`freecad_version` 和目标对象的 `shape_summary.{bbox,volume,topology_counts}`。Body group 中的 DressUp member 会和 Body 一起进入 `objects` expected。S3 focused test 入口从当前 `test_p7_features.py` 复核为 `test_p7_fillet_replaces_body_tip_shape`、`test_p7_chamfer_replaces_body_tip_shape`、`test_c3m5_chamfer_parameter_variants_build`、`test_c3m5_chained_dressup_pattern_history_keeps_support_transform_slot` 等同族用例，具体新增或扩展测试由 S3 在 fixtures/expected 存在后处理。
+
+`ReferenceShadow` recovery 的 S1 结论必须单独保留：当前 `collect_freecad_expected.py::link_sub_value()` 会优先用 `StableSubList` 收集 post-resolution 几何，但不会把 `ShadowSub` / `ReferenceShadow` 原生喂给 FreeCAD。S2 若无法补足 recovered `SubList`、`StableSubList`、`ShadowSub`、`ReferenceShadow` 更新证据，就只能把 `C7M3-SCOPE-103` 记为 collector blocker / `oracle_blocked`，不得宽松 fallback。
 
 ### S2 oracle 采集
 
-按 S1 设计新增 fixtures 并采集 FreeCAD expected。若 collector 缺能力，先修 collector 或记录 native oracle blocker；不得把 `cad-core` 当前输出写入 expected。
+按 S1 设计新增 fixtures 并采集 FreeCAD expected。若 collector 缺能力，先修 collector 或记录 native oracle blocker；不得把 `cad-core` 当前输出写入 expected。S2 尤其要区分 DressUp recovery 的 geometry expected 与 `ReferenceShadow` / `ShadowSub` 恢复证据，不能用前者替代后者。
 
 ### S3 parity gate
 
@@ -78,7 +93,7 @@ git diff --check
 
 ### Oracle / parity 短跑
 
-S1 必须从当前 `cad-core/tools/collect_freecad_expected.py` 和 `cad-core/tests/test_p7_features.py` 复核真实命令与 test names 后写入；不要在方案里硬编码未复核的旧 filter。
+S1 已从当前 `cad-core/tools/collect_freecad_expected.py` 和 `cad-core/tests/test_p7_features.py` 复核真实命令与 test names。S2 按 S1 单 fixture collector commands 采集；S3 再按当前测试文件扩展或新增 focused unittest。
 
 ### 实现短跑
 

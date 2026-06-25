@@ -38,6 +38,7 @@ C7-M3 承接 C7-M2 的 3 个 `oracle_pending_collect` rows，不直接实现 C++
 - C7-M2 最终发布口径：Chamfer Two distances、Chamfer Distance and Angle、SupportTransform mirrored / chained DressUp regression 是 inherited `already_closed_expected_backed`；Fillet multi-edge / `UseAllEdges`、Chamfer `FlipDirection=true`、stale `ReferenceShadow` / Base recovery 是 `oracle_pending_collect`，不能写成 supported；GUI、full DressUp universe、full MapperHistory 和 output-side guessing 是 `diagnostic_non_goal`。
 - C7-M3 方案已创建：创建前 live 起点 `HEAD=d678462e20`（`d678462e20 文档：完成 C7-M2 S5 发布闸门`），`git status --short -uall` 无输出。C7-M3 初始队列为 S0-S5 pending；S0/S1 只允许文档和矩阵，S2 才能按设计新增 oracle fixtures/expected，S3 才能裁决 implementation gate。
 - C7-M3 S0 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=d678462e20`（`d678462e20 文档：完成 C7-M2 S5 发布闸门`）；开始状态已有目标文档改动（root README modified、C7-M3 包 untracked），未发现无关 dirty 文件。C7-M1/C7-M2 队列为空，C7-M3 队列推进到 S1；3 个 C7-M2 `oracle_pending_collect` rows 已冻结到 C7-M3：`C7M2-GAP-101 -> C7M3-SCOPE-101`、`C7M2-GAP-203 -> C7M3-SCOPE-102`、`C7M2-GAP-301 -> C7M3-SCOPE-103`。
+- C7-M3 S1 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=a0a9799608`（`a0a9799608 文档：完成 C7-M3 S0 基线冻结`），开始状态干净。S1 只更新文档和矩阵，没有新增 fixture/expected/tests、没有运行 FreeCAD oracle、没有改 C++；已把 Fillet multi-edge / `UseAllEdges`、Chamfer `FlipDirection=true` 和 DressUp stale `ReferenceShadow` / Base recovery 写成 S2 可采集设计，队列推进到 S2。DressUp recovery 的 `ReferenceShadow` / `ShadowSub` 证据仍由 S2 collector blocker 路线约束，不能宽松 fallback。
 
 ## 队列检查
 
