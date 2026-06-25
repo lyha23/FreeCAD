@@ -12,7 +12,7 @@ C7-M3 的方案是 oracle-first：先设计和采集 representative fixtures，�
 - 采集或记录 FreeCAD native oracle blocker，明确 expected 来源。
 - 用当前 `cad-core` 对新 oracle fixtures 做 parity 分类。
 - 若出现 active backend gap，明确 S4 修改文件、FreeCAD 依据、fixture/test 范围和验证命令。
-- 若 parity 已闭合，更新 docs/capability 发布口径，不扩大 C++ scope。
+- 若 parity 已闭合，更新 docs/矩阵发布口径，不改 capability_contract，也不扩大 C++ scope。
 
 ## 最小完整语义批次
 
@@ -97,7 +97,9 @@ S3 新增最小 focused tests：`test_c7m3_fillet_oracle_rows_match_expected`、
 
 ### S4 实现或 no-code 发布
 
-S3 没有打开 implementation gate。S4 只能做 no-code publication closure：同步 docs/capability/矩阵，保留 `C7M3-SCOPE-103` 的 `oracle_blocked` 发布边界，不改 C++ executor/runtime/topo/adapter。
+已完成。S4 的 live 起点为 `pwd=/Users/li/Chili3DProject/FreeCAD`、`HEAD=364ae7a093`（`364ae7a093 测试：完成 C7-M3 S3 parity gate`），开始状态干净。S3 没有打开 implementation gate，因此 S4 只做 no-code publication closure：同步 root README、本包 README/总入口/方案、P7 细化文档和 C7-M3 矩阵；发布 `C7M3-SCOPE-101` / `C7M3-SCOPE-102` 为 expected-backed，保留 `C7M3-SCOPE-103` 的 `oracle_blocked` 发布边界；不改 C++ executor/runtime/topo/adapter/capability_contract，也不新增 fixtures/expected/tests。
+
+S4 完成后队列推进到 S5 release gate。
 
 ### S5 release gate
 
@@ -111,7 +113,7 @@ S3 没有打开 implementation gate。S4 只能做 no-code publication closure�
 cd /Users/li/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M3-PartDesignFilletChamferOracle补采与实现准入主线/工作步骤细分 --format markdown
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M3-PartDesignFilletChamferOracle补采与实现准入主线/矩阵/*.tsv
-rg -n '[ \t]$' docs/CADCore7.0/C7-M3-PartDesignFilletChamferOracle补采与实现准入主线 docs/CADCore7.0/README.md
+rg -n '[ \t]$' docs/CADCore7.0/C7-M3-PartDesignFilletChamferOracle补采与实现准入主线 docs/CADCore7.0/README.md docs/CADCore方案/细化方案/10-P7-PartDesign常用生态.md
 git diff --check
 ```
 

@@ -6,7 +6,7 @@ CADCore7.0 承接 C6-M9 之后的下一轮 CAD Core 收口工作。C6-M9 已把 
 
 C7-M2 接在 C7-M1 之后，转向 `PartDesign::Fillet` / `PartDesign::Chamfer` 的复杂参数组合与复杂引用变更后的稳定恢复。P7 live 文档已说明基础 Edge / Face Base、连续边过滤、OCCT maker、replacement solid、DressUp AddSubShape cache、`SupportTransform=true` 和链式 DressUp 已有覆盖；本包不重开泛 Fillet / Chamfer。S4 已把旧 P7 残余口径拆成 inherited expected-backed、oracle pending 和 non-goal / publication-only 三类发布口径，避免把缺 oracle 的候选能力写成 supported。
 
-C7-M3 承接 C7-M2 的 3 个 `oracle_pending_collect` rows，不直接实现 C++。本包先为 Fillet multi-edge / `UseAllEdges`、Chamfer `FlipDirection=true`、DressUp chain stale `ReferenceShadow` / Base recovery 设计并采集 FreeCAD oracle，再通过 cad-core parity 打开或关闭 implementation gate。
+C7-M3 承接 C7-M2 的 3 个 `oracle_pending_collect` rows，不直接实现 C++。本包先为 Fillet multi-edge / `UseAllEdges`、Chamfer `FlipDirection=true`、DressUp chain stale `ReferenceShadow` / Base recovery 设计并采集 FreeCAD oracle，再通过 cad-core parity 打开或关闭 implementation gate。S4 已按 S3 gate 走 no-code 发布收口：5 个 Fillet / Chamfer oracle rows 发布为 expected-backed，DressUp stale `ReferenceShadow` / Base recovery 保持 `oracle_blocked`，未打开 C++ implementation gate。
 
 ## 入口
 
@@ -40,6 +40,8 @@ C7-M3 承接 C7-M2 的 3 个 `oracle_pending_collect` rows，不直接实现 C++
 - C7-M3 S0 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=d678462e20`（`d678462e20 文档：完成 C7-M2 S5 发布闸门`）；开始状态已有目标文档改动（root README modified、C7-M3 包 untracked），未发现无关 dirty 文件。C7-M1/C7-M2 队列为空，C7-M3 队列推进到 S1；3 个 C7-M2 `oracle_pending_collect` rows 已冻结到 C7-M3：`C7M2-GAP-101 -> C7M3-SCOPE-101`、`C7M2-GAP-203 -> C7M3-SCOPE-102`、`C7M2-GAP-301 -> C7M3-SCOPE-103`。
 - C7-M3 S1 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=a0a9799608`（`a0a9799608 文档：完成 C7-M3 S0 基线冻结`），开始状态干净。S1 只更新文档和矩阵，没有新增 fixture/expected/tests、没有运行 FreeCAD oracle、没有改 C++；已把 Fillet multi-edge / `UseAllEdges`、Chamfer `FlipDirection=true` 和 DressUp stale `ReferenceShadow` / Base recovery 写成 S2 可采集设计。
 - C7-M3 S2 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=ad03c44cfe`（`ad03c44cfe 文档：完成 C7-M3 S1 oracle fixture 设计`），开始状态干净。S2 新增 6 个 fixture JSON、5 个 FreeCADCmd expected JSON 和 1 个 ReferenceShadow native oracle blocker JSON，未改 C++、tests、adapter、runtime、topo 或 capability；队列推进到 S3。DressUp recovery 的 geometry-only FreeCADCmd 探测不能证明 `ShadowSub` / `ReferenceShadow` 原生恢复，S3 必须裁为 `oracle_blocked`。
+- C7-M3 S3 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=ac831f3ba7`（`ac831f3ba7 文档：完成 C7-M3 S2 oracle expected 固化`），开始状态干净。当前 cad-core 对 5 个 Fillet / Chamfer expected-backed fixtures 的 bbox、volume、topology_counts 全部匹配 S2 FreeCADCmd expected；`dressup-reference-shadow-base-recovery` 保持 `oracle_blocked`，没有 `backend_gap_requires_implementation`。
+- C7-M3 S4 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=364ae7a093`（`364ae7a093 测试：完成 C7-M3 S3 parity gate`），开始状态干净。S4 只同步 root README、本包 README/总入口/方案、P7 细化文档和 C7-M3 矩阵；未改 C++ executor/runtime/topo/adapter/capability_contract、fixtures/expected/tests。Fillet multi-edge、Fillet `UseAllEdges`、Chamfer Equal distance / Two distances / Distance and Angle `FlipDirection=true` 发布为 expected-backed，`dressup-reference-shadow-base-recovery` 保持 `oracle_blocked`；队列推进到 S5。
 
 ## 队列检查
 
