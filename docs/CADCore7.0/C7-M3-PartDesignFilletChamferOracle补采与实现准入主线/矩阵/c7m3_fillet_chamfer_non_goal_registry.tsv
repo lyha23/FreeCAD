@@ -1,0 +1,6 @@
+non_goal_id	item	reason	evidence	allowed_follow_up
+C7M3-NONGOAL-001	GUI Fillet/Chamfer task panel	CAD Core backend package excludes GUI/ViewProvider/TaskPanel	AGENTS.md project structure excludes GUI for cad-core	Separate frontend or FreeCAD GUI task
+C7M3-NONGOAL-002	Full DressUp universe	C7-M3 only handles C7-M2 Fillet/Chamfer oracle pending rows	C7-M2 non-goal registry excluded Draft/Thickness/full DressUp	New package after Fillet/Chamfer oracle rows close
+C7M3-NONGOAL-003	Full topo naming / full MapperHistory	Reference recovery may need narrow topo/history work, but full mapper completion is broader	C7-M2 kept full MapperHistory as diagnostic_non_goal	Separate topo/history package
+C7M3-NONGOAL-004	Output-side stable reference guessing	Would violate FreeCAD migration discipline and hide real topo/history gaps	AGENTS.md forbids output修剪, source-edge guessing and fixture-name branching	Only formal topo/history implementation after oracle-backed backend gap
+C7M3-NONGOAL-005	Reopening C7-M2 expected-backed rows	Two distances, Distance and Angle and SupportTransform regression are already expected-backed	C7-M2 S5 release gate closed these rows	Reopen only with new failing oracle evidence

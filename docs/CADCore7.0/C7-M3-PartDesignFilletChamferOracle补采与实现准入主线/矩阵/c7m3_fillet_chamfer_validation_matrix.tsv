@@ -1,0 +1,12 @@
+validation_id	phase	command	required	when_to_run	notes
+C7M3-VAL-001	queue	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M3-PartDesignFilletChamferOracle补采与实现准入主线/工作步骤细分 --format markdown	yes	every step	After S0 this must skip S0 and show S1 as next pending step
+C7M3-VAL-002	tsv	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M3-PartDesignFilletChamferOracle补采与实现准入主线/矩阵/*.tsv	yes	every matrix edit	Guards column drift
+C7M3-VAL-003	whitespace	rg -n '[ \t]$' docs/CADCore7.0/C7-M3-PartDesignFilletChamferOracle补采与实现准入主线 docs/CADCore7.0/README.md	yes	every docs step	No trailing whitespace
+C7M3-VAL-004	diff	git diff --check	yes	every step	No whitespace errors in patch
+C7M3-VAL-101	source evidence	rg -n 'UseAllEdges|FlipDirection|ReferenceShadow|StableSubList|ShadowSub|getContinuousEdges|getAddSubShape|makeElementFillet|makeElementChamfer' src/Mod/PartDesign/App/FeatureFillet.cpp src/Mod/PartDesign/App/FeatureChamfer.cpp src/Mod/PartDesign/App/FeatureDressUp.cpp cad-core/src/part_design/feature_fillet.cpp cad-core/src/part_design/feature_chamfer.cpp cad-core/src/part_design/feature_dress_up.cpp	yes	S0_S1	Evidence collection only
+C7M3-VAL-111	row consistency	rg -n 'C7M2-GAP-101|C7M3-SCOPE-101|Fillet multi-edge|UseAllEdges' docs/CADCore7.0/C7-M3-PartDesignFilletChamferOracle补采与实现准入主线	yes	S0_S1	Fillet oracle pending scope, oracle plan, blocker, and docs must stay aligned
+C7M3-VAL-112	row consistency	rg -n 'C7M2-GAP-203|C7M3-SCOPE-102|Chamfer.*FlipDirection|FlipDirection=true' docs/CADCore7.0/C7-M3-PartDesignFilletChamferOracle补采与实现准入主线	yes	S0_S1	Chamfer FlipDirection scope, oracle plan, blocker, and docs must stay aligned
+C7M3-VAL-113	row consistency	rg -n 'C7M2-GAP-301|C7M3-SCOPE-103|ReferenceShadow|Base recovery' docs/CADCore7.0/C7-M3-PartDesignFilletChamferOracle补采与实现准入主线	yes	S0_S1	DressUp ReferenceShadow recovery scope, oracle plan, blocker, and docs must stay aligned
+C7M3-VAL-201	oracle collection	derive exact collect_freecad_expected.py commands from S1	conditional	S2	Expected must be FreeCAD-derived; sandbox FreeCADCmd failures are environment blockers
+C7M3-VAL-301	parity tests	derive exact unittest filters from current cad-core/tests/test_p7_features.py	conditional	S3_S5	Run only after fixtures/tests exist
+C7M3-VAL-401	build	cd cad-core && cmake --build build	conditional	S4_S5 if C++ changed	Do not run for docs-only or oracle-only steps unless required

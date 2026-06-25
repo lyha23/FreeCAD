@@ -1,0 +1,8 @@
+blocker_id	state	owner_step	blocker	source_evidence	decision_rule	next_step
+C7M3-BLOCKER-000	closed	S0	Live baseline frozen	S0 recorded HEAD=d678462e20, target-doc dirty status, empty C7-M1/C7-M2 queues, and C7M2-GAP-101/203/301 to C7-M3 scope mappings	S1 may design fixtures; do not collect oracle, add fixtures, or implement before later steps	none
+C7M3-BLOCKER-101	open	S1	Fillet oracle fixture design missing	C7-M2 row C7M2-GAP-101 is oracle_pending_collect	S1 must design multi-edge and UseAllEdges fixtures before S2	S1
+C7M3-BLOCKER-201	open	S1	Chamfer FlipDirection=true oracle fixture design missing	C7-M2 row C7M2-GAP-203 is oracle_pending_collect	S1 must design true-side fixture and decide variant breadth before S2	S1
+C7M3-BLOCKER-301	open	S1	ReferenceShadow recovery oracle design missing	C7-M2 row C7M2-GAP-301 is oracle_pending_collect	S1 must define StableSubList, ShadowSub, ReferenceShadow and current graph evidence before S2	S1
+C7M3-BLOCKER-302	open	S2	Native oracle collection not run	Expected must come from FreeCAD oracle or explicit blocker	S2 owns fixture creation and expected collection	S2
+C7M3-BLOCKER-401	open	S3	Implementation gate closed	No C7-M3 backend gap has been proven yet	S4 cannot modify C++ until S3 opens backend_gap_requires_implementation	S3
+C7M3-BLOCKER-900	closed	S0	Non-goal scope inherited	GUI/full DressUp/full MapperHistory/output guessing excluded by C7-M2 and AGENTS rules	Keep excluded unless upstream scope changes	none
