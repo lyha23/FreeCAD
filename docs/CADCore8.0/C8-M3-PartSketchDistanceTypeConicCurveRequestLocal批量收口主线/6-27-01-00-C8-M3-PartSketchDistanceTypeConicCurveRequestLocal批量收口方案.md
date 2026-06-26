@@ -12,7 +12,7 @@ C8-M2 已经确认 `SubShapeBinder BindCopyOnChange` full temporary-document cac
 - 已覆盖 `Part.Hyperbola` / `Part.Parabola` finite edge、typed metadata、invalid diagnostics。
 - 已有 Part consumer：`Part::Extrusion` 和 `Part::RuledSurface`。
 - `cad-core` Sketcher 已存在 ArcOfHyperbola / ArcOfParabola parsing/building/external-reference 相关代码。
-- Assembly / Ondsel distance type 已有 basic / extended reference classification 流程，但 conic curves capability 仍保留 `distance_type_default_todo`。
+- Assembly / Ondsel distance type 已有 basic / extended reference classification 流程；S6 已把 conic curves capability 中的 `distance_type_default_todo` 从 active `remaining_gaps` 移除，并链接到 Assembly `PointCurve` / `default_or_todo_boundaries` publication。
 
 ## 最小完整语义批次
 
@@ -50,7 +50,7 @@ C8-M2 已经确认 `SubShapeBinder BindCopyOnChange` full temporary-document cac
 
 ## S6 实现与发布闸门
 
-消费 S2-S5 证据。若存在 implementable `backend_gap_candidate`，按 C++ landing + focused tests 实现；若无实现缺口，则发布 no-code release gate，更新 capability/docs/tests，确保 active `remaining_gaps` 不再保留无解释项。
+S6 已消费 S2-S5 证据并关闭为 publication sync gate：无 implementable Assembly solver backend gap，未修改 `cad-core/src/assembly/joint_solver.cpp` 或 `assembly_utils.cpp`。本轮只更新 `cad-core/src/runtime/capability_contract.cpp` 与 `cad-core/tests/test_adapters.py`，让 `part_workbench.conic_curves.remaining_gaps=[]`，并把 GUI conic edit、full Sketcher solver conic constraints、fake Part conic DocumentObject 写成 explicit non-goals / reopen conditions。DistanceType default/TODO 保持 Assembly capability 的 unsupported / non-goal boundary。
 
 ## 验收分层
 

@@ -732,6 +732,13 @@ nlohmann::json capabilityContractJson()
                   // "AngleXU"; ::GeomArcOf*::Save/Restore() adds "StartAngle"/"EndAngle".
                   // /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PrimitiveFeature.cpp
                   // has no Part::Hyperbola or Part::Parabola DocumentObject source.
+                  // FreeCAD:
+                  // /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+                  // ::SketchObject::processEdge2(), branches on "GeomAbs_Hyperbola" and
+                  // "GeomAbs_Parabola" before constructing Part conic geometry. FreeCAD:
+                  // /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.cpp
+                  // ::getDistanceType() classifies conic/default curve references as
+                  // PointCurve, Curve* or Other/default boundaries before solver mapping.
                   {"status", "done_part_geometry_curve_edge_consumer"},
                   {"dto", "PartConicCurveDTO"},
                   {"payload_keys", {"partGeometryCurve", "partGeometryCurveConsumers"}},
@@ -743,13 +750,21 @@ nlohmann::json capabilityContractJson()
                     "typed_conic_curve_metadata",
                     "invalid_param_diagnostics",
                     "part_extrusion_edge_to_face_consumer",
-                    "part_ruled_surface_edge_consumer"}},
+                    "part_ruled_surface_edge_consumer",
+                    "sketcher_arc_of_hyperbola_profile",
+                    "sketcher_arc_of_parabola_profile",
+                    "sketcher_conic_external_reference"}},
                   {"fixtures",
                    {"p8/part-hyperbola-edge",
                     "p8/part-parabola-edge",
                     "p8/part-conic-edge-invalid-params",
                     "p8/part-conic-edge-extrusion",
-                    "p8/part-ruled-surface-conic-line"}},
+                    "p8/part-ruled-surface-conic-line",
+                    "p5/sketch-hyperbola-arc-profile",
+                    "p5/sketch-parabola-arc-profile",
+                    "p5/sketch-conic-arcs-construction-filter",
+                    "p5/sketch-conic-arcs-external-geometry-projected",
+                    "p5/sketch-conic-arcs-external-geometry-native"}},
                   {"diagnostics",
                    {"invalid_part_conic_axis",
                     "invalid_part_conic_curve_kind",
@@ -762,11 +777,25 @@ nlohmann::json capabilityContractJson()
                    {"no_part_hyperbola_document_object_executor",
                     "no_part_parabola_document_object_executor",
                     "conic_edge_is_request_local_producer_not_document_object",
+                    "sketcher_conic_profile_external_reference_only",
                     "source_shape_recomputed_from_document_graph"}},
-                  {"remaining_gaps",
+                  {"distance_type_publication",
+                   {{"source_capability", "assembly.ondsel_solver_adapter.distance_type_extended_geometry"},
+                    {"deferred_diagnostic_cases", {"PointCurve"}},
+                    {"default_or_todo_boundaries",
+                     {"PlaneCone", "LineCylinder", "CurvePlane", "Other"}},
+                    {"status", "published_as_assembly_default_or_todo_boundary_not_part_conic_gap"}}},
+                  {"non_goals",
                    {"gui_conic_edit",
                     "full_sketcher_solver_conic_constraints",
-                    "distance_type_default_todo"}},
+                    "fake_part_hyperbola_parabola_document_object"}},
+                  {"reopen_conditions",
+                   {{"gui_conic_edit", "separate_gui_or_frontend_editor_package"},
+                    {"full_sketcher_solver_conic_constraints",
+                     "approved_full_sketcher_solver_conic_constraints_package"},
+                    {"distance_type_default_todo",
+                     "approved_supported_assembly_default_or_todo_distance_type_solver_scope"}}},
+                  {"remaining_gaps", nlohmann::json::array()},
               }},
              {"project_on_surface",
               {

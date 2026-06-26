@@ -18,7 +18,7 @@ C8-M3 不继续扩展已关闭的 C8-M2 `SubShapeBinder CopyOnChange` 包，而�
 - C8-M2 队列为空，C8-M3 队列首项为 S0；S0、S1、S2 已完成后下一 pending 是 S3。
 - `cad-core capabilities` 当前显示 `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`，但 C8-M2 已裁决为 no-code release gate。
 - `part_workbench.conic_curves.status=done_part_geometry_curve_edge_consumer`。
-- `part_workbench.conic_curves.remaining_gaps=["gui_conic_edit","full_sketcher_solver_conic_constraints","distance_type_default_todo"]` 仍作为 C8-M3 输入保留，S0 不删除或声明已支持。
+- `part_workbench.conic_curves.remaining_gaps=[]` 已在 S6 发布；`gui_conic_edit`、`full_sketcher_solver_conic_constraints` 与 fake Part conic DocumentObject 是 explicit `non_goals` / reopen conditions，不声明为 supported runtime。
 - 现有 expected-backed 证据包括 `p8/part-hyperbola-edge`、`p8/part-parabola-edge`、`p8/part-conic-edge-invalid-params`、`p8/part-conic-edge-extrusion`、`p8/part-ruled-surface-conic-line`。
 
 ## 为什么同轮批量处理
@@ -78,7 +78,7 @@ S0 live 基线与声明冻结
 | S3 | `工作步骤细分/6-27-01-04-【已实现】C8-M3-S3-PartConicCurveDTO生产消费oracle批量复核.md` | Part DTO / consumer |
 | S4 | `工作步骤细分/6-27-01-05-【已实现】C8-M3-S4-SketcherConic输入与solver边界复核.md` | Sketcher 边界 |
 | S5 | `工作步骤细分/6-27-01-06-【已实现】C8-M3-S5-DistanceType默认分类与capability准入.md` | DistanceType / capability |
-| S6 | `工作步骤细分/6-27-01-07-C8-M3-S6-实现与发布闸门.md` | implementation / no-code gate |
+| S6 | `工作步骤细分/6-27-01-07-【已实现】C8-M3-S6-实现与发布闸门.md` | implementation / no-code gate |
 | source candidates | `矩阵/c8m3_conic_requestlocal_source_candidates.tsv` | FreeCAD / cad-core source |
 | scope review | `矩阵/c8m3_conic_requestlocal_scope_review_matrix.tsv` | scope / status |
 | blocker queue | `矩阵/c8m3_conic_requestlocal_blocker_queue.tsv` | blocker / close condition |
@@ -87,4 +87,4 @@ S0 live 基线与声明冻结
 | oracle plan | `矩阵/c8m3_conic_requestlocal_oracle_plan.tsv` | native/current expected plan |
 | validation | `矩阵/c8m3_conic_requestlocal_validation_matrix.tsv` | 验收命令 |
 
-当前 S0 已完成 live 基线与批量范围冻结，`C8M3-BLOCKER-000` 已关闭为 `closed_S0_live_baseline_and_batch_scope_frozen`；S1 已完成 FreeCAD source authority 与 current cad-core coverage 复核，`C8M3-BLOCKER-101` 已关闭为 `closed_S1_source_authority_and_current_coverage_reviewed`；S2 已完成 scope 准入与 blocker 矩阵路由，`C8M3-BLOCKER-201` 已关闭为 `closed_S2_scope_routes_and_blocker_matrix_reviewed`；S3 已完成 PartConicCurveDTO producer / consumer expected-backed batch 复核，`C8M3-BLOCKER-301` 已关闭为 `closed_S3_part_conic_producer_consumer_expected_backed_batch_reviewed`；S4 已完成 Sketcher conic request-local input / external-reference boundary 复核，`C8M3-BLOCKER-401` 已关闭为 `closed_S4_sketcher_conic_request_local_boundary_reviewed`，`full_sketcher_solver_conic_constraints` 发布为 `non_goal` 并保留 reopen condition。S5 已把 `distance_type_default_todo` 裁决为 `capability_publication_gap`，证明 current DistanceType tests 已覆盖 PointCurve diagnostic 和 default/TODO boundaries，`C8M3-BLOCKER-501` 已关闭为 `closed_S5_distance_type_default_classified_as_capability_publication_gap`。S6 仍为待执行状态，`C8M3-BLOCKER-601` 未关闭；S6 只同步 capability/docs/tests publication，不打开 Assembly solver C++ 实现闸门。
+当前 S0 已完成 live 基线与批量范围冻结，`C8M3-BLOCKER-000` 已关闭为 `closed_S0_live_baseline_and_batch_scope_frozen`；S1 已完成 FreeCAD source authority 与 current cad-core coverage 复核，`C8M3-BLOCKER-101` 已关闭为 `closed_S1_source_authority_and_current_coverage_reviewed`；S2 已完成 scope 准入与 blocker 矩阵路由，`C8M3-BLOCKER-201` 已关闭为 `closed_S2_scope_routes_and_blocker_matrix_reviewed`；S3 已完成 PartConicCurveDTO producer / consumer expected-backed batch 复核，`C8M3-BLOCKER-301` 已关闭为 `closed_S3_part_conic_producer_consumer_expected_backed_batch_reviewed`；S4 已完成 Sketcher conic request-local input / external-reference boundary 复核，`C8M3-BLOCKER-401` 已关闭为 `closed_S4_sketcher_conic_request_local_boundary_reviewed`，`full_sketcher_solver_conic_constraints` 发布为 `non_goal` 并保留 reopen condition。S5 已把 `distance_type_default_todo` 裁决为 `capability_publication_gap`，证明 current DistanceType tests 已覆盖 PointCurve diagnostic 和 default/TODO boundaries，`C8M3-BLOCKER-501` 已关闭为 `closed_S5_distance_type_default_classified_as_capability_publication_gap`。S6 已完成 capability/docs/tests publication sync，`C8M3-BLOCKER-601` 已关闭为 `closed_S6_release_gate_queue_empty_and_capability_publication_synchronized`；C8-M3 队列为空，不打开 Assembly solver C++ 实现闸门。

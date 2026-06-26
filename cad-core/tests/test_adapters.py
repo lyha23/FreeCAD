@@ -2857,11 +2857,19 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("hyperbola_finite_edge", conic_curves["covered"])
         self.assertIn("parabola_finite_edge", conic_curves["covered"])
         self.assertIn("part_extrusion_edge_to_face_consumer", conic_curves["covered"])
+        self.assertIn("part_ruled_surface_edge_consumer", conic_curves["covered"])
+        self.assertIn("sketcher_arc_of_hyperbola_profile", conic_curves["covered"])
+        self.assertIn("sketcher_arc_of_parabola_profile", conic_curves["covered"])
+        self.assertIn("sketcher_conic_external_reference", conic_curves["covered"])
         self.assertIn("p8/part-hyperbola-edge", conic_curves["fixtures"])
         self.assertIn("p8/part-parabola-edge", conic_curves["fixtures"])
         self.assertIn("p8/part-conic-edge-invalid-params", conic_curves["fixtures"])
         self.assertIn("p8/part-conic-edge-extrusion", conic_curves["fixtures"])
         self.assertIn("p8/part-ruled-surface-conic-line", conic_curves["fixtures"])
+        self.assertIn("p5/sketch-hyperbola-arc-profile", conic_curves["fixtures"])
+        self.assertIn("p5/sketch-parabola-arc-profile", conic_curves["fixtures"])
+        self.assertIn("p5/sketch-conic-arcs-external-geometry-projected", conic_curves["fixtures"])
+        self.assertIn("p5/sketch-conic-arcs-external-geometry-native", conic_curves["fixtures"])
         self.assertIn("invalid_part_conic_curve_kind", conic_curves["diagnostics"])
         self.assertIn("Part::Extrusion", conic_curves["consumer_type_ids"])
         self.assertIn("Part::RuledSurface", conic_curves["consumer_type_ids"])
@@ -2879,21 +2887,41 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "conic_edge_is_request_local_producer_not_document_object",
             conic_curves["request_local_boundaries"],
         )
+        self.assertIn(
+            "sketcher_conic_profile_external_reference_only",
+            conic_curves["request_local_boundaries"],
+        )
+        self.assertEqual(conic_curves["distance_type_publication"]["deferred_diagnostic_cases"], ["PointCurve"])
+        self.assertIn(
+            "PlaneCone",
+            conic_curves["distance_type_publication"]["default_or_todo_boundaries"],
+        )
+        self.assertIn(
+            "LineCylinder",
+            conic_curves["distance_type_publication"]["default_or_todo_boundaries"],
+        )
+        self.assertIn(
+            "CurvePlane",
+            conic_curves["distance_type_publication"]["default_or_todo_boundaries"],
+        )
+        self.assertEqual(conic_curves["remaining_gaps"], [])
+        self.assertIn("gui_conic_edit", conic_curves["non_goals"])
+        self.assertIn("full_sketcher_solver_conic_constraints", conic_curves["non_goals"])
+        self.assertIn("fake_part_hyperbola_parabola_document_object", conic_curves["non_goals"])
         self.assertEqual(
-            conic_curves["remaining_gaps"],
-            [
-                "gui_conic_edit",
-                "full_sketcher_solver_conic_constraints",
-                "distance_type_default_todo",
-            ],
+            conic_curves["reopen_conditions"]["gui_conic_edit"],
+            "separate_gui_or_frontend_editor_package",
+        )
+        self.assertEqual(
+            conic_curves["reopen_conditions"]["full_sketcher_solver_conic_constraints"],
+            "approved_full_sketcher_solver_conic_constraints_package",
         )
         self.assertNotIn("full_part_surface_family", conic_curves["remaining_gaps"])
         self.assertNotIn("ruled_surface", conic_curves["remaining_gaps"])
         self.assertNotIn("projection_on_surface", conic_curves["remaining_gaps"])
-        self.assertIn(
-            "full_sketcher_solver_conic_constraints",
-            conic_curves["remaining_gaps"],
-        )
+        self.assertNotIn("distance_type_default_todo", conic_curves["remaining_gaps"])
+        self.assertNotIn("gui_conic_edit", conic_curves["covered"])
+        self.assertNotIn("full_sketcher_solver_conic_constraints", conic_curves["covered"])
         project_on_surface = capabilities["part_workbench"]["project_on_surface"]
         self.assertEqual(project_on_surface["status"], "supported_expected_backed_published_slice")
         self.assertIn("Part::ProjectOnSurface", project_on_surface["type_ids"])
