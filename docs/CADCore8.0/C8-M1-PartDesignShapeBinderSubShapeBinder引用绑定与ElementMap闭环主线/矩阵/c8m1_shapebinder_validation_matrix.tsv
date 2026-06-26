@@ -2,7 +2,7 @@ validation_id	validation_type	command	required_at	purpose
 C8M1-VAL-000	status	git status --short -uall	S0 and every step	Show dirty worktree boundary before completion
 C8M1-VAL-001	queue	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore8.0/C8-M1-PartDesignShapeBinderSubShapeBinder引用绑定与ElementMap闭环主线/工作步骤细分 --format markdown	every step	Show next pending step and prove queue-empty at S6
 C8M1-VAL-002	tsv	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore8.0/C8-M1-PartDesignShapeBinderSubShapeBinder引用绑定与ElementMap闭环主线/矩阵/*.tsv	every matrix edit	Prevent TSV column drift
-C8M1-VAL-003	whitespace	rg -n '[ \t]$' docs/CADCore8.0	every docs step	No trailing whitespace in package docs
+C8M1-VAL-003	whitespace	rg -n '[ \t]$' docs/CADCore8.0 cad-core/src cad-core/include cad-core/tests	every docs/code step	No trailing whitespace in package docs or touched cad-core files
 C8M1-VAL-004	diff	git diff --check	every step	No whitespace errors
 C8M1-VAL-005	scope-rg	rg -n 'PartDesign::ShapeBinder|PartDesign::SubShapeBinder|backend_gap_candidate|diagnostic_non_goal|C8M1-SCOPE' docs/CADCore8.0/C8-M1-PartDesignShapeBinderSubShapeBinder引用绑定与ElementMap闭环主线	S0	Prove S0 scope and non-goal wording exists
 C8M1-VAL-101	source	rg -n 'PartDesign::ShapeBinder|PartDesign::SubShapeBinder|ShapeBinder::updatedShape|SubShapeBinder::update|setupCopyOnChange|BindMode|BindCopyOnChange|makeElementOffset2D|makeElementFace' src/Mod/PartDesign/App src/Mod/PartDesign/PartDesignTests cad-core/src cad-core/tests docs/CADCore8.0/C8-M1-PartDesignShapeBinderSubShapeBinder引用绑定与ElementMap闭环主线	S1	Source and current coverage evidence exists
@@ -17,4 +17,5 @@ C8M1-VAL-402	focused-test	cd cad-core && python3 -m unittest tests.test_c8_shape
 C8M1-VAL-403	diagnostics	cd cad-core && python3 -m unittest tests.test_diagnostics	S4/S5/S6	Diagnostic codes and lifecycle boundaries remain stable
 C8M1-VAL-501	capability	./cad-core/cad-core capabilities	S5/S6	Capability contract exposes Binder status covered remaining_gaps topo_history.producer_matrix.shapebinder and CopyOnChange known_gap/oracle_blocked boundary
 C8M1-VAL-502	publication-rg	rg -n 'shape_binder|sub_shape_binder|PartDesign::ShapeBinder|PartDesign::SubShapeBinder|remaining_gaps|oracle_blocked|known_gap|diagnostic_non_goal' cad-core/src/runtime/capability_contract.cpp cad-core/tests docs/CADCore8.0	S5/S6	Publication wording remains visible in capability code tests and docs
-C8M1-VAL-601	stage-regression	cd cad-core && python3 -m unittest tests.test_p6_topology tests.test_p7_features tests.test_p8_features	conditional S6	Run only if shared topo/reference/ElementMap paths changed
+C8M1-VAL-601	stage-regression	cd cad-core && python3 -m unittest tests.test_p6_topology tests.test_p7_features tests.test_p8_features	S6	Run because S4/S5 touched shared topo/reference/ElementMap and capability paths
+C8M1-VAL-602	stage-regression-body-profile	cd cad-core && python3 -m unittest tests.test_mvp tests.test_feature_flows tests.test_p7_features	S6	Run because S4 touched Body replay/profile consumer paths

@@ -93,7 +93,9 @@ S4 验证：`cmake --build build`、`python3 -m unittest tests.test_c8_shapebind
 
 ## S6 release gate
 
-S6 做队列、TSV、focused tests、build 和必要阶段回归。只有 S4/S5 修改 C++ 或 fixtures/tests/capability 时才跑 `cmake --build build` 和 focused unittest；docs-only 变更只跑 docs/matrix/diff 检查。
+S6 已完成队列、TSV、focused tests、build、capability smoke 和阶段回归。`C8M1-BLOCKER-601` 已关闭，队列为空，矩阵无未处理 `backend_gap_requires_implementation`。CopyOnChange full temporary-document cache 仍保持 `known_gap` / `oracle_blocked` diagnostic 和 delete/reopen condition，不引入跨请求 backend session。
+
+阶段回归中发现的两个 `tests.test_p8_features` 失败属于 C6-M4 / c5m10 Sweep historical known-gap guard 断言陈旧；本轮只同步测试断言到既有 docs / expected 口径，未扩大 C8-M1 feature scope。
 
 ## 验收分层
 

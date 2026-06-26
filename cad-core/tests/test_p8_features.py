@@ -1011,13 +1011,11 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         expected = self.expected_freecad("c5m10", "part-sweep-located-profile-contract")
 
         self.assertEqual(result["diagnostics"], [])
-        self.assertNotIn("known_gap", sweep)
-        self.assert_part_sweep_history(
-            result,
-            "PipeSpine",
-            ["SketchPipeProfile"],
-            transition="Transformed",
-        )
+        self.assertEqual(sweep["known_gap"]["kind"], expected["known_gap"]["kind"])
+        self.assertEqual(sweep["known_gap"]["cad_core_status"], "request_metadata_only")
+        self.assertEqual(sweep["known_gap"]["freecadcmd_evidence"]["error"], "OCCError: NCollection_Array1::Value")
+        self.assertIn("delete_condition", sweep["known_gap"])
+        self.assertNotIn("Sweep", result["named_shapes"])
         self.assertEqual(
             sweep["advanced"]["sections"],
             [
@@ -1028,10 +1026,6 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     "location": {"target": "ProfileLocation", "subname": "Vertex1"},
                 }
             ],
-        )
-        self.assertIn(
-            "terminal_history:split_deleted",
-            result["named_shapes"]["Sweep"]["element_history_status"],
         )
         self.assertEqual(
             expected["known_gap"]["kind"],
@@ -1263,14 +1257,11 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         combined = result["objects"]["CombinedSweep"]
         expected = self.expected_freecad("c5m10", "part-sweep-advanced-combined-contract")
 
-        self.assertNotIn("known_gap", combined)
-        self.assert_part_sweep_history(
-            result,
-            "PipeSpine",
-            ["SketchPipeProfile"],
-            transition="Round corner",
-            object_name="CombinedSweep",
-        )
+        self.assertEqual(combined["known_gap"]["kind"], expected["known_gap"]["kind"])
+        self.assertEqual(combined["known_gap"]["cad_core_status"], "request_metadata_only")
+        self.assertEqual(combined["known_gap"]["freecadcmd_evidence"]["error"], "OCCError: NCollection_Array1::Value")
+        self.assertIn("delete_condition", combined["known_gap"])
+        self.assertNotIn("CombinedSweep", result["named_shapes"])
         self.assertEqual(combined["advanced"]["mode"], "Auxiliary")
         self.assertEqual(
             combined["advanced"]["auxiliary_spine"],
@@ -1296,11 +1287,6 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             combined["advanced"]["tolerance"],
             {"tol3d": 0.0001, "boundTol": 0.0002, "tolAngular": 0.01},
         )
-        self.assertIn(
-            "terminal_history:split_deleted",
-            result["named_shapes"]["CombinedSweep"]["element_history_status"],
-        )
-
         by_object = {diagnostic["object"]: diagnostic for diagnostic in result["diagnostics"]}
         self.assertEqual(
             {

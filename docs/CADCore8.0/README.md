@@ -14,10 +14,11 @@ C8-M1 转向 `PartDesign::ShapeBinder` / `PartDesign::SubShapeBinder` 外部引�
 ## 当前状态
 
 - S0 live 基线：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=29da94dd13`（`29da94dd13 文档：完成 C7-M7 S6 发布闸门`），开始状态只包含本 C8-M1 文档包与 `docs/CADCore8.0/README.md` 未跟踪文件。
-- C8-M1 为新建方案包；工作步骤总入口是索引文件，已标记 `【已实现】`。S0 已完成 live 基线冻结，S1 已完成 FreeCAD source authority 与 current cad-core coverage 复核，S2 已完成 oracle 候选矩阵分类，S3 已完成 native oracle 批量采集与 expected 固化，S4 已完成 `cad-core` executor，S5 已完成 fixtures / tests / capability 发布；下一 pending 是 S6 release gate。
+- C8-M1 为新建方案包；工作步骤总入口是索引文件，已标记 `【已实现】`。S0 已完成 live 基线冻结，S1 已完成 FreeCAD source authority 与 current cad-core coverage 复核，S2 已完成 oracle 候选矩阵分类，S3 已完成 native oracle 批量采集与 expected 固化，S4 已完成 `cad-core` executor，S5 已完成 fixtures / tests / capability 发布，S6 release gate 已完成；当前队列为空。
 - C8-M1 不重开 C7-M7 的 oracle-blocked Link 持久化行，不声明完整 CopyOnChange / Frozen / Detached 持久状态已支持。
 - S1 复核确认 `cad-core/src/runtime/feature_registry.cpp` 未覆盖 `PartDesign::ShapeBinder`、`PartDesign::SubShapeBinder` 或 `PartDesign::SubShapeBinderPython`；`body.cpp`、`profile_resolver.cpp`、`topo_shape_expansion.cpp`、`property_topo_shape.cpp`、`copy_on_change.cpp` 和 `reference_resolution.cpp` 仅为可复用能力，不是 Binder 支持。
 - S3 已在 `cad-core/fixtures/c8m1` 固化 12 个 fixture 和 12 个 FreeCAD native expected；S4/S5 已发布 `PartDesign::ShapeBinder` / `PartDesign::SubShapeBinder` expected-backed request-local support、`topo_history.producer_matrix.shapebinder` 和 focused tests。CopyOnChange full temporary-document cache 保持 `known_gap` / `oracle_blocked` diagnostic，不作为无状态后端必须实现项。
+- S6 已关闭 `C8M1-BLOCKER-601`：build、focused tests、diagnostics、capability smoke、阶段回归、TSV 和 diff 检查通过。阶段回归中仅同步 C6-M4 / c5m10 Sweep historical known-gap guard 测试断言，未修改 C8-M1 runtime scope。
 
 ## 队列检查
 

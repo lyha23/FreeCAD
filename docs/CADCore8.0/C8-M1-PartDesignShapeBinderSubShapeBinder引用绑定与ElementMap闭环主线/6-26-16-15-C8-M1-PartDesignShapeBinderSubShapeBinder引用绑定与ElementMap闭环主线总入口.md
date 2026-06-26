@@ -14,7 +14,7 @@ C8-M1 是 CADCore8.0 的第一包，目标是把 FreeCAD `PartDesign::ShapeBinde
 - C7-M7 队列已清空，P8 Link / import 持久生命周期没有 C++ implementation gate。
 - S0 live 基线已冻结：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=29da94dd13`（`29da94dd13 文档：完成 C7-M7 S6 发布闸门`），开始状态只包含本 C8-M1 文档包与 `docs/CADCore8.0/README.md` 未跟踪文件。
 - S0 基线中 `cad-core/src/runtime/feature_registry.cpp` 尚未注册 `PartDesign::ShapeBinder` / `PartDesign::SubShapeBinder` / `PartDesign::SubShapeBinderPython`，当时只能记录为 `backend_gap_candidate` / `oracle_candidate`，不能声明 supported。
-- S4/S5 当前已新增 ShapeBinder 专用 executor、registry、capability `covered` 字段和 focused capability 断言；发布口径是 expected-backed request-local support，full CopyOnChange temporary-document cache 仍为 known_gap / oracle_blocked diagnostic。
+- S4/S5 当前已新增 ShapeBinder 专用 executor、registry、capability `covered` 字段和 focused capability 断言；发布口径是 expected-backed request-local support，full CopyOnChange temporary-document cache 仍为 known_gap / oracle_blocked diagnostic。S6 release gate 已通过，队列为空。
 - `cad-core` 已具备可复用能力：`part_design/body.cpp`、`part_design/profile_resolver.cpp`、`part/topo_shape_expansion.cpp`、`part/property_topo_shape.cpp`、`app/copy_on_change.cpp`、`runtime/element_reference_update.cpp` 和 `runtime/reference_resolution.cpp`。
 
 ## 证明链条
@@ -26,7 +26,7 @@ S0 live 基线与批量边界冻结
   -> S3 批量 native oracle / expected / blocker 采集（已完成）
   -> S4 cad-core C++ executor / DTO / topo 实现（已完成）
   -> S5 fixtures / focused tests / capability / docs 发布（已完成）
-  -> S6 release gate
+  -> S6 release gate（已完成）
 ```
 
 ## FreeCAD 调用依据
@@ -64,7 +64,7 @@ S0 live 基线与批量边界冻结
 | S3 | `工作步骤细分/6-26-16-19-【已实现】C8-M1-S3-native-oracle批量采集与expected固化.md` | 批量采集 native expected |
 | S4 | `工作步骤细分/6-26-16-20-【已实现】C8-M1-S4-cad-core-ShapeBinderSubShapeBinder实现.md` | C++ executor / topo 实现 |
 | S5 | `工作步骤细分/6-26-16-21-【已实现】C8-M1-S5-fixtures-tests-capability发布.md` | fixtures/tests/capability 发布 |
-| S6 | `工作步骤细分/6-26-16-22-C8-M1-S6-release-gate.md` | release gate |
+| S6 | `工作步骤细分/6-26-16-22-【已实现】C8-M1-S6-release-gate.md` | release gate |
 | source authority | `矩阵/c8m1_shapebinder_source_authority.tsv` | FreeCAD source 证据 |
 | scope | `矩阵/c8m1_shapebinder_scope.tsv` | 范围与状态 |
 | oracle plan | `矩阵/c8m1_shapebinder_oracle_plan.tsv` | native oracle 采集计划 |
@@ -73,4 +73,4 @@ S0 live 基线与批量边界冻结
 | non-goal | `矩阵/c8m1_shapebinder_non_goal_registry.tsv` | 非目标与 reopen 条件 |
 | validation | `矩阵/c8m1_shapebinder_validation_matrix.tsv` | 验收命令 |
 
-当前 S0、S1、S2、S3、S4、S5 已完成；S6 为待执行状态。S5 已在 `cad-core/src/runtime/capability_contract.cpp` 发布 `part_design.shape_binder` / `part_design.sub_shape_binder` 的 `status`、`covered`、`remaining_gaps`，并发布 `topo_history.producer_matrix.shapebinder` 与 `maker_history` 的 `shapebinder` / `subshapebinder` tag。CopyOnChange full temporary-document cache 保持 `known_gap` / `oracle_blocked` diagnostic。
+当前 S0、S1、S2、S3、S4、S5、S6 均已完成；队列为空。S5 已在 `cad-core/src/runtime/capability_contract.cpp` 发布 `part_design.shape_binder` / `part_design.sub_shape_binder` 的 `status`、`covered`、`remaining_gaps`，并发布 `topo_history.producer_matrix.shapebinder` 与 `maker_history` 的 `shapebinder` / `subshapebinder` tag。S6 已确认 CopyOnChange full temporary-document cache 保持 `known_gap` / `oracle_blocked` diagnostic 且带 delete/reopen condition，`C8M1-BLOCKER-601` 已关闭为 `closed_S6_release_gate`。

@@ -1,4 +1,27 @@
-# C8-M1-S6 release gate
+# 【已实现】C8-M1-S6 release gate
+
+## 当前结论
+
+S6 release gate 已完成。发布审计基线为 `pwd=/home/user/Chili3DProject/FreeCAD`，开始 HEAD=`4a428e80a1`（`4a428e80a1 feat: 发布 C8-M1 ShapeBinder 能力合约`），开始 `git status --short -uall` 为空。
+
+- S0-S5 均已按文件名标记 `【已实现】`；S6 完成后本文件重命名为 `6-26-16-22-【已实现】C8-M1-S6-release-gate.md`，队列为空。
+- `c8m1_shapebinder_backend_gap_classification.tsv` 无未处理 `backend_gap_requires_implementation`；`C8M1-BLOCKER-601` 已关闭为 `closed_S6_release_gate`。
+- `C8M1-ORACLE-302` / CopyOnChange full temporary-document cache 保持 `known_gap` / `oracle_blocked`，capability 与 expected 均有 delete / reopen condition，不升级为 supported。
+- `capability_contract.cpp`、`tests.test_c8_shapebinder` 与 `/tmp/c8m1-capabilities.json` 对 `shape_binder.remaining_gaps=[]`、`sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`、`topo_history.producer_matrix.shapebinder.remaining=[]` 保持一致。
+- 阶段回归中发现的两个 `tests.test_p8_features` 失败属于 C6-M4 / c5m10 Sweep historical known-gap guard 断言陈旧：运行时与 C6-M4 docs 均保留 `request_metadata_only` known_gap，测试仍要求对象无 `known_gap`。本轮只同步测试断言到既有文档口径，未修改 Sweep 运行时、fixture、capability 或 C8 feature scope。
+
+已通过验证：
+
+```bash
+cd /home/user/Chili3DProject/FreeCAD/cad-core
+cmake --build build
+python3 -m unittest tests.test_c8_shapebinder
+python3 -m unittest tests.test_diagnostics
+./cad-core capabilities > /tmp/c8m1-capabilities.json
+python3 -m unittest tests.test_p8_features.CadCoreP8FeatureTest.test_c5m10_part_sweep_located_profile_contract_keeps_wrapper_blocker_evidence tests.test_p8_features.CadCoreP8FeatureTest.test_c5m10_part_sweep_combined_advanced_contract_and_diagnostic_priority
+python3 -m unittest tests.test_p6_topology tests.test_p7_features tests.test_p8_features
+python3 -m unittest tests.test_mvp tests.test_feature_flows tests.test_p7_features
+```
 
 ## 目标
 
@@ -44,7 +67,7 @@ python3 -m unittest tests.test_diagnostics
 
 ## 下一轮代码落点
 
-如果 S6 仍发现未关闭项，必须写成下一轮具体代码任务，而不是只留一句“后续处理”：
+如果后续重新打开 C8-M1 项，必须写成下一轮具体代码任务，而不是只留一句“后续处理”：
 
 | 未关闭类型 | 下一轮落点 | 禁止做法 |
 | --- | --- | --- |
