@@ -17,7 +17,9 @@ C7-M5 不重开已经由旧 P7 Transformed 主线关闭的基础 topology_counts
 - 创建基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=1f2b86990d`（`1f2b86990d 文档：完成 C7-M4 S5 发布闸门`），创建前 `git status --short -uall` 无输出。
 - C7-M1 / C7-M2 / C7-M3 / C7-M4 `工作步骤细分` 队列均为空。
 - 旧 P7 Transformed 主线已经 S0-S6 完成，`P7T-SCOPE-001..007` 保持 supported / covered；`polar-pattern-whole-shape` standalone 仍是 nonGoal lifecycle boundary。
-- C7-M5 工作步骤总入口索引已按 C7-M1/C7-M2/C7-M3 约定标记为 `【已实现】`；收口 live 起点 `HEAD=2b8c09b242`（`2b8c09b242 docs: 新增 C7-M5 transformed ownership 准入主线`），开始时 `git status --short -uall` 无输出。索引收口不执行 S0-S6，实际队列仍为 S0-S6 pending，下一 pending 必须是 S0。S0/S1 只允许文档和矩阵；S2 才形成 native oracle 候选；S3 才允许采集 oracle；S4 裁决 implementation gate；S5 只有在 S4 打开 code gate 后才改 C++。
+- C7-M5 工作步骤总入口索引已按 C7-M1/C7-M2/C7-M3 约定标记为 `【已实现】`；索引收口 live 起点 `HEAD=2b8c09b242`（`2b8c09b242 docs: 新增 C7-M5 transformed ownership 准入主线`），开始时 `git status --short -uall` 无输出。索引收口不执行 S0-S6。
+- S0 已完成：live 起点 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=a2cc93a1ee`（`a2cc93a1ee 文档：收口 C7-M5 工作步骤总入口索引`），开始状态 `git status --short -uall` 无输出。C7-M1/C7-M2/C7-M3/C7-M4 与旧 P7 Transformed `工作步骤细分` 队列均为空；旧 P7T `P7T-SCOPE-001..007` 保持 `supported`，`P7T-BG-001/002` 保持 supported/covered closed，`P7T-BG-003` 保持 standalone lifecycle boundary，`P7T-BLOCK-001..005` 均 closed，`P7T-NG-005` standalone geometry-equivalent native golden 保持 nonGoal，冻结表写入 `矩阵/c7m5_transformed_history_p7_boundary_freeze.tsv`。S0 未采 oracle、未运行 FreeCADCmd、未新增或修改 fixtures/expected/tests、未改 C++，队列推进到 S1。
+- S1 才能复核 FreeCAD source 和 current `cad-core` coverage；S2 才形成 native oracle 候选；S3 才允许采集 oracle；S4 裁决 implementation gate；S5 只有在 S4 打开 code gate 后才改 C++。
 
 ## 收口边界
 

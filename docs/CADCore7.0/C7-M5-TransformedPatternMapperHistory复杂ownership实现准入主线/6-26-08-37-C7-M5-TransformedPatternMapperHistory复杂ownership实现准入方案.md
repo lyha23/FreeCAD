@@ -37,6 +37,8 @@ C7-M5 的核心不是重新实现已经关闭的 topology_counts，而是审计�
 
 冻结当前 live 起点、C7-M1..M4 队列、旧 P7 Transformed S0-S6 completion、P7 live 口径和总览后续队列。S0 不采 oracle、不改代码。
 
+S0 已完成：live 起点 `HEAD=a2cc93a1ee`（`a2cc93a1ee 文档：收口 C7-M5 工作步骤总入口索引`），开始状态干净；C7-M1/C7-M2/C7-M3/C7-M4 和旧 P7 Transformed 队列为空。旧 P7T `P7T-SCOPE-001..007` 保持 `supported`，`P7T-BG-001/002` 保持 supported/covered closed，`P7T-BG-003` 保持 standalone lifecycle boundary，`P7T-BLOCK-001..005` 均 closed，`P7T-NG-005` 保持 standalone Whole shape nonGoal，冻结表写入 `矩阵/c7m5_transformed_history_p7_boundary_freeze.tsv`。S0 未采 oracle、未运行 FreeCADCmd、未新增或修改 fixtures/expected/tests、未改 C++；队列推进到 S1。
+
 ### S1 FreeCAD source 与 current coverage 复核
 
 复核 FreeCAD source authority：

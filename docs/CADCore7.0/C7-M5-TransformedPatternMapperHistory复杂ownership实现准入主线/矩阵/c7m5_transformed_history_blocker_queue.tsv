@@ -1,5 +1,5 @@
 blocker_id	state	owner_step	blocker	source_evidence	decision_rule	next_step
-C7M5-BLOCKER-000	open	S0	Live baseline not frozen	Package was just created after C7-M4 release gate	S0 must record clean baseline and preceding queue state before any oracle or implementation	S0
+C7M5-BLOCKER-000	closed	S0	Live baseline frozen	S0 recorded pwd=/Users/li/Chili3DProject/FreeCAD, HEAD=a2cc93a1ee, clean git status, empty C7-M1/C7-M2/C7-M3/C7-M4 and old P7T queues, plus old P7T supported/covered/nonGoal boundary freeze	S1 may review current FreeCAD source and cad-core coverage; no oracle collection or implementation was done in S0	S1
 C7M5-BLOCKER-101	open	S1	Current source and coverage not reviewed	Old P7T closure is source of prior state but current code/tests must be rechecked	S1 must capture FreeCAD and cad-core source authority plus current fixture/test coverage	S1
 C7M5-BLOCKER-201	open	S2	Oracle candidate batch not selected	C7-M5 scope is intentionally broader than one fixture, but old P7 rows cannot be reopened blindly	S2 must classify already covered, oracle candidate, blocker and nonGoal rows	S2
 C7M5-BLOCKER-301	open	S3	Native oracle missing	No C7-M5 expected or known_gap exists yet	S3 must produce native oracle, native blocker or diagnostic non-goal for each candidate	S3
