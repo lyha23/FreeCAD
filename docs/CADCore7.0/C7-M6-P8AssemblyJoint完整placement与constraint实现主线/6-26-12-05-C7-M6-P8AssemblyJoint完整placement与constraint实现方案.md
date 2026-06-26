@@ -111,6 +111,10 @@ S3 同时新增 `cad-core/fixtures/c3m6/assembly-angle-zero-and-signed-current-r
 
 S4 必须写清 S5 是否允许改 C++、允许文件范围、focused tests 和 non-goals。
 
+已完成。S4 从 `HEAD=cd3c93b873` 干净起点执行，未改 C++、adapter、tests、fixtures 或 expected。`C7M6-ORACLE-202` 的 current `cad-core` legacy recompute 对 S3 FreeCAD expected 裁为 `already_closed_expected_backed`：去掉 S3 collector 预写的 `known_gap/backendGap` 元数据后 expected comparator 通过，`documentObjectUpdates` placement update 最大误差约 `4.44e-16`，`reference1/reference2` marker placement 最大误差分别约 `2.22e-16` / `1.11e-16`，`solver_adapter.status/mode/joints/unsupported_joints` 一致。`CadCoreP8FeatureTest` 215 tests OK，C API capability 显示 `ondsel_solver_adapter.available=true`、`subshape_marker_placement.remaining_gaps=[]`、`placement_writeback.remaining_gaps=[]`。
+
+`C7M6-ORACLE-302` 和 `C7M6-ORACLE-203` 保持 `oracle_blocked`：302 仍缺 zero Angle fallback `solver_joint_class` / fallback evidence；203 仍缺 dedicated native `preDrag()` / bundled fixed lifecycle evidence。S5 implementation gate closed，只允许 no-code publication closure。S5 允许文件限定为 root README、本包 README、方案、工作步骤总入口 / S5 / S6 文档和本包 `矩阵/*.tsv`；不得修改 `cad-core/src/assembly/*`、adapter、tests、fixtures 或 expected。
+
 ### S5 实现或 no-code 发布
 
 若 S4 打开 code gate，S5 实现顺序固定：
@@ -120,6 +124,8 @@ S4 必须写清 S5 是否允许改 C++、允许文件范围、focused tests 和 
 3. 删除临时 diagnostic 或保持 known_gap 时同步矩阵。
 
 若 S4 未打开 code gate，S5 只做 no-code publication closure。
+
+当前 S4 裁决已经关闭 implementation gate，因此 S5 不做 C++ implementation；只同步 README / 方案 / 矩阵 / 工作步骤发布口径，关闭 no-code blocker，并推进到 S6 release gate。
 
 ### S6 release gate
 
