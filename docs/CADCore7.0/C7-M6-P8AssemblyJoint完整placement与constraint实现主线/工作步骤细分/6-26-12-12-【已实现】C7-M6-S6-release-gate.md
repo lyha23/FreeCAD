@@ -1,10 +1,18 @@
-# C7-M6 S6 release gate
+# 【已实现】C7-M6 S6 release gate
 
 ## 目标
 
 执行 C7-M6 release gate，确认队列、矩阵、发布口径和验证结果一致。S6 只允许收口文档、矩阵、状态和必要的 release validation；不新增 scope。
 
 S5 已按 no-code publication closure 完成：未做 C++ implementation，未修改 adapter、tests、fixtures、expected、collector 或生成输出。S6 默认只跑文档 / 矩阵 / 队列 release validation；只有 S6 自己引入代码、fixture、expected、test 或 capability 改动时，才需要补跑 build / focused unittest。
+
+## 完成结论
+
+- live 起点：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=f7c7c39f9f`（`f7c7c39f9f 文档：完成 C7-M6 S5 no-code 发布收口`），开始状态干净。
+- release route 已关闭：`C7M6-ORACLE-202=already_closed_expected_backed`；`C7M6-ORACLE-302=oracle_blocked`，等待 zero Angle fallback `solver_joint_class` / fallback evidence；`C7M6-ORACLE-203=oracle_blocked`，等待 dedicated native `preDrag()` / bundled fixed `offsetPlc` probe。
+- C7-M6 没有 `backend_gap_requires_implementation`，没有 C++ implementation；S6 也未修改 C++、adapter、tests、fixtures、expected、collector、capability 或生成输出。
+- `C7M6-BLOCKER-601` 已关闭，`C7M6-GATE-701` 已关闭，C7-M6 队列为空。
+- 因本轮只改文档和矩阵，未运行 `cmake --build build`、focused P8 unittest、adapter unittest、FreeCADCmd 或 collector。
 
 ## 必读文件
 
@@ -15,13 +23,12 @@ S5 已按 no-code publication closure 完成：未做 C++ implementation，未�
 
 ## 执行要点
 
-1. 记录 live baseline 和 C7-M6 queue。
-2. 复跑本包 queue、TSV 列数、trailing whitespace 和 `git diff --check`。
-3. S5 未改 C++、fixture、expected、test 或 capability，默认不跑 `cmake --build build` 和 focused unittest。
-4. 若 S6 额外改了代码 / fixture / expected / capability，再复跑 `cmake --build build` 和 focused unittest。
-5. 更新 root README、本包 README/总入口/方案、矩阵和 P8 细化口径。
-6. 将完成的步骤文件标记为 `【已实现】`，确认队列为空。
-7. 按仓库规则提交本轮相关变更并证明工作区干净，除非用户明确要求不提交。
+1. 已记录 live baseline 和 C7-M6 queue。
+2. 已复跑本包 queue、TSV 列数、trailing whitespace 和 `git diff --check`。
+3. S5/S6 均未改 C++、fixture、expected、test 或 capability，因此不跑 `cmake --build build` 和 focused unittest。
+4. 已更新 root README、本包 README/总入口/方案、矩阵和 P8 细化口径。
+5. 本文件标题和文件名已标记为 `【已实现】`，队列为空。
+6. 按仓库规则提交本轮相关变更并证明工作区干净。
 
 ## 验收
 

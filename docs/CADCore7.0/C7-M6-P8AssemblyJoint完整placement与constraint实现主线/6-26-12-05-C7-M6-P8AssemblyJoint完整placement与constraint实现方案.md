@@ -129,7 +129,7 @@ S4 必须写清 S5 是否允许改 C++、允许文件范围、focused tests 和 
 
 ### S6 release gate
 
-当前下一步。运行本包 queue、TSV、trailing whitespace、`git diff --check`。S5 未改 C++ / fixture / expected / test / capability，因此 S6 默认不跑 focused P8 tests 或 `cmake --build build`；只有 S6 额外引入这些改动时才补跑。
+已完成。S6 运行本包 queue、TSV、trailing whitespace、`git diff --check`，并同步 root README、本包 README / 总入口 / 方案、矩阵和 P8 细化口径。S5/S6 均未改 C++、adapter、fixtures、expected、tests、collector、capability 或生成输出，因此未跑 focused P8 tests 或 `cmake --build build`。最终 route：`C7M6-ORACLE-202=already_closed_expected_backed`；`C7M6-ORACLE-302=oracle_blocked`，等待 zero Angle fallback `solver_joint_class` / fallback evidence；`C7M6-ORACLE-203=oracle_blocked`，等待 native `preDrag()` / bundled fixed `offsetPlc` lifecycle probe。`C7M6-BLOCKER-601` / `C7M6-GATE-701` 已关闭，C7-M6 队列为空。
 
 ## 验收分层
 
