@@ -4,7 +4,7 @@
 
 C7-M6 是 C7-M5 之后的 P8 follow-up。总览后续队列已经把 P7 transformed / pattern 复杂 ownership 关闭为 expected-backed / no backendGap，下一类值得推进的实现方向是 P8 Assembly Joint 的完整 placement / constraint 与复杂 placement chain。
 
-当前默认 gate closed：P8 已有 Fixed / Revolute / Cylindrical / Slider / Ball / Distance / Angle request-local real Ondsel adapter 子集和 c3m6 native expected；S0 已进一步确认 c3m6 checked-in expected / focused tests 还覆盖 Parallel、Perpendicular、Gears、Belt、RackPinion、Screw、marker native oracle、DistanceType extended / default diagnostic boundary 和 multi-component writeback。C7-M6 不能凭“完整 Joint”直接改 C++。S1-S2 必须继续复核 live source、fixtures、expected 和 tests，在已覆盖边界之外形成可采 native oracle 的最小完整语义批次。S4 只有在 source-backed native oracle 证明 current `cad-core` mismatch 时，才允许把 S5 转成 implementation。
+当前默认 gate closed：P8 已有 Fixed / Revolute / Cylindrical / Slider / Ball / Distance / Angle request-local real Ondsel adapter 子集和 c3m6 native expected；S0 已进一步确认 c3m6 checked-in expected / focused tests 还覆盖 Parallel、Perpendicular、Gears、Belt、RackPinion、Screw、marker native oracle、DistanceType extended / default diagnostic boundary 和 multi-component writeback。C7-M6 不能凭“完整 Joint”直接改 C++。S1-S2 必须继续复核 live source、fixtures、expected 和 tests，在已覆盖边界之外形成可采 native oracle 的最小完整语义批次。S4 只有在 source-backed native oracle 证明 current `cad-core` mismatch 时，才允许把 S5 转成 implementation；S4 已裁决没有 backend gap，S5 已按 no-code publication closure 完成。
 
 ## 上游状态
 
@@ -15,6 +15,8 @@ C7-M6 是 C7-M5 之后的 P8 follow-up。总览后续队列已经把 P7 transfor
 - S0 live 基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=60876b2f6c`（`60876b2f6c docs: 完成 C7-M5 S6 release gate`）。开始状态只包含 root `docs/CADCore7.0/README.md` modified 和本 C7-M6 文档包 untracked 文件。C7-M1 到 C7-M5 队列均为空。
 - 当前 c3m6 expected/test 边界：52 个 checked-in expected JSON，其中 51 个 Assembly expected；45 个 Assembly expected 无 `known_gap` / `backendGap`，6 个 Assembly expected 带已知 gap / non-goal 元数据，其中 5 个 DistanceType diagnostic expected 保持 `DTE-NG-003`，1 个新 marker custom placement expected 带 collector marker parity `backendGap` 元数据；35 个 expected 带 `native_marker_oracle`。`test_p8_features.py` 已把既有 expected 约束到 real Ondsel solver DTO、marker placement、DistanceType、writeback 和 diagnostics；新 S3 expected 的 current cad-core parity 由 S4 裁决。
 - S1 已完成 source / current coverage 复核：`AssemblyObject::solve()`、`handleOneSideOfJoint()`、`makeMbdJointOfType()`、`AssemblyUtils::getDistanceType()` / `getJointCurrentValue()`、`JointObject.py`、current `cad-core/src/assembly/*`、c3m6 expected 和 focused tests 均已矩阵化；`C7M6-BLOCKER-101` 已关闭。未采 oracle，未新增或修改 fixtures/expected/tests，未改 C++。
+- S4 已完成 parity 与 implementation gate 裁决：`C7M6-ORACLE-202` 裁为 `already_closed_expected_backed`，S3 expected 里的 marker `backendGap` 是历史 collector 元数据；`C7M6-ORACLE-302` / `C7M6-ORACLE-203` 继续 `oracle_blocked`。
+- S5 已完成 no-code publication closure：没有 C++ implementation，没有修改 adapter、tests、fixtures、expected、collector 或生成输出；`C7M6-BLOCKER-501` 关闭，`C7M6-GATE-601` 发布为 no-code closure，`C7M6-GATE-701` / `C7M6-BLOCKER-601` 仍等待 S6 release gate。
 
 ## 初始范围
 
@@ -38,9 +40,9 @@ C7-M6 是 C7-M5 之后的 P8 follow-up。总览后续队列已经把 P7 transfor
 2. S1：复核 FreeCAD Assembly source、current `cad-core` solver / marker / writeback 能力和 c3m6 fixture/test 覆盖。已完成，关闭 `C7M6-BLOCKER-101`。
 3. S2：形成 Joint placement / constraint native oracle 候选矩阵和最小完整语义批次。已完成，关闭 `C7M6-BLOCKER-201`，只保留 `C7M6-ORACLE-202` / `C7M6-ORACLE-302` 为 S3 oracle candidates，`C7M6-ORACLE-203` 为 offsetPlc oracle blocker。
 4. S3：采集 native oracle 或记录 oracle blocker / diagnostic non-goal。已完成，关闭 `C7M6-BLOCKER-301`；`C7M6-ORACLE-202` 已采集 native expected，`C7M6-ORACLE-302` / `C7M6-ORACLE-203` 记录 `native_oracle_blocked`。
-5. S4：用 current `cad-core` 做 parity 和 implementation gate 裁决。当前下一步。
-6. S5：实现正式 Assembly Joint placement / constraint gap，或 no-code 发布收口。
-7. S6：release gate，更新 README / 矩阵 / P8 口径并清空队列。
+5. S4：用 current `cad-core` 做 parity 和 implementation gate 裁决。已完成，`C7M6-ORACLE-202=already_closed_expected_backed`，`C7M6-ORACLE-302/203=oracle_blocked`。
+6. S5：实现正式 Assembly Joint placement / constraint gap，或 no-code 发布收口。已完成 no-code publication closure，未改 C++ / fixtures / expected / tests。
+7. S6：release gate，更新 README / 矩阵 / P8 口径并清空队列。当前下一步。
 
 ## 验收入口
 

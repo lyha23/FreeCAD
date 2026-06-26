@@ -125,11 +125,11 @@ S4 必须写清 S5 是否允许改 C++、允许文件范围、focused tests 和 
 
 若 S4 未打开 code gate，S5 只做 no-code publication closure。
 
-当前 S4 裁决已经关闭 implementation gate，因此 S5 不做 C++ implementation；只同步 README / 方案 / 矩阵 / 工作步骤发布口径，关闭 no-code blocker，并推进到 S6 release gate。
+已完成。S4 裁决已经关闭 implementation gate，因此 S5 没有做 C++ implementation；只同步 README / 方案 / 总入口 / 工作步骤 / 矩阵发布口径，未修改 `cad-core/src`、adapter、tests、fixtures、expected、collector 或生成输出。`C7M6-ORACLE-202` 保持 `already_closed_expected_backed`；`C7M6-ORACLE-302` 继续等待 zero Angle fallback `solver_joint_class` / fallback evidence；`C7M6-ORACLE-203` 继续等待 dedicated native `preDrag()` / bundled fixed lifecycle probe。`C7M6-BLOCKER-501` 已关闭，`C7M6-GATE-601` 发布为 no-code closure，队列推进到 S6 release gate。
 
 ### S6 release gate
 
-运行本包 queue、TSV、trailing whitespace、`git diff --check`。若 S5 改 C++，再跑 focused P8 tests 和 `cmake --build build`。
+当前下一步。运行本包 queue、TSV、trailing whitespace、`git diff --check`。S5 未改 C++ / fixture / expected / test / capability，因此 S6 默认不跑 focused P8 tests 或 `cmake --build build`；只有 S6 额外引入这些改动时才补跑。
 
 ## 验收分层
 
