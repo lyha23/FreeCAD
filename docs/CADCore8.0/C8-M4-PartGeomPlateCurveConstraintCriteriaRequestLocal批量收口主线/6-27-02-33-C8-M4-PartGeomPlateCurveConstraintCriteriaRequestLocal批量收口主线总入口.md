@@ -17,6 +17,8 @@ C8-M4 的目标是收口 `Part.GeomPlate` 中 CurveConstraint criteria 的 reque
 - S1 已完成 source/current coverage 复核并关闭 `C8M4-BLOCKER-101`：FreeCAD CurveConstraint native setters 仍 `NotImplemented`；getter 证明 OCCT criteria read state；PointConstraint setter 仅 analog；当前 Curve DTO 没有 G0/G1/G2 字段，parser/apply path 尚未支持 Curve criteria。
 - S2 live HEAD：`37497319c6`（`37497319c6 docs: 完成 C8-M4 S1 源码覆盖复核`），开始工作区干净。
 - S2 已完成 route 分类并关闭 `C8M4-BLOCKER-201`：G0/G1/G2 同批进入 `request_local_backend_gap_candidate`；native setter 为 `native_oracle_blocked`；PointConstraint 仅 analog evidence；capability / diagnostics 为 publication pending；GUI、wrapper lifecycle、persistent geometry cache 为 `non_goal`。
+- S3 live HEAD：`340ecaf864`（`340ecaf864 docs: 完成 C8-M4 S2 scope blocker 分类`），开始工作区干净。
+- S3 已完成 native CurveConstraint criteria 边界复核并关闭 `C8M4-BLOCKER-301`：`CurveConstraintPyImp.cpp` 三个 setter 仍直接抛 `PyExc_NotImplementedError("Not yet implemented")`，`C8M4-ORACLE-101` 为 `native_oracle_blocked`；`PyInit` 与 `G0Criterion(u)` / `G1Criterion(u)` / `G2Criterion(u)` 只证明底层 `GeomPlate_CurveConstraint` criteria read state。FreeCADCmd probe 可构造对象但 setter/getter runtime probe 终止且无 JSON，记为 `environment_probe_blocked`，不否定 S4 cad-core request-local gate。
 - 当前 known gap 输入：`part_workbench.geomplate.narrowed_gaps.curve_constraint_criteria_setters_not_implemented`。
 - 当前 diagnostic 输入：`unsupported_curve_criteria`。
 - S0-S2 禁止声明：不采 FreeCAD oracle，不新增 fixture / expected / tests / collector，不修改 C++ / Rust / FreeCAD `src/`，不删除上述 gap / diagnostic，不声明 FreeCAD native `CurveConstraintPy` setter parity 已支持，不把 route 分类当作已实现。
@@ -74,7 +76,7 @@ S0 live 基线与批量范围冻结
 | S0 | `工作步骤细分/6-27-02-34-【已实现】C8-M4-S0-live基线与批量范围冻结.md` | 声明与基线 |
 | S1 | `工作步骤细分/6-27-02-35-【已实现】C8-M4-S1-FreeCAD源码与current覆盖批量复核.md` | source authority |
 | S2 | `工作步骤细分/6-27-02-36-【已实现】C8-M4-S2-scope准入与blocker矩阵.md` | route 分类 |
-| S3 | `工作步骤细分/6-27-02-37-C8-M4-S3-FreeCADCurveConstraintCriteria原生边界复核.md` | native setter 边界 |
+| S3 | `工作步骤细分/6-27-02-37-【已实现】C8-M4-S3-FreeCADCurveConstraintCriteria原生边界复核.md` | native setter 边界 |
 | S4 | `工作步骤细分/6-27-02-38-C8-M4-S4-cad-core请求内criteria落点与fixture准入.md` | cad-core DTO / fixture gate |
 | S5 | `工作步骤细分/6-27-02-39-C8-M4-S5-capability与non-goal重分类准入.md` | capability / non-goal |
 | S6 | `工作步骤细分/6-27-02-40-C8-M4-S6-实现与发布闸门.md` | implementation / release gate |
@@ -86,4 +88,4 @@ S0 live 基线与批量范围冻结
 | non-goal | `矩阵/c8m4_geomplate_criteria_non_goal_registry.tsv` | native blocked / GUI / wrapper exclusions |
 | validation | `矩阵/c8m4_geomplate_criteria_validation_matrix.tsv` | 验收命令 |
 
-S0 已完成 live baseline 与批量范围冻结；S1 已完成 source/current coverage 复核；S2 已完成 route 分类和 blocker 矩阵收口；S3-S6 仍待执行。执行后续步骤时必须继续从 live baseline 开始，不继承旧结论。
+S0 已完成 live baseline 与批量范围冻结；S1 已完成 source/current coverage 复核；S2 已完成 route 分类和 blocker 矩阵收口；S3 已完成 native setter 边界复核；S4-S6 仍待执行。执行后续步骤时必须继续从 live baseline 开始，不继承旧结论。

@@ -1,8 +1,34 @@
-# C8-M4-S3 FreeCAD CurveConstraint Criteria 原生边界复核
+# 【已实现】C8-M4-S3 FreeCAD CurveConstraint Criteria 原生边界复核
 
 ## 目标
 
 裁决 FreeCAD native `CurveConstraintPy` 的 G0 / G1 / G2 setter 是否可用。S3 的结论只影响 native parity 与 oracle 采集路线；不得用 native setter blocked 直接否定 `cad-core` request-local DTO 支持。
+
+## live 基线
+
+本步骤已记录：
+
+- `pwd=/home/user/Chili3DProject/FreeCAD`
+- `git rev-parse --short HEAD`：`340ecaf864`
+- `git log -1 --oneline`：`340ecaf864 docs: 完成 C8-M4 S2 scope blocker 分类`
+- `git status --short -uall`：无输出，开始工作区干净。
+- S3 执行前 C8-M4 队列首项为 `6-27-02-37-C8-M4-S3-FreeCADCurveConstraintCriteria原生边界复核.md`。
+
+## S3 结论
+
+- `/home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate/CurveConstraintPyImp.cpp::CurveConstraintPy::PyInit()` 从 `GeometryCurvePy` 的 `Boundary` 构造 wrapped `GeomPlate_CurveConstraint`，并把 `Order`、`NbPts`、`TolDist`、`TolAng`、`TolCurv` 传入底层对象。
+- `CurveConstraintPy::G0Criterion(u)` / `G1Criterion(u)` / `G2Criterion(u)` 分别调用 `getGeomPlate_CurveConstraintPtr()->G0Criterion(u)` / `G1Criterion(u)` / `G2Criterion(u)`。这证明 wrapped `GeomPlate_CurveConstraint` 有 criteria read state，但 getter 不能证明 Python setter 支持。
+- `CurveConstraintPy::setG0Criterion()` / `setG1Criterion()` / `setG2Criterion()` 当前仍直接 `PyErr_SetString(PyExc_NotImplementedError, "Not yet implemented")` 并返回 `nullptr`。Native CurveConstraint setter parity 因此保持 `native_oracle_blocked`。
+- 本机 `/home/user/.local/bin/freecadcmd --version` 返回 `FreeCAD 1.2.0 Revision: 20260519 (Git shallow)`；`freecadcmd -c` 最小命令可执行，`CurveConstraint` 构造探针可返回 `C8M4_CONSTRUCT_OK 0`。
+- 同一 FreeCADCmd 环境中，setter-only 和 getter-only 探针均直接返回 `Application unexpectedly terminated`，没有稳定 JSON 结果；该 runtime probe 记为 `environment_probe_blocked`，不当作 setter 语义失败，也不覆盖源码中的 `PyExc_NotImplementedError` 结论。
+- `C8M4-ORACLE-101` 回写为 `native_oracle_blocked`；`C8M4-ORACLE-102` 回写为 `environment_probe_blocked`，同时保留 getter read state 的源码证据。
+- Native setter blocked 只影响 native parity / oracle route，不否定 S4 对 `cad-core` request-local DTO / parser / OCCT apply gate 的独立评估。
+
+## 已回写的矩阵
+
+- `c8m4_geomplate_criteria_oracle_plan.tsv`
+- `c8m4_geomplate_criteria_non_goal_registry.tsv`
+- `c8m4_geomplate_criteria_blocker_queue.tsv`
 
 ## 复核路径
 
