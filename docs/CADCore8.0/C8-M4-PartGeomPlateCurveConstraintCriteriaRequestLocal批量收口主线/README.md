@@ -29,8 +29,10 @@ C8-M4 承接 C8-M3 完成后的 live gap：`part_workbench.geomplate.narrowed_ga
 - S3 关闭 `C8M4-BLOCKER-301`；完成后队列首项应前移到 S4。
 - S4 live 基线：`HEAD=c2b9038d0e`（`c2b9038d0e docs: 完成 C8-M4 S3 原生边界复核`），`git status --short -uall` 无输出。
 - S4 已裁决打开 `open_S6_implementation_gate`：当前 Curve DTO 仍无 G0/G1/G2，`readCurveConstraints()` 仍由 `presentCriterionFields()` 在 source 创建前报 `unsupported_curve_criteria`，3D Curve `addCurveConstraint()` 仍未调用 `SetG0Criterion()` / `SetG1Criterion()` / `SetG2Criterion()`，但 `GeomPlateSourceEvidence` 已有 optional criteria 字段可复用；因此 S6 必须补 DTO、finite-number parser validation、3D curve apply path、request-local fixture、focused tests 和 capability publication。S4 关闭 `C8M4-BLOCKER-401`；完成后队列首项应前移到 S5。
+- S5 live 基线：`HEAD=3bbc588f8a`（`3bbc588f8a docs: 完成 C8-M4 S4 criteria 准入裁决`），`git status --short -uall` 无输出。
+- S5 已完成 capability 与 non-goal 重分类准入：S6 实现后 `cad-core` request-local CurveConstraint G0/G1/G2 criteria 应发布为 `part_workbench.geomplate` product contract / supported；`curve_constraint_criteria_setters_not_implemented` 不得作为 active remaining gap，若保留只能作为 FreeCAD native non-parity / historical evidence；合法 G0/G1/G2 不应继续产生 `unsupported_curve_criteria`，invalid criteria 应走显式 invalid finite-number diagnostic。GUI / TaskPanel / ViewProvider、`PlateSurface.Curves` wrapper lifecycle、cross-request geometry cache、downstream Rust / frontend persistence 均保持 non-goal。S5 关闭 `C8M4-BLOCKER-501`；完成后队列首项应前移到 S6。
 - S0/S1/S2 只冻结声明、证据和 route 矩阵，不采 FreeCAD oracle，不新增 fixture / expected / tests / collector，不修改 C++ / Rust / FreeCAD `src/`。
-- 输入 gap `part_workbench.geomplate.narrowed_gaps.curve_constraint_criteria_setters_not_implemented` 与 diagnostic `unsupported_curve_criteria` 在 S0 保留，不提前删除或声明 supported。
+- 输入 gap `part_workbench.geomplate.narrowed_gaps.curve_constraint_criteria_setters_not_implemented` 与 diagnostic `unsupported_curve_criteria` 在 S0 保留；S5 已裁决其 S6 后发布口径，不得把 native setter blocked 继续混作 request-local active gap。
 
 ## 批量范围
 
