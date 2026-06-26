@@ -1,4 +1,22 @@
-# C8-M1-S4 cad-core ShapeBinder / SubShapeBinder 实现
+# 【已实现】C8-M1-S4 cad-core ShapeBinder / SubShapeBinder 实现
+
+## 当前结论
+
+已实现。S4 已新增 `feature_shape_binder` executor 并注册 `PartDesign::ShapeBinder`、`PartDesign::SubShapeBinder`、`PartDesign::SubShapeBinderPython`，覆盖 C8M1-BG-101 / 201 / 301 / 401 的 request-local 实现边界：
+
+- ShapeBinder：whole support、Face / Edge / Vertex subshape、多 subshape compound、`TraceSupport` placement、`App::Line` / `App::Plane` / `App::Point` datum fallback。
+- SubShapeBinder：whole / subshape Support、nested route、Relative target context、MakeFace、Offset2D、Fuse、Refine、profile consumer、Body replay。
+- ElementMap / NamedShape：复用 `part/topo_shape.cpp` 的 linked retag、compound、wire、offset、boolean、refine builder，Binder executor 不在 output JSON 末端补业务逻辑。
+- lifecycle：`BindMode=Synchronized/Frozen/Detached` 记录 request-local 结果和 Detached Support 清空 writeback；`BindCopyOnChange=Enabled/Mutated` 与 `PartialLoad=True` 保持 full temporary-document cache known_gap diagnostic，不引入跨请求 backend session。
+
+已通过验证：
+
+```bash
+cd /home/user/Chili3DProject/FreeCAD/cad-core
+cmake --build build
+python3 -m unittest tests.test_c8_shapebinder
+python3 -m unittest tests.test_diagnostics
+```
 
 ## 目标
 

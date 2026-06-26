@@ -72,17 +72,19 @@ S3 结论：
 
 ## S4 cad-core 实现
 
-S3 已产出 source-backed expected，且 current `cad-core` 对 Binder TypeId 缺失或 mismatch；S4 可以落 C++：
+S4 已消费 S3 source-backed expected，且 current `cad-core` 对 Binder TypeId 缺失或 mismatch 的 gate 已落 C++：
 
 - 新增 `cad-core/include/cad_core/part_design/feature_shape_binder.h`。
-- 新增 `cad-core/src/part_design/feature_shape_binder.cpp`。
-- 修改 `cad-core/src/runtime/feature_registry.cpp` 注册 Binder TypeId。
+- 新增 `cad-core/src/part_design/feature_shape_binder.cpp`，实现 ShapeBinder whole/subshape/multi/TraceSupport/datum fallback 与 SubShapeBinder support/MakeFace/Offset/Fuse/Refine/Relative/nested route/profile consumer。
+- 修改 `cad-core/src/runtime/feature_registry.cpp` 注册 Binder TypeId，并让 `App::Plane` / `App::Point` datum fallback 依赖可执行。
 - 修改 `cad-core/CMakeLists.txt` source list。
-- 复用 `part/topo_shape_expansion.cpp`、`part/property_topo_shape.cpp`、`runtime/reference_resolution.cpp`、`app/copy_on_change.cpp`，不得在 adapter 层补业务逻辑。
+- 复用 `part/topo_shape.cpp` 的 makeElement* / NamedShape / ElementMap 能力，并在 executor 内记录 BindMode / CopyOnChange request-local lifecycle boundary，不在 adapter 层补业务逻辑。
+
+S4 验证：`cmake --build build`、`python3 -m unittest tests.test_c8_shapebinder`、`python3 -m unittest tests.test_diagnostics` 已通过。S5 继续做 publication 口径收口。
 
 ## S5 fixtures / tests / capability 发布
 
-补齐 fixtures、expected、focused tests、diagnostic tests、capability contract 和 docs。发布口径必须区分：
+补齐 fixtures、expected、focused tests、diagnostic tests、capability contract 和 docs 的发布口径。发布时必须区分：
 
 - expected-backed supported subset。
 - request-local product contract。

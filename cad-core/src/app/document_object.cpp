@@ -19,6 +19,15 @@ bool sameDependencyLink(const Link& left, const Link& right)
         && left.stableSubnames == right.stableSubnames && left.property == right.property;
 }
 
+bool isIntrinsicReferenceAxis(const Link& link)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Feature.cpp
+    // ::getBaseObject() and Body origin flows can resolve local "X_Axis", "Y_Axis" and
+    // "Z_Axis" names through the coordinate system instead of requiring a normal document object.
+    return link.property == "ReferenceAxis" && link.subnames.empty()
+        && (link.object == "X_Axis" || link.object == "Y_Axis" || link.object == "Z_Axis");
+}
+
 void addDependencyLinks(DocumentObject& object, const PropertyValue& property)
 {
     std::vector<Link> dependencies = property.links;
@@ -27,6 +36,9 @@ void addDependencyLinks(DocumentObject& object, const PropertyValue& property)
     for (Link& link : nested) {
         if (link.property.empty()) {
             link.property = property.name;
+        }
+        if (isIntrinsicReferenceAxis(link)) {
+            continue;
         }
         const bool duplicate = std::any_of(
             dependencies.begin(),
@@ -37,11 +49,11 @@ void addDependencyLinks(DocumentObject& object, const PropertyValue& property)
             dependencies.push_back(std::move(link));
         }
     }
-    object.dependencyLinks.insert(
-        object.dependencyLinks.end(),
-        dependencies.begin(),
-        dependencies.end()
-    );
+    for (const Link& dependency : dependencies) {
+        if (!isIntrinsicReferenceAxis(dependency)) {
+            object.dependencyLinks.push_back(dependency);
+        }
+    }
 }
 
 }  // namespace

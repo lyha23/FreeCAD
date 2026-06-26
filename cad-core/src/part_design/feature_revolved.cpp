@@ -400,6 +400,24 @@ std::optional<AxisSelection> sketchAxis(const std::string& subname,
     return axis;
 }
 
+std::optional<AxisSelection> intrinsicOriginAxis(const std::string& objectName)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+    // ::setBaseProperty() and origin relink paths can expose local datum names "X_Axis",
+    // "Y_Axis" and "Z_Axis"; FeatureSketchBased::getAxis() consumes the resolved axis
+    // direction without requiring a normal Part::Feature edge.
+    if (objectName == "X_Axis") {
+        return AxisSelection {gp_Pnt(0.0, 0.0, 0.0), gp_Dir(1.0, 0.0, 0.0)};
+    }
+    if (objectName == "Y_Axis") {
+        return AxisSelection {gp_Pnt(0.0, 0.0, 0.0), gp_Dir(0.0, 1.0, 0.0)};
+    }
+    if (objectName == "Z_Axis") {
+        return AxisSelection {gp_Pnt(0.0, 0.0, 0.0), gp_Dir(0.0, 0.0, 1.0)};
+    }
+    return std::nullopt;
+}
+
 std::optional<AxisSelection> axisFromEdge(const TopoDS_Edge& edge,
                                           const app::DocumentObject& object,
                                           runtime::ComputeContext& context,
@@ -529,6 +547,23 @@ std::optional<AxisSelection> resolveReferenceAxis(const app::DocumentObject& obj
         }
         if (subname.rfind("Axis", 0) == 0U) {
             return std::nullopt;
+        }
+    }
+
+    if (subname.empty()) {
+        if (auto axis = intrinsicOriginAxis(referenceAxis->object)) {
+            if (axisIsParallelToProfileNormal(*axis, profile.normal)) {
+                runtime::addDiagnostic(context.diagnostics,
+                                       "error",
+                                       "invalid_axis",
+                                       "Axis must not be perpendicular to the sketch plane",
+                                       object.name,
+                                       "ReferenceAxis",
+                                       "runtime",
+                                       referenceAxis->object);
+                return std::nullopt;
+            }
+            return axis;
         }
     }
 

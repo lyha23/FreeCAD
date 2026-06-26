@@ -15,12 +15,13 @@ C8-M1 的目标不是做单 case 探针，而是把同一 `src/Mod/PartDesign/Ap
 ## 当前状态
 
 - S0 live 基线已冻结：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=29da94dd13`（`29da94dd13 文档：完成 C7-M7 S6 发布闸门`）。S0 开始状态只包含本 C8-M1 文档包与 `docs/CADCore8.0/README.md` 未跟踪文件，未发现无关 dirty 文件。
-- 当前 `cad-core/src/runtime/feature_registry.cpp` 未注册 `PartDesign::ShapeBinder`、`PartDesign::SubShapeBinder` 或 `PartDesign::SubShapeBinderPython`；S0 不能声明 supported 或 `backend_gap_requires_implementation`。
+- S0 快照中 `cad-core/src/runtime/feature_registry.cpp` 未注册 `PartDesign::ShapeBinder`、`PartDesign::SubShapeBinder` 或 `PartDesign::SubShapeBinderPython`；S0 不能声明 supported 或 `backend_gap_requires_implementation`。
 - FreeCAD source authority 明确：`ShapeBinder::updatedShape()`、`ShapeBinder::buildShapeFromReferences()`、`SubShapeBinder::update()`、`SubShapeBinder::getSubObject()`、`setupCopyOnChange()`、`setLinks()` 与 `onChanged()` 构成主链。
 - 上游测试已有候选 oracle：`PartDesignTests/TestShapeBinder.py` 覆盖跨 Body ShapeBinder、SubShapeBinder edge offset、binder before / after Pad、binder as Revolution profile；`PartDesignTests/TestTopologicalNamingProblem.py` 覆盖 ShapeBinder / SubShapeBinder ElementMap。
-- S0 已完成 live 基线与批量边界冻结；S1 已完成 FreeCAD source authority 与 current cad-core coverage 复核；S2 已完成 oracle 候选矩阵分类；S3 已完成 native oracle 批量采集与 expected 固化。下一 pending 是 S4 cad-core ShapeBinder / SubShapeBinder 实现。索引文件已标 `【已实现】` 仅表示队列索引完成。
-- S1 结论：current `feature_registry.cpp` 未注册 `PartDesign::ShapeBinder`、`PartDesign::SubShapeBinder` 或 `PartDesign::SubShapeBinderPython`；current `body.cpp`、`profile_resolver.cpp`、`topo_shape_expansion.cpp`、`property_topo_shape.cpp`、`copy_on_change.cpp`、`reference_resolution.cpp` 和 P7/P8 tests 可复用，但不能记录为 Binder supported。
-- S3 结论：`cad-core/fixtures/c8m1` 已新增 12 个 fixture 和 12 个 FreeCAD native expected；`C8M1-ORACLE-101..104`、`201..206`、`301` 为 collected，`302` 记录 CopyOnChange full temporary-document cache 的 `known_gap` diagnostic。当前 cad-core 对 Binder TypeId 返回 `unsupported_type`，因此 S4 gate 已对 executor / ElementMap / BindMode request-local 子集打开。
+- S0 已完成 live 基线与批量边界冻结；S1 已完成 FreeCAD source authority 与 current cad-core coverage 复核；S2 已完成 oracle 候选矩阵分类；S3 已完成 native oracle 批量采集与 expected 固化；S4 已落 `PartDesign::ShapeBinder` / `PartDesign::SubShapeBinder` request-local C++ executor、registry、capability 和 focused tests。下一 pending 是 S5 fixtures / tests / capability 发布。
+- S1 结论：当时 `feature_registry.cpp` 未注册 `PartDesign::ShapeBinder`、`PartDesign::SubShapeBinder` 或 `PartDesign::SubShapeBinderPython`；`body.cpp`、`profile_resolver.cpp`、`topo_shape_expansion.cpp`、`property_topo_shape.cpp`、`copy_on_change.cpp`、`reference_resolution.cpp` 和 P7/P8 tests 可复用，但不能在 S1 记录为 Binder supported。
+- S3 结论：`cad-core/fixtures/c8m1` 已新增 12 个 fixture 和 12 个 FreeCAD native expected；`C8M1-ORACLE-101..104`、`201..206`、`301` 为 collected，`302` 记录 CopyOnChange full temporary-document cache 的 `known_gap` diagnostic。
+- S4 结论：`feature_shape_binder.cpp` 已覆盖 ShapeBinder whole/subshape/multi/TraceSupport/datum fallback，SubShapeBinder support/MakeFace/Offset/Fuse/Refine/Relative/nested route/profile consumer，ElementMap/NamedShape/Body replay 和 BindMode request-local 子集；CopyOnChange full temporary-document cache 继续以 request-local diagnostic/known_gap 发布，不引入跨请求 backend session。
 
 ## 收口边界
 

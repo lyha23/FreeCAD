@@ -29,6 +29,7 @@
 #include "cad_core/part_design/feature_polar_pattern.h"
 #include "cad_core/part_design/feature_revolution.h"
 #include "cad_core/part_design/feature_scaled.h"
+#include "cad_core/part_design/feature_shape_binder.h"
 #include "cad_core/sketcher/sketch_object.h"
 #include "cad_core/part_design/feature_thickness.h"
 
@@ -116,6 +117,8 @@ FeatureRegistry buildDefaultRegistry()
     registry.registerExecutor("Part::FeatureBooleanFragments", part::executePartBooleanFragments);
     registry.registerExecutor("App::Origin", part_design::executeDatumCoordinateSystem);
     registry.registerExecutor("App::Line", part_design::executeAppLine);
+    registry.registerExecutor("App::Plane", part_design::executeDatumPlane);
+    registry.registerExecutor("App::Point", part_design::executeDatumPoint);
     registry.registerExecutor("PartDesign::Body", part_design::executeBody);
     registry.registerExecutor("PartDesign::CoordinateSystem", part_design::executeDatumCoordinateSystem);
     registry.registerExecutor("PartDesign::Line", part_design::executeDatumLine);
@@ -141,6 +144,9 @@ FeatureRegistry buildDefaultRegistry()
     registry.registerExecutor("PartDesign::PolarPattern", part_design::executePolarPattern);
     registry.registerExecutor("PartDesign::Scaled", part_design::executeScaled);
     registry.registerExecutor("PartDesign::Chamfer", part_design::executeChamfer);
+    registry.registerExecutor("PartDesign::ShapeBinder", part_design::executeShapeBinder);
+    registry.registerExecutor("PartDesign::SubShapeBinder", part_design::executeSubShapeBinder);
+    registry.registerExecutor("PartDesign::SubShapeBinderPython", part_design::executeSubShapeBinder);
     return registry;
 }
 
