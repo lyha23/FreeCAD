@@ -62,6 +62,20 @@ fixtures / tests 已复核：`cad-core/fixtures/c3m6/expected` 当前 50 个 Ass
 
 ### S2 oracle 候选矩阵与批次裁决
 
+已完成。S2 只更新文档和矩阵，没有新增 fixtures/expected/tests，没有运行 FreeCAD oracle，没有改 C++。
+
+S2 route 裁决：
+
+| route | 范围 | S3 动作 |
+| --- | --- | --- |
+| `already_covered` | grounded JointType matrix、DistanceType basic / extended expected、DTE-NG-003 default / TODO diagnostic boundary、marker native oracle batch、single / multi / partial / next-request `assembly_set_placement` writeback | 保留 checked-in expected，不重采、不重开 |
+| `oracle_candidate` | `assembly-marker-custom-placement-chain-real-solver`：非 identity `Placement1/2` connector 和 object-global 到 part-local marker chain | S3 创建 fixture，用 `collect_freecad_expected.py` 采 FreeCAD native expected，新增 focused test 名称见 `oracle_plan.tsv` |
+| `oracle_candidate` | `assembly-angle-zero-and-signed-current-real-solver`：Angle zero fallback 与 placement-derived signed Distance / current value evidence | S3 创建 fixture，用 `collect_freecad_expected.py` 采 FreeCAD native expected，新增 focused test 名称见 `oracle_plan.tsv` |
+| `oracle_blocker` | bundled `offsetPlc` 同时影响 `handleOneSideOfJoint()` marker 和 `setNewPlacements()` writeback，但当前 c3m6 只证明 identity offset boundary | S3 先做 source-backed probe；若无法构造 native lifecycle，记录 `native_oracle_blocked`，不得打开 implementation gate |
+| `diagnostic_non_goal` | GUI / drag / persistent solver / cross-request backend state / full Link lifecycle / Worker / WASM / Web adapter | 不采 native golden，不进入 S4 backend gap |
+
+S2 没有 `backend_gap_candidate`。S4 仍是第一个可以把 native oracle mismatch 裁成 `backend_gap_requires_implementation` 的步骤；S5 code gate 继续关闭。
+
 把候选路由到：
 
 - `already_covered`
@@ -70,7 +84,7 @@ fixtures / tests 已复核：`cad-core/fixtures/c3m6/expected` 当前 50 个 Ass
 - `backend_gap_candidate`
 - `diagnostic_non_goal`
 
-S2 必须明确每个候选是否有 support-backed FreeCAD lifecycle、是否已有 checked-in expected、是否只是 request-local diagnostic 或 GUI/session 行为。
+S2 已明确每个候选是否有 source-backed FreeCAD lifecycle、是否已有 checked-in expected、是否只是 request-local diagnostic 或 GUI/session 行为；细节以 `矩阵/c7m6_p8_assembly_joint_oracle_plan.tsv`、`scope.tsv`、`backend_gate.tsv` 和 `blocker_queue.tsv` 为准。
 
 ### S3 native oracle 采集
 

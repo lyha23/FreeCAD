@@ -5,3 +5,4 @@ C7M6-NG-003	C7M6-SCOPE-501	Full Link lifecycle and cross-document hash / postfix
 C7M6-NG-004	C7M6-SCOPE-501	Worker / WASM / Web adapter productization	Adapter productization should reuse stable core semantics and not drive Joint source behavior	Open Worker / WASM / Web package after core semantics close
 C7M6-NG-005	C7M6-SCOPE-501	Part surface full family	Part surface belongs to separate P8 surface family lane	Open Part surface full family package
 C7M6-NG-006	C7M6-SCOPE-501	Current cad-core output as FreeCAD oracle	Expected must come from FreeCAD native collector or source-backed probe	Replace only with source-backed FreeCAD oracle collection
+C7M6-NG-007	C7M6-SCOPE-501	Cross-request backend solver state or cache	CAD Core Assembly solve remains stateless per request and only returns documentObjectUpdates suggestions; backend must not persist MbD session or placements across requests	Reopen only if CAD Core stateless boundary changes in an architecture package

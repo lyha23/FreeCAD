@@ -36,8 +36,8 @@ C7-M6 是 C7-M5 之后的 P8 follow-up。总览后续队列已经把 P7 transfor
 
 1. S0：冻结 live baseline、C7-M1..M5 队列、P8 当前 supported / expected-backed / diagnostic 边界。已完成，关闭 `C7M6-BLOCKER-000` / `C7M6-GATE-000`。
 2. S1：复核 FreeCAD Assembly source、current `cad-core` solver / marker / writeback 能力和 c3m6 fixture/test 覆盖。已完成，关闭 `C7M6-BLOCKER-101`。
-3. S2：形成 Joint placement / constraint native oracle 候选矩阵和最小完整语义批次。
-4. S3：采集 native oracle 或记录 oracle blocker / diagnostic non-goal。
+3. S2：形成 Joint placement / constraint native oracle 候选矩阵和最小完整语义批次。已完成，关闭 `C7M6-BLOCKER-201`，只保留 `C7M6-ORACLE-202` / `C7M6-ORACLE-302` 为 S3 oracle candidates，`C7M6-ORACLE-203` 为 offsetPlc oracle blocker。
+4. S3：采集 native oracle 或记录 oracle blocker / diagnostic non-goal。当前下一步。
 5. S4：用 current `cad-core` 做 parity 和 implementation gate 裁决。
 6. S5：实现正式 Assembly Joint placement / constraint gap，或 no-code 发布收口。
 7. S6：release gate，更新 README / 矩阵 / P8 口径并清空队列。
