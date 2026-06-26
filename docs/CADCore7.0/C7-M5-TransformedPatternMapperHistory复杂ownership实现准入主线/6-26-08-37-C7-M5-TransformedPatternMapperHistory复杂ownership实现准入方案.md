@@ -138,6 +138,8 @@ python3 -m unittest tests.test_p7_features.CadCoreP7FeatureTest
 
 S4 当前裁决未打开 code gate，因此 S5 范围限定为 no-code publication closure：允许更新本包 README、总入口、方案、矩阵和必要的 P7 发布口径；不允许修改 `cad-core/src/part_design`、`cad-core/src/part`、fixtures、expected、tests 或 adapter。focused tests 只作为回归记录，不要求重新 build。
 
+S5 已完成：live 起点为 `HEAD=77b7903f76`（`77b7903f76 docs: 完成 C7-M5 S4 parity gate 裁决`），开始状态干净；本轮执行 no-code publication closure，关闭 `C7M5-BLOCKER-501`，发布 C7-M5 expected-backed closed / no backendGap。S5 只更新 README、主线总入口、方案、矩阵和必要的 P7 live / 总览后续口径，未修改 C++、fixtures、expected、tests、adapter、collector 或 capability，未运行 build 或 unittest；S4 focused 5 tests 与完整 `CadCoreP7FeatureTest` 通过结果作为发布依据。standalone geometry-equivalent Whole shape 保持 diagnostic non-goal，不升格为 native golden；旧 P7T rows 不重开。队列推进到 S6。
+
 ### S6 release gate
 
 运行本包 queue、TSV、trailing whitespace、`git diff --check`。若 S5 改 C++，再跑 focused P7 tests 和 `cmake --build build`。
