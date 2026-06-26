@@ -93,6 +93,18 @@ S2 已完成：live 起点为 `HEAD=cbfbfe736d`（`cbfbfe736d docs: 完成 C7-M5
 | `native_oracle_blocked` | collector、FreeCADCmd 或 lifecycle 不可观察 | known_gap JSON |
 | `diagnostic_non_goal` | standalone / GUI / session / unsupported child type 等超边界 | diagnostic expected 或 docs row |
 
+S3 已完成：live 起点为 `HEAD=d8ad940e33`（`d8ad940e33 docs: 完成 C7-M5 S2 oracle 候选裁决`），开始状态干净；本轮只运行 native oracle check、更新文档和矩阵，未改 C++、runtime、adapter、expected 或 tests。执行命令：
+
+```bash
+cd /Users/li/Chili3DProject/FreeCAD/cad-core
+python3 tools/collect_freecad_expected.py fixtures/p7/mirrored-dressup-chain-support-transform.json --check
+python3 tools/collect_freecad_expected.py fixtures/p7/linear-pattern-pad-pocket-multi-original.json --check
+python3 tools/collect_freecad_expected.py fixtures/p7/multi-transform-linear-mirror.json --check
+python3 tools/collect_freecad_expected.py fixtures/p7/multi-transform-scaled-diagonal.json --check
+```
+
+四个 check 均通过，runtime 输出 `FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)`，checked-in expected 记录 `freecad_version=1.2.0 revision 20260519`。`C7M5-ORACLE-201` 固化 Pattern AddSubShape slot ownership 的 topology 与 checked-in `named_shapes` evidence：`mirrored-dressup-chain-support-transform` 覆盖 `Chamfer/Fillet/Pad/SketchPad` prefixes 和 split/deleted/merge history，`linear-pattern-pad-pocket-multi-original` 覆盖 `Pad/Pocket/SketchPad/SketchPocket/LinearPattern.Transform1` prefixes。`C7M5-ORACLE-301` 固化 MultiTransform composition：`multi-transform-linear-mirror` 覆盖 `MultiTransform.Transform` prefixes 与 `faces=12, edges=24, vertices=16`，`multi-transform-scaled-diagonal` 覆盖 diagonal composition topology `faces=18, edges=36, vertices=24`、bbox `[0.0, -0.5, -0.5]..[7.5, 1.5, 1.5]`、volume `12.375`。collector `--check` 只重采 FreeCAD geometry payload；`named_shapes` ownership/history evidence 由 checked-in expected 与 focused P7 tests 消费。`C7M5-ORACLE-401` 保持 `diagnostic_non_goal`，standalone Whole shape 仍不采 native golden。
+
 ### S4 cad-core parity 与 implementation gate
 
 如果 S3 得到 native oracle，则比较 current `cad-core`：
