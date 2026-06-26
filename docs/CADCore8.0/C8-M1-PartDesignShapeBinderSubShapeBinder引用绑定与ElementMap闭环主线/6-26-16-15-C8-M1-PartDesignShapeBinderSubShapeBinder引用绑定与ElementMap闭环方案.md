@@ -44,7 +44,7 @@ S0 结论：`HEAD=29da94dd13`，当前 registry 未覆盖 `PartDesign::ShapeBind
 
 S1 不采 oracle，不改 C++。
 
-S1 结论：`C8M1-BLOCKER-101` 已关闭到 source authority；所有 scope 仍保持 `backend_gap_candidate` / `oracle_candidate` / `diagnostic_non_goal`，不提升为 supported 或 `backend_gap_requires_implementation`。下一步进入 S2 oracle 候选矩阵。
+S1 结论：`C8M1-BLOCKER-101` 已关闭到 source authority；所有 scope 仍保持 `backend_gap_candidate` / `oracle_candidate` / `diagnostic_non_goal`，不提升为 supported 或 `backend_gap_requires_implementation`。S2 已完成 oracle 候选矩阵，下一步进入 S3 native oracle 批量采集。
 
 ## S2 oracle 候选矩阵
 
@@ -56,6 +56,8 @@ S1 结论：`C8M1-BLOCKER-101` 已关闭到 source authority；所有 scope 仍�
 - BindMode / CopyOnChange lifecycle。
 
 S2 只能输出 `oracle_candidate`、`backend_gap_candidate`、`diagnostic_non_goal`、`oracle_blocker` 或 `oracle_blocked`，不能直接发布 supported。
+
+S2 结论：`C8M1-ORACLE-101..104`、`201..206`、`301..302` 已全部写入批量 `oracle_candidate`；`C8M1-BG-101..401` 保持 `backend_gap_candidate`；`C8M1-BLOCKER-201` 关闭到矩阵完整性；GUI / session / persistent state / full temporary-document CopyOnChange / downstream Rust / adapter patch / C7-M7 writeback 保持 `diagnostic_non_goal`。
 
 ## S3 native oracle 批量采集
 
