@@ -51,7 +51,7 @@ S2 结论：C8-M1 ShapeBinder / SubShapeBinder capability、fixtures、expected 
 
 ## S4 下游 opencascade-rs 同步契约
 
-形成下游同步清单：TypeId registry、document graph parser、feature executor / DTO、capability snapshot、fixture blackbox、diagnostics 和 known_gap vocabulary。S4 在本 repo 只写合同，不改 Rust。
+已完成。S4 形成下游同步清单：TypeId registry、document graph parser、feature executor / DTO、capability snapshot、fixture blackbox、diagnostics、known_gap vocabulary、C8-M2 native probe 使用边界和 ElementMap / NamedShape 前端输出合同。合同落在 `矩阵/c8m2_downstream_sync_contract.tsv`，本 repo 只写源头合同，不改 Rust，不改 C++，full temporary-document copied-object cache 仍保持 `known_gap_diagnostic` / `oracle_blocked`。
 
 ## S5 capability 协议与前端接入边界
 
