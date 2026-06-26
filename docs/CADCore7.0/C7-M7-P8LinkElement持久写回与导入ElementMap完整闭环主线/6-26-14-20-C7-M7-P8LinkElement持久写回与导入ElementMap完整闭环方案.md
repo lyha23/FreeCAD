@@ -128,11 +128,19 @@ S5 implementation gate 关闭。S5 只允许 no-code publication closure；允�
 2. 写 focused tests，约束 ElementMap、NamedShape alias、`documentObjectUpdates`、`elementReferenceUpdates`、diagnostics、capability 和 expected parity。
 3. 删除临时 diagnostic 或保持 known_gap 时同步矩阵。
 
-若 S4 未打开 code gate，S5 只做 no-code publication closure。当前 S4 已关闭 code gate，因此 S5 不实现 Link / ElementMap / LinkSub / writeback gap，不新增或修改 C++、fixtures、expected、tests、collector、adapter 或 runtime 输出；只同步发布口径和矩阵。
+若 S4 未打开 code gate，S5 只做 no-code publication closure。当前已按此路线完成：执行时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=5080d31d76`（`5080d31d76 文档：完成 C7-M7 S4 准入裁决`），开始状态干净。S5 不实现 Link / ElementMap / LinkSub / writeback gap，不新增或修改 C++、fixtures、expected、tests、collector、adapter、capability 或 runtime 输出；只同步发布口径和矩阵。
+
+S5 发布裁决：
+
+- already-covered rows 继续关闭：request-local Link display / alias / `FullSubList` / mapped postfix / imported Link chain、ShowElement `documentObjectUpdates`、BREP / STEP / IGES `history_partial` ElementMap、STL `indexed_only`。
+- ORACLE-202 / 302 / 402 发布为 `oracle_blocked`：完整 imported ElementMap、ShowElement persistent writeback、complex LinkSub hash / postfix lifecycle 仍缺 source-backed native expected。
+- ORACLE-203 发布为 STL `oracle_blocker`：FreeCAD `Mesh::Import` 不走 Part `PropertyPartShape` ElementMap。
+- GUI / frontend sync / cross-request cache / Worker / WASM / Web 保持 `diagnostic_non_goal`。
+- `C7M7-BLOCKER-501` 已关闭，`C7M7-GATE-601` 发布为 no-code closure；S6 只做 release gate。
 
 ### S6 release gate
 
-运行本包 queue、TSV、trailing whitespace、`git diff --check`。若 S5 改 C++、fixtures、expected、tests 或 capability，再跑 focused P8 tests 和 `cmake --build build`。
+运行本包 queue、TSV、trailing whitespace、`git diff --check`。S5 已确认未改 C++、fixtures、expected、tests 或 capability，因此 S6 默认不跑 focused P8 tests 和 `cmake --build build`；只有 S6 自己引入代码、fixture、expected、test 或 capability 改动时才补跑。
 
 ## 验收分层
 

@@ -4,7 +4,7 @@
 
 C7-M7 是 C7-M6 之后的 P8 stable reference follow-up。总览后续队列中，Assembly Joint 已经被 C7-M6 裁为 expected-backed / oracle-blocked 且没有 backend implementation gap；下一类更值得推进的后端语义是 Link / imported-shape 的稳定引用闭环。
 
-当前 gate 已关闭：P8 已覆盖基础 Link / LinkSub / LinkGroup / LinkElement display、ElementList / ElementCount / ShowElement 请求内生命周期建议、hidden / XLink / FullSubList 解析、mapped alias、Link retag terminal 与 merge history 传播、plain group 展开以及导入 shape indexed `NamedShape`。C7-M7 不能凭“完整 Link 账本”直接改 C++。S3 未产生 source-backed native expected；S4 已裁决 ORACLE-202 / 302 / 402 保持 `oracle_blocked`，ORACLE-203 保持 STL `oracle_blocker`，没有 `backend_gap_requires_implementation`。S5 只能做 no-code publication closure。
+当前 gate 已关闭：P8 已覆盖基础 Link / LinkSub / LinkGroup / LinkElement display、ElementList / ElementCount / ShowElement 请求内生命周期建议、hidden / XLink / FullSubList 解析、mapped alias、Link retag terminal 与 merge history 传播、plain group 展开以及导入 shape indexed `NamedShape`。C7-M7 不能凭“完整 Link 账本”直接改 C++。S3 未产生 source-backed native expected；S4 已裁决 ORACLE-202 / 302 / 402 保持 `oracle_blocked`，ORACLE-203 保持 STL `oracle_blocker`，没有 `backend_gap_requires_implementation`。S5 已执行 no-code publication closure，未做 C++、fixture、expected、test、collector、capability 或生成输出改动；S6 只做 release gate。
 
 ## 上游状态
 
@@ -16,6 +16,7 @@ C7-M7 是 C7-M6 之后的 P8 stable reference follow-up。总览后续队列中�
 - S2 已完成 oracle 候选矩阵：`already_covered` 包括 BREP / STEP / IGES `history_partial` import ElementMap、imported Link chain、现有 Link / LinkSub / LinkGroup / LinkElement display/alias、ShowElement request-local `documentObjectUpdates` 和 cross-document request-graph diagnostics；`oracle_candidate` 只剩完整 BREP / STEP / IGES import ElementMap、ShowElement persistent writeback transaction、复杂多层 LinkSub / cross-document hash-postfix save/restore lifecycle；STL complete Part ElementMap 为 `oracle_blocker`，GUI / frontend / Worker / cross-request backend state 为 `diagnostic_non_goal`。S2 未采 oracle、未改 fixture/expected/test/C++，也未打开 S5 gate。
 - S3 已完成 native oracle 采集：FreeCADCmd collector/probe 均未暴露可固化的完整 native lifecycle。ORACLE-202 import payload 缺完整 `ElementMap` / reference-update evidence；ORACLE-302 ShowElement payload 缺持久 writeback transaction 字段且部分 fixture 因 native `ElementList` 只读失败；ORACLE-402 collector/save-restore probe 缺 file/stamp/hash、DocMap、restored `FullSubList`、ReferenceShadow 和 mapped postfix lifecycle，复杂多层 label fixture 在 native FreeCAD 中 Link broken；ORACLE-203 保持 STL mesh-specific `oracle_blocker`。S3 未新增或修改 fixture/expected/test，未改 C++。
 - S4 已完成 cad-core parity / implementation gate 裁决：没有 source-backed native oracle 可比较，因此 ORACLE-202 / 302 / 402 route=`oracle_blocked`，ORACLE-203 继续 `oracle_blocker`；implementation gate closed，S5 只允许 no-code 发布，不允许修改 runtime C++、fixtures、expected、tests、collector 或 adapter。
+- S5 已完成 no-code 发布收口：执行时 `HEAD=5080d31d76`（`5080d31d76 文档：完成 C7-M7 S4 准入裁决`），开始状态干净。already-covered rows 继续关闭；ORACLE-202 / 302 / 402 发布为 `oracle_blocked`；ORACLE-203 发布为 STL `oracle_blocker`；GUI / frontend / cache / Worker 继续 `diagnostic_non_goal`。`C7M7-BLOCKER-501` 已关闭，`C7M7-GATE-601` 发布为 no-code closure，S6 只做 release gate。
 
 ## 初始范围
 
@@ -46,8 +47,8 @@ C7-M7 是 C7-M6 之后的 P8 stable reference follow-up。总览后续队列中�
 3. S2（已实现）：形成 LinkElement writeback / imported-shape ElementMap / complex LinkSub native oracle 候选矩阵。
 4. S3（已实现）：采集 native oracle 或记录 native blocker / diagnostic non-goal。
 5. S4（已实现）：用 current `cad-core` 做 parity 和 implementation gate 裁决；无 native expected 可比较，implementation gate closed。
-6. S5：no-code 发布收口；不改 runtime C++ / fixtures / expected / tests。
-7. S6：release gate，更新 README / 矩阵 / P8 口径并清空队列。
+6. S5（已实现）：no-code 发布收口；未改 runtime C++ / fixtures / expected / tests。
+7. S6：release gate，验证 README / 矩阵 / 队列发布口径并清空队列。
 
 ## 验收入口
 
