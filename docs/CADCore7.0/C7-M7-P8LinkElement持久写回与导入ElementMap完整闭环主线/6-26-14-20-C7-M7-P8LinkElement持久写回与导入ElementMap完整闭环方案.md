@@ -68,15 +68,17 @@ S1 结论：
 
 ### S2 oracle 候选矩阵与批次裁决
 
-把候选路由到：
+已完成。执行时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=d6f62daad5`（`d6f62daad5 文档：完成 C7-M7 S1 源码覆盖复核`），开始状态干净，队列显示 S2-S6 pending。
 
-- `already_covered`
-- `oracle_candidate`
-- `oracle_blocker`
-- `backend_gap_candidate`
-- `diagnostic_non_goal`
+S2 将 S1 source / coverage 结果裁成最小完整语义批次：
 
-S2 必须明确每个候选是否有 source-backed FreeCAD lifecycle、是否已有 checked-in expected、是否只是 request-local update suggestion，或是否依赖 GUI / cross-request backend state。
+- `already_covered`：既有 Link / LinkSub / LinkGroup / LinkElement display 与 alias、`FullSubList` / mapped postfix、terminal / merge history、imported Link chain、BREP / STEP / IGES `history_partial` import ElementMap，以及 ShowElement request-local `documentObjectUpdates` apply-stable graph。
+- `oracle_candidate`：完整 BREP / STEP / IGES imported-shape `ElementMap` / stable reference lifecycle；ShowElement `LinkElement` / `LinkGroup` persistent writeback transaction；复杂多层 `LinkSub` / cross-document hash-postfix save/restore lifecycle。
+- `oracle_blocker`：STL complete Part-style ElementMap，因为 FreeCAD `Mesh::Import` 走 mesh path，不经过 `PropertyPartShape::setValue()` / TopoShape ElementMap。
+- `backend_gap_candidate`：仅作为 S4 parity 后的候选状态保留在 `C7M7-GATE-601`，S2 不把任何行升级为 `backend_gap_requires_implementation`。
+- `diagnostic_non_goal`：GUI / ViewProvider / Workbench、frontend sync protocol、cross-request backend cache / persistent BREP、Worker / WASM / Web 产品化。
+
+每个 `oracle_candidate` 已在 `oracle_plan.tsv` 写清 fixture/probe 输入、FreeCAD source authority、expected 字段、S3 collector/probe 命令或 blocker 判定和 focused test 名称。S2 已关闭 `C7M7-BLOCKER-201` 与 S2 分类 gate；未采 native oracle，未新增或修改 fixture/expected/test，未改 C++，S5 implementation gate 仍关闭。
 
 ### S3 native oracle 采集
 

@@ -1,4 +1,4 @@
-# C7-M7 S2 LinkElement 写回与 Import ElementMap oracle 候选矩阵
+# 【已实现】C7-M7 S2 LinkElement 写回与 Import ElementMap oracle 候选矩阵
 
 ## 目标
 
@@ -26,6 +26,16 @@
 - 同一 FreeCAD 调用链和同一 ElementMap / LinkSub / writeback 账本能覆盖的 case 应批量推进，不要只挑单 fixture。
 - 缺 native lifecycle 的 GUI / cross-request backend state / front-end-only protocol 不能进入 implementation gate。
 - 如果只能拆小批次，必须写清下一批次范围和拆分理由。
+
+## S2 结论
+
+- live 基线：执行时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=d6f62daad5`（`d6f62daad5 文档：完成 C7-M7 S1 源码覆盖复核`），`git status --short -uall` 无输出；队列显示 S2-S6 pending。
+- `already_covered`：现有 p8/c3m2 coverage 已覆盖基础 Link / LinkSub / LinkGroup / LinkElement display 与 alias、`FullSubList` / mapped postfix、terminal / merge history、BREP / STEP / IGES `history_partial` import ElementMap、`app-link-imported-element-map-chain` imported Link chain、ShowElement request-local `documentObjectUpdates` 和 cross-document request-graph diagnostics。这些 rows 不得在 S3/S4 被重开为 active backend gap。
+- `oracle_candidate`：三组最小完整语义批次进入 S3：1）BREP / STEP / IGES complete imported-shape `ElementMap` / stable reference lifecycle；2）ShowElement `LinkElement` / `LinkGroup` persistent writeback transaction；3）复杂多层 `LinkSub` / cross-document hash-postfix save/restore lifecycle。每组的 fixture/probe 输入、FreeCAD authority、expected 字段、S3 命令和 focused tests 已写入 `oracle_plan.tsv`。
+- `oracle_blocker`：STL complete Part-style ElementMap 暂不采 native oracle。FreeCAD `Mesh::Import::execute()` 只把 mesh 写入 `Mesh.setValuePtr(...)`，现有 `mesh-import-stl.freecad.json` 固定 `element_map_status=indexed_only`；除非后续开 mesh-specific oracle 包，否则不把它作为 Part `PropertyPartShape` ElementMap 缺口。
+- `backend_gap_candidate`：只保留为 S4 parity 后的候选状态。S2 不设置 `backend_gap_requires_implementation`，不打开 S5 code gate。
+- `diagnostic_non_goal`：GUI / ViewProvider / Workbench、frontend sync protocol、cross-request backend cache / persistent BREP、Worker / WASM / Web 产品化继续排除。
+- S2 已关闭 `C7M7-BLOCKER-201` 与 S2 分类 gate；未采 native oracle，未新增或修改 fixture/expected/test，未改 C++。
 
 ## 验收
 
