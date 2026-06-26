@@ -75,6 +75,14 @@ S1 已完成：live 起点为 `HEAD=27b2f84d6a`（`27b2f84d6a docs: 完成 C7-M5
 
 S2 必须明确每个候选是否有 support-backed FreeCAD lifecycle，是否已有 checked-in expected，是否只是 geometry-equivalent smoke。
 
+S2 已完成：live 起点为 `HEAD=cbfbfe736d`（`cbfbfe736d docs: 完成 C7-M5 S1 源码与覆盖复核`），开始状态干净；本轮未采 FreeCAD oracle、未新增或修改 fixtures/expected/tests、未改 C++。裁决结论如下：
+
+- `C7M5-SCOPE-101` route=`already_covered`：TransformN alias、original stable alias、terminal split/deleted history、merge history 和 `element_history_status` 已由现有 P7 focused tests 与 expected 覆盖，S3 不再采新 oracle。
+- `C7M5-SCOPE-201` route=`oracle_candidate`：以 support-backed `mirrored-dressup-chain-support-transform` 和 `linear-pattern-pad-pocket-multi-original` 作为 Pattern AddSubShape slot ownership 的最小完整语义批次；S3 只做 native expected / blocker / evidence 固化。
+- `C7M5-SCOPE-301` route=`oracle_candidate`：以 support-backed `multi-transform-linear-mirror` 和 `multi-transform-scaled-diagonal` 作为 MultiTransform composition ownership 的最小完整语义批次；`multi-transform-whole-shape` 这类 standalone smoke 不升格为 native golden。
+- `C7M5-SCOPE-401` route=`diagnostic_non_goal`：standalone Whole shape lifecycle boundary 延续旧 P7T `P7T-NG-005`，缺 Body/BaseFeature lifecycle 的 geometry-equivalent case 不得变成 backendGap 或 native ownership oracle。
+- S2 没有打开任何 `backend_gap_candidate`；只有 S4 在 S3 native oracle 证明 current `cad-core` mismatch 后才允许裁决 implementation gate。
+
 ### S3 native oracle 采集
 
 对 S2 的 `oracle_candidate` 批次采集 FreeCAD expected。合法结果：

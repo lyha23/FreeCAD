@@ -1,4 +1,4 @@
-# C7-M5 S2 复杂 ownership oracle 候选矩阵与最小批次
+# 【已实现】C7-M5 S2 复杂 ownership oracle 候选矩阵与最小批次
 
 ## 目标
 
@@ -26,6 +26,15 @@
 - 同一 FreeCAD 调用链和同一 ownership 账本能覆盖的 case 应批量推进，不要只挑单 fixture。
 - 缺 native lifecycle 的 geometry-equivalent case 不能进入 implementation gate。
 - 如果只能拆小批次，必须写清下一批次范围和拆分理由。
+
+## S2 完成结论
+
+- live baseline：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=cbfbfe736d`（`cbfbfe736d docs: 完成 C7-M5 S1 源码与覆盖复核`），开始状态 `git status --short -uall` 无输出；C7-M5 队列首项为 S2。
+- `C7M5-SCOPE-101` route=`already_covered`：TransformN alias、original stable alias、terminal split/deleted history、merge history 和 `element_history_status` 已由现有 P7 fixture / expected / focused tests 覆盖；S3 不新增 native oracle。
+- `C7M5-SCOPE-201` route=`oracle_candidate`：S3 最小完整批次为 support-backed `cad-core/fixtures/p7/mirrored-dressup-chain-support-transform.json` 与 `cad-core/fixtures/p7/linear-pattern-pad-pocket-multi-original.json`，authority 为 `Transformed::execute()` + `DressUp::getAddSubShape()`，evidence 字段为 topology summary、slot owner/source prefixes、TransformN aliases 和 `element_history_status`。
+- `C7M5-SCOPE-301` route=`oracle_candidate`：S3 最小完整批次为 support-backed `cad-core/fixtures/p7/multi-transform-linear-mirror.json` 与 `cad-core/fixtures/p7/multi-transform-scaled-diagonal.json`，authority 为 `MultiTransform::getTransformations()` + `TopoShape::makeElementTransform()`，evidence 字段为 child template order、composition topology、MultiTransform.Transform aliases 和 stable diagnostics。
+- `C7M5-SCOPE-401` route=`diagnostic_non_goal`：standalone `polar-pattern-whole-shape` / `multi-transform-whole-shape` 等 geometry-equivalent smoke 不具备 Body/BaseFeature lifecycle，不能变成 native golden 或 backendGap。
+- S2 没有打开 `backend_gap_candidate`；S4 之前 implementation gate 仍关闭。已更新 `oracle_plan`、`scope`、`backend_gate`、`blocker_queue`、`validation_matrix` 和方案 S2 小节；未采 oracle、未新增或修改 fixtures/expected/tests、未改 C++。
 
 ## 验收
 
