@@ -35,7 +35,9 @@ S0 不采 oracle，不改 C++，不声明 CopyOnChange full temporary-document c
 
 ## S1 FreeCAD source 与 C8-M1 能力复核
 
-复核 `ShapeBinder.cpp` 的 CopyOnChange / PartialLoad 调用链、`LinkBaseExtension` 对照、C8-M1 capability/tests/fixtures 和 current diagnostic 边界。S1 不采 oracle，不改 C++。
+已完成。S1 live 基线为 `HEAD=e7e07663d9`（`e7e07663d9 docs: 完成 C8-M2 S0 live 基线冻结`），开始工作区干净。S1 复核了 `ShapeBinder.cpp` 的 `setupCopyOnChange()`、`checkCopyOnChange()`、`onChanged()`、`update()` 中 CopyOnChange / PartialLoad / Mutated 行为，以及 `LinkBaseExtension::setupCopyOnChange()` 对照、C8-M1 capability/tests/fixtures 和 current diagnostic 边界。
+
+S1 结论：FreeCAD `Mutated` full path 依赖 `_CopiedObjs`、`"_tmp_binder"` temporary document、`copyObject()` 和 `recomputeFeature()`；cad-core 当前只发布 request-local recompute + `copy_on_change_full_temporary_document_cache_not_supported` diagnostic。C8-M2 仍不采 oracle、不改 C++，`copy_on_change_full_temporary_document_cache` 继续是 known_gap。
 
 ## S2 DTO 准入与 oracle 候选矩阵
 

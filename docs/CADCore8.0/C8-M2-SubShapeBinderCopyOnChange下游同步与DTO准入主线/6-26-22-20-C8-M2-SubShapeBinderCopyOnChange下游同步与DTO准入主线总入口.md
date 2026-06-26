@@ -14,13 +14,14 @@ C8-M2 是 C8-M1 之后的源头方案包。它不重开 `ShapeBinder` / `SubShap
 - `part_design.sub_shape_binder.status=supported_c8m1_expected_backed_request_local_with_copy_on_change_known_gap`，`remaining_gaps=["copy_on_change_full_temporary_document_cache"]`。
 - C8-M1 fixtures 和 expected 已在 `cad-core/fixtures/c8m1`，focused tests 已在 `cad-core/tests/test_c8_shapebinder.py`。
 - C8-M2 S0 live 基线已冻结：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=dc93b0d3af`（`dc93b0d3af chore: 完成 C8-M1 S6 发布闸门`）。开始状态包含既有 C8-M2 文档/矩阵未提交改动；S0 只写文档和矩阵，不采 oracle、不改 C++、不修改 Rust 下游。
-- S0 冻结后的状态词典为 `already_supported`、`sync_required`、`oracle_candidate`、`known_gap_retained`、`backend_gap_candidate`、`backend_gap_requires_implementation`、`diagnostic_non_goal`。`copy_on_change_full_temporary_document_cache` 继续是 `known_gap_diagnostic` / `oracle_blocked`，不能写成 supported。
+- C8-M2 S1 live 复核已完成：`HEAD=e7e07663d9`（`e7e07663d9 docs: 完成 C8-M2 S0 live 基线冻结`），开始工作区干净；已复核 FreeCAD `SubShapeBinder::setupCopyOnChange()` / `checkCopyOnChange()` / `onChanged()` / `update()`、`LinkBaseExtension::setupCopyOnChange()`、C8-M1 capability/tests/fixtures 和 current cad-core diagnostic 边界。
+- S1 复核后的状态词典仍为 `already_supported`、`sync_required`、`oracle_candidate`、`known_gap_retained`、`backend_gap_candidate`、`backend_gap_requires_implementation`、`diagnostic_non_goal`。`copy_on_change_full_temporary_document_cache` 继续是 `known_gap_diagnostic` / `oracle_blocked`，不能写成 supported。
 
 ## 证明链条
 
 ```text
 S0 live 基线与声明冻结
-  -> S1 FreeCAD source / C8-M1 capability 复核
+  -> S1 FreeCAD source / C8-M1 capability 复核（已完成）
   -> S2 CopyOnChange DTO 与下游同步 scope 裁决
   -> S3 native CopyOnChange 生命周期探针
   -> S4 下游 opencascade-rs 同步契约
@@ -52,7 +53,7 @@ S0 live 基线与声明冻结
 | --- | --- | --- |
 | 工作步骤总入口 | `工作步骤细分/6-26-22-20-【已实现】C8-M2工作步骤总入口.md` | 队列索引 |
 | S0 | `工作步骤细分/6-26-22-21-【已实现】C8-M2-S0-live基线与同步范围冻结.md` | 冻结声明口径 |
-| S1 | `工作步骤细分/6-26-22-22-C8-M2-S1-FreeCAD源码与C8-M1能力复核.md` | source / capability 复核 |
+| S1 | `工作步骤细分/6-26-22-22-【已实现】C8-M2-S1-FreeCAD源码与C8-M1能力复核.md` | source / capability 复核 |
 | S2 | `工作步骤细分/6-26-22-23-C8-M2-S2-CopyOnChangeDTO准入与oracle候选矩阵.md` | oracle / backend gate 候选 |
 | S3 | `工作步骤细分/6-26-22-24-C8-M2-S3-native-CopyOnChange生命周期探针与blocker证据.md` | native lifecycle 证据 |
 | S4 | `工作步骤细分/6-26-22-25-C8-M2-S4-下游opencascade-rs同步契约方案.md` | 下游同步契约 |
@@ -66,4 +67,4 @@ S0 live 基线与声明冻结
 | oracle plan | `矩阵/c8m2_copyonchange_oracle_plan.tsv` | native oracle / downstream sync 计划 |
 | validation | `矩阵/c8m2_copyonchange_validation_matrix.tsv` | 验收命令 |
 
-当前 S0 已实现，S1-S6 仍为待执行状态。矩阵中 S0 范围、non-goal 和 live blocker 行已冻结；oracle、下游同步、capability 和 release gate 结论仍不是发布闸门结论。
+当前 S0/S1 已实现，S2-S6 仍为待执行状态。矩阵中 S1 source candidates、scope review、non-goal registry 和 `C8M2-BLOCKER-101` 已完成 source authority 复核；oracle、下游同步、capability 和 release gate 结论仍不是发布闸门结论。
