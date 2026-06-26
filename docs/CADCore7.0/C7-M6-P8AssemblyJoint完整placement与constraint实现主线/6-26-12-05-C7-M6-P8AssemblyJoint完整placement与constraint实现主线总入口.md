@@ -13,7 +13,7 @@ C7-M6 是 C7-M5 之后的 P8 follow-up。总览后续队列已经把 P7 transfor
 - `docs/CADCore方案/细化方案/11-P8-Part导入导出与Assembly后续.md` 已声明 Assembly solver native FreeCAD placement oracle 入库并验收，但完整 Joint placement / constraint 和复杂 placement chain 仍未迁移。
 - `cad-core/fixtures/c3m6/expected` 已保存多个 Assembly solver placement expected；这些文件是后续 parity 的标准答案，不能用 current `cad-core` 输出倒推。
 - S0 live 基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=60876b2f6c`（`60876b2f6c docs: 完成 C7-M5 S6 release gate`）。开始状态只包含 root `docs/CADCore7.0/README.md` modified 和本 C7-M6 文档包 untracked 文件。C7-M1 到 C7-M5 队列均为空。
-- 当前 c3m6 expected/test 边界：51 个 checked-in expected JSON，其中 50 个 Assembly expected；45 个 Assembly expected 无 `known_gap` / `backendGap`，5 个 DistanceType diagnostic expected 保持 `DTE-NG-003`；34 个 expected 带 `native_marker_oracle`。`test_p8_features.py` 已把这些 expected 约束到 real Ondsel solver DTO、marker placement、DistanceType、writeback 和 diagnostics。
+- 当前 c3m6 expected/test 边界：52 个 checked-in expected JSON，其中 51 个 Assembly expected；45 个 Assembly expected 无 `known_gap` / `backendGap`，6 个 Assembly expected 带已知 gap / non-goal 元数据，其中 5 个 DistanceType diagnostic expected 保持 `DTE-NG-003`，1 个新 marker custom placement expected 带 collector marker parity `backendGap` 元数据；35 个 expected 带 `native_marker_oracle`。`test_p8_features.py` 已把既有 expected 约束到 real Ondsel solver DTO、marker placement、DistanceType、writeback 和 diagnostics；新 S3 expected 的 current cad-core parity 由 S4 裁决。
 - S1 已完成 source / current coverage 复核：`AssemblyObject::solve()`、`handleOneSideOfJoint()`、`makeMbdJointOfType()`、`AssemblyUtils::getDistanceType()` / `getJointCurrentValue()`、`JointObject.py`、current `cad-core/src/assembly/*`、c3m6 expected 和 focused tests 均已矩阵化；`C7M6-BLOCKER-101` 已关闭。未采 oracle，未新增或修改 fixtures/expected/tests，未改 C++。
 
 ## 初始范围
@@ -37,8 +37,8 @@ C7-M6 是 C7-M5 之后的 P8 follow-up。总览后续队列已经把 P7 transfor
 1. S0：冻结 live baseline、C7-M1..M5 队列、P8 当前 supported / expected-backed / diagnostic 边界。已完成，关闭 `C7M6-BLOCKER-000` / `C7M6-GATE-000`。
 2. S1：复核 FreeCAD Assembly source、current `cad-core` solver / marker / writeback 能力和 c3m6 fixture/test 覆盖。已完成，关闭 `C7M6-BLOCKER-101`。
 3. S2：形成 Joint placement / constraint native oracle 候选矩阵和最小完整语义批次。已完成，关闭 `C7M6-BLOCKER-201`，只保留 `C7M6-ORACLE-202` / `C7M6-ORACLE-302` 为 S3 oracle candidates，`C7M6-ORACLE-203` 为 offsetPlc oracle blocker。
-4. S3：采集 native oracle 或记录 oracle blocker / diagnostic non-goal。当前下一步。
-5. S4：用 current `cad-core` 做 parity 和 implementation gate 裁决。
+4. S3：采集 native oracle 或记录 oracle blocker / diagnostic non-goal。已完成，关闭 `C7M6-BLOCKER-301`；`C7M6-ORACLE-202` 已采集 native expected，`C7M6-ORACLE-302` / `C7M6-ORACLE-203` 记录 `native_oracle_blocked`。
+5. S4：用 current `cad-core` 做 parity 和 implementation gate 裁决。当前下一步。
 6. S5：实现正式 Assembly Joint placement / constraint gap，或 no-code 发布收口。
 7. S6：release gate，更新 README / 矩阵 / P8 口径并清空队列。
 

@@ -96,6 +96,10 @@ S2 已明确每个候选是否有 source-backed FreeCAD lifecycle、是否已有
 | `native_oracle_blocked` | collector、FreeCADCmd、solver runtime 或 lifecycle 不可观察 | known_gap JSON |
 | `diagnostic_non_goal` | GUI / drag session / persistent solver / unsupported child type 等超边界 | diagnostic expected 或 docs row |
 
+已完成。S3 新增 `cad-core/fixtures/c3m6/assembly-marker-custom-placement-chain-real-solver.json` 与 `cad-core/fixtures/c3m6/expected/assembly-marker-custom-placement-chain-real-solver.freecad.json`，FreeCAD collector 在 `freecad_version=1.2.0 revision 20260519` 上采到 `solver_adapter.status=solved`、1 条 `assembly_set_placement` writeback、非 identity `Placement1/2` connector、object-global / part-local / marker placement evidence，route=`native_oracle_collected`。collector 自动写入的 marker parity `backendGap` 只是 expected 元数据，S4 仍是 implementation gate。
+
+S3 同时新增 `cad-core/fixtures/c3m6/assembly-angle-zero-and-signed-current-real-solver.json`，但 native probe 输出虽有 `SignedDistanceJoint` 负 signed current value `-4.190763653560053` 和 writeback，仍缺 S2 required 的 zero Angle fallback `solver_joint_class` / fallback evidence；未提交不完整 expected，route=`native_oracle_blocked`。`offsetPlc` 也保持 `native_oracle_blocked`：源码显示非 identity `MbDPartData.offsetPlc` 只在 `preDrag()` 设置 `bundleFixed=true` 后由 fixed bundle lifecycle 产生，当前 request-local collector 无法进入该生命周期。
+
 ### S4 cad-core parity 与 implementation gate
 
 如果 S3 得到 native oracle，则比较 current `cad-core`：
