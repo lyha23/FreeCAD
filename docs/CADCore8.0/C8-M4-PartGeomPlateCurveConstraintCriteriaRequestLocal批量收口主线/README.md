@@ -2,7 +2,7 @@
 
 C8-M4 承接 C8-M3 完成后的 live gap：`part_workbench.geomplate.narrowed_gaps.curve_constraint_criteria_setters_not_implemented`。本包不继续扩展 conic 曲线，而是把 `Part.GeomPlate` 中 `CurveConstraint` 的 `G0Criterion` / `G1Criterion` / `G2Criterion` 请求内 criteria 支持做成一轮批量裁决。
 
-本包的关键边界是：FreeCAD 原生 `CurveConstraintPy` setter 可能仍是 `NotImplemented`，这不能被写成 native setter parity 已支持；S1 已确认当前 `cad-core` Curve DTO、parser 和 Curve builder 也尚未接通 criteria，需要由后续步骤判断是否打开 request-local product contract 实现闸门。
+本包的关键边界是：FreeCAD 原生 `CurveConstraintPy` setter 仍是 `NotImplemented`，这不能被写成 native setter parity 已支持；S6 只发布 `cad-core` request-local CurveConstraint criteria product contract，并把 native setter blocked 保留为 historical non-parity evidence。
 
 ## 入口
 
@@ -31,8 +31,13 @@ C8-M4 承接 C8-M3 完成后的 live gap：`part_workbench.geomplate.narrowed_ga
 - S4 已裁决打开 `open_S6_implementation_gate`：当前 Curve DTO 仍无 G0/G1/G2，`readCurveConstraints()` 仍由 `presentCriterionFields()` 在 source 创建前报 `unsupported_curve_criteria`，3D Curve `addCurveConstraint()` 仍未调用 `SetG0Criterion()` / `SetG1Criterion()` / `SetG2Criterion()`，但 `GeomPlateSourceEvidence` 已有 optional criteria 字段可复用；因此 S6 必须补 DTO、finite-number parser validation、3D curve apply path、request-local fixture、focused tests 和 capability publication。S4 关闭 `C8M4-BLOCKER-401`；完成后队列首项应前移到 S5。
 - S5 live 基线：`HEAD=3bbc588f8a`（`3bbc588f8a docs: 完成 C8-M4 S4 criteria 准入裁决`），`git status --short -uall` 无输出。
 - S5 已完成 capability 与 non-goal 重分类准入：S6 实现后 `cad-core` request-local CurveConstraint G0/G1/G2 criteria 应发布为 `part_workbench.geomplate` product contract / supported；`curve_constraint_criteria_setters_not_implemented` 不得作为 active remaining gap，若保留只能作为 FreeCAD native non-parity / historical evidence；合法 G0/G1/G2 不应继续产生 `unsupported_curve_criteria`，invalid criteria 应走显式 invalid finite-number diagnostic。GUI / TaskPanel / ViewProvider、`PlateSurface.Curves` wrapper lifecycle、cross-request geometry cache、downstream Rust / frontend persistence 均保持 non-goal。S5 关闭 `C8M4-BLOCKER-501`；完成后队列首项应前移到 S6。
+- S6 live 基线：`HEAD=fe744a966a`（`fe744a966a docs: 完成 C8-M4 S5 capability 发布准入`），开始工作区干净。
+- S6 已实现 request-local CurveConstraint criteria：`GeomPlateCurveConstraintSource` 增加 `g0Criterion` / `g1Criterion` / `g2Criterion`，`readCurveConstraints()` 对三项做 finite-number validation，builder 把 finite-number criteria 映射为 OCCT `Law_Constant` 并调用 `GeomPlate_CurveConstraint::SetG0Criterion()` / `SetG1Criterion()` / `SetG2Criterion()`，source evidence 输出 `g0_criterion` / `g1_criterion` / `g2_criterion`。
+- S6 新增 `cad-core/fixtures/c8m4/part-geomplate-curve-custom-criteria.json`，同一 CurveConstraint 同时覆盖 G0/G1/G2；旧 `c5m7/part-geomplate-curve-criteria-diagnostic` 改为 invalid finite-number 负例，合法 criteria 不再走 `unsupported_curve_criteria`。
+- S6 已将 `part_workbench.geomplate` capability 发布为 `c8m4_curve_constraint_criteria_product_contract`；`curve_constraint_criteria_setters_not_implemented` 只作为 native non-parity historical evidence，不在 active `remaining_gaps` 中。
+- S6 验证：`cmake --build build` 通过；`python3 -m unittest tests.test_p8_features tests.test_adapters tests.test_diagnostics` 通过。按 shared builder / capability schema 要求执行的阶段回归命令已运行，但失败稳定复现在两个 C8-M1 expected-fixture 行（`BodyBaseFeature` 缺失、`cycle_dependency` vs `cycle_rejected_by_property_link`），与 C8-M4 GeomPlate criteria 改动无直接调用链关系，未在本轮修改 C8-M1 expected。
 - S0/S1/S2 只冻结声明、证据和 route 矩阵，不采 FreeCAD oracle，不新增 fixture / expected / tests / collector，不修改 C++ / Rust / FreeCAD `src/`。
-- 输入 gap `part_workbench.geomplate.narrowed_gaps.curve_constraint_criteria_setters_not_implemented` 与 diagnostic `unsupported_curve_criteria` 在 S0 保留；S5 已裁决其 S6 后发布口径，不得把 native setter blocked 继续混作 request-local active gap。
+- 输入 gap `part_workbench.geomplate.narrowed_gaps.curve_constraint_criteria_setters_not_implemented` 已在 S6 后变为 native historical evidence；`unsupported_curve_criteria` 不再覆盖合法 G0/G1/G2 request-local input。
 
 ## 批量范围
 

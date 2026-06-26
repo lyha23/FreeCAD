@@ -23,8 +23,11 @@ C8-M4 的目标是收口 `Part.GeomPlate` 中 CurveConstraint criteria 的 reque
 - S4 已完成 cad-core request-local gate 裁决并关闭 `C8M4-BLOCKER-401`：live source 证明当前 Curve DTO 无 G0/G1/G2、`readCurveConstraints()` 用 `presentCriterionFields()` 在 source 创建前报 `unsupported_curve_criteria`、3D Curve `addCurveConstraint()` 未调用 `SetG*Criterion()`，同时 `GeomPlateSourceEvidence` 已有 optional criteria 字段可复用。S4 打开 `open_S6_implementation_gate`，S6 必须补 DTO、finite-number validation、3D Curve apply、request-local fixture、focused tests 和 capability publication。
 - S5 live HEAD：`3bbc588f8a`（`3bbc588f8a docs: 完成 C8-M4 S4 criteria 准入裁决`），开始工作区干净。
 - S5 已完成 capability / diagnostics / non-goal publication route 并关闭 `C8M4-BLOCKER-501`：S6 实现后 request-local CurveConstraint criteria 发布为 product contract / supported；`curve_constraint_criteria_setters_not_implemented` 不得作为 active remaining gap，若保留只能作为 native non-parity / historical evidence；合法 G0/G1/G2 不再产生 `unsupported_curve_criteria`，invalid criteria 走显式 invalid finite-number diagnostic。
-- 当前 known gap 输入：`part_workbench.geomplate.narrowed_gaps.curve_constraint_criteria_setters_not_implemented`，S5 已裁决为 S6 后 native historical evidence only，不得继续作为 cad-core active gap。
-- 当前 diagnostic 输入：`unsupported_curve_criteria`，S5 已裁决为不得覆盖合法 G0/G1/G2 request-local input。
+- S6 live HEAD：`fe744a966a`（`fe744a966a docs: 完成 C8-M4 S5 capability 发布准入`），开始工作区干净。
+- S6 已完成 implementation gate：Curve DTO 增加 G0/G1/G2 optional 字段，parser 对 `CurveConstraints.SubSet[].G0Criterion/G1Criterion/G2Criterion` 做 finite-number validation，builder 将 finite-number criteria 映射为 OCCT `Law_Constant` 并调用 `GeomPlate_CurveConstraint::SetG0Criterion()` / `SetG1Criterion()` / `SetG2Criterion()`，source evidence 输出三项 criteria。
+- S6 已新增 `cad-core/fixtures/c8m4/part-geomplate-curve-custom-criteria.json` request-local 正例；旧 `c5m7/part-geomplate-curve-criteria-diagnostic` 改为 invalid finite-number 负例。合法 G0/G1/G2 不再产生 `unsupported_curve_criteria`，invalid 类型保留 `invalid_parameter`。
+- 当前 known gap 输入 `part_workbench.geomplate.narrowed_gaps.curve_constraint_criteria_setters_not_implemented` 已转为 native non-parity historical evidence only；不得继续作为 cad-core active gap。
+- S6 验证：build 与 focused tests 通过；阶段回归命令已执行但失败稳定复现在两个 C8-M1 expected fixture 行，未在本轮改动 C8-M1 expected。
 - S0-S2 禁止声明：不采 FreeCAD oracle，不新增 fixture / expected / tests / collector，不修改 C++ / Rust / FreeCAD `src/`，不删除上述 gap / diagnostic，不声明 FreeCAD native `CurveConstraintPy` setter parity 已支持，不把 route 分类当作已实现。
 
 ## 为什么同轮批量处理
@@ -48,7 +51,7 @@ S0 live 基线与批量范围冻结
   -> S3 FreeCAD CurveConstraint criteria 原生 setter 边界复核
   -> S4 cad-core request-local criteria fixture / DTO / parser 准入
   -> S5 capability 与 non-goal 重分类准入
-  -> S6 实现与发布闸门
+  -> S6 实现与发布闸门（已完成）
 ```
 
 ## FreeCAD 调用依据
@@ -64,9 +67,9 @@ S0 live 基线与批量范围冻结
 
 | 层 | 当前代码落点 | 职责 |
 | --- | --- | --- |
-| DTO | `/home/user/Chili3DProject/FreeCAD/cad-core/include/cad_core/part/part_geomplate.h::GeomPlateCurveConstraintSource` | S1 复核确认当前没有 G0/G1/G2 字段；字段只在 PointConstraint source 与 source evidence 中存在 |
-| parser / diagnostics | `/home/user/Chili3DProject/FreeCAD/cad-core/src/part/part_geomplate.cpp::readCurveConstraints()` | 当前发现 criteria 字段后发布 `unsupported_curve_criteria`，并在创建 Curve source 前返回 |
-| OCCT apply | `/home/user/Chili3DProject/FreeCAD/cad-core/src/part/part_geomplate.cpp::addCurveConstraint()` | S1 复核确认当前 Curve path 未调用 `SetG*Criterion`；`SetG*Criterion` 调用只在 PointConstraint path |
+| DTO | `/home/user/Chili3DProject/FreeCAD/cad-core/include/cad_core/part/part_geomplate.h::GeomPlateCurveConstraintSource` | S6 已增加 `g0Criterion` / `g1Criterion` / `g2Criterion` |
+| parser / diagnostics | `/home/user/Chili3DProject/FreeCAD/cad-core/src/part/part_geomplate.cpp::readCurveConstraints()` | S6 已对 Curve criteria 做 finite-number validation；合法值不再报 `unsupported_curve_criteria` |
+| OCCT apply | `/home/user/Chili3DProject/FreeCAD/cad-core/src/part/part_geomplate.cpp::addCurveConstraint()` | S6 已把 finite-number criteria 映射为 `Law_Constant` 并调用 `SetG*Criterion` |
 | capability | `/home/user/Chili3DProject/FreeCAD/cad-core/src/runtime/capability_contract.cpp` | 发布 `part_workbench.geomplate` 支持状态、narrowed gaps 和 diagnostics |
 | tests | `/home/user/Chili3DProject/FreeCAD/cad-core/tests/test_p8_features.py`、`test_adapters.py`、`test_diagnostics.py` | focused validation 和 capability smoke |
 
@@ -83,7 +86,7 @@ S0 live 基线与批量范围冻结
 | S3 | `工作步骤细分/6-27-02-37-【已实现】C8-M4-S3-FreeCADCurveConstraintCriteria原生边界复核.md` | native setter 边界 |
 | S4 | `工作步骤细分/6-27-02-38-【已实现】C8-M4-S4-cad-core请求内criteria落点与fixture准入.md` | cad-core DTO / fixture gate |
 | S5 | `工作步骤细分/6-27-02-39-【已实现】C8-M4-S5-capability与non-goal重分类准入.md` | capability / non-goal |
-| S6 | `工作步骤细分/6-27-02-40-C8-M4-S6-实现与发布闸门.md` | implementation / release gate |
+| S6 | `工作步骤细分/6-27-02-40-【已实现】C8-M4-S6-实现与发布闸门.md` | implementation / release gate |
 | source candidates | `矩阵/c8m4_geomplate_criteria_source_candidates.tsv` | FreeCAD / cad-core source |
 | scope review | `矩阵/c8m4_geomplate_criteria_scope_review_matrix.tsv` | scope / status |
 | oracle plan | `矩阵/c8m4_geomplate_criteria_oracle_plan.tsv` | native / request-local expected plan |
@@ -92,4 +95,4 @@ S0 live 基线与批量范围冻结
 | non-goal | `矩阵/c8m4_geomplate_criteria_non_goal_registry.tsv` | native blocked / GUI / wrapper exclusions |
 | validation | `矩阵/c8m4_geomplate_criteria_validation_matrix.tsv` | 验收命令 |
 
-S0 已完成 live baseline 与批量范围冻结；S1 已完成 source/current coverage 复核；S2 已完成 route 分类和 blocker 矩阵收口；S3 已完成 native setter 边界复核；S4 已打开 S6 request-local implementation gate；S5 已完成 capability / diagnostics / non-goal 发布策略；S6 仍待执行。执行后续步骤时必须继续从 live baseline 开始，不继承旧结论。
+S0 已完成 live baseline 与批量范围冻结；S1 已完成 source/current coverage 复核；S2 已完成 route 分类和 blocker 矩阵收口；S3 已完成 native setter 边界复核；S4 已打开 S6 request-local implementation gate；S5 已完成 capability / diagnostics / non-goal 发布策略；S6 已完成实现与发布闸门，队列应为空。

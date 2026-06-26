@@ -1,0 +1,56 @@
+{
+  "Objects": [
+    {
+      "Name": "SupportPlane",
+      "ID": 1,
+      "TypeId": "Part::Plane",
+      "Properties": {
+        "Length": 4,
+        "Width": 4
+      }
+    },
+    {"Name": "BoundaryB", "ID": 2, "TypeId": "Part::Line", "Properties": {"X1": 4, "Y1": 0, "Z1": 0, "X2": 4, "Y2": 4, "Z2": 0}},
+    {"Name": "BoundaryC", "ID": 3, "TypeId": "Part::Line", "Properties": {"X1": 4, "Y1": 4, "Z1": 0, "X2": 0, "Y2": 4, "Z2": 0}},
+    {"Name": "BoundaryD", "ID": 4, "TypeId": "Part::Line", "Properties": {"X1": 0, "Y1": 4, "Z1": 0, "X2": 0, "Y2": 0, "Z2": 0}},
+    {
+      "Name": "GeomPlateCurveCriteria",
+      "ID": 5,
+      "TypeId": "Part::GeomPlateSurface",
+      "Properties": {
+        "CurveConstraints": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SupportPlane",
+              "SubList": ["Edge1"],
+              "StableSubList": ["Edge1"],
+              "Order": 1,
+              "NbPts": 10,
+              "TolDist": 0.0001,
+              "TolAng": 0.01,
+              "TolCurv": 0.1,
+              "Surface": {
+                "PropertyType": "App::PropertyLinkSub",
+                "value": "SupportPlane",
+                "SubList": ["Face1"],
+                "StableSubList": ["Face1"]
+              },
+              "G0Criterion": 0.05,
+              "G1Criterion": 0.02,
+              "G2Criterion": 0.3
+            },
+            {"value": "BoundaryB", "SubList": ["Edge1"], "StableSubList": ["Edge1"], "Order": 0, "NbPts": 10, "TolDist": 0.0001, "TolAng": 0.01, "TolCurv": 0.1},
+            {"value": "BoundaryC", "SubList": ["Edge1"], "StableSubList": ["Edge1"], "Order": 0, "NbPts": 10, "TolDist": 0.0001, "TolAng": 0.01, "TolCurv": 0.1},
+            {"value": "BoundaryD", "SubList": ["Edge1"], "StableSubList": ["Edge1"], "Order": 0, "NbPts": 10, "TolDist": 0.0001, "TolAng": 0.01, "TolCurv": 0.1}
+          ]
+        },
+        "PointConstraints": [
+          {"Point": [2, 2, 1], "Order": 0, "TolDist": 0.0001}
+        ]
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["GeomPlateCurveCriteria"]
+  }
+}

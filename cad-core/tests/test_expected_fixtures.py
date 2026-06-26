@@ -185,16 +185,16 @@ class CadCoreExpectedFixtureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCa
                 )
 
         criteria = self.expected_freecad("c5m7", "part-geomplate-curve-criteria-diagnostic")
-        self.assertIn("NotImplementedError", criteria["c5m13_s4_evidence"]["runtime_result"])
-        self.assertEqual(criteria["native_error_code"], "unsupported_curve_criteria")
+        self.assertIn("finite-number CurveConstraint criteria", criteria["c8m4_s6_evidence"]["runtime_result"])
+        self.assertEqual(criteria["native_error_code"], "invalid_parameter")
         self.assertEqual(
-            criteria["c6m6_s5_publication"]["status"],
-            "published_c6m6_diagnostic_boundary",
+            criteria["c8m4_s6_publication"]["status"],
+            "request_local_curve_criteria_supported_invalid_type_diagnostic_retained",
         )
-        self.assertFalse(criteria["c6m6_s5_publication"]["active_remaining_gap"])
+        self.assertFalse(criteria["c8m4_s6_publication"]["active_remaining_gap"])
         self.assertIn(
             "CurveConstraintPyImp.cpp::setG0Criterion/setG1Criterion/setG2Criterion",
-            criteria["c5m13_s4_evidence"]["source_authority"],
+            criteria["c8m4_s6_evidence"]["source_authority"],
         )
         wrapper = self.expected_freecad("c5m7", "part-geomplate-wrapper-boundary")
         self.assertIn("139/SIGSEGV", wrapper["c5m13_s4_evidence"]["runtime_result"])

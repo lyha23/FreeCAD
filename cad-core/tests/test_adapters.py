@@ -3914,7 +3914,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         geomplate = capabilities["part_workbench"]["geomplate"]
         self.assertEqual(
             geomplate["status"],
-            "supported_expected_backed_projected_initial_surface_plus_c6m6_product_contract_non_parity",
+            "supported_expected_backed_projected_initial_surface_plus_c6m6_product_contract_non_parity_plus_c8m4_curve_criteria_contract",
         )
         self.assertIn("Part::GeomPlateSurface", geomplate["type_ids"])
         self.assertEqual(geomplate["helper"], "Part.GeomPlate.BuildPlateSurface")
@@ -3991,6 +3991,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "part_geomplate_surface_source_backed_helper",
             "buildplate_surface_helper",
             "c6m6_geomplate_product_contract_non_parity",
+            "c8m4_curve_constraint_criteria_product_contract",
             "default_3d_curve_point_expected_backed",
             "source_backed_3d_curve_g0_constraints",
             "point_3d_constraints",
@@ -4014,7 +4015,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "expected_backed_fixtures",
             "invalid_diagnostics",
             "g1_curve_on_surface_native_hidden_diagnostic_only",
-            "curve_constraint_criteria_diagnostic_boundary",
+            "curve_constraint_criteria_request_local_product_contract",
             "platesurface_curves_non_goal_boundary",
             "native_oracle_blockers_retained_as_historical_evidence",
         ):
@@ -4031,6 +4032,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "c5m7/part-geomplate-point2d-on-surface",
             "c5m7/part-geomplate-mixed-surface-constraints",
             "c5m7/part-geomplate-point-custom-criteria",
+            "c8m4/part-geomplate-curve-custom-criteria",
             "c5m7/part-geomplate-curve-criteria-diagnostic",
             "c5m7/part-geomplate-wrapper-boundary",
             "c5m13/part-geomplate-projected-curve2d-initial-surface",
@@ -4052,6 +4054,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "c5m7/part-geomplate-point2d-on-surface",
                 "c5m7/part-geomplate-mixed-surface-constraints",
                 "c5m7/part-geomplate-point-custom-criteria",
+                "c8m4/part-geomplate-curve-custom-criteria",
                 "c5m7/part-geomplate-curve-criteria-diagnostic",
                 "c5m7/part-geomplate-wrapper-boundary",
                 "c5m13/part-geomplate-projected-curve2d-initial-surface",
@@ -4073,7 +4076,6 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "surface_not_done",
             "approximation_failed",
             "unsupported_property",
-            "unsupported_curve_criteria",
             "unsupported_wrapper_lifecycle",
         ):
             self.assertIn(diagnostic, geomplate["diagnostics"])
@@ -4093,7 +4095,6 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "surface_not_done",
                 "approximation_failed",
                 "unsupported_property",
-                "unsupported_curve_criteria",
                 "unsupported_wrapper_lifecycle",
             ],
         )
@@ -4112,8 +4113,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "projected_curve2d_no_initial_surface_request_local_contract_not_expected_backed",
             "projected_curve2d_no_initial_surface_v1_v2_blocker",
             "point_constraint_criteria_expected_backed",
-            "curve_constraint_criteria_setters_not_implemented_in_freecad",
-            "curve_constraint_criteria_c6m6_diagnostic_freeze",
+            "curve_constraint_criteria_request_local_product_contract",
+            "curve_constraint_criteria_native_setters_historical_non_parity",
             "platesurface_curves_requires_wrapper_lifecycle",
             "platesurface_curves_c6m6_non_goal_freeze",
             "default_and_explicit_build_params",
@@ -4145,7 +4146,15 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             geomplate["field_boundaries"]["product_contract"],
         )
         self.assertIn(
+            "CurveConstraint G0/G1/G2 request-local criteria",
+            geomplate["field_boundaries"]["product_contract"],
+        )
+        self.assertIn(
             "ProjectedCurve2d without InitialSurface V1==V2 native blocker",
+            geomplate["field_boundaries"]["historical_native_helper_evidence"],
+        )
+        self.assertIn(
+            "CurveConstraintPy native criteria setters NotImplemented",
             geomplate["field_boundaries"]["historical_native_helper_evidence"],
         )
         self.assertIn(
@@ -4201,13 +4210,25 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(
             geomplate["narrowed_gaps"]["curve_constraint_criteria_setters_not_implemented"]["status"],
-            "released_c6m6_diagnostic_boundary_not_implemented",
+            "native_non_parity_historical_evidence_request_local_supported",
         )
         self.assertEqual(
             geomplate["narrowed_gaps"]["curve_constraint_criteria_setters_not_implemented"][
-                "s4_diagnostic_evidence"
+                "native_non_parity_evidence"
             ]["status"],
-            "published_c6m6_diagnostic_boundary",
+            "retained_as_historical_native_setter_blocker",
+        )
+        self.assertEqual(
+            geomplate["narrowed_gaps"]["curve_constraint_criteria_setters_not_implemented"]["cad_core_contract"][
+                "status"
+            ],
+            "request_local_curve_constraint_criteria_supported",
+        )
+        self.assertEqual(
+            geomplate["narrowed_gaps"]["curve_constraint_criteria_setters_not_implemented"]["cad_core_contract"][
+                "source_evidence_fields"
+            ],
+            ["g0_criterion", "g1_criterion", "g2_criterion"],
         )
         self.assertEqual(
             geomplate["narrowed_gaps"]["curve_constraint_criteria_setters_not_implemented"][
@@ -4215,17 +4236,17 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ]["error"],
             "NotImplementedError: Not yet implemented",
         )
-        self.assertEqual(
-            geomplate["narrowed_gaps"]["curve_constraint_criteria_setters_not_implemented"]["diagnostic"],
-            "unsupported_curve_criteria",
-        )
         self.assertIn(
             "CurveConstraintPyImp.cpp::setG0Criterion/setG1Criterion/setG2Criterion",
             geomplate["narrowed_gaps"]["curve_constraint_criteria_setters_not_implemented"]["source_authority"],
         )
         self.assertIn(
-            "request-local CurveConstraint criteria fixtures",
+            "stable native criteria oracle fixtures",
             geomplate["narrowed_gaps"]["curve_constraint_criteria_setters_not_implemented"]["delete_condition"],
+        )
+        self.assertIn(
+            "finite-number CurveConstraint G0/G1/G2",
+            geomplate["narrowed_gaps"]["curve_constraint_criteria_setters_not_implemented"]["reopen_condition"],
         )
         self.assertEqual(
             geomplate["narrowed_gaps"]["platesurface_curves_wrapper_lifecycle"]["status"],
@@ -4265,6 +4286,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "fake_part_geomplate_document_object",
             "fake_persistent_platesurface_object",
             "platesurface_curves_wrapper_lifecycle",
+            "downstream_rust_frontend_persistence",
             "filling_brepoffsetapi_makefilling_extension",
             "full_part_surface_family",
         ):
@@ -4277,6 +4299,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "fake_part_geomplate_document_object",
                 "fake_persistent_platesurface_object",
                 "platesurface_curves_wrapper_lifecycle",
+                "downstream_rust_frontend_persistence",
                 "filling_brepoffsetapi_makefilling_extension",
                 "full_part_surface_family",
             ],
@@ -4284,7 +4307,6 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("Part::GeomPlate", geomplate["type_ids"])
         self.assertNotIn("part_platesurface_curves_wrapper", geomplate["covered"])
         for unsupported in (
-            "curve_constraint_criteria",
             "part_platesurface_curves_wrapper",
             "full_advanced_geomplate_support",
             "full_part_surface_family",

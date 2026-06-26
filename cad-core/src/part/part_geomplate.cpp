@@ -33,6 +33,7 @@
 #include <Geom_BSplineSurface.hxx>
 #include <Geom_Curve.hxx>
 #include <Geom_Surface.hxx>
+#include <Law_Constant.hxx>
 #include <Precision.hxx>
 #include <Standard_Failure.hxx>
 #include <TopAbs_ShapeEnum.hxx>
@@ -530,20 +531,6 @@ std::optional<double> numberField(const nlohmann::json& value, const std::string
     return it->get<double>();
 }
 
-std::vector<std::string> presentCriterionFields(const nlohmann::json& value)
-{
-    std::vector<std::string> result;
-    if (!value.is_object()) {
-        return result;
-    }
-    for (const std::string& field : {"G0Criterion", "G1Criterion", "G2Criterion"}) {
-        if (value.find(field) != value.end()) {
-            result.push_back(field);
-        }
-    }
-    return result;
-}
-
 bool readOptionalFiniteField(
     const app::DocumentObject& object,
     runtime::ComputeContext& context,
@@ -592,6 +579,49 @@ bool readPointCriteriaFields(
     return readOptionalFiniteField(object, context, item, "G0Criterion", property, source.g0Criterion, target, subname)
         && readOptionalFiniteField(object, context, item, "G1Criterion", property, source.g1Criterion, target, subname)
         && readOptionalFiniteField(object, context, item, "G2Criterion", property, source.g2Criterion, target, subname);
+}
+
+bool readCurveCriteriaFields(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const nlohmann::json& item,
+    GeomPlateCurveConstraintSource& source
+)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate
+    // /CurveConstraintPyImp.cpp::G0Criterion()/G1Criterion()/G2Criterion() read criteria
+    // from GeomPlate_CurveConstraint. PointConstraintPyImp.cpp::setG0Criterion() etc. prove
+    // the matching OCCT SetG*Criterion finite-number contract used by this request-local DTO.
+    return readOptionalFiniteField(
+               object,
+               context,
+               item,
+               "G0Criterion",
+               "CurveConstraints",
+               source.g0Criterion,
+               source.objectName,
+               source.stableSubname
+           )
+        && readOptionalFiniteField(
+               object,
+               context,
+               item,
+               "G1Criterion",
+               "CurveConstraints",
+               source.g1Criterion,
+               source.objectName,
+               source.stableSubname
+           )
+        && readOptionalFiniteField(
+               object,
+               context,
+               item,
+               "G2Criterion",
+               "CurveConstraints",
+               source.g2Criterion,
+               source.objectName,
+               source.stableSubname
+           );
 }
 
 int intField(const nlohmann::json& value, const std::string& field, int fallback)
@@ -649,24 +679,6 @@ std::optional<std::vector<GeomPlateCurveConstraintSource>> readCurveConstraints(
         }
         const std::size_t count = link.subnames.empty() ? 1U : link.subnames.size();
         for (std::size_t subIndex = 0; subIndex < count; ++subIndex) {
-            const std::vector<std::string> curveCriteria = presentCriterionFields(raw);
-            if (!curveCriteria.empty()) {
-                // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate
-                // /CurveConstraintPyImp.cpp::setG0Criterion()/setG1Criterion()/setG2Criterion()
-                // all raise PyExc_NotImplementedError("Not yet implemented"). Curve criteria are
-                // therefore diagnostic-backed until the FreeCAD wrapper exposes a real setter.
-                addGeomPlateDiagnostic(
-                    object,
-                    context,
-                    "unsupported_curve_criteria",
-                    "Part.GeomPlate.CurveConstraint " + curveCriteria.front()
-                        + " setter is NotImplementedError in FreeCAD",
-                    "CurveConstraints." + curveCriteria.front(),
-                    link.object,
-                    stableSubnameForLink(link, subIndex)
-                );
-                return std::nullopt;
-            }
             const auto shape = resolveGeomPlateCurveShape(context, link, subIndex);
             if (!shape || shape->IsNull()) {
                 addGeomPlateDiagnostic(
@@ -694,6 +706,9 @@ std::optional<std::vector<GeomPlateCurveConstraintSource>> readCurveConstraints(
             source.tolDist = positiveField(raw, "TolDist", source.tolDist);
             source.tolAng = positiveField(raw, "TolAng", source.tolAng);
             source.tolCurv = positiveField(raw, "TolCurv", source.tolCurv);
+            if (!readCurveCriteriaFields(object, context, raw, source)) {
+                return std::nullopt;
+            }
             result.push_back(std::move(source));
         }
     }
@@ -1338,6 +1353,46 @@ std::optional<GeomPlateSourceEvidence> loadInitialSurface(
     return evidence;
 }
 
+void applyCurveCriteria(
+    const GeomPlateCurveConstraintSource& source,
+    const Handle(GeomPlate_CurveConstraint)& constraint,
+    double first,
+    double last
+)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate
+    // /CurveConstraintPyImp.cpp::G0Criterion()/G1Criterion()/G2Criterion() read the wrapped
+    // GeomPlate_CurveConstraint criteria state; OCCT exposes the matching
+    // GeomPlate_CurveConstraint::SetG0Criterion()/SetG1Criterion()/SetG2Criterion() mutators,
+    // whose arguments are Law_Function handles. CAD Core maps request-local finite numbers to
+    // Law_Constant criteria over the source curve range without claiming native FreeCAD Python
+    // setter parity.
+    const auto constantCriterion = [first, last](double value) {
+        Handle(Law_Constant) criterion = new Law_Constant();
+        criterion->Set(value, first, last);
+        return criterion;
+    };
+    if (source.g0Criterion) {
+        constraint->SetG0Criterion(constantCriterion(*source.g0Criterion));
+    }
+    if (source.g1Criterion) {
+        constraint->SetG1Criterion(constantCriterion(*source.g1Criterion));
+    }
+    if (source.g2Criterion) {
+        constraint->SetG2Criterion(constantCriterion(*source.g2Criterion));
+    }
+}
+
+void writeCurveCriteriaEvidence(
+    const GeomPlateCurveConstraintSource& source,
+    GeomPlateSourceEvidence& evidence
+)
+{
+    evidence.g0Criterion = source.g0Criterion;
+    evidence.g1Criterion = source.g1Criterion;
+    evidence.g2Criterion = source.g2Criterion;
+}
+
 std::optional<GeomPlateSourceEvidence> addCurveOnSurfaceConstraint(
     GeomPlate_BuildPlateSurface& builder,
     const GeomPlateCurveConstraintSource& source,
@@ -1392,6 +1447,7 @@ std::optional<GeomPlateSourceEvidence> addCurveOnSurfaceConstraint(
         source.tolAng,
         source.tolCurv
     );
+    applyCurveCriteria(source, constraint, first, last);
     builder.Add(constraint);
 
     GeomPlateSourceEvidence evidence;
@@ -1404,6 +1460,7 @@ std::optional<GeomPlateSourceEvidence> addCurveOnSurfaceConstraint(
     evidence.tolDist = source.tolDist;
     evidence.tolAng = source.tolAng;
     evidence.tolCurv = source.tolCurv;
+    writeCurveCriteriaEvidence(source, evidence);
     evidence.surfaceObjectName = source.surface->objectName;
     evidence.surfaceSubname = source.surface->subname;
     evidence.surfaceStableSubname = source.surface->stableSubname;
@@ -1490,6 +1547,7 @@ std::optional<GeomPlateSourceEvidence> addCurve2dConstraint(
     else {
         constraint->SetCurve2dOnSurf(curve2d);
     }
+    applyCurveCriteria(source, constraint, first, last);
     builder.Add(constraint);
 
     GeomPlateSourceEvidence evidence;
@@ -1504,6 +1562,7 @@ std::optional<GeomPlateSourceEvidence> addCurve2dConstraint(
     evidence.tolDist = source.tolDist;
     evidence.tolAng = source.tolAng;
     evidence.tolCurv = source.tolCurv;
+    writeCurveCriteriaEvidence(source, evidence);
     evidence.curve2dStart = source.curve2d->start;
     evidence.curve2dEnd = source.curve2d->end;
     evidence.surfaceObjectName = source.surface->objectName;
@@ -1557,6 +1616,7 @@ std::optional<GeomPlateSourceEvidence> addCurveConstraint(
         source.tolAng,
         source.tolCurv
     );
+    applyCurveCriteria(source, constraint, first, last);
     builder.Add(constraint);
 
     GeomPlateSourceEvidence evidence;
@@ -1569,6 +1629,7 @@ std::optional<GeomPlateSourceEvidence> addCurveConstraint(
     evidence.tolDist = source.tolDist;
     evidence.tolAng = source.tolAng;
     evidence.tolCurv = source.tolCurv;
+    writeCurveCriteriaEvidence(source, evidence);
     return evidence;
 }
 

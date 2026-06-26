@@ -100,6 +100,15 @@ struct GeomPlateCurveConstraintSource
     double tolDist = 0.0001;
     double tolAng = 0.01;
     double tolCurv = 0.1;
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate
+    // /CurveConstraintPyImp.cpp::CurveConstraintPy::G0Criterion()/G1Criterion()/G2Criterion()
+    // read "G0Criterion(u)", "G1Criterion(u)" and "G2Criterion(u)" from the wrapped
+    // GeomPlate_CurveConstraint; PointConstraintPyImp.cpp::setG0Criterion() etc. call the
+    // matching OCCT SetG*Criterion methods. CAD Core accepts these as request-local criteria
+    // while FreeCAD's Python CurveConstraint setters remain native non-parity evidence.
+    std::optional<double> g0Criterion;
+    std::optional<double> g1Criterion;
+    std::optional<double> g2Criterion;
 };
 
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate/PointConstraintPyImp.cpp

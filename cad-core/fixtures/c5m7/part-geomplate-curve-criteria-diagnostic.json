@@ -18,7 +18,7 @@
               "TolDist": 0.0001,
               "TolAng": 0.01,
               "TolCurv": 0.1,
-              "G0Criterion": 0.05
+              "G0Criterion": "not-a-finite-number"
             }
           ]
         },

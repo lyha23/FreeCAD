@@ -2366,15 +2366,49 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(point["g2_criterion"], 0.3)
         self.assert_object_matches_expected(result, "c5m7", "part-geomplate-point-custom-criteria")
 
-    def test_c5m7_part_geomplate_curve_criteria_are_locatable_diagnostics(self) -> None:
+    def test_c8m4_part_geomplate_curve_custom_criteria_are_request_local_product_contract(
+        self,
+    ) -> None:
+        result = self.run_recompute("part-geomplate-curve-custom-criteria", "c8m4")
+        geomplate = result["objects"]["GeomPlateCurveCriteria"]
+        source_evidence = geomplate["source_evidence"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(geomplate["status"], "ok")
+        self.assertEqual(geomplate["feature"], "part_geomplate_surface")
+        self.assertEqual(geomplate["helper"], "Part.GeomPlate.BuildPlateSurface")
+        self.assertEqual(geomplate["dto"], "PartGeomPlateSurfaceDTO")
+        self.assertEqual(geomplate["curve_constraint_count"], 4)
+        self.assertEqual(geomplate["point_constraint_count"], 1)
+        curve = next(
+            item
+            for item in source_evidence
+            if item["kind"] == "curve_on_surface" and item["object"] == "SupportPlane"
+        )
+        self.assertEqual(curve["subname"], "Edge1")
+        self.assertEqual(curve["stable_subname"], "Edge1")
+        self.assertEqual(curve["surface_object"], "SupportPlane")
+        self.assertEqual(curve["surface_subname"], "Face1")
+        self.assertEqual(curve["g0_criterion"], 0.05)
+        self.assertEqual(curve["g1_criterion"], 0.02)
+        self.assertEqual(curve["g2_criterion"], 0.3)
+        self.assertNotIn(
+            "unsupported_curve_criteria",
+            [item["code"] for item in result["diagnostics"]],
+        )
+
+    def test_c5m7_part_geomplate_curve_criteria_invalid_type_is_finite_number_diagnostic(
+        self,
+    ) -> None:
         result = self.run_recompute("part-geomplate-curve-criteria-diagnostic", "c5m7")
         diagnostic = result["diagnostics"][0]
         geomplate = result["objects"]["CurveCriteriaDiagnostic"]
 
-        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_curve_criteria"])
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["invalid_parameter"])
         self.assertEqual(diagnostic["property"], "CurveConstraints.G0Criterion")
         self.assertEqual(diagnostic["target"], "BoundaryA")
         self.assertEqual(diagnostic["subname"], "Edge1")
+        self.assertIn("finite number", diagnostic["message"])
         self.assertEqual(geomplate["status"], "error")
         self.assertEqual(geomplate["feature"], "part_geomplate_surface")
         self.assertEqual(geomplate["helper"], "Part.GeomPlate.BuildPlateSurface")
