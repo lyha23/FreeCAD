@@ -18,7 +18,8 @@ C8-M1 的目标不是做单 case 探针，而是把同一 `src/Mod/PartDesign/Ap
 - 当前 `cad-core/src/runtime/feature_registry.cpp` 未注册 `PartDesign::ShapeBinder`、`PartDesign::SubShapeBinder` 或 `PartDesign::SubShapeBinderPython`；S0 不能声明 supported 或 `backend_gap_requires_implementation`。
 - FreeCAD source authority 明确：`ShapeBinder::updatedShape()`、`ShapeBinder::buildShapeFromReferences()`、`SubShapeBinder::update()`、`SubShapeBinder::getSubObject()`、`setupCopyOnChange()`、`setLinks()` 与 `onChanged()` 构成主链。
 - 上游测试已有候选 oracle：`PartDesignTests/TestShapeBinder.py` 覆盖跨 Body ShapeBinder、SubShapeBinder edge offset、binder before / after Pad、binder as Revolution profile；`PartDesignTests/TestTopologicalNamingProblem.py` 覆盖 ShapeBinder / SubShapeBinder ElementMap。
-- S0 已完成；S1-S6 待执行。索引文件已标 `【已实现】` 仅表示队列索引完成。
+- S0 已完成 live 基线与批量边界冻结；S1 已完成 FreeCAD source authority 与 current cad-core coverage 复核。下一 pending 是 S2 oracle 候选矩阵。索引文件已标 `【已实现】` 仅表示队列索引完成。
+- S1 结论：current `feature_registry.cpp` 未注册 `PartDesign::ShapeBinder`、`PartDesign::SubShapeBinder` 或 `PartDesign::SubShapeBinderPython`；current `body.cpp`、`profile_resolver.cpp`、`topo_shape_expansion.cpp`、`property_topo_shape.cpp`、`copy_on_change.cpp`、`reference_resolution.cpp` 和 P7/P8 tests 可复用，但不能记录为 Binder supported。
 
 ## 收口边界
 

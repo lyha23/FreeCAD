@@ -36,13 +36,15 @@ C8-M1 选择 `PartDesign::ShapeBinder` / `PartDesign::SubShapeBinder`，因为�
 
 S0 不采 oracle，不改 C++。
 
-S0 结论：`HEAD=29da94dd13`，当前 registry 未覆盖 `PartDesign::ShapeBinder` / `PartDesign::SubShapeBinder` / `PartDesign::SubShapeBinderPython`；`C8M1-BLOCKER-000` 关闭，下一步进入 S1 source 与 current coverage 复核。
+S0 结论：`HEAD=29da94dd13`，当前 registry 未覆盖 `PartDesign::ShapeBinder` / `PartDesign::SubShapeBinder` / `PartDesign::SubShapeBinderPython`；`C8M1-BLOCKER-000` 关闭。
 
 ## S1 FreeCAD 源码与 current coverage 复核
 
-复核 `ShapeBinder.cpp`、`ShapeBinder.h`、`Body.cpp`、`Feature.cpp`、`App/Link.cpp`、`PartFeature.cpp` 和 current `cad-core` 落点。S1 必须确认每个 scope 是否有 FreeCAD authority、current cad-core support、现有复用模块和风险边界。
+已复核 `ShapeBinder.cpp`、`ShapeBinder.h`、`Body.cpp`、`Feature.cpp`、上游 PartDesign tests 和 current `cad-core` 落点。S1 确认每个 scope 都有 FreeCAD authority 与 current cad-core coverage 结论：registry 未注册 Binder TypeId，`body.cpp`、`profile_resolver.cpp`、`topo_shape_expansion.cpp`、`property_topo_shape.cpp`、`copy_on_change.cpp`、`reference_resolution.cpp` 可复用但不是 Binder 支持。
 
 S1 不采 oracle，不改 C++。
+
+S1 结论：`C8M1-BLOCKER-101` 已关闭到 source authority；所有 scope 仍保持 `backend_gap_candidate` / `oracle_candidate` / `diagnostic_non_goal`，不提升为 supported 或 `backend_gap_requires_implementation`。下一步进入 S2 oracle 候选矩阵。
 
 ## S2 oracle 候选矩阵
 

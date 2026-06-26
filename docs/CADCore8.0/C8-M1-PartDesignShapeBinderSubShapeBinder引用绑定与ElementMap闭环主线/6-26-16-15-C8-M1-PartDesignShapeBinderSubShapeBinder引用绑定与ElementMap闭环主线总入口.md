@@ -21,7 +21,7 @@ C8-M1 是 CADCore8.0 的第一包，目标是把 FreeCAD `PartDesign::ShapeBinde
 
 ```text
 S0 live 基线与批量边界冻结
-  -> S1 FreeCAD ShapeBinder.cpp 调用链和 current cad-core 缺口复核
+  -> S1 FreeCAD ShapeBinder.cpp 调用链和 current cad-core 缺口复核（已完成）
   -> S2 oracle 候选与 backend gate 矩阵
   -> S3 批量 native oracle / expected / blocker 采集
   -> S4 cad-core C++ executor / DTO / topo 实现
@@ -59,7 +59,7 @@ S0 live 基线与批量边界冻结
 | --- | --- | --- |
 | 工作步骤总入口 | `工作步骤细分/6-26-16-15-【已实现】C8-M1工作步骤总入口.md` | 队列索引 |
 | S0 | `工作步骤细分/6-26-16-16-【已实现】C8-M1-S0-live基线与Binder批量边界冻结.md` | 冻结声明口径 |
-| S1 | `工作步骤细分/6-26-16-17-C8-M1-S1-FreeCAD源码与current-cad-core覆盖复核.md` | 源码与现状复核 |
+| S1 | `工作步骤细分/6-26-16-17-【已实现】C8-M1-S1-FreeCAD源码与current-cad-core覆盖复核.md` | 源码与现状复核 |
 | S2 | `工作步骤细分/6-26-16-18-C8-M1-S2-ShapeBinderSubShapeBinder-oracle候选矩阵.md` | oracle 候选与分类 |
 | S3 | `工作步骤细分/6-26-16-19-C8-M1-S3-native-oracle批量采集与expected固化.md` | 批量采集 native expected |
 | S4 | `工作步骤细分/6-26-16-20-C8-M1-S4-cad-core-ShapeBinderSubShapeBinder实现.md` | C++ executor / topo 实现 |
@@ -73,4 +73,4 @@ S0 live 基线与批量边界冻结
 | non-goal | `矩阵/c8m1_shapebinder_non_goal_registry.tsv` | 非目标与 reopen 条件 |
 | validation | `矩阵/c8m1_shapebinder_validation_matrix.tsv` | 验收命令 |
 
-当前 S0 已完成；S1-S6 为待执行状态。矩阵是 seed，不是发布闸门结论。
+当前 S0、S1 已完成；S2-S6 为待执行状态。矩阵是 seed / S1 source coverage 结论，不是发布闸门结论。
