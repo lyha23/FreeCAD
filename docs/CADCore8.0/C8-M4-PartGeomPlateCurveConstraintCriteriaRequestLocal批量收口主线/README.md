@@ -27,13 +27,15 @@ C8-M4 承接 C8-M3 完成后的 live gap：`part_workbench.geomplate.narrowed_ga
 - S3 live 基线：`HEAD=340ecaf864`（`340ecaf864 docs: 完成 C8-M4 S2 scope blocker 分类`），`git status --short -uall` 无输出。
 - S3 已复核 native CurveConstraint criteria 边界：源码中 `setG0Criterion` / `setG1Criterion` / `setG2Criterion` 仍为 `PyExc_NotImplementedError("Not yet implemented")`，因此 `C8M4-ORACLE-101` 为 `native_oracle_blocked`；`PyInit` 与 `G0Criterion(u)` / `G1Criterion(u)` / `G2Criterion(u)` 证明 wrapped `GeomPlate_CurveConstraint` 有 criteria read state，但 getter 不证明 setter 支持。`FreeCADCmd 1.2.0 revision 20260519` 可构造 CurveConstraint，但 setter/getter runtime probe 均终止且未返回 JSON，记录为 `environment_probe_blocked`，不当作 semantic failure。
 - S3 关闭 `C8M4-BLOCKER-301`；完成后队列首项应前移到 S4。
+- S4 live 基线：`HEAD=c2b9038d0e`（`c2b9038d0e docs: 完成 C8-M4 S3 原生边界复核`），`git status --short -uall` 无输出。
+- S4 已裁决打开 `open_S6_implementation_gate`：当前 Curve DTO 仍无 G0/G1/G2，`readCurveConstraints()` 仍由 `presentCriterionFields()` 在 source 创建前报 `unsupported_curve_criteria`，3D Curve `addCurveConstraint()` 仍未调用 `SetG0Criterion()` / `SetG1Criterion()` / `SetG2Criterion()`，但 `GeomPlateSourceEvidence` 已有 optional criteria 字段可复用；因此 S6 必须补 DTO、finite-number parser validation、3D curve apply path、request-local fixture、focused tests 和 capability publication。S4 关闭 `C8M4-BLOCKER-401`；完成后队列首项应前移到 S5。
 - S0/S1/S2 只冻结声明、证据和 route 矩阵，不采 FreeCAD oracle，不新增 fixture / expected / tests / collector，不修改 C++ / Rust / FreeCAD `src/`。
 - 输入 gap `part_workbench.geomplate.narrowed_gaps.curve_constraint_criteria_setters_not_implemented` 与 diagnostic `unsupported_curve_criteria` 在 S0 保留，不提前删除或声明 supported。
 
 ## 批量范围
 
 - 纳入：CurveConstraint 的 `G0Criterion` / `G1Criterion` / `G2Criterion` 三个字段。
-- 纳入：当前 `cad-core` DTO parser、OCCT apply path、fixture / focused tests、capability publication 口径；S1 已确认 Curve request-local criteria 仍缺 DTO 字段、parser 读取和 Curve apply path。
+- 纳入：当前 `cad-core` DTO parser、OCCT apply path、fixture / focused tests、capability publication 口径；S4 已打开 S6 implementation gate，要求 Curve request-local criteria 同批补 DTO 字段、parser validation、3D Curve apply path 和 source evidence tests。
 - 纳入：FreeCAD `CurveConstraintPyImp.cpp` setter native 边界复核。
 - 不纳入：`PlateSurface.Curves` wrapper 生命周期、GUI TaskPanel、跨请求 BREP / TopoDS_Shape / NamedShape cache、完整 GeomPlate 曲面族扩展。
 
