@@ -25,13 +25,14 @@ C8-M2 的目标是拆清两件事：
 - C8-M2 S2 已实现 CopyOnChange DTO 准入与 oracle 候选矩阵：C8-M1 capability / diagnostics / fixtures 为 `sync_required` 下游合同；CopyOnChange Disabled / Enabled / Mutated property-state 与 PartialLoad allow-partial 为 `oracle_candidate`；full temporary-document copied-object cache 为 `known_gap_retained`；request-local DTO 为 `backend_gap_candidate`，不等于 S6 implementation gate；GUI/session/persistent cache/Rust 下游为 `diagnostic_non_goal`。`C8M2-BLOCKER-201` 已关闭。
 - C8-M2 S3 已实现 native CopyOnChange 生命周期探针与 blocker evidence：FreeCADCmd 采集 `freecad_version=1.2.0 revision 20260519`；`C8M2-ORACLE-101` / `102` 已采 property-state；`C8M2-ORACLE-103` 观察到 `_tmp_binder` 和 `_CopiedLink`，但 `_CopiedObjs` / `copyObject` / `recomputeFeature(true)` 全缓存仍不可导出为稳定 request-local DTO，继续保持 `oracle_blocked`。`C8M2-BLOCKER-301` 已关闭。
 - C8-M2 S4 已实现下游 `opencascade-rs` / 前端同步源头合同：新增 `矩阵/c8m2_downstream_sync_contract.tsv`，覆盖 TypeIds、C8-M1 12 个 input/expected fixture blackbox 种子、C8-M2 native probe evidence 使用边界、`/cad/capabilities` status / covered / remaining_gaps、diagnostics vocabulary、known_gap delete/reopen condition，以及 ElementMap / NamedShape / picking / reference update 输出合同。`C8M2-SYNC-101..103` 与 `C8M2-BLOCKER-401` 已关闭。
-- C8-M2 S5 已实现 capability 协议与前端接入边界发布：`./cad-core capabilities > /tmp/c8m2-capabilities.json` 和 `python3 -m unittest tests.test_c8_shapebinder tests.test_diagnostics` 通过；`shape_binder` 保持 supported，`sub_shape_binder` 保持 `copy_on_change_full_temporary_document_cache` known_gap / `oracle_blocked`；下游同步保持 `sync_required`，GUI/session/persistent cache/Rust 与前端持久 full BREP / TopoDS_Shape / NamedShape / ElementMap / temporary cache 均发布为 `diagnostic_non_goal`。`C8M2-BLOCKER-501` 已关闭，S6 仍待执行。
+- C8-M2 S5 已实现 capability 协议与前端接入边界发布：`./cad-core capabilities > /tmp/c8m2-capabilities.json` 和 `python3 -m unittest tests.test_c8_shapebinder tests.test_diagnostics` 通过；`shape_binder` 保持 supported，`sub_shape_binder` 保持 `copy_on_change_full_temporary_document_cache` known_gap / `oracle_blocked`；下游同步保持 `sync_required`，GUI/session/persistent cache/Rust 与前端持久 full BREP / TopoDS_Shape / NamedShape / ElementMap / temporary cache 均发布为 `diagnostic_non_goal`。`C8M2-BLOCKER-501` 已关闭。
+- C8-M2 S6 已实现 no-code release gate：S3 / S5 只证明 property-state evidence，未证明稳定 request-local CopyOnChange DTO；`C8M2-ORACLE-103` full temporary-document cache 继续 `oracle_blocked`，`C8M2-BLOCKER-601` 已关闭，C8-M2 队列为空。
 
 ## 收口边界
 
 - C8-M2 不修改 Rust 下游代码；若需要执行下游同步，应另在 `opencascade-rs` 建包。
 - C8-M2 不实现跨请求 backend session、persistent BREP、TopoDS_Shape、NamedShape、ElementMap 或 FreeCAD temporary document cache。
-- C8-M2 只有在 S6 明确接受 S3 property-state 子集为 request-local DTO 时，才能打开 FreeCAD `cad-core` C++ implementation gate；full temporary-document copied-object cache 仍不得写成 supported。
+- C8-M2 S6 已裁决本包不打开 FreeCAD `cad-core` C++ implementation gate；只有未来 native probe 导出稳定 request-local DTO 且 product approval 明确时，才使用 `feature_shape_binder.cpp` / `copy_on_change.cpp` 落代码。full temporary-document copied-object cache 仍不得写成 supported。
 
 ## 队列检查
 

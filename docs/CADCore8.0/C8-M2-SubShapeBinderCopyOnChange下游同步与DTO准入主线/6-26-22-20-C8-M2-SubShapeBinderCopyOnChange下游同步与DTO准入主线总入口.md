@@ -18,7 +18,8 @@ C8-M2 是 C8-M1 之后的源头方案包。它不重开 `ShapeBinder` / `SubShap
 - C8-M2 S2 DTO 准入与 oracle 候选矩阵已完成：`HEAD=73a5acf8a8`（`73a5acf8a8 docs: 完成 C8-M2 S1 源码与能力复核`），开始工作区干净；已把 C8-M1 capability / diagnostics / fixtures 分类为 `sync_required`，CopyOnChange property-state 和 PartialLoad 分类为 `oracle_candidate`，full temporary-document cache 分类为 `known_gap_retained`，request-local DTO 分类为 `backend_gap_candidate`，GUI/session/persistent cache/Rust 下游分类为 `diagnostic_non_goal`。
 - C8-M2 S3 native lifecycle probe 已完成：`HEAD=12be750a30`（`12be750a30 docs: 完成 C8-M2 S2 DTO 准入矩阵`），开始工作区干净；FreeCADCmd 采集 `freecad_version=1.2.0 revision 20260519`，`C8M2-ORACLE-101` / `102` 为 property-state collected，`C8M2-ORACLE-103` 仍为 retained `oracle_blocked`，因为 `_CopiedObjs`、`copyObject` dependency order 和 `recomputeFeature(true)` 生命周期未能导出为稳定 request-local DTO。
 - C8-M2 S4 下游同步契约已完成：`HEAD=7b4eec93fe`（`7b4eec93fe docs: 完成 C8-M2 S3 native 生命周期探针`），开始工作区干净；已新增 `矩阵/c8m2_downstream_sync_contract.tsv`，关闭 `C8M2-SYNC-101..103` 和 `C8M2-BLOCKER-401`，并保持 full temporary-document cache 为 `known_gap_diagnostic` / `oracle_blocked`。
-- C8-M2 S5 capability 协议与前端接入边界发布已完成：`HEAD=d1afdb460f`（`d1afdb460f docs: 完成 C8-M2 S4 下游同步契约`），开始工作区干净；`./cad-core capabilities > /tmp/c8m2-capabilities.json` 和 `python3 -m unittest tests.test_c8_shapebinder tests.test_diagnostics` 通过，`C8M2-BLOCKER-501` 已关闭，S6 仍 pending。
+- C8-M2 S5 capability 协议与前端接入边界发布已完成：`HEAD=d1afdb460f`（`d1afdb460f docs: 完成 C8-M2 S4 下游同步契约`），开始工作区干净；`./cad-core capabilities > /tmp/c8m2-capabilities.json` 和 `python3 -m unittest tests.test_c8_shapebinder tests.test_diagnostics` 通过，`C8M2-BLOCKER-501` 已关闭。
+- C8-M2 S6 实现准入与发布闸门已完成：`HEAD=8994732678`（`8994732678 docs: 完成 C8-M2 S5 capability 发布`），入场工作区干净；S6 裁决为 no-code release gate，不打开 C++ implementation gate；`C8M2-BLOCKER-601` 已关闭，队列为空。
 - S2 后的状态词典仍为 `already_supported`、`sync_required`、`oracle_candidate`、`known_gap_retained`、`backend_gap_candidate`、`backend_gap_requires_implementation`、`diagnostic_non_goal`。`copy_on_change_full_temporary_document_cache` 继续是 `known_gap_diagnostic` / `oracle_blocked`，不能写成 supported。
 
 ## 证明链条
@@ -30,7 +31,7 @@ S0 live 基线与声明冻结
   -> S3 native CopyOnChange 生命周期探针
   -> S4 下游 opencascade-rs 同步契约（已完成）
   -> S5 capability / 前端协议发布边界（已完成）
-  -> S6 实现准入与发布闸门
+  -> S6 实现准入与发布闸门（已完成，no-code release gate）
 ```
 
 ## FreeCAD 调用依据
@@ -62,7 +63,7 @@ S0 live 基线与声明冻结
 | S3 | `工作步骤细分/6-26-22-24-【已实现】C8-M2-S3-native-CopyOnChange生命周期探针与blocker证据.md` | native lifecycle 证据 |
 | S4 | `工作步骤细分/6-26-22-25-【已实现】C8-M2-S4-下游opencascade-rs同步契约方案.md` | 下游同步契约 |
 | S5 | `工作步骤细分/6-26-22-26-【已实现】C8-M2-S5-capability协议与前端接入边界发布.md` | capability / 前端边界 |
-| S6 | `工作步骤细分/6-26-22-27-C8-M2-S6-实现准入与发布闸门.md` | 实现准入与发布闸门 |
+| S6 | `工作步骤细分/6-26-22-27-【已实现】C8-M2-S6-实现准入与发布闸门.md` | no-code release gate |
 | source candidates | `矩阵/c8m2_copyonchange_source_candidates.tsv` | FreeCAD / cad-core authority |
 | scope review | `矩阵/c8m2_copyonchange_scope_review_matrix.tsv` | scope 与状态 |
 | blocker queue | `矩阵/c8m2_copyonchange_blocker_queue.tsv` | blocker 与关闭条件 |
@@ -72,4 +73,4 @@ S0 live 基线与声明冻结
 | downstream sync | `矩阵/c8m2_downstream_sync_contract.tsv` | 下游 TypeIds / fixtures / capability / diagnostics / ElementMap 合同 |
 | validation | `矩阵/c8m2_copyonchange_validation_matrix.tsv` | 验收命令 |
 
-当前 S0/S1/S2/S3/S4/S5 已实现，S6 仍为待执行状态。矩阵中 `C8M2-ORACLE-101..102` 已完成 S3 property-state evidence，`C8M2-ORACLE-103` 保持 `oracle_blocked` retained blocker，`C8M2-SYNC-101..103` 与 `C8M2-BLOCKER-401` 已关闭，`C8M2-BLOCKER-501` 已在 S5 关闭；S6 implementation/no-code 裁决仍不是本步结论。
+当前 S0/S1/S2/S3/S4/S5/S6 均已实现，C8-M2 队列为空。矩阵中 `C8M2-ORACLE-101..102` 已完成 S3 property-state evidence，`C8M2-ORACLE-103` 保持 `oracle_blocked` retained blocker，`C8M2-SYNC-101..103` 保留下游同步合同；S6 已裁决为 no-code release gate，未打开 C++ implementation gate。

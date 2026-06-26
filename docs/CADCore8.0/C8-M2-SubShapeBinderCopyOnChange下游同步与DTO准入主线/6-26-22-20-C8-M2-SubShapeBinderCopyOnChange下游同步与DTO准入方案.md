@@ -57,11 +57,13 @@ S2 结论：C8-M1 ShapeBinder / SubShapeBinder capability、fixtures、expected 
 
 已完成。S5 live 基线为 `HEAD=d1afdb460f`（`d1afdb460f docs: 完成 C8-M2 S4 下游同步契约`），开始工作区干净。S5 通过 `./cad-core capabilities > /tmp/c8m2-capabilities.json` 与 `python3 -m unittest tests.test_c8_shapebinder tests.test_diagnostics` 验证当前 C++ / tests 口径一致，因此只回写文档和矩阵，不修改 `capability_contract.cpp` 或 focused tests。
 
-S5 发布口径：`part_design.shape_binder` 保持 expected-backed supported，`part_design.sub_shape_binder` 保持 expected-backed request-local support with `copy_on_change_full_temporary_document_cache` known_gap；下游同步合同继续是 `sync_required`，full temporary-document cache 继续是 `known_gap_diagnostic` / `oracle_blocked`，GUI/session/persistent cache/Rust 下游和前端持久 full BREP / TopoDS_Shape / NamedShape / ElementMap / temporary cache 均为 `diagnostic_non_goal`。`C8M2-BLOCKER-501` 已关闭，S6 implementation/no-code gate 仍 pending。
+S5 发布口径：`part_design.shape_binder` 保持 expected-backed supported，`part_design.sub_shape_binder` 保持 expected-backed request-local support with `copy_on_change_full_temporary_document_cache` known_gap；下游同步合同继续是 `sync_required`，full temporary-document cache 继续是 `known_gap_diagnostic` / `oracle_blocked`，GUI/session/persistent cache/Rust 下游和前端持久 full BREP / TopoDS_Shape / NamedShape / ElementMap / temporary cache 均为 `diagnostic_non_goal`。`C8M2-BLOCKER-501` 已关闭，S6 release gate 已在 no-code 裁决下关闭。
 
 ## S6 实现准入与发布闸门
 
-若 S6 明确接受 S3 property-state 子集为 request-local CopyOnChange DTO，S6 指定 C++ landing 和 focused tests；若不能证明 product-approved DTO，则关闭为 no-code release gate，并给出下游同步或下一轮 oracle probe 任务。full temporary-document copied-object cache 仍不得写成 supported。
+已完成。S6 live 基线为 `HEAD=8994732678`（`8994732678 docs: 完成 C8-M2 S5 capability 发布`），开始工作区干净。S6 裁决为 no-code release gate：S3 / S5 只证明 property-state evidence，未证明 product-approved 稳定 request-local CopyOnChange DTO；`C8M2-ORACLE-103` full temporary-document copied-object cache 继续保持 `oracle_blocked` / `known_gap_diagnostic`。
+
+下一轮代码落点只作为未来入口保留：`cad-core/src/part_design/feature_shape_binder.cpp` 与 `cad-core/src/app/copy_on_change.cpp` 仅在 native probe 导出稳定 request-local DTO 且 product approval 明确后使用；`opencascade-rs` 同步另包执行。C8-M2 不修改 C++、tests 或 Rust，不把 full temporary-document copied-object cache 写成 supported。
 
 ## 验收分层
 
@@ -74,7 +76,7 @@ awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " f
 git diff --check
 ```
 
-实现短跑：
+实现短跑仅在打开 C++ implementation gate 时执行；S6 no-code release gate 未运行该重型验证，保留 S5 focused checks 结论：
 
 ```bash
 cd /home/user/Chili3DProject/FreeCAD/cad-core
