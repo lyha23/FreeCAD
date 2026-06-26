@@ -14,6 +14,10 @@ C8-M1 转向 `PartDesign::ShapeBinder` / `PartDesign::SubShapeBinder` 外部引�
 - C8-M2 方案：`C8-M2-SubShapeBinderCopyOnChange下游同步与DTO准入主线/6-26-22-20-C8-M2-SubShapeBinderCopyOnChange下游同步与DTO准入方案.md`
 - C8-M2 工作步骤：`C8-M2-SubShapeBinderCopyOnChange下游同步与DTO准入主线/工作步骤细分/`
 - C8-M2 矩阵：`C8-M2-SubShapeBinderCopyOnChange下游同步与DTO准入主线/矩阵/`
+- C8-M3 总入口：`C8-M3-PartSketchDistanceTypeConicCurveRequestLocal批量收口主线/6-27-01-00-C8-M3-PartSketchDistanceTypeConicCurveRequestLocal批量收口主线总入口.md`
+- C8-M3 方案：`C8-M3-PartSketchDistanceTypeConicCurveRequestLocal批量收口主线/6-27-01-00-C8-M3-PartSketchDistanceTypeConicCurveRequestLocal批量收口方案.md`
+- C8-M3 工作步骤：`C8-M3-PartSketchDistanceTypeConicCurveRequestLocal批量收口主线/工作步骤细分/`
+- C8-M3 矩阵：`C8-M3-PartSketchDistanceTypeConicCurveRequestLocal批量收口主线/矩阵/`
 
 ## 当前状态
 
@@ -31,6 +35,8 @@ C8-M1 转向 `PartDesign::ShapeBinder` / `PartDesign::SubShapeBinder` 外部引�
 - C8-M2 S4 已完成下游 `opencascade-rs` / 前端同步源头合同：`HEAD=7b4eec93fe`（`7b4eec93fe docs: 完成 C8-M2 S3 native 生命周期探针`），开始工作区干净。新增 `矩阵/c8m2_downstream_sync_contract.tsv`，覆盖 TypeIds、C8-M1 fixtures / expected、C8-M2 native probe 使用边界、`/cad/capabilities`、diagnostics vocabulary、known_gap delete/reopen condition 和 ElementMap / NamedShape 输出合同；`C8M2-SYNC-101..103` 与 `C8M2-BLOCKER-401` 已关闭。
 - C8-M2 S5 已完成 capability 协议与前端接入边界发布：`HEAD=d1afdb460f`（`d1afdb460f docs: 完成 C8-M2 S4 下游同步契约`），开始工作区干净。`./cad-core capabilities > /tmp/c8m2-capabilities.json` 与 `python3 -m unittest tests.test_c8_shapebinder tests.test_diagnostics` 通过；`shape_binder` 保持 supported，`sub_shape_binder` 保持 `copy_on_change_full_temporary_document_cache` known_gap / `oracle_blocked`，下游同步保持 `sync_required`，GUI/session/persistent cache/Rust 与前端持久 full BREP / TopoDS_Shape / NamedShape / ElementMap / temporary cache 均发布为 `diagnostic_non_goal`；`C8M2-BLOCKER-501` 已关闭。
 - C8-M2 S6 已完成实现准入与发布闸门：`HEAD=8994732678`（`8994732678 docs: 完成 C8-M2 S5 capability 发布`），开始工作区干净。S6 裁决为 no-code release gate，不打开 C++ implementation gate；`C8M2-ORACLE-103` full temporary-document cache 保持 `oracle_blocked` / `known_gap_diagnostic`，`C8M2-BLOCKER-601` 已关闭，C8-M2 队列为空。
+- C8-M3 已创建为下一轮方案包，目标是把 live capability 中 `part_workbench.conic_curves.remaining_gaps=["gui_conic_edit","full_sketcher_solver_conic_constraints","distance_type_default_todo"]` 按同一 conic request-local API 边界批量收口。C8-M3 不只处理单个字符串 gap，而是同轮覆盖 `PartConicCurveDTO` producer / consumer、Sketcher ArcOfHyperbola / ArcOfParabola input / external-reference、DistanceType default 分类，以及 GUI / full solver non-goal 发布边界。
+- C8-M3 S0 live 基线已冻结：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=c6a848b69c`（`c6a848b69c docs: 完成 C8-M2 S6 发布闸门`），开始状态只包含 `docs/CADCore8.0/README.md` 与本 C8-M3 文档包 / 矩阵 / 工作步骤变更，未见代码、fixture、expected 或 collector dirty 文件。S0 已关闭 `C8M3-BLOCKER-000`；S1-S6 仍待执行。`part_workbench.conic_curves.remaining_gaps=["gui_conic_edit","full_sketcher_solver_conic_constraints","distance_type_default_todo"]` 仍保留为 S0 输入，不声明支持。
 
 ## 队列检查
 
@@ -38,6 +44,7 @@ C8-M1 转向 `PartDesign::ShapeBinder` / `PartDesign::SubShapeBinder` 外部引�
 cd /home/user/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore8.0/C8-M2-SubShapeBinderCopyOnChange下游同步与DTO准入主线/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore8.0/C8-M1-PartDesignShapeBinderSubShapeBinder引用绑定与ElementMap闭环主线/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore8.0/C8-M3-PartSketchDistanceTypeConicCurveRequestLocal批量收口主线/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -46,6 +53,7 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 cd /home/user/Chili3DProject/FreeCAD
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore8.0/C8-M2-SubShapeBinderCopyOnChange下游同步与DTO准入主线/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore8.0/C8-M1-PartDesignShapeBinderSubShapeBinder引用绑定与ElementMap闭环主线/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore8.0/C8-M3-PartSketchDistanceTypeConicCurveRequestLocal批量收口主线/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore8.0
 git diff --check
 ```
