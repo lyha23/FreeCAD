@@ -1,5 +1,5 @@
 category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
-C8M3-BG-101	distance_type_default_todo	high	C8M3-SCOPE-301	no	S5 must decide whether this active gap is implementable DistanceType classification, stale capability publication, oracle blocker or non-goal; S6 must not leave it unexplained
+C8M3-BG-101	distance_type_default_todo	high	C8M3-SCOPE-301	no	S1 found current cad-core already separates mapped basic/extended DistanceTypes from PointCurve diagnostic and default_or_todo boundaries; S5 must decide whether the active gap is stale publication, implementable default mapping, oracle blocker or non-goal
 C8M3-BG-102	sketcher_conic_request_local_input	medium	C8M3-SCOPE-201,C8M3-SCOPE-203	no	S4 checks current ArcOfHyperbola/ArcOfParabola input/external-reference coverage; S6 implements only missing request-local input/diagnostic evidence, not full solver
 C8M3-BG-103	part_conic_consumer_batch	medium	C8M3-SCOPE-101,C8M3-SCOPE-102	no	S3 checks producer/consumer representative batch and only expands if same API boundary needs more than existing Extrusion/RuledSurface fixtures
 C8M3-BG-201	gui_and_full_solver_non_goal	low	C8M3-SCOPE-202,C8M3-SCOPE-401	no	Publish gui_conic_edit and full_sketcher_solver_conic_constraints as non-goals unless S1/S2 finds a narrower request-local DTO
