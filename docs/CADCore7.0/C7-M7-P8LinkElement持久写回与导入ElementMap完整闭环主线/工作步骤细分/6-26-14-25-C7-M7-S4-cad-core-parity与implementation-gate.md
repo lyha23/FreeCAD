@@ -10,10 +10,15 @@
 - S3 新增或更新的 fixture / expected / known_gap。
 - `cad-core/tests/test_p8_features.py`
 - `cad-core/tests/test_expected_fixtures.py`
-- `cad-core/src/features/link.cpp`
-- `cad-core/src/features/part.cpp`
-- `cad-core/src/document`
-- `cad-core/src/topo`
+- `cad-core/src/app/link.cpp`
+- `cad-core/src/app/document_object.cpp`
+- `cad-core/src/app/property_links.cpp`
+- `cad-core/src/app/element_map.cpp`
+- `cad-core/src/part/part_import.cpp`
+- `cad-core/src/part/topo_shape.cpp`
+- `cad-core/src/part/topo_shape_mapper.cpp`
+- `cad-core/src/runtime/element_reference_update.cpp`
+- `cad-core/src/mesh/feature_mesh_import.cpp`
 - `cad-core/src/adapters/c_api/c_api.cpp`
 
 ## 执行要点

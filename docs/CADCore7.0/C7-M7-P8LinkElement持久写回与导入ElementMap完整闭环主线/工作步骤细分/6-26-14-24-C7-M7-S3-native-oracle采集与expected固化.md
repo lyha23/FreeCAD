@@ -26,7 +26,7 @@
 - 可以新增或更新 `cad-core/fixtures/p8/*link*` / `*import*` / `*element*` 相关 fixture。
 - 可以新增或更新 `cad-core/fixtures/p8/expected/*.freecad.json`。
 - 可以新增 focused oracle tests。
-- 不允许改 `cad-core/src/features/link.cpp`、`cad-core/src/topo`、adapter 或 runtime 主路径。
+- 不允许改 `cad-core/src/app/link.cpp`、`cad-core/src/part/*`、adapter 或 runtime 主路径。
 
 ## 验收
 

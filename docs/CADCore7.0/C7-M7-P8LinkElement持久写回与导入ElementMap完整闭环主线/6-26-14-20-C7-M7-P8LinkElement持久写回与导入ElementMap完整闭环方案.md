@@ -30,7 +30,7 @@ C7-M7 的核心不是先扩大 Link 功能声明，而是按 FreeCAD source auth
 - S2 只输出 oracle 候选和最小批次；不能把 existing expected-backed rows 误写成 active gap。
 - S3 可以新增 oracle fixture / expected / known_gap，但不能从 current `cad-core` 输出倒推 expected。
 - S4 只做 parity 和 gate 裁决；只有 route=`backend_gap_requires_implementation` 才打开 S5 code edit gate。
-- S5 若实现，必须落到正式 `features/link.*`、`document` parser、`topo` ElementMap / NamedShape 或 C ABI capability 路径，不允许 adapter 输出端修正、fixture 名称分支或 LinkSub 猜测特判。
+- S5 若实现，必须落到当前正式路径：`cad-core/src/app/link.cpp`、`cad-core/src/app/property_links.cpp`、`cad-core/src/part/*`、`cad-core/src/runtime/element_reference_update.cpp`、`cad-core/src/mesh/*`、ElementMap / NamedShape 或 C ABI capability 路径，不允许 adapter 输出端修正、fixture 名称分支或 LinkSub 猜测特判。
 
 ## 步骤
 
@@ -48,17 +48,23 @@ S0 不采 oracle、不新增 fixture/expected/test、不改 C++；`C7M7-BLOCKER-
 
 ### S1 FreeCAD source 与 current coverage 复核
 
-复核 FreeCAD source authority：
+已复核 FreeCAD source authority：
 
 - `src/App/Link.cpp`、`src/App/Link.h`
 - `src/App/DocumentObject.cpp`、`src/App/DocumentObject.h`
 - `src/App/PropertyLinks.cpp`
 - `src/Mod/Part/App/PartFeature.cpp`
-- `src/Mod/Part/App/ImportStep.cpp` / import 相关 source
+- `src/Mod/Part/App/FeaturePartImportBrep.cpp`、`FeaturePartImportStep.cpp`、`FeaturePartImportIges.cpp`
 - `src/Mod/Part/App/PropertyTopoShape.cpp`
 - `src/Mod/Part/App/TopoShape*.cpp`
+- `src/Mod/Mesh/App/FeatureMeshImport.cpp`
 
-同时复核 `cad-core/src/features/link.cpp`、`cad-core/src/document/*`、`cad-core/src/topo/*`、`cad-core/src/features/part.cpp`、`cad-core/tests/test_p8_features.py`、`cad-core/fixtures/p8` 和 relevant expected。
+S1 结论：
+
+- FreeCAD source authority：`LinkBaseExtension::update()` 负责 ElementCount / ElementList / ShowElement 和 LinkElement create / claim / sync / delete；`DocumentObject::getSubObject()` 通过 Link extension 处理 numeric index、child object、`$Label`、collapsed `_iN`、linked target name/label 和 group / child-cache recursion；`PropertyXLink*` 保存 object + subvalue 并参与引用更新。
+- Import / ElementMap source authority：BREP / STEP / IGES import 读入 `TopoShape` 后由 `PropertyPartShape::setValue()` remap / restore `ElementMap`；`Mesh::Import` 是独立 mesh path；`PartFeature::getTopoShape()`、`PropertyTopoShape` 和 `TopoShapeMapper` 是 linked/imported `NamedShape` / ElementMap retag 的依据。
+- Current `cad-core` coverage：实际路径是 `cad-core/src/app`、`cad-core/src/part`、`cad-core/src/runtime`、`cad-core/src/mesh`，不是旧假设 `cad-core/src/features`、`cad-core/src/document`、`cad-core/src/topo`。已覆盖 request-local Link display / alias / FullSubList / mapped postfix / LinkElement / LinkGroup / ElementList / ElementCount / ShowElement `documentObjectUpdates`、`elementReferenceUpdates`、BREP / STEP / IGES `history_partial` import、STL `indexed_only` import 和 imported Link chain fixtures/tests。
+- S2 输入池：完整 imported-shape `ElementMap` / stable reference lifecycle、ShowElement LinkElement / LinkGroup persistent writeback transaction、复杂多层 LinkSub / cross-document hash-postfix lifecycle。S1 未采 oracle、未新增 fixture/expected/test、未改 C++；S1 blocker/gate 已关闭，implementation gate 仍关闭。
 
 ### S2 oracle 候选矩阵与批次裁决
 
@@ -97,7 +103,7 @@ S4 必须写清 S5 是否允许改 C++、允许文件范围、focused tests 和 
 
 若 S4 打开 code gate，S5 实现顺序固定：
 
-1. 在 `document` / `features/link` / `features/part` / `topo` 正式路径补语义。
+1. 在 `app` / `part` / `runtime` / `mesh` / ElementMap / NamedShape 正式路径补语义。
 2. 写 focused tests，约束 ElementMap、NamedShape alias、`documentObjectUpdates`、`elementReferenceUpdates`、diagnostics、capability 和 expected parity。
 3. 删除临时 diagnostic 或保持 known_gap 时同步矩阵。
 

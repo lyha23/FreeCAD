@@ -12,7 +12,7 @@ C7-M7 是 C7-M6 之后的 P8 stable reference follow-up。总览后续队列中�
 - `docs/CADCore方案/细化方案/00-CAD-Core完整抽取执行总览.md` 的后续队列当前仍列出 P8：Worker / WASM / Web adapter、导入 shape 完整 ElementMap、`ShowElement=true` LinkElement / LinkGroup 持久写回事务生命周期、完整 cross-document 文档哈希 / postfix 生命周期、更复杂多层 LinkSub 链，以及 Part surface family。
 - `docs/CADCore方案/细化方案/11-P8-Part导入导出与Assembly后续.md` 已声明当前 Link 能力只覆盖请求内 display、拾取、alias retag、history 传播和前端图更新建议；完整 Link 账本和导入 shape 完整 ElementMap 仍未迁移。
 - S0 live 基线已冻结：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=7be2d4e937`（`7be2d4e937 docs: 完成 C7-M6 S6 发布闸门`），开始状态只包含 `docs/CADCore7.0/README.md` modified 和本 C7-M7 文档包 untracked 文件；C7-M1..C7-M6 队列均为空，C7-M7 从 S0 起步。
-- S0 已关闭 `C7M7-BLOCKER-000` / `C7M7-GATE-000`，未采 oracle、未新增 fixture/expected/test、未改 C++；下一步只允许 S1 复核 FreeCAD source 与 current cad-core coverage。
+- S1 已完成 FreeCAD source 与 current cad-core coverage 复核：source authority 覆盖 `LinkBaseExtension::update()`、`DocumentObject::getSubObject()`、`PropertyXLink*`、Part import、`PropertyPartShape`、`TopoShapeMapper`；current coverage 覆盖 `cad-core/src/app`、`cad-core/src/part`、`cad-core/src/runtime`、`cad-core/src/mesh`、P8 tests 和 fixtures。S1 未采 oracle、未新增 fixture/expected/test、未改 C++；`C7M7-BLOCKER-101` / `C7M7-GATE-101` 已关闭。
 
 ## 初始范围
 
@@ -39,7 +39,7 @@ C7-M7 是 C7-M6 之后的 P8 stable reference follow-up。总览后续队列中�
 ## 步骤队列
 
 1. S0（已实现）：冻结 live baseline、C7-M1..M6 队列和 P8 Link / import 已覆盖边界。
-2. S1：复核 FreeCAD Link / import / PropertyXLink / topo source 与 current `cad-core` coverage。
+2. S1（已实现）：复核 FreeCAD Link / import / PropertyXLink / topo source 与 current `cad-core` coverage，并把 S2 oracle candidate 输入池矩阵化。
 3. S2：形成 LinkElement writeback / imported-shape ElementMap / complex LinkSub native oracle 候选矩阵。
 4. S3：采集 native oracle 或记录 native blocker / diagnostic non-goal。
 5. S4：用 current `cad-core` 做 parity 和 implementation gate 裁决。
