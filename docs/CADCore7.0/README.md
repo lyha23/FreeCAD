@@ -10,7 +10,7 @@ C7-M3 承接 C7-M2 的 3 个 `oracle_pending_collect` rows，不直接实现 C++
 
 C7-M4 承接 C7-M3 唯一未关闭为 supported 的 blocker：DressUp stale `ReferenceShadow` / Base recovery。C7-M4 不直接实现宽松 fallback，而是先证明 FreeCAD native `PropertyLinkSub` / `ShadowSub` / `ReferenceShadow` restore / update 行为。S5 release gate 已完成：S2 native probe `returncode=0`，但 FreeCAD Python API 不能观察 `Base.getShadowSubs()` / `getSubValues(false/true)`，所以 `dressup-reference-shadow-base-recovery` 最终 route=`oracle_blocked`，implementation gate closed，StableSubList-fed geometry 负控不能删除 blocker；C7-M4 队列为空。
 
-C7-M5 承接总览后续队列里的 P7 transformed / pattern 完整 MapperHistory 与复杂 ownership 方向。旧 P7 Transformed 主线已关闭基础 topology_counts、final-result refine、TransformN alias、terminal history 和 supported/covered 发布闸门；C7-M5 不重开这些已关闭基线，而是先用 FreeCAD source、现有 P7/c3m5 fixtures 和 native oracle 候选矩阵审计更复杂 ownership 是否存在 active backend gap。只有 source-backed native oracle 证明当前 `cad-core` mismatch 时，才打开 C++ implementation gate。
+C7-M5 承接总览后续队列里的 P7 transformed / pattern 完整 MapperHistory 与复杂 ownership 方向。旧 P7 Transformed 主线已关闭基础 topology_counts、final-result refine、TransformN alias、terminal history 和 supported/covered 发布闸门；C7-M5 不重开这些已关闭基线，而是用 FreeCAD source、现有 P7/c3m5 fixtures 和 native oracle 候选矩阵审计更复杂 ownership 是否存在 active backend gap。S6 release gate 已关闭：support-backed Pattern AddSubShape slot ownership 与 MultiTransform composition 是 expected-backed closed / no backendGap，standalone Whole shape 保持 `diagnostic_non_goal`，队列为空。
 
 ## 入口
 
@@ -66,6 +66,7 @@ C7-M5 承接总览后续队列里的 P7 transformed / pattern 完整 MapperHisto
 - C7-M5 工作步骤总入口索引已收口：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=2b8c09b242`（`2b8c09b242 docs: 新增 C7-M5 transformed ownership 准入主线`），开始状态干净；收口前队列首项是索引文件，现已标记为 `【已实现】`。本次没有执行 S0-S6、没有采 oracle、没有新增 fixture/expected/test、没有改 C++；索引收口后下一 pending 是 S0。
 - C7-M5 S0 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=a2cc93a1ee`（`a2cc93a1ee 文档：收口 C7-M5 工作步骤总入口索引`），开始状态干净。C7-M1/C7-M2/C7-M3/C7-M4 与旧 P7 Transformed 队列均为空；旧 P7T `P7T-SCOPE-001..007` 保持 `supported`，`P7T-BG-001/002` 保持 supported/covered closed，`P7T-BG-003` 保持 standalone lifecycle boundary，`P7T-BLOCK-001..005` 均 closed，`P7T-NG-005` 保持 standalone Whole shape nonGoal。S0 未采 oracle、未新增或修改 fixture/expected/test、未改 C++。
 - C7-M5 S1 已完成：执行 live 基线时 `HEAD=27b2f84d6a`（`27b2f84d6a docs: 完成 C7-M5 S0 基线冻结`），开始状态干净；已复核 FreeCAD `Transformed::execute()`、`DressUp::getAddSubShape()`、`MultiTransform::getTransformations()`、`TopoShape::makeElementTransform()` 和 current `cad-core` alias/terminal/merge/P7 fixture test coverage。S1 未采 oracle、未新增或修改 fixture/expected/test、未改 C++；下一 pending 必须是 S2。
+- C7-M5 S2-S6 已完成：S2 裁出 support-backed oracle 候选并保留 standalone Whole shape diagnostic non-goal；S3 四个 support-backed fixture 在 FreeCAD `1.2.0 revision 20260519` 基线上 `--check` 通过；S4 focused 5 tests 与完整 `CadCoreP7FeatureTest` 通过，裁决 `already_closed_expected_backed`；S5 no-code 发布 expected-backed closed / no backendGap；S6 release gate 复跑 queue、TSV、trailing whitespace 和 `git diff --check`，未因 S5 文档/矩阵改动运行 build / unittest，队列为空。
 
 ## 队列检查
 

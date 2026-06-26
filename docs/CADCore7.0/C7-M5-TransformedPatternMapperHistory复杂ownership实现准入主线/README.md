@@ -24,6 +24,7 @@ C7-M5 不重开已经由旧 P7 Transformed 主线关闭的基础 topology_counts
 - S3 已完成 native oracle check：四个 support-backed fixture 均在 FreeCAD `1.2.0 revision 20260519` 基线上 `--check` 通过，`C7M5-ORACLE-201` / `C7M5-ORACLE-301` route=`native_oracle_confirmed`，`C7M5-ORACLE-401` 继续 route=`diagnostic_non_goal`。S3 未修改 expected、tests 或 C++，并固化了 S4 current `cad-core` parity 输入。
 - S4 已完成 current `cad-core` parity gate：focused 5 项 parity 命令通过（`Ran 5 tests in 1.601s`），完整 `tests.test_p7_features.CadCoreP7FeatureTest` 通过（`Ran 148 tests in 27.855s`）。`C7M5-ORACLE-101` 保持 already covered regression guard；`C7M5-ORACLE-201` 与 `C7M5-ORACLE-301` route=`already_closed_expected_backed`；`C7M5-ORACLE-401` route=`diagnostic_non_goal` carry-forward。S4 未修改 C++、fixtures、expected 或 tests；S5 不打开 code gate，走 no-code publication closure。
 - S5 已完成 no-code publication closure：`HEAD=77b7903f76` 起步且工作区干净；按 S4 route 发布 expected-backed closed / no backendGap，关闭 `C7M5-BLOCKER-501`。本轮只更新 README、主线总入口、方案、矩阵和必要 P7 / 总览发布口径；未修改 `cad-core/src`、fixtures、expected、tests、adapter、collector 或 capability；未重跑 build / unittest，仅引用 S4 focused 5 tests 与完整 `CadCoreP7FeatureTest` 通过结果；队列推进到 S6。
+- S6 已完成 release gate：`HEAD=fb0e22fd42` 起步且工作区干净；S6 核实 S5 没有后端、fixture、expected、test、adapter、collector 或 capability 改动，因此不运行 build / unittest，只复跑 queue、TSV、trailing whitespace 和 `git diff --check`。最终发布为 expected-backed closed / no backendGap；standalone Whole shape 保持 `diagnostic_non_goal`；`C7M5-GATE-601` / `C7M5-BLOCKER-601` 关闭，队列为空。
 
 ## 收口边界
 
@@ -44,6 +45,6 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线/矩阵/*.tsv
-rg -n '[ \t]$' docs/CADCore7.0/C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线 docs/CADCore7.0/README.md
+rg -n '[ \t]$' docs/CADCore7.0/C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线 docs/CADCore7.0/README.md docs/CADCore方案/细化方案/10-P7-PartDesign常用生态.md
 git diff --check
 ```

@@ -144,6 +144,8 @@ S5 已完成：live 起点为 `HEAD=77b7903f76`（`77b7903f76 docs: 完成 C7-M5
 
 运行本包 queue、TSV、trailing whitespace、`git diff --check`。若 S5 改 C++，再跑 focused P7 tests 和 `cmake --build build`。
 
+S6 已完成：live 起点为 `HEAD=fb0e22fd42`（`fb0e22fd42 docs: 完成 C7-M5 S5 no-code 发布收口`），开始状态干净；C7-M5 队列首项为 S6。S6 核实 S5 只改 README、主线总入口、方案、矩阵和必要 P7 / 总览发布口径，未修改 `cad-core/src`、fixtures、expected、tests、adapter、collector 或 capability，因此不运行 build / unittest。release gate 只执行 queue、TSV、trailing whitespace 和 `git diff --check`；最终结论为 expected-backed closed / no backendGap，standalone Whole shape 保持 diagnostic_non_goal，旧 P7T rows 不重开，队列为空。
+
 ## 验收分层
 
 ### 本轮短跑
@@ -152,7 +154,7 @@ S5 已完成：live 起点为 `HEAD=77b7903f76`（`77b7903f76 docs: 完成 C7-M5
 cd /Users/li/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线/工作步骤细分 --format markdown
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线/矩阵/*.tsv
-rg -n '[ \t]$' docs/CADCore7.0/C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线 docs/CADCore7.0/README.md
+rg -n '[ \t]$' docs/CADCore7.0/C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线 docs/CADCore7.0/README.md docs/CADCore方案/细化方案/10-P7-PartDesign常用生态.md
 git diff --check
 ```
 

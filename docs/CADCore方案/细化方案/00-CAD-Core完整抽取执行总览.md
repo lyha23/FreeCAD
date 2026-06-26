@@ -88,7 +88,7 @@ P8 Link display 已新增 `App::DocumentObjectGroup` plain group 请求内 child
 
 - Sketcher 完整 solver、BSpline solver/control-point 语义、完整 `ExternalGeometryExtension` 状态机、WireJoiner EdgeInfo / WireInfo 的 `findTightBoundSplitWire()` / `findTightBoundUpdateVertices()` / `exhaustTightBound()` 已有 splitWire / done / secondary-owner lifecycle 诊断账本，但尚未替代 bounded ownership classifier，也尚未执行 `exhaustTightBoundUpdateWire()` 搜索主路径；真实 `openWireCompound` history 过滤、FaceMaker / WireJoiner history summary 到正式 `NamedShape` / `ElementMap` 的完整 MapperHistory 消费仍待迁移；FaceMaker summary 当前进入 `Sketch.InternalShape` 的 `NamedShape` 元数据和通用 `element_history_status`。
 - Topo Naming 完整 MapperHistory 发布边界仍按 maker 分阶段复核；P6 MakerHistory S3-S5 已确认 ShapeFix、DressUp / Refine / transformed 和 taper 当前 focused scope 为 supported，复杂 split / deleted 旧引用恢复仍保留为 `notCollected`，只有专项复核证明当前 cad-core 与 FreeCAD authority 或 checked-in expected 不匹配时才转为 `backendGap`；merge history 已有 Body boolean 与 Link retag 传播回归，但仍要纳入完整 MapperHistory 生命周期。
-- PartDesign transformed / pattern 完整 MapperHistory 与更复杂 ownership：C7-M5 已按 expected-backed closed / no backendGap 发布；不扩大 transformed family 支持范围，不把 standalone geometry-equivalent Whole shape 升格为 native golden。完整全局 MapperHistory 仍只在后续 source-backed native oracle mismatch 或 scope change 时重新打开。
+- PartDesign transformed / pattern 完整 MapperHistory 与更复杂 ownership：C7-M5 已通过 S6 release gate，按 expected-backed closed / no backendGap 发布；不扩大 transformed family 支持范围，不把 standalone geometry-equivalent Whole shape 升格为 native golden。完整全局 MapperHistory 仍只在后续 source-backed native oracle mismatch 或 scope change 时重新打开。
 - 完整 Joint placement / constraint 求解、剩余 JointType、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、`ShowElement=true` LinkElement / LinkGroup 持久写回事务生命周期、完整 cross-document 文档哈希 / postfix 生命周期和更复杂多层 LinkSub 链。
 
 ## 阶段索引
@@ -112,7 +112,7 @@ P8 Link display 已新增 `App::DocumentObjectGroup` plain group 请求内 child
 
 1. P5/P6 联合主线已按 `13-【已实现】ExternalGeometry-TopoNaming下一阶段主线.md` 收口；后续只在阶段发布时复跑验收和回写台账。
 2. 补 P6 MakerHistory 余量：S0-S6 已完成 ShapeFix、RefineModel、taper、transformed / DressUp 的 capability / tests / expected 与正式文档一致性复核；当前无 C++ backendGap，后续只在复杂 split / deleted oracle 证明 mismatch 时重新打开实现任务。
-3. 补 P7：transformed / pattern 完整 MapperHistory 与更复杂 ownership 已按 C7-M5 expected-backed closed / no backendGap 发布，后续只做 C7-M5 release gate 收口；不重开旧 P7T rows。
+3. 补 P7：transformed / pattern 完整 MapperHistory 与更复杂 ownership 已按 C7-M5 expected-backed closed / no backendGap 发布并完成 release gate；不重开旧 P7T rows，后续只在新的 source-backed native oracle mismatch 或 scope change 时重新打开。
 4. 扩展 P8：完整 Joint placement / constraint、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、`ShowElement=true` LinkElement / LinkGroup 持久写回事务生命周期、完整 cross-document 文档哈希 / postfix 生命周期、更复杂多层 LinkSub 链，以及 Part surface 的 `Linearize` / advanced PipeShell wrapper / Filling support-order-constraint / GeomPlate initial/G1/projected/PlateSurface curves / full surface family。
 
 ## 全局规则

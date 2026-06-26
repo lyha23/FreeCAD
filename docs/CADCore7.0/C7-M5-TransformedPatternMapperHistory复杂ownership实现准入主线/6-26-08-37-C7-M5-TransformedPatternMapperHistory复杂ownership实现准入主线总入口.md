@@ -4,9 +4,9 @@
 
 C7-M5 是 C7-M4 之后的 P7 follow-up。总览后续队列明确下一项是 P7 transformed / pattern 完整 MapperHistory 与更复杂 ownership；P8 扩展排在其后。
 
-当前默认 gate closed：旧 P7 Transformed 主线已经关闭基础 topology_counts 和 supported / covered 发布闸门，C7-M5 不能凭“复杂 ownership”这个名称直接改 C++。S0-S2 必须先复核 live source、fixtures、expected 和 tests，形成可采 native oracle 的最小完整语义批次。S4 只有在 source-backed native oracle 证明 current `cad-core` mismatch 时，才允许把 S5 转成 implementation。
+当前 gate closed：旧 P7 Transformed 主线已经关闭基础 topology_counts 和 supported / covered 发布闸门，C7-M5 不能凭“复杂 ownership”这个名称直接改 C++。S0-S2 已复核 live source、fixtures、expected 和 tests，S3 已确认 support-backed native expected，S4 证明 current `cad-core` 匹配，S5/S6 发布为 expected-backed closed / no backendGap。
 
-工作步骤总入口索引已按 C7-M1/C7-M2/C7-M3 约定标记为 `【已实现】`，只用于跳过索引文件；S0 已冻结 live 基线与旧 P7T 已关闭边界，S1 已完成 FreeCAD source 与 current `cad-core` coverage 复核，S2 已裁出 native oracle 候选批次，S3 已确认四个 support-backed expected，S4 已完成 current `cad-core` parity gate，S5 已完成 no-code publication closure。当前下一 pending 必须是 S6。
+工作步骤总入口索引已按 C7-M1/C7-M2/C7-M3 约定标记为 `【已实现】`，只用于跳过索引文件；S0-S6 均已完成。`C7M5-ORACLE-201` / `C7M5-ORACLE-301` 为 expected-backed closed，`C7M5-ORACLE-401` standalone Whole shape 保持 diagnostic non-goal，旧 P7T rows 不重开；当前队列为空。
 
 ## 上游状态
 
@@ -20,6 +20,7 @@ C7-M5 是 C7-M4 之后的 P7 follow-up。总览后续队列明确下一项是 P7
 - C7-M5 S3 已完成：`HEAD=d8ad940e33` 起步且工作区干净；四个 support-backed fixture 的 native `--check` 均通过，FreeCAD 基线为 `1.2.0 revision 20260519`。`C7M5-ORACLE-201` 与 `C7M5-ORACLE-301` 已成为 S4 parity 输入；`C7M5-ORACLE-401` standalone Whole shape 继续 diagnostic non-goal。S3 未改 C++、runtime、adapter、expected 或 tests。
 - C7-M5 S4 已完成：`HEAD=4baa80c37a` 起步且工作区干净；focused parity 5 项通过，完整 `CadCoreP7FeatureTest` 148 项通过。`C7M5-ORACLE-201` 与 `C7M5-ORACLE-301` 已裁为 `already_closed_expected_backed`，`C7M5-ORACLE-401` 保持 `diagnostic_non_goal`，没有 `backend_gap_requires_implementation`。S4 未改 C++、runtime、adapter、expected 或 tests；S5 走 no-code publication closure。
 - C7-M5 S5 已完成：`HEAD=77b7903f76` 起步且工作区干净；S5 code gate 继续关闭，发布 route=`already_closed_expected_backed` / no backendGap，关闭 `C7M5-BLOCKER-501`，并把 P7 live / 总览口径限制为 C7-M5 expected-backed closed / no backendGap。S5 未改 C++、fixtures、expected、tests、adapter、collector 或 capability，未重跑 build / unittest，仅引用 S4 focused 5 项和完整 `CadCoreP7FeatureTest` 通过结果。
+- C7-M5 S6 已完成：`HEAD=fb0e22fd42` 起步且工作区干净；S6 核实 S5 只改文档和矩阵，没有后端、fixture、expected、test、adapter、collector 或 capability 改动，因此不运行 build / unittest。release gate 队列、TSV、trailing whitespace 和 `git diff --check` 验证通过，`C7M5-GATE-601` / `C7M5-BLOCKER-601` 关闭，队列为空。
 
 ## 初始范围
 
@@ -45,7 +46,7 @@ C7-M5 是 C7-M4 之后的 P7 follow-up。总览后续队列明确下一项是 P7
 4. S3：已完成，确认四个 support-backed native expected，carry-forward standalone diagnostic non-goal。
 5. S4：已完成，用 current `cad-core` 做 parity 和 implementation gate 裁决，route=`already_closed_expected_backed`。
 6. S5：已完成，no-code 发布收口，关闭 `C7M5-BLOCKER-501`，不打开 backendGap 或 C++ 实现门。
-7. S6：下一 pending，release gate，更新 README / 矩阵 / P7 口径并清空队列。
+7. S6：已完成，release gate 关闭 `C7M5-GATE-601` / `C7M5-BLOCKER-601`，队列为空。
 
 ## 验收入口
 
@@ -53,6 +54,6 @@ C7-M5 是 C7-M4 之后的 P7 follow-up。总览后续队列明确下一项是 P7
 cd /Users/li/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线/工作步骤细分 --format markdown
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线/矩阵/*.tsv
-rg -n '[ \t]$' docs/CADCore7.0/C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线 docs/CADCore7.0/README.md
+rg -n '[ \t]$' docs/CADCore7.0/C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线 docs/CADCore7.0/README.md docs/CADCore方案/细化方案/10-P7-PartDesign常用生态.md
 git diff --check
 ```

@@ -1,4 +1,4 @@
-# C7-M5 S6 release gate
+# 【已实现】C7-M5 S6 release gate
 
 ## 目标
 
@@ -20,6 +20,13 @@
 5. 更新 root README、本包 README/总入口/方案、矩阵和 P7 细化口径。
 6. 将完成的步骤文件标记为 `【已实现】`，确认队列为空。
 7. 按仓库规则提交本轮相关变更并证明工作区干净，除非用户明确要求不提交。
+
+## S6 完成结论
+
+- live baseline：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=fb0e22fd42`（`fb0e22fd42 docs: 完成 C7-M5 S5 no-code 发布收口`），开始状态 `git status --short -uall` 无输出；C7-M5 队列首项为 S6。
+- S5 提交范围已核实为 README、主线总入口、方案、矩阵和 P7 / 总览发布口径，没有修改 `cad-core/src`、fixtures、expected、tests、adapter、collector 或 capability。因此 S6 不运行 `cmake --build build` 或 P7 unittest，只执行 release gate 文档验证。
+- release 结论：C7-M5 final route=`expected-backed closed / no backendGap`。`C7M5-ORACLE-201` / `C7M5-ORACLE-301` 保持 already closed expected-backed；`C7M5-ORACLE-401` standalone Whole shape 保持 `diagnostic_non_goal`，不升格为 native golden；旧 P7T rows 不重开。
+- S6 已同步 root README、本包 README、主线总入口、方案、矩阵、P7 细化文档和 CAD Core 总览口径；`C7M5-GATE-601` / `C7M5-BLOCKER-601` 已关闭；队列应为空。
 
 ## 验收
 
