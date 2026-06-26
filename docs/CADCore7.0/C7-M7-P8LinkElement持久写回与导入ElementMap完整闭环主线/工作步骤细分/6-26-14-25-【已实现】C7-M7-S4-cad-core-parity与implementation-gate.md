@@ -1,8 +1,16 @@
-# C7-M7 S4 cad-core parity 与 implementation gate
+# 【已实现】C7-M7 S4 cad-core parity 与 implementation gate
 
 ## 目标
 
 基于 S3 native oracle / blocker 结果，对当前 `cad-core` 做 parity 或 diagnostics 分类，裁决 S5 是否打开 C++ implementation gate。S4 默认不改 C++。
+
+## S4 结论
+
+- live 基线：执行时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=24b7649fa5`（`24b7649fa5 文档：完成 C7-M7 S3 native oracle 采集`），`git status --short -uall` 无输出；队列显示 S4-S6 pending。
+- S3 没有产生可比较的 source-backed native expected：ORACLE-202、ORACLE-302、ORACLE-402 均为 `native_oracle_blocked`，ORACLE-203 仍是 STL mesh-specific `oracle_blocker`。
+- S4 裁决：ORACLE-202 / 302 / 402 只能发布为 `oracle_blocked`，不能写成 `backend_gap_requires_implementation`；ORACLE-203 继续保持 `oracle_blocker`。既有 request-local Link display / alias / `FullSubList` / mapped postfix / imported Link chain、ShowElement `documentObjectUpdates`、BREP / STEP / IGES `history_partial` ElementMap 和 STL `indexed_only` rows 保持 already-covered / already-closed。
+- S5 implementation gate 关闭。S5 只能做 no-code publication closure；允许修改文件限于 `docs/CADCore7.0/README.md`、本包 `README.md`、主线总入口、方案、工作步骤总入口 / S5 / S6 文档和本包 `矩阵/*.tsv`。
+- S5 不允许修改 `cad-core/src/app/*`、`cad-core/src/part/*`、`cad-core/src/runtime/*`、`cad-core/src/mesh/*`、`cad-core/src/adapters/*`、`cad-core/tests/*`、fixtures、expected、collector 或生成输出；不得从 current `cad-core` 输出倒推 expected。
 
 ## 必读文件
 

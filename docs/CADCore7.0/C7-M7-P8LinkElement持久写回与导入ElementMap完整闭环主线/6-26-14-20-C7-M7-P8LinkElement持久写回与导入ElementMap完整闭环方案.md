@@ -101,6 +101,8 @@ S3 没有新增或修改 fixture、expected、test、collector、adapter 或 run
 
 ### S4 cad-core parity 与 implementation gate
 
+已完成。执行时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=24b7649fa5`（`24b7649fa5 文档：完成 C7-M7 S3 native oracle 采集`），开始状态干净。S4 复核 S3 blocker / diagnostic 结果、P8 focused tests 和 current `cad-core` Link / import / ElementMap / update / mesh / C API 路径后，未发现可进入 runtime parity 比较的 source-backed native expected。
+
 如果 S3 得到 native oracle，则比较 current `cad-core`：
 
 - 匹配：`already_closed_expected_backed`
@@ -108,7 +110,15 @@ S3 没有新增或修改 fixture、expected、test、collector、adapter 或 run
 - 缺 oracle：`oracle_blocked`
 - 超边界：`diagnostic_non_goal`
 
-S4 必须写清 S5 是否允许改 C++、允许文件范围、focused tests 和 non-goals。
+S4 裁决：
+
+- ORACLE-202：缺完整 imported Faces / Edges / Vertices `ElementMap` 和 stable reference update native evidence，route=`oracle_blocked`。
+- ORACLE-302：缺 ShowElement owner / child persistent writeback transaction native evidence，route=`oracle_blocked`；request-local `documentObjectUpdates` 已覆盖但不是 backend persistence。
+- ORACLE-402：缺 file/stamp/hash、DocMap、restored `FullSubList`、ReferenceShadow 和 mapped postfix lifecycle native evidence，route=`oracle_blocked`。
+- ORACLE-203：STL 仍是 `Mesh::Import` / `indexed_only` 边界，保持 mesh-specific `oracle_blocker`。
+- already-covered rows 保持关闭：request-local Link display / alias / `FullSubList` / mapped postfix / imported Link chain、ShowElement `documentObjectUpdates`、BREP / STEP / IGES `history_partial` ElementMap、STL `indexed_only`。
+
+S5 implementation gate 关闭。S5 只允许 no-code publication closure；允许修改文件限于 root README、本包 README、主线总入口、方案、工作步骤总入口 / S5 / S6 文档和本包 `矩阵/*.tsv`。S5 不允许修改 `cad-core/src/app/*`、`cad-core/src/part/*`、`cad-core/src/runtime/*`、`cad-core/src/mesh/*`、`cad-core/src/adapters/*`、`cad-core/tests/*`、fixtures、expected、collector 或生成输出。
 
 ### S5 实现或 no-code 发布
 
@@ -118,7 +128,7 @@ S4 必须写清 S5 是否允许改 C++、允许文件范围、focused tests 和 
 2. 写 focused tests，约束 ElementMap、NamedShape alias、`documentObjectUpdates`、`elementReferenceUpdates`、diagnostics、capability 和 expected parity。
 3. 删除临时 diagnostic 或保持 known_gap 时同步矩阵。
 
-若 S4 未打开 code gate，S5 只做 no-code publication closure。
+若 S4 未打开 code gate，S5 只做 no-code publication closure。当前 S4 已关闭 code gate，因此 S5 不实现 Link / ElementMap / LinkSub / writeback gap，不新增或修改 C++、fixtures、expected、tests、collector、adapter 或 runtime 输出；只同步发布口径和矩阵。
 
 ### S6 release gate
 
