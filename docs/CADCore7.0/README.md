@@ -14,6 +14,8 @@ C7-M5 承接总览后续队列里的 P7 transformed / pattern 完整 MapperHisto
 
 C7-M6 承接 C7-M5 之后的 P8 Assembly / Joint 完整 placement 与 constraint 方向。P8 已有 request-local real Ondsel adapter、c3m6 native placement expected、Fixed / Revolute / Cylindrical / Slider / Ball / Distance / Angle 子集和 marker / DistanceType / writeback first slices；本包不重开这些基线，而是围绕完整 Joint placement / constraint、复杂 placement chain、remaining JointType 和 request-local writeback 先做 source / oracle / parity 准入，只有 S4 证明 current cad-core mismatch 才打开 implementation gate。S6 release gate 已关闭：`C7M6-ORACLE-202` expected-backed closed，`C7M6-ORACLE-302` / `C7M6-ORACLE-203` 继续 oracle_blocked，没有 `backend_gap_requires_implementation`，未做 C++ implementation，队列为空。
 
+C7-M7 承接 C7-M6 之后的 P8 Link / imported-shape stable reference 方向。P8 已覆盖基础 Link / LinkSub / LinkGroup / LinkElement display、ShowElement 请求内生命周期建议、XLink / FullSubList / mapped alias、plain group 展开、Link retag terminal 与 merge history 传播，以及导入 shape indexed `NamedShape`；本包不重开这些基线，而是围绕导入 shape 完整 `ElementMap`、`ShowElement=true` LinkElement / LinkGroup 持久写回事务生命周期、完整 cross-document 文档哈希 / postfix 生命周期和复杂多层 LinkSub 链先做 source / oracle / parity 准入，只有 S4 证明 current cad-core mismatch 才打开 implementation gate。
+
 ## 入口
 
 - C7-M1 总入口：`C7-M1-PartDesignHoleModelThread标准孔表边界收口主线/6-25-14-03-C7-M1-PartDesignHoleModelThread标准孔表边界收口主线总入口.md`
@@ -40,6 +42,10 @@ C7-M6 承接 C7-M5 之后的 P8 Assembly / Joint 完整 placement 与 constraint
 - C7-M6 方案：`C7-M6-P8AssemblyJoint完整placement与constraint实现主线/6-26-12-05-C7-M6-P8AssemblyJoint完整placement与constraint实现方案.md`
 - C7-M6 工作步骤：`C7-M6-P8AssemblyJoint完整placement与constraint实现主线/工作步骤细分/`
 - C7-M6 矩阵：`C7-M6-P8AssemblyJoint完整placement与constraint实现主线/矩阵/`
+- C7-M7 总入口：`C7-M7-P8LinkElement持久写回与导入ElementMap完整闭环主线/6-26-14-20-C7-M7-P8LinkElement持久写回与导入ElementMap完整闭环主线总入口.md`
+- C7-M7 方案：`C7-M7-P8LinkElement持久写回与导入ElementMap完整闭环主线/6-26-14-20-C7-M7-P8LinkElement持久写回与导入ElementMap完整闭环方案.md`
+- C7-M7 工作步骤：`C7-M7-P8LinkElement持久写回与导入ElementMap完整闭环主线/工作步骤细分/`
+- C7-M7 矩阵：`C7-M7-P8LinkElement持久写回与导入ElementMap完整闭环主线/矩阵/`
 
 ## 当前状态
 
@@ -80,6 +86,8 @@ C7-M6 承接 C7-M5 之后的 P8 Assembly / Joint 完整 placement 与 constraint
 - C7-M6 S4 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=cd3c93b873`（`cd3c93b873 证据：完成 C7-M6 S3 native oracle 固化`），开始状态干净。`C7M6-ORACLE-202` 通过 current `cad-core` legacy recompute、expected comparator 去 gap 元数据检查、focused P8 unittest 和 C API capability smoke 裁为 `already_closed_expected_backed`；`C7M6-ORACLE-302` / `C7M6-ORACLE-203` 继续 `oracle_blocked`。S5 implementation gate closed，只允许 no-code publication closure；S4 未改 C++、adapter、tests、fixtures 或 expected。
 - C7-M6 S5 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=2d1b4673d7`（`2d1b4673d7 文档：完成 C7-M6 S4 parity 准入裁决`），开始状态干净。S5 只更新 root README、本包 README/总入口/方案、工作步骤和矩阵；未改 C++、adapter、tests、fixtures、expected、collector 或生成输出。`C7M6-BLOCKER-501` 已关闭，`C7M6-GATE-601` 发布为 no-code closure。
 - C7-M6 S6 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=f7c7c39f9f`（`f7c7c39f9f 文档：完成 C7-M6 S5 no-code 发布收口`），开始状态干净。release route 为 `C7M6-ORACLE-202=already_closed_expected_backed`、`C7M6-ORACLE-302=oracle_blocked`、`C7M6-ORACLE-203=oracle_blocked`；`C7M6-BLOCKER-601` / `C7M6-GATE-701` 已关闭，C7-M6 队列为空。S6 只更新发布文档和矩阵，没有新增或修改 C++、adapter、tests、fixtures、expected、collector、capability 或生成输出，因此未运行 build、focused unittest、FreeCADCmd 或 collector。
+- C7-M7 方案已创建：创建前 live 起点 `HEAD=7be2d4e937`（`7be2d4e937 docs: 完成 C7-M6 S6 发布闸门`），`git status --short -uall` 无输出。C7-M7 只取 P8 LinkElement 持久写回与导入 ElementMap 完整闭环方向；初始队列为 S0-S6 pending，工作步骤总入口索引已创建即标记为 `【已实现】`，避免 goal-step-runner 把索引当作独立步骤。S0/S1 只允许文档和矩阵，S2 形成 oracle 候选批次，S3 才允许采集 native oracle，S4 裁决 implementation gate，S5 只有在 S4 打开 `backend_gap_requires_implementation` 时才改 C++。
+- C7-M7 S0 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=7be2d4e937`（`7be2d4e937 docs: 完成 C7-M6 S6 发布闸门`），开始状态只包含 `docs/CADCore7.0/README.md` modified 和本 C7-M7 文档包 untracked 文件。C7-M1/C7-M2/C7-M3/C7-M4/C7-M5/C7-M6 队列均为空，C7-M7 从 S0 起步并推进到 S1。S0 冻结 P8 已覆盖边界：基础 Link / LinkSub / LinkGroup / LinkElement display、ElementList / ElementCount / ShowElement 请求内 `documentObjectUpdates` 建议、FullSubList / mapped postfix / cross-document alias 更新、Link retag terminal / merge history、plain group 展开、BREP / STEP / IGES import `history_partial` ElementMap 和 STL import `indexed_only` 边界；完整 Link 持久账本、完整导入 ElementMap、跨请求 backend state、GUI / frontend protocol、Worker / WASM / Web 继续不在 S0 实现范围。S0 未采 oracle、未新增或修改 fixture/expected/test、未改 C++。
 
 ## 队列检查
 
@@ -91,6 +99,7 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M6-P8AssemblyJoint完整placement与constraint实现主线/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M7-P8LinkElement持久写回与导入ElementMap完整闭环主线/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -103,5 +112,6 @@ awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " f
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M6-P8AssemblyJoint完整placement与constraint实现主线/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M7-P8LinkElement持久写回与导入ElementMap完整闭环主线/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore7.0 docs/CADCore方案/细化方案/10-P7-PartDesign常用生态.md
 ```

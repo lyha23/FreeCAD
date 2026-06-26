@@ -1,0 +1,8 @@
+blocker_id	state	owner_step	blocker	source_evidence	decision_rule	next_step
+C7M7-BLOCKER-000	closed	S0	Live baseline frozen	HEAD=7be2d4e937, C7-M1..M6 queues empty, C7-M7 starts at S0, and P8 Link/import already-covered / remaining / diagnostic boundaries are recorded	S1 may start source review	S1
+C7M7-BLOCKER-101	open	S1	Current source and coverage not reviewed	P8 doc and current p8 expected are prior state but current source/tests must be rechecked	S1 must capture FreeCAD and cad-core source authority plus fixture/test coverage	S1
+C7M7-BLOCKER-201	open	S2	Oracle candidate batch not selected	C7-M7 scope is intentionally broader than one fixture, but existing P8 expected rows cannot be reopened blindly	S2 must classify already covered, oracle candidate, blocker and non-goal rows	S2
+C7M7-BLOCKER-301	open	S3	Native oracle missing	No C7-M7 expected or known_gap exists yet	S3 must produce native oracle, native blocker or diagnostic non-goal for each candidate	S3
+C7M7-BLOCKER-401	open	S4	Implementation gate undecided	No C7-M7 parity route yet	S4 must classify already_closed_expected_backed, backend_gap_requires_implementation, oracle_blocked or diagnostic_non_goal	S4
+C7M7-BLOCKER-501	open	S5	Implementation or no-code route not applied	S5 depends on S4 gate	S5 must implement formal Link / ElementMap gap or publish no-code closure	S5
+C7M7-BLOCKER-601	open	S6	Release gate not run	Queue starts pending	S6 must validate docs/tests/build as scoped and empty the queue	S6

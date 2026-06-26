@@ -1,0 +1,11 @@
+validation_id	phase	command	required	when_to_run	notes
+C7M7-VAL-001	queue	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M7-P8LinkElement持久写回与导入ElementMap完整闭环主线/工作步骤细分 --format markdown	yes	every step	Skip files marked 【已实现】 and expose next pending step
+C7M7-VAL-002	tsv	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M7-P8LinkElement持久写回与导入ElementMap完整闭环主线/矩阵/*.tsv	yes	every matrix edit	Guards column drift
+C7M7-VAL-003	whitespace	rg -n '[ \t]$' docs/CADCore7.0/C7-M7-P8LinkElement持久写回与导入ElementMap完整闭环主线 docs/CADCore7.0/README.md	yes	every docs step	No trailing whitespace
+C7M7-VAL-004	diff	git diff --check	yes	every step	No whitespace errors in patch
+C7M7-VAL-101	source evidence	rg -n 'LinkBaseExtension|ShowElement|ElementList|ElementCount|LinkElement|LinkGroup|PropertyXLink|FullSubList|ElementMap|NamedShape|elementReferenceUpdates|documentObjectUpdates|ImportStep|ImportBrep|Mesh::Import' docs/CADCore7.0/C7-M7-P8LinkElement持久写回与导入ElementMap完整闭环主线 src/App src/Mod/Part/App cad-core/src/features cad-core/src/document cad-core/src/topo cad-core/tests/test_p8_features.py	yes	S1	Evidence collection and source review only
+C7M7-VAL-201	oracle plan rg	rg -n 'oracle_candidate|already_covered|backend_gap_candidate|diagnostic_non_goal|LinkElement|LinkGroup|ElementMap|FullSubList|LinkSub|documentObjectUpdates|elementReferenceUpdates' docs/CADCore7.0/C7-M7-P8LinkElement持久写回与导入ElementMap完整闭环主线	yes	S2	Route-bearing docs must use approved vocabulary
+C7M7-VAL-301	native oracle	S3 command to be added after oracle candidates are selected	conditional	S3	Must use FreeCAD native expected or known_gap, never current cad-core output
+C7M7-VAL-401	focused p8	cd cad-core && python3 -m unittest tests.test_p8_features.CadCoreP8FeatureTest	conditional	S4_S5	Run when expected/tests or Link/import runtime behavior changes
+C7M7-VAL-402	adapter capabilities	cd cad-core && python3 -m unittest tests.test_adapters.CadCoreAdapterTest.test_c_api_capabilities_exposes_web_contract_facts	conditional	S5	Run when capability publication changes
+C7M7-VAL-501	build	cd cad-core && cmake --build build	conditional	S5_S6	Required only if C++ changes
