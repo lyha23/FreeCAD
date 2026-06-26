@@ -42,16 +42,23 @@ S0 已冻结 P8 Assembly / Joint 已发布边界：`cad-core/fixtures/c3m6/expec
 
 ### S1 FreeCAD source 与 current coverage 复核
 
-复核 FreeCAD source authority：
+已完成。S1 只更新文档和矩阵，没有新增 fixtures/expected/tests，没有运行 FreeCAD oracle，没有改 C++。
 
-- `src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::solve()`
-- `src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::makeMbdJointOfType()`
-- `src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint()`
-- `src/Mod/Assembly/App/AssemblyUtils.cpp::getDistanceType()`
-- `src/Mod/Assembly/App/AssemblyUtils.cpp::getJointCurrentValue()`
-- `src/Mod/Assembly/JointObject.py`
+FreeCAD source authority 已复核：
 
-同时复核 `cad-core/src/assembly/*`、`cad-core/tests/test_p8_features.py`、`cad-core/fixtures/c3m6` 和 relevant expected。
+- `src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::solve()`：request-local 顺序为 `ensureIdentityPlacements()`、`syncGroundedJoints()`、`makeMbdAssembly()`、`fixGroundedParts()`、`jointParts()`、`mbdAssembly->runPreDrag()`、`setNewPlacements()`、`redrawJointPlacements()`。
+- `src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint()`：`Placement1/2` 先经 object-global，再转 moving part local，最后按 bundled `offsetPlc` 修正后创建 Ondsel marker。
+- `src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::makeMbdJointOfType()` / `makeMbdJointDistance()`：确认 Fixed、Revolute、Cylindrical、Slider、Ball、Distance、Parallel、Perpendicular、Angle、RackPinion、Screw、Gears、Belt 到 ASMT joint class 和 scalar 字段的映射。
+- `src/Mod/Assembly/App/AssemblyUtils.cpp::getDistanceType()` / `getJointCurrentValue()`：确认 DistanceType 分类、`swapJCS()` solver ordering、radius correction、signed distance / angle current value 和 default / TODO 边界。
+- `src/Mod/Assembly/JointObject.py`：确认 `JointType` 枚举、`Reference1/2`、`Placement1/2`、`Distance` / `Distance2`、`ObjectToGround` 和 GUI/session-only 行为边界。
+
+current `cad-core` coverage 已复核：`buildAssemblySolveRequest()` 构造 request-local solver DTO，`solveAssemblyWithRealOndselAdapter()` 使用真实 Ondsel adapter，`makeOndselJointOfType()` 已覆盖当前 supported JointType / DistanceType 映射，`assembly_set_placement` 通过 `documentObjectUpdates` 发布 request-local writeback，unsupported / missing marker / default DistanceType 保持 diagnostic boundary。
+
+PointLine 保留 source / native expected 差异边界：当前源码 `makeMbdJointDistance()` 写成 `ASMTCylSphJoint`，但已入库 FreeCADCmd 1.2.0 expected 和 current focused tests 对 request-local AssemblyLink PointLine 子集约束为 `ASMTLineInPlaneJoint` + `offset`。S2 若要重开该类，必须先拿到新的 source-backed native oracle，不能只凭源码 / current output 任一侧改口径。
+
+fixtures / tests 已复核：`cad-core/fixtures/c3m6/expected` 当前 50 个 Assembly expected 中 45 个无 `known_gap` / `backendGap`，5 个保留 `DTE-NG-003` diagnostic boundary，34 个带 `native_marker_oracle`；`cad-core/tests/test_p8_features.py` 覆盖 grounded JointType matrix、DistanceType basic / extended / default boundary、marker native oracle、single / multi / partial writeback、invalid grounded、ungrounded、unsupported diagnostics、Screw / RackPinion sliding precondition 与 marker rewrite。
+
+`C7M6-BLOCKER-101` 已关闭。S2 只能把上述已覆盖边界外、同时具备 FreeCAD source-backed request-local lifecycle 的内容列为 oracle candidate；已覆盖 expected-backed rows 不得重开。
 
 ### S2 oracle 候选矩阵与批次裁决
 

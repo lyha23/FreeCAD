@@ -18,9 +18,9 @@ C7-M6 的目标是围绕完整 Joint placement / constraint、复杂 placement c
 - C7-M1/C7-M2/C7-M3/C7-M4/C7-M5 `工作步骤细分` 队列均为空；C7-M5 final route 为 `expected-backed closed / no backendGap`。
 - CAD Core 总览后续队列当前指向 P8 扩展：完整 Joint placement / constraint、Worker / WASM / Web adapter、导入 shape 完整 ElementMap、`ShowElement=true` LinkElement / LinkGroup 持久写回事务生命周期、完整 cross-document 文档哈希 / postfix 生命周期、更复杂多层 LinkSub 链，以及 Part surface full family。
 - C7-M6 只取 P8 Assembly / Joint 方向，不把 Part surface、Link lifecycle、Worker / WASM / Web 混入同一实现批次。
-- S0 已关闭 `C7M6-BLOCKER-000` / `C7M6-GATE-000`，队列推进到 S1；S1 继续只允许文档和矩阵，S2 形成 oracle 候选批次，S3 采集 native oracle 或 blocker，S4 裁决 implementation gate，S5 只有在 S4 打开 `backend_gap_requires_implementation` 时才改 C++。
+- S0 已关闭 `C7M6-BLOCKER-000` / `C7M6-GATE-000`；S1 已关闭 `C7M6-BLOCKER-101`，只更新文档和矩阵，没有采 oracle、没有新增 fixtures/expected/tests、没有改 C++。队列推进到 S2；S2 形成 oracle 候选批次，S3 采集 native oracle 或 blocker，S4 裁决 implementation gate，S5 只有在 S4 打开 `backend_gap_requires_implementation` 时才改 C++。
 - `cad-core/fixtures/c3m6/expected` 当前有 51 个 JSON，其中 50 个 Assembly expected；45 个 Assembly expected 无 `known_gap` / `backendGap`，5 个 DistanceType default / TODO / PointCurve expected 保持 `DTE-NG-003` diagnostic boundary。34 个 expected 带 `native_marker_oracle`，覆盖 subshape marker / handleOneSide evidence；这些 expected 均不是从 current `cad-core` 输出倒推。
-- `cad-core/tests/test_p8_features.py` 的 c3m6 focused coverage 已覆盖 grounded JointType matrix、DistanceType basic / extended / default diagnostic boundary、marker native oracle expected batch、single / multi-component `assembly_set_placement` writeback、invalid grounded、ungrounded、unsupported diagnostics、RackPinion / Screw sliding precondition 与 marker rewrite；S1/S2 只能在这些边界外裁 oracle candidate 或 diagnostic non-goal。
+- `cad-core/tests/test_p8_features.py` 的 c3m6 focused coverage 已覆盖 grounded JointType matrix、DistanceType basic / extended / default diagnostic boundary、marker native oracle expected batch、single / multi-component `assembly_set_placement` writeback、invalid grounded、ungrounded、unsupported diagnostics、RackPinion / Screw sliding precondition 与 marker rewrite；S2 只能在这些边界外裁 oracle candidate 或 diagnostic non-goal。
 
 ## 收口边界
 

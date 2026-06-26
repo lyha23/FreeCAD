@@ -14,6 +14,7 @@ C7-M6 是 C7-M5 之后的 P8 follow-up。总览后续队列已经把 P7 transfor
 - `cad-core/fixtures/c3m6/expected` 已保存多个 Assembly solver placement expected；这些文件是后续 parity 的标准答案，不能用 current `cad-core` 输出倒推。
 - S0 live 基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=60876b2f6c`（`60876b2f6c docs: 完成 C7-M5 S6 release gate`）。开始状态只包含 root `docs/CADCore7.0/README.md` modified 和本 C7-M6 文档包 untracked 文件。C7-M1 到 C7-M5 队列均为空。
 - 当前 c3m6 expected/test 边界：51 个 checked-in expected JSON，其中 50 个 Assembly expected；45 个 Assembly expected 无 `known_gap` / `backendGap`，5 个 DistanceType diagnostic expected 保持 `DTE-NG-003`；34 个 expected 带 `native_marker_oracle`。`test_p8_features.py` 已把这些 expected 约束到 real Ondsel solver DTO、marker placement、DistanceType、writeback 和 diagnostics。
+- S1 已完成 source / current coverage 复核：`AssemblyObject::solve()`、`handleOneSideOfJoint()`、`makeMbdJointOfType()`、`AssemblyUtils::getDistanceType()` / `getJointCurrentValue()`、`JointObject.py`、current `cad-core/src/assembly/*`、c3m6 expected 和 focused tests 均已矩阵化；`C7M6-BLOCKER-101` 已关闭。未采 oracle，未新增或修改 fixtures/expected/tests，未改 C++。
 
 ## 初始范围
 
@@ -34,7 +35,7 @@ C7-M6 是 C7-M5 之后的 P8 follow-up。总览后续队列已经把 P7 transfor
 ## 步骤队列
 
 1. S0：冻结 live baseline、C7-M1..M5 队列、P8 当前 supported / expected-backed / diagnostic 边界。已完成，关闭 `C7M6-BLOCKER-000` / `C7M6-GATE-000`。
-2. S1：复核 FreeCAD Assembly source、current `cad-core` solver / marker / writeback 能力和 c3m6 fixture/test 覆盖。
+2. S1：复核 FreeCAD Assembly source、current `cad-core` solver / marker / writeback 能力和 c3m6 fixture/test 覆盖。已完成，关闭 `C7M6-BLOCKER-101`。
 3. S2：形成 Joint placement / constraint native oracle 候选矩阵和最小完整语义批次。
 4. S3：采集 native oracle 或记录 oracle blocker / diagnostic non-goal。
 5. S4：用 current `cad-core` 做 parity 和 implementation gate 裁决。

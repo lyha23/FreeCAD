@@ -1,5 +1,5 @@
 validation_id	phase	command	required	when_to_run	notes
-C7M6-VAL-001	queue	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M6-P8AssemblyJoint完整placement与constraint实现主线/工作步骤细分 --format markdown	yes	every step	Skip files marked 【已实现】 and expose next pending step; after S0 this must start at S1
+C7M6-VAL-001	queue	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M6-P8AssemblyJoint完整placement与constraint实现主线/工作步骤细分 --format markdown	yes	every step	Skip files marked 【已实现】 and expose next pending step; after S1 this must start at S2
 C7M6-VAL-002	tsv	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M6-P8AssemblyJoint完整placement与constraint实现主线/矩阵/*.tsv	yes	every matrix edit	Guards column drift
 C7M6-VAL-003	whitespace	rg -n '[ \t]$' docs/CADCore7.0/C7-M6-P8AssemblyJoint完整placement与constraint实现主线 docs/CADCore7.0/README.md	yes	every docs step	No trailing whitespace
 C7M6-VAL-004	diff	git diff --check	yes	every step	No whitespace errors in patch
