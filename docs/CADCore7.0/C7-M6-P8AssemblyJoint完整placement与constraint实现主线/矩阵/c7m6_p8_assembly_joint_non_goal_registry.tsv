@@ -1,0 +1,7 @@
+non_goal_id	scope_id	item	why_excluded	reopen_condition
+C7M6-NG-001	C7M6-SCOPE-501	GUI / ViewProvider / TaskPanel joint creation	CAD Core consumes DocumentObject graph and request-local solver input; GUI command state is outside backend scope	Open a GUI-specific plan outside cad-core backend
+C7M6-NG-002	C7M6-SCOPE-501	Persistent solver session and drag interaction	CAD Core is stateless per request and cannot keep MbD session state across requests without changing architecture	Reopen only if stateless CAD Core boundary changes
+C7M6-NG-003	C7M6-SCOPE-501	Full Link lifecycle and cross-document hash / postfix persistence	Belongs to P8 Link lifecycle package, not Joint placement / constraint implementation	Open a dedicated Link lifecycle package
+C7M6-NG-004	C7M6-SCOPE-501	Worker / WASM / Web adapter productization	Adapter productization should reuse stable core semantics and not drive Joint source behavior	Open Worker / WASM / Web package after core semantics close
+C7M6-NG-005	C7M6-SCOPE-501	Part surface full family	Part surface belongs to separate P8 surface family lane	Open Part surface full family package
+C7M6-NG-006	C7M6-SCOPE-501	Current cad-core output as FreeCAD oracle	Expected must come from FreeCAD native collector or source-backed probe	Replace only with source-backed FreeCAD oracle collection

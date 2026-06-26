@@ -1,0 +1,124 @@
+# C7-M6 P8 Assembly Joint 完整 placement 与 constraint 实现方案
+
+## 背景
+
+C7-M5 已经把 P7 transformed / pattern 复杂 ownership 收口为 expected-backed closed / no backendGap。CAD Core 总览的下一类开放方向是 P8 扩展，其中 Assembly Joint 已有 request-local real Ondsel adapter、固定的 c3m6 native expected 和一批 focused tests，但完整 Joint placement / constraint、复杂 placement chain、remaining JointType 与产品化边界仍未收口。
+
+C7-M6 的核心不是重写 Assembly solver，而是按 FreeCAD source authority 和 checked-in native expected 审计 current `cad-core` 是否还有真实 mismatch。没有 source-backed native oracle 时，只能保持 `oracle_pending` / `oracle_blocked` / `diagnostic_non_goal`，不能直接改 C++。
+
+## 目标
+
+- 从 P8 live 文档、FreeCAD Assembly source、current `cad-core` assembly 实现和 c3m6 fixtures/tests 中抽出 Joint placement / constraint 候选。
+- 形成最小完整语义批次：source authority、fixture / expected 候选、collector 命令、focused tests、capability / docs 发布口径。
+- 若 native oracle 证明 current `cad-core` mismatch，打开 S5 implementation gate。
+- 若 current `cad-core` 已匹配，发布 `already_closed_expected_backed`。
+- 若缺 oracle 或 lifecycle 不可复现，发布 `oracle_blocked` 或 `diagnostic_non_goal`，不改 C++。
+
+## 最小完整语义批次
+
+| 批次 | 代表项 | 判定方式 |
+| --- | --- | --- |
+| Baseline Joint placement | GroundedJoint、Fixed / Revolute / Cylindrical / Slider / Ball / Distance / Angle request-local placement writeback | c3m6 native expected + current P8 focused tests |
+| Marker placement chain | face / edge / vertex marker、object-global 到 part-local 变换、`Placement1/2`、offset marker | FreeCAD `AssemblyObject::handleOneSideOfJoint()` + marker fixtures |
+| Remaining JointType constraints | Parallel、Perpendicular、RackPinion、Screw、Gears、Belt、Angle zero / nonzero | FreeCAD `makeMbdJointOfType()` + current `makeOndselJointOfType()` evidence |
+| Distance / current value scalar | DistanceType、radius-bearing geometry、signed distance / angle、`getJointCurrentValue()` | FreeCAD `AssemblyUtils::getDistanceType()` / `getJointCurrentValue()` + solver DTO expected |
+| Writeback lifecycle | multi-component placement, `assembly_set_placement`, unsupported diagnostics | c3m6 expected + `documentObjectUpdates` tests |
+
+## 实施纪律
+
+- S0/S1 不改 C++、fixtures、expected 或 tests；只冻结状态、source 和 current coverage。
+- S2 只输出 oracle 候选和最小批次；不能把 existing expected-backed rows 误写成 active gap。
+- S3 可以新增 oracle fixture / expected / known_gap，但不能从 current `cad-core` 输出倒推 expected。
+- S4 只做 parity 和 gate 裁决；只有 route=`backend_gap_requires_implementation` 才打开 S5 code edit gate。
+- S5 若实现，必须落到正式 `assembly/*`、`document` parser 或 C ABI capability 路径，不允许 adapter 输出端修正、fixture 名称分支或 solver result 后处理特判。
+
+## 步骤
+
+### S0 live baseline 与 P8 边界冻结
+
+已完成。冻结 live 起点：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=60876b2f6c`（`60876b2f6c docs: 完成 C7-M5 S6 release gate`）；开始状态只包含 root `docs/CADCore7.0/README.md` modified 和本 C7-M6 文档包 untracked 文件，未发现无关 dirty work。C7-M1..M5 队列均为空。
+
+S0 已冻结 P8 Assembly / Joint 已发布边界：`cad-core/fixtures/c3m6/expected` 有 51 个 checked-in JSON，其中 50 个 Assembly expected；45 个 Assembly expected 无 `known_gap` / `backendGap`，5 个 DistanceType default / TODO / PointCurve expected 保持 `DTE-NG-003` diagnostic boundary；34 个 expected 带 `native_marker_oracle`。`cad-core/tests/test_p8_features.py` 已覆盖 grounded JointType matrix、DistanceType basic / extended / default diagnostic boundary、marker native oracle expected batch、single / multi-component `assembly_set_placement` writeback、invalid grounded、ungrounded、unsupported diagnostics、RackPinion / Screw sliding precondition 与 marker rewrite。S0 没有采 oracle、没有新增 fixture/expected/test、没有改 C++。
+
+### S1 FreeCAD source 与 current coverage 复核
+
+复核 FreeCAD source authority：
+
+- `src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::solve()`
+- `src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::makeMbdJointOfType()`
+- `src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint()`
+- `src/Mod/Assembly/App/AssemblyUtils.cpp::getDistanceType()`
+- `src/Mod/Assembly/App/AssemblyUtils.cpp::getJointCurrentValue()`
+- `src/Mod/Assembly/JointObject.py`
+
+同时复核 `cad-core/src/assembly/*`、`cad-core/tests/test_p8_features.py`、`cad-core/fixtures/c3m6` 和 relevant expected。
+
+### S2 oracle 候选矩阵与批次裁决
+
+把候选路由到：
+
+- `already_covered`
+- `oracle_candidate`
+- `oracle_blocker`
+- `backend_gap_candidate`
+- `diagnostic_non_goal`
+
+S2 必须明确每个候选是否有 support-backed FreeCAD lifecycle、是否已有 checked-in expected、是否只是 request-local diagnostic 或 GUI/session 行为。
+
+### S3 native oracle 采集
+
+对 S2 的 `oracle_candidate` 批次采集 FreeCAD expected。合法结果：
+
+| route | 条件 | 输出 |
+| --- | --- | --- |
+| `native_oracle_collected` | FreeCAD native fixture 可复现 placement / constraint evidence | expected / evidence JSON |
+| `native_oracle_blocked` | collector、FreeCADCmd、solver runtime 或 lifecycle 不可观察 | known_gap JSON |
+| `diagnostic_non_goal` | GUI / drag session / persistent solver / unsupported child type 等超边界 | diagnostic expected 或 docs row |
+
+### S4 cad-core parity 与 implementation gate
+
+如果 S3 得到 native oracle，则比较 current `cad-core`：
+
+- 匹配：`already_closed_expected_backed`
+- 不匹配：`backend_gap_requires_implementation`
+- 缺 oracle：`oracle_blocked`
+- 超边界：`diagnostic_non_goal`
+
+S4 必须写清 S5 是否允许改 C++、允许文件范围、focused tests 和 non-goals。
+
+### S5 实现或 no-code 发布
+
+若 S4 打开 code gate，S5 实现顺序固定：
+
+1. 在 `cad-core/src/assembly` 正式路径补 Joint placement / constraint / marker / writeback 语义。
+2. 写 focused tests，约束 solver DTO、`documentObjectUpdates`、diagnostics、capability 和 expected parity。
+3. 删除临时 diagnostic 或保持 known_gap 时同步矩阵。
+
+若 S4 未打开 code gate，S5 只做 no-code publication closure。
+
+### S6 release gate
+
+运行本包 queue、TSV、trailing whitespace、`git diff --check`。若 S5 改 C++，再跑 focused P8 tests 和 `cmake --build build`。
+
+## 验收分层
+
+### 本轮短跑
+
+```bash
+cd /Users/li/Chili3DProject/FreeCAD
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M6-P8AssemblyJoint完整placement与constraint实现主线/工作步骤细分 --format markdown
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M6-P8AssemblyJoint完整placement与constraint实现主线/矩阵/*.tsv
+rg -n '[ \t]$' docs/CADCore7.0/C7-M6-P8AssemblyJoint完整placement与constraint实现主线 docs/CADCore7.0/README.md
+git diff --check
+```
+
+### 实现短跑
+
+```bash
+cd /Users/li/Chili3DProject/FreeCAD/cad-core
+cmake --build build
+python3 -m unittest tests.test_p8_features.CadCoreP8FeatureTest
+python3 -m unittest tests.test_adapters.CadCoreAdapterTest.test_c_api_capabilities_exposes_web_contract_facts
+```
+
+只有 S5 改 C++、expected、tests 或 capability 时，这组才是必须执行项。

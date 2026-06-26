@@ -1,0 +1,9 @@
+gate_id	scope_id	state	route	current_evidence	decision_rule	next_step
+C7M6-GATE-000	C7M6-SCOPE-000	closed	baseline_frozen	HEAD=60876b2f6c; start status only root README modified plus C7-M6 package untracked; C7-M1..M5 queues empty; c3m6 expected/test boundary summarized	S0 closed baseline and can advance to S1	S1
+C7M6-GATE-101	C7M6-SCOPE-101	pending	source_review_pending	S0 froze current coverage: c3m6 has 50 Assembly expected, 45 expected-backed rows, 5 DTE-NG-003 diagnostic rows and focused JointType/DistanceType tests	S1 must identify already covered vs oracle candidate rows beyond frozen baseline	S1
+C7M6-GATE-201	C7M6-SCOPE-201	pending	source_review_pending	S0 found 34 expected files with native_marker_oracle plus marker placement focused tests; remaining complex placement chain still needs source review	S2 must classify and S3 may collect oracle only for reproducible request-local lifecycle	S2
+C7M6-GATE-301	C7M6-SCOPE-301	pending	source_review_pending	S0 found focused coverage for Parallel, Perpendicular, Gears, Belt, RackPinion and Screw grounded rows plus diagnostic unsupported rows	S2 must classify before implementation	S2
+C7M6-GATE-401	C7M6-SCOPE-401	pending	source_review_pending	S0 found existing single and multi-component assembly_set_placement expected/test coverage; completeness still needs S1/S2 review	S2 must classify already covered or oracle candidate	S2
+C7M6-GATE-501	C7M6-SCOPE-501	pending	diagnostic_non_goal_pending	GUI / persistent solver / full Link lifecycle / Worker adapter boundaries must be preserved unless upstream scope changes	S2 must keep session/product behavior out of implementation gate	S2
+C7M6-GATE-601	C7M6-SCOPE-601	pending	implementation_gate_closed	No C7-M6 native oracle/parity result yet	S4 is the only step allowed to set backend_gap_requires_implementation	S4
+C7M6-GATE-701	C7M6-SCOPE-000	pending	release_pending	Queue and validation not yet closed	S6 runs release gate and empties queue	S6
