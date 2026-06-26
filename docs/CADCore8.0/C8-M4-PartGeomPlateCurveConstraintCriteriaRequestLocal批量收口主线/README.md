@@ -13,9 +13,12 @@ C8-M4 承接 C8-M3 完成后的 live gap：`part_workbench.geomplate.narrowed_ga
 
 ## 当前基线
 
-- 起点 HEAD：`48900289ec`（`48900289ec chore: 完成 C8-M3 S6 capability 发布闸门`）。
+- S0 live 基线：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=7a9fa7bdd3`（`7a9fa7bdd3 docs: 创建 C8-M4 GeomPlate criteria 收口方案`），`git status --short -uall` 无输出。
+- 方案创建旧起点：`48900289ec`（`48900289ec chore: 完成 C8-M3 S6 capability 发布闸门`），只保留为创建时历史证据；S0 执行证据以上述 live 基线为准。
 - C8-M3 队列为空，`part_workbench.conic_curves.remaining_gaps=[]`。
-- C8-M4 队列新建后应从 S0 开始；索引文件本身标记为 `【已实现】`，避免被 `goal-step-runner` 当成待执行步骤。
+- C8-M4 S0 执行前队列首项是 `6-27-02-34-C8-M4-S0-live基线与批量范围冻结.md`；S0 完成后队列首项前移到 S1。
+- S0 只冻结声明和矩阵，不采 FreeCAD oracle，不新增 fixture / expected / tests / collector，不修改 C++ / Rust / FreeCAD `src/`。
+- 输入 gap `part_workbench.geomplate.narrowed_gaps.curve_constraint_criteria_setters_not_implemented` 与 diagnostic `unsupported_curve_criteria` 在 S0 保留，不提前删除或声明 supported。
 
 ## 批量范围
 

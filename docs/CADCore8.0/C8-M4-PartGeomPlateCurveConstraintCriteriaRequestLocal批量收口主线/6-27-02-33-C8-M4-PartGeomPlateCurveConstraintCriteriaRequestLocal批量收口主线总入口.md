@@ -9,10 +9,13 @@ C8-M4 的目标是收口 `Part.GeomPlate` 中 CurveConstraint criteria 的 reque
 ## 当前基线
 
 - `pwd=/home/user/Chili3DProject/FreeCAD`
-- 起点 HEAD：`48900289ec`（`48900289ec chore: 完成 C8-M3 S6 capability 发布闸门`）
-- C8-M3 队列为空，C8-M4 是新建方案包。
+- S0 live HEAD：`7a9fa7bdd3`（`7a9fa7bdd3 docs: 创建 C8-M4 GeomPlate criteria 收口方案`），`git status --short -uall` 无输出。
+- 方案创建旧起点：`48900289ec`（`48900289ec chore: 完成 C8-M3 S6 capability 发布闸门`），已被 S0 live baseline 覆盖为执行证据。
+- C8-M3 队列为空，`part_workbench.conic_curves.remaining_gaps=[]`。
+- C8-M4 S0 执行前队列首项是 S0；S0 完成后队列首项前移到 S1。
 - 当前 known gap 输入：`part_workbench.geomplate.narrowed_gaps.curve_constraint_criteria_setters_not_implemented`。
 - 当前 diagnostic 输入：`unsupported_curve_criteria`。
+- S0 禁止声明：不采 FreeCAD oracle，不新增 fixture / expected / tests / collector，不修改 C++ / Rust / FreeCAD `src/`，不删除上述 gap / diagnostic，不声明 FreeCAD native `CurveConstraintPy` setter parity 已支持。
 
 ## 为什么同轮批量处理
 
@@ -64,7 +67,7 @@ S0 live 基线与批量范围冻结
 | README | `README.md` | 包入口 |
 | 方案 | `6-27-02-33-C8-M4-PartGeomPlateCurveConstraintCriteriaRequestLocal批量收口方案.md` | 实施方案 |
 | 工作步骤总入口 | `工作步骤细分/6-27-02-33-【已实现】C8-M4工作步骤总入口.md` | 队列索引 |
-| S0 | `工作步骤细分/6-27-02-34-C8-M4-S0-live基线与批量范围冻结.md` | 声明与基线 |
+| S0 | `工作步骤细分/6-27-02-34-【已实现】C8-M4-S0-live基线与批量范围冻结.md` | 声明与基线 |
 | S1 | `工作步骤细分/6-27-02-35-C8-M4-S1-FreeCAD源码与current覆盖批量复核.md` | source authority |
 | S2 | `工作步骤细分/6-27-02-36-C8-M4-S2-scope准入与blocker矩阵.md` | route 分类 |
 | S3 | `工作步骤细分/6-27-02-37-C8-M4-S3-FreeCADCurveConstraintCriteria原生边界复核.md` | native setter 边界 |
@@ -79,4 +82,4 @@ S0 live 基线与批量范围冻结
 | non-goal | `矩阵/c8m4_geomplate_criteria_non_goal_registry.tsv` | native blocked / GUI / wrapper exclusions |
 | validation | `矩阵/c8m4_geomplate_criteria_validation_matrix.tsv` | 验收命令 |
 
-当前只创建方案包和 pending 队列；S0-S6 尚未执行。执行本包时必须先从 S0 的 live baseline 开始。
+S0 已完成 live baseline 与批量范围冻结；S1-S6 仍待执行。执行后续步骤时必须继续从 live baseline 开始，不继承旧结论。

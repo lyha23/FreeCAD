@@ -1,8 +1,8 @@
 id	layer	command	required_when	expected_signal	status	owner_step
-C8M4-VAL-001	queue	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore8.0/C8-M4-PartGeomPlateCurveConstraintCriteriaRequestLocal批量收口主线/工作步骤细分 --format markdown	every_step	Shows current first pending step	pending	S0-S6
-C8M4-VAL-002	tsv	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore8.0/C8-M4-PartGeomPlateCurveConstraintCriteriaRequestLocal批量收口主线/矩阵/*.tsv	every_step	No field count mismatch	pending	S0-S6
-C8M4-VAL-003	whitespace	rg -n '[ \t]$' docs/CADCore8.0/C8-M4-PartGeomPlateCurveConstraintCriteriaRequestLocal批量收口主线 docs/CADCore8.0/README.md	every_step	No trailing whitespace matches	pending	S0-S6
-C8M4-VAL-004	diff	git diff --check	every_step	No whitespace errors	pending	S0-S6
+C8M4-VAL-001	queue	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore8.0/C8-M4-PartGeomPlateCurveConstraintCriteriaRequestLocal批量收口主线/工作步骤细分 --format markdown	every_step	Shows current first pending step	s0_passed_next_S1	S0-S6
+C8M4-VAL-002	tsv	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore8.0/C8-M4-PartGeomPlateCurveConstraintCriteriaRequestLocal批量收口主线/矩阵/*.tsv	every_step	No field count mismatch	s0_passed	S0-S6
+C8M4-VAL-003	whitespace	rg -n '[ \t]$' docs/CADCore8.0/C8-M4-PartGeomPlateCurveConstraintCriteriaRequestLocal批量收口主线 docs/CADCore8.0/README.md	every_step	No trailing whitespace matches	s0_passed_no_matches	S0-S6
+C8M4-VAL-004	diff	git diff --check	every_step	No whitespace errors	s0_passed	S0-S6
 C8M4-VAL-101	source	rg -n 'setG0Criterion|setG1Criterion|setG2Criterion|unsupported_curve_criteria|GeomPlateCurveConstraintSource|SetG0Criterion|SetG1Criterion|SetG2Criterion' src/Mod/Part/App/GeomPlate cad-core/include/cad_core/part/part_geomplate.h cad-core/src/part/part_geomplate.cpp cad-core/tests	S1-S4	Source and current coverage located	pending	S1-S4
 C8M4-VAL-201	build	cmake --build build	S6 implementation gate open	cad-core builds	pending	S6
 C8M4-VAL-202	tests	python3 -m unittest tests.test_p8_features tests.test_adapters tests.test_diagnostics	S6 implementation gate open	Focused tests pass	pending	S6
