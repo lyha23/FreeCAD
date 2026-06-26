@@ -55,7 +55,9 @@ S2 结论：C8-M1 ShapeBinder / SubShapeBinder capability、fixtures、expected 
 
 ## S5 capability 协议与前端接入边界
 
-同步 FreeCAD `cad-core` capability 发布口径，明确哪些是 supported、known_gap、diagnostic_non_goal 和下游 product contract。
+已完成。S5 live 基线为 `HEAD=d1afdb460f`（`d1afdb460f docs: 完成 C8-M2 S4 下游同步契约`），开始工作区干净。S5 通过 `./cad-core capabilities > /tmp/c8m2-capabilities.json` 与 `python3 -m unittest tests.test_c8_shapebinder tests.test_diagnostics` 验证当前 C++ / tests 口径一致，因此只回写文档和矩阵，不修改 `capability_contract.cpp` 或 focused tests。
+
+S5 发布口径：`part_design.shape_binder` 保持 expected-backed supported，`part_design.sub_shape_binder` 保持 expected-backed request-local support with `copy_on_change_full_temporary_document_cache` known_gap；下游同步合同继续是 `sync_required`，full temporary-document cache 继续是 `known_gap_diagnostic` / `oracle_blocked`，GUI/session/persistent cache/Rust 下游和前端持久 full BREP / TopoDS_Shape / NamedShape / ElementMap / temporary cache 均为 `diagnostic_non_goal`。`C8M2-BLOCKER-501` 已关闭，S6 implementation/no-code gate 仍 pending。
 
 ## S6 实现准入与发布闸门
 
