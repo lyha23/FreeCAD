@@ -140,7 +140,7 @@ S5 发布裁决：
 
 ### S6 release gate
 
-运行本包 queue、TSV、trailing whitespace、`git diff --check`。S5 已确认未改 C++、fixtures、expected、tests 或 capability，因此 S6 默认不跑 focused P8 tests 和 `cmake --build build`；只有 S6 自己引入代码、fixture、expected、test 或 capability 改动时才补跑。
+已完成。S6 运行本包 queue、TSV、trailing whitespace、`git diff --check`，并同步 root README、本包 README / 总入口 / 方案和矩阵。S5/S6 均未改 C++、adapter、fixtures、expected、tests、collector、capability 或生成输出，因此未跑 focused P8 tests 或 `cmake --build build`。最终 route：already-covered rows closed；`C7M7-ORACLE-202=oracle_blocked`，等待 native collector/probe 暴露完整 imported Faces / Edges / Vertices ElementMap 与 stable reference update evidence；`C7M7-ORACLE-302=oracle_blocked`，等待 native transaction probe 捕获 persistent owner / child graph writeback；`C7M7-ORACLE-402=oracle_blocked`，等待 source-backed FCStd save/restore probe 捕获 file / stamp / hash / DocMap / restored FullSubList / ReferenceShadow / mapped postfix lifecycle；`C7M7-ORACLE-203=oracle_blocker`，等待单独 mesh-specific oracle package。GUI / frontend / cache / Worker 保持 `diagnostic_non_goal`，没有 `backend_gap_requires_implementation`。`C7M7-BLOCKER-601` / `C7M7-GATE-701` 已关闭，C7-M7 队列为空。
 
 ## 验收分层
 
