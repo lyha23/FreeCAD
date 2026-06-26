@@ -1,8 +1,37 @@
-# C8-M4-S1 FreeCAD 源码与 current 覆盖批量复核
+# 【已实现】C8-M4-S1 FreeCAD 源码与 current 覆盖批量复核
 
 ## 目标
 
 复核 CurveConstraint criteria 的 FreeCAD source authority、当前 `cad-core` DTO / parser / OCCT apply path、existing tests 和 capability publication。S1 只做证据复核和矩阵回写，不改 C++。
+
+## live 基线
+
+本步骤已记录：
+
+- `pwd=/home/user/Chili3DProject/FreeCAD`
+- `git rev-parse --short HEAD`：`d3d02af5e3`
+- `git log -1 --oneline`：`d3d02af5e3 docs: 完成 C8-M4 S0 live 基线冻结`
+- `git status --short -uall`：无输出，开始工作区干净。
+- S1 执行前 C8-M4 队列首项为 `6-27-02-35-C8-M4-S1-FreeCAD源码与current覆盖批量复核.md`。
+
+## S1 复核结论
+
+- FreeCAD `CurveConstraintPy::setG0Criterion()` / `setG1Criterion()` / `setG2Criterion()` 当前仍全部显式 `PyExc_NotImplementedError("Not yet implemented")`。这只关闭 source/current coverage 复核，不关闭 native setter parity。
+- FreeCAD `CurveConstraintPy::G0Criterion(u)` / `G1Criterion(u)` / `G2Criterion(u)` 直接读取 wrapped `GeomPlate_CurveConstraint` 的 criteria state，证明 OCCT 约束对象存在 criteria 读状态；但 getter 不能证明 Python setter 支持。
+- `PointConstraintPy::setG0Criterion()` / `setG1Criterion()` / `setG2Criterion()` 已实现并调用 `GeomPlate_PointConstraint::SetG*Criterion()`，只能作为 criteria setter analog，不能替代 CurveConstraint native setter parity。
+- `cad-core` 当前 `GeomPlateCurveConstraintSource` 没有 `g0Criterion` / `g1Criterion` / `g2Criterion` 字段。当前源码中存在这些 optional 字段的是 `GeomPlatePointConstraintSource` 和 `GeomPlateSourceEvidence`，不是 CurveConstraint DTO。
+- `readCurveConstraints()` 的真实阻断是：发现 `G0Criterion` / `G1Criterion` / `G2Criterion` 任一字段即发布 `unsupported_curve_criteria` 并在创建 `GeomPlateCurveConstraintSource` 前返回。由于 Curve DTO 没有 criteria 字段，parser 也没有把这些字段读入 curve source；这不是单纯 stale diagnostic。
+- `addCurveConstraint()`、`addCurveOnSurfaceConstraint()` 和 `addCurve2dConstraint()` 当前没有对 CurveConstraint 调用 `SetG0Criterion()` / `SetG1Criterion()` / `SetG2Criterion()`。这些 `SetG*Criterion()` 调用只存在于 `addPointConstraint()`。
+- capability 当前同时列出 `Objects[].Properties.CurveConstraints.SubSet[].G0Criterion/G1Criterion/G2Criterion` payload key，但把 Curve criteria 放在 `unsupported_curve_criteria` diagnostic 和 `curve_constraint_criteria_setters_not_implemented` narrowed gap 下；`remaining_gaps` 为空，`covered` 中没有 `curve_constraint_criteria`。
+- native setter boundary 与 `cad-core` request-local boundary 必须分离：FreeCAD native setter 当前仍 blocked；`cad-core` request-local criteria 支持理论上可作为独立产品契约进入 S4/S6，但当前实现并未已经具备 Curve DTO / parser / apply path。
+- `C8M4-BLOCKER-101` 已关闭为 source/current coverage 已复核；S2 应基于“Curve request-local backend gap confirmed”而不是“DTO 已有字段/Apply path 已完成”的旧假设继续分类。
+
+## 已回写的矩阵
+
+- `c8m4_geomplate_criteria_source_candidates.tsv`
+- `c8m4_geomplate_criteria_scope_review_matrix.tsv`
+- `c8m4_geomplate_criteria_backend_gap_classification.tsv`
+- `c8m4_geomplate_criteria_blocker_queue.tsv`
 
 ## 必读源码
 
@@ -44,7 +73,7 @@ cad-core：
 
 - `C8M4-BLOCKER-101` 关闭为 source/current coverage 已复核。
 - 每个 source row 有 file、symbol、evidence、cad-core landing 和 S1 结论。
-- S1 结论必须明确：FreeCAD native setter boundary 与 `cad-core` request-local boundary 是否分离。
+- S1 结论必须明确：FreeCAD native setter boundary 与 `cad-core` request-local boundary 分离；并明确当前 Curve DTO / parser / apply path 仍是 request-local backend gap。
 - 不新增 fixture / expected / tests，不改 C++。
 
 ```bash

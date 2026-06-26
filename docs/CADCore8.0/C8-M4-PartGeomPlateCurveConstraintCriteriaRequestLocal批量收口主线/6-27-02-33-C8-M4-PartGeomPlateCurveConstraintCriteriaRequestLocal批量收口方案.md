@@ -18,9 +18,9 @@
 
 ## 当前证据
 
-- `cad-core/include/cad_core/part/part_geomplate.h` 已有 `GeomPlateCurveConstraintSource::g0Criterion/g1Criterion/g2Criterion`。
-- `cad-core/src/part/part_geomplate.cpp::readCurveConstraints()` 当前检测到 CurveConstraint criteria 字段后发布 `unsupported_curve_criteria`。
-- `cad-core/src/part/part_geomplate.cpp::addCurveConstraint()` 已存在调用 OCCT `SetG0Criterion` / `SetG1Criterion` / `SetG2Criterion` 的落点，需要 S1-S4 复核是否足以切换主路径。
+- S1 复核确认 `cad-core/include/cad_core/part/part_geomplate.h::GeomPlateCurveConstraintSource` 当前没有 `g0Criterion/g1Criterion/g2Criterion`；这些 optional 字段只存在于 `GeomPlatePointConstraintSource` 和 `GeomPlateSourceEvidence`。
+- `cad-core/src/part/part_geomplate.cpp::readCurveConstraints()` 当前检测到 CurveConstraint criteria 字段后发布 `unsupported_curve_criteria`，并在创建 Curve source 前返回。
+- S1 复核确认 `cad-core/src/part/part_geomplate.cpp::addCurveConstraint()`、`addCurveOnSurfaceConstraint()` 和 `addCurve2dConstraint()` 当前没有对 CurveConstraint 调用 OCCT `SetG0Criterion` / `SetG1Criterion` / `SetG2Criterion`；`SetG*Criterion` 调用只在 PointConstraint path。
 - `cad-core/tests/test_p8_features.py::test_c5m7_part_geomplate_curve_criteria_are_locatable_diagnostics` 当前把 curve criteria 视为可定位 diagnostic。
 - `PointConstraintPyImp.cpp` 的 criteria setter 已实现，现有 point criteria expected-backed tests 可作为同族 criteria 证据；但不得直接替代 CurveConstraint setter parity。
 
