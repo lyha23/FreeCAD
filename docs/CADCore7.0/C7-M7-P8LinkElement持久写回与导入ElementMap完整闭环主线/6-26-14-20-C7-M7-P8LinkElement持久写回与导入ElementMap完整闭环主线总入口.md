@@ -14,6 +14,7 @@ C7-M7 是 C7-M6 之后的 P8 stable reference follow-up。总览后续队列中�
 - S0 live 基线已冻结：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=7be2d4e937`（`7be2d4e937 docs: 完成 C7-M6 S6 发布闸门`），开始状态只包含 `docs/CADCore7.0/README.md` modified 和本 C7-M7 文档包 untracked 文件；C7-M1..C7-M6 队列均为空，C7-M7 从 S0 起步。
 - S1 已完成 FreeCAD source 与 current cad-core coverage 复核：source authority 覆盖 `LinkBaseExtension::update()`、`DocumentObject::getSubObject()`、`PropertyXLink*`、Part import、`PropertyPartShape`、`TopoShapeMapper`；current coverage 覆盖 `cad-core/src/app`、`cad-core/src/part`、`cad-core/src/runtime`、`cad-core/src/mesh`、P8 tests 和 fixtures。S1 未采 oracle、未新增 fixture/expected/test、未改 C++；`C7M7-BLOCKER-101` / `C7M7-GATE-101` 已关闭。
 - S2 已完成 oracle 候选矩阵：`already_covered` 包括 BREP / STEP / IGES `history_partial` import ElementMap、imported Link chain、现有 Link / LinkSub / LinkGroup / LinkElement display/alias、ShowElement request-local `documentObjectUpdates` 和 cross-document request-graph diagnostics；`oracle_candidate` 只剩完整 BREP / STEP / IGES import ElementMap、ShowElement persistent writeback transaction、复杂多层 LinkSub / cross-document hash-postfix save/restore lifecycle；STL complete Part ElementMap 为 `oracle_blocker`，GUI / frontend / Worker / cross-request backend state 为 `diagnostic_non_goal`。S2 未采 oracle、未改 fixture/expected/test/C++，也未打开 S5 gate。
+- S3 已完成 native oracle 采集：FreeCADCmd collector/probe 均未暴露可固化的完整 native lifecycle。ORACLE-202 import payload 缺完整 `ElementMap` / reference-update evidence；ORACLE-302 ShowElement payload 缺持久 writeback transaction 字段且部分 fixture 因 native `ElementList` 只读失败；ORACLE-402 collector/save-restore probe 缺 file/stamp/hash、DocMap、restored `FullSubList`、ReferenceShadow 和 mapped postfix lifecycle，复杂多层 label fixture 在 native FreeCAD 中 Link broken；ORACLE-203 保持 STL mesh-specific `oracle_blocker`。S3 未新增或修改 fixture/expected/test，未改 C++。
 
 ## 初始范围
 
@@ -42,7 +43,7 @@ C7-M7 是 C7-M6 之后的 P8 stable reference follow-up。总览后续队列中�
 1. S0（已实现）：冻结 live baseline、C7-M1..M6 队列和 P8 Link / import 已覆盖边界。
 2. S1（已实现）：复核 FreeCAD Link / import / PropertyXLink / topo source 与 current `cad-core` coverage，并把 S2 oracle candidate 输入池矩阵化。
 3. S2（已实现）：形成 LinkElement writeback / imported-shape ElementMap / complex LinkSub native oracle 候选矩阵。
-4. S3：采集 native oracle 或记录 native blocker / diagnostic non-goal。
+4. S3（已实现）：采集 native oracle 或记录 native blocker / diagnostic non-goal。
 5. S4：用 current `cad-core` 做 parity 和 implementation gate 裁决。
 6. S5：实现正式 Link / ElementMap gap，或 no-code 发布收口。
 7. S6：release gate，更新 README / 矩阵 / P8 口径并清空队列。

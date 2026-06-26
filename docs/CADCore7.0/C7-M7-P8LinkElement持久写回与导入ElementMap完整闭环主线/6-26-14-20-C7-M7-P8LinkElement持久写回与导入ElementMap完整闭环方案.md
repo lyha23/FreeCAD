@@ -82,13 +82,22 @@ S2 将 S1 source / coverage 结果裁成最小完整语义批次：
 
 ### S3 native oracle 采集
 
-对 S2 的 `oracle_candidate` 批次采集 FreeCAD expected。合法结果：
+已完成。执行时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=7e7a99627e`（`7e7a99627e 文档：完成 C7-M7 S2 oracle 候选矩阵`），开始状态干净。对 S2 的 `oracle_candidate` 批次采集 FreeCAD expected / probe，未得到可固化为 checked-in native expected 的完整 lifecycle payload。
 
 | route | 条件 | 输出 |
 | --- | --- | --- |
 | `native_oracle_collected` | FreeCAD native fixture 可复现 ElementMap / LinkSub / writeback evidence | expected / evidence JSON |
 | `native_oracle_blocked` | collector、FreeCADCmd、document lifecycle 或 source instrumentation 不可观察 | known_gap JSON |
 | `diagnostic_non_goal` | GUI、cross-request state、front-end-only protocol 等超边界 | diagnostic expected 或 docs row |
+
+S3 结果：
+
+- ORACLE-202：`part-import-brep`、`part-import-step`、`part-import-iges`、`app-link-imported-element-map-chain` collector 均成功，但 payload 只有 shape summary，没有完整 `named_shapes` / Faces-Edges-Vertices ElementMap / `elements[*].sources` / stable reference update evidence。route=`native_oracle_blocked`。
+- ORACLE-302：全部 `app-link-show-element*.json` 已探测。显式 `ElementList` 事务相关 fixture 在 native collector 中失败为 `ElementList` 只读；其余成功 payload 只含 shape / `object_fields`，没有 owner / child 持久图字段。route=`native_oracle_blocked`，不把 request-local `documentObjectUpdates` 改写成 backend persistence。
+- ORACLE-402：seed fixtures 的 collector/save-restore probe 只能观察本地 `LinkedObject` tuple；`full-sublist` 的 external tag 未在 native property 中出现，`multilevel-label` native shape broken，未采到 file/stamp/hash、DocMap、restored `FullSubList`、ReferenceShadow 或 mapped postfix lifecycle。route=`native_oracle_blocked`，cross-request/session 依赖保持 diagnostic boundary。
+- ORACLE-203：没有打开 mesh-specific oracle 包，继续 `oracle_blocker`。
+
+S3 没有新增或修改 fixture、expected、test、collector、adapter 或 runtime C++；S4 只允许基于上述 blocker / diagnostic 结论做 parity / gate 裁决。
 
 ### S4 cad-core parity 与 implementation gate
 
