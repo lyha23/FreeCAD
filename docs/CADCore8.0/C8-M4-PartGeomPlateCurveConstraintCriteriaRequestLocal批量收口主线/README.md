@@ -20,7 +20,11 @@ C8-M4 承接 C8-M3 完成后的 live gap：`part_workbench.geomplate.narrowed_ga
 - S1 live 基线：`HEAD=d3d02af5e3`（`d3d02af5e3 docs: 完成 C8-M4 S0 live 基线冻结`），`git status --short -uall` 无输出。
 - S1 已复核 current coverage：FreeCAD CurveConstraint 三个 native setter 仍为 `NotImplementedError`；Curve getter 证明 OCCT criteria state 存在；PointConstraint setter 只作为 analog；当前 `GeomPlateCurveConstraintSource` 没有 G0/G1/G2 字段，`readCurveConstraints()` 仍以 `unsupported_curve_criteria` 阻断，Curve `addCurveConstraint()` 路径尚未调用 `SetG*Criterion()`。
 - S1 关闭 `C8M4-BLOCKER-101`；完成后队列首项应前移到 S2。
-- S0 只冻结声明和矩阵，不采 FreeCAD oracle，不新增 fixture / expected / tests / collector，不修改 C++ / Rust / FreeCAD `src/`。
+- S2 live 基线：`HEAD=37497319c6`（`37497319c6 docs: 完成 C8-M4 S1 源码覆盖复核`），`git status --short -uall` 无输出。
+- S2 已将 S1 证据转成 route：CurveConstraint `G0Criterion` / `G1Criterion` / `G2Criterion` 三项同批进入 `request_local_backend_gap_candidate`，并确认当前是 DTO 字段缺失、`readCurveConstraints()` 以 `unsupported_curve_criteria` 阻断、Curve `addCurveConstraint()` path 未调用 `SetG*Criterion()` 的 request-local backend gap，不是 `already_supported` 或单纯 stale diagnostic。
+- S2 将 FreeCAD native CurveConstraint setter 三项保持为 `native_oracle_blocked`，不阻止后续 cad-core request-local 实现；`PointConstraint` criteria 只作为 analog evidence；capability / diagnostics 为 publication pending；GUI、wrapper lifecycle、persistent geometry cache 为 `non_goal`。
+- S2 关闭 `C8M4-BLOCKER-201`；完成后队列首项应前移到 S3。
+- S0/S1/S2 只冻结声明、证据和 route 矩阵，不采 FreeCAD oracle，不新增 fixture / expected / tests / collector，不修改 C++ / Rust / FreeCAD `src/`。
 - 输入 gap `part_workbench.geomplate.narrowed_gaps.curve_constraint_criteria_setters_not_implemented` 与 diagnostic `unsupported_curve_criteria` 在 S0 保留，不提前删除或声明 supported。
 
 ## 批量范围
