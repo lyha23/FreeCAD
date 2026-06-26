@@ -6,6 +6,8 @@ C7-M5 是 C7-M4 之后的 P7 follow-up。总览后续队列明确下一项是 P7
 
 当前默认 gate closed：旧 P7 Transformed 主线已经关闭基础 topology_counts 和 supported / covered 发布闸门，C7-M5 不能凭“复杂 ownership”这个名称直接改 C++。S0-S2 必须先复核 live source、fixtures、expected 和 tests，形成可采 native oracle 的最小完整语义批次。S4 只有在 source-backed native oracle 证明 current `cad-core` mismatch 时，才允许把 S5 转成 implementation。
 
+工作步骤总入口索引已按 C7-M1/C7-M2/C7-M3 约定标记为 `【已实现】`，只用于跳过索引文件；本次没有执行 S0-S6，下一 pending 必须是 S0。
+
 ## 上游状态
 
 - C7-M4 release gate 已完成，最终提交为 `1f2b86990d 文档：完成 C7-M4 S5 发布闸门`。
@@ -28,6 +30,8 @@ C7-M5 是 C7-M4 之后的 P7 follow-up。总览后续队列明确下一项是 P7
 - P8 Assembly / Link / Worker / WASM / Web service bridge。
 
 ## 步骤队列
+
+工作步骤总入口索引不是实现步骤；其文件为 `工作步骤细分/6-26-08-37-【已实现】C7-M5工作步骤总入口.md`。当前执行队列：
 
 1. S0：冻结 live baseline、C7-M1..M4 队列和旧 P7 Transformed 已关闭边界。
 2. S1：复核 FreeCAD source、当前 `cad-core` topo/history 能力和 fixture/test 覆盖。

@@ -63,6 +63,7 @@ C7-M5 承接总览后续队列里的 P7 transformed / pattern 完整 MapperHisto
 - C7-M4 S4 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=381d56ef9e`（`381d56ef9e 文档：完成 C7-M4 S3 准入裁决`），开始状态干净。S4 只同步 README、总入口、方案、矩阵和 P7 发布口径；`C7M4-BLOCKER-401` / `C7M4-GATE-401` 已关闭。未改 C++、collector/probe、fixtures/expected/tests，未运行 FreeCADCmd 或 cmake build；现有 focused blocker test 保留且不新增测试，S5 只做 release gate。
 - C7-M4 S5 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=d7337b49f1`（`d7337b49f1 文档：完成 C7-M4 S4 no-code 发布收口`），开始状态干净。release gate focused blocker unittest 1 test OK，C7-M4 队列清空，矩阵 TSV 列数检查、trailing whitespace 检查和 `git diff --check` 通过；`C7M4-BLOCKER-501` / `C7M4-GATE-501` 已关闭。S5 只更新发布文档和矩阵，没有新增或修改 C++、collector/probe、fixtures/expected/tests，因此未运行 FreeCADCmd、cmake build 或全量 FreeCAD build。
 - C7-M5 方案已创建：创建前 live 起点 `HEAD=1f2b86990d`（`1f2b86990d 文档：完成 C7-M4 S5 发布闸门`），`git status --short -uall` 无输出。C7-M1/C7-M2/C7-M3/C7-M4 队列为空。C7-M5 初始队列为 S0-S6 pending；S0/S1 只允许文档和矩阵，S2 形成 oracle 候选批次，S3 才允许采集 native oracle，S4 才裁决 implementation gate，S5 只有在 S4 打开 `backend_gap_requires_implementation` 时才改 C++。
+- C7-M5 工作步骤总入口索引已收口：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=2b8c09b242`（`2b8c09b242 docs: 新增 C7-M5 transformed ownership 准入主线`），开始状态干净；收口前队列首项是索引文件，现已标记为 `【已实现】`。本次没有执行 S0-S6、没有采 oracle、没有新增 fixture/expected/test、没有改 C++；下一 pending 必须是 S0。
 
 ## 队列检查
 

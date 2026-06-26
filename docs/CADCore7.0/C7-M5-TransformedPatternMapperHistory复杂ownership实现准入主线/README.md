@@ -8,6 +8,7 @@ C7-M5 不重开已经由旧 P7 Transformed 主线关闭的基础 topology_counts
 
 - 主线总入口：`6-26-08-37-C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线总入口.md`
 - 方案：`6-26-08-37-C7-M5-TransformedPatternMapperHistory复杂ownership实现准入方案.md`
+- 工作步骤总入口索引：`工作步骤细分/6-26-08-37-【已实现】C7-M5工作步骤总入口.md`
 - 工作步骤：`工作步骤细分/`
 - 矩阵：`矩阵/`
 
@@ -16,7 +17,7 @@ C7-M5 不重开已经由旧 P7 Transformed 主线关闭的基础 topology_counts
 - 创建基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=1f2b86990d`（`1f2b86990d 文档：完成 C7-M4 S5 发布闸门`），创建前 `git status --short -uall` 无输出。
 - C7-M1 / C7-M2 / C7-M3 / C7-M4 `工作步骤细分` 队列均为空。
 - 旧 P7 Transformed 主线已经 S0-S6 完成，`P7T-SCOPE-001..007` 保持 supported / covered；`polar-pattern-whole-shape` standalone 仍是 nonGoal lifecycle boundary。
-- C7-M5 初始队列为 S0-S6 pending。S0/S1 只允许文档和矩阵；S2 才形成 native oracle 候选；S3 才允许采集 oracle；S4 裁决 implementation gate；S5 只有在 S4 打开 code gate 后才改 C++。
+- C7-M5 工作步骤总入口索引已按 C7-M1/C7-M2/C7-M3 约定标记为 `【已实现】`；收口 live 起点 `HEAD=2b8c09b242`（`2b8c09b242 docs: 新增 C7-M5 transformed ownership 准入主线`），开始时 `git status --short -uall` 无输出。索引收口不执行 S0-S6，实际队列仍为 S0-S6 pending，下一 pending 必须是 S0。S0/S1 只允许文档和矩阵；S2 才形成 native oracle 候选；S3 才允许采集 oracle；S4 裁决 implementation gate；S5 只有在 S4 打开 code gate 后才改 C++。
 
 ## 收口边界
 
