@@ -76,7 +76,7 @@ S0 live 基线与声明冻结
 | S1 | `工作步骤细分/6-27-01-02-【已实现】C8-M3-S1-FreeCAD源码与current覆盖批量复核.md` | source authority |
 | S2 | `工作步骤细分/6-27-01-03-【已实现】C8-M3-S2-scope准入与blocker矩阵.md` | route 分类 |
 | S3 | `工作步骤细分/6-27-01-04-【已实现】C8-M3-S3-PartConicCurveDTO生产消费oracle批量复核.md` | Part DTO / consumer |
-| S4 | `工作步骤细分/6-27-01-05-C8-M3-S4-SketcherConic输入与solver边界复核.md` | Sketcher 边界 |
+| S4 | `工作步骤细分/6-27-01-05-【已实现】C8-M3-S4-SketcherConic输入与solver边界复核.md` | Sketcher 边界 |
 | S5 | `工作步骤细分/6-27-01-06-C8-M3-S5-DistanceType默认分类与capability准入.md` | DistanceType / capability |
 | S6 | `工作步骤细分/6-27-01-07-C8-M3-S6-实现与发布闸门.md` | implementation / no-code gate |
 | source candidates | `矩阵/c8m3_conic_requestlocal_source_candidates.tsv` | FreeCAD / cad-core source |
@@ -87,4 +87,4 @@ S0 live 基线与声明冻结
 | oracle plan | `矩阵/c8m3_conic_requestlocal_oracle_plan.tsv` | native/current expected plan |
 | validation | `矩阵/c8m3_conic_requestlocal_validation_matrix.tsv` | 验收命令 |
 
-当前 S0 已完成 live 基线与批量范围冻结，`C8M3-BLOCKER-000` 已关闭为 `closed_S0_live_baseline_and_batch_scope_frozen`；S1 已完成 FreeCAD source authority 与 current cad-core coverage 复核，`C8M3-BLOCKER-101` 已关闭为 `closed_S1_source_authority_and_current_coverage_reviewed`；S2 已完成 scope 准入与 blocker 矩阵路由，`C8M3-BLOCKER-201` 已关闭为 `closed_S2_scope_routes_and_blocker_matrix_reviewed`；S3 已完成 PartConicCurveDTO producer / consumer expected-backed batch 复核，`C8M3-BLOCKER-301` 已关闭为 `closed_S3_part_conic_producer_consumer_expected_backed_batch_reviewed`；S4-S6 仍为待执行状态。矩阵中 S0-S3 证据已冻结，后续行不是发布闸门结论。
+当前 S0 已完成 live 基线与批量范围冻结，`C8M3-BLOCKER-000` 已关闭为 `closed_S0_live_baseline_and_batch_scope_frozen`；S1 已完成 FreeCAD source authority 与 current cad-core coverage 复核，`C8M3-BLOCKER-101` 已关闭为 `closed_S1_source_authority_and_current_coverage_reviewed`；S2 已完成 scope 准入与 blocker 矩阵路由，`C8M3-BLOCKER-201` 已关闭为 `closed_S2_scope_routes_and_blocker_matrix_reviewed`；S3 已完成 PartConicCurveDTO producer / consumer expected-backed batch 复核，`C8M3-BLOCKER-301` 已关闭为 `closed_S3_part_conic_producer_consumer_expected_backed_batch_reviewed`；S4 已完成 Sketcher conic request-local input / external-reference boundary 复核，`C8M3-BLOCKER-401` 已关闭为 `closed_S4_sketcher_conic_request_local_boundary_reviewed`，`full_sketcher_solver_conic_constraints` 发布为 `non_goal` 并保留 reopen condition。S5-S6 仍为待执行状态，`C8M3-BLOCKER-501/601` 未关闭。矩阵中 S0-S4 证据已冻结，后续行不是发布闸门结论。

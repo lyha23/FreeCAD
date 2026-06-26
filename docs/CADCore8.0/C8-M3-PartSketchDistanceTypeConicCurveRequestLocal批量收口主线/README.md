@@ -23,7 +23,7 @@ C8-M3 转向当前 live capability 中仍有 active `remaining_gaps` 的 `part_w
 - S0 live 基线已冻结：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=c6a848b69c`（`c6a848b69c docs: 完成 C8-M2 S6 发布闸门`）。S0 开始状态只包含 `docs/CADCore8.0/README.md` 与本 C8-M3 文档包 / 矩阵 / 工作步骤变更，未见代码、fixture、expected 或 collector dirty 文件。
 - live capability 中 `part_workbench.conic_curves.status=done_part_geometry_curve_edge_consumer`，已有 `PartConicCurveDTO`、Hyperbola / Parabola edge producer、Extrusion / RuledSurface consumer 和 p8 fixtures。
 - live capability 中 `part_workbench.conic_curves.remaining_gaps=["gui_conic_edit","full_sketcher_solver_conic_constraints","distance_type_default_todo"]`，S0 只把这三项记录为输入，不删除、不声明支持。
-- C8-M3 S0 已完成 live 基线与批量范围冻结，`C8M3-BLOCKER-000` 已关闭；S1 已完成 FreeCAD source authority 与 current cad-core coverage 复核，`C8M3-BLOCKER-101` 已关闭；S2 已完成 scope 准入与 blocker 矩阵路由，`C8M3-BLOCKER-201` 已关闭；S3 已完成 PartConicCurveDTO producer / consumer expected-backed batch 复核，`C8M3-BLOCKER-301` 已关闭。S4-S6 仍待执行，`C8M3-ORACLE-103` 仍属 S4 Sketcher 边界，`C8M3-BLOCKER-401/501/601` 未关闭。矩阵是分步证据，不是发布结论。
+- C8-M3 S0 已完成 live 基线与批量范围冻结，`C8M3-BLOCKER-000` 已关闭；S1 已完成 FreeCAD source authority 与 current cad-core coverage 复核，`C8M3-BLOCKER-101` 已关闭；S2 已完成 scope 准入与 blocker 矩阵路由，`C8M3-BLOCKER-201` 已关闭；S3 已完成 PartConicCurveDTO producer / consumer expected-backed batch 复核，`C8M3-BLOCKER-301` 已关闭；S4 已完成 Sketcher conic request-local input / external-reference boundary 复核，`C8M3-ORACLE-103` 关闭为 existing p5 expected / focused-test-backed，`full_sketcher_solver_conic_constraints` 发布为 `non_goal`，`C8M3-BLOCKER-401` 已关闭。S5-S6 仍待执行，`C8M3-BLOCKER-501/601` 未关闭。矩阵是分步证据，不是发布结论。
 
 ## 批量边界
 
