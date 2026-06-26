@@ -41,7 +41,9 @@ S1 结论：FreeCAD `Mutated` full path 依赖 `_CopiedObjs`、`"_tmp_binder"` t
 
 ## S2 DTO 准入与 oracle 候选矩阵
 
-把 S1 的 source / current evidence 转成 `oracle_candidate`、`sync_required`、`known_gap_retained`、`diagnostic_non_goal` 和 possible implementation gate。S2 不能直接打开 C++ implementation gate。
+已完成。S2 live 基线为 `HEAD=73a5acf8a8`（`73a5acf8a8 docs: 完成 C8-M2 S1 源码与能力复核`），开始工作区干净。S2 把 S1 的 source / current evidence 转成 `oracle_candidate`、`sync_required`、`known_gap_retained`、`backend_gap_candidate` 和 `diagnostic_non_goal`，并关闭 `C8M2-BLOCKER-201`。
+
+S2 结论：C8-M1 ShapeBinder / SubShapeBinder capability、fixtures、expected 和 diagnostics 是下游同步合同；CopyOnChange Disabled / Enabled / Mutated property-state 与 PartialLoad allow-partial 进入 S3 native probe；full temporary-document copied-object cache 继续保持 `known_gap_retained`；request-local DTO 只是 `backend_gap_candidate`，不是 S6 implementation gate；GUI/session/persistent cache/Rust 下游属于 `diagnostic_non_goal`。S2 不采 oracle、不新增 fixture/expected/tests/collector、不改 C++ 或 Rust。
 
 ## S3 native CopyOnChange 生命周期探针
 

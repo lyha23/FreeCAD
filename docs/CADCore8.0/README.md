@@ -25,7 +25,8 @@ C8-M1 转向 `PartDesign::ShapeBinder` / `PartDesign::SubShapeBinder` 外部引�
 - S6 已关闭 `C8M1-BLOCKER-601`：build、focused tests、diagnostics、capability smoke、阶段回归、TSV 和 diff 检查通过。阶段回归中仅同步 C6-M4 / c5m10 Sweep historical known-gap guard 测试断言，未修改 C8-M1 runtime scope。
 - C8-M2 已创建为下一轮方案包，目标是把 C8-M1 的 `ShapeBinder` / `SubShapeBinder` 能力同步边界和 `SubShapeBinder BindCopyOnChange` request-local DTO 准入拆清楚。C8-M2 不重开 C8-M1 已关闭的 executor / ElementMap 主路径，也不把 full FreeCAD temporary-document CopyOnChange cache 写成 supported。
 - C8-M2 S0 live 基线已冻结：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=dc93b0d3af`（`dc93b0d3af chore: 完成 C8-M1 S6 发布闸门`），开始状态包含既有 C8-M2 文档/矩阵未提交改动与本文件修改。S0 已确认 C8-M1 队列为空、`part_design.shape_binder.remaining_gaps=[]`、`part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`。
-- C8-M2 S1 已完成 FreeCAD source 与 C8-M1 能力复核：`HEAD=e7e07663d9`（`e7e07663d9 docs: 完成 C8-M2 S0 live 基线冻结`），开始工作区干净。S1 已确认 FreeCAD `SubShapeBinder::update()` 的 Mutated full path 依赖 temporary document / `_CopiedObjs` cache，cad-core 当前只发布 request-local diagnostic，`copy_on_change_full_temporary_document_cache` 继续保持 known_gap；S2-S6 仍为 pending。
+- C8-M2 S1 已完成 FreeCAD source 与 C8-M1 能力复核：`HEAD=e7e07663d9`（`e7e07663d9 docs: 完成 C8-M2 S0 live 基线冻结`），开始工作区干净。S1 已确认 FreeCAD `SubShapeBinder::update()` 的 Mutated full path 依赖 temporary document / `_CopiedObjs` cache，cad-core 当前只发布 request-local diagnostic，`copy_on_change_full_temporary_document_cache` 继续保持 known_gap。
+- C8-M2 S2 已完成 CopyOnChange DTO 准入与 oracle 候选矩阵：`HEAD=73a5acf8a8`（`73a5acf8a8 docs: 完成 C8-M2 S1 源码与能力复核`），开始工作区干净。S2 已把 C8-M1 capability / diagnostics / fixtures 下游同步分类为 `sync_required`，把 CopyOnChange Disabled / Enabled / Mutated property-state 和 PartialLoad allow-partial 分类为 `oracle_candidate`，把 full temporary-document copied-object cache 保持为 `known_gap_retained`，把 request-local DTO 只保留为 `backend_gap_candidate` 而非 implementation gate；S3-S6 仍为 pending。
 
 ## 队列检查
 

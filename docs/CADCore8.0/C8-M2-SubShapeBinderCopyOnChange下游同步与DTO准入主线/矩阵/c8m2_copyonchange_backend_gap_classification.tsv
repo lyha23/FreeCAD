@@ -1,6 +1,6 @@
-category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
-C8M2-BG-101	copy_on_change_request_local_dto	high	C8M2-SCOPE-201	yes	S3 must prove request-local copied-object evidence before S6 opens C++ implementation in feature_shape_binder.cpp and app/copy_on_change.cpp
-C8M2-BG-102	partialload_lifecycle_boundary	medium	C8M2-SCOPE-202	yes	S3 probes PartialLoad allow-partial behavior; S6 may implement diagnostics only if native evidence is insufficient
-C8M2-BG-201	downstream_sync_contract	high	C8M2-SCOPE-101,C8M2-SCOPE-102,C8M2-SCOPE-103	no	S4 writes opencascade-rs/front-end sync contract; implementation happens in downstream repo
-C8M2-BG-301	full_temporary_document_cache	low	C8M2-SCOPE-203	yes	Keep known_gap_retained unless FreeCADCmd exposes stable request-local evidence and product approves DTO
-C8M2-BG-401	gui_session_cache_non_goal	low	C8M2-SCOPE-301	yes	Publish diagnostic_non_goal and do not implement backend session or GUI behavior
+category_id	category_name	priority	scope_ids	s2_route	product_decision_needed	recommended_next_step
+C8M2-BG-101	copy_on_change_request_local_dto	high	C8M2-SCOPE-201	backend_gap_candidate	yes	Candidate only: S3 must prove request-local copied-object DTO evidence before S6 may open C++ work in feature_shape_binder.cpp or app/copy_on_change.cpp
+C8M2-BG-102	partialload_lifecycle_boundary	medium	C8M2-SCOPE-202	oracle_candidate	yes	S3 probes PartialLoad allow-partial observability; S6 may only decide after native evidence, and backend_gap_candidate is not itself an implementation gate
+C8M2-BG-201	downstream_sync_contract	high	C8M2-SCOPE-101,C8M2-SCOPE-102,C8M2-SCOPE-103	sync_required	no	S4 writes the opencascade-rs and frontend sync contract for already supported C8-M1 capability, fixtures, expected and diagnostics; implementation happens downstream
+C8M2-BG-301	full_temporary_document_cache	low	C8M2-SCOPE-203	known_gap_retained	yes	Keep the FreeCAD temporary-document copied-object cache as known_gap_retained unless S3 produces stable request-local evidence and product approves a DTO subset
+C8M2-BG-401	gui_session_cache_non_goal	low	C8M2-SCOPE-301	diagnostic_non_goal	no	Publish GUI, backend session, persistent cache and Rust downstream work as diagnostic_non_goal for this FreeCAD repo package
