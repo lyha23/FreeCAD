@@ -1,0 +1,6 @@
+category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
+C8M1-BG-101	shape_binder_executor	high	C8M1-SCOPE-101,C8M1-SCOPE-102,C8M1-SCOPE-103,C8M1-SCOPE-104	no	Collect native expected in S3, then implement ShapeBinder executor in S4 if current cad-core still lacks registry support or mismatches
+C8M1-BG-201	sub_shape_binder_executor	high	C8M1-SCOPE-201,C8M1-SCOPE-202,C8M1-SCOPE-203,C8M1-SCOPE-204,C8M1-SCOPE-205	no	Collect native expected in S3, then implement SubShapeBinder executor in S4 if current cad-core still lacks registry support or mismatches
+C8M1-BG-301	binder_element_map_history	high	C8M1-SCOPE-206	no	Require ElementMap and NamedShape evidence before publishing supported; do not allow display-only shape output
+C8M1-BG-401	bindmode_copy_on_change_partialload_lifecycle	medium	C8M1-SCOPE-301,C8M1-SCOPE-302	yes	Probe BindMode CopyOnChange and PartialLoad lifecycle in S3; implement request-local subset only, otherwise publish oracle_blocked or diagnostic_non_goal
+C8M1-BG-501	gui_session_downstream	low	C8M1-SCOPE-401	yes	Publish non-goal and avoid C++ backend work in this repo
