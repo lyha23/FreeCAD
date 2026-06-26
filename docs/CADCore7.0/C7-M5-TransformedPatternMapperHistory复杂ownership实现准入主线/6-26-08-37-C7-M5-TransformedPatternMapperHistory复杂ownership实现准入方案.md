@@ -116,6 +116,16 @@ python3 tools/collect_freecad_expected.py fixtures/p7/multi-transform-scaled-dia
 
 S4 必须写清 S5 是否允许改 C++、允许文件范围、focused tests 和 non-goals。
 
+S4 已完成：live 起点为 `HEAD=4baa80c37a`（`4baa80c37a docs: 完成 C7-M5 S3 native oracle 固化`），开始状态干净；本轮只运行 parity unittest、更新文档和矩阵，未改 C++、fixtures、expected 或 tests。执行命令：
+
+```bash
+cd /Users/li/Chili3DProject/FreeCAD/cad-core
+python3 -m unittest tests.test_p7_features.CadCoreP7FeatureTest.test_p7_mirrored_features_mode_consumes_chained_dressup_support_transform_cache tests.test_p7_features.CadCoreP7FeatureTest.test_p7_linear_pattern_replays_multi_original_add_and_sub_slots tests.test_p7_features.CadCoreP7FeatureTest.test_p7_multi_transform_combines_linear_pattern_and_mirror tests.test_p7_features.CadCoreP7FeatureTest.test_p7_multi_transform_scaled_child_uses_diagonal_composition tests.test_p7_features.CadCoreP7FeatureTest.test_p7_transformed_copy_preserves_terminal_stable_history
+python3 -m unittest tests.test_p7_features.CadCoreP7FeatureTest
+```
+
+结果：focused 5 项通过（`Ran 5 tests in 1.601s`），完整 `CadCoreP7FeatureTest` 148 项通过（`Ran 148 tests in 27.855s`）。这些测试覆盖 S3 四个 support-backed expected 的 topology、diagnostics、ElementMap / `named_shapes`、`element_history_status`、TransformN alias、SupportTransform slot ownership、MultiTransform composition 和 expected fixture assertions。裁决为 `already_closed_expected_backed`：`C7M5-ORACLE-201` / `C7M5-ORACLE-301` 不打开 `backend_gap_requires_implementation`；`C7M5-ORACLE-101` 继续作为 already covered regression guard；`C7M5-ORACLE-401` 保持 `diagnostic_non_goal` carry-forward。S5 不允许改 C++，只做 no-code publication closure；若后续要重开实现，必须先有新的 source-backed native oracle mismatch 或 upstream scope change。
+
 ### S5 实现或 no-code 发布
 
 若 S4 打开 code gate，S5 实现顺序固定：
@@ -125,6 +135,8 @@ S4 必须写清 S5 是否允许改 C++、允许文件范围、focused tests 和 
 3. 删除旧 fallback 或保持 known_gap 时同步矩阵。
 
 若 S4 未打开 code gate，S5 只做 no-code publication closure。
+
+S4 当前裁决未打开 code gate，因此 S5 范围限定为 no-code publication closure：允许更新本包 README、总入口、方案、矩阵和必要的 P7 发布口径；不允许修改 `cad-core/src/part_design`、`cad-core/src/part`、fixtures、expected、tests 或 adapter。focused tests 只作为回归记录，不要求重新 build。
 
 ### S6 release gate
 
