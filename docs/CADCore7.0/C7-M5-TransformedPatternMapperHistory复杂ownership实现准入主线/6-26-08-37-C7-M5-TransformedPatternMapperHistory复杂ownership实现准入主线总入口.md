@@ -1,0 +1,48 @@
+# C7-M5 Transformed Pattern MapperHistory 复杂 ownership 实现准入主线总入口
+
+## 结论
+
+C7-M5 是 C7-M4 之后的 P7 follow-up。总览后续队列明确下一项是 P7 transformed / pattern 完整 MapperHistory 与更复杂 ownership；P8 扩展排在其后。
+
+当前默认 gate closed：旧 P7 Transformed 主线已经关闭基础 topology_counts 和 supported / covered 发布闸门，C7-M5 不能凭“复杂 ownership”这个名称直接改 C++。S0-S2 必须先复核 live source、fixtures、expected 和 tests，形成可采 native oracle 的最小完整语义批次。S4 只有在 source-backed native oracle 证明 current `cad-core` mismatch 时，才允许把 S5 转成 implementation。
+
+## 上游状态
+
+- C7-M4 release gate 已完成，最终提交为 `1f2b86990d 文档：完成 C7-M4 S5 发布闸门`。
+- `docs/CADCore方案/细化方案/00-CAD-Core完整抽取执行总览.md` 的后续队列：P5/P6 已收口，P6 MakerHistory 当前无 C++ backendGap，下一项是 P7 transformed / pattern 完整 MapperHistory 与复杂 ownership。
+- 旧 P7 Transformed 主线：`docs/FreeCAD几何生态迁移工程-细分/P7-Transformed-Topology-MakerHistory收敛主线/` 已关闭 S0-S6，基础 transformed topology oracle 和 ownership / fallback evidence 为 supported / covered。
+- P7 live 口径：`docs/CADCore方案/细化方案/10-P7-PartDesign常用生态.md` 声明 transformed family 超出当前 fixture 矩阵的复杂参数组合按 unsupported diagnostic 或后续专项处理。
+
+## 初始范围
+
+- Mirrored / LinearPattern / PolarPattern / Scaled / MultiTransform 的复杂 ownership 和 MapperHistory。
+- Features 模式下 AddSubShape slot ownership、链式 DressUp / SupportTransform、multi-original add / sub replay。
+- Whole shape support-backed owner、Body prefix support、refined prefix support 和 terminal / merge / split / deleted history。
+- MultiTransform child template composition、TransformN alias、original stable alias、ElementMap copy 和 source retag。
+
+## 排除项
+
+- C7-M4 stale `ReferenceShadow` / Base recovery。
+- standalone geometry-equivalent native golden，尤其缺 Body / BaseFeature lifecycle 的 Whole shape 用例。
+- GUI、TaskPanel、完整 DressUp universe、full MapperHistory 全量迁移。
+- P8 Assembly / Link / Worker / WASM / Web service bridge。
+
+## 步骤队列
+
+1. S0：冻结 live baseline、C7-M1..M4 队列和旧 P7 Transformed 已关闭边界。
+2. S1：复核 FreeCAD source、当前 `cad-core` topo/history 能力和 fixture/test 覆盖。
+3. S2：形成复杂 ownership native oracle 候选矩阵和最小完整语义批次。
+4. S3：采集 native oracle 或记录 oracle blocker / diagnostic non-goal。
+5. S4：用 current `cad-core` 做 parity 和 implementation gate 裁决。
+6. S5：实现正式 ownership / MapperHistory gap，或 no-code 发布收口。
+7. S6：release gate，更新 README / 矩阵 / P7 口径并清空队列。
+
+## 验收入口
+
+```bash
+cd /Users/li/Chili3DProject/FreeCAD
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线/工作步骤细分 --format markdown
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线/矩阵/*.tsv
+rg -n '[ \t]$' docs/CADCore7.0/C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线 docs/CADCore7.0/README.md
+git diff --check
+```

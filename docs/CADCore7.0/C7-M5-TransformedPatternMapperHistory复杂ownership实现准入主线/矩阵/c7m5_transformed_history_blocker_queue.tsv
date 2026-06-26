@@ -1,0 +1,8 @@
+blocker_id	state	owner_step	blocker	source_evidence	decision_rule	next_step
+C7M5-BLOCKER-000	open	S0	Live baseline not frozen	Package was just created after C7-M4 release gate	S0 must record clean baseline and preceding queue state before any oracle or implementation	S0
+C7M5-BLOCKER-101	open	S1	Current source and coverage not reviewed	Old P7T closure is source of prior state but current code/tests must be rechecked	S1 must capture FreeCAD and cad-core source authority plus current fixture/test coverage	S1
+C7M5-BLOCKER-201	open	S2	Oracle candidate batch not selected	C7-M5 scope is intentionally broader than one fixture, but old P7 rows cannot be reopened blindly	S2 must classify already covered, oracle candidate, blocker and nonGoal rows	S2
+C7M5-BLOCKER-301	open	S3	Native oracle missing	No C7-M5 expected or known_gap exists yet	S3 must produce native oracle, native blocker or diagnostic non-goal for each candidate	S3
+C7M5-BLOCKER-401	open	S4	Implementation gate undecided	No C7-M5 parity route yet	S4 must classify already_closed_expected_backed, backend_gap_requires_implementation, oracle_blocked or diagnostic_non_goal	S4
+C7M5-BLOCKER-501	open	S5	Implementation or no-code route not applied	S5 depends on S4 gate	S5 must implement formal ownership/history gap or publish no-code closure	S5
+C7M5-BLOCKER-601	open	S6	Release gate not run	Queue starts pending	S6 must validate docs/tests/build as scoped and empty the queue	S6

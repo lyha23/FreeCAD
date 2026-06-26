@@ -10,6 +10,8 @@ C7-M3 承接 C7-M2 的 3 个 `oracle_pending_collect` rows，不直接实现 C++
 
 C7-M4 承接 C7-M3 唯一未关闭为 supported 的 blocker：DressUp stale `ReferenceShadow` / Base recovery。C7-M4 不直接实现宽松 fallback，而是先证明 FreeCAD native `PropertyLinkSub` / `ShadowSub` / `ReferenceShadow` restore / update 行为。S5 release gate 已完成：S2 native probe `returncode=0`，但 FreeCAD Python API 不能观察 `Base.getShadowSubs()` / `getSubValues(false/true)`，所以 `dressup-reference-shadow-base-recovery` 最终 route=`oracle_blocked`，implementation gate closed，StableSubList-fed geometry 负控不能删除 blocker；C7-M4 队列为空。
 
+C7-M5 承接总览后续队列里的 P7 transformed / pattern 完整 MapperHistory 与复杂 ownership 方向。旧 P7 Transformed 主线已关闭基础 topology_counts、final-result refine、TransformN alias、terminal history 和 supported/covered 发布闸门；C7-M5 不重开这些已关闭基线，而是先用 FreeCAD source、现有 P7/c3m5 fixtures 和 native oracle 候选矩阵审计更复杂 ownership 是否存在 active backend gap。只有 source-backed native oracle 证明当前 `cad-core` mismatch 时，才打开 C++ implementation gate。
+
 ## 入口
 
 - C7-M1 总入口：`C7-M1-PartDesignHoleModelThread标准孔表边界收口主线/6-25-14-03-C7-M1-PartDesignHoleModelThread标准孔表边界收口主线总入口.md`
@@ -28,6 +30,10 @@ C7-M4 承接 C7-M3 唯一未关闭为 supported 的 blocker：DressUp stale `Ref
 - C7-M4 方案：`C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线/6-26-00-49-C7-M4-DressUpReferenceShadow原生恢复证据与实现准入方案.md`
 - C7-M4 工作步骤：`C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线/工作步骤细分/`
 - C7-M4 矩阵：`C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线/矩阵/`
+- C7-M5 总入口：`C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线/6-26-08-37-C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线总入口.md`
+- C7-M5 方案：`C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线/6-26-08-37-C7-M5-TransformedPatternMapperHistory复杂ownership实现准入方案.md`
+- C7-M5 工作步骤：`C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线/工作步骤细分/`
+- C7-M5 矩阵：`C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线/矩阵/`
 
 ## 当前状态
 
@@ -56,6 +62,7 @@ C7-M4 承接 C7-M3 唯一未关闭为 supported 的 blocker：DressUp stale `Ref
 - C7-M4 S3 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=01aeef0217`（`01aeef0217 证据：补齐 C7-M4 S2 native probe`），开始状态干净。S3 没有发现能删除 S2 blocker 的 native introspection 证据，裁决 route=`oracle_blocked`；`dressup-reference-shadow-base-recovery` expected 继续 `known_gap.kind=dressup_reference_shadow_base_recovery_native_oracle_blocked`，implementation gate closed，S4 只允许 no-code publication closure。
 - C7-M4 S4 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=381d56ef9e`（`381d56ef9e 文档：完成 C7-M4 S3 准入裁决`），开始状态干净。S4 只同步 README、总入口、方案、矩阵和 P7 发布口径；`C7M4-BLOCKER-401` / `C7M4-GATE-401` 已关闭。未改 C++、collector/probe、fixtures/expected/tests，未运行 FreeCADCmd 或 cmake build；现有 focused blocker test 保留且不新增测试，S5 只做 release gate。
 - C7-M4 S5 已完成：执行 live 基线时 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=d7337b49f1`（`d7337b49f1 文档：完成 C7-M4 S4 no-code 发布收口`），开始状态干净。release gate focused blocker unittest 1 test OK，C7-M4 队列清空，矩阵 TSV 列数检查、trailing whitespace 检查和 `git diff --check` 通过；`C7M4-BLOCKER-501` / `C7M4-GATE-501` 已关闭。S5 只更新发布文档和矩阵，没有新增或修改 C++、collector/probe、fixtures/expected/tests，因此未运行 FreeCADCmd、cmake build 或全量 FreeCAD build。
+- C7-M5 方案已创建：创建前 live 起点 `HEAD=1f2b86990d`（`1f2b86990d 文档：完成 C7-M4 S5 发布闸门`），`git status --short -uall` 无输出。C7-M1/C7-M2/C7-M3/C7-M4 队列为空。C7-M5 初始队列为 S0-S6 pending；S0/S1 只允许文档和矩阵，S2 形成 oracle 候选批次，S3 才允许采集 native oracle，S4 才裁决 implementation gate，S5 只有在 S4 打开 `backend_gap_requires_implementation` 时才改 C++。
 
 ## 队列检查
 
@@ -65,6 +72,7 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M2-PartDesignFilletChamfer复杂参数引用恢复收口主线/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M3-PartDesignFilletChamferOracle补采与实现准入主线/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore7.0/C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -75,5 +83,6 @@ awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " f
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M2-PartDesignFilletChamfer复杂参数引用恢复收口主线/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M3-PartDesignFilletChamferOracle补采与实现准入主线/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M4-DressUpReferenceShadow原生恢复证据与实现准入主线/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore7.0/C7-M5-TransformedPatternMapperHistory复杂ownership实现准入主线/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore7.0 docs/CADCore方案/细化方案/10-P7-PartDesign常用生态.md
 ```
