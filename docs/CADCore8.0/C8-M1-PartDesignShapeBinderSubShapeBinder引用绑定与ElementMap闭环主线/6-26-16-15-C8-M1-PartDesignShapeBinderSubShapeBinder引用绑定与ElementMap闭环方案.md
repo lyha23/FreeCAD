@@ -61,13 +61,18 @@ S2 结论：`C8M1-ORACLE-101..104`、`201..206`、`301..302` 已全部写入批�
 
 ## S3 native oracle 批量采集
 
-新增或扩展 FreeCAD native collector，生成 `cad-core/fixtures/c8m1` input 与 `cad-core/fixtures/c8m1/expected/*.freecad.json`。如果 FreeCAD Python API 无法观察 lifecycle，则把对应 row 写成 `oracle_blocked` 并记录 delete / reopen condition。
+已新增 `cad-core/tools/collect_c8m1_shapebinder_expected.py`，生成 `cad-core/fixtures/c8m1` input 与 `cad-core/fixtures/c8m1/expected/*.freecad.json`。
 
-S3 不改 runtime C++。
+S3 结论：
+
+- `C8M1-ORACLE-101..104`、`201..206`、`301` 均采到 FreeCAD native expected。
+- `C8M1-ORACLE-302` 采到 CopyOnChange / PartialLoad Python-visible state，并记录 full temporary-document copied-object cache 的 `known_gap` diagnostic。
+- 当前 `cad-core` 对 Binder fixture 返回 `unsupported_type` 或 downstream `missing_link_target`，所以 S4 implementation gate 已对 ShapeBinder / SubShapeBinder executor、ElementMap / NamedShape propagation 和 BindMode request-local lifecycle 子集打开。
+- S3 不改 runtime C++。
 
 ## S4 cad-core 实现
 
-只有 S3 有 source-backed expected 且 current `cad-core` 缺失或 mismatch 时，S4 才落 C++：
+S3 已产出 source-backed expected，且 current `cad-core` 对 Binder TypeId 缺失或 mismatch；S4 可以落 C++：
 
 - 新增 `cad-core/include/cad_core/part_design/feature_shape_binder.h`。
 - 新增 `cad-core/src/part_design/feature_shape_binder.cpp`。

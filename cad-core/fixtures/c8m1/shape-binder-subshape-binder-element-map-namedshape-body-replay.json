@@ -1,0 +1,18 @@
+{
+  "schema_version": "cad-core.c8m1-shapebinder-fixture.v1",
+  "c8m1_case": "shape-binder-subshape-binder-element-map-namedshape-body-replay",
+  "oracle_ids": ["C8M1-ORACLE-206"],
+  "freecad_authority": [
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::update()",
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/PartDesignTests/TestTopologicalNamingProblem.py::testBodySubShapeBinderElementMap()"
+  ],
+  "Objects": [
+    {"Name": "Box", "ID": 1, "TypeId": "Part::Box", "Properties": {"Length": 10, "Width": 10, "Height": 10}},
+    {"Name": "Box001", "ID": 2, "TypeId": "Part::Box", "Properties": {"Length": 10, "Width": 10, "Height": 10}},
+    {"Name": "Fusion", "ID": 3, "TypeId": "Part::MultiFuse", "Properties": {"Shapes": {"PropertyType": "App::PropertyLinkList", "values": ["Box", "Box001"]}, "Refine": {"PropertyType": "App::PropertyBool", "value": false}}},
+    {"Name": "ShapeBinder", "ID": 4, "TypeId": "PartDesign::ShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyLinkSubList", "SubSet": [{"value": "Fusion", "SubList": []}]}}},
+    {"Name": "SubShapeBinder", "ID": 5, "TypeId": "PartDesign::SubShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyXLinkSubList", "SubSet": [{"value": "Fusion", "SubList": []}]}}},
+    {"Name": "Body", "ID": 6, "TypeId": "PartDesign::Body", "Properties": {"Group": {"PropertyType": "App::PropertyLinkList", "values": ["SubShapeBinder"]}, "Tip": {"PropertyType": "App::PropertyLink", "value": "SubShapeBinder"}}}
+  ],
+  "recompute": {"objs": ["ShapeBinder", "SubShapeBinder", "Body"]}
+}

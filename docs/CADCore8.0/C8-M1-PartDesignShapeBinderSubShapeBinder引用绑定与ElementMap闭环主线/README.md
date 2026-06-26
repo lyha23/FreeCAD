@@ -18,13 +18,14 @@ C8-M1 的目标不是做单 case 探针，而是把同一 `src/Mod/PartDesign/Ap
 - 当前 `cad-core/src/runtime/feature_registry.cpp` 未注册 `PartDesign::ShapeBinder`、`PartDesign::SubShapeBinder` 或 `PartDesign::SubShapeBinderPython`；S0 不能声明 supported 或 `backend_gap_requires_implementation`。
 - FreeCAD source authority 明确：`ShapeBinder::updatedShape()`、`ShapeBinder::buildShapeFromReferences()`、`SubShapeBinder::update()`、`SubShapeBinder::getSubObject()`、`setupCopyOnChange()`、`setLinks()` 与 `onChanged()` 构成主链。
 - 上游测试已有候选 oracle：`PartDesignTests/TestShapeBinder.py` 覆盖跨 Body ShapeBinder、SubShapeBinder edge offset、binder before / after Pad、binder as Revolution profile；`PartDesignTests/TestTopologicalNamingProblem.py` 覆盖 ShapeBinder / SubShapeBinder ElementMap。
-- S0 已完成 live 基线与批量边界冻结；S1 已完成 FreeCAD source authority 与 current cad-core coverage 复核；S2 已完成 oracle 候选矩阵分类。下一 pending 是 S3 native oracle 批量采集。索引文件已标 `【已实现】` 仅表示队列索引完成。
+- S0 已完成 live 基线与批量边界冻结；S1 已完成 FreeCAD source authority 与 current cad-core coverage 复核；S2 已完成 oracle 候选矩阵分类；S3 已完成 native oracle 批量采集与 expected 固化。下一 pending 是 S4 cad-core ShapeBinder / SubShapeBinder 实现。索引文件已标 `【已实现】` 仅表示队列索引完成。
 - S1 结论：current `feature_registry.cpp` 未注册 `PartDesign::ShapeBinder`、`PartDesign::SubShapeBinder` 或 `PartDesign::SubShapeBinderPython`；current `body.cpp`、`profile_resolver.cpp`、`topo_shape_expansion.cpp`、`property_topo_shape.cpp`、`copy_on_change.cpp`、`reference_resolution.cpp` 和 P7/P8 tests 可复用，但不能记录为 Binder supported。
+- S3 结论：`cad-core/fixtures/c8m1` 已新增 12 个 fixture 和 12 个 FreeCAD native expected；`C8M1-ORACLE-101..104`、`201..206`、`301` 为 collected，`302` 记录 CopyOnChange full temporary-document cache 的 `known_gap` diagnostic。当前 cad-core 对 Binder TypeId 返回 `unsupported_type`，因此 S4 gate 已对 executor / ElementMap / BindMode request-local 子集打开。
 
 ## 收口边界
 
 - 本包必须批量覆盖 ShapeBinder 与 SubShapeBinder 的同源语义，不允许长期停在单 fixture：ShapeBinder whole/subshape/multi/TraceSupport/datum fallback，SubShapeBinder support/MakeFace/Fuse/Offset/Refine/Relative/Context/nested `getSubObject()`，以及 BindMode/CopyOnChange/PartialLoad、ElementMap/NamedShape/Body replay。
-- S0/S1/S2 只做证据、边界和矩阵；S3 批量采 native oracle；S4 才按 oracle 和 current mismatch 落 C++ executor；S5 发布 fixtures/tests/capability/docs；S6 release gate。
+- S0/S1/S2 只做证据、边界和矩阵；S3 已批量采 native oracle；S4 按 oracle 和 current mismatch 落 C++ executor；S5 发布 tests / capability / docs；S6 release gate。
 - CopyOnChange、Frozen、Detached、PartialLoad 若被证明依赖跨请求 FreeCAD 文档状态，可在本包内裁为 `oracle_blocked` 或 `diagnostic_non_goal`，但必须先审计同一调用链，不另开薄包。
 - 不从 current `cad-core` 输出倒推 FreeCAD expected，不在 adapter/output 层做 subshape 猜测，不引入跨请求 BREP / shape / ElementMap 状态。
 

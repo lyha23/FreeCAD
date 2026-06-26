@@ -1,0 +1,16 @@
+{
+  "schema_version": "cad-core.c8m1-shapebinder-fixture.v1",
+  "c8m1_case": "subshape-binder-profile-consumer-before-after-pad",
+  "oracle_ids": ["C8M1-ORACLE-205"],
+  "freecad_authority": [
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/PartDesignTests/TestShapeBinder.py::TestSubShapeBinder::testBinderWithRevolution()",
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::PartDesign::Body::isAllowed()"
+  ],
+  "Objects": [
+    {"Name": "Sketch", "ID": 1, "TypeId": "Sketcher::SketchObject", "Properties": {"Geometry": [{"kind": "LineSegment", "start": [10, 10], "end": [30, 10]}, {"kind": "LineSegment", "start": [30, 10], "end": [30, 15]}, {"kind": "LineSegment", "start": [30, 15], "end": [10, 15]}, {"kind": "LineSegment", "start": [10, 15], "end": [10, 10]}], "Constraints": []}},
+    {"Name": "BinderProfile", "ID": 2, "TypeId": "PartDesign::SubShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyXLinkSubList", "SubSet": [{"value": "Sketch", "SubList": []}]}}},
+    {"Name": "Revolution", "ID": 3, "TypeId": "PartDesign::Revolution", "Properties": {"Profile": {"PropertyType": "App::PropertyLinkSub", "value": "BinderProfile", "SubList": []}, "ReferenceAxis": {"PropertyType": "App::PropertyLinkSub", "value": "Y_Axis", "SubList": []}, "Angle": 360, "Angle2": 60, "Reversed": true}},
+    {"Name": "Body", "ID": 4, "TypeId": "PartDesign::Body", "Properties": {"Group": {"PropertyType": "App::PropertyLinkList", "values": ["Sketch", "BinderProfile", "Revolution"]}, "Tip": {"PropertyType": "App::PropertyLink", "value": "Revolution"}}}
+  ],
+  "recompute": {"objs": ["BinderProfile", "Revolution", "Body"]}
+}

@@ -22,9 +22,9 @@ C8-M1 是 CADCore8.0 的第一包，目标是把 FreeCAD `PartDesign::ShapeBinde
 ```text
 S0 live 基线与批量边界冻结
   -> S1 FreeCAD ShapeBinder.cpp 调用链和 current cad-core 缺口复核（已完成）
-  -> S2 oracle 候选与 backend gate 矩阵
-  -> S3 批量 native oracle / expected / blocker 采集
-  -> S4 cad-core C++ executor / DTO / topo 实现
+  -> S2 oracle 候选与 backend gate 矩阵（已完成）
+  -> S3 批量 native oracle / expected / blocker 采集（已完成）
+  -> S4 cad-core C++ executor / DTO / topo 实现（下一步）
   -> S5 fixtures / focused tests / capability / docs 发布
   -> S6 release gate
 ```
@@ -61,7 +61,7 @@ S0 live 基线与批量边界冻结
 | S0 | `工作步骤细分/6-26-16-16-【已实现】C8-M1-S0-live基线与Binder批量边界冻结.md` | 冻结声明口径 |
 | S1 | `工作步骤细分/6-26-16-17-【已实现】C8-M1-S1-FreeCAD源码与current-cad-core覆盖复核.md` | 源码与现状复核 |
 | S2 | `工作步骤细分/6-26-16-18-【已实现】C8-M1-S2-ShapeBinderSubShapeBinder-oracle候选矩阵.md` | oracle 候选与分类 |
-| S3 | `工作步骤细分/6-26-16-19-C8-M1-S3-native-oracle批量采集与expected固化.md` | 批量采集 native expected |
+| S3 | `工作步骤细分/6-26-16-19-【已实现】C8-M1-S3-native-oracle批量采集与expected固化.md` | 批量采集 native expected |
 | S4 | `工作步骤细分/6-26-16-20-C8-M1-S4-cad-core-ShapeBinderSubShapeBinder实现.md` | C++ executor / topo 实现 |
 | S5 | `工作步骤细分/6-26-16-21-C8-M1-S5-fixtures-tests-capability发布.md` | fixtures/tests/capability 发布 |
 | S6 | `工作步骤细分/6-26-16-22-C8-M1-S6-release-gate.md` | release gate |
@@ -73,4 +73,4 @@ S0 live 基线与批量边界冻结
 | non-goal | `矩阵/c8m1_shapebinder_non_goal_registry.tsv` | 非目标与 reopen 条件 |
 | validation | `矩阵/c8m1_shapebinder_validation_matrix.tsv` | 验收命令 |
 
-当前 S0、S1、S2 已完成；S3-S6 为待执行状态。矩阵已完成 S2 oracle_candidate / backend_gap_candidate / diagnostic_non_goal 候选分类，不是发布闸门结论。
+当前 S0、S1、S2、S3 已完成；S4-S6 为待执行状态。S3 已在 `cad-core/fixtures/c8m1` 固化 12 个 FreeCAD native expected，并基于 current `unsupported_type` 把 Binder executor / ElementMap / BindMode request-local 子集打开为 S4 implementation gate；CopyOnChange full temporary-document cache 保持 `known_gap` diagnostic。

@@ -1,0 +1,682 @@
+{
+  "case_schema_version": "cad-core.c8m1-shapebinder-native-oracle.v1",
+  "diagnostic_codes": [
+    "copy_on_change_full_temporary_document_cache_not_collected"
+  ],
+  "fixture_group": "c8m1",
+  "freecad_authority": [
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::setupCopyOnChange()",
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::checkCopyOnChange()",
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::checkPropertyStatus()"
+  ],
+  "freecad_version": "1.2.0 revision 20260519",
+  "known_gap": {
+    "delete_condition": "Replace this lifecycle blocker only after FreeCADCmd exposes a stable request-local CopyOnChange mutation payload with copied-object evidence that does not require a persistent backend session.",
+    "freecadcmd_evidence": {
+      "property_states_collected": [
+        "Disabled",
+        "Enabled",
+        "Mutated",
+        "PartialLoad=True"
+      ],
+      "support_property_type": "App::PropertyXLinkSubList"
+    },
+    "kind": "c8m1_copy_on_change_full_temporary_document_native_lifecycle_blocked",
+    "reason": "FreeCADCmd exposes BindCopyOnChange and PartialLoad property states, but the full temporary copied-object document cache and mutation trigger are session-local lifecycle state, not a stable stateless cad-core expected geometry payload.",
+    "reopen_condition": "Reopen for S4 only if product chooses a request-local CopyOnChange DTO subset backed by this or a stronger native oracle.",
+    "route": "native_oracle_blocked",
+    "source_authority": [
+      "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::setupCopyOnChange()",
+      "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::checkCopyOnChange()",
+      "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::checkPropertyStatus()"
+    ],
+    "uncollected_fields": [
+      "_CopiedObjs temporary document cache contents",
+      "LinkBaseExtension copy-on-change property divergence trigger",
+      "Support.setAllowPartial internal flag beyond Python-visible PartialLoad value"
+    ]
+  },
+  "native_case": "subshape-binder-copy-on-change-disabled-enabled-mutated-partialload",
+  "objects": {
+    "CopyOnChangeDisabled": {
+      "BindCopyOnChange": "Disabled",
+      "BindMode": "Synchronized",
+      "Fuse": false,
+      "InList": [],
+      "MakeFace": true,
+      "Offset": 0.0,
+      "OutList": [
+        "SupportBox"
+      ],
+      "PartialLoad": false,
+      "Refine": true,
+      "Relative": true,
+      "Support": [
+        {
+          "label": "SupportBox",
+          "object": "SupportBox",
+          "subnames": []
+        }
+      ],
+      "label": "CopyOnChangeDisabled",
+      "name": "CopyOnChangeDisabled",
+      "placement": {
+        "Base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Rotation": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      "role": "copy_on_change_disabled",
+      "shape_summary": {
+        "area": 599.9999999999999,
+        "bbox": {
+          "max": [
+            10.0,
+            10.0,
+            10.0
+          ],
+          "min": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "childShapes": [
+          {
+            "area": 599.9999999999999,
+            "bbox": {
+              "max": [
+                10.0,
+                10.0,
+                10.0
+              ],
+              "min": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "element_map": {
+              "ElementMap": {
+                "Edge10;:H36a,E": "Edge10",
+                "Edge11;:H36a,E": "Edge11",
+                "Edge12;:H36a,E": "Edge12",
+                "Edge1;:H36a,E": "Edge1",
+                "Edge2;:H36a,E": "Edge2",
+                "Edge3;:H36a,E": "Edge3",
+                "Edge4;:H36a,E": "Edge4",
+                "Edge5;:H36a,E": "Edge5",
+                "Edge6;:H36a,E": "Edge6",
+                "Edge7;:H36a,E": "Edge7",
+                "Edge8;:H36a,E": "Edge8",
+                "Edge9;:H36a,E": "Edge9",
+                "Face1;:H36a,F": "Face1",
+                "Face2;:H36a,F": "Face2",
+                "Face3;:H36a,F": "Face3",
+                "Face4;:H36a,F": "Face4",
+                "Face5;:H36a,F": "Face5",
+                "Face6;:H36a,F": "Face6",
+                "Vertex1;:H36a,V": "Vertex1",
+                "Vertex2;:H36a,V": "Vertex2",
+                "Vertex3;:H36a,V": "Vertex3",
+                "Vertex4;:H36a,V": "Vertex4",
+                "Vertex5;:H36a,V": "Vertex5",
+                "Vertex6;:H36a,V": "Vertex6",
+                "Vertex7;:H36a,V": "Vertex7",
+                "Vertex8;:H36a,V": "Vertex8"
+              },
+              "ElementMapSize": 26,
+              "ElementMapVersion": "15.70200.5"
+            },
+            "length": 240.0,
+            "shape_type": "Solid",
+            "status": "ok",
+            "topology_counts": {
+              "edges": 12,
+              "faces": 6,
+              "shells": 1,
+              "solids": 1,
+              "vertices": 8,
+              "wires": 6
+            },
+            "volume": 999.9999999999998
+          }
+        ],
+        "element_map": {
+          "ElementMap": {
+            "Edge10;:H36a,E": "Edge10",
+            "Edge11;:H36a,E": "Edge11",
+            "Edge12;:H36a,E": "Edge12",
+            "Edge1;:H36a,E": "Edge1",
+            "Edge2;:H36a,E": "Edge2",
+            "Edge3;:H36a,E": "Edge3",
+            "Edge4;:H36a,E": "Edge4",
+            "Edge5;:H36a,E": "Edge5",
+            "Edge6;:H36a,E": "Edge6",
+            "Edge7;:H36a,E": "Edge7",
+            "Edge8;:H36a,E": "Edge8",
+            "Edge9;:H36a,E": "Edge9",
+            "Face1;:H36a,F": "Face1",
+            "Face2;:H36a,F": "Face2",
+            "Face3;:H36a,F": "Face3",
+            "Face4;:H36a,F": "Face4",
+            "Face5;:H36a,F": "Face5",
+            "Face6;:H36a,F": "Face6",
+            "Vertex1;:H36a,V": "Vertex1",
+            "Vertex2;:H36a,V": "Vertex2",
+            "Vertex3;:H36a,V": "Vertex3",
+            "Vertex4;:H36a,V": "Vertex4",
+            "Vertex5;:H36a,V": "Vertex5",
+            "Vertex6;:H36a,V": "Vertex6",
+            "Vertex7;:H36a,V": "Vertex7",
+            "Vertex8;:H36a,V": "Vertex8"
+          },
+          "ElementMapSize": 26,
+          "ElementMapVersion": "15.70200.5"
+        },
+        "length": 240.0,
+        "shape_type": "Compound",
+        "status": "ok",
+        "topology_counts": {
+          "edges": 12,
+          "faces": 6,
+          "shells": 1,
+          "solids": 1,
+          "vertices": 8,
+          "wires": 6
+        },
+        "volume": 999.9999999999998
+      },
+      "type_id": "PartDesign::SubShapeBinder"
+    },
+    "CopyOnChangeEnabled": {
+      "BindCopyOnChange": "Enabled",
+      "BindMode": "Synchronized",
+      "Fuse": false,
+      "InList": [],
+      "MakeFace": true,
+      "Offset": 0.0,
+      "OutList": [
+        "SupportBox"
+      ],
+      "PartialLoad": false,
+      "Refine": true,
+      "Relative": true,
+      "Support": [
+        {
+          "label": "SupportBox",
+          "object": "SupportBox",
+          "subnames": []
+        }
+      ],
+      "label": "CopyOnChangeEnabled",
+      "name": "CopyOnChangeEnabled",
+      "placement": {
+        "Base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Rotation": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      "role": "copy_on_change_enabled",
+      "shape_summary": {
+        "area": 599.9999999999999,
+        "bbox": {
+          "max": [
+            10.0,
+            10.0,
+            10.0
+          ],
+          "min": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "childShapes": [
+          {
+            "area": 599.9999999999999,
+            "bbox": {
+              "max": [
+                10.0,
+                10.0,
+                10.0
+              ],
+              "min": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "element_map": {
+              "ElementMap": {
+                "Edge10;:H36a,E": "Edge10",
+                "Edge11;:H36a,E": "Edge11",
+                "Edge12;:H36a,E": "Edge12",
+                "Edge1;:H36a,E": "Edge1",
+                "Edge2;:H36a,E": "Edge2",
+                "Edge3;:H36a,E": "Edge3",
+                "Edge4;:H36a,E": "Edge4",
+                "Edge5;:H36a,E": "Edge5",
+                "Edge6;:H36a,E": "Edge6",
+                "Edge7;:H36a,E": "Edge7",
+                "Edge8;:H36a,E": "Edge8",
+                "Edge9;:H36a,E": "Edge9",
+                "Face1;:H36a,F": "Face1",
+                "Face2;:H36a,F": "Face2",
+                "Face3;:H36a,F": "Face3",
+                "Face4;:H36a,F": "Face4",
+                "Face5;:H36a,F": "Face5",
+                "Face6;:H36a,F": "Face6",
+                "Vertex1;:H36a,V": "Vertex1",
+                "Vertex2;:H36a,V": "Vertex2",
+                "Vertex3;:H36a,V": "Vertex3",
+                "Vertex4;:H36a,V": "Vertex4",
+                "Vertex5;:H36a,V": "Vertex5",
+                "Vertex6;:H36a,V": "Vertex6",
+                "Vertex7;:H36a,V": "Vertex7",
+                "Vertex8;:H36a,V": "Vertex8"
+              },
+              "ElementMapSize": 26,
+              "ElementMapVersion": "15.70200.5"
+            },
+            "length": 240.0,
+            "shape_type": "Solid",
+            "status": "ok",
+            "topology_counts": {
+              "edges": 12,
+              "faces": 6,
+              "shells": 1,
+              "solids": 1,
+              "vertices": 8,
+              "wires": 6
+            },
+            "volume": 999.9999999999998
+          }
+        ],
+        "element_map": {
+          "ElementMap": {
+            "Edge10;:H36a,E": "Edge10",
+            "Edge11;:H36a,E": "Edge11",
+            "Edge12;:H36a,E": "Edge12",
+            "Edge1;:H36a,E": "Edge1",
+            "Edge2;:H36a,E": "Edge2",
+            "Edge3;:H36a,E": "Edge3",
+            "Edge4;:H36a,E": "Edge4",
+            "Edge5;:H36a,E": "Edge5",
+            "Edge6;:H36a,E": "Edge6",
+            "Edge7;:H36a,E": "Edge7",
+            "Edge8;:H36a,E": "Edge8",
+            "Edge9;:H36a,E": "Edge9",
+            "Face1;:H36a,F": "Face1",
+            "Face2;:H36a,F": "Face2",
+            "Face3;:H36a,F": "Face3",
+            "Face4;:H36a,F": "Face4",
+            "Face5;:H36a,F": "Face5",
+            "Face6;:H36a,F": "Face6",
+            "Vertex1;:H36a,V": "Vertex1",
+            "Vertex2;:H36a,V": "Vertex2",
+            "Vertex3;:H36a,V": "Vertex3",
+            "Vertex4;:H36a,V": "Vertex4",
+            "Vertex5;:H36a,V": "Vertex5",
+            "Vertex6;:H36a,V": "Vertex6",
+            "Vertex7;:H36a,V": "Vertex7",
+            "Vertex8;:H36a,V": "Vertex8"
+          },
+          "ElementMapSize": 26,
+          "ElementMapVersion": "15.70200.5"
+        },
+        "length": 240.0,
+        "shape_type": "Compound",
+        "status": "ok",
+        "topology_counts": {
+          "edges": 12,
+          "faces": 6,
+          "shells": 1,
+          "solids": 1,
+          "vertices": 8,
+          "wires": 6
+        },
+        "volume": 999.9999999999998
+      },
+      "type_id": "PartDesign::SubShapeBinder"
+    },
+    "CopyOnChangeMutated": {
+      "BindCopyOnChange": "Mutated",
+      "BindMode": "Synchronized",
+      "Fuse": false,
+      "InList": [],
+      "MakeFace": true,
+      "Offset": 0.0,
+      "OutList": [
+        "SupportBox"
+      ],
+      "PartialLoad": false,
+      "Refine": true,
+      "Relative": true,
+      "Support": [
+        {
+          "label": "SupportBox",
+          "object": "SupportBox",
+          "subnames": []
+        }
+      ],
+      "label": "CopyOnChangeMutated",
+      "name": "CopyOnChangeMutated",
+      "placement": {
+        "Base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Rotation": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      "role": "copy_on_change_mutated",
+      "shape_summary": {
+        "area": 599.9999999999999,
+        "bbox": {
+          "max": [
+            10.0,
+            10.0,
+            10.0
+          ],
+          "min": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "childShapes": [
+          {
+            "area": 599.9999999999999,
+            "bbox": {
+              "max": [
+                10.0,
+                10.0,
+                10.0
+              ],
+              "min": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "element_map": {
+              "ElementMap": {
+                "Edge10;:H36a,E": "Edge10",
+                "Edge11;:H36a,E": "Edge11",
+                "Edge12;:H36a,E": "Edge12",
+                "Edge1;:H36a,E": "Edge1",
+                "Edge2;:H36a,E": "Edge2",
+                "Edge3;:H36a,E": "Edge3",
+                "Edge4;:H36a,E": "Edge4",
+                "Edge5;:H36a,E": "Edge5",
+                "Edge6;:H36a,E": "Edge6",
+                "Edge7;:H36a,E": "Edge7",
+                "Edge8;:H36a,E": "Edge8",
+                "Edge9;:H36a,E": "Edge9",
+                "Face1;:H36a,F": "Face1",
+                "Face2;:H36a,F": "Face2",
+                "Face3;:H36a,F": "Face3",
+                "Face4;:H36a,F": "Face4",
+                "Face5;:H36a,F": "Face5",
+                "Face6;:H36a,F": "Face6",
+                "Vertex1;:H36a,V": "Vertex1",
+                "Vertex2;:H36a,V": "Vertex2",
+                "Vertex3;:H36a,V": "Vertex3",
+                "Vertex4;:H36a,V": "Vertex4",
+                "Vertex5;:H36a,V": "Vertex5",
+                "Vertex6;:H36a,V": "Vertex6",
+                "Vertex7;:H36a,V": "Vertex7",
+                "Vertex8;:H36a,V": "Vertex8"
+              },
+              "ElementMapSize": 26,
+              "ElementMapVersion": "15.70200.5"
+            },
+            "length": 240.0,
+            "shape_type": "Solid",
+            "status": "ok",
+            "topology_counts": {
+              "edges": 12,
+              "faces": 6,
+              "shells": 1,
+              "solids": 1,
+              "vertices": 8,
+              "wires": 6
+            },
+            "volume": 999.9999999999998
+          }
+        ],
+        "element_map": {
+          "ElementMap": {
+            "Edge10;:H36a,E": "Edge10",
+            "Edge11;:H36a,E": "Edge11",
+            "Edge12;:H36a,E": "Edge12",
+            "Edge1;:H36a,E": "Edge1",
+            "Edge2;:H36a,E": "Edge2",
+            "Edge3;:H36a,E": "Edge3",
+            "Edge4;:H36a,E": "Edge4",
+            "Edge5;:H36a,E": "Edge5",
+            "Edge6;:H36a,E": "Edge6",
+            "Edge7;:H36a,E": "Edge7",
+            "Edge8;:H36a,E": "Edge8",
+            "Edge9;:H36a,E": "Edge9",
+            "Face1;:H36a,F": "Face1",
+            "Face2;:H36a,F": "Face2",
+            "Face3;:H36a,F": "Face3",
+            "Face4;:H36a,F": "Face4",
+            "Face5;:H36a,F": "Face5",
+            "Face6;:H36a,F": "Face6",
+            "Vertex1;:H36a,V": "Vertex1",
+            "Vertex2;:H36a,V": "Vertex2",
+            "Vertex3;:H36a,V": "Vertex3",
+            "Vertex4;:H36a,V": "Vertex4",
+            "Vertex5;:H36a,V": "Vertex5",
+            "Vertex6;:H36a,V": "Vertex6",
+            "Vertex7;:H36a,V": "Vertex7",
+            "Vertex8;:H36a,V": "Vertex8"
+          },
+          "ElementMapSize": 26,
+          "ElementMapVersion": "15.70200.5"
+        },
+        "length": 240.0,
+        "shape_type": "Compound",
+        "status": "ok",
+        "topology_counts": {
+          "edges": 12,
+          "faces": 6,
+          "shells": 1,
+          "solids": 1,
+          "vertices": 8,
+          "wires": 6
+        },
+        "volume": 999.9999999999998
+      },
+      "type_id": "PartDesign::SubShapeBinder"
+    },
+    "PartialLoadEnabled": {
+      "BindCopyOnChange": "Disabled",
+      "BindMode": "Synchronized",
+      "Fuse": false,
+      "InList": [],
+      "MakeFace": true,
+      "Offset": 0.0,
+      "OutList": [
+        "SupportBox"
+      ],
+      "PartialLoad": true,
+      "Refine": true,
+      "Relative": true,
+      "Support": [
+        {
+          "label": "SupportBox",
+          "object": "SupportBox",
+          "subnames": []
+        }
+      ],
+      "label": "PartialLoadEnabled",
+      "name": "PartialLoadEnabled",
+      "placement": {
+        "Base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Rotation": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      "role": "partial_load_enabled",
+      "shape_summary": {
+        "area": 599.9999999999999,
+        "bbox": {
+          "max": [
+            10.0,
+            10.0,
+            10.0
+          ],
+          "min": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "childShapes": [
+          {
+            "area": 599.9999999999999,
+            "bbox": {
+              "max": [
+                10.0,
+                10.0,
+                10.0
+              ],
+              "min": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "element_map": {
+              "ElementMap": {
+                "Edge10;:H36a,E": "Edge10",
+                "Edge11;:H36a,E": "Edge11",
+                "Edge12;:H36a,E": "Edge12",
+                "Edge1;:H36a,E": "Edge1",
+                "Edge2;:H36a,E": "Edge2",
+                "Edge3;:H36a,E": "Edge3",
+                "Edge4;:H36a,E": "Edge4",
+                "Edge5;:H36a,E": "Edge5",
+                "Edge6;:H36a,E": "Edge6",
+                "Edge7;:H36a,E": "Edge7",
+                "Edge8;:H36a,E": "Edge8",
+                "Edge9;:H36a,E": "Edge9",
+                "Face1;:H36a,F": "Face1",
+                "Face2;:H36a,F": "Face2",
+                "Face3;:H36a,F": "Face3",
+                "Face4;:H36a,F": "Face4",
+                "Face5;:H36a,F": "Face5",
+                "Face6;:H36a,F": "Face6",
+                "Vertex1;:H36a,V": "Vertex1",
+                "Vertex2;:H36a,V": "Vertex2",
+                "Vertex3;:H36a,V": "Vertex3",
+                "Vertex4;:H36a,V": "Vertex4",
+                "Vertex5;:H36a,V": "Vertex5",
+                "Vertex6;:H36a,V": "Vertex6",
+                "Vertex7;:H36a,V": "Vertex7",
+                "Vertex8;:H36a,V": "Vertex8"
+              },
+              "ElementMapSize": 26,
+              "ElementMapVersion": "15.70200.5"
+            },
+            "length": 240.0,
+            "shape_type": "Solid",
+            "status": "ok",
+            "topology_counts": {
+              "edges": 12,
+              "faces": 6,
+              "shells": 1,
+              "solids": 1,
+              "vertices": 8,
+              "wires": 6
+            },
+            "volume": 999.9999999999998
+          }
+        ],
+        "element_map": {
+          "ElementMap": {
+            "Edge10;:H36a,E": "Edge10",
+            "Edge11;:H36a,E": "Edge11",
+            "Edge12;:H36a,E": "Edge12",
+            "Edge1;:H36a,E": "Edge1",
+            "Edge2;:H36a,E": "Edge2",
+            "Edge3;:H36a,E": "Edge3",
+            "Edge4;:H36a,E": "Edge4",
+            "Edge5;:H36a,E": "Edge5",
+            "Edge6;:H36a,E": "Edge6",
+            "Edge7;:H36a,E": "Edge7",
+            "Edge8;:H36a,E": "Edge8",
+            "Edge9;:H36a,E": "Edge9",
+            "Face1;:H36a,F": "Face1",
+            "Face2;:H36a,F": "Face2",
+            "Face3;:H36a,F": "Face3",
+            "Face4;:H36a,F": "Face4",
+            "Face5;:H36a,F": "Face5",
+            "Face6;:H36a,F": "Face6",
+            "Vertex1;:H36a,V": "Vertex1",
+            "Vertex2;:H36a,V": "Vertex2",
+            "Vertex3;:H36a,V": "Vertex3",
+            "Vertex4;:H36a,V": "Vertex4",
+            "Vertex5;:H36a,V": "Vertex5",
+            "Vertex6;:H36a,V": "Vertex6",
+            "Vertex7;:H36a,V": "Vertex7",
+            "Vertex8;:H36a,V": "Vertex8"
+          },
+          "ElementMapSize": 26,
+          "ElementMapVersion": "15.70200.5"
+        },
+        "length": 240.0,
+        "shape_type": "Compound",
+        "status": "ok",
+        "topology_counts": {
+          "edges": 12,
+          "faces": 6,
+          "shells": 1,
+          "solids": 1,
+          "vertices": 8,
+          "wires": 6
+        },
+        "volume": 999.9999999999998
+      },
+      "type_id": "PartDesign::SubShapeBinder"
+    }
+  },
+  "oracle_ids": [
+    "C8M1-ORACLE-302"
+  ],
+  "reference": "FreeCADCmd C8-M1 ShapeBinder/SubShapeBinder oracle from subshape-binder-copy-on-change-disabled-enabled-mutated-partialload.json; case=subshape-binder-copy-on-change-disabled-enabled-mutated-partialload; oracle_ids=C8M1-ORACLE-302",
+  "route": "native_oracle_collected",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "source_fixture": "/home/user/Chili3DProject/FreeCAD/cad-core/fixtures/c8m1/subshape-binder-copy-on-change-disabled-enabled-mutated-partialload.json",
+  "source_fixture_name": "subshape-binder-copy-on-change-disabled-enabled-mutated-partialload.json"
+}

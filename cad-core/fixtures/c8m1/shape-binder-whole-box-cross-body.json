@@ -1,0 +1,39 @@
+{
+  "schema_version": "cad-core.c8m1-shapebinder-fixture.v1",
+  "c8m1_case": "shape-binder-whole-box-cross-body",
+  "oracle_ids": ["C8M1-ORACLE-101"],
+  "freecad_authority": [
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::ShapeBinder::updatedShape()",
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::ShapeBinder::buildShapeFromReferences()"
+  ],
+  "Objects": [
+    {
+      "Name": "SupportBox",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {"Length": 2, "Width": 3, "Height": 4}
+    },
+    {
+      "Name": "ShapeBinder",
+      "ID": 2,
+      "TypeId": "PartDesign::ShapeBinder",
+      "Properties": {
+        "Support": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [{"value": "SupportBox", "SubList": []}]
+        },
+        "TraceSupport": {"PropertyType": "App::PropertyBool", "value": false}
+      }
+    },
+    {
+      "Name": "TargetBody",
+      "ID": 3,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {"PropertyType": "App::PropertyLinkList", "values": ["ShapeBinder"]},
+        "Tip": {"PropertyType": "App::PropertyLink", "value": "ShapeBinder"}
+      }
+    }
+  ],
+  "recompute": {"objs": ["ShapeBinder", "TargetBody"]}
+}

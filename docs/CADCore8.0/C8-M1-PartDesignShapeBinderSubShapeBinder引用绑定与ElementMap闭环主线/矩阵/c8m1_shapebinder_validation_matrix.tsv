@@ -10,6 +10,8 @@ C8M1-VAL-102	registry-gap	rg -n 'PartDesign::ShapeBinder|PartDesign::SubShapeBin
 C8M1-VAL-201	oracle-plan	rg -n 'C8M1-ORACLE|oracle_candidate|backend_gap_candidate|oracle_blocker|diagnostic_non_goal|CopyOnChange|BindMode|TraceSupport|ElementMap' docs/CADCore8.0/C8-M1-PartDesignShapeBinderSubShapeBinder引用绑定与ElementMap闭环主线	S2	Oracle plan covers batch scope, blocker route, non-goal boundary and lifecycle terms
 C8M1-VAL-301	fixtures	find cad-core/fixtures/c8m1 -maxdepth 2 -type f | sort	S3	Expected and fixture files exist after oracle collection
 C8M1-VAL-302	oracle-evidence	rg -n 'freecad_version|PartDesign::ShapeBinder|PartDesign::SubShapeBinder|ElementMap|known_gap|native_oracle_blocked|C8M1-ORACLE' cad-core/fixtures/c8m1 docs/CADCore8.0/C8-M1-PartDesignShapeBinderSubShapeBinder引用绑定与ElementMap闭环主线	S3	Oracle or blocker evidence is explicit
+C8M1-VAL-303	collector	python3 cad-core/tools/collect_c8m1_shapebinder_expected.py --phase c8m1	S3	Regenerate C8-M1 FreeCAD native expected through FreeCADCmd without current cad-core output
+C8M1-VAL-304	current-compare	for fixture in cad-core/fixtures/c8m1/*.json; do cad-core/cad-core recompute "$fixture" --output "/tmp/$(basename "${fixture%.json}").c8m1.current.json"; done	S3_optional	Current cad-core comparison confirms unsupported_type/mismatch before S4 implementation gate
 C8M1-VAL-401	build	cd cad-core && cmake --build build	S4/S6	Build passes after C++ changes
 C8M1-VAL-402	focused-test	cd cad-core && python3 -m unittest tests.test_c8_shapebinder	S4/S5/S6	ShapeBinder focused tests pass
 C8M1-VAL-403	diagnostics	cd cad-core && python3 -m unittest tests.test_diagnostics	S4/S5/S6	Diagnostic codes and lifecycle boundaries remain stable

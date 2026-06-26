@@ -1,0 +1,15 @@
+{
+  "schema_version": "cad-core.c8m1-shapebinder-fixture.v1",
+  "c8m1_case": "subshape-binder-basic-support-whole-face-edge-list",
+  "oracle_ids": ["C8M1-ORACLE-201"],
+  "freecad_authority": [
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::update()"
+  ],
+  "Objects": [
+    {"Name": "SupportBox", "ID": 1, "TypeId": "Part::Box", "Properties": {"Length": 3, "Width": 4, "Height": 5}},
+    {"Name": "SubShapeBinderWhole", "ID": 2, "TypeId": "PartDesign::SubShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyXLinkSubList", "SubSet": [{"value": "SupportBox", "SubList": []}]}}},
+    {"Name": "SubShapeBinderFace", "ID": 3, "TypeId": "PartDesign::SubShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyXLinkSubList", "SubSet": [{"value": "SupportBox", "SubList": ["Face1"]}]}}},
+    {"Name": "SubShapeBinderEdgeList", "ID": 4, "TypeId": "PartDesign::SubShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyXLinkSubList", "SubSet": [{"value": "SupportBox", "SubList": ["Edge1", "Edge2", "Edge3", "Edge4"]}]}}}
+  ],
+  "recompute": {"objs": ["SubShapeBinderWhole", "SubShapeBinderFace", "SubShapeBinderEdgeList"]}
+}

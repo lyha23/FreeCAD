@@ -1,0 +1,31 @@
+{
+  "schema_version": "cad-core.c8m1-shapebinder-fixture.v1",
+  "c8m1_case": "shape-binder-face-edge-vertex-multi-subshape",
+  "oracle_ids": ["C8M1-ORACLE-102"],
+  "freecad_authority": [
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::ShapeBinder::getFilteredReferences()",
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::ShapeBinder::buildShapeFromReferences()"
+  ],
+  "Objects": [
+    {"Name": "SupportBox", "ID": 1, "TypeId": "Part::Box", "Properties": {"Length": 3, "Width": 4, "Height": 5}},
+    {"Name": "ShapeBinderFace", "ID": 2, "TypeId": "PartDesign::ShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyLinkSubList", "SubSet": [{"value": "SupportBox", "SubList": ["Face1"]}]}}},
+    {"Name": "ShapeBinderEdge", "ID": 3, "TypeId": "PartDesign::ShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyLinkSubList", "SubSet": [{"value": "SupportBox", "SubList": ["Edge1"]}]}}},
+    {"Name": "ShapeBinderVertex", "ID": 4, "TypeId": "PartDesign::ShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyLinkSubList", "SubSet": [{"value": "SupportBox", "SubList": ["Vertex1"]}]}}},
+    {
+      "Name": "ShapeBinderMulti",
+      "ID": 5,
+      "TypeId": "PartDesign::ShapeBinder",
+      "Properties": {
+        "Support": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {"value": "SupportBox", "SubList": ["Face1"]},
+            {"value": "SupportBox", "SubList": ["Edge1"]},
+            {"value": "SupportBox", "SubList": ["Vertex1"]}
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {"objs": ["ShapeBinderFace", "ShapeBinderEdge", "ShapeBinderVertex", "ShapeBinderMulti"]}
+}

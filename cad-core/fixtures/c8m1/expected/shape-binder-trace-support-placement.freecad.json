@@ -1,0 +1,337 @@
+{
+  "case_schema_version": "cad-core.c8m1-shapebinder-native-oracle.v1",
+  "fixture_group": "c8m1",
+  "freecad_authority": [
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::ShapeBinder::updatedShape()"
+  ],
+  "freecad_version": "1.2.0 revision 20260519",
+  "native_case": "shape-binder-trace-support-placement",
+  "objects": {
+    "ShapeBinderTraceFalse": {
+      "InList": [
+        "TargetPart"
+      ],
+      "OutList": [
+        "SupportBox"
+      ],
+      "Support": [
+        {
+          "label": "SupportBox",
+          "object": "SupportBox",
+          "subnames": [
+            ""
+          ]
+        }
+      ],
+      "TraceSupport": false,
+      "label": "ShapeBinderTraceFalse",
+      "name": "ShapeBinderTraceFalse",
+      "placement": {
+        "Base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Rotation": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      "role": "trace_support_false",
+      "shape_summary": {
+        "area": 52.0,
+        "bbox": {
+          "max": [
+            2.0,
+            3.0,
+            4.0
+          ],
+          "min": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "childShapes": [
+          {
+            "area": 52.0,
+            "bbox": {
+              "max": [
+                2.0,
+                3.0,
+                4.0
+              ],
+              "min": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "element_map": {
+              "ElementMap": {
+                "Edge1": "Edge1",
+                "Edge10": "Edge10",
+                "Edge11": "Edge11",
+                "Edge12": "Edge12",
+                "Edge2": "Edge2",
+                "Edge3": "Edge3",
+                "Edge4": "Edge4",
+                "Edge5": "Edge5",
+                "Edge6": "Edge6",
+                "Edge7": "Edge7",
+                "Edge8": "Edge8",
+                "Edge9": "Edge9",
+                "Face1": "Face1",
+                "Face2": "Face2",
+                "Face3": "Face3",
+                "Face4": "Face4",
+                "Face5": "Face5",
+                "Face6": "Face6",
+                "Vertex1": "Vertex1",
+                "Vertex2": "Vertex2",
+                "Vertex3": "Vertex3",
+                "Vertex4": "Vertex4",
+                "Vertex5": "Vertex5",
+                "Vertex6": "Vertex6",
+                "Vertex7": "Vertex7",
+                "Vertex8": "Vertex8"
+              },
+              "ElementMapSize": 26,
+              "ElementMapVersion": "15.70200.5"
+            },
+            "length": 72.0,
+            "shape_type": "Shell",
+            "status": "ok",
+            "topology_counts": {
+              "edges": 12,
+              "faces": 6,
+              "shells": 1,
+              "solids": 0,
+              "vertices": 8,
+              "wires": 6
+            },
+            "volume": 23.999999999999996
+          }
+        ],
+        "element_map": {
+          "ElementMap": {},
+          "ElementMapSize": 0,
+          "ElementMapVersion": "15.70200.5"
+        },
+        "length": 72.0,
+        "shape_type": "Solid",
+        "status": "ok",
+        "topology_counts": {
+          "edges": 12,
+          "faces": 6,
+          "shells": 1,
+          "solids": 1,
+          "vertices": 8,
+          "wires": 6
+        },
+        "volume": 23.999999999999996
+      },
+      "type_id": "PartDesign::ShapeBinder"
+    },
+    "ShapeBinderTraceTrue": {
+      "InList": [
+        "TargetPart"
+      ],
+      "OutList": [
+        "SupportBox"
+      ],
+      "Support": [
+        {
+          "label": "SupportBox",
+          "object": "SupportBox",
+          "subnames": [
+            ""
+          ]
+        }
+      ],
+      "TraceSupport": true,
+      "label": "ShapeBinderTraceTrue",
+      "name": "ShapeBinderTraceTrue",
+      "placement": {
+        "Base": [
+          10.0,
+          -20.0,
+          0.0
+        ],
+        "Rotation": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      "role": "trace_support_true",
+      "shape_summary": {
+        "area": 52.0,
+        "bbox": {
+          "max": [
+            12.0,
+            -17.0,
+            4.0
+          ],
+          "min": [
+            10.0,
+            -20.0,
+            0.0
+          ]
+        },
+        "childShapes": [
+          {
+            "area": 52.0,
+            "bbox": {
+              "max": [
+                12.0,
+                -17.0,
+                4.0
+              ],
+              "min": [
+                10.0,
+                -20.0,
+                0.0
+              ]
+            },
+            "element_map": {
+              "ElementMap": {
+                "Edge1": "Edge1",
+                "Edge10": "Edge10",
+                "Edge11": "Edge11",
+                "Edge12": "Edge12",
+                "Edge2": "Edge2",
+                "Edge3": "Edge3",
+                "Edge4": "Edge4",
+                "Edge5": "Edge5",
+                "Edge6": "Edge6",
+                "Edge7": "Edge7",
+                "Edge8": "Edge8",
+                "Edge9": "Edge9",
+                "Face1": "Face1",
+                "Face2": "Face2",
+                "Face3": "Face3",
+                "Face4": "Face4",
+                "Face5": "Face5",
+                "Face6": "Face6",
+                "Vertex1": "Vertex1",
+                "Vertex2": "Vertex2",
+                "Vertex3": "Vertex3",
+                "Vertex4": "Vertex4",
+                "Vertex5": "Vertex5",
+                "Vertex6": "Vertex6",
+                "Vertex7": "Vertex7",
+                "Vertex8": "Vertex8"
+              },
+              "ElementMapSize": 26,
+              "ElementMapVersion": "15.70200.5"
+            },
+            "length": 72.0,
+            "shape_type": "Shell",
+            "status": "ok",
+            "topology_counts": {
+              "edges": 12,
+              "faces": 6,
+              "shells": 1,
+              "solids": 0,
+              "vertices": 8,
+              "wires": 6
+            },
+            "volume": 23.999999999999996
+          }
+        ],
+        "element_map": {
+          "ElementMap": {},
+          "ElementMapSize": 0,
+          "ElementMapVersion": "15.70200.5"
+        },
+        "length": 72.0,
+        "shape_type": "Solid",
+        "status": "ok",
+        "topology_counts": {
+          "edges": 12,
+          "faces": 6,
+          "shells": 1,
+          "solids": 1,
+          "vertices": 8,
+          "wires": 6
+        },
+        "volume": 23.999999999999996
+      },
+      "type_id": "PartDesign::ShapeBinder"
+    },
+    "SourcePart": {
+      "InList": [],
+      "OutList": [
+        "Origin",
+        "SupportBox"
+      ],
+      "label": "SourcePart",
+      "name": "SourcePart",
+      "placement": {
+        "Base": [
+          10.0,
+          0.0,
+          0.0
+        ],
+        "Rotation": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      "role": "source_container",
+      "type_id": "App::Part"
+    },
+    "TargetPart": {
+      "InList": [],
+      "OutList": [
+        "Origin002",
+        "ShapeBinderTraceFalse",
+        "ShapeBinderTraceTrue"
+      ],
+      "label": "TargetPart",
+      "name": "TargetPart",
+      "placement": {
+        "Base": [
+          0.0,
+          20.0,
+          0.0
+        ],
+        "Rotation": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      "role": "target_container",
+      "type_id": "App::Part"
+    }
+  },
+  "oracle_ids": [
+    "C8M1-ORACLE-103"
+  ],
+  "reference": "FreeCADCmd C8-M1 ShapeBinder/SubShapeBinder oracle from shape-binder-trace-support-placement.json; case=shape-binder-trace-support-placement; oracle_ids=C8M1-ORACLE-103",
+  "route": "native_oracle_collected",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "source_fixture": "/home/user/Chili3DProject/FreeCAD/cad-core/fixtures/c8m1/shape-binder-trace-support-placement.json",
+  "source_fixture_name": "shape-binder-trace-support-placement.json",
+  "transform_evidence": {
+    "freecad_formula": "targetCS.inverse() * sourceCS",
+    "source_container_base": [
+      10.0,
+      0.0,
+      0.0
+    ],
+    "target_container_base": [
+      0.0,
+      20.0,
+      0.0
+    ]
+  }
+}

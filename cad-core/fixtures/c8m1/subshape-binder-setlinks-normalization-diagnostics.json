@@ -1,0 +1,14 @@
+{
+  "schema_version": "cad-core.c8m1-shapebinder-fixture.v1",
+  "c8m1_case": "subshape-binder-setlinks-normalization-diagnostics",
+  "oracle_ids": ["C8M1-ORACLE-203"],
+  "freecad_authority": [
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::setLinks()"
+  ],
+  "Objects": [
+    {"Name": "SupportBox", "ID": 1, "TypeId": "Part::Box", "Properties": {"Length": 2, "Width": 2, "Height": 2}},
+    {"Name": "SubShapeBinderEmptySubList", "ID": 2, "TypeId": "PartDesign::SubShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyXLinkSubList", "SubSet": [{"value": "SupportBox", "SubList": []}]}}},
+    {"Name": "SubShapeBinderCycle", "ID": 3, "TypeId": "PartDesign::SubShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyXLinkSubList", "SubSet": [{"value": "SubShapeBinderCycle", "SubList": []}]}}}
+  ],
+  "recompute": {"objs": ["SubShapeBinderEmptySubList", "SubShapeBinderCycle"]}
+}

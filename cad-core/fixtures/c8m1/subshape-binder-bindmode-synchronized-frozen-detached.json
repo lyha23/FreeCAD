@@ -1,0 +1,16 @@
+{
+  "schema_version": "cad-core.c8m1-shapebinder-fixture.v1",
+  "c8m1_case": "subshape-binder-bindmode-synchronized-frozen-detached",
+  "oracle_ids": ["C8M1-ORACLE-301"],
+  "freecad_authority": [
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::execute()",
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::onChanged()"
+  ],
+  "Objects": [
+    {"Name": "SupportBox", "ID": 1, "TypeId": "Part::Box", "Properties": {"Length": 10, "Width": 10, "Height": 10}},
+    {"Name": "BindModeSynchronized", "ID": 2, "TypeId": "PartDesign::SubShapeBinder", "Properties": {"BindMode": {"PropertyType": "App::PropertyEnumeration", "value": "Synchronized"}, "Support": {"PropertyType": "App::PropertyXLinkSubList", "SubSet": [{"value": "SupportBox", "SubList": []}]}}},
+    {"Name": "BindModeFrozen", "ID": 3, "TypeId": "PartDesign::SubShapeBinder", "Properties": {"BindMode": {"PropertyType": "App::PropertyEnumeration", "value": "Frozen"}, "Support": {"PropertyType": "App::PropertyXLinkSubList", "SubSet": [{"value": "SupportBox", "SubList": []}]}}},
+    {"Name": "BindModeDetached", "ID": 4, "TypeId": "PartDesign::SubShapeBinder", "Properties": {"BindMode": {"PropertyType": "App::PropertyEnumeration", "value": "Detached"}, "Support": {"PropertyType": "App::PropertyXLinkSubList", "SubSet": [{"value": "SupportBox", "SubList": []}]}}}
+  ],
+  "recompute": {"objs": ["BindModeSynchronized", "BindModeFrozen", "BindModeDetached"]}
+}

@@ -1,0 +1,431 @@
+{
+  "case_schema_version": "cad-core.c8m1-shapebinder-native-oracle.v1",
+  "fixture_group": "c8m1",
+  "freecad_authority": [
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::update()"
+  ],
+  "freecad_version": "1.2.0 revision 20260519",
+  "native_case": "subshape-binder-basic-support-whole-face-edge-list",
+  "objects": {
+    "SubShapeBinderEdgeList": {
+      "BindCopyOnChange": "Disabled",
+      "BindMode": "Synchronized",
+      "Fuse": false,
+      "InList": [],
+      "MakeFace": true,
+      "Offset": 0.0,
+      "OutList": [
+        "SupportBox"
+      ],
+      "PartialLoad": false,
+      "Refine": true,
+      "Relative": true,
+      "Support": [
+        {
+          "label": "SupportBox",
+          "object": "SupportBox",
+          "subnames": [
+            "Edge1",
+            "Edge2",
+            "Edge3",
+            "Edge4"
+          ]
+        }
+      ],
+      "label": "SubShapeBinderEdgeList",
+      "name": "SubShapeBinderEdgeList",
+      "placement": {
+        "Base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Rotation": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      "role": "edge_list_support",
+      "shape_summary": {
+        "area": 19.999999999999996,
+        "bbox": {
+          "max": [
+            0.0,
+            4.0,
+            5.0
+          ],
+          "min": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "childShapes": [
+          {
+            "area": 0.0,
+            "bbox": {
+              "max": [
+                0.0,
+                4.0,
+                5.0
+              ],
+              "min": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "element_map": {
+              "ElementMap": {
+                "Edge1;:H12d6,E;WIR;:H12d6:4,E": "Edge4",
+                "Edge2;:H12d6,E;WIR;:H12d6:4,E": "Edge1",
+                "Edge3;:H12d6,E;WIR;:H12d6:4,E": "Edge2",
+                "Edge4;:H12d6,E;WIR;:H12d6:4,E": "Edge3",
+                "Vertex1;:H12d6,V;WIR;:H12d6:4,V": "Vertex2",
+                "Vertex2;:H12d6,V;WIR;:H12d6:4,V": "Vertex4",
+                "Vertex3;:H12d6,V;WIR;:H12d6:4,V": "Vertex1",
+                "Vertex4;:H12d6,V;WIR;:H12d6:4,V": "Vertex3"
+              },
+              "ElementMapSize": 8,
+              "ElementMapVersion": "15.70200.5"
+            },
+            "length": 18.0,
+            "shape_type": "Wire",
+            "status": "ok",
+            "topology_counts": {
+              "edges": 4,
+              "faces": 0,
+              "shells": 0,
+              "solids": 0,
+              "vertices": 4,
+              "wires": 1
+            },
+            "volume": 0.0
+          }
+        ],
+        "element_map": {
+          "ElementMap": {
+            "Edge1;:H12d6,E;WIR;:H12d6:4,E": "Edge4",
+            "Edge1;:H12d6,E;WIR;:H12d6:4,E;FAC;:H12d6:4,F": "Face1",
+            "Edge2;:H12d6,E;WIR;:H12d6:4,E": "Edge1",
+            "Edge3;:H12d6,E;WIR;:H12d6:4,E": "Edge2",
+            "Edge4;:H12d6,E;WIR;:H12d6:4,E": "Edge3",
+            "Vertex1;:H12d6,V;WIR;:H12d6:4,V": "Vertex2",
+            "Vertex2;:H12d6,V;WIR;:H12d6:4,V": "Vertex4",
+            "Vertex3;:H12d6,V;WIR;:H12d6:4,V": "Vertex1",
+            "Vertex4;:H12d6,V;WIR;:H12d6:4,V": "Vertex3"
+          },
+          "ElementMapSize": 9,
+          "ElementMapVersion": "15.70200.5"
+        },
+        "length": 18.0,
+        "shape_type": "Face",
+        "status": "ok",
+        "topology_counts": {
+          "edges": 4,
+          "faces": 1,
+          "shells": 0,
+          "solids": 0,
+          "vertices": 4,
+          "wires": 1
+        },
+        "volume": 0.0
+      },
+      "type_id": "PartDesign::SubShapeBinder"
+    },
+    "SubShapeBinderFace": {
+      "BindCopyOnChange": "Disabled",
+      "BindMode": "Synchronized",
+      "Fuse": false,
+      "InList": [],
+      "MakeFace": true,
+      "Offset": 0.0,
+      "OutList": [
+        "SupportBox"
+      ],
+      "PartialLoad": false,
+      "Refine": true,
+      "Relative": true,
+      "Support": [
+        {
+          "label": "SupportBox",
+          "object": "SupportBox",
+          "subnames": [
+            "Face1"
+          ]
+        }
+      ],
+      "label": "SubShapeBinderFace",
+      "name": "SubShapeBinderFace",
+      "placement": {
+        "Base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Rotation": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      "role": "face_support",
+      "shape_summary": {
+        "area": 19.999999999999996,
+        "bbox": {
+          "max": [
+            0.0,
+            4.0,
+            5.0
+          ],
+          "min": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "childShapes": [
+          {
+            "area": 19.999999999999996,
+            "bbox": {
+              "max": [
+                0.0,
+                4.0,
+                5.0
+              ],
+              "min": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "element_map": {
+              "ElementMap": {
+                "Edge1;:H12d6,E": "Edge1",
+                "Edge2;:H12d6,E": "Edge2",
+                "Edge3;:H12d6,E": "Edge3",
+                "Edge4;:H12d6,E": "Edge4",
+                "Face1;:H12d6,F": "Face1",
+                "Vertex1;:H12d6,V": "Vertex1",
+                "Vertex2;:H12d6,V": "Vertex2",
+                "Vertex3;:H12d6,V": "Vertex3",
+                "Vertex4;:H12d6,V": "Vertex4"
+              },
+              "ElementMapSize": 9,
+              "ElementMapVersion": "15.70200.5"
+            },
+            "length": 18.0,
+            "shape_type": "Face",
+            "status": "ok",
+            "topology_counts": {
+              "edges": 4,
+              "faces": 1,
+              "shells": 0,
+              "solids": 0,
+              "vertices": 4,
+              "wires": 1
+            },
+            "volume": 0.0
+          }
+        ],
+        "element_map": {
+          "ElementMap": {
+            "Edge1;:H12d6,E": "Edge1",
+            "Edge2;:H12d6,E": "Edge2",
+            "Edge3;:H12d6,E": "Edge3",
+            "Edge4;:H12d6,E": "Edge4",
+            "Face1;:H12d6,F": "Face1",
+            "Vertex1;:H12d6,V": "Vertex1",
+            "Vertex2;:H12d6,V": "Vertex2",
+            "Vertex3;:H12d6,V": "Vertex3",
+            "Vertex4;:H12d6,V": "Vertex4"
+          },
+          "ElementMapSize": 9,
+          "ElementMapVersion": "15.70200.5"
+        },
+        "length": 18.0,
+        "shape_type": "Compound",
+        "status": "ok",
+        "topology_counts": {
+          "edges": 4,
+          "faces": 1,
+          "shells": 0,
+          "solids": 0,
+          "vertices": 4,
+          "wires": 1
+        },
+        "volume": 0.0
+      },
+      "type_id": "PartDesign::SubShapeBinder"
+    },
+    "SubShapeBinderWhole": {
+      "BindCopyOnChange": "Disabled",
+      "BindMode": "Synchronized",
+      "Fuse": false,
+      "InList": [],
+      "MakeFace": true,
+      "Offset": 0.0,
+      "OutList": [
+        "SupportBox"
+      ],
+      "PartialLoad": false,
+      "Refine": true,
+      "Relative": true,
+      "Support": [
+        {
+          "label": "SupportBox",
+          "object": "SupportBox",
+          "subnames": []
+        }
+      ],
+      "label": "SubShapeBinderWhole",
+      "name": "SubShapeBinderWhole",
+      "placement": {
+        "Base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Rotation": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      "role": "whole_support",
+      "shape_summary": {
+        "area": 93.99999999999999,
+        "bbox": {
+          "max": [
+            3.0,
+            4.0,
+            5.0
+          ],
+          "min": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "childShapes": [
+          {
+            "area": 93.99999999999999,
+            "bbox": {
+              "max": [
+                3.0,
+                4.0,
+                5.0
+              ],
+              "min": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "element_map": {
+              "ElementMap": {
+                "Edge10;:H12d6,E": "Edge10",
+                "Edge11;:H12d6,E": "Edge11",
+                "Edge12;:H12d6,E": "Edge12",
+                "Edge1;:H12d6,E": "Edge1",
+                "Edge2;:H12d6,E": "Edge2",
+                "Edge3;:H12d6,E": "Edge3",
+                "Edge4;:H12d6,E": "Edge4",
+                "Edge5;:H12d6,E": "Edge5",
+                "Edge6;:H12d6,E": "Edge6",
+                "Edge7;:H12d6,E": "Edge7",
+                "Edge8;:H12d6,E": "Edge8",
+                "Edge9;:H12d6,E": "Edge9",
+                "Face1;:H12d6,F": "Face1",
+                "Face2;:H12d6,F": "Face2",
+                "Face3;:H12d6,F": "Face3",
+                "Face4;:H12d6,F": "Face4",
+                "Face5;:H12d6,F": "Face5",
+                "Face6;:H12d6,F": "Face6",
+                "Vertex1;:H12d6,V": "Vertex1",
+                "Vertex2;:H12d6,V": "Vertex2",
+                "Vertex3;:H12d6,V": "Vertex3",
+                "Vertex4;:H12d6,V": "Vertex4",
+                "Vertex5;:H12d6,V": "Vertex5",
+                "Vertex6;:H12d6,V": "Vertex6",
+                "Vertex7;:H12d6,V": "Vertex7",
+                "Vertex8;:H12d6,V": "Vertex8"
+              },
+              "ElementMapSize": 26,
+              "ElementMapVersion": "15.70200.5"
+            },
+            "length": 96.0,
+            "shape_type": "Solid",
+            "status": "ok",
+            "topology_counts": {
+              "edges": 12,
+              "faces": 6,
+              "shells": 1,
+              "solids": 1,
+              "vertices": 8,
+              "wires": 6
+            },
+            "volume": 60.0
+          }
+        ],
+        "element_map": {
+          "ElementMap": {
+            "Edge10;:H12d6,E": "Edge10",
+            "Edge11;:H12d6,E": "Edge11",
+            "Edge12;:H12d6,E": "Edge12",
+            "Edge1;:H12d6,E": "Edge1",
+            "Edge2;:H12d6,E": "Edge2",
+            "Edge3;:H12d6,E": "Edge3",
+            "Edge4;:H12d6,E": "Edge4",
+            "Edge5;:H12d6,E": "Edge5",
+            "Edge6;:H12d6,E": "Edge6",
+            "Edge7;:H12d6,E": "Edge7",
+            "Edge8;:H12d6,E": "Edge8",
+            "Edge9;:H12d6,E": "Edge9",
+            "Face1;:H12d6,F": "Face1",
+            "Face2;:H12d6,F": "Face2",
+            "Face3;:H12d6,F": "Face3",
+            "Face4;:H12d6,F": "Face4",
+            "Face5;:H12d6,F": "Face5",
+            "Face6;:H12d6,F": "Face6",
+            "Vertex1;:H12d6,V": "Vertex1",
+            "Vertex2;:H12d6,V": "Vertex2",
+            "Vertex3;:H12d6,V": "Vertex3",
+            "Vertex4;:H12d6,V": "Vertex4",
+            "Vertex5;:H12d6,V": "Vertex5",
+            "Vertex6;:H12d6,V": "Vertex6",
+            "Vertex7;:H12d6,V": "Vertex7",
+            "Vertex8;:H12d6,V": "Vertex8"
+          },
+          "ElementMapSize": 26,
+          "ElementMapVersion": "15.70200.5"
+        },
+        "length": 96.0,
+        "shape_type": "Compound",
+        "status": "ok",
+        "topology_counts": {
+          "edges": 12,
+          "faces": 6,
+          "shells": 1,
+          "solids": 1,
+          "vertices": 8,
+          "wires": 6
+        },
+        "volume": 60.0
+      },
+      "type_id": "PartDesign::SubShapeBinder"
+    }
+  },
+  "oracle_ids": [
+    "C8M1-ORACLE-201"
+  ],
+  "reference": "FreeCADCmd C8-M1 ShapeBinder/SubShapeBinder oracle from subshape-binder-basic-support-whole-face-edge-list.json; case=subshape-binder-basic-support-whole-face-edge-list; oracle_ids=C8M1-ORACLE-201",
+  "route": "native_oracle_collected",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "source_fixture": "/home/user/Chili3DProject/FreeCAD/cad-core/fixtures/c8m1/subshape-binder-basic-support-whole-face-edge-list.json",
+  "source_fixture_name": "subshape-binder-basic-support-whole-face-edge-list.json"
+}
