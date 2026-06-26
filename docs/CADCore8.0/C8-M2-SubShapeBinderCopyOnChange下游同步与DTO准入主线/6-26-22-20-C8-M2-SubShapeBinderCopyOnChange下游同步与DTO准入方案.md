@@ -22,8 +22,8 @@ C8-M2 选择先做准入和同步，而不是直接写 C++：
 | --- | --- | --- |
 | C8-M1 capability sync | ShapeBinder / SubShapeBinder status、covered、remaining_gaps、diagnostics | 下游同步合同 |
 | Fixture / expected sync | `cad-core/fixtures/c8m1` 12 个输入和 expected | 下游 parity / blackbox 种子 |
-| CopyOnChange property state | Disabled / Enabled / Mutated / PartialLoad Python-visible state | S3 native probe 复核 |
-| CopyOnChange copied cache | temporary document / copied object cache / mutation lifecycle | 默认 `oracle_blocked`，除非 S3 有新证据 |
+| CopyOnChange property state | Disabled / Enabled / Mutated / PartialLoad Python-visible state | S3 已用 native probe 复核 |
+| CopyOnChange copied cache | temporary document / copied object cache / mutation lifecycle | S3 观察到 `_tmp_binder` / `_CopiedLink`，但 full cache 仍 retained `oracle_blocked` |
 | Request-local DTO | 仅传递 product-approved graph updates / diagnostics | S6 可实现候选 |
 | GUI / backend session | TaskPanel、ViewProvider、persistent session | non-goal |
 
@@ -47,7 +47,7 @@ S2 结论：C8-M1 ShapeBinder / SubShapeBinder capability、fixtures、expected 
 
 ## S3 native CopyOnChange 生命周期探针
 
-尝试用 FreeCADCmd / native probe 观察 `BindCopyOnChange` copied-object cache、Mutated lifecycle、PartialLoad allow-partial 行为。若不可观察，固化 blocker evidence 和 delete/reopen condition。
+已完成。S3 新增 `cad-core/tools/probe_c8m2_subshapebinder_copyonchange.py`、`cad-core/fixtures/c8m2/subshape-binder-copyonchange-lifecycle-probe.json` 和 `cad-core/fixtures/c8m2/expected/subshape-binder-copyonchange-lifecycle-probe.freecad.json`。FreeCADCmd 采集 `freecad_version=1.2.0 revision 20260519`；Disabled / Enabled / Mutated、动态 CopyOnChange 属性和 Enabled -> Mutated 触发均可 Python-visible；`PartialLoad=True` 与 `Support` 的 `AllowPartial` / `ReadOnly` 状态可见；但 `_CopiedObjs` private vector、`copyObject` dependency order 和 `recomputeFeature(true)` 生命周期不可作为稳定 request-local DTO 导出，所以 full temporary-document cache 继续 retained `oracle_blocked`。
 
 ## S4 下游 opencascade-rs 同步契约
 
@@ -59,7 +59,7 @@ S2 结论：C8-M1 ShapeBinder / SubShapeBinder capability、fixtures、expected 
 
 ## S6 实现准入与发布闸门
 
-若 S3 证明 request-local CopyOnChange DTO 可实现，S6 指定 C++ landing 和 focused tests；若不能证明，则关闭为 no-code release gate，并给出下游同步或下一轮 oracle probe 任务。
+若 S6 明确接受 S3 property-state 子集为 request-local CopyOnChange DTO，S6 指定 C++ landing 和 focused tests；若不能证明 product-approved DTO，则关闭为 no-code release gate，并给出下游同步或下一轮 oracle probe 任务。full temporary-document copied-object cache 仍不得写成 supported。
 
 ## 验收分层
 

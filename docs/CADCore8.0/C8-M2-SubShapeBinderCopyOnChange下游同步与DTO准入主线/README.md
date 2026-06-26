@@ -22,13 +22,14 @@ C8-M2 的目标是拆清两件事：
 - S0 live 基线已冻结：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=dc93b0d3af`（`dc93b0d3af chore: 完成 C8-M1 S6 发布闸门`），开始工作区包含既有 C8-M2 文档/矩阵未提交改动与 `docs/CADCore8.0/README.md` 修改。
 - C8-M2 S0 已实现 live 基线冻结；S1 已实现 FreeCAD source authority 与 C8-M1 capability/tests/fixtures/current diagnostic 边界复核。S1 live 基线为 `HEAD=e7e07663d9`（`e7e07663d9 docs: 完成 C8-M2 S0 live 基线冻结`），开始工作区干净。
 - S1 已确认 `SubShapeBinder::setupCopyOnChange()` / `checkCopyOnChange()` / `onChanged()` / `update()`、`LinkBaseExtension::setupCopyOnChange()`、`cad-core/src/part_design/feature_shape_binder.cpp`、`cad-core/src/app/copy_on_change.cpp`、capability、focused tests、generic diagnostics suite 和 C8-M1 CopyOnChange fixture/expected 的当前边界；C8-M2 仍保持 `copy_on_change_full_temporary_document_cache` 为 known_gap diagnostic。
-- C8-M2 S2 已实现 CopyOnChange DTO 准入与 oracle 候选矩阵：C8-M1 capability / diagnostics / fixtures 为 `sync_required` 下游合同；CopyOnChange Disabled / Enabled / Mutated property-state 与 PartialLoad allow-partial 为 `oracle_candidate`；full temporary-document copied-object cache 为 `known_gap_retained`；request-local DTO 为 `backend_gap_candidate`，不等于 S6 implementation gate；GUI/session/persistent cache/Rust 下游为 `diagnostic_non_goal`。`C8M2-BLOCKER-201` 已关闭，S3-S6 仍待执行。
+- C8-M2 S2 已实现 CopyOnChange DTO 准入与 oracle 候选矩阵：C8-M1 capability / diagnostics / fixtures 为 `sync_required` 下游合同；CopyOnChange Disabled / Enabled / Mutated property-state 与 PartialLoad allow-partial 为 `oracle_candidate`；full temporary-document copied-object cache 为 `known_gap_retained`；request-local DTO 为 `backend_gap_candidate`，不等于 S6 implementation gate；GUI/session/persistent cache/Rust 下游为 `diagnostic_non_goal`。`C8M2-BLOCKER-201` 已关闭。
+- C8-M2 S3 已实现 native CopyOnChange 生命周期探针与 blocker evidence：FreeCADCmd 采集 `freecad_version=1.2.0 revision 20260519`；`C8M2-ORACLE-101` / `102` 已采 property-state；`C8M2-ORACLE-103` 观察到 `_tmp_binder` 和 `_CopiedLink`，但 `_CopiedObjs` / `copyObject` / `recomputeFeature(true)` 全缓存仍不可导出为稳定 request-local DTO，继续保持 `oracle_blocked`。`C8M2-BLOCKER-301` 已关闭，S4-S6 仍待执行。
 
 ## 收口边界
 
 - C8-M2 不修改 Rust 下游代码；若需要执行下游同步，应另在 `opencascade-rs` 建包。
 - C8-M2 不实现跨请求 backend session、persistent BREP、TopoDS_Shape、NamedShape、ElementMap 或 FreeCAD temporary document cache。
-- C8-M2 只有在 S3 证明 request-local CopyOnChange DTO 可由 native oracle 支撑时，S6 才能打开 FreeCAD `cad-core` C++ implementation gate。
+- C8-M2 只有在 S6 明确接受 S3 property-state 子集为 request-local DTO 时，才能打开 FreeCAD `cad-core` C++ implementation gate；full temporary-document copied-object cache 仍不得写成 supported。
 
 ## 队列检查
 

@@ -1,0 +1,1370 @@
+{
+  "command": {
+    "argv": [
+      "/home/user/.local/bin/freecadcmd",
+      "/home/user/Chili3DProject/FreeCAD/cad-core/tools/probe_c8m2_subshapebinder_copyonchange.py",
+      "--pass",
+      "__cad_core_c8m2_subshapebinder_copyonchange_probe_args_env__"
+    ],
+    "returncode": 0
+  },
+  "documents_after_initial_recompute": [
+    "C8M2CopyOnChangeProbe",
+    "_tmp_binder"
+  ],
+  "documents_before_recompute": [
+    "C8M2CopyOnChangeProbe"
+  ],
+  "fixture_group": "c8m2",
+  "freecad_authority": [
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::setupCopyOnChange()",
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::checkCopyOnChange()",
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::update()",
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::checkPropertyStatus()",
+    "/home/user/Chili3DProject/FreeCAD/src/App/Link.cpp::LinkBaseExtension::setupCopyOnChange()"
+  ],
+  "freecad_revision": "20260519",
+  "freecad_version": "1.2.0 revision 20260519",
+  "initial_objects": {
+    "CopyOnChangeDisabled": {
+      "copy_on_change_properties": {},
+      "hidden_cache_fields": {
+        "_CopiedLink": {
+          "hasattr": true,
+          "property": {
+            "getGroupOfProperty": {
+              "status": "ok",
+              "value": "Base"
+            },
+            "getPropertyStatus": {
+              "status": "ok",
+              "value": [
+                22,
+                24,
+                26
+              ]
+            },
+            "getTypeIdOfProperty": {
+              "status": "ok",
+              "value": "App::PropertyXLinkSub"
+            },
+            "value": null
+          },
+          "value": null
+        },
+        "_CopiedObjs": {
+          "hasattr": false,
+          "property": {
+            "getGroupOfProperty": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "getPropertyStatus": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "getTypeIdOfProperty": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "value": {
+              "error": "'Part.Feature' object has no attribute '_CopiedObjs'",
+              "status": "error"
+            }
+          },
+          "value": {
+            "error": "'Part.Feature' object has no attribute '_CopiedObjs'",
+            "status": "error"
+          }
+        }
+      },
+      "label": "CopyOnChangeDisabled",
+      "name": "CopyOnChangeDisabled",
+      "properties": {
+        "BindCopyOnChange": "Disabled",
+        "BindMode": "Synchronized",
+        "PartialLoad": false,
+        "Support": [
+          {
+            "label": "SupportBox",
+            "object": "SupportBox",
+            "subnames": []
+          }
+        ]
+      },
+      "role": "copy_on_change_disabled",
+      "shape_summary": {
+        "area": 599.9999999999999,
+        "bbox": {
+          "max": [
+            10.0,
+            10.0,
+            10.0
+          ],
+          "min": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "shape_type": "Compound",
+        "status": "ok",
+        "topology_counts": {
+          "edges": 12,
+          "faces": 6,
+          "solids": 1,
+          "vertices": 8
+        },
+        "volume": 999.9999999999998
+      },
+      "type_id": "PartDesign::SubShapeBinder"
+    },
+    "CopyOnChangeEnabled": {
+      "copy_on_change_properties": {
+        "C8M2CopyOnChangeValue": {
+          "getGroupOfProperty": {
+            "status": "ok",
+            "value": "Configuration (C8M2)"
+          },
+          "getPropertyStatus": {
+            "status": "ok",
+            "value": [
+              "CopyOnChange",
+              21
+            ]
+          },
+          "getTypeIdOfProperty": {
+            "status": "ok",
+            "value": "App::PropertyFloat"
+          },
+          "value": 11.0
+        }
+      },
+      "hidden_cache_fields": {
+        "_CopiedLink": {
+          "hasattr": true,
+          "property": {
+            "getGroupOfProperty": {
+              "status": "ok",
+              "value": "Base"
+            },
+            "getPropertyStatus": {
+              "status": "ok",
+              "value": [
+                22,
+                24,
+                26
+              ]
+            },
+            "getTypeIdOfProperty": {
+              "status": "ok",
+              "value": "App::PropertyXLinkSub"
+            },
+            "value": null
+          },
+          "value": null
+        },
+        "_CopiedObjs": {
+          "hasattr": false,
+          "property": {
+            "getGroupOfProperty": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "getPropertyStatus": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "getTypeIdOfProperty": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "value": {
+              "error": "'Part.Feature' object has no attribute '_CopiedObjs'",
+              "status": "error"
+            }
+          },
+          "value": {
+            "error": "'Part.Feature' object has no attribute '_CopiedObjs'",
+            "status": "error"
+          }
+        }
+      },
+      "label": "CopyOnChangeEnabled",
+      "name": "CopyOnChangeEnabled",
+      "properties": {
+        "BindCopyOnChange": "Enabled",
+        "BindMode": "Synchronized",
+        "PartialLoad": false,
+        "Support": [
+          {
+            "label": "SupportBox",
+            "object": "SupportBox",
+            "subnames": []
+          }
+        ]
+      },
+      "role": "copy_on_change_enabled",
+      "shape_summary": {
+        "area": 599.9999999999999,
+        "bbox": {
+          "max": [
+            10.0,
+            10.0,
+            10.0
+          ],
+          "min": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "shape_type": "Compound",
+        "status": "ok",
+        "topology_counts": {
+          "edges": 12,
+          "faces": 6,
+          "solids": 1,
+          "vertices": 8
+        },
+        "volume": 999.9999999999998
+      },
+      "type_id": "PartDesign::SubShapeBinder"
+    },
+    "CopyOnChangeExplicitMutated": {
+      "copy_on_change_properties": {
+        "C8M2CopyOnChangeValue": {
+          "getGroupOfProperty": {
+            "status": "ok",
+            "value": "Configuration (C8M2)"
+          },
+          "getPropertyStatus": {
+            "status": "ok",
+            "value": [
+              "CopyOnChange",
+              21
+            ]
+          },
+          "getTypeIdOfProperty": {
+            "status": "ok",
+            "value": "App::PropertyFloat"
+          },
+          "value": 11.0
+        }
+      },
+      "hidden_cache_fields": {
+        "_CopiedLink": {
+          "hasattr": true,
+          "property": {
+            "getGroupOfProperty": {
+              "status": "ok",
+              "value": "Base"
+            },
+            "getPropertyStatus": {
+              "status": "ok",
+              "value": [
+                22,
+                24,
+                26
+              ]
+            },
+            "getTypeIdOfProperty": {
+              "status": "ok",
+              "value": "App::PropertyXLinkSub"
+            },
+            "value": [
+              {
+                "Name": "SupportBox",
+                "TypeId": "Part::Box"
+              },
+              []
+            ]
+          },
+          "value": [
+            {
+              "Name": "SupportBox",
+              "TypeId": "Part::Box"
+            },
+            []
+          ]
+        },
+        "_CopiedObjs": {
+          "hasattr": false,
+          "property": {
+            "getGroupOfProperty": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "getPropertyStatus": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "getTypeIdOfProperty": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "value": {
+              "error": "'Part.Feature' object has no attribute '_CopiedObjs'",
+              "status": "error"
+            }
+          },
+          "value": {
+            "error": "'Part.Feature' object has no attribute '_CopiedObjs'",
+            "status": "error"
+          }
+        }
+      },
+      "label": "CopyOnChangeExplicitMutated",
+      "name": "CopyOnChangeExplicitMutated",
+      "properties": {
+        "BindCopyOnChange": "Mutated",
+        "BindMode": "Synchronized",
+        "PartialLoad": false,
+        "Support": [
+          {
+            "label": "SupportBox",
+            "object": "SupportBox",
+            "subnames": []
+          }
+        ]
+      },
+      "role": "copy_on_change_explicit_mutated",
+      "shape_summary": {
+        "area": 599.9999999999999,
+        "bbox": {
+          "max": [
+            10.0,
+            10.0,
+            10.0
+          ],
+          "min": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "shape_type": "Compound",
+        "status": "ok",
+        "topology_counts": {
+          "edges": 12,
+          "faces": 6,
+          "solids": 1,
+          "vertices": 8
+        },
+        "volume": 999.9999999999998
+      },
+      "type_id": "PartDesign::SubShapeBinder"
+    },
+    "CopyOnChangeMutationTrigger": {
+      "copy_on_change_properties": {
+        "C8M2CopyOnChangeValue": {
+          "getGroupOfProperty": {
+            "status": "ok",
+            "value": "Configuration (C8M2)"
+          },
+          "getPropertyStatus": {
+            "status": "ok",
+            "value": [
+              "CopyOnChange",
+              21
+            ]
+          },
+          "getTypeIdOfProperty": {
+            "status": "ok",
+            "value": "App::PropertyFloat"
+          },
+          "value": 11.0
+        }
+      },
+      "hidden_cache_fields": {
+        "_CopiedLink": {
+          "hasattr": true,
+          "property": {
+            "getGroupOfProperty": {
+              "status": "ok",
+              "value": "Base"
+            },
+            "getPropertyStatus": {
+              "status": "ok",
+              "value": [
+                22,
+                24,
+                26
+              ]
+            },
+            "getTypeIdOfProperty": {
+              "status": "ok",
+              "value": "App::PropertyXLinkSub"
+            },
+            "value": null
+          },
+          "value": null
+        },
+        "_CopiedObjs": {
+          "hasattr": false,
+          "property": {
+            "getGroupOfProperty": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "getPropertyStatus": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "getTypeIdOfProperty": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "value": {
+              "error": "'Part.Feature' object has no attribute '_CopiedObjs'",
+              "status": "error"
+            }
+          },
+          "value": {
+            "error": "'Part.Feature' object has no attribute '_CopiedObjs'",
+            "status": "error"
+          }
+        }
+      },
+      "label": "CopyOnChangeMutationTrigger",
+      "name": "CopyOnChangeMutationTrigger",
+      "properties": {
+        "BindCopyOnChange": "Enabled",
+        "BindMode": "Synchronized",
+        "PartialLoad": false,
+        "Support": [
+          {
+            "label": "SupportBox",
+            "object": "SupportBox",
+            "subnames": []
+          }
+        ]
+      },
+      "role": "copy_on_change_enabled_before_mutation",
+      "shape_summary": {
+        "area": 599.9999999999999,
+        "bbox": {
+          "max": [
+            10.0,
+            10.0,
+            10.0
+          ],
+          "min": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "shape_type": "Compound",
+        "status": "ok",
+        "topology_counts": {
+          "edges": 12,
+          "faces": 6,
+          "solids": 1,
+          "vertices": 8
+        },
+        "volume": 999.9999999999998
+      },
+      "type_id": "PartDesign::SubShapeBinder"
+    },
+    "PartialLoadEnabled": {
+      "copy_on_change_properties": {},
+      "hidden_cache_fields": {
+        "_CopiedLink": {
+          "hasattr": true,
+          "property": {
+            "getGroupOfProperty": {
+              "status": "ok",
+              "value": "Base"
+            },
+            "getPropertyStatus": {
+              "status": "ok",
+              "value": [
+                22,
+                24,
+                26
+              ]
+            },
+            "getTypeIdOfProperty": {
+              "status": "ok",
+              "value": "App::PropertyXLinkSub"
+            },
+            "value": null
+          },
+          "value": null
+        },
+        "_CopiedObjs": {
+          "hasattr": false,
+          "property": {
+            "getGroupOfProperty": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "getPropertyStatus": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "getTypeIdOfProperty": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "value": {
+              "error": "'Part.Feature' object has no attribute '_CopiedObjs'",
+              "status": "error"
+            }
+          },
+          "value": {
+            "error": "'Part.Feature' object has no attribute '_CopiedObjs'",
+            "status": "error"
+          }
+        }
+      },
+      "label": "PartialLoadEnabled",
+      "name": "PartialLoadEnabled",
+      "properties": {
+        "BindCopyOnChange": "Disabled",
+        "BindMode": "Synchronized",
+        "PartialLoad": true,
+        "Support": [
+          {
+            "label": "SupportBox",
+            "object": "SupportBox",
+            "subnames": []
+          }
+        ]
+      },
+      "role": "partial_load_enabled",
+      "shape_summary": {
+        "area": 599.9999999999999,
+        "bbox": {
+          "max": [
+            10.0,
+            10.0,
+            10.0
+          ],
+          "min": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "shape_type": "Compound",
+        "status": "ok",
+        "topology_counts": {
+          "edges": 12,
+          "faces": 6,
+          "solids": 1,
+          "vertices": 8
+        },
+        "volume": 999.9999999999998
+      },
+      "type_id": "PartDesign::SubShapeBinder"
+    },
+    "SupportBox": {
+      "copy_on_change_properties": {
+        "C8M2CopyOnChangeValue": {
+          "getGroupOfProperty": {
+            "status": "ok",
+            "value": "C8M2"
+          },
+          "getPropertyStatus": {
+            "status": "ok",
+            "value": [
+              "CopyOnChange",
+              21
+            ]
+          },
+          "getTypeIdOfProperty": {
+            "status": "ok",
+            "value": "App::PropertyFloat"
+          },
+          "value": 11.0
+        }
+      },
+      "hidden_cache_fields": {
+        "_CopiedLink": {
+          "hasattr": false,
+          "property": {
+            "getGroupOfProperty": {
+              "error": "Property container has no property '_CopiedLink'",
+              "status": "error"
+            },
+            "getPropertyStatus": {
+              "error": "Property container has no property '_CopiedLink'",
+              "status": "error"
+            },
+            "getTypeIdOfProperty": {
+              "error": "Property container has no property '_CopiedLink'",
+              "status": "error"
+            },
+            "value": {
+              "error": "'PrimitivePy' object has no attribute '_CopiedLink'",
+              "status": "error"
+            }
+          },
+          "value": {
+            "error": "'PrimitivePy' object has no attribute '_CopiedLink'",
+            "status": "error"
+          }
+        },
+        "_CopiedObjs": {
+          "hasattr": false,
+          "property": {
+            "getGroupOfProperty": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "getPropertyStatus": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "getTypeIdOfProperty": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "value": {
+              "error": "'PrimitivePy' object has no attribute '_CopiedObjs'",
+              "status": "error"
+            }
+          },
+          "value": {
+            "error": "'PrimitivePy' object has no attribute '_CopiedObjs'",
+            "status": "error"
+          }
+        }
+      },
+      "label": "SupportBox",
+      "name": "SupportBox",
+      "properties": {},
+      "role": "source_support",
+      "shape_summary": {
+        "area": 599.9999999999999,
+        "bbox": {
+          "max": [
+            10.0,
+            10.0,
+            10.0
+          ],
+          "min": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "shape_type": "Solid",
+        "status": "ok",
+        "topology_counts": {
+          "edges": 12,
+          "faces": 6,
+          "solids": 1,
+          "vertices": 8
+        },
+        "volume": 999.9999999999998
+      },
+      "type_id": "Part::Box"
+    }
+  },
+  "initial_recompute": {
+    "status": "ok"
+  },
+  "known_gap": {
+    "delete_condition": "Delete this blocker only after a native probe exposes a stable request-local DTO for _CopiedObjs/_tmp_binder/copyObject/recomputeFeature that does not require a backend session or persistent temporary document cache, and S6 explicitly opens implementation.",
+    "freecadcmd_evidence": {
+      "documents_after_initial_recompute": [
+        "C8M2CopyOnChangeProbe",
+        "_tmp_binder"
+      ],
+      "documents_after_mutation_recompute": [
+        "C8M2CopyOnChangeProbe",
+        "_tmp_binder"
+      ],
+      "freecad_revision": "20260519",
+      "freecad_version": "1.2.0 revision 20260519",
+      "observed_fields": [
+        "BindCopyOnChange Disabled Python-visible state",
+        "BindCopyOnChange Enabled Python-visible state",
+        "BindCopyOnChange Mutated Python-visible state",
+        "PartialLoad=True Python-visible property state",
+        "Support PropertyXLinkSubList Python-visible value",
+        "_CopiedLink hidden property value if exposed by Python",
+        "dynamic CopyOnChange property names when source exposes CopyOnChange property status",
+        "mutation-triggered BindCopyOnChange state when Python-visible dynamic property is writable",
+        "temporary document names visible through FreeCAD.listDocuments() during this probe"
+      ],
+      "unobservable_fields": [
+        "Support.setAllowPartial internal flag when no Python getAllowPartial-style method is exposed",
+        "_CopiedObjs private vector contents",
+        "_CopiedObjs private vector payload",
+        "_tmp_binder copyObject object graph and dependency order",
+        "copyObject dependency mapping behind temporary document cache",
+        "recomputeFeature(true) internal copied-object ElementMap lifecycle"
+      ]
+    },
+    "kind": "c8m2_copy_on_change_full_temporary_document_cache_blocker",
+    "reason": "FreeCAD native probing can expose property state and some hidden-link/document names, but it still does not produce a stable stateless request-local payload for the full temporary-document copied-object cache.",
+    "reopen_condition": "Reopen S3 if FreeCADCmd or a native C++ probe can export copied-object cache contents and mutation lifecycle as deterministic request-local evidence.",
+    "route": "oracle_blocked",
+    "source_fixture": "cad-core/fixtures/c8m2/subshape-binder-copyonchange-lifecycle-probe.json"
+  },
+  "mutation_trigger": {
+    "after_assignment": {
+      "copy_on_change_properties": {
+        "C8M2CopyOnChangeValue": {
+          "getGroupOfProperty": {
+            "status": "ok",
+            "value": "Configuration (C8M2)"
+          },
+          "getPropertyStatus": {
+            "status": "ok",
+            "value": [
+              "CopyOnChange",
+              21
+            ]
+          },
+          "getTypeIdOfProperty": {
+            "status": "ok",
+            "value": "App::PropertyFloat"
+          },
+          "value": 17.0
+        }
+      },
+      "hidden_cache_fields": {
+        "_CopiedLink": {
+          "hasattr": true,
+          "property": {
+            "getGroupOfProperty": {
+              "status": "ok",
+              "value": "Base"
+            },
+            "getPropertyStatus": {
+              "status": "ok",
+              "value": [
+                22,
+                24,
+                26
+              ]
+            },
+            "getTypeIdOfProperty": {
+              "status": "ok",
+              "value": "App::PropertyXLinkSub"
+            },
+            "value": null
+          },
+          "value": null
+        },
+        "_CopiedObjs": {
+          "hasattr": false,
+          "property": {
+            "getGroupOfProperty": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "getPropertyStatus": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "getTypeIdOfProperty": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "value": {
+              "error": "'Part.Feature' object has no attribute '_CopiedObjs'",
+              "status": "error"
+            }
+          },
+          "value": {
+            "error": "'Part.Feature' object has no attribute '_CopiedObjs'",
+            "status": "error"
+          }
+        }
+      },
+      "label": "CopyOnChangeMutationTrigger",
+      "name": "CopyOnChangeMutationTrigger",
+      "properties": {
+        "BindCopyOnChange": "Mutated",
+        "BindMode": "Synchronized",
+        "PartialLoad": false,
+        "Support": [
+          {
+            "label": "SupportBox",
+            "object": "SupportBox",
+            "subnames": []
+          }
+        ]
+      },
+      "role": "copy_on_change_after_assignment",
+      "shape_summary": {
+        "area": 599.9999999999999,
+        "bbox": {
+          "max": [
+            10.0,
+            10.0,
+            10.0
+          ],
+          "min": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "shape_type": "Compound",
+        "status": "ok",
+        "topology_counts": {
+          "edges": 12,
+          "faces": 6,
+          "solids": 1,
+          "vertices": 8
+        },
+        "volume": 999.9999999999998
+      },
+      "type_id": "PartDesign::SubShapeBinder"
+    },
+    "after_recompute": {
+      "copy_on_change_properties": {
+        "C8M2CopyOnChangeValue": {
+          "getGroupOfProperty": {
+            "status": "ok",
+            "value": "Configuration (C8M2)"
+          },
+          "getPropertyStatus": {
+            "status": "ok",
+            "value": [
+              "CopyOnChange",
+              21
+            ]
+          },
+          "getTypeIdOfProperty": {
+            "status": "ok",
+            "value": "App::PropertyFloat"
+          },
+          "value": 17.0
+        }
+      },
+      "hidden_cache_fields": {
+        "_CopiedLink": {
+          "hasattr": true,
+          "property": {
+            "getGroupOfProperty": {
+              "status": "ok",
+              "value": "Base"
+            },
+            "getPropertyStatus": {
+              "status": "ok",
+              "value": [
+                22,
+                24,
+                26
+              ]
+            },
+            "getTypeIdOfProperty": {
+              "status": "ok",
+              "value": "App::PropertyXLinkSub"
+            },
+            "value": [
+              {
+                "Name": "SupportBox001",
+                "TypeId": "Part::Box"
+              },
+              []
+            ]
+          },
+          "value": [
+            {
+              "Name": "SupportBox001",
+              "TypeId": "Part::Box"
+            },
+            []
+          ]
+        },
+        "_CopiedObjs": {
+          "hasattr": false,
+          "property": {
+            "getGroupOfProperty": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "getPropertyStatus": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "getTypeIdOfProperty": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "value": {
+              "error": "'Part.Feature' object has no attribute '_CopiedObjs'",
+              "status": "error"
+            }
+          },
+          "value": {
+            "error": "'Part.Feature' object has no attribute '_CopiedObjs'",
+            "status": "error"
+          }
+        }
+      },
+      "label": "CopyOnChangeMutationTrigger",
+      "name": "CopyOnChangeMutationTrigger",
+      "properties": {
+        "BindCopyOnChange": "Mutated",
+        "BindMode": "Synchronized",
+        "PartialLoad": false,
+        "Support": [
+          {
+            "label": "SupportBox",
+            "object": "SupportBox",
+            "subnames": []
+          }
+        ]
+      },
+      "role": "copy_on_change_after_recompute",
+      "shape_summary": {
+        "area": 599.9999999999999,
+        "bbox": {
+          "max": [
+            10.0,
+            10.0,
+            10.0
+          ],
+          "min": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "shape_type": "Compound",
+        "status": "ok",
+        "topology_counts": {
+          "edges": 12,
+          "faces": 6,
+          "solids": 1,
+          "vertices": 8
+        },
+        "volume": 999.9999999999998
+      },
+      "type_id": "PartDesign::SubShapeBinder"
+    },
+    "assignment": {
+      "label": "set C8M2CopyOnChangeValue=17.0",
+      "status": "ok",
+      "value": null
+    },
+    "before": {
+      "copy_on_change_properties": {
+        "C8M2CopyOnChangeValue": {
+          "getGroupOfProperty": {
+            "status": "ok",
+            "value": "Configuration (C8M2)"
+          },
+          "getPropertyStatus": {
+            "status": "ok",
+            "value": [
+              "CopyOnChange",
+              21
+            ]
+          },
+          "getTypeIdOfProperty": {
+            "status": "ok",
+            "value": "App::PropertyFloat"
+          },
+          "value": 11.0
+        }
+      },
+      "hidden_cache_fields": {
+        "_CopiedLink": {
+          "hasattr": true,
+          "property": {
+            "getGroupOfProperty": {
+              "status": "ok",
+              "value": "Base"
+            },
+            "getPropertyStatus": {
+              "status": "ok",
+              "value": [
+                22,
+                24,
+                26
+              ]
+            },
+            "getTypeIdOfProperty": {
+              "status": "ok",
+              "value": "App::PropertyXLinkSub"
+            },
+            "value": null
+          },
+          "value": null
+        },
+        "_CopiedObjs": {
+          "hasattr": false,
+          "property": {
+            "getGroupOfProperty": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "getPropertyStatus": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "getTypeIdOfProperty": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "value": {
+              "error": "'Part.Feature' object has no attribute '_CopiedObjs'",
+              "status": "error"
+            }
+          },
+          "value": {
+            "error": "'Part.Feature' object has no attribute '_CopiedObjs'",
+            "status": "error"
+          }
+        }
+      },
+      "label": "CopyOnChangeMutationTrigger",
+      "name": "CopyOnChangeMutationTrigger",
+      "properties": {
+        "BindCopyOnChange": "Enabled",
+        "BindMode": "Synchronized",
+        "PartialLoad": false,
+        "Support": [
+          {
+            "label": "SupportBox",
+            "object": "SupportBox",
+            "subnames": []
+          }
+        ]
+      },
+      "role": "copy_on_change_enabled_before_assignment",
+      "shape_summary": {
+        "area": 599.9999999999999,
+        "bbox": {
+          "max": [
+            10.0,
+            10.0,
+            10.0
+          ],
+          "min": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "shape_type": "Compound",
+        "status": "ok",
+        "topology_counts": {
+          "edges": 12,
+          "faces": 6,
+          "solids": 1,
+          "vertices": 8
+        },
+        "volume": 999.9999999999998
+      },
+      "type_id": "PartDesign::SubShapeBinder"
+    },
+    "documents_after_recompute": [
+      "C8M2CopyOnChangeProbe",
+      "_tmp_binder"
+    ],
+    "recompute": {
+      "status": "ok"
+    }
+  },
+  "native_case": "subshape-binder-copyonchange-lifecycle-probe",
+  "observed_fields": [
+    "BindCopyOnChange Disabled Python-visible state",
+    "BindCopyOnChange Enabled Python-visible state",
+    "BindCopyOnChange Mutated Python-visible state",
+    "PartialLoad=True Python-visible property state",
+    "Support PropertyXLinkSubList Python-visible value",
+    "_CopiedLink hidden property value if exposed by Python",
+    "dynamic CopyOnChange property names when source exposes CopyOnChange property status",
+    "mutation-triggered BindCopyOnChange state when Python-visible dynamic property is writable",
+    "temporary document names visible through FreeCAD.listDocuments() during this probe"
+  ],
+  "oracle_ids": [
+    "C8M2-ORACLE-101",
+    "C8M2-ORACLE-102",
+    "C8M2-ORACLE-103"
+  ],
+  "oracle_results": {
+    "C8M2-ORACLE-101": {
+      "observed_fields": [
+        "BindCopyOnChange Disabled Python-visible state",
+        "BindCopyOnChange Enabled Python-visible state",
+        "BindCopyOnChange Mutated Python-visible state",
+        "dynamic CopyOnChange property names when source exposes CopyOnChange property status",
+        "mutation-triggered BindCopyOnChange state when Python-visible dynamic property is writable"
+      ],
+      "route": "native_property_state_collected",
+      "unobservable_fields": [
+        "_CopiedObjs private vector contents",
+        "copyObject dependency mapping behind temporary document cache"
+      ]
+    },
+    "C8M2-ORACLE-102": {
+      "observed_fields": [
+        "PartialLoad=True Python-visible property state",
+        "Support PropertyXLinkSubList Python-visible value"
+      ],
+      "route": "native_partialload_property_state_collected",
+      "unobservable_fields": [
+        "Support.setAllowPartial internal flag when no Python getAllowPartial-style method is exposed"
+      ]
+    },
+    "C8M2-ORACLE-103": {
+      "observed_fields": [
+        "BindCopyOnChange Mutated Python-visible state",
+        "_CopiedLink hidden property value if exposed by Python",
+        "temporary document names visible through FreeCAD.listDocuments() during this probe"
+      ],
+      "reason": "FreeCAD native probing can expose property state and some hidden-link/document names, but it still does not produce a stable stateless request-local payload for the full temporary-document copied-object cache.",
+      "route": "oracle_blocked",
+      "unobservable_fields": [
+        "_CopiedObjs private vector payload",
+        "_tmp_binder copyObject object graph and dependency order",
+        "recomputeFeature(true) internal copied-object ElementMap lifecycle"
+      ]
+    }
+  },
+  "partialload_observability": {
+    "object": {
+      "copy_on_change_properties": {},
+      "hidden_cache_fields": {
+        "_CopiedLink": {
+          "hasattr": true,
+          "property": {
+            "getGroupOfProperty": {
+              "status": "ok",
+              "value": "Base"
+            },
+            "getPropertyStatus": {
+              "status": "ok",
+              "value": [
+                22,
+                24,
+                26
+              ]
+            },
+            "getTypeIdOfProperty": {
+              "status": "ok",
+              "value": "App::PropertyXLinkSub"
+            },
+            "value": null
+          },
+          "value": null
+        },
+        "_CopiedObjs": {
+          "hasattr": false,
+          "property": {
+            "getGroupOfProperty": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "getPropertyStatus": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "getTypeIdOfProperty": {
+              "error": "Property container has no property '_CopiedObjs'",
+              "status": "error"
+            },
+            "value": {
+              "error": "'Part.Feature' object has no attribute '_CopiedObjs'",
+              "status": "error"
+            }
+          },
+          "value": {
+            "error": "'Part.Feature' object has no attribute '_CopiedObjs'",
+            "status": "error"
+          }
+        }
+      },
+      "label": "PartialLoadEnabled",
+      "name": "PartialLoadEnabled",
+      "properties": {
+        "BindCopyOnChange": "Disabled",
+        "BindMode": "Synchronized",
+        "PartialLoad": true,
+        "Support": [
+          {
+            "label": "SupportBox",
+            "object": "SupportBox",
+            "subnames": []
+          }
+        ]
+      },
+      "role": "partial_load_enabled",
+      "shape_summary": {
+        "area": 599.9999999999999,
+        "bbox": {
+          "max": [
+            10.0,
+            10.0,
+            10.0
+          ],
+          "min": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "shape_type": "Compound",
+        "status": "ok",
+        "topology_counts": {
+          "edges": 12,
+          "faces": 6,
+          "solids": 1,
+          "vertices": 8
+        },
+        "volume": 999.9999999999998
+      },
+      "type_id": "PartDesign::SubShapeBinder"
+    },
+    "support_property": {
+      "allow_partial_methods": {
+        "allowPartial": {
+          "status": "unavailable"
+        },
+        "getAllowPartial": {
+          "status": "unavailable"
+        },
+        "isAllowedPartial": {
+          "status": "unavailable"
+        }
+      },
+      "getPropertyByName": {
+        "status": "ok",
+        "type": "list",
+        "value": [
+          [
+            {
+              "Name": "SupportBox",
+              "TypeId": "Part::Box"
+            },
+            []
+          ]
+        ]
+      },
+      "property_api": {
+        "getGroupOfProperty": {
+          "status": "ok",
+          "value": ""
+        },
+        "getPropertyStatus": {
+          "status": "ok",
+          "value": [
+            "AllowPartial",
+            "ReadOnly"
+          ]
+        },
+        "getTypeIdOfProperty": {
+          "status": "ok",
+          "value": "App::PropertyXLinkSubList"
+        },
+        "value": [
+          [
+            {
+              "Name": "SupportBox",
+              "TypeId": "Part::Box"
+            },
+            []
+          ]
+        ]
+      },
+      "python_value": [
+        [
+          {
+            "Name": "SupportBox",
+            "TypeId": "Part::Box"
+          },
+          []
+        ]
+      ]
+    }
+  },
+  "route": "native_evidence_collected_with_known_gap_blocker",
+  "save_before_recompute": {
+    "label": "doc.saveAs",
+    "status": "ok",
+    "value": null
+  },
+  "schema_version": "cad-core.c8m2-subshapebinder-copyonchange-native-probe.v1",
+  "source_fixture": "cad-core/fixtures/c8m2/subshape-binder-copyonchange-lifecycle-probe.json",
+  "source_fixture_name": "subshape-binder-copyonchange-lifecycle-probe.json",
+  "source_property_setup": {
+    "add_property": {
+      "label": "addProperty(App::PropertyFloat)",
+      "status": "ok",
+      "value": {
+        "Name": "SupportBox",
+        "TypeId": "Part::Box"
+      }
+    },
+    "copy_on_change_status": {
+      "attempts": [
+        {
+          "error": "function takes exactly 2 arguments (3 given)",
+          "error_type": "TypeError",
+          "label": "setPropertyStatus(name, CopyOnChange, True)",
+          "status": "error"
+        },
+        {
+          "label": "setPropertyStatus(name, CopyOnChange)",
+          "status": "ok",
+          "value": null
+        },
+        {
+          "label": "setPropertyStatus(name, [CopyOnChange])",
+          "status": "ok",
+          "value": null
+        }
+      ],
+      "final_status": {
+        "getGroupOfProperty": {
+          "status": "ok",
+          "value": "C8M2"
+        },
+        "getPropertyStatus": {
+          "status": "ok",
+          "value": [
+            "CopyOnChange",
+            21
+          ]
+        },
+        "getTypeIdOfProperty": {
+          "status": "ok",
+          "value": "App::PropertyFloat"
+        },
+        "value": 11.0
+      }
+    },
+    "initial_value": 11.0,
+    "source_copy_on_change_properties": {
+      "C8M2CopyOnChangeValue": {
+        "getGroupOfProperty": {
+          "status": "ok",
+          "value": "C8M2"
+        },
+        "getPropertyStatus": {
+          "status": "ok",
+          "value": [
+            "CopyOnChange",
+            21
+          ]
+        },
+        "getTypeIdOfProperty": {
+          "status": "ok",
+          "value": "App::PropertyFloat"
+        },
+        "value": 11.0
+      }
+    }
+  },
+  "unobservable_fields": [
+    "Support.setAllowPartial internal flag when no Python getAllowPartial-style method is exposed",
+    "_CopiedObjs private vector contents",
+    "_CopiedObjs private vector payload",
+    "_tmp_binder copyObject object graph and dependency order",
+    "copyObject dependency mapping behind temporary document cache",
+    "recomputeFeature(true) internal copied-object ElementMap lifecycle"
+  ]
+}
