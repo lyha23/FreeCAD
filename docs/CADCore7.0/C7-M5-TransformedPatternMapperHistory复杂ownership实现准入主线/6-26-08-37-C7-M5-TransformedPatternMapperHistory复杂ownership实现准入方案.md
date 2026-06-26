@@ -54,6 +54,15 @@ S0 已完成：live 起点 `HEAD=a2cc93a1ee`（`a2cc93a1ee 文档：收口 C7-M5
 
 同时复核 `cad-core/src/part_design/feature_transformed.cpp`、各子 feature、`cad-core/src/part/topo_shape.cpp`、`cad-core/tests/test_p7_features.py` 和 relevant expected。
 
+S1 已完成：live 起点为 `HEAD=27b2f84d6a`（`27b2f84d6a docs: 完成 C7-M5 S0 基线冻结`），开始状态干净；本轮未采 FreeCAD oracle、未新增或修改 fixtures/expected/tests、未改 C++。复核结论如下：
+
+- FreeCAD `Transformed::execute()` 的主顺序是跳过 MultiTransform child、必要时由 Body 写入 BaseFeature、`positionBySupport()`、调用子类 `getTransformations()`，再在 Features 模式中对每个 Original 单独 `getAddSubShape()`、`makeElementTransform()`、`makeElementFuse()` / `makeElementCut()`；WholeShape 模式把 support 本体和 transformed support copies 一起 fuse，最后再 `refineShapeIfActive()`。
+- FreeCAD `DressUp::getAddSubShape()` 的 `SupportTransform` 会跳过连续 DressUp 找到前一个 `FeatureAddSub` owner；additive support 只生成 add slot，subtractive support 只生成 sub slot；非 `SupportTransform` 路径生成 add/sub 两个 cut slot。
+- FreeCAD `MultiTransform::getTransformations()` 已确认 child order、Scaled diagonal divisor、非 Scaled multiplication、first-original COG 和 WholeShape 空 originals 时默认 origin 的行为；Mirrored / LinearPattern / PolarPattern / Scaled 的 transform list source 已复核。
+- FreeCAD `TopoShape::makeElementTransform()` 的 ownership authority 是 transform/move 后 `copyElementMap(tmp, op)`，不是根据输出几何猜测 source owner。
+- current `cad-core` 已有 `namedShapeForTransformedCopy()` source alias / original stable alias / nested history / merge history 路径；P7 tests 已覆盖 `TransformN` aliases、terminal split/deleted diagnostics、`history_consumed:merge`、DressUp slot history、MultiTransform linear+mirror、Scaled diagonal、divisor diagnostic 和 whole-shape support。
+- S2 输入池已写入矩阵：`C7M5-SCOPE-101` 为 `already_covered_baseline`；`C7M5-SCOPE-201` 和 `C7M5-SCOPE-301` 为 `s2_oracle_candidate_input_pool`；`C7M5-SCOPE-401` 为 `diagnostic_non_goal_baseline`。S2 只能基于 support-backed lifecycle 决定 oracle candidate，不得把 S0 冻结的旧 P7T closed baseline 改成 backendGap。
+
 ### S2 oracle 候选矩阵与批次裁决
 
 把候选路由到：
