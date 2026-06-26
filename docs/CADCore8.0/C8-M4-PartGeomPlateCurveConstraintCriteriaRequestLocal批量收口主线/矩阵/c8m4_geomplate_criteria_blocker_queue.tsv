@@ -1,0 +1,8 @@
+id	step	blocker	status	close_condition	evidence	next_owner
+C8M4-BLOCKER-000	S0	Live baseline and batch scope not frozen	pending	Record baseline, scope, status dictionary, forbidden declarations	S0 doc and matrices	S0
+C8M4-BLOCKER-101	S1	FreeCAD source and current cad-core coverage not reviewed	pending	Source candidates and current parser/apply/test coverage reviewed	source matrix	S1
+C8M4-BLOCKER-201	S2	Scope route and blocker classification missing	pending	Scope matrix assigns route for G0/G1/G2/native/capability/non-goal	scope and backend matrices	S2
+C8M4-BLOCKER-301	S3	Native CurveConstraint setter boundary unknown	pending	Source or native probe classifies setter boundary	oracle and non-goal matrices	S3
+C8M4-BLOCKER-401	S4	Request-local criteria implementation gate unknown	pending	Open S6 gate or record no-code reason	backend gap and oracle matrices	S4
+C8M4-BLOCKER-501	S5	Capability and non-goal publication route unknown	pending	Publication strategy and reopen conditions written	non-goal and backend matrices	S5
+C8M4-BLOCKER-601	S6	Implementation or release gate not closed	pending	Code/no-code gate validated and queue empty	validation matrix and queue output	S6

@@ -1,0 +1,8 @@
+id	scope	freecad_authority	current_cad_core_status	route	owner_step	next_action	notes
+C8M4-SCOPE-101	CurveConstraint G0Criterion	CurveConstraintPyImp.cpp set/get G0Criterion	DTO field exists; parser currently blocks criteria	pending	S2	Classify with G1/G2 as one batch	Do not implement G0 alone
+C8M4-SCOPE-102	CurveConstraint G1Criterion	CurveConstraintPyImp.cpp set/get G1Criterion	DTO field exists; parser currently blocks criteria	pending	S2	Classify with G0/G2 as one batch	Do not implement G1 alone
+C8M4-SCOPE-103	CurveConstraint G2Criterion	CurveConstraintPyImp.cpp set/get G2Criterion	DTO field exists; parser currently blocks criteria	pending	S2	Classify with G0/G1 as one batch	Do not implement G2 alone
+C8M4-SCOPE-201	FreeCAD native CurveConstraint criteria setters	CurveConstraintPyImp.cpp setters	Current evidence suggests NotImplemented boundary	pending	S3	Verify source and optional native probe	Native blocked does not block request-local cad-core contract
+C8M4-SCOPE-202	PointConstraint criteria analog	PointConstraintPyImp.cpp setters	Already covered by point criteria support	pending	S1	Use only as analog evidence	Not a CurveConstraint setter parity proof
+C8M4-SCOPE-301	capability and diagnostics publication	capability_contract.cpp and tests	Active narrowed gap and unsupported diagnostic exist	pending	S5	Publish supported request-local or retained diagnostic	Must align with S4 gate
+C8M4-SCOPE-401	PlateSurface.Curves wrapper lifecycle	GeomPlate Python wrapper family	Not in request-local criteria scope	pending	S5	Register non-goal or split	Do not expand this package into wrapper lifecycle
