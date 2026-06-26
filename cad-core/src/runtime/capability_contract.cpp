@@ -2021,10 +2021,18 @@ nlohmann::json capabilityContractJson()
                   // Part::Feature support and treats an empty SubList as whole-shape binding;
                   // ::ShapeBinder::updatedShape() applies "TraceSupport" through source/target
                   // coordinate systems.
-                  {"status", "supported_c8m1_s4_request_local"},
+                  {"status", "supported_c8m1_expected_backed_request_local"},
                   {"type_ids", {"PartDesign::ShapeBinder"}},
                   {"blocker_ids_closed", {"C8M1-BG-101", "C8M1-BG-301"}},
                   {"supported",
+                   {"whole_shape_support",
+                    "single_subshape_support",
+                    "multi_subshape_compound",
+                    "TraceSupport source-to-target transform",
+                    "App::Line/App::Plane/App::Point datum fallback",
+                    "ElementMap/NamedShape retag through linked source",
+                    "Body group replay as non-base feature"}},
+                  {"covered",
                    {"whole_shape_support",
                     "single_subshape_support",
                     "multi_subshape_compound",
@@ -2048,7 +2056,7 @@ nlohmann::json capabilityContractJson()
                   // with "Transform", then makeElementCompound/Fuse/makeElementWires/
                   // makeElementFace/makeElementOffset2D/makeElementRefine. onChanged() clears
                   // Support for BindMode "Detached"; setupCopyOnChange() uses temporary docs.
-                  {"status", "supported_c8m1_s4_request_local_with_copy_on_change_known_gap"},
+                  {"status", "supported_c8m1_expected_backed_request_local_with_copy_on_change_known_gap"},
                   {"type_ids", {"PartDesign::SubShapeBinder", "PartDesign::SubShapeBinderPython"}},
                   {"blocker_ids_closed", {"C8M1-BG-201", "C8M1-BG-301"}},
                   {"blocker_ids_diagnostic", {"C8M1-BG-401"}},
@@ -2066,14 +2074,35 @@ nlohmann::json capabilityContractJson()
                     "ElementMap/NamedShape propagation",
                     "Body replay",
                     "BindMode Synchronized/Frozen/Detached request-local subset"}},
+                  {"covered",
+                   {"whole_support",
+                    "selected Face/Edge/Vertex support",
+                    "multi-support compound",
+                    "nested App::Part route",
+                    "Relative target-context transform",
+                    "MakeFace from support edges",
+                    "Offset2D request fields",
+                    "Fuse solid supports",
+                    "Refine",
+                    "profile consumer",
+                    "ElementMap/NamedShape propagation",
+                    "Body replay",
+                    "BindMode Synchronized/Frozen/Detached request-local subset"}},
                   {"known_gaps",
                    {{"copy_on_change_full_temporary_document_cache",
                      {{"blocker_id", "C8M1-BG-401"},
                       {"status", "known_gap_diagnostic"},
+                      {"route", "oracle_blocked"},
                       {"diagnostic", "copy_on_change_full_temporary_document_cache_not_supported"},
                       {"boundary",
                        "No backend session, persistent temporary document, cross-request BREP, "
-                       "TopoDS_Shape, NamedShape, ElementMap or cache is stored."}}}}},
+                       "TopoDS_Shape, NamedShape, ElementMap or cache is stored."},
+                      {"delete_condition",
+                       "Replace only after FreeCADCmd exposes stable request-local CopyOnChange copied-object "
+                       "evidence that does not require a persistent backend session."},
+                      {"reopen_condition",
+                       "Reopen only if product approves a request-local CopyOnChange DTO backed by a stronger "
+                       "native oracle."}}}}},
                   {"fixtures",
                    {"c8m1/subshape-binder-basic-support-whole-face-edge-list",
                     "c8m1/subshape-binder-makeface-offset-fuse-refine",
@@ -2973,6 +3002,12 @@ nlohmann::json capabilityContractJson()
                // makeElementShape(maker, _shapes, Part::OpCodes::FilledFace) after
                // BRepOffsetAPI_MakeFilling::Build().
                "filling",
+               // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/
+               // ShapeBinder.cpp::SubShapeBinder::update(), applies "reTagElementMap" before
+               // makeElementCompound/Fuse/makeElementWires/makeElementFace/makeElementOffset2D/
+               // makeElementRefine for ShapeBinder/SubShapeBinder output history.
+               "shapebinder",
+               "subshapebinder",
                "refine_modified_deleted_generated"}},
              // FreeCAD:
              // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
@@ -3033,6 +3068,19 @@ nlohmann::json capabilityContractJson()
                   {"link_retag",
                    {{"status", "covered"},
                     {"covered", {"source_prefixed_stable_key", "mapped_postfix_alias"}}}},
+                  {"shapebinder",
+                   {{"status", "supported_c8m1_expected_backed_request_local"},
+                    {"covered",
+                     {"maker_history:shapebinder",
+                      "maker_history:subshapebinder",
+                      "linked_retag",
+                      "makeElementCompound",
+                      "makeElementFace",
+                      "makeElementOffset2D",
+                      "Fuse",
+                      "Refine",
+                      "Body replay NamedShape"}},
+                    {"remaining", nlohmann::json::array()}}},
                   {"sketch_internalshape",
                    {{"status", "done_first_slice"},
                     {"covered",

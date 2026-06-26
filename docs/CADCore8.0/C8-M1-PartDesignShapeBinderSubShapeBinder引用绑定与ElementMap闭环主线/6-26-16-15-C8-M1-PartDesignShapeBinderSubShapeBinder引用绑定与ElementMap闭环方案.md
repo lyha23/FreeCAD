@@ -84,12 +84,12 @@ S4 验证：`cmake --build build`、`python3 -m unittest tests.test_c8_shapebind
 
 ## S5 fixtures / tests / capability 发布
 
-补齐 fixtures、expected、focused tests、diagnostic tests、capability contract 和 docs 的发布口径。发布时必须区分：
+已完成 fixtures、expected、focused tests、diagnostic tests、capability contract 和 docs 的发布口径收口。发布结果区分：
 
-- expected-backed supported subset。
-- request-local product contract。
-- oracle-blocked lifecycle。
-- diagnostic non-goal。
+- expected-backed supported subset：`part_design.shape_binder.status=supported_c8m1_expected_backed_request_local`，`part_design.sub_shape_binder.status=supported_c8m1_expected_backed_request_local_with_copy_on_change_known_gap`。
+- request-local product contract：ShapeBinder / SubShapeBinder 的 `covered` 字段、`topo_history.producer_matrix.shapebinder`、`maker_history` 中 `shapebinder` / `subshapebinder` tag 由 `tests.test_c8_shapebinder` 断言。
+- oracle-blocked lifecycle：`copy_on_change_full_temporary_document_cache` 保持 `known_gap` / `oracle_blocked` diagnostic，并写明 delete/reopen condition。
+- diagnostic non-goal：GUI/session/Rust/adapter output patch 和 C7-M7 persistent writeback 不纳入本包实现。
 
 ## S6 release gate
 

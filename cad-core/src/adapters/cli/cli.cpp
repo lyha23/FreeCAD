@@ -3,6 +3,7 @@
 #include "cad_core/app/document.h"
 #include "cad_core/part/part_geometry_curve.h"
 #include "cad_core/part/shape_exporter.h"
+#include "cad_core/runtime/capability_contract.h"
 #include "cad_core/runtime/diagnostics.h"
 #include "cad_core/runtime/io.h"
 #include "cad_core/runtime/recompute.h"
@@ -211,9 +212,15 @@ int runRecompute(const RecomputeOptions& options)
     return 0;
 }
 
+int runCapabilities()
+{
+    std::cout << runtime::capabilityContractJson().dump(2) << '\n';
+    return 0;
+}
+
 void printHelp()
 {
-    std::cout << "usage: cad-core [--version] recompute <input.json> --output <output.json>"
+    std::cout << "usage: cad-core [--version] capabilities | recompute <input.json> --output <output.json>"
                  " [--export-object <name> --export-format <brep|step|stl> --export-file <path>]"
                  " [--stl-deflection <value>]\n";
 }
@@ -230,6 +237,9 @@ int cliMain(int argc, char** argv)
         if (argc == 2 && (std::string(argv[1]) == "--help" || std::string(argv[1]) == "-h")) {
             printHelp();
             return 0;
+        }
+        if (argc == 2 && std::string(argv[1]) == "capabilities") {
+            return runCapabilities();
         }
         if (argc < 2 || std::string(argv[1]) != "recompute") {
             printHelp();

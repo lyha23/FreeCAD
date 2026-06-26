@@ -15,5 +15,6 @@ C8M1-VAL-304	current-compare	for fixture in cad-core/fixtures/c8m1/*.json; do ca
 C8M1-VAL-401	build	cd cad-core && cmake --build build	S4/S6	Build passes after C++ changes
 C8M1-VAL-402	focused-test	cd cad-core && python3 -m unittest tests.test_c8_shapebinder	S4/S5/S6	ShapeBinder focused tests pass
 C8M1-VAL-403	diagnostics	cd cad-core && python3 -m unittest tests.test_diagnostics	S4/S5/S6	Diagnostic codes and lifecycle boundaries remain stable
-C8M1-VAL-501	capability	./cad-core/cad-core capabilities	S5	Capability contract exposes Binder support and remaining gaps
+C8M1-VAL-501	capability	./cad-core/cad-core capabilities	S5/S6	Capability contract exposes Binder status covered remaining_gaps topo_history.producer_matrix.shapebinder and CopyOnChange known_gap/oracle_blocked boundary
+C8M1-VAL-502	publication-rg	rg -n 'shape_binder|sub_shape_binder|PartDesign::ShapeBinder|PartDesign::SubShapeBinder|remaining_gaps|oracle_blocked|known_gap|diagnostic_non_goal' cad-core/src/runtime/capability_contract.cpp cad-core/tests docs/CADCore8.0	S5/S6	Publication wording remains visible in capability code tests and docs
 C8M1-VAL-601	stage-regression	cd cad-core && python3 -m unittest tests.test_p6_topology tests.test_p7_features tests.test_p8_features	conditional S6	Run only if shared topo/reference/ElementMap paths changed

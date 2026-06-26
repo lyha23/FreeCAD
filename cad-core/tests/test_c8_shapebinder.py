@@ -1,14 +1,27 @@
 from __future__ import annotations
 
+import json
+import subprocess
+
 try:
     from .fixture_expected import ExpectedFixtureAssertions
-    from .fixture_runner import CadCoreFixtureTestCase
+    from .fixture_runner import BIN, ROOT, CadCoreFixtureTestCase
 except ImportError:  # pragma: no cover - supports `python -m unittest tests.test_c8_shapebinder`.
     from fixture_expected import ExpectedFixtureAssertions
-    from fixture_runner import CadCoreFixtureTestCase
+    from fixture_runner import BIN, ROOT, CadCoreFixtureTestCase
 
 
 class CadCoreC8ShapeBinderTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
+    def run_capabilities_cli(self) -> dict:
+        completed = subprocess.run(
+            [str(BIN), "capabilities"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        return json.loads(completed.stdout)
+
     def assert_no_error_diagnostics(self, result: dict) -> None:
         self.assertEqual(
             [item for item in result["diagnostics"] if item.get("severity") == "error"],
@@ -184,3 +197,37 @@ class CadCoreC8ShapeBinderTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase
             "subshape-binder-setlinks-normalization-diagnostics",
             "SubShapeBinderEmptySubList",
         )
+
+    def test_capability_contract_publishes_c8m1_binder_scope(self) -> None:
+        capabilities = self.run_capabilities_cli()
+
+        shape_binder = capabilities["part_design"]["shape_binder"]
+        self.assertEqual(shape_binder["status"], "supported_c8m1_expected_backed_request_local")
+        self.assertIn("whole_shape_support", shape_binder["covered"])
+        self.assertIn("TraceSupport source-to-target transform", shape_binder["covered"])
+        self.assertIn("ElementMap/NamedShape retag through linked source", shape_binder["covered"])
+        self.assertEqual(shape_binder["remaining_gaps"], [])
+
+        sub_shape_binder = capabilities["part_design"]["sub_shape_binder"]
+        self.assertEqual(
+            sub_shape_binder["status"],
+            "supported_c8m1_expected_backed_request_local_with_copy_on_change_known_gap",
+        )
+        self.assertIn("MakeFace from support edges", sub_shape_binder["covered"])
+        self.assertIn("BindMode Synchronized/Frozen/Detached request-local subset", sub_shape_binder["covered"])
+        self.assertEqual(sub_shape_binder["remaining_gaps"], ["copy_on_change_full_temporary_document_cache"])
+        copy_on_change = sub_shape_binder["known_gaps"]["copy_on_change_full_temporary_document_cache"]
+        self.assertEqual(copy_on_change["status"], "known_gap_diagnostic")
+        self.assertEqual(copy_on_change["route"], "oracle_blocked")
+        self.assertEqual(copy_on_change["diagnostic"], "copy_on_change_full_temporary_document_cache_not_supported")
+        self.assertIn("delete_condition", copy_on_change)
+        self.assertIn("reopen_condition", copy_on_change)
+
+        topo_history = capabilities["topo_history"]
+        self.assertIn("shapebinder", topo_history["maker_history"])
+        self.assertIn("subshapebinder", topo_history["maker_history"])
+        producer = topo_history["producer_matrix"]["shapebinder"]
+        self.assertEqual(producer["status"], "supported_c8m1_expected_backed_request_local")
+        self.assertIn("maker_history:shapebinder", producer["covered"])
+        self.assertIn("maker_history:subshapebinder", producer["covered"])
+        self.assertEqual(producer["remaining"], [])
