@@ -20,6 +20,7 @@
 - S0 冻结声明：C9-M2 只能在 native oracle 或 focused tests 证明 current mismatch 后，才由后续 S6 打开 C++ implementation gate；S0 不采 oracle、不改 expected、不把 oracle-only row 写成 supported / backendGap。
 - S2 范围准入已关闭于 `HEAD=87f289aaba`（`87f289aaba docs: 关闭 C9-M2 S1 源码候选矩阵`）：bundled `offsetPlc` object/subshape/writeback 保持 `native_oracle_required` 到 S3；custom placement-chain 为 `expected_activation` 到 S4；zero Angle fallback 为 `native_oracle_required;known_gap_retained` 到 S5；unsupported diagnostics guard 为 `already_covered_review;release_gate` 到 S5；capability/final validation 为 `release_gate` 到 S6；primitive frame generalization、persistent solver state、GUI/session 与 non-source-backed `offsetPlc` guessing 继续作为 forbidden claims。
 - S3 bundled `offsetPlc` oracle 已采集于 `HEAD=f500c34407` 之后：object marker、subshape marker、placement writeback 三条 expected 均证明 `offsetPlc=[2,0,0]` 非 identity；当前 cad-core 对 `ComponentC` writeback 仍输出 `[4,0,0]`，native expected 为 `[6,0,2]`，因此 `C9M2-SCOPE-101/102/103` 路由为 `backend_gap_candidate`，交 S6 消费。
+- S4 custom placement-chain expected activation 已关闭于 `HEAD=fe1b38727b` 之后：`assembly-marker-custom-placement-chain-real-solver` 已被 focused test 直接断言，测试锁定 `native_marker_oracle` 与 `offset_boundary=identity_offset_for_two_box_assembly_link_fixture`；该 identity boundary 不作为 bundled `offsetPlc` parity 证据。
 
 ## 证明链条
 
@@ -66,7 +67,7 @@ C9-M1 no-code closure
 | S1 | `工作步骤细分/6-27-22-06-【已实现】C9-M2-S1-FreeCAD源码与oracle候选矩阵.md` | FreeCAD source authority 与 oracle candidate 复核。 |
 | S2 | `工作步骤细分/6-27-22-07-【已实现】C9-M2-S2-范围准入与blocker矩阵.md` | scope / blocker / non-goal / backend gap 路由。 |
 | S3 | `工作步骤细分/6-27-22-08-【已实现】C9-M2-S3-bundledOffsetPlcOracle批量采集.md` | bundled `offsetPlc` native oracle 批量采集。 |
-| S4 | `工作步骤细分/6-27-22-09-C9-M2-S4-customPlacementChain测试激活.md` | 现有 custom placement-chain expected 接入测试。 |
+| S4 | `工作步骤细分/6-27-22-09-【已实现】C9-M2-S4-customPlacementChain测试激活.md` | 现有 custom placement-chain expected 已接入 focused test，identity offset boundary 已锁定。 |
 | S5 | `工作步骤细分/6-27-22-10-C9-M2-S5-zeroAngleFallback与diagnostics复审.md` | zero Angle native oracle 与 diagnostics guard。 |
 | S6 | `工作步骤细分/6-27-22-11-C9-M2-S6-Oracle实现与发布闸门.md` | 根据 oracle 结果实现或 release gate。 |
 | source candidates | `矩阵/c9m2_assembly_solver_oracle_source_candidates.tsv` | FreeCAD / cad-core source authority。 |
@@ -76,4 +77,4 @@ C9-M1 no-code closure
 | backend gap classification | `矩阵/c9m2_assembly_solver_oracle_backend_gap_classification.tsv` | oracle / backendGap / releaseGate 分类。 |
 | validation matrix | `矩阵/c9m2_assembly_solver_oracle_validation_matrix.tsv` | 分层验收命令。 |
 
-当前 S0-S3 已关闭；S4-S6 仍是待执行状态。矩阵已经完成 S3 oracle 裁决：bundled `offsetPlc` 三类 case 均为 expected-backed `backend_gap_candidate`，但发布闸门和 C++ 实现仍只由 S6 消费并关闭。
+当前 S0-S4 已关闭；S5-S6 仍是待执行状态。矩阵已经完成 S3 oracle 裁决：bundled `offsetPlc` 三类 case 均为 expected-backed `backend_gap_candidate`，但发布闸门和 C++ 实现仍只由 S6 消费并关闭。S4 仅关闭 custom placement-chain expected activation，不宣称 non-identity bundled offset coverage。

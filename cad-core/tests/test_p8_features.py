@@ -5308,6 +5308,43 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 if joint_type == "Angle":
                     self.assertIn("xy_angle_radians_from_jcs_placements", oracle_joint["current_value"])
 
+        custom_fixture = "assembly-marker-custom-placement-chain-real-solver"
+        with self.subTest(fixture=custom_fixture):
+            expected = self.expected_freecad("c3m6", custom_fixture)
+            fixture_payload = json.loads(
+                (ROOT / "fixtures" / "c3m6" / f"{custom_fixture}.json").read_text(encoding="utf-8")
+            )
+            fixture_objects = {document_object["Name"]: document_object for document_object in fixture_payload["Objects"]}
+
+            self.assertIn(custom_fixture, expected["reference"])
+            self.assertIn("known_gap", expected)
+            self.assertIn("backendGap", expected)
+            self.assertEqual(expected["solver_adapter"]["status"], "solved")
+            self.assertEqual(fixture_objects["ComponentA"]["Properties"]["Placement"]["Base"], [1, 2, 0])
+            self.assertEqual(fixture_objects["ComponentB"]["Properties"]["Placement"]["Base"], [5, -1, 1])
+
+            oracle = expected["native_marker_oracle"]
+            self.assertTrue(oracle["requires_cad_core_marker_parity"])
+            self.assertIn("AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint()", oracle["source"])
+            oracle_joint = oracle["solver_joints"][0]
+            self.assertEqual(oracle_joint["object"], "FixedJoint")
+            self.assertEqual(oracle_joint["joint_type"], "Fixed")
+            self.assertFalse(oracle_joint["jcs_swapped_for_solver"])
+            for side in ("native_reference1", "native_reference2", "solver_reference1", "solver_reference2"):
+                reference = oracle_joint[side]
+                self.assertEqual(reference["status"], "resolved_native_handle_one_side")
+                self.assertEqual(reference["frame"], "part_local")
+                self.assertTrue(reference["subshape_reference"])
+                self.assertEqual(
+                    reference["offset_boundary"],
+                    "identity_offset_for_two_box_assembly_link_fixture",
+                )
+                self.assertEqual(reference["marker_placement"]["PropertyType"], "App::PropertyPlacement")
+                self.assertNotEqual(
+                    reference["jcs_global_placement"]["Base"],
+                    reference["marker_placement"]["Base"],
+                )
+
         special = self.expected_freecad("c3m6", "assembly-rackpinion-marker-rewrite-real-solver")
         self.assertNotIn("known_gap", special)
         self.assertEqual(special["solver_adapter"]["status"], "solved")
