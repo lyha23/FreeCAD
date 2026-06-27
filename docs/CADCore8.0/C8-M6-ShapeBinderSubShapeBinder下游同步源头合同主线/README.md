@@ -18,6 +18,7 @@ C8-M6 不修改下游仓库，也不新增 `cad-core` 几何能力。它承接 C
 - S2 已完成同步范围准入与 non-goal 路由：`C8M6-SCOPE-101..104/201..203/301` 均为 `sync_required_source_contract`，`C8M6-SCOPE-204` 为 `known_gap_retained`，`C8M6-SCOPE-001/302` 为 `release_gate_only`；未发现 `unexpected_mismatch`。
 - S2 明确非目标：不审计或修改下游仓库，不把 UI 展示策略写成 FreeCAD 必须实现项，不在本步修改 `cad-core/src`、fixtures、tests 或 expected；request-local ElementMap / NamedShape 可以同步，跨请求持久 ElementMap / NamedShape 不能同步。
 - S3 已完成 TypeId 与 DocumentGraph 合同复审：`PartDesign::ShapeBinder`、`PartDesign::SubShapeBinder`、`PartDesign::SubShapeBinderPython` 与 `/cad/capabilities` 可追溯到 `capability_contract.cpp` 和 FreeCAD `ShapeBinder.h/.cpp`；`DocumentObject graph`、property-link 字段、request-local `documentObjectUpdates` / `elementReferenceUpdates`、Body replay no-synthesis 边界都有 fixture 或 focused test 证据；`ReferenceShadow.brep` 例外未扩展为完整 BREP 传输。
+- S4 已完成 fixture expected 与 diagnostics 合同复审：12 个 C8-M1 input fixture 与 12 个 C8-M5-current expected 文件发布为下游黑盒合同；`shape-binder-subshape-binder-element-map-namedshape-body-replay` 不要求无 input `Body.BaseFeature` 时出现 `BodyBaseFeature`；`subshape-binder-setlinks-normalization-diagnostics` 使用 setter-level `cycle_rejected_by_property_link`，generic graph cycle 仍保持 `cycle_dependency`；CopyOnChange fixture 只证明 property-state 和 diagnostic 边界，full temporary-document copied-object cache 继续保持 known gap。
 
 ## 与既有 C8 包的关系
 
@@ -46,7 +47,14 @@ C8-M6 不修改下游仓库，也不新增 `cad-core` 几何能力。它承接 C
 - `C8M6-SYNC-104` 已发布 request-local DTO 边界：`results`、`elementReferenceUpdates`、`documentObjectUpdates`、`diagnostics`、`binaryPayloads` 是单次 recompute 结果通道；下游不得从该合同推导持久 full BREP / TopoDS_Shape / NamedShape / ElementMap / temporary document cache。
 - `C8M6-SCOPE-201..203` 的 fixture / expected / Body replay 证据在 S3 被复核为 DTO 字段证据，精确 fixture 表和 diagnostics vocabulary 仍留给 S4 发布。
 - `C8M6-SCOPE-204` 保持 `known_gap_retained`，没有升级为 supported 或 implementation gate。
-- `C8M6-BLOCKER-301` 已关闭；S3 未发现 `unexpected_mismatch`，队列下一项为 S4。
+- `C8M6-BLOCKER-301` 已关闭；S3 未发现 `unexpected_mismatch`，S4 已复核 fixture expected 与 diagnostics 合同。
+
+## S4 fixture expected 与 diagnostics 结论
+
+- `C8M6-SYNC-102` 已发布 diagnostics vocabulary：`copy_on_change_full_temporary_document_cache_not_supported` 是 known-gap diagnostic，`cycle_rejected_by_property_link` 只用于 SubShapeBinder Support self-link setter rejection，generic graph cycle 继续由 `cycle_dependency` 表达，禁止 adapter 字符串改写。
+- `C8M6-SYNC-103` 已发布 fixture seeds 和 expected contract：`cad-core/fixtures/c8m1` 下 12 个 input fixture 与 `expected` 下 12 个 C8-M5-current expected 文件作为下游黑盒合同；本包未刷新 expected。
+- `C8M6-SYNC-105` 已发布 C8-M5 delta contract：无 input `Body.BaseFeature` 时不合成 `BodyBaseFeature`；SubShapeBinder setter-cycle 诊断为 `cycle_rejected_by_property_link`。
+- `C8M6-BLOCKER-401` 已关闭；`python3 -m unittest tests.test_c8_shapebinder tests.test_diagnostics` 通过 18 tests，expected fixture gate 通过且保持 35 skipped known-gap fixtures；未发现 `unexpected_mismatch`。
 
 ## 主文件
 
