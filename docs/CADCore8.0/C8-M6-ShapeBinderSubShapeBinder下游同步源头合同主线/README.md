@@ -17,6 +17,7 @@ C8-M6 不修改下游仓库，也不新增 `cad-core` 几何能力。它承接 C
 - S1 已完成源头合同与能力面复核：`C8M6-SRC-101..403` 均已绑定 FreeCAD source、cad-core landing、C8-M1/C8-M5 fixture 或 focused test 证据；`C8M6-SCOPE-101..104` 标为 `sync_required_source_contract`，CopyOnChange full temporary document cache 继续由 `C8M6-SCOPE-204` 保持 `known_gap_retained`。
 - S2 已完成同步范围准入与 non-goal 路由：`C8M6-SCOPE-101..104/201..203/301` 均为 `sync_required_source_contract`，`C8M6-SCOPE-204` 为 `known_gap_retained`，`C8M6-SCOPE-001/302` 为 `release_gate_only`；未发现 `unexpected_mismatch`。
 - S2 明确非目标：不审计或修改下游仓库，不把 UI 展示策略写成 FreeCAD 必须实现项，不在本步修改 `cad-core/src`、fixtures、tests 或 expected；request-local ElementMap / NamedShape 可以同步，跨请求持久 ElementMap / NamedShape 不能同步。
+- S3 已完成 TypeId 与 DocumentGraph 合同复审：`PartDesign::ShapeBinder`、`PartDesign::SubShapeBinder`、`PartDesign::SubShapeBinderPython` 与 `/cad/capabilities` 可追溯到 `capability_contract.cpp` 和 FreeCAD `ShapeBinder.h/.cpp`；`DocumentObject graph`、property-link 字段、request-local `documentObjectUpdates` / `elementReferenceUpdates`、Body replay no-synthesis 边界都有 fixture 或 focused test 证据；`ReferenceShadow.brep` 例外未扩展为完整 BREP 传输。
 
 ## 与既有 C8 包的关系
 
@@ -37,7 +38,15 @@ C8-M6 不修改下游仓库，也不新增 `cad-core` 几何能力。它承接 C
 - `known_gap_retained`：`copy_on_change_full_temporary_document_cache` 继续保持 C8-M2 `known_gap` / `oracle_blocked` 和 capability `remaining_gaps`，不进入 supported 或 implementation gate。
 - `release_gate_only`：C8-M5 release baseline 与最终 focused / expected / stage gate 只在 S6 证明未漂移。
 - `non_goal`：下游仓库审计或修改、UI 展示策略、跨请求持久 full BREP / TopoDS_Shape / NamedShape / ElementMap / temporary cache、本步修改 `cad-core/src` / fixtures / tests / expected 均不在 C8-M6 S2 范围。
-- `C8M6-BLOCKER-201` 已关闭；scope/category/non-goal 矩阵不再保留 `seed_pending`、`baseline_frozen` 或非标准分类，S3 下一步复核 TypeId 与 DocumentGraph 合同。
+- `C8M6-BLOCKER-201` 已关闭；scope/category/non-goal 矩阵不再保留 `seed_pending`、`baseline_frozen` 或非标准分类；S3 已复核 TypeId 与 DocumentGraph 合同。
+
+## S3 TypeId 与 DocumentGraph 结论
+
+- `C8M6-SYNC-101` 已发布：ShapeBinder capability 保持 `supported_c8m1_expected_backed_request_local` 且无 remaining gap；SubShapeBinder capability 保持 request-local supported，并只保留 `copy_on_change_full_temporary_document_cache` known gap。
+- `C8M6-SYNC-104` 已发布 request-local DTO 边界：`results`、`elementReferenceUpdates`、`documentObjectUpdates`、`diagnostics`、`binaryPayloads` 是单次 recompute 结果通道；下游不得从该合同推导持久 full BREP / TopoDS_Shape / NamedShape / ElementMap / temporary document cache。
+- `C8M6-SCOPE-201..203` 的 fixture / expected / Body replay 证据在 S3 被复核为 DTO 字段证据，精确 fixture 表和 diagnostics vocabulary 仍留给 S4 发布。
+- `C8M6-SCOPE-204` 保持 `known_gap_retained`，没有升级为 supported 或 implementation gate。
+- `C8M6-BLOCKER-301` 已关闭；S3 未发现 `unexpected_mismatch`，队列下一项为 S4。
 
 ## 主文件
 
