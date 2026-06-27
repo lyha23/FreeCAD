@@ -27,6 +27,13 @@ C9-M1 处理 Assembly request-local solver 链路中仍需要裁决的 marker / 
 - C3M6 / P8 focused tests 已覆盖 13 个 JointType 的 real Ondsel solver、object/subshape marker evidence、`documentObjectUpdates.action=assembly_set_placement`、next-request no-op、multi-component writeback 和 unsupported diagnostics。`assembly-marker-custom-placement-chain-real-solver` expected 已包含 non-identity connector / part placement chain native evidence，但仍带旧 `known_gap/backendGap` 文案，必须交给 S3 复审，不在 S1 升级为 supported。
 - `C9M1-SRC-201..403` 已写入 source evidence、cad-core landing 和 next action；`C9M1-BLOCKER-101` 已关闭为 `Closed S1`。S2 继续做 scope / blocker / non-goal 路由，不改 capability、fixtures、tests 或 cad-core 源码。
 
+## S2 结论
+
+- S2 执行基线：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=99bee0faee`（`99bee0faee docs: 完成 C9-M1 S1 源码覆盖复核`），开始状态干净。
+- `scope_review_matrix` 已统一为 S2 route 裁决表：`C9M1-SCOPE-101`、`C9M1-SCOPE-201`、`C9M1-SCOPE-202` 为 `already_covered`；`C9M1-SCOPE-102` 为 `oracle_candidate`；`C9M1-SCOPE-103`、`C9M1-SCOPE-302`、`C9M1-SCOPE-303` 为 `diagnostic_non_goal`；`C9M1-SCOPE-203` 为 `known_gap_retained`；`C9M1-SCOPE-301`、`C9M1-SCOPE-304` 为 `release_gate`。
+- backend 分类已写入 `C9M1-BG-101..501`，并新增 route / close condition 字段；每行都指向对应 `scope_ids`。non-goal 注册表 `C9M1-NG-001..008` 保持无状态 CAD Core、完整 Link 生命周期、GUI、primitive frame、offsetPlc 猜测和 adapter 字符串改写排除理由。
+- `C9M1-BLOCKER-201` 已关闭为 `Closed S2`。S3 只复审 marker placement 与 `offsetPlc`，S4 复审 writeback / zero Angle / diagnostics，S5 决定 capability publication，S6 只消费已被 S3-S5 证明的 implementation gate 或 release gate。
+
 ## FreeCAD 依据
 
 | 语义 | FreeCAD 源码入口 | 关键行为 |

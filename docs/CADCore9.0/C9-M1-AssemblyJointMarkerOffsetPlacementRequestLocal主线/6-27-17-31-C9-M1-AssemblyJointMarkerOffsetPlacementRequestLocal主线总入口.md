@@ -39,7 +39,7 @@ live 声明口径
 | 工作步骤总入口 | `工作步骤细分/6-27-17-32-【已实现】C9-M1工作步骤总入口.md` | S0-S6 队列索引。 |
 | S0 | `工作步骤细分/6-27-17-33-【已实现】C9-M1-S0-live基线与声明口径冻结.md` | 冻结 live baseline 和允许声明。 |
 | S1 | `工作步骤细分/6-27-17-34-【已实现】C9-M1-S1-FreeCAD源码与current覆盖候选.md` | 源码候选和 current coverage 复核。 |
-| S2 | `工作步骤细分/6-27-17-35-C9-M1-S2-范围准入与blocker矩阵.md` | scope / blocker / non-goal 路由。 |
+| S2 | `工作步骤细分/6-27-17-35-【已实现】C9-M1-S2-范围准入与blocker矩阵.md` | scope / blocker / non-goal 路由。 |
 | S3 | `工作步骤细分/6-27-17-36-C9-M1-S3-markerPlacement与offsetPlc复审.md` | marker placement 与 `offsetPlc` oracle / gap 裁决。 |
 | S4 | `工作步骤细分/6-27-17-37-C9-M1-S4-runPreDragPlacementWriteback复审.md` | solver placement writeback 生命周期复审。 |
 | S5 | `工作步骤细分/6-27-17-38-C9-M1-S5-capability与diagnostics发布准入.md` | capability / diagnostics / non-goal 发布准入。 |
@@ -51,4 +51,4 @@ live 声明口径
 | backend gap classification | `矩阵/c9m1_assembly_marker_offset_backend_gap_classification.tsv` | backendGap / oracle / releaseGate 分类。 |
 | validation matrix | `矩阵/c9m1_assembly_marker_offset_validation_matrix.tsv` | 分层验收命令。 |
 
-当前 S0 已完成 live 基线与声明口径冻结；S1 已完成 FreeCAD source 与 current coverage 候选复核，`C9M1-BLOCKER-101` 已关闭。S2-S6 仍为待执行状态，矩阵中的 S1 source authority 仍是后续裁决输入，不是发布闸门结论。
+当前 S0 已完成 live 基线与声明口径冻结；S1 已完成 FreeCAD source 与 current coverage 候选复核，`C9M1-BLOCKER-101` 已关闭。S2 已完成 scope / blocker / non-goal 路由，`C9M1-BLOCKER-201` 已关闭；S3-S6 仍为待执行状态，矩阵中的 S2 route 是后续裁决输入，不是发布闸门结论。
