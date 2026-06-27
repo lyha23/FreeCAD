@@ -1,11 +1,4 @@
 {
-  "backendGap": {
-    "delete_condition": "S6 closes the exact-zero Angle native expected mismatch by making current cad-core solve or route this fixture with source-backed parity, focused expected tests pass, and the C9-M2 matrices are updated from backend_gap_candidate to expected-backed current match.",
-    "ids": [
-      "C9M2-BG-301"
-    ],
-    "route": "backend_gap_candidate"
-  },
   "bbox": {
     "max": [
       6.0,
@@ -19,7 +12,6 @@
     ]
   },
   "freecad_version": "1.2.0 revision 20260519",
-  "known_gap": "C9M2-BLOCKER-501: S5 native FreeCAD zero Angle oracle is checked in for assembly-angle-zero-and-signed-current-real-solver; native exact-zero Angle solve succeeds, but current cad-core returns ondsel_solver_failed and no placement update. Keep this as backend_gap_candidate evidence for S6 instead of changing C++ in S5.",
   "native_marker_oracle": {
     "requires_cad_core_marker_parity": true,
     "solver_joints": [
@@ -810,5 +802,13 @@
     "faces": 12,
     "vertices": 16
   },
-  "volume": 16.0
+  "volume": 16.0,
+  "zero_angle_oracle_route": {
+    "route": "expected_backed_current_match",
+    "scope_ids": [
+      "C9M2-SCOPE-301"
+    ],
+    "blocker_id": "C9M2-BLOCKER-501",
+    "close_condition": "C9-M2 S6 current cad-core exact-zero Angle fallback parity matches this native expected."
+  }
 }

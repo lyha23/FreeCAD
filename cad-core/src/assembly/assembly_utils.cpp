@@ -80,10 +80,20 @@ nlohmann::json jointReferenceJson(const AssemblyJointReference& reference)
     nlohmann::json result = {
         {"object", reference.object.empty() ? nlohmann::json(nullptr) : nlohmann::json(reference.object)},
         {"subnames", reference.subnames},
+        {"solverPartObject",
+         reference.solverPartObject.empty() ? nlohmann::json(nullptr)
+                                            : nlohmann::json(reference.solverPartObject)},
         {"connectorPlacement",
          reference.connectorPlacement ? placementJson(*reference.connectorPlacement) : nlohmann::json(nullptr)},
         {"markerPlacement",
          reference.markerPlacement ? placementJson(*reference.markerPlacement) : nlohmann::json(nullptr)},
+        {"bundledOffsetPlacement",
+         reference.bundledOffsetPlacement ? placementJson(*reference.bundledOffsetPlacement)
+                                          : nlohmann::json(nullptr)},
+        {"bundledOffsetApplied", reference.bundledOffsetApplied},
+        {"bundledOffsetSourceJoint",
+         reference.bundledOffsetSourceJoint.empty() ? nlohmann::json(nullptr)
+                                                    : nlohmann::json(reference.bundledOffsetSourceJoint)},
         {"objectGlobalPlacement",
          reference.objectGlobalPlacement ? placementJson(*reference.objectGlobalPlacement) : nlohmann::json(nullptr)},
         {"partGlobalPlacement",

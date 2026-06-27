@@ -13,8 +13,10 @@ namespace cad_core::assembly {
 struct AssemblyJointReference {
     std::string object;
     std::vector<std::string> subnames;
+    std::string solverPartObject;
     std::optional<app::Placement> connectorPlacement;
     std::optional<app::Placement> markerPlacement;
+    std::optional<app::Placement> bundledOffsetPlacement;
     std::optional<app::Placement> objectGlobalPlacement;
     std::optional<app::Placement> partGlobalPlacement;
     std::optional<app::Placement> jcsGlobalPlacement;
@@ -29,6 +31,8 @@ struct AssemblyJointReference {
     bool markerResolutionRequiresHandleOneSide = false;
     bool markerResolutionUsedObjectLevelBaseline = false;
     bool markerResolutionConnectorDefaulted = false;
+    bool bundledOffsetApplied = false;
+    std::string bundledOffsetSourceJoint;
     std::string elementKind;
     std::string primitive;
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.cpp
@@ -45,6 +49,15 @@ struct AssemblyPartRef {
     std::string typeId;
     app::Placement placement;
     bool grounded = false;
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.h
+    // ::AssemblyObject::MbDPartData stores "part" plus "offsetPlc"; AssemblyObject.cpp
+    // ::getMbDData() writes objectPartMap[partToAdd].offsetPlc = "plc.inverse() * plci".
+    // CAD Core keeps the same request-local ASMTPart owner and member offset without persisting
+    // solver state across requests.
+    std::string solverPartObject;
+    app::Placement offsetPlacement {{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0, 1.0}};
+    bool bundledByFixedJoint = false;
+    std::string bundledFixedJoint;
 };
 
 // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp

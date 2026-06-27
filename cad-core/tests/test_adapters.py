@@ -1630,6 +1630,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("scalar_correction", extended_distance["scalar_correction_fields"])
         self.assertIn("scalar_correction_source", extended_distance["scalar_correction_fields"])
         self.assertIn("identity_offset_assembly_link_subset", extended_distance["request_local_boundaries"])
+        self.assertIn("non_identity_bundled_offsetPlc", extended_distance["request_local_boundaries"])
         self.assertIn(
             "distance_writeback_uses_user_distance_not_radius_corrected_scalar",
             extended_distance["request_local_boundaries"],
@@ -1683,19 +1684,21 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("edge_jcs_marker", subshape_marker["covered"])
         self.assertIn("face_jcs_marker", subshape_marker["covered"])
         self.assertIn("assembly_link_identity_offset_subshape_marker", subshape_marker["covered"])
+        self.assertIn("non_identity_bundled_offsetPlc_marker", subshape_marker["covered"])
         self.assertIn("non_linear_edge_and_non_planar_face_identity_offset", subshape_marker["covered"])
         self.assertIn("mixed_swap_marker_sync", subshape_marker["covered"])
         self.assertIn("real_ondsel_marker_consumption", subshape_marker["covered"])
         self.assertIn("placement_updates_native_parity", subshape_marker["covered"])
         self.assertEqual(subshape_marker["active_expected_count"], 28)
         self.assertIn("identity_offset_assembly_link_subset", subshape_marker["request_local_boundaries"])
+        self.assertIn("non_identity_bundled_offsetPlc", subshape_marker["request_local_boundaries"])
         self.assertIn("request_graph_no_persistent_solver_state", subshape_marker["request_local_boundaries"])
         self.assertNotIn("radius_bearing_distance_type", subshape_marker["non_goals"])
         self.assertIn("curve_default_distance_type", subshape_marker["non_goals"])
         self.assertIn("GUI/session", subshape_marker["non_goals"])
         self.assertIn("persistent_solver_state", subshape_marker["non_goals"])
         self.assertIn("non_assembly_link_subshape_primitive_frame_generalization", subshape_marker["non_goals"])
-        self.assertIn("non_identity_bundled_offsetPlc", subshape_marker["non_goals"])
+        self.assertNotIn("non_identity_bundled_offsetPlc", subshape_marker["non_goals"])
         self.assertEqual(subshape_marker["remaining_gaps"], [])
         self.assertEqual(ondsel_adapter["remaining_gaps"], [])
         self.assertEqual(
@@ -1721,6 +1724,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertIn(
             "multi_component_writeback_order",
+            capabilities["assembly"]["placement_writeback"]["covered"],
+        )
+        self.assertIn(
+            "bundled_offsetPlc_writeback",
             capabilities["assembly"]["placement_writeback"]["covered"],
         )
         self.assertIn(

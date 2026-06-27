@@ -5354,7 +5354,77 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertFalse(special["native_marker_oracle"]["requires_cad_core_marker_parity"])
 
-    def test_c3m6_assembly_zero_angle_s5_native_oracle_routes_current_gap(self) -> None:
+    def test_c3m6_assembly_bundled_offset_s6_native_oracle_expected_batch(self) -> None:
+        cases = [
+            (
+                "assembly-bundled-offset-object-marker-real-solver",
+                "ObjectMarkerJoint",
+                False,
+            ),
+            (
+                "assembly-bundled-offset-subshape-marker-real-solver",
+                "SubshapeMarkerJoint",
+                True,
+            ),
+            (
+                "assembly-bundled-offset-placement-writeback-real-solver",
+                None,
+                False,
+            ),
+        ]
+
+        for fixture, marker_joint_name, subshape_reference in cases:
+            with self.subTest(fixture=fixture):
+                expected = self.expected_freecad("c3m6", fixture)
+                result = self.run_recompute(fixture, "c3m6")
+                assembly = result["objects"]["Assembly"]
+                adapter = assembly["solver_adapter"]
+                solver_joints = {
+                    solver_joint["object"]: solver_joint
+                    for solver_joint in adapter["solver_joints"]
+                }
+
+                self.assertNotIn("known_gap", expected)
+                self.assertNotIn("backendGap", expected)
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(assembly["solve"], "solved")
+                self.assertEqual(adapter["status"], "solved")
+                self.assertEqual(adapter["mode"], "real_ondsel_solver")
+                self.assertEqual(adapter["placement_updates"], expected["solver_adapter"]["placement_updates"])
+                self.assertEqual(
+                    [update["object"] for update in result["documentObjectUpdates"]],
+                    ["ComponentB", "ComponentC"],
+                )
+                self.assertEqual(
+                    result["documentObjectUpdates"][0]["properties"]["Placement"]["Base"],
+                    [4.0, 0.0, 2.0],
+                )
+                self.assertEqual(
+                    result["documentObjectUpdates"][1]["properties"]["Placement"]["Base"],
+                    [6.0, 0.0, 2.0],
+                )
+
+                fixed_reference = solver_joints["FixedBundleJoint"]["reference2"]
+                self.assertEqual(fixed_reference["object"], "ComponentC")
+                self.assertEqual(fixed_reference["solverPartObject"], "ComponentB")
+                self.assertTrue(fixed_reference["bundledOffsetApplied"])
+                self.assertEqual(fixed_reference["bundledOffsetSourceJoint"], "FixedBundleJoint")
+                self.assertEqual(fixed_reference["bundledOffsetPlacement"]["Base"], [2.0, 0.0, 0.0])
+                self.assertEqual(fixed_reference["markerPlacement"]["Base"], [0.0, 0.0, 0.0])
+                self.assertIn("offsetPlc", fixed_reference["markerResolutionDiagnostic"])
+
+                if marker_joint_name is None:
+                    continue
+                marker_reference = solver_joints[marker_joint_name]["reference2"]
+                self.assertEqual(marker_reference["object"], "ComponentC")
+                self.assertEqual(marker_reference["subnames"], ["Face1"] if subshape_reference else [])
+                self.assertEqual(marker_reference["solverPartObject"], "ComponentB")
+                self.assertTrue(marker_reference["bundledOffsetApplied"])
+                self.assertEqual(marker_reference["bundledOffsetPlacement"]["Base"], [2.0, 0.0, 0.0])
+                self.assertEqual(marker_reference["markerPlacement"]["Base"], [2.25, 0.5, 0.75])
+                self.assertIn("offsetPlc", marker_reference["markerResolutionDiagnostic"])
+
+    def test_c3m6_assembly_zero_angle_s6_native_oracle_matches_current(self) -> None:
         fixture = "assembly-angle-zero-and-signed-current-real-solver"
         expected = self.expected_freecad("c3m6", fixture)
         result = self.run_recompute(fixture, "c3m6")
@@ -5375,9 +5445,8 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(expected["solver_adapter"]["status"], "solved")
         self.assertEqual(expected["solver_adapter"]["mode"], "real_ondsel_solver")
         self.assertEqual(expected["solver_adapter"]["unsupported_joints"], [])
-        self.assertIn("known_gap", expected)
-        self.assertEqual(expected["backendGap"]["route"], "backend_gap_candidate")
-        self.assertEqual(expected["backendGap"]["ids"], ["C9M2-BG-301"])
+        self.assertNotIn("known_gap", expected)
+        self.assertNotIn("backendGap", expected)
         self.assertEqual(
             expected["solver_adapter"]["placement_updates"][0]["properties"]["Placement"]["Base"],
             [4.0, 0.0, 4.0],
@@ -5398,12 +5467,16 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertTrue(reference["subshape_reference"])
             self.assertEqual(reference["offset_boundary"], "identity_offset_for_two_box_assembly_link_fixture")
 
-        self.assertEqual([item["code"] for item in result["diagnostics"]], ["ondsel_solver_failed"])
-        self.assertEqual(assembly["solve"], "error")
-        self.assertEqual(adapter["status"], "error")
-        self.assertEqual(adapter["reason"], "ondsel_solver_failed")
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(assembly["solve"], "solved")
+        self.assertEqual(adapter["status"], "solved")
+        self.assertEqual(adapter["mode"], "real_ondsel_solver")
         self.assertEqual(adapter["unsupported_joints"], [])
-        self.assertEqual(adapter["placement_updates"], [])
+        self.assertEqual(adapter["placement_updates"], expected["solver_adapter"]["placement_updates"])
+        self.assertEqual(
+            adapter["placement_updates"][0]["properties"]["Placement"]["Base"],
+            [4.0, 0.0, 4.0],
+        )
         actual_angle = {
             solver_joint["object"]: solver_joint
             for solver_joint in adapter["solver_joints"]

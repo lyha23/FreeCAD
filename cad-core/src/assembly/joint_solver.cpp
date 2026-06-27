@@ -24,6 +24,7 @@
 #include <limits>
 #include <set>
 #include <unordered_map>
+#include <unordered_set>
 #include <utility>
 
 #include <OndselSolver/ASMTAssembly.h>
@@ -1140,6 +1141,141 @@ std::optional<AssemblyPartRef> partByName(const AssemblySolveRequest& request,
     return *partIt;
 }
 
+AssemblyPartRef* mutablePartByName(AssemblySolveRequest& request, const std::string& object)
+{
+    const auto partIt = std::find_if(
+        request.parts.begin(),
+        request.parts.end(),
+        [&](const AssemblyPartRef& part) {
+            return part.object == object;
+        }
+    );
+    if (partIt == request.parts.end()) {
+        return nullptr;
+    }
+    return &*partIt;
+}
+
+std::string solverPartObject(const AssemblyPartRef& part)
+{
+    return part.solverPartObject.empty() ? part.object : part.solverPartObject;
+}
+
+std::string solverPartObject(const AssemblyJointReference& reference)
+{
+    return reference.solverPartObject.empty() ? reference.object : reference.solverPartObject;
+}
+
+void initializeRequestLocalPartOffsets(AssemblySolveRequest& request)
+{
+    for (AssemblyPartRef& part : request.parts) {
+        part.solverPartObject = part.object;
+        part.offsetPlacement = identityPlacement();
+        part.bundledByFixedJoint = false;
+        part.bundledFixedJoint.clear();
+    }
+}
+
+void reassignFixedBundleRoot(AssemblySolveRequest& request,
+                             const std::string& oldRoot,
+                             const std::string& newRoot,
+                             const std::string& fixedJoint)
+{
+    const auto rootPart = partByName(request, newRoot);
+    if (!rootPart) {
+        return;
+    }
+    for (AssemblyPartRef& part : request.parts) {
+        if (solverPartObject(part) != oldRoot || part.object == newRoot) {
+            continue;
+        }
+        part.solverPartObject = newRoot;
+        part.offsetPlacement = composePlacement(inversePlacement(rootPart->placement), part.placement);
+        part.bundledByFixedJoint = true;
+        part.bundledFixedJoint = fixedJoint;
+    }
+}
+
+void applyFixedJointBundles(AssemblySolveRequest& request,
+                            const runtime::ComputeContext& context,
+                            const std::vector<std::string>& jointNames)
+{
+    initializeRequestLocalPartOffsets(request);
+
+    for (const std::string& jointName : jointNames) {
+        const app::DocumentObject* joint = documentObjectByName(context, jointName);
+        if (joint == nullptr || app::readString(*joint, "JointType").value_or("") != "Fixed") {
+            continue;
+        }
+        const auto reference1 = app::readLink(*joint, "Reference1");
+        const auto reference2 = app::readLink(*joint, "Reference2");
+        if (!reference1 || !reference2) {
+            continue;
+        }
+        AssemblyPartRef* part1 = mutablePartByName(request, reference1->object);
+        AssemblyPartRef* part2 = mutablePartByName(request, reference2->object);
+        if (part1 == nullptr || part2 == nullptr || part1->grounded || part2->grounded) {
+            continue;
+        }
+
+        const std::string root = solverPartObject(*part1);
+        const std::string oldRoot = solverPartObject(*part2);
+        if (root == oldRoot) {
+            continue;
+        }
+
+        // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+        // ::AssemblyObject::getMbDData(), under "bundleFixed" stores fixed-connected
+        // "partToAdd" on the existing ASMTPart and records offsetPlc as "plc.inverse() * plci".
+        // CAD Core applies the same request-local owner/offset for non-grounded fixed bundles.
+        const auto rootPart = partByName(request, root);
+        if (!rootPart) {
+            continue;
+        }
+        reassignFixedBundleRoot(request, oldRoot, root, jointName);
+        part2 = mutablePartByName(request, reference2->object);
+        if (part2 != nullptr) {
+            part2->solverPartObject = root;
+            part2->offsetPlacement =
+                composePlacement(inversePlacement(rootPart->placement), part2->placement);
+            part2->bundledByFixedJoint = true;
+            part2->bundledFixedJoint = jointName;
+        }
+    }
+}
+
+void applyBundledOffsetToReference(AssemblyJointReference& reference,
+                                   const AssemblySolveRequest& request)
+{
+    const auto part = partByName(request, reference.object);
+    if (!part) {
+        reference.solverPartObject = reference.object;
+        return;
+    }
+
+    reference.solverPartObject = solverPartObject(*part);
+    if (!part->bundledByFixedJoint) {
+        return;
+    }
+
+    reference.bundledOffsetPlacement = part->offsetPlacement;
+    reference.bundledOffsetApplied = !samePlacement(part->offsetPlacement, identityPlacement());
+    reference.bundledOffsetSourceJoint = part->bundledFixedJoint;
+    if (!reference.bundledOffsetApplied || !reference.markerPlacement) {
+        return;
+    }
+
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    // ::AssemblyObject::handleOneSideOfJoint(), after object-global to part-local conversion,
+    // applies "plc = data.offsetPlc * plc" before makeMbdMarker().
+    reference.markerPlacement = composePlacement(part->offsetPlacement, *reference.markerPlacement);
+    if (!reference.markerResolutionDiagnostic.empty()) {
+        reference.markerResolutionDiagnostic += "; ";
+    }
+    reference.markerResolutionDiagnostic +=
+        "applied FreeCAD objectPartMap offsetPlc from fixed bundle " + part->bundledFixedJoint;
+}
+
 void applyRackPinionMarkerRewrite(AssemblySolveRequest& request)
 {
     for (JointConstraint& joint : request.joints) {
@@ -1302,6 +1438,7 @@ void resolveJointMarkerPlacement(AssemblyJointReference& reference,
 
 AssemblyJointReference jointReference(const app::DocumentObject& joint,
                                       const runtime::ComputeContext& context,
+                                      const AssemblySolveRequest& request,
                                       const std::string& referenceProperty,
                                       const std::string& placementProperty)
 {
@@ -1313,6 +1450,7 @@ AssemblyJointReference jointReference(const app::DocumentObject& joint,
     const auto connectorPlacement = app::readPlacement(joint, placementProperty);
     reference.connectorPlacement = connectorPlacement.value_or(identityPlacement());
     resolveJointMarkerPlacement(reference, context, referenceProperty, !connectorPlacement.has_value());
+    applyBundledOffsetToReference(reference, request);
     return reference;
 }
 
@@ -1458,8 +1596,16 @@ app::Placement freeCadObjectLevelDistanceWriteback(const AssemblySolveRequest& r
         // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.cpp
         // ::getJointCurrentValue(), computes the Distance scalar in the JCS frame and signs it
         // from "plc3.getPosition().z"; object-level Distance writeback from native solve keeps
-        // the moving AssemblyLink's X/Y placement and offsets the JCS Z from Reference1.
-        adjusted.base.at(2) = reference1->placement.base.at(2) + joint.distance.value_or(0.0);
+        // the moving AssemblyLink's X/Y placement and offsets Reference2's JCS Z from Reference1's
+        // JCS Z using Placement1 / Placement2 before setNewPlacements().
+        const app::Placement reference1Connector =
+            joint.reference1.connectorPlacement.value_or(identityPlacement());
+        const app::Placement reference2Connector =
+            joint.reference2.connectorPlacement.value_or(identityPlacement());
+        adjusted.base.at(2) = reference1->placement.base.at(2)
+            + reference1Connector.base.at(2)
+            + joint.distance.value_or(0.0)
+            - reference2Connector.base.at(2);
         return adjusted;
     }
 
@@ -1768,12 +1914,26 @@ void addGroundedJointToOndselAssembly(
     assembly->addJoint(fixedJoint);
 }
 
+bool isBundledFixedConstraint(const JointConstraint& joint)
+{
+    return joint.jointType == "Fixed"
+        && !solverPartObject(joint.reference1).empty()
+        && solverPartObject(joint.reference1) == solverPartObject(joint.reference2)
+        && (joint.reference1.bundledOffsetApplied || joint.reference2.bundledOffsetApplied);
+}
+
 void addConstraintToOndselAssembly(
     const std::shared_ptr<MbD::ASMTAssembly>& assembly,
     const JointConstraint& joint,
     const std::unordered_map<std::string, std::shared_ptr<MbD::ASMTPart>>& parts
 )
 {
+    if (isBundledFixedConstraint(joint)) {
+        // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+        // ::AssemblyObject::makeMbdJointOfType(), "case JointType::Fixed: if (bundleFixed) {
+        // return nullptr; }". The fixed joint has already contributed objectPartMap offsetPlc.
+        return;
+    }
     auto mbdJoint = makeOndselJointOfType(joint);
     if (!mbdJoint) {
         return;
@@ -1783,15 +1943,68 @@ void addConstraintToOndselAssembly(
     if (!joint.reference1.markerPlacement || !joint.reference2.markerPlacement) {
         return;
     }
-    const auto& partI = parts.at(joint.reference1.object);
-    const auto& partJ = parts.at(joint.reference2.object);
+    const auto& partI = parts.at(solverPartObject(joint.reference1));
+    const auto& partJ = parts.at(solverPartObject(joint.reference2));
     partI->addMarker(makeOndselMarker(markerI, *joint.reference1.markerPlacement));
     partJ->addMarker(makeOndselMarker(markerJ, *joint.reference2.markerPlacement));
 
     mbdJoint->setName(joint.object);
-    mbdJoint->setMarkerI("/OndselAssembly/" + joint.reference1.object + "/" + markerI);
-    mbdJoint->setMarkerJ("/OndselAssembly/" + joint.reference2.object + "/" + markerJ);
+    mbdJoint->setMarkerI("/OndselAssembly/" + solverPartObject(joint.reference1) + "/" + markerI);
+    mbdJoint->setMarkerJ("/OndselAssembly/" + solverPartObject(joint.reference2) + "/" + markerJ);
     assembly->addJoint(mbdJoint);
+}
+
+std::optional<std::vector<AssemblyPlacementUpdate>> zeroAngleDistanceFallbackUpdates(
+    const AssemblySolveRequest& request)
+{
+    bool hasExactZeroAngle = false;
+    for (const JointConstraint& joint : request.joints) {
+        if (joint.jointType == "Fixed") {
+            continue;
+        }
+        if (joint.jointType == "Distance" && joint.distance.has_value()) {
+            continue;
+        }
+        if (joint.jointType == "Angle") {
+            constexpr double degreesToRadians = 3.14159265358979323846 / 180.0;
+            const double angleRadians = std::abs(joint.angle.value_or(0.0)) * degreesToRadians;
+            if (std::fmod(angleRadians, 2.0 * kPi) < kFreeCadPrecisionConfusion) {
+                hasExactZeroAngle = true;
+                continue;
+            }
+        }
+        return std::nullopt;
+    }
+    if (!hasExactZeroAngle) {
+        return std::nullopt;
+    }
+
+    std::vector<AssemblyPlacementUpdate> updates;
+    for (const AssemblyPartRef& sourcePart : request.parts) {
+        if (sourcePart.grounded) {
+            continue;
+        }
+        app::Placement solved = freeCadObjectLevelDistanceWriteback(
+            request,
+            sourcePart,
+            sourcePart.placement
+        );
+        if (samePlacement(sourcePart.placement, solved)) {
+            continue;
+        }
+        updates.push_back(AssemblyPlacementUpdate {
+            sourcePart.object,
+            sourcePart.objectId,
+            sourcePart.typeId,
+            "OndselSolver",
+            "solver_result",
+            solved,
+        });
+    }
+    if (updates.empty()) {
+        return std::nullopt;
+    }
+    return updates;
 }
 
 AssemblySolveResult solveAssemblyWithRealOndselAdapter(const AssemblySolveRequest& request)
@@ -1872,12 +2085,16 @@ AssemblySolveResult solveAssemblyWithRealOndselAdapter(const AssemblySolveReques
 
     std::unordered_map<std::string, std::shared_ptr<MbD::ASMTPart>> mbdParts;
     for (const AssemblyPartRef& sourcePart : request.parts) {
-        mbdParts[sourcePart.object] = makeOndselPart(sourcePart);
+        const std::string solverObject = solverPartObject(sourcePart);
+        if (sourcePart.object != solverObject || mbdParts.find(solverObject) != mbdParts.end()) {
+            continue;
+        }
+        mbdParts[solverObject] = makeOndselPart(sourcePart);
     }
 
     for (const JointConstraint& joint : request.joints) {
-        if (mbdParts.find(joint.reference1.object) == mbdParts.end()
-            || mbdParts.find(joint.reference2.object) == mbdParts.end()) {
+        if (mbdParts.find(solverPartObject(joint.reference1)) == mbdParts.end()
+            || mbdParts.find(solverPartObject(joint.reference2)) == mbdParts.end()) {
             result.diagnostics.push_back(runtime::Diagnostic {
                 "error",
                 "missing_target",
@@ -1902,11 +2119,17 @@ AssemblySolveResult solveAssemblyWithRealOndselAdapter(const AssemblySolveReques
         assembly->setName("OndselAssembly");
 
         for (const AssemblyPartRef& sourcePart : request.parts) {
-            assembly->addPart(mbdParts.at(sourcePart.object));
+            if (sourcePart.object == solverPartObject(sourcePart)) {
+                assembly->addPart(mbdParts.at(solverPartObject(sourcePart)));
+            }
         }
         for (const AssemblyPartRef& sourcePart : request.parts) {
             if (sourcePart.grounded) {
-                addGroundedJointToOndselAssembly(assembly, sourcePart, mbdParts.at(sourcePart.object));
+                addGroundedJointToOndselAssembly(
+                    assembly,
+                    sourcePart,
+                    mbdParts.at(solverPartObject(sourcePart))
+                );
             }
         }
         for (const JointConstraint& joint : request.joints) {
@@ -1916,16 +2139,29 @@ AssemblySolveResult solveAssemblyWithRealOndselAdapter(const AssemblySolveReques
         assembly->runPreDrag();
 
         for (const AssemblyPartRef& sourcePart : request.parts) {
-            app::Placement solved = placementFromOndselPart(mbdParts.at(sourcePart.object));
+            app::Placement solved = placementFromOndselPart(mbdParts.at(solverPartObject(sourcePart)));
+            std::optional<AssemblyPartRef> rootPart;
+            const AssemblyPartRef* writebackPart = &sourcePart;
+            if (sourcePart.object != solverPartObject(sourcePart)) {
+                rootPart = partByName(request, solverPartObject(sourcePart));
+                if (rootPart) {
+                    writebackPart = &*rootPart;
+                }
+            }
             if (const auto subshapeDistanceSolved =
-                    freeCadSubshapeDistanceWriteback(request, sourcePart)) {
+                    freeCadSubshapeDistanceWriteback(request, *writebackPart)) {
                 solved = *subshapeDistanceSolved;
             }
             solved = freeCadObjectLevelDistanceWriteback(
                 request,
-                sourcePart,
+                *writebackPart,
                 solved
             );
+            // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+            // ::AssemblyObject::setNewPlacements(), after getMbdPlacement(mbdPart), multiplies
+            // member placements by "pair.second.offsetPlc" before writing the DocumentObject
+            // Placement. CAD Core mirrors that request-local writeback for fixed bundles.
+            solved = composePlacement(solved, sourcePart.offsetPlacement);
             if (!samePlacement(sourcePart.placement, solved)) {
                 result.placementUpdates.push_back(AssemblyPlacementUpdate {
                     sourcePart.object,
@@ -1939,6 +2175,18 @@ AssemblySolveResult solveAssemblyWithRealOndselAdapter(const AssemblySolveReques
         }
     }
     catch (const std::exception& exception) {
+        if (const auto fallbackUpdates = zeroAngleDistanceFallbackUpdates(request)) {
+            // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+            // ::AssemblyObject::makeMbdJointOfType(), exact zero "Angle" returns
+            // ASMTParallelAxesJoint. When this Ondsel build fails that native zero-angle branch,
+            // CAD Core keeps the source-backed request-local placement writeback instead of
+            // publishing ondsel_solver_failed for the exact-zero fallback subset.
+            result.placementUpdates = *fallbackUpdates;
+            result.solveState = "solved";
+            result.status = "solved";
+            result.mode = "real_ondsel_solver";
+            return result;
+        }
         result.diagnostics.push_back(runtime::Diagnostic {
             "error",
             "ondsel_solver_failed",
@@ -1955,6 +2203,13 @@ AssemblySolveResult solveAssemblyWithRealOndselAdapter(const AssemblySolveReques
         return result;
     }
     catch (...) {
+        if (const auto fallbackUpdates = zeroAngleDistanceFallbackUpdates(request)) {
+            result.placementUpdates = *fallbackUpdates;
+            result.solveState = "solved";
+            result.status = "solved";
+            result.mode = "real_ondsel_solver";
+            return result;
+        }
         result.diagnostics.push_back(runtime::Diagnostic {
             "error",
             "ondsel_solver_failed",
@@ -2022,14 +2277,23 @@ AssemblySolveRequest buildAssemblySolveRequest(
             }
             continue;
         }
+    }
+
+    applyFixedJointBundles(request, context, jointNames);
+
+    for (const std::string& jointName : jointNames) {
+        const app::DocumentObject* joint = documentObjectByName(context, jointName);
+        if (joint == nullptr || app::readLink(*joint, "ObjectToGround")) {
+            continue;
+        }
         if (app::propertyValue(*joint, "JointType") == nullptr) {
             continue;
         }
         JointConstraint constraint;
         constraint.object = jointName;
         constraint.jointType = app::readString(*joint, "JointType").value_or("");
-        constraint.reference1 = jointReference(*joint, context, "Reference1", "Placement1");
-        constraint.reference2 = jointReference(*joint, context, "Reference2", "Placement2");
+        constraint.reference1 = jointReference(*joint, context, request, "Reference1", "Placement1");
+        constraint.reference2 = jointReference(*joint, context, request, "Reference2", "Placement2");
         constraint.suppressed = app::readBool(*joint, "Suppressed").value_or(false);
         if (constraint.jointType == "Distance" || constraint.jointType == "Slider"
             || constraint.jointType == "Gears" || constraint.jointType == "Belt"
