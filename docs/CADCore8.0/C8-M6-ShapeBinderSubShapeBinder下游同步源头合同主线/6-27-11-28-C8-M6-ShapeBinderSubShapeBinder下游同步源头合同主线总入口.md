@@ -20,6 +20,7 @@
 - S4 已完成 fixture expected 与 diagnostics 合同复审。12 个 C8-M1 fixture / expected 行已逐行发布为 S4 合同；`shape-binder-subshape-binder-element-map-namedshape-body-replay` 采用 C8-M5 refreshed expected，不要求无 input `Body.BaseFeature` 时出现 `BodyBaseFeature`；`subshape-binder-setlinks-normalization-diagnostics` 采用 setter-level `cycle_rejected_by_property_link`，generic graph cycle 保持 `cycle_dependency`；CopyOnChange fixture 只证明 request-local property-state 和 diagnostic 边界。
 - S5 已完成 capability 与前端消费边界发布。`part_design.shape_binder` 保持 request-local supported 且无 remaining gap；`part_design.sub_shape_binder` 保持 request-local supported 并只保留 `copy_on_change_full_temporary_document_cache` known gap；下游前端可消费 capability、diagnostics、fixture seeds、request-local mesh / subshape / full subname / reference update evidence、`documentObjectUpdates` 与 `elementReferenceUpdates` 建议，不得持久消费 full BREP、TopoDS_Shape、NamedShape / ElementMap 原始内核对象、temporary-document cache 或 request 结束后的 shape cache。
 - current capability 中 `part_design.shape_binder.remaining_gaps=[]`，`part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`；该 gap 保持 C8-M2 `known_gap` / `oracle_blocked`，不被本包升级为 supported。
+- S6 已完成发布闸门与下游交接清单：`HEAD=f0739ca2ba` 起跑，queue / TSV / whitespace / diff 短跑通过，`/tmp/c8m6-capabilities.json` 已采集，focused tests 47 tests OK，expected fixture gate 1 test OK with 35 skipped，`cmake --build build` 通过，stage regression 266 tests OK with 35 skipped。未发现 implementable mismatch，未修改 `cad-core/src`、fixtures、expected、tests 或下游仓库。
 
 ## 证明链条
 
@@ -63,7 +64,7 @@ C8-M5 live baseline
 | S3 | `工作步骤细分/6-27-11-33-【已实现】C8-M6-S3-TypeId与DocumentGraph合同复审.md` | 已复核 TypeId、DocumentGraph、request / response DTO 合同。 |
 | S4 | `工作步骤细分/6-27-11-34-【已实现】C8-M6-S4-fixtureExpected与diagnostics合同复审.md` | 已复核 C8-M1 expected、C8-M5 drift delta 和 diagnostics vocabulary。 |
 | S5 | `工作步骤细分/6-27-11-35-【已实现】C8-M6-S5-capability与前端消费边界发布.md` | 已发布 capability 和前端消费边界。 |
-| S6 | `工作步骤细分/6-27-11-36-C8-M6-S6-发布闸门与下游交接清单.md` | 执行发布闸门并形成下游交接清单。 |
+| S6 | `工作步骤细分/6-27-11-36-【已实现】C8-M6-S6-发布闸门与下游交接清单.md` | 已执行发布闸门并形成下游交接清单。 |
 | source candidates | `矩阵/c8m6_downstream_sync_source_candidates.tsv` | FreeCAD、cad-core、fixture、测试源头候选。 |
 | scope review | `矩阵/c8m6_downstream_sync_scope_review_matrix.tsv` | 同步范围和下一步 owner。 |
 | blocker queue | `矩阵/c8m6_downstream_sync_blocker_queue.tsv` | 阻塞项、证据和关闭条件。 |
@@ -72,4 +73,13 @@ C8-M5 live baseline
 | non-goal | `矩阵/c8m6_downstream_sync_non_goal_registry.tsv` | 本包明确不做的内容。 |
 | validation | `矩阵/c8m6_downstream_sync_validation_matrix.tsv` | 短跑、阶段复核、发布闸门命令。 |
 
-当前 S0 已完成 live 基线冻结，S1 已完成源头合同与能力面复核，S2 已完成同步范围准入与 non-goal 路由，S3 已完成 TypeId 与 DocumentGraph 合同复审，S4 已完成 fixture expected 与 diagnostics 合同复审，S5 已完成 capability 与前端消费边界发布；队列下一项应为 S6。矩阵中 S5 指定 contract/scope/blocker/validation 行已回写 live evidence，S6 release gate 行仍待执行，不是发布闸门结论。
+## S6 下游交接清单
+
+- TypeIds：`PartDesign::ShapeBinder`、`PartDesign::SubShapeBinder`、`PartDesign::SubShapeBinderPython`。
+- Capability：以 `cad-core/src/runtime/capability_contract.cpp` 当前输出和 `/tmp/c8m6-capabilities.json` 为准；ShapeBinder 无 remaining gap，SubShapeBinder 只保留 `copy_on_change_full_temporary_document_cache`。
+- Fixture / expected：`cad-core/fixtures/c8m1` 的 12 个 input fixture 与 `cad-core/fixtures/c8m1/expected` 的 12 个 C8-M5-current expected。
+- Diagnostics：`cycle_rejected_by_property_link`、`cycle_dependency`、`copy_on_change_full_temporary_document_cache_not_supported`。
+- Request-local output：mesh / subshapes / full subname、ElementMap / NamedShape evidence、maker history、reference update evidence、`documentObjectUpdates`、`elementReferenceUpdates`。
+- Non-goal：full CopyOnChange temporary-document cache、持久 BREP / TopoDS_Shape / NamedShape / ElementMap / geometry cache、request 结束后的 shape cache。
+
+当前 S0-S6 全部完成，`C8M6-BLOCKER-601` 已关闭；S6 重命名后 C8-M6 工作步骤队列为空。矩阵中 S6 release gate、blocker 和 validation 行已回写 live evidence，本包只证明 FreeCAD 仓库源头合同可交接，不证明下游仓库已经完成实现。

@@ -67,6 +67,18 @@ C8-M6 不修改下游仓库，也不新增 `cad-core` 几何能力。它承接 C
 - 前端不应持久消费：full BREP、TopoDS_Shape、NamedShape / ElementMap 原始内核对象、temporary-document cache、request 结束后的 shape cache；`ReferenceShadow.brep` 仍只允许作为单个旧 subshape snapshot 的引用恢复证据，不扩展为完整 BREP transport。
 - `C8M6-BLOCKER-501` 已关闭；S5 未修改 `cad-core/src`、fixtures、tests、expected、下游 adapter 或前端 UI，未发现 `unexpected_mismatch`。
 
+## S6 发布闸门与下游交接结论
+
+- S6 执行基线：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=f0739ca2ba`（`f0739ca2ba docs: 完成 C8-M6 S5 消费边界发布`），开始工作区干净。
+- 发布闸门通过：S6 重命名前队列只剩 S6；C8-M6 TSV 字段数检查、尾随空白扫描和 `git diff --check` 通过；`./cad-core capabilities > /tmp/c8m6-capabilities.json` 通过；focused tests 47 tests OK；expected fixture gate 1 test OK with 35 skipped；`cmake --build build` 通过；stage regression 266 tests OK with 35 skipped。
+- S0-S5 没有 current / unexpected mismatch，S6 未进入 C++ 修改，未修改 `cad-core/src`、fixtures、expected、tests 或下游仓库；`C8M6-BLOCKER-601` 已关闭，S6 重命名后 C8-M6 队列为空。
+- 下游同步 TypeIds：`PartDesign::ShapeBinder`、`PartDesign::SubShapeBinder`、`PartDesign::SubShapeBinderPython`。
+- 下游同步能力合同：以 `cad-core/src/runtime/capability_contract.cpp` 当前输出和 `/tmp/c8m6-capabilities.json` 为准；`part_design.shape_binder.remaining_gaps=[]`，`part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`。
+- 下游同步 fixture 合同：`cad-core/fixtures/c8m1` 的 12 个 input fixture 与 `cad-core/fixtures/c8m1/expected` 的 12 个 C8-M5-current expected。
+- 下游同步 diagnostics：`cycle_rejected_by_property_link`、`cycle_dependency`、`copy_on_change_full_temporary_document_cache_not_supported`，分别对应 setter-level self-link rejection、generic graph cycle 和 CopyOnChange full temporary-document cache known gap。
+- 下游同步 request-local 输出：mesh / subshapes / full subname、ElementMap / NamedShape evidence、maker history、reference update evidence、`documentObjectUpdates`、`elementReferenceUpdates`。
+- 下游 non-goal：full CopyOnChange temporary-document cache、持久 BREP / TopoDS_Shape / NamedShape / ElementMap / geometry cache、request 结束后的 shape cache；`ReferenceShadow.brep` 仍只允许作为单个旧 subshape snapshot 例外。
+
 ## 主文件
 
 - 总入口：`6-27-11-28-C8-M6-ShapeBinderSubShapeBinder下游同步源头合同主线总入口.md`
