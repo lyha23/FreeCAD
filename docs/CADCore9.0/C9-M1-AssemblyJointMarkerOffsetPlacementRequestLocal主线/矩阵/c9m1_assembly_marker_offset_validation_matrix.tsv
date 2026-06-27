@@ -1,0 +1,12 @@
+validation_id	validation_type	command	required	when	notes
+C9M1-VAL-001	queue	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore9.0/C9-M1-AssemblyJointMarkerOffsetPlacementRequestLocal主线/工作步骤细分 --format markdown	yes	S0-S6	Queue must advance one step at a time and be empty after S6 rename
+C9M1-VAL-002	tsv	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore9.0/C9-M1-AssemblyJointMarkerOffsetPlacementRequestLocal主线/矩阵/*.tsv	yes	S0-S6	All matrix files must keep stable field counts
+C9M1-VAL-003	whitespace	rg -n '[ \t]$' docs/CADCore9.0	yes	S0-S6	Exit code 1 means no trailing whitespace matches
+C9M1-VAL-004	diff	git diff --check	yes	S0-S6	Required before each step close
+C9M1-VAL-101	source_scan	rg -n 'handleOneSideOfJoint|offsetPlc|runPreDrag|setNewPlacements|validateNewPlacements|makeMbdJointOfType|getJointType|getJointCurrentValue|ObjectToGround|JointType' src/Mod/Assembly/App src/Mod/Assembly/JointObject.py cad-core/src/assembly cad-core/tests/test_p8_features.py cad-core/tests/test_adapters.py cad-core/fixtures/c3m6	yes	S1	Source authority and current coverage scan
+C9M1-VAL-301	marker_offset_scan	rg -n 'handleOneSideOfJoint|offsetPlc|getGlobalPlacement|markerResolutionStatus|markerResolutionDiagnostic|unsupported_subshape_marker_primitive|Resolved subshape marker' src/Mod/Assembly/App cad-core/src/assembly cad-core/tests/test_p8_features.py cad-core/fixtures/c3m6	yes	S3	Marker placement and offsetPlc evidence scan
+C9M1-VAL-401	writeback_scan	rg -n 'runPreDrag|setNewPlacements|validateNewPlacements|assembly_set_placement|documentObjectUpdates|unsupported_assembly_solver|ondsel_solver_failed|Angle' src/Mod/Assembly/App cad-core/src/assembly cad-core/tests/test_p8_features.py cad-core/tests/test_adapters.py cad-core/fixtures/c3m6	yes	S4	Placement writeback and diagnostics evidence scan
+C9M1-VAL-501	capability_smoke	cd cad-core && ./cad-core capabilities > /tmp/c9m1-capabilities.json	conditional	S5-S6	Required if S5 changes or verifies Assembly capability publication
+C9M1-VAL-502	adapter_tests	cd cad-core && python3 -m unittest tests.test_adapters	conditional	S5-S6	Required if capability_contract.cpp or adapter-facing capability tests change
+C9M1-VAL-601	focused_assembly_tests	cd cad-core && python3 -m unittest tests.test_p8_features tests.test_adapters	conditional	S6	Required if S6 opens runtime or capability code gate
+C9M1-VAL-602	build	cd cad-core && cmake --build build	conditional	S6	Required if C++ code changed

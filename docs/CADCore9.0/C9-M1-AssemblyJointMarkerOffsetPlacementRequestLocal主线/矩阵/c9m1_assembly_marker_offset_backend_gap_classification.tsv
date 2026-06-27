@@ -1,0 +1,9 @@
+category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
+C9M1-BG-101	current_marker_placement_covered_review	high	C9M1-SCOPE-101	no	S3 verifies current source and tests; route to already_covered or unexpected_mismatch
+C9M1-BG-102	non_identity_offsetPlc_oracle_candidate	high	C9M1-SCOPE-102	no	S3 inventories native expected and opens S6 backend gap only with source-backed mismatch
+C9M1-BG-103	non_assembly_link_primitive_frame_candidate	medium	C9M1-SCOPE-103	maybe	S3 decides whether product wants request-local subset or keeps diagnostic_non_goal
+C9M1-BG-201	zero_angle_fallback_oracle_candidate	medium	C9M1-SCOPE-104	no	S4 keeps oracle_candidate unless stable native evidence exists
+C9M1-BG-202	placement_writeback_release_gate	high	C9M1-SCOPE-201	no	S4 confirms request-local documentObjectUpdates or opens mismatch
+C9M1-BG-301	persistent_solver_session_non_goal	high	C9M1-SCOPE-302	yes	Keep diagnostic_non_goal unless product boundary changes
+C9M1-BG-401	capability_publication_gate	high	C9M1-SCOPE-301	no	S5 writes exact S6 route based on S3/S4
+C9M1-BG-501	final_release_gate	high	C9M1-SCOPE-304	no	S6 runs focused validations and closes queue
