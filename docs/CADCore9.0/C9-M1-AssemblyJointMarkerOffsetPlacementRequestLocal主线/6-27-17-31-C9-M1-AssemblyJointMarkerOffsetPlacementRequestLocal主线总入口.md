@@ -42,7 +42,7 @@ live 声明口径
 | S2 | `工作步骤细分/6-27-17-35-【已实现】C9-M1-S2-范围准入与blocker矩阵.md` | scope / blocker / non-goal 路由。 |
 | S3 | `工作步骤细分/6-27-17-36-【已实现】C9-M1-S3-markerPlacement与offsetPlc复审.md` | marker placement 与 `offsetPlc` oracle / gap 裁决。 |
 | S4 | `工作步骤细分/6-27-17-37-【已实现】C9-M1-S4-runPreDragPlacementWriteback复审.md` | solver placement writeback 生命周期复审。 |
-| S5 | `工作步骤细分/6-27-17-38-C9-M1-S5-capability与diagnostics发布准入.md` | capability / diagnostics / non-goal 发布准入。 |
+| S5 | `工作步骤细分/6-27-17-38-【已实现】C9-M1-S5-capability与diagnostics发布准入.md` | capability / diagnostics / non-goal 发布准入。 |
 | S6 | `工作步骤细分/6-27-17-39-C9-M1-S6-Oracle实现与发布闸门.md` | 实现或 no-code release gate。 |
 | source candidates | `矩阵/c9m1_assembly_marker_offset_source_candidates.tsv` | FreeCAD / cad-core source authority 种子。 |
 | scope review | `矩阵/c9m1_assembly_marker_offset_scope_review_matrix.tsv` | scope 状态与 owner step。 |
@@ -51,4 +51,4 @@ live 声明口径
 | backend gap classification | `矩阵/c9m1_assembly_marker_offset_backend_gap_classification.tsv` | backendGap / oracle / releaseGate 分类。 |
 | validation matrix | `矩阵/c9m1_assembly_marker_offset_validation_matrix.tsv` | 分层验收命令。 |
 
-当前 S0 已完成 live 基线与声明口径冻结；S1 已完成 FreeCAD source 与 current coverage 候选复核，`C9M1-BLOCKER-101` 已关闭。S2 已完成 scope / blocker / non-goal 路由，`C9M1-BLOCKER-201` 已关闭。S3 已完成 marker placement 与 `offsetPlc` 复审，`C9M1-BLOCKER-301` 已关闭。S4 已完成 request-local placement writeback、zero Angle known-gap 与 unsupported diagnostic 复审，`C9M1-BLOCKER-401` 已关闭；S5-S6 仍为待执行状态，S5 只消费 S3/S4 route 做 capability / diagnostics 发布准入，S6 只消费 S5 裁决的 no-code release gate 或受限实现 gate。
+当前 S0 已完成 live 基线与声明口径冻结；S1 已完成 FreeCAD source 与 current coverage 候选复核，`C9M1-BLOCKER-101` 已关闭。S2 已完成 scope / blocker / non-goal 路由，`C9M1-BLOCKER-201` 已关闭。S3 已完成 marker placement 与 `offsetPlc` 复审，`C9M1-BLOCKER-301` 已关闭。S4 已完成 request-local placement writeback、zero Angle known-gap 与 unsupported diagnostic 复审，`C9M1-BLOCKER-401` 已关闭。S5 已完成 capability / diagnostics 发布准入，`C9M1-BLOCKER-501` 已关闭；S6 只消费 S5 裁决的 no-code release gate，不需要 build、native oracle refresh、fixture 或 runtime C++ patch，除非 focused capability smoke 或 adapter tests 发现发布口径与 S3/S4 route 冲突。

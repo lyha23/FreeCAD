@@ -52,6 +52,13 @@ C9-M1 处理 Assembly request-local solver 链路中仍需要裁决的 marker / 
 - zero Angle fallback 保持 `known_gap_retained`：FreeCAD 与 cad-core 都有 Angle zero fallback 到 parallel axes 的 source/class evidence；`assembly-angle-zero-and-signed-current-real-solver.json` 只是输入 fixture，没有对应 expected 或测试引用。C9-M1 未采 native zero Angle oracle，也没有 current mismatch 证据，不打开 S6 C++ gate。
 - unsupported JointType / boundary diagnostics 仍准确，`unsupported_assembly_solver` 不会被 C9-M1 writeback 复审改成 silent success。`C9M1-SCOPE-201` / `C9M1-SCOPE-202` / `C9M1-BG-202` 已关闭为 `already_covered`，`C9M1-SCOPE-203` / `C9M1-BG-201` 保持 `known_gap_retained`，`C9M1-BLOCKER-401` 已关闭为 `Closed S4`。S5 只做 capability / diagnostics 发布准入；若 S5 不发现发布口径缺口，S6 走 no-code release gate。
 
+## S5 结论
+
+- S5 执行基线：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=6d7cb18f0f`（`6d7cb18f0f docs: 完成 C9-M1 S4 writeback 复审`），开始状态干净。
+- current `./cad-core capabilities` 与 `test_adapters.py` 一致：`assembly.ondsel_solver_adapter.status=covered_full`、`available=true`，`subshape_marker_placement.status=covered_representative_subset`，`placement_writeback.status=covered_full`，`solver_validation` 仍公开 Assembly diagnostics，`assembly.remaining_gaps=[]`。
+- S5 保持 S3/S4 裁决：identity-offset representative marker subset 和 request-local writeback 已覆盖；non-identity bundled `offsetPlc` 没有 native expected 加 current mismatch，不能升 `backend_gap_candidate`；non-AssemblyLink primitive frame 保持 `diagnostic_non_goal`；zero Angle fallback 保持 `known_gap_retained`。
+- S6 route 写死为 no-code capability publication closure：allowed files 限本包 README、主线总入口、工作步骤状态文件和矩阵；必须跑 capability smoke、`tests.test_adapters`、队列、TSV、docs whitespace 和 `git diff --check`；不需要 build、native oracle refresh、fixture 或 runtime C++ patch。
+
 ## FreeCAD 依据
 
 | 语义 | FreeCAD 源码入口 | 关键行为 |
@@ -80,7 +87,7 @@ C9-M1 处理 Assembly request-local solver 链路中仍需要裁决的 marker / 
 3. S2：scope 准入、blocker 与 non-goal 路由。
 4. S3：marker placement 与 `offsetPlc` oracle 复审。
 5. S4：`runPreDrag` placement writeback 生命周期复审（已完成）。
-6. S5：capability / diagnostics 发布准入。
+6. S5：capability / diagnostics 发布准入（已完成，S6 no-code route）。
 7. S6：Oracle 实现与发布闸门。
 
 ## 验收分层
