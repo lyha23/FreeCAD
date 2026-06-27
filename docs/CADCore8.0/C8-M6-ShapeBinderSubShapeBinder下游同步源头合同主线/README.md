@@ -14,12 +14,20 @@ C8-M6 不修改下游仓库，也不新增 `cad-core` 几何能力。它承接 C
 - current capability：`part_design.shape_binder.status=supported_c8m1_expected_backed_request_local` 且 `remaining_gaps=[]`；`part_design.sub_shape_binder.status=supported_c8m1_expected_backed_request_local_with_copy_on_change_known_gap` 且唯一 `remaining_gaps=["copy_on_change_full_temporary_document_cache"]`。
 - C8-M5 已恢复 C8-M1 expected fixture 阶段回归：`BodyBaseFeature` stale expected 已刷新，`SubShapeBinder Support` self-link 诊断已落为 `cycle_rejected_by_property_link`；旧 C8-M2 合同不能覆盖这两个最终口径。
 - 本包 S0 只冻结文档和 TSV 同步声明；不修改 `cad-core/src`、fixtures、expected 或测试。
+- S1 已完成源头合同与能力面复核：`C8M6-SRC-101..403` 均已绑定 FreeCAD source、cad-core landing、C8-M1/C8-M5 fixture 或 focused test 证据；`C8M6-SCOPE-101..104` 标为 `sync_required_source_contract`，CopyOnChange full temporary document cache 继续由 `C8M6-SCOPE-204` 保持 `known_gap_retained`。
 
 ## 与既有 C8 包的关系
 
 - C8-M1 是 ShapeBinder/SubShapeBinder executor、ElementMap / NamedShape 和 fixture expected 的能力闭环。
 - C8-M2 是 CopyOnChange DTO 准入与下游同步源头合同首版；它明确不把 full temporary-document cache 标成 supported。
 - C8-M5 是 C8-M1 expected drift 的阶段回归恢复；本包的合同必须吸收 C8-M5 的最终口径，不能继续引用旧的 `BodyBaseFeature` stale expected 或 generic `cycle_dependency` 结论。
+
+## S1 源头复核结论
+
+- FreeCAD source authority 已现场复核：`ShapeBinder::updatedShape()` 覆盖 filtered support、datum fallback 和 `TraceSupport` placement；`SubShapeBinder::update()` 覆盖 support subelements、Relative、MakeFace、Offset2D、Fuse、Refine 与 CopyOnChange 分支；`SubShapeBinder::setLinks()` 在 setter 阶段拒绝 self/cyclic Support；`Body::onChanged(BaseFeature)` 只在 `BaseFeature.getValue()` 存在时创建 `PartDesign::FeatureBase`。
+- cad-core landing 已现场复核：`feature_shape_binder.cpp` 发布 request-local binder output 与 lifecycle diagnostics，`body.cpp` 不在缺少 `Body.BaseFeature` 时合成 `BodyBaseFeature`，`capability_contract.cpp` 发布 ShapeBinder supported 与 SubShapeBinder known gap，`reference_lifecycle.cpp` 输出 `cycle_rejected_by_property_link`。
+- C8-M1/C8-M5 证据已绑定：12 个 `cad-core/fixtures/c8m1` input 与 12 个 C8-M5-current expected 仍是黑盒合同，`tests/test_c8_shapebinder.py` 锁定 Body replay、CopyOnChange known gap 和 self-link diagnostic，`tests/test_expected_fixtures.py` 继续作为 expected fixture gate。
+- S1 未发现 source / capability / test 证据矛盾；没有新增 `unexpected_mismatch`，`C8M6-BLOCKER-101` 已关闭并转入 S2。
 
 ## 主文件
 
