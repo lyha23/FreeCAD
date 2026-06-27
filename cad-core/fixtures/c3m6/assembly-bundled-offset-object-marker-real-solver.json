@@ -1,0 +1,133 @@
+{
+  "freecad_expected": {
+    "bundled_offset_oracle": {
+      "enabled": true,
+      "route": "backend_gap_candidate",
+      "scope_ids": ["C9M2-SCOPE-101"],
+      "backend_gap_ids": ["C9M2-BG-101"],
+      "blocker_id": "C9M2-BLOCKER-301",
+      "bundles": [
+        {
+          "root": "ComponentB",
+          "member": "ComponentC",
+          "fixed_joint": "FixedBundleJoint"
+        }
+      ]
+    }
+  },
+  "Objects": [
+    {
+      "Name": "BoxA",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {"Length": 2, "Width": 2, "Height": 2}
+    },
+    {
+      "Name": "BoxB",
+      "ID": 2,
+      "TypeId": "Part::Box",
+      "Properties": {"Length": 2, "Width": 2, "Height": 2}
+    },
+    {
+      "Name": "BoxC",
+      "ID": 3,
+      "TypeId": "Part::Box",
+      "Properties": {"Length": 2, "Width": 2, "Height": 2}
+    },
+    {
+      "Name": "ComponentA",
+      "ID": 4,
+      "TypeId": "Assembly::AssemblyLink",
+      "Properties": {
+        "LinkedObject": {"PropertyType": "App::PropertyXLink", "value": "BoxA"},
+        "Rigid": true
+      }
+    },
+    {
+      "Name": "ComponentB",
+      "ID": 5,
+      "TypeId": "Assembly::AssemblyLink",
+      "Properties": {
+        "LinkedObject": {"PropertyType": "App::PropertyXLink", "value": "BoxB"},
+        "Rigid": true,
+        "Placement": {"PropertyType": "App::PropertyPlacement", "Base": [4, 0, 0], "Rotation": [0, 0, 0, 1]}
+      }
+    },
+    {
+      "Name": "ComponentC",
+      "ID": 6,
+      "TypeId": "Assembly::AssemblyLink",
+      "Properties": {
+        "LinkedObject": {"PropertyType": "App::PropertyXLink", "value": "BoxC"},
+        "Rigid": true,
+        "Placement": {"PropertyType": "App::PropertyPlacement", "Base": [6, 0, 0], "Rotation": [0, 0, 0, 1]}
+      }
+    },
+    {
+      "Name": "GroundedJoint",
+      "ID": 7,
+      "TypeId": "App::FeaturePython",
+      "Properties": {
+        "ObjectToGround": {"PropertyType": "App::PropertyLinkGlobal", "value": "ComponentA"}
+      }
+    },
+    {
+      "Name": "FixedBundleJoint",
+      "ID": 8,
+      "TypeId": "App::FeaturePython",
+      "Properties": {
+        "JointType": {"PropertyType": "App::PropertyEnumeration", "value": "Fixed"},
+        "Reference1": {"PropertyType": "App::PropertyXLinkSub", "value": "ComponentB", "SubList": []},
+        "Placement1": {"PropertyType": "App::PropertyPlacement", "Base": [0, 0, 0], "Rotation": [0, 0, 0, 1]},
+        "Detach1": {"PropertyType": "App::PropertyBool", "value": true},
+        "Reference2": {"PropertyType": "App::PropertyXLinkSub", "value": "ComponentC", "SubList": []},
+        "Placement2": {"PropertyType": "App::PropertyPlacement", "Base": [-2, 0, 0], "Rotation": [0, 0, 0, 1]},
+        "Detach2": {"PropertyType": "App::PropertyBool", "value": true}
+      }
+    },
+    {
+      "Name": "RootDistanceJoint",
+      "ID": 9,
+      "TypeId": "App::FeaturePython",
+      "Properties": {
+        "JointType": {"PropertyType": "App::PropertyEnumeration", "value": "Distance"},
+        "Distance": {"PropertyType": "App::PropertyFloat", "value": 2},
+        "Reference1": {"PropertyType": "App::PropertyXLinkSub", "value": "ComponentA", "SubList": []},
+        "Reference2": {"PropertyType": "App::PropertyXLinkSub", "value": "ComponentB", "SubList": []}
+      }
+    },
+    {
+      "Name": "ObjectMarkerJoint",
+      "ID": 10,
+      "TypeId": "App::FeaturePython",
+      "Properties": {
+        "JointType": {"PropertyType": "App::PropertyEnumeration", "value": "Parallel"},
+        "Reference1": {"PropertyType": "App::PropertyXLinkSub", "value": "ComponentA", "SubList": []},
+        "Detach1": {"PropertyType": "App::PropertyBool", "value": true},
+        "Reference2": {"PropertyType": "App::PropertyXLinkSub", "value": "ComponentC", "SubList": []},
+        "Placement2": {"PropertyType": "App::PropertyPlacement", "Base": [0.25, 0.5, 0.75], "Rotation": [0, 0, 0, 1]},
+        "Detach2": {"PropertyType": "App::PropertyBool", "value": true}
+      }
+    },
+    {
+      "Name": "Joints",
+      "ID": 11,
+      "TypeId": "Assembly::JointGroup",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["GroundedJoint", "FixedBundleJoint", "RootDistanceJoint", "ObjectMarkerJoint"]
+        }
+      }
+    },
+    {
+      "Name": "Assembly",
+      "ID": 12,
+      "TypeId": "Assembly::AssemblyObject",
+      "Properties": {
+        "Group": {"PropertyType": "App::PropertyLinkList", "values": ["ComponentA", "ComponentB", "ComponentC", "Joints"]}
+      }
+    }
+  ],
+  "recompute": {"objs": ["Assembly"]}
+}

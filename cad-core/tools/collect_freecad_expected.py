@@ -2619,6 +2619,18 @@ def same_placement_payload(left: dict, right: dict, tolerance: float = 1e-9) -> 
     return True
 
 
+def identity_placement_payload() -> dict:
+    return {
+        "PropertyType": "App::PropertyPlacement",
+        "Base": [0.0, 0.0, 0.0],
+        "Rotation": [0.0, 0.0, 0.0, 1.0],
+    }
+
+
+def placement_payload_is_identity(value: dict, tolerance: float = 1e-9) -> bool:
+    return same_placement_payload(value, identity_placement_payload(), tolerance)
+
+
 def fixture_placement_payload(spec: dict) -> dict:
     placement = spec.get("Properties", {}).get("Placement")
     if isinstance(placement, dict) and placement.get("PropertyType") == "App::PropertyPlacement":
@@ -3455,7 +3467,147 @@ def reference_payload_key(reference: dict) -> tuple[str, tuple[str, ...]]:
     return str(reference.get("object", "")), tuple(str(item) for item in reference.get("subnames", []))
 
 
-def native_joint_reference_marker_evidence(joint: Any, ref_name: str, plc_name: str) -> dict:
+def bundled_offset_oracle_config(fixture: dict) -> dict | None:
+    config = fixture.get("freecad_expected", {}).get("bundled_offset_oracle")
+    if not isinstance(config, dict):
+        return None
+    if config.get("enabled", True) is False:
+        return None
+    return config
+
+
+def native_bundled_offset_oracle_payload(
+    fixture: dict,
+    created: dict[str, Any],
+) -> tuple[dict, dict[str, dict]]:
+    config = bundled_offset_oracle_config(fixture)
+    if config is None:
+        return {}, {}
+
+    runtime_offsets: dict[str, dict] = {}
+    bundles = []
+    for item in config.get("bundles", []):
+        if not isinstance(item, dict):
+            continue
+        root_name = str(item.get("root", ""))
+        member_name = str(item.get("member", ""))
+        fixed_joint = str(item.get("fixed_joint", ""))
+        root = created.get(root_name)
+        member = created.get(member_name)
+        if root is None or member is None:
+            bundles.append({
+                "root": root_name,
+                "member": member_name,
+                "fixed_joint": fixed_joint,
+                "status": "missing_fixture_object",
+            })
+            continue
+
+        # FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+        # ::AssemblyObject::getMbDData(), for fixed bundles stores "plc.inverse() * plci" in
+        # objectPartMap[partToAdd].offsetPlc.
+        offset = root.Placement.inverse() * member.Placement
+        offset_payload = placement_payload(offset)
+        non_identity = not placement_payload_is_identity(offset_payload)
+        runtime_offsets[member_name] = {
+            "root": root_name,
+            "member": member_name,
+            "fixed_joint": fixed_joint,
+            "offset_placement": offset,
+            "offset_payload": offset_payload,
+            "non_identity": non_identity,
+        }
+        bundles.append({
+            "root": root_name,
+            "member": member_name,
+            "fixed_joint": fixed_joint,
+            "status": "resolved_source_backed_offsetPlc",
+            "offset_formula": "plc.inverse() * plci",
+            "offset_non_identity": non_identity,
+            "root_initial_placement": placement_payload(root.Placement),
+            "member_initial_placement": placement_payload(member.Placement),
+            "offsetPlc": offset_payload,
+            "source": (
+                "/home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp"
+                "::AssemblyObject::getMbDData(), objectPartMap[partToAdd].offsetPlc = "
+                "\"plc.inverse() * plci\""
+            ),
+        })
+
+    if not bundles:
+        return {}, {}
+
+    return {
+        "collector_mode": "source_backed_bundled_offsetPlc_evidence",
+        "route": str(config.get("route", "backend_gap_candidate")),
+        "scope_ids": [str(item) for item in config.get("scope_ids", [])],
+        "backend_gap_ids": [str(item) for item in config.get("backend_gap_ids", [])],
+        "blocker_id": str(config.get("blocker_id", "")),
+        "sources": [
+            "/home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.h"
+            "::AssemblyObject::MbDPartData::offsetPlc",
+            "/home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp"
+            "::AssemblyObject::getMbDData()",
+            "/home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp"
+            "::AssemblyObject::handleOneSideOfJoint()",
+            "/home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp"
+            "::AssemblyObject::validateNewPlacements()",
+            "/home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp"
+            "::AssemblyObject::setNewPlacements()",
+        ],
+        "bundles": bundles,
+    }, runtime_offsets
+
+
+def attach_bundled_writeback_evidence(
+    oracle: dict,
+    runtime_offsets: dict[str, dict],
+    created: dict[str, Any],
+) -> None:
+    if not oracle:
+        return
+    for bundle in oracle.get("bundles", []):
+        member_name = str(bundle.get("member", ""))
+        offset_data = runtime_offsets.get(member_name)
+        if not offset_data:
+            continue
+        root = created.get(offset_data["root"])
+        member = created.get(member_name)
+        if root is None or member is None:
+            continue
+        # FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+        # ::AssemblyObject::setNewPlacements() and ::validateNewPlacements() both use
+        # "getMbdPlacement(mbdPart) * offsetPlc" for bundled objects.
+        computed_member = root.Placement * offset_data["offset_placement"]
+        computed_payload = placement_payload(computed_member)
+        native_member_payload = placement_payload(member.Placement)
+        bundle["writeback_evidence"] = {
+            "source": (
+                "/home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp"
+                "::AssemblyObject::setNewPlacements(); "
+                "/home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp"
+                "::AssemblyObject::validateNewPlacements()"
+            ),
+            "formula": "getMbdPlacement(mbdPart) * offsetPlc",
+            "mbd_part_owner": offset_data["root"],
+            "member": member_name,
+            "mbd_part_placement_after_solve": placement_payload(root.Placement),
+            "offsetPlc": offset_data["offset_payload"],
+            "computed_member_placement": computed_payload,
+            "native_member_placement_after_solve": native_member_payload,
+            "matches_native_member_placement_after_solve": same_placement_payload(
+                computed_payload,
+                native_member_payload,
+            ),
+        }
+
+
+def native_joint_reference_marker_evidence(
+    joint: Any,
+    ref_name: str,
+    plc_name: str,
+    bundled_offsets: dict[str, dict] | None = None,
+) -> dict:
     import FreeCAD  # type: ignore
     import UtilsAssembly  # type: ignore
 
@@ -3491,6 +3643,16 @@ def native_joint_reference_marker_evidence(joint: Any, ref_name: str, plc_name: 
         part_global = UtilsAssembly.getGlobalPlacement(ref, part)
         jcs_global = obj_global * connector
         marker = part_global.inverse() * jcs_global
+        marker_without_offset = marker
+        offset_data = bundled_offsets.get(link_name(part), {}) if bundled_offsets else {}
+        offset_boundary = "identity_offset_for_two_box_assembly_link_fixture"
+        marker_offset_payload = None
+        marker_without_offset_payload = None
+        if offset_data:
+            marker = offset_data["offset_placement"] * marker
+            marker_without_offset_payload = placement_payload(marker_without_offset)
+            marker_offset_payload = offset_data["offset_payload"]
+            offset_boundary = "non_identity_objectPartMap_offsetPlc"
         evidence.update({
             "status": "resolved_native_handle_one_side",
             "frame": "part_local",
@@ -3499,8 +3661,26 @@ def native_joint_reference_marker_evidence(joint: Any, ref_name: str, plc_name: 
             "part_global_placement": placement_payload(part_global),
             "jcs_global_placement": placement_payload(jcs_global),
             "marker_placement": placement_payload(marker),
-            "offset_boundary": "identity_offset_for_two_box_assembly_link_fixture",
+            "offset_boundary": offset_boundary,
         })
+        if marker_offset_payload is not None:
+            evidence.update({
+                "marker_without_offsetPlc": marker_without_offset_payload,
+                "offsetPlc": marker_offset_payload,
+                "offsetPlc_non_identity": not placement_payload_is_identity(marker_offset_payload),
+                "offsetPlc_source": (
+                    "/home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp"
+                    "::AssemblyObject::getMbDData(), objectPartMap[partToAdd].offsetPlc = "
+                    "\"plc.inverse() * plci\""
+                ),
+                "offsetPlc_consumer": (
+                    "/home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp"
+                    "::AssemblyObject::handleOneSideOfJoint(), applies \"data.offsetPlc * plc\""
+                ),
+                "bundled_mbd_part_owner": str(offset_data.get("root", "")),
+                "bundled_member": str(offset_data.get("member", "")),
+                "fixed_joint": str(offset_data.get("fixed_joint", "")),
+            })
     except Exception as exc:
         evidence["status"] = "collector_error"
         evidence["diagnostic"] = str(exc)
@@ -3535,7 +3715,11 @@ def native_current_value_evidence(joint: Any, joint_type: str) -> dict | None:
     return None
 
 
-def native_marker_oracle_payload(created: dict[str, Any], solver_joints: list[dict]) -> dict:
+def native_marker_oracle_payload(
+    created: dict[str, Any],
+    solver_joints: list[dict],
+    bundled_offsets: dict[str, dict] | None = None,
+) -> dict:
     entries = []
     requires_marker_parity = False
     for solver_joint in solver_joints:
@@ -3543,8 +3727,18 @@ def native_marker_oracle_payload(created: dict[str, Any], solver_joints: list[di
         if joint is None or not hasattr(joint, "JointType"):
             continue
         joint_type = str(getattr(joint, "JointType", solver_joint.get("joint_type", "")))
-        native_reference1 = native_joint_reference_marker_evidence(joint, "Reference1", "Placement1")
-        native_reference2 = native_joint_reference_marker_evidence(joint, "Reference2", "Placement2")
+        native_reference1 = native_joint_reference_marker_evidence(
+            joint,
+            "Reference1",
+            "Placement1",
+            bundled_offsets,
+        )
+        native_reference2 = native_joint_reference_marker_evidence(
+            joint,
+            "Reference2",
+            "Placement2",
+            bundled_offsets,
+        )
         by_reference = {
             reference_payload_key(native_reference1["reference"]): native_reference1,
             reference_payload_key(native_reference2["reference"]): native_reference2,
@@ -3561,6 +3755,8 @@ def native_marker_oracle_payload(created: dict[str, Any], solver_joints: list[di
         requires_marker_parity = requires_marker_parity or bool(
             native_reference1.get("subshape_reference")
             or native_reference2.get("subshape_reference")
+            or native_reference1.get("offsetPlc_non_identity")
+            or native_reference2.get("offsetPlc_non_identity")
         )
         entry = {
             "object": solver_joint.get("object", ""),
@@ -3594,10 +3790,12 @@ def native_assembly_solver_payload(obj: Any, fixture: dict, created: dict[str, A
     # part exists, then runs "mbdAssembly->runPreDrag()" and "setNewPlacements()". CAD Core
     # expected fixtures use this native writeback as the Assembly placement oracle.
     grounded_joints, joints, solver_joints = joint_payloads_from_fixture(fixture, str(obj.Name))
-    native_marker_oracle = native_marker_oracle_payload(created, solver_joints)
+    bundled_offset_oracle, bundled_offsets = native_bundled_offset_oracle_payload(fixture, created)
+    native_marker_oracle = native_marker_oracle_payload(created, solver_joints, bundled_offsets)
     solve_code = int(obj.solve(False))
+    attach_bundled_writeback_evidence(bundled_offset_oracle, bundled_offsets, created)
     if solve_code == -6:
-        return {
+        payload = {
             "status": "error",
             "reason": "no_grounded_part",
             "grounded_joints": grounded_joints,
@@ -3606,9 +3804,12 @@ def native_assembly_solver_payload(obj: Any, fixture: dict, created: dict[str, A
             "unsupported_joints": [],
             "placement_updates": [],
             "native_solver_return": solve_code,
-        }, native_marker_oracle
+        }
+        if bundled_offset_oracle:
+            payload["bundled_offset_oracle"] = bundled_offset_oracle
+        return payload, native_marker_oracle
     if solve_code != 0:
-        return {
+        payload = {
             "status": "error",
             "reason": "native_solver_failed",
             "grounded_joints": grounded_joints,
@@ -3617,7 +3818,10 @@ def native_assembly_solver_payload(obj: Any, fixture: dict, created: dict[str, A
             "unsupported_joints": [],
             "placement_updates": [],
             "native_solver_return": solve_code,
-        }, native_marker_oracle
+        }
+        if bundled_offset_oracle:
+            payload["bundled_offset_oracle"] = bundled_offset_oracle
+        return payload, native_marker_oracle
 
     placement_updates = []
     for component_spec in assembly_link_specs_for_object(fixture, str(obj.Name)):
@@ -3647,7 +3851,7 @@ def native_assembly_solver_payload(obj: Any, fixture: dict, created: dict[str, A
         mode = "grounded_only_noop"
     else:
         mode = "real_ondsel_solver"
-    return {
+    payload = {
         "status": "solved",
         "mode": mode,
         "grounded_joints": grounded_joints,
@@ -3656,7 +3860,10 @@ def native_assembly_solver_payload(obj: Any, fixture: dict, created: dict[str, A
         "unsupported_joints": [],
         "placement_updates": placement_updates,
         "native_solver_return": solve_code,
-    }, native_marker_oracle
+    }
+    if bundled_offset_oracle:
+        payload["bundled_offset_oracle"] = bundled_offset_oracle
+    return payload, native_marker_oracle
 
 
 def assembly_object_payload(obj: Any, fixture: dict | None = None, created: dict[str, Any] | None = None) -> dict:
@@ -3681,6 +3888,8 @@ def assembly_object_payload(obj: Any, fixture: dict | None = None, created: dict
         solver_adapter, native_marker_oracle = native_assembly_solver_payload(obj, fixture, created)
         native_solver_return = solver_adapter.pop("native_solver_return")
         payload["native_solver"] = {"return_code": native_solver_return}
+        if "bundled_offset_oracle" in solver_adapter:
+            payload["bundled_offset_oracle"] = solver_adapter["bundled_offset_oracle"]
         payload["solver_adapter"] = solver_adapter
         if native_marker_oracle:
             payload["native_marker_oracle"] = native_marker_oracle
@@ -4988,6 +5197,42 @@ def payload_requires_marker_parity(payload: dict) -> bool:
     return False
 
 
+def bundled_offset_oracle_from_payload(payload: dict) -> dict | None:
+    if isinstance(payload.get("bundled_offset_oracle"), dict):
+        return payload["bundled_offset_oracle"]
+    for summary in payload.get("objects", {}).values():
+        if isinstance(summary.get("bundled_offset_oracle"), dict):
+            return summary["bundled_offset_oracle"]
+    return None
+
+
+def bundled_offset_gap_metadata(payload: dict) -> dict[str, Any] | None:
+    oracle = bundled_offset_oracle_from_payload(payload)
+    if not oracle:
+        return None
+    scope_ids = [str(item) for item in oracle.get("scope_ids", []) if str(item)]
+    backend_gap_ids = [str(item) for item in oracle.get("backend_gap_ids", []) if str(item)]
+    blocker_id = str(oracle.get("blocker_id", "C9M2-BLOCKER-301") or "C9M2-BLOCKER-301")
+    ids = backend_gap_ids or scope_ids or [blocker_id]
+    return {
+        "known_gap": (
+            f"{blocker_id}: C9-M2 S3 native FreeCAD bundled offsetPlc oracle is checked in "
+            f"for {', '.join(scope_ids or ['C9M2-SCOPE-101..103'])}; current cad-core still "
+            "treats bundled offsetPlc as an identity boundary. Keep this as "
+            "backend_gap_candidate evidence for S6 instead of claiming support in S3."
+        ),
+        "backendGap": {
+            "ids": sorted(dict.fromkeys(ids)),
+            "route": "backend_gap_candidate",
+            "delete_condition": (
+                "S6 implements source-backed non-identity objectPartMap.offsetPlc marker and "
+                "writeback parity, focused expected tests pass, and the C9-M2 matrices are "
+                "updated from backend_gap_candidate to expected-backed current match."
+            ),
+        },
+    }
+
+
 def solver_distance_types_from_payload(payload: dict) -> set[str]:
     distance_types: set[str] = set()
     summaries = list(payload.get("objects", {}).values())
@@ -5096,9 +5341,25 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
     require_native_dressup_body_membership(fixture)
     require_native_polar_pattern_whole_shape_support(fixture)
     doc = FreeCAD.newDocument("CadCoreExpected")
+    assembly_solve_preferences = None
+    previous_solve_on_recompute = True
     try:
+        if has_assembly_objects(fixture):
+            # FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+            # ::AssemblyObject::execute() calls "solve(false)" when the user preference
+            # "SolveOnRecompute" is true. The collector runs the solver explicitly below so
+            # request-local oracle evidence sees the fixture's initial placements, not a prior
+            # recompute writeback.
+            assembly_solve_preferences = FreeCAD.ParamGet(
+                "User parameter:BaseApp/Preferences/Mod/Assembly"
+            )
+            previous_solve_on_recompute = assembly_solve_preferences.GetBool("SolveOnRecompute", True)
+            assembly_solve_preferences.SetBool("SolveOnRecompute", False)
         created = create_objects(FreeCAD, doc, fixture)
         doc.recompute()
+        if assembly_solve_preferences is not None:
+            assembly_solve_preferences.SetBool("SolveOnRecompute", previous_solve_on_recompute)
+            assembly_solve_preferences = None
 
         targets = list(requested_targets) if requested_targets is not None else target_names(fixture)
         object_payloads: dict[str, dict] = {}
@@ -5120,8 +5381,11 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
             payload.update(summary)
         else:
             payload["objects"] = object_payloads
+        bundled_offset_gap = bundled_offset_gap_metadata(payload)
         distance_type_gap = distance_type_gap_metadata(payload)
-        if distance_type_gap is not None:
+        if bundled_offset_gap is not None:
+            payload.update(bundled_offset_gap)
+        elif distance_type_gap is not None:
             payload.update(distance_type_gap)
         elif payload_requires_marker_parity(payload):
             payload["known_gap"] = (
@@ -5145,6 +5409,8 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
             payload["diagnostic_codes"] = sorted(set(diagnostic_codes))
         return payload
     finally:
+        if assembly_solve_preferences is not None:
+            assembly_solve_preferences.SetBool("SolveOnRecompute", bool(previous_solve_on_recompute))
         FreeCAD.closeDocument(doc.Name)
 
 

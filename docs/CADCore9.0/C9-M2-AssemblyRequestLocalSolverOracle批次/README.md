@@ -17,9 +17,9 @@ C9-M2 承接 C9-M1 no-code closure 后的剩余 Assembly request-local solver ev
 
 | 方向 | 当前状态 | C9-M2 目标 |
 | --- | --- | --- |
-| bundled `offsetPlc` object marker | oracle_candidate | native expected + current compare |
-| bundled `offsetPlc` subshape marker | oracle_candidate | native expected + current compare |
-| bundled `offsetPlc` writeback | oracle_candidate | native expected + current compare |
+| bundled `offsetPlc` object marker | backend_gap_candidate | S3 native expected 已采集；S6 消费 current mismatch。 |
+| bundled `offsetPlc` subshape marker | backend_gap_candidate | S3 native expected 已采集；S6 消费 current mismatch。 |
+| bundled `offsetPlc` writeback | backend_gap_candidate | S3 native expected 已采集；S6 消费 current mismatch。 |
 | custom placement-chain expected | expected exists, test not direct | focused test activation |
 | zero Angle fallback | known_gap_retained | native expected + focused test or retained route |
 | primitive frame generalization | diagnostic_non_goal | 保持 non-goal，除非产品另批 DTO |
@@ -34,6 +34,13 @@ S0 关闭证据：C9-M1 queue script 只输出表头；C9-M2 queue 在 S0 重命
 - cad-core 落点已分类：marker / Angle 在 `joint_solver.cpp`，writeback JSON 在 `assembly_utils.cpp`，request-local display apply 在 `assembly_object.cpp`，capability 和 adapter tests 仍保持 `non_identity_bundled_offsetPlc` 与 primitive frame generalization 为 non-goals 且 Assembly remaining gaps 为空。
 - `assembly-marker-custom-placement-chain-real-solver.freecad.json` 已存在，但 exact fixture name 当前只命中 expected 文件，focused tests 尚未直接断言；该项交给 S4 激活，不得误写成 bundled `offsetPlc` coverage。S1 未新增 fixture、未采 native oracle、未改 cad-core source / capability / tests / expected。
 - C9-M2 S2 已关闭范围准入：S2 live 基线为 `HEAD=87f289aaba`（`87f289aaba docs: 关闭 C9-M2 S1 源码候选矩阵`），起始 status 无输出；`C9M2-SCOPE-101/102/103` 路由到 S3 native oracle，`C9M2-SCOPE-201` 路由到 S4 expected activation，`C9M2-SCOPE-301/302` 路由到 S5 zero Angle known-gap/native oracle 与 diagnostics guard review，`C9M2-SCOPE-303/304` 路由到 S6 release gate，`C9M2-SCOPE-401/402` 和 `C9M2-NG-001..006` 保持 diagnostic non-goal / forbidden claims。`C9M2-BLOCKER-201` 已关闭；S2 未改 cad-core source / fixtures / expected / tests，未采 native oracle。
+
+## S3 关闭结论
+
+- S3 live 基线：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=f500c34407`（`f500c34407 docs: 关闭 C9-M2 S2 范围准入矩阵`），起始 `git -c core.quotepath=false status --short -uall` 无输出。
+- 已采集三条 bundled `offsetPlc` native expected：`assembly-bundled-offset-object-marker-real-solver.freecad.json`、`assembly-bundled-offset-subshape-marker-real-solver.freecad.json`、`assembly-bundled-offset-placement-writeback-real-solver.freecad.json`。
+- 三条 expected 均证明 `offsetPlc=[2,0,0]` 非 identity；object/subshape marker 证明 `data.offsetPlc * plc`，writeback 证明 `getMbdPlacement(mbdPart) * offsetPlc`，`ComponentC` expected writeback 为 `[6,0,2]`。
+- 当前 cad-core 对三条 fixture 的 `ComponentC` writeback 仍为 `[4,0,0]`，与 native expected mismatch；`C9M2-SCOPE-101/102/103` 和 `C9M2-BG-101/102/103` 均路由为 `backend_gap_candidate`，仅交 S6 消费。S3 未修改 cad-core C++ solver 语义。
 
 ## 验收分层
 
