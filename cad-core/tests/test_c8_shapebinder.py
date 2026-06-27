@@ -193,8 +193,12 @@ class CadCoreC8ShapeBinderTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase
     def test_setlinks_normalization_keeps_cycle_diagnostic_without_unsupported_type(self) -> None:
         result = self.run_recompute("subshape-binder-setlinks-normalization-diagnostics", "c8m1")
         codes = [item["code"] for item in result["diagnostics"]]
-        self.assertIn("cycle_dependency", codes)
+        self.assertEqual(codes, ["cycle_rejected_by_property_link"])
         self.assertNotIn("unsupported_type", codes)
+        diagnostic = result["diagnostics"][0]
+        self.assertEqual(diagnostic["object"], "SubShapeBinderCycle")
+        self.assertEqual(diagnostic["property"], "Support")
+        self.assertEqual(diagnostic["target"], "SubShapeBinderCycle")
         self.assert_object_summary_matches(
             result,
             "c8m1",

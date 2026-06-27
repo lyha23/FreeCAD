@@ -7,7 +7,7 @@ C8-M5 不新增几何能力。它承接 C8-M4 S6 阶段回归中暴露的两个 
 本轮只处理两个 live 失败点：
 
 - `shape-binder-subshape-binder-element-map-namedshape-body-replay`：expected 中包含 `BodyBaseFeature`，当前 `cad-core` 输出缺失该对象。
-- `subshape-binder-setlinks-normalization-diagnostics`：expected 诊断为 `cycle_rejected_by_property_link`，当前 `cad-core` 输出为 `cycle_dependency`。
+- `subshape-binder-setlinks-normalization-diagnostics`：expected 诊断为 `cycle_rejected_by_property_link`；S4 已把 current `cad-core` 从 generic `cycle_dependency` 修复为 setter-level `cycle_rejected_by_property_link`。
 
 `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]` 继续按 C8-M2 结论保留为 `known_gap` / `oracle_blocked`，不是 C8-M5 的实现入口。
 
@@ -56,6 +56,16 @@ S3 在 `3bcdfaf958` 上复核 `shape-binder-subshape-binder-element-map-namedsha
 已最小刷新 `cad-core/fixtures/c8m1/expected/shape-binder-subshape-binder-element-map-namedshape-body-replay.freecad.json` 中直接相关字段：移除 `objects.BodyBaseFeature`，移除 `Fusion.InList` 中的 `BodyBaseFeature` / `BaseFeature` 控制引用，移除 `element_map_evidence.base_feature_body_shape_element_map_size`。Focused test 现在显式断言该 fixture 不产生 `BodyBaseFeature` 且 `documentObjectUpdates=[]`。
 
 S3 验证结果：`python3 -m unittest tests.test_c8_shapebinder` 通过；expected fixture gate 不再出现 `BodyBaseFeature` drift，当前仅剩 S4 范围的 `subshape-binder-setlinks-normalization-diagnostics` 诊断码差异。
+
+## S4 cycle 诊断裁决
+
+S4 在 `b375ffa973` 上复核 `subshape-binder-setlinks-normalization-diagnostics` 的 input、expected、FreeCAD `SubShapeBinder::setLinks()` 和 current `cad-core` graph 输出后，最终裁决 `C8M5-GAP-201=code_fix_landed`。
+
+结论：该 request-local input 中 `SubShapeBinderCycle.Support` 是 `App::PropertyXLinkSubList`，且唯一 target 为 owner 自身。FreeCAD authority 中 `SubShapeBinder::setLinks()` 先构造 `inSet` 并插入 `this`，命中后抛出 `Cyclic reference to ...`；fresh native collector 同步产出 `cycle_rejected_by_property_link` / `ValueError: self linking`。因此 expected 不刷新，代码修复落在 `cad-core/src/runtime/reference_lifecycle.cpp`，只重放 `PartDesign::SubShapeBinder` 的 `Support` self-link setter-cycle 拒绝；generic graph cycle 仍由 `cad-core/src/graph/recompute_plan.cpp` 输出 `cycle_dependency`。
+
+已同步 diagnostics vocabulary、focused C8 test、diagnostics test 和 adapter capability smoke。full FreeCAD property editor lifecycle、reverse in-list cache、copy-on-change temporary document cache 仍不是 C8-M5 supported scope。
+
+S4 验证结果：`cmake --build build` 通过；`python3 -m unittest tests.test_c8_shapebinder tests.test_diagnostics tests.test_adapters` 通过；`python3 -m unittest tests.test_expected_fixtures.CadCoreExpectedFixtureTest.test_expected_fixtures_match_recompute_results` 通过，35 skipped 保持不变。
 
 ## 主文件
 

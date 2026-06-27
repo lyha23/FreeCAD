@@ -1528,6 +1528,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "missing_constraints",
             "missing_curve_source",
             "cycle_dependency",
+            "cycle_rejected_by_property_link",
             "execution_failed",
             "perform_failed",
             "surface_not_done",

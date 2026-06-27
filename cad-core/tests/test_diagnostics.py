@@ -52,6 +52,9 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             ("c3m2", "xlink-missing-external-document"): ["missing_external_document"],
             ("c3m2", "xlink-pending-external-document"): ["external_document_pending_reload"],
             ("c3m2", "xlink-unloaded-external-document"): ["external_document_unloaded"],
+            ("c8m1", "subshape-binder-setlinks-normalization-diagnostics"): [
+                "cycle_rejected_by_property_link"
+            ],
         }
         for (group, fixture), codes in diagnostic_cases.items():
             with self.subTest(fixture=fixture):

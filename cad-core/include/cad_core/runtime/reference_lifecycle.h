@@ -15,6 +15,9 @@ enum class ReferenceLifecycleState
 {
     CurrentTarget,
     MissingTarget,
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp
+    // ::SubShapeBinder::setLinks(), throws "Cyclic reference to ..." for setter-level cycles.
+    PropertyLinkSetterCycleRejected,
     FrozenOldExternalGeometry,
     MissingOldExternalGeometry,
     DetachedExternalGeometry,

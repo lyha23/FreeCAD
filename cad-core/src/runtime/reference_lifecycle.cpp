@@ -157,6 +157,20 @@ bool targetExists(const app::Link& link, const ReferenceLifecycleView& view)
     return view.documentObjects.count(link.object) != 0U;
 }
 
+bool rejectsSubShapeBinderSupportSetterCycle(const app::DocumentObject& owner,
+                                             const app::PropertyValue& propertyValue,
+                                             const std::string& propertyName,
+                                             const app::Link& link)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp
+    // ::SubShapeBinder::setLinks() builds "auto inSet = getInListEx(true); inSet.insert(this)"
+    // and throws "Cyclic reference to ..." before assigning Support when the target is inSet.
+    // cad-core only replays the request-local self-link case for the Support
+    // App::PropertyXLinkSubList setter; full property editor lifecycle/cache behavior remains out of scope.
+    return owner.typeId == "PartDesign::SubShapeBinder" && propertyName == "Support"
+        && propertyValue.propertyType == "App::PropertyXLinkSubList" && link.object == owner.name;
+}
+
 }  // namespace
 
 ExternalGeometryLifecycleFlags externalGeometryLifecycleFlags(const app::Link& link)
@@ -208,6 +222,19 @@ ReferenceLifecycleDecision classifyReferenceLifecycle(const app::DocumentObject&
     const std::string propertyName = link.property.empty() ? propertyValue.name : link.property;
     decision.targetExists = targetExists(link, view);
     decision.requiresGraphDependency = decision.targetExists;
+    if (rejectsSubShapeBinderSupportSetterCycle(owner, propertyValue, propertyName, link)) {
+        decision.state = ReferenceLifecycleState::PropertyLinkSetterCycleRejected;
+        decision.action = ReferenceLifecycleAction::BlockRecompute;
+        decision.diagnostic = makeGraphDiagnostic(
+            "cycle_rejected_by_property_link",
+            "PartDesign::SubShapeBinder Support rejected cyclic link to " + link.object
+                + " before recompute",
+            owner,
+            propertyName,
+            link
+        );
+        return decision;
+    }
     decision.hasLabelReferenceRename = !link.labelReferenceRenames.empty();
     if (link.documentRef) {
         decision.hasDocumentReferenceRename = documentReferenceRenameChanged(*link.documentRef);
