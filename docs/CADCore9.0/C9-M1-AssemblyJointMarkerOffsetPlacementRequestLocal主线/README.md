@@ -19,6 +19,14 @@ C9-M1 处理 Assembly request-local solver 链路中仍需要裁决的 marker / 
 - `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache` 继续保留 C8 known gap / `oracle_blocked`，不进入 C9-M1。
 - `cad-core/fixtures/c3m6/expected` 已有 Assembly native solver placement expected；C9-M1 必须复用这些 oracle 作为基线，不得用 current cad-core 输出倒推 FreeCAD expected。
 
+## S1 结论
+
+- S1 执行基线：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=f6ecb77b1a`（`f6ecb77b1a docs: 完成 C9-M1 S0 基线冻结`），开始状态干净。
+- FreeCAD source authority 已闭合到 `AssemblyObject.cpp::handleOneSideOfJoint()`、`validateNewPlacements()`、`setNewPlacements()`、`solve()`、`makeMbdJointOfType()`，`AssemblyUtils.cpp::getJointType()` / `getJointCurrentValue()`，以及 `JointObject.py` 的 Joint / GroundedJoint schema。关键顺序是 `getGlobalPlacement(nullptr, ref) * PlacementN`，再 `getGlobalPlacement(part, ref).inverse()`，最后在 marker creation 前应用 `offsetPlc * marker`；solver writeback 则写 `getMbdPlacement(mbdPart) * offsetPlc`。
+- current cad-core coverage 已定位到 `joint_solver.cpp::resolveJointMarkerPlacement()` / real Ondsel adapter、`assembly_utils.cpp::placementUpdateJson()` / `solverSummary()`、`assembly_object.cpp` 的 request-local display update，以及 capability 的 `assembly.ondsel_solver_adapter` / `placement_writeback`。当前覆盖 object、Vertex、linear Edge、planar Face、mixed、identity-offset AssemblyLink marker subset，unsupported primitive 和 unresolved marker 走 diagnostics。
+- C3M6 / P8 focused tests 已覆盖 13 个 JointType 的 real Ondsel solver、object/subshape marker evidence、`documentObjectUpdates.action=assembly_set_placement`、next-request no-op、multi-component writeback 和 unsupported diagnostics。`assembly-marker-custom-placement-chain-real-solver` expected 已包含 non-identity connector / part placement chain native evidence，但仍带旧 `known_gap/backendGap` 文案，必须交给 S3 复审，不在 S1 升级为 supported。
+- `C9M1-SRC-201..403` 已写入 source evidence、cad-core landing 和 next action；`C9M1-BLOCKER-101` 已关闭为 `Closed S1`。S2 继续做 scope / blocker / non-goal 路由，不改 capability、fixtures、tests 或 cad-core 源码。
+
 ## FreeCAD 依据
 
 | 语义 | FreeCAD 源码入口 | 关键行为 |
