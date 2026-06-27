@@ -33,6 +33,7 @@ S0 关闭证据：C9-M1 queue script 只输出表头；C9-M2 queue 在 S0 重命
 - `makeMbdJointOfType()` 的 FreeCAD authority 明确为 Angle 0 或 2pi fallback 到 `ASMTParallelAxesJoint`；cad-core 当前落点在 `joint_solver.cpp::makeOndselJointOfType()`，S5 仍需 native expected 判定 current parity，不在 S1 宣称 supported。
 - cad-core 落点已分类：marker / Angle 在 `joint_solver.cpp`，writeback JSON 在 `assembly_utils.cpp`，request-local display apply 在 `assembly_object.cpp`，capability 和 adapter tests 仍保持 `non_identity_bundled_offsetPlc` 与 primitive frame generalization 为 non-goals 且 Assembly remaining gaps 为空。
 - `assembly-marker-custom-placement-chain-real-solver.freecad.json` 已存在，但 exact fixture name 当前只命中 expected 文件，focused tests 尚未直接断言；该项交给 S4 激活，不得误写成 bundled `offsetPlc` coverage。S1 未新增 fixture、未采 native oracle、未改 cad-core source / capability / tests / expected。
+- C9-M2 S2 已关闭范围准入：S2 live 基线为 `HEAD=87f289aaba`（`87f289aaba docs: 关闭 C9-M2 S1 源码候选矩阵`），起始 status 无输出；`C9M2-SCOPE-101/102/103` 路由到 S3 native oracle，`C9M2-SCOPE-201` 路由到 S4 expected activation，`C9M2-SCOPE-301/302` 路由到 S5 zero Angle known-gap/native oracle 与 diagnostics guard review，`C9M2-SCOPE-303/304` 路由到 S6 release gate，`C9M2-SCOPE-401/402` 和 `C9M2-NG-001..006` 保持 diagnostic non-goal / forbidden claims。`C9M2-BLOCKER-201` 已关闭；S2 未改 cad-core source / fixtures / expected / tests，未采 native oracle。
 
 ## 验收分层
 
