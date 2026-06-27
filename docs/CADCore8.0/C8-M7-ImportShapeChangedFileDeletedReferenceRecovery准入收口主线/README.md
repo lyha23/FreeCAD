@@ -54,6 +54,12 @@ S4 不打开代码闸门。`namedShapeForImportedShape()` 已为当前请求导�
 
 因此 C8-M7 S4 将 `C8M7-SCOPE-201`、`C8M7-SCOPE-202`、`C8M7-SCOPE-203` 收口为 `already_covered`，把 `C8M7-SCOPE-204` 继续保持为 `diagnostic_non_goal`。deleted-file 且没有 current imported shape 的 old geometry recovery 不属于无状态 CAD Core，本包后续 S5 只处理 capability residual 发布口径，S6 只有在 S5 发现发布需要代码闸门时才进入实现。
 
+## S5 capability 残留与 non-goal 发布准入结论
+
+S5 裁决当前 `import_shape.remaining=["changed_file_deleted_reference_recovery"]` 是 stale mixed publication，不是新的 request-local backend gap。S3 已证明 readable changed-file / same-file `FileName` 会按当前请求文件重新导入并发布 current request 的 `NamedShape` / ElementMap / mapper history；S4 已证明 current imported shape + request-local `ReferenceShadow` fingerprint / 单 subshape BREP 证据的恢复边界已覆盖。deleted / unreadable `FileName` 没有 current imported shape 时只能走 explicit diagnostic，不能声明 old geometry recovery supported。
+
+S6 路线因此限定为 capability publication closure：只允许修改 `cad-core/src/runtime/capability_contract.cpp` 与 `cad-core/tests/test_adapters.py`，将 `import_shape.remaining` 中的 stale mixed token 移除，并用 adapter capability smoke 锁住该 token 不再出现。如果 capability JSON 需要继续表达 deleted-file old geometry recovery，必须以 non-goal / diagnostic wording 表达，不得进入 `covered` 或 supported known-gap。S6 不允许改 runtime import、reference resolution、elementReferenceUpdates、fixture expected、adapter 字符串改写或下游同步。
+
 ## 主文件
 
 - 总入口：`6-27-15-37-C8-M7-ImportShapeChangedFileDeletedReferenceRecovery准入收口主线总入口.md`
@@ -68,24 +74,17 @@ S4 不打开代码闸门。`namedShapeForImportedShape()` 已为当前请求导�
 3. S2：已完成准入路由与 blocker 矩阵。
 4. S3：已完成 import 文件生命周期 oracle 复审。
 5. S4：已完成 ElementMap 与 ReferenceShadow 恢复边界复审。
-6. S5：capability 残留与 non-goal 发布准入。
+6. S5：已完成 capability 残留与 non-goal 发布准入，S6 路线为受限 capability publication patch。
 7. S6：实现或 no-code 发布闸门。
 
 ## 允许代码落点
 
-只有 S3-S5 证明存在 request-local、source-backed、非跨请求缓存的实现缺口时，S6 才允许代码修改。候选落点限于：
+S5 未发现 request-local、source-backed、非跨请求缓存的实现缺口，因此 S6 不打开 runtime backend gate。S6 允许代码落点限于：
 
-- `cad-core/src/part/part_import.cpp`
-- `cad-core/src/part/topo_shape_expansion.cpp`
-- `cad-core/src/part/topo_shape.cpp`
-- `cad-core/src/runtime/reference_resolution.cpp`
-- `cad-core/src/runtime/element_reference_update.cpp`
 - `cad-core/src/runtime/capability_contract.cpp`
-- `cad-core/tests/test_p6_topology.py`
-- `cad-core/tests/test_p8_features.py`
 - `cad-core/tests/test_adapters.py`
 
-禁止用 adapter 字符串改写、fixture 名称分支、输出排序猜测、文件名特判、跨请求 shape cache、持久完整 BREP、持久 TopoDS_Shape、持久 NamedShape 或持久 ElementMap 关闭 residual。
+S6 可同步回写本包 README / 矩阵 / S6 step 状态。禁止修改 `cad-core/src/part/part_import.cpp`、`cad-core/src/part/topo_shape_expansion.cpp`、`cad-core/src/part/topo_shape.cpp`、`cad-core/src/runtime/reference_resolution.cpp`、`cad-core/src/runtime/element_reference_update.cpp`、fixtures、expected、adapter 输出字符串或下游仓库。禁止用 fixture 名称分支、输出排序猜测、文件名特判、跨请求 shape cache、持久完整 BREP、持久 TopoDS_Shape、持久 NamedShape 或持久 ElementMap 关闭 residual。
 
 ## 验收分层
 

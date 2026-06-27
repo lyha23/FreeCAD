@@ -19,6 +19,12 @@
 - `C8M7-BLOCKER-501`
 - README 的 S5 结论。
 
+## S5 裁决结论
+
+S5 裁决当前 `import_shape.remaining=["changed_file_deleted_reference_recovery"]` 是 stale mixed publication，不是 request-local backend gap。S3 已将 readable changed-file / same-file `FileName` 的 current request reimport 收口为 `already_covered`；S4 已将 current imported shape + request-local `ReferenceShadow` 的恢复边界收口为 `already_covered`；deleted / unreadable `FileName` 没有 current imported shape 时只能走 diagnostic / `diagnostic_non_goal`，不得声明 old geometry recovery supported。
+
+S6 选择受限 capability publication patch：允许修改 `cad-core/src/runtime/capability_contract.cpp` 和 `cad-core/tests/test_adapters.py`，移除 stale mixed remaining token，并用 adapter capability test 锁住 `import_shape.remaining` 为空、`changed_file_deleted_reference_recovery` 不再出现、deleted-file old geometry recovery 不进入 supported / covered。S6 不允许改 runtime import、reference resolution、elementReferenceUpdates、fixtures、expected、adapter 字符串改写或下游同步。
+
 ## 验收
 
 ```bash
