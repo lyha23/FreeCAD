@@ -34,6 +34,12 @@ current `cad-core` 的 `Part::ImportBrep` / `ImportStep` / `ImportIges` 同样�
 
 现有测试已经覆盖 `import_shape_element_map`、owner-qualified alias、BREP / STEP / IGES current-file import、imported ElementMap link-chain consumption 和 capability `import_shape` row。S1 不打开代码闸门；changed-file 与 deleted-file 的最终路由继续交给 S2-S5 裁决。
 
+## S2 准入路由结论
+
+S2 已把 `changed_file_deleted_reference_recovery` 拆成明确 owner：changed-file 当前可读文件重导入路由为 `already_covered`，S3 只保留文件生命周期复审；deleted / unreadable `FileName` 只允许显式 diagnostics，路由为 `known_gap_retained`，不得声明 deleted-file full recovery supported；request-local `ReferenceShadow` + current imported shape 恢复仍是 `request_local_backend_gap_candidate`，交给 S4 决定是否已有覆盖；跨请求完整 import cache、完整 BREP、TopoDS_Shape、NamedShape 或 ElementMap 持久状态均为 `diagnostic_non_goal`。
+
+继承自 C7-M7 的完整 imported ElementMap、ShowElement persistent writeback、STL complete Part ElementMap 与 cross-document hash / postfix lifecycle 保持 `known_gap_retained`，不在 C8-M7 重开。当前 capability residual 与上述拆分存在 publication drift，S2 路由为 `unexpected_mismatch` 并交给 S5 精确决定移除、保留已命名 known gap，或在 S3/S4 发现 request-local mismatch 时才进入 S6 受限代码闸门。
+
 ## 主文件
 
 - 总入口：`6-27-15-37-C8-M7-ImportShapeChangedFileDeletedReferenceRecovery准入收口主线总入口.md`
@@ -45,7 +51,7 @@ current `cad-core` 的 `Part::ImportBrep` / `ImportStep` / `ImportIges` 同样�
 
 1. S0：已完成 live 基线与 residual 声明冻结。
 2. S1：已完成 FreeCAD source 与 current coverage 复核。
-3. S2：准入路由与 blocker 矩阵。
+3. S2：已完成准入路由与 blocker 矩阵。
 4. S3：import 文件生命周期 oracle 复审。
 5. S4：ElementMap 与 ReferenceShadow 恢复边界复审。
 6. S5：capability 残留与 non-goal 发布准入。
