@@ -1,0 +1,6 @@
+category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
+C8M6-CAT-001	sync_required_source_contract	high	C8M6-SCOPE-101;C8M6-SCOPE-102;C8M6-SCOPE-103;C8M6-SCOPE-201;C8M6-SCOPE-202;C8M6-SCOPE-301	No	S3-S5 publish contract rows and verify with focused tests
+C8M6-CAT-002	known_gap_retained	high	C8M6-SCOPE-204	No	Keep copy_on_change_full_temporary_document_cache as remaining_gap and diagnostic non-goal
+C8M6-CAT-003	c8m5_delta_must_sync	high	C8M6-SCOPE-104;C8M6-SCOPE-203	No	Ensure downstream contract uses C8-M5 BodyBaseFeature and cycle diagnostic verdicts
+C8M6-CAT-004	release_gate_only	medium	C8M6-SCOPE-302	No	Run queue TSV whitespace diff focused tests expected fixture gate and stage regression as S6 requires
+C8M6-CAT-005	unexpected_mismatch_route	critical	all	Only if S1-S5 finds current code contradicts source contract	Route to exact cad-core landing and focused tests before closing S6
