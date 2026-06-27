@@ -43,6 +43,15 @@ C9-M1 处理 Assembly request-local solver 链路中仍需要裁决的 marker / 
 - `assembly-marker-custom-placement-chain-real-solver.freecad.json` 已有 non-identity connector / part placement chain native evidence，但它的 `offset_boundary` 是 `identity_offset_for_two_box_assembly_link_fixture`，且当前 `test_p8_features.py` 没有直接断言该 fixture。因此它可作为 custom-chain oracle inventory，不能证明 non-identity bundled `offsetPlc`，也不能把缺失的 offsetPlc oracle 升成 backendGap。
 - S3 route：`C9M1-SCOPE-101` / `C9M1-BG-101` 保持 `already_covered`；`C9M1-SCOPE-102` / `C9M1-BG-102` 保持 `oracle_candidate`，collector / probe 基线应是固定关节 bundle 产生非 identity `objectPartMap.offsetPlc` 的 native case，本步按非目标不采集；`C9M1-SCOPE-103` / `C9M1-BG-103` 保持 `diagnostic_non_goal`。`C9M1-BLOCKER-301` 已关闭为 `Closed S3`。
 
+## S4 结论
+
+- S4 执行基线：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=292587a0f5`（`292587a0f5 docs: 完成 C9-M1 S3 markerPlacement 复审`），开始状态干净。
+- FreeCAD `solve()` 调用 real Ondsel `runPreDrag()` 后走 `setNewPlacements()`；拖拽路径才先过 `validateNewPlacements()`。`validateNewPlacements()` 与 `setNewPlacements()` 均按 `getMbdPlacement(mbdPart) * offsetPlc` 处理 bundled part placement。
+- cad-core 只发布 request-local writeback 建议：`solveAssemblyWithRealOndselAdapter()` 生成 placement updates，`assembly_utils.cpp::placementUpdateJson()` 输出 `documentObjectUpdates.action=assembly_set_placement`，`assembly_object.cpp` 只把同一 request 的 update 用于 display compound，不持久写回后端 state、placement cache 或 frontend graph。
+- C3M6 expected 中 42 个文件、44 条 `solver_adapter.placement_updates.action=assembly_set_placement` 覆盖 native writeback evidence；P8/C3M6 tests 覆盖顶层 `documentObjectUpdates`、next-request no-op、多组件/partial writeback 和 unsupported diagnostics。现有 expected 仍只证明 identity `offsetPlc` boundary，non-identity bundled `offsetPlc` 保持 S3 `oracle_candidate`。
+- zero Angle fallback 保持 `known_gap_retained`：FreeCAD 与 cad-core 都有 Angle zero fallback 到 parallel axes 的 source/class evidence；`assembly-angle-zero-and-signed-current-real-solver.json` 只是输入 fixture，没有对应 expected 或测试引用。C9-M1 未采 native zero Angle oracle，也没有 current mismatch 证据，不打开 S6 C++ gate。
+- unsupported JointType / boundary diagnostics 仍准确，`unsupported_assembly_solver` 不会被 C9-M1 writeback 复审改成 silent success。`C9M1-SCOPE-201` / `C9M1-SCOPE-202` / `C9M1-BG-202` 已关闭为 `already_covered`，`C9M1-SCOPE-203` / `C9M1-BG-201` 保持 `known_gap_retained`，`C9M1-BLOCKER-401` 已关闭为 `Closed S4`。S5 只做 capability / diagnostics 发布准入；若 S5 不发现发布口径缺口，S6 走 no-code release gate。
+
 ## FreeCAD 依据
 
 | 语义 | FreeCAD 源码入口 | 关键行为 |
@@ -70,7 +79,7 @@ C9-M1 处理 Assembly request-local solver 链路中仍需要裁决的 marker / 
 2. S1：FreeCAD source 与 current cad-core coverage 候选矩阵。
 3. S2：scope 准入、blocker 与 non-goal 路由。
 4. S3：marker placement 与 `offsetPlc` oracle 复审。
-5. S4：`runPreDrag` placement writeback 生命周期复审。
+5. S4：`runPreDrag` placement writeback 生命周期复审（已完成）。
 6. S5：capability / diagnostics 发布准入。
 7. S6：Oracle 实现与发布闸门。
 
