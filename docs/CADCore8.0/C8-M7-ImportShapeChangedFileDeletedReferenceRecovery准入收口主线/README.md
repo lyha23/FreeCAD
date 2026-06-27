@@ -40,6 +40,12 @@ S2 已把 `changed_file_deleted_reference_recovery` 拆成明确 owner：changed
 
 继承自 C7-M7 的完整 imported ElementMap、ShowElement persistent writeback、STL complete Part ElementMap 与 cross-document hash / postfix lifecycle 保持 `known_gap_retained`，不在 C8-M7 重开。当前 capability residual 与上述拆分存在 publication drift，S2 路由为 `unexpected_mismatch` 并交给 S5 精确决定移除、保留已命名 known gap，或在 S3/S4 发现 request-local mismatch 时才进入 S6 受限代码闸门。
 
+## S3 import 文件生命周期 oracle 复审结论
+
+S3 未采 native FreeCAD oracle：S2 没有 `oracle_candidate` 行，文件生命周期语义可由 FreeCAD source、current `cad-core` source 和现有 P6 / P8 / adapter tests 裁决。复核结论是，readable same / new `FileName` 已由当前请求重导入覆盖；`FeaturePartImportBrep` / `FeaturePartImportStep` / `FeaturePartImportIges` 与 `TopoShape::import*` 均从当前 `FileName` 读取，`cad-core/src/part/part_import.cpp` 也在每次执行中读请求 `FileName` 并发布 current request 的 import `NamedShape` / `import_shape_element_map`。
+
+deleted / unreadable `FileName` 只收口为显式 diagnostic / `known_gap_retained`：FreeCAD 走 `Cannot open file` 错误返回，`cad-core` 对缺失或非普通文件也发出 `execution_failed` / `Cannot open file` 诊断并把对象置为 error。S3 不声明 deleted-file old geometry recovery supported，不引入跨请求 import cache，也不重开 C7-M7 inherited persistent lifecycle。旧 subshape 是否能在当前 imported shape + request-local `ReferenceShadow` 边界内恢复，仍交给 S4 复审。
+
 ## 主文件
 
 - 总入口：`6-27-15-37-C8-M7-ImportShapeChangedFileDeletedReferenceRecovery准入收口主线总入口.md`
@@ -52,7 +58,7 @@ S2 已把 `changed_file_deleted_reference_recovery` 拆成明确 owner：changed
 1. S0：已完成 live 基线与 residual 声明冻结。
 2. S1：已完成 FreeCAD source 与 current coverage 复核。
 3. S2：已完成准入路由与 blocker 矩阵。
-4. S3：import 文件生命周期 oracle 复审。
+4. S3：已完成 import 文件生命周期 oracle 复审。
 5. S4：ElementMap 与 ReferenceShadow 恢复边界复审。
 6. S5：capability 残留与 non-goal 发布准入。
 7. S6：实现或 no-code 发布闸门。
