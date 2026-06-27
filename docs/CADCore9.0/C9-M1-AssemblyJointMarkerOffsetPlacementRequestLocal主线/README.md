@@ -59,6 +59,14 @@ C9-M1 处理 Assembly request-local solver 链路中仍需要裁决的 marker / 
 - S5 保持 S3/S4 裁决：identity-offset representative marker subset 和 request-local writeback 已覆盖；non-identity bundled `offsetPlc` 没有 native expected 加 current mismatch，不能升 `backend_gap_candidate`；non-AssemblyLink primitive frame 保持 `diagnostic_non_goal`；zero Angle fallback 保持 `known_gap_retained`。
 - S6 route 写死为 no-code capability publication closure：allowed files 限本包 README、主线总入口、工作步骤状态文件和矩阵；必须跑 capability smoke、`tests.test_adapters`、队列、TSV、docs whitespace 和 `git diff --check`；不需要 build、native oracle refresh、fixture 或 runtime C++ patch。
 
+## S6 结论
+
+- S6 执行基线：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=c36602a88d`（`c36602a88d docs: 完成 C9-M1 S5 发布准入`），开始状态干净。
+- S6 按 S5 裁决执行 no-code capability publication closure，未修改 `cad-core/src`、`cad-core/tests`、fixtures、expected，未运行 build，未采 native oracle。
+- capability smoke 仍证明 `assembly.ondsel_solver_adapter.status=covered_full`、`available=true`，`subshape_marker_placement.status=covered_representative_subset`、`remaining_gaps=[]`，`placement_writeback.status=covered_full` 且只发布 `documentObjectUpdates.action=assembly_set_placement`；`assembly.remaining_gaps=[]`。
+- 最终 route 保持不变：marker / writeback 为 `already_covered`；non-identity bundled `offsetPlc` 保持 `oracle_candidate` / forbidden guessing；non-AssemblyLink primitive frame 保持 `diagnostic_non_goal`；zero Angle fallback 保持 `known_gap_retained`。
+- `C9M1-BLOCKER-601` 已关闭为 `Closed S6`，S6 文件已重命名为 `【已实现】`，C9-M1 工作步骤队列为空。
+
 ## FreeCAD 依据
 
 | 语义 | FreeCAD 源码入口 | 关键行为 |
@@ -88,7 +96,7 @@ C9-M1 处理 Assembly request-local solver 链路中仍需要裁决的 marker / 
 4. S3：marker placement 与 `offsetPlc` oracle 复审。
 5. S4：`runPreDrag` placement writeback 生命周期复审（已完成）。
 6. S5：capability / diagnostics 发布准入（已完成，S6 no-code route）。
-7. S6：Oracle 实现与发布闸门。
+7. S6：Oracle 实现与发布闸门（已完成，no-code release gate）。
 
 ## 验收分层
 
@@ -106,6 +114,8 @@ git diff --check
 
 ```bash
 cd /home/user/Chili3DProject/FreeCAD/cad-core
-cmake --build build
-python3 -m unittest tests.test_p8_features tests.test_adapters
+./cad-core capabilities > /tmp/c9m1-capabilities.json
+python3 -m unittest tests.test_adapters
 ```
+
+S6 验证结果：capability smoke 通过；`tests.test_adapters` 通过，29 tests OK；S6 重命名后队列脚本只输出表头；TSV field count、docs trailing-whitespace、`git diff --check` 均通过。`tests.test_p8_features` 与 `cmake --build build` 未运行，因为 S6 未打开 C++、fixture、expected 或 capability code gate。
