@@ -2957,6 +2957,21 @@ def set_extended_scalar(
     solver_joint["distance_type_boundary"] = "extended_mapping_pending_s5_oracle"
 
 
+def set_accepted_default_planar_scalar(solver_joint: dict) -> None:
+    # FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    # ::AssemblyObject::makeMbdJointDistance(), default branch creates "ASMTPlanarJoint" and
+    # writes "offset = getJointDistance(joint)". C9-M3 accepts only the native expected-backed
+    # default rows returned by distance_type_is_accepted_default_planar().
+    distance = float(solver_joint.get("distance", 0.0) or 0.0)
+    solver_joint["solver_joint_class"] = "ASMTPlanarJoint"
+    solver_joint["offset"] = distance
+    solver_joint["scalar_correction"] = 0.0
+    solver_joint["scalar_correction_source"] = "none"
+    solver_joint["radius_source_side"] = "none"
+    solver_joint["distance_type_mapping_status"] = "mapped_c9m3_default_planar"
+    solver_joint["distance_type_boundary"] = "expected_backed_default_planar_supported"
+
+
 def mark_default_distance_boundary(solver_joint: dict) -> None:
     solver_joint["scalar_correction"] = 0.0
     solver_joint["scalar_correction_source"] = "none"
@@ -3110,6 +3125,15 @@ def distance_type_is_default_boundary(distance_type: str | None) -> bool:
     }
 
 
+def distance_type_is_accepted_default_planar(distance_type: str | None) -> bool:
+    return distance_type in {
+        "PlaneCone",
+        "LineCylinder",
+        "CurvePlane",
+        "Other",
+    }
+
+
 def resolve_fixture_distance_mapping(solver_joint: dict) -> None:
     distance = float(solver_joint.get("distance", 0.0) or 0.0)
     distance_type = solver_joint.get("distance_type")
@@ -3143,6 +3167,8 @@ def resolve_fixture_distance_mapping(solver_joint: dict) -> None:
         solver_joint["offset"] = distance
     elif resolve_extended_fixture_distance_mapping(solver_joint):
         return
+    elif distance_type_is_accepted_default_planar(distance_type):
+        set_accepted_default_planar_scalar(solver_joint)
     elif distance_type_is_default_boundary(distance_type):
         mark_default_distance_boundary(solver_joint)
 
@@ -5253,7 +5279,7 @@ def distance_type_gap_metadata(payload: dict) -> dict[str, Any] | None:
     if not distance_types:
         return None
 
-    mapped_extended = distance_types & {
+    supported_mapped_extended = {
         "LineCircle",
         "CircleCircle",
         "PlaneCylinder",
@@ -5269,7 +5295,13 @@ def distance_type_gap_metadata(payload: dict) -> dict[str, Any] | None:
         "PointSphere",
         "PointCurve",
     }
-    default_boundary = {item for item in distance_types if distance_type_is_default_boundary(item)}
+    mapped_extended = distance_types & supported_mapped_extended
+    mapped_extended_gap_candidates = mapped_extended - supported_mapped_extended
+    default_boundary = {
+        item
+        for item in distance_types
+        if distance_type_is_default_boundary(item) and not distance_type_is_accepted_default_planar(item)
+    }
     if default_boundary:
         return {
             "known_gap": (
@@ -5287,11 +5319,12 @@ def distance_type_gap_metadata(payload: dict) -> dict[str, Any] | None:
                 ),
             },
         }
-    if mapped_extended:
+    if mapped_extended_gap_candidates or (mapped_extended and payload_requires_marker_parity(payload)):
         ids = ["DTE-BLOCK-007"]
-        if mapped_extended & {"LineCircle", "CircleCircle"}:
+        reported_mapped_extended = mapped_extended_gap_candidates or mapped_extended
+        if reported_mapped_extended & {"LineCircle", "CircleCircle"}:
             ids.append("DTE-BLOCK-003")
-        if mapped_extended & {
+        if reported_mapped_extended & {
             "PlaneCylinder",
             "PlaneSphere",
             "CylinderCylinder",
@@ -5300,16 +5333,22 @@ def distance_type_gap_metadata(payload: dict) -> dict[str, Any] | None:
             "PointSphere",
         }:
             ids.append("DTE-BLOCK-004")
-        if mapped_extended & {"PlaneTorus", "CylinderTorus", "TorusTorus", "TorusSphere", "SphereSphere"}:
+        if reported_mapped_extended & {
+            "PlaneTorus",
+            "CylinderTorus",
+            "TorusTorus",
+            "TorusSphere",
+            "SphereSphere",
+        }:
             ids.append("DTE-BLOCK-005")
-        if mapped_extended & {"PointCurve"}:
+        if reported_mapped_extended & {"PointCurve"}:
             ids.append("DTE-BLOCK-006")
         if payload_requires_marker_parity(payload):
             ids.extend(["MP-BLOCK-002", "MP-BLOCK-003", "MP-BLOCK-006"])
         return {
             "known_gap": (
                 "DTE-S5 native extended DistanceType oracle is checked in "
-                f"({', '.join(sorted(mapped_extended))}), but cad-core has not completed the "
+                f"({', '.join(sorted(reported_mapped_extended))}), but cad-core has not completed the "
                 "S6 publication/parity gate for this expected file; delete after the listed "
                 "blockers are closed and focused expected parity passes."
             ),

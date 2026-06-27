@@ -4462,19 +4462,47 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 8.0,
             ),
         }
-        diagnostic_cases = {
+        accepted_s6_cases = {
             "assembly-distance-point-curve-real-solver": (
                 "PointCurve",
+                "ASMTPointInPlaneJoint",
+                "offset",
+                1.5,
                 "mapped_s4_extended",
                 "extended_mapping_pending_s5_oracle",
-                "point_curve_diagnostic_boundary",
             ),
-        }
-        default_cases = {
-            "assembly-distance-plane-cone-default-boundary": "PlaneCone",
-            "assembly-distance-line-cylinder-default-boundary": "LineCylinder",
-            "assembly-distance-curve-plane-default-boundary": "CurvePlane",
-            "assembly-distance-other-default-boundary": "Other",
+            "assembly-distance-plane-cone-default-boundary": (
+                "PlaneCone",
+                "ASMTPlanarJoint",
+                "offset",
+                1.5,
+                "mapped_c9m3_default_planar",
+                "expected_backed_default_planar_supported",
+            ),
+            "assembly-distance-line-cylinder-default-boundary": (
+                "LineCylinder",
+                "ASMTPlanarJoint",
+                "offset",
+                1.5,
+                "mapped_c9m3_default_planar",
+                "expected_backed_default_planar_supported",
+            ),
+            "assembly-distance-curve-plane-default-boundary": (
+                "CurvePlane",
+                "ASMTPlanarJoint",
+                "offset",
+                1.5,
+                "mapped_c9m3_default_planar",
+                "expected_backed_default_planar_supported",
+            ),
+            "assembly-distance-other-default-boundary": (
+                "Other",
+                "ASMTPlanarJoint",
+                "offset",
+                1.5,
+                "mapped_c9m3_default_planar",
+                "expected_backed_default_planar_supported",
+            ),
         }
 
         for fixture, (distance_type, solver_class, scalar_field, scalar_value) in supported_cases.items():
@@ -4506,7 +4534,14 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     "extended_mapping_pending_s5_oracle",
                 )
 
-        for fixture, (distance_type, mapping_status, boundary, unsupported_reason) in diagnostic_cases.items():
+        for fixture, (
+            distance_type,
+            solver_class,
+            scalar_field,
+            scalar_value,
+            mapping_status,
+            boundary,
+        ) in accepted_s6_cases.items():
             with self.subTest(fixture=fixture):
                 expected = self.expected_freecad("c3m6", fixture)
                 expected_joint = expected["solver_adapter"]["solver_joints"][0]
@@ -4514,44 +4549,32 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 adapter = result["objects"]["Assembly"]["solver_adapter"]
                 actual_joint = adapter["solver_joints"][0]
 
-                self.assertIn("known_gap", expected)
-                self.assertIn("delete_condition", expected["nonGoal"])
+                self.assertNotIn("known_gap", expected)
+                self.assertNotIn("nonGoal", expected)
                 self.assertNotIn("backendGap", expected)
-                self.assertEqual(expected["nonGoal"]["ids"], ["DTE-NG-003"])
                 self.assertEqual(expected_joint["distance_type"], distance_type)
+                self.assertEqual(expected_joint["solver_joint_class"], solver_class)
+                self.assertAlmostEqual(expected_joint[scalar_field], scalar_value)
                 self.assertEqual(expected_joint["distance_type_mapping_status"], mapping_status)
                 self.assertEqual(expected_joint["distance_type_boundary"], boundary)
-                self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_assembly_solver"])
-                self.assertEqual(adapter["status"], "unsupported")
-                self.assertEqual(adapter["unsupported_joints"][0]["reason"], unsupported_reason)
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(adapter["status"], "solved")
+                self.assertEqual(adapter["unsupported_joints"], [])
+                self.assert_nested_matches_expected(
+                    adapter["placement_updates"],
+                    expected["solver_adapter"]["placement_updates"],
+                    "solver_adapter.placement_updates",
+                )
+                self.assert_nested_matches_expected(
+                    result["documentObjectUpdates"],
+                    expected["solver_adapter"]["placement_updates"],
+                    "documentObjectUpdates",
+                )
                 self.assertEqual(actual_joint["distance_type"], distance_type)
+                self.assertEqual(actual_joint["solver_joint_class"], solver_class)
+                self.assertAlmostEqual(actual_joint[scalar_field], scalar_value)
                 self.assertEqual(actual_joint["distance_type_mapping_status"], mapping_status)
                 self.assertEqual(actual_joint["distance_type_boundary"], boundary)
-
-        for fixture, distance_type in default_cases.items():
-            with self.subTest(fixture=fixture):
-                expected = self.expected_freecad("c3m6", fixture)
-                expected_joint = expected["solver_adapter"]["solver_joints"][0]
-                result = self.run_recompute(fixture, "c3m6")
-                adapter = result["objects"]["Assembly"]["solver_adapter"]
-                actual_joint = adapter["solver_joints"][0]
-
-                self.assertIn("known_gap", expected)
-                self.assertIn("delete_condition", expected["nonGoal"])
-                self.assertNotIn("backendGap", expected)
-                self.assertEqual(expected["nonGoal"]["ids"], ["DTE-NG-003"])
-                self.assertEqual(expected_joint["distance_type"], distance_type)
-                self.assertEqual(expected_joint["distance_type_mapping_status"], "default_boundary_not_mapped")
-                self.assertEqual(expected_joint["distance_type_boundary"], "default_or_todo_boundary")
-                self.assertNotIn("solver_joint_class", expected_joint)
-                self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_assembly_solver"])
-                self.assertEqual(adapter["status"], "unsupported")
-                self.assertEqual(actual_joint["distance_type"], distance_type)
-                self.assertEqual(actual_joint["distance_type_mapping_status"], "default_boundary_not_mapped")
-                self.assertEqual(
-                    adapter["unsupported_joints"][0]["reason"],
-                    "default_boundary_not_mapped",
-                )
 
     def test_c3m6_assembly_distance_type_reference_classification_exposes_solver_dto(self) -> None:
         point_a = {
@@ -5114,7 +5137,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "solver_joint_class": "ASMTPointInPlaneJoint",
                 "scalar_field": "offset",
                 "scalar_value": 1.5,
-                "unsupported_reason": "point_curve_diagnostic_boundary",
+                "unsupported_reason": "missing_marker_placement",
             },
             {
                 "case": "plane_cone_default_boundary",
@@ -5127,12 +5150,12 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "scalar_correction": 0.0,
                 "scalar_correction_source": "none",
                 "radius_source_side": "none",
-                "mapping_status": "default_boundary_not_mapped",
-                "boundary": "default_or_todo_boundary",
-                "solver_joint_class": None,
-                "scalar_field": None,
-                "scalar_value": None,
-                "unsupported_reason": "default_boundary_not_mapped",
+                "mapping_status": "mapped_c9m3_default_planar",
+                "boundary": "expected_backed_default_planar_supported",
+                "solver_joint_class": "ASMTPlanarJoint",
+                "scalar_field": "offset",
+                "scalar_value": 1.5,
+                "unsupported_reason": "missing_marker_placement",
             },
             {
                 "case": "line_cylinder_default_boundary",
@@ -5145,12 +5168,12 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "scalar_correction": 0.0,
                 "scalar_correction_source": "none",
                 "radius_source_side": "none",
-                "mapping_status": "default_boundary_not_mapped",
-                "boundary": "default_or_todo_boundary",
-                "solver_joint_class": None,
-                "scalar_field": None,
-                "scalar_value": None,
-                "unsupported_reason": "default_boundary_not_mapped",
+                "mapping_status": "mapped_c9m3_default_planar",
+                "boundary": "expected_backed_default_planar_supported",
+                "solver_joint_class": "ASMTPlanarJoint",
+                "scalar_field": "offset",
+                "scalar_value": 1.5,
+                "unsupported_reason": "missing_marker_placement",
             },
             {
                 "case": "curve_plane_default_boundary",
@@ -5163,12 +5186,12 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "scalar_correction": 0.0,
                 "scalar_correction_source": "none",
                 "radius_source_side": "none",
-                "mapping_status": "default_boundary_not_mapped",
-                "boundary": "default_or_todo_boundary",
-                "solver_joint_class": None,
-                "scalar_field": None,
-                "scalar_value": None,
-                "unsupported_reason": "default_boundary_not_mapped",
+                "mapping_status": "mapped_c9m3_default_planar",
+                "boundary": "expected_backed_default_planar_supported",
+                "solver_joint_class": "ASMTPlanarJoint",
+                "scalar_field": "offset",
+                "scalar_value": 1.5,
+                "unsupported_reason": "missing_marker_placement",
             },
             {
                 "case": "line_curve_other_default_boundary",
@@ -5177,6 +5200,24 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "distance_type": "Other",
                 "swapped": True,
                 "solver_ref1": line_a,
+                "solver_ref2": ellipse_edge,
+                "scalar_correction": 0.0,
+                "scalar_correction_source": "none",
+                "radius_source_side": "none",
+                "mapping_status": "mapped_c9m3_default_planar",
+                "boundary": "expected_backed_default_planar_supported",
+                "solver_joint_class": "ASMTPlanarJoint",
+                "scalar_field": "offset",
+                "scalar_value": 1.5,
+                "unsupported_reason": "missing_marker_placement",
+            },
+            {
+                "case": "curve_cylinder_uncollected_default_boundary",
+                "reference1": ellipse_edge,
+                "reference2": cylinder_face,
+                "distance_type": "CurveCylinder",
+                "swapped": True,
+                "solver_ref1": cylinder_face,
                 "solver_ref2": ellipse_edge,
                 "scalar_correction": 0.0,
                 "scalar_correction_source": "none",
@@ -5498,22 +5539,6 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ),
             (
                 "c4m5",
-                "assembly-runtime-adapter-pointcurve-unsupported-diagnostic",
-                "unsupported_assembly_solver",
-                "unsupported",
-                "unsupported_joint_type",
-                "point_curve_diagnostic_boundary",
-            ),
-            (
-                "c3m6",
-                "assembly-distance-plane-cone-default-boundary",
-                "unsupported_assembly_solver",
-                "unsupported",
-                "unsupported_joint_type",
-                "default_boundary_not_mapped",
-            ),
-            (
-                "c4m5",
                 "assembly-runtime-adapter-missing-grounded-part-diagnostic",
                 "missing_grounded_part",
                 "error",
@@ -5690,33 +5715,29 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(assembly["solver_adapter"]["joints"], ["FixedJoint"])
         self.assertEqual(result["documentObjectUpdates"], [])
 
-    def test_c4m5_assembly_pointcurve_distance_stays_unsupported_diagnostic(self) -> None:
+    def test_c4m5_assembly_pointcurve_distance_matches_supported_solver(self) -> None:
         result = self.run_recompute(
             "assembly-runtime-adapter-pointcurve-unsupported-diagnostic",
             "c4m5",
         )
         assembly = result["objects"]["Assembly"]
-        diagnostic = result["diagnostics"][0]
         solver_joint = assembly["solver_adapter"]["solver_joints"][0]
 
-        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_assembly_solver"])
-        self.assertEqual(diagnostic["target"], "DistanceJoint")
-        self.assertEqual(assembly["solve"], "unsupported")
-        self.assertEqual(assembly["solver_adapter"]["status"], "unsupported")
-        self.assertEqual(assembly["solver_adapter"]["reason"], "unsupported_joint_type")
-        self.assertEqual(
-            assembly["solver_adapter"]["unsupported_joints"],
-            [
-                {
-                    "object": "DistanceJoint",
-                    "joint_type": "Distance",
-                    "reason": "point_curve_diagnostic_boundary",
-                }
-            ],
-        )
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(assembly["solve"], "solved")
+        self.assertEqual(assembly["solver_adapter"]["status"], "solved")
+        self.assertEqual(assembly["solver_adapter"]["unsupported_joints"], [])
         self.assertEqual(solver_joint["distance_type"], "PointCurve")
+        self.assertEqual(solver_joint["solver_joint_class"], "ASMTPointInPlaneJoint")
+        self.assertAlmostEqual(solver_joint["offset"], 1.5)
         self.assertEqual(solver_joint["distance_type_mapping_status"], "mapped_s4_extended")
-        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual(solver_joint["distance_type_boundary"], "extended_mapping_pending_s5_oracle")
+        self.assertEqual([update["object"] for update in result["documentObjectUpdates"]], ["ComponentB"])
+        self.assert_nested_matches_expected(
+            result["documentObjectUpdates"],
+            assembly["solver_adapter"]["placement_updates"],
+            "documentObjectUpdates",
+        )
 
     def test_c4m5_assembly_partial_writeback_updates_only_changed_components(self) -> None:
         result = self.run_recompute("assembly-runtime-adapter-partial-writeback", "c4m5")

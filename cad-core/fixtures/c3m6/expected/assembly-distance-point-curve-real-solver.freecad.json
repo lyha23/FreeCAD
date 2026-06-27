@@ -12,7 +12,6 @@
     ]
   },
   "freecad_version": "1.2.0 revision 20260519",
-  "known_gap": "DTE-BLOCK-006/DTE-NG-003: PointCurve native expected is checked in for diagnostic review only; S6 keeps this TODO-like plane-of-curve behavior out of supported capability until a product decision reopens it.",
   "native_marker_oracle": {
     "requires_cad_core_marker_parity": true,
     "solver_joints": [
@@ -366,12 +365,6 @@
   },
   "native_solver": {
     "return_code": 0
-  },
-  "nonGoal": {
-    "delete_condition": "A later DistanceType scope update accepts PointCurve product behavior, cad-core implements focused parity, and capability docs publish PointCurve explicitly.",
-    "ids": [
-      "DTE-NG-003"
-    ]
   },
   "object": "Assembly",
   "object_fields": {

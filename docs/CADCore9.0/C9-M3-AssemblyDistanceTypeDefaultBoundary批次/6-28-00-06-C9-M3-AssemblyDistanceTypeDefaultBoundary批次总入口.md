@@ -13,10 +13,10 @@
 
 - C9-M2 工作步骤队列已清空，handoff 提交为 `b981e84f68 feat(cad-core): 关闭C9-M2 S6 oracle发布闸门`；S0 执行 live 基线为 `04bdd2e561 docs: 新增 C9-M3 DistanceType default boundary 方案`，起始 status 无输出；S1 执行 live 基线为 `8f209aab54 docs: 关闭 C9-M3 S0 基线冻结`，起始 status 无输出；S2 执行 live 基线为 `48355eae5d docs: 关闭 C9-M3 S1 源码候选矩阵`，起始 status 无输出；S3 执行 live 基线为 `696046ca6c docs: 关闭 C9-M3 S2 范围准入路由`，起始 status 无输出；S4 执行 live 基线为 `213583d369 docs: 关闭 C9-M3 S3 PointCurve 复审`，起始 status 无输出；S5 执行 live 基线为 `7b252ed6df docs: 关闭 C9-M3 S4 DefaultPlanarBranch 复审`，起始 status 无输出。
 - live capability 中 `assembly.remaining_gaps=[]`、`assembly.unsupported_joint_matrix=[]`、`assembly.ondsel_solver_adapter.status=covered_full`。
-- Assembly DistanceType 仍发布 `distance_type_extended_geometry.deferred_diagnostic_cases=["PointCurve"]`，`default_or_todo_boundaries` 包含 `PlaneCone`、`CylinderCone`、`ConeCone`、`ConeTorus`、`ConeSphere`、`PointCone`、`PointTorus`、`LineCylinder`、`LineSphere`、`LineCone`、`LineTorus`、`CurvePlane`、`CurveCylinder`、`CurveSphere`、`CurveCone`、`CurveTorus`、`Other`。
-- checked-in expected 已存在：`assembly-distance-point-curve-real-solver`、`assembly-distance-plane-cone-default-boundary`、`assembly-distance-line-cylinder-default-boundary`、`assembly-distance-curve-plane-default-boundary`、`assembly-distance-other-default-boundary`；这些当前仍带 `DTE-NG-003` / diagnostic 路由。
-- 当前 `cad-core/src/assembly/joint_solver.cpp` 已能给 `PointCurve` 计算 `ASMTPointInPlaneJoint` / `offset` DTO，但 `unsupportedReasonForOndselJoint()` 仍显式返回 `point_curve_diagnostic_boundary`；default branch 缺 solver class，当前走 `default_boundary_not_mapped`。
-- S0 已关闭：`C9M3-BLOCKER-000` / `C9M3-SCOPE-001` 只冻结 live baseline 与 forbidden claims；`PointCurve`、default branch、primitive frame、GUI/session、persistent solver 均不在 S0 写成 supported 或 backendGap。S1 已关闭：`C9M3-BLOCKER-101` 固化 FreeCAD `getDistanceType()` / `makeMbdJointDistance()` source authority、cad-core current landing、collector metadata、expected inventory 和 diagnostics guard；仍不把候选写成 supported 或 backendGap。S2 已关闭：`C9M3-BLOCKER-201` 将 `C9M3-SCOPE-101..404`、`C9M3-BG-101..601`、`C9M3-NG-001..005` 路由到 S3-S6 或 non-goal guard；没有 native expected 或 current mismatch 的行仍不写成 backendGap。S3 已关闭：PointCurve native expected solved，current 仍是 `point_curve_diagnostic_boundary` 且无 `documentObjectUpdates`，因此 `C9M3-SCOPE-101` / `C9M3-BG-101` 路由为 S6 `backend_gap_candidate`，但 S3 不发布 supported。S4 已关闭：`PlaneCone`、`LineCylinder`、`CurvePlane`、`Other` native expected solved，current 仍是 `default_boundary_not_mapped` 且无 `documentObjectUpdates`，因此 `C9M3-SCOPE-201` / `C9M3-BG-201` 与 `C9M3-SCOPE-203` / `C9M3-BG-203` 的 expected-backed 部分路由为 S6 `backend_gap_candidate`；缺 input/expected 的 default 扩面族写为 `notCollected` / `native_oracle_required`，不写 backendGap。S5 已关闭：publication route 和 diagnostics guard 已回写，`C9M3-BG-301..501` 进入 S6-ready 状态；S5 未改 C++、tests、capability_contract 或 expected 实际发布状态。`C9M3-BG-601` 仍是 S6 release gate。
+- Assembly DistanceType 发布已更新：`distance_type_extended_geometry.native_expected_count=18`，`supported` 包含 `PointCurve`、`PlaneCone`、`LineCylinder`、`CurvePlane`、`Other`，`deferred_diagnostic_cases=[]`。
+- checked-in accepted expected：`assembly-distance-point-curve-real-solver`、`assembly-distance-plane-cone-default-boundary`、`assembly-distance-line-cylinder-default-boundary`、`assembly-distance-curve-plane-default-boundary`、`assembly-distance-other-default-boundary` 已删除 stale `DTE-NG-003` / diagnostic metadata，并与 current parity。
+- 缺 input/expected 的 `CylinderCone`、`ConeCone`、`ConeTorus`、`ConeSphere`、`PointCone`、`PointTorus`、`LineSphere`、`LineCone`、`LineTorus`、`CurveCylinder`、`CurveSphere`、`CurveCone`、`CurveTorus` 继续保留在 `default_or_todo_boundaries`，route 为 `notCollected` / `native_oracle_required`。
+- S0-S5 已关闭 source / scope / oracle / publication gate；S6 已关闭 implementation and release gate，`C9M3-BLOCKER-601` 关闭，队列清空后本包收口。
 
 ## S4 关闭证据
 
@@ -41,7 +41,7 @@ C9-M2 queue empty
   -> PointCurve plane-of-curve review
   -> default planar branch batch oracle
   -> capability / diagnostics publication gate
-  -> code landing for expected-backed backendGap or supported publication
+  -> S6 supported publication and queue-empty release gate
 ```
 
 ## FreeCAD 调用依据
@@ -79,7 +79,7 @@ S1 复核补充：Edge/Face 中 line edge 进入 `LinePlane`、`LineCylinder`、
 | S3 | `工作步骤细分/6-28-00-10-【已实现】C9-M3-S3-PointCurve平面化oracle复审.md` | 已关闭：PointCurve native expected/current mismatch -> S6 `backend_gap_candidate`，current diagnostic gate 暂保留。 |
 | S4 | `工作步骤细分/6-28-00-11-【已实现】C9-M3-S4-DefaultPlanarBranch批量oracle复审.md` | 已关闭：existing default expected/current mismatch -> S6 `backend_gap_candidate`；缺 input/expected 扩面族保留 `notCollected` / `native_oracle_required`。 |
 | S5 | `工作步骤细分/6-28-00-12-【已实现】C9-M3-S5-capability与diagnostics发布准入.md` | 已关闭：publication route 和 diagnostics guard 已准入，S6 消费 expected-backed backend gap，缺 oracle rows 保持可见。 |
-| S6 | `工作步骤细分/6-28-00-13-C9-M3-S6-Oracle实现与发布闸门.md` | 根据 oracle 结果实现或 release gate。 |
+| S6 | `工作步骤细分/6-28-00-13-【已实现】C9-M3-S6-Oracle实现与发布闸门.md` | 已关闭：expected-backed backend gap 已实现，accepted expected / capability / tests / docs 已同步，缺 oracle rows 保持可见。 |
 | source candidates | `矩阵/c9m3_distance_type_default_boundary_source_candidates.tsv` | FreeCAD / cad-core source authority。 |
 | scope review | `矩阵/c9m3_distance_type_default_boundary_scope_review_matrix.tsv` | scope 状态、owner step、route。 |
 | blocker queue | `矩阵/c9m3_distance_type_default_boundary_blocker_queue.tsv` | S0-S6 blocker 闭环。 |
@@ -87,4 +87,4 @@ S1 复核补充：Edge/Face 中 line edge 进入 `LinePlane`、`LineCylinder`、
 | backend gap classification | `矩阵/c9m3_distance_type_default_boundary_backend_gap_classification.tsv` | oracle / backendGap / releaseGate 分类。 |
 | validation matrix | `矩阵/c9m3_distance_type_default_boundary_validation_matrix.tsv` | 分层验收命令。 |
 
-当前 S0-S5 已关闭，S6 仍为待执行状态；矩阵仍不是最终支持性发布结论。
+当前 S0-S6 已关闭；矩阵记录最终支持性发布结论和 remaining notCollected/default rows。

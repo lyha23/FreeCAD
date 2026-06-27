@@ -703,6 +703,22 @@ bool isExplicitExtendedDistanceType(const std::string& distanceType)
     return explicitExtendedDistanceTypes.count(distanceType) != 0U;
 }
 
+bool isC9M3AcceptedDefaultPlanarDistanceType(const std::string& distanceType)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    // ::AssemblyObject::makeMbdJointDistance(), default branch says "by default we make a
+    // planar joint." then creates "ASMTPlanarJoint" and assigns "offset = getJointDistance(joint)".
+    // C9-M3 only accepts the checked-in native expected rows below; other default/TODO families
+    // remain oracle-required and must not inherit support.
+    static const std::set<std::string> acceptedDefaultPlanarDistanceTypes = {
+        "PlaneCone",
+        "LineCylinder",
+        "CurvePlane",
+        "Other",
+    };
+    return acceptedDefaultPlanarDistanceTypes.count(distanceType) != 0U;
+}
+
 double radiusOrZero(const AssemblyJointReference& reference)
 {
     return reference.radius.value_or(0.0);
@@ -1009,6 +1025,10 @@ void resolveDistanceJointMapping(JointConstraint& joint)
         joint.distanceTypeMappingStatus = "mapped_s4_extended";
         joint.distanceTypeBoundary = "extended_mapping_pending_s5_oracle";
     };
+    const auto markAcceptedDefaultPlanarMapping = [&joint]() {
+        joint.distanceTypeMappingStatus = "mapped_c9m3_default_planar";
+        joint.distanceTypeBoundary = "expected_backed_default_planar_supported";
+    };
     const auto setDistanceIJ = [&](const std::string& solverJointClass, double scalar) {
         joint.solverJointClass = solverJointClass;
         joint.distanceIJ = scalar;
@@ -1018,6 +1038,11 @@ void resolveDistanceJointMapping(JointConstraint& joint)
         joint.solverJointClass = solverJointClass;
         joint.offset = scalar;
         markExtendedMapping();
+    };
+    const auto setAcceptedDefaultPlanarOffset = [&](double scalar) {
+        joint.solverJointClass = "ASMTPlanarJoint";
+        joint.offset = scalar;
+        markAcceptedDefaultPlanarMapping();
     };
 
     // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
@@ -1107,6 +1132,10 @@ void resolveDistanceJointMapping(JointConstraint& joint)
     }
     if (*joint.distanceType == "PointCurve") {
         setOffset("ASMTPointInPlaneJoint", distance);
+        return;
+    }
+    if (isC9M3AcceptedDefaultPlanarDistanceType(*joint.distanceType)) {
+        setAcceptedDefaultPlanarOffset(distance);
         return;
     }
 }
@@ -1835,9 +1864,6 @@ std::optional<std::string> unsupportedReasonForOndselJoint(const JointConstraint
     if (!isSupportedOndselJointType(joint.jointType)) {
         return "unsupported_joint_type";
     }
-    if (joint.jointType == "Distance" && joint.distanceType && *joint.distanceType == "PointCurve") {
-        return "point_curve_diagnostic_boundary";
-    }
     if (joint.jointType == "Distance" && joint.distanceType && !joint.solverJointClass) {
         return joint.distanceTypeMappingStatus.empty() ? "distance_type_mapping_pending"
                                                        : joint.distanceTypeMappingStatus;
@@ -1874,9 +1900,6 @@ std::string unsupportedJointMessage(const UnsupportedAssemblyJoint& unsupported)
     }
     if (unsupported.reason == "default_boundary_not_mapped") {
         return "Ondsel solver adapter keeps default/TODO DistanceType boundary unsupported";
-    }
-    if (unsupported.reason == "point_curve_diagnostic_boundary") {
-        return "Ondsel solver adapter keeps PointCurve DistanceType diagnostic until product acceptance";
     }
     if (unsupported.reason == "distance_type_mapping_pending") {
         return "Ondsel solver adapter cannot convert Distance without a published solver_joint_class";
@@ -1922,6 +1945,22 @@ bool isBundledFixedConstraint(const JointConstraint& joint)
         && (joint.reference1.bundledOffsetApplied || joint.reference2.bundledOffsetApplied);
 }
 
+bool usesC9M3OtherPlanarOndselMarkerOrder(const JointConstraint& joint)
+{
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.cpp
+    // ::getDistanceType(), edge/edge Other first makes the line edge first with "swapJCS(joint)".
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
+    // ::AssemblyObject::makeMbdJointDistance(), default creates "ASMTPlanarJoint" and assigns
+    // "offset = getJointDistance(joint)". The checked-in C9-M3 Other oracle keeps that public DTO,
+    // but the request-local Ondsel marker I/J order must be reversed for this edge/edge default
+    // branch to reproduce FreeCAD's placement writeback.
+    return joint.jointType == "Distance"
+        && joint.distanceType
+        && *joint.distanceType == "Other"
+        && joint.solverJointClass
+        && *joint.solverJointClass == "ASMTPlanarJoint";
+}
+
 void addConstraintToOndselAssembly(
     const std::shared_ptr<MbD::ASMTAssembly>& assembly,
     const JointConstraint& joint,
@@ -1949,8 +1988,14 @@ void addConstraintToOndselAssembly(
     partJ->addMarker(makeOndselMarker(markerJ, *joint.reference2.markerPlacement));
 
     mbdJoint->setName(joint.object);
-    mbdJoint->setMarkerI("/OndselAssembly/" + solverPartObject(joint.reference1) + "/" + markerI);
-    mbdJoint->setMarkerJ("/OndselAssembly/" + solverPartObject(joint.reference2) + "/" + markerJ);
+    if (usesC9M3OtherPlanarOndselMarkerOrder(joint)) {
+        mbdJoint->setMarkerI("/OndselAssembly/" + solverPartObject(joint.reference2) + "/" + markerJ);
+        mbdJoint->setMarkerJ("/OndselAssembly/" + solverPartObject(joint.reference1) + "/" + markerI);
+    }
+    else {
+        mbdJoint->setMarkerI("/OndselAssembly/" + solverPartObject(joint.reference1) + "/" + markerI);
+        mbdJoint->setMarkerJ("/OndselAssembly/" + solverPartObject(joint.reference2) + "/" + markerJ);
+    }
     assembly->addJoint(mbdJoint);
 }
 
