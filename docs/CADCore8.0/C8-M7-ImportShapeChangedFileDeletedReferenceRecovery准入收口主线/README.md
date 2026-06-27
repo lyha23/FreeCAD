@@ -46,6 +46,14 @@ S3 未采 native FreeCAD oracle：S2 没有 `oracle_candidate` 行，文件生�
 
 deleted / unreadable `FileName` 只收口为显式 diagnostic / `known_gap_retained`：FreeCAD 走 `Cannot open file` 错误返回，`cad-core` 对缺失或非普通文件也发出 `execution_failed` / `Cannot open file` 诊断并把对象置为 error。S3 不声明 deleted-file old geometry recovery supported，不引入跨请求 import cache，也不重开 C7-M7 inherited persistent lifecycle。旧 subshape 是否能在当前 imported shape + request-local `ReferenceShadow` 边界内恢复，仍交给 S4 复审。
 
+## S4 ElementMap 与 ReferenceShadow 恢复边界复审结论
+
+S4 不打开代码闸门。`namedShapeForImportedShape()` 已为当前请求导入 shape 生成 `owner.ElementN` alias、element sources 和 `import_shape_element_map` preserved mapper history；P6 STEP / BREP import tests 覆盖了 owner-qualified Face / Edge alias 与 mapper history。`currentSubshapeForReference()` 先通过 current `NamedShape` 的 `ElementMap` 调 `part::resolveElementReference()`，只有当前 named shape 不能解析时才退到当前 shape 的可见 subshape 查找。
+
+`recoverSubshapeForReference()` 仍是 request-local：它要求 `view.shapes` 中存在当前请求对象，只在当前 `shape` 或当前 `InternalShape` 内调用 `recoverReferenceShadowSubshape()`，并用请求携带的 `ReferenceShadow` fingerprint 或单 subshape BREP 证据做唯一性验证；没有 current shape 时只能返回 missing 并走 diagnostic。`referenceShadowUpdateJson()` 只接收一个已解析的 `currentSubshape`，刷新 fingerprint，并且仅在输入已有 `ReferenceShadow.brep` 时用当前单 subshape snapshot 更新该字段；它不发布完整对象 BREP，也不保存跨请求 `NamedShape` / `ElementMap` / `TopoDS_Shape` cache。
+
+因此 C8-M7 S4 将 `C8M7-SCOPE-201`、`C8M7-SCOPE-202`、`C8M7-SCOPE-203` 收口为 `already_covered`，把 `C8M7-SCOPE-204` 继续保持为 `diagnostic_non_goal`。deleted-file 且没有 current imported shape 的 old geometry recovery 不属于无状态 CAD Core，本包后续 S5 只处理 capability residual 发布口径，S6 只有在 S5 发现发布需要代码闸门时才进入实现。
+
 ## 主文件
 
 - 总入口：`6-27-15-37-C8-M7-ImportShapeChangedFileDeletedReferenceRecovery准入收口主线总入口.md`
@@ -59,7 +67,7 @@ deleted / unreadable `FileName` 只收口为显式 diagnostic / `known_gap_retai
 2. S1：已完成 FreeCAD source 与 current coverage 复核。
 3. S2：已完成准入路由与 blocker 矩阵。
 4. S3：已完成 import 文件生命周期 oracle 复审。
-5. S4：ElementMap 与 ReferenceShadow 恢复边界复审。
+5. S4：已完成 ElementMap 与 ReferenceShadow 恢复边界复审。
 6. S5：capability 残留与 non-goal 发布准入。
 7. S6：实现或 no-code 发布闸门。
 
