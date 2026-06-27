@@ -67,6 +67,16 @@ S4 在 `b375ffa973` 上复核 `subshape-binder-setlinks-normalization-diagnostic
 
 S4 验证结果：`cmake --build build` 通过；`python3 -m unittest tests.test_c8_shapebinder tests.test_diagnostics tests.test_adapters` 通过；`python3 -m unittest tests.test_expected_fixtures.CadCoreExpectedFixtureTest.test_expected_fixtures_match_recompute_results` 通过，35 skipped 保持不变。
 
+## S5 准入收口
+
+S5 在 `4e8d00798e` 上复核 S3/S4 落地状态，最终裁决为 docs/status 收口，不再改 C++、expected fixture 或测试。
+
+- `C8M5-GAP-101=approved_expected_refresh`：S3 只刷新 `shape-binder-subshape-binder-element-map-namedshape-body-replay` 中 `BodyBaseFeature` 直接相关字段，未做 blanket C8-M1 expected refresh。
+- `C8M5-GAP-201=code_fix_landed`：S4 代码落在 `cad-core/src/runtime/reference_lifecycle.cpp`，不是 adapter、comparator 或 fixture-name 字符串重写；generic graph cycle 仍保持 `cycle_dependency`。
+- `copy_on_change_full_temporary_document_cache` 仍按 C8-M2 保持 `known_gap` / `oracle_blocked`，不是 C8-M5 supported scope。
+
+S5 验证结果：`python3 -m unittest tests.test_c8_shapebinder tests.test_diagnostics` 通过，18 tests；`python3 -m unittest tests.test_expected_fixtures.CadCoreExpectedFixtureTest.test_expected_fixtures_match_recompute_results` 通过，35 skipped。`C8M5-BLOCKER-501` 已关闭，下一队列首项为 S6 阶段回归发布闸门。
+
 ## 主文件
 
 - 总入口：`6-27-09-19-C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线总入口.md`
