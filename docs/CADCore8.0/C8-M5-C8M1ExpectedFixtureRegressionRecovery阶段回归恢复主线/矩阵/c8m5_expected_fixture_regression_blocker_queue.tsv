@@ -1,6 +1,6 @@
 blocker_id	step	blocker	status	close_condition	evidence	next_owner
 C8M5-BLOCKER-000	S0	live baseline and non-goal freeze	closed	pwd HEAD queues capability and two drift rows recorded	HEAD e93ddd8746; C8-M1..C8-M4 queues empty; only active remaining_gap copy_on_change_full_temporary_document_cache; stage regression current codes missing_BodyBaseFeature and cycle_dependency	S1
-C8M5-BLOCKER-101	S1	failure list owner classification	pending	source scope oracle and backend gap matrices route every drift	C8-M5 source candidates	S1
+C8M5-BLOCKER-101	S1	failure list owner classification	closed	source scope oracle and backend gap matrices route every drift	Each target drift now has expected current implementation focused test and FreeCAD source authority evidence; Body route is expected_authority_pending plus implementation_regression_candidate; cycle route is expected_authority_pending plus diagnostic_policy_pending	S2
 C8M5-BLOCKER-201	S2	expected authority and current output compare	pending	each drift has approved_refresh_candidate or code_fix_required_candidate	focused expected fixture compare	S2
 C8M5-BLOCKER-301	S3	BodyBaseFeature drift verdict	pending	C8M5-GAP-101 classified and focused tests updated	FreeCAD Body BaseFeature authority	S3
 C8M5-BLOCKER-401	S4	cycle diagnostic drift verdict	pending	C8M5-GAP-201 classified and diagnostics vocabulary aligned	SubShapeBinder::setLinks and graph visitObject evidence	S4

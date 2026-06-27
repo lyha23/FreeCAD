@@ -29,6 +29,15 @@ C8-M5 不新增几何能力。它承接 C8-M4 S6 阶段回归中暴露的两个 
 | `shape-binder-subshape-binder-element-map-namedshape-body-replay` | `cad-core/fixtures/c8m1/expected/shape-binder-subshape-binder-element-map-namedshape-body-replay.freecad.json` | current output object map lacks `BodyBaseFeature`; expected contains it; stage regression error is `KeyError: 'BodyBaseFeature'`. |
 | `subshape-binder-setlinks-normalization-diagnostics` | `cad-core/fixtures/c8m1/expected/subshape-binder-setlinks-normalization-diagnostics.freecad.json` | current diagnostic code is `cycle_dependency` at `graph` stage for `SubShapeBinderCycle`; expected code is `cycle_rejected_by_property_link`. |
 
+## S1 owner 分类
+
+S1 在 `f3cca29254` 上只做失败清单和 owner 路由，不改 C++、fixture expected 或测试断言。`C8M5-BLOCKER-101` 已关闭；两个 drift 都已绑定 expected、current implementation、focused test 和 FreeCAD source authority 四类证据。
+
+| drift | expected evidence | current implementation evidence | focused test evidence | FreeCAD source authority | route | next owner |
+| --- | --- | --- | --- | --- | --- | --- |
+| `BodyBaseFeature` object drift | expected fixture object map contains `BodyBaseFeature` and `Fusion.InList` references it | `cad-core/src/part_design/body.cpp::appendBodyBaseFeatureChainUpdates()` can synthesize `PartDesign::FeatureBase`, but S0 current output still lacks the object | `test_c8_shapebinder.py::test_binder_element_map_namedshape_and_body_replay_stay_request_local()` covers the fixture without directly asserting `BodyBaseFeature`; expected fixture gate fails on the object drift | `src/Mod/PartDesign/App/Body.cpp::Body::onChanged()` creates `FeatureBase` when `BaseFeature` is set; ShapeBinder authority remains `SubShapeBinder::update()` for the binder shape | `expected_authority_pending` plus `implementation_regression_candidate` | S2 then S3 |
+| `cycle_rejected_by_property_link` / `cycle_dependency` diagnostic drift | expected fixture `diagnostic_codes` contains `cycle_rejected_by_property_link` | `cad-core/src/graph/recompute_plan.cpp::visitObject()` emits `cycle_dependency`; `runtime/reference_lifecycle.cpp` has no setter-level cycle diagnostic | `test_c8_shapebinder.py` and `test_diagnostics.py` currently assert `cycle_dependency` for cycle fixtures | `src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::setLinks()` throws `Cyclic reference to ...` before Support is accepted | `diagnostic_policy_pending` with `expected_authority_pending` input | S2 then S4 |
+
 ## 主文件
 
 - 总入口：`6-27-09-19-C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线总入口.md`
