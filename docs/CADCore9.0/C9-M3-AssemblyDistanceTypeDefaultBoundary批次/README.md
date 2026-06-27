@@ -6,11 +6,11 @@ C9-M3 承接 C9-M2 关闭后的 Assembly request-local solver 状态，专门处
 
 ## 当前状态
 
-- live baseline：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=b981e84f68`（`b981e84f68 feat(cad-core): 关闭C9-M2 S6 oracle发布闸门`）。
-- C9-M2 queue 已清空，C9-M3 是新批次。
+- live baseline：C9-M2 关闭 handoff 为 `b981e84f68`（`b981e84f68 feat(cad-core): 关闭C9-M2 S6 oracle发布闸门`）；S0 执行起点为 `pwd=/home/user/Chili3DProject/FreeCAD`、`HEAD=04bdd2e561`（`04bdd2e561 docs: 新增 C9-M3 DistanceType default boundary 方案`），起始 status 无输出。
+- C9-M2 queue 已由 S0 复核清空，C9-M3 是新批次。
 - `assembly.remaining_gaps=[]`、`assembly.unsupported_joint_matrix=[]`，但 `distance_type_extended_geometry` 仍发布 `PointCurve` 为 deferred diagnostic，`default_or_todo_boundaries` 仍包含 `PlaneCone`、`LineCylinder`、`CurvePlane`、`Other` 及同源 cone / sphere / torus / curve 组合。
 - `PointCurve`、`PlaneCone`、`LineCylinder`、`CurvePlane`、`Other` 已有 checked-in FreeCAD expected，但当前 tests 仍把它们锁在 diagnostic/default boundary。
-- 本包 seed 文档与矩阵已建立；S0-S6 尚未执行。
+- S0 已关闭，只回写 C9-M3 README / 总入口 / 矩阵并重命名 S0 step；未改 cad-core source、fixtures、expected 或 tests。S1-S6 仍待执行。
 
 ## 批次边界
 

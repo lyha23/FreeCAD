@@ -1,4 +1,4 @@
-# C9-M3 S0 live 基线与 DistanceType 声明口径冻结
+# 【已实现】C9-M3 S0 live 基线与 DistanceType 声明口径冻结
 
 ## 目标
 
@@ -12,6 +12,14 @@
 - `cad-core/tests/test_adapters.py`
 - `cad-core/tests/test_p8_features.py`
 - `cad-core/fixtures/c3m6/expected/assembly-distance-*-*.freecad.json`
+
+## S0 live baseline
+
+- 执行目录：`/home/user/Chili3DProject/FreeCAD`。
+- S0 起始 HEAD：`04bdd2e561`（`04bdd2e561 docs: 新增 C9-M3 DistanceType default boundary 方案`），起始 `git -c core.quotepath=false status --short -uall` 无输出。
+- C9-M2 关闭 handoff：`b981e84f68 feat(cad-core): 关闭C9-M2 S6 oracle发布闸门`；C9-M2 `step_goal_queue.py` 只输出表头，无 pending 行。
+- current capability / adapter guard：`assembly.remaining_gaps=[]`、`assembly.unsupported_joint_matrix=[]`、`distance_type_extended_geometry.deferred_diagnostic_cases=["PointCurve"]`，`default_or_todo_boundaries` 仍包含 `PlaneCone`、`CylinderCone`、`ConeCone`、`ConeTorus`、`ConeSphere`、`PointCone`、`PointTorus`、`LineCylinder`、`LineSphere`、`LineCone`、`LineTorus`、`CurvePlane`、`CurveCylinder`、`CurveSphere`、`CurveCone`、`CurveTorus`、`Other`。
+- checked-in expected 库存：`assembly-distance-point-curve-real-solver`、`assembly-distance-plane-cone-default-boundary`、`assembly-distance-line-cylinder-default-boundary`、`assembly-distance-curve-plane-default-boundary`、`assembly-distance-other-default-boundary` 均仍带 `DTE-NG-003` / known-gap diagnostic metadata；S0 未采集或修改 expected。
 
 ## 声明口径
 
@@ -29,6 +37,13 @@
 - `C9M3-SCOPE-001`
 - `C9M3-BG-501`
 - `C9M3-NG-001..005`
+
+## S0 关闭结论
+
+- `C9M3-BLOCKER-000` 与 `C9M3-SCOPE-001` 已关闭为 baseline / claim freeze。
+- `C9M3-BG-501` 只记录 S0 baseline 证据，仍是 S6 release gate，不能在 S0 关闭。
+- `C9M3-NG-001..005` 已按 S0 冻结为 non-goal / forbidden claim；S2 只复核守卫，不把它们提升为 supported 或 backendGap。
+- S1-S6 保持 pending；S0 未修改 cad-core C++、fixtures、expected 或 tests。
 
 ## 验收
 
