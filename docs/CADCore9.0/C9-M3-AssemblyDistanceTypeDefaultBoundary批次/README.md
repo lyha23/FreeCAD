@@ -6,11 +6,18 @@ C9-M3 承接 C9-M2 关闭后的 Assembly request-local solver 状态，专门处
 
 ## 当前状态
 
-- live baseline：C9-M2 关闭 handoff 为 `b981e84f68`（`b981e84f68 feat(cad-core): 关闭C9-M2 S6 oracle发布闸门`）；S0 执行起点为 `pwd=/home/user/Chili3DProject/FreeCAD`、`HEAD=04bdd2e561`（`04bdd2e561 docs: 新增 C9-M3 DistanceType default boundary 方案`），起始 status 无输出。
+- live baseline：C9-M2 关闭 handoff 为 `b981e84f68`（`b981e84f68 feat(cad-core): 关闭C9-M2 S6 oracle发布闸门`）；S0 执行起点为 `pwd=/home/user/Chili3DProject/FreeCAD`、`HEAD=04bdd2e561`（`04bdd2e561 docs: 新增 C9-M3 DistanceType default boundary 方案`），起始 status 无输出；S1 执行起点为 `HEAD=8f209aab54`（`8f209aab54 docs: 关闭 C9-M3 S0 基线冻结`），起始 status 无输出。
 - C9-M2 queue 已由 S0 复核清空，C9-M3 是新批次。
 - `assembly.remaining_gaps=[]`、`assembly.unsupported_joint_matrix=[]`，但 `distance_type_extended_geometry` 仍发布 `PointCurve` 为 deferred diagnostic，`default_or_todo_boundaries` 仍包含 `PlaneCone`、`LineCylinder`、`CurvePlane`、`Other` 及同源 cone / sphere / torus / curve 组合。
 - `PointCurve`、`PlaneCone`、`LineCylinder`、`CurvePlane`、`Other` 已有 checked-in FreeCAD expected，但当前 tests 仍把它们锁在 diagnostic/default boundary。
-- S0 已关闭，只回写 C9-M3 README / 总入口 / 矩阵并重命名 S0 step；未改 cad-core source、fixtures、expected 或 tests。S1-S6 仍待执行。
+- S0 已关闭，只回写 C9-M3 README / 总入口 / 矩阵并重命名 S0 step；未改 cad-core source、fixtures、expected 或 tests。S1 已关闭 FreeCAD source authority、cad-core current landing、checked-in expected inventory 和 diagnostics guard 复核；未采 oracle，未改 cad-core source、fixtures、expected 或 tests。S2-S6 仍待执行。
+
+## S1 关闭证据
+
+- FreeCAD source authority：`AssemblyUtils.cpp::getDistanceType()` 已复核 Vertex / Edge / Face 与 line / circle / plane / cylinder / cone / torus / sphere 的分类顺序；`PointCurve` 来自 Vertex + 非 line Edge，`PlaneCone` / `LineCylinder` / `CurvePlane` / `Other` 等来自 Face / Edge default-or-TODO 边界。
+- FreeCAD solver mapping：`AssemblyObject.cpp::makeMbdJointDistance()` 中 `PointCurve` 创建 `ASMTPointInPlaneJoint` 并写 `offset`；default branch 创建 `ASMTPlanarJoint` 并写 `offset`。
+- cad-core current 落点：`classifyDistanceType()`、`resolveDistanceJointMapping()`、`unsupportedReasonForOndselJoint()`、collector metadata、capability publication、focused tests 和 checked-in expected inventory 已全部写入 `source_candidates` 与 `scope_review_matrix`。
+- S1 关闭后队列只剩 S2-S6；`C9M3-BLOCKER-101` 已关闭，S2 继续处理 scope / blocker / non-goal 路由。
 
 ## 批次边界
 

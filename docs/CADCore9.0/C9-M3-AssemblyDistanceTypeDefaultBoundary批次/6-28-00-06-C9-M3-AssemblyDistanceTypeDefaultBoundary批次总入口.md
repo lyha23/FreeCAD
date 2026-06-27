@@ -11,12 +11,12 @@
 
 ## 当前基线
 
-- C9-M2 工作步骤队列已清空，handoff 提交为 `b981e84f68 feat(cad-core): 关闭C9-M2 S6 oracle发布闸门`；S0 执行 live 基线为 `04bdd2e561 docs: 新增 C9-M3 DistanceType default boundary 方案`，起始 status 无输出。
+- C9-M2 工作步骤队列已清空，handoff 提交为 `b981e84f68 feat(cad-core): 关闭C9-M2 S6 oracle发布闸门`；S0 执行 live 基线为 `04bdd2e561 docs: 新增 C9-M3 DistanceType default boundary 方案`，起始 status 无输出；S1 执行 live 基线为 `8f209aab54 docs: 关闭 C9-M3 S0 基线冻结`，起始 status 无输出。
 - live capability 中 `assembly.remaining_gaps=[]`、`assembly.unsupported_joint_matrix=[]`、`assembly.ondsel_solver_adapter.status=covered_full`。
 - Assembly DistanceType 仍发布 `distance_type_extended_geometry.deferred_diagnostic_cases=["PointCurve"]`，`default_or_todo_boundaries` 包含 `PlaneCone`、`CylinderCone`、`ConeCone`、`ConeTorus`、`ConeSphere`、`PointCone`、`PointTorus`、`LineCylinder`、`LineSphere`、`LineCone`、`LineTorus`、`CurvePlane`、`CurveCylinder`、`CurveSphere`、`CurveCone`、`CurveTorus`、`Other`。
 - checked-in expected 已存在：`assembly-distance-point-curve-real-solver`、`assembly-distance-plane-cone-default-boundary`、`assembly-distance-line-cylinder-default-boundary`、`assembly-distance-curve-plane-default-boundary`、`assembly-distance-other-default-boundary`；这些当前仍带 `DTE-NG-003` / diagnostic 路由。
 - 当前 `cad-core/src/assembly/joint_solver.cpp` 已能给 `PointCurve` 计算 `ASMTPointInPlaneJoint` / `offset` DTO，但 `unsupportedReasonForOndselJoint()` 仍显式返回 `point_curve_diagnostic_boundary`；default branch 缺 solver class，当前走 `default_boundary_not_mapped`。
-- S0 已关闭：`C9M3-BLOCKER-000` / `C9M3-SCOPE-001` 只冻结 live baseline 与 forbidden claims；`PointCurve`、default branch、primitive frame、GUI/session、persistent solver 均不在 S0 写成 supported 或 backendGap。`C9M3-BG-501` 仍是 S6 release gate。
+- S0 已关闭：`C9M3-BLOCKER-000` / `C9M3-SCOPE-001` 只冻结 live baseline 与 forbidden claims；`PointCurve`、default branch、primitive frame、GUI/session、persistent solver 均不在 S0 写成 supported 或 backendGap。S1 已关闭：`C9M3-BLOCKER-101` 固化 FreeCAD `getDistanceType()` / `makeMbdJointDistance()` source authority、cad-core current landing、collector metadata、expected inventory 和 diagnostics guard；仍不把候选写成 supported 或 backendGap。`C9M3-BG-501` 仍是 S6 release gate。
 
 ## 证明链条
 
@@ -40,6 +40,8 @@ C9-M2 queue empty
 | default branch | `/home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::makeMbdJointDistance()` | `default` 创建 `ASMTPlanarJoint` 并写入 `offset = getJointDistance(joint)`。 |
 | default 分类覆盖 | `/home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.cpp::getDistanceType()` | `PlaneCone`、`CylinderCone`、`Cone*`、`PointCone`、`LineCylinder`、`CurvePlane`、`Curve*`、`Other` 等先被分类，再由 default branch 处理未显式映射项。 |
 
+S1 复核补充：Edge/Face 中 line edge 进入 `LinePlane`、`LineCylinder`、`LineSphere`、`LineCone`、`LineTorus`，非 line edge 进入 `CurvePlane`、`CurveCylinder`、`CurveSphere`、`CurveCone`、`CurveTorus`；Vertex/Edge 中非 line edge 进入 `PointCurve`；未命中组合返回 `Other`。
+
 ## cad-core 落点
 
 | 层 | 当前代码落点 | 职责 |
@@ -58,7 +60,7 @@ C9-M2 queue empty
 | 方案 | `6-28-00-06-C9-M3-AssemblyDistanceTypeDefaultBoundary批次方案.md` | C9-M3 实施策略。 |
 | 工作步骤总入口 | `工作步骤细分/6-28-00-06-【已实现】C9-M3工作步骤总入口.md` | S0-S6 队列索引。 |
 | S0 | `工作步骤细分/6-28-00-07-【已实现】C9-M3-S0-live基线与DistanceType声明口径冻结.md` | 冻结 live baseline、claim 和 forbidden claim。 |
-| S1 | `工作步骤细分/6-28-00-08-C9-M3-S1-FreeCAD源码与current覆盖候选.md` | FreeCAD source authority、current cad-core coverage 与 checked-in expected inventory。 |
+| S1 | `工作步骤细分/6-28-00-08-【已实现】C9-M3-S1-FreeCAD源码与current覆盖候选.md` | FreeCAD source authority、current cad-core coverage 与 checked-in expected inventory。 |
 | S2 | `工作步骤细分/6-28-00-09-C9-M3-S2-范围准入与blocker矩阵.md` | scope / blocker / non-goal / backend gap 初始路由。 |
 | S3 | `工作步骤细分/6-28-00-10-C9-M3-S3-PointCurve平面化oracle复审.md` | PointCurve native expected、current diagnostic gate、focused tests。 |
 | S4 | `工作步骤细分/6-28-00-11-C9-M3-S4-DefaultPlanarBranch批量oracle复审.md` | default branch 既有 expected 激活与缺口批量采集。 |
@@ -71,4 +73,4 @@ C9-M2 queue empty
 | backend gap classification | `矩阵/c9m3_distance_type_default_boundary_backend_gap_classification.tsv` | oracle / backendGap / releaseGate 分类。 |
 | validation matrix | `矩阵/c9m3_distance_type_default_boundary_validation_matrix.tsv` | 分层验收命令。 |
 
-当前 S0 已关闭，S1-S6 仍为待执行状态；矩阵仍不是支持性发布结论。
+当前 S0-S1 已关闭，S2-S6 仍为待执行状态；矩阵仍不是支持性发布结论。
