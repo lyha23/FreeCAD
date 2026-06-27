@@ -47,6 +47,16 @@ S2 在 `528f294e98` 上只做 current recompute、expected compare 和 native co
 | `shape-binder-subshape-binder-element-map-namedshape-body-replay` | current diagnostics 为空，object map 为 `Body`、`Box`、`Box001`、`Fusion`、`ShapeBinder`、`SubShapeBinder`，缺 expected 的 `BodyBaseFeature`；`documentObjectUpdates=[]` | `collect_c8m1_shapebinder_expected.py` 用 `FreeCADCmd 1.2.0 revision 20260519` 重跑到 `/tmp/c8m5-s2/native`，仍产出 `BodyBaseFeature`；但 input fixture 本身没有 `BodyBaseFeature` 对象，也没有 `Body.BaseFeature` 属性，collector 中该对象来自额外 `base_feature_control` 控制 Body | `approved_refresh_candidate`：expected/collector 覆盖范围与 request-local input 不一致，S3 决定刷新该 expected 字段或拆出独立 BaseFeature fixture | S3 |
 | `subshape-binder-setlinks-normalization-diagnostics` | current diagnostics 为 `cycle_dependency`，stage=`graph`，object=`SubShapeBinderCycle` | fresh native collector 仍产出 `cycle_rejected_by_property_link`，`SubShapeBinder::setLinks()` 对 self link 抛出 `ValueError: self linking` | `code_fix_required_candidate`：setter-level property-link cycle 有 FreeCAD authority，S4 应在 runtime/reference lifecycle 或 graph 诊断语义层处理，不在 adapter 改字符串 | S4 |
 
+## S3 BodyBaseFeature 裁决
+
+S3 在 `3bcdfaf958` 上复核 `shape-binder-subshape-binder-element-map-namedshape-body-replay` 的 input、expected、current output、FreeCAD `Body::onChanged(BaseFeature)` 和 `cad-core/src/part_design/body.cpp::appendBodyBaseFeatureChainUpdates()` 后，最终裁决 `C8M5-GAP-101=approved_expected_refresh`。
+
+结论：该 request-local input 只有 `Body.Group=["SubShapeBinder"]` 与 `Body.Tip=SubShapeBinder`，没有 `BodyBaseFeature` 对象、没有 `Body.BaseFeature` 属性，也没有等价控制对象；current output 的 object map 为 `Body`、`Box`、`Box001`、`Fusion`、`ShapeBinder`、`SubShapeBinder`，`documentObjectUpdates=[]`，这是正确请求语义。FreeCAD authority 中 `Body::onChanged()` 只在 `prop == &BaseFeature` 且 `BaseFeature.getValue()` 存在时创建 `PartDesign::FeatureBase`；C8-M1 collector 的 `BodyBaseFeature` 来自 `collect_binder_element_map()` 额外创建的 `base_feature_control` Body，不属于该 input graph。
+
+已最小刷新 `cad-core/fixtures/c8m1/expected/shape-binder-subshape-binder-element-map-namedshape-body-replay.freecad.json` 中直接相关字段：移除 `objects.BodyBaseFeature`，移除 `Fusion.InList` 中的 `BodyBaseFeature` / `BaseFeature` 控制引用，移除 `element_map_evidence.base_feature_body_shape_element_map_size`。Focused test 现在显式断言该 fixture 不产生 `BodyBaseFeature` 且 `documentObjectUpdates=[]`。
+
+S3 验证结果：`python3 -m unittest tests.test_c8_shapebinder` 通过；expected fixture gate 不再出现 `BodyBaseFeature` drift，当前仅剩 S4 范围的 `subshape-binder-setlinks-normalization-diagnostics` 诊断码差异。
+
 ## 主文件
 
 - 总入口：`6-27-09-19-C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线总入口.md`

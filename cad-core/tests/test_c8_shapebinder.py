@@ -136,6 +136,10 @@ class CadCoreC8ShapeBinderTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase
     def test_binder_element_map_namedshape_and_body_replay_stay_request_local(self) -> None:
         result = self.run_recompute("shape-binder-subshape-binder-element-map-namedshape-body-replay", "c8m1")
         self.assert_no_error_diagnostics(result)
+        self.assertNotIn("BodyBaseFeature", result["objects"])
+        self.assertEqual(result["documentObjectUpdates"], [])
+        self.assertEqual(result["objects"]["Body"]["group"], ["SubShapeBinder"])
+        self.assertEqual(result["objects"]["Body"]["tip"], "SubShapeBinder")
         for object_name in ("Fusion", "ShapeBinder", "SubShapeBinder", "Body"):
             self.assertEqual(result["objects"][object_name]["status"], "ok")
         for object_name in ("ShapeBinder", "SubShapeBinder", "Body"):
