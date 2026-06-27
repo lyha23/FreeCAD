@@ -6,11 +6,11 @@ C9-M3 承接 C9-M2 关闭后的 Assembly request-local solver 状态，专门处
 
 ## 当前状态
 
-- live baseline：C9-M2 关闭 handoff 为 `b981e84f68`（`b981e84f68 feat(cad-core): 关闭C9-M2 S6 oracle发布闸门`）；S0 执行起点为 `pwd=/home/user/Chili3DProject/FreeCAD`、`HEAD=04bdd2e561`（`04bdd2e561 docs: 新增 C9-M3 DistanceType default boundary 方案`），起始 status 无输出；S1 执行起点为 `HEAD=8f209aab54`（`8f209aab54 docs: 关闭 C9-M3 S0 基线冻结`），起始 status 无输出；S2 执行起点为 `48355eae5d`（`48355eae5d docs: 关闭 C9-M3 S1 源码候选矩阵`），起始 status 无输出；S3 执行起点为 `696046ca6c`（`696046ca6c docs: 关闭 C9-M3 S2 范围准入路由`），起始 status 无输出；S4 执行起点为 `213583d369`（`213583d369 docs: 关闭 C9-M3 S3 PointCurve 复审`），起始 status 无输出。
+- live baseline：C9-M2 关闭 handoff 为 `b981e84f68`（`b981e84f68 feat(cad-core): 关闭C9-M2 S6 oracle发布闸门`）；S0 执行起点为 `pwd=/home/user/Chili3DProject/FreeCAD`、`HEAD=04bdd2e561`（`04bdd2e561 docs: 新增 C9-M3 DistanceType default boundary 方案`），起始 status 无输出；S1 执行起点为 `HEAD=8f209aab54`（`8f209aab54 docs: 关闭 C9-M3 S0 基线冻结`），起始 status 无输出；S2 执行起点为 `48355eae5d`（`48355eae5d docs: 关闭 C9-M3 S1 源码候选矩阵`），起始 status 无输出；S3 执行起点为 `696046ca6c`（`696046ca6c docs: 关闭 C9-M3 S2 范围准入路由`），起始 status 无输出；S4 执行起点为 `213583d369`（`213583d369 docs: 关闭 C9-M3 S3 PointCurve 复审`），起始 status 无输出；S5 执行起点为 `7b252ed6df`（`7b252ed6df docs: 关闭 C9-M3 S4 DefaultPlanarBranch 复审`），起始 status 无输出。
 - C9-M2 queue 已由 S0 复核清空，C9-M3 是新批次。
 - `assembly.remaining_gaps=[]`、`assembly.unsupported_joint_matrix=[]`，但 `distance_type_extended_geometry` 仍发布 `PointCurve` 为 deferred diagnostic，`default_or_todo_boundaries` 仍包含 `PlaneCone`、`LineCylinder`、`CurvePlane`、`Other` 及同源 cone / sphere / torus / curve 组合。
 - `PointCurve`、`PlaneCone`、`LineCylinder`、`CurvePlane`、`Other` 已有 checked-in FreeCAD expected，但当前 tests 仍把它们锁在 diagnostic/default boundary。
-- S0 已关闭，只回写 C9-M3 README / 总入口 / 矩阵并重命名 S0 step；未改 cad-core source、fixtures、expected 或 tests。S1 已关闭 FreeCAD source authority、cad-core current landing、checked-in expected inventory 和 diagnostics guard 复核；未采 oracle，未改 cad-core source、fixtures、expected 或 tests。S2 已关闭 scope / blocker / backend gap / non-goal 路由；未采 oracle，未改 cad-core source、fixtures、expected 或 tests。S3 已关闭 PointCurve expected/current 复审并路由为 S6 `backend_gap_candidate`；未改 cad-core source、fixtures、expected 或 tests。S4 已关闭 default branch existing expected/current 复审：`PlaneCone`、`LineCylinder`、`CurvePlane`、`Other` 路由为 S6 `backend_gap_candidate`，缺 input/expected 的 default 扩面族保留 `notCollected` / `native_oracle_required`；未改 cad-core source、fixtures、expected 或 tests。S5-S6 仍待执行。
+- S0 已关闭，只回写 C9-M3 README / 总入口 / 矩阵并重命名 S0 step；未改 cad-core source、fixtures、expected 或 tests。S1 已关闭 FreeCAD source authority、cad-core current landing、checked-in expected inventory 和 diagnostics guard 复核；未采 oracle，未改 cad-core source、fixtures、expected 或 tests。S2 已关闭 scope / blocker / backend gap / non-goal 路由；未采 oracle，未改 expected、未运行 build，也未删除 `default_or_todo_branch_support`。S3 已关闭 PointCurve expected/current 复审并路由为 S6 `backend_gap_candidate`；未改 cad-core source、fixtures、expected 或 tests。S4 已关闭 default branch existing expected/current 复审：`PlaneCone`、`LineCylinder`、`CurvePlane`、`Other` 路由为 S6 `backend_gap_candidate`，缺 input/expected 的 default 扩面族保留 `notCollected` / `native_oracle_required`；未改 cad-core source、fixtures、expected 或 tests。S5 已关闭 publication readiness：只回写 README / 总入口 / S5 step / 矩阵，明确 S6 publication route 与 diagnostics guard；未改 C++、capability_contract、tests、fixtures 或 expected 实际发布状态。S6 仍待执行。
 
 ## S1 关闭证据
 
@@ -41,6 +41,14 @@ C9-M3 承接 C9-M2 关闭后的 Assembly request-local solver 状态，专门处
 - `CylinderCone`、`ConeCone`、`ConeTorus`、`ConeSphere`、`PointCone`、`PointTorus`、`LineSphere`、`LineCone`、`LineTorus`、`CurveCylinder`、`CurveSphere`、`CurveCone`、`CurveTorus` 在 `cad-core/fixtures/c3m6` 未发现 input 或 expected；S4 保留 `notCollected` / `native_oracle_required`，不写 backendGap。
 - `C9M3-SCOPE-201..203`、`C9M3-BLOCKER-401`、`C9M3-BG-201..203` 已回写。S4 不直接发布 default branch supported，S6 只消费 expected-backed `PlaneCone` / `LineCylinder` / `CurvePlane` / `Other` mismatch，缺 oracle 族先补 native oracle。
 
+## S5 关闭证据
+
+- S5 执行起点为 `7b252ed6df`（`7b252ed6df docs: 关闭 C9-M3 S4 DefaultPlanarBranch 复审`），起始 status 无输出；S5 执行前队列首项为本步骤，关闭后只应剩余 S6。
+- capability / adapter / runtime diagnostics 当前仍保持诚实发布：`PointCurve` 在 `deferred_diagnostic_cases` 和 `non_goals`，`default_or_todo_boundaries` 仍包含 `PlaneCone`、`LineCylinder`、`CurvePlane`、`Other` 及缺 oracle 的 default 扩面族，`default_or_todo_branch_support` 仍是 non-goal。
+- S6 必须消费的 publication route 已写入矩阵：`PointCurve` 与 `PlaneCone` / `LineCylinder` / `CurvePlane` / `Other` 是 expected-backed `backend_gap_candidate`；缺 oracle 的 default families 继续是 `notCollected` / `native_oracle_required`，并必须留在 `default_or_todo_boundaries` 或等价可见字段。
+- diagnostics guard 已记录：unsupported JointType、`missing_grounded_part`、`missing_marker_placement`、`invalid_assembly_solver_result` 和未采 default boundary 不能因 S6 支持 accepted rows 而静默消失。
+- primitive frame、persistent solver、GUI/session 和 adapter string hiding 继续是 non-goal / guard。S5 不把 `known_gaps=[]` 当作隐藏 diagnostic 的理由，也不在 adapter 层伪造 supported。
+
 ## 批次边界
 
 | 方向 | 当前状态 | C9-M3 目标 |
@@ -48,7 +56,8 @@ C9-M3 承接 C9-M2 关闭后的 Assembly request-local solver 状态，专门处
 | `PointCurve` | S3 证明 native expected solved：`ASMTPointInPlaneJoint`、`offset=1.5`、`ComponentB` placement writeback；current runtime 仍报 `point_curve_diagnostic_boundary` 且无 updates | S6 消费 `backend_gap_candidate`，决定移除 guard 并发布 supported，或显式保留 retained diagnostic。 |
 | 已有 default expected | S4 证明 `PlaneCone`、`LineCylinder`、`CurvePlane`、`Other` native expected solved 且有 `ComponentB` placement writeback；current runtime 仍报 `default_boundary_not_mapped` 且无 updates | S6 消费 expected-backed `backend_gap_candidate`，决定实现 `ASMTPlanarJoint` + `offset` 并发布，或显式保留 retained diagnostic。 |
 | default branch 扩面 | `CylinderCone`、`ConeCone`、`ConeTorus`、`ConeSphere`、`PointCone`、`PointTorus`、`LineSphere`、`LineCone`、`LineTorus`、`CurveCylinder`、`CurveSphere`、`CurveCone`、`CurveTorus` 缺 input/expected | 保留 `notCollected` / `native_oracle_required`；不得只靠一个 fixture 推断全族，也不得写 backendGap。 |
-| capability publication | `PointCurve` 与 `default_or_todo_branch_support` 仍在 non-goals | S5/S6 根据 oracle 和实现更新 supported / non-goal / default boundary。 |
+| capability publication | S5 publication route 已准入：accepted expected-backed rows 交 S6；缺 oracle rows 留在 `default_or_todo_boundaries` 或等价 visible field；`PointCurve` 与 `default_or_todo_branch_support` 仍在 non-goals | S6 根据实现结果更新 supported / non-goal / default boundary，不得隐藏 retained diagnostics。 |
+| diagnostics guard | unsupported JointType、`missing_grounded_part`、`missing_marker_placement`、`invalid_assembly_solver_result` 和未采 default boundary 必须继续可见 | S6 支持 accepted rows 后仍要用 focused tests / capability smoke 证明 guard 未消失。 |
 | primitive frame generalization | diagnostic non-goal | 不进入 C9-M3。 |
 
 ## 入口
