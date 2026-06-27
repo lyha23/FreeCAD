@@ -9,10 +9,11 @@ C8-M6 不修改下游仓库，也不新增 `cad-core` 几何能力。它承接 C
 ## 当前基线
 
 - 仓库：`/home/user/Chili3DProject/FreeCAD`
-- 基线提交：`b580d66ac3`（`docs: 完成 C8-M5 S6 发布闸门`）
-- C8-M5 已恢复 C8-M1 expected fixture 阶段回归：`BodyBaseFeature` stale expected 已刷新，`SubShapeBinder Support` self-link 诊断已落为 `cycle_rejected_by_property_link`。
-- `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]` 继续保留为 C8-M2 已裁决的 `known_gap` / `oracle_blocked`，不是本包实现入口。
-- 本包创建时只新增文档、工作步骤和 TSV 矩阵；不修改 `cad-core/src`、fixtures、expected 或测试。
+- S0 live 基线提交：`9361ddc83a`（`docs: 新增 C8-M6 下游同步源头合同包`）
+- S0 开始工作区干净：`git -c core.quotepath=false status --short -uall` 无输出；C8-M1 到 C8-M5 工作步骤队列均为空，C8-M6 队列首项为 S0。
+- current capability：`part_design.shape_binder.status=supported_c8m1_expected_backed_request_local` 且 `remaining_gaps=[]`；`part_design.sub_shape_binder.status=supported_c8m1_expected_backed_request_local_with_copy_on_change_known_gap` 且唯一 `remaining_gaps=["copy_on_change_full_temporary_document_cache"]`。
+- C8-M5 已恢复 C8-M1 expected fixture 阶段回归：`BodyBaseFeature` stale expected 已刷新，`SubShapeBinder Support` self-link 诊断已落为 `cycle_rejected_by_property_link`；旧 C8-M2 合同不能覆盖这两个最终口径。
+- 本包 S0 只冻结文档和 TSV 同步声明；不修改 `cad-core/src`、fixtures、expected 或测试。
 
 ## 与既有 C8 包的关系
 
