@@ -26,6 +26,14 @@ C8-M7 承接 C8-M6 之后的 live capability 残留：`topo_history.producer_mat
 - C8-M6：完成 ShapeBinder/SubShapeBinder 下游同步源头合同并清空队列；C8-M7 从 current capability 的下一条 active residual 继续。
 - P6/P8 import tests：已有 STEP / BREP / IGES import first slice、owner-qualified alias 和 `import_shape_element_map` mapper history 证据；C8-M7 只复核 residual 是否仍应留在 `remaining`。
 
+## S1 源码与 current 覆盖结论
+
+S1 已复核 FreeCAD 与 current `cad-core` 覆盖：FreeCAD `ImportBrep` / `ImportStep` / `ImportIges` 均以 `FileName` 为执行输入，文件不可读时走 `Cannot open file` 错误路径，读取成功后通过 `TopoShape::importBrep` / `importStep` / `importIges` 从当前文件重建 `Shape`，没有隐式旧后端 cache。
+
+current `cad-core` 的 `Part::ImportBrep` / `ImportStep` / `ImportIges` 同样按请求中的当前 `FileName` 读取 BREP / STEP / IGES，并通过 `namedShapeForImportedShape()` 发布 current request 的 `NamedShape`、owner-qualified `ElementMap` alias 和 `import_shape_element_map` mapper history。`PropertyLinks` / `ElementMap` / `TopoShape` mapper 复核确认：引用恢复只能走当前 shape、stable subname / owner-qualified alias 和 request-local `ReferenceShadow` 证据；`ReferenceShadow.brep` 仍只是单 subshape snapshot evidence，不能扩展为完整对象 BREP 或跨请求缓存。
+
+现有测试已经覆盖 `import_shape_element_map`、owner-qualified alias、BREP / STEP / IGES current-file import、imported ElementMap link-chain consumption 和 capability `import_shape` row。S1 不打开代码闸门；changed-file 与 deleted-file 的最终路由继续交给 S2-S5 裁决。
+
 ## 主文件
 
 - 总入口：`6-27-15-37-C8-M7-ImportShapeChangedFileDeletedReferenceRecovery准入收口主线总入口.md`
@@ -36,7 +44,7 @@ C8-M7 承接 C8-M6 之后的 live capability 残留：`topo_history.producer_mat
 ## 步骤队列
 
 1. S0：已完成 live 基线与 residual 声明冻结。
-2. S1：FreeCAD source 与 current coverage 复核。
+2. S1：已完成 FreeCAD source 与 current coverage 复核。
 3. S2：准入路由与 blocker 矩阵。
 4. S3：import 文件生命周期 oracle 复审。
 5. S4：ElementMap 与 ReferenceShadow 恢复边界复审。
