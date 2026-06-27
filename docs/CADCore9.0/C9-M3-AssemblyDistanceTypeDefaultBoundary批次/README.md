@@ -10,7 +10,7 @@ C9-M3 承接 C9-M2 关闭后的 Assembly request-local solver 状态，专门处
 - C9-M2 queue 已由 S0 复核清空，C9-M3 是新批次。
 - `assembly.remaining_gaps=[]`、`assembly.unsupported_joint_matrix=[]`，但 `distance_type_extended_geometry` 仍发布 `PointCurve` 为 deferred diagnostic，`default_or_todo_boundaries` 仍包含 `PlaneCone`、`LineCylinder`、`CurvePlane`、`Other` 及同源 cone / sphere / torus / curve 组合。
 - `PointCurve`、`PlaneCone`、`LineCylinder`、`CurvePlane`、`Other` 已有 checked-in FreeCAD expected，但当前 tests 仍把它们锁在 diagnostic/default boundary。
-- S0 已关闭，只回写 C9-M3 README / 总入口 / 矩阵并重命名 S0 step；未改 cad-core source、fixtures、expected 或 tests。S1 已关闭 FreeCAD source authority、cad-core current landing、checked-in expected inventory 和 diagnostics guard 复核；未采 oracle，未改 cad-core source、fixtures、expected 或 tests。S2-S6 仍待执行。
+- S0 已关闭，只回写 C9-M3 README / 总入口 / 矩阵并重命名 S0 step；未改 cad-core source、fixtures、expected 或 tests。S1 已关闭 FreeCAD source authority、cad-core current landing、checked-in expected inventory 和 diagnostics guard 复核；未采 oracle，未改 cad-core source、fixtures、expected 或 tests。S2 已关闭 scope / blocker / backend gap / non-goal 路由；未采 oracle，未改 cad-core source、fixtures、expected 或 tests。S3-S6 仍待执行。
 
 ## S1 关闭证据
 
@@ -18,6 +18,12 @@ C9-M3 承接 C9-M2 关闭后的 Assembly request-local solver 状态，专门处
 - FreeCAD solver mapping：`AssemblyObject.cpp::makeMbdJointDistance()` 中 `PointCurve` 创建 `ASMTPointInPlaneJoint` 并写 `offset`；default branch 创建 `ASMTPlanarJoint` 并写 `offset`。
 - cad-core current 落点：`classifyDistanceType()`、`resolveDistanceJointMapping()`、`unsupportedReasonForOndselJoint()`、collector metadata、capability publication、focused tests 和 checked-in expected inventory 已全部写入 `source_candidates` 与 `scope_review_matrix`。
 - S1 关闭后队列只剩 S2-S6；`C9M3-BLOCKER-101` 已关闭，S2 继续处理 scope / blocker / non-goal 路由。
+
+## S2 关闭证据
+
+- S2 执行起点为 `48355eae5d`（`48355eae5d docs: 关闭 C9-M3 S1 源码候选矩阵`），起始 status 无输出。
+- `C9M3-SCOPE-101..404` 已按 S1 source candidates 路由：`PointCurve` 交 S3 `existing_expected_review`；已有 default expected 交 S4 `existing_expected_review`；缺 expected 的 default branch 交 S4 `native_oracle_required` / 后续显式 `notCollected`；capability / expected metadata / final validation 保持 `release_gate`；diagnostics guard 保持 `diagnostics_guard_review`；primitive frame、persistent solver、GUI/session 与 fixture guessing 保持 `diagnostic_non_goal` / `forbidden_claim`。
+- `C9M3-BLOCKER-201` 已关闭；`C9M3-BG-101..601` 与 `C9M3-NG-001..005` 已回链到 scope。S2 未采 oracle、未改 expected、未运行 build，也未删除 `default_or_todo_branch_support`。
 
 ## 批次边界
 
