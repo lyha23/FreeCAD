@@ -1,4 +1,4 @@
-# C9-M1 S3 markerPlacement 与 offsetPlc 复审
+# 【已实现】C9-M1 S3 markerPlacement 与 offsetPlc 复审
 
 ## 目标
 
@@ -7,7 +7,7 @@
 ## FreeCAD 依据
 
 - `src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint()`
-- `src/Mod/Assembly/App/AssemblyObject.h::AssemblyObject::PartData::offsetPlc`
+- `src/Mod/Assembly/App/AssemblyObject.h::AssemblyObject::MbDPartData::offsetPlc`
 - `src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::jointParts()`
 - `src/Mod/Assembly/App/AssemblyLink.cpp`
 
@@ -26,8 +26,18 @@
 - `C9M1-SCOPE-103`
 - `C9M1-BG-101`
 - `C9M1-BG-102`
+- `C9M1-BG-103`
 - `C9M1-BLOCKER-301`
+- 必要时 `C9M1-NG-007`
 - README 的 S3 结论。
+
+## 复审结果
+
+- `handleOneSideOfJoint()` 的 marker placement 顺序已复核：`getGlobalPlacement(nullptr, ref) * PlacementN` 先形成 object-global JCS，`getGlobalPlacement(part, ref).inverse()` 再转回 moving-part-local，最后 `data.offsetPlc * plc` 进入 `makeMbdMarker()`。这不是在 linked object local frame 里做猜测。
+- `offsetPlc` 是 bundled parts 内部 offset：`AssemblyObject.h::MbDPartData::offsetPlc` 明确为 bundled parts 内部 offset，`getMbDData()` 在 fixed-joint bundling 中记录 `plc.inverse() * plci`，`validateNewPlacements()` / `setNewPlacements()` 使用 `getMbdPlacement(mbdPart) * offsetPlc`。C9-M1 不引入跨请求缓存或 frontend 补猜测。
+- current `joint_solver.cpp` 覆盖 object-level baseline、AssemblyLink identity-offset subshape marker、Vertex / linear Edge / planar Face 和 mixed marker；非线性 Edge、非平面 Face 或缺 markerPlacement 的路径保持 `unsupported_subshape_marker_primitive` / `unsupported_assembly_solver` 诊断。
+- C3M6 `assembly-marker-custom-placement-chain-real-solver.freecad.json` 已包含 non-identity connector / part placement chain native evidence，但 `offset_boundary` 是 `identity_offset_for_two_box_assembly_link_fixture`，当前 `test_p8_features.py` 没有直接断言该 fixture。它不能证明 non-identity bundled `offsetPlc`。
+- S3 裁决：`C9M1-SCOPE-101` / `C9M1-BG-101` 保持 `already_covered`；`C9M1-SCOPE-102` / `C9M1-BG-102` 保持 `oracle_candidate`，collector / probe 基线应是 fixed-joint bundle 产生 non-identity `objectPartMap.offsetPlc` 的 native case，本步按非目标不采集；`C9M1-SCOPE-103` / `C9M1-BG-103` 保持 `diagnostic_non_goal`。`C9M1-BLOCKER-301` 已关闭为 `Closed S3`。
 
 ## 验收标准
 
