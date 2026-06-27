@@ -4,6 +4,8 @@ CADCore8.0 承接 C7-M7 之后的下一轮 CAD Core 收口工作。C7-M7 已确�
 
 C8-M1 转向 `PartDesign::ShapeBinder` / `PartDesign::SubShapeBinder` 外部引用绑定与 ElementMap 闭环。这个方向有清晰 FreeCAD 源码入口、上游测试案例和当前 `cad-core` registry 缺口，且能复用已落地的 `PropertyLink*`、Link retag、ElementMap、Body replay、CopyOnChange 和 request-local `documentObjectUpdates` 语义。
 
+C8-M7 转向 current capability 中仍暴露的 `topo_history.producer_matrix.import_shape.remaining=["changed_file_deleted_reference_recovery"]` 残留。该方向必须先区分 request-local changed-file 重导入、deleted-file diagnostic / non-goal、`ReferenceShadow` 单 subshape 恢复证据和跨请求 persistent cache 禁区，再决定是 no-code publication closure 还是受限 C++ 实现。
+
 ## 入口
 
 - C8-M1 总入口：`C8-M1-PartDesignShapeBinderSubShapeBinder引用绑定与ElementMap闭环主线/6-26-16-15-C8-M1-PartDesignShapeBinderSubShapeBinder引用绑定与ElementMap闭环主线总入口.md`
@@ -30,6 +32,10 @@ C8-M1 转向 `PartDesign::ShapeBinder` / `PartDesign::SubShapeBinder` 外部引�
 - C8-M6 方案：`C8-M6-ShapeBinderSubShapeBinder下游同步源头合同主线/6-27-11-28-C8-M6-ShapeBinderSubShapeBinder下游同步源头合同方案.md`
 - C8-M6 工作步骤：`C8-M6-ShapeBinderSubShapeBinder下游同步源头合同主线/工作步骤细分/`
 - C8-M6 矩阵：`C8-M6-ShapeBinderSubShapeBinder下游同步源头合同主线/矩阵/`
+- C8-M7 总入口：`C8-M7-ImportShapeChangedFileDeletedReferenceRecovery准入收口主线/6-27-15-37-C8-M7-ImportShapeChangedFileDeletedReferenceRecovery准入收口主线总入口.md`
+- C8-M7 方案：`C8-M7-ImportShapeChangedFileDeletedReferenceRecovery准入收口主线/6-27-15-37-C8-M7-ImportShapeChangedFileDeletedReferenceRecovery准入收口方案.md`
+- C8-M7 工作步骤：`C8-M7-ImportShapeChangedFileDeletedReferenceRecovery准入收口主线/工作步骤细分/`
+- C8-M7 矩阵：`C8-M7-ImportShapeChangedFileDeletedReferenceRecovery准入收口主线/矩阵/`
 
 ## 当前状态
 
@@ -53,6 +59,9 @@ C8-M1 转向 `PartDesign::ShapeBinder` / `PartDesign::SubShapeBinder` 外部引�
 - C8-M5 已完成 C8-M1 expected fixture regression recovery 阶段回归恢复主线。目标不是新增几何能力，而是恢复 C8-M4 S6 暴露的两个 C8-M1 expected drift：`shape-binder-subshape-binder-element-map-namedshape-body-replay` 的 `BodyBaseFeature` expected/current 对齐，以及 `subshape-binder-setlinks-normalization-diagnostics` 的 `cycle_rejected_by_property_link` / `cycle_dependency` 诊断归属裁决。S0 已在 `HEAD=e93ddd8746`（`e93ddd8746 feat: 完成 C8-M4 GeomPlate 曲线 criteria 发布闸门`）冻结 live 基线：C8-M1 到 C8-M4 队列为空，stage regression 重跑仅复现这两个 C8-M1 drift，current capability 唯一 active `remaining_gaps` 为 `copy_on_change_full_temporary_document_cache`；该项继续保留 C8-M2 `known_gap` / `oracle_blocked` 边界，不进入 C8-M5 实现范围。S3 已完成 `BodyBaseFeature` approved expected refresh；S4 已完成 SubShapeBinder Support self-link setter-cycle code fix，expected fixture gate 与 focused diagnostics / adapter tests 通过。S6 已在 `HEAD=89dacb11fd` 后完成发布闸门：`cmake --build build`、focused tests、expected fixture gate 和 stage regression 全部通过，`C8M5-BLOCKER-601` 已关闭，C8-M5 队列为空；`copy_on_change_full_temporary_document_cache` 保持 known gap / non-goal，C8-M5 不新增 active remaining gap。
 - C8-M6 已完成 ShapeBinder/SubShapeBinder 下游同步源头合同主线。它不修改 `opencascade-rs`、前端或其它下游仓库，只在 FreeCAD 仓库内把 C8-M1 executor / expected、C8-M2 downstream contract 和 C8-M5 expected / diagnostics 修复后的最终口径整理成同步合同包。S0 已在 `HEAD=9361ddc83a`（`9361ddc83a docs: 新增 C8-M6 下游同步源头合同包`）冻结 live 基线：开始工作区干净，C8-M1 到 C8-M5 队列为空，current capability 中 `shape_binder` supported 且 `sub_shape_binder` 唯一 remaining gap 为 `copy_on_change_full_temporary_document_cache`。S1 已完成源头合同与能力面复核；S2 已完成范围准入与 non-goal 路由：TypeId / capability、request-local output、C8-M5-current fixture expected、BodyBaseFeature no-synthesis 和 `cycle_rejected_by_property_link` 均进入 `sync_required_source_contract`，`copy_on_change_full_temporary_document_cache` 保持 `known_gap_retained`，跨请求持久 ElementMap / NamedShape、UI 展示策略、下游审计和本步修改 `cad-core/src` / fixtures / tests / expected 均为 non-goal。S3 已完成 TypeId 与 DocumentGraph 合同复审：三类 TypeId 与 `/cad/capabilities` 可追溯到 `capability_contract.cpp` 和 FreeCAD `ShapeBinder.h/.cpp`，`DocumentObject graph`、property-link 字段、request-local `documentObjectUpdates` / `elementReferenceUpdates`、Body replay no-synthesis 和 `ReferenceShadow.brep` 单 subshape snapshot 边界均有 fixture 或 focused test 证据。S4 已完成 fixture expected 与 diagnostics 合同复审：12 个 C8-M1 fixture / expected 行发布为下游黑盒合同，`BodyBaseFeature` stale expected 不再使用，SubShapeBinder setter-cycle 使用 `cycle_rejected_by_property_link`，generic graph cycle 保持 `cycle_dependency`，CopyOnChange full temporary-document cache 继续保持 known gap。S5 已完成 capability 与前端消费边界发布：`part_design.shape_binder` 保持 request-local supported 且 `remaining_gaps=[]`，`part_design.sub_shape_binder` 保持 request-local supported 并只保留 `copy_on_change_full_temporary_document_cache` known gap；前端可消费 capability、diagnostics、fixture seeds、request-local mesh/subshape/full subname/reference update evidence、`documentObjectUpdates` 与 `elementReferenceUpdates` 建议，但不得把 full BREP、TopoDS_Shape、NamedShape/ElementMap 原始内核对象、temporary-document cache 或 request 结束后的 shape cache 作为持久状态消费。S6 已在 `HEAD=f0739ca2ba` 后完成发布闸门：queue、TSV、尾随空白、diff、capability smoke、focused tests、expected fixture gate、`cmake --build build` 和 stage regression 全部通过；`C8M6-BLOCKER-601` 已关闭，C8-M6 队列为空。
 - C8-M6 下游交接清单：TypeIds 使用 `PartDesign::ShapeBinder`、`PartDesign::SubShapeBinder`、`PartDesign::SubShapeBinderPython`；capability 使用 `cad-core/src/runtime/capability_contract.cpp` 当前输出和 `/tmp/c8m6-capabilities.json`；fixture 使用 `cad-core/fixtures/c8m1` input 与 `cad-core/fixtures/c8m1/expected` C8-M5-current expected；diagnostics 使用 `cycle_rejected_by_property_link`、`cycle_dependency`、`copy_on_change_full_temporary_document_cache_not_supported`；request-local 输出使用 mesh/subshapes/full subname、ElementMap/NamedShape evidence、maker history、`documentObjectUpdates`、`elementReferenceUpdates`；non-goal 继续包括 full CopyOnChange temporary-document cache、持久 BREP / TopoDS_Shape / NamedShape / ElementMap / geometry cache。
+- C8-M7 已创建为下一轮方案包，目标是收口 current capability 中 `topo_history.producer_matrix.import_shape.remaining=["changed_file_deleted_reference_recovery"]`。建包起点为 `HEAD=8a64f67808`（`8a64f67808 docs: 完成 C8-M6 S6 发布闸门`），开始工作区干净；C8-M1 到 C8-M6 队列均为空。
+- C8-M7 的裁决对象分三类：changed-file 当前请求重导入可能已经由 `ImportBrep` / `ImportStep` / `ImportIges` first slice 覆盖；deleted-file 不能依赖跨请求 backend cache、完整 BREP、TopoDS_Shape、NamedShape 或 ElementMap 恢复；若存在 request-local `ReferenceShadow` + current imported shape 的 source-backed 缺口，才允许 S6 打开受限 C++ gate。
+- C8-M7 初始队列：工作步骤总入口已标记 `【已实现】`，S0 到 S6 均待执行。S0 必须先冻结 live capability residual、C8-M1..M6 empty queue 和 C7-M7 inherited oracle-blocked / non-goal 边界。
 
 ## 队列检查
 
@@ -64,6 +73,7 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore8.0/C8-M4-PartGeomPlateCurveConstraintCriteriaRequestLocal批量收口主线/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore8.0/C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore8.0/C8-M6-ShapeBinderSubShapeBinder下游同步源头合同主线/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore8.0/C8-M7-ImportShapeChangedFileDeletedReferenceRecovery准入收口主线/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -76,6 +86,7 @@ awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " f
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore8.0/C8-M4-PartGeomPlateCurveConstraintCriteriaRequestLocal批量收口主线/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore8.0/C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore8.0/C8-M6-ShapeBinderSubShapeBinder下游同步源头合同主线/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore8.0/C8-M7-ImportShapeChangedFileDeletedReferenceRecovery准入收口主线/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore8.0
 git diff --check
 ```

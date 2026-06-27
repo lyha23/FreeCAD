@@ -1,0 +1,12 @@
+validation_id	validation_type	command	required	when	notes
+C8M7-VAL-001	queue	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore8.0/C8-M7-ImportShapeChangedFileDeletedReferenceRecovery准入收口主线/工作步骤细分 --format markdown	yes	S0-S6	Queue must advance one step at a time and be empty after S6 rename
+C8M7-VAL-002	tsv	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore8.0/C8-M7-ImportShapeChangedFileDeletedReferenceRecovery准入收口主线/矩阵/*.tsv	yes	S0-S6	All matrix files must keep stable field counts
+C8M7-VAL-003	whitespace	rg -n '[ \t]$' docs/CADCore8.0/C8-M7-ImportShapeChangedFileDeletedReferenceRecovery准入收口主线 docs/CADCore8.0/README.md	yes	S0-S6	Exit code 1 means no trailing whitespace matches
+C8M7-VAL-004	diff	git diff --check	yes	S0-S6	Required before each step close
+C8M7-VAL-101	source_scan	rg -n 'FileName|ImportBrep|ImportStep|ImportIges|importStep|importIges|importBrep|ElementMap|ReferenceShadow|ShadowSub' src/Mod/Part/App src/App cad-core/src/part cad-core/src/runtime cad-core/tests/test_p6_topology.py cad-core/tests/test_p8_features.py cad-core/tests/test_adapters.py	yes	S1	Source authority and current coverage scan
+C8M7-VAL-201	file_lifecycle_scan	rg -n 'Cannot open file|isReadable|ReadFile|TransferRoots|OneShape|import_shape_element_map|FileName' src/Mod/Part/App cad-core/src/part cad-core/tests	conditional	S3	Required if changed-file or deleted-file route remains ambiguous
+C8M7-VAL-301	reference_boundary_scan	rg -n 'namedShapeForImportedShape|ImportElementMapSource|import_shape_element_map|resolveElementReference|recoverSubshapeForReference|referenceShadowUpdateJson|ReferenceShadow.brep' cad-core/src cad-core/include cad-core/tests	yes	S4	Confirms request-local reference recovery boundary
+C8M7-VAL-401	capability_smoke	cd cad-core && ./cad-core capabilities > /tmp/c8m7-capabilities.json	conditional	S5-S6	Required if S5 changes or verifies capability residual publication
+C8M7-VAL-402	adapter_tests	cd cad-core && python3 -m unittest tests.test_adapters	conditional	S5-S6	Required if capability_contract.cpp or adapter-facing capability tests change
+C8M7-VAL-501	focused_import_tests	cd cad-core && python3 -m unittest tests.test_p6_topology tests.test_p8_features tests.test_adapters	conditional	S6	Required if S6 opens request-local backend implementation gate
+C8M7-VAL-601	build	cd cad-core && cmake --build build	conditional	S6	Required only if C++ code changed
