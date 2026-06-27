@@ -14,8 +14,8 @@ C8-M7 承接 C8-M6 之后的 live capability 残留：`topo_history.producer_mat
 ## 当前基线
 
 - 仓库：`/home/user/Chili3DProject/FreeCAD`
-- 建包起点：`HEAD=8a64f67808`（`8a64f67808 docs: 完成 C8-M6 S6 发布闸门`），开始工作区干净。
-- C8-M1 到 C8-M6 工作步骤队列均已为空。
+- S0 live 基线：`HEAD=1450487296`（`1450487296 docs: 新增 C8-M7 ImportShape 恢复准入方案`），`git -c core.quotepath=false status --short -uall` 无输出。
+- C8-M1 到 C8-M6 工作步骤队列均已为空；C8-M7 队列在 S0 重命名前首项为 S0。
 - 当前 `cad-core/src/runtime/capability_contract.cpp` 发布 `import_shape.status=done_first_slice`，`covered=["step","brep","iges","owner_qualified_alias"]`，唯一 `remaining=["changed_file_deleted_reference_recovery"]`。
 - C7-M7 已裁决完整 imported ElementMap、ShowElement persistent writeback 和 cross-document hash / postfix lifecycle 没有 backend implementation gate，保持 `oracle_blocked` 或 `oracle_blocker`。
 - C8-M7 不重开 C7-M7 的完整 Link / ShowElement / cross-document 持久生命周期；只处理当前 live capability 中仍暴露的 `import_shape` residual 是否应实现、保留或改发布。
@@ -35,7 +35,7 @@ C8-M7 承接 C8-M6 之后的 live capability 残留：`topo_history.producer_mat
 
 ## 步骤队列
 
-1. S0：live 基线与 residual 声明冻结。
+1. S0：已完成 live 基线与 residual 声明冻结。
 2. S1：FreeCAD source 与 current coverage 复核。
 3. S2：准入路由与 blocker 矩阵。
 4. S3：import 文件生命周期 oracle 复审。

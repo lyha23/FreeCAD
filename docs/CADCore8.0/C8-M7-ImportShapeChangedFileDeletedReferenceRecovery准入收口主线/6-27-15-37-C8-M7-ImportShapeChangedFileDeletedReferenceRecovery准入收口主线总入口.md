@@ -35,7 +35,7 @@ C8-M7 是 C8-M6 之后的下一轮 CAD Core 收口包。当前 C8-M1 到 C8-M6 �
 
 ## 步骤队列
 
-1. S0：冻结 live baseline、C8-M1..M6 empty queue、current capability residual 和 C7-M7 non-goal 继承边界。
+1. S0：已完成 live baseline、C8-M1..M6 empty queue、current capability residual 和 C7-M7 non-goal 继承边界冻结。
 2. S1：复核 FreeCAD Part import、TopoShape import、PropertyFile / PropertyLinks / ElementMap source authority，以及 current cad-core coverage。
 3. S2：把 changed-file、deleted-file、request-local ReferenceShadow、full persistent cache 和 capability drift 拆入准入矩阵。
 4. S3：复审 import 文件生命周期 oracle：当前文件重导入是否已 covered，删除文件是否只能 diagnostic / non-goal。
