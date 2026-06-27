@@ -6,6 +6,8 @@ C9-M1 转向 Assembly Joint marker / `offsetPlc` request-local 扩面。目标�
 
 C9-M2 承接 C9-M1 no-code closure，不再把后续拆成单个 oracle case，而是把同一 Assembly request-local solver 调用链里的 bundled `offsetPlc` native oracle、custom placement-chain expected 激活、zero Angle fallback oracle 和 diagnostics guard 作为最小完整语义批次处理。本包已在 S6 关闭 request-local bundled offset 和 exact-zero Angle fallback 的实现闸门；不会重开 C9-M1，也不会把 oracle-only row 直接写成 supported 或 backendGap。
 
+C9-M3 承接 C9-M2 queue-empty 后的剩余 Assembly DistanceType 发布边界。当前 Assembly `remaining_gaps=[]`、`unsupported_joint_matrix=[]`，但 capability 仍公开 `PointCurve` deferred diagnostic 和 `default_or_todo_boundaries`；C9-M3 不重开 C9-M1/C9-M2，而是围绕 FreeCAD `getDistanceType()` / `makeMbdJointDistance()` 的 `PointCurve` 与 default planar branch 建立 oracle、focused tests、capability 和 S6 code gate。
+
 ## 入口
 
 - C9-M1 总入口：`C9-M1-AssemblyJointMarkerOffsetPlacementRequestLocal主线/6-27-17-31-C9-M1-AssemblyJointMarkerOffsetPlacementRequestLocal主线总入口.md`
@@ -16,6 +18,10 @@ C9-M2 承接 C9-M1 no-code closure，不再把后续拆成单个 oracle case，�
 - C9-M2 方案：`C9-M2-AssemblyRequestLocalSolverOracle批次/6-27-22-03-C9-M2-AssemblyRequestLocalSolverOracle批次方案.md`
 - C9-M2 工作步骤：`C9-M2-AssemblyRequestLocalSolverOracle批次/工作步骤细分/`
 - C9-M2 矩阵：`C9-M2-AssemblyRequestLocalSolverOracle批次/矩阵/`
+- C9-M3 总入口：`C9-M3-AssemblyDistanceTypeDefaultBoundary批次/6-28-00-06-C9-M3-AssemblyDistanceTypeDefaultBoundary批次总入口.md`
+- C9-M3 方案：`C9-M3-AssemblyDistanceTypeDefaultBoundary批次/6-28-00-06-C9-M3-AssemblyDistanceTypeDefaultBoundary批次方案.md`
+- C9-M3 工作步骤：`C9-M3-AssemblyDistanceTypeDefaultBoundary批次/工作步骤细分/`
+- C9-M3 矩阵：`C9-M3-AssemblyDistanceTypeDefaultBoundary批次/矩阵/`
 
 ## 当前状态
 
@@ -35,6 +41,7 @@ C9-M2 承接 C9-M1 no-code closure，不再把后续拆成单个 oracle case，�
 - C9-M2 S4 已关闭 custom placement-chain expected activation：`assembly-marker-custom-placement-chain-real-solver` 已进入 `test_c3m6_assembly_marker_placement_s4_native_oracle_expected_batch` focused test，测试直接断言 `native_marker_oracle` 与 `offset_boundary=identity_offset_for_two_box_assembly_link_fixture`，不把该 identity boundary 误写成 S3 non-identity bundled offset coverage。
 - C9-M2 S5 已关闭 zero Angle fallback 与 diagnostics 复审：`assembly-angle-zero-and-signed-current-real-solver.freecad.json` 已由 FreeCADCmd 1.2.0 revision 20260519 采集，native solver return 0、`AngleZeroJoint.angle=0.0`、native current XY angle 为 0，证明 exact-zero Angle native route；current cad-core 对同 fixture 保留 `Angle=0` DTO 和 subshape marker evidence，但 solver 返回 `ondsel_solver_failed` 且无 placement update，因此 `C9M2-SCOPE-301/C9M2-BG-301` 路由为 `backend_gap_candidate` 交 S6。S5 focused tests 同时证明 unsupported JointType、PointCurve/default boundary、missing grounded 和 `ondsel_solver_failed` 不会静默变成 success；`invalid_assembly_solver_result` 仍由 adapter capability guard 发布。
 - C9-M2 S6 已关闭 oracle 实现与发布闸门：三条 bundled `offsetPlc` expected 已与 current parity，object/subshape marker 均按 `[0.25,0.5,0.75] -> [2.25,0.5,0.75]` 应用 request-local offset，`ComponentC` writeback 为 `[6,0,2]`；zero Angle expected-backed route 现在解出 `ComponentB=[4,0,4]`，旧 `ondsel_solver_failed` 不再作为该 fixture 的 supported route。`C9M2-BLOCKER-601` 已关闭，`non_identity_bundled_offsetPlc` 从 capability non-goals 移除，primitive frame generalization 保持 diagnostic non-goal。
+- C9-M3 方案包已建立，当前为待执行队列：`PointCurve`、`PlaneCone`、`LineCylinder`、`CurvePlane`、`Other` 已有 checked-in expected 但仍保留 diagnostic/default boundary；其他 default planar branch rows 需要 S4 批量采集或明确 `notCollected`。S6 只消费 expected-backed backendGap 或 releaseGate，不把未采集 row 写成 supported。
 
 ## 队列检查
 
@@ -42,6 +49,7 @@ C9-M2 承接 C9-M1 no-code closure，不再把后续拆成单个 oracle case，�
 cd /home/user/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore9.0/C9-M1-AssemblyJointMarkerOffsetPlacementRequestLocal主线/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore9.0/C9-M2-AssemblyRequestLocalSolverOracle批次/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore9.0/C9-M3-AssemblyDistanceTypeDefaultBoundary批次/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -50,6 +58,7 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 cd /home/user/Chili3DProject/FreeCAD
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore9.0/C9-M1-AssemblyJointMarkerOffsetPlacementRequestLocal主线/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore9.0/C9-M2-AssemblyRequestLocalSolverOracle批次/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore9.0/C9-M3-AssemblyDistanceTypeDefaultBoundary批次/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore9.0
 git diff --check
 ```
