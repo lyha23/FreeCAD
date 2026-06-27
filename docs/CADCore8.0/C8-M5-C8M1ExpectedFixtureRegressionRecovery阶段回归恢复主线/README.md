@@ -38,6 +38,15 @@ S1 在 `f3cca29254` 上只做失败清单和 owner 路由，不改 C++、fixture
 | `BodyBaseFeature` object drift | expected fixture object map contains `BodyBaseFeature` and `Fusion.InList` references it | `cad-core/src/part_design/body.cpp::appendBodyBaseFeatureChainUpdates()` can synthesize `PartDesign::FeatureBase`, but S0 current output still lacks the object | `test_c8_shapebinder.py::test_binder_element_map_namedshape_and_body_replay_stay_request_local()` covers the fixture without directly asserting `BodyBaseFeature`; expected fixture gate fails on the object drift | `src/Mod/PartDesign/App/Body.cpp::Body::onChanged()` creates `FeatureBase` when `BaseFeature` is set; ShapeBinder authority remains `SubShapeBinder::update()` for the binder shape | `expected_authority_pending` plus `implementation_regression_candidate` | S2 then S3 |
 | `cycle_rejected_by_property_link` / `cycle_dependency` diagnostic drift | expected fixture `diagnostic_codes` contains `cycle_rejected_by_property_link` | `cad-core/src/graph/recompute_plan.cpp::visitObject()` emits `cycle_dependency`; `runtime/reference_lifecycle.cpp` has no setter-level cycle diagnostic | `test_c8_shapebinder.py` and `test_diagnostics.py` currently assert `cycle_dependency` for cycle fixtures | `src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::setLinks()` throws `Cyclic reference to ...` before Support is accepted | `diagnostic_policy_pending` with `expected_authority_pending` input | S2 then S4 |
 
+## S2 expected authority 复核
+
+S2 在 `528f294e98` 上只做 current recompute、expected compare 和 native collector 复核，不改 C++、expected fixture 或测试断言。`C8M5-BLOCKER-201` 已关闭；完整 expected fixture gate 仍失败，但失败范围只剩两个目标 drift：1 error、1 failure、35 skipped。
+
+| drift | current compare | fresh native collector | 初步裁决 | 后续 owner |
+| --- | --- | --- | --- | --- |
+| `shape-binder-subshape-binder-element-map-namedshape-body-replay` | current diagnostics 为空，object map 为 `Body`、`Box`、`Box001`、`Fusion`、`ShapeBinder`、`SubShapeBinder`，缺 expected 的 `BodyBaseFeature`；`documentObjectUpdates=[]` | `collect_c8m1_shapebinder_expected.py` 用 `FreeCADCmd 1.2.0 revision 20260519` 重跑到 `/tmp/c8m5-s2/native`，仍产出 `BodyBaseFeature`；但 input fixture 本身没有 `BodyBaseFeature` 对象，也没有 `Body.BaseFeature` 属性，collector 中该对象来自额外 `base_feature_control` 控制 Body | `approved_refresh_candidate`：expected/collector 覆盖范围与 request-local input 不一致，S3 决定刷新该 expected 字段或拆出独立 BaseFeature fixture | S3 |
+| `subshape-binder-setlinks-normalization-diagnostics` | current diagnostics 为 `cycle_dependency`，stage=`graph`，object=`SubShapeBinderCycle` | fresh native collector 仍产出 `cycle_rejected_by_property_link`，`SubShapeBinder::setLinks()` 对 self link 抛出 `ValueError: self linking` | `code_fix_required_candidate`：setter-level property-link cycle 有 FreeCAD authority，S4 应在 runtime/reference lifecycle 或 graph 诊断语义层处理，不在 adapter 改字符串 | S4 |
+
 ## 主文件
 
 - 总入口：`6-27-09-19-C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线总入口.md`

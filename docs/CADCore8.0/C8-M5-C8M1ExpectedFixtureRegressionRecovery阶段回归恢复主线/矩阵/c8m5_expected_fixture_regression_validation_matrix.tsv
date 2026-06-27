@@ -1,10 +1,11 @@
 id	layer	command	required_when	expected_signal	status	owner_step
-C8M5-VAL-001	queue	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore8.0/C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线/工作步骤细分 --format markdown	every step	queue shows only unfinished S files	passed_s1_queue_starts_at_S2	S0-S6
-C8M5-VAL-002	tsv	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore8.0/C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线/矩阵/*.tsv	every doc update	exit 0	passed_s1	S0-S6
-C8M5-VAL-003	whitespace	rg -n '[ \t]$' docs/CADCore8.0/C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线 docs/CADCore8.0/README.md	every doc update	no output	passed_s1_no_matches	S0-S6
-C8M5-VAL-004	diff	git diff --check	every step	exit 0	passed_s1	S0-S6
+C8M5-VAL-001	queue	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore8.0/C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线/工作步骤细分 --format markdown	every step	queue shows only unfinished S files	passed_s2_queue_starts_at_S3	S0-S6
+C8M5-VAL-002	tsv	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore8.0/C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线/矩阵/*.tsv	every doc update	exit 0	passed_s2	S0-S6
+C8M5-VAL-003	whitespace	rg -n '[ \t]$' docs/CADCore8.0/C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线 docs/CADCore8.0/README.md	every doc update	no output	passed_s2_no_matches	S0-S6
+C8M5-VAL-004	diff	git diff --check	every step	exit 0	passed_s2	S0-S6
 C8M5-VAL-005	evidence-rg	rg -n "BodyBaseFeature|cycle_rejected_by_property_link|cycle_dependency" cad-core/fixtures cad-core/tests cad-core/src	S1	source expected current implementation and focused test references collected	passed_s1	S1
-C8M5-VAL-101	expected-fixture	python3 -m unittest tests.test_expected_fixtures.CadCoreExpectedFixtureTest.test_expected_fixtures_match_recompute_results	S2-S6	two target drift rows disappear or remain documented before S5	pending	S2-S6
+C8M5-VAL-006	native-collector	python3 tools/collect_c8m1_shapebinder_expected.py fixtures/c8m1/<target>.json --out /tmp/c8m5-s2/native/<target>.freecad.json	S2	FreeCADCmd collector runs without sandbox Qt processor blocker	passed_s2_FreeCADCmd_1_2_0_revision_20260519	S2
+C8M5-VAL-101	expected-fixture	python3 -m unittest tests.test_expected_fixtures.CadCoreExpectedFixtureTest.test_expected_fixtures_match_recompute_results	S2-S6	two target drift rows disappear or remain documented before S5	failed_s2_only_two_target_drifts_1_error_1_failure_35_skipped	S2-S6
 C8M5-VAL-102	focused-c8	python3 -m unittest tests.test_c8_shapebinder tests.test_diagnostics	S3-S6	ShapeBinder and diagnostics focused tests pass	pending	S3-S6
 C8M5-VAL-103	adapter	python3 -m unittest tests.test_adapters	S4-S6	diagnostic contract remains adapter-visible	pending	S4-S6
 C8M5-VAL-201	stage-regression	python3 -m unittest tests.test_p8_features tests.test_expected_fixtures tests.test_adapters tests.test_diagnostics	S6	stage regression passes	pending_s6_s0_reproduced_two_c8m1_drifts	S6
