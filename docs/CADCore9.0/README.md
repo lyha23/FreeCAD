@@ -29,6 +29,7 @@ C9-M2 承接 C9-M1 no-code closure，不再把后续拆成单个 oracle case，�
 - C9-M2 S0 live 基线：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=d52cd67a19`（`d52cd67a19 docs: 关闭 C9-M1 S6 发布闸门`）。S0 起始 `git -c core.quotepath=false status --short -uall` 显示仅 `docs/CADCore9.0/README.md` 和未提交的 `docs/CADCore9.0/C9-M2-AssemblyRequestLocalSolverOracle批次/**` seed 文档 / 矩阵 / step 文件。
 - S0 复核后的 current capability 口径不变：`assembly.remaining_gaps=[]`，`assembly.ondsel_solver_adapter.status=covered_full`，`subshape_marker_placement.status=covered_representative_subset` 且 `subshape_marker_placement.remaining_gaps=[]`，`placement_writeback.status=covered_full`。
 - S0 forbidden claims：`non_identity_bundled_offsetPlc` 仍是 native oracle candidate / forbidden guessing，`non_assembly_link_subshape_primitive_frame_generalization` 仍是 diagnostic non-goal，zero Angle fallback 仍缺 native expected；这些行不得在 C9-M2 S0 写成 supported 或 backendGap。
+- C9-M2 S1 已关闭 source authority：S1 live 基线为 `HEAD=8dc1ec2ccd`（`8dc1ec2ccd docs: 关闭 C9-M2 S0 基线冻结`），`source_candidates` 已固化 `getMbDData()` bundled `objectPartMap.offsetPlc` 生产、`handleOneSideOfJoint()` 的 `data.offsetPlc * plc` marker 消费、`validateNewPlacements()` / `setNewPlacements()` 的 `getMbdPlacement(mbdPart) * offsetPlc` writeback 消费、Angle 0/2pi fallback source、cad-core marker/writeback/capability/test/fixture 落点；S1 未采 native oracle、未改 cad-core source / fixtures / expected / tests，后续从 S2 继续。
 
 ## 队列检查
 

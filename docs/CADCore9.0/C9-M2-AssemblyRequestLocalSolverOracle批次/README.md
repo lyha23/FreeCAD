@@ -26,6 +26,14 @@ C9-M2 承接 C9-M1 no-code closure 后的剩余 Assembly request-local solver ev
 
 S0 关闭证据：C9-M1 queue script 只输出表头；C9-M2 queue 在 S0 重命名前从 S0 开始；`cad-core/src/runtime/capability_contract.cpp` 与 `cad-core/tests/test_adapters.py` 仍断言 Assembly remaining gaps 为空、`non_identity_bundled_offsetPlc` 和 primitive frame generalization 在 non-goals 内。本步未采 native oracle、未改 cad-core 源码 / fixtures / expected / tests，也未运行 build 或重型回归。
 
+## S1 关闭结论
+
+- S1 live 基线：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=8dc1ec2ccd`（`8dc1ec2ccd docs: 关闭 C9-M2 S0 基线冻结`），S1 起始 `git -c core.quotepath=false status --short -uall` 无输出。
+- FreeCAD source authority 已固化到 `source_candidates`：`AssemblyObject::getMbDData()` 在 `bundleFixed` 下把 fixed-joint connected part 复用同一 `ASMTPart`，并把 `objectPartMap[partToAdd].offsetPlc` 写成 `plc.inverse() * plci`；`handleOneSideOfJoint()` 的 marker 顺序是 object-global、part-local，再 `data.offsetPlc * plc`；`validateNewPlacements()` / `setNewPlacements()` 的 solver writeback 顺序是 `getMbdPlacement(mbdPart) * offsetPlc`。
+- `makeMbdJointOfType()` 的 FreeCAD authority 明确为 Angle 0 或 2pi fallback 到 `ASMTParallelAxesJoint`；cad-core 当前落点在 `joint_solver.cpp::makeOndselJointOfType()`，S5 仍需 native expected 判定 current parity，不在 S1 宣称 supported。
+- cad-core 落点已分类：marker / Angle 在 `joint_solver.cpp`，writeback JSON 在 `assembly_utils.cpp`，request-local display apply 在 `assembly_object.cpp`，capability 和 adapter tests 仍保持 `non_identity_bundled_offsetPlc` 与 primitive frame generalization 为 non-goals 且 Assembly remaining gaps 为空。
+- `assembly-marker-custom-placement-chain-real-solver.freecad.json` 已存在，但 exact fixture name 当前只命中 expected 文件，focused tests 尚未直接断言；该项交给 S4 激活，不得误写成 bundled `offsetPlc` coverage。S1 未新增 fixture、未采 native oracle、未改 cad-core source / capability / tests / expected。
+
 ## 验收分层
 
 文档短跑：

@@ -41,6 +41,14 @@ git diff --check
 
 S1 关闭时，source candidates 必须都有 source evidence、cad-core landing 和 next step；不得把候选直接写成 supported。
 
+## S1 关闭结论
+
+- S1 live 基线：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=8dc1ec2ccd`（`8dc1ec2ccd docs: 关闭 C9-M2 S0 基线冻结`），起始 `git -c core.quotepath=false status --short -uall` 无输出。
+- `C9M2-SRC-101..403` 已回写 source evidence、cad-core landing 和 next action；`C9M2-BLOCKER-101` 已关闭为 `Closed S1`。
+- FreeCAD source authority：`getMbDData()` 在 `bundleFixed` 下将 fixed-joint connected part 复用同一 `ASMTPart` 并记录 `plc.inverse() * plci`；`handleOneSideOfJoint()` 在 object-global 与 part-local 转换后执行 `data.offsetPlc * plc`；`validateNewPlacements()` / `setNewPlacements()` 使用 `getMbdPlacement(mbdPart) * offsetPlc`；`makeMbdJointOfType()` 对 Angle 0 或 2pi fallback 到 `ASMTParallelAxesJoint`。
+- cad-core source authority：marker / Angle 落点在 `joint_solver.cpp`，writeback JSON 在 `assembly_utils.cpp`，request-local display apply 在 `assembly_object.cpp`，capability 与 adapter tests 仍把 `non_identity_bundled_offsetPlc` 和 primitive frame generalization 保持为 non-goals。
+- `assembly-marker-custom-placement-chain-real-solver.freecad.json` 已存在，但 focused tests 尚未直接断言；S1 未新增 fixture、未采 native oracle、未改 cad-core source / capability / tests / expected，也未把候选写成 supported。
+
 ## 非目标
 
 - 不新增 fixture。

@@ -61,7 +61,7 @@ C9-M1 no-code closure
 | 方案 | `6-27-22-03-C9-M2-AssemblyRequestLocalSolverOracle批次方案.md` | C9-M2 实施策略。 |
 | 工作步骤总入口 | `工作步骤细分/6-27-22-04-【已实现】C9-M2工作步骤总入口.md` | S0-S6 队列索引。 |
 | S0 | `工作步骤细分/6-27-22-05-【已实现】C9-M2-S0-live基线与声明口径冻结.md` | 已冻结 live baseline、claim 和 forbidden claim。 |
-| S1 | `工作步骤细分/6-27-22-06-C9-M2-S1-FreeCAD源码与oracle候选矩阵.md` | FreeCAD source authority 与 oracle candidate 复核。 |
+| S1 | `工作步骤细分/6-27-22-06-【已实现】C9-M2-S1-FreeCAD源码与oracle候选矩阵.md` | FreeCAD source authority 与 oracle candidate 复核。 |
 | S2 | `工作步骤细分/6-27-22-07-C9-M2-S2-范围准入与blocker矩阵.md` | scope / blocker / non-goal / backend gap 路由。 |
 | S3 | `工作步骤细分/6-27-22-08-C9-M2-S3-bundledOffsetPlcOracle批量采集.md` | bundled `offsetPlc` native oracle 批量采集。 |
 | S4 | `工作步骤细分/6-27-22-09-C9-M2-S4-customPlacementChain测试激活.md` | 现有 custom placement-chain expected 接入测试。 |
@@ -74,4 +74,4 @@ C9-M1 no-code closure
 | backend gap classification | `矩阵/c9m2_assembly_solver_oracle_backend_gap_classification.tsv` | oracle / backendGap / releaseGate 分类。 |
 | validation matrix | `矩阵/c9m2_assembly_solver_oracle_validation_matrix.tsv` | 分层验收命令。 |
 
-当前 S0 已关闭；S1-S6 仍是待执行状态。矩阵是 seed，不是发布闸门结论；S0 只冻结现场口径，不代表任何 oracle case 已采集或 supported/backendGap 已裁决。
+当前 S0-S1 已关闭；S2-S6 仍是待执行状态。矩阵是 seed，不是发布闸门结论；S1 只固化 source authority，不代表任何 oracle case 已采集或 supported/backendGap 已裁决。
