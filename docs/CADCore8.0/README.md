@@ -22,6 +22,10 @@ C8-M1 转向 `PartDesign::ShapeBinder` / `PartDesign::SubShapeBinder` 外部引�
 - C8-M4 方案：`C8-M4-PartGeomPlateCurveConstraintCriteriaRequestLocal批量收口主线/6-27-02-33-C8-M4-PartGeomPlateCurveConstraintCriteriaRequestLocal批量收口方案.md`
 - C8-M4 工作步骤：`C8-M4-PartGeomPlateCurveConstraintCriteriaRequestLocal批量收口主线/工作步骤细分/`
 - C8-M4 矩阵：`C8-M4-PartGeomPlateCurveConstraintCriteriaRequestLocal批量收口主线/矩阵/`
+- C8-M5 总入口：`C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线/6-27-09-19-C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线总入口.md`
+- C8-M5 方案：`C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线/6-27-09-19-C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复方案.md`
+- C8-M5 工作步骤：`C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线/工作步骤细分/`
+- C8-M5 矩阵：`C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线/矩阵/`
 
 ## 当前状态
 
@@ -42,6 +46,7 @@ C8-M1 转向 `PartDesign::ShapeBinder` / `PartDesign::SubShapeBinder` 外部引�
 - C8-M3 已完成 Part / Sketch / DistanceType conic request-local 批量收口。最终 live capability 中 `part_workbench.conic_curves.remaining_gaps=[]`，同轮覆盖 `PartConicCurveDTO` producer / consumer、Sketcher ArcOfHyperbola / ArcOfParabola input / external-reference、DistanceType default/TODO publication boundary，以及 GUI / full solver non-goal 发布边界。
 - C8-M3 S0 live 基线已冻结：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=c6a848b69c`（`c6a848b69c docs: 完成 C8-M2 S6 发布闸门`），开始状态只包含 `docs/CADCore8.0/README.md` 与本 C8-M3 文档包 / 矩阵 / 工作步骤变更，未见代码、fixture、expected 或 collector dirty 文件。S0 已关闭 `C8M3-BLOCKER-000`。S1 已在 `HEAD=a91b4a9d6b` 后完成 FreeCAD source authority 与 current cad-core coverage 复核；`C8M3-BLOCKER-101` 已关闭。S2 已在 `HEAD=6b5132ce7e` 后完成 scope 准入与 blocker 矩阵路由，`C8M3-BLOCKER-201` 已关闭。S3 已在 `HEAD=c144cf43dd` 后完成 PartConicCurveDTO producer / consumer expected-backed batch 复核，确认 existing p8 Hyperbola / Parabola producer、invalid diagnostics、Extrusion pair 和 RuledSurface conic-line consumer 足以关闭 Part batch；`C8M3-BLOCKER-301` 已关闭。S4 已在 `HEAD=a1638a28ab` 后完成 Sketcher conic request-local input / external-reference boundary 复核，确认 existing p5 Hyperbola / Parabola profile expected、construction filter、projected external expected、native ExternalGeo focused test 和 diagnostics 足以关闭 `C8M3-ORACLE-103` / `C8M3-BLOCKER-401`；`full_sketcher_solver_conic_constraints` 发布为 `non_goal`，不声明完整 solver 支持。S5 已在 `HEAD=6808e4890c` 后把 `distance_type_default_todo` 裁决为 `capability_publication_gap`，确认 current DistanceType tests 已覆盖 `PointCurve` diagnostic 与 default/TODO boundaries；`C8M3-BLOCKER-501` 已关闭。S6 已在 `HEAD=eb26957cfd` 后同步 capability/docs/tests publication：Part conic capability 发布 `remaining_gaps=[]`，GUI/full solver/fake Part conic DocumentObject 作为 explicit non-goals / reopen conditions，DistanceType default/TODO 仍由 Assembly capability 发布为 unsupported boundary；`C8M3-BLOCKER-601` 已关闭，C8-M3 队列为空。
 - C8-M4 已完成 Part GeomPlate CurveConstraint criteria request-local 批量收口。最终 `part_workbench.geomplate` capability 发布 `c8m4_curve_constraint_criteria_product_contract`，合法 `CurveConstraints.SubSet[].G0Criterion/G1Criterion/G2Criterion` 进入 DTO、finite-number parser、OCCT `Law_Constant` criteria apply path 和 source evidence；`curve_constraint_criteria_setters_not_implemented` 不再是 active remaining gap，只保留为 FreeCAD native setter non-parity historical evidence。S6 live 基线为 `HEAD=fe744a966a`（`fe744a966a docs: 完成 C8-M4 S5 capability 发布准入`），开始工作区干净。新增 `cad-core/fixtures/c8m4/part-geomplate-curve-custom-criteria.json` 正例，旧 c5m7 curve criteria diagnostic 转为 invalid finite-number 负例；focused build/tests/capability smoke 通过。阶段回归命令已执行，但稳定失败于两个 C8-M1 expected fixture drift 行，未在 C8-M4 中修改 C8-M1 expected。C8-M4 队列已收口为空。
+- C8-M5 已创建为 C8-M1 expected fixture regression recovery 阶段回归恢复主线。目标不是新增几何能力，而是恢复 C8-M4 S6 暴露的两个 C8-M1 expected drift：`shape-binder-subshape-binder-element-map-namedshape-body-replay` 的 `BodyBaseFeature` expected/current 对齐，以及 `subshape-binder-setlinks-normalization-diagnostics` 的 `cycle_rejected_by_property_link` / `cycle_dependency` 诊断归属裁决。S0 已在 `HEAD=e93ddd8746`（`e93ddd8746 feat: 完成 C8-M4 GeomPlate 曲线 criteria 发布闸门`）冻结 live 基线：C8-M1 到 C8-M4 队列为空，stage regression 重跑仅复现这两个 C8-M1 drift，current capability 唯一 active `remaining_gaps` 为 `copy_on_change_full_temporary_document_cache`；该项继续保留 C8-M2 `known_gap` / `oracle_blocked` 边界，不进入 C8-M5 实现范围。
 
 ## 队列检查
 
@@ -51,6 +56,7 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore8.0/C8-M1-PartDesignShapeBinderSubShapeBinder引用绑定与ElementMap闭环主线/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore8.0/C8-M3-PartSketchDistanceTypeConicCurveRequestLocal批量收口主线/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore8.0/C8-M4-PartGeomPlateCurveConstraintCriteriaRequestLocal批量收口主线/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore8.0/C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -61,6 +67,7 @@ awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " f
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore8.0/C8-M1-PartDesignShapeBinderSubShapeBinder引用绑定与ElementMap闭环主线/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore8.0/C8-M3-PartSketchDistanceTypeConicCurveRequestLocal批量收口主线/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore8.0/C8-M4-PartGeomPlateCurveConstraintCriteriaRequestLocal批量收口主线/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore8.0/C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore8.0
 git diff --check
 ```

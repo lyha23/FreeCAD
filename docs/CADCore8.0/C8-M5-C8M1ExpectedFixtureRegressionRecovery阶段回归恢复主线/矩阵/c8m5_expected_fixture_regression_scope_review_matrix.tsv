@@ -1,0 +1,7 @@
+scope_id	source_candidate	item	current_status	route	owner_step	next_action	notes
+C8M5-SCOPE-101	C8M5-SRC-102	BodyBaseFeature object in expected	pending	implementation_or_expected_drift	S3	compare FreeCAD Body BaseFeature authority with current output	Only this fixture row is in scope
+C8M5-SCOPE-102	C8M5-SRC-104	Body Group and downstream BaseFeature updates	pending	implementation_regression_candidate	S3	verify appendBodyBaseFeatureChainUpdates still emits expected create/update actions	Do not patch adapter output
+C8M5-SCOPE-201	C8M5-SRC-201	cycle_rejected_by_property_link expected	pending	diagnostic_policy_pending	S4	decide setter-level diagnostic support	May become approved expected refresh
+C8M5-SCOPE-202	C8M5-SRC-202	cycle_dependency current output	pending	graph_policy_candidate	S4	verify request-local input only observes graph cycle	Needs tests/test_diagnostics alignment
+C8M5-SCOPE-301	C8M5-SRC-301	expected fixture gate	s0_failed_two_drift_rows	release_gate_blocker	S2	keep failure list limited to two rows	No blanket C8-M1 refresh
+C8M5-SCOPE-401	C8M5-SRC-401	copy_on_change_full_temporary_document_cache	retained_s0_frozen	non_goal	S0	record C8-M2 known_gap boundary	Only active remaining_gaps entry; not a C8-M5 blocker

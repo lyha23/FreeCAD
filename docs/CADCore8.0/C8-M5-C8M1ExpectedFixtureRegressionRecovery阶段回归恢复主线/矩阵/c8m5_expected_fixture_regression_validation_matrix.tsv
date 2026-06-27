@@ -1,0 +1,10 @@
+id	layer	command	required_when	expected_signal	status	owner_step
+C8M5-VAL-001	queue	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore8.0/C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线/工作步骤细分 --format markdown	every step	queue shows only unfinished S files	passed_s0_queue_starts_at_S1	S0-S6
+C8M5-VAL-002	tsv	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore8.0/C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线/矩阵/*.tsv	every doc update	exit 0	passed_s0	S0-S6
+C8M5-VAL-003	whitespace	rg -n '[ \t]$' docs/CADCore8.0/C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线 docs/CADCore8.0/README.md	every doc update	no output	passed_s0_no_matches	S0-S6
+C8M5-VAL-004	diff	git diff --check	every step	exit 0	passed_s0	S0-S6
+C8M5-VAL-101	expected-fixture	python3 -m unittest tests.test_expected_fixtures.CadCoreExpectedFixtureTest.test_expected_fixtures_match_recompute_results	S2-S6	two target drift rows disappear or remain documented before S5	pending	S2-S6
+C8M5-VAL-102	focused-c8	python3 -m unittest tests.test_c8_shapebinder tests.test_diagnostics	S3-S6	ShapeBinder and diagnostics focused tests pass	pending	S3-S6
+C8M5-VAL-103	adapter	python3 -m unittest tests.test_adapters	S4-S6	diagnostic contract remains adapter-visible	pending	S4-S6
+C8M5-VAL-201	stage-regression	python3 -m unittest tests.test_p8_features tests.test_expected_fixtures tests.test_adapters tests.test_diagnostics	S6	stage regression passes	pending_s6_s0_reproduced_two_c8m1_drifts	S6
+C8M5-VAL-301	build	cmake --build build	S6 only if C++ changed	cad-core builds	pending	S6
