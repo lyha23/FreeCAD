@@ -2633,8 +2633,17 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "offset2d_makeoffsetfix_intersection_compound_collective",
             producer_matrix["part_offset"]["remaining"],
         )
-        self.assertEqual(producer_matrix["import_shape"]["status"], "done_first_slice")
-        self.assertIn("owner_qualified_alias", producer_matrix["import_shape"]["covered"])
+        import_shape = producer_matrix["import_shape"]
+        self.assertEqual(import_shape["status"], "done_first_slice")
+        for covered in ("step", "brep", "iges", "owner_qualified_alias"):
+            self.assertIn(covered, import_shape["covered"])
+        self.assertEqual(import_shape["remaining"], [])
+        serialized_capabilities = json.dumps(capabilities, sort_keys=True)
+        self.assertNotIn("changed_file_deleted_reference_recovery", serialized_capabilities)
+        self.assertFalse(
+            any("deleted" in covered and "recovery" in covered for covered in import_shape["covered"])
+        )
+        self.assertFalse(any("old_geometry" in covered for covered in import_shape["covered"]))
         self.assertEqual(producer_matrix["sketch_internalshape"]["status"], "done_first_slice")
         self.assertIn(
             "mixed_bounded_faces_open_wires_oracle",

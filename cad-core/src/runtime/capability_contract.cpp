@@ -3108,7 +3108,7 @@ nlohmann::json capabilityContractJson()
                   {"import_shape",
                    {{"status", "done_first_slice"},
                     {"covered", {"step", "brep", "iges", "owner_qualified_alias"}},
-                    {"remaining", {"changed_file_deleted_reference_recovery"}}}},
+                    {"remaining", nlohmann::json::array()}}},
                   {"link_retag",
                    {{"status", "covered"},
                     {"covered", {"source_prefixed_stable_key", "mapped_postfix_alias"}}}},

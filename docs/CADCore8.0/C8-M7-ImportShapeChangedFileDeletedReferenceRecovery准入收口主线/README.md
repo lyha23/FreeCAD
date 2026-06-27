@@ -2,7 +2,7 @@
 
 ## 定位
 
-C8-M7 承接 C8-M6 之后的 live capability 残留：`topo_history.producer_matrix.import_shape.remaining=["changed_file_deleted_reference_recovery"]`。
+C8-M7 承接 C8-M6 之后的 live capability 残留：`topo_history.producer_matrix.import_shape.remaining=["changed_file_deleted_reference_recovery"]`。S6 已把该残留收口为 capability publication drift，当前 `import_shape.remaining=[]`。
 
 本包不默认打开 C++ 实现。它先把这条残留拆成两类可裁决语义：
 
@@ -16,7 +16,7 @@ C8-M7 承接 C8-M6 之后的 live capability 残留：`topo_history.producer_mat
 - 仓库：`/home/user/Chili3DProject/FreeCAD`
 - S0 live 基线：`HEAD=1450487296`（`1450487296 docs: 新增 C8-M7 ImportShape 恢复准入方案`），`git -c core.quotepath=false status --short -uall` 无输出。
 - C8-M1 到 C8-M6 工作步骤队列均已为空；C8-M7 队列在 S0 重命名前首项为 S0。
-- 当前 `cad-core/src/runtime/capability_contract.cpp` 发布 `import_shape.status=done_first_slice`，`covered=["step","brep","iges","owner_qualified_alias"]`，唯一 `remaining=["changed_file_deleted_reference_recovery"]`。
+- S0 时 `cad-core/src/runtime/capability_contract.cpp` 发布 `import_shape.status=done_first_slice`，`covered=["step","brep","iges","owner_qualified_alias"]`，唯一 `remaining=["changed_file_deleted_reference_recovery"]`；S6 后保持相同 status / covered，`remaining=[]`。
 - C7-M7 已裁决完整 imported ElementMap、ShowElement persistent writeback 和 cross-document hash / postfix lifecycle 没有 backend implementation gate，保持 `oracle_blocked` 或 `oracle_blocker`。
 - C8-M7 不重开 C7-M7 的完整 Link / ShowElement / cross-document 持久生命周期；只处理当前 live capability 中仍暴露的 `import_shape` residual 是否应实现、保留或改发布。
 
@@ -60,6 +60,14 @@ S5 裁决当前 `import_shape.remaining=["changed_file_deleted_reference_recover
 
 S6 路线因此限定为 capability publication closure：只允许修改 `cad-core/src/runtime/capability_contract.cpp` 与 `cad-core/tests/test_adapters.py`，将 `import_shape.remaining` 中的 stale mixed token 移除，并用 adapter capability smoke 锁住该 token 不再出现。如果 capability JSON 需要继续表达 deleted-file old geometry recovery，必须以 non-goal / diagnostic wording 表达，不得进入 `covered` 或 supported known-gap。S6 不允许改 runtime import、reference resolution、elementReferenceUpdates、fixture expected、adapter 字符串改写或下游同步。
 
+## S6 发布闸门结论
+
+S6 走 capability publication closure，不打开 runtime backend gate。`topo_history.producer_matrix.import_shape` 继续发布 `status=done_first_slice`，`covered=["step","brep","iges","owner_qualified_alias"]`，`remaining=[]`；`changed_file_deleted_reference_recovery` 不再出现在 capability JSON。
+
+deleted-file old geometry recovery 没有进入 supported / covered。该场景仍按 S3-S5 裁决保持显式 diagnostic、`known_gap_retained` 或 `diagnostic_non_goal`，不得依赖跨请求 cache、完整 BREP、TopoDS_Shape、NamedShape 或 ElementMap。
+
+本轮只修改 `cad-core/src/runtime/capability_contract.cpp`、`cad-core/tests/test_adapters.py`、C8-M7 README / 矩阵、`docs/CADCore8.0/README.md` 和 S6 文件名。`C8M7-BLOCKER-601` 关闭，S6 文件重命名后 C8-M7 队列为空。
+
 ## 主文件
 
 - 总入口：`6-27-15-37-C8-M7-ImportShapeChangedFileDeletedReferenceRecovery准入收口主线总入口.md`
@@ -75,7 +83,7 @@ S6 路线因此限定为 capability publication closure：只允许修改 `cad-c
 4. S3：已完成 import 文件生命周期 oracle 复审。
 5. S4：已完成 ElementMap 与 ReferenceShadow 恢复边界复审。
 6. S5：已完成 capability 残留与 non-goal 发布准入，S6 路线为受限 capability publication patch。
-7. S6：实现或 no-code 发布闸门。
+7. S6：已完成 capability publication closure 与发布闸门。
 
 ## 允许代码落点
 
@@ -102,6 +110,7 @@ git diff --check
 
 ```bash
 cd /home/user/Chili3DProject/FreeCAD/cad-core
+cmake --build build
 ./cad-core capabilities > /tmp/c8m7-capabilities.json
 python3 -m unittest tests.test_p6_topology tests.test_p8_features tests.test_adapters
 ```
