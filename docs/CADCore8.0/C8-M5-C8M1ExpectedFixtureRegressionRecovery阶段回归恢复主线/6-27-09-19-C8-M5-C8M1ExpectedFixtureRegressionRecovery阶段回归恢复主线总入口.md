@@ -41,7 +41,13 @@
 4. S3：`BodyBaseFeature` 对象漂移专项复审。
 5. S4：cycle 诊断代码漂移专项复审。
 6. S5：approved refresh or code fix 准入。
-7. S6：阶段回归发布闸门。
+7. S6：阶段回归发布闸门（已完成）。
+
+## 发布状态
+
+- `C8M5-BLOCKER-601` 已关闭，C8-M5 工作步骤队列为空。
+- S6 验证通过：`cmake --build build`、focused C8/diagnostics/adapter tests、expected fixture gate 和 stage regression。
+- C8-M5 不新增 active remaining gap；`copy_on_change_full_temporary_document_cache` 继续保持 C8-M2 `known_gap` / `oracle_blocked` / C8-M5 non-goal。
 
 ## 验收
 
@@ -59,5 +65,6 @@ S6 发布闸门必须回到：
 
 ```bash
 cd /home/user/Chili3DProject/FreeCAD/cad-core
+cmake --build build
 python3 -m unittest tests.test_p8_features tests.test_expected_fixtures tests.test_adapters tests.test_diagnostics
 ```

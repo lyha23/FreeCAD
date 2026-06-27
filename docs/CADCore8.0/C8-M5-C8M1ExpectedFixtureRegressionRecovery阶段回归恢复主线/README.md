@@ -77,6 +77,17 @@ S5 在 `4e8d00798e` 上复核 S3/S4 落地状态，最终裁决为 docs/status �
 
 S5 验证结果：`python3 -m unittest tests.test_c8_shapebinder tests.test_diagnostics` 通过，18 tests；`python3 -m unittest tests.test_expected_fixtures.CadCoreExpectedFixtureTest.test_expected_fixtures_match_recompute_results` 通过，35 skipped。`C8M5-BLOCKER-501` 已关闭，下一队列首项为 S6 阶段回归发布闸门。
 
+## S6 发布闸门
+
+S6 在 `89dacb11fd` 上执行阶段回归发布闸门，最终裁决为 release gate restored。
+
+- `cmake --build build` 通过，覆盖 S4 修改过的 C++ 主路径。
+- `python3 -m unittest tests.test_c8_shapebinder tests.test_diagnostics tests.test_adapters` 通过，47 tests。
+- `python3 -m unittest tests.test_expected_fixtures.CadCoreExpectedFixtureTest.test_expected_fixtures_match_recompute_results` 通过，35 skipped 保持为既有 expected-fixture skip。
+- `python3 -m unittest tests.test_p8_features tests.test_expected_fixtures tests.test_adapters tests.test_diagnostics` 通过，266 tests，35 skipped。
+- `C8M5-BLOCKER-601` 已关闭；C8-M5 工作步骤队列为空。
+- `copy_on_change_full_temporary_document_cache` 继续保持 C8-M2 `known_gap` / `oracle_blocked` / C8-M5 non-goal，不新增 active remaining gap。
+
 ## 主文件
 
 - 总入口：`6-27-09-19-C8-M5-C8M1ExpectedFixtureRegressionRecovery阶段回归恢复主线总入口.md`
@@ -116,5 +127,6 @@ python3 -m unittest tests.test_c8_shapebinder tests.test_diagnostics
 
 ```bash
 cd /home/user/Chili3DProject/FreeCAD/cad-core
+cmake --build build
 python3 -m unittest tests.test_p8_features tests.test_expected_fixtures tests.test_adapters tests.test_diagnostics
 ```
