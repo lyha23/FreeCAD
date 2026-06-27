@@ -5354,6 +5354,116 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertFalse(special["native_marker_oracle"]["requires_cad_core_marker_parity"])
 
+    def test_c3m6_assembly_zero_angle_s5_native_oracle_routes_current_gap(self) -> None:
+        fixture = "assembly-angle-zero-and-signed-current-real-solver"
+        expected = self.expected_freecad("c3m6", fixture)
+        result = self.run_recompute(fixture, "c3m6")
+        assembly = result["objects"]["Assembly"]
+        adapter = assembly["solver_adapter"]
+
+        expected_joints = {
+            solver_joint["object"]: solver_joint
+            for solver_joint in expected["solver_adapter"]["solver_joints"]
+        }
+        native_oracle_joints = {
+            solver_joint["object"]: solver_joint
+            for solver_joint in expected["native_marker_oracle"]["solver_joints"]
+        }
+
+        self.assertIn(fixture, expected["reference"])
+        self.assertEqual(expected["native_solver"]["return_code"], 0)
+        self.assertEqual(expected["solver_adapter"]["status"], "solved")
+        self.assertEqual(expected["solver_adapter"]["mode"], "real_ondsel_solver")
+        self.assertEqual(expected["solver_adapter"]["unsupported_joints"], [])
+        self.assertIn("known_gap", expected)
+        self.assertEqual(expected["backendGap"]["route"], "backend_gap_candidate")
+        self.assertEqual(expected["backendGap"]["ids"], ["C9M2-BG-301"])
+        self.assertEqual(
+            expected["solver_adapter"]["placement_updates"][0]["properties"]["Placement"]["Base"],
+            [4.0, 0.0, 4.0],
+        )
+
+        expected_angle = expected_joints["AngleZeroJoint"]
+        self.assertEqual(expected_angle["joint_type"], "Angle")
+        self.assertEqual(expected_angle["angle"], 0.0)
+        native_angle = native_oracle_joints["AngleZeroJoint"]
+        self.assertEqual(native_angle["joint_type"], "Angle")
+        self.assertEqual(
+            native_angle["current_value"]["xy_angle_radians_from_jcs_placements"],
+            0.0,
+        )
+        for side in ("native_reference1", "native_reference2", "solver_reference1", "solver_reference2"):
+            reference = native_angle[side]
+            self.assertEqual(reference["status"], "resolved_native_handle_one_side")
+            self.assertTrue(reference["subshape_reference"])
+            self.assertEqual(reference["offset_boundary"], "identity_offset_for_two_box_assembly_link_fixture")
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["ondsel_solver_failed"])
+        self.assertEqual(assembly["solve"], "error")
+        self.assertEqual(adapter["status"], "error")
+        self.assertEqual(adapter["reason"], "ondsel_solver_failed")
+        self.assertEqual(adapter["unsupported_joints"], [])
+        self.assertEqual(adapter["placement_updates"], [])
+        actual_angle = {
+            solver_joint["object"]: solver_joint
+            for solver_joint in adapter["solver_joints"]
+        }["AngleZeroJoint"]
+        self.assertEqual(actual_angle["joint_type"], "Angle")
+        self.assertEqual(actual_angle["angle"], 0.0)
+        for side in ("reference1", "reference2"):
+            self.assertEqual(actual_angle[side]["markerResolutionStatus"], "resolved_subshape_handle_one_side")
+
+    def test_c9m2_s5_assembly_solver_diagnostics_remain_visible(self) -> None:
+        cases = [
+            (
+                "c3m6",
+                "assembly-unsupported-joint-diagnostic",
+                "unsupported_assembly_solver",
+                "unsupported",
+                "unsupported_joint_type",
+                "missing_sliding_precondition",
+            ),
+            (
+                "c4m5",
+                "assembly-runtime-adapter-pointcurve-unsupported-diagnostic",
+                "unsupported_assembly_solver",
+                "unsupported",
+                "unsupported_joint_type",
+                "point_curve_diagnostic_boundary",
+            ),
+            (
+                "c3m6",
+                "assembly-distance-plane-cone-default-boundary",
+                "unsupported_assembly_solver",
+                "unsupported",
+                "unsupported_joint_type",
+                "default_boundary_not_mapped",
+            ),
+            (
+                "c4m5",
+                "assembly-runtime-adapter-missing-grounded-part-diagnostic",
+                "missing_grounded_part",
+                "error",
+                "missing_grounded_part",
+                None,
+            ),
+        ]
+        for group, fixture, diagnostic_code, status, reason, unsupported_reason in cases:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, group)
+                assembly = result["objects"]["Assembly"]
+                adapter = assembly["solver_adapter"]
+
+                self.assertEqual([item["code"] for item in result["diagnostics"]], [diagnostic_code])
+                self.assertEqual(assembly["solve"], status)
+                self.assertEqual(adapter["status"], status)
+                self.assertEqual(adapter["reason"], reason)
+                self.assertEqual(result["documentObjectUpdates"], [])
+                if unsupported_reason is None:
+                    self.assertEqual(adapter["unsupported_joints"], [])
+                else:
+                    self.assertEqual(adapter["unsupported_joints"][0]["reason"], unsupported_reason)
+
     def test_c3m6_assembly_placement_writeback_applies_to_next_request_graph(self) -> None:
         result = self.run_recompute("assembly-grounded-distance-joint-real-solver", "c3m6")
         updates = result["documentObjectUpdates"]

@@ -9,9 +9,9 @@ C9-M2 承接 C9-M1 no-code closure 后的剩余 Assembly request-local solver ev
 - S0 live 基线：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=d52cd67a19`（`d52cd67a19 docs: 关闭 C9-M1 S6 发布闸门`）。S0 起始 status 仅包含 `docs/CADCore9.0/README.md` 与本 C9-M2 seed 文档 / 矩阵 / step 文件，未出现 cad-core source、fixture、expected 或 tests 改动。
 - C9-M1 队列为空，C9-M1 已关闭且不重开；C9-M2 只处理 Assembly request-local solver oracle 批次。
 - live capability 仍发布 `assembly.remaining_gaps=[]`、`subshape_marker_placement.remaining_gaps=[]`，`assembly.ondsel_solver_adapter.status=covered_full`，`placement_writeback.status=covered_full`。
-- `non_identity_bundled_offsetPlc` 仍是 oracle candidate / forbidden guessing，因为缺 fixed-joint bundle 产生 non-identity `objectPartMap.offsetPlc` 的 native expected。
+- `non_identity_bundled_offsetPlc` 已有 S3 native expected 并路由为 backend_gap_candidate；S6 只消费 current mismatch，不在 S5 重开。
 - `assembly-marker-custom-placement-chain-real-solver` 已有 expected；C9-M1 记录它未被 focused tests 直接断言，S4 已把 exact fixture 接入 focused test 并锁定 identity offset boundary。
-- `non_assembly_link_subshape_primitive_frame_generalization` 仍是 diagnostic non-goal；zero Angle fallback 有 FreeCAD / cad-core source evidence，但缺 native expected / focused test。
+- `non_assembly_link_subshape_primitive_frame_generalization` 仍是 diagnostic non-goal；zero Angle fallback 已在 S5 采集 native expected 并路由 current mismatch 到 S6。
 
 ## 批次边界
 
@@ -21,7 +21,7 @@ C9-M2 承接 C9-M1 no-code closure 后的剩余 Assembly request-local solver ev
 | bundled `offsetPlc` subshape marker | backend_gap_candidate | S3 native expected 已采集；S6 消费 current mismatch。 |
 | bundled `offsetPlc` writeback | backend_gap_candidate | S3 native expected 已采集；S6 消费 current mismatch。 |
 | custom placement-chain expected | focused test activated | S4 已直接断言 `assembly-marker-custom-placement-chain-real-solver` expected，且锁定 identity offset boundary；不宣称 bundled offset parity。 |
-| zero Angle fallback | known_gap_retained | native expected + focused test or retained route |
+| zero Angle fallback | backend_gap_candidate | S5 已采 native expected；current cad-core `ondsel_solver_failed` mismatch 交 S6 |
 | primitive frame generalization | diagnostic_non_goal | 保持 non-goal，除非产品另批 DTO |
 
 S0 关闭证据：C9-M1 queue script 只输出表头；C9-M2 queue 在 S0 重命名前从 S0 开始；`cad-core/src/runtime/capability_contract.cpp` 与 `cad-core/tests/test_adapters.py` 仍断言 Assembly remaining gaps 为空、`non_identity_bundled_offsetPlc` 和 primitive frame generalization 在 non-goals 内。本步未采 native oracle、未改 cad-core 源码 / fixtures / expected / tests，也未运行 build 或重型回归。
@@ -48,6 +48,14 @@ S0 关闭证据：C9-M1 queue script 只输出表头；C9-M2 queue 在 S0 重命
 - `assembly-marker-custom-placement-chain-real-solver` 已进入 `cad-core/tests/test_p8_features.py::CadCoreP8FeatureTest.test_c3m6_assembly_marker_placement_s4_native_oracle_expected_batch`，不再只作为 expected 库存证据。
 - S4 focused test 直接断言该 fixture 的 `native_marker_oracle`、known_gap/backendGap retention、`FixedJoint` native handle-one-side evidence，以及每个 native/solver reference 的 `offset_boundary=identity_offset_for_two_box_assembly_link_fixture`。
 - S4 结论是 custom placement-chain expected activation；该 expected 的 boundary 是 identity offset，不代表 S3 non-identity bundled `offsetPlc` coverage，也不关闭 S3 backend_gap_candidate。`C9M2-SCOPE-201`、`C9M2-BG-201` 和 `C9M2-BLOCKER-401` 已关闭为 focused test activated。
+
+## S5 关闭结论
+
+- S5 live 基线：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=1e67ff8971`（`1e67ff8971 test(cad-core): 激活C9-M2 S4 custom placement测试`），起始 `git -c core.quotepath=false status --short -uall` 无输出。
+- `cad-core/fixtures/c3m6/expected/assembly-angle-zero-and-signed-current-real-solver.freecad.json` 已用 `/home/user/.local/bin/freecadcmd` 采集；默认 macOS `FreeCADCmd` 路径不可用，但 PATH 内 native FreeCADCmd 可用，最终采集成功。expected 记录 FreeCADCmd 1.2.0 revision 20260519、native solver return 0、`AngleZeroJoint.angle=0.0`、native current XY angle 0、`ComponentB` native placement update `[4,0,4]`。
+- current cad-core 对同 fixture 保留 `Angle=0` solver DTO 与 resolved subshape marker evidence，但 real Ondsel solve 返回 `ondsel_solver_failed` / `iterNo > iterMax`，无 placement updates；`C9M2-SCOPE-301` 与 `C9M2-BG-301` 已路由为 expected-backed `backend_gap_candidate`，只交 S6，不在 S5 改 C++。
+- `cad-core/tests/test_p8_features.py::CadCoreP8FeatureTest.test_c3m6_assembly_zero_angle_s5_native_oracle_routes_current_gap` 锁定 native expected 与 current mismatch；`test_c9m2_s5_assembly_solver_diagnostics_remain_visible` 锁定 unsupported JointType、PointCurve/default boundary、missing grounded 仍走 diagnostics，zero-angle fixture 同时证明 `ondsel_solver_failed` 可见；`test_adapters.py` 继续断言 capability 发布 `invalid_assembly_solver_result`。
+- `C9M2-SCOPE-302`、`C9M2-BG-302` 和 `C9M2-BLOCKER-501` 已关闭为 diagnostics guard reviewed；S6 状态不变。
 
 ## 验收分层
 
