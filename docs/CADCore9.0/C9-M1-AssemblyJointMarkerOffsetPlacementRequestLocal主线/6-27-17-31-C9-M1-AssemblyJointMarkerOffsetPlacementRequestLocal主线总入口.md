@@ -12,8 +12,8 @@
 
 ## 当前基线
 
-- `HEAD=a191099068`（`a191099068 fix: 完成 C8-M7 ImportShape capability 发布闸门`）。
-- C8-M1 到 C8-M7 工作步骤队列应为空。
+- S0 live 基线：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=ebd6fd1243`（`ebd6fd1243 docs: 新增 C9-M1 Assembly Joint marker 方案包`），开始工作区干净。
+- C8-M1 到 C8-M7 工作步骤队列已复核为空：各队列脚本仅输出表头。
 - live capability 已关闭 ImportShape residual；`part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache` 仍是 `oracle_blocked` known gap，不进入 C9-M1。
 - current `assembly.ondsel_solver_adapter.subshape_marker_placement` 已覆盖 object / Vertex / Edge / Face / mixed、identity-offset AssemblyLink subset、real Ondsel marker consumption 与 placement update native parity；但 capability 仍把 `non_identity_bundled_offsetPlc` 和 `non_assembly_link_subshape_primitive_frame_generalization` 放入 non-goals。
 
@@ -37,7 +37,7 @@ live 声明口径
 | 包 README | `README.md` | 本包定位、基线、落点和验收分层。 |
 | 方案 | `6-27-17-31-C9-M1-AssemblyJointMarkerOffsetPlacementRequestLocal方案.md` | 主线范围和实施策略。 |
 | 工作步骤总入口 | `工作步骤细分/6-27-17-32-【已实现】C9-M1工作步骤总入口.md` | S0-S6 队列索引。 |
-| S0 | `工作步骤细分/6-27-17-33-C9-M1-S0-live基线与声明口径冻结.md` | 冻结 live baseline 和允许声明。 |
+| S0 | `工作步骤细分/6-27-17-33-【已实现】C9-M1-S0-live基线与声明口径冻结.md` | 冻结 live baseline 和允许声明。 |
 | S1 | `工作步骤细分/6-27-17-34-C9-M1-S1-FreeCAD源码与current覆盖候选.md` | 源码候选和 current coverage 复核。 |
 | S2 | `工作步骤细分/6-27-17-35-C9-M1-S2-范围准入与blocker矩阵.md` | scope / blocker / non-goal 路由。 |
 | S3 | `工作步骤细分/6-27-17-36-C9-M1-S3-markerPlacement与offsetPlc复审.md` | marker placement 与 `offsetPlc` oracle / gap 裁决。 |
@@ -51,4 +51,4 @@ live 声明口径
 | backend gap classification | `矩阵/c9m1_assembly_marker_offset_backend_gap_classification.tsv` | backendGap / oracle / releaseGate 分类。 |
 | validation matrix | `矩阵/c9m1_assembly_marker_offset_validation_matrix.tsv` | 分层验收命令。 |
 
-当前 S0-S6 都是待执行状态；矩阵是 seed，不是发布闸门结论。
+当前 S0 已完成 live 基线与声明口径冻结；S1-S6 仍为待执行状态，矩阵除 S0 证据行外仍是 seed，不是发布闸门结论。

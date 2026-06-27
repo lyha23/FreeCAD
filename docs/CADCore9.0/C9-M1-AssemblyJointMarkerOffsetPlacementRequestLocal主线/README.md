@@ -13,9 +13,10 @@ C9-M1 处理 Assembly request-local solver 链路中仍需要裁决的 marker / 
 ## 当前基线
 
 - 仓库：`/home/user/Chili3DProject/FreeCAD`
-- 建包起点：`HEAD=a191099068`（`a191099068 fix: 完成 C8-M7 ImportShape capability 发布闸门`），S0 需复核 dirty state。
-- C8-M1 到 C8-M7 队列应为空。
-- current capability 中 Assembly real Ondsel adapter 已可用，`subshape_marker_placement` 发布 `covered_representative_subset`，并把 `non_identity_bundled_offsetPlc` 与 `non_assembly_link_subshape_primitive_frame_generalization` 列为 non-goals。
+- S0 live 基线：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=ebd6fd1243`（`ebd6fd1243 docs: 新增 C9-M1 Assembly Joint marker 方案包`），开始状态干净。
+- C8-M1 到 C8-M7 队列已复核为空：队列脚本均只输出表头，无 pending 行。
+- current capability 中 Assembly real Ondsel adapter 已可用（`assembly.ondsel_solver_adapter.available=true`），`subshape_marker_placement` 发布 `covered_representative_subset`，并把 `non_identity_bundled_offsetPlc` 与 `non_assembly_link_subshape_primitive_frame_generalization` 列为 non-goals。
+- `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache` 继续保留 C8 known gap / `oracle_blocked`，不进入 C9-M1。
 - `cad-core/fixtures/c3m6/expected` 已有 Assembly native solver placement expected；C9-M1 必须复用这些 oracle 作为基线，不得用 current cad-core 输出倒推 FreeCAD expected。
 
 ## FreeCAD 依据

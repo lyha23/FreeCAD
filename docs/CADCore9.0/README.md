@@ -13,10 +13,11 @@ C9-M1 转向 Assembly Joint marker / `offsetPlc` request-local 扩面。目标�
 
 ## 当前状态
 
-- live 基线：`HEAD=a191099068`（`a191099068 fix: 完成 C8-M7 ImportShape capability 发布闸门`），开始工作区需由 S0 复核。
-- C8-M1 到 C8-M7 工作步骤队列应为空。
-- current capability：`assembly.ondsel_solver_adapter.status=covered_full`，`subshape_marker_placement.status=covered_representative_subset`，当前 non-goals 包含 `non_assembly_link_subshape_primitive_frame_generalization` 与 `non_identity_bundled_offsetPlc`。
+- live 基线：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=ebd6fd1243`（`ebd6fd1243 docs: 新增 C9-M1 Assembly Joint marker 方案包`），S0 开始 `git -c core.quotepath=false status --short -uall` 无输出。
+- C8-M1 到 C8-M7 工作步骤队列已由 S0 复核为空：各 `step_goal_queue.py` 输出均只有 Markdown 表头，无 pending 行。
+- current capability：`assembly.ondsel_solver_adapter.status=covered_full`、`available=true`，`subshape_marker_placement.status=covered_representative_subset`，当前 non-goals 包含 `non_assembly_link_subshape_primitive_frame_generalization` 与 `non_identity_bundled_offsetPlc`。
 - current capability 已覆盖 Fixed / Revolute / Cylindrical / Slider / Ball / Distance / Angle request-local real Ondsel adapter、basic / extended DistanceType、subshape marker placement、`runPreDrag` 和 `documentObjectUpdates.action=assembly_set_placement`。
+- `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache` 保持 C8 known gap / `oracle_blocked`，不进入 C9-M1 实现范围。
 - C9-M1 不重开完整 FreeCAD Link 账本、ShowElement 持久写回事务、cross-document lifecycle、GUI / ViewProvider / Worker / WASM / Web，也不引入跨请求 solver session。
 
 ## 队列检查
