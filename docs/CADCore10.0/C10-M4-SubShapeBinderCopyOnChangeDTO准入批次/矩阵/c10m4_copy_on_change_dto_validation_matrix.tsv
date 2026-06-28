@@ -1,0 +1,12 @@
+validation_id	validation_type	command	required_at	purpose
+C10M4-VAL-000	status	git status --short -uall	every step	Show dirty worktree boundary
+C10M4-VAL-001	head	git rev-parse --short=10 HEAD	S0 and release gate	Show exact baseline commit
+C10M4-VAL-002	queue	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore10.0/C10-M4-SubShapeBinderCopyOnChangeDTO准入批次/工作步骤细分 --format markdown	every step	Show next pending step and prove queue-empty at S6
+C10M4-VAL-003	tsv	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore10.0/C10-M4-SubShapeBinderCopyOnChangeDTO准入批次/矩阵/*.tsv	every matrix edit	Prevent TSV column drift
+C10M4-VAL-004	whitespace	rg -n '[ \t]$' docs/CADCore10.0/C10-M4-SubShapeBinderCopyOnChangeDTO准入批次 docs/CADCore10.0/README.md	every docs step	No trailing whitespace; exit 1 means no matches
+C10M4-VAL-005	diffcheck	git diff --check	every step	Detect whitespace errors before commit
+C10M4-VAL-006	source_rg	rg -n "setupCopyOnChange|checkCopyOnChange|BindCopyOnChange|PartialLoad|makeCopyOnChange|documentObjectUpdates|copy_on_change_full_temporary_document_cache" src/Mod/PartDesign/App/ShapeBinder.cpp src/Mod/PartDesign/App/ShapeBinder.h src/App/Link.cpp src/App/Link.h cad-core/src/part_design/feature_shape_binder.cpp cad-core/include/cad_core/part_design/feature_shape_binder.h cad-core/src/app/copy_on_change.cpp cad-core/include/cad_core/app/copy_on_change.h cad-core/src/runtime/capability_contract.cpp	S1	Prove FreeCAD authority and current landing paths are live
+C10M4-VAL-007	capability_rg	rg -n "copy_on_change_full_temporary_document_cache|known_gap_diagnostic|oracle_blocked|remaining_gaps" cad-core/src/runtime/capability_contract.cpp	S0,S6	Prove retained gap publication has not drifted
+C10M4-VAL-008	probe_rg	rg -n "CopyOnChange|BindCopyOnChange|PartialLoad|temporary document|request-local|not_collected|blocker" cad-core/tools/probe_c9m5_subshapebinder_copyonchange.py cad-core/tools/probe_c8m2_subshapebinder_copyonchange.py cad-core/tools/collect_c8m1_shapebinder_expected.py cad-core/fixtures/c8m1 cad-core/fixtures/c8m2	S3	Review native evidence history before opening implementation
+C10M4-VAL-009	focused_tests	python3 -m unittest tests.test_p7_features tests.test_adapters	S6 if code changes	Verify DTO diagnostics adapters and feature behavior after implementation
+C10M4-VAL-010	build	cmake --build build	S6 if code changes	Compile cad-core after C++ changes

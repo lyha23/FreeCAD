@@ -8,6 +8,8 @@ C10-M2 转向 PartDesign DressUp / Hole topo history 第二阶段。current capa
 
 C10-M3 转向 stale `ReferenceShadow` / `ShadowSub` Native Recovery 准入。C10-M2 已把 cross-feature old-reference recovery 保持为 `diagnostic_retained`，重开条件是 native observable `ShadowSub` / `ReferenceShadow` evidence 加 current cad-core mismatch。C10-M3 已完成 FCStd / XML restore 可观测性、current parser / recovery / diagnostic 复核和协议边界审计；S6 因没有 evidence-backed mismatch 发布 docs-only no-code retained diagnostic / release gate。
 
+C10-M4 转向 SubShapeBinder CopyOnChange request-local DTO 准入。当前 live capability 的唯一非空 `remaining_gaps` 仍是 `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache`，但它继续是 `known_gap_diagnostic` / `oracle_blocked`。C10-M4 只判断是否存在 native copied-object evidence、产品批准 DTO 和 current mismatch 同时成立的 request-local 子集；否则继续发布 no-code retained diagnostic / release gate。
+
 ## 入口
 
 - C10-M1 总入口：`C10-M1-SketchOpenWireInternalFaceStableSelector批次/6-28-17-33-C10-M1-SketchOpenWireInternalFaceStableSelector批次总入口.md`
@@ -22,6 +24,10 @@ C10-M3 转向 stale `ReferenceShadow` / `ShadowSub` Native Recovery 准入。C10
 - C10-M3 方案：`C10-M3-ReferenceShadowShadowSubNativeRecovery准入批次/6-29-01-07-C10-M3-ReferenceShadowShadowSubNativeRecovery准入批次方案.md`
 - C10-M3 工作步骤：`C10-M3-ReferenceShadowShadowSubNativeRecovery准入批次/工作步骤细分/`
 - C10-M3 矩阵：`C10-M3-ReferenceShadowShadowSubNativeRecovery准入批次/矩阵/`
+- C10-M4 总入口：`C10-M4-SubShapeBinderCopyOnChangeDTO准入批次/6-29-03-29-C10-M4-SubShapeBinderCopyOnChangeDTO准入批次总入口.md`
+- C10-M4 方案：`C10-M4-SubShapeBinderCopyOnChangeDTO准入批次/6-29-03-29-C10-M4-SubShapeBinderCopyOnChangeDTO准入批次方案.md`
+- C10-M4 工作步骤：`C10-M4-SubShapeBinderCopyOnChangeDTO准入批次/工作步骤细分/`
+- C10-M4 矩阵：`C10-M4-SubShapeBinderCopyOnChangeDTO准入批次/矩阵/`
 
 ## 当前状态
 
@@ -36,6 +42,7 @@ C10-M3 转向 stale `ReferenceShadow` / `ShadowSub` Native Recovery 准入。C10
 - C10-M2 S6 发布闸门已完成：执行基线为 `HEAD=49bb78adf3`（`docs: 完成 C10-M2 S5 旧引用诊断复审`），裁决为 docs-only no-code release gate；`C10M2-SCOPE-401=release_closed`、`C10M2-BLOCKER-601=closed_s6`、`C10M2-CAT-104=release_closed`。C10-M2 队列为空；未修改 `cad-core/src`、tests、fixtures、expected 或 capability；stale `ReferenceShadow` / Base recovery 继续保持 `diagnostic_retained` / oracle-blocked，不声明 supported。
 - C10-M2 禁止声明：raw `FaceN`、bbox、面积、顺序、source index、fixture 名称、adapter 层修剪或输出排序不能用来选 face / edge；stale `ReferenceShadow` / Base recovery 继续保持 oracle-blocked / diagnostic，不能发布为 supported。
 - C10-M3 S0 live 基线已冻结：起点 HEAD=`f528b8f7f6`（`docs: 新增 C10-M3 ReferenceShadow native recovery 方案`），S0 起始工作区干净；主题是 `ReferenceShadow` / `ShadowSub` native recovery 准入，不是 CopyOnChange，也不是已支持声明。`C10M3-BLOCKER-000=closed_s0`，`C10M3-SCOPE-001=baseline_frozen_s0`；`C10M3-NG-001..007` forbidden claims / reopen condition 完整，`C10M3-VAL-000..005` 为 S0 docs / matrix 验收命令。C10-M3 S1 source authority audit 已完成：`C10M3-SRC-101..204` 已刷新 live FreeCAD / current cad-core path、symbol、evidence、focused tests 与 capability landing，`C10M3-BLOCKER-101=closed_s1`；没有 supported 或 backend gap 升级。C10-M3 S2 范围准入已完成：`C10M3-BLOCKER-201=closed_s2`，scope、blocker、non-goal 和 backend-gap 矩阵只发布 native oracle、current comparison、diagnostic 和 release gate 路由，没有 implementation row。C10-M3 S3 native 可观测性复审已完成：执行基线 HEAD=`b1735afd88`（`docs: 完成 C10-M3 S2 范围准入矩阵`），本轮 FreeCADCmd probe 基线为 FreeCAD `1.2.0 revision 20260519` / Libs `1.2.0devR20260519` / OCCT `7.8.1`；FCStd/XML restore 与 recompute 成功，但 Python-visible `Base` 不暴露 `ShadowSub`、`ReferenceShadow` 或 `getSubValues(false/true)`，所以 `C10M3-SCOPE-101..102=notCollected`、`C10M3-BLOCKER-301=closed_s3`、`C10M3-CAT-101=notCollected`，未创建 collector、fixtures 或 expected。C10-M3 S4 current recovery comparison 已完成：只复审 current parser / recovery / ElementMap diagnostics / focused tests；因 S3 `notCollected` 且没有 C10-M3 collector、fixture 或 expected，current comparison 不能证明 mismatch，`C10M3-SCOPE-201=release_gate`、`C10M3-SCOPE-202=diagnostic_retained`、`C10M3-BLOCKER-401=closed_s4`、`C10M3-CAT-102=release_gate`，未创建 backend gap 或 implementation row。C10-M3 S5 protocol / diagnostic boundary 已完成：`elementReferenceUpdates` 仍是前端 graph update 建议，`ReferenceShadow.brep` 仍只允许 single-subshape evidence，split / deleted / ambiguous 保持 diagnostic / reselect，adapter 只发布 contract metadata；`C10M3-SCOPE-202=diagnostic_retained`、`C10M3-SCOPE-301=release_gate`、`C10M3-BLOCKER-501=closed_s5`、`C10M3-CAT-103=diagnostic_retained`，未创建 backend gap 或 implementation row。C10-M3 S6 发布闸门已完成：执行基线为 `HEAD=730dc22e6d`（`docs: 完成 C10-M3 S5 协议边界复审`），裁决为 docs-only no-code retained diagnostic / release gate；`C10M3-SCOPE-401=release_closed`、`C10M3-BLOCKER-601=closed_s6`、`C10M3-CAT-104=release_closed`。C10-M3 队列为空；未运行 FreeCADCmd，未采 oracle / expected，未修改 `cad-core/src`、tests、fixtures、capability 或 adapter protocol。C10-M3 的 reopen condition 是 native observable `ShadowSub` / `ReferenceShadow` evidence 加 current cad-core mismatch。
+- C10-M4 seed package 已创建：起点 HEAD=`3c21f08005`，主题是 SubShapeBinder CopyOnChange request-local DTO 准入，不是 full temporary-document cache 实现包。S0-S6 待执行，工作步骤索引已标 `【已实现】`；S6 只有在 native copied-object evidence、产品批准 DTO 和 current mismatch 同时成立时才允许打开 C++ gate，否则发布 no-code retained diagnostic / release gate。
 
 ## 队列检查
 
@@ -44,6 +51,7 @@ cd /home/user/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore10.0/C10-M1-SketchOpenWireInternalFaceStableSelector批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore10.0/C10-M2-PartDesignDressUpHoleTopoHistory批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore10.0/C10-M3-ReferenceShadowShadowSubNativeRecovery准入批次/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore10.0/C10-M4-SubShapeBinderCopyOnChangeDTO准入批次/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -53,6 +61,7 @@ cd /home/user/Chili3DProject/FreeCAD
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore10.0/C10-M1-SketchOpenWireInternalFaceStableSelector批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore10.0/C10-M2-PartDesignDressUpHoleTopoHistory批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore10.0/C10-M3-ReferenceShadowShadowSubNativeRecovery准入批次/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore10.0/C10-M4-SubShapeBinderCopyOnChangeDTO准入批次/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore10.0
 git diff --check
 ```
