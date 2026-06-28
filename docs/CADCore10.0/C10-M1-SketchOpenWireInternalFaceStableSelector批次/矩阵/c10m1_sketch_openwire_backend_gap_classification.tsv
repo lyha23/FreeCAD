@@ -1,0 +1,5 @@
+category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
+C10M1-CAT-101	near_tangent_coincident_oracle	high	C10M1-SCOPE-101,C10M1-SCOPE-102	no	S3 must collect or retain FreeCAD oracle before any FaceMaker implementation; current output cannot define expected
+C10M1-CAT-102	complex_open_wire_ledger	high	C10M1-SCOPE-103,C10M1-SCOPE-104	no	S4 must classify unique WireJoiner evidence versus ambiguous one-to-many diagnostics before S6 code gate
+C10M1-CAT-103	internalface_stable_selector	high	C10M1-SCOPE-201	yes	S5 may approve only an ElementMap-backed request-local selector; raw FaceN or geometry guessing remains rejected
+C10M1-CAT-104	publication_and_diagnostics_gate	medium	C10M1-SCOPE-202	no	S6 must keep capability diagnostics and focused tests aligned with implemented support or retained blocker
