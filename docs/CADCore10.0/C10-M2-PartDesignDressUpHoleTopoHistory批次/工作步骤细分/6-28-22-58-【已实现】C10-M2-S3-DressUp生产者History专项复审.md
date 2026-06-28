@@ -1,4 +1,4 @@
-# C10-M2-S3 DressUp 生产者 History 专项复审
+# 【已实现】C10-M2-S3 DressUp 生产者 History 专项复审
 
 ## 目标
 
@@ -37,6 +37,14 @@
 - 如发现 no-gap：写为 `no_gap` 或 `expected_backed_no_gap`，并说明 checked-in expected / focused tests。
 - 如发现 current mismatch：写为 `backend_gap_candidate`，并把 S6 code landing 限定到对应 C++ / tests。
 - 如只有不可观察 old reference recovery：写为 `notCollected` 或 `diagnostic_retained`，不写 implementation row。
+
+## S3 复核结果
+
+- live baseline：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=d5adcb5666`（`docs: 完成 C10-M2 S2 范围准入矩阵`），起点工作区干净。
+- `C10M2-SCOPE-101=expected_backed_no_gap`：FreeCAD `DressUp::getAddSubShape()` 的 AddSubShape cache / SupportTransform slot、`getContinuousEdges()` 的 Edge/Face/Wire 展开，以及 `Fillet::execute()` / `Chamfer::execute()` 的 maker + rawShape-before-refine 路径，与 current `cad-core/src/part_design/feature_dress_up.cpp`、`feature_fillet.cpp`、`feature_chamfer.cpp` 和 P7/C3M5 checked-in expected 对齐。覆盖证据包括 `fillet-pad-edge`、`chamfer-pad-edge`、`fillet-pad-multi-edge`、`fillet-pad-use-all-edges`、`chamfer-*` 参数变体、`fillet-face-selection-history`、`mirrored-fillet-support-transform`、`mirrored-dressup-chain-support-transform`、`chained-dressup-pattern-history`，未发现 current mismatch。
+- `C10M2-SCOPE-102=no_gap`：FreeCAD `Draft::execute()` 的 selected FaceN、neutral plane / pull direction 与 copy-no-face path，以及 `Thickness::execute()` 的 selected close faces、Mode / Join / Reversed / Intersection、per-solid thick-solid 和 multi-solid fuse path，与 current `feature_draft.cpp`、`feature_thickness.cpp`、focused tests 和 capability producer matrix 一致。Draft / Thickness 行当前没有 checked-in `.freecad.json` expected，因此不升级为 `expected_backed_no_gap`，也没有证据进入 `backend_gap_candidate`。
+- `C10M2-BLOCKER-301=closed_s3`：S3 没有打开 DressUp C++ / tests / fixtures / expected / capability 改动；S6 只需发布 no-code no-gap release gate。
+- `C10M2-CAT-101=no_gap`：DressUp producer-history 分类已从 `oracle_candidate` 收口为 no-code no-gap。stale `ReferenceShadow` / Base recovery 仍由 `C10M2-NG-006` 和 S5 保持 `diagnostic_retained`，不能声明 supported。
 
 ## 验收标准
 

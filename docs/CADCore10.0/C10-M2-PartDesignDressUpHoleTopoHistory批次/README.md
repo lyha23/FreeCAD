@@ -13,11 +13,12 @@
 
 ## 当前状态
 
-- S0 已冻结 live baseline、状态词典、forbidden claims 和通用验证命令；S1 已完成 FreeCAD source authority 与 current cad-core coverage 复核；S2 已完成范围准入与 blocker 矩阵路由；S3-S6 仍为待执行。
+- S0 已冻结 live baseline、状态词典、forbidden claims 和通用验证命令；S1 已完成 FreeCAD source authority 与 current cad-core coverage 复核；S2 已完成范围准入与 blocker 矩阵路由；S3 已完成 DressUp producer-history 复审；S4-S6 仍为待执行。
 - 工作步骤总入口已标 `【已实现】`，它只是队列索引，避免 goal runner 把索引当成实现步骤。
 - `C10M2-BLOCKER-000=closed_s0`；`C10M2-SCOPE-001=baseline_frozen_s0` 只作为 S6 复核的 docs-only release baseline，不打开 C++ gate。
 - `C10M2-BLOCKER-101=closed_s1`；`C10M2-SRC-101..204` 已有 live FreeCAD 或 current cad-core/tests path、symbol 和 concise evidence。
 - `C10M2-BLOCKER-201=closed_s2`；每个 scope 已有合法 `current_status`、owner `next_step` 和 `close_condition`，每个 blocker 均指向 scope，non-goal 均有用户 / 协议行为和 reopen condition。
+- `C10M2-BLOCKER-301=closed_s3`；`C10M2-SCOPE-101=expected_backed_no_gap`，`C10M2-SCOPE-102=no_gap`，`C10M2-CAT-101=no_gap`。S3 未发现 expected-backed current mismatch，未修改 C++ / tests / fixtures / expected / capability。
 - 本包不声明新的 backend gap；`backend_gap_candidate` 必须等 S3-S5 给出 FreeCAD authority 或 checked-in expected 与 current cad-core 的 mismatch。
 - C9/C10 保留的 `copy_on_change_full_temporary_document_cache` 仍是 SubShapeBinder retained known gap，不属于本包默认入口。
 
