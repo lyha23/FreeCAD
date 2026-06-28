@@ -16,14 +16,15 @@
 
 ## current cad-core 依据
 
-- `cad-core/src/features/sketch_object.cpp`
+- `cad-core/src/sketcher/sketch_object.cpp`
 - `cad-core/src/sketcher/sketch_internal_builder.cpp`
 - `cad-core/src/part/face_maker.cpp`
 - `cad-core/src/part/wire_joiner.cpp`
 - `cad-core/src/part/internal_shape_history_publisher.cpp`
 - `cad-core/src/part_design/profile_resolver.cpp`
-- `cad-core/src/topo/element_map.cpp`
-- `cad-core/src/topo/named_shape.cpp`
+- `cad-core/src/app/element_map.cpp`
+- `cad-core/include/cad_core/part/topo_shape.h`
+- `cad-core/src/part/topo_shape.cpp`
 - `cad-core/tests/test_p5_sketch.py`
 - `cad-core/tests/test_p6_topology.py`
 - `cad-core/tests/test_adapters.py`

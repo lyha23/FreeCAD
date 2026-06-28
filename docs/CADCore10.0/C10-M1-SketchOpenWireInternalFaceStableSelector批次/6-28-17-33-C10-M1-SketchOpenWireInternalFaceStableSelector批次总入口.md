@@ -54,13 +54,13 @@ C9-M5 queue empty
 
 | 层 | 当前代码落点 | 职责 |
 | --- | --- | --- |
-| Sketch executor | `cad-core/src/features/sketch_object.cpp` | 执行 Sketch 顺序、发布 `InternalShape`、subshape 和 metadata。 |
+| Sketch executor | `cad-core/src/sketcher/sketch_object.cpp` | 执行 Sketch 顺序、发布 `InternalShape`、subshape 和 metadata。 |
 | Internal builder | `cad-core/src/sketcher/sketch_internal_builder.cpp` | 组合 FaceMaker bounded result 与 WireJoiner open-wire result，保持 `profileShape` 与 `internalShape` 分离。 |
 | FaceMaker | `cad-core/src/part/face_maker.cpp` | bounded split、pre-split / splitter producer evidence、summary diagnostics。 |
 | WireJoiner | `cad-core/src/part/wire_joiner.cpp` | EdgeInfo / WireInfo 账本、openWireCompound export、history events、noOriginal 过滤。 |
 | History publisher | `cad-core/src/part/internal_shape_history_publisher.cpp` | 把 FaceMaker / WireJoiner evidence 写入 `NamedShape`、mapper events 和 diagnostics。 |
 | Stable selector | `cad-core/src/part_design/profile_resolver.cpp` | 解析 `Profile.SubList` / `StableSubList`，选择 InternalFace profile 或发出稳定诊断。 |
-| Topo naming | `cad-core/src/topo/element_map.cpp`、`cad-core/src/topo/named_shape.cpp` | ElementMap alias、split / deleted / generated history 和 stable subname resolution。 |
+| Topo naming | `cad-core/src/app/element_map.cpp`、`cad-core/include/cad_core/part/topo_shape.h`、`cad-core/src/part/topo_shape.cpp` | ElementMap alias、split / deleted / generated history 和 stable subname resolution。 |
 
 ## 产物索引
 
