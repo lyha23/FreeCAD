@@ -8,6 +8,8 @@ C9-M2 承接 C9-M1 no-code closure，不再把后续拆成单个 oracle case，�
 
 C9-M3 承接 C9-M2 queue-empty 后的剩余 Assembly DistanceType 发布边界。本包已在 S6 消费 expected-backed backend gap：`PointCurve` 进入 supported，`PlaneCone` / `LineCylinder` / `CurvePlane` / `Other` 只按 checked-in native expected 映射为 `ASMTPlanarJoint + offset`；缺 oracle 的 default families 仍留在 `default_or_todo_boundaries`，不继承 supported。
 
+C9-M4 承接 C9-M3 queue-empty 后仍公开的 13 个 Assembly DistanceType `default_or_todo_boundaries`。它不重开 C9-M3 accepted rows，而是围绕 `CylinderCone`、`ConeCone`、`ConeTorus`、`ConeSphere`、`PointCone`、`PointTorus`、`LineSphere`、`LineCone`、`LineTorus`、`CurveCylinder`、`CurveSphere`、`CurveCone`、`CurveTorus` 的缺 input / expected 行建立 native oracle、current comparison、capability publication 和 S6 code gate。
+
 ## 入口
 
 - C9-M1 总入口：`C9-M1-AssemblyJointMarkerOffsetPlacementRequestLocal主线/6-27-17-31-C9-M1-AssemblyJointMarkerOffsetPlacementRequestLocal主线总入口.md`
@@ -22,6 +24,10 @@ C9-M3 承接 C9-M2 queue-empty 后的剩余 Assembly DistanceType 发布边界�
 - C9-M3 方案：`C9-M3-AssemblyDistanceTypeDefaultBoundary批次/6-28-00-06-C9-M3-AssemblyDistanceTypeDefaultBoundary批次方案.md`
 - C9-M3 工作步骤：`C9-M3-AssemblyDistanceTypeDefaultBoundary批次/工作步骤细分/`
 - C9-M3 矩阵：`C9-M3-AssemblyDistanceTypeDefaultBoundary批次/矩阵/`
+- C9-M4 总入口：`C9-M4-AssemblyDistanceTypeDefaultMissingOracle扩面批次/6-28-09-34-C9-M4-AssemblyDistanceTypeDefaultMissingOracle扩面批次总入口.md`
+- C9-M4 方案：`C9-M4-AssemblyDistanceTypeDefaultMissingOracle扩面批次/6-28-09-34-C9-M4-AssemblyDistanceTypeDefaultMissingOracle扩面批次方案.md`
+- C9-M4 工作步骤：`C9-M4-AssemblyDistanceTypeDefaultMissingOracle扩面批次/工作步骤细分/`
+- C9-M4 矩阵：`C9-M4-AssemblyDistanceTypeDefaultMissingOracle扩面批次/矩阵/`
 
 ## 当前状态
 
@@ -42,6 +48,8 @@ C9-M3 承接 C9-M2 queue-empty 后的剩余 Assembly DistanceType 发布边界�
 - C9-M2 S5 已关闭 zero Angle fallback 与 diagnostics 复审：`assembly-angle-zero-and-signed-current-real-solver.freecad.json` 已由 FreeCADCmd 1.2.0 revision 20260519 采集，native solver return 0、`AngleZeroJoint.angle=0.0`、native current XY angle 为 0，证明 exact-zero Angle native route；current cad-core 对同 fixture 保留 `Angle=0` DTO 和 subshape marker evidence，但 solver 返回 `ondsel_solver_failed` 且无 placement update，因此 `C9M2-SCOPE-301/C9M2-BG-301` 路由为 `backend_gap_candidate` 交 S6。S5 focused tests 同时证明 unsupported JointType、PointCurve/default boundary、missing grounded 和 `ondsel_solver_failed` 不会静默变成 success；`invalid_assembly_solver_result` 仍由 adapter capability guard 发布。
 - C9-M2 S6 已关闭 oracle 实现与发布闸门：三条 bundled `offsetPlc` expected 已与 current parity，object/subshape marker 均按 `[0.25,0.5,0.75] -> [2.25,0.5,0.75]` 应用 request-local offset，`ComponentC` writeback 为 `[6,0,2]`；zero Angle expected-backed route 现在解出 `ComponentB=[4,0,4]`，旧 `ondsel_solver_failed` 不再作为该 fixture 的 supported route。`C9M2-BLOCKER-601` 已关闭，`non_identity_bundled_offsetPlc` 从 capability non-goals 移除，primitive frame generalization 保持 diagnostic non-goal。
 - C9-M3 已关闭：S0-S5 完成 source / scope / oracle / publication gate，S6 在 `dd933c7f91 docs: 关闭 C9-M3 S5 发布准入` 后落代码与发布面。`PointCurve`、`PlaneCone`、`LineCylinder`、`CurvePlane`、`Other` expected-backed rows 当前与 cad-core parity，5 个 accepted expected 不再带 stale `DTE-NG-003` metadata；`native_expected_count=18`。`CylinderCone`、`ConeCone`、`ConeTorus`、`ConeSphere`、`PointCone`、`PointTorus`、`LineSphere`、`LineCone`、`LineTorus`、`CurveCylinder`、`CurveSphere`、`CurveCone`、`CurveTorus` 仍缺 input/expected，保持 `notCollected` / `native_oracle_required`。
+- C9-M4 方案包已建立，S0 已关闭：S0 live baseline 为 `pwd=/home/user/Chili3DProject/FreeCAD`、`HEAD=435f3f26b9`（`435f3f26b9 feat(cad-core): 关闭 C9-M3 S6 距离类型发布闸门`），起始 status 仅包含 `docs/CADCore9.0/README.md` 修改和本 C9-M4 seed 包未提交；C9-M3 queue 已复核为空，current capability 中 `assembly.remaining_gaps=[]`、`assembly.unsupported_joint_matrix=[]`、`distance_type_extended_geometry.native_expected_count=18`、`deferred_diagnostic_cases=[]`。
+- C9-M4 S0 冻结缺 oracle 声明：`CylinderCone`、`ConeCone`、`ConeTorus`、`ConeSphere`、`PointCone`、`PointTorus`、`LineSphere`、`LineCone`、`LineTorus`、`CurveCylinder`、`CurveSphere`、`CurveCone`、`CurveTorus` 仍缺 input / expected 并留在 `default_or_todo_boundaries`；S1-S6 需要先采集 native oracle 或记录 notCollected，不得继承 C9-M3 supported，也不得把缺 oracle rows 写成 supported/backendGap。
 
 ## 队列检查
 
@@ -50,6 +58,7 @@ cd /home/user/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore9.0/C9-M1-AssemblyJointMarkerOffsetPlacementRequestLocal主线/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore9.0/C9-M2-AssemblyRequestLocalSolverOracle批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore9.0/C9-M3-AssemblyDistanceTypeDefaultBoundary批次/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore9.0/C9-M4-AssemblyDistanceTypeDefaultMissingOracle扩面批次/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -59,6 +68,7 @@ cd /home/user/Chili3DProject/FreeCAD
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore9.0/C9-M1-AssemblyJointMarkerOffsetPlacementRequestLocal主线/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore9.0/C9-M2-AssemblyRequestLocalSolverOracle批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore9.0/C9-M3-AssemblyDistanceTypeDefaultBoundary批次/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore9.0/C9-M4-AssemblyDistanceTypeDefaultMissingOracle扩面批次/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore9.0
 git diff --check
 ```
