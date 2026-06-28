@@ -24,13 +24,14 @@ C9-M5 不把这个 known gap 直接写成 supported，也不搬运 FreeCAD tempo
 - S1 已关闭 source/current 审计：FreeCAD full path 仍依赖 `setupCopyOnChange()` / `update()`、`_tmp_binder`、`_CopiedObjs`、`copyObject()`、`recomputeFeature(true)` 和 `_CopiedLink`；current `cad-core` 仍只发布 SubShapeBinder diagnostic boundary，`app/copy_on_change.cpp` 仅作为 App Link DTO 词汇对照。
 - S2 已关闭 scope admission：`C9M5-SCOPE-001..301` 只保留 `native_oracle_required`、`product_decision_required`、`known_gap_retained`、`backend_gap_candidate`、`diagnostic_non_goal` 和 `release_gate` 路由；没有生成 `backend_gap_requires_implementation`，full temporary-document copied-object cache 保持 retained known gap。
 - S3 已关闭 native lifecycle probe 复审：新增 `cad-core/tools/probe_c9m5_subshapebinder_copyonchange.py`、`cad-core/fixtures/c9m5/subshape-binder-copyonchange-lifecycle-probe.json` 和 `cad-core/fixtures/c9m5/expected/subshape-binder-copyonchange-lifecycle-probe.freecad.json`；FreeCADCmd 为 `/home/user/.local/bin/freecadcmd`，`freecad_version=1.2.0 revision 20260519`。证据能观察 Disabled / Enabled / Mutated / PartialLoad、`_tmp_binder` 和 `_CopiedLink`，但 `_CopiedObjs`、`copyObject()` dependency order 与 `recomputeFeature(true)` internal ElementMap lifecycle 仍不可导出为稳定 request-local DTO；`C9M5-SCOPE-103` 保持 `needs_more_native_evidence`，不打开 implementation gate。
+- S4 已关闭 request-local DTO 产品边界复审：裁决为 `dto_rejected_known_gap_retained`。可接受字段仅限 request graph 可持久化字段、request-local `documentObjectUpdates` / diagnostics、source id/name、support subname、mutated property delta、copy intent 与 deletion/update/reselect 建议；forbidden fields 包括 hidden temporary document、TopoDS_Shape / BREP / full shape cache、request 后继续有效的 NamedShape / ElementMap / copied-object cache、`_CopiedObjs` private vector 和 native object pointer identity。S5/S6 不得落 C++ support。
 
 ## 收口边界
 
 - C9-M5 不重开 C8-M1 已关闭的 ShapeBinder/SubShapeBinder executor、ElementMap、NamedShape、Body replay 主路径。
 - C9-M5 不继承 C8-M2 no-code 裁决为永久结论；它重新复核 native oracle 和 request-local DTO 准入，但必须拿到更强 evidence 才能落代码。
 - 禁止引入跨请求 backend session、persistent temporary document、BREP、TopoDS_Shape、NamedShape、ElementMap 或 hidden cache。
-- 若 S3-S5 仍只能证明 property-state evidence，S6 必须关闭为 no-code release gate，并保持 known gap。
+- S4 已拒绝 DTO；S5/S6 必须关闭为 no-code release gate，并保持 known gap。
 
 ## 队列检查
 
