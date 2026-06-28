@@ -15,6 +15,7 @@ C10-M1 转向 P5b Sketch open-wire / WireJoiner / InternalFace stable selector�
 
 - S0 live 基线已冻结：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=382539f170`（`382539f170 docs: 关闭 C9-M5 S6 发布闸门`）。S0 起始 `git -c core.quotepath=false status --short -uall` 仅显示 C10-M1 seed 文档、矩阵和 `docs/CADCore10.0/README.md` 未跟踪；无 `cad-core/src`、fixtures、expected 或 tests 改动。
 - C9-M5 队列复核为空；`copy_on_change_full_temporary_document_cache` 仍由 live capability 发布为 `known_gap_diagnostic` / `oracle_blocked` 和 `remaining_gaps=["copy_on_change_full_temporary_document_cache"]`，只作为 retained known gap，不进入 C10-M1。
+- C10-M1 S2 scope 准入已完成：执行基线为 `HEAD=b53dd572ad`（`b53dd572ad docs: 完成 C10-M1 S1 源码覆盖矩阵审计`），`C10M1-BLOCKER-201` 已关闭为 `closed_s2`；S3/S4/S5/S6 owner step 已在矩阵中明确，S2 未采 oracle、未改 C++。
 - `docs/CADCore方案/细化方案/12-P5b-Sketch-open-wire-WireJoiner完整迁移方案.md` 已把下一步定为：用 FreeCAD oracle 固定近切线、重合边、复杂 open-wire case；不可证明的一对多 open-wire history 保持 stable diagnostic；若支持 `Profile.StableSubList=InternalFaceN` without `ReferenceShadow`，必须先补 FreeCAD evidence 和 ElementMap-backed stable selector。
 - current `cad-core` 已有 `profile_resolver.cpp` 的 explicit `InternalFaceN` profile selection、ReferenceShadow-backed recovery、open profile diagnostic，以及 `wire_joiner.cpp` / `internal_shape_history_publisher.cpp` 的 recoverable WireJoiner child-wire / MapperHistory / ElementMap 子集；C10-M1 只在 S3-S5 证据闭环后扩大这些正式路径。
 - 禁止声明：CopyOnChange、full Sketcher solver、GUI、cross-request cache、raw `FaceN` alias、source index / split order / bbox / 面积 / 输出排序 stable selector 均不是 C10-M1 supported 范围。

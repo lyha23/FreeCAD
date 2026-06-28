@@ -41,6 +41,8 @@ S1 当前结论：`SketchObject::buildInternals()` 的 FaceMakerBuildFace 后接
 
 S2 把 source/current evidence 路由到 `native_oracle_required`、`current_mismatch_candidate`、`backend_gap_candidate`、`diagnostic_retained`、`diagnostic_non_goal` 或 `release_gate`。S2 不允许无 oracle / current mismatch 的 `backend_gap_requires_implementation`。
 
+S2 已完成准入：`C10M1-BLOCKER-201` 关闭为 `closed_s2`；`C10M1-SCOPE-001` 作为 `release_gate` 保留；`C10M1-SCOPE-101` 与 `C10M1-SCOPE-103` 保持 `native_oracle_required`，并明确 oracle 未采集时只能保留 `notCollected`；`C10M1-SCOPE-102` 与 `C10M1-SCOPE-105` 保持 `backend_gap_candidate`，必须等 S3/S5 证据后才可由 S6 消费；`C10M1-SCOPE-104` 保持 `diagnostic_retained`；`C10M1-NG-001..006` 统一为 `diagnostic_non_goal`。
+
 ## S3 近切线重合边 FreeCAD oracle 专项复审
 
 S3 负责采集或复核 near-tangent / coincident-edge fixtures。代表场景包括近切线圆弧 / 线段、重合边闭合 profile、touching open cutter、near-overlap bounded region。若 FreeCADCmd 可采集，应新增 `cad-core/fixtures/c10m1` expected；若不能采集，记录 native blocker，不转成实现任务。
