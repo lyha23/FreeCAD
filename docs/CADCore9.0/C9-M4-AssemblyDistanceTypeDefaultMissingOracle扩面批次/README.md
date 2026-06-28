@@ -8,10 +8,11 @@ C9-M4 承接 C9-M3 关闭后的 Assembly DistanceType 状态，处理 `default_o
 
 - S0 live baseline：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=435f3f26b9`（`435f3f26b9 feat(cad-core): 关闭 C9-M3 S6 距离类型发布闸门`）。
 - S0 起始 `git -c core.quotepath=false status --short -uall` 仅显示 `docs/CADCore9.0/README.md` 修改和未提交的 C9-M4 seed 包；这些是本轮上下文，不是可回退的无关改动。
-- C9-M3 `工作步骤细分` 队列已复核为空；C9-M4 S0 已冻结起点，S1-S6 仍待执行。
+- C9-M3 `工作步骤细分` 队列已复核为空；C9-M4 S0 已冻结起点，S1 已关闭 source authority/current coverage 候选，S2-S6 仍待执行。
 - current capability 口径：`assembly.remaining_gaps=[]`、`assembly.unsupported_joint_matrix=[]`、`distance_type_extended_geometry.native_expected_count=18`、`deferred_diagnostic_cases=[]`。
 - `PointCurve`、`PlaneCone`、`LineCylinder`、`CurvePlane`、`Other` 已 supported；C9-M4 不重开这些 C9-M3 accepted rows。
 - 仍缺 input / expected 并留在 `default_or_todo_boundaries`：`CylinderCone`、`ConeCone`、`ConeTorus`、`ConeSphere`、`PointCone`、`PointTorus`、`LineSphere`、`LineCone`、`LineTorus`、`CurveCylinder`、`CurveSphere`、`CurveCone`、`CurveTorus`。S0 fixture inventory 对这些名称无命中，因此只声明 `native_oracle_required` / `notCollected`，不写 supported 或 backendGap。
+- S1 source authority 复核已关闭：FreeCAD `getDistanceType()` 负责 13 rows 的 Face/Face、Vertex/Face、Edge/Face 分类与 `swapJCS` ordering；FreeCAD `makeMbdJointDistance()` default branch 创建 `ASMTPlanarJoint` 并写 `offset=getJointDistance(joint)`；current cad-core 只把 C9-M3 accepted defaults 映射为 supported，13 个 C9-M4 rows 继续保持 `default_boundary_not_mapped/default_or_todo_boundary`。
 - forbidden claims：不得继承 C9-M3 supported，不得靠 fixture 名称、bbox、几何排序、adapter 文案或输出修剪支持 default branch；persistent solver state、cross-request placement cache、non-AssemblyLink primitive frame generalization 仍是 non-goal。
 
 ## 批次边界
