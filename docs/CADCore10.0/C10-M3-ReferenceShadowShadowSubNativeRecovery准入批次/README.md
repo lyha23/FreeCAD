@@ -13,12 +13,13 @@
 
 ## 当前状态
 
-- S0-S3 已完成，S4-S6 待执行。
+- S0-S4 已完成，S5-S6 待执行。
 - S0 live 基线已冻结：`HEAD=f528b8f7f6`（`docs: 新增 C10-M3 ReferenceShadow native recovery 方案`），S0 起始 `git -c core.quotepath=false status --short -uall` 为空；`C10M3-BLOCKER-000=closed_s0`，`C10M3-SCOPE-001=baseline_frozen_s0`。
 - 工作步骤总入口已标 `【已实现】`，它只是队列索引，避免 goal runner 把索引当成实现步骤。
 - `C10M3-BLOCKER-101=closed_s1`；`C10M3-SRC-101..204` 已复核 live FreeCAD / current cad-core path、symbol、evidence、focused tests 与 capability landing，且未升级为 supported 或 backend gap。
 - `C10M3-BLOCKER-201=closed_s2`；scope、blocker、non-goal 和 backend-gap 矩阵已完成范围准入，当前只有 native oracle、current comparison、diagnostic 和 release gate 路由，没有 implementation row。
 - `C10M3-BLOCKER-301=closed_s3`；S3 用 `/home/user/.local/bin/freecadcmd` 安全重跑现有 C7-M4 FCStd/XML restore probe 到 `/tmp/c10m3-c7m4-reference-shadow-native-probe.evidence.json`，基线为 FreeCAD `1.2.0 revision 20260519` / Libs `1.2.0devR20260519` / OCCT `7.8.1`。restore/recompute 成功，但 Python-visible `Base` 不暴露 `ShadowSub`、`ReferenceShadow` 或 `getSubValues(false/true)`；`C10M3-SCOPE-101..102=notCollected`，`C10M3-CAT-101=notCollected`，未创建 collector、fixtures 或 expected。
+- `C10M3-BLOCKER-401=closed_s4`；S4 只复审 current `cad-core` parser / recovery / ElementMap diagnostics / focused tests。因 S3 已关闭为 `notCollected` 且没有 C10-M3 collector、fixture 或 expected，current comparison 不能证明 FreeCAD mismatch；`C10M3-SCOPE-201=release_gate`，`C10M3-SCOPE-202=diagnostic_retained`，`C10M3-CAT-102=release_gate`，未创建 backend gap 或 implementation row。
 - `C10M3-NG-001..007` forbidden claims / reopen condition 已确认完整；`C10M3-VAL-000..005` 为 S0 docs / matrix 验收命令，`C10M3-VAL-006..007` 为 S1 source/current scan。
 - 本包不声明 stale `ReferenceShadow` / Base recovery 已 supported；只有 S3-S5 证明 native observable evidence + current mismatch 后，S6 才能打开 C++。
 - CopyOnChange full temporary-document cache 仍是 retained known gap，不属于本包默认入口。

@@ -1,4 +1,4 @@
-# C10-M3-S4 cad-core 恢复路径与 current mismatch 专项复审
+# 【已实现】C10-M3-S4 cad-core 恢复路径与 current mismatch 专项复审
 
 ## 目标
 
@@ -27,10 +27,10 @@
 
 ## 必须回写的矩阵行
 
-- `C10M3-SCOPE-201`：关闭为 `no_gap`、`backend_gap_candidate` 或 `diagnostic_retained`。
-- `C10M3-SCOPE-202`：如 S4 提前发现 split / deleted mismatch，可交给 S5 或标为 `backend_gap_candidate`，但必须有 native evidence。
-- `C10M3-BLOCKER-401`：S4 完成后改为 `closed_s4` 或 evidence-backed S6 implementation row。
-- `C10M3-CAT-102`：按 current comparison 改为 `no_gap`、`backend_gap_candidate` 或 `diagnostic_retained`。
+- `C10M3-SCOPE-201`：本轮因 S3 `notCollected` 且无 native expected，关闭为 `release_gate`。
+- `C10M3-SCOPE-202`：本轮没有 native evidence 能把 split / deleted / merge 收敛到唯一恢复，继续保持 `diagnostic_retained`，由 S5 收口协议边界。
+- `C10M3-BLOCKER-401`：S4 完成后改为 `closed_s4`，不得创建 evidence 不足的 S6 implementation row。
+- `C10M3-CAT-102`：本轮按 current comparison 复审结果改为 `release_gate`。
 
 ## 代码闸门
 
@@ -40,6 +40,13 @@ S4 可以提出实现行，但不应直接把未经 S6 审核的 C++ 合并为�
 | --- | --- | --- |
 | `C10M3-BLOCKER-401` / `C10M3-SCOPE-201` | `cad-core/src/app/property_links.cpp`、`cad-core/src/part/topo_shape_reference.cpp`、`cad-core/src/part/topo_shape.cpp` | `cad-core/tests/test_p7_features.py`、`cad-core/tests/test_adapters.py` |
 | `C10M3-BLOCKER-401` / `C10M3-SCOPE-202` | `cad-core/src/app/element_map.cpp`、`cad-core/src/part/topo_shape.cpp` | focused split / deleted / merge diagnostic tests |
+
+## S4 收口结果
+
+- 结论：`C10M3-SCOPE-201=release_gate`，`C10M3-SCOPE-202=diagnostic_retained`，`C10M3-BLOCKER-401=closed_s4`，`C10M3-CAT-102=release_gate`。
+- S3 已把 `C10M3-SCOPE-101..102` 关闭为 `notCollected`：FCStd / XML restore 与 recompute 成功，但 Python API 不暴露 native `ShadowSub`、`ReferenceShadow` 或 `getSubValues(false/true)`，且没有 `cad-core/tools/collect_reference_shadow_recovery.py`、`cad-core/fixtures/c10m3/*` 或 C10-M3 expected。
+- 本轮只复审 current cad-core 路径：`property_links.cpp` 解析 `StableSubList` / `ShadowSub` / `ReferenceShadow` 并要求 recovery 字段 index-aligned；`topo_shape_reference.cpp` 的 `recoverReferenceShadowSubshape()` 对 BREP / fingerprint 只接受 single target，split / deleted / ambiguous 返回 diagnostic；`topo_shape.cpp` / `element_map.cpp` 继续把 split / deleted / merge 保持为 ElementMap / mapper-history diagnostic；`element_reference_update.cpp` 和 adapter tests 只发布 request-local `elementReferenceUpdates`。
+- 因为缺少 native observable expected，本轮不能把 current behavior 判成 FreeCAD mismatch，也不能创建 `backend_gap_candidate`、`backend_gap_requires_implementation`、collector、fixture、expected、C++ 或 tests 改动。S6 只能按 no-code retained diagnostic / release gate 收口，除非后续先补到 native observable evidence。
 
 ## 验收标准
 
