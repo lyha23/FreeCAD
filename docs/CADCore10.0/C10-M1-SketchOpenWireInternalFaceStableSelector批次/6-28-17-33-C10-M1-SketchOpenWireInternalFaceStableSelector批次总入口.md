@@ -19,6 +19,7 @@
 - S3 near-tangent / coincident-edge oracle 复审执行基线：`HEAD=918c09ef8e`（`918c09ef8e docs: 完成 C10-M1 S2 范围准入矩阵`），起始工作区干净；新增 `cad-core/fixtures/c10m1` 四个 native expected，FreeCAD `freecad_version=1.2.0 revision 20260519`，current public internal counts 全部匹配，未修改 C++。
 - S4 complex open-wire / WireJoiner ledger 复审执行基线：`HEAD=a00fa181e7`（`a00fa181e7 docs: 完成 C10-M1 S3 FreeCAD oracle 复审`），起始工作区干净；未新增 native expected，未修改 C++；复杂 open-wire 唯一 ledger evidence 归为 no-gap，歧义 history 保持 retained diagnostic。
 - S5 InternalFace stable selector / reference 更新复审执行基线：`HEAD=eedae1200c`（`eedae1200c docs: 完成 C10-M1 S4 WireJoiner 账本复审`），起始工作区干净；裁决为 `stable_selector_approved_candidate`，只批准当前 recompute 的 `Sketch.InternalShape` `NamedShape` / `ElementMap` 唯一解析 `InternalFaceN`；未修改 C++ 或 capability。
+- S6 Oracle 实现与发布闸门执行基线：`HEAD=e409342850`（`e409342850 docs: 完成 C10-M1 S5 stable selector 复审`），起始工作区干净；裁决为 existing-code no-code release gate，未修改 C++ / tests / fixture / capability；`C10M1-BLOCKER-601` 已关闭为 `closed_s6`，C10-M1 队列为空。
 - C9-M5 `工作步骤细分` 队列输出只有 Markdown 表头；CopyOnChange 保持 retained known gap，不进入 C10-M1。
 - P5b 已支持 `InternalFaceN` 作为 explicit `Profile.SubList`、ReferenceShadow-backed recovery 和 recoverable WireJoiner 子集；S5 已准入 without `ReferenceShadow` 的 request-local `StableSubList=InternalFaceN` candidate。
 
@@ -80,7 +81,7 @@ C9-M5 queue empty
 | S3 | `工作步骤细分/6-28-17-38-【已实现】C10-M1-S3-近切线重合边FreeCADOracle专项复审.md` | 已采集 / 复核 near-tangent、coincident-edge oracle。 |
 | S4 | `工作步骤细分/6-28-17-39-【已实现】C10-M1-S4-复杂open-wire与WireJoiner账本专项复审.md` | 已复核复杂 open-wire 与 WireJoiner history ledger。 |
 | S5 | `工作步骤细分/6-28-17-40-【已实现】C10-M1-S5-InternalFaceStableSelector与reference更新专项复审.md` | 已裁决 InternalFace stable selector 与 reference update contract。 |
-| S6 | `工作步骤细分/6-28-17-41-C10-M1-S6-Oracle实现与发布闸门.md` | 按 S3-S5 evidence 实现或发布 retained diagnostic。 |
+| S6 | `工作步骤细分/6-28-17-41-【已实现】C10-M1-S6-Oracle实现与发布闸门.md` | 已按 S3-S5 evidence 发布 existing-code no-code release gate。 |
 | source candidates | `矩阵/c10m1_sketch_openwire_source_candidates.tsv` | FreeCAD / cad-core source authority。 |
 | scope review | `矩阵/c10m1_sketch_openwire_scope_review_matrix.tsv` | scope 状态、owner step、route。 |
 | blocker queue | `矩阵/c10m1_sketch_openwire_blocker_queue.tsv` | S0-S6 blocker 闭环。 |
@@ -88,4 +89,4 @@ C9-M5 queue empty
 | backend gap classification | `矩阵/c10m1_sketch_openwire_backend_gap_classification.tsv` | oracle / backendGap / releaseGate 分类。 |
 | validation matrix | `矩阵/c10m1_sketch_openwire_validation_matrix.tsv` | 分层验收命令。 |
 
-当前工作步骤总入口索引、S0、S1、S2、S3、S4、S5 标为 `【已实现】`；S6 仍是待执行状态。S4 已关闭 complex open-wire ledger blocker；S5 已批准 without-ReferenceShadow stable selector 的 request-local NamedShape / ElementMap candidate，supported 发布结论仍需 S6 对 tests / capability / docs 做收口。
+当前工作步骤总入口索引、S0、S1、S2、S3、S4、S5、S6 均标为 `【已实现】`；C10-M1 队列为空。S6 已确认 S3/S4 不打开 FaceMaker / WireJoiner C++ gate，S5 的 without-ReferenceShadow stable selector 只发布 request-local `Sketch.InternalShape` `NamedShape` / `ElementMap` 唯一解析 `InternalFaceN` 的路径；pure selector 不发布 `elementReferenceUpdates`，ReferenceShadow lifecycle 存在时才发布 `SubList` / `StableSubList` / `ShadowSub` / `ReferenceShadow`。

@@ -59,10 +59,12 @@ S5 已裁决为 `stable_selector_approved_candidate`：`Profile.StableSubList=In
 
 ## S6 Oracle 实现与发布闸门
 
-S6 是唯一允许代码落地的步骤。实现路径：
+S6 已完成，裁决为 existing-code no-code release gate。本轮没有 `backend_gap_requires_implementation` row，也没有发现 S5 approved candidate 的 focused tests / capability / docs publication evidence 缺口，因此不修改 C++、tests、fixture 或 capability。
 
-- code / audit gate：S3 的 count-level no-gap 与 S4 的 WireJoiner no-gap / retained diagnostic 不打开 C++；S6 只允许对 S5 批准的 InternalFace stable selector 边界审计或补齐 `profile_resolver`、reference update、focused tests、capability / docs publication evidence。
-- no-code gate：S3/S4 已进入 no-code release 口径；S6 对未批准、缺证据或多解路径只发布 retained diagnostic / known gap，写清 reopen condition，不改 C++。
+- S3 count-level no-gap 与 S4 WireJoiner no-gap / retained diagnostic 不打开 FaceMaker / WireJoiner C++ gate。
+- S5 批准的 `Profile.StableSubList=InternalFaceN` without `ReferenceShadow` 只发布 request-local `Sketch.InternalShape` `NamedShape` / `ElementMap` 唯一解析当前 `InternalFaceN` 的路径。
+- pure without-ReferenceShadow selector 不发布 `elementReferenceUpdates`；只有存在 ReferenceShadow lifecycle / 恢复证据时才发布 `SubList`、`StableSubList`、`ShadowSub`、`ReferenceShadow`。
+- `C10M1-BLOCKER-601` 已关闭为 `closed_s6`，C10-M1 队列为空；后续只有新增 native oracle 证明唯一 request-local ElementMap-backed selector 缺失，且不依赖 raw `FaceN`、bbox、面积、source index、split order 或 output order，才可重开实现候选。
 
 ## 验收分层
 
