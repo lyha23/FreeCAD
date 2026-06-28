@@ -1,0 +1,35 @@
+{
+  "freecad_version": "1.2.0 revision 20260519",
+  "object": "Sketch",
+  "object_fields": {
+    "external_curve_count": 0,
+    "external_geometry_count": 0,
+    "external_point_count": 0,
+    "raw_edge_count": 8,
+    "shape": "occt_sketch_shape",
+    "status": "ok"
+  },
+  "reference": "FreeCADCmd Sketcher oracle from cad-core/fixtures/c10m1/sketch-coincident-shared-edge.json. Source: /home/user/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildInternals() calls FaceMakerBuildFace then WireJoiner; /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp::FaceMakerBuildFace::Build_Essence() owns coincident shared-edge bounded regions.",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "sketch_external": {
+    "construction_count": 0,
+    "flag_counts": {
+      "Defining": 0,
+      "Detached": 0,
+      "Frozen": 0,
+      "Missing": 0,
+      "Sync": 0
+    },
+    "flags": []
+  },
+  "sketch_internal": {
+    "internal_counts": {
+      "edges": 7,
+      "faces": 2,
+      "vertices": 6
+    },
+    "profile_ready": true,
+    "raw_edge_count": 8,
+    "shape": "occt_internal_shape"
+  }
+}

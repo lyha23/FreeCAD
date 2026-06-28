@@ -16,6 +16,7 @@
 - S0 起始 `git -c core.quotepath=false status --short -uall` 仅显示 C10-M1 seed 文档、矩阵和 `docs/CADCore10.0/README.md` 未跟踪；无 `cad-core/src`、fixtures、expected 或 tests 改动。
 - S1 source/current 审计执行基线：`HEAD=3493d948f5`（`3493d948f5 docs: 修正 C10-M1 S1 cad-core 路径口径`），起始工作区干净；S1 未运行 FreeCADCmd，未新增 fixture / expected / tests，未修改 C++。
 - S2 scope 准入执行基线：`HEAD=b53dd572ad`（`b53dd572ad docs: 完成 C10-M1 S1 源码覆盖矩阵审计`），起始工作区干净；S2 未运行 FreeCADCmd，未新增 fixture / expected / tests，未修改 C++。
+- S3 near-tangent / coincident-edge oracle 复审执行基线：`HEAD=918c09ef8e`（`918c09ef8e docs: 完成 C10-M1 S2 范围准入矩阵`），起始工作区干净；新增 `cad-core/fixtures/c10m1` 四个 native expected，FreeCAD `freecad_version=1.2.0 revision 20260519`，current public internal counts 全部匹配，未修改 C++。
 - C9-M5 `工作步骤细分` 队列输出只有 Markdown 表头；CopyOnChange 保持 retained known gap，不进入 C10-M1。
 - P5b 已支持 `InternalFaceN` 作为 explicit `Profile.SubList`、ReferenceShadow-backed recovery 和 recoverable WireJoiner 子集；without `ReferenceShadow` 的 stable selector 仍需 S5 重新准入。
 
@@ -74,7 +75,7 @@ C9-M5 queue empty
 | S0 | `工作步骤细分/6-28-17-35-【已实现】C10-M1-S0-live基线与声明口径冻结.md` | 已冻结 live baseline、allowed claim、forbidden claim 和状态词典。 |
 | S1 | `工作步骤细分/6-28-17-36-【已实现】C10-M1-S1-FreeCAD源码与current覆盖候选矩阵.md` | 已复核 FreeCAD source authority 和 current cad-core coverage。 |
 | S2 | `工作步骤细分/6-28-17-37-【已实现】C10-M1-S2-范围准入与blocker矩阵.md` | 已对 oracle、implementation、diagnostic 和 non-goal 做路由。 |
-| S3 | `工作步骤细分/6-28-17-38-C10-M1-S3-近切线重合边FreeCADOracle专项复审.md` | 采集 / 复核 near-tangent、coincident-edge oracle。 |
+| S3 | `工作步骤细分/6-28-17-38-【已实现】C10-M1-S3-近切线重合边FreeCADOracle专项复审.md` | 已采集 / 复核 near-tangent、coincident-edge oracle。 |
 | S4 | `工作步骤细分/6-28-17-39-C10-M1-S4-复杂open-wire与WireJoiner账本专项复审.md` | 复核复杂 open-wire 与 WireJoiner history ledger。 |
 | S5 | `工作步骤细分/6-28-17-40-C10-M1-S5-InternalFaceStableSelector与reference更新专项复审.md` | 裁决 InternalFace stable selector 与 reference update contract。 |
 | S6 | `工作步骤细分/6-28-17-41-C10-M1-S6-Oracle实现与发布闸门.md` | 按 S3-S5 evidence 实现或发布 retained diagnostic。 |
@@ -85,4 +86,4 @@ C9-M5 queue empty
 | backend gap classification | `矩阵/c10m1_sketch_openwire_backend_gap_classification.tsv` | oracle / backendGap / releaseGate 分类。 |
 | validation matrix | `矩阵/c10m1_sketch_openwire_validation_matrix.tsv` | 分层验收命令。 |
 
-当前工作步骤总入口索引、S0、S1、S2 标为 `【已实现】`；S3-S6 仍是待执行状态。S2 已关闭 scope-admission blocker，但 near-tangent、complex open-wire 和 without-ReferenceShadow stable selector 仍只是后续复审候选，不是 supported 发布结论。
+当前工作步骤总入口索引、S0、S1、S2、S3 标为 `【已实现】`；S4-S6 仍是待执行状态。S3 已关闭 near-tangent / coincident oracle blocker，但 complex open-wire 和 without-ReferenceShadow stable selector 仍只是后续复审候选，不是 supported 发布结论。

@@ -45,7 +45,7 @@ S2 已完成准入：`C10M1-BLOCKER-201` 关闭为 `closed_s2`；`C10M1-SCOPE-00
 
 ## S3 近切线重合边 FreeCAD oracle 专项复审
 
-S3 负责采集或复核 near-tangent / coincident-edge fixtures。代表场景包括近切线圆弧 / 线段、重合边闭合 profile、touching open cutter、near-overlap bounded region。若 FreeCADCmd 可采集，应新增 `cad-core/fixtures/c10m1` expected；若不能采集，记录 native blocker，不转成实现任务。
+S3 已完成 near-tangent / coincident-edge native oracle 复审：新增 `cad-core/fixtures/c10m1` 四个 input / expected，覆盖近切线圆弧 / 线段、重合边闭合 profile、touching open cutter、near-overlap bounded region；FreeCAD `freecad_version=1.2.0 revision 20260519`，current cad-core CLI 公开 `InternalFace` / `InternalEdge` / `InternalVertex` counts 全部匹配。S3 因此不打开 C++ implementation gate，`C10M1-CAT-101` 进入 S6 no-code release gate。
 
 ## S4 复杂 open-wire 与 WireJoiner 账本专项复审
 
