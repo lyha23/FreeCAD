@@ -1,6 +1,6 @@
 # CADCore9.0
 
-CADCore9.0 承接 C8-M7 之后的下一轮 CAD Core 收口工作。C8-M1 到 C8-M7 队列已经清空，`topo_history.producer_matrix.import_shape.remaining=[]`，当前 live capability 里唯一非空 `remaining_gaps` 是 `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache`，但该项已被 C8-M2 / C8-M6 裁为 `oracle_blocked` / `known_gap_diagnostic`，不作为 CADCore9.0 的默认实现入口。
+CADCore9.0 承接 C8-M7 之后的下一轮 CAD Core 收口工作。C8-M1 到 C8-M7 队列已经清空，`topo_history.producer_matrix.import_shape.remaining=[]`，当前 live capability 里唯一非空 `remaining_gaps` 是 `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache`，但该项已被 C8-M2 / C8-M6 裁为 `oracle_blocked` / `known_gap_diagnostic`，不作为 CADCore9.0 的默认实现入口；只有显式准入复审包可以重新判断是否存在 request-local DTO。
 
 C9-M1 转向 Assembly Joint marker / `offsetPlc` request-local 扩面。目标不是完整 Assembly session，也不是 GUI solver 生命周期，而是沿 FreeCAD `AssemblyObject::handleOneSideOfJoint()`、`runPreDrag()`、`setNewPlacements()` 的同一调用链，复核并补齐当前 capability 中仍标为 non-goal / oracle-blocked 的 request-local marker 和 placement 边界。
 
@@ -9,6 +9,8 @@ C9-M2 承接 C9-M1 no-code closure，不再把后续拆成单个 oracle case，�
 C9-M3 承接 C9-M2 queue-empty 后的剩余 Assembly DistanceType 发布边界。本包已在 S6 消费 expected-backed backend gap：`PointCurve` 进入 supported，`PlaneCone` / `LineCylinder` / `CurvePlane` / `Other` 只按 checked-in native expected 映射为 `ASMTPlanarJoint + offset`；缺 oracle 的 default families 仍留在 `default_or_todo_boundaries`，不继承 supported。
 
 C9-M4 承接 C9-M3 queue-empty 后仍公开的 13 个 Assembly DistanceType `default_or_todo_boundaries`。它不重开 C9-M3 accepted rows，而是围绕 `CylinderCone`、`ConeCone`、`ConeTorus`、`ConeSphere`、`PointCone`、`PointTorus`、`LineSphere`、`LineCone`、`LineTorus`、`CurveCylinder`、`CurveSphere`、`CurveCone`、`CurveTorus` 的缺 input / expected 行建立 native oracle、current comparison、capability publication 和 S6 code gate。S6 已把这 13 行发布为 expected-backed `ASMTPlanarJoint + offset=getJointDistance` supported route。
+
+C9-M5 承接 C9-M4 queue-empty 后的 live capability gap：`part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache`。它不直接实现 FreeCAD temporary document cache，而是复审 `SubShapeBinder::setupCopyOnChange()` / `update()`、`LinkBaseExtension::syncCopyOnChange()` 和 `Document::copyObject()` 是否能导出稳定、产品批准、完全 request-local 的 CopyOnChange DTO。若 S3-S5 不能证明 DTO，S6 必须保持 `known_gap_diagnostic` / `oracle_blocked`。
 
 ## 入口
 
@@ -28,6 +30,10 @@ C9-M4 承接 C9-M3 queue-empty 后仍公开的 13 个 Assembly DistanceType `def
 - C9-M4 方案：`C9-M4-AssemblyDistanceTypeDefaultMissingOracle扩面批次/6-28-09-34-C9-M4-AssemblyDistanceTypeDefaultMissingOracle扩面批次方案.md`
 - C9-M4 工作步骤：`C9-M4-AssemblyDistanceTypeDefaultMissingOracle扩面批次/工作步骤细分/`
 - C9-M4 矩阵：`C9-M4-AssemblyDistanceTypeDefaultMissingOracle扩面批次/矩阵/`
+- C9-M5 总入口：`C9-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审包/6-28-11-24-C9-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审包总入口.md`
+- C9-M5 方案：`C9-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审包/6-28-11-24-C9-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审包方案.md`
+- C9-M5 工作步骤：`C9-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审包/工作步骤细分/`
+- C9-M5 矩阵：`C9-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审包/矩阵/`
 
 ## 当前状态
 
@@ -56,6 +62,7 @@ C9-M4 承接 C9-M3 queue-empty 后仍公开的 13 个 Assembly DistanceType `def
 - C9-M4 S4 已关闭：S4 live baseline 为 `HEAD=7fd956ea30`（`7fd956ea30 docs: 关闭 C9-M4 S3 FaceCone oracle复审`）且起始 status clean；`PointCone`、`PointTorus`、`LineSphere`、`LineCone`、`LineTorus` 均新增 c3m6 input / expected，FreeCADCmd `1.2.0 revision 20260519` native expected 为 solved + placement writeback，五行已由 S6 发布 supported。
 - C9-M4 S5 已关闭：S5 live baseline 为 `HEAD=aeedc692ab`（`aeedc692ab docs: 关闭 C9-M4 S4 PointLineSurface oracle复审`）且起始 status clean；`CurveCylinder`、`CurveSphere`、`CurveCone`、`CurveTorus` 均新增 c3m6 input / expected，FreeCADCmd `1.2.0 revision 20260519` native expected 为 solved + Face-first `swapJCS` ordering + placement writeback，四行已由 S6 发布 supported；conic publication mirror default list 已清空。
 - C9-M4 S6 已关闭：S6 live baseline 为 `HEAD=33b15325a5`（`33b15325a5 docs: 关闭 C9-M4 S5 CurveSurface oracle复审`）且起始 status clean；13 个 C9-M4 expected-backed rows 已进入 `ASMTPlanarJoint + offset=distance/getJointDistance` supported route，expected JSON 不再带 diagnostic-only `known_gap` / `nonGoal`，`distance_type_extended_geometry.native_expected_count=31`，Assembly 与 conic publication 的 `default_or_todo_boundaries=[]`，C9-M4 队列为空。
+- C9-M5 方案包已建立，S0 已关闭且 S1-S6 待执行：生成基线为 `HEAD=ceef6a128b`（`ceef6a128b feat: 关闭 C9-M4 S6 默认距离类型发布闸门`）且生成前工作区干净；S0 执行基线仍为 `HEAD=ceef6a128b`，开始 status 仅包含 `docs/CADCore9.0/README.md` 修改和本 C9-M5 包未跟踪文件。C9-M4 队列为空，当前 live gap 仍是 `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache`，发布状态为 `known_gap_diagnostic` / `oracle_blocked`；S6 code gate 只有在 S3 native evidence 与 S4 产品边界同时成立时打开。本包不重开 C9-M1 到 C9-M4 Assembly 主线，也不把 FreeCAD `_tmp_binder` / `_CopiedObjs` / `copyObject()` / `recomputeFeature(true)` full temporary-document cache 写成 supported。
 
 ## 队列检查
 
@@ -65,6 +72,7 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore9.0/C9-M2-AssemblyRequestLocalSolverOracle批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore9.0/C9-M3-AssemblyDistanceTypeDefaultBoundary批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore9.0/C9-M4-AssemblyDistanceTypeDefaultMissingOracle扩面批次/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore9.0/C9-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审包/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -75,6 +83,7 @@ awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " f
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore9.0/C9-M2-AssemblyRequestLocalSolverOracle批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore9.0/C9-M3-AssemblyDistanceTypeDefaultBoundary批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore9.0/C9-M4-AssemblyDistanceTypeDefaultMissingOracle扩面批次/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore9.0/C9-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审包/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore9.0
 git diff --check
 ```
