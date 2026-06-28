@@ -1603,7 +1603,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("persistent_solver_state", basic_distance["non_goals"])
         extended_distance = ondsel_adapter["distance_type_extended_geometry"]
         self.assertEqual(extended_distance["status"], "covered_supported_subset")
-        self.assertEqual(extended_distance["native_expected_count"], 18)
+        self.assertEqual(extended_distance["native_expected_count"], 31)
         self.assertEqual(
             extended_distance["supported"],
             [
@@ -1622,8 +1622,21 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "TorusSphere",
                 "SphereSphere",
                 "PlaneCone",
+                "CylinderCone",
+                "ConeCone",
+                "ConeTorus",
+                "ConeSphere",
+                "PointCone",
+                "PointTorus",
                 "LineCylinder",
+                "LineSphere",
+                "LineCone",
+                "LineTorus",
                 "CurvePlane",
+                "CurveCylinder",
+                "CurveSphere",
+                "CurveCone",
+                "CurveTorus",
                 "Other",
             ],
         )
@@ -1635,22 +1648,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(extended_distance["solver_joint_classes"]["LineCylinder"], ["ASMTPlanarJoint"])
         self.assertEqual(extended_distance["solver_joint_classes"]["CurvePlane"], ["ASMTPlanarJoint"])
         self.assertEqual(extended_distance["solver_joint_classes"]["Other"], ["ASMTPlanarJoint"])
-        self.assertIn("reference1_primitive", extended_distance["evidence_fields"])
-        self.assertIn("reference2_radius", extended_distance["evidence_fields"])
-        self.assertIn("scalar_correction", extended_distance["scalar_correction_fields"])
-        self.assertIn("scalar_correction_source", extended_distance["scalar_correction_fields"])
-        self.assertIn("identity_offset_assembly_link_subset", extended_distance["request_local_boundaries"])
-        self.assertIn("non_identity_bundled_offsetPlc", extended_distance["request_local_boundaries"])
-        self.assertIn(
-            "distance_writeback_uses_user_distance_not_radius_corrected_scalar",
-            extended_distance["request_local_boundaries"],
-        )
-        self.assertEqual(extended_distance["deferred_diagnostic_cases"], [])
-        self.assertNotIn("PlaneCone", extended_distance["default_or_todo_boundaries"])
-        self.assertNotIn("LineCylinder", extended_distance["default_or_todo_boundaries"])
-        self.assertNotIn("CurvePlane", extended_distance["default_or_todo_boundaries"])
-        self.assertNotIn("Other", extended_distance["default_or_todo_boundaries"])
-        for boundary in [
+        for default_planar in [
             "CylinderCone",
             "ConeCone",
             "ConeTorus",
@@ -1665,7 +1663,19 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "CurveCone",
             "CurveTorus",
         ]:
-            self.assertIn(boundary, extended_distance["default_or_todo_boundaries"])
+            self.assertEqual(extended_distance["solver_joint_classes"][default_planar], ["ASMTPlanarJoint"])
+        self.assertIn("reference1_primitive", extended_distance["evidence_fields"])
+        self.assertIn("reference2_radius", extended_distance["evidence_fields"])
+        self.assertIn("scalar_correction", extended_distance["scalar_correction_fields"])
+        self.assertIn("scalar_correction_source", extended_distance["scalar_correction_fields"])
+        self.assertIn("identity_offset_assembly_link_subset", extended_distance["request_local_boundaries"])
+        self.assertIn("non_identity_bundled_offsetPlc", extended_distance["request_local_boundaries"])
+        self.assertIn(
+            "distance_writeback_uses_user_distance_not_radius_corrected_scalar",
+            extended_distance["request_local_boundaries"],
+        )
+        self.assertEqual(extended_distance["deferred_diagnostic_cases"], [])
+        self.assertEqual(extended_distance["default_or_todo_boundaries"], [])
         self.assertNotIn("PointCurve", extended_distance["non_goals"])
         self.assertNotIn("default_or_todo_branch_support", extended_distance["non_goals"])
         self.assertIn("PointCurve", extended_distance["supported"])
@@ -2935,10 +2945,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             conic_curves["request_local_boundaries"],
         )
         self.assertEqual(conic_curves["distance_type_publication"]["deferred_diagnostic_cases"], [])
-        self.assertEqual(
-            conic_curves["distance_type_publication"]["default_or_todo_boundaries"],
-            ["CurveCylinder", "CurveSphere", "CurveCone", "CurveTorus"],
-        )
+        self.assertEqual(conic_curves["distance_type_publication"]["default_or_todo_boundaries"], [])
         self.assertEqual(conic_curves["remaining_gaps"], [])
         self.assertIn("gui_conic_edit", conic_curves["non_goals"])
         self.assertIn("full_sketcher_solver_conic_constraints", conic_curves["non_goals"])

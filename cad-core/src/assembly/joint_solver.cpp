@@ -703,17 +703,30 @@ bool isExplicitExtendedDistanceType(const std::string& distanceType)
     return explicitExtendedDistanceTypes.count(distanceType) != 0U;
 }
 
-bool isC9M3AcceptedDefaultPlanarDistanceType(const std::string& distanceType)
+bool isExpectedBackedDefaultPlanarDistanceType(const std::string& distanceType)
 {
     // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
     // ::AssemblyObject::makeMbdJointDistance(), default branch says "by default we make a
     // planar joint." then creates "ASMTPlanarJoint" and assigns "offset = getJointDistance(joint)".
-    // C9-M3 only accepts the checked-in native expected rows below; other default/TODO families
-    // remain oracle-required and must not inherit support.
+    // C9-M3 accepted the first four checked-in native expected rows; C9-M4 S3-S5 collected the
+    // remaining rows below and S6 publishes the same expected-backed default planar route.
     static const std::set<std::string> acceptedDefaultPlanarDistanceTypes = {
         "PlaneCone",
+        "CylinderCone",
+        "ConeCone",
+        "ConeTorus",
+        "ConeSphere",
+        "PointCone",
+        "PointTorus",
         "LineCylinder",
+        "LineSphere",
+        "LineCone",
+        "LineTorus",
         "CurvePlane",
+        "CurveCylinder",
+        "CurveSphere",
+        "CurveCone",
+        "CurveTorus",
         "Other",
     };
     return acceptedDefaultPlanarDistanceTypes.count(distanceType) != 0U;
@@ -1026,6 +1039,8 @@ void resolveDistanceJointMapping(JointConstraint& joint)
         joint.distanceTypeBoundary = "extended_mapping_pending_s5_oracle";
     };
     const auto markAcceptedDefaultPlanarMapping = [&joint]() {
+        // The historical status token is retained so C9-M3 expected files stay stable; the
+        // accepted set is now the C9-M3 plus C9-M4 native-expected-backed default planar set.
         joint.distanceTypeMappingStatus = "mapped_c9m3_default_planar";
         joint.distanceTypeBoundary = "expected_backed_default_planar_supported";
     };
@@ -1134,7 +1149,7 @@ void resolveDistanceJointMapping(JointConstraint& joint)
         setOffset("ASMTPointInPlaneJoint", distance);
         return;
     }
-    if (isC9M3AcceptedDefaultPlanarDistanceType(*joint.distanceType)) {
+    if (isExpectedBackedDefaultPlanarDistanceType(*joint.distanceType)) {
         setAcceptedDefaultPlanarOffset(distance);
         return;
     }

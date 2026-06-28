@@ -2960,8 +2960,8 @@ def set_extended_scalar(
 def set_accepted_default_planar_scalar(solver_joint: dict) -> None:
     # FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp
     # ::AssemblyObject::makeMbdJointDistance(), default branch creates "ASMTPlanarJoint" and
-    # writes "offset = getJointDistance(joint)". C9-M3 accepts only the native expected-backed
-    # default rows returned by distance_type_is_accepted_default_planar().
+    # writes "offset = getJointDistance(joint)". The accepted set is limited to native
+    # expected-backed rows returned by distance_type_is_accepted_default_planar().
     distance = float(solver_joint.get("distance", 0.0) or 0.0)
     solver_joint["solver_joint_class"] = "ASMTPlanarJoint"
     solver_joint["offset"] = distance
@@ -3128,8 +3128,21 @@ def distance_type_is_default_boundary(distance_type: str | None) -> bool:
 def distance_type_is_accepted_default_planar(distance_type: str | None) -> bool:
     return distance_type in {
         "PlaneCone",
+        "CylinderCone",
+        "ConeCone",
+        "ConeTorus",
+        "ConeSphere",
+        "PointCone",
+        "PointTorus",
         "LineCylinder",
+        "LineSphere",
+        "LineCone",
+        "LineTorus",
         "CurvePlane",
+        "CurveCylinder",
+        "CurveSphere",
+        "CurveCone",
+        "CurveTorus",
         "Other",
     }
 
@@ -5426,7 +5439,7 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
             payload.update(bundled_offset_gap)
         elif distance_type_gap is not None:
             payload.update(distance_type_gap)
-        elif payload_requires_marker_parity(payload):
+        elif payload_requires_marker_parity(payload) and not solver_distance_types_from_payload(payload):
             payload["known_gap"] = (
                 "MP-BLOCK-002/003/006: S4 native marker oracle is checked in, but current "
                 "cad-core S3 resolver still withholds subshape markerPlacement and the real "

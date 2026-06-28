@@ -12,7 +12,6 @@
     ]
   },
   "freecad_version": "1.2.0 revision 20260519",
-  "known_gap": "DTE-BLOCK-006/DTE-NG-003: native FreeCAD default/TODO DistanceType oracle collected for diagnostic review only (LineTorus); cad-core must keep default_boundary_not_mapped out of supported capability until S6 or a later product decision explicitly reopens this boundary.",
   "native_marker_oracle": {
     "requires_cad_core_marker_parity": true,
     "solver_joints": [
@@ -367,12 +366,6 @@
   "native_solver": {
     "return_code": 0
   },
-  "nonGoal": {
-    "delete_condition": "A later DistanceType scope update accepts the FreeCAD default/TODO behavior, cad-core implements the reopened case with focused tests, and capability docs publish it explicitly instead of inheriting default support.",
-    "ids": [
-      "DTE-NG-003"
-    ]
-  },
   "object": "Assembly",
   "object_fields": {
     "assembly": "object",
@@ -432,11 +425,12 @@
       {
         "distance": 1.5,
         "distance_type": "LineTorus",
-        "distance_type_boundary": "default_or_todo_boundary",
-        "distance_type_mapping_status": "default_boundary_not_mapped",
+        "distance_type_boundary": "expected_backed_default_planar_supported",
+        "distance_type_mapping_status": "mapped_c9m3_default_planar",
         "jcs_swapped_for_solver": true,
         "joint_type": "Distance",
         "object": "DistanceJoint",
+        "offset": 1.5,
         "radius_source_side": "none",
         "reference1": {
           "object": "ComponentB",
@@ -460,6 +454,7 @@
         "reference2_radius_source": "getEdgeRadius",
         "scalar_correction": 0.0,
         "scalar_correction_source": "none",
+        "solver_joint_class": "ASMTPlanarJoint",
         "suppressed": false
       }
     ],
