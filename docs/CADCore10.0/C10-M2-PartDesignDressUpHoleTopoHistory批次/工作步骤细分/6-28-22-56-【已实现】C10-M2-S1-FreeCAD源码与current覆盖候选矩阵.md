@@ -1,4 +1,4 @@
-# C10-M2-S1 FreeCAD 源码与 current 覆盖候选矩阵
+# 【已实现】C10-M2-S1 FreeCAD 源码与 current 覆盖候选矩阵
 
 ## 目标
 
@@ -18,7 +18,8 @@
 
 ## current cad-core 扫描轴
 
-- `cad-core/src/part_design/feature_dress_up_support.*`
+- `cad-core/src/part_design/feature_dress_up_support.h`
+- `cad-core/src/part_design/feature_dress_up.cpp`
 - `cad-core/src/part_design/feature_fillet.cpp`
 - `cad-core/src/part_design/feature_chamfer.cpp`
 - `cad-core/src/part_design/feature_draft.cpp`
@@ -37,6 +38,13 @@
 - `C10M2-SRC-101` 到 `C10M2-SRC-204`：确认 source file / symbol / source evidence / cad-core landing 仍准确。
 - `C10M2-BLOCKER-101`：S1 完成后改为 `closed_s1`。
 - 若某个 source path 不存在，不能静默删除，必须在 blocker queue 写明 replacement path 或 reopen condition。
+
+## S1 复核结果
+
+- `C10M2-SRC-101` 到 `C10M2-SRC-107` 已改为 live FreeCAD path + line anchor，并保留 `DressUp::getAddSubShape()`、`getContinuousEdges()`、`getFaces()`、Fillet / Chamfer / Draft / Thickness / Hole 调用链证据。
+- `C10M2-SRC-201` 到 `C10M2-SRC-204` 已改为 current cad-core / tests / capability path + line anchor，覆盖 DressUp shared support、Hole producer history、Topo / ElementMap 和 P7 focused tests。
+- seed 中的 `feature_dress_up_support.*` 已收敛为实际存在的 `feature_dress_up_support.h` 声明与 `feature_dress_up.cpp` 实现；没有保留不存在的 `.cpp` path。
+- `C10M2-BLOCKER-101` 已关闭为 `closed_s1`。S1 未采 native oracle，未改 C++，未把任何行升级为 `supported` 或 `backendGap`。
 
 ## 推荐命令
 

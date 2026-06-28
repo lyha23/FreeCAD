@@ -28,7 +28,7 @@ C10-M1 已关闭 Sketch open-wire / InternalFace stable selector 队列。下一
 
 S6 只有在 S3-S5 产生 `backend_gap_candidate` 或 `release_gate` 行时才改代码。允许的落点包括：
 
-- DressUp：`cad-core/src/part_design/feature_dress_up_support.*`、`feature_fillet.cpp`、`feature_chamfer.cpp`、`feature_draft.cpp`、`feature_thickness.cpp`、`body.cpp`。
+- DressUp：`cad-core/src/part_design/feature_dress_up_support.h`、`cad-core/src/part_design/feature_dress_up.cpp`、`feature_fillet.cpp`、`feature_chamfer.cpp`、`feature_draft.cpp`、`feature_thickness.cpp`、`body.cpp`。
 - Hole：`cad-core/src/part_design/feature_hole.cpp`、`body.cpp`。
 - Topo / ElementMap：`cad-core/include/cad_core/part/topo_shape.h`、`cad-core/src/part/topo_shape.cpp`、`cad-core/src/app/element_map.cpp`。
 - Capability / tests：`cad-core/src/runtime/capability_contract.cpp`、`cad-core/tests/test_p7_features.py`、`cad-core/tests/test_adapters.py`，必要时新增 `cad-core/fixtures/c10m2` expected。

@@ -25,7 +25,7 @@
 
 - `cad-core/tests/test_p7_features.py` 中 Fillet / Chamfer / Draft / Thickness focused tests 是否覆盖 S3 scope。
 - `cad-core/src/runtime/capability_contract.cpp` 中 `dressup_*` producer matrix 是否与 tests / docs 一致。
-- `cad-core/src/part_design/feature_dress_up_support.*` 是否仍是 AddSubShape slot / selection history 的正式落点。
+- `cad-core/src/part_design/feature_dress_up_support.h` 与 `cad-core/src/part_design/feature_dress_up.cpp` 是否仍是 AddSubShape slot / selection history 的正式落点。
 - 若需要新增 oracle，优先新增 source-backed P7 / C10M2 representative fixture，不允许用 diagnostic-only standalone DressUp 输出做 native golden。
 
 ## 必须回写的矩阵行

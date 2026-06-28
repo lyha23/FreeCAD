@@ -20,6 +20,7 @@
 - current capability 中 `part_design.hole.history.status=element_map_freeze_first_slice`，`topo_history.producer_matrix.dressup.status=done_first_slice`，`topo_history.producer_matrix.hole.status=done_first_slice`，三者均没有 active `remaining`。
 - `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache` 仍是 retained known gap / `oracle_blocked`，不进入 C10-M2。
 - `C10M2-BLOCKER-000` 已关闭为 `closed_s0`；`C10M2-SCOPE-001` 保持 `baseline_frozen_s0` docs-only release baseline，S6 只复核 drift，不打开 C++ gate。
+- C10-M2 S1 source authority 已复核：`C10M2-SRC-101..204` 均有 live FreeCAD 或 current cad-core/tests path、symbol 和 concise evidence；`C10M2-BLOCKER-101` 已关闭为 `closed_s1`。S1 未采 native oracle，未改 C++，未升级 `supported` / `backendGap`。
 
 ## 状态词典
 
@@ -65,7 +66,7 @@ C10-M1 queue empty
 
 | 层 | 当前代码落点 | 职责 |
 | --- | --- | --- |
-| DressUp shared support | `cad-core/src/part_design/feature_dress_up_support.*` | 解析 Base / selection / AddSubShape slot，发布 DressUp result。 |
+| DressUp shared support | `cad-core/src/part_design/feature_dress_up_support.h`、`cad-core/src/part_design/feature_dress_up.cpp` | 解析 Base / selection / AddSubShape slot，发布 DressUp result。 |
 | Fillet / Chamfer | `cad-core/src/part_design/feature_fillet.cpp`、`cad-core/src/part_design/feature_chamfer.cpp` | OCCT maker、selection history、refine 与 AddSubShape slot publication。 |
 | Draft / Thickness | `cad-core/src/part_design/feature_draft.cpp`、`cad-core/src/part_design/feature_thickness.cpp` | face selection、neutral plane、multi-solid / fuse history。 |
 | Hole | `cad-core/src/part_design/feature_hole.cpp` | profile source、head cut、thread table、ModelThread pipe-shell tool、subtractive history。 |
@@ -81,7 +82,7 @@ C10-M1 queue empty
 | 方案 | `6-28-22-53-C10-M2-PartDesignDressUpHoleTopoHistory批次方案.md` | C10-M2 实施策略与 S0-S6 拆分。 |
 | 工作步骤总入口 | `工作步骤细分/6-28-22-54-【已实现】C10-M2工作步骤总入口.md` | S0-S6 队列索引。 |
 | S0 | `工作步骤细分/6-28-22-55-【已实现】C10-M2-S0-live基线与声明口径冻结.md` | 已冻结 live baseline、allowed claims、forbidden claims、状态词典和验证命令。 |
-| S1 | `工作步骤细分/6-28-22-56-C10-M2-S1-FreeCAD源码与current覆盖候选矩阵.md` | 复核 FreeCAD source authority 与 current cad-core coverage。 |
+| S1 | `工作步骤细分/6-28-22-56-【已实现】C10-M2-S1-FreeCAD源码与current覆盖候选矩阵.md` | 已复核 FreeCAD source authority 与 current cad-core coverage。 |
 | S2 | `工作步骤细分/6-28-22-57-C10-M2-S2-范围准入与blocker矩阵.md` | 对 oracle、implementation、diagnostic 和 non-goal 做路由。 |
 | S3 | `工作步骤细分/6-28-22-58-C10-M2-S3-DressUp生产者History专项复审.md` | DressUp AddSubShape slot、selection history、Draft / Thickness history 复审。 |
 | S4 | `工作步骤细分/6-28-22-59-C10-M2-S4-Hole生产者History专项复审.md` | Hole `findHoles()`、profile-source、ModelThread、head-cut 和 subtractive cut 复审。 |
@@ -94,4 +95,4 @@ C10-M1 queue empty
 | backend gap classification | `矩阵/c10m2_dressup_hole_topohistory_backend_gap_classification.tsv` | oracle / backendGap / releaseGate 分类。 |
 | validation matrix | `矩阵/c10m2_dressup_hole_topohistory_validation_matrix.tsv` | 分层验收命令。 |
 
-当前工作步骤总入口和 S0 已标为 `【已实现】`；S1-S6 仍待执行。矩阵仍是 seed / route 口径，除 `C10M2-BLOCKER-000=closed_s0` 与 `C10M2-SCOPE-001=baseline_frozen_s0` release baseline 外，不是发布闸门结论。
+当前工作步骤总入口、S0 和 S1 已标为 `【已实现】`；S2-S6 仍待执行。矩阵仍是 seed / route 口径，除 `C10M2-BLOCKER-000=closed_s0`、`C10M2-BLOCKER-101=closed_s1` 与 `C10M2-SCOPE-001=baseline_frozen_s0` release baseline 外，不是发布闸门结论。
