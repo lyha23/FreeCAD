@@ -33,7 +33,9 @@ S0 状态词典固定为：`native_oracle_required` 表示先采 FreeCAD oracle�
 
 ## S1 FreeCAD 源码与 current 覆盖候选矩阵
 
-S1 复核 FreeCAD source 和 current cad-core 落点，形成 `C10M1-SRC-101..` 候选。S1 不采 oracle、不改 C++，只把可进入 S2/S3/S4/S5 的 source/current evidence 写入矩阵。
+S1 已复核 FreeCAD source 和 current cad-core 落点，形成 FreeCAD authority `C10M1-SRC-101..108` 与 current cad-core coverage `C10M1-SRC-201..208`。S1 没有采 oracle、没有改 C++，只把可进入 S2/S3/S4/S5 的 source/current evidence 写入矩阵。
+
+S1 当前结论：`SketchObject::buildInternals()` 的 FaceMakerBuildFace 后接 WireJoiner 路径已在 current `sketch_internal_builder.cpp` 中有对应落点；FaceMaker / WireJoiner producer history 已有 partial publication；`Profile.StableSubList=InternalFaceN` without `ReferenceShadow` 仍必须等 S5 产品边界批准，不能直接写成 supported。
 
 ## S2 范围准入与 blocker 矩阵
 

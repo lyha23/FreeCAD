@@ -13,9 +13,11 @@
 ## 当前状态
 
 - S0 live 基线已冻结：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=382539f170`（`382539f170 docs: 关闭 C9-M5 S6 发布闸门`）。起始 dirty state 仅为 C10-M1 seed 文档 / 矩阵与 `docs/CADCore10.0/README.md` 未跟踪；本轮不改 `cad-core/src`、fixtures、expected 或 tests。
+- S1 source/current 审计已完成：执行基线为 `HEAD=3493d948f5`（`3493d948f5 docs: 修正 C10-M1 S1 cad-core 路径口径`），起始工作区干净，队列下一项已从 S1 推进到 S2。
 - C9-M5 队列为空，`copy_on_change_full_temporary_document_cache` 已被保留为 `known_gap_diagnostic` / `oracle_blocked`，不是本批实现入口。
 - P5b 当前已支持 bounded split、FaceMaker concrete producer evidence、WireJoiner EdgeInfo / WireInfo 子集、InternalFace profile selection、ReferenceShadow-backed recovery 和多类 P5 fixtures。
-- S0 允许声明的待准入范围仅限近切线、重合边、复杂 open-wire、非平面 / 复杂投影，以及 `Profile.StableSubList=InternalFaceN` without `ReferenceShadow` 的 request-local evidence 边界。
+- S1 矩阵已把 FreeCAD authority 拆到 `C10M1-SRC-101..108`，把 current cad-core coverage 拆到 `C10M1-SRC-201..208`；`C10M1-BLOCKER-101` 已关闭。
+- S0 允许声明的待准入范围仅限近切线、重合边、复杂 open-wire、非平面 / 复杂投影，以及 `Profile.StableSubList=InternalFaceN` without `ReferenceShadow` 的 request-local evidence 边界；S1 未把这些候选升级为 supported。
 - S0 禁止声明 CopyOnChange、full Sketcher solver、GUI、cross-request cache、raw `FaceN` alias、source index / split order / bbox / 面积 / 输出排序 stable selector 为 supported。
 
 ## 收口边界
