@@ -20,6 +20,7 @@
 - S2 已关闭范围准入：`C10M3-BLOCKER-201=closed_s2`；每个 scope 均有合法 `current_status`、`next_step` 和 `close_condition`，每个 blocker 均指向 scope 和 owner step，non-goal 均有 protocol behavior 与 reopen condition，backend-gap 分类没有 implementation row。
 - S3 已关闭 native observability oracle：执行基线 `HEAD=b1735afd88`（`docs: 完成 C10-M3 S2 范围准入矩阵`），本轮 FreeCADCmd native probe 只写 `/tmp/c10m3-c7m4-reference-shadow-native-probe.evidence.json`；基线为 FreeCAD `1.2.0 revision 20260519` / Libs `1.2.0devR20260519` / OCCT `7.8.1`。FCStd/XML restore 与 recompute 成功，但 Python-visible `Base` 不暴露 `ShadowSub`、`ReferenceShadow` 或 `getSubValues(false/true)`；`C10M3-SCOPE-101..102=notCollected`，`C10M3-BLOCKER-301=closed_s3`，`C10M3-CAT-101=notCollected`。
 - S4 已关闭 current recovery comparison：只复审 current `cad-core` parser / recovery / ElementMap diagnostics / focused tests；因 S3 `notCollected` 且没有 C10-M3 collector、fixture 或 expected，不能证明 current mismatch；`C10M3-SCOPE-201=release_gate`，`C10M3-SCOPE-202=diagnostic_retained`，`C10M3-BLOCKER-401=closed_s4`，`C10M3-CAT-102=release_gate`。
+- S5 已关闭 protocol / diagnostic boundary：只复审 `elementReferenceUpdates`、single-subshape `ReferenceShadow.brep`、split / deleted diagnostics、adapter boundary 和 `C10M3-NG-001..007` reopen condition；`C10M3-SCOPE-202=diagnostic_retained`，`C10M3-SCOPE-301=release_gate`，`C10M3-BLOCKER-501=closed_s5`，`C10M3-CAT-103=diagnostic_retained`，未打开 implementation row。
 - C10-M1 / C10-M2 队列均已关闭，`docs/CADCore10.0/C10-M2-PartDesignDressUpHoleTopoHistory批次/工作步骤细分` 无待执行步骤。
 - C10-M2 已发布：DressUp producer history `expected_backed_no_gap` / `no_gap`，Hole producer history `expected_backed_no_gap`，cross-feature old-reference recovery `diagnostic_retained`。
 - `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache` 仍是 retained known gap / `oracle_blocked`，不进入 C10-M3。
@@ -34,6 +35,7 @@
 | `closed_s2` | 只表示 S2 scope / blocker / non-goal / backend-gap routing 关闭；不表示 C++ implementation gate 打开。 |
 | `closed_s3` | 只表示 S3 native observability 复审关闭；本轮结论为 Python API 不可观察所需 recovery evidence，不打开 C++ gate。 |
 | `closed_s4` | 只表示 S4 current cad-core parser / recovery / diagnostic 复审关闭；因 S3 `notCollected`，不能证明 current mismatch 或打开 C++ gate。 |
+| `closed_s5` | 只表示 S5 protocol / diagnostic / non-goal 边界复审关闭；不表示 stale `ReferenceShadow` supported 或 backend gap 打开。 |
 | `native_oracle_candidate` | 需要 FreeCADCmd / FCStd / XML restore native probe 证明可观察性。 |
 | `current_comparison_pending` | 已有 native evidence 后，待比较 current cad-core。 |
 | `backend_gap_candidate` | native evidence 与 current mismatch 同时存在后，S6 才能消费。 |
@@ -87,7 +89,7 @@ C10-M2 queue empty
 | S2 | `工作步骤细分/6-29-01-11-【已实现】C10-M3-S2-范围准入与blocker矩阵.md` | 对 native oracle、backend gap、diagnostic 和 non-goal 做范围准入。 |
 | S3 | `工作步骤细分/6-29-01-12-【已实现】C10-M3-S3-native可观测性与oracle采集专项复审.md` | 已复核 FCStd / XML restore 后 ShadowSub / ReferenceShadow 是否 native observable，结论为 `notCollected`。 |
 | S4 | `工作步骤细分/6-29-01-13-【已实现】C10-M3-S4-cad-core恢复路径与current mismatch专项复审.md` | 已复审 current cad-core parser / recovery / diagnostics；因 S3 `notCollected`，关闭为 release gate / retained diagnostic。 |
-| S5 | `工作步骤细分/6-29-01-14-C10-M3-S5-前端协议诊断与non-goal边界专项复审.md` | 复核 `elementReferenceUpdates`、ReferenceShadow.brep 单 subshape 例外和禁止 shortcut。 |
+| S5 | `工作步骤细分/6-29-01-14-【已实现】C10-M3-S5-前端协议诊断与non-goal边界专项复审.md` | 已复核 `elementReferenceUpdates`、ReferenceShadow.brep 单 subshape 例外和禁止 shortcut，关闭为 retained diagnostic / release gate。 |
 | S6 | `工作步骤细分/6-29-01-15-C10-M3-S6-Oracle实现与发布闸门.md` | 消费 S3-S5 evidence，落 C++ / tests 或发布 no-code retained diagnostic。 |
 | source candidates | `矩阵/c10m3_reference_shadow_recovery_source_candidates.tsv` | FreeCAD / cad-core source authority。 |
 | scope review | `矩阵/c10m3_reference_shadow_recovery_scope_review_matrix.tsv` | scope 状态、owner step、route。 |
@@ -96,4 +98,4 @@ C10-M2 queue empty
 | backend gap classification | `矩阵/c10m3_reference_shadow_recovery_backend_gap_classification.tsv` | oracle / backendGap / releaseGate 分类。 |
 | validation matrix | `矩阵/c10m3_reference_shadow_recovery_validation_matrix.tsv` | 分层验收命令。 |
 
-当前工作步骤总入口索引、S0、S1、S2、S3 与 S4 已标为 `【已实现】`；S5-S6 待执行。矩阵发布结论为：`C10M3-BLOCKER-000=closed_s0`、`C10M3-BLOCKER-101=closed_s1`、`C10M3-BLOCKER-201=closed_s2`、`C10M3-BLOCKER-301=closed_s3`、`C10M3-BLOCKER-401=closed_s4`、`C10M3-SCOPE-001=baseline_frozen_s0`、`C10M3-SCOPE-101..102=notCollected`、`C10M3-SCOPE-201=release_gate`、`C10M3-SCOPE-202=diagnostic_retained`、`C10M3-CAT-101=notCollected`、`C10M3-CAT-102=release_gate`；source candidates 只表示 live source audit 已闭环，S3 只证明当前 Python API 不可观察 native recovery evidence，S4 只证明 current comparison 不能在缺少 native expected 时升级为 mismatch，不是 supported 或 implementation 结论。
+当前工作步骤总入口索引、S0、S1、S2、S3、S4 与 S5 已标为 `【已实现】`；S6 待执行。矩阵发布结论为：`C10M3-BLOCKER-000=closed_s0`、`C10M3-BLOCKER-101=closed_s1`、`C10M3-BLOCKER-201=closed_s2`、`C10M3-BLOCKER-301=closed_s3`、`C10M3-BLOCKER-401=closed_s4`、`C10M3-BLOCKER-501=closed_s5`、`C10M3-SCOPE-001=baseline_frozen_s0`、`C10M3-SCOPE-101..102=notCollected`、`C10M3-SCOPE-201=release_gate`、`C10M3-SCOPE-202=diagnostic_retained`、`C10M3-SCOPE-301=release_gate`、`C10M3-CAT-101=notCollected`、`C10M3-CAT-102=release_gate`、`C10M3-CAT-103=diagnostic_retained`；source candidates 只表示 live source audit 已闭环，S3 只证明当前 Python API 不可观察 native recovery evidence，S4 只证明 current comparison 不能在缺少 native expected 时升级为 mismatch，S5 只证明 protocol / non-goal 边界仍应 retained，不是 supported 或 implementation 结论。
