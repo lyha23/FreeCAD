@@ -48,7 +48,7 @@
 回写状态：
 
 - `c9m5_copyonchange_source_candidates.tsv`：`C9M5-SRC-101..205` 已补入 FreeCAD / cad-core 行段、语义边界和下一步。
-- `c9m5_copyonchange_scope_review_matrix.tsv`：`C9M5-SCOPE-101..104` 已保持为 `native_oracle_required`、`known_gap_diagnostic_oracle_blocked`、`backend_gap_candidate`、`release_gate`，没有提升为 supported 或 `backend_gap_requires_implementation`。
+- `c9m5_copyonchange_scope_review_matrix.tsv`：`C9M5-SCOPE-101..104` 当前保持为 `native_oracle_required`、`known_gap_retained`、`backend_gap_candidate`、`release_gate`，没有提升为 supported 或 `backend_gap_requires_implementation`。
 - `c9m5_copyonchange_blocker_queue.tsv`：`C9M5-BLOCKER-101` 已关闭为 `closed_S1`。
 
 ## 验收

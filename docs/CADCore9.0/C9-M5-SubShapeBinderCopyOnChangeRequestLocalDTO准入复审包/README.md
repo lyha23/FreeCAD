@@ -22,6 +22,7 @@ C9-M5 不把这个 known gap 直接写成 supported，也不搬运 FreeCAD tempo
 - cad-core 当前只支持 SubShapeBinder request-local shape / ElementMap / NamedShape / BindMode 子集；CopyOnChange Enabled / Mutated / PartialLoad 只发布 diagnostic 和 lifecycle boundary。
 - S0 已冻结本包状态词典：当前 gap 仍是 `copy_on_change_full_temporary_document_cache`，状态只能写作 `known_gap_diagnostic` / `oracle_blocked`；S6 code gate 只有在 S3 native evidence 与 S4 产品边界同时成立时打开。
 - S1 已关闭 source/current 审计：FreeCAD full path 仍依赖 `setupCopyOnChange()` / `update()`、`_tmp_binder`、`_CopiedObjs`、`copyObject()`、`recomputeFeature(true)` 和 `_CopiedLink`；current `cad-core` 仍只发布 SubShapeBinder diagnostic boundary，`app/copy_on_change.cpp` 仅作为 App Link DTO 词汇对照。
+- S2 已关闭 scope admission：`C9M5-SCOPE-001..301` 只保留 `native_oracle_required`、`product_decision_required`、`known_gap_retained`、`backend_gap_candidate`、`diagnostic_non_goal` 和 `release_gate` 路由；没有生成 `backend_gap_requires_implementation`，full temporary-document copied-object cache 保持 retained known gap。
 
 ## 收口边界
 
