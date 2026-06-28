@@ -1,0 +1,22 @@
+{
+  "schema_version": "cad-core.c9m5-subshapebinder-copyonchange-fixture.v1",
+  "fixture_group": "c9m5",
+  "c9m5_case": "subshape-binder-copyonchange-lifecycle-probe",
+  "oracle_ids": [
+    "C9M5-ORACLE-101",
+    "C9M5-ORACLE-102",
+    "C9M5-ORACLE-103"
+  ],
+  "freecad_authority": [
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::setupCopyOnChange()",
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::checkCopyOnChange()",
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::update()",
+    "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::checkPropertyStatus()",
+    "/home/user/Chili3DProject/FreeCAD/src/App/Link.cpp::LinkBaseExtension::setupCopyOnChange()"
+  ],
+  "probe_contract": {
+    "property_state": "Record Disabled, Enabled and Mutated Python-visible BindCopyOnChange states.",
+    "partialload": "Record PartialLoad=True and Support PropertyXLinkSubList visibility.",
+    "copied_object_cache": "Record C9M5 blocker evidence for _CopiedObjs, _tmp_binder, copyObject and recomputeFeature; do not mark the full temporary-document cache supported."
+  }
+}
