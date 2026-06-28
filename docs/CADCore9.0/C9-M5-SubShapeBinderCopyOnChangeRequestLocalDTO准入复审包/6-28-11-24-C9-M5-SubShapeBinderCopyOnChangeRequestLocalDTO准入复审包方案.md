@@ -62,9 +62,11 @@ S5 已对照当前 C++、capability 和 focused tests 关闭为 no-code release 
 
 ## S6 Oracle 实现与发布闸门
 
-S6 是 no-code release gate：保留 `copy_on_change_full_temporary_document_cache` known gap，更新 docs / matrices / capability smoke 证据，不改 C++。
+S6 已关闭为 no-code release gate：保留 `copy_on_change_full_temporary_document_cache` known gap，更新 docs / matrices / capability smoke 证据，不改 C++。
 
 S6 不允许半支持：full temporary-document cache 仍是必要条件，且 S4/S5 未批准替代 DTO，因此不能把它发布成 supported。
+
+最终裁决为 `no_code_retained_known_gap_release_gate`。`C9M5-BLOCKER-601` 已关闭为 `closed_S6_no_code_retained_known_gap`；delete condition 是 FreeCADCmd / native probe 暴露稳定 request-local copied-object evidence 且产品批准 DTO，reopen condition 是更强 native oracle 或明确产品决策重开 implementation gate。
 
 ## 验收分层
 
@@ -76,6 +78,9 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore9.0/C9-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审包/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore9.0/C9-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审包 docs/CADCore9.0/README.md
 git diff --check
+cd /home/user/Chili3DProject/FreeCAD/cad-core
+./cad-core capabilities > /tmp/c9m5-capabilities.json
+python3 -m unittest tests.test_c8_shapebinder tests.test_diagnostics tests.test_adapters
 ```
 
 实现短跑只在 S6 打开 C++ gate 时执行：

@@ -23,6 +23,7 @@
 - S3 native lifecycle probe 复审已关闭：C9-M5 专属 probe / fixture / expected 已采集 FreeCADCmd `1.2.0 revision 20260519` 证据；Disabled / Enabled / Mutated / PartialLoad、`_tmp_binder` 和 `_CopiedLink` 可见，但 `_CopiedObjs`、`copyObject()` dependency order 和 `recomputeFeature(true)` ElementMap lifecycle 仍不可导出为稳定 request-local DTO，`C9M5-SCOPE-103` 保持 `needs_more_native_evidence`。
 - S4 request-local DTO 产品边界复审已关闭：裁决为 `dto_rejected_known_gap_retained`。允许字段仅限 request graph、request-local `documentObjectUpdates` / diagnostics、source id/name、support subname、mutated property delta、copy intent 和 deletion/update/reselect 建议；hidden temporary document、TopoDS_Shape / BREP / full shape cache、request 后继续有效的 NamedShape / ElementMap / copied-object cache、`_CopiedObjs` private vector 和 native object pointer identity 仍是 forbidden fields。
 - S5 cad-core 实现闸门与 diagnostic 发布复审已关闭：current `cad-core` 仍发布 `copy_on_change_full_temporary_document_cache_not_supported`，capability 仍保留 `known_gap_diagnostic` / `oracle_blocked` 和 `remaining_gaps=["copy_on_change_full_temporary_document_cache"]`，focused tests 仍证明 retained known gap。S6 路由固定为 no-code retained known gap release gate，不落 C++ support。
+- S6 Oracle 实现与发布闸门已关闭：执行基线为 `HEAD=c68a9621b5`（`c68a9621b5 docs: 关闭 C9-M5 S5 diagnostic 发布复审`），起始 status clean。S6 消费 S3 native evidence、S4 `dto_rejected_known_gap_retained` 和 S5 `no_code_retained_known_gap_release_gate`，最终保持 `copy_on_change_full_temporary_document_cache` 为 `known_gap_diagnostic` / `oracle_blocked`；`C9M5-BLOCKER-601` 关闭为 `closed_S6_no_code_retained_known_gap`，C9-M5 队列为空。
 
 ## 证明链条
 
@@ -70,7 +71,7 @@ C9-M4 queue empty
 | S3 | `工作步骤细分/6-28-11-28-【已实现】C9-M5-S3-native-CopyOnChange生命周期probe复审.md` | 已复跑并增强 native CopyOnChange lifecycle probe，结论为 evidence collected with retained blocker。 |
 | S4 | `工作步骤细分/6-28-11-29-【已实现】C9-M5-S4-request-local-DTO产品边界复审.md` | 已裁定 request-local DTO 为 rejected retained known gap。 |
 | S5 | `工作步骤细分/6-28-11-30-【已实现】C9-M5-S5-cad-core实现闸门与diagnostic发布复审.md` | 已复审 current diagnostic / capability / focused tests，裁定 S6 为 no-code retained known gap。 |
-| S6 | `工作步骤细分/6-28-11-31-C9-M5-S6-Oracle实现与发布闸门.md` | 根据 S3-S5 evidence 发布 no-code retained known gap release gate。 |
+| S6 | `工作步骤细分/6-28-11-31-【已实现】C9-M5-S6-Oracle实现与发布闸门.md` | 已根据 S3-S5 evidence 发布 no-code retained known gap release gate。 |
 | source candidates | `矩阵/c9m5_copyonchange_source_candidates.tsv` | FreeCAD / cad-core source authority。 |
 | scope review | `矩阵/c9m5_copyonchange_scope_review_matrix.tsv` | scope 状态、owner step、route。 |
 | blocker queue | `矩阵/c9m5_copyonchange_blocker_queue.tsv` | S0-S6 blocker 闭环。 |
@@ -78,4 +79,4 @@ C9-M4 queue empty
 | backend gap classification | `矩阵/c9m5_copyonchange_backend_gap_classification.tsv` | oracle / backendGap / releaseGate 分类。 |
 | validation matrix | `矩阵/c9m5_copyonchange_validation_matrix.tsv` | 分层验收命令。 |
 
-当前工作步骤总入口索引、S0、S1、S2、S3、S4 和 S5 已标为 `【已实现】`；S6 仍是待执行状态。S4 已拒绝 request-local DTO，S5 已确认 current cad-core diagnostic / capability / focused tests 与 retained known gap 发布口径一致，不打开 C++ implementation gate。
+当前工作步骤总入口索引、S0、S1、S2、S3、S4、S5 和 S6 均已标为 `【已实现】`；C9-M5 队列为空。S4 已拒绝 request-local DTO，S5/S6 已确认 current cad-core diagnostic / capability / focused tests 与 retained known gap 发布口径一致，不打开 C++ implementation gate。

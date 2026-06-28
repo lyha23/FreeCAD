@@ -26,13 +26,14 @@ C9-M5 不把这个 known gap 直接写成 supported，也不搬运 FreeCAD tempo
 - S3 已关闭 native lifecycle probe 复审：新增 `cad-core/tools/probe_c9m5_subshapebinder_copyonchange.py`、`cad-core/fixtures/c9m5/subshape-binder-copyonchange-lifecycle-probe.json` 和 `cad-core/fixtures/c9m5/expected/subshape-binder-copyonchange-lifecycle-probe.freecad.json`；FreeCADCmd 为 `/home/user/.local/bin/freecadcmd`，`freecad_version=1.2.0 revision 20260519`。证据能观察 Disabled / Enabled / Mutated / PartialLoad、`_tmp_binder` 和 `_CopiedLink`，但 `_CopiedObjs`、`copyObject()` dependency order 与 `recomputeFeature(true)` internal ElementMap lifecycle 仍不可导出为稳定 request-local DTO；`C9M5-SCOPE-103` 保持 `needs_more_native_evidence`，不打开 implementation gate。
 - S4 已关闭 request-local DTO 产品边界复审：裁决为 `dto_rejected_known_gap_retained`。可接受字段仅限 request graph 可持久化字段、request-local `documentObjectUpdates` / diagnostics、source id/name、support subname、mutated property delta、copy intent 与 deletion/update/reselect 建议；forbidden fields 包括 hidden temporary document、TopoDS_Shape / BREP / full shape cache、request 后继续有效的 NamedShape / ElementMap / copied-object cache、`_CopiedObjs` private vector 和 native object pointer identity。
 - S5 已关闭 cad-core 实现闸门与 diagnostic 发布复审：current `cad-core` 仍发布 `copy_on_change_full_temporary_document_cache_not_supported`，capability 仍保留 `known_gap_diagnostic` / `oracle_blocked` 和 `remaining_gaps=["copy_on_change_full_temporary_document_cache"]`，focused tests 仍证明 known gap。S6 是 no-code retained known gap release gate，不落 C++ support。
+- S6 已关闭 Oracle 实现与发布闸门：消费 S3 native evidence、S4 `dto_rejected_known_gap_retained` 和 S5 `no_code_retained_known_gap_release_gate`，最终裁决为 `no_code_retained_known_gap_release_gate`。`C9M5-BLOCKER-601` 已关闭为 no-code retained known gap；队列为空；capability smoke 和 focused tests 继续证明 diagnostic、delete / reopen condition 与 `remaining_gaps=["copy_on_change_full_temporary_document_cache"]` 保留。
 
 ## 收口边界
 
 - C9-M5 不重开 C8-M1 已关闭的 ShapeBinder/SubShapeBinder executor、ElementMap、NamedShape、Body replay 主路径。
 - C9-M5 不继承 C8-M2 no-code 裁决为永久结论；它重新复核 native oracle 和 request-local DTO 准入，但必须拿到更强 evidence 才能落代码。
 - 禁止引入跨请求 backend session、persistent temporary document、BREP、TopoDS_Shape、NamedShape、ElementMap 或 hidden cache。
-- S4 已拒绝 DTO；S5/S6 必须关闭为 no-code release gate，并保持 known gap。
+- S4 已拒绝 DTO；S5/S6 已关闭为 no-code release gate，并保持 known gap。
 
 ## 队列检查
 
