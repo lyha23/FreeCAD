@@ -1,0 +1,12 @@
+validation_id	validation_type	command	required_at	purpose
+C10M3-VAL-000	status	git status --short -uall	every step	Show dirty worktree boundary
+C10M3-VAL-001	head	git rev-parse --short=10 HEAD	S0 and release gate	Show exact baseline commit
+C10M3-VAL-002	queue	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore10.0/C10-M3-ReferenceShadowShadowSubNativeRecovery准入批次/工作步骤细分 --format markdown	every step	Show next pending step and prove queue-empty at S6
+C10M3-VAL-003	tsv	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore10.0/C10-M3-ReferenceShadowShadowSubNativeRecovery准入批次/矩阵/*.tsv	every matrix edit	Prevent TSV column drift
+C10M3-VAL-004	whitespace	rg -n '[ \t]$' docs/CADCore10.0/C10-M3-ReferenceShadowShadowSubNativeRecovery准入批次 docs/CADCore10.0/README.md	every docs step	No trailing whitespace; exit 1 means no matches
+C10M3-VAL-005	diffcheck	git diff --check	every step	Detect whitespace errors before commit
+C10M3-VAL-006	source_rg	rg -n "updateElementReferences|_updateElementReference|resolveElement|getSubValues|afterRestore|MapperHistory|makeShapeWithElementMap" src/App/PropertyLinks.cpp src/App/GeoFeature.cpp src/Mod/Part/App/PropertyTopoShape.cpp src/Mod/Part/App/TopoShape.cpp src/Mod/Part/App/TopoShapeMapper.cpp	S1	Prove FreeCAD authority paths are current
+C10M3-VAL-007	current_rg	rg -n "ReferenceShadow|ShadowSub|StableSubList|recoverReferenceShadowSubshape|resolveElementReference|elementReferenceUpdates|unsupportedReferenceShadowBrepReason|element_history_status" cad-core/src/app cad-core/src/part cad-core/src/runtime cad-core/include/cad_core cad-core/tests/test_p7_features.py cad-core/tests/test_adapters.py	S1-S5	Prove current cad-core landings and focused tests were reviewed
+C10M3-VAL-008	native_probe	FREECADCMD=${FREECADCMD:-FreeCADCmd} python3 cad-core/tools/collect_reference_shadow_recovery.py --output cad-core/fixtures/c10m3/native-reference-shadow-recovery.freecad.json	S3 if collector exists or is created	Collect native observable ShadowSub ReferenceShadow recovery evidence
+C10M3-VAL-009	focused_tests	python3 -m unittest tests.test_p7_features tests.test_adapters	S6 only if C++ or capability changed	Run focused P7 and adapter regression after implementation or capability edits
+C10M3-VAL-010	build	cmake --build build	S6 only if C++ changed	Compile cad-core after implementation
