@@ -1,0 +1,11 @@
+validation_id	validation_type	command	required_at	purpose
+C10M2-VAL-000	status	git status --short -uall	every step	S0 confirmed runnable; shows dirty worktree boundary and C10-M2 docs/matrices are in-scope
+C10M2-VAL-001	head	git rev-parse --short=10 HEAD	S0 and release gate	S0 confirmed baseline HEAD 2420e3b842 before S0 commit; release gate records final drift check
+C10M2-VAL-002	queue	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore10.0/C10-M2-PartDesignDressUpHoleTopoHistory批次/工作步骤细分 --format markdown	every step	S0 confirmed runnable; after S0 rename the next pending step must be S1
+C10M2-VAL-003	tsv	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore10.0/C10-M2-PartDesignDressUpHoleTopoHistory批次/矩阵/*.tsv	every matrix edit	S0 confirmed runnable; prevents TSV column drift
+C10M2-VAL-004	whitespace	rg -n '[ \t]$' docs/CADCore10.0/C10-M2-PartDesignDressUpHoleTopoHistory批次 docs/CADCore10.0/README.md	every docs step	S0 confirmed runnable; no trailing whitespace, exit 1 means no matches
+C10M2-VAL-005	diffcheck	git diff --check	every step	Detect whitespace errors before commit
+C10M2-VAL-006	source_rg	rg -n "DressUp::getAddSubShape|Fillet::execute|Chamfer::execute|Draft::execute|Thickness::execute|Hole::execute|Hole::findHoles|Hole::makeThread|makeShapeWithElementMap" src/Mod/PartDesign/App src/Mod/Part/App	S1	Prove FreeCAD authority paths are current
+C10M2-VAL-007	current_rg	rg -n "Fillet|Chamfer|Draft|Thickness|Hole|StableSubList|ReferenceShadow|element_history_status|MapperHistory" cad-core/src/part_design cad-core/src/part cad-core/src/app cad-core/tests/test_p7_features.py cad-core/tests/test_adapters.py	S1-S5	Prove current cad-core landings and focused tests were reviewed
+C10M2-VAL-008	focused_tests	python3 -m unittest tests.test_p7_features tests.test_adapters	S6 only if C++ or capability changed	Run focused P7 and adapter regression after implementation or capability edits
+C10M2-VAL-009	build	cmake --build build	S6 only if C++ changed	Compile cad-core after implementation

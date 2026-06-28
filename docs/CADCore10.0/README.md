@@ -4,12 +4,18 @@ CADCore10.0 承接 CADCore9.0 队列全部关闭后的下一轮 CAD Core 收口�
 
 C10-M1 转向 P5b Sketch open-wire / WireJoiner / InternalFace stable selector。目标不是重开 Sketcher solver，也不是继续做 CopyOnChange 准入，而是沿 FreeCAD `SketchObject::buildInternals()` 同一调用链，把近切线、重合边、复杂 open-wire 与 `Profile.StableSubList=InternalFaceN` without `ReferenceShadow` 的 request-local 证据、ElementMap 和发布边界拆清。
 
+C10-M2 转向 PartDesign DressUp / Hole topo history 第二阶段。current capability 已显示 DressUp / Hole producer matrix 为 first slice 且无 active `remaining`，所以本包不是从 remaining gap 硬开 C++，而是复核 FreeCAD `DressUp::getAddSubShape()`、Fillet / Chamfer / Draft / Thickness、`Hole::findHoles()` / `makeThread()` 与 current cad-core `NamedShape` / `ElementMap` / MapperHistory 是否还有 source-backed mismatch。只有 S3-S5 证明 mismatch 时，S6 才打开实现；否则发布 no-code release gate。
+
 ## 入口
 
 - C10-M1 总入口：`C10-M1-SketchOpenWireInternalFaceStableSelector批次/6-28-17-33-C10-M1-SketchOpenWireInternalFaceStableSelector批次总入口.md`
 - C10-M1 方案：`C10-M1-SketchOpenWireInternalFaceStableSelector批次/6-28-17-33-C10-M1-SketchOpenWireInternalFaceStableSelector批次方案.md`
 - C10-M1 工作步骤：`C10-M1-SketchOpenWireInternalFaceStableSelector批次/工作步骤细分/`
 - C10-M1 矩阵：`C10-M1-SketchOpenWireInternalFaceStableSelector批次/矩阵/`
+- C10-M2 总入口：`C10-M2-PartDesignDressUpHoleTopoHistory批次/6-28-22-53-C10-M2-PartDesignDressUpHoleTopoHistory批次总入口.md`
+- C10-M2 方案：`C10-M2-PartDesignDressUpHoleTopoHistory批次/6-28-22-53-C10-M2-PartDesignDressUpHoleTopoHistory批次方案.md`
+- C10-M2 工作步骤：`C10-M2-PartDesignDressUpHoleTopoHistory批次/工作步骤细分/`
+- C10-M2 矩阵：`C10-M2-PartDesignDressUpHoleTopoHistory批次/矩阵/`
 
 ## 当前状态
 
@@ -20,12 +26,15 @@ C10-M1 转向 P5b Sketch open-wire / WireJoiner / InternalFace stable selector�
 - `docs/CADCore方案/细化方案/12-P5b-Sketch-open-wire-WireJoiner完整迁移方案.md` 已把下一步定为：用 FreeCAD oracle 固定近切线、重合边、复杂 open-wire case；不可证明的一对多 open-wire history 保持 stable diagnostic；若支持 `Profile.StableSubList=InternalFaceN` without `ReferenceShadow`，必须先补 FreeCAD evidence 和 ElementMap-backed stable selector。
 - current `cad-core` 已有 `profile_resolver.cpp` 的 explicit `InternalFaceN` profile selection、ReferenceShadow-backed recovery、open profile diagnostic，以及 `wire_joiner.cpp` / `internal_shape_history_publisher.cpp` 的 recoverable WireJoiner child-wire / MapperHistory / ElementMap 子集；C10-M1 只在 S3-S5 证据闭环后扩大这些正式路径。
 - 禁止声明：CopyOnChange、full Sketcher solver、GUI、cross-request cache、raw `FaceN` alias、source index / split order / bbox / 面积 / 输出排序 stable selector 均不是 C10-M1 supported 范围。
+- C10-M2 S0 live 基线已冻结：起点 HEAD=`2420e3b842`（`docs: 完成 C10-M1 S6 发布闸门`），起点 dirty boundary 仅包含 C10-M2 docs / matrices 和 `docs/CADCore10.0/README.md` 的 in-scope 变更；`C10M2-BLOCKER-000=closed_s0`，`C10M2-SCOPE-001=baseline_frozen_s0` 仅作为 S6 复核的 docs-only release baseline。current capability 显示 `part_design.hole.history.status=element_map_freeze_first_slice`、`topo_history.producer_matrix.dressup.status=done_first_slice`、`topo_history.producer_matrix.hole.status=done_first_slice`；C10-M2 只在 DressUp / Hole source-backed mismatch 被 S3-S5 证明后才进入 C++。
+- C10-M2 禁止声明：raw `FaceN`、bbox、面积、顺序、source index、fixture 名称、adapter 层修剪或输出排序不能用来选 face / edge；stale `ReferenceShadow` / Base recovery 继续保持 oracle-blocked / diagnostic，不能发布为 supported。
 
 ## 队列检查
 
 ```bash
 cd /home/user/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore10.0/C10-M1-SketchOpenWireInternalFaceStableSelector批次/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore10.0/C10-M2-PartDesignDressUpHoleTopoHistory批次/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -33,6 +42,7 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 ```bash
 cd /home/user/Chili3DProject/FreeCAD
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore10.0/C10-M1-SketchOpenWireInternalFaceStableSelector批次/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore10.0/C10-M2-PartDesignDressUpHoleTopoHistory批次/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore10.0
 git diff --check
 ```
