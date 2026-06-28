@@ -18,6 +18,7 @@
 - S0 只关闭 docs / matrix 基线：`C10M3-BLOCKER-000=closed_s0`，`C10M3-SCOPE-001=baseline_frozen_s0`；不打开 C++ gate。
 - S1 已关闭 source authority audit：`C10M3-BLOCKER-101=closed_s1`，`C10M3-SRC-101..204` 已刷新为 live FreeCAD / current cad-core path、symbol、evidence、focused tests 与 capability landing；不声明 supported 或 backend gap。
 - S2 已关闭范围准入：`C10M3-BLOCKER-201=closed_s2`；每个 scope 均有合法 `current_status`、`next_step` 和 `close_condition`，每个 blocker 均指向 scope 和 owner step，non-goal 均有 protocol behavior 与 reopen condition，backend-gap 分类没有 implementation row。
+- S3 已关闭 native observability oracle：执行基线 `HEAD=b1735afd88`（`docs: 完成 C10-M3 S2 范围准入矩阵`），本轮 FreeCADCmd native probe 只写 `/tmp/c10m3-c7m4-reference-shadow-native-probe.evidence.json`；基线为 FreeCAD `1.2.0 revision 20260519` / Libs `1.2.0devR20260519` / OCCT `7.8.1`。FCStd/XML restore 与 recompute 成功，但 Python-visible `Base` 不暴露 `ShadowSub`、`ReferenceShadow` 或 `getSubValues(false/true)`；`C10M3-SCOPE-101..102=notCollected`，`C10M3-BLOCKER-301=closed_s3`，`C10M3-CAT-101=notCollected`。
 - C10-M1 / C10-M2 队列均已关闭，`docs/CADCore10.0/C10-M2-PartDesignDressUpHoleTopoHistory批次/工作步骤细分` 无待执行步骤。
 - C10-M2 已发布：DressUp producer history `expected_backed_no_gap` / `no_gap`，Hole producer history `expected_backed_no_gap`，cross-feature old-reference recovery `diagnostic_retained`。
 - `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache` 仍是 retained known gap / `oracle_blocked`，不进入 C10-M3。
@@ -30,6 +31,7 @@
 | `closed_s0` | 只表示 S0 blocker 关闭；不表示 stale `ReferenceShadow` / Base recovery supported。 |
 | `closed_s1` | 只表示 S1 source authority audit 关闭；不表示 native oracle 或 backend gap。 |
 | `closed_s2` | 只表示 S2 scope / blocker / non-goal / backend-gap routing 关闭；不表示 C++ implementation gate 打开。 |
+| `closed_s3` | 只表示 S3 native observability 复审关闭；本轮结论为 Python API 不可观察所需 recovery evidence，不打开 C++ gate。 |
 | `native_oracle_candidate` | 需要 FreeCADCmd / FCStd / XML restore native probe 证明可观察性。 |
 | `current_comparison_pending` | 已有 native evidence 后，待比较 current cad-core。 |
 | `backend_gap_candidate` | native evidence 与 current mismatch 同时存在后，S6 才能消费。 |
@@ -81,7 +83,7 @@ C10-M2 queue empty
 | S0 | `工作步骤细分/6-29-01-09-【已实现】C10-M3-S0-live基线与声明口径冻结.md` | 冻结 live baseline、allowed claims、forbidden claims 和状态词典。 |
 | S1 | `工作步骤细分/6-29-01-10-【已实现】C10-M3-S1-FreeCAD源码与current覆盖候选矩阵.md` | 复核 FreeCAD source authority 与 current cad-core coverage。 |
 | S2 | `工作步骤细分/6-29-01-11-【已实现】C10-M3-S2-范围准入与blocker矩阵.md` | 对 native oracle、backend gap、diagnostic 和 non-goal 做范围准入。 |
-| S3 | `工作步骤细分/6-29-01-12-C10-M3-S3-native可观测性与oracle采集专项复审.md` | 复核 FCStd / XML restore 后 ShadowSub / ReferenceShadow 是否 native observable。 |
+| S3 | `工作步骤细分/6-29-01-12-【已实现】C10-M3-S3-native可观测性与oracle采集专项复审.md` | 已复核 FCStd / XML restore 后 ShadowSub / ReferenceShadow 是否 native observable，结论为 `notCollected`。 |
 | S4 | `工作步骤细分/6-29-01-13-C10-M3-S4-cad-core恢复路径与current mismatch专项复审.md` | 比较 current cad-core parser / recovery / diagnostics 与 native evidence。 |
 | S5 | `工作步骤细分/6-29-01-14-C10-M3-S5-前端协议诊断与non-goal边界专项复审.md` | 复核 `elementReferenceUpdates`、ReferenceShadow.brep 单 subshape 例外和禁止 shortcut。 |
 | S6 | `工作步骤细分/6-29-01-15-C10-M3-S6-Oracle实现与发布闸门.md` | 消费 S3-S5 evidence，落 C++ / tests 或发布 no-code retained diagnostic。 |
@@ -92,4 +94,4 @@ C10-M2 queue empty
 | backend gap classification | `矩阵/c10m3_reference_shadow_recovery_backend_gap_classification.tsv` | oracle / backendGap / releaseGate 分类。 |
 | validation matrix | `矩阵/c10m3_reference_shadow_recovery_validation_matrix.tsv` | 分层验收命令。 |
 
-当前工作步骤总入口索引、S0、S1 与 S2 已标为 `【已实现】`；S3-S6 待执行。矩阵发布结论为：`C10M3-BLOCKER-000=closed_s0`、`C10M3-BLOCKER-101=closed_s1`、`C10M3-BLOCKER-201=closed_s2`、`C10M3-SCOPE-001=baseline_frozen_s0`；source candidates 只表示 live source audit 已闭环，S2 只完成 native oracle、current comparison、protocol diagnostic、non-goal 和 release gate 的范围路由，不是 supported 或 implementation 结论。
+当前工作步骤总入口索引、S0、S1、S2 与 S3 已标为 `【已实现】`；S4-S6 待执行。矩阵发布结论为：`C10M3-BLOCKER-000=closed_s0`、`C10M3-BLOCKER-101=closed_s1`、`C10M3-BLOCKER-201=closed_s2`、`C10M3-BLOCKER-301=closed_s3`、`C10M3-SCOPE-001=baseline_frozen_s0`、`C10M3-SCOPE-101..102=notCollected`、`C10M3-CAT-101=notCollected`；source candidates 只表示 live source audit 已闭环，S3 只证明当前 Python API 不可观察 native recovery evidence，不是 supported 或 implementation 结论。
