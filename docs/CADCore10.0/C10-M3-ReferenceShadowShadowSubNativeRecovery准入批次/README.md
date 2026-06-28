@@ -13,8 +13,10 @@
 
 ## 当前状态
 
-- S0-S6 均为待执行。
+- S0 已完成，S1-S6 待执行。
+- S0 live 基线已冻结：`HEAD=f528b8f7f6`（`docs: 新增 C10-M3 ReferenceShadow native recovery 方案`），S0 起始 `git -c core.quotepath=false status --short -uall` 为空；`C10M3-BLOCKER-000=closed_s0`，`C10M3-SCOPE-001=baseline_frozen_s0`。
 - 工作步骤总入口已标 `【已实现】`，它只是队列索引，避免 goal runner 把索引当成实现步骤。
+- `C10M3-NG-001..007` forbidden claims / reopen condition 已确认完整；`C10M3-VAL-000..005` 为 S0 docs / matrix 验收命令。
 - 本包不声明 stale `ReferenceShadow` / Base recovery 已 supported；只有 S3-S5 证明 native observable evidence + current mismatch 后，S6 才能打开 C++。
 - CopyOnChange full temporary-document cache 仍是 retained known gap，不属于本包默认入口。
 

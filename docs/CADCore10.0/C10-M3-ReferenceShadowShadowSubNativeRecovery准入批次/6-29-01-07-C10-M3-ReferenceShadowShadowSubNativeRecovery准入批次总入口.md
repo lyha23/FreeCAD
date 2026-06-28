@@ -13,8 +13,9 @@
 ## 当前基线
 
 - 起点仓库：`/home/user/Chili3DProject/FreeCAD`。
-- 起点 HEAD：`3279f8f524`（`docs: 完成 C10-M2 S6 发布闸门`）。
-- 起点工作区：生成本包前 `git status --short -uall` 为空。
+- 包创建起点 HEAD：`3279f8f524`（`docs: 完成 C10-M2 S6 发布闸门`）。
+- S0 live 基线：`HEAD=f528b8f7f6`（`docs: 新增 C10-M3 ReferenceShadow native recovery 方案`），S0 起始 `git -c core.quotepath=false status --short -uall` 为空。
+- S0 只关闭 docs / matrix 基线：`C10M3-BLOCKER-000=closed_s0`，`C10M3-SCOPE-001=baseline_frozen_s0`；不打开 C++ gate。
 - C10-M1 / C10-M2 队列均已关闭，`docs/CADCore10.0/C10-M2-PartDesignDressUpHoleTopoHistory批次/工作步骤细分` 无待执行步骤。
 - C10-M2 已发布：DressUp producer history `expected_backed_no_gap` / `no_gap`，Hole producer history `expected_backed_no_gap`，cross-feature old-reference recovery `diagnostic_retained`。
 - `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache` 仍是 retained known gap / `oracle_blocked`，不进入 C10-M3。
@@ -24,6 +25,8 @@
 | 状态词 | C10-M3 口径 |
 | --- | --- |
 | `baseline_pending` | S0 之前的初始状态，只表示待冻结 live 起点。 |
+| `baseline_frozen_s0` | 只表示 S0 已冻结 live 起点、允许声明、forbidden claims 和验证命令。 |
+| `closed_s0` | 只表示 S0 blocker 关闭；不表示 stale `ReferenceShadow` / Base recovery supported。 |
 | `source_audit_pending` | S1 待读 FreeCAD / cad-core source authority。 |
 | `native_oracle_candidate` | 需要 FreeCADCmd / FCStd / XML restore native probe 证明可观察性。 |
 | `current_comparison_pending` | 已有 native evidence 后，待比较 current cad-core。 |
@@ -72,7 +75,7 @@ C10-M2 queue empty
 | 包 README | `README.md` | 本包定位、入口、队列和文档验收命令。 |
 | 方案 | `6-29-01-07-C10-M3-ReferenceShadowShadowSubNativeRecovery准入批次方案.md` | C10-M3 实施策略与 S0-S6 拆分。 |
 | 工作步骤总入口 | `工作步骤细分/6-29-01-08-【已实现】C10-M3工作步骤总入口.md` | S0-S6 队列索引。 |
-| S0 | `工作步骤细分/6-29-01-09-C10-M3-S0-live基线与声明口径冻结.md` | 冻结 live baseline、allowed claims、forbidden claims 和状态词典。 |
+| S0 | `工作步骤细分/6-29-01-09-【已实现】C10-M3-S0-live基线与声明口径冻结.md` | 冻结 live baseline、allowed claims、forbidden claims 和状态词典。 |
 | S1 | `工作步骤细分/6-29-01-10-C10-M3-S1-FreeCAD源码与current覆盖候选矩阵.md` | 复核 FreeCAD source authority 与 current cad-core coverage。 |
 | S2 | `工作步骤细分/6-29-01-11-C10-M3-S2-范围准入与blocker矩阵.md` | 对 native oracle、backend gap、diagnostic 和 non-goal 做范围准入。 |
 | S3 | `工作步骤细分/6-29-01-12-C10-M3-S3-native可观测性与oracle采集专项复审.md` | 复核 FCStd / XML restore 后 ShadowSub / ReferenceShadow 是否 native observable。 |
@@ -86,4 +89,4 @@ C10-M2 queue empty
 | backend gap classification | `矩阵/c10m3_reference_shadow_recovery_backend_gap_classification.tsv` | oracle / backendGap / releaseGate 分类。 |
 | validation matrix | `矩阵/c10m3_reference_shadow_recovery_validation_matrix.tsv` | 分层验收命令。 |
 
-当前只有工作步骤总入口索引标为 `【已实现】`；S0-S6 均为待执行，矩阵是 seed，不是发布闸门结论。
+当前工作步骤总入口索引与 S0 已标为 `【已实现】`；S1-S6 待执行。矩阵发布结论为：`C10M3-BLOCKER-000=closed_s0`、`C10M3-SCOPE-001=baseline_frozen_s0`；其余 native oracle、current comparison、protocol diagnostic 和 release gate 行仍是 S1-S6 的待审 seed，不是 supported 结论。
