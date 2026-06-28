@@ -21,6 +21,7 @@
 - `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache` 仍是 retained known gap / `oracle_blocked`，不进入 C10-M2。
 - `C10M2-BLOCKER-000` 已关闭为 `closed_s0`；`C10M2-SCOPE-001` 保持 `baseline_frozen_s0` docs-only release baseline，S6 只复核 drift，不打开 C++ gate。
 - C10-M2 S1 source authority 已复核：`C10M2-SRC-101..204` 均有 live FreeCAD 或 current cad-core/tests path、symbol 和 concise evidence；`C10M2-BLOCKER-101` 已关闭为 `closed_s1`。S1 未采 native oracle，未改 C++，未升级 `supported` / `backendGap`。
+- C10-M2 S2 scope 准入已完成：`C10M2-SCOPE-001/101/102/201/202/301/401` 均有合法 `current_status`、owner `next_step` 和 `close_condition`；`C10M2-BLOCKER-201` 已关闭为 `closed_s2`。S2 未采 native oracle，未改 C++，未新增 implementation row 或 `backend_gap_requires_implementation`。
 
 ## 状态词典
 
@@ -83,7 +84,7 @@ C10-M1 queue empty
 | 工作步骤总入口 | `工作步骤细分/6-28-22-54-【已实现】C10-M2工作步骤总入口.md` | S0-S6 队列索引。 |
 | S0 | `工作步骤细分/6-28-22-55-【已实现】C10-M2-S0-live基线与声明口径冻结.md` | 已冻结 live baseline、allowed claims、forbidden claims、状态词典和验证命令。 |
 | S1 | `工作步骤细分/6-28-22-56-【已实现】C10-M2-S1-FreeCAD源码与current覆盖候选矩阵.md` | 已复核 FreeCAD source authority 与 current cad-core coverage。 |
-| S2 | `工作步骤细分/6-28-22-57-C10-M2-S2-范围准入与blocker矩阵.md` | 对 oracle、implementation、diagnostic 和 non-goal 做路由。 |
+| S2 | `工作步骤细分/6-28-22-57-【已实现】C10-M2-S2-范围准入与blocker矩阵.md` | 已对 oracle、implementation、diagnostic 和 non-goal 做范围准入。 |
 | S3 | `工作步骤细分/6-28-22-58-C10-M2-S3-DressUp生产者History专项复审.md` | DressUp AddSubShape slot、selection history、Draft / Thickness history 复审。 |
 | S4 | `工作步骤细分/6-28-22-59-C10-M2-S4-Hole生产者History专项复审.md` | Hole `findHoles()`、profile-source、ModelThread、head-cut 和 subtractive cut 复审。 |
 | S5 | `工作步骤细分/6-28-23-00-C10-M2-S5-跨特征旧引用恢复与diagnostic边界专项复审.md` | DressUp / Hole 经 Body、transformed、Link retag 后的 split / deleted / old reference 边界复审。 |
@@ -95,4 +96,4 @@ C10-M1 queue empty
 | backend gap classification | `矩阵/c10m2_dressup_hole_topohistory_backend_gap_classification.tsv` | oracle / backendGap / releaseGate 分类。 |
 | validation matrix | `矩阵/c10m2_dressup_hole_topohistory_validation_matrix.tsv` | 分层验收命令。 |
 
-当前工作步骤总入口、S0 和 S1 已标为 `【已实现】`；S2-S6 仍待执行。矩阵仍是 seed / route 口径，除 `C10M2-BLOCKER-000=closed_s0`、`C10M2-BLOCKER-101=closed_s1` 与 `C10M2-SCOPE-001=baseline_frozen_s0` release baseline 外，不是发布闸门结论。
+当前工作步骤总入口、S0、S1 和 S2 已标为 `【已实现】`；S3-S6 仍待执行。矩阵仍是 route / release gate 口径，除 `C10M2-BLOCKER-000=closed_s0`、`C10M2-BLOCKER-101=closed_s1`、`C10M2-BLOCKER-201=closed_s2` 与 `C10M2-SCOPE-001=baseline_frozen_s0` release baseline 外，不是发布闸门结论。
