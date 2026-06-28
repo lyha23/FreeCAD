@@ -17,6 +17,7 @@
 - S0 live 基线：`HEAD=f528b8f7f6`（`docs: 新增 C10-M3 ReferenceShadow native recovery 方案`），S0 起始 `git -c core.quotepath=false status --short -uall` 为空。
 - S0 只关闭 docs / matrix 基线：`C10M3-BLOCKER-000=closed_s0`，`C10M3-SCOPE-001=baseline_frozen_s0`；不打开 C++ gate。
 - S1 已关闭 source authority audit：`C10M3-BLOCKER-101=closed_s1`，`C10M3-SRC-101..204` 已刷新为 live FreeCAD / current cad-core path、symbol、evidence、focused tests 与 capability landing；不声明 supported 或 backend gap。
+- S2 已关闭范围准入：`C10M3-BLOCKER-201=closed_s2`；每个 scope 均有合法 `current_status`、`next_step` 和 `close_condition`，每个 blocker 均指向 scope 和 owner step，non-goal 均有 protocol behavior 与 reopen condition，backend-gap 分类没有 implementation row。
 - C10-M1 / C10-M2 队列均已关闭，`docs/CADCore10.0/C10-M2-PartDesignDressUpHoleTopoHistory批次/工作步骤细分` 无待执行步骤。
 - C10-M2 已发布：DressUp producer history `expected_backed_no_gap` / `no_gap`，Hole producer history `expected_backed_no_gap`，cross-feature old-reference recovery `diagnostic_retained`。
 - `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache` 仍是 retained known gap / `oracle_blocked`，不进入 C10-M3。
@@ -25,15 +26,16 @@
 
 | 状态词 | C10-M3 口径 |
 | --- | --- |
-| `baseline_pending` | S0 之前的初始状态，只表示待冻结 live 起点。 |
 | `baseline_frozen_s0` | 只表示 S0 已冻结 live 起点、允许声明、forbidden claims 和验证命令。 |
 | `closed_s0` | 只表示 S0 blocker 关闭；不表示 stale `ReferenceShadow` / Base recovery supported。 |
-| `source_audit_pending` | S1 待读 FreeCAD / cad-core source authority。 |
+| `closed_s1` | 只表示 S1 source authority audit 关闭；不表示 native oracle 或 backend gap。 |
+| `closed_s2` | 只表示 S2 scope / blocker / non-goal / backend-gap routing 关闭；不表示 C++ implementation gate 打开。 |
 | `native_oracle_candidate` | 需要 FreeCADCmd / FCStd / XML restore native probe 证明可观察性。 |
 | `current_comparison_pending` | 已有 native evidence 后，待比较 current cad-core。 |
 | `backend_gap_candidate` | native evidence 与 current mismatch 同时存在后，S6 才能消费。 |
 | `diagnostic_retained` | 保留 stable diagnostic，不声明 supported。 |
 | `notCollected` | 尚无 native 可观察证据，不能实现。 |
+| `diagnostic_non_goal` | 本包明确排除的行为，只保留 reopen condition。 |
 | `release_gate` | S6 对 implementation / no-code / retained diagnostic 做发布收口。 |
 
 ## 证明链条
@@ -78,7 +80,7 @@ C10-M2 queue empty
 | 工作步骤总入口 | `工作步骤细分/6-29-01-08-【已实现】C10-M3工作步骤总入口.md` | S0-S6 队列索引。 |
 | S0 | `工作步骤细分/6-29-01-09-【已实现】C10-M3-S0-live基线与声明口径冻结.md` | 冻结 live baseline、allowed claims、forbidden claims 和状态词典。 |
 | S1 | `工作步骤细分/6-29-01-10-【已实现】C10-M3-S1-FreeCAD源码与current覆盖候选矩阵.md` | 复核 FreeCAD source authority 与 current cad-core coverage。 |
-| S2 | `工作步骤细分/6-29-01-11-C10-M3-S2-范围准入与blocker矩阵.md` | 对 native oracle、backend gap、diagnostic 和 non-goal 做范围准入。 |
+| S2 | `工作步骤细分/6-29-01-11-【已实现】C10-M3-S2-范围准入与blocker矩阵.md` | 对 native oracle、backend gap、diagnostic 和 non-goal 做范围准入。 |
 | S3 | `工作步骤细分/6-29-01-12-C10-M3-S3-native可观测性与oracle采集专项复审.md` | 复核 FCStd / XML restore 后 ShadowSub / ReferenceShadow 是否 native observable。 |
 | S4 | `工作步骤细分/6-29-01-13-C10-M3-S4-cad-core恢复路径与current mismatch专项复审.md` | 比较 current cad-core parser / recovery / diagnostics 与 native evidence。 |
 | S5 | `工作步骤细分/6-29-01-14-C10-M3-S5-前端协议诊断与non-goal边界专项复审.md` | 复核 `elementReferenceUpdates`、ReferenceShadow.brep 单 subshape 例外和禁止 shortcut。 |
@@ -90,4 +92,4 @@ C10-M2 queue empty
 | backend gap classification | `矩阵/c10m3_reference_shadow_recovery_backend_gap_classification.tsv` | oracle / backendGap / releaseGate 分类。 |
 | validation matrix | `矩阵/c10m3_reference_shadow_recovery_validation_matrix.tsv` | 分层验收命令。 |
 
-当前工作步骤总入口索引、S0 与 S1 已标为 `【已实现】`；S2-S6 待执行。矩阵发布结论为：`C10M3-BLOCKER-000=closed_s0`、`C10M3-BLOCKER-101=closed_s1`、`C10M3-SCOPE-001=baseline_frozen_s0`；source candidates 只表示 live source audit 已闭环，其余 native oracle、current comparison、protocol diagnostic 和 release gate 行仍是 S2-S6 的待审 seed，不是 supported 结论。
+当前工作步骤总入口索引、S0、S1 与 S2 已标为 `【已实现】`；S3-S6 待执行。矩阵发布结论为：`C10M3-BLOCKER-000=closed_s0`、`C10M3-BLOCKER-101=closed_s1`、`C10M3-BLOCKER-201=closed_s2`、`C10M3-SCOPE-001=baseline_frozen_s0`；source candidates 只表示 live source audit 已闭环，S2 只完成 native oracle、current comparison、protocol diagnostic、non-goal 和 release gate 的范围路由，不是 supported 或 implementation 结论。
