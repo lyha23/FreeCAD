@@ -11,7 +11,7 @@ C9-M5 不是直接实现这个 cache，也不是否定 C8-M2。它做一次新�
 - 不保存跨请求 FreeCAD document、temporary document、BREP、TopoDS_Shape、NamedShape、ElementMap 或 copied-object cache。
 - 不用 fixture 名、bbox、面积、长度、几何类型或输出排序猜 CopyOnChange 语义。
 - 不把 `_CopiedObjs` private vector、`copyObject()` dependency order、`recomputeFeature(true)` ElementMap lifecycle 直接当成可传输 DTO，除非 S3-S5 证明有 request-local、可序列化、产品批准的替代表达。
-- S6 只消费 S3-S5 产生的 `native_oracle_collected`、`backend_gap_requires_implementation`、`known_gap_retained` 或 `releaseGate` row。
+- S5 已确认没有 `backend_gap_requires_implementation` row；S6 只消费 S3-S5 产生的 retained known gap / release gate 证据。
 
 ## 最小完整语义批次
 
@@ -54,19 +54,17 @@ S4 的输出不是代码实现，而是产品边界裁决：`dto_approved_candid
 
 ## S5 cad-core 实现闸门与 diagnostic 发布复审
 
-S5 对照当前 C++ 和 tests 决定 S6 是否能落代码：
+S5 已对照当前 C++、capability 和 focused tests 关闭为 no-code release gate：
 
-- 若 S4 批准 DTO 且 S3 有 native evidence，S5 把对应 row 升级为 `backend_gap_requires_implementation`，列出 C++、fixture、focused tests 和 capability 更新。
-- 若 S4 未批准或 S3 evidence 不足，S5 保持 no-code release gate，确保 capability / tests / docs 继续发布 `known_gap_diagnostic`。
+- S4 未批准 DTO，S5 不把任何 row 升级为 `backend_gap_requires_implementation`。
+- current `cad-core` 继续发布 `copy_on_change_full_temporary_document_cache_not_supported`。
+- capability / tests / docs 继续发布 `known_gap_diagnostic`、`oracle_blocked` 和 `remaining_gaps=["copy_on_change_full_temporary_document_cache"]`。
 
 ## S6 Oracle 实现与发布闸门
 
-S6 是唯一允许代码落地的步骤。实现路径有两种：
+S6 是 no-code release gate：保留 `copy_on_change_full_temporary_document_cache` known gap，更新 docs / matrices / capability smoke 证据，不改 C++。
 
-- code gate：实现 product-approved request-local DTO，修改 `feature_shape_binder.cpp` / `copy_on_change.cpp` / capability / focused tests，并删除或收窄 corresponding remaining gap。
-- no-code gate：保留 `copy_on_change_full_temporary_document_cache` known gap，更新 docs / matrices / capability smoke 证据，不改 C++。
-
-S6 不允许半支持：如果 full temporary-document cache 仍是必要条件，就不能把它发布成 supported。
+S6 不允许半支持：full temporary-document cache 仍是必要条件，且 S4/S5 未批准替代 DTO，因此不能把它发布成 supported。
 
 ## 验收分层
 
