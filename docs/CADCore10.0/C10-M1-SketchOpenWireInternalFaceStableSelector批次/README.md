@@ -16,11 +16,12 @@
 - S1 source/current 审计已完成：执行基线为 `HEAD=3493d948f5`（`3493d948f5 docs: 修正 C10-M1 S1 cad-core 路径口径`），起始工作区干净，队列下一项已从 S1 推进到 S2。
 - S2 scope 准入已完成：执行基线为 `HEAD=b53dd572ad`（`b53dd572ad docs: 完成 C10-M1 S1 源码覆盖矩阵审计`），起始工作区干净，`C10M1-BLOCKER-201` 已关闭为 `closed_s2`。
 - S3 near-tangent / coincident-edge oracle 复审已完成：执行基线为 `HEAD=918c09ef8e`（`918c09ef8e docs: 完成 C10-M1 S2 范围准入矩阵`），起始工作区干净；新增 `cad-core/fixtures/c10m1` 四个 input / expected，FreeCAD `freecad_version=1.2.0 revision 20260519`，current public `InternalFace` / `InternalEdge` / `InternalVertex` counts 全部匹配；`C10M1-BLOCKER-301` 已关闭为 `closed_s3`，队列下一项应为 S4。
+- S4 complex open-wire / WireJoiner ledger 复审已完成：执行基线为 `HEAD=a00fa181e7`（`a00fa181e7 docs: 完成 C10-M1 S3 FreeCAD oracle 复审`），起始工作区干净；本轮未新增 fixture / expected，消费现有 P5 expected 与 S3 C10M1 expected 后确认 branch / multi-result open-wire 唯一 ledger evidence 已覆盖，one-to-many、summary_only、missing child-wire 和 noOriginal purge 保持 `diagnostic_retained`；`C10M1-BLOCKER-401` 已关闭为 `closed_s4`，队列下一项应为 S5。
 - C9-M5 队列为空，`copy_on_change_full_temporary_document_cache` 已被保留为 `known_gap_diagnostic` / `oracle_blocked`，不是本批实现入口。
 - P5b 当前已支持 bounded split、FaceMaker concrete producer evidence、WireJoiner EdgeInfo / WireInfo 子集、InternalFace profile selection、ReferenceShadow-backed recovery 和多类 P5 fixtures。
 - S1 矩阵已把 FreeCAD authority 拆到 `C10M1-SRC-101..108`，把 current cad-core coverage 拆到 `C10M1-SRC-201..208`；`C10M1-BLOCKER-101` 已关闭。
 - S0 允许声明的待准入范围仅限近切线、重合边、复杂 open-wire、非平面 / 复杂投影，以及 `Profile.StableSubList=InternalFaceN` without `ReferenceShadow` 的 request-local evidence 边界；S1 未把这些候选升级为 supported。
-- S3 route 分布：near-tangent / coincident 已为 `native_expected_collected`，FaceMaker count-level row 为 `no_gap`，`C10M1-CAT-101` 为 `native_expected_collected_no_gap`；complex open-wire 仍保持 `native_oracle_required` / `notCollected` 出口，without-ReferenceShadow stable selector 保持 `backend_gap_candidate`，ambiguous one-to-many open-wire history 保持 `diagnostic_retained`；full solver、GUI、cache、raw FaceN alias、geometry guessing 与 downstream Rust 保持 `diagnostic_non_goal`。
+- S4 route 分布：near-tangent / coincident 已为 `native_expected_collected`，FaceMaker count-level row 为 `no_gap`，complex open-wire ledger 为 `no_gap` / `diagnostic_retained`，`C10M1-CAT-102` 为 `no_gap_diagnostic_retained`；without-ReferenceShadow stable selector 保持 `backend_gap_candidate` 等待 S5；full solver、GUI、cache、raw FaceN alias、geometry guessing 与 downstream Rust 保持 `diagnostic_non_goal`。
 - S0 禁止声明 CopyOnChange、full Sketcher solver、GUI、cross-request cache、raw `FaceN` alias、source index / split order / bbox / 面积 / 输出排序 stable selector 为 supported。
 
 ## 收口边界

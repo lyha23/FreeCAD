@@ -49,7 +49,9 @@ S3 已完成 near-tangent / coincident-edge native oracle 复审：新增 `cad-c
 
 ## S4 复杂 open-wire 与 WireJoiner 账本专项复审
 
-S4 负责复杂开放线网、branch open cutter、multi-result openWireCompound、one-source-to-many history ambiguity。目标是确认哪些 case 能由 `EdgeInfo` / `WireInfo` / `aHistory` 产生唯一 ElementMap alias，哪些必须保留 stable diagnostic。
+S4 已完成复杂开放线网、branch open cutter、multi-result openWireCompound、one-source-to-many history ambiguity 复审。结论是：现有 P5 expected 与 S3 C10M1 expected 已足以定性，branch / t / through / touching / near-overlap open-wire 唯一 ledger evidence 已由 current child-wire / split history 覆盖，没有 S4 C++ implementation candidate；one-source-to-many、vertex multiplicity、summary_only、missing child-wire 和 noOriginal deleted source purge 保持 stable diagnostic。
+
+S4 给 S6 的 gate 是 no-code：`C10M1-SCOPE-103=no_gap`，`C10M1-SCOPE-104=diagnostic_retained`，`C10M1-CAT-102=no_gap_diagnostic_retained`。只有后续 native oracle 证明缺少唯一 mapper-history alias，且不依赖 source index、split order、bbox、面积、长度、几何排序或输出端修剪，才允许重开 `wire_joiner.cpp` / `internal_shape_history_publisher.cpp` 实现候选。
 
 ## S5 InternalFace stable selector 与 reference 更新专项复审
 
@@ -60,7 +62,7 @@ S5 根据 S3/S4 evidence 裁决 `Profile.StableSubList=InternalFaceN` without `R
 S6 是唯一允许代码落地的步骤。实现路径：
 
 - code gate：实现 expected-backed near-tangent / coincident / complex open-wire 子集，或实现 S5 批准的 InternalFace stable selector；补 C++、fixtures、focused tests、capability / docs。
-- no-code gate：如果 S3-S5 证据不足，保留 diagnostic / known gap，写清 reopen condition，不改 C++。
+- no-code gate：S3 的 count-level no-gap 与 S4 的 WireJoiner no-gap / retained diagnostic 已进入 no-code release 口径；如果 S5 也不批准 implementation gate，S6 只发布 retained diagnostic / known gap，写清 reopen condition，不改 C++。
 
 ## 验收分层
 
