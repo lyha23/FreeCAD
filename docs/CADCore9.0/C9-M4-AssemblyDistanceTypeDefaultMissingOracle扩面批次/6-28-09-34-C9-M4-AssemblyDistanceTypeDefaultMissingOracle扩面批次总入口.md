@@ -18,6 +18,7 @@
 - `default_or_todo_boundaries` 仍保留 13 个缺 input / expected 行；S0 对 `cad-core/fixtures/c3m6` 的 inventory scan 对这些名称无命中，这些行是 C9-M4 的唯一默认目标。
 - S0 forbidden claims 已冻结：缺 oracle row 不得写 supported 或 backendGap；不得继承 C9-M3 accepted default rows；不得靠 fixture 名称、bbox、几何排序、adapter string rewrite 或输出修剪隐藏缺口；GUI/session、persistent solver state、cross-request placement cache、primitive frame generalization 仍是 non-goal。
 - S1 已关闭 source authority/current coverage：FreeCAD `getDistanceType()` 覆盖 13 个 missing default rows 的 Face/Face、Vertex/Face、Edge/Face 分类和 `swapJCS` ordering；FreeCAD `makeMbdJointDistance()` default branch 是 `ASMTPlanarJoint + offset=getJointDistance(joint)`；current cad-core/collector/capability/tests/fixture inventory 共同证明这些 rows 仍是缺 oracle default boundary，不是 supported/backendGap。
+- S2 已关闭 scope / blocker / non-goal 初始路由：FaceCone 交 S3，Point / Line + Surface 交 S4，CurveSurface 交 S5；缺 input / expected rows 只能保持 `native_oracle_required` / `notCollected`，S6 只有在 native expected-backed current mismatch 后才能写 `backend_gap_candidate` 或实现。capability/diagnostics 是 `release_gate` / `diagnostics_guard_review`，GUI/session/cache/guessing/string rewrite/output pruning 保持 non-goal 或 guard。
 
 ## 证明链条
 
@@ -62,7 +63,7 @@ C9-M3 queue empty
 | 工作步骤总入口 | `工作步骤细分/6-28-09-34-【已实现】C9-M4工作步骤总入口.md` | S0-S6 队列索引。 |
 | S0 | `工作步骤细分/6-28-09-35-【已实现】C9-M4-S0-live基线与缺oracle声明口径冻结.md` | 已冻结 live baseline、claim 和 forbidden claim。 |
 | S1 | `工作步骤细分/6-28-09-36-【已实现】C9-M4-S1-FreeCAD源码与current覆盖候选.md` | 已关闭 FreeCAD source authority、current cad-core landing 与 missing inventory。 |
-| S2 | `工作步骤细分/6-28-09-37-C9-M4-S2-范围准入与blocker矩阵.md` | scope / blocker / non-goal / backend gap 初始路由。 |
+| S2 | `工作步骤细分/6-28-09-37-【已实现】C9-M4-S2-范围准入与blocker矩阵.md` | 已关闭 scope / blocker / non-goal / backend gap 初始路由。 |
 | S3 | `工作步骤细分/6-28-09-38-C9-M4-S3-FaceCone族native-oracle复审.md` | `CylinderCone`、`ConeCone`、`ConeTorus`、`ConeSphere` native oracle。 |
 | S4 | `工作步骤细分/6-28-09-39-C9-M4-S4-PointLineSurface族native-oracle复审.md` | `PointCone`、`PointTorus`、`LineSphere`、`LineCone`、`LineTorus` native oracle。 |
 | S5 | `工作步骤细分/6-28-09-40-C9-M4-S5-CurveSurface族native-oracle复审.md` | `CurveCylinder`、`CurveSphere`、`CurveCone`、`CurveTorus` native oracle。 |
@@ -74,4 +75,4 @@ C9-M3 queue empty
 | backend gap classification | `矩阵/c9m4_distance_type_default_missing_oracle_backend_gap_classification.tsv` | oracle / backendGap / releaseGate 分类。 |
 | validation matrix | `矩阵/c9m4_distance_type_default_missing_oracle_validation_matrix.tsv` | 分层验收命令。 |
 
-当前 S0-S1 已关闭，S2-S6 仍为待执行状态；矩阵是 source/current coverage 候选和后续 oracle 路由依据，不是支持性发布结论。
+当前 S0-S2 已关闭，S3-S6 仍为待执行状态；矩阵是 source/current coverage、scope 准入和后续 oracle 路由依据，不是支持性发布结论。
