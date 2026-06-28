@@ -23,6 +23,7 @@
 - C10-M2 S1 source authority 已复核：`C10M2-SRC-101..204` 均有 live FreeCAD 或 current cad-core/tests path、symbol 和 concise evidence；`C10M2-BLOCKER-101` 已关闭为 `closed_s1`。S1 未采 native oracle，未改 C++，未升级 `supported` / `backendGap`。
 - C10-M2 S2 scope 准入已完成：`C10M2-SCOPE-001/101/102/201/202/301/401` 均有合法 `current_status`、owner `next_step` 和 `close_condition`；`C10M2-BLOCKER-201` 已关闭为 `closed_s2`。S2 未采 native oracle，未改 C++，未新增 implementation row 或 `backend_gap_requires_implementation`。
 - C10-M2 S3 DressUp producer-history 复审已完成：`C10M2-SCOPE-101=expected_backed_no_gap`，`C10M2-SCOPE-102=no_gap`，`C10M2-BLOCKER-301=closed_s3`，`C10M2-CAT-101=no_gap`。S3 未发现 expected-backed current mismatch，未改 C++、tests、fixtures、expected 或 capability；S6 只发布 no-code no-gap。
+- C10-M2 S4 Hole producer-history 复审已完成：`C10M2-SCOPE-201=expected_backed_no_gap`，`C10M2-SCOPE-202=expected_backed_no_gap`，`C10M2-BLOCKER-401=closed_s4`，`C10M2-CAT-102=no_gap`。S4 未发现 expected-backed current mismatch，未改 C++、tests、fixtures、expected 或 capability；S6 只发布 no-code no-gap。
 
 ## 状态词典
 
@@ -87,7 +88,7 @@ C10-M1 queue empty
 | S1 | `工作步骤细分/6-28-22-56-【已实现】C10-M2-S1-FreeCAD源码与current覆盖候选矩阵.md` | 已复核 FreeCAD source authority 与 current cad-core coverage。 |
 | S2 | `工作步骤细分/6-28-22-57-【已实现】C10-M2-S2-范围准入与blocker矩阵.md` | 已对 oracle、implementation、diagnostic 和 non-goal 做范围准入。 |
 | S3 | `工作步骤细分/6-28-22-58-【已实现】C10-M2-S3-DressUp生产者History专项复审.md` | DressUp AddSubShape slot、selection history、Draft / Thickness history 复审。 |
-| S4 | `工作步骤细分/6-28-22-59-C10-M2-S4-Hole生产者History专项复审.md` | Hole `findHoles()`、profile-source、ModelThread、head-cut 和 subtractive cut 复审。 |
+| S4 | `工作步骤细分/6-28-22-59-【已实现】C10-M2-S4-Hole生产者History专项复审.md` | Hole `findHoles()`、profile-source、ModelThread、head-cut 和 subtractive cut 复审。 |
 | S5 | `工作步骤细分/6-28-23-00-C10-M2-S5-跨特征旧引用恢复与diagnostic边界专项复审.md` | DressUp / Hole 经 Body、transformed、Link retag 后的 split / deleted / old reference 边界复审。 |
 | S6 | `工作步骤细分/6-28-23-01-C10-M2-S6-Oracle实现与发布闸门.md` | 消费 S3-S5 证明过的 mismatch，实施或发布 no-code gate。 |
 | source candidates | `矩阵/c10m2_dressup_hole_topohistory_source_candidates.tsv` | FreeCAD / cad-core source authority。 |
@@ -97,4 +98,4 @@ C10-M1 queue empty
 | backend gap classification | `矩阵/c10m2_dressup_hole_topohistory_backend_gap_classification.tsv` | oracle / backendGap / releaseGate 分类。 |
 | validation matrix | `矩阵/c10m2_dressup_hole_topohistory_validation_matrix.tsv` | 分层验收命令。 |
 
-当前工作步骤总入口、S0、S1、S2 和 S3 已标为 `【已实现】`；S4-S6 仍待执行。矩阵仍是 route / release gate 口径，除 `C10M2-BLOCKER-000=closed_s0`、`C10M2-BLOCKER-101=closed_s1`、`C10M2-BLOCKER-201=closed_s2`、`C10M2-BLOCKER-301=closed_s3`、`C10M2-SCOPE-001=baseline_frozen_s0`、`C10M2-SCOPE-101=expected_backed_no_gap`、`C10M2-SCOPE-102=no_gap` 与 `C10M2-CAT-101=no_gap` 外，不是发布闸门结论。
+当前工作步骤总入口、S0、S1、S2、S3 和 S4 已标为 `【已实现】`；S5-S6 仍待执行。矩阵仍是 route / release gate 口径，除 `C10M2-BLOCKER-000=closed_s0`、`C10M2-BLOCKER-101=closed_s1`、`C10M2-BLOCKER-201=closed_s2`、`C10M2-BLOCKER-301=closed_s3`、`C10M2-BLOCKER-401=closed_s4`、`C10M2-SCOPE-001=baseline_frozen_s0`、`C10M2-SCOPE-101=expected_backed_no_gap`、`C10M2-SCOPE-102=no_gap`、`C10M2-SCOPE-201=expected_backed_no_gap`、`C10M2-SCOPE-202=expected_backed_no_gap`、`C10M2-CAT-101=no_gap` 与 `C10M2-CAT-102=no_gap` 外，不是发布闸门结论。
