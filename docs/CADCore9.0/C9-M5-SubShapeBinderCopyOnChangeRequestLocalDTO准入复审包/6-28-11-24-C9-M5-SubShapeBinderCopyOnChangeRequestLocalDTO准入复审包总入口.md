@@ -18,6 +18,7 @@
 - live capability 唯一非空 `remaining_gaps` 为 `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache`，当前发布为 `known_gap_diagnostic` / `oracle_blocked`。
 - `cad-core/src/part_design/feature_shape_binder.cpp` 已在 CopyOnChange Enabled / Mutated / PartialLoad 时返回 `copy_on_change_full_temporary_document_cache_not_supported` diagnostic。
 - S0 冻结声明：full temporary-document copied-object cache 不得写成 supported 或 `backend_gap_requires_implementation`；S6 code gate 只在 S3 native evidence 与 S4 产品边界同时成立时打开。
+- S1 source/current 审计已关闭：FreeCAD full path 仍依赖 `_tmp_binder` / `_CopiedObjs` / `copyObject()` / `recomputeFeature(true)` / `_CopiedLink`；current `cad-core` 保持 `copy_on_change_full_temporary_document_cache_not_supported` diagnostic、`known_gap_diagnostic` / `oracle_blocked` capability 和 focused test 断言。
 
 ## 证明链条
 
@@ -60,7 +61,7 @@ C9-M4 queue empty
 | 方案 | `6-28-11-24-C9-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审包方案.md` | C9-M5 实施策略与 S0-S6 拆分。 |
 | 工作步骤总入口 | `工作步骤细分/6-28-11-24-【已实现】C9-M5工作步骤总入口.md` | S0-S6 队列索引。 |
 | S0 | `工作步骤细分/6-28-11-25-【已实现】C9-M5-S0-live基线与known-gap声明口径冻结.md` | 已冻结 live baseline、claim、forbidden claim 和状态词典。 |
-| S1 | `工作步骤细分/6-28-11-26-C9-M5-S1-FreeCAD源码与current覆盖候选矩阵.md` | 复核 FreeCAD source authority、current cad-core landing 和候选矩阵。 |
+| S1 | `工作步骤细分/6-28-11-26-【已实现】C9-M5-S1-FreeCAD源码与current覆盖候选矩阵.md` | 已复核 FreeCAD source authority、current cad-core landing 和候选矩阵。 |
 | S2 | `工作步骤细分/6-28-11-27-C9-M5-S2-范围准入与blocker矩阵.md` | 对 CopyOnChange property-state、full cache、DTO、non-goal 做准入路由。 |
 | S3 | `工作步骤细分/6-28-11-28-C9-M5-S3-native-CopyOnChange生命周期probe复审.md` | 复跑并增强 native CopyOnChange lifecycle probe。 |
 | S4 | `工作步骤细分/6-28-11-29-C9-M5-S4-request-local-DTO产品边界复审.md` | 审核是否存在可发布的 request-local DTO。 |
@@ -73,4 +74,4 @@ C9-M4 queue empty
 | backend gap classification | `矩阵/c9m5_copyonchange_backend_gap_classification.tsv` | oracle / backendGap / releaseGate 分类。 |
 | validation matrix | `矩阵/c9m5_copyonchange_validation_matrix.tsv` | 分层验收命令。 |
 
-当前工作步骤总入口索引和 S0 已标为 `【已实现】`；S1-S6 仍是待执行状态，矩阵除 S0 冻结行外仍是 seed，不是发布闸门结论。
+当前工作步骤总入口索引、S0 和 S1 已标为 `【已实现】`；S2-S6 仍是待执行状态。S1 已关闭 source/current 审计，但不改变 CopyOnChange known gap 发布口径。
