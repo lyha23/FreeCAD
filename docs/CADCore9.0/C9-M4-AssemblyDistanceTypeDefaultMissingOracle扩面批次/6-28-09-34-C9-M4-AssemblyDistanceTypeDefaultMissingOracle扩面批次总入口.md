@@ -19,6 +19,7 @@
 - S0 forbidden claims 已冻结：缺 oracle row 不得写 supported 或 backendGap；不得继承 C9-M3 accepted default rows；不得靠 fixture 名称、bbox、几何排序、adapter string rewrite 或输出修剪隐藏缺口；GUI/session、persistent solver state、cross-request placement cache、primitive frame generalization 仍是 non-goal。
 - S1 已关闭 source authority/current coverage：FreeCAD `getDistanceType()` 覆盖 13 个 missing default rows 的 Face/Face、Vertex/Face、Edge/Face 分类和 `swapJCS` ordering；FreeCAD `makeMbdJointDistance()` default branch 是 `ASMTPlanarJoint + offset=getJointDistance(joint)`；current cad-core/collector/capability/tests/fixture inventory 共同证明这些 rows 仍是缺 oracle default boundary，不是 supported/backendGap。
 - S2 已关闭 scope / blocker / non-goal 初始路由：FaceCone 交 S3，Point / Line + Surface 交 S4，CurveSurface 交 S5；缺 input / expected rows 只能保持 `native_oracle_required` / `notCollected`，S6 只有在 native expected-backed current mismatch 后才能写 `backend_gap_candidate` 或实现。capability/diagnostics 是 `release_gate` / `diagnostics_guard_review`，GUI/session/cache/guessing/string rewrite/output pruning 保持 non-goal 或 guard。
+- S3 已关闭 FaceCone native oracle：`CylinderCone`、`ConeCone`、`ConeTorus`、`ConeSphere` 均新增 c3m6 input / expected，FreeCADCmd `1.2.0 revision 20260519` native expected 为 solved + placement writeback，current cad-core 保持 `unsupported/default_boundary_not_mapped`，四行交 S6 `backend_gap_candidate`。
 
 ## 证明链条
 
@@ -64,7 +65,7 @@ C9-M3 queue empty
 | S0 | `工作步骤细分/6-28-09-35-【已实现】C9-M4-S0-live基线与缺oracle声明口径冻结.md` | 已冻结 live baseline、claim 和 forbidden claim。 |
 | S1 | `工作步骤细分/6-28-09-36-【已实现】C9-M4-S1-FreeCAD源码与current覆盖候选.md` | 已关闭 FreeCAD source authority、current cad-core landing 与 missing inventory。 |
 | S2 | `工作步骤细分/6-28-09-37-【已实现】C9-M4-S2-范围准入与blocker矩阵.md` | 已关闭 scope / blocker / non-goal / backend gap 初始路由。 |
-| S3 | `工作步骤细分/6-28-09-38-C9-M4-S3-FaceCone族native-oracle复审.md` | `CylinderCone`、`ConeCone`、`ConeTorus`、`ConeSphere` native oracle。 |
+| S3 | `工作步骤细分/6-28-09-38-【已实现】C9-M4-S3-FaceCone族native-oracle复审.md` | 已关闭 `CylinderCone`、`ConeCone`、`ConeTorus`、`ConeSphere` native oracle，四行路由为 S6 `backend_gap_candidate`。 |
 | S4 | `工作步骤细分/6-28-09-39-C9-M4-S4-PointLineSurface族native-oracle复审.md` | `PointCone`、`PointTorus`、`LineSphere`、`LineCone`、`LineTorus` native oracle。 |
 | S5 | `工作步骤细分/6-28-09-40-C9-M4-S5-CurveSurface族native-oracle复审.md` | `CurveCylinder`、`CurveSphere`、`CurveCone`、`CurveTorus` native oracle。 |
 | S6 | `工作步骤细分/6-28-09-41-C9-M4-S6-Oracle实现与发布闸门.md` | 根据 oracle 结果实现或 release gate。 |
@@ -75,4 +76,4 @@ C9-M3 queue empty
 | backend gap classification | `矩阵/c9m4_distance_type_default_missing_oracle_backend_gap_classification.tsv` | oracle / backendGap / releaseGate 分类。 |
 | validation matrix | `矩阵/c9m4_distance_type_default_missing_oracle_validation_matrix.tsv` | 分层验收命令。 |
 
-当前 S0-S2 已关闭，S3-S6 仍为待执行状态；矩阵是 source/current coverage、scope 准入和后续 oracle 路由依据，不是支持性发布结论。
+当前 S0-S3 已关闭，S4-S6 仍为待执行状态；矩阵是 source/current coverage、scope 准入和后续 oracle 路由依据，不是支持性发布结论。
