@@ -1,4 +1,4 @@
-# C10-M3-S1 FreeCAD 源码与 current 覆盖候选矩阵
+# 【已实现】C10-M3-S1 FreeCAD 源码与 current 覆盖候选矩阵
 
 ## 目标
 
@@ -58,6 +58,13 @@ git diff --check
 ```
 
 验收通过后，S1 文件才能重命名为 `6-29-01-10-【已实现】C10-M3-S1-FreeCAD源码与current覆盖候选矩阵.md`。
+
+## S1 收口结果
+
+- `c10m3_reference_shadow_recovery_source_candidates.tsv` 已把 `C10M3-SRC-101..104` 刷新到 live FreeCAD path、line anchor、symbol 和 source evidence。
+- `C10M3-SRC-201..204` 已补 current cad-core parser、ReferenceShadow recovery、ElementMap diagnostics、focused tests 与 capability landing；这些 landing 只作为 current 覆盖候选，不声明 supported。
+- `C10M3-SRC-104` 保留 required rg 对 `TopoShape.cpp` / `TopoShapeMapper.cpp` 的扫描结论，并记录 `TopoShapeExpansion.cpp` 为 `makeShapeWithElementMap` / `MapperHistory` 的 replacement implementation path；若实现再次迁移，S4 需按 reopen condition 复核。
+- `C10M3-BLOCKER-101=closed_s1`；S1 未运行 FreeCADCmd、未采 oracle、未修改 `cad-core/src`、tests、fixtures 或 capability。
 
 ## 非目标
 
