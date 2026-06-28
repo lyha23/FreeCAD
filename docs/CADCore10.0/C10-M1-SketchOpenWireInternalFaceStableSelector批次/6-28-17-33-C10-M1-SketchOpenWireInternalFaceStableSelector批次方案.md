@@ -55,14 +55,14 @@ S4 给 S6 的 gate 是 no-code：`C10M1-SCOPE-103=no_gap`，`C10M1-SCOPE-104=dia
 
 ## S5 InternalFace stable selector 与 reference 更新专项复审
 
-S5 根据 S3/S4 evidence 裁决 `Profile.StableSubList=InternalFaceN` without `ReferenceShadow` 是否可以进入 request-local implementation gate。批准条件是：当前 recompute 已经有 `Sketch.InternalShape` `NamedShape` 或 ElementMap 证据，能唯一解析到当前 `InternalFaceN`，并能生成 `elementReferenceUpdates`；缺证据或多解时保持 diagnostic。
+S5 已裁决为 `stable_selector_approved_candidate`：`Profile.StableSubList=InternalFaceN` without `ReferenceShadow` 可以进入 S6 gate，但只限当前 recompute 的 `Sketch.InternalShape` `NamedShape` / ElementMap 能唯一解析到当前 `InternalFaceN`。纯 without-ReferenceShadow selector 不要求发布 `elementReferenceUpdates`；只有存在 `ReferenceShadow` lifecycle 或恢复证据时才发布 `SubList`、`StableSubList`、`ShadowSub`、`ReferenceShadow`。缺 evidence、多解、split / deleted、non-face、raw `FaceN` 或几何猜测保持 diagnostic。
 
 ## S6 Oracle 实现与发布闸门
 
 S6 是唯一允许代码落地的步骤。实现路径：
 
-- code gate：实现 expected-backed near-tangent / coincident / complex open-wire 子集，或实现 S5 批准的 InternalFace stable selector；补 C++、fixtures、focused tests、capability / docs。
-- no-code gate：S3 的 count-level no-gap 与 S4 的 WireJoiner no-gap / retained diagnostic 已进入 no-code release 口径；如果 S5 也不批准 implementation gate，S6 只发布 retained diagnostic / known gap，写清 reopen condition，不改 C++。
+- code / audit gate：S3 的 count-level no-gap 与 S4 的 WireJoiner no-gap / retained diagnostic 不打开 C++；S6 只允许对 S5 批准的 InternalFace stable selector 边界审计或补齐 `profile_resolver`、reference update、focused tests、capability / docs publication evidence。
+- no-code gate：S3/S4 已进入 no-code release 口径；S6 对未批准、缺证据或多解路径只发布 retained diagnostic / known gap，写清 reopen condition，不改 C++。
 
 ## 验收分层
 
