@@ -19,6 +19,7 @@ CADCore12.0 承接 CADCore11.0 队列关闭后的下一轮 capability-first 规�
 - `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`，known gap 状态为 `known_gap_diagnostic`，route 为 `oracle_blocked`。
 - S1 source authority 已复核：capability/test/FreeCAD source/current landing 均可定位，`C12M1-BLOCKER-101` 已关闭；未采 oracle、未改 C++、未新增 fixture、未创建 implementation row。
 - S2 scope admission 已完成：`C12M1-SCOPE-001..401` 已补 owner step、current status、next step 和 close condition，`C12M1-BLOCKER-201` 已关闭，`implementation_candidate` 仅保留为 S6-only placeholder。
+- S3 CopyOnChange 剩余 gap 复审已完成：C9-M5 / C10-M4 仍只提供 property/session evidence 和 retained diagnostic 裁决，App::Link `documentObjectUpdates` 是 reference-only DTO 通道，不等同 SubShapeBinder `_tmp_binder` / `_CopiedObjs` / `copyObject` lifecycle；`C12M1-SCOPE-101`、`C12M1-BLOCKER-301`、`C12M1-CAT-001` 均关闭为 retained known gap / oracle blocked，无 C++ implementation candidate。
 - Assembly representative solver、Part Workbench Sweep / Filling / GeomPlate / Loft / ProjectOnSurface 等当前存在的是 representative / narrowed / historical evidence，不是已证明的 active backend gap。
 
 ## 队列检查

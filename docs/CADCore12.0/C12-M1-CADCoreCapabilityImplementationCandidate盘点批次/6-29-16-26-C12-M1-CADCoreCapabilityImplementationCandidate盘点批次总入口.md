@@ -65,7 +65,7 @@ live capability baseline
 | S0 live 基线 | `工作步骤细分/6-29-16-28-【已实现】C12-M1-S0-live能力基线与候选声明口径冻结.md` | 已冻结 C11 队列、capability JSON 和声明边界。 |
 | S1 source candidates | `工作步骤细分/6-29-16-29-【已实现】C12-M1-S1-FreeCAD源码与capability候选矩阵.md` | 已复核 FreeCAD / cad-core source authority 并关闭 `C12M1-BLOCKER-101`。 |
 | S2 scope review | `工作步骤细分/6-29-16-30-【已实现】C12-M1-S2-范围准入与blocker矩阵.md` | 已把候选行路由到 active gap、representative subset、narrowed evidence、non-goal 或 S6-only implementation placeholder。 |
-| S3 CopyOnChange audit | `工作步骤细分/6-29-16-31-C12-M1-S3-CopyOnChange剩余gap复审.md` | 复核唯一 active remaining gap 是否仍 retained。 |
+| S3 CopyOnChange audit | `工作步骤细分/6-29-16-31-【已实现】C12-M1-S3-CopyOnChange剩余gap复审.md` | 已复核唯一 active remaining gap 并关闭为 retained known gap / oracle blocked。 |
 | S4 representative audit | `工作步骤细分/6-29-16-32-C12-M1-S4-代表子集与产品边界候选复审.md` | 审计 Assembly / representative subset 是否具备产品授权和 expected。 |
 | S5 historical audit | `工作步骤细分/6-29-16-33-C12-M1-S5-历史non-parity与narrowed证据复审.md` | 审计 Part Workbench narrowed / non-parity evidence。 |
 | S6 release gate | `工作步骤细分/6-29-16-34-C12-M1-S6-NextBatch发布闸门与代码授权.md` | 选择下一 implementation package 或发布 no-code backlog gate。 |
@@ -76,4 +76,4 @@ live capability baseline
 | backend gap classification | `矩阵/c12m1_capability_candidate_backend_gap_classification.tsv` | next-batch 分类。 |
 | validation matrix | `矩阵/c12m1_capability_candidate_validation_matrix.tsv` | 验收命令索引。 |
 
-当前 S0、S1、S2 已实现，S3-S6 仍是待执行状态；矩阵已关闭 S0 baseline、S1 source authority blocker 与 S2 scope admission blocker。CopyOnChange、Assembly representative subset、Part Workbench historical evidence 与 next-batch release gate 仍需 S3-S6 逐步复审；S2 没有授权任何 C++ implementation row。
+当前 S0、S1、S2、S3 已实现，S4-S6 仍是待执行状态；矩阵已关闭 S0 baseline、S1 source authority blocker、S2 scope admission blocker 与 S3 CopyOnChange oracle/product gate。CopyOnChange 已保持 retained known gap / oracle blocked：没有 stable native copied-object expected、没有产品批准的 SubShapeBinder request-local DTO，也没有 current cad-core mismatch。Assembly representative subset、Part Workbench historical evidence 与 next-batch release gate 仍需 S4-S6 逐步复审；S3 没有授权任何 C++ implementation row。
