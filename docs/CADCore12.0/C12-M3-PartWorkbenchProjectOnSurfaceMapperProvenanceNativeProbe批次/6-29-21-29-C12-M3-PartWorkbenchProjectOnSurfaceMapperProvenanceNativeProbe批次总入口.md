@@ -45,6 +45,14 @@ S0 开包基线为 `HEAD=7c14aa6f7a`（`7c14aa6f7a docs: 完成 C12-M2 S6 oracle
 - `ElementMap` save/load 需要持久 native document / BREP roundtrip，按 product boundary 保持 rejected；invalid diagnostic 只提供 null/Invalid 状态，不形成 source-to-target provenance expected。
 - S4 总结论为 `native_hidden_retained`，`s5_input=null`，S5 current comparison 被阻断；`C12M3-BLOCKER-004` 关闭为 retained blocker。本步未做 current cad-core comparison，未改 C++、expected、tests、adapters 或 capability wording。
 
+## S5 live 记录
+
+- S5 起点命令已执行：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=c7a60c98bd`，`git log -1 --oneline=c7a60c98bd docs: 完成 C12-M3 S4 原生 provenance probe`，`git -c core.quotepath=false status --short -uall` 输出为空。
+- 已审计 S4 artifact `docs/temp/6-29-23-05-c12m3-s4-project-on-surface-native-provenance-probe-output.json`：`expected_summary.c12m3_classification=native_hidden_retained`，`s5_input=null`，12 条 observation 只有 `native_hidden_retained` / `product_boundary_rejected`，无 `native_provenance_expected_ready` row。
+- S5 按 no-comparison 关闭，证据为 `docs/temp/6-29-22-40-c12m3-s5-project-on-surface-no-comparison-evidence.json`；未运行 current mismatch，未创建 current comparison artifact、`current_covered` 或 `backend_gap_candidate`。
+- C5-M9 source-backed known-gap expected 保持 context/delete-condition evidence，不能替代 native expected；native-hidden row 未被比较。
+- Implementation gate 未满足，C12-M3 仍不授权 C++、fixtures expected、tests、adapters 或 capability wording 改动。
+
 ## 最小完整语义批次
 
 本包覆盖同一条 FreeCAD 调用链和同一类 expected：`src/Mod/Part/App/FeatureProjectOnSurface.cpp` 生成 projected wire / face / compound，`src/Mod/Part/App/TopoShapePyImp.cpp` 与 `src/Mod/Part/App/TopoShapeExpansion.cpp` 暴露或维护 ElementMap / MapperHistory。C12-M3 不拆成单个 fixture，因为 source ownership、split fragments、face rebuild 和 compound result 都依赖同一 provenance 可观测性。
@@ -68,7 +76,7 @@ S0 开包基线为 `HEAD=7c14aa6f7a`（`7c14aa6f7a docs: 完成 C12-M2 S6 oracle
 | S2 | 范围准入与 blocker 矩阵 | 区分 request-local mapper provenance、native-hidden、collector bug 和 product boundary。 |
 | S3 | NativeProvenanceProbe harness 与 artifact schema | 定义 C12-M3 provenance artifact 字段、probe ids、失败分类和复用 C12-M2 harness 的方式。 |
 | S4 | ProjectOnSurface 原生 provenance 可观测性 probe | 已运行 native probe；原生 history 仍隐藏，S5 comparison 被阻断。 |
-| S5 | Current comparison 与 implementation gate 审计 | 仅对 expected-ready 行比较 current cad-core；不能比较 native-hidden 行。 |
+| S5 | Current comparison 与 implementation gate 审计 | 已审计 S4 artifact；无 expected-ready row，S5 no-comparison 关闭，不创建 implementation gate。 |
 | S6 | 发布闸门 | 发布 `native_hidden_retained` / `current_covered` / `backend_gap_candidate`，并给出下一包授权或 no-code 结论。 |
 
 ## 发布闸门

@@ -1,4 +1,4 @@
-# C12-M3 S5 Current comparison 与 implementation gate 审计
+# C12-M3 S5 Current comparison 与 implementation gate 审计【已实现】
 
 ## 目标
 
@@ -30,6 +30,15 @@
 - 不对 native-hidden row 做 comparison。
 - 不把 C5-M9 source-backed known-gap expected 当成 native expected 直接通过。
 - 不跑全量 FreeCAD build 或全量 CI。
+
+## S5 结果
+
+- S5 live 起点已记录：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=c7a60c98bd`（`c7a60c98bd docs: 完成 C12-M3 S4 原生 provenance probe`），起点 `git status --short -uall` 输出为空。
+- 已审计 S4 artifact `docs/temp/6-29-23-05-c12m3-s4-project-on-surface-native-provenance-probe-output.json`：`expected_summary.c12m3_classification=native_hidden_retained`，`s5_input=null`，12 条 observation 的分类只有 `native_hidden_retained` 与 `product_boundary_rejected`，`native_provenance_expected_ready` 计数为 0。
+- 因没有 expected-ready row，S5 按 no-comparison 关闭：未运行 current mismatch，未创建 current comparison artifact，未创建 `current_covered` 或 `backend_gap_candidate` 分类。
+- C5-M9 source-backed known-gap expected 仍只作为 context/delete-condition evidence，不能替代 FreeCAD native expected；native-hidden row 未被比较。
+- No-comparison 证据记录在 `docs/temp/6-29-22-40-c12m3-s5-project-on-surface-no-comparison-evidence.json`。
+- Implementation gate 未满足，C12-M3 仍不授权 `cad-core/src`、`include`、fixtures expected、tests、adapters 或 capability wording 改动。
 
 ## 验收
 

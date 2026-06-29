@@ -48,6 +48,14 @@ C12-M2 已确认 `FeatureProjectOnSurface` 原生对象可以 build 几何，但
 - `PropertyPartShape` ElementMap save/load 仍是持久 native document / BREP roundtrip 语境，按 S2 product boundary 保持 `product_boundary_rejected`；invalid diagnostic 仅得到 null/Invalid 状态或 silent null shape，不形成 source-to-target provenance expected。
 - S4 总结论为 `native_hidden_retained`，`s5_input=null`，`current_comparison_path=blocked: no native_provenance_expected_ready observation; S5 comparison is blocked`。`C12M3-BLOCKER-004` 关闭为 retained blocker；本步未运行 current `cad-core` comparison，未修改 C++、fixtures expected、tests、adapters 或 capability wording。
 
+## S5 Current comparison gate audit
+
+- S5 live 起点已记录：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=c7a60c98bd`（`c7a60c98bd docs: 完成 C12-M3 S4 原生 provenance probe`），起点 `git status --short -uall` 为 clean。
+- S5 复核 S4 artifact 后确认：12 条 observation 中没有 `native_provenance_expected_ready`，`s5_input=null`，`current_comparison_path` 仍为 blocked。
+- S5 因此关闭为 no comparison：未运行 current mismatch，未创建 current comparison artifact，未创建 `current_covered` / `backend_gap_candidate`，也未把 C5-M9 source-backed known-gap expected 当 native expected。
+- No-comparison 证据为 `docs/temp/6-29-22-40-c12m3-s5-project-on-surface-no-comparison-evidence.json`；`C12M3-BLOCKER-005` 关闭为 `closed_s5_no_comparison`。
+- Implementation gate 未满足，C12-M3 仍不授权 C++、fixtures expected、tests、adapters 或 capability wording 改动。
+
 ## 入口
 
 - 总入口：`6-29-21-29-C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次总入口.md`
