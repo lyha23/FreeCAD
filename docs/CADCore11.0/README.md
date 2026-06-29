@@ -6,6 +6,8 @@ C11-M1 转向 Part Workbench Sweep `Location` overload native parity 复开。C6
 
 本批次目标不是把 C6-M4 重新实现一遍，而是复开 FreeCAD native oracle：如果 `FreeCADCmd` / native helper 能稳定采到 `add(Profile, Location, WithContact, WithCorrection)` 与 combined auxiliary / tolerance / located section 的 `shape_summary`，再比较 current cad-core product contract 是否能升级为 FreeCAD parity；如果仍然不可采，则继续保留 non-parity product contract 和 narrowed evidence，不新增 C++。
 
+当前 C11-M1 S3 已复跑本机 FreeCADCmd：FreeCAD `1.2.0 revision 20260519` / OCCT `7.8.1` 仍在 Location overload `builder.build()` 阶段返回 `OCCError: NCollection_Array1::Value`，advanced combined 保留为 located dependency-retained；因此暂不新增 C11-M1 native expected 或 C++ gate。
+
 ## 入口
 
 - C11-M1 总入口：`C11-M1-PartSweepLocationOverloadNativeParity复开批次/6-29-10-10-C11-M1-PartSweepLocationOverloadNativeParity复开批次总入口.md`
