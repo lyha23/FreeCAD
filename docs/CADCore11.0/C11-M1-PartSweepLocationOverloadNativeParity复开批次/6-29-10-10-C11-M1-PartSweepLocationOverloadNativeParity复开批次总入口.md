@@ -11,9 +11,10 @@
 
 ## 当前基线
 
-- C10-M1 到 C10-M4 队列均已关闭；C10-M4 把 CopyOnChange 继续保留为 `known_gap_diagnostic` / `oracle_blocked`。
+- S0 live 基线已冻结：`pwd=/home/user/Chili3DProject/FreeCAD`，`HEAD=a7df521d6a`（`a7df521d6a test: 同步 c3m6 Assembly expected 状态`），起点工作区干净；C10-M1 到 C10-M4 队列均已关闭。
+- C10-M4 把 CopyOnChange 继续保留为 `known_gap_diagnostic` / `oracle_blocked`；CopyOnChange 不进入 C11-M1。
 - C6-M4 队列已关闭；located profile 与 advanced combined 已作为 CAD Core product contract non-parity 发布，c5m10 expected 只保留 wrapper build blocker / request metadata evidence。
-- 当前工作区可能包含与本包无关的 `cad-core/fixtures/c3m6/expected/*.freecad.json` 本地改动；C11-M1 只编辑 `docs/CADCore11.0` 文档和矩阵。
+- 当前 live capability / adapter test 仍能追溯两个 narrowed wrapper blocker、`freecadcmd_location_overload_status=notCollected` 和 `part_workbench.sweep.remaining_gaps=[]`；C11-M1 只编辑本批次文档和矩阵，直到 S3/S4 证明 backend gap。
 
 ## 证明链条
 
@@ -50,7 +51,7 @@
 | --- | --- | --- |
 | 方案 | `6-29-10-10-C11-M1-PartSweepLocationOverloadNativeParity复开批次方案.md` | 说明 C11-M1 背景、实施原则、S0-S6 拆分和验收分层。 |
 | 工作步骤总入口 | `工作步骤细分/6-29-10-11-【已实现】C11-M1工作步骤总入口.md` | goal 队列索引；自身已完成，S0-S6 仍待执行。 |
-| S0 | `工作步骤细分/6-29-10-12-C11-M1-S0-live基线与声明口径冻结.md` | 冻结 live capability、dirty boundary、forbidden claims。 |
+| S0 | `工作步骤细分/6-29-10-12-【已实现】C11-M1-S0-live基线与声明口径冻结.md` | 冻结 live capability、dirty boundary、forbidden claims。 |
 | S1 | `工作步骤细分/6-29-10-13-C11-M1-S1-FreeCAD源码与wrapper候选矩阵.md` | 复核 FreeCAD source、current cad-core source 和 source candidates。 |
 | S2 | `工作步骤细分/6-29-10-14-C11-M1-S2-范围准入与blocker矩阵.md` | 路由 scope / blocker / nonGoal / backendGap。 |
 | S3 | `工作步骤细分/6-29-10-15-C11-M1-S3-FreeCADCmd原生LocationOverload复采集.md` | 复采集 native Location overload 与 advanced combined oracle。 |
@@ -64,4 +65,4 @@
 | backend gap classification | `矩阵/c11m1_part_sweep_location_overload_backend_gap_classification.tsv` | implementation gate 分类。 |
 | validation matrix | `矩阵/c11m1_part_sweep_location_overload_validation_matrix.tsv` | 文档、oracle、focused tests 和 release gate 命令。 |
 
-当前 S0-S6 都是待执行状态；矩阵是 seed，不是发布闸门结论。
+当前 S0 已实现，S1-S6 仍是待执行状态；矩阵除 S0 baseline 行外仍是 seed，不是发布闸门结论。
