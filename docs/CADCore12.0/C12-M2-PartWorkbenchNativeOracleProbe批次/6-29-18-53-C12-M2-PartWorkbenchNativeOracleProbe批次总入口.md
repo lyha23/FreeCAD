@@ -14,7 +14,7 @@ C12-M2 覆盖同一个发布问题：Part Workbench retained rows 是否能升�
 
 - S0/S1 统一冻结 live baseline、source authority 和既有 probe 证据。
 - S2 统一判断 request-local/product boundary、helper/native-hidden blocker 和当前 cad-core 可比较性。
-- S3 建立 probe harness / FreeCADCmd / artifact schema 的共同准入。
+- S3 建立 probe harness / FreeCADCmd / artifact schema 的共同准入；当前 schema 为 `c12m2.native-probe-artifact.v1`，FreeCADCmd baseline 为 `1.2.0 revision 20260519` / OCCT `7.8.1`，runtime artifact 位于 `docs/temp/6-29-20-12-c12m2-freecadcmd-baseline-native-probe.json`。
 - S4 处理更接近 DocumentObject / native Part feature 的 Sweep 与 Loft。
 - S5 处理 helper / wrapper / mapper 证据更重的 Filling、GeomPlate 与 ProjectOnSurface。
 - S6 只发布 oracle 结果和后续授权，不在本包写代码。

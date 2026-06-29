@@ -40,6 +40,19 @@ S2 已逐行复核 C12M2-SRC/SCOPE/CAT/PROBE/BLOCKER：Sweep 为 `probe_admitted
 
 全局 blocker 保留为：FreeCADCmd runtime baseline（S3）、probe artifact schema（S3）和 current cad-core comparison path（S6）。`C12M2-BLOCKER-003` 保持 `closed_s1_none_found`。Non-goal registry 已覆盖 GUI/session、persistent geometry / cross-request native cache、full BREP product API、crash/timeout/notCollected/helper lifecycle 噪声，以及 API/output-order provenance guessing。Backend gap classification 仍保持 `oracle_probe_candidate` 或 `retained_no_expected`，代码 gate 关闭。
 
+## S3 harness / FreeCADCmd 基线
+
+S3 已固定 C12-M2 native probe artifact schema 为 `c12m2.native-probe-artifact.v1`，并提供 file-backed harness，避免 FreeCADCmd 长 `-c` 字符串不稳定。S4/S5 probe artifact 必须记录 probe id、family、case id、source authority、input artifact、FreeCADCmd path/version、OCCT/LibPack、命令、stdout/stderr、exit code、异常分类、expected summary、request-local 判定、current comparison path 和结论。
+
+S3 baseline artifact：
+
+- schema：`docs/temp/6-29-20-12-c12m2-native-probe-schema.md`
+- harness：`docs/temp/6-29-20-12-c12m2-native-probe-harness.py`
+- baseline probe：`docs/temp/6-29-20-12-c12m2-freecadcmd-baseline-probe.py`
+- baseline output：`docs/temp/6-29-20-12-c12m2-freecadcmd-baseline-native-probe.json`
+
+当前 FreeCADCmd baseline 为 `/Users/li/.cargo/bin/freecadcmd`，FreeCAD `1.2.0 revision 20260519`，OCCT `7.8.1`，LibPack / LibPackVersion 为空。该 baseline 的 `expected_ready` 只表示 runtime metadata 可读，不表示任何 family geometry expected 已发布；S4/S5 仍需按 family 产出 `expected_ready`、`native_probe_blocked`、`helper_blocked`、`native_hidden`、`sandbox_runtime_limit`、`collector_bug`、`product_boundary_rejected` 或 `retained_no_expected`。
+
 ## 范围
 
 | family | C12-M1 retained reason | C12-M2 probe question | owner step |

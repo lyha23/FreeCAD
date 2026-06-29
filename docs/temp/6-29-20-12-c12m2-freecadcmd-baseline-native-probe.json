@@ -1,0 +1,86 @@
+{
+  "command": [
+    "/Users/li/.cargo/bin/freecadcmd",
+    "-c",
+    "import sys; sys.argv = [\"/Users/li/Chili3DProject/FreeCAD/docs/temp/6-29-20-12-c12m2-freecadcmd-baseline-probe.py\"]; exec(compile(open('/Users/li/Chili3DProject/FreeCAD/docs/temp/6-29-20-12-c12m2-freecadcmd-baseline-probe.py', encoding='utf-8').read(), '6-29-20-12-c12m2-freecadcmd-baseline-probe.py', 'exec'))"
+  ],
+  "conclusion": "expected_ready",
+  "current_comparison_path": "S6 only compares current cad-core after S4/S5 produce a family expected_ready artifact.",
+  "exception_classification": "expected_ready",
+  "expected_summary": {
+    "area": null,
+    "bbox": null,
+    "diagnostics": [
+      "S3 collected FreeCADCmd version/OCCT/LibPack only; no family native expected was collected."
+    ],
+    "freecad_version": "1.2.0 revision 20260519",
+    "kind": "runtime_baseline",
+    "occt_version": "7.8.1",
+    "runtime_ready": true,
+    "shape_kind": null,
+    "subshape_counts": null,
+    "volume": null
+  },
+  "freecadcmd": {
+    "app_home_path": "/Applications/FreeCAD.app/Contents/Resources/",
+    "freecad_libs": "",
+    "libpack": "",
+    "libpack_version": "",
+    "occt_version": "7.8.1",
+    "path": "/Users/li/.cargo/bin/freecadcmd",
+    "raw_probe_payload": {
+      "app_home_path": "/Applications/FreeCAD.app/Contents/Resources/",
+      "build_revision": "20260519 (Git shallow)",
+      "build_revision_date": "2026/05/19 20:59:45",
+      "config_occt_version": "7.8.1",
+      "env_FREECAD_LIBPACK": null,
+      "freecad_libs": "",
+      "freecad_version": [
+        "1",
+        "2",
+        "0",
+        "20260519 (Git shallow)",
+        "Unknown",
+        "2026/05/19 20:59:45",
+        "(HEAD detached at 5a5d8d042)",
+        "5a5d8d0425fdb440fb5dcb47f1c48422d07d3267"
+      ],
+      "freecad_version_string": "1.2.0 revision 20260519",
+      "libpack": "",
+      "libpack_version": "",
+      "occt_version": "7.8.1",
+      "python_version": "3.11.14",
+      "run_mode": "Cmd"
+    },
+    "version": "1.2.0 revision 20260519",
+    "version_tuple": [
+      "1",
+      "2",
+      "0",
+      "20260519 (Git shallow)",
+      "Unknown",
+      "2026/05/19 20:59:45",
+      "(HEAD detached at 5a5d8d042)",
+      "5a5d8d0425fdb440fb5dcb47f1c48422d07d3267"
+    ]
+  },
+  "input_artifact": "docs/temp/6-29-20-12-c12m2-freecadcmd-baseline-probe.py",
+  "notes": [],
+  "probe": {
+    "case_id": "freecadcmd_version_occt_libpack",
+    "family": "global_runtime_baseline",
+    "id": "C12M2-PROBE-S3-RUNTIME"
+  },
+  "process": {
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "C12M2_PROBE_PAYLOAD={\"app_home_path\": \"/Applications/FreeCAD.app/Contents/Resources/\", \"build_revision\": \"20260519 (Git shallow)\", \"build_revision_date\": \"2026/05/19 20:59:45\", \"config_occt_version\": \"7.8.1\", \"env_FREECAD_LIBPACK\": null, \"freecad_libs\": \"\", \"freecad_version\": [\"1\", \"2\", \"0\", \"20260519 (Git shallow)\", \"Unknown\", \"2026/05/19 20:59:45\", \"(HEAD detached at 5a5d8d042)\", \"5a5d8d0425fdb440fb5dcb47f1c48422d07d3267\"], \"freecad_version_string\": \"1.2.0 revision 20260519\", \"libpack\": \"\", \"libpack_version\": \"\", \"occt_version\": \"7.8.1\", \"python_version\": \"3.11.14\", \"run_mode\": \"Cmd\"}\n",
+    "timeout_seconds": 60
+  },
+  "request_local": {
+    "judgement": "not_applicable_runtime_baseline",
+    "notes": "S3 collects runtime metadata only; S4/S5 decide family request-local expected boundaries."
+  },
+  "schema_version": "c12m2.native-probe-artifact.v1",
+  "source_authority": "cad-core/tools/collect_freecad_expected.py::run_via_freecadcmd plus FreeCAD.ConfigDump and Part.OCC_VERSION"
+}

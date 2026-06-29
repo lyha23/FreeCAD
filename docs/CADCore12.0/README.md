@@ -33,6 +33,7 @@ CADCore12.0 承接 CADCore11.0 队列关闭后的下一轮 capability-first 规�
 - C12-M2 继承 C12-M1 S6 `no_code_backlog_gate`：代码 gate 仍关闭，不授权 `cad-core/src`、`cad-core/include`、fixtures、expected、tests、adapters、capability wording 或 full build 改动；本包只为 Sweep / Filling / GeomPlate / Loft / ProjectOnSurface 采集或阻断 stable native/request-local expected。
 - C12-M2 S1 source 基线已完成：Sweep / Filling / GeomPlate / Loft / ProjectOnSurface 均有 exact FreeCAD source authority、关键函数/短句和 existing expected / historical probe output / no-code retained 分类；`C12M2-BLOCKER-003` 关闭为无缺 source-authority 行。本步未运行 FreeCADCmd，未改代码、fixtures、expected、tests、adapters 或 capability wording。
 - C12-M2 S2 范围准入已完成：Sweep 为 `probe_admitted`；Filling 为 `helper_blocked`；GeomPlate / ProjectOnSurface 为 `needs_probe_design`；Loft 为 `native_hidden_blocked`。FreeCADCmd baseline、artifact schema、current comparison、helper lifecycle、native-hidden 和 mapper/provenance blocker 已入队；backend classification 仍为 `oracle_probe_candidate` / `retained_no_expected`，不授权代码实现包。
+- C12-M2 S3 通用 native probe harness 已完成：schema 固定为 `c12m2.native-probe-artifact.v1`，baseline artifact 为 `docs/temp/6-29-20-12-c12m2-freecadcmd-baseline-native-probe.json`；FreeCADCmd `/Users/li/.cargo/bin/freecadcmd` 可启动并读取 FreeCAD `1.2.0 revision 20260519`、OCCT `7.8.1`，LibPack / LibPackVersion 为空。S3 的 `expected_ready` 仅表示 runtime metadata ready，不发布 family geometry expected。
 
 ## 重开条件
 
