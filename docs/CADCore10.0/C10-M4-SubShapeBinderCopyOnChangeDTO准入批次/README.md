@@ -6,6 +6,15 @@ C10-M4 承接 C10-M3 队列关闭后的 live capability 剩余项：`part_design
 
 本包目标是做 SubShapeBinder `BindCopyOnChange` 的 request-local DTO 准入：先证明 FreeCAD native copied-object lifecycle 能稳定转成无状态请求证据，再决定是否把 cad-core 现有 `documentObjectUpdates` 机制扩到 SubShapeBinder。若证据或产品边界不足，S6 只发布 no-code retained diagnostic / release gate。
 
+## S0 live 基线
+
+- `pwd=/home/user/Chili3DProject/FreeCAD`
+- S0 起点 HEAD：`cd8cd95fa2`（`cd8cd95fa2 docs: 新增 C10-M4 CopyOnChange DTO 准入方案`）。
+- S0 起点 dirty state：`git -c core.quotepath=false status --short -uall` 无输出，工作区干净。
+- 队列状态：C10-M1 / C10-M2 / C10-M3 队列为空；C10-M4 在 S0 执行前下一步为 `6-29-03-31-C10-M4-S0-live基线与声明口径冻结.md`，S0 完成后仅 S1-S6 待执行。
+- retained gap：`cad-core/src/runtime/capability_contract.cpp` 仍发布 `copy_on_change_full_temporary_document_cache` 为 `known_gap_diagnostic` / `oracle_blocked`，diagnostic 为 `copy_on_change_full_temporary_document_cache_not_supported`，`remaining_gaps=["copy_on_change_full_temporary_document_cache"]`。
+- S0 冻结的 forbidden claims：不声明 full temporary-document cache supported；不声明 backend session、persistent copied object、cross-request BREP / TopoDS / NamedShape / ElementMap cache supported；不把 App::Link CopyOnChange current DTO 自动等同为 SubShapeBinder CopyOnChange supported。
+
 ## 入口
 
 - 总入口：`6-29-03-29-C10-M4-SubShapeBinderCopyOnChangeDTO准入批次总入口.md`

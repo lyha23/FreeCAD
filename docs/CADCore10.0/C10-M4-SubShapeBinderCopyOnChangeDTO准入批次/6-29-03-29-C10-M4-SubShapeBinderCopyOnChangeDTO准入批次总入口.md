@@ -8,9 +8,11 @@
 
 - 仓库：`/home/user/Chili3DProject/FreeCAD`
 - seed HEAD：`3c21f08005`
+- S0 live HEAD：`cd8cd95fa2`（`cd8cd95fa2 docs: 新增 C10-M4 CopyOnChange DTO 准入方案`）。
+- S0 起始 dirty state：工作区干净。
 - 上游闭环：C10-M1 / C10-M2 / C10-M3 队列为空。
 - live retained gap：`copy_on_change_full_temporary_document_cache_not_supported`。
-- 当前包状态：S0-S6 待执行；工作步骤索引已实现。
+- 当前包状态：S0 live 基线已冻结；S1-S6 待执行；工作步骤索引已实现。
 
 ## 关键判断
 
