@@ -14,6 +14,8 @@ C11-M2 的目标不是重做 C6-M5，而是重新采集当前 FreeCAD / OCCT 下
 
 当前 C11-M2 S3 已复跑本机 FreeCADCmd：FreeCAD `1.2.0 revision 20260519` / OCCT `7.8.1` 下 Surface helper 仍返回 `TypeError: argument 2 must be , not Part.Face`，Supports/Orders G1/G2 同样无法稳定采集，PtsOnCurve / TolG1+TolG2 / MaxSegments / all params 与 non-boundary support/order 仍有 SIGSEGV / timeout / no-payload evidence；direct wrapper controls 只作为 diagnostic dependency，不进入 request-local expected。
 
+C11-M2 S6 已关闭为 docs-only no-code retained non-parity release gate：S4 没有 stable native expected 或 `backend_gap_candidate`，S5 已关闭 non-goal 边界；因此不新增 C11-M2 expected / fixtures，不修改 C++、tests、capability、collectors，继续保留 `part_workbench.filling.status=supported_expected_backed_plus_c6m5_product_contract_non_parity`、`remaining_gaps=[]` 与 `historical_native_helper_evidence`。
+
 ## 入口
 
 - C11-M1 总入口：`C11-M1-PartSweepLocationOverloadNativeParity复开批次/6-29-10-10-C11-M1-PartSweepLocationOverloadNativeParity复开批次总入口.md`
