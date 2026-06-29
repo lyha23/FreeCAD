@@ -12,7 +12,7 @@
 - S0 起始 dirty state：工作区干净。
 - 上游闭环：C10-M1 / C10-M2 / C10-M3 队列为空。
 - live retained gap：`copy_on_change_full_temporary_document_cache_not_supported`。
-- 当前包状态：S0 live 基线已冻结；S1-S6 待执行；工作步骤索引已实现。
+- 当前包状态：S0-S6 已完成；工作步骤索引已实现；C10-M4 队列已关闭。
 
 ## 关键判断
 
@@ -23,7 +23,15 @@ S6 只有在以下条件同时成立时才能进入 C++ 实现：
 3. current cad-core 与该 native expected 存在可复现 mismatch。
 4. 实现落点保持在 `part_design` / `app` / `runtime` / capability / tests，不把业务逻辑塞到 adapter 输出修剪。
 
-任一条件不成立，S6 发布 no-code retained diagnostic / release gate。
+任一条件不成立，S6 发布 no-code retained diagnostic / release gate。本轮 S3 copied-object evidence 为 `notCollected`，S4 DTO 边界为 reference-only / `product_decision_needed` / `current_retained_diagnostic`，S5 no-session non-goal 已关闭且没有 backend gap candidate；S6 因此只发布 docs-only no-code retained diagnostic / release gate。
+
+## 发布闸门结果
+
+- S6 执行起点 HEAD：`376e3dba31`（`docs: 完成 C10-M4 S5 non-goal 边界复审`），起点工作区干净。
+- 当前矩阵没有任何 `route` / `current_status` / `status` 列被分类为 `backend_gap_candidate`；实现条件未成立。
+- 未修改 `cad-core/src`、tests、fixtures、expected、probe、collector 或 capability；未运行 build / focused tests。
+- `cad-core/src/runtime/capability_contract.cpp` 继续保留 `copy_on_change_full_temporary_document_cache` 的 `known_gap_diagnostic` / `oracle_blocked` / `remaining_gaps` 口径，unsupported `BindCopyOnChange` / `PartialLoad` 继续输出结构化 diagnostic。
+- `C10M4-SCOPE-401=release_closed`，`C10M4-BLOCKER-601=closed_s6`，`C10M4-CAT-105=release_closed`；队列为空。
 
 ## 文件结构
 

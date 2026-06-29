@@ -2,9 +2,9 @@
 
 ## 当前定位
 
-C10-M4 承接 C10-M3 队列关闭后的 live capability 剩余项：`part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache`。这个剩余项目前仍是 `known_gap_diagnostic` / `oracle_blocked`，不是直接实现 full temporary-document cache 的许可。
+C10-M4 承接 C10-M3 队列关闭后的 live capability 剩余项：`part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache`。这个剩余项最终仍是 `known_gap_diagnostic` / `oracle_blocked`，不是直接实现 full temporary-document cache 的许可。
 
-本包目标是做 SubShapeBinder `BindCopyOnChange` 的 request-local DTO 准入：先证明 FreeCAD native copied-object lifecycle 能稳定转成无状态请求证据，再决定是否把 cad-core 现有 `documentObjectUpdates` 机制扩到 SubShapeBinder。若证据或产品边界不足，S6 只发布 no-code retained diagnostic / release gate。
+本包目标是做 SubShapeBinder `BindCopyOnChange` 的 request-local DTO 准入：先证明 FreeCAD native copied-object lifecycle 能稳定转成无状态请求证据，再决定是否把 cad-core 现有 `documentObjectUpdates` 机制扩到 SubShapeBinder。本轮 S3-S5 未满足 native copied-object evidence、产品 DTO approval 与 current mismatch 的共同条件，S6 已发布 no-code retained diagnostic / release gate。
 
 ## S0 live 基线
 
@@ -38,7 +38,7 @@ C10-M4 承接 C10-M3 队列关闭后的 live capability 剩余项：`part_design
 - App::Link 路径已复核：`cad-core/src/app/copy_on_change.cpp` 和 `cad-core/src/app/link.cpp` 使用当前 request graph 中的 `LinkCopyOnChange`、`LinkedObject`、`LinkCopyOnChangeSource`、`LinkCopyOnChangeGroup`、`LinkCopyOnChangeTouched` 与依赖图生成 `documentObjectUpdates`，覆盖 group create/update、copied object create/update、dependency rewrite、history preserve 与 link property writeback；`cad-core/tests/test_p8_features.py` 会把这些 updates 应用回下一次请求 graph，`cad-core/tests/test_adapters.py` 和 capability contract 也声明这是 App::Link `documentObjectUpdates` transport。
 - DTO 边界四问结论：当前 App::Link 请求携带的是前端已经持久化在 DocumentObject graph 里的 copied-object snapshot 加 CopyOnChange link properties/touched state，不是 SubShapeBinder 的 `_CopiedObjs` snapshot、`copyObject` intent 或 source mutation evidence；App::Link 可返回 `documentObjectUpdates`，缺 source 时也可返回 diagnostic；前端写回方式是把 create/update properties 应用到 DocumentObject graph 后再发下一次请求；SubShapeBinder 的 `_tmp_binder`、`_CopiedObjs`、`copyObject`、`recomputeFeature(true)`、temporary document/cache 和 copied-object ElementMap lifecycle 仍 unsupported。
 - SubShapeBinder 当前路径已复核：`cad-core/src/part_design/feature_shape_binder.cpp` 对 `BindMode=Detached` 只返回清空 `Support` 的 request-local `documentObjectUpdates`；对 `BindCopyOnChange=Enabled/Mutated` 或 `PartialLoad=True` 只发布 `copy_on_change_full_temporary_document_cache_not_supported` retained diagnostic 和 metadata，不产生 copied-object `documentObjectUpdates`。
-- 因 S3 未采到 request-local copied-object expected，S4 不能比较出 current mismatch，也不能进入 S6 C++ 实现。`C10M4-BLOCKER-401` 关闭为 `product_decision_needed` / `current_retained_diagnostic` / `release_gate`；S5/S6 仍保持 pending。
+- 因 S3 未采到 request-local copied-object expected，S4 不能比较出 current mismatch，也不能进入 S6 C++ 实现。`C10M4-BLOCKER-401` 关闭为 `product_decision_needed` / `current_retained_diagnostic` / `release_gate`；S5 已继续复核 no-session non-goal。
 
 ## S5 non-goal 边界复审结果
 
@@ -46,7 +46,15 @@ C10-M4 承接 C10-M3 队列关闭后的 live capability 剩余项：`part_design
 - `non_goal_registry.tsv` 已覆盖并保留 forbidden claims：backend session、persistent temporary document/cache、persistent copied object、cross-request BREP / TopoDS / NamedShape / ElementMap cache、GUI lifecycle、adapter repair、frontend mock、unsupported support claim、App::Link lifecycle 非等价，以及 `ReferenceShadow.brep` 不得扩展为 full object BREP persistence。
 - reopen condition 已收紧：persistent backend state 只能由明确架构批准重开；request-local CopyOnChange 替代方案必须同时具备 native copied-object evidence、product DTO approval 和 current cad-core mismatch。
 - `adapter` 只能透传 core 产生的 `documentObjectUpdates` / diagnostics，不能生成业务语义；前端 mock 也不能替代 cad-core core semantics。
-- unsupported `BindCopyOnChange=Enabled/Mutated` 与 `PartialLoad=True` 必须继续发布结构化 diagnostic，当前分类保持 `diagnostic_retained` / `release_gate`。`C10M4-BLOCKER-501` 已关闭为 `closed_s5_diagnostic_retained`；S6 仍 pending。
+- unsupported `BindCopyOnChange=Enabled/Mutated` 与 `PartialLoad=True` 必须继续发布结构化 diagnostic，当前分类保持 `diagnostic_retained` / `release_gate`。`C10M4-BLOCKER-501` 已关闭为 `closed_s5_diagnostic_retained`。
+
+## S6 发布闸门结果
+
+- S6 起点 HEAD：`376e3dba31`（`376e3dba31 docs: 完成 C10-M4 S5 non-goal 边界复审`），起点工作区干净。
+- 矩阵列级检查确认 `route` / `current_status` / `status` 当前列中没有 `backend_gap_candidate`，只有未来 reopen condition 或词汇说明继续提到该词。
+- S6 未改 C++，未新增 fixture / probe / collector，未运行 build / focused tests；本轮只消费 S3-S5 证据并关闭文档发布闸门。
+- capability contract 继续发布 `copy_on_change_full_temporary_document_cache` 为 `known_gap_diagnostic` / `oracle_blocked`，`remaining_gaps=["copy_on_change_full_temporary_document_cache"]` 不变；unsupported `BindCopyOnChange=Enabled/Mutated` 与 `PartialLoad=True` 继续由 `copy_on_change_full_temporary_document_cache_not_supported` 结构化 diagnostic 表达。
+- `C10M4-SCOPE-401=release_closed`，`C10M4-CAT-105=release_closed`，`C10M4-BLOCKER-601=closed_s6`；C10-M4 队列关闭。
 
 ## 入口
 
@@ -63,7 +71,7 @@ C10-M4 承接 C10-M3 队列关闭后的 live capability 剩余项：`part_design
 - S3：CopyOnChange native probe 与 DTO evidence 专项复审（已关闭为 `diagnostic_retained` / `notCollected`，无 C++ route）。
 - S4：cad-core 请求 DTO 与 `documentObjectUpdates` 专项复审（已关闭为 reference-only / release gate）。
 - S5：临时文档禁用与 non-goal 边界专项复审（已关闭为 `diagnostic_retained`，无 backend gap candidate）。
-- S6：Oracle 实现与发布闸门。
+- S6：Oracle 实现与发布闸门（已关闭为 docs-only no-code retained diagnostic / release gate）。
 
 ## 当前禁止声明
 
