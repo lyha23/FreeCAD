@@ -33,8 +33,17 @@ C12-M4 承接 C12-M3 S6 的 `native_hidden_retained` / `no_code_retained_gate`�
 - 队列检查确认 C12-M4 从 S3 开始，S3 文件执行前未标 `【已实现】`；S3 完成后只应推进到 S4 产品契约发布闸门。
 - Implementation package 迁移面已明确：五个 C5-M9 expected JSON 的 `known_gap/native_hidden replacement` wording 应迁移为 `product_contract` 或 `product_diagnostic_contract`，同时保留 `native_oracle_unavailable`、FreeCAD source authority 和现有 focused assertions。
 - Capability / adapter / interface wording 的后续目标已定位：`cad-core/src/runtime/capability_contract.cpp:821-952` 的 `part_workbench.project_on_surface`，`cad-core/tests/test_adapters.py:2970-3104` 的 capability assertion，以及 `docs/接口规定/01-cad-recompute全量输入输出接口.md:113-127` 的 “projected edge provenance mapper/history ... 仍是 gap / non-goal” 文案。
-- `C12M4-BLOCKER-003` 已关闭为 migration list complete；`C12M4-BLOCKER-004` 已记录 exact sources，但是否打开后续 implementation package 留给 S4 release decision；`C12M4-BLOCKER-005` 仍保持 S4 open。
+- `C12M4-BLOCKER-003` 已关闭为 migration list complete；`C12M4-BLOCKER-004/005` 在 S3 结束时交由 S4 release decision，最终状态见 S4 发布记录。
 - S3 不改 C++、include、fixtures expected、tests、adapters、capability source、接口文档正文或 C5-M9 expected JSON；不运行 FreeCADCmd、current comparison 或 full build。
+
+## S4 产品契约发布闸门
+
+- S4 live 起点：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=af1cc283b1`，`git log -1 --oneline=af1cc283b1 docs: 完成 C12-M4 S3 迁移设计`；起点 `git -c core.quotepath=false status --short -uall` 输出为空，即 `<clean>`。
+- 队列检查确认 C12-M4 只剩 S4，且 S4 文件执行前未标 `【已实现】`。
+- S4 逐行复核 `source_authority`、`contract_fields`、`scope_review`、`expected_migration`、`non_goal_registry`、`blocker_queue` 与 `validation_matrix` 后，没有发现新的 retained blocker。`projection_item_ledger`、`MapperHistoryEvent`、edge/wire、face rebuild、height/compound/offset、`element_history_status` / recovery hook 与 invalid projection diagnostics 均保持产品契约边界清楚。
+- C12-M3 负结论继续保留为 `native_oracle_unavailable`：S4 artifact 是 `native_hidden_retained`，`s5_input=null`，12 条 observation 只有 `native_hidden_retained` / `product_boundary_rejected`；S5 no-comparison evidence 记录 `native_provenance_expected_ready_count=0`、未运行 current comparison、未创建 backend gap candidate。
+- 最终发布 `contract_published`、`contract_migration_ready`、`implementation_deferred` 和 `rejected_native_parity_dependency`。C12-M4 本身不改 C++、include、fixtures expected、tests、adapters、capability source、接口文档正文或 C5-M9 expected JSON。
+- `C12M4-BLOCKER-004` 已关闭为 follow-up migration sources located；`C12M4-BLOCKER-005` 已关闭为 release gate published。建议另开 follow-up implementation package，迁移 C5-M9 expected wording、capability source、adapter assertion 和接口文档 wording。
 
 ## 契约判断
 
@@ -49,6 +58,8 @@ C12-M4 承接 C12-M3 S6 的 `native_hidden_retained` / `no_code_retained_gate`�
 - `contract_migration_ready`：expected/test/capability/interface wording 的具体迁移范围和验收命令已经明确，可另开 implementation goal。
 - `implementation_deferred`：只发布决策和迁移包，不直接改 C++ 或 fixture expected。
 - `rejected_native_parity_dependency`：继续要求 FreeCAD native ProjectOnSurface history artifact 作为唯一入口的路线被拒绝。
+
+最终状态：S4 已发布以上四个出口；C12-M4 队列关闭预期为 `step_goal_queue.py` 只输出表头。
 
 ## 入口
 

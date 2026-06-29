@@ -37,7 +37,16 @@ C12-M4 的目标是把 `cad-core` 当前 ProjectOnSurface request-local projecti
 - 队列检查确认 C12-M4 执行前从 S3 开始，S3 文件未标 `【已实现】`；S3 完成后只应推进到 S4 产品契约发布闸门。
 - Expected migration 设计已列全五个 C5-M9 expected JSON：edge、wire split、face rebuild、all compound 和 invalid diagnostic 均从 `known_gap/native_hidden replacement` wording 迁移为 CAD Core request-local `product_contract` 或 `product_diagnostic_contract` wording，并保留 `native_oracle_unavailable`、source authority、focused assertions 和非目标。
 - Capability / adapter / interface 后续迁移目标已定位：`cad-core/src/runtime/capability_contract.cpp:821-952` 的 `part_workbench.project_on_surface`，`cad-core/tests/test_adapters.py:2970-3104` 的 capability assertions，以及 `docs/接口规定/01-cad-recompute全量输入输出接口.md:113-127` 的 ProjectOnSurface DTO 文案。
-- `C12M4-BLOCKER-003` 已关闭；`C12M4-BLOCKER-004` 记录 exact sources 后保留为 S4 release decision pending；`C12M4-BLOCKER-005` 仍由 S4 发布闸门关闭。
+- `C12M4-BLOCKER-003` 已关闭；`C12M4-BLOCKER-004/005` 在 S3 结束时交由 S4 release decision，最终状态见 S4 live 记录。
+
+## S4 live 记录
+
+- 基线命令已执行：`pwd=/Users/li/Chili3DProject/FreeCAD`，`git rev-parse --short HEAD=af1cc283b1`，`git log -1 --oneline=af1cc283b1 docs: 完成 C12-M4 S3 迁移设计`。
+- 起点 dirty boundary：`git -c core.quotepath=false status --short -uall` 输出为空，即 `<clean>`；本步只更新 C12-M4 包内 README、总入口、矩阵、root `docs/CADCore12.0/README.md` 并重命名 S4 步骤文件，不改 `cad-core/src`、`cad-core/include`、fixtures expected、tests、adapters、capability source、接口文档正文或 C5-M9 expected JSON。
+- 队列检查确认 C12-M4 执行前只剩 S4，S4 文件未标 `【已实现】`；S4 完成后队列关闭预期为只输出表头。
+- 发布状态为 `contract_published`、`contract_migration_ready`、`implementation_deferred`、`rejected_native_parity_dependency`。C12-M4 决策包只发布契约和迁移边界，不执行 wording 迁移本身。
+- `C12M4-BLOCKER-004` 已关闭为 exact sources located and routed to follow-up implementation package；`C12M4-BLOCKER-005` 已关闭为 release gate published。没有 retained blocker。
+- C12-M3 负结论继续保留为 `native_oracle_unavailable`：S4 artifact 是 `native_hidden_retained`，`s5_input=null`，`native_provenance_expected_ready_count=0`；S5 no-comparison evidence 未运行 current comparison，未创建 backend gap candidate。
 
 ## 决策
 
@@ -54,7 +63,7 @@ C12-M4 不拆成单个 fixture，因为 edge/wire split、face rebuild、height 
 - S1 盘点当前 `cad-core` ledger 字段、focused tests、C5-M9 expected wording 和前端引用恢复需求。
 - S2 发布产品契约边界：哪些字段是 CAD Core contract，哪些仍是 FreeCAD geometry parity 或 non-goal。
 - S3 设计 expected/test/capability/interface wording 迁移包，但不在决策包里直接改代码或 expected JSON。
-- S4 发布闸门：决定是否另开 implementation package 迁移 C5-M9 wording 与 capability docs。
+- S4 发布闸门：发布 contract_migration_ready，建议另开 implementation package 迁移 C5-M9 wording、capability source、adapter assertion 与接口文档 wording。
 
 ## 发布闸门
 
@@ -64,6 +73,8 @@ S4 只有在以下条件都满足时，才建议另开 implementation package：
 2. C12-M3 native-hidden 结论被保留为 native oracle unavailable，而不是被改写成 FreeCAD parity success。
 3. Expected / tests / capability wording 的迁移范围清楚，并能用 focused C5-M9 tests 验证。
 4. 非目标仍拒绝 output guessing、persistent native cache、full BREP transport 和 GUI/Workbench state。
+
+S4 复核后四项均满足：最终建议另开 follow-up implementation package；C12-M4 本身保持 docs-only release gate，不改 C++、expected、tests、adapters、capability source 或接口正文。
 
 ## 交付物
 
