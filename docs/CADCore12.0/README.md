@@ -2,7 +2,7 @@
 
 CADCore12.0 承接 CADCore11.0 队列关闭后的下一轮 capability-first 规划。当前不直接重开 C11-M1 Sweep Location overload 或 C11-M2 Filling native helper：这两条线都已关闭为 no-code retained non-parity gate，且 live capability 中 `part_workbench.sweep.remaining_gaps=[]`、`part_workbench.filling.remaining_gaps=[]`。
 
-当前 live capability 唯一非空 `remaining_gaps` 仍是 `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache`。C9-M5 与 C10-M4 已多轮复审并保留为 `known_gap_diagnostic` / `oracle_blocked`，不是默认 C++ 实现入口。CADCore12.0 的第一包因此先做全局候选盘点：从 live capability、CADCore9/10/11 的 release gate 和 current tests 中筛出下一批真正可实现的 backend gap；如果没有满足 oracle / request-local / current mismatch 的候选，S6 必须发布 no-code backlog gate，而不是勉强实现 CopyOnChange。
+当前 live capability 唯一非空 `remaining_gaps` 仍是 `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache`。C9-M5 与 C10-M4 已多轮复审并保留为 `known_gap_diagnostic` / `oracle_blocked`，不是默认 C++ 实现入口。CADCore12.0 的第一包因此先做全局候选盘点：从 live capability、CADCore9/10/11 的 release gate 和 current tests 中筛出下一批真正可实现的 backend gap。C12-M1 S6 已完成该发布闸门并选择 `no_code_backlog_gate`：本轮无代码落点，不授权 C++、fixtures、expected、oracle 采集、capability wording 或 adapter/test 改动。
 
 ## 入口
 
@@ -22,6 +22,15 @@ CADCore12.0 承接 CADCore11.0 队列关闭后的下一轮 capability-first 规�
 - S3 CopyOnChange 剩余 gap 复审已完成：C9-M5 / C10-M4 仍只提供 property/session evidence 和 retained diagnostic 裁决，App::Link `documentObjectUpdates` 是 reference-only DTO 通道，不等同 SubShapeBinder `_tmp_binder` / `_CopiedObjs` / `copyObject` lifecycle；`C12M1-SCOPE-101`、`C12M1-BLOCKER-301`、`C12M1-CAT-001` 均关闭为 retained known gap / oracle blocked，无 C++ implementation candidate。
 - S4 Assembly representative / marker / writeback 复审已完成：representative_solver_adapter 仍是 `available=false` fallback metadata；subshape marker placement 与 placement writeback 已是 expected-backed current-covered request-local subset；full solver、persistent solver state 和 cross-request assembly session 保持 non-goal，无 C12-M2 implementation candidate。
 - S5 Part Workbench historical narrowed 复审已完成：Sweep / Filling 继续 no-code retained non-parity，GeomPlate / ProjectOnSurface 继续 probe-only retained evidence，Loft 继续 native-hidden retained evidence；没有 stable expected/current mismatch，无 C++ implementation candidate。
+- S6 NextBatch 发布闸门已完成：`C12M1-SCOPE-401`、`C12M1-BLOCKER-601`、`C12M1-CAT-004`、`C12M1-CAT-005` 与 `C12M1-VAL-601..606` 已回写；最终 action 是 `no_code_backlog_gate`，`C12M1-CAT-005` 仍为 `none_s2_placeholder`，无 implementation candidate。
+
+## 重开条件
+
+| family | reopen condition |
+| --- | --- |
+| CopyOnChange | stable native copied-object expected + 产品批准 request-local DTO + current cad-core mismatch。 |
+| Assembly representative / marker / writeback | 产品批准 request-local subset + expected/current mismatch。 |
+| Part Workbench historical rows | stable native/request-local expected + current mismatch。 |
 
 ## 队列检查
 

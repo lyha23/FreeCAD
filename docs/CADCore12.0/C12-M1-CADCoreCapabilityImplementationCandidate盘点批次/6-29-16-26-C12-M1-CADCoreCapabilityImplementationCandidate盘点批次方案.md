@@ -18,6 +18,8 @@ C12-M1 用一个 evidence-first 闸门回答“下一轮到底实现什么”。
 1. 发现 implementation row：写清下一包主题、C++ 落点、FreeCAD authority、fixtures / focused tests、成功标准和禁止捷径。
 2. 没有 implementation row：发布 no-code backlog gate，说明哪些行继续 retained、哪些行需要产品决策或 native oracle 才能重开。
 
+S6 已选择第二种结果：发布 `no_code_backlog_gate`。C12-M1 没有授权下一轮 C++ implementation package；CopyOnChange、Assembly representative / marker / writeback、Part Workbench historical narrowed rows 均继续按各自 reopen condition 保留。
+
 ## C++ 闸门规则
 
 任一候选只有同时满足以下条件，才允许进入下一轮代码包：
@@ -36,7 +38,7 @@ C12-M1 用一个 evidence-first 闸门回答“下一轮到底实现什么”。
 - S3 专审 CopyOnChange：除非有更强 native oracle 与产品 DTO approval，否则保持 retained diagnostic。
 - S4 专审代表子集：Assembly representative / marker / solver 边界只在产品明确扩大 request-local subset 时进入下一包。
 - S5 专审历史 narrowed evidence：Sweep、Filling、GeomPlate、Loft、ProjectOnSurface 等只在 stable oracle 与 current mismatch 同时成立时重开。
-- S6 发布闸门：选择下一 implementation package 或发布 no-code backlog gate。
+- S6 发布闸门：已发布 `no_code_backlog_gate`，本轮无代码落点。
 
 ## 验收命令
 
@@ -67,7 +69,7 @@ for area, vals in sorted(data.items()):
 PY
 ```
 
-阶段回归只在 S6 打开 C++ gate 后执行；若 S6 仍是 docs-only gate，不跑 cad-core build。
+阶段回归只在 S6 打开 C++ gate 后执行；S6 已关闭为 docs-only gate，不跑 cad-core build。
 
 ## 非目标
 

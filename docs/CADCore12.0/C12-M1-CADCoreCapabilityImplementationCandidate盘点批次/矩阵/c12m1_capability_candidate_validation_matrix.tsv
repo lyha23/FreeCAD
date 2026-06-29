@@ -23,9 +23,9 @@ C12M1-VAL-503	S5	awk TSV field-count check over C12-M1 matrices	passed_s5: all C
 C12M1-VAL-504	S5	rg -n '[ \t]$' docs/CADCore12.0/C12-M1-CADCoreCapabilityImplementationCandidate盘点批次 docs/CADCore12.0/README.md	passed_s5: no trailing whitespace in S5 docs scope	yes
 C12M1-VAL-505	S5	git diff --check	passed_s5: no whitespace errors after S5 docs-only changes	yes
 C12M1-VAL-506	S5	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/工作步骤细分 --format markdown	passed_s5: after S5 rename, queue starts at S6 and S5 is skipped as implemented	yes
-C12M1-VAL-601	S6	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/工作步骤细分 --format markdown	Queue empty only after S0-S6 are renamed implemented	yes
-C12M1-VAL-602	All	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/矩阵/*.tsv	All TSV rows match header field counts	yes
-C12M1-VAL-603	All	rg -n '[ \t]$' docs/CADCore12.0	No trailing whitespace	yes
-C12M1-VAL-604	All	git diff --check	No whitespace errors	yes
-C12M1-VAL-605	S6	python3 -m unittest tests/test_adapters.py	Run only if S6 modifies capability contract or adapter assertions	conditional
-C12M1-VAL-606	S6	cmake --build build	Run only if S6 opens a C++ implementation package in cad-core	conditional
+C12M1-VAL-601	S6	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/工作步骤细分 --format markdown	passed_s6: queue is empty after S6 rename; all S0-S6 step files are marked implemented	yes
+C12M1-VAL-602	All	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/矩阵/*.tsv	passed_s6: all C12-M1 TSV rows match header field counts after S6 updates	yes
+C12M1-VAL-603	All	rg -n '[ \t]$' docs/CADCore12.0	passed_s6: no trailing whitespace in CADCore12.0 docs scope	yes
+C12M1-VAL-604	All	git diff --check	passed_s6: no whitespace errors after S6 docs-only changes	yes
+C12M1-VAL-605	S6	python3 -m unittest tests/test_adapters.py	not_required_s6_docs_only: capability contract and adapter assertions were not modified	conditional
+C12M1-VAL-606	S6	cmake --build build	not_required_s6_docs_only: no C++ implementation package was opened	conditional

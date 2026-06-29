@@ -9,7 +9,7 @@
 - 冻结 C11-M1 / C11-M2 队列关闭后的 live capability 基线。
 - 区分 active `remaining_gaps`、historical `narrowed_gaps`、representative subset、non-goal 和 release gate。
 - 防止把 CopyOnChange retained known gap、Part Workbench helper `notCollected`、Assembly representative fallback 或 native-hidden evidence 误当成可实现 backend gap。
-- 若 S6 发现满足条件的行，写清下一轮代码落点、FreeCAD source authority、fixtures / focused tests 和禁止捷径；若没有满足条件的行，发布 no-code backlog gate。
+- S6 已确认没有满足条件的行，最终发布 `no_code_backlog_gate`；本轮无代码落点，不授权 C++、fixtures、expected、oracle 采集、capability wording 或 adapter/test 改动。
 
 ## 当前基线
 
@@ -68,7 +68,7 @@ live capability baseline
 | S3 CopyOnChange audit | `工作步骤细分/6-29-16-31-【已实现】C12-M1-S3-CopyOnChange剩余gap复审.md` | 已复核唯一 active remaining gap 并关闭为 retained known gap / oracle blocked。 |
 | S4 representative audit | `工作步骤细分/6-29-16-32-【已实现】C12-M1-S4-代表子集与产品边界候选复审.md` | 已审计 Assembly / representative subset，关闭为 no-code product-boundary retained。 |
 | S5 historical audit | `工作步骤细分/6-29-16-33-【已实现】C12-M1-S5-历史non-parity与narrowed证据复审.md` | 已审计 Part Workbench narrowed / non-parity evidence，关闭为 no-code retained / probe-only 输入。 |
-| S6 release gate | `工作步骤细分/6-29-16-34-C12-M1-S6-NextBatch发布闸门与代码授权.md` | 选择下一 implementation package 或发布 no-code backlog gate。 |
+| S6 release gate | `工作步骤细分/6-29-16-34-【已实现】C12-M1-S6-NextBatch发布闸门与代码授权.md` | 已发布 `no_code_backlog_gate`，确认本轮无代码落点且无 implementation candidate。 |
 | source candidates | `矩阵/c12m1_capability_candidate_source_candidates.tsv` | source authority seed。 |
 | scope review | `矩阵/c12m1_capability_candidate_scope_review_matrix.tsv` | scope / owner step / route / close condition。 |
 | blocker queue | `矩阵/c12m1_capability_candidate_blocker_queue.tsv` | S0-S6 blocker 和关闭条件。 |
@@ -76,4 +76,4 @@ live capability baseline
 | backend gap classification | `矩阵/c12m1_capability_candidate_backend_gap_classification.tsv` | next-batch 分类。 |
 | validation matrix | `矩阵/c12m1_capability_candidate_validation_matrix.tsv` | 验收命令索引。 |
 
-当前 S0、S1、S2、S3、S4、S5 已实现，S6 仍是待执行状态；矩阵已关闭 S0 baseline、S1 source authority blocker、S2 scope admission blocker、S3 CopyOnChange oracle/product gate、S4 Assembly representative/product gate 与 S5 Part Workbench historical narrowed gate。CopyOnChange 已保持 retained known gap / oracle blocked：没有 stable native copied-object expected、没有产品批准的 SubShapeBinder request-local DTO，也没有 current cad-core mismatch。Assembly representative solver 仅保留 fallback metadata；subshape marker placement 与 placement writeback 已是 expected-backed current-covered request-local subset，没有新的产品批准 expected/current mismatch。Sweep、Filling、GeomPlate、Loft、ProjectOnSurface 均没有 stable expected/current mismatch，继续作为 no-code retained non-parity、probe-only 或 native-hidden evidence 输入 S6；截至 S5 没有授权任何 C++ implementation row。
+当前 S0、S1、S2、S3、S4、S5、S6 均已实现；矩阵已关闭 S0 baseline、S1 source authority blocker、S2 scope admission blocker、S3 CopyOnChange oracle/product gate、S4 Assembly representative/product gate、S5 Part Workbench historical narrowed gate 与 S6 next-batch publication gate。CopyOnChange 保持 retained known gap / oracle blocked：没有 stable native copied-object expected、没有产品批准的 SubShapeBinder request-local DTO，也没有 current cad-core mismatch。Assembly representative solver 仅保留 fallback metadata；subshape marker placement 与 placement writeback 已是 expected-backed current-covered request-local subset，没有新的产品批准 expected/current mismatch。Sweep、Filling、GeomPlate、Loft、ProjectOnSurface 均没有 stable expected/current mismatch，继续作为 no-code retained non-parity、probe-only 或 native-hidden evidence。C12-M1 最终 action 是 `no_code_backlog_gate`，本轮无 C++ implementation row，`C12M1-CAT-005` 仍为 `none_s2_placeholder`。
