@@ -63,7 +63,7 @@ live capability baseline
 | --- | --- | --- |
 | 工作步骤总入口 | `工作步骤细分/6-29-16-27-【已实现】C12-M1工作步骤总入口.md` | goal 队列索引。 |
 | S0 live 基线 | `工作步骤细分/6-29-16-28-【已实现】C12-M1-S0-live能力基线与候选声明口径冻结.md` | 已冻结 C11 队列、capability JSON 和声明边界。 |
-| S1 source candidates | `工作步骤细分/6-29-16-29-C12-M1-S1-FreeCAD源码与capability候选矩阵.md` | 复核 FreeCAD / cad-core source authority。 |
+| S1 source candidates | `工作步骤细分/6-29-16-29-【已实现】C12-M1-S1-FreeCAD源码与capability候选矩阵.md` | 已复核 FreeCAD / cad-core source authority 并关闭 `C12M1-BLOCKER-101`。 |
 | S2 scope review | `工作步骤细分/6-29-16-30-C12-M1-S2-范围准入与blocker矩阵.md` | 把候选行路由到 active gap、representative subset、narrowed evidence 或 non-goal。 |
 | S3 CopyOnChange audit | `工作步骤细分/6-29-16-31-C12-M1-S3-CopyOnChange剩余gap复审.md` | 复核唯一 active remaining gap 是否仍 retained。 |
 | S4 representative audit | `工作步骤细分/6-29-16-32-C12-M1-S4-代表子集与产品边界候选复审.md` | 审计 Assembly / representative subset 是否具备产品授权和 expected。 |
@@ -76,4 +76,4 @@ live capability baseline
 | backend gap classification | `矩阵/c12m1_capability_candidate_backend_gap_classification.tsv` | next-batch 分类。 |
 | validation matrix | `矩阵/c12m1_capability_candidate_validation_matrix.tsv` | 验收命令索引。 |
 
-当前 S0 已实现，S1-S6 仍是待执行状态；矩阵只有 S0 baseline 行完成冻结，其余仍是 seed，不是发布闸门结论。
+当前 S0、S1 已实现，S2-S6 仍是待执行状态；矩阵已关闭 S0 baseline 与 S1 source authority blocker，其余准入、复审和发布闸门仍是 seed，不是发布闸门结论。

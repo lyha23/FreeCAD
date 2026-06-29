@@ -17,6 +17,7 @@ CADCore12.0 承接 CADCore11.0 队列关闭后的下一轮 capability-first 规�
 - S0 起点 dirty boundary 只包含 C12-M1 docs 和 `docs/CADCore12.0/README.md` 未跟踪文件；未发现 `cad-core/src`、tests、fixtures、expected 或 collector 改动。
 - capability 复核命令使用 `cad-core/cad-core capabilities`，冻结输出保存到 `/tmp/c12-capabilities.json`。
 - `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`，known gap 状态为 `known_gap_diagnostic`，route 为 `oracle_blocked`。
+- S1 source authority 已复核：capability/test/FreeCAD source/current landing 均可定位，`C12M1-BLOCKER-101` 已关闭；未采 oracle、未改 C++、未新增 fixture、未创建 implementation row。
 - Assembly representative solver、Part Workbench Sweep / Filling / GeomPlate / Loft / ProjectOnSurface 等当前存在的是 representative / narrowed / historical evidence，不是已证明的 active backend gap。
 
 ## 队列检查

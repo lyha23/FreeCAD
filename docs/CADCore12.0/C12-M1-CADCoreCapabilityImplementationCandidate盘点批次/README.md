@@ -4,7 +4,7 @@
 
 C12-M1 是 CADCore12.0 的候选筛选闸门，不是直接代码实现包。它先把 live capability、C9-M5 / C10-M4 CopyOnChange retained gap、C11-M1 / C11-M2 no-code parity 复开结果和 current adapter assertions 汇总成可执行矩阵，再决定下一包是否有资格进入 C++。
 
-S0 live 冻结结论：唯一 active `remaining_gaps` 是 SubShapeBinder CopyOnChange full temporary-document cache，但它仍是 `known_gap_diagnostic` / `oracle_blocked`。C11-M1 / C11-M2 队列均为空，closed line 不自动重开。其他 Part Workbench 和 Assembly 行多为 supported、representative subset、narrowed historical evidence 或 non-goal boundary。S6 只有在某行同时满足 stable native/request-local evidence、current cad-core mismatch 和产品边界时，才允许创建下一轮 implementation package。
+S0 live 冻结结论：唯一 active `remaining_gaps` 是 SubShapeBinder CopyOnChange full temporary-document cache，但它仍是 `known_gap_diagnostic` / `oracle_blocked`。C11-M1 / C11-M2 队列均为空，closed line 不自动重开。S1 已复核 capability/test/FreeCAD source/current landing evidence 并关闭 source authority blocker。其他 Part Workbench 和 Assembly 行多为 supported、representative subset、narrowed historical evidence 或 non-goal boundary。S6 只有在某行同时满足 stable native/request-local evidence、current cad-core mismatch 和产品边界时，才允许创建下一轮 implementation package。
 
 ## 入口
 
@@ -16,7 +16,7 @@ S0 live 冻结结论：唯一 active `remaining_gaps` 是 SubShapeBinder CopyOnC
 ## 工作步骤
 
 - S0：live 能力基线与候选声明口径冻结（已实现）。
-- S1：FreeCAD 源码与 capability 候选矩阵复核。
+- S1：FreeCAD 源码与 capability 候选矩阵复核（已实现）。
 - S2：范围准入与 blocker 矩阵。
 - S3：CopyOnChange active remaining gap 复审。
 - S4：代表子集、产品边界和 Assembly 候选复审。
