@@ -14,6 +14,13 @@ S0 开包基线为 `HEAD=7c14aa6f7a`（`7c14aa6f7a docs: 完成 C12-M2 S6 oracle
 - C12-M2 继承口径：`C12M2-CAT-005 project_on_surface_provenance` 为 `native_hidden` 且 `code_gate=closed`；`C12M2-CAT-006 global` 发布 `retained_no_expected` / no-code oracle gate。C12-M3 只能继续追问 native API 是否能暴露 source-backed request-local provenance。
 - S0 禁止项：不运行 FreeCADCmd probe；不做 current cad-core comparison；不新增 implementation row；不修改 `cad-core/src`、`cad-core/include`、fixtures expected、tests、adapters、capability wording 或 full build 口径。
 
+## S1 live 记录
+
+- S1 起点命令已执行：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=787198e9ff`，`git log -1 --oneline=787198e9ff docs: 冻结 C12-M3 S0 live 基线`，`git -c core.quotepath=false status --short -uall` 输出为空。
+- Source candidate matrix 已回填为 exact source authority：ProjectOnSurface execute/link/filter/wire/face/height/offset、TopoShapePy `getElementHistory` / `mapShapes` / `mapSubElement`、TopoShapeExpansion `mapSubElement` / `makeShapeWithElementMap` / `MapperHistory`、PropertyPartShape ElementMap 保存恢复，以及 C12-M2 artifact / current cad-core ledger/tests / C5-M9 expected context。
+- `C12M3-BLOCKER-003` 已关闭；剩余 open blocker 是 S3 schema、S4 native-hidden、S5 current comparison gate 和 S2 product boundary guard。
+- 分类口径：edge/wire、face rebuild、all compound/height/offset 和 invalid diagnostic 均为 source-backed known-gap / native expected missing；C12-M2 ProjectOnSurface artifact 仍为 `native_hidden`；current cad-core ledger 与 focused tests 只作为 S5 context，不授权代码、expected、tests、adapter 或 capability wording 改动。
+
 ## 最小完整语义批次
 
 本包覆盖同一条 FreeCAD 调用链和同一类 expected：`src/Mod/Part/App/FeatureProjectOnSurface.cpp` 生成 projected wire / face / compound，`src/Mod/Part/App/TopoShapePyImp.cpp` 与 `src/Mod/Part/App/TopoShapeExpansion.cpp` 暴露或维护 ElementMap / MapperHistory。C12-M3 不拆成单个 fixture，因为 source ownership、split fragments、face rebuild 和 compound result 都依赖同一 provenance 可观测性。

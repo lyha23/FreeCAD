@@ -16,6 +16,13 @@ C12-M2 已确认 `FeatureProjectOnSurface` 原生对象可以 build 几何，但
 - 队列状态：C12-M1 / C12-M2 `工作步骤细分` 均只输出表头；C12-M3 在 S0 执行前从 S0-S6 开始，S0 完成并重命名后下一步为 S1。
 - 继承口径：C12-M2 S6 发布 `no_code_oracle_blocked_gate`，ProjectOnSurface geometry 可 build，但 mapper/provenance history 仍为 `native_hidden`；C12-M3 只做 ProjectOnSurface mapper / provenance native observability，不创建 implementation row。
 
+## S1 源码与证据矩阵
+
+- S1 live 起点已记录：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=787198e9ff`（`787198e9ff docs: 冻结 C12-M3 S0 live 基线`），起点 `git status --short -uall` 为 clean。
+- `source_candidates` 已拆成 ProjectOnSurface execute/link/filter/wire/face/height/offset、TopoShapePy history API、TopoShapeExpansion `mapSubElement` / `makeShapeWithElementMap` / `MapperHistory`、PropertyPartShape ElementMap 保存恢复、C12-M2 native-hidden artifact、current cad-core ledger/tests 和 C5-M9 expected context。
+- `C12M3-BLOCKER-003` 已关闭：所有 S1 row 都有 exact FreeCAD file + class/function + 支撑短句或字段名；不再存在缺 source authority 行。
+- S1 结论仍是 no-code：C5-M9 expected 保持 `source_backed_known_gap` context，C12-M2 artifact 保持 `native_hidden` blocker，current cad-core provenance ledger / focused tests 只作为 S5 comparison context；本步未运行 native probe，也未做 current comparison。
+
 ## 入口
 
 - 总入口：`6-29-21-29-C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次总入口.md`
