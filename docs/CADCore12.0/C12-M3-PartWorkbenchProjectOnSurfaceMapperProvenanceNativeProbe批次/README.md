@@ -39,6 +39,15 @@ C12-M2 已确认 `FeatureProjectOnSurface` 原生对象可以 build 几何，但
 - 分类冻结为 `native_provenance_expected_ready`、`current_covered`、`backend_gap_candidate`、`native_hidden_retained`、`collector_bug`、`product_boundary_rejected`、`sandbox_runtime_limit`；S4 只有 expected-ready 行能进入 S5 comparison。
 - `C12M3-BLOCKER-002` 已关闭；S3 未运行 family expected、未做 current comparison，也未修改 `cad-core/src`、`include`、fixtures expected、tests、adapters 或 capability wording。
 
+## S4 ProjectOnSurface native provenance probe
+
+- S4 live 起点已记录：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=9fa00a2936`（`9fa00a2936 docs: 完成 C12-M3 S3 原生 provenance schema`），起点 `git status --short -uall` 为 clean。
+- 新增并运行 `docs/temp/6-29-23-05-c12m3-s4-project-on-surface-native-provenance-probe.py`，artifact 为 `docs/temp/6-29-23-05-c12m3-s4-project-on-surface-native-provenance-probe-output.json`；FreeCADCmd 为 `/Users/li/.cargo/bin/freecadcmd`，FreeCAD baseline 为 `1.2.0 revision 20260519`，OCCT 为 `7.8.1`。
+- Artifact 使用 `expected_summary.schema_version=c12m3.native-provenance-summary.v1`，共记录 12 条 observation，覆盖 `edge_wire_provenance`、`face_rebuild_provenance`、`all_compound_height_offset`、`invalid_projection_diagnostic` 和 `api_observability`。
+- Object result shape 与必要 intermediate `makeParallelProjection` shape 均可在同一 FreeCADCmd request 内生成，但 `TopoShapePy.getElementHistory` 对 Edge/Wire/Face/Solid 查询均返回 `None`；`mapSubElement` / `mapShapes` 只能作为手动 API 可观测性，不能证明 `FeatureProjectOnSurface` 发布 MapperHistory 或 ElementMap。
+- `PropertyPartShape` ElementMap save/load 仍是持久 native document / BREP roundtrip 语境，按 S2 product boundary 保持 `product_boundary_rejected`；invalid diagnostic 仅得到 null/Invalid 状态或 silent null shape，不形成 source-to-target provenance expected。
+- S4 总结论为 `native_hidden_retained`，`s5_input=null`，`current_comparison_path=blocked: no native_provenance_expected_ready observation; S5 comparison is blocked`。`C12M3-BLOCKER-004` 关闭为 retained blocker；本步未运行 current `cad-core` comparison，未修改 C++、fixtures expected、tests、adapters 或 capability wording。
+
 ## 入口
 
 - 总入口：`6-29-21-29-C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次总入口.md`

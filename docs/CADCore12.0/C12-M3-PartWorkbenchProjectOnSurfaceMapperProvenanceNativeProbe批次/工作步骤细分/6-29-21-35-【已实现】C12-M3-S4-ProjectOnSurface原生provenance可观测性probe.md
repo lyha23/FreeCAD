@@ -1,4 +1,4 @@
-# C12-M3 S4 ProjectOnSurface 原生 provenance 可观测性 probe
+# C12-M3 S4 ProjectOnSurface 原生 provenance 可观测性 probe【已实现】
 
 ## 目标
 
@@ -28,6 +28,15 @@
 - 不刷新 checked-in expected。
 - 不把 geometry build 成功等同 provenance 成功。
 - 不把 collector bug、sandbox limitation 或 TypeError 写成 backend gap。
+
+## S4 结果
+
+- 已新增并运行 `docs/temp/6-29-23-05-c12m3-s4-project-on-surface-native-provenance-probe.py`，artifact 为 `docs/temp/6-29-23-05-c12m3-s4-project-on-surface-native-provenance-probe-output.json`。
+- Artifact 使用 `expected_summary.schema_version=c12m3.native-provenance-summary.v1`，记录 12 条 observation，覆盖 edge/wire split、face rebuild、all-compound/height/offset、invalid diagnostic 和 api_observability。
+- FreeCADCmd `/Users/li/.cargo/bin/freecadcmd` 可运行；FreeCAD baseline 为 `1.2.0 revision 20260519`，OCCT 为 `7.8.1`，process exit code 为 0。
+- Object result shape 与必要 intermediate projection shape 均可生成，但 `getElementHistory` 对 result/source/intermediate 的 Edge/Wire/Face/Solid 查询均返回 `None`；未观察到 history API 本身暴露 source-backed source->target provenance。
+- `mapSubElement` / `mapShapes` 只证明手动 API 可调用，不能证明 `FeatureProjectOnSurface` 原生发布 MapperHistory；`PropertyPartShape` ElementMap save/load 仍属于持久 native document / BREP roundtrip product boundary。
+- S4 总结论为 `native_hidden_retained`，`s5_input=null`，S5 current comparison 被阻断；本步未修改 `cad-core`、checked-in expected、tests、adapters 或 capability wording。
 
 ## 验收
 

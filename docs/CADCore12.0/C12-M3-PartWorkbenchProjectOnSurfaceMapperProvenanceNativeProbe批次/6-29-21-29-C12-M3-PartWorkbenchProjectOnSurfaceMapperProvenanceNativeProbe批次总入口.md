@@ -36,6 +36,15 @@ S0 开包基线为 `HEAD=7c14aa6f7a`（`7c14aa6f7a docs: 完成 C12-M2 S6 oracle
 - 分类已冻结为 `native_provenance_expected_ready`、`current_covered`、`backend_gap_candidate`、`native_hidden_retained`、`collector_bug`、`product_boundary_rejected`、`sandbox_runtime_limit`。`C12M3-BLOCKER-002` 已关闭，probe/validation matrix 已记录 S4 artifact 命名和通过标准。
 - S3 未运行 ProjectOnSurface family expected、未运行 current comparison、未把 C12-M2 `None` history 当最终结论，也未修改 `cad-core/src`、`include`、fixtures expected、tests、adapters 或 capability wording。
 
+## S4 live 记录
+
+- S4 起点命令已执行：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=9fa00a2936`，`git log -1 --oneline=9fa00a2936 docs: 完成 C12-M3 S3 原生 provenance schema`，`git -c core.quotepath=false status --short -uall` 输出为空。
+- S4 新增 probe script `docs/temp/6-29-23-05-c12m3-s4-project-on-surface-native-provenance-probe.py`，并输出 artifact `docs/temp/6-29-23-05-c12m3-s4-project-on-surface-native-provenance-probe-output.json`。运行包络为 FreeCADCmd `/Users/li/.cargo/bin/freecadcmd`、FreeCAD `1.2.0 revision 20260519`、OCCT `7.8.1`。
+- Artifact 使用 `c12m3.native-provenance-summary.v1`，12 条 observation 均含 source endpoint、target endpoint、history API name、history return summary、request-local judgement、classification 和 current comparison path。
+- `edge_wire_provenance`、`face_rebuild_provenance`、`all_compound_height_offset` 的 object result / intermediate shape 可生成，但 `getElementHistory` 对查询元素均返回 `None`；`mapSubElement` / `mapShapes` 属于手动 API 调用，不是 `FeatureProjectOnSurface` 原生 mapper/history 输出。
+- `ElementMap` save/load 需要持久 native document / BREP roundtrip，按 product boundary 保持 rejected；invalid diagnostic 只提供 null/Invalid 状态，不形成 source-to-target provenance expected。
+- S4 总结论为 `native_hidden_retained`，`s5_input=null`，S5 current comparison 被阻断；`C12M3-BLOCKER-004` 关闭为 retained blocker。本步未做 current cad-core comparison，未改 C++、expected、tests、adapters 或 capability wording。
+
 ## 最小完整语义批次
 
 本包覆盖同一条 FreeCAD 调用链和同一类 expected：`src/Mod/Part/App/FeatureProjectOnSurface.cpp` 生成 projected wire / face / compound，`src/Mod/Part/App/TopoShapePyImp.cpp` 与 `src/Mod/Part/App/TopoShapeExpansion.cpp` 暴露或维护 ElementMap / MapperHistory。C12-M3 不拆成单个 fixture，因为 source ownership、split fragments、face rebuild 和 compound result 都依赖同一 provenance 可观测性。
@@ -58,7 +67,7 @@ S0 开包基线为 `HEAD=7c14aa6f7a`（`7c14aa6f7a docs: 完成 C12-M2 S6 oracle
 | S1 | FreeCAD 源码与现有 provenance 证据矩阵 | 回填 ProjectOnSurface / TopoShape history source authority、C5-M9 expected 和 current cad-core landing。 |
 | S2 | 范围准入与 blocker 矩阵 | 区分 request-local mapper provenance、native-hidden、collector bug 和 product boundary。 |
 | S3 | NativeProvenanceProbe harness 与 artifact schema | 定义 C12-M3 provenance artifact 字段、probe ids、失败分类和复用 C12-M2 harness 的方式。 |
-| S4 | ProjectOnSurface 原生 provenance 可观测性 probe | 运行或记录 native probe，判断 `getElementHistory` / `mapShapes` / `mapSubElement` 是否能暴露 source-backed history。 |
+| S4 | ProjectOnSurface 原生 provenance 可观测性 probe | 已运行 native probe；原生 history 仍隐藏，S5 comparison 被阻断。 |
 | S5 | Current comparison 与 implementation gate 审计 | 仅对 expected-ready 行比较 current cad-core；不能比较 native-hidden 行。 |
 | S6 | 发布闸门 | 发布 `native_hidden_retained` / `current_covered` / `backend_gap_candidate`，并给出下一包授权或 no-code 结论。 |
 
