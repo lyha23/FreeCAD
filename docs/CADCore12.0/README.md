@@ -8,6 +8,8 @@ CADCore12.0 承接 CADCore11.0 队列关闭后的下一轮 capability-first 规�
 
 C12-M2 S6 已完成并发布 `no_code_oracle_blocked_gate`：ProjectOnSurface 几何可 build，但 mapper/provenance history 仍 `native_hidden`。C12-M3 已完成 ProjectOnSurface mapper / provenance native observability 发布闸门：原生 API 仍没有给出 source-backed、request-local provenance，最终发布 `no_code_retained_gate`，仍不是 C++ implementation 包。
 
+用户已在 C12-M3 后批准打开 C12-M4 产品契约包：不再把 FreeCAD native ProjectOnSurface history artifact 作为唯一 gate，而是把当前 `cad-core` request-local projection ledger 升级为 CAD Core 产品契约。C12-M4 的任务是冻结 contract 边界、字段、non-goal 和后续 expected / capability wording 迁移范围；开包阶段仍不直接改 C++、fixtures expected、tests、adapters 或 capability wording。
+
 ## 入口
 
 - C12-M1 总入口：`C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/6-29-16-26-C12-M1-CADCoreCapabilityImplementationCandidate盘点批次总入口.md`
@@ -22,6 +24,10 @@ C12-M2 S6 已完成并发布 `no_code_oracle_blocked_gate`：ProjectOnSurface �
 - C12-M3 方案：`C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次/6-29-21-29-C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次方案.md`
 - C12-M3 工作步骤：`C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次/工作步骤细分/`
 - C12-M3 矩阵：`C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次/矩阵/`
+- C12-M4 总入口：`C12-M4-ProjectOnSurfaceRequestLocalLedger产品契约批次/6-29-23-00-C12-M4-ProjectOnSurfaceRequestLocalLedger产品契约批次总入口.md`
+- C12-M4 方案：`C12-M4-ProjectOnSurfaceRequestLocalLedger产品契约批次/6-29-23-00-C12-M4-ProjectOnSurfaceRequestLocalLedger产品契约批次方案.md`
+- C12-M4 工作步骤：`C12-M4-ProjectOnSurfaceRequestLocalLedger产品契约批次/工作步骤细分/`
+- C12-M4 矩阵：`C12-M4-ProjectOnSurfaceRequestLocalLedger产品契约批次/矩阵/`
 
 ## 当前基线
 
@@ -50,6 +56,7 @@ C12-M2 S6 已完成并发布 `no_code_oracle_blocked_gate`：ProjectOnSurface �
 - C12-M3 S4 ProjectOnSurface native provenance probe 已完成：S4 live 起点为 clean 的 `HEAD=9fa00a2936`（`9fa00a2936 docs: 完成 C12-M3 S3 原生 provenance schema`）。新增并运行 `docs/temp/6-29-23-05-c12m3-s4-project-on-surface-native-provenance-probe.py`，artifact `docs/temp/6-29-23-05-c12m3-s4-project-on-surface-native-provenance-probe-output.json` 使用 `c12m3.native-provenance-summary.v1`，FreeCAD baseline 为 `1.2.0 revision 20260519` / OCCT `7.8.1`。12 条 observation 覆盖 edge/wire、face rebuild、all compound/height/offset、invalid diagnostic 和 API observability；object result 与 intermediate shape 可生成，但 native history API 仍不暴露 source-backed source-to-target provenance，`mapShapes` manual mapper 与 ElementMap persistence 均不能作为产品证据。S4 总结论为 `native_hidden_retained`，`s5_input=null`，S5 current comparison 被阻断；本步未改代码、expected、tests、adapters 或 capability wording。
 - C12-M3 S5 Current comparison gate audit 已完成：S5 live 起点为 clean 的 `HEAD=c7a60c98bd`（`c7a60c98bd docs: 完成 C12-M3 S4 原生 provenance probe`）。S5 审计 S4 artifact 后确认 `expected_ready_count=0`、`s5_input=null`，12 条 observation 只有 `native_hidden_retained` / `product_boundary_rejected`；因此按 no-comparison 关闭，证据为 `docs/temp/6-29-22-40-c12m3-s5-project-on-surface-no-comparison-evidence.json`。未运行 current mismatch，未创建 `current_covered` 或 `backend_gap_candidate`，C5-M9 source-backed known-gap expected 仍不是 native expected；C12-M3 仍不授权代码、expected、tests、adapters 或 capability wording 改动。
 - C12-M3 S6 发布闸门已完成：S6 live 起点为 clean 的 `HEAD=0a32e7cb36`（`0a32e7cb36 docs: 完成 C12-M3 S5 no-comparison 审计`）。逐行复核 source authority、expected status、current status、product boundary 和 code gate 后，没有 row 同时满足 stable native provenance expected、request-local product boundary 和 current mismatch；`C12M3-CAT-001..005` 均为 `native_hidden_retained` / `closed_no_code`，`C12M3-CAT-006..010` 为 rejected / closed，`C12M3-CAT-011` 发布 `no_code_retained_gate`。C12-M3 不建议 implementation 包，不授权 C++、fixtures expected、tests、adapters 或 capability wording；剩余 retained blocker 仅在未来原生 API 或 collector 能产出 expected-ready provenance 并证明 current mismatch 时重开。
+- C12-M4 已创建为 ProjectOnSurface request-local ledger 产品契约包。S0 开包基线 `HEAD=fe563906c8`（`fe563906c8 docs: 完成 C12-M3 S6 no-code 发布闸门`），本包继承 C12-M3 的 native-hidden 负结论，但不再把 native history artifact 作为 CAD Core 产品契约唯一 gate。C12-M4 只负责冻结 contract、field semantics、non-goal 和 expected/capability wording 迁移范围；不直接改 C++、fixtures expected、tests、adapters 或 capability wording。
 
 ## 重开条件
 
@@ -59,6 +66,7 @@ C12-M2 S6 已完成并发布 `no_code_oracle_blocked_gate`：ProjectOnSurface �
 | Assembly representative / marker / writeback | 产品批准 request-local subset + expected/current mismatch。 |
 | Part Workbench historical rows | stable native/request-local expected + current mismatch。 |
 | ProjectOnSurface provenance | 未来 FreeCAD 原生 MapperHistory / ElementMap artifact 产出 `native_provenance_expected_ready` + request-local boundary + current mismatch；C12-M3 native-hidden 证据本身不能重开代码。 |
+| ProjectOnSurface request-local ledger product contract | C12-M4 发布 contract_migration_ready 后，另开 implementation 包迁移 C5-M9 expected wording、focused tests 命名和 capability docs；该路线不要求 FreeCAD native provenance expected。 |
 
 ## 队列检查
 
@@ -67,6 +75,7 @@ cd /home/user/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M2-PartWorkbenchNativeOracleProbe批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M4-ProjectOnSurfaceRequestLocalLedger产品契约批次/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -76,6 +85,7 @@ cd /home/user/Chili3DProject/FreeCAD
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M2-PartWorkbenchNativeOracleProbe批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M4-ProjectOnSurfaceRequestLocalLedger产品契约批次/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore12.0
 git diff --check
 ```

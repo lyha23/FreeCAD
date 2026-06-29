@@ -1,0 +1,9 @@
+id	axis	product_boundary	native_parity_status	contract_status	migration_status	next_action	owner_step
+C12M4-SCOPE-001	projection_item_ledger	in_scope_request_local	native_history_unavailable	product_contract_candidate	expected_wording_pending	Freeze ledger fields and migrate C5-M9 wording from known_gap to product_contract.	S2
+C12M4-SCOPE-002	mapper_history_event	in_scope_request_local	native_history_unavailable	product_contract_candidate	expected_wording_pending	Keep MapperHistoryEvent as CAD Core ledger and document it as native-oracle-unavailable, not FreeCAD parity.	S2
+C12M4-SCOPE-003	edge_wire_provenance	in_scope_request_local	native_history_unavailable	product_contract_candidate	expected_wording_pending	Retain focused tests for projection_item_index and edge_fragment_index; remove native replacement delete-condition wording later.	S2
+C12M4-SCOPE-004	face_rebuild_provenance	in_scope_request_local	native_history_unavailable	product_contract_candidate	expected_wording_pending	Retain outer/inner face wire source tests; describe as source-ledger contract.	S2
+C12M4-SCOPE-005	height_compound_offset	in_scope_request_local	native_history_unavailable	product_contract_candidate	expected_wording_pending	Retain height solid and compound child ownership tests; document pre/post offset semantics.	S2
+C12M4-SCOPE-006	invalid_projection_diagnostic	in_scope_request_local_diagnostic	native_diagnostic_not_product_contract	product_diagnostic_contract	expected_wording_pending	Migrate diagnostic expected wording without claiming native provenance.	S2
+C12M4-SCOPE-007	freecad_native_elementmap	out_of_scope_product_boundary	native_hidden_retained	not_product_contract	n/a	Keep as retained blocker only; do not wait on it for product contract migration.	S2
+C12M4-SCOPE-008	output_guessing	out_of_scope_product_boundary	rejected	not_product_contract	n/a	Keep rejected: bbox/order/EdgeN/topology/fixture-name inference cannot become contract.	S2
