@@ -16,8 +16,8 @@ C12-M2 覆盖同一个发布问题：Part Workbench retained rows 是否能升�
 - S2 统一判断 request-local/product boundary、helper/native-hidden blocker 和当前 cad-core 可比较性。
 - S3 建立 probe harness / FreeCADCmd / artifact schema 的共同准入；当前 schema 为 `c12m2.native-probe-artifact.v1`，FreeCADCmd baseline 为 `1.2.0 revision 20260519` / OCCT `7.8.1`，runtime artifact 位于 `docs/temp/6-29-20-12-c12m2-freecadcmd-baseline-native-probe.json`。
 - S4 已处理更接近 DocumentObject / native Part feature 的 Sweep 与 Loft：Sweep Location overload 为 `native_probe_blocked`，no-location auxiliary / binormal / tolerance controls 为 current-covered context；Loft selected subelement 为 `native_hidden`。
-- S5 已处理 helper / wrapper / mapper 证据更重的 Filling、GeomPlate 与 ProjectOnSurface：Filling 为 `helper_blocked`；GeomPlate 只有 projected curve2d + initial surface 进入 `oracle_expected_ready` / S6 comparison，G1 curve-on-surface 保持 `native_hidden`；ProjectOnSurface provenance 为 `native_hidden`。
-- S6 只发布 oracle 结果和后续授权，不在本包写代码；当前唯一允许比较 current cad-core 的 S5 行是 GeomPlate projected curve2d + initial surface。
+- S5 已处理 helper / wrapper / mapper 证据更重的 Filling、GeomPlate 与 ProjectOnSurface：Filling 为 `helper_blocked`；GeomPlate 只有 projected curve2d + initial surface 进入 S6 comparison candidate，G1 curve-on-surface 保持 `native_hidden`；ProjectOnSurface provenance 为 `native_hidden`。
+- S6 已发布 oracle 结果和后续授权，不在本包写代码；唯一允许比较 current cad-core 的 GeomPlate projected curve2d + initial surface 已确认为 `current_covered`。
 
 ## 工作步骤
 
@@ -28,8 +28,8 @@ C12-M2 覆盖同一个发布问题：Part Workbench retained rows 是否能升�
 | S2 | 范围准入与 blocker 矩阵 | 判断 request-local 边界、helper/native-hidden 阻塞和可比较性。 |
 | S3 | 通用 NativeProbe harness 与 FreeCADCmd 基线 | 定义可复用 probe schema、artifact 命名、失败分类和运行口径。 |
 | S4 | Sweep / Loft 原生 DocumentObject probe 复审 | 已关闭：Sweep Location native_probe_blocked，Sweep no-location controls current-covered context，Loft native_hidden。 |
-| S5 | Filling / GeomPlate / ProjectOnSurface helper-mapper probe 复审 | 已关闭：Filling helper_blocked，GeomPlate projected curve2d + initial surface oracle_expected_ready / G1 native_hidden，ProjectOnSurface provenance native_hidden。 |
-| S6 | Oracle 收集与发布闸门 | 发布 `oracle_expected_ready` / `native_probe_blocked` / `retained_no_expected` 等最终状态，并决定是否另开 implementation 包。 |
+| S5 | Filling / GeomPlate / ProjectOnSurface helper-mapper probe 复审 | 已关闭：Filling helper_blocked，GeomPlate projected curve2d + initial surface 进入 S6 comparison candidate / G1 native_hidden，ProjectOnSurface provenance native_hidden。 |
+| S6 | Oracle 收集与发布闸门 | 已关闭：发布 `no_code_oracle_blocked_gate`，GeomPlate projected curve2d + initial surface 为 current_covered，无 implementation 包授权。 |
 
 ## 发布闸门
 
@@ -41,6 +41,8 @@ S6 只有在同一 row 同时满足以下条件时，才允许写出后续 imple
 4. current cad-core 输出与 expected 存在稳定 mismatch，并能落到明确 C++ module/API boundary。
 
 任何一项缺失都保持 no-code：可以记录 blocker，可以建议下一包 probe，但不能授权 C++。
+
+S6 最终裁决：没有任何 row 同时满足四项条件。Sweep Location 为 `native_probe_blocked`，Filling 为 `helper_blocked`，Loft 与 ProjectOnSurface 为 `native_hidden`，GeomPlate projected curve2d + initial surface 虽有 expected-backed path 但 current cad-core 已覆盖。`C12M2-BLOCKER-004` 已关闭为 `closed_s6_current_covered_geomplate_only`；后续只允许另开更窄 native probe 包解除 blocker，不授权 C++ implementation 包。
 
 本包禁止在 S6 前把 crash、timeout、TypeError、notCollected、native-hidden、helper blocker 或 probe-only evidence 写成 implementation row；禁止修改 `cad-core/src`、`cad-core/include`、fixtures、expected、tests 或 adapters；禁止用当前机器系统 OCCT 差异替代正式 FreeCAD / LibPack oracle 基线；禁止把 GUI session、跨请求 BREP / TopoDS / NamedShape / ElementMap cache 纳入 CAD Core request-local 产品边界。
 

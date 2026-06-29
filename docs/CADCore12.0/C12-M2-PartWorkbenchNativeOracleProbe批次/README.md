@@ -77,9 +77,24 @@ S5 复用 S3 file-backed harness，FreeCADCmd 为 `/Users/li/.cargo/bin/freecadc
 
 Filling final classification：`helper_blocked`。direct `BRepOffsetAPI_MakeFilling` wrapper controls 与 simple `Part.makeFilledFace` boundary control 可产生稳定 Face summary，但 `helper_surface_initial_face` / `helper_explicit_params_all` 在隔离子 FreeCADCmd 中 SIGSEGV，helper support-order G1/G2 case timeout。S6 不得把 wrapper/control output 升级成 helper support-order 或 initial-surface expected。
 
-GeomPlate final classification：`oracle_expected_ready` 只适用于 projected curve2d + initial surface。fresh probe 中 `projected_curve2d_initial_surface` `perform_ok=true` / `is_done=true`，输出 stable Face summary；`curve2d_on_surface_no_initial_surface` `is_done=false` 且无 surface；`CurveConstraint.setG1Criterion` 返回 `NotImplementedError: Not yet implemented`，G1 curve-on-surface 保持 `native_hidden`。S6 只能比较 projected curve2d + initial surface 对应 current path。
+GeomPlate S5 interim classification：只有 projected curve2d + initial surface 进入 S6 comparison candidate。fresh probe 中 `projected_curve2d_initial_surface` `perform_ok=true` / `is_done=true`，输出 stable Face summary；`curve2d_on_surface_no_initial_surface` `is_done=false` 且无 surface；`CurveConstraint.setG1Criterion` 返回 `NotImplementedError: Not yet implemented`，G1 curve-on-surface 保持 `native_hidden`。S6 已将该唯一 candidate 收口为 `current_covered`。
 
 ProjectOnSurface final classification：`native_hidden`。native object 可赋值、recompute 并输出 4-edge Compound，但 `getElementHistory("Edge1".."Edge4","Wire1","Face1")` 全部返回 `None`，没有 source-backed mapper/provenance/split trace。S6 不得用 API result order、bbox、输出顺序或 fixture 名倒推 ownership。
+
+## S6 Oracle 发布闸门
+
+S6 已消费 S0-S5 的矩阵和 artifact，并对唯一 expected-ready candidate 做 current comparison。最终发布结果是 `no_code_oracle_blocked_gate`：没有任何 row 同时满足 source authority、stable expected、request-local/product boundary 和 current mismatch；本包不授权 C++、fixtures expected、tests、adapters 或 capability wording 改动。
+
+逐行最终分类：
+
+- Sweep Location overload：`native_probe_blocked`。S4 artifact 仍是 build-stage `OCCError: NCollection_Array1::Value`，无 stable Location shape summary；no-location auxiliary / binormal / tolerance controls 只作为 `current_covered` context。
+- Filling helper：`helper_blocked`。S5 artifact 的 wrapper/simple boundary controls 只是 context；helper initial-surface、support-order、explicit params 仍被 crash/timeout 阻塞。
+- GeomPlate projected curve2d + initial surface：`current_covered`。S5 artifact 证明 native wrapper 可收集 Face / 1 face / 4 edges / 4 vertices / volume `5.966720601`；S6 通过 `docs/temp/6-29-20-58-c12m2-s6-geomplate-current-comparison.json` 和 `python3 -m unittest tests.test_p8_features.CadCoreP8FeatureTest.test_c5m13_part_geomplate_projected_curve2d_initial_surface_is_expected_backed` 确认当前 cad-core 已匹配 `cad-core/fixtures/c5m13/expected/part-geomplate-projected-curve2d-initial-surface.freecad.json`。S5 no-arg `makeApprox()` bbox 只作为 wrapper evidence，不覆盖 checked-in expected 的 explicit approximation 比较口径。
+- GeomPlate no-initial-surface curve2d 与 G1 curve-on-surface：`native_hidden` / retained no expected，不比较 current。
+- Loft selected subelement：`native_hidden`。FreeCAD native `Sections` 不暴露 selected subelement assignment。
+- ProjectOnSurface provenance：`native_hidden`。geometry 可 build，但 source-backed mapper/provenance/split trace 没有 native expected。
+
+`C12M2-BLOCKER-004` 已关闭为 `closed_s6_current_covered_geomplate_only`。后续若要继续，只能另开更窄 native probe 包来解除 Location/helper/native-hidden blocker；本包没有 implementation package 授权。
 
 ## 范围
 

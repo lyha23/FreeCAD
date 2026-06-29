@@ -16,6 +16,14 @@ C12-M1 已把 CopyOnChange、Assembly representative subset 和 Part Workbench h
 6. 对 Filling / GeomPlate / ProjectOnSurface 单独处理 helper / wrapper / mapper blocker，不把 helper lifecycle 失败算成 cad-core mismatch。
 7. S6 发布分类结果：只有 stable expected + current mismatch 的 row 才进入后续 implementation 包建议。
 
+## S6 发布结论
+
+S6 已完成最终闸门：没有任何 row 同时满足 source authority、stable native expected、request-local/product boundary 和 current mismatch。本包发布 `no_code_oracle_blocked_gate`，不授权 C++、fixtures expected、tests、adapters 或 capability wording 改动。
+
+唯一进入 S6 current comparison 的 row 是 GeomPlate projected curve2d + initial surface。S5 native artifact 证明该 wrapper path 可收集 Face / 1 face / 4 edges / 4 vertices / volume `5.966720601`；S6 通过 `docs/temp/6-29-20-58-c12m2-s6-geomplate-current-comparison.json` 和 focused unittest 确认 current cad-core 已匹配 `cad-core/fixtures/c5m13/expected/part-geomplate-projected-curve2d-initial-surface.freecad.json`，因此分类为 `current_covered`，不是 implementation candidate。
+
+其余行保持 no-code 分类：Sweep Location 为 `native_probe_blocked`，Sweep no-location controls 只是 `current_covered` context，Filling 为 `helper_blocked`，Loft 为 `native_hidden`，GeomPlate no-initial-surface / G1 native rows 不比较，ProjectOnSurface provenance 为 `native_hidden`。
+
 ## 本包不做什么
 
 - 不新增或修改 `cad-core` C++。
@@ -38,7 +46,7 @@ C12-M1 已把 CopyOnChange、Assembly representative subset 和 Part Workbench h
 
 ## 后续分流
 
-S6 若发现多个 family 同时满足 implementation 条件，后续应按 FreeCAD 调用链拆包，不在 C12-M2 内合并落代码：
+S6 未发现满足 implementation 条件的 family；以下拆包方向不授权执行，只保留为未来解除 blocker 后的分流框架：
 
 - Sweep: `part_sweep` / `TopoShapeExpansion` / pipe shell binding 对齐。
 - Filling: `part_filling` / filling helper / support-order parameters 对齐。
