@@ -50,8 +50,8 @@
 | 类型 | 路径 | 用途 |
 | --- | --- | --- |
 | 方案 | `6-29-12-22-C11-M2-PartWorkbenchFillingNativeHelperParity复开批次方案.md` | 说明 C11-M2 背景、实施原则、S0-S6 拆分和验收分层。 |
-| 工作步骤总入口 | `工作步骤细分/6-29-12-23-【已实现】C11-M2工作步骤总入口.md` | goal 队列索引；自身已完成，S0-S6 待执行。 |
-| S0 | `工作步骤细分/6-29-12-24-C11-M2-S0-live基线与声明口径冻结.md` | 冻结 live capability、dirty boundary、C11-M1/C6-M5 继承口径和 forbidden claims。 |
+| 工作步骤总入口 | `工作步骤细分/6-29-12-23-【已实现】C11-M2工作步骤总入口.md` | goal 队列索引；自身已完成，S0 已关闭，S1-S6 待执行。 |
+| S0 | `工作步骤细分/6-29-12-24-【已实现】C11-M2-S0-live基线与声明口径冻结.md` | 已冻结 live capability、dirty boundary、C11-M1/C6-M5 继承口径和 forbidden claims。 |
 | S1 | `工作步骤细分/6-29-12-25-C11-M2-S1-FreeCAD源码与helper候选矩阵.md` | 复核 FreeCAD source、direct wrapper controls 和 current cad-core landings。 |
 | S2 | `工作步骤细分/6-29-12-26-C11-M2-S2-范围准入与blocker矩阵.md` | 路由 scope / blocker / nonGoal / backend gap 分类，防止无 oracle 直接进 C++。 |
 | S3 | `工作步骤细分/6-29-12-27-C11-M2-S3-FreeCADCmd原生FillingHelper复采集.md` | 复采集 Surface、Supports/Orders、ExplicitParams、non-boundary support/order native helper oracle。 |
@@ -60,10 +60,10 @@
 | S6 | `工作步骤细分/6-29-12-30-C11-M2-S6-Oracle实现与发布闸门.md` | 有 backend gap 则落 C++ / fixtures / focused tests / capability；否则发布 no-code retained non-parity gate。 |
 | source candidates | `矩阵/c11m2_part_workbench_filling_native_helper_source_candidates.tsv` | FreeCAD / cad-core authority seed。 |
 | scope review | `矩阵/c11m2_part_workbench_filling_native_helper_scope_review_matrix.tsv` | 范围、状态和 owner step。 |
-| blocker queue | `矩阵/c11m2_part_workbench_filling_native_helper_blocker_queue.tsv` | S0-S6 blocker 和关闭条件。 |
+| blocker queue | `矩阵/c11m2_part_workbench_filling_native_helper_blocker_queue.tsv` | S0 baseline blocker 已关闭；S1-S6 blocker 和关闭条件待后续步骤消费。 |
 | oracle fixtures | `矩阵/c11m2_part_workbench_filling_native_helper_oracle_fixture_matrix.tsv` | retained C6-M5 evidence、S3 probe route 和 future expected gate。 |
 | non-goal registry | `矩阵/c11m2_part_workbench_filling_native_helper_non_goal_registry.tsv` | 禁止声明和 reopen condition。 |
 | backend gap classification | `矩阵/c11m2_part_workbench_filling_native_helper_backend_gap_classification.tsv` | implementation gate 分类。 |
 | validation matrix | `矩阵/c11m2_part_workbench_filling_native_helper_validation_matrix.tsv` | 文档、oracle、focused tests 和 release gate 命令。 |
 
-当前 S0-S6 都是待执行状态；矩阵是 seed，不是发布闸门结论。C11-M2 不修改 C11-M1 已关闭结论。
+当前 S0 已实现，S1-S6 仍是待执行状态；矩阵除 S0 live 基线行外仍是 seed，不是发布闸门结论。C11-M2 不修改 C11-M1 已关闭结论。
