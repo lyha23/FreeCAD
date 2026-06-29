@@ -4,4 +4,4 @@ C12M2-CAT-002	filling_helper	source_candidate_present	helper_blocked_or_not_yet_
 C12M2-CAT-003	geomplate_surface	source_candidate_present	probe_only_or_not_yet_promoted	not_yet_compared	request_local_possible_with_wrapper_risk	oracle_probe_candidate	closed	Run S5 wrapper-aware probe and require stable expected artifact.	S5
 C12M2-CAT-004	loft_subelement	source_candidate_present	native_hidden_retained	not_yet_compared	request_local_possible	oracle_probe_candidate	closed	Run S4 native-hidden probe and require visible expected.	S4
 C12M2-CAT-005	project_on_surface_provenance	source_candidate_present	probe_only_or_not_yet_promoted	not_yet_compared	request_local_possible_with_mapper_risk	oracle_probe_candidate	closed	Run S5 mapper/provenance probe and require request-local comparison path.	S5
-C12M2-CAT-006	global	s6_only	n/a	n/a	n/a	implementation_candidate_placeholder	closed	S6 may replace this only if a concrete row meets all four gates.	S6
+C12M2-CAT-006	global	s6_only	n/a	n/a	n/a	retained_no_expected	closed	S6 may open a follow-up code package only if a concrete row meets all four gates.	S6

@@ -32,6 +32,7 @@ CADCore12.0 承接 CADCore11.0 队列关闭后的下一轮 capability-first 规�
 - C12-M2 已创建为独立 oracle/native probe 队列。S0 live 冻结 `HEAD=4d245a9c11`（`4d245a9c11 docs: 新增 C12-M2 native oracle probe 开包`），`pwd=/Users/li/Chili3DProject/FreeCAD`，起点 dirty boundary 为 `<clean>`；C12-M1 队列为空，C12-M2 队列从 S0 开始。`freecadcmd` 可发现于 `/Users/li/.cargo/bin/freecadcmd`，S0 未启动 FreeCAD，版本 / OCCT / LibPack runtime 基线留给 S3。
 - C12-M2 继承 C12-M1 S6 `no_code_backlog_gate`：代码 gate 仍关闭，不授权 `cad-core/src`、`cad-core/include`、fixtures、expected、tests、adapters、capability wording 或 full build 改动；本包只为 Sweep / Filling / GeomPlate / Loft / ProjectOnSurface 采集或阻断 stable native/request-local expected。
 - C12-M2 S1 source 基线已完成：Sweep / Filling / GeomPlate / Loft / ProjectOnSurface 均有 exact FreeCAD source authority、关键函数/短句和 existing expected / historical probe output / no-code retained 分类；`C12M2-BLOCKER-003` 关闭为无缺 source-authority 行。本步未运行 FreeCADCmd，未改代码、fixtures、expected、tests、adapters 或 capability wording。
+- C12-M2 S2 范围准入已完成：Sweep 为 `probe_admitted`；Filling 为 `helper_blocked`；GeomPlate / ProjectOnSurface 为 `needs_probe_design`；Loft 为 `native_hidden_blocked`。FreeCADCmd baseline、artifact schema、current comparison、helper lifecycle、native-hidden 和 mapper/provenance blocker 已入队；backend classification 仍为 `oracle_probe_candidate` / `retained_no_expected`，不授权代码实现包。
 
 ## 重开条件
 

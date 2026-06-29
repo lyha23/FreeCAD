@@ -34,6 +34,12 @@ S1 已把五个 family 的 source authority 回填到 source/probe 矩阵：每�
 
 S1 未运行 FreeCADCmd/native probe，未修改 `cad-core/src`、fixtures、expected、tests、adapters 或 capability wording。`C12M2-BLOCKER-003` 关闭为 `closed_s1_none_found`；稳定 native expected 与 current mismatch 仍由 S4/S5/S6 判定。
 
+## S2 范围准入
+
+S2 已逐行复核 C12M2-SRC/SCOPE/CAT/PROBE/BLOCKER：Sweep 为 `probe_admitted`，由 S4 关闭 `C12M2-BLOCKER-101`；Filling 为 `helper_blocked`，由 S5 分离 helper lifecycle 与稳定 expected；GeomPlate 与 ProjectOnSurface 为 `needs_probe_design`，分别由 S5 处理 wrapper / mapper 证据；Loft 为 `native_hidden_blocked`，由 S4 判断是否能暴露可比较 expected。
+
+全局 blocker 保留为：FreeCADCmd runtime baseline（S3）、probe artifact schema（S3）和 current cad-core comparison path（S6）。`C12M2-BLOCKER-003` 保持 `closed_s1_none_found`。Non-goal registry 已覆盖 GUI/session、persistent geometry / cross-request native cache、full BREP product API、crash/timeout/notCollected/helper lifecycle 噪声，以及 API/output-order provenance guessing。Backend gap classification 仍保持 `oracle_probe_candidate` 或 `retained_no_expected`，代码 gate 关闭。
+
 ## 范围
 
 | family | C12-M1 retained reason | C12-M2 probe question | owner step |
