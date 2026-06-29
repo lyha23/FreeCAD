@@ -40,6 +40,14 @@ C10-M4 承接 C10-M3 队列关闭后的 live capability 剩余项：`part_design
 - SubShapeBinder 当前路径已复核：`cad-core/src/part_design/feature_shape_binder.cpp` 对 `BindMode=Detached` 只返回清空 `Support` 的 request-local `documentObjectUpdates`；对 `BindCopyOnChange=Enabled/Mutated` 或 `PartialLoad=True` 只发布 `copy_on_change_full_temporary_document_cache_not_supported` retained diagnostic 和 metadata，不产生 copied-object `documentObjectUpdates`。
 - 因 S3 未采到 request-local copied-object expected，S4 不能比较出 current mismatch，也不能进入 S6 C++ 实现。`C10M4-BLOCKER-401` 关闭为 `product_decision_needed` / `current_retained_diagnostic` / `release_gate`；S5/S6 仍保持 pending。
 
+## S5 non-goal 边界复审结果
+
+- S5 起点 HEAD：`6963ff7a4e`（`6963ff7a4e docs: 完成 C10-M4 S4 DTO 复审`），起点工作区干净。
+- `non_goal_registry.tsv` 已覆盖并保留 forbidden claims：backend session、persistent temporary document/cache、persistent copied object、cross-request BREP / TopoDS / NamedShape / ElementMap cache、GUI lifecycle、adapter repair、frontend mock、unsupported support claim、App::Link lifecycle 非等价，以及 `ReferenceShadow.brep` 不得扩展为 full object BREP persistence。
+- reopen condition 已收紧：persistent backend state 只能由明确架构批准重开；request-local CopyOnChange 替代方案必须同时具备 native copied-object evidence、product DTO approval 和 current cad-core mismatch。
+- `adapter` 只能透传 core 产生的 `documentObjectUpdates` / diagnostics，不能生成业务语义；前端 mock 也不能替代 cad-core core semantics。
+- unsupported `BindCopyOnChange=Enabled/Mutated` 与 `PartialLoad=True` 必须继续发布结构化 diagnostic，当前分类保持 `diagnostic_retained` / `release_gate`。`C10M4-BLOCKER-501` 已关闭为 `closed_s5_diagnostic_retained`；S6 仍 pending。
+
 ## 入口
 
 - 总入口：`6-29-03-29-C10-M4-SubShapeBinderCopyOnChangeDTO准入批次总入口.md`
@@ -53,8 +61,8 @@ C10-M4 承接 C10-M3 队列关闭后的 live capability 剩余项：`part_design
 - S1：FreeCAD 源码与 current coverage 候选矩阵复核（已关闭 source authority blocker）。
 - S2：范围准入与 blocker 矩阵。
 - S3：CopyOnChange native probe 与 DTO evidence 专项复审（已关闭为 `diagnostic_retained` / `notCollected`，无 C++ route）。
-- S4：cad-core 请求 DTO 与 `documentObjectUpdates` 专项复审。
-- S5：临时文档禁用与 non-goal 边界专项复审。
+- S4：cad-core 请求 DTO 与 `documentObjectUpdates` 专项复审（已关闭为 reference-only / release gate）。
+- S5：临时文档禁用与 non-goal 边界专项复审（已关闭为 `diagnostic_retained`，无 backend gap candidate）。
 - S6：Oracle 实现与发布闸门。
 
 ## 当前禁止声明
@@ -63,7 +71,8 @@ C10-M4 承接 C10-M3 队列关闭后的 live capability 剩余项：`part_design
 - 不把 BREP、TopoDS_Shape、NamedShape、ElementMap 或完整 copied-object graph 保存为后端状态。
 - 不把 FreeCAD GUI / task panel / user prompt 生命周期写入 cad-core。
 - 不把 App::Link 的完整 CopyOnChange group lifecycle 当成 SubShapeBinder supported，除非 S3-S5 证明 request-local DTO 子集成立。
-- 不用 fixture 名称、几何猜测、输出修剪或 adapter repair 伪造 CopyOnChange 语义。
+- 不用 fixture 名称、几何猜测、输出修剪、adapter repair 或 frontend mock 伪造 CopyOnChange 语义。
+- 不把 `ReferenceShadow.brep` 的 single-subshape evidence 例外扩展成 full object BREP persistence 或建模输入。
 
 ## 队列检查
 
