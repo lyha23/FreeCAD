@@ -21,7 +21,7 @@ CADCore12.0 承接 CADCore11.0 队列关闭后的下一轮 capability-first 规�
 - S2 scope admission 已完成：`C12M1-SCOPE-001..401` 已补 owner step、current status、next step 和 close condition，`C12M1-BLOCKER-201` 已关闭，`implementation_candidate` 仅保留为 S6-only placeholder。
 - S3 CopyOnChange 剩余 gap 复审已完成：C9-M5 / C10-M4 仍只提供 property/session evidence 和 retained diagnostic 裁决，App::Link `documentObjectUpdates` 是 reference-only DTO 通道，不等同 SubShapeBinder `_tmp_binder` / `_CopiedObjs` / `copyObject` lifecycle；`C12M1-SCOPE-101`、`C12M1-BLOCKER-301`、`C12M1-CAT-001` 均关闭为 retained known gap / oracle blocked，无 C++ implementation candidate。
 - S4 Assembly representative / marker / writeback 复审已完成：representative_solver_adapter 仍是 `available=false` fallback metadata；subshape marker placement 与 placement writeback 已是 expected-backed current-covered request-local subset；full solver、persistent solver state 和 cross-request assembly session 保持 non-goal，无 C12-M2 implementation candidate。
-- Part Workbench Sweep / Filling / GeomPlate / Loft / ProjectOnSurface 等当前存在的是 narrowed / historical evidence，不是已证明的 active backend gap。
+- S5 Part Workbench historical narrowed 复审已完成：Sweep / Filling 继续 no-code retained non-parity，GeomPlate / ProjectOnSurface 继续 probe-only retained evidence，Loft 继续 native-hidden retained evidence；没有 stable expected/current mismatch，无 C++ implementation candidate。
 
 ## 队列检查
 

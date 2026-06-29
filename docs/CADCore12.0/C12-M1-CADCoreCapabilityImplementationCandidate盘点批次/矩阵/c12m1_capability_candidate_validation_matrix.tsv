@@ -17,7 +17,12 @@ C12M1-VAL-401	S4	rg Assembly representative/marker/product boundary rows	passed_
 C12M1-VAL-402	S4	rg FreeCAD AssemblyObject solve/marker/writeback source authority	passed_s4: AssemblyObject::solve, runPreDrag, setNewPlacements, handleOneSideOfJoint, getGlobalPlacement and offsetPlc source authority were located	yes
 C12M1-VAL-403	S4	awk TSV field-count check over C12-M1 matrices	passed_s4: all C12-M1 TSV rows match header field counts after S4 updates	yes
 C12M1-VAL-404	S4	S4 docs hygiene, git diff --check and goal-step queue	passed_s4: no trailing whitespace, git diff --check passed and queue now starts at S5 after S4 rename	yes
-C12M1-VAL-501	S5	rg Part Workbench narrowed evidence rows	Historical Sweep/Filling/GeomPlate/Loft/ProjectOnSurface evidence is classified	yes
+C12M1-VAL-501	S5	rg Part Workbench narrowed evidence rows in capability/tests/C11 docs	passed_s5: Sweep Filling GeomPlate Loft ProjectOnSurface historical narrowed evidence rows remain visible and classified without remaining_gaps promotion	yes
+C12M1-VAL-502	S5	rg FreeCAD Part Workbench source authority symbols	passed_s5: Sweep::execute Loft::execute makeFilledFace BRepOffsetAPI_MakeFillingPy BuildPlateSurfacePy and ProjectOnSurface::execute source authorities were located	yes
+C12M1-VAL-503	S5	awk TSV field-count check over C12-M1 matrices	passed_s5: all C12-M1 matrix TSV rows match header field counts after S5 updates	yes
+C12M1-VAL-504	S5	rg -n '[ \t]$' docs/CADCore12.0/C12-M1-CADCoreCapabilityImplementationCandidate盘点批次 docs/CADCore12.0/README.md	passed_s5: no trailing whitespace in S5 docs scope	yes
+C12M1-VAL-505	S5	git diff --check	passed_s5: no whitespace errors after S5 docs-only changes	yes
+C12M1-VAL-506	S5	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/工作步骤细分 --format markdown	passed_s5: after S5 rename, queue starts at S6 and S5 is skipped as implemented	yes
 C12M1-VAL-601	S6	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/工作步骤细分 --format markdown	Queue empty only after S0-S6 are renamed implemented	yes
 C12M1-VAL-602	All	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/矩阵/*.tsv	All TSV rows match header field counts	yes
 C12M1-VAL-603	All	rg -n '[ \t]$' docs/CADCore12.0	No trailing whitespace	yes
