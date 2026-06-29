@@ -4,12 +4,18 @@ CADCore12.0 承接 CADCore11.0 队列关闭后的下一轮 capability-first 规�
 
 当前 live capability 唯一非空 `remaining_gaps` 仍是 `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache`。C9-M5 与 C10-M4 已多轮复审并保留为 `known_gap_diagnostic` / `oracle_blocked`，不是默认 C++ 实现入口。CADCore12.0 的第一包因此先做全局候选盘点：从 live capability、CADCore9/10/11 的 release gate 和 current tests 中筛出下一批真正可实现的 backend gap。C12-M1 S6 已完成该发布闸门并选择 `no_code_backlog_gate`：本轮无代码落点，不授权 C++、fixtures、expected、oracle 采集、capability wording 或 adapter/test 改动。
 
+用户已在 C12-M1 之后单独批准打开 C12-M2 oracle collection / native probe 包。C12-M2 不推翻 C12-M1 的 no-code 结论，也不直接打开 C++ gate；它只针对 Part Workbench historical rows 采集或阻断 stable native expected，作为后续是否能另开 implementation 包的前置证据。
+
 ## 入口
 
 - C12-M1 总入口：`C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/6-29-16-26-C12-M1-CADCoreCapabilityImplementationCandidate盘点批次总入口.md`
 - C12-M1 方案：`C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/6-29-16-26-C12-M1-CADCoreCapabilityImplementationCandidate盘点批次方案.md`
 - C12-M1 工作步骤：`C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/工作步骤细分/`
 - C12-M1 矩阵：`C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/矩阵/`
+- C12-M2 总入口：`C12-M2-PartWorkbenchNativeOracleProbe批次/6-29-18-53-C12-M2-PartWorkbenchNativeOracleProbe批次总入口.md`
+- C12-M2 方案：`C12-M2-PartWorkbenchNativeOracleProbe批次/6-29-18-53-C12-M2-PartWorkbenchNativeOracleProbe批次方案.md`
+- C12-M2 工作步骤：`C12-M2-PartWorkbenchNativeOracleProbe批次/工作步骤细分/`
+- C12-M2 矩阵：`C12-M2-PartWorkbenchNativeOracleProbe批次/矩阵/`
 
 ## 当前基线
 
@@ -23,6 +29,7 @@ CADCore12.0 承接 CADCore11.0 队列关闭后的下一轮 capability-first 规�
 - S4 Assembly representative / marker / writeback 复审已完成：representative_solver_adapter 仍是 `available=false` fallback metadata；subshape marker placement 与 placement writeback 已是 expected-backed current-covered request-local subset；full solver、persistent solver state 和 cross-request assembly session 保持 non-goal，无 C12-M2 implementation candidate。
 - S5 Part Workbench historical narrowed 复审已完成：Sweep / Filling 继续 no-code retained non-parity，GeomPlate / ProjectOnSurface 继续 probe-only retained evidence，Loft 继续 native-hidden retained evidence；没有 stable expected/current mismatch，无 C++ implementation candidate。
 - S6 NextBatch 发布闸门已完成：`C12M1-SCOPE-401`、`C12M1-BLOCKER-601`、`C12M1-CAT-004`、`C12M1-CAT-005` 与 `C12M1-VAL-601..606` 已回写；最终 action 是 `no_code_backlog_gate`，`C12M1-CAT-005` 仍为 `none_s2_placeholder`，无 implementation candidate。
+- C12-M2 已创建为独立 oracle/native probe 队列，基线 `HEAD=6c0b3a89b3`。初始范围覆盖 Sweep / Filling / GeomPlate / Loft / ProjectOnSurface；S0-S6 尚待执行，代码 gate 仍关闭。
 
 ## 重开条件
 
@@ -37,6 +44,7 @@ CADCore12.0 承接 CADCore11.0 队列关闭后的下一轮 capability-first 规�
 ```bash
 cd /home/user/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M2-PartWorkbenchNativeOracleProbe批次/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -44,6 +52,7 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 ```bash
 cd /home/user/Chili3DProject/FreeCAD
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M2-PartWorkbenchNativeOracleProbe批次/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore12.0
 git diff --check
 ```

@@ -1,0 +1,9 @@
+id	level	command	expected_result	status	owner_step
+C12M2-VAL-001	queue	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M2-PartWorkbenchNativeOracleProbe批次/工作步骤细分 --format markdown	Queue shows pending S0-S6 until implemented.	planned	S0
+C12M2-VAL-002	tsv	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M2-PartWorkbenchNativeOracleProbe批次/矩阵/*.tsv	All TSV rows have stable field counts.	planned	S0
+C12M2-VAL-003	whitespace	rg -n '[ \t]$' docs/CADCore12.0/C12-M2-PartWorkbenchNativeOracleProbe批次 docs/CADCore12.0/README.md	No trailing whitespace.	planned	S0
+C12M2-VAL-004	diff	git diff --check	No whitespace errors in staged or unstaged diff.	planned	S0
+C12M2-VAL-005	native_probe_schema	S3 records FreeCADCmd path, version, OCCT/LibPack, command, stdout/stderr, failure class, expected summary	Probe artifacts are comparable and not just prose.	planned	S3
+C12M2-VAL-006	sweep_loft_probe	S4 probe artifact exists or blocker row records why it cannot exist	Sweep and Loft no longer remain vague historical evidence.	planned	S4
+C12M2-VAL-007	helper_mapper_probe	S5 probe artifact exists or blocker row records why it cannot exist	Filling, GeomPlate, and ProjectOnSurface have explicit expected/blocker classification.	planned	S5
+C12M2-VAL-008	release_gate	S6 classification has no implementation_candidate unless source authority, stable expected, request-local boundary, and current mismatch all hold	C12-M2 publishes a no-code gate or follow-up implementation package recommendation.	planned	S6

@@ -1,0 +1,6 @@
+id	family	non_goal	reason	enforcement	owner_step
+C12M2-NG-001	global	GUI Workbench session behavior	CAD Core is request-local and must not depend on GUI session or ViewProvider state.	Any row requiring GUI session is product_boundary_rejected.	S2
+C12M2-NG-002	global	Cross-request native document or TopoDS cache	CAD Core receives the full document graph per request and does not keep FreeCAD native document state.	Rows requiring persistent native cache cannot become implementation candidates.	S2
+C12M2-NG-003	global	Full BREP transport as product API	Repository boundary only allows ReferenceShadow.brep exception for old subshape snapshot, not full modeling input/output BREP.	Oracle artifacts may be local evidence but not product DTO expansion.	S2
+C12M2-NG-004	global	Crash or timeout as expected behavior	Crash/timeout proves probe instability, not a stable expected/current mismatch.	S6 cannot authorize code from crash/timeout alone.	S6
+C12M2-NG-005	project_on_surface_provenance	Output-order provenance guessing	Mapper ownership cannot be inferred from bbox, output order, or fixture name.	S5 must require source-backed request-local provenance.	S5
