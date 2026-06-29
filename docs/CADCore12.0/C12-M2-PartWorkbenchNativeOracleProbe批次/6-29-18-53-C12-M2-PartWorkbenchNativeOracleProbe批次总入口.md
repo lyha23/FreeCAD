@@ -4,7 +4,9 @@
 
 C12-M2 单独承接 C12-M1 S6 的重开条件：Part Workbench historical rows 必须先获得 stable native / request-local expected，并证明 current cad-core 与 expected 不一致，才允许后续 implementation。C12-M2 本身是 oracle collection / native probe 包，不是代码实现包。
 
-本包基线为 `HEAD=6c0b3a89b3`（`docs: 完成 C12-M1 S6 no-code 发布闸门`）。C12-M1 已确认 Sweep / Filling / GeomPlate / Loft / ProjectOnSurface 只有历史证据，缺少 stable expected/current mismatch。C12-M2 的任务是把这些历史证据逐行复开为可采集、可阻断、可发布的 native oracle 结果。
+S0 live 基线为 `HEAD=4d245a9c11`（`4d245a9c11 docs: 新增 C12-M2 native oracle probe 开包`），`pwd=/Users/li/Chili3DProject/FreeCAD`，起点 dirty boundary 为 `<clean>`。C12-M1 队列已空；C12-M2 队列在 S0 执行前从 S0-S6 开始。FreeCADCmd 可发现路径为 `/Users/li/.cargo/bin/freecadcmd`，S0 不启动 FreeCAD，版本 / OCCT / LibPack 和 runtime 分类由 S3 采集。
+
+C12-M1 已确认 Sweep / Filling / GeomPlate / Loft / ProjectOnSurface 只有历史证据，缺少 stable expected/current mismatch；S6 最终发布 `no_code_backlog_gate`，不授权 C++、fixtures、expected、oracle 采集、capability wording 或 adapter/test 改动。C12-M2 单独打开 native oracle probe，但不推翻该 no-code 结论；它的任务是把这些历史证据逐行复开为可采集、可阻断、可发布的 native oracle 结果。
 
 ## 最小完整语义批次
 
@@ -39,6 +41,8 @@ S6 只有在同一 row 同时满足以下条件时，才允许写出后续 imple
 4. current cad-core 输出与 expected 存在稳定 mismatch，并能落到明确 C++ module/API boundary。
 
 任何一项缺失都保持 no-code：可以记录 blocker，可以建议下一包 probe，但不能授权 C++。
+
+本包禁止在 S6 前把 crash、timeout、TypeError、notCollected、native-hidden、helper blocker 或 probe-only evidence 写成 implementation row；禁止修改 `cad-core/src`、`cad-core/include`、fixtures、expected、tests 或 adapters；禁止用当前机器系统 OCCT 差异替代正式 FreeCAD / LibPack oracle 基线；禁止把 GUI session、跨请求 BREP / TopoDS / NamedShape / ElementMap cache 纳入 CAD Core request-local 产品边界。
 
 ## 主要交付物
 

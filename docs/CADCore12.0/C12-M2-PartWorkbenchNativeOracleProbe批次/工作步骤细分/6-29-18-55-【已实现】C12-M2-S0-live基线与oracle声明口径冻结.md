@@ -1,4 +1,4 @@
-# C12-M2 S0 live 基线与 oracle 声明口径冻结
+# 【已实现】C12-M2 S0 live 基线与 oracle 声明口径冻结
 
 ## 目标
 
@@ -39,3 +39,14 @@ git diff --check
 ## 完成条件
 
 S0 完成后，必须能用一句话说明：C12-M2 是 user-approved oracle/native probe 包，代码 gate 仍关闭；本步只冻结基线，不采 expected。
+
+## S0 冻结结论
+
+- `pwd=/Users/li/Chili3DProject/FreeCAD`
+- `HEAD=4d245a9c11`
+- `git log -1 --oneline=4d245a9c11 docs: 新增 C12-M2 native oracle probe 开包`
+- `git -c core.quotepath=false status --short -uall=<clean>`
+- C12-M1 队列检查只输出表头，确认已空；C12-M2 队列在 S0 执行前从 S0-S6 开始。
+- FreeCADCmd 仅做发现性检查：`/Users/li/.cargo/bin/freecadcmd` 可发现；S0 未启动 FreeCAD，版本 / OCCT / LibPack / runtime 分类留给 S3。
+
+一句话结论：C12-M2 是 user-approved oracle/native probe 包，继承 C12-M1 S6 `no_code_backlog_gate`，代码 gate 仍关闭；本步只冻结 live baseline 与 oracle 声明口径，不采 expected。
