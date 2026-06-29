@@ -15,6 +15,7 @@
 - C6-M5 已关闭：`Part.makeFilledFace` 的 Surface、Supports/Orders、ExplicitParams 和 non-boundary support/order 已作为 CAD Core request-local product contract 发布，`remaining_gaps=[]`。
 - C6-M5 未声明 FreeCAD parity；six native helper crash / timeout / notCollected evidence 保留在 `narrowed_gaps` / `historical_native_helper_evidence`。
 - C11-M2 S3 已复跑本机 FreeCADCmd：FreeCAD `1.2.0 revision 20260519` / OCCT `7.8.1` 下 Surface、Supports/Orders G1/G2、blocked explicit params 和 non-boundary support/order 仍没有 stable helper `shape_summary`；direct wrapper controls 只是 diagnostic dependency。
+- C11-M2 S4 已完成 ProductContract 到 Parity 升级审计：S3 没有 stable native expected 可比较，C6-M5 fixtures 保留为 current product-contract non-parity evidence，comparison 关闭为 `diagnostic_retained`，不新增 backend gap。
 - 本批次起点不假设 backend gap。只有 S3 得到 stable native oracle，且 S4 证明 current cad-core product contract 与 native expected 存在 request-local mismatch，才允许 S6 打开代码实现。
 
 ## 证明链条
@@ -51,12 +52,12 @@
 | 类型 | 路径 | 用途 |
 | --- | --- | --- |
 | 方案 | `6-29-12-22-C11-M2-PartWorkbenchFillingNativeHelperParity复开批次方案.md` | 说明 C11-M2 背景、实施原则、S0-S6 拆分和验收分层。 |
-| 工作步骤总入口 | `工作步骤细分/6-29-12-23-【已实现】C11-M2工作步骤总入口.md` | goal 队列索引；自身已完成，S0-S3 已关闭，S4-S6 待执行。 |
+| 工作步骤总入口 | `工作步骤细分/6-29-12-23-【已实现】C11-M2工作步骤总入口.md` | goal 队列索引；自身已完成，S0-S4 已关闭，S5-S6 待执行。 |
 | S0 | `工作步骤细分/6-29-12-24-【已实现】C11-M2-S0-live基线与声明口径冻结.md` | 已冻结 live capability、dirty boundary、C11-M1/C6-M5 继承口径和 forbidden claims。 |
 | S1 | `工作步骤细分/6-29-12-25-【已实现】C11-M2-S1-FreeCAD源码与helper候选矩阵.md` | 已复核 FreeCAD source、direct wrapper controls 和 current cad-core landings；`C11M2-BLOCKER-101` 关闭。 |
 | S2 | `工作步骤细分/6-29-12-26-【已实现】C11-M2-S2-范围准入与blocker矩阵.md` | 已路由 scope / blocker / nonGoal / backend gap 分类，关闭 `C11M2-BLOCKER-201`，防止无 oracle 直接进 C++。 |
 | S3 | `工作步骤细分/6-29-12-27-【已实现】C11-M2-S3-FreeCADCmd原生FillingHelper复采集.md` | 已复采集 Surface、Supports/Orders、ExplicitParams、non-boundary support/order native helper oracle；101/102/201/202 均为 `notCollected_s3_reconfirmed`。 |
-| S4 | `工作步骤细分/6-29-12-28-C11-M2-S4-ProductContract到Parity升级审计.md` | 仅在 S3 stable oracle 存在时比较 C6-M5 current product contract 与 native expected。 |
+| S4 | `工作步骤细分/6-29-12-28-【已实现】C11-M2-S4-ProductContract到Parity升级审计.md` | 已审计 ProductContract 到 Parity 升级闸门；无 stable native expected，关闭为 `diagnostic_retained`，不新增 backend gap。 |
 | S5 | `工作步骤细分/6-29-12-29-C11-M2-S5-协议边界与non-goal复审.md` | 关闭 native DocumentObject、Surface Workbench GUI、persistent wrapper lifecycle、adapter fixup 等边界。 |
 | S6 | `工作步骤细分/6-29-12-30-C11-M2-S6-Oracle实现与发布闸门.md` | 有 backend gap 则落 C++ / fixtures / focused tests / capability；否则发布 no-code retained non-parity gate。 |
 | source candidates | `矩阵/c11m2_part_workbench_filling_native_helper_source_candidates.tsv` | FreeCAD / cad-core authority seed。 |
@@ -67,4 +68,4 @@
 | backend gap classification | `矩阵/c11m2_part_workbench_filling_native_helper_backend_gap_classification.tsv` | implementation gate 分类。 |
 | validation matrix | `矩阵/c11m2_part_workbench_filling_native_helper_validation_matrix.tsv` | 文档、oracle、focused tests 和 release gate 命令。 |
 
-当前 S0-S3 已实现，S4-S6 仍是待执行状态；矩阵已写入 S1 source authority evidence、S2 route evidence 和 S3 FreeCADCmd notCollected evidence，但 parity comparison、non-goal release boundary 和 S6 发布闸门仍未关闭。C11-M2 不修改 C11-M1 已关闭结论。
+当前 S0-S4 已实现，S5-S6 仍是待执行状态；矩阵已写入 S1 source authority evidence、S2 route evidence、S3 FreeCADCmd notCollected evidence 和 S4 diagnostic-retained comparison gate。non-goal release boundary 和 S6 发布闸门仍未关闭。C11-M2 不修改 C11-M1 已关闭结论。
