@@ -124,7 +124,7 @@ Link 属性字段名遵循 `docs/接口规定/05-30-12-36-Link属性迁移到val
 | `Properties.SupportFace` | `App::PropertyLinkSub`，当前发布切片要求单个 support face。 |
 | `Properties.Projection` | `App::PropertyLinkSubList`，按 `SubSet[]` / `SubList[]` 的请求顺序投影 edge / wire / face，不按 bbox、subname 或几何类型重排。 |
 
-当前响应只发布普通 indexed `NamedShape` / subshape，projected edge provenance mapper/history、GUI projection task panel 和未验证高级分支仍是 gap / non-goal；不能把本切片解释为完整 `ProjectOnSurface` 或完整 Part surface family。
+当前响应发布普通 indexed `NamedShape` / subshape，并公开 C12-M4 request-local 产品契约字段：`projection_item_ledger`、由该 ledger 生成的 ProjectOnSurface `mapper_history`、`element_history_status` / reference recovery hook，以及 invalid projection 的结构化 provenance diagnostic。上述字段是 CAD Core 请求内可重建证据，不宣称 FreeCAD native MapperHistory / ElementMap parity；当前 FreeCAD 原生 mapper/history oracle 仍为 unavailable。GUI projection task panel、GUI selection/camera session 和完整 Part surface family 仍是 non-goal。
 
 ### `ReferenceShadow` 与 BREP snapshot
 

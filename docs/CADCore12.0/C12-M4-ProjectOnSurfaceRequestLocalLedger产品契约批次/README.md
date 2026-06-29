@@ -2,7 +2,7 @@
 
 C12-M4 承接 C12-M3 S6 的 `native_hidden_retained` / `no_code_retained_gate`。C12-M3 已证明 FreeCAD 原生 `FeatureProjectOnSurface` 能生成 geometry，但公开的 `TopoShapePy.getElementHistory`、`mapSubElement`、`mapShapes`、`MapperHistory` / `ElementMap` 观察路径没有暴露 source-backed source-to-target provenance；继续等待 native expected 会把 ProjectOnSurface provenance 卡在不可观测状态。
 
-本包把 `cad-core` 现有 request-local projection ledger 升级为 CAD Core 产品契约：它不再伪装成 FreeCAD native parity expected，而是作为前端引用恢复、stable subname、mapper history 和 diagnostic recovery 的 request-local contract。C12-M4 仍不在开包阶段改 C++、fixtures expected、tests、adapters 或 capability wording；这些变更必须由后续步骤或独立 implementation 包按本契约执行。
+本包把 `cad-core` 现有 request-local projection ledger 升级为 CAD Core 产品契约：它不再伪装成 FreeCAD native parity expected，而是作为前端引用恢复、stable subname、mapper history 和 diagnostic recovery 的 request-local contract。C12-M4 决策包本身不改 C++、fixtures expected、tests、adapters 或 capability wording；发布后续已按本契约把 expected / capability / adapter / 接口文档的公开口径迁移完成。
 
 ## S0 live 基线冻结
 
@@ -43,23 +43,23 @@ C12-M4 承接 C12-M3 S6 的 `native_hidden_retained` / `no_code_retained_gate`�
 - S4 逐行复核 `source_authority`、`contract_fields`、`scope_review`、`expected_migration`、`non_goal_registry`、`blocker_queue` 与 `validation_matrix` 后，没有发现新的 retained blocker。`projection_item_ledger`、`MapperHistoryEvent`、edge/wire、face rebuild、height/compound/offset、`element_history_status` / recovery hook 与 invalid projection diagnostics 均保持产品契约边界清楚。
 - C12-M3 负结论继续保留为 `native_oracle_unavailable`：S4 artifact 是 `native_hidden_retained`，`s5_input=null`，12 条 observation 只有 `native_hidden_retained` / `product_boundary_rejected`；S5 no-comparison evidence 记录 `native_provenance_expected_ready_count=0`、未运行 current comparison、未创建 backend gap candidate。
 - 最终发布 `contract_published`、`contract_migration_ready`、`implementation_deferred` 和 `rejected_native_parity_dependency`。C12-M4 本身不改 C++、include、fixtures expected、tests、adapters、capability source、接口文档正文或 C5-M9 expected JSON。
-- `C12M4-BLOCKER-004` 已关闭为 follow-up migration sources located；`C12M4-BLOCKER-005` 已关闭为 release gate published。建议另开 follow-up implementation package，迁移 C5-M9 expected wording、capability source、adapter assertion 和接口文档 wording。
+- `C12M4-BLOCKER-004` 已关闭为 follow-up migration sources located；`C12M4-BLOCKER-005` 已关闭为 release gate published。发布后的公开口径迁移已覆盖 C5-M9 expected wording、capability source、adapter assertion 和接口文档 wording。
 
 ## 契约判断
 
 - FreeCAD 语义依据仍来自 `src/Mod/Part/App/FeatureProjectOnSurface.cpp` 的 `Projection` LinkSubList、`projectWire()`、`projectFace()`、`createSolidIfHeight()`、`createCompound()` 和 `getOffsetPlacement()` 调用顺序。
 - `cad-core/src/part/part_project_on_surface.cpp` 里的 `projection_item_ledger`、`ProjectedShapeEvidence`、`projectOnSurfaceMapperEvidenceJson()` 和 `namedShapeForProjectOnSurfaceProvenance()` 是产品契约的当前实现语义来源。
 - `cad-core/include/cad_core/part/topo_shape_mapper.h` 的 `MapperHistoryEvent` 是 request-local provenance 的公共语义形状；它是 `cad-core` 的产品账本，不要求 FreeCAD native API 输出同构 history。
-- C5-M9 expected 当前仍写着 `known_gap` / native hidden delete condition；S3 已把这类 wording 的迁移目标列为 implementation-ready 清单。迁移不得改写 geometry parity，也不得降低 source-authority 注释、focused assertions 或 native oracle unavailable 注记要求。
+- C5-M9 expected 已从 `known_gap` / native hidden delete condition 迁移为 `product_contract` 或 `product_diagnostic_contract`；该迁移不改写 geometry parity，也不降低 source-authority 注释、focused assertions 或 native oracle unavailable 注记要求。
 
 ## 出口
 
-- `contract_published`：产品契约已在文档/矩阵中冻结，但 fixtures/capability wording 尚未迁移。
-- `contract_migration_ready`：expected/test/capability/interface wording 的具体迁移范围和验收命令已经明确，可另开 implementation goal。
-- `implementation_deferred`：只发布决策和迁移包，不直接改 C++ 或 fixture expected。
+- `contract_published`：产品契约已在文档/矩阵中冻结，发布后续已迁移 fixtures/capability wording。
+- `contract_migration_ready`：expected/test/capability/interface wording 的具体迁移范围和验收命令已经明确，并已按该范围执行。
+- `implementation_deferred`：C12-M4 决策包只发布决策和迁移包；后续口径迁移不改变 ProjectOnSurface 几何实现。
 - `rejected_native_parity_dependency`：继续要求 FreeCAD native ProjectOnSurface history artifact 作为唯一入口的路线被拒绝。
 
-最终状态：S4 已发布以上四个出口；C12-M4 队列关闭预期为 `step_goal_queue.py` 只输出表头。
+最终状态：S4 已发布以上四个出口；C12-M4 队列关闭预期为 `step_goal_queue.py` 只输出表头；发布后的 expected / capability / adapter / 接口文档公开口径迁移已完成。
 
 ## 入口
 

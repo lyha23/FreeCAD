@@ -2968,7 +2968,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("gui_conic_edit", conic_curves["covered"])
         self.assertNotIn("full_sketcher_solver_conic_constraints", conic_curves["covered"])
         project_on_surface = capabilities["part_workbench"]["project_on_surface"]
-        self.assertEqual(project_on_surface["status"], "supported_expected_backed_published_slice")
+        self.assertEqual(project_on_surface["status"], "supported_expected_backed_product_contract")
         self.assertIn("Part::ProjectOnSurface", project_on_surface["type_ids"])
         self.assertEqual(
             project_on_surface["payload_keys"],
@@ -3018,11 +3018,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "projected_face_parametric_wire_rebuild",
             "ordinary_indexed_named_shape",
             "c5m9_projected_edge_wire_projection_item_ledger",
-            "c5m9_projected_edge_wire_mapper_history_source_backed",
+            "c5m9_projected_edge_wire_mapper_history_product_contract",
             "c5m9_projected_wire_fragment_ownership",
-            "c5m9_invalid_provenance_diagnostics",
-            "c5m9_projected_face_wire_source_evidence",
-            "c5m9_projected_face_rebuild_mapper_history_source_backed",
+            "c5m9_invalid_request_local_provenance_diagnostics",
+            "c5m9_projected_face_wire_source_ledger",
+            "c5m9_projected_face_rebuild_mapper_history_product_contract",
             "c5m9_projected_all_compound_child_provenance",
             "c5m9_projected_height_solid_provenance",
             "c5m9_projected_reference_recovery_hook",
@@ -3067,10 +3067,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "source_shape_recomputed_from_document_graph",
             "single_support_face",
             "ordinary_link_sub_list_projection_order",
-            "ordinary_indexed_named_shape_without_freecad_mapper_history",
+            "ordinary_indexed_named_shape_with_request_local_mapper_history",
             "projected_edge_wire_mapper_history_from_projection_item_ledger",
             "projected_face_all_mapper_history_from_projection_item_ledger",
-            "native_project_on_surface_mapper_history_hidden_until_probe",
+            "native_project_on_surface_mapper_history_oracle_unavailable",
         ):
             self.assertIn(boundary, project_on_surface["request_local_boundaries"])
         self.assertEqual(project_on_surface["remaining_gaps"], [])
@@ -3080,20 +3080,23 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("gui_selection_camera_session", project_on_surface["non_goals"])
         self.assertNotIn("unverified_advanced_branches", project_on_surface["non_goals"])
         narrowed_gaps = project_on_surface["narrowed_gaps"]
-        self.assertIn("native_project_on_surface_mapper_history_hidden_until_probe", narrowed_gaps)
-        native_mapper_gap = narrowed_gaps["native_project_on_surface_mapper_history_hidden_until_probe"]
-        self.assertEqual(native_mapper_gap["status"], "historical_boundary_until_native_mapper_probe")
-        self.assertEqual(native_mapper_gap["route"], "historical_narrowed_gap")
+        self.assertIn("native_project_on_surface_mapper_history_oracle_unavailable", narrowed_gaps)
+        native_mapper_gap = narrowed_gaps["native_project_on_surface_mapper_history_oracle_unavailable"]
+        self.assertEqual(native_mapper_gap["status"], "native_oracle_unavailable_retained")
+        self.assertEqual(native_mapper_gap["route"], "product_contract_non_parity")
         self.assertEqual(
             native_mapper_gap["product_contract"]["provenance"],
             "cad_core_projection_item_ledger",
         )
-        self.assertEqual(native_mapper_gap["product_contract"]["freecad_expected_status"], "not_expected_backed")
+        self.assertEqual(
+            native_mapper_gap["product_contract"]["freecad_expected_status"],
+            "native_oracle_unavailable",
+        )
         self.assertIn("c5m9/part-project-on-surface-edge-provenance", native_mapper_gap["fixtures"])
         self.assertIn("ProjectOnSurface mapper/history ownership", native_mapper_gap["delete_condition"])
         self.assertIn("Mode", project_on_surface["field_boundaries"]["expected_backed"])
         self.assertIn(
-            "native ProjectOnSurface mapper/history ownership hidden until stable native probe",
+            "native ProjectOnSurface mapper/history ownership unavailable through the current FreeCAD public history API",
             project_on_surface["field_boundaries"]["historical_native_evidence"],
         )
         self.assertIn(

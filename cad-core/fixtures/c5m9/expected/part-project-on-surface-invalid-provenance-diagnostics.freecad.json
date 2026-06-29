@@ -1,13 +1,31 @@
 {
   "freecad_version": "1.2.0 revision 20260519",
-  "known_gap": {
+  "product_diagnostic_contract": {
     "cad_core_fixture": "cad-core/fixtures/c5m9/part-project-on-surface-invalid-provenance-diagnostics.json",
-    "delete_condition": "Replace this source-backed diagnostic boundary with native expected diagnostics after FreeCADCmd collector exports ProjectOnSurface Projection target/subname diagnostics in the same schema.",
-    "kind": "project_on_surface_invalid_provenance_diagnostic_schema_native_hidden",
-    "reason": "Native ProjectOnSurface raises errors for invalid Projection links, but the current collector does not expose cad-core diagnostic property/target/subname schema for provenance failures. S2 focused tests keep this diagnostic-backed.",
+    "kind": "project_on_surface_invalid_request_local_diagnostic",
+    "contract": "CAD Core request-local ProjectOnSurface invalid projection diagnostic",
+    "provenance": "projection_item_ledger + diagnostic payload",
+    "native_oracle_status": "native_oracle_unavailable",
+    "freecad_native_parity": false,
     "source_authority": [
       "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp::getProjectionShapes()"
+    ],
+    "focused_test": "tests.test_p8_features.CadCoreP8FeatureTest.test_c5m9_part_project_on_surface_invalid_provenance_diagnostics_are_locatable",
+    "asserted_fields": [
+      "diagnostics[].code",
+      "diagnostics[].property",
+      "diagnostics[].target",
+      "diagnostics[].subname"
     ]
   },
-  "reference": "Diagnostic-backed ProjectOnSurface invalid provenance boundary; focused cad-core tests assert property, target, and subname."
+  "native_oracle_unavailable": {
+    "classification": "native_hidden_retained",
+    "evidence": [
+      "docs/temp/6-29-23-05-c12m3-s4-project-on-surface-native-provenance-probe-output.json",
+      "docs/temp/6-29-22-40-c12m3-s5-project-on-surface-no-comparison-evidence.json"
+    ],
+    "reason": "Current FreeCAD native probe does not expose stable ProjectOnSurface invalid projection diagnostics with mapper/history ownership. This fixture is the published CAD Core product diagnostic contract, not a native parity oracle.",
+    "reopen_condition": "Only compare as FreeCAD native parity if a future native artifact exposes stable ProjectOnSurface invalid projection diagnostics with native_provenance_expected_ready."
+  },
+  "reference": "CAD Core request-local ProjectOnSurface invalid projection diagnostic product contract; native FreeCAD mapper/history parity remains unavailable."
 }

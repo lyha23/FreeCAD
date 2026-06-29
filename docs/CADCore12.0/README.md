@@ -8,7 +8,7 @@ CADCore12.0 承接 CADCore11.0 队列关闭后的下一轮 capability-first 规�
 
 C12-M2 S6 已完成并发布 `no_code_oracle_blocked_gate`：ProjectOnSurface 几何可 build，但 mapper/provenance history 仍 `native_hidden`。C12-M3 已完成 ProjectOnSurface mapper / provenance native observability 发布闸门：原生 API 仍没有给出 source-backed、request-local provenance，最终发布 `no_code_retained_gate`，仍不是 C++ implementation 包。
 
-用户已在 C12-M3 后批准打开 C12-M4 产品契约包：不再把 FreeCAD native ProjectOnSurface history artifact 作为唯一 gate，而是把当前 `cad-core` request-local projection ledger 升级为 CAD Core 产品契约。C12-M4 已完成发布闸门并发布 `contract_published`、`contract_migration_ready`、`implementation_deferred` 和 `rejected_native_parity_dependency`；本包不直接改 C++、fixtures expected、tests、adapters 或 capability wording，后续 wording 迁移应另开 implementation package。
+用户已在 C12-M3 后批准打开 C12-M4 产品契约包：不再把 FreeCAD native ProjectOnSurface history artifact 作为唯一 gate，而是把当前 `cad-core` request-local projection ledger 升级为 CAD Core 产品契约。C12-M4 已完成发布闸门并发布 `contract_published`、`contract_migration_ready`、`implementation_deferred` 和 `rejected_native_parity_dependency`；随后已把该产品契约落到 C5-M9 expected wording、capability source、adapter assertion 和 recompute 接口文档的公开口径中。当前口径是：CAD Core request-local ledger / mapper_history 是产品契约，FreeCAD native mapper/history oracle 仍为 unavailable。
 
 ## 入口
 
@@ -61,7 +61,8 @@ C12-M2 S6 已完成并发布 `no_code_oracle_blocked_gate`：ProjectOnSurface �
 - C12-M4 S1 current ledger 证据矩阵已完成：S1 live 起点为 clean 的 `HEAD=842ce54ad7`（`842ce54ad7 docs: 冻结 C12-M4 S0 live 基线`）。已盘点 current producer `ProjectedShapeEvidence`、`projectOnSurfaceMapperEvidenceJson()`、`namedShapeForProjectOnSurfaceProvenance()` 和 `MapperHistoryEvent` 公共字段；focused consumer 为 `cad-core/tests/test_p8_features.py` 的 C5-M9 edge、wire split、invalid diagnostic、face rebuild、all-compound 方法；五个 C5-M9 expected JSON 当前仍是 `known_gap` / `native_hidden` / native replacement wording。S1 只冻结 current evidence 和迁移点，保持 C12-M3 native oracle unavailable 口径，不关闭 S2 产品契约边界，也不改 C++、fixtures expected、tests、adapters 或 capability wording。
 - C12-M4 S2 产品契约边界与 non-goal 冻结已完成：S2 live 起点为 clean 的 `HEAD=49cdd9d086`（`49cdd9d086 docs: 完成 C12-M4 S1 ledger 证据矩阵`）。`projection_item_ledger`、`MapperHistoryEvent`、edge/wire、face rebuild、height/compound/offset、`element_history_status` / recovery hook 已冻结为 CAD Core request-local product contract；invalid projection diagnostics 已冻结为 product diagnostic contract。S2 保留 `native_oracle_unavailable` 注记：C12-M3 仍是 `native_hidden_retained`、`s5_input=null`、`native_provenance_expected_ready_count=0`，不能改写成 FreeCAD native parity success。`C12M4-BLOCKER-002` 已关闭；S3 expected/capability wording 迁移和 S4 发布闸门仍未关闭。本步未改 C++、fixtures expected、tests、adapters、capability wording 或 C5-M9 expected JSON。
 - C12-M4 S3 expected 与 capability 迁移设计已完成：S3 live 起点为 clean 的 `HEAD=5aa11afe11`（`5aa11afe11 docs: 完成 C12-M4 S2 产品契约冻结`）。五个 C5-M9 expected JSON 的 `known_gap/native_hidden replacement` wording 已设计为迁移到 `product_contract` 或 `product_diagnostic_contract` wording；capability source、adapter assertion 与接口文档 exact sources 已定位到 `cad-core/src/runtime/capability_contract.cpp:821-952`、`cad-core/tests/test_adapters.py:2970-3104`、`docs/接口规定/01-cad-recompute全量输入输出接口.md:113-127`。S3 只设计迁移，不改 C++、expected、tests、adapters、capability source 或接口正文。
-- C12-M4 S4 产品契约发布闸门已完成：S4 live 起点为 clean 的 `HEAD=af1cc283b1`（`af1cc283b1 docs: 完成 C12-M4 S3 迁移设计`）。逐行复核矩阵后无新增 retained blocker，最终发布 `contract_published`、`contract_migration_ready`、`implementation_deferred` 和 `rejected_native_parity_dependency`；`C12M4-BLOCKER-004/005` 已关闭。C12-M3 native oracle 仍保留为 `native_oracle_unavailable`：S4 artifact 是 `native_hidden_retained`，`s5_input=null`，`native_provenance_expected_ready_count=0`，未运行 current comparison，未创建 backend gap candidate。C12-M4 队列关闭预期为只输出表头；后续应另开 implementation package 迁移 C5-M9 expected wording、capability source、adapter assertion 和接口文档 wording。
+- C12-M4 S4 产品契约发布闸门已完成：S4 live 起点为 clean 的 `HEAD=af1cc283b1`（`af1cc283b1 docs: 完成 C12-M4 S3 迁移设计`）。逐行复核矩阵后无新增 retained blocker，最终发布 `contract_published`、`contract_migration_ready`、`implementation_deferred` 和 `rejected_native_parity_dependency`；`C12M4-BLOCKER-004/005` 已关闭。C12-M3 native oracle 仍保留为 `native_oracle_unavailable`：S4 artifact 是 `native_hidden_retained`，`s5_input=null`，`native_provenance_expected_ready_count=0`，未运行 current comparison，未创建 backend gap candidate。C12-M4 队列关闭预期为只输出表头。
+- C12-M4 后续公开口径迁移已落地：C5-M9 ProjectOnSurface provenance expected JSON 已从 `known_gap/native_hidden replacement` 改为 `product_contract` 或 `product_diagnostic_contract`；`cad-core` capability / C API adapter test / recompute 接口文档已同步发布 request-local ledger 产品契约，并保留 FreeCAD native mapper/history oracle unavailable 的非 parity 边界。
 
 ## 重开条件
 
@@ -71,7 +72,7 @@ C12-M2 S6 已完成并发布 `no_code_oracle_blocked_gate`：ProjectOnSurface �
 | Assembly representative / marker / writeback | 产品批准 request-local subset + expected/current mismatch。 |
 | Part Workbench historical rows | stable native/request-local expected + current mismatch。 |
 | ProjectOnSurface provenance | 未来 FreeCAD 原生 MapperHistory / ElementMap artifact 产出 `native_provenance_expected_ready` + request-local boundary + current mismatch；C12-M3 native-hidden 证据本身不能重开代码。 |
-| ProjectOnSurface request-local ledger product contract | C12-M4 发布 contract_migration_ready 后，另开 implementation 包迁移 C5-M9 expected wording、focused tests 命名和 capability docs；该路线不要求 FreeCAD native provenance expected。 |
+| ProjectOnSurface request-local ledger product contract | C12-M4 产品契约公开口径已落地；后续只在新增 request-local ledger 字段、改变 mapper_history schema，或未来 FreeCAD 原生 artifact 产出 `native_provenance_expected_ready` 并证明需要重审 parity 边界时重开。 |
 
 ## 队列检查
 

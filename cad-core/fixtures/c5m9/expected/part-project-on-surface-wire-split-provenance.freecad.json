@@ -1,15 +1,33 @@
 {
   "freecad_version": "1.2.0 revision 20260519",
-  "known_gap": {
+  "product_contract": {
     "cad_core_fixture": "cad-core/fixtures/c5m9/part-project-on-surface-wire-split-provenance.json",
-    "delete_condition": "Replace this source-backed known_gap with native expected fields after FreeCADCmd collector or a dedicated probe can export ProjectOnSurface wire fragment ownership and MapperHistory/ElementMap rows.",
-    "kind": "project_on_surface_wire_fragment_mapper_history_native_hidden",
-    "reason": "Native collector cannot expose which projected edge fragment belongs to a source wire LinkSubList item. S2 focused tests require projection_item_index and edge_fragment_index to come from the source item ledger, not bbox, output order, fixture name, or geometry similarity.",
+    "kind": "project_on_surface_wire_split_request_local_ledger",
+    "contract": "CAD Core request-local ProjectOnSurface wire split provenance ledger",
+    "provenance": "projection_item_ledger + mapper_history",
+    "native_oracle_status": "native_oracle_unavailable",
+    "freecad_native_parity": false,
     "source_authority": [
       "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp::getProjectionShapes()",
       "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp::projectWire()",
       "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeMapper.cpp::ShapeMapper::insert()"
+    ],
+    "focused_test": "tests.test_p8_features.CadCoreP8FeatureTest.test_c5m9_part_project_on_surface_wire_split_records_fragment_ownership",
+    "asserted_fields": [
+      "objects.ProjectedWireSplitProvenance.projection_item_ledger[].source_subname",
+      "named_shapes.ProjectedWireSplitProvenance.mapper_history[].relation",
+      "named_shapes.ProjectedWireSplitProvenance.mapper_history[].evidence.edge_fragment_index",
+      "named_shapes.ProjectedWireSplitProvenance.mapper_history[].evidence.wire_fragment_ownership"
     ]
   },
-  "reference": "Source-backed ProjectOnSurface wire split provenance expected boundary; hidden mapper/history fields are covered by focused cad-core tests."
+  "native_oracle_unavailable": {
+    "classification": "native_hidden_retained",
+    "evidence": [
+      "docs/temp/6-29-23-05-c12m3-s4-project-on-surface-native-provenance-probe-output.json",
+      "docs/temp/6-29-22-40-c12m3-s5-project-on-surface-no-comparison-evidence.json"
+    ],
+    "reason": "Current FreeCAD native probe does not expose stable ProjectOnSurface wire split mapper/history ownership. This fixture is the published CAD Core product contract, not a native parity oracle.",
+    "reopen_condition": "Only compare as FreeCAD native parity if a future native artifact exposes stable ProjectOnSurface wire split mapper/history ownership with native_provenance_expected_ready."
+  },
+  "reference": "CAD Core request-local ProjectOnSurface wire split provenance product contract; native FreeCAD mapper/history parity remains unavailable."
 }
