@@ -50,3 +50,10 @@ git diff --check
 ## 完成条件
 
 Filling、GeomPlate、ProjectOnSurface 必须分别有稳定 expected、current-covered、明确 blocker 或 non-goal 结论；不得保留“历史上看起来不稳定所以应该实现”的空泛判断。
+
+## 完成记录
+
+- Filling：`helper_blocked`，artifact 为 `docs/temp/6-29-20-40-c12m2-s5-filling-helper-native-probe-output.json`。direct wrapper 与 simple helper boundary control 稳定，但 helper initial-surface / support-order / explicit params 仍 crash 或 timeout，S6 不比较。
+- GeomPlate：projected curve2d + initial surface 为 `oracle_expected_ready`，artifact 为 `docs/temp/6-29-20-40-c12m2-s5-geomplate-native-probe-output.json`。G1 curve-on-surface 保持 `native_hidden`，no-initial-surface curve2d 不进入比较。
+- ProjectOnSurface：mapper/provenance 为 `native_hidden`，artifact 为 `docs/temp/6-29-20-40-c12m2-s5-project-on-surface-native-probe-output.json`。native geometry 可 build，但 source-backed history/provenance 未暴露，禁止用输出顺序、bbox 或 fixture 名倒推 ownership。
+- S5 验收已通过：队列刷新后只剩 S6，TSV field count 通过，trailing whitespace 无匹配，`git diff --check` 通过。

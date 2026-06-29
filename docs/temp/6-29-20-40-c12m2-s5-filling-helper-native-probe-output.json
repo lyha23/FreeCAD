@@ -1,0 +1,382 @@
+{
+  "command": [
+    "/Users/li/.cargo/bin/freecadcmd",
+    "-c",
+    "import sys; sys.argv = [\"/Users/li/Chili3DProject/FreeCAD/docs/temp/6-29-20-40-c12m2-s5-helper-mapper-native-probe.py\", \"filling\"]; exec(compile(open('/Users/li/Chili3DProject/FreeCAD/docs/temp/6-29-20-40-c12m2-s5-helper-mapper-native-probe.py', encoding='utf-8').read(), '6-29-20-40-c12m2-s5-helper-mapper-native-probe.py', 'exec'))"
+  ],
+  "conclusion": "helper_blocked",
+  "current_comparison_path": "No S6 current comparison is allowed for helper support/order or initial-surface rows until a future artifact returns stable helper shape_summary; stable wrapper/control rows remain c5m8/c5m13/c6m5 context only.",
+  "exception_classification": "helper_blocked",
+  "expected_summary": {
+    "area": null,
+    "bbox": null,
+    "diagnostics": [
+      "S5 separates Part.makeFilledFace helper lifecycle from BRepOffsetAPI_MakeFilling direct wrapper controls.",
+      "Direct wrapper/control payloads are diagnostic context only and are not promoted to cad-core expected rows.",
+      "Helper support/order or initial-surface failures remain helper_blocked unless raw_probe_payload shows stable shape_summary for the exact row."
+    ],
+    "kind": "filling_helper_lifecycle_split",
+    "shape_kind": null,
+    "stable_expected": false,
+    "subshape_counts": null,
+    "volume": null
+  },
+  "freecadcmd": {
+    "app_home_path": "/Applications/FreeCAD.app/Contents/Resources//",
+    "freecad_libs": "",
+    "libpack": "",
+    "libpack_version": "",
+    "occt_version": "7.8.1",
+    "path": "/Users/li/.cargo/bin/freecadcmd",
+    "raw_probe_payload": {
+      "app_home_path": "/Applications/FreeCAD.app/Contents/Resources//",
+      "blocked_helper_cases": [
+        "helper_surface_initial_face",
+        "helper_support_order_boundary_g1",
+        "helper_support_order_boundary_g2",
+        "helper_explicit_params_all"
+      ],
+      "config_occt_version": "7.8.1",
+      "freecad_libs": "",
+      "freecad_version": [
+        "1",
+        "2",
+        "0",
+        "20260519 (Git shallow)",
+        "Unknown",
+        "2026/05/19 20:59:45",
+        "(HEAD detached at 5a5d8d042)",
+        "5a5d8d0425fdb440fb5dcb47f1c48422d07d3267"
+      ],
+      "freecad_version_string": "1.2.0 revision 20260519",
+      "helper_results": [
+        {
+          "app_home_path": "/Applications/FreeCAD.app/Contents/Resources//",
+          "case": "helper_boundary_control",
+          "case_kind": "helper",
+          "child_command": [
+            "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+            "-c",
+            "import sys; sys.argv = ['/Users/li/Chili3DProject/FreeCAD/docs/temp/6-29-20-40-c12m2-s5-helper-mapper-native-probe.py', 'filling_child']; exec(compile(open('/Users/li/Chili3DProject/FreeCAD/docs/temp/6-29-20-40-c12m2-s5-helper-mapper-native-probe.py', encoding='utf-8').read(), '6-29-20-40-c12m2-s5-helper-mapper-native-probe.py', 'exec'))"
+          ],
+          "child_returncode": 0,
+          "child_stderr_tail": "",
+          "child_stdout_tail": "C12M2_S5_CHILD_PAYLOAD={\"app_home_path\": \"/Applications/FreeCAD.app/Contents/Resources//\", \"case\": \"helper_boundary_control\", \"case_kind\": \"helper\", \"config_occt_version\": \"7.8.1\", \"freecad_libs\": \"\", \"freecad_version\": [\"1\", \"2\", \"0\", \"20260519 (Git shallow)\", \"Unknown\", \"2026/05/19 20:59:45\", \"(HEAD detached at 5a5d8d042)\", \"5a5d8d0425fdb440fb5dcb47f1c48422d07d3267\"], \"freecad_version_string\": \"1.2.0 revision 20260519\", \"libpack\": \"\", \"libpack_version\": \"\", \"occt_version\": \"7.8.1\", \"run_mode\": \"Cmd\", \"shape\": {\"area\": 16.0, \"bbox\": {\"xmax\": 6.4, \"xmin\": -2.4, \"ymax\": 6.4, \"ymin\": -2.4, \"zmax\": 0.0, \"zmin\": 0.0}, \"is_null\": false, \"length\": 16.0, \"shape_type\": \"Face\", \"topology_counts\": {\"edges\": 4, \"faces\": 1, \"shells\": 0, \"solids\": 0, \"vertices\": 4, \"wires\": 1}, \"volume\": 0.0}, \"status\": \"stable_native_expected\"}\nProcessing......\nProcessing......\nProcessing......\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\n",
+          "config_occt_version": "7.8.1",
+          "freecad_libs": "",
+          "freecad_version": [
+            "1",
+            "2",
+            "0",
+            "20260519 (Git shallow)",
+            "Unknown",
+            "2026/05/19 20:59:45",
+            "(HEAD detached at 5a5d8d042)",
+            "5a5d8d0425fdb440fb5dcb47f1c48422d07d3267"
+          ],
+          "freecad_version_string": "1.2.0 revision 20260519",
+          "libpack": "",
+          "libpack_version": "",
+          "occt_version": "7.8.1",
+          "run_mode": "Cmd",
+          "shape": {
+            "area": 16.0,
+            "bbox": {
+              "xmax": 6.4,
+              "xmin": -2.4,
+              "ymax": 6.4,
+              "ymin": -2.4,
+              "zmax": 0.0,
+              "zmin": 0.0
+            },
+            "is_null": false,
+            "length": 16.0,
+            "shape_type": "Face",
+            "topology_counts": {
+              "edges": 4,
+              "faces": 1,
+              "shells": 0,
+              "solids": 0,
+              "vertices": 4,
+              "wires": 1
+            },
+            "volume": 0.0
+          },
+          "status": "stable_native_expected"
+        },
+        {
+          "case": "helper_surface_initial_face",
+          "case_kind": "helper",
+          "child_command": [
+            "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+            "-c",
+            "import sys; sys.argv = ['/Users/li/Chili3DProject/FreeCAD/docs/temp/6-29-20-40-c12m2-s5-helper-mapper-native-probe.py', 'filling_child']; exec(compile(open('/Users/li/Chili3DProject/FreeCAD/docs/temp/6-29-20-40-c12m2-s5-helper-mapper-native-probe.py', encoding='utf-8').read(), '6-29-20-40-c12m2-s5-helper-mapper-native-probe.py', 'exec'))"
+          ],
+          "child_returncode": -11,
+          "child_stderr_tail": "",
+          "child_stdout_tail": "",
+          "failure": {
+            "error_type": "nonzero_exit",
+            "returncode": -11,
+            "stage": "child_freecadcmd"
+          },
+          "status": "notCollected"
+        },
+        {
+          "case": "helper_support_order_boundary_g1",
+          "case_kind": "helper",
+          "failure": {
+            "error_type": "timeout",
+            "stage": "child_freecadcmd",
+            "stderr_tail": "",
+            "stdout_tail": "",
+            "timeout_seconds": 12
+          },
+          "status": "notCollected"
+        },
+        {
+          "case": "helper_support_order_boundary_g2",
+          "case_kind": "helper",
+          "failure": {
+            "error_type": "timeout",
+            "stage": "child_freecadcmd",
+            "stderr_tail": "",
+            "stdout_tail": "",
+            "timeout_seconds": 12
+          },
+          "status": "notCollected"
+        },
+        {
+          "case": "helper_explicit_params_all",
+          "case_kind": "helper",
+          "child_command": [
+            "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+            "-c",
+            "import sys; sys.argv = ['/Users/li/Chili3DProject/FreeCAD/docs/temp/6-29-20-40-c12m2-s5-helper-mapper-native-probe.py', 'filling_child']; exec(compile(open('/Users/li/Chili3DProject/FreeCAD/docs/temp/6-29-20-40-c12m2-s5-helper-mapper-native-probe.py', encoding='utf-8').read(), '6-29-20-40-c12m2-s5-helper-mapper-native-probe.py', 'exec'))"
+          ],
+          "child_returncode": -11,
+          "child_stderr_tail": "",
+          "child_stdout_tail": "",
+          "failure": {
+            "error_type": "nonzero_exit",
+            "returncode": -11,
+            "stage": "child_freecadcmd"
+          },
+          "status": "notCollected"
+        }
+      ],
+      "judgement": "helper_blocked",
+      "libpack": "",
+      "libpack_version": "",
+      "occt_version": "7.8.1",
+      "probe_case": "filling_helper_lifecycle_split",
+      "reason": "Direct wrapper controls and simple helper controls can produce shapes, but helper support/order and initial-surface semantics remain mixed with wrapper lifecycle or process-level failures; these controls are not promoted to cad-core expected rows.",
+      "run_mode": "Cmd",
+      "source_authority": "src/Mod/Part/App/AppPartPy.cpp::makeFilledFace; src/Mod/Part/App/BRepOffsetAPI_MakeFillingPyImp.cpp::add,loadInitSurface,build,shape; src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementFilledFace",
+      "stable_helper_controls": [
+        "helper_boundary_control"
+      ],
+      "stable_wrapper_controls": [
+        "wrapper_boundary_default",
+        "wrapper_load_init_surface",
+        "wrapper_add_support_order_g1",
+        "wrapper_add_support_order_g2",
+        "wrapper_uv_point_on_surface"
+      ],
+      "wrapper_results": [
+        {
+          "case": "wrapper_boundary_default",
+          "case_kind": "direct_wrapper",
+          "lifecycle": {
+            "build_ok": true,
+            "is_done": true,
+            "shape": {
+              "area": 16.0,
+              "bbox": {
+                "xmax": 6.4,
+                "xmin": -2.4,
+                "ymax": 6.4,
+                "ymin": -2.4,
+                "zmax": 0.0,
+                "zmin": 0.0
+              },
+              "is_null": false,
+              "length": 16.0,
+              "shape_type": "Face",
+              "topology_counts": {
+                "edges": 4,
+                "faces": 1,
+                "shells": 0,
+                "solids": 0,
+                "vertices": 4,
+                "wires": 1
+              },
+              "volume": 0.0
+            },
+            "shape_access_ok": true
+          }
+        },
+        {
+          "case": "wrapper_load_init_surface",
+          "case_kind": "direct_wrapper",
+          "lifecycle": {
+            "build_ok": true,
+            "is_done": true,
+            "shape": {
+              "area": 16.0,
+              "bbox": {
+                "xmax": 4.4,
+                "xmin": 0.0,
+                "ymax": 4.4,
+                "ymin": 0.0,
+                "zmax": 0.0,
+                "zmin": 0.0
+              },
+              "is_null": false,
+              "length": 16.0,
+              "shape_type": "Face",
+              "topology_counts": {
+                "edges": 4,
+                "faces": 1,
+                "shells": 0,
+                "solids": 0,
+                "vertices": 4,
+                "wires": 1
+              },
+              "volume": 0.0
+            },
+            "shape_access_ok": true
+          }
+        },
+        {
+          "case": "wrapper_add_support_order_g1",
+          "case_kind": "direct_wrapper",
+          "lifecycle": {
+            "build_ok": true,
+            "is_done": true,
+            "shape": {
+              "area": 16.0,
+              "bbox": {
+                "xmax": 6.4,
+                "xmin": -2.4,
+                "ymax": 6.4,
+                "ymin": -2.4,
+                "zmax": 0.0,
+                "zmin": 0.0
+              },
+              "is_null": false,
+              "length": 16.0,
+              "shape_type": "Face",
+              "topology_counts": {
+                "edges": 4,
+                "faces": 1,
+                "shells": 0,
+                "solids": 0,
+                "vertices": 4,
+                "wires": 1
+              },
+              "volume": 0.0
+            },
+            "shape_access_ok": true
+          }
+        },
+        {
+          "case": "wrapper_add_support_order_g2",
+          "case_kind": "direct_wrapper",
+          "lifecycle": {
+            "build_ok": true,
+            "is_done": true,
+            "shape": {
+              "area": 16.0,
+              "bbox": {
+                "xmax": 6.4,
+                "xmin": -2.4,
+                "ymax": 6.4,
+                "ymin": -2.4,
+                "zmax": 0.0,
+                "zmin": 0.0
+              },
+              "is_null": false,
+              "length": 16.0,
+              "shape_type": "Face",
+              "topology_counts": {
+                "edges": 4,
+                "faces": 1,
+                "shells": 0,
+                "solids": 0,
+                "vertices": 4,
+                "wires": 1
+              },
+              "volume": 0.0
+            },
+            "shape_access_ok": true
+          }
+        },
+        {
+          "case": "wrapper_uv_point_on_surface",
+          "case_kind": "direct_wrapper",
+          "lifecycle": {
+            "build_ok": true,
+            "is_done": true,
+            "shape": {
+              "area": 16.0,
+              "bbox": {
+                "xmax": 6.401852,
+                "xmin": -2.398148,
+                "ymax": 6.401852,
+                "ymin": -2.398148,
+                "zmax": 0.0,
+                "zmin": 0.0
+              },
+              "is_null": false,
+              "length": 16.0,
+              "shape_type": "Face",
+              "topology_counts": {
+                "edges": 4,
+                "faces": 1,
+                "shells": 0,
+                "solids": 0,
+                "vertices": 4,
+                "wires": 1
+              },
+              "volume": 0.0
+            },
+            "shape_access_ok": true
+          }
+        }
+      ]
+    },
+    "version": "1.2.0 revision 20260519",
+    "version_tuple": [
+      "1",
+      "2",
+      "0",
+      "20260519 (Git shallow)",
+      "Unknown",
+      "2026/05/19 20:59:45",
+      "(HEAD detached at 5a5d8d042)",
+      "5a5d8d0425fdb440fb5dcb47f1c48422d07d3267"
+    ]
+  },
+  "input_artifact": "docs/temp/6-29-20-40-c12m2-s5-helper-mapper-native-probe.py#filling plus docs/temp/6-29-12-27-c11m2-s3-filling-native-helper-probe-output.json context",
+  "notes": [
+    "C12-M2 S5 helper-aware fresh probe; C11-M2 helper probe is context only."
+  ],
+  "probe": {
+    "case_id": "filling_helper_lifecycle_split",
+    "family": "filling_helper",
+    "id": "C12M2-PROBE-004"
+  },
+  "process": {
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "C12M2_PROBE_PAYLOAD={\"app_home_path\": \"/Applications/FreeCAD.app/Contents/Resources//\", \"blocked_helper_cases\": [\"helper_surface_initial_face\", \"helper_support_order_boundary_g1\", \"helper_support_order_boundary_g2\", \"helper_explicit_params_all\"], \"config_occt_version\": \"7.8.1\", \"freecad_libs\": \"\", \"freecad_version\": [\"1\", \"2\", \"0\", \"20260519 (Git shallow)\", \"Unknown\", \"2026/05/19 20:59:45\", \"(HEAD detached at 5a5d8d042)\", \"5a5d8d0425fdb440fb5dcb47f1c48422d07d3267\"], \"freecad_version_string\": \"1.2.0 revision 20260519\", \"helper_results\": [{\"app_home_path\": \"/Applications/FreeCAD.app/Contents/Resources//\", \"case\": \"helper_boundary_control\", \"case_kind\": \"helper\", \"child_command\": [\"/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd\", \"-c\", \"import sys; sys.argv = ['/Users/li/Chili3DProject/FreeCAD/docs/temp/6-29-20-40-c12m2-s5-helper-mapper-native-probe.py', 'filling_child']; exec(compile(open('/Users/li/Chili3DProject/FreeCAD/docs/temp/6-29-20-40-c12m2-s5-helper-mapper-native-probe.py', encoding='utf-8').read(), '6-29-20-40-c12m2-s5-helper-mapper-native-probe.py', 'exec'))\"], \"child_returncode\": 0, \"child_stderr_tail\": \"\", \"child_stdout_tail\": \"C12M2_S5_CHILD_PAYLOAD={\\\"app_home_path\\\": \\\"/Applications/FreeCAD.app/Contents/Resources//\\\", \\\"case\\\": \\\"helper_boundary_control\\\", \\\"case_kind\\\": \\\"helper\\\", \\\"config_occt_version\\\": \\\"7.8.1\\\", \\\"freecad_libs\\\": \\\"\\\", \\\"freecad_version\\\": [\\\"1\\\", \\\"2\\\", \\\"0\\\", \\\"20260519 (Git shallow)\\\", \\\"Unknown\\\", \\\"2026/05/19 20:59:45\\\", \\\"(HEAD detached at 5a5d8d042)\\\", \\\"5a5d8d0425fdb440fb5dcb47f1c48422d07d3267\\\"], \\\"freecad_version_string\\\": \\\"1.2.0 revision 20260519\\\", \\\"libpack\\\": \\\"\\\", \\\"libpack_version\\\": \\\"\\\", \\\"occt_version\\\": \\\"7.8.1\\\", \\\"run_mode\\\": \\\"Cmd\\\", \\\"shape\\\": {\\\"area\\\": 16.0, \\\"bbox\\\": {\\\"xmax\\\": 6.4, \\\"xmin\\\": -2.4, \\\"ymax\\\": 6.4, \\\"ymin\\\": -2.4, \\\"zmax\\\": 0.0, \\\"zmin\\\": 0.0}, \\\"is_null\\\": false, \\\"length\\\": 16.0, \\\"shape_type\\\": \\\"Face\\\", \\\"topology_counts\\\": {\\\"edges\\\": 4, \\\"faces\\\": 1, \\\"shells\\\": 0, \\\"solids\\\": 0, \\\"vertices\\\": 4, \\\"wires\\\": 1}, \\\"volume\\\": 0.0}, \\\"status\\\": \\\"stable_native_expected\\\"}\\nProcessing......\\nProcessing......\\nProcessing......\\n\\t\\t\\t\\t\\t\\t\\t\\t\\n\\t\\t\\t\\t\\t\\t\\t\\t\\n\", \"config_occt_version\": \"7.8.1\", \"freecad_libs\": \"\", \"freecad_version\": [\"1\", \"2\", \"0\", \"20260519 (Git shallow)\", \"Unknown\", \"2026/05/19 20:59:45\", \"(HEAD detached at 5a5d8d042)\", \"5a5d8d0425fdb440fb5dcb47f1c48422d07d3267\"], \"freecad_version_string\": \"1.2.0 revision 20260519\", \"libpack\": \"\", \"libpack_version\": \"\", \"occt_version\": \"7.8.1\", \"run_mode\": \"Cmd\", \"shape\": {\"area\": 16.0, \"bbox\": {\"xmax\": 6.4, \"xmin\": -2.4, \"ymax\": 6.4, \"ymin\": -2.4, \"zmax\": 0.0, \"zmin\": 0.0}, \"is_null\": false, \"length\": 16.0, \"shape_type\": \"Face\", \"topology_counts\": {\"edges\": 4, \"faces\": 1, \"shells\": 0, \"solids\": 0, \"vertices\": 4, \"wires\": 1}, \"volume\": 0.0}, \"status\": \"stable_native_expected\"}, {\"case\": \"helper_surface_initial_face\", \"case_kind\": \"helper\", \"child_command\": [\"/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd\", \"-c\", \"import sys; sys.argv = ['/Users/li/Chili3DProject/FreeCAD/docs/temp/6-29-20-40-c12m2-s5-helper-mapper-native-probe.py', 'filling_child']; exec(compile(open('/Users/li/Chili3DProject/FreeCAD/docs/temp/6-29-20-40-c12m2-s5-helper-mapper-native-probe.py', encoding='utf-8').read(), '6-29-20-40-c12m2-s5-helper-mapper-native-probe.py', 'exec'))\"], \"child_returncode\": -11, \"child_stderr_tail\": \"\", \"child_stdout_tail\": \"\", \"failure\": {\"error_type\": \"nonzero_exit\", \"returncode\": -11, \"stage\": \"child_freecadcmd\"}, \"status\": \"notCollected\"}, {\"case\": \"helper_support_order_boundary_g1\", \"case_kind\": \"helper\", \"failure\": {\"error_type\": \"timeout\", \"stage\": \"child_freecadcmd\", \"stderr_tail\": \"\", \"stdout_tail\": \"\", \"timeout_seconds\": 12}, \"status\": \"notCollected\"}, {\"case\": \"helper_support_order_boundary_g2\", \"case_kind\": \"helper\", \"failure\": {\"error_type\": \"timeout\", \"stage\": \"child_freecadcmd\", \"stderr_tail\": \"\", \"stdout_tail\": \"\", \"timeout_seconds\": 12}, \"status\": \"notCollected\"}, {\"case\": \"helper_explicit_params_all\", \"case_kind\": \"helper\", \"child_command\": [\"/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd\", \"-c\", \"import sys; sys.argv = ['/Users/li/Chili3DProject/FreeCAD/docs/temp/6-29-20-40-c12m2-s5-helper-mapper-native-probe.py', 'filling_child']; exec(compile(open('/Users/li/Chili3DProject/FreeCAD/docs/temp/6-29-20-40-c12m2-s5-helper-mapper-native-probe.py', encoding='utf-8').read(), '6-29-20-40-c12m2-s5-helper-mapper-native-probe.py', 'exec'))\"], \"child_returncode\": -11, \"child_stderr_tail\": \"\", \"child_stdout_tail\": \"\", \"failure\": {\"error_type\": \"nonzero_exit\", \"returncode\": -11, \"stage\": \"child_freecadcmd\"}, \"status\": \"notCollected\"}], \"judgement\": \"helper_blocked\", \"libpack\": \"\", \"libpack_version\": \"\", \"occt_version\": \"7.8.1\", \"probe_case\": \"filling_helper_lifecycle_split\", \"reason\": \"Direct wrapper controls and simple helper controls can produce shapes, but helper support/order and initial-surface semantics remain mixed with wrapper lifecycle or process-level failures; these controls are not promoted to cad-core expected rows.\", \"run_mode\": \"Cmd\", \"source_authority\": \"src/Mod/Part/App/AppPartPy.cpp::makeFilledFace; src/Mod/Part/App/BRepOffsetAPI_MakeFillingPyImp.cpp::add,loadInitSurface,build,shape; src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementFilledFace\", \"stable_helper_controls\": [\"helper_boundary_control\"], \"stable_wrapper_controls\": [\"wrapper_boundary_default\", \"wrapper_load_init_surface\", \"wrapper_add_support_order_g1\", \"wrapper_add_support_order_g2\", \"wrapper_uv_point_on_surface\"], \"wrapper_results\": [{\"case\": \"wrapper_boundary_default\", \"case_kind\": \"direct_wrapper\", \"lifecycle\": {\"build_ok\": true, \"is_done\": true, \"shape\": {\"area\": 16.0, \"bbox\": {\"xmax\": 6.4, \"xmin\": -2.4, \"ymax\": 6.4, \"ymin\": -2.4, \"zmax\": 0.0, \"zmin\": 0.0}, \"is_null\": false, \"length\": 16.0, \"shape_type\": \"Face\", \"topology_counts\": {\"edges\": 4, \"faces\": 1, \"shells\": 0, \"solids\": 0, \"vertices\": 4, \"wires\": 1}, \"volume\": 0.0}, \"shape_access_ok\": true}}, {\"case\": \"wrapper_load_init_surface\", \"case_kind\": \"direct_wrapper\", \"lifecycle\": {\"build_ok\": true, \"is_done\": true, \"shape\": {\"area\": 16.0, \"bbox\": {\"xmax\": 4.4, \"xmin\": 0.0, \"ymax\": 4.4, \"ymin\": 0.0, \"zmax\": 0.0, \"zmin\": 0.0}, \"is_null\": false, \"length\": 16.0, \"shape_type\": \"Face\", \"topology_counts\": {\"edges\": 4, \"faces\": 1, \"shells\": 0, \"solids\": 0, \"vertices\": 4, \"wires\": 1}, \"volume\": 0.0}, \"shape_access_ok\": true}}, {\"case\": \"wrapper_add_support_order_g1\", \"case_kind\": \"direct_wrapper\", \"lifecycle\": {\"build_ok\": true, \"is_done\": true, \"shape\": {\"area\": 16.0, \"bbox\": {\"xmax\": 6.4, \"xmin\": -2.4, \"ymax\": 6.4, \"ymin\": -2.4, \"zmax\": 0.0, \"zmin\": 0.0}, \"is_null\": false, \"length\": 16.0, \"shape_type\": \"Face\", \"topology_counts\": {\"edges\": 4, \"faces\": 1, \"shells\": 0, \"solids\": 0, \"vertices\": 4, \"wires\": 1}, \"volume\": 0.0}, \"shape_access_ok\": true}}, {\"case\": \"wrapper_add_support_order_g2\", \"case_kind\": \"direct_wrapper\", \"lifecycle\": {\"build_ok\": true, \"is_done\": true, \"shape\": {\"area\": 16.0, \"bbox\": {\"xmax\": 6.4, \"xmin\": -2.4, \"ymax\": 6.4, \"ymin\": -2.4, \"zmax\": 0.0, \"zmin\": 0.0}, \"is_null\": false, \"length\": 16.0, \"shape_type\": \"Face\", \"topology_counts\": {\"edges\": 4, \"faces\": 1, \"shells\": 0, \"solids\": 0, \"vertices\": 4, \"wires\": 1}, \"volume\": 0.0}, \"shape_access_ok\": true}}, {\"case\": \"wrapper_uv_point_on_surface\", \"case_kind\": \"direct_wrapper\", \"lifecycle\": {\"build_ok\": true, \"is_done\": true, \"shape\": {\"area\": 16.0, \"bbox\": {\"xmax\": 6.401852, \"xmin\": -2.398148, \"ymax\": 6.401852, \"ymin\": -2.398148, \"zmax\": 0.0, \"zmin\": 0.0}, \"is_null\": false, \"length\": 16.0, \"shape_type\": \"Face\", \"topology_counts\": {\"edges\": 4, \"faces\": 1, \"shells\": 0, \"solids\": 0, \"vertices\": 4, \"wires\": 1}, \"volume\": 0.0}, \"shape_access_ok\": true}}]}\n",
+    "timeout_seconds": 120
+  },
+  "request_local": {
+    "judgement": "request_local_possible_with_helper_lifecycle_risk",
+    "notes": "Filling inputs can be request-local shapes and parameters, but S5 must separate direct wrapper controls, helper lifecycle failures, and stable expected before any S6 comparison."
+  },
+  "schema_version": "c12m2.native-probe-artifact.v1",
+  "source_authority": "src/Mod/Part/App/AppPartPy.cpp::makeFilledFace; src/Mod/Part/App/BRepOffsetAPI_MakeFillingPyImp.cpp::add,loadInitSurface,build,shape; src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementFilledFace"
+}

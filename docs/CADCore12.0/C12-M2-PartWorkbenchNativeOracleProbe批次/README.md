@@ -66,6 +66,21 @@ Sweep final classification：Location overload 为 `native_probe_blocked`。fres
 
 Loft final classification：selected subelement 为 `native_hidden`。object-level `Sections` control 可 build；`[(object, ["Edge1"]), ...]` 等 tuple subelement assignment 被 `App::PropertyLinkList` 拒绝，错误为 `TypeError: Type must be App.DocumentObject or None, not tuple`。`C12M2-BLOCKER-401` 已关闭，c5m12/c6m7 继续只是 native-hidden / product-contract context。
 
+## S5 Filling / GeomPlate / ProjectOnSurface probe 结论
+
+S5 复用 S3 file-backed harness，FreeCADCmd 为 `/Users/li/.cargo/bin/freecadcmd`，FreeCAD `1.2.0 revision 20260519`，OCCT `7.8.1`，LibPack / LibPackVersion 为空。新增 artifacts：
+
+- probe script：`docs/temp/6-29-20-40-c12m2-s5-helper-mapper-native-probe.py`
+- Filling：`docs/temp/6-29-20-40-c12m2-s5-filling-helper-native-probe-output.json`
+- GeomPlate：`docs/temp/6-29-20-40-c12m2-s5-geomplate-native-probe-output.json`
+- ProjectOnSurface：`docs/temp/6-29-20-40-c12m2-s5-project-on-surface-native-probe-output.json`
+
+Filling final classification：`helper_blocked`。direct `BRepOffsetAPI_MakeFilling` wrapper controls 与 simple `Part.makeFilledFace` boundary control 可产生稳定 Face summary，但 `helper_surface_initial_face` / `helper_explicit_params_all` 在隔离子 FreeCADCmd 中 SIGSEGV，helper support-order G1/G2 case timeout。S6 不得把 wrapper/control output 升级成 helper support-order 或 initial-surface expected。
+
+GeomPlate final classification：`oracle_expected_ready` 只适用于 projected curve2d + initial surface。fresh probe 中 `projected_curve2d_initial_surface` `perform_ok=true` / `is_done=true`，输出 stable Face summary；`curve2d_on_surface_no_initial_surface` `is_done=false` 且无 surface；`CurveConstraint.setG1Criterion` 返回 `NotImplementedError: Not yet implemented`，G1 curve-on-surface 保持 `native_hidden`。S6 只能比较 projected curve2d + initial surface 对应 current path。
+
+ProjectOnSurface final classification：`native_hidden`。native object 可赋值、recompute 并输出 4-edge Compound，但 `getElementHistory("Edge1".."Edge4","Wire1","Face1")` 全部返回 `None`，没有 source-backed mapper/provenance/split trace。S6 不得用 API result order、bbox、输出顺序或 fixture 名倒推 ownership。
+
 ## 范围
 
 | family | C12-M1 retained reason | C12-M2 probe question | owner step |

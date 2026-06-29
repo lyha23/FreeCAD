@@ -16,8 +16,8 @@ C12-M2 覆盖同一个发布问题：Part Workbench retained rows 是否能升�
 - S2 统一判断 request-local/product boundary、helper/native-hidden blocker 和当前 cad-core 可比较性。
 - S3 建立 probe harness / FreeCADCmd / artifact schema 的共同准入；当前 schema 为 `c12m2.native-probe-artifact.v1`，FreeCADCmd baseline 为 `1.2.0 revision 20260519` / OCCT `7.8.1`，runtime artifact 位于 `docs/temp/6-29-20-12-c12m2-freecadcmd-baseline-native-probe.json`。
 - S4 已处理更接近 DocumentObject / native Part feature 的 Sweep 与 Loft：Sweep Location overload 为 `native_probe_blocked`，no-location auxiliary / binormal / tolerance controls 为 current-covered context；Loft selected subelement 为 `native_hidden`。
-- S5 处理 helper / wrapper / mapper 证据更重的 Filling、GeomPlate 与 ProjectOnSurface。
-- S6 只发布 oracle 结果和后续授权，不在本包写代码。
+- S5 已处理 helper / wrapper / mapper 证据更重的 Filling、GeomPlate 与 ProjectOnSurface：Filling 为 `helper_blocked`；GeomPlate 只有 projected curve2d + initial surface 进入 `oracle_expected_ready` / S6 comparison，G1 curve-on-surface 保持 `native_hidden`；ProjectOnSurface provenance 为 `native_hidden`。
+- S6 只发布 oracle 结果和后续授权，不在本包写代码；当前唯一允许比较 current cad-core 的 S5 行是 GeomPlate projected curve2d + initial surface。
 
 ## 工作步骤
 
@@ -28,7 +28,7 @@ C12-M2 覆盖同一个发布问题：Part Workbench retained rows 是否能升�
 | S2 | 范围准入与 blocker 矩阵 | 判断 request-local 边界、helper/native-hidden 阻塞和可比较性。 |
 | S3 | 通用 NativeProbe harness 与 FreeCADCmd 基线 | 定义可复用 probe schema、artifact 命名、失败分类和运行口径。 |
 | S4 | Sweep / Loft 原生 DocumentObject probe 复审 | 已关闭：Sweep Location native_probe_blocked，Sweep no-location controls current-covered context，Loft native_hidden。 |
-| S5 | Filling / GeomPlate / ProjectOnSurface helper-mapper probe 复审 | 产出 helper / wrapper / mapper family 的 oracle candidate 或阻塞结论。 |
+| S5 | Filling / GeomPlate / ProjectOnSurface helper-mapper probe 复审 | 已关闭：Filling helper_blocked，GeomPlate projected curve2d + initial surface oracle_expected_ready / G1 native_hidden，ProjectOnSurface provenance native_hidden。 |
 | S6 | Oracle 收集与发布闸门 | 发布 `oracle_expected_ready` / `native_probe_blocked` / `retained_no_expected` 等最终状态，并决定是否另开 implementation 包。 |
 
 ## 发布闸门
