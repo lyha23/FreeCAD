@@ -28,6 +28,14 @@ S0 开包基线为 `HEAD=7c14aa6f7a`（`7c14aa6f7a docs: 完成 C12-M2 S6 oracle
 - Product boundary 已关闭为 rejected/non-goal：GUI session / Workbench、跨请求 native document、持久 TopoDS / NamedShape / ElementMap cache、完整 BREP transport、bbox/order/EdgeN/topology-count/fixture-name/current-ledger guessing 均不能作为 provenance 或 backend gap 依据。
 - `C12M3-BLOCKER-006` 与 `C12M3-BLOCKER-007` 已关闭；backend classification 在 S2 只保留 `probe_candidate` / `rejected`，没有 implementation candidate。本步未采 FreeCAD expected、未运行 FreeCADCmd/native probe、未做 current comparison，也未修改代码、expected、tests、adapters 或 capability wording。
 
+## S3 live 记录
+
+- S3 起点命令已执行：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=07643d5e3a`，`git log -1 --oneline=07643d5e3a docs: 完成 C12-M3 S2 范围准入矩阵`，`git -c core.quotepath=false status --short -uall` 输出为空。
+- 已复核 `docs/temp/6-29-20-12-c12m2-native-probe-schema.md`、`docs/temp/6-29-20-12-c12m2-native-probe-harness.py`、runtime baseline artifact 和 ProjectOnSurface C12-M2 S5 artifact：C12-M2 harness 可复用作 wrapper，但 C12-M2 schema 缺少 row-level source endpoint、target endpoint、history API name、history return summary、request-local judgement、classification 和 current comparison path。
+- 新增 `docs/temp/6-29-22-15-c12m3-native-provenance-probe-schema.md`，要求 S4 artifact 在 `expected_summary` 写入 `c12m3.native-provenance-summary.v1` 和 `provenance_observations[]`；`native_provenance_expected_ready` 只能来自 native history API 暴露的 source-backed provenance，不能来自 bbox、顺序、数量、fixture 名称或 current ledger。
+- 分类已冻结为 `native_provenance_expected_ready`、`current_covered`、`backend_gap_candidate`、`native_hidden_retained`、`collector_bug`、`product_boundary_rejected`、`sandbox_runtime_limit`。`C12M3-BLOCKER-002` 已关闭，probe/validation matrix 已记录 S4 artifact 命名和通过标准。
+- S3 未运行 ProjectOnSurface family expected、未运行 current comparison、未把 C12-M2 `None` history 当最终结论，也未修改 `cad-core/src`、`include`、fixtures expected、tests、adapters 或 capability wording。
+
 ## 最小完整语义批次
 
 本包覆盖同一条 FreeCAD 调用链和同一类 expected：`src/Mod/Part/App/FeatureProjectOnSurface.cpp` 生成 projected wire / face / compound，`src/Mod/Part/App/TopoShapePyImp.cpp` 与 `src/Mod/Part/App/TopoShapeExpansion.cpp` 暴露或维护 ElementMap / MapperHistory。C12-M3 不拆成单个 fixture，因为 source ownership、split fragments、face rebuild 和 compound result 都依赖同一 provenance 可观测性。

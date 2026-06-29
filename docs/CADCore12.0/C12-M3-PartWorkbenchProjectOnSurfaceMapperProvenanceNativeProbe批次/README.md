@@ -31,6 +31,14 @@ C12-M2 已确认 `FeatureProjectOnSurface` 原生对象可以 build 几何，但
 - C5-M9 source-backed expected 只能作为 current context、known-gap wording 和 delete-condition evidence；在 S4 产出 native_provenance_expected_ready artifact 前，不能当 native expected，也不能打开 S5 comparison。
 - `backend_gap_classification` 在 S2 只保留 `probe_candidate` 或 `rejected`；没有 implementation candidate，本步未采 FreeCAD expected、未运行 FreeCADCmd/native probe、未做 current comparison、未改代码或 expected。
 
+## S3 NativeProvenanceProbe schema
+
+- S3 live 起点已记录：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=07643d5e3a`（`07643d5e3a docs: 完成 C12-M3 S2 范围准入矩阵`），起点 `git status --short -uall` 为 clean。
+- C12-M2 harness 可继续作为 FreeCADCmd/runtime/process wrapper；C12-M2 schema 不足以承载 ProjectOnSurface source-to-target provenance，因此新增 `docs/temp/6-29-22-15-c12m3-native-provenance-probe-schema.md`。
+- C12-M3 schema 固定 `expected_summary.c12m3_classification` 与 `provenance_observations[]`：每条观察必须有 source endpoint、target endpoint、history API name、history return summary、request-local judgement、classification 和 current comparison path。
+- 分类冻结为 `native_provenance_expected_ready`、`current_covered`、`backend_gap_candidate`、`native_hidden_retained`、`collector_bug`、`product_boundary_rejected`、`sandbox_runtime_limit`；S4 只有 expected-ready 行能进入 S5 comparison。
+- `C12M3-BLOCKER-002` 已关闭；S3 未运行 family expected、未做 current comparison，也未修改 `cad-core/src`、`include`、fixtures expected、tests、adapters 或 capability wording。
+
 ## 入口
 
 - 总入口：`6-29-21-29-C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次总入口.md`
@@ -56,6 +64,7 @@ C12-M2 已确认 `FeatureProjectOnSurface` 原生对象可以 build 几何，但
 - `native_hidden_retained`：FreeCAD native API 仍不暴露 mapper/provenance，保持 no-code。
 - `product_boundary_rejected`：依赖 GUI session、跨请求 native document、完整 BREP 或持久 TopoDS/ElementMap cache。
 - `collector_bug`：probe 脚本或调用方式错误，需要先修 collector，不能升级为 backend gap。
+- `sandbox_runtime_limit`：当前运行环境无法启动或完成 FreeCADCmd，例如 Qt / processor / startup / timeout 限制。
 
 ## 禁止项
 

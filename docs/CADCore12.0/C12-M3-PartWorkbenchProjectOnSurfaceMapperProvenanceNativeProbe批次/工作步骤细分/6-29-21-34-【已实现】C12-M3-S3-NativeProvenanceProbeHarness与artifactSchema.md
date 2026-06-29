@@ -1,4 +1,4 @@
-# C12-M3 S3 NativeProvenanceProbe harness 与 artifact schema
+# C12-M3 S3 NativeProvenanceProbe harness 与 artifact schema【已实现】
 
 ## 目标
 
@@ -25,6 +25,13 @@
 - 不在 S3 采集 family expected。
 - 不比较 current cad-core。
 - 不把 C12-M2 `None` history 直接当作最终结论；S4 负责重新 probe。
+
+## 完成记录
+
+- 已复核 C12-M2 schema/harness、runtime baseline artifact 和 ProjectOnSurface C12-M2 S5 artifact；C12-M2 harness 可复用作 FreeCADCmd/runtime/process wrapper，但 C12-M2 schema 缺少 row-level provenance 字段。
+- 已新增 `docs/temp/6-29-22-15-c12m3-native-provenance-probe-schema.md`，固定 source endpoint、target endpoint、history API name、history return summary、request-local judgement、classification、current comparison path、S4 artifact 命名和通过标准。
+- 已冻结分类：`native_provenance_expected_ready`、`current_covered`、`backend_gap_candidate`、`native_hidden_retained`、`collector_bug`、`product_boundary_rejected`、`sandbox_runtime_limit`。
+- 已更新 probe matrix、blocker queue 和 validation matrix；`C12M3-BLOCKER-002` 关闭。
 
 ## 验收
 
