@@ -1,0 +1,9 @@
+id	area	reason	forbidden_claim	reopen_condition	owner_step
+C12M5-NG-001	persistent_backend_session	CAD Core remains stateless request-local compute	backend keeps FreeCAD temporary document across requests	explicit architecture approval	S0/S3
+C12M5-NG-002	temporary_document_cache	FreeCAD _tmp_binder is native lifecycle evidence, not CAD Core state	cad-core supports hidden _tmp_binder cache	explicit architecture approval plus product DTO redesign	S3
+C12M5-NG-003	full_brep_or_topods_transport	BREP exception is limited to ReferenceShadow single-subshape evidence	full copied object BREP or TopoDS is request model input	explicit interface redesign	S3
+C12M5-NG-004	persistent_namedshape_elementmap_cache	NamedShape and ElementMap are per-request products, not backend state	post-request ElementMap cache supports CopyOnChange	explicit architecture approval	S3
+C12M5-NG-005	app_link_equals_subshapebinder	App::Link DTO path is reference only	App::Link CopyOnChange coverage proves SubShapeBinder support	S2/S3 evidence proves equivalent request-local DTO	S3
+C12M5-NG-006	adapter_repair	adapter only converts protocol	adapter creates copied-object semantics	core implementation package owns semantics	S4
+C12M5-NG-007	frontend_mock	frontend cannot substitute core support	frontend mock closes backend gap	core expected and capability support exist	S4
+C12M5-NG-008	output_guessing	ownership must come from source authority and DTO	bbox, output order or fixture name infers copied-object ownership	never for this lane	S3/S4

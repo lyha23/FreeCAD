@@ -10,6 +10,8 @@ C12-M2 S6 已完成并发布 `no_code_oracle_blocked_gate`：ProjectOnSurface �
 
 用户已在 C12-M3 后批准打开 C12-M4 产品契约包：不再把 FreeCAD native ProjectOnSurface history artifact 作为唯一 gate，而是把当前 `cad-core` request-local projection ledger 升级为 CAD Core 产品契约。C12-M4 已完成发布闸门并发布 `contract_published`、`contract_migration_ready`、`implementation_deferred` 和 `rejected_native_parity_dependency`；随后已把该产品契约落到 C5-M9 expected wording、capability source、adapter assertion 和 recompute 接口文档的公开口径中。当前口径是：CAD Core request-local ledger / mapper_history 是产品契约，FreeCAD native mapper/history oracle 仍为 unavailable。
 
+用户已在 C12-M4 后要求打开下一套方案：C12-M5 选择当前唯一公开 remaining gap `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache`，但仍不把它直接写成 C++ 实现任务。C12-M5 是 SubShapeBinder CopyOnChange request-local DTO 准入复审批次：先复核 FreeCAD native copied-object evidence、产品 DTO 边界和 current mismatch，只有三者同时成立才另开 implementation package；否则继续保留 `known_gap_diagnostic` / `oracle_blocked`。
+
 ## 入口
 
 - C12-M1 总入口：`C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/6-29-16-26-C12-M1-CADCoreCapabilityImplementationCandidate盘点批次总入口.md`
@@ -28,6 +30,10 @@ C12-M2 S6 已完成并发布 `no_code_oracle_blocked_gate`：ProjectOnSurface �
 - C12-M4 方案：`C12-M4-ProjectOnSurfaceRequestLocalLedger产品契约批次/6-29-23-00-C12-M4-ProjectOnSurfaceRequestLocalLedger产品契约批次方案.md`
 - C12-M4 工作步骤：`C12-M4-ProjectOnSurfaceRequestLocalLedger产品契约批次/工作步骤细分/`
 - C12-M4 矩阵：`C12-M4-ProjectOnSurfaceRequestLocalLedger产品契约批次/矩阵/`
+- C12-M5 总入口：`C12-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审批次/6-30-01-03-C12-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审批次总入口.md`
+- C12-M5 方案：`C12-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审批次/6-30-01-03-C12-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审批次方案.md`
+- C12-M5 工作步骤：`C12-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审批次/工作步骤细分/`
+- C12-M5 矩阵：`C12-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审批次/矩阵/`
 
 ## 当前基线
 
@@ -63,6 +69,7 @@ C12-M2 S6 已完成并发布 `no_code_oracle_blocked_gate`：ProjectOnSurface �
 - C12-M4 S3 expected 与 capability 迁移设计已完成：S3 live 起点为 clean 的 `HEAD=5aa11afe11`（`5aa11afe11 docs: 完成 C12-M4 S2 产品契约冻结`）。五个 C5-M9 expected JSON 的 `known_gap/native_hidden replacement` wording 已设计为迁移到 `product_contract` 或 `product_diagnostic_contract` wording；capability source、adapter assertion 与接口文档 exact sources 已定位到 `cad-core/src/runtime/capability_contract.cpp:821-952`、`cad-core/tests/test_adapters.py:2970-3104`、`docs/接口规定/01-cad-recompute全量输入输出接口.md:113-127`。S3 只设计迁移，不改 C++、expected、tests、adapters、capability source 或接口正文。
 - C12-M4 S4 产品契约发布闸门已完成：S4 live 起点为 clean 的 `HEAD=af1cc283b1`（`af1cc283b1 docs: 完成 C12-M4 S3 迁移设计`）。逐行复核矩阵后无新增 retained blocker，最终发布 `contract_published`、`contract_migration_ready`、`implementation_deferred` 和 `rejected_native_parity_dependency`；`C12M4-BLOCKER-004/005` 已关闭。C12-M3 native oracle 仍保留为 `native_oracle_unavailable`：S4 artifact 是 `native_hidden_retained`，`s5_input=null`，`native_provenance_expected_ready_count=0`，未运行 current comparison，未创建 backend gap candidate。C12-M4 队列关闭预期为只输出表头。
 - C12-M4 后续公开口径迁移已落地：C5-M9 ProjectOnSurface provenance expected JSON 已从 `known_gap/native_hidden replacement` 改为 `product_contract` 或 `product_diagnostic_contract`；`cad-core` capability / C API adapter test / recompute 接口文档已同步发布 request-local ledger 产品契约，并保留 FreeCAD native mapper/history oracle unavailable 的非 parity 边界。
+- C12-M5 已创建为 SubShapeBinder CopyOnChange Request-Local DTO 准入复审批次。创建基线为 `HEAD=0709323947`（`0709323947 docs: 落地 C12-M4 产品契约公开口径`），起点 dirty boundary 为 `<clean>`；C12-M1..M4 队列均为空，live capability 仍只有 `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache` 这一项 remaining gap。C12-M5 的默认动作不是实现 full temporary-document cache，而是先复核 native copied-object evidence、request-local DTO approval 和 current mismatch。
 
 ## 重开条件
 
@@ -82,6 +89,7 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M2-PartWorkbenchNativeOracleProbe批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M4-ProjectOnSurfaceRequestLocalLedger产品契约批次/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审批次/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -92,6 +100,7 @@ awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " f
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M2-PartWorkbenchNativeOracleProbe批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M4-ProjectOnSurfaceRequestLocalLedger产品契约批次/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审批次/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore12.0
 git diff --check
 ```
