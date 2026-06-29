@@ -52,7 +52,7 @@
 | 方案 | `6-29-10-10-C11-M1-PartSweepLocationOverloadNativeParity复开批次方案.md` | 说明 C11-M1 背景、实施原则、S0-S6 拆分和验收分层。 |
 | 工作步骤总入口 | `工作步骤细分/6-29-10-11-【已实现】C11-M1工作步骤总入口.md` | goal 队列索引；自身已完成，S0-S6 仍待执行。 |
 | S0 | `工作步骤细分/6-29-10-12-【已实现】C11-M1-S0-live基线与声明口径冻结.md` | 冻结 live capability、dirty boundary、forbidden claims。 |
-| S1 | `工作步骤细分/6-29-10-13-C11-M1-S1-FreeCAD源码与wrapper候选矩阵.md` | 复核 FreeCAD source、current cad-core source 和 source candidates。 |
+| S1 | `工作步骤细分/6-29-10-13-【已实现】C11-M1-S1-FreeCAD源码与wrapper候选矩阵.md` | 已完成：复核 FreeCAD source、current cad-core source 和 source candidates，关闭 `C11M1-BLOCKER-101`。 |
 | S2 | `工作步骤细分/6-29-10-14-C11-M1-S2-范围准入与blocker矩阵.md` | 路由 scope / blocker / nonGoal / backendGap。 |
 | S3 | `工作步骤细分/6-29-10-15-C11-M1-S3-FreeCADCmd原生LocationOverload复采集.md` | 复采集 native Location overload 与 advanced combined oracle。 |
 | S4 | `工作步骤细分/6-29-10-16-C11-M1-S4-ProductContract到Parity升级审计.md` | 比较 c6m4 product contract 与 native oracle，判断是否有 implementation row。 |
@@ -65,4 +65,4 @@
 | backend gap classification | `矩阵/c11m1_part_sweep_location_overload_backend_gap_classification.tsv` | implementation gate 分类。 |
 | validation matrix | `矩阵/c11m1_part_sweep_location_overload_validation_matrix.tsv` | 文档、oracle、focused tests 和 release gate 命令。 |
 
-当前 S0 已实现，S1-S6 仍是待执行状态；矩阵除 S0 baseline 行外仍是 seed，不是发布闸门结论。
+当前 S0、S1 已实现，S2-S6 仍是待执行状态；S1 仅关闭 source authority 审计，不是发布闸门结论。
