@@ -16,6 +16,7 @@
 - C6-M4 队列已关闭；located profile 与 advanced combined 已作为 CAD Core product contract non-parity 发布，c5m10 expected 只保留 wrapper build blocker / request metadata evidence。
 - 当前 live capability / adapter test 仍能追溯两个 narrowed wrapper blocker、`freecadcmd_location_overload_status=notCollected` 和 `part_workbench.sweep.remaining_gaps=[]`；C11-M1 只编辑本批次文档和矩阵，直到 S3/S4 证明 backend gap。
 - S3 已在 `HEAD=ff07bd9b83` 复跑旧 C5-M13 S2 FreeCADCmd probe：当前 FreeCAD `1.2.0 revision 20260519` / OCCT `7.8.1` 仍在 located overload `builder.build()` 返回 `OCCError: NCollection_Array1::Value`；advanced combined 保留为 located dependency-retained，不打开 C++ gate。
+- S4 已消费 S3 结果：current C6-M4 product contract 仍是 comparison target，但因为没有 stable native `shape_summary` 或 `cad-core/fixtures/c11m1` native expected，不能做 parity comparison，不能生成 backend gap；S6 后续只能做 no-code retained non-parity release gate，除非另有 stable oracle。
 
 ## 证明链条
 
@@ -56,7 +57,7 @@
 | S1 | `工作步骤细分/6-29-10-13-【已实现】C11-M1-S1-FreeCAD源码与wrapper候选矩阵.md` | 已完成：复核 FreeCAD source、current cad-core source 和 source candidates，关闭 `C11M1-BLOCKER-101`。 |
 | S2 | `工作步骤细分/6-29-10-14-【已实现】C11-M1-S2-范围准入与blocker矩阵.md` | 已完成：路由 scope / blocker / nonGoal / backendGap，关闭 `C11M1-BLOCKER-201`。 |
 | S3 | `工作步骤细分/6-29-10-15-【已实现】C11-M1-S3-FreeCADCmd原生LocationOverload复采集.md` | 已复采集 native Location overload 与 advanced combined；结果为 `notCollected` / dependency-retained，未新增 native expected。 |
-| S4 | `工作步骤细分/6-29-10-16-C11-M1-S4-ProductContract到Parity升级审计.md` | 比较 c6m4 product contract 与 native oracle，判断是否有 implementation row。 |
+| S4 | `工作步骤细分/6-29-10-16-【已实现】C11-M1-S4-ProductContract到Parity升级审计.md` | 已关闭为 `diagnostic_retained` / no-code gate；c6m4 product contract 保留为 comparison target，不升级为 native parity expected。 |
 | S5 | `工作步骤细分/6-29-10-17-C11-M1-S5-协议边界与non-goal复审.md` | 关闭 GUI、persistent wrapper lifecycle、adapter 修剪和 fixture 特判边界。 |
 | S6 | `工作步骤细分/6-29-10-18-C11-M1-S6-Oracle实现与发布闸门.md` | 消费 S3-S5 结果；有 mismatch 则落代码，无 mismatch / notCollected 则发布 no-code gate。 |
 | source candidates | `矩阵/c11m1_part_sweep_location_overload_source_candidates.tsv` | FreeCAD / cad-core authority seed。 |
@@ -66,4 +67,4 @@
 | backend gap classification | `矩阵/c11m1_part_sweep_location_overload_backend_gap_classification.tsv` | implementation gate 分类。 |
 | validation matrix | `矩阵/c11m1_part_sweep_location_overload_validation_matrix.tsv` | 文档、oracle、focused tests 和 release gate 命令。 |
 
-当前 S0、S1、S2、S3 已实现，S4-S6 仍是待执行状态；S3 只关闭本机 FreeCADCmd 复采集结论，不是 C++ 或发布闸门结论。
+当前 S0、S1、S2、S3、S4 已实现，S5-S6 仍是待执行状态；S4 已确认没有 stable native oracle，因此不是 C++ implementation gate，S6 只能发布 no-code retained non-parity gate，除非后续另有 stable oracle。
