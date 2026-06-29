@@ -161,7 +161,11 @@ class ExpectedFixtureAssertions:
             self.assert_sketch_internal_matches_expected(result, object_name, expected)
         if "solver_adapter" in expected:
             self.assertIn("solver_adapter", obj)
-            self.assert_nested_matches_expected(obj["solver_adapter"], expected["solver_adapter"], "solver_adapter")
+            expected_solver_adapter = dict(expected["solver_adapter"])
+            # `bundled_offset_oracle` is fixture-side FreeCAD evidence, not part of the runtime
+            # solver_adapter product contract.
+            expected_solver_adapter.pop("bundled_offset_oracle", None)
+            self.assert_nested_matches_expected(obj["solver_adapter"], expected_solver_adapter, "solver_adapter")
 
     def assert_named_shape_matches_expected(
         self,
