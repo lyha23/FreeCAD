@@ -23,6 +23,14 @@ C12-M2 已确认 `FeatureProjectOnSurface` 原生对象可以 build 几何，但
 - `C12M3-BLOCKER-003` 已关闭：所有 S1 row 都有 exact FreeCAD file + class/function + 支撑短句或字段名；不再存在缺 source authority 行。
 - S1 结论仍是 no-code：C5-M9 expected 保持 `source_backed_known_gap` context，C12-M2 artifact 保持 `native_hidden` blocker，current cad-core provenance ledger / focused tests 只作为 S5 comparison context；本步未运行 native probe，也未做 current comparison。
 
+## S2 范围准入与 blocker 矩阵
+
+- S2 live 起点已记录：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=adc5b96e52`（`adc5b96e52 docs: 完成 C12-M3 S1 provenance 证据矩阵`），起点 `git status --short -uall` 为 clean。
+- `edge_wire_provenance`、`face_rebuild_provenance`、`all_compound_height_offset`、`invalid_projection_diagnostic` 和 `api_observability` 均只作为 S4 probe candidate 准入；每行都要求 source endpoint、target endpoint、history API 结果、request-local judgement 和 S4 close condition。
+- `C12M3-BLOCKER-006` 已关闭：GUI session / Workbench、跨请求 native document、持久 TopoDS / NamedShape / ElementMap cache、完整 BREP transport，以及 bbox / order / EdgeN / topology count / fixture-name / current-ledger guessing 均被写成 rejected 或 non-goal。
+- C5-M9 source-backed expected 只能作为 current context、known-gap wording 和 delete-condition evidence；在 S4 产出 native_provenance_expected_ready artifact 前，不能当 native expected，也不能打开 S5 comparison。
+- `backend_gap_classification` 在 S2 只保留 `probe_candidate` 或 `rejected`；没有 implementation candidate，本步未采 FreeCAD expected、未运行 FreeCADCmd/native probe、未做 current comparison、未改代码或 expected。
+
 ## 入口
 
 - 总入口：`6-29-21-29-C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次总入口.md`

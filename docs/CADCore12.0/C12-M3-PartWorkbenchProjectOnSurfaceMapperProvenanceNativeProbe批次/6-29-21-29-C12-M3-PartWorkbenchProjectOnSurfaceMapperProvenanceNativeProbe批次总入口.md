@@ -21,6 +21,13 @@ S0 开包基线为 `HEAD=7c14aa6f7a`（`7c14aa6f7a docs: 完成 C12-M2 S6 oracle
 - `C12M3-BLOCKER-003` 已关闭；剩余 open blocker 是 S3 schema、S4 native-hidden、S5 current comparison gate 和 S2 product boundary guard。
 - 分类口径：edge/wire、face rebuild、all compound/height/offset 和 invalid diagnostic 均为 source-backed known-gap / native expected missing；C12-M2 ProjectOnSurface artifact 仍为 `native_hidden`；current cad-core ledger 与 focused tests 只作为 S5 context，不授权代码、expected、tests、adapter 或 capability wording 改动。
 
+## S2 live 记录
+
+- S2 起点命令已执行：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=adc5b96e52`，`git log -1 --oneline=adc5b96e52 docs: 完成 C12-M3 S1 provenance 证据矩阵`，`git -c core.quotepath=false status --short -uall` 输出为空。
+- 范围准入已覆盖五个轴：`edge_wire_provenance`、`face_rebuild_provenance`、`all_compound_height_offset`、`invalid_projection_diagnostic` 和 `api_observability`。可继续 S4 的行必须给出 native source endpoint、target endpoint、history API return summary、request-local judgement 和 close condition；C5-M9 source-backed expected 只作为 current context，不是 native expected。
+- Product boundary 已关闭为 rejected/non-goal：GUI session / Workbench、跨请求 native document、持久 TopoDS / NamedShape / ElementMap cache、完整 BREP transport、bbox/order/EdgeN/topology-count/fixture-name/current-ledger guessing 均不能作为 provenance 或 backend gap 依据。
+- `C12M3-BLOCKER-006` 与 `C12M3-BLOCKER-007` 已关闭；backend classification 在 S2 只保留 `probe_candidate` / `rejected`，没有 implementation candidate。本步未采 FreeCAD expected、未运行 FreeCADCmd/native probe、未做 current comparison，也未修改代码、expected、tests、adapters 或 capability wording。
+
 ## 最小完整语义批次
 
 本包覆盖同一条 FreeCAD 调用链和同一类 expected：`src/Mod/Part/App/FeatureProjectOnSurface.cpp` 生成 projected wire / face / compound，`src/Mod/Part/App/TopoShapePyImp.cpp` 与 `src/Mod/Part/App/TopoShapeExpansion.cpp` 暴露或维护 ElementMap / MapperHistory。C12-M3 不拆成单个 fixture，因为 source ownership、split fragments、face rebuild 和 compound result 都依赖同一 provenance 可观测性。
