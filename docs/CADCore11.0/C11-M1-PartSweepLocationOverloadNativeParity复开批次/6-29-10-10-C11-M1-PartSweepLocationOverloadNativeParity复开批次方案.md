@@ -38,6 +38,11 @@ C10-M4 已把 SubShapeBinder CopyOnChange DTO 准入关闭为 docs-only retained
 | S5 | 协议边界与 non-goal 复审 | 明确 GUI、native direct properties、persistent wrapper lifecycle、adapter 修剪和 fixture 特判不可进入本批次。 |
 | S6 | Oracle 实现与发布闸门 | 有 backend gap 则落 C++ / fixtures / focused tests / capability；否则发布 no-code release gate。 |
 
+S6 已按 S3 `notCollected`、S4 `diagnostic_retained`、S5 non-goal boundary
+关闭为 no-code retained non-parity release gate。本批次没有 stable native
+`shape_summary` 或 `cad-core/fixtures/c11m1` expected，没有 request-local mismatch
+证据，因此不新增 C++、fixtures、expected、tests 或 capability support upgrade。
+
 ## S6 代码落点规则
 
 S6 只有在 S3-S4 产生 `backend_gap_candidate` 时才改代码。允许落点包括：
@@ -62,7 +67,7 @@ rg -n '[ \t]$' docs/CADCore11.0
 git diff --check
 ```
 
-代码闸门触发后：
+代码闸门触发后（本批次未触发）：
 
 ```bash
 cd /home/user/Chili3DProject/FreeCAD/cad-core
@@ -70,4 +75,4 @@ cmake --build build
 python3 -m unittest tests.test_p8_features tests.test_expected_fixtures tests.test_adapters
 ```
 
-重型收口只在 S6 实际修改 collector、fixtures、capability 或核心 C++ 后执行；S0-S5 文档 / 准入步骤不跑 cad-core build。
+重型收口只在 S6 实际修改 collector、fixtures、capability 或核心 C++ 后执行；本批次 S6 是 no-code gate，不跑 cad-core build。
