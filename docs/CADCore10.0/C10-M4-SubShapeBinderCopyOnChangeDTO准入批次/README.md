@@ -24,6 +24,14 @@ C10-M4 承接 C10-M3 队列关闭后的 live capability 剩余项：`part_design
 - Probe history：S1 复核了 `collect_c8m1_shapebinder_expected.py`、`probe_c8m2_subshapebinder_copyonchange.py` 和 `probe_c9m5_subshapebinder_copyonchange.py`；这些工具覆盖 Disabled / Enabled / Mutated / PartialLoad property states，同时仍把 full temporary-document copied-object cache 记录为 `oracle_blocked` 或 `native_oracle_blocked`。
 - `C10M4-BLOCKER-101` 已按 S1 关闭；S3/S4/S5 仍必须分别处理 native evidence、DTO boundary 和 no-session non-goal，不得升级 unsupported/full temporary-document cache 为 supported。
 
+## S3 native evidence 复审结果
+
+- S3 起点 HEAD：`ed483b6c34`（`ed483b6c34 docs: 完成 C10-M4 S2 范围准入矩阵`），起点工作区干净。
+- 已复核 `cad-core/tools/probe_c9m5_subshapebinder_copyonchange.py`、`cad-core/tools/probe_c8m2_subshapebinder_copyonchange.py`、`cad-core/tools/collect_c8m1_shapebinder_expected.py`、`cad-core/fixtures/c8m1` 和 `cad-core/fixtures/c8m2`；未修改 probe 或 expected。
+- 既有 FreeCADCmd expected 基线为 FreeCAD `1.2.0 revision 20260519`。证据能区分 `BindCopyOnChange=Disabled/Enabled/Mutated`、`PartialLoad=True`、动态 CopyOnChange property 写入和 `_tmp_binder` 文档名，但这仍是 Python-visible property/session evidence。
+- S3 未采到可序列化为 request-local DTO 的 copied-object evidence：`_CopiedObjs` 不可访问，`_tmp_binder`/`copyObject` 依赖顺序和 `recomputeFeature(true)` ElementMap lifecycle 仍不可观测，`_CopiedLink` 可见值也不是前端 graph writeback target。
+- `C10M4-SCOPE-101` 已关闭为 `diagnostic_retained`，`C10M4-SCOPE-102` 已关闭为 `notCollected`，`C10M4-BLOCKER-301` 已关闭为 `closed_s3_notCollected`。在当前证据下，S4/S6 不能进入 C++ 实现；`backend_gap_candidate` 仍只能由未来 S3 native expected + S4 DTO approval + S5 stateless clearance 共同产生。
+
 ## 入口
 
 - 总入口：`6-29-03-29-C10-M4-SubShapeBinderCopyOnChangeDTO准入批次总入口.md`
@@ -36,7 +44,7 @@ C10-M4 承接 C10-M3 队列关闭后的 live capability 剩余项：`part_design
 - S0：live 基线与声明口径冻结。
 - S1：FreeCAD 源码与 current coverage 候选矩阵复核（已关闭 source authority blocker）。
 - S2：范围准入与 blocker 矩阵。
-- S3：CopyOnChange native probe 与 DTO evidence 专项复审。
+- S3：CopyOnChange native probe 与 DTO evidence 专项复审（已关闭为 `diagnostic_retained` / `notCollected`，无 C++ route）。
 - S4：cad-core 请求 DTO 与 `documentObjectUpdates` 专项复审。
 - S5：临时文档禁用与 non-goal 边界专项复审。
 - S6：Oracle 实现与发布闸门。
