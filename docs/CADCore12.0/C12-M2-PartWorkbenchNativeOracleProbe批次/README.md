@@ -24,6 +24,16 @@ C12-M2 是 C12-M1 S6 `no_code_backlog_gate` 之后单独打开的 oracle collect
 
 S0 结论：C12-M2 是用户批准的 oracle/native probe 包，继承 C12-M1 S6 `no_code_backlog_gate`；代码 gate 仍关闭，本步只冻结 live baseline 和 oracle 声明口径，不采 expected。
 
+## S1 source 基线
+
+S1 已把五个 family 的 source authority 回填到 source/probe 矩阵：每行都有 FreeCAD 源文件、类/函数和关键短句，不存在缺 source authority 仍进入后续 probe 的行。证据分三类保留：
+
+- `existing expected`：C5/C6 已有 checked-in fixture expected 或 product-contract/non-parity fixture，只能作为历史上下文或 current comparison target。
+- `historical probe output`：C11-M1 Sweep 与 C11-M2 Filling 的 native probe JSON 只证明 `notCollected` / helper lifecycle / diagnostic control，不是 stable native expected。
+- `no-code retained`：C12-M1 S5/S6、C11 release gate 和 C6 release gate 的 retained / product-contract 结论保持 no-code，不升级成 implementation candidate。
+
+S1 未运行 FreeCADCmd/native probe，未修改 `cad-core/src`、fixtures、expected、tests、adapters 或 capability wording。`C12M2-BLOCKER-003` 关闭为 `closed_s1_none_found`；稳定 native expected 与 current mismatch 仍由 S4/S5/S6 判定。
+
 ## 范围
 
 | family | C12-M1 retained reason | C12-M2 probe question | owner step |
