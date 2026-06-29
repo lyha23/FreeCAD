@@ -1,0 +1,9 @@
+category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
+C11M2-CAT-000	baseline_and_release_state	C11-P0	C11M2-SCOPE-001	no	S0 freeze C11-M1 closure C6-M5 publication live capability and dirty boundary before oracle work
+C11M2-CAT-101	surface_native_helper_oracle	C11-P0	C11M2-SCOPE-101	no_until_s3	S3 re-collect Part.makeFilledFace surface helper; if stable, S4 compare; if notCollected, retain no-code evidence
+C11M2-CAT-102	support_order_native_helper_oracle	C11-P0	C11M2-SCOPE-102	no_until_s3	S3 re-collect G1 and G2 support/order helper; if stable, S4 compare; if notCollected, retain no-code evidence
+C11M2-CAT-201	explicit_params_native_helper_oracle	C11-P1	C11M2-SCOPE-201	no_until_s3	S3 re-collect PtsOnCurve Anisotropy TolG1 TolG2 MaxSegments and all params while preserving C5-M13 expected-backed subsets
+C11M2-CAT-202	nonboundary_support_order_native_helper_oracle	C11-P1	C11M2-SCOPE-202	no_until_s3	S3 re-collect non-boundary support/order helper while preserving C5-M12 no-support expected-backed subset
+C11M2-CAT-301	product_contract_to_parity_comparison	C11-P0	C11M2-SCOPE-301	no_until_s4	S4 can create backend_gap_candidate only for S3 stable native expected plus current cad-core request-local mismatch
+C11M2-CAT-401	protocol_non_goal_boundary	C11-P0	C11M2-SCOPE-401	no	S5 closes native DocumentObject GUI mutable wrapper direct UV full surface family adapter shortcut and cross-request state boundaries
+C11M2-CAT-501	release_publication	C11-P0	C11M2-SCOPE-501	S6_decides	S6 publishes no-code retained gate or lands C++ fixtures focused tests and capability for proven backend gaps
