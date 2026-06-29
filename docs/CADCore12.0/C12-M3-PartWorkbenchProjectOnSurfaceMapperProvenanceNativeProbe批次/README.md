@@ -56,6 +56,13 @@ C12-M2 已确认 `FeatureProjectOnSurface` 原生对象可以 build 几何，但
 - No-comparison 证据为 `docs/temp/6-29-22-40-c12m3-s5-project-on-surface-no-comparison-evidence.json`；`C12M3-BLOCKER-005` 关闭为 `closed_s5_no_comparison`。
 - Implementation gate 未满足，C12-M3 仍不授权 C++、fixtures expected、tests、adapters 或 capability wording 改动。
 
+## S6 发布闸门
+
+- S6 live 起点已记录：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=0a32e7cb36`（`0a32e7cb36 docs: 完成 C12-M3 S5 no-comparison 审计`），起点 `git status --short -uall` 输出为空。
+- 已逐行复核 `source_candidates`、`scope_review`、`blocker_queue`、`backend_gap_classification`、`probe_matrix`、`validation_matrix`、S4 artifact 和 S5 no-comparison evidence：没有 row 同时满足 stable native provenance expected、request-local product boundary 和 current mismatch。
+- C12-M3 最终发布为 `native_hidden_retained` / `no_code_retained_gate`：ProjectOnSurface geometry 和必要 intermediate shape 可生成，但 FreeCAD 原生 history API 仍未暴露 source subelement 到 projected Edge/Wire/Face/Solid 的稳定 provenance。
+- 剩余 retained blocker 是 `C12M3-BLOCKER-008`：只能在未来 FreeCAD 原生 API 或 collector 能输出 `native_provenance_expected_ready`、`s5_input` 非空并证明 current mismatch 时重开。C12-M3 不建议 implementation 包，不授权 C++、fixtures expected、tests、adapters 或 capability wording 改动。
+
 ## 入口
 
 - 总入口：`6-29-21-29-C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次总入口.md`

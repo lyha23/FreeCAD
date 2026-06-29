@@ -6,7 +6,7 @@ CADCore12.0 承接 CADCore11.0 队列关闭后的下一轮 capability-first 规�
 
 用户已在 C12-M1 之后单独批准打开 C12-M2 oracle collection / native probe 包。C12-M2 不推翻 C12-M1 的 no-code 结论，也不直接打开 C++ gate；它只针对 Part Workbench historical rows 采集或阻断 stable native expected，作为后续是否能另开 implementation 包的前置证据。
 
-C12-M2 S6 已完成并发布 `no_code_oracle_blocked_gate`：ProjectOnSurface 几何可 build，但 mapper/provenance history 仍 `native_hidden`。C12-M3 因此单独打开 ProjectOnSurface mapper / provenance native observability 包，只追问原生 API 是否能给出 source-backed、request-local provenance；它仍不是 C++ implementation 包。
+C12-M2 S6 已完成并发布 `no_code_oracle_blocked_gate`：ProjectOnSurface 几何可 build，但 mapper/provenance history 仍 `native_hidden`。C12-M3 已完成 ProjectOnSurface mapper / provenance native observability 发布闸门：原生 API 仍没有给出 source-backed、request-local provenance，最终发布 `no_code_retained_gate`，仍不是 C++ implementation 包。
 
 ## 入口
 
@@ -49,6 +49,7 @@ C12-M2 S6 已完成并发布 `no_code_oracle_blocked_gate`：ProjectOnSurface �
 - C12-M3 S3 NativeProvenanceProbe schema 已完成：S3 live 起点为 clean 的 `HEAD=07643d5e3a`（`07643d5e3a docs: 完成 C12-M3 S2 范围准入矩阵`）。已新增 `docs/temp/6-29-22-15-c12m3-native-provenance-probe-schema.md`；C12-M2 harness 仅作为 FreeCADCmd/runtime/process wrapper 复用，C12-M3 provenance payload 必须在 `expected_summary` 中记录 source endpoint、target endpoint、history API name、history return summary、request-local judgement、classification 和 current comparison path。分类冻结为 `native_provenance_expected_ready`、`current_covered`、`backend_gap_candidate`、`native_hidden_retained`、`collector_bug`、`product_boundary_rejected`、`sandbox_runtime_limit`；`C12M3-BLOCKER-002` 已关闭。S3 未采集 family expected、未做 current comparison，也未改 `cad-core/src`、`include`、fixtures expected、tests、adapters 或 capability wording。
 - C12-M3 S4 ProjectOnSurface native provenance probe 已完成：S4 live 起点为 clean 的 `HEAD=9fa00a2936`（`9fa00a2936 docs: 完成 C12-M3 S3 原生 provenance schema`）。新增并运行 `docs/temp/6-29-23-05-c12m3-s4-project-on-surface-native-provenance-probe.py`，artifact `docs/temp/6-29-23-05-c12m3-s4-project-on-surface-native-provenance-probe-output.json` 使用 `c12m3.native-provenance-summary.v1`，FreeCAD baseline 为 `1.2.0 revision 20260519` / OCCT `7.8.1`。12 条 observation 覆盖 edge/wire、face rebuild、all compound/height/offset、invalid diagnostic 和 API observability；object result 与 intermediate shape 可生成，但 native history API 仍不暴露 source-backed source-to-target provenance，`mapShapes` manual mapper 与 ElementMap persistence 均不能作为产品证据。S4 总结论为 `native_hidden_retained`，`s5_input=null`，S5 current comparison 被阻断；本步未改代码、expected、tests、adapters 或 capability wording。
 - C12-M3 S5 Current comparison gate audit 已完成：S5 live 起点为 clean 的 `HEAD=c7a60c98bd`（`c7a60c98bd docs: 完成 C12-M3 S4 原生 provenance probe`）。S5 审计 S4 artifact 后确认 `expected_ready_count=0`、`s5_input=null`，12 条 observation 只有 `native_hidden_retained` / `product_boundary_rejected`；因此按 no-comparison 关闭，证据为 `docs/temp/6-29-22-40-c12m3-s5-project-on-surface-no-comparison-evidence.json`。未运行 current mismatch，未创建 `current_covered` 或 `backend_gap_candidate`，C5-M9 source-backed known-gap expected 仍不是 native expected；C12-M3 仍不授权代码、expected、tests、adapters 或 capability wording 改动。
+- C12-M3 S6 发布闸门已完成：S6 live 起点为 clean 的 `HEAD=0a32e7cb36`（`0a32e7cb36 docs: 完成 C12-M3 S5 no-comparison 审计`）。逐行复核 source authority、expected status、current status、product boundary 和 code gate 后，没有 row 同时满足 stable native provenance expected、request-local product boundary 和 current mismatch；`C12M3-CAT-001..005` 均为 `native_hidden_retained` / `closed_no_code`，`C12M3-CAT-006..010` 为 rejected / closed，`C12M3-CAT-011` 发布 `no_code_retained_gate`。C12-M3 不建议 implementation 包，不授权 C++、fixtures expected、tests、adapters 或 capability wording；剩余 retained blocker 仅在未来原生 API 或 collector 能产出 expected-ready provenance 并证明 current mismatch 时重开。
 
 ## 重开条件
 
@@ -57,6 +58,7 @@ C12-M2 S6 已完成并发布 `no_code_oracle_blocked_gate`：ProjectOnSurface �
 | CopyOnChange | stable native copied-object expected + 产品批准 request-local DTO + current cad-core mismatch。 |
 | Assembly representative / marker / writeback | 产品批准 request-local subset + expected/current mismatch。 |
 | Part Workbench historical rows | stable native/request-local expected + current mismatch。 |
+| ProjectOnSurface provenance | 未来 FreeCAD 原生 MapperHistory / ElementMap artifact 产出 `native_provenance_expected_ready` + request-local boundary + current mismatch；C12-M3 native-hidden 证据本身不能重开代码。 |
 
 ## 队列检查
 

@@ -53,6 +53,13 @@ S0 开包基线为 `HEAD=7c14aa6f7a`（`7c14aa6f7a docs: 完成 C12-M2 S6 oracle
 - C5-M9 source-backed known-gap expected 保持 context/delete-condition evidence，不能替代 native expected；native-hidden row 未被比较。
 - Implementation gate 未满足，C12-M3 仍不授权 C++、fixtures expected、tests、adapters 或 capability wording 改动。
 
+## S6 live 记录
+
+- S6 起点命令已执行：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=0a32e7cb36`，`git log -1 --oneline=0a32e7cb36 docs: 完成 C12-M3 S5 no-comparison 审计`，`git -c core.quotepath=false status --short -uall` 输出为空。
+- S6 逐行复核 source authority、expected status、current status、product boundary 和 code gate：`C12M3-CAT-001..005` 均为 `native_hidden_retained` / `closed_no_code`，`C12M3-CAT-006..010` 均为 rejected / closed，`C12M3-CAT-011` 发布为 `no_code_retained_gate`。
+- S4 artifact 的 `expected_summary.c12m3_classification=native_hidden_retained`、`s5_input=null`，S5 no-comparison evidence 的 `native_provenance_expected_ready_count=0`。没有 stable native provenance expected + request-local boundary + current mismatch 的交集。
+- C12-M3 最终分类为 `native_hidden_retained`，发布 no-code retained；不建议 implementation 包，不授权 C++、fixtures expected、tests、adapters 或 capability wording。剩余 retained blocker 是未来原生 ProjectOnSurface MapperHistory / ElementMap 可观测性。
+
 ## 最小完整语义批次
 
 本包覆盖同一条 FreeCAD 调用链和同一类 expected：`src/Mod/Part/App/FeatureProjectOnSurface.cpp` 生成 projected wire / face / compound，`src/Mod/Part/App/TopoShapePyImp.cpp` 与 `src/Mod/Part/App/TopoShapeExpansion.cpp` 暴露或维护 ElementMap / MapperHistory。C12-M3 不拆成单个 fixture，因为 source ownership、split fragments、face rebuild 和 compound result 都依赖同一 provenance 可观测性。
@@ -77,7 +84,7 @@ S0 开包基线为 `HEAD=7c14aa6f7a`（`7c14aa6f7a docs: 完成 C12-M2 S6 oracle
 | S3 | NativeProvenanceProbe harness 与 artifact schema | 定义 C12-M3 provenance artifact 字段、probe ids、失败分类和复用 C12-M2 harness 的方式。 |
 | S4 | ProjectOnSurface 原生 provenance 可观测性 probe | 已运行 native probe；原生 history 仍隐藏，S5 comparison 被阻断。 |
 | S5 | Current comparison 与 implementation gate 审计 | 已审计 S4 artifact；无 expected-ready row，S5 no-comparison 关闭，不创建 implementation gate。 |
-| S6 | 发布闸门 | 发布 `native_hidden_retained` / `current_covered` / `backend_gap_candidate`，并给出下一包授权或 no-code 结论。 |
+| S6 | 发布闸门 | 已发布 `native_hidden_retained` / `no_code_retained_gate`；无 expected-ready/current mismatch，不开 implementation 包。 |
 
 ## 发布闸门
 
@@ -89,6 +96,8 @@ S6 只有在同一 row 同时满足以下条件时，才允许建议另开 imple
 4. S5 证明 current cad-core 与 native expected 存在稳定 mismatch，并能落到 `cad-core/src/part`、`cad-core/src/topo` 或 mapper/history API 边界。
 
 缺任一项则保持 no-code；允许记录 blocker 或建议下一轮 probe，但不得直接写代码。
+
+S6 发布结论：当前缺第 2 和第 4 项。FreeCAD 原生 artifact 未暴露 source-backed provenance，S5 没有 current comparison；因此 C12-M3 保持 no-code retained。后续只有在新的 native artifact 同时给出 `native_provenance_expected_ready`、request-local 边界和 current mismatch 时，才允许另开 implementation 包。
 
 ## 主要交付物
 
