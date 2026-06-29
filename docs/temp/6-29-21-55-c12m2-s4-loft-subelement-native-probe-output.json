@@ -1,0 +1,154 @@
+{
+  "command": [
+    "/Users/li/.cargo/bin/freecadcmd",
+    "-c",
+    "import sys; sys.argv = [\"/Users/li/Chili3DProject/FreeCAD/docs/temp/6-29-21-55-c12m2-s4-sweep-loft-native-probe.py\", \"loft_subelement\"]; exec(compile(open('/Users/li/Chili3DProject/FreeCAD/docs/temp/6-29-21-55-c12m2-s4-sweep-loft-native-probe.py', encoding='utf-8').read(), '6-29-21-55-c12m2-s4-sweep-loft-native-probe.py', 'exec'))"
+  ],
+  "conclusion": "native_hidden",
+  "current_comparison_path": "No S6 current comparison is allowed for native Loft selected subelement expected; c5m12/c6m7 fixtures remain native-hidden/product-contract context only until upstream Sections exposes subelement storage.",
+  "exception_classification": "native_hidden",
+  "expected_summary": {
+    "area": null,
+    "bbox": null,
+    "diagnostics": [
+      "Object-level Part::Loft Sections assignment builds as a control.",
+      "Selected subelement tuple assignments are rejected by App::PropertyLinkList before recompute.",
+      "No visible native selected-subelement expected can be published from FreeCADCmd."
+    ],
+    "kind": "loft_subelement_native_hidden",
+    "shape_kind": null,
+    "stable_expected": false,
+    "subshape_counts": null,
+    "volume": null
+  },
+  "freecadcmd": {
+    "app_home_path": "/Applications/FreeCAD.app/Contents/Resources//",
+    "freecad_libs": "",
+    "libpack": "",
+    "libpack_version": "",
+    "occt_version": "7.8.1",
+    "path": "/Users/li/.cargo/bin/freecadcmd",
+    "raw_probe_payload": {
+      "app_home_path": "/Applications/FreeCAD.app/Contents/Resources//",
+      "config_occt_version": "7.8.1",
+      "freecad_libs": "",
+      "freecad_version": [
+        "1",
+        "2",
+        "0",
+        "20260519 (Git shallow)",
+        "Unknown",
+        "2026/05/19 20:59:45",
+        "(HEAD detached at 5a5d8d042)",
+        "5a5d8d0425fdb440fb5dcb47f1c48422d07d3267"
+      ],
+      "freecad_version_string": "1.2.0 revision 20260519",
+      "judgement": "native_hidden",
+      "libpack": "",
+      "libpack_version": "",
+      "occt_version": "7.8.1",
+      "probe_case": "loft_subelement_assignment",
+      "reason": "Object-level Sections assignment builds, but selected subelement tuple assignments are rejected by App::PropertyLinkList before recompute.",
+      "results": [
+        {
+          "assignment_repr": "[<Part::RegularPolygon>, <Part::RegularPolygon>]",
+          "case": "object_level_control",
+          "recompute_ok": true,
+          "sections_after_assignment": [
+            "LowerProfile",
+            "UpperProfile"
+          ],
+          "shape": {
+            "area": 26.153393661,
+            "bbox": {
+              "xmax": 2.0,
+              "xmin": -2.0,
+              "ymax": 2.0,
+              "ymin": -2.0,
+              "zmax": 3.0,
+              "zmin": 0.0
+            },
+            "is_null": false,
+            "shape_type": "Shell",
+            "topology_counts": {
+              "edges": 12,
+              "faces": 4,
+              "shells": 1,
+              "solids": 0,
+              "vertices": 8,
+              "wires": 4
+            },
+            "volume": 9.0
+          }
+        },
+        {
+          "assignment_repr": "[(<Part::RegularPolygon>, ['Edge1']), <Part::RegularPolygon>]",
+          "case": "tuple_list_subname",
+          "error": "TypeError: Type must be App.DocumentObject or None, not tuple",
+          "failed_stage": "assign_or_recompute",
+          "traceback_tail": [
+            "Traceback (most recent call last):",
+            "  File \"6-29-21-55-c12m2-s4-sweep-loft-native-probe.py\", line 331, in run_loft_assignment",
+            "TypeError: Type must be App.DocumentObject or None, not tuple"
+          ]
+        },
+        {
+          "assignment_repr": "[(<Part::RegularPolygon>, 'Edge1'), <Part::RegularPolygon>]",
+          "case": "tuple_string_subname",
+          "error": "TypeError: Type must be App.DocumentObject or None, not tuple",
+          "failed_stage": "assign_or_recompute",
+          "traceback_tail": [
+            "Traceback (most recent call last):",
+            "  File \"6-29-21-55-c12m2-s4-sweep-loft-native-probe.py\", line 331, in run_loft_assignment",
+            "TypeError: Type must be App.DocumentObject or None, not tuple"
+          ]
+        },
+        {
+          "assignment_repr": "[(<Part::RegularPolygon>, ['Edge1'], ['Edge1']), <Part::RegularPolygon>]",
+          "case": "tuple_stable_subname",
+          "error": "TypeError: Type must be App.DocumentObject or None, not tuple",
+          "failed_stage": "assign_or_recompute",
+          "traceback_tail": [
+            "Traceback (most recent call last):",
+            "  File \"6-29-21-55-c12m2-s4-sweep-loft-native-probe.py\", line 331, in run_loft_assignment",
+            "TypeError: Type must be App.DocumentObject or None, not tuple"
+          ]
+        }
+      ],
+      "run_mode": "Cmd",
+      "source_authority": "src/Mod/Part/App/PartFeatures.cpp::Loft::execute reads Sections.getValues only; src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementLoft"
+    },
+    "version": "1.2.0 revision 20260519",
+    "version_tuple": [
+      "1",
+      "2",
+      "0",
+      "20260519 (Git shallow)",
+      "Unknown",
+      "2026/05/19 20:59:45",
+      "(HEAD detached at 5a5d8d042)",
+      "5a5d8d0425fdb440fb5dcb47f1c48422d07d3267"
+    ]
+  },
+  "input_artifact": "docs/temp/6-29-21-55-c12m2-s4-sweep-loft-native-probe.py#loft_subelement plus cad-core/fixtures/c6m7 product-contract context",
+  "notes": [
+    "C12-M2 S4 fresh harness reprobe; c6m7 product-contract fixture is context only."
+  ],
+  "probe": {
+    "case_id": "loft_selected_subelement_visibility",
+    "family": "loft_subelement",
+    "id": "C12M2-PROBE-003"
+  },
+  "process": {
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "C12M2_PROBE_PAYLOAD={\"app_home_path\": \"/Applications/FreeCAD.app/Contents/Resources//\", \"config_occt_version\": \"7.8.1\", \"freecad_libs\": \"\", \"freecad_version\": [\"1\", \"2\", \"0\", \"20260519 (Git shallow)\", \"Unknown\", \"2026/05/19 20:59:45\", \"(HEAD detached at 5a5d8d042)\", \"5a5d8d0425fdb440fb5dcb47f1c48422d07d3267\"], \"freecad_version_string\": \"1.2.0 revision 20260519\", \"judgement\": \"native_hidden\", \"libpack\": \"\", \"libpack_version\": \"\", \"occt_version\": \"7.8.1\", \"probe_case\": \"loft_subelement_assignment\", \"reason\": \"Object-level Sections assignment builds, but selected subelement tuple assignments are rejected by App::PropertyLinkList before recompute.\", \"results\": [{\"assignment_repr\": \"[<Part::RegularPolygon>, <Part::RegularPolygon>]\", \"case\": \"object_level_control\", \"recompute_ok\": true, \"sections_after_assignment\": [\"LowerProfile\", \"UpperProfile\"], \"shape\": {\"area\": 26.153393661, \"bbox\": {\"xmax\": 2.0, \"xmin\": -2.0, \"ymax\": 2.0, \"ymin\": -2.0, \"zmax\": 3.0, \"zmin\": 0.0}, \"is_null\": false, \"shape_type\": \"Shell\", \"topology_counts\": {\"edges\": 12, \"faces\": 4, \"shells\": 1, \"solids\": 0, \"vertices\": 8, \"wires\": 4}, \"volume\": 9.0}}, {\"assignment_repr\": \"[(<Part::RegularPolygon>, ['Edge1']), <Part::RegularPolygon>]\", \"case\": \"tuple_list_subname\", \"error\": \"TypeError: Type must be App.DocumentObject or None, not tuple\", \"failed_stage\": \"assign_or_recompute\", \"traceback_tail\": [\"Traceback (most recent call last):\", \"  File \\\"6-29-21-55-c12m2-s4-sweep-loft-native-probe.py\\\", line 331, in run_loft_assignment\", \"TypeError: Type must be App.DocumentObject or None, not tuple\"]}, {\"assignment_repr\": \"[(<Part::RegularPolygon>, 'Edge1'), <Part::RegularPolygon>]\", \"case\": \"tuple_string_subname\", \"error\": \"TypeError: Type must be App.DocumentObject or None, not tuple\", \"failed_stage\": \"assign_or_recompute\", \"traceback_tail\": [\"Traceback (most recent call last):\", \"  File \\\"6-29-21-55-c12m2-s4-sweep-loft-native-probe.py\\\", line 331, in run_loft_assignment\", \"TypeError: Type must be App.DocumentObject or None, not tuple\"]}, {\"assignment_repr\": \"[(<Part::RegularPolygon>, ['Edge1'], ['Edge1']), <Part::RegularPolygon>]\", \"case\": \"tuple_stable_subname\", \"error\": \"TypeError: Type must be App.DocumentObject or None, not tuple\", \"failed_stage\": \"assign_or_recompute\", \"traceback_tail\": [\"Traceback (most recent call last):\", \"  File \\\"6-29-21-55-c12m2-s4-sweep-loft-native-probe.py\\\", line 331, in run_loft_assignment\", \"TypeError: Type must be App.DocumentObject or None, not tuple\"]}], \"run_mode\": \"Cmd\", \"source_authority\": \"src/Mod/Part/App/PartFeatures.cpp::Loft::execute reads Sections.getValues only; src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementLoft\"}\nRecompute......\n\t\t\t\t\t\t(50 %)\t\n\t\t\t\t\t\t(100 %)\t\n\t\t\t\t\t\t\t\t\nRecompute......\n\t\t\t\t\t\t(33 %)\t\n\t\t\t\t\t\t(66 %)\t\nProcessing......\nProcessing......\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t(100 %)\t\n\t\t\t\t\t\t\t\t\nRecompute......\n\t\t\t\t\t\t(50 %)\t\n\t\t\t\t\t\t(100 %)\t\n\t\t\t\t\t\t\t\t\nRecompute......\n\t\t\t\t\t\t(50 %)\t\n\t\t\t\t\t\t(100 %)\t\n\t\t\t\t\t\t\t\t\nRecompute......\n\t\t\t\t\t\t(50 %)\t\n\t\t\t\t\t\t(100 %)\t\n\t\t\t\t\t\t\t\t\n",
+    "timeout_seconds": 60
+  },
+  "request_local": {
+    "judgement": "request_local_product_contract_exists_but_native_expected_hidden",
+    "notes": "CAD Core can express selected sections as request-local product contract, but FreeCAD native Part::Loft.Sections is App::PropertyLinkList and rejects subelement tuple assignments."
+  },
+  "schema_version": "c12m2.native-probe-artifact.v1",
+  "source_authority": "src/Mod/Part/App/PartFeatures.cpp::Loft::execute; src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementLoft; src/Mod/Part/App/AppPartPy.cpp::makeLoft"
+}

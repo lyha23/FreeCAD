@@ -53,6 +53,19 @@ S3 baseline artifact：
 
 当前 FreeCADCmd baseline 为 `/Users/li/.cargo/bin/freecadcmd`，FreeCAD `1.2.0 revision 20260519`，OCCT `7.8.1`，LibPack / LibPackVersion 为空。该 baseline 的 `expected_ready` 只表示 runtime metadata 可读，不表示任何 family geometry expected 已发布；S4/S5 仍需按 family 产出 `expected_ready`、`native_probe_blocked`、`helper_blocked`、`native_hidden`、`sandbox_runtime_limit`、`collector_bug`、`product_boundary_rejected` 或 `retained_no_expected`。
 
+## S4 Sweep / Loft probe 结论
+
+S4 已按 S3 schema 运行 file-backed harness，FreeCADCmd 为 `/Users/li/.cargo/bin/freecadcmd`，FreeCAD `1.2.0 revision 20260519`，OCCT `7.8.1`，LibPack / LibPackVersion 为空。新增 artifacts：
+
+- `docs/temp/6-29-21-55-c12m2-s4-sweep-loft-native-probe.py`
+- `docs/temp/6-29-21-55-c12m2-s4-sweep-native-probe-output.json`
+- `docs/temp/6-29-21-55-c12m2-s4-sweep-options-native-probe-output.json`
+- `docs/temp/6-29-21-55-c12m2-s4-loft-subelement-native-probe-output.json`
+
+Sweep final classification：Location overload 为 `native_probe_blocked`。fresh probe 中 located representatives 均在 `is_ready_before_build=true` / `status_before_build=0` 后于 build 阶段返回 `OCCError: NCollection_Array1::Value`；plain no-location control 可 build。auxiliary / binormal / tolerance / no-location combined controls 可作为 current-covered c5m10 context，但带 Location 的 combined row 仍依赖 Location blocker。`C12M2-BLOCKER-101` 已关闭，S6 不得对 Location overload 做 current mismatch 比较。
+
+Loft final classification：selected subelement 为 `native_hidden`。object-level `Sections` control 可 build；`[(object, ["Edge1"]), ...]` 等 tuple subelement assignment 被 `App::PropertyLinkList` 拒绝，错误为 `TypeError: Type must be App.DocumentObject or None, not tuple`。`C12M2-BLOCKER-401` 已关闭，c5m12/c6m7 继续只是 native-hidden / product-contract context。
+
 ## 范围
 
 | family | C12-M1 retained reason | C12-M2 probe question | owner step |
