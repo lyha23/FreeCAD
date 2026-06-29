@@ -18,12 +18,21 @@ C12-M4 承接 C12-M3 S6 的 `native_hidden_retained` / `no_code_retained_gate`�
 - Current producer 已冻结到 `source_authority` / `contract_fields`：`ProjectedShapeEvidence` 承载 sourceObject/sourceSubname/stableSubname/projectionItemIndex/sourceShapeKind/makerStage/edgeFragmentIndex/faceWireSources/heightSolidId/compoundChildIndex/preOffsetChildId/offsetApplied；`projectOnSurfaceMapperEvidenceJson()` 输出 `reference_recovery_hook=mapper_history_event_target_subname` 以及 face/height/compound/wire ownership；`namedShapeForProjectOnSurfaceProvenance()` 写入 `mapper_history` 与 `element_history_status`。
 - Focused consumer 已冻结为 `cad-core/tests/test_p8_features.py` 的 C5-M9 edge、wire split、invalid diagnostic、face rebuild、all-compound 方法；五个 C5-M9 expected JSON 当前仍保留 `known_gap` / `native_hidden` / native replacement wording，迁移点只记录到 `expected_migration`，不在 S1 修改 expected、tests、capability wording、C++、adapters 或 fixtures。
 
+## S2 产品契约边界冻结
+
+- S2 live 起点：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=49cdd9d086`，`git log -1 --oneline=49cdd9d086 docs: 完成 C12-M4 S1 ledger 证据矩阵`；起点 `git -c core.quotepath=false status --short -uall` 输出为空，即 `<clean>`。
+- 队列检查确认 C12-M4 从 S2 开始，S2 文件执行前未标 `【已实现】`；S2 完成后下一步应为 S3 expected 与 capability 迁移设计。
+- 产品契约已冻结：`projection_item_ledger`、`MapperHistoryEvent`、edge/wire provenance、face rebuild provenance、height/compound/offset provenance、`element_history_status` 与 `reference_recovery_hook` 是 CAD Core request-local product contract；invalid projection diagnostic 是 CAD Core product diagnostic contract。
+- `native_oracle_unavailable` 注记保留为强制口径：C12-M3 S4/S5 仍是 `native_hidden_retained`、`s5_input=null`、`native_provenance_expected_ready_count=0`，没有 FreeCAD native parity success，也没有 current comparison / backend gap candidate。
+- Non-goal 已冻结：FreeCAD native ElementMap parity、output guessing、GUI/Workbench、persistent native Document / TopoDS / NamedShape / ElementMap cache、full BREP transport，以及在本 decision package 内直接改 C++、include、fixture expected、tests、adapters 或 capability wording 都保持 out of scope。
+- `C12M4-BLOCKER-002` 已关闭；`C12M4-BLOCKER-003` expected wording 迁移、`C12M4-BLOCKER-004` capability wording audit 和 `C12M4-BLOCKER-005` release gate 仍保持未关闭。
+
 ## 契约判断
 
 - FreeCAD 语义依据仍来自 `src/Mod/Part/App/FeatureProjectOnSurface.cpp` 的 `Projection` LinkSubList、`projectWire()`、`projectFace()`、`createSolidIfHeight()`、`createCompound()` 和 `getOffsetPlacement()` 调用顺序。
 - `cad-core/src/part/part_project_on_surface.cpp` 里的 `projection_item_ledger`、`ProjectedShapeEvidence`、`projectOnSurfaceMapperEvidenceJson()` 和 `namedShapeForProjectOnSurfaceProvenance()` 是产品契约的当前实现语义来源。
 - `cad-core/include/cad_core/part/topo_shape_mapper.h` 的 `MapperHistoryEvent` 是 request-local provenance 的公共语义形状；它是 `cad-core` 的产品账本，不要求 FreeCAD native API 输出同构 history。
-- C5-M9 expected 当前仍写着 `known_gap` / native hidden delete condition；C12-M4 要把这类 wording 迁移为 `product_contract` / `native_oracle_unavailable`，但迁移不得改写 geometry parity，也不得降低 source-authority 注释要求。
+- C5-M9 expected 当前仍写着 `known_gap` / native hidden delete condition；S2 只冻结 product contract 口径，S3/S4 再决定把这类 wording 迁移为 `product_contract` / `native_oracle_unavailable` 的具体文件和验收命令。迁移不得改写 geometry parity，也不得降低 source-authority 注释要求。
 
 ## 出口
 
