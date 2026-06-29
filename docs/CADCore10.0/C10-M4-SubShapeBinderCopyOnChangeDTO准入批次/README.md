@@ -32,6 +32,14 @@ C10-M4 承接 C10-M3 队列关闭后的 live capability 剩余项：`part_design
 - S3 未采到可序列化为 request-local DTO 的 copied-object evidence：`_CopiedObjs` 不可访问，`_tmp_binder`/`copyObject` 依赖顺序和 `recomputeFeature(true)` ElementMap lifecycle 仍不可观测，`_CopiedLink` 可见值也不是前端 graph writeback target。
 - `C10M4-SCOPE-101` 已关闭为 `diagnostic_retained`，`C10M4-SCOPE-102` 已关闭为 `notCollected`，`C10M4-BLOCKER-301` 已关闭为 `closed_s3_notCollected`。在当前证据下，S4/S6 不能进入 C++ 实现；`backend_gap_candidate` 仍只能由未来 S3 native expected + S4 DTO approval + S5 stateless clearance 共同产生。
 
+## S4 DTO / documentObjectUpdates 复审结果
+
+- S4 起点 HEAD：`cc713e621f`（`cc713e621f docs: 完成 C10-M4 S3 native evidence 复审`），起点工作区干净。
+- App::Link 路径已复核：`cad-core/src/app/copy_on_change.cpp` 和 `cad-core/src/app/link.cpp` 使用当前 request graph 中的 `LinkCopyOnChange`、`LinkedObject`、`LinkCopyOnChangeSource`、`LinkCopyOnChangeGroup`、`LinkCopyOnChangeTouched` 与依赖图生成 `documentObjectUpdates`，覆盖 group create/update、copied object create/update、dependency rewrite、history preserve 与 link property writeback；`cad-core/tests/test_p8_features.py` 会把这些 updates 应用回下一次请求 graph，`cad-core/tests/test_adapters.py` 和 capability contract 也声明这是 App::Link `documentObjectUpdates` transport。
+- DTO 边界四问结论：当前 App::Link 请求携带的是前端已经持久化在 DocumentObject graph 里的 copied-object snapshot 加 CopyOnChange link properties/touched state，不是 SubShapeBinder 的 `_CopiedObjs` snapshot、`copyObject` intent 或 source mutation evidence；App::Link 可返回 `documentObjectUpdates`，缺 source 时也可返回 diagnostic；前端写回方式是把 create/update properties 应用到 DocumentObject graph 后再发下一次请求；SubShapeBinder 的 `_tmp_binder`、`_CopiedObjs`、`copyObject`、`recomputeFeature(true)`、temporary document/cache 和 copied-object ElementMap lifecycle 仍 unsupported。
+- SubShapeBinder 当前路径已复核：`cad-core/src/part_design/feature_shape_binder.cpp` 对 `BindMode=Detached` 只返回清空 `Support` 的 request-local `documentObjectUpdates`；对 `BindCopyOnChange=Enabled/Mutated` 或 `PartialLoad=True` 只发布 `copy_on_change_full_temporary_document_cache_not_supported` retained diagnostic 和 metadata，不产生 copied-object `documentObjectUpdates`。
+- 因 S3 未采到 request-local copied-object expected，S4 不能比较出 current mismatch，也不能进入 S6 C++ 实现。`C10M4-BLOCKER-401` 关闭为 `product_decision_needed` / `current_retained_diagnostic` / `release_gate`；S5/S6 仍保持 pending。
+
 ## 入口
 
 - 总入口：`6-29-03-29-C10-M4-SubShapeBinderCopyOnChangeDTO准入批次总入口.md`
