@@ -30,12 +30,21 @@ C12-M4 的目标是把 `cad-core` 当前 ProjectOnSurface request-local projecti
 - Non-goal 已冻结：FreeCAD native ElementMap parity、output guessing、GUI/Workbench、persistent native Document / TopoDS / NamedShape / ElementMap cache、full BREP transport，以及在 C12-M4 decision package 内直接改 C++、include、fixture expected、tests、adapters 或 capability wording。
 - `C12M4-BLOCKER-002` 已关闭；`C12M4-BLOCKER-003`、`C12M4-BLOCKER-004`、`C12M4-BLOCKER-005` 仍分别留给 S3 expected/capability 迁移和 S4 release gate。
 
+## S3 live 记录
+
+- 基线命令已执行：`pwd=/Users/li/Chili3DProject/FreeCAD`，`git rev-parse --short HEAD=5aa11afe11`，`git log -1 --oneline=5aa11afe11 docs: 完成 C12-M4 S2 产品契约冻结`。
+- 起点 dirty boundary：`git -c core.quotepath=false status --short -uall` 输出为空，即 `<clean>`；本步只更新 C12-M4 包内 README、总入口、矩阵并重命名 S3 步骤文件，不改 root README、`cad-core/src`、`cad-core/include`、fixtures expected、tests、adapters、capability source、接口文档正文或 C5-M9 expected JSON。
+- 队列检查确认 C12-M4 执行前从 S3 开始，S3 文件未标 `【已实现】`；S3 完成后只应推进到 S4 产品契约发布闸门。
+- Expected migration 设计已列全五个 C5-M9 expected JSON：edge、wire split、face rebuild、all compound 和 invalid diagnostic 均从 `known_gap/native_hidden replacement` wording 迁移为 CAD Core request-local `product_contract` 或 `product_diagnostic_contract` wording，并保留 `native_oracle_unavailable`、source authority、focused assertions 和非目标。
+- Capability / adapter / interface 后续迁移目标已定位：`cad-core/src/runtime/capability_contract.cpp:821-952` 的 `part_workbench.project_on_surface`，`cad-core/tests/test_adapters.py:2970-3104` 的 capability assertions，以及 `docs/接口规定/01-cad-recompute全量输入输出接口.md:113-127` 的 ProjectOnSurface DTO 文案。
+- `C12M4-BLOCKER-003` 已关闭；`C12M4-BLOCKER-004` 记录 exact sources 后保留为 S4 release decision pending；`C12M4-BLOCKER-005` 仍由 S4 发布闸门关闭。
+
 ## 决策
 
 1. `ProjectOnSurface` 的几何构造仍必须沿 FreeCAD 调用链对齐；source authority 继续写明 FreeCAD 源文件、类/函数和关键短句。
 2. Provenance contract 不再等待 FreeCAD native `getElementHistory` / `ElementMap` artifact；C12-M3 artifact 已证明公开路径仍是 `native_hidden_retained`，S2 将其保留为 `native_oracle_unavailable`。
 3. `projection_item_ledger`、`MapperHistoryEvent`、edge/wire、face rebuild、height/compound/offset、`element_history_status`、`reference_recovery_hook` 等字段是 CAD Core request-local product contract；invalid projection diagnostics 是 product diagnostic contract。
-4. C5-M9 expected 的 `known_gap` wording 需要后续迁移为 product-contract wording；迁移只改变契约状态，不降低测试覆盖或 source-backed 字段要求。
+4. C5-M9 expected 的 `known_gap` wording 需要后续迁移为 product-contract wording；S3 已列明五个 expected JSON、capability source、adapter assertion 和接口文档的最小迁移面。迁移只改变契约状态和发布文案，不降低测试覆盖、source-backed 字段要求或 `native_oracle_unavailable` 注记。
 
 ## 最小完整语义批次
 
@@ -44,7 +53,7 @@ C12-M4 不拆成单个 fixture，因为 edge/wire split、face rebuild、height 
 - S0 冻结 C12-M3 继承口径、live baseline 和禁止项。
 - S1 盘点当前 `cad-core` ledger 字段、focused tests、C5-M9 expected wording 和前端引用恢复需求。
 - S2 发布产品契约边界：哪些字段是 CAD Core contract，哪些仍是 FreeCAD geometry parity 或 non-goal。
-- S3 设计 expected/test/capability wording 迁移包，但不在决策包里直接改代码。
+- S3 设计 expected/test/capability/interface wording 迁移包，但不在决策包里直接改代码或 expected JSON。
 - S4 发布闸门：决定是否另开 implementation package 迁移 C5-M9 wording 与 capability docs。
 
 ## 发布闸门
