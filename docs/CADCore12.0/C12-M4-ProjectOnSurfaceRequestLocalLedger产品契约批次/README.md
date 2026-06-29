@@ -11,6 +11,13 @@ C12-M4 承接 C12-M3 S6 的 `native_hidden_retained` / `no_code_retained_gate`�
 - 队列状态：C12-M3 `工作步骤细分` 只输出表头；C12-M4 执行前从 S0-S4 pending 开始，S0 完成并重命名后下一步为 S1。
 - C12-M3 继承口径固定为：S4/S5 已证明 ProjectOnSurface native history 仍是 `native_hidden_retained`，`s5_input=null`，`native_provenance_expected_ready_count=0`。C12-M4 因此只发布产品契约决策，不创建 C++ implementation gate。
 
+## S1 current ledger 证据冻结
+
+- S1 live 起点：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=842ce54ad7`，`git log -1 --oneline=842ce54ad7 docs: 冻结 C12-M4 S0 live 基线`；起点 `git -c core.quotepath=false status --short -uall` 输出为空，即 `<clean>`。
+- 队列检查确认 C12-M4 从 S1 开始，S1 文件执行前未标 `【已实现】`；S1 完成后下一步应为 S2 产品契约边界与 non-goal 冻结。
+- Current producer 已冻结到 `source_authority` / `contract_fields`：`ProjectedShapeEvidence` 承载 sourceObject/sourceSubname/stableSubname/projectionItemIndex/sourceShapeKind/makerStage/edgeFragmentIndex/faceWireSources/heightSolidId/compoundChildIndex/preOffsetChildId/offsetApplied；`projectOnSurfaceMapperEvidenceJson()` 输出 `reference_recovery_hook=mapper_history_event_target_subname` 以及 face/height/compound/wire ownership；`namedShapeForProjectOnSurfaceProvenance()` 写入 `mapper_history` 与 `element_history_status`。
+- Focused consumer 已冻结为 `cad-core/tests/test_p8_features.py` 的 C5-M9 edge、wire split、invalid diagnostic、face rebuild、all-compound 方法；五个 C5-M9 expected JSON 当前仍保留 `known_gap` / `native_hidden` / native replacement wording，迁移点只记录到 `expected_migration`，不在 S1 修改 expected、tests、capability wording、C++、adapters 或 fixtures。
+
 ## 契约判断
 
 - FreeCAD 语义依据仍来自 `src/Mod/Part/App/FeatureProjectOnSurface.cpp` 的 `Projection` LinkSubList、`projectWire()`、`projectFace()`、`createSolidIfHeight()`、`createCompound()` 和 `getOffsetPlacement()` 调用顺序。

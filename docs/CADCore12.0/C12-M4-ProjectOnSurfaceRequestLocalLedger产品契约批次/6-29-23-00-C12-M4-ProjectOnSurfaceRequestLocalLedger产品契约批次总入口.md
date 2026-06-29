@@ -12,6 +12,14 @@ C12-M4 的目标是把 `cad-core` 当前 ProjectOnSurface request-local projecti
 - C12-M3 继承口径：S4 artifact 结论为 `native_hidden_retained`，`s5_input=null`；S5 no-comparison evidence 记录 `native_provenance_expected_ready_count=0`，未运行 current comparison，未创建 `backend_gap_candidate`。C12-M4 只能把 request-local ledger 发布为 CAD Core 产品契约，不能改写成 FreeCAD native expected。
 - S0 禁止项：不修改 `cad-core/src`、`cad-core/include`、fixtures expected、tests、adapters、capability wording 或 C5-M9 expected wording；不运行 FreeCADCmd、current comparison 或 full build。
 
+## S1 live 记录
+
+- 基线命令已执行：`pwd=/Users/li/Chili3DProject/FreeCAD`，`git rev-parse --short HEAD=842ce54ad7`，`git log -1 --oneline=842ce54ad7 docs: 冻结 C12-M4 S0 live 基线`。
+- 起点 dirty boundary：`git -c core.quotepath=false status --short -uall` 输出为空，即 `<clean>`；本步只更新 C12-M4 docs/TSV 并重命名 S1 步骤文件，不改 `cad-core/src`、`cad-core/include`、tests、fixtures expected、adapters、capability wording 或 C5-M9 expected JSON。
+- 队列检查确认 C12-M4 执行前从 S1 开始，S1 文件未标 `【已实现】`；S1 完成后只应推进到 S2，不关闭 S2 的产品契约边界。
+- Current ledger 证据：`ProjectedShapeEvidence` 是字段生产账本；`projectOnSurfaceMapperEvidenceJson()` 输出 `reference_recovery_hook=mapper_history_event_target_subname` 以及 face/height/compound/wire ownership；`namedShapeForProjectOnSurfaceProvenance()` 写入 `mapper_history` 与 `element_history_status`；`MapperHistoryEvent` 公共字段为 source、target、shapeKind、relation、makerStage、evidence、recoverability、diagnosticStatus。
+- Consumer/wording 证据：`cad-core/tests/test_p8_features.py` 的 C5-M9 focused methods 覆盖 edge、wire split、invalid diagnostic、face rebuild 和 all-compound 字段；五个 C5-M9 expected JSON 当前仍是 `known_gap` / `native_hidden` / native replacement wording。S1 只把这些迁移点列入 `expected_migration`，继续保持 C12-M3 native oracle unavailable 口径。
+
 ## 决策
 
 1. `ProjectOnSurface` 的几何构造仍必须沿 FreeCAD 调用链对齐；source authority 继续写明 FreeCAD 源文件、类/函数和关键短句。
