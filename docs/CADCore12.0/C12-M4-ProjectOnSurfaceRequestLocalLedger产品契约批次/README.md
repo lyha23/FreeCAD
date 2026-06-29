@@ -4,6 +4,13 @@ C12-M4 承接 C12-M3 S6 的 `native_hidden_retained` / `no_code_retained_gate`�
 
 本包把 `cad-core` 现有 request-local projection ledger 升级为 CAD Core 产品契约：它不再伪装成 FreeCAD native parity expected，而是作为前端引用恢复、stable subname、mapper history 和 diagnostic recovery 的 request-local contract。C12-M4 仍不在开包阶段改 C++、fixtures expected、tests、adapters 或 capability wording；这些变更必须由后续步骤或独立 implementation 包按本契约执行。
 
+## S0 live 基线冻结
+
+- `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=744531f67c`，`git log -1 --oneline=744531f67c docs: 新增 C12-M4 request-local ledger 产品契约包`。
+- 起点 `git -c core.quotepath=false status --short -uall` 输出为空；dirty boundary 为 `<clean>`，未发现 `cad-core/src`、`cad-core/include`、fixtures expected、tests、adapters、capability wording 或构建产物改动。
+- 队列状态：C12-M3 `工作步骤细分` 只输出表头；C12-M4 执行前从 S0-S4 pending 开始，S0 完成并重命名后下一步为 S1。
+- C12-M3 继承口径固定为：S4/S5 已证明 ProjectOnSurface native history 仍是 `native_hidden_retained`，`s5_input=null`，`native_provenance_expected_ready_count=0`。C12-M4 因此只发布产品契约决策，不创建 C++ implementation gate。
+
 ## 契约判断
 
 - FreeCAD 语义依据仍来自 `src/Mod/Part/App/FeatureProjectOnSurface.cpp` 的 `Projection` LinkSubList、`projectWire()`、`projectFace()`、`createSolidIfHeight()`、`createCompound()` 和 `getOffsetPlacement()` 调用顺序。

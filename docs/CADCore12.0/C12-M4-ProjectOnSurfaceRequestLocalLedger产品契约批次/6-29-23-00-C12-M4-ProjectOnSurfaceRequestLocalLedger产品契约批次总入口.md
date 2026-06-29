@@ -4,7 +4,13 @@
 
 C12-M4 的目标是把 `cad-core` 当前 ProjectOnSurface request-local projection ledger 升级为明确产品契约。它承认 C12-M3 的负结论：FreeCAD 原生 ProjectOnSurface history API 没有暴露可用于替换 C5-M9 的 `native_provenance_expected_ready`。因此后续工作不再以 native expected 作为唯一 gate，而是把 `cad-core` 为前端引用恢复提供的 request-local ledger 定义为 CAD Core 自有 contract。
 
-S0 live 起点为 `HEAD=fe563906c8`（`fe563906c8 docs: 完成 C12-M3 S6 no-code 发布闸门`），`pwd=/Users/li/Chili3DProject/FreeCAD`，起点工作区为 clean。
+## S0 live 记录
+
+- 基线命令已执行：`pwd=/Users/li/Chili3DProject/FreeCAD`，`git rev-parse --short HEAD=744531f67c`，`git log -1 --oneline=744531f67c docs: 新增 C12-M4 request-local ledger 产品契约包`。
+- 起点 dirty boundary：`git -c core.quotepath=false status --short -uall` 输出为空，即 `<clean>`。边界内没有 `cad-core/src`、`cad-core/include`、fixtures expected、tests、adapters、capability wording 或构建产物。
+- 队列检查：C12-M3 `工作步骤细分` 只输出表头；C12-M4 执行前从 S0-S4 pending 开始，S0 完成并重命名后下一步为 S1。
+- C12-M3 继承口径：S4 artifact 结论为 `native_hidden_retained`，`s5_input=null`；S5 no-comparison evidence 记录 `native_provenance_expected_ready_count=0`，未运行 current comparison，未创建 `backend_gap_candidate`。C12-M4 只能把 request-local ledger 发布为 CAD Core 产品契约，不能改写成 FreeCAD native expected。
+- S0 禁止项：不修改 `cad-core/src`、`cad-core/include`、fixtures expected、tests、adapters、capability wording 或 C5-M9 expected wording；不运行 FreeCADCmd、current comparison 或 full build。
 
 ## 决策
 
