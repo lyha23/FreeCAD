@@ -12,6 +12,8 @@ C11-M2 转向 Part Workbench Filling `Part.makeFilledFace` native helper parity 
 
 C11-M2 的目标不是重做 C6-M5，而是重新采集当前 FreeCAD / OCCT 下的 `Part.makeFilledFace(...)` helper oracle：如果 Surface、Supports/Orders G1/G2、ExplicitParams all params 或 non-boundary support/order 能稳定返回 native `shape_summary`，再比较 C6-M5 current product contract 是否可升级为 parity；如果仍然 crash / timeout / `notCollected`，则发布 no-code retained non-parity gate。
 
+当前 C11-M2 S3 已复跑本机 FreeCADCmd：FreeCAD `1.2.0 revision 20260519` / OCCT `7.8.1` 下 Surface helper 仍返回 `TypeError: argument 2 must be , not Part.Face`，Supports/Orders G1/G2 同样无法稳定采集，PtsOnCurve / TolG1+TolG2 / MaxSegments / all params 与 non-boundary support/order 仍有 SIGSEGV / timeout / no-payload evidence；direct wrapper controls 只作为 diagnostic dependency，不进入 request-local expected。
+
 ## 入口
 
 - C11-M1 总入口：`C11-M1-PartSweepLocationOverloadNativeParity复开批次/6-29-10-10-C11-M1-PartSweepLocationOverloadNativeParity复开批次总入口.md`
