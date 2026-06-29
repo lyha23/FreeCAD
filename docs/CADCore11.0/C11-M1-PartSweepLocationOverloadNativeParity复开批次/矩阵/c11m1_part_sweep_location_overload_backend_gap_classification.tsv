@@ -1,0 +1,7 @@
+category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
+C11M1-CAT-000	baseline_and_release_state	C11-P0	C11M1-SCOPE-001	no	S0 freeze current C10 closed state and C6-M4 sweep non-parity publication before any oracle work
+C11M1-CAT-101	located_profile_native_oracle	C11-P0	C11M1-SCOPE-102	no	S3 re-collect add(Profile, Location, WithContact, WithCorrection); do not implement C++ until stable oracle exists
+C11M1-CAT-102	located_profile_product_to_parity	C11-P0	C11M1-SCOPE-103	no	S4 compare stable oracle with current c6m4 output; create backend_gap_candidate only on real mismatch
+C11M1-CAT-103	advanced_combined_product_to_parity	C11-P1	C11M1-SCOPE-104	no	S3/S4 process after located profile oracle; retain dependency if Location overload remains notCollected
+C11M1-CAT-104	protocol_non_goal_boundary	C11-P0	C11M1-SCOPE-301	no	S5 close native direct properties GUI persistent lifecycle PartDesign Pipe/Hole adapter and fixture-fixup boundaries
+C11M1-CAT-105	release_publication	C11-P0	C11M1-SCOPE-201	no	S6 publish code implementation or no-code retained non-parity gate based on S3-S5
