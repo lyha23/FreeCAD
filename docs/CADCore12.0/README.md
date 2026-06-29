@@ -6,6 +6,8 @@ CADCore12.0 承接 CADCore11.0 队列关闭后的下一轮 capability-first 规�
 
 用户已在 C12-M1 之后单独批准打开 C12-M2 oracle collection / native probe 包。C12-M2 不推翻 C12-M1 的 no-code 结论，也不直接打开 C++ gate；它只针对 Part Workbench historical rows 采集或阻断 stable native expected，作为后续是否能另开 implementation 包的前置证据。
 
+C12-M2 S6 已完成并发布 `no_code_oracle_blocked_gate`：ProjectOnSurface 几何可 build，但 mapper/provenance history 仍 `native_hidden`。C12-M3 因此单独打开 ProjectOnSurface mapper / provenance native observability 包，只追问原生 API 是否能给出 source-backed、request-local provenance；它仍不是 C++ implementation 包。
+
 ## 入口
 
 - C12-M1 总入口：`C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/6-29-16-26-C12-M1-CADCoreCapabilityImplementationCandidate盘点批次总入口.md`
@@ -16,6 +18,10 @@ CADCore12.0 承接 CADCore11.0 队列关闭后的下一轮 capability-first 规�
 - C12-M2 方案：`C12-M2-PartWorkbenchNativeOracleProbe批次/6-29-18-53-C12-M2-PartWorkbenchNativeOracleProbe批次方案.md`
 - C12-M2 工作步骤：`C12-M2-PartWorkbenchNativeOracleProbe批次/工作步骤细分/`
 - C12-M2 矩阵：`C12-M2-PartWorkbenchNativeOracleProbe批次/矩阵/`
+- C12-M3 总入口：`C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次/6-29-21-29-C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次总入口.md`
+- C12-M3 方案：`C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次/6-29-21-29-C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次方案.md`
+- C12-M3 工作步骤：`C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次/工作步骤细分/`
+- C12-M3 矩阵：`C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次/矩阵/`
 
 ## 当前基线
 
@@ -37,6 +43,7 @@ CADCore12.0 承接 CADCore11.0 队列关闭后的下一轮 capability-first 规�
 - C12-M2 S4 Sweep / Loft probe 已完成：Sweep Location overload 关闭为 `native_probe_blocked`，fresh artifact `docs/temp/6-29-21-55-c12m2-s4-sweep-native-probe-output.json` 仍显示 located representatives 在 build 阶段返回 `OCCError: NCollection_Array1::Value`；Sweep auxiliary / binormal / tolerance no-location controls 为 current-covered context，artifact 为 `docs/temp/6-29-21-55-c12m2-s4-sweep-options-native-probe-output.json`。Loft selected subelement 关闭为 `native_hidden`，artifact `docs/temp/6-29-21-55-c12m2-s4-loft-subelement-native-probe-output.json` 显示 tuple subelement assignment 被 `App::PropertyLinkList` 拒绝。`C12M2-BLOCKER-101` 与 `C12M2-BLOCKER-401` 已关闭，无 C++ implementation candidate。
 - C12-M2 S5 Filling / GeomPlate / ProjectOnSurface probe 已完成：Filling 关闭为 `helper_blocked`，artifact `docs/temp/6-29-20-40-c12m2-s5-filling-helper-native-probe-output.json` 显示 wrapper/simple boundary controls 稳定但 helper initial-surface / support-order / explicit params 仍 crash 或 timeout；GeomPlate 只有 projected curve2d + initial surface 进入 S6 comparison candidate，artifact `docs/temp/6-29-20-40-c12m2-s5-geomplate-native-probe-output.json` 同时保留 G1 curve-on-surface `native_hidden`；ProjectOnSurface provenance 关闭为 `native_hidden`，artifact `docs/temp/6-29-20-40-c12m2-s5-project-on-surface-native-probe-output.json` 显示 geometry 可 build 但 source-backed mapper/history 全部隐藏。
 - C12-M2 S6 Oracle 发布闸门已完成：唯一 S6 comparison candidate（GeomPlate projected curve2d + initial surface）通过 `docs/temp/6-29-20-58-c12m2-s6-geomplate-current-comparison.json` 和 focused unittest 证明 current cad-core 已覆盖 `cad-core/fixtures/c5m13/expected/part-geomplate-projected-curve2d-initial-surface.freecad.json`，最终分类为 `current_covered`。Sweep Location 保持 `native_probe_blocked`，Filling 保持 `helper_blocked`，Loft / ProjectOnSurface / GeomPlate G1 或 no-initial-surface native rows 保持 `native_hidden` / no-code context。C12-M2 最终发布 `no_code_oracle_blocked_gate`，不授权 C++、fixtures expected、tests、adapters 或 capability wording 改动。
+- C12-M3 S0 live 冻结已完成：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=7c14aa6f7a`（`7c14aa6f7a docs: 完成 C12-M2 S6 oracle 发布闸门`）。起点 dirty boundary 只包含 `docs/CADCore12.0/README.md` 修改和未跟踪的 `docs/CADCore12.0/C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次/` 包；未发现 `cad-core/src`、`cad-core/include`、fixtures expected、tests、adapters 或 capability wording 改动。C12-M1 / C12-M2 队列均为空；C12-M3 S0 前队列从 S0-S6 开始，S0 完成后下一步为 S1。本包继承 C12-M2 S6 `no_code_oracle_blocked_gate`，只允许复核 FreeCAD 原生 ProjectOnSurface / TopoShape history API 是否能导出 source-backed request-local provenance；不授权 C++、fixtures expected、tests、adapters、capability wording 或 full build 改动。
 
 ## 重开条件
 
@@ -52,6 +59,7 @@ CADCore12.0 承接 CADCore11.0 队列关闭后的下一轮 capability-first 规�
 cd /home/user/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M2-PartWorkbenchNativeOracleProbe批次/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -60,6 +68,7 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 cd /home/user/Chili3DProject/FreeCAD
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M2-PartWorkbenchNativeOracleProbe批次/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore12.0
 git diff --check
 ```

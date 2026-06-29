@@ -1,0 +1,9 @@
+id	level	command	expected_result	status	owner_step
+C12M3-VAL-001	queue	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次/工作步骤细分 --format markdown	S0 precheck showed C12-M3 starts at S0 and C12-M1/C12-M2 are empty; after S0 rename the next pending step is S1.	passed_s0	S0
+C12M3-VAL-002	tsv	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次/矩阵/*.tsv	All TSV rows have stable field counts.	passed_s0	S0
+C12M3-VAL-003	whitespace	rg -n '[ \t]$' docs/CADCore12.0/C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次 docs/CADCore12.0/README.md	No trailing whitespace in C12-M3 package or root README edits.	passed_s0	S0
+C12M3-VAL-004	diff	git diff --check	No whitespace errors in git diff.	passed_s0	S0
+C12M3-VAL-005	schema	S3 checks or creates docs/temp/*c12m3-native-provenance-probe-schema.md	Schema includes source endpoint, target endpoint, history API name, history return summary, request-local judgement, classification and current comparison path.	planned	S3
+C12M3-VAL-006	native_probe	S4 creates docs/temp/*c12m3*s4*project-on-surface*native*provenance*.json or closes native-hidden blocker	Artifact classifies each probe as expected-ready, native-hidden, collector bug, sandbox limitation or product-boundary rejected.	planned	S4
+C12M3-VAL-007	current_comparison	S5 creates docs/temp/*c12m3*s5*project-on-surface-current-comparison.json only when S4 expected-ready row exists	Comparison is skipped for native-hidden rows; expected-ready rows are classified current-covered or backend-gap-candidate.	planned	S5
+C12M3-VAL-008	release_gate	S6 queue check returns no pending files after S6 rename	S6 publishes no-code/current-covered/backend-gap recommendation and updates root README.	planned	S6
