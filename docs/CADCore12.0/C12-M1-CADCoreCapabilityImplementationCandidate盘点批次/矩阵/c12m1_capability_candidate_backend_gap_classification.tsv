@@ -1,0 +1,7 @@
+category_id	category_name	priority	scope_ids	product_decision_needed	recommended_next_step
+C12M1-CAT-000	baseline_frozen_s0	closed	C12M1-SCOPE-001	no	S0 froze HEAD/status, C11 queue-empty evidence and live capability; this is not an implementation category
+C12M1-CAT-001	active_remaining_gap_oracle_blocked	high	C12M1-SCOPE-101;C12M1-SCOPE-102	yes	CopyOnChange remains retained unless S3 proves stable native copied-object expected plus product DTO approval plus current mismatch
+C12M1-CAT-002	representative_or_product_scope_candidate	medium	C12M1-SCOPE-201;C12M1-SCOPE-202	yes	S4 may recommend a product-scoped next package only for a concrete expected-backed request-local subset
+C12M1-CAT-003	historical_narrowed_or_non_parity	medium	C12M1-SCOPE-301;C12M1-SCOPE-302;C12M1-SCOPE-303;C12M1-SCOPE-304;C12M1-SCOPE-305	no	S5 keeps rows retained unless stable oracle and current mismatch are already available
+C12M1-CAT-004	no_code_backlog_gate	conditional	C12M1-SCOPE-401	no	S6 publishes this if no implementation row satisfies source, expected, mismatch and request-local rules
+C12M1-CAT-005	implementation_candidate	conditional	C12M1-SCOPE-401	conditional	S6 may replace this seed with one exact next package only after S0-S5 evidence qualifies it
