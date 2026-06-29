@@ -7,7 +7,9 @@
       "Properties": {
         "OriginFeatures": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["External_Z_Axis"]
+          "values": [
+            "External_Z_Axis"
+          ]
         }
       }
     },
@@ -29,12 +31,23 @@
       "Properties": {
         "OriginFeatures": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["Body_Z_Axis"]
+          "values": [
+            "Body_Z_Axis"
+          ]
         },
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [77, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            77,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -55,10 +68,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
-          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
-          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]}
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -69,9 +122,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Sketch",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Sketch",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "ReferenceAxis": {
           "PropertyType": "App::PropertyLinkSub",
@@ -92,7 +154,10 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["Sketch", "Pad"]
+          "values": [
+            "Sketch",
+            "Pad"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -104,13 +169,25 @@
         },
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [5, 2, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            5,
+            2,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     }
   ],
   "recompute": {
-    "objs": ["Body", "Body_Z_Axis"]
+    "objs": [
+      "Body",
+      "Body_Z_Axis"
+    ]
   }
 }

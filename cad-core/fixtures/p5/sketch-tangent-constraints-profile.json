@@ -6,25 +6,161 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
-          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
-          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]},
-          {"kind": "LineSegment", "start": [0, 8], "end": [10, 8], "construction": true},
-          {"kind": "Circle", "center": [5, 6], "radius": 2, "construction": true},
-          {"kind": "Circle", "center": [9, 6], "radius": 2, "construction": true},
-          {"kind": "LineSegment", "start": [2, 8], "end": [8, 8], "construction": true},
-          {"kind": "LineSegment", "start": [5, 8], "end": [8, 8], "construction": true},
-          {"kind": "LineSegment", "start": [8, 8], "end": [10, 8], "construction": true},
-          {"kind": "Point", "point": [5, 8], "construction": true}
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              8
+            ],
+            "end": [
+              10,
+              8
+            ],
+            "construction": true
+          },
+          {
+            "kind": "Circle",
+            "center": [
+              5,
+              6
+            ],
+            "radius": 2,
+            "construction": true
+          },
+          {
+            "kind": "Circle",
+            "center": [
+              9,
+              6
+            ],
+            "radius": 2,
+            "construction": true
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              8
+            ],
+            "end": [
+              8,
+              8
+            ],
+            "construction": true
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              5,
+              8
+            ],
+            "end": [
+              8,
+              8
+            ],
+            "construction": true
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              8,
+              8
+            ],
+            "end": [
+              10,
+              8
+            ],
+            "construction": true
+          },
+          {
+            "kind": "Point",
+            "point": [
+              5,
+              8
+            ],
+            "construction": true
+          }
         ],
         "Constraints": [
-          {"Type": "Tangent", "First": 4, "Second": 5},
-          {"Type": 5, "First": 5, "Second": 6},
-          {"Type": "Tangent", "First": 4, "Second": 7},
-          {"Type": "Tangent", "First": 8, "FirstPos": "start", "Second": 5},
-          {"Type": "Tangent", "First": 8, "FirstPos": "end", "Second": 9, "SecondPos": "start"},
-          {"Type": "Tangent", "First": 4, "Second": 5, "Third": 10, "ThirdPos": "start"}
+          {
+            "Type": "Tangent",
+            "First": 4,
+            "Second": 5
+          },
+          {
+            "Type": 5,
+            "First": 5,
+            "Second": 6
+          },
+          {
+            "Type": "Tangent",
+            "First": 4,
+            "Second": 7
+          },
+          {
+            "Type": "Tangent",
+            "First": 8,
+            "FirstPos": "start",
+            "Second": 5
+          },
+          {
+            "Type": "Tangent",
+            "First": 8,
+            "FirstPos": "end",
+            "Second": 9,
+            "SecondPos": "start"
+          },
+          {
+            "Type": "Tangent",
+            "First": 4,
+            "Second": 5,
+            "Third": 10,
+            "ThirdPos": "start"
+          }
         ]
       }
     },
@@ -34,9 +170,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Sketch",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Sketch",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 4,
@@ -45,5 +190,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Pad"]}
+  "recompute": {
+    "objs": [
+      "Pad"
+    ]
+  }
 }

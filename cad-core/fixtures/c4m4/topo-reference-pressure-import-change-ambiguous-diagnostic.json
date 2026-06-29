@@ -68,9 +68,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "ProbeSketch",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "ProbeSketch",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "UpToFace",
         "UpToFace": {

@@ -18,7 +18,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SupportBox",
-          "SubList": ["Vertex1"]
+          "SubList": [
+            "Vertex1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -34,7 +36,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SupportBox",
-          "SubList": ["Face1"]
+          "SubList": [
+            "Face1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -46,8 +50,17 @@
         },
         "AttachmentOffset": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [1, 2, 3],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            1,
+            2,
+            3
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -59,8 +72,12 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SupportBox",
-          "SubList": ["Edge1"],
-          "StableSubList": ["g100:1"],
+          "SubList": [
+            "Edge1"
+          ],
+          "StableSubList": [
+            "g100:1"
+          ],
           "ShadowSub": [
             {
               "oldName": "Edge1",
@@ -84,10 +101,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [3, 0]},
-          {"kind": "LineSegment", "start": [3, 0], "end": [3, 2]},
-          {"kind": "LineSegment", "start": [3, 2], "end": [0, 2]},
-          {"kind": "LineSegment", "start": [0, 2], "end": [0, 0]}
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              3,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              3,
+              0
+            ],
+            "end": [
+              3,
+              2
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              3,
+              2
+            ],
+            "end": [
+              0,
+              2
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              2
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -98,9 +155,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "SketchPad",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchPad",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 2,

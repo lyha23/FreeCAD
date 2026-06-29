@@ -114,9 +114,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "SketchPad",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchPad",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 10,
@@ -130,9 +139,18 @@
       "TypeId": "PartDesign::Pocket",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "SketchPocket",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchPocket",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 8,
@@ -262,9 +280,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "ProbeSketch",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "ProbeSketch",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "UpToFace",
         "UpToFace": {

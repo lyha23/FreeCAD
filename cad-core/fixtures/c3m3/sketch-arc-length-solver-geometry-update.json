@@ -6,17 +6,34 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [-1, 0], "end": [1, 0]},
+          {
+            "kind": "LineSegment",
+            "start": [
+              -1,
+              0
+            ],
+            "end": [
+              1,
+              0
+            ]
+          },
           {
             "kind": "ArcOfCircle",
-            "center": [0, 0],
+            "center": [
+              0,
+              0
+            ],
             "radius": 2,
             "startAngle": 0,
             "endAngle": 3.141592653589793
           }
         ],
         "Constraints": [
-          {"Type": "Distance", "First": 1, "Value": 3.141592653589793}
+          {
+            "Type": "Distance",
+            "First": 1,
+            "Value": 3.141592653589793
+          }
         ]
       }
     },
@@ -26,9 +43,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Sketch",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Sketch",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 3,
@@ -37,5 +63,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Pad"]}
+  "recompute": {
+    "objs": [
+      "Pad"
+    ]
+  }
 }

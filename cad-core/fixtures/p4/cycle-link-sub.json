@@ -6,9 +6,15 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "PadB",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "PadB",
+              "SubList": [
+                "InternalFace1"
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 10,
@@ -22,9 +28,15 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "PadA",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "PadA",
+              "SubList": [
+                "InternalFace1"
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 10,
@@ -33,5 +45,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["PadA"]}
+  "recompute": {
+    "objs": [
+      "PadA"
+    ]
+  }
 }

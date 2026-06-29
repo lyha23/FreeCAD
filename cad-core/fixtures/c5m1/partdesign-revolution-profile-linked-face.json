@@ -19,10 +19,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [0, 0], "end": [10, 0] },
-          { "kind": "LineSegment", "start": [10, 0], "end": [10, 5] },
-          { "kind": "LineSegment", "start": [10, 5], "end": [0, 5] },
-          { "kind": "LineSegment", "start": [0, 5], "end": [0, 0] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -33,9 +73,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "SketchBase",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchBase",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Length": 10,
         "Reversed": false,
@@ -51,14 +100,18 @@
         "Profile": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "BasePad",
-          "SubList": ["Face6"]
+          "SubList": [
+            "Face6"
+          ]
         },
         "Type": "Angle",
         "Angle": 90,
         "ReferenceAxis": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "PartAxis",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "Reversed": false,
         "Midplane": false,
@@ -67,6 +120,8 @@
     }
   ],
   "recompute": {
-    "objs": ["RevolutionFromFace"]
+    "objs": [
+      "RevolutionFromFace"
+    ]
   }
 }

@@ -6,20 +6,121 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
-          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
-          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]},
-          {"kind": "Point", "point": [2, 2], "construction": true},
-          {"kind": "Point", "point": [8, 2], "construction": true},
-          {"kind": "LineSegment", "start": [5, -1], "end": [5, 6], "construction": true},
-          {"kind": "Point", "point": [2, 4], "construction": true},
-          {"kind": "Point", "point": [8, 0], "construction": true},
-          {"kind": "Point", "point": [5, 2], "construction": true}
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          },
+          {
+            "kind": "Point",
+            "point": [
+              2,
+              2
+            ],
+            "construction": true
+          },
+          {
+            "kind": "Point",
+            "point": [
+              8,
+              2
+            ],
+            "construction": true
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              5,
+              -1
+            ],
+            "end": [
+              5,
+              6
+            ],
+            "construction": true
+          },
+          {
+            "kind": "Point",
+            "point": [
+              2,
+              4
+            ],
+            "construction": true
+          },
+          {
+            "kind": "Point",
+            "point": [
+              8,
+              0
+            ],
+            "construction": true
+          },
+          {
+            "kind": "Point",
+            "point": [
+              5,
+              2
+            ],
+            "construction": true
+          }
         ],
         "Constraints": [
-          {"Type": "Symmetric", "First": 4, "FirstPos": "start", "Second": 5, "SecondPos": "start", "Third": 6},
-          {"Type": 14, "First": 7, "FirstPos": 1, "Second": 8, "SecondPos": 1, "Third": 9, "ThirdPos": 1}
+          {
+            "Type": "Symmetric",
+            "First": 4,
+            "FirstPos": "start",
+            "Second": 5,
+            "SecondPos": "start",
+            "Third": 6
+          },
+          {
+            "Type": 14,
+            "First": 7,
+            "FirstPos": 1,
+            "Second": 8,
+            "SecondPos": 1,
+            "Third": 9,
+            "ThirdPos": 1
+          }
         ]
       }
     },
@@ -29,9 +130,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Sketch",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Sketch",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 4,
@@ -40,5 +150,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Pad"]}
+  "recompute": {
+    "objs": [
+      "Pad"
+    ]
+  }
 }

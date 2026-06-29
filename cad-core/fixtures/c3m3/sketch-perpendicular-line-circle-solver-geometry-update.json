@@ -8,18 +8,31 @@
         "Geometry": [
           {
             "kind": "LineSegment",
-            "start": [0, 0],
-            "end": [4, 0],
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              4,
+              0
+            ],
             "construction": true
           },
           {
             "kind": "Circle",
-            "center": [2, 3],
+            "center": [
+              2,
+              3
+            ],
             "radius": 1
           }
         ],
         "Constraints": [
-          {"Type": "Perpendicular", "First": 0, "Second": 1}
+          {
+            "Type": "Perpendicular",
+            "First": 0,
+            "Second": 1
+          }
         ]
       }
     },
@@ -29,9 +42,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Sketch",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Sketch",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 2,
@@ -40,5 +62,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Pad"]}
+  "recompute": {
+    "objs": [
+      "Pad"
+    ]
+  }
 }

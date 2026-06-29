@@ -6,10 +6,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
-          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
-          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]}
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -20,9 +60,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "BaseSketch",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "BaseSketch",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 5,
@@ -37,14 +86,63 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 5],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            0,
+            5
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         },
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
-          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
-          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]}
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -55,9 +153,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "RemovedSketch",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "RemovedSketch",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "BaseFeature": {
           "PropertyType": "App::PropertyLink",
@@ -75,10 +182,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [2, 1], "end": [8, 1]},
-          {"kind": "LineSegment", "start": [8, 1], "end": [8, 4]},
-          {"kind": "LineSegment", "start": [8, 4], "end": [2, 4]},
-          {"kind": "LineSegment", "start": [2, 4], "end": [2, 1]}
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              1
+            ],
+            "end": [
+              8,
+              1
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              8,
+              1
+            ],
+            "end": [
+              8,
+              4
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              8,
+              4
+            ],
+            "end": [
+              2,
+              4
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              4
+            ],
+            "end": [
+              2,
+              1
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -89,9 +236,18 @@
       "TypeId": "PartDesign::Pocket",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "PocketSketch",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "PocketSketch",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "BaseFeature": {
           "PropertyType": "App::PropertyLink",
@@ -110,7 +266,12 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["BaseSketch", "Pad", "PocketSketch", "Pocket"]
+          "values": [
+            "BaseSketch",
+            "Pad",
+            "PocketSketch",
+            "Pocket"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -120,6 +281,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Body"]
+    "objs": [
+      "Body"
+    ]
   }
 }

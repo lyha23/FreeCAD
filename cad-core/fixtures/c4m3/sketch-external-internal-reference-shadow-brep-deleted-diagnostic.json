@@ -6,10 +6,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
-          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
-          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]}
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -20,33 +60,53 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Sketch",
-          "SubList": ["InternalFace99"],
-          "StableSubList": ["g999"],
-          "ReferenceShadow": [
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
             {
-              "target": "Sketch",
-              "targetId": 1,
-              "property": "InternalShape",
-              "shapeType": "Face",
-              "indexed": "Face1",
-              "subname": "InternalFace1",
-              "stableSubname": "g999",
-              "fingerprint": {
-                "area": 50.0,
-                "centroid": [25.0, 2.5, 0.0],
-                "bboxMin": [20.0, 0.0, 0.0],
-                "bboxMax": [30.0, 5.0, 0.0],
-                "edgeCount": 4,
-                "vertexCount": 4
-              },
-              "brep": {
-                "format": "brep-text",
-                "byteLength": 671,
-                "sha256": "31074ac9f5db9009f00a6ec05f9e72b64c2dd35b2cba46ca569476c0c380980a",
-                "data": "DBRep_DrawableShape\n\nCASCADE Topology V1, (c) Matra-Datavision\nLocations 0\nCurve2ds 0\nCurves 4\n1 20 0 0 1 0 0 \n1 30 0 0 0 1 0 \n1 30 5 0 -1 0 0 \n1 20 5 0 0 -1 0 \nPolygon3D 0\nPolygonOnTriangulations 0\nSurfaces 1\n1 25 2.5 0 0 0 1 1 0 -0 -0 1 0 \nTriangulations 0\n\nTShapes 10\nVe\n1e-07\n20 0 0\n0 0\n\n0101101\n*\nVe\n1e-07\n30 0 0\n0 0\n\n0101101\n*\nEd\n 1e-07 1 1 0\n1  1 0 0 10\n0\n\n0101000\n+10 0 -9 0 *\nVe\n1e-07\n30 5 0\n0 0\n\n0101101\n*\nEd\n 1e-07 1 1 0\n1  2 0 0 5\n0\n\n0101000\n+9 0 -7 0 *\nVe\n1e-07\n20 5 0\n0 0\n\n0101101\n*\nEd\n 1e-07 1 1 0\n1  3 0 0 10\n0\n\n0101000\n+7 0 -5 0 *\nEd\n 1e-07 1 1 0\n1  4 0 0 5\n0\n\n0101000\n+5 0 -10 0 *\nWi\n\n0101100\n+8 0 +6 0 +4 0 +3 0 *\nFa\n0  1e-07 1 0\n\n1101000\n+2 0 *\n\n+1 0 "
-              }
+              "value": "Sketch",
+              "SubList": [
+                "InternalFace99"
+              ],
+              "StableSubList": [
+                "g999"
+              ],
+              "ReferenceShadow": [
+                {
+                  "target": "Sketch",
+                  "targetId": 1,
+                  "property": "InternalShape",
+                  "shapeType": "Face",
+                  "indexed": "Face1",
+                  "subname": "InternalFace1",
+                  "stableSubname": "g999",
+                  "fingerprint": {
+                    "area": 50.0,
+                    "centroid": [
+                      25.0,
+                      2.5,
+                      0.0
+                    ],
+                    "bboxMin": [
+                      20.0,
+                      0.0,
+                      0.0
+                    ],
+                    "bboxMax": [
+                      30.0,
+                      5.0,
+                      0.0
+                    ],
+                    "edgeCount": 4,
+                    "vertexCount": 4
+                  },
+                  "brep": {
+                    "format": "brep-text",
+                    "byteLength": 671,
+                    "sha256": "31074ac9f5db9009f00a6ec05f9e72b64c2dd35b2cba46ca569476c0c380980a",
+                    "data": "DBRep_DrawableShape\n\nCASCADE Topology V1, (c) Matra-Datavision\nLocations 0\nCurve2ds 0\nCurves 4\n1 20 0 0 1 0 0 \n1 30 0 0 0 1 0 \n1 30 5 0 -1 0 0 \n1 20 5 0 0 -1 0 \nPolygon3D 0\nPolygonOnTriangulations 0\nSurfaces 1\n1 25 2.5 0 0 0 1 1 0 -0 -0 1 0 \nTriangulations 0\n\nTShapes 10\nVe\n1e-07\n20 0 0\n0 0\n\n0101101\n*\nVe\n1e-07\n30 0 0\n0 0\n\n0101101\n*\nEd\n 1e-07 1 1 0\n1  1 0 0 10\n0\n\n0101000\n+10 0 -9 0 *\nVe\n1e-07\n30 5 0\n0 0\n\n0101101\n*\nEd\n 1e-07 1 1 0\n1  2 0 0 5\n0\n\n0101000\n+9 0 -7 0 *\nVe\n1e-07\n20 5 0\n0 0\n\n0101101\n*\nEd\n 1e-07 1 1 0\n1  3 0 0 10\n0\n\n0101000\n+7 0 -5 0 *\nEd\n 1e-07 1 1 0\n1  4 0 0 5\n0\n\n0101000\n+5 0 -10 0 *\nWi\n\n0101100\n+8 0 +6 0 +4 0 +3 0 *\nFa\n0  1e-07 1 0\n\n1101000\n+2 0 *\n\n+1 0 "
+                  }
+                }
+              ]
             }
           ]
         },
@@ -56,5 +116,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Pad"]}
+  "recompute": {
+    "objs": [
+      "Pad"
+    ]
+  }
 }

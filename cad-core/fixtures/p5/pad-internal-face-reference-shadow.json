@@ -21,14 +21,16 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Sketch",
-          "SubList": ["InternalFace1"],
-          "ShadowSub": [
-            {"newName": "g305:split1", "oldName": "InternalFace1"}
-          ],
-          "ReferenceShadow": [
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
             {
+              "value": "Sketch",
+              "SubList": ["InternalFace1"],
+              "ShadowSub": [
+                {"newName": "g305:split1", "oldName": "InternalFace1"}
+              ],
+              "ReferenceShadow": [
+                {
               "target": "Sketch",
               "targetId": 1,
               "property": "InternalShape",
@@ -44,6 +46,8 @@
                 "edgeCount": 4,
                 "vertexCount": 4
               }
+                }
+              ]
             }
           ]
         },

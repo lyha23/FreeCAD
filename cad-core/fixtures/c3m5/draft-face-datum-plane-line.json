@@ -6,10 +6,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
-          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
-          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]}
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -20,9 +60,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "SketchPad",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchPad",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 10,
@@ -50,7 +99,9 @@
         "Base": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Pad",
-          "SubList": ["Face2"]
+          "SubList": [
+            "Face2"
+          ]
         },
         "NeutralPlane": {
           "PropertyType": "App::PropertyLinkSub",
@@ -73,7 +124,13 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["SketchPad", "Pad", "NeutralPlane", "PullDirection", "Draft"]
+          "values": [
+            "SketchPad",
+            "Pad",
+            "NeutralPlane",
+            "PullDirection",
+            "Draft"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -83,6 +140,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Body"]
+    "objs": [
+      "Body"
+    ]
   }
 }

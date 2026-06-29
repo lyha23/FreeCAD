@@ -24,9 +24,15 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Body",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Body",
+              "SubList": [
+                "InternalFace1"
+              ]
+            }
+          ]
         },
         "Length": 10,
         "Reversed": false,

@@ -8,6 +8,7 @@
 
 #include <optional>
 #include <string>
+#include <vector>
 
 namespace cad_core::part_design {
 
@@ -29,6 +30,12 @@ struct ProfileBasedProfileSelection {
 };
 
 std::optional<ProfileBasedProfileSelection> resolveProfileBasedProfile(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const std::string& featureName,
+    std::string profileRequirementMessage = {});
+
+std::vector<ProfileBasedProfileSelection> resolveProfileBasedProfileSelections(
     const app::DocumentObject& object,
     runtime::ComputeContext& context,
     const std::string& featureName,

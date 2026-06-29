@@ -8,7 +8,10 @@
         "Geometry": [
           {
             "kind": "Ellipse",
-            "center": [0, 0],
+            "center": [
+              0,
+              0
+            ],
             "majorRadius": 3,
             "minorRadius": 1
           }
@@ -22,9 +25,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Sketch",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Sketch",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 2,
@@ -33,5 +45,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Pad"]}
+  "recompute": {
+    "objs": [
+      "Pad"
+    ]
+  }
 }

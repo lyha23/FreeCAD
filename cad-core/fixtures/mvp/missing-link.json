@@ -6,9 +6,15 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "MissingSketch",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "MissingSketch",
+              "SubList": [
+                "InternalFace1"
+              ]
+            }
+          ]
         },
         "Length": 10,
         "Reversed": false,

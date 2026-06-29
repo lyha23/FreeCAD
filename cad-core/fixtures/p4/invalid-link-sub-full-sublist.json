@@ -6,11 +6,22 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Sketch",
-          "SubList": ["Face1"],
-          "StableSubList": ["Face1"],
-          "FullSubList": ["Sketch.Face1", "Sketch.Edge1"]
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Sketch",
+              "SubList": [
+                "Face1"
+              ],
+              "StableSubList": [
+                "Face1"
+              ],
+              "FullSubList": [
+                "Sketch.Face1",
+                "Sketch.Edge1"
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 10,
@@ -19,5 +30,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Pad"]}
+  "recompute": {
+    "objs": [
+      "Pad"
+    ]
+  }
 }

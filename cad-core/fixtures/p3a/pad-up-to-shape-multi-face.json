@@ -6,10 +6,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
-          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
-          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]}
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -20,9 +60,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "LimitSketch",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "LimitSketch",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 10,
@@ -36,10 +85,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [2, 1], "end": [8, 1]},
-          {"kind": "LineSegment", "start": [8, 1], "end": [8, 4]},
-          {"kind": "LineSegment", "start": [8, 4], "end": [2, 4]},
-          {"kind": "LineSegment", "start": [2, 4], "end": [2, 1]}
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              1
+            ],
+            "end": [
+              8,
+              1
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              8,
+              1
+            ],
+            "end": [
+              8,
+              4
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              8,
+              4
+            ],
+            "end": [
+              2,
+              4
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              4
+            ],
+            "end": [
+              2,
+              1
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -50,16 +139,35 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "SketchPad",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchPad",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "UpToShape",
         "UpToShape": {
           "PropertyType": "App::PropertyLinkSubList",
           "SubSet": [
-            {"value": "LimitPad", "SubList": ["Face6"]},
-            {"value": "LimitPad", "SubList": ["Face1"]}
+            {
+              "value": "LimitPad",
+              "SubList": [
+                "Face6"
+              ]
+            },
+            {
+              "value": "LimitPad",
+              "SubList": [
+                "Face1"
+              ]
+            }
           ]
         },
         "Reversed": false,
@@ -68,6 +176,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Pad"]
+    "objs": [
+      "Pad"
+    ]
   }
 }

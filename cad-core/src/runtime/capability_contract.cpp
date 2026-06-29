@@ -53,6 +53,8 @@ nlohmann::json diagnosticCodeList()
         "invalid_placement",
         "invalid_point_constraint",
         "invalid_point2d_source",
+        "invalid_profile",
+        "invalid_profile_link_type",
         "invalid_property_type",
         "invalid_surface_source",
         "invalid_subshape",

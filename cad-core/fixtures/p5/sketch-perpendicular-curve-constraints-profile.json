@@ -6,17 +6,94 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
-          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
-          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]},
-          {"kind": "LineSegment", "start": [5, 6], "end": [5, 12], "construction": true},
-          {"kind": "Circle", "center": [5, 8], "radius": 2, "construction": true},
-          {"kind": "ArcOfCircle", "center": [5, 10], "radius": 2, "startAngle": 0, "endAngle": 1.5707963267948966, "construction": true}
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              5,
+              6
+            ],
+            "end": [
+              5,
+              12
+            ],
+            "construction": true
+          },
+          {
+            "kind": "Circle",
+            "center": [
+              5,
+              8
+            ],
+            "radius": 2,
+            "construction": true
+          },
+          {
+            "kind": "ArcOfCircle",
+            "center": [
+              5,
+              10
+            ],
+            "radius": 2,
+            "startAngle": 0,
+            "endAngle": 1.5707963267948966,
+            "construction": true
+          }
         ],
         "Constraints": [
-          {"Type": "Perpendicular", "First": 4, "Second": 5},
-          {"Type": 10, "First": 6, "Second": 4}
+          {
+            "Type": "Perpendicular",
+            "First": 4,
+            "Second": 5
+          },
+          {
+            "Type": 10,
+            "First": 6,
+            "Second": 4
+          }
         ]
       }
     },
@@ -26,9 +103,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Sketch",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Sketch",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 4,
@@ -37,5 +123,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Pad"]}
+  "recompute": {
+    "objs": [
+      "Pad"
+    ]
+  }
 }

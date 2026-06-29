@@ -6,12 +6,72 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 10]},
-          {"kind": "LineSegment", "start": [10, 10], "end": [0, 10]},
-          {"kind": "LineSegment", "start": [0, 10], "end": [0, 0]},
-          {"kind": "LineSegment", "start": [0, 5], "end": [10, 5]},
-          {"kind": "LineSegment", "start": [5, 0], "end": [5, 10]}
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              10
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              10
+            ],
+            "end": [
+              0,
+              10
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              10
+            ],
+            "end": [
+              0,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              5,
+              0
+            ],
+            "end": [
+              5,
+              10
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -22,9 +82,15 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Sketch",
-          "SubList": ["InternalFace1"]
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Sketch",
+              "SubList": [
+                "InternalFace1"
+              ]
+            }
+          ]
         },
         "Length": 10,
         "Reversed": false,
@@ -32,5 +98,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Pad"]}
+  "recompute": {
+    "objs": [
+      "Pad"
+    ]
+  }
 }

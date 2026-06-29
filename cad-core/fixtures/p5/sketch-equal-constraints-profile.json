@@ -6,16 +6,80 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
-          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
-          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]},
-          {"kind": "Circle", "center": [20, 20], "radius": 3, "construction": true},
-          {"kind": "Circle", "center": [28, 20], "radius": 3, "construction": true}
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          },
+          {
+            "kind": "Circle",
+            "center": [
+              20,
+              20
+            ],
+            "radius": 3,
+            "construction": true
+          },
+          {
+            "kind": "Circle",
+            "center": [
+              28,
+              20
+            ],
+            "radius": 3,
+            "construction": true
+          }
         ],
         "Constraints": [
-          {"Type": "Equal", "First": 0, "Second": 2},
-          {"Type": 12, "First": 4, "Second": 5}
+          {
+            "Type": "Equal",
+            "First": 0,
+            "Second": 2
+          },
+          {
+            "Type": 12,
+            "First": 4,
+            "Second": 5
+          }
         ]
       }
     },
@@ -25,9 +89,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Sketch",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Sketch",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 4,
@@ -36,5 +109,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Pad"]}
+  "recompute": {
+    "objs": [
+      "Pad"
+    ]
+  }
 }

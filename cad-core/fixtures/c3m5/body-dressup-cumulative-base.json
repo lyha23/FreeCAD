@@ -8,30 +8,63 @@
         "Geometry": [
           {
             "kind": "LineSegment",
-            "start": [-822.5859011075054, 98.17224070273323],
-            "end": [-152.11723793126987, 98.17224070273323]
+            "start": [
+              -822.5859011075054,
+              98.17224070273323
+            ],
+            "end": [
+              -152.11723793126987,
+              98.17224070273323
+            ]
           },
           {
             "kind": "LineSegment",
-            "start": [-152.11723793126987, 98.17224070273323],
-            "end": [-152.11723793126987, -454.3696499427235]
+            "start": [
+              -152.11723793126987,
+              98.17224070273323
+            ],
+            "end": [
+              -152.11723793126987,
+              -454.3696499427235
+            ]
           },
           {
             "kind": "LineSegment",
-            "start": [-152.11723793126987, -454.3696499427235],
-            "end": [-822.5859011075054, -454.3696499427235]
+            "start": [
+              -152.11723793126987,
+              -454.3696499427235
+            ],
+            "end": [
+              -822.5859011075054,
+              -454.3696499427235
+            ]
           },
           {
             "kind": "LineSegment",
-            "start": [-822.5859011075054, -454.3696499427235],
-            "end": [-822.5859011075054, 98.17224070273323]
+            "start": [
+              -822.5859011075054,
+              -454.3696499427235
+            ],
+            "end": [
+              -822.5859011075054,
+              98.17224070273323
+            ]
           }
         ],
         "Constraints": [],
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -41,9 +74,15 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "SketchPad",
-          "SubList": ["InternalFace1"]
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchPad",
+              "SubList": [
+                "InternalFace1"
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 747,
@@ -59,8 +98,12 @@
         "Base": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Pad",
-          "SubList": ["Edge10"],
-          "StableSubList": ["Edge10"]
+          "SubList": [
+            "Edge10"
+          ],
+          "StableSubList": [
+            "Edge10"
+          ]
         },
         "Radius": 200,
         "UseAllEdges": false,
@@ -73,17 +116,29 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Fillet",
-          "SubList": ["Face5"],
-          "StableSubList": ["Pad.Face6"]
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Fillet",
+              "SubList": [
+                "Face5"
+              ],
+              "StableSubList": [
+                "Pad.Face6"
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 303,
         "Reversed": false,
         "SideType": "One side",
         "UseCustomVector": true,
-        "Direction": [0, 0, 1],
+        "Direction": [
+          0,
+          0,
+          1
+        ],
         "AlongSketchNormal": true
       }
     },
@@ -93,17 +148,29 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Fillet",
-          "SubList": ["Face11"],
-          "StableSubList": ["Face7"]
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Fillet",
+              "SubList": [
+                "Face11"
+              ],
+              "StableSubList": [
+                "Face7"
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 252,
         "Reversed": false,
         "SideType": "One side",
         "UseCustomVector": true,
-        "Direction": [-1, 0, 0],
+        "Direction": [
+          -1,
+          0,
+          0
+        ],
         "AlongSketchNormal": true
       }
     },
@@ -113,17 +180,29 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Fillet",
-          "SubList": ["Face7"],
-          "StableSubList": ["Face3"]
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Fillet",
+              "SubList": [
+                "Face7"
+              ],
+              "StableSubList": [
+                "Face3"
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 187,
         "Reversed": false,
         "SideType": "One side",
         "UseCustomVector": true,
-        "Direction": [0, -0.7071067811865481, 0.707106781186547],
+        "Direction": [
+          0,
+          -0.7071067811865481,
+          0.707106781186547
+        ],
         "AlongSketchNormal": true
       }
     },
@@ -133,17 +212,29 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Pad3",
-          "SubList": ["Face13"],
-          "StableSubList": ["Face1"]
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Pad3",
+              "SubList": [
+                "Face13"
+              ],
+              "StableSubList": [
+                "Face1"
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 199,
         "Reversed": false,
         "SideType": "One side",
         "UseCustomVector": true,
-        "Direction": [0, -1, -1.0391849883145889e-16],
+        "Direction": [
+          0,
+          -1,
+          -1.0391849883145889e-16
+        ],
         "AlongSketchNormal": true
       }
     },
@@ -155,8 +246,12 @@
         "Base": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Pad5",
-          "SubList": ["Edge14"],
-          "StableSubList": ["Edge8"]
+          "SubList": [
+            "Edge14"
+          ],
+          "StableSubList": [
+            "Edge8"
+          ]
         },
         "Radius": 50,
         "UseAllEdges": false,
@@ -170,7 +265,16 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["SketchPad", "Pad", "Fillet", "Pad2", "Pad3", "Pad4", "Pad5", "Fillet2"]
+          "values": [
+            "SketchPad",
+            "Pad",
+            "Fillet",
+            "Pad2",
+            "Pad3",
+            "Pad4",
+            "Pad5",
+            "Fillet2"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -180,7 +284,9 @@
     }
   ],
   "recompute": {
-    "objs": ["Pad5Body"],
+    "objs": [
+      "Pad5Body"
+    ],
     "force": true
   }
 }

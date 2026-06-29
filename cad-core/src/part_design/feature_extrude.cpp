@@ -84,6 +84,12 @@ struct SideBuild {
     std::optional<part::NamedShape> namedShape;
 };
 
+struct ExtrusionProfile {
+    app::Link link;
+    TopoDS_Shape shape;
+    std::optional<gp_Dir> normal;
+};
+
 struct ToolShapeBuild {
     TopoDS_Shape shape;
     std::optional<part::NamedShape> namedShape;
@@ -242,6 +248,40 @@ TopoDS_Shape compoundOfShapes(const std::vector<TopoDS_Shape>& shapes)
         }
     }
     return compound;
+}
+
+std::optional<ExtrusionProfile> resolveFeatureExtrusionProfile(const app::DocumentObject& object,
+                                                               runtime::ComputeContext& context,
+                                                               const std::string& featureName)
+{
+    const auto selections = resolveProfileBasedProfileSelections(
+        object,
+        context,
+        featureName,
+        featureName + " Profile must be App::PropertyLinkSubList with SubSet[] entries");
+    if (selections.empty()) {
+        return std::nullopt;
+    }
+    if (selections.size() == 1U) {
+        return ExtrusionProfile{selections.front().link, selections.front().shape, selections.front().normal};
+    }
+
+    std::vector<TopoDS_Shape> profileShapes;
+    profileShapes.reserve(selections.size());
+    for (const auto& selection : selections) {
+        profileShapes.push_back(selection.shape);
+    }
+    TopoDS_Shape profileShape = compoundOfShapes(profileShapes);
+    if (profileShape.IsNull()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "open_profile",
+                               featureName + " Profile.SubSet did not produce extrudable profile faces",
+                               object.name,
+                               "Profile");
+        return std::nullopt;
+    }
+    return ExtrusionProfile{selections.front().link, profileShape, selections.front().normal};
 }
 
 std::optional<TopoDS_Face> firstFaceOf(const TopoDS_Shape& shape)
@@ -1461,24 +1501,13 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
     // FreeCAD semantic source:
     // src/Mod/PartDesign/App/FeatureExtrude.cpp FeatureExtrude::buildExtrusion().
     const std::string sideType = readStringProperty(object, "SideType", "One side");
-    const auto profile = resolveProfileBasedProfile(
-        object,
-        context,
-        featureName,
-        featureName + " Profile must link to a Sketch object");
+    const auto profile = resolveFeatureExtrusionProfile(object, context, featureName);
     if (!profile) {
         return std::nullopt;
     }
 
     const bool reversed = readBoolProperty(object, "Reversed", false);
-    auto direction = computeDirection(
-        object,
-        context,
-        profile->link,
-        profile->shape,
-        mode,
-        profile->normal
-    );
+    auto direction = computeDirection(object, context, profile->link, profile->shape, mode, profile->normal);
     if (!direction) {
         return std::nullopt;
     }

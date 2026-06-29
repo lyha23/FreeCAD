@@ -6,18 +6,95 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
-          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
-          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]},
-          {"kind": "Point", "point": [5, 0], "construction": true},
-          {"kind": "Circle", "center": [20, 20], "radius": 3, "construction": true},
-          {"kind": "Point", "point": [23, 20], "construction": true}
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          },
+          {
+            "kind": "Point",
+            "point": [
+              5,
+              0
+            ],
+            "construction": true
+          },
+          {
+            "kind": "Circle",
+            "center": [
+              20,
+              20
+            ],
+            "radius": 3,
+            "construction": true
+          },
+          {
+            "kind": "Point",
+            "point": [
+              23,
+              20
+            ],
+            "construction": true
+          }
         ],
         "Constraints": [
-          {"Type": "PointOnObject", "First": 4, "FirstPos": "start", "Second": 0},
-          {"Type": 13, "First": 0, "FirstPos": "end", "Second": 1},
-          {"Type": "PointOnObject", "First": 6, "FirstPos": 1, "Second": 5}
+          {
+            "Type": "PointOnObject",
+            "First": 4,
+            "FirstPos": "start",
+            "Second": 0
+          },
+          {
+            "Type": 13,
+            "First": 0,
+            "FirstPos": "end",
+            "Second": 1
+          },
+          {
+            "Type": "PointOnObject",
+            "First": 6,
+            "FirstPos": 1,
+            "Second": 5
+          }
         ]
       }
     },
@@ -27,9 +104,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Sketch",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Sketch",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 4,
@@ -38,5 +124,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Pad"]}
+  "recompute": {
+    "objs": [
+      "Pad"
+    ]
+  }
 }

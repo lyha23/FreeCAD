@@ -136,9 +136,14 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "TypeId": "PartDesign::Pad",
                 "Properties": {
                     "Profile": {
-                        "PropertyType": "App::PropertyLinkSub",
-                        "value": "Sketch",
-                        "SubList": [],
+                        "PropertyType": "App::PropertyLinkSubList",
+                        "SubSet": [
+                            {
+                                "value": "Sketch",
+                                "SubList": ["InternalFace1"],
+                                "StableSubList": [""],
+                            }
+                        ],
                     },
                     "Type": "Length",
                     "Length": 4,
@@ -2016,7 +2021,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p5_pad_rejects_missing_internal_face_stable_sublist(self) -> None:
         fixture_path = ROOT / "fixtures" / "p5" / "pad-internal-face-stable-sublist.json"
         payload = json.loads(fixture_path.read_text(encoding="utf-8"))
-        profile = payload["Objects"][1]["Properties"]["Profile"]
+        profile = payload["Objects"][1]["Properties"]["Profile"]["SubSet"][0]
         profile["SubList"] = ["InternalFace99"]
         profile["StableSubList"] = ["InternalFace99"]
 
@@ -2033,7 +2038,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p5_pad_rejects_internal_face_stable_sublist_without_internal_shape_evidence(self) -> None:
         fixture_path = ROOT / "fixtures" / "p5" / "pad-open-wire-profile.json"
         payload = json.loads(fixture_path.read_text(encoding="utf-8"))
-        profile = payload["Objects"][1]["Properties"]["Profile"]
+        profile = payload["Objects"][1]["Properties"]["Profile"]["SubSet"][0]
         profile["SubList"] = ["InternalFace1"]
         profile["StableSubList"] = ["InternalFace1"]
 
@@ -2058,7 +2063,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertAlmostEqual(pad["volume"], 250.0)
         self.assertEqual(pad["bbox"], {"min": [0.0, 0.0, 0.0], "max": [5.0, 5.0, 10.0]})
         ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow", "p5")
-        update = ffi_result["elementReferenceUpdates"][0]
+        update = ffi_result["elementReferenceUpdates"][0]["SubSet"][0]
         self.assertEqual(update["SubList"], ["InternalFace1"])
         self.assertEqual(update["StableSubList"], ["g305:split1"])
         self.assertEqual(update["ShadowSub"], [{"newName": "g305:split1", "oldName": "InternalFace1"}])
@@ -2096,7 +2101,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p5_pad_uses_shadow_sub_before_global_reference_shadow_recovery(self) -> None:
         fixture_path = ROOT / "fixtures" / "p5" / "pad-internal-face-reference-shadow.json"
         payload = json.loads(fixture_path.read_text(encoding="utf-8"))
-        payload["Objects"][1]["Properties"]["Profile"]["SubList"] = ["InternalFace2"]
+        payload["Objects"][1]["Properties"]["Profile"]["SubSet"][0]["SubList"] = ["InternalFace2"]
 
         temp_path: Path | None = None
         try:
@@ -2125,7 +2130,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         finally:
             library.cad_core_free_result(ctypes.byref(ffi))
 
-        update = ffi_result["elementReferenceUpdates"][0]
+        update = ffi_result["elementReferenceUpdates"][0]["SubSet"][0]
         self.assertEqual(update["SubList"], ["InternalFace1"])
         self.assertEqual(update["StableSubList"], ["g305:split1"])
         self.assertEqual(update["ShadowSub"], [{"newName": "g305:split1", "oldName": "InternalFace1"}])
@@ -2135,7 +2140,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         for sublist_mode in ["omitted", "empty"]:
             with self.subTest(sublist_mode=sublist_mode):
                 payload = json.loads(fixture_path.read_text(encoding="utf-8"))
-                profile = payload["Objects"][1]["Properties"]["Profile"]
+                profile = payload["Objects"][1]["Properties"]["Profile"]["SubSet"][0]
                 if sublist_mode == "omitted":
                     del profile["SubList"]
                 else:
@@ -2152,28 +2157,8 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     if temp_path is not None:
                         temp_path.unlink(missing_ok=True)
 
-                pad = result["objects"]["Pad"]
-                self.assertEqual(result["diagnostics"], [])
-                self.assertEqual(pad["status"], "ok")
-                self.assertAlmostEqual(pad["volume"], 250.0)
-                self.assertEqual(pad["bbox"], {"min": [0.0, 0.0, 0.0], "max": [5.0, 5.0, 10.0]})
-
-                library = self.ffi_library()
-                raw = json.dumps(payload).encode("utf-8")
-                ffi = library.cad_core_recompute_json(raw, len(raw))
-                try:
-                    if ffi.status != 0:
-                        error = ctypes.string_at(ffi.error.ptr, ffi.error.len).decode("utf-8") if ffi.error.ptr else ""
-                        self.fail(f"cad_core_recompute_json failed with status {ffi.status}: {error}")
-                    ffi_result = json.loads(ctypes.string_at(ffi.json.ptr, ffi.json.len).decode("utf-8"))
-                finally:
-                    library.cad_core_free_result(ctypes.byref(ffi))
-
-                update = ffi_result["elementReferenceUpdates"][0]
-                self.assertEqual(update["SubList"], ["InternalFace1"])
-                self.assertEqual(update["StableSubList"], ["g305:split1"])
-                self.assertEqual(update["ShadowSub"], [{"newName": "g305:split1", "oldName": "InternalFace1"}])
-                self.assertEqual(update["ReferenceShadow"][0]["stableSubname"], "g305:split1")
+                self.assertEqual([item["code"] for item in result["diagnostics"]], ["invalid_profile"])
+                self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_rejects_malformed_reference_shadow(self) -> None:
         for fixture in [
@@ -2212,7 +2197,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertAlmostEqual(pad["volume"], 250.0)
         self.assertEqual(pad["bbox"], {"min": [0.0, 0.0, 0.0], "max": [5.0, 5.0, 10.0]})
         ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-recover-sublist", "p5")
-        update = ffi_result["elementReferenceUpdates"][0]
+        update = ffi_result["elementReferenceUpdates"][0]["SubSet"][0]
         self.assertEqual(update["SubList"], ["InternalFace1"])
         self.assertEqual(update["StableSubList"], ["g305:split1"])
         self.assertEqual(update["ShadowSub"], [{"newName": "g305:split1", "oldName": "InternalFace1"}])
@@ -2227,7 +2212,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertAlmostEqual(pad["volume"], 250.0)
         self.assertEqual(pad["bbox"], {"min": [0.0, 0.0, 0.0], "max": [5.0, 5.0, 10.0]})
         ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-brep-recover-sublist", "p5")
-        update = ffi_result["elementReferenceUpdates"][0]
+        update = ffi_result["elementReferenceUpdates"][0]["SubSet"][0]
         self.assertEqual(update["SubList"], ["InternalFace1"])
         self.assertEqual(update["ReferenceShadow"][0]["subname"], "InternalFace1")
         brep = update["ReferenceShadow"][0]["brep"]
@@ -2246,7 +2231,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertAlmostEqual(pad["volume"], 250.0)
         self.assertEqual(pad["bbox"], {"min": [0.0, 0.0, 0.0], "max": [5.0, 5.0, 10.0]})
         ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-brep-bin-recover-sublist", "p5")
-        update = ffi_result["elementReferenceUpdates"][0]
+        update = ffi_result["elementReferenceUpdates"][0]["SubSet"][0]
         self.assertEqual(update["SubList"], ["InternalFace1"])
         self.assertEqual(update["ReferenceShadow"][0]["subname"], "InternalFace1")
         brep = update["ReferenceShadow"][0]["brep"]
@@ -2257,7 +2242,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p5_pad_rejects_reference_shadow_brep_zstd_base64_decode_error(self) -> None:
         fixture_path = ROOT / "fixtures" / "p5" / "pad-internal-face-reference-shadow-brep-bin-recover-sublist.json"
         payload = json.loads(fixture_path.read_text(encoding="utf-8"))
-        payload["Objects"][1]["Properties"]["Profile"]["ReferenceShadow"][0]["brep"]["data"] = "not-base64"
+        payload["Objects"][1]["Properties"]["Profile"]["SubSet"][0]["ReferenceShadow"][0]["brep"]["data"] = "not-base64"
 
         temp_path: Path | None = None
         try:
@@ -2282,7 +2267,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p5_pad_rejects_reference_shadow_brep_sha_mismatch(self) -> None:
         fixture_path = ROOT / "fixtures" / "p5" / "pad-internal-face-reference-shadow-brep-recover-sublist.json"
         payload = json.loads(fixture_path.read_text(encoding="utf-8"))
-        payload["Objects"][1]["Properties"]["Profile"]["ReferenceShadow"][0]["brep"]["sha256"] = "0" * 64
+        payload["Objects"][1]["Properties"]["Profile"]["SubSet"][0]["ReferenceShadow"][0]["brep"]["sha256"] = "0" * 64
 
         temp_path: Path | None = None
         try:
@@ -2416,7 +2401,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertAlmostEqual(pad["volume"], 250.0)
         self.assertEqual(pad["bbox"], {"min": [0.0, 0.0, 0.0], "max": [5.0, 5.0, 10.0]})
         ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-brep-drift-recover", "p5")
-        update = ffi_result["elementReferenceUpdates"][0]
+        update = ffi_result["elementReferenceUpdates"][0]["SubSet"][0]
         self.assertEqual(update["SubList"], ["InternalFace1"])
         self.assertEqual(update["ReferenceShadow"][0]["subname"], "InternalFace1")
 
@@ -2531,7 +2516,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p5_pad_requires_sublist_for_multi_internal_face_sketch(self) -> None:
         result = self.run_recompute("pad-internal-face-missing-sublist", "p5")
 
-        self.assertEqual([item["code"] for item in result["diagnostics"]], ["invalid_subshape"])
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["invalid_profile"])
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_reports_missing_internal_face_subshape_context(self) -> None:

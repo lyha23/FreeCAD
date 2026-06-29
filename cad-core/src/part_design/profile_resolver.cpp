@@ -868,6 +868,109 @@ std::optional<ProfileBasedProfileSelection> resolveLinkedFaceProfileSelection(
     return std::nullopt;
 }
 
+std::optional<ProfileBasedProfileSelection> resolveProfileBasedProfileLink(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const app::Link& profileLink,
+    const std::string& featureName,
+    std::string profileRequirementMessage)
+{
+    if (profileRequirementMessage.empty()) {
+        profileRequirementMessage = featureName + " Profile must link to a sketch profile or face";
+    }
+    const auto shapeIt = context.shapes.find(profileLink.object);
+    if (shapeIt == context.shapes.end()
+        || (shapeIt->second.kind != runtime::ShapeValue::Kind::Sketch
+            && shapeIt->second.kind != runtime::ShapeValue::Kind::Profile
+            && shapeIt->second.kind != runtime::ShapeValue::Kind::Solid)) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "missing_link_target",
+                               "Profile target " + profileLink.object + " did not produce a profile",
+                               object.name,
+                               "Profile",
+                               "runtime",
+                               profileLink.object);
+        return std::nullopt;
+    }
+
+    std::optional<ProfileBasedProfileSelection> selection;
+    if (shapeIt->second.kind == runtime::ShapeValue::Kind::Sketch) {
+        selection = resolveSketchInternalFaceProfile(object, context, profileLink, shapeIt->second, featureName);
+        const bool explicitSubshape = !profileLink.subnames.empty();
+        const bool ambiguousMultiFace = shapeIt->second.profileRequiresSubshapeSelection;
+        if (!selection && (explicitSubshape || ambiguousMultiFace)) {
+            return std::nullopt;
+        }
+    }
+    else if (!profileLink.subnames.empty() || shapeIt->second.kind == runtime::ShapeValue::Kind::Solid) {
+        selection = resolveLinkedFaceProfileSelection(object, context, profileLink, shapeIt->second, featureName);
+        if (!selection) {
+            return std::nullopt;
+        }
+    }
+    else {
+        selection = ProfileBasedProfileSelection {
+            profileLink,
+            shapeIt->second.shape,
+            shapeIt->second.profileNormal,
+            {},
+            {},
+            false,
+            false,
+            false,
+            false,
+        };
+    }
+
+    if (!selection || selection->shape.IsNull()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "open_profile",
+                               "Profile target " + profileLink.object + " did not produce a closed profile face",
+                               object.name,
+                               "Profile",
+                               "runtime",
+                               profileLink.object);
+        return std::nullopt;
+    }
+    return selection;
+}
+
+bool isProfileSubListType(const std::string& propertyType)
+{
+    return propertyType == "App::PropertyLinkSubList";
+}
+
+void addInvalidProfileLinkTypeDiagnostic(runtime::ComputeContext& context,
+                                         const app::DocumentObject& object,
+                                         const std::string& propertyType,
+                                         const std::string& featureName)
+{
+    runtime::addDiagnostic(context.diagnostics,
+                           "error",
+                           "invalid_profile_link_type",
+                           featureName + " Profile must be App::PropertyLinkSubList with SubSet[]",
+                           object.name,
+                           "Profile",
+                           "runtime",
+                           {},
+                           propertyType);
+}
+
+void addEmptyProfileDiagnostic(runtime::ComputeContext& context,
+                               const app::DocumentObject& object,
+                               const std::string& featureName,
+                               const std::string& message)
+{
+    runtime::addDiagnostic(context.diagnostics,
+                           "error",
+                           "invalid_profile",
+                           featureName + " " + message,
+                           object.name,
+                           "Profile");
+}
+
 }  // namespace
 
 std::optional<ProfileBasedProfileSelection> resolveProfileBasedProfile(
@@ -900,63 +1003,67 @@ std::optional<ProfileBasedProfileSelection> resolveProfileBasedProfile(
         return std::nullopt;
     }
 
-    const auto shapeIt = context.shapes.find(profileLink->object);
-    if (shapeIt == context.shapes.end()
-        || (shapeIt->second.kind != runtime::ShapeValue::Kind::Sketch
-            && shapeIt->second.kind != runtime::ShapeValue::Kind::Profile
-            && shapeIt->second.kind != runtime::ShapeValue::Kind::Solid)) {
+    return resolveProfileBasedProfileLink(object, context, *profileLink, featureName, profileRequirementMessage);
+}
+
+std::vector<ProfileBasedProfileSelection> resolveProfileBasedProfileSelections(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const std::string& featureName,
+    std::string profileRequirementMessage)
+{
+    if (profileRequirementMessage.empty()) {
+        profileRequirementMessage = featureName + " Profile must link to a sketch profile or face";
+    }
+    const auto* profileProperty = app::propertyValue(object, "Profile");
+    if (profileProperty == nullptr) {
         runtime::addDiagnostic(context.diagnostics,
                                "error",
-                               "missing_link_target",
-                               "Profile target " + profileLink->object + " did not produce a profile",
+                               "missing_property",
+                               profileRequirementMessage,
                                object.name,
-                               "Profile",
-                               "runtime",
-                               profileLink->object);
-        return std::nullopt;
+                               "Profile");
+        return {};
+    }
+    if (!isProfileSubListType(profileProperty->propertyType)) {
+        addInvalidProfileLinkTypeDiagnostic(context, object, profileProperty->propertyType, featureName);
+        return {};
+    }
+    if (!profileProperty->valid) {
+        return {};
     }
 
-    std::optional<ProfileBasedProfileSelection> selection;
-    if (shapeIt->second.kind == runtime::ShapeValue::Kind::Sketch) {
-        selection = resolveSketchInternalFaceProfile(object, context, *profileLink, shapeIt->second, featureName);
-        const bool explicitSubshape = !profileLink->subnames.empty();
-        const bool ambiguousMultiFace = shapeIt->second.profileRequiresSubshapeSelection;
-        if (!selection && (explicitSubshape || ambiguousMultiFace)) {
-            return std::nullopt;
-        }
+    const auto profileLinks = app::readLinks(object, "Profile");
+    if (profileLinks.empty()) {
+        addEmptyProfileDiagnostic(context, object, featureName, "Profile.SubSet must contain at least one profile");
+        return {};
     }
-    else if (!profileLink->subnames.empty() || shapeIt->second.kind == runtime::ShapeValue::Kind::Solid) {
-        selection = resolveLinkedFaceProfileSelection(object, context, *profileLink, shapeIt->second, featureName);
+
+    std::vector<ProfileBasedProfileSelection> selections;
+    selections.reserve(profileLinks.size());
+    for (const auto& profileLink : profileLinks) {
+        if (profileLink.subnames.empty()
+            || std::any_of(profileLink.subnames.begin(), profileLink.subnames.end(), [](const std::string& subname) {
+                   return subname.empty();
+               })) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "invalid_profile",
+                                   featureName + " Profile.SubSet[].SubList must contain at least one subname",
+                                   object.name,
+                                   "Profile",
+                                   "runtime",
+                                   profileLink.object);
+            return {};
+        }
+        auto selection =
+            resolveProfileBasedProfileLink(object, context, profileLink, featureName, profileRequirementMessage);
         if (!selection) {
-            return std::nullopt;
+            return {};
         }
+        selections.push_back(std::move(*selection));
     }
-    else {
-        selection = ProfileBasedProfileSelection {
-            *profileLink,
-            shapeIt->second.shape,
-            shapeIt->second.profileNormal,
-            {},
-            {},
-            false,
-            false,
-            false,
-            false,
-        };
-    }
-
-    if (!selection || selection->shape.IsNull()) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "open_profile",
-                               "Profile target " + profileLink->object + " did not produce a closed profile face",
-                               object.name,
-                               "Profile",
-                               "runtime",
-                               profileLink->object);
-        return std::nullopt;
-    }
-    return selection;
+    return selections;
 }
 
 std::optional<TopoDS_Shape> resolveLinkedFaceProfile(const app::DocumentObject& object,

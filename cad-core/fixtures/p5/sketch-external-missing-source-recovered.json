@@ -21,35 +21,71 @@
           "Geometry": [
             {
               "kind": "LineSegment",
-              "start": [0, 0],
-              "end": [10, 0],
+              "start": [
+                0,
+                0
+              ],
+              "end": [
+                10,
+                0
+              ],
               "construction": true,
               "Ref": "Box.Face5",
-              "ExternalFlags": ["Defining", "Missing"]
+              "ExternalFlags": [
+                "Defining",
+                "Missing"
+              ]
             },
             {
               "kind": "LineSegment",
-              "start": [10, 0],
-              "end": [10, 5],
+              "start": [
+                10,
+                0
+              ],
+              "end": [
+                10,
+                5
+              ],
               "construction": true,
               "Ref": "Box.Face5",
-              "ExternalFlags": ["Defining", "Missing"]
+              "ExternalFlags": [
+                "Defining",
+                "Missing"
+              ]
             },
             {
               "kind": "LineSegment",
-              "start": [10, 5],
-              "end": [0, 5],
+              "start": [
+                10,
+                5
+              ],
+              "end": [
+                0,
+                5
+              ],
               "construction": true,
               "Ref": "Box.Face5",
-              "ExternalFlags": ["Defining", "Missing"]
+              "ExternalFlags": [
+                "Defining",
+                "Missing"
+              ]
             },
             {
               "kind": "LineSegment",
-              "start": [0, 5],
-              "end": [0, 0],
+              "start": [
+                0,
+                5
+              ],
+              "end": [
+                0,
+                0
+              ],
               "construction": true,
               "Ref": "Box.Face5",
-              "ExternalFlags": ["Defining", "Missing"]
+              "ExternalFlags": [
+                "Defining",
+                "Missing"
+              ]
             }
           ]
         },
@@ -58,8 +94,13 @@
           "SubSet": [
             {
               "value": "Box",
-              "SubList": ["Face5"],
-              "ExternalFlags": ["Defining", "Missing"]
+              "SubList": [
+                "Face5"
+              ],
+              "ExternalFlags": [
+                "Defining",
+                "Missing"
+              ]
             }
           ]
         },
@@ -72,9 +113,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Sketch",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Sketch",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 4,
@@ -84,6 +134,9 @@
     }
   ],
   "recompute": {
-    "objs": ["Sketch", "Pad"]
+    "objs": [
+      "Sketch",
+      "Pad"
+    ]
   }
 }

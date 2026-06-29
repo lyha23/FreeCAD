@@ -6,10 +6,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [0, 0], "end": [8, 0] },
-          { "kind": "LineSegment", "start": [8, 0], "end": [8, 6] },
-          { "kind": "LineSegment", "start": [8, 6], "end": [0, 6] },
-          { "kind": "LineSegment", "start": [0, 6], "end": [0, 0] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              8,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              8,
+              0
+            ],
+            "end": [
+              8,
+              6
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              8,
+              6
+            ],
+            "end": [
+              0,
+              6
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              6
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -20,9 +60,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "SketchBase",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchBase",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 4,
@@ -38,10 +87,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [6, 1], "end": [10, 1] },
-          { "kind": "LineSegment", "start": [10, 1], "end": [10, 5] },
-          { "kind": "LineSegment", "start": [10, 5], "end": [6, 5] },
-          { "kind": "LineSegment", "start": [6, 5], "end": [6, 1] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              6,
+              1
+            ],
+            "end": [
+              10,
+              1
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              1
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              6,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              6,
+              5
+            ],
+            "end": [
+              6,
+              1
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -52,9 +141,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "SketchTool",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchTool",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 4,
@@ -71,7 +169,10 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["SketchTool", "ToolPad"]
+          "values": [
+            "SketchTool",
+            "ToolPad"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -87,7 +188,9 @@
         "Type": "Cut",
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["ToolBody"]
+          "values": [
+            "ToolBody"
+          ]
         },
         "BaseFeature": {
           "PropertyType": "App::PropertyLink",
@@ -104,7 +207,11 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["SketchBase", "BasePad", "BooleanCut"]
+          "values": [
+            "SketchBase",
+            "BasePad",
+            "BooleanCut"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -114,6 +221,8 @@
     }
   ],
   "recompute": {
-    "objs": ["MainBody"]
+    "objs": [
+      "MainBody"
+    ]
   }
 }

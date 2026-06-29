@@ -6,10 +6,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [14, 0]},
-          {"kind": "LineSegment", "start": [14, 0], "end": [14, 14]},
-          {"kind": "LineSegment", "start": [14, 14], "end": [0, 14]},
-          {"kind": "LineSegment", "start": [0, 14], "end": [0, 0]}
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              14,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              14,
+              0
+            ],
+            "end": [
+              14,
+              14
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              14,
+              14
+            ],
+            "end": [
+              0,
+              14
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              14
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -20,9 +60,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "SketchPad",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchPad",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 10,
@@ -38,14 +87,23 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Pad",
-          "SubList": ["Face6"]
+          "SubList": [
+            "Face6"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
           "value": "FlatFace"
         },
         "Geometry": [
-          {"kind": "Circle", "center": [7, 7], "radius": 2}
+          {
+            "kind": "Circle",
+            "center": [
+              7,
+              7
+            ],
+            "radius": 2
+          }
         ],
         "Constraints": []
       }
@@ -82,7 +140,12 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["SketchPad", "Pad", "SketchHole", "Hole"]
+          "values": [
+            "SketchPad",
+            "Pad",
+            "SketchHole",
+            "Hole"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -92,6 +155,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Body"]
+    "objs": [
+      "Body"
+    ]
   }
 }

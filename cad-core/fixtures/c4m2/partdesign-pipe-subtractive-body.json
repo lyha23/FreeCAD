@@ -6,10 +6,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [0, 0], "end": [4, 0] },
-          { "kind": "LineSegment", "start": [4, 0], "end": [4, 4] },
-          { "kind": "LineSegment", "start": [4, 4], "end": [0, 4] },
-          { "kind": "LineSegment", "start": [0, 4], "end": [0, 0] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              4,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              4,
+              0
+            ],
+            "end": [
+              4,
+              4
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              4,
+              4
+            ],
+            "end": [
+              0,
+              4
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              4
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -20,9 +60,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "SketchBase",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchBase",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 5,
@@ -38,10 +87,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [1.5, 1.5], "end": [2.5, 1.5] },
-          { "kind": "LineSegment", "start": [2.5, 1.5], "end": [2.5, 2.5] },
-          { "kind": "LineSegment", "start": [2.5, 2.5], "end": [1.5, 2.5] },
-          { "kind": "LineSegment", "start": [1.5, 2.5], "end": [1.5, 1.5] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              1.5,
+              1.5
+            ],
+            "end": [
+              2.5,
+              1.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              2.5,
+              1.5
+            ],
+            "end": [
+              2.5,
+              2.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              2.5,
+              2.5
+            ],
+            "end": [
+              1.5,
+              2.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              1.5,
+              2.5
+            ],
+            "end": [
+              1.5,
+              1.5
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -53,11 +142,30 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [2, 2, 0],
-          "Rotation": [0.7071067811865475, 0, 0, 0.7071067811865476]
+          "Base": [
+            2,
+            2,
+            0
+          ],
+          "Rotation": [
+            0.7071067811865475,
+            0,
+            0,
+            0.7071067811865476
+          ]
         },
         "Geometry": [
-          { "kind": "LineSegment", "start": [0, 0], "end": [0, 5] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              0,
+              5
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -91,7 +199,13 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["SketchBase", "BasePad", "SketchPipeProfile", "SketchPipeSpine", "SubtractivePipe"]
+          "values": [
+            "SketchBase",
+            "BasePad",
+            "SketchPipeProfile",
+            "SketchPipeSpine",
+            "SubtractivePipe"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -101,6 +215,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Body"]
+    "objs": [
+      "Body"
+    ]
   }
 }

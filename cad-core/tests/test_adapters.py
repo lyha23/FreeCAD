@@ -307,12 +307,13 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(len(updates), 1)
         self.assertEqual(updates[0]["object"], "Pad")
         self.assertEqual(updates[0]["property"], "Profile")
-        self.assertEqual(updates[0]["PropertyType"], "App::PropertyLinkSub")
-        self.assertEqual(updates[0]["value"], "Sketch")
-        self.assertEqual(updates[0]["SubList"], ["InternalFace1"])
-        self.assertEqual(updates[0]["ShadowSub"], [{"newName": "g305:split1", "oldName": "InternalFace1"}])
+        self.assertEqual(updates[0]["PropertyType"], "App::PropertyLinkSubList")
+        item = updates[0]["SubSet"][0]
+        self.assertEqual(item["value"], "Sketch")
+        self.assertEqual(item["SubList"], ["InternalFace1"])
+        self.assertEqual(item["ShadowSub"], [{"newName": "g305:split1", "oldName": "InternalFace1"}])
 
-        shadow = updates[0]["ReferenceShadow"][0]
+        shadow = item["ReferenceShadow"][0]
         self.assertEqual(shadow["target"], "Sketch")
         self.assertEqual(shadow["property"], "InternalShape")
         self.assertEqual(shadow["indexed"], "Face1")
@@ -329,10 +330,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(len(updates), 1)
         self.assertEqual(updates[0]["object"], "Pad")
         self.assertEqual(updates[0]["property"], "Profile")
-        self.assertEqual(updates[0]["SubList"], ["InternalFace1"])
-        self.assertEqual(updates[0]["StableSubList"], ["g305:split1"])
+        item = updates[0]["SubSet"][0]
+        self.assertEqual(item["SubList"], ["InternalFace1"])
+        self.assertEqual(item["StableSubList"], ["g305:split1"])
 
-        shadow = updates[0]["ReferenceShadow"][0]
+        shadow = item["ReferenceShadow"][0]
         self.assertEqual(shadow["indexed"], "Face1")
         self.assertEqual(shadow["subname"], "InternalFace1")
         self.assertEqual(shadow["stableSubname"], "g305:split1")
@@ -340,7 +342,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def test_c_api_recompute_reports_reference_shadow_recovery_metadata(self) -> None:
         ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-recover-sublist", "p5")
-        update = ffi_result["elementReferenceUpdates"][0]
+        update = ffi_result["elementReferenceUpdates"][0]["SubSet"][0]
         shadow = update["ReferenceShadow"][0]
 
         self.assertEqual(ffi_result["diagnostics"], [])
@@ -351,7 +353,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def test_c_api_recompute_preserves_full_sublist_on_reference_shadow_update(self) -> None:
         payload = json.loads((ROOT / "fixtures" / "p5" / "pad-internal-face-reference-shadow.json").read_text())
-        profile = payload["Objects"][1]["Properties"]["Profile"]
+        profile = payload["Objects"][1]["Properties"]["Profile"]["SubSet"][0]
         profile["FullSubList"] = ["ExternalDoc#Sketch.InternalFace1"]
 
         ffi_result = self.run_recompute_ffi_payload(payload)
@@ -361,8 +363,9 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(len(updates), 1)
         self.assertEqual(updates[0]["object"], "Pad")
         self.assertEqual(updates[0]["property"], "Profile")
-        self.assertEqual(updates[0]["SubList"], ["InternalFace1"])
-        self.assertEqual(updates[0]["FullSubList"], ["ExternalDoc#Sketch.InternalFace1"])
+        item = updates[0]["SubSet"][0]
+        self.assertEqual(item["SubList"], ["InternalFace1"])
+        self.assertEqual(item["FullSubList"], ["ExternalDoc#Sketch.InternalFace1"])
 
     def test_c_api_recompute_returns_reference_shadow_update_for_link_sub_list(self) -> None:
         ffi_result = self.run_recompute_ffi("sketch-external-face-reference-shadow", "p5")

@@ -6,10 +6,23 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [-3, 0], "end": [3, 0]},
+          {
+            "kind": "LineSegment",
+            "start": [
+              -3,
+              0
+            ],
+            "end": [
+              3,
+              0
+            ]
+          },
           {
             "kind": "ArcOfEllipse",
-            "center": [0, 0],
+            "center": [
+              0,
+              0
+            ],
             "majorRadius": 3,
             "minorRadius": 1,
             "startAngle": 0,
@@ -25,9 +38,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Sketch",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Sketch",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 2,
@@ -36,5 +58,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Pad"]}
+  "recompute": {
+    "objs": [
+      "Pad"
+    ]
+  }
 }

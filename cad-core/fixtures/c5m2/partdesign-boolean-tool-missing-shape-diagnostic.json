@@ -6,10 +6,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [0, 0], "end": [2, 0] },
-          { "kind": "LineSegment", "start": [2, 0], "end": [2, 2] },
-          { "kind": "LineSegment", "start": [2, 2], "end": [0, 2] },
-          { "kind": "LineSegment", "start": [0, 2], "end": [0, 0] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              2,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              0
+            ],
+            "end": [
+              2,
+              2
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              2
+            ],
+            "end": [
+              0,
+              2
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              2
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -20,9 +60,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "SketchBase",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchBase",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 2,
@@ -38,7 +87,17 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [4, 0], "end": [6, 0] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              4,
+              0
+            ],
+            "end": [
+              6,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -51,7 +110,9 @@
         "Type": "Fuse",
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["NoSuchTool"]
+          "values": [
+            "NoSuchTool"
+          ]
         },
         "BaseFeature": {
           "PropertyType": "App::PropertyLink",
@@ -69,7 +130,9 @@
         "Type": "Fuse",
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["SketchNullTool"]
+          "values": [
+            "SketchNullTool"
+          ]
         },
         "BaseFeature": {
           "PropertyType": "App::PropertyLink",
@@ -87,7 +150,9 @@
         "Type": "Fragments",
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["SketchNullTool"]
+          "values": [
+            "SketchNullTool"
+          ]
         },
         "BaseFeature": {
           "PropertyType": "App::PropertyLink",
@@ -99,6 +164,10 @@
     }
   ],
   "recompute": {
-    "objs": ["BooleanMissingTool", "BooleanNullShapeTool", "BooleanUnsupportedType"]
+    "objs": [
+      "BooleanMissingTool",
+      "BooleanNullShapeTool",
+      "BooleanUnsupportedType"
+    ]
   }
 }

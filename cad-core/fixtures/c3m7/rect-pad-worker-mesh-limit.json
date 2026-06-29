@@ -11,10 +11,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [2, 0]},
-          {"kind": "LineSegment", "start": [2, 0], "end": [2, 1]},
-          {"kind": "LineSegment", "start": [2, 1], "end": [0, 1]},
-          {"kind": "LineSegment", "start": [0, 1], "end": [0, 0]}
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              2,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              0
+            ],
+            "end": [
+              2,
+              1
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              1
+            ],
+            "end": [
+              0,
+              1
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              1
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -25,9 +65,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Sketch",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Sketch",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 1,
@@ -37,6 +86,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Pad"]
+    "objs": [
+      "Pad"
+    ]
   }
 }

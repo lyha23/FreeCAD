@@ -6,10 +6,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [0, 0], "end": [6, 0] },
-          { "kind": "LineSegment", "start": [6, 0], "end": [6, 4] },
-          { "kind": "LineSegment", "start": [6, 4], "end": [0, 4] },
-          { "kind": "LineSegment", "start": [0, 4], "end": [0, 0] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              6,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              6,
+              0
+            ],
+            "end": [
+              6,
+              4
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              6,
+              4
+            ],
+            "end": [
+              0,
+              4
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              4
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -20,9 +60,18 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "SketchPad",
-          "SubList": []
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchPad",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
         },
         "Type": "Length",
         "Length": 4,
@@ -38,10 +87,50 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [2, 0], "end": [3, 0] },
-          { "kind": "LineSegment", "start": [3, 0], "end": [3, 1] },
-          { "kind": "LineSegment", "start": [3, 1], "end": [2, 1] },
-          { "kind": "LineSegment", "start": [2, 1], "end": [2, 0] }
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              0
+            ],
+            "end": [
+              3,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              3,
+              0
+            ],
+            "end": [
+              3,
+              1
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              3,
+              1
+            ],
+            "end": [
+              2,
+              1
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              2,
+              1
+            ],
+            "end": [
+              2,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -61,12 +150,16 @@
         "ReferenceAxis": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SketchRevolution",
-          "SubList": ["V_Axis"]
+          "SubList": [
+            "V_Axis"
+          ]
         },
         "UpToFace": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Pad",
-          "SubList": ["Face4"]
+          "SubList": [
+            "Face4"
+          ]
         },
         "Reversed": false,
         "Midplane": false,
@@ -81,7 +174,12 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["SketchPad", "Pad", "SketchRevolution", "Revolution"]
+          "values": [
+            "SketchPad",
+            "Pad",
+            "SketchRevolution",
+            "Revolution"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -91,6 +189,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Body"]
+    "objs": [
+      "Body"
+    ]
   }
 }

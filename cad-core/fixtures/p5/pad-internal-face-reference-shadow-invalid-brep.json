@@ -6,11 +6,61 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
-          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
-          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]},
-          {"kind": "LineSegment", "start": [5, 0], "end": [5, 5]}
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              5,
+              0
+            ],
+            "end": [
+              5,
+              5
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -21,23 +71,29 @@
       "TypeId": "PartDesign::Pad",
       "Properties": {
         "Profile": {
-          "PropertyType": "App::PropertyLinkSub",
-          "value": "Sketch",
-          "SubList": ["InternalFace1"],
-          "ReferenceShadow": [
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
             {
-              "target": "Sketch",
-              "targetId": 1,
-              "property": "InternalShape",
-              "shapeType": "Face",
-              "indexed": "Face1",
-              "subname": "InternalFace1",
-              "brep": {
-                "format": "whole-object-brep",
-                "byteLength": 12,
-                "sha256": "bad",
-                "data": "..."
-              }
+              "value": "Sketch",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "ReferenceShadow": [
+                {
+                  "target": "Sketch",
+                  "targetId": 1,
+                  "property": "InternalShape",
+                  "shapeType": "Face",
+                  "indexed": "Face1",
+                  "subname": "InternalFace1",
+                  "brep": {
+                    "format": "whole-object-brep",
+                    "byteLength": 12,
+                    "sha256": "bad",
+                    "data": "..."
+                  }
+                }
+              ]
             }
           ]
         },
@@ -47,5 +103,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Pad"]}
+  "recompute": {
+    "objs": [
+      "Pad"
+    ]
+  }
 }
