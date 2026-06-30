@@ -6,6 +6,8 @@ C12-M6 用于验证 `Part::RuledSurface` wire/wire 分支是否已经满足正�
 
 本包不是默认 C++ implementation 包。只有 S5 证明 checked-in expected 与 current output mismatch，且 mismatch 不能通过 docs/capability wording 修复时，才允许另开实现包。
 
+S5 已完成最终发布闸门，出口为 `wire_wire_admitted_current_supported`。S2 collector / expected、S3 input schema、S4 shell/topo provenance 三闸门均通过，focused wire/wire test 与 C API capability publication smoke 通过；未发现 checked-in expected / current output mismatch，不创建 implementation 包，不修改 `cad-core/src`、fixtures、expected、tests、adapters 或 capability source。
+
 ## S0 live 冻结
 
 - `pwd=/Users/li/Chili3DProject/FreeCAD`。
@@ -52,7 +54,15 @@ C12-M6 用于验证 `Part::RuledSurface` wire/wire 分支是否已经满足正�
 - current legacy recompute smoke 输出 `diagnostics=[]`，`RuledSurface.shape=occt_shell`，faces=4、edges=12、vertices=8，`volume=10.5625`；`element_history_status` 包含 `part_ruled_surface:wire_wire_brepfill_shell` 和 `history_consumed:generated_modified`。
 - `assert_ruled_surface_source_edge()` 本身是按传入 source edge 做 representative smoke；focused test 只显式断言 `LowerWire.Edge1` 和 `UpperWire.Edge1`。但 current output 的 `mapper_history` 包含 LowerWire.Edge1..Edge4 与 UpperWire.Edge1..Edge4 共 8 条 `ruled_surface_shared_vertex_relation` / `modified` / `resolved` event，因此本 fixture 的 source edge relation 不只是 adapter 输出端猜测。
 - CLI / C API adapter 只做 recompute / capabilities 协议转换；RuledSurface provenance 命中点在 Part executor、TopoShapeExpansion、NamedShape serialization 和 capability contract，未发现 adapter 侧补猜 `LowerWire.Edge1` / `UpperWire.Edge1`。
-- focused unittest 与 C API capability publication smoke 均通过。S4 裁决为 `provenance_admitted_current_supported_candidate`，关闭 `C12M6-BLOCKER-401`；S5 publication gate 仍保持 open，不在 S4 发布 full surface family 或关闭 `C12M6-BLOCKER-501`。
+- focused unittest 与 C API capability publication smoke 均通过。S4 裁决为 `provenance_admitted_current_supported_candidate`，关闭 `C12M6-BLOCKER-401`；当时 S5 publication gate 仍保持 open，不在 S4 发布 full surface family 或关闭 `C12M6-BLOCKER-501`。
+
+## S5 implementation / publication gate
+
+- S5 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=abb595fdbb`（`abb595fdbb docs: 完成 C12-M6 S4 provenance 准入验证`），起点 worktree clean。
+- 三闸门全部成立：S2 为 `collector_expected_admitted`，S3 为 `input_schema_admitted`，S4 为 `provenance_admitted_current_supported_candidate`。
+- capability wording `supported_wire_wire_expected_backed` 与 current evidence 一致：只发布 `Part::RuledSurface` wire/wire shell、source edge provenance、request-local graph/schema 和 expected-backed fixture，不发布 full Part surface family、ProjectOnSurface 或 CopyOnChange。
+- focused wire/wire test 与 adapter capability smoke 均通过，无 current mismatch。
+- 最终出口为 `wire_wire_admitted_current_supported`；`C12M6-BLOCKER-501`、`C12M6-CAT-006/007`、`C12M6-SCOPE-007/008` 已关闭；旧 C3M4 `PARTSURF-BLOCK-005` / `PARTSURF-SCOPE-007` / `PARTSURF-FIX-005` 改为 historical closed / superseded by C12-M6 evidence。
 
 ## 入口
 
@@ -61,14 +71,14 @@ C12-M6 用于验证 `Part::RuledSurface` wire/wire 分支是否已经满足正�
 - 工作步骤：`工作步骤细分/`
 - 矩阵：`矩阵/`
 
-## 当前裁决目标
+## 最终裁决结果
 
 | 结果 | 含义 |
 | --- | --- |
-| `wire_wire_admitted_current_supported` | collector、schema、provenance 和 focused tests 均成立；关闭旧 deferred blocker，无新增 C++。 |
-| `publication_repair_required` | current code/test 成立，但旧 C3M4/CADCore 文档或 capability wording 漂移；只做文档/metadata 修复。 |
-| `implementation_candidate_required` | checked-in expected 与 current output 出现真实 mismatch，且来源可定位到 Part executor / TopoShapeExpansion / topo provenance；另开 implementation 包。 |
-| `retained_validation_blocker` | 三项准入证据仍缺一项；保留 blocker，不实现、不发布 supported。 |
+| `wire_wire_admitted_current_supported` | 已发布：collector、schema、provenance 和 focused tests 均成立；关闭旧 deferred blocker，无新增 C++。 |
+| `publication_repair_required` | 未采用：current code/test 成立，C12-M6 仅需把旧 C3M4 deferred 行改为历史关闭，不需要 capability source 修复。 |
+| `implementation_candidate_required` | 未采用：checked-in expected 与 current output 无真实 mismatch。 |
+| `retained_validation_blocker` | 未采用：collector、schema、provenance 三项准入证据均已关闭。 |
 
 ## 队列检查
 

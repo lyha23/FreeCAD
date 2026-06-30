@@ -6,6 +6,8 @@ C3M4 PartSurface RuledProjection 主线已经实现 `Part::RuledSurface` edge/ed
 
 当前 live code 已出现新的证据：`part_workbench.ruled_surface.status=supported_wire_wire_expected_backed`，fixtures 包含 `c4m1/part-ruled-surface-wire-wire`，focused test 断言 `occt_shell`、`part_ruled_surface:wire_wire_brepfill_shell` 和 source edge provenance。C12-M6 因此不是从零实现 wire/wire，而是验证这组 current evidence 是否足够让旧 deferred blocker 正式准入。
 
+S5 已完成发布闸门，最终出口为 `wire_wire_admitted_current_supported`。三闸门均通过，旧 C3M4 deferred 行关闭为 historical closed；本包不创建 implementation package，不改 `cad-core/src`、fixtures、expected、tests、adapters 或 capability source。
+
 ## 设计原则
 
 | 原则 | 含义 |
@@ -35,7 +37,15 @@ wire/wire 不应拆成单个输出 shape 检查，因为 FreeCAD 同一调用链
 2. fixture input 是否只使用 DocumentObject graph、`PropertyLinkSub` 和 recompute target，不携带 BREP、TopoDS 或 adapter-only shortcut？
 3. current `TopoShapeExpansion` 是否真正走 `BRepFill::Shell(Wire, Wire)`，并把 shell 输出的 element history / source edge relation 写入 named shape？
 4. focused tests 和 capability JSON 是否足以支撑 `supported_wire_wire_expected_backed`，还是只覆盖了过窄的 Edge1 smoke？
-5. 若旧 C3M4 `PARTSURF-BLOCK-005` 与 current capability 冲突，应修文档，还是创建 C++ implementation candidate？
+5. 若旧 C3M4 `PARTSURF-BLOCK-005` 与 current capability 冲突，应修文档，还是创建 C++ implementation candidate？S5 已裁决为历史 deferred 文档漂移：由 C12-M6 evidence 关闭，不创建 C++ implementation candidate。
+
+## 最终出口
+
+- `wire_wire_admitted_current_supported`：collector / expected、input schema、shell/topo provenance、focused wire/wire test 和 adapter capability smoke 均成立。
+- `publication_repair_required` 未采用：只需把旧 C3M4 deferred 行改为 historical closed，不需要改 capability source。
+- `retained_validation_blocker` 未采用：三项准入证据无缺项。
+- `implementation_candidate_required` 未采用：没有 checked-in expected / current output mismatch。
+- non-goals 保持：ProjectOnSurface、full Part surface family、SubShapeBinder CopyOnChange、full BREP transport 和 persistent NamedShape / ElementMap cache 不因本包被发布为 supported。
 
 ## 交付物
 
