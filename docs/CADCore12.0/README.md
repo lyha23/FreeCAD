@@ -20,6 +20,8 @@ C12-M7 已完成 PartDesign Groove UpTo 产品契约准入批次并发布 `produ
 
 用户已在 C12-M7 后要求继续出方案：C12-M8 重新选择当前唯一 live `remaining_gaps`：`part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache`。C12-M8 已完成 Native Copied Graph DTO 准入解锁批次并发布 `no_code_retained_diagnostic`：S2=`native_evidence_retained_blocker`，S3=`dto_not_reviewed_due_to_native_blocker`，S4=`no_current_mismatch_retained_diagnostic`，S5=`no_code_retained_diagnostic`。本轮不创建 C12-M9 implementation package，不授权 C++ work；`part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`、`known_gap_diagnostic` / `oracle_blocked` 和 `copy_on_change_full_temporary_document_cache_not_supported` 继续保留。
 
+用户已在 C12-M8 后要求打开 C12-M9 候选盘点包。C12-M9 不是直接 implementation 包，也不推翻 C12-M8 的 CopyOnChange no-code retained 结论；它重新从 live capability、C12-M1..M8 release gate、`narrowed_gaps`、product-contract non-parity 和 current tests 中筛选是否存在 stable expected / product contract、request-local boundary 与 current mismatch 同时成立的候选。只有三闸门成立时，C12-M9 S5/S6 才允许指向后续 implementation package；否则发布 oracle / product-contract 分流或 no-code backlog gate。
+
 ## 入口
 
 - C12-M1 总入口：`C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/6-29-16-26-C12-M1-CADCoreCapabilityImplementationCandidate盘点批次总入口.md`
@@ -54,6 +56,10 @@ C12-M7 已完成 PartDesign Groove UpTo 产品契约准入批次并发布 `produ
 - C12-M8 方案：`C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次/6-30-21-24-C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次方案.md`
 - C12-M8 工作步骤：`C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次/工作步骤细分/`
 - C12-M8 矩阵：`C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次/矩阵/`
+- C12-M9 总入口：`C12-M9-CADCoreImplementationCandidate再盘点批次/7-1-01-23-C12-M9-CADCoreImplementationCandidate再盘点批次总入口.md`
+- C12-M9 方案：`C12-M9-CADCoreImplementationCandidate再盘点批次/7-1-01-23-C12-M9-CADCoreImplementationCandidate再盘点批次方案.md`
+- C12-M9 工作步骤：`C12-M9-CADCoreImplementationCandidate再盘点批次/工作步骤细分/`
+- C12-M9 矩阵：`C12-M9-CADCoreImplementationCandidate再盘点批次/矩阵/`
 
 ## 当前基线
 
@@ -113,6 +119,7 @@ C12-M7 已完成 PartDesign Groove UpTo 产品契约准入批次并发布 `produ
 - C12-M7 S5 发布闸门已完成：最终出口为 `product_diagnostic_contract_published`，C12-M7 队列预期只输出表头；本包不创建 geometry implementation package，不改 `cad-core/src`、`cad-core/include`、fixtures、expected、tests 或 adapters。只有同一 FreeCAD / LibPack / OCCT oracle baseline 证明 Groove UpToFirst 与 UpToFace native success，且 current CAD Core 与 stable expected mismatch 时，才另开 geometry implementation candidate。
 - C12-M8 已创建为 SubShapeBinder CopyOnChange Native Copied Graph DTO 准入解锁批次。创建基线为 `HEAD=1d03274e9e`（`1d03274e9e docs: 发布 C12-M7 S5 产品诊断契约出口`），起点 worktree clean；C12-M1..M7 队列均为空。live capability 仍为 `part_design.sub_shape_binder.status=supported_c8m1_expected_backed_request_local_with_copy_on_change_known_gap`，`remaining_gaps=["copy_on_change_full_temporary_document_cache"]`，known gap 仍为 `status=known_gap_diagnostic`、`route=oracle_blocked`、`diagnostic=copy_on_change_full_temporary_document_cache_not_supported`。本包只裁决 native copied-object graph evidence、request-local DTO approval 和 current mismatch 三闸门，不直接改 C++、fixtures、expected、tests、adapters 或 capability source。
 - C12-M8 S6 发布闸门已完成：S6 live 起点为 clean 的 `HEAD=7e5befaa50`（`7e5befaa50 docs: 关闭 C12-M8 S5 no-code 裁决`）。最终出口为 `no_code_retained_diagnostic` published：S2=`native_evidence_retained_blocker`，S3=`dto_not_reviewed_due_to_native_blocker`，S4=`no_current_mismatch_retained_diagnostic`，S5=`no_code_retained_diagnostic`；C12-M8 队列预期只输出表头。没有 C12-M9 package，没有 C++ authorization；`remaining_gaps=["copy_on_change_full_temporary_document_cache"]`、`known_gap_diagnostic` / `oracle_blocked` 和 `copy_on_change_full_temporary_document_cache_not_supported` 继续保留。
+- C12-M9 已创建为 CAD Core implementation candidate 再盘点批次。创建基线为 `HEAD=75e7a58723`（`75e7a58723 docs: 关闭 C12-M8 S6 发布闸门`），起点 worktree clean；C12-M1..M8 队列均为空。C12-M9 先从 live capability、C12-M1..M8 发布闸门、`narrowed_gaps` 和 current tests 中筛选候选，不默认实现 CopyOnChange，也不把 Groove UpTo product diagnostic、RuledSurface current-supported、ProjectOnSurface ledger contract 或 Part Workbench native-hidden/helper-blocked rows 自动升级为 C++ gap。
 
 ## 重开条件
 
@@ -138,6 +145,7 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M6-RuledSurfaceWireWire准入验证批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M7-PartDesignGrooveUpTo产品契约准入批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M9-CADCoreImplementationCandidate再盘点批次/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -152,6 +160,7 @@ awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " f
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M6-RuledSurfaceWireWire准入验证批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M7-PartDesignGrooveUpTo产品契约准入批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M9-CADCoreImplementationCandidate再盘点批次/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore12.0
 git diff --check
 ```

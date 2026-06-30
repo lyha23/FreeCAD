@@ -1,0 +1,10 @@
+id	validation	owner_step	status	command_or_evidence	expected_result
+C12M9-VAL-001	C12-M9 queue check	入口	pending	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M9-CADCoreImplementationCandidate再盘点批次/工作步骤细分 --format markdown	Queue starts at C12-M9 work-step total entry, then S0-S6.
+C12M9-VAL-002	prior C12 queue checks	S0	pending	C12-M1..C12-M8 step_goal_queue commands	Each prior queue outputs only table header.
+C12M9-VAL-003	live capability snapshot	S0/S1	pending	cad-core/build/cad-core capabilities	Current remaining/known/narrowed gaps extracted and recorded.
+C12M9-VAL-101	TSV field count	每步	pending	awk -F '\t' over C12-M9 matrices	No field count mismatch.
+C12M9-VAL-102	trailing whitespace check	S6	pending	rg -n '[ \t]$' docs/CADCore12.0/C12-M9-CADCoreImplementationCandidate再盘点批次 docs/CADCore12.0/README.md	No output.
+C12M9-VAL-103	diff whitespace check	每步	pending	git diff --check	No output.
+C12M9-VAL-301	candidate comparison evidence	S3	pending	S3-selected focused comparison or documented blocker	Every candidate has current-covered, mismatch-confirmed, blocked, or not-comparable status.
+C12M9-VAL-501	final authorization	S5	pending	backend classification and blocker queue	S5 emits implementation_package_authorized, oracle_or_product_contract_package_required, or no_code_backlog_gate.
+C12M9-VAL-601	final queue closure	S6	pending	step_goal_queue for C12-M9	Only table header after S6 closes.

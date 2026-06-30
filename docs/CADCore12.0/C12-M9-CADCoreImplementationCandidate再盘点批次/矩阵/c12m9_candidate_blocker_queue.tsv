@@ -1,0 +1,9 @@
+id	blocker	owner_step	status	close_condition	next_action
+C12M9-BLOCKER-001	live baseline not frozen	S0	open	HEAD, latest commit, dirty boundary and C12-M9 start queue recorded	Freeze baseline and update README/total entry.
+C12M9-BLOCKER-002	previous C12 queues not confirmed empty	S0	open	C12-M1..M8 step_goal_queue commands output only table headers	Proceed to S1 only after prior queues are closed.
+C12M9-BLOCKER-101	live capability extraction incomplete	S1	open	Non-empty remaining_gaps, known_gaps and narrowed_gaps paths extracted from current capability JSON	Update source/scope/backend matrices.
+C12M9-BLOCKER-201	narrowed gap classification incomplete	S2	open	Groove, RuledSurface, ProjectOnSurface, Sweep, Filling, GeomPlate, Loft and Assembly rows classified by current-supported/product-contract/native-hidden/helper-blocked/oracle-blocked/candidate	Proceed to S3 expected and mismatch gate.
+C12M9-BLOCKER-301	expected/current mismatch gate undecided	S3	open	Each candidate has expected source, request-local boundary and current comparison status	Proceed to S4 only for admitted candidate rows.
+C12M9-BLOCKER-401	highest-priority candidate source review incomplete	S4	open	If S3 admits a candidate, FreeCAD source, cad-core landing, fixtures/tests and non-goals are documented; if none, no-candidate evidence is recorded	Feed S5 authorization.
+C12M9-BLOCKER-501	implementation package authorization undecided	S5	open	S5 emits implementation_package_authorized, oracle_or_product_contract_package_required, or no_code_backlog_gate	Proceed to S6 publication gate.
+C12M9-BLOCKER-601	publication gate not closed	S6	open	README root docs queue TSV whitespace and diff checks complete	Complete S6 validation and close C12-M9 queue.
