@@ -1,7 +1,7 @@
 id	area	source_status	expected_status	current_status	classification	implementation_action	owner_step	notes
 C12M6-CAT-001	freecad_source	source_supported	n/a	n/a	freecad_source_supported	no_code	S1	PartFeatures RuledSurface executes Curve1/Curve2/Orientation through TopoShape::makeElementRuledSurface; TopoShapeExpansion has BRepFill::Shell wire/wire branch
 C12M6-CAT-002	historical_deferred	source_supported	n/a	current_landing_present	historical_deferred_doc_drift	no_code_validate_s2_s4	S1	Old PARTSURF deferred lacked collector/input schema/provenance evidence; current executor/helper/fixture/test/capability have wire/wire landing, but S2/S3/S4 still own admission gates
-C12M6-CAT-003	collector_expected	source_supported	pending_s2	n/a	pending	no_code	S2	Expected must be trusted before current comparison matters
+C12M6-CAT-003	collector_expected	source_supported	freecadcmd_expected_checked_in	focused_test_passed	collector_expected_admitted	no_code	S2	Fixture uses request-local Part::RegularPolygon wire producers and Part::RuledSurface; expected reference is FreeCADCmd oracle with FreeCAD 1.2.0 revision 20260519, occt_version not serialized, occt_shell geometry/object_fields stable, and focused expected-backed test passes
 C12M6-CAT-004	input_schema	source_supported	expected_candidate	pending_s3	pending	no_code	S3	Request graph schema must be accepted without BREP/cache
 C12M6-CAT-005	provenance	source_supported	expected_candidate	pending_s4	pending	no_code	S4	Shell/topo provenance must be stronger than bbox/topology match
 C12M6-CAT-006	capability_publication	source_supported	expected_candidate	current_claim_supported_wire_wire	pending	no_code_or_docs_only	S5	Only publish admitted status if S2-S4 pass

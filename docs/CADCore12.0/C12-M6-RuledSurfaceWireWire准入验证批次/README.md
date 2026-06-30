@@ -25,6 +25,15 @@ C12-M6 用于验证 `Part::RuledSurface` wire/wire 分支是否已经满足正�
 - current cad-core 已有 executor/helper/fixture/expected/focused test/capability wire/wire landing，因此旧 PARTSURF deferred 在 S1 层面归类为 `historical-deferred-doc-drift`，不是 current backend implementation gap。
 - S1 只关闭 `C12M6-BLOCKER-101/102`；S2 collector/expected、S3 input schema、S4 shell/topo provenance 仍是正式 admission gate。
 
+## S2 collector / expected 准入
+
+- S2 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=af6477dd3b`（`af6477dd3b docs: 完成 C12-M6 S1 源码证据复核`），起点 `status --short -uall` 无输出。
+- fixture 使用 request-local `DocumentObject graph`：`LowerWire` / `UpperWire` 为 `Part::RegularPolygon` wire producers，`RuledSurface` 为 `TypeId=Part::RuledSurface`，`Curve1` / `Curve2` 为 `App::PropertyLinkSub`，输入未携带 BREP、TopoDS、persistent `NamedShape` / `ElementMap` 或 mesh。
+- checked-in expected 的 `reference` 是 `FreeCADCmd oracle from part-ruled-surface-wire-wire.json; objects: Part::RegularPolygon, Part::RegularPolygon, Part::RuledSurface`；`freecad_version=1.2.0 revision 20260519`，当前 expected 未序列化独立 `occt_version` 字段。
+- expected 记录 `shape=occt_shell`、`topology_counts={faces:4, edges:12, vertices:8}`、bbox、`volume=10.5625`、`object_fields` source curves / orientation / status，以及 `LowerWire.Edge1` / `UpperWire.Edge1` element-map 信号。
+- collector 支持 `Part::RuledSurface` native type，`object_expected_payload()` 走 `ruled_surface_payload()` 从 FreeCAD native `obj.Shape` 生成 geometry/object_fields；S2 未刷新 expected。
+- focused unittest `tests.test_p8_features.CadCoreP8FeatureTest.test_c4m1_part_ruled_surface_wire_wire_builds_shell_with_provenance` 通过。S2 关闭 `C12M6-BLOCKER-201/202/203/204`，下一步为 S3 input schema gate；S4 provenance strength 和 S5 publication gate 仍保持 open。
+
 ## 入口
 
 - 总入口：`6-30-13-27-C12-M6-RuledSurfaceWireWire准入验证批次总入口.md`

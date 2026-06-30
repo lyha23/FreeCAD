@@ -23,6 +23,15 @@
 - current-supported-candidate：cad-core executor/helper、`c4m1/part-ruled-surface-wire-wire` fixture/expected、focused test 和 capability 均已有 wire/wire landing。
 - 旧 `PARTSURF-BLOCK-005` 在 S1 层面裁决为 `historical-deferred-doc-drift`；只关闭 `C12M6-BLOCKER-101/102`，collector/schema/provenance 仍由 S2/S3/S4 关闭。
 
+## S2 collector / expected 准入验证
+
+- S2 执行基线：`HEAD=af6477dd3b`（`af6477dd3b docs: 完成 C12-M6 S1 源码证据复核`），起点 worktree clean。
+- `c4m1/part-ruled-surface-wire-wire` fixture 是 request-local `Part::RegularPolygon` wire producers + `Part::RuledSurface` graph；`Curve1` / `Curve2` 为 `App::PropertyLinkSub`，未携带 BREP、TopoDS、persistent `NamedShape` / `ElementMap` 或 mesh。
+- checked-in expected 是 `FreeCADCmd oracle`，baseline 为 `freecad_version=1.2.0 revision 20260519`；当前 expected 未单独序列化 `occt_version` 字段。
+- expected 记录 `occt_shell`、faces=4、edges=12、vertices=8、bbox、volume=10.5625、source curve object fields 和 Lower/Upper representative edge element-map 信号。
+- collector `SUPPORTED_NATIVE_TYPES` 包含 `Part::RuledSurface`，native payload 从 FreeCAD `obj.Shape` 生成 geometry/object_fields；focused expected-backed unittest 已通过。
+- S2 裁决为 `collector_expected_admitted`，只关闭 `C12M6-BLOCKER-201/202/203/204`；S3 input schema、S4 provenance 和 S5 publication 仍 open。
+
 ## 执行规则
 
 1. 每步开始前执行 live baseline：`pwd`、`git rev-parse --short HEAD`、`git log -1 --oneline`、`git -c core.quotepath=false status --short -uall`。
@@ -34,8 +43,8 @@
 ## 顺序
 
 - S0：live 基线与继承口径冻结。
-- S1：FreeCAD 源码与旧 PARTSURF 证据复核（已完成，下一步为 S2 collector / expected gate）。
-- S2：collector / expected 准入验证。
+- S1：FreeCAD 源码与旧 PARTSURF 证据复核。
+- S2：collector / expected 准入验证（已完成，下一步为 S3 input schema gate）。
 - S3：request-local input schema 准入验证。
 - S4：shell/topo provenance 准入验证。
 - S5：implementation gate 与发布闸门。
