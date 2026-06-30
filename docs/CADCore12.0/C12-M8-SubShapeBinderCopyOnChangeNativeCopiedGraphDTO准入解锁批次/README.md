@@ -61,6 +61,15 @@ C12-M5 已关闭为 `no_code_retained_diagnostic`：旧 native evidence 只能�
 - `C12M8-DTO-007..012` temporary document handle、native pointer、full BREP / TopoDS、persistent `NamedShape` / `ElementMap` cache、post-request `_tmp_binder` / `_CopiedObjs` session state、backend `Cache_*` 均裁决为 `rejected`。
 - `C12M8-BLOCKER-301` 已关闭为 `closed_s3_dto_not_reviewed_due_to_native_blocker`；backend gap classification 已同步为 native blocker 下的 DTO retained/deferred 状态。
 
+## S4 current mismatch gate
+
+- S4 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=6279752006`（`6279752006 文档：关闭 C12-M8 S3 DTO 边界裁决`），起点 worktree clean。
+- S4 执行前队列确认：S4 是第一条 pending，后续为 S5-S6。
+- S4 裁决：`no_current_mismatch_retained_diagnostic`。S2=`native_evidence_retained_blocker`，S3=`dto_not_reviewed_due_to_native_blocker`，没有 approved CopyOnChange request-local DTO，因此同一 request-local graph comparison 不成立。
+- current `cad-core` 对 `BindCopyOnChange=Enabled` / `Mutated` 与 `PartialLoad=True` 保留 `copy_on_change_full_temporary_document_cache_not_supported`，capability 继续发布 `known_gap_diagnostic` / `oracle_blocked`；该 retained diagnostic 与现有证据一致，没有 C++ implementation mismatch。
+- `C12M8-BLOCKER-401` 已关闭为 `closed_s4_no_current_mismatch`；`C12M8-CAT-001` 已裁决为 `retained_diagnostic/no_current_mismatch`。
+- S4 focused tests 未运行，记录为 `not_run_blocked_by_s2_s3_gate`；S6 最多做 publication wording check，不得把 App::Link transport、property/session 状态、label、bbox、shape count、`_tmp_binder` document name 或 `_CopiedLink` target 当作 SubShapeBinder success/mismatch 证据。
+
 ## 解锁条件
 
 只有以下三项同时成立，C12-M8 才允许产出后续 implementation package：
@@ -88,7 +97,7 @@ C12-M5 已关闭为 `no_code_retained_diagnostic`：旧 native evidence 只能�
 - S1：FreeCAD source、current coverage 和 existing transport evidence 复核（已完成）。
 - S2：native copied graph probe schema 与 evidence gate（已完成，`native_evidence_retained_blocker`）。
 - S3：request-local DTO 产品边界裁决（已完成，`dto_not_reviewed_due_to_native_blocker`）。
-- S4：current mismatch 与 implementation candidate gate。
+- S4：current mismatch 与 implementation candidate gate（已完成，`no_current_mismatch_retained_diagnostic`）。
 - S5：implementation package authorization / no-code retained decision。
 - S6：发布闸门、README 更新和后续分流。
 
