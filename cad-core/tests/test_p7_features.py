@@ -2460,6 +2460,18 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(body["bbox"]["max"][2], 1049.0)
         self.assertAlmostEqual(body["volume"], fillet2["volume"])
 
+    def test_c3m5_curved_face_profile_pad_uses_surface_normal(self) -> None:
+        result = self.run_recompute("body-curved-face-pad-profile-normal", "c3m5")
+        body = result["objects"]["PadPreviewBody"]
+        preview = result["objects"]["PadPreview"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(preview["status"], "ok")
+        self.assertEqual(body["status"], "ok")
+        self.assertIn("PadPreview", result["mesh"])
+        self.assertIn("PadPreviewBody", result["mesh"])
+        self.assertGreater(preview["volume"], 0)
+
     def test_c3m5_body_dressup_rejects_invalid_target_stable_subname(self) -> None:
         result = self.run_recompute("body-dressup-invalid-stable-subname", "c3m5")
         diagnostic = result["diagnostics"][0]

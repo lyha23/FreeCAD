@@ -7,10 +7,16 @@
 #include "cad_core/runtime/diagnostics.h"
 
 #include <BRepAdaptor_Surface.hxx>
+#include <BRepGProp_Face.hxx>
+#include <BRepLProp_SLProps.hxx>
 #include <GeomAbs_SurfaceType.hxx>
+#include <Precision.hxx>
 #include <TopAbs_ShapeEnum.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Face.hxx>
+#include <gp_Dir.hxx>
+#include <gp_Pnt.hxx>
+#include <gp_Vec.hxx>
 
 #include <algorithm>
 #include <optional>
@@ -325,14 +331,40 @@ std::string stripObjectPrefix(const std::string& value, const std::string& objec
     return value;
 }
 
+bool hasObjectPrefix(const std::string& value)
+{
+    return value.find('.') != std::string::npos;
+}
+
+std::string bodyStableSubnameForProfile(const app::Link& profileLink,
+                                        const std::string& subname,
+                                        const std::string& stableSubname)
+{
+    if (stableSubname.empty()) {
+        return stableSubname;
+    }
+
+    const std::string strippedStableSubname = stripObjectPrefix(stableSubname, profileLink.object);
+    const std::string strippedSubname = stripObjectPrefix(subname, profileLink.object);
+    if (strippedStableSubname == strippedSubname
+        || hasObjectPrefix(stableSubname)
+        || !part::parseSubshapeName(strippedStableSubname)) {
+        return strippedStableSubname;
+    }
+
+    return profileLink.object + "." + strippedStableSubname;
+}
+
 app::Link bodyTopoShapeLink(const app::Link& profileLink)
 {
     app::Link link = profileLink;
     for (auto& subname : link.subnames) {
         subname = stripObjectPrefix(subname, profileLink.object);
     }
-    for (auto& stableSubname : link.stableSubnames) {
-        stableSubname = stripObjectPrefix(stableSubname, profileLink.object);
+    for (std::size_t index = 0; index < link.stableSubnames.size(); ++index) {
+        const std::string subname = index < profileLink.subnames.size() ? profileLink.subnames.at(index) : std::string {};
+        link.stableSubnames[index] =
+            bodyStableSubnameForProfile(profileLink, subname, profileLink.stableSubnames.at(index));
     }
     return link;
 }
@@ -777,7 +809,24 @@ std::optional<gp_Dir> orientedFaceNormal(const TopoDS_Face& face)
 {
     BRepAdaptor_Surface surface(face);
     if (surface.GetType() != GeomAbs_Plane) {
-        return std::nullopt;
+        const double u = surface.FirstUParameter()
+            + (surface.LastUParameter() - surface.FirstUParameter()) / 2.0;
+        const double v = surface.FirstVParameter()
+            + (surface.LastVParameter() - surface.FirstVParameter()) / 2.0;
+        BRepLProp_SLProps props(surface, u, v, 2, Precision::Confusion());
+        if (!props.IsNormalDefined()) {
+            return std::nullopt;
+        }
+
+        gp_Pnt point;
+        gp_Vec normal;
+        // FreeCAD ProfileBased::getProfileNormal() uses BRepGProp_Face::Normal()
+        // here so the face orientation is reflected in the returned vector.
+        BRepGProp_Face(face).Normal(u, v, point, normal);
+        if (normal.Magnitude() < Precision::Confusion()) {
+            return std::nullopt;
+        }
+        return gp_Dir(normal);
     }
 
     gp_Dir normal = surface.Plane().Axis().Direction();
