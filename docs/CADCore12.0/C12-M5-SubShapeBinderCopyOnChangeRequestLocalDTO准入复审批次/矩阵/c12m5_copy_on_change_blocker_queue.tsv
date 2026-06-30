@@ -2,6 +2,6 @@ id	owner_step	blocker	current_status	unblock_condition	next_action	status
 C12M5-BLOCKER-000	S0	live_baseline_not_frozen	closed	HEAD 84179ae66d, clean dirty boundary, C12-M1..M4 queue empty and capability snapshot recorded	proceed to S1 source/current coverage	done
 C12M5-BLOCKER-101	S1	source_authority_unverified	closed	ShapeBinder, Link, Document and cad-core landing paths verified	proceed to S2 native evidence without implementation candidate	done
 C12M5-BLOCKER-201	S2	native_copied_object_evidence	closed	old C9/C8 probes and C9 expected reviewed; no stable _CopiedObjs copyObject dependency order support rewrite graph or recomputeFeature ElementMap DTO evidence found	proceed to S3 as DTO product boundary only; no C++ implementation candidate	done
-C12M5-BLOCKER-301	S3	dto_product_boundary	open	allowed and forbidden DTO fields frozen	publish dto approved or rejected	pending
+C12M5-BLOCKER-301	S3	dto_product_boundary	closed_dto_rejected_known_gap_retained	S3 froze allowed and forbidden DTO fields; frontend cannot persist a complete SubShapeBinder copied-object graph after S2 retained blocker	proceed to S4 current mismatch gate with DTO rejected and no implementation candidate	done
 C12M5-BLOCKER-401	S4	current_mismatch_gate	open	S2 and S3 decisions reviewed against current cad-core	publish implementation candidate or no mismatch	pending
 C12M5-BLOCKER-501	S5	release_gate	open	all prior blockers closed	publish final route and close queue	pending

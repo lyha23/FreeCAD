@@ -46,6 +46,17 @@ C12-M5 承接 C12-M4 公开口径迁移完成后的 live capability 状态。当
 - `_CopiedObjs` 仍不可通过 Python API 观察；`copyObject()` dependency order、copied support rewrite 的完整 graph、`recomputeFeature(true)` internal ElementMap lifecycle 仍不能导出为稳定 request-local DTO。
 - 因此 `C12M5-BLOCKER-201` 关闭为 `native_evidence_retained_blocker`；S2 不设计新 probe schema，不采新 oracle，不打开 C++ implementation candidate。S3 只能继续做 DTO 产品边界裁决。
 
+## S3 request-local DTO 产品边界
+
+- S3 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`。
+- S3 执行 HEAD：`239a866ad9`（`239a866ad9 docs: 完成 C12-M5 S2 native 证据复核`）。
+- S3 起点 dirty boundary：`git -c core.quotepath=false status --short -uall` 无输出，即 `<clean>`；未发现非本任务 dirty work。
+- 允许持久化的 graph 字段只包括 `Objects[]`、`Name`、`ID`、`TypeId`、`Properties`、`BindCopyOnChange`、`PartialLoad`、`Support` / `App::PropertyLinkSub`、`SubList`、`StableSubList`、`FullSubList`、source id/name、support subname、diagnostic，以及被前端应用后才成为下一次输入的 `documentObjectUpdates`。
+- `copy_intent` 与 `mutation_delta` 只能作为未来 request-local DTO 设计词汇；S2 没有 stable copied-object graph evidence 时，不能证明前端可把 SubShapeBinder copied-object lifecycle 完整写回 `DocumentObject graph`。
+- 禁止字段保持为 temporary document、native object pointer、TopoDS / full object BREP、post-request `NamedShape` / `ElementMap` cache、`_CopiedObjs` private vector、`_tmp_binder` session state、adapter / frontend mock 和 output guessing。
+- App::Link `documentObjectUpdates` 仍是 reference-only；`ReferenceShadow.brep` 仍只允许单个旧 subshape snapshot，不扩展成 full object BREP。
+- S3 裁决为 `dto_rejected_known_gap_retained`，`C12M5-BLOCKER-301` 已关闭；S4 只能在 DTO 已拒绝前提下做 current mismatch gate，不打开 implementation candidate。
+
 ## 继承口径
 
 - C9-M5 裁决：CopyOnChange full temporary-document copied-object lifecycle 依赖 `_tmp_binder`、`_CopiedObjs`、`copyObject()`、`recomputeFeature(true)` 和 `_CopiedLink`，S6 关闭为 `no_code_retained_known_gap_release_gate`。
@@ -73,7 +84,7 @@ C12-M5 承接 C12-M4 公开口径迁移完成后的 live capability 状态。当
 - S0：live 基线与继承口径冻结（已完成）。
 - S1：FreeCAD 源码与 current 覆盖矩阵（已完成）。
 - S2：native evidence 刷新与 probe 准入（已完成）。
-- S3：request-local DTO 产品边界冻结。
+- S3：request-local DTO 产品边界冻结（已完成，`dto_rejected_known_gap_retained`）。
 - S4：current mismatch 与实现候选闸门。
 - S5：发布闸门与后续分流。
 
