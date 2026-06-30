@@ -12,6 +12,8 @@ C12-M2 S6 已完成并发布 `no_code_oracle_blocked_gate`：ProjectOnSurface �
 
 用户已在 C12-M4 后要求打开下一套方案：C12-M5 选择当前唯一公开 remaining gap `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache`，但仍不把它直接写成 C++ 实现任务。C12-M5 是 SubShapeBinder CopyOnChange request-local DTO 准入复审批次：先复核 FreeCAD native copied-object evidence、产品 DTO 边界和 current mismatch，只有三者同时成立才另开 implementation package；否则继续保留 `known_gap_diagnostic` / `oracle_blocked`。
 
+C12-M5 S5 已完成并发布 `no_code_retained_diagnostic`：S2 保留 `native_evidence_retained_blocker`，S3 保留 `dto_rejected_known_gap_retained`，S4 保留 `no_current_mismatch_retained_diagnostic`。当前不创建 implementation package，不刷新 oracle，不改 `cad-core/src`、fixtures、expected、tests 或 adapter；`part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`、`known_gap_diagnostic` / `oracle_blocked` 和 `copy_on_change_full_temporary_document_cache_not_supported` 继续保留。
+
 ## 入口
 
 - C12-M1 总入口：`C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/6-29-16-26-C12-M1-CADCoreCapabilityImplementationCandidate盘点批次总入口.md`
@@ -71,12 +73,17 @@ C12-M2 S6 已完成并发布 `no_code_oracle_blocked_gate`：ProjectOnSurface �
 - C12-M4 后续公开口径迁移已落地：C5-M9 ProjectOnSurface provenance expected JSON 已从 `known_gap/native_hidden replacement` 改为 `product_contract` 或 `product_diagnostic_contract`；`cad-core` capability / C API adapter test / recompute 接口文档已同步发布 request-local ledger 产品契约，并保留 FreeCAD native mapper/history oracle unavailable 的非 parity 边界。
 - C12-M5 已创建为 SubShapeBinder CopyOnChange Request-Local DTO 准入复审批次。创建基线为 `HEAD=0709323947`（`0709323947 docs: 落地 C12-M4 产品契约公开口径`），起点 dirty boundary 为 `<clean>`；C12-M1..M4 队列均为空，live capability 仍只有 `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache` 这一项 remaining gap。C12-M5 的默认动作不是实现 full temporary-document cache，而是先复核 native copied-object evidence、request-local DTO approval 和 current mismatch。
 - C12-M5 S0 live 基线与继承口径冻结已完成：S0 执行 HEAD 为 `84179ae66d`（`84179ae66d docs: 新增 C12-M5 CopyOnChange 准入方案`），起点 dirty boundary 为 `<clean>`；C12-M1..M4 队列均为空。当前 `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`，known gap 仍为 `status=known_gap_diagnostic`、`route=oracle_blocked`、`diagnostic=copy_on_change_full_temporary_document_cache_not_supported`。C9-M5 / C10-M4 retained diagnostic 口径继续有效，App::Link `documentObjectUpdates` 仍不等同于 SubShapeBinder CopyOnChange supported；下一步是 S1 FreeCAD 源码与 current 覆盖矩阵。
+- C12-M5 S1 FreeCAD 源码与 current 覆盖矩阵已完成：SubShapeBinder full CopyOnChange 仍依赖 `_tmp_binder`、`_CopiedObjs`、`copyObject()`、`recomputeFeature(true)` 和 `_CopiedLink` 的真实 Document 生命周期；current `cad-core` 只覆盖 `BindMode=Detached` request-local writeback 子集，并对 `BindCopyOnChange=Enabled/Mutated` 或 `PartialLoad=True` 保留 diagnostic。
+- C12-M5 S2 native 证据刷新与 probe 准入已完成：旧 C9/C8 probe 仍覆盖 Disabled / Enabled / Mutated / PartialLoad、`_tmp_binder`、`_CopiedLink` 和 Python-visible property state，但没有 stable copied-object graph、dependency order、copied support rewrite 或 ElementMap lifecycle DTO 证据；关闭为 `native_evidence_retained_blocker`。
+- C12-M5 S3 request-local DTO 产品边界已完成：允许字段仍限于 request graph / graph-writeback vocabulary；temporary document、native pointer、full object BREP / TopoDS、post-request `NamedShape` / `ElementMap` cache、`_CopiedObjs` 和 `_tmp_binder` session state 均禁止进入 DTO；关闭为 `dto_rejected_known_gap_retained`。
+- C12-M5 S4 current mismatch 与实现候选闸门已完成：S2 不是 `native_evidence_ready`，S3 不是 `dto_approved_for_mismatch_gate`，current diagnostic 与 capability wording 和 retained gap 一致；关闭为 `no_current_mismatch_retained_diagnostic`，不创建 implementation package。
+- C12-M5 S5 发布闸门已完成：最终出口为 `no_code_retained_diagnostic`，C12-M5 队列预期只输出表头；capability 继续保留 `remaining_gaps=["copy_on_change_full_temporary_document_cache"]`、`known_gap_diagnostic` / `oracle_blocked` 和 diagnostic `copy_on_change_full_temporary_document_cache_not_supported`。
 
 ## 重开条件
 
 | family | reopen condition |
 | --- | --- |
-| CopyOnChange | stable native copied-object expected + 产品批准 request-local DTO + current cad-core mismatch。 |
+| CopyOnChange | C12-M5 已关闭为 `no_code_retained_diagnostic`；仅当 stable native copied-object graph expected + 产品批准 request-local DTO + current cad-core mismatch 同时成立时重开。 |
 | Assembly representative / marker / writeback | 产品批准 request-local subset + expected/current mismatch。 |
 | Part Workbench historical rows | stable native/request-local expected + current mismatch。 |
 | ProjectOnSurface provenance | 未来 FreeCAD 原生 MapperHistory / ElementMap artifact 产出 `native_provenance_expected_ready` + request-local boundary + current mismatch；C12-M3 native-hidden 证据本身不能重开代码。 |

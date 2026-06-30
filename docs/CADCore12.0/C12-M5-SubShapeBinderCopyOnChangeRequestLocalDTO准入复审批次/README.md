@@ -67,6 +67,17 @@ C12-M5 承接 C12-M4 公开口径迁移完成后的 live capability 状态。当
 - current capability 仍是 `known_gap_diagnostic` / `oracle_blocked`，focused tests 仍覆盖 retained diagnostic 和 capability wording。
 - 因此没有 approved DTO 与 current retained diagnostic 的冲突，S4 关闭为 `no_current_mismatch_retained_diagnostic`，不创建 implementation package。
 
+## S5 发布闸门
+
+- S5 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`。
+- S5 执行 HEAD：`c1f02e3d7e`（`c1f02e3d7e docs: 完成 C12-M5 S4 实现候选闸门`）。
+- S5 起点 dirty boundary：`git -c core.quotepath=false status --short -uall` 无输出，即 `<clean>`；未发现非本任务 dirty work。
+- S5 逐行复核 source、scope、DTO、backend classification、blocker、non-goal 和 validation 矩阵后确认：S2=`native_evidence_retained_blocker`，S3=`dto_rejected_known_gap_retained`，S4=`no_current_mismatch_retained_diagnostic`。
+- C12-M5 最终出口为 `no_code_retained_diagnostic`。不创建 implementation package，不刷新 oracle，不改 C++、fixtures、expected、tests 或 adapter。
+- capability 继续保留 `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`。
+- known gap 继续保留 `status=known_gap_diagnostic`、`route=oracle_blocked`、diagnostic=`copy_on_change_full_temporary_document_cache_not_supported`。
+- 后续只在同时满足 stable native copied-object graph evidence、产品批准 request-local DTO、current `cad-core` mismatch 时重开；future reopen condition 不写成 current supported。
+
 ## 继承口径
 
 - C9-M5 裁决：CopyOnChange full temporary-document copied-object lifecycle 依赖 `_tmp_binder`、`_CopiedObjs`、`copyObject()`、`recomputeFeature(true)` 和 `_CopiedLink`，S6 关闭为 `no_code_retained_known_gap_release_gate`。
@@ -96,14 +107,14 @@ C12-M5 承接 C12-M4 公开口径迁移完成后的 live capability 状态。当
 - S2：native evidence 刷新与 probe 准入（已完成）。
 - S3：request-local DTO 产品边界冻结（已完成，`dto_rejected_known_gap_retained`）。
 - S4：current mismatch 与实现候选闸门（已完成，`no_current_mismatch_retained_diagnostic`）。
-- S5：发布闸门与后续分流。
+- S5：发布闸门与后续分流（已完成，`no_code_retained_diagnostic`）。
 
 ## 出口
 
 - `implementation_candidate`：只有 native evidence、产品 DTO 和 current mismatch 同时成立时发布，并另开 C++ implementation package。
 - `oracle_refresh_required`：source authority 明确但 evidence 不够，需要先补 probe / collector。
 - `dto_rejected_known_gap_retained`：产品边界拒绝 request-local DTO，继续保留 diagnostic。
-- `no_code_retained_diagnostic`：没有实现候选，capability 继续发布 `known_gap_diagnostic` / `oracle_blocked`。
+- `no_code_retained_diagnostic`：C12-M5 最终出口；没有实现候选，capability 继续发布 `known_gap_diagnostic` / `oracle_blocked`。
 
 ## 队列检查
 
