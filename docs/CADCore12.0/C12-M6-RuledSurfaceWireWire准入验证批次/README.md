@@ -32,7 +32,16 @@ C12-M6 用于验证 `Part::RuledSurface` wire/wire 分支是否已经满足正�
 - checked-in expected 的 `reference` 是 `FreeCADCmd oracle from part-ruled-surface-wire-wire.json; objects: Part::RegularPolygon, Part::RegularPolygon, Part::RuledSurface`；`freecad_version=1.2.0 revision 20260519`，当前 expected 未序列化独立 `occt_version` 字段。
 - expected 记录 `shape=occt_shell`、`topology_counts={faces:4, edges:12, vertices:8}`、bbox、`volume=10.5625`、`object_fields` source curves / orientation / status，以及 `LowerWire.Edge1` / `UpperWire.Edge1` element-map 信号。
 - collector 支持 `Part::RuledSurface` native type，`object_expected_payload()` 走 `ruled_surface_payload()` 从 FreeCAD native `obj.Shape` 生成 geometry/object_fields；S2 未刷新 expected。
-- focused unittest `tests.test_p8_features.CadCoreP8FeatureTest.test_c4m1_part_ruled_surface_wire_wire_builds_shell_with_provenance` 通过。S2 关闭 `C12M6-BLOCKER-201/202/203/204`，下一步为 S3 input schema gate；S4 provenance strength 和 S5 publication gate 仍保持 open。
+- focused unittest `tests.test_p8_features.CadCoreP8FeatureTest.test_c4m1_part_ruled_surface_wire_wire_builds_shell_with_provenance` 通过。S2 关闭 `C12M6-BLOCKER-201/202/203/204`；当时下一步为 S3 input schema gate，S4 provenance strength 和 S5 publication gate 仍保持 open。
+
+## S3 input schema 准入
+
+- S3 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=eb7a856b15`（`eb7a856b15 docs: 完成 C12-M6 S2 expected 准入验证`），起点 `status --short -uall` 无输出。
+- fixture payload 为 request-local `DocumentObject graph`：`Objects[2].TypeId=Part::RuledSurface`，`Curve1.value=LowerWire`，`Curve2.value=UpperWire`，`Orientation.value=Automatic`，`recompute.objs=["RuledSurface"]`。`SubList` 在该 fixture 中缺省，表示 whole wire object；capability 仍公开 `Curve1.SubList` / `Curve2.SubList` 可选 key。
+- `LowerWire` / `UpperWire` 由当前请求图中的 `Part::RegularPolygon` 重算；fixture 无 `BREP`、`TopoDS`、persistent `NamedShape` / `ElementMap`、mesh 或旧 shape cache 字段。
+- 当前 document 层实际落点为 `cad-core/src/app/document.cpp`、`document_object.cpp`、`property.cpp`、`property_links.cpp`；只解析 `Objects`、properties、link-sub 和 `recompute.objs`，不引入后端 session cache。
+- `part_ruled_surface.cpp` 只接受 `Curve1`、`Curve2`、`Orientation`，从 `context.shapes` 解析本次 recompute source shape，并拒绝 missing link、multiple subnames、no-edge 和非 edge/wire 输入；未发现 fixture name branch、adapter shortcut 或 compound hack。
+- capability snapshot 的 `request_local_boundaries` 包含 `source_shape_recomputed_from_document_graph` 和 `wire_wire_brepfill_shell`，payload wording 不要求 full BREP transport。S3 关闭为 `input_schema_admitted`；S4 provenance gate 和 S5 publication gate 继续 open。
 
 ## 入口
 

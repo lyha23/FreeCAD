@@ -32,6 +32,14 @@
 - collector `SUPPORTED_NATIVE_TYPES` 包含 `Part::RuledSurface`，native payload 从 FreeCAD `obj.Shape` 生成 geometry/object_fields；focused expected-backed unittest 已通过。
 - S2 裁决为 `collector_expected_admitted`，只关闭 `C12M6-BLOCKER-201/202/203/204`；S3 input schema、S4 provenance 和 S5 publication 仍 open。
 
+## S3 input schema 准入验证
+
+- S3 执行基线：`HEAD=eb7a856b15`（`eb7a856b15 docs: 完成 C12-M6 S2 expected 准入验证`），起点 worktree clean。
+- fixture schema 使用 `Part::RuledSurface` + `Curve1` / `Curve2` `App::PropertyLinkSub` value links + `Orientation=Automatic` + `recompute.objs=["RuledSurface"]`；`SubList` 缺省表示 whole wire object，capability 公开可选 `Curve1.SubList` / `Curve2.SubList`。
+- `LowerWire` / `UpperWire` 为当前请求图内的 `Part::RegularPolygon` producers；fixture 无 BREP / TopoDS / persistent `NamedShape` / `ElementMap` / mesh / cache 字段。
+- document/app parser 只解析 request graph、properties、link-sub 和 recompute targets；`part_ruled_surface.cpp` 从 `context.shapes` 读取本次 recompute source shape，并拒绝 no-edge 和非 edge/wire 输入。
+- capability snapshot 包含 `source_shape_recomputed_from_document_graph` 与 `wire_wire_brepfill_shell`，未要求 full BREP transport。S3 裁决为 `input_schema_admitted`，只关闭 `C12M6-BLOCKER-301`；S4 provenance 和 S5 publication 仍 open。
+
 ## 执行规则
 
 1. 每步开始前执行 live baseline：`pwd`、`git rev-parse --short HEAD`、`git log -1 --oneline`、`git -c core.quotepath=false status --short -uall`。
@@ -44,8 +52,8 @@
 
 - S0：live 基线与继承口径冻结。
 - S1：FreeCAD 源码与旧 PARTSURF 证据复核。
-- S2：collector / expected 准入验证（已完成，下一步为 S3 input schema gate）。
-- S3：request-local input schema 准入验证。
+- S2：collector / expected 准入验证。
+- S3：request-local input schema 准入验证（已完成，下一步为 S4 shell/topo provenance gate）。
 - S4：shell/topo provenance 准入验证。
 - S5：implementation gate 与发布闸门。
 
