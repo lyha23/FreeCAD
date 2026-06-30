@@ -1,8 +1,8 @@
 id	scope	reason	reopen_condition	status	owner_step
 C12M7-NG-001	copy_on_change	C12-M5 retained CopyOnChange as no-code diagnostic with rejected DTO	Stable native copied-object graph plus approved DTO plus current mismatch	active	S0
 C12M7-NG-002	ruled_surface_wire_wire	C12-M6 already admitted RuledSurface wire/wire as current-supported	Future checked-in expected/current mismatch in RuledSurface wire/wire	active	S0
-C12M7-NG-003	full_revolution_groove_family	This package only handles Groove UpToFirst and UpToFace exact blocker	New package with source/expected/current mismatch for another shared owner	active	S0
-C12M7-NG-004	geometry_cxx_before_native_success	Native failure means geometry parity is not authorized by default	FreeCAD native baseline succeeds and current CAD Core mismatches	active	S1
+C12M7-NG-003	full_revolution_groove_family	This package only handles Groove UpToFirst and UpToFace exact blocker	New package with source/expected/current mismatch for another shared owner	active_s5_not_reopened	S0
+C12M7-NG-004	geometry_cxx_before_native_success	Native failure means geometry parity is not authorized by default	Same FreeCAD/LibPack/OCCT oracle baseline proves Groove UpToFirst and UpToFace native success plus current CAD Core mismatch	active_s5_no_geometry_package	S1
 C12M7-NG-005	adapter_diagnostic_patch	Diagnostic must come from core PartDesign/TopoShape path, not adapter output	Core implementation package changes diagnostic source	active	S2
 C12M7-NG-006	output_guessing	BBox, output order, fixture names or EdgeN guesses cannot prove UpTo target semantics	Source-backed expected or product contract field exists	active	S2
 C12M7-NG-007	other_part_workbench_families	Sweep, Filling, GeomPlate, Loft and ProjectOnSurface have separate retained/product-contract histories	Separate live queue or blocker package	active	S0

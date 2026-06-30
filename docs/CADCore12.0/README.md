@@ -16,7 +16,7 @@ C12-M5 S5 已完成并发布 `no_code_retained_diagnostic`：S2 保留 `native_e
 
 用户已在 C12-M5 后要求打开下一套准入验证包：C12-M6 选择旧 C3M4 `PARTSURF-BLOCK-005` RuledSurface wire/wire deferred 行，但不默认把它当作未实现。C12-M6 已完成发布闸门并发布 `wire_wire_admitted_current_supported`：collector / expected、input schema、shell/topo provenance 三闸门均成立，focused wire/wire test 与 adapter capability smoke 通过，旧 C3M4 deferred 行关闭为 historical closed / superseded by C12-M6 evidence；不创建 implementation 包，不改 C++、fixtures、expected、tests、adapters 或 capability source。
 
-用户现在要求判断 CADCore12.0 下一步实现内容并出方案到本目录。C12-M7 选择 live capability 中最明确的 exact narrowed gap：`part_design.revolution_groove.narrowed_gaps.partdesign_groove_upto_brepfeat_cut_native_failure`。该包不是直接几何 C++ 实现，而是先裁决 `PartDesign::Groove` `UpToFirst` / `UpToFace` native failure 是否可升级为 CAD Core product diagnostic contract；S3 已完成 expected/test/capability/docs 迁移，当前仍不声称 FreeCAD native parity。
+C12-M7 已完成 PartDesign Groove UpTo 产品契约准入批次并发布 `product_diagnostic_contract_published`。该包没有直接几何 C++ 实现；`PartDesign::Groove` `UpToFirst` / `UpToFace` native failure 仍成立，CAD Core request-local exact diagnostic 已升级为 product diagnostic contract，expected/test/capability/docs 公开口径已迁移，当前仍不声称 FreeCAD native parity。
 
 ## 入口
 
@@ -103,7 +103,8 @@ C12-M5 S5 已完成并发布 `no_code_retained_diagnostic`：S2 保留 `native_e
 - C12-M7 S1 native failure 与 current diagnostic 复核已完成：FreeCAD source chain 定位为 `Groove::execute -> executeRevolved(CutFromBase) -> Revolved::tryExecuteRevolved -> tryToRevolveToFace -> TopoShape::makeElementRevolution -> BRepFeat_MakeRevol`；C51X FreeCADCmd 1.2.0 revision 20260519 证据仍显示两个 Groove UpTo fixtures 报 `Groove: Revolution: Up to face: Could not revolve the sketch!`，current CAD Core exact diagnostics 未漂移。
 - C12-M7 S2 product diagnostic contract 准入裁决已完成：FreeCAD parity success 当前不成立，historical native failure 继续保留为 native evidence，CAD Core exact diagnostic 批准为 request-local、locatable、product-visible 的 product diagnostic contract。
 - C12-M7 S3 expected / test / capability / docs 迁移实现已完成：新增 `c51m1/expected/partdesign-groove-uptofirst-body.freecad.json` 与 `partdesign-groove-uptoface-body.freecad.json`；focused test 改为 expected-backed product diagnostic assertion；`part_design.revolution_groove` capability / adapter assertion 发布 `product_diagnostic_contract_non_parity` 并保留 native failure note、fixture pair、delete/reopen condition。
-- C12-M7 S4 focused validation 与发布边界复核已完成：focused Groove test、C API capability smoke 和 `/tmp/c12m7-s4-capabilities.json` 均确认 `part_design.revolution_groove` status / fixtures / diagnostics / narrowed gap route 未漂移，仍为 `product_diagnostic_contract_non_parity` 且 `freecad_native_parity=false`；CopyOnChange 仍是 C12-M5 retained diagnostic，RuledSurface wire/wire 仍 current-supported；未发布 full Groove family，未把 geometry C++ parity 当作完成。当前 live queue 下一项应为 S5 发布闸门与后续分流。
+- C12-M7 S4 focused validation 与发布边界复核已完成：focused Groove test、C API capability smoke 和 `/tmp/c12m7-s4-capabilities.json` 均确认 `part_design.revolution_groove` status / fixtures / diagnostics / narrowed gap route 未漂移，仍为 `product_diagnostic_contract_non_parity` 且 `freecad_native_parity=false`；CopyOnChange 仍是 C12-M5 retained diagnostic，RuledSurface wire/wire 仍 current-supported；未发布 full Groove family，未把 geometry C++ parity 当作完成。
+- C12-M7 S5 发布闸门已完成：最终出口为 `product_diagnostic_contract_published`，C12-M7 队列预期只输出表头；本包不创建 geometry implementation package，不改 `cad-core/src`、`cad-core/include`、fixtures、expected、tests 或 adapters。只有同一 FreeCAD / LibPack / OCCT oracle baseline 证明 Groove UpToFirst 与 UpToFace native success，且 current CAD Core 与 stable expected mismatch 时，才另开 geometry implementation candidate。
 
 ## 重开条件
 
@@ -115,7 +116,7 @@ C12-M5 S5 已完成并发布 `no_code_retained_diagnostic`：S2 保留 `native_e
 | ProjectOnSurface provenance | 未来 FreeCAD 原生 MapperHistory / ElementMap artifact 产出 `native_provenance_expected_ready` + request-local boundary + current mismatch；C12-M3 native-hidden 证据本身不能重开代码。 |
 | ProjectOnSurface request-local ledger product contract | C12-M4 产品契约公开口径已落地；后续只在新增 request-local ledger 字段、改变 mapper_history schema，或未来 FreeCAD 原生 artifact 产出 `native_provenance_expected_ready` 并证明需要重审 parity 边界时重开。 |
 | RuledSurface wire/wire | C12-M6 已关闭为 `wire_wire_admitted_current_supported`；旧 C3M4 `PARTSURF-BLOCK-005` / `PARTSURF-SCOPE-007` / `PARTSURF-FIX-005` 为 historical closed / superseded by C12-M6 evidence。仅当未来 checked-in expected 与 current output 出现真实 mismatch，并定位到 Part executor / TopoShapeExpansion / topo provenance 时，才另开 implementation package。 |
-| Groove UpTo product diagnostic | C12-M7 已开包；只有 native failure 仍成立且产品批准 exact diagnostic contract，才迁移 expected/test/capability/docs。若 FreeCAD native baseline 反转成功且 current CAD Core mismatch 成立，另开 geometry implementation package。 |
+| Groove UpTo product diagnostic | C12-M7 已关闭为 `product_diagnostic_contract_published`；仅当同一 FreeCAD / LibPack / OCCT oracle baseline 证明 Groove UpToFirst 与 UpToFace native success，且 current CAD Core 与 stable expected mismatch 时，才另开 geometry implementation candidate。 |
 
 ## 队列检查
 

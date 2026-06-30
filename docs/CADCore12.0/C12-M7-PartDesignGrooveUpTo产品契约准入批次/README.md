@@ -33,13 +33,13 @@ C12-M7 用于裁决 `PartDesign::Groove` 的 `Type=UpToFirst` / `Type=UpToFace` 
 - S2 product diagnostic contract 准入裁决已完成：本轮起点 `HEAD=cc9e3a1190`，worktree clean；current diagnostic 批准为 CAD Core product diagnostic contract，但 FreeCAD native failure 仍保留为历史证据，不得写成 FreeCAD parity success。批准依据是两个 fixtures 同时覆盖 UpToFirst / UpToFace，primary diagnostic 稳定、locatable、request-local 且产品可见：UpToFirst 定位到 `Groove.Type / subname=UpToFirst`，UpToFace 定位到 `Groove.UpToFace / target=Pad / subname=Face4`。
 - S3 expected / test / capability / docs 迁移实现已完成：新增两个 C51M1 Groove UpTo product diagnostic expected，`test_p7_features.py` 改为 expected-backed assertion，`capability_contract.cpp` / `test_adapters.py` 将 route 发布为 `product_diagnostic_contract_non_parity`，并保留 FreeCAD native failure note、fixture pair、delete/reopen condition。focused Groove test 与 C API capability smoke 已通过。
 - S4 focused validation 与发布边界复核已完成：本轮起点 `HEAD=11cf58bc8f`，worktree clean；focused Groove test、C API capability smoke 和 `/tmp/c12m7-s4-capabilities.json` 均确认 `part_design.revolution_groove` 仍发布 `product_diagnostic_contract_non_parity`，fixtures、diagnostics、`freecad_native_parity=false`、native failure note、delete/reopen condition 未漂移。CopyOnChange 仍是 C12-M5 retained diagnostic，RuledSurface wire/wire 仍 current-supported；未发布 full Groove family，未把 geometry C++ parity 当作完成。
-- 当前 live 队列应从 S5 `工作步骤细分/6-30-17-04-C12-M7-S5-发布闸门与后续分流.md` 开始；S5 仍保持 pending。
+- S5 发布闸门与后续分流已完成：本轮起点 `HEAD=735f6ed5f7`，worktree clean；最终出口为 `product_diagnostic_contract_published`。Native failure 仍成立，S2 已批准 product contract，S3 已完成 expected/test/capability/docs 迁移，S4 focused tests / capability smoke / capability JSON review 均通过。本包不创建 geometry implementation package；只有同一 FreeCAD / LibPack / OCCT oracle baseline 证明 Groove UpToFirst 与 UpToFace native success，且 current CAD Core 与 stable expected mismatch 时，才另开 geometry implementation candidate。
 
-## 预期出口
+## 最终出口
 
 | 出口 | 含义 |
 | --- | --- |
-| `product_diagnostic_contract_published` | FreeCAD native 仍失败；CAD Core exact diagnostic 被批准为 product diagnostic contract，并完成 expected/test/capability/docs 公开口径。 |
+| `product_diagnostic_contract_published` | 已发布。FreeCAD native 仍失败；CAD Core exact diagnostic 被批准为 product diagnostic contract，并完成 expected/test/capability/docs 公开口径。 |
 | `retained_historical_native_failure` | native 仍失败，但 product contract 证据或发布面不足；继续保留 narrowed gap。 |
 | `implementation_candidate_required` | native 成功且 current CAD Core mismatch，可另开 geometry implementation package。 |
 | `no_code_retained` | 证据不足或边界不批准，不改代码和 expected。 |

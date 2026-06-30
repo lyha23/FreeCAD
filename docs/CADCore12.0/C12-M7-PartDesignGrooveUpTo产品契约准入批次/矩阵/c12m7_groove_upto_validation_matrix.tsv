@@ -8,5 +8,5 @@ C12M7-VAL-004A	diagnostic_payload_inspection	cad-core/build/cad-core recompute f
 C12M7-VAL-005	focused_groove_test	cd cad-core && python3 -m unittest tests.test_p7_features.CadCoreP7FeatureTest.test_c51m1_groove_upto_native_brepfeat_failures_are_exact_blockers	Groove UpToFirst and UpToFace diagnostics are expected-backed product diagnostic contracts	passed_s4_revalidated	S3/S4
 C12M7-VAL-006	capability_smoke	cd cad-core && python3 -m unittest tests.test_adapters.CadCoreAdapterTest.test_c_api_capabilities_publication_smoke	Capability publication matches approved product diagnostic contract route and preserves native failure note	passed_s4_revalidated	S3/S4
 C12M7-VAL-006A	capability_json_boundary	cad-core/build/cad-core capabilities >/tmp/c12m7-s4-capabilities.json	part_design.revolution_groove status, fixture pair, diagnostics, product_diagnostic_contract_non_parity route, freecad_native_parity=false, native failure note, delete/reopen condition and non-goal capabilities remain stable	passed_s4	S4
-C12M7-VAL-007	whitespace_check	rg -n '[ \t]$' docs/CADCore12.0/C12-M7-PartDesignGrooveUpTo产品契约准入批次 docs/CADCore12.0/README.md	No trailing whitespace	pending	S5
-C12M7-VAL-008	diff_check	git diff --check	No whitespace errors in diff	pending	S5
+C12M7-VAL-007	whitespace_check	rg -n '[ \t]$' docs/CADCore12.0/C12-M7-PartDesignGrooveUpTo产品契约准入批次 docs/CADCore12.0/README.md	No trailing whitespace	passed_s5	S5
+C12M7-VAL-008	diff_check	git diff --check	No whitespace errors in diff	passed_s5	S5

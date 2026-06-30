@@ -2,9 +2,9 @@
 
 ## 结论
 
-下一步应做 `C12-M7 PartDesign Groove UpTo 产品契约准入批次`。
+`C12-M7 PartDesign Groove UpTo 产品契约准入批次` 已发布最终出口 `product_diagnostic_contract_published`。
 
-这不是 broad PartDesign 重开，也不是 CopyOnChange 直接实现。当前最适合推进的是 `part_design.revolution_groove.narrowed_gaps.partdesign_groove_upto_brepfeat_cut_native_failure`：它已经从 broad deferred 收敛成两个 exact fixtures，并且 capability 明确允许未来包批准 CAD Core non-parity product contract。
+这不是 broad PartDesign 重开，也不是 CopyOnChange 直接实现。`part_design.revolution_groove.narrowed_gaps.partdesign_groove_upto_brepfeat_cut_native_failure` 已从 broad deferred 收敛成两个 exact fixtures，并在本包中批准为 CAD Core non-parity product diagnostic contract。
 
 ## 当前基线
 
@@ -19,6 +19,7 @@
 - S2 准入裁决：`HEAD=cc9e3a1190` 起点 worktree clean；FreeCAD parity success 当前不成立，historical native failure 继续保留，CAD Core product diagnostic contract 已批准。批准范围必须同时覆盖 UpToFirst 与 UpToFace，且 S3 必须保留 native failure note。
 - S3 迁移实现：`HEAD=c1955ab56e` 起点 worktree clean；新增两个 C51M1 expected，focused test 改成 expected-backed product diagnostic assertion，capability / adapter assertion 发布 `product_diagnostic_contract_non_parity`，并保留 native failure note、fixture pair 和 delete/reopen condition。
 - S4 focused validation：`HEAD=11cf58bc8f` 起点 worktree clean；focused Groove test、C API capability smoke 与 capability JSON 复核均通过，`part_design.revolution_groove` 继续发布 `product_diagnostic_contract_non_parity` 且保留 `freecad_native_parity=false`、native failure note、fixture pair、delete/reopen condition。CopyOnChange 仍是 C12-M5 retained diagnostic，RuledSurface wire/wire 仍 current-supported；未发布 full Groove family，未把 geometry C++ parity 当作完成。
+- S5 发布闸门：`HEAD=735f6ed5f7` 起点 worktree clean；最终出口为 `product_diagnostic_contract_published`，队列关闭；不创建 geometry implementation package。
 
 ## FreeCAD / CAD Core 依据
 
@@ -29,7 +30,7 @@
 - current CAD Core：`cad-core/src/part_design/feature_revolved.cpp::buildRevolvedUntil()` 对 UpTo revolution 进入 `makeElementRevolutionUntilFromSources()`。
 - current CAD Core：`cad-core/src/part/topo_shape_expansion.cpp` 当前 exact diagnostic 为 `BRepFeat_MakeRevol could not revolve profile up to face`。
 - current tests：`cad-core/tests/test_p7_features.py::test_c51m1_groove_upto_native_brepfeat_failures_are_exact_blockers()` 已断言两个 Groove UpTo fixtures 的 exact diagnostic。
-- current capability：`cad-core/tests/test_adapters.py` 已断言该 narrowed gap 不是 `remaining_gaps`，而是 historical native failure。
+- current capability：`cad-core/tests/test_adapters.py` 已断言该 narrowed gap 不是 `remaining_gaps`，而是 `product_diagnostic_contract_non_parity`，并保留 native failure note。
 
 ## 最小完整语义批次
 
@@ -61,6 +62,14 @@ S2 已批准 product diagnostic contract，S3 已按下列文件面完成迁移�
 - `cad-core/include`
 - geometry builder 语义
 
+## 发布闸门与重开条件
+
+- 最终出口：`product_diagnostic_contract_published`。
+- Native failure 仍成立；本包发布的是 CAD Core request-local product diagnostic contract，不是 FreeCAD native parity success。
+- 不创建 geometry implementation package。
+- 仅当同一 FreeCAD / LibPack / OCCT oracle baseline 证明 `Groove Type=UpToFirst` 与 `Groove Type=UpToFace` native success，且 current CAD Core 与 stable expected mismatch 时，才另开 geometry implementation candidate。
+- 后续候选必须同时覆盖 UpToFirst 与 UpToFace，不得只迁移单个 fixture，也不得删除 C12-M7 native failure note。
+
 ## 非目标
 
 - 不实现 full `Groove` / `Revolution` 家族。
@@ -78,6 +87,7 @@ S2 已批准 product diagnostic contract，S3 已按下列文件面完成迁移�
 cd /Users/li/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M7-PartDesignGrooveUpTo产品契约准入批次/工作步骤细分 --format markdown
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M7-PartDesignGrooveUpTo产品契约准入批次/矩阵/*.tsv
+rg -n '[ \t]$' docs/CADCore12.0/C12-M7-PartDesignGrooveUpTo产品契约准入批次 docs/CADCore12.0/README.md
 git diff --check
 ```
 
