@@ -21,6 +21,8 @@ S5/S6 必须输出以下之一：
 2. `oracle_or_product_contract_package_required`：发现值得推进的方向，但缺 stable native expected 或缺产品契约，需要先另开 oracle / product-contract 包。
 3. `no_code_backlog_gate`：没有行满足实现准入，继续保留 backlog 和重开条件。
 
+S6 最终发布结果为 `no_code_backlog_gate`：S3 未产生 mismatch-confirmed 行，S4 没有 implementation source / cad-core landing / validation surface，S5 未授权 implementation package。本包不创建后续 implementation package、不补 C++、不刷新 expected、不重开 C12-M8 CopyOnChange、不把 helper-blocked / native-hidden / product-contract non-parity 写成 supported。
+
 ## C++ 闸门
 
 进入 implementation package 必须同时满足：
@@ -40,13 +42,15 @@ S5/S6 必须输出以下之一：
 - S3：按 stable expected / product contract / current mismatch 三闸门筛出 candidate 或阻断原因。
 - S4：对最高优先 candidate 做 source authority、cad-core 落点、fixtures / tests 和 non-goal 复核。
 - S5：决定是否授权后续 implementation package；若授权，写明最小完整语义批次。
-- S6：发布 C12-M9 最终状态，更新 CADCore12.0 README、矩阵和队列。
+- S6：发布 C12-M9 最终状态，更新 CADCore12.0 README、矩阵和队列（已完成，最终状态 `no_code_backlog_gate`）。
 
 ## 初始判断
 
 当前最可能被误开的项是 CopyOnChange，但它刚在 C12-M8 被关闭为 `no_code_retained_diagnostic`。C12-M9 必须把它当作 retained blocker 输入，而不是默认实现方向。
 
 当前更合理的盘点重点是 `narrowed_gaps`：确认哪些 row 已经是 current-covered / product-contract non-parity，哪些 row 仍缺 native expected，哪些 row 可能因为新的 expected 或 current regression 形成真实 mismatch。
+
+最终盘点结果：没有 row 同时满足 stable expected / approved product contract、request-local boundary 和 current mismatch。C12-M9 只发布 no-code backlog gate，保留后续重开条件，不授权当前实现包。
 
 ## 验收分层
 

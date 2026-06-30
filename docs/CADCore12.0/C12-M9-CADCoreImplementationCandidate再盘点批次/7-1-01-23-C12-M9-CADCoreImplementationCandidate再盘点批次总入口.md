@@ -55,7 +55,7 @@ live capability baseline
 | S3 | `工作步骤细分/7-1-01-28-【已实现】C12-M9-S3-expected与current-mismatch准入.md` | 过滤 stable expected / mismatch，已关闭且未产生 S4 implementation candidate。 |
 | S4 | `工作步骤细分/7-1-01-29-【已实现】C12-M9-S4-最高优先候选source与验证范围复核.md` | 复核 candidate source / landing，已关闭为 `no_candidate_after_s3_gate`。 |
 | S5 | `工作步骤细分/7-1-01-30-【已实现】C12-M9-S5-implementation-package-authorization裁决.md` | 已关闭为 `no_code_backlog_gate`，未授权 implementation package。 |
-| S6 | `工作步骤细分/7-1-01-31-C12-M9-S6-发布闸门与后续分流.md` | 发布最终状态。 |
+| S6 | `工作步骤细分/7-1-01-31-【已实现】C12-M9-S6-发布闸门与后续分流.md` | 已关闭为 `no_code_backlog_gate`，队列关闭。 |
 | 矩阵 | `矩阵/` | source、scope、classification、blocker、non-goal、validation。 |
 
 ## 执行规则
@@ -91,6 +91,7 @@ live capability baseline
 - S5 implementation package authorization 裁决已关闭：执行基线 `HEAD=d644685d8d`（`d644685d8d docs: 关闭 C12-M9 S4 无候选复核`），起点 worktree clean；执行前队列第一项为 S5，关闭后应从 S6 继续。
 - S5 核对 S4 输入：没有 admitted `mismatch-confirmed` row，`C12M9-BLOCKER-401=closed_s4_no_candidate_after_s3_gate`，`C12M9-CAT-006=s5_input_no_code_backlog_gate`。最终发布 `no_code_backlog_gate`，不授权 implementation package。
 - S5 明确不修改 C++、不刷新 expected、不创建后续包、不删除 CopyOnChange known gap、不删除 Groove product diagnostic contract。`C12M9-BLOCKER-501` 已关闭为 `closed_s5_no_code_backlog_gate`，`C12M9-VAL-501` 已记录实际裁决；只有新 oracle / product-contract evidence 同时满足 stable expected 或 approved product contract、request-local boundary 与 current mismatch，才可另开包。
+- S6 发布闸门已关闭：执行基线 `HEAD=ef3f457447`（`ef3f457447 docs: 关闭 C12-M9 S5 无代码积压闸门`），起点 worktree clean；最终发布 `no_code_backlog_gate`。`C12M9-BLOCKER-601` 已关闭，`C12M9-VAL-601` 记录最终队列闭合；C12-M9 队列应只输出表头。本步只更新 C12-M9 README / 方案 / 总入口 / step / 矩阵与 root README，不创建 implementation package，不补 C++，不刷新 expected，不重开 C12-M8 CopyOnChange，不把 helper-blocked / native-hidden / product-contract non-parity 写成 supported。
 
 ## 验收
 

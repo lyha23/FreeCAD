@@ -82,6 +82,14 @@ C12-M8 已把当前唯一 live `remaining_gaps`：`part_design.sub_shape_binder.
 - `C12M9-BLOCKER-501` 已关闭为 `closed_s5_no_code_backlog_gate`，`C12M9-VAL-501` 记录为 `passed_s5_no_code_backlog_gate`。
 - 后续只能在新 oracle / product-contract evidence 同时证明 stable expected 或 approved product contract、request-local boundary 与 current mismatch 时另开包；本 S5 不授权当前实现包。
 
+## S6 发布闸门与后续分流
+
+- S6 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=ef3f457447`（`ef3f457447 docs: 关闭 C12-M9 S5 无代码积压闸门`），起点 `git -c core.quotepath=false status --short -uall` 无输出，即 worktree clean。
+- S6 执行前 C12-M9 队列第一项为 `7-1-01-31-C12-M9-S6-发布闸门与后续分流.md`；关闭后文件为 `7-1-01-31-【已实现】C12-M9-S6-发布闸门与后续分流.md`，队列应只输出表头。
+- C12-M9 final publication 为 `no_code_backlog_gate`。S0-S5 最终结果保持有效：CopyOnChange retained blocker、narrowed gaps / product-contract non-parity 分类、no mismatch-confirmed row、`no_candidate_after_s3_gate`、未授权 implementation package。
+- 本包不创建 implementation package，不补 C++，不刷新 expected，不重开 C12-M8 CopyOnChange，不把 helper-blocked / native-hidden / product-contract non-parity 写成 supported。
+- `C12M9-BLOCKER-601` 已关闭，`C12M9-VAL-601` 记录最终队列闭合；后续只能在新 oracle / product-contract evidence 同时满足 stable expected 或 approved product contract、request-local boundary 与 current mismatch 时另开新包。
+
 ## 候选准入规则
 
 任一 C12-M9 候选必须同时满足三项，才允许 S5/S6 产出后续 implementation package：
@@ -110,7 +118,7 @@ C12-M8 已把当前唯一 live `remaining_gaps`：`part_design.sub_shape_binder.
 - S3：stable expected / product contract 与 current mismatch 准入（已完成，未产生 S4 implementation candidate）。
 - S4：最高优先候选的 FreeCAD source、cad-core 落点和验证范围复核（已完成，`no_candidate_after_s3_gate`）。
 - S5：implementation package authorization 或 no-code backlog 裁决（已完成，`no_code_backlog_gate`，未授权 implementation package）。
-- S6：发布闸门、README 更新和后续分流。
+- S6：发布闸门、README 更新和后续分流（已完成，`no_code_backlog_gate`，队列关闭）。
 
 ## 入口
 
