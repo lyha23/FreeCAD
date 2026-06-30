@@ -30,6 +30,17 @@ C12-M8 已把当前唯一 live `remaining_gaps`：`part_design.sub_shape_binder.
 - live `narrowed_gaps` presence 已冻结为 `part_design.revolution_groove`、`part_workbench.filling`、`part_workbench.geomplate`、`part_workbench.loft`、`part_workbench.project_on_surface`、`part_workbench.sweep`。
 - C12-M8 retained diagnostic 继续继承：S2=`native_evidence_retained_blocker`，S3=`dto_not_reviewed_due_to_native_blocker`，S4=`no_current_mismatch_retained_diagnostic`，S5=`no_code_retained_diagnostic`；S0 不做 current mismatch 判断，不运行 FreeCADCmd，不修改 production code、fixtures、expected、tests、adapters 或 capability source。
 
+## S1 live capability 抽取
+
+- S1 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=a7e7eb040f`（`a7e7eb040f 文档：冻结 C12-M9 S0 live 基线`），起点 worktree clean。
+- S1 执行前 C12-M9 队列第一项为 `7-1-01-26-C12-M9-S1-live-capability与remaining-gap抽取.md`，后续为 S2-S6；S1 关闭后队列应从 S2 继续。
+- live capability snapshot 保存到 `/tmp/c12m9-capabilities.json`。唯一非空 `remaining_gaps` 仍为 `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`。
+- live `known_gaps` 只有 `part_design.sub_shape_binder.known_gaps.copy_on_change_full_temporary_document_cache`，current 为 `status=known_gap_diagnostic`、`route=oracle_blocked`、`diagnostic=copy_on_change_full_temporary_document_cache_not_supported`。
+- CopyOnChange reopen condition 继承 C12-M8：必须先有更强 native copied graph artifact，再通过 request-local DTO approval，再确认 current mismatch；S1 不把该 remaining gap 自动升级为 implementation。
+- live `narrowed_gaps` presence 为 15 条：`part_design.revolution_groove` 1 条，`part_workbench.filling` 6 条，`part_workbench.geomplate` 4 条，`part_workbench.loft` 1 条，`part_workbench.project_on_surface` 1 条，`part_workbench.sweep` 2 条。S1 只记录 presence，不做 S2 归类或 S3 mismatch 判断。
+- publication authority 位于 `cad-core/src/runtime/capability_contract.cpp::capabilityContractJson()`、`diagnosticCodeList()`、`ondselSolverCapabilityJson()` 和 `part_design.sub_shape_binder` capability block；adapter assertions 位于 `cad-core/tests/test_adapters.py` 的 capability smoke / web contract / narrowed gap assertions 与 `cad-core/tests/test_c8_shapebinder.py` 的 CopyOnChange known gap assertions。
+- `C12M9-SRC-001..003` 已写入 current evidence，`C12M9-SCOPE-101` 裁决为 `retained_blocker_needs_further_gate`，`C12M9-CAT-001` 记录为 retained known gap，`C12M9-BLOCKER-101` 已关闭。
+
 ## 候选准入规则
 
 任一 C12-M9 候选必须同时满足三项，才允许 S5/S6 产出后续 implementation package：
@@ -53,7 +64,7 @@ C12-M8 已把当前唯一 live `remaining_gaps`：`part_design.sub_shape_binder.
 
 - 入口：确认 C12-M9 队列和包结构（已完成）。
 - S0：live 基线与 C12-M1..M8 关闭口径冻结（已完成）。
-- S1：live capability 和非空 `remaining_gaps` 抽取。
+- S1：live capability 和非空 `remaining_gaps` 抽取（已完成）。
 - S2：`narrowed_gaps`、product-contract non-parity 和 historical evidence 归类。
 - S3：stable expected / product contract 与 current mismatch 准入。
 - S4：最高优先候选的 FreeCAD source、cad-core 落点和验证范围复核。

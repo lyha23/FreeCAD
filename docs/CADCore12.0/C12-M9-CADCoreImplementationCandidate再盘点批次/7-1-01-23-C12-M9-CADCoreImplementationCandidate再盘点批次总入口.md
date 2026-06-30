@@ -50,7 +50,7 @@ live capability baseline
 | 方案 | `7-1-01-23-C12-M9-CADCoreImplementationCandidate再盘点批次方案.md` | 批次规则、步骤安排和验收分层。 |
 | 工作步骤总入口 | `工作步骤细分/7-1-01-24-【已实现】C12-M9工作步骤总入口.md` | goal 队列索引，已关闭。 |
 | S0 | `工作步骤细分/7-1-01-25-【已实现】C12-M9-S0-live基线与继承口径冻结.md` | 冻结 C12-M8 后 live baseline，已关闭。 |
-| S1 | `工作步骤细分/7-1-01-26-C12-M9-S1-live-capability与remaining-gap抽取.md` | 抽取 remaining / known gaps。 |
+| S1 | `工作步骤细分/7-1-01-26-【已实现】C12-M9-S1-live-capability与remaining-gap抽取.md` | 抽取 remaining / known gaps，已关闭。 |
 | S2 | `工作步骤细分/7-1-01-27-C12-M9-S2-narrowed-gaps与产品契约归类.md` | 归类 narrowed gaps 和 non-parity。 |
 | S3 | `工作步骤细分/7-1-01-28-C12-M9-S3-expected与current-mismatch准入.md` | 过滤 stable expected / mismatch。 |
 | S4 | `工作步骤细分/7-1-01-29-C12-M9-S4-最高优先候选source与验证范围复核.md` | 复核 candidate source / landing。 |
@@ -76,6 +76,9 @@ live capability baseline
 - S0 live 基线与继承口径已冻结：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=d7602e1bd2`（`d7602e1bd2 文档：关闭 C12-M9 工作步骤总入口`），起点 worktree clean；C12-M1..M8 队列均只输出表头，C12-M9 S0 执行前为第一项。
 - S0 capability snapshot 为 `/tmp/c12m9-s0-capabilities.json`：唯一非空 `remaining_gaps` 为 `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`，known gap 继续是 `known_gap_diagnostic` / `oracle_blocked` / `copy_on_change_full_temporary_document_cache_not_supported`；`narrowed_gaps` presence 位于 `part_design.revolution_groove`、`part_workbench.filling`、`part_workbench.geomplate`、`part_workbench.loft`、`part_workbench.project_on_surface`、`part_workbench.sweep`。
 - S0 只冻结 C12-M8 retained diagnostic 继承口径：S2=`native_evidence_retained_blocker`，S3=`dto_not_reviewed_due_to_native_blocker`，S4=`no_current_mismatch_retained_diagnostic`，S5=`no_code_retained_diagnostic`；未执行 S1-S6 盘点，未运行 FreeCADCmd，未修改 production code、fixtures、expected、tests、adapters 或 capability source。
+- S1 live capability 抽取已关闭：执行基线 `HEAD=a7e7eb040f`（`a7e7eb040f 文档：冻结 C12-M9 S0 live 基线`），起点 worktree clean；snapshot 为 `/tmp/c12m9-capabilities.json`。
+- S1 current evidence：唯一非空 `remaining_gaps` 仍是 `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`；唯一 nested `known_gaps` 是 CopyOnChange retained diagnostic，`status=known_gap_diagnostic`、`route=oracle_blocked`、`diagnostic=copy_on_change_full_temporary_document_cache_not_supported`。
+- S1 裁决：CopyOnChange 继续是 retained blocker / needs further gate；reopen condition 为更强 native copied graph artifact + request-local DTO approval + current mismatch。S1 只记录 15 条 `narrowed_gaps` presence 和 capability publication authority，不做 S2 归类、S3 mismatch 判断或 C++ implementation。
 
 ## 验收
 
