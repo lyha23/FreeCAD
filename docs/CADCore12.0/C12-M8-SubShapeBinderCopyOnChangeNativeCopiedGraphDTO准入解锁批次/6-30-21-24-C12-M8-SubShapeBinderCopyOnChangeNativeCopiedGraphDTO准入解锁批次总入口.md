@@ -18,7 +18,7 @@
 
 - S0：live 基线与 C12-M5/C12-M7 继承口径冻结（已完成）。
 - S1：FreeCAD source、current coverage 和 App::Link transport 证据复核（已完成）。
-- S2：native copied graph probe schema 与 evidence gate。
+- S2：native copied graph probe schema 与 evidence gate（已完成，`native_evidence_retained_blocker`）。
 - S3：request-local DTO 产品边界裁决。
 - S4：current mismatch 与 implementation candidate gate。
 - S5：implementation package authorization / no-code retained decision。
@@ -30,11 +30,13 @@
 - S0 live 基线与继承口径冻结已完成：`HEAD=fd9810dc23`，起点 worktree clean，C12-M1..M7 队列均只输出表头。
 - live `part_design.sub_shape_binder` capability 仍为 `supported_c8m1_expected_backed_request_local_with_copy_on_change_known_gap`，`remaining_gaps=["copy_on_change_full_temporary_document_cache"]`；known gap 仍是 `known_gap_diagnostic` / `oracle_blocked` / `copy_on_change_full_temporary_document_cache_not_supported`。
 - S1 source/current 复核已完成：FreeCAD 单 support gate、Mutated `_tmp_binder` / `copyObject()` / `_CopiedObjs` / `recomputeFeature(true)` / `_CopiedLink` 路径、`PartialLoad` 与 `Cache_*` 边界、current retained diagnostic 和 App::Link reference-only transport 已写入矩阵。
-- C12-M5 `no_code_retained_diagnostic` 与 C12-M7 `product_diagnostic_contract_published` 后续分流口径均继续有效；S2 只进入 native copied graph probe schema 与 evidence gate，不推进实现或 oracle refresh。
+- S2 native evidence gate 已完成：本机 FreeCADCmd 可运行，raw artifact 写入 `docs/temp/c12m8-subshapebinder-copy-on-change-native-copied-graph-probe.raw.c9m5.freecad.json`，C12-M8 gate artifact 写入 `docs/temp/c12m8-subshapebinder-copy-on-change-native-copied-graph-evidence-gate.json`，schema 为 `c12m8.subshapebinder-copy-on-change-native-copied-graph.v1`。
+- S2 裁决为 `native_evidence_retained_blocker`：raw probe 只能证明 property / session 状态、`_tmp_binder` document name 和部分 `_CopiedLink` value，不能证明 `_CopiedObjs` identity、copyObject dependency order、support rewrite map、`recomputeFeature(true)` lifecycle、ElementMap / NamedShape lifecycle 或 request-local serializability。
+- C12-M5 `no_code_retained_diagnostic` 与 C12-M7 `product_diagnostic_contract_published` 后续分流口径均继续有效；S3/S4 不能跳到 implementation approval，除非另有更强 native copied graph artifact 重新打开 S2 gate。
 
 ## 必要裁决
 
-- 若 S2 不是 `native_copied_graph_evidence_ready`，S3/S4 不能跳到 implementation。
+- S2 已是 `native_evidence_retained_blocker`，S3/S4 不能跳到 implementation。
 - 若 S3 不是 `dto_approved_for_request_local_graph`，S4 只能保留 diagnostic。
 - 若 S4 无 current mismatch，S5 不能创建 implementation package。
 - 若任一条件失败，最终出口必须写明 retained blocker、删除条件和下一次重开条件。

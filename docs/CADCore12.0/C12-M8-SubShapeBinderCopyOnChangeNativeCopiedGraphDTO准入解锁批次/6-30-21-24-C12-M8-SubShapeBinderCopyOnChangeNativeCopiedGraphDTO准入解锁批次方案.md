@@ -6,6 +6,14 @@ C12-M8 是 CopyOnChange 的“解锁包”，不是代码实现包。它只回�
 
 如果三段证据链成立，S5/S6 产出后续 implementation package；如果不成立，保留 `copy_on_change_full_temporary_document_cache_not_supported`，并把缺口继续标为 `known_gap_diagnostic` / `oracle_blocked`。
 
+## S2 当前裁决
+
+S2 已固定 artifact schema `c12m8.subshapebinder-copy-on-change-native-copied-graph.v1`，并在本机 FreeCADCmd 上生成 raw native artifact 到 `docs/temp/c12m8-subshapebinder-copy-on-change-native-copied-graph-probe.raw.c9m5.freecad.json`。
+
+裁决结果是 `native_evidence_retained_blocker`：raw artifact 仍只能证明 Python-visible property / session 状态、`_tmp_binder` document name 和部分 `_CopiedLink` value，不能证明 `_CopiedObjs` identity、copyObject dependency order、support rewrite map、`recomputeFeature(true)` lifecycle、ElementMap / NamedShape lifecycle 或 request-local serializability。
+
+因此后续 S3/S4 只能继承该 blocker 做 DTO rejection/defer 与 retained diagnostic path；除非另有更强 native copied graph artifact 重开 S2，S5 不能授权 implementation package。
+
 ## 为什么不能直接实现
 
 `SubShapeBinder` CopyOnChange 的 full path 不是普通 shape copy。FreeCAD 里它会进入 `_tmp_binder`、`_CopiedObjs`、`copyObject()`、`recomputeFeature(true)`、`_CopiedLink` 和 copied support rewrite 的组合流程。CAD Core 的边界是无状态 request graph：后端不能保存 temporary document、TopoDS、BREP、NamedShape、ElementMap 或 copied-object cache。

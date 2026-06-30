@@ -2,8 +2,8 @@ id	validation	owner_step	status	command_or_evidence	expected_result
 C12M8-VAL-001	queue check before S0	S0	passed_s0	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次/工作步骤细分 --format markdown	Initial queue showed index and S0-S6 pending; after S0 close queue starts at S1.
 C12M8-VAL-002	prior queue checks	S0	passed_s0	C12-M1..M7 step_goal_queue commands	Each prior queue outputs only header.
 C12M8-VAL-003	capability snapshot	S0	passed_s0	cad-core/build/cad-core capabilities	part_design.sub_shape_binder status remains supported_c8m1_expected_backed_request_local_with_copy_on_change_known_gap; remaining gap still present with known_gap_diagnostic, oracle_blocked and copy_on_change_full_temporary_document_cache_not_supported.
-C12M8-VAL-101	source matrix TSV check	S1	pending	awk TSV field count check	All TSV rows have matching field counts.
-C12M8-VAL-201	native probe artifact or blocker	S2	pending	docs/temp artifact or blocker note	S2 records evidence_ready or retained blocker.
+C12M8-VAL-101	source matrix TSV check	S1	pending_s2_final_check_required	awk TSV field count check	S2 close must run the package TSV field count check after matrix edits.
+C12M8-VAL-201	native probe artifact or blocker	S2	passed_s2_retained_blocker	docs/temp/c12m8-subshapebinder-copy-on-change-native-copied-graph-evidence-gate.json and docs/temp/c12m8-subshapebinder-copy-on-change-native-copied-graph-probe.raw.c9m5.freecad.json	S2 records native_evidence_retained_blocker: raw FreeCADCmd evidence runs but remains property/session-level and does not export stable copied graph evidence.
 C12M8-VAL-301	DTO matrix field decision	S3	pending	Review c12m8_copy_on_change_dto_contract_fields.tsv	Every DTO row approved rejected or deferred.
 C12M8-VAL-401	current comparison gate	S4	pending	focused test or documented not-run reason	Implementation mismatch only if S2 and S3 pass.
 C12M8-VAL-501	final exit	S5	pending	backend_gap_classification and README update	implementation_package_authorized or no_code_retained_diagnostic.

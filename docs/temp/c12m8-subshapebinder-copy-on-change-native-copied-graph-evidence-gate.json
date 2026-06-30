@@ -1,0 +1,94 @@
+{
+  "schema_version": "c12m8.subshapebinder-copy-on-change-native-copied-graph.v1",
+  "decision": "native_evidence_retained_blocker",
+  "raw_probe_artifact": "docs/temp/c12m8-subshapebinder-copy-on-change-native-copied-graph-probe.raw.c9m5.freecad.json",
+  "checked_in_reference_artifact": "cad-core/fixtures/c9m5/expected/subshape-binder-copyonchange-lifecycle-probe.freecad.json",
+  "runtime_baseline": {
+    "freecadcmd": "/Users/li/.cargo/bin/freecadcmd",
+    "freecad_version": "1.2.0 revision 20260519",
+    "freecad_revision": "20260519",
+    "occt_version": "7.8.1",
+    "raw_probe_schema_version": "cad-core.c9m5-subshapebinder-copyonchange-native-probe.v1"
+  },
+  "mode_matrix": {
+    "observed": [
+      "BindCopyOnChange Disabled Python-visible state",
+      "BindCopyOnChange Enabled Python-visible state",
+      "BindCopyOnChange Mutated Python-visible state",
+      "mutation-triggered Enabled to Mutated Python-visible state",
+      "PartialLoad=True Python-visible property state",
+      "Support PropertyXLinkSubList Python-visible value"
+    ],
+    "decision": "property_state_only"
+  },
+  "required_evidence": {
+    "single_support_gate": {
+      "observed_status": "source_gate_positive_only",
+      "decision": "insufficient",
+      "note": "ShapeBinder.cpp::setupCopyOnChange requires support.size()==1, but the raw artifact only records one-support positive cases and does not export zero or multi-support rejection evidence."
+    },
+    "tmp_binder_lifecycle": {
+      "observed_status": "tmp_document_name_observed",
+      "decision": "insufficient",
+      "note": "FreeCAD.listDocuments() shows _tmp_binder, but this is session/document-name evidence rather than a request-local copied graph payload."
+    },
+    "copied_objs_identity": {
+      "observed_status": "missing",
+      "decision": "blocker",
+      "note": "_CopiedObjs reports hasattr=false/property missing from Python; copied object identities, source relation, count and stored order are not exported."
+    },
+    "copy_object_dependency_order": {
+      "observed_status": "missing",
+      "decision": "blocker",
+      "note": "The raw artifact lists _tmp_binder copyObject object graph and dependency order plus dependency mapping as unobservable."
+    },
+    "support_rewrite": {
+      "observed_status": "copied_link_target_only",
+      "decision": "insufficient",
+      "note": "_CopiedLink can show SupportBox001 with empty subvalues after recompute, but no source-to-copy rewrite map or dependency edge evidence is exported."
+    },
+    "copied_link_subvalues": {
+      "observed_status": "observed_empty_subvalues",
+      "decision": "insufficient",
+      "note": "Subvalues are visible only as the hidden _CopiedLink value; this does not prove deterministic copied support rewrite."
+    },
+    "recompute_feature_true_status": {
+      "observed_status": "doc_recompute_only",
+      "decision": "insufficient",
+      "note": "doc.recompute returns ok, but the two copied->recomputeFeature(true) calls and copied-object validity/log state are not exported."
+    },
+    "elementmap_namedshape_lifecycle": {
+      "observed_status": "missing",
+      "decision": "blocker",
+      "note": "The raw artifact lists recomputeFeature(true) internal copied-object ElementMap lifecycle as unobservable; NamedShape/ElementMap cannot be promoted to persistent backend cache."
+    },
+    "request_local_serializability": {
+      "observed_status": "failed",
+      "decision": "blocker",
+      "note": "The artifact cannot serialize copied object graph identity, order, dependency rewrite, recompute state or ElementMap lifecycle into frontend-owned DocumentObject graph/documentObjectUpdates."
+    },
+    "cache_star_boundary": {
+      "observed_status": "classified_from_source",
+      "decision": "optimization_not_backend_state",
+      "note": "ShapeBinder.cpp Cache_* dynamic PropertyMatrix entries support transform matrix cache hit/update/cleanup; no evidence makes them request-local copied graph semantic state."
+    }
+  },
+  "observed_fields_not_accepted_as_copied_graph_evidence": [
+    "Python-visible BindCopyOnChange property state",
+    "Python-visible PartialLoad property state",
+    "object labels",
+    "bbox",
+    "shape topology counts",
+    "temporary document names",
+    "_CopiedLink target without rewrite map"
+  ],
+  "unobservable_core_fields": [
+    "_CopiedObjs private vector contents",
+    "_CopiedObjs private vector payload",
+    "_tmp_binder copyObject object graph and dependency order",
+    "copyObject dependency mapping behind temporary document cache",
+    "recomputeFeature(true) internal copied-object ElementMap lifecycle"
+  ],
+  "delete_condition": "Reopen the gate only after a FreeCADCmd or native C++ probe exports stable copied object identities, dependency order, support rewrite, recomputeFeature(true) status and ElementMap/NamedShape lifecycle as deterministic request-local graph evidence without backend session or persistent temporary document cache.",
+  "next_steps": "S3 and later steps must inherit native_evidence_retained_blocker and must not authorize implementation unless the native evidence gate is reopened by stronger artifact."
+}

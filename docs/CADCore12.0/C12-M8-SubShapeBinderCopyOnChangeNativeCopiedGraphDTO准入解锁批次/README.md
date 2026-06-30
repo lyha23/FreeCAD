@@ -37,6 +37,20 @@ C12-M5 已关闭为 `no_code_retained_diagnostic`：旧 native evidence 只能�
 - App::Link CopyOnChange `documentObjectUpdates` transport 已记录为 reference-only：它提供 group sync、copy object、dependency rewrite 和 link writeback 词汇，但不证明 SubShapeBinder `_tmp_binder` / `_CopiedObjs` lifecycle 已支持。
 - `C12M8-SRC-001..008`、`C12M8-BLOCKER-101`、`C12M8-BLOCKER-102` 已关闭；S2 probe 必须证明 baseline、mode matrix、single support gate、temporary binder lifecycle、copied object identities、dependency order、support rewrite、recompute status、ElementMap / NamedShape lifecycle 和 `Cache_*` 边界。
 
+## S2 native evidence gate
+
+- S2 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=f5ed6d2397`（`f5ed6d2397 文档：关闭 C12-M8 S1 源码复核`），起点 worktree clean。
+- S2 执行前队列确认：S2 是第一条 pending，后续为 S3-S6。
+- 本机 FreeCADCmd 可运行；本轮只写入 `docs/temp/`，不刷新 checked-in expected。
+- FreeCAD / OCCT baseline：`freecadcmd=/Users/li/.cargo/bin/freecadcmd`，FreeCAD `1.2.0 revision 20260519`，OCCT `7.8.1`。
+- raw native artifact：`docs/temp/c12m8-subshapebinder-copy-on-change-native-copied-graph-probe.raw.c9m5.freecad.json`。
+- C12-M8 gate artifact：`docs/temp/c12m8-subshapebinder-copy-on-change-native-copied-graph-evidence-gate.json`，schema 为 `c12m8.subshapebinder-copy-on-change-native-copied-graph.v1`。
+- S2 裁决：`native_evidence_retained_blocker`。旧 C9M5 probe 能证明 Python-visible property / session 状态、`_tmp_binder` document name 和部分 `_CopiedLink` value，但不能证明 stable copied-object graph evidence。
+- 核心缺口仍是 `_CopiedObjs` identity、copyObject dependency order、support rewrite map、`recomputeFeature(true)` lifecycle、ElementMap / NamedShape lifecycle 和 request-local serializability。
+- `Cache_*` 已分类为 transform matrix cache hit/update/cleanup optimization；backend persistent `Cache_*` 继续禁止。
+- `C12M8-PROBE-001..010` 均已写 observed_status / decision / artifact_or_note；`C12M8-BLOCKER-201` 已关闭为 `closed_s2_retained_blocker`。
+- S3/S4 必须继承 S2 retained blocker，不得把 property 状态、label、bbox、shape count、temporary document name 或 `_CopiedLink` target 单独当作 implementation approval 证据。
+
 ## 解锁条件
 
 只有以下三项同时成立，C12-M8 才允许产出后续 implementation package：
@@ -62,7 +76,7 @@ C12-M5 已关闭为 `no_code_retained_diagnostic`：旧 native evidence 只能�
 
 - S0：live 基线与 C12-M5/C12-M7 继承口径冻结（已完成）。
 - S1：FreeCAD source、current coverage 和 existing transport evidence 复核（已完成）。
-- S2：native copied graph probe schema 与 evidence gate。
+- S2：native copied graph probe schema 与 evidence gate（已完成，`native_evidence_retained_blocker`）。
 - S3：request-local DTO 产品边界裁决。
 - S4：current mismatch 与 implementation candidate gate。
 - S5：implementation package authorization / no-code retained decision。
