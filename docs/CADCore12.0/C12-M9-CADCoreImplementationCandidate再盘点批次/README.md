@@ -41,6 +41,17 @@ C12-M8 已把当前唯一 live `remaining_gaps`：`part_design.sub_shape_binder.
 - publication authority 位于 `cad-core/src/runtime/capability_contract.cpp::capabilityContractJson()`、`diagnosticCodeList()`、`ondselSolverCapabilityJson()` 和 `part_design.sub_shape_binder` capability block；adapter assertions 位于 `cad-core/tests/test_adapters.py` 的 capability smoke / web contract / narrowed gap assertions 与 `cad-core/tests/test_c8_shapebinder.py` 的 CopyOnChange known gap assertions。
 - `C12M9-SRC-001..003` 已写入 current evidence，`C12M9-SCOPE-101` 裁决为 `retained_blocker_needs_further_gate`，`C12M9-CAT-001` 记录为 retained known gap，`C12M9-BLOCKER-101` 已关闭。
 
+## S2 narrowed gaps 与产品契约归类
+
+- S2 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=e0a9b08d2a`（`e0a9b08d2a 文档：关闭 C12-M9 S1 live capability 抽取`），起点 worktree clean。
+- S2 执行前 C12-M9 队列第一项为 `7-1-01-27-C12-M9-S2-narrowed-gaps与产品契约归类.md`，后续为 S3-S6；S2 关闭后队列应从 S3 继续。
+- live capability snapshot 已刷新到 `/tmp/c12m9-capabilities.json`。S2 只消费 capability 与 C12-M2/M3/M4/M6/M7/M8 README，不运行 FreeCADCmd，不新增 fixture/expected，不修改 production code、tests、adapters 或 capability source。
+- Groove UpTo 归类为 `product_diagnostic_contract_non_parity_retained`：live `part_design.revolution_groove.status=supported_c12m7_groove_upto_product_diagnostic_contract`，narrowed gap route 为 `product_diagnostic_contract_non_parity`，FreeCAD native parity 仍为 false；reopen/delete condition 是同一 FreeCAD/LibPack/OCCT oracle baseline 证明 UpToFirst 与 UpToFace native success，并出现 current mismatch。
+- RuledSurface wire/wire 归类为 `current_supported_retained`：live `part_workbench.ruled_surface.status=supported_wire_wire_expected_backed` 且 `remaining_gaps=[]`，继承 C12-M6 `wire_wire_admitted_current_supported`；只有 regression 或 checked-in expected/current mismatch 才重开。
+- Part Workbench narrowed gaps 已逐类关闭 S2 分类：Sweep 是 product-contract non-parity，保留 Location/native-probe blocker 与 current-covered context；Filling 是 helper-blocked/product-contract non-parity；GeomPlate 中 projected curve2d initial surface 为 current-covered，其余 curve criteria、G1 curve-on-surface、PlateSurface wrapper lifecycle、no-initial-surface oracle blocker 按 request-local contract/native-hidden/oracle-blocked/non-goal 保留；Loft 是 native-hidden product-contract non-parity；ProjectOnSurface 是 native-hidden/request-local ledger product contract。
+- Assembly 归类为 request-local covered subset 与 non-goal 并存：`ondsel_solver_adapter.status=covered_full`，覆盖 grounded joints、extended distance geometry、subshape marker placement、runPreDrag 和 placement validation；`representative_solver_adapter.status=covered_representative`，full solver、persistent solver state、cross-request assembly session 继续是 non-goals。
+- `C12M9-SCOPE-201/202/301/401` 已关闭为分类完成，`C12M9-CAT-002..005` 已写入 S2 decision，`C12M9-NG-004/006` 继续保留，`C12M9-BLOCKER-201` 已关闭。S2 没有打开 implementation row，S3 仍需按 stable expected/product contract、request-local boundary 和 current mismatch 逐项准入。
+
 ## 候选准入规则
 
 任一 C12-M9 候选必须同时满足三项，才允许 S5/S6 产出后续 implementation package：
@@ -65,7 +76,7 @@ C12-M8 已把当前唯一 live `remaining_gaps`：`part_design.sub_shape_binder.
 - 入口：确认 C12-M9 队列和包结构（已完成）。
 - S0：live 基线与 C12-M1..M8 关闭口径冻结（已完成）。
 - S1：live capability 和非空 `remaining_gaps` 抽取（已完成）。
-- S2：`narrowed_gaps`、product-contract non-parity 和 historical evidence 归类。
+- S2：`narrowed_gaps`、product-contract non-parity 和 historical evidence 归类（已完成）。
 - S3：stable expected / product contract 与 current mismatch 准入。
 - S4：最高优先候选的 FreeCAD source、cad-core 落点和验证范围复核。
 - S5：implementation package authorization 或 no-code backlog 裁决。

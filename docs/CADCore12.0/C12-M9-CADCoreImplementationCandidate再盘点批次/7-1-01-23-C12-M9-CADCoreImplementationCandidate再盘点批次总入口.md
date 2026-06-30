@@ -51,7 +51,7 @@ live capability baseline
 | 工作步骤总入口 | `工作步骤细分/7-1-01-24-【已实现】C12-M9工作步骤总入口.md` | goal 队列索引，已关闭。 |
 | S0 | `工作步骤细分/7-1-01-25-【已实现】C12-M9-S0-live基线与继承口径冻结.md` | 冻结 C12-M8 后 live baseline，已关闭。 |
 | S1 | `工作步骤细分/7-1-01-26-【已实现】C12-M9-S1-live-capability与remaining-gap抽取.md` | 抽取 remaining / known gaps，已关闭。 |
-| S2 | `工作步骤细分/7-1-01-27-C12-M9-S2-narrowed-gaps与产品契约归类.md` | 归类 narrowed gaps 和 non-parity。 |
+| S2 | `工作步骤细分/7-1-01-27-【已实现】C12-M9-S2-narrowed-gaps与产品契约归类.md` | 归类 narrowed gaps 和 non-parity，已关闭。 |
 | S3 | `工作步骤细分/7-1-01-28-C12-M9-S3-expected与current-mismatch准入.md` | 过滤 stable expected / mismatch。 |
 | S4 | `工作步骤细分/7-1-01-29-C12-M9-S4-最高优先候选source与验证范围复核.md` | 复核 candidate source / landing。 |
 | S5 | `工作步骤细分/7-1-01-30-C12-M9-S5-implementation-package-authorization裁决.md` | 授权实现包或关闭。 |
@@ -79,6 +79,9 @@ live capability baseline
 - S1 live capability 抽取已关闭：执行基线 `HEAD=a7e7eb040f`（`a7e7eb040f 文档：冻结 C12-M9 S0 live 基线`），起点 worktree clean；snapshot 为 `/tmp/c12m9-capabilities.json`。
 - S1 current evidence：唯一非空 `remaining_gaps` 仍是 `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`；唯一 nested `known_gaps` 是 CopyOnChange retained diagnostic，`status=known_gap_diagnostic`、`route=oracle_blocked`、`diagnostic=copy_on_change_full_temporary_document_cache_not_supported`。
 - S1 裁决：CopyOnChange 继续是 retained blocker / needs further gate；reopen condition 为更强 native copied graph artifact + request-local DTO approval + current mismatch。S1 只记录 15 条 `narrowed_gaps` presence 和 capability publication authority，不做 S2 归类、S3 mismatch 判断或 C++ implementation。
+- S2 narrowed gaps 与产品契约归类已关闭：执行基线 `HEAD=e0a9b08d2a`（`e0a9b08d2a 文档：关闭 C12-M9 S1 live capability 抽取`），起点 worktree clean；snapshot 刷新为 `/tmp/c12m9-capabilities.json`。
+- S2 current classification：Groove UpTo=`product_diagnostic_contract_non_parity_retained`；RuledSurface wire/wire=`current_supported_retained`；ProjectOnSurface=`native-hidden/request-local ledger product contract`；Sweep=`product-contract non-parity with native_probe_blocked/current-covered context`；Filling=`helper_blocked/product-contract non-parity`；GeomPlate projected curve2d initial surface=`current-covered`，其余 GeomPlate narrowed rows 保留为 request-local product contract/native-hidden/oracle-blocked/non-goal；Loft=`native-hidden product-contract non-parity`；Assembly=`request-local covered subset + representative fallback metadata/full solver session non-goal`。
+- S2 裁决：`C12M9-SCOPE-201/202/301/401` 已关闭，`C12M9-CAT-002..005` 已写入 decision，`C12M9-NG-004/006` 继续保留，`C12M9-BLOCKER-201` 已关闭。S2 未运行 FreeCADCmd，未新增 fixture/expected，未修改 `cad-core/src`、`include`、tests、adapters 或 capability source，未授权 implementation package。
 
 ## 验收
 
