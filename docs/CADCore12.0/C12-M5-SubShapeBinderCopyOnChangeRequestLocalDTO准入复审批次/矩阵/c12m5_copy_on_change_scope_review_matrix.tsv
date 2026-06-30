@@ -1,5 +1,5 @@
 id	axis	admission	current_status	required_evidence	forbidden_claim	owner_step
-C12M5-SCOPE-001	live_remaining_gap	in_scope_review	known_gap_diagnostic_oracle_blocked	current capability snapshot	full support claim from remaining_gaps alone	S0
+C12M5-SCOPE-001	live_remaining_gap	closed_s0	live_frozen_known_gap_diagnostic_oracle_blocked	HEAD 84179ae66d clean dirty boundary, C12-M1..M4 queue empty, remaining gap and known gap snapshot recorded	full support claim from remaining_gaps alone	S0
 C12M5-SCOPE-002	freecad_source_chain	in_scope_review	needs_source_refresh	ShapeBinder and Link and Document call chain	source-free DTO design	S1
 C12M5-SCOPE-003	native_copied_object_evidence	conditional_probe	previous_notCollected_or_native_hidden	stable copied-object graph evidence	property-visible state treated as copied-object graph	S2
 C12M5-SCOPE-004	app_link_dto_reference	in_scope_reference	current_covered_reference	documentObjectUpdates behavior and limits	App::Link equals SubShapeBinder support	S3

@@ -12,6 +12,16 @@ C12-M5 承接 C12-M4 公开口径迁移完成后的 live capability 状态。当
 - C12-M1 / C12-M2 / C12-M3 / C12-M4 `工作步骤细分` 队列均只输出表头。
 - `cad-core/build/cad-core capabilities` 显示 `known_gaps=[]`，`part_workbench.project_on_surface.remaining_gaps=[]`，`part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`。
 
+## S0 live 冻结
+
+- S0 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`。
+- S0 执行 HEAD：`84179ae66d`（`84179ae66d docs: 新增 C12-M5 CopyOnChange 准入方案`）。
+- S0 起点 dirty boundary：`git -c core.quotepath=false status --short -uall` 无输出，即 `<clean>`；未发现非本任务 dirty work。
+- C12-M1 / C12-M2 / C12-M3 / C12-M4 `工作步骤细分` 队列均只输出表头。
+- 当前 capability 仍只有 `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`。
+- 当前 known gap 为 `status=known_gap_diagnostic`、`route=oracle_blocked`、`diagnostic=copy_on_change_full_temporary_document_cache_not_supported`。
+- S0 已冻结 forbidden claims：不把 remaining gap 直接写成 full support；不声明 backend session、persistent temporary document、cross-request BREP / TopoDS / NamedShape / ElementMap cache；不把 App::Link CopyOnChange `documentObjectUpdates` 自动等同为 SubShapeBinder CopyOnChange supported。
+
 ## 继承口径
 
 - C9-M5 裁决：CopyOnChange full temporary-document copied-object lifecycle 依赖 `_tmp_binder`、`_CopiedObjs`、`copyObject()`、`recomputeFeature(true)` 和 `_CopiedLink`，S6 关闭为 `no_code_retained_known_gap_release_gate`。
@@ -36,7 +46,7 @@ C12-M5 承接 C12-M4 公开口径迁移完成后的 live capability 状态。当
 
 ## 工作步骤
 
-- S0：live 基线与继承口径冻结。
+- S0：live 基线与继承口径冻结（已完成）。
 - S1：FreeCAD 源码与 current 覆盖矩阵。
 - S2：native evidence 刷新与 probe 准入。
 - S3：request-local DTO 产品边界冻结。
@@ -56,4 +66,3 @@ C12-M5 承接 C12-M4 公开口径迁移完成后的 live capability 状态。当
 cd /Users/li/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审批次/工作步骤细分 --format markdown
 ```
-

@@ -1,5 +1,5 @@
 id	owner_step	blocker	current_status	unblock_condition	next_action	status
-C12M5-BLOCKER-000	S0	live_baseline_not_frozen	open	HEAD, dirty boundary, queue state and capability snapshot recorded	update README and matrices	pending
+C12M5-BLOCKER-000	S0	live_baseline_not_frozen	closed	HEAD 84179ae66d, clean dirty boundary, C12-M1..M4 queue empty and capability snapshot recorded	proceed to S1 source/current coverage	done
 C12M5-BLOCKER-101	S1	source_authority_unverified	open	ShapeBinder, Link, Document and cad-core landing paths verified	close source candidates	pending
 C12M5-BLOCKER-201	S2	native_copied_object_evidence	open	old probe reviewed or new probe schema approved	classify evidence ready or retained blocker	pending
 C12M5-BLOCKER-301	S3	dto_product_boundary	open	allowed and forbidden DTO fields frozen	publish dto approved or rejected	pending
