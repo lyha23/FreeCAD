@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import math
 import subprocess
 import tempfile
 from pathlib import Path
@@ -59,6 +60,26 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             )
             return json.loads(output_path.read_text(encoding="utf-8"))
 
+    def nearest_edge_distance(self, result_item: dict, point: tuple[float, float, float]) -> float:
+        def point_segment_distance(a: list[float], b: list[float]) -> float:
+            ab = [b[index] - a[index] for index in range(3)]
+            ap = [point[index] - a[index] for index in range(3)]
+            denominator = sum(value * value for value in ab)
+            if denominator == 0:
+                return math.dist(point, a)
+            t = max(0.0, min(1.0, sum(ap[index] * ab[index] for index in range(3)) / denominator))
+            closest = [a[index] + t * ab[index] for index in range(3)]
+            return math.dist(point, closest)
+
+        distances: list[float] = []
+        for edge in result_item["mesh"]["edgeSegments"]:
+            points = edge["points"]
+            distances.extend(
+                point_segment_distance(points[index], points[index + 1])
+                for index in range(len(points) - 1)
+            )
+        return min(distances)
+
     def assert_c4m4_update(
         self,
         fixture: str,
@@ -113,6 +134,55 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["objects"]["PadPreviewBody"]["replay_stopped_at_tip"], "PadPreview")
         self.assertGreater(len(result["mesh"]["PadPreviewBody"]["triangles"]), 0)
         self.assertGreater(len(result["subshapes"]["PadPreviewBody"]), 0)
+
+    def test_p6_body_face_profile_prefers_body_topo_shape_over_direct_feature_face(self) -> None:
+        result = self.run_recompute("body-tip-face-profile-pad-after-sketch-axis-revolution", "p6")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(result["objects"]["PadPreview"]["status"], "ok")
+        self.assertEqual(result["objects"]["PadPreviewBody"]["status"], "ok")
+        self.assertGreater(len(result["mesh"]["PadPreviewBody"]["triangles"]), 0)
+        self.assertGreater(len(result["subshapes"]["PadPreviewBody"]), 0)
+
+    def test_p6_same_body_fillet_resolves_target_local_stable_edge_on_body_replay(self) -> None:
+        payload = self.p6_payload("body-dressup-fillet-target-local-stable-edge")
+        result = self.run_response_payload(payload)
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual([item["object"] for item in result["results"]], ["Pad2Body"])
+        selected_point = (-206.14529418945312, 382.5390319824219, 848.0122110459921)
+        stable_distance = self.nearest_edge_distance(result["results"][0], selected_point)
+        self.assertAlmostEqual(stable_distance, 20.0, delta=0.1)
+
+        payload_with_qualified_stable = json.loads(json.dumps(payload))
+        for item in payload_with_qualified_stable["Objects"]:
+            if item["Name"] == "FilletPreview":
+                item["Properties"]["Base"]["StableSubList"] = ["Pad2.Edge7"]
+
+        result_with_qualified_stable = self.run_response_payload(payload_with_qualified_stable)
+
+        self.assertEqual(result_with_qualified_stable["diagnostics"], [])
+        qualified_stable_distance = self.nearest_edge_distance(
+            result_with_qualified_stable["results"][0],
+            selected_point,
+        )
+        self.assertAlmostEqual(qualified_stable_distance, 20.0, delta=0.1)
+
+        payload_without_stable = json.loads(json.dumps(payload))
+        for item in payload_without_stable["Objects"]:
+            if item["Name"] == "FilletPreview":
+                del item["Properties"]["Base"]["StableSubList"]
+
+        result_without_stable = self.run_response_payload(payload_without_stable)
+
+        self.assertEqual(result_without_stable["diagnostics"], [])
+        no_stable_distance = self.nearest_edge_distance(
+            result_without_stable["results"][0],
+            selected_point,
+        )
+        self.assertAlmostEqual(no_stable_distance, 20.0, delta=0.1)
+        self.assertAlmostEqual(stable_distance, no_stable_distance, delta=0.1)
+        self.assertAlmostEqual(stable_distance, qualified_stable_distance, delta=0.1)
 
     def test_p6_body_result_publishes_revolution_tip_face_path(self) -> None:
         payload = self.p6_payload("body-tip-face-profile-pad-after-revolution")

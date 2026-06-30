@@ -218,11 +218,21 @@ std::string stripObjectPrefix(const std::string& value, const std::string& objec
 app::Link bodyTopoShapeLink(const app::Link& link)
 {
     app::Link result = link;
-    for (auto& subname : result.subnames) {
-        subname = stripObjectPrefix(subname, link.object);
+    for (std::size_t index = 0; index < result.subnames.size(); ++index) {
+        result.subnames[index] = stripObjectPrefix(result.subnames[index], link.object);
     }
-    for (auto& stableSubname : result.stableSubnames) {
-        stableSubname = stripObjectPrefix(stableSubname, link.object);
+    for (std::size_t index = 0; index < result.stableSubnames.size(); ++index) {
+        std::string& stableSubname = result.stableSubnames[index];
+        if (stableSubname.empty() || stableSubname.find('.') != std::string::npos) {
+            continue;
+        }
+        const std::string currentSubname =
+            index < result.subnames.size() ? result.subnames[index] : std::string {};
+        if (stableSubname == currentSubname) {
+            // Omitted StableSubList decodes to SubList as a current-name fallback, not target-owner evidence.
+            continue;
+        }
+        stableSubname = link.object + "." + stableSubname;
     }
     return result;
 }
@@ -623,7 +633,11 @@ std::optional<DressUpBase> resolveDressUpBase(
     }
 
     if (const auto bodyContext = sameBodyEarlierFeatureContext(object, link->object, context)) {
-        if (!validateTargetStableSubnames(*link, namedShape, object, context)) {
+        app::Link targetLocalLink = *link;
+        for (std::string& stableSubname : targetLocalLink.stableSubnames) {
+            stableSubname = stripObjectPrefix(stableSubname, link->object);
+        }
+        if (!validateTargetStableSubnames(targetLocalLink, namedShape, object, context)) {
             return std::nullopt;
         }
         if (const auto bodyTopoShape = bodyTopoShapeAtFeature(*bodyContext, context)) {

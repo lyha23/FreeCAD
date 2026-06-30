@@ -306,7 +306,7 @@ std::optional<Link> readLinkObject(const nlohmann::json& value, const std::strin
 
     const bool stableSubnamesExplicit = value.contains("StableSubList");
     std::vector<std::string> stableSubnames = readOptionalStringList(value, "StableSubList");
-    if (stableSubnames.empty()) {
+    if (!stableSubnamesExplicit && stableSubnames.empty()) {
         stableSubnames = subnames;
     }
     std::vector<ShadowSub> shadowSubs;
@@ -333,7 +333,7 @@ std::optional<Link> readLinkObject(const nlohmann::json& value, const std::strin
     // request-side evidence so link retag can preserve the original full subname alias.
     const bool fullSubnamesExplicit = value.contains("FullSubList");
     std::vector<std::string> fullSubnames = readOptionalStringList(value, "FullSubList");
-    if (fullSubnames.empty()) {
+    if (!fullSubnamesExplicit && fullSubnames.empty()) {
         fullSubnames = stableSubnames;
     }
     Link link{objectIt->get<std::string>(),
@@ -376,7 +376,7 @@ std::optional<Link> readLinkSubListItem(const nlohmann::json& value, const std::
 
     const bool stableSubnamesExplicit = value.contains("StableSubList");
     std::vector<std::string> stableSubnames = readOptionalStringList(value, "StableSubList");
-    if (stableSubnames.empty()) {
+    if (!stableSubnamesExplicit && stableSubnames.empty()) {
         stableSubnames = subnames;
     }
     std::vector<ShadowSub> shadowSubs;
@@ -403,7 +403,7 @@ std::optional<Link> readLinkSubListItem(const nlohmann::json& value, const std::
     // the current SubList used for geometry resolution.
     const bool fullSubnamesExplicit = value.contains("FullSubList");
     std::vector<std::string> fullSubnames = readOptionalStringList(value, "FullSubList");
-    if (fullSubnames.empty()) {
+    if (!fullSubnamesExplicit && fullSubnames.empty()) {
         fullSubnames = stableSubnames;
     }
     Link link{objectIt->get<std::string>(),
@@ -1125,14 +1125,16 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
         if (!readFieldSize(item, "StableSubList", stableSubListSize)) {
             return false;
         }
-        if (hasCurrentSubnames && stableSubListSize && *stableSubListSize != *subListSize) {
+        if (hasCurrentSubnames && stableSubListSize && *stableSubListSize > 0U
+            && *stableSubListSize != *subListSize) {
             return false;
         }
         std::optional<std::size_t> fullSubListSize;
         if (!readFieldSize(item, "FullSubList", fullSubListSize)) {
             return false;
         }
-        if (fullSubListSize && (!hasCurrentSubnames || *fullSubListSize != *subListSize)) {
+        if (fullSubListSize && *fullSubListSize > 0U
+            && (!hasCurrentSubnames || *fullSubListSize != *subListSize)) {
             return false;
         }
 
@@ -1143,10 +1145,11 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
             if (!shadowSubs) {
                 return false;
             }
-            if (hasCurrentSubnames && shadowSubs->size() != *subListSize) {
+            if (hasCurrentSubnames && !shadowSubs->empty() && shadowSubs->size() != *subListSize) {
                 return false;
             }
-            if (!hasCurrentSubnames && !alignRecoverySize(recoverySize, shadowSubs->size())) {
+            if (!hasCurrentSubnames && !shadowSubs->empty()
+                && !alignRecoverySize(recoverySize, shadowSubs->size())) {
                 return false;
             }
         }
@@ -1157,10 +1160,11 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
             if (!referenceShadows) {
                 return false;
             }
-            if (hasCurrentSubnames && referenceShadows->size() != *subListSize) {
+            if (hasCurrentSubnames && !referenceShadows->empty() && referenceShadows->size() != *subListSize) {
                 return false;
             }
-            if (!hasCurrentSubnames && !alignRecoverySize(recoverySize, referenceShadows->size())) {
+            if (!hasCurrentSubnames && !referenceShadows->empty()
+                && !alignRecoverySize(recoverySize, referenceShadows->size())) {
                 return false;
             }
         }
@@ -1175,7 +1179,7 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
                 && item.contains("ReferenceShadow") && stableSubListSize
                 && *stableSubListSize == *recoverySize && *recoverySize > 0U;
         }
-        if (!hasCurrentSubnames && stableSubListSize) {
+        if (!hasCurrentSubnames && stableSubListSize && *stableSubListSize > 0U) {
             return false;
         }
         return true;

@@ -1,0 +1,226 @@
+{
+    "Objects": [
+        {
+            "ID": 1,
+            "Name": "\u8349\u56fe 7:55:12 PM",
+            "Properties": {
+                "Constraints": [],
+                "Geometry": [
+                    {
+                        "end": [
+                            -206.14529842878983,
+                            52.539035150718064
+                        ],
+                        "kind": "LineSegment",
+                        "start": [
+                            -711.2815048832463,
+                            52.539035150718064
+                        ]
+                    },
+                    {
+                        "end": [
+                            -206.14529842878983,
+                            -475.29841830040823
+                        ],
+                        "kind": "LineSegment",
+                        "start": [
+                            -206.14529842878983,
+                            52.539035150718064
+                        ]
+                    },
+                    {
+                        "end": [
+                            -711.2815048832463,
+                            -475.29841830040823
+                        ],
+                        "kind": "LineSegment",
+                        "start": [
+                            -206.14529842878983,
+                            -475.29841830040823
+                        ]
+                    },
+                    {
+                        "end": [
+                            -711.2815048832463,
+                            52.539035150718064
+                        ],
+                        "kind": "LineSegment",
+                        "start": [
+                            -711.2815048832463,
+                            -475.29841830040823
+                        ]
+                    }
+                ],
+                "Placement": {
+                    "Base": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "PropertyType": "App::PropertyPlacement",
+                    "Rotation": [
+                        0,
+                        0,
+                        0,
+                        1
+                    ]
+                }
+            },
+            "TypeId": "Sketcher::SketchObject"
+        },
+        {
+            "ID": 2,
+            "Name": "Pad",
+            "Properties": {
+                "Length": 907,
+                "Profile": {
+                    "PropertyType": "App::PropertyLinkSubList",
+                    "SubSet": [
+                        {
+                            "FullSubList": [],
+                            "ReferenceShadow": [],
+                            "ShadowSub": [],
+                            "StableSubList": [],
+                            "SubList": [
+                                "InternalFace1"
+                            ],
+                            "value": "\u8349\u56fe 7:55:12 PM"
+                        }
+                    ]
+                },
+                "Reversed": false,
+                "SideType": "One side",
+                "Type": "Length"
+            },
+            "TypeId": "PartDesign::Pad"
+        },
+        {
+            "ID": 3,
+            "Name": "Revolution",
+            "Properties": {
+                "Angle": 360,
+                "FuseOrder": "BaseFirst",
+                "FuzzyTolerance": 0,
+                "Midplane": false,
+                "Profile": {
+                    "PropertyType": "App::PropertyLinkSubList",
+                    "SubSet": [
+                        {
+                            "FullSubList": [],
+                            "ReferenceShadow": [],
+                            "ShadowSub": [],
+                            "StableSubList": [
+                                "Face6"
+                            ],
+                            "SubList": [
+                                "Face6"
+                            ],
+                            "value": "Pad"
+                        }
+                    ]
+                },
+                "ReferenceAxis": {
+                    "FullSubList": [],
+                    "PropertyType": "App::PropertyLinkSub",
+                    "ReferenceShadow": [],
+                    "ShadowSub": [],
+                    "StableSubList": [
+                        "Edge4"
+                    ],
+                    "SubList": [
+                        "Edge4"
+                    ],
+                    "value": "\u8349\u56fe 7:55:12 PM"
+                },
+                "Refine": false,
+                "Reversed": false,
+                "Type": "Angle"
+            },
+            "TypeId": "PartDesign::Revolution"
+        },
+        {
+            "ID": 4,
+            "Name": "Pad2",
+            "Properties": {
+                "AlongSketchNormal": true,
+                "Direction": [
+                    0,
+                    1,
+                    0
+                ],
+                "Length": 330,
+                "Profile": {
+                    "PropertyType": "App::PropertyLinkSubList",
+                    "SubSet": [
+                        {
+                            "FullSubList": [],
+                            "ReferenceShadow": [],
+                            "ShadowSub": [],
+                            "StableSubList": [
+                                "Face4"
+                            ],
+                            "SubList": [
+                                "Face4"
+                            ],
+                            "value": "Revolution"
+                        }
+                    ]
+                },
+                "Reversed": false,
+                "SideType": "One side",
+                "Type": "Length",
+                "UseCustomVector": true
+            },
+            "TypeId": "PartDesign::Pad"
+        },
+        {
+            "ID": 5,
+            "Name": "FilletPreview",
+            "Properties": {
+                "Base": {
+                    "FullSubList": [],
+                    "PropertyType": "App::PropertyLinkSub",
+                    "ReferenceShadow": [],
+                    "ShadowSub": [],
+                    "StableSubList": [
+                        "Edge7"
+                    ],
+                    "SubList": [
+                        "Edge9"
+                    ],
+                    "value": "Pad2"
+                },
+                "Radius": 20,
+                "SupportTransform": true,
+                "UseAllEdges": false
+            },
+            "TypeId": "PartDesign::Fillet"
+        },
+        {
+            "ID": 6,
+            "Name": "Pad2Body",
+            "Properties": {
+                "Group": {
+                    "PropertyType": "App::PropertyLinkList",
+                    "values": [
+                        "\u8349\u56fe 7:55:12 PM",
+                        "Pad",
+                        "Revolution",
+                        "Pad2",
+                        "FilletPreview"
+                    ]
+                },
+                "Tip": {
+                    "PropertyType": "App::PropertyLink",
+                    "value": "FilletPreview"
+                }
+            },
+            "TypeId": "PartDesign::Body"
+        }
+    ],
+    "recompute": {
+        "objs": [
+            "Pad2Body"
+        ]
+    }
+}

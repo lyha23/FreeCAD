@@ -26,7 +26,10 @@
             {
               "value": "Sketch",
               "SubList": ["InternalFace1"],
-              "StableSubList": [""]
+              "StableSubList": [],
+              "FullSubList": [],
+              "ShadowSub": [],
+              "ReferenceShadow": []
             }
           ]
         },

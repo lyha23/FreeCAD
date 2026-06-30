@@ -829,15 +829,12 @@ std::optional<ProfileBasedProfileSelection> resolveLinkedFaceProfileSelection(
         namedShapeIt == context.namedShapes.end() ? nullptr : &namedShapeIt->second;
     ResolveAttempt direct =
         resolveFaceOnSource(object, profileLink, shapeValue.shape, namedShape, featureName);
-    if (direct.shape) {
-        return selectionFromAttempt(direct, false);
-    }
 
-    if (bodyTopoShapeContext && direct.code == "invalid_subshape") {
+    if (bodyTopoShapeContext) {
         // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureRevolved.cpp
         // ::Revolved::setResult(), stores the revolved tool in AddSubShape and the fused/cut body
-        // state in Shape. When cad-core's direct feature output is still the tool shape, reconstruct
-        // the owning Body state at that feature to recover the FreeCAD-visible cumulative Shape.
+        // state in Shape. Same-Body feature FaceN links are resolved through Body::getSubObject()
+        // against the cumulative body state at the target feature, not the direct tool shape.
         const BodyTopoShapeOptions options {
             false,
             false,
@@ -855,13 +852,19 @@ std::optional<ProfileBasedProfileSelection> resolveLinkedFaceProfileSelection(
             if (bodyShapeAttempt.shape) {
                 return selectionFromAttempt(bodyShapeAttempt, true);
             }
-            direct.message +=
-                " after Body " + bodyTopoShapeContext->body->name + " topo shape at " + profileLink.object;
+            if (!direct.shape && direct.code == "invalid_subshape") {
+                direct.message +=
+                    " after Body " + bodyTopoShapeContext->body->name + " topo shape at " + profileLink.object;
+            }
         }
         if (context.diagnostics.size() > diagnosticCount) {
             context.diagnostics.erase(context.diagnostics.begin() + static_cast<std::ptrdiff_t>(diagnosticCount),
                                       context.diagnostics.end());
         }
+    }
+
+    if (direct.shape) {
+        return selectionFromAttempt(direct, false);
     }
 
     addResolveDiagnostic(context, object, profileLink, direct);

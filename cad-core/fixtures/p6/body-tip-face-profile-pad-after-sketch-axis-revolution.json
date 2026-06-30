@@ -1,0 +1,202 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchSource",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "start": [
+              -242.6779098224813,
+              602.9963391769425
+            ],
+            "end": [
+              -799.1557296019053,
+              602.9963391769425
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              -799.1557296019053,
+              602.9963391769425
+            ],
+            "end": [
+              -799.1557296019053,
+              76.3909313176714
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              -799.1557296019053,
+              76.3909313176714
+            ],
+            "end": [
+              -242.6779098224813,
+              76.3909313176714
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              -242.6779098224813,
+              76.3909313176714
+            ],
+            "end": [
+              -242.6779098224813,
+              602.9963391769425
+            ]
+          }
+        ],
+        "Constraints": [],
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchSource",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [],
+              "FullSubList": [],
+              "ShadowSub": [],
+              "ReferenceShadow": []
+            }
+          ]
+        },
+        "Type": "Length",
+        "Length": 917,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Revolution",
+      "ID": 3,
+      "TypeId": "PartDesign::Revolution",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Pad",
+              "SubList": [
+                "Face6"
+              ],
+              "StableSubList": [
+                "Face6"
+              ],
+              "FullSubList": [],
+              "ShadowSub": [],
+              "ReferenceShadow": []
+            }
+          ]
+        },
+        "Type": "Angle",
+        "Angle": 360,
+        "ReferenceAxis": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchSource",
+          "SubList": [
+            "Edge2"
+          ],
+          "StableSubList": [
+            "Edge2"
+          ],
+          "FullSubList": [],
+          "ShadowSub": [],
+          "ReferenceShadow": []
+        },
+        "FuseOrder": "BaseFirst",
+        "Reversed": false,
+        "Midplane": false,
+        "Refine": false,
+        "FuzzyTolerance": 0
+      }
+    },
+    {
+      "Name": "PadPreview",
+      "ID": 4,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Revolution",
+              "SubList": [
+                "Face4"
+              ],
+              "StableSubList": [
+                "Face4"
+              ],
+              "FullSubList": [],
+              "ShadowSub": [],
+              "ReferenceShadow": []
+            }
+          ]
+        },
+        "Type": "Length",
+        "Length": 10,
+        "Reversed": false,
+        "SideType": "One side",
+        "UseCustomVector": true,
+        "Direction": [
+          0,
+          1,
+          0
+        ],
+        "AlongSketchNormal": true
+      }
+    },
+    {
+      "Name": "PadPreviewBody",
+      "ID": 5,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "SketchSource",
+            "Pad",
+            "Revolution",
+            "PadPreview"
+          ]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "PadPreview"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "PadPreviewBody"
+    ]
+  }
+}

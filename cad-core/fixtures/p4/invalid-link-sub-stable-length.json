@@ -13,7 +13,10 @@
               "SubList": [
                 "Face1"
               ],
-              "StableSubList": []
+              "StableSubList": [
+                "Face1",
+                "Face2"
+              ]
             }
           ]
         },
