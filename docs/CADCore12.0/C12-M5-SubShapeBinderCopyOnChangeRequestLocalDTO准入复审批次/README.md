@@ -57,6 +57,16 @@ C12-M5 承接 C12-M4 公开口径迁移完成后的 live capability 状态。当
 - App::Link `documentObjectUpdates` 仍是 reference-only；`ReferenceShadow.brep` 仍只允许单个旧 subshape snapshot，不扩展成 full object BREP。
 - S3 裁决为 `dto_rejected_known_gap_retained`，`C12M5-BLOCKER-301` 已关闭；S4 只能在 DTO 已拒绝前提下做 current mismatch gate，不打开 implementation candidate。
 
+## S4 current mismatch / implementation candidate gate
+
+- S4 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`。
+- S4 执行 HEAD：`f7c1e83960`（`f7c1e83960 docs: 完成 C12-M5 S3 DTO 边界冻结`）。
+- S4 起点 dirty boundary：`git -c core.quotepath=false status --short -uall` 无输出，即 `<clean>`；未发现非本任务 dirty work。
+- S2 不是 `native_evidence_ready`，而是 `native_evidence_retained_blocker`；S3 不是 `dto_approved_for_mismatch_gate`，而是 `dto_rejected_known_gap_retained`。
+- current `feature_shape_binder.cpp` 仍在 `BindCopyOnChange=Enabled/Mutated` 或 `PartialLoad=True` 时发布 `copy_on_change_full_temporary_document_cache_not_supported`。
+- current capability 仍是 `known_gap_diagnostic` / `oracle_blocked`，focused tests 仍覆盖 retained diagnostic 和 capability wording。
+- 因此没有 approved DTO 与 current retained diagnostic 的冲突，S4 关闭为 `no_current_mismatch_retained_diagnostic`，不创建 implementation package。
+
 ## 继承口径
 
 - C9-M5 裁决：CopyOnChange full temporary-document copied-object lifecycle 依赖 `_tmp_binder`、`_CopiedObjs`、`copyObject()`、`recomputeFeature(true)` 和 `_CopiedLink`，S6 关闭为 `no_code_retained_known_gap_release_gate`。
@@ -85,7 +95,7 @@ C12-M5 承接 C12-M4 公开口径迁移完成后的 live capability 状态。当
 - S1：FreeCAD 源码与 current 覆盖矩阵（已完成）。
 - S2：native evidence 刷新与 probe 准入（已完成）。
 - S3：request-local DTO 产品边界冻结（已完成，`dto_rejected_known_gap_retained`）。
-- S4：current mismatch 与实现候选闸门。
+- S4：current mismatch 与实现候选闸门（已完成，`no_current_mismatch_retained_diagnostic`）。
 - S5：发布闸门与后续分流。
 
 ## 出口

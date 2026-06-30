@@ -34,6 +34,7 @@ C12-M5 处理当前 live capability 中唯一剩余公开 gap：`part_design.sub
 5. S2 已消费 native evidence；后续只剩产品 DTO 和 current mismatch gate，且不能从 remaining gap、App::Link coverage 或 S2 retained evidence 直接推出代码任务。
 6. S2 已复核 C9/C8 native probe 与 checked-in expected：Disabled / Enabled / Mutated / PartialLoad、`_tmp_binder`、`_CopiedLink` 和 Python-visible property state 仍可见，但 `_CopiedObjs`、`copyObject()` dependency order、copied support rewrite graph 与 `recomputeFeature(true)` ElementMap lifecycle 仍不可导出为稳定 request-local DTO；S2 关闭为 `native_evidence_retained_blocker`。
 7. S3 已冻结 request-local DTO 产品边界：允许字段只能作为 request graph / graph-writeback vocabulary，禁止 temporary document、native pointer、TopoDS / full object BREP、post-request `NamedShape` / `ElementMap` cache、`_CopiedObjs`、`_tmp_binder` session state、adapter / frontend mock 和 output guessing；裁决为 `dto_rejected_known_gap_retained`。
+8. S4 已执行 current mismatch gate：S2 不是 `native_evidence_ready`，S3 不是 `dto_approved_for_mismatch_gate`；current retained diagnostic、capability known gap 和 focused tests 与保留缺口一致，关闭为 `no_current_mismatch_retained_diagnostic`。
 
 ## 决策顺序
 
@@ -41,7 +42,7 @@ C12-M5 处理当前 live capability 中唯一剩余公开 gap：`part_design.sub
 2. S1 复核 FreeCAD source authority 与 current cad-core coverage（已完成，`C12M5-BLOCKER-101` 已关闭）。
 3. S2 判断 native evidence 是否足够，必要时设计 probe，而不是先写实现（已完成，`C12M5-BLOCKER-201` 已关闭为 retained blocker）。
 4. S3 冻结产品 DTO 边界：允许字段、禁止字段、前端写回职责（已完成，`dto_rejected_known_gap_retained`）。
-5. S4 做 current mismatch gate：只有 approved DTO 与 current diagnostic 冲突才进入 implementation candidate；S3 已拒绝 DTO 时不得打开 implementation candidate。
+5. S4 做 current mismatch gate（已完成，`no_current_mismatch_retained_diagnostic`）：只有 approved DTO 与 current diagnostic 冲突才进入 implementation candidate；S3 已拒绝 DTO 时不得打开 implementation candidate。
 6. S5 发布出口：implementation package、oracle refresh、DTO rejected 或 retained diagnostic。
 
 ## 非目标
