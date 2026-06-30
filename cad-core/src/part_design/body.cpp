@@ -907,6 +907,7 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
             bodyShape = shapeIt->second.shape;
             bodyUsesPreciseBoundingBox = shapeIt->second.usePreciseBoundingBox;
             bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
+            refinedFeatures.clear();
             appliedReplacementFeatures.push_back(feature);
             if (feature == resolvedStopFeature) {
                 break;
@@ -923,6 +924,7 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
                 bodyShape = shapeIt->second.shape;
                 bodyUsesPreciseBoundingBox = shapeIt->second.usePreciseBoundingBox;
                 bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
+                refinedFeatures.clear();
                 appliedReplacementFeatures.push_back(feature);
                 if (feature == resolvedStopFeature) {
                     break;

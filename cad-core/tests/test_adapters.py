@@ -240,6 +240,16 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertRegex(item["stableSubname"], r"^Fillet\..*Face\d+$")
             self.assertNotRegex(item["stableSubname"], r"\.(Edge|Vertex)\d+$")
 
+    def test_c_api_body_replacement_tip_after_earlier_refine_publishes_tip_owner(self) -> None:
+        result = self.run_recompute_ffi("body-replacement-tip-after-earlier-refine", "c3m5")
+        body = next(item for item in result["results"] if item["object"] == "PadBody")
+        subshapes = {item["indexed"]: item for item in body["subshapes"]}
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(subshapes["Face2"]["id"], "PadBody:Face2")
+        self.assertEqual(subshapes["Face2"]["subname"], "Fillet2.Face2")
+        self.assertEqual(subshapes["Face2"]["stableSubname"], "Fillet2.Fillet.Face3")
+
     def test_c_api_body_additive_chain_tip_subshapes_publish_tip_qualified_stable_names(self) -> None:
         result = self.run_recompute_ffi("partdesign-revolution-featurefirst-body", "c51m1")
         body = next(item for item in result["results"] if item["object"] == "Body")

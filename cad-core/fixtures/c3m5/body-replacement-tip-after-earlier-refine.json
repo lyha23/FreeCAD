@@ -1,0 +1,169 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "Sketch",
+      "Properties": {
+        "Constraints": [],
+        "Geometry": [
+          {
+            "end": [
+              -50.29992898984278,
+              504.2124461751048
+            ],
+            "kind": "LineSegment",
+            "start": [
+              -692.1494740317128,
+              504.2124461751048
+            ]
+          },
+          {
+            "end": [
+              -50.29992898984278,
+              140.7515453908013
+            ],
+            "kind": "LineSegment",
+            "start": [
+              -50.29992898984278,
+              504.2124461751048
+            ]
+          },
+          {
+            "end": [
+              -692.1494740317128,
+              140.7515453908013
+            ],
+            "kind": "LineSegment",
+            "start": [
+              -50.29992898984278,
+              140.7515453908013
+            ]
+          },
+          {
+            "end": [
+              -692.1494740317128,
+              504.2124461751048
+            ],
+            "kind": "LineSegment",
+            "start": [
+              -692.1494740317128,
+              140.7515453908013
+            ]
+          }
+        ],
+        "Placement": {
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      },
+      "TypeId": "Sketcher::SketchObject"
+    },
+    {
+      "ID": 2,
+      "Name": "Pad",
+      "Properties": {
+        "Length": 465,
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "FullSubList": [],
+              "ReferenceShadow": [],
+              "ShadowSub": [],
+              "StableSubList": [],
+              "SubList": [
+                "InternalFace1"
+              ],
+              "value": "Sketch"
+            }
+          ]
+        },
+        "Reversed": false,
+        "SideType": "One side",
+        "Type": "Length"
+      },
+      "TypeId": "PartDesign::Pad"
+    },
+    {
+      "ID": 3,
+      "Name": "Fillet",
+      "Properties": {
+        "Base": {
+          "FullSubList": [],
+          "PropertyType": "App::PropertyLinkSub",
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "StableSubList": [
+            "Edge7"
+          ],
+          "SubList": [
+            "Edge7"
+          ],
+          "value": "Pad"
+        },
+        "Radius": 100,
+        "SupportTransform": true,
+        "UseAllEdges": false
+      },
+      "TypeId": "PartDesign::Fillet"
+    },
+    {
+      "ID": 4,
+      "Name": "Fillet2",
+      "Properties": {
+        "Base": {
+          "FullSubList": [],
+          "PropertyType": "App::PropertyLinkSub",
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "StableSubList": [
+            "Edge10"
+          ],
+          "SubList": [
+            "Edge14"
+          ],
+          "value": "Fillet"
+        },
+        "Radius": 50,
+        "SupportTransform": true,
+        "UseAllEdges": false
+      },
+      "TypeId": "PartDesign::Fillet"
+    },
+    {
+      "ID": 5,
+      "Name": "PadBody",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "Sketch",
+            "Pad",
+            "Fillet",
+            "Fillet2"
+          ]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Fillet2"
+        }
+      },
+      "TypeId": "PartDesign::Body"
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "PadBody"
+    ]
+  }
+}
