@@ -18,6 +18,7 @@
 - S1 live 复核：`HEAD=fdeea2443e` 起点 worktree clean；C51X native evidence 仍采用 `FreeCADCmd 1.2.0 revision 20260519` 下两个 Groove UpTo fixtures 报 `Groove: Revolution: Up to face: Could not revolve the sketch!`，本轮轻量 `freecadcmd --version` 同为 `FreeCAD 1.2.0 Revision: 20260519 (Git shallow)`；focused test 证明 current CAD Core exact diagnostic 未漂移。
 - S2 准入裁决：`HEAD=cc9e3a1190` 起点 worktree clean；FreeCAD parity success 当前不成立，historical native failure 继续保留，CAD Core product diagnostic contract 已批准。批准范围必须同时覆盖 UpToFirst 与 UpToFace，且 S3 必须保留 native failure note。
 - S3 迁移实现：`HEAD=c1955ab56e` 起点 worktree clean；新增两个 C51M1 expected，focused test 改成 expected-backed product diagnostic assertion，capability / adapter assertion 发布 `product_diagnostic_contract_non_parity`，并保留 native failure note、fixture pair 和 delete/reopen condition。
+- S4 focused validation：`HEAD=11cf58bc8f` 起点 worktree clean；focused Groove test、C API capability smoke 与 capability JSON 复核均通过，`part_design.revolution_groove` 继续发布 `product_diagnostic_contract_non_parity` 且保留 `freecad_native_parity=false`、native failure note、fixture pair、delete/reopen condition。CopyOnChange 仍是 C12-M5 retained diagnostic，RuledSurface wire/wire 仍 current-supported；未发布 full Groove family，未把 geometry C++ parity 当作完成。
 
 ## FreeCAD / CAD Core 依据
 
@@ -51,7 +52,7 @@ S2 已批准 product diagnostic contract，S3 已按下列文件面完成迁移�
 - `cad-core/tests/test_p7_features.py`：让两个 fixtures 使用 expected-backed diagnostic contract，而不是只靠手写 exact blocker 断言，并保留 primary / secondary diagnostic 区分。
 - `cad-core/src/runtime/capability_contract.cpp`：把 Groove UpTo narrowed gap wording 从 historical native failure 调整为 approved product diagnostic contract，保留 native failure note。
 - `cad-core/tests/test_adapters.py`：同步 capability assertion。
-- C12-M7 docs 与矩阵：记录 S3 迁移实现、S4 focused validation 入口和最终发布边界。
+- C12-M7 docs 与矩阵：记录 S3 迁移实现、S4 focused validation 结果和最终发布边界。
 
 除非 S1 证明 FreeCAD native baseline 已成功且 S2/S3 证明 current mismatch，否则不改：
 
