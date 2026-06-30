@@ -11,7 +11,9 @@ C12-M11 是用户单独打开的并行方案包，用来解决草图提交后“
 - 创建时 C12-M10 队列仍 pending；C12-M11 是用户点名主题的并行方案包。
 - 当前 `cad-core` 已有 `results[].mesh.edgeSegments`、`subshapes[]`、`InternalEdgeN` / `InternalVertexN` 和 sketch `internal_element_map` 的基础管线，但本包要把它收敛成可验收产品契约并补齐 FreeCAD 级稳定性边界。
 - 工作步骤总入口已关闭：`工作步骤细分/7-1-02-58-【已实现】C12-M11工作步骤总入口.md` 已核对包结构、入口 + S0-S5 队列顺序和 6 个 TSV 字段数。
-- S0 live 基线与并行开包冻结已关闭：执行基线为 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=fdea7997eb`（`fdea7997eb 文档：关闭 C12-M11 工作步骤总入口`），起点 dirty boundary 为 `<clean>`。C12-M10 队列仍 pending（工作步骤总入口、S0-S6），C12-M11 是用户单独点名的并行主题，不继承为 C12-M10 后的自然下一包，也不修改 C12-M10 队列结论。`C12M11-BLOCKER-001/002` 与 `C12M11-VAL-002` 已关闭；本步未运行 focused tests，未做 backend/frontend 缺口裁决，未改 code、fixtures、expected、tests、adapters。后续从 S1 `7-1-03-00-C12-M11-S1-FreeCAD与cad-core-source复核.md` 开始。
+- S0 live 基线与并行开包冻结已关闭：执行基线为 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=fdea7997eb`（`fdea7997eb 文档：关闭 C12-M11 工作步骤总入口`），起点 dirty boundary 为 `<clean>`。C12-M10 队列仍 pending（工作步骤总入口、S0-S6），C12-M11 是用户单独点名的并行主题，不继承为 C12-M10 后的自然下一包，也不修改 C12-M10 队列结论。`C12M11-BLOCKER-001/002` 与 `C12M11-VAL-002` 已关闭；本步未运行 focused tests，未做 backend/frontend 缺口裁决，未改 code、fixtures、expected、tests、adapters。S1 已关闭为 `7-1-03-00-【已实现】C12-M11-S1-FreeCAD与cad-core-source复核.md`。
+- S1 FreeCAD 与 `cad-core` source 复核已关闭：执行基线为 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=1abd1c7df5`（`1abd1c7df5 文档：冻结 C12-M11 S0 live 基线`），起点 dirty boundary 为 `<clean>`。已复核 FreeCAD `buildShape()` / `getEdge()` / `buildInternals()` / `getInternalElementMap()` / `updateGeoHistory()` / `generateId()` 与 `cad-core` `buildSketchInternalResult()` / `meshForShape()` / `edgeSegmentsForShape()` / `subshapeMapForShape()` / `internalElementMapForSketch()` / `namedShapeForSketchInternalShape()` / `responseMesh()` / `responseSubshapes()`；`C12M11-BLOCKER-101` 已关闭，`C12M11-VAL-101` 已记录。本步只更新 docs/矩阵，未运行 focused tests，未修改 C++、tests、fixtures、expected 或 adapters。
+- S1 结论：closed internal profile 与 open wire profile 是不同 source 路径；open wire mesh/null 不可直接判为 closed profile `InternalEdge` 丢失。`edgeSegments` 与 `subshapes` 必须来自同一 `TopoDS_Shape` 与 `TopExp::MapShapes(..., TopAbs_EDGE, ...)` topology source。FreeCAD-grade geometry id stability 只记录为后续 S3/S4 follow-up 候选，不在 S1 裁决。后续从 S2 `7-1-03-01-C12-M11-S2-current-response-contract复核.md` 开始。
 
 ## 问题定义
 
@@ -42,7 +44,7 @@ C12-M11 的最终发布状态应是以下之一：
 
 1. `contract_current_supported`：当前 `cad-core` 已经稳定返回 `InternalEdgeN` edgeSegments/subshapes，缺口只在前端消费或运行态发布。
 2. `implementation_package_authorized`：发现当前后端实际缺失 response contract，需要打开最小完整实现包。
-3. `stable_geometry_id_followup_required`：request-local `InternalEdgeN -> EdgeN` 已成立，但 FreeCAD-grade 跨编辑稳定性仍缺 geometry id / history ledger。
+3. `stable_geometry_id_followup_required`：request-local `InternalEdgeN -> EdgeN` 已成立，但 FreeCAD-grade 跨编辑稳定性仍缺 geometry id / history ledger；S1 只把该项记录为后续 S3/S4 follow-up 候选，不提前裁决。
 4. `blocked_by_missing_oracle`：缺少能证明 FreeCAD 行为的 expected / fixture / oracle，先补采集。
 
 ## 入口

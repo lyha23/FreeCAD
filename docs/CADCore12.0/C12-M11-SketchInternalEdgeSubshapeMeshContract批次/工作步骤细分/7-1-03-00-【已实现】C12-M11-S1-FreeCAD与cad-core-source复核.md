@@ -1,4 +1,4 @@
-# C12-M11 S1 FreeCAD 与 cad-core source 复核
+# C12-M11 S1 【已实现】FreeCAD 与 cad-core source 复核
 
 ## 目标
 

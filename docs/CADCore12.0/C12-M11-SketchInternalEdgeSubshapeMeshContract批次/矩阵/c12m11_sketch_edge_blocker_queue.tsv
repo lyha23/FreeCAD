@@ -1,7 +1,7 @@
 id	blocker	owner_step	status	close_condition	next_action
 C12M11-BLOCKER-001	live baseline not frozen	S0	closed	HEAD=fdea7997eb, latest=fdea7997eb 文档：关闭 C12-M11 工作步骤总入口, pwd=/Users/li/Chili3DProject/FreeCAD, dirty boundary=<clean>	Proceed to S1 source review.
 C12M11-BLOCKER-002	C12-M10 pending relation not recorded	S0	closed	C12-M10 queue still pending; C12-M11 recorded as user-named parallel package, not natural next after C12-M10	Proceed to S1 source review.
-C12M11-BLOCKER-101	source authority incomplete	S1	open	FreeCAD and cad-core source candidates reviewed	Proceed to S2 current response contract.
+C12M11-BLOCKER-101	source authority incomplete	S1	closed	FreeCAD buildShape/getEdge/buildInternals/getInternalElementMap/updateGeoHistory/generateId and cad-core buildSketchInternalResult/meshForShape/edgeSegmentsForShape/subshapeMapForShape/internalElementMapForSketch/namedShapeForSketchInternalShape/responseMesh/responseSubshapes reviewed; same-topology-source rule recorded	Proceed to S2 current response contract; do not run focused unittest from S1 evidence.
 C12M11-BLOCKER-201	current response evidence missing	S2	open	Focused tests or checked-in evidence prove current edgeSegments/subshapes state	Proceed to S3 gap classification.
 C12M11-BLOCKER-301	gap classification undecided	S3	open	Backend/frontend/open-wire/stable-id rows have decisions	Proceed to S4 minimal semantic package.
 C12M11-BLOCKER-401	minimal semantic package undefined	S4	open	Next package scope, landing and validations are defined	Proceed to S5 publication.

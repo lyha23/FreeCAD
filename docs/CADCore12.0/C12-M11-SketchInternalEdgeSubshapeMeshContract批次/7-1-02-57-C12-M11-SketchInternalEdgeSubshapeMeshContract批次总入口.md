@@ -32,7 +32,7 @@ FreeCAD SketchObject source authority
 | 方案 | `7-1-02-57-C12-M11-SketchInternalEdgeSubshapeMeshContract批次方案.md` | 批次规则、FreeCAD 调用链、CAD Core 落点和验收分层。 |
 | 工作步骤总入口 | `工作步骤细分/7-1-02-58-【已实现】C12-M11工作步骤总入口.md` | goal 队列索引，已关闭。 |
 | S0 | `工作步骤细分/7-1-02-59-【已实现】C12-M11-S0-live基线与并行开包冻结.md` | baseline 和 C12-M10 pending 关系已冻结。 |
-| S1 | `工作步骤细分/7-1-03-00-C12-M11-S1-FreeCAD与cad-core-source复核.md` | 复核 FreeCAD / cad-core source authority。 |
+| S1 | `工作步骤细分/7-1-03-00-【已实现】C12-M11-S1-FreeCAD与cad-core-source复核.md` | FreeCAD / cad-core source authority 已复核。 |
 | S2 | `工作步骤细分/7-1-03-01-C12-M11-S2-current-response-contract复核.md` | 验证 current edgeSegments/subshapes 对齐。 |
 | S3 | `工作步骤细分/7-1-03-02-C12-M11-S3-contract-gap分流裁决.md` | 裁决 backend/frontend/stable-id 缺口。 |
 | S4 | `工作步骤细分/7-1-03-03-C12-M11-S4-implementation最小语义批次.md` | 定义实现包或同步包的最小范围。 |
@@ -44,7 +44,8 @@ FreeCAD SketchObject source authority
 - 工作步骤总入口已关闭：已核对 C12-M11 包结构、入口 + S0-S5 队列顺序和 6 个 TSV 字段数。
 - S0 live 基线与并行开包冻结已关闭：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=fdea7997eb`（`fdea7997eb 文档：关闭 C12-M11 工作步骤总入口`），起点 dirty boundary 为 `<clean>`。
 - C12-M10 队列仍 pending（工作步骤总入口、S0-S6），C12-M11 是用户单独点名的并行主题，不继承为 C12-M10 后的自然下一包，也不修改 C12-M10 队列结论。
-- 后续队列从 S1 `工作步骤细分/7-1-03-00-C12-M11-S1-FreeCAD与cad-core-source复核.md` 开始。
+- S1 FreeCAD 与 `cad-core` source 复核已关闭：`C12M11-BLOCKER-101` closed，`C12M11-VAL-101` passed；已记录 closed internal profile 与 open wire profile 的 source 差异、`edgeSegments` / `subshapes` 同一 topology source 要求，以及 FreeCAD-grade geometry id stability 仅作为 S3/S4 follow-up 候选。
+- 后续队列从 S2 `工作步骤细分/7-1-03-01-C12-M11-S2-current-response-contract复核.md` 开始。
 
 ## 执行规则
 

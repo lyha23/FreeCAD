@@ -1,7 +1,7 @@
 id	validation	owner_step	status	command_or_evidence	expected_result
 C12M11-VAL-001	C12-M11 queue check	入口	passed	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M11-SketchInternalEdgeSubshapeMeshContract批次/工作步骤细分 --format markdown	Initial queue order confirmed as entry then S0-S5; after entry closure the next pending step is S0.
 C12M11-VAL-002	live baseline	S0	passed	pwd=/Users/li/Chili3DProject/FreeCAD; HEAD=fdea7997eb; latest=fdea7997eb 文档：关闭 C12-M11 工作步骤总入口; status=<clean>; C12-M10 queue pending total entry and S0-S6	Baseline and parallel-package relation frozen; no focused tests run.
-C12M11-VAL-101	source review	S1	pending	rg source commands for FreeCAD SketchObject and cad-core edgeSegments/InternalEdge landings	Source authority rows reviewed.
+C12M11-VAL-101	source review	S1	passed	rg source commands for FreeCAD SketchObject and cad-core edgeSegments/InternalEdge landings	Source authority rows reviewed; edgeSegments and subshapes same topology source rule plus open-wire boundary recorded.
 C12M11-VAL-201	closed sketch internal edge response	S2	pending	python3 -m unittest tests.test_adapters.CadCoreAdapterTest.test_c_api_returns_sketch_internal_profile_mesh	Sketch internal profile returns InternalEdgeN mesh/subshapes.
 C12M11-VAL-202	general edgeSegments to subshapes alignment	S2	pending	python3 -m unittest tests.test_adapters.CadCoreAdapterTest.test_c_api_mesh_edge_segments_reference_result_subshapes	edgeSegments ids/indexed align with Edge subshapes.
 C12M11-VAL-203	internal edge stable subname	S2	pending	python3 -m unittest tests.test_p5_sketch.CadCoreP5SketchTest.test_p5_sketch_exports_internal_edge_vertex_stable_subnames	InternalEdgeN stableSubname maps to raw EdgeN.
