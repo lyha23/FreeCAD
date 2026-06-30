@@ -1,7 +1,7 @@
 id	validation	owner_step	status	command_or_evidence	expected_result
-C12M8-VAL-001	queue check before S0	S0	pending	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次/工作步骤细分 --format markdown	Shows pending index and S0-S6 at package creation.
-C12M8-VAL-002	prior queue checks	S0	pending	C12-M1..M7 step_goal_queue commands	Each prior queue outputs only header.
-C12M8-VAL-003	capability snapshot	S0	pending	cad-core/build/cad-core capabilities	part_design.sub_shape_binder remaining gap still present.
+C12M8-VAL-001	queue check before S0	S0	passed_s0	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次/工作步骤细分 --format markdown	Initial queue showed index and S0-S6 pending; after S0 close queue starts at S1.
+C12M8-VAL-002	prior queue checks	S0	passed_s0	C12-M1..M7 step_goal_queue commands	Each prior queue outputs only header.
+C12M8-VAL-003	capability snapshot	S0	passed_s0	cad-core/build/cad-core capabilities	part_design.sub_shape_binder status remains supported_c8m1_expected_backed_request_local_with_copy_on_change_known_gap; remaining gap still present with known_gap_diagnostic, oracle_blocked and copy_on_change_full_temporary_document_cache_not_supported.
 C12M8-VAL-101	source matrix TSV check	S1	pending	awk TSV field count check	All TSV rows have matching field counts.
 C12M8-VAL-201	native probe artifact or blocker	S2	pending	docs/temp artifact or blocker note	S2 records evidence_ready or retained blocker.
 C12M8-VAL-301	DTO matrix field decision	S3	pending	Review c12m8_copy_on_change_dto_contract_fields.tsv	Every DTO row approved rejected or deferred.

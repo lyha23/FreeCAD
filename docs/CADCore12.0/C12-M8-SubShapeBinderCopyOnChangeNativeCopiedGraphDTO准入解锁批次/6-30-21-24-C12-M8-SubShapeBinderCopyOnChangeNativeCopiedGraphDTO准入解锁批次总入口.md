@@ -16,13 +16,20 @@
 
 ## 顺序
 
-- S0：live 基线与 C12-M5/C12-M7 继承口径冻结。
+- S0：live 基线与 C12-M5/C12-M7 继承口径冻结（已完成）。
 - S1：FreeCAD source、current coverage 和 App::Link transport 证据复核。
 - S2：native copied graph probe schema 与 evidence gate。
 - S3：request-local DTO 产品边界裁决。
 - S4：current mismatch 与 implementation candidate gate。
 - S5：implementation package authorization / no-code retained decision。
 - S6：发布闸门、README 更新和后续分流。
+
+## 当前执行状态
+
+- 工作步骤总入口已随 S0 标记为 `【已实现】`，仅承担 C12-M8 S0-S6 队列索引职责。
+- S0 live 基线与继承口径冻结已完成：`HEAD=fd9810dc23`，起点 worktree clean，C12-M1..M7 队列均只输出表头。
+- live `part_design.sub_shape_binder` capability 仍为 `supported_c8m1_expected_backed_request_local_with_copy_on_change_known_gap`，`remaining_gaps=["copy_on_change_full_temporary_document_cache"]`；known gap 仍是 `known_gap_diagnostic` / `oracle_blocked` / `copy_on_change_full_temporary_document_cache_not_supported`。
+- C12-M5 `no_code_retained_diagnostic` 与 C12-M7 `product_diagnostic_contract_published` 后续分流口径均继续有效；S1 仍只进入 source/current 覆盖复核，不推进实现或 oracle。
 
 ## 必要裁决
 

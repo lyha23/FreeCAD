@@ -13,6 +13,20 @@ C12-M5 已关闭为 `no_code_retained_diagnostic`：旧 native evidence 只能�
 - known gap 仍为 `status=known_gap_diagnostic`、`route=oracle_blocked`、`diagnostic=copy_on_change_full_temporary_document_cache_not_supported`。
 - `link_transaction.copy_on_change_writeback_contract` 已支持 persisted CopyOnChange copied graph 的 `documentObjectUpdates` transport，但它只证明 App::Link 侧 transport 词汇存在，不自动证明 SubShapeBinder `_tmp_binder` / `_CopiedObjs` lifecycle 可用。
 
+## S0 live 冻结
+
+- S0 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`。
+- S0 执行 HEAD：`fd9810dc23`（`fd9810dc23 文档：新增 C12-M8 CopyOnChange 解锁方案`）。
+- S0 起点 dirty boundary：`git -c core.quotepath=false status --short -uall` 无输出，即 `<clean>`；未发现非本任务 dirty work。
+- C12-M1..M7 `工作步骤细分` 队列均只输出表头。
+- `part_design.sub_shape_binder.status=supported_c8m1_expected_backed_request_local_with_copy_on_change_known_gap`。
+- `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`。
+- `part_design.sub_shape_binder.known_gaps.copy_on_change_full_temporary_document_cache.status=known_gap_diagnostic`，`route=oracle_blocked`，`diagnostic=copy_on_change_full_temporary_document_cache_not_supported`。
+- delete condition：只有 FreeCADCmd 暴露不依赖 persistent backend session 的 stable request-local CopyOnChange copied-object evidence 后，才能替换该 diagnostic。
+- reopen condition：只有产品批准由更强 native oracle 支撑的 request-local CopyOnChange DTO 后，才重新打开实现判断。
+- C12-M5 `no_code_retained_diagnostic` 继续有效：S2=`native_evidence_retained_blocker`，S3=`dto_rejected_known_gap_retained`，S4=`no_current_mismatch_retained_diagnostic`。
+- C12-M7 后续分流口径继续有效：Groove UpTo 已发布 `product_diagnostic_contract_published`，只有同一 FreeCAD / LibPack / OCCT oracle baseline 证明 native success 且 current mismatch 时才另开 geometry implementation candidate；本包不重开 Groove 或 RuledSurface。
+
 ## 解锁条件
 
 只有以下三项同时成立，C12-M8 才允许产出后续 implementation package：
@@ -36,7 +50,7 @@ C12-M5 已关闭为 `no_code_retained_diagnostic`：旧 native evidence 只能�
 
 ## 工作步骤
 
-- S0：live 基线与 C12-M5/C12-M7 继承口径冻结。
+- S0：live 基线与 C12-M5/C12-M7 继承口径冻结（已完成）。
 - S1：FreeCAD source、current coverage 和 existing transport evidence 复核。
 - S2：native copied graph probe schema 与 evidence gate。
 - S3：request-local DTO 产品边界裁决。

@@ -5,5 +5,5 @@ C12M8-NG-003	persistent NamedShape or ElementMap cache	NamedShape/ElementMap are
 C12M8-NG-004	adapter-side CopyOnChange emulation	Adapter only translates protocol and must not own FreeCAD semantics	S4	active
 C12M8-NG-005	frontend-only prefix or support guessing	DTO must come from source-backed graph evidence	S3	active
 C12M8-NG-006	broad SubShapeBinder family rewrite	This batch only handles CopyOnChange full temporary-document gap	S5	active
-C12M8-NG-007	Groove UpTo or RuledSurface reopen	C12-M7 and C12-M6 have separate closed exits	S0	active
+C12M8-NG-007	Groove UpTo or RuledSurface reopen	C12-M7 and C12-M6 have separate closed exits	S0	active_confirmed_s0
 C12M8-NG-008	shape-count or bbox based oracle	Need copied graph identity and dependency evidence not geometry-only hints	S2	active

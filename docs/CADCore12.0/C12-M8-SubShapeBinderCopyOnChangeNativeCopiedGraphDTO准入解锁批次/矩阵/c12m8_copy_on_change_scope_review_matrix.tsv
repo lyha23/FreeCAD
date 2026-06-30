@@ -1,6 +1,6 @@
 id	scope_item	why_in_scope	owner_step	current_status	decision	next_step	close_condition
-C12M8-SCOPE-001	live SubShapeBinder remaining gap	Only public live remaining gap after C12-M7	S0	pending	active_unlock_batch	S0	Freeze capability and old queue state.
-C12M8-SCOPE-002	C12-M5 retained diagnostic inheritance	Previous CopyOnChange package retained no-code diagnostic	S0	pending	in_scope_as_constraint	S0	Record retained blocker and deletion condition.
+C12M8-SCOPE-001	live SubShapeBinder remaining gap	Only public live remaining gap after C12-M7	S0	closed_s0_live_gap_frozen	active_unlock_batch	S1	HEAD fd9810dc23 clean dirty boundary, C12-M1..M7 queues empty, SubShapeBinder remaining gap and known gap snapshot recorded.
+C12M8-SCOPE-002	C12-M5 retained diagnostic inheritance	Previous CopyOnChange package retained no-code diagnostic	S0	closed_s0_retained_constraint_frozen	in_scope_as_constraint	S1	C12-M5 no_code_retained_diagnostic, delete condition and reopen condition recorded.
 C12M8-SCOPE-003	FreeCAD native copied graph lifecycle	Needed to unlock stronger oracle than C12-M5	S1/S2	pending	in_scope	S1/S2	Source authority and probe evidence reviewed.
 C12M8-SCOPE-004	request-local DTO approval	Needed before current mismatch can matter	S3	pending	in_scope	S3	Allowed and forbidden DTO fields decided.
 C12M8-SCOPE-005	current mismatch gate	Implementation package requires mismatch after DTO approval	S4	pending	in_scope	S4	Current retained diagnostic compared or retained.

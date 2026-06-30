@@ -1,6 +1,6 @@
 id	blocker	owner_step	status	close_condition	next_action
-C12M8-BLOCKER-001	live baseline not frozen	S0	open	Record HEAD dirty boundary queue state and capability snapshot	Run S0 baseline.
-C12M8-BLOCKER-002	previous C12 queues not confirmed empty	S0	open	C12-M1..M7 queues only output table headers	Run step_goal_queue for each prior package.
+C12M8-BLOCKER-001	live baseline not frozen	S0	closed	HEAD fd9810dc23, clean dirty boundary, M8 starting queue and SubShapeBinder capability snapshot recorded	Proceed to S1 source/current coverage.
+C12M8-BLOCKER-002	previous C12 queues not confirmed empty	S0	closed	C12-M1..M7 queues only output table headers	Proceed to S1; do not reopen prior packages.
 C12M8-BLOCKER-101	FreeCAD source authority incomplete	S1	open	ShapeBinder Document Link and current cad-core sources reviewed	Complete S1 source candidates.
 C12M8-BLOCKER-102	App::Link transport may be overclaimed	S1	open	Transport marked reference-only unless SubShapeBinder evidence connects it	Complete S1/S3 boundary.
 C12M8-BLOCKER-201	native copied graph evidence missing	S2	open	Probe artifact proves or blocks copied graph identity dependency order support rewrite and ElementMap lifecycle	Run or block S2 probe.
