@@ -1,0 +1,9 @@
+id	field	current_payload	admission_rule	required_check	status	owner_step
+C12M6-SCHEMA-001	type_id	Objects[].TypeId=Part::RuledSurface	Must use source-backed DocumentObject executor	Check fixture and part_ruled_surface.cpp dispatch	pending_s3	S3
+C12M6-SCHEMA-002	curve1	Objects[].Properties.Curve1.value=LowerWire with App::PropertyLinkSub	Must reference a request-graph object whose shape is recomputed in this request	Check link resolution and no stored BREP	pending_s3	S3
+C12M6-SCHEMA-003	curve2	Objects[].Properties.Curve2.value=UpperWire with App::PropertyLinkSub	Must reference a request-graph object whose shape is recomputed in this request	Check link resolution and no stored BREP	pending_s3	S3
+C12M6-SCHEMA-004	sublist	SubList may be absent for whole wire objects or present for selected subshape	Must preserve FreeCAD link-sub semantics and diagnostics	Check capability payload keys include Curve1.SubList and Curve2.SubList	pending_s3	S3
+C12M6-SCHEMA-005	orientation	Objects[].Properties.Orientation.value=Automatic	Must support Automatic, Forward and Reversed without silently ignoring enum	Check capability and existing orientation focused fixture	pending_s3	S3
+C12M6-SCHEMA-006	wire_producers	LowerWire and UpperWire are Part::RegularPolygon objects	Must be built from request-local graph, not previous backend state	Check fixture has no shape cache or BREP field	pending_s3	S3
+C12M6-SCHEMA-007	recompute	recompute.objs includes RuledSurface	Must compute target from current graph only	Check runtime output object fields and diagnostics	pending_s3	S3
+C12M6-SCHEMA-008	forbidden_transport	No BREP, TopoDS, persistent NamedShape or ElementMap fields	Must preserve stateless CAD Core boundary	Grep fixture and capability wording for forbidden transport	pending_s3	S3

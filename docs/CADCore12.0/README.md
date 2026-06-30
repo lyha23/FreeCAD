@@ -14,6 +14,8 @@ C12-M2 S6 已完成并发布 `no_code_oracle_blocked_gate`：ProjectOnSurface �
 
 C12-M5 S5 已完成并发布 `no_code_retained_diagnostic`：S2 保留 `native_evidence_retained_blocker`，S3 保留 `dto_rejected_known_gap_retained`，S4 保留 `no_current_mismatch_retained_diagnostic`。当前不创建 implementation package，不刷新 oracle，不改 `cad-core/src`、fixtures、expected、tests 或 adapter；`part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`、`known_gap_diagnostic` / `oracle_blocked` 和 `copy_on_change_full_temporary_document_cache_not_supported` 继续保留。
 
+用户已在 C12-M5 后要求打开下一套准入验证包：C12-M6 选择旧 C3M4 `PARTSURF-BLOCK-005` RuledSurface wire/wire deferred 行，但不默认把它当作未实现。当前 live code / capability 已显示 `part_workbench.ruled_surface.status=supported_wire_wire_expected_backed`，fixtures 包含 `c4m1/part-ruled-surface-wire-wire`，所以 C12-M6 的目标是验证 collector、input schema、shell/topo provenance 三闸门是否足以正式准入，或裁决为 publication repair / retained validation blocker / implementation candidate。
+
 ## 入口
 
 - C12-M1 总入口：`C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/6-29-16-26-C12-M1-CADCoreCapabilityImplementationCandidate盘点批次总入口.md`
@@ -36,6 +38,10 @@ C12-M5 S5 已完成并发布 `no_code_retained_diagnostic`：S2 保留 `native_e
 - C12-M5 方案：`C12-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审批次/6-30-01-03-C12-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审批次方案.md`
 - C12-M5 工作步骤：`C12-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审批次/工作步骤细分/`
 - C12-M5 矩阵：`C12-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审批次/矩阵/`
+- C12-M6 总入口：`C12-M6-RuledSurfaceWireWire准入验证批次/6-30-13-27-C12-M6-RuledSurfaceWireWire准入验证批次总入口.md`
+- C12-M6 方案：`C12-M6-RuledSurfaceWireWire准入验证批次/6-30-13-27-C12-M6-RuledSurfaceWireWire准入验证批次方案.md`
+- C12-M6 工作步骤：`C12-M6-RuledSurfaceWireWire准入验证批次/工作步骤细分/`
+- C12-M6 矩阵：`C12-M6-RuledSurfaceWireWire准入验证批次/矩阵/`
 
 ## 当前基线
 
@@ -78,6 +84,8 @@ C12-M5 S5 已完成并发布 `no_code_retained_diagnostic`：S2 保留 `native_e
 - C12-M5 S3 request-local DTO 产品边界已完成：允许字段仍限于 request graph / graph-writeback vocabulary；temporary document、native pointer、full object BREP / TopoDS、post-request `NamedShape` / `ElementMap` cache、`_CopiedObjs` 和 `_tmp_binder` session state 均禁止进入 DTO；关闭为 `dto_rejected_known_gap_retained`。
 - C12-M5 S4 current mismatch 与实现候选闸门已完成：S2 不是 `native_evidence_ready`，S3 不是 `dto_approved_for_mismatch_gate`，current diagnostic 与 capability wording 和 retained gap 一致；关闭为 `no_current_mismatch_retained_diagnostic`，不创建 implementation package。
 - C12-M5 S5 发布闸门已完成：最终出口为 `no_code_retained_diagnostic`，C12-M5 队列预期只输出表头；capability 继续保留 `remaining_gaps=["copy_on_change_full_temporary_document_cache"]`、`known_gap_diagnostic` / `oracle_blocked` 和 diagnostic `copy_on_change_full_temporary_document_cache_not_supported`。
+- C12-M6 已创建为 RuledSurface wire/wire 准入验证包。创建基线为当前 clean worktree；继承旧 C3M4 `PARTSURF-BLOCK-005` 的三项重开条件：source-backed collector、cad-core input schema、shell/topo provenance。live capability 同时显示 `part_workbench.ruled_surface.status=supported_wire_wire_expected_backed`，因此本包先做证据准入和历史 deferred reconciliation，不直接写 C++。
+- C12-M6 S0 live 冻结已完成：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=71dba06fb6`（`71dba06fb6 docs: 完成 C12-M5 S5 发布闸门`）。起点 dirty boundary 只包含 `docs/CADCore12.0/README.md` 修改和未跟踪的 C12-M6 包；C12-M1..M5 队列均只输出表头。`part_workbench.ruled_surface` capability 快照为 `status=supported_wire_wire_expected_backed`，fixtures 含 `c4m1/part-ruled-surface-wire-wire`，`remaining_gaps=[]`，covered 含 `wire_wire_brepfill_shell` / `wire_edge_provenance` / `expected_backed_fixtures`，request-local boundaries 含 `wire_wire_brepfill_shell`。旧 `PARTSURF-BLOCK-005` / `PARTSURF-SCOPE-007` / `PARTSURF-FIX-005` 的 deferred 条件冻结为 collector、input schema、shell/topo provenance；下一步是 S1 source/current evidence 复核。
 
 ## 重开条件
 
@@ -88,6 +96,7 @@ C12-M5 S5 已完成并发布 `no_code_retained_diagnostic`：S2 保留 `native_e
 | Part Workbench historical rows | stable native/request-local expected + current mismatch。 |
 | ProjectOnSurface provenance | 未来 FreeCAD 原生 MapperHistory / ElementMap artifact 产出 `native_provenance_expected_ready` + request-local boundary + current mismatch；C12-M3 native-hidden 证据本身不能重开代码。 |
 | ProjectOnSurface request-local ledger product contract | C12-M4 产品契约公开口径已落地；后续只在新增 request-local ledger 字段、改变 mapper_history schema，或未来 FreeCAD 原生 artifact 产出 `native_provenance_expected_ready` 并证明需要重审 parity 边界时重开。 |
+| RuledSurface wire/wire | C12-M6 验证 collector + input schema + shell/topo provenance 三闸门；若全部通过则关闭为 current supported，无需实现包；若 expected/current mismatch 且定位到 Part executor / TopoShapeExpansion / topo provenance，再另开 implementation package。 |
 
 ## 队列检查
 
@@ -98,6 +107,7 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M4-ProjectOnSurfaceRequestLocalLedger产品契约批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审批次/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M6-RuledSurfaceWireWire准入验证批次/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -109,6 +119,7 @@ awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " f
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M3-PartWorkbenchProjectOnSurfaceMapperProvenanceNativeProbe批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M4-ProjectOnSurfaceRequestLocalLedger产品契约批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审批次/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M6-RuledSurfaceWireWire准入验证批次/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore12.0
 git diff --check
 ```

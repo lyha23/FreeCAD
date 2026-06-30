@@ -1,0 +1,9 @@
+id	check	current_signal	admission_rule	required_check	status	owner_step
+C12M6-PROV-001	shell_branch	cad-core source exposes part_ruled_surface:wire_wire_brepfill_shell	Must call BRepFill::Shell for two wire inputs, not BRepFill::Face or compound fallback	Read topo_shape_expansion.cpp and focused result metadata	pending_s4	S4
+C12M6-PROV-002	shape_kind	Expected object_fields shape=occt_shell	Must publish shell output for wire/wire	Check expected and current recompute object field	pending_s4	S4
+C12M6-PROV-003	topology_counts	Expected topology_counts faces=4 edges=12 vertices=8	Must match checked-in expected within accepted tolerance	Run focused test against expected	pending_s4	S4
+C12M6-PROV-004	element_history_status	Expected named_shapes includes part_ruled_surface:wire_wire_brepfill_shell	Must expose history status in NamedShape evidence	Check expected and current named_shapes	pending_s4	S4
+C12M6-PROV-005	source_edge_lower	Expected element_map contains LowerWire.Edge1	Must prove at least one source edge from lower wire propagates	Check assert_ruled_surface_source_edge for LowerWire.Edge1	pending_s4	S4
+C12M6-PROV-006	source_edge_upper	Expected element_map contains UpperWire.Edge1	Must prove at least one source edge from upper wire propagates	Check assert_ruled_surface_source_edge for UpperWire.Edge1	pending_s4	S4
+C12M6-PROV-007	full_wire_strength	Current evidence appears representative-edge based	Must decide whether representative provenance is enough or needs full wire-edge family assertion	If insufficient, classify as retained_validation_blocker or publication_repair_required	pending_s4	S4
+C12M6-PROV-008	no_adapter_guess	Capability and tests locate provenance in Part executor and TopoShapeExpansion	Must not repair source ownership in adapter output	Grep c_api adapter for ruled_surface provenance guesses	pending_s4	S4

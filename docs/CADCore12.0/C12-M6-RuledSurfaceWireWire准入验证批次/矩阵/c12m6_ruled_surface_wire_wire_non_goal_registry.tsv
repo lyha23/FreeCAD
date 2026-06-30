@@ -1,0 +1,8 @@
+id	scope	reason	reopen_condition	status	owner_step
+C12M6-NG-001	full_part_surface_family	C12-M6 only validates RuledSurface wire/wire, not Loft, Sweep, Filling, GeomPlate or ProjectOnSurface	New independent package with source, expected, schema and provenance gates	active	S0
+C12M6-NG-002	project_on_surface	ProjectOnSurface has separate C12-M3 and C12-M4 packages and different mapper/provenance contract	New ProjectOnSurface-specific request-local or native evidence package	active	S0
+C12M6-NG-003	adapter_special_case	Adapter output cannot prove FreeCAD RuledSurface semantics or source edge ownership	Only if core executor and topo helper are removed from scope, which is disallowed	active	S1
+C12M6-NG-004	full_brep_transport	CAD Core request graph remains stateless and must not carry full object BREP or TopoDS	Architecture decision explicitly changes stateless CAD Core boundary	active	S3
+C12M6-NG-005	persistent_namedshape_cache	NamedShape and ElementMap are per-request outputs, not cross-request backend state	Architecture decision explicitly approves backend session/cache	active	S3
+C12M6-NG-006	copy_on_change	SubShapeBinder CopyOnChange remains C12-M5 retained known gap diagnostic	Stable native copied-object graph expected plus approved DTO plus current mismatch	active	S0
+C12M6-NG-007	code_before_gate	C12-M6 is validation-first; code changes before S5 would hide evidence classification	S5 creates implementation_candidate_required with layer attribution	active	S5

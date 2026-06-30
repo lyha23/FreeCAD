@@ -1,0 +1,11 @@
+id	owner_step	blocker	current_status	unblock_condition	next_action	status
+C12M6-BLOCKER-000	S0	live_baseline_not_frozen	closed_s0	HEAD 71dba06fb6, dirty boundary, C12-M1..M5 empty queues, C12-M6 starting queue, ruled_surface capability snapshot, and old PARTSURF deferred conditions recorded	proceed to S1 source/current evidence and historical deferred reconciliation	done
+C12M6-BLOCKER-101	S1	source_authority_unverified	open	FreeCAD PartFeatures and TopoShapeExpansion wire/wire source chain verified	proceed to S2 collector and expected gate	pending
+C12M6-BLOCKER-102	S1	historical_deferred_not_reconciled	open	PARTSURF-BLOCK-005, SCOPE-007 and FIX-005 compared with current code/capability	proceed with clear stale-doc versus active-blocker classification	pending
+C12M6-BLOCKER-201	S2	collector_expected_trust	open	c4m1 wire/wire fixture and expected are source-backed and stable	proceed to S3 input schema validation	pending
+C12M6-BLOCKER-202	S2	collector_reproducibility_unclear	open	Collector support or checked-in expected provenance is documented enough for admission	avoid expected refresh unless required; otherwise retain validation blocker	pending
+C12M6-BLOCKER-203	S2	self_oracle_risk	open	Expected is not derived only from current cad-core output	proceed only with FreeCADCmd or accepted source-backed reference	pending
+C12M6-BLOCKER-204	S2	focused_test_not_run	open	Focused wire/wire expected-backed unittest result recorded	proceed to S3 if test passes or classify mismatch	pending
+C12M6-BLOCKER-301	S3	input_schema_boundary	open	Request graph schema expresses wire/wire without BREP, TopoDS, cache or adapter shortcut	proceed to S4 provenance validation	pending
+C12M6-BLOCKER-401	S4	shell_topo_provenance_strength	open	BRepFill::Shell, occt_shell, element_history_status and source edge relation are asserted strongly enough	proceed to S5 publication gate	pending
+C12M6-BLOCKER-501	S5	publication_gate	open	S2/S3/S4 closed and focused validation recorded	close as admitted, docs repair, retained blocker or implementation candidate	pending
