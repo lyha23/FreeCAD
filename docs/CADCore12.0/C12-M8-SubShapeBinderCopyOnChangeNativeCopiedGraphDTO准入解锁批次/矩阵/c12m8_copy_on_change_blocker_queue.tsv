@@ -1,8 +1,8 @@
 id	blocker	owner_step	status	close_condition	next_action
 C12M8-BLOCKER-001	live baseline not frozen	S0	closed	HEAD fd9810dc23, clean dirty boundary, M8 starting queue and SubShapeBinder capability snapshot recorded	Proceed to S1 source/current coverage.
 C12M8-BLOCKER-002	previous C12 queues not confirmed empty	S0	closed	C12-M1..M7 queues only output table headers	Proceed to S1; do not reopen prior packages.
-C12M8-BLOCKER-101	FreeCAD source authority incomplete	S1	open	ShapeBinder Document Link and current cad-core sources reviewed	Complete S1 source candidates.
-C12M8-BLOCKER-102	App::Link transport may be overclaimed	S1	open	Transport marked reference-only unless SubShapeBinder evidence connects it	Complete S1/S3 boundary.
+C12M8-BLOCKER-101	FreeCAD source authority incomplete	S1	closed_s1	ShapeBinder setup/update, ShapeBinder.h hidden state, Document copyObject/recomputeFeature, Link CopyOnChange transport, current cad-core executor, tests and capability source reviewed	Proceed to S2 native copied graph probe schema and evidence gate.
+C12M8-BLOCKER-102	App::Link transport may be overclaimed	S1	closed_s1	App::Link documentObjectUpdates transport marked reference-only; SubShapeBinder support still requires S2 proof of _tmp_binder, _CopiedObjs, dependency order, support rewrite, recompute and ElementMap lifecycle	Proceed to S2/S3 with reference-only boundary preserved.
 C12M8-BLOCKER-201	native copied graph evidence missing	S2	open	Probe artifact proves or blocks copied graph identity dependency order support rewrite and ElementMap lifecycle	Run or block S2 probe.
 C12M8-BLOCKER-301	DTO product boundary undecided	S3	open	All DTO rows approved rejected or deferred with reason	Complete S3 DTO matrix.
 C12M8-BLOCKER-401	current mismatch not adjudicated	S4	open	S2/S3 gate state used to compare or retain diagnostic	Complete S4 comparison gate.

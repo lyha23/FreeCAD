@@ -27,6 +27,16 @@ C12-M5 已关闭为 `no_code_retained_diagnostic`：旧 native evidence 只能�
 - C12-M5 `no_code_retained_diagnostic` 继续有效：S2=`native_evidence_retained_blocker`，S3=`dto_rejected_known_gap_retained`，S4=`no_current_mismatch_retained_diagnostic`。
 - C12-M7 后续分流口径继续有效：Groove UpTo 已发布 `product_diagnostic_contract_published`，只有同一 FreeCAD / LibPack / OCCT oracle baseline 证明 native success 且 current mismatch 时才另开 geometry implementation candidate；本包不重开 Groove 或 RuledSurface。
 
+## S1 source / current 复核
+
+- S1 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=79602c1072`（`79602c1072 fix: 修复 Body replay 默认 RefineModel 语义`），起点 worktree clean。
+- FreeCAD `SubShapeBinder::setupCopyOnChange()` 入口条件已复核：`BindCopyOnChange != Disabled` 且 `Support.getSubListValues().size()==1`；否则清理动态 CopyOnChange property 并返回。
+- FreeCAD `SubShapeBinder::update()` 的 `BindCopyOnChange=Mutated` 路径已复核：新建 temporary `_tmp_binder`，调用 `copyObject({obj}, true, true)`，填充 `_CopiedObjs`，先后执行 `recomputeFeature(true)`，并用 `_CopiedLink` 指向 copied object 的 subvalues。
+- `PartialLoad` 是可持久化输入和 `canLoadPartial()` / `Support.setAllowPartial()` 边界；`Cache_*` 是 dynamic matrix cache 的 hit/update/cleanup 优化边界，不能默认写成后端 persistent semantic state。
+- current `cad-core` 仍只支持 `BindMode` request-local 子集；`BindCopyOnChange=Enabled/Mutated` 或 `PartialLoad=True` 继续发布 `copy_on_change_full_temporary_document_cache_not_supported` retained diagnostic。
+- App::Link CopyOnChange `documentObjectUpdates` transport 已记录为 reference-only：它提供 group sync、copy object、dependency rewrite 和 link writeback 词汇，但不证明 SubShapeBinder `_tmp_binder` / `_CopiedObjs` lifecycle 已支持。
+- `C12M8-SRC-001..008`、`C12M8-BLOCKER-101`、`C12M8-BLOCKER-102` 已关闭；S2 probe 必须证明 baseline、mode matrix、single support gate、temporary binder lifecycle、copied object identities、dependency order、support rewrite、recompute status、ElementMap / NamedShape lifecycle 和 `Cache_*` 边界。
+
 ## 解锁条件
 
 只有以下三项同时成立，C12-M8 才允许产出后续 implementation package：
@@ -51,7 +61,7 @@ C12-M5 已关闭为 `no_code_retained_diagnostic`：旧 native evidence 只能�
 ## 工作步骤
 
 - S0：live 基线与 C12-M5/C12-M7 继承口径冻结（已完成）。
-- S1：FreeCAD source、current coverage 和 existing transport evidence 复核。
+- S1：FreeCAD source、current coverage 和 existing transport evidence 复核（已完成）。
 - S2：native copied graph probe schema 与 evidence gate。
 - S3：request-local DTO 产品边界裁决。
 - S4：current mismatch 与 implementation candidate gate。
