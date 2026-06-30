@@ -22,7 +22,7 @@
 - S3：request-local DTO 产品边界裁决（已完成，`dto_not_reviewed_due_to_native_blocker`）。
 - S4：current mismatch 与 implementation candidate gate（已完成，`no_current_mismatch_retained_diagnostic`）。
 - S5：implementation package authorization / no-code retained decision（已完成，`no_code_retained_diagnostic`）。
-- S6：发布闸门、README 更新和后续分流。
+- S6：发布闸门、README 更新和后续分流（已完成，`no_code_retained_diagnostic` published）。
 
 ## 当前执行状态
 
@@ -40,13 +40,15 @@
 - S5 不创建 C12-M9 implementation package，不授权 C++ work；保留 `copy_on_change_full_temporary_document_cache_not_supported`、`known_gap_diagnostic`、`oracle_blocked` 与 `remaining_gaps=[copy_on_change_full_temporary_document_cache]`。
 - S5 delete condition：只有 FreeCADCmd 稳定暴露 `_CopiedObjs` identity、copyObject dependency order、support rewrite map、`recomputeFeature(true)` lifecycle、ElementMap / NamedShape lifecycle，且这些证据能转成前端持久化 graph / `documentObjectUpdates` 后，才可替换 diagnostic。
 - S5 reopen condition：更强 native copied graph artifact 必须先重开并通过 S2，再重新执行 S3 DTO approval 与 S4 current mismatch gate。
+- S6 发布闸门已完成：C12-M8 最终状态为 `no_code_retained_diagnostic` published；C12-M8 队列关闭后只输出表头，TSV 字段数、尾随空白和 diff whitespace 检查通过。
+- S6 不创建 C12-M9 package，不授权 C++ work；final delete/reopen condition 继承 S5，并要求更强 native copied graph artifact 先重开并通过 S2/S3/S4。
 
 ## 必要裁决
 
 - S2 已是 `native_evidence_retained_blocker`，S3/S4 不能跳到 implementation。
 - S3 已是 `dto_not_reviewed_due_to_native_blocker`，S4 只能保留 diagnostic 或做 publication wording repair 判断。
 - S4 已无 current mismatch，S5 不能创建 implementation package。
-- S5 已按失败 gate 输出 `no_code_retained_diagnostic`，保留 retained blocker、delete condition 和 reopen condition；S6 只做发布闸门与后续分流。
+- S5 已按失败 gate 输出 `no_code_retained_diagnostic`，保留 retained blocker、delete condition 和 reopen condition；S6 已发布该 no-code retained 出口并关闭队列。
 
 ## 验收
 
@@ -54,5 +56,6 @@
 cd /Users/li/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次/工作步骤细分 --format markdown
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次/矩阵/*.tsv
+rg -n '[ \t]$' docs/CADCore12.0/C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次 docs/CADCore12.0/README.md
 git diff --check
 ```

@@ -30,6 +30,16 @@ delete condition：只有 FreeCADCmd 稳定暴露 `_CopiedObjs` identity、copyO
 
 reopen condition：更强 native copied graph artifact 必须先重开并通过 S2，再重新执行 S3 DTO approval 与 S4 current mismatch gate。
 
+## S6 发布裁决
+
+S6 已关闭发布闸门：最终状态继续是 `no_code_retained_diagnostic`，不创建 C12-M9 package，不授权 C++ work。
+
+最终发布事实固定为：S2=`native_evidence_retained_blocker`，S3=`dto_not_reviewed_due_to_native_blocker`，S4=`no_current_mismatch_retained_diagnostic`，S5=`no_code_retained_diagnostic`。`part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`、`known_gap_diagnostic` / `oracle_blocked` 和 `copy_on_change_full_temporary_document_cache_not_supported` 全部保留。
+
+final delete condition：只有 FreeCADCmd 稳定暴露 `_CopiedObjs` identity、copyObject dependency order、support rewrite map、`recomputeFeature(true)` lifecycle、ElementMap / NamedShape lifecycle，且这些证据能转成前端持久化 graph / `documentObjectUpdates` 后，才可替换 diagnostic。
+
+final reopen condition：更强 native copied graph artifact 必须先重开并通过 S2，再重新执行 S3 DTO approval 与 S4 current mismatch gate；不得从 App::Link transport、property/session 状态、publication wording 或 C12-M8 retained diagnostic 直接授权 implementation。
+
 ## 为什么不能直接实现
 
 `SubShapeBinder` CopyOnChange 的 full path 不是普通 shape copy。FreeCAD 里它会进入 `_tmp_binder`、`_CopiedObjs`、`copyObject()`、`recomputeFeature(true)`、`_CopiedLink` 和 copied support rewrite 的组合流程。CAD Core 的边界是无状态 request graph：后端不能保存 temporary document、TopoDS、BREP、NamedShape、ElementMap 或 copied-object cache。
@@ -86,3 +96,5 @@ git diff --check
 ```
 
 后续若 S5 授权 implementation package，再由新包决定 focused tests、fixtures、expected 和 C++ 修改范围。C12-M8 本身不要求 full build 或 full FreeCAD CI。
+
+S6 实际发布未授权 implementation package；后续只有满足 final reopen condition 后才另开实现包。

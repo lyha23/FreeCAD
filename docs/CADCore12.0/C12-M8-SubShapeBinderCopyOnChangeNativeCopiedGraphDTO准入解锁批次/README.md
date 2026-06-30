@@ -80,6 +80,16 @@ C12-M5 已关闭为 `no_code_retained_diagnostic`：旧 native evidence 只能�
 - delete condition：只有 FreeCADCmd 稳定暴露 `_CopiedObjs` identity、copyObject dependency order、support rewrite map、`recomputeFeature(true)` lifecycle、ElementMap / NamedShape lifecycle，且这些证据能转成前端持久化 graph / `documentObjectUpdates` 后，才可替换 diagnostic。
 - reopen condition：更强 native copied graph artifact 必须先重开并通过 S2，再重新执行 S3 DTO approval 与 S4 current mismatch gate。
 
+## S6 publication gate
+
+- S6 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=7e5befaa50`（`7e5befaa50 docs: 关闭 C12-M8 S5 no-code 裁决`），起点 worktree clean。
+- S6 发布结果：C12-M8 最终发布为 `no_code_retained_diagnostic`，没有 implementation package；C12-M8 队列关闭后只输出表头。
+- 最终事实固定为：S2=`native_evidence_retained_blocker`，S3=`dto_not_reviewed_due_to_native_blocker`，S4=`no_current_mismatch_retained_diagnostic`，S5=`no_code_retained_diagnostic`。
+- 本包不创建 C12-M9 package，不授权 C++ work，不修改 `cad-core/src`、`include`、fixtures、expected、tests、adapters 或 capability source。
+- `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]` 继续保留；known gap 继续是 `known_gap_diagnostic` / `oracle_blocked`，diagnostic 继续是 `copy_on_change_full_temporary_document_cache_not_supported`。
+- final delete condition：只有 FreeCADCmd 稳定暴露 `_CopiedObjs` identity、copyObject dependency order、support rewrite map、`recomputeFeature(true)` lifecycle、ElementMap / NamedShape lifecycle，且这些证据能转成前端持久化 graph / `documentObjectUpdates` 后，才可替换 retained diagnostic。
+- final reopen condition：更强 native copied graph artifact 必须先重开并通过 S2，再重新执行 S3 DTO approval 与 S4 current mismatch gate；不得从 App::Link transport、property/session 状态或 publication wording 直接重开 implementation。
+
 ## 解锁条件
 
 只有以下三项同时成立，C12-M8 才允许产出后续 implementation package：
@@ -109,7 +119,7 @@ C12-M5 已关闭为 `no_code_retained_diagnostic`：旧 native evidence 只能�
 - S3：request-local DTO 产品边界裁决（已完成，`dto_not_reviewed_due_to_native_blocker`）。
 - S4：current mismatch 与 implementation candidate gate（已完成，`no_current_mismatch_retained_diagnostic`）。
 - S5：implementation package authorization / no-code retained decision（已完成，`no_code_retained_diagnostic`）。
-- S6：发布闸门、README 更新和后续分流。
+- S6：发布闸门、README 更新和后续分流（已完成，`no_code_retained_diagnostic` published）。
 
 ## 入口
 
