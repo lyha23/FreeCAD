@@ -16,6 +16,8 @@ C12-M5 S5 已完成并发布 `no_code_retained_diagnostic`：S2 保留 `native_e
 
 用户已在 C12-M5 后要求打开下一套准入验证包：C12-M6 选择旧 C3M4 `PARTSURF-BLOCK-005` RuledSurface wire/wire deferred 行，但不默认把它当作未实现。C12-M6 已完成发布闸门并发布 `wire_wire_admitted_current_supported`：collector / expected、input schema、shell/topo provenance 三闸门均成立，focused wire/wire test 与 adapter capability smoke 通过，旧 C3M4 deferred 行关闭为 historical closed / superseded by C12-M6 evidence；不创建 implementation 包，不改 C++、fixtures、expected、tests、adapters 或 capability source。
 
+用户现在要求判断 CADCore12.0 下一步实现内容并出方案到本目录。C12-M7 选择 live capability 中最明确的 exact narrowed gap：`part_design.revolution_groove.narrowed_gaps.partdesign_groove_upto_brepfeat_cut_native_failure`。该包不是直接几何 C++ 实现，而是先裁决 `PartDesign::Groove` `UpToFirst` / `UpToFace` native failure 是否可升级为 CAD Core product diagnostic contract；只有 FreeCAD native baseline 反转成功且 current CAD Core mismatch 成立，才另开 geometry implementation package。
+
 ## 入口
 
 - C12-M1 总入口：`C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/6-29-16-26-C12-M1-CADCoreCapabilityImplementationCandidate盘点批次总入口.md`
@@ -42,6 +44,10 @@ C12-M5 S5 已完成并发布 `no_code_retained_diagnostic`：S2 保留 `native_e
 - C12-M6 方案：`C12-M6-RuledSurfaceWireWire准入验证批次/6-30-13-27-C12-M6-RuledSurfaceWireWire准入验证批次方案.md`
 - C12-M6 工作步骤：`C12-M6-RuledSurfaceWireWire准入验证批次/工作步骤细分/`
 - C12-M6 矩阵：`C12-M6-RuledSurfaceWireWire准入验证批次/矩阵/`
+- C12-M7 总入口：`C12-M7-PartDesignGrooveUpTo产品契约准入批次/6-30-16-57-C12-M7-PartDesignGrooveUpTo产品契约准入批次总入口.md`
+- C12-M7 方案：`C12-M7-PartDesignGrooveUpTo产品契约准入批次/6-30-16-57-C12-M7-PartDesignGrooveUpTo产品契约准入批次方案.md`
+- C12-M7 工作步骤：`C12-M7-PartDesignGrooveUpTo产品契约准入批次/工作步骤细分/`
+- C12-M7 矩阵：`C12-M7-PartDesignGrooveUpTo产品契约准入批次/矩阵/`
 
 ## 当前基线
 
@@ -91,6 +97,8 @@ C12-M5 S5 已完成并发布 `no_code_retained_diagnostic`：S2 保留 `native_e
 - C12-M6 S3 input schema 准入验证已完成：S3 live 起点为 clean 的 `HEAD=eb7a856b15`（`eb7a856b15 docs: 完成 C12-M6 S2 expected 准入验证`）。fixture 使用 `Part::RuledSurface`、`Curve1.value=LowerWire`、`Curve2.value=UpperWire`、`Orientation.value=Automatic`、`recompute.objs=["RuledSurface"]`；`Curve1/Curve2.SubList` 在 fixture 中缺省但 capability 作为可选 key 发布。`LowerWire` / `UpperWire` 由当前请求图 `Part::RegularPolygon` 重算，输入无 BREP / TopoDS / persistent `NamedShape` / `ElementMap` / mesh / cache；document/app parser 只解析 request graph/link-sub/recompute targets，`part_ruled_surface.cpp` 从 `context.shapes` 取本次 recompute source shape并拒绝非 edge/wire 输入。capability snapshot 含 `source_shape_recomputed_from_document_graph` 与 `wire_wire_brepfill_shell`，不要求 full BREP transport；关闭 `C12M6-BLOCKER-301`，下一步是 S4 shell/topo provenance gate。
 - C12-M6 S4 shell/topo provenance 准入验证已完成：S4 live 起点为 clean 的 `HEAD=c9c58edd67`（`c9c58edd67 docs: 完成 C12-M6 S3 input schema 准入验证`）。FreeCAD `TopoShape::makeElementRuledSurface()` wire/wire 调用 `BRepFill::Shell`，并记录 BRepFill 会修改输入 edge、需恢复 source edge relation；current core 在 `part_ruled_surface.cpp` 收集 source edge evidence，在 `topo_shape_expansion.cpp` 调用 `BRepFill::Shell(Wire, Wire)`、写入 `part_ruled_surface:wire_wire_brepfill_shell` 和 source edge mapper history。focused test 断言 Lower/Upper representative Edge1；current legacy recompute 额外显示 LowerWire.Edge1..Edge4 与 UpperWire.Edge1..Edge4 共 8 条 `ruled_surface_shared_vertex_relation` event。两个指定 unittest 通过；关闭 `C12M6-BLOCKER-401` 为 `provenance_admitted_current_supported_candidate`，当时 S5 publication gate 仍 open。
 - C12-M6 S5 implementation / publication gate 已完成：S5 live 起点为 clean 的 `HEAD=abb595fdbb`（`abb595fdbb docs: 完成 C12-M6 S4 provenance 准入验证`）。S2 `collector_expected_admitted`、S3 `input_schema_admitted`、S4 `provenance_admitted_current_supported_candidate` 全部成立；`supported_wire_wire_expected_backed` wording admitted，且不 overclaim full Part surface family、ProjectOnSurface 或 CopyOnChange。focused wire/wire test 与 C API capability smoke 通过，无 checked-in expected / current output mismatch；最终出口为 `wire_wire_admitted_current_supported`，`C12M6-BLOCKER-501`、`C12M6-CAT-006/007`、`C12M6-SCOPE-007/008` 已关闭。
+- C12-M7 已创建为 PartDesign Groove UpTo 产品契约准入批次。创建基线为 `HEAD=11778397bf`（`11778397bf docs: 关闭 C12-M6 wire/wire 发布闸门`），起点 worktree clean；C12-M1..M6 队列均为空。下一步选择 `part_design.revolution_groove.narrowed_gaps.partdesign_groove_upto_brepfeat_cut_native_failure`，因为 CopyOnChange 仍是 C12-M5 no-code retained diagnostic，RuledSurface wire/wire 已 current-supported，而 Groove UpTo exact blocker 已具备 fixtures、focused diagnostic test、FreeCAD source authority 和 future product-contract reopen condition。C12-M7 默认先做 native failure / product diagnostic contract 准入，不直接改几何 C++。
+- C12-M7 工作步骤总入口已闭合：`C12-M7-PartDesignGrooveUpTo产品契约准入批次/工作步骤细分/6-30-16-58-【已实现】C12-M7工作步骤总入口.md` 已核对为 S0-S5 队列入口，未关闭 S0-S5；live queue 下一项应为 S0 live 基线与候选冻结。
 
 ## 重开条件
 
@@ -102,6 +110,7 @@ C12-M5 S5 已完成并发布 `no_code_retained_diagnostic`：S2 保留 `native_e
 | ProjectOnSurface provenance | 未来 FreeCAD 原生 MapperHistory / ElementMap artifact 产出 `native_provenance_expected_ready` + request-local boundary + current mismatch；C12-M3 native-hidden 证据本身不能重开代码。 |
 | ProjectOnSurface request-local ledger product contract | C12-M4 产品契约公开口径已落地；后续只在新增 request-local ledger 字段、改变 mapper_history schema，或未来 FreeCAD 原生 artifact 产出 `native_provenance_expected_ready` 并证明需要重审 parity 边界时重开。 |
 | RuledSurface wire/wire | C12-M6 已关闭为 `wire_wire_admitted_current_supported`；旧 C3M4 `PARTSURF-BLOCK-005` / `PARTSURF-SCOPE-007` / `PARTSURF-FIX-005` 为 historical closed / superseded by C12-M6 evidence。仅当未来 checked-in expected 与 current output 出现真实 mismatch，并定位到 Part executor / TopoShapeExpansion / topo provenance 时，才另开 implementation package。 |
+| Groove UpTo product diagnostic | C12-M7 已开包；只有 native failure 仍成立且产品批准 exact diagnostic contract，才迁移 expected/test/capability/docs。若 FreeCAD native baseline 反转成功且 current CAD Core mismatch 成立，另开 geometry implementation package。 |
 
 ## 队列检查
 
@@ -113,6 +122,7 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M4-ProjectOnSurfaceRequestLocalLedger产品契约批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M6-RuledSurfaceWireWire准入验证批次/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M7-PartDesignGrooveUpTo产品契约准入批次/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -125,6 +135,7 @@ awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " f
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M4-ProjectOnSurfaceRequestLocalLedger产品契约批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M6-RuledSurfaceWireWire准入验证批次/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M7-PartDesignGrooveUpTo产品契约准入批次/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore12.0
 git diff --check
 ```

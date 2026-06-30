@@ -1,0 +1,8 @@
+id	axis	admission	current_status	required_evidence	forbidden_claim	owner_step
+C12M7-SCOPE-001	live_next_candidate	in_scope	pending_s0	C12-M1..M6 queues empty; CopyOnChange retained no-code; revolution_groove exact narrowed gap visible in live capability	CopyOnChange implemented from remaining_gaps alone	S0
+C12M7-SCOPE-002	freecad_native_failure	in_scope	pending_s1	FreeCADCmd or accepted previous oracle proves Groove UpToFirst and UpToFace still fail on same baseline	Assuming native success without oracle	S1
+C12M7-SCOPE-003	current_exact_diagnostic	in_scope	pending_s2	Current recompute returns stable execution_failed diagnostics for both c51m1 Groove UpTo fixtures	Geometry success inferred from diagnostic fixture	S2
+C12M7-SCOPE-004	product_diagnostic_contract	conditional	pending_s2	Product accepts exact diagnostic as request-local CAD Core behavior while preserving native failure note	Claiming FreeCAD native parity	S2
+C12M7-SCOPE-005	expected_test_capability_migration	conditional	pending_s3	Expected/test/capability/docs migrate together if product contract approved	Capability wording change without tests or expected	S3
+C12M7-SCOPE-006	geometry_implementation_candidate	conditional	pending_s4	Only if native success plus current mismatch is proven	Editing BRepFeat path while native still fails	S4
+C12M7-SCOPE-007	release_gate	in_scope	pending_s5	Final exit is product contract, retained historical failure, implementation candidate or no-code retained	Leaving narrowed gap ambiguous	S5

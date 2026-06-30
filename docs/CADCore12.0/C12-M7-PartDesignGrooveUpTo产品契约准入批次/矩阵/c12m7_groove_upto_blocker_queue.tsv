@@ -1,0 +1,8 @@
+id	owner_step	blocker	current_status	unblock_condition	next_action	status
+C12M7-BLOCKER-ENTRY	入口	work_step_total_entry_unchecked	closed	工作步骤总入口已核对为 S0-S5 队列入口，与 README / 总入口 / 方案 / 矩阵一致	Proceed to S0 live baseline and candidate freeze	closed
+C12M7-BLOCKER-000	S0	next_candidate_not_frozen	open	Live baseline, queue state and capability narrowed gap recorded	Proceed to S1 native/current evidence review	pending
+C12M7-BLOCKER-101	S1	native_failure_not_refreshed	open	FreeCAD native failure or accepted prior oracle evidence for both fixtures recorded	Proceed to S2 contract admission	pending
+C12M7-BLOCKER-201	S2	product_contract_not_approved	open	Diagnostic fields and product boundary accepted or rejected	Proceed to S3 implementation only if approved	pending
+C12M7-BLOCKER-301	S3	expected_test_capability_not_migrated	open	Expected/test/capability/docs updated consistently, or skipped with retained decision	Proceed to S4 validation	pending
+C12M7-BLOCKER-401	S4	focused_validation_not_run	open	Focused tests and capability smoke prove contract or retained state	Proceed to S5 release gate	pending
+C12M7-BLOCKER-501	S5	release_gate_open	open	Final exit and follow-up route recorded	Close queue or open follow-up implementation package	pending

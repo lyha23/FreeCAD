@@ -1,0 +1,42 @@
+# C12-M7 PartDesign Groove UpTo 产品契约准入批次总入口
+
+## 目标
+
+把下一步实现内容收敛到 `PartDesign::Groove` 的 `UpToFirst` / `UpToFace` exact blocker：先复核 native failure，再决定是否发布 CAD Core product diagnostic contract。
+
+## 当前选择理由
+
+当前不应直接实现 SubShapeBinder CopyOnChange：C12-M5 已证明 native copied-object graph、request-local DTO 和 current mismatch 没有同时成立。也不应重开 RuledSurface wire/wire：C12-M6 已关闭为 `wire_wire_admitted_current_supported`。
+
+`part_design.revolution_groove` 的 `partdesign_groove_upto_brepfeat_cut_native_failure` 是 live capability 中最明确的下一项 exact narrowed gap。它已有两条 fixtures、FreeCAD source authority、current CAD Core exact diagnostics 和 future product-contract reopen condition，因此适合进入 C12-M7。
+
+## 执行规则
+
+1. 每步开始前执行 live baseline：`pwd`、`git rev-parse --short HEAD`、`git log -1 --oneline`、`git -c core.quotepath=false status --short -uall`。
+2. S0-S2 默认只改 C12-M7 文档 / 矩阵，不改 `cad-core`。
+3. S3 只有在 S2 批准 product diagnostic contract 后，才允许改 expected/test/capability/docs；仍不得改几何 C++。
+4. 只有 FreeCAD native baseline 反转成功且 current mismatch 成立，才把 geometry C++ implementation 作为后续包，不在本包直接实现。
+5. 不从 fixture 输出倒推业务逻辑，不用 bbox、输出顺序、fixture 名称或 adapter 补猜替代 FreeCAD / CAD Core source authority。
+
+## 顺序
+
+- S0：live 基线与候选冻结。
+- S1：FreeCAD native failure 与 current diagnostic 复核。
+- S2：product diagnostic contract 准入裁决。
+- S3：expected / test / capability / docs 迁移实现。
+- S4：focused validation 与发布边界复核。
+- S5：发布闸门与后续分流。
+
+## 当前闭合状态
+
+- 工作步骤总入口已核对为队列入口：只定义 S0-S5 的执行规则、顺序和验收命令，与 README、方案和矩阵一致。
+- 下一步是 S0 live 基线与候选冻结；S0-S5 尚未标记完成。
+
+## 验收
+
+```bash
+cd /Users/li/Chili3DProject/FreeCAD
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M7-PartDesignGrooveUpTo产品契约准入批次/工作步骤细分 --format markdown
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M7-PartDesignGrooveUpTo产品契约准入批次/矩阵/*.tsv
+git diff --check
+```
