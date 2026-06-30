@@ -16,6 +16,7 @@
 - `part_design.revolution_groove.status=supported_c51s1_advanced_with_historical_groove_upto_native_failure`。
 - narrowed gap：`partdesign_groove_upto_brepfeat_cut_native_failure`，fixtures 为 `c51m1/partdesign-groove-uptofirst-body` 和 `c51m1/partdesign-groove-uptoface-body`。
 - S1 live 复核：`HEAD=fdeea2443e` 起点 worktree clean；C51X native evidence 仍采用 `FreeCADCmd 1.2.0 revision 20260519` 下两个 Groove UpTo fixtures 报 `Groove: Revolution: Up to face: Could not revolve the sketch!`，本轮轻量 `freecadcmd --version` 同为 `FreeCAD 1.2.0 Revision: 20260519 (Git shallow)`；focused test 证明 current CAD Core exact diagnostic 未漂移。
+- S2 准入裁决：`HEAD=cc9e3a1190` 起点 worktree clean；FreeCAD parity success 当前不成立，historical native failure 继续保留，CAD Core product diagnostic contract 已批准。批准范围必须同时覆盖 UpToFirst 与 UpToFace，且 S3 必须保留 native failure note。
 
 ## FreeCAD / CAD Core 依据
 
@@ -42,13 +43,14 @@
 
 ## 预期实现面
 
-若 S2 批准 product diagnostic contract，S3 可修改：
+S2 已批准 product diagnostic contract，S3 可修改：
 
-- `cad-core/fixtures/c51m1/expected/`：新增或更新 Groove UpTo diagnostic product-contract expected。
-- `cad-core/tests/test_p7_features.py`：让两个 fixtures 使用 expected-backed diagnostic contract，而不是只靠手写断言。
+- `cad-core/fixtures/c51m1/expected/partdesign-groove-uptofirst-body.freecad.json`：新增或更新 Groove UpToFirst product diagnostic expected。
+- `cad-core/fixtures/c51m1/expected/partdesign-groove-uptoface-body.freecad.json`：新增或更新 Groove UpToFace product diagnostic expected。
+- `cad-core/tests/test_p7_features.py`：让两个 fixtures 使用 expected-backed diagnostic contract，而不是只靠手写 exact blocker 断言，并保留 primary / secondary diagnostic 区分。
 - `cad-core/src/runtime/capability_contract.cpp`：把 Groove UpTo narrowed gap wording 从 historical native failure 调整为 approved product diagnostic contract，保留 native failure note。
 - `cad-core/tests/test_adapters.py`：同步 capability assertion。
-- `docs/CADCore12.0/README.md` 与本包矩阵：记录 C12-M7 最终出口。
+- C12-M7 docs 与矩阵：记录 S3 迁移实现、S4 focused validation 入口和最终发布边界。
 
 除非 S1 证明 FreeCAD native baseline 已成功且 S2/S3 证明 current mismatch，否则不改：
 
