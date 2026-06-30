@@ -1,13 +1,13 @@
 id	field_or_concept	proposed_contract	allowed_status	owner_step	reason	next_action
-C12M8-DTO-001	copied_object_create	documentObjectUpdates create copied object	pending	S3	Only frontend-persisted graph mutation can cross requests	Approve only if S2 gives stable copied identity.
-C12M8-DTO-002	copied_property_writeback	documentObjectUpdates set copied properties	pending	S3	App::Link transport has vocabulary but SubShapeBinder evidence required	Review against S2 property evidence.
-C12M8-DTO-003	copied_link_rewrite	documentObjectUpdates rewrite links to copied objects	pending	S3	Needed to represent support rewrite without backend session	Approve only with dependency order evidence.
-C12M8-DTO-004	copied_support_sublist	DocumentObject graph PropertyLinkSub support after rewrite	pending	S3	SubShapeBinder support must remain frontend-owned data	Review FullSubList and StableSubList requirements.
-C12M8-DTO-005	copy_on_change_mode	BindCopyOnChange enum request field	pending	S3	Input property already visible but full support not implied	Keep as input field; do not overclaim execution.
-C12M8-DTO-006	partial_load	PartialLoad request field	pending	S3	Current diagnostic covers PartialLoad True	Decide whether DTO admits or keeps unsupported.
-C12M8-DTO-007	temporary_document_handle	forbidden	pending	S3	Backend must stay stateless	Reject.
-C12M8-DTO-008	native_object_pointer	forbidden	pending	S3	Pointers are process/session state	Reject.
-C12M8-DTO-009	full_brep_or_topods	forbidden	pending	S3	Repository boundary forbids full BREP/TopoDS as persisted state	Reject.
-C12M8-DTO-010	persistent_namedshape_elementmap_cache	forbidden	pending	S3	NamedShape/ElementMap are single-request products	Reject.
-C12M8-DTO-011	tmp_binder_session_state	forbidden	pending	S3	_tmp_binder cannot survive backend request	Reject.
-C12M8-DTO-012	cache_star_backend_cache	forbidden_by_default	pending	S3	Cache_* should not become backend cache without source proof	Classify after S2.
+C12M8-DTO-001	copied_object_create	documentObjectUpdates create copied object	deferred	S3	Direction is allowed only as frontend-persisted graph mutation, but S2 lacks stable copied object identity and order evidence	Do not approve SubShapeBinder implementation DTO; require stronger native copied graph artifact.
+C12M8-DTO-002	copied_property_writeback	documentObjectUpdates set copied properties	deferred	S3	App::Link has transport vocabulary, but S2 lacks SubShapeBinder copied property graph evidence	Keep as reference vocabulary only until native copied graph evidence reopens S2.
+C12M8-DTO-003	copied_link_rewrite	documentObjectUpdates rewrite links to copied objects	deferred	S3	Link rewrite is request-local in principle, but S2 lacks dependency order and source-to-copy rewrite map	Do not enter S4 implementation approval; require deterministic dependency and rewrite evidence.
+C12M8-DTO-004	copied_support_sublist	DocumentObject graph PropertyLinkSub support after rewrite	deferred	S3	Support sublist must remain frontend-owned data, but S2 lacks copied support rewrite evidence and must not guess prefixes	Require FullSubList and StableSubList rewrite evidence before DTO approval.
+C12M8-DTO-005	copy_on_change_mode	BindCopyOnChange enum request field	approved	S3	Existing frontend-persistent input property may remain in Objects graph, but this is not execution approval	Keep input-only; Enabled or Mutated still retains current diagnostic until S2 gate reopens.
+C12M8-DTO-006	partial_load	PartialLoad request field	deferred	S3	PartialLoad is a visible property, but True semantics depend on native copied graph and support lifecycle evidence missing in S2	Keep current unsupported diagnostic for PartialLoad True until stronger native evidence and product decision.
+C12M8-DTO-007	temporary_document_handle	forbidden	rejected	S3	Backend must stay stateless and temporary document handles are native session state	Reject permanently for request and response DTO.
+C12M8-DTO-008	native_object_pointer	forbidden	rejected	S3	Pointers are process and session state, not serializable product data	Reject permanently for request and response DTO.
+C12M8-DTO-009	full_brep_or_topods	forbidden	rejected	S3	Repository boundary forbids full BREP or TopoDS as persisted request or response state	Reject permanently; only ReferenceShadow.brep single-subshape exception remains out of scope here.
+C12M8-DTO-010	persistent_namedshape_elementmap_cache	forbidden	rejected	S3	NamedShape and ElementMap are single-request products and cannot become persistent copied graph cache	Reject persistent cache; only derived subshape names or writeback suggestions may cross the boundary.
+C12M8-DTO-011	tmp_binder_session_state	forbidden	rejected	S3	_tmp_binder and _CopiedObjs lifecycle cannot survive backend request boundaries	Reject post-request session state; require frontend-persisted graph if native evidence later supports it.
+C12M8-DTO-012	cache_star_backend_cache	forbidden	rejected	S3	S2 classifies Cache_* as transform matrix cache optimization, not copied graph semantic state	Reject backend Cache_* persistence; keep Cache_* out of request and response DTO.

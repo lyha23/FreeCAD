@@ -14,6 +14,12 @@ S2 已固定 artifact schema `c12m8.subshapebinder-copy-on-change-native-copied-
 
 因此后续 S3/S4 只能继承该 blocker 做 DTO rejection/defer 与 retained diagnostic path；除非另有更强 native copied graph artifact 重开 S2，S5 不能授权 implementation package。
 
+## S3 当前裁决
+
+S3 已关闭为 `dto_not_reviewed_due_to_native_blocker`。本轮只确认 request-local DTO 边界，不批准完整 CopyOnChange implementation DTO：copied object create、property writeback、link rewrite、support sublist rewrite 和 `PartialLoad=True` 均因 S2 native blocker `deferred`；`BindCopyOnChange` 只保留为 input-only request graph 字段；temporary document handle、native pointer、full BREP / TopoDS、persistent `NamedShape` / `ElementMap` cache、post-request `_tmp_binder` / `_CopiedObjs` session state 和 backend `Cache_*` 均 `rejected`。
+
+S4/S5 只能继承 retained diagnostic path。除非先用更强 native copied graph artifact 重开 S2 并重新通过 S3 DTO approval，否则不得输出 implementation package。
+
 ## 为什么不能直接实现
 
 `SubShapeBinder` CopyOnChange 的 full path 不是普通 shape copy。FreeCAD 里它会进入 `_tmp_binder`、`_CopiedObjs`、`copyObject()`、`recomputeFeature(true)`、`_CopiedLink` 和 copied support rewrite 的组合流程。CAD Core 的边界是无状态 request graph：后端不能保存 temporary document、TopoDS、BREP、NamedShape、ElementMap 或 copied-object cache。

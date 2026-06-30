@@ -24,7 +24,7 @@ C12-M5 已关闭为 `no_code_retained_diagnostic`：旧 native evidence 只能�
 - `part_design.sub_shape_binder.known_gaps.copy_on_change_full_temporary_document_cache.status=known_gap_diagnostic`，`route=oracle_blocked`，`diagnostic=copy_on_change_full_temporary_document_cache_not_supported`。
 - delete condition：只有 FreeCADCmd 暴露不依赖 persistent backend session 的 stable request-local CopyOnChange copied-object evidence 后，才能替换该 diagnostic。
 - reopen condition：只有产品批准由更强 native oracle 支撑的 request-local CopyOnChange DTO 后，才重新打开实现判断。
-- C12-M5 `no_code_retained_diagnostic` 继续有效：S2=`native_evidence_retained_blocker`，S3=`dto_rejected_known_gap_retained`，S4=`no_current_mismatch_retained_diagnostic`。
+- C12-M5 `no_code_retained_diagnostic` 继续有效：S2=`native_evidence_retained_blocker`，S3 继承 retained path；本包已将 S3 精化为 `dto_not_reviewed_due_to_native_blocker`。
 - C12-M7 后续分流口径继续有效：Groove UpTo 已发布 `product_diagnostic_contract_published`，只有同一 FreeCAD / LibPack / OCCT oracle baseline 证明 native success 且 current mismatch 时才另开 geometry implementation candidate；本包不重开 Groove 或 RuledSurface。
 
 ## S1 source / current 复核
@@ -50,6 +50,16 @@ C12-M5 已关闭为 `no_code_retained_diagnostic`：旧 native evidence 只能�
 - `Cache_*` 已分类为 transform matrix cache hit/update/cleanup optimization；backend persistent `Cache_*` 继续禁止。
 - `C12M8-PROBE-001..010` 均已写 observed_status / decision / artifact_or_note；`C12M8-BLOCKER-201` 已关闭为 `closed_s2_retained_blocker`。
 - S3/S4 必须继承 S2 retained blocker，不得把 property 状态、label、bbox、shape count、temporary document name 或 `_CopiedLink` target 单独当作 implementation approval 证据。
+
+## S3 request-local DTO 边界
+
+- S3 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=557c5be617`（`557c5be617 文档：关闭 C12-M8 S2 native evidence gate`），起点 worktree clean。
+- S3 执行前队列确认：S3 是第一条 pending，后续为 S4-S6。
+- S3 裁决：`dto_not_reviewed_due_to_native_blocker`。由于 S2 没有输出 `native_copied_graph_evidence_ready`，本步不批准完整 CopyOnChange request-local DTO，也不允许 S4/S5 进入 implementation approval。
+- `C12M8-DTO-001..004` copied object create、property writeback、link rewrite、support sublist rewrite 均是未来可能允许的 frontend-persisted graph / `documentObjectUpdates` 方向，但本轮因 S2 缺 stable copied graph evidence 裁决为 `deferred`。
+- `C12M8-DTO-005` 只批准为 input-only `BindCopyOnChange` request graph 字段；`C12M8-DTO-006` `PartialLoad=True` 仍因 native blocker 裁决为 `deferred`。
+- `C12M8-DTO-007..012` temporary document handle、native pointer、full BREP / TopoDS、persistent `NamedShape` / `ElementMap` cache、post-request `_tmp_binder` / `_CopiedObjs` session state、backend `Cache_*` 均裁决为 `rejected`。
+- `C12M8-BLOCKER-301` 已关闭为 `closed_s3_dto_not_reviewed_due_to_native_blocker`；backend gap classification 已同步为 native blocker 下的 DTO retained/deferred 状态。
 
 ## 解锁条件
 
@@ -77,7 +87,7 @@ C12-M5 已关闭为 `no_code_retained_diagnostic`：旧 native evidence 只能�
 - S0：live 基线与 C12-M5/C12-M7 继承口径冻结（已完成）。
 - S1：FreeCAD source、current coverage 和 existing transport evidence 复核（已完成）。
 - S2：native copied graph probe schema 与 evidence gate（已完成，`native_evidence_retained_blocker`）。
-- S3：request-local DTO 产品边界裁决。
+- S3：request-local DTO 产品边界裁决（已完成，`dto_not_reviewed_due_to_native_blocker`）。
 - S4：current mismatch 与 implementation candidate gate。
 - S5：implementation package authorization / no-code retained decision。
 - S6：发布闸门、README 更新和后续分流。
