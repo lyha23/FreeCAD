@@ -18,6 +18,8 @@ C12-M5 S5 已完成并发布 `no_code_retained_diagnostic`：S2 保留 `native_e
 
 C12-M7 已完成 PartDesign Groove UpTo 产品契约准入批次并发布 `product_diagnostic_contract_published`。该包没有直接几何 C++ 实现；`PartDesign::Groove` `UpToFirst` / `UpToFace` native failure 仍成立，CAD Core request-local exact diagnostic 已升级为 product diagnostic contract，expected/test/capability/docs 公开口径已迁移，当前仍不声称 FreeCAD native parity。
 
+用户已在 C12-M7 后要求继续出方案：C12-M8 重新选择当前唯一 live `remaining_gaps`：`part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache`。C12-M8 不推翻 C12-M5 `no_code_retained_diagnostic`，也不是直接实现包；它是 Native Copied Graph DTO 准入解锁批次，只有 stable native copied-object graph evidence、request-local DTO approval 和 current mismatch 三项同时成立，才允许产出后续 implementation package。
+
 ## 入口
 
 - C12-M1 总入口：`C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/6-29-16-26-C12-M1-CADCoreCapabilityImplementationCandidate盘点批次总入口.md`
@@ -48,6 +50,10 @@ C12-M7 已完成 PartDesign Groove UpTo 产品契约准入批次并发布 `produ
 - C12-M7 方案：`C12-M7-PartDesignGrooveUpTo产品契约准入批次/6-30-16-57-C12-M7-PartDesignGrooveUpTo产品契约准入批次方案.md`
 - C12-M7 工作步骤：`C12-M7-PartDesignGrooveUpTo产品契约准入批次/工作步骤细分/`
 - C12-M7 矩阵：`C12-M7-PartDesignGrooveUpTo产品契约准入批次/矩阵/`
+- C12-M8 总入口：`C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次/6-30-21-24-C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次总入口.md`
+- C12-M8 方案：`C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次/6-30-21-24-C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次方案.md`
+- C12-M8 工作步骤：`C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次/工作步骤细分/`
+- C12-M8 矩阵：`C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次/矩阵/`
 
 ## 当前基线
 
@@ -105,12 +111,13 @@ C12-M7 已完成 PartDesign Groove UpTo 产品契约准入批次并发布 `produ
 - C12-M7 S3 expected / test / capability / docs 迁移实现已完成：新增 `c51m1/expected/partdesign-groove-uptofirst-body.freecad.json` 与 `partdesign-groove-uptoface-body.freecad.json`；focused test 改为 expected-backed product diagnostic assertion；`part_design.revolution_groove` capability / adapter assertion 发布 `product_diagnostic_contract_non_parity` 并保留 native failure note、fixture pair、delete/reopen condition。
 - C12-M7 S4 focused validation 与发布边界复核已完成：focused Groove test、C API capability smoke 和 `/tmp/c12m7-s4-capabilities.json` 均确认 `part_design.revolution_groove` status / fixtures / diagnostics / narrowed gap route 未漂移，仍为 `product_diagnostic_contract_non_parity` 且 `freecad_native_parity=false`；CopyOnChange 仍是 C12-M5 retained diagnostic，RuledSurface wire/wire 仍 current-supported；未发布 full Groove family，未把 geometry C++ parity 当作完成。
 - C12-M7 S5 发布闸门已完成：最终出口为 `product_diagnostic_contract_published`，C12-M7 队列预期只输出表头；本包不创建 geometry implementation package，不改 `cad-core/src`、`cad-core/include`、fixtures、expected、tests 或 adapters。只有同一 FreeCAD / LibPack / OCCT oracle baseline 证明 Groove UpToFirst 与 UpToFace native success，且 current CAD Core 与 stable expected mismatch 时，才另开 geometry implementation candidate。
+- C12-M8 已创建为 SubShapeBinder CopyOnChange Native Copied Graph DTO 准入解锁批次。创建基线为 `HEAD=1d03274e9e`（`1d03274e9e docs: 发布 C12-M7 S5 产品诊断契约出口`），起点 worktree clean；C12-M1..M7 队列均为空。live capability 仍为 `part_design.sub_shape_binder.status=supported_c8m1_expected_backed_request_local_with_copy_on_change_known_gap`，`remaining_gaps=["copy_on_change_full_temporary_document_cache"]`，known gap 仍为 `status=known_gap_diagnostic`、`route=oracle_blocked`、`diagnostic=copy_on_change_full_temporary_document_cache_not_supported`。本包只裁决 native copied-object graph evidence、request-local DTO approval 和 current mismatch 三闸门，不直接改 C++、fixtures、expected、tests、adapters 或 capability source。
 
 ## 重开条件
 
 | family | reopen condition |
 | --- | --- |
-| CopyOnChange | C12-M5 已关闭为 `no_code_retained_diagnostic`；仅当 stable native copied-object graph expected + 产品批准 request-local DTO + current cad-core mismatch 同时成立时重开。 |
+| CopyOnChange | C12-M8 已打开为 Native Copied Graph DTO 准入解锁批次；C12-M5 `no_code_retained_diagnostic` 继续有效。仅当 stable native copied-object graph evidence + 产品批准 request-local DTO + current cad-core mismatch 同时成立时，才允许另开 implementation package。 |
 | Assembly representative / marker / writeback | 产品批准 request-local subset + expected/current mismatch。 |
 | Part Workbench historical rows | stable native/request-local expected + current mismatch。 |
 | ProjectOnSurface provenance | 未来 FreeCAD 原生 MapperHistory / ElementMap artifact 产出 `native_provenance_expected_ready` + request-local boundary + current mismatch；C12-M3 native-hidden 证据本身不能重开代码。 |
@@ -129,6 +136,7 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M6-RuledSurfaceWireWire准入验证批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M7-PartDesignGrooveUpTo产品契约准入批次/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -142,6 +150,7 @@ awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " f
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M6-RuledSurfaceWireWire准入验证批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M7-PartDesignGrooveUpTo产品契约准入批次/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore12.0
 git diff --check
 ```

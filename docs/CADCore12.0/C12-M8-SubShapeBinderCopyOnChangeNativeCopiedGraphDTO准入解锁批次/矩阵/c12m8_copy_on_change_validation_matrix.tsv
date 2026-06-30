@@ -1,0 +1,13 @@
+id	validation	owner_step	status	command_or_evidence	expected_result
+C12M8-VAL-001	queue check before S0	S0	pending	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次/工作步骤细分 --format markdown	Shows pending index and S0-S6 at package creation.
+C12M8-VAL-002	prior queue checks	S0	pending	C12-M1..M7 step_goal_queue commands	Each prior queue outputs only header.
+C12M8-VAL-003	capability snapshot	S0	pending	cad-core/build/cad-core capabilities	part_design.sub_shape_binder remaining gap still present.
+C12M8-VAL-101	source matrix TSV check	S1	pending	awk TSV field count check	All TSV rows have matching field counts.
+C12M8-VAL-201	native probe artifact or blocker	S2	pending	docs/temp artifact or blocker note	S2 records evidence_ready or retained blocker.
+C12M8-VAL-301	DTO matrix field decision	S3	pending	Review c12m8_copy_on_change_dto_contract_fields.tsv	Every DTO row approved rejected or deferred.
+C12M8-VAL-401	current comparison gate	S4	pending	focused test or documented not-run reason	Implementation mismatch only if S2 and S3 pass.
+C12M8-VAL-501	final exit	S5	pending	backend_gap_classification and README update	implementation_package_authorized or no_code_retained_diagnostic.
+C12M8-VAL-601	final queue check	S6	pending	step_goal_queue for C12-M8	Only table header after S6 closes.
+C12M8-VAL-602	final TSV check	S6	pending	awk -F '\t' over matrices	No field count mismatch.
+C12M8-VAL-603	trailing whitespace check	S6	pending	rg -n '[ \t]$' docs/CADCore12.0/C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次 docs/CADCore12.0/README.md	No output.
+C12M8-VAL-604	diff whitespace check	S6	pending	git diff --check	No output.

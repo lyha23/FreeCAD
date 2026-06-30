@@ -1,0 +1,6 @@
+id	candidate	requires	owner_step	current_classification	decision	exit_condition
+C12M8-CAT-001	copy_on_change_full_temporary_document_cache	S2 native evidence plus S3 DTO plus S4 mismatch	S4/S5	pending	retained_until_gates_pass	Implementation package only if all three gates pass.
+C12M8-CAT-002	app_link_copy_on_change_transport	SubShapeBinder evidence linking App::Link updates to binder copied graph	S1/S3	pending	reference_only	Can inform DTO wording but not close SubShapeBinder gap alone.
+C12M8-CAT-003	publication_repair	Capability/docs wording drift without C++ mismatch	S4/S6	pending	possible	S4 decides if wording repair is enough.
+C12M8-CAT-004	no_code_retained_diagnostic	Any failed gate	S5	pending	default_exit	Retain known_gap_diagnostic and oracle_blocked.
+C12M8-CAT-005	implementation_package_authorized	Native copied graph evidence ready and DTO approved and mismatch confirmed	S5	pending	gated_exit	Create follow-up implementation package; do not mix code into C12-M8.

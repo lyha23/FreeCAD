@@ -1,0 +1,10 @@
+id	blocker	owner_step	status	close_condition	next_action
+C12M8-BLOCKER-001	live baseline not frozen	S0	open	Record HEAD dirty boundary queue state and capability snapshot	Run S0 baseline.
+C12M8-BLOCKER-002	previous C12 queues not confirmed empty	S0	open	C12-M1..M7 queues only output table headers	Run step_goal_queue for each prior package.
+C12M8-BLOCKER-101	FreeCAD source authority incomplete	S1	open	ShapeBinder Document Link and current cad-core sources reviewed	Complete S1 source candidates.
+C12M8-BLOCKER-102	App::Link transport may be overclaimed	S1	open	Transport marked reference-only unless SubShapeBinder evidence connects it	Complete S1/S3 boundary.
+C12M8-BLOCKER-201	native copied graph evidence missing	S2	open	Probe artifact proves or blocks copied graph identity dependency order support rewrite and ElementMap lifecycle	Run or block S2 probe.
+C12M8-BLOCKER-301	DTO product boundary undecided	S3	open	All DTO rows approved rejected or deferred with reason	Complete S3 DTO matrix.
+C12M8-BLOCKER-401	current mismatch not adjudicated	S4	open	S2/S3 gate state used to compare or retain diagnostic	Complete S4 comparison gate.
+C12M8-BLOCKER-501	implementation package authorization undecided	S5	open	S5 final exit set to implementation_package_authorized or no_code_retained_diagnostic	Complete S5.
+C12M8-BLOCKER-601	publication gate not closed	S6	open	README root docs queues TSV whitespace and diff checks complete	Complete S6 validation.

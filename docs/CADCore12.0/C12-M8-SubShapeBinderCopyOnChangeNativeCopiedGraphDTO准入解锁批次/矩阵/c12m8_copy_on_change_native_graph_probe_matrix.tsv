@@ -1,0 +1,11 @@
+id	evidence_field	why_required	source_authority	owner_step	observed_status	decision	artifact_or_note
+C12M8-PROBE-001	freecad_occt_baseline	Native evidence must state exact runtime baseline	FreeCADCmd runtime	S2	pending	required	Record FreeCAD version revision and OCCT if probe runs.
+C12M8-PROBE-002	mode_matrix	Enabled Mutated PartialLoad must be separated	ShapeBinder.h::BindCopyOnChange;PartialLoad	S2	pending	required	Disabled is control; Enabled Mutated PartialLoad are target cases.
+C12M8-PROBE-003	single_support_gate	setupCopyOnChange requires support.size()==1	ShapeBinder.cpp::setupCopyOnChange	S1/S2	pending	required	Probe must record support count and rejection cases.
+C12M8-PROBE-004	tmp_binder_lifecycle	FreeCAD uses temporary binder during copied-object update	ShapeBinder.cpp::update	S2	pending	required	Record whether lifecycle is observable without backend session.
+C12M8-PROBE-005	copied_objs_identity	_CopiedObjs must expose stable copied object identities	ShapeBinder.h::_CopiedObjs;ShapeBinder.cpp::update	S2	pending	required	Must include object names/types and source relation.
+C12M8-PROBE-006	dependency_order	copyObject dependency order is core graph evidence	Document.cpp::copyObject	S2	pending	required	Must record copied dependency edges and order.
+C12M8-PROBE-007	support_rewrite	Copied support must rewrite links to copied objects	ShapeBinder.cpp::_CopiedLink;Document.cpp::copyObject	S2	pending	required	Must record support before and after rewrite.
+C12M8-PROBE-008	recompute_status	recomputeFeature(true) affects copied graph validity	Document.cpp::recomputeFeature;ShapeBinder.cpp::update	S2	pending	required	Must record recompute status and diagnostics.
+C12M8-PROBE-009	elementmap_lifecycle	ElementMap/NamedShape lifecycle cannot become backend cache	PropertyTopoShape and ShapeBinder update path	S2/S3	pending	required	Must judge request-local serializability.
+C12M8-PROBE-010	cache_star_boundary	Cache_* must be classified as required semantic state or optimization	ShapeBinder.cpp Cache_ name handling	S2	pending	boundary_review	Do not require backend persistent cache unless source proves semantic need.
