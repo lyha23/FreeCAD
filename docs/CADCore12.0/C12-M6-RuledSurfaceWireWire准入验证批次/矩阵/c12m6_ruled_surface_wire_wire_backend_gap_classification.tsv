@@ -1,6 +1,6 @@
 id	area	source_status	expected_status	current_status	classification	implementation_action	owner_step	notes
-C12M6-CAT-001	freecad_source	pending_s1	n/a	n/a	pending	no_code	S1	FreeCAD source must confirm BRepFill::Shell branch before any supported claim
-C12M6-CAT-002	historical_deferred	pending_s1	n/a	current_capability_claims_supported	pending	no_code	S1	Decide whether old PARTSURF-BLOCK-005 is stale docs or still active
+C12M6-CAT-001	freecad_source	source_supported	n/a	n/a	freecad_source_supported	no_code	S1	PartFeatures RuledSurface executes Curve1/Curve2/Orientation through TopoShape::makeElementRuledSurface; TopoShapeExpansion has BRepFill::Shell wire/wire branch
+C12M6-CAT-002	historical_deferred	source_supported	n/a	current_landing_present	historical_deferred_doc_drift	no_code_validate_s2_s4	S1	Old PARTSURF deferred lacked collector/input schema/provenance evidence; current executor/helper/fixture/test/capability have wire/wire landing, but S2/S3/S4 still own admission gates
 C12M6-CAT-003	collector_expected	source_supported	pending_s2	n/a	pending	no_code	S2	Expected must be trusted before current comparison matters
 C12M6-CAT-004	input_schema	source_supported	expected_candidate	pending_s3	pending	no_code	S3	Request graph schema must be accepted without BREP/cache
 C12M6-CAT-005	provenance	source_supported	expected_candidate	pending_s4	pending	no_code	S4	Shell/topo provenance must be stronger than bbox/topology match

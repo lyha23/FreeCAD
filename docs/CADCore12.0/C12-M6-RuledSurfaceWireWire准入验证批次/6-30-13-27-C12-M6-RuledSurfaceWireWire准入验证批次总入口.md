@@ -16,6 +16,13 @@
 - `cad-core/build/cad-core capabilities` 显示 `part_workbench.ruled_surface.status=supported_wire_wire_expected_backed`，fixtures 含 `c4m1/part-ruled-surface-wire-wire`，`remaining_gaps=[]`，covered / request-local boundaries 均包含 `wire_wire_brepfill_shell`。
 - 旧 deferred 继承口径冻结为 collector、input schema、shell/topo provenance 三项；下一步为 S1 source/current evidence 复核。
 
+## S1 source/current evidence 复核
+
+- S1 执行基线：`HEAD=2083c0cbdb`（`2083c0cbdb docs: 冻结 C12-M6 S0 live 基线`），起点 worktree clean。
+- FreeCAD source-supported：`Part::RuledSurface` 声明 `Orientation`、`Curve1`、`Curve2`；`execute()` 调用 `res.makeElementRuledSurface(shapes, Orientation.getValue())`；`TopoShape::makeElementRuledSurface()` 对 wire/wire 调用 `BRepFill::Shell` 并记录 source edge recovery comment。
+- current-supported-candidate：cad-core executor/helper、`c4m1/part-ruled-surface-wire-wire` fixture/expected、focused test 和 capability 均已有 wire/wire landing。
+- 旧 `PARTSURF-BLOCK-005` 在 S1 层面裁决为 `historical-deferred-doc-drift`；只关闭 `C12M6-BLOCKER-101/102`，collector/schema/provenance 仍由 S2/S3/S4 关闭。
+
 ## 执行规则
 
 1. 每步开始前执行 live baseline：`pwd`、`git rev-parse --short HEAD`、`git log -1 --oneline`、`git -c core.quotepath=false status --short -uall`。
@@ -27,7 +34,7 @@
 ## 顺序
 
 - S0：live 基线与继承口径冻结。
-- S1：FreeCAD 源码与旧 PARTSURF 证据复核。
+- S1：FreeCAD 源码与旧 PARTSURF 证据复核（已完成，下一步为 S2 collector / expected gate）。
 - S2：collector / expected 准入验证。
 - S3：request-local input schema 准入验证。
 - S4：shell/topo provenance 准入验证。

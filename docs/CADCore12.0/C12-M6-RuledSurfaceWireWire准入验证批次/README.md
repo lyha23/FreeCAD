@@ -17,6 +17,14 @@ C12-M6 用于验证 `Part::RuledSurface` wire/wire 分支是否已经满足正�
 - `part_workbench.ruled_surface.status=supported_wire_wire_expected_backed`，fixtures 包含 `c4m1/part-ruled-surface-wire-wire`，`remaining_gaps=[]`，covered 包含 `wire_wire_brepfill_shell` / `wire_edge_provenance` / `expected_backed_fixtures`，request-local boundaries 包含 `wire_wire_brepfill_shell`。
 - 旧 `PARTSURF-BLOCK-005`、`PARTSURF-SCOPE-007`、`PARTSURF-FIX-005` 的 deferred 条件冻结为：source-backed collector、cad-core input schema、shell/topo provenance。
 
+## S1 source/current 复核
+
+- S1 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=2083c0cbdb`（`2083c0cbdb docs: 冻结 C12-M6 S0 live 基线`），起点 `status --short -uall` 无输出。
+- FreeCAD `PartFeatures.cpp::RuledSurface::execute()` source-backed 读取 `Curve1` / `Curve2` / `Orientation` 后调用 `res.makeElementRuledSurface(shapes, Orientation.getValue())`。
+- FreeCAD `TopoShapeExpansion.cpp::TopoShape::makeElementRuledSurface()` source-supported：edge/edge 调用 `BRepFill::Face`，wire/wire 调用 `BRepFill::Shell`，并记录 BRepFill 修改输入 edge 后需要 shared-vertex relation recovery。
+- current cad-core 已有 executor/helper/fixture/expected/focused test/capability wire/wire landing，因此旧 PARTSURF deferred 在 S1 层面归类为 `historical-deferred-doc-drift`，不是 current backend implementation gap。
+- S1 只关闭 `C12M6-BLOCKER-101/102`；S2 collector/expected、S3 input schema、S4 shell/topo provenance 仍是正式 admission gate。
+
 ## 入口
 
 - 总入口：`6-30-13-27-C12-M6-RuledSurfaceWireWire准入验证批次总入口.md`
