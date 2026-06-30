@@ -759,7 +759,13 @@ bool applyFinalResultRefineForFeature(const app::DocumentObject& bodyObject,
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureAddSub.cpp
     // ::FeatureAddSub::execute(), "result = refineShapeIfActive(result)" after the feature's
     // add/sub boolean has produced the final body result.
-    const auto refined = runtime::applyRefinePropertyForOwner(*documentIt->second, bodyObject.name, context, *bodyShape, bodyNamedShape);
+    const auto refined = runtime::applyPartDesignFeatureRefinePropertyForOwner(
+        *documentIt->second,
+        bodyObject.name,
+        context,
+        *bodyShape,
+        bodyNamedShape
+    );
     if (!refined) {
         return false;
     }

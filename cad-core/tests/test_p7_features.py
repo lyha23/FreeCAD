@@ -240,7 +240,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pocket["status"], "ok")
         self.assertNotIn("refine", pocket)
-        self.assertEqual(body["refined_features"], ["Pocket"])
+        self.assertEqual(body["refined_features"], ["Pad", "Pocket"])
         for source in ["Pocket.Face5", "Pocket.Face6", "SketchPocket.Face1"]:
             self.assertTrue(
                 any(
@@ -257,6 +257,41 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             {("Pocket", "Face5"), ("Pocket", "Face6"), ("SketchPocket", "Face1")},
         )
         self.assert_object_matches_expected(result, "p7", "pocket-refine-true")
+
+    def test_p7_pocket_missing_refine_uses_partdesign_default_refinemodel(self) -> None:
+        payload = json.loads((ROOT / "fixtures" / "p7" / "pocket-refine-true.json").read_text())
+        self.object_payload(payload, "Pocket")["Properties"].pop("Refine")
+
+        result = self.run_recompute_payload(payload)
+        pocket = result["objects"]["Pocket"]
+        body = result["objects"]["Body"]
+        body_named_shape = result["named_shapes"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pocket["status"], "ok")
+        self.assertNotIn("refine", pocket)
+        self.assertEqual(body["refined_features"], ["Pad", "Pocket"])
+        self.assert_refine_model_history(
+            body_named_shape,
+            {"SketchPad", "SketchPocket"},
+            {"Pad", "Pocket", "SketchPad", "SketchPocket"},
+            {("Pocket", "Face5"), ("Pocket", "Face6"), ("SketchPocket", "Face1")},
+        )
+        self.assert_object_matches_expected(result, "p7", "pocket-refine-true")
+
+    def test_p7_body_replay_explicit_refine_false_overrides_partdesign_default(self) -> None:
+        payload = json.loads((ROOT / "fixtures" / "p7" / "pocket-refine-true.json").read_text())
+        self.object_payload(payload, "Pad")["Properties"]["Refine"] = False
+        self.object_payload(payload, "Pocket")["Properties"]["Refine"] = False
+
+        result = self.run_recompute_payload(payload)
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(body["status"], "ok")
+        self.assertNotIn("refined_features", body)
+        self.assertEqual(body["direct_tip_subshape_owner"], "Pocket")
+        self.assertTrue(body["direct_tip_subshape_stable_prefix"])
 
     def test_p7_coordinate_system_exposes_axes_for_reference_axis(self) -> None:
         result = self.run_recompute("datum-coordinate-system-reference-axis", "p7")
