@@ -40,6 +40,14 @@
 - document/app parser 只解析 request graph、properties、link-sub 和 recompute targets；`part_ruled_surface.cpp` 从 `context.shapes` 读取本次 recompute source shape，并拒绝 no-edge 和非 edge/wire 输入。
 - capability snapshot 包含 `source_shape_recomputed_from_document_graph` 与 `wire_wire_brepfill_shell`，未要求 full BREP transport。S3 裁决为 `input_schema_admitted`，只关闭 `C12M6-BLOCKER-301`；S4 provenance 和 S5 publication 仍 open。
 
+## S4 shell/topo provenance 准入验证
+
+- S4 执行基线：`HEAD=c9c58edd67`（`c9c58edd67 docs: 完成 C12-M6 S3 input schema 准入验证`），起点 worktree clean。
+- FreeCAD `TopoShape::makeElementRuledSurface()` 的 wire/wire 分支调用 `BRepFill::Shell`，并在注释中记录 BRepFill 会修改输入 edge、需要恢复 source edge relation；current core 的对应落点是 `part_ruled_surface.cpp` 收集 source edge evidence、`topo_shape_expansion.cpp` 调用 `BRepFill::Shell(Wire, Wire)` 并写入 `part_ruled_surface:wire_wire_brepfill_shell`。
+- checked-in expected 与 current focused test 覆盖 `occt_shell`、faces=4、edges=12、vertices=8、bbox tolerance、`volume=10.5625`、Lower/Upper representative Edge1 element-map 和 `wire_wire_brepfill_shell`。
+- `assert_ruled_surface_source_edge()` 是 representative edge smoke helper；但 current legacy recompute 的 `mapper_history` 实际包含 LowerWire.Edge1..Edge4 与 UpperWire.Edge1..Edge4 共 8 条 source edge relation event，provenance 来自 Part executor / TopoShapeExpansion / NamedShape history，不是 adapter output guess。
+- S4 裁决为 `provenance_admitted_current_supported_candidate`，关闭 `C12M6-BLOCKER-401`；S5 publication gate 与 `C12M6-BLOCKER-501` 仍 open，不在本步发布 full surface family。
+
 ## 执行规则
 
 1. 每步开始前执行 live baseline：`pwd`、`git rev-parse --short HEAD`、`git log -1 --oneline`、`git -c core.quotepath=false status --short -uall`。
@@ -53,8 +61,8 @@
 - S0：live 基线与继承口径冻结。
 - S1：FreeCAD 源码与旧 PARTSURF 证据复核。
 - S2：collector / expected 准入验证。
-- S3：request-local input schema 准入验证（已完成，下一步为 S4 shell/topo provenance gate）。
-- S4：shell/topo provenance 准入验证。
+- S3：request-local input schema 准入验证（已完成）。
+- S4：shell/topo provenance 准入验证（已完成，下一步为 S5 implementation/publication gate）。
 - S5：implementation gate 与发布闸门。
 
 ## 验收

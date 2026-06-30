@@ -43,6 +43,17 @@ C12-M6 用于验证 `Part::RuledSurface` wire/wire 分支是否已经满足正�
 - `part_ruled_surface.cpp` 只接受 `Curve1`、`Curve2`、`Orientation`，从 `context.shapes` 解析本次 recompute source shape，并拒绝 missing link、multiple subnames、no-edge 和非 edge/wire 输入；未发现 fixture name branch、adapter shortcut 或 compound hack。
 - capability snapshot 的 `request_local_boundaries` 包含 `source_shape_recomputed_from_document_graph` 和 `wire_wire_brepfill_shell`，payload wording 不要求 full BREP transport。S3 关闭为 `input_schema_admitted`；S4 provenance gate 和 S5 publication gate 继续 open。
 
+## S4 shell/topo provenance 准入
+
+- S4 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=c9c58edd67`（`c9c58edd67 docs: 完成 C12-M6 S3 input schema 准入验证`），起点 `status --short -uall` 无输出。
+- FreeCAD `TopoShapeExpansion.cpp::TopoShape::makeElementRuledSurface()` 的 wire/wire 分支调用 `BRepFill::Shell(TopoDS::Wire(S1), TopoDS::Wire(S2))`；相邻注释明确 `BRepFill::Face()` 和 `Shell()` 会修改原始 input edges，需要通过 shared-vertex 搜索重建 source edge relation 后交给 element map。
+- current `cad-core/src/part/part_ruled_surface.cpp` 从 source `NamedShape` / selected curve 收集 source edge evidence，并把两条 curve 传给 `makeElementRuledSurfaceFromCurves()`；`cad-core/src/part/topo_shape_expansion.cpp` 在 `isWire` 分支调用 `BRepFill::Shell(Wire, Wire)`，随后对两个 source 调用 `addRuledSurfaceSourceRelations()` 并写入 `part_ruled_surface:wire_wire_brepfill_shell`。
+- checked-in expected 记录 `shape=occt_shell`、faces=4、edges=12、vertices=8、bbox tolerance、`volume=10.5625`、`element_history_status_contains=["part_ruled_surface:wire_wire_brepfill_shell"]`，以及 `LowerWire.Edge1` / `UpperWire.Edge1` 的 representative element-map 信号。
+- current legacy recompute smoke 输出 `diagnostics=[]`，`RuledSurface.shape=occt_shell`，faces=4、edges=12、vertices=8，`volume=10.5625`；`element_history_status` 包含 `part_ruled_surface:wire_wire_brepfill_shell` 和 `history_consumed:generated_modified`。
+- `assert_ruled_surface_source_edge()` 本身是按传入 source edge 做 representative smoke；focused test 只显式断言 `LowerWire.Edge1` 和 `UpperWire.Edge1`。但 current output 的 `mapper_history` 包含 LowerWire.Edge1..Edge4 与 UpperWire.Edge1..Edge4 共 8 条 `ruled_surface_shared_vertex_relation` / `modified` / `resolved` event，因此本 fixture 的 source edge relation 不只是 adapter 输出端猜测。
+- CLI / C API adapter 只做 recompute / capabilities 协议转换；RuledSurface provenance 命中点在 Part executor、TopoShapeExpansion、NamedShape serialization 和 capability contract，未发现 adapter 侧补猜 `LowerWire.Edge1` / `UpperWire.Edge1`。
+- focused unittest 与 C API capability publication smoke 均通过。S4 裁决为 `provenance_admitted_current_supported_candidate`，关闭 `C12M6-BLOCKER-401`；S5 publication gate 仍保持 open，不在 S4 发布 full surface family 或关闭 `C12M6-BLOCKER-501`。
+
 ## 入口
 
 - 总入口：`6-30-13-27-C12-M6-RuledSurfaceWireWire准入验证批次总入口.md`
