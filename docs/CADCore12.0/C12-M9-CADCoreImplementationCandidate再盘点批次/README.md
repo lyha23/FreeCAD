@@ -13,6 +13,13 @@ C12-M8 已把当前唯一 live `remaining_gaps`：`part_design.sub_shape_binder.
 - CopyOnChange 继续是 `known_gap_diagnostic` / `oracle_blocked`，diagnostic 为 `copy_on_change_full_temporary_document_cache_not_supported`。
 - C12-M8 最终事实继续有效：S2=`native_evidence_retained_blocker`，S3=`dto_not_reviewed_due_to_native_blocker`，S4=`no_current_mismatch_retained_diagnostic`，S5=`no_code_retained_diagnostic`。
 
+## 入口关闭
+
+- 入口关闭执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=982ee025ce`（`982ee025ce fix: 修复 Body 替换 Tip 后 refined 继承`），起点 worktree clean。
+- 关闭前 C12-M9 队列显示工作步骤总入口与 S0-S6 均 pending；入口关闭后队列从 S0 继续。
+- C12-M9 矩阵 TSV 字段数检查通过。
+- 本入口只关闭队列索引，不执行 S0-S6 实质盘点，不修改 `cad-core/src`、`include`、fixtures、expected、tests、adapters 或 capability source。
+
 ## 候选准入规则
 
 任一 C12-M9 候选必须同时满足三项，才允许 S5/S6 产出后续 implementation package：
@@ -34,7 +41,7 @@ C12-M8 已把当前唯一 live `remaining_gaps`：`part_design.sub_shape_binder.
 
 ## 工作步骤
 
-- 入口：确认 C12-M9 队列和包结构。
+- 入口：确认 C12-M9 队列和包结构（已完成）。
 - S0：live 基线与 C12-M1..M8 关闭口径冻结。
 - S1：live capability 和非空 `remaining_gaps` 抽取。
 - S2：`narrowed_gaps`、product-contract non-parity 和 historical evidence 归类。

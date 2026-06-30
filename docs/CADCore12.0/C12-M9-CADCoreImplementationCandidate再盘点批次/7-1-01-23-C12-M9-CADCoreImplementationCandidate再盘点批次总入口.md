@@ -48,7 +48,7 @@ live capability baseline
 | --- | --- | --- |
 | README | `README.md` | C12-M9 当前定位和入口。 |
 | 方案 | `7-1-01-23-C12-M9-CADCoreImplementationCandidate再盘点批次方案.md` | 批次规则、步骤安排和验收分层。 |
-| 工作步骤总入口 | `工作步骤细分/7-1-01-24-C12-M9工作步骤总入口.md` | goal 队列索引。 |
+| 工作步骤总入口 | `工作步骤细分/7-1-01-24-【已实现】C12-M9工作步骤总入口.md` | goal 队列索引，已关闭。 |
 | S0 | `工作步骤细分/7-1-01-25-C12-M9-S0-live基线与继承口径冻结.md` | 冻结 C12-M8 后 live baseline。 |
 | S1 | `工作步骤细分/7-1-01-26-C12-M9-S1-live-capability与remaining-gap抽取.md` | 抽取 remaining / known gaps。 |
 | S2 | `工作步骤细分/7-1-01-27-C12-M9-S2-narrowed-gaps与产品契约归类.md` | 归类 narrowed gaps 和 non-parity。 |
@@ -66,6 +66,13 @@ live capability baseline
 4. 只有 S5 同时确认 stable expected / product contract、request-local boundary 和 current mismatch，才允许输出后续 implementation package。
 5. 不把 C12-M8 的 retained CopyOnChange blocker、C12-M7 的 Groove product diagnostic contract、C12-M6 的 current-supported RuledSurface 或 C12-M4 的 ProjectOnSurface ledger contract误写成未实现 C++。
 6. 每步完成后重命名为 `【已实现】` 并更新 README / 总入口 / 矩阵中对应状态。
+
+## 当前执行状态
+
+- 工作步骤总入口已标记为 `【已实现】`，仅承担 C12-M9 S0-S6 队列索引职责。
+- 入口关闭执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=982ee025ce`（`982ee025ce fix: 修复 Body 替换 Tip 后 refined 继承`），起点 worktree clean。
+- 关闭前队列显示入口与 S0-S6 pending；入口关闭后队列从 S0 继续。
+- C12-M9 TSV 字段数检查通过；本入口未执行 S0-S6 实质盘点，未修改 `cad-core/src`、`include`、fixtures、expected、tests、adapters 或 capability source。
 
 ## 验收
 
