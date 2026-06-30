@@ -49,7 +49,7 @@ live capability baseline
 | README | `README.md` | C12-M9 当前定位和入口。 |
 | 方案 | `7-1-01-23-C12-M9-CADCoreImplementationCandidate再盘点批次方案.md` | 批次规则、步骤安排和验收分层。 |
 | 工作步骤总入口 | `工作步骤细分/7-1-01-24-【已实现】C12-M9工作步骤总入口.md` | goal 队列索引，已关闭。 |
-| S0 | `工作步骤细分/7-1-01-25-C12-M9-S0-live基线与继承口径冻结.md` | 冻结 C12-M8 后 live baseline。 |
+| S0 | `工作步骤细分/7-1-01-25-【已实现】C12-M9-S0-live基线与继承口径冻结.md` | 冻结 C12-M8 后 live baseline，已关闭。 |
 | S1 | `工作步骤细分/7-1-01-26-C12-M9-S1-live-capability与remaining-gap抽取.md` | 抽取 remaining / known gaps。 |
 | S2 | `工作步骤细分/7-1-01-27-C12-M9-S2-narrowed-gaps与产品契约归类.md` | 归类 narrowed gaps 和 non-parity。 |
 | S3 | `工作步骤细分/7-1-01-28-C12-M9-S3-expected与current-mismatch准入.md` | 过滤 stable expected / mismatch。 |
@@ -73,6 +73,9 @@ live capability baseline
 - 入口关闭执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=982ee025ce`（`982ee025ce fix: 修复 Body 替换 Tip 后 refined 继承`），起点 worktree clean。
 - 关闭前队列显示入口与 S0-S6 pending；入口关闭后队列从 S0 继续。
 - C12-M9 TSV 字段数检查通过；本入口未执行 S0-S6 实质盘点，未修改 `cad-core/src`、`include`、fixtures、expected、tests、adapters 或 capability source。
+- S0 live 基线与继承口径已冻结：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=d7602e1bd2`（`d7602e1bd2 文档：关闭 C12-M9 工作步骤总入口`），起点 worktree clean；C12-M1..M8 队列均只输出表头，C12-M9 S0 执行前为第一项。
+- S0 capability snapshot 为 `/tmp/c12m9-s0-capabilities.json`：唯一非空 `remaining_gaps` 为 `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`，known gap 继续是 `known_gap_diagnostic` / `oracle_blocked` / `copy_on_change_full_temporary_document_cache_not_supported`；`narrowed_gaps` presence 位于 `part_design.revolution_groove`、`part_workbench.filling`、`part_workbench.geomplate`、`part_workbench.loft`、`part_workbench.project_on_surface`、`part_workbench.sweep`。
+- S0 只冻结 C12-M8 retained diagnostic 继承口径：S2=`native_evidence_retained_blocker`，S3=`dto_not_reviewed_due_to_native_blocker`，S4=`no_current_mismatch_retained_diagnostic`，S5=`no_code_retained_diagnostic`；未执行 S1-S6 盘点，未运行 FreeCADCmd，未修改 production code、fixtures、expected、tests、adapters 或 capability source。
 
 ## 验收
 

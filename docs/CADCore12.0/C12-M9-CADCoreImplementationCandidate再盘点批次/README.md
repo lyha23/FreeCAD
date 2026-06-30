@@ -20,6 +20,16 @@ C12-M8 已把当前唯一 live `remaining_gaps`：`part_design.sub_shape_binder.
 - C12-M9 矩阵 TSV 字段数检查通过。
 - 本入口只关闭队列索引，不执行 S0-S6 实质盘点，不修改 `cad-core/src`、`include`、fixtures、expected、tests、adapters 或 capability source。
 
+## S0 live 冻结
+
+- S0 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=d7602e1bd2`（`d7602e1bd2 文档：关闭 C12-M9 工作步骤总入口`），起点 `git -c core.quotepath=false status --short -uall` 无输出，即 worktree clean。
+- S0 执行前 C12-M9 队列第一项为 `7-1-01-25-C12-M9-S0-live基线与继承口径冻结.md`，后续仍为 S1-S6；S0 关闭后队列应从 S1 继续。
+- C12-M1..M8 `工作步骤细分` 队列均只输出 markdown 表头，继承口径可作为 closed release gate 输入。
+- live capability snapshot 保存到 `/tmp/c12m9-s0-capabilities.json`；唯一非空 `remaining_gaps` 为 `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`。
+- CopyOnChange known gap 继续为 `status=known_gap_diagnostic`、`route=oracle_blocked`、`diagnostic=copy_on_change_full_temporary_document_cache_not_supported`。
+- live `narrowed_gaps` presence 已冻结为 `part_design.revolution_groove`、`part_workbench.filling`、`part_workbench.geomplate`、`part_workbench.loft`、`part_workbench.project_on_surface`、`part_workbench.sweep`。
+- C12-M8 retained diagnostic 继续继承：S2=`native_evidence_retained_blocker`，S3=`dto_not_reviewed_due_to_native_blocker`，S4=`no_current_mismatch_retained_diagnostic`，S5=`no_code_retained_diagnostic`；S0 不做 current mismatch 判断，不运行 FreeCADCmd，不修改 production code、fixtures、expected、tests、adapters 或 capability source。
+
 ## 候选准入规则
 
 任一 C12-M9 候选必须同时满足三项，才允许 S5/S6 产出后续 implementation package：
@@ -42,7 +52,7 @@ C12-M8 已把当前唯一 live `remaining_gaps`：`part_design.sub_shape_binder.
 ## 工作步骤
 
 - 入口：确认 C12-M9 队列和包结构（已完成）。
-- S0：live 基线与 C12-M1..M8 关闭口径冻结。
+- S0：live 基线与 C12-M1..M8 关闭口径冻结（已完成）。
 - S1：live capability 和非空 `remaining_gaps` 抽取。
 - S2：`narrowed_gaps`、product-contract non-parity 和 historical evidence 归类。
 - S3：stable expected / product contract 与 current mismatch 准入。
