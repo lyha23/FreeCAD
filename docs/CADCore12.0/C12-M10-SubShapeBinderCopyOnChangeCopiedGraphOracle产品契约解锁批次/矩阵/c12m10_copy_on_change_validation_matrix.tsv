@@ -1,0 +1,13 @@
+id	validation	owner_step	status	command_or_evidence	expected_result
+C12M10-VAL-001	C12-M10 queue check	入口	pending	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次/工作步骤细分 --format markdown	Queue starts at C12-M10 work-step total entry, then S0-S6.
+C12M10-VAL-002	prior C12 queue checks	S0	pending	C12-M1..C12-M9 step_goal_queue commands	Each prior queue outputs only table header.
+C12M10-VAL-003	live capability snapshot	S0	pending	cad-core/build/cad-core capabilities	SubShapeBinder remaining gap and known gap snapshot recorded.
+C12M10-VAL-101	source and oracle schema review	S1	pending	FreeCAD source and c12m10 probe schema review	Source rows and probe rows are complete.
+C12M10-VAL-201	native oracle artifact	S2	pending	FreeCADCmd file-backed native probe	Artifact records native evidence ready or retained blocker.
+C12M10-VAL-301	DTO product contract decision	S3	pending	DTO and product contract matrices	Every field has allowed, deferred or rejected decision.
+C12M10-VAL-401	current mismatch gate	S4	pending	focused comparison or documented blocker	Current comparison status recorded.
+C12M10-VAL-501	final authorization	S5	pending	backend classification and blocker queue	S5 emits implementation, product-contract, oracle-blocked or no-code exit.
+C12M10-VAL-601	final queue closure	S6	pending	step_goal_queue for C12-M10	Only table header after S6 closes.
+C12M10-VAL-701	TSV field count	每步	pending	awk -F '\t' over C12-M10 matrices	No field count mismatch.
+C12M10-VAL-702	trailing whitespace check	S6	pending	rg -n '[ \t]$' docs/CADCore12.0/C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次 docs/CADCore12.0/README.md	No output.
+C12M10-VAL-703	diff whitespace check	每步	pending	git diff --check	No output.

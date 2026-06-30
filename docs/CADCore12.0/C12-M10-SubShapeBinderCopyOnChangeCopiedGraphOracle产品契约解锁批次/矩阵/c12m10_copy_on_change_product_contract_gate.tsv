@@ -1,0 +1,7 @@
+id	contract_axis	owner_step	initial_status	product_boundary	current_requirement	exit_condition
+C12M10-CONTRACT-001	frontend_persisted_copied_graph	S3	pending	Only DocumentObject graph and documentObjectUpdates may persist	Copied object identity and dependency order must be native-evidence-backed	approve_defer_or_reject
+C12M10-CONTRACT-002	support_rewrite_contract	S3	pending	Support rewrite must be explicit graph data, not frontend prefix guessing	Native artifact must expose source-to-copy support rewrite map	approve_defer_or_reject
+C12M10-CONTRACT-003	elementmap_namedshape_output	S3	pending	Only request-local output suggestions may cross boundary; no persistent cache	Native artifact must distinguish lifecycle evidence from cache state	approve_defer_or_reject
+C12M10-CONTRACT-004	retained_diagnostic_contract	S4/S5	pending	If DTO is not approved, retained diagnostic remains product-visible	current diagnostic must be compared only after DTO approval	retain_or_replace
+C12M10-CONTRACT-005	app_link_reference_vocabulary	S1/S3	pending	App::Link documentObjectUpdates may provide wording only	SubShapeBinder support requires independent native evidence	reference_only_or_reused_terms
+C12M10-CONTRACT-006	forbidden_session_geometry_state	S3	active_rejected	No backend session, temporary document handle, native pointer, full BREP or TopoDS	No current comparison may depend on forbidden state	retain_rejection_through_s6

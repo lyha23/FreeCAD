@@ -1,0 +1,9 @@
+id	blocker	owner_step	status	close_condition	next_action
+C12M10-BLOCKER-001	live baseline not frozen	S0	open	HEAD, latest commit, dirty boundary and C12-M10 start queue recorded	Freeze baseline and update README/total entry.
+C12M10-BLOCKER-002	previous C12 queues not confirmed empty	S0	open	C12-M1..M9 step_goal_queue commands output only table headers	Proceed to S1 after prior queues are closed.
+C12M10-BLOCKER-101	source and oracle schema incomplete	S1	open	FreeCAD source, current diagnostic, App::Link vocabulary and C12-M10 artifact schema documented	Proceed to S2 native oracle collection.
+C12M10-BLOCKER-201	native copied graph oracle not collected	S2	open	S2 artifact records every probe row and decides native evidence ready or retained blocker	Proceed to S3 only with S2 decision.
+C12M10-BLOCKER-301	DTO and product contract boundary undecided	S3	open	DTO and product contract rows have allowed, deferred or rejected decision	Proceed to S4 current mismatch gate.
+C12M10-BLOCKER-401	current mismatch not adjudicated	S4	open	Comparison status recorded as mismatch-confirmed, current-covered, blocked or not-comparable	Proceed to S5 authorization.
+C12M10-BLOCKER-501	implementation authorization undecided	S5	open	S5 emits implementation_package_authorized, product_contract_package_required, oracle_blocked_retained or no_code_retained_diagnostic	Proceed to S6 publication gate.
+C12M10-BLOCKER-601	publication gate not closed	S6	open	README root docs queue TSV whitespace and diff checks complete	Complete S6 validation and close C12-M10 queue.

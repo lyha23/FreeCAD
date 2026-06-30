@@ -22,6 +22,8 @@ C12-M7 已完成 PartDesign Groove UpTo 产品契约准入批次并发布 `produ
 
 用户已在 C12-M8 后要求打开 C12-M9 候选盘点包。C12-M9 不是直接 implementation 包，也不推翻 C12-M8 的 CopyOnChange no-code retained 结论；它重新从 live capability、C12-M1..M8 release gate、`narrowed_gaps`、product-contract non-parity 和 current tests 中筛选是否存在 stable expected / product contract、request-local boundary 与 current mismatch 同时成立的候选。C12-M9 S6 已完成发布闸门并发布 `no_code_backlog_gate`：S3 未产生 mismatch-confirmed 行，S4 无 implementation source / landing / validation surface，S5 未授权 implementation package；当前不创建 implementation package、不补 C++、不刷新 expected、不重开 C12-M8 CopyOnChange、不把 helper-blocked / native-hidden / product-contract non-parity 写成 supported。
 
+用户已在 C12-M9 后要求新建 oracle / product-contract 解锁包到 `docs/CADCore12.0`。C12-M10 重新选择唯一 live `remaining_gaps`：`part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache`，但仍不直接授权 C++ 实现；本包先解锁 Native Copied Graph oracle schema、request-local DTO / product contract 边界和 current mismatch 准入，三闸门未同时成立前继续保留 `known_gap_diagnostic` / `oracle_blocked`。
+
 ## 入口
 
 - C12-M1 总入口：`C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/6-29-16-26-C12-M1-CADCoreCapabilityImplementationCandidate盘点批次总入口.md`
@@ -60,6 +62,10 @@ C12-M7 已完成 PartDesign Groove UpTo 产品契约准入批次并发布 `produ
 - C12-M9 方案：`C12-M9-CADCoreImplementationCandidate再盘点批次/7-1-01-23-C12-M9-CADCoreImplementationCandidate再盘点批次方案.md`
 - C12-M9 工作步骤：`C12-M9-CADCoreImplementationCandidate再盘点批次/工作步骤细分/`
 - C12-M9 矩阵：`C12-M9-CADCoreImplementationCandidate再盘点批次/矩阵/`
+- C12-M10 总入口：`C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次/7-1-02-48-C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次总入口.md`
+- C12-M10 方案：`C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次/7-1-02-48-C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次方案.md`
+- C12-M10 工作步骤：`C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次/工作步骤细分/`
+- C12-M10 矩阵：`C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次/矩阵/`
 
 ## 当前基线
 
@@ -124,12 +130,13 @@ C12-M7 已完成 PartDesign Groove UpTo 产品契约准入批次并发布 `produ
 - C12-M9 S0 live 基线与继承口径冻结已完成：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=d7602e1bd2`（`d7602e1bd2 文档：关闭 C12-M9 工作步骤总入口`），起点 worktree clean；C12-M1..M8 队列均只输出表头。live capability snapshot `/tmp/c12m9-s0-capabilities.json` 显示唯一非空 `remaining_gaps` 为 `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`，known gap 仍为 `known_gap_diagnostic` / `oracle_blocked` / `copy_on_change_full_temporary_document_cache_not_supported`；`narrowed_gaps` presence 位于 `part_design.revolution_groove`、`part_workbench.filling`、`part_workbench.geomplate`、`part_workbench.loft`、`part_workbench.project_on_surface`、`part_workbench.sweep`。S0 仅继承 C12-M8 retained diagnostic，不运行 FreeCADCmd，不做 current mismatch 判断，不改 production code、fixtures、expected、tests、adapters 或 capability source；下一步队列从 S1 继续。
 - C12-M9 S1-S5 已全部关闭：S1 确认唯一非空 `remaining_gaps` 仍是 CopyOnChange retained known gap；S2 将 Groove、RuledSurface、ProjectOnSurface、Sweep / Filling / GeomPlate / Loft 与 Assembly 分别归类为 product-contract non-parity、current-supported、native-hidden / request-local product contract、helper-blocked / current-covered / oracle-blocked 或 request-local covered subset / non-goal；S3 未发现 `mismatch-confirmed` 行；S4 关闭为 `no_candidate_after_s3_gate`；S5 发布 `no_code_backlog_gate`，未授权 implementation package。
 - C12-M9 S6 发布闸门已完成：最终状态为 `no_code_backlog_gate`，`C12M9-BLOCKER-601` 已关闭，`C12M9-VAL-601` 记录队列闭合。C12-M9 队列应只输出表头；本轮只更新 C12-M9 README / 方案 / 总入口 / step / 矩阵与 root README，不创建后续包，不补 C++，不刷新 expected，不重开 C12-M8 CopyOnChange，不把 helper-blocked / native-hidden / product-contract non-parity 写成 supported。
+- C12-M10 已创建为 SubShapeBinder CopyOnChange Copied Graph Oracle 产品契约解锁批次。创建基线为 `HEAD=3c50dfccd8`（`3c50dfccd8 fix: 修复 Body 回放面引用法线解析`），起点 worktree clean；C12-M1..M9 队列均只输出表头。live capability 仍为 `part_design.sub_shape_binder.status=supported_c8m1_expected_backed_request_local_with_copy_on_change_known_gap`，`remaining_gaps=["copy_on_change_full_temporary_document_cache"]`，known gap 仍为 `status=known_gap_diagnostic`、`route=oracle_blocked`、`diagnostic=copy_on_change_full_temporary_document_cache_not_supported`。本包只准入 native copied graph oracle、DTO / product contract 和 current mismatch；不直接改 `cad-core/src`、`cad-core/include`、fixtures、expected、tests、adapters 或 capability source。
 
 ## 重开条件
 
 | family | reopen condition |
 | --- | --- |
-| CopyOnChange | C12-M8 已关闭为 `no_code_retained_diagnostic` published，C12-M9 又关闭为 `no_code_backlog_gate`；C12-M5 retained diagnostic 继续有效。仅当更强 native copied graph artifact 先重开并通过 native evidence gate，再重新通过 DTO approval 与 current mismatch gate 时，才允许另开 implementation package。 |
+| CopyOnChange | C12-M8 已关闭为 `no_code_retained_diagnostic` published，C12-M9 又关闭为 `no_code_backlog_gate`；C12-M5 retained diagnostic 继续有效。C12-M10 是当前新的 oracle / product-contract 解锁包，但不是 implementation package；仅当 native copied graph artifact、DTO / product contract approval 与 current mismatch 三闸门同时成立时，才允许另开 implementation package。 |
 | Assembly representative / marker / writeback | 产品批准 request-local subset + expected/current mismatch。 |
 | Part Workbench historical rows | stable native/request-local expected 或 approved product contract + request-local boundary + current mismatch；helper-blocked、native-hidden、oracle-blocked 或 product-contract non-parity 本身不能写成 supported。 |
 | ProjectOnSurface provenance | 未来 FreeCAD 原生 MapperHistory / ElementMap artifact 产出 `native_provenance_expected_ready` + request-local boundary + current mismatch；C12-M3 native-hidden 证据本身不能重开代码。 |
@@ -150,6 +157,7 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M7-PartDesignGrooveUpTo产品契约准入批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M9-CADCoreImplementationCandidate再盘点批次/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -165,6 +173,7 @@ awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " f
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M7-PartDesignGrooveUpTo产品契约准入批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M9-CADCoreImplementationCandidate再盘点批次/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore12.0
 git diff --check
 ```

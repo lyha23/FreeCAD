@@ -1,0 +1,9 @@
+id	non_goal	reason	owner_step	status
+C12M10-NG-001	backend persistent temporary document	CAD Core backend is stateless and request-local	S0-S6	active
+C12M10-NG-002	persisted TopoDS or full BREP document state	Repo contract forbids full BREP/TopoDS as frontend/backend long-term state	S0-S6	active
+C12M10-NG-003	persistent NamedShape or ElementMap cache	NamedShape/ElementMap are per-request computation products	S0-S6	active
+C12M10-NG-004	adapter-side CopyOnChange emulation	Adapter only translates protocol and must not own FreeCAD semantics	S4/S5	active
+C12M10-NG-005	frontend-only prefix or support guessing	DTO must come from source-backed graph evidence	S3	active
+C12M10-NG-006	broad SubShapeBinder family rewrite	This batch only handles CopyOnChange full temporary-document gap	S5	active
+C12M10-NG-007	property_session_shape_count_or_bbox_proof	Need copied graph identity and dependency evidence, not geometry-only hints	S2	active
+C12M10-NG-008	Groove RuledSurface ProjectOnSurface PartWorkbench Assembly reopen	These rows have separate C12-M2..M9 exits and are outside C12-M10	S0	active

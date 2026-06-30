@@ -1,0 +1,13 @@
+id	field_or_concept	proposed_contract	allowed_status	owner_step	reason	next_action
+C12M10-DTO-001	copied_object_create	documentObjectUpdates create copied object	pending_s3	S3	Allowed only if S2 proves stable copied object identity and order	Wait for native artifact.
+C12M10-DTO-002	copied_property_writeback	documentObjectUpdates set copied properties	pending_s3	S3	App::Link vocabulary exists but SubShapeBinder copied property evidence must come from S2	Wait for native artifact.
+C12M10-DTO-003	copied_link_rewrite	documentObjectUpdates rewrite links to copied objects	pending_s3	S3	Requires dependency order and source-to-copy rewrite map	Wait for native artifact.
+C12M10-DTO-004	copied_support_sublist	DocumentObject graph PropertyLinkSub support after rewrite	pending_s3	S3	Must avoid frontend prefix guessing and preserve FullSubList/StableSubList semantics	Wait for support rewrite evidence.
+C12M10-DTO-005	copy_on_change_mode	BindCopyOnChange enum request field	input_only_pending_s3	S3	Existing visible input may be retained but does not imply execution support	Keep separate from implementation approval.
+C12M10-DTO-006	partial_load	PartialLoad request field	pending_s3	S3	Visible property depends on copied graph lifecycle and support loading evidence	Wait for S2 decision.
+C12M10-DTO-007	temporary_document_handle	forbidden	rejected_initial	S3	Backend must stay stateless and temporary document handles are native session state	Reject unless architecture decision changes.
+C12M10-DTO-008	native_object_pointer	forbidden	rejected_initial	S3	Pointers are process and session state	Reject permanently.
+C12M10-DTO-009	full_brep_or_topods	forbidden	rejected_initial	S3	Repo boundary forbids full BREP or TopoDS as long-term request/response state	Reject; ReferenceShadow.brep exception does not apply to full copied graph.
+C12M10-DTO-010	persistent_namedshape_elementmap_cache	forbidden	rejected_initial	S3	NamedShape and ElementMap are per-request products	Reject persistent cache; allow only approved derived suggestions if S2 supports them.
+C12M10-DTO-011	tmp_binder_or_copiedobjs_session_state	forbidden	rejected_initial	S3	_tmp_binder and _CopiedObjs cannot survive backend request boundaries	Reject post-request session state.
+C12M10-DTO-012	cache_star_backend_cache	forbidden	rejected_initial	S3	Cache_* is presumed transform matrix optimization until proven otherwise	Reject backend Cache_* persistence.
