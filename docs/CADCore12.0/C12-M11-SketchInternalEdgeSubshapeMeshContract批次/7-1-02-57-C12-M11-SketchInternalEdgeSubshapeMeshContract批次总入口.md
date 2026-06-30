@@ -34,8 +34,8 @@ FreeCAD SketchObject source authority
 | S0 | `工作步骤细分/7-1-02-59-【已实现】C12-M11-S0-live基线与并行开包冻结.md` | baseline 和 C12-M10 pending 关系已冻结。 |
 | S1 | `工作步骤细分/7-1-03-00-【已实现】C12-M11-S1-FreeCAD与cad-core-source复核.md` | FreeCAD / cad-core source authority 已复核。 |
 | S2 | `工作步骤细分/7-1-03-01-【已实现】C12-M11-S2-current-response-contract复核.md` | 验证 current edgeSegments/subshapes 对齐，已关闭。 |
-| S3 | `工作步骤细分/7-1-03-02-C12-M11-S3-contract-gap分流裁决.md` | 裁决 backend/frontend/stable-id 缺口。 |
-| S4 | `工作步骤细分/7-1-03-03-C12-M11-S4-implementation最小语义批次.md` | 定义实现包或同步包的最小范围。 |
+| S3 | `工作步骤细分/7-1-03-02-【已实现】C12-M11-S3-contract-gap分流裁决.md` | backend/frontend/stable-id/open-wire 缺口已分流。 |
+| S4 | `工作步骤细分/7-1-03-03-C12-M11-S4-implementation最小语义批次.md` | 定义前端同步、stable-id follow-up、open-wire 产品契约的最小范围。 |
 | S5 | `工作步骤细分/7-1-03-04-C12-M11-S5-发布闸门与后续分流.md` | 发布最终状态。 |
 | 矩阵 | `矩阵/` | source、contract、gap、blocker、non-goal、validation。 |
 
@@ -46,7 +46,8 @@ FreeCAD SketchObject source authority
 - C12-M10 队列仍 pending（工作步骤总入口、S0-S6），C12-M11 是用户单独点名的并行主题，不继承为 C12-M10 后的自然下一包，也不修改 C12-M10 队列结论。
 - S1 FreeCAD 与 `cad-core` source 复核已关闭：`C12M11-BLOCKER-101` closed，`C12M11-VAL-101` passed；已记录 closed internal profile 与 open wire profile 的 source 差异、`edgeSegments` / `subshapes` 同一 topology source 要求，以及 FreeCAD-grade geometry id stability 仅作为 S3/S4 follow-up 候选。
 - S2 current response contract 复核已关闭：`C12M11-BLOCKER-201` closed，`C12M11-VAL-201..203` passed。closed `p5/sketch-internal-face` 当前 response 发布 `Sketch:InternalEdge1..4` mesh `edgeSegments`、同名 edge `subshapes` 和 request-local `stableSubname=Edge1..4`；open `p5/sketch-open-wire-internal-empty` 单独记录为 raw `Sketch:Edge1..3` subshapes 可见且 `mesh=null`。
-- 后续队列从 S3 `工作步骤细分/7-1-03-02-C12-M11-S3-contract-gap分流裁决.md` 开始。
+- S3 contract gap 分流裁决已关闭：`C12M11-BLOCKER-301` closed，`C12M11-VAL-301` passed。closed internal edge backend response 为 `current_supported`，alignment 为 `mismatch_absent`，request-local stableSubname 已 passed；FreeCAD-grade geometry id stability、前端 consumer sync 和 open wire mesh/null 产品契约分别进入 S4 后续输入，不打开 closed profile backend C++ implementation。
+- 后续队列从 S4 `工作步骤细分/7-1-03-03-C12-M11-S4-implementation最小语义批次.md` 开始。
 
 ## 执行规则
 
