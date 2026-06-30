@@ -31,13 +31,14 @@ C12-M5 处理当前 live capability 中唯一剩余公开 gap：`part_design.sub
 2. C9-M5 / C10-M4 仍是有效前置结论：没有稳定 copied-object expected，没有产品批准 DTO，没有 current mismatch。
 3. S1 已复核 FreeCAD source/current coverage：SubShapeBinder full CopyOnChange 依赖 `_tmp_binder`、`_CopiedObjs`、`copyObject()` 和 `recomputeFeature(true)` 的真实 Document 生命周期；App::Link `documentObjectUpdates` 仍只是 reference-only DTO 路径。
 4. current `cad-core` 只覆盖 `BindMode=Detached` request-local writeback 子集；`BindCopyOnChange=Enabled/Mutated` 或 `PartialLoad=True` 继续保持 `copy_on_change_full_temporary_document_cache_not_supported` diagnostic。
-5. C12-M5 后续仍必须验证 native evidence、产品 DTO 和 current mismatch 是否同时成立；不能从 remaining gap 或 App::Link coverage 直接推出代码任务。
+5. S2 已消费 native evidence；后续只剩产品 DTO 和 current mismatch gate，且不能从 remaining gap、App::Link coverage 或 S2 retained evidence 直接推出代码任务。
+6. S2 已复核 C9/C8 native probe 与 checked-in expected：Disabled / Enabled / Mutated / PartialLoad、`_tmp_binder`、`_CopiedLink` 和 Python-visible property state 仍可见，但 `_CopiedObjs`、`copyObject()` dependency order、copied support rewrite graph 与 `recomputeFeature(true)` ElementMap lifecycle 仍不可导出为稳定 request-local DTO；S2 关闭为 `native_evidence_retained_blocker`。
 
 ## 决策顺序
 
 1. S0 冻结 live baseline、旧结论和 forbidden claims（已完成）。
 2. S1 复核 FreeCAD source authority 与 current cad-core coverage（已完成，`C12M5-BLOCKER-101` 已关闭）。
-3. S2 判断 native evidence 是否足够，必要时设计 probe，而不是先写实现。
+3. S2 判断 native evidence 是否足够，必要时设计 probe，而不是先写实现（已完成，`C12M5-BLOCKER-201` 已关闭为 retained blocker）。
 4. S3 冻结产品 DTO 边界：允许字段、禁止字段、前端写回职责。
 5. S4 做 current mismatch gate：只有 approved DTO 与 current diagnostic 冲突才进入 implementation candidate。
 6. S5 发布出口：implementation package、oracle refresh、DTO rejected 或 retained diagnostic。

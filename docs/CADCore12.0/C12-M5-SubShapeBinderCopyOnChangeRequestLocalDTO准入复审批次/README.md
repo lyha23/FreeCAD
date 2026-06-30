@@ -35,6 +35,17 @@ C12-M5 承接 C12-M4 公开口径迁移完成后的 live capability 状态。当
 - current `cad-core` 只确认 `BindMode=Detached` 的 request-local `Support` clear writeback 子集；`BindCopyOnChange=Enabled/Mutated` 或 `PartialLoad=True` 继续发布 `copy_on_change_full_temporary_document_cache_not_supported` diagnostic，capability 仍是 `known_gap_diagnostic` / `oracle_blocked`。
 - `C12M5-BLOCKER-101` 已关闭；S1 不打开 implementation candidate，后续只进入 S2 native evidence / probe 准入复核。
 
+## S2 native evidence / probe 准入
+
+- S2 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`。
+- S2 执行 HEAD：`b38b0647d6`（`b38b0647d6 docs: 完成 C12-M5 S1 source 覆盖复核`）。
+- S2 起点 dirty boundary：`git -c core.quotepath=false status --short -uall` 无输出，即 `<clean>`；未发现非本任务 dirty work。
+- S2 已复核 `probe_c9m5_subshapebinder_copyonchange.py`、`probe_c8m2_subshapebinder_copyonchange.py`、`collect_c8m1_shapebinder_expected.py`、C9-M5 expected 和 C9/C10 README；未修改 probe、expected、fixture、C++、tests 或 adapter。
+- C9-M5 probe schema 仍覆盖 `BindCopyOnChange=Disabled/Enabled/Mutated`、`PartialLoad=True`、dynamic CopyOnChange property、mutation-triggered Mutated、`_tmp_binder` document name、`_CopiedLink` 和 Python-visible property state。
+- checked-in expected 基线仍是 FreeCAD `1.2.0 revision 20260519`，route 为 `native_evidence_collected_with_known_gap_blocker`；可观察字段仍限于 property/session evidence、`_tmp_binder` document name 和 `_CopiedLink` 单值。
+- `_CopiedObjs` 仍不可通过 Python API 观察；`copyObject()` dependency order、copied support rewrite 的完整 graph、`recomputeFeature(true)` internal ElementMap lifecycle 仍不能导出为稳定 request-local DTO。
+- 因此 `C12M5-BLOCKER-201` 关闭为 `native_evidence_retained_blocker`；S2 不设计新 probe schema，不采新 oracle，不打开 C++ implementation candidate。S3 只能继续做 DTO 产品边界裁决。
+
 ## 继承口径
 
 - C9-M5 裁决：CopyOnChange full temporary-document copied-object lifecycle 依赖 `_tmp_binder`、`_CopiedObjs`、`copyObject()`、`recomputeFeature(true)` 和 `_CopiedLink`，S6 关闭为 `no_code_retained_known_gap_release_gate`。
@@ -61,7 +72,7 @@ C12-M5 承接 C12-M4 公开口径迁移完成后的 live capability 状态。当
 
 - S0：live 基线与继承口径冻结（已完成）。
 - S1：FreeCAD 源码与 current 覆盖矩阵（已完成）。
-- S2：native evidence 刷新与 probe 准入。
+- S2：native evidence 刷新与 probe 准入（已完成）。
 - S3：request-local DTO 产品边界冻结。
 - S4：current mismatch 与实现候选闸门。
 - S5：发布闸门与后续分流。
