@@ -990,7 +990,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         revolution_groove = capabilities["part_design"]["revolution_groove"]
         self.assertEqual(
             revolution_groove["status"],
-            "supported_c51s1_advanced_with_historical_groove_upto_native_failure",
+            "supported_c12m7_groove_upto_product_diagnostic_contract",
         )
         self.assertEqual(revolution_groove["type_ids"], ["PartDesign::Revolution", "PartDesign::Groove"])
         self.assertIn("Type=Angle", revolution_groove["supported"])
@@ -1050,11 +1050,15 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "Groove Type=UpToFirst native BRepFeat_MakeRevol failure",
             revolution_groove["field_boundaries"]["historical_native_evidence"],
         )
+        self.assertIn(
+            "C12-M7 approved CAD Core request-local Groove UpTo diagnostic contract",
+            revolution_groove["field_boundaries"]["product_contract"],
+        )
         narrowed_gaps = revolution_groove["narrowed_gaps"]
         self.assertIn("partdesign_groove_upto_brepfeat_cut_native_failure", narrowed_gaps)
         groove_upto_gap = narrowed_gaps["partdesign_groove_upto_brepfeat_cut_native_failure"]
-        self.assertEqual(groove_upto_gap["status"], "published_c6m9_historical_native_failure")
-        self.assertEqual(groove_upto_gap["route"], "historical_native_failure")
+        self.assertEqual(groove_upto_gap["status"], "published_c12m7_product_diagnostic_contract")
+        self.assertEqual(groove_upto_gap["route"], "product_diagnostic_contract_non_parity")
         self.assertEqual(
             groove_upto_gap["freecad_message"],
             "Revolution: Up to face: Could not revolve the sketch!",
@@ -1063,6 +1067,24 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             groove_upto_gap["cad_core_diagnostic"],
             "BRepFeat_MakeRevol could not revolve profile up to face",
         )
+        product_contract = groove_upto_gap["product_diagnostic_contract"]
+        self.assertFalse(product_contract["freecad_native_parity"])
+        self.assertEqual(product_contract["diagnostic_codes"], ["execution_failed", "execution_failed"])
+        self.assertEqual(
+            product_contract["primary_diagnostic"]["message"],
+            "BRepFeat_MakeRevol could not revolve profile up to face",
+        )
+        self.assertEqual(product_contract["secondary_diagnostic"]["message"], "Could not revolve the sketch")
+        self.assertIn(
+            "UpToFirst: property=Type subname=UpToFirst",
+            product_contract["primary_diagnostic"]["locatable_fields"],
+        )
+        self.assertIn(
+            "UpToFace: property=UpToFace target=Pad subname=Face4",
+            product_contract["primary_diagnostic"]["locatable_fields"],
+        )
+        self.assertEqual(product_contract["object_status"]["Groove"], "error")
+        self.assertEqual(product_contract["object_status"]["Body"], "skipped")
         self.assertEqual(
             groove_upto_gap["fixtures"],
             [
@@ -1076,6 +1098,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertIn("same FreeCAD/LibPack oracle baseline", groove_upto_gap["delete_condition"])
         self.assertIn("one Groove UpToFirst plus UpToFace batch", groove_upto_gap["reopen_condition"])
+        self.assertIn("C12-M7 native failure note", groove_upto_gap["reopen_condition"])
         boolean = capabilities["part_design"]["boolean"]
         self.assertEqual(boolean["status"], "supported_c51s2_boolean_compound_section_with_exact_body_policy")
         self.assertEqual(boolean["type_ids"], ["PartDesign::Boolean"])

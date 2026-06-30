@@ -869,18 +869,33 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         ]:
             with self.subTest(fixture=fixture):
                 result = self.run_recompute(fixture, "c51m1")
+                expected = self.expected_freecad("c51m1", fixture)
+                contract = expected["product_diagnostic_contract"]
 
                 self.assertEqual(
                     [diagnostic["code"] for diagnostic in result["diagnostics"]],
-                    ["execution_failed", "execution_failed"],
+                    expected["diagnostic_codes"],
+                )
+                self.assertFalse(expected["freecad_native_parity"])
+                self.assertFalse(contract["freecad_native_parity"])
+                self.assert_nested_matches_expected(
+                    result["diagnostics"][0],
+                    contract["primary_diagnostic"],
+                    "product_diagnostic_contract.primary_diagnostic",
+                )
+                self.assert_nested_matches_expected(
+                    result["diagnostics"][1],
+                    contract["secondary_diagnostic"],
+                    "product_diagnostic_contract.secondary_diagnostic",
                 )
                 self.assertEqual(
                     result["diagnostics"][0]["message"],
-                    "BRepFeat_MakeRevol could not revolve profile up to face",
+                    contract["primary_diagnostic"]["message"],
                 )
-                self.assertEqual(result["diagnostics"][1]["message"], "Could not revolve the sketch")
-                self.assertEqual(result["objects"]["Groove"]["status"], "error")
-                self.assertEqual(result["objects"]["Body"]["status"], "skipped")
+                self.assertEqual(result["diagnostics"][1]["message"], contract["secondary_diagnostic"]["message"])
+                self.assertEqual(result["objects"]["Groove"]["status"], contract["object_status"]["Groove"])
+                self.assertEqual(result["objects"]["Body"]["status"], contract["object_status"]["Body"])
+                self.assert_object_matches_expected(result, "c51m1", fixture)
 
     def test_c4m2_revolution_invalid_angle_is_diagnostic(self) -> None:
         result = self.run_recompute("partdesign-revolution-invalid-angle", "c4m2")

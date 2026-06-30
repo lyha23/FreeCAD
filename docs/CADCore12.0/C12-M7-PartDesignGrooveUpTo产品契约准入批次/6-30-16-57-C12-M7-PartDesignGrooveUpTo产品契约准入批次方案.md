@@ -13,10 +13,11 @@
 - C12-M1..M6 工作步骤队列均为空。
 - `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]` 仍存在，但 C12-M5 已关闭为 `no_code_retained_diagnostic`。
 - `part_workbench.ruled_surface.status=supported_wire_wire_expected_backed`，`remaining_gaps=[]`，C12-M6 已关闭为 `wire_wire_admitted_current_supported`。
-- `part_design.revolution_groove.status=supported_c51s1_advanced_with_historical_groove_upto_native_failure`。
+- S0/S1/S2 时 `part_design.revolution_groove.status=supported_c51s1_advanced_with_historical_groove_upto_native_failure`；S3 已将公开 capability status 迁移为 `supported_c12m7_groove_upto_product_diagnostic_contract`。
 - narrowed gap：`partdesign_groove_upto_brepfeat_cut_native_failure`，fixtures 为 `c51m1/partdesign-groove-uptofirst-body` 和 `c51m1/partdesign-groove-uptoface-body`。
 - S1 live 复核：`HEAD=fdeea2443e` 起点 worktree clean；C51X native evidence 仍采用 `FreeCADCmd 1.2.0 revision 20260519` 下两个 Groove UpTo fixtures 报 `Groove: Revolution: Up to face: Could not revolve the sketch!`，本轮轻量 `freecadcmd --version` 同为 `FreeCAD 1.2.0 Revision: 20260519 (Git shallow)`；focused test 证明 current CAD Core exact diagnostic 未漂移。
 - S2 准入裁决：`HEAD=cc9e3a1190` 起点 worktree clean；FreeCAD parity success 当前不成立，historical native failure 继续保留，CAD Core product diagnostic contract 已批准。批准范围必须同时覆盖 UpToFirst 与 UpToFace，且 S3 必须保留 native failure note。
+- S3 迁移实现：`HEAD=c1955ab56e` 起点 worktree clean；新增两个 C51M1 expected，focused test 改成 expected-backed product diagnostic assertion，capability / adapter assertion 发布 `product_diagnostic_contract_non_parity`，并保留 native failure note、fixture pair 和 delete/reopen condition。
 
 ## FreeCAD / CAD Core 依据
 
@@ -43,7 +44,7 @@
 
 ## 预期实现面
 
-S2 已批准 product diagnostic contract，S3 可修改：
+S2 已批准 product diagnostic contract，S3 已按下列文件面完成迁移：
 
 - `cad-core/fixtures/c51m1/expected/partdesign-groove-uptofirst-body.freecad.json`：新增或更新 Groove UpToFirst product diagnostic expected。
 - `cad-core/fixtures/c51m1/expected/partdesign-groove-uptoface-body.freecad.json`：新增或更新 Groove UpToFace product diagnostic expected。
