@@ -1,0 +1,8 @@
+id	non_goal	reason	owner_step	status
+C12M11-NG-001	frontend topology guessing	Edge tokens must come from backend topology enumeration, not mesh triangle or draw geometry	S0-S5	active
+C12M11-NG-002	persistent TopoDS or BREP cache	CAD Core remains request-local and stateless	S0-S5	active
+C12M11-NG-003	persistent NamedShape or ElementMap cache	NamedShape/ElementMap are per-request computation products	S0-S5	active
+C12M11-NG-004	InternalFace alias simplification	FreeCAD getInternalElementMap does not map InternalFace through raw FaceN	S1-S5	active
+C12M11-NG-005	open wire hidden fallback	Open wire behavior must be explicitly classified, not silently folded into closed profile contract	S2-S5	active
+C12M11-NG-006	C12-M10 conclusion rewrite	C12-M11 is a user-requested parallel package and does not close CopyOnChange	S0-S5	active
+C12M11-NG-007	adapter-side token fabrication	Adapter may shape response but must not invent topology identity	S3-S5	active

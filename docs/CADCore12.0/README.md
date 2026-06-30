@@ -24,6 +24,8 @@ C12-M7 已完成 PartDesign Groove UpTo 产品契约准入批次并发布 `produ
 
 用户已在 C12-M9 后要求新建 oracle / product-contract 解锁包到 `docs/CADCore12.0`。C12-M10 重新选择唯一 live `remaining_gaps`：`part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache`，但仍不直接授权 C++ 实现；本包先解锁 Native Copied Graph oracle schema、request-local DTO / product contract 边界和 current mismatch 准入，三闸门未同时成立前继续保留 `known_gap_diagnostic` / `oracle_blocked`。
 
+用户随后单独要求为“后端稳定返回草图边 `subshapes[]` / `mesh.edgeSegments[]`，以及 FreeCAD 如何实现”出方案到 `docs/CADCore12.0`。C12-M11 是并行方案包，不声明 C12-M10 已关闭；它专门把 FreeCAD `SketchObject::buildShape()` / `buildInternals()` / `getInternalElementMap()` 的 raw `EdgeN`、`InternalEdgeN` 和 geometry id 稳定性拆成后端 response contract、前端消费边界、open wire 产品契约和 FreeCAD-grade stable id follow-up。
+
 ## 入口
 
 - C12-M1 总入口：`C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/6-29-16-26-C12-M1-CADCoreCapabilityImplementationCandidate盘点批次总入口.md`
@@ -66,6 +68,10 @@ C12-M7 已完成 PartDesign Groove UpTo 产品契约准入批次并发布 `produ
 - C12-M10 方案：`C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次/7-1-02-48-C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次方案.md`
 - C12-M10 工作步骤：`C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次/工作步骤细分/`
 - C12-M10 矩阵：`C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次/矩阵/`
+- C12-M11 总入口：`C12-M11-SketchInternalEdgeSubshapeMeshContract批次/7-1-02-57-C12-M11-SketchInternalEdgeSubshapeMeshContract批次总入口.md`
+- C12-M11 方案：`C12-M11-SketchInternalEdgeSubshapeMeshContract批次/7-1-02-57-C12-M11-SketchInternalEdgeSubshapeMeshContract批次方案.md`
+- C12-M11 工作步骤：`C12-M11-SketchInternalEdgeSubshapeMeshContract批次/工作步骤细分/`
+- C12-M11 矩阵：`C12-M11-SketchInternalEdgeSubshapeMeshContract批次/矩阵/`
 
 ## 当前基线
 
@@ -158,6 +164,7 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M9-CADCoreImplementationCandidate再盘点批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M11-SketchInternalEdgeSubshapeMeshContract批次/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -174,6 +181,7 @@ awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " f
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M8-SubShapeBinderCopyOnChangeNativeCopiedGraphDTO准入解锁批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M9-CADCoreImplementationCandidate再盘点批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M11-SketchInternalEdgeSubshapeMeshContract批次/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore12.0
 git diff --check
 ```

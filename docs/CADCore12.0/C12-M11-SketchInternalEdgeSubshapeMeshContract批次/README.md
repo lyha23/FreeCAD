@@ -1,0 +1,69 @@
+# C12-M11 Sketch Internal Edge Subshape / Mesh Contract 批次
+
+C12-M11 是用户单独打开的并行方案包，用来解决草图提交后“面能保留，边保留不下来”的后端契约问题。它不声明 C12-M10 已关闭，也不把当前 pending 的 CopyOnChange 队列当作已完成事实；执行 C12-M11 前需要由用户明确选择暂停、绕过或关闭 C12-M10。
+
+本包目标是把 FreeCAD `SketchObject` 的 `Shape` / `InternalShape` / `InternalEdgeN` 语义转成 CAD Core 后端可稳定返回的 `subshapes[]` 与 `mesh.edgeSegments[]` 契约：同一条草图边必须在 response 中同时有可拾取显示段和可持久化引用 token，前端不得从三角网格或绘制线段猜 `EdgeN` / `InternalEdgeN`。
+
+## 当前基线
+
+- 创建基线：`pwd=/Users/li/Chili3DProject/FreeCAD`。
+- 创建基线：`HEAD=3662c8ff81`（`3662c8ff81 文档：新增 C12-M10 CopyOnChange oracle 解锁包`）。
+- 创建时 C12-M10 队列仍 pending；C12-M11 是用户点名主题的并行方案包。
+- 当前 `cad-core` 已有 `results[].mesh.edgeSegments`、`subshapes[]`、`InternalEdgeN` / `InternalVertexN` 和 sketch `internal_element_map` 的基础管线，但本包要把它收敛成可验收产品契约并补齐 FreeCAD 级稳定性边界。
+
+## 问题定义
+
+草图边不能保留下来通常有三类原因：
+
+1. 后端没有把草图 `InternalShape` 的真实 `TopoDS_Edge` 发布到 `mesh.edgeSegments[]`。
+2. `mesh.edgeSegments[].indexed` 与 `subshapes[].indexed` 不来自同一套 `TopExp::MapShapes(..., TopAbs_EDGE, ...)` 枚举，导致拾取 token 对不上。
+3. `InternalEdgeN` 只有显示名，没有稳定回写到 raw `EdgeN` 或 FreeCAD-style geometry id mapped name，导致重算或提交后引用丢失。
+
+本包只接受后端拓扑源输出：`InternalEdgeN` / `EdgeN` 必须来自 OCCT topology enumeration、`NamedShape` / `ElementMap` 或 request-local history ledger；禁止从 mesh triangle adjacency、前端线段顺序、点坐标近似或 display object name 推断长期 topology identity。
+
+## FreeCAD / CAD Core 依据
+
+| 语义 | 依据 | C12-M11 用法 |
+| --- | --- | --- |
+| 草图 raw Shape 构建 | `src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildShape()` | 非 construction geometry 生成 raw `EdgeN`，随后 `makeElementWires(..., Part::OpCodes::Sketch)`。 |
+| Edge / Vertex mapped name | `src/Mod/Sketcher/App/SketchObjectGeometry.cpp::SketchObject::getEdge()` | 每条草图 edge 写入 `ElementMap`，vertex 用 `name + v + pos` 绑定端点。 |
+| 草图 InternalShape | `src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildInternals()` | `FaceMakerBuildFace` 生成内部面，`WireJoiner::getOpenWires()` 保留 open wire。 |
+| InternalEdge 映射 | `src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::getInternalElementMap()` | 只映射 `InternalVertexN` / `InternalEdgeN` 到 raw `VertexN` / `EdgeN`；`InternalFaceN` 不走这个简单映射。 |
+| FreeCAD stable geometry id | `src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::updateGeoHistory()` 与 `generateId()` | 完整稳定命名需要 geometry id 复用，不只是当前请求中的 `EdgeN` 顺序。 |
+| 当前 edgeSegments 生成 | `cad-core/src/part/shape_exporter.cpp::edgeSegmentsForShape()` | `TopExp::MapShapes(shape, TopAbs_EDGE, edges)` 是唯一允许的 edge segment 枚举源。 |
+| 当前 sketch internal 发布 | `cad-core/src/sketcher/sketch_internal_result.cpp::buildSketchInternalResult()` | 对 internal shape 调用 `meshForShape(..., "InternalFace", "InternalEdge", "InternalVertex")` 并合并 internal subshapes。 |
+| 当前 response 契约 | `cad-core/src/runtime/recompute.cpp::responseMesh()` / `responseSubshapes()` | response 层给 `edgeSegments.id` / `subshapes.id` 加对象名前缀，并为 internal edge 补 `stableSubname`。 |
+
+## 解锁目标
+
+C12-M11 的最终发布状态应是以下之一：
+
+1. `contract_current_supported`：当前 `cad-core` 已经稳定返回 `InternalEdgeN` edgeSegments/subshapes，缺口只在前端消费或运行态发布。
+2. `implementation_package_authorized`：发现当前后端实际缺失 response contract，需要打开最小完整实现包。
+3. `stable_geometry_id_followup_required`：request-local `InternalEdgeN -> EdgeN` 已成立，但 FreeCAD-grade 跨编辑稳定性仍缺 geometry id / history ledger。
+4. `blocked_by_missing_oracle`：缺少能证明 FreeCAD 行为的 expected / fixture / oracle，先补采集。
+
+## 入口
+
+- 总入口：`7-1-02-57-C12-M11-SketchInternalEdgeSubshapeMeshContract批次总入口.md`
+- 方案：`7-1-02-57-C12-M11-SketchInternalEdgeSubshapeMeshContract批次方案.md`
+- 工作步骤：`工作步骤细分/`
+- 矩阵：`矩阵/`
+
+## 非目标
+
+- 不从前端 mesh triangle、线段绘制顺序或点坐标猜 `EdgeN` / `InternalEdgeN`。
+- 不把 `InternalFaceN` 简化成 raw face stable alias；FreeCAD 的 internal face 需要 FaceMaker / WireJoiner history 支撑。
+- 不引入 persistent `NamedShape` / `ElementMap` / TopoDS / BREP cache。
+- 不修改 C12-M10 CopyOnChange 队列结论。
+- 不把当前请求枚举稳定误写成 FreeCAD 级跨编辑稳定；两者必须分层验收。
+
+## 验收
+
+```bash
+cd /Users/li/Chili3DProject/FreeCAD
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M11-SketchInternalEdgeSubshapeMeshContract批次/工作步骤细分 --format markdown
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M11-SketchInternalEdgeSubshapeMeshContract批次/矩阵/*.tsv
+rg -n '[ \t]$' docs/CADCore12.0/C12-M11-SketchInternalEdgeSubshapeMeshContract批次 docs/CADCore12.0/README.md
+git diff --check
+```
