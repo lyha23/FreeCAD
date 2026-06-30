@@ -10,6 +10,7 @@ C12-M11 是用户单独打开的并行方案包，用来解决草图提交后“
 - 创建基线：`HEAD=3662c8ff81`（`3662c8ff81 文档：新增 C12-M10 CopyOnChange oracle 解锁包`）。
 - 创建时 C12-M10 队列仍 pending；C12-M11 是用户点名主题的并行方案包。
 - 当前 `cad-core` 已有 `results[].mesh.edgeSegments`、`subshapes[]`、`InternalEdgeN` / `InternalVertexN` 和 sketch `internal_element_map` 的基础管线，但本包要把它收敛成可验收产品契约并补齐 FreeCAD 级稳定性边界。
+- 工作步骤总入口已关闭：`工作步骤细分/7-1-02-58-【已实现】C12-M11工作步骤总入口.md` 已核对包结构、入口 + S0-S5 队列顺序和 6 个 TSV 字段数；下一步从 S0 `7-1-02-59-C12-M11-S0-live基线与并行开包冻结.md` 开始。C12-M10 队列仍 pending，本记录不改变 C12-M10 状态。
 
 ## 问题定义
 

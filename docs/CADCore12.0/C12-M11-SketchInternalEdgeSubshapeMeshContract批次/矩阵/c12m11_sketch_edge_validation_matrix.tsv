@@ -1,5 +1,5 @@
 id	validation	owner_step	status	command_or_evidence	expected_result
-C12M11-VAL-001	C12-M11 queue check	入口	pending	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M11-SketchInternalEdgeSubshapeMeshContract批次/工作步骤细分 --format markdown	Queue starts at C12-M11 work-step total entry, then S0-S5.
+C12M11-VAL-001	C12-M11 queue check	入口	passed	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M11-SketchInternalEdgeSubshapeMeshContract批次/工作步骤细分 --format markdown	Initial queue order confirmed as entry then S0-S5; after entry closure the next pending step is S0.
 C12M11-VAL-002	live baseline	S0	pending	pwd; git rev-parse --short HEAD; git log -1 --oneline; git -c core.quotepath=false status --short -uall	Baseline and dirty boundary recorded.
 C12M11-VAL-101	source review	S1	pending	rg source commands for FreeCAD SketchObject and cad-core edgeSegments/InternalEdge landings	Source authority rows reviewed.
 C12M11-VAL-201	closed sketch internal edge response	S2	pending	python3 -m unittest tests.test_adapters.CadCoreAdapterTest.test_c_api_returns_sketch_internal_profile_mesh	Sketch internal profile returns InternalEdgeN mesh/subshapes.

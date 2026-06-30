@@ -30,7 +30,7 @@ FreeCAD SketchObject source authority
 | --- | --- | --- |
 | README | `README.md` | 当前定位、口径和入口。 |
 | 方案 | `7-1-02-57-C12-M11-SketchInternalEdgeSubshapeMeshContract批次方案.md` | 批次规则、FreeCAD 调用链、CAD Core 落点和验收分层。 |
-| 工作步骤总入口 | `工作步骤细分/7-1-02-58-C12-M11工作步骤总入口.md` | goal 队列索引。 |
+| 工作步骤总入口 | `工作步骤细分/7-1-02-58-【已实现】C12-M11工作步骤总入口.md` | goal 队列索引，已关闭。 |
 | S0 | `工作步骤细分/7-1-02-59-C12-M11-S0-live基线与并行开包冻结.md` | 冻结 baseline 和 C12-M10 pending 关系。 |
 | S1 | `工作步骤细分/7-1-03-00-C12-M11-S1-FreeCAD与cad-core-source复核.md` | 复核 FreeCAD / cad-core source authority。 |
 | S2 | `工作步骤细分/7-1-03-01-C12-M11-S2-current-response-contract复核.md` | 验证 current edgeSegments/subshapes 对齐。 |
@@ -38,6 +38,12 @@ FreeCAD SketchObject source authority
 | S4 | `工作步骤细分/7-1-03-03-C12-M11-S4-implementation最小语义批次.md` | 定义实现包或同步包的最小范围。 |
 | S5 | `工作步骤细分/7-1-03-04-C12-M11-S5-发布闸门与后续分流.md` | 发布最终状态。 |
 | 矩阵 | `矩阵/` | source、contract、gap、blocker、non-goal、validation。 |
+
+## 当前状态
+
+- 工作步骤总入口已关闭：已核对 C12-M11 包结构、入口 + S0-S5 队列顺序和 6 个 TSV 字段数。
+- 后续队列从 S0 `工作步骤细分/7-1-02-59-C12-M11-S0-live基线与并行开包冻结.md` 开始。
+- 本次关闭只处理入口索引，不执行 S0-S5 实质裁决，不改变 C12-M10 pending 队列。
 
 ## 执行规则
 
