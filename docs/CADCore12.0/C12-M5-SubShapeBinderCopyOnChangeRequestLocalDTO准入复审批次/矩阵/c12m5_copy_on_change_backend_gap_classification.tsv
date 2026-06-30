@@ -1,7 +1,7 @@
 id	candidate	route	current_evidence	required_to_open	default_action	owner_step
-C12M5-CAT-001	copy_on_change_full_temporary_document_cache	retained_known_gap	live S0 capability: remaining gap retained with status known_gap_diagnostic, route oracle_blocked and diagnostic copy_on_change_full_temporary_document_cache_not_supported	stable native copied-object evidence plus approved request-local DTO plus current mismatch	keep diagnostic	S0/S4
+C12M5-CAT-001	copy_on_change_full_temporary_document_cache	retained_known_gap	live S0 capability plus S1 source check: SubShapeBinder full path uses _tmp_binder, _CopiedObjs, copyObject, recomputeFeature and _CopiedLink; current diagnostic remains copy_on_change_full_temporary_document_cache_not_supported	stable native copied-object evidence plus approved request-local DTO plus current mismatch	keep diagnostic	S0/S1/S4
 C12M5-CAT-002	subshapebinder_request_local_copy_intent	probe_candidate	no approved DTO yet	S2 evidence and S3 product approval	keep as design candidate only	S3
-C12M5-CAT-003	app_link_documentObjectUpdates_reference	current_covered_reference	cad-core app link tests and capability	none, because it is not SubShapeBinder implementation	keep reference boundary	S3
-C12M5-CAT-004	bindmode_detached_support	current_covered_subset	feature_shape_binder documentObjectUpdates for Detached	none for C12-M5	avoid scope expansion	S1
+C12M5-CAT-003	app_link_documentObjectUpdates_reference	current_covered_reference	cad-core app link tests and S1 source review confirm reference-only DTO vocabulary	none, because it is not SubShapeBinder implementation	keep reference boundary	S1/S3
+C12M5-CAT-004	bindmode_detached_support	current_covered_subset	S1 verified feature_shape_binder documentObjectUpdates for Detached Support clear only	none for C12-M5	avoid scope expansion	S1
 C12M5-CAT-005	implementation_candidate	conditional	none at creation	S2 native_evidence_ready plus S3 dto_approved plus mismatch	closed unless conditions met	S4
 C12M5-CAT-006	no_code_retained_diagnostic	conditional_release	current default if candidate absent	S4 closes implementation candidate	primary release fallback	S5

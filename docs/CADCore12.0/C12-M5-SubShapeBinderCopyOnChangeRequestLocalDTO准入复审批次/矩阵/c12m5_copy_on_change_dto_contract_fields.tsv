@@ -1,10 +1,10 @@
 id	field	source	allowed_if	forbidden_if	owner_step
-C12M5-FIELD-001	BindCopyOnChange	request DocumentObject graph	frontend persists FreeCAD-style property and cad-core can diagnose or process request-local intent	used to imply hidden temporary document cache exists	S1/S3
-C12M5-FIELD-002	PartialLoad	request DocumentObject graph	treated as explicit unsupported or future DTO input with source authority	used to silently skip copied-object lifecycle	S1/S3
+C12M5-FIELD-001	BindCopyOnChange	request DocumentObject graph	source verified FreeCAD-style property; current cad-core may diagnose Enabled or Mutated unless S3 approves request-local DTO	used to imply hidden _tmp_binder or _CopiedObjs cache exists, or App::Link support proves SubShapeBinder support	S1/S3
+C12M5-FIELD-002	PartialLoad	request DocumentObject graph	source verified property and canLoadPartial input; current cad-core treats True as explicit retained diagnostic	used to silently skip copied-object lifecycle or remove copy_on_change_full_temporary_document_cache_not_supported	S1/S3
 C12M5-FIELD-003	copy_intent	CAD Core product DTO candidate	describes request-local copy request without backend session	requires native object pointer or persistent temporary document	S3
 C12M5-FIELD-004	source_identity	Support LinkSub and request graph	stable object name, subname and source id are serializable	full TopoDS or BREP object transported as model input	S3
 C12M5-FIELD-005	mutation_delta	product DTO candidate	frontend can apply updates to DocumentObject graph before next request	backend stores mutation across requests	S3
-C12M5-FIELD-006	documentObjectUpdates	App::Link reference transport	returns create/update/delete suggestions that frontend persists into graph	adapter invents updates outside core semantics	S3/S4
+C12M5-FIELD-006	documentObjectUpdates	App::Link reference transport	reference-only App::Link create/update/delete suggestions that frontend persists into graph	used as evidence that SubShapeBinder _tmp_binder, _CopiedObjs, copyObject or recomputeFeature lifecycle is supported	S1/S3/S4
 C12M5-FIELD-007	copied_object_snapshot	future candidate only	only if serialized as graph objects and approved by product	captures native _CopiedObjs vector or hidden object pointer	S2/S3
 C12M5-FIELD-008	ElementMap_lifecycle	FreeCAD internal lifecycle	currently evidence target, not product field	requires post-request NamedShape or ElementMap cache	S2/S3
 C12M5-FIELD-009	diagnostic	current product behavior	published when DTO or native evidence is insufficient	suppressed without replacement support	S0/S5

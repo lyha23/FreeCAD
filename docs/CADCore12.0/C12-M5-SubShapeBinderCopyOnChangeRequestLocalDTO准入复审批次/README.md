@@ -22,6 +22,19 @@ C12-M5 承接 C12-M4 公开口径迁移完成后的 live capability 状态。当
 - 当前 known gap 为 `status=known_gap_diagnostic`、`route=oracle_blocked`、`diagnostic=copy_on_change_full_temporary_document_cache_not_supported`。
 - S0 已冻结 forbidden claims：不把 remaining gap 直接写成 full support；不声明 backend session、persistent temporary document、cross-request BREP / TopoDS / NamedShape / ElementMap cache；不把 App::Link CopyOnChange `documentObjectUpdates` 自动等同为 SubShapeBinder CopyOnChange supported。
 
+## S1 source/current 覆盖
+
+- S1 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`。
+- S1 执行 HEAD：`de93b702b0`（`de93b702b0 docs: 完成 C12-M5 S0 live 基线冻结`）。
+- S1 起点 dirty boundary：`git -c core.quotepath=false status --short -uall` 无输出，即 `<clean>`；未发现非本任务 dirty work。
+- FreeCAD `SubShapeBinder::execute()` 先 `setupCopyOnChange()` 再按 `BindMode=Synchronized` 调用 `update(UpdateForced)`；`setupCopyOnChange()` 只在 `BindCopyOnChange!=Disabled` 且单一 `Support` 时接入 `LinkBaseExtension::setupCopyOnChange()`。
+- FreeCAD `checkCopyOnChange()` 在 Enabled、单一 Support、非 transaction 且 dynamic CopyOnChange property 变化时把 `BindCopyOnChange` 推进到 Mutated。
+- FreeCAD Mutated 主路径在 `update()` 中创建或复用 `_CopiedObjs`：缺少有效 copied object 时新建临时文档 `_tmp_binder`，调用 `tmpDoc->copyObject({obj}, true, true)`，先 `recomputeFeature(true)` 生成正确 geometry element map，再复制属性并按需再次 `recomputeFeature(true)`，最后写 `_CopiedLink`。
+- `Document::copyObject()` 依赖 dependency list 与 `exportObjects()` / `MergeDocuments::importObjects()` 的真实 Document 生命周期；这说明 SubShapeBinder CopyOnChange 的完整 copied-object lifecycle 不能仅靠 request-local scalar field 推出 supported。
+- App::Link `documentObjectUpdates` 是 reference-only：current `cad-core` 已有 App::Link CopyOnChange create/update/delete 建议，但该路径不等同于 SubShapeBinder `_tmp_binder` / `_CopiedObjs` 支持。
+- current `cad-core` 只确认 `BindMode=Detached` 的 request-local `Support` clear writeback 子集；`BindCopyOnChange=Enabled/Mutated` 或 `PartialLoad=True` 继续发布 `copy_on_change_full_temporary_document_cache_not_supported` diagnostic，capability 仍是 `known_gap_diagnostic` / `oracle_blocked`。
+- `C12M5-BLOCKER-101` 已关闭；S1 不打开 implementation candidate，后续只进入 S2 native evidence / probe 准入复核。
+
 ## 继承口径
 
 - C9-M5 裁决：CopyOnChange full temporary-document copied-object lifecycle 依赖 `_tmp_binder`、`_CopiedObjs`、`copyObject()`、`recomputeFeature(true)` 和 `_CopiedLink`，S6 关闭为 `no_code_retained_known_gap_release_gate`。
@@ -47,7 +60,7 @@ C12-M5 承接 C12-M4 公开口径迁移完成后的 live capability 状态。当
 ## 工作步骤
 
 - S0：live 基线与继承口径冻结（已完成）。
-- S1：FreeCAD 源码与 current 覆盖矩阵。
+- S1：FreeCAD 源码与 current 覆盖矩阵（已完成）。
 - S2：native evidence 刷新与 probe 准入。
 - S3：request-local DTO 产品边界冻结。
 - S4：current mismatch 与实现候选闸门。

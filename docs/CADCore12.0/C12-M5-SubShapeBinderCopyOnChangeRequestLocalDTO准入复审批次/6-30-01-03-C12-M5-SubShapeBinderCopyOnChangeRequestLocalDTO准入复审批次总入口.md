@@ -29,12 +29,14 @@ C12-M5 处理当前 live capability 中唯一剩余公开 gap：`part_design.sub
 
 1. CopyOnChange 是唯一剩余公开 gap，但当前 route 是 `oracle_blocked`，不是直接 implementation route。
 2. C9-M5 / C10-M4 仍是有效前置结论：没有稳定 copied-object expected，没有产品批准 DTO，没有 current mismatch。
-3. C12-M5 必须重新验证上述三件事是否发生变化；不能从 remaining gap 直接推出代码任务。
+3. S1 已复核 FreeCAD source/current coverage：SubShapeBinder full CopyOnChange 依赖 `_tmp_binder`、`_CopiedObjs`、`copyObject()` 和 `recomputeFeature(true)` 的真实 Document 生命周期；App::Link `documentObjectUpdates` 仍只是 reference-only DTO 路径。
+4. current `cad-core` 只覆盖 `BindMode=Detached` request-local writeback 子集；`BindCopyOnChange=Enabled/Mutated` 或 `PartialLoad=True` 继续保持 `copy_on_change_full_temporary_document_cache_not_supported` diagnostic。
+5. C12-M5 后续仍必须验证 native evidence、产品 DTO 和 current mismatch 是否同时成立；不能从 remaining gap 或 App::Link coverage 直接推出代码任务。
 
 ## 决策顺序
 
 1. S0 冻结 live baseline、旧结论和 forbidden claims（已完成）。
-2. S1 复核 FreeCAD source authority 与 current cad-core coverage。
+2. S1 复核 FreeCAD source authority 与 current cad-core coverage（已完成，`C12M5-BLOCKER-101` 已关闭）。
 3. S2 判断 native evidence 是否足够，必要时设计 probe，而不是先写实现。
 4. S3 冻结产品 DTO 边界：允许字段、禁止字段、前端写回职责。
 5. S4 做 current mismatch gate：只有 approved DTO 与 current diagnostic 冲突才进入 implementation candidate。
