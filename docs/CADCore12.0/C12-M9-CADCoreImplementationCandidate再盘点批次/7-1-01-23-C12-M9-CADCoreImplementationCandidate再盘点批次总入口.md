@@ -53,7 +53,7 @@ live capability baseline
 | S1 | `工作步骤细分/7-1-01-26-【已实现】C12-M9-S1-live-capability与remaining-gap抽取.md` | 抽取 remaining / known gaps，已关闭。 |
 | S2 | `工作步骤细分/7-1-01-27-【已实现】C12-M9-S2-narrowed-gaps与产品契约归类.md` | 归类 narrowed gaps 和 non-parity，已关闭。 |
 | S3 | `工作步骤细分/7-1-01-28-【已实现】C12-M9-S3-expected与current-mismatch准入.md` | 过滤 stable expected / mismatch，已关闭且未产生 S4 implementation candidate。 |
-| S4 | `工作步骤细分/7-1-01-29-C12-M9-S4-最高优先候选source与验证范围复核.md` | 复核 candidate source / landing。 |
+| S4 | `工作步骤细分/7-1-01-29-【已实现】C12-M9-S4-最高优先候选source与验证范围复核.md` | 复核 candidate source / landing，已关闭为 `no_candidate_after_s3_gate`。 |
 | S5 | `工作步骤细分/7-1-01-30-C12-M9-S5-implementation-package-authorization裁决.md` | 授权实现包或关闭。 |
 | S6 | `工作步骤细分/7-1-01-31-C12-M9-S6-发布闸门与后续分流.md` | 发布最终状态。 |
 | 矩阵 | `矩阵/` | source、scope、classification、blocker、non-goal、validation。 |
@@ -85,6 +85,9 @@ live capability baseline
 - S3 expected 与 current mismatch 准入已关闭：执行基线 `HEAD=514409a568`（`514409a568 docs: 关闭 C12-M9 S2 narrowed gaps 归类`），起点 worktree clean；capability 刷新为 `/tmp/c12m9-capabilities-s3.json`。
 - S3 三闸门裁决：CopyOnChange=`none / needs product decision / blocked-not-comparable`；Groove UpTo=`product diagnostic contract / approved / current-covered`，不是 native parity success；RuledSurface wire/wire=`checked-in expected / approved / current-covered`；Part Workbench narrowed rows=`mixed expected and boundary / current-covered or not comparable`，无 mismatch-confirmed；Assembly=`request-local subset current-covered + full solver/session non-goal`；authorization placeholder=`no admitted candidate`。
 - `C12M9-BLOCKER-301` 已关闭为 `closed_s3_no_admitted_candidate`，`C12M9-VAL-301` 已写实际复核结果。S3 未运行 FreeCADCmd，未新增或修改 fixture expected，未修改 `cad-core/src`、`include`、tests、adapters 或 capability source，未授权 implementation package。
+- S4 最高优先候选 source 与验证范围复核已关闭：执行基线 `HEAD=50c3691d8c`（`50c3691d8c docs: 关闭 C12-M9 S3 mismatch 准入`），起点 worktree clean；执行前队列第一项为 S4，关闭后应从 S5 继续。
+- S4 复核确认 `C12M9-CAT-001..005` 均为 `not_s4_candidate`，`C12M9-CAT-006` 为 `no_s4_candidate_yet`，没有 admitted `mismatch-confirmed` 行；结果记录为 `no_candidate_after_s3_gate`。
+- S4 未发现可写 FreeCAD source authority、cad-core landing、fixtures / focused tests 或 implementation surface。`C12M9-BLOCKER-401` 已关闭为 no-candidate evidence，`C12M9-SCOPE-501` / `C12M9-CAT-006` 仅作为 S5 `no_code_backlog_gate` 输入；除非后续出现新 oracle / product-contract 证据，不创建 implementation package。
 
 ## 验收
 

@@ -65,6 +65,14 @@ C12-M8 已把当前唯一 live `remaining_gaps`：`part_design.sub_shape_binder.
 - `C12M9-CAT-006` authorization placeholder：没有 admitted candidate，current comparison not comparable。S3 结论为 `no S4 implementation candidate yet`。
 - `C12M9-BLOCKER-301` 已关闭为 `closed_s3_no_admitted_candidate`，`C12M9-VAL-301` 已记录实际复核结果。S4 只能在无新增证据时记录 no-candidate source review，不得授权 implementation package。
 
+## S4 最高优先候选 source 与验证范围复核
+
+- S4 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=50c3691d8c`（`50c3691d8c docs: 关闭 C12-M9 S3 mismatch 准入`），起点 worktree clean。
+- S4 执行前 C12-M9 队列第一项为 `7-1-01-29-C12-M9-S4-最高优先候选source与验证范围复核.md`，后续为 S5-S6；关闭后文件为 `7-1-01-29-【已实现】C12-M9-S4-最高优先候选source与验证范围复核.md`，队列应从 S5 继续。
+- S4 复核 S3 结果与 backend/scope/non-goal 矩阵：`C12M9-CAT-001..005` 均为 `not_s4_candidate`，`C12M9-CAT-006` 为 `no_s4_candidate_yet`；没有 admitted `mismatch-confirmed` 行。
+- S4 结果为 `no_candidate_after_s3_gate`。没有可写 FreeCAD source authority、cad-core landing、fixtures / tests 或 implementation surface；不得发明 C++ 范围。
+- `C12M9-BLOCKER-401` 已关闭为 no-candidate evidence。`C12M9-SCOPE-501` / `C12M9-CAT-006` 作为 S5 输入只能走 `no_code_backlog_gate`，或在后续新证据出现时另开 oracle / product-contract package；本 S4 不创建后续 implementation 包。
+
 ## 候选准入规则
 
 任一 C12-M9 候选必须同时满足三项，才允许 S5/S6 产出后续 implementation package：
@@ -91,7 +99,7 @@ C12-M8 已把当前唯一 live `remaining_gaps`：`part_design.sub_shape_binder.
 - S1：live capability 和非空 `remaining_gaps` 抽取（已完成）。
 - S2：`narrowed_gaps`、product-contract non-parity 和 historical evidence 归类（已完成）。
 - S3：stable expected / product contract 与 current mismatch 准入（已完成，未产生 S4 implementation candidate）。
-- S4：最高优先候选的 FreeCAD source、cad-core 落点和验证范围复核。
+- S4：最高优先候选的 FreeCAD source、cad-core 落点和验证范围复核（已完成，`no_candidate_after_s3_gate`）。
 - S5：implementation package authorization 或 no-code backlog 裁决。
 - S6：发布闸门、README 更新和后续分流。
 
