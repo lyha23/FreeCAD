@@ -70,6 +70,16 @@ C12-M5 已关闭为 `no_code_retained_diagnostic`：旧 native evidence 只能�
 - `C12M8-BLOCKER-401` 已关闭为 `closed_s4_no_current_mismatch`；`C12M8-CAT-001` 已裁决为 `retained_diagnostic/no_current_mismatch`。
 - S4 focused tests 未运行，记录为 `not_run_blocked_by_s2_s3_gate`；S6 最多做 publication wording check，不得把 App::Link transport、property/session 状态、label、bbox、shape count、`_tmp_binder` document name 或 `_CopiedLink` target 当作 SubShapeBinder success/mismatch 证据。
 
+## S5 implementation authorization
+
+- S5 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=02ace35b4d`（`02ace35b4d 文档：关闭 C12-M8 S4 mismatch gate`），起点 worktree clean。
+- S5 执行前队列确认：S5 是第一条 pending，后续为 S6。
+- S5 裁决：`no_code_retained_diagnostic`。S2=`native_evidence_retained_blocker`，S3=`dto_not_reviewed_due_to_native_blocker`，S4=`no_current_mismatch_retained_diagnostic`，三项 implementation gate 均未满足。
+- S5 不创建 C12-M9 implementation package，不授权 C++ work。
+- 继续保留 `copy_on_change_full_temporary_document_cache_not_supported`、`known_gap_diagnostic`、`oracle_blocked` 与 `remaining_gaps=[copy_on_change_full_temporary_document_cache]`。
+- delete condition：只有 FreeCADCmd 稳定暴露 `_CopiedObjs` identity、copyObject dependency order、support rewrite map、`recomputeFeature(true)` lifecycle、ElementMap / NamedShape lifecycle，且这些证据能转成前端持久化 graph / `documentObjectUpdates` 后，才可替换 diagnostic。
+- reopen condition：更强 native copied graph artifact 必须先重开并通过 S2，再重新执行 S3 DTO approval 与 S4 current mismatch gate。
+
 ## 解锁条件
 
 只有以下三项同时成立，C12-M8 才允许产出后续 implementation package：
@@ -98,7 +108,7 @@ C12-M5 已关闭为 `no_code_retained_diagnostic`：旧 native evidence 只能�
 - S2：native copied graph probe schema 与 evidence gate（已完成，`native_evidence_retained_blocker`）。
 - S3：request-local DTO 产品边界裁决（已完成，`dto_not_reviewed_due_to_native_blocker`）。
 - S4：current mismatch 与 implementation candidate gate（已完成，`no_current_mismatch_retained_diagnostic`）。
-- S5：implementation package authorization / no-code retained decision。
+- S5：implementation package authorization / no-code retained decision（已完成，`no_code_retained_diagnostic`）。
 - S6：发布闸门、README 更新和后续分流。
 
 ## 入口

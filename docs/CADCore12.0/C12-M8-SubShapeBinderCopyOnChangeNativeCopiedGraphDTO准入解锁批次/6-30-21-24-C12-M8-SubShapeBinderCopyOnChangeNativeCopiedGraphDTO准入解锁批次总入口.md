@@ -21,7 +21,7 @@
 - S2：native copied graph probe schema 与 evidence gate（已完成，`native_evidence_retained_blocker`）。
 - S3：request-local DTO 产品边界裁决（已完成，`dto_not_reviewed_due_to_native_blocker`）。
 - S4：current mismatch 与 implementation candidate gate（已完成，`no_current_mismatch_retained_diagnostic`）。
-- S5：implementation package authorization / no-code retained decision。
+- S5：implementation package authorization / no-code retained decision（已完成，`no_code_retained_diagnostic`）。
 - S6：发布闸门、README 更新和后续分流。
 
 ## 当前执行状态
@@ -36,13 +36,17 @@
 - C12-M5 `no_code_retained_diagnostic` 与 C12-M7 `product_diagnostic_contract_published` 后续分流口径均继续有效；S4 不能跳到 implementation approval，除非另有更强 native copied graph artifact 重新打开 S2 gate 并重新通过 S3 DTO approval。
 - S4 current mismatch gate 已完成：`C12M8-BLOCKER-401` 已关闭为 `closed_s4_no_current_mismatch`；`C12M8-CAT-001` 已裁决为 `retained_diagnostic/no_current_mismatch`，输出 `no_current_mismatch_retained_diagnostic`。
 - current `cad-core` retained diagnostic 与现有证据一致；没有 approved DTO 时，同一 request-local graph comparison 不成立，因此没有 C++ implementation mismatch。S6 最多保留 publication wording check。
+- S5 implementation authorization 已完成：S2=`native_evidence_retained_blocker`，S3=`dto_not_reviewed_due_to_native_blocker`，S4=`no_current_mismatch_retained_diagnostic`，三项 implementation gate 均未满足，最终输出 `no_code_retained_diagnostic`。
+- S5 不创建 C12-M9 implementation package，不授权 C++ work；保留 `copy_on_change_full_temporary_document_cache_not_supported`、`known_gap_diagnostic`、`oracle_blocked` 与 `remaining_gaps=[copy_on_change_full_temporary_document_cache]`。
+- S5 delete condition：只有 FreeCADCmd 稳定暴露 `_CopiedObjs` identity、copyObject dependency order、support rewrite map、`recomputeFeature(true)` lifecycle、ElementMap / NamedShape lifecycle，且这些证据能转成前端持久化 graph / `documentObjectUpdates` 后，才可替换 diagnostic。
+- S5 reopen condition：更强 native copied graph artifact 必须先重开并通过 S2，再重新执行 S3 DTO approval 与 S4 current mismatch gate。
 
 ## 必要裁决
 
 - S2 已是 `native_evidence_retained_blocker`，S3/S4 不能跳到 implementation。
 - S3 已是 `dto_not_reviewed_due_to_native_blocker`，S4 只能保留 diagnostic 或做 publication wording repair 判断。
 - S4 已无 current mismatch，S5 不能创建 implementation package。
-- 若任一条件失败，最终出口必须写明 retained blocker、删除条件和下一次重开条件。
+- S5 已按失败 gate 输出 `no_code_retained_diagnostic`，保留 retained blocker、delete condition 和 reopen condition；S6 只做发布闸门与后续分流。
 
 ## 验收
 
