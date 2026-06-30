@@ -33,7 +33,8 @@ S0 live 冻结进一步确认：C12-M1..M6 队列均为空；`part_design.sub_sh
 
 - 工作步骤总入口已核对为队列入口：只定义 S0-S5 的执行规则、顺序和验收命令，与 README、方案和矩阵一致。
 - S0 live 基线与候选冻结已完成：`HEAD=bb69e61a0f`，起点 worktree clean，C12-M1..M6 队列均为空，capability 三段摘录已记录。
-- 下一步是 S1 native failure 与 current diagnostic 复核；S1-S5 尚未标记完成。
+- S1 native failure 与 current diagnostic 复核已完成：`HEAD=fdeea2443e` 起点 clean；FreeCAD 调用链已定位到 `Groove::execute -> executeRevolved(CutFromBase) -> Revolved::tryExecuteRevolved -> tryToRevolveToFace -> TopoShape::makeElementRevolution -> BRepFeat_MakeRevol`；C51X native evidence 仍记录 FreeCADCmd 1.2.0 revision 20260519 下两个 Groove UpTo fixtures 报 `Groove: Revolution: Up to face: Could not revolve the sketch!`；current focused test 继续断言 `BRepFeat_MakeRevol could not revolve profile up to face` / `Could not revolve the sketch`。
+- 下一步是 S2 product diagnostic contract 准入裁决；S2-S5 尚未标记完成。
 
 ## 验收
 

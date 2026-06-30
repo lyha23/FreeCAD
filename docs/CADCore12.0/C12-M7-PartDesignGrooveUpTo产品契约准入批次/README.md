@@ -29,7 +29,8 @@ C12-M7 用于裁决 `PartDesign::Groove` 的 `Type=UpToFirst` / `Type=UpToFace` 
 - S0 live 基线与候选冻结已完成：执行起点为 `HEAD=bb69e61a0f`（`bb69e61a0f docs: 关闭 C12-M7 工作步骤总入口`），worktree clean，C12-M1..M6 队列均为空。
 - `cad-core/build/cad-core capabilities` 摘录显示：`part_design.revolution_groove.remaining_gaps=[]`，`narrowed_gaps.partdesign_groove_upto_brepfeat_cut_native_failure.route=historical_native_failure`；`part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]` 且仍为 `known_gap_diagnostic` / `oracle_blocked`；`part_workbench.ruled_surface.status=supported_wire_wire_expected_backed` 且 `remaining_gaps=[]`。
 - S0 冻结结论：下一步仍选择 Groove UpTo exact narrowed gap；不重开 CopyOnChange，因为 C12-M5 已发布 `no_code_retained_diagnostic`；不重开 RuledSurface wire/wire，因为 C12-M6 已发布 `wire_wire_admitted_current_supported`。
-- 当前 live 队列应从 S1 `工作步骤细分/6-30-17-00-C12-M7-S1-native-failure与current-diagnostic复核.md` 开始；S1-S5 仍保持 pending，未提前关闭。
+- S1 native failure 与 current diagnostic 复核已完成：本轮起点 `HEAD=fdeea2443e`，worktree clean；FreeCAD chain 为 `Groove::execute -> executeRevolved(CutFromBase) -> Revolved::tryExecuteRevolved -> tryToRevolveToFace -> TopoShape::makeElementRevolution -> BRepFeat_MakeRevol`；C51X 旧证据仍采用 `FreeCADCmd 1.2.0 revision 20260519` 下两个 Groove UpTo fixtures 报 `Groove: Revolution: Up to face: Could not revolve the sketch!`，本机 `freecadcmd --version` 也为 `FreeCAD 1.2.0 Revision: 20260519 (Git shallow)`；focused test 确认 current exact diagnostics 仍为 `BRepFeat_MakeRevol could not revolve profile up to face` / `Could not revolve the sketch`。
+- 当前 live 队列应从 S2 `工作步骤细分/6-30-17-01-C12-M7-S2-product-diagnostic-contract准入裁决.md` 开始；S2-S5 仍保持 pending，未提前关闭。
 
 ## 预期出口
 

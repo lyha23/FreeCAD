@@ -15,12 +15,14 @@
 - `part_workbench.ruled_surface.status=supported_wire_wire_expected_backed`，`remaining_gaps=[]`，C12-M6 已关闭为 `wire_wire_admitted_current_supported`。
 - `part_design.revolution_groove.status=supported_c51s1_advanced_with_historical_groove_upto_native_failure`。
 - narrowed gap：`partdesign_groove_upto_brepfeat_cut_native_failure`，fixtures 为 `c51m1/partdesign-groove-uptofirst-body` 和 `c51m1/partdesign-groove-uptoface-body`。
+- S1 live 复核：`HEAD=fdeea2443e` 起点 worktree clean；C51X native evidence 仍采用 `FreeCADCmd 1.2.0 revision 20260519` 下两个 Groove UpTo fixtures 报 `Groove: Revolution: Up to face: Could not revolve the sketch!`，本轮轻量 `freecadcmd --version` 同为 `FreeCAD 1.2.0 Revision: 20260519 (Git shallow)`；focused test 证明 current CAD Core exact diagnostic 未漂移。
 
 ## FreeCAD / CAD Core 依据
 
 - FreeCAD source：`src/Mod/PartDesign/App/FeatureGroove.cpp::Groove::execute()` 调用 subtractive revolved path。
 - FreeCAD source：`src/Mod/PartDesign/App/FeatureRevolved.cpp::Revolved::tryExecuteRevolved()` 对 ToFirst / ToFace / ToLast 进入 `BRepFeat_MakeRevol` up-to path。
 - FreeCAD source：`src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementRevolution()` 是 BRepFeat revolution helper 落点。
+- S1 调用链复核：`Groove::execute -> executeRevolved(CutFromBase) -> Revolved::tryExecuteRevolved -> tryToRevolveToFace -> TopoShape::makeElementRevolution -> BRepFeat_MakeRevol`，FreeCAD failure string 仍来自 `TopoShapeExpansion.cpp::makeElementRevolution()` 的 up-to revolver failure。
 - current CAD Core：`cad-core/src/part_design/feature_revolved.cpp::buildRevolvedUntil()` 对 UpTo revolution 进入 `makeElementRevolutionUntilFromSources()`。
 - current CAD Core：`cad-core/src/part/topo_shape_expansion.cpp` 当前 exact diagnostic 为 `BRepFeat_MakeRevol could not revolve profile up to face`。
 - current tests：`cad-core/tests/test_p7_features.py::test_c51m1_groove_upto_native_brepfeat_failures_are_exact_blockers()` 已断言两个 Groove UpTo fixtures 的 exact diagnostic。
