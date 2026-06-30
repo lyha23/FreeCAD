@@ -10,6 +10,8 @@
 
 `part_design.revolution_groove` 的 `partdesign_groove_upto_brepfeat_cut_native_failure` 是 live capability 中最明确的下一项 exact narrowed gap。它已有两条 fixtures、FreeCAD source authority、current CAD Core exact diagnostics 和 future product-contract reopen condition，因此适合进入 C12-M7。
 
+S0 live 冻结进一步确认：C12-M1..M6 队列均为空；`part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache` 仍是 C12-M5 retained diagnostic / `oracle_blocked`，不能从 remaining gap 直接变成实现任务；`part_workbench.ruled_surface` 已是 `supported_wire_wire_expected_backed` 且无 remaining gap；`part_design.revolution_groove` 无 active `remaining_gaps`，但保留 exact narrowed gap `partdesign_groove_upto_brepfeat_cut_native_failure`，适合进入 S1 native/current evidence 复核。
+
 ## 执行规则
 
 1. 每步开始前执行 live baseline：`pwd`、`git rev-parse --short HEAD`、`git log -1 --oneline`、`git -c core.quotepath=false status --short -uall`。
@@ -30,7 +32,8 @@
 ## 当前闭合状态
 
 - 工作步骤总入口已核对为队列入口：只定义 S0-S5 的执行规则、顺序和验收命令，与 README、方案和矩阵一致。
-- 下一步是 S0 live 基线与候选冻结；S0-S5 尚未标记完成。
+- S0 live 基线与候选冻结已完成：`HEAD=bb69e61a0f`，起点 worktree clean，C12-M1..M6 队列均为空，capability 三段摘录已记录。
+- 下一步是 S1 native failure 与 current diagnostic 复核；S1-S5 尚未标记完成。
 
 ## 验收
 

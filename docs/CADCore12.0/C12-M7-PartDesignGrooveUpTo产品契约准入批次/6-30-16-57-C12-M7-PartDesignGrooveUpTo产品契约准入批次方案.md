@@ -8,9 +8,11 @@
 
 ## 当前基线
 
-- 最新 live HEAD：`11778397bf docs: 关闭 C12-M6 wire/wire 发布闸门`。
+- 创建基线：`11778397bf docs: 关闭 C12-M6 wire/wire 发布闸门`。
+- S0 live 基线：`bb69e61a0f docs: 关闭 C12-M7 工作步骤总入口`，起点 worktree clean。
 - C12-M1..M6 工作步骤队列均为空。
 - `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]` 仍存在，但 C12-M5 已关闭为 `no_code_retained_diagnostic`。
+- `part_workbench.ruled_surface.status=supported_wire_wire_expected_backed`，`remaining_gaps=[]`，C12-M6 已关闭为 `wire_wire_admitted_current_supported`。
 - `part_design.revolution_groove.status=supported_c51s1_advanced_with_historical_groove_upto_native_failure`。
 - narrowed gap：`partdesign_groove_upto_brepfeat_cut_native_failure`，fixtures 为 `c51m1/partdesign-groove-uptofirst-body` 和 `c51m1/partdesign-groove-uptoface-body`。
 
