@@ -52,6 +52,19 @@ C12-M8 已把当前唯一 live `remaining_gaps`：`part_design.sub_shape_binder.
 - Assembly 归类为 request-local covered subset 与 non-goal 并存：`ondsel_solver_adapter.status=covered_full`，覆盖 grounded joints、extended distance geometry、subshape marker placement、runPreDrag 和 placement validation；`representative_solver_adapter.status=covered_representative`，full solver、persistent solver state、cross-request assembly session 继续是 non-goals。
 - `C12M9-SCOPE-201/202/301/401` 已关闭为分类完成，`C12M9-CAT-002..005` 已写入 S2 decision，`C12M9-NG-004/006` 继续保留，`C12M9-BLOCKER-201` 已关闭。S2 没有打开 implementation row，S3 仍需按 stable expected/product contract、request-local boundary 和 current mismatch 逐项准入。
 
+## S3 expected 与 current mismatch 准入
+
+- S3 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=514409a568`（`514409a568 docs: 关闭 C12-M9 S2 narrowed gaps 归类`），起点 worktree clean。
+- S3 执行前 C12-M9 队列第一项为 `7-1-01-28-C12-M9-S3-expected与current-mismatch准入.md`，关闭后文件为 `7-1-01-28-【已实现】C12-M9-S3-expected与current-mismatch准入.md`，队列应从 S4 继续。
+- live capability 已刷新到 `/tmp/c12m9-capabilities-s3.json`。S3 只消费 live capability、S2 矩阵和 C12-M2/M3/M4/M6/M7/M8 README，不运行 FreeCADCmd，不新增或修改 fixture expected，不修改 `cad-core/src`、`include`、tests、adapters 或 capability source。
+- `C12M9-CAT-001` CopyOnChange：expected source=`none`，request-local boundary=`needs product decision`，current comparison=`blocked/not comparable`。C12-M8 native copied graph gate 未过且完整 DTO 未批准，current retained diagnostic 不能被写成 implementation mismatch。
+- `C12M9-CAT-002` Groove UpTo：expected source=`product diagnostic contract`，request-local boundary=`approved`，current comparison=`current-covered`。该行继续是 product diagnostic contract non-parity，不是 native parity success。
+- `C12M9-CAT-003` RuledSurface wire/wire：expected source=`checked-in expected`，request-local boundary=`approved`，current comparison=`current-covered`。未发现 checked-in expected/current mismatch。
+- `C12M9-CAT-004` Part Workbench narrowed rows：expected source 与 boundary 为 mixed；current comparison 为 current-covered 或 not comparable。Sweep/Filling/GeomPlate/Loft/ProjectOnSurface 仍分别落在 current-covered、native-hidden、helper-blocked、oracle-blocked、product-contract non-parity 或 non-goal，没有 mismatch-confirmed 行。
+- `C12M9-CAT-005` Assembly：request-local subset 有 checked-in expected/current-covered；full solver、persistent solver state 和 cross-request session 是 non-goals。未发现 request-local subset mismatch。
+- `C12M9-CAT-006` authorization placeholder：没有 admitted candidate，current comparison not comparable。S3 结论为 `no S4 implementation candidate yet`。
+- `C12M9-BLOCKER-301` 已关闭为 `closed_s3_no_admitted_candidate`，`C12M9-VAL-301` 已记录实际复核结果。S4 只能在无新增证据时记录 no-candidate source review，不得授权 implementation package。
+
 ## 候选准入规则
 
 任一 C12-M9 候选必须同时满足三项，才允许 S5/S6 产出后续 implementation package：
@@ -77,7 +90,7 @@ C12-M8 已把当前唯一 live `remaining_gaps`：`part_design.sub_shape_binder.
 - S0：live 基线与 C12-M1..M8 关闭口径冻结（已完成）。
 - S1：live capability 和非空 `remaining_gaps` 抽取（已完成）。
 - S2：`narrowed_gaps`、product-contract non-parity 和 historical evidence 归类（已完成）。
-- S3：stable expected / product contract 与 current mismatch 准入。
+- S3：stable expected / product contract 与 current mismatch 准入（已完成，未产生 S4 implementation candidate）。
 - S4：最高优先候选的 FreeCAD source、cad-core 落点和验证范围复核。
 - S5：implementation package authorization 或 no-code backlog 裁决。
 - S6：发布闸门、README 更新和后续分流。

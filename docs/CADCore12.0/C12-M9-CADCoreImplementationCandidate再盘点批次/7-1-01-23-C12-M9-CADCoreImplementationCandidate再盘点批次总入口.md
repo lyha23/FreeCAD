@@ -52,7 +52,7 @@ live capability baseline
 | S0 | `工作步骤细分/7-1-01-25-【已实现】C12-M9-S0-live基线与继承口径冻结.md` | 冻结 C12-M8 后 live baseline，已关闭。 |
 | S1 | `工作步骤细分/7-1-01-26-【已实现】C12-M9-S1-live-capability与remaining-gap抽取.md` | 抽取 remaining / known gaps，已关闭。 |
 | S2 | `工作步骤细分/7-1-01-27-【已实现】C12-M9-S2-narrowed-gaps与产品契约归类.md` | 归类 narrowed gaps 和 non-parity，已关闭。 |
-| S3 | `工作步骤细分/7-1-01-28-C12-M9-S3-expected与current-mismatch准入.md` | 过滤 stable expected / mismatch。 |
+| S3 | `工作步骤细分/7-1-01-28-【已实现】C12-M9-S3-expected与current-mismatch准入.md` | 过滤 stable expected / mismatch，已关闭且未产生 S4 implementation candidate。 |
 | S4 | `工作步骤细分/7-1-01-29-C12-M9-S4-最高优先候选source与验证范围复核.md` | 复核 candidate source / landing。 |
 | S5 | `工作步骤细分/7-1-01-30-C12-M9-S5-implementation-package-authorization裁决.md` | 授权实现包或关闭。 |
 | S6 | `工作步骤细分/7-1-01-31-C12-M9-S6-发布闸门与后续分流.md` | 发布最终状态。 |
@@ -82,6 +82,9 @@ live capability baseline
 - S2 narrowed gaps 与产品契约归类已关闭：执行基线 `HEAD=e0a9b08d2a`（`e0a9b08d2a 文档：关闭 C12-M9 S1 live capability 抽取`），起点 worktree clean；snapshot 刷新为 `/tmp/c12m9-capabilities.json`。
 - S2 current classification：Groove UpTo=`product_diagnostic_contract_non_parity_retained`；RuledSurface wire/wire=`current_supported_retained`；ProjectOnSurface=`native-hidden/request-local ledger product contract`；Sweep=`product-contract non-parity with native_probe_blocked/current-covered context`；Filling=`helper_blocked/product-contract non-parity`；GeomPlate projected curve2d initial surface=`current-covered`，其余 GeomPlate narrowed rows 保留为 request-local product contract/native-hidden/oracle-blocked/non-goal；Loft=`native-hidden product-contract non-parity`；Assembly=`request-local covered subset + representative fallback metadata/full solver session non-goal`。
 - S2 裁决：`C12M9-SCOPE-201/202/301/401` 已关闭，`C12M9-CAT-002..005` 已写入 decision，`C12M9-NG-004/006` 继续保留，`C12M9-BLOCKER-201` 已关闭。S2 未运行 FreeCADCmd，未新增 fixture/expected，未修改 `cad-core/src`、`include`、tests、adapters 或 capability source，未授权 implementation package。
+- S3 expected 与 current mismatch 准入已关闭：执行基线 `HEAD=514409a568`（`514409a568 docs: 关闭 C12-M9 S2 narrowed gaps 归类`），起点 worktree clean；capability 刷新为 `/tmp/c12m9-capabilities-s3.json`。
+- S3 三闸门裁决：CopyOnChange=`none / needs product decision / blocked-not-comparable`；Groove UpTo=`product diagnostic contract / approved / current-covered`，不是 native parity success；RuledSurface wire/wire=`checked-in expected / approved / current-covered`；Part Workbench narrowed rows=`mixed expected and boundary / current-covered or not comparable`，无 mismatch-confirmed；Assembly=`request-local subset current-covered + full solver/session non-goal`；authorization placeholder=`no admitted candidate`。
+- `C12M9-BLOCKER-301` 已关闭为 `closed_s3_no_admitted_candidate`，`C12M9-VAL-301` 已写实际复核结果。S3 未运行 FreeCADCmd，未新增或修改 fixture expected，未修改 `cad-core/src`、`include`、tests、adapters 或 capability source，未授权 implementation package。
 
 ## 验收
 
