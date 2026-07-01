@@ -15,6 +15,7 @@
 #include <optional>
 #include <set>
 #include <string>
+#include <utility>
 
 namespace cad_core::runtime {
 
@@ -374,11 +375,26 @@ nlohmann::json responseMesh(const std::string& objectName, const nlohmann::json&
                 || !pointsIt->is_array()) {
                 continue;
             }
-            edgeSegments.push_back({
+            nlohmann::json responseSegment {
                 {"id", objectName + ":" + id},
                 {"indexed", indexed},
                 {"points", *pointsIt},
-            });
+            };
+            for (const std::string& field : {"stableSubname", "sourceStableSubname", "identityStatus"}) {
+                const auto fieldIt = segment.find(field);
+                if (fieldIt != segment.end() && fieldIt->is_string()) {
+                    responseSegment[field] = fieldIt->get<std::string>();
+                }
+            }
+            const auto sourceGeometryIdIt = segment.find("sourceGeometryId");
+            if (sourceGeometryIdIt != segment.end() && sourceGeometryIdIt->is_number_integer()) {
+                responseSegment["sourceGeometryId"] = sourceGeometryIdIt->get<long long>();
+            }
+            const auto sourceGeometryIndexIt = segment.find("sourceGeometryIndex");
+            if (sourceGeometryIndexIt != segment.end() && sourceGeometryIndexIt->is_number_unsigned()) {
+                responseSegment["sourceGeometryIndex"] = sourceGeometryIndexIt->get<std::size_t>();
+            }
+            edgeSegments.push_back(std::move(responseSegment));
         }
     }
 
@@ -449,15 +465,40 @@ nlohmann::json responseSubshapes(const std::string& objectName,
         if (stableSubname.empty()) {
             stableSubname = internalElementStableSubnameFor(objectName, indexed, context);
         }
+        const std::string identityStatus = subshape.value("identityStatus", "");
+        if (identityStatus == "stable") {
+            const std::string sourceStableSubname = subshape.value("sourceStableSubname", "");
+            if (!sourceStableSubname.empty()) {
+                stableSubname = sourceStableSubname;
+            }
+        }
+        else if (identityStatus == "index_fallback") {
+            stableSubname.clear();
+        }
         stableSubname = bodyTipQualifiedStableSubname(objectName, indexed, stableSubname, tipContext);
         const std::string subname = responseSubnameFor(indexed, stableSubname, tipContext);
-        subshapes.push_back({
+        nlohmann::json responseSubshape {
             {"id", objectName + ":" + indexed},
             {"kind", displayKind(subshape)},
             {"indexed", indexed},
             {"subname", subname},
             {"stableSubname", stableSubname},
-        });
+        };
+        for (const std::string& field : {"sourceStableSubname", "identityStatus"}) {
+            const auto fieldIt = subshape.find(field);
+            if (fieldIt != subshape.end() && fieldIt->is_string()) {
+                responseSubshape[field] = fieldIt->get<std::string>();
+            }
+        }
+        const auto sourceGeometryIdIt = subshape.find("sourceGeometryId");
+        if (sourceGeometryIdIt != subshape.end() && sourceGeometryIdIt->is_number_integer()) {
+            responseSubshape["sourceGeometryId"] = sourceGeometryIdIt->get<long long>();
+        }
+        const auto sourceGeometryIndexIt = subshape.find("sourceGeometryIndex");
+        if (sourceGeometryIndexIt != subshape.end() && sourceGeometryIndexIt->is_number_unsigned()) {
+            responseSubshape["sourceGeometryIndex"] = sourceGeometryIndexIt->get<std::size_t>();
+        }
+        subshapes.push_back(std::move(responseSubshape));
     }
     return subshapes;
 }

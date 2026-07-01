@@ -51,6 +51,53 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             if temp_path is not None:
                 temp_path.unlink(missing_ok=True)
 
+    def open_wire_identity_geometry(self) -> list[dict]:
+        return [
+            {"kind": "LineSegment", "id": 101, "start": [0, 0], "end": [10, 0]},
+            {"kind": "LineSegment", "id": 102, "start": [10, 0], "end": [10, 5]},
+            {"kind": "LineSegment", "id": 103, "start": [10, 5], "end": [0, 5]},
+        ]
+
+    def open_wire_identity_payload(
+        self,
+        geometry: list[dict],
+        extra_objects: list[dict] | None = None,
+        targets: list[str] | None = None,
+    ) -> dict:
+        objects = [
+            {
+                "Name": "Sketch",
+                "ID": 1,
+                "TypeId": "Sketcher::SketchObject",
+                "Properties": {"Geometry": geometry, "Constraints": []},
+            }
+        ]
+        if extra_objects:
+            objects.extend(extra_objects)
+        return {"Objects": objects, "recompute": {"objs": targets or ["Sketch"]}}
+
+    def open_wire_identity_ffi_result(self, geometry: list[dict]) -> dict:
+        return self.run_recompute_ffi_payload(self.open_wire_identity_payload(geometry))
+
+    def sketch_result_item(self, result: dict) -> dict:
+        return next(item for item in result["results"] if item["object"] == "Sketch")
+
+    def edge_segments_by_source_id(self, result: dict) -> dict[int, dict]:
+        sketch = self.sketch_result_item(result)
+        return {
+            segment["sourceGeometryId"]: segment
+            for segment in sketch["mesh"]["edgeSegments"]
+            if "sourceGeometryId" in segment
+        }
+
+    def subshapes_by_source_id(self, result: dict) -> dict[int, dict]:
+        sketch = self.sketch_result_item(result)
+        return {
+            subshape["sourceGeometryId"]: subshape
+            for subshape in sketch["subshapes"]
+            if "sourceGeometryId" in subshape
+        }
+
     def assert_internal_history_publication_surface(self, result: dict[str, object]) -> dict:
         sketch = result["objects"]["Sketch"]
         named_shape = result["named_shapes"]["Sketch.InternalShape"]
@@ -2878,6 +2925,145 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assert_object_matches_expected(result, "p5", "sketch-external-internal-vertex")
 
+    def test_p5_open_wire_edge_identity_publishes_geometry_ids(self) -> None:
+        result = self.open_wire_identity_ffi_result(self.open_wire_identity_geometry())
+        sketch = self.sketch_result_item(result)
+
+        self.assertEqual(result["diagnostics"], [])
+        subshapes = {item["indexed"]: item for item in sketch["subshapes"]}
+        edge_segments = {item["indexed"]: item for item in sketch["mesh"]["edgeSegments"]}
+        for edge_name, geometry_id in [("Edge1", 101), ("Edge2", 102), ("Edge3", 103)]:
+            with self.subTest(edge=edge_name):
+                stable = f"g{geometry_id}"
+                self.assertEqual(subshapes[edge_name]["id"], f"Sketch:{edge_name}")
+                self.assertEqual(subshapes[edge_name]["stableSubname"], stable)
+                self.assertEqual(subshapes[edge_name]["sourceStableSubname"], stable)
+                self.assertEqual(subshapes[edge_name]["sourceGeometryId"], geometry_id)
+                self.assertEqual(subshapes[edge_name]["identityStatus"], "stable")
+                self.assertEqual(edge_segments[edge_name]["id"], f"Sketch:{edge_name}")
+                self.assertEqual(edge_segments[edge_name]["stableSubname"], stable)
+                self.assertEqual(edge_segments[edge_name]["sourceStableSubname"], stable)
+                self.assertEqual(edge_segments[edge_name]["sourceGeometryId"], geometry_id)
+                self.assertEqual(edge_segments[edge_name]["identityStatus"], "stable")
+
+    def test_p5_open_wire_edge_identity_survives_segment_edit(self) -> None:
+        geometry = self.open_wire_identity_geometry()
+        geometry[1] = {"kind": "LineSegment", "id": 102, "start": [10, 0], "end": [12, 6]}
+
+        result = self.open_wire_identity_ffi_result(geometry)
+        segment = self.edge_segments_by_source_id(result)[102]
+        subshape = self.subshapes_by_source_id(result)[102]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(segment["sourceStableSubname"], "g102")
+        self.assertEqual(segment["stableSubname"], "g102")
+        self.assertEqual(segment["points"][0], [10.0, 0.0, 0.0])
+        self.assertEqual(segment["points"][-1], [12.0, 6.0, 0.0])
+        self.assertEqual(subshape["sourceStableSubname"], "g102")
+        self.assertEqual(subshape["identityStatus"], "stable")
+
+    def test_p5_open_wire_edge_identity_survives_insert_before(self) -> None:
+        geometry = [
+            {"kind": "LineSegment", "id": 100, "start": [-5, 0], "end": [0, 0]},
+            *self.open_wire_identity_geometry(),
+        ]
+
+        result = self.open_wire_identity_ffi_result(geometry)
+        segment = self.edge_segments_by_source_id(result)[102]
+        subshape = self.subshapes_by_source_id(result)[102]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(segment["indexed"], "Edge3")
+        self.assertEqual(segment["id"], "Sketch:Edge3")
+        self.assertEqual(segment["stableSubname"], "g102")
+        self.assertEqual(subshape["indexed"], "Edge3")
+        self.assertEqual(subshape["subname"], "Edge3")
+        self.assertEqual(subshape["stableSubname"], "g102")
+
+    def test_p5_open_wire_stable_sublist_resolves_geometry_id(self) -> None:
+        geometry = [
+            {"kind": "LineSegment", "id": 100, "start": [-5, 0], "end": [0, 0]},
+            *self.open_wire_identity_geometry(),
+        ]
+        edge_link = {
+            "Name": "EdgeLink",
+            "ID": 2,
+            "TypeId": "App::Link",
+            "Properties": {
+                "LinkedObject": {
+                    "PropertyType": "App::PropertyXLink",
+                    "value": "Sketch",
+                    "SubList": ["Edge2"],
+                    "StableSubList": ["g102"],
+                },
+                "LinkTransform": False,
+            },
+        }
+
+        result = self.run_payload(
+            self.open_wire_identity_payload(geometry, [edge_link], ["Sketch", "EdgeLink"])
+        )
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(result["objects"]["EdgeLink"]["status"], "ok")
+        self.assertEqual(result["objects"]["EdgeLink"]["shape"], "occt_edge")
+        self.assertEqual(
+            result["objects"]["EdgeLink"]["bbox"],
+            {"min": [10.0, 0.0, 0.0], "max": [10.0, 5.0, 0.0]},
+        )
+        self.assertEqual(result["objects"]["Sketch"]["raw_edge_identity"]["byStableSubname"]["g102"], "Edge3")
+
+    def test_p5_open_wire_deleted_geometry_id_does_not_hit_new_edge(self) -> None:
+        geometry = [
+            {"kind": "LineSegment", "id": 101, "start": [0, 0], "end": [10, 0]},
+            {"kind": "LineSegment", "id": 103, "start": [10, 5], "end": [0, 5]},
+        ]
+        edge_link = {
+            "Name": "EdgeLink",
+            "ID": 2,
+            "TypeId": "App::Link",
+            "Properties": {
+                "LinkedObject": {
+                    "PropertyType": "App::PropertyXLink",
+                    "value": "Sketch",
+                    "SubList": ["Edge2"],
+                    "StableSubList": ["g102"],
+                },
+                "LinkTransform": False,
+            },
+        }
+
+        result = self.run_payload(
+            self.open_wire_identity_payload(geometry, [edge_link], ["Sketch", "EdgeLink"])
+        )
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_stable_subname"])
+        self.assertEqual(diagnostic["object"], "EdgeLink")
+        self.assertEqual(diagnostic["property"], "LinkedObject")
+        self.assertEqual(diagnostic["target"], "Sketch")
+        self.assertEqual(diagnostic["subname"], "g102")
+        self.assertNotIn("bbox", result["objects"]["EdgeLink"])
+        self.assertNotIn("EdgeLink", result["subshapes"])
+        self.assertEqual(
+            result["objects"]["Sketch"]["raw_edge_identity"]["byStableSubname"],
+            {"g101": "Edge1", "g103": "Edge2"},
+        )
+
+    def test_p5_sketch_rejects_duplicate_geometry_id(self) -> None:
+        geometry = [
+            {"kind": "LineSegment", "id": 101, "start": [0, 0], "end": [10, 0]},
+            {"kind": "LineSegment", "id": 101, "start": [10, 0], "end": [10, 5]},
+        ]
+
+        result = self.run_payload(self.open_wire_identity_payload(geometry))
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["duplicate_geometry_id"])
+        self.assertEqual(diagnostic["object"], "Sketch")
+        self.assertEqual(diagnostic["property"], "Geometry")
+        self.assertEqual(result["objects"]["Sketch"]["status"], "error")
+
     def test_p5_open_sketch_keeps_raw_shape_without_profile_face(self) -> None:
         result = self.run_recompute("sketch-open-wire-internal-empty", "p5")
         sketch = result["objects"]["Sketch"]
@@ -2886,3 +3072,15 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(sketch["status"], "ok")
         self.assertEqual(sketch["shape"], "occt_sketch_shape")
         self.assert_object_matches_expected(result, "p5", "sketch-open-wire-internal-empty")
+        subshapes = result["subshapes"]["Sketch"]
+        mesh = result["mesh"]["Sketch"]
+        edge_segments = mesh["edgeSegments"]
+        edge_segments_by_id = {segment["id"]: segment for segment in edge_segments}
+
+        self.assertFalse(any(subshape_id.startswith("Internal") for subshape_id in subshapes))
+        for edge_id in ("Edge1", "Edge2", "Edge3"):
+            self.assertIn(edge_id, subshapes)
+            self.assertIn(edge_id, edge_segments_by_id)
+            self.assertEqual(edge_segments_by_id[edge_id]["indexed"], edge_id)
+            self.assertEqual(edge_segments_by_id[edge_id]["identityStatus"], "index_fallback")
+            self.assertGreaterEqual(len(edge_segments_by_id[edge_id]["points"]), 2)

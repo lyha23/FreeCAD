@@ -4,7 +4,9 @@
 #include "cad_core/runtime/compute_context.h"
 
 #include <cmath>
+#include <limits>
 #include <optional>
+#include <set>
 #include <utility>
 
 namespace cad_core::sketcher
@@ -40,6 +42,40 @@ std::optional<int> readIntField(const nlohmann::json& value, const std::string& 
         return it->at("value").get<int>();
     }
     return std::nullopt;
+}
+
+struct GeometryIdRead
+{
+    bool present = false;
+    std::optional<long> value;
+    std::string field;
+};
+
+GeometryIdRead readGeometryIdField(const nlohmann::json& value)
+{
+    for (const std::string& field : {"id", "Id", "geometryId"}) {
+        const auto it = value.find(field);
+        if (it == value.end()) {
+            continue;
+        }
+        GeometryIdRead result;
+        result.present = true;
+        result.field = field;
+        const nlohmann::json* source = &*it;
+        if (it->is_object() && it->contains("value")) {
+            source = &it->at("value");
+        }
+        if (!source->is_number_integer()) {
+            return result;
+        }
+        const long long raw = source->get<long long>();
+        if (raw <= 0 || raw > std::numeric_limits<long>::max()) {
+            return result;
+        }
+        result.value = static_cast<long>(raw);
+        return result;
+    }
+    return {};
 }
 
 bool readBoolField(const nlohmann::json& value, const std::string& field, bool fallback)
@@ -123,6 +159,7 @@ bool parseSketchGeometry(
     const std::string& propertyName
 )
 {
+    std::set<long> seenGeometryIds;
     for (std::size_t index = 0; index < geometry.size(); ++index) {
         const auto& item = geometry.at(index);
         if (!item.is_object() || !item.contains("kind") || !item.at("kind").is_string()) {
@@ -138,6 +175,33 @@ bool parseSketchGeometry(
         }
 
         const std::string kind = item.at("kind").get<std::string>();
+        const GeometryIdRead geometryId = readGeometryIdField(item);
+        if (geometryId.present && !geometryId.value) {
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "invalid_geometry_id",
+                "Sketch Geometry " + geometryId.field + " must be a positive integer",
+                object.name,
+                propertyName
+            );
+            return false;
+        }
+        if (geometryId.value && seenGeometryIds.count(*geometryId.value) != 0U) {
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "duplicate_geometry_id",
+                "Sketch Geometry id " + std::to_string(*geometryId.value) + " is duplicated",
+                object.name,
+                propertyName
+            );
+            return false;
+        }
+        if (geometryId.value) {
+            seenGeometryIds.insert(*geometryId.value);
+        }
+
         if (kind == "Point" || kind == "GeomPoint") {
             bool ok = true;
             const double px = readNumber2(item.at("point"), 0, ok);
@@ -159,7 +223,12 @@ bool parseSketchGeometry(
             // ::SketchObject::buildShape(), for "Part::GeomPoint" calls geo->toShape()
             // and exposes it as a Vertex in the Sketch Shape compound.
             parsed.points.push_back(
-                SketchPoint {index, gp_Pnt(px, py, 0.0), readBoolField(item, "construction", false)}
+                SketchPoint {
+                    index,
+                    gp_Pnt(px, py, 0.0),
+                    readBoolField(item, "construction", false),
+                    geometryId.value,
+                }
             );
             continue;
         }
@@ -187,7 +256,8 @@ bool parseSketchGeometry(
                     index,
                     gp_Pnt(sx, sy, 0.0),
                     gp_Pnt(ex, ey, 0.0),
-                    readBoolField(item, "construction", false)
+                    readBoolField(item, "construction", false),
+                    geometryId.value,
                 }
             );
             continue;
@@ -211,7 +281,13 @@ bool parseSketchGeometry(
             }
 
             parsed.circles.push_back(
-                SketchCircle {index, gp_Pnt(cx, cy, 0.0), *radius, readBoolField(item, "construction", false)}
+                SketchCircle {
+                    index,
+                    gp_Pnt(cx, cy, 0.0),
+                    *radius,
+                    readBoolField(item, "construction", false),
+                    geometryId.value,
+                }
             );
             continue;
         }
@@ -243,7 +319,8 @@ bool parseSketchGeometry(
                     *majorRadius,
                     *minorRadius,
                     angle,
-                    readBoolField(item, "construction", false)
+                    readBoolField(item, "construction", false),
+                    geometryId.value,
                 }
             );
             continue;
@@ -276,7 +353,8 @@ bool parseSketchGeometry(
                     *radius,
                     *startAngle,
                     *endAngle,
-                    readBoolField(item, "construction", false)
+                    readBoolField(item, "construction", false),
+                    geometryId.value,
                 }
             );
             continue;
@@ -314,7 +392,8 @@ bool parseSketchGeometry(
                     angle,
                     *startAngle,
                     *endAngle,
-                    readBoolField(item, "construction", false)
+                    readBoolField(item, "construction", false),
+                    geometryId.value,
                 }
             );
             continue;
@@ -356,7 +435,8 @@ bool parseSketchGeometry(
                     angle,
                     *startAngle,
                     *endAngle,
-                    readBoolField(item, "construction", false)
+                    readBoolField(item, "construction", false),
+                    geometryId.value,
                 }
             );
             continue;
@@ -395,7 +475,8 @@ bool parseSketchGeometry(
                     angle,
                     *startAngle,
                     *endAngle,
-                    readBoolField(item, "construction", false)
+                    readBoolField(item, "construction", false),
+                    geometryId.value,
                 }
             );
             continue;
@@ -436,7 +517,13 @@ bool parseSketchGeometry(
             // ::SketchBSplineCurve::getPoint(), returns "bsp->getStartPoint()" and
             // "bsp->getEndPoint()" for profile connectivity.
             parsed.bsplines.push_back(
-                SketchBSpline {index, *degree, std::move(poles), readBoolField(item, "construction", false)}
+                SketchBSpline {
+                    index,
+                    *degree,
+                    std::move(poles),
+                    readBoolField(item, "construction", false),
+                    geometryId.value,
+                }
             );
             continue;
         }
@@ -508,7 +595,8 @@ bool parseSketchGeometry(
                     index,
                     std::move(poles),
                     std::move(weights),
-                    readBoolField(item, "construction", false)
+                    readBoolField(item, "construction", false),
+                    geometryId.value,
                 }
             );
             continue;

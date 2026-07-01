@@ -7,8 +7,27 @@
 
 #include "sketch_object_operations.h"
 
+#include <TopAbs_ShapeEnum.hxx>
+#include <TopExp_Explorer.hxx>
+
 namespace cad_core::sketcher
 {
+
+namespace
+{
+
+bool shapeHasEdges(const TopoDS_Shape& shape)
+{
+    if (shape.IsNull()) {
+        return false;
+    }
+    for (TopExp_Explorer explorer(shape, TopAbs_EDGE); explorer.More(); explorer.Next()) {
+        return true;
+    }
+    return false;
+}
+
+}  // namespace
 
 SketchInternalResult buildSketchInternalResult(const SketchInternalResultInput& input)
 {
@@ -21,6 +40,13 @@ SketchInternalResult buildSketchInternalResult(const SketchInternalResultInput& 
     result.shapeValue.profileRequiresSubshapeSelection = input.profileRequiresSubshapeSelection;
 
     const bool hasNonEmptyInternalShape = input.internalShape && !input.internalShape->IsNull();
+    if (!input.rawShape.IsNull() && !hasNonEmptyInternalShape) {
+        result.rawNamedShape = namedShapeForSketchRawEdgeIdentity(
+            input.objectName,
+            input.rawShape,
+            input.rawEdgeIdentityLedger
+        );
+    }
     if (hasNonEmptyInternalShape) {
         result.shapeValue.internalNamedShape = part::namedShapeForSketchInternalShape(
             input.objectName,
@@ -34,6 +60,13 @@ SketchInternalResult buildSketchInternalResult(const SketchInternalResultInput& 
         result.mesh
             = part::meshForShape(*input.internalShape, "InternalFace", "InternalEdge", "InternalVertex");
     }
+    else if (shapeHasEdges(input.rawShape)) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+        // ::SketchObject::execute(), keeps the raw sketch "Shape" even when buildInternals()
+        // cannot build an "InternalShape" from an open wire. cad-core publishes that raw
+        // EdgeN/VertexN display mesh for picking without synthesizing Internal* elements.
+        result.mesh = part::meshForShape(input.rawShape);
+    }
 
     const nlohmann::json internalSubshapes = hasNonEmptyInternalShape
         ? part::subshapeMapForShape(*input.internalShape, "Internal")
@@ -45,6 +78,13 @@ SketchInternalResult buildSketchInternalResult(const SketchInternalResultInput& 
                 result.subshapes[item.key()] = item.value();
             }
         }
+    }
+    if (!hasNonEmptyInternalShape && result.mesh && !result.subshapes.empty()) {
+        publishRawSketchEdgeIdentity(
+            *result.mesh,
+            result.subshapes,
+            input.rawEdgeIdentityLedger
+        );
     }
 
     const nlohmann::json internalElementMap = hasNonEmptyInternalShape
@@ -61,6 +101,7 @@ SketchInternalResult buildSketchInternalResult(const SketchInternalResultInput& 
         {"internal_edge_count", countSubshapesOfKind(internalSubshapes, "edge")},
         {"internal_vertex_count", countSubshapesOfKind(internalSubshapes, "vertex")},
         {"internal_element_map", internalElementMap},
+        {"raw_edge_identity", rawSketchEdgeIdentityObject(input.rawEdgeIdentityLedger)},
     };
     if (input.historyLedger) {
         result.objectFields["internal_shape_history_diagnostics"] =

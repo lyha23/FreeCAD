@@ -570,11 +570,12 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         = profileEdges(profile, arcs, ellipseArcs, hyperbolaArcs, parabolaArcs, bsplines, beziers);
     const std::vector<SketchCircle> circles = profileCircles(resolvedCircles);
     const std::vector<SketchEllipse> ellipses = profileEllipses(resolvedEllipses);
-    auto rawShape = buildRawSketchShape(object, context, edges, points, circles, ellipses);
-    if (!rawShape) {
+    auto rawShapeBuild = buildRawSketchShape(object, context, edges, points, circles, ellipses);
+    if (!rawShapeBuild) {
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
+    TopoDS_Shape rawShape = rawShapeBuild->shape;
 
     std::optional<TopoDS_Shape> profileShape;
     std::optional<TopoDS_Shape> internalShape;
@@ -605,8 +606,8 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
     const auto historyLedger = profileFace.historyLedger;
 
     if (hasPlacement) {
-        if (!rawShape->IsNull()) {
-            rawShape = base::transformShape(*rawShape, placement);
+        if (!rawShape.IsNull()) {
+            rawShape = base::transformShape(rawShape, placement);
         }
         if (profileShape) {
             profileShape = base::transformShape(*profileShape, placement);
@@ -615,17 +616,26 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
             internalShape = base::transformShape(*internalShape, placement);
         }
     }
+    const RawSketchEdgeIdentityLedger rawEdgeIdentityLedger = buildRawSketchEdgeIdentityLedger(
+        rawShape,
+        rawShapeBuild->sourceEdges,
+        rawShapeBuild->sourceEdgeIdentities
+    );
 
     const SketchInternalResult internalResult = buildSketchInternalResult({
         object.name,
-        *rawShape,
+        rawShape,
         profileShape,
         sketchProfileNormalFromPlacement(hasPlacement ? placement : gp_Trsf {}),
         internalShape,
         profileFace.requiresSubshapeSelection,
         historyLedger,
+        rawEdgeIdentityLedger,
     });
     context.shapes[object.name] = internalResult.shapeValue;
+    if (internalResult.rawNamedShape) {
+        context.namedShapes[object.name] = *internalResult.rawNamedShape;
+    }
     if (internalResult.shapeValue.internalNamedShape) {
         context.namedShapes[object.name + ".InternalShape"]
             = *internalResult.shapeValue.internalNamedShape;
@@ -649,7 +659,7 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
     );
     context.objects[object.name] = {
         {"status", "ok"},
-        {"shape", rawShape->IsNull() ? "empty" : "occt_sketch_shape"},
+        {"shape", rawShape.IsNull() ? "empty" : "occt_sketch_shape"},
         {"solver_state", solverStateName(appliedConstraints->solver.state)},
         {"solver_malformed_constraints",
          constraintIndexArray(appliedConstraints->solver.malformedConstraints)},

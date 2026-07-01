@@ -2,6 +2,7 @@
 
 #include "cad_core/part/internal_shape_history_ledger.h"
 #include "cad_core/runtime/compute_context.h"
+#include "cad_core/sketcher/sketch_edge_identity.h"
 
 #include <TopoDS_Shape.hxx>
 #include <gp_Dir.hxx>
@@ -22,6 +23,7 @@ struct SketchInternalResultInput
     std::optional<TopoDS_Shape> internalShape;
     bool profileRequiresSubshapeSelection = false;
     std::optional<part::InternalShapeHistoryLedger> historyLedger;
+    RawSketchEdgeIdentityLedger rawEdgeIdentityLedger;
 };
 
 struct SketchInternalResult
@@ -36,6 +38,7 @@ struct SketchInternalResult
     std::optional<nlohmann::json> mesh;
     nlohmann::json subshapes = nlohmann::json::object();
     nlohmann::json objectFields = nlohmann::json::object();
+    std::optional<part::NamedShape> rawNamedShape;
 };
 
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp

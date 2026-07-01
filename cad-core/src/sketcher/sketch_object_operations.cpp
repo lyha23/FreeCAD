@@ -76,6 +76,16 @@ bool addEllipseWire(const SketchEllipse& ellipse, BRepBuilderAPI_MakeWire& wireB
     return wireBuilder.IsDone();
 }
 
+SketchProfileEdge profileEdgeWithIdentity(SketchProfileEdgeKind kind,
+                                          std::size_t geometryIndex,
+                                          std::optional<long> geometryId)
+{
+    SketchProfileEdge edge;
+    edge.kind = kind;
+    edge.identity = sketchGeometryIdentity(geometryIndex, geometryId);
+    return edge;
+}
+
 std::vector<SketchProfileEdge> profileEdges(
     const std::vector<SketchSegment>& segments,
     const std::vector<SketchArc>& arcs,
@@ -88,89 +98,74 @@ std::vector<SketchProfileEdge> profileEdges(
 {
     std::vector<SketchProfileEdge> edges;
     for (const auto& segment : segments) {
-        edges.push_back(SketchProfileEdge {SketchProfileEdgeKind::Line, segment.start, segment.end});
+        SketchProfileEdge edge =
+            profileEdgeWithIdentity(SketchProfileEdgeKind::Line, segment.geometryIndex, segment.geometryId);
+        edge.start = segment.start;
+        edge.end = segment.end;
+        edges.push_back(std::move(edge));
     }
     for (const auto& arc : arcs) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchGeometry.cpp
         // SketchArcOfCircle::getPoint() exposes start/end/mid; cad-core keeps the same endpoint
         // semantics for profile connectivity while deferring full solver support.
-        edges.push_back(
-            SketchProfileEdge {
-                SketchProfileEdgeKind::ArcOfCircle,
-                pointAtAngle(arc.center, arc.radius, arc.startAngle),
-                pointAtAngle(arc.center, arc.radius, arc.endAngle),
-                arc.center,
-                arc.radius,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                arc.startAngle,
-                arc.endAngle
-            }
-        );
+        SketchProfileEdge edge =
+            profileEdgeWithIdentity(SketchProfileEdgeKind::ArcOfCircle, arc.geometryIndex, arc.geometryId);
+        edge.start = pointAtAngle(arc.center, arc.radius, arc.startAngle);
+        edge.end = pointAtAngle(arc.center, arc.radius, arc.endAngle);
+        edge.center = arc.center;
+        edge.radius = arc.radius;
+        edge.startAngle = arc.startAngle;
+        edge.endAngle = arc.endAngle;
+        edges.push_back(std::move(edge));
     }
     for (const auto& arc : ellipseArcs) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchGeometry.cpp
         // SketchArcOfEllipse::getPoint() exposes start/end/mid with emulateCCW=true.
         // cad-core uses the same start/end parameters for profile connectivity.
-        edges.push_back(
-            SketchProfileEdge {
-                SketchProfileEdgeKind::ArcOfEllipse,
-                pointAtEllipseAngle(arc.center, arc.majorRadius, arc.minorRadius, arc.angle, arc.startAngle),
-                pointAtEllipseAngle(arc.center, arc.majorRadius, arc.minorRadius, arc.angle, arc.endAngle),
-                arc.center,
-                0.0,
-                arc.majorRadius,
-                arc.minorRadius,
-                0.0,
-                arc.angle,
-                arc.startAngle,
-                arc.endAngle
-            }
-        );
+        SketchProfileEdge edge =
+            profileEdgeWithIdentity(SketchProfileEdgeKind::ArcOfEllipse, arc.geometryIndex, arc.geometryId);
+        edge.start = pointAtEllipseAngle(arc.center, arc.majorRadius, arc.minorRadius, arc.angle, arc.startAngle);
+        edge.end = pointAtEllipseAngle(arc.center, arc.majorRadius, arc.minorRadius, arc.angle, arc.endAngle);
+        edge.center = arc.center;
+        edge.majorRadius = arc.majorRadius;
+        edge.minorRadius = arc.minorRadius;
+        edge.angle = arc.angle;
+        edge.startAngle = arc.startAngle;
+        edge.endAngle = arc.endAngle;
+        edges.push_back(std::move(edge));
     }
     for (const auto& arc : hyperbolaArcs) {
         // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App
         // /SketchObjectExternal.cpp::processEdge2(), for GeomAbs_Hyperbola builds a
         // Part::GeomArcOfHyperbola from the trimmed curve parameters.
         const gp_Hypr hyperbola(ellipseAxis(arc.center, arc.angle), arc.majorRadius, arc.minorRadius);
-        edges.push_back(
-            SketchProfileEdge {
-                SketchProfileEdgeKind::ArcOfHyperbola,
-                ElCLib::Value(arc.startAngle, hyperbola),
-                ElCLib::Value(arc.endAngle, hyperbola),
-                arc.center,
-                0.0,
-                arc.majorRadius,
-                arc.minorRadius,
-                0.0,
-                arc.angle,
-                arc.startAngle,
-                arc.endAngle
-            }
-        );
+        SketchProfileEdge edge =
+            profileEdgeWithIdentity(SketchProfileEdgeKind::ArcOfHyperbola, arc.geometryIndex, arc.geometryId);
+        edge.start = ElCLib::Value(arc.startAngle, hyperbola);
+        edge.end = ElCLib::Value(arc.endAngle, hyperbola);
+        edge.center = arc.center;
+        edge.majorRadius = arc.majorRadius;
+        edge.minorRadius = arc.minorRadius;
+        edge.angle = arc.angle;
+        edge.startAngle = arc.startAngle;
+        edge.endAngle = arc.endAngle;
+        edges.push_back(std::move(edge));
     }
     for (const auto& arc : parabolaArcs) {
         // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App
         // /SketchObjectExternal.cpp::processEdge2(), for GeomAbs_Parabola builds a
         // Part::GeomArcOfParabola from the trimmed curve parameters.
         const gp_Parab parabola(ellipseAxis(arc.center, arc.angle), arc.focal);
-        edges.push_back(
-            SketchProfileEdge {
-                SketchProfileEdgeKind::ArcOfParabola,
-                ElCLib::Value(arc.startAngle, parabola),
-                ElCLib::Value(arc.endAngle, parabola),
-                arc.center,
-                0.0,
-                0.0,
-                0.0,
-                arc.focal,
-                arc.angle,
-                arc.startAngle,
-                arc.endAngle
-            }
-        );
+        SketchProfileEdge edge =
+            profileEdgeWithIdentity(SketchProfileEdgeKind::ArcOfParabola, arc.geometryIndex, arc.geometryId);
+        edge.start = ElCLib::Value(arc.startAngle, parabola);
+        edge.end = ElCLib::Value(arc.endAngle, parabola);
+        edge.center = arc.center;
+        edge.focal = arc.focal;
+        edge.angle = arc.angle;
+        edge.startAngle = arc.startAngle;
+        edge.endAngle = arc.endAngle;
+        edges.push_back(std::move(edge));
     }
     for (const auto& bspline : bsplines) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchGeometry.cpp
@@ -179,23 +174,13 @@ std::vector<SketchProfileEdge> profileEdges(
         if (bspline.poles.size() < 2U) {
             continue;
         }
-        edges.push_back(
-            SketchProfileEdge {
-                SketchProfileEdgeKind::BSpline,
-                bspline.poles.front(),
-                bspline.poles.back(),
-                gp_Pnt {},
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                bspline.degree,
-                bspline.poles
-            }
-        );
+        SketchProfileEdge edge =
+            profileEdgeWithIdentity(SketchProfileEdgeKind::BSpline, bspline.geometryIndex, bspline.geometryId);
+        edge.start = bspline.poles.front();
+        edge.end = bspline.poles.back();
+        edge.degree = bspline.degree;
+        edge.poles = bspline.poles;
+        edges.push_back(std::move(edge));
     }
     for (const auto& bezier : beziers) {
         // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp
@@ -204,24 +189,14 @@ std::vector<SketchProfileEdge> profileEdges(
         if (bezier.poles.size() < 2U) {
             continue;
         }
-        edges.push_back(
-            SketchProfileEdge {
-                SketchProfileEdgeKind::Bezier,
-                bezier.poles.front(),
-                bezier.poles.back(),
-                gp_Pnt {},
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                static_cast<int>(bezier.poles.size() - 1U),
-                bezier.poles,
-                bezier.weights
-            }
-        );
+        SketchProfileEdge edge =
+            profileEdgeWithIdentity(SketchProfileEdgeKind::Bezier, bezier.geometryIndex, bezier.geometryId);
+        edge.start = bezier.poles.front();
+        edge.end = bezier.poles.back();
+        edge.degree = static_cast<int>(bezier.poles.size() - 1U);
+        edge.poles = bezier.poles;
+        edge.weights = bezier.weights;
+        edges.push_back(std::move(edge));
     }
     return edges;
 }
@@ -484,6 +459,8 @@ std::optional<SketchProfileWires> makeProfileWiresFromEdges(const std::vector<Sk
         }
         wireBuilder.Add(*firstEdge);
         builtEdges.push_back(*firstEdge);
+        std::vector<SketchGeometryIdentity> builtIdentities;
+        builtIdentities.push_back(edges[startIndex].identity);
         used[startIndex] = true;
 
         while (!samePoint(firstStart, currentEnd)) {
@@ -499,6 +476,7 @@ std::optional<SketchProfileWires> makeProfileWiresFromEdges(const std::vector<Sk
                     }
                     wireBuilder.Add(*nextEdge);
                     builtEdges.push_back(*nextEdge);
+                    builtIdentities.push_back(edges[index].identity);
                     currentEnd = edges[index].end;
                     used[index] = true;
                     found = true;
@@ -511,6 +489,7 @@ std::optional<SketchProfileWires> makeProfileWiresFromEdges(const std::vector<Sk
                     }
                     wireBuilder.Add(*nextEdge);
                     builtEdges.push_back(*nextEdge);
+                    builtIdentities.push_back(edges[index].identity);
                     currentEnd = edges[index].start;
                     used[index] = true;
                     found = true;
@@ -532,6 +511,11 @@ std::optional<SketchProfileWires> makeProfileWiresFromEdges(const std::vector<Sk
             wireSourceEdgeIndices.push_back(sourceEdgeOffset + edgeIndex);
         }
         result.sourceEdges.insert(result.sourceEdges.end(), builtEdges.begin(), builtEdges.end());
+        result.sourceEdgeIdentities.insert(
+            result.sourceEdgeIdentities.end(),
+            builtIdentities.begin(),
+            builtIdentities.end()
+        );
         if (samePoint(firstStart, currentEnd)) {
             result.closedWires.push_back(wireBuilder.Wire());
             result.closedWireSourceEdgeIndices.push_back(std::move(wireSourceEdgeIndices));
@@ -608,7 +592,7 @@ std::optional<TopoDS_Wire> makeWireFromEllipse(const SketchEllipse& ellipse)
     return wireBuilder.Wire();
 }
 
-std::optional<TopoDS_Shape> buildRawSketchShape(
+std::optional<RawSketchShapeBuild> buildRawSketchShape(
     const app::DocumentObject& object,
     runtime::ComputeContext& context,
     const std::vector<SketchProfileEdge>& edges,
@@ -622,6 +606,8 @@ std::optional<TopoDS_Shape> buildRawSketchShape(
     // "GeometryFacade::getConstruction(geo)" is skipped, then raw edges are collected into
     // makeElementWires() before PartDesign later asks ProfileBased to make a face.
     std::vector<TopoDS_Shape> shapes;
+    std::vector<TopoDS_Edge> sourceEdges;
+    std::vector<SketchGeometryIdentity> sourceEdgeIdentities;
     if (!edges.empty()) {
         const auto profileWires = makeProfileWiresFromEdges(edges);
         if (!profileWires) {
@@ -637,6 +623,16 @@ std::optional<TopoDS_Shape> buildRawSketchShape(
         }
         shapes.insert(shapes.end(), profileWires->closedWires.begin(), profileWires->closedWires.end());
         shapes.insert(shapes.end(), profileWires->openWires.begin(), profileWires->openWires.end());
+        sourceEdges.insert(
+            sourceEdges.end(),
+            profileWires->sourceEdges.begin(),
+            profileWires->sourceEdges.end()
+        );
+        sourceEdgeIdentities.insert(
+            sourceEdgeIdentities.end(),
+            profileWires->sourceEdgeIdentities.begin(),
+            profileWires->sourceEdgeIdentities.end()
+        );
         if (shapes.empty()) {
             runtime::addDiagnostic(
                 context.diagnostics,
@@ -679,6 +675,15 @@ std::optional<TopoDS_Shape> buildRawSketchShape(
             );
             return std::nullopt;
         }
+        const std::size_t edgeOffset = sourceEdges.size();
+        appendSourceEdgesFromWire(sourceEdges, *wire);
+        sourceEdgeIdentities.resize(
+            sourceEdges.size(),
+            sketchGeometryIdentity(circle.geometryIndex, circle.geometryId)
+        );
+        for (std::size_t index = edgeOffset; index < sourceEdges.size(); ++index) {
+            sourceEdgeIdentities[index] = sketchGeometryIdentity(circle.geometryIndex, circle.geometryId);
+        }
         shapes.push_back(*wire);
     }
     for (const auto& ellipse : ellipses) {
@@ -694,10 +699,23 @@ std::optional<TopoDS_Shape> buildRawSketchShape(
             );
             return std::nullopt;
         }
+        const std::size_t edgeOffset = sourceEdges.size();
+        appendSourceEdgesFromWire(sourceEdges, *wire);
+        sourceEdgeIdentities.resize(
+            sourceEdges.size(),
+            sketchGeometryIdentity(ellipse.geometryIndex, ellipse.geometryId)
+        );
+        for (std::size_t index = edgeOffset; index < sourceEdges.size(); ++index) {
+            sourceEdgeIdentities[index] = sketchGeometryIdentity(ellipse.geometryIndex, ellipse.geometryId);
+        }
         shapes.push_back(*wire);
     }
 
-    return compoundOrSingleShape(shapes);
+    return RawSketchShapeBuild {
+        compoundOrSingleShape(shapes),
+        std::move(sourceEdges),
+        std::move(sourceEdgeIdentities),
+    };
 }
 
 ProfileFaceBuild buildOptionalProfileFace(

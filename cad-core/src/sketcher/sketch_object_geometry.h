@@ -4,6 +4,7 @@
 #include <nlohmann/json.hpp>
 
 #include <cstddef>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -26,6 +27,7 @@ struct SketchSegment
     gp_Pnt start;
     gp_Pnt end;
     bool construction = false;
+    std::optional<long> geometryId;
 };
 
 struct SketchPoint
@@ -33,6 +35,7 @@ struct SketchPoint
     std::size_t geometryIndex = 0;
     gp_Pnt point;
     bool construction = false;
+    std::optional<long> geometryId;
 };
 
 struct SketchCircle
@@ -41,6 +44,7 @@ struct SketchCircle
     gp_Pnt center;
     double radius = 0.0;
     bool construction = false;
+    std::optional<long> geometryId;
 };
 
 struct SketchEllipse
@@ -51,6 +55,7 @@ struct SketchEllipse
     double minorRadius = 0.0;
     double angle = 0.0;
     bool construction = false;
+    std::optional<long> geometryId;
 };
 
 struct SketchArc
@@ -61,6 +66,7 @@ struct SketchArc
     double startAngle = 0.0;
     double endAngle = 0.0;
     bool construction = false;
+    std::optional<long> geometryId;
 };
 
 struct SketchBSpline
@@ -69,6 +75,7 @@ struct SketchBSpline
     int degree = 0;
     std::vector<gp_Pnt> poles;
     bool construction = false;
+    std::optional<long> geometryId;
 };
 
 struct SketchBezier
@@ -77,6 +84,7 @@ struct SketchBezier
     std::vector<gp_Pnt> poles;
     std::vector<double> weights;
     bool construction = false;
+    std::optional<long> geometryId;
 };
 
 struct SketchEllipseArc
@@ -89,6 +97,7 @@ struct SketchEllipseArc
     double startAngle = 0.0;
     double endAngle = 0.0;
     bool construction = false;
+    std::optional<long> geometryId;
 };
 
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp
@@ -103,6 +112,7 @@ struct SketchHyperbolaArc
     double startAngle = 0.0;
     double endAngle = 0.0;
     bool construction = false;
+    std::optional<long> geometryId;
 };
 
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp
@@ -116,6 +126,7 @@ struct SketchParabolaArc
     double startAngle = 0.0;
     double endAngle = 0.0;
     bool construction = false;
+    std::optional<long> geometryId;
 };
 
 struct SketchGeometrySet

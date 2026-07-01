@@ -127,14 +127,18 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertTrue(any(item["id"] == "Sketch:InternalEdge1" for item in sketch["subshapes"]))
         self.assertTrue(any(item["id"] == "Sketch:InternalVertex1" for item in sketch["subshapes"]))
 
-    def test_c_api_keeps_open_sketch_internal_profile_mesh_null(self) -> None:
+    def test_c_api_returns_open_sketch_raw_edge_segments(self) -> None:
         result = self.run_recompute_ffi("sketch-open-wire-internal-empty", "p5")
         sketch = result["results"][0]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(sketch["object"], "Sketch")
-        self.assertIsNone(sketch["mesh"])
-        self.assertFalse(any(item["id"] == "Sketch:InternalFace1" for item in sketch["subshapes"]))
+        self.assertIsNotNone(sketch["mesh"])
+        self.assertNotIn("Sketch:InternalFace1", sketch["mesh"]["faceIds"])
+        edge_segment_ids = {segment["id"] for segment in sketch["mesh"]["edgeSegments"]}
+        self.assertIn("Sketch:Edge1", edge_segment_ids)
+        self.assert_mesh_edge_segments_reference_subshapes(sketch)
+        self.assertFalse(any(item["id"].startswith("Sketch:Internal") for item in sketch["subshapes"]))
         self.assertTrue(any(item["id"] == "Sketch:Edge1" for item in sketch["subshapes"]))
 
     def test_c_api_applies_sketch_plane_frame_to_internal_profile_mesh(self) -> None:
