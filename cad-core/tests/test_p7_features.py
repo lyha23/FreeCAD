@@ -294,6 +294,43 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             )
         )
 
+    def test_p7_body_tip_open_wire_pad_returns_display_surface(self) -> None:
+        payload = json.loads((ROOT / "fixtures" / "p7" / "partdesign-pad-open-wire-surface-auto.json").read_text())
+        payload["Objects"].append(
+            {
+                "Name": "Body",
+                "ID": 3,
+                "TypeId": "PartDesign::Body",
+                "Properties": {
+                    "Group": {
+                        "PropertyType": "App::PropertyLinkList",
+                        "values": ["Sketch", "Pad"],
+                    },
+                    "Tip": {
+                        "PropertyType": "App::PropertyLink",
+                        "value": "Pad",
+                    },
+                },
+            }
+        )
+        payload["recompute"]["objs"] = ["Body"]
+
+        result = self.run_recompute_payload(payload)
+        body = result["objects"]["Body"]
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["open_profile_surface_display_only"])
+        self.assertEqual(body["status"], "ok")
+        self.assertEqual(body["shape"], "occt_shell")
+        self.assertEqual(body["tip"], "Pad")
+        self.assertEqual(body["display_only_features"], ["Pad"])
+        self.assertEqual(body["direct_tip_subshape_owner"], "Pad")
+        self.assertEqual(body["bbox"], pad["bbox"])
+        self.assertEqual(body["volume"], 0.0)
+        self.assertGreater(len(result["mesh"]["Body"]["triangles"]), 0)
+        self.assertGreater(len(result["mesh"]["Body"]["edgeSegments"]), 0)
+        self.assertGreater(len(result["subshapes"]["Body"]), 0)
+
     def test_p7_pocket_open_wire_profile_is_body_display_only(self) -> None:
         result = self.run_recompute("partdesign-pocket-open-wire-body-display-only", "p7")
         body = result["objects"]["Body"]

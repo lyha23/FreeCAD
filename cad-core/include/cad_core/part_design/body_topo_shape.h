@@ -19,6 +19,7 @@ struct BodyTopoShapeOptions {
 
 struct BodyTopoShapeResult {
     TopoDS_Shape shape;
+    runtime::ShapeValue::Kind shapeValueKind = runtime::ShapeValue::Kind::Solid;
     std::optional<part::NamedShape> namedShape;
     bool usesPreciseBoundingBox = false;
     std::string stopFeature;

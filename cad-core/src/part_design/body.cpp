@@ -856,8 +856,10 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
     }
 
     std::optional<TopoDS_Shape> bodyShape;
+    runtime::ShapeValue::Kind bodyShapeKind = runtime::ShapeValue::Kind::Solid;
     std::optional<part::NamedShape> bodyNamedShape;
     bool bodyUsesPreciseBoundingBox = false;
+    bool bodyAdoptedDisplayOnlyTip = false;
     std::vector<std::string> refinedFeatures;
     std::vector<std::string> appliedAdditiveFeatures;
     std::vector<std::string> appliedSubtractiveFeatures;
@@ -939,6 +941,17 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
                 // "默认 surface extrusion 是 display_only" for Body fuse/cut participation.
                 displayOnlyFeatures.push_back(feature);
                 if (feature == resolvedStopFeature) {
+                    if (!bodyShape && shapeIt != context.shapes.end()) {
+                        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+                        // ::Body::execute(), reads the Tip feature "Shape" for display. cad-core's
+                        // open-wire Pad/Pocket extension keeps that Tip Shape as display-only: it
+                        // is not fused/cut into a Body solid, but an empty Body still displays it.
+                        bodyShape = shapeIt->second.shape;
+                        bodyShapeKind = shapeIt->second.kind;
+                        bodyUsesPreciseBoundingBox = shapeIt->second.usePreciseBoundingBox;
+                        bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
+                        bodyAdoptedDisplayOnlyTip = true;
+                    }
                     break;
                 }
                 continue;
@@ -1057,13 +1070,15 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
         bodyNamedShape->owner = body.name;
         bodyNamedShape->shape = resultShape;
     }
-    const auto directTipSubshapeOwner = directTipSubshapeOwnerForBody(body,
-                                                                      resolvedStopFeature,
-                                                                      appliedAdditiveFeatures,
-                                                                      appliedSubtractiveFeatures,
-                                                                      appliedReplacementFeatures,
-                                                                      refinedFeatures,
-                                                                      hasNonIdentityPlacement);
+    const auto directTipSubshapeOwner = bodyAdoptedDisplayOnlyTip && !hasNonIdentityPlacement
+        ? std::optional<std::string> {resolvedStopFeature}
+        : directTipSubshapeOwnerForBody(body,
+                                        resolvedStopFeature,
+                                        appliedAdditiveFeatures,
+                                        appliedSubtractiveFeatures,
+                                        appliedReplacementFeatures,
+                                        refinedFeatures,
+                                        hasNonIdentityPlacement);
     const std::size_t appliedFeatureCount = appliedAdditiveFeatures.size()
         + appliedSubtractiveFeatures.size() + appliedReplacementFeatures.size();
     const bool directTipSubshapeStablePrefix = directTipSubshapeOwner
@@ -1072,6 +1087,7 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
 
     return BodyTopoShapeResult {
         resultShape,
+        bodyShapeKind,
         bodyNamedShape,
         bodyUsesPreciseBoundingBox,
         resolvedStopFeature,
@@ -1129,11 +1145,14 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
     else {
         context.namedShapes[object.name] = part::indexedNamedShapeForObject(object.name, resultShape);
     }
-    runtime::ShapeValue bodyValue{runtime::ShapeValue::Kind::Solid, resultShape};
+    runtime::ShapeValue bodyValue{bodyTopoShape->shapeValueKind, resultShape};
     bodyValue.usePreciseBoundingBox = bodyTopoShape->usesPreciseBoundingBox;
     context.shapes[object.name] = bodyValue;
     context.mesh[object.name] = cad_core::part::meshForShape(resultShape);
     context.subshapes[object.name] = part::subshapeMapForShape(resultShape);
+    const double volume = bodyTopoShape->shapeValueKind == runtime::ShapeValue::Kind::Solid
+        ? cad_core::part::volumeForShape(resultShape)
+        : 0.0;
     nlohmann::json result = {
         {"status", "ok"},
         {"tip", bodyTopoShape->stopFeature},
@@ -1143,7 +1162,7 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
         {"bbox",
          bodyTopoShape->usesPreciseBoundingBox ? cad_core::part::preciseBBoxForShape(resultShape)
                                                : cad_core::part::objectBBoxForShape(resultShape)},
-        {"volume", cad_core::part::volumeForShape(resultShape)},
+        {"volume", volume},
         {"kernel", cad_core::part::kernelVersion()},
     };
     if (bodyTopoShape->origin) {
