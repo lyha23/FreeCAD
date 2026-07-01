@@ -188,6 +188,9 @@ void executePad(const app::DocumentObject& object, runtime::ComputeContext& cont
         {"kernel", cad_core::part::kernelVersion()},
     };
     appendOpenProfileResultFields(result, *extrusion);
+    if (extrusion->profileKind != ProfileKind::ClosedFace) {
+        result["topo_naming_history"] = "history_pending:open_profile_thin";
+    }
     if (extrusion->taperHistory) {
         result["topo_naming_history"] = "maker_history:taper_thru_sections";
     }

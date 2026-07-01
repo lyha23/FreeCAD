@@ -100,6 +100,12 @@ struct ToolShapeBuild {
     std::optional<part::NamedShape> namedShape;
 };
 
+struct ThinOpenProfileBuild {
+    TopoDS_Shape shape;
+    std::optional<part::NamedShape> namedShape;
+    std::string side;
+};
+
 struct CutFaceCandidate {
     TopoDS_Face face;
     double distanceSquared = 0.0;
@@ -1586,6 +1592,138 @@ std::string bodyParticipationForClosedProfile(AddSubMode mode)
     return mode == AddSubMode::Additive ? "solid_add" : "solid_cut";
 }
 
+std::optional<std::string> readOpenProfileSide(const app::DocumentObject& object,
+                                               runtime::ComputeContext& context,
+                                               const std::string& featureName)
+{
+    const std::string side = app::readString(object, "OpenProfileSide").value_or("Both");
+    if (side == "Left" || side == "Right" || side == "Both") {
+        return side;
+    }
+    runtime::addDiagnostic(context.diagnostics,
+                           "error",
+                           "unsupported_property",
+                           featureName + " OpenProfileSide must be Left, Right, or Both",
+                           object.name,
+                           "OpenProfileSide");
+    return std::nullopt;
+}
+
+std::optional<double> readOpenProfileThickness(const app::DocumentObject& object,
+                                               runtime::ComputeContext& context,
+                                               const std::string& featureName,
+                                               OpenProfileMode requestedMode)
+{
+    const auto thickness = app::readNumber(object, "OpenProfileThickness");
+    if (!thickness) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "missing_open_profile_thickness",
+                               featureName + " " + openProfileModeName(requestedMode)
+                                   + " requires OpenProfileThickness",
+                               object.name,
+                               "OpenProfileThickness");
+        return std::nullopt;
+    }
+    if (*thickness <= Precision::Confusion()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_length",
+                               featureName + " OpenProfileThickness must be greater than zero",
+                               object.name,
+                               "OpenProfileThickness");
+        return std::nullopt;
+    }
+    return *thickness;
+}
+
+std::optional<ThinOpenProfileBuild> buildThinOpenProfileFace(const app::DocumentObject& object,
+                                                             runtime::ComputeContext& context,
+                                                             const app::Link& profileLink,
+                                                             const TopoDS_Shape& profileShape,
+                                                             const std::string& featureName,
+                                                             OpenProfileMode requestedMode)
+{
+    const auto thickness = readOpenProfileThickness(object, context, featureName, requestedMode);
+    if (!thickness) {
+        return std::nullopt;
+    }
+    const auto side = readOpenProfileSide(object, context, featureName);
+    if (!side) {
+        return std::nullopt;
+    }
+
+    const part::NamedShape* profileNamedShape = namedShapeForProfileSource(context, profileLink, profileShape);
+    const part::NamedShapeSource profileSource{profileLink.object, profileShape, profileNamedShape};
+    const std::string unsupportedCode = requestedMode == OpenProfileMode::ThinCut
+        ? "unsupported_open_profile_pocket"
+        : "unsupported_open_profile_body_fuse";
+    const auto offsetFace = [&](double distance, const std::string& ownerSuffix) -> part::NamedShapeBuild {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+        // ::TopoShape::makeElementOffset2D(), for open wires with FillType::fill connects the
+        // source and offset open wires into a face. CAD Core uses this Part-layer ledger as the
+        // explicit thin Pad/Pocket product extension before entering the normal extrusion path.
+        return part::makeElementOffset2DFromSource(object.name + ownerSuffix,
+                                                   profileSource,
+                                                   distance,
+                                                   0,
+                                                   true,
+                                                   true,
+                                                   true);
+    };
+
+    if (*side == "Left" || *side == "Right") {
+        const double distance = *side == "Left" ? *thickness : -*thickness;
+        auto build = offsetFace(distance, ".ThinProfile");
+        if (!build.error.empty() || build.shape.IsNull()) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   unsupportedCode,
+                                   build.error.empty() ? "Could not build thin open-profile face" : build.error,
+                                   object.name,
+                                   "OpenProfileThickness");
+            return std::nullopt;
+        }
+        return ThinOpenProfileBuild{build.shape, build.namedShape, *side};
+    }
+
+    auto left = offsetFace(*thickness / 2.0, ".ThinProfileLeft");
+    if (!left.error.empty() || left.shape.IsNull()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               unsupportedCode,
+                               left.error.empty() ? "Could not build left thin open-profile face" : left.error,
+                               object.name,
+                               "OpenProfileThickness");
+        return std::nullopt;
+    }
+    auto right = offsetFace(-*thickness / 2.0, ".ThinProfileRight");
+    if (!right.error.empty() || right.shape.IsNull()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               unsupportedCode,
+                               right.error.empty() ? "Could not build right thin open-profile face" : right.error,
+                               object.name,
+                               "OpenProfileThickness");
+        return std::nullopt;
+    }
+
+    std::vector<part::NamedShapeSource> sources;
+    sources.push_back({object.name + ".ThinProfileLeft", left.shape, left.namedShape ? &*left.namedShape : nullptr});
+    sources.push_back({object.name + ".ThinProfileRight", right.shape, right.namedShape ? &*right.namedShape : nullptr});
+    auto compound = part::makeElementCompoundFromSources(object.name + ".ThinProfile", sources, false);
+    if (!compound.error.empty() || compound.shape.IsNull()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               unsupportedCode,
+                               compound.error.empty() ? "Could not combine thin open-profile faces" : compound.error,
+                               object.name,
+                               "OpenProfileSide");
+        return std::nullopt;
+    }
+    return ThinOpenProfileBuild{compound.shape, compound.namedShape, *side};
+}
+
 std::vector<std::string> nonEmptyStrings(const std::vector<std::string>& values)
 {
     std::vector<std::string> result;
@@ -1607,26 +1745,25 @@ std::optional<OpenProfileMode> resolveOpenProfileExecutionMode(const app::Docume
         return OpenProfileMode::SurfaceExtrusion;
     }
     if (requestedMode == OpenProfileMode::ThinSolid || requestedMode == OpenProfileMode::ThinCut) {
-        if (!app::readNumber(object, "OpenProfileThickness")) {
+        if (requestedMode == OpenProfileMode::ThinSolid && addSubMode != AddSubMode::Additive) {
             runtime::addDiagnostic(context.diagnostics,
                                    "error",
-                                   "missing_open_profile_thickness",
-                                   featureName + " " + openProfileModeName(requestedMode)
-                                       + " requires OpenProfileThickness",
+                                   "unsupported_open_profile_pocket",
+                                   featureName + " ThinSolid is only valid for additive open-profile features",
                                    object.name,
-                                   "OpenProfileThickness");
+                                   "OpenProfileMode");
             return std::nullopt;
         }
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               requestedMode == OpenProfileMode::ThinCut
-                                   ? "unsupported_open_profile_pocket"
-                                   : "unsupported_open_profile_body_fuse",
-                               featureName + " " + openProfileModeName(requestedMode)
-                                   + " is reserved for the explicit thin open-profile solid path",
-                               object.name,
-                               "OpenProfileMode");
-        return std::nullopt;
+        if (requestedMode == OpenProfileMode::ThinCut && addSubMode != AddSubMode::Subtractive) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "unsupported_open_profile_body_fuse",
+                                   featureName + " ThinCut is only valid for subtractive open-profile features",
+                                   object.name,
+                                   "OpenProfileMode");
+            return std::nullopt;
+        }
+        return requestedMode;
     }
     runtime::addDiagnostic(context.diagnostics,
                            "error",
@@ -1797,17 +1934,31 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
     const bool openProfile = isOpenProfileKind(profile->kind);
     std::optional<OpenProfileMode> resolvedOpenProfileMode;
     std::string bodyParticipation = bodyParticipationForClosedProfile(mode);
+    TopoDS_Shape extrusionProfileShape = profile->shape;
+    bool displayOnlyOpenProfile = false;
     if (openProfile) {
         resolvedOpenProfileMode =
             resolveOpenProfileExecutionMode(object, context, *openProfileMode, mode, featureName);
         if (!resolvedOpenProfileMode) {
             return std::nullopt;
         }
-        bodyParticipation = "display_only";
+        if (*resolvedOpenProfileMode == OpenProfileMode::SurfaceExtrusion) {
+            bodyParticipation = "display_only";
+            displayOnlyOpenProfile = true;
+        }
+        else {
+            const auto thinProfile = buildThinOpenProfileFace(
+                object, context, profile->link, profile->shape, featureName, *resolvedOpenProfileMode);
+            if (!thinProfile) {
+                return std::nullopt;
+            }
+            extrusionProfileShape = thinProfile->shape;
+            bodyParticipation = bodyParticipationForClosedProfile(mode);
+        }
     }
 
     const bool reversed = readBoolProperty(object, "Reversed", false);
-    auto direction = computeDirection(object, context, profile->link, profile->shape, mode, profile->normal);
+    auto direction = computeDirection(object, context, profile->link, extrusionProfileShape, mode, profile->normal);
     if (!direction) {
         return std::nullopt;
     }
@@ -1845,7 +1996,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
 
     if (sideType == "One side") {
         auto side = buildSingleSide(
-            object, context, profile->shape, profile->link, side1, mode, featureName, direction->lengthScale, object.name);
+            object, context, extrusionProfileShape, profile->link, side1, mode, featureName, direction->lengthScale, object.name);
         if (!side) {
             return std::nullopt;
         }
@@ -1889,7 +2040,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
                                        "Length2");
                 return std::nullopt;
             }
-            const TopoDS_Shape movedProfile = translatedShape(profile->shape,
+            const TopoDS_Shape movedProfile = translatedShape(extrusionProfileShape,
                                                               -scaledLength2 * gp_Vec(direction->direction));
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp
             // ::FeatureExtrude::buildExtrusion(), Two sides no-taper fast path copies and moves
@@ -1915,7 +2066,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
         else {
             auto first = buildSingleSide(object,
                                          context,
-                                         profile->shape,
+                                         extrusionProfileShape,
                                          profile->link,
                                          side1,
                                          mode,
@@ -1927,7 +2078,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
             }
             auto second = buildSingleSide(object,
                                           context,
-                                          profile->shape,
+                                          extrusionProfileShape,
                                           profile->link,
                                           side2,
                                           mode,
@@ -1982,7 +2133,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
             const double halfLength = scaledLength / 2.0;
             auto first = makeExtrusionShape(object,
                                             context,
-                                            profile->shape,
+                                            extrusionProfileShape,
                                             direction->direction,
                                             halfLength,
                                             taper1,
@@ -1996,7 +2147,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
             }
             auto second = makeExtrusionShape(object,
                                              context,
-                                             profile->shape,
+                                             extrusionProfileShape,
                                              secondDirection,
                                              halfLength,
                                              taper1,
@@ -2014,7 +2165,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
             taperHistory = first->taperHistory || second->taperHistory;
         }
         else {
-            const TopoDS_Shape movedProfile = translatedShape(profile->shape,
+            const TopoDS_Shape movedProfile = translatedShape(extrusionProfileShape,
                                                               -0.5 * scaledLength * gp_Vec(direction->direction));
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp
             // ::FeatureExtrude::buildExtrusion(), Symmetric no-taper fast path creates one prism
@@ -2048,7 +2199,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
         return std::nullopt;
     }
 
-    const auto toolShape = openProfile
+    const auto toolShape = displayOnlyOpenProfile
         ? displayOnlyToolShapes(prisms, object, context, featureName)
         : xorToolShapes(prisms, object, context, featureName);
     if (!toolShape) {
@@ -2058,7 +2209,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
         resultNamedShape = toolShape->namedShape;
     }
 
-    if (openProfile) {
+    if (displayOnlyOpenProfile) {
         runtime::addDiagnostic(context.diagnostics,
                                "warning",
                                "open_profile_surface_display_only",
@@ -2082,7 +2233,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
         reversed,
         toolShape->shape,
         cad_core::part::objectBBoxForShape(toolShape->shape),
-        openProfile ? 0.0 : cad_core::part::volumeForShape(toolShape->shape),
+        displayOnlyOpenProfile ? 0.0 : cad_core::part::volumeForShape(toolShape->shape),
         topoNamingKnownGap,
         taperHistory,
         resultNamedShape,

@@ -336,6 +336,34 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"][0]["property"], "OpenProfileThickness")
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
+    def test_p7_open_wire_thin_solid_with_thickness_builds_additive_solid(self) -> None:
+        payload = json.loads((ROOT / "fixtures" / "p7" / "partdesign-pad-open-wire-surface-auto.json").read_text())
+        pad_properties = self.object_payload(payload, "Pad")["Properties"]
+        pad_properties["OpenProfileMode"] = {
+            "PropertyType": "App::PropertyEnumeration",
+            "value": "ThinSolid",
+        }
+        pad_properties["OpenProfileThickness"] = {
+            "PropertyType": "App::PropertyLength",
+            "value": 1.0,
+        }
+        pad_properties["OpenProfileSide"] = {
+            "PropertyType": "App::PropertyEnumeration",
+            "value": "Both",
+        }
+
+        result = self.run_recompute_payload(payload)
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pad["status"], "ok")
+        self.assertEqual(pad["shape"], "occt_solid")
+        self.assertEqual(pad["profileKind"], "open_wire")
+        self.assertEqual(pad["resolvedOpenProfileMode"], "ThinSolid")
+        self.assertEqual(pad["bodyParticipation"], "solid_add")
+        self.assertEqual(pad["topo_naming_history"], "history_pending:open_profile_thin")
+        self.assertGreater(pad["volume"], 0.0)
+
     def test_p7_pocket_open_wire_thin_cut_requires_thickness(self) -> None:
         payload = json.loads((ROOT / "fixtures" / "p7" / "partdesign-pocket-open-wire-body-display-only.json").read_text())
         self.object_payload(payload, "Pocket")["Properties"]["OpenProfileMode"] = {
@@ -348,6 +376,45 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["missing_open_profile_thickness"])
         self.assertEqual(result["diagnostics"][0]["property"], "OpenProfileThickness")
         self.assertEqual(result["objects"]["Pocket"]["status"], "error")
+
+    def test_p7_pocket_open_wire_thin_cut_with_thickness_modifies_body(self) -> None:
+        payload = json.loads((ROOT / "fixtures" / "p7" / "partdesign-pocket-open-wire-body-display-only.json").read_text())
+        self.object_payload(payload, "SketchPocket")["Properties"]["Placement"] = {
+            "PropertyType": "App::PropertyPlacement",
+            "Base": [0.0, 0.0, 10.0],
+            "Rotation": [0.0, 0.0, 0.0, 1.0],
+        }
+        pocket_properties = self.object_payload(payload, "Pocket")["Properties"]
+        pocket_properties["OpenProfileMode"] = {
+            "PropertyType": "App::PropertyEnumeration",
+            "value": "ThinCut",
+        }
+        pocket_properties["OpenProfileThickness"] = {
+            "PropertyType": "App::PropertyLength",
+            "value": 0.5,
+        }
+        pocket_properties["OpenProfileSide"] = {
+            "PropertyType": "App::PropertyEnumeration",
+            "value": "Both",
+        }
+
+        result = self.run_recompute_payload(payload)
+        body = result["objects"]["Body"]
+        pad = result["objects"]["Pad"]
+        pocket = result["objects"]["Pocket"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pocket["status"], "ok")
+        self.assertEqual(pocket["profileKind"], "open_wire")
+        self.assertEqual(pocket["resolvedOpenProfileMode"], "ThinCut")
+        self.assertEqual(pocket["bodyParticipation"], "solid_cut")
+        self.assertEqual(pocket["topo_naming_history"], "history_pending:open_profile_thin")
+        self.assertGreater(pocket["volume"], 0.0)
+        self.assertEqual(body["status"], "ok")
+        self.assertEqual(body["replayed_additive_features"], ["Pad"])
+        self.assertEqual(body["replayed_subtractive_features"], ["Pocket"])
+        self.assertNotIn("display_only_features", body)
+        self.assertLess(body["volume"], pad["volume"])
 
     def test_p7_pocket_missing_refine_uses_partdesign_default_refinemodel(self) -> None:
         payload = json.loads((ROOT / "fixtures" / "p7" / "pocket-refine-true.json").read_text())
