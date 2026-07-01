@@ -3,6 +3,7 @@
 #include "cad_core/part_design/profile_resolver.h"
 #include "cad_core/runtime/feature_executor.h"
 #include "cad_core/part/extrusion_helper.h"
+#include "cad_core/part/part_extrusion.h"
 #include "cad_core/part/shape_exporter.h"
 #include "cad_core/part/topo_shape.h"
 #include "cad_core/part/property_topo_shape.h"
@@ -88,6 +89,10 @@ struct ExtrusionProfile {
     app::Link link;
     TopoDS_Shape shape;
     std::optional<gp_Dir> normal;
+    ProfileKind kind = ProfileKind::ClosedFace;
+    std::vector<std::string> selectedSubnames;
+    std::vector<std::string> selectedStableSubnames;
+    bool unstableOpenProfileReference = false;
 };
 
 struct ToolShapeBuild {
@@ -250,26 +255,64 @@ TopoDS_Shape compoundOfShapes(const std::vector<TopoDS_Shape>& shapes)
     return compound;
 }
 
+std::vector<std::string> appendDistinctStrings(std::vector<std::string> values,
+                                               const std::vector<std::string>& incoming)
+{
+    for (const std::string& value : incoming) {
+        if (value.empty()) {
+            continue;
+        }
+        if (std::find(values.begin(), values.end(), value) == values.end()) {
+            values.push_back(value);
+        }
+    }
+    return values;
+}
+
 std::optional<ExtrusionProfile> resolveFeatureExtrusionProfile(const app::DocumentObject& object,
                                                                runtime::ComputeContext& context,
-                                                               const std::string& featureName)
+                                                               const std::string& featureName,
+                                                               OpenProfileMode openProfileMode)
 {
-    const auto selections = resolveProfileBasedProfileSelections(
+    const auto selections = resolveProfileBasedProfilesForExtrusion(
         object,
         context,
         featureName,
+        openProfileMode,
         featureName + " Profile must be App::PropertyLinkSubList with SubSet[] entries");
     if (selections.empty()) {
         return std::nullopt;
     }
     if (selections.size() == 1U) {
-        return ExtrusionProfile{selections.front().link, selections.front().shape, selections.front().normal};
+        return ExtrusionProfile{
+            selections.front().link,
+            selections.front().shape,
+            selections.front().normal,
+            selections.front().kind,
+            selections.front().selectedSubnames.empty()
+                ? std::vector<std::string>{selections.front().selectedSubname}
+                : selections.front().selectedSubnames,
+            selections.front().selectedStableSubnames.empty()
+                ? std::vector<std::string>{selections.front().stableSubname}
+                : selections.front().selectedStableSubnames,
+            selections.front().unstableOpenProfileReference,
+        };
     }
 
     std::vector<TopoDS_Shape> profileShapes;
     profileShapes.reserve(selections.size());
+    ProfileKind profileKind = selections.front().kind;
+    std::vector<std::string> selectedSubnames;
+    std::vector<std::string> selectedStableSubnames;
+    bool unstableOpenProfileReference = false;
     for (const auto& selection : selections) {
         profileShapes.push_back(selection.shape);
+        selectedSubnames = appendDistinctStrings(selectedSubnames, selection.selectedSubnames);
+        selectedStableSubnames = appendDistinctStrings(selectedStableSubnames, selection.selectedStableSubnames);
+        unstableOpenProfileReference = unstableOpenProfileReference || selection.unstableOpenProfileReference;
+        if (selection.kind == ProfileKind::EdgeCompound) {
+            profileKind = ProfileKind::EdgeCompound;
+        }
     }
     TopoDS_Shape profileShape = compoundOfShapes(profileShapes);
     if (profileShape.IsNull()) {
@@ -281,7 +324,15 @@ std::optional<ExtrusionProfile> resolveFeatureExtrusionProfile(const app::Docume
                                "Profile");
         return std::nullopt;
     }
-    return ExtrusionProfile{selections.front().link, profileShape, selections.front().normal};
+    return ExtrusionProfile{
+        selections.front().link,
+        profileShape,
+        selections.front().normal,
+        profileKind,
+        std::move(selectedSubnames),
+        std::move(selectedStableSubnames),
+        unstableOpenProfileReference,
+    };
 }
 
 std::optional<TopoDS_Face> firstFaceOf(const TopoDS_Shape& shape)
@@ -878,6 +929,91 @@ std::string readStringProperty(const app::DocumentObject& object, const std::str
     return app::readString(object, property).value_or(fallback);
 }
 
+std::string openProfileModeName(OpenProfileMode mode)
+{
+    switch (mode) {
+        case OpenProfileMode::Auto:
+            return "Auto";
+        case OpenProfileMode::Reject:
+            return "Reject";
+        case OpenProfileMode::SurfaceExtrusion:
+            return "SurfaceExtrusion";
+        case OpenProfileMode::ThinSolid:
+            return "ThinSolid";
+        case OpenProfileMode::ThinCut:
+            return "ThinCut";
+        case OpenProfileMode::SurfaceSplitCut:
+            return "SurfaceSplitCut";
+    }
+    return "Auto";
+}
+
+std::optional<OpenProfileMode> parseOpenProfileModeValue(const std::string& value)
+{
+    if (value == "Auto") {
+        return OpenProfileMode::Auto;
+    }
+    if (value == "Reject") {
+        return OpenProfileMode::Reject;
+    }
+    if (value == "SurfaceExtrusion") {
+        return OpenProfileMode::SurfaceExtrusion;
+    }
+    if (value == "ThinSolid") {
+        return OpenProfileMode::ThinSolid;
+    }
+    if (value == "ThinCut") {
+        return OpenProfileMode::ThinCut;
+    }
+    if (value == "SurfaceSplitCut") {
+        return OpenProfileMode::SurfaceSplitCut;
+    }
+    return std::nullopt;
+}
+
+std::optional<OpenProfileMode> readOpenProfileMode(const app::DocumentObject& object,
+                                                   runtime::ComputeContext& context,
+                                                   const std::string& featureName)
+{
+    if (const auto value = app::readString(object, "OpenProfileMode")) {
+        if (const auto mode = parseOpenProfileModeValue(*value)) {
+            return *mode;
+        }
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "unsupported_property",
+                               featureName + " OpenProfileMode is not supported",
+                               object.name,
+                               "OpenProfileMode");
+        return std::nullopt;
+    }
+    if (const auto numberValue = app::readNumber(object, "OpenProfileMode")) {
+        switch (static_cast<int>(std::llround(*numberValue))) {
+            case 0:
+                return OpenProfileMode::Auto;
+            case 1:
+                return OpenProfileMode::Reject;
+            case 2:
+                return OpenProfileMode::SurfaceExtrusion;
+            case 3:
+                return OpenProfileMode::ThinSolid;
+            case 4:
+                return OpenProfileMode::ThinCut;
+            case 5:
+                return OpenProfileMode::SurfaceSplitCut;
+            default:
+                runtime::addDiagnostic(context.diagnostics,
+                                       "error",
+                                       "unsupported_property",
+                                       featureName + " OpenProfileMode is not supported",
+                                       object.name,
+                                       "OpenProfileMode");
+                return std::nullopt;
+        }
+    }
+    return OpenProfileMode::Auto;
+}
+
 double degreesToRadians(double degrees)
 {
     constexpr double pi = 3.14159265358979323846;
@@ -1174,6 +1310,20 @@ TopoDS_Shape translatedShape(const TopoDS_Shape& shape, const gp_Vec& translatio
     return BRepBuilderAPI_Transform(shape, transform, true).Shape();
 }
 
+const part::NamedShape* namedShapeForProfileSource(const runtime::ComputeContext& context,
+                                                   const app::Link& profileLink,
+                                                   const TopoDS_Shape& profile)
+{
+    if (firstFaceOf(profile)) {
+        const auto internalNamedShapeIt = context.namedShapes.find(profileLink.object + ".InternalShape");
+        if (internalNamedShapeIt != context.namedShapes.end()) {
+            return &internalNamedShapeIt->second;
+        }
+    }
+    const auto profileNamedShapeIt = context.namedShapes.find(profileLink.object);
+    return profileNamedShapeIt == context.namedShapes.end() ? nullptr : &profileNamedShapeIt->second;
+}
+
 std::optional<SideBuild> makePrismSide(const TopoDS_Shape& profile,
                                        const gp_Dir& direction,
                                        double length,
@@ -1184,22 +1334,58 @@ std::optional<SideBuild> makePrismSide(const TopoDS_Shape& profile,
                                        const std::string& featureName,
                                        const std::string& historyOwner)
 {
-    BRepPrimAPI_MakePrism prism(profile, length * gp_Vec(direction));
-    prism.Build();
-    if (!prism.IsDone()) {
+    if (firstFaceOf(profile)) {
+        BRepPrimAPI_MakePrism prism(profile, length * gp_Vec(direction));
+        prism.Build();
+        if (!prism.IsDone()) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "execution_failed",
+                                   "OCCT could not extrude " + featureName + " profile",
+                                   object.name);
+            return std::nullopt;
+        }
+        auto namedShape = part::namedShapeForMakerHistory(historyOwner,
+                                                          prism.Shape(),
+                                                          profileLink.object,
+                                                          profile,
+                                                          prism);
+        return SideBuild{method, length, prism.Shape(), false, false, std::move(namedShape)};
+    }
+
+    const part::NamedShape* profileNamedShape = namedShapeForProfileSource(context, profileLink, profile);
+    std::string error;
+    const auto extrusion = part::buildLinearExtrusionFromProfile(
+        historyOwner,
+        profileLink.object,
+        profile,
+        part::PartLinearExtrusionOptions {
+            direction,
+            length,
+            0.0,
+            0.0,
+            0.0,
+            true,
+        },
+        profileNamedShape,
+        error
+    );
+    if (!extrusion) {
         runtime::addDiagnostic(context.diagnostics,
                                "error",
                                "execution_failed",
-                               "OCCT could not extrude " + featureName + " profile",
+                               error.empty() ? "OCCT could not extrude " + featureName + " profile" : error,
                                object.name);
         return std::nullopt;
     }
-    auto namedShape = part::namedShapeForMakerHistory(historyOwner,
-                                                      prism.Shape(),
-                                                      profileLink.object,
-                                                      profile,
-                                                      prism);
-    return SideBuild{method, length, prism.Shape(), false, false, std::move(namedShape)};
+    return SideBuild{
+        method,
+        length,
+        extrusion->shape,
+        extrusion->topoNamingKnownGap,
+        extrusion->taperHistory,
+        std::move(extrusion->namedShape)
+    };
 }
 
 std::optional<SideBuild> makePrismUntilSide(const TopoDS_Shape& profile,
@@ -1355,6 +1541,105 @@ std::optional<ToolShapeBuild> xorToolShapes(const std::vector<SideBuild>& sides,
     return ToolShapeBuild{result.shape, result.namedShape};
 }
 
+std::optional<ToolShapeBuild> displayOnlyToolShapes(const std::vector<SideBuild>& sides,
+                                                    const app::DocumentObject& object,
+                                                    runtime::ComputeContext& context,
+                                                    const std::string& featureName)
+{
+    if (sides.empty()) {
+        runtime::addDiagnostic(context.diagnostics, "error", "execution_failed", "No extrusion geometry was generated", object.name);
+        return std::nullopt;
+    }
+    if (sides.size() == 1U) {
+        return ToolShapeBuild{sides.front().shape, sides.front().namedShape};
+    }
+
+    std::vector<part::NamedShapeSource> sources;
+    sources.reserve(sides.size());
+    for (std::size_t index = 0; index < sides.size(); ++index) {
+        part::NamedShapeSource source{object.name + ".Surface" + std::to_string(index + 1), sides.at(index).shape};
+        if (sides.at(index).namedShape) {
+            source.namedShape = &*sides.at(index).namedShape;
+        }
+        sources.push_back(source);
+    }
+    const auto result = part::makeElementCompoundFromSources(object.name, sources);
+    if (!result.error.empty()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               result.error + " while combining " + featureName + " open profile extrusion sides",
+                               object.name,
+                               "SideType");
+        return std::nullopt;
+    }
+    return ToolShapeBuild{result.shape, result.namedShape};
+}
+
+bool isOpenProfileKind(ProfileKind kind)
+{
+    return kind == ProfileKind::OpenWire || kind == ProfileKind::EdgeCompound;
+}
+
+std::string bodyParticipationForClosedProfile(AddSubMode mode)
+{
+    return mode == AddSubMode::Additive ? "solid_add" : "solid_cut";
+}
+
+std::vector<std::string> nonEmptyStrings(const std::vector<std::string>& values)
+{
+    std::vector<std::string> result;
+    for (const std::string& value : values) {
+        if (!value.empty()) {
+            result.push_back(value);
+        }
+    }
+    return result;
+}
+
+std::optional<OpenProfileMode> resolveOpenProfileExecutionMode(const app::DocumentObject& object,
+                                                               runtime::ComputeContext& context,
+                                                               OpenProfileMode requestedMode,
+                                                               AddSubMode addSubMode,
+                                                               const std::string& featureName)
+{
+    if (requestedMode == OpenProfileMode::Auto || requestedMode == OpenProfileMode::SurfaceExtrusion) {
+        return OpenProfileMode::SurfaceExtrusion;
+    }
+    if (requestedMode == OpenProfileMode::ThinSolid || requestedMode == OpenProfileMode::ThinCut) {
+        if (!app::readNumber(object, "OpenProfileThickness")) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "missing_open_profile_thickness",
+                                   featureName + " " + openProfileModeName(requestedMode)
+                                       + " requires OpenProfileThickness",
+                                   object.name,
+                                   "OpenProfileThickness");
+            return std::nullopt;
+        }
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               requestedMode == OpenProfileMode::ThinCut
+                                   ? "unsupported_open_profile_pocket"
+                                   : "unsupported_open_profile_body_fuse",
+                               featureName + " " + openProfileModeName(requestedMode)
+                                   + " is reserved for the explicit thin open-profile solid path",
+                               object.name,
+                               "OpenProfileMode");
+        return std::nullopt;
+    }
+    runtime::addDiagnostic(context.diagnostics,
+                           "error",
+                           addSubMode == AddSubMode::Subtractive
+                               ? "unsupported_open_profile_pocket"
+                               : "unsupported_open_profile_body_fuse",
+                           featureName + " " + openProfileModeName(requestedMode)
+                               + " requires an explicit Body solid participation policy",
+                           object.name,
+                           "OpenProfileMode");
+    return std::nullopt;
+}
+
 std::optional<SideBuild> buildSingleSide(const app::DocumentObject& object,
                                          runtime::ComputeContext& context,
                                          const TopoDS_Shape& profile,
@@ -1501,9 +1786,24 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
     // FreeCAD semantic source:
     // src/Mod/PartDesign/App/FeatureExtrude.cpp FeatureExtrude::buildExtrusion().
     const std::string sideType = readStringProperty(object, "SideType", "One side");
-    const auto profile = resolveFeatureExtrusionProfile(object, context, featureName);
+    const auto openProfileMode = readOpenProfileMode(object, context, featureName);
+    if (!openProfileMode) {
+        return std::nullopt;
+    }
+    const auto profile = resolveFeatureExtrusionProfile(object, context, featureName, *openProfileMode);
     if (!profile) {
         return std::nullopt;
+    }
+    const bool openProfile = isOpenProfileKind(profile->kind);
+    std::optional<OpenProfileMode> resolvedOpenProfileMode;
+    std::string bodyParticipation = bodyParticipationForClosedProfile(mode);
+    if (openProfile) {
+        resolvedOpenProfileMode =
+            resolveOpenProfileExecutionMode(object, context, *openProfileMode, mode, featureName);
+        if (!resolvedOpenProfileMode) {
+            return std::nullopt;
+        }
+        bodyParticipation = "display_only";
     }
 
     const bool reversed = readBoolProperty(object, "Reversed", false);
@@ -1748,7 +2048,9 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
         return std::nullopt;
     }
 
-    const auto toolShape = xorToolShapes(prisms, object, context, featureName);
+    const auto toolShape = openProfile
+        ? displayOnlyToolShapes(prisms, object, context, featureName)
+        : xorToolShapes(prisms, object, context, featureName);
     if (!toolShape) {
         return std::nullopt;
     }
@@ -1756,14 +2058,31 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
         resultNamedShape = toolShape->namedShape;
     }
 
+    if (openProfile) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "warning",
+                               "open_profile_surface_display_only",
+                               featureName + " open wire profile was extruded as display-only surface geometry; Body solid was not modified",
+                               object.name,
+                               "Profile",
+                               "runtime",
+                               profile->link.object);
+    }
+
     return ExtrudeResult{
         profile->link,
+        profile->kind,
+        *openProfileMode,
+        resolvedOpenProfileMode,
+        bodyParticipation,
+        nonEmptyStrings(profile->selectedSubnames),
+        nonEmptyStrings(profile->selectedStableSubnames),
         method,
         reportedLength,
         reversed,
         toolShape->shape,
         cad_core::part::objectBBoxForShape(toolShape->shape),
-        cad_core::part::volumeForShape(toolShape->shape),
+        openProfile ? 0.0 : cad_core::part::volumeForShape(toolShape->shape),
         topoNamingKnownGap,
         taperHistory,
         resultNamedShape,

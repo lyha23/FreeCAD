@@ -1224,7 +1224,12 @@ bool isMalformedLinkValue(const nlohmann::json& value, const std::string& proper
                 && *stableSubListSize == *recoverySize && *recoverySize > 0U;
         }
         if (!hasCurrentSubnames && stableSubListSize && *stableSubListSize > 0U) {
-            return false;
+            // CAD Core product extension:
+            // /Users/li/Chili3DProject/FreeCAD/docs/要求/7-1-12-21-PadPocket-open-wire拉伸扩展要求.md
+            // lets Profile.SubSet carry StableSubList-only raw sketch identities such as
+            // "g101"; document parsing accepts the shape, while feature resolvers decide
+            // whether that stable evidence is valid for their business semantics.
+            return true;
         }
         return true;
     };

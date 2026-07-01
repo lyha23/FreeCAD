@@ -12,6 +12,21 @@
 
 namespace cad_core::part_design {
 
+enum class OpenProfileMode {
+    Auto,
+    Reject,
+    SurfaceExtrusion,
+    ThinSolid,
+    ThinCut,
+    SurfaceSplitCut,
+};
+
+enum class ProfileKind {
+    ClosedFace,
+    OpenWire,
+    EdgeCompound,
+};
+
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.cpp
 // ::ProfileBased::getTopoShapeVerifiedFace(), reads "Profile.getSubValues()" before resolving a
 // selected subshape; ::ProfileBased::getProfileNormal() returns the profile normal used by
@@ -27,6 +42,10 @@ struct ProfileBasedProfileSelection {
     bool recoveredFromReferenceShadow = false;
     bool recoveredFromShadowSub = false;
     bool fromBodyCumulativeReplay = false;
+    ProfileKind kind = ProfileKind::ClosedFace;
+    std::vector<std::string> selectedSubnames;
+    std::vector<std::string> selectedStableSubnames;
+    bool unstableOpenProfileReference = false;
 };
 
 std::optional<ProfileBasedProfileSelection> resolveProfileBasedProfile(
@@ -39,6 +58,13 @@ std::vector<ProfileBasedProfileSelection> resolveProfileBasedProfileSelections(
     const app::DocumentObject& object,
     runtime::ComputeContext& context,
     const std::string& featureName,
+    std::string profileRequirementMessage = {});
+
+std::vector<ProfileBasedProfileSelection> resolveProfileBasedProfilesForExtrusion(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const std::string& featureName,
+    OpenProfileMode openProfileMode,
     std::string profileRequirementMessage = {});
 
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.cpp

@@ -6,20 +6,28 @@
 #include "cad_core/part_design/body_topo_shape.h"
 #include "cad_core/runtime/diagnostics.h"
 
+#include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRepAdaptor_Surface.hxx>
 #include <BRepGProp_Face.hxx>
 #include <BRepLProp_SLProps.hxx>
+#include <BRep_Builder.hxx>
 #include <GeomAbs_SurfaceType.hxx>
 #include <Precision.hxx>
 #include <TopAbs_ShapeEnum.hxx>
+#include <TopExp_Explorer.hxx>
 #include <TopoDS.hxx>
+#include <TopoDS_Compound.hxx>
+#include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
+#include <TopoDS_Wire.hxx>
 #include <gp_Dir.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Vec.hxx>
 
 #include <algorithm>
+#include <cctype>
 #include <optional>
+#include <set>
 #include <string>
 #include <utility>
 #include <vector>
@@ -49,6 +57,284 @@ struct InternalFaceProfileCandidate {
     bool recoveredFromReferenceShadow = false;
     bool recoveredFromShadowSub = false;
 };
+
+struct RawOpenProfileResolveAttempt {
+    bool attempted = false;
+    std::optional<ProfileBasedProfileSelection> selection;
+};
+
+bool isRawSketchGeometryStableSubname(const std::string& value)
+{
+    if (value.size() < 2U || value.front() != 'g') {
+        return false;
+    }
+    return std::all_of(value.begin() + 1, value.end(), [](unsigned char item) {
+        return std::isdigit(item) != 0;
+    });
+}
+
+bool linkRequestsRawOpenSketchProfile(const app::Link& profileLink)
+{
+    if (profileLink.stableSubnamesExplicit
+        && std::any_of(profileLink.stableSubnames.begin(),
+                       profileLink.stableSubnames.end(),
+                       isRawSketchGeometryStableSubname)) {
+        return true;
+    }
+    return std::any_of(profileLink.subnames.begin(), profileLink.subnames.end(), [](const std::string& subname) {
+        const auto parsed = part::parseSubshapeName(subname);
+        return parsed && parsed->kind == TopAbs_EDGE;
+    });
+}
+
+TopoDS_Shape compoundOfShapes(const std::vector<TopoDS_Shape>& shapes)
+{
+    BRep_Builder builder;
+    TopoDS_Compound compound;
+    builder.MakeCompound(compound);
+    for (const TopoDS_Shape& shape : shapes) {
+        if (!shape.IsNull()) {
+            builder.Add(compound, shape);
+        }
+    }
+    return compound;
+}
+
+std::string openProfileModeName(OpenProfileMode mode)
+{
+    switch (mode) {
+        case OpenProfileMode::Auto:
+            return "Auto";
+        case OpenProfileMode::Reject:
+            return "Reject";
+        case OpenProfileMode::SurfaceExtrusion:
+            return "SurfaceExtrusion";
+        case OpenProfileMode::ThinSolid:
+            return "ThinSolid";
+        case OpenProfileMode::ThinCut:
+            return "ThinCut";
+        case OpenProfileMode::SurfaceSplitCut:
+            return "SurfaceSplitCut";
+    }
+    return "Auto";
+}
+
+void addOpenProfileDiagnostic(runtime::ComputeContext& context,
+                              const app::DocumentObject& object,
+                              const app::Link& profileLink,
+                              const std::string& severity,
+                              const std::string& code,
+                              const std::string& message,
+                              const std::string& subname = {})
+{
+    runtime::addDiagnostic(context.diagnostics,
+                           severity,
+                           code,
+                           message,
+                           object.name,
+                           "Profile",
+                           "runtime",
+                           profileLink.object,
+                           subname);
+}
+
+RawOpenProfileResolveAttempt resolveRawSketchOpenProfile(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const app::Link& profileLink,
+    OpenProfileMode openProfileMode,
+    const std::string& featureName)
+{
+    RawOpenProfileResolveAttempt attempt;
+    if (!linkRequestsRawOpenSketchProfile(profileLink)) {
+        return attempt;
+    }
+    attempt.attempted = true;
+
+    if (openProfileMode == OpenProfileMode::Reject) {
+        addOpenProfileDiagnostic(context,
+                                 object,
+                                 profileLink,
+                                 "error",
+                                 "open_profile",
+                                 featureName + " OpenProfileMode=Reject does not accept open wire profiles",
+                                 profileLink.stableSubnames.empty() ? std::string{} : profileLink.stableSubnames.front());
+        return attempt;
+    }
+
+    const auto shapeIt = context.shapes.find(profileLink.object);
+    if (shapeIt == context.shapes.end() || shapeIt->second.kind != runtime::ShapeValue::Kind::Sketch) {
+        addOpenProfileDiagnostic(context,
+                                 object,
+                                 profileLink,
+                                 "error",
+                                 "unsupported_open_profile_multi_target",
+                                 featureName + " open wire profiles currently require a Sketcher::SketchObject target");
+        return attempt;
+    }
+
+    const auto namedShapeIt = context.namedShapes.find(profileLink.object);
+    const part::NamedShape* rawNamedShape = namedShapeIt == context.namedShapes.end()
+        ? nullptr
+        : &namedShapeIt->second;
+    std::vector<std::string> requestedSubnames;
+    std::vector<std::string> requestedStableSubnames;
+    bool unstableOpenProfileReference = false;
+
+    if (profileLink.stableSubnamesExplicit) {
+        for (const std::string& stableSubname : profileLink.stableSubnames) {
+            if (stableSubname.empty()) {
+                continue;
+            }
+            if (!isRawSketchGeometryStableSubname(stableSubname)) {
+                continue;
+            }
+            if (rawNamedShape == nullptr) {
+                addOpenProfileDiagnostic(context,
+                                         object,
+                                         profileLink,
+                                         "error",
+                                         "ambiguous_open_profile_reference",
+                                         featureName + " Profile.StableSubList requires raw sketch edge identity evidence",
+                                         stableSubname);
+                return attempt;
+            }
+            const auto resolved = part::resolveElementReference(*rawNamedShape, {}, stableSubname);
+            if (resolved.status != part::ElementResolveStatus::Resolved || !resolved.element) {
+                addOpenProfileDiagnostic(context,
+                                         object,
+                                         profileLink,
+                                         "error",
+                                         "ambiguous_open_profile_reference",
+                                         featureName + " Profile.StableSubList cannot resolve " + stableSubname
+                                             + " to a current raw sketch edge",
+                                         stableSubname);
+                return attempt;
+            }
+            requestedSubnames.push_back(*resolved.element);
+            requestedStableSubnames.push_back(stableSubname);
+        }
+    }
+
+    if (requestedSubnames.empty()) {
+        for (const std::string& subname : profileLink.subnames) {
+            const auto parsed = part::parseSubshapeName(subname);
+            if (!parsed || parsed->kind != TopAbs_EDGE) {
+                continue;
+            }
+            requestedSubnames.push_back(subname);
+            const auto stableIt = std::find_if(
+                profileLink.stableSubnames.begin(),
+                profileLink.stableSubnames.end(),
+                isRawSketchGeometryStableSubname);
+            if (stableIt != profileLink.stableSubnames.end()) {
+                requestedStableSubnames.push_back(*stableIt);
+            }
+            else {
+                requestedStableSubnames.push_back(subname);
+                unstableOpenProfileReference = true;
+            }
+        }
+    }
+
+    if (requestedSubnames.empty()) {
+        addOpenProfileDiagnostic(context,
+                                 object,
+                                 profileLink,
+                                 "error",
+                                 "ambiguous_open_profile_reference",
+                                 featureName + " open wire Profile must reference raw sketch EdgeN or StableSubList g<ID>",
+                                 profileLink.object);
+        return attempt;
+    }
+
+    std::vector<TopoDS_Shape> selectedEdges;
+    selectedEdges.reserve(requestedSubnames.size());
+    for (const std::string& subname : requestedSubnames) {
+        const auto parsed = part::parseSubshapeName(subname);
+        if (!parsed || parsed->kind != TopAbs_EDGE) {
+            addOpenProfileDiagnostic(context,
+                                     object,
+                                     profileLink,
+                                     "error",
+                                     "ambiguous_open_profile_reference",
+                                     featureName + " open wire Profile resolved to non-edge " + subname,
+                                     subname);
+            return attempt;
+        }
+
+        std::optional<TopoDS_Shape> subshape;
+        if (rawNamedShape != nullptr) {
+            subshape = part::subshapeByName(*rawNamedShape, subname);
+        }
+        else {
+            subshape = part::subshapeByName(shapeIt->second.shape, subname);
+        }
+        if (!subshape || subshape->IsNull() || subshape->ShapeType() != TopAbs_EDGE) {
+            addOpenProfileDiagnostic(context,
+                                     object,
+                                     profileLink,
+                                     "error",
+                                     "ambiguous_open_profile_reference",
+                                     featureName + " Profile target " + profileLink.object
+                                         + " has no raw sketch edge " + subname,
+                                     subname);
+            return attempt;
+        }
+        selectedEdges.push_back(*subshape);
+    }
+
+    TopoDS_Shape profileShape;
+    ProfileKind kind = ProfileKind::OpenWire;
+    BRepBuilderAPI_MakeWire wireBuilder;
+    for (const TopoDS_Shape& edge : selectedEdges) {
+        wireBuilder.Add(TopoDS::Edge(edge));
+    }
+    if (wireBuilder.IsDone()) {
+        profileShape = wireBuilder.Wire();
+    }
+    else {
+        profileShape = compoundOfShapes(selectedEdges);
+        kind = ProfileKind::EdgeCompound;
+    }
+    if (profileShape.IsNull()) {
+        addOpenProfileDiagnostic(context,
+                                 object,
+                                 profileLink,
+                                 "error",
+                                 "ambiguous_open_profile_reference",
+                                 featureName + " open wire Profile did not produce an extrudable edge shape",
+                                 profileLink.object);
+        return attempt;
+    }
+    if (unstableOpenProfileReference) {
+        addOpenProfileDiagnostic(context,
+                                 object,
+                                 profileLink,
+                                 "warning",
+                                 "ambiguous_open_profile_reference",
+                                 featureName + " open wire Profile.SubList uses raw EdgeN without stable g<ID> identity",
+                                 requestedSubnames.front());
+    }
+
+    ProfileBasedProfileSelection selection {
+        profileLink,
+        profileShape,
+        shapeIt->second.profileNormal,
+        requestedSubnames.front(),
+        requestedStableSubnames.empty() ? std::string{} : requestedStableSubnames.front(),
+        !requestedStableSubnames.empty() && !unstableOpenProfileReference,
+        false,
+        false,
+        false,
+    };
+    selection.kind = kind;
+    selection.selectedSubnames = requestedSubnames;
+    selection.selectedStableSubnames = requestedStableSubnames;
+    selection.unstableOpenProfileReference = unstableOpenProfileReference;
+    attempt.selection = std::move(selection);
+    return attempt;
+}
 
 std::string stableSubnameDiagnosticCode(part::ElementResolveStatus status)
 {
@@ -1115,6 +1401,107 @@ std::vector<ProfileBasedProfileSelection> resolveProfileBasedProfileSelections(
         }
         selections.push_back(std::move(*selection));
     }
+    return selections;
+}
+
+std::vector<ProfileBasedProfileSelection> resolveProfileBasedProfilesForExtrusion(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const std::string& featureName,
+    OpenProfileMode openProfileMode,
+    std::string profileRequirementMessage)
+{
+    if (profileRequirementMessage.empty()) {
+        profileRequirementMessage = featureName + " Profile must link to a sketch profile or face";
+    }
+    const auto* profileProperty = app::propertyValue(object, "Profile");
+    if (profileProperty == nullptr) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "missing_property",
+                               profileRequirementMessage,
+                               object.name,
+                               "Profile");
+        return {};
+    }
+    if (!isProfileSubListType(profileProperty->propertyType)) {
+        addInvalidProfileLinkTypeDiagnostic(context, object, profileProperty->propertyType, featureName);
+        return {};
+    }
+    if (!profileProperty->valid) {
+        return {};
+    }
+
+    const auto profileLinks = app::readLinks(object, "Profile");
+    if (profileLinks.empty()) {
+        addEmptyProfileDiagnostic(context, object, featureName, "Profile.SubSet must contain at least one profile");
+        return {};
+    }
+
+    std::vector<ProfileBasedProfileSelection> selections;
+    selections.reserve(profileLinks.size());
+    for (const auto& profileLink : profileLinks) {
+        RawOpenProfileResolveAttempt openAttempt =
+            resolveRawSketchOpenProfile(object, context, profileLink, openProfileMode, featureName);
+        if (openAttempt.attempted) {
+            if (!openAttempt.selection) {
+                return {};
+            }
+            selections.push_back(std::move(*openAttempt.selection));
+            continue;
+        }
+
+        if (profileLink.subnames.empty()
+            || std::any_of(profileLink.subnames.begin(), profileLink.subnames.end(), [](const std::string& subname) {
+                   return subname.empty();
+               })) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "invalid_profile",
+                                   featureName + " Profile.SubSet[].SubList must contain at least one subname",
+                                   object.name,
+                                   "Profile",
+                                   "runtime",
+                                   profileLink.object);
+            return {};
+        }
+        auto selection =
+            resolveProfileBasedProfileLink(object, context, profileLink, featureName, profileRequirementMessage);
+        if (!selection) {
+            return {};
+        }
+        selections.push_back(std::move(*selection));
+    }
+
+    const bool hasOpenProfile =
+        std::any_of(selections.begin(), selections.end(), [](const ProfileBasedProfileSelection& selection) {
+            return selection.kind == ProfileKind::OpenWire || selection.kind == ProfileKind::EdgeCompound;
+        });
+    if (hasOpenProfile) {
+        std::set<std::string> openOwners;
+        for (const auto& selection : selections) {
+            if (selection.kind == ProfileKind::ClosedFace) {
+                runtime::addDiagnostic(context.diagnostics,
+                                       "error",
+                                       "unsupported_open_profile_multi_target",
+                                       featureName + " Profile cannot mix closed faces and open wire selections",
+                                       object.name,
+                                       "Profile");
+                return {};
+            }
+            openOwners.insert(selection.link.object);
+        }
+        if (openOwners.size() > 1U) {
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "unsupported_open_profile_multi_target",
+                                   featureName + " open wire Profile.SubSet currently requires one sketch target",
+                                   object.name,
+                                   "Profile");
+            return {};
+        }
+    }
+
     return selections;
 }
 

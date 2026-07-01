@@ -1,0 +1,125 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPad",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "id": 101,
+            "start": [0, 0],
+            "end": [10, 0]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 102,
+            "start": [10, 0],
+            "end": [10, 5]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 103,
+            "start": [10, 5],
+            "end": [0, 5]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 104,
+            "start": [0, 5],
+            "end": [0, 0]
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "SketchPocket",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "id": 201,
+            "start": [2, 1],
+            "end": [8, 1]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 202,
+            "start": [8, 1],
+            "end": [8, 4]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 203,
+            "start": [8, 4],
+            "end": [2, 4]
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 3,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchPad",
+              "SubList": ["InternalFace1"],
+              "StableSubList": [""]
+            }
+          ]
+        },
+        "Type": "Length",
+        "Length": 10,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Pocket",
+      "ID": 4,
+      "TypeId": "PartDesign::Pocket",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchPocket",
+              "StableSubList": ["g201", "g202", "g203"]
+            }
+          ]
+        },
+        "Type": "Length",
+        "Length": 10,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 5,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["SketchPad", "Pad", "SketchPocket", "Pocket"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Pocket"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}

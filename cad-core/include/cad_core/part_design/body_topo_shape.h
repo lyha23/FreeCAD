@@ -27,6 +27,7 @@ struct BodyTopoShapeResult {
     std::vector<std::string> appliedAdditiveFeatures;
     std::vector<std::string> appliedSubtractiveFeatures;
     std::vector<std::string> appliedReplacementFeatures;
+    std::vector<std::string> displayOnlyFeatures;
     std::vector<std::string> refinedFeatures;
     std::optional<std::string> directTipSubshapeOwner;
     bool directTipSubshapeStablePrefix = false;

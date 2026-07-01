@@ -3,11 +3,13 @@
 #include "cad_core/app/document.h"
 #include "cad_core/runtime/compute_context.h"
 #include "cad_core/part/topo_shape.h"
+#include "cad_core/part_design/profile_resolver.h"
 
 #include <TopoDS_Shape.hxx>
 
 #include <optional>
 #include <string>
+#include <vector>
 
 namespace cad_core::part_design {
 
@@ -18,6 +20,12 @@ enum class AddSubMode {
 
 struct ExtrudeResult {
     app::Link profile;
+    ProfileKind profileKind = ProfileKind::ClosedFace;
+    OpenProfileMode openProfileMode = OpenProfileMode::Auto;
+    std::optional<OpenProfileMode> resolvedOpenProfileMode;
+    std::string bodyParticipation;
+    std::vector<std::string> sourceProfileSubnames;
+    std::vector<std::string> sourceProfileStableSubnames;
     std::string method;
     double length = 0.0;
     bool reversed = false;

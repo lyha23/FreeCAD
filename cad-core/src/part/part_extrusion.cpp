@@ -1,4 +1,5 @@
 #include "cad_core/part/part_feature.h"
+#include "cad_core/part/part_extrusion.h"
 
 #include "part_feature_support.h"
 
@@ -38,6 +39,119 @@
 
 namespace cad_core::part
 {
+
+std::optional<PartLinearExtrusionResult> buildLinearExtrusionFromProfile(
+    const std::string& owner,
+    const std::string& sourceOwner,
+    const TopoDS_Shape& profile,
+    const PartLinearExtrusionOptions& options,
+    const part::NamedShape* sourceNamedShape,
+    std::string& error)
+{
+    error.clear();
+    if (profile.IsNull()) {
+        error = "Linear extrusion profile is empty";
+        return std::nullopt;
+    }
+
+    const bool hasForwardLength = std::abs(options.lengthFwd) > Precision::Confusion();
+    const bool hasReverseLength = std::abs(options.lengthRev) > Precision::Confusion();
+    const bool hasActiveTaperFwd = std::abs(options.taperAngleFwdRadians) > Precision::Angular()
+        && hasForwardLength;
+    const bool hasActiveTaperRev = std::abs(options.taperAngleRevRadians) > Precision::Angular()
+        && hasReverseLength;
+    if (hasActiveTaperFwd || hasActiveTaperRev) {
+        auto tapered = part::makeTaperedExtrusion(
+            profile,
+            part::TaperedExtrusionOptions {
+                options.direction,
+                options.lengthFwd,
+                options.taperAngleFwdRadians,
+                options.solid,
+                options.lengthRev,
+                options.taperAngleRevRadians,
+            },
+            error
+        );
+        if (!tapered || tapered->shape.IsNull()) {
+            if (error.empty()) {
+                error = "Could not build tapered linear extrusion";
+            }
+            return std::nullopt;
+        }
+        const part::NamedShapeSource profileSource {
+            sourceOwner,
+            profile,
+            sourceNamedShape
+        };
+        auto namedShape = part::namedShapeForTaperedExtrusionHistory(
+            owner,
+            *tapered,
+            profile,
+            profileSource
+        );
+        return PartLinearExtrusionResult {
+            tapered->shape,
+            tapered->topoNamingKnownGap,
+            !tapered->topoNamingKnownGap,
+            std::move(namedShape)
+        };
+    }
+
+    TopoDS_Shape sourceShape = profile;
+    std::optional<part::NamedShape> movedNamedShape;
+    const part::NamedShape* currentNamedShape = sourceNamedShape;
+    if (hasReverseLength) {
+        gp_Trsf reverseTransform;
+        reverseTransform.SetTranslation(gp_Vec(options.direction) * (-options.lengthRev));
+        BRepBuilderAPI_Transform transform(sourceShape, reverseTransform, Standard_True);
+        if (!transform.IsDone()) {
+            error = "Could not translate the reverse-length source shape";
+            return std::nullopt;
+        }
+        const TopoDS_Shape previousSourceShape = sourceShape;
+        sourceShape = transform.Shape();
+        if (sourceNamedShape != nullptr) {
+            movedNamedShape = part::namedShapeForTransformedCopy(
+                sourceOwner,
+                sourceShape,
+                part::NamedShapeSource {sourceOwner, previousSourceShape, sourceNamedShape}
+            );
+            currentNamedShape = &*movedNamedShape;
+        }
+    }
+
+    try {
+        BRepPrimAPI_MakePrism prism(
+            sourceShape,
+            gp_Vec(options.direction) * (options.lengthFwd + options.lengthRev),
+            Standard_True
+        );
+        prism.Build();
+        if (!prism.IsDone() || prism.Shape().IsNull()) {
+            error = "Could not extrude the profile shape";
+            return std::nullopt;
+        }
+        const part::NamedShapeSource profileSource {
+            sourceOwner,
+            sourceShape,
+            currentNamedShape
+        };
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+        // ::TopoShape::makeElementPrism(), "return makeElementShape(mkPrism, base, op)".
+        auto namedShape = part::namedShapeForMakerHistory(
+            owner,
+            prism.Shape(),
+            std::vector<part::NamedShapeSource> {profileSource},
+            prism
+        );
+        return PartLinearExtrusionResult {prism.Shape(), false, false, std::move(namedShape)};
+    }
+    catch (const Standard_Failure& failure) {
+        error = failure.GetMessageString();
+        return std::nullopt;
+    }
+}
 
 namespace
 {
@@ -526,125 +640,40 @@ std::optional<PartExtrusionShapeBuild> makePartExtrusionShape(
         return std::nullopt;
     }
 
-    const bool hasForwardLength = std::abs(lengthFwd) > Precision::Confusion();
-    const bool hasReverseLength = std::abs(lengthRev) > Precision::Confusion();
-    const bool hasActiveTaperFwd = std::abs(taperAngleFwdDegrees) > Precision::Angular()
-        && hasForwardLength;
-    const bool hasActiveTaperRev = std::abs(taperAngleRevDegrees) > Precision::Angular()
-        && hasReverseLength;
-    if (hasActiveTaperFwd || hasActiveTaperRev) {
-        // FreeCAD:
-        // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FeatureExtrusion.cpp
-        // ::Extrusion::extrudeShape(), when taper is present, calls
-        // "ExtrusionHelper::makeElementDraft(params, myShape, drafts, ...)" instead of
-        // makeElementPrism(). cad-core reuses part::makeTaperedExtrusion for the one-side
-        // and two-sided LengthFwd/LengthRev subsets.
-        std::string error;
-        const auto tapered = part::makeTaperedExtrusion(
-            source->shape,
-            part::TaperedExtrusionOptions {
-                direction,
-                lengthFwd,
-                radians(taperAngleFwdDegrees),
-                solid,
-                lengthRev,
-                radians(taperAngleRevDegrees),
-            },
-            error
+    std::string error;
+    auto shape = part::buildLinearExtrusionFromProfile(
+        object.name,
+        baseObjectName,
+        source->shape,
+        part::PartLinearExtrusionOptions {
+            direction,
+            lengthFwd,
+            lengthRev,
+            radians(taperAngleFwdDegrees),
+            radians(taperAngleRevDegrees),
+            solid,
+        },
+        source->namedShape ? &*source->namedShape : nullptr,
+        error
+    );
+    if (!shape) {
+        const bool hasForwardTaper = std::abs(taperAngleFwdDegrees) > Precision::Angular();
+        const bool hasReverseTaper = std::abs(taperAngleRevDegrees) > Precision::Angular();
+        addPartExtrusionDiagnostic(
+            object,
+            context,
+            hasForwardTaper || hasReverseTaper ? "invalid_taper" : "execution_failed",
+            error.empty() ? "Part::Extrusion could not extrude the linked Base shape" : error,
+            hasReverseTaper && !hasForwardTaper ? "TaperAngleRev" : "Base"
         );
-        if (!tapered || tapered->shape.IsNull()) {
-            addPartExtrusionDiagnostic(
-                object,
-                context,
-                "invalid_taper",
-                error.empty() ? "Part::Extrusion could not build tapered extrusion" : error,
-                hasActiveTaperRev && !hasActiveTaperFwd ? "TaperAngleRev" : "TaperAngle"
-            );
-            return std::nullopt;
-        }
-        const part::NamedShapeSource profileSource {
-            baseObjectName,
-            source->shape,
-            source->namedShape ? &*source->namedShape : nullptr
-        };
-        auto namedShape = part::namedShapeForTaperedExtrusionHistory(
-            object.name,
-            *tapered,
-            source->shape,
-            profileSource
-        );
-        return PartExtrusionShapeBuild {
-            tapered->shape,
-            tapered->topoNamingKnownGap,
-            !tapered->topoNamingKnownGap,
-            std::move(namedShape)
-        };
-    }
-
-    if (std::abs(lengthRev) > Precision::Confusion()) {
-        gp_Trsf reverseTransform;
-        reverseTransform.SetTranslation(gp_Vec(direction) * (-lengthRev));
-        const TopoDS_Shape previousSourceShape = source->shape;
-        std::optional<part::NamedShape> previousNamedShape = source->namedShape;
-        BRepBuilderAPI_Transform transform(previousSourceShape, reverseTransform, Standard_True);
-        if (!transform.IsDone()) {
-            addPartExtrusionDiagnostic(
-                object,
-                context,
-                "execution_failed",
-                "Part::Extrusion could not translate the reverse-length source shape",
-                "LengthRev"
-            );
-            return std::nullopt;
-        }
-        source->shape = transform.Shape();
-        if (previousNamedShape) {
-            source->namedShape = part::namedShapeForTransformedCopy(
-                baseObjectName,
-                source->shape,
-                part::NamedShapeSource {baseObjectName, previousSourceShape, &*previousNamedShape}
-            );
-        }
-    }
-
-    try {
-        BRepPrimAPI_MakePrism prism(
-            source->shape,
-            gp_Vec(direction) * (lengthFwd + lengthRev),
-            Standard_True
-        );
-        prism.Build();
-        if (!prism.IsDone() || prism.Shape().IsNull()) {
-            addPartExtrusionDiagnostic(
-                object,
-                context,
-                "execution_failed",
-                "Part::Extrusion could not extrude the linked Base shape",
-                "Base"
-            );
-            return std::nullopt;
-        }
-        const part::NamedShapeSource profileSource {
-            baseObjectName,
-            source->shape,
-            source->namedShape ? &*source->namedShape : nullptr
-        };
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
-        // ::TopoShape::makeElementPrism(), "return makeElementShape(mkPrism, base, op)".
-        // Part::Extrusion publishes the same maker-history subset instead of falling back to
-        // indexed-only names after the prism succeeds.
-        auto namedShape = part::namedShapeForMakerHistory(
-            object.name,
-            prism.Shape(),
-            std::vector<part::NamedShapeSource> {profileSource},
-            prism
-        );
-        return PartExtrusionShapeBuild {prism.Shape(), false, false, std::move(namedShape)};
-    }
-    catch (const Standard_Failure& failure) {
-        addPartExtrusionDiagnostic(object, context, "execution_failed", failure.GetMessageString(), "Base");
         return std::nullopt;
     }
+    return PartExtrusionShapeBuild {
+        shape->shape,
+        shape->topoNamingKnownGap,
+        shape->taperHistory,
+        std::move(shape->namedShape)
+    };
 }
 
 }  // namespace

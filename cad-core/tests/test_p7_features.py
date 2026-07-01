@@ -258,6 +258,97 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assert_object_matches_expected(result, "p7", "pocket-refine-true")
 
+    def test_p7_pad_open_wire_profile_auto_surface_extrusion(self) -> None:
+        result = self.run_recompute("partdesign-pad-open-wire-surface-auto", "p7")
+        pad = result["objects"]["Pad"]
+        sketch = result["objects"]["Sketch"]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["open_profile_surface_display_only"])
+        self.assertEqual(pad["status"], "ok")
+        self.assertEqual(pad["shape"], "occt_shell")
+        self.assertEqual(pad["profileKind"], "open_wire")
+        self.assertEqual(pad["openProfileMode"], "Auto")
+        self.assertEqual(pad["resolvedOpenProfileMode"], "SurfaceExtrusion")
+        self.assertEqual(pad["bodyParticipation"], "display_only")
+        self.assertEqual(pad["sourceProfile"], {"object": "Sketch", "stableSubnames": ["g101", "g102", "g103"]})
+        self.assertEqual(pad["topo_naming_history"], "history_pending:open_profile_surface")
+        self.assertEqual(pad["volume"], 0.0)
+        self.assertGreater(len(result["subshapes"]["Pad"]), 0)
+        self.assertEqual(sketch["raw_edge_identity"]["byStableSubname"]["g102"], "Edge2")
+
+    def test_p7_pocket_open_wire_profile_is_body_display_only(self) -> None:
+        result = self.run_recompute("partdesign-pocket-open-wire-body-display-only", "p7")
+        body = result["objects"]["Body"]
+        pad = result["objects"]["Pad"]
+        pocket = result["objects"]["Pocket"]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["open_profile_surface_display_only"])
+        self.assertEqual(pocket["status"], "ok")
+        self.assertEqual(pocket["shape"], "occt_shell")
+        self.assertEqual(pocket["profileKind"], "open_wire")
+        self.assertEqual(pocket["resolvedOpenProfileMode"], "SurfaceExtrusion")
+        self.assertEqual(pocket["bodyParticipation"], "display_only")
+        self.assertEqual(pocket["sourceProfile"]["stableSubnames"], ["g201", "g202", "g203"])
+        self.assertEqual(pocket["topo_naming_history"], "history_pending:open_profile_surface")
+        self.assertEqual(pocket["volume"], 0.0)
+        self.assertEqual(body["status"], "ok")
+        self.assertEqual(body["shape"], "occt_solid")
+        self.assertEqual(body["display_only_features"], ["Pocket"])
+        self.assertEqual(body["replayed_additive_features"], ["Pad"])
+        self.assertNotIn("replayed_subtractive_features", body)
+        self.assertEqual(body["bbox"], pad["bbox"])
+        self.assertAlmostEqual(body["volume"], pad["volume"], delta=1e-6)
+
+    def test_p7_open_wire_profile_reject_mode_keeps_strict_native_error(self) -> None:
+        payload = json.loads((ROOT / "fixtures" / "p7" / "partdesign-pad-open-wire-surface-auto.json").read_text())
+        self.object_payload(payload, "Pad")["Properties"]["OpenProfileMode"] = {
+            "PropertyType": "App::PropertyEnumeration",
+            "value": "Reject",
+        }
+
+        result = self.run_recompute_payload(payload)
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["open_profile"])
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
+
+    def test_p7_pocket_open_wire_reject_mode_keeps_strict_native_error(self) -> None:
+        payload = json.loads((ROOT / "fixtures" / "p7" / "partdesign-pocket-open-wire-body-display-only.json").read_text())
+        self.object_payload(payload, "Pocket")["Properties"]["OpenProfileMode"] = {
+            "PropertyType": "App::PropertyEnumeration",
+            "value": "Reject",
+        }
+
+        result = self.run_recompute_payload(payload)
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["open_profile"])
+        self.assertEqual(result["objects"]["Pocket"]["status"], "error")
+
+    def test_p7_open_wire_thin_solid_requires_thickness(self) -> None:
+        payload = json.loads((ROOT / "fixtures" / "p7" / "partdesign-pad-open-wire-surface-auto.json").read_text())
+        self.object_payload(payload, "Pad")["Properties"]["OpenProfileMode"] = {
+            "PropertyType": "App::PropertyEnumeration",
+            "value": "ThinSolid",
+        }
+
+        result = self.run_recompute_payload(payload)
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["missing_open_profile_thickness"])
+        self.assertEqual(result["diagnostics"][0]["property"], "OpenProfileThickness")
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
+
+    def test_p7_pocket_open_wire_thin_cut_requires_thickness(self) -> None:
+        payload = json.loads((ROOT / "fixtures" / "p7" / "partdesign-pocket-open-wire-body-display-only.json").read_text())
+        self.object_payload(payload, "Pocket")["Properties"]["OpenProfileMode"] = {
+            "PropertyType": "App::PropertyEnumeration",
+            "value": "ThinCut",
+        }
+
+        result = self.run_recompute_payload(payload)
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["missing_open_profile_thickness"])
+        self.assertEqual(result["diagnostics"][0]["property"], "OpenProfileThickness")
+        self.assertEqual(result["objects"]["Pocket"]["status"], "error")
+
     def test_p7_pocket_missing_refine_uses_partdesign_default_refinemodel(self) -> None:
         payload = json.loads((ROOT / "fixtures" / "p7" / "pocket-refine-true.json").read_text())
         self.object_payload(payload, "Pocket")["Properties"].pop("Refine")

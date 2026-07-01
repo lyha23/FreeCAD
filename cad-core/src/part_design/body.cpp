@@ -862,6 +862,7 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
     std::vector<std::string> appliedAdditiveFeatures;
     std::vector<std::string> appliedSubtractiveFeatures;
     std::vector<std::string> appliedReplacementFeatures;
+    std::vector<std::string> displayOnlyFeatures;
     if (body.properties.contains("BaseFeature")) {
         const auto baseLink = app::readLink(body, "BaseFeature");
         if (!baseLink) {
@@ -929,6 +930,18 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
                 if (feature == resolvedStopFeature) {
                     break;
                 }
+            }
+            else if (objectIt != context.objects.end()
+                     && objectIt->second.value("bodyParticipation", "") == "display_only") {
+                // CAD Core product extension:
+                // /Users/li/Chili3DProject/FreeCAD/docs/要求/7-1-12-21-PadPocket-open-wire拉伸扩展要求.md
+                // says Pad/Pocket open-wire surface extrusion publishes feature geometry but
+                // "默认 surface extrusion 是 display_only" for Body fuse/cut participation.
+                displayOnlyFeatures.push_back(feature);
+                if (feature == resolvedStopFeature) {
+                    break;
+                }
+                continue;
             }
             else if (shapeIt != context.shapes.end() && feature == resolvedStopFeature) {
                 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::Body::execute(),
@@ -1067,6 +1080,7 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
         appliedAdditiveFeatures,
         appliedSubtractiveFeatures,
         appliedReplacementFeatures,
+        displayOnlyFeatures,
         refinedFeatures,
         directTipSubshapeOwner,
         directTipSubshapeStablePrefix,
@@ -1143,6 +1157,9 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
     }
     if (!bodyTopoShape->appliedReplacementFeatures.empty()) {
         result["replayed_replacement_features"] = bodyTopoShape->appliedReplacementFeatures;
+    }
+    if (!bodyTopoShape->displayOnlyFeatures.empty()) {
+        result["display_only_features"] = bodyTopoShape->displayOnlyFeatures;
     }
     result["replay_stopped_at_tip"] = bodyTopoShape->stopFeature;
     if (!bodyTopoShape->refinedFeatures.empty()) {
