@@ -79,6 +79,57 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def open_wire_identity_ffi_result(self, geometry: list[dict]) -> dict:
         return self.run_recompute_ffi_payload(self.open_wire_identity_payload(geometry))
 
+    def open_wire_identity_reference_shadow(
+        self,
+        stable: str = "g102",
+        subname: str = "Edge2",
+        geometry_id: int = 102,
+        geometry_kind: str = "LineSegment",
+    ) -> dict:
+        return {
+            "target": "Sketch",
+            "targetId": 1,
+            "property": "Shape",
+            "shapeType": "Edge",
+            "indexed": subname,
+            "subname": subname,
+            "stableSubname": stable,
+            "sourceStableSubname": stable,
+            "sourceGeometryId": geometry_id,
+            "sourceGeometryKind": geometry_kind,
+            "fingerprint": {
+                "shapeType": "Edge",
+                "bboxMin": [10.0, 0.0, 0.0],
+                "bboxMax": [10.0, 5.0, 0.0],
+                "edgeCount": 1,
+                "vertexCount": 2,
+                "length": 5.0,
+                "centroid": [10.0, 2.5, 0.0],
+            },
+        }
+
+    def open_wire_identity_external_geometry_consumer(self, shadow: dict | None = None) -> dict:
+        external_item = {
+            "value": "Sketch",
+            "SubList": ["Edge2"],
+            "StableSubList": ["g102"],
+        }
+        if shadow is not None:
+            external_item["ReferenceShadow"] = [shadow]
+        return {
+            "Name": "Consumer",
+            "ID": 2,
+            "TypeId": "Sketcher::SketchObject",
+            "Properties": {
+                "Geometry": [],
+                "ExternalGeometry": {
+                    "PropertyType": "App::PropertyLinkSubList",
+                    "SubSet": [external_item],
+                },
+                "Constraints": [],
+            },
+        }
+
     def sketch_result_item(self, result: dict) -> dict:
         return next(item for item in result["results"] if item["object"] == "Sketch")
 
@@ -2939,11 +2990,13 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(subshapes[edge_name]["stableSubname"], stable)
                 self.assertEqual(subshapes[edge_name]["sourceStableSubname"], stable)
                 self.assertEqual(subshapes[edge_name]["sourceGeometryId"], geometry_id)
+                self.assertEqual(subshapes[edge_name]["sourceGeometryKind"], "LineSegment")
                 self.assertEqual(subshapes[edge_name]["identityStatus"], "stable")
                 self.assertEqual(edge_segments[edge_name]["id"], f"Sketch:{edge_name}")
                 self.assertEqual(edge_segments[edge_name]["stableSubname"], stable)
                 self.assertEqual(edge_segments[edge_name]["sourceStableSubname"], stable)
                 self.assertEqual(edge_segments[edge_name]["sourceGeometryId"], geometry_id)
+                self.assertEqual(edge_segments[edge_name]["sourceGeometryKind"], "LineSegment")
                 self.assertEqual(edge_segments[edge_name]["identityStatus"], "stable")
 
     def test_p5_open_wire_edge_identity_survives_segment_edit(self) -> None:
@@ -2957,9 +3010,11 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(segment["sourceStableSubname"], "g102")
         self.assertEqual(segment["stableSubname"], "g102")
+        self.assertEqual(segment["sourceGeometryKind"], "LineSegment")
         self.assertEqual(segment["points"][0], [10.0, 0.0, 0.0])
         self.assertEqual(segment["points"][-1], [12.0, 6.0, 0.0])
         self.assertEqual(subshape["sourceStableSubname"], "g102")
+        self.assertEqual(subshape["sourceGeometryKind"], "LineSegment")
         self.assertEqual(subshape["identityStatus"], "stable")
 
     def test_p5_open_wire_edge_identity_survives_insert_before(self) -> None:
@@ -2979,6 +3034,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(subshape["indexed"], "Edge3")
         self.assertEqual(subshape["subname"], "Edge3")
         self.assertEqual(subshape["stableSubname"], "g102")
+        self.assertEqual(subshape["sourceGeometryKind"], "LineSegment")
 
     def test_p5_open_wire_stable_sublist_resolves_geometry_id(self) -> None:
         geometry = [
@@ -3012,6 +3068,130 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             {"min": [10.0, 0.0, 0.0], "max": [10.0, 5.0, 0.0]},
         )
         self.assertEqual(result["objects"]["Sketch"]["raw_edge_identity"]["byStableSubname"]["g102"], "Edge3")
+
+    def test_p5_open_wire_reference_shadow_refreshes_geometry_id_update(self) -> None:
+        geometry = [
+            {"kind": "LineSegment", "id": 100, "start": [-5, 0], "end": [0, 0]},
+            *self.open_wire_identity_geometry(),
+        ]
+        consumer = self.open_wire_identity_external_geometry_consumer(
+            self.open_wire_identity_reference_shadow()
+        )
+
+        result = self.run_recompute_ffi_payload(
+            self.open_wire_identity_payload(geometry, [consumer], ["Sketch", "Consumer"])
+        )
+        update = result["elementReferenceUpdates"][0]
+        item = update["SubSet"][0]
+        shadow = item["ReferenceShadow"][0]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(update["object"], "Consumer")
+        self.assertEqual(update["property"], "ExternalGeometry")
+        self.assertEqual(item["SubList"], ["Edge3"])
+        self.assertEqual(item["StableSubList"], ["g102"])
+        self.assertEqual(item["ShadowSub"], [{"newName": "g102", "oldName": "Edge3"}])
+        self.assertEqual(shadow["indexed"], "Edge3")
+        self.assertEqual(shadow["subname"], "Edge3")
+        self.assertEqual(shadow["stableSubname"], "g102")
+        self.assertEqual(shadow["sourceStableSubname"], "g102")
+        self.assertEqual(shadow["sourceGeometryId"], 102)
+        self.assertEqual(shadow["sourceGeometryKind"], "LineSegment")
+        self.assertEqual(shadow["fingerprint"]["length"], 5.0)
+
+    def test_p5_open_wire_reference_shadow_refreshes_after_segment_edit(self) -> None:
+        geometry = self.open_wire_identity_geometry()
+        geometry[1] = {"kind": "LineSegment", "id": 102, "start": [10, 0], "end": [12, 6]}
+        consumer = self.open_wire_identity_external_geometry_consumer(
+            self.open_wire_identity_reference_shadow()
+        )
+
+        result = self.run_recompute_ffi_payload(
+            self.open_wire_identity_payload(geometry, [consumer], ["Sketch", "Consumer"])
+        )
+        update = result["elementReferenceUpdates"][0]
+        item = update["SubSet"][0]
+        shadow = item["ReferenceShadow"][0]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(item["SubList"], ["Edge2"])
+        self.assertEqual(item["StableSubList"], ["g102"])
+        self.assertEqual(shadow["subname"], "Edge2")
+        self.assertEqual(shadow["stableSubname"], "g102")
+        self.assertEqual(shadow["sourceGeometryId"], 102)
+        self.assertEqual(shadow["sourceGeometryKind"], "LineSegment")
+        self.assertGreater(shadow["fingerprint"]["length"], 6.0)
+        self.assertEqual(
+            result["results"][0]["mesh"]["edgeSegments"][1]["sourceStableSubname"],
+            "g102",
+        )
+
+    def test_p5_open_wire_reference_shadow_reports_geometry_kind_drift(self) -> None:
+        geometry = self.open_wire_identity_geometry()
+        geometry[1] = {
+            "kind": "ArcOfCircle",
+            "id": 102,
+            "center": [10, 2.5],
+            "radius": 2.5,
+            "startAngle": -1.5707963267948966,
+            "endAngle": 1.5707963267948966,
+        }
+        consumer = self.open_wire_identity_external_geometry_consumer(
+            self.open_wire_identity_reference_shadow()
+        )
+
+        result = self.run_recompute_ffi_payload(
+            self.open_wire_identity_payload(geometry, [consumer], ["Sketch", "Consumer"])
+        )
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["geometry_kind_changed"])
+        self.assertEqual(diagnostic["object"], "Consumer")
+        self.assertEqual(diagnostic["property"], "ExternalGeometry")
+        self.assertEqual(diagnostic["target"], "Sketch")
+        self.assertEqual(diagnostic["subname"], "Edge2")
+        self.assertEqual(result["elementReferenceUpdates"], [])
+
+    def test_p5_open_wire_reference_shadow_deleted_geometry_id_does_not_hit_new_edge(self) -> None:
+        geometry = [
+            {"kind": "LineSegment", "id": 101, "start": [0, 0], "end": [10, 0]},
+            {"kind": "LineSegment", "id": 103, "start": [10, 5], "end": [0, 5]},
+        ]
+        consumer = self.open_wire_identity_external_geometry_consumer(
+            self.open_wire_identity_reference_shadow()
+        )
+
+        result = self.run_recompute_ffi_payload(
+            self.open_wire_identity_payload(geometry, [consumer], ["Sketch", "Consumer"])
+        )
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["deleted_stable_subname"])
+        self.assertEqual(diagnostic["object"], "Consumer")
+        self.assertEqual(diagnostic["property"], "ExternalGeometry")
+        self.assertEqual(diagnostic["target"], "Sketch")
+        self.assertEqual(diagnostic["subname"], "Edge2")
+        self.assertEqual(result["elementReferenceUpdates"], [])
+
+    def test_p5_open_wire_reference_shadow_deleted_geometry_id_same_shape_new_id_does_not_rebind(self) -> None:
+        geometry = [
+            {"kind": "LineSegment", "id": 101, "start": [0, 0], "end": [10, 0]},
+            {"kind": "LineSegment", "id": 202, "start": [10, 0], "end": [10, 5]},
+            {"kind": "LineSegment", "id": 103, "start": [10, 5], "end": [0, 5]},
+        ]
+        consumer = self.open_wire_identity_external_geometry_consumer(
+            self.open_wire_identity_reference_shadow()
+        )
+
+        result = self.run_recompute_ffi_payload(
+            self.open_wire_identity_payload(geometry, [consumer], ["Sketch", "Consumer"])
+        )
+        sketch = self.sketch_result_item(result)
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["deleted_stable_subname"])
+        self.assertEqual(result["elementReferenceUpdates"], [])
+        self.assertFalse(any(item.get("stableSubname") == "g102" for item in sketch["subshapes"]))
+        self.assertTrue(any(item.get("stableSubname") == "g202" for item in sketch["subshapes"]))
 
     def test_p5_open_wire_deleted_geometry_id_does_not_hit_new_edge(self) -> None:
         geometry = [

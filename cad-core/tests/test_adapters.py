@@ -141,6 +141,86 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertFalse(any(item["id"].startswith("Sketch:Internal") for item in sketch["subshapes"]))
         self.assertTrue(any(item["id"] == "Sketch:Edge1" for item in sketch["subshapes"]))
 
+    def test_c_api_open_wire_reference_shadow_source_identity_contract(self) -> None:
+        payload = {
+            "Objects": [
+                {
+                    "Name": "Sketch",
+                    "ID": 1,
+                    "TypeId": "Sketcher::SketchObject",
+                    "Properties": {
+                        "Geometry": [
+                            {"kind": "LineSegment", "id": 101, "start": [0, 0], "end": [10, 0]},
+                            {"kind": "LineSegment", "id": 102, "start": [10, 0], "end": [10, 5]},
+                            {"kind": "LineSegment", "id": 103, "start": [10, 5], "end": [0, 5]},
+                        ],
+                        "Constraints": [],
+                    },
+                },
+                {
+                    "Name": "Consumer",
+                    "ID": 2,
+                    "TypeId": "Sketcher::SketchObject",
+                    "Properties": {
+                        "Geometry": [],
+                        "ExternalGeometry": {
+                            "PropertyType": "App::PropertyLinkSubList",
+                            "SubSet": [
+                                {
+                                    "value": "Sketch",
+                                    "SubList": ["Edge2"],
+                                    "StableSubList": ["g102"],
+                                    "ReferenceShadow": [
+                                        {
+                                            "target": "Sketch",
+                                            "targetId": 1,
+                                            "property": "Shape",
+                                            "shapeType": "Edge",
+                                            "indexed": "Edge2",
+                                            "subname": "Edge2",
+                                            "stableSubname": "g102",
+                                            "sourceStableSubname": "g102",
+                                            "sourceGeometryId": 102,
+                                            "sourceGeometryKind": "LineSegment",
+                                            "fingerprint": {
+                                                "shapeType": "Edge",
+                                                "bboxMin": [10.0, 0.0, 0.0],
+                                                "bboxMax": [10.0, 5.0, 0.0],
+                                                "edgeCount": 1,
+                                                "vertexCount": 2,
+                                                "length": 5.0,
+                                                "centroid": [10.0, 2.5, 0.0],
+                                            },
+                                        }
+                                    ],
+                                }
+                            ],
+                        },
+                        "Constraints": [],
+                    },
+                },
+            ],
+            "recompute": {"objs": ["Sketch", "Consumer"]},
+        }
+
+        result = self.run_recompute_ffi_payload(payload)
+        sketch = next(item for item in result["results"] if item["object"] == "Sketch")
+        edge2 = next(item for item in sketch["subshapes"] if item["indexed"] == "Edge2")
+        segment2 = next(item for item in sketch["mesh"]["edgeSegments"] if item["indexed"] == "Edge2")
+        update_item = result["elementReferenceUpdates"][0]["SubSet"][0]
+        update_shadow = update_item["ReferenceShadow"][0]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(edge2["stableSubname"], "g102")
+        self.assertEqual(edge2["sourceGeometryId"], 102)
+        self.assertEqual(edge2["sourceGeometryKind"], "LineSegment")
+        self.assertEqual(segment2["sourceStableSubname"], "g102")
+        self.assertEqual(segment2["sourceGeometryKind"], "LineSegment")
+        self.assertEqual(update_item["StableSubList"], ["g102"])
+        self.assertEqual(update_shadow["stableSubname"], "g102")
+        self.assertEqual(update_shadow["sourceGeometryId"], 102)
+        self.assertEqual(update_shadow["sourceGeometryKind"], "LineSegment")
+
     def test_c_api_returns_raw_edge_segments_with_internal_profile_mesh(self) -> None:
         result = self.run_recompute_ffi("sketch-internal-face-dangling-line", "p5")
         sketch = result["results"][0]
@@ -198,10 +278,9 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(item["stableSubname"], "")
             elif item["stableSubname"]:
                 self.assertRegex(item["stableSubname"], r"^(Edge|Vertex)\d+$")
-        self.assertEqual(
-            next(item for item in sketch["subshapes"] if item["indexed"] == "Edge1")["stableSubname"],
-            "Edge1",
-        )
+        raw_edge = next(item for item in sketch["subshapes"] if item["indexed"] == "Edge1")
+        self.assertEqual(raw_edge["stableSubname"], "")
+        self.assertEqual(raw_edge["identityStatus"], "index_fallback")
 
     def test_c_api_matches_cli_for_p3b_recompute(self) -> None:
         ffi_result = self.run_recompute_ffi("pocket-custom-vector", "p3b")

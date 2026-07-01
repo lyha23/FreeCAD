@@ -82,7 +82,31 @@ SketchProfileEdge profileEdgeWithIdentity(SketchProfileEdgeKind kind,
 {
     SketchProfileEdge edge;
     edge.kind = kind;
-    edge.identity = sketchGeometryIdentity(geometryIndex, geometryId);
+    std::string geometryKind;
+    switch (kind) {
+        case SketchProfileEdgeKind::Line:
+            geometryKind = "LineSegment";
+            break;
+        case SketchProfileEdgeKind::ArcOfCircle:
+            geometryKind = "ArcOfCircle";
+            break;
+        case SketchProfileEdgeKind::ArcOfEllipse:
+            geometryKind = "ArcOfEllipse";
+            break;
+        case SketchProfileEdgeKind::ArcOfHyperbola:
+            geometryKind = "ArcOfHyperbola";
+            break;
+        case SketchProfileEdgeKind::ArcOfParabola:
+            geometryKind = "ArcOfParabola";
+            break;
+        case SketchProfileEdgeKind::BSpline:
+            geometryKind = "BSpline";
+            break;
+        case SketchProfileEdgeKind::Bezier:
+            geometryKind = "Bezier";
+            break;
+    }
+    edge.identity = sketchGeometryIdentity(geometryIndex, geometryId, geometryKind);
     return edge;
 }
 
@@ -679,10 +703,11 @@ std::optional<RawSketchShapeBuild> buildRawSketchShape(
         appendSourceEdgesFromWire(sourceEdges, *wire);
         sourceEdgeIdentities.resize(
             sourceEdges.size(),
-            sketchGeometryIdentity(circle.geometryIndex, circle.geometryId)
+            sketchGeometryIdentity(circle.geometryIndex, circle.geometryId, "Circle")
         );
         for (std::size_t index = edgeOffset; index < sourceEdges.size(); ++index) {
-            sourceEdgeIdentities[index] = sketchGeometryIdentity(circle.geometryIndex, circle.geometryId);
+            sourceEdgeIdentities[index] =
+                sketchGeometryIdentity(circle.geometryIndex, circle.geometryId, "Circle");
         }
         shapes.push_back(*wire);
     }
@@ -703,10 +728,11 @@ std::optional<RawSketchShapeBuild> buildRawSketchShape(
         appendSourceEdgesFromWire(sourceEdges, *wire);
         sourceEdgeIdentities.resize(
             sourceEdges.size(),
-            sketchGeometryIdentity(ellipse.geometryIndex, ellipse.geometryId)
+            sketchGeometryIdentity(ellipse.geometryIndex, ellipse.geometryId, "Ellipse")
         );
         for (std::size_t index = edgeOffset; index < sourceEdges.size(); ++index) {
-            sourceEdgeIdentities[index] = sketchGeometryIdentity(ellipse.geometryIndex, ellipse.geometryId);
+            sourceEdgeIdentities[index] =
+                sketchGeometryIdentity(ellipse.geometryIndex, ellipse.geometryId, "Ellipse");
         }
         shapes.push_back(*wire);
     }

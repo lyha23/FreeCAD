@@ -4,6 +4,7 @@
 #include "cad_core/runtime/reference_lifecycle.h"
 
 #include <algorithm>
+#include <cctype>
 
 namespace cad_core::runtime
 {
@@ -109,6 +110,102 @@ part::MapperHistoryRelation referenceRelation(part::ReferenceMatchStatus status)
 bool requestLocalInternalSubname(const std::string& subname)
 {
     return part::parseInternalSubshapeName(subname).has_value();
+}
+
+bool sketchGeometryStableSubname(const std::string& stableSubname)
+{
+    if (stableSubname.size() < 2U || stableSubname.front() != 'g') {
+        return false;
+    }
+    return std::all_of(stableSubname.begin() + 1,
+                       stableSubname.end(),
+                       [](unsigned char value) { return std::isdigit(value) != 0; });
+}
+
+std::string sourceStableSubnameForReference(const app::Link& link,
+                                            std::size_t index,
+                                            const app::ReferenceShadow& shadow)
+{
+    const auto choose = [](const std::string& stableSubname) {
+        return sketchGeometryStableSubname(stableSubname) ? stableSubname : std::string {};
+    };
+    if (index < link.stableSubnames.size()) {
+        if (const std::string stableSubname = choose(link.stableSubnames.at(index));
+            !stableSubname.empty()) {
+            return stableSubname;
+        }
+    }
+    if (const std::string stableSubname = choose(shadow.stableSubname); !stableSubname.empty()) {
+        return stableSubname;
+    }
+    return choose(shadow.sourceStableSubname);
+}
+
+struct RawSketchSourceIdentity
+{
+    std::string indexed;
+    std::optional<long> sourceGeometryId;
+    std::string sourceGeometryKind;
+    std::string sourceStableSubname;
+};
+
+bool objectPublishesRawSketchEdgeIdentity(const ReferenceResolutionView& view,
+                                          const std::string& objectName)
+{
+    const auto objectIt = view.objects.find(objectName);
+    if (objectIt == view.objects.end() || !objectIt->second.is_object()) {
+        return false;
+    }
+    const auto identityIt = objectIt->second.find("raw_edge_identity");
+    return identityIt != objectIt->second.end() && identityIt->is_object();
+}
+
+std::optional<RawSketchSourceIdentity> rawSketchSourceIdentityForStable(
+    const ReferenceResolutionView& view,
+    const std::string& objectName,
+    const std::string& stableSubname)
+{
+    const auto objectIt = view.objects.find(objectName);
+    if (objectIt == view.objects.end() || !objectIt->second.is_object()) {
+        return std::nullopt;
+    }
+    const auto identityIt = objectIt->second.find("raw_edge_identity");
+    if (identityIt == objectIt->second.end() || !identityIt->is_object()) {
+        return std::nullopt;
+    }
+    const auto byStableIt = identityIt->find("byStableSubname");
+    if (byStableIt == identityIt->end() || !byStableIt->is_object()) {
+        return std::nullopt;
+    }
+    const auto indexedIt = byStableIt->find(stableSubname);
+    if (indexedIt == byStableIt->end() || !indexedIt->is_string()) {
+        return std::nullopt;
+    }
+
+    RawSketchSourceIdentity identity;
+    identity.indexed = indexedIt->get<std::string>();
+    const auto byIndexedIt = identityIt->find("byIndexed");
+    if (byIndexedIt != identityIt->end() && byIndexedIt->is_object()) {
+        const auto currentIt = byIndexedIt->find(identity.indexed);
+        if (currentIt != byIndexedIt->end() && currentIt->is_object()) {
+            const auto sourceGeometryIdIt = currentIt->find("sourceGeometryId");
+            if (sourceGeometryIdIt != currentIt->end() && sourceGeometryIdIt->is_number_integer()) {
+                identity.sourceGeometryId = sourceGeometryIdIt->get<long long>();
+            }
+            const auto sourceGeometryKindIt = currentIt->find("sourceGeometryKind");
+            if (sourceGeometryKindIt != currentIt->end() && sourceGeometryKindIt->is_string()) {
+                identity.sourceGeometryKind = sourceGeometryKindIt->get<std::string>();
+            }
+            const auto sourceStableSubnameIt = currentIt->find("sourceStableSubname");
+            if (sourceStableSubnameIt != currentIt->end() && sourceStableSubnameIt->is_string()) {
+                identity.sourceStableSubname = sourceStableSubnameIt->get<std::string>();
+            }
+        }
+    }
+    if (identity.sourceStableSubname.empty()) {
+        identity.sourceStableSubname = stableSubname;
+    }
+    return identity;
 }
 
 std::vector<std::string> stableNameCandidatesForReference(const app::Link& link,
@@ -380,7 +477,57 @@ ReferenceResolutionResult resolveReferenceShadow(const app::Link& link,
     result.requestedStableSubname =
         index < link.stableSubnames.size() ? link.stableSubnames.at(index) : shadow.stableSubname;
 
-    auto currentSubshape = currentSubshapeForReference(link, index, view);
+    std::optional<ReferenceSubshapeResolution> currentSubshape;
+    bool resolvedBySketchGeometryId = false;
+    const std::string sourceStableSubname = sourceStableSubnameForReference(link, index, shadow);
+    const bool rawSketchEdgeReference = shadow.property == "Shape" && shadow.shapeType == "Edge";
+    if (rawSketchEdgeReference && !sourceStableSubname.empty()
+        && objectPublishesRawSketchEdgeIdentity(view, link.object)) {
+        const auto sourceIdentity =
+            rawSketchSourceIdentityForStable(view, link.object, sourceStableSubname);
+        if (!sourceIdentity) {
+            result.status = ReferenceResolutionStatus::Deleted;
+            result.recoveryStatus = part::ReferenceMatchStatus::Deleted;
+            result.diagnosticCode = "deleted_stable_subname";
+            result.diagnosticReason =
+                sourceStableSubname + " is deleted from current Sketch raw edge identity";
+            return result;
+        }
+        if (!shadow.sourceGeometryKind.empty() && !sourceIdentity->sourceGeometryKind.empty()
+            && shadow.sourceGeometryKind != sourceIdentity->sourceGeometryKind) {
+            result.status = ReferenceResolutionStatus::SemanticDrift;
+            result.diagnosticCode = "geometry_kind_changed";
+            result.diagnosticReason = sourceStableSubname + " geometry kind changed from "
+                + shadow.sourceGeometryKind + " to " + sourceIdentity->sourceGeometryKind;
+            return result;
+        }
+        const auto namedShapeIt = view.namedShapes.find(link.object);
+        const auto subshape = namedShapeIt == view.namedShapes.end()
+            ? std::nullopt
+            : part::subshapeByName(namedShapeIt->second, sourceIdentity->indexed);
+        if (!subshape) {
+            result.status = ReferenceResolutionStatus::Missing;
+            result.diagnosticCode = "unsupported_stable_subname";
+            result.diagnosticReason = sourceStableSubname
+                + " resolved in Sketch raw edge identity but not in the current NamedShape";
+            return result;
+        }
+        currentSubshape = ReferenceSubshapeResolution {
+            sourceIdentity->indexed,
+            *subshape,
+            sourceIdentity->indexed != result.requestedSubname,
+            {},
+            {},
+            sourceIdentity->sourceGeometryId,
+            sourceIdentity->sourceGeometryKind,
+            sourceIdentity->sourceStableSubname,
+        };
+        resolvedBySketchGeometryId = true;
+    }
+
+    if (!currentSubshape) {
+        currentSubshape = currentSubshapeForReference(link, index, view);
+    }
     if (!currentSubshape) {
         currentSubshape = internalSubshapeFromShadowSub(link, index, shadow, view);
     }
@@ -403,8 +550,11 @@ ReferenceResolutionResult resolveReferenceShadow(const app::Link& link,
         currentSubshape->recoveryReason = "ReferenceShadow.targetId matched current object ID";
     }
 
-    const auto driftReason =
-        part::referenceFingerprintDriftReason(currentSubshape->shape, shadow.fingerprint, shadow.shapeType);
+    const auto driftReason = resolvedBySketchGeometryId
+        ? std::optional<std::string> {}
+        : part::referenceFingerprintDriftReason(currentSubshape->shape,
+                                                shadow.fingerprint,
+                                                shadow.shapeType);
     if (driftReason) {
         if (const auto shadowSubResolution = internalSubshapeFromShadowSub(link, index, shadow, view);
             shadowSubResolution && shadowSubResolution->subname != currentSubshape->subname
@@ -454,6 +604,9 @@ ReferenceResolutionResult resolveReferenceShadow(const app::Link& link,
     result.resolvedShape = currentSubshape->shape;
     result.recoveryMethod = currentSubshape->recoveryMethod;
     result.recoveryReason = currentSubshape->recoveryReason;
+    result.sourceGeometryId = currentSubshape->sourceGeometryId;
+    result.sourceGeometryKind = currentSubshape->sourceGeometryKind;
+    result.sourceStableSubname = currentSubshape->sourceStableSubname;
     return result;
 }
 
@@ -560,7 +713,10 @@ ReferenceValidationResult validateObjectReferences(const app::DocumentObject& ob
                                               resolution.resolvedSubname,
                                               resolution.resolvedShape,
                                               resolution.recoveryMethod,
-                                              resolution.recoveryReason));
+                                              resolution.recoveryReason,
+                                              resolution.sourceGeometryId,
+                                              resolution.sourceGeometryKind,
+                                              resolution.sourceStableSubname));
             }
             if (linkValid) {
                 appendElementReferenceUpdate(object,

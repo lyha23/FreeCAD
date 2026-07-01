@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <array>
 #include <iterator>
+#include <limits>
 #include <map>
 #include <optional>
 #include <set>
@@ -97,6 +98,26 @@ std::optional<BrepSnapshot> readBrepSnapshot(const nlohmann::json& value)
     return BrepSnapshot{format, byteLength, sha256It->get<std::string>(), dataIt->get<std::string>()};
 }
 
+std::optional<long> readOptionalPositiveLongField(const nlohmann::json& value,
+                                                  const std::string& field,
+                                                  bool& valid)
+{
+    const auto it = value.find(field);
+    if (it == value.end()) {
+        return std::nullopt;
+    }
+    if (!it->is_number_integer()) {
+        valid = false;
+        return std::nullopt;
+    }
+    const long long raw = it->get<long long>();
+    if (raw <= 0 || raw > std::numeric_limits<long>::max()) {
+        valid = false;
+        return std::nullopt;
+    }
+    return static_cast<long>(raw);
+}
+
 std::optional<std::vector<ReferenceShadow>> readReferenceShadowList(const nlohmann::json& value)
 {
     if (!value.is_array()) {
@@ -140,6 +161,29 @@ std::optional<std::vector<ReferenceShadow>> readReferenceShadowList(const nlohma
                 return std::nullopt;
             }
             shadow.stableSubname = stableSubnameIt->get<std::string>();
+        }
+
+        const auto sourceStableSubnameIt = item.find("sourceStableSubname");
+        if (sourceStableSubnameIt != item.end()) {
+            if (!sourceStableSubnameIt->is_string()) {
+                return std::nullopt;
+            }
+            shadow.sourceStableSubname = sourceStableSubnameIt->get<std::string>();
+        }
+
+        const auto sourceGeometryKindIt = item.find("sourceGeometryKind");
+        if (sourceGeometryKindIt != item.end()) {
+            if (!sourceGeometryKindIt->is_string()) {
+                return std::nullopt;
+            }
+            shadow.sourceGeometryKind = sourceGeometryKindIt->get<std::string>();
+        }
+
+        bool sourceGeometryIdValid = true;
+        shadow.sourceGeometryId =
+            readOptionalPositiveLongField(item, "sourceGeometryId", sourceGeometryIdValid);
+        if (!sourceGeometryIdValid) {
+            return std::nullopt;
         }
 
         const auto fingerprintIt = item.find("fingerprint");

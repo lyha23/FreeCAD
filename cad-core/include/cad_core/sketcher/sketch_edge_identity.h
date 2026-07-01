@@ -18,6 +18,7 @@ struct SketchGeometryIdentity
 {
     std::size_t geometryIndex = 0;
     std::optional<long> geometryId;
+    std::string geometryKind;
 };
 
 struct RawSketchEdgeIdentity
@@ -34,7 +35,8 @@ struct RawSketchEdgeIdentityLedger
 };
 
 SketchGeometryIdentity sketchGeometryIdentity(std::size_t geometryIndex,
-                                              std::optional<long> geometryId);
+                                              std::optional<long> geometryId,
+                                              std::string geometryKind = {});
 
 std::string stableSubnameForGeometryId(long geometryId);
 

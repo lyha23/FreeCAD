@@ -6,6 +6,7 @@
 #include <TopoDS.hxx>
 
 #include <algorithm>
+#include <utility>
 
 namespace cad_core::sketcher
 {
@@ -42,6 +43,9 @@ nlohmann::json edgeIdentityJson(const RawSketchEdgeIdentity& identity)
     if (identity.source.geometryId) {
         value["sourceGeometryId"] = *identity.source.geometryId;
     }
+    if (!identity.source.geometryKind.empty()) {
+        value["sourceGeometryKind"] = identity.source.geometryKind;
+    }
     return value;
 }
 
@@ -54,6 +58,9 @@ void applyIdentityFields(nlohmann::json& value, const RawSketchEdgeIdentity& ide
         const std::string stable = stableSubnameForGeometryId(*identity.source.geometryId);
         value["sourceGeometryId"] = *identity.source.geometryId;
         value["stableSubname"] = stable;
+    }
+    if (!identity.source.geometryKind.empty()) {
+        value["sourceGeometryKind"] = identity.source.geometryKind;
     }
 }
 
@@ -77,9 +84,10 @@ std::optional<std::size_t> sourceIndexForRawEdge(
 }  // namespace
 
 SketchGeometryIdentity sketchGeometryIdentity(std::size_t geometryIndex,
-                                              std::optional<long> geometryId)
+                                              std::optional<long> geometryId,
+                                              std::string geometryKind)
 {
-    return SketchGeometryIdentity {geometryIndex, geometryId};
+    return SketchGeometryIdentity {geometryIndex, geometryId, std::move(geometryKind)};
 }
 
 std::string stableSubnameForGeometryId(long geometryId)
@@ -119,6 +127,7 @@ RawSketchEdgeIdentityLedger buildRawSketchEdgeIdentityLedger(
         SketchGeometryIdentity sourceIdentity {
             static_cast<std::size_t>(index - 1),
             std::nullopt,
+            {},
         };
         if (sourceIndex && *sourceIndex < sourceIdentities.size()) {
             sourceIdentity = sourceIdentities[*sourceIndex];

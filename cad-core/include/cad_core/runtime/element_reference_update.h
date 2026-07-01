@@ -28,7 +28,10 @@ nlohmann::json referenceShadowUpdateJson(const app::ReferenceShadow& shadow,
                                          const std::string& subname,
                                          const TopoDS_Shape& currentSubshape,
                                          const std::string& recoveryMethod = {},
-                                         const std::string& recoveryReason = {});
+                                         const std::string& recoveryReason = {},
+                                         std::optional<long> sourceGeometryId = std::nullopt,
+                                         const std::string& sourceGeometryKind = {},
+                                         const std::string& sourceStableSubname = {});
 
 void appendElementReferenceUpdate(const app::DocumentObject& object,
                                   const std::string& propertyName,

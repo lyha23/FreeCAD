@@ -35,6 +35,7 @@ nlohmann::json diagnosticCodeList()
         "execution_failed",
         "external_document_pending_reload",
         "external_document_unloaded",
+        "geometry_kind_changed",
         "invalid_angle",
         "invalid_axis",
         "invalid_curve_source",

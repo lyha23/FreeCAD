@@ -150,6 +150,15 @@ nlohmann::json externalReferenceShadowsJson(const std::vector<app::ReferenceShad
         if (!shadow.stableSubname.empty()) {
             item["stableSubname"] = shadow.stableSubname;
         }
+        if (shadow.sourceGeometryId) {
+            item["sourceGeometryId"] = *shadow.sourceGeometryId;
+        }
+        if (!shadow.sourceGeometryKind.empty()) {
+            item["sourceGeometryKind"] = shadow.sourceGeometryKind;
+        }
+        if (!shadow.sourceStableSubname.empty()) {
+            item["sourceStableSubname"] = shadow.sourceStableSubname;
+        }
         if (shadow.brep) {
             item["brep"] = {
                 {"format", shadow.brep->format},

@@ -38,6 +38,9 @@ struct ReferenceShadow {
     std::string indexed;
     std::string subname;
     std::string stableSubname;
+    std::optional<long> sourceGeometryId;
+    std::string sourceGeometryKind;
+    std::string sourceStableSubname;
     nlohmann::json fingerprint = nlohmann::json::object();
     std::optional<BrepSnapshot> brep;
 };

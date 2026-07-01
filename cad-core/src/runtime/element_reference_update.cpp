@@ -266,8 +266,19 @@ nlohmann::json referenceShadowUpdateJson(const app::ReferenceShadow& shadow,
                                          const std::string& subname,
                                          const TopoDS_Shape& currentSubshape,
                                          const std::string& recoveryMethod,
-                                         const std::string& recoveryReason)
+                                         const std::string& recoveryReason,
+                                         std::optional<long> sourceGeometryId,
+                                         const std::string& sourceGeometryKind,
+                                         const std::string& sourceStableSubname)
 {
+    const std::optional<long> effectiveSourceGeometryId =
+        sourceGeometryId ? sourceGeometryId : shadow.sourceGeometryId;
+    const std::string effectiveSourceGeometryKind =
+        !sourceGeometryKind.empty() ? sourceGeometryKind : shadow.sourceGeometryKind;
+    const std::string effectiveSourceStableSubname =
+        !sourceStableSubname.empty() ? sourceStableSubname : shadow.sourceStableSubname;
+    const std::string stableSubname =
+        !effectiveSourceStableSubname.empty() ? effectiveSourceStableSubname : shadow.stableSubname;
     nlohmann::json update = {
         {"target", link.object},
         {"targetId", shadow.targetId},
@@ -275,9 +286,18 @@ nlohmann::json referenceShadowUpdateJson(const app::ReferenceShadow& shadow,
         {"shapeType", shadow.shapeType},
         {"indexed", indexedSubnameForReference(subname)},
         {"subname", subname},
-        {"stableSubname", shadow.stableSubname},
+        {"stableSubname", stableSubname},
         {"fingerprint", part::referenceFingerprintForShape(currentSubshape)},
     };
+    if (effectiveSourceGeometryId) {
+        update["sourceGeometryId"] = *effectiveSourceGeometryId;
+    }
+    if (!effectiveSourceGeometryKind.empty()) {
+        update["sourceGeometryKind"] = effectiveSourceGeometryKind;
+    }
+    if (!effectiveSourceStableSubname.empty()) {
+        update["sourceStableSubname"] = effectiveSourceStableSubname;
+    }
     if (shadow.brep) {
         if (const auto currentBrep = brepTextSnapshotForCurrentSubshape(currentSubshape)) {
             update["brep"] = brepSnapshotToJson(*currentBrep);

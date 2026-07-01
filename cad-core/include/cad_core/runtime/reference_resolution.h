@@ -58,6 +58,9 @@ struct ReferenceResolutionResult
     std::string diagnosticCode;
     std::string diagnosticReason;
     bool mapperDiagnostic = false;
+    std::optional<long> sourceGeometryId;
+    std::string sourceGeometryKind;
+    std::string sourceStableSubname;
 };
 
 struct ReferenceSubshapeResolution
@@ -67,6 +70,9 @@ struct ReferenceSubshapeResolution
     bool recovered = false;
     std::string recoveryMethod;
     std::string recoveryReason;
+    std::optional<long> sourceGeometryId;
+    std::string sourceGeometryKind;
+    std::string sourceStableSubname;
 };
 
 struct ReferenceSubshapeRecovery

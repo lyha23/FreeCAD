@@ -255,12 +255,15 @@ python3 -m unittest tests.test_p5_sketch.CadCoreP5SketchTest
 4. 删除目标 geometry 后不会误命中新边，而是给出 deleted/ambiguous 诊断或走 `ReferenceShadow`。
 5. `InternalShape` 为空的 FreeCAD parity 保持不变，open-only sketch 不产生 synthetic `Internal*`。
 
-## 当前实现状态（7-1 本轮）
+## 当前实现状态（7-1 S3 收口）
 
 - 已完成 S1/S2 后端闭环：Sketch `Geometry[]` 解析 `id` / `Id` / `geometryId` 为正整数，重复 id 返回 `duplicate_geometry_id`；普通 profile edge 保留 `geometryIndex + geometryId`，open-only raw `EdgeN` 通过 sketcher 层 identity ledger 发布 `sourceGeometryId/sourceStableSubname/identityStatus`。
-- `results[].subshapes[]` 与 `mesh.edgeSegments[]` 对有 geometry id 的 open wire edge 发布 `stableSubname = g<ID>`；无 id 旧 fixture 只发布 `identityStatus = index_fallback`，响应 `stableSubname` 保持空，不把请求内 `EdgeN` 宣称为稳定引用。
+- `results[].subshapes[]` 与 `mesh.edgeSegments[]` 对有 geometry id 的 open wire edge 发布 `stableSubname = g<ID>`、`sourceGeometryId`、`sourceGeometryKind`、`sourceStableSubname`；无 id 旧 fixture 只发布 `identityStatus = index_fallback`，响应 `stableSubname` 保持空，不把请求内 `EdgeN` 宣称为稳定引用。
 - `Sketch` raw `NamedShape` 注册 `g<ID> -> 当前 EdgeN`，现有 `App::Link` / `PropertyXLink` 的 `StableSubList=["g<ID>"]` 可解析到当前 raw Edge；插入新线导致 `EdgeN` 改号时，`g102` 仍解析到对应线段。
-- 删除目标 geometry id 后，`g<ID>` 不会落到其它当前 EdgeN；当前实现返回 `unsupported_stable_subname` 诊断。完整 S3 `ReferenceShadow.brep` 几何恢复、geometry kind drift 分类与删除后几何恢复建议仍是后续 gap，本文件不改名为 `【已实现】`。
+- S3 的 raw Sketch `Shape` open-wire Edge `ReferenceShadow` 已接入同一份 source identity：`PropertyLinkSubList` / `ExternalGeometry` 使用 `StableSubList=["g<ID>"]` 时，当前 id 命中会刷新 `SubList`、`ShadowSub`、`ReferenceShadow` 和 `elementReferenceUpdates`，并保留 `sourceGeometryId/sourceGeometryKind/sourceStableSubname`。
+- 修改端点但保留 geometry id 时，不再用旧 `ReferenceShadow` fingerprint 判定语义漂移；以 `g<ID>` 为权威身份刷新当前 EdgeN 和 shadow。若同一 `g<ID>` 的 `sourceGeometryKind` 从 `LineSegment` 变为 `ArcOfCircle` 等不兼容类型，返回 `geometry_kind_changed` 诊断。
+- 删除目标 geometry id 后，`g<ID>` 不会落到其它当前 EdgeN；带 `ReferenceShadow` 的 open-wire LinkSubList 路径返回 `deleted_stable_subname`，无 shadow 的既有 `App::Link` 路径保持 `unsupported_stable_subname`。删除后用相同几何重建新 id 不会自动恢复旧 `g<ID>`。
+- S3 本身已收口，但阶段回归仍有独立 blocker：`tests.test_adapters.CadCoreAdapterTest.test_c_api_body_direct_tip_subshapes_publish_tip_qualified_stable_names` 当前失败，`Body.Face5 stableSubname` 实际为 `Pad.Face5`，测试期望 `Sketch.Face1`。复核 `rect-pad` live NamedShape 后，当前 Pad/Body 仅有 `Sketch.Edge1..4 -> Face1..4`，没有 `Sketch.Face1 -> Face5` 或 `Sketch.Edge1 -> Edge3` 的 profile source 映射；该问题属于 PartDesign Body/Pad `makeElementPrism` + RefineModel topo history 传播缺口，不属于 open-wire S3，本文件暂不改名为 `【已实现】`。
 
 本轮 focused 验收覆盖：
 
@@ -274,6 +277,21 @@ python3 -m unittest tests.test_p5_sketch.CadCoreP5SketchTest.test_p5_open_wire_e
 python3 -m unittest tests.test_p5_sketch.CadCoreP5SketchTest.test_p5_open_wire_edge_identity_survives_insert_before
 python3 -m unittest tests.test_p5_sketch.CadCoreP5SketchTest.test_p5_open_wire_stable_sublist_resolves_geometry_id
 python3 -m unittest tests.test_p5_sketch.CadCoreP5SketchTest.test_p5_open_wire_deleted_geometry_id_does_not_hit_new_edge
+python3 -m unittest tests.test_p5_sketch.CadCoreP5SketchTest.test_p5_open_wire_reference_shadow_refreshes_geometry_id_update
+python3 -m unittest tests.test_p5_sketch.CadCoreP5SketchTest.test_p5_open_wire_reference_shadow_refreshes_after_segment_edit
+python3 -m unittest tests.test_p5_sketch.CadCoreP5SketchTest.test_p5_open_wire_reference_shadow_reports_geometry_kind_drift
+python3 -m unittest tests.test_p5_sketch.CadCoreP5SketchTest.test_p5_open_wire_reference_shadow_deleted_geometry_id_does_not_hit_new_edge
+python3 -m unittest tests.test_p5_sketch.CadCoreP5SketchTest.test_p5_open_wire_reference_shadow_deleted_geometry_id_same_shape_new_id_does_not_rebind
 python3 -m unittest tests.test_p5_sketch.CadCoreP5SketchTest.test_p5_sketch_rejects_duplicate_geometry_id
+python3 -m unittest tests.test_p5_sketch.CadCoreP5SketchTest
+python3 -m unittest tests.test_adapters.CadCoreAdapterTest.test_c_api_open_wire_reference_shadow_source_identity_contract
 git diff --check
+```
+
+阶段回归结果：
+
+```bash
+python3 -m unittest tests.test_adapters.CadCoreAdapterTest
+# 当前仅剩 test_c_api_body_direct_tip_subshapes_publish_tip_qualified_stable_names 失败：
+# AssertionError: 'Pad.Face5' != 'Sketch.Face1'
 ```
