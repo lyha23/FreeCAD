@@ -27,6 +27,15 @@ bool shapeHasEdges(const TopoDS_Shape& shape)
     return false;
 }
 
+void appendRawSketchDisplayTopology(nlohmann::json& mesh, const nlohmann::json& rawMesh)
+{
+    for (const char* field : {"edgeSegments", "vertexPoints"}) {
+        for (const auto& item : rawMesh.at(field)) {
+            mesh.at(field).push_back(item);
+        }
+    }
+}
+
 }  // namespace
 
 SketchInternalResult buildSketchInternalResult(const SketchInternalResultInput& input)
@@ -59,6 +68,12 @@ SketchInternalResult buildSketchInternalResult(const SketchInternalResultInput& 
         // renders that request-local shape with InternalFace ids matching subshapes.
         result.mesh
             = part::meshForShape(*input.internalShape, "InternalFace", "InternalEdge", "InternalVertex");
+        if (!input.rawShape.IsNull()) {
+            // FreeCAD keeps the public Sketch Shape namespace alive beside InternalShape. Publish
+            // raw edge/vertex display geometry too, so raw EdgeN items that are not retained in
+            // InternalShape still have mesh data for rendering and picking.
+            appendRawSketchDisplayTopology(*result.mesh, part::meshForShape(input.rawShape));
+        }
     }
     else if (shapeHasEdges(input.rawShape)) {
         // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp

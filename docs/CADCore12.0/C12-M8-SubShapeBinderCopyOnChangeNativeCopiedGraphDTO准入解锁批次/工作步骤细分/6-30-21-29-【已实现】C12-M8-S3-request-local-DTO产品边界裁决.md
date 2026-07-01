@@ -29,6 +29,7 @@
 - S2 输出是 `native_evidence_retained_blocker`，不是 `native_copied_graph_evidence_ready`，因此 S3 按步骤规则直接关闭为 `dto_not_reviewed_due_to_native_blocker`。
 - `docs/接口规定/01-cad-recompute全量输入输出接口.md` 继续固定边界：`Objects[]` 是唯一持久输入，`documentObjectUpdates[]` 只是前端可选择应用到 `Objects[]` 的对象级 graph 写回建议，不表示后端保存 graph/session。
 - `TopoDS_Shape`、full BREP、mesh、subshape map、`NamedShape`、`ElementMap` 都是单次 recompute 运行态产物；除既有 `ReferenceShadow.brep` 单 subshape 例外外，不得进入 CopyOnChange 请求或响应 DTO。
+- 该禁止项只约束 SubShapeBinder CopyOnChange copied graph DTO，不能误读为禁止普通 recompute 结果返回运行态 mesh 拾取合同；`results[].mesh.edgeSegments` 仍应覆盖可拾取拓扑边，包括 open wire mesh 的边段。
 - `cad-core/include/cad_core/app/copy_on_change.h` 与 `cad-core/src/app/copy_on_change.cpp` 只提供 App::Link `documentObjectUpdates` vocabulary：copied object create/update、copied-subtree link rewrite、group sync、historyPreserve 和 link writeback；它是 S3 字段命名参考，不等同 SubShapeBinder `_tmp_binder` / `_CopiedObjs` 支持。
 - `cad-core/src/adapters/cli/cli.cpp`、`main.cpp` 与 `cad-core/src/adapters/c_api/c_api.cpp` 仍只暴露 request-local recompute / export adapter 边界，不承接 CopyOnChange、Link rewrite、NamedShape、ElementMap 或 backend session 业务语义；S3 不改 adapter 协议。
 
@@ -56,6 +57,7 @@
 
 - 不为了通过 DTO 审核而新增 backend session。
 - 不把 full BREP / TopoDS / NamedShape / ElementMap cache 放进请求或响应。
+- 不把普通 recompute/export 的 `mesh.edgeSegments` 合同归入 C12-M8；open wire mesh 返回 `edgeSegments` 属于运行态响应拾取合同，不重开 CopyOnChange DTO gate。
 - 不改 adapter 协议。
 - 不改 `cad-core/src`、`include`、fixtures、expected、tests、adapters 或 capability source。
 

@@ -88,6 +88,14 @@ HOLE_PRE_BODY_PROPERTIES = {
     "Profile",
 }
 
+NATIVE_PROFILE_LINK_SUB_TYPES = {
+    "PartDesign::Groove",
+    "PartDesign::Hole",
+    "PartDesign::Pad",
+    "PartDesign::Pocket",
+    "PartDesign::Revolution",
+}
+
 SKETCH_SHAPE_DEPENDENT_PROPERTIES = {
     "AttachmentSupport",
     "Support",
@@ -236,6 +244,18 @@ def list_field(value: dict, *names: str) -> list:
     return []
 
 
+def native_sub_list(value: dict) -> list:
+    stable_sub_list = value.get("StableSubList")
+    if isinstance(stable_sub_list, list) and stable_sub_list:
+        return list(stable_sub_list)
+    sub_list = value.get("SubList")
+    if sub_list is not None:
+        return list(sub_list)
+    if stable_sub_list is not None:
+        return list(stable_sub_list)
+    return []
+
+
 def external_geometry_flags_from_item(item: dict) -> set[str]:
     flags: set[str] = set()
 
@@ -294,9 +314,46 @@ def link_sub_value(created: dict[str, Any], value: dict) -> Any:
     # StableSubList that represents the stable element to be resolved through ElementMap.
     # Native FreeCAD has no JSON StableSubList property, so the collector feeds the stable
     # subname to PropertyLinkSub to collect the expected post-resolution geometry.
-    sub_list = list_field(value, "StableSubList", "SubList")
+    sub_list = native_sub_list(value)
     if sub_list:
         return target, [native_link_subname(target, subname) for subname in sub_list]
+    return target
+
+
+def profile_link_sub_value_from_sublist(created: dict[str, Any], value: dict) -> Any:
+    # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.h
+    # ::ProfileBased stores "App::PropertyLinkSub Profile". cad-core fixtures intentionally model
+    # Profile as PropertyLinkSubList so multiple selected faces can share one recompute DTO; native
+    # oracle collection folds same-target SubSet items into the single FreeCAD Profile link-sub slot.
+    sub_set = value.get("SubSet")
+    if not isinstance(sub_set, list):
+        raise UnsupportedFixture("Profile.SubSet must be a list")
+    if not sub_set:
+        raise UnsupportedFixture("Profile.SubSet must contain at least one item")
+
+    target_name: str | None = None
+    target = None
+    subnames: list[str] = []
+    for item in sub_set:
+        if not isinstance(item, dict):
+            raise UnsupportedFixture("Profile.SubSet items must be objects")
+        item_target_name = item.get("value")
+        if item_target_name not in created:
+            raise UnsupportedFixture(f"link target {item_target_name} was not created")
+        if target_name is None:
+            target_name = item_target_name
+            target = created[item_target_name]
+        elif item_target_name != target_name:
+            raise UnsupportedFixture(
+                "FreeCAD native Profile is App::PropertyLinkSub and cannot collect "
+                "multi-target Profile.SubSet directly"
+            )
+        item_target = created[item_target_name]
+        for subname in native_sub_list(item):
+            subnames.append(native_link_subname(item_target, subname))
+
+    if subnames:
+        return target, subnames
     return target
 
 
@@ -305,7 +362,7 @@ def assembly_joint_reference_value(created: dict[str, Any], value: dict) -> Any:
     if target_name not in created:
         raise UnsupportedFixture(f"assembly joint reference target {target_name} was not created")
     target = created[target_name]
-    sub_list = list_field(value, "StableSubList", "SubList")
+    sub_list = native_sub_list(value)
     if sub_list:
         return target, [native_link_subname(target, subname) for subname in sub_list]
     # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/UtilsAssembly.py
@@ -661,6 +718,9 @@ def set_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, val
             "App::PropertyLinkSubListHidden",
             "App::PropertyXLinkSubList",
         }:
+            if name == "Profile" and getattr(obj, "TypeId", "") in NATIVE_PROFILE_LINK_SUB_TYPES:
+                safe_setattr(obj, name, profile_link_sub_value_from_sublist(created, value))
+                return
             safe_setattr(obj, name, [link_sub_value(created, item) for item in value.get("SubSet", [])])
             return
         raise UnsupportedFixture(f"unsupported structured property {name}: {property_type or sorted(value)}")

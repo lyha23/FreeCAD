@@ -59,6 +59,7 @@ C12-M5 已关闭为 `no_code_retained_diagnostic`：旧 native evidence 只能�
 - `C12M8-DTO-001..004` copied object create、property writeback、link rewrite、support sublist rewrite 均是未来可能允许的 frontend-persisted graph / `documentObjectUpdates` 方向，但本轮因 S2 缺 stable copied graph evidence 裁决为 `deferred`。
 - `C12M8-DTO-005` 只批准为 input-only `BindCopyOnChange` request graph 字段；`C12M8-DTO-006` `PartialLoad=True` 仍因 native blocker 裁决为 `deferred`。
 - `C12M8-DTO-007..012` temporary document handle、native pointer、full BREP / TopoDS、persistent `NamedShape` / `ElementMap` cache、post-request `_tmp_binder` / `_CopiedObjs` session state、backend `Cache_*` 均裁决为 `rejected`。
+- S3 的 mesh / subshape map 禁止项只约束 CopyOnChange copied graph DTO，不改变普通 recompute 运行态响应合同；`results[].mesh.edgeSegments` 应继续覆盖可拾取拓扑边，包括 open wire mesh 的边段。
 - `C12M8-BLOCKER-301` 已关闭为 `closed_s3_dto_not_reviewed_due_to_native_blocker`；backend gap classification 已同步为 native blocker 下的 DTO retained/deferred 状态。
 
 ## S4 current mismatch gate

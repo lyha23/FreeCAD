@@ -141,6 +141,21 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertFalse(any(item["id"].startswith("Sketch:Internal") for item in sketch["subshapes"]))
         self.assertTrue(any(item["id"] == "Sketch:Edge1" for item in sketch["subshapes"]))
 
+    def test_c_api_returns_raw_edge_segments_with_internal_profile_mesh(self) -> None:
+        result = self.run_recompute_ffi("sketch-internal-face-dangling-line", "p5")
+        sketch = result["results"][0]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["object"], "Sketch")
+        self.assertIsNotNone(sketch["mesh"])
+        self.assertIn("Sketch:InternalFace1", sketch["mesh"]["faceIds"])
+        self.assert_mesh_edge_segments_reference_subshapes(sketch)
+        self.assert_mesh_vertex_points_reference_subshapes(sketch)
+        self.assertTrue(any(item["id"] == "Sketch:Edge5" for item in sketch["subshapes"]))
+        self.assertTrue(
+            any(segment["id"] == "Sketch:Edge5" for segment in sketch["mesh"]["edgeSegments"])
+        )
+
     def test_c_api_applies_sketch_plane_frame_to_internal_profile_mesh(self) -> None:
         result = self.run_recompute_ffi("sketch-plane-frame-internal-face", "p5")
         sketch = result["results"][0]
