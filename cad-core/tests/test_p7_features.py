@@ -29,6 +29,20 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             if temp_path is not None:
                 temp_path.unlink(missing_ok=True)
 
+    def run_recompute_response(self, fixture: str, group: str = "mvp") -> dict:
+        input_path = ROOT / "fixtures" / group / f"{fixture}.json"
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / f"{input_path.stem}.result.json"
+            env = os.environ.copy()
+            env.pop("CAD_CORE_TEST_LEGACY_OUTPUT", None)
+            subprocess.run(
+                [str(BIN), "recompute", str(input_path), "--output", str(output)],
+                cwd=ROOT,
+                check=True,
+                env=env,
+            )
+            return json.loads(output.read_text(encoding="utf-8"))
+
     def assert_pad_profile_source_element_map(self, named_shape: dict) -> None:
         self.assertEqual(named_shape["element_map"]["Sketch.Face1"], "Face5")
         self.assertEqual(named_shape["element_map"]["Sketch.Edge1"], "Edge3")
@@ -330,6 +344,60 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(len(result["mesh"]["Body"]["triangles"]), 0)
         self.assertGreater(len(result["mesh"]["Body"]["edgeSegments"]), 0)
         self.assertGreater(len(result["subshapes"]["Body"]), 0)
+
+    def test_p7_body_accumulates_display_only_surface_chain(self) -> None:
+        result = self.run_recompute("partdesign-body-display-only-surface-chain", "p7")
+        response = self.run_recompute_response("partdesign-body-display-only-surface-chain", "p7")
+        body = result["objects"]["Body"]
+        body_named_shape = result["named_shapes"]["Body"]
+        response_subshapes = response["results"][0]["subshapes"]
+        response_subnames = [item["subname"] for item in response_subshapes]
+        response_stable_subnames = [
+            item.get("stableSubname", "")
+            for item in response_subshapes
+            if item.get("stableSubname")
+        ]
+        edge_z_values = [
+            point[2]
+            for segment in result["mesh"]["Body"]["edgeSegments"]
+            for point in segment["points"]
+        ]
+
+        self.assertEqual(
+            [item["code"] for item in result["diagnostics"]],
+            [
+                "open_profile_surface_display_only",
+                "ambiguous_open_profile_reference",
+                "open_profile_surface_display_only",
+            ],
+        )
+        self.assertEqual(body["status"], "ok")
+        self.assertEqual(body["display_only_features"], ["Pad", "Pad2"])
+        self.assertEqual(body["volume"], 0.0)
+        self.assertGreaterEqual(len(result["mesh"]["Body"]["triangles"]), 4)
+        self.assertTrue(any(abs(z - 0.0) <= 1e-6 for z in edge_z_values))
+        self.assertTrue(any(abs(z - 375.0) <= 1e-6 for z in edge_z_values))
+        self.assertTrue(any(abs(z - 614.0) <= 1e-6 for z in edge_z_values))
+        self.assertTrue(any(name.startswith("Pad.") for name in response_subnames))
+        self.assertTrue(any(name.startswith("Pad2.") for name in response_subnames))
+        self.assertFalse(
+            any(
+                stable == item.get("indexed")
+                for item in response_subshapes
+                if (stable := item.get("stableSubname"))
+            )
+        )
+        self.assertTrue(all(not name.startswith("Body.") for name in response_stable_subnames))
+        self.assertNotIn("direct_tip_subshape_owner", body)
+        self.assertTrue(
+            {"Pad", "Pad2"}.issubset(
+                {item["source_owner"] for item in body_named_shape["child_element_maps"]}
+            )
+        )
+        self.assertIn(
+            "partdesign_body:display_only_compound",
+            body_named_shape["element_history_status"],
+        )
 
     def test_p7_pad_open_wire_profile_from_existing_pad_edge(self) -> None:
         result = self.run_recompute("partdesign-pad-open-wire-from-pad-edge", "p7")

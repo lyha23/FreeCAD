@@ -17,6 +17,12 @@ struct BodyTopoShapeOptions {
     bool applyBodyPlacement = true;
 };
 
+struct DisplayOnlyChild {
+    std::string feature;
+    TopoDS_Shape shape;
+    std::optional<part::NamedShape> namedShape;
+};
+
 struct BodyTopoShapeResult {
     TopoDS_Shape shape;
     runtime::ShapeValue::Kind shapeValueKind = runtime::ShapeValue::Kind::Solid;
@@ -29,6 +35,8 @@ struct BodyTopoShapeResult {
     std::vector<std::string> appliedSubtractiveFeatures;
     std::vector<std::string> appliedReplacementFeatures;
     std::vector<std::string> displayOnlyFeatures;
+    std::vector<DisplayOnlyChild> displayOnlyChildren;
+    bool bodyAdoptedDisplayOnlyCompound = false;
     std::vector<std::string> refinedFeatures;
     std::optional<std::string> directTipSubshapeOwner;
     bool directTipSubshapeStablePrefix = false;

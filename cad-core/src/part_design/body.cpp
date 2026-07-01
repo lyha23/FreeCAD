@@ -625,6 +625,63 @@ part::NamedShape namedShapeForFeatureOrIndexed(const std::string& feature,
     return part::indexedNamedShapeForObject(feature, shape);
 }
 
+void addDistinctString(std::vector<std::string>& values, const std::string& value)
+{
+    if (std::find(values.begin(), values.end(), value) == values.end()) {
+        values.push_back(value);
+    }
+}
+
+std::optional<part::NamedShape> namedShapeForDisplayOnlyFeature(
+    const std::string& feature,
+    const runtime::ComputeContext& context)
+{
+    const auto namedShapeIt = context.namedShapes.find(feature);
+    if (namedShapeIt == context.namedShapes.end()) {
+        return std::nullopt;
+    }
+    return namedShapeIt->second;
+}
+
+std::optional<BooleanBuild> compoundDisplayOnlyChildren(
+    const app::DocumentObject& body,
+    runtime::ComputeContext& context,
+    const std::vector<DisplayOnlyChild>& children)
+{
+    std::vector<part::NamedShapeSource> sources;
+    sources.reserve(children.size());
+    for (const DisplayOnlyChild& child : children) {
+        if (child.shape.IsNull()) {
+            continue;
+        }
+        sources.push_back({
+            child.namedShape ? child.namedShape->owner : child.feature,
+            child.shape,
+            child.namedShape ? &*child.namedShape : nullptr,
+        });
+    }
+
+    const auto build = part::makeElementCompoundFromSources(body.name, sources, true);
+    if (!build.error.empty()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               "Body could not build display-only compound: " + build.error,
+                               body.name);
+        return std::nullopt;
+    }
+
+    part::NamedShape namedShape = build.namedShape
+        ? *build.namedShape
+        : part::indexedNamedShapeForObject(body.name, build.shape);
+    // CAD Core product extension:
+    // /Users/li/Chili3DProject/FreeCAD/docs/要求/7-2-00-14-【已实现】display-only-surface-Body累计显示修复方案.md
+    // requires Body display-only surface chains to carry child feature provenance through the
+    // NamedShape / child ElementMap ledger instead of assigning every subshape to the Tip.
+    addDistinctString(namedShape.elementHistoryStatus, "partdesign_body:display_only_compound");
+    return BooleanBuild{build.shape, std::move(namedShape)};
+}
+
 part::NamedShapeSource sourceForCurrentBody(const std::string& bodyName,
                                             const TopoDS_Shape& shape,
                                             const std::optional<part::NamedShape>& namedShape)
@@ -865,6 +922,8 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
     std::vector<std::string> appliedSubtractiveFeatures;
     std::vector<std::string> appliedReplacementFeatures;
     std::vector<std::string> displayOnlyFeatures;
+    std::vector<DisplayOnlyChild> displayOnlyChildren;
+    bool bodyAdoptedDisplayOnlyCompound = false;
     if (body.properties.contains("BaseFeature")) {
         const auto baseLink = app::readLink(body, "BaseFeature");
         if (!baseLink) {
@@ -940,17 +999,37 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
                 // says Pad/Pocket open-wire surface extrusion publishes feature geometry but
                 // "默认 surface extrusion 是 display_only" for Body fuse/cut participation.
                 displayOnlyFeatures.push_back(feature);
+                if (shapeIt != context.shapes.end() && !shapeIt->second.shape.IsNull()) {
+                    displayOnlyChildren.push_back(DisplayOnlyChild{
+                        feature,
+                        shapeIt->second.shape,
+                        namedShapeForDisplayOnlyFeature(feature, context),
+                    });
+                }
                 if (feature == resolvedStopFeature) {
                     if (!bodyShape && shapeIt != context.shapes.end()) {
-                        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp
-                        // ::Body::execute(), reads the Tip feature "Shape" for display. cad-core's
-                        // open-wire Pad/Pocket extension keeps that Tip Shape as display-only: it
-                        // is not fused/cut into a Body solid, but an empty Body still displays it.
-                        bodyShape = shapeIt->second.shape;
-                        bodyShapeKind = shapeIt->second.kind;
-                        bodyUsesPreciseBoundingBox = shapeIt->second.usePreciseBoundingBox;
-                        bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
-                        bodyAdoptedDisplayOnlyTip = true;
+                        if (displayOnlyChildren.size() > 1U) {
+                            const auto build = compoundDisplayOnlyChildren(body, context, displayOnlyChildren);
+                            if (!build) {
+                                return std::nullopt;
+                            }
+                            bodyShape = build->shape;
+                            bodyShapeKind = runtime::ShapeValue::Kind::PartPrimitive;
+                            bodyUsesPreciseBoundingBox = false;
+                            bodyNamedShape = build->namedShape;
+                            bodyAdoptedDisplayOnlyCompound = true;
+                        }
+                        else {
+                            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+                            // ::Body::execute(), reads the Tip feature "Shape" for display. cad-core's
+                            // open-wire Pad/Pocket extension keeps that Tip Shape as display-only: it
+                            // is not fused/cut into a Body solid, but an empty Body still displays it.
+                            bodyShape = shapeIt->second.shape;
+                            bodyShapeKind = shapeIt->second.kind;
+                            bodyUsesPreciseBoundingBox = shapeIt->second.usePreciseBoundingBox;
+                            bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
+                            bodyAdoptedDisplayOnlyTip = true;
+                        }
                     }
                     break;
                 }
@@ -1097,6 +1176,8 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
         appliedSubtractiveFeatures,
         appliedReplacementFeatures,
         displayOnlyFeatures,
+        displayOnlyChildren,
+        bodyAdoptedDisplayOnlyCompound,
         refinedFeatures,
         directTipSubshapeOwner,
         directTipSubshapeStablePrefix,
@@ -1179,6 +1260,19 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
     }
     if (!bodyTopoShape->displayOnlyFeatures.empty()) {
         result["display_only_features"] = bodyTopoShape->displayOnlyFeatures;
+    }
+    if (!bodyTopoShape->displayOnlyChildren.empty()) {
+        nlohmann::json children = nlohmann::json::array();
+        for (const DisplayOnlyChild& child : bodyTopoShape->displayOnlyChildren) {
+            children.push_back({
+                {"feature", child.feature},
+                {"has_named_shape", child.namedShape.has_value()},
+            });
+        }
+        result["display_only_children"] = std::move(children);
+    }
+    if (bodyTopoShape->bodyAdoptedDisplayOnlyCompound) {
+        result["body_adopted_display_only_compound"] = true;
     }
     result["replay_stopped_at_tip"] = bodyTopoShape->stopFeature;
     if (!bodyTopoShape->refinedFeatures.empty()) {

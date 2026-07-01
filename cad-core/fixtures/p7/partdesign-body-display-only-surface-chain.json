@@ -1,0 +1,88 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "id": 100001,
+            "start": [0, 0],
+            "end": [10, 0]
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Sketch",
+              "StableSubList": ["g100001"]
+            }
+          ]
+        },
+        "OpenProfileMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "SurfaceExtrusion"
+        },
+        "Type": "Length",
+        "Length": 375,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Pad2",
+      "ID": 3,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Pad",
+              "SubList": ["Edge4"],
+              "StableSubList": ["Edge4"],
+              "FullSubList": ["Edge4"]
+            }
+          ]
+        },
+        "OpenProfileMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "SurfaceExtrusion"
+        },
+        "Type": "Length",
+        "Length": 239,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 4,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["Sketch", "Pad", "Pad2"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Pad2"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}

@@ -11,6 +11,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <cstddef>
 #include <map>
 #include <optional>
 #include <set>
@@ -306,6 +307,47 @@ struct BodyTipSubshapeResponseContext {
     bool stablePrefix = false;
 };
 
+struct TopologicalElementToken {
+    std::string prefix;
+    std::string kind;
+    int index = 0;
+};
+
+struct BodyDisplayCompoundResponseContext {
+    const part::NamedShape* namedShape = nullptr;
+    std::set<std::string> childFeatures;
+    std::map<std::string, bool> childHasNamedShape;
+};
+
+std::optional<TopologicalElementToken> parseTopologicalElementToken(const std::string& indexed)
+{
+    const std::string local = localElementName(indexed);
+    const auto parseWithPrefix = [&local](const std::string& prefix,
+                                          const std::string& kind) -> std::optional<TopologicalElementToken> {
+        if (local.rfind(prefix, 0) != 0 || local.size() == prefix.size()) {
+            return std::nullopt;
+        }
+        int index = 0;
+        for (auto it = local.begin() + static_cast<std::ptrdiff_t>(prefix.size()); it != local.end(); ++it) {
+            if (std::isdigit(static_cast<unsigned char>(*it)) == 0) {
+                return std::nullopt;
+            }
+            index = index * 10 + (*it - '0');
+        }
+        if (index <= 0) {
+            return std::nullopt;
+        }
+        return TopologicalElementToken{prefix, kind, index};
+    };
+    if (const auto token = parseWithPrefix("Face", "face")) {
+        return token;
+    }
+    if (const auto token = parseWithPrefix("Edge", "edge")) {
+        return token;
+    }
+    return parseWithPrefix("Vertex", "vertex");
+}
+
 std::optional<BodyTipSubshapeResponseContext> bodyTipSubshapeResponseContext(
     const std::string& objectName,
     const ComputeContext& context)
@@ -327,6 +369,85 @@ std::optional<BodyTipSubshapeResponseContext> bodyTipSubshapeResponseContext(
         ownerIt->get<std::string>(),
         objectIt->second.value("direct_tip_subshape_stable_prefix", false),
     };
+}
+
+std::optional<BodyDisplayCompoundResponseContext> bodyDisplayCompoundResponseContext(
+    const std::string& objectName,
+    const ComputeContext& context,
+    const part::NamedShape* namedShape)
+{
+    const auto documentIt = context.documentObjects.find(objectName);
+    if (documentIt == context.documentObjects.end() || documentIt->second == nullptr
+        || documentIt->second->typeId != "PartDesign::Body" || namedShape == nullptr) {
+        return std::nullopt;
+    }
+    const auto objectIt = context.objects.find(objectName);
+    if (objectIt == context.objects.end() || !objectIt->second.is_object()
+        || !objectIt->second.value("body_adopted_display_only_compound", false)) {
+        return std::nullopt;
+    }
+
+    BodyDisplayCompoundResponseContext result;
+    result.namedShape = namedShape;
+    const auto childrenIt = objectIt->second.find("display_only_children");
+    if (childrenIt != objectIt->second.end() && childrenIt->is_array()) {
+        for (const auto& child : *childrenIt) {
+            if (!child.is_object()) {
+                continue;
+            }
+            const auto featureIt = child.find("feature");
+            if (featureIt != child.end() && featureIt->is_string() && !featureIt->get<std::string>().empty()) {
+                const std::string feature = featureIt->get<std::string>();
+                result.childFeatures.insert(feature);
+                result.childHasNamedShape[feature] = child.value("has_named_shape", false);
+            }
+        }
+    }
+    return result;
+}
+
+std::optional<std::string> bodyDisplayCompoundSubnameFor(
+    const std::string& indexed,
+    const std::optional<BodyDisplayCompoundResponseContext>& displayContext)
+{
+    if (!displayContext || displayContext->namedShape == nullptr) {
+        return std::nullopt;
+    }
+    const auto token = parseTopologicalElementToken(indexed);
+    if (!token) {
+        return std::nullopt;
+    }
+    for (const part::NamedShapeChildMap& childMap : displayContext->namedShape->childElementMaps) {
+        if (childMap.kind != token->kind || childMap.count <= 0 || childMap.sourceOwner.empty()) {
+            continue;
+        }
+        if (!displayContext->childFeatures.empty()
+            && displayContext->childFeatures.count(childMap.sourceOwner) == 0U) {
+            continue;
+        }
+        if (token->index <= childMap.offset || token->index > childMap.offset + childMap.count) {
+            continue;
+        }
+        const int localIndex = token->index - childMap.offset;
+        return childMap.sourceOwner + "." + token->prefix + std::to_string(localIndex);
+    }
+    return std::nullopt;
+}
+
+bool bodyDisplayCompoundStableSubnameHasChildEvidence(
+    const std::string& stableSubname,
+    const std::optional<BodyDisplayCompoundResponseContext>& displayContext)
+{
+    if (!displayContext || stableSubname.empty()) {
+        return true;
+    }
+    const std::size_t dot = stableSubname.rfind('.');
+    if (dot == std::string::npos || dot == 0U) {
+        return true;
+    }
+    const std::string owner = stableSubname.substr(0, dot);
+    const auto childIt = displayContext->childHasNamedShape.find(owner);
+    return childIt == displayContext->childHasNamedShape.end() || childIt->second;
 }
 
 std::string bodyTipQualifiedStableSubname(const std::string& objectName,
@@ -364,10 +485,14 @@ std::string bodyTipQualifiedStableSubname(const std::string& objectName,
 std::string responseSubnameFor(const std::string& indexed,
                                const std::string& stableSubname,
                                const part::NamedShape* namedShape,
-                               const std::optional<BodyTipSubshapeResponseContext>& tipContext)
+                               const std::optional<BodyTipSubshapeResponseContext>& tipContext,
+                               const std::optional<BodyDisplayCompoundResponseContext>& displayContext)
 {
     if (tipContext) {
         return tipContext->owner + "." + indexed;
+    }
+    if (const auto displaySubname = bodyDisplayCompoundSubnameFor(indexed, displayContext)) {
+        return *displaySubname;
     }
     const std::string displaySubname = displaySubnameFor(indexed, namedShape);
     if (!displaySubname.empty()) {
@@ -496,6 +621,7 @@ nlohmann::json responseSubshapes(const std::string& objectName,
         shapeValue = &shapeIt->second;
     }
     const auto tipContext = bodyTipSubshapeResponseContext(objectName, context);
+    const auto displayContext = bodyDisplayCompoundResponseContext(objectName, context, namedShape);
 
     for (const auto& [indexed, subshape] : subshapeIt->second.items()) {
         const bool internalIndexed = indexed.rfind("InternalFace", 0) == 0
@@ -523,7 +649,13 @@ nlohmann::json responseSubshapes(const std::string& objectName,
             stableSubname.clear();
         }
         stableSubname = bodyTipQualifiedStableSubname(objectName, indexed, stableSubname, tipContext);
-        const std::string subname = responseSubnameFor(indexed, stableSubname, namedShape, tipContext);
+        if (displayContext && stableSubname == indexed && isPlainTopologicalElementName(stableSubname)) {
+            stableSubname.clear();
+        }
+        if (!bodyDisplayCompoundStableSubnameHasChildEvidence(stableSubname, displayContext)) {
+            stableSubname.clear();
+        }
+        const std::string subname = responseSubnameFor(indexed, stableSubname, namedShape, tipContext, displayContext);
         nlohmann::json responseSubshape {
             {"id", objectName + ":" + indexed},
             {"kind", displayKind(subshape)},
