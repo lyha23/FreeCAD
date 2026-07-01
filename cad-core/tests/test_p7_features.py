@@ -331,6 +331,75 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(len(result["mesh"]["Body"]["edgeSegments"]), 0)
         self.assertGreater(len(result["subshapes"]["Body"]), 0)
 
+    def test_p7_pad_open_wire_profile_from_existing_pad_edge(self) -> None:
+        result = self.run_recompute("partdesign-pad-open-wire-from-pad-edge", "p7")
+        pad = result["objects"]["Pad"]
+        preview = result["objects"]["PadPreview"]
+        diagnostic_codes = [item["code"] for item in result["diagnostics"]]
+
+        self.assertNotIn("unsupported_open_profile_multi_target", diagnostic_codes)
+        self.assertEqual(
+            diagnostic_codes,
+            [
+                "open_profile_surface_display_only",
+                "ambiguous_open_profile_reference",
+                "open_profile_surface_display_only",
+            ],
+        )
+        self.assertEqual(pad["status"], "ok")
+        self.assertEqual(preview["status"], "ok")
+        self.assertEqual(preview["shape"], "occt_shell")
+        self.assertIn(preview["profileKind"], {"open_wire", "edge_compound"})
+        self.assertEqual(preview["openProfileMode"], "SurfaceExtrusion")
+        self.assertEqual(preview["resolvedOpenProfileMode"], "SurfaceExtrusion")
+        self.assertEqual(preview["bodyParticipation"], "display_only")
+        self.assertEqual(preview["sourceProfile"], {"object": "Pad", "stableSubnames": ["Edge4"]})
+        self.assertGreater(len(result["subshapes"]["PadPreview"]), 0)
+        self.assertEqual(preview["volume"], 0.0)
+
+        body_payload = json.loads(
+            (ROOT / "fixtures" / "p7" / "partdesign-pad-open-wire-from-pad-edge.json").read_text()
+        )
+        body_payload["Objects"].append(
+            {
+                "Name": "Body",
+                "ID": 4,
+                "TypeId": "PartDesign::Body",
+                "Properties": {
+                    "Group": {
+                        "PropertyType": "App::PropertyLinkList",
+                        "values": ["Sketch", "Pad"],
+                    },
+                    "Tip": {
+                        "PropertyType": "App::PropertyLink",
+                        "value": "Pad",
+                    },
+                },
+            }
+        )
+        body_profile = self.object_payload(body_payload, "PadPreview")["Properties"]["Profile"]["SubSet"][0]
+        body_profile["value"] = "Body"
+        body_profile["SubList"] = ["Pad.Edge4"]
+        body_profile["StableSubList"] = ["Pad.Edge4"]
+        body_profile["FullSubList"] = ["Pad.Edge4"]
+
+        body_result = self.run_recompute_payload(body_payload)
+        body_preview = body_result["objects"]["PadPreview"]
+        body_diagnostic_codes = [item["code"] for item in body_result["diagnostics"]]
+
+        self.assertNotIn("unsupported_open_profile_multi_target", body_diagnostic_codes)
+        self.assertEqual(
+            body_diagnostic_codes,
+            [
+                "open_profile_surface_display_only",
+                "ambiguous_open_profile_reference",
+                "open_profile_surface_display_only",
+            ],
+        )
+        self.assertEqual(body_preview["status"], "ok")
+        self.assertEqual(body_preview["sourceProfile"], {"object": "Pad", "stableSubnames": ["Edge4"]})
+        self.assertEqual(body_preview["bodyParticipation"], "display_only")
+
     def test_p7_pocket_open_wire_profile_is_body_display_only(self) -> None:
         result = self.run_recompute("partdesign-pocket-open-wire-body-display-only", "p7")
         body = result["objects"]["Body"]
