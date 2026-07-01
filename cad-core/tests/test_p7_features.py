@@ -29,6 +29,10 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             if temp_path is not None:
                 temp_path.unlink(missing_ok=True)
 
+    def assert_pad_profile_source_element_map(self, named_shape: dict) -> None:
+        self.assertEqual(named_shape["element_map"]["Sketch.Face1"], "Face5")
+        self.assertEqual(named_shape["element_map"]["Sketch.Edge1"], "Edge3")
+
     def assert_dressup_slot_history(
         self,
         named_shape: dict,
@@ -198,10 +202,12 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p7_refine_false_is_feature_refine_noop(self) -> None:
         result = self.run_recompute("pad-refine-false", "p7")
         pad = result["objects"]["Pad"]
+        pad_named_shape = result["named_shapes"]["Pad"]
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pad["status"], "ok")
         self.assertNotIn("topo_naming", pad)
+        self.assert_pad_profile_source_element_map(pad_named_shape)
         self.assert_object_matches_expected(result, "p7", "pad-refine-false")
 
     def test_p7_pad_profile_accepts_linked_face(self) -> None:
@@ -227,6 +233,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pad["status"], "ok")
         self.assertEqual(pad["refine"], "applied")
+        self.assert_pad_profile_source_element_map(pad_named_shape)
         self.assert_refine_model_history(pad_named_shape, {"Sketch"}, set(), set())
         self.assert_object_matches_expected(result, "p7", "pad-refine-true")
 

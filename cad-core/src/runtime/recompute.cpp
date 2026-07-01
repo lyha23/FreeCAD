@@ -182,6 +182,19 @@ bool stableSubnameKindMatchesIndexed(const std::string& indexed, const std::stri
     return *indexedKind == *stableKind;
 }
 
+int stableSubnamePriority(const std::string& indexed, const std::string& stableSubname)
+{
+    if (stableSubname == indexed) {
+        return 0;
+    }
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeShapeWithElementMap(), first preserves source subelement names through
+    // "mapSubElement(shapes)" and then consumes maker history into ElementMap. When both a
+    // display-path alias such as Pad.Face5 and a source alias such as Sketch.Face1 target the
+    // same current element, the source alias is the stable reference identity.
+    return localElementName(stableSubname) == indexed ? 1 : 2;
+}
+
 std::string stableSubnameFor(const std::string& indexed,
                              const part::NamedShape* namedShape)
 {
@@ -192,7 +205,8 @@ std::string stableSubnameFor(const std::string& indexed,
         return internalIndexed ? std::string{} : indexed;
     }
 
-    std::string fallback;
+    std::string bestStableSubname;
+    int bestPriority = -1;
     for (const auto& [stableSubname, currentSubname] : namedShape->elementMap) {
         if (currentSubname != indexed) {
             continue;
@@ -200,16 +214,17 @@ std::string stableSubnameFor(const std::string& indexed,
         if (!stableSubnameKindMatchesIndexed(indexed, stableSubname)) {
             continue;
         }
-        if (stableSubname != indexed) {
-            return stableSubname;
+        const int priority = stableSubnamePriority(indexed, stableSubname);
+        if (priority > bestPriority) {
+            bestStableSubname = stableSubname;
+            bestPriority = priority;
         }
-        fallback = stableSubname;
     }
-    if (!fallback.empty()) {
-        if (internalIndexed && fallback == indexed) {
+    if (!bestStableSubname.empty()) {
+        if (bestPriority == 0 || (internalIndexed && bestStableSubname == indexed)) {
             return {};
         }
-        return fallback;
+        return bestStableSubname;
     }
     // Sketch Internal* names are request-local until the sketch InternalShape has a real
     // NamedShape/ElementMap. Do not synthesize a stable name from the current indexed name.
@@ -258,6 +273,29 @@ std::string currentSubnameForStable(const std::string& indexed,
     return stableSubname.substr(0, dot + 1) + indexed;
 }
 
+std::string displaySubnameFor(const std::string& indexed, const part::NamedShape* namedShape)
+{
+    if (namedShape == nullptr) {
+        return {};
+    }
+    for (const auto& [stableSubname, currentSubname] : namedShape->elementMap) {
+        if (currentSubname != indexed) {
+            continue;
+        }
+        if (!stableSubnameKindMatchesIndexed(indexed, stableSubname)) {
+            continue;
+        }
+        if (stableSubname != indexed && localElementName(stableSubname) == indexed) {
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+            // ::Body::execute(), reads the Tip shape and writes "Shape.setValue(tipShape)".
+            // cad-core keeps Body display subnames in the current Tip namespace, while
+            // stableSubname may point further back to the profile source ElementMap alias.
+            return stableSubname;
+        }
+    }
+    return {};
+}
+
 bool isPlainTopologicalElementName(const std::string& name)
 {
     return localElementName(name) == name && topologicalElementKind(name).has_value();
@@ -296,7 +334,7 @@ std::string bodyTipQualifiedStableSubname(const std::string& objectName,
                                           const std::string& stableSubname,
                                           const std::optional<BodyTipSubshapeResponseContext>& tipContext)
 {
-    if (!tipContext || stableSubname.empty()) {
+    if (!tipContext) {
         return stableSubname;
     }
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::Body::execute(),
@@ -304,6 +342,9 @@ std::string bodyTipQualifiedStableSubname(const std::string& objectName,
     // The response subname is always the current Tip child path. Stable names from replacement
     // Tips also need that Tip path so downstream PropertyLinkSub can safely peel it off.
     const std::string ownerPrefix = tipContext->owner + ".";
+    if (stableSubname.empty()) {
+        return ownerPrefix + indexed;
+    }
     const std::string bodyPrefix = objectName + ".";
     if (stableSubname.rfind(ownerPrefix, 0) == 0) {
         return stableSubname;
@@ -322,10 +363,15 @@ std::string bodyTipQualifiedStableSubname(const std::string& objectName,
 
 std::string responseSubnameFor(const std::string& indexed,
                                const std::string& stableSubname,
+                               const part::NamedShape* namedShape,
                                const std::optional<BodyTipSubshapeResponseContext>& tipContext)
 {
     if (tipContext) {
         return tipContext->owner + "." + indexed;
+    }
+    const std::string displaySubname = displaySubnameFor(indexed, namedShape);
+    if (!displaySubname.empty()) {
+        return displaySubname;
     }
     return currentSubnameForStable(indexed, stableSubname);
 }
@@ -477,7 +523,7 @@ nlohmann::json responseSubshapes(const std::string& objectName,
             stableSubname.clear();
         }
         stableSubname = bodyTipQualifiedStableSubname(objectName, indexed, stableSubname, tipContext);
-        const std::string subname = responseSubnameFor(indexed, stableSubname, tipContext);
+        const std::string subname = responseSubnameFor(indexed, stableSubname, namedShape, tipContext);
         nlohmann::json responseSubshape {
             {"id", objectName + ":" + indexed},
             {"kind", displayKind(subshape)},

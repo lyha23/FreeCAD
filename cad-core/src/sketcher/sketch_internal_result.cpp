@@ -94,7 +94,7 @@ SketchInternalResult buildSketchInternalResult(const SketchInternalResultInput& 
             }
         }
     }
-    if (!hasNonEmptyInternalShape && result.mesh && !result.subshapes.empty()) {
+    if (result.mesh && !result.subshapes.empty()) {
         publishRawSketchEdgeIdentity(
             *result.mesh,
             result.subshapes,
